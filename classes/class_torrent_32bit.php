@@ -264,9 +264,10 @@ class TORRENT extends BENCODE_DICT {
 	}
 	
 	function make_private() {
-		// Might as well take care of some useless shit
+		//----- The following properties do not affect the infohash:
 
-		// anounce-list is an unofficial extension to the protocol that allows for multiple trackers per torrent
+		// anounce-list is an unofficial extension to the protocol
+		// that allows for multiple trackers per torrent
 		unset($this->Val['announce-list']);
 
 		// Bitcomet & Azureus cache peers in here
@@ -275,16 +276,21 @@ class TORRENT extends BENCODE_DICT {
 		// Azureus stores the dht_backup_enable flag here
 		unset($this->Val['azureus_properties']);
 
-		// Azureus stores the dht_backup_enable flag here
+		// Remove web-seeds
+		unset($this->Val['url-list']);
+
+		// Remove libtorrent resume info
 		unset($this->Val['libtorrent_resume']);
-		
+
+		//----- End properties that do not affect the infohash
+
 		if (!empty($this->Val['info']->Val['private']) && $this->Val['info']->Val['private'] == '[*INT*]1') {
 			return true;
 		} else {
 			// Torrent is not private!
-			
 			// add private tracker flag
 			$this->Val['info']->Val['private'] = '[*INT*]1';
+
 			return false;
 		}
 	}

@@ -111,7 +111,7 @@ if($Details=='all' || $Details=='day') {
 	if (!$TopTorrentsActiveLastDay = $Cache->get_value('top10tor_day_'.$Limit.$WhereSum)) {
 		$DayAgo = time_minus(86400);
 		$Query = $BaseQuery.' WHERE t.Seeders>0 AND ';
-		if (isset($Where) && !empty($Where)) { $Query .= $Where.' AND '; }
+		if (!empty($Where)) { $Query .= $Where.' AND '; }
 		$Query .= "
 			t.Time>'$DayAgo'
 			ORDER BY (t.Seeders + t.Leechers) DESC
@@ -126,7 +126,7 @@ if($Details=='all' || $Details=='week') {
 	if (!$TopTorrentsActiveLastWeek = $Cache->get_value('top10tor_week_'.$Limit.$WhereSum)) {
 		$WeekAgo = time_minus(604800);
 		$Query = $BaseQuery.' WHERE ';
-		if (isset($Where)) { $Query .= $Where.' AND '; }
+		if (!empty($Where)) { $Query .= $Where.' AND '; }
 		$Query .= "
 			t.Time>'$WeekAgo'
 			ORDER BY (t.Seeders + t.Leechers) DESC
@@ -142,7 +142,7 @@ if($Details=='all' || $Details=='overall') {
 	if (!$TopTorrentsActiveAllTime = $Cache->get_value('top10tor_overall_'.$Limit.$WhereSum)) {
 		// IMPORTANT NOTE - we use WHERE t.Seeders>500 in order to speed up this query. You should remove it!
 		$Query = $BaseQuery;
-		if (isset($Where)) { $Query .= ' WHERE '.$Where; }
+		if (!empty($Where)) { $Query .= ' WHERE '.$Where; }
 		elseif ($Details=='all') { $Query .= " WHERE t.Seeders>500 "; }
 		$Query .= "
 			ORDER BY (t.Seeders + t.Leechers) DESC
@@ -157,7 +157,6 @@ if($Details=='all' || $Details=='overall') {
 if(($Details=='all' || $Details=='snatched') && empty($Where)) {
 	if (!$TopTorrentsSnatched = $Cache->get_value('top10tor_snatched_'.$Limit.$WhereSum)) {
 		$Query = $BaseQuery;
-		if (isset($Where)) { $Query .= ' WHERE '.$Where; }
 		$Query .= "
 			ORDER BY t.Snatched DESC
 			LIMIT $Limit;";
