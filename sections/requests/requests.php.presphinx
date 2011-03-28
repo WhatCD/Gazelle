@@ -1,0 +1,495 @@
+<?
+
+list($Page,$Limit) = page_limit(REQUESTS_PER_PAGE);
+$OrderWays = array('name', 'votes', 'bounty', 'filler', 'requestor', 'created', 'lastvote', 'filled');
+$Wheres = array();
+$ExtraJoins = array();
+
+$Submitted = !empty($_GET['submit']);
+
+if(!empty($_GET['search'])) {
+	$Words = explode(' ', $_GET['search']);
+	$SearchWords = array();
+	foreach($Words AS $Word) {
+		$Wheres[] = "LOCATE('".db_string($Word)."', r.Title)";
+	}
+}
+
+$TagMatcher = (!empty($_GET['tagmatcher']) && $_GET['tagmatcher'] == "any") ? "any" : "all";
+
+if(!empty($_GET['tags'])){
+	$Tags = explode(',', $_GET['tags']);
+	$TagNames = array();
+	foreach ($Tags as $Tag){
+		$Tag = sanitize_tag($Tag);
+		if(!empty($Tag)) {
+			$TagNames[] = $Tag;
+		}
+	}
+	
+	if($TagMatcher == "any") {
+		$ExtraJoins[] = "LEFT JOIN requests_tags AS rt ON r.ID=rt.RequestID"; 
+		$ExtraJoins[] = "LEFT JOIN tags AS t ON t.ID=rt.TagID";
+		$Wheres[] = "t.Name IN ('".implode("', '", $TagNames)."')";
+	} else {
+		
+	}
+}
+
+if(!empty($_GET['requestor']) && check_perms('site_see_old_requests')) {
+	$Wheres[] = "u.Username LIKE ".db_string($_GET['requestor']);
+}
+
+if(!empty($_GET['filter_cat'])) {
+	$Keys = array_keys($_GET['filter_cat']);
+	$Wheres[] = "r.CategoryID IN (".implode(", ", $Keys).")";
+}
+
+if(!empty($_GET['releases'])) {
+	$ReleaseArray = $_GET['releases'];
+	if(count($ReleaseArray) != count($ReleaseTypes)) {
+		foreach($ReleaseArray as $Index => $Value) {
+			if(is_number($Value)) {
+				$Wheres[] = "r.ReleaseType = ".$Value;
+			} else {
+				error(0);
+			}
+		}
+	}
+}
+
+if(!empty($_GET['formats'])) {
+	$FormatArray = $_GET['formats'];
+	if(count($FormatArray) != count($Formats)) {
+		$FormatNameArray = array();
+		foreach($FormatArray as $Index => $MasterIndex) {
+			if(array_key_exists($Index, $Formats)) {
+				$FormatNameArray[$Index] = $Formats[$MasterIndex];
+			} else {
+				//Hax
+				error(0);
+			}
+		}
+		foreach($FormatNameArray as $Index => $Name) {
+			$Wheres[] = "LOCATE('".db_string($Name)."', r.FormatList)";
+		}
+	}
+}
+
+if(!empty($_GET['media'])) {
+	$MediaArray = $_GET['media'];
+	if(count($MediaArray) != count($Media)) {
+		$MediaNameArray = array();
+		foreach($MediaArray as $Index => $MasterIndex) {
+			if(array_key_exists($Index, $Media)) {
+				$MediaNameArray[$Index] = $Media[$MasterIndex];
+			} else {
+				//Hax
+				error(0);
+			}
+		}
+		foreach($MediaNameArray as $Index => $Name) {
+			$Wheres[] = "LOCATE('".db_string($Name)."', r.MediaList)";
+		}
+	}
+}
+
+if(!empty($_GET['bitrates'])) {
+	$BitrateArray = $_GET['bitrates'];
+	if(count($BitrateArray) != count($Bitrates)) {
+		$BitrateNameArray = array();
+		foreach($BitrateArray as $Index => $MasterIndex) {
+			if(array_key_exists($Index, $Bitrates)) {
+				$BitrateNameArray[$Index] = $Bitrates[$MasterIndex];
+			} else {
+				//Hax
+				error(0);
+			}
+		}
+		foreach($BitrateNameArray as $Index => $Name) {
+			$Wheres[] = "LOCATE('".db_string($Name)."', r.BitrateList)";
+		}
+	}
+}
+
+if(empty($_GET['type'])) { 
+	$Title = 'Requests';
+	if(!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
+		$Wheres[] = "(TorrentID = 0 OR (TimeFilled > (NOW() - INTERVAL 3 DAY)))";
+	}
+} else {
+	switch($_GET['type']) {
+		case 'created':
+			$Title = 'My requests';
+			$Wheres[] = "r.UserID = ".$LoggedUser['ID'];
+			break;
+		case 'voted':
+			$Title = "Requests I've voted on";
+			$Wheres[] = "_rv.UserID = ".$LoggedUser['ID'];
+			$ExtraJoins[] = "LEFT JOIN requests_votes AS _rv ON _rv.RequestID=r.ID";
+			break;
+		case 'filled':
+			if(empty($_GET['userid']) || !is_number($_GET['userid'])) {
+				error(404);
+			} else {
+				$Title = "Requests filled";
+				$Wheres = "r.FillerID = ".$_GET['userid'];
+			}
+		default:
+			error(404);
+	}
+}
+
+
+if(empty($_GET['order'])) {
+	$CurrentOrder = 'created';
+	$CurrentSort = 'desc';
+	$NewSort = 'asc';
+} else {
+	if(in_array($_GET['order'], $OrderWays)) {
+		$CurrentOrder = $_GET['order'];
+		if($_GET['sort'] == 'asc' || $_GET['sort'] == 'desc') {
+			$CurrentSort = $_GET['sort'];
+			$NewSort = ($_GET['sort'] == 'asc' ? 'desc' : 'asc');
+		} else {
+			error(404);
+		}
+	} else {
+		error(404);
+	}
+}
+
+$CurrentURL = get_url(array('order', 'sort'));
+
+switch($CurrentOrder) {
+	case 'name' :
+		$OrderBy = "r.Title";
+		break;
+	case 'votes' :
+		$OrderBy = "Votes";
+		break;
+	case 'bounty' :
+		$OrderBy = "Bounty";
+		break;
+	case 'filler' :
+		$OrderBy = "r.FillerID";
+		break;
+	case 'requestor' :
+		$OrderBy = "r.UserID";
+		break;
+	case 'created' :
+		$OrderBy = "r.ID";
+		break;
+	case 'lastvote' :
+		$OrderBy = "r.LastVote";
+		break;
+	case 'filled' :
+		$OrderBy = "r.TimeFilled";
+		break;
+	default :
+		$OrderBy = "r.ID";
+		break;
+}
+$OrderBy = $OrderBy." ".$CurrentSort;
+
+$Matcher = "AND";
+if(count($Wheres)) {
+	$Where = "WHERE (".implode(") ".$Matcher." (", $Wheres).")";
+} else {
+	$Where = "";
+}
+
+if(count($ExtraJoins)) {
+	$ExtraJoin = implode(" ", $ExtraJoins);
+} else {
+	$ExtraJoin = "";
+}
+
+// Build SQL query
+$DB->query("SELECT
+			SQL_CALC_FOUND_ROWS 
+			r.ID,
+			r.CategoryID,
+			r.Title,
+			r.Year,
+			SUM(rv.Bounty) AS Bounty,
+			COUNT(rv.UserID) AS Votes,
+			r.FillerID,
+			filler.Username,
+			r.TorrentID,
+			r.TimeFilled,
+			r.UserID,
+			u.Username,
+			r.TimeAdded,
+			r.LastVote
+			FROM requests AS r
+			LEFT JOIN users_main AS u ON u.ID=r.UserID
+			LEFT JOIN users_main AS filler ON filler.ID = FillerID
+			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID "
+			.$ExtraJoin." "
+			.$Where."
+			GROUP BY r.ID
+			ORDER BY ".$OrderBy."
+			LIMIT ".$Limit);
+
+$Requests = $DB->to_array();
+
+$DB->query('SELECT FOUND_ROWS()');
+list($Results) = $DB->next_record();
+$PageLinks = get_pages($Page, $Results, REQUESTS_PER_PAGE, 11);
+
+
+
+
+show_header($Title, 'requests');
+
+?>
+<div class="thin">
+	<h2><?=$Title?></h2>
+	<div class="linkbox">
+<?	if(check_perms('site_submit_requests')){ ?> 
+		<a href="requests.php?action=new">[New request]</a>
+		<a href="requests.php?type=created">[My requests]</a>
+<?	} 
+	if(check_perms('site_vote')){?> 
+		<a href="requests.php?type=voted">[Requests I've voted on]</a>
+<?	} ?> 
+	</div>
+	<div class="center">
+		<form action="" method="get">
+			<input type="hidden" name="submit" value="true" />
+			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+				<tr>
+					<td class="label">Search terms:</td>
+					<td>
+						<input type="text" name="search" size="75" value="<?if(isset($_GET['search'])) { echo display_str($_GET['search']); } ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td class="label">Tags (comma-separated):</td>
+					<td>
+						<input type="text" name="tags" size="60" value="<?=display_str(implode(', ', $TagNames))?>" />
+						<input type="radio" name="tagmatcher" value="any" <?=((empty($TagMatcher) || $TagMatcher == "any") ? ' checked="checked" ' : '')?>/>Any &nbsp;
+						<input type="radio" name="tagmatcher" value="all" <?=((!empty($TagMatcher) && $TagMatcher == "all") ? ' checked="checked" ' : '')?>/>All
+					</td>
+				</tr>
+
+<?	if(check_perms('site_see_old_requests')){ ?> 
+				<tr>
+					<td class="label">Include filled:</td>
+					<td>
+						<input type="checkbox" name="showall" <? if($_GET['showall']) {?>checked="checked"<? } ?> />
+					</td>
+				</tr>
+<?	/* ?> 
+				<tr>
+					<td class="label">Requested by:</td>
+					<td>
+						<input type="text" name="requester" size="75" value="<?=display_str($_GET['requester'])?>" />
+					</td>
+				</tr>
+<?	*/} ?>
+			</table>
+			<table class="cat_list">
+<?
+$x=1;
+reset($Categories);
+foreach($Categories as $CatKey => $CatName) {
+	if($x%8==0 || $x==1) {
+?>
+					<tr class="cat_list">
+<?	} ?>
+						<td>
+							<input type="checkbox" name="filter_cat[<?=($CatKey+1)?>]" id="cat_<?=($CatKey+1)?>" value="1" <? if(isset($_GET['filter_cat'][$CatKey+1])) { ?>checked="checked"<? } ?> />
+							<label for="cat_<?=($CatKey+1)?>"><?=$CatName?></label>
+						</td>
+<?
+	if($x%7==0) {
+?>
+					</tr>
+<?
+	}
+	$x++;
+}
+?>
+			</table>
+			<table>
+				<tr id="release_list">
+					<td class="label">Release Types</td>
+					<td>
+						<input type="checkbox" id="toggle_releases" onchange="Toggle('releases');" /> Toggle All
+<?		$i = 0;
+		foreach ($ReleaseTypes as $Key => $Val) {
+			if($i % 8 == 0) echo "<br />";?>
+						<input type="checkbox" name="releases[]" value="<?=$Key?>"
+							<?=(((!$Submitted) || !empty($ReleaseArray) && in_array($Key, $ReleaseArray)) ? ' checked="checked" ' : '')?>
+						/> <?=$Val?>
+<?			$i++;
+		}?>
+					</td>
+				</tr>
+				<tr id="format_list">
+					<td class="label">Formats</td>
+					<td>
+						<input type="checkbox" id="toggle_formats" onchange="Toggle('formats');" /> Toggle All
+<?		foreach ($Formats as $Key => $Val) {
+			if($Key % 8 == 0) echo "<br />";?>
+						<input type="checkbox" name="formats[]" value="<?=$Key?>" 
+							<?=(((!$Submitted) || !empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
+						/> <?=$Val?>
+<?		}?>
+					</td>
+				</tr>				
+				<tr id="bitrate_list">
+					<td class="label">Bitrates</td>
+					<td>
+						<input type="checkbox" id="toggle_bitrates" onchange="Toggle('bitrates');" /> Toggle All
+<?		foreach ($Bitrates as $Key => $Val) {
+			if($Key % 8 == 0) echo "<br />";?>
+						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" 
+							<?=(((!$Submitted) || !empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
+						/> <?=$Val?>
+<?		}?>
+					</td>
+				</tr>
+				<tr id="media_list">
+					<td class="label">Media</td>
+					<td>
+						<input type="checkbox" id="toggle_media" onchange="Toggle('media');" /> Toggle All
+<?		foreach ($Media as $Key => $Val) {
+			if($Key % 8 == 0) echo "<br />";?>
+						<input type="checkbox" name="media[]" value="<?=$Key?>" 
+							<?=(((!$Submitted) || !empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
+						/> <?=$Val?>
+<?		}?>
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td colspan="2" class="center">
+						<input type="submit" value="Search requests" />
+					</td>
+				</tr>
+			</table>	
+		</form>
+	</div>
+	
+	<div class="linkbox">
+		<?=$PageLinks?>
+	</div>
+	
+	<table id="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+		<tr class="colhead_dark">
+			<td style="width: 38%;">
+				<a href="requests.php?order=name&amp;sort=<?=(($CurrentOrder == 'name') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Request Name</strong></a>
+			</td>
+			<td>
+				<strong><a href="requests.php?order=votes&amp;sort=<?=(($CurrentOrder == 'votes') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>">Vote (20MB)</a></strong></td>
+			<td>
+				<a href="requests.php?order=bounty&amp;sort=<?=(($CurrentOrder == 'bounty') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Bounty</strong></a>
+			</td>
+			<td>
+				<a href="requests.php?order=filled&amp;sort=<?=(($CurrentOrder == 'filled') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Filled</strong></a>
+			<td>
+				<a href="requests.php?order=filler&amp;sort=<?=(($CurrentOrder == 'filler') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Filled by</strong></a>
+			</td>
+			<td>
+				<a href="requests.php?order=requestor&amp;sort=<?=(($CurrentOrder == 'requestor') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Requested by</strong></a>
+			</td>
+			<td>
+				<a href="requests.php?order=created&amp;sort=<?=(($CurrentOrder == 'created') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
+			</td>
+			<td>
+				<a href="requests.php?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Last Vote</strong></a>
+			</td>
+		</tr>
+
+<?	if($Results == 0){ ?>
+		<tr class="rowb">
+			<td colspan="7">
+				Nothing found!
+			</td>
+		</tr>
+<?	} else {
+		$Row = 'a';
+		foreach ($Requests as $Request) {
+			list($RequestID, $CategoryID, $Title, $Year, $Bounty, $Votes, $FillerID, $FillerName, $TorrentID, $TimeFilled, $RequestorID, $RequestorName, $TimeAdded, $LastVote) = $Request;
+			
+			$CategoryName = $Categories[$CategoryID - 1];
+			$IsFilled = ($TorrentID != 0);
+			
+			if($CategoryName == "Music") {
+				$ArtistForm = get_request_artists($RequestID);
+				$ArtistLink = display_artists($ArtistForm, true, true);
+				$FullName = $ArtistLink."<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
+			} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
+				$FullName = "<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
+			} else {
+				$FullName ="<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title."</a>";
+			}
+			
+			$Row = ($Row == 'a') ? 'b' : 'a';
+			
+			$Tags = get_request_tags($RequestID);
+?>
+		<tr class="row<?=$Row?>">
+			<td>
+				<?=$FullName?>
+				<div class="tags">
+<?			
+			$TagList = array();
+			foreach($Tags as $TagID => $TagName) {
+				$TagList[] = "<a href='requests.php?tag=".$TagID."'>".display_str($TagName)."</a>";
+			}
+			$TagList = implode(', ', $TagList);
+?>
+					<?=$TagList?>
+				</div>
+			</td>
+			<td>
+				<?=$Votes?>
+<?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
+				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+				&nbsp;&nbsp; <a href="javascript:Vote()"><strong>(+)</strong></a>
+<?  		} ?> 
+			</td>
+			<td>
+				<?=get_size($Bounty)?>
+			</td>
+			<td>
+<?   		if($IsFilled){ ?>
+				<a href="torrents.php?id=<?=$TorrentID?>"><strong>Yes - <?=$TimeFilled?></strong></a>
+<?   		} else { ?>
+				<strong>No - <a href="upload.php?requestid=<?=$RequestID?>">[Upload]</a></strong>
+<?   		} ?>
+			</td>
+			<td>
+<?			if($IsFilled){ ?>
+			<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a>
+<?			} else { ?>
+			--
+<?			} ?>
+			</td>
+			<td>
+				<a href="user.php?id=<?=$RequestorID?>"><?=$RequestorName?></a>
+			</td>
+			<td>
+				<?=time_diff($TimeAdded)?>
+			</td>
+			<td>
+				<?=time_diff($LastVote)?>
+			</td>
+		</tr>
+<?
+		} // while
+	} // else
+?>
+	</table>
+	<div class="linkbox">
+		<?=$PageLinks?>
+	</div>
+</div>
+<?
+show_footer();
+?>

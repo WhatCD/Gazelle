@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /index.php
+Allow: /login.php
+Allow: /register.php
+#<skip>
+Allow: /what-network/
+Allow: /gazelle/
+Sitemap: http://what.cd/sitemap.xml
+#</skip>
+Disallow: /

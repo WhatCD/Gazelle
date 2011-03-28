@@ -1,0 +1,467 @@
+/* inline-block might not work in ie7 */
+
+/* GLOBAL */
+body{background:#262626 url(http://www.what.cd/static/styles/minimal/images/bg.png) repeat-x; color:#F1F1F1; font-family:Arial,sans-serif; font-size:11px; margin:0}
+h1, h2, h3, h4{margin-top:0; padding:0}
+a, a:visited, a:active{color:#5AF; text-decoration:none}
+a:hover{color:#49D; text-decoration:underline}
+a img{border-style:none; position:relative; top:1px}
+p{margin:0px 0 5px 0}
+td p{margin:0}
+input, select, textarea{color:#F1F1F1; padding:3px; background:#262626; border:1px solid #9C9C9C; font-family:Arial,sans-serif; font-size:11px; }
+input:focus, textarea:focus{border:1px solid #CCC}
+blockquote{background:transparent url(http://what.cd/static/styles/minimal/images/blockquote.png) repeat; padding:5px; margin:10px; color:#F1F1F1 !important}
+input[type="submit"]:focus, input[type="button"]:focus{background:#333}
+input[type="submit"]:active, input[type="button"]:active{background:#5AF}
+select{padding:1px}
+input#file, input[type="file"]{color:#fff}
+textarea#quickpost{margin:0; padding:0}
+
+/* GENERAL */
+.box, #content table tr td{background:#373737; margin-bottom:15px}
+.pad{padding:10px}
+
+.sidebar .box{position:relative}
+.sidebar img{max-width:228px}
+.hidden, .hide{display:none}
+.nobr{white-space:nowrap; font-weight:normal}
+.rowa td{background-color:#2A2A2A}
+.rowb td{background-color:#232323}
+.min_padding{padding:0}
+.head, .colhead, #user table tr td.center strong{background:#454545 !important; padding:5px 7px; border:1px solid #757575 !important}
+.label{width:15%}
+
+/* wrapper */
+#wrapper{width:980px; margin:0 auto}
+
+/* header layout */
+#header{position:relative; overflow:visible; height:102px; z-index:4;}
+
+/* menu */
+#menu{margin:0 0 0 0px; padding:0 249px 7px 0; border-bottom:1px solid #353535; overflow:hidden}
+#menu *{text-transform:lowercase}
+#menu ul{list-style:none; margin:0; padding:0}
+#menu ul li{float:left; margin:2px 6px 0; text-align:center}
+#menu ul li a{padding:12px 4px 3px; font-weight:bold; display:block; text-decoration:none; color:#FFF}
+#menu ul li:hover{background:#353535}
+#menu ul li:hover a{color:#FFF}
+
+/* active menu item */
+#index #nav_index a, #torrents #nav_torrents a, #collage #nav_collages a, #requests #nav_requests a, #forums #nav_forums a, #top10 #nav_top10 a, #rules #nav_rules a, #kb #nav_wiki a, #wiki #nav_wiki a, #staff #nav_staff a, #chat #nav_irc a
+{background:#5AF}
+
+/* sprite */
+#userinfo_username li:first-child, #userinfo_major li:first-child, #userinfo_minor li:first-child, #userinfo_username li:first-child:hover, #userinfo_major li:first-child:hover, #userinfo_minor li:first-child:hover,
+#userinfo_username li:first-child a, #userinfo_username li:first-child a:hover, #userinfo_minor li:first-child a, #userinfo_minor li:first-child a:hover,
+#userinfo_major li:first-child a, #userinfo_major li:first-child a:hover,
+.show_torrents, .hide_torrents {background-image:url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png)}
+
+/* userinfo start */
+#userinfo{z-index:3}
+#userinfo *{text-transform:lowercase}
+#userinfo, #userinfo a{color:#FFF}
+#userinfo ul{position:absolute; list-style:none; margin:8px 0 0; padding:0; z-index:2}
+#userinfo ul li{z-index:2}
+#userinfo ul li a{z-index:2; position:relative}
+
+/* common drop down */
+#userinfo_username li:first-child, #userinfo_major li:first-child, #userinfo_minor li:first-child{background-repeat:no-repeat; background-position:100% -177px; height:23px; padding:0 2px 0 0}
+#userinfo_username li:first-child:hover, #userinfo_major li:first-child:hover, #userinfo_minor li:first-child:hover{background-position:100% -527px}
+#userinfo_username li:first-child a, #userinfo_major li:first-child a, #userinfo_minor li:first-child a{height:19px; padding:4px 20px 0 22px; background-repeat:no-repeat; background-position:top left}
+
+/* common props */
+#userinfo_username:hover, #userinfo_major:hover, #userinfo_minor:hover{background-color:#303030}
+#userinfo_username li a, #userinfo_major li a, #userinfo_minor li a{display:block; padding:3px 3px 3px 22px}
+#userinfo_username li:hover, #userinfo_major li:hover, #userinfo_minor li:hover{background-color:#5E5E5E}
+#userinfo_major:hover li, #userinfo_minor:hover li{display:block}
+#userinfo_major li, #userinfo_minor li{display:none; margin-bottom:2px; padding-left:2px}
+#userinfo_major li:last-child, #userinfo_minor li:last-child{margin-bottom:0}
+#userinfo_major li:first-child, #userinfo_minor li:first-child{display:block}
+
+/* username drop down */
+#userinfo_username li:first-child a{text-transform:none; background-position:0 -819px}
+#userinfo_username li:first-child a:hover{background-position:0 -580px}
+#userinfo_username{right:182px; min-width:58px}
+#userinfo_username .brackets{display:none}
+#userinfo_username:hover .brackets{display:block}
+#userinfo_username li{margin-bottom:2px; padding-left:2px}
+#userinfo_username li:last-child{margin-bottom:0}
+
+/* minor drop down */
+#userinfo_minor li:first-child a{background-position:0 -368px}
+#userinfo_minor li:first-child a:hover{background-position:0 -30px}
+#userinfo_minor{right:85px; width:89px}
+
+/* major drop down */
+#userinfo_major li:first-child a{background-position:0 -421px}
+#userinfo_major li:first-child a:hover{background-position:0 -474px}
+#userinfo_major{right:0; width:77px}
+#userinfo_major .brackets strong{font-weight:normal}
+
+/* stats */
+#userinfo_stats{top:34px; width:230px; right:0; z-index:1 !important; text-align:right}
+#userinfo_stats li{float:right; margin-left:5px; width:102px; position:relative; top:1px; z-index:1 !important}
+#userinfo_stats *{padding:1px 0.5px}
+#userinfo_stats .stat{color:#5AF}
+
+/* greasemonkey replacements */
+#userinfo_username>li:first-child + li>a{ background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -322px;}
+#userinfo_username>li:first-child + li + li>a{ background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -679px; }
+
+#userinfo_minor>li:first-child + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -918px; }
+#userinfo_minor>li:first-child + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -872px; }
+#userinfo_minor>li:first-child + li + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -83px; }
+#userinfo_minor>li:first-child + li + li + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -276px; }
+#userinfo_minor>li:first-child + li + li + li + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -958px; }
+#userinfo_minor>li:first-child + li + li + li + li + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -633px; }
+
+#userinfo_major>li:first-child + li>strong>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -230px; }
+#userinfo_major>li:first-child + li + li>strong>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -725px; }
+
+/* alerts */
+#alerts{position:absolute; top:75px; left:0px; z-index:1; font-weight:bold; font-size: 10px; color:#FFF; text-transform: uppercase;}
+.alertbar{height:11px; padding:3px; float:left; margin-right: 5px;}
+.alertbar a{color: #f60021;}
+
+/* searchbars */
+#searchbars{margin:10px 210px 0 0px}
+#searchbars input{background-repeat:no-repeat; background-position:0 -129px; border:1px solid #333; width:82px; margin:0; padding:2px 4px; color:#777}
+#searchbars ul{padding:0; margin:0; list-style:none;display:block;text-align:center}
+#searchbars ul li{display:inline; margin-right:10px;list-style:none;position:relative}
+#searchbars form{display:inline}
+#searchbars ul li ul {
+		display: block;
+        position: absolute;
+        top: 1em;
+		left: 0;
+        z-index: 1000;
+        border : 1px solid #000;
+        width: 12em;
+        margin-top: 12px;
+}
+
+#searchbars ul li ul li {
+        margin: 0 0 0 0;
+        padding: 0;
+        display: block;
+        width: 100%;
+        text-align: center;
+}
+/* TABLE BORDERS */
+table tr td{border:1px solid #757575}
+#user table tr td{border:0}
+
+/* content */
+#content{z-index:0; padding:0; margin:0; position:relative}
+#content h2:first-child{border-bottom:1px solid #ACBFA9;}
+#content .box h2{background:none;  margin:0;  padding:0; position:static;  border-bottom:0}
+#content table{padding:0; border-collapse:collapse; width:100%}
+#content table td{padding:5px}
+#content table td h4{margin:0}
+#content table .colhead td{background-color:#454545; font-weight:bold}
+#content table .colhead_dark td{background-color:#555}
+#content table .colhead td, #content table .colhead_dark td{border:1px solid #757575; color:#FFF}
+#content table .colhead a, #content table .colhead_dark a{font-weight:bold; color:#FFF}
+#content table td.label{border-right:1px solid #757575}
+#content table td.right{text-align:right}
+
+/* footer */
+#footer{padding:40px 0; color:#555; border-top:1px solid #353535}
+#footer p{float:left; width:30%; margin-right:2%}
+#disclaimer_container{text-align:left !important}
+
+/* WIKI */
+#wiki .pad ul:first-child{padding-left:5px}
+#wiki .pad ul{padding-left:15px}
+#wiki .linkbox{background-color:transparent; margin-bottom:0}
+
+/* FRIENDS */
+#friends table{width:60%;  margin:0 auto}
+#friends textarea{height:42px;  width:270px !important;  margin:0}
+#friends .left{width:50%;  text-align:right}
+
+#friends br,
+#footer br{display:none}
+
+/* MESSAGES */
+#inbox .box .body{padding:10px; border:1px solid #353535}
+#inbox form textarea{margin:0 0 10px 0}
+#messageform input{margin-top:5px}
+#inbox table a{color:#AAA}
+#inbox .unreadpm a{color:#5AF; font-weight:bold}
+
+/* LOGS */
+#log .center{margin-bottom:8px}
+
+/* REQUESTS, TOP10 */
+#requests #content div.center, #top10 #content div.center{background:#2A2A2A}
+#requests table.border{margin-bottom:8px}
+
+/* STAFF */
+#staff .thin  .box{padding-top:3px !important}
+
+/* UPLOAD */
+#upload #post{font-size:175%; margin-top:10px}
+
+/* USER */
+table tr.colhead_dark td{background:#555; border:0}
+/*#user table input[type="text"]{width:98% !important}*/
+#user #styleurl{width:40% !important}
+#user table textarea{width:98% !important}
+#user table tr td.center strong{display:block}
+
+/* FORUMS */
+#forums h3{margin:15px 0}
+#forums h3:first-child{margin:0 0 15px 0}
+#forums table.border .cat_list{width:80%}
+#forums table.border .cat_list td{width:20%;  padding:0 !important;  border:0 !important}
+.forum_unread .colhead_dark{background-color:#e3f1f9 !important; /*border:2px solid #a8d3ec !important; */}
+#forums table.forum_unread tr.colhead_dark td{background: #3A638C}
+
+.last_read { width: 15px; height: 15px; background: url(http://what.cd/static/styles/minimal/images/go_last_read.png) no-repeat center center; margin-left: 5px; margin-left: 5px;}
+.last_read a { border: none; width: 100%; height: 100%; display: block; }
+.last_read a:hover { border: none; }
+
+#forums #content .thin td.read{background:#373737 url(http://what.cd/static/styles/minimal/images/balloon.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.unread{background:#373737 url(http://what.cd/static/styles/minimal/images/balloon-unread.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.read_sticky{background:#373737 url(http://what.cd/static/styles/minimal/images/sticky.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.unread_sticky{background:#373737 url(http://what.cd/static/styles/minimal/images/sticky-unread.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.read_locked{background:#373737 url(http://what.cd/static/styles/minimal/images/lock.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.unread_locked{background:#373737 url(http://what.cd/static/styles/minimal/images/lock-unread.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.read_locked_sticky{background:#373737 url(http://what.cd/static/styles/minimal/images/lock-sticky.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.unread_locked_sticky{background:#373737 url(http://what.cd/static/styles/minimal/images/lock-sticky-unread.png) no-repeat 50%; width:18px; height:18px}
+
+/* log checker fix */
+#logchecker input[type="file"]{color:#fff}
+
+/* TOO MUCH BLUE FIXES */
+#forums #content a{color:#F1F1F1}
+#forums #content a:hover{color:#007dc6}
+#forums #content .forum_post a, #forums #content .linkbox a, #forums #content h2 a, #forums #content .forum_post .colhead_dark a, #forums #content #quickpostform a{color:#5AF}
+#forums #content .forum_post a:hover, #forums #content .linkbox a:hover, #forums #content h2 a:hover, #forums #content .forum_post .colhead_dark a:hover, #forums #content #quickpostform a{color:#5AF}
+
+#forums .rowb .min_padding img, #forums .rowa .min_padding img{position:relative; top:3px}
+
+#forums .forum_post tr, 
+#userhistory .forum_post tr, 
+#collage .forum_post tr, 
+#torrents .forum_post tr{border-bottom:1px solid #757575}
+
+#forums .forum_post, 
+#userhistory .forum_post, 
+#collage .forum_post, 
+#torrents .forum_post{border:0;  margin:0}
+
+.avatar{border:0 !important;  padding:1px 1px 1px 0;  background-color:#161616 !important;  width:150px}
+#comments .avatar{width:150px}
+
+#requests .forum_post .body{border:0}
+#requests .forum_post{margin-bottom:0}
+
+#forums .forum_post .body, 
+#userhistory .forum_post .body, 
+#collage .forum_post .body, 
+#torrents .forum_post .body{padding:0; border-left:0}
+
+#forums .forum_post td, 
+#userhistory .forum_post td, 
+#collage .forum_post td, 
+#torrents .forum_post td{border-left:0;  border-right:0}
+
+#forums .forum_post .body div, 
+#collage .forum_post .body div, 
+#torrents .forum_post .body div,
+#requests .forum_post .body div{padding:10px 15px}
+
+#userhistory .forum_post .body{padding:20px}
+#userhistory .forum_post tr.colhead_dark{background-image:none}
+
+#forums .forum_post .body div div, 
+#collage .forum_post .body div div, 
+#torrents .forum_post .body div div{background:none;  padding:0}
+
+#forums .forum_post ul{margin:5px 0 0 0; padding:0}
+#forums .forum_post li{margin:0 0 0 20px; padding:0}
+#forums #content .thin .box form .box input[type="Text"]{font-size:20px;  width:500px}
+#forums #content form .box{width:510px; margin:0 auto; padding:1ex; text-align:left; background-color:#404040}
+
+/* TORRENTS */
+#torrents .filter_torrents{margin:0 auto}
+#torrents .filter_torrents td{border:0}
+#torrents .filter_torrents .cat_list .label{border-right:0}
+#torrents .filter_torrents .cat_list label{position:relative; top:-3px}
+#torrents .filter_torrents .cat_list{margin:10px 0; padding:5px 0; border:1px solid #757575; border-width:1px 0}
+#torrents .filter_torrents #taglist{border:0}
+#torrents .filter_torrents table{background-color:transparent}
+#torrents .filter_torrents h3{margin-top:0}
+#torrents .filter_torrents #taglist td{padding:2px 5px}
+#torrents .filter_torrents .inputtext{width:150px}
+#torrents .filter_torrents .smallest{width:80px}
+#torrents .filter_torrents table td.label{text-align:right; padding:0 5px 0 0}
+#torrents .filter_torrents a#swaptags{font-weight:bold; text-align:center; display:block; padding:5px 0}
+#torrents .filter_torrents .submit{padding:5px 0 0 0; font-weight:bold; text-align:right; direction:rtl}
+#torrents .filter_torrents .submit span{direction:ltr}
+.torrent a{font-weight:bold}
+.linkbox{text-align:center; padding:0 0 8px; margin-top: 8px;}
+.linkbox a{padding:0 3px}
+.show_torrents_link{border:none; width:28px;  height:28px; display:block}
+.show_torrents{background-repeat:no-repeat; background-position:0 -1093px; width:30px; height:30px}
+.hide_torrents{background-repeat:no-repeat; background-position:0 -1033px; width:30px; height:30px}
+.group{font-weight:bold}
+.group td.nobr{font-weight:normal}
+#taglist td{border:0}
+#taglist a, .tags a{font-weight:normal; color:#888}
+#taglist a:hover, .tags a:hover{color:#007dc6}
+
+#torrent_table{margin:0; padding:0; border-spacing:0; border-collapse:collapse; width:100%}
+#torrent_table a img{border:0}
+#torrent_table td{margin:0; padding:3px}
+#torrent_table tr.colhead td{font-weight:bold}
+#torrent_table .group_torrent td{background-color:#333}
+.torrent_table .group_torrent td{background-color:#333}
+.torrent_table .pad td{padding:20px !important;  border:1px solid #ACBFA9 !important}
+.torrent_table .pad td td{border-left:0 !important;  border-right:0 !important;  background:none;  padding:5px !important}
+.torrent_table tr.group_torrent td span, #torrent_table tr.group_torrent td span{padding-left:18px}
+.torrent_table tr.group_torrent a, #torrent_table tr.group_torrent a{color:#999; font-weight:normal}
+.torrent_table tr.group_torrent a:hover, #torrent_table tr.group_torrent a:hover{color:#007dc6}
+
+#torrents #content .center .box form div input[type="text"], 
+#wiki #content .center .box form div input[type="text"], 
+#artist #content .center .box form div input[type="text"]{width:500px;  margin-bottom:10px}
+
+#torrents #content .center .box form div textarea, 
+#wiki #content .center .box form div textarea, 
+#upload textarea#album_desc, 
+#forums #content .thin .box form .box textarea, 
+#forums #quickpost{height:200px}
+
+#torrents #content .center .box form div, 
+#wiki #content .center .box form div, 
+#artist #content .center .box form div{text-align:left !important}
+
+/* PROFILE PAGE */
+/* #user .main_column table tr td{border-style:solid none solid none !important} */
+/* #user .main_column table tr.colhead td{border-style:solid !important} */
+
+/* HOME AND ARTISTS */
+.main_column{width:700px}
+.sidebar{float:right; width:250px}
+.main_column table{margin:0 0 20px 0}
+.box table{margin:0;  background-color:#FFF}
+
+#discog_table, #collage_table{margin-top:1px}
+.sidebar form br, 
+.sidebar .pad br{line-height:1em}
+
+.main_column .body, 
+.sidebar .box .body{/*ADD TAG ON ALBUM PAGE */ padding:10px}
+
+.sidebar .box .stats{list-style:none; margin:0; padding:10px}
+.sidebar ol{padding:0 !important;  margin:0;  list-style-position:inside}
+.sidebar ul{list-style-type:none;  margin:0}
+.sidebar .box li{margin:0 0 2px 0}
+.sidebar form textarea{width:220px !important}
+.sidebar form input{margin:0}
+.sidebar .box .pad div{padding:0 !important}
+.sidebar form{padding:0 !important;  margin:0 !important}
+
+#recommended ul{margin:0 0 0 0; padding:10px}
+#discog_table .center{background-image:none}
+
+
+/* TORRENTS */
+.main_column .torrent_table .pad{padding:15px !important}
+.main_column .torrent_table .torrent{background-color:#f6f6f6}
+.main_column .torrent_table .pad blockquote{margin:0 0 5px 0; border:1px dotted #e6e6e6; padding:5px}
+
+/*.main_column .group{background:#c2c2c2 url('discogbglightshadow.png') top left repeat-x}*/
+.main_column .group td{ border:0 !important}
+#discog_table div.tags{padding-left:15px}
+
+/* POLLS  */
+.poll{list-style:none; padding:10px; margin:5px}
+.poll li{clear:both}
+.poll .graph{padding:0 0 15px 0}
+.poll .graph span{display:block;  height:19px;  float:left}
+.poll .graph #left_poll{width:9px;  background:url(http://what.cd/static/styles/minimal/images/poll_left.png) top left no-repeat}
+.poll .graph #center_poll{background:url(http://what.cd/static/styles/minimal/images/poll_middle.png) top left repeat-x}
+.poll .graph #right_poll{width:11px;  background:url(http://what.cd/static/styles/minimal/images/poll_right.png) top left no-repeat}
+
+/* MISC */
+.r00{color:#F00}
+.r01{color:#FF1300}
+.r02{color:#FF1300}
+.r03{color:#FF2600}
+.r04{color:#FF4C00}
+.r05{color:#FF5E00}
+.r06{color:#FF5E00}
+.r07{color:#FF7100}
+.r08{color:#FF9700}
+.r09{color:#FA0}
+.r10{color:#74C42E}
+.r20{color:#418B00}
+.r50{color:#418B00}
+.r99{color:#418B00}
+.size1{font-size:0.75em}
+.size2{font-size:1em}
+.size3{font-size:1.25em}
+.size4{font-size:1.5em}
+.size5{font-size:1.75em}
+.size6{font-size:2em}
+.size7{font-size:2.25em}
+.size8{font-size:2.5em}
+.size9{font-size:2.75em}
+.size10{font-size:3em}
+
+.curtain{position:fixed; top:0%; left:0%; width:100%; height:100%; background-color:black; z-index:1001; opacity:0.8; filter:alpha(opacity=80)}
+.lightbox{position:fixed; text-align:center; top:5%; left:5%; width:90%; height:90%; padding:0px; z-index:1002; overflow:auto}
+.lightbox table{position:absolute;  top:50%; left:50%; margin-left:-300px !important; background-color:#e6e6e6; border:5px solid #f6f6f6; padding:5px}
+.lightbox form{color:#aaa}
+.lightbox table *{text-align:left}
+.lightbox .colhead span{font-weight:bold}
+.save_message{color: #007dc6; display:table; padding:5px; background-repeat:repeat-x; background-position:0 -771px; margin:0 auto; text-align:center; font-weight:bold}
+.nobullet{list-style:none; margin:0; padding:10px}
+
+/* CLEARFIXES */
+#menu ul:after, ul#userinfo_minor:after, div.sidebar:after, #content:after, #footer:after{content:".";  display:block;  height:0;  clear:both;  visibility:hidden}
+div.sidebar, #content, #footer{display:inline-block}
+
+/* Hides from IE-mac \*/
+* html #menu ul, * html ul#userinfo_minor, * html div.sidebar, * html #content, * html #footer{height:1%}
+div.sidebar, #content, #footer{display:block}
+/* End hide from IE-mac */
+
+/* COLLAGES + User profile page */
+#collage_table td{padding:0 !important;  border:0 !important;  width:140px !important;  height:140px !important}
+#collage_table td img{width:140px !important;  height:140px !important;  float:left}
+#collage_table td img:hover{width:300px !important;  height:300px !important; float:left; margin:-80px; z-index:100}
+#user .main_column td img{width:130px !important; height:130px !important}
+#user .main_column td img:hover{width:280px !important; height:280px !important; margin:-75px; z-index:100}
+#collage_table{width:645px}
+
+#requests .tags{color:#656565}
+#requests .tags a{color:#8c8c8c}
+#requests .tags a:hover{color:#575757}
+
+#quickreplybuttons{margin-top:5px}
+h3{margin:10px 0}
+
+#user #userform{padding:20px 0 0 0}
+
+#user .linkbox, 
+#artist .linkbox, 
+#collage .linkbox, 
+#forums .linkbox, 
+#bookmarks .linkbox, 
+#torrents .linkbox{border-bottom:0}
+
+#rules #content li{margin:0 0 5px 0}
+
+/* ICONS */
+.cats_music{width:30px; height:30px; background:url(http://what.cd/static/styles/minimal/images/icons/music.png) top left no-repeat}
+.cats_applications{width:30px; height:30px; background:url(http://what.cd/static/styles/minimal/images/icons/apps.png) top left no-repeat}
+.cats_ebooks{width:30px; height:30px; background:url(http://what.cd/static/styles/minimal/images/icons/ebook.png) top left no-repeat}
+.cats_audiobooks{width:30px; height:30px; background:url(http://what.cd/static/styles/minimal/images/icons/audiobook.png) top left no-repeat}
+.cats_elearningvideos{width:30px; height:30px; background:url(http://what.cd/static/styles/minimal/images/icons/elearning.png) top left no-repeat}
+.cats_comedy{width:30px; height:30px; background:url(http://what.cd/static/styles/minimal/images/icons/comedy.png) top left no-repeat}
+.cats_comics{width:30px; height:30px; background:url(http://what.cd/static/styles/minimal/images/icons/comics.png) top left no-repeat}

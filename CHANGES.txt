@@ -1,0 +1,150 @@
+CHANGELOG
+2010-08-28
+-Upgrade Sphinx to 1.10b
+
+2010-08-25
+-Better handling of special characters in torrent searches
+-Improved file name search
+-Add negations to request searches
+
+2010-08-11
+-Fixed long standing IE Bug. Turns out that IE fails to handle unicode data in the Content-disposition header so this value is now urlencoded ensuring compatibility.
+
+2010-08-10
+-Added check for CustomPerms IP protection on login
+
+2010-07-30
+-Add collage stats to user profiles
+
+2010-07-04
+-Updated sphinx.conf
+
+2010-06-26
+-Fixed IP bans and added to public repo
+-Added catch for missing system 'host' command
+-Logged in users can't hit register.php
+-Fix in URL_REGEX to allow URLs of the form http://foo.com/
+
+2010-06-09
+-Delete torrent files when torrent is deleted
+
+2010-06-04
+-User proper names on bookmark/notify links if a group is already bookmarked or in the notifications
+
+2010-05-21
+-Sortable invitee list
+
+2010-05-16
+-Escape tag links on user torrent pages
+
+2010-05-12
+-Make the "view tags" button change to "hide tags" if tags are shown
+-Make editing upload/download amounts work on 32bit systems
+-Fix a typo in class_cache, not major
+-Add default values to schedule table
+
+2010-05-09
+-Add catchup link to subscriptions page
+
+2010-05-05
+-Move $Classes fetching code to somewhere globally accessible so that schedule can fetch it
+
+2010-05-03
+-Fixed bug in 32bit parser that would allow clients to set private=0
+
+2010-05-01
+-Add preview functionality to thread creation page
+
+2010-04-30
+-Fix various subscription bugs
+
+2010-04-29
+-Properly update cache and database when a forum post is removed
+
+2010-04-28
+-Alias IDs now show next to artists in the artist box
+-Users with an infinite ratio now get promoted along with those who have a
+ratio of 1.05 or higher
+
+2010-04-26
+-Fixed bug where snatchlists were not visible to other users at paranoia level
+1 (should be 2 or higher)
+
+2010-04-19
+-Add requests to sphinx.conf
+
+2010-04-18
+-Fix request sorting
+
+2010-04-15
+-Added clickable staff notes
+
+2010-04-14
+-Add stylesheet and avatar search to advanced user search
+
+2010-04-13
+-Require authorization to manually run schedule
+-Fix minor bbcode bug which didn't allow question marks in filenames
+
+2010-04-11
+-Add "visible" checkbox to user profiles. Unticked, this will remove a user from a peer list.
+-Add option to disable PM privileges of user
+
+2010-04-07
+-Fix critical bug where users can view staff forum posts by changing the ID on the reports page
+
+2010-03-18
+-Clear notifications per torrent or filter
+
+2010-03-16
+-Notifications groups actually work now
+-Post history and subscriptions pages now default to unread posts with collapsed post bodies
+
+2010-03-14
+-Group notifications by filter
+
+2010-03-13
+-Added ability to view a user's downloaded torrents as well as snatched
+
+2010-03-12
+-Thread subscriptions
+-Various bugfixes, see resolved gazelle bug forum
+-Standardised Email and Image regexes across gazelle
+
+2010-03-10
+-Completed requestsv2, feel free to use it now
+
+2010-03-09
+-Add size and files column to notifications page and clone the browse layout
+-Don't redirect if ssl url == nonssl url
+-Fix some more warnings when calling sphinxapi.php
+-Year filter in notifications also checks remaster year
+
+2010-03-07
+-Change INSERT INTO to REPLACE INTO to avoid errors when updating the sphinx*_delta tables
+
+2010-03-04
+-Added initial version of requestsv2, will need more updates so not advised to
+update yet
+
+2010-03-02
+-Fixed bug in notifications by tags
+
+2010-03-01
+-Fixed bug in notifications by release type
+
+2010-02-28
+-Fixed bug which causes stats to be altered if the tracker updates while someone with stat editing powers moderates a profile
+-Fixed artist permission
+-Fixed two permission bugs
+-Removed references to What.CD in takemoderate.php
+-Fixed E_NOTICE with regards to taglist on browse2.php
+-Removed geodistribution from stats, fixed stats so they don't whitepage
+-Fixed the user geodistribution stats and geoip database updater, and added a function for an unsigned ip2long
+-Kill poll manager, it doesn't work anymore - use the forums
+	-Fix width of poll replies, don't display poll if there aren't any
+-Re-add reports folder
+-Fixed "database schema" tool
+-Fix upscale pool blank message
+-Fix number of posts in a forum after a thread has been moved out of it
+-Strip out SVN revision echo

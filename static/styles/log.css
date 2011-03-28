@@ -1,0 +1,45 @@
+pre, blockquote {
+	color: #444;
+}
+.log1 {
+ 	color: purple;
+ }
+ .log2 {
+ 	color: yellow;
+ }
+ 
+ .log3 {
+ 	color: blue;
+ }
+ 
+ .log4 {
+ 	font-weight: bold;
+ }
+ 
+ .log5 {
+ 	text-decoration: underline;
+ }
+ 
+ .good {
+ 	font-weight: bold;
+ 	color: green;
+ }
+ 
+ .bad {
+ 	font-weight: bold;
+ 	color: red;
+ }
+ 
+ .goodish {
+ 	font-weight: bold;
+ 	color: #35BF00;
+ }
+ 
+ .badish {
+ 	font-weight: bold;
+ 	color: #E5B244;
+ }
+ 
+ pre {
+ 	overflow: auto;
+ }
