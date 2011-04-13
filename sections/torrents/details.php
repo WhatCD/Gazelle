@@ -30,7 +30,7 @@ $WikiBody = $Text->full_format($WikiBody);
 $Artists = get_artist($GroupID);
 
 if($Artists) {
-	$DisplayName = display_artists($Artists, true).$DisplayName.'&lrm;';
+	$DisplayName = '<span dir="ltr">'.display_artists($Artists, true).$DisplayName.'</span>';
 	$AltName = display_str(display_artists($Artists, false)).$AltName;
 	$Title = $AltName;
 }
@@ -366,7 +366,8 @@ foreach ($TorrentList as $Torrent) {
 	if(!$ExtraInfo) {
 		$ExtraInfo = $GroupName ; $AddExtra=' / ';
 	}
-	if($FreeTorrent) { $ExtraInfo.=$AddExtra.'<strong>Freeleech!</strong>'; $AddExtra=' / '; }
+	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra.'<strong>Freeleech!</strong>'; $AddExtra=' / '; }
+	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra.'<strong>Neutral Leech!</strong>'; $AddExtra=' / '; }
 	if($Reported) { $ExtraInfo.=$AddExtra.'<strong>Reported</strong>'; $AddExtra=' / '; }
 	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra.'<strong>Bad Tags</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra.'<strong>Bad Folders</strong>'; $AddExtra=' / '; }

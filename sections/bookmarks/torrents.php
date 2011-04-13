@@ -227,7 +227,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	$DisplayName .= $GroupName;
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
 ?>
-		<td>
+		<li class="image_group_<?=$GroupID?>">
 			<a href="#group_<?=$GroupID?>">
 <?	if($Image) { ?>
 				<img src="<?=$Image?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
@@ -235,7 +235,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				<div style="width:107px;padding:5px"><?=$DisplayName?></div>
 <?	} ?>
 			</a>
-		</td>
+		</li>
 <?
 	$Collage[]=ob_get_clean();
 	
@@ -245,7 +245,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <div class="thin">
 	<h2><?=$Username?>'s Bookmarks</h2>
 	<div class="linkbox">
-		<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you've snatched?');">[Remove Snatched]</a>
+		<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">[Remove Snatched]</a>
 	</div>
 	<div class="sidebar">
 <?
@@ -297,28 +297,13 @@ foreach ($Artists as $ID => $Artist) {
 	</div>
 	<div class="main_column">
 <? if(empty($LoggedUser['HideCollage'])) { ?>
-		<table class="collage" id="collage_table" cellpadding="0" cellspacing="0" border="0">
-			<tr>
-<?
-	$x = 0;
-	foreach($Collage as $Group) {
-		echo $Group;
-		$x++;
-		if($x%5==0) {
-?>
-			</tr>
-			<tr>
-<?
-	}
-}
-	if($x%5!=0) { // Padding
-?>
-				<td colspan="<?=7-($x%7)?>"> </td>
-<? 	} ?>
-			
-			</tr>
-		</table>
+		<ul class="collage_images">
+<? foreach($Collage as $Group) { ?>
+			<?=$Group?>
 <? } ?>
+		</ul>
+<? } ?>
+		<br />
 		<table class="torrent_table" id="torrent_table">
 			<tr class="colhead_dark">
 				<td><!-- expand/collapse --></td>

@@ -26,7 +26,7 @@ heart. -A9
 SQL template:
 SELECT 
 	CASE 
-	WHEN t.Format='Ogg' THEN 0 
+	WHEN t.Format='Ogg Vorbis' THEN 0 
 	WHEN t.Format='MP3' AND t.Encoding='V0 (VBR)' THEN 1 
 	WHEN t.Format='MP3' AND t.Encoding='V2 (VBR)' THEN 2 
 	ELSE 100 
@@ -91,7 +91,7 @@ foreach ($_REQUEST['list'] as $Priority => $Selection) {
 		case '35': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless' AND HasLog='1'"; break;
 		case '36': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless'"; break;
 		case '40': $SQL .= "t.Format='DTS'"; break;
-		case '41': $SQL .= "t.Format='Ogg'"; break;
+		case '41': $SQL .= "t.Format='Ogg Vorbis'"; break;
 		case '42': $SQL .= "t.Format='AAC' AND t.Encoding='320'"; break;
 		case '43': $SQL .= "t.Format='AAC' AND t.Encoding='256'"; break;
 		case '44': $SQL .= "t.Format='AAC' AND t.Encoding='q5.5'"; break;

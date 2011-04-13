@@ -509,6 +509,7 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 				<td colspan="<?=($AdvancedSearch)?'3':'1'?>">
 					<select name="order_by" style="width:auto;">
 						<option value="time"<?selected('order_by','time')?>>Time added</option>
+						<option value="year"<?selected('order_by','year')?>>Year</option>
 						<option value="size"<?selected('order_by','size')?>>Size</option>
 						<option value="snatched"<?selected('order_by','snatched')?>>Snatched</option>
 						<option value="seeders"<?selected('order_by','seeders')?>>Seeders</option>
@@ -651,7 +652,7 @@ if(($Bookmarks = $Cache->get_value('bookmarks_'.$LoggedUser['ID'])) === FALSE) {
 	<tr class="colhead">
 		<td class="small"></td>
 		<td class="small cats_col"></td>
-		<td width="100%">Name</td>
+		<td width="100%">Name / <a href="<?=header_link('year')?>">Year</a></td>
 		<td>Files</td>
 		<td><a href="<?=header_link('time')?>">Time</a></td>
 		<td><a href="<?=header_link('size')?>">Size</a></td>
@@ -680,7 +681,7 @@ foreach($Results as $GroupID=>$Data) {
 		} else {
 			$DisplayName='';
 		}
-		$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'&lrm;</a>';
+		$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 ?>
 	<tr class="group">
@@ -748,7 +749,6 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 					$Pass = true;
 				}
 			}
-			
 			if(!empty($_GET['format'])) {
 				$Filter = true;
 				if($Data['Format']==$_GET['format']) {

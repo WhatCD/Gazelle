@@ -86,6 +86,14 @@ show_header('Better');
 					Torrents that have been marked as having 'Bad File Names'.
 				</td>
 			</tr>
+			<tr class="rowb">
+				<td class="nobr">
+					<a href="better.php?method=single">Single seeded FLAC torrents</a>
+				</td>
+				<td class="nobr">
+					FLAC torrents that only have one seeder, show them some love!
+				</td>
+			</tr>
 
 		</table>
 	</div>

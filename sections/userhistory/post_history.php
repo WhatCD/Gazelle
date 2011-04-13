@@ -163,25 +163,7 @@ if($ShowGrouped) {
 	
 	$DB->set_query_id($Posts);
 }
-//<strip>
-/*
-if($UserID == $LoggedUser['ID']){
-	$TopicIDs = implode(', ', $DB->collect('TopicID'));
-	if($TopicIDs) {
-		$DB->query("SELECT 
-			l.TopicID, 
-			l.PostID,
-			(SELECT COUNT(ID) FROM forums_posts WHERE forums_posts.TopicID = l.TopicID AND forums_posts.ID<=l.PostID) AS Post
-			FROM forums_last_read_topics AS l
-			WHERE TopicID IN($TopicIDs)
-			AND UserID='$LoggedUser[ID]'");
-		
-		$LastRead = $DB->to_array('TopicID');
-	}
-	$ViewingOwn = true;
-}
-*/
-//<strip>
+
 ?>
 <div class="thin">
 	<h2>

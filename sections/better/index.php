@@ -7,6 +7,9 @@ if(isset($_GET['method'])) {
 		case 'transcode':
 			include(SERVER_ROOT.'/sections/better/transcode.php');
 			break;
+		case 'single':
+			include(SERVER_ROOT.'/sections/better/single.php');
+			break;
 		case 'snatch':
 			include(SERVER_ROOT.'/sections/better/snatch.php');
 			break;

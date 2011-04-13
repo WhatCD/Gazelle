@@ -156,16 +156,14 @@ switch($_GET['type']) {
 if(!empty($_GET['filter']) && (($_GET['filter'] == "perfectflac") || ($_GET['filter'] == "uniquegroup"))) {
 	if($_GET['filter'] == "perfectflac") {
 		if (!check_paranoia('perfectflacs', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
-		$ExtraWhere .= ' AND t.Format = \'FLAC\'';
+		$ExtraWhere .= " AND t.Format = 'FLAC'";
 		if(empty($_GET['media'])) {
-			$ExtraWhere .= ' AND (
+			$ExtraWhere .= " AND (
 				t.LogScore = 100 OR
-				t.Media = \'Vinyl\' OR
-				t.Media = \'WEB\' OR
-				t.Media = \'DVD\' OR
-				t.Media = \'Soundboard\')';
+				t.Media IN ('Vinyl','WEB','DVD','Soundboard','Casette','SACD','Blu-ray','DAT')
+				)";
 		} elseif(strtoupper($_GET['media']) == 'CD' && empty($_GET['log'])) {
-			$ExtraWhere .= ' AND t.LogScore = 100';
+			$ExtraWhere .= " AND t.LogScore = 100";
 		}
 	} elseif($_GET['filter'] == "uniquegroup") {
 		if (!check_paranoia('uniquegroups', $User['Paranoia'], $UserClass, $UserID)) { error(403); }

@@ -347,10 +347,10 @@ ul.thin li {
         top: 1em;
 	left: 0;
         z-index: 1000;
-        border: none;
+        border: 1px solid #B8E8FB;
         background: #fff;
-        width: 12em;
-        margin-top: 12px;
+        width: 11.5em;
+        margin-top: 5px;
 }
 
 #searchbars ul li ul li {
@@ -759,7 +759,7 @@ td.avatar {
 }
 
 table.forum_post td.body {
-	width: 690px;
+	max-width: 675px;
 }
 
 tbody {

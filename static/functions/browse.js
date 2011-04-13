@@ -166,6 +166,7 @@ function unbookmark(groupid,newname) {
                 ajax.get("bookmarks.php?action=remove&auth=" + authkey + "&groupid=" + groupid,function() {
                         $('#group_' + groupid).remove();
                         $('.groupid_' + groupid).remove();
+			$('.image_group_' + groupid).remove();
                 });
         } else {
                 var lnk = $('#bookmarklink'+groupid).raw();

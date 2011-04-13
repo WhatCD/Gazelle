@@ -51,6 +51,7 @@ require(SERVER_ROOT.'/classes/regex.php');
 
 $Debug = new DEBUG;
 $Debug->handle_errors();
+$Debug->set_flag('Debug constructed');
 
 $DB = new DB_MYSQL;
 $Cache = new CACHE;
@@ -390,9 +391,16 @@ function site_ban_ip($IP) {
 	$IP = ip2unsigned($IP);
 	$IPBans = $Cache->get_value('ip_bans');
 	if(!is_array($IPBans)) {
-		$DB->query("SELECT ID, FromIP, ToIP FROM ip_bans");
-		$IPBans = $DB->to_array('ID');
-		$Cache->cache_value('ip_bans', $IPBans, 0);
+		//Cache lock!
+		$Lock = $Cache->get_value('ip_bans_lock');
+		if($Lock) {
+			?><script type="script/javascript">setTimeout('window.location="http://<?=NONSSL_SITE_URL?><?=$_SERVER['REQUEST_URI']?>"', 5)</script><?
+		} else {
+			$Cache->cache_value('ip_bans_lock', '1', 10);
+			$DB->query("SELECT ID, FromIP, ToIP FROM ip_bans");
+			$IPBans = $DB->to_array('ID');
+			$Cache->cache_value('ip_bans', $IPBans, 0);
+		}
 	}
 	foreach($IPBans as $Index => $IPBan) {
 		list($ID, $FromIP, $ToIP) = $IPBan;
@@ -1646,7 +1654,8 @@ function update_sphinx_requests($RequestID) {
 				UNIX_TIMESTAMP(TimeFilled) AS TimeFilled, Visible,
 				COUNT(rv.UserID) AS Votes, SUM(rv.Bounty) >> 10 AS Bounty
 			FROM requests AS r LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-				WHERE ID = ".$RequestID);
+				wHERE ID = ".$RequestID."
+				GROUP BY r.ID");
 
 	$DB->query("UPDATE sphinx_requests_delta
 					SET ArtistList = (SELECT
@@ -1696,7 +1705,8 @@ function torrent_info($Data) {
 	if(!empty($Data['HasCue'])) { $Info[]='Cue'; }
 	if(!empty($Data['Media'])) { $Info[]=$Data['Media']; }
 	if(!empty($Data['Scene'])) { $Info[]='Scene'; }
-	if(!empty($Data['FreeTorrent'])) { $Info[]='<strong>Freeleech!</strong>'; }
+	if($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
+	if($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
 	return implode(' / ', $Info);
 }
 
@@ -1762,6 +1772,15 @@ function disable_users($UserIDs, $AdminComment, $BanReason = 1) {
 		*/
 		$Cache->delete_value('enabled_'.$UserID);
 		$Cache->delete_value('user_info_'.$UserID);
+		$Cache->delete_value('user_info_heavy_'.$UserID);
+		$Cache->delete_value('user_stats_'.$UserID);
+	
+		$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
+		while(list($SessionID) = $DB->next_record()) {
+			$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
+		}
+		$Cache->delete_value('users_sessions_'.$UserID);
+		$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
 	}
 	$DB->query("SELECT torrent_pass FROM users_main WHERE ID in (".implode(", ",$UserIDs).")");
 	$PassKeys = $DB->collect('torrent_pass');

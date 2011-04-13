@@ -102,6 +102,10 @@ switch ($Type) {
 
 			$Validate->SetFields('album_desc',
 				'1','string','The album description has a minimum length of 10 characters.',array('maxlength'=>1000000, 'minlength'=>10));
+
+			if ($Properties['Media'] == 'CD' && !$Properties['Remastered']) {
+				$Validate->SetFields('year', '1', 'number', 'You have selected a year for an album that predates the media you say it was created on.', array('minlength'=>1982));
+			}
 		}
 
 		if($Properties['Remastered'] && !$Properties['UnknownRelease']){
@@ -112,8 +116,8 @@ switch ($Type) {
 				'0','number','Invalid remaster year.');
 		}
 
-		if ($Properties['Remastered'] && $Properties['RemasterYear'] < 1982 && $Properties['Media'] == 'CD' && !$Properties['UnknownRelease']) {
-			$Validate->SetFields('remaster_year', '1', 'number', 'You have selected a year for an album that predates the media you say it was created on.');
+		if ($Properties['Media'] == 'CD' && $Properties['Remastered']) {
+			$Validate->SetFields('remaster_year', '1', 'number', 'You have selected a year for an album that predates the media you say it was created on.', array('minlength'=>1982));
 		}
 
 		$Validate->SetFields('remaster_title',
@@ -620,7 +624,7 @@ $DB->query("
 $Cache->increment('stats_torrent_count');
 $TorrentID = $DB->inserted_id();
 
-update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => '0'));
+update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => (int)$Properties['FreeLeech']));
 
 
 

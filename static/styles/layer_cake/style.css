@@ -198,7 +198,6 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 
 #userinfo ul li {
-	position: relative;
 	display: inline;
 	margin: 0 0.1em;
 	line-height: 20px;

@@ -44,8 +44,8 @@ show_header('News','bbcode');
 			<div class="center"><a href="torrents.php?id=<?=$FeaturedAlbum['GroupID']?>" title="<?=display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>"><img src="<?=$FeaturedAlbum['WikiImage']?>" alt="<?=display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>" width="100%" /></a></div>
 			<div class="center pad"><a href="forums.php?action=viewthread&amp;threadid=<?=$FeaturedAlbum['ThreadID']?>"><em>Discuss this album here!</em></a></div>
 		</div>
-<?	} 
-	//</strip>
+<?
+	}
 ?>
 		<div class="box">
 			<div class="head colhead_dark"><strong><a href="blog.php">Latest blog posts</a></strong></div>

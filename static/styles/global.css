@@ -2,13 +2,24 @@ pre br {
 	line-height:0px;
 	display:none;
 }
- 
-.collage td {
-	border: none;
+
+ul.collage_images {
 	padding: 0px;
+	width: 590px;
+	border-collapse: collapse;
 }
 
-.collage tr {
+ul.collage_images li {
+	border: none;
+	float: left;
+	margin: 0;
+	width: 118px;
+	height: 118px;
+	list-style: none;
+}
+
+.collage td {
+	padding: 0px;
 	border: none;
 }
 

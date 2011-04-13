@@ -580,7 +580,7 @@ if($NumRequests > 0) {
 <?			
 		$TagList = array();
 		foreach($Tags as $TagID => $TagName) {
-			$TagList[] = "<a href='requests.php?tag=".$TagID."'>".display_str($TagName)."</a>";
+			$TagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
 		}
 		$TagList = implode(', ', $TagList);
 ?>

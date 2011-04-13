@@ -76,8 +76,7 @@ if(empty($_POST['confirm'])) {
 		$Cache->delete_value('artist_'.$ArtistID); 
 	}
 	
-	$Cache->delete_value('torrentcomments_count_'.$GroupID);
-	$Cache->delete_value('torrentcomment_'.$GroupID.'_page_1');
+	$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_0');
 	$Cache->delete_value('groups_artists_'.$GroupID);
 	update_hash($GroupID);
 	

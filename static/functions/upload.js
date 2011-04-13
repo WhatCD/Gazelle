@@ -214,7 +214,7 @@ function CheckVA() {
 
 function CheckYear() {
 	var media = $('#media').raw().options[$('#media').raw().selectedIndex].text;
-	if(media == "Vinyl" || media == "Soundboard" || media == "Cassette") {
+	if(media == "---" || media == "Vinyl" || media == "Soundboard" || media == "Cassette") {
 		media = "old";
 	}
 	var x = $('#year').raw();

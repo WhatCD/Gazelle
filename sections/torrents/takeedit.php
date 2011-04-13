@@ -55,7 +55,11 @@ if($_POST['album_desc']) {
 	$Properties['GroupDescription'] = $_POST['album_desc'];
 }
 if(check_perms('torrents_freeleech')) {
-	$Properties['FreeLeech'] = (isset($_POST['freeleech'])) ? 1 : 0;
+	$Free = (int)$_POST['freeleech'];
+	if(!in_array($Free, array(0,1,2))) {
+		error(404);
+	}
+	$Properties['FreeLeech'] = $Free;
 }
 $Properties['ExtendedGrace'] = (isset($_POST['extendedgrace']))? 1 : 0;
 
@@ -312,8 +316,9 @@ $SQL .= "
 	WHERE ID=$TorrentID
 ";
 $DB->query($SQL);
+
 if(check_perms('torrents_freeleech') && $Properties['FreeLeech'] != $CurFreeLeech) {
-	update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $Properties['FreeLeech'] ? '1' : '0'));
+	update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $Properties['FreeLeech']));
 }
 
 $DB->query("SELECT GroupID, Time FROM torrents WHERE ID='$TorrentID'");

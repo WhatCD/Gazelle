@@ -93,6 +93,7 @@ $DB->query("SELECT
 	m.can_leech,
 	m.Visible,
 	i.AdminComment,
+	m.torrent_pass,
 	i.Donor,
 	i.Artist,
 	i.Warned,
@@ -157,6 +158,7 @@ if ($_POST['ResetIPHistory'] && check_perms('users_edit_reset_keys')) {
 	$DB->query("DELETE FROM users_history_ips WHERE UserID='$UserID'");
 	$DB->query("UPDATE users_main SET IP='127.0.0.1' WHERE ID='$UserID'");
 	$DB->query("UPDATE xbt_snatched SET IP = '' WHERE uid='$UserID'");
+	$DB->query("UPDATE users_history_passwords SET ChangerIP = '' WHERE UserID = ".$UserID);
 	$EditSummary[]='IP history cleared';
 }
 
@@ -448,7 +450,7 @@ if ($DisableRequests!=$Cur['DisableRequests'] && check_perms('users_disable_any'
 if ($EnableUser!=$Cur['Enabled'] && check_perms('users_disable_users')) {
 	$EditSummary[]='account '.translateUserStatus($Cur['Enabled']).'->'.translateUserStatus($EnableUser);
 	if($EnableUser == '2') {
-		disable_users($UserID, '', '1');
+		disable_users($UserID, '', 1);
 	} elseif($EnableUser == '1') {
 		$Cache->increment('stats_user_count');
 		$UpdateSet[]="i.RatioWatchDownload='0'";

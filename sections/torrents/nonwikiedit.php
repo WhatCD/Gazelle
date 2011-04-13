@@ -17,8 +17,14 @@ if(!check_perms('torrents_edit')) {
 }
 
 
-if(check_perms('torrents_freeleech') && (isset($_POST['freeleech']) xor isset($_POST['unfreeleech']))) {
-	$Free = $_POST['freeleech'] ? '1' : '0';
+if(check_perms('torrents_freeleech') && (isset($_POST['freeleech']) xor isset($_POST['neutralleech']) xor isset($_POST['unfreeleech']))) {
+	if(isset($_POST['freeleech'])) {
+		$Free = 1;
+	} elseif(isset($_POST['neutralleech'])) {
+		$Free = 2;
+	} else {
+		$Free = 0;
+	}
 	$DB->query("SELECT info_hash FROM torrents WHERE GroupID = ".$GroupID);
 	$InfoHashes = $DB->collect('info_hash', false);
 	foreach($InfoHashes as $InfoHash) {

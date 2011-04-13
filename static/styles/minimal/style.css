@@ -83,7 +83,7 @@ textarea#quickpost{margin:0; padding:0}
 /* username drop down */
 #userinfo_username li:first-child a{text-transform:none; background-position:0 -819px}
 #userinfo_username li:first-child a:hover{background-position:0 -580px}
-#userinfo_username{right:182px; min-width:58px}
+#userinfo_username{right:193px; min-width:58px}
 #userinfo_username .brackets{display:none}
 #userinfo_username:hover .brackets{display:block}
 #userinfo_username li{margin-bottom:2px; padding-left:2px}
@@ -92,7 +92,7 @@ textarea#quickpost{margin:0; padding:0}
 /* minor drop down */
 #userinfo_minor li:first-child a{background-position:0 -368px}
 #userinfo_minor li:first-child a:hover{background-position:0 -30px}
-#userinfo_minor{right:85px; width:89px}
+#userinfo_minor{right:85px; width:100px}
 
 /* major drop down */
 #userinfo_major li:first-child a{background-position:0 -421px}

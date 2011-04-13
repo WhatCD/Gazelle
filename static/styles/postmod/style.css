@@ -294,7 +294,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 #userinfo_major {
 	position: absolute;
 	width: 609px;
-	margin: 94px 0 0 330px;
+	margin: 110px 0 0 326px;
 	text-align: right;
 }
 #userinfo_username {
@@ -312,9 +312,10 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 #userinfo_minor {
 	position: absolute;
-	width: 609px;
-	margin: 74px 0 0 330px;
+	width: 295px;
+	margin: 70px 0 0 640px;
 	text-align: right;
+	float: right;
 }
 #userinfo_minor li a {
 	color: #FFF;
@@ -329,7 +330,6 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 
 #userinfo ul li {
-	position: relative;
 	display: inline;
 	margin: 0 0.1em;
 	line-height: 20px;

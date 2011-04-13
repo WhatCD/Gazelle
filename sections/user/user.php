@@ -751,7 +751,7 @@ if (check_paranoia_here('requestsvoted_list')) {
 			$Tags = $Request['Tags'];
 			$TagList = array();
 			foreach($Tags as $TagID => $TagName) {
-				$TagList[] = "<a href='requests.php?tag=".$TagID."'>".display_str($TagName)."</a>";
+				$TagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
 			}
 			$TagList = implode(', ', $TagList);
 ?>
@@ -1047,9 +1047,9 @@ if (check_paranoia_here('requestsvoted_list')) {
 				<td class="label">Account:</td>
 				<td>
 					<select name="UserStatus">
-						<option value="0" <? if ($Enabled==0) { ?>selected="selected"<? } ?>>Unconfirmed</option>
-						<option value="1" <? if ($Enabled==1) { ?>selected="selected"<? } ?>>Enabled</option>
-						<option value="2" <? if ($Enabled==2) { ?>selected="selected"<? } ?>>Disabled</option>
+						<option value="0" <? if ($Enabled=='0') { ?>selected="selected"<? } ?>>Unconfirmed</option>
+						<option value="1" <? if ($Enabled=='1') { ?>selected="selected"<? } ?>>Enabled</option>
+						<option value="2" <? if ($Enabled=='2') { ?>selected="selected"<? } ?>>Disabled</option>
 <?		if (check_perms('users_delete_users')) { ?>
 						<optgroup label="-- WARNING --"></optgroup>
 						<option value="delete">Delete Account</option>

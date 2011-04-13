@@ -78,7 +78,6 @@ write_log("Request $RequestID ($FullName), with a ".get_size($RequestVotes['Tota
 
 $Cache->delete_value('request_'.$RequestID);
 
-$SS->UpdateAttributes('requests', array('torrentid','fillerid'), array($RequestID => array(0,0)));
 update_sphinx_requests($RequestID);
 
 

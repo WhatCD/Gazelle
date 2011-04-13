@@ -20,7 +20,7 @@ if(!empty($_GET['search'])) {
 	$Query.=' @(groupname,artistname,yearfulltext) '.$SS->EscapeString($_GET['search']);
 }
 
-$SS->SetFilter('logscore', array(100));//<strip>
+$SS->SetFilter('logscore', array(100));
 $SS->SetSortMode(SPH_SORT_EXTENDED, "@random");
 $SS->limit(0, TORRENTS_PER_PAGE);
 

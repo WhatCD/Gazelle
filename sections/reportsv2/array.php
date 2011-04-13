@@ -717,7 +717,7 @@ $Types = array(
 					'upload' => '0',
 					'warn' => '1',
 					'delete' => '1',
-					'pm' => 'Tutorials on how to use features of applications, musical instruments or computer hardware are the only allowed topics for eLearning Videos.'
+					'pm' => 'Tutorials on how to use musical instruments, vocal training, producing music or otherwise learning the theory and practice of music are the only allowed topics.'
 				)
 			)
 		),

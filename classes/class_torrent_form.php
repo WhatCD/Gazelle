@@ -117,7 +117,12 @@ class TORRENT_FORM {
 			<tr id="freetorrent">
 				<td class="label">Freeleech</td>
 				<td>
-					<input type="checkbox" name="freeleech"<?=$Torrent['FreeTorrent'] ? ' checked="checked"' : ''?> /> Checking this box will make the torrent freeleech. Don't abuse it.
+					<select name="freeleech">
+<?	$FL = array("Normal", "Free", "Neutral");
+	foreach($FL as $Key => $Name) { ?>	
+						<option value="<?=$Key?>" <?=($Key == $Torrent['FreeTorrent'] ? ' selected="selected"' : '')?>><?=$Name?></option>
+<?	} ?>
+					</select>
 				</td>
 			</tr>
 

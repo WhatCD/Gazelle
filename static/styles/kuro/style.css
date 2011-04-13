@@ -98,6 +98,7 @@ img {
 	border: none;
 }
 
+
 /* Ratio Colors */
 
 .r00 { color: #FF0000; }
@@ -752,7 +753,7 @@ td.avatar {
 }
 
 table.forum_post td.body {
-	width: 690px;
+	max-width: 675px;
 }
 
 tbody {

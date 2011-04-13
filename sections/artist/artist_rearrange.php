@@ -456,67 +456,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 			</div>
 		</div>
 <?	}
-//<strip>
-if(check_perms('zip_downloader')){
-	if(isset($LoggedUser['Collector'])) {
-		list($ZIPList,$ZIPPrefs) = $LoggedUser['Collector'];
-		$ZIPList = explode(':',$ZIPList);
-	} else {
-		$ZIPList = array('00','11');
-		$ZIPPrefs = 1;
-	}
-?>
-		<div class="box">
-			<div class="head colhead_dark"><strong>Collector</strong></div>
-			<div class="pad">
-				<form action="artist.php" method="post">
-					<input type="hidden" name="action" value="download" />
-					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					<input type="hidden" name="artistid" value="<?=$ArtistID?>" /> 
-				<ul id="list" class="nobullet">
-<? foreach ($ZIPList as $ListItem) { ?>
-					<li id="list<?=$ListItem?>">
-						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
-						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-						<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;">[X]</a>
-						<br style="clear:all;" />
-					</li>
-<? } ?>
-				</ul>
-				<select id="formats" style="width:180px">
-<?
-$OpenGroup = false;
-$LastGroupID=-1;
 
-foreach ($ZIPOptions as $Option) {
-	list($GroupID,$OptionID,$OptName) = $Option;
-
-	if($GroupID!=$LastGroupID) {
-		$LastGroupID=$GroupID;
-		if($OpenGroup) { ?>
-					</optgroup>
-<?		} ?>
-					<optgroup label="<?=$ZIPGroups[$GroupID]?>">
-<?		$OpenGroup = true;
-	}
-?>
-						<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if(in_array($GroupID.$OptionID,$ZIPList)){ echo ' disabled="disabled"'; }?>><?=$OptName?></option>
-<?
-}
-?>
-					</optgroup>
-				</select>
-				<button type="button" onclick="add_selection()">+</button>
-				<select name="preference" style="width:210px">
-					<option value="0"<? if($ZIPPrefs==0){ echo ' selected="selected"'; } ?>>Prefer Original</option>
-					<option value="1"<? if($ZIPPrefs==1){ echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
-					<option value="2"<? if($ZIPPrefs==2){ echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
-				</select>
-				<input type="submit" style="width:210px" value="Download" /> 
-				</form>
-			</div>
-		</div>
-<? } //<strip> 
 ?>
 		<div class="box">
 			<div class="head"><strong>Tags</strong></div>
@@ -665,7 +605,7 @@ if($NumRequests > 0) {
 <?			
 		$TagList = array();
 		foreach($Tags as $TagID => $TagName) {
-			$TagList[] = "<a href='requests.php?tag=".$TagID."'>".display_str($TagName)."</a>";
+			$TagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
 		}
 		$TagList = implode(', ', $TagList);
 ?>
