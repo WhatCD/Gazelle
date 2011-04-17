@@ -55,26 +55,26 @@ if(!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
 
 // Setting default search options
 if(!empty($_GET['setdefault'])) {
-	$UnsetList[]='/(&?page\=.+?&?)/i';
-	$UnsetList[]='/(&?setdefault\=.+?&?)/i';
+	$UnsetList = array('page','setdefault');
+	$UnsetRegexp = '/(&|^)('.implode('|',$UnsetList).')=.*?(&|$)/i';
 
 	$DB->query("SELECT SiteOptions FROM users_info WHERE UserID='".db_string($LoggedUser['ID'])."'");
-	list($SiteOptions)=$DB->next_record(MYSQLI_NUM, true);
+	list($SiteOptions)=$DB->next_record(MYSQLI_NUM, false);
 	if(!empty($SiteOptions)) {
 		$SiteOptions = unserialize($SiteOptions);
 	} else {
 		$SiteOptions = array();
 	}
-	$SiteOptions['DefaultSearch']=preg_replace($UnsetList,'',$_SERVER['QUERY_STRING']);
+	$SiteOptions['DefaultSearch'] = preg_replace($UnsetRegexp,'',$_SERVER['QUERY_STRING']);
 	$DB->query("UPDATE users_info SET SiteOptions='".db_string(serialize($SiteOptions))."' WHERE UserID='".db_string($LoggedUser['ID'])."'");
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
-	$Cache->update_row(false, array('DefaultSearch'=>preg_replace($UnsetList,'',$_SERVER['QUERY_STRING'])));
+	$Cache->update_row(false, array('DefaultSearch'=>$SiteOptions['DefaultSearch']));
 	$Cache->commit_transaction(0);
 
 // Clearing default search options
 } elseif(!empty($_GET['cleardefault'])) {
 	$DB->query("SELECT SiteOptions FROM users_info WHERE UserID='".db_string($LoggedUser['ID'])."'");
-	list($SiteOptions)=$DB->next_record(MYSQLI_NUM, true);
+	list($SiteOptions)=$DB->next_record(MYSQLI_NUM, false);
 	$SiteOptions=unserialize($SiteOptions);
 	$SiteOptions['DefaultSearch']='';
 	$DB->query("UPDATE users_info SET SiteOptions='".db_string(serialize($SiteOptions))."' WHERE UserID='".db_string($LoggedUser['ID'])."'");

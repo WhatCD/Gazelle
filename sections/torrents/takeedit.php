@@ -149,9 +149,9 @@ switch ($Type) {
 		
 	case 'Audiobooks':
 	case 'Comedy':
-		$Validate->SetFields('title',
+		/*$Validate->SetFields('title',
 			'1','string','Title must be between 2 and 300 characters.',array('maxlength'=>300, 'minlength'=>2));
-		
+		^ this is commented out because there is no title field on these pages*/
 		$Validate->SetFields('year',
 			'1','number','The year of the release must be entered.');
 		

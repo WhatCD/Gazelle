@@ -71,7 +71,7 @@ function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
 			case 'snatched': case 'snatched+':
 				$May = $May || check_perms('site_view_torrent_snatchlist', $UserClass);
 				break;
-			case 'uploading': case 'uploading+':
+			case 'uploads': case 'uploads+':
 			case 'seeding': case 'seeding+':
 			case 'leeching': case 'leeching+':
 				$May = $May || check_perms('users_view_seedleech', $UserClass);

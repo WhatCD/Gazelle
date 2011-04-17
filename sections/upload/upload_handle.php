@@ -736,7 +736,7 @@ if(!$IsNewGroup) {
 	foreach($GroupInfo[1] as $TorrentInfo) {
 		if (($TorrentInfo['Media'] == $ThisMedia)
 		    && ($TorrentInfo['Remastered'] == $ThisRemastered)
-		    && ($TorrentInfo['RemasterYear'] == $ThisRemasterYear)
+		    && ($TorrentInfo['RemasterYear'] == (int)$ThisRemasterYear)
 		    && ($TorrentInfo['RemasterTitle'] == $ThisRemasterTitle)
 		    && ($TorrentInfo['RemasterRecordLabel'] == $ThisRemasterRecordLabel)
 		    && ($TorrentInfo['RemasterCatalogueNumber'] == $ThisRemasterCatalogueNumber)

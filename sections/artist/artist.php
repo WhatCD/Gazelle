@@ -332,12 +332,12 @@ show_header($Name, 'requests,bbcode');
 <? }
 
 if (check_perms('site_torrents_notify')) {
-	if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === FALSE) {
+	if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === false) {
 		$DB->query("SELECT ID, Artists FROM users_notify_filters WHERE UserID='$LoggedUser[ID]' AND Label='Artist notifications' LIMIT 1");
-		$Notify = $DB->next_record(MYSQLI_ASSOC);
+		$Notify = $DB->next_record(MYSQLI_ASSOC, false);
 		$Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
 	}
-	if (stripos($Notify['Artists'], '|'.$Name.'|') === FALSE) {
+	if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
 ?>
 		<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Notify of new uploads]</a>
 <?

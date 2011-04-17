@@ -372,7 +372,7 @@ class TORRENT_FORM {
 					</select>
 					<span id="other_bitrate_span"<? if(!$OtherBitrate) { echo ' class="hidden"'; } ?>>
 						<input type="text" name="other_bitrate" size="5" id="other_bitrate"<? if($OtherBitrate) { echo " value='".display_str($Torrent['Bitrate'])."'";} ?> onchange="AltBitrate()" />
-						<input type="checkbox" id="vbr" name="vbr"<? if(isset($VBR)) { echo ' checked="checked"'; } ?> /> (VBR)
+						<input type="checkbox" id="vbr" name="vbr"<? if(isset($VBR)) { echo ' checked="checked"'; } ?> /><label for="vbr"> (VBR)</label>
 					</span>
 				</td>
 			</tr>
@@ -572,14 +572,19 @@ class TORRENT_FORM {
 				<td>
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
-<?		if($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates)) {
+<?
+		if($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates)) {
 			$OtherBitrate = true;
+			if(substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(" (VBR)")) == " (VBR)") {
+				$Torrent['Bitrate'] = substr($Torrent['Bitrate'], 0, strlen($Torrent['Bitrate'])-6);
+				$VBR = true;
+			}
 		} else {
 			$OtherBitrate = false;
 		}
 		foreach(display_array($this->Bitrates) as $Bitrate) {
 			echo "<option value='$Bitrate'";
-			if($Bitrate == $Torrent['Bitrate']) { 
+			if($Bitrate == $Torrent['Bitrate'] || (!$OtherBitrate || $Bitrate == "Other")) {
 				echo " selected='selected'";
 			}
 			echo ">";
@@ -589,10 +594,8 @@ class TORRENT_FORM {
 ?> 
 					</select>
 					<span id="other_bitrate_span"<? if(!$OtherBitrate) { echo ' class="hidden"'; } ?> >
-						<input type="text" name="other_bitrate" size="5" id="other_bitrate"<? if($OtherBitrate) { echo " value='".display_str($Torrent['Encoding'])."'";} ?> onchange="AltBitrate()" />
-<? 		if($this->NewTorrent) {  ?>
-						<input type="checkbox" id="vbr" name="vbr" /> (VBR)
-<?		} ?>
+						<input type="text" name="other_bitrate" size="5" id="other_bitrate"<? if($OtherBitrate) { echo " value='".display_str($Torrent['Bitrate'])."'";} ?> onchange="AltBitrate()" />
+						<input type="checkbox" id="vbr" name="vbr"<? if(isset($VBR)) { echo ' checked="checked"'; } ?> /><label for="vbr"> (VBR)</label>
 					</span>
 				</td>
 			</tr>

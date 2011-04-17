@@ -19,6 +19,7 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 		if($DB->record_count()==0) { error(404); }
 		$ThreadInfo = $DB->next_record(MYSQLI_ASSOC);
 		if($ThreadInfo['StickyPostID']) {
+			$ThreadInfo['Posts']--;
 			$DB->query("SELECT
 				p.ID,
 				p.AuthorID,
@@ -32,8 +33,8 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 				WHERE p.TopicID = '$ThreadID' AND p.ID = '".$ThreadInfo['StickyPostID']."'");
 			list($ThreadInfo['StickyPost']) = $DB->to_array(false, MYSQLI_ASSOC);
 		}
-		if(!$SelectiveCache || (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky'])) {
-			$Cache->cache_value('thread_'.$TheadID.'_info', $ThreadInfo, 0);
+		if(!$SelectiveCache || !$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
+			$Cache->cache_value('thread_'.$ThreadID.'_info', $ThreadInfo, 0);
 		}
 	}
 	if($Return) {

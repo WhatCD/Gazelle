@@ -5,7 +5,11 @@ function Categories() {
 }
 
 function Remaster() {
-	$('#remaster_true').toggle();
+	if($('#remaster').raw().checked) {
+		$('#remaster_true').show();
+	} else {
+		$('#remaster_true').hide();
+	}
 }
 
 function Format() {

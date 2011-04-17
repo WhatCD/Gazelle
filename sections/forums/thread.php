@@ -332,7 +332,7 @@ foreach($Thread as $Key => $Post){
 <table class="forum_post box vertical_margin<? if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) { echo ' forum_unread'; } if($HeavyInfo['DisableAvatars']) { echo ' noavatar'; } ?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
-			<span style="float:left;"><a class="post_id" href='forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;post=<?=($CatalogueID*THREAD_CATALOGUE)+($Key+1)?>#post<?=$PostID?>'>#<?=$PostID?></a>
+			<span style="float:left;"><a class="post_id" href='forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
 				<strong><?=format_username($AuthorID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true, $PermissionID)?></strong> 
 				<span class="user_title"><?=!empty($UserTitle) ? '('.$UserTitle.')' : '' ?></span> 
 				<?=time_diff($AddedTime,2)?> 

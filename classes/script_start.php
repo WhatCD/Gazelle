@@ -393,7 +393,7 @@ function site_ban_ip($IP) {
 	if(!is_array($IPBans)) {
 		//Cache lock!
 		$Lock = $Cache->get_value('ip_bans_lock');
-		if($Lock) {
+		if($Lock && substr($_SERVER['REQUEST_URI'], 0, 29) != '/torrents.php?action=download') {
 			?><script type="script/javascript">setTimeout('window.location="http://<?=NONSSL_SITE_URL?><?=$_SERVER['REQUEST_URI']?>"', 5)</script><?
 		} else {
 			$Cache->cache_value('ip_bans_lock', '1', 10);

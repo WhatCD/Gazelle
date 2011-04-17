@@ -177,6 +177,9 @@ if ($Err) {
 	die();
 }
 
+if(!empty($LoggedUser['DefaultSearch'])) {
+	$Options['DefaultSearch'] = $LoggedUser['DefaultSearch'];
+}
 $Options['DisableGrouping'] = (!empty($_POST['disablegrouping']) ? 1 : 0);
 $Options['TorrentGrouping'] = (!empty($_POST['torrentgrouping']) ? 1 : 0);
 $Options['DiscogView'] = (!empty($_POST['discogview']) ? 1 : 0);
@@ -187,15 +190,15 @@ $Options['AutoSubscribe'] = (!empty($_POST['autosubscribe']) ? 1 : 0);
 $Options['DisableSmileys'] = (!empty($_POST['disablesmileys']) ? 1 : 0);
 $Options['DisableAvatars'] = (!empty($_POST['disableavatars']) ? 1 : 0);
 
-if(!empty($_POST['hidetypes'])) { 
+if(!empty($_POST['hidetypes'])) {
 	foreach($_POST['hidetypes'] as $Type) {
 		$Options['HideTypes'][] = (int) $Type;
 	}
 } else {
-	$Options['HideTypes']=array();
+	$Options['HideTypes'] = array();
 }
 if (check_perms('site_advanced_search')) {
-	$Options['SearchType']  =$_POST['searchtype'];
+	$Options['SearchType'] = $_POST['searchtype'];
 } else {
 	unset($Options['SearchType']);
 }

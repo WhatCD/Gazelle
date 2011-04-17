@@ -1,5 +1,6 @@
 <?
 authorize();
+include(SERVER_ROOT.'/sections/forums/functions.php');
 
 //TODO: Remove all the stupid queries that could get their information just as easily from the cache
 /*********************************************************************\
@@ -47,24 +48,7 @@ if($LoggedUser['DisablePosting']) {
 }
 
 $TopicID = $_POST['thread'];
-if(!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
-	$DB->query("SELECT
-		t.Title,
-		t.ForumID,
-		t.IsLocked,
-		t.IsSticky,
-		COUNT(fp.id) AS Posts,
-		t.LastPostAuthorID,
-		ISNULL(p.TopicID) AS NoPoll
-		FROM forums_topics AS t
-		JOIN forums_posts AS fp ON fp.TopicID = t.ID
-		LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
-		WHERE t.ID = '$TopicID'
-		GROUP BY fp.TopicID");
-	if($DB->record_count()==0) { error(404); }
-	$ThreadInfo = $DB->next_record(MYSQLI_ASSOC, false);
-	$Cache->cache_value('thread_'.$TopicID.'_info', $ThreadInfo, 0);
-}
+$ThreadInfo = get_thread_info($TopicID);
 $ForumID = $ThreadInfo['ForumID'];
 
 if($LoggedUser['Class'] < $Forums[$ForumID]['MinClassRead'] || !$ForumID) { error(403); }
