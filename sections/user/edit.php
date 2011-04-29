@@ -138,16 +138,42 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Hide release types</strong></td>
 				<td>
-<?	foreach ($ReleaseTypes as $Key => $Val) {
-		if(!empty($SiteOptions['HideTypes']) && in_array($Key, $SiteOptions['HideTypes'])) { 
-			$Checked = 'checked="checked"'; 
-		} else { 
-			$Checked=''; 
+					<table style="border:none;">
+<?
+	$ReleaseTypes[1024] = "Guest Appearance";
+	$ReleaseTypes[1023] = "Remixed By";
+	for($i = 0; list($Key,$Val) = each($ReleaseTypes); $i++) {
+		if(!($i % 7)) {
+			if($i) {
+?>
+						</tr>
+<?
+			}
+?>
+						<tr style="border:none;">
+<?
+		}
+		if(!empty($SiteOptions['HideTypes']) && in_array($Key, $SiteOptions['HideTypes'])) {
+			$Checked = 'checked="checked" ';
+		} else {
+			$Checked='';
 		}
 ?>
-		<input type="checkbox" id="hide_type_<?=$Key?>" name="hidetypes[]=" value="<?=$Key?>" <?=$Checked?> />
-		<label for="hide_type_<?=$Key?>"><?=$Val?></label>
-<?	}?>
+							<td style="border:none;">
+								<label><input type="checkbox" id="hide_type_<?=$Key?>" name="hidetypes[]=" value="<?=$Key?>" <?=$Checked?>/>
+								<?=$Val?></label>
+							</td>
+<?
+	}
+	if($i % 7) {
+?>
+							<td style="border:none;" colspan="<?=7 - ($i % 7)?>"></td>
+<?
+	}
+	unset($ReleaseTypes[1023], $ReleaseTypes[1024]);
+?>
+						</tr>
+					</table>
 				</td>
 			</tr>
 			<tr>

@@ -323,11 +323,11 @@ if(!empty($_REQUEST['action'])) {
 			$ThisCatalogue = floor((POSTS_PER_PAGE*$Page-POSTS_PER_PAGE)/THREAD_CATALOGUE);
 			$LastCatalogue = floor((POSTS_PER_PAGE*$Pages-POSTS_PER_PAGE)/THREAD_CATALOGUE);
 			for($i=$ThisCatalogue;$i<=$LastCatalogue;$i++) {
-				$Cache->delete('thread_'.$TopicID.'_catalogue_'.$i);
+				$Cache->delete('torrent_comments_'.$GroupID.'_catalogue_'.$i);
 			}
 			
 			// Delete thread info cache (eg. number of pages)
-			$Cache->delete('torrentcomments_count_'.$GroupID);
+			$Cache->delete('torrent_comments_'.$GroupID);
 			break;
 		case 'regen_filelist' :
 			if(check_perms('users_mod') && !empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {

@@ -31,14 +31,16 @@ $Pass = db_string($_POST['ChangePassword']);
 $Warned = (isset($_POST['Warned']))? 1 : 0;
 $Logs095 = (int)$_POST['095logs']; 
 if(isset($_POST['Uploaded']) && isset($_POST['Downloaded'])) {
-	$Uploaded = ($_POST['Uploaded']  == "" ? 0 : $_POST['Uploaded']); 
-	if(!is_number($Uploaded)) { 
-		error(0);
+	$Uploaded = ($_POST['Uploaded']  == "" ? 0 : $_POST['Uploaded']);
+	if($Arithmetic = strpbrk($Uploaded, '+-')) {
+		$Uploaded += max(-$Uploaded, get_bytes($Arithmetic));
 	}
-
 	$Downloaded = ($_POST['Downloaded'] == "" ? 0 : $_POST['Downloaded']);
-	if(!is_number($Downloaded)) { 
-		error(0); 
+	if($Arithmetic = strpbrk($Downloaded, '+-')) {
+		$Downloaded += max(-$Downloaded, get_bytes($Arithmetic));
+	}
+	if(!is_number($Uploaded) || !is_number($Downloaded)) {
+		error(0);
 	}
 }
 

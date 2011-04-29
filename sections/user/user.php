@@ -315,7 +315,9 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 	if (check_perms('users_view_ips',$Class)) {
 ?>
 	<li>IPs: <?=number_format($IPChanges)?> [<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>">View</a>]&nbsp;[<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1">View Users</a>]</li>
+<?		if (check_perms('users_view_ips',$Class) && check_perms('users_mod',$Class)) { ?>
 	<li>Tracker IPs: <?=number_format($TrackerIPs)?> [<a href="userhistory.php?action=tracker_ips&amp;userid=<?=$UserID?>">View</a>]</li>
+<?		} ?>
 <?
 	}
 	if (check_perms('users_view_keys',$Class)) {
@@ -363,7 +365,7 @@ if($ParanoiaLevel == 0) {
 
 if (check_perms('users_view_ips',$Class)) {
 ?>
-				<li>IP: <?=display_str($IP)?> (<?=get_cc($IP)?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>&matchtype=strict" title="Search">S</a>]</li>
+				<li>IP: <?=display_ip($IP)?></li>
 				<li>Host: <?=get_host($IP)?></li>
 <?
 }

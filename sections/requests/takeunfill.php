@@ -77,6 +77,7 @@ foreach($UserIDs as $UserID) {
 write_log("Request $RequestID ($FullName), with a ".get_size($RequestVotes['TotalBounty'])." bounty, was un-filled by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].") for the reason: ".$_POST['reason']);
 
 $Cache->delete_value('request_'.$RequestID);
+$Cache->delete_value('request_artists_'.$RequestID);
 
 update_sphinx_requests($RequestID);
 

@@ -38,7 +38,7 @@ $DB->query("SELECT AliasID FROM artists_alias WHERE Name='".db_string($OldName).
 list($OldAliasID) = $DB->next_record(MYSQLI_NUM, false);
 if(!$OldAliasID) { error('Could not find old alias ID'); }
 
-$DB->query("SELECT AliasID, ArtistID FROM artists_alias WHERE name LIKE '".db_string($NewName)."'");
+$DB->query("SELECT AliasID, ArtistID FROM artists_alias WHERE name LIKE '".db_string($NewName, true)."'");
 list($TargetAliasID, $TargetArtistID) = $DB->next_record(MYSQLI_NUM, false);
 
 if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {

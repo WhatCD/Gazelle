@@ -12,7 +12,7 @@ user.
 
 define('IPS_PER_PAGE', 25);
 
-if(!check_perms('users_view_ips')) { error(403); }
+if(!check_perms('users_view_ips') || !check_perms('users_mod')) { error(403); }
 
 $UserID = $_GET['userid'];
 if (!is_number($UserID)) { error(404); }

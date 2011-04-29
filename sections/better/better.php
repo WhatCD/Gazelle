@@ -64,7 +64,7 @@ show_header('Better');
 			</tr>
 			<tr class="rowb">
 				<td class="nobr">
-					<a href="better.php?method=tags">Tags</a>
+					<a href="better.php?method=tags&amp;filter=all">Tags</a>
 				</td>
 				<td class="nobr">
 					Torrents that have been marked as having 'Very bad tags' or 'No tags at all'.

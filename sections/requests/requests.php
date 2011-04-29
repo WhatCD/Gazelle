@@ -38,7 +38,7 @@ if(empty($_GET['type'])) {
 				$Title = "Requests I've voted on";
 				$SS->set_filter('voter', array($LoggedUser['ID']));
 			}
-			if(empty($_GET['show_filled'])) {
+			if(empty($_GET['show_filled']) && $Submitted) {
 				$SS->set_filter('torrentid', array(0));
 			}
 			break;

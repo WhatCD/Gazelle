@@ -115,12 +115,13 @@ if (!extension_loaded('mysqli')) {
 //Handles escaping
 function db_string($String,$DisableWildcards=false) {
 	global $DB;
+	//Escape
+	$String = $DB->escape_str($String);
 	//Remove user input wildcards
 	if ($DisableWildcards) {
-		$String = str_replace(array('%','_'), '', $String);
+		$String = str_replace(array('%','_'), array('\%','\_'), $String);
 	}
-	//Escape and return
-	return $DB->escape_str($String);
+	return $String;
 }
 
 function db_array($Array, $DontEscape = array(), $Quote = false) {

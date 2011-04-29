@@ -489,7 +489,13 @@ function get_cc($IP) {
 	++$ID;
 	return '<span id="cc_'.$ID.'">Resolving CC...<script type="text/javascript">ajax.get(\'tools.php?action=get_cc&ip='.$IP.'\',function(cc){$(\'#cc_'.$ID.'\').raw().innerHTML=cc;});</script></span>';
 }
-			
+
+function display_ip($IP) {
+	$Line = display_str($IP).' ('.get_cc($IP).') ';
+	$Line .= '[<a href="user.php?action=search&amp;ip_history=on&amp;ip='.display_str($IP).'&matchtype=strict" title="Search">S</a>]';
+	
+	return $Line;
+}
 
 function logout() {
 	global $SessionID, $LoggedUser, $DB, $Cache;
@@ -781,6 +787,21 @@ function get_size($Size, $Levels = 2) {
 		$Levels++;
 	}
 	return number_format($Size,$Levels).$Units[$Steps];
+}
+
+function get_bytes($Size) {
+	list($Value,$Unit) = sscanf($Size, "%f%s");
+	$Unit = ltrim($Unit);
+	if(empty($Unit)) {
+		return $Value ? round($Value) : 0;
+	}
+	switch(strtolower($Unit[0])) {
+		case 'k': return round($Value * 1024);
+		case 'm': return round($Value * 1048576);
+		case 'g': return round($Value * 1073741824);
+		case 't': return round($Value * 1099511627776);
+		default: return 0;
+	}
 }
 
 function human_format($Number) {

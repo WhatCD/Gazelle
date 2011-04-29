@@ -12,7 +12,7 @@
 ini_set('max_file_uploads','100');
 show_header('Upload','upload');
 
-if(!empty($_GET['groupid']) && is_number($_GET['groupid'])) {
+if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	$DB->query("SELECT 
 		tg.ID as GroupID,
 		tg.CategoryID,
@@ -41,7 +41,7 @@ if(!empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	list($Properties['TagList']) = $DB->next_record();
 }
 
-if(!empty($_GET['requestid']) && is_number($_GET['requestid'])) {
+if(empty($Properties) && !empty($_GET['requestid']) && is_number($_GET['requestid'])) {
 	include(SERVER_ROOT.'/sections/requests/functions.php');	
 	$DB->query("SELECT
 		r.ID AS RequestID,

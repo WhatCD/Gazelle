@@ -16,7 +16,7 @@ if(!is_number($GroupID) || !$GroupID) {
 $Changed = false;
 
 for($i = 0; $i < count($AliasNames); $i++) {
-	$AliasName = trim(db_string($AliasNames[$i]));
+	$AliasName = trim($AliasNames[$i]);
 	$Importance = $Importances[$i];
 	
 	if($Importance!='1' && $Importance!='2' && $Importance!='3') {
@@ -24,8 +24,9 @@ for($i = 0; $i < count($AliasNames); $i++) {
 	}
 	
 	if(strlen($AliasName) > 0) {
-		$DB->query("SELECT AliasID, ArtistID, Redirect, Name FROM artists_alias WHERE Name LIKE '$AliasName'");
+		$DB->query("SELECT AliasID, ArtistID, Redirect, Name FROM artists_alias WHERE Name LIKE '".db_string($AliasName,true)."'");
 		if($DB->record_count() == 0) {
+			$AliasName = db_string($AliasName);
 			$DB->query("INSERT INTO artists_group (Name) VALUES ('$AliasName')");
 			$ArtistID = $DB->inserted_id();
 			$DB->query("INSERT INTO artists_alias (ArtistID, Name) VALUES ('$ArtistID', '$AliasName')");
@@ -78,7 +79,6 @@ if($Changed) {
 	$Cache->delete_value('artist_'.$ArtistID);
 	update_hash($GroupID);
 }
-
 
 header('Location: '.$_SERVER['HTTP_REFERER']);
 ?>

@@ -25,6 +25,7 @@ show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=recommend">Vanity House additions</a></td></tr>
 <? } if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=email_blacklist">Email Blacklist</a></td></tr>
+
 <? } ?>
 		</table>
 	</div>
