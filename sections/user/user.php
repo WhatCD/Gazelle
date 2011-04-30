@@ -1021,7 +1021,6 @@ if (check_paranoia_here('requestsvoted_list')) {
 					<input type="checkbox" name="DisableLeech" id="DisableLeech"<? if ($DisableLeech==0) { ?>checked="checked"<? } ?> /><label for="DisableLeech">Leech</label> |
 					<input type="checkbox" name="DisablePM" id="DisablePM"<? if ($DisablePM==1) { ?>checked="checked"<? } ?> /><label for="DisablePM">PM</label> |
 					<input type="checkbox" name="DisableIRC" id="DisableIRC"<? if ($DisableIRC==1) { ?>checked="checked"<? } ?> /><label for="DisableIRC">IRC</label>
-					<??>
 				</td>
 			</tr>
 			<tr>

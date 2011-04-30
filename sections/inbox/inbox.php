@@ -97,7 +97,6 @@ echo $Pages;
 <? } else { ?>
         <form action="inbox.php" method="get" id="searchbox">
         	<div>
-			<??>
         		<input type="radio" name="searchtype" value="user" checked="checked" /> User 
         		<input type="radio" name="searchtype" value="subject" /> Subject
         		<input type="radio" name="searchtype" value="message" /> Message
@@ -156,7 +155,6 @@ echo $Pages;
 				</tr>
 <?	} ?>
 			</table>
-<?			?>
 			<input type="submit" value="Delete message(s)" />
 		</form>
 <? } ?>

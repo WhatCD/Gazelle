@@ -196,6 +196,7 @@ else {
 							$DB->query("INSERT INTO ip_bans
 								(FromIP, ToIP, Reason) VALUES
 								('$IP','$IP', 'Automated ban per >60 failed login attempts')");
+							$Cache->delete_value('ip_bans');
 						}
 					}
 			} else {

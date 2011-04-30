@@ -147,7 +147,6 @@ function permissions_form(){ ?>
 					<? display_perm('site_collages_recover', 'Can recover \'deleted\' collages.'); ?>
 					<? display_perm('site_forums_double_post', 'Can double post in the forums.'); ?>
 					<? display_perm('project_team', 'Part of the project team.'); ?>
-<??>
 				</td>
 			</tr>
 		</table>
@@ -189,7 +188,6 @@ function permissions_form(){ ?>
 					<? display_perm('users_make_invisible', 'Can make users invisible'); ?>
 					<? display_perm('users_logout', 'Can log users out'); ?>
 					<? display_perm('users_mod', 'Can access basic moderator tools (Admin comment)'); ?>
-<??>
 					*Everything is only applicable to users with the same or lower class level
 				</td>
 			</tr>
@@ -243,7 +241,6 @@ function permissions_form(){ ?>
 					<? display_perm('admin_login_watch', 'Can manage login watch.'); ?>
 					<? display_perm('admin_manage_wiki', 'Can manage wiki access.'); ?>
 					<? display_perm('admin_update_geoip', 'Can update geoip data.'); ?>
-<??>
 				</td>
 			</tr>
 		</table>

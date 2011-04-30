@@ -197,9 +197,6 @@ $PeerCount = $SeederCount + $LeecherCount;
 				<li>Seeders: <?=number_format($SeederCount) ?></li>
 				<li>Leechers: <?=number_format($LeecherCount) ?></li>
 				<li>Seeder/Leecher Ratio: <?=$Ratio?></li>
-<?
-
-?>
 			</ul>
 		</div>
 <?

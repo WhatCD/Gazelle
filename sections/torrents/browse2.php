@@ -602,9 +602,6 @@ if (!empty($LoggedUser['DefaultSearch'])) {
 </form>
 
 <div class="linkbox"><?=$Pages?></div>
-<? 
-
-?>
 <? if(count($Results)==0) {
 $DB->query("SELECT 
 	tags.Name,

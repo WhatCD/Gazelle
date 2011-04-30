@@ -431,7 +431,6 @@ foreach ($TorrentList as $Torrent) {
 						| <a href="torrents.php?action=delete&amp;torrentid=<?=$TorrentID ?>" title="Remove">RM</a>
 <?	} ?>
 
-<??>
 						| <a href="torrents.php?torrentid=<?=$TorrentID ?>" title="Permalink">PL</a>
 					]</span>
 					<a href="#" onclick="$('#torrent_<?=$TorrentID?>').toggle(); return false;">&raquo; <?=$ExtraInfo; ?></a>
@@ -459,8 +458,6 @@ foreach ($TorrentList as $Torrent) {
 						
 <? } ?>
 
-<?	
-?>
 					</blockquote>
 <? if(check_perms('site_moderate_requests')) { ?>
 					<div class="linkbox">

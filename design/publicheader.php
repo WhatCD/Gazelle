@@ -31,18 +31,17 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 <body>
 <div id="head">
 <?=($SSL)?'<span>SSL</span>':''?>
-<?
-?>
 </div>
 <table id="maincontent">
 	<tr>
 		<td align="center" valign="middle">
 			<div id="logo">
 				<ul>
-					<li><a href="index.php<?=($Lang != DEFAULT_LOCALE ? '?lang='.$Lang : '')?>">Home</a></li>
-					<li><a href="login.php<?=($Lang != DEFAULT_LOCALE ? '?lang='.$Lang : '')?>">Login</a></li>
+					<li><a href="index.php">Home</a></li>
+					<li><a href="login.php">Login</a></li>
 <? if (OPEN_REGISTRATION) { ?> 
-					<li><a href="register.php<?=($Lang != DEFAULT_LOCALE ? '?lang='.$Lang : '')?>">Register</a></li>
+					<li><a href="register.php">Register</a></li>
+<? } ?>
 				</ul>
-<? } ?> 
 			</div>
+

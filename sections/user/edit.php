@@ -77,9 +77,6 @@ echo $Val->GenerateJS('userform');
 					<strong>Site preferences</strong>
 				</td>
 			</tr>
-<?
-
-?>
 			<tr>
 				<td class="label"><strong>Stylesheet</strong></td>
 				<td>
@@ -215,8 +212,6 @@ echo $Val->GenerateJS('userform');
 					<label for="disableavatars">Disable avatars</label>
 				</td>
 			</tr>
-<?	
-?>		
 			<tr>
 				<td class="label"><strong>Download torrents as text files</strong></td>
 				<td>

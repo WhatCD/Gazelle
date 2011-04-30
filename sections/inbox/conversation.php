@@ -65,10 +65,6 @@ $DB->query("SELECT SentDate, SenderID, Body, ID FROM pm_messages AS m WHERE Conv
 ?>
 <div class="thin">
 	<h2><?=$Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')':'')?></h2>
-<?
-
-
-?>
 	<div class="linkbox">
 		<a href="inbox.php">[Back to inbox]</a>
 	</div>

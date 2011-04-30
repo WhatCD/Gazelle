@@ -65,7 +65,6 @@ list($FrontLineSupport,$Staff) = $Support;
 <?	} ?>
 		</table>
 	</div>
-<??>
 	<div class="box pad" style="padding:0px 10px 10px 10px;">
 
 <?

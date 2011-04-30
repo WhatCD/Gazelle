@@ -463,8 +463,8 @@ if(!$LoggedUser['DisablePosting']) { ?>
 						<input type="hidden" name="requestid" value="<?=$RequestID?>" />
 						<textarea id="quickpost" name="body" cols="70" rows="8"></textarea> <br />
 					</div>
-					<input type="submit" value="Post reply" />
 					<input id="post_preview" type="button" value="Preview" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
+					<input type="submit" value="Post reply" />
 				</form>
 			</div>
 <? } ?>

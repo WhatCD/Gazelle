@@ -106,8 +106,6 @@ foreach($Friends as $Friend) {
 			<td valign="top">
 					<input type="hidden" name="friendid" value="<?=$FriendID?>" />
 
-<? 
-?>
 					<textarea name="comment" rows="4" cols="80"><?=$Comment?></textarea>
 				</td>
 				<td class="left" valign="top">
@@ -115,9 +113,6 @@ foreach($Friends as $Friend) {
 					<input type="submit" name="action" value="Defriend" /><br />
 					<input type="submit" name="action" value="Contact" /><br />
 
-<?
-
-?>
 			</td>
 		</tr>
 	</table>
