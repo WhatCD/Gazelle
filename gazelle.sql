@@ -339,7 +339,8 @@ CREATE TABLE `ip_bans` (
   `Reason` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `FromIP_2` (`FromIP`,`ToIP`),
-  KEY `FromIP` (`FromIP`,`ToIP`)
+  KEY `FromIP` (`FromIP`,`ToIP`),
+  KEY `ToIP` (`ToIP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `log` (

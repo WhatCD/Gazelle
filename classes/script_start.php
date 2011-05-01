@@ -424,12 +424,14 @@ function geoip($IP) {
 		return $IPs[$IP];
 	}
 	$Long = ip2unsigned($IP);
-	if($Long == 2130706433 || !$Long) {
+	if(!$Long || $Long == 2130706433) { // No need to check cc for 127.0.0.1
 		return false;
 	}
 	global $DB;
-	$DB->query("SELECT Code FROM geoip_country WHERE $Long BETWEEN StartIP AND EndIP LIMIT 1");
-	list($Country) = $DB->next_record();
+	$DB->query("SELECT EndIP,Code FROM geoip_country WHERE $Long >= StartIP ORDER BY StartIP DESC LIMIT 1");
+	if((!list($EndIP,$Country) = $DB->next_record()) || $EndIP < $Long) {
+		$Country = '?';
+	}
 	$IPs[$IP] = $Country;
 	return $Country;
 }
