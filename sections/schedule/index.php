@@ -432,7 +432,7 @@ if($Day != next_day() || $_GET['runday']){
         foreach($Passkeys as $Passkey) {
                 update_tracker('update_user', array('passkey' => $Passkey, 'can_leech' => '1'));
         }
-
+/*
 	
 	// Put user on ratio watch if he doesn't meet the standards
 	sleep(10);
@@ -458,7 +458,7 @@ if($Day != next_day() || $_GET['runday']){
 		send_pm($UserID, 0, db_string("You have been put on Ratio Watch"), db_string("This happens when your ratio falls below the requirements we have outlined in the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n For information about ratio watch, click the link above."), '');
 		echo "Ratio watch on: $UserID\n";
 	}
-	
+*/
 	sleep(5);
 
 	//------------- Rescore 0.95 logs of disabled users
@@ -621,13 +621,12 @@ if($Day != next_day() || $_GET['runday']){
 		t.Encoding,
 		t.UserID
 		FROM torrents AS t
-		JOIN torrents_group AS tg ON tg.ID=t.GroupID
-		LEFT JOIN artists_group AS ag ON ag.ArtistID=tg.ArtistID
-		WHERE t.flags <> 1
-		AND (t.last_action<'".time_minus(3600*24*28)."'
-		AND t.last_action!='0000-00-00 00:00:00'
-		OR t.Time<'".time_minus(3600*24*2)."'
-		AND t.last_action='0000-00-00 00:00:00')");
+		JOIN torrents_group AS tg ON tg.ID = t.GroupID
+		LEFT JOIN artists_group AS ag ON ag.ArtistID = tg.ArtistID
+		WHERE t.last_action < '".time_minus(3600*24*28)."'
+		AND t.last_action != 0");
+//		OR t.Time < '".time_minus(3600*24*2)."'
+//		AND t.last_action = 0");
 	$TorrentIDs = $DB->to_array();
 	
 	$LogEntries = array();

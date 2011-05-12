@@ -260,7 +260,7 @@ if(count($_GET)){
 		if(!empty($_GET['tracker_ip'])){
 				$Distinct = 'DISTINCT ';
 				$Join[]=' JOIN xbt_files_users AS xfu ON um1.ID=xfu.uid ';
-				$Where[]= ' xfu.ipa '.$Match.wrap((int) ip2long($_GET['tracker_ip']));
+				$Where[]= ' (xfu.ipa '.$Match.wrap((int) ip2long($_GET['tracker_ip'])).' OR xfu.ip '.$Match.wrap($_GET['tracker_ip']).')';
 		}
 		
 		

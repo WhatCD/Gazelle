@@ -754,6 +754,7 @@ ul.poll li.graph {
 }
 .torrent_table tr.group_torrent {
 	background-color:#fbfaf8;
+	border-bottom:1px solid #efefef;
 }
 
 tr.group_torrent td,

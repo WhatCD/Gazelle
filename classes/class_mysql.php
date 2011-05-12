@@ -305,7 +305,7 @@ class DB_MYSQL {
 			if($Escape!==FALSE) {
 				$Row = display_array($Row, $Escape);
 			}
-			if($Key) {
+			if($Key !== false) {
 				$Return[$Row[$Key]] = $Row;
 			} else {
 				$Return[]=$Row;

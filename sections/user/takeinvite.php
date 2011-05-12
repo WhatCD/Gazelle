@@ -69,19 +69,19 @@ Thank you,
 $SiteName Staff
 EOT;
 	
-	send_email($CurEmail, 'You have been invited to '.SITE_NAME, $Message,'noreply');
-
 	$DB->query("INSERT INTO invites
 		(InviterID, InviteKey, Email, Expires) VALUES
 		('$LoggedUser[ID]', '$InviteKey', '".db_string($CurEmail)."', '$InviteExpires')");
 
 	if (!check_perms('site_send_unlimited_invites')) {
-		$DB->query("UPDATE users_main SET Invites=Invites-1 WHERE ID='$LoggedUser[ID]'");
+		$DB->query("UPDATE users_main SET Invites=GREATEST(Invites,1)-1 WHERE ID='$LoggedUser[ID]'");
 		$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
 		$Cache->update_row(false, array('Invites'=>'-1'));
 		$Cache->commit_transaction(0);
 	}
 	
+	send_email($CurEmail, 'You have been invited to '.SITE_NAME, $Message,'noreply');
+
 	
 }
 

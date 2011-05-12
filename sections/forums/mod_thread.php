@@ -155,7 +155,7 @@ if(isset($_POST['delete'])) {
 			LEFT JOIN users_main AS um ON um.ID=p.AuthorID
 			WHERE t.ForumID='$OldForumID'
 			ORDER BY t.LastPostID DESC LIMIT 1");
-		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts, $NewLocked, $NewSticky) = $DB->next_record();
+		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts, $NewLocked, $NewSticky) = $DB->next_record(MYSQLI_NUM, false);
 		
 		$DB->query("UPDATE forums SET 
 			NumTopics=NumTopics-1, 

@@ -223,36 +223,29 @@ if(isset($LoginCookie)) {
 	}
 	
 	// IP changed
-	if($LoggedUser['IP']!=$_SERVER['REMOTE_ADDR'] && !check_perms('site_disable_ip_history')) {
-		
+	if($LoggedUser['IP'] != $_SERVER['REMOTE_ADDR'] && !check_perms('site_disable_ip_history')) {
 		if(site_ban_ip($_SERVER['REMOTE_ADDR'])) {
 			error('Your IP has been banned.');
 		}
 
-		if(!check_perms('site_disable_ip_history')) {
-			$CurIP = db_string($LoggedUser['IP']);
-			$NewIP = db_string($_SERVER['REMOTE_ADDR']);
+		$CurIP = db_string($LoggedUser['IP']);
+		$NewIP = db_string($_SERVER['REMOTE_ADDR']);
+		$DB->query("UPDATE users_history_ips SET
+				EndTime='".sqltime()."'
+				WHERE EndTime IS NULL
+				AND UserID='$LoggedUser[ID]'
+				AND IP='$CurIP'");
+		$DB->query("INSERT IGNORE INTO users_history_ips
+				(UserID, IP, StartTime) VALUES
+				('$LoggedUser[ID]', '$NewIP', '".sqltime()."')");
 
-			$DB->query("UPDATE users_history_ips SET
-					EndTime='".sqltime()."'
-					WHERE EndTime IS NULL
-					AND UserID='$LoggedUser[ID]'
-					AND IP='$CurIP'");
-			
-			$DB->query("INSERT IGNORE INTO users_history_ips
-					(UserID, IP, StartTime) VALUES
-					('$LoggedUser[ID]', '$NewIP', '".sqltime()."')");
+		$ipcc = geoip($NewIP);
+		$DB->query("UPDATE users_main SET IP='$NewIP', ipcc='".$ipcc."' WHERE ID='$LoggedUser[ID]'");
+		$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
+		$Cache->update_row(false, array('IP' => $_SERVER['REMOTE_ADDR']));
+		$Cache->commit_transaction(0);
 
-			$ipcc = geoip($_SERVER['REMOTE_ADDR']);
-//			$DB->query("SELECT Code from geoip_country WHERE '".ip2long($_SERVER['REMOTE_ADDR'])."' BETWEEN StartIP AND EndIP");
-//			list($ipcc) = $DB->next_record();
-			$DB->query("UPDATE users_main SET IP='$NewIP', ipcc='".$ipcc."' WHERE ID='$LoggedUser[ID]'");
-			$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
-			$Cache->update_row(false, array('IP' => $_SERVER['REMOTE_ADDR']));
-			$Cache->commit_transaction(0);
-			
-			
-		}
+		
 	}
 	
 	
@@ -398,7 +391,7 @@ function site_ban_ip($IP) {
 		} else {
 			$Cache->cache_value('ip_bans_lock', '1', 10);
 			$DB->query("SELECT ID, FromIP, ToIP FROM ip_bans");
-			$IPBans = $DB->to_array('ID');
+			$IPBans = $DB->to_array(0, MYSQLI_NUM);
 			$Cache->cache_value('ip_bans', $IPBans, 0);
 		}
 	}
@@ -1361,10 +1354,10 @@ function create_thread($ForumID, $AuthorID, $Title, $PostBody) {
 			WHERE ID = '$TopicID'");
 
 	// Bump this topic to head of the cache
-	list($Forum, $TopicIDs,,$Stickies) = $Cache->get_value('forums_'.$ForumID);
+	list($Forum,,,$Stickies) = $Cache->get_value('forums_'.$ForumID);
 	if (!empty($Forum)) {
-		if (count($Forum) == TOPICS_PER_PAGE) {
-			unset($Forum[(count($Forum)-1)]);
+		if (count($Forum) == TOPICS_PER_PAGE && $Stickies < TOPICS_PER_PAGE) {
+			array_pop($Forum);
 		}
 		$DB->query("SELECT f.IsLocked, f.IsSticky, f.NumPosts FROM forums_topics AS f WHERE f.ID ='$TopicID'");
 		list($IsLocked,$IsSticky,$NumPosts) = $DB->next_record();
@@ -1385,11 +1378,17 @@ function create_thread($ForumID, $AuthorID, $Title, $PostBody) {
 				)
 			); //Bumped thread
 		$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE,true); //Rest of page
-		$Forum = array_merge($Part1, $Part2, $Part3); //Merge it
-
-		$TopicArray=array_keys($Forum);
-		$TopicIDs = implode(', ', $TopicArray);
-		$Cache->cache_value('forums_'.$ForumID, array($Forum,$TopicIDs,0,$Stickies), 0);
+		if ($Stickies > 0) {
+			$Part1 = array_slice($Forum,0,$Stickies,true); //Stickies
+			$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE-$Stickies-1,true); //Rest of page
+		} else {
+			$Part1 = array();
+			$Part3 = $Forum;
+		}
+		if (is_null($Part1)) { $Part1 = array(); }
+		if (is_null($Part3)) { $Part3 = array(); }
+		$Forum = $Part1 + $Part2 + $Part3;
+		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
 	}
 
 	//Update the forum root
@@ -1875,7 +1874,7 @@ function update_tracker($Action, $Updates) {
 	}
 
 	if($Return != "success") {
-		send_irc("PRIVMSG #admin :Failed to update ocelot: ".$Err." : ".$Get);
+		send_irc("PRIVMSG #tracker :Failed to update ocelot: ".$Err." : ".$Get);
 	}
 	return ($Return == "success");
 }

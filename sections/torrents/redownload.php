@@ -9,10 +9,9 @@ if(!check_perms('zip_downloader')) {
 	error(403);
 }
 
-if ($UserID != $LoggedUser['ID']) {
-	$DB->query("SELECT m.Paranoia, p.Level FROM users_main AS m JOIN permissions AS p ON p.ID=m.PermissionID WHERE m.ID='".$UserID."'");
-	list($Paranoia, $UserClass)=$DB->next_record();
-}
+$User = user_info($UserID);
+$Perms = get_permissions($User['PermissionID']);
+$UserClass = $Perms['Class'];
 
 require(SERVER_ROOT.'/classes/class_torrent.php');
 require(SERVER_ROOT.'/classes/class_zip.php');
@@ -23,17 +22,17 @@ if (empty($_GET['type'])) {
 	
 	switch ($_GET['type']) {
 		case 'uploads':
-			if(!check_paranoia('uploads', $Paranoia, $UserClass, $UserID)) { error(403); }
+			if(!check_paranoia('uploads', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
 			$SQL = "WHERE t.UserID='$UserID'";
 			$Month = "t.Time";
 			break;
 		case 'snatches':
-			if(!check_paranoia('snatched', $Paranoia, $UserClass, $UserID)) { error(403); }
+			if(!check_paranoia('snatched', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
 			$SQL = "JOIN xbt_snatched AS x ON t.ID=x.fid WHERE x.uid='$UserID'";
 			$Month = "FROM_UNIXTIME(x.tstamp)";
 			break;
 		case 'seeding':
-			if(!check_paranoia('seeding', $Paranoia, $UserClass, $UserID)) { error(403); }
+			if(!check_paranoia('seeding', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
 			$SQL = "JOIN xbt_files_users AS xfu ON t.ID = xfu.fid WHERE xfu.uid='$UserID' AND xfu.remaining = 0";
 			$Month = "FROM_UNIXTIME(xfu.mtime)";
 			break;
@@ -57,7 +56,8 @@ $DB->query("SELECT
 	FROM torrents as t 
 	JOIN torrents_group AS tg ON t.GroupID=tg.ID 
 	LEFT JOIN torrents_files AS f ON t.ID=f.TorrentID
-	".$SQL);
+	".$SQL."
+	GROUP BY t.ID");
 $Downloads = $DB->to_array(false,MYSQLI_NUM,false);
 $Artists = get_artists($DB->collect('GroupID'));
 

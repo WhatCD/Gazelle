@@ -15,7 +15,7 @@ if ($ConvID = (int)$_GET['id']) {
 			$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
 		}
 		
-		show_header('Staff PM', 'staffpm');
+		show_header('Staff PM', 'staffpm,bbcode');
 		
 		$UserInfo = user_info($UserID);
 		$UserStr = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);

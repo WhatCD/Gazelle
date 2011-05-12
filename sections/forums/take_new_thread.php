@@ -121,13 +121,13 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 	list($Forum,,,$Stickies) = $Forum;
 	
 	//Remove the last thread from the index
-	if (count($Forum) == TOPICS_PER_PAGE) {
-		unset($Forum[(count($Forum)-1)]);
+	if (count($Forum) == TOPICS_PER_PAGE && $Stickies < TOPICS_PER_PAGE) {
+		array_pop($Forum);
 	}
 	
 	if ($Stickies > 0) {
 		$Part1 = array_slice($Forum,0,$Stickies,true); //Stikys
-		$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE,true); //Rest of page
+		$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE-$Stickies-1,true); //Rest of page
 	} else {
 		$Part1 = array();
 		$Part3 = $Forum;

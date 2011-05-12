@@ -212,11 +212,6 @@ class DEBUG {
 		return get_included_files();
 	}
 	
-	public function get_cache() {
-		global $Cache;
-		return $Cache->CacheHits;
-	}
-
 	public function get_cache_time() {
 		global $Cache;
 		return $Cache->Time;
@@ -360,18 +355,17 @@ class DEBUG {
 <?
 	}
 
-	public function cache_table($CacheData=false) {
+	public function cache_table($CacheKeys=false) {
 		global $Cache;
 		$Header = 'Cache Keys';
-		$CacheKeys = $this->get_cache_keys();
-		if (!is_array($CacheData)) {
-			$CacheData = $this->get_cache();
+		if (!is_array($CacheKeys)) {
+			$CacheKeys = $this->get_cache_keys();
 			$Header .= ' ('.number_format($this->get_cache_time(), 5).' ms)';
 		}
-		if (empty($CacheData)) {
+		if (empty($CacheKeys)) {
 			return;
 		}
-		$Header = ' '.number_format(count($CacheData)).' '.$Header.':';
+		$Header = ' '.number_format(count($CacheKeys)).' '.$Header.':';
 
 ?>
 	<table width="100%">
@@ -386,7 +380,7 @@ class DEBUG {
 				<a href="#" onclick="$('#debug_cache_<?=$Key?>').toggle(); return false;"><?=display_str($Key)?></a>
 			</td>
 			<td align="left">
-				<pre id="debug_cache_<?=$Key?>" class="hidden"><?=display_str(print_r($Cache->get_value($Key), true))?></pre>
+				<pre id="debug_cache_<?=$Key?>" class="hidden"><?=display_str(print_r($Cache->get_value($Key, true), true))?></pre>
 			</td>
 		</tr>
 <?		} ?>
