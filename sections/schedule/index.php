@@ -432,7 +432,7 @@ if($Day != next_day() || $_GET['runday']){
         foreach($Passkeys as $Passkey) {
                 update_tracker('update_user', array('passkey' => $Passkey, 'can_leech' => '1'));
         }
-/*
+
 	
 	// Put user on ratio watch if he doesn't meet the standards
 	sleep(10);
@@ -440,6 +440,7 @@ if($Day != next_day() || $_GET['runday']){
 		WHERE m.Uploaded/m.Downloaded < m.RequiredRatio
 		AND i.RatioWatchEnds='0000-00-00 00:00:00'
 		AND m.Enabled='1'
+		AND m.Downloaded > 100<<30
 		AND m.can_leech='1'");
 	$OnRatioWatch = $DB->collect('ID');
 	
@@ -458,7 +459,7 @@ if($Day != next_day() || $_GET['runday']){
 		send_pm($UserID, 0, db_string("You have been put on Ratio Watch"), db_string("This happens when your ratio falls below the requirements we have outlined in the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n For information about ratio watch, click the link above."), '');
 		echo "Ratio watch on: $UserID\n";
 	}
-*/
+
 	sleep(5);
 
 	//------------- Rescore 0.95 logs of disabled users

@@ -229,9 +229,7 @@ if ($Classes[$Class]['Level']!=$Cur['Class'] && (
 	$UpdateSet[]="PermissionID='$Class'";
 	$EditSummary[]="class changed to ".make_class_string($Class);
 	$LightUpdates['PermissionID']=$Class;
-	if ($Class == 6) {
-		$DB->query("UPDATE users_info SET RestrictedForums = CONCAT('30,', RestrictedForums) WHERE UserID = ".$UserID);
-	}
+
 	$DB->query("SELECT DISTINCT DisplayStaff FROM permissions WHERE ID = $Class OR ID = ".$ClassLevels[$Cur['Class']]['ID']);
 	if($DB->record_count() == 2) {
 		if($Classes[$Class]['Level'] < $Cur['Class']) {

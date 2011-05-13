@@ -13,7 +13,4 @@ if (empty($_GET['ip'])) {
 	die("Invalid IP");
 }
 
-$DB->query("SELECT Code FROM geoip_country WHERE ".ip2long($_GET['ip'])." BETWEEN StartIP AND EndIP LIMIT 1");
-list($CC) = $DB->next_record();
-die($CC);
-
+die(geoip($_GET['ip']));

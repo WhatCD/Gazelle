@@ -240,7 +240,16 @@ if(isset($_GET['haslog']) && $_GET['haslog']!=='') {
 
 foreach(array('hascue','scene','freetorrent','releasetype') as $Search) {
 	if(isset($_GET[$Search]) && $_GET[$Search]!=='') {
-		$SS->set_filter($Search, array($_GET[$Search]));
+		if($Search == 'freetorrent') {
+			switch($_GET[$Search]) {
+				case 0: $SS->set_filter($Search, array(0)); break;
+				case 1: $SS->set_filter($Search, array(1)); break;
+				case 2: $SS->set_filter($Search, array(2)); break;
+				case 3: $SS->set_filter($Search, array(0), true); break;
+			}
+		} else {
+			$SS->set_filter($Search, array($_GET[$Search]));
+		}
 	}
 }
 
@@ -479,9 +488,11 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 						<option value="0" <?selected('scene',0)?>>No</option>
 					</select>
 					<select name="freetorrent">
-						<option value="">Freeleech</option>
-						<option value="1" <?selected('freetorrent',1)?>>Yes</option>
-						<option value="0" <?selected('freetorrent',0)?>>No</option>
+						<option value="">Leech Status</option>
+						<option value="1" <?selected('freetorrent',1)?>>Freeleech</option>
+						<option value="2" <?selected('freetorrent',2)?>>Neutral Leech</option>
+						<option value="3" <?selected('freetorrent',3)?>>Either</option>
+						<option value="0" <?selected('freetorrent',0)?>>Normal</option>
 					</select>
 				</td>
 			</tr>
@@ -784,7 +795,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			}
 			if(isset($_GET['freetorrent']) && $_GET['freetorrent']!=='') {
 				$Filter = true;
-				if((int)$Data['FreeTorrent']==$_GET['freetorrent']) {
+				if((int)$Data['FreeTorrent'] & $_GET['freetorrent'] || (int)$Data['FreeTorrent'] == $_GET['freetorrent']) {
 					$Pass = true;
 				}
 			}

@@ -108,6 +108,8 @@ define('STATUS_CHAN', '#');
 
 // Miscellaneous values
 
+$ForumsRevealVoters = array();
+
 $Categories = array('Music', 'Applications', 'E-Books', 'Audiobooks', 'E-Learning Videos', 'Comedy', 'Comics');
 $CategoryIcons = array('music.png', 'apps.png', 'ebook.png', 'audiobook.png', 'elearning.png', 'comedy.png', 'comics.png');
 

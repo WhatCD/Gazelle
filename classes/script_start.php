@@ -193,7 +193,6 @@ if(isset($LoginCookie)) {
 	// Update LastUpdate every 10 minutes
 	if(strtotime($UserSessions[$SessionID]['LastUpdate'])+600<time()) {
 		$DB->query("UPDATE users_main SET LastAccess='".sqltime()."' WHERE ID='$LoggedUser[ID]'");
-		
 		$DB->query("UPDATE users_sessions SET IP='".$_SERVER['REMOTE_ADDR']."', Browser='".$Browser."', OperatingSystem='".$OperatingSystem."', LastUpdate='".sqltime()."' WHERE UserID='$LoggedUser[ID]' AND SessionID='".db_string($SessionID)."'");
 		$Cache->begin_transaction('users_sessions_'.$UserID);
 		$Cache->delete_row($SessionID);
@@ -1224,7 +1223,7 @@ function update_hash($GroupID) {
 		MAX(t.Scene) AS Scene,
 		MAX(t.HasLog) AS HasLog,
 		MAX(t.HasCue) AS HasCue,
-		MAX(t.FreeTorrent) AS FreeTorrent,
+		BIT_OR(t.FreeTorrent-1) AS FreeTorrent,
 		GROUP_CONCAT(DISTINCT t.Media SEPARATOR ' ') AS Media,
 		GROUP_CONCAT(DISTINCT t.Format SEPARATOR ' ') AS Format,
 		GROUP_CONCAT(DISTINCT t.Encoding SEPARATOR ' ') AS Encoding,

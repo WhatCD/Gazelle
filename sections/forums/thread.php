@@ -168,13 +168,14 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		$MaxVotes = 0;
 	}
 	
+	$RevealVoters = in_array($ForumID, $ForumsRevealVoters);
 	//Polls lose the you voted arrow thingy
 	$DB->query("SELECT Vote FROM forums_polls_votes WHERE UserID='".$LoggedUser['ID']."' AND TopicID='$ThreadID'");
 	list($UserResponse) = $DB->next_record();
 	if (!empty($UserResponse) && $UserResponse != 0) {
 		$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
 	} else {
-		if(!empty($UserResponse) && $ForumID == STAFF_FORUM) {
+		if(!empty($UserResponse) && $RevealVoters) {
 			$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
 		}
 	}
@@ -187,7 +188,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?	if ($UserResponse !== null || $Closed || $ThreadInfo['IsLocked'] || $LoggedUser['Class'] < $Forums[$ForumID]['MinClassWrite']) { ?>
 			<ul class="poll nobullet">
 <?		
-		if($ForumID != STAFF_FORUM) {
+		if(!$RevealVoters) {
 			foreach($Answers as $i => $Answer) {
 				if (!empty($Votes[$i]) && $TotalVotes > 0) {
 					$Ratio = $Votes[$i]/$MaxVotes;
@@ -253,11 +254,17 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?			} ?>
 				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0">Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float) $Votes[0]/$TotalVotes)*100, 2)?>%)</li>
 			</ul>
+<?
+			if($ForumID == STAFF_FORUM) {
+?>
 			<br />
 			<strong>Votes:</strong> <?=number_format($TotalVotes)?> / <?=$StaffCount ?>
 			<br />
 			<strong>Missing Votes:</strong> <?=implode(", ", $StaffNames)?>
 			<br /><br />
+<?
+			}
+?>
 			<a href="#" onclick="AddPollOption(<?=$ThreadID?>); return false;">[+]</a>
 <?
 		}
@@ -292,7 +299,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				</form>
 			</div>
 <? } ?>
-<? if(check_perms('forums_polls_moderate') && $ForumID != STAFF_FORUM) { ?>
+<? if(check_perms('forums_polls_moderate') && !$RevealVoters) { ?>
 	<? if (!$Featured || $Featured == '0000-00-00 00:00:00') { ?>
 			<form action="forums.php" method="post">
 				<input type="hidden" name="action" value="poll_mod"/>

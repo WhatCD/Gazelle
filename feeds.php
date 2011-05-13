@@ -87,4 +87,5 @@ header('Pragma:');
 header('Expires: '.date('D, d M Y H:i:s', time()+(2*60*60)).' GMT');
 header('Last-Modified: '.date('D, d M Y H:i:s').' GMT');
 
+$Feed->UseSSL = (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
 require(SERVER_ROOT.'/sections/feeds/index.php');

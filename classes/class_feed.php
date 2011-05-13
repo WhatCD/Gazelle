@@ -1,5 +1,7 @@
 <?
 class FEED {
+	var $UseSSL = false; // If we're using SSL for blog and news links
+
 	function open_feed() {
 		header("Content-type: application/xml; charset=UTF-8");
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n","<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n\t<channel>\n";
@@ -8,11 +10,12 @@ class FEED {
 		echo "\t</channel>\n</rss>";
 	}
 	function channel($Title, $Description, $Section='') {
-		echo "\t\t<title>", $Title, " :: ", SITE_NAME, "</title>\n";
-		echo "\t\t<link>http://", SITE_URL, "/", $Section, "</link>\n";
-		echo "\t\t<description>", $Description, "</description>\n";
+		$Site = $this->UseSSL ? 'https://'.SSL_SITE_URL : 'http://'.NONSSL_SITE_URL;
+		echo "\t\t<title>$Title :: ". SITE_NAME. "</title>\n";
+		echo "\t\t<link>$Site/$Section</link>\n";
+		echo "\t\t<description>$Description</description>\n";
 		echo "\t\t<language>en-us</language>\n";
-		echo "\t\t<lastBuildDate>", date('r'), "</lastBuildDate>\n";
+		echo "\t\t<lastBuildDate>". date('r'). "</lastBuildDate>\n";
 		echo "\t\t<docs>http://blogs.law.harvard.edu/tech/rss</docs>\n";
 		echo "\t\t<generator>Gazelle Feed Class</generator>\n\n";
 	}
@@ -22,15 +25,15 @@ class FEED {
 		} else {
 			$Date = date("r",strtotime($Date));
 		}
-		$Site = NONSSL_SITE_URL;
+		$Site = $this->UseSSL ? 'https://'.SSL_SITE_URL : 'http://'.NONSSL_SITE_URL;
 		$Item = "\t\t<item>\n";
 		$Item .= "\t\t\t<title><![CDATA[$Title]]></title>\n";
 		$Item .= "\t\t\t<description><![CDATA[$Description]]></description>\n";
 		$Item .= "\t\t\t<pubDate>$Date</pubDate>\n";
-		$Item .= "\t\t\t<link>http://$Site/$Page</link>\n";
-		$Item .= "\t\t\t<guid>http://$Site/$Page</guid>\n";
+		$Item .= "\t\t\t<link>$Site/$Page</link>\n";
+		$Item .= "\t\t\t<guid>$Site/$Page</guid>\n";
 		if ($Comments != '') {
-			$Item .= "\t\t\t<comments>http://$Site/$Comments</comments>\n";
+			$Item .= "\t\t\t<comments>$Site/$Comments</comments>\n";
 		}
 		if ($Category != '') {
 			$Item .= "\t\t\t<category><![CDATA[$Category]]></category>\n";
