@@ -518,7 +518,8 @@ if(check_paranoia_here('invitedcount')) {
 	list($Invited) = $DB->next_record();
 ?>
 				<li>Invited: <?=number_format($Invited)?></li>
-<? } ?>
+<?
+} ?>
 			</ul>
 		</div>
 	</div>

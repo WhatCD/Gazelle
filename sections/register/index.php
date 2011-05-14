@@ -78,17 +78,15 @@ if(!empty($_REQUEST['confirm'])) {
 				$Enabled = '0';
 			}
 
+			$ipcc = geoip($_SERVER['REMOTE_ADDR']);
 			
 			
 			$DB->query("INSERT INTO users_main 
-				(Username,Email,PassHash,Secret,torrent_pass,IP,PermissionID,Enabled,Invites,Uploaded) VALUES
-				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(make_hash($_POST['password'],$Secret))."','".db_string($Secret)."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000')");
-			
-			
+				(Username,Email,PassHash,Secret,torrent_pass,IP,PermissionID,Enabled,Invites,Uploaded,ipcc) VALUES
+				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(make_hash($_POST['password'],$Secret))."','".db_string($Secret)."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000', '$ipcc')");
+
 			$UserID = $DB->inserted_id();
-			$DB->query("SELECT Code FROM geoip_country WHERE '".ip2long($_SERVER['REMOTE_ADDR'])."' BETWEEN StartIP AND EndIP");
-			list($ipcc) = $DB->next_record();
-			$DB->query("UPDATE users_main SET ipcc = '".$ipcc."' WHERE ID = '$UserID'");
+			
 			
 			//User created, delete invite. If things break after this point then it's better to have a broken account to fix, or a 'free' invite floating around that can be reused
 			$DB->query("DELETE FROM invites WHERE InviteKey='".db_string($_REQUEST['invite'])."'");

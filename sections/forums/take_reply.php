@@ -60,7 +60,7 @@ if(isset($_POST['subscribe'])) {
 }
 
 //Now lets handle the special case of merging posts, we can skip bumping the thread and all that fun
-if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && (!check_perms('site_forums_double_post') || isset($_POST['merge']))) {
+if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site_forums_double_post') && !in_array($ForumID, $ForumsDoublePost)) || isset($_POST['merge']))) {
 	//Get the id for this post in the database to append
 	$DB->query("SELECT ID FROM forums_posts WHERE TopicID='$TopicID' AND AuthorID='".$LoggedUser['ID']."' ORDER BY ID DESC LIMIT 1");
 	list($PostID) = $DB->next_record();

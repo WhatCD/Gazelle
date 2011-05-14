@@ -450,7 +450,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 						<label for="subscribebox">Subscribe</label>
 <?
 }
-	if($ThreadInfo['LastPostAuthorID']==$LoggedUser['ID'] && check_perms('site_forums_double_post')) {
+	if($ThreadInfo['LastPostAuthorID']==$LoggedUser['ID'] && (check_perms('site_forums_double_post') || in_array($ForumID, $ForumsDoublePost))) {
 ?>
 						<input id="mergebox" type="checkbox" name="merge" checked="checked" tabindex="2" />
 						<label for="mergebox">Merge</label>
