@@ -60,7 +60,7 @@ $DisableIRC = (isset($_POST['DisableIRC']))? 1 : 0;
 $DisableRequests = (isset($_POST['DisableRequests']))? 1 : 0;
 $DisableLeech = (isset($_POST['DisableLeech'])) ? 0 : 1;
 
-$RestrictedForums = db_string($_POST['RestrictedForums']);
+$RestrictedForums = db_string(trim($_POST['RestrictedForums']));
 $EnableUser = (int)$_POST['UserStatus'];
 $ResetRatioWatch = (isset($_POST['ResetRatioWatch']))? 1 : 0;
 $ResetPasskey = (isset($_POST['ResetPasskey']))? 1 : 0;
@@ -338,6 +338,11 @@ if ($SupportFor!=db_string($Cur['SupportFor']) && (check_perms('admin_manage_fls
 if ($RestrictedForums != db_string($Cur['RestrictedForums']) && check_perms('users_mod')) {
 	$UpdateSet[]="RestrictedForums='$RestrictedForums'";
 	$EditSummary[]="restricted forum(s): $RestrictedForums";
+	if(empty($RestrictedForums)) {
+		$HeavyUpdates['CustomForums'] = null;
+	} else {
+		$HeavyUpdates['CustomForums'] = array_fill_keys(explode(',', $RestrictedForums), 0);
+	}
 }
 
 if ($DisableAvatar!=$Cur['DisableAvatar'] && check_perms('users_disable_any')) {

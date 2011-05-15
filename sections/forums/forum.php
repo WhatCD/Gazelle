@@ -8,8 +8,6 @@ Things to expect in $_GET:
 
 ********************************************************************************/
 
-include(SERVER_ROOT.'/sections/forums/functions.php');
-
 //---------- Things to sort out before it can start printing/generating content
 
 // Check for lame SQL injection attempts
@@ -61,7 +59,6 @@ if(!isset($Forum) || !is_array($Forum)) {
 }
 
 if(!isset($Forums[$ForumID])) { error(404); }
-
 // Make sure they're allowed to look at the page
 if (!check_perms('site_moderate_forums')) {
 	$DB->query("SELECT RestrictedForums FROM users_info WHERE UserID = ".$LoggedUser['ID']);

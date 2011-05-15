@@ -52,6 +52,10 @@ if(check_perms('site_proxy_images') && !empty($Avatar)) {
 
 show_header('Post history for '.$Username,'subscriptions,comments,bbcode');
 
+if($LoggedUser['CustomForums']) {
+	unset($LoggedUser['CustomForums']['']);
+	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+}
 $ViewingOwn = ($UserID == $LoggedUser['ID']);
 $ShowUnread = ($ViewingOwn && (!isset($_GET['showunread']) || !!$_GET['showunread']));
 $ShowGrouped = ($ViewingOwn && (!isset($_GET['group']) || !!$_GET['group']));
@@ -69,6 +73,10 @@ if($ShowGrouped) {
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = '.$UserID.'
 		AND f.MinClassRead <= '.$LoggedUser['Class'];
+	if(!empty($RestrictedForums)) {
+		$sql.='
+		AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+	}
 	if($ShowUnread) {
 		$sql .= '
 		AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\')
@@ -140,6 +148,11 @@ if($ShowGrouped) {
 		LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
 		WHERE p.AuthorID = '.$UserID.'
 		AND f.MinClassRead <= '.$LoggedUser['Class'];
+
+	if(!empty($RestrictedForums)) {
+		$sql.='
+		AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+	}
 
 	if($ShowUnread) {
 		$sql.='

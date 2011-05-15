@@ -440,7 +440,6 @@ if($Day != next_day() || $_GET['runday']){
 		WHERE m.Uploaded/m.Downloaded < m.RequiredRatio
 		AND i.RatioWatchEnds='0000-00-00 00:00:00'
 		AND m.Enabled='1'
-		AND m.Downloaded > 100<<30
 		AND m.can_leech='1'");
 	$OnRatioWatch = $DB->collect('ID');
 	
@@ -625,9 +624,9 @@ if($Day != next_day() || $_GET['runday']){
 		JOIN torrents_group AS tg ON tg.ID = t.GroupID
 		LEFT JOIN artists_group AS ag ON ag.ArtistID = tg.ArtistID
 		WHERE t.last_action < '".time_minus(3600*24*28)."'
-		AND t.last_action != 0");
-//		OR t.Time < '".time_minus(3600*24*2)."'
-//		AND t.last_action = 0");
+		AND t.last_action != 0
+		OR t.Time < '".time_minus(3600*24*2)."'
+		AND t.last_action = 0");
 	$TorrentIDs = $DB->to_array();
 	
 	$LogEntries = array();

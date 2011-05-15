@@ -117,6 +117,10 @@ if(check_perms('site_send_unlimited_invites')) {
 //Subscriptions
 $NewSubscriptions = $Cache->get_value('subscriptions_user_new_'.$LoggedUser['ID']);
 if($NewSubscriptions === FALSE) {
+	if($LoggedUser['CustomForums']) {
+		unset($LoggedUser['CustomForums']['']);
+		$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+	}
 	$DB->query("SELECT COUNT(s.TopicID)
 		FROM users_subscriptions AS s
 			JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
@@ -124,7 +128,9 @@ if($NewSubscriptions === FALSE) {
 			JOIN forums AS f ON t.ForumID = f.ID
 		WHERE f.MinClassRead <= ".$LoggedUser['Class']."
 			AND l.PostID < t.LastPostID
-			AND s.UserID = ".$LoggedUser['ID']);
+			AND s.UserID = ".$LoggedUser['ID'].
+		(!empty($RestrictedForums) ? "
+			AND f.ID NOT IN ('".$RestrictedForums."')" : ""));
 	list($NewSubscriptions) = $DB->next_record();
 	$Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
 }

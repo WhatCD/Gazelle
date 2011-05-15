@@ -1,6 +1,5 @@
 <?
 authorize();
-include(SERVER_ROOT.'/sections/forums/functions.php');
 
 //TODO: Remove all the stupid queries that could get their information just as easily from the cache
 /*********************************************************************\

@@ -83,7 +83,7 @@ $LastCategoryID = -1;
 $Columns = 0;
 
 foreach($Forums as $Forum) {
-	if ($Forum['MinClassRead'] > $LoggedUser['Class']) {
+	if (!check_forumperm($Forum['ID'])) {
 		continue;
 	}
 	
@@ -143,6 +143,10 @@ if ($Columns%5) { ?>
 // Break search string down into individual words
 $Words = explode(' ',  db_string($Search));
 
+if($LoggedUser['CustomForums']) {
+	unset($LoggedUser['CustomForums']['']);
+	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+}
 if($Type == 'body') {
 
 	$sql = "SELECT SQL_CALC_FOUND_ROWS
@@ -162,6 +166,9 @@ if($Type == 'body') {
 		JOIN forums AS f ON f.ID=t.ForumID
 		WHERE 
 		f.MinClassRead<='$LoggedUser[Class]' AND ";
+	if(!empty($RestrictedForums)) {
+		$sql.="f.ID NOT IN ('".$RestrictedForums."') AND ";
+	}
 
 	//In tests, this is significantly faster than LOCATE
 	$sql .= "p.Body LIKE '%";
@@ -194,6 +201,9 @@ if($Type == 'body') {
 		JOIN forums AS f ON f.ID=t.ForumID
 		WHERE 
 		f.MinClassRead<='$LoggedUser[Class]' AND ";
+	if(!empty($RestrictedForums)) {
+		$sql.="f.ID NOT IN ('".$RestrictedForums."') AND ";
+	}
 	$sql .= "t.Title LIKE '%";
 	$sql .= implode("%' AND t.Title LIKE '%", $Words);
 	$sql .= "%' ";

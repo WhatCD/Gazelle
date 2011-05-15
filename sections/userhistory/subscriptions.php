@@ -18,76 +18,68 @@ if (isset($LoggedUser['PostsPerPage'])) {
 list($Page,$Limit) = page_limit($PerPage);
 
 show_header('Subscribed topics','subscriptions,bbcode');
-if(($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === FALSE) {
-	$DB->query('SELECT TopicID FROM users_subscriptions WHERE UserID = '.$LoggedUser['ID']);
-	if($UserSubscriptions = $DB->collect(0)) {
-		$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
-	}
+
+if($LoggedUser['CustomForums']) {
+	unset($LoggedUser['CustomForums']['']);
+	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 }
 $ShowUnread = (!isset($_GET['showunread']) && !isset($HeavyInfo['SubscriptionsUnread']) || isset($HeavyInfo['SubscriptionsUnread']) && !!$HeavyInfo['SubscriptionsUnread'] || isset($_GET['showunread']) && !!$_GET['showunread']);
 $ShowCollapsed = (!isset($_GET['collapse']) && !isset($HeavyInfo['SubscriptionsCollapse']) || isset($HeavyInfo['SubscriptionsCollapse']) && !!$HeavyInfo['SubscriptionsCollapse'] || isset($_GET['collapse']) && !!$_GET['collapse']);
-if(!empty($UserSubscriptions)) {
-	$sql = "SELECT
-		SQL_CALC_FOUND_ROWS
-		MAX(p.ID) AS ID
+$sql = 'SELECT
+	SQL_CALC_FOUND_ROWS
+	MAX(p.ID) AS ID
+	FROM forums_posts AS p
+	LEFT JOIN forums_topics AS t ON t.ID = p.TopicID
+	JOIN users_subscriptions AS s ON s.TopicID = t.ID
+	LEFT JOIN forums AS f ON f.ID = t.ForumID
+	LEFT JOIN forums_last_read_topics AS l ON p.TopicID = l.TopicID AND l.UserID = s.UserID
+	WHERE s.UserID = '.$LoggedUser['ID'].'
+	AND p.ID <= IFNULL(l.PostID,t.LastPostID)
+	AND f.MinClassRead <= '.$LoggedUser['Class'];
+if(!empty($RestrictedForums)) {
+	$sql.='
+	AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+}
+if($ShowUnread) {
+	$sql .= '
+	AND IF(l.PostID IS NULL OR (t.IsLocked = \'1\' && t.IsSticky = \'0\'), t.LastPostID, l.PostID) < t.LastPostID';
+}
+$sql .= '
+	GROUP BY t.ID
+	ORDER BY t.LastPostID DESC
+	LIMIT '.$Limit;
+$PostIDs = $DB->query($sql);
+$DB->query('SELECT FOUND_ROWS()');
+list($NumResults) = $DB->next_record();
+
+if($NumResults > $PerPage*($Page-1)) {
+	$DB->set_query_id($PostIDs);
+	$PostIDs = $DB->collect('ID');
+	$sql = 'SELECT
+		f.ID AS ForumID,
+		f.Name AS ForumName,
+		p.TopicID,
+		t.Title,
+		p.Body,
+		t.LastPostID,
+		t.IsLocked,
+		t.IsSticky,
+		p.ID,
+		um.ID,
+		um.Username,
+		ui.Avatar,
+		p.EditedUserID,
+		p.EditedTime,
+		ed.Username AS EditedUsername
 		FROM forums_posts AS p
-		LEFT JOIN forums_last_read_topics AS l ON l.UserID = ".$LoggedUser['ID']." AND p.TopicID = l.TopicID
 		LEFT JOIN forums_topics AS t ON t.ID = p.TopicID
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
-		WHERE t.ID IN (".implode(',',$UserSubscriptions).")
-		AND p.ID <= IF(l.PostID IS NULL
-				OR l.PostID>t.LastPostID,
-			t.LastPostID,
-			l.PostID)
-		AND f.MinClassRead<=".$LoggedUser['Class'];
-	if($ShowUnread) {
-		$sql .= "
-		AND IF(l.PostID IS NULL OR (t.IsLocked = '1' && t.IsSticky = '0'), t.LastPostID, l.PostID)<t.LastPostID";
-	}
-	$sql .= "
-		GROUP BY t.ID
-		ORDER BY t.LastPostID DESC
-		LIMIT ".$Limit;
-	$PostIDs = $DB->query($sql);
-	$DB->query("SELECT FOUND_ROWS()");
-	list($NumResults) = $DB->next_record();
-
-	if($NumResults > $PerPage*($Page-1)) {
-		$DB->set_query_id($PostIDs);
-		$PostIDs = $DB->collect('ID');
-		$sql = 'SELECT
-			f.ID AS ForumID,
-			f.Name AS ForumName,
-			p.TopicID,
-			t.Title,
-			p.Body,
-			t.LastPostID,
-			t.IsLocked,
-			t.IsSticky,
-			p.ID,
-			IFNULL((SELECT COUNT(ID)
-				FROM forums_posts
-				WHERE forums_posts.TopicID=p.TopicID
-				AND forums_posts.ID <= p.ID),1)
-				AS LastReadNum,
-			um.ID,
-			um.Username,
-			ui.Avatar,
-			p.EditedUserID,
-			p.EditedTime,
-			ed.Username AS EditedUsername
-			FROM forums_posts AS p
-			LEFT JOIN forums_topics AS t ON t.ID = p.TopicID
-			LEFT JOIN forums AS f ON f.ID = t.ForumID
-			LEFT JOIN users_main AS um ON um.ID = p.AuthorID
-			LEFT JOIN users_info AS ui ON ui.UserID = um.ID
-			LEFT JOIN users_main AS ed ON ed.ID = um.ID
-			WHERE p.ID IN ('.implode(',',$PostIDs).')
-			ORDER BY f.Name ASC, t.LastPostID DESC';
-		$DB->query($sql);
-	}
-} else {
-	$NumResults = 0;
+		LEFT JOIN users_main AS um ON um.ID = p.AuthorID
+		LEFT JOIN users_info AS ui ON ui.UserID = um.ID
+		LEFT JOIN users_main AS ed ON ed.ID = um.ID
+		WHERE p.ID IN ('.implode(',',$PostIDs).')
+		ORDER BY f.Name ASC, t.LastPostID DESC';
+	$DB->query($sql);
 }
 ?>
 <div class="thin">
@@ -131,7 +123,7 @@ if(!$NumResults) {
 ?>
 	</div>
 <?
-	while(list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $LastReadNum, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()){
+	while(list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()){
 ?>
 	<table class='forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>'>
 		<tr class='colhead_dark'>
@@ -144,7 +136,7 @@ if(!$NumResults) {
 		<? } ?>
 				</span>
 				<span style="float:left;" class="last_read" title="Jump to last read">
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID.($PostID?'&amp;post='.$LastReadNum.'#post'.$PostID:'')?>"></a>
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID.($PostID?'&amp;postid='.$PostID.'#post'.$PostID:'')?>"></a>
 				</span>
 				<span id="bar<?=$PostID ?>" style="float:right;">
 					<a href="#" onclick="Subscribe(<?=$TopicID?>);return false;" id="subscribelink<?=$TopicID?>">[Unsubscribe]</a>

@@ -345,7 +345,8 @@ function user_heavy_info($UserID) {
 			i.DisableRequests,
 			i.SiteOptions,
 			i.DownloadAlt,
-			i.LastReadNews
+			i.LastReadNews,
+			i.RestrictedForums
 			FROM users_main AS m
 			INNER JOIN users_info AS i ON i.UserID=m.ID
 			WHERE m.ID='$UserID'");
@@ -354,6 +355,13 @@ function user_heavy_info($UserID) {
 		if (!empty($HeavyInfo['CustomPermissions'])) {
 			$HeavyInfo['CustomPermissions'] = unserialize($HeavyInfo['CustomPermissions']);
 		}
+
+		if (!empty($HeavyInfo['RestrictedForums'])) {
+			$HeavyInfo['CustomForums'] = array_fill_keys(explode(',', $HeavyInfo['RestrictedForums']), 0);
+		} else {
+			$HeavyInfo['CustomForums'] = null;
+		}
+		unset($HeavyInfo['RestrictedForums']);
 
 		if(!empty($HeavyInfo['SiteOptions'])) {
 			$HeavyInfo['SiteOptions'] = unserialize($HeavyInfo['SiteOptions']);

@@ -12,7 +12,6 @@ Things to expect in $_GET:
 //---------- Things to sort out before it can start printing/generating content
 
 include(SERVER_ROOT.'/classes/class_text.php');
-include(SERVER_ROOT.'/sections/forums/functions.php');
 
 $Text = new TEXT;
 
@@ -42,13 +41,9 @@ $ThreadInfo = get_thread_info($ThreadID, true, true);
 $ForumID = $ThreadInfo['ForumID'];
 
 // Make sure they're allowed to look at the page
-if (!check_perms('site_moderate_forums')) {
-	$DB->query("SELECT RestrictedForums FROM users_info WHERE UserID = ".$LoggedUser['ID']);
-	list($RestrictedForums) = $DB->next_record();
-	$RestrictedForums = explode(',', $RestrictedForums);
-	if (array_search($ForumID, $RestrictedForums) !== FALSE) { error(403); }
+if($Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class'] || (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] == 0)) {
+	error(403);
 }
-if($Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
 
 //Post links utilize the catalogue & key params to prevent issues with custom posts per page
 if($ThreadInfo['Posts'] > $PerPage) {

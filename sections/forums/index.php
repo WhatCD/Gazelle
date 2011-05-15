@@ -6,6 +6,7 @@ if(!empty($LoggedUser['DisableForums'])) {
 	error(403);
 }
 
+include(SERVER_ROOT.'/sections/forums/functions.php');
 //This variable contains all our lovely forum data
 if(!$Forums = $Cache->get_value('forums_list')) {
 	$DB->query("SELECT

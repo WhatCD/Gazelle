@@ -41,3 +41,14 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 		return $ThreadInfo;
 	}
 }
+
+function check_forumperm($ForumID) {
+	global $LoggedUser, $Forums;
+	if($Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) {
+		return false;
+	}
+	if(isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] == 0) {
+		return false;
+	}
+	return true;
+}
