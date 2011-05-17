@@ -65,7 +65,7 @@ switch($_GET['feed']) {
 			if (strtotime($NewsTime) >= time()) {
 				continue;
 			}
-			echo $Feed->item($Title, $Text->strip_bbcode($Body), 'index.php#'.$NewsID, SITE_NAME.' Staff','','',$NewsTime);
+			echo $Feed->item($Title, $Text->strip_bbcode($Body), 'index.php#news'.$NewsID, SITE_NAME.' Staff','','',$NewsTime);
 			if (++$Count > 4) {
 				break;
 			}
