@@ -5,16 +5,15 @@ if(!check_perms('torrents_edit')) { error(403); }
 $ArtistID = $_POST['artistid'];
 $Redirect = $_POST['redirect'];
 $AliasName = db_string($_POST['name']);
+if(!$Redirect) { $Redirect = 0; }
 
-if(!is_number($ArtistID) || !($Redirect == "0" || is_number($Redirect)) || !$ArtistID) {
+if(!is_number($ArtistID) || !($Redirect == 0 || is_number($Redirect)) || !$ArtistID) {
 	error(0);
 }
 
 if($AliasName == '') {
 	error('Blank artist name');
 }
-
-if(!$Redirect) { $Redirect = 0; }
 
 /*
  * In the case of foo, who released an album before changing his name to bar and releasing another
