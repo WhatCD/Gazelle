@@ -10,17 +10,18 @@ if(!$NewGroupID || !is_number($NewGroupID)) { error(404); }
 if($NewGroupID == $GroupID) {
 	error('Old group ID is the same as new group ID!');
 }
-$DB->query("SELECT ID FROM torrents_group WHERE ID='$NewGroupID'");
+$DB->query("SELECT CategoryID, Name FROM torrents_group WHERE ID='$NewGroupID'");
 if($DB->record_count()==0) {
 	error('Target group does not exist.');
 }
-
+list($CategoryID, $NewName) = $DB->next_record();
+if($Categories[$CategoryID-1] != 'Music') {
+	error('Only music groups can be merged.');
+}
 //Everything is legit, let's just confim they're not retarded
 if(empty($_POST['confirm'])) {
 	$DB->query("SELECT Name FROM torrents_group WHERE ID = ".$GroupID);
 	list($Name) = $DB->next_record();
-	$DB->query("SELECT Name FROM torrents_group WHERE ID = ".$NewGroupID);
-	list($NewName) = $DB->next_record();
 	
 	$Artists = get_artists(array($GroupID, $NewGroupID));
 	

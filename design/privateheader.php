@@ -234,7 +234,6 @@ if (check_perms('users_mod')) {
 		$ModBar[] = '<a href="staffpm.php">'.$NumStaffPMs.' Staff PMs</a>';
 	}
 }
-
 if(check_perms('admin_reports')) {
 	$NumTorrentReports = $Cache->get_value('num_torrent_reportsv2');
 	if ($NumTorrentReports === false) {
