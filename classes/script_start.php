@@ -1451,7 +1451,7 @@ function get_artists($GroupIDs, $Escape = array()) {
 	$Results = array();
 	$DBs = array();
 	foreach($GroupIDs as $GroupID) {
-		$Artists = $Cache->get_value('groups_artists_'.$GroupID);
+		$Artists = $Cache->get_value('groups_artists_'.$GroupID, true);
 		if(is_array($Artists)) {
 			$Results[$GroupID] = $Artists;
 		} else {
@@ -1547,7 +1547,7 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 	$NotFound = array_flip($GroupIDs);
 	
 	foreach($GroupIDs as $GroupID) {
-		$Data = $Cache->get_value('torrent_group_'.$GroupID);
+		$Data = $Cache->get_value('torrent_group_'.$GroupID, true);
 		if(!empty($Data)) {
 			unset($NotFound[$GroupID]);
 			$Found[$GroupID] = $Data;
