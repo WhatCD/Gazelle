@@ -38,12 +38,20 @@ if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
 	list($AvailableBounty) = $DB->next_record();
 	$DB->query("SELECT SUM(Snatched), COUNT(ID) FROM torrents");
 	list($TotalSnatches, $TotalTorrents) = $DB->next_record(); // This is the total number of snatches for torrents that still exist
+
+
 	$DB->query("SELECT COUNT(uid) FROM xbt_snatched");
 	list($TotalOverallSnatches) = $DB->next_record();
-	$DB->query("SELECT COUNT(fid) FROM xbt_files_users WHERE remaining=0");
-	list($TotalSeeders) = $DB->next_record();
-	$DB->query("SELECT COUNT(fid) FROM xbt_files_users");
-	list($TotalPeers) = $DB->next_record();
+
+	if(($PeerStats = $Cache->get_value('stats_peers')) === false) {
+		$DB->query("SELECT COUNT(fid) FROM xbt_files_users WHERE remaining=0");
+		list($TotalSeeders) = $DB->next_record();
+		$DB->query("SELECT COUNT(fid) FROM xbt_files_users WHERE remaining>0");
+		list($TotalLeechers) = $DB->next_record();
+	} else {
+		list($TotalLeechers,$TotalSeeders) = $PeerStats;
+	}
+	$TotalPeers = $TotalLeechers + $TotalSeeders;
 	$DB->query("SELECT COUNT(ID) FROM users_main WHERE(SELECT COUNT(uid) FROM xbt_files_users WHERE uid=users_main.ID)>0");
 	list($TotalPeerUsers) = $DB->next_record();
 	$Cache->cache_value('new_economic_stats',
