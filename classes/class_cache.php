@@ -34,6 +34,10 @@ class CACHE extends Memcache {
 	public $MemcacheDBKey = '';
 	protected $InTransaction = false;
 	public $Time = 0;
+	private $PersistentKeys = array(
+		'stats_*',
+		'percentiles_*',
+	);
 	
 	public $CanClear = false;
 
@@ -77,14 +81,16 @@ class CACHE extends Memcache {
 			trigger_error("Cache retrieval failed for empty key");
 		}
 
-		if (isset($_GET['clearcache']) && $this->CanClear) {
+		if (isset($_GET['clearcache']) && $this->CanClear && !in_array_partial($Key, $this->PersistentKeys)) {
 			if ($_GET['clearcache'] == 1) {
 				//Because check_perms isn't true until loggeduser is pulled from the cache, we have to remove the entries loaded before the loggeduser data
 				//Because of this, not user cache data will require a secondary pageload following the clearcache to update
 				if (count($this->CacheHits) > 0) {
-					foreach ($this->CacheHits as $Key => $Entry) {
-						$this->delete($Key);
-						unset($this->CacheHits[$Key]);
+					foreach (array_keys($this->CacheHits) as $HitKey) {
+						if (!in_array_partial($HitKey, $this->PersistentKeys)) {
+							$this->delete($HitKey);
+							unset($this->CacheHits[$HitKey]);
+						}
 					}
 				}
 				$this->delete($Key);

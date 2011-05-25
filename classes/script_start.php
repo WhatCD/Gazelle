@@ -1901,6 +1901,31 @@ function starts_with($Haystack, $Needle) {
 	return strpos($Haystack, $Needle) === 0;
 }
 
+/**
+ * Variant of in_array() with trailing wildcard support
+ * @param string $Needle, array $Haystack
+ * @return true if (substring of) $Needle exists in $Haystack
+ */
+function in_array_partial($Needle, $Haystack) {
+	static $Searches = array();
+	if(array_key_exists($Needle, $Searches)) {
+		return $Searches[$Needle];
+	}
+	foreach($Haystack as $String) {
+		if(substr($String, -1) == '*') {
+			if(!strncmp($Needle, $String, strlen($String)-1)) {
+				$Searches[$Needle] = true;
+				return true;
+			}
+		} elseif(!strcmp($Needle, $String)) {
+			$Searches[$Needle] = true;
+			return true;
+		}
+	}
+	$Searches[$Needle] = false;
+	return false;
+}
+
 
 
 $Debug->set_flag('ending function definitions');
