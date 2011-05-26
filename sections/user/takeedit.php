@@ -247,6 +247,7 @@ $SQL="UPDATE users_main AS m JOIN users_info AS i ON m.ID=i.UserID SET
 $SQL .= "m.Paranoia='".db_string(serialize($Paranoia))."'";
 
 if($ResetPassword) {
+	$ChangerIP = db_string($LoggedUser['IP']);
 	$Secret=make_secret();
 	$PassHash=make_hash($_POST['new_pass_1'],$Secret);
 	$SQL.=",m.Secret='".db_string($Secret)."',m.PassHash='".db_string($PassHash)."'";

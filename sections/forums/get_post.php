@@ -21,14 +21,15 @@ $PostID = $_GET['post'];
 
 // Mainly 
 $DB->query("SELECT
-		p.Body
-		FROM forums_posts as p
-		JOIN forums_topics as t on p.TopicID = t.ID
-		JOIN forums as f ON t.ForumID=f.ID 
-		WHERE 
-		p.ID='$PostID' AND 
-		f.MinClassRead<='$LoggedUser[Class]'");
-list($Body) = $DB->next_record(MYSQLI_NUM);
+		p.Body, t.ForumID
+		FROM forums_posts as p JOIN forums_topics as t on p.TopicID = t.ID
+		WHERE p.ID='$PostID'");
+list($Body, $ForumID) = $DB->next_record(MYSQLI_NUM);
+
+// Is the user allowed to view the post?
+if(!check_forumperm($ForumID)) {
+	error(0);
+}
 
 // This gets sent to the browser, which echoes it wherever 
 
