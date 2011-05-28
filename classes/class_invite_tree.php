@@ -39,7 +39,7 @@ class INVITE_TREE {
 		list($TreePosition, $TreeID, $TreeLevel, $MaxPosition) = $DB->next_record();
 		if(!$MaxPosition){ $MaxPosition = 1000000; } // $MaxPermission is null if the user is the last one in that tree on that level
 		if(!$TreeID){ return; }
-		$DB->query("
+		$TreeQuery = $DB->query("
 			SELECT 
 			it.UserID, 
 			Username,
@@ -135,7 +135,8 @@ class INVITE_TREE {
 ?>			
 			</li>
 <?			$PreviousTreeLevel = $TreeLevel;
-		} 
+			$DB->set_query_id($TreeQuery);
+		}
 		$Tree = ob_get_clean();
 		if($Count){
 		

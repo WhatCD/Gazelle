@@ -42,6 +42,7 @@ if(!$Forums = $Cache->get_value('forums_list')) {
 			$Forums[$ForumID]['SpecificRules'] = $ThreadIDs;
 		}
 	}
+	unset($ForumID, $Forum);
 	$Cache->cache_value('forums_list', $Forums, 0); //Inf cache.
 }
 
