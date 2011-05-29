@@ -41,7 +41,7 @@ $ThreadInfo = get_thread_info($ThreadID, true, true);
 $ForumID = $ThreadInfo['ForumID'];
 
 // Make sure they're allowed to look at the page
-if($Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class'] || (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] == 0)) {
+if(!check_forumperm($ForumID)) {
 	error(403);
 }
 

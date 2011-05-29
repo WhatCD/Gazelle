@@ -391,16 +391,9 @@ function site_ban_ip($IP) {
 	$IP = ip2unsigned($IP);
 	$IPBans = $Cache->get_value('ip_bans');
 	if(!is_array($IPBans)) {
-		//Cache lock!
-		$Lock = $Cache->get_value('ip_bans_lock');
-		if($Lock && substr($_SERVER['REQUEST_URI'], 0, 29) != '/torrents.php?action=download') {
-			?><script type="script/javascript">setTimeout('window.location="http://<?=NONSSL_SITE_URL?><?=$_SERVER['REQUEST_URI']?>"', 5)</script><?
-		} else {
-			$Cache->cache_value('ip_bans_lock', '1', 10);
-			$DB->query("SELECT ID, FromIP, ToIP FROM ip_bans");
-			$IPBans = $DB->to_array(0, MYSQLI_NUM);
-			$Cache->cache_value('ip_bans', $IPBans, 0);
-		}
+		$DB->query("SELECT ID, FromIP, ToIP FROM ip_bans");
+		$IPBans = $DB->to_array(0, MYSQLI_NUM);
+		$Cache->cache_value('ip_bans', $IPBans, 0);
 	}
 	foreach($IPBans as $Index => $IPBan) {
 		list($ID, $FromIP, $ToIP) = $IPBan;
