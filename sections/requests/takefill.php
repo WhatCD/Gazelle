@@ -52,8 +52,8 @@ $DB->query("SELECT t.UserID,
 			WHERE t.ID = ".$TorrentID." 
 			LIMIT 1");
 
+
 if($DB->record_count() < 1) {
-	//No such torrent
 	error(404);
 }
 list($UploaderID, $UploadTime, $TorrentReleaseType, $Bitrate, $Format, $Media, $HasLog, $HasCue, $LogScore, $TorrentCategoryID, $TorrentCatalogueNumber) = $DB->next_record();
@@ -94,7 +94,6 @@ list($Title, $RequesterID, $OldTorrentID, $RequestCategoryID, $RequestReleaseTyp
 if(!empty($OldTorrentID)) {
 	$Err = "This request has already been filled";
 }
-
 if($RequestCategoryID != 0 && $TorrentCategoryID != $RequestCategoryID) {
 	$Err = "This torrent is of a different category than the request";
 }
