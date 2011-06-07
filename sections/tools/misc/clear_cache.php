@@ -1,5 +1,5 @@
 <?
-if(!check_perms('admin_clear_cache')) {
+if(!check_perms('users_mod') || !check_perms('admin_clear_cache')) {
 	error(403);
 }
 
