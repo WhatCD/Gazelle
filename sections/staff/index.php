@@ -11,6 +11,7 @@ list($FrontLineSupport,$Staff) = $Support;
 <div class="thin">
 	<h2><?=SITE_NAME?> Staff</h2>
 	<div class="box pad" style="padding:0px 10px 10px 10px;">
+		<br />
 		<h3>Contact Staff</h3>
 		<div id="staff_inbox" class="hidden">
 			<form action="staffpm.php" method="post">
@@ -65,8 +66,8 @@ list($FrontLineSupport,$Staff) = $Support;
 <?	} ?>
 		</table>
 	</div>
+	<br />
 	<div class="box pad" style="padding:0px 10px 10px 10px;">
-
 <?
 	$CurClass = 0;
 	$CloseTable = false;
@@ -80,8 +81,11 @@ list($FrontLineSupport,$Staff) = $Support;
 			}
 			$CurClass = $Class;
 			$CloseTable = true;
-			echo '<h3>'.$ClassName.'s</h3>';
+			echo '<br /><h3>'.$ClassName.'s</h3>';
 ?>
+<? if($CurClass == 28) { ?>
+		<p>Forum Mods are users who have been promoted to help moderate the forums. They can only help with forum oriented questions</p>
+<? } ?>
 		<table class="staff" width="100%">
 			<tr class="colhead">
 				<td style="width:130px;">Username</td>

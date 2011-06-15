@@ -344,7 +344,7 @@ foreach($Thread as $Key => $Post){
 if (((!$ThreadInfo['IsLocked'] && $LoggedUser['Class'] >= $Forums[$ForumID]['MinClassWrite']) && ($AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums'))) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a> 
 <? }
-if(check_perms('site_moderate_forums') && $ThreadInfo['Posts'] > 1) { ?> 
+if(check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?> 
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> 
 <? }
 if($PostID == $ThreadInfo['StickyPostID']) { ?>
@@ -382,7 +382,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 <? if($EditedUserID){ ?>
 				<br />
 				<br />
-<?	if(check_perms('site_moderate_forums')) { ?>
+<?	if(check_perms('site_admin_forums')) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
@@ -517,12 +517,14 @@ foreach ($Forums as $Forum) {
 					</select>
 				</td>
 			</tr>
+<? if(check_perms('site_admin_forums')) { ?>
 			<tr>
 				<td class="label">Delete thread</td>
 				<td>
 					<input type="checkbox" name="delete" tabindex="2" />
 				</td>
 			</tr>
+<? } ?>
 			<tr>
 				<td colspan="2" class="center">
 					<input type="submit" value="Edit thread" tabindex="2" />

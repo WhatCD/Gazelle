@@ -1,5 +1,5 @@
 <?
-if(!check_perms('site_moderate_forums')) {
+if(!check_perms('site_admin_forums')) {
 	error(403);
 }
 

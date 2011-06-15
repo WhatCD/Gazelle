@@ -28,6 +28,7 @@
 	'site_moderate_requests' => 'Request moderation access.',
 	'site_delete_artist' => 'Can delete artists (must be able to delete torrents+requests).',
 	'site_moderate_forums' => 'Forum moderation access.',
+	'site_admin_forums' => 'Forum administrator access.',
 	'site_forums_double_post' => 'Can double post in the forums.',
 	'site_view_flow' => 'Can view stats and data pools.',
 	'site_view_full_log' => 'Can view old log entries.',
@@ -133,6 +134,7 @@ function permissions_form(){ ?>
 					<? display_perm('site_moderate_requests', 'Can moderate any request.'); ?>
 					<? display_perm('site_delete_artist', 'Can delete artists (must be able to delete torrents+requests).'); ?>
 					<? display_perm('site_moderate_forums', 'Can moderate the forums.'); ?>
+					<? display_perm('site_admin_forums', 'Can administrate the forums.'); ?>
 					<? display_perm('site_view_flow', 'Can view site stats and data pools.'); ?>
 					<? display_perm('site_view_full_log', 'Can view the full site log.'); ?>
 					<? display_perm('site_view_torrent_snatchlist', 'Can view torrent snatchlists.'); ?>

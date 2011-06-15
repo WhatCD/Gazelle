@@ -51,58 +51,62 @@ $Cache->delete_value('forums_'.$OldForumID);
 
 // If we're deleting a thread
 if(isset($_POST['delete'])) {
-	$DB->query("DELETE FROM forums_posts WHERE TopicID='$TopicID'");
-	$DB->query("DELETE FROM forums_topics WHERE ID='$TopicID'");
-	
-	$DB->query("SELECT 
-		t.ID,
-		t.LastPostID,
-		t.Title,
-		p.AuthorID,
-		um.Username,
-		p.AddedTime, 
-		(SELECT COUNT(pp.ID) FROM forums_posts AS pp JOIN forums_topics AS tt ON pp.TopicID=tt.ID WHERE tt.ForumID='$ForumID'),
-		t.IsLocked,
-		t.IsSticky
-		FROM forums_topics AS t 
-		JOIN forums_posts AS p ON p.ID=t.LastPostID 
-		LEFT JOIN users_main AS um ON um.ID=p.AuthorID
-		WHERE t.ForumID='$ForumID'
-		GROUP BY t.ID
-		ORDER BY t.LastPostID DESC LIMIT 1");
-	list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts, $NewLocked, $NewSticky) = $DB->next_record(MYSQLI_BOTH, false);
-	
-	$DB->query("UPDATE forums SET 
-		NumTopics=NumTopics-1, 
-		NumPosts=NumPosts-'$Posts',
-		LastPostTopicID='$NewLastTopic',
-		LastPostID='$NewLastPostID',
-		LastPostAuthorID='$NewLastAuthorID',
-		LastPostTime='$NewLastAddedTime'
-		WHERE ID='$ForumID'");
-	
-	$Cache->delete('thread_'.$TopicID);
-	
-	
-	$Cache->begin_transaction('forums_list');
-	$UpdateArray = array(
-		'NumPosts'=>$NumPosts,
-		'NumTopics'=>'-1',
-		'LastPostID'=>$NewLastPostID,
-		'LastPostAuthorID'=>$NewLastAuthorID,
-		'Username'=>$NewLastAuthorName,
-		'LastPostTopicID'=>$NewLastTopic,
-		'LastPostTime'=>$NewLastAddedTime,
-		'Title'=>$NewLastTitle,
-		'IsLocked'=>$NewLocked,
-		'IsSticky'=>$NewSticky
-		);
-	
-	$Cache->update_row($ForumID, $UpdateArray);
-	$Cache->commit_transaction(0);
-	$Cache->delete_value('thread_'.$TopicID.'_info');
+	if(check_perms('site_admin_forums')) {
+		$DB->query("DELETE FROM forums_posts WHERE TopicID='$TopicID'");
+		$DB->query("DELETE FROM forums_topics WHERE ID='$TopicID'");
+		
+		$DB->query("SELECT 
+			t.ID,
+			t.LastPostID,
+			t.Title,
+			p.AuthorID,
+			um.Username,
+			p.AddedTime, 
+			(SELECT COUNT(pp.ID) FROM forums_posts AS pp JOIN forums_topics AS tt ON pp.TopicID=tt.ID WHERE tt.ForumID='$ForumID'),
+			t.IsLocked,
+			t.IsSticky
+			FROM forums_topics AS t 
+			JOIN forums_posts AS p ON p.ID=t.LastPostID 
+			LEFT JOIN users_main AS um ON um.ID=p.AuthorID
+			WHERE t.ForumID='$ForumID'
+			GROUP BY t.ID
+			ORDER BY t.LastPostID DESC LIMIT 1");
+		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts, $NewLocked, $NewSticky) = $DB->next_record(MYSQLI_BOTH, false);
+		
+		$DB->query("UPDATE forums SET 
+			NumTopics=NumTopics-1, 
+			NumPosts=NumPosts-'$Posts',
+			LastPostTopicID='$NewLastTopic',
+			LastPostID='$NewLastPostID',
+			LastPostAuthorID='$NewLastAuthorID',
+			LastPostTime='$NewLastAddedTime'
+			WHERE ID='$ForumID'");
+		
+		$Cache->delete('thread_'.$TopicID);
+		
+		
+		$Cache->begin_transaction('forums_list');
+		$UpdateArray = array(
+			'NumPosts'=>$NumPosts,
+			'NumTopics'=>'-1',
+			'LastPostID'=>$NewLastPostID,
+			'LastPostAuthorID'=>$NewLastAuthorID,
+			'Username'=>$NewLastAuthorName,
+			'LastPostTopicID'=>$NewLastTopic,
+			'LastPostTime'=>$NewLastAddedTime,
+			'Title'=>$NewLastTitle,
+			'IsLocked'=>$NewLocked,
+			'IsSticky'=>$NewSticky
+			);
+		
+		$Cache->update_row($ForumID, $UpdateArray);
+		$Cache->commit_transaction(0);
+		$Cache->delete_value('thread_'.$TopicID.'_info');
 
-	header('Location: forums.php?action=viewforum&forumid='.$ForumID);
+		header('Location: forums.php?action=viewforum&forumid='.$ForumID);
+	} else {
+		error(403);
+	}
 
 } else { // If we're just editing it
 	$Cache->begin_transaction('thread_'.$TopicID.'_info');
