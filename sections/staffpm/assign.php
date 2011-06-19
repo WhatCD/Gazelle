@@ -11,7 +11,7 @@ if ($ConvID = (int)$_GET['convid']) {
 	
 	if ($Level == 0) {
 		// FLS conversation, assign to staff (moderator)
-		$DB->query("UPDATE staff_pm_conversations SET Level=700 WHERE ID=$ConvID");
+		$DB->query("UPDATE staff_pm_conversations SET Level=650 WHERE ID=$ConvID");
 
 		header('Location: staffpm.php');
 		

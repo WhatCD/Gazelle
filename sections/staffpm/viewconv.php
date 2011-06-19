@@ -149,7 +149,7 @@ if ($ConvID = (int)$_GET['id']) {
 			// Staff classes
 			foreach ($ClassLevels as $Class) { 
 				// Create one <option> for each staff user class
-				if ($Class['Level'] >= 700) {
+				if ($Class['Level'] >= 650) {
 					$Selected = (!$AssignedToUser && ($Level == $Class['Level'])) ? ' selected="selected"' : '';
 ?>
 							<option value="class_<?=$Class['Level']?>"<?=$Selected?>><?=$Class['Name']?></option>

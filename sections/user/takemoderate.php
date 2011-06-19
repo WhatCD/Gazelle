@@ -144,7 +144,6 @@ if ($_POST['UserStatus']=="delete" && check_perms('users_delete_users')) {
 	die();
 }
 
-
 // User was not deleted. Perform other stuff.
 
 $UpdateSet = array();

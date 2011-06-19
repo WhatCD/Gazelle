@@ -585,7 +585,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 <?		
 		foreach($RecentSnatches as $RS) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=$RS['Artist']?><?=$RS['Name']?>"><img src="<?=$RS['WikiImage']?>" alt="<?=$RS['Artist']?><?=$RS['Name']?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=$RS['WikiImage']?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
 			</td>
 <?		} ?>
 		</tr>
@@ -813,7 +813,6 @@ if (check_paranoia_here('requestsvoted_list')) {
 			</tr>
 <?
 	}
-
 	if (check_perms('users_edit_titles')) {
 ?>
 			<tr>

@@ -27,7 +27,7 @@ list($FrontLineSupport,$Staff) = $Support;
 				<strong>Send to: </strong>
 				<select name="level">
 					<option value="0" selected="selected">First Line Support</option>
-					<option value="700">Staff</option>
+					<option value="650">Staff</option>
 				</select>
 				
 				<input type="submit" value="Send message" />
