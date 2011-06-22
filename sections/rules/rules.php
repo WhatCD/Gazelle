@@ -8,13 +8,10 @@ show_header('Rule Index');
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>
-				Do not defy the expressed wishes of the staff.
+				Respect Staff - They have enough experience, are knowledgable and always have a reason for their actions. If you disagree with a staff member discuss it privately and courteously. Arguing with or being disrespectful towards staff will not be taken lightly
 			</li>
 			<li>
 				Access to this website is a privilege, not a right, and it can be taken away from you for any reason.
-			</li>
-			<li>
-				Staff decisions are final. Arguing about our decisions is hazardous for your account.
 			</li>
 			<li>
 				One account per person per lifetime. Anyone creating additional accounts will be banned.
