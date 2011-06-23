@@ -10,14 +10,17 @@ user.
 
 ************************************************************************/
 
-if(!check_perms('users_view_email')) { error(403); }
-
 $UserID = $_GET['userid'];
 if (!is_number($UserID)) { error(404); }
-$UsersOnly = $_GET['usersonly'];
 
-$DB->query("SELECT m.Username, i.JoinDate FROM users_main AS m JOIN users_info AS i ON m.ID=i.UserID WHERE ID = $UserID");
-list($Username,$Joined) = $DB->next_record();
+$DB->query("SELECT um.Username, ui.JoinDate, p.Level AS Class FROM users_main AS um JOIN users_info AS ui ON um.ID=ui.UserID JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = $UserID");
+list($Username, $Joined, $Class) = $DB->next_record();
+
+if(!check_perms('users_view_email', $Class)) {
+	error(403);
+}
+
+$UsersOnly = $_GET['usersonly'];
 
 show_header("Email history for $Username");
 

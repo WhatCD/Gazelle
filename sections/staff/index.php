@@ -27,7 +27,8 @@ list($FrontLineSupport,$Staff) = $Support;
 				<strong>Send to: </strong>
 				<select name="level">
 					<option value="0" selected="selected">First Line Support</option>
-					<option value="650">Staff</option>
+					<option value="650">Forum Moderators</option>
+					<option value="700">Staff</option>
 				</select>
 				
 				<input type="submit" value="Send message" />
@@ -83,7 +84,7 @@ list($FrontLineSupport,$Staff) = $Support;
 			$CloseTable = true;
 			echo '<br /><h3>'.$ClassName.'s</h3>';
 ?>
-<? if($CurClass == 28) { ?>
+<? if($CurClass == 650) { ?>
 		<p>Forum Mods are users who have been promoted to help moderate the forums. They can only help with forum oriented questions</p>
 <? } ?>
 		<table class="staff" width="100%">

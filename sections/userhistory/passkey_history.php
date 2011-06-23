@@ -10,13 +10,15 @@ user.
 
 ************************************************************************/
 
-if(!check_perms('users_view_keys')) { error(403); }
-
 $UserID = $_GET['userid'];
 if (!is_number($UserID)) { error(404); }
 
-$DB->query("SELECT UserName FROM users_main WHERE ID = $UserID");
-list($Username) = $DB->next_record();
+$DB->query("SELECT um.Username, p.Level AS Class FROM users_main AS um LEFT JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = ".$UserID);
+list($Username, $Class) = $DB->next_record();
+
+if(!check_perms('users_view_keys', $Class)) { 
+	error(403);
+}
 
 show_header("PassKey history for $Username");
 
