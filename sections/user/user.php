@@ -138,7 +138,7 @@ $Badges.=($Warned!='0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/s
 $Badges.=($Enabled == '1' || $Enabled == '0' || !$Enabled) ? '': '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" />';
 
 
-show_header($Username,'user,bbcode');
+show_header($Username,'user,bbcode,requests');
 ?>
 <div class="thin">
 	<h2><?=$Username?></h2>
@@ -762,14 +762,14 @@ if (check_paranoia_here('requestsvoted_list')) {
 							</div>
 						</td>
 						<td>
-							<?=$Votes?> 
+							<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
 <?		  	if(check_perms('site_vote')){ ?>
 							<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				&nbsp;&nbsp; <a href="javascript:Vote(20971520)"><strong>(+)</strong></a>
+							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)"><strong>(+)</strong></a>
 <?			} ?> 
 						</td>
 						<td>
-							<?=get_size($Bounty)?>
+							<span id="bounty_<?=$RequestID?>"><?=get_size($Bounty)?></span>
 						</td>
 						<td>
 							<?=time_diff($TimeAdded)?>

@@ -233,8 +233,8 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 				<td>
 					<span id="votecount"><?=$VoteCount?></span> 
 <?	if($CanVote) { ?>
-					&nbsp;<a href="javascript:Vote(20971520)"><strong>(+)</strong></a>
-					<strong>Costs 20 MB</strong>
+					&nbsp;<a href="javascript:Vote(0)"><strong>(+)</strong></a>
+					<strong>Costs <?=get_size($MinimumVote, 0)?></strong>
 <?	} ?> 
 				</td>
 			</tr>

@@ -15,6 +15,7 @@ function Vote(amount, requestid) {
 		index = false;
 	} else {
 		votecount = $('#vote_count_' + requestid).raw();
+		bounty = $('#bounty_' + requestid).raw();
 		index = true;
 	}
 	
@@ -22,15 +23,13 @@ function Vote(amount, requestid) {
 			if(response == 'bankrupt') {
 				error_message("You do not have sufficient upload credit to add " + get_size(amount) + " to this request");
 				return;
-			}
-			if(response == 'dupe') {
+			} else if (response == 'dupesuccess') {
 				//No increment
-			} else {
-
+			} else if (response == 'success') {
 				votecount.innerHTML = (parseInt(votecount.innerHTML)) + 1;
 			}
 
-			if(!index) {
+			if($('#total_bounty').results() > 0) {
 				totalBounty = parseInt($('#total_bounty').raw().value);
 				totalBounty += (amount * (1 - $('#request_tax').raw().value));
 				$('#total_bounty').raw().value = totalBounty;
@@ -47,7 +46,8 @@ function Vote(amount, requestid) {
 
 function Calculate() {
 	var mul = (($('#unit').raw().options[$('#unit').raw().selectedIndex].value == 'mb') ? (1024*1024) : (1024*1024*1024));
-	if(($('#amount_box').raw().value * mul) > $('#current_uploaded').raw().value) {
+	var amt = Math.floor($('#amount_box').raw().value * mul);
+	if(amt > $('#current_uploaded').raw().value) {
 		$('#new_uploaded').raw().innerHTML = "You can't afford that request!";
 		$('#new_bounty').raw().innerHTML = "0.00 MB";
 		$('#button').raw().disabled = true;
@@ -59,9 +59,9 @@ function Calculate() {
 		$('#button').raw().disabled = true;
 	} else {
 		$('#button').raw().disabled = false;
-		$('#amount').raw().value = $('#amount_box').raw().value * mul;
-		$('#new_uploaded').raw().innerHTML = get_size(($('#current_uploaded').raw().value) - (mul * $('#amount_box').raw().value));
-		$('#new_ratio').raw().innerHTML = ratio($('#current_uploaded').raw().value - (mul * $('#amount_box').raw().value), $('#current_downloaded').raw().value);
+		$('#amount').raw().value = amt;
+		$('#new_uploaded').raw().innerHTML = get_size(($('#current_uploaded').raw().value) - amt);
+		$('#new_ratio').raw().innerHTML = ratio($('#current_uploaded').raw().value - amt, $('#current_downloaded').raw().value);
 		$('#new_bounty').raw().innerHTML = get_size(mul * $('#amount_box').raw().value);
 	}
 }

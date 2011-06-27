@@ -1502,7 +1502,7 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true) {
 				$link = display_artist($Artists[1][0], $MakeLink);
 				break;
 			case 2:
-				$link = display_artist($Artists[1][0], $MakeLink).' '.($MakeLink ? '&amp;' : '&').' '.display_artist($Artists[1][1], $MakeLink);
+				$link = display_artist($Artists[1][0], $MakeLink).' &amp; '.display_artist($Artists[1][1], $MakeLink);
 				break;
 			default:
 				$link = 'Various Artists';
@@ -1513,7 +1513,7 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true) {
 					$link .= ' with '.display_artist($Artists[2][0], $MakeLink);
 					break;
 				case 2:
-					$link .= ' with '.display_artist($Artists[2][0], $MakeLink).' '.($MakeLink ? '&amp;' : '&').' '.display_artist($Artists[2][1], $MakeLink);
+					$link .= ' with '.display_artist($Artists[2][0], $MakeLink).' &amp; '.display_artist($Artists[2][1], $MakeLink);
 					break;
 			}
 		}

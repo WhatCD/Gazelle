@@ -588,14 +588,14 @@ if($NumRequests > 0) {
 				</div>
 			</td>
 			<td>
-				<?=$Votes?>
+				<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
 <?  	if(check_perms('site_vote')){ ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)"><strong>(+)</strong></a>
 <?		} ?> 
 			</td>
 			<td>
-				<?=get_size($Bounty)?>
+				<span id="bounty_<?=$RequestID?>"><?=get_size($Bounty)?></span>
 			</td>
 			<td>
 				<?=time_diff($TimeAdded)?>

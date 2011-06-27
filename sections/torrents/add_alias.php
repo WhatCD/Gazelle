@@ -9,9 +9,6 @@ $AliasNames = $_POST['aliasname'];
 if(!is_number($GroupID) || !$GroupID) {
 	error(0);
 }
-/*if(!check_perms('torrents_edit')) {
-	error(403);
-}*/
 
 $Changed = false;
 

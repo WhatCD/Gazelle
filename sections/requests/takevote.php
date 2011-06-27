@@ -15,8 +15,8 @@ if(empty($_GET['id']) || !is_number($_GET['id'])) {
 
 $RequestID = $_GET['id'];
 
-if(empty($_GET['amount']) || !is_number($_GET['amount']) || $_GET['amount'] < 20*1024*1024) {
-	$Amount = 20*1024*1024;
+if(empty($_GET['amount']) || !is_number($_GET['amount']) || $_GET['amount'] < $MinimumVote) {
+	$Amount = $MinimumVote;
 } else {
 	$Amount = $_GET['amount'];
 }
@@ -63,6 +63,7 @@ if($LoggedUser['BytesUploaded'] >= $Amount && $Filled == 0){
 	$Cache->delete_value('user_stats_'.$LoggedUser['ID']);
 
 	update_sphinx_requests($RequestID);
+	echo 'success';
 } elseif($LoggedUser['BytesUploaded'] < $Amount) {
 	echo 'bankrupt';
 }

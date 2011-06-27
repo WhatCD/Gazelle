@@ -616,7 +616,7 @@ if($NumRequests > 0) {
 				<?=$Votes?> 
 <?  	if(check_perms('site_vote')){ ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				&nbsp;&nbsp; <a href="javascript:Vote(20971520)"><strong>(+)</strong></a>
+				&nbsp;&nbsp; <a href="javascript:Vote(0)"><strong>(+)</strong></a>
 <?		} ?> 
 			</td>
 			<td>

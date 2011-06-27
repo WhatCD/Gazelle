@@ -180,25 +180,25 @@ else {
 					Bans=Bans+1 
 					WHERE ID='".db_string($AttemptID)."'");
 				
-					if ($Bans>9) { // Automated bruteforce prevention
-						$IP = ip2unsigned($_SERVER['REMOTE_ADDR']);
-						$DB->query("SELECT Reason FROM ip_bans WHERE ".$IP." BETWEEN FromIP AND ToIP");
-						if($DB->record_count() > 0) {
-							//Ban exists already, only add new entry if not for same reason
-							list($Reason) = $DB->next_record(MYSQLI_BOTH, false);
-							if($Reason != "Automated ban per >60 failed login attempts") {
-								$DB->query("UPDATE ip_bans
-									SET Reason = CONCAT('Automated ban per >60 failed login attempts AND ', Reason)
-									WHERE FromIP = ".$IP." AND ToIP = ".$IP);
-							}
-						} else {
-							//No ban
-							$DB->query("INSERT INTO ip_bans
-								(FromIP, ToIP, Reason) VALUES
-								('$IP','$IP', 'Automated ban per >60 failed login attempts')");
-							$Cache->delete_value('ip_bans');
+				if ($Bans>9) { // Automated bruteforce prevention
+					$IP = ip2unsigned($_SERVER['REMOTE_ADDR']);
+					$DB->query("SELECT Reason FROM ip_bans WHERE ".$IP." BETWEEN FromIP AND ToIP");
+					if($DB->record_count() > 0) {
+						//Ban exists already, only add new entry if not for same reason
+						list($Reason) = $DB->next_record(MYSQLI_BOTH, false);
+						if($Reason != "Automated ban per >60 failed login attempts") {
+							$DB->query("UPDATE ip_bans
+								SET Reason = CONCAT('Automated ban per >60 failed login attempts AND ', Reason)
+								WHERE FromIP = ".$IP." AND ToIP = ".$IP);
 						}
+					} else {
+						//No ban
+						$DB->query("INSERT INTO ip_bans
+							(FromIP, ToIP, Reason) VALUES
+							('$IP','$IP', 'Automated ban per >60 failed login attempts')");
+						$Cache->delete_value('ip_bans');
 					}
+				}
 			} else {
 				// User has attempted fewer than 6 logins
 				$DB->query("UPDATE login_attempts SET
@@ -285,10 +285,6 @@ else {
 
 						$DB->query($Sql);
 						
-						if($Attempts > 0) {
-							$DB->query("DELETE FROM login_attempts WHERE ID='".db_string($AttemptID)."'");
-						}
-
 						if (!empty($_COOKIE['redirect'])) {
 							$URL = $_COOKIE['redirect'];
 							setcookie('redirect','',time()-60*60*24,'/','',false);
