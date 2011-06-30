@@ -72,11 +72,14 @@ $DB->query("INSERT INTO reports
 				(".db_string($LoggedUser['ID']).", ".$ID." , '".$Short."', '".sqltime()."', '".db_string($Reason)."')");
 $ReportID = $DB->inserted_id();
 
-$Channels = array("#forumreports");
+$Channels = array();
 
 if($Short == "request_update") {
 	$Channels[] = "#requestedits";
 	$Cache->increment('num_update_reports');
+}
+if(in_array($Short, array('collages_comment', 'Post', 'requests_comment', 'thread', 'torrents_comment'))) {
+	$Channels[] = "#forumreports";
 }
 
 foreach($Channels as $Channel) {

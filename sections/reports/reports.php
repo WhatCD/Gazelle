@@ -2,7 +2,7 @@
 /************************************************************************
 
  ************************************************************************/
-if(!check_perms('admin_reports') && !check_perms('project_team')) {
+if(!check_perms('admin_reports') && !check_perms('project_team') && !check_perms('site_moderate_forums')) {
 	error(404);
 }
 
@@ -37,7 +37,13 @@ if($_GET['id'] && is_number($_GET['id'])) {
 }
 
 if(!check_perms('admin_reports')) {
-	$Where .= " AND Type = 'request_update'";
+	if(check_perms('project_team')) {
+		$Where .= " AND Type = 'request_update'";
+	}
+	if(check_perms('site_moderate_forums')) {
+		$Where .= " AND Type IN('collages_comment', 'Post', 'requests_comment', 'thread', 'torrents_comment')";
+	}
+
 }
 
 $Reports = $DB->query("SELECT SQL_CALC_FOUND_ROWS 

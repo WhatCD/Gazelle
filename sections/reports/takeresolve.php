@@ -1,7 +1,7 @@
 <?
 authorize();
 
-if(!check_perms('admin_reports') && !check_perms('project_team')) {
+if(!check_perms('admin_reports') && !check_perms('project_team') && !check_perms('site_moderate_forums')) {
 	error(403);
 }
 
@@ -14,8 +14,14 @@ $ReportID = $_POST['reportid'];
 $DB->query("SELECT Type FROM reports WHERE ID = ".$ReportID);
 list($Type) = $DB->next_record();
 if(!check_perms('admin_reports')) {
-	if($Type != "request_update") {
-		error(403);
+	if(check_perms('site_moderate_forums')) {
+		if(!in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
+			error($Type);
+		}
+	} else if(check_perms('project_team')) {
+		if($Type != "request_update") {
+			error(403);
+		}
 	}
 }
 
@@ -25,11 +31,19 @@ $DB->query("UPDATE reports
 				ResolverID='".$LoggedUser['ID']."'
 			WHERE ID='".db_string($ReportID)."'");
 
-$Channels = array("#forumreports");
+
+$Channels = array();
+
 if($Type == "request_update") {
 	$Channels[] = "#requestedits";
 	$Cache->decrement('num_update_reports');
 }
+
+if(in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
+	$Channels[] = "#forumreports";
+	$Cache->decrement('num_forum_reports');
+}
+
 
 $DB->query("SELECT COUNT(ID) FROM reports WHERE Status = 'New'");
 list($Remaining) = $DB->next_record();

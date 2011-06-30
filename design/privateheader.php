@@ -267,6 +267,17 @@ if(check_perms('admin_reports')) {
 	if ($NumUpdateReports > 0) {
 		$ModBar[] = '<a href="reports.php">'.'Request update reports'.'</a>';
 	}
+} else if(check_perms('site_moderate_forums')) {
+	$NumForumReports = $Cache->get_value('num_forum_reports');
+	if ($NumForumReports === false) {
+		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New' AND Type IN('collages_comment', 'Post', 'requests_comment', 'thread', 'torrents_comment')");
+		list($NumForumReports) = $DB->next_record();
+		$Cache->cache_value('num_forum_reports', $NumForumReports, 0);
+	}
+	
+	if ($NumForumReports > 0) {
+		$ModBar[] = '<a href="reports.php">'.'Forum reports'.'</a>';
+	}
 }
 
 
@@ -346,7 +357,16 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 			<li id="searchbar_artists">
 				<span class="hidden">Artist: </span>
 				<form action="artist.php" method="get">
-					
+					<script type="text/javascript" src="static/functions/autocomplete.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/autocomplete.js')?>"></script>
+					<input id="artistsearch" 
+						onkeyup="autocomp.keyup(event);"
+						onkeydown="autocomp.keydown(event);"
+						accesskey="a" spellcheck="false" autocomplete="off"
+						onfocus="if (this.value == 'Artists') this.value=''; autocomp.start('artist');"
+						onblur="if (this.value == '') this.value='Artists';"
+						value="Artists" type="text" name="artistname" size="17"
+					/>
+					<ul id="artistcomplete" style="visibility: hidden;"><li/></ul>
 				</form>
 			</li>
 			<li id="searchbar_requests">
