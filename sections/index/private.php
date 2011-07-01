@@ -33,7 +33,7 @@ show_header('News','bbcode');
 	if($FeaturedAlbum === false) {
 		$DB->query("SELECT fa.GroupID, tg.Name, tg.WikiImage, fa.ThreadID, fa.Title FROM featured_albums AS fa JOIN torrents_group AS tg ON tg.ID=fa.GroupID WHERE Ended = 0");
 		$FeaturedAlbum = $DB->next_record();
-		$FeaturedAlbum['WikiImage'] = 'http://i53.tinypic.com/if7sqr.png';
+		$FeaturedAlbum['WikiImage'] = 'http://i.imgur.com/4xaAx.png';
 		$Cache->cache_value('featured_album', $FeaturedAlbum, 0);
 	}
 	if(is_number($FeaturedAlbum['GroupID'])) {
