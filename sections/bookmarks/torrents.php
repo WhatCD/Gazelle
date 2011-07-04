@@ -103,11 +103,12 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start(); 
 	if(count($Torrents)>1 || $GroupCategoryID==1) {
-			 // Grouped torrents
+			// Grouped torrents
+			$ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
 ?>
 			<tr class="group discog" id="group_<?=$GroupID?>">
 				<td class="center">
-					<div title="View" id="showimg_<?=$GroupID?>" class="hide_torrents">
+					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
 						<a href="#" class="show_torrents_link" onclick="ToggleGroup(<?=$GroupID?>); return false;"></a>
 					</div>
 				</td>

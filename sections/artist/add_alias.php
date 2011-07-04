@@ -4,7 +4,7 @@ authorize();
 if(!check_perms('torrents_edit')) { error(403); }
 $ArtistID = $_POST['artistid'];
 $Redirect = $_POST['redirect'];
-$AliasName = db_string($_POST['name']);
+$AliasName = db_string(normalise_artist_name($_POST['name']));
 if(!$Redirect) { $Redirect = 0; }
 
 if(!is_number($ArtistID) || !($Redirect === 0 || is_number($Redirect)) || !$ArtistID) {

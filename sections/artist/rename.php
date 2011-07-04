@@ -23,7 +23,7 @@
 authorize();
 
 $ArtistID = $_POST['artistid'];
-$NewName = $_POST['name'];
+$NewName = normalise_artist_name($_POST['name']);
 
 if(!$ArtistID || !is_number($ArtistID)) { error(404); }
 

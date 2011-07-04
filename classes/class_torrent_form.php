@@ -125,13 +125,6 @@ class TORRENT_FORM {
 					</select>
 				</td>
 			</tr>
-
-			<tr id="grace">
-				<td class="label">Extended Grace</td>
-				<td>
-					<input type="checkbox" name="extendedgrace"<?=$Torrent['ExtendedGrace']? ' checked="checked"' : ''?> /> Checking this box extendes the grace period for this torrent.
-				</td>
-			</tr>
 <?
 			}
 		}

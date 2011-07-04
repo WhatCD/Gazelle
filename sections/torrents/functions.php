@@ -87,8 +87,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			tfi.TorrentID,
 			t.LastReseedRequest,
 			tln.TorrentID AS LogInDB,
-			t.ID AS HasFile,
-			t.ExtendedGrace
+			t.ID AS HasFile
 			FROM torrents AS t
 			LEFT JOIN users_main AS um ON um.ID=t.UserID
 			LEFT JOIN torrents_bad_tags AS tbt ON tbt.TorrentID=t.ID

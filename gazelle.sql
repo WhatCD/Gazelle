@@ -78,6 +78,10 @@ CREATE TABLE `artists_tags` (
   KEY `UserID` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `bad_passwords` (
+  `Password` char(32) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 CREATE TABLE `blog` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UserID` int(10) unsigned NOT NULL,

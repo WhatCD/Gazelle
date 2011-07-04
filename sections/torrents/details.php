@@ -293,7 +293,7 @@ foreach ($TorrentList as $Torrent) {
 	
 	list($TorrentID, $Media, $Format, $Encoding, $Remastered, $RemasterYear, $RemasterTitle, $RemasterRecordLabel, $RemasterCatalogueNumber, 
 		$Scene, $HasLog, $HasCue, $LogScore, $FileCount, $Size, $Seeders, $Leechers, $Snatched, $FreeTorrent, $TorrentTime, $Description, 
-		$FileList, $FilePath, $UserID, $Username, $LastActive, $BadTags, $BadFolders, $BadFiles, $LastReseedRequest, $LogInDB, $HasFile, $ExtendedGrace) = $Torrent;
+		$FileList, $FilePath, $UserID, $Username, $LastActive, $BadTags, $BadFolders, $BadFiles, $LastReseedRequest, $LogInDB, $HasFile) = $Torrent;
 
 	if($Remastered && !$RemasterYear) {
 		if(!isset($FirstUnknown)) {
@@ -372,7 +372,6 @@ foreach ($TorrentList as $Torrent) {
 	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra.'<strong>Bad Tags</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra.'<strong>Bad Folders</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFiles)) { $ExtraInfo.=$AddExtra.'<strong>Bad File Names</strong>'; $AddExtra=' / '; }
-	if (!empty($ExtendedGrace)) { $ExtraInfo.=$AddExtra.'<strong>Extended Grace Period</strong>'; $AddExtra=' / '; }
 	
 	if($GroupCategoryID == 1 
 		&& ($RemasterTitle != $LastRemasterTitle

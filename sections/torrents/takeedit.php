@@ -61,7 +61,6 @@ if(check_perms('torrents_freeleech')) {
 	}
 	$Properties['FreeLeech'] = $Free;
 }
-$Properties['ExtendedGrace'] = (isset($_POST['extendedgrace']))? 1 : 0;
 
 //******************************************************************************//
 //--------------- Validate data in edit form -----------------------------------//
@@ -260,8 +259,7 @@ $SQL = "
 		RemasterRecordLabel=$T[RemasterRecordLabel], 
 		RemasterCatalogueNumber=$T[RemasterCatalogueNumber],
 		Scene=$T[Scene], 
-		Description=$T[TorrentDescription],
-		ExtendedGrace=$T[ExtendedGrace],";
+		Description=$T[TorrentDescription],";
 
 if(check_perms('torrents_freeleech')) {
 	$SQL .= "FreeTorrent=$T[FreeLeech],";

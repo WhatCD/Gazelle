@@ -1439,6 +1439,11 @@ function check_perms($PermissionName,$MinClass = 0) {
 	return (isset($LoggedUser['Permissions'][$PermissionName]) && $LoggedUser['Permissions'][$PermissionName] && $LoggedUser['Class']>=$MinClass)?true:false;
 }
 
+// TODO: make stricter, e.g. on all whitespace characters or Unicode normalisation
+function normalise_artist_name($ArtistName) {
+	return trim(preg_replace('/ +/', ' ', $ArtistName));
+}
+
 function get_artists($GroupIDs, $Escape = array()) {
 	global $Cache, $DB;
 	$Results = array();

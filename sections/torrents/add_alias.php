@@ -13,7 +13,7 @@ if(!is_number($GroupID) || !$GroupID) {
 $Changed = false;
 
 for($i = 0; $i < count($AliasNames); $i++) {
-	$AliasName = trim($AliasNames[$i]);
+	$AliasName = normalise_artist_name($AliasNames[$i]);
 	$Importance = $Importances[$i];
 	
 	if($Importance!='1' && $Importance!='2' && $Importance!='3') {
