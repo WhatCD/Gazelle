@@ -144,8 +144,11 @@ function time_minus($Offset, $Fuzzy = false) {
 	}
 }
 
-function sqltime() {
-	return date('Y-m-d H:i:s');
+function sqltime($timestamp = false) {
+	if ($timestamp === false) {
+		$timestamp = time();
+	}
+	return date('Y-m-d H:i:s', $timestamp);
 }
 
 function validDate($DateString) {

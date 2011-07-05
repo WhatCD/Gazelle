@@ -65,7 +65,7 @@ list($UserID, $Username) = array_values(user_info($UserID));
 $Zip = new ZIP($Username.'\'s '.ucfirst($_GET['type']));
 foreach($Downloads as $Download) {
 	list($Month, $GroupID, $Media, $Format, $Encoding, $Year, $Album, $Size, $Contents) = $Download;
-	$Artist = display_artists($Artists[$GroupID],false);
+	$Artist = display_artists($Artists[$GroupID],false,true,false);
 	$Contents = unserialize(base64_decode($Contents));
 	$Tor = new TORRENT($Contents, true);
 	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');

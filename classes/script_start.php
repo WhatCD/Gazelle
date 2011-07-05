@@ -1498,16 +1498,17 @@ function get_artist($GroupID) {
 	return $Results[$GroupID];
 }
 
-function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true) {
+function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Escape = true) {
 	if(!empty($Artists)) {
+		$ampersand = ($Escape) ? ' &amp; ' : ' & ';
 		switch(count($Artists[1])) {
 			case 0:
 				return '';
 			case 1:
-				$link = display_artist($Artists[1][0], $MakeLink);
+				$link = display_artist($Artists[1][0], $MakeLink, $Escape);
 				break;
 			case 2:
-				$link = display_artist($Artists[1][0], $MakeLink).' &amp; '.display_artist($Artists[1][1], $MakeLink);
+				$link = display_artist($Artists[1][0], $MakeLink, $Escape).$ampersand.display_artist($Artists[1][1], $MakeLink, $Escape);
 				break;
 			default:
 				$link = 'Various Artists';
@@ -1515,10 +1516,10 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true) {
 		if(!empty($Artists[2]) && (count($Artists[1]) < 3)) {
 			switch(count($Artists[2])) {
 				case 1:
-					$link .= ' with '.display_artist($Artists[2][0], $MakeLink);
+					$link .= ' with '.display_artist($Artists[2][0], $MakeLink, $Escape);
 					break;
 				case 2:
-					$link .= ' with '.display_artist($Artists[2][0], $MakeLink).' &amp; '.display_artist($Artists[2][1], $MakeLink);
+					$link .= ' with '.display_artist($Artists[2][0], $MakeLink, $Escape).$ampersand.display_artist($Artists[2][1], $MakeLink, $Escape);
 					break;
 			}
 		}
@@ -1528,11 +1529,15 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true) {
 	}
 }
 
-function display_artist($Artist, $MakeLink = true) {
-	if($MakeLink) {
+function display_artist($Artist, $MakeLink = true, $Escape = true) {
+	if ($MakeLink && !$Escape) {
+		error('Invalid parameters to display_artist()');
+	} elseif ($MakeLink) {
 		return '<a href="artist.php?id='.$Artist['id'].'">'.display_str($Artist['name']).'</a>';
-	} else {
+	} elseif ($Escape) {
 		return display_str($Artist['name']);
+	} else {
+		return $Artist['name'];
 	}
 }
 

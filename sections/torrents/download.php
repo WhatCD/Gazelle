@@ -28,7 +28,7 @@ $TorrentID = $_REQUEST['id'];
 if (!is_number($TorrentID)){ error(0); }
 
 $Info = $Cache->get_value('torrent_download_'.$TorrentID);
-if(!is_array($Info)) {
+if(!is_array($Info) || !array_key_exists('PlainArtists', $Info)) {
 	$DB->query("SELECT
 		t.Media,
 		t.Format,
@@ -46,7 +46,9 @@ if(!is_array($Info)) {
 		die();
 	}
 	$Info = array($DB->next_record(MYSQLI_NUM, array(4,5,6)));
-	$Info['Artists'] = display_artists(get_artist($Info[0][4],false), false, true);
+	$Artists = get_artist($Info[0][4],false);
+	$Info['Artists'] = display_artists($Artists, false, true);
+	$Info['PlainArtists'] = display_artists($Artists, false, true, false);
 	$Cache->cache_value('torrent_download_'.$TorrentID, $Info, 0);
 }
 if(!is_array($Info[0])) {
@@ -93,7 +95,7 @@ unset($Tor->Val['libtorrent_resume']);
 $TorrentName='';
 $TorrentInfo='';
 
-$TorrentName = $Artists;
+$TorrentName = $Info['PlainArtists'];
 
 $TorrentName.=$Name;
 

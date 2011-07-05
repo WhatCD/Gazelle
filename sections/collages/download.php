@@ -127,7 +127,7 @@ require(SERVER_ROOT.'/classes/class_zip.php');
 $Zip = new ZIP(file_string($CollageName));
 foreach($Downloads as $Download) {
 	list($Rank, $GroupID, $Media, $Format, $Encoding, $Year, $Album, $Size, $Contents) = $Download;
-	$Artist = display_artists($Artists[$GroupID],false);
+	$Artist = display_artists($Artists[$GroupID],false,true,false);
 	if ($Rank == 100) {
 		$Skips[] = $Artist.$Album.' '.$Year;
 		continue;
