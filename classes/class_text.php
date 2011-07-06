@@ -12,10 +12,13 @@ class TEXT {
 		':blush:'			=> 'blush.gif',
 		':cool:'			=> 'cool.gif',
 		':\'('				=> 'crying.gif',
+		':*('				=> 'crying.gif',
+		':crying:'				=> 'crying.gif',
 		'&gt;.&gt;'			=> 'eyesright.gif',
 		':frown:'			=> 'frown.gif',
 		'&lt;3'				=> 'heart.gif',
 		':unsure:'			=> 'hmm.gif',
+		':\\'			=> 'hmm.gif',
 		':whatlove:'		=> 'ilu.gif',
 		':lol:'				=> 'laughing.gif',
 		':loveflac:'		=> 'loveflac.gif',
@@ -44,7 +47,7 @@ class TEXT {
 		':creepy:'			=> 'creepy.gif',
 		':worried:'			=> 'worried.gif',
 		':wtf:'				=> 'wtf.gif',
-		':wub:'				=> 'wub.gif'
+		':wub:'				=> 'wub.gif',
 	);
 	
 	private $NoImg = 0; // If images should be turned into URLs
@@ -373,7 +376,7 @@ EXPLANATION OF PARSER LOGIC
 					$Block = preg_replace('/\[inlinesize\=5\](.*?)\[\/inlinesize\]/i', '===$1===', $Block);
 					$Block = preg_replace('/\[inlinesize\=7\](.*?)\[\/inlinesize\]/i', '==$1==', $Block);
 					
-					$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>$Block);
+					$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>htmlspecialchars($Block)); // double escape
 					break;
 				case 'hide':
 					$Array[$ArrayPos] = array('Type'=>'hide', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
