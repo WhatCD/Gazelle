@@ -200,8 +200,10 @@ if ($NewMessages > 0) {
 	$Alerts[] = '<a href="inbox.php">'.'You have '.$NewMessages.(($NewMessages > 1) ? ' new messages' : ' new message').'</a>';
 }
 
-if($LoggedUser['RatioWatch']){
+if($LoggedUser['RatioWatch']) {
 	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'You have '.time_diff($LoggedUser['RatioWatchEnds'], 3).' to get your ratio over your required ratio.';
+} else if($LoggedUser['CanLeech'] != 1) {
+	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'Your downloading privileges are disabled until you meet your required ratio.';
 }
 
 if (check_perms('site_torrents_notify')) {

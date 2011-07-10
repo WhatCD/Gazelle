@@ -357,6 +357,7 @@ if ($DisableLeech!=$Cur['can_leech'] && check_perms('users_disable_any')) {
 	$UpdateSet[]="can_leech='$DisableLeech'";
 	$EditSummary[]="leeching status changed";
 	$HeavyUpdates['DisableLeech']=$DisableLeech;
+	$HeavyUpdates['CanLeech']=$DisableLeech;
 	if (!empty($UserReason)) {
 		send_pm($UserID, 0, db_string('Your leeching privileges have been disabled'),db_string("Your leeching privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN." on our IRC network. Instructions can be found [url=http://".NONSSL_SITE_URL."/wiki.php?action=article&name=IRC+-+How+to+join]here[/url]."));
 	}

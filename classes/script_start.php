@@ -331,6 +331,7 @@ function user_heavy_info($UserID) {
 			m.torrent_pass,
 			m.IP,
 			m.CustomPermissions,
+			m.can_leech AS CanLeech,
 			i.AuthKey,
 			i.RatioWatchEnds,
 			i.RatioWatchDownload,
@@ -854,6 +855,11 @@ function display_str($Str) {
 	return $Str;
 }
 
+// Use sparingly
+function undisplay_str($Str) {
+	return mb_convert_encoding($Str, 'UTF-8', 'HTML-ENTITIES');
+}
+
 function make_utf8($Str) {
 	if ($Str!="") {
 		if (is_utf8($Str)) { $Encoding="UTF-8"; }
@@ -1164,7 +1170,7 @@ function warn_user($UserID, $Duration, $Reason) {
 
 		send_pm($UserID, 0, db_string("You have received multiple warnings."), db_string("When you received your latest warning (Set to expire on ".date("Y-m-d", (time() + $Duration))."), you already had a different warning (Set to expire on ".date("Y-m-d", strtotime($OldDate)).").\n\n Due to this collision, your warning status will now expire at ".$NewExpDate."."));
 
-		$AdminComment = date("Y-m-d").' - Warning (Clash) extended to expire at '.$NewExpDate.' by '.$LoggedUser['Username']."\nReason: $Reason\n";
+		$AdminComment = date("Y-m-d").' - Warning (Clash) extended to expire at '.$NewExpDate.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
 
 		$DB->query('UPDATE users_info SET
 			Warned=\''.db_string($NewExpDate).'\',
@@ -1179,7 +1185,7 @@ function warn_user($UserID, $Duration, $Reason) {
 		$Cache->update_row(false, array('Warned' => $WarnTime));
 		$Cache->commit_transaction(0);
 
-		$AdminComment = "\n".date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $Reason\n";
+		$AdminComment = "\n".date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
 
 		$DB->query('UPDATE users_info SET
 			Warned=\''.db_string($WarnTime).'\',
@@ -1249,6 +1255,14 @@ function update_hash($GroupID) {
 	
 	$Cache->delete_value('torrents_details_'.$GroupID);
 	$Cache->delete_value('torrent_group_'.$GroupID);
+
+	$ArtistInfo = get_artist($GroupID);
+	foreach($ArtistInfo as $Importances => $Importance) {
+		foreach($Importance as $Artist) {
+			$Cache->delete_value('artist_'.$Artist['id']); //Needed for at least freeleech change, if not others.
+		}
+	}
+		
 	$Cache->delete_value('groups_artists_'.$GroupID);
 }
 
@@ -1929,6 +1943,49 @@ function in_array_partial($Needle, $Haystack) {
 	return false;
 }
 
+/**
+ * Will freeleech / neutralleech / normalise a set of torrents
+ * @param array $TorrentIDs An array of torrents IDs to iterate over
+ * @param int $FreeNeutral 0 = normal, 1 = fl, 2 = nl
+ * @param int $FreeLeechType 0 = Unknown, 1 = Staff picks, 2 = Perma-FL (Toolbox, etc.), 3 = Vanity House
+ */
+function freeleech_torrents($TorrentIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
+	global $DB;
+
+	if(!is_array($TorrentIDs)) {
+		$TorrentIDs = array($TorrentIDs);
+	}
+	
+	$DB->query("UPDATE torrents SET FreeTorrent = '".$FreeNeutral."', FreeLeechType = '".$FreeLeechType."' WHERE ID IN (".implode(", ", $TorrentIDs).")");
+	$DB->query("SELECT ID, GroupID, info_hash FROM torrents WHERE ID IN (".implode(", ", $TorrentIDs).") ORDER BY GroupID ASC");
+	$Torrents = $DB->to_array(false, MYSQLI_NUM, false);
+	$GroupIDs = $DB->collect('GroupID');
+
+	foreach($Torrents as $Torrent) {
+		list($TorrentID, $GroupID, $InfoHash) = $Torrent;
+		update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $FreeNeutral));
+	}
+
+	foreach($GroupIDs as $GroupID) {
+		update_hash($GroupID);
+	}
+}
+
+/**
+ * Convenience function to allow for passing groups to freeleech_torrents()
+ */	
+function freeleech_groups($GroupIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
+	global $DB;
+
+	if(!is_array($GroupIDs)) {
+		$GroupIDs = array($GroupIDs);
+	}
+
+	$DB->query("SELECT ID from torrents WHERE GroupID IN (".implode(", ", $GroupIDs).")");
+	$TorrentIDs = $DB->collect('ID');
+	
+	freeleech_torrents($TorrentIDs, $FreeNeutral, $FreeLeechType);
+}
 
 
 $Debug->set_flag('ending function definitions');

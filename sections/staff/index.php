@@ -2,10 +2,10 @@
 enforce_login();
 show_header('Staff');
 
-include('functions.php');
-$Support = get_support();
+include(SERVER_ROOT.'/sections/staff/functions.php');
+$SupportStaff = get_support();
 
-list($FrontLineSupport,$Staff) = $Support;
+list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 
 ?>
 <div class="thin">
@@ -69,10 +69,40 @@ list($FrontLineSupport,$Staff) = $Support;
 	</div>
 	<br />
 	<div class="box pad" style="padding:0px 10px 10px 10px;">
+		<h3>Forum moderators</h3>
+		<p>Forum Mods are users who have been promoted to help moderate the forums. They can only help with forum oriented questions</p>
+		<table class="staff" width="100%">
+			<tr class="colhead">
+				<td style="width:130px;">Username</td>
+				<td style="width:130px;">Last seen</td>
+				<td><strong>Remark</strong></td>
+			</tr>
+<?
+	$Row = 'a';
+	foreach($ForumStaff as $Support) {
+		list($ID, $Class, $Username, $Paranoia, $LastAccess, $SupportFor) = $Support;
+		$Row = ($Row == 'a') ? 'b' : 'a';
+?>
+			<tr class="row<?=$Row?>">
+				<td class="nobr">
+					<?=format_username($ID, $Username)?>
+				</td>
+				<td class="nobr">
+					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by user'; }?>
+				</td>
+				<td class="nobr">
+					<?=$SupportFor?>
+				</td>
+			</tr>
+<?	} ?>
+		</table>
+	</div>
+	<br />
+	<div class="box pad" style="padding:0px 10px 10px 10px;">
 <?
 	$CurClass = 0;
 	$CloseTable = false;
-	foreach ($Staff as $StaffMember) {	
+	foreach ($Staff as $StaffMember) {
 		list($ID, $Class, $ClassName, $Username, $Paranoia, $LastAccess, $Remark) = $StaffMember;
 		if($Class!=$CurClass) { // Start new class of staff members
 			$Row = 'a';
@@ -84,9 +114,6 @@ list($FrontLineSupport,$Staff) = $Support;
 			$CloseTable = true;
 			echo '<br /><h3>'.$ClassName.'s</h3>';
 ?>
-<? if($CurClass == 650) { ?>
-		<p>Forum Mods are users who have been promoted to help moderate the forums. They can only help with forum oriented questions</p>
-<? } ?>
 		<table class="staff" width="100%">
 			<tr class="colhead">
 				<td style="width:130px;">Username</td>

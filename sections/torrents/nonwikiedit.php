@@ -25,12 +25,14 @@ if(check_perms('torrents_freeleech') && (isset($_POST['freeleech']) xor isset($_
 	} else {
 		$Free = 0;
 	}
-	$DB->query("SELECT info_hash FROM torrents WHERE GroupID = ".$GroupID);
-	$InfoHashes = $DB->collect('info_hash', false);
-	foreach($InfoHashes as $InfoHash) {
-		update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $Free));
+
+	if(isset($_POST['freeleechtype']) && in_array($_POST['freeleechtype'], array(0,1,2,3))) {
+		$FreeType = $_POST['freeleechtype'];
+	} else {
+		error(404);
 	}
-	$DB->query("UPDATE torrents SET FreeTorrent = '".$Free."' WHERE GroupID = ".$GroupID);
+
+	freeleech_groups($GroupID, $Free, $FreeType);
 }
 
 //Escape fields

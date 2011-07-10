@@ -70,6 +70,7 @@ if(empty($_POST['confirm'])) {
 	$DB->query("SELECT COUNT(ID) FROM torrents WHERE GroupID='$OldGroupID'");
 	list($TorrentsInGroup) = $DB->next_record();
 	if($TorrentsInGroup == 0) {
+		$DB->query("UPDATE torrents_comments SET GroupID='$GroupID' WHERE GroupID='$OldGroupID'");
 		delete_group($OldGroupID);
 	} else {
 		update_hash($OldGroupID);

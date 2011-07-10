@@ -10,20 +10,25 @@ if(!empty($_GET['userid']) && is_number($_GET['userid'])) {
 	$UserID = $LoggedUser['ID'];
 }
 
+if(!empty($_GET['filter']) && $_GET['filter'] == 'seeding') {
+	$SeedingOnly = true;
+} else {
+	$SeedingOnly = false;
+}
+
 // Get list of FLAC snatches
-$DB->query("SELECT t.GroupID, xs.fid
-	FROM xbt_snatched AS xs
-	JOIN torrents AS t ON t.ID=xs.fid
-	WHERE 
-	t.Format='FLAC' 
-	AND ((t.LogScore = '100' AND t.Media = 'CD')
-		OR t.Media = 'Vinyl')
-	AND xs.uid='$UserID'");
+$DB->query("SELECT t.GroupID, x.fid
+	FROM ".($SeedingOnly ? 'xbt_files_users' : 'xbt_snatched')." AS x
+		JOIN torrents AS t ON t.ID=x.fid
+	WHERE t.Format='FLAC' 
+		AND ((t.LogScore = '100' AND t.Media = 'CD')
+			OR t.Media = 'Vinyl')
+		AND x.uid='$UserID'");
 
 $SnatchedGroupIDs = $DB->collect('GroupID');
 $Snatches = $DB->to_array('GroupID');
 
-if(count($SnatchedGroupIDs) == 0) { error('You haven\'t snatched any 100% flacs!'); }
+if(count($SnatchedGroupIDs) == 0) { error(($SeedingOnly ? "You aren't seeding any 100% FLACs!" : "You haven't snatched any 100% FLACs!")); }
 // Create hash table
 
 $DB->query("CREATE TEMPORARY TABLE t 
@@ -48,6 +53,13 @@ $Results = get_groups($GroupIDs);
 
 show_header('Transcode Snatches');
 ?>
+<div class="linkbox">
+<? if($SeedingOnly) { ?>
+	<a href="better.php?method=snatch">Show all</a>
+<? } else { ?>
+	<a href="better.php?method=snatch&amp;filter=seeding">Just those currently seeding</a>
+<? } ?>
+</div>
 <div class="thin">
 	<table width="100%">
 		<tr class="colhead">

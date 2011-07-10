@@ -130,6 +130,18 @@ show_header('Detailed User Statistics');
 	<img src="<?=$BrowserDistribution?>" />
 </div>
 <br />
-
+<h3>Geographical Distribution Map</h3>
+<div class="box center">
+	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=world&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=europe&chf=bg,s,CCD6FF" />
+	<br />
+	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=south_america&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=asia&chf=bg,s,CCD6FF" />
+	<br />
+	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=africa&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=middle_east&chf=bg,s,CCD6FF" />
+	<br />
+	<img src="http://chart.apis.google.com/chart?chxt=y,x&chg=0,-1,1,1&chxs=0,h&cht=bvs&chco=76A4FB&chs=880x300&chd=t:<?=implode(',',array_slice($CountryUsers,0,31))?>&chxl=1:|<?=implode('|',array_slice($Countries,0,31))?>|0:|<?=implode('|',$LogIncrements)?>&amp;chf=bg,s,FFFFFF00" />
+</div>
 <?
 show_footer();

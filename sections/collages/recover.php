@@ -5,12 +5,17 @@ if (!check_perms('site_collages_recover')) {
 
 if($_POST['collage_id'] && is_number($_POST['collage_id'])) {
 	authorize();
-
 	$CollageID = $_POST['collage_id'];
-	$DB->query("UPDATE collages SET Deleted = '0' WHERE ID=$CollageID");
-	$Cache->delete_value('collage_'.$CollageID);
-	write_log("Collage ".$CollageID." was recovered by ".$LoggedUser['Username']);
-	header("Location: collages.php?id=$CollageID");
+
+	$DB->query("SELECT Name FROM collages WHERE ID = ".$CollageID);
+	if($DB->record_count() == 0) {
+		error('Collage is completely deleted');
+	} else {
+		$DB->query("UPDATE collages SET Deleted = '0' WHERE ID=$CollageID");
+		$Cache->delete_value('collage_'.$CollageID);
+		write_log("Collage ".$CollageID." was recovered by ".$LoggedUser['Username']);
+		header("Location: collages.php?id=$CollageID");
+	}
 }
 show_header("Collage recovery!");
 ?>

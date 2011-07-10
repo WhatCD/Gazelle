@@ -108,6 +108,13 @@ show_header('Edit torrent group');
 						<input type="checkbox" name="unfreeleech" /> Reset
 						<input type="checkbox" name="freeleech" /> Freeleech
 						<input type="checkbox" name="neutralleech" /> Neutralleech
+						 because 
+						<select name="freeleechtype">
+	<?	$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
+		foreach($FL as $Key => $Name) { ?>	
+							<option value="<?=$Key?>" <?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$Name?></option>
+	<?	} ?>
+						</select>
 					</td>
 				</tr>	
 <? } ?>

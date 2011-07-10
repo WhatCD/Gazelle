@@ -60,13 +60,23 @@ if(check_perms('torrents_freeleech')) {
 		error(404);
 	}
 	$Properties['FreeLeech'] = $Free;
+
+	if($Free == 0) {
+		$FreeType = 0;
+	} else {
+		$FreeType = (int)$_POST['freeleechtype'];
+		if(!in_array($Free, array(0,1,2,3))) {
+			error(404);
+		}
+	}
+	$Properties['FreeLeechType'] = $FreeType;
 }
 
 //******************************************************************************//
 //--------------- Validate data in edit form -----------------------------------//
 
-$DB->query('SELECT UserID, Remastered, RemasterYear, FreeTorrent, info_hash FROM torrents WHERE ID='.$TorrentID);
-list($UserID, $Remastered, $RemasterYear, $CurFreeLeech, $InfoHash) = $DB->next_record(MYSQLI_BOTH, false);
+$DB->query('SELECT UserID, Remastered, RemasterYear, FreeTorrent FROM torrents WHERE ID='.$TorrentID);
+list($UserID, $Remastered, $RemasterYear, $CurFreeLeech) = $DB->next_record(MYSQLI_BOTH, false);
 
 if($LoggedUser['ID']!=$UserID && !check_perms('torrents_edit')) {
 	error(403);
@@ -263,6 +273,7 @@ $SQL = "
 
 if(check_perms('torrents_freeleech')) {
 	$SQL .= "FreeTorrent=$T[FreeLeech],";
+	$SQL .= "FreeLeechType=$T[FreeLeechType],";
 }
 
 if(check_perms('users_mod')) {
@@ -316,7 +327,7 @@ $SQL .= "
 $DB->query($SQL);
 
 if(check_perms('torrents_freeleech') && $Properties['FreeLeech'] != $CurFreeLeech) {
-	update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $Properties['FreeLeech']));
+	freeleech_torrents($TorrentID, $Properties['FreeLeech'], $Properties['FreeLeechType']);
 }
 
 $DB->query("SELECT GroupID, Time FROM torrents WHERE ID='$TorrentID'");

@@ -1,7 +1,7 @@
 <?
 class TEXT {
 	// tag=>max number of attributes
-	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0
+	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0
 	);
 	private $Smileys = array(
 		':angry:'			=> 'angry.gif',
@@ -11,8 +11,7 @@ class TEXT {
 		':-|'				=> 'blank.gif',
 		':blush:'			=> 'blush.gif',
 		':cool:'			=> 'cool.gif',
-		':\'('				=> 'crying.gif',
-		':*('				=> 'crying.gif',
+		':&#39;('				=> 'crying.gif',
 		':crying:'				=> 'crying.gif',
 		'&gt;.&gt;'			=> 'eyesright.gif',
 		':frown:'			=> 'frown.gif',
@@ -43,6 +42,7 @@ class TEXT {
 		':-P'				=> 'tongue.gif',
 		':-p'				=> 'tongue.gif',
 		':wave:'			=> 'wave.gif',
+		';-)'				=> 'wink.gif',
 		':wink:'			=> 'wink.gif',
 		':creepy:'			=> 'creepy.gif',
 		':worried:'			=> 'worried.gif',
@@ -64,9 +64,13 @@ class TEXT {
 		$Str = display_str($Str);
 
 		//Inline links
-		$Str = preg_replace('/(?<!(\[url\]|\[url\=|\[img\=|\[img\]))http(s)?:\/\//i', '$1[inlineurl]http$2://', $Str);
-		// For anonym.to links. We can't have this in the regex because php freaks out at the ?, even if it's escaped
-		$Str = strtr($Str, array('?[inlineurl]http'=>'?http', '=[inlineurl]http'=>'=http')); 
+		$URLPrefix = '(\[url\]|\[url\=|\[img\=|\[img\])';
+		$Str = preg_replace('/'.$URLPrefix.'\s+/i', '$1', $Str);
+		$Str = preg_replace('/(?<!'.$URLPrefix.')http(s)?:\/\//i', '$1[inlineurl]http$2://', $Str);
+		// For anonym.to and archive.org links, remove any [inlineurl] in the middle of the link
+		$callback = create_function('$matches', 'return str_replace("[inlineurl]","",$matches[0]);');
+		$Str = preg_replace_callback('/(?<=\[inlineurl\]|'.$URLPrefix.')(\S*\[inlineurl\]\S*)/m', $callback, $Str);
+
 		$Str = preg_replace('/\=\=\=\=([^=].*)\=\=\=\=/i', '[inlinesize=3]$1[/inlinesize]', $Str);
 		$Str = preg_replace('/\=\=\=([^=].*)\=\=\=/i', '[inlinesize=5]$1[/inlinesize]', $Str);
 		$Str = preg_replace('/\=\=([^=].*)\=\=/i', '[inlinesize=7]$1[/inlinesize]', $Str);
@@ -104,16 +108,16 @@ class TEXT {
 		$Regex .= ')';
 		$Regex .= '(:[0-9]{1,5})?'; // port
 		$Regex .= '\/?'; // slash?
-		$Regex .= '(\/?[0-9a-z\-_.,&=@~%\/:;()+!#]+)*'; // /file
+		$Regex .= '(\/?[0-9a-z\-_.,&=@~%\/:;()+|!#]+)*'; // /file
 		if(!empty($Extension)) {
 			$Regex.=$Extension;
 		}
 
 		// query string
 		if ($Inline) {
-			$Regex .= '(\?([0-9a-z\-_.,%\/\@~&=:;()+*\^$!#]|\[\d*\])*)?';
+			$Regex .= '(\?([0-9a-z\-_.,%\/\@~&=:;()+*\^$!#|]|\[\d*\])*)?';
 		} else {
-			$Regex .= '(\?[0-9a-z\-_.,%\/\@[\]~&=:;()+*\^$!#]*)?';
+			$Regex .= '(\?[0-9a-z\-_.,%\/\@[\]~&=:;()+*\^$!#|]*)?';
 		}
 
 		$Regex .= '(#[a-z0-9\-_.,%\/\@[\]~&=:;()+*\^$!]*)?'; // #anchor
@@ -370,13 +374,14 @@ EXPLANATION OF PARSER LOGIC
 					$Array[$ArrayPos] = array('Type'=>'tex', 'Val'=>$Block);
 					break;
 				case 'pre':
+				case 'code':
 				case 'plain':
 					$Block = strtr($Block, array('[inlineurl]'=>''));
 					$Block = preg_replace('/\[inlinesize\=3\](.*?)\[\/inlinesize\]/i', '====$1====', $Block);
 					$Block = preg_replace('/\[inlinesize\=5\](.*?)\[\/inlinesize\]/i', '===$1===', $Block);
 					$Block = preg_replace('/\[inlinesize\=7\](.*?)\[\/inlinesize\]/i', '==$1==', $Block);
 					
-					$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>htmlspecialchars($Block)); // double escape
+					$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>$Block);
 					break;
 				case 'hide':
 					$Array[$ArrayPos] = array('Type'=>'hide', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
@@ -437,7 +442,7 @@ EXPLANATION OF PARSER LOGIC
 					$Str.='<a href="user.php?action=search&amp;search='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'artist':
-					$Str.='<a href="artist.php?artistname='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'">'.$Block['Val'].'</a>';
+					$Str.='<a href="artist.php?artistname='.urlencode(undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
 					break;
 				case 'wiki':
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
@@ -450,6 +455,9 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'pre':
 					$Str.='<pre>'.$Block['Val'].'</pre>';
+					break;
+				case 'code':
+					$Str.='<code>'.$Block['Val'].'</code>';
 					break;
 				case 'list':
 					$Str .= '<ul>';
@@ -599,6 +607,7 @@ EXPLANATION OF PARSER LOGIC
 				case 'user':
 				case 'wiki':
 				case 'pre':
+				case 'code':
 				case 'aud':
 				case 'img':
 					$Str.=$Block['Val'];

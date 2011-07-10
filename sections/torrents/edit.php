@@ -25,6 +25,7 @@ $DB->query("SELECT
 	t.RemasterRecordLabel,
 	t.Scene, 
 	t.FreeTorrent, 
+	t.FreeLeechType, 
 	t.Dupable, 
 	t.DupeReason, 
 	t.Description AS TorrentDescription, 

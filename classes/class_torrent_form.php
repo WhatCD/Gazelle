@@ -123,6 +123,13 @@ class TORRENT_FORM {
 						<option value="<?=$Key?>" <?=($Key == $Torrent['FreeTorrent'] ? ' selected="selected"' : '')?>><?=$Name?></option>
 <?	} ?>
 					</select>
+					 because 
+					<select name="freeleechtype">
+<?	$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
+	foreach($FL as $Key => $Name) { ?>	
+						<option value="<?=$Key?>" <?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$Name?></option>
+<?	} ?>
+					</select>
 				</td>
 			</tr>
 <?

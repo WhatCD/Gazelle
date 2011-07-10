@@ -394,7 +394,7 @@ if($Day != next_day() || $_GET['runday']){
 	
 	foreach($OffRatioWatch as $UserID) {
 		$Cache->begin_transaction('user_info_heavy_'.$UserID);
-		$Cache->update_row(false, array('RatioWatchEnds'=>'0000-00-00 00:00:00','RatioWatchDownload'=>'0'));
+		$Cache->update_row(false, array('RatioWatchEnds'=>'0000-00-00 00:00:00','RatioWatchDownload'=>'0','CanLeech'=>1));
 		$Cache->commit_transaction(0);
 		send_pm($UserID, 0, db_string("You have been taken off Ratio Watch"), db_string("Congratulations! Feel free to begin downloading again.\n To ensure that you do not get put on ratio watch again, please read the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n"), '');
 		echo "Ratio watch off: $UserID\n";
@@ -422,7 +422,7 @@ if($Day != next_day() || $_GET['runday']){
 
         foreach($OffRatioWatch as $UserID) {
                 $Cache->begin_transaction('user_info_heavy_'.$UserID);
-                $Cache->update_row(false, array('RatioWatchEnds'=>'0000-00-00 00:00:00','RatioWatchDownload'=>'0'));
+                $Cache->update_row(false, array('RatioWatchEnds'=>'0000-00-00 00:00:00','RatioWatchDownload'=>'0','CanLeech'=>1));
                 $Cache->commit_transaction(0);
                 send_pm($UserID, 0, db_string("You have been taken off Ratio Watch"), db_string("Congratulations! Feel free to begin downloading again.\n To ensure that you do not get put on ratio watch again, please read the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n"), '');
                 echo "Ratio watch off: $UserID\n";
@@ -496,7 +496,7 @@ if($Day != next_day() || $_GET['runday']){
 	
 	foreach($UserIDs as $UserID) {
 		$Cache->begin_transaction('user_info_heavy_'.$UserID);
-		$Cache->update_row(false, array('RatioWatchDownload'=>0));
+		$Cache->update_row(false, array('RatioWatchDownload'=>0, 'CanLeech'=>0));
 		$Cache->commit_transaction(0);
 		send_pm($UserID, 0, db_string("Your downloading rights have been disabled"), db_string("As you did not raise your ratio in time, your downloading rights have been revoked. You will not be able to download any torrents until your ratio is above your new required ratio."), '');
 		echo "Ratio watch disabled: $UserID\n";

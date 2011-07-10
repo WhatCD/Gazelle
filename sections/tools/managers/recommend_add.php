@@ -25,9 +25,14 @@ if($Err){ // if something didn't validate
 $URLRegex = '/torrents\.php\?id=([0-9]+)$/i';
 preg_match($URLRegex, $URL, $Matches);
 $GroupID=$Matches[1];
-if(!$GroupID){ error(404); }
+
+if(empty($GroupID) || !is_number($GroupID)) {
+	 error(404); 
+}
 
 $DB->query("INSERT INTO torrents_recommended (GroupID, UserID, Time) VALUES ('".db_string($GroupID)."', $LoggedUser[ID], '".sqltime()."')");
+freeleech_groups($GroupID, 2, 3);
+
 $Cache->delete_value('recommend');
 header('Location: '.$_SERVER['HTTP_REFERER']);
 ?>
