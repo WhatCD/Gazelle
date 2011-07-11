@@ -1,5 +1,5 @@
 <?
-class TEXT {
+class TEXT_2 {
 	// tag=>max number of attributes
 	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0
 	);
@@ -195,9 +195,9 @@ EXPLANATION OF PARSER LOGIC
 			$Block = '';
 			
 			// 1) Find the next tag (regex)
-			// [name(=attribute)?]|[[wiki-link]]
-			$IsTag = preg_match("/((\[[a-zA-Z*]+)(=(?:[^\n'\"\[\]]|\[\d*\])+)?\])|(\[\[[^\n\"'\[\]]+\]\])/", $Str, $Tag, PREG_OFFSET_CAPTURE, $i);
-			
+			// [name=|[name]|[[wiki-link]]
+			$IsTag = preg_match("/((\[[a-zA-Z*]{1,100})([=\]]))|(\[\[[^\n\"'\[\]]+\]\])/", $Str, $Tag, PREG_OFFSET_CAPTURE, $i);
+
 			// 1a) If there aren't any tags left, write everything remaining to a block
 			if(!$IsTag) {
 				// No more tags
@@ -218,6 +218,7 @@ EXPLANATION OF PARSER LOGIC
 				$WikiLink = true;
 				$TagName = substr($Tag[4][0], 2, -2);
 				$Attrib = '';
+				$ExtraTagLen = 0;
 			} else { // 3) If it's not a wiki link:
 				$WikiLink = false;
 				$TagName = strtolower(substr($Tag[2][0], 1));
@@ -233,15 +234,19 @@ EXPLANATION OF PARSER LOGIC
 				$MaxAttribs = $this->ValidTags[$TagName];
 				
 				// 3b) Get the attribute, if it exists [name=attribute]
-				if(!empty($Tag[3][0])) {
-					$Attrib = substr($Tag[3][0], 1);
+				$HasAttrib = ($Tag[3][0] == '=');
+				if($HasAttrib) {
+					$AttribFrom = $TagPos + strlen($Tag[0][0]);
+					$Attrib = substr($Str, $AttribFrom, strpos($Str, ']', $AttribFrom) - $AttribFrom);
+					$ExtraTagLen = strlen($Attrib) + 1;
 				} else {
-					$Attrib='';
+					$Attrib = '';
+					$ExtraTagLen = 0;
 				}
 			}
 			
 			// 4) Move the pointer past the end of the tag
-			$i=$TagPos+strlen($Tag[0][0]);
+			$i=$TagPos+strlen($Tag[0][0])+$ExtraTagLen;
 			
 			// 5) Find out where the tag closes (beginning of [/tag])
 			
@@ -251,7 +256,7 @@ EXPLANATION OF PARSER LOGIC
 			
 			
 			//5a) Different for different types of tag. Some tags don't close, others are weird like [*]
-			if($TagName == 'img' && !empty($Tag[3][0])) { //[img=...]
+			if($TagName == 'img' && $HasAttrib) { //[img=...]
 				$Block = ''; // Nothing inside this tag
 				// Don't need to touch $i
 			} elseif($TagName == 'inlineurl') { // We did a big replace early on to turn http:// into [inlineurl]http://
