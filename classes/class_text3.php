@@ -1,7 +1,7 @@
 <?
-class TEXT_2 {
+class TEXT_3 {
 	// tag=>max number of attributes
-	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0
+	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0
 	);
 	private $Smileys = array(
 		':angry:'			=> 'angry.gif',
@@ -11,13 +11,11 @@ class TEXT_2 {
 		':-|'				=> 'blank.gif',
 		':blush:'			=> 'blush.gif',
 		':cool:'			=> 'cool.gif',
-		':&#39;('				=> 'crying.gif',
-		':crying:'				=> 'crying.gif',
+		':\'('				=> 'crying.gif',
 		'&gt;.&gt;'			=> 'eyesright.gif',
 		':frown:'			=> 'frown.gif',
 		'&lt;3'				=> 'heart.gif',
 		':unsure:'			=> 'hmm.gif',
-		':\\'			=> 'hmm.gif',
 		':whatlove:'		=> 'ilu.gif',
 		':lol:'				=> 'laughing.gif',
 		':loveflac:'		=> 'loveflac.gif',
@@ -42,12 +40,11 @@ class TEXT_2 {
 		':-P'				=> 'tongue.gif',
 		':-p'				=> 'tongue.gif',
 		':wave:'			=> 'wave.gif',
-		';-)'				=> 'wink.gif',
 		':wink:'			=> 'wink.gif',
 		':creepy:'			=> 'creepy.gif',
 		':worried:'			=> 'worried.gif',
 		':wtf:'				=> 'wtf.gif',
-		':wub:'				=> 'wub.gif',
+		':wub:'				=> 'wub.gif'
 	);
 	
 	private $NoImg = 0; // If images should be turned into URLs
@@ -64,14 +61,9 @@ class TEXT_2 {
 		$Str = display_str($Str);
 
 		//Inline links
-		$URLPrefix = '(\[url\]|\[url\=|\[img\=|\[img\])';
-		$Str = preg_replace('/'.$URLPrefix.'\s+http/i', '$1http', $Str);
-		$Str = preg_replace('/(?<!'.$URLPrefix.')http(s)?:\/\//i', '$1[inlineurl]http$2://', $Str);
-		// For anonym.to and archive.org links, remove any [inlineurl] in the middle of the link
+		$Str = preg_replace('/(?<!(\[url\]|\[url\=|\[img\=|\[img\]))http(s)?:\/\//i', '$1[inlineurl]http$2://', $Str);
+		// For anonym.to links. We can't have this in the regex because php freaks out at the ?, even if it's escaped
 		$Str = strtr($Str, array('?[inlineurl]http'=>'?http', '=[inlineurl]http'=>'=http')); 
-		$callback = create_function('$matches', 'return str_replace("[inlineurl]","",$matches[0]);');
-		$Str = preg_replace_callback('/(?<=\[inlineurl\]|'.$URLPrefix.')(\S*\[inlineurl\]\S*)/m', $callback, $Str);
-
 		$Str = preg_replace('/\=\=\=\=([^=].*)\=\=\=\=/i', '[inlinesize=3]$1[/inlinesize]', $Str);
 		$Str = preg_replace('/\=\=\=([^=].*)\=\=\=/i', '[inlinesize=5]$1[/inlinesize]', $Str);
 		$Str = preg_replace('/\=\=([^=].*)\=\=/i', '[inlinesize=7]$1[/inlinesize]', $Str);
@@ -109,16 +101,16 @@ class TEXT_2 {
 		$Regex .= ')';
 		$Regex .= '(:[0-9]{1,5})?'; // port
 		$Regex .= '\/?'; // slash?
-		$Regex .= '(\/?[0-9a-z\-_.,&=@~%\/:;()+|!#]+)*'; // /file
+		$Regex .= '(\/?[0-9a-z\-_.,&=@~%\/:;()+!#]+)*'; // /file
 		if(!empty($Extension)) {
 			$Regex.=$Extension;
 		}
 
 		// query string
 		if ($Inline) {
-			$Regex .= '(\?([0-9a-z\-_.,%\/\@~&=:;()+*\^$!#|]|\[\d*\])*)?';
+			$Regex .= '(\?([0-9a-z\-_.,%\/\@~&=:;()+*\^$!#]|\[\d*\])*)?';
 		} else {
-			$Regex .= '(\?[0-9a-z\-_.,%\/\@[\]~&=:;()+*\^$!#|]*)?';
+			$Regex .= '(\?[0-9a-z\-_.,%\/\@[\]~&=:;()+*\^$!#]*)?';
 		}
 
 		$Regex .= '(#[a-z0-9\-_.,%\/\@[\]~&=:;()+*\^$!]*)?'; // #anchor
@@ -157,14 +149,14 @@ This is all done in a loop.
 
 EXPLANATION OF PARSER LOGIC
 
-1) Find and parse the next tag (regex)
-	1a) See if it's a [[wiki-link]] or an ordinary tag, and get the tag name
-	1b) If it's not a wiki link:
-		1bi) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
-		1bii) Get the attribute, if it exists [name=attribute]
-			If it's [not a tag] or has an invalid attribute, just leave it as plaintext and move on
-2) If there aren't any tags left, write everything remaining to a block and return (done parsing)
-3) If the next tag isn't where the pointer is, write everything up to there to a text block.
+1) Find the next tag (regex)
+	1a) If there aren't any tags left, write everything remaining to a block and return (done parsing)
+	1b) If the next tag isn't where the pointer is, write everything up to there to a text block.
+2) See if it's a [[wiki-link]] or an ordinary tag, and get the tag name
+3) If it's not a wiki link:
+	3a) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
+		If it's [not a tag], just leave it as plaintext and move on
+	3b) Get the attribute, if it exists [name=attribute]
 4) Move the pointer past the end of the tag
 5) Find out where the tag closes (beginning of [/tag])
 	5a) Different for different types of tag. Some tags don't close, others are weird like [*]
@@ -191,85 +183,58 @@ EXPLANATION OF PARSER LOGIC
 		$Len = strlen($Str);
 		$Array = array();
 		$ArrayPos = 0;
-
+		
 		while($i<$Len) {
 			$Block = '';
 			
-			// 1) Find and parse the next tag (regex)
-			// [name=|[name]|[[wiki-link]]
-			$IsTag = preg_match("/((\[[a-zA-Z*]{1,100})([=\]]))|(\[\[[^\n\"'\[\]]+\]\])/", $Str, $Tag, PREG_OFFSET_CAPTURE, $i);
-			$TagPos = $Tag[0][1];
-			// At this point we still don't know whether the tag code is valid
-			// $IsTag will be updated with new information
-
-			// 1a) See if it's a [[wiki-link]] or an ordinary tag, and get the tag name
-			if ($IsTag && !empty($Tag[4][0])) { // Wiki-link
-				$WikiLink = true;
-				$TagName = substr($Tag[4][0], 2, -2);
-				$Attrib = '';
-				$ExtraTagLen = 0;
-			} elseif ($IsTag) { // 1b) If it's not a wiki link:
-				$WikiLink = false;
-				$TagName = strtolower(substr($Tag[2][0], 1));
-				
-				$MaxAttribs = $this->ValidTags[$TagName];
-				
-				// 1bi) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
-				if(!isset($this->ValidTags[$TagName])) {
-					$IsTag = 0;
-				}
-
-				// 1bii) Get the attribute, if it exists [name=attribute]
-				$HasAttrib = ($Tag[3][0] == '=');
-				if ($IsTag && $HasAttrib) {
-					$AttribFrom = $TagPos + strlen($Tag[0][0]);
-					$Attrib = substr($Str, $AttribFrom, strpos($Str, ']', $AttribFrom) - $AttribFrom);
-					$ExtraTagLen = strlen($Attrib) + 1;
-					// check $Attrib is valid, i.e. the tag is in a valid format
-					// disallowed characters
-					if ((strpos($Attrib, "\n") !== false)
-							|| (strpos($Attrib, "'") !== false)
-							|| (strpos($Attrib, "\"") !== false)) {
-						$IsTag = 0;
-					} elseif (strpos($Attrib, "[") !== false) {
-						// attributes aren't allowed to contain any tag (or something which looks like it might be one) inside them
-						foreach ($this->ValidTags as $PossibleTag=>$_) {
-							if (strpos($Attrib, "[".$PossibleTag) !== false) {
-								$IsTag = 0;
-							}
-						}
-					}
-				} else {
-					$Attrib = '';
-					$ExtraTagLen = 0;
-				}
-
-				if (!$IsTag) {
-					// we jump past the beginning of the "tag", but not the attribute value, as this may contain real tags
-					$Array[$ArrayPos] = substr($Str, $i, ($TagPos-$i)+strlen($Tag[0][0]));
-					$i=$TagPos+strlen($Tag[0][0]);
-					++$ArrayPos;
-					continue;
-				}
-				
-			}
+			// 1) Find the next tag (regex)
+			// [name(=attribute)?]|[[wiki-link]]
+			$IsTag = preg_match("/((\[[a-zA-Z*]+)(=(?:[^\n'\"\[\]]|\[\d*\])+)?\])|(\[\[[^\n\"'\[\]]+\]\])/", $Str, $Tag, PREG_OFFSET_CAPTURE, $i);
 			
-			// 2) If there aren't any tags left, write everything remaining to a block
+			// 1a) If there aren't any tags left, write everything remaining to a block
 			if(!$IsTag) {
 				// No more tags
 				$Array[$ArrayPos] = substr($Str, $i);
 				break;
 			}
 			
-			// 3) If the next tag isn't where the pointer is, write everything up to there to a text block.
+			// 1b) If the next tag isn't where the pointer is, write everything up to there to a text block.
+			$TagPos = $Tag[0][1];
 			if($TagPos>$i) {
 				$Array[$ArrayPos] = substr($Str, $i, $TagPos-$i);
 				++$ArrayPos;
 				$i=$TagPos;
 			}
 			
+			// 2) See if it's a [[wiki-link]] or an ordinary tag, and get the tag name
+			if(!empty($Tag[4][0])) { // Wiki-link
+				$WikiLink = true;
+				$TagName = substr($Tag[4][0], 2, -2);
+				$Attrib = '';
+			} else { // 3) If it's not a wiki link:
+				$WikiLink = false;
+				$TagName = strtolower(substr($Tag[2][0], 1));
+				
+				//3a) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
+				if(!isset($this->ValidTags[$TagName])) {
+					$Array[$ArrayPos] = substr($Str, $i, ($TagPos-$i)+strlen($Tag[0][0]));
+					$i=$TagPos+strlen($Tag[0][0]);
+					++$ArrayPos;
+					continue;
+				}
+				
+				$MaxAttribs = $this->ValidTags[$TagName];
+				
+				// 3b) Get the attribute, if it exists [name=attribute]
+				if(!empty($Tag[3][0])) {
+					$Attrib = substr($Tag[3][0], 1);
+				} else {
+					$Attrib='';
+				}
+			}
+			
 			// 4) Move the pointer past the end of the tag
-			$i=$TagPos+strlen($Tag[0][0])+$ExtraTagLen;
+			$i=$TagPos+strlen($Tag[0][0]);
 			
 			// 5) Find out where the tag closes (beginning of [/tag])
 			
@@ -279,7 +244,7 @@ EXPLANATION OF PARSER LOGIC
 			
 			
 			//5a) Different for different types of tag. Some tags don't close, others are weird like [*]
-			if($TagName == 'img' && $HasAttrib) { //[img=...]
+			if($TagName == 'img' && !empty($Tag[3][0])) { //[img=...]
 				$Block = ''; // Nothing inside this tag
 				// Don't need to touch $i
 			} elseif($TagName == 'inlineurl') { // We did a big replace early on to turn http:// into [inlineurl]http://
@@ -402,7 +367,6 @@ EXPLANATION OF PARSER LOGIC
 					$Array[$ArrayPos] = array('Type'=>'tex', 'Val'=>$Block);
 					break;
 				case 'pre':
-				case 'code':
 				case 'plain':
 					$Block = strtr($Block, array('[inlineurl]'=>''));
 					$Block = preg_replace('/\[inlinesize\=3\](.*?)\[\/inlinesize\]/i', '====$1====', $Block);
@@ -470,7 +434,7 @@ EXPLANATION OF PARSER LOGIC
 					$Str.='<a href="user.php?action=search&amp;search='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'artist':
-					$Str.='<a href="artist.php?artistname='.urlencode(undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
+					$Str.='<a href="artist.php?artistname='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'">'.$Block['Val'].'</a>';
 					break;
 				case 'wiki':
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
@@ -483,9 +447,6 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'pre':
 					$Str.='<pre>'.$Block['Val'].'</pre>';
-					break;
-				case 'code':
-					$Str.='<code>'.$Block['Val'].'</code>';
 					break;
 				case 'list':
 					$Str .= '<ul>';
@@ -635,7 +596,6 @@ EXPLANATION OF PARSER LOGIC
 				case 'user':
 				case 'wiki':
 				case 'pre':
-				case 'code':
 				case 'aud':
 				case 'img':
 					$Str.=$Block['Val'];
