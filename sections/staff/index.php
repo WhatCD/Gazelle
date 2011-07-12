@@ -3,6 +3,7 @@ enforce_login();
 show_header('Staff');
 
 include(SERVER_ROOT.'/sections/staff/functions.php');
+include(SERVER_ROOT.'/sections/staffpm/functions.php');
 $SupportStaff = get_support();
 
 list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
@@ -13,32 +14,12 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 	<div class="box pad" style="padding:0px 10px 10px 10px;">
 		<br />
 		<h3>Contact Staff</h3>
-		<div id="staff_inbox" class="hidden">
-			<form action="staffpm.php" method="post">
-				<input type="hidden" name="action" value="takepost" />
-				<label for="subject"><h3>Subject</h3></label>
-				<input size="95" type="text" name="subject" id="subject" />
-				<br />
-				
-				<label for="message"><h3>Message</h3></label>
-				<textarea rows="10" cols="95" name="message" id="message"></textarea>
-				<br />
-				
-				<strong>Send to: </strong>
-				<select name="level">
-					<option value="0" selected="selected">First Line Support</option>
-					<option value="650">Forum Moderators</option>
-					<option value="700">Staff</option>
-				</select>
-				
-				<input type="submit" value="Send message" />
-				<input type="button" value="Hide" onClick="$('#staff_inbox').toggle();$('#below_box').toggle();return false;" />
-			</form>
-		</div>
 		<div id="below_box">
 			<p>If you are looking for help with a general question, we appreciate it if you would only message through the staff inbox, where we can all help you.</p>
-			<p>You can do that by <strong><a href="#" onClick="$('#staff_inbox').toggle();$('#below_box').toggle();return false;">sending a message to the Staff Inbox</a></strong>.</p>
+			<p>You can do that by <strong><a href="#" onClick="$('#compose').toggle();">sending a message to the Staff Inbox</a></strong>.</p>
 		</div>
+		<? print_compose_staff_pm(true); ?>
+		<br />
 		<h3>First-line Support</h3>
 		<p><strong>These users are not official staff members</strong> - they're users who have volunteered their time to help people in need. Please treat them with respect and read <a href="wiki.php?action=article&amp;id=260">this</a> before contacting them. </p>
 		<table class="staff" width="100%">

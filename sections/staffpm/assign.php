@@ -11,10 +11,25 @@ if ($ConvID = (int)$_GET['convid']) {
 	
 	if ($Level == 0) {
 		// FLS conversation, assign to staff (moderator)
-		$DB->query("UPDATE staff_pm_conversations SET Level=650 WHERE ID=$ConvID");
-
-		header('Location: staffpm.php');
-		
+		if(!empty($_GET['to'])) {
+			$Level = 0;
+			switch($_GET['to']) {
+				case 'forum' :
+					$Level = 650;
+					break;
+				case 'staff' :
+					$Level = 700;
+					break;
+				default :
+					error(404);
+					break;
+			}
+			
+			$DB->query("UPDATE staff_pm_conversations SET Level=".$Level." WHERE ID=$ConvID");
+			header('Location: staffpm.php');
+		} else {
+			error(404);
+		}
 	} else {
 		// FLS trying to assign non-FLS conversation
 		error(403);

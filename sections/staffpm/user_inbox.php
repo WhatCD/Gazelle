@@ -1,4 +1,7 @@
 <?
+
+include(SERVER_ROOT.'/sections/staffpm/functions.php');
+
 show_header('Staff PMs', 'staffpm');
 
 // Get messages
@@ -26,27 +29,7 @@ $StaffPMs = $DB->query("
 		<br />
 		<br />
 	</div>
-	<div id="compose" class="hidden">
-		<form action="staffpm.php" method="post">
-			<input type="hidden" name="action" value="takepost" />
-			
-			<label for="subject"><h3>Subject</h3></label>
-			<input size="95" type="text" name="subject" id="subject" />
-			<br />
-			
-			<label for="message"><h3>Message</h3></label>
-			<textarea rows="10" cols="95" name="message" id="message"></textarea>
-			<br />
-			
-			<strong>Send to: </strong>
-			<select name="level">
-				<option value="0" selected="selected">First Line Support</option>
-				<option value="650">Staff</option>
-			</select>
-			<input type="submit" value="Send message" />
-		</form>
-		<br />
-	</div>
+	<? print_compose_staff_pm(true); ?>
 	<div class="box pad" id="inbox">
 <?
 
