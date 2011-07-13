@@ -180,7 +180,7 @@ if (check_perms('admin_reports')) {
 	<div class="sidebar">
 <?	if ($Avatar && empty($HeavyInfo['DisableAvatars'])) {
 		if(check_perms('site_proxy_images') && !empty($Avatar)) {
-			$Avatar = 'http://'.SITE_URL.'/image.php?c=1&avatar='.$UserID.'&i='.urlencode($Avatar);
+			$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&avatar='.$UserID.'&i='.urlencode($Avatar);
 		}
 ?>
 		<div class="box">

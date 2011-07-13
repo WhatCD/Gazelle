@@ -245,7 +245,11 @@ if ($ThreadInfo['NoPoll'] == 0) {
 
 			foreach($Answers as $i => $Answer) {
 ?>
-				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>"><?=display_str($Answer == '' ? "Blank" : $Answer)?></a> - <?=$StaffVotes[$i]?>&nbsp;(<?=number_format(((float) $Votes[$i]/$TotalVotes)*100, 2)?>%)</li>
+				<li>
+					<a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>"><?=display_str($Answer == '' ? "Blank" : $Answer)?></a>
+					 - <?=$StaffVotes[$i]?>&nbsp;(<?=number_format(((float) $Votes[$i]/$TotalVotes)*100, 2)?>%)
+					 <a href="forums.php?action=delete_poll_option&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>">[X]</a>
+</li>
 <?			} ?>
 				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0">Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float) $Votes[0]/$TotalVotes)*100, 2)?>%)</li>
 			</ul>

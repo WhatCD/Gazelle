@@ -17,8 +17,23 @@ if($_POST['submit'] == 'Delete'){ //Delete
 	$Err=$Val->ValidateForm($_POST); // Validate the form
 	if($Err){ error($Err); }
 
+	if($P['minclassread'] > $LoggedUser['Class'] || $P['minclasswrite'] > $LoggedUser['Class'] || $P['minclasscreate'] > $LoggedUser['Class']) {
+		error(403);
+	}
+
+
 	if($_POST['submit'] == 'Edit'){ //Edit
 		if(!is_number($_POST['id']) || $_POST['id'] == ''){ error(0); }
+		$DB->query("SELECT MinClassRead FROM forums WHERE ID=".$P['id']);
+		if($DB->record_count() < 1) {
+			error(404);
+		} else {
+			list($MinClassRead) = $DB->next_record();
+			if($MinClassRead > $LoggedUser['Class']) {
+				error(403);
+			}
+		}
+
 		$DB->query("UPDATE forums SET
 			Sort='$P[sort]',
 			CategoryID='$P[categoryid]',

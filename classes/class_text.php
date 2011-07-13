@@ -514,7 +514,7 @@ EXPLANATION OF PARSER LOGIC
 						$Str.='[img]'.$Block['Val'].'[/img]';
 					} else {
 						if(check_perms('site_proxy_images')) {
-							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
+							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
 						} else {
 							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';
 						}

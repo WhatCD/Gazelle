@@ -1,7 +1,10 @@
 <?
 require 'config.php'; //The config contains all site wide configuration information as well as memcached rules
+require(SERVER_ROOT.'/classes/class_debug.php');
 require(SERVER_ROOT.'/classes/class_cache.php'); //Require the caching class
 require(SERVER_ROOT.'/classes/class_encrypt.php'); //Require the caching class
+
+$Debug = new DEBUG;
 $Cache = NEW CACHE; //Load the caching class
 $Enc = NEW CRYPT; //Load the encryption class
 
@@ -88,4 +91,22 @@ function display_array($Array, $DontEscape = array()) {
 		}
 	}
 	return $Array;
+}
+
+function make_secret($Length = 32) {
+	$Secret = '';
+	$Chars='abcdefghijklmnopqrstuvwxyz0123456789';
+	for($i=0; $i<$Length; $i++) {
+		$Rand = mt_rand(0, strlen($Chars)-1);
+		$Secret .= substr($Chars, $Rand, 1);
+	}
+	return str_shuffle($Secret);
+}
+
+// Send a message to an IRC bot listening on SOCKET_LISTEN_PORT
+function send_irc($Raw) {
+	$IRCSocket = fsockopen(SOCKET_LISTEN_ADDRESS, SOCKET_LISTEN_PORT);
+	$Raw = str_replace(array("\n", "\r"), '', $Raw);
+	fwrite($IRCSocket, $Raw);
+	fclose($IRCSocket);
 }

@@ -314,7 +314,7 @@ function user_info($UserID) {
 	
 	// Image proxy
 	if(check_perms('site_proxy_images') && !empty($UserInfo['Avatar'])) {
-		$UserInfo['Avatar'] = 'http://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($UserInfo['Avatar']);
+		$UserInfo['Avatar'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($UserInfo['Avatar']);
 	}
 	return $UserInfo;
 }
@@ -1030,10 +1030,11 @@ function delete_torrent($ID, $GroupID=0) {
 
 
 	$DB->query("UPDATE reportsv2 SET
-		Status='Resolved',
-		LastChangeTime='".sqltime()."',
-		ModComment='Report already dealt with (Torrent deleted)'
-		WHERE TorrentID=".$ID);
+			Status='Resolved',
+			LastChangeTime='".sqltime()."',
+			ModComment='Report already dealt with (Torrent deleted)'
+		WHERE TorrentID=".$ID."
+			AND Status != 'Resolved'");
 	$Reports = $DB->affected_rows();
 	if($Reports) {
 		$Cache->decrement('num_torrent_reportsv2', $Reports);

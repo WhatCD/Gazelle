@@ -37,7 +37,7 @@ var autocomp = {
 			case 8: //backspace
 				this.href = null;
 				this.list.style.visibility = 'hidden';
-				this.timer = setTimeout("autocomp.get('" + this.input.value + "');",500);
+				this.timer = setTimeout("autocomp.get('" + escape(this.input.value) + "');",500);
 				break;
 			case 38: //up
 			case 40: //down
@@ -52,7 +52,7 @@ var autocomp = {
 				return 0;
 			default:
 				this.href = null;
-				this.timer = setTimeout("autocomp.get('"+this.input.value+"');",300);
+				this.timer = setTimeout("autocomp.get('" + escape(this.input.value) + "');",300);
 				return 1;
 		}
 		return 0;

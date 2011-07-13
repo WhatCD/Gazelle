@@ -155,8 +155,15 @@ switch ($_REQUEST['action']){
 				$DB->query("SELECT p.ID,p.Name,p.Level,p.Values,p.DisplayStaff,COUNT(u.ID) FROM permissions AS p LEFT JOIN users_main AS u ON u.PermissionID=p.ID WHERE p.ID='".db_string($_REQUEST['id'])."' GROUP BY p.ID");
 				list($ID,$Name,$Level,$Values,$DisplayStaff,$UserCount)=$DB->next_record(MYSQLI_NUM, array(3));
 
+				if($Level > $LoggedUser['Class']  || $_REQUEST['level'] > $LoggedUser['Class']) {
+					error(403);
+				}
+
+
 				$Values=unserialize($Values);
 			}
+			
+		
 
 			if (!empty($_POST['submit'])) {
 				$Err = $Val->ValidateForm($_POST);

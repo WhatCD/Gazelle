@@ -109,6 +109,9 @@ if(!empty($_POST['action'])){
 			// Change poll vote
 			require(SERVER_ROOT.'/sections/forums/change_vote.php');
 			break;
+		case 'delete_poll_option':
+			require(SERVER_ROOT.'/sections/forums/delete_poll_option.php');
+			break;
 		case 'sticky_post':
 			require(SERVER_ROOT.'/sections/forums/sticky_post.php');
 			break;
