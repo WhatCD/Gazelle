@@ -206,8 +206,8 @@ if ($ConvID = (int)$_GET['id']) {
 <?
 		} elseif ($IsFLS) {	// FLS assign button
 ?>
-					<input type="button" value="Assign to forum staff" onClick="location.href='staffpm.php?action=assign&to=forum&convid=<?=$ConvID?>';" />
 					<input type="button" value="Assign to staff" onClick="location.href='staffpm.php?action=assign&to=staff&convid=<?=$ConvID?>';" />
+					<input type="button" value="Assign to forum staff" onClick="location.href='staffpm.php?action=assign&to=forum&convid=<?=$ConvID?>';" />
 <?
 		}
 		
