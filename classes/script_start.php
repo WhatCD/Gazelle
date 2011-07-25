@@ -1898,8 +1898,6 @@ function update_tracker($Action, $Updates) {
 		$Attempts++;
 	}
 
-	send_irc("PRIVMSG #tracker :{$Attempts} {$Return} {$Get}");
-
 	if($Return != "success") {
 		send_irc("PRIVMSG ".ADMIN_CHAN." :Failed to update ocelot: ".$Err." : ".$Get);
 	}
