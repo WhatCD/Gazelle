@@ -95,7 +95,7 @@ show_header('Ratio Requirements');
 		</p>
 		
 		<p>
-			To get this range of requirements to a more precise number, what we do is take the required ratio (0% seeded) for your download band, multiply it by <img src="http://chart.apis.google.com/chart?cht=tx&chf=bg,s,FFFFFF00&chl=1%20-%20\frac{Seeding}{Snatched}" alt="(1-(seeding/snatched))" title="(1-(seeding/snatched))" />, and round it up to the required ratio (100% seeded) if need be. Therefore, your required ratio will always lie between the 0% seeded and 100% seeded requirements, depending on the percentage of torrents you are seeding. 
+			To get this range of requirements to a more precise number, what we do is take the required ratio (0% seeded) for your download band, multiply it by <img style="vertical-align: middle" src="static/blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == 'blank.gif') { this.src = 'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=1-%5Cfrac%7BSeeding%7D%7BSnatched%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode,null).color); }" />, and round it up to the required ratio (100% seeded) if need be. Therefore, your required ratio will always lie between the 0% seeded and 100% seeded requirements, depending on the percentage of torrents you are seeding. 
 		</p>
 		
 		<p>
