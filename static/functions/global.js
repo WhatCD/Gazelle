@@ -64,8 +64,8 @@ function hexify(str) {
 function resize(id) {
 	var textarea = document.getElementById(id);
 	if (textarea.scrollHeight > textarea.clientHeight) {
-		textarea.style.overflowY = 'hidden';
-		textarea.style.height = textarea.scrollHeight + textarea.style.fontSize + 'px';
+		//textarea.style.overflowY = 'hidden';
+		textarea.style.height = Math.min(1000, textarea.scrollHeight + textarea.style.fontSize) + 'px';
 	}
 }
 

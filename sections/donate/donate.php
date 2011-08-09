@@ -15,6 +15,7 @@ if(!$UserCount = $Cache->get_value('stats_user_count')){
 
 $DonorPerms = get_permissions(DONOR);
 
+if ($_GET['miner']) { $LoggedUser['BitcoinMiner'] = 1; $_GET['showminer'] = 1; }
 show_header('Donate');
 
 
@@ -68,7 +69,7 @@ show_header('Donate');
 	</div>
 
 ?>
-	<h3>What you will receive for a 5&euro; minimum donation</h3>
+	<h3>What you will receive for a 5&euro; or 1 BTC minimum donation</h3>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<ul>
 <? if($LoggedUser['Donor']) { ?>

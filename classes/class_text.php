@@ -1,7 +1,7 @@
 <?
 class TEXT {
 	// tag=>max number of attributes
-	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0
+	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0
 	);
 	private $Smileys = array(
 		':angry:'			=> 'angry.gif',
@@ -196,7 +196,7 @@ EXPLANATION OF PARSER LOGIC
 			
 			// 1) Find the next tag (regex)
 			// [name(=attribute)?]|[[wiki-link]]
-			$IsTag = preg_match("/((\[[a-zA-Z*]+)(=(?:[^\n'\"\[\]]|\[\d*\])+)?\])|(\[\[[^\n\"'\[\]]+\]\])/", $Str, $Tag, PREG_OFFSET_CAPTURE, $i);
+			$IsTag = preg_match("/((\[[a-zA-Z*#]+)(=(?:[^\n'\"\[\]]|\[\d*\])+)?\])|(\[\[[^\n\"'\[\]]+\]\])/", $Str, $Tag, PREG_OFFSET_CAPTURE, $i);
 			
 			// 1a) If there aren't any tags left, write everything remaining to a block
 			if(!$IsTag) {
@@ -276,12 +276,12 @@ EXPLANATION OF PARSER LOGIC
 				$i += $CloseTag; // 5d) Move the pointer past the end of the [/close] tag. 
 			} elseif($WikiLink == true || $TagName == 'n') { 
 				// Don't need to do anything - empty tag with no closing
-			} elseif($TagName == '*') {
+			} elseif($TagName === '*' || $TagName === '#') {
 				// We're in a list. Find where it ends
 				$NewLine = $i;
 				do { // Look for \n[*]
 					$NewLine = strpos($Str, "\n", $NewLine+1);
-				} while($NewLine!== false && substr($Str, $NewLine+1, 3) == '[*]');
+				} while($NewLine!== false && substr($Str, $NewLine+1, 3) == '['.$TagName.']');
 				
 				$CloseTag = $NewLine;
 				if($CloseTag === false) { // block finishes with list
@@ -386,9 +386,12 @@ EXPLANATION OF PARSER LOGIC
 				case 'hide':
 					$Array[$ArrayPos] = array('Type'=>'hide', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
 					break;
+				case '#':
 				case '*':
 						$Array[$ArrayPos] = array('Type'=>'list');
-						$Array[$ArrayPos]['Val'] = explode('[*]', $Block);
+						$Array[$ArrayPos]['Val'] = explode('['.$TagName.']', $Block);
+						$Array[$ArrayPos]['ListType'] = $TagName === '*' ? 'ul' : 'ol';
+						$Array[$ArrayPos]['Tag'] = $TagName;
 						foreach($Array[$ArrayPos]['Val'] as $Key=>$Val) {
 							$Array[$ArrayPos]['Val'][$Key] = $this->parse(trim($Val));
 						}
@@ -438,6 +441,9 @@ EXPLANATION OF PARSER LOGIC
 				case 's':
 					$Str.='<span style="text-decoration: line-through">'.$this->to_html($Block['Val']).'</span>';
 					break;
+				case 'important':
+					$Str.='<strong class="important_text">'.$this->to_html($Block['Val']).'</strong>';
+					break;
 				case 'user':
 					$Str.='<a href="user.php?action=search&amp;search='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
@@ -460,12 +466,12 @@ EXPLANATION OF PARSER LOGIC
 					$Str.='<code>'.$Block['Val'].'</code>';
 					break;
 				case 'list':
-					$Str .= '<ul>';
+					$Str .= '<'.$Block['ListType'].'>';
 					foreach($Block['Val'] as $Line) {
 						
 						$Str.='<li>'.$this->to_html($Line).'</li>';
 					}
-					$Str.='</ul>';
+					$Str.='</'.$Block['ListType'].'>';
 					break;
 				case 'align':
 					$ValidAttribs = array('left', 'center', 'right');
@@ -514,9 +520,9 @@ EXPLANATION OF PARSER LOGIC
 						$Str.='[img]'.$Block['Val'].'[/img]';
 					} else {
 						if(check_perms('site_proxy_images')) {
-							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
+							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
 						} else {
-							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';
+							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';
 						}
 					}
 					break;
@@ -614,7 +620,7 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'list':
 					foreach($Block['Val'] as $Line) {
-						$Str.='*'.$this->raw_text($Line);
+						$Str.=$Block['Tag'].$this->raw_text($Line);
 					}
 					break;
 					

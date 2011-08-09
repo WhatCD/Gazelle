@@ -4,6 +4,7 @@
  * This is the page that displays the request to the end user after being created.
  */
 
+include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
@@ -90,6 +91,11 @@ show_header('View request: '.$FullName, 'comments,requests,bbcode');
 if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requests')) { ?>
 		<a href="requests.php?action=delete&amp;id=<?=$RequestID?>">[Delete]</a>
 <? } ?>
+<?	if(has_bookmarked('request', $RequestID)) { ?>
+		<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+<?	} else { ?>
+		<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+<?	} ?>
 		<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report Request]</a>
 		<a href="upload.php?requestid=<?=$RequestID?>">[Upload Request]</a>
 <? if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>

@@ -17,7 +17,8 @@ if(!is_number($ArtistID)) { error(0); }
 $DB->query("SELECT
 	Name,
 	Image,
-	Body
+	Body,
+	VanityHouse
 	FROM artists_group AS a
 	LEFT JOIN wiki_artists ON wiki_artists.RevisionID=a.RevisionID
 	WHERE a.ArtistID='$ArtistID'");
@@ -26,7 +27,7 @@ if($DB->record_count() < 1) {
 	error("Cannot find the artist with the ID ".$ArtistID.': See the <a href="log.php?search=Artist+'.$ArtistID.'">log</a>.');
 }
 
-list($Name, $Image, $Body) = $DB->next_record(MYSQLI_NUM, true);
+list($Name, $Image, $Body, $VanityHouse) = $DB->next_record(MYSQLI_NUM, true);
 
 // Start printing form
 show_header('Edit artist');
@@ -43,6 +44,7 @@ show_header('Edit artist');
 				<input type="text" name="image" size="92" value="<?=$Image?>" /><br />
 				<h3>Artist info</h3>
 				<textarea name="body" cols="91" rows="20"><?=$Body?></textarea> <br />
+				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1"  <?=( check_perms('artist_edit_vanityhouse') ? '' : 'disabled="disabled"' )?> <?=($VanityHouse ? 'checked="checked"' : '')?>" /></h3>
 				<h3>Edit summary</h3>
 				<input type="text" name="summary" size="92" /><br />
 				<div style="text-align: center;">

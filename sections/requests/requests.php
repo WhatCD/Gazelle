@@ -11,6 +11,8 @@ $UserInfo = user_info((int)$_GET['userid']);
 $Perms = get_permissions($UserInfo['PermissionID']);
 $UserClass = $Perms['Class'];
 
+$BookmarkView = false;
+
 if(empty($_GET['type'])) { 
 	$Title = 'Requests';
 	if(!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
@@ -50,6 +52,11 @@ if(empty($_GET['type'])) {
 				$Title = "Requests filled by ".$UserInfo['Username'];
 				$SS->set_filter('fillerid', array($_GET['userid']));
 			}
+			break;
+		case 'bookmarks':
+			$Title = 'Your bookmarked requests';
+			$BookmarkView = true;
+			$SS->set_filter('bookmarker', array($LoggedUser['ID']));
 			break;
 		default:
 			error(404);
@@ -283,18 +290,30 @@ show_header($Title, 'requests');
 <div class="thin">
 	<h2><?=$Title?></h2>
 	<div class="linkbox">
-<?	if(check_perms('site_submit_requests')){ ?> 
+<?	if (!$BookmarkView) { ?>
+<?		if(check_perms('site_submit_requests')){ ?> 
 		<a href="requests.php?action=new">[New request]</a>
 		<a href="requests.php?type=created">[My requests]</a>
-<?	} 
-	if(check_perms('site_vote')){?> 
+<?		} 
+		if(check_perms('site_vote')){?> 
 		<a href="requests.php?type=voted">[Requests I've voted on]</a>
-<?	} ?> 
+<?		} ?>
+<?	} else { ?>
+		<a href="bookmarks.php?type=torrents">[Torrents]</a>
+		<a href="bookmarks.php?type=artists">[Artists]</a>
+		<a href="bookmarks.php?type=collages">[Collages]</a>
+		<a href="bookmarks.php?type=requests">[Requests]</a>
+<?	} ?>
 	</div>
 	<div>
 		<form action="" method="get">
-			<input type="hidden" name="submit" value="true" />
+<?	if ($BookmarkView) { ?>
+			<input type="hidden" name="action" value="view" />
+			<input type="hidden" name="type" value="requests" />
+<?	} else { ?>
 			<input type="hidden" name="type" value="<?=$_GET['type']?>" />
+<?	} ?>
+			<input type="hidden" name="submit" value="true" />
 <?	if(!empty($_GET['userid']) && is_number($_GET['userid'])) { ?>
 			<input type="hidden" name="userid" value="<?=$_GET['userid']?>" />
 <?	} ?>

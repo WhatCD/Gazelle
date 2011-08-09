@@ -13,7 +13,7 @@ $DB->query("UPDATE torrents SET LastReseedRequest=NOW() WHERE ID='$TorrentID'");
 
 $Group = get_groups(array($GroupID));
 $Group = array_pop($Group['matches']);
-list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $GroupArtists) = array_values($Group);
+list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
 
 $Name = '';
 $Name .= display_artists(array('1'=>$GroupArtists), false, true);

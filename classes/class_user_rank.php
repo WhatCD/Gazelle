@@ -9,18 +9,18 @@ class USER_RANK {
 	function build_table($MemKey, $Query) {
 		global $Cache,$DB;
 		
-		$DB->query("DROP TEMPORARY TABLE IF EXISTS stats");
+		$DB->query("DROP TEMPORARY TABLE IF EXISTS temp_stats");
 		
-		$DB->query("CREATE TEMPORARY TABLE stats
+		$DB->query("CREATE TEMPORARY TABLE temp_stats
 			(ID int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 			Val bigint(20) NOT NULL);");
 		
-		$DB->query("INSERT INTO stats (Val) ".$Query);
+		$DB->query("INSERT INTO temp_stats (Val) ".$Query);
 		
-		$DB->query("SELECT COUNT(ID) FROM stats");
+		$DB->query("SELECT COUNT(ID) FROM temp_stats");
 		list($UserCount) = $DB->next_record();
 		
-		$DB->query("SELECT MIN(Val) FROM stats GROUP BY CEIL(ID/(".(int)$UserCount."/100));");
+		$DB->query("SELECT MIN(Val) FROM temp_stats GROUP BY CEIL(ID/(".(int)$UserCount."/100));");
 		
 		$Table = $DB->to_array();
 		

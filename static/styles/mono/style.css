@@ -1103,7 +1103,7 @@ div.permission_container>table {
 	width: 100%;
 }
 
-div.pad ul,div.body ul,table.torrent_table blockquote>ul {
+div.pad ul,div.body ul,table.torrent_table blockquote>ul,div.pad ol,div.body ol {
 	padding-left: 15px;
 }
 

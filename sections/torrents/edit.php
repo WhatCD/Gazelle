@@ -33,6 +33,7 @@ $DB->query("SELECT
 	tg.Name AS Title,
 	tg.Year,
 	tg.ArtistID,
+	tg.VanityHouse,
 	ag.Name AS ArtistName,
 	t.GroupID,
 	t.UserID,
@@ -41,13 +42,17 @@ $DB->query("SELECT
 	t.LogScore,
 	bt.TorrentID AS BadTags,
 	bf.TorrentID AS BadFolders,
-	bfi.TorrentID AS BadFiles
+	bfi.TorrentID AS BadFiles,
+	ca.TorrentID AS CassetteApproved,
+	lma.TorrentID AS LossymasterApproved
 	FROM torrents AS t 
 	LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
 	LEFT JOIN artists_group AS ag ON ag.ArtistID=tg.ArtistID
 	LEFT JOIN torrents_bad_tags AS bt ON bt.TorrentID=t.ID
 	LEFT JOIN torrents_bad_folders AS bf ON bf.TorrentID=t.ID
 	LEFT JOIN torrents_bad_files AS bfi ON bfi.TorrentID=t.ID
+	LEFT JOIN torrents_cassette_approved AS ca ON ca.TorrentID=t.ID
+	LEFT JOIN torrents_lossymaster_approved AS lma ON lma.TorrentID=t.ID
 	WHERE t.ID='$TorrentID'");
 
 list($Properties) = $DB->to_array(false,MYSQLI_BOTH);

@@ -20,6 +20,7 @@
 *
 *************************************************************************/
 
+include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 
@@ -238,7 +239,7 @@ if(isset($_GET['haslog']) && $_GET['haslog']!=='') {
 	}	
 }
 
-foreach(array('hascue','scene','freetorrent','releasetype') as $Search) {
+foreach(array('hascue','scene','vanityhouse','freetorrent','releasetype') as $Search) {
 	if(isset($_GET[$Search]) && $_GET[$Search]!=='') {
 		if($Search == 'freetorrent') {
 			switch($_GET[$Search]) {
@@ -487,6 +488,11 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 						<option value="1" <?selected('scene',1)?>>Yes</option>
 						<option value="0" <?selected('scene',0)?>>No</option>
 					</select>
+					<select name="vanityhouse">
+						<option value="">Vanity House</option>
+						<option value="1" <?selected('vanityhouse',1)?>>Yes</option>
+						<option value="0" <?selected('vanityhouse',0)?>>No</option>
+					</select>
 					<select name="freetorrent">
 						<option value="">Leech Status</option>
 						<option value="1" <?selected('freetorrent',1)?>>Freeleech</option>
@@ -641,17 +647,7 @@ $DB->query("SELECT
 show_footer();die();
 }
 
-// Get array of bookmarks
-if(($Bookmarks = $Cache->get_value('bookmarks_'.$LoggedUser['ID'])) === FALSE) {
-	if(($Bookmarks = $Cache->get_value('bookmarks_'.$LoggedUser['ID'].'_groups')) === FALSE) {
-		$DB->query("SELECT GroupID FROM bookmarks_torrents WHERE UserID = $LoggedUser[ID]");
-		$Bookmarks = $DB->collect('GroupID');
-		$Cache->cache_value('bookmarks_'.$LoggedUser['ID'].'_groups', $Bookmarks, 0);
-	}
-} else {
-	$Bookmarks = unserialize($Bookmarks);
-	$Bookmarks = array_keys($Bookmarks[0][1]);
-}
+$Bookmarks = all_bookmarks('torrent');
 
 ?>
 
@@ -672,7 +668,7 @@ if(($Bookmarks = $Cache->get_value('bookmarks_'.$LoggedUser['ID'])) === FALSE) {
 // Start printing torrent list
 
 foreach($Results as $GroupID=>$Data) {
-	list($Artists, $GroupCatalogueNumber, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
+	list($Artists, $GroupCatalogueNumber, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupVanityHouse, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
 	
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 	
@@ -691,6 +687,7 @@ foreach($Results as $GroupID=>$Data) {
 		}
 		$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
+		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 ?>
 	<tr class="group">
 		<td class="center">
@@ -708,9 +705,9 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		<td colspan="2">
 			<?=$DisplayName?>
 <?	if(in_array($GroupID, $Bookmarks)) { ?>
-			<span style="float:right;"><a href="#showimg_<?=$GroupID?>" id="bookmarklink<?=$GroupID?>" onclick="unbookmark(<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
+			<span style="float:right;"><a href="#showimg_<?=$GroupID?>" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
 <?	} else { ?>
-			<span style="float:right;"><a href="#showimg_<?=$GroupID?>" id="bookmarklink<?=$GroupID?>" onclick="Bookmark(<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
+			<span style="float:right;"><a href="#showimg_<?=$GroupID?>" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
 <?	} ?>
 			<br />
 			<div class="tags">
@@ -790,6 +787,12 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			if(isset($_GET['scene']) && $_GET['scene']!=='') {
 				$Filter = true;
 				if((int)$Data['Scene']==$_GET['scene']) {
+					$Pass = true;
+				}
+			}
+			if(isset($_GET['vanityhouse']) && $_GET['vanityhouse']!=='') {
+				$Filter = true;
+				if((int)$Data['VanityHouse']==$_GET['vanityhouse']) {
 					$Pass = true;
 				}
 			}

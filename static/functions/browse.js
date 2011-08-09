@@ -151,33 +151,6 @@ function toggle_edition(groupid, editionid, lnk, event) {
 	if (event.preventDefault) { event.preventDefault(); } else { event.returnValue = false; }
 }
 
-// Bookmarks
-function Bookmark(groupid,newname) {
-        var lnk = $('#bookmarklink'+groupid).raw();
-        lnk.setAttribute('newname', lnk.innerHTML);
-        ajax.get("bookmarks.php?action=add&auth=" + authkey + "&groupid=" + groupid, function() {
-                lnk.onclick = function() { unbookmark(groupid,this.getAttribute('newname')); return false; };
-                lnk.innerHTML = newname;
-        });
-}
-
-function unbookmark(groupid,newname) {
-        if(window.location.pathname.indexOf('bookmarks.php') != -1) {
-                ajax.get("bookmarks.php?action=remove&auth=" + authkey + "&groupid=" + groupid,function() {
-                        $('#group_' + groupid).remove();
-                        $('.groupid_' + groupid).remove();
-			$('.image_group_' + groupid).remove();
-                });
-        } else {
-                var lnk = $('#bookmarklink'+groupid).raw();
-                lnk.setAttribute('newname', lnk.innerHTML);
-                ajax.get("bookmarks.php?action=remove&auth=" + authkey + "&groupid=" + groupid, function() {
-                        lnk.onclick = function() { Bookmark(groupid,this.getAttribute('newname')); return false; };
-                        lnk.innerHTML = newname;
-                });
-        }
-}
-
 // For /sections/torrents/browse.php (not browse2.php)
 function Bitrate() {
 	$('#other_bitrate').raw().value = '';

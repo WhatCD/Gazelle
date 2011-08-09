@@ -64,6 +64,10 @@ if(isset($_GET['scene']) && in_array($_GET['scene'], array('1','0'))) {
 	$SearchWhere[]="t.Scene='".db_string($_GET['scene'])."'";
 }
 
+if(isset($_GET['vanityhouse']) && in_array($_GET['vanityhouse'], array('1','0'))) {
+	$SearchWhere[]="tg.VanityHouse='".db_string($_GET['vanityhouse'])."'";
+}
+
 if(isset($_GET['cue']) && in_array($_GET['cue'], array('1','0'))) {
 	$SearchWhere[]="t.HasCue='".db_string($_GET['cue'])."'";
 }
@@ -183,7 +187,7 @@ if((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 		GROUP BY ".$GroupBy."
 		ORDER BY $Order $Way LIMIT $Limit";
 } else {
-	$DB->query("CREATE TEMPORARY TABLE t (
+	$DB->query("CREATE TEMPORARY TABLE temp_sections_torrents_user (
 		GroupID int(10) unsigned not null,
 		TorrentID int(10) unsigned not null,
 		Time int(12) unsigned not null,
@@ -194,7 +198,7 @@ if((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 		Name mediumtext,
 		Size bigint(12) unsigned,
 		PRIMARY KEY (TorrentID)) CHARSET=utf8");
-	$DB->query("INSERT IGNORE INTO t SELECT
+	$DB->query("INSERT IGNORE INTO temp_sections_torrents_user SELECT
 		t.GroupID, 
 		t.ID AS TorrentID, 
 		$Time AS Time, 
@@ -217,7 +221,7 @@ if((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 
 	$SQL = "SELECT SQL_CALC_FOUND_ROWS 
 		GroupID, TorrentID, Time, CategoryID
-		FROM t";
+		FROM temp_sections_torrents_user";
 	if(!empty($Words)) {
 		$SQL .= "
 		WHERE Name LIKE '%".implode("%' AND Name LIKE '%", $Words)."%'";
@@ -308,6 +312,11 @@ $Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 							<option value="1" <?selected('scene',1)?>>Yes</option>
 							<option value="0" <?selected('scene',0)?>>No</option>
 						</select>
+						<select name="vanityhouse">
+							<option value="">Vanity House</option>
+							<option value="1" <?selected('scene',1)?>>Yes</option>
+							<option value="0" <?selected('scene',0)?>>No</option>
+						</select>
 					</td>
 				</tr>
 				<tr>
@@ -390,7 +399,7 @@ foreach($Categories as $CatKey => $CatName) {
 	foreach($TorrentsInfo as $TorrentID=>$Info) {
 		list($GroupID,, $Time, $CategoryID) = array_values($Info);
 		
-		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $Artists) = array_values($Results[$GroupID]);
+		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Results[$GroupID]);
 		$Torrent = $Torrents[$TorrentID];
 		
 		
@@ -409,6 +418,7 @@ foreach($Categories as $CatKey => $CatName) {
 		}
 		$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'" title="View Torrent">'.$GroupName.'</a>';
 		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
+		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 		
 		$ExtraInfo = torrent_info($Torrent);
 		if($ExtraInfo) {

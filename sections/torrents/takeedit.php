@@ -44,6 +44,8 @@ $Properties['HasCue'] = (isset($_POST['flac_cue']))? 1 : 0;
 $Properties['BadTags'] = (isset($_POST['bad_tags']))? 1 : 0;
 $Properties['BadFolders'] = (isset($_POST['bad_folders']))? 1 : 0;
 $Properties['BadFiles'] = (isset($_POST['bad_files'])) ? 1 : 0;
+$Properties['CassetteApproved'] = (isset($_POST['cassette_approved']))? 1 : 0;
+$Properties['LossymasterApproved'] = (isset($_POST['lossymaster_approved']))? 1 : 0;
 $Properties['Format'] = $_POST['format'];
 $Properties['Media'] = $_POST['media'];
 $Properties['Bitrate'] = $_POST['bitrate'];
@@ -317,6 +319,26 @@ if(check_perms('users_mod')) {
 	}
 	if ($bfiID && !$Properties['BadFiles']) {
 		$DB->query("DELETE FROM torrents_bad_files WHERE TorrentID='$TorrentID'");
+	}
+
+	$DB->query("SELECT TorrentID FROM torrents_cassette_approved WHERE TorrentID='$TorrentID'");
+	list($caID) = $DB->next_record();
+
+	if (!$caID && $Properties['CassetteApproved']) {
+	    $DB->query("INSERT INTO torrents_cassette_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+	}
+	if ($caID && !$Properties['CassetteApproved']) {
+	    $DB->query("DELETE FROM torrents_cassette_approved WHERE TorrentID='$TorrentID'");
+	}
+	
+	$DB->query("SELECT TorrentID FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
+	list($lmaID) = $DB->next_record();
+
+	if (!$lmaID && $Properties['LossymasterApproved']) {
+	    $DB->query("INSERT INTO torrents_lossymaster_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+	}
+	if ($lmaID && !$Properties['LossymasterApproved']) {
+	    $DB->query("DELETE FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
 	}
 }
 

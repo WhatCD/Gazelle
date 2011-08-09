@@ -25,16 +25,16 @@ $Uploads = $DB->to_array('GroupID');
 if(count($UploadedGroupIDs) == 0) { error('You haven\'t uploaded any 100% flacs!'); }
 // Create hash table
 
-$DB->query("CREATE TEMPORARY TABLE t 
+$DB->query("CREATE TEMPORARY TABLE temp_sections_better_upload
 	SELECT t.GroupID,
 	GROUP_CONCAT(t.Encoding SEPARATOR ' ') AS EncodingList
 	FROM torrents AS t
 	WHERE t.GroupID IN(".implode(',',$UploadedGroupIDs).")
 	GROUP BY t.GroupID");
 
-$DB->query('SELECT * FROM t');
+//$DB->query('SELECT * FROM t');
 
-$DB->query("SELECT GroupID FROM t 
+$DB->query("SELECT GroupID FROM temp_sections_better_upload
 		WHERE EncodingList NOT LIKE '%V0 (VBR)%' 
 		OR EncodingList NOT LIKE '%V2 (VBR)%' 
 		OR EncodingList NOT LIKE '%320%'");
@@ -58,7 +58,7 @@ show_header('Transcode Uploads');
 <?
 $Results = $Results['matches'];
 foreach ($Results as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $Artists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
 	$FlacID = $Uploads[$GroupID]['ID'];
 	
 	$DisplayName = '';

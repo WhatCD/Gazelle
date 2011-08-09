@@ -59,6 +59,14 @@ if(!empty($_GET['way']) && !empty($WayTable[$_GET['way']])) {
 	$Way = 'DESC';
 }
 
+$BookmarkView = !empty($_GET['bookmarks']);
+
+if ($BookmarkView) {
+	$BookmarkJoin = 'INNER JOIN bookmarks_collages AS bc ON c.ID = bc.CollageID';
+} else {
+	$BookmarkJoin = '';
+}
+
 $SQL = "SELECT SQL_CALC_FOUND_ROWS 
 	c.ID, 
 	c.Name, 
@@ -68,8 +76,13 @@ $SQL = "SELECT SQL_CALC_FOUND_ROWS
 	c.UserID,
 	um.Username 
 	FROM collages AS c 
+	$BookmarkJoin
 	LEFT JOIN users_main AS um ON um.ID=c.UserID 
 	WHERE Deleted = '0'";
+
+if ($BookmarkView) {
+	$SQL .= " AND bc.UserID = '" . $LoggedUser['ID'] . "'";
+}
 
 if(!empty($Search)) {
 	$SQL .= " AND $Type LIKE '%";
@@ -119,11 +132,16 @@ $Collages = $DB->to_array();
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 
-show_header('Browse collages');
+show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 ?>
 <div class="thin">
+<? if ($BookmarkView) { ?>
+	<h2>Your bookmarked collages</h2>
+<? } else { ?>
 	<h2>Browse collages<?=(!empty($UserLink) ? (isset($CollageIDs) ? ' with contributions by '.$UserLink : ' started by '.$UserLink) : '')?></h2>
+<? } ?>
 	<div>
+<? if (!$BookmarkView) { ?>
 		<form action="" method="get">
 			<div><input type="hidden" name="action" value="search" /></div>
 			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
@@ -177,7 +195,9 @@ show_header('Browse collages');
 			</table>	
 		</form>
 	</div>
+<? } // if (!$BookmarkView) ?>
 	<div class="linkbox">
+<? if (!$BookmarkView) { ?>
 <?
 if (check_perms('site_collages_create')) { ?>
 		<a href="collages.php?action=new">[New collage]</a>
@@ -196,12 +216,39 @@ if (check_perms('site_collages_personal')) {
 } 
 if (check_perms('site_collages_recover')) { ?>
 		<a href="collages.php?action=recover">[Recover collage]</a>
-<? } ?><br /><br />
+<?
+}
+if (check_perms('site_collages_create') || check_perms('site_collages_personal') || check_perms('site_collages_recover')) {
+?>
+		<br /><br />
+<?
+}
+?>
+		<a href="collages.php?userid=<?=$LoggedUser['ID']?>">[Collages you started]</a>
+		<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1">[Collages you've contributed to]</a>
+<? } else { ?>
+		<a href="bookmarks.php?type=torrents">[Torrents]</a>
+		<a href="bookmarks.php?type=artists">[Artists]</a>
+		<a href="bookmarks.php?type=collages">[Collages]</a>
+		<a href="bookmarks.php?type=requests">[Requests]</a>
+<? } ?>
+<br /><br />
 <?
 $Pages=get_pages($Page,$NumResults,COLLAGES_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
+<? if (count($Collages) == 0) { ?>
+<div class="box pad" align="center">
+<?	if ($BookmarkView) { ?>
+	<h2>You have not bookmarked any collages.</h2>
+<?	} else { ?>
+	<h2>Your search did not match anything.</h2>
+	<p>Make sure all names are spelled correctly, or try making your search less specific.</p>
+<?	} ?>
+</div>
+<? show_footer(); die();
+} ?>
 <table width="100%">
 	<tr class="colhead">
 		<td>Category</td>
@@ -223,12 +270,17 @@ foreach ($Collages as $Collage) {
 	
 	//Print results
 ?>
-	<tr class="row<?=$Row?>">
+	<tr class="row<?=$Row?> <?=($BookmarkView)?'bookmark_'.$ID:''?>">
 		<td>
 			<a href="collages.php?action=search&amp;cats[<?=(int)$CategoryID?>]=1"><?=$CollageCats[(int)$CategoryID]?></a>
 		</td>
 		<td>
 			<a href="collages.php?id=<?=$ID?>"><?=$Name?></a>
+<?	if ($BookmarkView) { ?>
+			<span style="float:right">
+				<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;">[Remove bookmark]</a>
+			</span>
+<?	} ?>
 			<div class="tags">
 				<?=$Tags?>
 			</div>

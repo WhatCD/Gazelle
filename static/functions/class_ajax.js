@@ -114,3 +114,29 @@ var ajax = {
 		return query.substr(0, query.length - 1);
 	}
 };
+//Bookmarks
+function Bookmark(type, id, newName) {
+	var lnk = $('#bookmarklink_' + type + '_' + id).raw();
+	var oldName = lnk.innerHTML;
+	ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
+		lnk.onclick = function() { Unbookmark(type, id, oldName); return false; };
+		lnk.innerHTML = newName;
+	});
+}
+
+function Unbookmark(type, id, newName) {
+	if(window.location.pathname.indexOf('bookmarks.php') != -1) {
+		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
+			$('#group_' + id).remove();
+			$('.groupid_' + id).remove();
+			$('.bookmark_' + id).remove();
+		});
+	} else {
+		var lnk = $('#bookmarklink_' + type + '_' + id).raw();
+		var oldName = lnk.innerHTML;
+		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
+			lnk.onclick = function() { Bookmark(type, id, oldName); return false; };
+			lnk.innerHTML = newName;
+		});
+	}
+}

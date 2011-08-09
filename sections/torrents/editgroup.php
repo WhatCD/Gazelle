@@ -27,12 +27,13 @@ $DB->query("SELECT
 	tg.RecordLabel,
 	tg.CatalogueNumber,
 	tg.ReleaseType,
-	tg.CategoryID
+	tg.CategoryID,
+	tg.VanityHouse
 	FROM torrents_group AS tg
 	LEFT JOIN wiki_torrents AS wt ON wt.RevisionID=tg.RevisionID
 	WHERE tg.ID='$GroupID'");
 if($DB->record_count() == 0) { error(404); }
-list($Name, $Image, $Body, $WikiImage, $WikiBody, $Year, $RecordLabel, $CatalogueNumber, $ReleaseType, $CategoryID) = $DB->next_record();
+list($Name, $Image, $Body, $WikiImage, $WikiBody, $Year, $RecordLabel, $CatalogueNumber, $ReleaseType, $CategoryID, $VanityHouse) = $DB->next_record();
 
 if(!$Body) { $Body = $WikiBody; $Image = $WikiImage; }
 
@@ -60,6 +61,7 @@ show_header('Edit torrent group');
 					</option>
 <?	} ?>
 				</select><br />
+				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1"  <?=( check_perms('torrents_edit_vanityhouse') ? '' : 'disabled="disabled"' )?> <?=($VanityHouse ? 'checked="checked"' : '')?> /></h3>
 <? } ?>
 				<h3>Edit summary</h3>
 				<input type="text" name="summary" size="92" /><br />

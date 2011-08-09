@@ -5,6 +5,7 @@ function compare($X, $Y){
 	return($Y['count'] - $X['count']);
 }
 
+include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
@@ -76,7 +77,7 @@ $Users = array();
 $Number = 0;
 
 foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $GroupArtists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
 	list($GroupID2, $Image, $GroupCategoryID, $UserID, $Username) = array_values($CollageDataList[$GroupID]);
 	
 	// Handle stats and stuff
@@ -125,7 +126,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	}
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
-	
+	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start();
 	if(count($Torrents)>1 || $GroupCategoryID==1) {
@@ -244,6 +245,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	}
 	$DisplayName .= $GroupName;
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
+	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 ?>
 		<td>
 			<a href="#group_<?=$GroupID?>">
@@ -271,10 +273,18 @@ if(($MaxGroups>0 && $NumGroups>=$MaxGroups)  || ($MaxGroupsPerUser>0 && $NumGrou
 <? if (check_perms('site_collages_create')) { ?>
 		<a href="collages.php?action=new">[New collage]</a> 
 <? } ?>
+		<br /><br />
 <? if (check_perms('site_edit_wiki') && !$Locked) { ?>
 		<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>">[Edit description]</a> 
-<? } ?>
-<? if (check_perms('site_collages_manage') && !$Locked) { ?>
+<? }
+	if(has_bookmarked('collage', $CollageID)) {
+?>
+		<a href="#" id="bookmarklink_collage_<?=$CollageID?>" onclick="Unbookmark('collage', <?=$CollageID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+<?	} else { ?>
+		<a href="#" id="bookmarklink_collage_<?=$CollageID?>" onclick="Bookmark('collage', <?=$CollageID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+<?	}
+
+if (check_perms('site_collages_manage') && !$Locked) { ?>
 		<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>">[Manage torrents]</a> 
 <? } ?>
 	<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>">[Report Collage]</a>

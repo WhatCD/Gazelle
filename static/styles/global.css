@@ -97,7 +97,10 @@ a.beta {
 	font-weight: bold;
 	color: #ff0000;
 }
-
+strong.important_text { 
+	color: red;
+	font-weight: bold;
+}
 .invalid, .warning, .error {
 	color: #ff0000;
 }
@@ -123,6 +126,18 @@ div#AddArtists a {
 
 .new-subscriptions {
 	font-weight: bold;
+}
+
+.scale_image {
+	max-width: 500px;
+}
+
+#torrents .scale_image {
+	max-width: 400px;
+}
+
+.sidebar .scale_image {
+	max-width: 100%;
 }
 
 .rippywrap { z-index:25; display: block; position: fixed; background: transparent url('../rippy/rippy.png') no-repeat bottom center; color: black; text-align: center; width: 190px; height: 180px; bottom: 0px; right: 0px; }

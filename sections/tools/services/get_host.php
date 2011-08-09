@@ -27,15 +27,13 @@ if(
 	die('Invalid IP.');
 }
 
-$Output = explode(' ',shell_exec('host -W 1 '.escapeshellarg($_GET['ip'])));
-if(count($Output) == 1 && empty($Output[0])) {
-	//No output at all implies the command failed
-	trigger_error("get_host() command failed with no output, ensure that the host command exists on your system and accepts the argument -W");
-}
+$Host = lookup_ip($_GET['ip']);
 
-if(count($Output)!=5) {
-	die('Could not retrieve host.');
+if ($Host === '') {
+	trigger_error("get_host() command failed with no output, ensure that the host command exists on your system and accepts the argument -W");
+} elseif ($Host === false) {
+	print 'Could not retrieve host.';
 } else {
-	die($Output[4]);
+	print $Host;
 }
 

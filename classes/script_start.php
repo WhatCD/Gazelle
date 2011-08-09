@@ -162,27 +162,8 @@ if(isset($LoginCookie)) {
 		($LoggedUser['BytesDownloaded']*$LoggedUser['RequiredRatio'])>$LoggedUser['BytesUploaded']
 	);
 
-	// Manage 'special' inherited permissions
-	if($LoggedUser['Artist']) {
-		$ArtistPerms = get_permissions(ARTIST);
-	} else {
-		$ArtistPerms['Permissions'] = array();
-	}
-
-	if($LoggedUser['Donor']) {
-		$DonorPerms = get_permissions(DONOR);
-	} else {
-		$DonorPerms['Permissions'] = array();
-	}
-
-	if(is_array($LoggedUser['CustomPermissions'])) {
-		$CustomPerms = $LoggedUser['CustomPermissions'];
-	} else {
-		$CustomPerms = array();
-	}
-
 	//Load in the permissions
-	$LoggedUser['Permissions'] = array_merge($LoggedUser['Permissions'], $DonorPerms['Permissions'], $ArtistPerms['Permissions'], $CustomPerms);
+	$LoggedUser['Permissions'] = get_permissions_for_user($LoggedUser['ID'], $LoggedUser['CustomPermissions']);
 	
 	//Change necessary triggers in external components
 	$Cache->CanClear = check_perms('admin_clear_cache');
@@ -355,6 +336,8 @@ function user_heavy_info($UserID) {
 
 		if (!empty($HeavyInfo['CustomPermissions'])) {
 			$HeavyInfo['CustomPermissions'] = unserialize($HeavyInfo['CustomPermissions']);
+		} else {
+			$HeavyInfo['CustomPermissions'] = array();
 		}
 
 		if (!empty($HeavyInfo['RestrictedForums'])) {
@@ -387,9 +370,51 @@ function get_permissions($PermissionID) {
 	return $Permission;
 }
 
+function get_permissions_for_user($UserID, $CustomPermissions = false) {
+	global $DB;
+
+	$UserInfo = user_info($UserID);
+	
+	if ($CustomPermissions === false) {
+		$DB->query('SELECT um.CustomPermissions FROM users_main AS um WHERE um.ID = '.((int)$UserID));
+	
+		list($CustomPermissions) = $DB->next_record(MYSQLI_NUM, false);
+	}
+	
+	if (!empty($CustomPermissions) && !is_array($CustomPermissions)) {
+		$CustomPermissions = unserialize($CustomPermissions);
+	}
+
+	$Permissions = get_permissions($UserInfo['PermissionID']);
+	
+
+	// Manage 'special' inherited permissions
+	if($UserInfo['Artist']) {
+		$ArtistPerms = get_permissions(ARTIST);
+	} else {
+		$ArtistPerms = array('Permissions' => array());
+	}
+
+	if($UserInfo['Donor']) {
+		$DonorPerms = get_permissions(DONOR);
+	} else {
+		$DonorPerms = array('Permissions' => array());
+	}
+
+	if(!empty($CustomPermissions)) {
+		$CustomPerms = $CustomPermissions;
+	} else {
+		$CustomPerms = array();
+	}
+
+	//Combine the permissions
+	return array_merge($Permissions['Permissions'], $DonorPerms['Permissions'], $ArtistPerms['Permissions'], $CustomPerms);
+}
+
+// This function is slow. Don't call it unless somebody's logging in.
 function site_ban_ip($IP) {
 	global $DB, $Cache;
-	$IP = ip2unsigned($IP);
+	$IPNum = ip2unsigned($IP);
 	$IPBans = $Cache->get_value('ip_bans');
 	if(!is_array($IPBans)) {
 		$DB->query("SELECT ID, FromIP, ToIP FROM ip_bans");
@@ -398,7 +423,17 @@ function site_ban_ip($IP) {
 	}
 	foreach($IPBans as $Index => $IPBan) {
 		list($ID, $FromIP, $ToIP) = $IPBan;
-		if($IP >= $FromIP && $IP <= $ToIP) {
+		if($IPNum >= $FromIP && $IPNum <= $ToIP) {
+			return true;
+		}
+	}
+	if (BLOCK_TOR) {
+		$TorIPs = $Cache->get_value('tor_ips');
+		if (!is_array($TorIPs)) {
+			$TorIPs = file('https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=' . SITE_IP, FILE_IGNORE_NEW_LINES);
+			$Cache->cache_value('tor_ips', $TorIPs, 3600 * 4);
+		}
+		if (in_array($IP, $TorIPs)) {
 			return true;
 		}
 	}
@@ -478,6 +513,21 @@ function get_host($IP) {
 	static $ID = 0;
 	++$ID;
 	return '<span id="host_'.$ID.'">Resolving host...<script type="text/javascript">ajax.get(\'tools.php?action=get_host&ip='.$IP.'\',function(host){$(\'#host_'.$ID.'\').raw().innerHTML=host;});</script></span>';
+}
+
+function lookup_ip($IP) {
+	//TODO: use the $Cache
+	$Output = explode(' ',shell_exec('host -W 1 '.escapeshellarg($IP)));
+	if(count($Output) == 1 && empty($Output[0])) {
+		//No output at all implies the command failed
+		return '';
+	}
+
+	if(count($Output) != 5) {
+		return false;
+	} else {
+		return $Output[4];
+	}
 }
 
 function get_cc($IP) {
@@ -1044,6 +1094,8 @@ function delete_torrent($ID, $GroupID=0) {
 	$DB->query("DELETE FROM torrents_bad_tags WHERE TorrentID = ".$ID);
 	$DB->query("DELETE FROM torrents_bad_folders WHERE TorrentID = ".$ID);
 	$DB->query("DELETE FROM torrents_bad_files WHERE TorrentID = ".$ID);
+	$DB->query("DELETE FROM torrents_cassette_approved WHERE TorrentID = ".$ID);
+	$DB->query("DELETE FROM torrents_lossymaster_approved WHERE TorrentID = ".$ID);
 	$Cache->delete_value('torrent_download_'.$ID);
 	$Cache->delete_value('torrent_group_'.$GroupID);
 	$Cache->delete_value('torrents_details_'.$GroupID);
@@ -1582,7 +1634,7 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 	*/
 	
 	if(count($NotFound)>0) {
-		$DB->query("SELECT g.ID, g.Name, g.Year, g.RecordLabel, g.CatalogueNumber, g.TagList, g.ReleaseType FROM torrents_group AS g WHERE g.ID IN ($IDs)");
+		$DB->query("SELECT g.ID, g.Name, g.Year, g.RecordLabel, g.CatalogueNumber, g.TagList, g.ReleaseType, g.VanityHouse FROM torrents_group AS g WHERE g.ID IN ($IDs)");
 	
 		while($Group = $DB->next_record(MYSQLI_ASSOC, true)) {
 			unset($NotFound[$Group['ID']]);

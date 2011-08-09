@@ -7,24 +7,25 @@ function compare($X, $Y){
 }
 
 if(!empty($_GET['userid'])) {
-	if(!check_perms('users_mod')) {
+	if(!check_perms('users_override_paranoia')) {
 		error(403);
 	}
 	$UserID = $_GET['userid'];
-	$Sneaky = true;
 	if(!is_number($UserID)) { error(404); }
+	$DB->query("SELECT Username FROM users_main WHERE ID='$UserID'");
+	list($Username) = $DB->next_record();
 } else {
 	$UserID = $LoggedUser['ID'];
 }
 
-$Data = $Cache->get_value('bookmarks_'.$UserID);
+$Sneaky = ($UserID != $LoggedUser['ID']);
+
+$Data = $Cache->get_value('bookmarks_torrent_'.$UserID.'_full');
 
 if($Data) {
 	$Data = unserialize($Data);
-	list($K, list($Username, $TorrentList, $CollageDataList)) = each($Data);
+	list($K, list($TorrentList, $CollageDataList)) = each($Data);
 } else {
-	$DB->query("SELECT Username FROM users_main WHERE ID='$UserID'");
-	list($Username) = $DB->next_record();
 	// Build the data for the collage and the torrent list
 	$DB->query("SELECT 
 		bt.GroupID, 
@@ -46,11 +47,9 @@ if($Data) {
 	}
 }
 
-if(empty($TorrentList)) {
-	error("You do not have any bookmarks yet!");
-}
+$Title = ($Sneaky)?"$Username's bookmarked torrents":'Your bookmarked torrents';
 
-show_header($Username."'s Bookmarks",'browse');
+show_header($Title, 'browse');
 
 // Loop through the result set, building up $Collage and $TorrentTable
 // Then we print them.
@@ -62,7 +61,7 @@ $Artists = array();
 $Tags = array();
 
 foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $GroupArtists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
 	list($GroupID2, $Image, $GroupCategoryID, $AddedTime) = array_values($CollageDataList[$GroupID]);
 	
 	// Handle stats and stuff
@@ -99,6 +98,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	}
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
+	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 	
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start(); 
@@ -117,11 +117,14 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				</td>
 				<td colspan="5">
 					<span style="float:left;"><strong><?=$DisplayName?></strong></span>
-<? if(!isset($Sneaky)){ ?>					
-					<span style="float:right;"><a href="#group_<?=$GroupID?>" onclick="unbookmark(<?=$GroupID?>);return false;">Remove Bookmark</a></span>
+					<span style="float:right;text-align:right">
+<? if(!$Sneaky){ ?>
+						<a href="#group_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Remove Bookmark</a>
+						<br />
 <? } ?>
+						<?=time_diff($AddedTime);?>
+					</span>
 					<br /><span style="float:left;"><?=$TorrentTags?></span>
-					<span style="float:right;"><?=time_diff($AddedTime);?></span>
 				</td>
 			</tr>
 <?
@@ -202,8 +205,8 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			</span>
 			<strong><?=$DisplayName?></strong>
 			<?=$TorrentTags?>
-			<? if(empty($Sneaky)){ ?>
-			<span style="float:left;"><a href="#group_<?=$GroupID?>" onclick="unbookmark(<?=$GroupID?>);return false;">Remove Bookmark</a></span>
+<? if(!$Sneaky){ ?>
+			<span style="float:left;"><a href="#group_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Remove Bookmark</a></span>
 <? } ?>
 			<span style="float:right;"><?=time_diff($AddedTime);?></span>
 
@@ -229,7 +232,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
 ?>
 		<li class="image_group_<?=$GroupID?>">
-			<a href="#group_<?=$GroupID?>">
+			<a href="#group_<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
 <?	if($Image) { ?>
 				<img src="<?=$Image?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
 <?	} else { ?>
@@ -244,10 +247,25 @@ foreach ($TorrentList as $GroupID=>$Group) {
 
 ?>
 <div class="thin">
-	<h2><?=$Username?>'s Bookmarks</h2>
+	<h2><?=$Title?></h2>
 	<div class="linkbox">
+		<a href="bookmarks.php?type=torrents">[Torrents]</a>
+		<a href="bookmarks.php?type=artists">[Artists]</a>
+		<a href="bookmarks.php?type=collages">[Collages]</a>
+		<a href="bookmarks.php?type=requests">[Requests]</a>
+<? if (count($TorrentList) > 0) { ?>
+		<br /><br />
 		<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">[Remove Snatched]</a>
+<? } ?>
 	</div>
+<? if (count($TorrentList) == 0) { ?>
+	<div class="box pad" align="center">
+		<h2>You have not bookmarked any torrents.</h2>
+	</div>
+<?
+	show_footer();
+	die();
+} ?>
 	<div class="sidebar">
 		<div class="box">
 			<div class="head"><strong>Stats</strong></div>
@@ -295,9 +313,9 @@ foreach ($Artists as $ID => $Artist) {
 	</div>
 	<div class="main_column">
 <? if(empty($LoggedUser['HideCollage'])) { ?>
-		<ul class="collage_images">
+				<ul class="collage_images">
 <? foreach($Collage as $Group) { ?>
-			<?=$Group?>
+						<?=$Group?>
 <? } ?>
 		</ul>
 <? } ?>
@@ -318,5 +336,5 @@ foreach ($Artists as $ID => $Artist) {
 </div>
 <?
 show_footer();
-$Cache->cache_value('bookmarks_'.$UserID, serialize(array(array($Username, $TorrentList, $CollageDataList))), 3600);
+$Cache->cache_value('bookmarks_torrent_'.$UserID.'_full', serialize(array(array($TorrentList, $CollageDataList))), 3600);
 ?>

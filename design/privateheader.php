@@ -64,16 +64,31 @@ $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
 <?
 
 $Scripts=explode(',',$JSIncludes);
+
 foreach ($Scripts as $Script) {
-if (empty($Script)) { continue; }
+	if (empty($Script)) { continue; }
 ?>
 	<script src="<?=STATIC_SERVER?>functions/<?=$Script?>.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/'.$Script.'.js')?>" type="text/javascript"></script>
-<? }
+<?
+ 	if ($Script == 'jquery') { ?>
+<script type="text/javascript">
+  $.noConflict();
+</script>
+<?
+	} ?>
+<?
+}
 if ($Mobile) { ?>
 	<script src="<?=STATIC_SERVER?>styles/mobile/style.js" type="text/javascript"></script>
-<? } ?>
+<?
+}
+
+?>
 </head>
 <body id="<?=$Document == 'collages' ? 'collage' : $Document?>" <?= ((!$Mobile && $LoggedUser['Rippy'] == 'On') ? 'onload="say()"' : '') ?>>
+<?
+
+} ?>
 <div id="wrapper">
 <h1 class="hidden"><?=SITE_NAME?></h1>
 
@@ -111,7 +126,7 @@ if(check_perms('site_send_unlimited_invites')) {
 			<li id="nav_inbox"><a onmousedown="Stats('inbox');" href="inbox.php">Inbox</a></li>
 			<li id="nav_staffinbox"><a onmousedown="Stats('staffpm');" href="staffpm.php">Staff Inbox</a></li>
 			<li id="nav_uploaded"><a onmousedown="Stats('uploads');" href="torrents.php?type=uploaded&amp;userid=<?=$LoggedUser['ID']?>">Uploads</a></li>
-			<li id="nav_bookmarks"><a onmousedown="Stats('bookmarks');" href="bookmarks.php">Bookmarks</a></li>
+			<li id="nav_bookmarks"><a onmousedown="Stats('bookmarks');" href="bookmarks.php?type=torrents">Bookmarks</a></li>
 <? if (check_perms('site_torrents_notify')) { ?>
 			<li id="nav_notifications"><a onmousedown="Stats('notifications');" href="user.php?action=notify">Notifications</a></li>
 <? }

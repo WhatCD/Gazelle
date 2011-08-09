@@ -918,14 +918,14 @@ if($BiWeek != next_biweek() || $_GET['runbiweek']) {
 	
 	// Since MySQL doesn't like subselecting from the target table during an update, we must create a temporary table.
 
-	$DB->query("CREATE TEMPORARY TABLE u
+	$DB->query("CREATE TEMPORARY TABLE temp_sections_schedule_index
 		SELECT SUM(Uploaded) AS Upload,SUM(Downloaded) AS Download,Inviter
 		FROM users_main AS um JOIN users_info AS ui ON ui.UserID=um.ID
 		GROUP BY Inviter");
 	
 	foreach ($BonusReqs as $BonusReq) {
 		list($Ratio, $Upload) = $BonusReq;
-		$DB->query("SELECT ID FROM users_main AS um JOIN users_info AS ui on ui.UserID=um.ID JOIN u ON u.Inviter = um.ID WHERE u.Upload>$Upload AND u.Upload/u.Download>$Ratio AND um.PermissionID IN (".POWER.", ".ELITE.") AND um.Enabled = '1' AND ui.DisableInvites = '0' AND um.Invites<10");
+		$DB->query("SELECT ID FROM users_main AS um JOIN users_info AS ui on ui.UserID=um.ID JOIN temp_sections_schedule_index AS u ON u.Inviter = um.ID WHERE u.Upload>$Upload AND u.Upload/u.Download>$Ratio AND um.PermissionID IN (".POWER.", ".ELITE.") AND um.Enabled = '1' AND ui.DisableInvites = '0' AND um.Invites<10");
 		$UserIDs = $DB->collect('ID');
 		if (count($UserIDs) > 0) {
 			foreach($UserIDs as $UserID) {

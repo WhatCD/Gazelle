@@ -182,6 +182,8 @@ class TORRENT_FORM {
 		$BadTags = $Torrent['BadTags'];
 		$BadFolders = $Torrent['BadFolders'];
 		$BadFiles = $Torrent['BadFiles'];
+		$CassetteApproved = $Torrent['CassetteApproved'];
+		$LossymasterApproved = $Torrent['LossymasterApproved'];
 		global $ReleaseTypes;
 ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="border<? if($this->NewTorrent) { echo ' slice'; }?>" width="100%">
@@ -377,6 +379,16 @@ class TORRENT_FORM {
 				</td>
 			</tr>
 			<tr>
+				<td class="label">Vanity House</td>
+				<td>
+					<label><input type="checkbox" id="vanity_house" name="vanity_house" <?=( check_perms('torrents_edit_vanityhouse') ? $this->DisabledInputA : 'disabled="disabled"' )?> <? if($Torrent['VanityHouse']){ echo "checked='checked' ";}?>/>
+					Check this only if you are the submitting artist or submitting on behalf of the artist and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.</label>
+<? 			if ( ! check_perms('torrents_edit_vanityhouse') ) { ?>
+					<p>You do not have permission to mark albums as vanity house. <a href="wiki.php?action=article&id=282">More information about vanity house</a></p>
+<? 			} ?>
+				</td>
+			</tr>
+			<tr>
 				<td class="label">Media</td>
 				<td>
 					<select name="media" onchange="Media(); CheckYear();" id="media">
@@ -471,6 +483,18 @@ class TORRENT_FORM {
 				<td class="label">Bad File Names</td>
 				<td>
 					<input type="checkbox" id="bad_files" name="bad_files"<? if ($BadFiles) {echo " checked='checked'";}?>/> Check this box if the torrent has bad file names.
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Cassette Approved</td>
+				<td>
+					<input type="checkbox" id="cassette_approved" name="cassette_approved"<? if ($CassetteApproved) {echo " checked='checked'";}?>/> Check this box if the torrent is an approved cassette rip.
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Lossy master Approved</td>
+				<td>
+					<input type="checkbox" id="lossymaster_approved" name="lossymaster_approved"<? if ($LossymasterApproved) {echo " checked='checked'";}?>/> Check this box if the torrent is an approved lossy master.
 				</td>
 			</tr>
 <?		} ?>

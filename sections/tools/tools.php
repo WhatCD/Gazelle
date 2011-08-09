@@ -36,6 +36,7 @@ show_header('Staff Tools');
 <?
 if (check_perms('admin_donor_log')) { ?>
 			<tr><td><a href="tools.php?action=donation_log">Donation Log</a></td></tr>
+			<tr><td><a href="tools.php?action=bitcoin_balance">Bitcoin donation balance</a></td></tr>
 <? } if (check_perms('users_view_ips') && check_perms('users_view_email')) { ?>
 			<tr><td><a href="tools.php?action=registration_log">Registration Log</a></td></tr>
 <? } if (check_perms('users_view_invites')) { ?>

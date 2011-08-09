@@ -22,7 +22,8 @@ if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])
 		tg.CatalogueNumber,
 		tg.WikiImage AS Image,
 		tg.WikiBody AS GroupDescription,
-		tg.ReleaseType
+		tg.ReleaseType,
+		tg.VanityHouse
 		FROM torrents_group AS tg
 		LEFT JOIN torrents AS t ON t.GroupID = tg.ID
 		WHERE tg.ID=".$_GET['groupid']."

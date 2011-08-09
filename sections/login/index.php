@@ -9,9 +9,12 @@ if(!empty($LoggedUser['ID'])) {
 	die();
 }
 
+if (BLOCK_OPERA_MINI && isset($_SERVER['HTTP_X_OPERAMINI_PHONE'])) {
+	error('Opera Mini is banned, please use another browser.');
+}
 
 // Check if IP is banned
-if($BanID = site_ban_ip($_SERVER['REMOTE_ADDR'])) {
+if(site_ban_ip($_SERVER['REMOTE_ADDR'])) {
 	error('Your IP has been banned.');
 }
 

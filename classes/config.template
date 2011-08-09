@@ -5,6 +5,7 @@ date_default_timezone_set('UTC');
 define('SITE_NAME', ''); //The name of your site
 define('NONSSL_SITE_URL', ''); //The FQDN of your site
 define('SSL_SITE_URL', ''); //The FQDN of your site, make this different if you are using a subdomain for ssl
+define('SITE_IP', ''); //The IP address by which your site can be publicly accessed
 define('SERVER_ROOT', '/path'); //The root of the server, used for includes, purpose is to shorten the path string
 define('ANNOUNCE_URL', 'http://'.NONSSL_SITE_URL.':2710'); //Announce URL
 
@@ -56,6 +57,8 @@ define('DEBUG_MODE', false); //Set to false if you dont want everyone to see deb
 define('OPEN_REGISTRATION', true); //Set to false to disable open regirstration, true to allow anyone to register
 define('USER_LIMIT', 5000); //The maximum number of users the site can have, 0 for no limit
 define('STARTING_INVITES', 0); //# of invites to give to newly registered users
+define('BLOCK_TOR', false); //Set to true to block Tor users
+define('BLOCK_OPERA_MINI', false); //Set to true to block Opera Mini proxy
 define('DONOR_INVITES', 2);
 
 // User class IDs needed for automatic promotions. Found in the 'permissions' table

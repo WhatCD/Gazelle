@@ -61,6 +61,11 @@ $Properties['Encoding'] = $_POST['bitrate'];
 $Properties['TagList'] = $_POST['tags'];
 $Properties['Image'] = $_POST['image'];
 $Properties['GroupDescription'] = trim($_POST['album_desc']);
+if ($_POST['vanity_house'] && check_perms('torrents_edit_vanityhouse') ) {
+	$Properties['VanityHouse'] = 1;
+} else {
+	$Properties['VanityHouse'] = 0;
+}
 $Properties['TorrentDescription'] = $_POST['release_desc'];
 if($_POST['album_desc']) {
 	$Properties['GroupDescription'] = trim($_POST['album_desc']);
@@ -531,8 +536,8 @@ if(!$GroupID) {
 	// Create torrent group
 	$DB->query("
 		INSERT INTO torrents_group
-		(ArtistID, CategoryID, Name, Year, RecordLabel, CatalogueNumber, Time, WikiBody, WikiImage, SearchText, ReleaseType) VALUES
-		(0, ".$TypeID.", ".$T['Title'].", $T[Year], $T[RecordLabel], $T[CatalogueNumber], '".sqltime()."', '".db_string($Body)."', $T[Image], '$SearchText', $T[ReleaseType])");
+		(ArtistID, CategoryID, Name, Year, RecordLabel, CatalogueNumber, Time, WikiBody, WikiImage, SearchText, ReleaseType, VanityHouse) VALUES
+		(0, ".$TypeID.", ".$T['Title'].", $T[Year], $T[RecordLabel], $T[CatalogueNumber], '".sqltime()."', '".db_string($Body)."', $T[Image], '$SearchText', $T[ReleaseType], $T[VanityHouse])");
 	$GroupID = $DB->inserted_id();
 	if($Type == 'Music') {
 		foreach($ArtistForm as $Importance => $Artists) {

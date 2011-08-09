@@ -94,7 +94,7 @@ show_header('Transcode Search');
 		</tr>
 <?
 foreach($Results as $GroupID=>$Data) {
-	list($Artists, $GroupCatalogueNumber, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
+	list($Artists, $GroupCatalogueNumber, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $GroupVanityHouse, $Torrents, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
 	
 	$DisplayName = '';
 	if(count($Artists)>0) {

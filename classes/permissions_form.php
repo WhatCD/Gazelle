@@ -101,7 +101,9 @@
  	'edit_unknowns' => 'Can edit unknown release information.',
  	'forums_polls_create' => 'Can create polls in the forums.',
  	'forums_polls_moderate' => 'Can feature and close polls.',
-	'project_team' => 'Is part of the project team.'
+	'project_team' => 'Is part of the project team.',
+	'torrents_edit_vanityhouse' => 'Can mark groups as part of Vanity House.',
+	'artist_edit_vanityhouse' => 'Can mark Artists as part of Vanity House.'
 
  );
  
@@ -213,6 +215,8 @@ function permissions_form(){ ?>
 					<? display_perm('torrents_search_fast', 'Unlimit search frequency (for scripts).'); ?>
 					<? display_perm('torrents_add_artist', 'Can add artists to any group.'); ?>
 					<? display_perm('edit_unknowns', 'Can edit unknown release information.'); ?>
+					<? display_perm('torrents_edit_vanityhouse', 'Can mark groups as part of Vanity House.'); ?>
+					<? display_perm('artist_edit_vanityhouse', 'Can mark Artists as part of Vanity House.'); ?>
 					<? display_perm('site_add_logs', 'Can add logs to torrents after upload'); ?>
 				</td>
 			</tr>

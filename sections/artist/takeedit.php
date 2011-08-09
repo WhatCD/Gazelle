@@ -14,6 +14,10 @@ if(!check_perms('site_edit_wiki')) { error(403); }
 // Variables for database input
 $UserID = $LoggedUser['ID'];
 $ArtistID = $_REQUEST['artistid'];
+if ( check_perms('artist_edit_vanityhouse') ) {
+	$VanityHouse = ( isset($_POST['vanity_house']) ? 1 : 0 );
+}
+
 
 if($_GET['action'] == 'revert') { // if we're reverting to a previous revision
 	authorize();
@@ -42,7 +46,11 @@ if(!$RevisionID) { // edit
 $RevisionID=$DB->inserted_id();
 
 // Update artists table (technically, we don't need the RevisionID column, but we can use it for a join which is nice and fast)
-$DB->query("UPDATE artists_group SET RevisionID='$RevisionID' WHERE ArtistID='$ArtistID'");
+$DB->query("UPDATE artists_group 
+	SET 
+	".  ( isset($VanityHouse) ? "VanityHouse='$VanityHouse'," : '' ) ."
+	RevisionID='$RevisionID' 
+	WHERE ArtistID='$ArtistID'");
 
 // There we go, all done!
 $Cache->delete_value('artist_'.$ArtistID); // Delete artist cache

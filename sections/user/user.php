@@ -651,7 +651,7 @@ if($CollageID) {
 <?	foreach($Collage as $C) {
 			$Group = get_groups(array($C['GroupID']));
 			$Group = array_pop($Group['matches']);
-			list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $GroupArtists) = array_values($Group);
+			list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
 			
 			$Name = '';
 			$Name .= display_artists(array('1'=>$GroupArtists), false, true);

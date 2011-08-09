@@ -4,6 +4,7 @@ function compare($X, $Y){
 	return($Y['score'] - $X['score']);
 }
 
+include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = NEW TEXT;
 
@@ -20,7 +21,7 @@ $TorrentList = $TorrentCache[1];
 
 // Group details
 list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $ReleaseType, $GroupCategoryID,
-	$GroupTime, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs, $TagPositiveVotes, $TagNegativeVotes) = array_shift($TorrentDetails);
+	$GroupTime, $GroupVanityHouse, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs, $TagPositiveVotes, $TagNegativeVotes) = array_shift($TorrentDetails);
 
 $DisplayName=$GroupName;
 $AltName=$GroupName; // Goes in the alt text of the image
@@ -38,6 +39,10 @@ if($Artists) {
 if($GroupYear>0) {
 	$DisplayName.=' ['.$GroupYear.']';
 	$AltName.=' ['.$GroupYear.']';
+}
+if($GroupVanityHouse){
+	$DisplayName.=' [Vanity House]';
+	$AltName.=' [VanityHouse]';
 }
 if($GroupCategoryID == 1) {
 	$DisplayName.=' ['.$ReleaseTypes[$ReleaseType].']';
@@ -81,22 +86,11 @@ show_header($Title,'browse,comments,torrent,bbcode');
 <?	if($RevisionID && check_perms('site_edit_wiki')) { ?>
 		<a href="/torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Revert to this revision]</a>
 <?	}
-	if(($Bookmarks = $Cache->get_value('bookmarks_'.$LoggedUser['ID'])) === FALSE) {
-		if(($Bookmarks = $Cache->get_value('bookmarks_'.$LoggedUser['ID'].'_groups')) === FALSE) {
-			$DB->query("SELECT GroupID FROM bookmarks_torrents WHERE UserID = ".$LoggedUser['ID']);
-			$Bookmarks = $DB->collect('GroupID');
-			$Cache->cache_value('bookmarks_'.$LoggedUser['ID'].'_groups', $Bookmarks, 0);
-		}
-		$Bookmarked = in_array($GroupID,$Bookmarks);
-	} else {
-		$Bookmarks = unserialize($Bookmarks);
-		$Bookmarked = array_key_exists($GroupID, $Bookmarks[0][1]);
-	}
-	if($Bookmarked) {
+	if(has_bookmarked('torrent', $GroupID)) {
 ?>
-		<a href="#" id="bookmarklink<?=$GroupID?>" onclick="unbookmark(<?=$GroupID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+		<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
 <?	} else { ?>
-		<a href="#" id="bookmarklink<?=$GroupID?>" onclick="Bookmark(<?=$GroupID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+		<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Bookmark('torrent', <?=$GroupID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?	}
 	if($Categories[$GroupCategoryID-1] == 'Music') { ?>
 		<a href="upload.php?groupid=<?=$GroupID?>">[Add format]</a>
@@ -289,11 +283,13 @@ foreach ($TorrentList as $Torrent) {
 	
 		//t.ID,	t.Media, t.Format, t.Encoding, t.Remastered, t.RemasterYear, t.RemasterTitle, t.RemasterRecordLabel,t.RemasterCatalogueNumber,
 		//t.Scene, t.HasLog, t.HasCue, t.LogScore, t.FileCount, t.Size, t.Seeders, t.Leechers, t.Snatched, t.FreeTorrent, t.Time, t.Description,
-		//t.FileList, t.FilePath, t.UserID, um.Username, t.last_action
+		//t.FileList, t.FilePath, t.UserID, um.Username, t.last_action,
+	    //(bad tags), (bad folders), (bad filenames), (cassette approved), (lossy master approved), t.LastReseedRequest, LogInDB
 	
 	list($TorrentID, $Media, $Format, $Encoding, $Remastered, $RemasterYear, $RemasterTitle, $RemasterRecordLabel, $RemasterCatalogueNumber, 
 		$Scene, $HasLog, $HasCue, $LogScore, $FileCount, $Size, $Seeders, $Leechers, $Snatched, $FreeTorrent, $TorrentTime, $Description, 
-		$FileList, $FilePath, $UserID, $Username, $LastActive, $BadTags, $BadFolders, $BadFiles, $LastReseedRequest, $LogInDB, $HasFile) = $Torrent;
+		$FileList, $FilePath, $UserID, $Username, $LastActive,
+		$BadTags, $BadFolders, $BadFiles, $CassetteApproved, $LossymasterApproved, $LastReseedRequest, $LogInDB, $HasFile) = $Torrent;
 
 	if($Remastered && !$RemasterYear) {
 		if(!isset($FirstUnknown)) {
@@ -371,6 +367,8 @@ foreach ($TorrentList as $Torrent) {
 	if($Reported) { $ExtraInfo.=$AddExtra.'<strong>Reported</strong>'; $AddExtra=' / '; }
 	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra.'<strong>Bad Tags</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra.'<strong>Bad Folders</strong>'; $AddExtra=' / '; }
+	if(!empty($CassetteApproved)) { $ExtraInfo.=$AddExtra.'<strong>Cassette Approved</strong>'; $AddExtra=' / '; }
+	if(!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra.'<strong>Lossy master Approved</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFiles)) { $ExtraInfo.=$AddExtra.'<strong>Bad File Names</strong>'; $AddExtra=' / '; }
 	
 	if($GroupCategoryID == 1 

@@ -8,16 +8,14 @@ include(SERVER_ROOT."/classes/permissions_form.php");
 list($UserID, $Username, $PermissionID) = array_values(user_info($_REQUEST['userid']));
 
 $DB->query("SELECT 
-		p.Values,
 		u.CustomPermissions 
 	FROM users_main AS u 
-	LEFT JOIN permissions AS p ON u.PermissionID=p.ID 
 	WHERE u.ID='$UserID'");
 
-list($Defaults,$Customs)=$DB->next_record(MYSQLI_NUM, array(0,1));
+list($Customs)=$DB->next_record(MYSQLI_NUM, false);
 
 
-$Defaults = unserialize($Defaults);
+$Defaults = get_permissions_for_user($UserID, array());
 
 $Delta=array();
 if (isset($_POST['action'])) {
@@ -67,7 +65,7 @@ function reset() {
 	[<a href="#" onclick="reset();return false;">Defaults</a>]
 </div>
 <div class="box pad">
-	Before using permissions, please understand that it allows you to both add and remove access to specific features. If you think that to add access to a feature, you need to uncheck everything else, <strong>YOU ARE WRONG</strong>. The checkmarks on the left, which are grayed out, are the standard permissions granted by their class, any changes you make to the right side will overwrite this. It's not complicated, and if you screw up, click the defaults link at the top. It will reset the user to their respective features granted by class, then you can check or uncheck the one or two things you want to change. <strong>DO NOT UNCHECK EVERYTHING.</strong> If you need further clarification, ask A9 before using this tool.
+	Before using permissions, please understand that it allows you to both add and remove access to specific features. If you think that to add access to a feature, you need to uncheck everything else, <strong>YOU ARE WRONG</strong>. The checkmarks on the left, which are grayed out, are the standard permissions granted by their class (and donor/artist status), any changes you make to the right side will overwrite this. It's not complicated, and if you screw up, click the defaults link at the top. It will reset the user to their respective features granted by class, then you can check or uncheck the one or two things you want to change. <strong>DO NOT UNCHECK EVERYTHING.</strong> If you need further clarification, ask A9 before using this tool.
 </div>
 <form name="permform" id="permform" method="post" action="">
 	<input type="hidden" name="action" value="permissions" />

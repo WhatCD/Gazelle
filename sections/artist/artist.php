@@ -6,6 +6,7 @@ function compare($X, $Y){
 	return($Y['count'] - $X['count']);
 }
 
+include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
@@ -36,7 +37,8 @@ if($Data) {
 		$sql = "SELECT
 			a.Name,
 			wiki.Image,
-			wiki.Body
+			wiki.body,
+			a.VanityHouse
 			FROM wiki_artists AS wiki 
 			LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
 			WHERE wiki.RevisionID='$RevisionID' ";
@@ -44,7 +46,8 @@ if($Data) {
 		$sql = "SELECT
 			a.Name,
 			wiki.Image,
-			wiki.body
+			wiki.body,
+			a.VanityHouse
 			FROM artists_group AS a
 			LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID=a.RevisionID
 			WHERE a.ArtistID='$ArtistID' ";
@@ -54,7 +57,7 @@ if($Data) {
 	
 	if($DB->record_count()==0) { error(404); }
 	
-	list($Name, $Image, $Body) = $DB->next_record(MYSQLI_NUM, array(0));
+	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record(MYSQLI_NUM, array(0));
 }
 
 //----------------- Build list and get stats
@@ -92,7 +95,7 @@ $NumRequests = count($Requests);
 $LastReleaseType = 0;
 if(empty($Importances) || empty($TorrentList)) {
 	$DB->query("SELECT 
-			DISTINCT ta.GroupID, ta.Importance
+			DISTINCT ta.GroupID, ta.Importance, tg.VanityHouse
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
@@ -174,7 +177,8 @@ $NumSnatches = 0;
 
 $OpenTable = false;
 foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $Artists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
+	$GroupVanityHouse = $Importances[$GroupID]['VanityHouse'];
 	
 	
 	
@@ -241,6 +245,8 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	}
 
 	if($GroupYear>0) { $DisplayName = $GroupYear. ' - '.$DisplayName; }
+
+	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 
 ?>
 			<tr class="releases_<?=$ReleaseType?> group discog<?=$HideDiscog?>">
@@ -325,7 +331,7 @@ $TorrentDisplayList = ob_get_clean();
 show_header($Name, 'requests,bbcode');
 ?>
 <div class="thin">
-	<h2><?=display_str($Name)?><? if ($RevisionID) { ?> (Revision #<?=$RevisionID?>)<? } ?></h2>
+	<h2><?=display_str($Name)?><? if ($RevisionID) { ?> (Revision #<?=$RevisionID?>)<? } if ($VanityHouseArtist) { ?> [Vanity House] <? } ?></h2>
 	<div class="linkbox">
 <? if (check_perms('site_submit_requests')) { ?>
 		<a href="requests.php?action=new&amp;artistid=<?=$ArtistID?>">[Add Request]</a>
@@ -346,6 +352,17 @@ if (check_perms('site_torrents_notify')) {
 		<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Do not notify of new uploads]</a>
 <?
 	}
+}
+
+if (has_bookmarked('artist', $ArtistID)) {
+?>
+		<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+
+<?
+	} else { 
+?>
+		<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+<?
 }
 
 if (check_perms('site_edit_wiki')) {

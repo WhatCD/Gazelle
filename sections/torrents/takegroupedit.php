@@ -24,6 +24,11 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 	$Body = $_POST['body'];
 	$Image = $_POST['image'];
 	$ReleaseType = (int)$_POST['releasetype'];
+	if ( $_POST['vanity_house'] && check_perms('torrents_edit_vanityhouse') ) {
+		$VanityHouse = ( isset($_POST['vanity_house']) ? 1 : 0 );
+	} else {
+		$VanityHouse = 0;
+	}
 
 	if($GroupInfo = $Cache->get_value('torrents_details_'.$GroupID)) {
 		$GroupCategoryID = $GroupInfo[0][0]['CategoryID'];
@@ -75,6 +80,7 @@ $Image = db_string($Image);
 // Update torrents table (technically, we don't need the RevisionID column, but we can use it for a join which is nice and fast)
 $DB->query("UPDATE torrents_group SET 
 	RevisionID='$RevisionID',
+	".((isset($VanityHouse)) ? "VanityHouse='$VanityHouse'," : "")."
 	WikiBody='$Body',
 	WikiImage='$Image'
 	WHERE ID='$GroupID'");
