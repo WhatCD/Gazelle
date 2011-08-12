@@ -22,6 +22,7 @@ function btc_address($UserID, $GenAddress = false) {
 	if (!empty($Addr)) { return $Addr; }
 	elseif ($GenAddress) {
 		
+		if (empty($NewAddr)) { error(0); }
 		$DB->query("UPDATE users_info SET BitcoinAddress = '".db_string($NewAddr)."' WHERE UserID = '".$UserID."' AND BitcoinAddress IS NULL");
 		return $NewAddr;
 	} else {

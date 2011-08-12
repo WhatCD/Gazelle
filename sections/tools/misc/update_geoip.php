@@ -1,16 +1,17 @@
 <?
 ini_set('memory_limit', -1);
+set_time_limit(0);
 
 if (!check_perms('site_debug')) { error(403); }
 
 show_header();
 
 //requires wget, unzip commands to be installed
-shell_exec('wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity_CSV/GeoLiteCity_'.date('Ym').'01.zip');
-shell_exec('unzip GeoLiteCity_'.date('Ym').'01.zip');
-shell_exec('rm GeoLiteCity_'.date('Ym').'01.zip');
+shell_exec('wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity_CSV/GeoLiteCity_'.date('Ym').'02.zip');
+shell_exec('unzip GeoLiteCity_'.date('Ym').'02.zip');
+shell_exec('rm GeoLiteCity_'.date('Ym').'02.zip');
 
-if(($Locations = file("GeoLiteCity_".date('Ym')."01/GeoLiteCity-Location.csv", FILE_IGNORE_NEW_LINES)) === false) {
+if(($Locations = file("GeoLiteCity_".date('Ym')."02/GeoLiteCity-Location.csv", FILE_IGNORE_NEW_LINES)) === false) {
 	error("Download or extraction of maxmind database failed");
 }
 array_shift($Locations);
@@ -29,7 +30,7 @@ foreach($Locations as $Location) {
 echo "There are ".count($CountryIDs)." CountryIDs";
 echo "<br />";
 
-if(($Blocks = file("GeoLiteCity_".date('Ym')."01/GeoLiteCity-Blocks.csv", FILE_IGNORE_NEW_LINES)) === false) {
+if(($Blocks = file("GeoLiteCity_".date('Ym')."02/GeoLiteCity-Blocks.csv", FILE_IGNORE_NEW_LINES)) === false) {
 	echo "Error";
 }
 array_shift($Blocks);

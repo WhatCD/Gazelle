@@ -71,7 +71,7 @@ $History = $DB->to_array();
 $Current['Email'] = $CurrentEmail['Email'];
 $Current['StartTime'] = $History[0]['Time'];
 $Current['CurrentIP'] = $CurrentEmail['IP'];
-$Current['IP'] = $History[0]['IP'];
+$Current['IP'] = $History[(count($History) - 1)]['IP'];
 
 // Matches for current email
 if ($CurrentEmail['Usernames'] != '') {

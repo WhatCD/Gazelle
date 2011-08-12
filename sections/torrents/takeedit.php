@@ -373,9 +373,15 @@ if ($Properties['Trumpable'] == 1 && $LogScore == 100) {
 	$DB->query("UPDATE torrents_logs_new SET Score = 99, Details = '".$Details."' WHERE TorrentID = ".$TorrentID);
 }
 
-if ($Properties['Trumpable'] == 0 && $LogScore == 99) {
-	$DB->query("UPDATE torrents SET LogScore = 100 WHERE ID = ".$TorrentID);
-	$DB->query("UPDATE torrents_logs_new SET Score = 100, Details = '' WHERE TorrentID = ".$TorrentID);
+$DB->query("SELECT Enabled FROM users_main WHERE ID =".$UserID);
+list($Enabled) = $DB->next_record();
+if ($Properties['Trumpable'] == 0 && $LogScore == 99 && $Enabled == 1 && strtotime($Time) < 1284422400) {
+	$DB->query("SELECT Log FROM torrents_logs_new WHERE TorrentID = ".$TorrentID);
+	list($Log) = $DB->next_record();
+	if (strpos($Log, "EAC extraction") === 0) {
+		$DB->query("UPDATE torrents SET LogScore = 100 WHERE ID = ".$TorrentID);
+		$DB->query("UPDATE torrents_logs_new SET Score = 100, Details = '' WHERE TorrentID = ".$TorrentID);
+	}
 }
 
 $DB->query("SELECT Name FROM torrents_group WHERE ID=$GroupID");

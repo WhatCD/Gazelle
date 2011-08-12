@@ -634,8 +634,7 @@ show_header('Uploading Rules');
 					<ul>
 						<li>MP3, FLAC, Ogg Vorbis, AAC, AC3, DTS</li>
 					</ul>
-
-					<p><em>Monkey's Audio (APE), Apple Lossless (ALAC/.M4A lossless), and Wavpack (WV) are depreciated. No more new uploads in either of these 3 formats are allowed after April 20, 2009. Only unique releases with no alternative upload in FLAC are permitted to remain on the site. However, you are encouraged to convert them to FLAC. See <a href="#r2.2.15.10">2.2.15.10.</a></em>
+					<p><em>Monkey's Audio (APE), Apple Lossless (ALAC/.M4A lossless), and Wavpack (WV) are deprecated. No more new uploads in either of these 3 formats are allowed after April 20, 2009. Only unique releases with no alternative upload in FLAC are permitted to remain on the site. However, you are encouraged to convert them to FLAC. </em>
 					</p>
 				</li>
 				<li id="r6.2"><a href="#h6"><strong>&uarr;_</strong></a> <a href="#r6.2">6.2.</a> <strong>No music is permitted in these two categories.</strong> They are for spoken word only.

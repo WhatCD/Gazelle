@@ -122,7 +122,28 @@ if(check_perms('site_send_unlimited_invites')) {
 			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
 <?	} ?>
 		</ul>
-		<ul id="userinfo_minor">
+<?
+$NewSubscriptions = $Cache->get_value('subscriptions_user_new_'.$LoggedUser['ID']);
+if($NewSubscriptions === FALSE) {
+        if($LoggedUser['CustomForums']) {
+                unset($LoggedUser['CustomForums']['']);
+                $RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+        }
+        $DB->query("SELECT COUNT(s.TopicID)
+                FROM users_subscriptions AS s
+                        JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
+                        JOIN forums_topics AS t ON l.TopicID = t.ID
+                        JOIN forums AS f ON t.ForumID = f.ID
+                WHERE f.MinClassRead <= ".$LoggedUser['Class']."
+                        AND l.PostID < t.LastPostID
+                        AND s.UserID = ".$LoggedUser['ID'].
+                (!empty($RestrictedForums) ? "
+                        AND f.ID NOT IN ('".$RestrictedForums."')" : ""));
+        list($NewSubscriptions) = $DB->next_record();
+        $Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
+} ?>
+
+		<ul id="userinfo_minor"<?=$NewSubscriptions ? ' class="highlite"' : ''?>>
 			<li id="nav_inbox"><a onmousedown="Stats('inbox');" href="inbox.php">Inbox</a></li>
 			<li id="nav_staffinbox"><a onmousedown="Stats('staffpm');" href="staffpm.php">Staff Inbox</a></li>
 			<li id="nav_uploaded"><a onmousedown="Stats('uploads');" href="torrents.php?type=uploaded&amp;userid=<?=$LoggedUser['ID']?>">Uploads</a></li>
@@ -130,26 +151,6 @@ if(check_perms('site_send_unlimited_invites')) {
 <? if (check_perms('site_torrents_notify')) { ?>
 			<li id="nav_notifications"><a onmousedown="Stats('notifications');" href="user.php?action=notify">Notifications</a></li>
 <? }
-//Subscriptions
-$NewSubscriptions = $Cache->get_value('subscriptions_user_new_'.$LoggedUser['ID']);
-if($NewSubscriptions === FALSE) {
-	if($LoggedUser['CustomForums']) {
-		unset($LoggedUser['CustomForums']['']);
-		$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-	}
-	$DB->query("SELECT COUNT(s.TopicID)
-		FROM users_subscriptions AS s
-			JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
-			JOIN forums_topics AS t ON l.TopicID = t.ID
-			JOIN forums AS f ON t.ForumID = f.ID
-		WHERE f.MinClassRead <= ".$LoggedUser['Class']."
-			AND l.PostID < t.LastPostID
-			AND s.UserID = ".$LoggedUser['ID'].
-		(!empty($RestrictedForums) ? "
-			AND f.ID NOT IN ('".$RestrictedForums."')" : ""));
-	list($NewSubscriptions) = $DB->next_record();
-	$Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
-}
 ?>
 			<li id="nav_subscriptions"><a onmousedown="Stats('subscriptions');" href="userhistory.php?action=subscriptions"<?=($NewSubscriptions ? ' class="new-subscriptions"' : '')?>>Subscriptions</a></li>
 			<li id="nav_comments"><a onmousedown="Stats('comments');" href="comments.php">Comments</a></li>

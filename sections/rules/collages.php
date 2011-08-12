@@ -15,7 +15,7 @@ show_header('Collages Rules');
 			Vandalizing of collages will be taken very seriously, resulting in collage editing privileges being removed (at a minimum).
 			</li>
 			<li>
-			Personal Best Of collages are only allowed in the new Personal Collages category. You must be an Elite+ or Donor to create one.
+			Personal Best Of collages are only allowed in the new Personal Collages category. You must be a Power User+ or Donor to create one.
 			</li>
 			<li>
 			A well-defined group of people, for instance Torrent Masters, or Interviewers, may create a Group Picks Theme collage with one pick per person, after having gained permission for the collage from Staff.
