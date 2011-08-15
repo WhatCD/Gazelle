@@ -80,7 +80,7 @@ CREATE TABLE `artists_tags` (
 
 CREATE TABLE `bad_passwords` (
   `Password` char(32) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `blog` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -512,7 +512,7 @@ CREATE TABLE `requests_artists` (
   `AliasID` int(10) NOT NULL,
   `Importance` enum('1','2','3') NOT NULL DEFAULT '1',
   PRIMARY KEY (`RequestID`,`AliasID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `requests_comments` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -875,7 +875,7 @@ CREATE TABLE `torrents_comments` (
   PRIMARY KEY (`ID`),
   KEY `TopicID` (`GroupID`),
   KEY `AuthorID` (`AuthorID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `torrents_files` (
   `TorrentID` int(10) NOT NULL,
