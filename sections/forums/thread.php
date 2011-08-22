@@ -390,7 +390,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
-				<?=format_username($EditedUserID, $EditedUsername) ?> <?=strtolower(time_diff($EditedTime))?>
+				<?=format_username($EditedUserID, $EditedUsername) ?> <?=time_diff($EditedTime,2,true,true)?>
 <? } ?>
 			</div>
 		</td>

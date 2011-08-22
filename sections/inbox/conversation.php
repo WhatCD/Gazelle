@@ -75,7 +75,9 @@ while(list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) { ?>
 		<div class="head">
 			<strong><?=$Users[(int)$SenderID]['UserStr']?></strong> <?=time_diff($SentDate)?> - <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Users[(int)$SenderID]['Username']?>');">[Quote]</a>	
 		</div>
-		<div class="body" id="message<?=$MessageID?>"><?=$Text->full_format($Body)?></div>
+		<div class="body" id="message<?=$MessageID?>">
+			<?=$Text->full_format($Body)?>
+		</div>
 	</div>
 <?
 }

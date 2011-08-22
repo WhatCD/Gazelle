@@ -334,7 +334,7 @@ foreach ($TorrentList as $Torrent) {
 				//There was a type but it wasn't an option!
 				$ReportType = $Types['master']['other'];
 			}
-			$ReportInfo .= "<tr><td>".(check_perms('admin_reports') ? "<a href='user.php?id=$ReporterID'>$ReporterName</a> <a href='reportsv2.php?view=report&amp;id=$ReportID'>reported it</a> " : "Someone reported it ").strtolower(time_diff($ReportedTime))." for the reason '".$ReportType['title']."':";
+			$ReportInfo .= "<tr><td>".(check_perms('admin_reports') ? "<a href='user.php?id=$ReporterID'>$ReporterName</a> <a href='reportsv2.php?view=report&amp;id=$ReportID'>reported it</a> " : "Someone reported it ").time_diff($ReportedTime,2,true,true)." for the reason '".$ReportType['title']."':";
 			$ReportInfo .= "<blockquote>".$Text->full_format($ReportReason)."</blockquote></td></tr>";
 		}
 		$ReportInfo .= "</table>";
@@ -616,7 +616,7 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('torrents', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
-				<?=format_username($EditedUserID, $EditedUsername) ?> <?=strtolower(time_diff($EditedTime))?>
+				<?=format_username($EditedUserID, $EditedUsername) ?> <?=time_diff($EditedTime,2,true,true)?>
 <? } ?>
 			</div>
 		</td>

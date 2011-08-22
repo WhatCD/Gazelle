@@ -145,7 +145,7 @@ if(count($_GET)){
 	$Val->SetFields('ratio', '0', 'inarray', 'Invalid ratio field', $NumberChoices);
 	$Val->SetFields('uploaded', '0', 'inarray', 'Invalid uploaded field', $NumberChoices);
 	$Val->SetFields('downloaded', '0', 'inarray', 'Invalid downloaded field', $NumberChoices);
-	$Val->SetFields('snatched', '0', 'inarray', 'Invalid snatched field', $NumberChoices);
+	//$Val->SetFields('snatched', '0', 'inarray', 'Invalid snatched field', $NumberChoices);
 
 	$Val->SetFields('matchtype', '0', 'inarray', 'Invalid matchtype field', array('inarray'=>array('strict', 'fuzzy', 'regex')));
 
@@ -194,9 +194,13 @@ if(count($_GET)){
 			um1.ID,
 			um1.Username,
 			um1.Uploaded,
-			um1.Downloaded,
-			(SELECT COUNT(uid) FROM xbt_snatched AS xs WHERE xs.uid=um1.ID) AS Snatches,
-			um1.PermissionID,
+			um1.Downloaded,';
+		if ($_GET['snatched'] == "off") {
+			$SQL .= "'X' AS Snatches,";
+		} else {
+			$SQL .= "(SELECT COUNT(uid) FROM xbt_snatched AS xs WHERE xs.uid=um1.ID) AS Snatches,";
+		}
+		$SQL .= 'um1.PermissionID,
 			um1.Email,
 			um1.Enabled,
 			um1.IP,
@@ -254,15 +258,24 @@ if(count($_GET)){
 		}
 
 		if (!empty($_GET['cc'])) {
-			$Where[]="um1.ipcc = '".$_GET['cc']."'";
+			if ($_GET['cc_op'] == "equal") {
+				$Where[]="um1.ipcc = '".$_GET['cc']."'";
+			} else {
+				$Where[]="um1.ipcc != '".$_GET['cc']."'";
+			}
 		}
 
 		if(!empty($_GET['tracker_ip'])){
 				$Distinct = 'DISTINCT ';
 				$Join[]=' JOIN xbt_files_users AS xfu ON um1.ID=xfu.uid ';
-				$Where[]= ' (xfu.ipa '.$Match.wrap((int) ip2long($_GET['tracker_ip'])).' OR xfu.ip '.$Match.wrap($_GET['tracker_ip']).')';
+				$Where[]= ' xfu.ip '.$Match.wrap($_GET['tracker_ip']);
 		}
-		
+
+//		if(!empty($_GET['tracker_ip'])){
+//				$Distinct = 'DISTINCT ';
+//				$Join[]=' JOIN xbt_snatched AS xs ON um1.ID=xs.uid ';
+//				$Where[]= ' xs.IP '.$Match.wrap($_GET['ip']);
+//		}	
 		
 		if(!empty($_GET['comment'])){
 			$Where[]='ui1.AdminComment'.$Match.wrap($_GET['comment']);
@@ -553,6 +566,7 @@ show_header('User search');
 						<option value="above"<? if(isset($_GET['snatched']) && $_GET['snatched']==='above'){echo ' selected="selected"';}?>>Above</option>
 						<option value="below"<? if(isset($_GET['snatched']) && $_GET['snatched']==='below'){echo ' selected="selected"';}?>>Below</option>
 						<option value="between"<? if(isset($_GET['snatched']) && $_GET['snatched']==='between'){echo ' selected="selected"';}?>>Between</option>
+						<option value="off"<? if(isset($_GET['snatched']) && $_GET['snatched']==='off'){echo ' selected="selected"';}?>>Off</option>
 					</select>
 					<input type="text" name="snatched1" size="6" value="<?=display_str($_GET['snatched1'])?>" />
 					<input type="text" name="snatched2" size="6" value="<?=display_str($_GET['snatched2'])?>" />
@@ -603,7 +617,11 @@ show_header('User search');
 					</select>
 				</td>
 				<td class="label nobr">Country Code:</td>
-				<td>
+				<td width="30%">
+					<select name="cc_op">
+						<option value="equal"<? if ($_GET['cc_op']==='equal'){ echo ' selected="selected"';}?>>Equals</option>
+						<option value="not_equal"<? if ($_GET['cc_op']==='not_equal'){ echo ' selected="selected"';}?>>Not Equal</option>
+					</select>
 					<input type="text" name="cc" size="2" value="<?=display_str($_GET['cc'])?>" />
 				</td>
 			</tr>
@@ -692,7 +710,7 @@ while(list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email
 			$DB->set_query_id($Results);
 ?>
 			<td><?=(int)$Downloads?></td>
-			<td><?=number_format($Snatched)?></td>
+			<td><?=is_numeric($Snatched) ? number_format($Snatched) : display_str($Snatched)?></td>
 			<td><? if($DisableInvites) { echo 'X'; } else { echo $Invites; } ?></td>
 		</tr>
 <?

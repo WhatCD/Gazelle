@@ -19,12 +19,13 @@ $DB->query("SELECT m.ID, m.Username, i.Donor, i.BitcoinAddress FROM users_main m
 	</tr>
 <?
 while ($row = $DB->next_record()) {
-	$amount = "&nbsp;";
+	$amount = false;
 	foreach ($Receiveds as $R) {
 		if ($R->address == $row['BitcoinAddress']) {
 			$amount = $R->amount . ' BTC';
 		}
 	}
+	if ($amount === false) { continue; }
 	?>
 	<tr>
 		<td><?=format_username($row['ID'],$row['Username'],$row['Donor'])?></td>

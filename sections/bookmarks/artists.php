@@ -41,6 +41,7 @@ show_header($Title,'browse');
 <? if (count($ArtistList) == 0) { ?>
 		<h2>You have not bookmarked any artists.</h2>
 	</div>
+</div><!--content-->
 <?
 	show_footer();
 	die();

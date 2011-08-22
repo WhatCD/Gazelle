@@ -1,5 +1,7 @@
 <?
-if (!check_perms('users_mod') && empty($LoggedUser['CustomPermissions'])) { error(403); }
+if (!check_perms('users_mod')) {
+	error(403);
+}
 show_header('Staff Tools');
 ?>
 <div class="permissions">

@@ -12,7 +12,7 @@ function time_ago($TimeStamp) {
 	return time()-$TimeStamp;
 }
 
-function time_diff($TimeStamp,$Levels=2,$Span=true) {	
+function time_diff($TimeStamp,$Levels=2,$Span=true, $Lowercase=false) {	
 	if(!is_number($TimeStamp)) { // Assume that $TimeStamp is SQL timestamp
 		if($TimeStamp == '0000-00-00 00:00:00') { return 'Never'; }
 		$TimeStamp = strtotime($TimeStamp);
@@ -121,6 +121,10 @@ function time_diff($TimeStamp,$Levels=2,$Span=true) {
 		$Return = 'Just now';
 	} elseif (!isset($HideAgo)) {
 		$Return .= ' ago';
+	}
+
+	if ($Lowercase) {
+		$Return = strtolower($Return);
 	}
 	
 	if ($Span) {

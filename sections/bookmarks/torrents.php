@@ -255,14 +255,14 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		<a href="bookmarks.php?type=requests">[Requests]</a>
 <? if (count($TorrentList) > 0) { ?>
 		<br /><br />
-		<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="alert('This feature is temporarily disabled');">[Remove Snatched]</a>
-		<?//onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">[Remove Snatched]</a>?>
+		<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">[Remove Snatched]</a>
 <? } ?>
 	</div>
 <? if (count($TorrentList) == 0) { ?>
 	<div class="box pad" align="center">
 		<h2>You have not bookmarked any torrents.</h2>
 	</div>
+</div><!--content-->
 <?
 	show_footer();
 	die();

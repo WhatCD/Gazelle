@@ -309,7 +309,7 @@ if(empty($Results)) {
 					<a href="#content<?=$PostID?>" onclick="LoadEdit(<?=$PostID?>, 1)">&laquo;</a>
 <? 				} ?>		   
 					Last edited by
-					<?=format_username($EditedUserID, $EditedUsername) ?> <?=strtolower(time_diff($EditedTime))?>
+					<?=format_username($EditedUserID, $EditedUsername) ?> <?=time_diff($EditedTime,2,true,true)?>
 <?			} ?>		
 				</div>
 			</td>

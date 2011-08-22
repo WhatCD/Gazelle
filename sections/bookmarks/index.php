@@ -17,13 +17,10 @@ switch($_REQUEST['action']) {
 		break;
 		
 	case 'remove_snatched':
-		header('Location: bookmarks.php');
-		die();
-		error(0); // disable this for now as it's the heaviest part of the entire site
 		authorize();
 		$DB->query("DELETE b FROM bookmarks_torrents AS b WHERE b.UserID='".$LoggedUser['ID']."' AND b.GroupID IN(SELECT DISTINCT t.GroupID FROM torrents AS t INNER JOIN xbt_snatched AS s ON s.fid=t.ID AND s.uid='".$LoggedUser['ID']."')");
-		$Cache->delete_value('bookmarks_torrents_'.$UserID);
-		$Cache->delete_value('bookmarks_torrents_'.$UserID.'_full');
+		$Cache->delete_value('bookmarks_torrent_'.$UserID);
+		$Cache->delete_value('bookmarks_torrent_'.$UserID.'_full');
 		header('Location: bookmarks.php');
 		die();
 		break;

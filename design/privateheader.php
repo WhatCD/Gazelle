@@ -86,9 +86,6 @@ if ($Mobile) { ?>
 ?>
 </head>
 <body id="<?=$Document == 'collages' ? 'collage' : $Document?>" <?= ((!$Mobile && $LoggedUser['Rippy'] == 'On') ? 'onload="say()"' : '') ?>>
-<?
-
-} ?>
 <div id="wrapper">
 <h1 class="hidden"><?=SITE_NAME?></h1>
 

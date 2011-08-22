@@ -86,10 +86,11 @@ $DB->query("SELECT
 		BitrateList,
 		FormatList,
 		MediaList,
-		LogCue
+		LogCue,
+		TimeStampDiff(MINUTE, LastVote, NOW())
 	FROM requests 
 	WHERE ID = ".$RequestID);
-list($Title, $RequesterID, $OldTorrentID, $RequestCategoryID, $RequestReleaseType, $RequestCatalogueNumber, $BitrateList, $FormatList, $MediaList, $LogCue) = $DB->next_record();
+list($Title, $RequesterID, $OldTorrentID, $RequestCategoryID, $RequestReleaseType, $RequestCatalogueNumber, $BitrateList, $FormatList, $MediaList, $LogCue, $VoteTime) = $DB->next_record();
 
 if(!empty($OldTorrentID)) {
 	$Err = "This request has already been filled";
@@ -160,8 +161,7 @@ $DB->query("UPDATE requests SET
 				FillerID = ".$FillerID.",
 				TorrentID = ".$TorrentID.",
 				TimeFilled = '".sqltime()."'
-			WHERE ID = ".$RequestID);
-
+			WHERE ID = ".$RequestID);	
 
 if($CategoryName == "Music") {
 	$ArtistForm = get_request_artists($RequestID);
@@ -174,8 +174,8 @@ if($CategoryName == "Music") {
 $DB->query("SELECT UserID FROM requests_votes WHERE RequestID = ".$RequestID);
 $UserIDs = $DB->to_array();
 foreach ($UserIDs as $User) {
-	list($UserID) = $User;
-	send_pm($UserID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID), '');
+	list($VoterID) = $User;
+	send_pm($VoterID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID), '');
 }
 
 $RequestVotes = get_votes_array($RequestID);
@@ -190,6 +190,7 @@ $DB->query("UPDATE users_main
 
 $Cache->delete_value('user_stats_'.$FillerID);
 $Cache->delete_value('request_'.$RequestID);
+
 
 
 $DB->query("SELECT ArtistID FROM requests_artists WHERE RequestID = ".$RequestID);

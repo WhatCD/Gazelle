@@ -782,9 +782,82 @@ if (check_paranoia_here('requestsvoted_list')) {
 <?
 	}
 }
+
+include_once(SERVER_ROOT.'/sections/staff/functions.php');
+$FLS = get_fls();
+$IsFLS = false;
+foreach($FLS as $F) {
+	if($LoggedUser['ID'] == $F['ID']) {
+		$IsFLS = true;
+		break;
+	}
+}
+if (check_perms('users_mod', $Class) || $IsFLS) { 
+	$UserLevel = $LoggedUser['Class'];
+	$DB->query("SELECT 
+					SQL_CALC_FOUND_ROWS
+					ID, 
+					Subject, 
+					Status, 
+					Level, 
+					AssignedToUser, 
+					Date, 
+					ResolverID 
+				FROM staff_pm_conversations 
+				WHERE UserID = $UserID AND (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."')
+				ORDER BY Date DESC");
+	if ($DB->record_count()) {
+		$StaffPMs = $DB->to_array();
+?>
+		<div class="box">
+			<div class="head">Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;">(View)</a></div>
+			<table width="100%" class="hidden" id="staffpms">
+				<tr class="colhead">
+					<td>Subject</td>
+					<td>Date</td>
+					<td>Assigned To</td>
+					<td>Resolved By</td>
+				</tr>
+<?		foreach($StaffPMs as $StaffPM) {
+			list($ID, $Subject, $Status, $Level, $AssignedTo, $Date, $ResolverID) = $StaffPM;
+			// Get assigned
+			if ($AssignedToUser == '') {
+				// Assigned to class
+				$Assigned = ($Level == 0) ? "First Line Support" : $ClassLevels[$Level]['Name'];
+				// No + on Sysops
+				if ($Assigned != 'Sysop') { $Assigned .= "+"; }
+					
+			} else {
+				// Assigned to user
+				$UserInfo = user_info($AssignedToUser);
+				$Assigned = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);	
+			} 
+			
+			if ($ResolverID) {
+				$UserInfo = user_info($ResolverID);
+				$Resolver = format_username($ResolverID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+			} else {
+				$Resolver = "(unresolved)";
+			}
+			
+			?>
+				<tr>
+					<td><a href="staffpm.php?action=viewconv&amp;id=<?=$ID?>"><?=display_str($Subject)?></a></td>
+					<td><?=time_diff($Date, 2, true)?></td>
+					<td><?=$Assigned?></td>
+					<td><?=$Resolver?></td>
+				</tr>
+<?		} ?>				
+			</table>
+		</div>
+<?	}
+}
 ?>
 <br />
-<? if (check_perms('users_mod', $Class)) { ?>
+<?
+
+
+if (check_perms('users_mod', $Class)) { ?>
 		<form id="form" action="user.php" method="post">
 		<input type="hidden" name="action" value="moderate" />
 		<input type="hidden" name="userid" value="<?=$UserID?>" />

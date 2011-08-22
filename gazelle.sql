@@ -388,6 +388,15 @@ CREATE TABLE `news` (
   KEY `Time` (`Time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `ocelot_query_times` (
+  `buffer` enum('users','torrents','snatches','peers') NOT NULL,
+  `starttime` datetime NOT NULL,
+  `ocelotinstance` datetime NOT NULL,
+  `querylength` int(11) NOT NULL,
+  `timespent` int(11) NOT NULL,
+  UNIQUE KEY `starttime` (`starttime`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `permissions` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Level` int(10) unsigned NOT NULL,
@@ -1075,7 +1084,8 @@ CREATE TABLE `users_info` (
   KEY `JoinDate` (`JoinDate`),
   KEY `Inviter` (`Inviter`),
   KEY `RatioWatchEnds` (`RatioWatchEnds`),
-  KEY `RatioWatchDownload` (`RatioWatchDownload`)
+  KEY `RatioWatchDownload` (`RatioWatchDownload`),
+  KEY `BitcoinAddress` (`BitcoinAddress`(4))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_main` (

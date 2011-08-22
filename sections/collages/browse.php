@@ -140,8 +140,8 @@ show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 <? } else { ?>
 	<h2>Browse collages<?=(!empty($UserLink) ? (isset($CollageIDs) ? ' with contributions by '.$UserLink : ' started by '.$UserLink) : '')?></h2>
 <? } ?>
-	<div>
 <? if (!$BookmarkView) { ?>
+	<div>
 		<form action="" method="get">
 			<div><input type="hidden" name="action" value="search" /></div>
 			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
@@ -197,8 +197,7 @@ show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 	</div>
 <? } // if (!$BookmarkView) ?>
 	<div class="linkbox">
-<? if (!$BookmarkView) { ?>
-<?
+<? if (!$BookmarkView) {
 if (check_perms('site_collages_create')) { ?>
 		<a href="collages.php?action=new">[New collage]</a>
 <? } 
@@ -232,7 +231,6 @@ if (check_perms('site_collages_create') || check_perms('site_collages_personal')
 		<a href="bookmarks.php?type=collages">[Collages]</a>
 		<a href="bookmarks.php?type=requests">[Requests]</a>
 <? } ?>
-<br /><br />
 <?
 $Pages=get_pages($Page,$NumResults,COLLAGES_PER_PAGE,9);
 echo $Pages;
@@ -246,7 +244,8 @@ echo $Pages;
 	<h2>Your search did not match anything.</h2>
 	<p>Make sure all names are spelled correctly, or try making your search less specific.</p>
 <?	} ?>
-</div>
+</div><!--box-->
+</div><!--content-->
 <? show_footer(); die();
 } ?>
 <table width="100%">
