@@ -538,6 +538,12 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 					</select>
 				</td>
 			</tr>
+<?	if(check_perms('site_search_many')) { ?>
+			<tr>
+				<td class="label">Limited search results:</td>
+				<td><input type="checkbox" value="1" name="limit_matches" <?selected('limit_matches',1,'checked')?> /></td>
+			</tr>
+<?	} ?>
 		</table>
 		<table class="cat_list">
 <?

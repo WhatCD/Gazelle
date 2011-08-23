@@ -136,7 +136,7 @@ class SPHINX_SEARCH extends SphinxClient {
 	}
 	
 	function limit($Start, $Length, $MaxMatches=SPHINX_MATCHES_START) {
-		if(check_perms('site_search_many')) {
+		if(check_perms('site_search_many') && empty($_GET['limit_matches'])) {
 			$MaxMatches = 500000; 
 		}
 		$this->SetLimits((int)$Start, (int)$Length, $MaxMatches, 0);
