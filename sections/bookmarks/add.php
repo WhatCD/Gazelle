@@ -23,8 +23,7 @@ if($DB->record_count() == 0) {
 	} elseif ($Type == 'request') {
 		$DB->query("SELECT UserID FROM $Table WHERE $Col='".db_string($_GET['id'])."'");
 		$Bookmarkers = $DB->collect('UserID');
-		$Bookmarkers = array(1);
-		$SS->UpdateAttributes('requests', array('bookmarker'), array($_GET['id'] => array($Bookmarkers)), true);
+		$SS->UpdateAttributes('requests requests_delta', array('bookmarker'), array($_GET['id'] => array($Bookmarkers)), true);
 	}
 }
 ?>
