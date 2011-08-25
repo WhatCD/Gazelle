@@ -11,6 +11,7 @@ The required page is determined by $_GET['action'].
 enforce_login();
 
 switch ($_GET['action']){
+	// things that (may be) used on the site
 	case 'upload_section':
 		// Gets one of the upload forms
 		require(SERVER_ROOT.'/sections/ajax/upload.php');
@@ -31,6 +32,10 @@ switch ($_GET['action']){
 		require(SERVER_ROOT.'/sections/ajax/stats.php');
 		break;
 	
+	// things not yet used on the site
+	case 'torrentgroup':
+		require('torrentgroup.php');
+		break;
 	default:
 		// If they're screwing around with the query string
 		error(403);
