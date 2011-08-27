@@ -4,7 +4,7 @@
 // Bear this in mind when you try to use script_start functions.
 
 if (!check_perms('site_proxy_images')) { error('forbidden'); }
-$URL = htmlspecialchars_decode($_GET['i']);
+$URL = isset($_GET['i']) ? htmlspecialchars_decode($_GET['i']) : null;
 
 if (!extension_loaded('openssl') && strtoupper($URL[4]) == 'S') { error('badprotocol'); }
 

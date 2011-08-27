@@ -214,10 +214,6 @@ switch ($_REQUEST['action']){
 
 		break;
 
-	case 'canariesv2':
-		include('data/canariesv2.php');
-		break;
-
 	case 'ip_ban':
 		//TODO: Clean up db table ip_bans.
 		include("managers/bans.php");
