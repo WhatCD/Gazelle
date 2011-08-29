@@ -76,8 +76,9 @@ if(time_ago($UploadTime) < 3600 && $UploaderID != $FillerID && !check_perms('sit
 }
 
 
-$DB->query("SELECT 
-		Title, 
+
+$DB->query("SELECT
+		Title,
 		UserID,
 		TorrentID,
 		CategoryID,
@@ -86,11 +87,11 @@ $DB->query("SELECT
 		BitrateList,
 		FormatList,
 		MediaList,
-		LogCue,
-		TimeStampDiff(MINUTE, LastVote, NOW())
-	FROM requests 
+		LogCue
+	FROM requests
 	WHERE ID = ".$RequestID);
-list($Title, $RequesterID, $OldTorrentID, $RequestCategoryID, $RequestReleaseType, $RequestCatalogueNumber, $BitrateList, $FormatList, $MediaList, $LogCue, $VoteTime) = $DB->next_record();
+list($Title, $RequesterID, $OldTorrentID, $RequestCategoryID, $RequestReleaseType, $RequestCatalogueNumber, $BitrateList, $FormatList, $MediaList, $LogCue) = $DB->next_record();
+
 
 if(!empty($OldTorrentID)) {
 	$Err = "This request has already been filled";
