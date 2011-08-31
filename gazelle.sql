@@ -872,6 +872,13 @@ CREATE TABLE `torrents_balance_history` (
   KEY `Time` (`Time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `torrents_cassette_approved` (
+  `TorrentID` int(10) NOT NULL DEFAULT '0',
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `TimeAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  KEY `TimeAdded` (`TimeAdded`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `torrents_comments` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `GroupID` int(10) NOT NULL,
@@ -932,6 +939,13 @@ CREATE TABLE `torrents_logs_new` (
   PRIMARY KEY (`LogID`),
   KEY `TorrentID` (`TorrentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `torrents_lossymaster_approved` (
+  `TorrentID` int(10) NOT NULL DEFAULT '0',
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `TimeAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  KEY `TimeAdded` (`TimeAdded`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `torrents_peerlists` (
   `GroupID` int(10) NOT NULL,
