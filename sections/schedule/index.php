@@ -631,8 +631,16 @@ if($Day != next_day() || $_GET['runday']){
 	
 	$LogEntries = array();
 	
+	// Exceptions for inactivity deletion
+	$InactivityExceptionsMade = array(//UserID => expiry time of exception
+		
+	);
 	foreach ($TorrentIDs as $TorrentID) {
 		list($ID, $GroupID, $Name, $ArtistName, $LastAction, $Format, $Encoding, $UserID) = $TorrentID;
+		if (array_key_exists($UserID, $InactivityExceptionsMade) && (time() < $InactivityExceptionsMade[$UserID])) {
+			// don't delete the torrent!
+			continue;	
+		}
 		if($ArtistName) {
 			$Name = $ArtistName.' - '.$Name;
 		}
