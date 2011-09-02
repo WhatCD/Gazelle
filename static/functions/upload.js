@@ -196,6 +196,7 @@ function AddArtistField() {
 	var x = $('#artistfields').raw();
 	x.appendChild(document.createElement("br"));
 	x.appendChild(ArtistField);
+	x.appendChild(document.createTextNode('\n'));
 	x.appendChild(ImportanceField);
 	ArtistCount++;
 }
