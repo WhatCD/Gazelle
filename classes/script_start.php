@@ -1618,9 +1618,9 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 	
 	foreach($GroupIDs as $GroupID) {
 		$Data = $Cache->get_value('torrent_group_'.$GroupID, true);
-		if(!empty($Data)) {
+		if(!empty($Data) && (@$Data['ver'] >= 2)) {
 			unset($NotFound[$GroupID]);
-			$Found[$GroupID] = $Data;
+			$Found[$GroupID] = $Data['d'];
 		}
 	}
 	
@@ -1645,11 +1645,11 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 	
 		$DB->query("SELECT
 			ID, GroupID, Media, Format, Encoding, RemasterYear, Remastered, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Scene, HasLog, HasCue, LogScore, FileCount, FreeTorrent, Size, Leechers, Seeders, Snatched, Time, ID AS HasFile
-			FROM torrents AS t WHERE GroupID IN($IDs) ORDER BY GroupID, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Format, Encoding");
+			FROM torrents AS t WHERE GroupID IN($IDs) ORDER BY GroupID, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Media, Format, Encoding");
 		while($Torrent = $DB->next_record(MYSQLI_ASSOC, true)) {
 			$Found[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;
 	
-			$Cache->cache_value('torrent_group_'.$Torrent['GroupID'], $Found[$Torrent['GroupID']], 0);
+			$Cache->cache_value('torrent_group_'.$Torrent['GroupID'], array('ver'=>2, 'd'=>$Found[$Torrent['GroupID']]), 0);
 		}
 	}
 
@@ -1802,7 +1802,6 @@ function torrent_info($Data) {
 		$Info[]=$Str;
 	}
 	if(!empty($Data['HasCue'])) { $Info[]='Cue'; }
-	if(!empty($Data['Media'])) { $Info[]=$Data['Media']; }
 	if(!empty($Data['Scene'])) { $Info[]='Scene'; }
 	if($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
 	if($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }

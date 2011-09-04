@@ -279,6 +279,8 @@ $LastRemasterTitle = '';
 $LastRemasterRecordLabel = '';
 $LastRemasterCatalogueNumber = '';
 
+$EditionID = 0;
+
 foreach ($TorrentList as $Torrent) {
 	
 		//t.ID,	t.Media, t.Format, t.Encoding, t.Remastered, t.RemasterYear, t.RemasterTitle, t.RemasterRecordLabel,t.RemasterCatalogueNumber,
@@ -352,12 +354,12 @@ foreach ($TorrentList as $Torrent) {
 
 	$TorrentUploader = $Username; // Save this for "Uploaded by:" below
 
+	// similar to torrent_info()
 	if($Format) { $ExtraInfo.=display_str($Format); $AddExtra=' / '; }
 	if($Encoding) { $ExtraInfo.=$AddExtra.display_str($Encoding); $AddExtra=' / '; }
 	if($HasLog) { $ExtraInfo.=$AddExtra.'Log'; $AddExtra=' / '; }
 	if($HasLog && $LogInDB) { $ExtraInfo.=' ('.(int) $LogScore.'%)'; }
 	if($HasCue) { $ExtraInfo.=$AddExtra.'Cue'; $AddExtra=' / '; }
-	if($Media) { $ExtraInfo.=$AddExtra.display_str($Media); $AddExtra=' / '; }
 	if($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
 	if(!$ExtraInfo) {
 		$ExtraInfo = $GroupName ; $AddExtra=' / ';
@@ -376,7 +378,10 @@ foreach ($TorrentList as $Torrent) {
 		|| $RemasterYear != $LastRemasterYear
 		|| $RemasterRecordLabel != $LastRemasterRecordLabel 
 		|| $RemasterCatalogueNumber != $LastRemasterCatalogueNumber
-		|| $FirstUnknown)) {
+		|| $FirstUnknown
+		|| $Media != $LastMedia)) {
+		
+		$EditionID++;
 
 		if($Remastered && $RemasterYear != 0){
 		
@@ -385,9 +390,10 @@ foreach ($TorrentList as $Torrent) {
 			if($RemasterRecordLabel) { $RemasterName .= $AddExtra.display_str($RemasterRecordLabel); $AddExtra=' / '; }
 			if($RemasterCatalogueNumber) { $RemasterName .= $AddExtra.display_str($RemasterCatalogueNumber); $AddExtra=' / '; }
 			if($RemasterTitle) { $RemasterName .= $AddExtra.display_str($RemasterTitle); $AddExtra=' / '; }			
+			$RemasterName .= $AddExtra.display_str($Media);
 ?>
-			<tr class="group_torrent">
-				<td colspan="5" class="edition_info"><strong><?=$RemasterName?></strong></td>
+			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
+				<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$RemasterName?></strong></td>
 			</tr>
 <?
 		} else {
@@ -396,9 +402,10 @@ foreach ($TorrentList as $Torrent) {
 				$AddExtra = " / ";
 				if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
 				if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
+				$MasterName .= $AddExtra.display_str($Media);
 ?>
-		<tr class="group_torrent">
-			<td colspan="5" class="edition_info"><strong><?=$MasterName?></strong></td>
+		<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
+			<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$MasterName?></strong></td>
 		</tr>
 <?
 			} else {
@@ -414,9 +421,10 @@ foreach ($TorrentList as $Torrent) {
 	$LastRemasterYear = $RemasterYear;
 	$LastRemasterRecordLabel = $RemasterRecordLabel;
 	$LastRemasterCatalogueNumber = $RemasterCatalogueNumber;
+	$LastMedia = $Media;
 ?>
 
-			<tr class="group_torrent" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
+			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
 				<td>
 					<span>[
 						<a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$HasFile ? 'DL' : 'Missing'?></a>
@@ -437,7 +445,7 @@ foreach ($TorrentList as $Torrent) {
 				<td><?=number_format($Seeders)?></td>
 				<td><?=number_format($Leechers)?></td>
 			</tr>
-			<tr class="pad <? if(!isset($_GET['torrentid']) || $_GET['torrentid']!=$TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
+			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> torrentdetails pad <? if(!isset($_GET['torrentid']) || $_GET['torrentid']!=$TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
 				<td colspan="5">
 					<blockquote>
 						Uploaded by <?=format_username($UserID, $TorrentUploader)?> <?=time_diff($TorrentTime);?>

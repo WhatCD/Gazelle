@@ -136,7 +136,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			<tr class="group discog" id="group_<?=$GroupID?>">
 				<td class="center">
 					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="ToggleGroup(<?=$GroupID?>); return false;"></a>
+						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group"></a>
 					</div>
 				</td>
 				<td class="center">
@@ -152,22 +152,28 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$LastRemasterTitle = '';
 		$LastRemasterRecordLabel = '';
 		$LastRemasterCatalogueNumber = '';
+		$LastMedia = '';
+		
+		$EditionID = 0;
 		
 		foreach ($Torrents as $TorrentID => $Torrent) {
 			
 			if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
-			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber) {
+			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $Torrent['Media'] != $LastMedia) {
 				if($Torrent['RemasterTitle']  || $Torrent['RemasterYear'] || $Torrent['RemasterRecordLabel'] || $Torrent['RemasterCatalogueNumber']) {
+				
+					$EditionID++;
 					
 					$RemasterName = $Torrent['RemasterYear'];
 					$AddExtra = " - ";
 					if($Torrent['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']); $AddExtra=' / '; }
 					if($Torrent['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']); $AddExtra=' / '; }
 					if($Torrent['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterTitle']); $AddExtra=' / '; }
+					$RemasterName .= $AddExtra.display_str($Torrent['Media']);
 					
 ?>
-	<tr class="group_torrent groupid_<?=$GroupID?><? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
-		<td colspan="7" class="edition_info"><strong><?=$RemasterName?></strong></td>
+	<tr class="group_torrent groupid_<?=$GroupID?> edition<? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
+		<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$RemasterName?></strong></td>
 	</tr>
 <?
 				} else {
@@ -175,9 +181,10 @@ foreach ($TorrentList as $GroupID=>$Group) {
 					$AddExtra = " / ";
 					if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
 					if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
+					$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
-	<tr class="group_torrent groupid_<?=$GroupID?><? if (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; }?>">
-		<td colspan="7" class="edition_info"><strong><?=$MasterName?></strong></td>
+	<tr class="group_torrent groupid_<?=$GroupID?> edition<? if (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; }?>">
+		<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$MasterName?></strong></td>
 	</tr>
 <?
 				}
@@ -186,8 +193,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			$LastRemasterYear = $Torrent['RemasterYear'];
 			$LastRemasterRecordLabel = $Torrent['RemasterRecordLabel'];
 			$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
+			$LastMedia = $Torrent['Media'];
 ?>
-<tr class="group_torrent groupid_<?=$GroupID?><? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
+<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
 		<td colspan="3">
 			<span>
 				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>]

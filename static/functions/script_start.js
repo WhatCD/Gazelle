@@ -259,7 +259,7 @@ util.fn = util.prototype = {
 		return this.objects[number];
 	},
 	nextElementSibling: function () {
-		here = this.objects[0];
+		var here = this.objects[0];
 		if (here.nextElementSibling) { 
 			return $(here.nextElementSibling);
 		}
@@ -269,7 +269,7 @@ util.fn = util.prototype = {
 		return $(here);
 	},
 	previousElementSibling: function () {
-		here = this.objects[0];
+		var here = this.objects[0];
 		if (here.previousElementSibling) { 
 			return $(here.previousElementSibling);
 		}

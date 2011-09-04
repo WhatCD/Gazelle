@@ -30,7 +30,8 @@ $DB->query("select t1.GroupID,t2.SeedersList,t2.LeechersList,t2.SnatchedList FRO
 
 while(list($GroupID,$Seeders,$Leechers,$Snatched) = $DB->next_record(MYSQLI_NUM)) {
 	$Data = $Cache->get_value('torrent_group_'.$GroupID);
-	if(!is_array($Data)) { continue; }
+	if (!(is_array($Data) && (@$Data['ver'] >= 2))) { continue; }
+	$Data = $Data['d'];
 	
 	$Changed = false;
 	

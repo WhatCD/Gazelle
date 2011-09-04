@@ -303,6 +303,7 @@ class CACHE extends Memcache {
 	}
 
 	// Built-in increment/decrement functions are said not to be thread safe
+/* Supposedly fixed in v1.4.6
 	public function increment($Key, $Value=1) {
 		if(($OldValue = $this->get($Key)) === false || !is_number($Value)) {
 			return false;
@@ -319,5 +320,5 @@ class CACHE extends Memcache {
 		}
 		$this->replace_value($Key, $OldValue-$Value);
 	}
-
+*/
 }

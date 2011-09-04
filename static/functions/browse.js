@@ -91,17 +91,18 @@ function toggle_group(groupid, link, event) {
 		clickedRow = clickedRow.parentNode;
 	}
 	var group_rows = clickedRow.parentNode.children;
-	//var showing = has_class(nextElementSibling(clickedRow), 'hidden'); // nextElementSibling(clickedRow) is a .edition
 	var showing = $(clickedRow).nextElementSibling().has_class('hidden');
 	var allGroups = event.ctrlKey;
 	for (var i = 0; i < group_rows.length; i++) {
 		var row = $(group_rows[i]);
 		if (row.has_class('colhead_dark')) { continue; }
 		if (row.has_class('colhead')) { continue; }
-		var relevantRow = row.has_class('group') ? row.nextElementSibling() : row;
+		var relevantRow = row.has_class('group') ? $(group_rows[i+1]) : row;
 		if (allGroups || relevantRow.has_class('groupid_' + groupid)) {
+			row = $(group_rows[i]); // idk why we need this :S
 			if (row.has_class('group')) {
-				$('a.show_torrents_link', row).raw().title = (showing) ? 'Collapse this group' : 'Expand this group';
+				$('a.show_torrents_link', row.raw()).raw().title = (showing) ? 'Collapse this group' : 'Expand this group';
+				$('a.show_torrents_link', row.raw()).raw().parentNode.className = (showing) ? 'hide_torrents' : 'show_torrents';
 			} else {
 				if (showing) {
 					// show the row depending on whether the edition it's in is collapsed or not
@@ -135,7 +136,7 @@ function toggle_edition(groupid, editionid, lnk, event) {
 	var group_rows = $('tr.groupid_' + groupid);
 	for (var i = 0; i < group_rows.results(); i++) {
 		var row = $(group_rows.raw(i));
-		if (row.has_class('edition') && (allEditions || row == clickedRow)) {
+		if (row.has_class('edition') && (allEditions || row.raw(0) == clickedRow)) {
 			$('a', row.raw()).raw().innerHTML = (showing) ? '&minus;' : '+';
 			$('a', row.raw()).raw().title = (showing) ? 'Collapse this edition' : 'Expand this edition';
 			continue;
@@ -184,16 +185,4 @@ function ToggleEditionRows() {
 	$('#edition_title').toggle();
 	$('#edition_label').toggle();
 	$('#edition_catalogue').toggle();
-}
-
-
-function ToggleGroup(groupid) {
-	var show = $('#showimg_' + groupid).has_class('show_torrents')
-	if(show) {
-		$('.groupid_' + groupid).show();
-		$('#showimg_' + groupid).remove_class('show_torrents').add_class('hide_torrents');
-	} else {
-		$('.groupid_' + groupid).hide();
-		$('#showimg_' + groupid).remove_class('hide_torrents').add_class('show_torrents');
-	}
 }

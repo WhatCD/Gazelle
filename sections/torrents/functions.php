@@ -102,7 +102,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			WHERE t.GroupID='".db_string($GroupID)."'
 			AND flags != 1
 			GROUP BY t.ID
-			ORDER BY t.Remastered ASC, (t.RemasterYear <> 0) DESC, t.RemasterYear ASC, t.RemasterTitle ASC, t.RemasterRecordLabel ASC, t.RemasterCatalogueNumber ASC, t.Format, t.Encoding, t.ID");
+			ORDER BY t.Remastered ASC, (t.RemasterYear <> 0) DESC, t.RemasterYear ASC, t.RemasterTitle ASC, t.RemasterRecordLabel ASC, t.RemasterCatalogueNumber ASC, t.Media ASC, t.Format, t.Encoding, t.ID");
 
 		$TorrentList = $DB->to_array();
 		if(count($TorrentList) == 0) {
