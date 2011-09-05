@@ -37,7 +37,6 @@ switch ($_REQUEST['action']) {
 			include('search.php');
 		}
 		break;
-
 	case 'edit':
 		include('edit.php');
 		break;

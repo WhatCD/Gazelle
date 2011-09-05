@@ -734,6 +734,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		$LastMedia = '';
 		
 		$EditionID = 0;
+		unset($FirstUnknown);
 
 		foreach($Torrents as $TorrentID => $Data) {
 			// All of the individual torrents in the group
@@ -828,10 +829,15 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 				continue;
 			}
 
+			if ($Data['Remastered'] && !$Data['RemasterYear']) {
+				$FirstUnknown = !isset($FirstUnknown);
+			}
+
 			if($CategoryID == 1 && ($Data['RemasterTitle'] != $LastRemasterTitle || $Data['RemasterYear'] != $LastRemasterYear ||
-			$Data['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Data['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber) || $Data['Media'] != $LastMedia) {
-				if($Data['RemasterTitle']  || $Data['RemasterYear'] || $Data['RemasterRecordLabel'] || $Data['RemasterCatalogueNumber']) {
-					$EditionID++;
+			$Data['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Data['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber) || $FirstUnknown || $Data['Media'] != $LastMedia) {
+				$EditionID++;
+
+				if($Data['Remastered'] && $Data['RemastedYear'] != 0) {
 					
 					$RemasterName = $Data['RemasterYear'];
 					$AddExtra = " - ";
@@ -846,10 +852,14 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 	</tr>
 <?
 				} else {
-					$MasterName = "Original Release";
 					$AddExtra = " / ";
-					if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
-					if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
+					if (!$Data['Remastered']) {
+						$MasterName = "Original Release";
+						if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
+						if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
+					} else {
+						$MasterName = "Unknown Release(s)";
+					}
 					$MasterName .= $AddExtra.display_str($Data['Media']);
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> edition<? if (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; }?>">

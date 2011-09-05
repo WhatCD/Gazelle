@@ -155,12 +155,17 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$LastMedia = '';
 		
 		$EditionID = 0;
+		unset($FirstUnknown);
 		
 		foreach ($Torrents as $TorrentID => $Torrent) {
+
+			if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
+				$FirstUnknown = !isset($FirstUnknown);
+			}
 			
 			if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
-			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $Torrent['Media'] != $LastMedia) {
-				if($Torrent['RemasterTitle']  || $Torrent['RemasterYear'] || $Torrent['RemasterRecordLabel'] || $Torrent['RemasterCatalogueNumber']) {
+			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
+				if($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
 				
 					$EditionID++;
 					
@@ -177,10 +182,14 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	</tr>
 <?
 				} else {
-					$MasterName = "Original Release";
 					$AddExtra = " / ";
-					if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
-					if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
+					if (!$Torrent['Remastered']) {
+						$MasterName = "Original Release";
+						if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
+						if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
+					} else {
+						$MasterName = "Unknown Release(s)";
+					}
 					$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> edition<? if (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; }?>">

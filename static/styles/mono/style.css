@@ -496,14 +496,18 @@ table[width="100%"] .colhead td,table[width="100%"] .colhead_dark td,.torrent_ta
 	border: 1px solid #aeaeae !important;
 }
 
+#bookmarks .torrent_table .colhead_dark td:nth-child(3) {
+	width: 60%;
+}
+
+#bookmarks .torrent_table .colhead_dark td:first-child, #bookmarks .torrent_table .colhead_dark td:nth-child(2) {
+	width: 5%;
+}
+/*
 .torrent_table .colhead_dark td:first-child {
 	width: 70%;
 }
-
-#bookmarks .torrent_table .colhead_dark td:first-child {
-	width: 5%;
-}
-
+*/
 table[width="100%"] td:first-child,.torrent_table td:first-child,#requests td:first-child,#collages td:first-child,.forum_index td:first-child,#torrent_table td:first-child,table.border td:first-child,.linkbox+table td:first-child,form#messageform table td:first-child,#inbox form table td:first-child {
 	border-left: 1px solid #aeaeae;
 }

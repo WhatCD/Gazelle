@@ -30,7 +30,7 @@ $DB->query("select t1.GroupID,t2.SeedersList,t2.LeechersList,t2.SnatchedList FRO
 
 while(list($GroupID,$Seeders,$Leechers,$Snatched) = $DB->next_record(MYSQLI_NUM)) {
 	$Data = $Cache->get_value('torrent_group_'.$GroupID);
-	if (!(is_array($Data) && (@$Data['ver'] >= 2))) { continue; }
+	if (!(is_array($Data) && (@$Data['ver'] >= 4))) { continue; }
 	$Data = $Data['d'];
 	
 	$Changed = false;
@@ -74,7 +74,7 @@ while(list($GroupID,$Seeders,$Leechers,$Snatched) = $DB->next_record(MYSQLI_NUM)
 		$TotalSnatched=$Val;
 	}
 	if($Changed) {
-		$Cache->cache_value('torrent_group_'.$GroupID, $Data, 0);
+		$Cache->cache_value('torrent_group_'.$GroupID, array('ver'=>4,'d'=>$Data), 0);
 	}
 	unset($Data);
 }

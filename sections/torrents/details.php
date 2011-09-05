@@ -294,11 +294,7 @@ foreach ($TorrentList as $Torrent) {
 		$BadTags, $BadFolders, $BadFiles, $CassetteApproved, $LossymasterApproved, $LastReseedRequest, $LogInDB, $HasFile) = $Torrent;
 
 	if($Remastered && !$RemasterYear) {
-		if(!isset($FirstUnknown)) {
-			$FirstUnknown = true;
-		} else {
-			$FirstUnknown = false;
-		}
+		$FirstUnknown = !isset($FirstUnknown);
 	}
 
 	$Reported = false;
@@ -397,24 +393,20 @@ foreach ($TorrentList as $Torrent) {
 			</tr>
 <?
 		} else {
+			$AddExtra = " / ";
 			if(!$Remastered) {
 				$MasterName = "Original Release";
-				$AddExtra = " / ";
 				if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
 				if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
-				$MasterName .= $AddExtra.display_str($Media);
+			} else {
+				$MasterName = "Unknown Release(s)";
+			}
+			$MasterName .= $AddExtra.display_str($Media);
 ?>
 		<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
 			<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$MasterName?></strong></td>
 		</tr>
 <?
-			} else {
-?>
-		<tr class="group_torrent">
-			<td colspan="5" class="edition_info"><strong>Unknown Release(s)</strong></td>
-		</tr>
-<?
-			}
 		}
 	}
 	$LastRemasterTitle = $RemasterTitle;
