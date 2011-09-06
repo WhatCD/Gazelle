@@ -57,10 +57,14 @@ if($UserID != $LoggedUser['ID']) {
 	send_pm($UserID, 0, db_string("A request you created has been unfilled"), db_string("The request '[url=http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
 }
 
+$DB->query("SELECT UserID FROM requests_votes WHERE RequestID = ".$RequestID);
+$VoterIDs = implode(',',$DB->collect('UserID'));
+
 $DB->query("SELECT ID, UserID 
 	FROM pm_conversations AS pc 
 	JOIN pm_conversations_users AS pu ON pu.ConvID=pc.ID AND pu.UserID!=0 
-	WHERE Subject='The request \"".db_string($FullName)."\" has been filled'");
+	WHERE Subject='".db_string("The request '{$FullName}' has been filled")."'
+	AND pu.UserID IN ($VoterIDs)");
 
 $ConvIDs = implode(',',$DB->collect('ID'));
 $UserIDs = $DB->collect('UserID');

@@ -26,15 +26,14 @@ $SS->limit(0, TORRENTS_PER_PAGE);
 
 $SS->set_index(SPHINX_INDEX.' delta');
 
-$Results = $SS->search($Query, 'torrent_group', 0, array(), '', '');
+$Results = $SS->search($Query, '', 0, array(), '', '');
 
 if(count($Results) == 0) { error('No results found!'); }
-
+/*
 // If some were fetched from memcached, get their artists
 if(!empty($Results['matches'])) { // Fetch the artists for groups
 	$GroupIDs = array_keys($Results['matches']);
 	$Artists = get_artists($GroupIDs);
-	
 	foreach($Artists as $GroupID=>$Data) {
 		if(!empty($Data[1])) {
 			$Results['matches'][$GroupID]['Artists']=$Data[1]; // Only use main artists
@@ -42,7 +41,7 @@ if(!empty($Results['matches'])) { // Fetch the artists for groups
 		ksort($Results['matches'][$GroupID]);
 	}
 }
-
+*/
  // These ones were not found in the cache, run SQL
 if(!empty($Results['notfound'])) {
 	$SQLResults = get_groups($Results['notfound']);
