@@ -63,7 +63,7 @@ $FillerUsername = $LoggedUser['Username'];
 
 if(!empty($_POST['user']) && check_perms('site_moderate_requests')) {
 	$FillerUsername = $_POST['user'];
-	$DB->query("SELECT ID FROM users_main WHERE Username LIKE '".$FillerUsername."'");
+	$DB->query("SELECT ID FROM users_main WHERE Username LIKE '".db_string($FillerUsername)."'");
 	if($DB->record_count() < 1) {
 		$Err = "No such user to fill for!";
 	} else {

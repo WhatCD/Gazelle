@@ -66,6 +66,9 @@ $Preference = $Preferences[$_REQUEST['preference']];
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
 list($ArtistName) = $DB->next_record(MYSQLI_NUM,false);
 
+$DB->query("SELECT GroupID FROM torrents_artists WHERE ArtistID='$ArtistID'");
+$GroupIDs = $DB->collect(0,false);
+
 $SQL = "SELECT CASE ";
 
 foreach ($_REQUEST['list'] as $Priority => $Selection) {
@@ -112,7 +115,7 @@ tg.Name,
 t.Size,
 f.File
 FROM torrents AS t 
-JOIN torrents_group AS tg ON tg.ID=t.GroupID AND tg.CategoryID='1' AND tg.ArtistID='$ArtistID'
+JOIN torrents_group AS tg ON tg.ID=t.GroupID AND tg.CategoryID='1' AND tg.ID IN (".implode(',',$GroupIDs).")
 LEFT JOIN torrents_files AS f ON t.ID=f.TorrentID
 ORDER BY t.GroupID ASC, Rank DESC, t.$Preference";
 

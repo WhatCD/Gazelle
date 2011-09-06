@@ -837,7 +837,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			$Data['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Data['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber) || $FirstUnknown || $Data['Media'] != $LastMedia) {
 				$EditionID++;
 
-				if($Data['Remastered'] && $Data['RemastedYear'] != 0) {
+				if($Data['Remastered'] && $Data['RemasterYear'] != 0) {
 					
 					$RemasterName = $Data['RemasterYear'];
 					$AddExtra = " - ";
