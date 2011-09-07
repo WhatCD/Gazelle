@@ -57,27 +57,6 @@ if($UserID != $LoggedUser['ID']) {
 	send_pm($UserID, 0, db_string("A request you created has been unfilled"), db_string("The request '[url=http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
 }
 
-$DB->query("SELECT UserID FROM requests_votes WHERE RequestID = ".$RequestID);
-$VoterIDs = implode(',',$DB->collect('UserID'));
-
-$DB->query("SELECT ID, UserID 
-	FROM pm_conversations AS pc 
-	JOIN pm_conversations_users AS pu ON pu.ConvID=pc.ID AND pu.UserID!=0 
-	WHERE Subject='".db_string("The request '{$FullName}' has been filled")."'
-	AND pu.UserID IN ($VoterIDs)");
-
-$ConvIDs = implode(',',$DB->collect('ID'));
-$UserIDs = $DB->collect('UserID');
-
-if($ConvIDs){
-	$DB->query("DELETE FROM pm_conversations WHERE ID IN($ConvIDs)");
-	$DB->query("DELETE FROM pm_conversations_users WHERE ConvID IN($ConvIDs)");
-	$DB->query("DELETE FROM pm_messages WHERE ConvID IN($ConvIDs)");
-}
-foreach($UserIDs as $UserID) {
-	$Cache->delete_value('inbox_new_'.$UserID);
-}
-
 write_log("Request $RequestID ($FullName), with a ".get_size($RequestVotes['TotalBounty'])." bounty, was un-filled by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].") for the reason: ".$_POST['reason']);
 
 $Cache->delete_value('request_'.$RequestID);
