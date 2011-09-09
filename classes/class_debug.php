@@ -440,7 +440,7 @@ class DEBUG {
 			list($SQL,$Time) = $Query;
 ?>
 		<tr valign="top">
-			<td><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str($SQL)))?></td>
+			<td class="query"><div><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str($SQL)))?></div></td>
 			<td class="rowa" style="width:130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 		</tr>
 <?

@@ -430,7 +430,7 @@ foreach ($TorrentList as $Torrent) {
 
 						| <a href="torrents.php?torrentid=<?=$TorrentID ?>" title="Permalink">PL</a>
 					]</span>
-					<a href="#" onclick="$('#torrent_<?=$TorrentID?>').toggle(); return false;">&raquo; <?=$ExtraInfo; ?></a>
+					&raquo; <a href="#" onclick="$('#torrent_<?=$TorrentID?>').toggle(); return false;"><?=$ExtraInfo; ?></a>
 				</td>
 				<td class="nobr"><?=get_size($Size)?></td>
 				<td><?=number_format($Snatched)?></td>

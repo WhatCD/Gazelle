@@ -44,8 +44,7 @@ $Results = $Results['matches'];
 	<table>
 <?
 foreach($TorrentsInfo as $TorrentID => $Info) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $Artists) = array_values($Results[$Info['GroupID']]);
-
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Results[$Info['GroupID']]);
 	$DisplayName = '';
 	if(count($Artists)>0) {
 		$DisplayName = display_artists(array('1'=>$Artists));

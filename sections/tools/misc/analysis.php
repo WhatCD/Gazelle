@@ -6,11 +6,7 @@ if (!isset($_GET['case']) || !$Analysis = $Cache->get_value('analysis_'.$_GET['c
 show_header('Case Analysis');
 ?>
 <h2>Case Analysis (<a href="<?=display_str($Analysis['url'])?>"><?=$_GET['case']?></a>)</h2>
-<table id="debug_report">
-	<tr>
-		<td align="left"><pre><?=display_str($Analysis['message'])?></pre></td>
-	</tr>
-</table>
+<pre id="#debug_report"><?=display_str($Analysis['message'])?></pre>
 <?
 $Debug->flag_table($Analysis['flags']);
 $Debug->include_table($Analysis['includes']);

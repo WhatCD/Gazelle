@@ -768,6 +768,14 @@ span.last_read a:hover {
 	padding: 15px;
 }
 
+body#forums table.forum_post td.body > div { /* Wide main column (forums) */
+	width: 787px;
+}
+
+table.forum_post td.body > div { /* Narrow main column (torrent comments, request comments) */
+	width: 522px;
+}
+
 .forum_post ul,.forum_post ol {
 	margin-left: 25px;
 }
@@ -1111,6 +1119,20 @@ div.pad ul,div.body ul,table.torrent_table blockquote>ul,div.pad ol,div.body ol 
 	padding-left: 15px;
 }
 
-#debug_database pre,#debug_report pre {
+#debug_report {
 	white-space: pre-wrap;
+}
+
+#debug_database td.query {
+	padding: 0;
+}
+
+#debug_database td.query>div {
+	overflow: auto;
+	padding: 8px;
+	width: 796px;
+}
+
+.nobr {
+	white-space: nowrap;
 }

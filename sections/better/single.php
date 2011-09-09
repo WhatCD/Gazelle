@@ -25,7 +25,7 @@ show_header('Single seeder FLACs');
 <?
 $Results = $Results['matches'];
 foreach ($Results as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $Torrents, $Artists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 	
 	$DisplayName = '';
