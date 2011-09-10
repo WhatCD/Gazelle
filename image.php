@@ -67,6 +67,23 @@ function verysmall($Image) {
 	return ((imagesx($Image) * imagesy($Image)) < 25) ? true : false;
 }
 
+function image_type($Data) {
+	if(!strncmp($Data,'GIF',3)) {
+		return 'gif';
+	}
+	if(!strncmp($Data,pack('H*','89504E47'),4)) {
+		return 'png';
+	}
+	if(!strncmp($Data,pack('H*','FFD8'),2)) {
+		return 'jpeg';
+	}
+	if(!strncmp($Data,'BM',2)) {
+		return 'bmp';
+	}
+	if(!strncmp($Data,'II',2) || !strncmp($Data,'MM',2)) {
+		return 'tiff';
+	}
+}
 
 function image_height($Type, $Data) {
 	$Length = strlen($Data);

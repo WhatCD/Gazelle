@@ -87,24 +87,27 @@ if(!empty($_GET['search'])) {
 	}
 }
 
-$TagMatcher = (!empty($_GET['tagmatcher']) && $_GET['tagmatcher'] == "any") ? "any" : "all";
-
 if(!empty($_GET['tags'])){
 	$Tags = explode(',', $_GET['tags']);
 	$TagNames = array();
-	foreach ($Tags as $Tag){
+	foreach ($Tags as $Tag) {
 		$Tag = sanitize_tag($Tag);
 		if(!empty($Tag)) {
 			$TagNames[] = $Tag;
 		}
 	}
-	
 	$Tags = get_tags($TagNames);
-	if(count($Tags) < 1) {
-		$Fail = true;
-	} else {
-		$SS->set_filter('tagid', array_keys($Tags));
+}
+
+if(empty($_GET['tags_type']) && !empty($Tags)) {
+	$_GET['tags_type'] = '0';
+	$SS->set_filter('tagid', array_keys($Tags));
+} elseif(!empty($Tags)) {
+	foreach(array_keys($Tags) as $Tag) {
+		$SS->set_filter('tagid', array($Tag));
 	}
+} else {
+	$_GET['tags_type'] = '1';
 }
 
 if(!empty($_GET['filter_cat'])) {
@@ -327,11 +330,9 @@ show_header($Title, 'requests');
 				<tr>
 					<td class="label">Tags (comma-separated):</td>
 					<td>
-						<input type="text" name="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />
-						<?/*
-						<input type="radio" name="tagmatcher" value="any" <?=((empty($TagMatcher) || $TagMatcher == "any") ? ' checked="checked" ' : '')?>/>Any &nbsp;
-						<input type="radio" name="tagmatcher" value="all" <?=((!empty($TagMatcher) && $TagMatcher == "all") ? ' checked="checked" ' : '')?>/>All
-						*/?>
+						<input type="text" name="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />&nbsp;
+						<input type="radio" name="tags_type" id="tags_type0" value="0" <?selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+						<input type="radio" name="tags_type" id="tags_type1" value="1"  <?selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 					</td>
 				</tr>
 				<tr>
@@ -471,7 +472,7 @@ foreach($Categories as $CatKey => $CatName) {
 				<a href="requests.php?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Last Vote</strong></a>
 			</td>
 		</tr>
-<?	if($NumResults == 0 || !empty($Fail)) { ?>
+<?	if($NumResults == 0) { ?>
 		<tr class="rowb">
 			<td colspan="8">
 				Nothing found!

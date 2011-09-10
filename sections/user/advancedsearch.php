@@ -22,7 +22,7 @@ if (!empty($_GET['search'])) {
  
 define('USERS_PER_PAGE', 30);
 
-function wrap($String, $ForceMatch = ''){
+function wrap($String, $ForceMatch = '', $IPSearch = false){
 	if(!$ForceMatch){
 		global $Match;
 	} else {
@@ -38,9 +38,9 @@ function wrap($String, $ForceMatch = ''){
 	if($Match == ' LIKE '){
 		// Fuzzy search
 		// Stick in wildcards at beginning and end of string unless string starts or ends with |
-		if($String[0] != '|'){
+		if (($String[0] != '|') && !$IPSearch) {
 			$String = '%'.$String;
-		} else {
+		} elseif ($String[0] == '|') {
 			$String = substr($String, 1, strlen($String));
 		}
 
@@ -251,9 +251,9 @@ if(count($_GET)){
 			if(isset($_GET['ip_history'])){
 				$Distinct = 'DISTINCT ';
 				$Join[]=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
-				$Where[]= ' hi.IP '.$Match.wrap($_GET['ip']);
+				$Where[]= ' hi.IP '.$Match.wrap($_GET['ip'], '', true);
 			} else {
-				$Where[]='um1.IP'.$Match.wrap($_GET['ip']);
+				$Where[]='um1.IP'.$Match.wrap($_GET['ip'], '', true);
 			}
 		}
 
@@ -268,7 +268,7 @@ if(count($_GET)){
 		if(!empty($_GET['tracker_ip'])){
 				$Distinct = 'DISTINCT ';
 				$Join[]=' JOIN xbt_files_users AS xfu ON um1.ID=xfu.uid ';
-				$Where[]= ' xfu.ip '.$Match.wrap($_GET['tracker_ip']);
+				$Where[]= ' xfu.ip '.$Match.wrap($_GET['tracker_ip'], '', true);
 		}
 
 //		if(!empty($_GET['tracker_ip'])){

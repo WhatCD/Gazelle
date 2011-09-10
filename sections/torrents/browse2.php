@@ -139,6 +139,7 @@ if(!empty($_GET['searchstr'])) {
 				unset($Words[$Key]);
 			}
 		}
+		unset($Word);
 		$Words = trim(implode(' ',$Words));
 		if(!empty($Words)) {
 			$Queries[]='@(groupname,artistname,yearfulltext) '.$Words;
@@ -163,16 +164,17 @@ if(!empty($_GET['taglist'])) {
 			unset($TagList[$Key]);
 		}
 	}
+	unset($Tag);
 }
 
 if(empty($_GET['tags_type']) && !empty($TagList) && count($TagList) > 1) {
+	$_GET['tags_type'] = '0';
 	if(!empty($TagListEx)) {
 		$Queries[]='@taglist ( '.implode(' | ', $TagList).' ) '.implode(' ', $TagListEx);
 	} else {
 		$Queries[]='@taglist ( '.implode(' | ', $TagList).' )';
 	}
 } elseif(!empty($TagList)) {
-	$_GET['tags_type'] = '1';
 	$Queries[]='@taglist '.implode(' ', array_merge($TagList,$TagListEx));
 } else {
 	$_GET['tags_type'] = '1';
@@ -517,8 +519,8 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 				<td class="label">Tags (comma-separated):</td>
 				<td colspan="3">
 					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_','.',form('taglist', true))?>" />&nbsp;
-					<input type="radio" name="tags_type" id="tags_type0" value="0" <?selected('tags_type',0,'checked')?> /> <label for="tags_type0">Any</label>&nbsp;&nbsp;
-					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?selected('tags_type',1,'checked')?> /> <label for="tags_type1">All</label>
+					<input type="radio" name="tags_type" id="tags_type0" value="0" <?selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 				</td>
 			</tr>
 			<tr>

@@ -38,19 +38,19 @@ switch ($View) {
 list($Page,$Limit) = page_limit(MESSAGES_PER_PAGE);
 // Get messages
 $StaffPMs = $DB->query("
-	SELECT 
+	SELECT
 		SQL_CALC_FOUND_ROWS
-		ID, 
-		Subject, 
-		UserID, 
-		Status, 
-		Level, 
-		AssignedToUser, 
-		Date, 
+		ID,
+		Subject,
+		UserID,
+		Status,
+		Level,
+		AssignedToUser,
+		Date,
 		Unread,
-		ResolverID 
-	FROM staff_pm_conversations 
-	$WhereCondition 
+		ResolverID
+	FROM staff_pm_conversations
+	$WhereCondition
 	ORDER BY Date DESC
 	LIMIT $Limit
 ");
@@ -74,7 +74,7 @@ $Row = 'a';
 <div class="thin">
 	<h2><?=$ViewString?> Staff PMs</h2>
 	<div class="linkbox">
-<? 	if ($IsStaff) { 
+<? 	if ($IsStaff) {
 ?>		<a href="staffpm.php">[My unanswered]</a>
 <? 	} ?>
 		<a href="staffpm.php?view=unanswered">[All unanswered]</a>
@@ -95,15 +95,15 @@ if ($DB->record_count() == 0) {
 
 } else {
 	// Messages, draw table
-	if ($ViewString != 'Resolved' && $IsStaff) { 
+	if ($ViewString != 'Resolved' && $IsStaff) {
 		// Open multiresolve form
 ?>
 		<form method="post" action="staffpm.php" id="messageform">
 			<input type="hidden" name="action" value="multiresolve" />
 			<input type="hidden" name="view" value="<?=strtolower($View)?>" />
-<? 
-	} 
-	
+<?
+	}
+
 	// Table head
 ?>
 			<table>
@@ -125,22 +125,22 @@ if ($DB->record_count() == 0) {
 	while(list($ID, $Subject, $UserID, $Status, $Level, $AssignedToUser, $Date, $Unread, $ResolverID) = $DB->next_record()) {
 		$Row = ($Row === 'a') ? 'b' : 'a';
 		$RowClass = 'row'.$Row;
-		
+
 		$UserInfo = user_info($UserID);
 		$UserStr = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
-		
+
 		// Get assigned
 		if ($AssignedToUser == '') {
 			// Assigned to class
 			$Assigned = ($Level == 0) ? "First Line Support" : $ClassLevels[$Level]['Name'];
 			// No + on Sysops
 			if ($Assigned != 'Sysop') { $Assigned .= "+"; }
-				
+
 		} else {
 			// Assigned to user
 			$UserInfo = user_info($AssignedToUser);
-			$Assigned = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
-			
+			$Assigned = format_username($AssignedToUser, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+
 		}
 
 		// Get resolver
@@ -148,7 +148,7 @@ if ($DB->record_count() == 0) {
 			$UserInfo = user_info($ResolverID);
 			$ResolverStr = format_username($ResolverID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
 		}
-		
+
 		// Table row
 ?>
 				<tr class="<?=$RowClass?>">
@@ -164,19 +164,19 @@ if ($DB->record_count() == 0) {
 <?				} ?>
 				</tr>
 <?
-		
+
 		$DB->set_query_id($StaffPMs);
 	}
-	
+
 	// Close table and multiresolve form
 ?>
 			</table>
 <? 		if ($ViewString != 'Resolved' && $IsStaff) { ?>
 			<input type="submit" value="Resolve selected" />
 <?		} ?>
-		</form>		
+		</form>
 <?
-	
+
 }
 
 ?>

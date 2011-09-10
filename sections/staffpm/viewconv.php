@@ -6,7 +6,7 @@ if ($ConvID = (int)$_GET['id']) {
 	// Get conversation info
 	$DB->query("SELECT Subject, UserID, Level, AssignedToUser, Unread, Status FROM staff_pm_conversations WHERE ID=$ConvID");
 	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
-	
+
 	if ($UserID == $LoggedUser['ID'] || $IsStaff || ($Level == 0 && $IsFLS) || $LoggedUser['ID'] == $AssignedToUser) {
 		// User is trying to view their own unread conversation, set it to read
 		if ($UserID == $LoggedUser['ID'] && $Unread) {
@@ -14,40 +14,40 @@ if ($ConvID = (int)$_GET['id']) {
 			// Clear cache for user
 			$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
 		}
-		
+
 		show_header('Staff PM', 'staffpm,bbcode');
-		
+
 		$UserInfo = user_info($UserID);
 		$UserStr = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
-		
+
 		$OwnerID = $UserID;
 
 ?>
 <div id="thin">
-	<h2>Staff PM - <?=display_str($Subject)?></h2>	
+	<h2>Staff PM - <?=display_str($Subject)?></h2>
 	<div class="linkbox">
-<? 
+<?
 		// Staff only
-		if ($IsStaff) { 
+		if ($IsStaff) {
 ?>
 		<a href="staffpm.php">[My unanswered]</a>
-<? 
-		} 
-		
+<?
+		}
+
 		// FLS/Staff
-		if ($IsFLS) { 
+		if ($IsFLS) {
 ?>
 		<a href="staffpm.php?view=unanswered">[All unanswered]</a>
 		<a href="staffpm.php?view=open">[Open]</a>
 		<a href="staffpm.php?view=resolved">[Resolved]</a>
-<? 
+<?
 		// User
-		} else { 
+		} else {
 ?>
 		<a href="staffpm.php">[Back to inbox]</a>
 <?
 		}
-		
+
 ?>
 		<br />
 		<br />
@@ -56,7 +56,7 @@ if ($ConvID = (int)$_GET['id']) {
 <?
 		// Get messages
 		$StaffPMs = $DB->query("SELECT UserID, SentDate, Message FROM staff_pm_messages WHERE ConvID=$ConvID");
-		
+
 		while(list($UserID, $SentDate, $Message) = $DB->next_record()) {
 			// Set user string
 			if ($UserID == $OwnerID) {
@@ -73,8 +73,8 @@ if ($ConvID = (int)$_GET['id']) {
 			<div class="head">
 				<strong>
 					<?=$UserString?>
-				
-				</strong> 
+
+				</strong>
 				<?=time_diff($SentDate, 2, true)?>
 
 			</div>
@@ -84,7 +84,7 @@ if ($ConvID = (int)$_GET['id']) {
 <?
 			$DB->set_query_id($StaffPMs);
 		}
-		
+
 		// Common responses
 		if ($IsFLS && $Status != 'Resolved') {
 ?>
@@ -115,14 +115,14 @@ if ($ConvID = (int)$_GET['id']) {
 		</div>
 <?
 		}
-		
+
 		// Ajax assign response div
 		if ($IsStaff) {
 ?>
 		<div id="ajax_message" class="hidden center alertbar"></div>
 <?
-		}		
-		
+		}
+
 		// Replybox and buttons
 ?>
 		<h3>Reply</h3>
@@ -133,7 +133,7 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="hidden" name="action" value="takepost" />
 					<input type="hidden" name="convid" value="<?=$ConvID?>" id="convid" />
 					<textarea id="quickpost" name="message" cols="90" rows="10"></textarea> <br />
-<? 
+<?
 		// Assign to
 		if ($IsStaff) {
 			// Staff assign dropdown
@@ -145,9 +145,9 @@ if ($ConvID = (int)$_GET['id']) {
 			$Selected = (!$AssignedToUser && $Level == 0) ? ' selected="selected"' : '';
 ?>
 							<option value="class_0"<?=$Selected?>>First Line Support</option>
-<?				
+<?
 			// Staff classes
-			foreach ($ClassLevels as $Class) { 
+			foreach ($ClassLevels as $Class) {
 				// Create one <option> for each staff user class
 				if ($Class['Level'] >= 650) {
 					$Selected = (!$AssignedToUser && ($Level == $Class['Level'])) ? ' selected="selected"' : '';
@@ -160,7 +160,7 @@ if ($ConvID = (int)$_GET['id']) {
 						</optgroup>
 						<optgroup label="Staff">
 <?
-			
+
 			// Staff members
 			$DB->query("
 				SELECT
@@ -169,15 +169,15 @@ if ($ConvID = (int)$_GET['id']) {
 				FROM permissions as p
 				JOIN users_main as m ON m.PermissionID=p.ID
 				WHERE p.DisplayStaff='1'
-				ORDER BY p.Level DESC"
+				ORDER BY p.Level DESC, m.Username ASC"
 			);
-			while(list($ID, $Name) = $DB->next_record()) { 
+			while(list($ID, $Name) = $DB->next_record()) {
 				// Create one <option> for each staff member
 				$Selected = ($AssignedToUser == $ID) ? ' selected="selected"' : '';
 ?>
 							<option value="user_<?=$ID?>"<?=$Selected?>><?=$Name?></option>
 <?
-			}	
+			}
 ?>
 						</optgroup>
 						<optgroup label="First Line Support">
@@ -191,8 +191,9 @@ if ($ConvID = (int)$_GET['id']) {
 				JOIN users_main as m ON m.ID=i.UserID
 				JOIN permissions as p ON p.ID=m.PermissionID
 				WHERE p.DisplayStaff!='1' AND i.SupportFor!=''
+				ORDER BY m.Username ASC
 			");
-			while(list($ID, $Name) = $DB->next_record()) { 
+			while(list($ID, $Name) = $DB->next_record()) {
 				// Create one <option> for each FLS user
 				$Selected = ($AssignedToUser == $ID) ? ' selected="selected"' : '';
 ?>
@@ -210,20 +211,20 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="button" value="Assign to forum staff" onClick="location.href='staffpm.php?action=assign&to=forum&convid=<?=$ConvID?>';" />
 <?
 		}
-		
+
 		if ($Status != 'Resolved') {
-		
+
 				if ($IsFLS) { ?>
 					<input type="button" value="Common answers" onClick="$('#common_answers').toggle();" />
-					<input type="button" value="Preview" onclick="PreviewMessage();" /> 
+					<input type="button" value="Preview" onclick="PreviewMessage();" />
 <?				} ?>
 					<input type="button" value="Resolve" onClick="location.href='staffpm.php?action=resolve&id=<?=$ConvID?>';" />
 					<input type="submit" value="Send message" />
-<?	
+<?
 		} else {
 ?>
 					<input type="button" value="Unresolve" onClick="location.href='staffpm.php?action=unresolve&id=<?=$ConvID?>';" />
-<?	
+<?
 		}
 ?>
 				</form>
@@ -232,7 +233,7 @@ if ($ConvID = (int)$_GET['id']) {
 	</div>
 </div>
 <?
-		
+
 	show_footer();
 	} else {
 		// User is trying to view someone else's conversation

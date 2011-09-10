@@ -51,11 +51,12 @@ class SPHINX_SEARCH extends SphinxClient {
 		$QueryEndTime=microtime(true);
 
 		$Filters = array();
-		foreach($this->Filters as $Name => $Value) {
-			list($Value) = $Value;
-			$Filters[] = $Name." - ".$Value;
+		foreach($this->Filters as $Name => $Values) {
+			foreach($Values as $Value) {
+				$Filters[] = $Name." - ".$Value;
+			}
 		}
-			
+
 		$this->Queries[]=array('Params: '.$Query.' Filters: '.implode(", ", $Filters).' Indicies: '.$this->Index,($QueryEndTime-$QueryStartTime)*1000);
 		$this->Time+=($QueryEndTime-$QueryStartTime)*1000;
 		
@@ -147,9 +148,11 @@ class SPHINX_SEARCH extends SphinxClient {
 		$this->Index = $Index;
 	}
 	
-	function set_filter($Name, $Val, $Exclude=false) {
-		$this->Filters[$Name] = $Val;
-		$this->SetFilter($Name, $Val, $Exclude);
+	function set_filter($Name, $Vals, $Exclude=false) {
+		foreach($Vals as $Val) {
+			$this->Filters[$Name][] = $Val;
+		}
+		$this->SetFilter($Name, $Vals, $Exclude);
 	}
 	
 	function set_filter_range($Name, $Min, $Max, $Exclude) {
