@@ -160,6 +160,7 @@ CREATE TABLE `collages_torrents` (
   `GroupID` int(10) NOT NULL,
   `UserID` int(10) NOT NULL,
   `Sort` int(10) NOT NULL DEFAULT '0',
+  `AddedOn` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`CollageID`,`GroupID`),
   KEY `UserID` (`UserID`),
   KEY `Sort` (`Sort`)
@@ -991,6 +992,13 @@ CREATE TABLE `torrents_tags_votes` (
   `UserID` int(10) NOT NULL,
   `Way` enum('up','down') NOT NULL DEFAULT 'up',
   PRIMARY KEY (`GroupID`,`TagID`,`UserID`,`Way`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `users_collage_subs` (
+  `UserID` int(10) NOT NULL,
+  `CollageID` int(10) NOT NULL,
+  `LastVisit` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserID`,`CollageID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_downloads` (

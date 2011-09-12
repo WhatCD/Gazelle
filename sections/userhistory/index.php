@@ -52,9 +52,7 @@ if ($_GET['action']) {
 		case 'catchup':
 			require('catchup.php');
 			break;
-		case 'earlybird':
-			require('earlybird.php');
-			break;
+
 		default:
 			//You trying to mess with me query string? To the home page with you!
 			header('Location: index.php');
