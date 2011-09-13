@@ -4,7 +4,8 @@ $ArticleID = $_GET['id'];
 
 $Latest = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Latest);
-if($Edit > $LoggedUser['Class']){ error(404); }
+if($Read > $LoggedUser['Class']){ error(404); }
+if($Edit > $LoggedUser['Class']){ error(403); }
 
 show_header("Revisions of ".$Title);
 ?>

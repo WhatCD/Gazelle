@@ -448,16 +448,16 @@ foreach($Categories as $CatKey => $CatName) {
 	<table id="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;">
-				<strong>Request Name</strong> / <a href="requests.php?order=year&amp;sort=<?=(($CurrentOrder == 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
+				<strong>Request Name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder == 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=votes&amp;sort=<?=(($CurrentOrder == 'votes') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Votes</strong></a>
+				<a href="?order=votes&amp;sort=<?=(($CurrentOrder == 'votes') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Votes</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=bounty&amp;sort=<?=(($CurrentOrder == 'bounty') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Bounty</strong></a>
+				<a href="?order=bounty&amp;sort=<?=(($CurrentOrder == 'bounty') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Bounty</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=filled&amp;sort=<?=(($CurrentOrder == 'filled') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Filled</strong></a>
+				<a href="?order=filled&amp;sort=<?=(($CurrentOrder == 'filled') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Filled</strong></a>
 			</td>
 			<td>
 				<strong>Filled by</strong>
@@ -466,10 +466,10 @@ foreach($Categories as $CatKey => $CatName) {
 				<strong>Requested by</strong>
 			</td>
 			<td>
-				<a href="requests.php?order=created&amp;sort=<?=(($CurrentOrder == 'created') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
+				<a href="?order=created&amp;sort=<?=(($CurrentOrder == 'created') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Last Vote</strong></a>
+				<a href="?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Last Vote</strong></a>
 			</td>
 		</tr>
 <?	if($NumResults == 0) { ?>
@@ -523,7 +523,7 @@ foreach($Categories as $CatKey => $CatName) {
 <?			
 			$TagList = array();
 			foreach($Tags as $TagID => $TagName) {
-				$TagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
+				$TagList[] = "<a href='?tags=".$TagName.($BookmarkView ? "&amp;type=requests" : "")."'>".display_str($TagName)."</a>";
 			}
 			$TagList = implode(', ', $TagList);
 ?>

@@ -69,7 +69,7 @@ foreach($Friends as $Friend) {
 ?>
 <form action="friends.php" method="post">
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-	<table class="forum_post vertical_margin">
+	<table class="friends_table vertical_margin">
 		<tr>
 			<td class="colhead" colspan="3">
 				<span style="float:left;"><?=format_username($FriendID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true, $Class)?>

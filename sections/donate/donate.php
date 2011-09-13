@@ -89,6 +89,7 @@ if(USER_LIMIT != 0 && $UserCount >= USER_LIMIT && !check_perms('site_can_invite_
 
 <? } ?>
 		</ul>
+		<p>Please be aware that by making a donation you aren't purchasing donor status or invites. You are helping us pay the bills and cover the costs of running the site. We are doing our best to give the benefits to donors but sometimes it might take more than 48 hours. If it has been more than 48 hours and you were not credited, let us know by sending us a <a href="http://what.cd/staffpm.php">Staff PM</a>. We will answer as quickly as possible.</p>
 	</div>
 	<h3>What you will <strong>not</strong> receive</h3>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
