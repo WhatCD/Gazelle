@@ -33,6 +33,12 @@ if (substr($_REQUEST['action'],0,7) == 'sandbox' && !isset($argv[1])) {
 	}
 }
 
+if (substr($_REQUEST['action'],0,12) == 'update_geoip' && !isset($argv[1])) {
+	if (!check_perms('site_debug')) {
+		error(403);
+	}
+}
+
 include(SERVER_ROOT."/classes/class_validate.php");
 $Val=NEW VALIDATE;
 
