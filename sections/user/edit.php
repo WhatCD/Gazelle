@@ -215,7 +215,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Download torrents as text files</strong></td>
 				<td>
-					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($LoggedUser['DownloadAlt']) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked"<? } ?> />
 					<label for="downloadalt">For users whose ISP block the downloading of torrent files</label>
 				</td>
 			</tr>

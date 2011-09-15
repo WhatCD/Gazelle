@@ -99,7 +99,7 @@ if(empty($Importances) || empty($TorrentList)) {
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY ta.Importance, tg.ReleaseType ASC, tg.Year DESC");
+			ORDER BY ta.Importance, tg.ReleaseType ASC, tg.Year DESC, tg.Name DESC");
 	
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array('GroupID', MYSQLI_BOTH, false);
