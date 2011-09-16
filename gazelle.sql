@@ -926,6 +926,19 @@ CREATE TABLE `torrents_group` (
   KEY `RevisionID` (`RevisionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `torrents_groups_log` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `GroupID` int(10) NOT NULL,
+  `TorrentID` int(10) NOT NULL DEFAULT '0',
+  `UserID` int(10) NOT NULL,
+  `Info` mediumtext,
+  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`),
+  KEY `TorrentID` (`TorrentID`),
+  KEY `GroupID` (`GroupID`),
+  KEY `UserID` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `torrents_logs_new` (
   `LogID` int(10) NOT NULL AUTO_INCREMENT,
   `TorrentID` int(10) NOT NULL DEFAULT '0',

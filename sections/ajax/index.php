@@ -36,6 +36,9 @@ switch ($_GET['action']){
 	case 'torrentgroup':
 		require('torrentgroup.php');
 		break;
+	case 'top10':
+		require(SERVER_ROOT.'/sections/ajax/top10/index.php');
+		break;
 	default:
 		// If they're screwing around with the query string
 		error(403);

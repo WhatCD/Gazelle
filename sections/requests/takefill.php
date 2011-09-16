@@ -132,8 +132,11 @@ if($CategoryName == "Music") {
 			}
 		}
 	}
-	
-	if($BitrateList && $BitrateList != "Any") {
+
+	if ($BitrateList === "Other") {
+		if ($Bitrate === "Lossless" || $Bitrate === "APS (VBR)" || $Bitrate === "V2 (VBR)" || $Bitrate === "V1 (VBR)" || $Bitrate === "256" || $Bitrate === "APX (VBR)" || $Bitrate === "V0 (VBR)" || $Bitrate === "q8.x (VBR)" || $Bitrate === "320" || $Bitrate === "24bit Lossless")
+			$Err = $Bitrate." is not allowed bitrate for this request";
+	} else if($BitrateList && $BitrateList != "Any") {
 		if(strpos($BitrateList, $Bitrate) === false) {
 			$Err = $Bitrate." is not an allowed bitrate for this request";
 		}
