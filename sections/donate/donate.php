@@ -77,7 +77,6 @@ show_header('Donate');
 			<li>A warmer fuzzier feeling than before!</li>
 <? } else { ?>
 			<li>Our eternal love, as represented by the <img src="<?=STATIC_SERVER?>common/symbols/donor.png" alt="Donor" /> you get next to your name.</li>
-			<li>2 invitations, to invite 2 good friends to use this tracker.</li>
 <?
 if(USER_LIMIT != 0 && $UserCount >= USER_LIMIT && !check_perms('site_can_invite_always') && !isset($DonorPerms['site_can_invite_always'])) {
 ?>

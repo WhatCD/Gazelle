@@ -933,6 +933,7 @@ CREATE TABLE `torrents_groups_log` (
   `UserID` int(10) NOT NULL,
   `Info` mediumtext,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Hidden` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `TorrentID` (`TorrentID`),
   KEY `GroupID` (`GroupID`),
