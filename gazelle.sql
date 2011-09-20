@@ -405,7 +405,8 @@ CREATE TABLE `permissions` (
   `Values` text CHARACTER SET latin1 NOT NULL,
   `DisplayStaff` enum('0','1') CHARACTER SET latin1 NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `Level` (`Level`)
+  UNIQUE KEY `Level` (`Level`),
+  KEY `DisplayStaff` (`DisplayStaff`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pm_conversations` (
@@ -505,6 +506,7 @@ CREATE TABLE `requests` (
   `TorrentID` int(10) unsigned NOT NULL DEFAULT '0',
   `TimeFilled` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Visible` binary(1) NOT NULL DEFAULT '1',
+  `RecordLabel` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Userid` (`UserID`),
   KEY `Name` (`Title`),
@@ -644,6 +646,7 @@ CREATE TABLE `sphinx_requests` (
   `Visible` binary(1) NOT NULL DEFAULT '1',
   `Bounty` bigint(20) unsigned NOT NULL DEFAULT '0',
   `Votes` int(10) unsigned NOT NULL DEFAULT '0',
+  `RecordLabel` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Userid` (`UserID`),
   KEY `Name` (`Title`),
@@ -676,6 +679,7 @@ CREATE TABLE `sphinx_requests_delta` (
   `Visible` binary(1) NOT NULL DEFAULT '1',
   `Bounty` bigint(20) unsigned NOT NULL DEFAULT '0',
   `Votes` int(10) unsigned NOT NULL DEFAULT '0',
+  `RecordLabel` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Userid` (`UserID`),
   KEY `Name` (`Title`),
@@ -808,6 +812,7 @@ CREATE TABLE `torrents` (
   `LastReseedRequest` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ExtendedGrace` enum('0','1') NOT NULL DEFAULT '0',
   `Tasted` enum('0','1') NOT NULL DEFAULT '0',
+  `TranscodedFrom` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `InfoHash` (`info_hash`(40)),
   KEY `GroupID` (`GroupID`),
@@ -1012,7 +1017,8 @@ CREATE TABLE `users_collage_subs` (
   `UserID` int(10) NOT NULL,
   `CollageID` int(10) NOT NULL,
   `LastVisit` datetime DEFAULT NULL,
-  PRIMARY KEY (`UserID`,`CollageID`)
+  PRIMARY KEY (`UserID`,`CollageID`),
+  KEY `CollageID` (`CollageID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_downloads` (
@@ -1121,7 +1127,8 @@ CREATE TABLE `users_info` (
   KEY `Inviter` (`Inviter`),
   KEY `RatioWatchEnds` (`RatioWatchEnds`),
   KEY `RatioWatchDownload` (`RatioWatchDownload`),
-  KEY `BitcoinAddress` (`BitcoinAddress`(4))
+  KEY `BitcoinAddress` (`BitcoinAddress`(4)),
+  KEY `BitcoinAddress_2` (`BitcoinAddress`(4))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_main` (
