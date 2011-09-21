@@ -38,8 +38,6 @@ function all_bookmarks($Type, $UserID = false) {
 		$DB->query("SELECT $Col FROM $Table WHERE UserID = '$UserID'");
 		$Bookmarks = $DB->collect($Col);
 		$Cache->cache_value($CacheKey, $Bookmarks, 0);
-	} else {
-		$Bookmarks = unserialize($Bookmarks);
 	}
 	return $Bookmarks;
 }
