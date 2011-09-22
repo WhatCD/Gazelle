@@ -1709,6 +1709,11 @@ div.box[style=""] .head{
   margin: 0 auto 20px auto;
 }
 
+div.invitetree ul.invitetree {
+  margin: 0;
+  padding-left: 10px;
+}
+
 .last_read { width: 15px; height: 15px; background: url('images/go_last_read.png') no-repeat center center; margin-left: 5px; margin-left: 5px;}
 .last_read a { border: none; width: 100%; height: 100%; display: block; }
 .last_read a:hover { border: none; }

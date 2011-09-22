@@ -111,6 +111,14 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 	list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9,11));
 }
 
+// Image proxy CTs
+$DisplayCustomTitle = $CustomTitle;
+if(check_perms('site_proxy_images') && !empty($CustomTitle)) {
+	$DisplayCustomTitle = preg_replace_callback('~src=("?)(.+?)(["\s>])~', function($Matches) {
+																		return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
+																	}, $CustomTitle);
+}
+
 $Paranoia = unserialize($Paranoia);
 if(!is_array($Paranoia)) {
 	$Paranoia = array();
@@ -537,7 +545,7 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 <? } ?>
 		<div class="box">
 			<div class="head">
-				<span style="float:left;">Profile<? if ($CustomTitle) { echo " - ".html_entity_decode($CustomTitle); } ?></span>
+				<span style="float:left;">Profile<? if ($CustomTitle) { echo " - ".html_entity_decode($DisplayCustomTitle); } ?></span>
 				<span style="float:right;"><?=$Badges?></span>&nbsp;
 			</div>
 			<div class="pad">
