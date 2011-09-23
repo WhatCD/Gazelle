@@ -114,7 +114,7 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 // Image proxy CTs
 $DisplayCustomTitle = $CustomTitle;
 if(check_perms('site_proxy_images') && !empty($CustomTitle)) {
-	$DisplayCustomTitle = preg_replace_callback('~src=("?)(.+?)(["\s>])~', function($Matches) {
+	$DisplayCustomTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
 																		return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
 																	}, $CustomTitle);
 }

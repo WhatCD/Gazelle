@@ -337,7 +337,7 @@ foreach($Thread as $Key => $Post){
 	
 	// Image proxy CTs
 	if(check_perms('site_proxy_images') && !empty($UserTitle)) {
-		$UserTitle = preg_replace_callback('~src=("?)(.+?)(["\s>])~', function($Matches) {
+		$UserTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
 																		return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
 																	  }, $UserTitle);
 	}
