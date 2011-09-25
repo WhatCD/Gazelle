@@ -220,7 +220,7 @@ if(count($_GET)){
 		if(!empty($_GET['email'])){
 			if(isset($_GET['email_history'])){
 				$Distinct = 'DISTINCT ';
-				$Join[]=' JOIN users_history_emails AS he ON he.UserID=um1.ID ';
+				$Join['he']=' JOIN users_history_emails AS he ON he.UserID=um1.ID ';
 				$Where[]= ' he.Email '.$Match.wrap($_GET['email']);
 			} else {
 				$Where[]='um1.Email'.$Match.wrap($_GET['email']);
@@ -250,7 +250,7 @@ if(count($_GET)){
 		if(!empty($_GET['ip'])){
 			if(isset($_GET['ip_history'])){
 				$Distinct = 'DISTINCT ';
-				$Join[]=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
+				$Join['hi']=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
 				$Where[]= ' hi.IP '.$Match.wrap($_GET['ip'], '', true);
 			} else {
 				$Where[]='um1.IP'.$Match.wrap($_GET['ip'], '', true);
@@ -267,13 +267,13 @@ if(count($_GET)){
 
 		if(!empty($_GET['tracker_ip'])){
 				$Distinct = 'DISTINCT ';
-				$Join[]=' JOIN xbt_files_users AS xfu ON um1.ID=xfu.uid ';
+				$Join['xfu']=' JOIN xbt_files_users AS xfu ON um1.ID=xfu.uid ';
 				$Where[]= ' xfu.ip '.$Match.wrap($_GET['tracker_ip'], '', true);
 		}
 
 //		if(!empty($_GET['tracker_ip'])){
 //				$Distinct = 'DISTINCT ';
-//				$Join[]=' JOIN xbt_snatched AS xs ON um1.ID=xs.uid ';
+//				$Join['xs']=' JOIN xbt_snatched AS xs ON um1.ID=xs.uid ';
 //				$Where[]= ' xs.IP '.$Match.wrap($_GET['ip']);
 //		}	
 		
@@ -360,13 +360,13 @@ if(count($_GET)){
 		if($_GET['disabled_ip']){
 			$Distinct = 'DISTINCT ';
 			if($_GET['ip_history']){
-				//if(count($Join) == 0){
-					$Join[]=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
-				//}
-				$Join[]=' JOIN users_history_ips AS hi2 ON hi2.IP=hi.IP ';
-				$Join[]=' JOIN users_main AS um2 ON um2.ID=hi2.UserID AND um2.Enabled=\'2\' ';
+				if(!isset($Join['hi'])){
+					$Join['hi']=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
+				}
+				$Join['hi2']=' JOIN users_history_ips AS hi2 ON hi2.IP=hi.IP ';
+				$Join['um2']=' JOIN users_main AS um2 ON um2.ID=hi2.UserID AND um2.Enabled=\'2\' ';
 			} else {
-				$Join[]=' JOIN users_main AS um2 ON um2.IP=um1.IP AND um2.Enabled=\'2\' ';
+				$Join['um2']=' JOIN users_main AS um2 ON um2.IP=um1.IP AND um2.Enabled=\'2\' ';
 			}
 		}
 		
@@ -421,7 +421,7 @@ show_header('User search');
 					<input type="text" name="username" size="20" value="<?=display_str($_GET['username'])?>" />
 				</td>
 				<td class="label nobr">Joined:</td>
-				<td width="24%" class="nobr">
+				<td width="24%">
 					<select name="joined">
 						<option value="on"<? if($_GET['joined']==='on'){echo ' selected="selected"';}?>>On</option>
 						<option value="before"<? if($_GET['joined']==='before'){echo ' selected="selected"';}?>>Before</option>
@@ -648,13 +648,13 @@ show_header('User search');
 					</select>
 				</td>
 				<td class="label nobr"># Of Emails:</td>
-                                <td>
-                                        <select name="emails_opt">
-                                                <option value="equal"<? if($_GET['emails_opt']==='equal'){echo ' selected="selected"';}?>>Equal</option>
-                                                <option value="above"<? if($_GET['emails_opt']==='above'){echo ' selected="selected"';}?>>Above</option>
-                                                <option value="below"<? if($_GET['emails_opt']==='below'){echo ' selected="selected"';}?>>Below</option>
-                                        </select>
-                                        <input type="text" name="email_cnt" size="6" value="<?=display_str($_GET['email_cnt'])?>" />
+				<td>
+					<select name="emails_opt">
+						<option value="equal"<? if($_GET['emails_opt']==='equal'){echo ' selected="selected"';}?>>Equal</option>
+						<option value="above"<? if($_GET['emails_opt']==='above'){echo ' selected="selected"';}?>>Above</option>
+						<option value="below"<? if($_GET['emails_opt']==='below'){echo ' selected="selected"';}?>>Below</option>
+					</select>
+					<input type="text" name="email_cnt" size="6" value="<?=display_str($_GET['email_cnt'])?>" />
 				</td>
 			</tr>
 			<tr>
