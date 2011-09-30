@@ -42,8 +42,10 @@ var autocomp = {
 			case 38: //up
 			case 40: //down
 				this.highlight(key);
-				this.href = this.list.children[this.pos].href;
-				this.input.value = this.list.children[this.pos].textContent || this.list.children[this.pos].innerText;
+				if(this.pos !== -1) {
+					this.href = this.list.children[this.pos].href;
+					this.input.value = this.list.children[this.pos].textContent || this.list.children[this.pos].value;
+				}
 				break;
 			case 13:
 				if(this.href != null) {
@@ -77,15 +79,15 @@ var autocomp = {
 		if (this.list.children.length === 0) {
 			return;
 		}
-		
+
 		//Show me the
 		this.list.style.visibility = 'visible';
-		
+
 		//Remove the previous highlight
 		if (this.pos !== -1) {
 			this.list.children[this.pos].className = "";
 		}
-			
+
 		//Change position
 		if (change === 40) {
 			++this.pos;
@@ -94,14 +96,14 @@ var autocomp = {
 		} else {
 			this.pos = change;
 		}
-		
+
 		//Wrap arounds
 		if (this.pos >= this.list.children.length) {
 			this.pos = -1;
 		} else if (this.pos < -1) {
 			this.pos = this.list.children.length-1;
 		}
-		
+
 		if (this.pos !== -1) {
 			this.list.children[this.pos].className = "highlight";
 		} else {
@@ -111,13 +113,13 @@ var autocomp = {
 	},
 	get: function (value) {
 		this.pos = -1;
-		this.value = value;
-		
+		this.value = unescape(value);
+
 		if (typeof this.cache[this.id+value] === 'object') {
 			this.display(this.cache[this.id+value]);
 			return;
 		}
-		
+
 		ajax.get(this.id+'.php?action=autocomplete&name='+this.input.value,function(jstr){
 			var data = json.decode(jstr);
 			autocomp.cache[autocomp.id+data[0]] = data;

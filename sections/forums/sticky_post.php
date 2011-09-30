@@ -19,6 +19,5 @@ if($Delete) {
 	$DB->query("UPDATE forums_topics SET StickyPostID = ".$PostID." WHERE ID = ".$ThreadID);
 }
 $Cache->delete_value('thread_'.$ThreadID.'_info');
-$Cache->delete_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID);
 
 header('Location: forums.php?action=viewthread&threadid='.$ThreadID);

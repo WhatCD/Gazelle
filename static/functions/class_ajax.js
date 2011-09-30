@@ -121,6 +121,7 @@ function Bookmark(type, id, newName) {
 	ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
 		lnk.onclick = function() { Unbookmark(type, id, oldName); return false; };
 		lnk.innerHTML = newName;
+		lnk.title = 'Remove bookmark';
 	});
 }
 
@@ -137,6 +138,7 @@ function Unbookmark(type, id, newName) {
 		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
 			lnk.onclick = function() { Bookmark(type, id, oldName); return false; };
 			lnk.innerHTML = newName;
+			lnk.title = 'Add bookmark';
 		});
 	}
 }

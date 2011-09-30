@@ -73,7 +73,7 @@ if(!empty($_POST['link'])) {
 }
 
 if(!empty($_POST['image'])) {
-	if(preg_match("/^(".IMAGE_REGEX.")( ".IMAGE_REGEX.")*$/is", $_POST['image'], $Matches)) {
+	if(preg_match("/^(".IMAGE_REGEX.")( ".IMAGE_REGEX.")*$/is", trim($_POST['image']), $Matches)) {
 		$Images = $Matches[0];
 	} else {
 		$Err = "The extra image links you provided weren't links to images...";

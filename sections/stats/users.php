@@ -14,12 +14,21 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 	$CountryMax = ceil(log(Max(1,$Data[0][1]))/log(2))+1;
 	$CountryMin = floor(log(Max(1,$Data[$CountryMinThreshold][1]))/log(2));
 
+	$CountryRegions = array('RS' => array('RS-KM')); // Count Kosovo as Serbia as it doesn't have a TLD
 	foreach ($Data as $Key => $Item) {
 		list($Country,$UserCount) = $Item;
 		$Countries[] = $Country;
 		$CountryUsers[] = number_format((((log($UserCount)/log(2))-$CountryMin)/($CountryMax-$CountryMin))*100,2);
-		$Rank[] = number_format((1-($Key/$Count))*100,4);
+		$Rank[] = round((1-($Key/$Count))*100);
+
+		if(isset($CountryRegions[$Country])) {
+			foreach($CountryRegions[$Country] as $Region) {
+				$Countries[] = $Region;
+				$Rank[] = end($Rank);
+			}
+		}
 	}
+	reset($Rank);
 	
 	for ($i=$CountryMin;$i<=$CountryMax;$i++) {
 		$LogIncrements[] = human_format(pow(2,$i));
@@ -132,14 +141,14 @@ show_header('Detailed User Statistics');
 <br />
 <h3>Geographical Distribution Map</h3>
 <div class="box center">
-	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=world&chf=bg,s,CCD6FF" />
-	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=europe&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-55,-180,73,180&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=37,-26,65,67&chs=440x220&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
 	<br />
-	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=south_america&chf=bg,s,CCD6FF" />
-	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=asia&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-46,-132,24,21.5&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-11,22,50,160&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
 	<br />
-	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=africa&chf=bg,s,CCD6FF" />
-	<img src="http://chart.apis.google.com/chart?cht=t&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('',$Countries)?>&chtm=middle_east&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-36,-57,37,100&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=14.8,15,45,86&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
 	<br />
 	<img src="http://chart.apis.google.com/chart?chxt=y,x&chg=0,-1,1,1&chxs=0,h&cht=bvs&chco=76A4FB&chs=880x300&chd=t:<?=implode(',',array_slice($CountryUsers,0,31))?>&chxl=1:|<?=implode('|',array_slice($Countries,0,31))?>|0:|<?=implode('|',$LogIncrements)?>&amp;chf=bg,s,FFFFFF00" />
 </div>

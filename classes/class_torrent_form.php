@@ -597,7 +597,7 @@ class TORRENT_FORM {
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
 <?
-		if($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates)) {
+		if(!$Torrent['Bitrate'] || ($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates))) {
 			$OtherBitrate = true;
 			if(substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(" (VBR)")) == " (VBR)") {
 				$Torrent['Bitrate'] = substr($Torrent['Bitrate'], 0, strlen($Torrent['Bitrate'])-6);
@@ -608,7 +608,7 @@ class TORRENT_FORM {
 		}
 		foreach(display_array($this->Bitrates) as $Bitrate) {
 			echo "<option value='$Bitrate'";
-			if($Bitrate == $Torrent['Bitrate'] || (!$OtherBitrate || $Bitrate == "Other")) {
+			if($Bitrate == $Torrent['Bitrate'] || ($OtherBitrate && $Bitrate == "Other")) {
 				echo " selected='selected'";
 			}
 			echo ">";

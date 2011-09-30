@@ -32,7 +32,7 @@ define('QUERY_EXCEPTION',true); // Shut up debugging
 $Properties=array();
 $Type = $Categories[(int)$_POST['type']];
 $TypeID = $_POST['type'] + 1;
-$Properties['CategoryName'] = $_POST['type'];
+$Properties['CategoryName'] = $Type;
 $Properties['Title'] = $_POST['title'];
 $Properties['Remastered'] = (isset($_POST['remaster'])) ? 1 : 0;
 if($Properties['Remastered'] || isset($_POST['unknown'])) {
