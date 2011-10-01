@@ -1861,8 +1861,7 @@ function disable_users($UserIDs, $AdminComment, $BanReason = 1) {
 		i.AdminComment = CONCAT('".sqltime()." - ".($AdminComment ? $AdminComment : 'Disabled by system')."\n\n', i.AdminComment),
 		i.BanDate='".sqltime()."',
 		i.BanReason='".$BanReason."',
-		i.RatioWatchDownload='0',
-		i.RatioWatchEnds='0000-00-00 00:00:00'
+		i.RatioWatchDownload='0'
 		WHERE m.ID IN(".implode(',',$UserIDs).") ");
 	$Cache->decrement('stats_user_count',$DB->affected_rows());
 	foreach($UserIDs as $UserID) {

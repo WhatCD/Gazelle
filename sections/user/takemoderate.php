@@ -108,7 +108,8 @@ $DB->query("SELECT
 	DisableUpload,
 	DisableWiki,
 	DisablePM,
-	DisableIRC
+	DisableIRC,
+	m.RequiredRatio
 	FROM users_main AS m
 	JOIN users_info AS i ON i.UserID = m.ID
 	LEFT JOIN permissions AS p ON p.ID=m.PermissionID
@@ -453,19 +454,24 @@ if ($DisableRequests!=$Cur['DisableRequests'] && check_perms('users_disable_any'
 
 
 if ($EnableUser!=$Cur['Enabled'] && check_perms('users_disable_users')) {
-	$EditSummary[]='account '.translateUserStatus($Cur['Enabled']).'->'.translateUserStatus($EnableUser);
+	$EnableStr = 'account '.translateUserStatus($Cur['Enabled']).'->'.translateUserStatus($EnableUser);
 	if($EnableUser == '2') {
 		disable_users($UserID, '', 1);
 	} elseif($EnableUser == '1') {
 		$Cache->increment('stats_user_count');
 		$UpdateSet[]="i.RatioWatchDownload='0'";
-		$UpdateSet[]="i.RatioWatchEnds='0000-00-00 00:00:00'";
+		if ($Cur['Uploaded']/$Cur['Downloaded'] > $Cur['RequiredRatio']) {
+			$UpdateSet[]="i.RatioWatchEnds='0000-00-00 00:00:00'";
+			$CanLeech = 1;
+			$UpdateSet[]="m.can_leech='1'";
+		} else {
+			$EnableStr .= ' (Ratio: '.number_format($Cur['Uploaded']/$Cur['Downloaded'],2).', RR: '.number_format($Cur['RequiredRatio'],2).')';
+		}
 		$UpdateSet[]="Enabled='1'";
-		$CanLeech = 1;
-		$UpdateSet[]="m.can_leech='1'";
 		$LightUpdates['Enabled'] = 1;
 		update_tracker('add_user', array('id' => $UserID, 'passkey' => $Cur['torrent_pass']));
 	}
+	$EditSummary[]=$EnableStr;
 	$Cache->replace_value('enabled_'.$UserID, $EnableUser, 0);
 }
 

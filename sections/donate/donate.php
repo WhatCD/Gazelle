@@ -82,13 +82,11 @@ if(USER_LIMIT != 0 && $UserCount >= USER_LIMIT && !check_perms('site_can_invite_
 ?>
 			<li class="warning">Note: Because the user limit has been reached, you will be unable to use the invites recieved until a later date.</li>
 <? } ?>
-			<li>Immunity to inactivity pruning.</li>
-			<li>Access to an ever growing list of exclusive features, including the ability to submit requests and personal collages.</li>
 			<li>A warm fuzzy feeling.</li>
 
 <? } ?>
 		</ul>
-		<p>Please be aware that by making a donation you aren't purchasing donor status or invites. You are helping us pay the bills and cover the costs of running the site. We are doing our best to give the benefits to donors but sometimes it might take more than 48 hours. If it has been more than 48 hours and you were not credited, let us know by sending us a <a href="staffpm.php">Staff PM</a>. We will answer as quickly as possible.</p>
+		<p>Please be aware that by making a donation you aren't purchasing donor status or invites. You are helping us pay the bills and cover the costs of running the site. We are doing our best to give our love back to donors but sometimes it might take more than 48 hours. Feel free to contact us by sending us a <a href="staffpm.php">Staff PM</a> regarding any matter. We will answer as quickly as possible.</p>
 	</div>
 	<h3>What you will <strong>not</strong> receive</h3>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
