@@ -642,22 +642,6 @@ write_log("Torrent $TorrentID ($LogName) (".number_format($TotalSize/(1024*1024)
 
 update_hash($GroupID);
 
-//More freeleech
-
-$DB->query("SELECT Encoding FROM sphinx_delta WHERE ID = ".$GroupID);
-if($DB->record_count() > 0) {
-	list($GroupEncoding) = $DB->next_record();
-} else {
-	$DB->query("SELECT Encoding FROM sphinx_hash WHERE ID = ".$GroupID);
-	list($GroupEncoding) = $DB->next_record();
-}
-/*if(strpos($GroupEncoding, "V0") !== false && strpos($GroupEncoding, "V2") !== false && strpos($GroupEncoding, "Lossless") !== false && strpos($GroupEncoding, "320") !== false) {
-	//Contains all 3!
-	$DB->query("UPDATE torrents SET freetorrent = '1', FreeLeechType = '1', flags = 2 WHERE GroupID = ".$GroupID);
-	$Cache->increment('stats_complete_count');
-}*/
-
-
 
 
 

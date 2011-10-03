@@ -591,7 +591,7 @@ CREATE TABLE `sphinx_delta` (
   `RemasterCatalogueNumber` varchar(50) DEFAULT NULL,
   `FileList` mediumtext,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sphinx_hash` (
   `ID` int(10) NOT NULL,
@@ -623,7 +623,7 @@ CREATE TABLE `sphinx_hash` (
   `RemasterCatalogueNumber` varchar(50) DEFAULT NULL,
   `FileList` mediumtext,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sphinx_requests` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
