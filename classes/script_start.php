@@ -427,20 +427,7 @@ function site_ban_ip($IP) {
 			return true;
 		}
 	}
-	if (BLOCK_TOR) {
-		$TorIPs = $Cache->get_value('tor_ips');
-		if (!is_array($TorIPs)) {
-			$TorIPs = file('https://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=' . SITE_IP, FILE_IGNORE_NEW_LINES);
-			if($TorIPs === false) {
-				$Cache->cache_value('tor_ips', array(), 1800);
-			} else {
-				$Cache->cache_value('tor_ips', $TorIPs, 3600 * 4);
-			}
-		}
-		if (in_array($IP, $TorIPs)) {
-			return true;
-		}
-	}
+
 	return false;
 }
 

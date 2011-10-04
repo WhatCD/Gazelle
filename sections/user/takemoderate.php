@@ -460,7 +460,7 @@ if ($EnableUser!=$Cur['Enabled'] && check_perms('users_disable_users')) {
 	} elseif($EnableUser == '1') {
 		$Cache->increment('stats_user_count');
 		$UpdateSet[]="i.RatioWatchDownload='0'";
-		if ($Cur['Uploaded']/$Cur['Downloaded'] > $Cur['RequiredRatio']) {
+		if ($Cur['Uploaded']/$Cur['Downloaded'] >= $Cur['RequiredRatio']) {
 			$UpdateSet[]="i.RatioWatchEnds='0000-00-00 00:00:00'";
 			$CanLeech = 1;
 			$UpdateSet[]="m.can_leech='1'";

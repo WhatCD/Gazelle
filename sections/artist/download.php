@@ -67,6 +67,7 @@ $DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
 list($ArtistName) = $DB->next_record(MYSQLI_NUM,false);
 
 $DB->query("SELECT GroupID FROM torrents_artists WHERE ArtistID='$ArtistID'");
+if($DB->record_count() == 0) { error(404); }
 $GroupIDs = $DB->collect(0,false);
 
 $SQL = "SELECT CASE ";
