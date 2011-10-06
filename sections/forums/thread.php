@@ -17,10 +17,20 @@ $Text = new TEXT;
 
 // Check for lame SQL injection attempts
 if(!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
-	if(!isset($_GET['topicid']) || !is_number($_GET['topicid'])) {
-		error('404');
-	} else {
+	if(isset($_GET['topicid']) && is_number($_GET['topicid'])) {
 		$ThreadID = $_GET['topicid'];
+	}
+	elseif(isset($_GET['postid']) && is_number($_GET['postid'])) {
+		$DB->query("SELECT TopicID FROM forums_posts WHERE ID = $_GET[postid]");
+		list($ThreadID) = $DB->next_record();
+		if($ThreadID) {
+			header("Location: forums.php?action=viewthread&threadid=$ThreadID&postid=$_GET[postid]#post$_GET[postid]");
+			die();
+		} else {
+			error(404);
+		}
+	} else {
+		error(404);
 	}
 } else {
 	$ThreadID = $_GET['threadid'];

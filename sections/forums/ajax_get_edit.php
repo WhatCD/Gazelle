@@ -34,27 +34,26 @@ if(!is_array($Edits)) {
 	$Cache->cache_value($Type.'_edits_'.$PostID, $Edits, 0);
 }
 	
+list($UserID, $Username, $Time) = $Edits[$Depth];
 if($Depth != 0) {
-	list($UserID, $Username, $Time, $Body) = $Edits[$Depth - 1];
+	list(,,,$Body) = $Edits[$Depth - 1];
 } else {
 	//Not an edit, have to get from the original
 	switch($Type) {
 		case 'forums' :
 			//Get from normal forum stuffs
-			$DB->query("SELECT fp.AuthorID, um.Username, fp.AddedTime, fp.Body
-					FROM forums_posts AS fp
-						JOIN users_main AS um ON um.ID=fp.AuthorID
-					WHERE fp.ID = ".$PostID);
-			list($UserID, $Username, $Time, $Body) = $DB->next_record();
+			$DB->query("SELECT Body
+					FROM forums_posts
+					WHERE ID = ".$PostID);
+			list($Body) = $DB->next_record();
 			break;
 		case 'collages' :
 		case 'requests' :
 		case 'torrents' :
-			$DB->query("SELECT c.AuthorID, um.Username, c.AddedTime, c.Body
-					FROM ".$Type."_comments AS c
-						JOIN users_main AS um ON um.ID=c.AuthorID
-					WHERE c.ID = ".$PostID);
-			list($UserID, $Username, $Time, $Body) = $DB->next_record();
+			$DB->query("SELECT Body
+					FROM ".$Type."_comments
+					WHERE ID = ".$PostID);
+			list($Body) = $DB->next_record();
 			break;
 	}
 }
