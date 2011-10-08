@@ -1032,6 +1032,15 @@ CREATE TABLE `users_downloads` (
   KEY `TorrentID_2` (`TorrentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `users_freeleeches` (
+  `UserID` int(10) NOT NULL,
+  `TorrentID` int(10) NOT NULL,
+  `Time` datetime NOT NULL,
+  `Expired` tinyint(1) NOT NULL DEFAULT '0',
+  `Downloaded` bigint(20) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`UserID`,`TorrentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `users_geodistribution` (
   `Code` varchar(2) NOT NULL,
   `Users` int(10) NOT NULL
@@ -1169,6 +1178,7 @@ CREATE TABLE `users_main` (
   `RequiredRatioWork` double(10,8) NOT NULL DEFAULT '0.00000000',
   `Language` char(2) NOT NULL DEFAULT '',
   `ipcc` varchar(2) NOT NULL DEFAULT '',
+  `FLTokens` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Username` (`Username`),
   KEY `Email` (`Email`),

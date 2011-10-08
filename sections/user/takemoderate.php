@@ -43,6 +43,10 @@ if(isset($_POST['Uploaded']) && isset($_POST['Downloaded'])) {
 		error(0);
 	}
 }
+$FLTokens = isset($_POST['FLTokens'])?$_POST['FLTokens'] : 0;
+if(!is_number($FLTokens)) {
+	error(0);
+}
 
 $WarnLength = (int)$_POST['WarnLength'];
 $ExtendWarning = (int)$_POST['ExtendWarning'];
@@ -109,7 +113,8 @@ $DB->query("SELECT
 	DisableWiki,
 	DisablePM,
 	DisableIRC,
-	m.RequiredRatio
+	m.RequiredRatio,
+	m.FLTokens
 	FROM users_main AS m
 	JOIN users_info AS i ON i.UserID = m.ID
 	LEFT JOIN permissions AS p ON p.ID=m.PermissionID
@@ -296,6 +301,12 @@ if ($Downloaded!=$Cur['Downloaded'] && $Downloaded!=$_POST['OldDownloaded'] && (
 	$UpdateSet[]="Downloaded='".$Downloaded."'";
 	$EditSummary[]="downloaded changed from ".get_size($Cur['Downloaded'])." to ".get_size($Downloaded);
 	$Cache->delete_value('users_stats_'.$UserID);
+}
+
+if ($FLTokens!=$Cur['FLTokens'] && (check_perms('users_edit_ratio') || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
+	$UpdateSet[]="FLTokens=".$FLTokens;
+	$EditSummary[]="Freeleech Tokens changed from ".$Cur['FLTokens']." to ".$FLTokens;
+	$HeavyUpdates['FLTokens'] = $FLTokens;
 }
 
 if ($Invites!=$Cur['Invites'] && check_perms('users_edit_invites')) {

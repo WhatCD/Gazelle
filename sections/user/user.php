@@ -58,7 +58,8 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		i.DisablePM,
 		i.DisableIRC,
 		i.DisableRequests,
-		i.HideCountryChanges
+		i.HideCountryChanges,
+		m.FLTokens
 		FROM users_main AS m
 		JOIN users_info AS i ON i.UserID = m.ID
 		LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
@@ -70,7 +71,7 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		header("Location: log.php?search=User+".$UserID);
 	}
 
-	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $Country, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $DisableCountry) = $DB->next_record(MYSQLI_NUM, array(8,11));
+	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $Country, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $DisableCountry, $FLTokens) = $DB->next_record(MYSQLI_NUM, array(8,11));
 } else { // Person viewing is a normal user
 	$DB->query("SELECT
 		m.Username,
@@ -182,7 +183,10 @@ if (check_perms('admin_reports')) {
 ?>
 		[<a href="reportsv2.php?view=reporter&amp;id=<?=$UserID?>">Reports</a>]
 <? }
+if (check_perms('users_mod')) {
 ?>
+		<!--[<a href="userhistory.php?action=token_history&userid=<?=$UserID?>">FL Tokens</a>]-->
+<? } ?>
 	</div>
 
 	<div class="sidebar">
@@ -970,6 +974,12 @@ if (check_perms('users_mod', $Class)) { ?>
 					<input type="text" size="40" name="MergeStatsFrom" />
 				</td>
 			</tr>
+			<!--<tr>
+				<td class="label">Freeleech Tokens:</td>
+				<td>
+					<input type="text" size="5" name="FLTokens" value="<?=$FLTokens?>" />
+				</td>
+			</tr>-->
 <?
 	}
 

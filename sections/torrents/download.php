@@ -6,12 +6,12 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 } else {
 	$UserInfo = $Cache->get_value('user_'.$_REQUEST['torrent_pass']);
 	if(!is_array($UserInfo)) {
-		$DB->query("SELECT 
+		$DB->query("SELECT
 			ID,
 			DownloadAlt
-			FROM users_main AS m 
-			INNER JOIN users_info AS i ON i.UserID=m.ID 
-			WHERE m.torrent_pass='".db_string($_REQUEST['torrent_pass'])."' 
+			FROM users_main AS m
+			INNER JOIN users_info AS i ON i.UserID=m.ID
+			WHERE m.torrent_pass='".db_string($_REQUEST['torrent_pass'])."'
 			AND m.Enabled='1'");
 		$UserInfo = $DB->next_record();
 		$Cache->cache_value('user_'.$_REQUEST['torrent_pass'], $UserInfo, 3600);
@@ -37,7 +37,10 @@ if(!is_array($Info) || !array_key_exists('PlainArtists', $Info)) {
 		tg.ID AS GroupID,
 		tg.Name,
 		tg.WikiImage,
-		tg.CategoryID
+		tg.CategoryID,
+		t.Size,
+		t.FreeTorrent,
+		t.info_hash
 		FROM torrents AS t
 		INNER JOIN torrents_group AS tg ON tg.ID=t.GroupID
 		WHERE t.ID='".db_string($TorrentID)."'");
@@ -54,8 +57,41 @@ if(!is_array($Info) || !array_key_exists('PlainArtists', $Info)) {
 if(!is_array($Info[0])) {
 	error(404);
 }
-list($Media,$Format,$Encoding,$Year,$GroupID,$Name,$Image, $CategoryID) = array_shift($Info); // used for generating the filename
+list($Media,$Format,$Encoding,$Year,$GroupID,$Name,$Image, $CategoryID, $Size, $FreeTorrent, $InfoHash) = array_shift($Info); // used for generating the filename
 $Artists = $Info['Artists'];
+
+// If he's trying use a token on this, we need to make sure he has one,
+// deduct it, add this to the FLs table, and update his cache key.
+if ($_REQUEST['usetoken'] && $FreeTorrent == '0' && $LoggedUser['CanLeech'] == '1') {
+	// First make sure this isn't already FL, and if it is, do nothing
+	$Data = $Cache->get_value('users_tokens_'.$UserID);
+	if (empty($Data)) {
+		$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+		$TokenTorrents = $DB->collect('TorrentID');
+	}
+	if (!in_array($TorrentID, $Data)) {
+		if (!($LoggedUser['FLTokens'] > 0)) {
+			error("You do not have any freeleech tokens left.  Please use the regular DL link.");
+		}
+		if ($Size >= 1073741824) {
+			error("This torrent is too large.  Please use the regular DL link.");
+		}
+		
+		$DB->query("INSERT INTO users_freeleeches (UserID, TorrentID, Time) VALUES ($UserID, $TorrentID, NOW())
+						ON DUPLICATE KEY UPDATE Time=VALUES(Time), Expired=FALSE");
+		$DB->query("UPDATE users_main SET FLTokens = FLTokens - 1 WHERE ID=$UserID");
+		
+		$Cache->begin_transaction('user_info_heavy_'.$UserID);
+		$Cache->update_row(false, array('FLTokens'=>($LoggedUser['FLTokens'] - 1)));
+		$Cache->commit_transaction(0);
+		
+		$Data[] = $TorrentID;
+		$Cache->cache_value('users_tokens_'.$UserID, $Data);
+		
+		// Let the tracker know about this
+		update_tracker('add_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $LoggedUser['ID']));
+	}
+}
 
 //Stupid Recent Snatches On User Page
 if($CategoryID == '1' && $Image != "") {

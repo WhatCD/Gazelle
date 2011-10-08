@@ -147,6 +147,10 @@ switch ($_REQUEST['action']){
 
 		header('Location: index.php');
 		break;
+		
+	case 'tokens':
+		include('managers/tokens.php');
+		break;
 
 	case 'permissions':
 		if (!check_perms('admin_manage_permissions')) { error(403); }

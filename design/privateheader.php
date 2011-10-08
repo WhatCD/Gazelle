@@ -117,6 +117,9 @@ if(check_perms('site_send_unlimited_invites')) {
 			<li id="stats_ratio">Ratio: <span class="stat"><?=ratio($LoggedUser['BytesUploaded'], $LoggedUser['BytesDownloaded'])?></span></li>
 <?	if(!empty($LoggedUser['RequiredRatio'])) {?>
 			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
+<?	} 
+    if($LoggedUser['FLTokens'] > 0) { ?>
+			<li id="fl_tokens">Tokens: <span class="stat"><?=$LoggedUser['FLTokens']?></span></li>
 <?	} ?>
 		</ul>
 <?
