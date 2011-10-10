@@ -114,7 +114,8 @@ $DB->query("SELECT
 	DisablePM,
 	DisableIRC,
 	m.RequiredRatio,
-	m.FLTokens
+	m.FLTokens,
+	i.RatioWatchEnds
 	FROM users_main AS m
 	JOIN users_info AS i ON i.UserID = m.ID
 	LEFT JOIN permissions AS p ON p.ID=m.PermissionID
@@ -470,13 +471,16 @@ if ($EnableUser!=$Cur['Enabled'] && check_perms('users_disable_users')) {
 		disable_users($UserID, '', 1);
 	} elseif($EnableUser == '1') {
 		$Cache->increment('stats_user_count');
-		$UpdateSet[]="i.RatioWatchDownload='0'";
 		if (($Cur['Downloaded'] == 0) || ($Cur['Uploaded']/$Cur['Downloaded'] >= $Cur['RequiredRatio'])) {
 			$UpdateSet[]="i.RatioWatchEnds='0000-00-00 00:00:00'";
 			$CanLeech = 1;
 			$UpdateSet[]="m.can_leech='1'";
+			$UpdateSet[]="i.RatioWatchDownload='0'";
 		} else {
 			$EnableStr .= ' (Ratio: '.number_format($Cur['Uploaded']/$Cur['Downloaded'],2).', RR: '.number_format($Cur['RequiredRatio'],2).')';
+			if ($Cur['RatioWatchEnds'] != '0000-00-00 00:00:00') {
+				$UpdateSet[]="i.RatioWatchEnds=NOW()";
+			}
 		}
 		$UpdateSet[]="Enabled='1'";
 		$LightUpdates['Enabled'] = 1;
