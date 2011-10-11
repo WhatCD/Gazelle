@@ -42,9 +42,9 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 	}
 }
 
-function check_forumperm($ForumID) {
+function check_forumperm($ForumID, $Perm = 'Read') {
 	global $LoggedUser, $Forums;
-	if($Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) {
+	if($Forums[$ForumID]['MinClass'.$Perm] > $LoggedUser['Class'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) {
 		return false;
 	}
 	if(isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] == 0) {

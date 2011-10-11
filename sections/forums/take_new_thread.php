@@ -48,7 +48,7 @@ $ForumID = $_POST['forum'];
 
 if (!isset($Forums[$ForumID])) { error(404); }
 
-if($LoggedUser['Class'] < $Forums[$ForumID]['MinClassWrite'] || $LoggedUser['Class'] < $Forums[$ForumID]['MinClassCreate']) {
+if(!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) {
 	error(403); 
 }
 	

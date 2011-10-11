@@ -10,9 +10,9 @@ if(!is_number($_GET['topicid'])) {
 	error(0);
 }
 
-$DB->query('SELECT MinClassRead FROM forums WHERE forums.ID = (SELECT ForumID FROM forums_topics WHERE ID = '.db_string($_GET['topicid']).')');
-list($MinClassRead) = $DB->next_record();
-if($MinClassRead>$LoggedUser['Class']) {
+$DB->query('SELECT MinClassRead, ID FROM forums WHERE forums.ID = (SELECT ForumID FROM forums_topics WHERE ID = '.db_string($_GET['topicid']).')');
+list($MinClassRead, $ForumID) = $DB->next_record();
+if(!check_forumperm($ForumID)) {
 	die();
 }
 

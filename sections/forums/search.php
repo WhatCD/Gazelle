@@ -146,6 +146,7 @@ $Words = explode(' ',  db_string($Search));
 if($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
 	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 }
 if($Type == 'body') {
 
@@ -165,10 +166,15 @@ if($Type == 'body') {
 		JOIN forums_topics AS t ON t.ID=p.TopicID
 		JOIN forums AS f ON f.ID=t.ForumID
 		WHERE 
-		f.MinClassRead<='$LoggedUser[Class]' AND ";
+		((f.MinClassRead<='$LoggedUser[Class]'";
 	if(!empty($RestrictedForums)) {
-		$sql.="f.ID NOT IN ('".$RestrictedForums."') AND ";
+		$sql.=" AND f.ID NOT IN ('".$RestrictedForums."')";
 	}
+	$sql .= ')';
+	if(!empty($PermittedForums)) {
+		$sql.=' OR f.ID IN (\''.$PermittedForums.'\')';
+	}
+	$sql .= ') AND ';
 
 	//In tests, this is significantly faster than LOCATE
 	$sql .= "p.Body LIKE '%";
@@ -200,10 +206,15 @@ if($Type == 'body') {
 		FROM forums_topics AS t 
 		JOIN forums AS f ON f.ID=t.ForumID
 		WHERE 
-		f.MinClassRead<='$LoggedUser[Class]' AND ";
+		((f.MinClassRead<='$LoggedUser[Class]'";
 	if(!empty($RestrictedForums)) {
-		$sql.="f.ID NOT IN ('".$RestrictedForums."') AND ";
+		$sql.=" AND f.ID NOT IN ('".$RestrictedForums."')";
 	}
+	$sql .= ')';
+	if(!empty($PermittedForums)) {
+		$sql.=' OR f.ID IN (\''.$PermittedForums.'\')';
+	}
+	$sql .= ') AND ';
 	$sql .= "t.Title LIKE '%";
 	$sql .= implode("%' AND t.Title LIKE '%", $Words);
 	$sql .= "%' ";

@@ -39,10 +39,10 @@ $OpenTable = false;
 $DB->query("SELECT RestrictedForums FROM users_info WHERE UserID = ".$LoggedUser['ID']);
 list($RestrictedForums) = $DB->next_record();
 $RestrictedForums = explode(',', $RestrictedForums);
-
+$PermittedForums = array_keys($LoggedUser['PermittedForums']);
 foreach ($Forums as $Forum) {
 	list($ForumID, $CategoryID, $ForumName, $ForumDescription, $MinRead, $MinWrite, $MinCreate, $NumTopics, $NumPosts, $LastPostID, $LastAuthorID, $LastPostAuthorName, $LastTopicID, $LastTime, $SpecificRules, $LastTopic, $Locked, $Sticky) = array_values($Forum);
-	if ($MinRead>$LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== FALSE) {
+	if ($LoggedUser['CustomForums'][$ForumID] != 1 && ($MinRead>$LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== FALSE)) {
 		continue;
 	}
 	$Row = ($Row == 'a') ? 'b' : 'a';

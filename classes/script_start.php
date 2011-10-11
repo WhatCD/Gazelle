@@ -329,6 +329,7 @@ function user_heavy_info($UserID) {
 			i.DownloadAlt,
 			i.LastReadNews,
 			i.RestrictedForums,
+			i.PermittedForums,
 			m.FLTokens
 			FROM users_main AS m
 			INNER JOIN users_info AS i ON i.UserID=m.ID
@@ -347,6 +348,10 @@ function user_heavy_info($UserID) {
 			$HeavyInfo['CustomForums'] = null;
 		}
 		unset($HeavyInfo['RestrictedForums']);
+		if (!empty($HeavyInfo['PermittedForums'])) {
+			$HeavyInfo['CustomForums'] = array_fill_keys(explode(',', $HeavyInfo['PermittedForums']), 1);
+		}
+		unset($HeavyInfo['PermittedForums']);
 
 		if(!empty($HeavyInfo['SiteOptions'])) {
 			$HeavyInfo['SiteOptions'] = unserialize($HeavyInfo['SiteOptions']);

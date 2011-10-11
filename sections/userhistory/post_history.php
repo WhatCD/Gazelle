@@ -72,11 +72,17 @@ if($ShowGrouped) {
 	$sql .= '
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = '.$UserID.'
-		AND f.MinClassRead <= '.$LoggedUser['Class'];
+		AND ((f.MinClassRead <= '.$LoggedUser['Class'];
 	if(!empty($RestrictedForums)) {
 		$sql.='
 		AND f.ID NOT IN (\''.$RestrictedForums.'\')';
 	}
+	$sql .= ')';
+	if(!empty($PermittedForums)) {
+		$sql.='
+		OR f.ID IN (\''.$PermittedForums.'\')';
+	}
+	$sql .= ')';
 	if($ShowUnread) {
 		$sql .= '
 		AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\')

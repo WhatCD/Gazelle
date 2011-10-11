@@ -126,15 +126,16 @@ if(check_perms('site_send_unlimited_invites')) {
 $NewSubscriptions = $Cache->get_value('subscriptions_user_new_'.$LoggedUser['ID']);
 if($NewSubscriptions === FALSE) {
         if($LoggedUser['CustomForums']) {
-                unset($LoggedUser['CustomForums']['']);
-                $RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+			unset($LoggedUser['CustomForums']['']);
+			$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+			$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
         }
         $DB->query("SELECT COUNT(s.TopicID)
                 FROM users_subscriptions AS s
                         JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
                         JOIN forums_topics AS t ON l.TopicID = t.ID
                         JOIN forums AS f ON t.ForumID = f.ID
-                WHERE f.MinClassRead <= ".$LoggedUser['Class']."
+                WHERE (f.MinClassRead <= ".$LoggedUser['Class']." OR f.ID IN ('$PermittedForums'))
                         AND l.PostID < t.LastPostID
                         AND s.UserID = ".$LoggedUser['ID'].
                 (!empty($RestrictedForums) ? "

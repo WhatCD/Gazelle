@@ -50,8 +50,8 @@ $TopicID = $_POST['thread'];
 $ThreadInfo = get_thread_info($TopicID);
 $ForumID = $ThreadInfo['ForumID'];
 
-if($LoggedUser['Class'] < $Forums[$ForumID]['MinClassRead'] || !$ForumID) { error(403); }
-if($LoggedUser['Class'] < $Forums[$ForumID]['MinClassWrite'] || $LoggedUser['DisablePosting'] || $ThreadInfo['IsLocked'] == "1" && !check_perms('site_moderate_forums')) { error(403); }
+if(!check_forumperm($ForumID)) { error(403); }
+if(!check_forumperm($ForumID, 'Write') || $LoggedUser['DisablePosting'] || $ThreadInfo['IsLocked'] == "1" && !check_perms('site_moderate_forums')) { error(403); }
 
 if(isset($_POST['subscribe'])) {
 	$DB->query("INSERT IGNORE INTO users_subscriptions VALUES ($LoggedUser[ID], '".db_string($TopicID)."')");

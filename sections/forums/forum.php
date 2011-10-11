@@ -61,12 +61,9 @@ if(!isset($Forum) || !is_array($Forum)) {
 if(!isset($Forums[$ForumID])) { error(404); }
 // Make sure they're allowed to look at the page
 if (!check_perms('site_moderate_forums')) {
-	$DB->query("SELECT RestrictedForums FROM users_info WHERE UserID = ".$LoggedUser['ID']);
-	list($RestrictedForums) = $DB->next_record();
-	$RestrictedForums = explode(',', $RestrictedForums);
-	if (array_search($ForumID, $RestrictedForums) !== FALSE) { error(403); }
+	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) { error(403); }
 }
-if($Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
+if($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
 
 // Start printing
 show_header('Forums > '. $Forums[$ForumID]['Name']);

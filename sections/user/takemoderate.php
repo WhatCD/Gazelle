@@ -65,6 +65,7 @@ $DisableRequests = (isset($_POST['DisableRequests']))? 1 : 0;
 $DisableLeech = (isset($_POST['DisableLeech'])) ? 0 : 1;
 
 $RestrictedForums = db_string(trim($_POST['RestrictedForums']));
+$PermittedForums = db_string(trim($_POST['PermittedForums']));
 $EnableUser = (int)$_POST['UserStatus'];
 $ResetRatioWatch = (isset($_POST['ResetRatioWatch']))? 1 : 0;
 $ResetPasskey = (isset($_POST['ResetPasskey']))? 1 : 0;
@@ -104,6 +105,8 @@ $DB->query("SELECT
 	i.Artist,
 	i.Warned,
 	i.SupportFor,
+	i.RestricForums,
+	i.PermittedForums,
 	DisableAvatar,
 	DisableInvites,
 	DisablePosting,
@@ -350,12 +353,35 @@ if ($SupportFor!=db_string($Cur['SupportFor']) && (check_perms('admin_manage_fls
 if ($RestrictedForums != db_string($Cur['RestrictedForums']) && check_perms('users_mod')) {
 	$UpdateSet[]="RestrictedForums='$RestrictedForums'";
 	$EditSummary[]="restricted forum(s): $RestrictedForums";
-	if(empty($RestrictedForums)) {
-		$HeavyUpdates['CustomForums'] = null;
-	} else {
-		$HeavyUpdates['CustomForums'] = array_fill_keys(explode(',', $RestrictedForums), 0);
+}
+
+if ($PermittedForums != db_string($Cur['PermittedForums']) && check_perms('users_mod')) {
+	$ForumSet=explode(',',$PermittedForums);
+	$ForumList = array();
+	foreach ($ForumSet as $ForumID) {
+		if ($Forums[$ForumID]['MinClassCreate'] <= $LoggedUser['Class']) {
+			$ForumList[] = $ForumID;
+		}
+	}
+	$PermittedForums = implode(',',$ForumSet);
+	$UpdateSet[]="PermittedForums='$PermittedForums'";
+	$EditSummary[]="permitted forum(s): $PermittedForums";
+}
+
+if(empty($RestrictedForums) && empty($PermittedForums)) {
+	$HeavyUpdates['CustomForums'] = null;
+} else {
+	$HeavyUpdates['CustomForums'] = array();
+	$Forums = explode(',',$RestrictedForums);
+	foreach ($Forums as $Forum) {
+		$HeavyUpdates['CustomForums'][$Forum] = 0;
+	}
+	$Forums = explode(',',$PermittedForums);
+	foreach ($Forums as $Forum) {
+		$HeavyUpdates['CustomForums'][$Forum] = 1;
 	}
 }
+
 
 if ($DisableAvatar!=$Cur['DisableAvatar'] && check_perms('users_disable_any')) {
 	$UpdateSet[]="DisableAvatar='$DisableAvatar'";

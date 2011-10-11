@@ -419,7 +419,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 </div>
 <?
 if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
-	if($Forums[$ForumID]['MinClassWrite'] <= $LoggedUser['Class'] && !$LoggedUser['DisablePosting']) {
+	if(check_forumperm($ForumID, 'Write') && !$LoggedUser['DisablePosting']) {
 	//TODO: Preview, come up with a standard, make it look like post or just a block of formatted bbcode, but decide and write some proper html
 ?>
 			<br />

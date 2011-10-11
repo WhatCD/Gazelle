@@ -43,6 +43,7 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		i.Warned,
 		i.SupportFor,
 		i.RestrictedForums,
+		i.PermittedForums,
 		i.Inviter,
 		inviter.Username,
 		COUNT(posts.id) AS ForumPosts,
@@ -71,7 +72,7 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		header("Location: log.php?search=User+".$UserID);
 	}
 
-	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $Country, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $DisableCountry, $FLTokens) = $DB->next_record(MYSQLI_NUM, array(8,11));
+	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $Country, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $PermittedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $DisableCountry, $FLTokens) = $DB->next_record(MYSQLI_NUM, array(8,11));
 } else { // Person viewing is a normal user
 	$DB->query("SELECT
 		m.Username,
@@ -1158,10 +1159,16 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 			<tr>
 				<td class="label">Restricted Forums (comma-delimited):</td>
-														<td>
-														    	<input type="text" size="60" name="RestrictedForums" value="<?=display_str($RestrictedForums)?>" />
-														</td>
-													</tr>
+				<td>
+						<input type="text" size="60" name="RestrictedForums" value="<?=display_str($RestrictedForums)?>" />
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Extra Forums (comma-delimited):</td>
+				<td>
+						<input type="text" size="60" name="PermittedForums" value="<?=display_str($PermittedForums)?>" />
+				</td>
+			</tr>
 
 <?	} ?>
 		</table><br />
