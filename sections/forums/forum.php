@@ -70,7 +70,7 @@ show_header('Forums > '. $Forums[$ForumID]['Name']);
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <?=$Forums[$ForumID]['Name']?></h2>
-<? if($LoggedUser['Class'] >= $Forums[$ForumID]['MinClassCreate']){ ?>
+<? if(check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')){ ?>
 	<div class="linkbox">
 		[<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>">New Thread</a>]
 	</div>

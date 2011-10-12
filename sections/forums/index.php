@@ -118,6 +118,8 @@ if(!empty($_POST['action'])){
 		case 'edit_rules':
 			require(SERVER_ROOT.'/sections/forums/edit_rules.php');
 			break;
+		case 'thread_subscribe':
+			break;
 		default:
 			error(404);
 	}

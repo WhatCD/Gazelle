@@ -19,7 +19,7 @@ if($Forum === false) {
 }
 
 
-if($LoggedUser['Class'] < $Forum['MinClassCreate']) { error(403); }
+if(!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) { error(403); }
 show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 ?>
 <div class="thin">

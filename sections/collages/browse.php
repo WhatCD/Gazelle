@@ -67,17 +67,17 @@ if ($BookmarkView) {
 	$BookmarkJoin = '';
 }
 
-$SQL = "SELECT SQL_CALC_FOUND_ROWS 
-	c.ID, 
-	c.Name, 
+$SQL = "SELECT SQL_CALC_FOUND_ROWS
+	c.ID,
+	c.Name,
 	c.NumTorrents,
 	c.TagList,
 	c.CategoryID,
 	c.UserID,
-	um.Username 
-	FROM collages AS c 
+	um.Username
+	FROM collages AS c
 	$BookmarkJoin
-	LEFT JOIN users_main AS um ON um.ID=c.UserID 
+	LEFT JOIN users_main AS um ON um.ID=c.UserID
 	WHERE Deleted = '0'";
 
 if ($BookmarkView) {
@@ -140,6 +140,42 @@ show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 <? } else { ?>
 	<h2>Browse collages<?=(!empty($UserLink) ? (isset($CollageIDs) ? ' with contributions by '.$UserLink : ' started by '.$UserLink) : '')?></h2>
 <? } ?>
+	<div class="linkbox">
+<? if (!$BookmarkView) {
+if (check_perms('site_collages_create')) { ?>
+		<a href="collages.php?action=new">[New collage]</a>
+<? }
+if (check_perms('site_collages_personal')) {
+	$DB->query("SELECT ID FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
+	if($DB->record_count() == 0) {
+?>
+		<a href="collages.php?action=create_personal">[New <strong>personal</strong> collage]</a>
+<? 	} else {
+		list($CollageID) = $DB->next_record();
+?>
+		<a href="collages.php?id=<?=$CollageID?>">[Your personal collage]</a>
+<?
+	}
+}
+if (check_perms('site_collages_recover')) { ?>
+		<a href="collages.php?action=recover">[Recover collage]</a>
+<?
+}
+if (check_perms('site_collages_create') || check_perms('site_collages_personal') || check_perms('site_collages_recover')) {
+?>
+		<br /><br />
+<?
+}
+?>
+		<a href="collages.php?userid=<?=$LoggedUser['ID']?>">[Collages you started]</a>
+		<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1">[Collages you've contributed to]</a>
+<? } else { ?>
+		<a href="bookmarks.php?type=torrents">[Torrents]</a>
+		<a href="bookmarks.php?type=artists">[Artists]</a>
+		<a href="bookmarks.php?type=collages">[Collages]</a>
+		<a href="bookmarks.php?type=requests">[Requests]</a>
+<? } ?>
+	</div>
 <? if (!$BookmarkView) { ?>
 	<div>
 		<form action="" method="get">
@@ -192,45 +228,11 @@ show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 						<input type="submit" value="Search" />
 					</td>
 				</tr>
-			</table>	
+			</table>
 		</form>
 	</div>
 <? } // if (!$BookmarkView) ?>
 	<div class="linkbox">
-<? if (!$BookmarkView) {
-if (check_perms('site_collages_create')) { ?>
-		<a href="collages.php?action=new">[New collage]</a>
-<? } 
-if (check_perms('site_collages_personal')) {
- 	$DB->query("SELECT ID FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
- 	if($DB->record_count() == 0) {
- ?>
-		<a href="collages.php?action=create_personal">[New <strong>personal</strong> collage]</a>
-<? 	} else {
-		list($CollageID) = $DB->next_record();
-?>
-		<a href="collages.php?id=<?=$CollageID?>">[Your personal collage]</a>
-<?
-	}
-} 
-if (check_perms('site_collages_recover')) { ?>
-		<a href="collages.php?action=recover">[Recover collage]</a>
-<?
-}
-if (check_perms('site_collages_create') || check_perms('site_collages_personal') || check_perms('site_collages_recover')) {
-?>
-		<br /><br />
-<?
-}
-?>
-		<a href="collages.php?userid=<?=$LoggedUser['ID']?>">[Collages you started]</a>
-		<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1">[Collages you've contributed to]</a>
-<? } else { ?>
-		<a href="bookmarks.php?type=torrents">[Torrents]</a>
-		<a href="bookmarks.php?type=artists">[Artists]</a>
-		<a href="bookmarks.php?type=collages">[Collages]</a>
-		<a href="bookmarks.php?type=requests">[Requests]</a>
-<? } ?>
 <?
 $Pages=get_pages($Page,$NumResults,COLLAGES_PER_PAGE,9);
 echo $Pages;
@@ -266,7 +268,7 @@ foreach ($Collages as $Collage) {
 		$Tags[]='<a href="collages.php?action=search&amp;tags='.$Tag.'">'.$Tag.'</a>';
 	}
 	$Tags = implode(', ', $Tags);
-	
+
 	//Print results
 ?>
 	<tr class="row<?=$Row?> <?=($BookmarkView)?'bookmark_'.$ID:''?>">

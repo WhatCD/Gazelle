@@ -10,8 +10,9 @@ if(!is_number($_GET['topicid'])) {
 	error(0);
 }
 
-$DB->query('SELECT MinClassRead, ID FROM forums WHERE forums.ID = (SELECT ForumID FROM forums_topics WHERE ID = '.db_string($_GET['topicid']).')');
-list($MinClassRead, $ForumID) = $DB->next_record();
+require(SERVER_ROOT.'/sections/forums/index.php');
+$DB->query('SELECT ID FROM forums WHERE forums.ID = (SELECT ForumID FROM forums_topics WHERE ID = '.db_string($_GET['topicid']).')');
+list($ForumID) = $DB->next_record();
 if(!check_forumperm($ForumID)) {
 	die();
 }
