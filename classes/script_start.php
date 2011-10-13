@@ -1235,7 +1235,7 @@ function warn_user($UserID, $Duration, $Reason) {
 		$Cache->update_row(false, array('Warned' => $WarnTime));
 		$Cache->commit_transaction(0);
 
-		$AdminComment = "\n".date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
+		$AdminComment = date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
 
 		$DB->query('UPDATE users_info SET
 			Warned=\''.db_string($WarnTime).'\',

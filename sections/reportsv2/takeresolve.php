@@ -197,7 +197,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 	
 	if($Warning > 0) {
 		$WarnLength = $Warning * (7*24*60*60); 
-		$Reason = "Uploader of torrent (".$TorrentID.") ".db_string($RawName)." which was resolved with the preset: ".$ResolveType['title'].".";
+		$Reason = "Uploader of torrent (".$TorrentID.") ".$RawName." which was resolved with the preset: ".$ResolveType['title'].".";
 		if($Escaped['admin_message']) {
 			$Reason .= " (".$Escaped['admin_message'].").";
 		}
