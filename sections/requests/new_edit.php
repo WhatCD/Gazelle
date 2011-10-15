@@ -61,11 +61,7 @@ if(!$NewRequest) {
 			if($BitrateList == "Any") {
 				$BitrateArray = array_keys($Bitrates);
 			} else {
-				foreach ($Bitrates as $Key => $Val) {
-					if(strpos($BitrateList, $Val) !== false) {
-						$BitrateArray[] = $Key;
-					}
-				}
+				$BitrateArray = array_keys(array_intersect($Bitrates,explode('|', $BitrateList)));
 			}
 			
 			$FormatArray = array();
