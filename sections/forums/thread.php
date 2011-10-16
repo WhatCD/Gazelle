@@ -362,7 +362,7 @@ foreach($Thread as $Key => $Post){
 <? if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')){ ?> 
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a> 
 <? }
-if (((!$ThreadInfo['IsLocked'] && $LoggedUser['Class'] >= $Forums[$ForumID]['MinClassWrite']) && ($AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums'))) { ?>
+if (((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write')) && ($AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums'))) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a> 
 <? }
 if(check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?> 
