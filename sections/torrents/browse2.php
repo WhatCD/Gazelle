@@ -899,9 +899,10 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		list($TorrentID, $Data) = each($Torrents);
 		
 		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
-		
-		if(!empty($Data['FreeTorrent'])) {
-			$DisplayName .=' <strong>Freeleech!</strong>'; 
+		if($Data['FreeTorrent'] == '1') {
+			$DisplayName .= ' <strong>Freeleech!</strong>';
+		} elseif($Data['FreeTorrent'] == '2') {
+			$DisplayName .= ' <strong>Neutral Leech!</strong>';
 		}
 ?>
 	<tr class="torrent">

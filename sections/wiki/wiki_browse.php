@@ -1,4 +1,5 @@
 <?
+show_header($Title);
 $Letter = strtoupper(substr($_GET['letter'],0,1));
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS 
@@ -21,7 +22,6 @@ $DB->query($sql);
 
 $Title = 'Browse articles';
 if($Letter) { $Title.= ' ('.$Letter.')'; }
-show_header($Title);
 ?>
 <div class="thin">
 <? if($Letter) { ?>

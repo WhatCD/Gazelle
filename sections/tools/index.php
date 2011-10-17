@@ -151,6 +151,9 @@ switch ($_REQUEST['action']){
 	case 'tokens':
 		include('managers/tokens.php');
 		break;
+	case 'ocelot':
+		include('managers/ocelot.php');
+		break;
 
 	case 'permissions':
 		if (!check_perms('admin_manage_permissions')) { error(403); }
@@ -158,6 +161,7 @@ switch ($_REQUEST['action']){
 		if (!empty($_REQUEST['id'])) {
 			$Val->SetFields('name',true,'string','You did not enter a valid name for this permission set.');
 			$Val->SetFields('level',true,'number','You did not enter a valid level for this permission set.');
+			$Val->SetFields('maxcollages',true,'number','You did not enter a valid number of personal collages.');
 			//$Val->SetFields('test',true,'number','You did not enter a valid level for this permission set.');
 
 			$Values=array();
@@ -195,6 +199,7 @@ switch ($_REQUEST['action']){
 				$Name=$_REQUEST['name'];
 				$Level=$_REQUEST['level'];
 				$DisplayStaff=$_REQUEST['displaystaff'];
+				$Values['MaxCollages']=$_REQUEST['maxcollages'];
 
 				if (!$Err) {
 					if (!is_numeric($_REQUEST['id'])) {

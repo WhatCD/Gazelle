@@ -32,6 +32,10 @@ echo $Val->GenerateJS('permform');
 			<td class="label">Show on Staff page</td>
 			<td><input type="checkbox" name="displaystaff" value="1" <? if (!empty($DisplayStaff)) { ?>checked<? } ?> /></td>
 		</tr>
+		<tr>
+			<td class="label">Maximum number of personal collages</td>
+			<td><input type="text" name="maxcollages" size="5" value="<?=$Values['MaxCollages']?>" /></td>
+		</tr>
 <? if (is_numeric($_REQUEST['id'])) { ?>
 		<tr>
 			<td class="label">Current users in this class</td>

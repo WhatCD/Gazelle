@@ -20,7 +20,9 @@
 	'site_collages_create' => 'Collage create access.',
 	'site_collages_manage' => 'Collage manage access.',
 	'site_collages_delete' => 'Collage delete access.',
+	'site_collages_subscribe' => 'Collage subscription access.',
 	'site_collages_personal' => 'Can have a personal collage.',
+	'site_collages_renamepersonal' => 'Can rename own personal collages.',
 	'site_make_bookmarks' => 'Bookmarks access.',
 	'site_edit_wiki' => 'Wiki edit access.',
 	'site_can_invite_always' => 'Can invite past user limit.',
@@ -127,7 +129,9 @@ function permissions_form(){ ?>
 					<? display_perm('site_collages_create','Can create collages.'); ?>
 					<? display_perm('site_collages_manage','Can manage collages (add torrents, sorting).'); ?>
 					<? display_perm('site_collages_delete','Can delete collages.'); ?>
+					<? display_perm('site_collages_subscribe','Can access collage subscriptions.'); ?>
 					<? display_perm('site_collages_personal','Can have a personal collage.'); ?>
+					<? display_perm('site_collages_renamepersonal','Can rename own personal collages.'); ?>
 					<? display_perm('site_advanced_top10','Can access advanced top 10.'); ?>
 					<? display_perm('site_make_bookmarks','Can make bookmarks.'); ?>
 					<? display_perm('site_edit_wiki','Can edit wiki pages.'); ?>
