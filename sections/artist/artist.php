@@ -176,7 +176,9 @@ $NumLeechers = 0;
 $NumSnatches = 0;
 
 $OpenTable = false;
-$ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
+$ShowGroups = !isset($LoggedUser['TorrentGrouping']) || $LoggedUser['TorrentGrouping'] == 0;
+$HideTorrents = ($ShowGroups ? '' : ' hidden');
+
 foreach ($TorrentList as $GroupID=>$Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
 	$GroupVanityHouse = $Importances[$GroupID]['VanityHouse'];
@@ -192,15 +194,15 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		} else {
 			$Tags[$Tag]['count']++;
 		}
-		$TorrentTags[]='<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
+		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
 	}
 	$TorrentTags = implode(', ', $TorrentTags);
-	$TorrentTags='<br /><div class="tags">'.$TorrentTags.'</div>';
+	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
 	
 	if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['HideTypes']) && in_array($ReleaseType, $LoggedUser['HideTypes']))) {
-		$HideDiscog=" hidden";
-	} else { 
-		$HideDiscog="";
+		$HideDiscog = ' hidden';
+	} else {
+		$HideDiscog = '';
 	}
 	
 	
@@ -224,7 +226,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			<table class="torrent_table" id="torrents_<?=$ReleaseTypeLabel?>">
 				<tr class="colhead_dark">
 					<td class="small"><!-- expand/collapse --></td>
-					<td width="70%"><a href="#">&uarr;</a>&nbsp;<strong><?=$DisplayName?></strong> (<a href="#" onclick="$('.releases_<?=$ReleaseType?>').toggle();return false;">View</a>)</td>
+					<td width="70%"><a href="#">&uarr;</a>&nbsp;<strong><?=$DisplayName?></strong> (<a href="#" onclick="$('.releases_<?=$ReleaseType?>').toggle(true);return false;">View</a>)</td>
 					<td>Size</td>
 					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
 					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
@@ -300,7 +302,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				$RemasterName .= $AddExtra.display_str($Torrent['Media']);
 					
 ?>
-	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog <?=$HideDiscog?>">
+	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog<?=$HideDiscog.$HideTorrents?>">
 		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$RemasterName?></strong></a></td>
 	</tr>
 <?
@@ -315,7 +317,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				}
 				$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
-	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent <?=$HideDiscog?>">
+	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent<?=$HideDiscog.$HideTorrents?>">
 		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$MasterName?></strong></a></td>
 	</tr>
 <?
@@ -327,7 +329,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 		$LastMedia = $Torrent['Media'];
 ?>
-	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent discog <?=$HideDiscog?>">
+	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent discog<?=$HideDiscog.$HideTorrents?>">
 		<td colspan="2">
 			<span>
 				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>]

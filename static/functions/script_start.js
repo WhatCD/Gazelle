@@ -176,13 +176,13 @@ util.fn = util.prototype = {
 	show: function () {
 		return this.remove_class('hidden');
 	},
-	hide: function () {
-		return this.add_class('hidden');
+	hide: function (force) {
+		return this.add_class('hidden', force);
 	},
-	toggle: function () {
+	toggle: function (force) {
 		//Should we interate and invert all entries, or just go by the first?
 		if (!in_array('hidden', this.objects[0].className.split(' '))) {
-			this.add_class('hidden');
+			this.add_class('hidden', force);
 		} else {
 			this.remove_class('hidden');
 		}
@@ -206,12 +206,12 @@ util.fn = util.prototype = {
 		}
 		return this;
 	},
-	add_class: function (class_name) {
+	add_class: function (class_name, force) {
 		for (var i=0,il=this.objects.length;i<il;i++) {
 			var object = this.objects[i];
 			if (object.className === '') {
 				object.className = class_name;
-			} else if (!in_array(class_name, object.className.split(' '))) {
+			} else if (force || !in_array(class_name, object.className.split(' '))) {
 				object.className = object.className + ' ' + class_name;
 			}
 		}
@@ -221,12 +221,11 @@ util.fn = util.prototype = {
 		for (var i=0,il=this.objects.length;i<il;i++) {
 			var object = this.objects[i];
 			var classes = object.className.split(' ');
-			var result = array_search(class_name, classes)
-			if (result === false) {
-				//return this;
+			var result = array_search(class_name, classes);
+			if (result !== false) {
+				classes.splice(result,1);
+				object.className = classes.join(' ');
 			}
-			delete classes[result];
-			object.className = classes.join(' ');
 		}
 		return this;
 	},

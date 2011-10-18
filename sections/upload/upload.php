@@ -81,9 +81,13 @@ if(!$GenreTags) {
 	$Cache->cache_value('genre_tags', $GenreTags, 3600*6);
 }
 ?>
-<div style="margin:0px auto;width:700px">
+<div class="<?=(check_perms('torrents_hide_dnu')?'box pad':'')?>" style="margin:0px auto;width:700px">
 	<h3 id="dnu_header">Do not upload</h3>
-	<p>The following releases are currently forbidden from being uploaded from the site. Do not upload them unless your torrent meets a condition specified in the comment.</p>
+	<p>The following releases are currently forbidden from being uploaded from the site. Do not upload them unless your torrent meets a condition specified in the comment.
+<? if (check_perms('torrents_hide_dnu')) { ?>
+   <span id="showdnu"><a href="#" <a href="#" onclick="$('#dnulist').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span>
+<? } ?>
+	</p>
 <?
 $DB->query("SELECT 
 	d.Name, 
@@ -91,7 +95,7 @@ $DB->query("SELECT
 	FROM do_not_upload as d
 	ORDER BY d.Time");
 ?>
-	<table style="">
+	<table id="dnulist" class="<?=(check_perms('torrents_hide_dnu')?'hidden':'')?>" style="">
 		<tr class="colhead">
 			<td width="50%"><strong>Name</strong></td>
 			<td><strong>Comment</strong></td>
@@ -103,7 +107,7 @@ $DB->query("SELECT
 		</tr>
 <? } ?>
 	</table>
-</div>
+</div><?=(check_perms('torrents_hide_dnu')?'<br />':'')?>
 <?
 $TorrentForm->head();
 switch ($UploadForm) {

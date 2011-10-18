@@ -80,6 +80,7 @@
 	'torrents_delete_fast' => 'Can delete more than 3 torrents at a time.',
 	'torrents_freeleech' => 'Can make torrents freeleech.',
 	'torrents_search_fast' => 'Rapid search (for scripts).',
+	'torrents_hide_dnu' => 'Hide the Do Not Upload list by default.',
 	'admin_manage_news' => 'Can manage news.',
 	'admin_manage_blog' => 'Can manage blog.',
 	'admin_manage_polls' => 'Can manage polls.',
@@ -139,6 +140,8 @@ function permissions_form(){ ?>
 					<? display_perm('site_send_unlimited_invites', 'Can send unlimited invites.'); ?>
 					<? display_perm('site_moderate_requests', 'Can moderate any request.'); ?>
 					<? display_perm('site_delete_artist', 'Can delete artists (must be able to delete torrents+requests).'); ?>
+					<? display_perm('forums_polls_create','Can create polls in the forums.') ?>
+					<? display_perm('forums_polls_moderate','Can feature and close polls.') ?>
 					<? display_perm('site_moderate_forums', 'Can moderate the forums.'); ?>
 					<? display_perm('site_admin_forums', 'Can administrate the forums.'); ?>
 					<? display_perm('site_view_flow', 'Can view site stats and data pools.'); ?>
@@ -208,9 +211,7 @@ function permissions_form(){ ?>
 			</tr>
 			<tr>
 				<td>
-					<? display_perm('forums_polls_create','Can create polls in the forums.') ?>
-					<? display_perm('forums_polls_moderate','Can feature and close polls.') ?>
-					
+			
 					<? display_perm('torrents_edit', 'Can edit any torrent'); ?>
 					
 					<? display_perm('torrents_delete', 'Can delete torrents'); ?>
@@ -222,6 +223,7 @@ function permissions_form(){ ?>
 					<? display_perm('torrents_edit_vanityhouse', 'Can mark groups as part of Vanity House.'); ?>
 					<? display_perm('artist_edit_vanityhouse', 'Can mark Artists as part of Vanity House.'); ?>
 					<? display_perm('site_add_logs', 'Can add logs to torrents after upload'); ?>
+					<? display_perm('torrents_hide_dnu', 'Hide the Do Not Upload list by default.'); ?>
 				</td>
 			</tr>
 		</table>

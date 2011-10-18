@@ -165,10 +165,8 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			
 			if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
+				$EditionID++;
 				if($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
-				
-					$EditionID++;
-					
 					$RemasterName = $Torrent['RemasterYear'];
 					$AddExtra = " - ";
 					if($Torrent['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']); $AddExtra=' / '; }
