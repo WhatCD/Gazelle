@@ -408,6 +408,26 @@ if (check_perms('users_view_invites')) {
 				?></li>
 <?
 }
+
+if (!isset($SupportFor)) {
+	$DB->query("SELECT SupportFor FROM users_info WHERE UserID = ".$LoggedUser['ID']);
+	list($SupportFor) = $DB->next_record();
+}
+if (check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
+	?>
+		<li>Clients: <?
+		$DB->query("SELECT DISTINCT useragent FROM xbt_files_users WHERE uid = ".$UserID);
+		while(list($Client) = $DB->next_record()) {
+			if (strlen($Clients) > 0) {
+				$Clients .= "; ".$Client;
+			} else {
+				$Clients = $Client;
+			}
+		}
+		echo $Clients;
+		?></li>
+<?
+}
 ?>
 			</ul>
 		</div>
