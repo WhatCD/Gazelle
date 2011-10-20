@@ -1260,9 +1260,11 @@ CREATE TABLE `users_sessions` (
   `OperatingSystem` varchar(8) DEFAULT NULL,
   `IP` varchar(15) NOT NULL,
   `LastUpdate` datetime NOT NULL,
+  `Active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`UserID`,`SessionID`),
   KEY `UserID` (`UserID`),
-  KEY `LastUpdate` (`LastUpdate`)
+  KEY `LastUpdate` (`LastUpdate`),
+  KEY `Active` (`Active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `users_subscriptions` (

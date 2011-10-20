@@ -206,7 +206,10 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 			$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 		}
 		$Cache->delete_value('users_sessions_'.$UserID);
-		$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
+		
+		
+		$DB->query("DELETE FROM users_sessions WHERE UserID="'$UserID'");
+		
 	}
 }
 
@@ -497,17 +500,19 @@ if ($EnableUser!=$Cur['Enabled'] && check_perms('users_disable_users')) {
 		disable_users($UserID, '', 1);
 	} elseif($EnableUser == '1') {
 		$Cache->increment('stats_user_count');
+		update_tracker('add_user', array('id' => $UserID, 'passkey' => $Cur['torrent_pass']));
 		if (($Cur['Downloaded'] == 0) || ($Cur['Uploaded']/$Cur['Downloaded'] >= $Cur['RequiredRatio'])) {
 			$UpdateSet[]="i.RatioWatchEnds='0000-00-00 00:00:00'";
 			$CanLeech = 1;
 			$UpdateSet[]="m.can_leech='1'";
-			$UpdateSet[]="i.RatioWatchDownload='0'";
-			update_tracker('add_user', array('id' => $UserID, 'passkey' => $Cur['torrent_pass']));
+			$UpdateSet[]="i.RatioWatchDownload='0'";	
 		} else {
 			$EnableStr .= ' (Ratio: '.number_format($Cur['Uploaded']/$Cur['Downloaded'],2).', RR: '.number_format($Cur['RequiredRatio'],2).')';
 			if ($Cur['RatioWatchEnds'] != '0000-00-00 00:00:00') {
 				$UpdateSet[]="i.RatioWatchEnds=NOW()";
+				$CanLeech = 0;
 			}
+			update_tracker('update_user', array('passkey' => $Cur['torrent_pass'], 'can_leech' => '0'));
 		}
 		$UpdateSet[]="Enabled='1'";
 		$LightUpdates['Enabled'] = 1;
@@ -576,7 +581,10 @@ if ($Pass && check_perms('users_edit_password')) {
 		$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 	}
         $Cache->delete_value('users_sessions_'.$UserID);
-        $DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
+        
+	
+	$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
+	
         
 }
 

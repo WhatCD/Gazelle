@@ -112,6 +112,7 @@ if(isset($LoginCookie)) {
 			LastUpdate
 			FROM users_sessions
 			WHERE UserID='$UserID'
+			AND Active = 1
 			ORDER BY LastUpdate DESC");
 		$UserSessions = $DB->to_array('SessionID',MYSQLI_ASSOC);
 		$Cache->cache_value('users_sessions_'.$UserID, $UserSessions, 0);
@@ -546,7 +547,10 @@ function logout() {
 	setcookie('keeplogged','',time()-60*60*24*365,'/','',false);
 	setcookie('session','',time()-60*60*24*365,'/','',false);
 	if($SessionID) {
+		
+		
 		$DB->query("DELETE FROM users_sessions WHERE UserID='$LoggedUser[ID]' AND SessionID='".db_string($SessionID)."'");
+		
 		$Cache->begin_transaction('users_sessions_'.$LoggedUser['ID']);
 		$Cache->delete_row($SessionID);
 		$Cache->commit_transaction(0);
@@ -1869,12 +1873,15 @@ function disable_users($UserIDs, $AdminComment, $BanReason = 1) {
 		$Cache->delete_value('user_info_heavy_'.$UserID);
 		$Cache->delete_value('user_stats_'.$UserID);
 	
-		$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
+		$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID' AND Active = 1");
 		while(list($SessionID) = $DB->next_record()) {
 			$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 		}
 		$Cache->delete_value('users_sessions_'.$UserID);
+		
+		
 		$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
+		
 	}
 	$DB->query("SELECT torrent_pass FROM users_main WHERE ID in (".implode(", ",$UserIDs).")");
 	$PassKeys = $DB->collect('torrent_pass');

@@ -252,7 +252,10 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
 		$Cache->delete_row($SessionID);
 		$Cache->commit_transaction(0);
 	}
-	$DB->query("DELETE FROM users_sessions WHERE LastUpdate<'$AgoDays' AND KeepLogged='1'");
+	
+	
+	$DB->query("DELETE FROM users_sesions WHERE LastUpdate<'$AgoDays' AND KeepLogged='1'");
+	
 	
 	$AgoMins = time_minus(60*30);
 	$DB->query("SELECT UserID, SessionID FROM users_sessions WHERE LastUpdate<'$AgoMins' AND KeepLogged='0'");
@@ -261,7 +264,10 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
 		$Cache->delete_row($SessionID);
 		$Cache->commit_transaction(0);
 	}
+	
+	
 	$DB->query("DELETE FROM users_sessions WHERE LastUpdate<'$AgoMins' AND KeepLogged='0'");
+	
 
 	
 	//------------- Lower Login Attempts ------------------------------------//

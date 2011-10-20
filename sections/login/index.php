@@ -139,7 +139,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 					while(list($SessionID) = $DB->next_record()) {
 						$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 					}
-					$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
+					$DB->query("UPDATE users_sessions SET Active = 0 WHERE UserID='$UserID' AND Active = 1");
 
 					
 				} else {
