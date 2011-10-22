@@ -105,7 +105,7 @@ $DB->query("SELECT
 	i.Artist,
 	i.Warned,
 	i.SupportFor,
-	i.RestricForums,
+	i.RestrictedForums,
 	i.PermittedForums,
 	DisableAvatar,
 	DisableInvites,
