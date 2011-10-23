@@ -510,6 +510,7 @@ if ($EnableUser!=$Cur['Enabled'] && check_perms('users_disable_users')) {
 			$EnableStr .= ' (Ratio: '.number_format($Cur['Uploaded']/$Cur['Downloaded'],2).', RR: '.number_format($Cur['RequiredRatio'],2).')';
 			if ($Cur['RatioWatchEnds'] != '0000-00-00 00:00:00') {
 				$UpdateSet[]="i.RatioWatchEnds=NOW()";
+				$UpdateSet[]="i.RatioWatchDownload=m.Downloaded";
 				$CanLeech = 0;
 			}
 			update_tracker('update_user', array('passkey' => $Cur['torrent_pass'], 'can_leech' => '0'));

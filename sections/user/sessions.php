@@ -9,6 +9,20 @@ if(isset($_GET['userid']) && check_perms('users_view_ips') && check_perms('users
         $UserID = $LoggedUser['ID'];
 }
 
+if(isset($_POST['all'])) {
+        authorize();
+
+        $DB->query("DELETE FROM users_sessions WHERE UserID='$UserID' AND SessionID<>'$SessionID'");
+		$Cache->delete_value('users_sessions_'.$UserID);
+}
+
+if (isset($_POST['session'])) {
+        authorize();
+
+        $DB->query("DELETE FROM users_sessions WHERE UserID='$UserID' AND SessionID='".db_string($_POST['session'])."'");
+		$Cache->delete_value('users_sessions_'.$UserID);
+}
+
 $UserSessions = $Cache->get_value('users_sessions_'.$UserID);
 if(!is_array($UserSessions)) {
         $DB->query("SELECT
@@ -22,25 +36,6 @@ if(!is_array($UserSessions)) {
                 ORDER BY LastUpdate DESC");
         $UserSessions = $DB->to_array('SessionID',MYSQLI_ASSOC);
         $Cache->cache_value('users_sessions_'.$UserID, $UserSessions, 0);
-}
-
-if(isset($_POST['all'])) {
-        authorize();
-
-        $DB->query("DELETE FROM users_sessions WHERE UserID='$UserID' AND SessionID<>'$SessionID'");
-        $UserSessions = array($SessionID=>array('SessionID'=>$SessionID,'Browser'=>$Browser,'OperatingSystem'=>$OperatingSystem,'IP'=>$SessionIP,'LastUpdate'=>sqltime()));
-        $Cache->cache_value('users_sessions_'.$UserID, $UserSessions, 0);
-}
-
-if (isset($_POST['session'])) {
-
-        authorize();
-
-        $DB->query("DELETE FROM users_sessions WHERE UserID='$UserID' AND SessionID='".db_string($_POST['session'])."'");
-        unset($UserSessions[$_POST['session']]);
-        $Cache->begin_transaction('users_sessions_'.$UserID);
-        $Cache->delete_row($_POST['session']);
-        $Cache->commit_transaction(0);
 }
 
 list($UserID, $Username) = array_values(user_info($UserID));
