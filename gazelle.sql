@@ -460,7 +460,8 @@ CREATE TABLE `reports` (
   PRIMARY KEY (`ID`),
   KEY `Status` (`Status`),
   KEY `Type` (`Type`),
-  KEY `ResolvedTime` (`ResolvedTime`)
+  KEY `ResolvedTime` (`ResolvedTime`),
+  KEY `ResolverID` (`ResolverID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `reportsv2` (
@@ -483,7 +484,8 @@ CREATE TABLE `reportsv2` (
   KEY `Status` (`Status`),
   KEY `Type` (`Type`(1)),
   KEY `LastChangeTime` (`LastChangeTime`),
-  KEY `TorrentID` (`TorrentID`)
+  KEY `TorrentID` (`TorrentID`),
+  KEY `ResolverID` (`ResolverID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `requests` (

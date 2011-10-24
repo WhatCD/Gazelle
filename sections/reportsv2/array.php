@@ -19,7 +19,7 @@
 $Types = array(
 		'master' => array(
 			'dupe' => array(
-				'priority' => '2',
+				'priority' => '1',
 				'title' => 'Dupe',
 				'report_messages' => array(
 					'Please specify a link to the original torrent.'
@@ -35,7 +35,7 @@ $Types = array(
 				)
 			),
 			'banned' => array(
-				'priority' => '988',
+				'priority' => '23',
 				'title' => 'Specifically Banned',
 				'report_messages' => array(
 					'Please specify exactly which entry on the Do Not Upload list this is violating.'
@@ -50,7 +50,7 @@ $Types = array(
 				)
 			),
 			'urgent' => array(
-				'priority' => '3',
+				'priority' => '28',
 				'title' => 'Urgent',
 				'report_messages' => array(
 					'This report type is only for the very urgent reports, usually for personal information being found within a torrent.',
@@ -71,7 +71,7 @@ $Types = array(
 				)
 			),
 			'other' => array(
-				'priority' => '999',
+				'priority' => '20',
 				'title' => 'Other',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -88,7 +88,7 @@ $Types = array(
 		),
 		'1' => array( //Music Resolves
 			'trump' => array(
-				'priority' => '1',
+				'priority' => '2',
 				'title' => 'Trump',
 				'report_messages' => array(
 					'Please list the specific reason(s) the newer torrent trumps the older one.',
@@ -106,7 +106,7 @@ $Types = array(
 				)
 			),
 			'tag_trump' => array (
-				'priority' => '703',
+				'priority' => '5',
 				'title' => 'Tag Trump',
 				'report_messages' => array(
 					'Please list the specific tag(s) the newer torrent trumps the older one.',
@@ -123,9 +123,27 @@ $Types = array(
 
 				)
 			),
+			'vinyl_trump' => array(
+				'priority' => '6',
+				'title' => 'Vinyl Trump',
+				'report_messages' => array(
+					'Please list the specific reason(s) the newer torrent trumps the older one.',
+					'Please make sure you are reporting the torrent <strong>which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
+				),
+
+				'report_fields' => array(
+					'sitelink' => '1'
+				),
+				'resolve_options' => array(
+					'upload' => '0',
+					'warn' => '0',
+					'delete' => '1',
+					'pm' => 'Your torrent has been deleted as it was trumped by another torrent.'
+				)
+			),
 			'folder_trump' => array (
-				'priority' => '704',
-				'title' => 'Folder Trump',
+				'priority' => '4',
+				'title' => 'Bad Folder Name Trump',
 				'report_messages' => array(
 					'Please list the folder name and what is wrong with it',
 					'Please make sure you are reporting the torrent <strong>which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
@@ -141,7 +159,7 @@ $Types = array(
 				)
 			),
 			'file_trump' => array (
-				'priority' => '769',
+				'priority' => '3',
 				'title' => 'Bad File Names Trump',
 				'report_messages' => array(
 					'Please describe what is wrong with the file names.',
@@ -158,7 +176,7 @@ $Types = array(
 				)
 			),
 			'tracks_missing' => array(
-				'priority' => '730',
+				'priority' => '24',
 				'title' => 'Track(s) Missing',
 				'report_messages' => array(
 					'Please list the track number and title of the missing track',
@@ -176,7 +194,7 @@ $Types = array(
 				)
 			),
 			'discs_missing' => array(
-				'priority' => '740',
+				'priority' => '12',
 				'title' => 'Disc(s) Missing',
 				'report_messages' => array(
 					'If possible, please provide a link to Amazon.com or another source showing the proper track listing.'
@@ -193,7 +211,7 @@ $Types = array(
 				)
 			),
 			'bonus_tracks' => array(
-				'priority' => '920',
+				'priority' => '9',
 				'title' => 'Bonus Tracks Only',
 				'report_messages' => array(
 					'If possible, please provide a link to Amazon.com or another source showing the proper track listing.'
@@ -210,7 +228,7 @@ $Types = array(
 				)
 			),						
 			'transcode' => array(
-				'priority' => '3',
+				'priority' => '25',
 				'title' => 'Transcode',
 				'report_messages' => array(
 					"Please list the tracks you checked, and the method used to determine the transcode.",
@@ -228,7 +246,7 @@ $Types = array(
 				)
 			),
 			'low' => array(
-				'priority' => '4',
+				'priority' => '17',
 				'title' => 'Low Bitrate',
 				'report_messages' => array(
 					"Please tell us the actual bitrate, and the software used to check."
@@ -244,7 +262,7 @@ $Types = array(
 				)	   
 			),
 			'mutt' => array(
-				'priority' => '5',
+				'priority' => '18',
 				'title' => 'Mutt rip',
 				'report_messages' => array(
 					"Please list at least two (2) tracks which have different bitrates and/or encoders."
@@ -260,7 +278,7 @@ $Types = array(
 				)
 			),
 			'single_track' => array(
-				'priority' => '750',
+				'priority' => '27',
 				'title' => 'Unsplit album rip',
 				'report_messages' => array(
 					"If possible, please provide a link to Amazon.com or another source showing the proper track listing.",
@@ -278,8 +296,8 @@ $Types = array(
 				)
 			),
 			'tags_lots' => array(
-				'priority' => '700',
-				'title' => 'Very bad tags / no tags at all',
+				'priority' => '31',
+				'title' => 'Bad tags / no tags at all',
 				'report_messages' => array(
 					"Please specify which tags are missing, and whether they're missing from all tracks.",
 					"Ideally, you will replace this torrent with one with fixed tags and report this with the reason 'Tag Trump' <3"
@@ -296,8 +314,8 @@ $Types = array(
 				)
 			),
 			'folders_bad' => array(
-				'priority' => '701',
-				'title' => 'Very bad folder names',
+				'priority' => '30',
+				'title' => 'Bad folder names',
 				'report_messages' => array(
 					"Please specify the issue with the folder names.",
 					"Ideally you will replace this torrent with one with fixed folder names and report this with the reason 'Trumped'."
@@ -311,7 +329,7 @@ $Types = array(
 [b]You can fix this torrent yourself![/b] It\'s easy, and only takes a few minutes: Add or fix the folder/directory name(s), and upload a new torrent to the site. Then, report (RP) the bad torrent for the reason "Folder Trump", indicate in the report comments that you have fixed the directory name(s), and provide a link (PL) to the new torrent.')
 			),
 			'wrong_format' => array(
-				'priority' => '705',
+				'priority' => '32',
 				'title' => 'Wrong specified format',
 				'report_messages' => array(
 					"Please specify the correct format."
@@ -326,7 +344,7 @@ $Types = array(
 				)
 			),
 			'format' => array(
-				'priority' => '790',
+				'priority' => '10',
 				'title' => 'Disallowed Format',
 				'report_messages' => array(
 					"If applicable, list the relevant tracks"
@@ -342,7 +360,7 @@ $Types = array(
 				)
 			),
 			'bitrate' => array(
-				'priority' => '800',
+				'priority' => '15',
 				'title' => 'Inaccurate Bitrate',
 				'report_messages' => array(
 					"Please tell us the actual bitrate, and the software used to check.",
@@ -360,7 +378,7 @@ $Types = array(
 				)
 			),
 			'source' => array(
-				'priority' => '870',
+				'priority' => '21',
 				'title' => 'Radio/TV/FM/WEBRIP',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -376,7 +394,7 @@ $Types = array(
 				)
 			),
 			'discog' => array(
-				'priority' => '890',
+				'priority' => '13',
 				'title' => 'Discography',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -392,7 +410,7 @@ $Types = array(
 				)
 			),
 			'user_discog' => array(
-				'priority' => '880',
+				'priority' => '29',
 				'title' => 'User Compilation',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -408,7 +426,7 @@ $Types = array(
 				)
 			),
 			'lineage' => array(
-				'priority' => '900',
+				'priority' => '19',
 				'title' => 'No Lineage Info',
 				'report_messages' => array(
 					"Please list the specific information missing from the torrent (hardware, software, etc.)"
@@ -423,7 +441,7 @@ $Types = array(
 				)
 			),
 			'edited' => array(
-				'priority' => '940',
+				'priority' => '14',
 				'title' => 'Edited Log',
 				'report_messages' => array(
 					"Please explain exactly where you believe the log was edited."
@@ -438,7 +456,7 @@ $Types = array(
 				)
 			),
 			'audience' => array(
-				'priority' => '760',
+				'priority' => '7',
 				'title' => 'Audience Recording',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -454,7 +472,7 @@ $Types = array(
 				)
 			),
 			'filename' => array(
-				'priority' => '770',
+				'priority' => '8',
 				'title' => 'Bad File Names',
 				'report_messages' => array(
 				),
@@ -469,7 +487,7 @@ $Types = array(
 				)
 			),
 			'cassette' => array(
-				'priority' => '910',
+				'priority' => '26',
 				'title' => 'Unapproved Cassette',
 				'report_messages' => array(
 					"If the album was never released other than on cassette, please include a source."
@@ -485,7 +503,7 @@ $Types = array(
 				)
 			),
 			'skips' => array(
-				'priority' => '745',
+				'priority' => '22',
 				'title' => 'Skips / Encode Errors',
 				'report_messages' => array(
 					"Please tell us which track(s) we should check.",
@@ -502,7 +520,7 @@ $Types = array(
 				)
 			),
 			'rescore' => array(
-				'priority' => '747',
+				'priority' => '16',
 				'title' => 'Log Rescore Request',
 				'report_messages' => array(
 					"It could help us if you say exactly why you believe this log requires rescoring.",
@@ -518,7 +536,7 @@ $Types = array(
 				)
 			),
 			'ogg' => array(
-				'priority' => '980',
+				'priority' => '11',
 				'title' => 'Disallowed Ogg Preset',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -533,29 +551,10 @@ $Types = array(
 					'pm' => "Only -q8.x (~256 (VBR)) is allowed on the site for Ogg Vorbis. Torrents encoded with presets other than -q8.x will be deleted."
 				)
 			),
-			'grace_period' => array(
-				'priority' => '990',
-				'title' => 'Grace Period Dupe',
-				'report_messages' => array(
-					"This option is for reporting a torrent that is a duplicate of another because that torrent is still within the one month grace period mentioned in the news.",
-					"You should report the torrent that is in error (The newer one), not the torrent that is 'safe' within it's grace period."
-				),
-				'report_fields' => array(
-					'sitelink' => '1'
-				),
-				'resolve_options' => array(
-					'upload' => '0',
-					'warn' => '0',
-					'delete' => '1',
-					'pm' => "[quote=The front page]Effective immediately, every user will have a grace period of one month to trump their own torrents that have had their scores reduced. 
-					For this month-long grace period, you may not trump others' torrents that have been affected by these new logchecker changes, only your own. 
-					After this month is up, we will open trumping to all users.[/quote]."
-				)
-			)
 		),
 		'2' => array( //Applications Rules Broken
 			'missing_crack' => array(
-				'priority' => '35',
+				'priority' => '7',
 				'title' => 'No Crack/Keygen/Patch',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report',
@@ -571,7 +570,7 @@ $Types = array(
 				)
 			),
 			'game' => array(
-				'priority' => '40',
+				'priority' => '5',
 				'title' => 'Game',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report',
@@ -587,7 +586,7 @@ $Types = array(
 				)
 			),
 			'free' => array(
-				'priority' => '60',
+				'priority' => '4',
 				'title' => 'Freely Available',
 				'report_messages' => array(
 					'Please include a link to a source of information or to the freely available app itself.',
@@ -603,7 +602,7 @@ $Types = array(
 				)
 			),
 			'description' => array(
-				'priority' => '55',
+				'priority' => '8',
 				'title' => 'No Description',
 				'report_messages' => array(
 					'If possible, please provide a link to an accurate description',
@@ -619,7 +618,7 @@ $Types = array(
 				)
 			),
 			'pack' => array(
-				'priority' => '49',
+				'priority' => '2',
 				'title' => 'Archived Pack',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -635,7 +634,7 @@ $Types = array(
 				)
 			),
 			'collection' => array(
-				'priority' => '51',
+				'priority' => '3',
 				'title' => 'Collection of Cracks',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -651,7 +650,7 @@ $Types = array(
 				)
 			),
 			'hack' => array(
-				'priority' => '50',
+				'priority' => '6',
 				'title' => 'Hacking Tool',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report',
@@ -669,7 +668,7 @@ $Types = array(
 		),
 		'3' => array( //Ebook Rules Broken
 			'unrelated' => array(
-				'priority' => '50',
+				'priority' => '27',
 				'title' => 'Unrelated Ebooks',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -686,7 +685,7 @@ $Types = array(
 		),
 		'4' => array( //Audiobook Rules Broken
 			'skips' => array(
-				'priority' => '745',
+				'priority' => '21',
 				'title' => 'Skips / Encode Errors',
 				'report_messages' => array(
 					"Please tell us which track(s) we should check.",
@@ -705,7 +704,7 @@ $Types = array(
 		),
 		'5' => array( //E-Learning vidoes Rules Broken
 			'dissallowed' => array(
-				'priority' => '50',
+				'priority' => '2',
 				'title' => 'Disallowed Topic',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -723,7 +722,7 @@ $Types = array(
 		),
 		'6' => array( //Comedy Rules Broken
 			'talkshow' => array(
-				'priority' => '50',
+				'priority' => '27',
 				'title' => 'Talkshow/Podcast',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -741,7 +740,7 @@ $Types = array(
 		),
 		'7' => array( //Comics Rules Broken
 			'titles' => array(
-				'priority' => '50',
+				'priority' => '18',
 				'title' => 'Multiple Comic Titles',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -757,7 +756,7 @@ $Types = array(
 				)
 			),
 			'volumes' => array(
-				'priority' => '51',
+				'priority' => '19',
 				'title' => 'Multiple Volumes',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'

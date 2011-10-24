@@ -5,6 +5,7 @@
 /* sitewide image proxy.								*/
 /*------------------------------------------------------*/
 /********************************************************/
+error_reporting(E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR);
 
 if(isset($_SERVER['http_if_modified_since'])) {
 	header("Status: 304 Not Modified");
