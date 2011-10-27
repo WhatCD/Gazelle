@@ -46,6 +46,13 @@ if($Data) {
 	}
 }
 
+$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+if (empty($TokenTorrents)) {
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$TokenTorrents = $DB->collect('TorrentID');
+	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+}
+
 $Title = ($Sneaky)?"$Username's bookmarked torrents":'Your bookmarked torrents';
 
 show_header($Title, 'browse');
@@ -185,8 +192,12 @@ foreach ($TorrentList as $GroupID=>$Group) {
 ?>
 <tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
 		<td colspan="3">
-			<span>
-				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>]
+			<span>[
+<?			if (($LoggedUser['FLTokens'] > 0)  && ($Torrent['Size'] < 1073741824) 
+				&& !in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&usetoken=1" title="Use a FL Token">FL</a> |
+<?			} ?>
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>]
 			</span>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=torrent_info($Torrent)?></a>
 		</td>
@@ -206,6 +217,8 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		
 		if(!empty($Torrent['FreeTorrent'])) {
 			$DisplayName .=' <strong>Freeleech!</strong>'; 
+		} elseif(in_array($TorrentID, $TokenTorrents)) { 
+			$DisplayName .= '<strong>Personal Freeleech!</strong>';
 		}
 ?>
 	<tr class="torrent" id="group_<?=$GroupID?>">
@@ -216,7 +229,12 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		</td>
 		<td>
 			<span>
-				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+				[
+<?		if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824) 
+			&& !in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&usetoken=1" title="Use a FL Token">FL</a> |
+<?		} ?>		
+				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>]
 			</span>
 			<strong><?=$DisplayName?></strong>

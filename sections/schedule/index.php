@@ -79,6 +79,23 @@ sleep(5);
 //------------- Delete unpopular tags -----------------------------------//
 $DB->query("DELETE FROM torrents_tags WHERE NegativeVotes>PositiveVotes");
 
+//------------- Expire old FL Tokens and clear cache where needed ------//
+$sqltime = sqltime();
+$DB->query("SELECT DISTINCT UserID from users_freeleeches WHERE Expired = FALSE AND Time < '$sqltime' - INTERVAL 2 DAY");
+while (list($UserID) = $DB->next_record()) {
+	$Cache->delete_value('users_tokens_'.$UserID[0]);
+}
+
+$DB->query("SELECT uf.UserID, t.info_hash 
+            FROM users_freeleeches AS uf 
+            JOIN torrents AS t ON uf.TorrentID = t.ID
+			WHERE uf.Expired = FALSE AND uf.Time < '$sqltime' - INTERVAL 2 DAY");
+while (list($UserID,$InfoHash) = $DB->next_record()) {
+	update_tracker('remove_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID));
+}
+$DB->query("UPDATE users_freeleeches SET Expired = True WHERE Time < '$sqltime' - INTERVAL 2 DAY");
+
+
 
 
 /*************************************************************************\
@@ -642,7 +659,7 @@ if($Day != next_day() || $_GET['runday']){
 		
 	);
 	foreach ($TorrentIDs as $TorrentID) {
-		list($ID, $GroupID, $Name, $ArtistName, $LastAction, $Format, $Encoding, $UserID) = $TorrentID;
+		list($ID, $GroupID, $Name, $ArtistName, $LastAction, $Format, $Encoding, $UserID, $Media) = $TorrentID;
 		if (array_key_exists($UserID, $InactivityExceptionsMade) && (time() < $InactivityExceptionsMade[$UserID])) {
 			// don't delete the torrent!
 			continue;	
@@ -651,15 +668,25 @@ if($Day != next_day() || $_GET['runday']){
 			$Name = $ArtistName.' - '.$Name;
 		}
 		if($Format && $Encoding) {
-			$Name.=' ['.$Format.' / '.$Encoding.']';
+			$Name.=' ['.(empty($Media)?'':"$Media / ").$Format.' / '.$Encoding.']';
 		}
 		delete_torrent($ID, $GroupID);
 		$LogEntries[] = "Torrent ".$ID." (".$Name.") was deleted for inactivity (unseeded)";
 		
-		send_pm($UserID,0,db_string('One of your torrents has been deleted for inactivity'), db_string("The torrent ".$Name." was deleted for being unseeded. Since it didn't break any rules (we hope), you can feel free to re-upload it."));
+		if (!array_key_exists($UserID, $DeleteNotes))
+				$DeleteNotes[$UserID] = array('Count' => 0, 'Msg' => '');
+		
+		$DeleteNotes[$UserID]['Msg'] .= "\n$Name";
+		$DeleteNotes[$UserID]['Count']++;
 		
 		++$i;
 	}
+	
+	foreach($DeleteNotes as $UserID => $MessageInfo){
+		$Singular = ($MessageInfo['Count'] == 1) ? true : false;
+		send_pm($UserID,0,db_string($MessageInfo['Count'].' of your torrents '.($Singular?'has':'have').' been deleted for inactivity'), db_string(($Singular?'One':'Some').' of you torrents '.($Singular?'was':'were').' deleted for being unseeded.  Since '.($Singular?'it':'they').' didn\'t break any rules (we hope), you can feel free to re-upload '.($Singular?'it':'them').'.\n\nThe following torrent'.($Singular?' was':'s were').' deleted:'.$MessageInfo['Msg']));
+	}	
+	unset($DeleteNotes);
 	
 	if(count($LogEntries) > 0) {
 		$Values = "('".implode("', '".$sqltime."'), ('",$LogEntries)."', '".$sqltime."')";
@@ -846,8 +873,48 @@ if($Day != next_day() || $_GET['runday']){
 				(".$HistoryID.", ".$i.", ".$TorrentID.", '".db_string($TitleString)."', '".db_string($TagString)."')");
 			$i++;
 		}
-
-
+	
+		// Send warnings to uploaders of torrents that will be deleted this week
+		$DB->query("SELECT
+			t.ID,
+			t.GroupID,
+			tg.Name,
+			t.Format,
+			t.Encoding,
+			t.UserID
+			FROM torrents AS t
+			JOIN torrents_group AS tg ON tg.ID = t.GroupID
+			JOIN users_info AS u ON u.UserID = t.UserID
+			LEFT JOIN artists_group AS ag ON ag.ArtistID = tg.ArtistID
+			WHERE t.last_action < NOW() - INTERVAL 20 DAY
+			AND t.last_action != 0
+			AND u.UnseededAlerts = '1'
+			ORDER BY t.last_action ASC");
+		$TorrentIDs = $DB->to_array();
+		$TorrentAlerts = array();
+		foreach ($TorrentIDs as $TorrentID) {
+			list($ID, $GroupID, $Name, $Format, $Encoding, $UserID) = $TorrentID;
+			
+			if (array_key_exists($UserID, $InactivityExceptionsMade) && (time() < $InactivityExceptionsMade[$UserID])) {
+				// don't notify exceptions
+				continue;	
+			}
+			
+			if (!array_key_exists($UserID, $TorrentAlerts))
+				$TorrentAlerts[$UserID] = array('Count' => 0, 'Msg' => '');
+			$ArtistName = display_artists(get_artist($GroupID), false, false, false);
+			if($ArtistName) {
+				$Name = $ArtistName.' - '.$Name;
+			}
+			if($Format && $Encoding) {
+				$Name.=' ['.$Format.' / '.$Encoding.']';
+			}
+			$TorrentAlerts[$UserID]['Msg'] .= "\n[url=http://".NONSSL_SITE_URL."/torrents.php?torrentid=$ID]".$Name."[/url]";
+			$TorrentAlerts[$UserID]['Count']++;
+		}
+		foreach($TorrentAlerts as $UserID => $MessageInfo){
+			send_pm($UserID, 0, db_string('Unseeded torrent notification'), db_string($MessageInfo['Count']." of your upload".($MessageInfo['Count']>1?'s':'')." will be deleted for inactivity soon.  Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=/wiki.php?action=article&id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count']>1?'s':'')." will be removed for inactivity:".$MessageInfo['Msg']."\n\nIf you no longer wish to recieve these notifications, please disable them in your profile settings."));
+		}
 	}
 }
 /*************************************************************************\

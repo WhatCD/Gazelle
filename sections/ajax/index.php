@@ -10,6 +10,8 @@ The required page is determined by $_GET['action'].
 
 enforce_login();
 
+header('Content-Type: application/json; charset=utf-8');
+
 switch ($_GET['action']){
 	// things that (may be) used on the site
 	case 'upload_section':
@@ -38,6 +40,18 @@ switch ($_GET['action']){
 		break;
 	case 'top10':
 		require(SERVER_ROOT.'/sections/ajax/top10/index.php');
+		break;
+	case 'artist':
+		require(SERVER_ROOT.'/sections/ajax/artist.php');
+		break;
+	case 'inbox':
+		require(SERVER_ROOT.'/sections/ajax/inbox/index.php');
+		break;
+	case 'subscriptions':
+		require(SERVER_ROOT.'/sections/ajax/subscriptions.php');
+		break;
+	case 'index':
+		require(SERVER_ROOT.'/sections/ajax/info.php');
 		break;
 	default:
 		// If they're screwing around with the query string

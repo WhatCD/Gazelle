@@ -19,3 +19,16 @@ function Cancel() {
 	}
 	document.getElementById("choices").raw().value = "";
 }
+
+function CollageSubscribe(collageid) {
+	ajax.get("userhistory.php?action=collage_subscribe&collageid=" + collageid + "&auth=" + authkey, function() {
+		var subscribeLink = $("#subscribelink" + collageid).raw();
+		if(subscribeLink) {
+			if(subscribeLink.firstChild.nodeValue.substr(1,1) == 'U') {
+				subscribeLink.firstChild.nodeValue = "[Subscribe]";
+			} else {
+				subscribeLink.firstChild.nodeValue = "[Unsubscribe]";
+			}
+		}
+	});
+}

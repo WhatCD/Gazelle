@@ -28,6 +28,9 @@ if (isset($_POST['action'])) {
 			$Delta[$Perm] = $Setting;
 		}
 	}
+	if (!is_number($_POST['maxcollages']) && !empty($_POST['maxcollages'])) { error("Please enter a valid number of extra personal collages"); }
+	$Delta['MaxCollages'] = $_POST['maxcollages'];
+	
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
 	$Cache->update_row(false, array('CustomPermissions' => $Delta));
 	$Cache->commit_transaction(0);
@@ -37,6 +40,7 @@ if (isset($_POST['action'])) {
 }
 
 $Permissions = array_merge($Defaults,$Delta);
+$MaxCollages = $Customs['MaxCollages'] + $Delta['MaxCollages'];
 
 function display_perm($Key,$Title) {
 	global $Defaults, $Permissions;
@@ -67,7 +71,15 @@ function reset() {
 <div class="box pad">
 	Before using permissions, please understand that it allows you to both add and remove access to specific features. If you think that to add access to a feature, you need to uncheck everything else, <strong>YOU ARE WRONG</strong>. The checkmarks on the left, which are grayed out, are the standard permissions granted by their class (and donor/artist status), any changes you make to the right side will overwrite this. It's not complicated, and if you screw up, click the defaults link at the top. It will reset the user to their respective features granted by class, then you can check or uncheck the one or two things you want to change. <strong>DO NOT UNCHECK EVERYTHING.</strong> If you need further clarification, ask A9 before using this tool.
 </div>
+<br />
+
 <form name="permform" id="permform" method="post" action="">
+	<table class="permission_head">
+		<tr>
+			<td class="label">Extra personal collages</td>
+			<td><input type="text" name="maxcollages" size="5" value="<?=($MaxCollages?$MaxCollages:'0')?>" /></td>
+		</tr>
+	</table>
 	<input type="hidden" name="action" value="permissions" />
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<input type="hidden" name="id" value="<?=$_REQUEST['userid']?>" />

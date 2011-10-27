@@ -86,6 +86,7 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		m.Enabled,
 		m.Paranoia,
 		m.Invites,
+		m.FLTokens,
 		m.Title,
 		m.torrent_pass,
 		m.can_leech,
@@ -110,7 +111,7 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		header("Location: log.php?search=User+".$UserID);
 	}
 
-	list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9,11));
+	list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $FLTokens, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9,11));
 }
 
 // Image proxy CTs
@@ -186,7 +187,7 @@ if (check_perms('admin_reports')) {
 <? }
 if (check_perms('users_mod')) {
 ?>
-		<!--[<a href="userhistory.php?action=token_history&userid=<?=$UserID?>">FL Tokens</a>]-->
+		[<a href="userhistory.php?action=token_history&userid=<?=$UserID?>">FL Tokens</a>]
 <? } ?>
 	</div>
 
@@ -219,6 +220,9 @@ if (check_perms('users_mod')) {
 <? } ?>
 <? if (check_paranoia_here('requiredratio') && isset($RequiredRatio)) { ?>
 				<li>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
+<? } ?>
+<? if (($FLTokens > 0) && ($OwnProfile || check_perms('users_mod'))) { ?>
+				<li>Tokens: <?=$FLTokens?></li>
 <? } ?>
 			</ul>
 		</div>
@@ -664,9 +668,11 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 <?
 }
 
-$DB->query("SELECT ID, Name FROM collages WHERE UserID='$UserID' AND CategoryID='0' AND Deleted='0'");
-list($CollageID, $Name) = $DB->next_record();
-if($CollageID) {
+$DB->query("SELECT ID, Name FROM collages WHERE UserID='$UserID' AND CategoryID='0' AND Deleted='0' ORDER BY Featured DESC, Name ASC");
+$Collages = $DB->to_array();
+$FirstCol = true;
+foreach ($Collages as $CollageInfo) {
+	list($CollageID, $CName) = $CollageInfo;
 	$DB->query("SELECT ct.GroupID,
 		tg.WikiImage,
 		tg.CategoryID
@@ -675,12 +681,18 @@ if($CollageID) {
 		WHERE ct.CollageID='$CollageID'
 		ORDER BY ct.Sort LIMIT 5");
 	$Collage = $DB->to_array();
-
 ?>
 	<table class="recent" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
-			<td colspan="5"><?=display_str($Name)?> - <a href="collages.php?id=<?=$CollageID?>">see full</a></td>
-		<tr>
+			<td colspan="5">
+				<span style="float:left;">
+					<?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>">see full</a>
+				</span>
+				<span style="float:right;">
+					<a href="#" onclick="$('#collage<?=$CollageID?>').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;"><?=$FirstCol?'(Hide)':'(Show)'?></a>
+				</span>
+			</td>
+		<tr id="collage<?=$CollageID?>" <?=$FirstCol?'':'class="hidden"'?>>
 <?	foreach($Collage as $C) {
 			$Group = get_groups(array($C['GroupID']));
 			$Group = array_pop($Group['matches']);
@@ -697,6 +709,7 @@ if($CollageID) {
 		</tr>
 	</table>
 <?
+	$FirstCol = false;
 }
 
 
@@ -995,12 +1008,12 @@ if (check_perms('users_mod', $Class)) { ?>
 					<input type="text" size="40" name="MergeStatsFrom" />
 				</td>
 			</tr>
-			<!--<tr>
+			<tr>
 				<td class="label">Freeleech Tokens:</td>
 				<td>
 					<input type="text" size="5" name="FLTokens" value="<?=$FLTokens?>" />
 				</td>
-			</tr>-->
+			</tr>
 <?
 	}
 

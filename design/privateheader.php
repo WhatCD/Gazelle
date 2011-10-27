@@ -240,6 +240,23 @@ if (check_perms('site_torrents_notify')) {
 	}
 }
 
+// Collage subscriptions
+if(check_perms('site_collages_subscribe')) { 
+	$NewCollages = $Cache->get_value('collage_subs_user_new_'.$LoggedUser['ID']);
+	if($NewCollages === FALSE) {
+			$DB->query("SELECT COUNT(DISTINCT s.CollageID)
+					FROM users_collage_subs as s
+					JOIN collages as c ON s.CollageID = c.ID
+					JOIN collages_torrents as ct on ct.CollageID = c.ID
+					WHERE s.UserID = ".$LoggedUser['ID']." AND ct.AddedOn > s.LastVisit AND c.Deleted = '0'");
+			list($NewCollages) = $DB->next_record();
+			$Cache->cache_value('collage_subs_user_new_'.$LoggedUser['ID'], $NewCollages, 0);
+	}
+	if ($NewCollages > 0) {
+		$Alerts[] = '<a href="userhistory.php?action=subscribed_collages">'.'You have '.$NewCollages.(($NewCollages > 1) ? ' new collage updates' : ' new collage update').'</a>';
+	}
+}
+
 if (check_perms('users_mod')) {
 	$ModBar[] = '<a href="tools.php">'.'Toolbox'.'</a>';
 

@@ -2,8 +2,8 @@
 $CollageID = $_GET['collageid'];
 if(!is_number($CollageID)) { error(0); }
 
-$DB->query("SELECT Name, Description, TagList, UserID, CategoryID, Locked, MaxGroups, MaxGroupsPerUser FROM collages WHERE ID='$CollageID'");
-list($Name, $Description, $TagList, $UserID, $CategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser) = $DB->next_record();
+$DB->query("SELECT Name, Description, TagList, UserID, CategoryID, Locked, MaxGroups, MaxGroupsPerUser, Featured FROM collages WHERE ID='$CollageID'");
+list($Name, $Description, $TagList, $UserID, $CategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Featured) = $DB->next_record();
 $TagList = implode(', ', explode(' ', $TagList));
 
 if($CategoryID == 0 && $UserID!=$LoggedUser['ID'] && !check_perms('site_collages_delete')) { error(403); }
@@ -17,7 +17,7 @@ show_header('Edit collage');
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="collageid" value="<?=$CollageID?>" />
 		<table id="edit_collage">
-<? if (check_perms('site_collages_delete')) { ?>
+<? if (check_perms('site_collages_delete') || ($CategoryID == 0 && $UserID == $LoggedUser['ID'] && check_perms('site_collages_renamepersonal'))) { ?>
 			<tr>
 				<td class="label">Name</td>
 				<td><input type="text" name="name" size="60" value="<?=$Name?>" /></td>
@@ -47,7 +47,13 @@ show_header('Edit collage');
 				<td class="label">Tags</td>
 				<td><input type="text" name="tags" size="60" value="<?=$TagList?>" /></td>
 			</tr>
-<? if(check_perms('site_collages_delete')) { ?>
+<? if($CategoryID == 0) { ?>
+			<tr>
+				<td class="label">Featured</td>
+				<td><input type="checkbox" name="featured" <?=($Featured?'checked':'')?> /></td>
+			</tr>
+<? }
+   if(check_perms('site_collages_delete')) { ?>
 			<tr>
 				<td class="label">Locked</td>
 				<td><input type="checkbox" name="locked" <?if($Locked) { ?>checked="checked" <? }?>/></td>

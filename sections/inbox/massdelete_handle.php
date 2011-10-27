@@ -25,13 +25,20 @@ if($MessageCount != count($Messages)){
 	error(0);
 }
 
-
-$DB->query("UPDATE pm_conversations_users SET
-	InInbox='0',
-	InSentbox='0',
-	Sticky='0',
-	UnRead='0'
-	WHERE ConvID IN($ConvIDs) AND UserID=$UserID");
+if (isset($_POST['delete'])) {
+	$DB->query("UPDATE pm_conversations_users SET
+		InInbox='0',
+		InSentbox='0',
+		Sticky='0',
+		UnRead='0'
+		WHERE ConvID IN($ConvIDs) AND UserID=$UserID");
+} elseif (isset($_POST['unread'])) {
+	$DB->query("UPDATE pm_conversations_users SET Unread='1'
+		WHERE ConvID IN($ConvIDs) AND UserID=$UserID");
+} elseif (isset($_POST['read'])) {
+	$DB->query("UPDATE pm_conversations_users SET Unread='0'
+		WHERE ConvID IN($ConvIDs) AND UserID=$UserID");
+}
 $Cache->delete_value('inbox_new_'.$UserID);
 
 header('Location: inbox.php');

@@ -26,7 +26,18 @@ $TagList = implode(' ',$TagList);
 
 $DB->query("UPDATE collages SET Description='".db_string($_POST['description'])."', TagList='$TagList' WHERE ID='$CollageID'");
 
-if (check_perms('site_collages_delete')) {
+if (!check_perms('site_collages_delete') && ($CategoryID == 0 && $UserID == $LoggedUser['ID'] && check_perms('site_collages_renamepersonal'))) {
+	if(!stristr($_POST['name'], $LoggedUser['Username'])) {
+		error("Your personal collage's title must include your username.");
+	}
+}
+
+if (isset($_POST['featured']) && $CategoryID == 0 && (($LoggedUser['ID'] == $UserID && check_perms('site_collages_personal')) || check_perms('site_collages_delete'))) {
+	$DB->query("UPDATE collages SET Featured=0 WHERE CategoryID=0 and UserID=$UserID");
+	$DB->query("UPDATE collages SET Featured=1 WHERE ID=$CollageID");
+}
+
+if (check_perms('site_collages_delete') || ($CategoryID == 0 && $UserID == $LoggedUser['ID'] && check_perms('site_collages_renamepersonal'))) {
 	$DB->query("UPDATE collages SET Name='".db_string($_POST['name'])."' WHERE ID='$CollageID'");
 }
 

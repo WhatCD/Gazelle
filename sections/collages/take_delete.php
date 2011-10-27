@@ -7,8 +7,8 @@ if(!is_number($CollageID) || !$CollageID) {
 	error(404); 
 }
 
-$DB->query("SELECT Name, UserID FROM collages WHERE ID='$CollageID'");
-list($Name, $UserID) = $DB->next_record();
+$DB->query("SELECT Name, CategoryID, UserID FROM collages WHERE ID='$CollageID'");
+list($Name, $CategoryID, $UserID) = $DB->next_record();
 
 if(!check_perms('site_collages_delete') && $UserID != $LoggedUser['ID']) {
 	error(403);
@@ -24,7 +24,8 @@ while(list($GroupID) = $DB->next_record()) {
 	$Cache->delete_value('torrents_details_'.$GroupID);
 }
 
-if (preg_match("/personal collage$/", $Name) > 0) {
+//Personal collages have CategoryID 0
+if ($CategoryID == 0) {
 	$DB->query("DELETE FROM collages WHERE ID='$CollageID'");
 	$DB->query("DELETE FROM collages_torrents WHERE CollageID='$CollageID'");
 	$DB->query("DELETE FROM collages_comments WHERE CollageID='$CollageID'");

@@ -156,7 +156,9 @@ echo $Pages;
 				</tr>
 <?	} ?>
 			</table>
-			<input type="submit" value="Delete message(s)" />
+			<input type="submit" name="read" value="Mark as read" />&nbsp;
+			<input type="submit" name="unread" value="Mark as unread" />&nbsp;
+			<input type="submit" name="delete" value="Delete message(s)" />
 		</form>
 <? } ?>
 	</div>

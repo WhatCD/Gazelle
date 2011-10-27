@@ -17,7 +17,7 @@ if(isset($argv[1])) {
 
 	$_REQUEST['action'] = $argv[1];
 } else {
-	if(empty($_REQUEST['action']) || $_REQUEST['action'] != "public_sandbox") {
+	if(empty($_REQUEST['action']) || ($_REQUEST['action'] != "public_sandbox" && $_REQUEST['action'] != "ocelot")) {
 		enforce_login();
 	}
 }

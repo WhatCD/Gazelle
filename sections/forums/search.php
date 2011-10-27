@@ -7,10 +7,11 @@ Forums search result page
 
 list($Page,$Limit) = page_limit(POSTS_PER_PAGE);
 
-// Searching for posts by a specific user
-
-// What are we looking for? Let's make sure it isn't dangerous.
-
+if($LoggedUser['CustomForums']) {
+	unset($LoggedUser['CustomForums']['']);
+	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
+}
 
 if((isset($_GET['type']) && $_GET['type'] == 'body')) {
 	$Type = 'body';
@@ -48,11 +49,33 @@ if(isset($_GET['forums']) && is_array($_GET['forums'])) {
 	}
 }
 
+// Searching for posts in a specific thread
+if(!empty($_GET['threadid'])) {
+	$ThreadID = db_string($_GET['threadid']);
+	$Type='body';
+	$SQL = "SELECT Title FROM forums_topics AS t 
+				JOIN forums AS f ON f.ID=t.ForumID
+				WHERE f.MinClassRead <= '$LoggedUser[Class]'
+				AND t.ID=$ThreadID";
+	if(!empty($RestrictedForums)) {
+		$SQL .= " AND f.ID NOT IN ('".$RestrictedForums."')";	
+	}
+	$DB->query($SQL);
+	if (list($Title) = $DB->next_record()) {
+		$Title = " &gt; <a href=\"forums.php?action=viewthread&threadid=$ThreadID\">$Title</a>";
+	} else {
+		$Title = '';
+		$ThreadID = '';
+	}
+} else {
+	$ThreadID = '';
+}
+
 // Let's hope we got some results - start printing out the content.
 show_header('Forums'.' > '.'Search');
 ?>
 <div class="thin">
-	<h2><a href="forums.php">Forums</a> &gt; Search</h2>
+	<h2><a href="forums.php">Forums</a> &gt; Search<?=$Title?></h2>
 	<form action="" method="get">
 		<input type="hidden" name="action" value="search" />
 		<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
@@ -62,6 +85,8 @@ show_header('Forums'.' > '.'Search');
 					<input type="text" name="search" size="70" value="<?=display_str($Search)?>" />
 				</td>
 			</tr>
+<?
+if (empty($ThreadID)) { ?>			
 			<tr>
 				<td><strong>Search in:</strong></td>
 				<td>
@@ -77,53 +102,56 @@ show_header('Forums'.' > '.'Search');
 		<table class="cat_list">
 	
 							
-<?// List of forums
-$Open = false;
-$LastCategoryID = -1;
-$Columns = 0;
+	<?// List of forums
+	$Open = false;
+	$LastCategoryID = -1;
+	$Columns = 0;
 
-foreach($Forums as $Forum) {
-	if (!check_forumperm($Forum['ID'])) {
-		continue;
-	}
-	
-	$Columns++;
-	
-	if ($Forum['CategoryID'] != $LastCategoryID) {
-		$LastCategoryID = $Forum['CategoryID'];
-		if($Open) {
-			if ($Columns%5) { ?>
+	foreach($Forums as $Forum) {
+		if (!check_forumperm($Forum['ID'])) {
+			continue;
+		}
+		
+		$Columns++;
+		
+		if ($Forum['CategoryID'] != $LastCategoryID) {
+			$LastCategoryID = $Forum['CategoryID'];
+			if($Open) {
+				if ($Columns%5) { ?>
 				<td colspan="<?=(5-($Columns%5))?>"></td>
 <? 			
-			}
+				}
 
 ?>
 			</tr>
 <?		
-		}
-		$Columns = 0;
-		$Open = true;
+			}
+			$Columns = 0;
+			$Open = true;
 ?>
 			<tr>
 				<td colspan="5"><strong><?=$ForumCats[$Forum['CategoryID']]?></strong></td>
 			</tr>
 			<tr>
-<?	} elseif ($Columns%5  == 0) { ?>
+<?		} elseif ($Columns%5  == 0) { ?>
 			</tr>
 			<tr>
-<?	} ?>
+<?		} ?>
 				<td>
 					<input type="checkbox" name="forums[]" value="<?=$Forum['ID']?>" id="forum_<?=$Forum['ID']?>"<? if(isset($_GET['forums']) && in_array($Forum['ID'], $_GET['forums'])) { echo ' checked="checked"';} ?> />
 					<label for="forum_<?=$Forum['ID']?>"><?=$Forum['Name']?></label>
 				</td>
-<? } 
-if ($Columns%5) { ?>
+<? 	} 
+	if ($Columns%5) { ?>
 				<td colspan="<?=(5-($Columns%5))?>"></td>
-<? } ?>
+<?	} ?>
 			</tr>
 		</table>
 					</td>
 				</tr>
+<? } else { ?>
+				<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
+<? } ?>
 				<tr>
 					<td><strong>Username:</strong></td>
 					<td>
@@ -143,25 +171,15 @@ if ($Columns%5) { ?>
 // Break search string down into individual words
 $Words = explode(' ',  db_string($Search));
 
-if($LoggedUser['CustomForums']) {
-	unset($LoggedUser['CustomForums']['']);
-	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
-}
 if($Type == 'body') {
 
 	$sql = "SELECT SQL_CALC_FOUND_ROWS
 		t.ID,
-		t.Title,
+		".(!empty($ThreadID) ? "SUBSTRING_INDEX(p.Body, ' ', 40)":"t.Title").",
 		t.ForumID,
 		f.Name,
 		p.AddedTime,
-		p.ID,
-		CEIL((SELECT COUNT(ID) 
-			FROM forums_posts 
-			WHERE forums_posts.TopicID = p.TopicID 
-			AND forums_posts.ID <= p.ID)) 
-			AS Post
+		p.ID
 		FROM forums_posts AS p
 		JOIN forums_topics AS t ON t.ID=p.TopicID
 		JOIN forums AS f ON f.ID=t.ForumID
@@ -190,6 +208,9 @@ if($Type == 'body') {
 	}
 	if(isset($AuthorID)) {
 		$sql.=" AND p.AuthorID='$AuthorID' ";
+	}
+	if(!empty($ThreadID)) {
+		$sql.=" AND t.ID='$ThreadID' ";
 	}
 	
 	$sql .= "ORDER BY p.AddedTime DESC LIMIT $Limit";
@@ -240,7 +261,7 @@ echo $Pages;
 	<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 	<tr class="colhead">
 		<td>Forum</td>
-		<td>Topic</td>
+		<td><?=(!empty($ThreadID))?'Post Begins':'Topic'?></td>
 		<td>Time</td>
 	</tr>
 <? if($DB->record_count() == 0) { ?>
@@ -248,7 +269,7 @@ echo $Pages;
 <? }
 
 $Row = 'a'; // For the pretty colours
-while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Post) = $DB->next_record()) {
+while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID) = $DB->next_record()) {
 	$Row = ($Row == 'a') ? 'b' : 'a';
 	// Print results
 ?>
@@ -257,9 +278,13 @@ while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Post) = $DB->
 				<a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$ForumName?></a>
 			</td>
 			<td>
-				<a href="forums.php?action=viewthread&amp;threadid=<?=$ID?>"><?=cut_string($Title, 80) ?></a>
-<? if($Type == 'body') { ?>
-				<span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if(!empty($PostID) && !empty($Post)) { echo '&amp;post='.$Post.'#post'.$PostID; } ?>"></a></span>
+<? if(empty($ThreadID)) { ?>
+				<a href="forums.php?action=viewthread&amp;threadid=<?=$ID?>"><?=cut_string($Title, 80); ?></a>
+<? } else { ?>
+				<?=cut_string($Title, 80); ?>
+<? }
+   if ($Type == 'body') { ?>
+				<span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if(!empty($PostID)) { echo '&amp;postid='.$PostID.'#post'.$PostID; } ?>"></a></span>
 <? } ?>
 			</td>
 			<td>

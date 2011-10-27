@@ -414,8 +414,10 @@ function get_permissions_for_user($UserID, $CustomPermissions = false) {
 		$CustomPerms = array();
 	}
 
+	$MaxCollages = $Permissions['Permissions']['MaxCollages'] + $DonorPerms['Permissions']['MaxCollages'] + $ArtistPerms['Permissions']['MaxCollages'] + $CustomPerms['MaxCollages'];
+	
 	//Combine the permissions
-	return array_merge($Permissions['Permissions'], $DonorPerms['Permissions'], $ArtistPerms['Permissions'], $CustomPerms);
+	return array_merge($Permissions['Permissions'], $DonorPerms['Permissions'], $ArtistPerms['Permissions'], $CustomPerms, array('MaxCollages' => $MaxCollages));
 }
 
 // This function is slow. Don't call it unless somebody's logging in.
@@ -574,11 +576,11 @@ function enforce_login() {
 
 // Make sure $_GET['auth'] is the same as the user's authorization key
 // Should be used for any user action that relies solely on GET.
-function authorize() {
+function authorize($Ajax = false) {
 	global $LoggedUser;
 	if(empty($_REQUEST['auth']) || $_REQUEST['auth'] != $LoggedUser['AuthKey']) {
 		send_irc("PRIVMSG ".LAB_CHAN." :".$LoggedUser['Username']." just failed authorize on ".$_SERVER['REQUEST_URI']." coming from ".$_SERVER['HTTP_REFERER']);
-		error('Invalid authorization key. Go back, refresh, and try again.');
+		error('Invalid authorization key. Go back, refresh, and try again.', $Ajax);
 		return false;
 	}
 	return true;

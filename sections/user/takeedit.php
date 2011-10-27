@@ -209,6 +209,7 @@ unset($Options['ShowQueryList']);
 unset($Options['ShowCacheList']);
 
 $DownloadAlt = (isset($_POST['downloadalt']))? 1:0;
+$UnseededAlerts = (isset($_POST['unseededalerts']))? 1:0;
 
 // Information on how the user likes to download torrents is stored in cache
 if($DownloadAlt != $LoggedUser['DownloadAlt']) {
@@ -241,6 +242,7 @@ $SQL="UPDATE users_main AS m JOIN users_info AS i ON m.ID=i.UserID SET
 	i.SiteOptions='".db_string(serialize($Options))."',
 	i.Info='".db_string($_POST['info'])."',
 	i.DownloadAlt='$DownloadAlt',
+	i.UnseededAlerts='$UnseededAlerts',
 	m.Email='".db_string($_POST['email'])."',
 	m.IRCKey='".db_string($_POST['irckey'])."',";
 

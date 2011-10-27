@@ -18,12 +18,13 @@ $DB->query("SELECT
 			i.StyleID,
 			i.StyleURL,
 			i.SiteOptions,
+			i.UnseededAlerts,
 			p.Level AS Class
 			FROM users_main AS m
 			JOIN users_info AS i ON i.UserID = m.ID
 			LEFT JOIN permissions AS p ON p.ID=m.PermissionID
 			WHERE m.ID = '".db_string($UserID)."'");
-list($Username,$Email,$IRCKey,$Paranoia,$Info,$Avatar,$Country,$StyleID,$StyleURL,$SiteOptions,$Class)=$DB->next_record(MYSQLI_NUM, array(3,9));
+list($Username,$Email,$IRCKey,$Paranoia,$Info,$Avatar,$Country,$StyleID,$StyleURL,$SiteOptions,$UnseededAlerts,$Class)=$DB->next_record(MYSQLI_NUM, array(3,9));
 
 
 if($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Class)) {
@@ -217,6 +218,13 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked"<? } ?> />
 					<label for="downloadalt">For users whose ISP block the downloading of torrent files</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><strong>Unseeded torrent alerts</strong></td>
+				<td>
+					<input type="checkbox" name="unseededalerts" id="unseededalerts" <?=checked($UnseededAlerts)?> />
+					<label for="unseededalerts">Recieve a PM alert before your uploads are deleted for being unseeded</label>
 				</td>
 			</tr>
 			<tr class="colhead_dark">

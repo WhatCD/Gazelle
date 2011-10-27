@@ -138,6 +138,7 @@ CREATE TABLE `collages` (
   `TagList` varchar(500) NOT NULL DEFAULT '',
   `MaxGroups` int(10) NOT NULL DEFAULT '0',
   `MaxGroupsPerUser` int(10) NOT NULL DEFAULT '0',
+  `Featured` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Name` (`Name`),
   KEY `UserID` (`UserID`),

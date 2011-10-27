@@ -12,6 +12,13 @@ $Text = new TEXT;
 $CollageID = $_GET['id'];
 if(!is_number($CollageID)) { error(0); }
 
+$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+if (empty($TokenTorrents)) {
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$TokenTorrents = $DB->collect('TorrentID');
+	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+}
+
 $Data = $Cache->get_value('collage_'.$CollageID);
 
 if($Data) {
@@ -38,6 +45,22 @@ if($CollageCategoryID == 0 && !check_perms('site_collages_delete')) {
 		$Locked = true;
 	}
 }
+
+//Handle subscriptions
+if(($CollageSubscriptions = $Cache->get_value('collage_subs_user_'.$LoggedUser['ID'])) === FALSE) {
+	$DB->query("SELECT CollageID FROM users_collage_subs WHERE UserID = '$LoggedUser[ID]'");
+	$CollageSubscriptions = $DB->collect(0);
+	$Cache->cache_value('collage_subs_user_'.$LoggedUser['ID'],$CollageSubscriptions,0);
+}
+
+if(empty($CollageSubscriptions)) {
+	$CollageSubscriptions = array();
+}
+
+if(in_array($CollageID, $CollageSubscriptions)) {
+	$Cache->delete_value('collage_subs_user_new_'.$LoggedUser['ID']);
+}
+$DB->query("UPDATE users_collage_subs SET LastVisit=NOW() WHERE UserID = ".$LoggedUser['ID']." AND CollageID=$CollageID");
 
 show_header($Name,'browse,collage,bbcode');
 // Build the data for the collage and the torrent list
@@ -205,7 +228,12 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
 		<td colspan="3">
 			<span>
-				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>]
+				[
+<?			if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824) 
+				&& !in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&usetoken=1" title="Use a FL Token">FL</a> |
+<?			} ?>		
+				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>]
 			</span>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=torrent_info($Torrent)?></a>
 		</td>
@@ -225,6 +253,8 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		
 		if(!empty($Torrent['FreeTorrent'])) {
 			$DisplayName .=' <strong>Freeleech!</strong>'; 
+		} elseif(in_array($TorrentID, $TokenTorrents)) { 
+			$DisplayName .= $AddExtra.'<strong>Personal Freeleech!</strong>';
 		}
 ?>
 	<tr class="torrent" id="group_<?=$GroupID?>">
@@ -235,7 +265,12 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		</td>
 		<td>
 			<span>
-				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+				[
+<?		if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824) 
+			&& !in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&usetoken=1" title="Use a FL Token">FL</a> |
+<?		} ?>		
+				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>]
 			</span>
 			<strong><?=$DisplayName?></strong>
@@ -289,7 +324,10 @@ if(($MaxGroups>0 && $NumGroups>=$MaxGroups)  || ($MaxGroupsPerUser>0 && $NumGrou
 		<a href="collages.php?action=new">[New collage]</a> 
 <? } ?>
 		<br /><br />
-<? if (check_perms('site_edit_wiki') && !$Locked) { ?>
+<? if(check_perms('site_collages_subscribe')) { ?>
+		<a href="#" onclick="CollageSubscribe(<?=$CollageID?>);return false;" id="subscribelink<?=$CollageID?>">[<?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?>]</a>
+<? }
+   if (check_perms('site_edit_wiki') && !$Locked) { ?>
 		<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>">[Edit description]</a> 
 <? }
 	if(has_bookmarked('collage', $CollageID)) {

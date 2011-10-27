@@ -165,7 +165,10 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 			'torrentId' => $TorrentID,
 			'groupId' => $GroupID,
 			'artist' => $TruncArtist,
+			'groupName' => $GroupName,
+			'groupCategory' => $GroupCategoryID,
 			'groupYear' => $GroupYear,
+			'remasterTitle' => $RemasterTitle,
 			'format' => $Format,
 			'encoding' => $Encoding,
 			'hasLog' => $HasLog,
@@ -176,7 +179,8 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 			'tags' => $TagList,
 			'snatched' => $Snatched,
 			'seeders' => $Seeders,
-			'leechers' => $Leechers
+			'leechers' => $Leechers,
+			'data' => $Data
 		);
 	}
 

@@ -136,6 +136,26 @@ show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],
 		<div class="center">
 			<a href="reports.php?action=report&amp;type=thread&amp;id=<?=$ThreadID?>">[Report Thread]</a>
 			<a href="#" onclick="Subscribe(<?=$ThreadID?>);return false;" id="subscribelink<?=$ThreadID?>">[<?=(in_array($ThreadID, $UserSubscriptions) ? 'Unsubscribe' : 'Subscribe')?>]</a>
+			<a href="#" onclick="$('#searchthread').toggle(); this.innerHTML = (this.innerHTML == '[Search this Thread]'?'[Hide Search]':'[Search this Thread]'); return false;">[Search this Thread]</a>
+		</div>
+		<div id="searchthread" class="hidden center">
+			<div style="display: inline-block;">
+				<h3>Search this thread:</h3>
+				<form action="forums.php" method="get">
+					<table cellpadding="6" cellspacing="1" border="0" class="border">	
+						<input type="hidden" name="action" value="search" />
+						<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
+						<tr>
+							<td><strong>Search for:</strong></td><td><input type="text" id="searchbox" name="search" size="70" /></td>
+						</tr>
+						<tr>
+							<td><strong>Username:</strong></td><td><input type="text" id="username" name="user" size="70" /></td>
+						</tr>
+						<tr><td colspan="2" style="text-align: center"><input type="submit" name="submit" value="Search" /></td></tr>
+					</table>
+				</form>
+				<br />
+			</div>
 		</div>
 <?
 $Pages=get_pages($Page,$ThreadInfo['Posts'],$PerPage,9);

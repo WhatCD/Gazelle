@@ -65,14 +65,17 @@ switch($_REQUEST['action']) {
 		if(!check_perms('site_collages_personal')) {
 			error(403);
 		}
-		$DB->query("SELECT ID FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
- 		if($DB->record_count() > 0) { 
+		
+		$DB->query("SELECT COUNT(ID) FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
+		list($CollageCount) = $DB->next_record();
+				
+		if($CollageCount >= $LoggedUser['Permissions']['MaxCollages']) { 
 			list($CollageID) = $DB->next_record();
 			header('Location: collage.php?id='.$CollageID);
 			die();
  		}
-		
-		$DB->query("INSERT INTO collages (Name, Description, CategoryID, UserID) VALUES ('$LoggedUser[Username]\'s personal collage', 'Personal collage for $LoggedUser[Username]. The first 5 albums will appear on his or her [url=http:\/\/".NONSSL_SITE_URL."\/user.php?id=$LoggedUser[ID]]profile[\/url].', '0', $LoggedUser[ID])");
+		$NameStr = ($CollageCount > 0)?" no. " . ($CollageCount + 1):'';
+		$DB->query("INSERT INTO collages (Name, Description, CategoryID, UserID) VALUES ('$LoggedUser[Username]\'s personal collage$NameStr', 'Personal collage for $LoggedUser[Username]. The first 5 albums will appear on his or her [url=http:\/\/".NONSSL_SITE_URL."\/user.php?id=$LoggedUser[ID]]profile[\/url].', '0', $LoggedUser[ID])");
 		$CollageID = $DB->inserted_id();
 		header('Location: collage.php?id='.$CollageID);
 		die();

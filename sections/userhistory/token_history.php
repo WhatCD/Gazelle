@@ -29,7 +29,7 @@ if (isset($_GET['expire'])) {
 	
 	if (!is_number($UserID) || !is_number($TorrentID)) { error(403); }
 	$DB->query("SELECT info_hash FROM torrents where ID = $TorrentID");
-	if (list($InfoHash) = $DB->next_record()) {
+	if (list($InfoHash) = $DB->next_record(MYSQLI_NUM, FALSE)) {
 		$DB->query("UPDATE users_freeleeches SET Expired=TRUE WHERE UserID=$UserID AND TorrentID=$TorrentID");
 		$Cache->delete_value('users_tokens_'.$UserID);
 		update_tracker('remove_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID));

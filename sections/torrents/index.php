@@ -189,8 +189,9 @@ if(!empty($_REQUEST['action'])) {
 			break;
 			
 		case 'download':
-			require(SERVER_ROOT.'/sections/torrents/download.php');			
+			require(SERVER_ROOT.'/sections/torrents/download.php');
 			break;
+			
 		case 'reply':
 			enforce_login();
 			authorize();
