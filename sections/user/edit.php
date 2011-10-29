@@ -224,7 +224,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Unseeded torrent alerts</strong></td>
 				<td>
 					<input type="checkbox" name="unseededalerts" id="unseededalerts" <?=checked($UnseededAlerts)?> />
-					<label for="unseededalerts">Recieve a PM alert before your uploads are deleted for being unseeded</label>
+					<label for="unseededalerts">Receive a PM alert before your uploads are deleted for being unseeded</label>
 				</td>
 			</tr>
 			<tr class="colhead_dark">

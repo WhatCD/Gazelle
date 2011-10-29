@@ -83,7 +83,7 @@ if(!$GenreTags) {
 ?>
 <div class="<?=(check_perms('torrents_hide_dnu')?'box pad':'')?>" style="margin:0px auto;width:700px">
 	<h3 id="dnu_header">Do not upload</h3>
-	<p>The following releases are currently forbidden from being uploaded from the site. Do not upload them unless your torrent meets a condition specified in the comment.
+	<p>The following releases are currently forbidden from being uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comment.
 <? if (check_perms('torrents_hide_dnu')) { ?>
    <span id="showdnu"><a href="#" <a href="#" onclick="$('#dnulist').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span>
 <? } ?>

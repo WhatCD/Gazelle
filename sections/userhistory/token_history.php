@@ -56,8 +56,12 @@ $DB->query("SELECT SQL_CALC_FOUND_ROWS
 			WHERE f.UserID = $UserID
 			ORDER BY f.Time DESC
 			LIMIT $Limit");
-	$Tokens = $DB->to_array();
-$Pages=get_pages($Page, $DB->record_count(), 25, 9);
+$Tokens = $DB->to_array();
+
+$DB->query("SELECT FOUND_ROWS()");
+list($NumResults) = $DB->next_record();
+$Pages=get_pages($Page, $NumResults, 25);
+
 ?>
 <h2>Freeleech token history for <?=format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'])?></h2>
 

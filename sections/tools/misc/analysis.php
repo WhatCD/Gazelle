@@ -16,4 +16,6 @@ $Debug->cache_table($Analysis['cache']);
 $Debug->class_table();
 $Debug->extension_table();
 $Debug->constant_table();
-show_footer(); ?>
+$Debug->vars_table($Analysis['vars']);
+show_footer();
+?>

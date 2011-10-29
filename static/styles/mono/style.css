@@ -1123,13 +1123,17 @@ div.pad ul,div.body ul,table.torrent_table blockquote>ul,div.pad ol,div.body ol 
 	white-space: pre-wrap;
 }
 
-#debug_database td.query {
+table.debug_table td.debug_data {
 	padding: 0;
 }
 
-#debug_database td.query>div {
+table.debug_table td.debug_data>div, table.debug_table td.debug_data>pre {
 	overflow: auto;
 	padding: 8px;
+	max-height: 400px;
+}
+
+table.debug_table td.debug_query_data>div {
 	width: 796px;
 }
 

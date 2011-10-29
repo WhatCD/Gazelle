@@ -28,7 +28,7 @@ $TorrentID = $_REQUEST['id'];
 if (!is_number($TorrentID)){ error(0); }
 
 $Info = $Cache->get_value('torrent_download_'.$TorrentID);
-if(!is_array($Info) || !array_key_exists('PlainArtists', $Info) || !array_key_exists('info_hash', $Info)) {
+if(!is_array($Info) || !array_key_exists('PlainArtists', $Info) || empty($Info[10])) {
 	$DB->query("SELECT
 		t.Media,
 		t.Format,
@@ -97,16 +97,26 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 			error("An error has occured.  Please try again.");
 		}
 		
-		$DB->query("INSERT INTO users_freeleeches (UserID, TorrentID, Time) VALUES ($UserID, $TorrentID, NOW())
-						ON DUPLICATE KEY UPDATE Time=VALUES(Time), Expired=FALSE");
-		$DB->query("UPDATE users_main SET FLTokens = FLTokens - 1 WHERE ID=$UserID");
+		// We need to fetch and check this again here because of people 
+		// double-clicking the FL link while waiting for a tracker response.
+		$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+		if (empty($TokenTorrents)) {
+			$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+			$TokenTorrents = $DB->collect('TorrentID');
+		}
 		
-		$Cache->begin_transaction('user_info_heavy_'.$UserID);
-		$Cache->update_row(false, array('FLTokens'=>($FLTokens - 1)));
-		$Cache->commit_transaction(0);
-		
-		$TokenTorrents[] = $TorrentID;
-		$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+		if (!in_array($TorrentID, $TokenTorrents)) {
+			$DB->query("INSERT INTO users_freeleeches (UserID, TorrentID, Time) VALUES ($UserID, $TorrentID, NOW())
+							ON DUPLICATE KEY UPDATE Time=VALUES(Time), Expired=FALSE");
+			$DB->query("UPDATE users_main SET FLTokens = FLTokens - 1 WHERE ID=$UserID");
+			
+			$Cache->begin_transaction('user_info_heavy_'.$UserID);
+			$Cache->update_row(false, array('FLTokens'=>($FLTokens - 1)));
+			$Cache->commit_transaction(0);
+			
+			$TokenTorrents[] = $TorrentID;
+			$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+		}
 	}
 }
 

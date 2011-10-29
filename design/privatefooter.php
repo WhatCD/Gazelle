@@ -39,6 +39,7 @@ $Debug->error_table();
 $Debug->sphinx_table();
 $Debug->query_table();
 $Debug->cache_table();
+$Debug->vars_table();
 ?>
 	</div>
 	<!-- End Debugging -->

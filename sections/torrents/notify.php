@@ -4,6 +4,13 @@ if(!check_perms('site_torrents_notify')) { error(403); }
 define('NOTIFICATIONS_PER_PAGE', 50);
 list($Page,$Limit) = page_limit(NOTIFICATIONS_PER_PAGE);
 
+$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+if (empty($TokenTorrents)) {
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$TokenTorrents = $DB->collect('TorrentID');
+	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+}
+
 $Results = $DB->query("SELECT SQL_CALC_FOUND_ROWS
 		t.ID,
 		g.ID,
@@ -27,6 +34,7 @@ $Results = $DB->query("SELECT SQL_CALC_FOUND_ROWS
 		t.HasLog,
 		t.HasCue,
 		t.LogScore,
+		t.FreeTorrent,
 		tln.TorrentID AS LogInDB,
 		unt.UnRead,
 		unt.FilterID,
@@ -98,7 +106,7 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 		foreach($FilterResults as $Result) {
 			list($TorrentID, $GroupID, $GroupName, $GroupCategoryID, $TorrentTags, $Size, $FileCount, $Format, $Encoding,
 				$Media, $Scene, $RemasterYear, $GroupYear, $RemasterYear, $RemasterTitle, $Snatched, $Seeders, 
-				$Leechers, $NotificationTime, $HasLog, $HasCue, $LogScore, $LogInDB, $UnRead) = $Result;
+				$Leechers, $NotificationTime, $HasLog, $HasCue, $LogScore, $FreeTorrent, $LogInDB, $UnRead) = $Result;
 			// generate torrent's title
 			$DisplayName='';
 			
@@ -106,6 +114,10 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 			
 			if(!empty($Artists)) {
 				$DisplayName = display_artists($Artists, true, true);
+			}
+			
+			if (in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent'])) {
+				$Data['PersonalFL'] = 1;
 			}
 			
 			$DisplayName.= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrentID$TorrentID'  title='View Torrent'>".$GroupName."</a>";
@@ -150,8 +162,12 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 		<td class="center cats_cols"><div title="<?=ucfirst(str_replace('_',' ',$MainTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1])).' tags_'.str_replace('.','_',$MainTag)?>"></div></td>
 		<td>
 			<span>
-				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> |
-				<a href="#" onclick="Clear(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a>]
+				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> 
+<?			if (($LoggedUser['FLTokens'] > 0) && ($Size < 1073741824) 
+				&& !in_array($TorrentID, $TokenTorrents) && empty($FreeTorrent) && ($LoggedUser['CanLeech'] == '1')) { ?>
+				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&usetoken=1" title="Use a FL Token">FL</a>
+<?			} ?>
+				| <a href="#" onclick="Clear(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a>]
 			</span>
 			<strong><?=$DisplayName?></strong> <?=$ExtraInfo ?>
 			<? if($UnRead) { echo '<strong>New!</strong>'; } ?>

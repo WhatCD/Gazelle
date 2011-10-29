@@ -344,16 +344,29 @@ function user_heavy_info($UserID) {
 		}
 
 		if (!empty($HeavyInfo['RestrictedForums'])) {
-			$HeavyInfo['CustomForums'] = array_fill_keys(explode(',', $HeavyInfo['RestrictedForums']), 0);
+			$RestrictedForums = explode(',', $HeavyInfo['RestrictedForums']);
 		} else {
-			$HeavyInfo['CustomForums'] = null;
+			$RestrictedForums = array();
 		}
 		unset($HeavyInfo['RestrictedForums']);
 		if (!empty($HeavyInfo['PermittedForums'])) {
-			$HeavyInfo['CustomForums'] = array_fill_keys(explode(',', $HeavyInfo['PermittedForums']), 1);
+			$PermittedForums = explode(',', $HeavyInfo['PermittedForums']);
+		} else {
+			$PermittedForums = array();
 		}
 		unset($HeavyInfo['PermittedForums']);
-
+		if (!empty($PermittedForums) || !empty($RestrictedForums)) {
+			$HeavyInfo['CustomForums'] = array();
+			foreach ($RestrictedForums as $ForumID) {
+				$HeavyInfo['CustomForums'][$ForumID] = 0;
+			}
+			foreach ($PermittedForums as $ForumID) {
+				$HeavyInfo['CustomForums'][$ForumID] = 1;
+			}
+		} else {
+			$HeavyInfo['CustomForums'] = null;
+		}
+		
 		if(!empty($HeavyInfo['SiteOptions'])) {
 			$HeavyInfo['SiteOptions'] = unserialize($HeavyInfo['SiteOptions']);
 			$HeavyInfo = array_merge($HeavyInfo, $HeavyInfo['SiteOptions']);
@@ -363,6 +376,40 @@ function user_heavy_info($UserID) {
 		$Cache->cache_value('user_info_heavy_'.$UserID, $HeavyInfo, 0);
 	}
 	return $HeavyInfo;
+}
+
+function update_site_options($UserID, $NewOptions) {
+	if(!is_number($UserID)) {
+		error(0);
+	}
+	if(empty($NewOptions)) {
+		return false;
+	}
+	global $DB, $Cache, $LoggedUser;
+
+	// Get SiteOptions
+	$DB->query("SELECT SiteOptions FROM users_info WHERE UserID = $UserID");
+	list($SiteOptions) = $DB->next_record(MYSQLI_NUM,false);
+	$SiteOptions = unserialize($SiteOptions);
+
+	// Get HeavyInfo
+	$HeavyInfo = user_heavy_info($UserID);
+
+	// Insert new/replace old options
+	$SiteOptions = array_merge($SiteOptions, $NewOptions);
+	$HeavyInfo = array_merge($HeavyInfo, $NewOptions);
+
+	// Update DB
+	$DB->query("UPDATE users_info SET SiteOptions = '".db_string(serialize($SiteOptions))."' WHERE UserID = $UserID");
+
+	// Update cache
+	$Cache->cache_value('user_info_heavy_'.$UserID, $HeavyInfo, 0);
+
+	// Update $LoggedUser if the options are changed for the current
+	if($LoggedUser['ID'] == $UserID) {
+		$LoggedUser = array_merge($LoggedUser, $NewOptions);
+		$LoggedUser['ID'] = $UserID; // We don't want to allow userid switching
+	}
 }
 
 function get_permissions($PermissionID) {
@@ -1519,6 +1566,9 @@ function get_artists($GroupIDs, $Escape = array()) {
 	$Results = array();
 	$DBs = array();
 	foreach($GroupIDs as $GroupID) {
+		if(!is_number($GroupID)) {
+			continue;
+		}
 		$Artists = $Cache->get_value('groups_artists_'.$GroupID, true);
 		if(is_array($Artists)) {
 			$Results[$GroupID] = $Artists;
@@ -1808,6 +1858,7 @@ function torrent_info($Data) {
 	if(!empty($Data['Scene'])) { $Info[]='Scene'; }
 	if($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
 	if($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
+	if($Data['PersonalFL'] == 1) { $Info[]='<strong>Personal Freeleech!</strong>'; }
 	return implode(' / ', $Info);
 }
 
@@ -1907,14 +1958,17 @@ function disable_users($UserIDs, $AdminComment, $BanReason = 1) {
  * @param $Action The action to send
  * @param $Updates An associative array of key->value pairs to send to the tracker
  */
-function update_tracker($Action, $Updates) {
+function update_tracker($Action, $Updates, $ToIRC = false) {
+	global $Cache;
 	//Build request
 	$Get = '/update?action='.$Action;
 	foreach($Updates as $Key => $Value) {
 		$Get .= '&'.$Key.'='.$Value;
 	}
 
-	send_irc('PRIVMSG #tracker :'.$Get);
+	if($ToIRC != false) {
+		send_irc('PRIVMSG #tracker :'.$Get);
+	}
 	$Path = TRACKER_SECRET.$Get;
 
 	$Return = "";
@@ -1956,7 +2010,10 @@ function update_tracker($Action, $Updates) {
 
 	if($Return != "success") {
 		send_irc("PRIVMSG #tracker :{$Attempts} {$Err} {$Get}");
-		send_irc("PRIVMSG ".ADMIN_CHAN." :Failed to update ocelot: ".$Err." : ".$Get);
+		if($Cache->get_value('ocelot_error_reported') === false) {
+			send_irc("PRIVMSG ".ADMIN_CHAN." :Failed to update ocelot: ".$Err." : ".$Get);
+			$Cache->cache_value('ocelot_error_reported', true);
+		}
 	}
 	return ($Return == "success");
 }
@@ -2008,7 +2065,7 @@ function in_array_partial($Needle, $Haystack) {
  * @param int $FreeLeechType 0 = Unknown, 1 = Staff picks, 2 = Perma-FL (Toolbox, etc.), 3 = Vanity House
  */
 function freeleech_torrents($TorrentIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
-	global $DB;
+	global $DB, $Cache;
 
 	if(!is_array($TorrentIDs)) {
 		$TorrentIDs = array($TorrentIDs);
@@ -2022,6 +2079,7 @@ function freeleech_torrents($TorrentIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
 	foreach($Torrents as $Torrent) {
 		list($TorrentID, $GroupID, $InfoHash) = $Torrent;
 		update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $FreeNeutral));
+		$Cache->delete_value('torrent_download_'.$TorrentID);
 	}
 
 	foreach($GroupIDs as $GroupID) {
