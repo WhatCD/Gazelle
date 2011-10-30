@@ -94,7 +94,7 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 		
 		// Let the tracker know about this
 		if (!update_tracker('add_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID))) {
-			error("An error has occured.  Please try again.");
+			error("An error has occured while trying to register your token.  This is most often caused by tracker problems.  Please try again when the tracker is up.  If the tracker is currently working, it may just be under heavy load, so please try again.");
 		}
 		
 		// We need to fetch and check this again here because of people 

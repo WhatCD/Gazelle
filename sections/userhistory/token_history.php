@@ -76,13 +76,19 @@ $Pages=get_pages($Page, $NumResults, 25);
 <? } ?>
 	</tr>
 <?
+foreach ($Tokens as $Token) {
+	$GroupIDs[] = $Token['GroupID'];
+}
+$Artists = get_artists($GroupIDs);
+
 $i = true;
 foreach ($Tokens as $Token) {
 	$i = !$i;
 	list($TorrentID, $GroupID, $Time, $Expired, $Downloaded, $Name, $Format, $Encoding) = $Token; 
-	$ArtistName = display_artists(get_artist($GroupID));
+	$Name = "<a href=\"torrents.php?torrentid=$TorrentID\">$Name</a>";
+	$ArtistName = display_artists($Artists[$GroupID]);
 	if($ArtistName) {
-		$Name = $ArtistName."<a href=\"torrents.php?torrentid=$TorrentID\">$Name</a>";
+		$Name = $ArtistName.$Name;
 	}
 	if($Format && $Encoding) {
 		$Name.=' ['.$Format.' / '.$Encoding.']';

@@ -190,6 +190,11 @@ $Options['AutoSubscribe'] = (!empty($_POST['autosubscribe']) ? 1 : 0);
 $Options['DisableSmileys'] = (!empty($_POST['disablesmileys']) ? 1 : 0);
 $Options['DisableAvatars'] = (!empty($_POST['disableavatars']) ? 1 : 0);
 
+
+if(isset($LoggedUser['DisableFreeTorrentTop10'])) {
+	$Options['DisableFreeTorrentTop10'] = $LoggedUser['DisableFreeTorrentTop10'];
+}
+
 if(!empty($_POST['hidetypes'])) {
 	foreach($_POST['hidetypes'] as $Type) {
 		$Options['HideTypes'][] = (int) $Type;

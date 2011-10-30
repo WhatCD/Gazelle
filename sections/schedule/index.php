@@ -684,7 +684,7 @@ if($Day != next_day() || $_GET['runday']){
 	
 	foreach($DeleteNotes as $UserID => $MessageInfo){
 		$Singular = ($MessageInfo['Count'] == 1) ? true : false;
-		send_pm($UserID,0,db_string($MessageInfo['Count'].' of your torrents '.($Singular?'has':'have').' been deleted for inactivity'), db_string(($Singular?'One':'Some').' of you torrents '.($Singular?'was':'were').' deleted for being unseeded.  Since '.($Singular?'it':'they').' didn\'t break any rules (we hope), you can feel free to re-upload '.($Singular?'it':'them').'.\n\nThe following torrent'.($Singular?' was':'s were').' deleted:'.$MessageInfo['Msg']));
+		send_pm($UserID,0,db_string($MessageInfo['Count'].' of your torrents '.($Singular?'has':'have').' been deleted for inactivity'), db_string(($Singular?'One':'Some').' of your uploads '.($Singular?'has':'have').' been deleted for being unseeded.  Since '.($Singular?'it':'they').' didn\'t break any rules (we hope), please feel free to re-upload '.($Singular?'it':'them').".\n\nThe following torrent".($Singular?' was':'s were').' deleted:'.$MessageInfo['Msg']));
 	}	
 	unset($DeleteNotes);
 	
@@ -913,7 +913,7 @@ if($Day != next_day() || $_GET['runday']){
 			$TorrentAlerts[$UserID]['Count']++;
 		}
 		foreach($TorrentAlerts as $UserID => $MessageInfo){
-			send_pm($UserID, 0, db_string('Unseeded torrent notification'), db_string($MessageInfo['Count']." of your upload".($MessageInfo['Count']>1?'s':'')." will be deleted for inactivity soon.  Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=/wiki.php?action=article&id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count']>1?'s':'')." will be removed for inactivity:".$MessageInfo['Msg']."\n\nIf you no longer wish to recieve these notifications, please disable them in your profile settings."));
+			send_pm($UserID, 0, db_string('Unseeded torrent notification'), db_string($MessageInfo['Count']." of your upload".($MessageInfo['Count']>1?'s':'')." will be deleted for inactivity soon.  Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=http://what.cd/wiki.php?action=article&id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count']>1?'s':'')." will be removed for inactivity:".$MessageInfo['Msg']."\n\nIf you no longer wish to recieve these notifications, please disable them in your profile settings."));
 		}
 	}
 }

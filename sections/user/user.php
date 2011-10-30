@@ -86,13 +86,13 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		m.Enabled,
 		m.Paranoia,
 		m.Invites,
-		m.FLTokens,
 		m.Title,
 		m.torrent_pass,
 		m.can_leech,
 		i.JoinDate,
 		i.Info,
 		i.Avatar,
+		m.FLTokens,
 		i.Country,
 		i.Donor,
 		i.Warned,
@@ -111,7 +111,7 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		header("Location: log.php?search=User+".$UserID);
 	}
 
-	list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $FLTokens, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9,11));
+	list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $FLTokens, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9,11));
 }
 
 // Image proxy CTs

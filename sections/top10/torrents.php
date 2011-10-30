@@ -1,8 +1,9 @@
 <?
+$Where = array();
+
 if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Details = 'all';
 	$Limit = 10;
-	$Where = array();
 	
 	if($_GET['tags']) {
 		$Tags = explode(',', str_replace(".","_",trim($_GET['tags'])));
@@ -20,8 +21,6 @@ if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 		}
 	}
 	
-	$Where = implode(' AND ', $Where);
-	
 } else {
 	// error out on invalid requests (before caching)
 	if(isset($_GET['details'])) {
@@ -38,7 +37,7 @@ if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 	$Limit = in_array($Limit, array(10, 100, 250)) ? $Limit : 10;
 }
-
+$Filtered = !empty($Where);
 show_header('Top '.$Limit.' Torrents');
 ?>
 <div class="thin">
@@ -83,6 +82,42 @@ if(check_perms('site_advanced_top10')) {
 <?
 }
 
+// default setting to have them shown
+$DisableFreeTorrentTop10 = (isset($LoggedUser['DisableFreeTorrentTop10']) ? $LoggedUser['DisableFreeTorrentTop10'] : 0);
+// did they just toggle it?
+if(isset($_GET['freeleech'])) {
+	// what did they choose?
+	$NewPref = ($_GET['freeleech'] == 'hide') ? 1 : 0;
+
+	// Pref id different
+	if ($NewPref != $DisableFreeTorrentTop10) {
+		$DisableFreeTorrentTop10 = $NewPref;
+		update_site_options($LoggedUser['ID'], array('DisableFreeTorrentTop10' => $DisableFreeTorrentTop10));
+	}
+}
+
+// Modify the Where query
+if ($DisableFreeTorrentTop10) {
+	$Where[] = "t.FreeTorrent='0'";
+}
+
+// The link should say the opposite of the current setting
+$FreeleechToggleName = ($DisableFreeTorrentTop10 ? 'show' : 'hide');
+$FreeleechToggleQuery = get_url(array('freeleech'));
+
+if (!empty($FreeleechToggleQuery))
+	$FreeleechToggleQuery .= '&amp;';
+
+$FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
+
+?>
+	<div style="text-align: right;">
+		<a href="top10.php?<?=$FreeleechToggleQuery?>">[<?=ucfirst($FreeleechToggleName)?> Freeleech in Top 10]</a>
+	</div>
+<?
+
+$Where = implode(' AND ', $Where);
+
 $WhereSum = (empty($Where)) ? '' : md5($Where);
 $BaseQuery = "SELECT
 	t.ID,
@@ -117,7 +152,7 @@ if($Details=='all' || $Details=='day') {
 			ORDER BY (t.Seeders + t.Leechers) DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
-		$TopTorrentsActiveLastDay = $DB->to_array();
+		$TopTorrentsActiveLastDay = $DB->to_array(false, MYSQLI_NUM);
 		$Cache->cache_value('top10tor_day_'.$Limit.$WhereSum,$TopTorrentsActiveLastDay,3600*2);
 	}
 	generate_torrent_table('Most Active Torrents Uploaded in the Past Day', 'day', $TopTorrentsActiveLastDay, $Limit);
@@ -132,7 +167,7 @@ if($Details=='all' || $Details=='week') {
 			ORDER BY (t.Seeders + t.Leechers) DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
-		$TopTorrentsActiveLastWeek = $DB->to_array();
+		$TopTorrentsActiveLastWeek = $DB->to_array(false, MYSQLI_NUM);
 		$Cache->cache_value('top10tor_week_'.$Limit.$WhereSum,$TopTorrentsActiveLastWeek,3600*6);
 	}
 	generate_torrent_table('Most Active Torrents Uploaded in the Past Week', 'week', $TopTorrentsActiveLastWeek, $Limit);
@@ -142,53 +177,62 @@ if($Details=='all' || $Details=='overall') {
 	if (!$TopTorrentsActiveAllTime = $Cache->get_value('top10tor_overall_'.$Limit.$WhereSum)) {
 		// IMPORTANT NOTE - we use WHERE t.Seeders>500 in order to speed up this query. You should remove it!
 		$Query = $BaseQuery;
-		if (!empty($Where)) { $Query .= ' WHERE '.$Where; }
-		elseif ($Details=='all') { $Query .= " WHERE t.Seeders>500 "; }
+		if ($Details=='all' && !$Filtered) {
+			$Query .= " WHERE t.Seeders>=500 ";
+			if (!empty($Where)) { $Query .= ' AND '.$Where; }
+		}
+		elseif (!empty($Where)) { $Query .= ' WHERE '.$Where; }
 		$Query .= "
 			ORDER BY (t.Seeders + t.Leechers) DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
-		$TopTorrentsActiveAllTime = $DB->to_array();
+		$TopTorrentsActiveAllTime = $DB->to_array(false, MYSQLI_NUM);
 		$Cache->cache_value('top10tor_overall_'.$Limit.$WhereSum,$TopTorrentsActiveAllTime,3600*6);
 	}
 	generate_torrent_table('Most Active Torrents of All Time', 'overall', $TopTorrentsActiveAllTime, $Limit);
 }
 
-if(($Details=='all' || $Details=='snatched') && empty($Where)) {
+if(($Details=='all' || $Details=='snatched') && !$Filtered) {
 	if (!$TopTorrentsSnatched = $Cache->get_value('top10tor_snatched_'.$Limit.$WhereSum)) {
 		$Query = $BaseQuery;
+		if (!empty($Where)) { $Query .= ' WHERE '.$Where; }
 		$Query .= "
 			ORDER BY t.Snatched DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
-		$TopTorrentsSnatched = $DB->to_array();
+		$TopTorrentsSnatched = $DB->to_array(false, MYSQLI_NUM);
 		$Cache->cache_value('top10tor_snatched_'.$Limit.$WhereSum,$TopTorrentsSnatched,3600*6);
 	}
 	generate_torrent_table('Most Snatched Torrents', 'snatched', $TopTorrentsSnatched, $Limit);
 }
 
-if(($Details=='all' || $Details=='data') && empty($Where)) {
+if(($Details=='all' || $Details=='data') && !$Filtered) {
 	if (!$TopTorrentsTransferred = $Cache->get_value('top10tor_data_'.$Limit.$WhereSum)) {
 		// IMPORTANT NOTE - we use WHERE t.Snatched>100 in order to speed up this query. You should remove it!
 		$Query = $BaseQuery;
-		if ($Details=='all') { $Query .= " WHERE t.Snatched>100 "; }
+		if ($Details=='all') {
+			$Query .= " WHERE t.Snatched>=100 ";
+			if (!empty($Where)) { $Query .= ' AND '.$Where; }
+		}
 		$Query .= "
 			ORDER BY Data DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
-		$TopTorrentsTransferred = $DB->to_array();
+		$TopTorrentsTransferred = $DB->to_array(false, MYSQLI_NUM);
 		$Cache->cache_value('top10tor_data_'.$Limit.$WhereSum,$TopTorrentsTransferred,3600*6);
 	}
 	generate_torrent_table('Most Data Transferred Torrents', 'data', $TopTorrentsTransferred, $Limit);
 }
 
-if(($Details=='all' || $Details=='seeded') && empty($Where)) {
+if(($Details=='all' || $Details=='seeded') && !$Filtered) {
 	if (!$TopTorrentsSeeded = $Cache->get_value('top10tor_seeded_'.$Limit.$WhereSum)) {
-		$Query = $BaseQuery."
+		$Query = $BaseQuery;
+		if (!empty($Where)) { $Query .= ' WHERE '.$Where; }
+		$Query .= "
 			ORDER BY t.Seeders DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
-		$TopTorrentsSeeded = $DB->to_array();
+		$TopTorrentsSeeded = $DB->to_array(false, MYSQLI_NUM);
 		$Cache->cache_value('top10tor_seeded_'.$Limit.$WhereSum,$TopTorrentsSeeded,3600*6);
 	}
 	generate_torrent_table('Best Seeded Torrents', 'seeded', $TopTorrentsSeeded, $Limit);
@@ -201,7 +245,7 @@ show_footer();
 
 // generate a table based on data from most recent query to $DB
 function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
-	global $LoggedUser,$Categories;
+	global $LoggedUser,$Categories,$Debug;
 ?>
 		<h3>Top <?=$Limit.' '.$Caption?>
 <?	if(empty($_GET['advanced'])){ ?> 
@@ -236,6 +280,10 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		return;
 	}
 	$Rank = 0;
+	foreach ($Details as $Detail) {
+		$GroupIDs[] = $Detail[1];
+	}
+	$Artists = get_artists($GroupIDs);
 
 	foreach ($Details as $Detail) {
 		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$TorrentTags,
@@ -249,10 +297,9 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		// generate torrent's title
 		$DisplayName='';
 		
-		$Artists = get_artist($GroupID);
 		
-		if(!empty($Artists)) {
-			$DisplayName = display_artists($Artists, true, true);
+		if(!empty($Artists[$GroupID])) {
+			$DisplayName = display_artists($Artists[$GroupID], true, true);
 		}
 		
 		$DisplayName.= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID'  title='View Torrent'>$GroupName</a>";
