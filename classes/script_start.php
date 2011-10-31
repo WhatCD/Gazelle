@@ -162,6 +162,12 @@ if(isset($LoginCookie)) {
 		time() < strtotime($LoggedUser['RatioWatchEnds']) &&
 		($LoggedUser['BytesDownloaded']*$LoggedUser['RequiredRatio'])>$LoggedUser['BytesUploaded']
 	);
+	if(!isset($LoggedUser['ID'])) {
+		$Debug->log_var($LightInfo, 'LightInfo');
+		$Debug->log_var($HeavyInfo, 'HeavyInfo');
+		$Debug->log_var($Permissions, 'Permissions');
+		$Debug->log_var($UserStats, 'UserStats');
+	}
 
 	//Load in the permissions
 	$LoggedUser['Permissions'] = get_permissions_for_user($LoggedUser['ID'], $LoggedUser['CustomPermissions']);
@@ -367,8 +373,8 @@ function user_heavy_info($UserID) {
 			$HeavyInfo['CustomForums'] = null;
 		}
 		
+		$HeavyInfo['SiteOptions'] = unserialize($HeavyInfo['SiteOptions']);
 		if(!empty($HeavyInfo['SiteOptions'])) {
-			$HeavyInfo['SiteOptions'] = unserialize($HeavyInfo['SiteOptions']);
 			$HeavyInfo = array_merge($HeavyInfo, $HeavyInfo['SiteOptions']);
 		}
 		unset($HeavyInfo['SiteOptions']);

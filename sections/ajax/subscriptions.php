@@ -13,6 +13,7 @@ if(!empty($LoggedUser['DisableForums'])) {
 				'status' => 'failure'
 			)
 		);
+	die();
 }
 
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class

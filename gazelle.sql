@@ -832,7 +832,8 @@ CREATE TABLE `torrents` (
   KEY `last_action` (`last_action`),
   KEY `Time` (`Time`),
   KEY `flags` (`flags`),
-  KEY `LastLogged` (`LastLogged`)
+  KEY `LastLogged` (`LastLogged`),
+  KEY `FreeTorrent` (`FreeTorrent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `torrents_artists` (

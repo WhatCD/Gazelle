@@ -38,6 +38,12 @@ switch ($_GET['action']){
 	case 'torrentgroup':
 		require('torrentgroup.php');
 		break;
+	case 'user':
+		require(SERVER_ROOT.'/sections/ajax/user.php');
+		break;
+	case 'forum':
+		require(SERVER_ROOT.'/sections/ajax/forum/index.php');
+		break;
 	case 'top10':
 		require(SERVER_ROOT.'/sections/ajax/top10/index.php');
 		break;
@@ -52,6 +58,12 @@ switch ($_GET['action']){
 		break;
 	case 'index':
 		require(SERVER_ROOT.'/sections/ajax/info.php');
+		break;
+	case 'usersearch':
+		require(SERVER_ROOT.'/sections/ajax/usersearch.php');
+		break;
+	case 'bookmarks':
+		require(SERVER_ROOT.'/sections/ajax/bookmarks.php');
 		break;
 	default:
 		// If they're screwing around with the query string

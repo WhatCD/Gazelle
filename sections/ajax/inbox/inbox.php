@@ -103,7 +103,7 @@ print
 		array(
 			'status' => 'success',
 			'response' => array(
-				'currentPage' => $Page,
+				'currentPage' => intval($Page),
 				'pages' => ceil($NumResults/MESSAGES_PER_PAGE),
 				'messages' => $JsonMessages
 			)
