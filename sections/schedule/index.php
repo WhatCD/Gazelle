@@ -90,7 +90,7 @@ $DB->query("SELECT uf.UserID, t.info_hash
             FROM users_freeleeches AS uf 
             JOIN torrents AS t ON uf.TorrentID = t.ID
 			WHERE uf.Expired = FALSE AND uf.Time < '$sqltime' - INTERVAL 4 DAY");
-while (list($UserID,$InfoHash) = $DB->next_record()) {
+while (list($UserID,$InfoHash) = $DB->next_record(MYSQLI_NUM, false)) {
 	update_tracker('remove_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID));
 }
 $DB->query("UPDATE users_freeleeches SET Expired = True WHERE Time < '$sqltime' - INTERVAL 4 DAY");
