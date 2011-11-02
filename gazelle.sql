@@ -1447,10 +1447,13 @@ CREATE TABLE `xbt_files_users` (
   `ipa` int(12) unsigned NOT NULL,
   `mtime` int(11) NOT NULL,
   `ip` varchar(15) NOT NULL DEFAULT '',
-  PRIMARY KEY (`uid`,`fid`,`peer_id`),
+  PRIMARY KEY (`peer_id`,`fid`),
   KEY `remaining_idx` (`remaining`),
   KEY `fid_idx` (`fid`),
-  KEY `mtime_idx` (`mtime`)
+  KEY `mtime_idx` (`mtime`),
+  KEY `uid` (`uid`),
+  KEY `downloaded` (`downloaded`),
+  KEY `active` (`active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `xbt_scrape_log` (

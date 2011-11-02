@@ -110,6 +110,10 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 							ON DUPLICATE KEY UPDATE Time=VALUES(Time), Expired=FALSE");
 			$DB->query("UPDATE users_main SET FLTokens = FLTokens - 1 WHERE ID=$UserID");
 			
+			// Fix for downloadthemall messing with the cached token count
+			$UInfo = user_heavy_info($UserID);
+			$FLTokens = $UInfo['FLTokens'];
+			
 			$Cache->begin_transaction('user_info_heavy_'.$UserID);
 			$Cache->update_row(false, array('FLTokens'=>($FLTokens - 1)));
 			$Cache->commit_transaction(0);
