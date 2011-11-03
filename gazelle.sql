@@ -1268,7 +1268,8 @@ CREATE TABLE `users_sessions` (
   PRIMARY KEY (`UserID`,`SessionID`),
   KEY `UserID` (`UserID`),
   KEY `LastUpdate` (`LastUpdate`),
-  KEY `Active` (`Active`)
+  KEY `Active` (`Active`),
+  KEY `ActiveAgeKeep` (`Active`,`LastUpdate`,`KeepLogged`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `users_subscriptions` (

@@ -221,7 +221,7 @@ if (check_perms('users_mod')) {
 <? if (check_paranoia_here('requiredratio') && isset($RequiredRatio)) { ?>
 				<li>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
 <? } ?>
-<? if ($OwnProfile || check_perms('users_mod')) { ?>
+<? if ($OwnProfile || check_paranoia_here(false)) { //if ($OwnProfile || check_perms('users_mod')) { ?>
 				<li><a href="userhistory.php?action=token_history&userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <? } ?>
 			</ul>

@@ -9,18 +9,19 @@ Nonmods and empty userid show $LoggedUser['ID']'s history
 ************************************************************************/
 
 if (isset($_GET['userid'])) {
-	if (($_GET['userid'] == $LoggedUser['ID']) || check_perms('users_mod')) {
-		$UserID = $_GET['userid'];
-	} else {
-		error(403);
-	}
+	$UserID = $_GET['userid'];
 } else {
 	$UserID = $LoggedUser['ID'];
 }
-
 if (!is_number($UserID)) { error(404); }
 
 $UserInfo = user_info($UserID);
+$Perms = get_permissions($UserInfo['PermissionID']);
+$UserClass = $Perms['Class'];
+
+if($LoggedUser['ID'] != $UserID && !check_paranoia(false, $User['Paranoia'], $UserClass, $UserID)) {
+	error(403);
+}
 
 if (isset($_GET['expire'])) {
 	if (!check_perms('users_mod')) { error(403); }

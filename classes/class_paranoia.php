@@ -45,6 +45,9 @@ function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
 	if(check_perms('users_override_paranoia', $UserClass)) {
 		return true;
 	}
+	if ($Property == false) {
+		return false;
+	}
 	if(!is_array($Paranoia)) {
 		$Paranoia = unserialize($Paranoia);
 	}
