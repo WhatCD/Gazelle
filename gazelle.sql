@@ -1042,6 +1042,7 @@ CREATE TABLE `users_freeleeches` (
   `Time` datetime NOT NULL,
   `Expired` tinyint(1) NOT NULL DEFAULT '0',
   `Downloaded` bigint(20) NOT NULL DEFAULT '0',
+  `Uses` int(10) NOT NULL DEFAULT '1',
   PRIMARY KEY (`UserID`,`TorrentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1433,7 +1434,7 @@ CREATE TABLE `xbt_files_users` (
   `uid` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `announced` int(11) NOT NULL,
-  `completed` int(11) NOT NULL,
+  `completed` tinyint(1) NOT NULL DEFAULT '0',
   `downloaded` bigint(20) NOT NULL,
   `remaining` bigint(20) NOT NULL,
   `uploaded` bigint(20) NOT NULL,
@@ -1445,16 +1446,13 @@ CREATE TABLE `xbt_files_users` (
   `connectable` tinyint(4) NOT NULL DEFAULT '1',
   `peer_id` binary(20) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `fid` int(11) NOT NULL,
-  `ipa` int(12) unsigned NOT NULL,
   `mtime` int(11) NOT NULL,
   `ip` varchar(15) NOT NULL DEFAULT '',
   PRIMARY KEY (`peer_id`,`fid`),
   KEY `remaining_idx` (`remaining`),
   KEY `fid_idx` (`fid`),
   KEY `mtime_idx` (`mtime`),
-  KEY `uid` (`uid`),
-  KEY `downloaded` (`downloaded`),
-  KEY `active` (`active`)
+  KEY `uid_active` (`uid`,`active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `xbt_scrape_log` (

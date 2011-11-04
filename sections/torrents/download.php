@@ -107,7 +107,7 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 		
 		if (!in_array($TorrentID, $TokenTorrents)) {
 			$DB->query("INSERT INTO users_freeleeches (UserID, TorrentID, Time) VALUES ($UserID, $TorrentID, NOW())
-							ON DUPLICATE KEY UPDATE Time=VALUES(Time), Expired=FALSE");
+							ON DUPLICATE KEY UPDATE Time=VALUES(Time), Expired=FALSE, Uses=Uses+1");
 			$DB->query("UPDATE users_main SET FLTokens = FLTokens - 1 WHERE ID=$UserID");
 			
 			// Fix for downloadthemall messing with the cached token count

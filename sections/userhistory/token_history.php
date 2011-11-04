@@ -48,6 +48,7 @@ $DB->query("SELECT SQL_CALC_FOUND_ROWS
 			   f.Time,
 			   f.Expired,			
 			   f.Downloaded,
+			   f.Uses,
 			   g.Name,
 			   t.Format,
 			   t.Encoding
@@ -74,6 +75,7 @@ $Pages=get_pages($Page, $NumResults, 25);
 		<td>Expired</td>
 <? if (check_perms('users_mod')) { ?>
 		<td>Downloaded</td>
+		<td>Tokens Used</td>
 <? } ?>
 	</tr>
 <?
@@ -85,7 +87,7 @@ $Artists = get_artists($GroupIDs);
 $i = true;
 foreach ($Tokens as $Token) {
 	$i = !$i;
-	list($TorrentID, $GroupID, $Time, $Expired, $Downloaded, $Name, $Format, $Encoding) = $Token; 
+	list($TorrentID, $GroupID, $Time, $Expired, $Downloaded, $Uses, $Name, $Format, $Encoding) = $Token; 
 	$Name = "<a href=\"torrents.php?torrentid=$TorrentID\">$Name</a>";
 	$ArtistName = display_artists($Artists[$GroupID]);
 	if($ArtistName) {
@@ -102,6 +104,7 @@ foreach ($Tokens as $Token) {
 		</td>
 <?	if (check_perms('users_mod')) { ?>
 		<td><?=get_size($Downloaded)?></td>
+		<td><?=$Uses?></td>
 <?	} ?>
 	</tr>
 <? }

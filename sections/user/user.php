@@ -512,11 +512,11 @@ list($PerfectFLACs) = $DB->next_record();
 <?
 
 if (check_paranoia_here('seeding+')) {
-	$DB->query("SELECT COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.remaining=0");
+	$DB->query("SELECT COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.active=1 AND x.remaining=0");
 	list($Seeding) = $DB->next_record();
 }
 if (check_paranoia_here('leeching+')) {
-	$DB->query("SELECT COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.remaining>0");
+	$DB->query("SELECT COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.active=1 AND x.remaining>0");
 	list($Leeching) = $DB->next_record();
 }
 ?>
