@@ -103,13 +103,13 @@ foreach ($_REQUEST['list'] as $Priority => $Selection) {
 }
 $SQL .= "ELSE 100 END AS Rank,
 t.GroupID,
+t.ID,
 t.Media,
 t.Format,
 t.Encoding,
 IF(t.RemasterYear=0,tg.Year,t.RemasterYear),
 tg.Name,
-t.Size,
-f.File
+t.Size
 FROM torrents AS t 
 INNER JOIN collages_torrents AS c ON t.GroupID=c.GroupID AND c.CollageID='$CollageID'
 INNER JOIN torrents_group AS tg ON tg.ID=t.GroupID AND tg.CategoryID='1'
@@ -122,18 +122,26 @@ $Artists = get_artists($DB->collect('GroupID'), false);
 $Skips = array();
 $TotalSize = 0;
 
+if(count($Downloads)) {
+	foreach($Downloads as $Download) {
+		$TorrentIDs[] = $Download[2];
+	}
+	$DB->query("SELECT TorrentID, file FROM torrents_files WHERE TorrentID IN (".implode(',', $TorrentIDs).")");
+	$Torrents = $DB->to_array('TorrentID',MYSQLI_ASSOC,false);
+}
+
 require(SERVER_ROOT.'/classes/class_torrent.php');
 require(SERVER_ROOT.'/classes/class_zip.php');
 $Zip = new ZIP(file_string($CollageName));
 foreach($Downloads as $Download) {
-	list($Rank, $GroupID, $Media, $Format, $Encoding, $Year, $Album, $Size, $Contents) = $Download;
+	list($Rank, $GroupID, $TorrentID, $Media, $Format, $Encoding, $Year, $Album, $Size) = $Download;
 	$Artist = display_artists($Artists[$GroupID],false,true,false);
 	if ($Rank == 100) {
 		$Skips[] = $Artist.$Album.' '.$Year;
 		continue;
 	}
 	$TotalSize += $Size;
-	$Contents = unserialize(base64_decode($Contents));
+	$Contents = unserialize(base64_decode($Torrents[$TorrentID]['file']));
 	$Tor = new TORRENT($Contents, true);
 	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');
 	unset($Tor->Val['announce-list']);

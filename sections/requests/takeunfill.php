@@ -45,7 +45,9 @@ if($CategoryName == "Music") {
 $RequestVotes = get_votes_array($RequestID);
 
 if ($RequestVotes['TotalBounty'] > $Uploaded) {
-	$DB->query("UPDATE users_main SET Downloaded = Downloaded + ".$RequestVotes['TotalBounty']." WHERE ID = ".$FillerID);
+	// If we can't take it all out of upload, zero that out and add whatever is left as download.
+	$DB->query("UPDATE users_main SET Uploaded = 0 WHERE ID = ".$FillerID);
+	$DB->query("UPDATE users_main SET Downloaded = Downloaded + ".($RequestVotes['TotalBounty']-$Uploaded)." WHERE ID = ".$FillerID);
 } else {
 	$DB->query("UPDATE users_main SET Uploaded = Uploaded - ".$RequestVotes['TotalBounty']." WHERE ID = ".$FillerID);
 }
