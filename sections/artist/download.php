@@ -66,13 +66,17 @@ $Preference = $Preferences[$_REQUEST['preference']];
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
 list($ArtistName) = $DB->next_record(MYSQLI_NUM,false);
 
-$DB->query("SELECT GroupID FROM torrents_artists WHERE ArtistID='$ArtistID'");
+$DB->query("SELECT GroupID, Importance FROM torrents_artists WHERE ArtistID='$ArtistID'");
 if($DB->record_count() == 0) { error(404); }
-$GroupIDs = $DB->collect(0,false);
+$Releases = $DB->to_array('GroupID',MYSQLI_ASSOC,false);
+$GroupIDs = array_keys($Releases);
 
 $SQL = "SELECT CASE ";
 
 foreach ($_REQUEST['list'] as $Priority => $Selection) {
+	if(!is_number($Priority)) {
+		continue;
+	}
 	$SQL .= "WHEN ";
 	switch ($Selection) {
 		case '00': $SQL .= "t.Format='MP3' AND t.Encoding='V0 (VBR)'"; break;
@@ -103,7 +107,7 @@ foreach ($_REQUEST['list'] as $Priority => $Selection) {
 		case '46': $SQL .= "t.Format='AAC' AND t.Encoding='192'"; break;
 		default: error(0);
 	}
-	$SQL .= " THEN '".db_string($Priority)."' ";
+	$SQL .= " THEN $Priority ";
 }
 $SQL .= "ELSE 100 END AS Rank,
 t.GroupID,
@@ -121,10 +125,9 @@ ORDER BY t.GroupID ASC, Rank DESC, t.$Preference";
 
 $DB->query($SQL);
 $Downloads = $DB->to_array('1',MYSQLI_NUM,false);
-$Artists = get_artists($DB->collect('GroupID'), false);
+$Artists = get_artists($GroupIDs, false);
 $Skips = array();
 $TotalSize = 0;
-
 if(count($Downloads)) {
 	foreach($Downloads as $Download) {
 		$TorrentIDs[] = $Download[2];
@@ -143,12 +146,19 @@ foreach($Downloads as $Download) {
 		$Skips[] = $Artist.$Album.' '.$Year;
 		continue;
 	}
+	if($Releases[$GroupID]['Importance'] == 1) {
+		$ReleaseTypeName = $ReleaseTypes[$ReleaseType];
+	} elseif($Releases[$GroupID]['Importance'] == 2) {
+		$ReleaseTypeName = "Guest Appearance";
+	} elseif($Releases[$GroupID]['Importance'] == 3) {
+		$ReleaseTypeName = "Remixed By";
+	}
 	$TotalSize += $Size;
 	$Contents = unserialize(base64_decode($Torrents[$TorrentID]['file']));
 	$Tor = new TORRENT($Contents, true);
 	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');
 	unset($Tor->Val['announce-list']);
-	$Zip->add_file($Tor->enc(), $ReleaseTypes[$ReleaseType].'/'.file_string($Artist.$Album).' - '.file_string($Year).' ('.file_string($Media).' - '.file_string($Format).' - '.file_string($Encoding).').torrent');
+	$Zip->add_file($Tor->enc(), $ReleaseTypeName.'/'.file_string($Artist.$Album).' - '.file_string($Year).' ('.file_string($Media).' - '.file_string($Format).' - '.file_string($Encoding).').torrent');
 }
 $Analyzed = count($Downloads);
 $Skipped = count($Skips);

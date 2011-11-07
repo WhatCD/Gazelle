@@ -292,14 +292,18 @@ if(!empty($_GET['order_way']) && $_GET['order_way'] == 'asc') {
 	$OrderWay = 'desc';
 }
 
-if(empty($_GET['order_by']) || !in_array($_GET['order_by'], array('year', 'time','size','seeders','leechers','snatched'))) {
+if(empty($_GET['order_by']) || !in_array($_GET['order_by'], array('year','time','size','seeders','leechers','snatched','random'))) {
 	$_GET['order_by'] = 'time';
 	$OrderBy = 'time'; // For header links
+} elseif($_GET['order_by'] == 'random') {
+	$OrderBy = '@random';
+	$Way = SPH_SORT_EXTENDED;
+	$SS->limit(0, TORRENTS_PER_PAGE, TORRENTS_PER_PAGE);
 } else {
 	$OrderBy = $_GET['order_by'];
 }
 
-$SS->SetSortMode($Way, $_GET['order_by']);
+$SS->SetSortMode($Way, $OrderBy);
 
 
 if(count($Queries)>0) {
@@ -540,6 +544,7 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 						<option value="snatched"<?selected('order_by','snatched')?>>Snatched</option>
 						<option value="seeders"<?selected('order_by','seeders')?>>Seeders</option>
 						<option value="leechers"<?selected('order_by','leechers')?>>Leechers</option>
+						<option value="random"<?selected('order_by','random')?>>Random</option>
 					</select>
 					<select name="order_way">
 						<option value="desc"<?selected('order_way','desc')?>>Descending</option>

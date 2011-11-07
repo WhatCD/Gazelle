@@ -112,12 +112,13 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
 	//------------- Front page stats ----------------------------------------//
 
 	//Love or hate, this makes things a hell of a lot faster
-	if ($Hour%6 == 0) {
+
+	if ($Hour%2 == 0) {
 		$DB->query("SELECT COUNT(uid) AS Snatches FROM xbt_snatched");
 		list($SnatchStats) = $DB->next_record();
 		$Cache->cache_value('stats_snatches',$SnatchStats,0);
 	}
-	
+
 	$DB->query("SELECT COUNT(uid) FROM xbt_files_users WHERE remaining>0");
 	list($LeecherCount) = $DB->next_record();
 	$DB->query("SELECT COUNT(uid) FROM xbt_files_users WHERE remaining=0");

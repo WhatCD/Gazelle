@@ -69,6 +69,9 @@ list($CollageName) = $DB->next_record(MYSQLI_NUM,false);
 $SQL = "SELECT CASE ";
 
 foreach ($_REQUEST['list'] as $Priority => $Selection) {
+	if(!is_number($Priority)) {
+		continue;
+	}
 	$SQL .= "WHEN ";
 	switch ($Selection) {
 		case '00': $SQL .= "t.Format='MP3' AND t.Encoding='V0 (VBR)'"; break;
