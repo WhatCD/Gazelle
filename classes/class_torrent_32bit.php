@@ -288,9 +288,9 @@ class TORRENT extends BENCODE_DICT {
 			return true;
 		} else {
 			// Torrent is not private!
-			// add private tracker flag
+			// add private tracker flag and sort info dictionary
 			$this->Val['info']->Val['private'] = '[*INT*]1';
-
+			ksort($this->Val['info']->Val);
 			return false;
 		}
 	}

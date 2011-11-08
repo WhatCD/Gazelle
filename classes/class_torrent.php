@@ -292,14 +292,13 @@ class TORRENT extends BENCODE_DICT {
 		unset($this->Val['libtorrent_resume']);
 		
 		//----- End properties that do not affect the infohash
-		
 		if ($this->Val['info']->Val['private']) {
 			return true; // Torrent is private
 		} else {
 			// Torrent is not private!
-			// add private tracker flag
+			// add private tracker flag and sort info dictionary
 			$this->Val['info']->Val['private'] = 1;
-			
+			ksort($this->Val['info']->Val);
 			return false;
 		}
 	}
