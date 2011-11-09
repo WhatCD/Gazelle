@@ -207,7 +207,7 @@ h1.hidden {
 	position: relative;
 	float: right;
 	width: 217px;
-	height: 38px;
+	height: 62px;
 	padding: 10px 14px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -227,7 +227,7 @@ h1.hidden {
 	color: #fff !important;
 }
 
-#userinfo_stats li:nth-child(even) {
+#userinfo_stats li:last-child {
 	border: none !important;
 }
 
@@ -236,6 +236,11 @@ h1.hidden {
 }
 
 #stats_ratio,#stats_required {
+	left: 128px;
+}
+
+#fl_tokens {
+	top: 5.4em;
 	left: 128px;
 }
 
@@ -768,7 +773,7 @@ span.last_read a:hover {
 	padding: 15px;
 }
 
-body#forums table.forum_post td.body > div { /* Wide main column (forums) */
+body#forums table.forum_post td.body > div, body#userhistory table.forum_post td.body > div { /* Wide main column (forums, user history) */
 	width: 787px;
 }
 

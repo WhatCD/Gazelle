@@ -23,7 +23,7 @@ if($AliasName == '') {
  * 3. For foo, there's two, same ArtistID, diff names, no redirect
  */
 
-$DB->query("SELECT AliasID, ArtistID FROM artists_alias WHERE Name='".$AliasName."'");
+$DB->query("SELECT AliasID, ArtistID FROM artists_alias WHERE Name LIKE '".$AliasName."'");
 list($CloneAliasID, $CloneArtistID) = $DB->next_record();
 if($CloneAliasID) {
 	if($Redirect == 0) {

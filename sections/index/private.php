@@ -179,12 +179,10 @@ if(($PeerStats = $Cache->get_value('stats_peers')) === false) {
 		?><script type="script/javascript">setTimeout('window.location="http://<?=NONSSL_SITE_URL?><?=$_SERVER['REQUEST_URI']?>"', 5)</script><?
 	} else {
 		$Cache->cache_value('stats_peers_lock', '1', 10);
-		$DB->query("SELECT COUNT(uid) FROM xbt_files_users WHERE remaining>0 AND active>0");
-		list($LeecherCount) = $DB->next_record();
-		if(!$LeecherCount) { $LeecherCount = 0; }
-		$DB->query("SELECT COUNT(uid) FROM xbt_files_users WHERE remaining=0 AND active>0");
-		list($SeederCount) = $DB->next_record();
-		if(!$SeederCount) { $SeederCount = 0; }
+		$DB->query("SELECT IF(remaining=0,'Seeding','Leeching') AS Type, COUNT(uid) FROM xbt_files_users WHERE active=1 GROUP BY Type");
+		$PeerCount = $DB->to_array(0, MYSQLI_NUM, false);
+		$SeederCount = isset($PeerCount['Seeding'][1]) ? $PeerCount['Seeding'][1] : 0;
+		$LeecherCount = isset($PeerCount['Leeching'][1]) ? $PeerCount['Leeching'][1] : 0;
 		$Cache->cache_value('stats_peers',array($LeecherCount,$SeederCount),0);
 	}
 } else {

@@ -511,13 +511,11 @@ list($PerfectFLACs) = $DB->next_record();
 <? } ?>
 <?
 
-if (check_paranoia_here('seeding+')) {
-	$DB->query("SELECT COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.active=1 AND x.remaining=0");
-	list($Seeding) = $DB->next_record();
-}
-if (check_paranoia_here('leeching+')) {
-	$DB->query("SELECT COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.active=1 AND x.remaining>0");
-	list($Leeching) = $DB->next_record();
+if (check_paranoia_here('seeding+') || check_paranoia_here('leeching+')) {
+	$DB->query("SELECT IF(remaining=0,'Seeding','Leeching') AS Type, COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.active=1 GROUP BY Type");
+	$PeerCount = $DB->to_array(0, MYSQLI_NUM, false);
+	$Seeding = isset($PeerCount['Seeding'][1]) ? $PeerCount['Seeding'][1] : 0;
+	$Leeching = isset($PeerCount['Leeching'][1]) ? $PeerCount['Leeching'][1] : 0;
 }
 ?>
 <? if (check_paranoia_here('seeding')) { ?>
