@@ -925,9 +925,7 @@ These functions are twice per month, on the 8th and the 22nd.
 
 \*************************************************************************/
 
-
 if($BiWeek != next_biweek() || $_GET['runbiweek']) {
-
 	echo "Ran bi-weekly functions\n";
 
 	//------------- Cycle auth keys -----------------------------------------//
