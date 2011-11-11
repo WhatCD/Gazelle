@@ -129,14 +129,14 @@ switch($_GET['type']) {
 		if(!check_paranoia('seeding', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
 		$Time = '(unix_timestamp(now()) - xfu.timespent)';
 		$UserField = 'xfu.uid';
-		$ExtraWhere = 'AND xfu.Remaining=0';
+		$ExtraWhere = 'AND xfu.active=1 AND xfu.Remaining=0';
 		$From = "xbt_files_users AS xfu JOIN torrents AS t ON t.ID=xfu.fid";
 		break;
 	case 'leeching':
 		if(!check_paranoia('leeching', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
 		$Time = '(unix_timestamp(now()) - xfu.timespent)';
 		$UserField = 'xfu.uid';
-		$ExtraWhere = 'AND xfu.Remaining>0';
+		$ExtraWhere = 'AND xfu.active=1 AND xfu.Remaining>0';
 		$From = "xbt_files_users AS xfu JOIN torrents AS t ON t.ID=xfu.fid";
 		break;
 	case 'uploaded':
