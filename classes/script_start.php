@@ -591,7 +591,7 @@ function get_cc($IP) {
 
 function display_ip($IP) {
 	$Line = display_str($IP).' ('.get_cc($IP).') ';
-	$Line .= '[<a href="user.php?action=search&amp;ip_history=on&amp;ip='.display_str($IP).'&matchtype=strict" title="Search">S</a>]';
+	$Line .= '[<a href="user.php?action=search&amp;ip_history=on&amp;ip='.display_str($IP).'&amp;matchtype=strict" title="Search">S</a>]';
 	
 	return $Line;
 }
@@ -2104,9 +2104,10 @@ function freeleech_groups($GroupIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
 	}
 
 	$DB->query("SELECT ID from torrents WHERE GroupID IN (".implode(", ", $GroupIDs).")");
-	$TorrentIDs = $DB->collect('ID');
-	
-	freeleech_torrents($TorrentIDs, $FreeNeutral, $FreeLeechType);
+	if($DB->record_count()) {
+		$TorrentIDs = $DB->collect('ID');
+		freeleech_torrents($TorrentIDs, $FreeNeutral, $FreeLeechType);
+	}
 }
 
 

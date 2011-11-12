@@ -48,18 +48,28 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 
 	$DB->query("UPDATE artists_alias SET Redirect='$TargetAliasID' WHERE AliasID='$OldAliasID'");
 	$DB->query("UPDATE artists_group SET Name='".db_string($NewName)."' WHERE ArtistID='$ArtistID'");
+
 	$DB->query("SELECT GroupID FROM torrents_artists WHERE AliasID='$OldAliasID'");
 	$Groups = $DB->collect('GroupID');
 	$DB->query("UPDATE IGNORE torrents_artists SET AliasID='$TargetAliasID' WHERE AliasID='$OldAliasID'");
 	$DB->query("DELETE FROM torrents_artists WHERE AliasID='$OldAliasID'");
-	
 	if(!empty($Groups)) {
 		foreach($Groups as $GroupID) {
 			$Cache->delete_value('groups_artists_'.$GroupID); // Delete group artist cache
 			update_hash($GroupID);
 		}
 	}
-	
+
+	$DB->query("SELECT RequestID FROM requests_artists WHERE AliasID='$OldAliasID'");
+	$Requests = $DB->collect('RequestID');
+	$DB->query("UPDATE IGNORE requests_artists SET AliasID='$TargetAliasID' WHERE AliasID='$OldAliasID'");
+	$DB->query("DELETE FROM requests_artists WHERE AliasID='$OldAliasID'");
+	if(!empty($Requests)) {
+		foreach($Requests as $RequestID) {
+			$Cache->delete_value('request_artists_'.$RequestID); // Delete group artist cache
+			update_sphinx_requests($RequestID);
+		}
+	}
 	$TargetArtistID = $ArtistID;
 
 } else {	// Merge stuff
@@ -74,31 +84,49 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 	
 	$DB->query("SELECT GroupID FROM torrents_artists WHERE AliasID='$OldAliasID'");
 	$Groups = $DB->collect('GroupID');
-	
 	$DB->query("UPDATE IGNORE torrents_artists SET AliasID='$TargetAliasID',ArtistID='$TargetArtistID' WHERE AliasID='$OldAliasID'");
 	$DB->query("DELETE FROM torrents_artists WHERE AliasID='$OldAliasID'");
-	
 	if(!empty($Groups)) {
 		foreach($Groups as $GroupID) {
 			$Cache->delete_value('groups_artists_'.$GroupID);
 			update_hash($GroupID);
 		}
 	}
+
+	$DB->query("SELECT RequestID FROM requests_artists WHERE AliasID='$OldAliasID'");
+	$Requests = $DB->collect('RequestID');
+	$DB->query("UPDATE IGNORE requests_artists SET AliasID='$TargetAliasID',ArtistID='$TargetArtistID' WHERE AliasID='$OldAliasID'");
+	$DB->query("DELETE FROM requests_artists WHERE AliasID='$OldAliasID'");
+	if(!empty($Requests)) {
+		foreach($Requests as $RequestID) {
+			$Cache->delete_value('request_artists_'.$RequestID);
+			update_sphinx_requests($RequestID);
+		}
+	}
+
 	if($ArtistID != $TargetArtistID) {
 		$DB->query("SELECT GroupID FROM torrents_artists WHERE ArtistID='$ArtistID'");
 		$Groups = $DB->collect('GroupID');
-		
 		$DB->query("UPDATE IGNORE torrents_artists SET ArtistID='$TargetArtistID' WHERE ArtistID='$ArtistID'");
 		$DB->query("DELETE FROM torrents_artists WHERE ArtistID='$ArtistID'");
-	
 		if(!empty($Groups)) {
 			foreach($Groups as $GroupID) {
 				$Cache->delete_value('groups_artists_'.$GroupID);
 				update_hash($GroupID);
 			}
 		}
+
+		$DB->query("SELECT RequestID FROM requests_artists WHERE ArtistID='$ArtistID'");
+		$Requests = $DB->collect('RequestID');
+		$DB->query("UPDATE IGNORE requests_artists SET ArtistID='$TargetArtistID' WHERE ArtistID='$ArtistID'");
+		$DB->query("DELETE FROM requests_artists WHERE ArtistID='$ArtistID'");
+		if(!empty($Requests)) {
+			foreach($Requests as $RequestID) {
+				$Cache->delete_value('request_artists_'.$RequestID);
+				update_sphinx_requests($RequestID);
+			}
+		}
 	}
-	
 }
 
 $Cache->delete_value('artist_'.$ArtistID);
@@ -111,6 +139,8 @@ while(list($GroupID) = $DB->next_record()) {
 
 $Cache->delete_value('artist_'.$ArtistID);
 $Cache->delete_value('artist_'.$TargetArtistID);
+$Cache->delete_value('artists_requests_'.$TargetArtistID);
+$Cache->delete_value('artists_requests_'.$ArtistID);
 
 header('Location: artist.php?id='.$TargetArtistID);
 

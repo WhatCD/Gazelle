@@ -625,12 +625,12 @@ table.staff td.nobr:last-child {
 	background: url('icons/ebooks.png');
 }
 
-#recommended .head {
+body#index #recommended .head {
 	margin-bottom: -11px !important;
 	border-bottom-color: #aeaeae !important;
 }
 
-#recommended #vanityhouse {
+body#index #recommended #vanityhouse {
 	margin-top: 21px;
 }
 

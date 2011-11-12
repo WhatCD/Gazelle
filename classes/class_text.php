@@ -519,7 +519,10 @@ EXPLANATION OF PARSER LOGIC
 					if(!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
 						$Str.='[img]'.$Block['Val'].'[/img]';
 					} else {
-						if(check_perms('site_proxy_images')) {
+						$LocalURL = $this->local_url($Block['Val']);
+						if($LocalURL) {
+							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$LocalURL.'" />';
+						} elseif(check_perms('site_proxy_images')) {
 							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
 						} else {
 							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';

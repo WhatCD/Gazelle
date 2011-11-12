@@ -187,7 +187,7 @@ if (check_perms('admin_reports')) {
 <? }
 if (check_perms('users_mod')) {
 ?>
-		[<a href="userhistory.php?action=token_history&userid=<?=$UserID?>">FL Tokens</a>]
+		[<a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">FL Tokens</a>]
 <? } ?>
 	</div>
 
@@ -222,7 +222,7 @@ if (check_perms('users_mod')) {
 				<li>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
 <? } ?>
 <? if ($OwnProfile || check_paranoia_here(false)) { //if ($OwnProfile || check_perms('users_mod')) { ?>
-				<li><a href="userhistory.php?action=token_history&userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
+				<li><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <? } ?>
 			</ul>
 		</div>
@@ -389,7 +389,7 @@ if (check_perms('users_view_ips',$Class)) {
 
 if (check_perms('users_view_keys',$Class) || $OwnProfile) {
 ?>
-				<li>Passkey: <?=display_str($torrent_pass)?>
+				<li>Passkey: <?=display_str($torrent_pass)?></li>
 <? }
 if (check_perms('users_view_invites')) {
 	if (!$InviterID) {
@@ -615,7 +615,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 	<table class="recent" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">Recent Snatches</td>
-		<tr>
+		</tr>
 		<tr>
 <?		
 		foreach($RecentSnatches as $RS) { ?>
@@ -655,6 +655,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 	<table class="recent" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">Recent Uploads</td>
+		</tr>
 		<tr>
 <?		foreach($RecentUploads as $RU) { ?>
 			<td>
@@ -690,6 +691,7 @@ foreach ($Collages as $CollageInfo) {
 					<a href="#" onclick="$('#collage<?=$CollageID?>').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;"><?=$FirstCol?'(Hide)':'(Show)'?></a>
 				</span>
 			</td>
+		</tr>
 		<tr id="collage<?=$CollageID?>" <?=$FirstCol?'':'class="hidden"'?>>
 <?	foreach($Collage as $C) {
 			$Group = get_groups(array($C['GroupID']));
