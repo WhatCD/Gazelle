@@ -447,28 +447,28 @@ foreach($Categories as $CatKey => $CatName) {
 	</div>
 	<table id="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 		<tr class="colhead_dark">
-			<td style="width: 38%;">
+			<td style="width: 38%;" class="nobr">
 				<strong>Request Name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder == 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
 			</td>
-			<td>
+			<td class="nobr">
 				<a href="?order=votes&amp;sort=<?=(($CurrentOrder == 'votes') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Votes</strong></a>
 			</td>
-			<td>
+			<td class="nobr">
 				<a href="?order=bounty&amp;sort=<?=(($CurrentOrder == 'bounty') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Bounty</strong></a>
 			</td>
-			<td>
+			<td class="nobr">
 				<a href="?order=filled&amp;sort=<?=(($CurrentOrder == 'filled') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Filled</strong></a>
 			</td>
-			<td>
+			<td class="nobr">
 				<strong>Filled by</strong>
 			</td>
-			<td>
+			<td class="nobr">
 				<strong>Requested by</strong>
 			</td>
-			<td>
+			<td class="nobr">
 				<a href="?order=created&amp;sort=<?=(($CurrentOrder == 'created') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
 			</td>
-			<td>
+			<td class="nobr">
 				<a href="?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Last Vote</strong></a>
 			</td>
 		</tr>
@@ -530,7 +530,7 @@ foreach($Categories as $CatKey => $CatName) {
 					<?=$TagList?>
 				</div>
 			</td>
-			<td>
+			<td class="nobr">
 				<form id="form_<?=$RequestID?>">
 					<span id="vote_count_<?=$RequestID?>"><?=$VoteCount?></span>
 <?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
@@ -540,7 +540,7 @@ foreach($Categories as $CatKey => $CatName) {
 				</form>
 <?  		} ?> 
 			</td>
-			<td>
+			<td class="nobr">
 				<?=get_size($RequestVotes['TotalBounty'])?>
 			</td>
 			<td>

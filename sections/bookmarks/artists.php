@@ -20,7 +20,8 @@ $Sneaky = ($UserID != $LoggedUser['ID']);
 $DB->query('SELECT ag.ArtistID, ag.Name
 	FROM bookmarks_artists AS ba
 	INNER JOIN artists_group AS ag ON ba.ArtistID = ag.ArtistID
-	WHERE ba.UserID = '.$UserID);
+	WHERE ba.UserID = '.$UserID.'
+	ORDER BY ag.Name');
 
 $ArtistList = $DB->to_array();
 

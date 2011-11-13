@@ -167,19 +167,39 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 			<div class="head"><strong>Top Contributors</strong></div>
 			<table>
 <?	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
+	$ViewerVote = false;
 	for($i = 0; $i < $VoteMax; $i++) { 
 		$User = array_shift($RequestVotes['Voters']);
+		$Boldify = false;
+		if ($User['UserID'] == $LoggedUser['ID']) {
+			$ViewerVote = true;
+			$Boldify = true;
+		}
 ?>
 				<tr>
 					<td>
-						<a href="user.php?id=<?=$User['UserID']?>"><?=display_str($User['Username'])?></a>
+						<a href="user.php?id=<?=$User['UserID']?>"><?=$Boldify?'<strong>':''?><?=display_str($User['Username'])?><?=$Boldify?'</strong>':''?></a>
 					</td>
 					<td>
-						<?=get_size($User['Bounty'])?>
+						<?=$Boldify?'<strong>':''?><?=get_size($User['Bounty'])?><?=$Boldify?'</strong>':''?>
 					</td>
 				</tr>
 <?	} 
 	reset($RequestVotes['Voters']);
+	if (!$ViewerVote) {
+		foreach ($RequestVotes['Voters'] as $User) {
+			if ($User['UserID'] == $LoggedUser['ID']) { ?>
+				<tr>
+					<td>
+						<a href="user.php?id=<?=$User['UserID']?>"><strong><?=display_str($User['Username'])?></strong></a>
+					</td>
+					<td>
+						<strong><?=get_size($User['Bounty'])?></strong>
+					</td>
+				</tr>
+<?			}
+		}
+	}
 ?>
 			</table>
 		</div>
