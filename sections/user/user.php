@@ -519,7 +519,7 @@ if (check_paranoia_here('seeding+') || check_paranoia_here('leeching+')) {
 }
 ?>
 <? if (check_paranoia_here('seeding')) { ?>
-				<li>Seeding: <?=number_format($Seeding)?> [<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" title="View">View</a>]<? if (check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]<? } ?></li>
+				<li>Seeding: <?=number_format($Seeding)?> <?=($Snatched && ($OwnProfile || check_paranoia_here(false)))?'(' . 100*min(1,round($Seeding/$Snatched,2)).'%) ':''?>[<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" title="View">View</a>]<? if (check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]<? } ?></li>
 <? } elseif (check_paranoia_here('seeding+')) { ?>
 				<li>Seeding: <?=number_format($Seeding)?></li>
 <? } ?>
