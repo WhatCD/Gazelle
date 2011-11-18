@@ -525,7 +525,7 @@ CREATE TABLE `requests_artists` (
   `RequestID` int(10) unsigned NOT NULL,
   `ArtistID` int(10) NOT NULL,
   `AliasID` int(10) NOT NULL,
-  `Importance` enum('1','2','3') NOT NULL DEFAULT '1',
+  `Importance` enum('1','2','3','4','5','6') DEFAULT NULL,
   PRIMARY KEY (`RequestID`,`AliasID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -841,7 +841,7 @@ CREATE TABLE `torrents_artists` (
   `ArtistID` int(10) NOT NULL,
   `AliasID` int(10) NOT NULL,
   `UserID` int(10) unsigned NOT NULL DEFAULT '0',
-  `Importance` enum('1','2','3') NOT NULL,
+  `Importance` enum('1','2','3','4','5','6') DEFAULT NULL,
   PRIMARY KEY (`GroupID`,`AliasID`),
   KEY `ArtistID` (`ArtistID`),
   KEY `AliasID` (`AliasID`),
