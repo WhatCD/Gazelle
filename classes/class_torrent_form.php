@@ -250,7 +250,7 @@ class TORRENT_FORM {
 			</tr>
 			<tr id="releasetype_tr">
 				<td class="label">
-					<span id="releasetype_label">Release type</span>
+					<span id="releasetype_label">Release Type</span>
 				</td>
 				<td>
 					<select id="releasetype" name="releasetype"<?=$this->Disabled?>>
@@ -266,12 +266,12 @@ class TORRENT_FORM {
 			}
 
 ?>
-					</select> Please take the time to fill this out properly (try searching <a href="http://musicbrainz.org/search.html">musicbrainz</a>).
+					</select> Please take the time to fill this out properly (try searching <a href="http://musicbrainz.org/search.html">MusicBrainz</a>).
 				</td>
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label">Edition information</td>
+				<td class="label">Edition Information</td>
 				<td>
 					<input type="checkbox" id="remaster" name="remaster"<? if($IsRemaster) { echo " checked='checked' ";}?> onclick="Remaster();<?if($this->NewTorrent) {?> CheckYear();<? } ?>" />
 					Check this box if this torrent is a different release to the original, for example a limited or country specific edition or a release that includes additional bonus tracks or is a bonus disc.
@@ -342,7 +342,7 @@ class TORRENT_FORM {
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Bitrate</td>
+				<td class="label">Bit Rate</td>
 				<td>
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
