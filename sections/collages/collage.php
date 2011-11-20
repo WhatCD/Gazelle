@@ -62,9 +62,8 @@ if(in_array($CollageID, $CollageSubscriptions)) {
 }
 $DB->query("UPDATE users_collage_subs SET LastVisit=NOW() WHERE UserID = ".$LoggedUser['ID']." AND CollageID=$CollageID");
 
-show_header($Name,'browse,collage,bbcode');
-// Build the data for the collage and the torrent list
 
+// Build the data for the collage and the torrent list
 if(!is_array($TorrentList)) {
 	$DB->query("SELECT ct.GroupID,
 			tg.WikiImage,
@@ -100,7 +99,7 @@ $Users = array();
 $Number = 0;
 
 foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists) = array_values($Group);
 	list($GroupID2, $Image, $GroupCategoryID, $UserID, $Username) = array_values($CollageDataList[$GroupID]);
 	
 	// Handle stats and stuff
@@ -110,8 +109,14 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$NumGroupsByUser++;
 	}
 	
-	if($GroupArtists) {
-		foreach($GroupArtists as $Artist) {
+	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+		$CountArtists = array_merge((array)$ExtendedArtists[1], (array)$ExtendedArtists[4], (array)$ExtendedArtists[5], (array)$ExtendedArtists[6]);
+	} else{
+		$CountArtists = $GroupArtists;
+	}
+	
+	if($CountArtists) {
+		foreach($CountArtists as $Artist) {
 			if(!isset($Artists[$Artist['id']])) {
 				$Artists[$Artist['id']] = array('name'=>$Artist['name'], 'count'=>1);
 			} else {
@@ -144,14 +149,21 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	$TorrentTags='<br /><div class="tags">'.$TorrentTags.'</div>';
 
 	$DisplayName = $Number.' - ';
-	if(count($GroupArtists)>0) {
-		$DisplayName .= display_artists(array('1'=>$GroupArtists));
+	
+	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
+			unset($ExtendedArtists[2]);
+			unset($ExtendedArtists[3]);
+			$DisplayName .= display_artists($ExtendedArtists);
+	} elseif(count($GroupArtists)>0) {
+			$DisplayName .= display_artists(array('1'=>$GroupArtists));
 	}
+	
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
 	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start();
+
 	if(count($Torrents)>1 || $GroupCategoryID==1) {
 			// Grouped torrents
 			$ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
@@ -298,26 +310,46 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	}
 	$DisplayName .= $GroupName;
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
-	//if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 ?>
-		<td>
+		<li class="image_group_<?=$GroupID?>">
 			<a href="#group_<?=$GroupID?>">
 <?	if($Image) { ?>
-				<img src="<?=$Image?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
+				<img src="<?=$Image?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="118" />
 <?	} else { ?>
 				<div style="width:107px;padding:5px"><?=$DisplayName?></div>
 <?	} ?>
 			</a>
-		</td>
+		</li>
 <?
 	$Collage[]=ob_get_clean();
-	
 }
 
 if(($MaxGroups>0 && $NumGroups>=$MaxGroups)  || ($MaxGroupsPerUser>0 && $NumGroupsByUser>=$MaxGroupsPerUser)) {
 	$Locked = true;
 }
 
+// Silly hack for people who are on the old setting
+$CollageCovers = isset($LoggedUser['CollageCovers'])?$LoggedUser['CollageCovers']:25*(abs($LoggedUser['HideCollage'] - 1));
+$CollagePages = array();
+
+// Pad it out
+if ($NumGroups > $CollageCovers) {
+	for ($i = $NumGroups + 1; $i <= ceil($NumGroups/$CollageCovers)*$CollageCovers; $i++) {
+		$Collage[] = '<li></li>';
+	}
+}
+
+
+for ($i=0; $i < $NumGroups/$CollageCovers; $i++) {
+	$Groups = array_slice($Collage, $i*$CollageCovers, $CollageCovers);
+	$CollagePage = '';
+	foreach ($Groups as $Group) {
+		$CollagePage .= $Group;
+	}
+	$CollagePages[] = $CollagePage;
+}
+
+show_header($Name,'browse,collage,bbcode');
 ?>
 <div class="thin">
 	<h2><?=$Name?></h2>
@@ -549,29 +581,34 @@ if(!$LoggedUser['DisablePosting']) {
 	</div>
 	<div class="main_column">	
 <?	
-if(!$LoggedUser['HideCollage']) { ?>
-		<table class="collage" id="collage_table" cellpadding="0" cellspacing="0" border="0">
-			<tr>
+if($CollageCovers != 0) { ?>
+		<div id="coverart" class="box">
+			<div class="head" id="coverhead"><strong>Cover Art</strong></div>
+			<ul class="collage_images" id="collage_page0">
 <?
-	$x = 0;
-	foreach($Collage as $Group) {
+	$Page1 = array_slice($Collage, 0, $CollageCovers);
+	foreach($Page1 as $Group) {
 		echo $Group;
-		$x++;
-		if($x%5==0) {
-?>
-			</tr>
-			<tr>
-<?
-	}
-}
-	if($x%5!=0) { // Padding
-?>
-				<td colspan="<?=7-($x%7)?>"> </td>
-<? 	} ?>
-			
-			</tr>
-		</table>
-<? } ?>
+}?>
+			</ul>
+		</div>
+<?		if ($NumGroups > $CollageCovers) { ?>
+		<div class="linkbox pager" style="clear: left;" id="pageslinksdiv">
+			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onClick="collageShow.page(0, this); return false;">&lt;&lt; First</a> | </span>
+			<span id="prevpage" class="invisible"><a href="#" id="prevpage"  class="pageslink" onClick="collageShow.prevPage(); return false;">&lt; Prev</a> | </span>
+<?			for ($i=0; $i < $NumGroups/$CollageCovers; $i++) { ?>
+			<span id="pagelink<?=$i?>" class="<?=(($i>4)?'hidden':'')?><?=(($i==0)?' selected':'')?>"><a href="#" class="pageslink" onClick="collageShow.page(<?=$i?>, this); return false;"><?=$CollageCovers*$i+1?>-<?=min($NumGroups,$CollageCovers*($i+1))?></a><?=($i != ceil($NumGroups/$CollageCovers)-1)?' | ':''?></span>
+<?			} ?>
+			<span id="nextbar" class="<?=($NumGroups/$CollageCovers > 5)?'hidden':''?>"> | </span>
+			<span id="nextpage"><a href="#" class="pageslink" onClick="collageShow.nextPage(); return false;">Next &gt;</a></span>
+			<span id="lastpage" class="<?=ceil($NumGroups/$CollageCovers)==2?'invisible':''?>"> | <a href="#" id="lastpage" class="pageslink" onClick="collageShow.page(<?=ceil($NumGroups/$CollageCovers)-1?>, this); return false;">Last &gt;&gt;</a></span>
+		</div>
+		<script type="text/javascript">
+			//collagePages = <?=json_encode($CollagePages)?>;
+			collageShow.init(<?=json_encode($CollagePages)?>);
+		</script>
+<?		} 
+} ?>
 		<table class="torrent_table" id="discog_table">
 			<tr class="colhead_dark">
 				<td><!-- expand/collapse --></td>

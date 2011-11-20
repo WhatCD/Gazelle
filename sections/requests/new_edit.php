@@ -159,9 +159,12 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 ?>
 						<input type="text" id="artist" name="artists[]" size="45" value="<?=display_str($Artist['name']) ?>" />
 						<select id="importance" name="importance[]" >
-								<option value="1"<?=($Importance == '1' ? ' selected="selected"' : '')?>>Main</option>
-								<option value="2"<?=($Importance == '2' ? ' selected="selected"' : '')?>>Guest</option>
-								<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
+							<option value="1"<?=($Importance == '1' ? ' selected="selected"' : '')?>>Main</option>
+							<option value="2"<?=($Importance == '2' ? ' selected="selected"' : '')?>>Guest</option>
+							<option value="4"<?=($Importance == '4' ? ' selected="selected"' : '')?>>Composer</option>
+							<option value="5"<?=($Importance == '5' ? ' selected="selected"' : '')?>>Conductor</option>
+							<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
+							<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 						</select>
 						<?if($First) { ?>[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>] <? } $First = false;?>
 						<br />
@@ -170,9 +173,12 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 		} else {
 ?>						<input type="text" id="artist" name="artists[]" size="45" onblur="CheckVA();" />
 						<select id="importance" name="importance[]" >
-								<option value="1">Main</option>
-								<option value="2">Guest</option>
-								<option value="3">Remixer</option>
+							<option value="1">Main</option>
+							<option value="2">Guest</option>
+							<option value="4">Composer</option>
+							<option value="5">Conductor</option>
+							<option value="6">DJ / Compiler</option>
+							<option value="3">Remixer</option>
 						</select>
 						[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]
 <?

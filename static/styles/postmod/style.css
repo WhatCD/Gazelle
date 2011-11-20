@@ -285,6 +285,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 #staff #nav_staff a { background-position: -675px -69px; }
 */
 
+
 #userinfo {
 	position: absolute;
 	color: #FFF;
@@ -837,6 +838,12 @@ blockquote {
 
 tr.unreadpm {
 	background-color: #E0EBEF;
+}
+
+/* Layout (collages) */
+.collage_images li {
+	background-color: #F7F6F2;
+	vertical-align: middle;
 }
 
 /* Layout (Permission Page) */

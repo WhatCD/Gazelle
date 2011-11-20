@@ -1186,25 +1186,40 @@ forum_post box vertical_margin pre {
 	height: 1%;
 }
 
-#collage_table td {
-	border: 0!important;
-	height: 140px!important;
-	width: 140px!important;
-	padding: 0!important;
+ul.collage_images {
+    margin: 0 2px 3px !important;
 }
 
-#collage_table td img {
-	float: left;
-	height: 140px!important;
-	width: 140px!important;
+ul.collage_images img {
+	height: 139px !important;
+	width: 139px !important;
 }
 
-#collage_table td img:hover {
-	float: left;
-	height: 300px!important;
-	width: 300px!important;
-	z-index: 100;
-	margin: -80px;
+ul.collage_images li a {
+    height: 139px !important;
+}
+
+ul.collage_images li {
+	width: 139px !important;
+	height: 139px !important;
+	/*border: 1px solid #757575;*/
+}
+
+ul.collage_images li a:hover {
+  position: relative;
+  overflow: visible !important;
+}
+
+ul.collage_images li a:hover img {
+  position: absolute;
+  margin: -80px;
+  z-index: 4;
+  width: 300px !important;
+  height: 300px !important;
+}
+
+ul.collage_images {
+  width: 695px !important;
 }
 
 #user .main_column td img {

@@ -198,9 +198,12 @@ class TORRENT_FORM {
 ?>
 					<input type="text" id="artist" name="artists[]" size="45" value="<?=display_str($Artist['name']) ?>" onblur="CheckVA();" <?=$this->Disabled?>/>
 					<select id="importance" name="importance[]" <?=$this->Disabled?>>
-							<option value="1"<?=($Importance == '1' ? ' selected="selected"' : '')?>>Main</option>
-							<option value="2"<?=($Importance == '2' ? ' selected="selected"' : '')?>>Guest</option>
-							<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
+						<option value="1"<?=($Importance == '1' ? ' selected="selected"' : '')?>>Main</option>
+						<option value="2"<?=($Importance == '2' ? ' selected="selected"' : '')?>>Guest</option>
+						<option value="4"<?=($Importance == '4' ? ' selected="selected"' : '')?>>Composer</option>
+						<option value="5"<?=($Importance == '5' ? ' selected="selected"' : '')?>>Conductor</option>
+						<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
+						<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 					</select>
 					<br />
 <?					}
@@ -209,9 +212,12 @@ class TORRENT_FORM {
 ?>
 					<input type="text" id="artist" name="artists[]" size="45" onblur="CheckVA();"<?=$this->Disabled?>/>
 					<select id="importance" name="importance[]" <?=$this->Disabled?>>
-							<option value="1">Main</option>
-							<option value="2">Guest</option>
-							<option value="3">Remixer</option>
+						<option value="1">Main</option>
+						<option value="2">Guest</option>
+						<option value="4">Composer</option>
+						<option value="5">Conductor</option>
+						<option value="6">DJ / Compiler</option>
+						<option value="3">Remixer</option>
 					</select>
 					[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]
 <?	
@@ -514,7 +520,7 @@ class TORRENT_FORM {
 					<br />
 					Tags should be comma separated, and you should use a period ('.') to separate words inside a tag - eg. '<strong style="color:green;">hip.hop</strong>'. 
 					<br /><br />
-					There is a list of official tags to the left of the text box. Please use these tags instead of 'unofficial' tags (eg. use the official '<strong style="color:green;">drum.and.bass</strong>' tag, instead of an unofficial '<strong style="color:red;">dnb</strong>' tag.)
+					There is a list of official tags to the left of the text box. Please use these tags instead of 'unofficial' tags (e.g. use the official '<strong style="color:green;">drum.and.bass</strong>' tag, instead of an unofficial '<strong style="color:red;">dnb</strong>' tag).  <strong>Please note that the '2000s' tag refers to music produced between 2000 and 2009.</strong>
 					<br /><br />
 					Avoid abbreviations if at all possible. So instead of tagging an album as '<strong style="color:red;">alt</strong>', tag it as '<strong style="color:green;">alternative</strong>'. Make sure that you use correct spelling. 
 					<br /><br />
@@ -522,7 +528,7 @@ class TORRENT_FORM {
 					<br /><br />
 					Don't use 'useless' tags, such as '<strong style="color:red;">seen.live</strong>', '<strong style="color:red;">awesome</strong>', '<strong style="color:red;">rap</strong>' (is encompassed by '<strong style="color:green;">hip.hop</strong>'), etc. If an album is live, you can tag it as '<strong style="color:green;">live</strong>'. 
 					<br /><br />
-					Only tag information on the album itself - NOT THE INDIVIDUAL RELEASE. Tags such as '<strong style="color:red;">v0</strong>', '<strong style="color:red;">eac</strong>', '<strong style="color:red;">vinyl</strong>', '<strong style="color:red;">from.oink</strong>' etc are strictly forbidden. Remember that these tags will be used for other versions of the same album. 
+					Only tag information on the album itself - NOT THE INDIVIDUAL RELEASE. Tags such as '<strong style="color:red;">v0</strong>', '<strong style="color:red;">eac</strong>', '<strong style="color:red;">vinyl</strong>', '<strong style="color:red;">from.oink</strong>' etc. are strictly forbidden. Remember that these tags will be used for other versions of the same album. 
 					<br /><br />
 					<strong>You should be able to build up a list of tags using only the official tags to the left of the text box. If you are in any doubt about whether or not a tag is acceptable, do not add it.</strong>
 				</td>

@@ -2,3 +2,21 @@
 .last_read {width: 15px; height: 15px; background: url(images/go_last_read.png) no-repeat center center; margin-left: 5px;}
 .last_read a { border: none; width: 100%; height: 100%; display: block; }
 .last_read a:hover { border: none; }
+
+ul.collage_images {
+	width: 650px !important;
+}
+
+ul.collage_images li {
+	width: 130px !important;
+	height: 130px !important;
+}
+
+ul.collage_images li a {
+    height: 130px !important;
+}
+
+ul.collage_images img {
+	height: 130px !important;
+	width: 130px !important;
+}

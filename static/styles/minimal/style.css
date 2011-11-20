@@ -445,12 +445,46 @@ div.sidebar, #content, #footer{display:block}
 /* End hide from IE-mac */
 
 /* COLLAGES + User profile page */
-#collage_table td{padding:0 !important;  border:0 !important;  width:140px !important;  height:140px !important}
-#collage_table td img{width:140px !important;  height:140px !important;  float:left}
-#collage_table td img:hover{width:300px !important;  height:300px !important; float:left; margin:-80px; z-index:100}
+ul.collage_images {
+    margin: 0 2px 3px !important;
+}
+
+ul.collage_images img {
+	height: 139px !important;
+	width: 139px !important;
+}
+
+ul.collage_images li a {
+    height: 139px !important;
+}
+
+ul.collage_images li {
+	width: 139px !important;
+	height: 139px !important;
+	/*border: 1px solid #757575;*/
+}
+
+ul.collage_images li a:hover {
+  position: relative;
+  overflow: visible !important;
+}
+
+ul.collage_images li a:hover img {
+  position: absolute;
+  margin: -80px;
+  z-index: 4;
+  width: 300px !important;
+  height: 300px !important;
+}
+
+ul.collage_images {
+  width: 695px !important;
+}
+
+
 #user .main_column td img{width:130px !important; height:130px !important}
-#user .main_column td img:hover{width:280px !important; height:280px !important; margin:-75px; z-index:100}
-#collage_table{width:645px}
+#user .main_column td img:hover{width:300px !important; height:300px !important; margin:-75px; z-index:100}
+.collage_images{width:645px}
 
 #requests .tags{color:#656565}
 #requests .tags a{color:#8c8c8c}

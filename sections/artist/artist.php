@@ -106,7 +106,8 @@ if(empty($Importances) || empty($TorrentList)) {
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY ta.Importance, tg.ReleaseType ASC, tg.Year DESC, tg.Name DESC");
+			ORDER BY IF(ta.Importance = '2' OR ta.Importance = '3' OR ta.Importance = '4',ta.Importance, 1), 
+			    tg.ReleaseType ASC, tg.Year DESC, tg.Name DESC");
 	
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array('GroupID', MYSQLI_BOTH, false);
@@ -136,6 +137,10 @@ foreach($TorrentList as $GroupID=>$Group) {
 		$TorrentList[$GroupID]['ReleaseType'] = 1023;
 		$RemixerAlbums = true;
 	}
+	if($Importances[$GroupID]['Importance'] == '4') {
+		$TorrentList[$GroupID]['ReleaseType'] = 1022;
+		$ComposerAlbums = true;
+	}
 	if(!in_array($TorrentList[$GroupID]['ReleaseType'], $UsedReleases)) {
 		$UsedReleases[] = $TorrentList[$GroupID]['ReleaseType'];
 	}
@@ -146,6 +151,9 @@ if(!empty($GuestAlbums)) {
 }
 if(!empty($RemixerAlbums)) {
 	$ReleaseTypes[1023] = "Remixed By";
+}
+if(!empty($ComposerAlbums)) {
+	$ReleaseTypes[1022] = "Composition";
 }
 
 
@@ -160,6 +168,9 @@ if(!empty($UsedReleases)) { ?>
 				break;
 			case "Anthology" :
 				$DisplayName = "Anthologies";
+				break;
+			case "DJ Mix" :
+				$DisplayName = "DJ Mixes";
 				break;
 			default :
 				$DisplayName = $ReleaseTypes[$ReleaseID]."s";
@@ -187,7 +198,7 @@ $ShowGroups = !isset($LoggedUser['TorrentGrouping']) || $LoggedUser['TorrentGrou
 $HideTorrents = ($ShowGroups ? '' : ' hidden');
 
 foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($Group);
 	$GroupVanityHouse = $Importances[$GroupID]['VanityHouse'];
 
 	$TagList = explode(' ',str_replace('_','.',$TagList));
@@ -221,6 +232,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			case "Anthology" :
 				$DisplayName = "Anthologies";
 				break;
+			case "DJ Mix" :
+				$DisplayName = "DJ Mixes";
+				break;
 			default :
 				$DisplayName = $ReleaseTypes[$ReleaseType]."s";
 				break;
@@ -249,8 +263,15 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$DisplayName .= ' [<a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'">Fix</a>]';
 	}
 
-	if (($ReleaseType == 1023) || ($ReleaseType == 1024)) {
-		$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
+	// Remixes, DJ Mixes, and Guest artists need the artist name
+	if (($ReleaseType == 1023) || ($ReleaseType == 1024) || ($ReleaseType == 8)) {
+		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
+			unset($ExtendedArtists[2]);
+			unset($ExtendedArtists[3]);
+			$DisplayName = display_artists($ExtendedArtists).$DisplayName;
+		} elseif(count($GroupArtists)>0) {
+			$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
+		}
 	}
 
 	if($GroupYear>0) { $DisplayName = $GroupYear. ' - '.$DisplayName; }

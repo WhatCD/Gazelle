@@ -25,7 +25,8 @@ $Val->SetFields('disablegrouping',1,"number","You forgot to select your torrent 
 $Val->SetFields('torrentgrouping',1,"number","You forgot to select your torrent grouping option.",array('minlength'=>0,'maxlength'=>1));
 $Val->SetFields('discogview',1,"number","You forgot to select your discography view option.",array('minlength'=>0,'maxlength'=>1));
 $Val->SetFields('postsperpage',1,"number","You forgot to select your posts per page option.",array('inarray'=>array(25,50,100)));
-$Val->SetFields('hidecollage',1,"number","You forgot to select your collage option.",array('minlength'=>0,'maxlength'=>1));
+//$Val->SetFields('hidecollage',1,"number","You forgot to select your collage option.",array('minlength'=>0,'maxlength'=>1));
+$Val->SetFields('collagecovers',1,"number","You forgot to select your collage option.");
 $Val->SetFields('showtags',1,"number","You forgot to select your show tags option.",array('minlength'=>0,'maxlength'=>1));
 $Val->SetFields('avatar',0,"regex","You did not enter a valid avatar url.",array('regex'=>"/^".IMAGE_REGEX."$/i"));
 $Val->SetFields('email',1,"email","You did not enter a valid email address.");
@@ -184,11 +185,13 @@ $Options['DisableGrouping'] = (!empty($_POST['disablegrouping']) ? 1 : 0);
 $Options['TorrentGrouping'] = (!empty($_POST['torrentgrouping']) ? 1 : 0);
 $Options['DiscogView'] = (!empty($_POST['discogview']) ? 1 : 0);
 $Options['PostsPerPage'] = (int) $_POST['postsperpage'];
-$Options['HideCollage'] = (!empty($_POST['hidecollage']) ? 1 : 0);
+//$Options['HideCollage'] = (!empty($_POST['hidecollage']) ? 1 : 0);
+$Options['CollageCovers'] = empty($_POST['collagecovers']) ? 0 : $_POST['collagecovers'];
 $Options['ShowTags'] = (!empty($_POST['showtags']) ? 1 : 0);
 $Options['AutoSubscribe'] = (!empty($_POST['autosubscribe']) ? 1 : 0);
 $Options['DisableSmileys'] = (!empty($_POST['disablesmileys']) ? 1 : 0);
 $Options['DisableAvatars'] = (!empty($_POST['disableavatars']) ? 1 : 0);
+$Options['DisablePMAvatars'] = (!empty($_POST['disablepmavatars']) ? 1 : 0);
 
 
 if(isset($LoggedUser['DisableFreeTorrentTop10'])) {

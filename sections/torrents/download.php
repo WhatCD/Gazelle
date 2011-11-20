@@ -180,6 +180,11 @@ if ($Encoding!='') {
 	$TorrentInfo.=$Encoding;
 }
 
+// Let's try to shorten the filename intelligently before chopping it off
+if (strlen($TorrentName) + strlen($TorrentInfo) + 3 > 152) {
+	$TorrentName = $Name . (($Year>0)?(' - '.$Year):'');
+}
+
 if ($TorrentInfo!='') { $TorrentName.=' ('.$TorrentInfo.')'; }
 
 if(!empty($_GET['mode']) && $_GET['mode'] == 'bbb'){
@@ -189,7 +194,7 @@ if(!empty($_GET['mode']) && $_GET['mode'] == 'bbb'){
 if (!$TorrentName) { $TorrentName="No Name"; }
 
 $FileName = ($Browser == 'Internet Explorer') ? urlencode(file_string($TorrentName)) : file_string($TorrentName);
-$MaxLength = $DownloadAlt ? 213 : 209;
+$MaxLength = $DownloadAlt ? 192 : 196;
 $FileName = cut_string($FileName, $MaxLength, true, false);
 $FileName = $DownloadAlt ? $FileName.'.txt' : $FileName.'.torrent';
 

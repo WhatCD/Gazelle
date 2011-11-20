@@ -9,6 +9,10 @@ ul.collage_images {
 	border-collapse: collapse;
 }
 
+.collage_images {
+	display: table;
+}
+
 ul.collage_images li {
 	border: none;
 	float: left;
@@ -16,6 +20,28 @@ ul.collage_images li {
 	width: 118px;
 	height: 118px;
 	list-style: none;
+	list-style-type: none;
+}
+
+ul.collage_images li a {
+    display: block;
+    height: 118px;
+    overflow: hidden;
+}
+
+ul.collage_images img {
+	height: 118px;
+	width: 118px;
+}
+
+
+.selected a{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.invisible {
+	visibility: hidden;
 }
 
 .collage td {

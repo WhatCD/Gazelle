@@ -688,7 +688,7 @@ $Bookmarks = all_bookmarks('torrent');
 // Start printing torrent list
 
 foreach($Results as $GroupID=>$Data) {
-	list($Artists, $GroupCatalogueNumber, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupVanityHouse, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
+	list($Artists, $GroupCatalogueNumber, $ExtendedArtists, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupVanityHouse, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
 	
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 	
@@ -700,7 +700,11 @@ foreach($Results as $GroupID=>$Data) {
 	
 	if(count($Torrents)>1 || $CategoryID==1) {
 		// These torrents are in a group
-		if(!empty($Artists)) {
+		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+			unset($ExtendedArtists[2]);
+			unset($ExtendedArtists[3]);
+			$DisplayName = display_artists($ExtendedArtists);
+		} elseif(!empty($Artists)) {
 			$DisplayName = display_artists(array(1=>$Artists));
 		} else {
 			$DisplayName='';

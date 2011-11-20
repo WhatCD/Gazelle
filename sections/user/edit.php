@@ -140,6 +140,7 @@ echo $Val->GenerateJS('userform');
 <?
 	$ReleaseTypes[1024] = "Guest Appearance";
 	$ReleaseTypes[1023] = "Remixed By";
+	$ReleaseTypes[1022] = "Composition";
 	for($i = 0; list($Key,$Val) = each($ReleaseTypes); $i++) {
 		if(!($i % 7)) {
 			if($i) {
@@ -168,18 +169,31 @@ echo $Val->GenerateJS('userform');
 							<td style="border:none;" colspan="<?=7 - ($i % 7)?>"></td>
 <?
 	}
-	unset($ReleaseTypes[1023], $ReleaseTypes[1024]);
+	unset($ReleaseTypes[1023], $ReleaseTypes[1024], $ReleaseTypes[1022]);
 ?>
 						</tr>
 					</table>
 				</td>
 			</tr>
-			<tr>
+<!--			<tr>
 				<td class="label"><strong>Collage album art view</strong></td>
 				<td>
 					<select name="hidecollage" id="hidecollage">
 						<option value="0"<? if ($SiteOptions['HideCollage'] == 0) { ?>selected="selected"<? } ?>>Show album art</option>
 						<option value="1"<? if ($SiteOptions['HideCollage'] == 1) { ?>selected="selected"<? } ?>>Hide album art</option>
+					</select>
+				</td>
+			</tr>-->
+			<tr>
+				<td class="label"><strong>Collage album covers to show per page</strong></td>
+				<td>
+					<select name="collagecovers" id="collagecovers">
+						<option value="10"<? if ($SiteOptions['CollageCovers'] == 10) { ?>selected="selected"<? } ?>>10</option>
+						<option value="25"<? if (($SiteOptions['CollageCovers'] == 25) || !isset($SiteOptions['CollageCovers'])) { ?>selected="selected"<? } ?>>25 (default)</option>
+						<option value="50"<? if ($SiteOptions['CollageCovers'] == 50) { ?>selected="selected"<? } ?>>50</option>
+						<option value="100"<? if ($SiteOptions['CollageCovers'] == 100) { ?>selected="selected"<? } ?>>100</option>
+						<option value="1000000"<? if ($SiteOptions['CollageCovers'] == 1000000) { ?>selected="selected"<? } ?>>All</option>
+						<option value="0"<? if (($SiteOptions['CollageCovers'] === 0) || (!isset($SiteOptions['CollageCovers']) && $SiteOptions['HideCollage'])) { ?>selected="selected"<? } ?>>None</option>
 					</select>
 				</td>
 			</tr>

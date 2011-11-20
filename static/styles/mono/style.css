@@ -372,8 +372,18 @@ textarea {
 }
 
 #content,.thin {
-	overflow: hidden;
+	/*overflow: hidden;*/
 	clear: both;
+}
+
+#content:after,
+.thin:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
 }
 
 #searchbars {
@@ -424,7 +434,7 @@ textarea {
 #content {
 	width: 960px;
 	margin: 0 auto !important;
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 
 #content .main_column,#content .sidebar {
@@ -441,17 +451,36 @@ textarea {
 	width: 245px;
 }
 
-#collage_table {
-	margin-bottom: 20px;
-	background: none;
-	border: none;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
+ul.collage_images {
+	width: 675px !important;
 }
 
-#collage_table td img {
-	width: 140px;
-	height: 140px;
+ul.collage_images li {
+	height: 135px !important;
+	width: 135px !important;
+}
+
+ul.collage_images li a {
+    height: 135px !important;
+	width: 135px !important;
+}
+
+ul.collage_images li a img {
+    height: 135px !important;
+	width: 135px !important;
+}
+
+ul.collage_images li a:hover {
+	position: relative;
+	overflow: visible !important;
+}
+
+ul.collage_images li a:hover img {
+  position: absolute;
+  margin: -80px;
+  z-index: 4;
+  width: 300px !important;
+  height: 300px !important;
 }
 
 #collages,#collage_table,.forum_index,.torrent_table,.forum_post.box,.recent,table.border,.torrent_table.grouping,#userhistory table {

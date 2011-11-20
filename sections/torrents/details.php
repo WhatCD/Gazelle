@@ -131,7 +131,50 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 			<?=(check_perms('torrents_edit')) ? '<span style="float:right;"><a onclick="ArtistManager(); return false;" href="#">[Edit]</a></span>' : ''?>
 			</div>
 			<ul class="stats nobullet" id="artist_list">
+<?	if(!empty($Artists[4]) && count($Artists[4]) > 0) {
+		print '				<li class="artists_composers"><strong>Composers:</strong></li>';
+		foreach($Artists[4] as $Artist) {
+?>
+				<li class="artists_composers">
+					<?=display_artist($Artist).'&lrm;'?>
+<?			if(check_perms('torrents_edit')){
+				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+				list($AliasID) = $DB->next_record();
+				if (empty($AliasID)) {
+					$AliasID = $Artist['id'];
+				}
+?>
+				&nbsp;(<?=$AliasID?>)&nbsp;
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+<?			} ?>
+				</li>
+<?		}
+	}
+	if (!empty($Artists[6]) && count($Artists[6]) > 0) {
+		print '				<li class="artists_dj"><strong>DJ / Compiler:</strong></li>';
+		foreach($Artists[6] as $Artist) {
+?>
+				<li class="artists_dj">
+					<?=display_artist($Artist).'&lrm;'?>
+<?		      if(check_perms('torrents_edit')){
+			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+                                list($AliasID) = $DB->next_record();
+                                if (empty($AliasID)) {
+                                        $AliasID = $Artist['id'];
+                                }
+?>
+				&nbsp;(<?=$AliasID?>)&nbsp;
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+<?		      } ?>
+				</li>
 <?
+		}
+	}
+	if ((count($Artists[6]) > 0) && (count($Artists[1]) > 0)) {
+		print '				<li class="artists_main"><strong>Artists:</strong></li>';
+	} elseif ((count($Artists[4]) > 0) && (count($Artists[1]) > 0)) {
+		print '				<li class="artists_main"><strong>Performers:</strong></li>';
+	}
 	foreach($Artists[1] as $Artist) {
 ?>
 				<li class="artist_main">
@@ -153,6 +196,26 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[2] as $Artist) {
 ?>
 				<li class="artist_guest">
+					<?=display_artist($Artist).'&lrm;'?>
+<?			if(check_perms('torrents_edit')){
+				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+				list($AliasID) = $DB->next_record();
+				if (empty($AliasID)) {
+					$AliasID = $Artist['id'];
+				}
+?>
+				&nbsp;(<?=$AliasID?>)&nbsp;
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+<?			} ?>
+				</li>
+<?
+		}
+	}
+	if(!empty($Artists[5]) && count($Artists[5]) > 0) {
+		print '				<li class="artists_conductors"><strong>Conducted by:</strong></li>';
+		foreach($Artists[5] as $Artist) {
+?>
+				<li class="artists_conductors">
 					<?=display_artist($Artist).'&lrm;'?>
 <?			if(check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
@@ -205,6 +268,9 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 						<select name="importance[]">
 							<option value="1">Main</option>
 							<option value="2">Guest</option>
+							<option value="4">Composer</option>
+							<option value="5">Conductor</option>
+							<option value="6">DJ / Compiler</option>
 							<option value="3">Remixer</option>
 						</select>
 					</div>

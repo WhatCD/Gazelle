@@ -119,30 +119,64 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 			<div class="head"><strong>Artists</strong></div>
 			<ul class="stats nobullet">
 <?
-		foreach($ArtistForm[1] as $Artist) {
+		if(!empty($ArtistForm[4]) && count($ArtistForm[4]) > 0) { 
 ?>
-				<li class="artist_main">
+				<li class="artists_composer"><strong>Composers:</strong></li>
+<?			foreach($ArtistForm[4] as $Artist) {
+?>
+				<li class="artists_composer">
+					<?=display_artist($Artist)?>
+				</li>
+<?			}
+		}
+		if(!empty($ArtistForm[6]) && count($ArtistForm[6]) > 0) { 
+?>
+				<li class="artists_dj"><strong>DJ / Compiler:</strong></li>
+<?			foreach($ArtistForm[6] as $Artist) {
+?>
+				<li class="artists_dj">
 					<?=display_artist($Artist)?>
 				</li>
 <?
+			}
 		}
+		if ((count($ArtistForm[6]) > 0) && (count($ArtistForm[1]) > 0)) {
+			print '				<li class="artists_main"><strong>Artists:</strong></li>';
+		} elseif ((count($ArtistForm[4]) > 0) && (count($ArtistForm[1]) > 0)) {
+			print '				<li class="artists_main"><strong>Performers:</strong></li>';
+		}
+		foreach($ArtistForm[1] as $Artist) {
+?>
+				<li class="artists_main">
+					<?=display_artist($Artist)?>
+				</li>
+<?		}
 		if(!empty($ArtistForm[2]) && count($ArtistForm[2]) > 0) { 
 ?>
 				<li class="artists_with"><strong>With:</strong></li>
 <?			foreach($ArtistForm[2] as $Artist) {
 ?>
+				<li class="artists_with">
+					<?=display_artist($Artist)?>
+				</li>
+<?			}
+		}
+		if(!empty($ArtistForm[5]) && count($ArtistForm[5]) > 0) { 
+?>
+				<li class="artists_conductor"><strong>Conducted by:</strong></li>
+<?			foreach($ArtistForm[5] as $Artist) {
+?>
 				<li class="artist_guest">
 					<?=display_artist($Artist)?>
 				</li>
-<?
-			}
+<?			}
 		}
 		if(!empty($ArtistForm[3]) && count($ArtistForm[3]) > 0) { 
 ?>
 				<li class="artists_remix"><strong>Remixed by:</strong></li>
 <?			foreach($ArtistForm[3] as $Artist) {
 ?>
-				<li class="artist_remix">
+				<li class="artists_remix">
 					<?=display_artist($Artist)?>
 				</li>
 <?

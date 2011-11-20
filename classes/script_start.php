@@ -1358,7 +1358,7 @@ function update_hash($GroupID) {
 		FROM torrents_artists AS ta
 		JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
 		JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-		WHERE ta.GroupID=$GroupID AND ta.Importance='1'
+		WHERE ta.GroupID=$GroupID AND ta.Importance IN ('1', '4', '5')
 		GROUP BY tg.ID
 		ON DUPLICATE KEY UPDATE ArtistName=values(ArtistName)");
 	
@@ -1627,28 +1627,94 @@ function get_artist($GroupID) {
 function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Escape = true) {
 	if(!empty($Artists)) {
 		$ampersand = ($Escape) ? ' &amp; ' : ' & ';
-		switch(count($Artists[1])) {
+		$link = '';
+		
+		$MainArtists = $Artists[1];
+		$Guests      = $Artists[2];
+		$Composers   = $Artists[4];
+		$Conductors  = $Artists[5];
+		$DJs         = $Artists[6];
+		
+		if (count($MainArtists) + count($Composers) + count($Conductors) == 0) {
+			return '';
+		}
+		
+		switch(count($Composers)) {
 			case 0:
-				return '';
+				break;
 			case 1:
-				$link = display_artist($Artists[1][0], $MakeLink, $Escape);
+				$link .= display_artist($Composers[0], $MakeLink, $Escape);
 				break;
 			case 2:
-				$link = display_artist($Artists[1][0], $MakeLink, $Escape).$ampersand.display_artist($Artists[1][1], $MakeLink, $Escape);
+				$link .= display_artist($Composers[0], $MakeLink, $Escape).$ampersand.display_artist($Composers[1], $MakeLink, $Escape);
 				break;
 			default:
-				$link = 'Various Artists';
+				$link .= 'Various Composers';
 		}
-		if(!empty($Artists[2]) && (count($Artists[1]) < 3)) {
-			switch(count($Artists[2])) {
+		$ComposerStr .= $link;
+				
+		if ((count($Composers) > 0) && (count($MainArtists) > 0)) {
+			$link .= ' performed by ';
+		}
+		
+		switch(count($MainArtists)) {
+			case 0:
+				break;
+			case 1:
+				$link .= display_artist($MainArtists[0], $MakeLink, $Escape);
+				break;
+			case 2:
+				$link .= display_artist($MainArtists[0], $MakeLink, $Escape).$ampersand.display_artist($MainArtists[1], $MakeLink, $Escape);
+				break;
+			default:
+				$link .= 'Various Artists';
+		}
+		
+		if(!empty($Guests) && (count($MainArtists) + count($Composers) + count($Conductors) < 3)) {
+			switch(count($Guests)) {
 				case 1:
-					$link .= ' with '.display_artist($Artists[2][0], $MakeLink, $Escape);
+					$link .= ' with '.display_artist($Guests[0], $MakeLink, $Escape);
 					break;
 				case 2:
-					$link .= ' with '.display_artist($Artists[2][0], $MakeLink, $Escape).$ampersand.display_artist($Artists[2][1], $MakeLink, $Escape);
+					$link .= ' with '.display_artist($Guests[0], $MakeLink, $Escape).$ampersand.display_artist($Guests[1], $MakeLink, $Escape);
 					break;
 			}
 		}
+		
+		if ((count($Conductors) > 0) && (count($MainArtists) + count($Composers) > 0)) {
+			$link .= ' under ';
+		}
+		switch(count($Conductors)) {
+			case 0:
+				break;
+			case 1:
+				$link .= display_artist($Conductors[0], $MakeLink, $Escape);
+				break;
+			case 2:
+				$link .= display_artist($Conductors[0], $MakeLink, $Escape).$ampersand.display_artist($Conductors[1], $MakeLink, $Escape);
+				break;
+			default:
+				$link .= 'under various conductors';
+		}
+		
+		if ((count($Composers) > 0) && (count($MainArtists) + count($Conductors) > 3)) {
+			$link = $ComposerStr . ' performed by Various Artists';
+		}
+		
+		// DJs override everything else
+		switch(count($DJs)) {
+			case 0:
+				break;
+			case 1:
+				$link = display_artist($DJs[0], $MakeLink, $Escape);
+				break;
+			case 2:
+				$link = display_artist($DJs[0], $MakeLink, $Escape).$ampersand.display_artist($DJs[1], $MakeLink, $Escape);
+				break;
+			default :
+				$link = 'Various DJs';
+		}
+		
 		return $link.($IncludeHyphen?' - ':'');
 	} else {
 		return '';
@@ -1721,7 +1787,16 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 	if($Return) { // If we're interested in the data, and not just caching it
 		foreach($Artists as $GroupID=>$Data) {
 			if(array_key_exists(1, $Data)) {
-				$Found[$GroupID]['Artists']=$Data[1]; // Only use main artists
+				$Found[$GroupID]['Artists']=$Data[1]; // Only use main artists (legacy)
+				$Found[$GroupID]['ExtendedArtists'][1]=$Data[1];
+				$Found[$GroupID]['ExtendedArtists'][2]=$Data[2];
+				$Found[$GroupID]['ExtendedArtists'][3]=$Data[3];
+				$Found[$GroupID]['ExtendedArtists'][4]=$Data[4];
+				$Found[$GroupID]['ExtendedArtists'][5]=$Data[5];
+				$Found[$GroupID]['ExtendedArtists'][6]=$Data[6];
+			}
+			else {
+				$Found[$GroupID]['ExtendedArtists'] = false;
 			}
 		}
 

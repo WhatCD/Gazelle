@@ -1328,32 +1328,38 @@ td.r00 {
 
 /* COLLAGES */
 
-#collage_table td {
-  padding: 0 !important;
-  border: 0 !important;
-  width: 129px !important;
-  height:129px !important;
+ul.collage_images {
+    margin: 2px auto;
+    width: 635px;
 }
 
-#collage_table td img {
-  width: 129px !important;
-  height:129px !important;
-  float: left;
+ul.collage_images  li {
+    width: 127px !important;
+	height: 127px !important;
 }
 
+ul.collage_images  li a {
+    width: 127px !important;
+	height: 127px !important;
+	overflow: visible !important;
+}
 
+ul.collage_images  li  a img{
+    width: 127px !important;
+	height: 127px !important;
+}
 
-#collage_table td a:hover {
+ul.collage_images li a:hover {
   position: relative;
 }
 
-#collage_table td a:hover img {
+ul.collage_images  li a:hover img {
   position: absolute;
-  top: -148px;
-  left: -85px;
+  top: -55px;
+  left: -55px;
   z-index: 4;
-  width: 300px !important;
-  height: 300px !important;
+  width: 250px !important;
+  height: 250px !important;
 }
 
 

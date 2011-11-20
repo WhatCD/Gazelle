@@ -270,7 +270,9 @@ if(empty($Properties['GroupID']) && empty($ArtistForm) && $Type == "Music") {
 	$ArtistForm = array(
 	1 => array(),
 	2 => array(),
-	3 => array()
+	3 => array(),
+	4 => array(),
+	5 => array()
 	);
 	for($i = 0, $il = count($Artists); $i < $il; $i++) {
 		if(trim($Artists[$i]) != "") {

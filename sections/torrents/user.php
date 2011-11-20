@@ -399,7 +399,7 @@ foreach($Categories as $CatKey => $CatName) {
 	foreach($TorrentsInfo as $TorrentID=>$Info) {
 		list($GroupID,, $Time, $CategoryID) = array_values($Info);
 		
-		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Results[$GroupID]);
+		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($Results[$GroupID]);
 		$Torrent = $Torrents[$TorrentID];
 		
 		
@@ -410,11 +410,15 @@ foreach($Categories as $CatKey => $CatName) {
 			$TorrentTags[]='<a href="torrents.php?type='.$Action.'&amp;userid='.$UserID.'&amp;tags='.$Tag.'">'.$Tag.'</a>';
 		}
 		$TorrentTags = implode(', ', $TorrentTags);
-		
-		
-		$DisplayName = '';
-		if(count($Artists)>0) {
-			$DisplayName = display_artists(array('1'=>$Artists));
+				
+		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
+			unset($ExtendedArtists[2]);
+			unset($ExtendedArtists[3]);
+			$DisplayName = display_artists($ExtendedArtists);
+		} elseif(!empty($Artists)) {
+			$DisplayName = display_artists(array(1=>$Artists));
+		} else {
+			$DisplayName='';
 		}
 		$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'" title="View Torrent">'.$GroupName.'</a>';
 		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }

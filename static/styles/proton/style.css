@@ -1412,39 +1412,37 @@ td.r00 {
 
 
 /* COLLAGES */
-
-#collage_table td {
-  padding: 0 !important;
-  border: 0 !important;
-  width: 129px !important;
-  height:129px !important;
+ul.collage_images img {
+	height: 127px !important;
+	width: 127px !important;
 }
 
-#collage_table td img {
-  width: 129px !important;
-  height:129px !important;
-  float: left;
+ul.collage_images li a {
+    height: 129px !important;
+	overflow: visible !important;
 }
 
+ul.collage_images li {
+	width: 129px !important;
+	height: 129px !important;
+}
 
-
-#collage_table td a:hover {
+ul.collage_images li a:hover {
   position: relative;
 }
 
-#collage_table td a:hover img {
+ul.collage_images li a:hover img {
+  left: -50px;
   position: absolute;
-  top: -148px;
-  left: -85px;
+  top: -50px;
+  width: 230px !important;
+  height: 230px !important;
   z-index: 4;
-  width: 300px !important;
-  height: 300px !important;
 }
 
-
-
-#collage_table {
-  width: 645px;
+ul.collage_images {
+  width: 645px !important;
+  margin: 0 !important;
 }
 
 

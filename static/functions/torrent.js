@@ -34,7 +34,27 @@ function ArtistManager() {
 
 		var elArtistList = ArtistList.cloneNode(true);
 		elArtistList.id = 'artistmanager_list';
-		for(var i=0, importance = 1; i<elArtistList.children.length; i++) {
+		for(var i=0; i<elArtistList.children.length; i++) {
+			switch (elArtistList.children[i].className) {
+				case 'artist_main':
+					importance = 1;
+					break;
+				case 'artists_with':
+					importance = 2;
+					break;
+				case 'artists_remix':
+					importance = 3;
+					break;
+				case 'artists_composers':
+					importance = 4;
+					break;
+				case 'artists_conductors':
+					importance = 5;
+					break;
+				case 'artists_dj':
+					importance = 6;
+					break;
+			}
 			if(elArtistList.children[i].children[0].tagName.toUpperCase() == 'A') {
 				var ArtistID = elArtistList.children[i].children[0].href.match(/[?&]id=(\d+)/)[1];
 				var elBox = document.createElement('input');
@@ -44,11 +64,9 @@ function ArtistManager() {
 				elBox.value = importance+','+ArtistID;
 				elBox.onclick = function(e) { SelectArtist(e,this); };
 				elArtistList.children[i].insertBefore(elBox, elArtistList.children[i].children[0]);
-				if(importance == 1) {
+				if(importance == 1 || importance == 4 || importance == 6) {
 					MainArtistCount++;
 				}
-			} else {
-				importance++;
 			}
 		}
 		elArtistManager.appendChild(elArtistList);
@@ -94,6 +112,18 @@ function ArtistManager() {
 		elOpt = document.createElement('option');
 		elOpt.value = 2;
 		elOpt.innerHTML = 'Guest artist';
+		elImportance.appendChild(elOpt);
+		elOpt = document.createElement('option');
+		elOpt.value = 4;
+		elOpt.innerHTML = 'Composer';
+		elImportance.appendChild(elOpt);
+		elOpt = document.createElement('option');
+		elOpt.value = 5;
+		elOpt.innerHTML = 'Conductor';
+		elImportance.appendChild(elOpt);
+		elOpt = document.createElement('option');
+		elOpt.value = 6;
+		elOpt.innerHTML = 'DJ / Compiler';
 		elImportance.appendChild(elOpt);
 		elOpt = document.createElement('option');
 		elOpt.value = 3;
@@ -155,9 +185,9 @@ function ArtistManagerSubmit() {
 		return;
 	}
 	$('#artists_selection').raw().value = Selection.join(',');
-	if(($('#artists_importance').raw().value != 1 || $('#manager_action').raw().value == 'delete') && MainSelectionCount == MainArtistCount) {
+	if((($('#artists_importance').raw().value != 1 && $('#artists_importance').raw().value != 4 && $('#artists_importance').raw().value != 6) || $('#manager_action').raw().value == 'delete') && MainSelectionCount == MainArtistCount) {
 		if(!$('.error_message').raw()) {
-			error_message('All groups need to have at least one main artist.');
+			error_message('All groups need to have at least one main artist, composer, or DJ.');
 		}
 		$('.error_message').raw().scrollIntoView();
 		return;
