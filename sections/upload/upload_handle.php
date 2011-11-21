@@ -754,7 +754,7 @@ if(!empty($ArtistsUnescaped)) {
 	$GuestArtistNameList = array();
 	foreach($ArtistsUnescaped as $Importance => $Artists) {
 		foreach($Artists as $Artist) {
-			if($Importance == 1) {
+			if($Importance == 1 || $Importance == 4 || $Importance == 5 || $Importance == 6) {
 				$ArtistNameList[] = "Artists LIKE '%|".db_string($Artist['name'])."|%'";
 			} else {
 				$GuestArtistNameList[] = "Artists LIKE '%|".db_string($Artist['name'])."|%'";

@@ -1694,10 +1694,10 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 				$link .= display_artist($Conductors[0], $MakeLink, $Escape).$ampersand.display_artist($Conductors[1], $MakeLink, $Escape);
 				break;
 			default:
-				$link .= 'under various conductors';
+				$link .= ' various conductors';
 		}
 		
-		if ((count($Composers) > 0) && (count($MainArtists) + count($Conductors) > 3)) {
+		if ((count($Composers) > 0) && (count($MainArtists) + count($Conductors) > 3) && (count($MainArtists) > 1) && (count($Conductors) > 1)) {
 			$link = $ComposerStr . ' performed by Various Artists';
 		}
 		
@@ -1786,7 +1786,7 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 	
 	if($Return) { // If we're interested in the data, and not just caching it
 		foreach($Artists as $GroupID=>$Data) {
-			if(array_key_exists(1, $Data)) {
+			if(array_key_exists(1, $Data) || array_key_exists(4, $Data) || array_key_exists(6, $Data)) {
 				$Found[$GroupID]['Artists']=$Data[1]; // Only use main artists (legacy)
 				$Found[$GroupID]['ExtendedArtists'][1]=$Data[1];
 				$Found[$GroupID]['ExtendedArtists'][2]=$Data[2];

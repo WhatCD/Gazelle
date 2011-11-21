@@ -265,8 +265,12 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	ob_start();
 	
 	$DisplayName = '';
-	if(!empty($GroupArtists)) {
-		$DisplayName.= display_artists(array('1'=>$GroupArtists), false);
+	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
+		unset($ExtendedArtists[2]);
+		unset($ExtendedArtists[3]);
+		$DisplayName .= display_artists($ExtendedArtists, false);
+	} elseif(count($GroupArtists)>0) {
+		$DisplayName .= display_artists(array('1'=>$GroupArtists), false);
 	}
 	$DisplayName .= $GroupName;
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}

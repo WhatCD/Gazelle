@@ -263,15 +263,33 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$DisplayName .= ' [<a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'">Fix</a>]';
 	}
 
-	// Remixes, DJ Mixes, and Guest artists need the artist name
-	if (($ReleaseType == 1023) || ($ReleaseType == 1024) || ($ReleaseType == 8)) {
-		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
-			unset($ExtendedArtists[2]);
-			unset($ExtendedArtists[3]);
-			$DisplayName = display_artists($ExtendedArtists).$DisplayName;
-		} elseif(count($GroupArtists)>0) {
-			$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
-		}
+	
+	switch($ReleaseType){
+		case 1023: // Remixes, DJ Mixes, and Guest artists need the artist name
+		case 1024:
+		case 8:
+			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
+				unset($ExtendedArtists[2]);
+				unset($ExtendedArtists[3]);
+				$DisplayName = display_artists($ExtendedArtists).$DisplayName;
+			} elseif(count($GroupArtists)>0) {
+				$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
+			}
+			break;
+		case 1022:  // Show performers on composer pages
+			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
+				unset($ExtendedArtists[4]);
+				unset($ExtendedArtists[3]);
+				unset($ExtendedArtists[6]);
+				$DisplayName = display_artists($ExtendedArtists).$DisplayName;
+			} elseif(count($GroupArtists)>0) {
+				$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
+			}
+			break;
+		default: // Show composers otherwise
+			if (!empty($ExtendedArtists[4])) {
+				$DisplayName = display_artists(array(4 => $ExtendedArtists[4]), true, true).$DisplayName;
+			}
 	}
 
 	if($GroupYear>0) { $DisplayName = $GroupYear. ' - '.$DisplayName; }
