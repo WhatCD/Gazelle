@@ -272,7 +272,8 @@ if(empty($Properties['GroupID']) && empty($ArtistForm) && $Type == "Music") {
 	2 => array(),
 	3 => array(),
 	4 => array(),
-	5 => array()
+	5 => array(),
+	6 => array()
 	);
 	for($i = 0, $il = count($Artists); $i < $il; $i++) {
 		if(trim($Artists[$i]) != "") {
@@ -304,6 +305,13 @@ if($Err) { // Show the upload form, with the data the user entered
 	$UploadForm=$Type;
 	include(SERVER_ROOT.'/sections/upload/upload.php');
 	die();
+}
+
+// Strip out amazon's padding
+$AmazonReg = '/(http:\/\/ecx.images-amazon.com\/images\/.+)(\._.*_\.jpg)/i';
+$Matches = array();
+if (preg_match($RegX, $Properties['Image'], $Matches)) {
+	$Properties['Image'] = $Matches[1].'.jpg';
 }
 
 //******************************************************************************//

@@ -1635,10 +1635,11 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 		$Conductors  = $Artists[5];
 		$DJs         = $Artists[6];
 		
-		if (count($MainArtists) + count($Composers) + count($Conductors) == 0) {
+		if (count($MainArtists) + (count($Composers)<3?count($Composers):0) + count($Conductors) + count($DJs) == 0) {
 			return '';
 		}
 		
+		// Various Composers is not needed and is ugly and should die
 		switch(count($Composers)) {
 			case 0:
 				break;
@@ -1648,12 +1649,10 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 			case 2:
 				$link .= display_artist($Composers[0], $MakeLink, $Escape).$ampersand.display_artist($Composers[1], $MakeLink, $Escape);
 				break;
-			default:
-				$link .= 'Various Composers';
 		}
 		$ComposerStr .= $link;
-				
-		if ((count($Composers) > 0) && (count($MainArtists) > 0)) {
+
+		if ((count($Composers) > 0) && (count($Composers) < 3) && (count($MainArtists) > 0)) {
 			$link .= ' performed by ';
 		}
 		
@@ -1670,7 +1669,7 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 				$link .= 'Various Artists';
 		}
 		
-		if(!empty($Guests) && (count($MainArtists) + count($Composers) + count($Conductors) < 3)) {
+		if(!empty($Guests) &&  (count($MainArtists) + count($Composers) > 0) && (count($MainArtists) + count($Composers) + count($Conductors) < 3)) {
 			switch(count($Guests)) {
 				case 1:
 					$link .= ' with '.display_artist($Guests[0], $MakeLink, $Escape);
@@ -1681,7 +1680,7 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 			}
 		}
 		
-		if ((count($Conductors) > 0) && (count($MainArtists) + count($Composers) > 0)) {
+		if ((count($Conductors) > 0) && (count($MainArtists) + count($Composers) > 0) && (count($Composers) < 3 || count($MainArtists) > 0)) {
 			$link .= ' under ';
 		}
 		switch(count($Conductors)) {

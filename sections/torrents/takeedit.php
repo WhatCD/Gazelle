@@ -213,6 +213,13 @@ if($Properties['Remastered'] && !$Properties['RemasterYear']) {
 	}
 }
 
+// Strip out amazon's padding
+$AmazonReg = '/(http:\/\/ecx.images-amazon.com\/images\/.+)(\._.*_\.jpg)/i';
+$Matches = array();
+if (preg_match($RegX, $Properties['Image'], $Matches)) {
+	$Properties['Image'] = $Matches[1].'.jpg';
+}
+
 if($Err){ // Show the upload form, with the data the user entered
 	if(check_perms('site_debug')) {
 		die($Err);
