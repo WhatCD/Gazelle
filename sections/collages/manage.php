@@ -42,15 +42,19 @@ show_header('Manage collage '.$Name);
 
 $Number = 0;
 foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists) = array_values($Group);
 	list($GroupID2, $UserID, $Username, $Sort) = array_values($CollageDataList[$GroupID]);
 	
 	
 	$Number++;
 
 	$DisplayName = $Number.' - ';
-	if(count($GroupArtists)>0) {
-		$DisplayName = display_artists(array('1'=>$GroupArtists));
+	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
+			unset($ExtendedArtists[2]);
+			unset($ExtendedArtists[3]);
+			$DisplayName .= display_artists($ExtendedArtists);
+	} elseif(count($GroupArtists)>0) {
+			$DisplayName .= display_artists(array('1'=>$GroupArtists));
 	}
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
