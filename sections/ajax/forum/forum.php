@@ -1,6 +1,6 @@
 <?
 
-authorize();
+authorize(true);
 
 /**********|| Page to show individual forums || ********************************\
 
@@ -79,7 +79,7 @@ $JsonSpecificRules = array();
 foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
 	$Thread = get_thread_info($ThreadIDs);
 	$JsonSpecificRules[] = array(
-		'threadId' => $ThreadIDs,
+		'threadId' => (int) $ThreadIDs,
 		'thread' => $Thread['Title']
 	);
 }
@@ -124,19 +124,19 @@ else {
 		}
 		
 		$JsonTopics[] = array(
-			'topicId' => $TopicID,
+			'topicId' => (int) $TopicID,
 			'title' => $Title,
-			'authorId' => $AuthorID,
+			'authorId' => (int) $AuthorID,
 			'authorName' => $AuthorName,
-			'locked' => $Locked,
-			'sticky' => $Sticky,
-			'postCount' => $PostCount,
-			'lastID' => $LastID,
+			'locked' => $Locked == 1,
+			'sticky' => $Sticky == 1,
+			'postCount' => (int) $PostCount,
+			'lastID' => $LastID == null ? 0 : (int) $LastID,
 			'lastTime' => $LastTime,
-			'lastAuthorId' => $LastAuthorID,
-			'lastAuthorName' => $LastAuthorName,
-			'lastReadPage' => $LastRead[$TopicID]['Page'],
-			'lastReadPostId' => $LastRead[$TopicID]['PostID']
+			'lastAuthorId' => $LastAuthorID == null ? 0 : (int) $LastAuthorID,
+			'lastAuthorName' => $LastAuthorName == null ? "" : $LastAuthorName,
+			'lastReadPage' => $LastRead[$TopicID]['Page'] == null ? 0 : (int) $LastRead[$TopicID]['Page'],
+			'lastReadPostId' => $LastRead[$TopicID]['PostID'] == null ? 0 : (int) $LastRead[$TopicID]['PostID']
 		);
 	}
 
@@ -147,7 +147,7 @@ else {
 				'response' => array(
 					'forumName' => $Forums[$ForumID]['Name'],
 					'specificRules' => $JsonSpecificRules,
-					'currentPage' => intval($Page),
+					'currentPage' => (int) $Page,
 					'pages' => ceil($Forums[$ForumID]['NumTopics']/TOPICS_PER_PAGE),
 					'threads' => $JsonTopics
 				)

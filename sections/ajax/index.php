@@ -65,9 +65,15 @@ switch ($_GET['action']){
 	case 'bookmarks':
 		require(SERVER_ROOT.'/sections/ajax/bookmarks.php');
 		break;
+	case 'announcements':
+		require(SERVER_ROOT.'/sections/ajax/announcements.php');
+		break;
+	case 'notifications':
+		require(SERVER_ROOT.'/sections/ajax/notifications.php');
+		break;
 	default:
 		// If they're screwing around with the query string
-		error(403);
+		print json_encode(array('status' => 'failure'));
 }
 
 ?>

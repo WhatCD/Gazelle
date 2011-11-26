@@ -14,7 +14,8 @@ if(!is_number($GroupID)) { error(404); }
 
 if($_POST['submit'] == 'Remove') {
 	$DB->query("DELETE FROM collages_torrents WHERE CollageID='$CollageID' AND GroupID='$GroupID'");
-	$DB->query("UPDATE collages SET NumTorrents=NumTorrents-1 WHERE ID='$CollageID'");
+	$Rows = $DB->affected_rows();
+	$DB->query("UPDATE collages SET NumTorrents=NumTorrents-$Rows WHERE ID='$CollageID'");
 	$Cache->delete_value('torrents_details_'.$GroupID);
 	$Cache->delete_value('torrent_collages_'.$GroupID);
 } else {

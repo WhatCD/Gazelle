@@ -1650,11 +1650,12 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 				$link .= display_artist($Composers[0], $MakeLink, $Escape).$ampersand.display_artist($Composers[1], $MakeLink, $Escape);
 				break;
 		}
-		$ComposerStr .= $link;
 
 		if ((count($Composers) > 0) && (count($Composers) < 3) && (count($MainArtists) > 0)) {
 			$link .= ' performed by ';
 		}
+		
+		$ComposerStr .= $link;
 		
 		switch(count($MainArtists)) {
 			case 0:
@@ -1697,9 +1698,9 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 		}
 		
 		if ((count($Composers) > 0) && (count($MainArtists) + count($Conductors) > 3) && (count($MainArtists) > 1) && (count($Conductors) > 1)) {
-			$link = $ComposerStr . ' performed by Various Artists';
+			$link = $ComposerStr . 'Various Artists';
 		}
-		
+				
 		// DJs override everything else
 		switch(count($DJs)) {
 			case 0:

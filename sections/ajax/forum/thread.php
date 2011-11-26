@@ -1,6 +1,6 @@
 <?
 
-authorize();
+authorize(true);
 
 //TODO: Normalize thread_*_info don't need to waste all that ram on things that are already in other caches
 /**********|| Page to show individual threads || ********************************\
@@ -169,10 +169,10 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		}
 	}
 	
-	$JsonPoll['closed'] = $Closed;
+	$JsonPoll['closed'] = $Closed == 1;
 	$JsonPoll['featured'] = $Featured;
 	$JsonPoll['question'] = $Question;
-	$JsonPoll['maxVotes'] = $MaxVotes;
+	$JsonPoll['maxVotes'] = (int) $MaxVotes;
 	$JsonPoll['totalVotes'] = $TotalVotes;
 	$JsonPollAnswers = array();
 	
@@ -215,19 +215,19 @@ foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
 	$JsonPosts[] = array(
-		'postId' => $PostID,
+		'postId' => (int) $PostID,
 		'addedTime' => $AddedTime,
 		'body' => $Text->full_format($Body),
-		'editedUserId' => $EditedUserID,
+		'editedUserId' => (int) $EditedUserID,
 		'editedTime' => $EditedTime,
 		'editedUsername' => $EditedUsername,
 		'author' => array(
-			'authorId' => $AuthorID,
+			'authorId' => (int) $AuthorID,
 			'authorName' => $Username,
 			'paranoia' => $Paranoia,
-			'artist' => $Artist,
-			'donor' => $Donor,
-			'warned' => $Warned,
+			'artist' => $Artist == 1,
+			'donor' => $Donor == 1,
+			'warned' => $Warned == 1,
 			'avatar' => $Avatar,
 			'enabled' => $Enabled == 2 ? false : true,
 			'userTitle' => $UserTitle
@@ -241,16 +241,16 @@ print
 		array(
 			'status' => 'success',
 			'response' => array(
-				'forumId' => $ForumID,
+				'forumId' => (int) $ForumID,
 				'forumName' => $Forums[$ForumID]['Name'],
-				'threadId' => $ThreadID,
+				'threadId' => (int) $ThreadID,
 				'threadTitle' => $ThreadInfo['Title'],
 				'subscribed' => in_array($ThreadID, $UserSubscriptions),
-				'locked' => $ThreadInfo['IsLocked'],
-				'sticky' => $ThreadInfo['IsSticky'],
-				'currentPage' => intval($Page),
+				'locked' => $ThreadInfo['IsLocked'] == 1,
+				'sticky' => $ThreadInfo['IsSticky'] == 1,
+				'currentPage' => (int) $Page,
 				'pages' => ceil($ThreadInfo['Posts']/$PerPage),
-				'poll' => $JsonPoll,
+				'poll' => empty($JsonPoll) ? null : $JsonPoll,
 				'posts' => $JsonPosts
 			)
 		)

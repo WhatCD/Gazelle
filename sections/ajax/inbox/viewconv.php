@@ -68,8 +68,8 @@ $DB->query("SELECT SentDate, SenderID, Body, ID FROM pm_messages AS m WHERE Conv
 $JsonMessages = array();
 while(list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) {
 	$JsonMessage = array(
-		'messageId' => $MessageID,
-		'senderId' => $SenderID,
+		'messageId' => (int) $MessageID,
+		'senderId' => (int) $SenderID,
 		'senderName' => $Users[(int)$SenderID]['Username'],
 		'sentDate' => $SentDate,
 		'body' => $Text->full_format($Body)
@@ -82,10 +82,11 @@ print
 		array(
 			'status' => 'success',
 			'response' => array(
-				'convId' => $ConvID,
+				'convId' => (int) $ConvID,
 				'subject' => $Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')':''),
-				'sticky' => $Sticky,
+				'sticky' => $Sticky == 1,
 				'messages' => $JsonMessages
 			)
 		)
 	);
+?>

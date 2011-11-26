@@ -42,10 +42,10 @@ print json_encode(
 			'authkey'=>$AuthKey,
 			'passkey'=>$torrent_pass,
 			'userstats' => array(
-				'uploaded' => $Uploaded,
-				'downloaded' => $Downloaded,
-				'ratio' => $Ratio,
-				'requiredratio' => $RequiredRatio,
+				'uploaded' => (int) $Uploaded,
+				'downloaded' => (int) $Downloaded,
+				'ratio' => (float) $Ratio,
+				'requiredratio' => (float) $RequiredRatio,
 				//'class' => $Class
 				'class' => $ClassLevels[$Class]['Name']
 			),

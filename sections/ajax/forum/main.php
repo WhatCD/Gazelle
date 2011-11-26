@@ -1,6 +1,6 @@
 <?
 
-authorize();
+authorize(true);
 
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
@@ -52,7 +52,7 @@ foreach ($Forums as $Forum) {
 		}
 		$LastCategoryID = $CategoryID;
 		$JsonCategory = array(
-			'categoryID' => $CategoryID,
+			'categoryID' => (int) $CategoryID,
 			'categoryName' => $ForumCats[$CategoryID]
 		);
 		$JsonForums = array();
@@ -65,21 +65,21 @@ foreach ($Forums as $Forum) {
 	}
 
 	$JsonForums[] = array(
-		'forumId' => $ForumID,
+		'forumId' => (int) $ForumID,
 		'forumName' => $ForumName,
 		'forumDescription' => $ForumDescription,
-		'numTopics' => $NumTopics,
-		'numPosts' => $NumPosts,
-		'lastPostId' => $LastPostID,
-		'lastAuthorId' => $LastAuthorID,
+		'numTopics' => (float) $NumTopics,
+		'numPosts' => (float) $NumPosts,
+		'lastPostId' => (float) $LastPostID,
+		'lastAuthorId' => (float) $LastAuthorID,
 		'lastPostAuthorName' => $LastPostAuthorName,
-		'lastTopicId' => $LastTopicID,
+		'lastTopicId' => (float) $LastTopicID,
 		'lastTime' => $LastTime,
 		'specificRules' => $SpecificRules,
 		'lastTopic' => $LastTopic,
-		'read' => $Read,
-		'locked' => $Locked,
-		'sticky' => $Sticky
+		'read' => $Read == 1,
+		'locked' => $Locked == 1,
+		'sticky' => $Sticky == 1
 	);
 }
 

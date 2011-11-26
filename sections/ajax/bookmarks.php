@@ -197,39 +197,39 @@ foreach ($TorrentList as $Torrent) {
 	$JsonTorrents = array();
 	foreach ($Torrent['Torrents'] as $GroupTorrents) {
 		$JsonTorrents[] = array(
-			'id' => $GroupTorrents['ID'],
-			'groupId' => $GroupTorrents['GroupID'],
+			'id' => (int) $GroupTorrents['ID'],
+			'groupId' => (int) $GroupTorrents['GroupID'],
 			'media' => $GroupTorrents['Media'],
 			'format' => $GroupTorrents['Format'],
 			'encoding' => $GroupTorrents['Encoding'],
 			'remasterYear' => $GroupTorrents['RemasterYear'],
-			'remastered' => $GroupTorrents['Remastered'],
+			'remastered' => $GroupTorrents['Remastered'] == 1,
 			'remasterTitle' => $GroupTorrents['RemasterTitle'],
 			'remasterRecordLabel' => $GroupTorrents['RemasterRecordLabel'],
 			'remasterCatalogueNumber' => $GroupTorrents['RemasterCatalogueNumber'],
-			'scene' => $GroupTorrents['Scene'],
-			'hasLog' => $GroupTorrents['HasLog'],
-			'hasCue' => $GroupTorrents['HasCue'],
-			'logScore' => $GroupTorrents['LogScore'],
-			'fileCount' => $GroupTorrents['FileCount'],
-			'freeTorrent' => $GroupTorrents['FreeTorrent'],
-			'size' => $GroupTorrents['Size'],
-			'leechers' => $GroupTorrents['Leechers'],
-			'seeders' => $GroupTorrents['Seeders'],
-			'snatched' => $GroupTorrents['Snatched'],
+			'scene' => $GroupTorrents['Scene'] == 1,
+			'hasLog' => $GroupTorrents['HasLog'] == 1,
+			'hasCue' => $GroupTorrents['HasCue'] == 1,
+			'logScore' => (float) $GroupTorrents['LogScore'],
+			'fileCount' => (int) $GroupTorrents['FileCount'],
+			'freeTorrent' => $GroupTorrents['FreeTorrent'] == 1,
+			'size' => (float) $GroupTorrents['Size'],
+			'leechers' => (int) $GroupTorrents['Leechers'],
+			'seeders' => (int) $GroupTorrents['Seeders'],
+			'snatched' => (int) $GroupTorrents['Snatched'],
 			'time' => $GroupTorrents['Time'],
-			'hasFile' => $GroupTorrents['HasFile']
+			'hasFile' => (int) $GroupTorrents['HasFile']
 		);
 	}
 	$JsonBookmarks[] = array(
-		'id' => $Torrent['ID'],
+		'id' => (int) $Torrent['ID'],
 		'name' => $Torrent['Name'],
 		'year' => $Torrent['Year'],
 		'recordLabel' => $Torrent['RecordLabel'],
 		'catalogueNumber' => $Torrent['CatalogueNumber'],
 		'tagList' => $Torrent['TagList'],
 		'releaseType' => $Torrent['ReleaseType'],
-		'vanityHouse' => $Torrent['VanityHouse'],
+		'vanityHouse' => $Torrent['VanityHouse'] == 1,
 		'torrents' => $JsonTorrents
 	);
 }

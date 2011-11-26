@@ -38,10 +38,10 @@ foreach($Results as $Result) {
 	list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned) = $Result;
 
 	$JsonUsers[] = array(
-		'userId' => $UserID,
+		'userId' => (int) $UserID,
 		'username' => $Username,
-		'donor' => $Donor,
-		'warned' => $Warned,
+		'donor' => $Donor == 1,
+		'warned' => $Warned == 1,
 		'enabled' => ($Enabled == 2 ? false : true),
 		'class' => make_class_string($PermissionID)
 	);
@@ -52,7 +52,7 @@ print
 		array(
 			'status' => 'success',
 			'response' => array(
-				'currentPage' => $Page,
+				'currentPage' => (int) $Page,
 				'pages' => ceil($NumResults/USERS_PER_PAGE),
 				'results' => $JsonUsers
 			)

@@ -82,16 +82,16 @@ $Pages=get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
 $JsonMessages = array();
 while(list($ConvID, $Subject, $Unread, $Sticky, $ForwardedID, $ForwardedName, $SenderID, $Username, $Donor, $Warned, $Enabled, $Date) = $DB->next_record()) {
 	$JsonMessage = array(
-		'convId' => $ConvID,
+		'convId' => (int) $ConvID,
 		'subject' => $Subject,
-		'unread' => $Unread,
-		'sticky' => $Sticky,
-		'forwardedId' => $ForwardedID,
+		'unread' => $Unread == 1,
+		'sticky' => $Sticky == 1,
+		'forwardedId' => (int) $ForwardedID,
 		'forwardedName' => $ForwardedName,
-		'senderId' => $SenderID,
+		'senderId' => (int) $SenderID,
 		'username' => $Username,
-		'donor' => $Donor,
-		'warned' => $Warned,
+		'donor' => $Donor == 1,
+		'warned' => $Warned == 1,
 		'enabled' => ($Enabled == 2 ? false : true),
 		'date' => $Date
 	);
@@ -103,7 +103,7 @@ print
 		array(
 			'status' => 'success',
 			'response' => array(
-				'currentPage' => intval($Page),
+				'currentPage' => (int) $Page,
 				'pages' => ceil($NumResults/MESSAGES_PER_PAGE),
 				'messages' => $JsonMessages
 			)

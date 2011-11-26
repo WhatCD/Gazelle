@@ -98,13 +98,13 @@ if($NumResults > $PerPage*($Page-1)) {
 $JsonPosts = array();
 while(list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()){
 	$JsonPost = array(
-		'forumId' => $ForumID,
+		'forumId' => (int) $ForumID,
 		'forumName' => $ForumName,
-		'threadId' => $TopicID,
+		'threadId' => (int) $TopicID,
 		'threadTitle' => $ThreadTitle,
-		'postId' => $PostID,
-		'lastPostId' => $LastPostID,
-		'locked' => $Locked,
+		'postId' => (int) $PostID,
+		'lastPostId' => (int) $LastPostID,
+		'locked' => $Locked == 1,
 		'new' => ($PostID<$LastPostID && !$Locked)
 	);
 	$JsonPosts[] = $JsonPost;
@@ -115,7 +115,7 @@ print
 		array(
 			'status' => 'success',
 			'response' => array(
-				'posts' => $JsonPosts
+				'threads' => $JsonPosts
 			)
 		)
 	);
