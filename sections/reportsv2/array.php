@@ -452,7 +452,7 @@ $Types = array(
 					'upload' => '0',
 					'warn' => '4',
 					'delete' => '1',
-					'pm' => "No log editing is permitted. You may change the path of the files to hide your username or personal info in the home directory (e.g. C:\Documents and Settings\MyRealName\My Documents\) after ripping if need be. No other log editing is permitted."
+					'pm' => "No log editing is permitted. See rule 2.2.15.9."
 				)
 			),
 			'audience' => array(

@@ -1694,7 +1694,7 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 				$link .= display_artist($Conductors[0], $MakeLink, $Escape).$ampersand.display_artist($Conductors[1], $MakeLink, $Escape);
 				break;
 			default:
-				$link .= ' various conductors';
+				$link .= ' Various Conductors';
 		}
 		
 		if ((count($Composers) > 0) && (count($MainArtists) + count($Conductors) > 3) && (count($MainArtists) > 1) && (count($Conductors) > 1)) {

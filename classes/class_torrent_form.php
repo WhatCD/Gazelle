@@ -446,7 +446,7 @@ class TORRENT_FORM {
 <?
 				}
 ?>
-							<input type="checkbox" id="make_trumpable" name="make_trumpable"<? if ($Torrent['LogScore'] == 99) { echo " checked='checked'";}?>/>Check this box if you want this torrent to be trumpable (subtracts 1 point).
+							<input type="checkbox" id="make_trumpable" name="make_trumpable"<? if ($Torrent['LogScore'] == 99) { echo " checked='checked'";}?>/> Check this box if you want this torrent to be trumpable (subtracts 1 point).
 <?			
 				if (!check_perms('users_mod')) {
 ?>						</td>

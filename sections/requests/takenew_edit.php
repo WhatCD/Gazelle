@@ -211,7 +211,7 @@ if($CategoryName == "Music") {
 		if(trim($Artists[$i]) != "") {
 			if(!in_array($Artists[$i], $ArtistNames)) {
 				$ArtistForm[$Importance[$i]][] = array('name' => trim($Artists[$i]));
-				if($Importance[$i] == 1) {
+				if(in_array($Importance[$i], array(1,4,5,6))) {
 					$MainArtistCount++;
 				}
 				$ArtistNames[] = trim($Artists[$i]);
@@ -219,7 +219,7 @@ if($CategoryName == "Music") {
 		}
 	}
 	if($MainArtistCount < 1) {
-		$Err = "Please enter at least one main artist";
+		$Err = "Please enter at least one main artist, conductor, composer, or DJ";
 	}
 	if(!isset($ArtistNames[0])) {
 		unset($ArtistForm);
