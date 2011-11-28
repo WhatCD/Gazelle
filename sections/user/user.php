@@ -573,9 +573,9 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 		<div class="box">
 			<div class="head">
 				<span style="float:left;">Profile<? if ($CustomTitle) { echo " - ".html_entity_decode($DisplayCustomTitle); } ?></span>
-				<span style="float:right;"><?=$Badges?></span>&nbsp;
+				<span style="float:right;"><?=!empty($Badges)?"$Badges&nbsp;&nbsp;":''?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Hide)</a></span>&nbsp;
 			</div>
-			<div class="pad">
+			<div class="pad" id="profilediv">
 <? if (!$Info) { ?>
 				This profile is currently empty.
 <?

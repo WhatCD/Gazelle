@@ -19,7 +19,7 @@ show_header('Request Rules');
 				<b>All users must have an equal chance to fill a request.</b> Trading upload credit is not allowed. Abusing the request system to exchange favors for other users is not tolerated. That includes making specific requests for certain users (whether explicitly named or not). Making requests for releases, and then unfilling so that one particular user can fill the request is not allowed. If reported, both the requester and user filling the request will receive a warning and lose the request bounty.
 			</li>
 			<li>
-				<b>No manipulation of the requester for bounty.</b> The bounty is a reward for helping other users&mdash;it should not be a ransom. Any user who refuses to fill a request unless the bounty is raised will face harsh punishment.
+				<b>No manipulation of the requester for bounty.</b> The bounty is a reward for helping other users&mdash;it should not be a ransom. Any user who refuses to fill a request unless the bounty is increased will face harsh punishment.
 			</li>
 		</ul>
 	</div>
