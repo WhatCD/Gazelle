@@ -181,7 +181,7 @@ if ($Encoding!='') {
 }
 
 // Let's try to shorten the filename intelligently before chopping it off
-if (strlen($TorrentName) + strlen($TorrentInfo) + 3 > 152) {
+if (strlen($TorrentName) + strlen($TorrentInfo) + 3 > 200) {
 	$TorrentName = $Name . (($Year>0)?(' - '.$Year):'');
 }
 

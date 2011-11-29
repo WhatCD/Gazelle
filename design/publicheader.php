@@ -10,6 +10,7 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 	<meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="shortcut icon" href="favicon.ico" />
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <? if ($Mobile) { ?>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0, user-scalable=no;"/>
 	<link href="<?=STATIC_SERVER ?>styles/mobile/style.css?v=<?=filemtime(SERVER_ROOT.'/static/mobile/style.css')?>" rel="stylesheet" type="text/css" />
