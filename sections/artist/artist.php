@@ -268,7 +268,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		case 1023: // Remixes, DJ Mixes, and Guest artists need the artist name
 		case 1024:
 		case 8:
-			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
+			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 				unset($ExtendedArtists[2]);
 				unset($ExtendedArtists[3]);
 				$DisplayName = display_artists($ExtendedArtists).$DisplayName;

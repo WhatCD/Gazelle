@@ -80,34 +80,44 @@ if(!$GenreTags) {
 	$GenreTags =  $DB->collect('Name');
 	$Cache->cache_value('genre_tags', $GenreTags, 3600*6);
 }
+
+$DB->query("SELECT 
+	d.Name, 
+	d.Comment,
+	d.Time
+	FROM do_not_upload as d
+	ORDER BY d.Time");
+$DNU = $DB->to_array();
+list($Name,$Comment,$Updated) = end($DNU);
+reset($DNU);
+$DB->query("SELECT IF(MAX(t.Time) < '$Updated' OR MAX(t.Time) IS NULL,1,0) FROM torrents AS t
+			WHERE UserID = ".$LoggedUser['ID']);
+list($NewDNU) = $DB->next_record();
+$HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
 ?>
 <div class="<?=(check_perms('torrents_hide_dnu')?'box pad':'')?>" style="margin:0px auto;width:700px">
 	<h3 id="dnu_header">Do not upload</h3>
+	<p><?=$NewDNU?'<strong class="important_text">':''?>Last Updated: <?=time_diff($Updated)?><?=$NewDNU?'</strong>':''?></p>
 	<p>The following releases are currently forbidden from being uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comment.
-<? if (check_perms('torrents_hide_dnu')) { ?>
+<? if ($HideDNU) { ?>
    <span id="showdnu"><a href="#" <a href="#" onclick="$('#dnulist').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span>
 <? } ?>
 	</p>
-<?
-$DB->query("SELECT 
-	d.Name, 
-	d.Comment
-	FROM do_not_upload as d
-	ORDER BY d.Time");
-?>
-	<table id="dnulist" class="<?=(check_perms('torrents_hide_dnu')?'hidden':'')?>" style="">
+	<table id="dnulist" class="<?=($HideDNU?'hidden':'')?>" style="">
 		<tr class="colhead">
 			<td width="50%"><strong>Name</strong></td>
 			<td><strong>Comment</strong></td>
 		</tr>
-<? while(list($Name, $Comment) = $DB->next_record()){ ?>
+<? foreach($DNU as $BadUpload) { 
+		list($Name, $Comment, $Updated) = $BadUpload;
+?>		
 		<tr>
 			<td><?=$Text->full_format($Name)?></td>
 			<td><?=$Text->full_format($Comment)?></td>
 		</tr>
 <? } ?>
 	</table>
-</div><?=(check_perms('torrents_hide_dnu')?'<br />':'')?>
+</div><?=($HideDNU?'<br />':'')?>
 <?
 $TorrentForm->head();
 switch ($UploadForm) {

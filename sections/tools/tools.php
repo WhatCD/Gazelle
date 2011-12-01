@@ -85,6 +85,7 @@ if (check_perms('admin_update_geoip')) { ?>
 			<tr><td><a href="tools.php?action=sandbox8">Sandbox (8)</a></td></tr>
 			<tr><td><a href="tools.php?action=nightoath">NightOath's Sandbox</a></td></tr>
 			<tr><td><a href="schedule.php?auth=<?=$LoggedUser['AuthKey']?>">Schedule</a></td></tr>
+			<tr><td><a href="tools.php?action=branches">Git branches</a></td></tr>
 <? }?>	
 			<tr><td><strong><a href="tools.php?action=public_sandbox">Public Sandbox</a></strong></td></tr>
 <? if (check_perms('users_mod')) { ?>
