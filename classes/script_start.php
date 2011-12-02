@@ -2161,6 +2161,7 @@ function freeleech_torrents($TorrentIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
 		list($TorrentID, $GroupID, $InfoHash) = $Torrent;
 		update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $FreeNeutral));
 		$Cache->delete_value('torrent_download_'.$TorrentID);
+		write_log($LoggedUser['Username']." marked torrent ".$TorrentID." freeleech type ".$FreeLeechType."!");
 	}
 
 	foreach($GroupIDs as $GroupID) {

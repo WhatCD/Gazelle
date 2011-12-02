@@ -7,7 +7,7 @@ if ($ConvID = (int)$_GET['id']) {
 	$DB->query("SELECT Subject, UserID, Level, AssignedToUser, Unread, Status FROM staff_pm_conversations WHERE ID=$ConvID");
 	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
 
-	if (!(($UserID == $LoggedUser['ID']) || ($AssignedToUser == $LoggedUser['ID']) || (($Level > 0 && $Level < $LoggedUser['Class']) || ($Level == 0 && $IsFLS)))) {
+	if (!(($UserID == $LoggedUser['ID']) || ($AssignedToUser == $LoggedUser['ID']) || (($Level > 0 && $Level <= $LoggedUser['Class']) || ($Level == 0 && $IsFLS)))) {
 	// User is trying to view someone else's conversation
 		error(403);
 	}

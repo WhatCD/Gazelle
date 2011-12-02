@@ -94,10 +94,11 @@ foreach ($_REQUEST['list'] as $Priority => $Selection) {
 		case '30': $SQL .= "t.Format='FLAC' AND t.Encoding='24bit Lossless' AND t.Media='Vinyl'"; break;
 		case '31': $SQL .= "t.Format='FLAC' AND t.Encoding='24bit Lossless' AND t.Media='DVD'"; break;
 		case '32': $SQL .= "t.Format='FLAC' AND t.Encoding='24bit Lossless' AND t.Media='SACD'"; break;
-		case '33': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless' AND HasLog='1' AND LogScore='100' AND HasCue='1'"; break;
-		case '34': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless' AND HasLog='1' AND LogScore='100'"; break;
-		case '35': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless' AND HasLog='1'"; break;
-		case '36': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless'"; break;
+		case '33': $SQL .= "t.Format='FLAC' AND t.Encoding='24bit Lossless' AND t.Media='WEB'"; break;
+		case '34': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless' AND HasLog='1' AND LogScore='100' AND HasCue='1'"; break;
+		case '35': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless' AND HasLog='1' AND LogScore='100'"; break;
+		case '36': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless' AND HasLog='1'"; break;
+		case '37': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless'"; break;
 		case '40': $SQL .= "t.Format='DTS'"; break;
 		case '41': $SQL .= "t.Format='Ogg Vorbis'"; break;
 		case '42': $SQL .= "t.Format='AAC' AND t.Encoding='320'"; break;
