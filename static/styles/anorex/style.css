@@ -368,6 +368,10 @@ p.min_padding {
 	margin: 0px 5px 10px 5px;
 }
 
+#AddArtists input {
+	width: 100px;
+}
+
 .head {
 	padding: 4px;
 	background: #b78234 url(images/woodnavcenter.png) repeat-x;

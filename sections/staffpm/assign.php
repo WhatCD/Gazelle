@@ -25,7 +25,7 @@ if ($ConvID = (int)$_GET['convid']) {
 					break;
 			}
 			
-			$DB->query("UPDATE staff_pm_conversations SET Level=".$Level." WHERE ID=$ConvID");
+			$DB->query("UPDATE staff_pm_conversations SET Status='Unanswered', Level=".$Level." WHERE ID=$ConvID");
 			header('Location: staffpm.php');
 		} else {
 			error(404);

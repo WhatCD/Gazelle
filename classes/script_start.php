@@ -1358,7 +1358,7 @@ function update_hash($GroupID) {
 		FROM torrents_artists AS ta
 		JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
 		JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-		WHERE ta.GroupID=$GroupID AND ta.Importance IN ('1', '4', '5')
+		WHERE ta.GroupID=$GroupID AND ta.Importance IN ('1', '4', '5', '6')
 		GROUP BY tg.ID
 		ON DUPLICATE KEY UPDATE ArtistName=values(ArtistName)");
 	
@@ -1742,7 +1742,7 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 	$NotFound = array_flip($GroupIDs);
 	
 	foreach($GroupIDs as $GroupID) {
-		$Data = $Cache->get_value('torrent_group_'.$GroupID, true);
+		$Data = $Cache->get_value('torrent_group_'.$GroupID);
 		if(!empty($Data) && (@$Data['ver'] >= 4)) {
 			unset($NotFound[$GroupID]);
 			$Found[$GroupID] = $Data['d'];
