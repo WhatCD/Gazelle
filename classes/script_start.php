@@ -1575,7 +1575,7 @@ function get_artists($GroupIDs, $Escape = array()) {
 		if(!is_number($GroupID)) {
 			continue;
 		}
-		$Artists = $Cache->get_value('groups_artists_'.$GroupID, true);
+		$Artists = $Cache->get_value('groups_artists_'.$GroupID);
 		if(is_array($Artists)) {
 			$Results[$GroupID] = $Artists;
 		} else {
@@ -1609,6 +1609,10 @@ function get_artists($GroupIDs, $Escape = array()) {
 			else {
 				$Cache->cache_value('groups_artists_'.$GroupID, array());
 			}
+		}
+		$Missing = array_diff($GroupIDs, array_keys($Results));
+		if(!empty($Missing)) {
+			$Results += array_fill_keys($Missing, array());
 		}
 	}
 	return $Results;
@@ -1777,7 +1781,6 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 			$Cache->cache_value('torrent_group_'.$Torrent['GroupID'], array('ver'=>4, 'd'=>$Found[$Torrent['GroupID']]), 0);
 		}
 	}
-
 	if($GetArtists) {
 		$Artists = get_artists($GroupIDs);
 	} else {

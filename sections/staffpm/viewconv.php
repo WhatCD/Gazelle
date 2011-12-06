@@ -197,13 +197,12 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="button" value="Assign to forum staff" onClick="location.href='staffpm.php?action=assign&to=forum&convid=<?=$ConvID?>';" />
 <?	}
 
-	if ($Status != 'Resolved') {
-
-			if ($IsFLS) { ?>
+	if ($Status != 'Resolved') { ?>
+					<input type="button" value="Resolve" onClick="location.href='staffpm.php?action=resolve&id=<?=$ConvID?>';" />
+<?			if ($IsFLS) {  //Moved by request ?>
 					<input type="button" value="Common answers" onClick="$('#common_answers').toggle();" />
 					<input type="button" value="Preview" onclick="PreviewMessage();" />
 <?			} ?>
-					<input type="button" value="Resolve" onClick="location.href='staffpm.php?action=resolve&id=<?=$ConvID?>';" />
 					<input type="submit" value="Send message" />
 <?	} else { ?>
 					<input type="button" value="Unresolve" onClick="location.href='staffpm.php?action=unresolve&id=<?=$ConvID?>';" />
