@@ -70,11 +70,39 @@ show_header('Forums > '. $Forums[$ForumID]['Name']);
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <?=$Forums[$ForumID]['Name']?></h2>
-<? if(check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')){ ?>
 	<div class="linkbox">
+<? if(check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')){ ?>
 		[<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>">New Thread</a>]
-	</div>
 <? } ?>
+		[<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this Forum'?'Hide Search':'Search this Forum'); return false;">Search this Forum</a>]
+		<div id="searchforum" class="hidden center">
+			<div style="display: inline-block;">
+				<h3>Search this forum:</h3>
+				<form action="forums.php" method="get">
+					<table cellpadding="6" cellspacing="1" border="0" class="border">	
+						<input type="hidden" name="action" value="search" />
+						<input type="hidden" name="forums[]" value="<?=$ForumID?>" />
+						<tr>
+							<td><strong>Search for:</strong></td><td><input type="text" id="searchbox" name="search" size="70" /></td>
+						</tr>
+						<tr>
+							<td><strong>Search in:</strong></td>
+							<td>
+								<input type="radio" name="type" id="type_title" value="title" checked="checked" /> 
+								<label for="type_title">Titles</label>
+								<input type="radio" name="type" id="type_body" value="body" /> 
+								<label for="type_body">Post bodies</label>
+							</td>
+						<tr>
+							<td><strong>Username:</strong></td><td><input type="text" id="username" name="user" size="70" /></td>
+						</tr>
+						<tr><td colspan="2" style="text-align: center"><input type="submit" name="submit" value="Search" /></td></tr>
+					</table>
+				</form>
+				<br />
+			</div>
+		</div>
+	</div>
 <? if(check_perms('site_moderate_forums')) { ?>
 	<div class="linkbox">
 		<a href="forums.php?action=edit_rules&amp;forumid=<?=$ForumID?>">Change specific rules</a>
