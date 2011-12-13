@@ -225,6 +225,9 @@ if (count($Forum) == 0) {
 <?	}
 } ?>
 </table>
+<!--<div class="breadcrumbs">
+	<a href="forums.php">Forums</a> &gt; <?=$Forums[$ForumID]['Name']?>
+</div>-->
 	<div class="linkbox pager">
 		<?=$Pages?>
 	</div>

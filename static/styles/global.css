@@ -171,3 +171,5 @@ div#AddArtists a {
 span.rbt { display: block; padding: 8px 0 0; background: url('../rippy/rippy_top.gif') no-repeat top; }
 span.rbm { display: block; background: url('../rippy/rippy_middle.gif') repeat bottom; padding: 2px; }
 span.rbb { display: block; padding: 4px 0px 18px; margin-bottom: 5px; background: url('../rippy/rippy_bottom.gif') no-repeat bottom; }
+
+.breadcrumbs { font-weight: bold; text-align: right; }

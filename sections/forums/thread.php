@@ -434,6 +434,11 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 	</tr>
 </table>
 <?	} ?>
+<div class="breadcrumbs">
+	<a href="forums.php">Forums</a> &gt;
+	<a href="forums.php?action=viewforum&amp;forumid=<?=$ThreadInfo['ForumID']?>"><?=$Forums[$ForumID]['Name']?></a> &gt;
+	<?=display_str($ThreadInfo['Title'])?>
+</div>
 <div class="linkbox">
 	<?=$Pages?>
 </div>
