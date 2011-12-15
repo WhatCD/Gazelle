@@ -176,9 +176,14 @@ if(!empty($UsedReleases)) { ?>
 				$DisplayName = $ReleaseTypes[$ReleaseID]."s";
 				break;
 		}
-
+		
+		if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['HideTypes']) && in_array($ReleaseID, $LoggedUser['HideTypes']))) {
+			$ToggleStr = " onClick=\"$('.releases_$ReleaseID').show(); return true;\"";
+		} else {
+			$ToggleStr = '';
+		}
 ?>
-		<a href="#torrents_<?=str_replace(" ", "_", strtolower($ReleaseTypes[$ReleaseID]))?>">[<?=$DisplayName?>]</a>
+		<a href="#torrents_<?=str_replace(" ", "_", strtolower($ReleaseTypes[$ReleaseID]))?>"<?=$ToggleStr?>>[<?=$DisplayName?>]</a>
 <?
 	}
 	if ($NumRequests > 0) {
