@@ -2,10 +2,25 @@
 show_header('Create a collage');
 
 if (!check_perms('site_collages_renamepersonal')) {
-	$ChangeJS = 'OnChange="if ( this.options[this.selectedIndex].value == \'0\') { namebox.style.display = \'none\'; personal.style.display = \'inline\'; } else { namebox.style.display = \'inline\'; personal.style.display = \'none\'; }"';
+	$ChangeJS = "OnChange=\"if ( this.options[this.selectedIndex].value == '0') { $('#namebox').hide(); $('#personal').show(); } else { $('#namebox').show(); $('#personal').hide(); }\"";
+}
+
+$Name        = $_REQUEST['name'];
+$Category    = $_REQUEST['cat'];
+$Description = $_REQUEST['descr'];
+$Tags        = $_REQUEST['tags'];
+$Error       = $_REQUEST['err'];
+
+if (!check_perms('site_collages_renamepersonal') && $Category === '0') {
+	$NoName = true;
 }
 ?>
 <div class="thin">
+<?
+if (!empty($Error)) { ?>
+	<div class="save_message error"><?=display_str($Error)?></div>
+	<br />
+<? } ?>
 	<form action="collages.php" method="post" name="newcollage">
 		<input type="hidden" name="action" value="new_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -13,8 +28,8 @@ if (!check_perms('site_collages_renamepersonal')) {
 			<tr id="collagename">
 				<td class="label"><strong>Name</strong></td>
 				<td>
-					<input type="text" name="name" size="60" id="namebox" />
-					<span id="personal" style="display: none; font-style: oblique"><strong><?=$LoggedUser['Username']?>'s personal collage</strong></span>
+					<input type="text" class="<?=$NoName?'hidden':''?>" name="name" size="60" id="namebox" value="<?=display_str($Name)?>" />
+					<span id="personal" class="<?=$NoName?'':'hidden'?>" style="font-style: oblique"><strong><?=$LoggedUser['Username']?>'s personal collage</strong></span>
 				</td>
 			</tr>
 			<tr>
@@ -25,12 +40,12 @@ if (!check_perms('site_collages_renamepersonal')) {
 array_shift($CollageCats);
 		
 foreach($CollageCats as $CatID=>$CatName) { ?>
-						<option value="<?=$CatID+1?>"><?=$CatName?></option>
+						<option value="<?=$CatID+1?>"<?=(($CatID+1 == $Category)?' selected':'')?>><?=$CatName?></option>
 <? } 
 $DB->query("SELECT COUNT(ID) FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
 list($CollageCount) = $DB->next_record();
 if(($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
-						<option value="0">Personal</option>
+						<option value="0"<?=(($Category === '0')?' selected':'')?>>Personal</option>
 <? } ?>
 					</select>
 					<br />
@@ -51,13 +66,13 @@ if(($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('s
 			<tr>
 				<td class="label">Description</td>
 				<td>
-					<textarea name="description" id="description" cols="60" rows="10"></textarea>
+					<textarea name="description" id="description" cols="60" rows="10"><?=display_str($Description)?></textarea>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Tags (comma-separated)</strong></td>
 				<td>
-					<input type="text" id="tags" name="tags" size="60" />
+					<input type="text" id="tags" name="tags" size="60" value="<?=display_str($Tags)?>" />
 				</td>
 			</tr>
 			<tr>

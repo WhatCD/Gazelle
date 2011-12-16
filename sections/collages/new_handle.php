@@ -54,8 +54,13 @@ if(!$Err) {
 }
 
 if($Err) {
-	error($Err);
-	header('Location: collages.php?action=new');
+	//error($Err);
+	$Err         = urlencode($Err);
+	$Name        = urlencode($_POST['name']);
+	$Category    = urlencode($_POST['category']);
+	$Tags        = urlencode($_POST['tags']);
+	$Description = urlencode($_POST['description']);
+	header("Location: collages.php?action=new&err=$Err&name=$Name&cat=$Category&tags=$Tags&descr=$Description");
 	die();
 }
 
