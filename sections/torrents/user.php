@@ -314,8 +314,8 @@ $Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 						</select>
 						<select name="vanityhouse">
 							<option value="">Vanity House</option>
-							<option value="1" <?selected('scene',1)?>>Yes</option>
-							<option value="0" <?selected('scene',0)?>>No</option>
+							<option value="1" <?selected('vanityhouse',1)?>>Yes</option>
+							<option value="0" <?selected('vanityhouse',0)?>>No</option>
 						</select>
 					</td>
 				</tr>
