@@ -266,9 +266,16 @@ if ($Username!=$Cur['Username'] && check_perms('users_edit_usernames', $Cur['Cla
 }
 
 if ($Title!=db_string($Cur['Title']) && check_perms('users_edit_titles')) {
-	$UpdateSet[]="Title='$Title'";
-	$EditSummary[]="title changed to $Title";
-	$LightUpdates['Title']=$_POST['Title'];
+	// Using the unescaped value for the test to avoid confusion
+	if (strlen($_POST['Title']) > 1024) {
+		error("Custom titles can be at most 1024 characters.");
+		header("Location: user.php?id=".$UserID);
+		die();
+	} else {
+		$UpdateSet[]="Title='$Title'";
+		$EditSummary[]="title changed to $Title";
+		$LightUpdates['Title']=$_POST['Title'];
+	}
 }
 
 if ($Donor!=$Cur['Donor']  && check_perms('users_give_donor')) {
