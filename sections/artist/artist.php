@@ -30,7 +30,7 @@ if(!empty($_GET['revisionid'])) { // if they're viewing an old revision
 }
 if($Data) {
 	$Data = unserialize($Data);
-	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $Importances)) = each($Data);
+	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $Importances, $VanityHouseArtist)) = each($Data);
 	
 } else {
 	if ($RevisionID) {
@@ -762,7 +762,7 @@ if($RevisionID) {
 	$Key = 'artist_'.$ArtistID;
 }
 
-$Data = serialize(array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $Importances)));
+$Data = serialize(array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $Importances, $VanityHouseArtist)));
 
 $Cache->cache_value($Key, $Data, 3600);
 ?>
