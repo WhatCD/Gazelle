@@ -357,6 +357,12 @@ CREATE TABLE `ip_bans` (
   KEY `ToIP` (`ToIP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `library_contest` (
+  `UserID` int(10) NOT NULL,
+  `TorrentID` int(10) NOT NULL,
+  PRIMARY KEY (`UserID`,`TorrentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `log` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Message` varchar(400) NOT NULL,
