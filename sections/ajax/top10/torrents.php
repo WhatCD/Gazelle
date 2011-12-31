@@ -162,32 +162,32 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 
 		// Append to the existing array.
 		$results[] = array(
-			'torrentId' => $TorrentID,
-			'groupId' => $GroupID,
+			'torrentId' => (int) $TorrentID,
+			'groupId' => (int) $GroupID,
 			'artist' => $TruncArtist,
 			'groupName' => $GroupName,
-			'groupCategory' => $GroupCategoryID,
-			'groupYear' => $GroupYear,
+			'groupCategory' => (int) $GroupCategory,
+			'groupYear' => (int) $GroupYear,
 			'remasterTitle' => $RemasterTitle,
 			'format' => $Format,
 			'encoding' => $Encoding,
-			'hasLog' => $HasLog,
-			'hasCue' => $HasCue,
+			'hasLog' => $HasLog == 1,
+			'hasCue' => $HasCue == 1,
 			'media' => $Media,
-			'scene' => $Scene,
-			'year' => $Year,
+			'scene' => $Scene == 1,
+			'year' => (int) $Year,
 			'tags' => $TagList,
-			'snatched' => $Snatched,
-			'seeders' => $Seeders,
-			'leechers' => $Leechers,
-			'data' => $Data
+			'snatched' => (int) $Snatched,
+			'seeders' => (int) $Seeders,
+			'leechers' => (int) $Leechers,
+			'data' => (int) $Data
 		);
 	}
 
 	return array(
 		'caption' => $Caption,
 		'tag' => $Tag,
-		'limit' => $Limit,
+		'limit' => (int) $Limit,
 		'results' => $results
 		);
 }

@@ -94,20 +94,20 @@ function generate_user_json($Caption, $Tag, $Details, $Limit) {
 	$results = array();
 	foreach($Details as $Details) {
 		$results[] = array(
-			'id' => $Detail['ID'],
+			'id' => (int) $Detail['ID'],
 			'username' => $Detail['Username'],
-			'uploaded' => $Detail['Uploaded'],
-			'upSpeed' => $Detail['UpSpeed'],
-			'downloaded' => $Detail['Downloaded'],
-			'downSpeed' => $Detail['DownSpeed'],
-			'numUploads' => $Detail['NumUploads'],
+			'uploaded' => (float) $Detail['Uploaded'],
+			'upSpeed' => (float) $Detail['UpSpeed'],
+			'downloaded' => (float) $Detail['Downloaded'],
+			'downSpeed' => (float) $Detail['DownSpeed'],
+			'numUploads' => (int) $Detail['NumUploads'],
 			'joinDate' => $Detail['JoinDate']
 		);
 	}
 	return array(
 		'caption' => $Caption,
 		'tag' => $Tag,
-		'limit' => $Limit,
+		'limit' => (int) $Limit,
 		'results' => $results
 		);
 }

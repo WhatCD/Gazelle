@@ -91,16 +91,16 @@ function generate_tag_json($Caption, $Tag, $Details, $Limit) {
 	foreach ($Details as $Detail) {
 		$results[] = array(
 			'name' => $Detail['Name'],
-			'uses' => $Detail['Uses'],
-			'posVotes' => $Detail['PosVotes'],
-			'negVotes' => $Detail['NegVotes']
+			'uses' => (int) $Detail['Uses'],
+			'posVotes' => (int) $Detail['PosVotes'],
+			'negVotes' => (int) $Detail['NegVotes']
 		);
 	}
 
 	return array(
 		'caption' => $Caption,
 		'tag' => $Tag,
-		'limit' => $Limit,
+		'limit' => (int) $Limit,
 		'results' => $results
 		);
 }
