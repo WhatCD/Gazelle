@@ -689,7 +689,7 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 <? if($EditedUserID){ ?>
 				<br />
 				<br />
-<?	if(check_perms('site_moderate_forums')) { ?>
+<?	if(check_perms('site_admin_forums')) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('torrents', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
