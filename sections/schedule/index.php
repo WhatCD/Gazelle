@@ -949,42 +949,26 @@ if($BiWeek != next_biweek() || $_GET['runbiweek']) {
 	//------------- Give out invites! ---------------------------------------//
 
 	/*
-	Every month, on the 8th, each Power User gets one invite (max of 4).
-	Every month, on the 8th and the 22nd, each Elite User gets one invite (max of 4).
-	Every month, on the 8th and the 22nd, each TorrentMaster gets two invites (max of 8).
+	PUs have a cap of 2 invites.  Elites have a cap of 4.
+	Every month, on the 8th and the 22nd, each PU/Elite User gets one invite up to their max.
 
 	Then, every month, on the 8th and the 22nd, we give out bonus invites like this:
 
-	Every Power User, Elite User or TorrentMaster whose total invitee ratio is above 0.75 and total invitee upload is over 2 gigs gets one invite.
-	Every Power User, Elite User or TorrentMaster whose total invitee ratio is above 2.0 and total invitee upload is over 10 gigs gets one invite.
-	Every Power User, Elite User or TorrentMaster whose total invitee ratio is above 3.0 and total invitee upload is over 20 gigs gets one invite.
-
+	Every Power User or Elite whose total invitee ratio is above 0.75 and total invitee upload is over 2 gigs gets one invite.
+	Every Elite whose total invitee ratio is above 2.0 and total invitee upload is over 10 gigs gets one more invite.
+	Every Elite whose total invitee ratio is above 3.0 and total invitee upload is over 20 gigs gets yet one more invite.
 
 	This cascades, so if you qualify for the last bonus group, you also qualify for the first two and will receive three bonus invites.
-	So a TorrentMaster who fits in the last bonus category gets 5 invites every month on the 8th and the 22nd, whereas a power user who fits in the first category gets two invites on the 8th and one on the 22nd. A power user whose invitees suck only gets one invite per month.
 
-	There is a hard maximum of 10 invites for all classes, that cannot be exceeded by bonus invites.
-
+	The bonus invites cannot put a user over their cap.
+	
 	*/
 
-	// Power users
-	if($BiWeek == 8){
-
-		$DB->query("SELECT ID FROM users_main AS um JOIN users_info AS ui on ui.UserID=um.ID WHERE PermissionID=".POWER." AND um.Enabled='1' AND ui.DisableInvites = '0' AND um.Invites<4");
-		$UserIDs = $DB->collect('ID');
-		if (count($UserIDs) > 0) {
-			foreach($UserIDs as $UserID) {
-					$Cache->begin_transaction('user_info_heavy_'.$UserID);
-					$Cache->update_row(false, array('Invites' => '+1'));
-					$Cache->commit_transaction(0);
-			}
-			$DB->query("UPDATE users_main SET Invites=Invites+1 WHERE ID IN(".implode(',',$UserIDs).")");
-		}
-
-	}
-
-	// Elite users
-	$DB->query("SELECT ID FROM users_main AS um JOIN users_info AS ui on ui.UserID=um.ID WHERE PermissionID=".ELITE." AND um.Enabled='1' AND ui.DisableInvites = '0' AND um.Invites<4");
+	$DB->query("SELECT ID 
+				FROM users_main AS um 
+				JOIN users_info AS ui on ui.UserID=um.ID
+				WHERE um.Enabled='1' AND ui.DisableInvites = '0'
+					AND ((um.PermissionID = ".POWER." AND um.Invites < 2) OR (um.PermissionID = ".ELITE." AND um.Invites < 4))");
 	$UserIDs = $DB->collect('ID');
 	if (count($UserIDs) > 0) {
 		foreach($UserIDs as $UserID) {
@@ -1009,7 +993,13 @@ if($BiWeek != next_biweek() || $_GET['runbiweek']) {
 	
 	foreach ($BonusReqs as $BonusReq) {
 		list($Ratio, $Upload) = $BonusReq;
-		$DB->query("SELECT ID FROM users_main AS um JOIN users_info AS ui on ui.UserID=um.ID JOIN temp_sections_schedule_index AS u ON u.Inviter = um.ID WHERE u.Upload>$Upload AND u.Upload/u.Download>$Ratio AND um.PermissionID IN (".POWER.", ".ELITE.") AND um.Enabled = '1' AND ui.DisableInvites = '0' AND um.Invites<10");
+		$DB->query("SELECT ID
+					FROM users_main AS um 
+					JOIN users_info AS ui ON ui.UserID=um.ID
+					JOIN temp_sections_schedule_index AS u ON u.Inviter = um.ID
+					WHERE u.Upload>$Upload AND u.Upload/u.Download>$Ratio 
+						AND um.Enabled = '1' AND ui.DisableInvites = '0' 
+						AND ((um.PermissionID = ".POWER." AND um.Invites < 2) OR (um.PermissionID = ".ELITE." AND um.Invites < 4))");
 		$UserIDs = $DB->collect('ID');
 		if (count($UserIDs) > 0) {
 			foreach($UserIDs as $UserID) {
