@@ -327,8 +327,7 @@ if($Day != next_day() || $_GET['runday']){
 	if($Day%2 == 0) { // If we should generate the drive database (at the end)
 		$GenerateDriveDB = true;
 	}
-	// Skip most of the daily schedule.   Commenting out all the parts is a pain.
-	goto skipdaily;
+	
 	//------------- Ratio requirements
 	
 	
@@ -707,8 +706,6 @@ if($Day != next_day() || $_GET['runday']){
 	
 	
 
-// kill this later when it's time to reactivate the daily schedule
-skipdaily:
 	// Daily top 10 history.
 	$DB->query("INSERT INTO top10_history (Date, Type) VALUES ('".$sqltime."', 'Daily')");
 	$HistoryID = $DB->inserted_id();
