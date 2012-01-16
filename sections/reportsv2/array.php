@@ -263,7 +263,7 @@ $Types = array(
 			),
 			'mutt' => array(
 				'priority' => '18',
-				'title' => 'Mutt rip',
+				'title' => 'Mutt Rip',
 				'report_messages' => array(
 					"Please list at least two (2) tracks which have different bitrates and/or encoders."
 				),
@@ -279,7 +279,7 @@ $Types = array(
 			),
 			'single_track' => array(
 				'priority' => '27',
-				'title' => 'Unsplit album rip',
+				'title' => 'Unsplit Album Rip',
 				'report_messages' => array(
 					"If possible, please provide a link to Amazon.com or another source showing the proper track listing.",
 					"This option is for uploads of CDs ripped as a single track when it should be split as on the CD",
@@ -297,7 +297,7 @@ $Types = array(
 			),
 			'tags_lots' => array(
 				'priority' => '31',
-				'title' => 'Bad tags / no tags at all',
+				'title' => 'Bad Tags / No Tags at All',
 				'report_messages' => array(
 					"Please specify which tags are missing, and whether they're missing from all tracks.",
 					"Ideally, you will replace this torrent with one with fixed tags and report this with the reason 'Tag Trump' <3"
@@ -315,7 +315,7 @@ $Types = array(
 			),
 			'folders_bad' => array(
 				'priority' => '30',
-				'title' => 'Bad folder names',
+				'title' => 'Bad Folder Names',
 				'report_messages' => array(
 					"Please specify the issue with the folder names.",
 					"Ideally you will replace this torrent with one with fixed folder names and report this with the reason 'Trumped'."
@@ -330,7 +330,7 @@ $Types = array(
 			),
 			'wrong_format' => array(
 				'priority' => '32',
-				'title' => 'Wrong specified format',
+				'title' => 'Wrong Specified Format',
 				'report_messages' => array(
 					"Please specify the correct format."
 				),
@@ -379,7 +379,7 @@ $Types = array(
 			),
 			'source' => array(
 				'priority' => '21',
-				'title' => 'Radio/TV/FM/WEBRIP',
+				'title' => 'Radio/TV/FM/WEB Rip',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
 				),
@@ -663,6 +663,38 @@ $Types = array(
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => 'Torrents containing hacking or cracking tools are not allowed.'
+				)
+			),
+			'virus' => array(
+				'priority' => '6',
+				'title' => 'Contains Virus',
+				'report_messages' => array(
+					'Please include as much information as possible to verify the report.  Please also double check that your virus scanner is not incorrectly identifying a keygen or crack as a virus.',
+				),
+				'report_fields' => array(
+					'link' => '0'
+				),
+				'resolve_options' => array(
+					'upload' => '0', 
+					'warn' => '1',
+					'delete' => '1',
+					'pm' => 'The torrent was determined to be infected with a virus/trojan. In the future, please scan all potential uploads with an antivirus program such as AVG, Avast, or MS Security Essentials.'
+				)
+			),
+			'notwork' => array(
+				'priority' => '6',
+				'title' => 'Not Working',
+				'report_messages' => array(
+					'Please include as much information as possible to verify the report.',
+				),
+				'report_fields' => array(
+					'link' => '0'
+				),
+				'resolve_options' => array(
+					'upload' => '0', 
+					'warn' => '0',
+					'delete' => '1',
+					'pm' => 'This program was determined to be not fully functional.'
 				)
 			)
 		),

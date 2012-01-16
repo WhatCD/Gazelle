@@ -8,7 +8,7 @@ show_header('Rule Index');
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>
-				Respect Staff - They have enough experience, are knowledgable and always have a reason for their actions. If you disagree with a staff member discuss it privately and courteously. Arguing with or being disrespectful towards staff will not be taken lightly.
+				All staff decisions must be respected. If you take issue with a decision, you must do so privately with the staff member who issued the decision or with an administrator of the site. Complaining about staff decisions in public or otherwise disrespecting staff members will not be taken lightly.
 			</li>
 			<li>
 				Access to this website is a privilege, not a right, and it can be taken away from you for any reason.
