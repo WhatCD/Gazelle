@@ -255,7 +255,7 @@ if (check_paranoia_here('artistsadded')) {
 	$ArtistsAdded = 0;
 }
 
-/*include(SERVER_ROOT.'/classes/class_user_rank.php');
+include(SERVER_ROOT.'/classes/class_user_rank.php');
 $Rank = new USER_RANK;
 
 $UploadedRank = $Rank->get_rank('uploaded', $Uploaded);
@@ -264,7 +264,7 @@ $UploadsRank = $Rank->get_rank('uploads', $Uploads);
 $RequestRank = $Rank->get_rank('requests', $RequestsFilled);
 $PostRank = $Rank->get_rank('posts', $ForumPosts);
 $BountyRank = $Rank->get_rank('bounty', $TotalSpent);
-$ArtistsRank = $Rank->get_rank('artists', $ArtistsAdded);*/
+$ArtistsRank = $Rank->get_rank('artists', $ArtistsAdded);
 
 if($Downloaded == 0) {
 	$Ratio = 1;
@@ -273,7 +273,7 @@ if($Downloaded == 0) {
 } else {
 	$Ratio = round($Uploaded/$Downloaded, 2);
 }
-/*$OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio);*/
+$OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio);
 
 ?>
 		<div class="box">

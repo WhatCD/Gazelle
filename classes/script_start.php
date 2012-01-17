@@ -1639,7 +1639,7 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 		$Conductors  = $Artists[5];
 		$DJs         = $Artists[6];
 		
-		if (count($MainArtists) + (count($Composers)<3?count($Composers):0) + count($Conductors) + count($DJs) == 0) {
+		if ((count($MainArtists) + count($Conductors) + count($DJs) == 0) && (count($Composers) == 0)) {
 			return '';
 		}
 		
@@ -1703,6 +1703,8 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 		
 		if ((count($Composers) > 0) && (count($MainArtists) + count($Conductors) > 3) && (count($MainArtists) > 1) && (count($Conductors) > 1)) {
 			$link = $ComposerStr . 'Various Artists';
+		} elseif ((count($Composers) > 2) && (count($MainArtists) + count($Conductors) == 0)) {
+			$link = 'Various Composers';
 		}
 				
 		// DJs override everything else
