@@ -257,7 +257,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 			$PM .= "\nMessage from ".$LoggedUser['Username'].": ".$PMMessage;	
 		}
 		
-		$PM .= "\n\nReport was handled by ".$LoggedUser['Username'].".";
+		$PM .= "\n\nReport was handled by [user]".$LoggedUser['Username']."[/user].";
 		
 		send_pm($UploaderID, 0, db_string($Escaped['raw_name']), db_string($PM));
 	}

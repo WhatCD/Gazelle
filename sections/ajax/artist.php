@@ -92,7 +92,7 @@ if(!is_array($Requests)) {
 		FROM requests AS r
 			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
 			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID 
-		WHERE ra.ArtistID = ".$ArtistID."
+		WHERE ra.ArtistID = '$ArtistID'
 			AND r.TorrentID = 0
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
@@ -221,6 +221,31 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$NumLeechers+=$Torrent['Leechers'];
 		$NumSnatches+=$Torrent['Snatched'];
 	}
+	foreach ($Torrents as $Torrent) {
+		$InnerTorrents[] = array(
+			'id' => (int) $Torrent['ID'],
+			'groupId' => (int) $Torrent['GroupID'],
+			'media' => $Torrent['Media'],
+			'format' => $Torrent['Format'],
+			'encoding' => $Torrent['Encoding'],
+			'remasterYear' => $Torrent['RemasterYear'],
+			'remastered' => $Torrent['Remastered'] == 1,
+			'remasterTitle' => $Torrent['RemasterTitle'],
+			'remasterRecordLabel' => $Torrent['RemasterRecordLabel'],
+			'scene' => $Torrent['Scene'] == 1,
+			'hasLog' => $Torrent['HasLog'] == 1,
+			'hasCue' => $Torrent['HasCue'] == 1,
+			'logScore' => (int) $Torrent['LogScore'],
+			'fileCount' => (int) $Torrent['FileCount'],
+			'freeTorrent' => $Torrent['FreeTorrent'] == 1,
+			'size' => (int) $Torrent['Size'],
+			'leechers' => (int) $Torrent['Leechers'],
+			'seeders' => (int) $Torrent['Seeders'],
+			'snatched' => (int) $Torrent['Snatched'],
+			'time' => $Torrent['Time'],
+			'hasFile' => (int) $Torrent['HasFile']
+		);
+	}
 	$JsonTorrents[] = array(
 		'groupId' => $GroupID,
 		'groupName' => $GroupName,
@@ -228,6 +253,10 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		'groupRecordLabel' => $GroupRecordLabel,
 		'groupCatalogueNumber' => $GroupCatalogueNumber,
 		'tags' => $TagList,
+		'releaseType' => (int) $ReleaseType,
+		'groupVanityHouse' => $GroupVanityHouse == 1,
+		'hasBookmarked' => $hasBookmarked = has_bookmarked('torrent', $GroupID),
+		'torrent' => $InnerTorrents,
 		'releaseType' => $ReleaseType,
 		'groupVanityHouse' => $GroupVanityHouse,
 		'hasBookmarked' => $hasBookmarked = has_bookmarked('torrent', $GroupID),
@@ -256,6 +285,10 @@ if(empty($SimilarArray)) {
 	$SimilarArray = $DB->to_array();
 	foreach ($SimilarArray as $Similar) {
 		$JsonSimilar[] = array(
+			'artistId' => (int) $Similar['ArtistID'],
+			'name' => $Similar['Name'],
+			'score' => (int) $Similar['Score'],
+			'similarId' => (int) $Similar['SimilarID'],
 			'artistId' => $Similar['ArtistID'],
 			'name' => $Similar['Name'],
 			'score' => $Similar['Score'],
@@ -269,6 +302,13 @@ $JsonRequests = array();
 foreach ($Requests as $Request) {
 	list($RequestID, $CategoryID, $Title, $Year, $TimeAdded, $Votes, $Bounty) = $Request;
 	$JsonRequests[] = array(
+		'requestId' => (int) $RequestID,
+		'categoryId' => (int) $CategoryID,
+		'title' => $Title,
+		'year' => $Year,
+		'timeAdded' => $TimeAdded,
+		'votes' => (int) $Votes,
+		'bounty' => (int) $Bounty,
 		'requestId' => $RequestID,
 		'categoryId' => $CategoryID,
 		'title' => $Title,
