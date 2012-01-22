@@ -343,6 +343,21 @@ $Types = array(
 					'pm' => 'Please be careful when specifying the format of your uploads'
 				)
 			),
+			'wrong_media' => array(
+				'priority' => '33',
+				'title' => 'Wrong Specified Media',
+				'report_messages' => array(
+					"Please specify the correct media."
+				),
+				'report_fields' => array(
+				),
+				'resolve_options' => array(
+					'upload' => '0',
+					'warn' => '0',
+					'delete' => '0',
+					'pm' => 'Please be careful when specifying the media of your uploads'
+				)
+			),
 			'format' => array(
 				'priority' => '10',
 				'title' => 'Disallowed Format',
