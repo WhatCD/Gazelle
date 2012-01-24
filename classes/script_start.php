@@ -1067,6 +1067,12 @@ function make_class_string($ClassID) {
 	return $Classes[$ClassID]['Name'];
 }
 
+//Write to the group log
+function write_group_log($GroupID, $TorrentID, $UserID, $Message, $Hidden) {
+	global $DB,$Time;
+	$DB->query("INSERT INTO group_log (GroupID, TorrentID, UserID, Info, Time, Hidden) VALUES (".$GroupID.", ".$TorrentID.", ".$UserID.", '".db_string($Message)."', '".sqltime()."', ".$Hidden.")");
+}
+
 // Write a message to the system log
 function write_log($Message) {
 	global $DB,$Time;
@@ -1161,6 +1167,7 @@ function delete_group($GroupID) {
 	global $DB, $Cache;
 
 	write_log("Group ".$GroupID." automatically deleted (No torrents have this group).");
+	//$DB->query("DELETE FROM group_log WHERE GroupID = ".$GroupID);
 
 	//Never call this unless you're certain the group is no longer used by any torrents
 	$DB->query("SELECT CategoryID FROM torrents_group WHERE ID='$GroupID'");
@@ -2167,6 +2174,7 @@ function freeleech_torrents($TorrentIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
 		update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $FreeNeutral));
 		$Cache->delete_value('torrent_download_'.$TorrentID);
 		write_log($LoggedUser['Username']." marked torrent ".$TorrentID." freeleech type ".$FreeLeechType."!");
+		write_group_log($GroupID, $TorrentID, $LoggedUser['UserID'], "marked as freeleech type ".$FreeLeechType."!", 0);
 	}
 
 	foreach($GroupIDs as $GroupID) {

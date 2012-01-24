@@ -323,6 +323,20 @@ CREATE TABLE `geoip_country` (
   PRIMARY KEY (`StartIP`,`EndIP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `group_log` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `GroupID` int(10) NOT NULL,
+  `TorrentID` int(10) NOT NULL,
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `Info` mediumtext,
+  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Hidden` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `GroupID` (`GroupID`),
+  KEY `TorrentID` (`TorrentID`),
+  KEY `UserID` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `invite_tree` (
   `UserID` int(10) NOT NULL DEFAULT '0',
   `InviterID` int(10) NOT NULL DEFAULT '0',

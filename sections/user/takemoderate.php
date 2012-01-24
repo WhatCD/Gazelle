@@ -208,7 +208,7 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 		$Cache->delete_value('users_sessions_'.$UserID);
 		
 		
-		$DB->query("DELETE FROM users_sessions WHERE UserID="'$UserID'");
+		$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
 		
 	}
 }
@@ -404,7 +404,7 @@ if ($DisableAvatar!=$Cur['DisableAvatar'] && check_perms('users_disable_any')) {
 
 if ($DisableLeech!=$Cur['can_leech'] && check_perms('users_disable_any')) {
 	$UpdateSet[]="can_leech='$DisableLeech'";
-	$EditSummary[]="leeching status changed";
+	$EditSummary[]="leeching status changed (".translateLeechStatus($Cur['can_leech'])." -> ".translateLeechStatus($DisableLeech).")";
 	$HeavyUpdates['DisableLeech']=$DisableLeech;
 	$HeavyUpdates['CanLeech']=$DisableLeech;
 	if (!empty($UserReason)) {
@@ -671,6 +671,17 @@ function translateUserStatus($status) {
 			return "Enabled";
 		case 2:
 			return "Disabled";
+		default:
+			return $status;
+	}
+}
+
+function translateLeechStatus($status) {
+	switch ($status) {
+		case 0:
+			return "Disabled";
+		case 1:
+			return "Enabled";
 		default:
 			return $status;
 	}

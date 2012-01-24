@@ -231,14 +231,15 @@ if (check_perms('users_mod')) {
 if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requestsfilled_bounty')) {
 	$DB->query("SELECT COUNT(DISTINCT r.ID), SUM(rv.Bounty) FROM requests AS r LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID WHERE r.FillerID = ".$UserID);
 	list($RequestsFilled, $TotalBounty) = $DB->next_record();
+} else {
+	$RequestsFilled = $TotalBounty = 0;
+}
+
+if (check_paranoia_here('requestsvoted_count') || check_paranoia_here('requestsvoted_bounty')) {
 	$DB->query("SELECT COUNT(rv.RequestID), SUM(rv.Bounty) FROM requests_votes AS rv WHERE rv.UserID = ".$UserID);
 	list($RequestsVoted, $TotalSpent) = $DB->next_record();
-	
-	$DB->query("SELECT COUNT(ID) FROM torrents WHERE UserID='$UserID'");
-	list($Uploads) = $DB->next_record();
 } else {
-	$RequestsVoted = 0;
-	$TotalSpent = 0;
+	$RequestsVoted = $TotalSpent = 0;
 }
 
 if(check_paranoia_here('uploads+')) {

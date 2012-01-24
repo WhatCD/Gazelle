@@ -84,6 +84,8 @@ if(empty($_POST['confirm'])) {
 	}
 	
 	write_log("Torrent $TorrentID was edited by " . $LoggedUser['Username']); // TODO: this is probably broken
+	write_group_log($GroupID, 0, $LoggedUser['ID'], "merged group ".$OldGroupID, 0);
+	$DB->query("UPDATE group_log SET GroupID = ".$GroupID." WHERE GroupID = ".$OldGroupID);
 	
 	$Cache->delete_value('torrents_details_'.$GroupID);	
 	$Cache->delete_value('torrent_download_'.$TorrentID);

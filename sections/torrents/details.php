@@ -105,6 +105,7 @@ show_header($Title,'browse,comments,torrent,bbcode');
 	if(check_perms('site_submit_requests')) { ?>
 		<a href="requests.php?action=new&amp;groupid=<?=$GroupID?>">[Request format]</a>
 <?	}?>
+	<a href="torrents.php?action=grouplog&amp;groupid=<?=$GroupID?>">[View log]</a>
 	</div>
 
 	<div class="sidebar">

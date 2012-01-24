@@ -49,6 +49,7 @@ $DB->query("INSERT INTO torrents_group (ID, NumArtists)
 $Cache->delete_value('torrents_details_'.$GroupID); // Delete torrent group cache
 $Cache->delete_value('groups_artists_'.$GroupID); // Delete group artist cache
 write_log("Artist ".$ArtistID." (".$ArtistName.") was removed from the group ".$GroupID." (".$GroupName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+write_group_log($GroupID, 0, $LoggedUser['ID'], "removed artist ".$ArtistName, 0);
 
 update_hash($GroupID);
 

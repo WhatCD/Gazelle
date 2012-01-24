@@ -27,5 +27,6 @@ while(list($ArtistID) = $DB->next_record()) {
 update_hash($GroupID);
 
 write_log("Torrent Group ".$GroupID." (".$OldName.")  was renamed to '".$NewName."' by ".$LoggedUser['Username']);
+write_group_log($GroupID, 0, $LoggedUser['ID'], "renamed to ".$NewName." from ".$OldName, 0);
 
 header('Location: torrents.php?id='.$GroupID);

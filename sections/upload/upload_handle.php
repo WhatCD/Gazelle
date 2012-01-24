@@ -649,6 +649,7 @@ update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlenc
 $DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($TorrentID, '".db_string($Tor->dump_data())."')");
 
 write_log("Torrent $TorrentID ($LogName) (".number_format($TotalSize/(1024*1024), 2)." MB) was uploaded by " . $LoggedUser['Username']);
+write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "uploaded (".number_format($TotalSize/(1024*1024), 2)." MB)", 0);
 
 update_hash($GroupID);
 

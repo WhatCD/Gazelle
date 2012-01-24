@@ -23,9 +23,6 @@ if(empty($_GET['type'])) {
 		case 'created':
 			$Title = 'My requests';
 			$SS->set_filter('userid', array($LoggedUser['ID']));
-			if(empty($_GET['show_filled'])) {
-				$SS->set_filter('torrentid', array(0));
-			}
 			break;
 		case 'voted':
 			if(!empty($_GET['userid'])) {
@@ -39,9 +36,6 @@ if(empty($_GET['type'])) {
 			} else {
 				$Title = "Requests I've voted on";
 				$SS->set_filter('voter', array($LoggedUser['ID']));
-			}
-			if(empty($_GET['show_filled']) && $Submitted) {
-				$SS->set_filter('torrentid', array(0));
 			}
 			break;
 		case 'filled':

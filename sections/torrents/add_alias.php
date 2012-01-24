@@ -60,6 +60,7 @@ for($i = 0; $i < count($AliasNames); $i++) {
 				NumArtists=VALUES(NumArtists);");
 			
 			write_log("Artist ".$ArtistID." (".$ArtistName.") was added to the group ".$GroupID." (".$GroupName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+			write_group_log($GroupID, 0, $LoggedUser['ID'], "added artist ".$ArtistName, 0);
 		} else {
 			list($OldAliasID) = $DB->next_record();
 			if($OldAliasID == 0) {

@@ -395,6 +395,7 @@ $DB->query("SELECT Name FROM torrents_group WHERE ID=$GroupID");
 list($Name) = $DB->next_record();
 
 write_log("Torrent $TorrentID ($Name) in group $GroupID was edited by ".$LoggedUser['Username']." (".$LogDetails.")"); // TODO: this is probably broken
+write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $LogDetails, 0);
 $Cache->delete_value('torrents_details_'.$GroupID);
 $Cache->delete_value('torrent_download_'.$TorrentID);
 

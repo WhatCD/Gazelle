@@ -18,11 +18,12 @@ list($CategoryID, $NewName) = $DB->next_record();
 if($Categories[$CategoryID-1] != 'Music') {
 	error('Only music groups can be merged.');
 }
+
+$DB->query("SELECT Name FROM torrents_group WHERE ID = ".$GroupID);
+list($Name) = $DB->next_record();
+
 //Everything is legit, let's just confim they're not retarded
 if(empty($_POST['confirm'])) {
-	$DB->query("SELECT Name FROM torrents_group WHERE ID = ".$GroupID);
-	list($Name) = $DB->next_record();
-	
 	$Artists = get_artists(array($GroupID, $NewGroupID));
 	
 	show_header();
@@ -54,6 +55,9 @@ if(empty($_POST['confirm'])) {
 	$DB->query("UPDATE torrents_comments SET GroupID='$NewGroupID' WHERE GroupID='$GroupID'");
 	
 	delete_group($GroupID);
+
+	write_group_log($NewGroupID, 0, $LoggedUser['ID'], "Merged Group ".$GroupID." (".$Name.") to ".$NewGroupID." (".$NewName.")", 0);
+	$DB->query("UPDATE group_log SET GroupID = ".$NewGroupID." WHERE GroupID = ".$GroupID);
 	
 	$GroupID=$NewGroupID;
 	

@@ -178,8 +178,11 @@ if($DB->affected_rows() > 0 || !$Report) {
 		if(isset($Escaped['log_message']) && $Escaped['log_message'] != "") {
 			$Log .= " ( ".$Escaped['log_message']." )";
 		}
+		$DB->query("SELECT GroupID FROM torrents WHERE ID = ".$TorrentID);
+		list($GroupID) = $DB->next_record();
 		delete_torrent($TorrentID);
 		write_log($Log);
+		write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "deleted torrent", 0);
 	} else {
 		$Log = "No log message (Torrent wasn't deleted)";
 	}
