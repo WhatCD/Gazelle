@@ -20,7 +20,7 @@ if($_POST['submit'] == 'Delete'){ //Delete
 	if($P['minclassread'] > $LoggedUser['Class'] || $P['minclasswrite'] > $LoggedUser['Class'] || $P['minclasscreate'] > $LoggedUser['Class']) {
 		error(403);
 	}
-
+	$P['autolock'] = isset($_POST['autolock'])?'1':'0';
 
 	if($_POST['submit'] == 'Edit'){ //Edit
 		if(!is_number($_POST['id']) || $_POST['id'] == ''){ error(0); }
@@ -41,12 +41,13 @@ if($_POST['submit'] == 'Delete'){ //Delete
 			Description='$P[description]',
 			MinClassRead='$P[minclassread]',
 			MinClassWrite='$P[minclasswrite]',
-			MinClassCreate='$P[minclasscreate]'
+			MinClassCreate='$P[minclasscreate]',
+			AutoLock='$P[autolock]'
 			WHERE ID='$P[id]'");
 	} else { //Create
 		$DB->query("INSERT INTO forums
-			(Sort, CategoryID, Name, Description, MinClassRead, MinClassWrite, MinClassCreate) VALUES
-			('$P[sort]', '$P[categoryid]', '$P[name]','$P[description]','$P[minclassread]','$P[minclasswrite]','$P[minclasscreate]')");
+			(Sort, CategoryID, Name, Description, MinClassRead, MinClassWrite, MinClassCreate, AutoLock) VALUES
+			('$P[sort]', '$P[categoryid]', '$P[name]','$P[description]','$P[minclassread]','$P[minclasswrite]','$P[minclasscreate]','$P[autolock]')");
 	}
 }
 

@@ -238,6 +238,7 @@ CREATE TABLE `forums` (
   `LastPostAuthorID` int(10) NOT NULL DEFAULT '0',
   `LastPostTopicID` int(10) NOT NULL DEFAULT '0',
   `LastPostTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `AutoLock` enum('0','1') DEFAULT '1',
   PRIMARY KEY (`ID`),
   KEY `Sort` (`Sort`),
   KEY `MinClassRead` (`MinClassRead`)
@@ -712,6 +713,24 @@ CREATE TABLE `sphinx_requests_delta` (
   KEY `Year` (`Year`),
   KEY `TimeFilled` (`TimeFilled`),
   KEY `LastVote` (`LastVote`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `staff_blog` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `UserID` int(10) unsigned NOT NULL,
+  `Title` varchar(255) NOT NULL,
+  `Body` text NOT NULL,
+  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  KEY `Time` (`Time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `staff_blog_visits` (
+  `UserID` int(10) unsigned NOT NULL,
+  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  UNIQUE KEY `UserID` (`UserID`),
+  CONSTRAINT `staff_blog_visits_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `staff_pm_conversations` (

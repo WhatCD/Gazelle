@@ -600,13 +600,12 @@ if($Day != next_day() || $_GET['runday']){
 
 	//------------- Lock old threads ----------------------------------------//
 	sleep(10);
-	
-	
-	$DB->query("SELECT ID FROM forums_topics WHERE 
-		IsLocked='0'
-		AND IsSticky='0'
-		AND LastPostTime<'".time_minus(3600*24*28)."'");
-	
+	$DB->query("SELECT t.ID
+				FROM forums_topics AS t
+				JOIN forums AS f ON t.ForumID = f.ID
+				WHERE t.IsLocked='0' AND t.IsSticky='0'
+				  AND t.LastPostTime<'".time_minus(3600*24*28)."'
+				  AND f.AutoLock = '1'");
 	$IDs = $DB->collect('ID');
 	
 	if(count($IDs) > 0) {

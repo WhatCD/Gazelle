@@ -47,7 +47,54 @@ show_header('News','bbcode');
 		</div>
 <?
 	}
+	if (check_perms('users_mod')) {
 ?>
+
+		<div class="box">
+			<div class="head colhead_dark"><strong><a href="staffblog.php">Latest staff blog posts</a></strong></div>
+<?
+if(($Blog = $Cache->get_value('staff_blog')) === false) {
+	$DB->query("SELECT
+		b.ID,
+		um.Username,
+		b.Title,
+		b.Body,
+		b.Time
+		FROM staff_blog AS b LEFT JOIN users_main AS um ON b.UserID=um.ID
+		ORDER BY Time DESC
+		LIMIT 20");
+	$Blog = $DB->to_array();
+	$Cache->cache_value('staff_blog',$Blog,1209600);
+}
+if(($ReadTime = $Cache->get_value('staff_blog_read_'.$LoggedUser['ID'])) === false) {
+	$DB->query("SELECT Time FROM staff_blog_visits WHERE UserID = ".$LoggedUser['ID']);
+	if (list($ReadTime) = $DB->next_record()) {
+		$ReadTime = strtotime($ReadTime);
+	} else {
+		$ReadTime = 0;
+	}
+	$Cache->cache_value('staff_blog_read_'.$LoggedUser['ID'],$ReadTime,1209600);
+}
+?>
+			<ul class="stats nobullet">
+<?
+if(count($Blog) < 5) {
+	$Limit = count($Blog);
+} else {
+	$Limit = 5;
+}
+for($i = 0; $i < $Limit; $i++) {
+	list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $Blog[$i];
+?>
+				<li>
+					<?=($ReadTime < strtotime($BlogTime))?'<strong>':''?><?=($i + 1)?>. <a href="staffblog.php#blog<?=$BlogID?>"><?=$Title?></a><?=($ReadTime < strtotime($BlogTime))?'</strong>':''?>
+				</li>
+<? 
+}
+?>
+			</ul>
+		</div>
+<?	}  ?>
 		<div class="box">
 			<div class="head colhead_dark"><strong><a href="blog.php">Latest blog posts</a></strong></div>
 <?

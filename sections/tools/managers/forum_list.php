@@ -30,7 +30,8 @@ $DB->query('SELECT
 	Description,
 	MinClassRead,
 	MinClassWrite,
-	MinClassCreate
+	MinClassCreate,
+	AutoLock
 	FROM forums
 	ORDER BY CategoryID, Sort ASC');
 ?>
@@ -45,11 +46,12 @@ $DB->query('SELECT
 		<td>Min class read</td>
 		<td>Min class write</td>
 		<td>Min class create</td>
+		<td>Autolock</td>
 		<td>Submit</td>
 	</tr>
 <?
 $Row = 'b';
-while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClassWrite, $MinClassCreate) = $DB->next_record()){
+while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClassWrite, $MinClassCreate, $AutoLock) = $DB->next_record()){
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
 	<tr class="row<?=$Row?>">
@@ -89,6 +91,9 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 				<select name="minclasscreate">
 					<?=class_list($MinClassCreate)?> 
 				</select>
+			</td>
+			<td>
+				<input type="checkbox" name="autolock" <?=($AutoLock == '1')?'checked ':''?>/>
 			</td>
 			<td>
 				<input type="submit" name="submit" value="Edit" />
@@ -138,6 +143,9 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 				<select name="minclasscreate">
 					<?=class_list()?> 
 				</select>
+			</td>
+			<td>
+				<input type="checkbox" name="autolock" checked />
 			</td>
 			<td>
 				<input type="submit" value="Create" />
