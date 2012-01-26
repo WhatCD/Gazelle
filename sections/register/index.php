@@ -7,6 +7,7 @@ if(isset($LoggedUser)) {
 }
 
 include(SERVER_ROOT.'/classes/class_validate.php');
+
 $Val=NEW VALIDATE;
 
 if(!empty($_REQUEST['confirm'])) {
@@ -187,6 +188,8 @@ if(!empty($_REQUEST['confirm'])) {
 			send_email($_REQUEST['email'],'New account confirmation at '.SITE_NAME,$TPL->get(),'noreply');
 			update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
 			$Sent=1;
+			
+			
 		}
 		
 	} elseif($_GET['invite']) {

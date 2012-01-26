@@ -645,7 +645,7 @@ function authorize($Ajax = false) {
 // ex: 'somefile,somdire/somefile'
 
 function show_header($PageTitle='',$JSIncludes='') {
-	global $Document, $Cache, $DB, $LoggedUser, $Mobile;
+	global $Document, $Cache, $DB, $LoggedUser, $Mobile, $Classes;
 
 	if($PageTitle!='') { $PageTitle.=' :: '; }
 	$PageTitle .= SITE_NAME;
@@ -2174,7 +2174,7 @@ function freeleech_torrents($TorrentIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
 		update_tracker('update_torrent', array('info_hash' => rawurlencode($InfoHash), 'freetorrent' => $FreeNeutral));
 		$Cache->delete_value('torrent_download_'.$TorrentID);
 		write_log($LoggedUser['Username']." marked torrent ".$TorrentID." freeleech type ".$FreeLeechType."!");
-		write_group_log($GroupID, $TorrentID, $LoggedUser['UserID'], "marked as freeleech type ".$FreeLeechType."!", 0);
+		write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "marked as freeleech type ".$FreeLeechType."!", 0);
 	}
 
 	foreach($GroupIDs as $GroupID) {

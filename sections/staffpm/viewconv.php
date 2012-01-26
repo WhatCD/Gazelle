@@ -6,6 +6,8 @@ if ($ConvID = (int)$_GET['id']) {
 	// Get conversation info
 	$DB->query("SELECT Subject, UserID, Level, AssignedToUser, Unread, Status FROM staff_pm_conversations WHERE ID=$ConvID");
 	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
+	$DB->query("SELECT Subject, UserID, Level, AssignedToUser, Unread, Status FROM staff_pm_conversations WHERE ID=$ConvID");
+	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
 
 	if (!(($UserID == $LoggedUser['ID']) || ($AssignedToUser == $LoggedUser['ID']) || (($Level > 0 && $Level <= $LoggedUser['Class']) || ($Level == 0 && $IsFLS)))) {
 	// User is trying to view someone else's conversation
@@ -206,6 +208,10 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="submit" value="Send message" />
 <?	} else { ?>
 					<input type="button" value="Unresolve" onClick="location.href='staffpm.php?action=unresolve&id=<?=$ConvID?>';" />
+<?	} 
+	if (check_perms('users_give_donor')) { ?>
+					<br />	
+					<input type="button" value="Make Donor" onClick="location.href='staffpm.php?action=make_donor&id=<?=$ConvID?>';" />
 <?	} ?>
 				</form>
 			</div>

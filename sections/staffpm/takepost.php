@@ -48,7 +48,7 @@ if ($Message = db_string($_POST['message'])) {
 			// Clear cache for user
 			$Cache->delete_value('staff_pm_new_'.$UserID);
 			$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
-			
+						
 			header("Location: staffpm.php?action=viewconv&id=$ConvID");
 		} else {
 			// User is trying to respond to conversation that does no belong to them

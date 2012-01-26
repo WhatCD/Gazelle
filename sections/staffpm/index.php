@@ -39,6 +39,9 @@ switch($_REQUEST['action']) {
 	case 'assign':
 		require('assign.php');
 		break;
+	case 'make_donor':
+		require('makedonor.php');
+		break;
 	case 'responses':
 		require('common_responses.php');
 		break;

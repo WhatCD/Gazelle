@@ -26,7 +26,7 @@ switch ($View) {
 	default:
 		if ($IsStaff) {
 			$ViewString = "My unanswered";
-			$WhereCondition = "WHERE (Level = $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+			$WhereCondition = "WHERE ((Level >= ".$Classes[MOD]['Level']." AND Level <= $UserLevel) OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		} else {
 			// FLS
 			$ViewString = "Unanswered";
@@ -51,7 +51,7 @@ $StaffPMs = $DB->query("
 		ResolverID
 	FROM staff_pm_conversations
 	$WhereCondition
-	ORDER BY Date DESC
+	ORDER BY IF(AssignedToUser = ".$LoggedUser['ID'].",0,1) ASC, Level DESC, Date DESC
 	LIMIT $Limit
 ");
 

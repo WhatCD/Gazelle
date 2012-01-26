@@ -182,7 +182,8 @@ if($DB->affected_rows() > 0 || !$Report) {
 		list($GroupID) = $DB->next_record();
 		delete_torrent($TorrentID);
 		write_log($Log);
-		write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "deleted torrent", 0);
+		$Log = "deleted torrent for the reason: ".$ResolveType['title'].". ( ".$Escaped['log_message']." )";
+		write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $Log, 0);
 	} else {
 		$Log = "No log message (Torrent wasn't deleted)";
 	}
