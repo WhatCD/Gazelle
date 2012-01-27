@@ -29,7 +29,7 @@ show_header('Rule Index');
 				This is a torrent site which promotes sharing amongst the community. If you are not willing to give back to the community what you take from it, this site is not for you. In other words, we expect you to have an acceptable share ratio. If you download a torrent, please, seed the copy you have until there are sufficient people seeding as well before you stop.
 			</li>
 			<li>
-				Do not browse the site using proxies or TOR. The site will automatically alert us. 
+				Do not browse the site using proxies or TOR. The site will automatically alert us.  This includes VPNs with dynamic IP addresses.
 			</li>
 			<li>
 				Asking for invites to any site is not allowed anywhere on What.CD or our IRC network. Invites may be offered in the Invites forum, and nowhere else.

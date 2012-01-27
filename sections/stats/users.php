@@ -39,10 +39,10 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 if(!$ClassDistribution = $Cache->get_value('class_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
 	$DB->query("SELECT p.Name, COUNT(m.ID) AS Users FROM users_main AS m JOIN permissions AS p ON m.PermissionID=p.ID WHERE m.Enabled='1' GROUP BY p.Name ORDER BY Users DESC");
-	$Classes = $DB->to_array();
+	$ClassSizes = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
-	foreach($Classes as $Class) {
-		list($Label,$Users) = $Class;
+	foreach($ClassSizes as $ClassSize) {
+		list($Label,$Users) = $ClassSize;
 		$Pie->add($Label,$Users);
 	}
 	$Pie->transparent();
@@ -53,7 +53,10 @@ if(!$ClassDistribution = $Cache->get_value('class_distribution')) {
 }
 if(!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
+	
+	
 	$DB->query("SELECT OperatingSystem, COUNT(UserID) AS Users FROM users_sessions GROUP BY OperatingSystem ORDER BY Users DESC");
+	
 	$Platforms = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
 	foreach($Platforms as $Platform) {
@@ -69,7 +72,10 @@ if(!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 
 if(!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
+	
+	
 	$DB->query("SELECT Browser, COUNT(UserID) AS Users FROM users_sessions GROUP BY Browser ORDER BY Users DESC");
+	
 	$Browsers = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
 	foreach($Browsers as $Browser) {

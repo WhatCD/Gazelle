@@ -47,6 +47,8 @@ switch ($_GET['action']){
 	case 'top10':
 		require(SERVER_ROOT.'/sections/ajax/top10/index.php');
 		break;
+	case 'requests':
+		require(SERVER_ROOT.'/sections/ajax/requests.php');
 	case 'bookmarks':
 		require(SERVER_ROOT.'/sections/ajax/bookmarks/index.php');
 	case 'artist':

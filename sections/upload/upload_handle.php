@@ -83,7 +83,7 @@ $RequestID = $_POST['requestid'];
 //******************************************************************************//
 //--------------- Validate data in upload form ---------------------------------//
 
-$Validate->SetFields('type','1','inarray','Not a valid type.',array('inarray'=>array_keys($Categories)));
+$Validate->SetFields('type','1','inarray','Please select a valid type.',array('inarray'=>array_keys($Categories)));
 switch ($Type) {
 	case 'Music':
 		if(!$_POST['groupid']) {
@@ -94,7 +94,7 @@ switch ($Type) {
 				'1','number','The year of the original release must be entered.',array('length'=>40));
 
 			$Validate->SetFields('releasetype',
-				'1','inarray','Not a valid release type.',array('inarray'=>array_keys($ReleaseTypes)));
+				'1','inarray','Please select a valid release type.',array('inarray'=>array_keys($ReleaseTypes)));
 
 			$Validate->SetFields('tags',
 				'1','string','You must enter at least one tag. Maximum length is 200 characters.',array('maxlength'=>200, 'minlength'=>2));
@@ -138,7 +138,7 @@ switch ($Type) {
 			'0','string','Remaster catalogue number must be between 2 and 80 characters.',array('maxlength'=>80, 'minlength'=>2));
 
 		$Validate->SetFields('format',
-			'1','inarray','Not a valid format.',array('inarray'=>$Formats));
+			'1','inarray','Please select a valid format.',array('inarray'=>$Formats));
 
 		// Handle 'other' bitrates
 		if($Properties['Encoding'] == 'Other') {
@@ -160,7 +160,7 @@ switch ($Type) {
 		}
 
 		$Validate->SetFields('media',
-			'1','inarray','Not a valid media.',array('inarray'=>$Media));
+			'1','inarray','Please select a valid media.',array('inarray'=>$Media));
 
 		$Validate->SetFields('image',
 			'0','link','The image URL you entered was invalid.',array('maxlength'=>255, 'minlength'=>12));
@@ -181,7 +181,7 @@ switch ($Type) {
 			'1','number','The year of the release must be entered.');
 
 		$Validate->SetFields('format',
-			'1','inarray','Not a valid format.',array('inarray'=>$Formats));
+			'1','inarray','Please select a valid format.',array('inarray'=>$Formats));
 
 		if($Properties['Encoding'] == 'Other') {
 			$Validate->SetFields('other_bitrate',
@@ -375,10 +375,10 @@ foreach($FileList as $File) {
 		$Err = 'The torrent contained one or more forbidden files ('.$Name.').';
 	}
 	if(preg_match('/\?/i', $Name)) {
-		$Err = 'The torrent contained one or more files with forbidden character (?).';
+		$Err = 'The torrent contains one or more files with a ?, which is a forbidden character. Please rename the files as necessary and recreate the .torrent file.';
 	}
 	if(preg_match('/\:/i', $Name)) {
-		$Err = 'The torrent contained one or more files with forbidden character (:).';
+		$Err = 'The torrent contains one or more files with a :, which is a forbidden character. Please rename the files as necessary and recreate the .torrent file.';
 	}
 	// Add file and size to array
 	$TmpFileList []= $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
