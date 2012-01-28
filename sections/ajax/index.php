@@ -47,6 +47,12 @@ switch ($_GET['action']){
 	case 'top10':
 		require(SERVER_ROOT.'/sections/ajax/top10/index.php');
 		break;
+	case 'usersearch':
+		require(SERVER_ROOT.'/sections/ajax/usersearch.php');
+		break;
+	case 'artist':
+		require(SERVER_ROOT.'/sections/ajax/artist.php');
+		break;
 	case 'requests':
 		require(SERVER_ROOT.'/sections/ajax/requests.php');
 	case 'bookmarks':
@@ -69,14 +75,8 @@ switch ($_GET['action']){
 	case 'bookmarks':
 		require(SERVER_ROOT.'/sections/ajax/bookmarks.php');
 		break;
-	case 'announcements':
-		require(SERVER_ROOT.'/sections/ajax/announcements.php');
-		break;
 	case 'notifications':
 		require(SERVER_ROOT.'/sections/ajax/notifications.php');
-		break;
-	case 'better':
-		require(SERVER_ROOT.'/sections/ajax/better/index.php');
 		break;
 	default:
 		// If they're screwing around with the query string

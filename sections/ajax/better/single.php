@@ -30,11 +30,11 @@ foreach ($Results as $GroupID=>$Group) {
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 	
 	$JsonResults[] = array(
-		'torrentId' => $FlacID,
-		'groupId' => $GroupID,
+		'torrentId' => (int) $FlacID,
+		'groupId' => (int) $GroupID,
 		'artist' => $Artists,
 		'groupName' => $GroupName,
-		'groupYear' => $GroupYear,
+		'groupYear' => (int) $GroupYear,
 		'downloadUrl' => 'torrents.php?action=download&id='.$FlacID.'&authkey='.$LoggedUser['AuthKey'].'&torrent_pass='.$LoggedUser['torrent_pass']
 	);
 }

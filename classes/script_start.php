@@ -1351,7 +1351,7 @@ function update_hash($GroupID) {
 		GROUP_CONCAT(DISTINCT t.Format SEPARATOR ' ') AS Format,
 		GROUP_CONCAT(DISTINCT t.Encoding SEPARATOR ' ') AS Encoding,
 		GROUP_CONCAT(DISTINCT t.RemasterTitle SEPARATOR ' ') AS RemasterTitle,
-		GROUP_CONCAT(REPLACE(REPLACE(REPLACE(FileList, '|||', '\n '), '_', ' '), '.', ' ') SEPARATOR '\n ') AS FileList
+		GROUP_CONCAT(REPLACE(REPLACE(FileList, '|||', '\n '), '_', ' ') SEPARATOR '\n ') AS FileList
 		FROM torrents AS t
 		JOIN torrents_group AS g ON g.ID=t.GroupID
 		WHERE g.ID=$GroupID
@@ -2158,7 +2158,7 @@ function in_array_partial($Needle, $Haystack) {
  * @param int $FreeLeechType 0 = Unknown, 1 = Staff picks, 2 = Perma-FL (Toolbox, etc.), 3 = Vanity House
  */
 function freeleech_torrents($TorrentIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
-	global $DB, $Cache;
+	global $DB, $Cache, $LoggedUser;
 
 	if(!is_array($TorrentIDs)) {
 		$TorrentIDs = array($TorrentIDs);

@@ -92,7 +92,7 @@ if(!is_array($Requests)) {
 		FROM requests AS r
 			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
 			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID 
-		WHERE ra.ArtistID = '$ArtistID'
+		WHERE ra.ArtistID = ".$ArtistID."
 			AND r.TorrentID = 0
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
@@ -228,7 +228,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			'media' => $Torrent['Media'],
 			'format' => $Torrent['Format'],
 			'encoding' => $Torrent['Encoding'],
-			'remasterYear' => $Torrent['RemasterYear'],
+			'remasterYear' => (int) $Torrent['RemasterYear'],
 			'remastered' => $Torrent['Remastered'] == 1,
 			'remasterTitle' => $Torrent['RemasterTitle'],
 			'remasterRecordLabel' => $Torrent['RemasterRecordLabel'],
@@ -247,20 +247,16 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		);
 	}
 	$JsonTorrents[] = array(
-		'groupId' => $GroupID,
+		'groupId' => (int) $GroupID,
 		'groupName' => $GroupName,
-		'groupYear' => $GroupYear,
+		'groupYear' => (int) $GroupYear,
 		'groupRecordLabel' => $GroupRecordLabel,
 		'groupCatalogueNumber' => $GroupCatalogueNumber,
 		'tags' => $TagList,
 		'releaseType' => (int) $ReleaseType,
 		'groupVanityHouse' => $GroupVanityHouse == 1,
 		'hasBookmarked' => $hasBookmarked = has_bookmarked('torrent', $GroupID),
-		'torrent' => $InnerTorrents,
-		'releaseType' => $ReleaseType,
-		'groupVanityHouse' => $GroupVanityHouse,
-		'hasBookmarked' => $hasBookmarked = has_bookmarked('torrent', $GroupID),
-		'torrent' => array_values($Torrents)
+		'torrent' => $InnerTorrents
 	);
 }
 
@@ -288,11 +284,7 @@ if(empty($SimilarArray)) {
 			'artistId' => (int) $Similar['ArtistID'],
 			'name' => $Similar['Name'],
 			'score' => (int) $Similar['Score'],
-			'similarId' => (int) $Similar['SimilarID'],
-			'artistId' => $Similar['ArtistID'],
-			'name' => $Similar['Name'],
-			'score' => $Similar['Score'],
-			'similarId' => $Similar['SimilarID']
+			'similarId' => (int) $Similar['SimilarID']
 		);
 	}
 	$NumSimilar = count($SimilarArray);
@@ -305,17 +297,10 @@ foreach ($Requests as $Request) {
 		'requestId' => (int) $RequestID,
 		'categoryId' => (int) $CategoryID,
 		'title' => $Title,
-		'year' => $Year,
+		'year' => (int) $Year,
 		'timeAdded' => $TimeAdded,
 		'votes' => (int) $Votes,
-		'bounty' => (int) $Bounty,
-		'requestId' => $RequestID,
-		'categoryId' => $CategoryID,
-		'title' => $Title,
-		'year' => $Year,
-		'timeAdded' => $TimeAdded,
-		'votes' => $Votes,
-		'bounty' => $Bounty
+		'bounty' => (int) $Bounty
 	);
 }
 
@@ -340,13 +325,13 @@ print
 		array(
 			'status' => 'success',
 			'response' => array(
-				'id' => $ArtistID,
+				'id' => (int) $ArtistID,
 				'name' => $Name,
 				'notificationsEnabled' => $notificationsEnabled,
 				'hasBookmarked' => has_bookmarked('artist', $ArtistID),
 				'image' => $Image,
 				'body' => $Text->full_format($Body),
-				'vanityHouse' => $VanityHouseArtist,
+				'vanityHouse' => $VanityHouseArtist == 1,
 				'tags' => array_values($Tags),
 				'similarArtists' => $JsonSimilar,
 				'statistics' => array(

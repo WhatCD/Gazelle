@@ -193,7 +193,7 @@ foreach(array('artistname','groupname', 'recordlabel', 'cataloguenumber',
 	if(!empty($_GET[$Search])) {
 		$_GET[$Search] = str_replace(array('%'), '', $_GET[$Search]);
 		if($Search == 'filelist') {
-			$Queries[]='@filelist "'.$SS->EscapeString(strtr($_GET['filelist'], '.', " ")).'"~20';
+			$Queries[]='@filelist "'.$SS->EscapeString($_GET['filelist']).'"~20';
 		} else {
 			$Words = explode(' ', $_GET[$Search]);
 			foreach($Words as $Key => &$Word) {

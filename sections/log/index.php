@@ -89,40 +89,43 @@ while(list($Message, $LogTime) = $DB->next_record()) {
 		}
 		switch ($MessageParts[$i]) {
 			case "Torrent":
-				$TorrentID = $MessageParts[++$i];
+			case "torrent":
+				$TorrentID = $MessageParts[$i + 1];
 				if (is_numeric($TorrentID)) {
-					$Message = $Message.' Torrent <a href="torrents.php?torrentid='.$TorrentID.'"> '.$TorrentID.'</a>';
+					$Message = $Message.' '.$MessageParts[$i].' <a href="torrents.php?torrentid='.$TorrentID.'"> '.$TorrentID.'</a>';
+					$i++;
 				} else {
-					$Message = $Message.' Torrent '.$TorrentID;
+					$Message = $Message.' '.$MessageParts[$i];
 				}
 				break;
 			case "Request":
-				$RequestID = $MessageParts[++$i];
+				$RequestID = $MessageParts[$i + 1];
 				if (is_numeric($RequestID)) {
-					$Message = $Message.' Request <a href="requests.php?action=view&id='.$RequestID.'"> '.$RequestID.'</a>';
+					$Message = $Message.' '.$MessageParts[$i].' <a href="requests.php?action=view&id='.$RequestID.'"> '.$RequestID.'</a>';
+					$i++;
 				} else {
-					$Message = $Message.' Request '.$RequestID;
+					$Message = $Message.' '.$MessageParts[$i];
 				}
 				break;
 			case "Artist":
-				$ArtistID = $MessageParts[++$i];
+			case "artist":
+				$ArtistID = $MessageParts[$i + 1];
 				if (is_numeric($ArtistID)) {
-					$Message = $Message.' Artist <a href="artist.php?id='.$ArtistID.'"> '.$ArtistID.'</a>';
+					$Message = $Message.' '.$MessageParts[$i].' <a href="artist.php?id='.$ArtistID.'"> '.$ArtistID.'</a>';
+					$i++;
 				} else {
-					$Message = $Message.' Artist '.$ArtistID;
+					$Message = $Message.' '.$MessageParts[$i];
 				}
 				break;
 			case "group":
-				$GroupID = $MessageParts[++$i];
-				$Message = $Message.' group <a href="torrents.php?id='.$GroupID.'"> '.$GroupID.'</a>';
-				break;
-			case "torrent":
-				$TorrentID = substr($MessageParts[++$i], 0, strlen($MessageParts[$i]) - 1);
-				if (is_numeric($TorrentID)) {
-					$Message = $Message.' torrent <a href="torrents.php?torrentid='.$TorrentID.'"> '.$TorrentID.'</a>,';
+			case "Group":
+				$GroupID = $MessageParts[$i + 1];
+				if (is_numeric($GroupID)) {
+					$Message = $Message.' '.$MessageParts[$i].' <a href="torrents.php?id='.$GroupID.'"> '.$GroupID.'</a>';
 				} else {
-					$Message = $Message.' torrent '.$MessageParts[$i];
+					$Message = $Message.' '.$MessageParts[$i];
 				}
+				$i++;
 				break;
 			case "by":
 				$UserID = 0;
@@ -143,7 +146,7 @@ while(list($Message, $LogTime) = $DB->next_record()) {
 					if(!isset($Usernames[$User])) {
 						$DB->query("SELECT ID FROM users_main WHERE Username = '".$User."'");
 						list($UserID) = $DB->next_record();
-						$Usernames[$User] = $UserID;
+						$Usernames[$User] = $UserID ? $UserID : '';
 					} else {
 						$UserID = $Usernames[$User];
 					}
@@ -175,6 +178,32 @@ while(list($Message, $LogTime) = $DB->next_record()) {
 					$Color = '';
 				}
 				$Message = $Message." ".$MessageParts[$i];
+				break;
+			case "marked":
+				if ($i == 1) {
+					$User = $MessageParts[$i - 1];
+					if(!isset($Usernames[$User])) {
+						$DB->query("SELECT ID FROM users_main WHERE Username = '".$User."'");
+						list($UserID) = $DB->next_record();
+						$Usernames[$User] = $UserID ? $UserID : '';
+						$DB->set_query_id($Log);
+					} else {
+						$UserID = $Usernames[$User];
+					}
+					$URL = $Usernames[$User] ? '<a href="user.php?id='.$UserID.'">'.$User."</a>" : $User;
+					$Message = $URL." ".$MessageParts[$i];
+				} else {
+					$Message = $Message.' '.$MessageParts[$i];
+				}
+				break;
+			case "Collage":
+				$CollageID = $MessageParts[$i + 1];
+				if (is_numeric($CollageID)) {
+					$Message = $Message.' '.$MessageParts[$i].' <a href="collages.php?id='.$CollageID.'"> '.$CollageID.'</a>';
+					$i++;
+				} else {
+					$Message = $Message.' '.$MessageParts[$i];
+				}
 				break;
 			default:
 				$Message = $Message." ".$MessageParts[$i];

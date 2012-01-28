@@ -91,11 +91,11 @@ $Debug->log_var($Data);
 	}
 
 	$JsonResults[] = array(
-		'torrentId' => $TorrentID,
-		'groupId' => $GroupID,
+		'torrentId' => (int) $TorrentID,
+		'groupId' => (int) $GroupID,
 		'artist' => $DisplayName,
 		'groupName' => $GroupName,
-		'groupYear' => $GroupYear,
+		'groupYear' => (int) $GroupYear,
 		'missingV2' => $MissingEncodings['V2 (VBR)'] == 0,
 		'missingV0' => $MissingEncodings['V0 (VBR)'] == 0,
 		'missing320' => $MissingEncodings['320'] == 0,
