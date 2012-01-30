@@ -50,6 +50,7 @@ if ($ConvID = (int)$_GET['convid']) {
 		} else {
 			// Assign to user
 			$DB->query("UPDATE staff_pm_conversations SET Status='Unanswered', AssignedToUser=$NewLevel WHERE ID=$ConvID");
+			
 		}
 		echo '1';
 		

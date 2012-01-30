@@ -518,14 +518,14 @@ foreach($Results as $GroupID=>$Data) {
 		$JsonGroup = $Data;
 	}
 	$JsonGroups[] = array(
-		'groupId' => $GroupID,
+		'groupId' => (int) $GroupID,
 		'groupName' => $GroupName,
 		'tags' => $TagList,
-		'torrentId' => $TorrentID,
-		'categoryId' => $Categories[$CategoryID-1],
-		'totalSnatched' => $TotalSnatched,
-		'totalSeeders' => $TotalSeeders,
-		'totalLeechers' => $TotalLeechers,
+		'torrentId' => (int) $TorrentID,
+		'categoryId' => (int) $Categories[$CategoryID-1],
+		'totalSnatched' => (int) $TotalSnatched,
+		'totalSeeders' => (int) $TotalSeeders,
+		'totalLeechers' => (int) $TotalLeechers,
 		'group' => $JsonGroup
 	);
 }
