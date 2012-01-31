@@ -60,7 +60,8 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		i.DisableIRC,
 		i.DisableRequests,
 		i.HideCountryChanges,
-		m.FLTokens
+		m.FLTokens,
+		SHA1(i.AdminComment)
 		FROM users_main AS m
 		JOIN users_info AS i ON i.UserID = m.ID
 		LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
@@ -72,7 +73,7 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 		header("Location: log.php?search=User+".$UserID);
 	}
 
-	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $Country, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $PermittedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $DisableCountry, $FLTokens) = $DB->next_record(MYSQLI_NUM, array(8,11));
+	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $Country, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $PermittedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $DisableCountry, $FLTokens, $CommentHash) = $DB->next_record(MYSQLI_NUM, array(8,11));
 } else { // Person viewing is a normal user
 	$DB->query("SELECT
 		m.Username,
@@ -913,6 +914,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<div class="box">
 			<div class="head">Staff Notes <a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;">(Edit)</a></div>
 			<div class="pad">
+				<input type="hidden" name="comment_hash" value="<?=$CommentHash?>">
 				<div id="admincommentlinks" class="AdminComment box" style="width:98%;"><?=$Text->full_format($AdminComment)?></div>
 				<textarea id="admincomment" onkeyup="resize('admincomment');" class="AdminComment hidden" name="AdminComment" cols="65" rows="26" style="width:98%;"><?=display_str($AdminComment)?></textarea>
 				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;">Toggle Edit</a>

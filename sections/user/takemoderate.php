@@ -118,7 +118,8 @@ $DB->query("SELECT
 	DisableIRC,
 	m.RequiredRatio,
 	m.FLTokens,
-	i.RatioWatchEnds
+	i.RatioWatchEnds,
+	SHA1(i.AdminComment) AS CommentHash
 	FROM users_main AS m
 	JOIN users_info AS i ON i.UserID = m.ID
 	LEFT JOIN permissions AS p ON p.ID=m.PermissionID
@@ -129,6 +130,9 @@ if ($DB->record_count() == 0) { // If user doesn't exist
 }
 
 $Cur = $DB->next_record(MYSQLI_ASSOC, false);
+if ($_POST['comment_hash'] != $Cur['CommentHash']) {
+	error("Somebody else has moderated this user since you loaded it.  Please go back and refresh the page.");
+}
 
 //NOW that we know the class of the current user, we can see if one staff member is trying to hax0r us.
 if(!check_perms('users_mod', $Cur['Class'])) {

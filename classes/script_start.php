@@ -2090,7 +2090,7 @@ function update_tracker($Action, $Updates, $ToIRC = false) {
 		$ResHeader = '';
 		do {
 			$ResHeader .= fread($File, 1);
-		} while (!ends_with($ResHeader, "\r\n\r\n"));
+		} while (!feof($File) && !ends_with($ResHeader, "\r\n\r\n"));
 
 		$Response = '';
 		while($Line = fgets($File)) {

@@ -1,5 +1,7 @@
 <?
 
+authorize(true);
+
 $RequestTax = 0.1;
 
 // Minimum and default amount of upload to remove from the user when they vote.

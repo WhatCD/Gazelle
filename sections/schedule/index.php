@@ -622,6 +622,7 @@ if($Day != next_day() || $_GET['runday']){
 			$Cache->expire_value('thread_'.$TopicID.'_info',3600*24*30);
 		}
 	}
+	echo "Old threads locked\n";
 
 	//------------- Delete dead torrents ------------------------------------//
 	
@@ -651,6 +652,7 @@ if($Day != next_day() || $_GET['runday']){
 		OR t.Time < '".time_minus(3600*24*2)."'
 		AND t.last_action = 0");
 	$TorrentIDs = $DB->to_array();
+	echo "Found ".count($TorrentIDs)." inactive torrents to be deleted.\n";
 	
 	$LogEntries = array();
 	
@@ -680,7 +682,11 @@ if($Day != next_day() || $_GET['runday']){
 		$DeleteNotes[$UserID]['Count']++;
 		
 		++$i;
+		if ($i % 500 == 0) {
+			echo "$i inactive torrents removed.\n";
+		}
 	}
+	echo "$i torrents deleted for inactivity.\n";
 	
 	foreach($DeleteNotes as $UserID => $MessageInfo){
 		$Singular = ($MessageInfo['Count'] == 1) ? true : false;
@@ -766,7 +772,7 @@ if($Day != next_day() || $_GET['runday']){
 		$AddExtra='';
 		if($Format) { $ExtraInfo.=$Format; $AddExtra=' / '; }
 		if($Encoding) { $ExtraInfo.=$AddExtra.$Encoding; $AddExtra=' / '; }
-		"FLAC / Lossless / Log (100%) / Cue / CD";
+		// "FLAC / Lossless / Log (100%) / Cue / CD";
 		if($HasLog) { $ExtraInfo.=$AddExtra."Log (".$LogScore."%)"; $AddExtra=' / '; }
 		if($HasCue) { $ExtraInfo.=$AddExtra."Cue"; $AddExtra=' / '; }
 		if($Media) { $ExtraInfo.=$AddExtra.$Media; $AddExtra=' / '; }
@@ -851,7 +857,7 @@ if($Day != next_day() || $_GET['runday']){
 			$AddExtra='';
 			if($Format) { $ExtraInfo.=$Format; $AddExtra=' / '; }
 			if($Encoding) { $ExtraInfo.=$AddExtra.$Encoding; $AddExtra=' / '; }
-			"FLAC / Lossless / Log (100%) / Cue / CD";
+			// "FLAC / Lossless / Log (100%) / Cue / CD";
 			if($HasLog) { $ExtraInfo.=$AddExtra."Log (".$LogScore."%)"; $AddExtra=' / '; }
 			if($HasCue) { $ExtraInfo.=$AddExtra."Cue"; $AddExtra=' / '; }
 			if($Media) { $ExtraInfo.=$AddExtra.$Media; $AddExtra=' / '; }

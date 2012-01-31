@@ -2,6 +2,8 @@
 
 authorize(true);
 
+include(SERVER_ROOT.'/sections/requests/functions.php');
+
 $Queries = array();
 
 $OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
