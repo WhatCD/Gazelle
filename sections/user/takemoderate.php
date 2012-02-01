@@ -540,6 +540,10 @@ if ($ResetPasskey == 1 && check_perms('users_edit_reset_keys')) {
 	$HeavyUpdates['torrent_pass']=$Passkey;
 	$Cache->delete_value('user_'.$Cur['torrent_pass']);
 	//MUST come after the case for updating can_leech.
+
+	$DB->query("INSERT INTO users_history_passkeys
+			(UserID, OldPassKey, NewPassKey, ChangerIP, ChangeTime) VALUES
+			('$UserID', '".$Cur['torrent_pass']."', '$Passkey', '0.0.0.0', '".sqltime()."')");
 	update_tracker('change_passkey', array('oldpasskey' => $Cur['torrent_pass'], 'newpasskey' => $Passkey));
 }
 

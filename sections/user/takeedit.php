@@ -272,7 +272,8 @@ if (isset($_POST['resetpasskey'])) {
 	
 	
 	
-	$OldPassKey = db_string($LoggedUser['torrent_pass']);
+	$UserInfo = user_heavy_info($UserID);
+	$OldPassKey = db_string($UserInfo['torrent_pass']);
 	$NewPassKey = db_string(make_secret());
 	$ChangerIP = db_string($LoggedUser['IP']);
 	$SQL.=",m.torrent_pass='$NewPassKey'";
