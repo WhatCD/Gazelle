@@ -1,7 +1,7 @@
 <?
 class TEXT {
 	// tag=>max number of attributes
-	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0
+	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0, 'torrent'=>0
 	);
 	private $Smileys = array(
 		':angry:'			=> 'angry.gif',
@@ -370,6 +370,9 @@ EXPLANATION OF PARSER LOGIC
 				case 'artist':
 					$Array[$ArrayPos] = array('Type'=>'artist', 'Val'=>$Block);
 					break;
+				case 'torrent':
+					$Array[$ArrayPos] = array('Type'=>'torrent', 'Val'=>$Block);
+					break;
 				case 'tex':
 					$Array[$ArrayPos] = array('Type'=>'tex', 'Val'=>$Block);
 					break;
@@ -449,6 +452,23 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'artist':
 					$Str.='<a href="artist.php?artistname='.urlencode(undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
+					break;
+				case 'torrent':
+					$Pattern = '/('.NONSSL_SITE_URL.'\/torrents\.php?.*id=)?(\d+)($|&|#)/';
+					$Matches = array();
+					if (preg_match($Pattern, $Block['Val'], $Matches)) {
+						if (isset($Matches[2])) {
+							$Groups = get_groups(array($Matches[2]), true, true, false);
+							if (!empty($Groups['matches'][$Matches[2]])) {
+								$Group = $Groups['matches'][$Matches[2]];
+								$Str .= display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$Matches[2].'">'.$Group['Name'].'</a>';
+							} else {
+								$Str .= '[torrent]'.str_replace('[inlineurl]','',$Block['Val']).'[/torrent]';
+							}
+						}
+					} else {
+						$Str .= '[torrent]'.$Block['Val'].'[/torrent]';
+					}
 					break;
 				case 'wiki':
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';

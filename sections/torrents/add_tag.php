@@ -36,7 +36,8 @@ foreach($Tags as $TagName) {
 	
 		$DB->query("INSERT INTO torrents_tags_votes (GroupID, TagID, UserID, Way) VALUES ('$GroupID', '$TagID', '$UserID', 'up')");
 		
-		
+		$DB->query("INSERT INTO group_log (GroupID, UserID, Time, Info)
+					VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string('Tag "'.$TagName.'" added to group')."')");
 	}
 }
 

@@ -1,7 +1,6 @@
 <?
 
 authorize(true);
-
 include(SERVER_ROOT.'/sections/requests/functions.php');
 
 $Queries = array();

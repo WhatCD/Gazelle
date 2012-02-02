@@ -1748,14 +1748,15 @@ function display_artist($Artist, $MakeLink = true, $Escape = true) {
 
 // Function to get data and torrents for an array of GroupIDs.
 // In places where the output from this is merged with sphinx filters, it will be in a different order.
-function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
+function get_groups($GroupIDs, $Return = true, $GetArtists = true, $Torrents = true) {
 	global $DB, $Cache;
 	
 	$Found = array_flip($GroupIDs);
 	$NotFound = array_flip($GroupIDs);
+	$Key = $Torrents ? 'torrent_group_' : 'torrent_group_light_';
 	
 	foreach($GroupIDs as $GroupID) {
-		$Data = $Cache->get_value('torrent_group_'.$GroupID);
+		$Data = $Cache->get_value($Key.$GroupID);
 		if(!empty($Data) && (@$Data['ver'] >= 4)) {
 			unset($NotFound[$GroupID]);
 			$Found[$GroupID] = $Data['d'];
@@ -1780,14 +1781,21 @@ function get_groups($GroupIDs, $Return = true, $GetArtists = true) {
 			$Found[$Group['ID']]['Torrents'] = array();
 			$Found[$Group['ID']]['Artists'] = array();
 		}
-	
-		$DB->query("SELECT
-			ID, GroupID, Media, Format, Encoding, RemasterYear, Remastered, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Scene, HasLog, HasCue, LogScore, FileCount, FreeTorrent, Size, Leechers, Seeders, Snatched, Time, ID AS HasFile
-			FROM torrents AS t WHERE GroupID IN($IDs) ORDER BY GroupID, Remastered, (RemasterYear <> 0) DESC, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Media, Format, Encoding, ID");
-		while($Torrent = $DB->next_record(MYSQLI_ASSOC, true)) {
-			$Found[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;
-	
-			$Cache->cache_value('torrent_group_'.$Torrent['GroupID'], array('ver'=>4, 'd'=>$Found[$Torrent['GroupID']]), 0);
+		
+		if ($Torrents) {
+			$DB->query("SELECT
+						ID, GroupID, Media, Format, Encoding, RemasterYear, Remastered, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Scene, HasLog, HasCue, LogScore, FileCount, FreeTorrent, Size, Leechers, Seeders, Snatched, Time, ID AS HasFile
+						FROM torrents AS t WHERE GroupID IN($IDs) ORDER BY GroupID, Remastered, (RemasterYear <> 0) DESC, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Media, Format, Encoding, ID");
+			while($Torrent = $DB->next_record(MYSQLI_ASSOC, true)) {
+				$Found[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;
+		
+				$Cache->cache_value('torrent_group_'.$Torrent['GroupID'], array('ver'=>4, 'd'=>$Found[$Torrent['GroupID']]), 0);
+				$Cache->cache_value('torrent_group_light_'.$Torrent['GroupID'], array('ver'=>4, 'd'=>$Found[$Torrent['GroupID']]), 0);
+			}
+		} else {
+			foreach ($Found as $Group) {
+				$Cache->cache_value('torrent_group_light_'.$Group['ID'], array('ver'=>4, 'd'=>$Found[$Group['ID']]), 0);
+			}
 		}
 	}
 	if($GetArtists) {
