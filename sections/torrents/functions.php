@@ -1,4 +1,5 @@
 <?
+include(SERVER_ROOT.'/sections/requests/functions.php'); // get_request_tags()
 
 function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 	global $Cache, $DB;
@@ -148,4 +149,17 @@ function is_valid_torrenthash($Str) {
 function set_torrent_logscore($TorrentID) {
 	global $DB;
 	$DB->query("UPDATE torrents SET LogScore = (SELECT FLOOR(AVG(Score)) FROM torrents_logs_new WHERE TorrentID = ".$TorrentID.") WHERE ID = ".$TorrentID);
+}
+
+function get_group_requests($GroupID) {
+	global $DB, $Cache;
+	
+	$Requests = $Cache->get_value('requests_group_'.$GroupID);
+	if ($Requests === FALSE) {
+		$DB->query("SELECT ID FROM requests WHERE GroupID = $GroupID");
+		$Requests = $DB->collect('ID');
+		$Cache->cache_value('requests_group_'.$GroupID, $Requests, 0);
+	}
+	$Requests = get_requests($Requests);
+	return $Requests['matches'];
 }

@@ -32,8 +32,8 @@ if($NewRequest) {
 		error(404);
 	}
 	
-	list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $ReleaseType,
-	$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
+	list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
+	     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID) = $Request;
 	$VoteArray = get_votes_array($RequestID);
 	$VoteCount = count($VoteArray['Voters']);
 	
@@ -174,6 +174,23 @@ if($CategoryName == "Music") {
 		$MinLogScore = false; 
 	}
 	
+	// GroupID
+	if (!empty($_POST['groupid'])) {
+		$GroupID = trim($_POST['groupid']);
+		$URLRegex = '/^https?:\/\/(www\.|ssl\.)?'.NONSSL_SITE_URL.'\/torrents\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
+		if (preg_match($URLRegex, $GroupID, $Matches)) {
+			$GroupID = $Matches[3];
+		}
+		if (is_number($GroupID)) {
+			$DB->query("SELECT 1 FROM torrents_group WHERE ID = '$GroupID'");
+			if ($DB->record_count() == 0) {
+				$Err = "Torrent Group, if entered, must correspond to a group on the site.";
+			}
+		} else {
+			$Err = "Torrent Group, if entered, must correspond to a group on the site.";
+		}
+	}
+	
 	//Not required
 	if(!empty($_POST['editioninfo'])) {
 		$EditionInfo = trim($_POST['editioninfo']);
@@ -184,6 +201,11 @@ if($CategoryName == "Music") {
 		$CatalogueNumber = trim($_POST['cataloguenumber']);
 	} else {
 		$CatalogueNumber = "";
+	}
+	if(!empty($_POST['recordlabel'])) {
+		$RecordLabel = trim($_POST['recordlabel']);
+	} else {
+		$RecordLabel = "";
 	}
 }
 
@@ -302,11 +324,11 @@ if($CategoryName == "Music") {
 if($CategoryName == "Music") {
 	if($NewRequest) {
 		$DB->query("INSERT INTO requests (     
-						UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description,
-						CatalogueNumber, ReleaseType, BitrateList, FormatList, MediaList, LogCue, Visible)
+						UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, RecordLabel,
+						CatalogueNumber, ReleaseType, BitrateList, FormatList, MediaList, LogCue, Visible, GroupID)
 					VALUES
-						(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."',
-					 	'".db_string($CatalogueNumber)."', ".$ReleaseType.", '".$BitrateList."','".$FormatList."', '".$MediaList."', '".$LogCue."', '1')");
+						(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."','".db_string($RecordLabel)."',
+					 	'".db_string($CatalogueNumber)."', ".$ReleaseType.", '".$BitrateList."','".$FormatList."', '".$MediaList."', '".$LogCue."', '1', '$GroupID')");
 		
 		$RequestID = $DB->inserted_id();
 	} else {
@@ -317,11 +339,13 @@ if($CategoryName == "Music") {
 						Image = '".db_string($Image)."',
 						Description = '".db_string($Description)."',
 						CatalogueNumber = '".db_string($CatalogueNumber)."',
+						RecordLabel = '".db_string($RecordLabel)."',
 						ReleaseType = ".$ReleaseType.",
 						BitrateList = '".$BitrateList."',
 						FormatList = '".$FormatList."',
 						MediaList = '".$MediaList."',
-						LogCue = '".$LogCue."'
+						LogCue = '".$LogCue."',
+						GroupID = '".$GroupID."'
 					WHERE ID = ".$RequestID);
 		
 		//I almost didn't think of this, we need to be able to delete artists / tags
@@ -332,6 +356,10 @@ if($CategoryName == "Music") {
 		}
 		$DB->query("DELETE FROM requests_artists WHERE RequestID = ".$RequestID);
 		$Cache->delete_value('request_artists_'.$RequestID);
+	}
+	
+	if ($GroupID) {
+		$Cache->delete_value('requests_group_'.$GroupID);
 	}
 	
 	/*

@@ -81,7 +81,7 @@ if (empty($TokenTorrents)) {
 }
 
 // Start output
-show_header($Title,'browse,comments,torrent,bbcode');
+show_header($Title,'browse,comments,torrent,bbcode,requests');
 ?>
 <div class="thin">
 	<h2><?=$DisplayName?></h2>
@@ -565,6 +565,48 @@ foreach ($TorrentList as $Torrent) {
 <? } ?>
 		</table>
 <?
+$Requests = get_group_requests($GroupID);
+if (count($Requests) > 0) {
+	$i = 0;
+?>
+		<div class="box">
+			<div class="head"><span style="font-weight: bold;">Requests (<?=count($Requests)?>)</span> <span style="float:right;"><a href="#" onClick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span></div>
+			<table id="requests" class="hidden">
+				<tr class="colhead">
+					<td>Format / Bitrate / Media</td>
+					<td>Votes</td>
+					<td>Bounty</td>
+				</tr>
+<?	foreach($Requests as $Request) {
+		$RequestVotes = get_votes_array($Request['ID']);
+
+		if($Request['BitrateList'] != "") {
+			$BitrateString = implode(", ", explode("|", $Request['BitrateList']));
+			$FormatString = implode(", ", explode("|", $Request['FormatList']));
+			$MediaString = implode(", ", explode("|", $Request['MediaList']));
+		} else {
+			$BitrateString = "Unknown";
+			$FormatString = "Unknown";
+			$MediaString = "Unknown";
+		}
+?>
+				<tr class="requestrows <?=(++$i%2?'rowa':'rowb')?>">
+					<td><a href="requests.php?action=view&id=<?=$Request['ID']?>"><?=$FormatString?> / <?=$BitrateString?> / <?=$MediaString?></a></td>
+					<td>
+						<form id="form_<?=$Request['ID']?>">
+							<span id="vote_count_<?=$Request['ID']?>"><?=count($RequestVotes['Voters'])?></span>
+							<input type="hidden" id="requestid_<?=$Request['ID']?>" name="requestid" value="<?=$Request['ID']?>" />
+							<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$Request['ID']?>)"><strong>(+)</strong></a>
+						</form>
+					</td>
+					<td><?=get_size($RequestVotes['TotalBounty'])?></td>
+				</tr>
+<?	} ?>
+			</table>
+		</div>
+<?
+}
 $Collages = $Cache->get_value('torrent_collages_'.$GroupID);
 if(!is_array($Collages)) {
 	$DB->query("SELECT c.Name, c.NumTorrents, c.ID FROM collages AS c JOIN collages_torrents AS ct ON ct.CollageID=c.ID WHERE ct.GroupID='$GroupID' AND Deleted='0' AND CategoryID!='0'");

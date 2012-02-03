@@ -1861,6 +1861,7 @@ function get_requests($RequestIDs, $Return = true) {
 					r.Image,
 					r.Description,
 					r.CatalogueNumber,
+					r.RecordLabel,
 					r.ReleaseType, 
 					r.BitrateList,
 					r.FormatList, 
@@ -1869,7 +1870,8 @@ function get_requests($RequestIDs, $Return = true) {
 					r.FillerID,
 					filler.Username,
 					r.TorrentID,
-					r.TimeFilled
+					r.TimeFilled,
+					r.GroupID
 				FROM requests AS r
 					LEFT JOIN users_main AS u ON u.ID=r.UserID
 					LEFT JOIN users_main AS filler ON filler.ID=FillerID AND FillerID!=0
@@ -1896,13 +1898,13 @@ function update_sphinx_requests($RequestID) {
 
 	$DB->query("REPLACE INTO sphinx_requests_delta (
 				ID, UserID, TimeAdded, LastVote, CategoryID, Title,
-				Year, ReleaseType, CatalogueNumber, BitrateList,
+				Year, ReleaseType, RecordLabel, CatalogueNumber, BitrateList,
 				FormatList, MediaList, LogCue, FillerID, TorrentID,
 				TimeFilled, Visible, Votes, Bounty)
 			SELECT
 				ID, r.UserID, UNIX_TIMESTAMP(TimeAdded) AS TimeAdded,
 				UNIX_TIMESTAMP(LastVote) AS LastVote, CategoryID,
-				Title, Year, ReleaseType, CatalogueNumber, BitrateList,
+				Title, Year, ReleaseType, RecordLabel, CatalogueNumber, BitrateList,
 				FormatList, MediaList, LogCue, FillerID, TorrentID,
 				UNIX_TIMESTAMP(TimeFilled) AS TimeFilled, Visible,
 				COUNT(rv.UserID) AS Votes, SUM(rv.Bounty) >> 10 AS Bounty

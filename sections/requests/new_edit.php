@@ -30,8 +30,8 @@ if(!$NewRequest) {
 			error(404);
 		}
 		
-		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $ReleaseType,
-		$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
+		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel, 
+		     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID) = $Request;
 		$VoteArray = get_votes_array($RequestID);
 		$VoteCount = count($VoteArray['Voters']);
 		
@@ -111,7 +111,9 @@ if($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 					JOIN torrents_tags AS tt ON tt.GroupID=tg.ID
 					JOIN tags AS t ON t.ID=tt.TagID
 				WHERE tg.ID = ".$_GET['groupid']);
-	list($Title, $Year, $ReleaseType, $Image, $Tags) = $DB->next_record();
+	if(list($Title, $Year, $ReleaseType, $Image, $Tags) = $DB->next_record()) {
+		$GroupID = trim($_REQUEST['groupid']);
+	}
 }
 
 show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
@@ -191,6 +193,12 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 					<td class="label">Title</td>
 					<td>
 						<input type="text" name="title" size="45" value="<?=(!empty($Title) ? display_str($Title) : '')?>" />
+					</td>
+				</tr>
+				<tr id="cataloguenumber_tr">
+					<td class="label">Record Label</td>
+					<td>
+						<input type="text" name="recordlabel" size="45" value="<?=(!empty($RecordLabel) ? display_str($RecordLabel) : '')?>" />
 					</td>
 				</tr>
 				<tr id="cataloguenumber_tr">
@@ -308,7 +316,29 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 						<textarea name="description" cols="70" rows="7"><?=(!empty($Description) ? $Description : '')?></textarea> <br />
 					</td>
 				</tr>
-<?	if($NewRequest) { ?>
+<?	if(check_perms('site_moderate_requests')) { ?>			
+				<tr>
+					<td class="label">Torrent Group</td>
+					<td>
+						http://what.cd/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15"><br />
+						If this request matches a torrent group <span style="font-weight: bold;">already existing</span> on the site, please indicate that here.
+					</td>
+				</tr>
+<?	} elseif ($GroupID) {
+?>
+				<tr>
+					<td class="label">Torrent Group</td>
+					<td>
+						<a href="torrents.php?id=<?=$GroupID?>">http://what.cd/torrents.php?id=<?=$GroupID?></a><br />
+						This request <?=($NewRequest?'will be':'is')?> associated with the above torrent group.
+<?		if (!$NewRequest) { 	?>
+						If this is incorrect, please <a href="reports.php?action=report&type=request&id=<?=$RequestID?>">report this request</a> so that staff can fix it.
+<? 		}	?>
+						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+					</td>
+				</tr>
+<?	}
+	if($NewRequest) { ?>
 				<tr id="voting">
 					<td class="label">Bounty (MB)</td>
 					<td>

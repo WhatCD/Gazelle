@@ -49,6 +49,7 @@ if(empty($Properties) && !empty($_GET['requestid']) && is_number($_GET['requesti
 		r.CategoryID,
 		r.Title AS Title,
 		r.Year,
+		r.RecordLabel,
 		r.CatalogueNumber,
 		r.ReleaseType,
 		r.Image

@@ -22,7 +22,7 @@ if(empty($Request)) {
 	error(404);
 }
 
-list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $ReleaseType,
+list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel, $ReleaseType,
 	$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
 
 //Convenience variables
@@ -247,6 +247,14 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 				</td>
 			</tr>
 <?	if($CategoryName == "Music") {
+		if(!empty($RecordLabel)) { ?>
+			<tr>
+				<td class="label">Record Label</td>
+				<td>
+					<?=$RecordLabel?>
+				</td>
+			</tr>
+<?		} 
 		if(!empty($CatalogueNumber)) { ?>
 			<tr>
 				<td class="label">Catalogue Number</td>

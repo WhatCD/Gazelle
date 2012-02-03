@@ -206,6 +206,12 @@ CREATE TABLE `drives` (
   KEY `Name` (`Name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `dupe_groups` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Comments` text,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `email_blacklist` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `UserID` int(10) NOT NULL,
@@ -531,6 +537,7 @@ CREATE TABLE `requests` (
   `TimeFilled` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Visible` binary(1) NOT NULL DEFAULT '1',
   `RecordLabel` varchar(80) DEFAULT NULL,
+  `GroupID` int(10) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Userid` (`UserID`),
   KEY `Name` (`Title`),
@@ -539,7 +546,8 @@ CREATE TABLE `requests` (
   KEY `TimeAdded` (`TimeAdded`),
   KEY `Year` (`Year`),
   KEY `TimeFilled` (`TimeFilled`),
-  KEY `LastVote` (`LastVote`)
+  KEY `LastVote` (`LastVote`),
+  KEY `GroupID` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `requests_artists` (
@@ -1073,6 +1081,15 @@ CREATE TABLE `users_downloads` (
   KEY `UserID` (`UserID`),
   KEY `UserID_2` (`UserID`),
   KEY `TorrentID_2` (`TorrentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `users_dupes` (
+  `GroupID` int(10) unsigned NOT NULL,
+  `UserID` int(10) unsigned NOT NULL,
+  UNIQUE KEY `UserID` (`UserID`),
+  KEY `GroupID` (`GroupID`),
+  CONSTRAINT `users_dupes_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `users_dupes_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `dupe_groups` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_freeleeches` (
