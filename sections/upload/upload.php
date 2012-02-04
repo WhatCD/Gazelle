@@ -40,9 +40,10 @@ if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])
 		WHERE tt.GroupID='$_GET[groupid]'");
 	
 	list($Properties['TagList']) = $DB->next_record();
-}
-
-if(empty($Properties) && !empty($_GET['requestid']) && is_number($_GET['requestid'])) {
+	if (!empty($_GET['requestid']) && is_number($_GET['requestid'])) {
+		$Properties['RequestID'] = $_GET['requestid'];
+	}
+} elseif (empty($Properties) && !empty($_GET['requestid']) && is_number($_GET['requestid'])) {
 	include(SERVER_ROOT.'/sections/requests/functions.php');	
 	$DB->query("SELECT
 		r.ID AS RequestID,

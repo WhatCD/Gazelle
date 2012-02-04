@@ -49,6 +49,7 @@ switch ($_GET['action']){
 		break;
 	case 'browse':
 		require(SERVER_ROOT.'/sections/ajax/browse.php');
+		break;
 	case 'usersearch':
 		require(SERVER_ROOT.'/sections/ajax/usersearch.php');
 		break;
@@ -57,8 +58,7 @@ switch ($_GET['action']){
 		break;
 	case 'requests':
 		require(SERVER_ROOT.'/sections/ajax/requests.php');
-	case 'bookmarks':
-		require(SERVER_ROOT.'/sections/ajax/bookmarks/index.php');
+		break;
 	case 'artist':
 		require(SERVER_ROOT.'/sections/ajax/artist.php');
 		break;

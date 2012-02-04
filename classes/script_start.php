@@ -1898,13 +1898,13 @@ function update_sphinx_requests($RequestID) {
 
 	$DB->query("REPLACE INTO sphinx_requests_delta (
 				ID, UserID, TimeAdded, LastVote, CategoryID, Title,
-				Year, ReleaseType, RecordLabel, CatalogueNumber, BitrateList,
+				Year, ReleaseType, CatalogueNumber, BitrateList,
 				FormatList, MediaList, LogCue, FillerID, TorrentID,
 				TimeFilled, Visible, Votes, Bounty)
 			SELECT
 				ID, r.UserID, UNIX_TIMESTAMP(TimeAdded) AS TimeAdded,
 				UNIX_TIMESTAMP(LastVote) AS LastVote, CategoryID,
-				Title, Year, ReleaseType, RecordLabel, CatalogueNumber, BitrateList,
+				Title, Year, ReleaseType, CatalogueNumber, BitrateList,
 				FormatList, MediaList, LogCue, FillerID, TorrentID,
 				UNIX_TIMESTAMP(TimeFilled) AS TimeFilled, Visible,
 				COUNT(rv.UserID) AS Votes, SUM(rv.Bounty) >> 10 AS Bounty

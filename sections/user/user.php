@@ -715,6 +715,13 @@ foreach ($Collages as $CollageInfo) {
 }
 
 
+
+// Linked accounts
+if(check_perms('users_mod')) {
+	include(SERVER_ROOT.'/sections/user/linkedfunctions.php');
+	user_dupes_table($UserID);
+}
+
 if ((check_perms('users_view_invites')) && $Invited > 0) {
 	include(SERVER_ROOT.'/classes/class_invite_tree.php');
 	$Tree = new INVITE_TREE($UserID, array('visible'=>false));

@@ -260,7 +260,7 @@ if(!empty($_REQUEST['action'])) {
 				WHERE tc.ID='".db_string($_POST['post'])."'");
 			list($OldBody, $AuthorID,$GroupID,$AddedTime)=$DB->next_record();
 			
-			$DB->query("SELECT ceil(COUNT(ID) / ".POSTS_PER_PAGE.") AS Page FROM torrents_comments WHERE GroupID = $GroupID AND ID <= $_POST[post]");
+			$DB->query("SELECT ceil(COUNT(ID) / ".TORRENT_COMMENTS_PER_PAGE.") AS Page FROM torrents_comments WHERE GroupID = $GroupID AND ID <= $_POST[post]");
 			list($Page) = $DB->next_record();
 			
 			if ($LoggedUser['ID']!=$AuthorID && !check_perms('site_moderate_forums')) { error(404); }
@@ -321,14 +321,15 @@ if(!empty($_REQUEST['action'])) {
 			$DB->query("DELETE FROM torrents_comments WHERE ID='".db_string($_GET['postid'])."'");
 		
 			//We need to clear all subsequential catalogues as they've all been bumped with the absence of this post
-			$ThisCatalogue = floor((POSTS_PER_PAGE*$Page-POSTS_PER_PAGE)/THREAD_CATALOGUE);
-			$LastCatalogue = floor((POSTS_PER_PAGE*$Pages-POSTS_PER_PAGE)/THREAD_CATALOGUE);
+			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
+			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Pages-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
 			for($i=$ThisCatalogue;$i<=$LastCatalogue;$i++) {
 				$Cache->delete('torrent_comments_'.$GroupID.'_catalogue_'.$i);
 			}
 			
 			// Delete thread info cache (eg. number of pages)
 			$Cache->delete('torrent_comments_'.$GroupID);
+			
 			break;
 		case 'regen_filelist' :
 			if(check_perms('users_mod') && !empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {

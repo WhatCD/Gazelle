@@ -454,7 +454,7 @@ EXPLANATION OF PARSER LOGIC
 					$Str.='<a href="artist.php?artistname='.urlencode(undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
 					break;
 				case 'torrent':
-					$Pattern = '/('.NONSSL_SITE_URL.'\/torrents\.php?.*id=)?(\d+)($|&|#)/i';
+					$Pattern = '/('.NONSSL_SITE_URL.'\/torrents\.php.*[\?&]id=)?(\d+)($|&|\#).*/i';
 					$Matches = array();
 					if (preg_match($Pattern, $Block['Val'], $Matches)) {
 						if (isset($Matches[2])) {
@@ -467,7 +467,7 @@ EXPLANATION OF PARSER LOGIC
 							}
 						}
 					} else {
-						$Str .= '[torrent]'.$Block['Val'].'[/torrent]';
+						$Str .= '[torrent]'.str_replace('[inlineurl]','',$Block['Val']).'[/torrent]';
 					}
 					break;
 				case 'wiki':
