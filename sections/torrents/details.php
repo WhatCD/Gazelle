@@ -81,7 +81,7 @@ if (empty($TokenTorrents)) {
 }
 
 // Start output
-show_header($Title,'browse,comments,torrent,bbcode,requests');
+show_header($Title,'browse,comments,torrent,bbcode');
 ?>
 <div class="thin">
 	<h2><?=$DisplayName?></h2>

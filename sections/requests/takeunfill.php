@@ -14,11 +14,12 @@ $DB->query("SELECT
 		r.UserID, 
 		r.FillerID, 
 		r.Title,
-		u.Uploaded
+		u.Uploaded,
+		r.GroupID
 	FROM requests AS r 
 		LEFT JOIN users_main AS u ON u.ID=FillerID
 	WHERE r.ID= ".$RequestID);
-list($CategoryID, $UserID, $FillerID, $Title, $Uploaded) = $DB->next_record();
+list($CategoryID, $UserID, $FillerID, $Title, $Uploaded, $GroupID) = $DB->next_record();
 
 if((($LoggedUser['ID'] != $UserID && $LoggedUser['ID'] != $FillerID) && !check_perms('site_moderate_requests')) || $FillerID == 0) {
 		error(403);
@@ -63,6 +64,9 @@ write_log("Request $RequestID ($FullName), with a ".get_size($RequestVotes['Tota
 
 $Cache->delete_value('request_'.$RequestID);
 $Cache->delete_value('request_artists_'.$RequestID);
+if ($GroupID) {
+	$Cache->delete_value('requests_group_'.$GroupID);
+}
 
 update_sphinx_requests($RequestID);
 

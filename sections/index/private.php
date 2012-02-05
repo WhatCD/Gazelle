@@ -348,7 +348,8 @@ if (!is_array($Recommend) || !is_array($Recommend_artists)) {
 		tr.GroupID,
 		tr.UserID,
 		u.Username,
-		tg.Name
+		tg.Name,
+		tg.TagList
 		FROM torrents_recommended AS tr
 		JOIN torrents_group AS tg ON tg.ID=tr.GroupID
 		LEFT JOIN users_main AS u ON u.ID=tr.UserID
@@ -373,11 +374,24 @@ $Cache->increment('usage_index');
 		<table class="hidden" id="vanityhouse">
 <?
 	foreach($Recommend as $Recommendations) {
-		list($GroupID, $UserID, $Username, $GroupName) = $Recommendations;
+		list($GroupID, $UserID, $Username, $GroupName, $TagList) = $Recommendations;
+		$TagsStr = '';
+		if ($TagList) {
+			// No vanity.house tag.
+			$Tags = explode(' ', str_replace('_', '.', str_replace('vanity_house', '', $TagList)));
+			$TagLinks = array();
+			foreach ($Tags as $Tag) {
+				$TagLinks[] = "<a href=\"torrents.php?action=basic&taglist=$Tag\">$Tag</a> ";
+			}
+			$TagStr = "<br />\n<div class=\"tags\">".implode(', ', $TagLinks).'</div>';
+		}
 ?>
 			<tr>
-				<td><?=display_artists($Recommend_artists[$GroupID], true, false) ?></td>
-				<td><a href="torrents.php?id=<?=$GroupID?>"><?=$GroupName?></a> (by <?=format_username($UserID, $Username)?>)</td>
+				<td>
+					<?=display_artists($Recommend_artists[$GroupID]) ?>
+					<a href="torrents.php?id=<?=$GroupID?>"><?=$GroupName?></a> (by <?=format_username($UserID, $Username)?>)
+					<?=$TagStr?>
+				</td>
 			</tr>
 <?	  } ?>
 		</table>

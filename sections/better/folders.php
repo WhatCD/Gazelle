@@ -44,7 +44,7 @@ $Results = $Results['matches'];
 	<table>
 <?
 foreach($TorrentsInfo as $TorrentID => $Info) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Results[$Info['GroupID']]);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Results[$Info['GroupID']]);
 
 	$DisplayName = '';
 	if(count($Artists)>0) {
@@ -58,12 +58,25 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;
 	}
+	
+	$TagList=array();
+	if($TorrentTags!='') {
+		$TorrentTags=explode(' ',$TorrentTags);
+		foreach ($TorrentTags as $TagKey => $TagName) {
+			$TagName = str_replace('_','.',$TagName);
+			$TagList[]='<a href="torrents.php?searchtags='.$TagName.'">'.$TagName.'</a>';
+		}
+		$PrimaryTag = $TorrentTags[0];
+		$TagList = implode(', ', $TagList);
+		$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
+	}
 ?>
 		<tr><td><?=$DisplayName?>
 			[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a>]
 <?	if(check_perms('admin_reports')) { ?>
-		<a href="better.php?method=folders&amp;remove=<?=$TorrentID?>">[X]</a>
+			<a href="better.php?method=folders&amp;remove=<?=$TorrentID?>">[X]</a>
 <? 	} ?>
+			<?=$TorrentTags?>
 		</td></tr>
 <?
 }

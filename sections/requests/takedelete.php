@@ -11,10 +11,11 @@ if(!is_number($RequestID)) {
 
 $DB->query("SELECT UserID,
 			Title,
-			CategoryID
+			CategoryID,
+			GroupID
 			FROM requests
 			WHERE ID = ".$RequestID);
-list($UserID, $Title, $CategoryID) = $DB->next_record();
+list($UserID, $Title, $CategoryID, $GroupID) = $DB->next_record();
 
 if($LoggedUser['ID'] != $UserID && !check_perms('site_moderate_requests')) { 
 	error(403);
@@ -52,6 +53,9 @@ write_log("Request $RequestID ($FullName) was deleted by user ".$LoggedUser['ID'
 
 $Cache->delete_value('request_'.$RequestID);
 $Cache->delete_value('request_votes_'.$RequestID);
+if ($GroupID) {
+	$Cache->delete_value('requests_group_'.$GroupID);
+}
 update_sphinx_requests($RequestID);
 
 header('Location: requests.php');

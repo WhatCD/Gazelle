@@ -25,7 +25,7 @@ show_header('Single seeder FLACs');
 <?
 $Results = $Results['matches'];
 foreach ($Results as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 	
 	$DisplayName = '';
@@ -35,11 +35,23 @@ foreach ($Results as $GroupID=>$Group) {
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 	
+	$TagList=array();
+	if($TorrentTags!='') {
+		$TorrentTags=explode(' ',$TorrentTags);
+		foreach ($TorrentTags as $TagKey => $TagName) {
+			$TagName = str_replace('_','.',$TagName);
+			$TagList[]='<a href="torrents.php?searchtags='.$TagName.'">'.$TagName.'</a>';
+		}
+		$PrimaryTag = $TorrentTags[0];
+		$TagList = implode(', ', $TagList);
+		$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
+	}
 ?>
 		<tr>
 			<td>
 				<?=$DisplayName?>	
 				[<a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a>]
+				<?=$TorrentTags?>
 			</td>
 		</tr>
 <?	} ?>
