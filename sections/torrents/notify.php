@@ -165,7 +165,7 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> 
 <?			if (($LoggedUser['FLTokens'] > 0) && ($Size < 1073741824) 
 				&& !in_array($TorrentID, $TokenTorrents) && empty($FreeTorrent) && ($LoggedUser['CanLeech'] == '1')) { ?>
-				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&usetoken=1" title="Use a FL Token">FL</a>
+				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&usetoken=1" title="Use a FL Token" onClick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?			} ?>
 				| <a href="#" onclick="Clear(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a>]
 			</span>

@@ -203,7 +203,7 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="button" value="Resolve" onClick="location.href='staffpm.php?action=resolve&id=<?=$ConvID?>';" />
 <?			if ($IsFLS) {  //Moved by request ?>
 					<input type="button" value="Common answers" onClick="$('#common_answers').toggle();" />
-					<input type="button" value="Preview" onclick="PreviewMessage();" />
+					<input type="button" id="previewbtn" value="Preview" onclick="PreviewMessage();" />
 <?			} ?>
 					<input type="submit" value="Send message" />
 <?	} else { ?>

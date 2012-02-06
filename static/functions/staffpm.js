@@ -97,10 +97,12 @@ function PreviewMessage() {
 			document.getElementById('preview').innerHTML = data;
 			$('#preview').toggle();
 			$('#quickpost').toggle();
+			$('#previewbtn').raw().value = "Edit";
 		});
 	} else {
 		$('#preview').toggle();
 		$('#quickpost').toggle();
+		$('#previewbtn').raw().value = "Preview";
 	}
 }
 

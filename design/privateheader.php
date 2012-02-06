@@ -220,7 +220,7 @@ if ($NewMessages > 0) {
 }
 
 if($LoggedUser['RatioWatch']) {
-	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'You have '.time_diff($LoggedUser['RatioWatchEnds'], 3).' to get your ratio over your required ratio.';
+	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'You have '.time_diff($LoggedUser['RatioWatchEnds'], 3).' to get your ratio over your required ratio or your leeching abilities will be disabled.';
 } else if($LoggedUser['CanLeech'] != 1) {
 	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'Your downloading privileges are disabled until you meet your required ratio.';
 }
