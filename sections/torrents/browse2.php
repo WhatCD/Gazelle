@@ -712,6 +712,7 @@ foreach($Results as $GroupID=>$Data) {
 		$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
+		$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 ?>
 	<tr class="group">
 <?

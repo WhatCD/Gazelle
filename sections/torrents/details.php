@@ -113,6 +113,9 @@ show_header($Title,'browse,comments,torrent,bbcode');
 			<div class="head"><strong>Cover</strong></div>
 <?
 if ($WikiImage!="") {
+	if(check_perms('site_proxy_images')) {
+		$WikiImage = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($WikiImage);
+	}
 ?>
 			<p align="center"><img style="max-width: 220px;" src="<?=$WikiImage?>" alt="<?=$AltName?>" onclick="lightbox.init(this,220);" /></p>
 <?
@@ -584,6 +587,9 @@ if (count($Requests) > 0) {
 			$BitrateString = implode(", ", explode("|", $Request['BitrateList']));
 			$FormatString = implode(", ", explode("|", $Request['FormatList']));
 			$MediaString = implode(", ", explode("|", $Request['MediaList']));
+			if ($Request['LogCue']) {
+				$FormatString .= ' - '.$Request['LogCue'];
+			}
 		} else {
 			$BitrateString = "Unknown";
 			$FormatString = "Unknown";

@@ -317,7 +317,11 @@ foreach ($TorrentList as $GroupID=>$Group) {
 ?>
 		<li class="image_group_<?=$GroupID?>">
 			<a href="#group_<?=$GroupID?>">
-<?	if($Image) { ?>
+<?	if($Image) { 
+		if(check_perms('site_proxy_images')) {
+			$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
+		}
+?>
 				<img src="<?=$Image?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="118" />
 <?	} else { ?>
 				<div style="width:107px;padding:5px"><?=$DisplayName?></div>
@@ -521,8 +525,8 @@ foreach ($Users as $ID => $User) {
 		</div>
 <? if(check_perms('site_collages_manage') && !$Locked) { ?>
 		<div class="box">
-			<div class="head"><strong>Add torrent</strong></div>
-			<div class="pad">
+			<div class="head"><strong>Add torrent</strong><span style="float: right"><a href="#" onClick="$('#addtorrent').toggle(); $('#batchadd').toggle(); this.innerHTML = (this.innerHTML == '[Batch Add]'?'[Individual Add]':'[Batch Add]'); return false;">[Batch Add]</a></span></div>
+			<div class="pad" id="addtorrent">
 				<form action="collages.php" method="post">
 					<input type="hidden" name="action" value="add_torrent" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -531,6 +535,17 @@ foreach ($Users as $ID => $User) {
 					<input type="submit" value="+" />
 					<br />
 					<i>Enter the URL of a torrent on the site.</i>
+				</form>
+			</div>
+			<div class="pad hidden" id="batchadd">
+				<form action="collages.php" method="post">
+					<input type="hidden" name="action" value="add_torrent_batch" />
+					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
+					<textarea name="urls" rows="5" cols="25" wrap="off"></textarea><br />
+					<input type="submit" value="Add" />
+					<br />
+					<i>Enter the URLs of torrents on the site, one to a line.</i>
 				</form>
 			</div>
 		</div>

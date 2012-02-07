@@ -13,6 +13,7 @@ switch($_REQUEST['action']) {
 		require(SERVER_ROOT.'/sections/collages/new_handle.php');
 		break;
 	case 'add_torrent':
+	case 'add_torrent_batch':
 		if(!check_perms('site_collages_manage')) { error(403); }
 		require(SERVER_ROOT.'/sections/collages/add_torrent.php');
 		break;

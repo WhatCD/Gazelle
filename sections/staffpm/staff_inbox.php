@@ -6,6 +6,7 @@ $View = display_str($_GET['view']);
 $UserLevel = $LoggedUser['Class'];
 
 // Setup for current view mode
+$SortStr = "IF(AssignedToUser = ".$LoggedUser['ID'].",0,1) ASC, ";
 switch ($View) {
 	case 'unanswered':
 		$ViewString = "Unanswered";
@@ -14,10 +15,12 @@ switch ($View) {
 	case 'open':
 		$ViewString = "All open";
 		$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status IN ('Open', 'Unanswered')";
+		$SortStr = '';
 		break;
 	case 'resolved':
 		$ViewString = "Resolved";
 		$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Resolved'";
+		$SortStr = '';
 		break;
 	case 'my':
 		$ViewString = "My unanswered";
@@ -51,7 +54,7 @@ $StaffPMs = $DB->query("
 		ResolverID
 	FROM staff_pm_conversations
 	$WhereCondition
-	ORDER BY IF(AssignedToUser = ".$LoggedUser['ID'].",0,1) ASC, Level DESC, Date DESC
+	ORDER BY $SortStr Level DESC, Date DESC
 	LIMIT $Limit
 ");
 

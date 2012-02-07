@@ -138,7 +138,8 @@ $BaseQuery = "SELECT
 	t.Snatched,
 	t.Seeders,
 	t.Leechers,
-	((t.Size * t.Snatched) + (t.Size * 0.5 * t.Leechers)) AS Data
+	((t.Size * t.Snatched) + (t.Size * 0.5 * t.Leechers)) AS Data,
+	g.ReleaseType
 	FROM torrents AS t
 	LEFT JOIN torrents_group AS g ON g.ID = t.GroupID ";
 	
@@ -225,7 +226,8 @@ if(($Details=='all' || $Details=='data') && !$Filtered) {
 }
 
 if(($Details=='all' || $Details=='seeded') && !$Filtered) {
-	if (!$TopTorrentsSeeded = $Cache->get_value('top10tor_seeded_'.$Limit.$WhereSum)) {
+	$TopTorrentsSeeded = $Cache->get_value('top10tor_seeded_'.$Limit.$WhereSum);
+	if ($TopTorrentsSeeded === FALSE) {
 		$Query = $BaseQuery;
 		if (!empty($Where)) { $Query .= ' WHERE '.$Where; }
 		$Query .= "
@@ -245,7 +247,7 @@ show_footer();
 
 // generate a table based on data from most recent query to $DB
 function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
-	global $LoggedUser,$Categories,$Debug;
+	global $LoggedUser,$Categories,$Debug,$ReleaseTypes;
 ?>
 		<h3>Top <?=$Limit.' '.$Caption?>
 <?	if(empty($_GET['advanced'])){ ?> 
@@ -288,7 +290,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 	foreach ($Details as $Detail) {
 		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$TorrentTags,
 			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
-			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data) = $Detail;
+			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType) = $Detail;
 
 		// highlight every other row
 		$Rank++;
@@ -306,6 +308,9 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 
 		if($GroupCategoryID==1 && $GroupYear>0) {
 			$DisplayName.= " [$GroupYear]";
+		}
+		if($GroupCategoryID==1 && $ReleaseType > 0) {
+			$DisplayName.= ' ['.$ReleaseTypes[$ReleaseType].']';
 		}
 
 		// append extra info to torrent title

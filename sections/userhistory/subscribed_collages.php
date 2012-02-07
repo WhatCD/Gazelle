@@ -146,7 +146,11 @@ if(!$NumResults) {
 				</td>
 <?			if (!$LoggedUser['HideCollage']) {?>
 				<td style="width: 60px; padding: 0;">
-<?				if ($Image) { ?>
+<?				if ($Image) { 
+					if(check_perms('site_proxy_images')) {
+						$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
+					}
+?>
 					<img style="max-width: 60px; max-height: 60px" src="<?=$Image?>" alt="<?=$AltName?>" onclick="lightbox.init(this,60);" />
 <?				} else { ?>
 					<img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID-1]?>" alt="<?=$Categories[$GroupCategoryID-1]?>" title="<?=$Categories[$GroupCategoryID-1]?>" width="60" height="60" border="0" />

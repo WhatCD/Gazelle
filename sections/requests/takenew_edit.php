@@ -182,12 +182,12 @@ if($CategoryName == "Music") {
 			$GroupID = $Matches[3];
 		}
 		if (is_number($GroupID)) {
-			$DB->query("SELECT 1 FROM torrents_group WHERE ID = '$GroupID'");
+			$DB->query("SELECT 1 FROM torrents_group WHERE ID = '$GroupID' AND CategoryID = 1");
 			if ($DB->record_count() == 0) {
-				$Err = "Torrent Group, if entered, must correspond to a group on the site.";
+				$Err = "Torrent Group, if entered, must correspond to a music group on the site.";
 			}
 		} else {
-			$Err = "Torrent Group, if entered, must correspond to a group on the site.";
+			$Err = "Torrent Group, if entered, must correspond to a music group on the site.";
 		}
 	}
 	

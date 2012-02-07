@@ -106,12 +106,13 @@ if($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 					tg.Year, 
 					tg.ReleaseType, 
 					tg.WikiImage,
-					GROUP_CONCAT(t.Name SEPARATOR ', ') 
+					GROUP_CONCAT(t.Name SEPARATOR ', '),
+					tg.CategoryID
 				FROM torrents_group AS tg 
 					JOIN torrents_tags AS tt ON tt.GroupID=tg.ID
 					JOIN tags AS t ON t.ID=tt.TagID
 				WHERE tg.ID = ".$_GET['groupid']);
-	if(list($Title, $Year, $ReleaseType, $Image, $Tags) = $DB->next_record()) {
+	if(list($Title, $Year, $ReleaseType, $Image, $Tags, $CategoryID) = $DB->next_record()) {
 		$GroupID = trim($_REQUEST['groupid']);
 	}
 }
@@ -324,7 +325,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 						If this request matches a torrent group <span style="font-weight: bold;">already existing</span> on the site, please indicate that here.
 					</td>
 				</tr>
-<?	} elseif ($GroupID) {
+<?	} elseif ($GroupID && ($CategoryID == 1)) {
 ?>
 				<tr>
 					<td class="label">Torrent Group</td>
