@@ -888,6 +888,15 @@ if($DB->record_count()>0){
 	}
 }
 
+// RSS for bookmarks
+$DB->query("SELECT u.ID, u.torrent_pass
+			FROM users_main AS u
+			JOIN bookmarks_torrents AS b ON b.UserID = u.ID
+			WHERE b.GroupID = $GroupID");
+while (list($UserID, $Passkey) = $DB->next_record()) {
+	$Feed->populate('torrents_bookmarks_t_'.$Passkey, $Item);
+}
+
 $Feed->populate('torrents_all',$Item);
 
 if($Type == 'Music'){
