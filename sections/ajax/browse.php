@@ -5,23 +5,22 @@ authorize(true);
 include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
-// Search by infohash
-if(!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
-	if(!empty($_GET['searchstr'])) {
-		$InfoHash = $_GET['searchstr'];
-	} else {
-		$InfoHash = $_GET['groupname'];
-	}
+// The "order by x" links on columns headers
+function header_link($SortKey,$DefaultWay="desc") {
+	global $OrderBy,$OrderWay;
+	if($SortKey==$OrderBy) {
+		if($OrderWay=="desc") { $NewWay="asc"; }
+		else { $NewWay="desc"; }
+	} else { $NewWay=$DefaultWay; }
 	
-	if($InfoHash = is_valid_torrenthash($InfoHash)) {
-		$InfoHash = db_string(pack("H*", $InfoHash));
-		$DB->query("SELECT ID,GroupID FROM torrents WHERE info_hash='$InfoHash'");
-		if($DB->record_count() > 0) {
-			list($ID, $GroupID) = $DB->next_record();
-			header('Location: torrents.php?id='.$GroupID.'&torrentid='.$ID);
-			die();
-		}
-	}
+	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".get_url(array('order_way','order_by'));
+}
+
+$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+if (empty($TokenTorrents)) {
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$TokenTorrents = $DB->collect('TorrentID');
+	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
 }
 
 // Setting default search options
@@ -156,7 +155,7 @@ foreach(array('artistname','groupname', 'recordlabel', 'cataloguenumber',
 	if(!empty($_GET[$Search])) {
 		$_GET[$Search] = str_replace(array('%'), '', $_GET[$Search]);
 		if($Search == 'filelist') {
-			$Queries[]='@filelist "'.$SS->EscapeString(strtr($_GET['filelist'], '.', " ")).'"~20';
+			$Queries[]='@filelist "'.$SS->EscapeString($_GET['filelist']).'"~20';
 		} else {
 			$Words = explode(' ', $_GET[$Search]);
 			foreach($Words as $Key => &$Word) {
@@ -255,14 +254,18 @@ if(!empty($_GET['order_way']) && $_GET['order_way'] == 'asc') {
 	$OrderWay = 'desc';
 }
 
-if(empty($_GET['order_by']) || !in_array($_GET['order_by'], array('year', 'time','size','seeders','leechers','snatched'))) {
+if(empty($_GET['order_by']) || !in_array($_GET['order_by'], array('year','time','size','seeders','leechers','snatched','random'))) {
 	$_GET['order_by'] = 'time';
 	$OrderBy = 'time'; // For header links
+} elseif($_GET['order_by'] == 'random') {
+	$OrderBy = '@random';
+	$Way = SPH_SORT_EXTENDED;
+	$SS->limit(0, TORRENTS_PER_PAGE, TORRENTS_PER_PAGE);
 } else {
 	$OrderBy = $_GET['order_by'];
 }
 
-$SS->SetSortMode($Way, $_GET['order_by']);
+$SS->SetSortMode($Way, $OrderBy);
 
 
 if(count($Queries)>0) {
@@ -278,20 +281,6 @@ $SS->set_index(SPHINX_INDEX.' delta');
 $Results = $SS->search($Query, '', 0, array(), '', '');
 $TorrentCount = $SS->TotalResults;
 
-/*
-// If some were fetched from memcached, get their artists
-if(!empty($Results['matches'])) { // Fetch the artists for groups
-	$GroupIDs = array_keys($Results['matches']);
-	$Artists = get_artists($GroupIDs);
-	
-	foreach($Artists as $GroupID=>$Data) {
-		if(!empty($Data[1])) {
-			$Results['matches'][$GroupID]['Artists']=$Data[1]; // Only use main artists
-		}
-		ksort($Results['matches'][$GroupID]);
-	}
-}
-*/
 // These ones were not found in the cache, run SQL
 if(!empty($Results['notfound'])) {
 	$SQLResults = get_groups($Results['notfound']);
@@ -320,27 +309,25 @@ if(((!empty($_GET['action']) && strtolower($_GET['action'])=="advanced") || (!em
 	$Action = 'action=advanced';
 }
 
- // List of pages
-$Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 
 if(count($Results)==0) {
-	$DB->query("SELECT 
-		tags.Name,
-		((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
-		FROM xbt_snatched AS s 
-		INNER JOIN torrents AS t ON t.ID=s.fid 
-		INNER JOIN torrents_group AS g ON t.GroupID=g.ID 
-		INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
-		INNER JOIN tags ON tags.ID=tt.TagID
-		WHERE s.uid='$LoggedUser[ID]'
-		AND tt.TagID<>'13679'
-		AND tt.TagID<>'4820'
-		AND tt.TagID<>'2838'
-		AND g.CategoryID='1'
-		AND tags.Uses > '10'
-		GROUP BY tt.TagID
-		ORDER BY Score DESC
-		LIMIT 8");
+$DB->query("SELECT 
+	tags.Name,
+	((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
+	FROM xbt_snatched AS s 
+	INNER JOIN torrents AS t ON t.ID=s.fid 
+	INNER JOIN torrents_group AS g ON t.GroupID=g.ID 
+	INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
+	INNER JOIN tags ON tags.ID=tt.TagID
+	WHERE s.uid='$LoggedUser[ID]'
+	AND tt.TagID<>'13679'
+	AND tt.TagID<>'4820'
+	AND tt.TagID<>'2838'
+	AND g.CategoryID='1'
+	AND tags.Uses > '10'
+	GROUP BY tt.TagID
+	ORDER BY Score DESC
+	LIMIT 8");
 
 	$JsonYouMightLike = array();
 	while(list($Tag)=$DB->next_record()) {
@@ -364,14 +351,25 @@ $Bookmarks = all_bookmarks('torrent');
 
 $JsonGroups = array();
 foreach($Results as $GroupID=>$Data) {
-	$JsonGroup = array();
-	list($Artists, $GroupCatalogueNumber, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupVanityHouse, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
+	list($Artists, $GroupCatalogueNumber, $ExtendedArtists, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupVanityHouse, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
+	
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 	
 	if(count($Torrents)>1 || $CategoryID==1) {
 		// These torrents are in a group
-		$ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
-		$IsBookmarked = in_array($GroupID, $Bookmarks);
+		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+			unset($ExtendedArtists[2]);
+			unset($ExtendedArtists[3]);
+			$DisplayName = display_artists($ExtendedArtists, false, false);
+		} elseif(!empty($Artists)) {
+			$DisplayName = display_artists(array(1=>$Artists), false, false);
+		} else {
+			$DisplayName='';
+		}
+		$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
+		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
+		$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 		
 		$LastRemasterYear = '-';
 		$LastRemasterTitle = '';
@@ -384,8 +382,10 @@ foreach($Results as $GroupID=>$Data) {
 
 		$JsonTorrents = array();
 		foreach($Torrents as $TorrentID => $Data) {
-			$JsonTorrent = array();
-
+			// All of the individual torrents in the group
+			
+			// If they're using the advanced search and have chosen enabled grouping, we just skip the torrents that don't check out
+			
 			$Filter = false;
 			$Pass = false;
 			
@@ -477,18 +477,19 @@ foreach($Results as $GroupID=>$Data) {
 			if ($Data['Remastered'] && !$Data['RemasterYear']) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
+			
+			if (in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent'])) {
+				$Data['PersonalFL'] = 1;
+			}
 
-			if($CategoryID == 1 && ($Data['RemasterTitle'] != $LastRemasterTitle ||
-				$Data['RemasterYear'] != $LastRemasterYear ||
-				$Data['RemasterRecordLabel'] != $LastRemasterRecordLabel ||
-				$Data['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber) ||
-				$FirstUnknown || $Data['Media'] != $LastMedia) {
+			if($CategoryID == 1 && ($Data['RemasterTitle'] != $LastRemasterTitle || $Data['RemasterYear'] != $LastRemasterYear ||
+			$Data['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Data['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber) || $FirstUnknown || $Data['Media'] != $LastMedia) {
 				$EditionID++;
 
 				if($Data['Remastered'] && $Data['RemasterYear'] != 0) {
 					
 					$RemasterName = $Data['RemasterYear'];
-						$AddExtra = " - ";
+					$AddExtra = " - ";
 					if($Data['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Data['RemasterRecordLabel']); $AddExtra=' / '; }
 					if($Data['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Data['RemasterCatalogueNumber']); $AddExtra=' / '; }
 					if($Data['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Data['RemasterTitle']); $AddExtra=' / '; }
@@ -505,29 +506,85 @@ foreach($Results as $GroupID=>$Data) {
 					$MasterName .= $AddExtra.display_str($Data['Media']);
 				}
 			}
-			$JsonTorrents[] = $Data;
+			$LastRemasterTitle = $Data['RemasterTitle'];
+			$LastRemasterYear = $Data['RemasterYear'];
+			$LastRemasterRecordLabel = $Data['RemasterRecordLabel'];
+			$LastRemasterCatalogueNumber = $Data['RemasterCatalogueNumber'];
+			$LastMedia = $Data['Media'];
+			
+			$JsonTorrents[] = array(
+				'torrentId' => (int) $TorrentID,
+				'editionId' => (int) $EditionID,
+				'remastered' => $Data['Remastered'],
+				'remasterYear' => (int) $Data['RemasterYear'],
+				'remasterCatalogueNumber' => $Data['RemasterCatalogueNumber'],
+				'remasterTitle' => $Data['RemasterTitle'],
+				'media' => $Data['Media'],
+				'encoding' => $Data['Encoding'],
+				'format' => $Data['Format'],
+				'hasLog' => $Data['HasLog'] == '1',
+				'logScore' => (int) $Data['LogScore'],
+				'hasCue' => $Data['HasCue'] == '1',
+				'scene' => $Data['Scene'] == '1',
+				'vanityHouse' => $Data['VanityHouse'] == '1',
+				'fileCount' => (int) $Data['FileCount'],
+				'time' => $Data['Time'],
+				'size' => (int) $Data['Size'],
+				'snatches' => (int) $Data['Snatched'],
+				'seeders' => (int) $Data['Seeders'],
+				'leechers' => (int) $Data['Leechers'],
+				'isFreeleech' => $Data['FreeTorrent'] == '1',
+				'isNeutralLeech' => $Data['FreeTorrent'] == '2',
+				'isPersonalFreeleech' => in_array($TorrentID, $TokenTorrents),
+				'canUseToken' => ($LoggedUser['FLTokens'] > 0)
+									&& $Data['HasFile'] && ($Data['Size'] < 1073741824)
+									&& !in_array($TorrentID, $TokenTorrents)
+									&& empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')
+			);
 		}
-		$LastRemasterTitle = $Data['RemasterTitle'];
-		$LastRemasterYear = $Data['RemasterYear'];
-		$LastRemasterRecordLabel = $Data['RemasterRecordLabel'];
-		$LastRemasterCatalogueNumber = $Data['RemasterCatalogueNumber'];
-		$LastMedia = $Data['Media'];
-		$JsonGroup[] = $JsonTorrents;
-	} else {
-		list($TorrentID, $Data) = each($Torrents);
-		$JsonGroup = $Data;
+		
+		$JsonGroups[] = array(
+			'groupId' => (int) $GroupID,
+			'groupName' => $GroupName,
+			'tags' => $TagList,
+			'bookmarked' => in_array($GroupID, $Bookmarks),
+			'vanityHouse' => $GroupVanityHouse,
+			'groupYear' => (int) $GroupYear,
+			'releaseType' => $ReleaseTypes[$ReleaseType],
+			'groupTime' => $GroupTime,
+			'maxSize' => (int) $MaxSize,
+			'totalSnatched' => (int) $TotalSnatched,
+			'totalSeeders' => (int) $TotalSeeders,
+			'totalLeechers' => (int) $TotalLeechers,
+			'torrents' => $JsonTorrents
+		);
 	}
-	$JsonGroups[] = array(
-		'groupId' => (int) $GroupID,
-		'groupName' => $GroupName,
-		'tags' => $TagList,
-		'torrentId' => (int) $TorrentID,
-		'categoryId' => (int) $Categories[$CategoryID-1],
-		'totalSnatched' => (int) $TotalSnatched,
-		'totalSeeders' => (int) $TotalSeeders,
-		'totalLeechers' => (int) $TotalLeechers,
-		'group' => $JsonGroup
-	);
+	else {
+		// Viewing a type that does not require grouping
+		
+		list($TorrentID, $Data) = each($Torrents);
+		
+		$JsonGroups[] = array(
+			'groupId' => (int) $GroupID,
+			'groupName' => $GroupName,
+			'torrentId' => (int) $TorrentID,
+			'tags' => $TagList,
+			'category' => $Categories[$CategoryID-1],
+			'fileCount' => (int) $Data['FileCount'],
+			'groupTime' => $GroupTime,
+			'size' => (int) $Data['Size'],
+			'snatches' => (int) $TotalSnatched,
+			'seeders' => (int) $TotalSeeders,
+			'leechers' => (int) $TotalLeechers,
+			'isFreeleech' => $Data['FreeTorrent'] == '1',
+			'isNeutralLeech' => $Data['FreeTorrent'] == '2',
+			'isPersonalFreeleech' => in_array($TorrentID, $TokenTorrents),
+			'canUseToken' => ($LoggedUser['FLTokens'] > 0)
+								&& $Data['HasFile'] && ($Data['Size'] < 1073741824)
+								&& !in_array($TorrentID, $TokenTorrents)
+								&& empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')
+		);
+	}
 }
 
 print
@@ -536,10 +593,8 @@ print
 			'status' => 'success',
 			'response' => array(
 				'currentPage' => intval($Page),
-				'pages' => ceil($Pages/TORRENTS_PER_PAGE),
+				'pages' => ceil($TorrentCount/TORRENTS_PER_PAGE),
 				'results' => $JsonGroups
 			)
 		)
 	);
-
-?>

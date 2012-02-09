@@ -34,6 +34,7 @@ foreach ($Results as $GroupID=>$Group) {
 	}
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
+	if($ReleaseType>0) { $DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]"; }
 	
 	$TagList=array();
 	if($TorrentTags!='') {

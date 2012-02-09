@@ -4,6 +4,7 @@
 
 if (!empty($LoggedUser['DisableForums'])) {
 	print json_encode(array('status' => 'failure'));
+	die();
 }
 else {
 	include(SERVER_ROOT.'/sections/forums/functions.php');

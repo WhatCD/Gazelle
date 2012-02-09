@@ -51,9 +51,9 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 		$DisplayName = display_artists(array('1'=>$Artists));
 	}
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
-	if($GroupYear>0) {
-		$DisplayName.=" [".$GroupYear."]";
-	}
+	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
+	if($ReleaseType>0) { $DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]"; }
+	
 	$ExtraInfo = torrent_info($Torrents[$TorrentID]);
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;

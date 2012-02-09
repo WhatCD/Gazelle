@@ -30,9 +30,11 @@ if(!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 			die();
 		} else {
 			print json_encode(array('status' => 'failure'));
+			die();
 		}
 	} else {
 		print json_encode(array('status' => 'failure'));
+		die();
 	}
 } else {
 	$ThreadID = $_GET['threadid'];
@@ -56,6 +58,7 @@ $ForumID = $ThreadInfo['ForumID'];
 // Make sure they're allowed to look at the page
 if(!check_forumperm($ForumID)) {
 	print json_encode(array('status' => 'failure'));
+	die();
 }
 
 //Post links utilize the catalogue & key params to prevent issues with custom posts per page
@@ -227,7 +230,7 @@ foreach ($Thread as $Key => $Post) {
 			'paranoia' => $Paranoia,
 			'artist' => $Artist == 1,
 			'donor' => $Donor == 1,
-			'warned' => $Warned == 1,
+			'warned' => ($Warned!='0000-00-00 00:00:00'),
 			'avatar' => $Avatar,
 			'enabled' => $Enabled == 2 ? false : true,
 			'userTitle' => $UserTitle

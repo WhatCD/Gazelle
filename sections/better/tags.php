@@ -53,6 +53,7 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 	if($GroupYear>0) {
 		$DisplayName.=" [".$GroupYear."]";
 	}
+	if($ReleaseType>0) { $DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]"; }
 	$ExtraInfo = torrent_info($Torrents[$TorrentID]);
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;

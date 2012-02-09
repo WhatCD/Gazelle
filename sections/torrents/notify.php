@@ -62,20 +62,21 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 
 
 ?>
-<h2>Latest notifications <a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear all)</a> <a href="user.php?action=notify">(edit filters)</a></h2>
+<h2>Latest notifications <a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear all)</a> <a href="javascript:SuperGroupClear()">(clear selected)</a> <a href="user.php?action=notify">(edit filters)</a></h2>
 <div class="linkbox">
 	<?=$Pages?>
 </div>
 <? if($DB->record_count()==0) { ?>
 <table class="border">
 	<tr class="rowb">
-		<td colspan="7" class="center">
+		<td colspan="8" class="center">
 			No new notifications found! <a href="user.php?action=notify">Edit notification filters</a>
 		</td>
 	</tr>
 </table>
 <? } else {
 	$FilterGroups = array();
+	$i = 0;
 	while($Result = $DB->next_record()) {
 		if(!$Result['FilterID']) {
 			$Result['FilterID'] = 0;
@@ -88,10 +89,13 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 	}
 	unset($Result);
 	foreach($FilterGroups as $ID => $FilterResults) {
+		$i++;
 ?>
-<h3>Matches for <?=$FilterResults['FilterLabel']?> (<a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$ID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Clear</a>)</h3>
+<h3>Matches for <?=$FilterResults['FilterLabel']?> (<a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$ID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Clear</a>) <a href="javascript:GroupClear($('#notificationform_<?=$i?>').raw())">(clear selected)</a></h3>
+<form id="notificationform_<?=$i?>">
 <table class="border">
 	<tr class="colhead">
+		<td style="text-align: center"><input type="checkbox" name="toggle" onClick="ToggleBoxes(this.form, this.checked)" /></td>
 		<td class="small cats_col"></td>
 		<td style="width:100%;"><strong>Name</strong></td>
 		<td><strong>Files</strong></td>
@@ -159,6 +163,7 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 		// print row
 ?>
 	<tr class="group_torrent" id="torrent<?=$TorrentID?>">
+		<td style="text-align: center"><input type="checkbox" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
 		<td class="center cats_cols"><div title="<?=ucfirst(str_replace('_',' ',$MainTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1])).' tags_'.str_replace('.','_',$MainTag)?>"></div></td>
 		<td>
 			<span>
@@ -184,6 +189,7 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 		}
 ?>
 </table>
+</form>
 <?
 	}
 }
