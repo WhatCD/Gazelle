@@ -38,7 +38,8 @@ $Results = $DB->query("SELECT SQL_CALC_FOUND_ROWS
 		tln.TorrentID AS LogInDB,
 		unt.UnRead,
 		unt.FilterID,
-		unf.Label
+		unf.Label,
+		g.ReleaseType
 		FROM users_notify_torrents AS unt
 		JOIN torrents AS t ON t.ID=unt.TorrentID
 		JOIN torrents_group AS g ON g.ID = t.GroupID 
@@ -76,7 +77,6 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 </table>
 <? } else {
 	$FilterGroups = array();
-	$i = 0;
 	while($Result = $DB->next_record()) {
 		if(!$Result['FilterID']) {
 			$Result['FilterID'] = 0;
@@ -89,10 +89,9 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 	}
 	unset($Result);
 	foreach($FilterGroups as $ID => $FilterResults) {
-		$i++;
 ?>
-<h3>Matches for <?=$FilterResults['FilterLabel']?> (<a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$ID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Clear</a>) <a href="javascript:GroupClear($('#notificationform_<?=$i?>').raw())">(clear selected)</a></h3>
-<form id="notificationform_<?=$i?>">
+<h3>Matches for <?=$FilterResults['FilterLabel']?> (<a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$ID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Clear</a>) <a href="javascript:GroupClear($('#notificationform_<?=$ID?>').raw())">(clear selected)</a></h3>
+<form id="notificationform_<?=$ID?>">
 <table class="border">
 	<tr class="colhead">
 		<td style="text-align: center"><input type="checkbox" name="toggle" onClick="ToggleBoxes(this.form, this.checked)" /></td>
@@ -110,7 +109,7 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 		foreach($FilterResults as $Result) {
 			list($TorrentID, $GroupID, $GroupName, $GroupCategoryID, $TorrentTags, $Size, $FileCount, $Format, $Encoding,
 				$Media, $Scene, $RemasterYear, $GroupYear, $RemasterYear, $RemasterTitle, $Snatched, $Seeders, 
-				$Leechers, $NotificationTime, $HasLog, $HasCue, $LogScore, $FreeTorrent, $LogInDB, $UnRead) = $Result;
+				$Leechers, $NotificationTime, $HasLog, $HasCue, $LogScore, $FreeTorrent, $LogInDB, $UnRead, $FilterLabel, $FilterLabel, $ReleaseType) = $Result;
 			// generate torrent's title
 			$DisplayName='';
 			
@@ -128,6 +127,9 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 	
 			if($GroupCategoryID==1 && $GroupYear>0) {
 				$DisplayName.= " [$GroupYear]";
+			}
+			if($GroupCategoryID==1 && $ReleaseType>0) {
+				$DisplayName.= " [".$ReleaseTypes[$ReleaseType]."]";
 			}
 	
 			// append extra info to torrent title

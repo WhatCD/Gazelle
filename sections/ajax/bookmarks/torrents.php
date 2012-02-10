@@ -202,7 +202,7 @@ foreach ($TorrentList as $Torrent) {
 			'media' => $GroupTorrents['Media'],
 			'format' => $GroupTorrents['Format'],
 			'encoding' => $GroupTorrents['Encoding'],
-			'remasterYear' => $GroupTorrents['RemasterYear'],
+			'remasterYear' => (int) $GroupTorrents['RemasterYear'],
 			'remastered' => $GroupTorrents['Remastered'] == 1,
 			'remasterTitle' => $GroupTorrents['RemasterTitle'],
 			'remasterRecordLabel' => $GroupTorrents['RemasterRecordLabel'],
@@ -224,7 +224,7 @@ foreach ($TorrentList as $Torrent) {
 	$JsonBookmarks[] = array(
 		'id' => (int) $Torrent['ID'],
 		'name' => $Torrent['Name'],
-		'year' => $Torrent['Year'],
+		'year' => (int) $Torrent['Year'],
 		'recordLabel' => $Torrent['RecordLabel'],
 		'catalogueNumber' => $Torrent['CatalogueNumber'],
 		'tagList' => $Torrent['TagList'],

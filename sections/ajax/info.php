@@ -5,10 +5,11 @@
 
 //calculate ratio --Gwindow
 //returns 0 for DNE and -1 for infiinity, because we dont want strings being returned for a numeric value in our java
+$Ratio = 0;
 if($LoggedUser['BytesUploaded'] == 0 && $LoggedUser['BytesDownloaded'] == 0) {
-	$Ratio = '0';
+	$Ratio = 0;
 } elseif($LoggedUser['BytesDownloaded'] == 0) {
-	$Ratio = '-1';
+	$Ratio = -1;
 } else {
 	$Ratio = number_format(max($LoggedUser['BytesUploaded']/$LoggedUser['BytesDownloaded']-0.005,0), 2); //Subtract .005 to floor to 2 decimals
 }
@@ -24,7 +25,7 @@ print json_encode(
 			'userstats' => array(
 				'uploaded' => (int) $LoggedUser['BytesUploaded'],
 				'downloaded' => (int) $LoggedUser['BytesDownloaded'],
-				'ratio' => (float) $LoggedUser['Ratio'],
+				'ratio' => (float) $Ratio,
 				'requiredratio' => (float) $LoggedUser['RequiredRatio'],
 				//'class' => $Class
 				'class' => $ClassLevels[$LoggedUser['Class']]['Name']

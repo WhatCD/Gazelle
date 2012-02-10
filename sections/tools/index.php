@@ -154,6 +154,9 @@ switch ($_REQUEST['action']){
 	case 'ocelot':
 		include('managers/ocelot.php');
 		break;
+	case 'official_tags':
+		include('managers/official_tags.php');
+		break;
 
 	case 'permissions':
 		if (!check_perms('admin_manage_permissions')) { error(403); }

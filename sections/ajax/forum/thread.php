@@ -102,15 +102,17 @@ $LastPost = end($Thread);
 $LastPost = $LastPost['ID'];
 reset($Thread);
 
-//Handle last read
-if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
-	$DB->query("SELECT PostID From forums_last_read_topics WHERE UserID='$LoggedUser[ID]' AND TopicID='$ThreadID'");
-	list($LastRead) = $DB->next_record();
-	if($LastRead < $LastPost) {
-		$DB->query("INSERT INTO forums_last_read_topics
-			(UserID, TopicID, PostID) VALUES
-			('$LoggedUser[ID]', '".$ThreadID ."', '".db_string($LastPost)."')
-			ON DUPLICATE KEY UPDATE PostID='$LastPost'");
+if ($_GET['updatelastread'] != '0') {
+	//Handle last read
+	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
+		$DB->query("SELECT PostID From forums_last_read_topics WHERE UserID='$LoggedUser[ID]' AND TopicID='$ThreadID'");
+		list($LastRead) = $DB->next_record();
+		if($LastRead < $LastPost) {
+			$DB->query("INSERT INTO forums_last_read_topics
+				(UserID, TopicID, PostID) VALUES
+				('$LoggedUser[ID]', '".$ThreadID ."', '".db_string($LastPost)."')
+				ON DUPLICATE KEY UPDATE PostID='$LastPost'");
+		}
 	}
 }
 

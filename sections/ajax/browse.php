@@ -515,7 +515,7 @@ foreach($Results as $GroupID=>$Data) {
 			$JsonTorrents[] = array(
 				'torrentId' => (int) $TorrentID,
 				'editionId' => (int) $EditionID,
-				'remastered' => $Data['Remastered'],
+				'remastered' => $Data['Remastered'] == '1',
 				'remasterYear' => (int) $Data['RemasterYear'],
 				'remasterCatalogueNumber' => $Data['RemasterCatalogueNumber'],
 				'remasterTitle' => $Data['RemasterTitle'],
@@ -548,7 +548,7 @@ foreach($Results as $GroupID=>$Data) {
 			'groupName' => $GroupName,
 			'tags' => $TagList,
 			'bookmarked' => in_array($GroupID, $Bookmarks),
-			'vanityHouse' => $GroupVanityHouse,
+			'vanityHouse' => $GroupVanityHouse == '1',
 			'groupYear' => (int) $GroupYear,
 			'releaseType' => $ReleaseTypes[$ReleaseType],
 			'groupTime' => $GroupTime,
