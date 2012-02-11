@@ -370,7 +370,6 @@ foreach($Results as $GroupID=>$Data) {
 		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 		$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
-		
 		$LastRemasterYear = '-';
 		$LastRemasterTitle = '';
 		$LastRemasterRecordLabel = '';
@@ -546,6 +545,7 @@ foreach($Results as $GroupID=>$Data) {
 		$JsonGroups[] = array(
 			'groupId' => (int) $GroupID,
 			'groupName' => $GroupName,
+			'artist' => $DisplayName,
 			'tags' => $TagList,
 			'bookmarked' => in_array($GroupID, $Bookmarks),
 			'vanityHouse' => $GroupVanityHouse == '1',

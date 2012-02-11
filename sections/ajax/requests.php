@@ -26,9 +26,6 @@ if(empty($_GET['type'])) {
 		case 'created':
 			$Title = 'My requests';
 			$SS->set_filter('userid', array($LoggedUser['ID']));
-			if(empty($_GET['show_filled'])) {
-				$SS->set_filter('torrentid', array(0));
-			}
 			break;
 		case 'voted':
 			if(!empty($_GET['userid'])) {
@@ -46,9 +43,6 @@ if(empty($_GET['type'])) {
 			} else {
 				$Title = "Requests I've voted on";
 				$SS->set_filter('voter', array($LoggedUser['ID']));
-			}
-			if(empty($_GET['show_filled']) && $Submitted) {
-				$SS->set_filter('torrentid', array(0));
 			}
 			break;
 		case 'filled':
@@ -301,16 +295,29 @@ if(!empty($SphinxResults['notfound'])) {
 	}
 }
 
-$PageLinks = get_pages($Page, $NumResults, REQUESTS_PER_PAGE);
-
 $Requests = $SphinxResults['matches'];
 
-$CurrentURL = get_url(array('order', 'sort'));
-
-$JsonResults = array();
-if ($NumResults != 0) {
+if ($NumResults == 0) {
+	print json_encode(
+		array(
+			'status' => 'success',
+			'response' => array(
+				'currentPage' => 1,
+				'pages' => 1,
+				'results' => array()
+			)
+			)
+		);
+	die();
+} else {
+	$JsonResults = array();
 	$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
 	foreach ($Requests as $RequestID => $Request) {
+		
+		//list($BitrateList, $CatalogueNumber, $CategoryID, $Description, $FillerID, $FormatList, $RequestID, $Image, $LogCue, $MediaList, $ReleaseType, 
+		//	$Tags, $TimeAdded, $TimeFilled, $Title, $TorrentID, $RequestorID, $RequestorName, $Year, $RequestID, $Categoryid, $FillerID, $LastVote, 
+		//	$ReleaseType, $TagIDs, $TimeAdded, $TimeFilled, $TorrentID, $RequestorID, $Voters) = array_values($Request);
+		
 		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, 
 			$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
 			
@@ -324,12 +331,12 @@ if ($NumResults != 0) {
 			$CategoryName = $Categories[$CategoryID - 1];
 		}
 		
-		$IsFilled = ($TorrentID != 0);
-		
+		$ArtistLink = "";
 		if($CategoryName == "Music") {
-			$ArtistForm = get_request_artists($RequestID);
 			$ArtistLink = display_artists($ArtistForm, false, false);
 		}
+
+		$Tags = $Request['Tags'];
 		
 		$JsonResults[] = array(
 			'requestId' => (int) $RequestID,
@@ -337,7 +344,10 @@ if ($NumResults != 0) {
 			'requestorName' => $RequestorName,
 			'timeAdded' => $TimeAdded,
 			'lastVote' => $LastVote,
+			'voteCount' => $VoteCount,
+			'bounty' => $RequestVotes['TotalBounty'],
 			'categoryId' => (int) $CategoryID,
+			'categoryName' => $CategoryName,
 			'artist' => $ArtistLink,
 			'title' => $Title,
 			'year' => (int) $Year,
@@ -351,23 +361,22 @@ if ($NumResults != 0) {
 			'logCue' => $LogCue,
 			'isFilled' => ($TorrentID > 0),
 			'fillerId' => (int) $FillerID,
-			'fillterName' => $FillerName,
+			'fillerName' => $FillerName == 0 ? "" : $FillerName,
 			'torrentId' => (int) $TorrentID,
-			'timeFilled' => $TimeFilled
+			'timeFilled' => $TimeFilled == 0 ? "" : $TimeFilled
 		);
 	}
-}
 
-print
-	json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'currentPage' => intval($Page),
-				'pages' => ceil($NumResults/REQUESTS_PER_PAGE),
-				'results' => $JsonResults
+	print
+		json_encode(
+			array(
+				'status' => 'success',
+				'response' => array(
+					'currentPage' => intval($Page),
+					'pages' => ceil($NumResults/REQUESTS_PER_PAGE),
+					'results' => $JsonResults
+				)
 			)
-		)
-	);
-
+		);
+}
 ?>
