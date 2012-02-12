@@ -356,7 +356,7 @@ $HasCue = "'0'";
 foreach($FileList as $File) {
 	list($Size, $Name) = $File;
 	// add +log to encoding
-	if($T['Encoding'] == "'Lossless'" && preg_match('/\.log$/i', $Name)) {
+	if($T['Encoding'] == "'Lossless'" && preg_match('/(?<!audiochecker)\.log$/i', $Name)) {
 		$HasLog = "'1'";
 	}
 	// add +cue to encoding
