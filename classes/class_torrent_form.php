@@ -196,6 +196,7 @@ class TORRENT_FORM {
 			<td id="artistfields">
 				<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding 'Various Artists' as an artist, read <a href='wiki.php?action=article&amp;id=369'>this</a> for more information on why.</p>
 <?			if(!empty($Torrent['Artists'])) {
+				$FirstArtist = true;
 				foreach($Torrent['Artists'] as $Importance => $Artists) {
 					foreach($Artists as $Artist) {
 ?>
@@ -208,6 +209,10 @@ class TORRENT_FORM {
 						<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
 						<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 					</select>
+<?				if ($FirstArtist) { ?>
+					[<a href="javascript:AddArtistField()">+</a>] [<a href="javascript:RemoveArtistField()">-</a>]
+<?					$FirstArtist = false;
+				}	?>
 					<br />
 <?					}
 				}

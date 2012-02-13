@@ -21,6 +21,17 @@ show_header('Forum Management');
 $DB->query('SELECT ID, Name FROM forums ORDER BY Sort');
 $ForumArray = $DB->to_array(); // used for generating the 'parent' drop down list
 
+// Replace the old hard-coded forum categories
+unset($ForumCats);
+$ForumCats = $Cache->get_value('forums_categories');
+if ($ForumCats === false) {
+	$DB->query("SELECT ID, Name FROM forums_categories");
+	$ForumCats = array();
+	while (list($ID, $Name) =  $DB->next_record()) {
+		$ForumCats[$ID] = $Name;
+	}
+	$Cache->cache_value('forums_categories', $ForumCats, 0); //Inf cache.
+}
 
 $DB->query('SELECT
 	ID,

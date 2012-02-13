@@ -49,6 +49,7 @@ foreach ($Forums as $Forum) {
 	$ForumDescription = display_str($ForumDescription);
 
 	if($CategoryID!=$LastCategoryID) {
+		$Row = 'b';
 		$LastCategoryID=$CategoryID;
 		if($OpenTable) { ?>
 	</table>

@@ -250,6 +250,14 @@ CREATE TABLE `forums` (
   KEY `MinClassRead` (`MinClassRead`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `forums_categories` (
+  `ID` tinyint(2) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(40) NOT NULL DEFAULT '',
+  `Sort` int(6) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `Sort` (`Sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `forums_last_read_topics` (
   `UserID` int(10) NOT NULL,
   `TopicID` int(10) NOT NULL,
@@ -1561,4 +1569,14 @@ INSERT INTO forums (ID, CategoryID, Sort, Name, Description, MinClassRead, MinCl
 INSERT INTO tags (ID, Name, TagType, Uses, UserID) VALUES (1, 'rock', 'genre', 0, 1),(2, 'pop', 'genre', 0, 1),(3, 'female.fronted.symphonic.death.metal', 'genre', 0, 1);
 
 INSERT INTO schedule (NextHour, NextDay, NextBiWeekly) VALUES (0,0,0);
+
+INSERT INTO forums_categories (ID, Sort, Name) VALUES (1,1,'Site');
+
+INSERT INTO forums_categories (ID, Sort, Name) VALUES (5,5,'Community');
+
+INSERT INTO forums_categories (ID, Sort, Name) VALUES (10,10,'Help');
+
+INSERT INTO forums_categories (ID, Sort, Name) VALUES (8,8,'Music');
+
+INSERT INTO forums_categories (ID, Sort, Name) VALUES (20,20,'Trash');
 

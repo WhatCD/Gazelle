@@ -42,7 +42,7 @@ if($GroupYear>0) {
 }
 if($GroupVanityHouse){
 	$DisplayName.=' [Vanity House]';
-	$AltName.=' [VanityHouse]';
+	$AltName.=' [Vanity House]';
 }
 if($GroupCategoryID == 1) {
 	$DisplayName.=' ['.$ReleaseTypes[$ReleaseType].']';

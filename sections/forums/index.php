@@ -7,6 +7,19 @@ if(!empty($LoggedUser['DisableForums'])) {
 }
 
 include(SERVER_ROOT.'/sections/forums/functions.php');
+
+// Replace the old hard-coded forum categories
+unset($ForumCats);
+$ForumCats = $Cache->get_value('forums_categories');
+if ($ForumCats === false) {
+	$DB->query("SELECT ID, Name FROM forums_categories");
+	$ForumCats = array();
+	while (list($ID, $Name) =  $DB->next_record()) {
+		$ForumCats[$ID] = $Name;
+	}
+	$Cache->cache_value('forums_categories', $ForumCats, 0); //Inf cache.
+}
+
 //This variable contains all our lovely forum data
 if(!$Forums = $Cache->get_value('forums_list')) {
 	$DB->query("SELECT
@@ -29,11 +42,12 @@ if(!$Forums = $Cache->get_value('forums_list')) {
 		t.IsLocked,
 		t.IsSticky
 		FROM forums AS f
+		JOIN forums_categories AS fc ON fc.ID = f.CategoryID
 		LEFT JOIN forums_topics as t ON t.ID = f.LastPostTopicID
 		LEFT JOIN users_main AS um ON um.ID=f.LastPostAuthorID
 		LEFT JOIN forums_specific_rules AS sr ON sr.ForumID = f.ID
 		GROUP BY f.ID
-		ORDER BY f.CategoryID, f.Sort");
+		ORDER BY fc.Sort, fc.Name, f.CategoryID, f.Sort");
 	$Forums = $DB->to_array('ID', MYSQLI_ASSOC, false);
 	foreach($Forums as $ForumID => $Forum) {
 		if(count($Forum['SpecificRules'])) {
