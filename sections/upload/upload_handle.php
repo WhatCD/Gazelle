@@ -205,6 +205,8 @@ switch ($Type) {
 		$Validate->SetFields('release_desc',
 			'0','string','The release description has a minimum length of 10 characters.',array('maxlength'=>1000000, 'minlength'=>10));
 
+		$Validate->SetFields('image',
+			'0','link','The image URL you entered was invalid.',array('maxlength'=>255, 'minlength'=>12));
 		break;
 
 	case 'Applications':
@@ -219,7 +221,9 @@ switch ($Type) {
 
 		$Validate->SetFields('release_desc',
 			'0','string','The release description has a minimum length of 10 characters.',array('maxlength'=>1000000, 'minlength'=>10));
-
+		
+		$Validate->SetFields('image',
+			'0','link','The image URL you entered was invalid.',array('maxlength'=>255, 'minlength'=>12));
 		break;
 }
 

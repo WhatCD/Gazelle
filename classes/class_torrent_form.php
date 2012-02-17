@@ -645,6 +645,12 @@ class TORRENT_FORM {
 				</td>
 			</tr>
 			<tr>
+				<td class="label">Image (optional)</td>
+				<td>
+					<input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/>
+				</td>
+			</tr>
+			<tr>
 				<td class="label">Description</td>
 				<td>
 					<textarea name="album_desc" id="album_desc" cols="60" rows="8"><?=display_str($Torrent['GroupDescription']); ?></textarea>
@@ -671,30 +677,35 @@ class TORRENT_FORM {
 		$Torrent = $this->Torrent; 
 ?>		<table cellpadding="3" cellspacing="1" border="0" class="border slice" width="100%">
 			<tr id="name">
-<?				if ($this->NewTorrent) { 
-					if ($this->Categories[$CategoryID] == 'E-Books') { ?>
-						<td class="label">Author - Title</td>
-<?					} else { ?>
-						<td class="label">Title</td>
-<?					} 
-?>
+<?		if ($this->NewTorrent) { 
+			if ($this->Categories[$CategoryID] == 'E-Books') { ?>
+				<td class="label">Author - Title</td>
+<?			} else { ?>
+				<td class="label">Title</td>
+<?			} ?>
 				<td>
 					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>" />
 				</td>
-				</tr>
-				<tr>
-					<td class="label">Tags</td>
-					<td>
-						<input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>" />
-					</td>
-				</tr>
-				<tr>
-					<td class="label">Description</td>
-					<td>
-						<textarea name="desc" id="desc" cols="60" rows="8"><?=display_str($Torrent['GroupDescription']); ?></textarea>
-					</td>
-				</tr>
-<?				} ?>
+			</tr>
+			<tr>
+				<td class="label">Tags</td>
+				<td>
+					<input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Image (optional)</td>
+				<td>
+					<input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Description</td>
+				<td>
+					<textarea name="desc" id="desc" cols="60" rows="8"><?=display_str($Torrent['GroupDescription']); ?></textarea>
+				</td>
+			</tr>
+<?		} ?>
 
 		</table>
 <?	}//function simple_form

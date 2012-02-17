@@ -498,7 +498,7 @@ $Types = array(
 					'upload' => '0',
 					'warn' => '0',
 					'delete' => '0',
-					'pm' => 'The [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.3.10]Uploading Rules[/url] require all uploads to have proper file names. Your torrent has been marked as eligible for trumping, which is now visible to all interested users, who may trump your torrent at any time. [b]You can avoid a 1-week warning by fixing this torrent yourself![/b] It\'s easy, and only takes a few minutes: Fix the required file names and upload a new torrent to the site. Then, report (RP) the bad torrent for the reason "Bad File Names Trump", indicate in the report comments that you have fixed the file names, and provide a link (PL) to the new torrent'
+					'pm' => 'Reason: The [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.3.10]Uploading Rules[/url] require all uploads to have proper file names. Your torrent has been marked as eligible for trumping, which is now visible to all interested users, who may trump your torrent at any time. You are encouraged to fix this torrent yourself. It\'s easy, and only takes a few minutes: Fix the required file names and upload a new torrent to the site. Then, report (RP) the bad torrent for the reason "Bad File Names Trump," indicate in the report comments that you have fixed the file names, and provide a link (PL) to the new torrent'
 				)
 			),
 			'cassette' => array(

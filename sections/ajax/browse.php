@@ -360,16 +360,13 @@ foreach($Results as $GroupID=>$Data) {
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
-			$DisplayName = display_artists($ExtendedArtists, false, false);
+			$DisplayName = display_artists($ExtendedArtists, false, false, true);
 		} elseif(!empty($Artists)) {
-			$DisplayName = display_artists(array(1=>$Artists), false, false);
+			$DisplayName = display_artists(array(1=>$Artists), false, false, true);
 		} else {
 			$DisplayName='';
 		}
-		$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
-		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
-		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
-		$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
+		
 		$LastRemasterYear = '-';
 		$LastRemasterTitle = '';
 		$LastRemasterRecordLabel = '';
