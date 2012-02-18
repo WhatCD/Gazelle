@@ -331,9 +331,10 @@ if ($NumResults == 0) {
 			$CategoryName = $Categories[$CategoryID - 1];
 		}
 		
-		$ArtistLink = "";
+		$JsonArtists = array();
 		if($CategoryName == "Music") {
-			$ArtistLink = display_artists($ArtistForm, false, false);
+			$ArtistForm = get_request_artists($RequestID);
+			$JsonArtists = array_values($ArtistForm);
 		}
 
 		$Tags = $Request['Tags'];
@@ -348,7 +349,7 @@ if ($NumResults == 0) {
 			'bounty' => $RequestVotes['TotalBounty'],
 			'categoryId' => (int) $CategoryID,
 			'categoryName' => $CategoryName,
-			'artist' => $ArtistLink,
+			'artists' => $JsonArtists,
 			'title' => $Title,
 			'year' => (int) $Year,
 			'image' => $Image,
