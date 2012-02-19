@@ -255,6 +255,26 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 <?
 		}
 	}
+	if (!empty($Artists[7]) && count($Artists[7]) > 0) {
+		print '				<li class="artists_procuder"><strong>Produced By:</strong></li>';
+		foreach($Artists[7] as $Artist) {
+?>
+				<li class="artists_producer">
+					<?=display_artist($Artist).'&lrm;'?>
+<?		      if(check_perms('torrents_edit')){
+			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+                                list($AliasID) = $DB->next_record();
+                                if (empty($AliasID)) {
+                                        $AliasID = $Artist['id'];
+                                }
+?>
+				&nbsp;(<?=$AliasID?>)&nbsp;
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+<?		      } ?>
+				</li>
+<?
+		}
+	}
 ?>
 			</ul>
 		</div>
@@ -276,6 +296,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 							<option value="5">Conductor</option>
 							<option value="6">DJ / Compiler</option>
 							<option value="3">Remixer</option>
+							<option value="7">Producer</option>
 						</select>
 					</div>
 					<input type="submit" value="Add" />

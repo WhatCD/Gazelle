@@ -84,6 +84,7 @@ function AddArtistField() {
 		ImportanceField.options[3] = new Option("Conductor", "5");
 		ImportanceField.options[4] = new Option("DJ / Compiler", "6");
 		ImportanceField.options[5] = new Option("Remixer", "3");
+		ImportanceField.options[6] = new Option("Producer", "7");
 		
 		var x = $('#artistfields').raw();
 		x.appendChild(document.createElement("br"));

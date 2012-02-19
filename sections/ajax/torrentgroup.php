@@ -32,6 +32,7 @@ $JsonTorrentDetails = array(
 	'categoryId' => (int) $TorrentDetails['CategoryID'],
 	'time' => $TorrentDetails['Time'],
 	'vanityHouse' => $TorrentDetails['VanityHouse'] == 1,
+	'artists' => get_artist($GroupID),
 );
 $TorrentList = array();
 foreach ($TorrentCache[1] as $Torrent) {

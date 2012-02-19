@@ -226,6 +226,7 @@ class TORRENT_FORM {
 						<option value="5">Conductor</option>
 						<option value="6">DJ / Compiler</option>
 						<option value="3">Remixer</option>
+						<option value="7">Producer</option>
 					</select>
 					[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]
 <?	

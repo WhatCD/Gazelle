@@ -896,7 +896,7 @@ CREATE TABLE `torrents_artists` (
   `ArtistID` int(10) NOT NULL,
   `AliasID` int(10) NOT NULL,
   `UserID` int(10) unsigned NOT NULL DEFAULT '0',
-  `Importance` enum('1','2','3','4','5','6') DEFAULT NULL,
+  `Importance` enum('1','2','3','4','5','6','7') DEFAULT NULL,
   PRIMARY KEY (`GroupID`,`AliasID`),
   KEY `ArtistID` (`ArtistID`),
   KEY `AliasID` (`AliasID`),

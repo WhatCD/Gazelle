@@ -115,7 +115,8 @@ if ($CategoryName == "Music") {
 		'artists' => $ArtistForm[1] == null ? array() : pullmediainfo($ArtistForm[1]),
 		'with' => $ArtistForm[2] == null ? array() : pullmediainfo($ArtistForm[2]),
 		'conductor' => $ArtistForm[5] == null ? array() : pullmediainfo($ArtistForm[5]),
-		'remixedBy' => $ArtistForm[3] == null ? array() : pullmediainfo($ArtistForm[3])
+		'remixedBy' => $ArtistForm[3] == null ? array() : pullmediainfo($ArtistForm[3]),
+		'producer' => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
 	);
 }
 

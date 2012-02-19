@@ -106,7 +106,7 @@ if(empty($Importances) || empty($TorrentList)) {
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY IF(ta.Importance = '2' OR ta.Importance = '3' OR ta.Importance = '4',ta.Importance, 1), 
+			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),ta.Importance, 1), 
 			    tg.ReleaseType ASC, tg.Year DESC, tg.Name DESC");
 	
 	$GroupIDs = $DB->collect('GroupID');
@@ -141,6 +141,10 @@ foreach($TorrentList as $GroupID=>$Group) {
 		$TorrentList[$GroupID]['ReleaseType'] = 1022;
 		$ComposerAlbums = true;
 	}
+	if($Importances[$GroupID]['Importance'] == '7') {
+		$TorrentList[$GroupID]['ReleaseType'] = 1021;
+		$ProducerAlbums = true;
+	}
 	if(!in_array($TorrentList[$GroupID]['ReleaseType'], $UsedReleases)) {
 		$UsedReleases[] = $TorrentList[$GroupID]['ReleaseType'];
 	}
@@ -154,6 +158,9 @@ if(!empty($RemixerAlbums)) {
 }
 if(!empty($ComposerAlbums)) {
 	$ReleaseTypes[1022] = "Composition";
+}
+if(!empty($ProducerAlbums)) {
+	$ReleaseTypes[1021] = "Produced By";
 }
 
 
@@ -270,8 +277,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 
 	
 	switch($ReleaseType){
-		case 1023: // Remixes, DJ Mixes, and Guest artists need the artist name
+		case 1023: // Remixes, DJ Mixes, Guest artists, and Producers need the artist name
 		case 1024:
+		case 1021:
 		case 8:
 			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 				unset($ExtendedArtists[2]);

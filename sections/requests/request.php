@@ -182,6 +182,17 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 <?
 			}
 		}
+		if(!empty($ArtistForm[7]) && count($ArtistForm[7]) > 0) { 
+?>
+				<li class="artists_producer"><strong>Produced by:</strong></li>
+<?			foreach($ArtistForm[7] as $Artist) {
+?>
+				<li class="artists_remix">
+					<?=display_artist($Artist)?>
+				</li>
+<?
+			}
+		}
 ?>
 			</ul>
 		</div>
