@@ -306,7 +306,17 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 				</td>
 			</tr>
 <?		}
-	} ?>
+	} 
+	if ($GroupID) { 
+		/*$Groups = get_groups(array($GroupID), true, true, false);
+		$Group = $Groups['matches'][$GroupID];
+		$GroupLink = display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';*/
+?>
+			<tr>
+				<td class="label">Torrent Group</td>
+				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></td>
+			</tr>
+<?	} ?>
 			<tr>
 				<td class="label">Votes</td>
 				<td>

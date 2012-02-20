@@ -18,6 +18,7 @@ if($_POST['submit'] == 'Remove') {
 	$DB->query("UPDATE collages SET NumTorrents=NumTorrents-$Rows WHERE ID='$CollageID'");
 	$Cache->delete_value('torrents_details_'.$GroupID);
 	$Cache->delete_value('torrent_collages_'.$GroupID);
+	$Cache->delete_value('torrent_collages_personal_'.$GroupID);
 } else {
 	$Sort = $_POST['sort'];
 	if(!is_number($Sort)) { error(404); }

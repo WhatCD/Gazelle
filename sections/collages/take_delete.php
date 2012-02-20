@@ -22,6 +22,8 @@ if(!$Reason) {
 $DB->query("SELECT GroupID FROM collages_torrents WHERE CollageID='$CollageID'");
 while(list($GroupID) = $DB->next_record()) {
 	$Cache->delete_value('torrents_details_'.$GroupID);
+	$Cache->delete_value('torrent_collages_'.$GroupID);
+	$Cache->delete_value('torrent_collages_personal_'.$GroupID);
 }
 
 //Personal collages have CategoryID 0

@@ -1223,6 +1223,14 @@ function delete_group($GroupID) {
 		}
 	}
 	
+	// Requests
+	$DB->query("SELECT ID FROM requests WHERE GroupID='$GroupID'");
+	$Requests = $DB->collect('ID');
+	$DB->query("UPDATE requests SET GroupID = NULL WHERE GroupID = '$GroupID'");
+	foreach ($Requests as $RequestID) {
+		$Cache->delete_value('request_'.$RequestID);
+	}
+	
 	$DB->query("DELETE FROM torrents_group WHERE ID='$GroupID'");
 	$DB->query("DELETE FROM torrents_tags WHERE GroupID='$GroupID'");
 	$DB->query("DELETE FROM torrents_tags_votes WHERE GroupID='$GroupID'");

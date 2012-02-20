@@ -106,8 +106,8 @@ if(empty($Importances) || empty($TorrentList)) {
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),ta.Importance, 1), 
-			    tg.ReleaseType ASC, tg.Year DESC, tg.Name DESC");
+			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),1000 + ta.Importance, tg.ReleaseType) ASC, 
+			    tg.Year DESC, tg.Name DESC");
 	
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array('GroupID', MYSQLI_BOTH, false);
@@ -217,14 +217,16 @@ foreach ($TorrentList as $GroupID=>$Group) {
 
 	$TorrentTags = array();
 	
-	// $Tags array is for the sidebar on the right
-	foreach($TagList as $Tag) {
-		if(!isset($Tags[$Tag])) {
-			$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
-		} else {
-			$Tags[$Tag]['count']++;
+	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
+	if (!in_array($ReleaseType, array(7, 3))) {
+		foreach($TagList as $Tag) {	
+			if(!isset($Tags[$Tag])) {
+				$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
+			} else {
+				$Tags[$Tag]['count']++;
+			}
+			$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
 		}
-		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
 	}
 	$TorrentTags = implode(', ', $TorrentTags);
 	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';

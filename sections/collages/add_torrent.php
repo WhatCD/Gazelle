@@ -23,6 +23,7 @@ function AddTorrent($CollageID, $GroupID) {
 		$Cache->delete_value('collage_'.$CollageID);
 		$Cache->delete_value('torrents_details_'.$GroupID);
 		$Cache->delete_value('torrent_collages_'.$GroupID);
+		$Cache->delete_value('torrent_collages_personal_'.$GroupID);
 		
 		$DB->query("SELECT UserID FROM users_collage_subs WHERE CollageID=$CollageID");
 		while (list($CacheUserID) = $DB->next_record()) {

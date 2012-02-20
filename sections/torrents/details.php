@@ -4,6 +4,8 @@ function compare($X, $Y){
 	return($Y['score'] - $X['score']);
 }
 
+define(MAX_PERS_COLLAGES, 3); // How many personal collages should be shown by default
+
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = NEW TEXT;
@@ -651,6 +653,51 @@ if(count($Collages)>0) {
 		list($CollageName, $CollageTorrents, $CollageID) = $Collage;
 ?>
 			<tr>
+				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
+				<td><?=$CollageTorrents?></td>
+			</tr>
+<?	} ?>
+		</table>
+<?
+}
+
+$PersonalCollages = $Cache->get_value('torrent_collages_personal_'.$GroupID);
+if(!is_array($PersonalCollages)) {
+	$DB->query("SELECT c.Name, c.NumTorrents, c.ID FROM collages AS c JOIN collages_torrents AS ct ON ct.CollageID=c.ID WHERE ct.GroupID='$GroupID' AND Deleted='0' AND CategoryID='0'");
+	$PersonalCollages = $DB->to_array(false, MYSQL_NUM);
+	$Cache->cache_value('torrent_collages_personal_'.$GroupID, $PersonalCollages, 3600*6);
+}
+
+if(count($PersonalCollages)>0) { 
+	if (count($PersonalCollages) > MAX_PERS_COLLAGES) {
+		// Pick 5 at random
+		$Range = range(0,count($PersonalCollages) - 1);
+		shuffle($Range);
+		$Indices = array_slice($Range, 0, MAX_PERS_COLLAGES);
+		$SeeAll = ' <a href="#" onClick="$(\'.personal_rows\').toggle(); return false;">(See all)</a>';
+	} else {
+		$Indices = range(0, count($PersonalCollages)-1);
+		$SeeAll = '';
+	}
+?>
+		<table id="personal_collages">
+			<tr class="colhead">
+				<td width="85%">This album is in <?=count($PersonalCollages)?> personal collage<?=((count($PersonalCollages)>1)?'s':'')?><?=$SeeAll?></td>
+				<td># torrents</td>
+			</tr>
+<?	foreach ($Indices as $i) { 
+		list($CollageName, $CollageTorrents, $CollageID) = $PersonalCollages[$i];
+		unset($PersonalCollages[$i]);
+?>
+			<tr>
+				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
+				<td><?=$CollageTorrents?></td>
+			</tr>
+<?	}
+	foreach ($PersonalCollages as $Collage) { 
+		list($CollageName, $CollageTorrents, $CollageID) = $Collage;
+?>
+			<tr class="personal_rows hidden">
 				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
 				<td><?=$CollageTorrents?></td>
 			</tr>

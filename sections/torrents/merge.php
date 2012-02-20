@@ -69,6 +69,13 @@ if(empty($_POST['confirm'])) {
 		$Cache->delete_value('collage_'.$CollageID);
 	}
 	
+	//Requests
+	$DB->query("SELECT ID FROM requests WHERE GroupID='$OldGroupID'");
+	$Requests = $DB->collect('ID');
+	$DB->query("UPDATE requests SET GroupID = 'NewGroupID' WHERE GroupID = '$OldGroupID'");
+	foreach ($Requests as $RequestID) {
+		$Cache->delete_value('request_'.$RequestID);
+	}
 	
 	$DB->query("SELECT ID FROM torrents WHERE GroupID='$OldGroupID'");
 	while(list($TorrentID) = $DB->next_record()) {

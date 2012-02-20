@@ -576,10 +576,10 @@ class TORRENT_FORM {
 		<table cellpadding="3" cellspacing="1" border="0" class="border slice" width="100%">
 <?		if($this->NewTorrent){ ?>
 			<tr id="title_tr">
-				<td class="label">Artist - Title</td>
+				<td class="label">Author - Title</td>
 				<td>
 					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>" />
-					<p class="min_padding">Should only include the artist if applicable</p>
+					<p class="min_padding">Should only include the author if applicable</p>
 				</td>
 			</tr>
 <?		} ?>

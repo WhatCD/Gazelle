@@ -27,13 +27,13 @@ switch ($View) {
 		$WhereCondition = "WHERE (Level = $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		break;
 	default:
-		if ($IsStaff) {
+		if ($UserLevel >= 700) {
 			$ViewString = "My unanswered";
-			$WhereCondition = "WHERE ((Level >= ".$Classes[MOD]['Level']." AND Level <= $UserLevel) OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+			$WhereCondition = "WHERE ((Level >= ".max($Classes[MOD]['Level'],700)." AND Level <= $UserLevel) OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		} else {
-			// FLS
+			// FLS and Forum Mods
 			$ViewString = "Unanswered";
-			$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+			$WhereCondition = "WHERE (Level = $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		}
 		break;
 }

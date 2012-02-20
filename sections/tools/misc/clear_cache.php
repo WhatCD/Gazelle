@@ -26,7 +26,7 @@ if(!empty($_GET['key']) && $_GET['type'] == "clear") {
 			<tr valign="top">
 				<td align="right">Key</td>
 				<td align="left">
-					<input type="text" name="key" id="key" class="inputtext" />
+					<input type="text" name="key" id="key" class="inputtext" value="<?=$_GET['key']?>" />
 					<select name="type">
 						<option value="view">View</option>
 						<option value="clear">Clear</option>
