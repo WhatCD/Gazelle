@@ -263,7 +263,7 @@ if (check_perms('users_mod')) {
 
 	$NumStaffPMs = $Cache->get_value('num_staff_pms_'.$LoggedUser['ID']);
 	if ($NumStaffPMs === false) {
-		$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR (Level >= ".$Classes[MOD]['Level']." AND Level <=".$LoggedUser['Class']."))");
+		$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR (Level >= ".max(700,$Classes[MOD]['Level'])." AND Level <=".$LoggedUser['Class']."))");
 		list($NumStaffPMs) = $DB->next_record();
 		$Cache->cache_value('num_staff_pms_'.$LoggedUser['ID'], $NumStaffPMs , 1000);
 	}

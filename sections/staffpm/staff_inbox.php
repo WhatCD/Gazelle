@@ -30,10 +30,14 @@ switch ($View) {
 		if ($UserLevel >= 700) {
 			$ViewString = "My unanswered";
 			$WhereCondition = "WHERE ((Level >= ".max($Classes[MOD]['Level'],700)." AND Level <= $UserLevel) OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
-		} else {
-			// FLS and Forum Mods
-			$ViewString = "Unanswered";
+		} elseif ($UserLevel == 650) {
+			// Forum Mods
+			$ViewString = "My Unanswered";
 			$WhereCondition = "WHERE (Level = $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+		} else {
+			// FLS
+			$ViewString = "Unanswered";
+			$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		}
 		break;
 }
