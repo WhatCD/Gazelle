@@ -17,6 +17,12 @@ if(!check_perms('site_edit_wiki')) { error(403); }
 $UserID = $LoggedUser['ID'];
 $GroupID = $_REQUEST['groupid'];
 
+// Get information for the group log
+$DB->query("SELECT VanityHouse FROM torrents_group WHERE ID = '$GroupID'");
+if (!(list($OldVH) = $DB->next_record())) {
+	error(404);
+}
+
 if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverting to a previous revision
 	$RevisionID=$_GET['revisionid'];
 	if(!is_number($RevisionID)) { error(0); }
@@ -84,6 +90,11 @@ $DB->query("UPDATE torrents_group SET
 	WikiBody='$Body',
 	WikiImage='$Image'
 	WHERE ID='$GroupID'");
+// Log VH changes
+if ($OldVH != $VanityHouse && check_perms('torrents_edit_vanityhouse')) {
+	$DB->query("INSERT INTO group_log (GroupID, UserID, Time, Info)
+				VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string('Vanity house status changed to '.($VanityHouse?'true':'false'))."')");
+}
 
 // There we go, all done!
 

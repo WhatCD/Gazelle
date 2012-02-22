@@ -62,7 +62,7 @@ if ($Details=='all' || $Details=='ur') {
 		$Cache->cache_value('toprequesttag_'.$Limit,$TopRequestTags,3600*12);
 	}
 
-	generate_tag_table('Most Used Request Tags', 'ur', $TopRequestTags, $Limit, false);
+	generate_tag_table('Most Used Request Tags', 'ur', $TopRequestTags, $Limit, false, true);
 }
 
 if ($Details=='all' || $Details=='v') {
@@ -90,7 +90,12 @@ show_footer();
 exit;
 
 // generate a table based on data from most recent query to $DB
-function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true) {
+function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true, $RequestsTable = false) {
+	if ($RequestsTable) {
+		$URLString = 'requests.php?tags=';
+	} else {
+		$URLString = 'torrents.php?taglist=';
+	}
 ?>
 	<h3>Top <?=$Limit.' '.$Caption?>
 		<small>
@@ -129,7 +134,7 @@ function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true) {
 ?>
 	<tr class="row<?=$Highlight?>">
 		<td class="center"><?=$Rank?></td>
-		<td><a href="torrents.php?taglist=<?=$Detail['Name']?>"><?=$Detail['Name']?></a></td>
+		<td><a href="<?=$URLString?><?=$Detail['Name']?>"><?=$Detail['Name']?></a></td>
 		<td style="text-align:right"><?=$Detail['Uses']?></td>
 <?		if($ShowVotes) { ?>
 		<td style="text-align:right"><?=$Detail['PosVotes']?></td>

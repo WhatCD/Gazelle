@@ -570,6 +570,10 @@ if(!$GroupID) {
 	$Cache->delete_value('torrent_group_'.$GroupID);
 	$Cache->delete_value('torrents_details_'.$GroupID);
 	$Cache->delete_value('detail_files_'.$GroupID);
+	if($Type == 'Music') {
+		$DB->query("SELECT ReleaseType FROM torrents_group WHERE ID='$GroupID'");
+		list($Properties['ReleaseType']) = $DB->next_record();
+	}
 }
 
 // Description
@@ -701,7 +705,9 @@ $Announce = "";
 if($Type == 'Music'){ $Announce .= display_artists($ArtistForm, false); }
 $Announce .= trim($Properties['Title'])." ";
 if($Type == 'Music'){
-	$Announce .= "[".trim($Properties['Year'])."] - ";
+	$Announce .= '['.trim($Properties['Year']).']';
+	if (($Type == 'Music') && ($Properties['ReleaseType'] > 0)) { $Announce .= ' ['.$ReleaseTypes[$Properties['ReleaseType']].']'; }
+	$Announce .= " - ";
 	$Announce .= trim($Properties['Format'])." / ".trim($Properties['Bitrate']);
 	if ($HasLog == "'1'") { $Announce .= " / Log"; }
 	if ($LogInDB) { $Announce .= " / ".$LogScoreAverage.'%'; }

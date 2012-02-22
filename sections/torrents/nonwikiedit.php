@@ -40,6 +40,10 @@ $Year = db_string((int)$_POST['year']);
 $RecordLabel = db_string($_POST['record_label']);
 $CatalogueNumber = db_string($_POST['catalogue_number']);
 
+// Get some info for the group log
+$DB->query("SELECT Year FROM torrents_group WHERE ID = $GroupID");
+list($OldYear) = $DB->next_record();
+
 
 
 $DB->query("UPDATE torrents_group SET 
@@ -47,6 +51,11 @@ $DB->query("UPDATE torrents_group SET
 	RecordLabel = '".$RecordLabel."',
 	CatalogueNumber = '".$CatalogueNumber."'
 	WHERE ID = ".$GroupID);
+
+if ($OldYear != $Year) {
+	$DB->query("INSERT INTO group_log (GroupID, UserID, Time, Info)
+				VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string("Year changed from $OldYear to $Year")."')");
+}
 
 $DB->query("SELECT ID FROM torrents WHERE GroupID='$GroupID'");
 while(list($TorrentID) = $DB->next_record()) {

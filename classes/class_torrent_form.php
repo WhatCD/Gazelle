@@ -393,16 +393,15 @@ class TORRENT_FORM {
 					</span>
 				</td>
 			</tr>
+<?		if (check_perms('torrents_edit_vanityhouse') && $this->NewTorrent) { ?>
 			<tr>
 				<td class="label">Vanity House</td>
 				<td>
-					<label><input type="checkbox" id="vanity_house" name="vanity_house" <?=( check_perms('torrents_edit_vanityhouse') ? $this->DisabledInputA : 'disabled="disabled"' )?> <? if($Torrent['VanityHouse']){ echo "checked='checked' ";}?>/>
+					<label><input type="checkbox" id="vanity_house" name="vanity_house" <? if(!$Torrent['GroupID']) { echo 'disabled '; }?><? if($Torrent['VanityHouse']){ echo "checked='checked' ";}?>/>
 					Check this only if you are the submitting artist or submitting on behalf of the artist and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.</label>
-<? 			if ( ! check_perms('torrents_edit_vanityhouse') ) { ?>
-					<p>You do not have permission to mark albums as vanity house. <a href="wiki.php?action=article&id=282">More information about vanity house</a></p>
-<? 			} ?>
 				</td>
 			</tr>
+<?		} ?>
 			<tr>
 				<td class="label">Media</td>
 				<td>

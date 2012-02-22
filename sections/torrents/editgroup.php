@@ -60,9 +60,12 @@ show_header('Edit torrent group');
 						<?=$Val?>
 					</option>
 <?	} ?>
-				</select><br />
-				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1"  <?=( check_perms('torrents_edit_vanityhouse') ? '' : 'disabled="disabled"' )?> <?=($VanityHouse ? 'checked="checked"' : '')?> /></h3>
-<? } ?>
+				</select>
+<?	if (check_perms('torrents_edit_vanityhouse')) { ?>
+				<br />
+				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1"  <?=($VanityHouse ? 'checked="checked"' : '')?> /></h3>
+<? 	}
+   } ?>
 				<h3>Edit summary</h3>
 				<input type="text" name="summary" size="92" /><br />
 				<div style="text-align: center;">
@@ -87,7 +90,6 @@ show_header('Edit torrent group');
 				<tr>
 					<td class="label">Year</td>
 					<td>
-						
 						<input type="text" name="year" size="10" value="<?=$Year?>" />
 					</td>
 				</tr>

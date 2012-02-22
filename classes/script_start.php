@@ -1579,6 +1579,10 @@ function check_perms($PermissionName,$MinClass = 0) {
 
 // TODO: make stricter, e.g. on all whitespace characters or Unicode normalisation
 function normalise_artist_name($ArtistName) {
+	// \u200e is &lrm;
+	$ArtistName = trim($ArtistName);
+	$ArtistName = preg_replace('/^(\xE2\x80\x8E)+/', '', $ArtistName);
+	$ArtistName = preg_replace('/(\xE2\x80\x8E)+$/', '', $ArtistName);
 	return trim(preg_replace('/ +/', ' ', $ArtistName));
 }
 
