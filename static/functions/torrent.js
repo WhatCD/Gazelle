@@ -64,7 +64,7 @@ function ArtistManager() {
 				elBox.type = 'checkbox';
 				elBox.id = 'artistmanager_box'+(i-importance+1);
 				elBox.name = 'artistmanager_box';
-				elBox.value = importance+','+ArtistID;
+				elBox.value = importance+';'+ArtistID;
 				elBox.onclick = function(e) { SelectArtist(e,this); };
 				elArtistList.children[i].insertBefore(elBox, elArtistList.children[i].children[0]);
 				if(importance == 1 || importance == 4 || importance == 6) {
@@ -182,7 +182,7 @@ function ArtistManagerSubmit() {
 	var MainSelectionCount = 0;
 	for(var i = 0, boxes = $('[name="artistmanager_box"]'); boxes.raw(i); i++) {
 		if(boxes.raw(i).checked) {
-			Selection.push(boxes.raw(i).value.substr(2));
+			Selection.push(boxes.raw(i).value);
 			if(boxes.raw(i).value.substr(0,1) == '1') {
 				MainSelectionCount++;
 			}

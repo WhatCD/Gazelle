@@ -1,15 +1,16 @@
 <?
 $ArtistID = db_string($_GET['artistid']);
 $GroupID = db_string($_GET['groupid']);
+$Importance = db_string($_GET['importance']);
 
-if(!is_number($ArtistID) || !is_number($GroupID)) {
+if(!is_number($ArtistID) || !is_number($GroupID) || !is_number($Importance)) {
 	error(404);
 }
 if(!check_perms('torrents_edit')) {
 	error(403);
 }
 
-$DB->query("DELETE FROM torrents_artists WHERE GroupID='$GroupID' AND ArtistID='$ArtistID'");
+$DB->query("DELETE FROM torrents_artists WHERE GroupID='$GroupID' AND ArtistID='$ArtistID' AND Importance='$Importance'");
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID=".$ArtistID);
 list($ArtistName) = $DB->next_record();
 
@@ -48,8 +49,8 @@ $DB->query("INSERT INTO torrents_group (ID, NumArtists)
 
 $Cache->delete_value('torrents_details_'.$GroupID); // Delete torrent group cache
 $Cache->delete_value('groups_artists_'.$GroupID); // Delete group artist cache
-write_log("Artist ".$ArtistID." (".$ArtistName.") was removed from the group ".$GroupID." (".$GroupName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
-write_group_log($GroupID, 0, $LoggedUser['ID'], "removed artist ".$ArtistName, 0);
+write_log("Artist (".$ArtistTypes[$Importance].") ".$ArtistID." (".$ArtistName.") was removed from the group ".$GroupID." (".$GroupName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+write_group_log($GroupID, 0, $LoggedUser['ID'], "removed artist ".$ArtistName." (".$ArtistTypes[$Importance].")", 0);
 
 update_hash($GroupID);
 

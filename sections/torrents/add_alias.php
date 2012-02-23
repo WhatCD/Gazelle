@@ -41,15 +41,13 @@ for($i = 0; $i < count($AliasNames); $i++) {
 		$DB->query("SELECT Name FROM artists_group WHERE ArtistID=".$ArtistID);
 		list($ArtistName) = $DB->next_record();
 		
-		$DB->query("SELECT AliasID FROM torrents_artists WHERE GroupID='$GroupID' AND ArtistID='$ArtistID'");
 		
-		if($DB->record_count() == 0) {
+		$DB->query("INSERT IGNORE INTO torrents_artists 
+		(GroupID, ArtistID, AliasID, Importance, UserID) VALUES 
+		('$GroupID', '$ArtistID', '$AliasID', '$Importance', '$UserID')");
+		
+		if ($DB->affected_rows()) {
 			$Changed = true;
-			
-			$DB->query("INSERT INTO torrents_artists 
-			(GroupID, ArtistID, AliasID, Importance, UserID) VALUES 
-			('$GroupID', '$ArtistID', '$AliasID', '$Importance', '$UserID')");
-			
 			$DB->query("INSERT INTO torrents_group (ID, NumArtists) 
 					SELECT ta.GroupID, COUNT(ta.ArtistID) 
 					FROM torrents_artists AS ta 
@@ -59,14 +57,8 @@ for($i = 0; $i < count($AliasNames); $i++) {
 				ON DUPLICATE KEY UPDATE 
 				NumArtists=VALUES(NumArtists);");
 			
-			write_log("Artist ".$ArtistID." (".$ArtistName.") was added to the group ".$GroupID." (".$GroupName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
-			write_group_log($GroupID, 0, $LoggedUser['ID'], "added artist ".$ArtistName, 0);
-		} else {
-			list($OldAliasID) = $DB->next_record();
-			if($OldAliasID == 0) {
-				$Changed = true;
-				$DB->query('UPDATE torrents_artists SET AliasID='.$AliasID.' WHERE GroupID='.$GroupID.' AND ArtistID='.$ArtistID);
-			}
+			write_log("Artist ".$ArtistID." (".$ArtistName.") was added to the group ".$GroupID." (".$GroupName.") as ".$ArtistTypes[$Importance]." by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+			write_group_log($GroupID, 0, $LoggedUser['ID'], "added artist ".$ArtistName." as ".$ArtistTypes[$Importance], 0);
 		}
 	}
 }

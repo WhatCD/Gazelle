@@ -102,7 +102,7 @@ $NumRequests = count($Requests);
 $LastReleaseType = 0;
 if(empty($Importances) || empty($TorrentList)) {
 	$DB->query("SELECT 
-			DISTINCT ta.GroupID, ta.Importance, tg.VanityHouse
+			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
@@ -110,7 +110,8 @@ if(empty($Importances) || empty($TorrentList)) {
 			    tg.Year DESC, tg.Name DESC");
 	
 	$GroupIDs = $DB->collect('GroupID');
-	$Importances = $DB->to_array('GroupID', MYSQLI_BOTH, false);
+	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
+	
 	if(count($GroupIDs)>0) {
 		$TorrentList = get_groups($GroupIDs, true,true);
 		$TorrentList = $TorrentList['matches'];
@@ -128,26 +129,39 @@ if(!empty($TorrentList)) {
 
 //Get list of used release types
 $UsedReleases = array();
-foreach($TorrentList as $GroupID=>$Group) {
-	if($Importances[$GroupID]['Importance'] == '2') {
-		$TorrentList[$GroupID]['ReleaseType'] = 1024;
-		$GuestAlbums = true;
+foreach($Importances as $ID=>$Group) {
+	switch ($Importances[$ID]['Importance']) {
+		case '2':
+			$Importances[$ID]['ReleaseType'] = 1024;
+			//$TorrentList[$GroupID]['ReleaseType'] = 1024;
+			$GuestAlbums = true;
+			break;
+			
+		case '3':
+			$Importances[$ID]['ReleaseType'] = 1023;
+			//$TorrentList[$GroupID]['ReleaseType'] = 1023;
+			$RemixerAlbums = true;
+			break;
+			
+		case '4':
+			$Importances[$ID]['ReleaseType'] = 1022;
+			//$TorrentList[$GroupID]['ReleaseType'] = 1022;
+			$ComposerAlbums = true;
+			break;
+			
+		case '7':
+			$Importances[$ID]['ReleaseType'] = 1021;
+			//$TorrentList[$GroupID]['ReleaseType'] = 1021;
+			$ProducerAlbums = true;
+			break;
+			
+		default:
+			$Importances[$ID]['ReleaseType'] = $TorrentList[$Group['GroupID']]['ReleaseType'];
 	}
-	if($Importances[$GroupID]['Importance'] == '3') {
-		$TorrentList[$GroupID]['ReleaseType'] = 1023;
-		$RemixerAlbums = true;
-	}
-	if($Importances[$GroupID]['Importance'] == '4') {
-		$TorrentList[$GroupID]['ReleaseType'] = 1022;
-		$ComposerAlbums = true;
-	}
-	if($Importances[$GroupID]['Importance'] == '7') {
-		$TorrentList[$GroupID]['ReleaseType'] = 1021;
-		$ProducerAlbums = true;
-	}
-	if(!in_array($TorrentList[$GroupID]['ReleaseType'], $UsedReleases)) {
-		$UsedReleases[] = $TorrentList[$GroupID]['ReleaseType'];
-	}
+	
+	if(!in_array($Importances[$ID]['ReleaseType'], $UsedReleases)) {
+		$UsedReleases[] = $Importances[$ID]['ReleaseType'];
+	}	
 }
 
 if(!empty($GuestAlbums)) {
@@ -208,10 +222,20 @@ $NumSnatches = 0;
 $OpenTable = false;
 $ShowGroups = !isset($LoggedUser['TorrentGrouping']) || $LoggedUser['TorrentGrouping'] == 0;
 $HideTorrents = ($ShowGroups ? '' : ' hidden');
+$OldGroupID = 0;
+$ReleaseType = 0;
 
-foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($Group);
-	$GroupVanityHouse = $Importances[$GroupID]['VanityHouse'];
+foreach ($Importances as $Group) {
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($TorrentList[$Group['GroupID']]);
+	$ReleaseType = $Group['ReleaseType'];
+	$GroupVanityHouse = $Group['VanityHouse'];
+	
+	if ($GroupID == $OldGroupID && $ReleaseType == $OldReleaseType) {
+		continue;
+	} else {
+		$OldGroupID = $GroupID;
+		$OldReleaseType = $ReleaseType;
+	}
 
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 

@@ -14,6 +14,9 @@ function js_pages($Action, $TorrentID, $NumResults, $CurrentPage) {
 	return implode(' | ',$PageLinks);
 }
 
+// This gets used in a few places
+$ArtistTypes = array(1 => 'Main', 2 => 'Guest', 3 => 'Remixer', 4 => 'Composer', 5 => 'Conductor', 6 => 'DJ/Compiler', 7 => 'Producer');
+
 if(!empty($_REQUEST['action'])) {
 	switch($_REQUEST['action']){
 		case 'edit':

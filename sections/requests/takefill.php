@@ -110,9 +110,11 @@ if($CategoryName == "Music") {
 		}
 	}*/
 
-	//WEB has no ripping log.
-	$WEBOverride = ((strpos($MediaList, "WEB") !== false) && $Media == "WEB");
-	if($Format == "FLAC" && $LogCue && !$WEBOverride) {
+	//WEB has no ripping log.  Ditto Vinyl - Actually ditto everything but CD
+	//$WEBOverride   = ((strpos($MediaList, "WEB") !== false) && $Media == "WEB");
+	//$VinylOverride = ((strpos($MediaList, "Vinyl") !== false) && $Media == "Vinyl");
+	//if($Format == "FLAC" && $LogCue && !$WEBOverride && !$VinylOverride) {
+	if($Format == "FLAC" && $LogCue && $Media == 'CD') {
 		if(strpos($LogCue, "Log") && !$HasLog) {
 			$Err = "This request requires a log";
 		}

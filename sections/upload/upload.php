@@ -28,21 +28,24 @@ if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])
 		LEFT JOIN torrents AS t ON t.GroupID = tg.ID
 		WHERE tg.ID=".$_GET['groupid']."
 		GROUP BY tg.ID");
-	
-	list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
-	$UploadForm = $Categories[$Properties['CategoryID']-1];
-	$Properties['CategoryName'] = $Categories[$Properties['CategoryID']-1];
-	$Properties['Artists'] = get_artist($_GET['groupid']);
-	
-	$DB->query("SELECT 
-		GROUP_CONCAT(tags.Name SEPARATOR ', ') AS TagList 
-		FROM torrents_tags AS tt JOIN tags ON tags.ID=tt.TagID
-		WHERE tt.GroupID='$_GET[groupid]'");
-	
-	list($Properties['TagList']) = $DB->next_record();
+	if ($DB->record_count()) {	
+		list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
+		$UploadForm = $Categories[$Properties['CategoryID']-1];
+		$Properties['CategoryName'] = $Categories[$Properties['CategoryID']-1];
+		$Properties['Artists'] = get_artist($_GET['groupid']);
+		
+		$DB->query("SELECT 
+			GROUP_CONCAT(tags.Name SEPARATOR ', ') AS TagList 
+			FROM torrents_tags AS tt JOIN tags ON tags.ID=tt.TagID
+			WHERE tt.GroupID='$_GET[groupid]'");
+		
+		list($Properties['TagList']) = $DB->next_record();
+	} else {
+		unset($_GET['groupid']);
+	}
 	if (!empty($_GET['requestid']) && is_number($_GET['requestid'])) {
 		$Properties['RequestID'] = $_GET['requestid'];
-	}
+	}	
 } elseif (empty($Properties) && !empty($_GET['requestid']) && is_number($_GET['requestid'])) {
 	include(SERVER_ROOT.'/sections/requests/functions.php');	
 	$DB->query("SELECT
