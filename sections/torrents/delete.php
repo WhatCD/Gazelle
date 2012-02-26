@@ -169,7 +169,9 @@ if(check_perms('admin_reports')) {
 						<div style="text-align: right;">
 							<a href="reportsv2.php?view=group&amp;id=<?=$GroupID?>">There <?=(($GroupOthers > 1) ? "are $GroupOthers reports" : "is 1 other report")?> for torrent(s) in this group</a>
 						</div>
-	<? 		$DB->query("SELECT t.UserID 
+	<? 		}
+	
+			$DB->query("SELECT t.UserID 
 						FROM reportsv2 AS r 
 						JOIN torrents AS t ON t.ID=r.TorrentID 
 						WHERE r.Status != 'Resolved'
@@ -188,12 +190,10 @@ if(check_perms('admin_reports')) {
 						req.TimeFilled
 						FROM requests AS req 
 						LEFT JOIN torrents AS t ON t.GroupID=req.TorrentID
-						LEFT JOIN reportsv2 AS rep ON rep.TorrentID=t.ID
 						JOIN users_main AS um ON um.ID=req.FillerID
-						WHERE rep.Status != 'Resolved'
 						AND req.TorrentID=$TorrentID");
 			$Requests = ($DB->record_count());
-			if($Requests > 0) { 
+			if($Requests > 0) {
 				while(list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 		?>
 							<div style="text-align: right;">
@@ -202,7 +202,6 @@ if(check_perms('admin_reports')) {
 		<?		}
 			}
 		}
-	}
 		?>
 					</td>
 				</tr>
