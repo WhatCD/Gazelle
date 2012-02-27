@@ -219,6 +219,39 @@ $NumSeeders = 0;
 $NumLeechers = 0;
 $NumSnatches = 0;
 
+foreach ($TorrentList as $GroupID => $Group) {
+	$TagList = explode(' ',str_replace('_','.',$Group['TagList']));
+
+	$TorrentTags = array();
+	
+	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
+	if (!in_array($ReleaseType, array(7, 3))) {
+		foreach($TagList as $Tag) {	
+			if(!isset($Tags[$Tag])) {
+				$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
+			} else {
+				$Tags[$Tag]['count']++;
+			}
+		}
+	}
+	$TorrentTags = implode(', ', $TorrentTags);
+	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
+	
+	foreach ($Group['Torrents'] as $TorrentID => $Torrent) {
+		$NumTorrents++;
+		
+		$Torrent['Seeders'] = (int)$Torrent['Seeders'];
+		$Torrent['Leechers'] = (int)$Torrent['Leechers'];
+		$Torrent['Snatched'] = (int)$Torrent['Snatched'];
+		
+		$NumSeeders+=$Torrent['Seeders'];
+		$NumLeechers+=$Torrent['Leechers'];
+		$NumSnatches+=$Torrent['Snatched'];
+	}
+}
+
+
+
 $OpenTable = false;
 $ShowGroups = !isset($LoggedUser['TorrentGrouping']) || $LoggedUser['TorrentGrouping'] == 0;
 $HideTorrents = ($ShowGroups ? '' : ' hidden');
@@ -236,24 +269,6 @@ foreach ($Importances as $Group) {
 		$OldGroupID = $GroupID;
 		$OldReleaseType = $ReleaseType;
 	}
-
-	$TagList = explode(' ',str_replace('_','.',$TagList));
-
-	$TorrentTags = array();
-	
-	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
-	if (!in_array($ReleaseType, array(7, 3))) {
-		foreach($TagList as $Tag) {	
-			if(!isset($Tags[$Tag])) {
-				$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
-			} else {
-				$Tags[$Tag]['count']++;
-			}
-			$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-		}
-	}
-	$TorrentTags = implode(', ', $TorrentTags);
-	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
 	
 	if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['HideTypes']) && in_array($ReleaseType, $LoggedUser['HideTypes']))) {
 		$HideDiscog = ' hidden';
@@ -261,6 +276,16 @@ foreach ($Importances as $Group) {
 		$HideDiscog = '';
 	}
 	
+	$TagList = explode(' ',str_replace('_','.',$TagList));
+
+	$TorrentTags = array();
+	
+	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
+	foreach($TagList as $Tag) {
+		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
+	}
+	$TorrentTags = implode(', ', $TorrentTags);
+	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
 	
 	if($ReleaseType!=$LastReleaseType) {
 		switch($ReleaseTypes[$ReleaseType]) {
@@ -358,32 +383,20 @@ foreach ($Importances as $Group) {
 	unset($FirstUnknown);
 	
 	foreach ($Torrents as $TorrentID => $Torrent) {
-		$NumTorrents++;
-
 		if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 			$FirstUnknown = !isset($FirstUnknown);
 		}
-		
-		
+			
 		if (in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent'])) {
 			$Torrent['PersonalFL'] = 1;
 		}
-		
-		$Torrent['Seeders'] = (int)$Torrent['Seeders'];
-		$Torrent['Leechers'] = (int)$Torrent['Leechers'];
-		$Torrent['Snatched'] = (int)$Torrent['Snatched'];
-		
-		$NumSeeders+=$Torrent['Seeders'];
-		$NumLeechers+=$Torrent['Leechers'];
-		$NumSnatches+=$Torrent['Snatched'];
-		
+
 		if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
-		$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
+		   $Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
 	
 			$EditionID++;
 
 			if($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
-				
 				$RemasterName = $Torrent['RemasterYear'];
 				$AddExtra = " - ";
 				if($Torrent['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']); $AddExtra=' / '; }

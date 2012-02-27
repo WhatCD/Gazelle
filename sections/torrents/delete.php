@@ -188,8 +188,7 @@ if(check_perms('admin_reports')) {
 						req.FillerID,
 						um.Username,
 						req.TimeFilled
-						FROM requests AS req 
-						LEFT JOIN torrents AS t ON t.GroupID=req.TorrentID
+						FROM requests AS req
 						JOIN users_main AS um ON um.ID=req.FillerID
 						AND req.TorrentID=$TorrentID");
 			$Requests = ($DB->record_count());
@@ -197,7 +196,7 @@ if(check_perms('admin_reports')) {
 				while(list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 		?>
 							<div style="text-align: right;">
-								<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used a torrent from this group to fill <a href="requests.php?action=viewrequest&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?>
+								<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=viewrequest&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?>
 							</div>
 		<?		}
 			}

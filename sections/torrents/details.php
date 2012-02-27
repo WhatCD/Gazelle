@@ -258,7 +258,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		}
 	}
 	if (!empty($Artists[7]) && count($Artists[7]) > 0) {
-		print '				<li class="artists_procuder"><strong>Produced By:</strong></li>';
+		print '				<li class="artists_producer"><strong>Produced By:</strong></li>';
 		foreach($Artists[7] as $Artist) {
 ?>
 				<li class="artists_producer">
@@ -467,7 +467,7 @@ foreach ($TorrentList as $Torrent) {
 	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra.'<strong>Bad Tags</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra.'<strong>Bad Folders</strong>'; $AddExtra=' / '; }
 	if(!empty($CassetteApproved)) { $ExtraInfo.=$AddExtra.'<strong>Cassette Approved</strong>'; $AddExtra=' / '; }
-	if(!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra.'<strong>Lossy master Approved</strong>'; $AddExtra=' / '; }
+	if(!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra.'<strong>Lossy Master Approved</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFiles)) { $ExtraInfo.=$AddExtra.'<strong>Bad File Names</strong>'; $AddExtra=' / '; }
 	
 	if($GroupCategoryID == 1 

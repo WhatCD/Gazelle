@@ -1693,7 +1693,7 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 				$link .= 'Various Artists';
 		}
 		
-		if(!empty($Guests) &&  (count($MainArtists) + count($Composers) > 0) && (count($MainArtists) + count($Composers) + count($Conductors) < 3)) {
+		/*if(!empty($Guests) &&  (count($MainArtists) + count($Composers) > 0) && (count($MainArtists) + count($Composers) + count($Conductors) < 3)) {
 			switch(count($Guests)) {
 				case 1:
 					$link .= ' with '.display_artist($Guests[0], $MakeLink, $Escape);
@@ -1702,7 +1702,7 @@ function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Esc
 					$link .= ' with '.display_artist($Guests[0], $MakeLink, $Escape).$ampersand.display_artist($Guests[1], $MakeLink, $Escape);
 					break;
 			}
-		}
+		}*/
 		
 		if ((count($Conductors) > 0) && (count($MainArtists) + count($Composers) > 0) && (count($Composers) < 3 || count($MainArtists) > 0)) {
 			$link .= ' under ';
