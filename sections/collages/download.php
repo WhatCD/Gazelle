@@ -117,7 +117,6 @@ t.Size
 FROM torrents AS t 
 INNER JOIN collages_torrents AS c ON t.GroupID=c.GroupID AND c.CollageID='$CollageID'
 INNER JOIN torrents_group AS tg ON tg.ID=t.GroupID AND tg.CategoryID='1'
-LEFT JOIN torrents_files AS f ON t.ID=f.TorrentID
 ORDER BY t.GroupID ASC, Rank DESC, t.$Preference";
 
 $DB->query($SQL);
@@ -149,7 +148,29 @@ foreach($Downloads as $Download) {
 	$Tor = new TORRENT($Contents, true);
 	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');
 	unset($Tor->Val['announce-list']);
-	$Zip->add_file($Tor->enc(), file_string($Artist.$Album).' - '.file_string($Year).' ('.file_string($Media).' - '.file_string($Format).' - '.file_string($Encoding).').torrent');
+	
+	// We need this section for long file names :/
+	$TorrentName='';
+	$TorrentInfo='';
+	$TorrentName = file_string($Artist.$Album);
+	if ($Year   >   0) { $TorrentName.=' - '.file_string($Year); }
+	if ($Media  != '') { $TorrentInfo .= file_string($Media); }
+	if ($Format != '') {
+		if ($TorrentInfo!='') { $TorrentInfo .= ' - '; }
+		$TorrentInfo .= file_string($Format);
+	}
+	if ($Encoding!='') {
+		if ($TorrentInfo != '') { $TorrentInfo.=' - '; }
+		$TorrentInfo .= file_string($Encoding);
+	}
+	if ($TorrentInfo != '') { $TorrentInfo = " ($TorrentInfo)"; }
+	if (strlen($TorrentName) + strlen($TorrentInfo) + 3 > 200) {
+		$TorrentName = file_string($Album).(($Year>0)?(' - '.file_string($Year)):'');
+	}
+	$FileName = $TorrentName.$TorrentInfo;
+	$FileName = cut_string($FileName, 192, true, false);
+	
+	$Zip->add_file($Tor->enc(), $FileName.'.torrent');
 }
 $Analyzed = count($Downloads);
 $Skipped = count($Skips);

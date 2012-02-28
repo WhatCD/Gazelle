@@ -159,7 +159,28 @@ foreach($Downloads as $Download) {
 	$Tor = new TORRENT($Contents, true);
 	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');
 	unset($Tor->Val['announce-list']);
-	$Zip->add_file($Tor->enc(), $ReleaseTypeName.'/'.file_string($Artist.$Album).' - '.file_string($Year).' ('.file_string($Media).' - '.file_string($Format).' - '.file_string($Encoding).').torrent');
+	
+	// We need this section for long file names :/
+	$TorrentName='';
+	$TorrentInfo='';
+	$TorrentName = file_string($Artist.$Album);
+	if ($Year   >   0) { $TorrentName.=' - '.file_string($Year); }
+	if ($Media  != '') { $TorrentInfo .= file_string($Media); }
+	if ($Format != '') {
+		if ($TorrentInfo!='') { $TorrentInfo .= ' - '; }
+		$TorrentInfo .= file_string($Format);
+	}
+	if ($Encoding!='') {
+		if ($TorrentInfo != '') { $TorrentInfo.=' - '; }
+		$TorrentInfo .= file_string($Encoding);
+	}
+	if ($TorrentInfo != '') { $TorrentInfo = " ($TorrentInfo)"; }
+	if (strlen($TorrentName) + strlen($TorrentInfo) + 3 > 200) {
+		$TorrentName = file_string($Album).(($Year>0)?(' - '.file_string($Year)):'');
+	}
+	$FileName = cut_string($TorrentName.$TorrentInfo, 180, true, false);
+	
+	$Zip->add_file($Tor->enc(), $ReleaseTypeName.'/'.$FileName.'.torrent');
 }
 $Analyzed = count($Downloads);
 $Skipped = count($Skips);

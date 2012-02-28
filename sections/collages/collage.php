@@ -623,7 +623,6 @@ if($CollageCovers != 0) { ?>
 			<span id="lastpage" class="<?=ceil($NumGroups/$CollageCovers)==2?'invisible':''?>"> | <a href="#" id="lastpage" class="pageslink" onClick="collageShow.page(<?=ceil($NumGroups/$CollageCovers)-1?>, this); return false;">Last &gt;&gt;</a></span>
 		</div>
 		<script type="text/javascript">
-			//collagePages = <?=json_encode($CollagePages)?>;
 			collageShow.init(<?=json_encode($CollagePages)?>);
 		</script>
 <?		} 
