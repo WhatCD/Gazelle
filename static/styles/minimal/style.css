@@ -482,8 +482,8 @@ ul.collage_images {
 }
 
 
-#user .main_column td img{width:130px !important; height:130px !important}
-#user .main_column td img:hover{width:300px !important; height:300px !important; margin:-75px; z-index:100}
+#user .main_column td img{max-width:130px !important; max-height:130px !important}
+#user .main_column td img:hover{max-width:300px !important; max-height:300px !important; width:300px !important; height:300px !important; margin:-75px; z-index:100}
 .collage_images{width:645px}
 
 #requests .tags{color:#656565}

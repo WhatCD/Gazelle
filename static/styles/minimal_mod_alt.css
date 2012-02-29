@@ -1223,12 +1223,14 @@ ul.collage_images {
 }
 
 #user .main_column td img {
-	height: 130px!important;
-	width: 130px!important;
+	max-height: 130px!important;
+	max-width: 130px!important;
 }
 
 #user .main_column td img:hover {
+	max-height: 280px!important;
 	height: 280px!important;
+	max-width: 280px!important;
 	width: 280px!important;
 	z-index: 100;
 	margin: -75px;
