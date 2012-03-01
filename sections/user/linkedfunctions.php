@@ -177,7 +177,7 @@ function user_dupes_table($UserID) {
 		list($DupeID) = $Dupe;
 		$DupeInfo = user_info($DupeID);
 ?>
-					<td align="left"><?=format_username($DupeID, $DupeInfo['Username'], $DupeInfo['Donor'], $DupeInfo['Warned'], $DupeInfo['Enabled'])?>
+					<td align="left"><?=format_username($DupeID, $DupeInfo['Username'], $DupeInfo['Donor'], $DupeInfo['Warned'], ($DupeInfo['Enabled']==2)?false:true)?>
 						(<a href="user.php?action=dupes&dupeaction=remove&auth=<?=$LoggedUser['AuthKey']?>&userid=<?=$UserID?>&removeid=<?=$DupeID?>" onClick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');">x</a>)</td>
 <?
 		if ($i == 5) {
