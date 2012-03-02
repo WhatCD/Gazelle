@@ -96,6 +96,7 @@ switch($Short) {
 		if($DB->record_count() < 1) {
 			error(404);
 		}
+		list($Body, $Username) = $DB->next_record();
 		break;
 }
 
