@@ -135,3 +135,13 @@ function ParanoiaResetOn() {
 }
 
 addDOMLoadEvent(AlterParanoia);
+
+function ToggleWarningAdjust(selector) {
+	if (selector.options[selector.selectedIndex].value == '---') {
+		$('#ReduceWarningTR').show();
+		$('#ReduceWarning').raw().disabled = false;
+	} else {
+		$('#ReduceWarningTR').hide();
+		$('#ReduceWarning').raw().disabled = true;
+	}
+}

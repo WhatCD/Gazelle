@@ -50,6 +50,7 @@ if(!is_number($FLTokens)) {
 
 $WarnLength = (int)$_POST['WarnLength'];
 $ExtendWarning = (int)$_POST['ExtendWarning'];
+$ReduceWarning = (int)$_POST['ReduceWarning'];
 $WarnReason = $_POST['WarnReason'];
 $UserReason = $_POST['UserReason'];
 $DisableAvatar = (isset($_POST['DisableAvatar']))? 1 : 0;
@@ -351,11 +352,22 @@ if ($Warned == 1 && $Cur['Warned']=='0000-00-00 00:00:00' && check_perms('users_
 	send_pm($UserID,0,db_string('Your warning has been extended'),db_string("Your warning has been extended by $ExtendWarning week(s) by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason"));
 	
 	$UpdateSet[]="Warned=Warned + INTERVAL $ExtendWarning WEEK";
-	$Msg = "warning extended by $ExtendWarning week(s)";
+	$DB->query("SELECT Warned + INTERVAL $ExtendWarning WEEK FROM users_info WHERE UserID='$UserID'");
+	list($WarnedUntil) = $DB->next_record();
+	$Msg = "warning extended by $ExtendWarning week(s) to $WarnedUntil";
 	if ($WarnReason) { $Msg.=" for $WarnReason"; }
 	$EditSummary[]= db_string($Msg);
-	$DB->query("SELECT Warned FROM users_info WHERE UserID='$UserID'");
+	$LightUpdates['Warned']=$WarnedUntil;
+} elseif ($Warned == 1 && $ExtendWarning=='---' && $ReduceWarning!='---' && check_perms('users_warn')) {
+	
+	send_pm($UserID,0,db_string('Your warning has been reduced'),db_string("Your warning has been reduced by $ReduceWarning week(s) by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason"));
+	
+	$UpdateSet[]="Warned=Warned - INTERVAL $ReduceWarning WEEK";
+	$DB->query("SELECT Warned  - INTERVAL $ReduceWarning WEEK FROM users_info WHERE UserID='$UserID'");
 	list($WarnedUntil) = $DB->next_record();
+	$Msg = "warning reduced by $ReduceWarning week(s) to $WarnedUntil";
+	if ($WarnReason) { $Msg.=" for $WarnReason"; }
+	$EditSummary[]= db_string($Msg);
 	$LightUpdates['Warned']=$WarnedUntil;
 }
 

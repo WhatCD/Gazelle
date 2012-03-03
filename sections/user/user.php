@@ -282,26 +282,26 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 			<div class="head colhead_dark">Percentile Rankings (Hover for values)</div>
 			<ul class="stats nobullet">
 <? if (check_paranoia_here('uploaded')) { ?>
-				<li title="<?=get_size($Uploaded)?>">Data uploaded: <?=number_format($UploadedRank)?></li>
+				<li title="<?=get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
 <? } ?>
 <? if (check_paranoia_here('downloaded')) { ?>
-				<li title="<?=get_size($Downloaded)?>">Data downloaded: <?=number_format($DownloadedRank)?></li>
+				<li title="<?=get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
 <? } ?>
 <? if (check_paranoia_here('uploads+')) { ?>
-				<li title="<?=$Uploads?>">Torrents uploaded: <?=number_format($UploadsRank)?></li>
+				<li title="<?=$Uploads?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
 <? } ?>
 <? if (check_paranoia_here('requestsfilled_count')) { ?>
-				<li title="<?=$RequestsFilled?>">Requests filled: <?=number_format($RequestRank)?></li>
+				<li title="<?=$RequestsFilled?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
 <? } ?>
 <? if (check_paranoia_here('requestsvoted_bounty')) { ?>
-				<li title="<?=get_size($TotalSpent)?>">Bounty spent: <?=number_format($BountyRank)?></li>
+				<li title="<?=get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
 <? } ?>
-				<li title="<?=$ForumPosts?>">Posts made: <?=number_format($PostRank)?></li>
+				<li title="<?=$ForumPosts?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
 <? if (check_paranoia_here('artistsadded')) { ?>
-				<li title="<?=$ArtistsAdded?>">Artists added: <?=number_format($ArtistsRank)?></li>
+				<li title="<?=$ArtistsAdded?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
 <? } ?>
 <? if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfilled_count', 'requestsvoted_bounty', 'artistsadded'))) { ?>
-				<li><strong>Overall rank: <?=number_format($OverallRank)?></strong></li>
+				<li><strong>Overall rank: <?=$OverallRank === false ? 'Server busy' : number_format($OverallRank)?></strong></li>
 <? } ?>
 			</ul>
 		</div>
@@ -1116,7 +1116,19 @@ if (check_perms('users_mod', $Class)) { ?>
 			<tr>
 				<td class="label">Extension:</td>
 				<td>
-					<select name="ExtendWarning">
+					<select name="ExtendWarning" onChange="ToggleWarningAdjust(this)">
+						<option>---</option>
+						<option value="1"> 1 Week</option>
+						<option value="2"> 2 Weeks</option>
+						<option value="4"> 4 Weeks</option>
+						<option value="8"> 8 Weeks</option>
+					</select>
+				</td>
+			</tr>
+			<tr id="ReduceWarningTR">
+				<td class="label">Reduction:</td>
+				<td>
+					<select name="ReduceWarning"ReduceWarning">
 						<option>---</option>
 						<option value="1"> 1 Week</option>
 						<option value="2"> 2 Weeks</option>

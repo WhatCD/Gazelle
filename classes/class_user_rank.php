@@ -67,10 +67,11 @@ class USER_RANK {
 			//Cache lock!
 			$Lock = $Cache->get_value(PREFIX.$TableName."_lock");
 			if($Lock) {
-				?><script type="script/javascript">setTimeout('window.location="http://<?=NONSSL_SITE_URL?><?=$_SERVER['REQUEST_URI']?>"', 5)</script><?
+				return false;
 			} else {
-				$Cache->cache_value(PREFIX.$TableName."_lock", '1', 10);
+				$Cache->cache_value(PREFIX.$TableName."_lock", '1', 300);
 				$Table = $this->build_table(PREFIX.$TableName, $this->table_query($TableName));
+				$Cache->delete_value(PREFIX.$TableName."_lock");
 			}
 		}
 		$LastPercentile = 0;
@@ -88,6 +89,9 @@ class USER_RANK {
 		// We can do this all in 1 line, but it's easier to read this way
 		if($Ratio>1) { $Ratio = 1; }
 		$TotalScore = 0;
+		if(in_array(false, func_get_args(), true)) {
+			return false;
+		}
 		$TotalScore += $Uploaded*15;
 		$TotalScore += $Downloaded*8;
 		$TotalScore += $Uploads*25;
@@ -98,7 +102,6 @@ class USER_RANK {
 		$TotalScore /= (15+8+25+2+1+1+1);
 		$TotalScore *= $Ratio;
 		return $TotalScore;
-		
 	}
 	
 }
