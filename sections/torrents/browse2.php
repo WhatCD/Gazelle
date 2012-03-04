@@ -407,7 +407,7 @@ $Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 			<tr>
 				<td class="label">Catalogue Number:</td>
 				<td>
-					<input type="text" size="40" name="cataloguenumber" class="inputtext smallest" value="<?form('"cataloguenumber"')?>"  />
+					<input type="text" size="40" name="cataloguenumber" class="inputtext smallest" value="<?form('cataloguenumber')?>"  />
 				</td>
 				<td class="label">Year:</td>
 				<td>

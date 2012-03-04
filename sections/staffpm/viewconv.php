@@ -25,7 +25,8 @@ if ($ConvID = (int)$_GET['id']) {
 	$UserInfo = user_info($UserID);
 	$UserStr = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
 
-	$OwnerID = $UserID;
+	$OwnerID   = $UserID;
+	$OwnerName = $UserInfo['Username'];
 
 ?>
 <div id="thin">
@@ -60,18 +61,19 @@ if ($ConvID = (int)$_GET['id']) {
 	<div id="inbox">
 <?
 	// Get messages
-	$StaffPMs = $DB->query("SELECT UserID, SentDate, Message FROM staff_pm_messages WHERE ConvID=$ConvID");
+	$StaffPMs = $DB->query("SELECT UserID, SentDate, Message, ID FROM staff_pm_messages WHERE ConvID=$ConvID");
 
-	while(list($UserID, $SentDate, $Message) = $DB->next_record()) {
+	while(list($UserID, $SentDate, $Message, $MessageID) = $DB->next_record()) {
 		// Set user string
 		if ($UserID == $OwnerID) {
 			// User, use prepared string
 			$UserString = $UserStr;
+			$Username   = $OwnerName;
 		} else {
 			// Staff/FLS
 			$UserInfo = user_info($UserID);
 			$UserString = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
-
+			$Username = $UserInfo['Username'];
 		}
 ?>
 		<div class="box vertical_space">
@@ -81,7 +83,9 @@ if ($ConvID = (int)$_GET['id']) {
 
 				</strong>
 				<?=time_diff($SentDate, 2, true)?>
-
+<?		if ($Status != 'Resolved') { ?>
+				- <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Username?>');">[Quote]</a>
+<?		} ?>
 			</div>
 			<div class="body"><?=$Text->full_format($Message)?></div>
 		</div>

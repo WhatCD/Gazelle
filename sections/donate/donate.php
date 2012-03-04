@@ -80,7 +80,7 @@ show_header('Donate');
 <?
 if(USER_LIMIT != 0 && $UserCount >= USER_LIMIT && !check_perms('site_can_invite_always') && !isset($DonorPerms['site_can_invite_always'])) {
 ?>
-			<li class="warning">Note: Because the user limit has been reached, you will be unable to use the invites recieved until a later date.</li>
+			<li class="warning">Note: Because the user limit has been reached, you will be unable to use the invites received until a later date.</li>
 <? } ?>
 			<li>A warm fuzzy feeling.</li>
 

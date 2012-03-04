@@ -1336,7 +1336,7 @@ function update_hash($GroupID) {
 		GROUP BY t.GroupID)
 		WHERE ID='$GroupID'");
 
-	$DB->query("REPLACE INTO sphinx_delta (ID, GroupName, TagList, Year, CategoryID, Time, ReleaseType, CatalogueNumber, Size, Snatched, Seeders, Leechers, LogScore, Scene, HasLog, HasCue, FreeTorrent, Media, Format, Encoding, RemasterTitle, FileList)
+	$DB->query("REPLACE INTO sphinx_delta (ID, GroupName, TagList, Year, CategoryID, Time, ReleaseType, RecordLabel, CatalogueNumber, VanityHouse, Size, Snatched, Seeders, Leechers, LogScore, Scene, HasLog, HasCue, FreeTorrent, Media, Format, Encoding, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, FileList)
 		SELECT
 		g.ID AS ID,
 		g.Name AS GroupName,
@@ -1345,7 +1345,9 @@ function update_hash($GroupID) {
 		g.CategoryID,
 		UNIX_TIMESTAMP(g.Time) AS Time,
 		g.ReleaseType,
+		g.RecordLabel,
 		g.CatalogueNumber,
+		g.VanityHouse,
 		MAX(CEIL(t.Size/1024)) AS Size,
 		SUM(t.Snatched) AS Snatched,
 		SUM(t.Seeders) AS Seeders,
@@ -1358,7 +1360,10 @@ function update_hash($GroupID) {
 		GROUP_CONCAT(DISTINCT t.Media SEPARATOR ' ') AS Media,
 		GROUP_CONCAT(DISTINCT t.Format SEPARATOR ' ') AS Format,
 		GROUP_CONCAT(DISTINCT t.Encoding SEPARATOR ' ') AS Encoding,
+		GROUP_CONCAT(DISTINCT t.RemasterYear SEPARATOR ' ') AS RemasterYear,
 		GROUP_CONCAT(DISTINCT t.RemasterTitle SEPARATOR ' ') AS RemasterTitle,
+		GROUP_CONCAT(DISTINCT t.RemasterRecordLabel SEPARATOR ' ') AS RemasterRecordLabel,
+		GROUP_CONCAT(DISTINCT t.RemasterCatalogueNumber SEPARATOR ' ') AS RemasterCatalogueNumber,
 		GROUP_CONCAT(REPLACE(REPLACE(FileList, '|||', '\n '), '_', ' ') SEPARATOR '\n ') AS FileList
 		FROM torrents AS t
 		JOIN torrents_group AS g ON g.ID=t.GroupID

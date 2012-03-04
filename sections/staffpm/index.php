@@ -57,6 +57,9 @@ switch($_REQUEST['action']) {
 	case 'preview':
 		require('ajax_preview_response.php');
 		break;
+	case 'get_post':
+		require('get_post.php');
+		break;
 	default:
 		if ($IsStaff || $IsFLS) {
 			require('staff_inbox.php');

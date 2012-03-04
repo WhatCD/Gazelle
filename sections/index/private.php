@@ -378,9 +378,12 @@ $Cache->increment('usage_index');
 		$TagsStr = '';
 		if ($TagList) {
 			// No vanity.house tag.
-			$Tags = explode(' ', str_replace('_', '.', str_replace('vanity_house', '', $TagList)));
+			$Tags = explode(' ', str_replace('_', '.', $TagList));
 			$TagLinks = array();
 			foreach ($Tags as $Tag) {
+				if ($Tag == 'vanity.house') {
+					continue;
+				}
 				$TagLinks[] = "<a href=\"torrents.php?action=basic&taglist=$Tag\">$Tag</a> ";
 			}
 			$TagStr = "<br />\n<div class=\"tags\">".implode(', ', $TagLinks).'</div>';
