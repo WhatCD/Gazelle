@@ -562,7 +562,7 @@ CREATE TABLE `requests_artists` (
   `RequestID` int(10) unsigned NOT NULL,
   `ArtistID` int(10) NOT NULL,
   `AliasID` int(10) NOT NULL,
-  `Importance` enum('1','2','3','4','5','6') DEFAULT NULL,
+  `Importance` enum('1','2','3','4','5','6','7') DEFAULT NULL,
   PRIMARY KEY (`RequestID`,`AliasID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
