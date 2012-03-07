@@ -137,7 +137,7 @@ while(list($Message, $LogTime) = $DB->next_record()) {
 						$UserID = $MessageParts[++$i];
 					}
 					$URL = "user ".$UserID." ".'<a href="user.php?id='.$UserID.'">'.$MessageParts[++$i]."</a>";
-				} else {
+				} elseif (strtolower($MessageParts[$i - 1]) != 'performed') {
 					$User = $MessageParts[++$i];
 					if(substr($User,-1) == ':') {
 						$User = substr($User, 0, -1);
