@@ -168,6 +168,10 @@ if($DB->affected_rows() > 0 || !$Report) {
 		$Cache->delete_value('torrents_details_'.$GroupID);
 		$SendPM = true;
 	}
+	if ($_POST['resolve_type'] == "library") {
+		$DB->query("INSERT INTO library_contest (UserID, TorrentID, Points) VALUES (".$UploaderID.", ".$TorrentID.", 1)");
+		$SendPM = false;
+	}
 	
 	//Log and delete
 	if(isset($Escaped['delete']) && check_perms('users_mod')) {

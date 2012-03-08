@@ -46,6 +46,8 @@ $Properties['BadFolders'] = (isset($_POST['bad_folders']))? 1 : 0;
 $Properties['BadFiles'] = (isset($_POST['bad_files'])) ? 1 : 0;
 $Properties['CassetteApproved'] = (isset($_POST['cassette_approved']))? 1 : 0;
 $Properties['LossymasterApproved'] = (isset($_POST['lossymaster_approved']))? 1 : 0;
+$Properties['LibraryUpload'] = (isset($_POST['library_upload']))? 1 : 0;
+$Properties['LibraryPoints'] = (isset($_POST['library_points']))? $_POST['library_points'] : 0;
 $Properties['Format'] = $_POST['format'];
 $Properties['Media'] = $_POST['media'];
 $Properties['Bitrate'] = $_POST['bitrate'];
@@ -88,10 +90,12 @@ if($Remastered == '1' && !$RemasterYear && !check_perms('edit_unknowns')) {
 	error(403);
 }
 
+$DB->query("SELECT UserID FROM torrents WHERE ID = ".$TorrentID);
+list($UploaderID) = $DB->next_record();
+
+
 if($Properties['UnknownRelease'] && !($Remastered == '1' && !$RemasterYear) && !check_perms('edit_unknowns')) {
 	//It's Unknown now, and it wasn't before
-	$DB->query("SELECT UserID FROM torrents WHERE ID = ".$TorrentID);
-	list($UploaderID) = $DB->next_record();
 	if($LoggedUser['ID'] != $UploaderID) {
 		//Hax
 		die();
@@ -326,6 +330,17 @@ if(check_perms('users_mod')) {
 	}
 	if ($bfiID && !$Properties['BadFiles']) {
 		$DB->query("DELETE FROM torrents_bad_files WHERE TorrentID='$TorrentID'");
+	}
+
+	$DB->query("SELECT TorrentID FROM library_contest WHERE TorrentID='$TorrentID'");
+	list($lbID) = $DB->next_record();
+	if (!$lbID && $Properties['LibraryUpload'] && $Properties['LibraryPoints'] > 0) {
+		$DB->query("SELECT UserID FROM torrents WHERE ID = ".$TorrentID);
+		list($UploaderID) = $DB->next_record();
+		$DB->query("INSERT INTO library_contest VALUES ($UploaderID, $TorrentID, $Properties[LibraryPoints])");
+	}
+	if ($lbID && !$Properties['LibraryUpload']) {
+		$DB->query("DELETE FROM library_contest WHERE TorrentID='$TorrentID'");
 	}
 
 	$DB->query("SELECT TorrentID FROM torrents_cassette_approved WHERE TorrentID='$TorrentID'");

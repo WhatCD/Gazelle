@@ -550,6 +550,23 @@ $Types = array(
 					'pm' => ""
 				)
 			),
+			'library' => array(
+				'priority' => '90',
+				'title' => 'Library Contest Request',
+				'report_messages' => array(
+					"Make sure to include a link to the image so we can verify it is a library upload.",
+					"Please indicate if this is a multi-disc upload in the Comments field. A simple 'yes' or 'no' will do."
+				),
+				'report_fields' => array(
+					'image' => '1'
+				),
+				'resolve_options' => array(
+					'upload' => '0',
+					'warn' => '0',
+					'delete' => '0',
+					'pm' => ""
+				)
+			),
 			'ogg' => array(
 				'priority' => '11',
 				'title' => 'Disallowed Ogg Preset',

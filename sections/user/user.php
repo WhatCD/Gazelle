@@ -225,6 +225,12 @@ if (check_perms('users_mod')) {
 <? if ($OwnProfile || check_paranoia_here(false)) { //if ($OwnProfile || check_perms('users_mod')) { ?>
 				<li><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <? } ?>
+<? if ($OwnProfile || check_paranoia_here(false)) { 
+	$DB->query("SELECT SUM(Points) FROM library_contest WHERE UserID = ".$UserID);
+	list($LibraryUploads) = $DB->next_record();
+	?>
+				<li>Library Points: <?=number_format($LibraryUploads)?></li>
+<? } ?>
 			</ul>
 		</div>
 <?

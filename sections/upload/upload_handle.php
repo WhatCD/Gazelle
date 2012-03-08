@@ -58,6 +58,8 @@ $Properties['Format'] = $_POST['format'];
 $Properties['Media'] = $_POST['media'];
 $Properties['Bitrate'] = $_POST['bitrate'];
 $Properties['Encoding'] = $_POST['bitrate'];
+$Properties['LibraryImage'] = $_POST['library_image'];
+$Properties['MultiDisc'] = $_POST['multi_disc'];
 $Properties['TagList'] = $_POST['tags'];
 $Properties['Image'] = $_POST['image'];
 $Properties['GroupDescription'] = trim($_POST['album_desc']);
@@ -696,6 +698,13 @@ if(trim($Properties['Image']) != "") {
 			$Cache->cache_value('recent_uploads_'.$UserID, $RecentUploads, 0);
 		} while (0);
 	}
+}
+
+//******************************************************************************//
+//--------------- Contest ------------------------------------------------------//
+if ($Properties['LibraryImage'] != "") {
+	$DB->query("INSERT INTO reportsv2 (ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, Track, Image, ExtraID, Link) 
+			VALUES (0, ".$TorrentID.", 'library', '".db_string(($Properties['MultiDisc'] ? "Multi-disc" : ""))."', 'New', '".sqltime()."', '', '".db_string($Properties['LibraryImage'])."', '', '')");
 }
 
 //******************************************************************************//

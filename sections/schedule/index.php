@@ -263,7 +263,7 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
 	//------------- Remove dead sessions ---------------------------------------//
 	sleep(3);
 	
-	$AgoDays = time_minus(3600*24*30);	
+	$AgoDays = time_minus(3600*24*30);
 	$DB->query("SELECT UserID, SessionID FROM users_sessions WHERE Active = 1 AND LastUpdate<'$AgoDays' AND KeepLogged='1'");
 	while(list($UserID,$SessionID) = $DB->next_record()) {
 		$Cache->begin_transaction('users_sessions_'.$UserID);

@@ -389,6 +389,7 @@ CREATE TABLE `ip_bans` (
 CREATE TABLE `library_contest` (
   `UserID` int(10) NOT NULL,
   `TorrentID` int(10) NOT NULL,
+  `Points` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`UserID`,`TorrentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1148,6 +1149,17 @@ CREATE TABLE `users_history_passwords` (
   `UserID` int(10) NOT NULL,
   `ChangeTime` datetime DEFAULT NULL,
   `ChangerIP` varchar(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `users_history_sessions` (
+  `UserID` int(11) NOT NULL DEFAULT '0',
+  `SessionID` char(32) NOT NULL DEFAULT '',
+  `Browser` varchar(40) DEFAULT NULL,
+  `OperatingSystem` varchar(8) DEFAULT NULL,
+  `IP` varchar(15) DEFAULT NULL,
+  `LastUpdate` datetime DEFAULT NULL,
+  PRIMARY KEY (`UserID`,`SessionID`),
+  KEY `LastUpdate` (`LastUpdate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `users_info` (
