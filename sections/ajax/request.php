@@ -243,14 +243,4 @@ print
 		)
 	);
 
-function pullmediainfo($Array) {
-	$NewArray = array();
-	foreach ($Array as $Item) {
-		$NewArray[] = array(
-			'id' => (int) $Item['id'],
-			'name' => $Item['name']
-		);
-	}
-	return $NewArray;
-}
 ?>

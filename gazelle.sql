@@ -1151,17 +1151,6 @@ CREATE TABLE `users_history_passwords` (
   `ChangerIP` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `users_history_sessions` (
-  `UserID` int(11) NOT NULL DEFAULT '0',
-  `SessionID` char(32) NOT NULL DEFAULT '',
-  `Browser` varchar(40) DEFAULT NULL,
-  `OperatingSystem` varchar(8) DEFAULT NULL,
-  `IP` varchar(15) DEFAULT NULL,
-  `LastUpdate` datetime DEFAULT NULL,
-  PRIMARY KEY (`UserID`,`SessionID`),
-  KEY `LastUpdate` (`LastUpdate`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 CREATE TABLE `users_info` (
   `UserID` int(10) unsigned NOT NULL,
   `StyleID` int(10) unsigned NOT NULL,

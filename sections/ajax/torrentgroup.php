@@ -20,6 +20,26 @@ $TorrentCache = get_group_info($GroupID, true, 0);
 function filter_by_key($input, $keys) { return array_intersect_key($input, array_flip($keys)); }
 
 $TorrentDetails = filter_by_key($TorrentCache[0][0], $GroupAllowed);
+
+$ArtistForm = get_artist($GroupID);
+if($TorrentDetails['CategoryID'] == 0) {
+	$CategoryName = "Unknown";
+} else {
+	$CategoryName = $Categories[$TorrentDetails['CategoryID'] - 1];
+}
+$JsonMusicInfo = array();
+if ($CategoryName == "Music") {
+	$JsonMusicInfo = array(
+		'composers' => $ArtistForm[4] == null ? array() : pullmediainfo($ArtistForm[4]),
+		'dj' => $ArtistForm[6] == null ? array() : pullmediainfo($ArtistForm[6]),
+		'artists' => $ArtistForm[1] == null ? array() : pullmediainfo($ArtistForm[1]),
+		'with' => $ArtistForm[2] == null ? array() : pullmediainfo($ArtistForm[2]),
+		'conductor' => $ArtistForm[5] == null ? array() : pullmediainfo($ArtistForm[5]),
+		'remixedBy' => $ArtistForm[3] == null ? array() : pullmediainfo($ArtistForm[3]),
+		'producer' => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
+	);
+}
+
 $JsonTorrentDetails = array(
 	'wikiBody' => $Text->full_format($TorrentDetails['WikiBody']),
 	'wikiImage' => $TorrentDetails['WikiImage'],
@@ -30,9 +50,10 @@ $JsonTorrentDetails = array(
 	'catalogueNumber' => $TorrentDetails['CatalogueNumber'],
 	'releaseType' => (int) $TorrentDetails['ReleaseType'],
 	'categoryId' => (int) $TorrentDetails['CategoryID'],
+	'categoryName' => $CategoryName,
 	'time' => $TorrentDetails['Time'],
 	'vanityHouse' => $TorrentDetails['VanityHouse'] == 1,
-	'artists' => get_artist($GroupID),
+	'musicInfo' => $JsonMusicInfo
 );
 $TorrentList = array();
 foreach ($TorrentCache[1] as $Torrent) {
