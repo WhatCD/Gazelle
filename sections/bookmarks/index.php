@@ -18,7 +18,9 @@ switch($_REQUEST['action']) {
 		
 	case 'remove_snatched':
 		authorize();
-		$DB->query("DELETE b FROM bookmarks_torrents AS b WHERE b.UserID='".$LoggedUser['ID']."' AND b.GroupID IN(SELECT DISTINCT t.GroupID FROM torrents AS t INNER JOIN xbt_snatched AS s ON s.fid=t.ID AND s.uid='".$LoggedUser['ID']."')");
+		$DB->query("CREATE TEMPORARY TABLE snatched_groups_temp (GroupID int PRIMARY KEY)");
+		$DB->query("INSERT INTO snatched_groups_temp SELECT DISTINCT GroupID FROM torrents AS t JOIN xbt_snatched AS s ON s.fid=t.ID WHERE s.uid='$LoggedUser[ID]'");
+		$DB->query("DELETE b FROM bookmarks_torrents AS b JOIN snatched_groups_temp AS s USING(GroupID) WHERE b.UserID='$LoggedUser[ID]'");
 		$Cache->delete_value('bookmarks_torrent_'.$UserID);
 		$Cache->delete_value('bookmarks_torrent_'.$UserID.'_full');
 		header('Location: bookmarks.php');
