@@ -49,8 +49,6 @@ $sqltime = sqltime();
 
 echo "$sqltime\n";
 
-
-
 /*************************************************************************\
 //--------------Run every time ------------------------------------------//
 
@@ -94,6 +92,7 @@ while (list($UserID,$InfoHash) = $DB->next_record(MYSQLI_NUM, false)) {
 	update_tracker('remove_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID));
 }
 $DB->query("UPDATE users_freeleeches SET Expired = True WHERE Time < '$sqltime' - INTERVAL 4 DAY");
+
 
 
 

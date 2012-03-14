@@ -62,6 +62,7 @@ if(!empty($_GET['way']) && !empty($WayTable[$_GET['way']])) {
 $BookmarkView = !empty($_GET['bookmarks']);
 
 if ($BookmarkView) {
+	$Categories[] = 0;
 	$BookmarkJoin = 'INNER JOIN bookmarks_collages AS bc ON c.ID = bc.CollageID';
 } else {
 	$BookmarkJoin = '';
