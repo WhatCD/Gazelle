@@ -90,7 +90,7 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 	unset($Result);
 	foreach($FilterGroups as $ID => $FilterResults) {
 ?>
-<h3>Matches for <?=$FilterResults['FilterLabel']?> (<a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$ID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Clear</a>) <a href="javascript:GroupClear($('#notificationform_<?=$ID?>').raw())">(clear selected)</a></h3>
+<h3>Matches for <?=$FilterResults['FilterLabel']?> <a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$ID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear)</a> <a href="javascript:GroupClear($('#notificationform_<?=$ID?>').raw())">(clear selected)</a></h3>
 <form id="notificationform_<?=$ID?>">
 <table class="border">
 	<tr class="colhead">
