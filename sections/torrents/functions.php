@@ -101,7 +101,6 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			LEFT JOIN torrents_lossymaster_approved AS lma on lma.TorrentID=t.ID
 			LEFT JOIN torrents_logs_new AS tln ON tln.TorrentID=t.ID
 			WHERE t.GroupID='".db_string($GroupID)."'
-			AND flags != 1
 			GROUP BY t.ID
 			ORDER BY t.Remastered ASC, (t.RemasterYear <> 0) DESC, t.RemasterYear ASC, t.RemasterTitle ASC, t.RemasterRecordLabel ASC, t.RemasterCatalogueNumber ASC, t.Media ASC, t.Format, t.Encoding, t.ID");
 

@@ -95,16 +95,32 @@ if(!empty($_GET['categories'])) {
 	$SearchWhere[]='('.implode(' OR ', $Cats).')';
 }
 
+if(!isset($_GET['tags_type'])) {
+	$_GET['tags_type'] = '1';
+}
+
 if(!empty($_GET['tags'])) {
 	$Tags = explode(',',$_GET['tags']);
 	$TagList = array();
 	foreach($Tags as $Tag) {
 		$Tag = trim(str_replace('.','_',$Tag));
 		if(empty($Tag)) { continue; }
-		$TagList[]="tg.TagList LIKE '%".db_string($Tag)."%'";
+		if($Tag[0] == '!') {
+			$Tag = ltrim(substr($Tag,1));
+			if(empty($Tag)) { continue; }
+			$TagList[]="CONCAT(' ',tg.TagList,' ') NOT LIKE '% ".db_string($Tag)." %'";
+		} else {
+			$TagList[]="CONCAT(' ',tg.TagList,' ') LIKE '% ".db_string($Tag)." %'";
+		}
 	}
 	if(!empty($TagList)) {
-		$SearchWhere[]='('.implode(' OR ', $TagList).')';
+		if(isset($_GET['tags_type']) && $_GET['tags_type'] != 1) {
+			$_GET['tags_type'] = '0';
+			$SearchWhere[]='('.implode(' OR ', $TagList).')';
+		} else {
+			$_GET['tags_type'] = '1';
+			$SearchWhere[]='('.implode(' AND ', $TagList).')';
+		}
 	}
 }
 
@@ -132,6 +148,12 @@ switch($_GET['type']) {
 		$ExtraWhere = 'AND xfu.active=1 AND xfu.Remaining=0';
 		$From = "xbt_files_users AS xfu JOIN torrents AS t ON t.ID=xfu.fid";
 		break;
+	case 'contest':
+		$Time = 'unix_timestamp(t.Time)';
+		$UserField = 't.UserID';
+		$ExtraWhere = " AND t.ID IN (SELECT TorrentID FROM library_contest WHERE UserID = ".$UserID.")";
+		$From = "torrents AS t";
+		break;
 	case 'leeching':
 		if(!check_paranoia('leeching', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
 		$Time = '(unix_timestamp(now()) - xfu.timespent)';
@@ -143,7 +165,7 @@ switch($_GET['type']) {
 		if ((empty($_GET['filter']) || $_GET['filter'] != 'perfectflac') && !check_paranoia('uploads', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
 		$Time = 'unix_timestamp(t.Time)';
 		$UserField = 't.UserID';
-		$ExtraWhere = 'AND flags!=1';
+		$ExtraWhere = '';
 		$From = "torrents AS t";
 		break;
 	case 'downloaded':
@@ -322,7 +344,9 @@ $Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 				<tr>
 					<td class="label"><strong>Tags:</strong></td>
 					<td>
-						<input type="text" name="tags" size="60" value="<?form('tags')?>" />
+						<input type="text" name="tags" size="60" title="Use !tag to exclude tag" value="<?form('tags')?>" />&nbsp;
+						<input type="radio" name="tags_type" id="tags_type0" value="0" <?selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+						<input type="radio" name="tags_type" id="tags_type1" value="1" <?selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 					</td>
 				</tr>
 				

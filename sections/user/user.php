@@ -229,7 +229,7 @@ if (check_perms('users_mod')) {
 	$DB->query("SELECT SUM(Points) FROM library_contest WHERE UserID = ".$UserID);
 	list($LibraryUploads) = $DB->next_record();
 	?>
-				<li>Library Points: <?=number_format($LibraryUploads)?></li>
+				<li>Library Points: <?=number_format($LibraryUploads)?> [<a href="torrents.php?type=contest&userid=<?=$UserID?>">View</a>]</li>
 <? } ?>
 			</ul>
 		</div>

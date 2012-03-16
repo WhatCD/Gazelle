@@ -1116,7 +1116,7 @@ function delete_torrent($ID, $GroupID=0) {
 	
 	$Cache->decrement('stats_torrent_count');
 
-	$DB->query("SELECT COUNT(ID) FROM torrents WHERE GroupID='$GroupID' AND flags <> 1");
+	$DB->query("SELECT COUNT(ID) FROM torrents WHERE GroupID='$GroupID'");
 	list($Count) = $DB->next_record();
 
 	if($Count == 0) {

@@ -24,7 +24,7 @@ if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 } else {
 	// error out on invalid requests (before caching)
 	if(isset($_GET['details'])) {
-		if(in_array($_GET['details'], array('day','week','overall','snatched','data','seeded'))) {
+		if(in_array($_GET['details'], array('day','week','overall','snatched','data','seeded','month','year'))) {
 			$Details = $_GET['details'];
 		} else {
 			error(404);
@@ -174,6 +174,36 @@ if($Details=='all' || $Details=='week') {
 	generate_torrent_table('Most Active Torrents Uploaded in the Past Week', 'week', $TopTorrentsActiveLastWeek, $Limit);
 }
 
+if($Details=='all' || $Details=='month') {
+	if (!$TopTorrentsActiveLastMonth = $Cache->get_value('top10tor_month_'.$Limit.$WhereSum)) {
+		$Query = $BaseQuery.' WHERE ';
+		if (!empty($Where)) { $Query .= $Where.' AND '; }
+		$Query .= "
+			t.Time>'".sqltime()."' - INTERVAL 1 MONTH
+			ORDER BY (t.Seeders + t.Leechers) DESC
+			LIMIT $Limit;";
+		$DB->query($Query);
+		$TopTorrentsActiveLastMonth = $DB->to_array(false, MYSQLI_NUM);
+		$Cache->cache_value('top10tor_month_'.$Limit.$WhereSum,$TopTorrentsActiveLastMonth,3600*6);
+	}
+	generate_torrent_table('Most Active Torrents Uploaded in the Past Month', 'month', $TopTorrentsActiveLastMonth, $Limit);
+}
+
+if($Details=='all' || $Details=='year') {
+	if (!$TopTorrentsActiveLastYear = $Cache->get_value('top10tor_year_'.$Limit.$WhereSum)) {
+		$Query = $BaseQuery.' WHERE ';
+		if (!empty($Where)) { $Query .= $Where.' AND '; }
+		$Query .= "
+			t.Time>'".sqltime()."' - INTERVAL 1 YEAR
+			ORDER BY (t.Seeders + t.Leechers) DESC
+			LIMIT $Limit;";
+		$DB->query($Query);
+		$TopTorrentsActiveLastYear = $DB->to_array(false, MYSQLI_NUM);
+		$Cache->cache_value('top10tor_year_'.$Limit.$WhereSum,$TopTorrentsActiveLastYear,3600*6);
+	}
+	generate_torrent_table('Most Active Torrents Uploaded in the Past Year', 'year', $TopTorrentsActiveLastYear, $Limit);
+}
+
 if($Details=='all' || $Details=='overall') {
 	if (!$TopTorrentsActiveAllTime = $Cache->get_value('top10tor_overall_'.$Limit.$WhereSum)) {
 		// IMPORTANT NOTE - we use WHERE t.Seeders>500 in order to speed up this query. You should remove it!
@@ -252,8 +282,23 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		<h3>Top <?=$Limit.' '.$Caption?>
 <?	if(empty($_GET['advanced'])){ ?> 
 		<small>
+<?	
+	switch($Limit) {
+		case 100: ?>
+			- [<a href="top10.php?details=<?=$Tag?>">Top 10</a>]
+			- [Top 100]
+			- [<a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>">Top 250</a>]
+		<?	break;
+		case 250: ?>
+			- [<a href="top10.php?details=<?=$Tag?>">Top 10</a>]
+			- [<a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>">Top 100</a>]
+			- [Top 250]
+		<?	break;
+		default: ?>
+			- [Top 10]
 			- [<a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>">Top 100</a>]
 			- [<a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>">Top 250</a>]
+<?	} ?>
 		</small>
 <?	} ?> 
 		</h3>
