@@ -1222,17 +1222,22 @@ ul.collage_images {
   width: 695px !important;
 }
 
-#user .main_column td img {
-	max-height: 130px!important;
-	max-width: 130px!important;
+#user .recent td img {
+	height: 130px!important;
+	width: 130px!important;
 }
 
-#user .main_column td img:hover {
+#user .recent td {
+	text-align: center;
+}
+
+#user .recent td img:hover {
 	max-height: 280px!important;
-	height: 280px!important;
 	max-width: 280px!important;
 	width: 280px!important;
-	z-index: 100;
+	height: 280px!important;
+	
+	z-index: 8;
 	margin: -75px;
 }
 
