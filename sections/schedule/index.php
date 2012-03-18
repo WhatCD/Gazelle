@@ -239,9 +239,9 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
 	$Users = $DB->to_array();
 	foreach ($Users as $UserID) {
 		list($UserID) = $UserID;
-		$DB->query("SELECT Invites FROM users_main WHERE ID=$UserID");
-		list($Invites) = $DB->next_record();
-		if ($Invites < 10) {
+		$DB->query("SELECT Invites, PermissionID FROM users_main WHERE ID=$UserID");
+		list($Invites, $PermID) = $DB->next_record();
+		if (($Invites < 2 && $Classes[$PermID]['Level'] <= $Classes[POWER]['Level']) || ($Invites < 4 && $PermID == ELITE)) {
 			$DB->query("UPDATE users_main SET Invites=Invites+1 WHERE ID=$UserID");
 			$Cache->begin_transaction('user_info_heavy_'.$UserID);
 			$Cache->update_row(false, array('Invites' => '+1'));
