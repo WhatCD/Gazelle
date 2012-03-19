@@ -22,6 +22,7 @@ class TORRENT_FORM {
 	var $Error = false;
 	var $TorrentID = false;
 	var $Disabled = '';
+	var $DisabledFlag = false;
 	
 	function TORRENT_FORM($Torrent = false, $Error = false, $NewTorrent = true) {
 		
@@ -39,6 +40,7 @@ class TORRENT_FORM {
 		
 		if($this->Torrent && $this->Torrent['GroupID']) {
 			$this->Disabled = ' disabled="disabled"';
+			$this->DisabledFlag = true;
 		}
 	}
 
@@ -217,9 +219,11 @@ class TORRENT_FORM {
 						<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
 						<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 					</select>
-<?				if ($FirstArtist) { ?>
+<?				if ($FirstArtist) { 
+					if (!$this->DisabledFlag) { ?>
 					[<a href="javascript:AddArtistField()">+</a>] [<a href="javascript:RemoveArtistField()">-</a>]
-<?					$FirstArtist = false;
+<?					}
+					$FirstArtist = false;
 				}	?>
 					<br />
 <?					}
@@ -236,8 +240,8 @@ class TORRENT_FORM {
 						<option value="3">Remixer</option>
 						<option value="7">Producer</option>
 					</select>
-					[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]
-<?	
+					[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]					
+<?
 			}
 ?>	
 				</td>

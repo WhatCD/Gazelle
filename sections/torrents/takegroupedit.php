@@ -131,19 +131,21 @@ foreach($UserIDs as $UserID) {
 }
 
 $DB->query("SELECT ID FROM torrents WHERE GroupID = ".$GroupID);
-$TorrentIDs = implode(",", $DB->collect('ID'));
-$DB->query("SELECT DISTINCT uid FROM xbt_snatched WHERE fid IN (".$TorrentIDs.")");
-$Snatchers = $DB->collect('uid');
-foreach($Snatchers as $UserID) {
-	$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
-	if(is_array($RecentSnatches)) {
-		foreach($RecentSnatches as $Key => $Recent) {
-			if($Recent['ID'] == $GroupID) {
-				if($Recent['WikiImage'] != $Image) {
-					$Recent['WikiImage'] = $Image;
-					$Cache->begin_transaction('recent_snatches_'.$UserID);
-					$Cache->update_row($Key, $Recent);
-					$Cache->commit_transaction(0);
+if($DB->record_count()) {
+	$TorrentIDs = implode(",", $DB->collect('ID'));
+	$DB->query("SELECT DISTINCT uid FROM xbt_snatched WHERE fid IN (".$TorrentIDs.")");
+	$Snatchers = $DB->collect('uid');
+	foreach($Snatchers as $UserID) {
+		$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
+		if(is_array($RecentSnatches)) {
+			foreach($RecentSnatches as $Key => $Recent) {
+				if($Recent['ID'] == $GroupID) {
+					if($Recent['WikiImage'] != $Image) {
+						$Recent['WikiImage'] = $Image;
+						$Cache->begin_transaction('recent_snatches_'.$UserID);
+						$Cache->update_row($Key, $Recent);
+						$Cache->commit_transaction(0);
+					}
 				}
 			}
 		}
