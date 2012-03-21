@@ -80,6 +80,9 @@ switch ($_GET['action']){
 	case 'loadavg':
 		require(SERVER_ROOT.'/sections/ajax/loadavg.php');
 		break;
+	case 'better':
+		require(SERVER_ROOT.'/sections/ajax/better/index.php');
+		break;
 	default:
 		// If they're screwing around with the query string
 		print json_encode(array('status' => 'failure'));
