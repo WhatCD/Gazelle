@@ -17,7 +17,7 @@ class TEXT {
 		':frown:'			=> 'frown.gif',
 		'&lt;3'				=> 'heart.gif',
 		':unsure:'			=> 'hmm.gif',
-		':\\'			=> 'hmm.gif',
+		//':\\'			=> 'hmm.gif',
 		':whatlove:'		=> 'ilu.gif',
 		':lol:'				=> 'laughing.gif',
 		':loveflac:'		=> 'loveflac.gif',

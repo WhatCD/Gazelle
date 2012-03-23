@@ -572,7 +572,7 @@ if ($SendHackedMail && check_perms('users_disable_any')) {
 
 This is the information to connect to our server:
 IRC Server: ".BOT_SERVER."
-Port: ".BOT_PORT." (6697 SSL)
+Port: ".BOT_PORT." (".BOT_PORT_SSL." SSL)
 
 Once you are connected to our server you'll need to join our disabled channel.
 Type: /join ".BOT_DISABLED_CHAN."

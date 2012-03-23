@@ -33,7 +33,7 @@ abstract class IRC_BOT {
 
 	public function connect() {
 		//Open a socket to the IRC server
-		$this->Socket = fsockopen(BOT_SERVER, BOT_PORT);
+		$this->Socket = fsockopen('ssl://'.BOT_SERVER, BOT_PORT_SSL);
 		stream_set_blocking($this->Socket, 0);
 
 		//create a socket to listen on
