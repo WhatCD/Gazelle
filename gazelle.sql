@@ -441,6 +441,8 @@ CREATE TABLE `permissions` (
   `Name` varchar(25) CHARACTER SET latin1 NOT NULL,
   `Values` text CHARACTER SET latin1 NOT NULL,
   `DisplayStaff` enum('0','1') CHARACTER SET latin1 NOT NULL DEFAULT '0',
+  `PermittedForums` varchar(150) NOT NULL DEFAULT '',
+  `Secondary` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Level` (`Level`),
   KEY `DisplayStaff` (`DisplayStaff`)
@@ -1212,6 +1214,13 @@ CREATE TABLE `users_info` (
   KEY `BitcoinAddress_2` (`BitcoinAddress`(4))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `users_levels` (
+  `UserID` int(10) unsigned NOT NULL,
+  `PermissionID` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`UserID`,`PermissionID`),
+  KEY `PermissionID` (`PermissionID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `users_main` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Username` varchar(20) NOT NULL,
@@ -1293,6 +1302,17 @@ CREATE TABLE `users_notify_filters` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_notify_torrents` (
+  `UserID` int(10) NOT NULL,
+  `FilterID` int(10) NOT NULL,
+  `GroupID` int(10) NOT NULL,
+  `TorrentID` int(10) NOT NULL,
+  `UnRead` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`UserID`,`TorrentID`),
+  KEY `TorrentID` (`TorrentID`),
+  KEY `UserID` (`UserID`,`UnRead`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `users_notify_torrents_old` (
   `UserID` int(10) NOT NULL,
   `FilterID` int(10) NOT NULL,
   `GroupID` int(10) NOT NULL,
