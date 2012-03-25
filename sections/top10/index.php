@@ -1,7 +1,7 @@
 <?
 enforce_login();
 
-if(!check_perms('site_top10')){
+if(1 || !check_perms('site_top10')){
 	show_header();
 ?>
 <div class="content_basiccontainer">

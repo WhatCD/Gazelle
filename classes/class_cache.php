@@ -43,7 +43,8 @@ class CACHE extends Memcache {
 	public $CanClear = false;
 
 	function __construct() {
-		$this->pconnect(MEMCACHED_HOST, MEMCACHED_PORT);
+		$this->pconnect('192.168.5.6', 11211);
+//		$this->pconnect(MEMCACHED_HOST, MEMCACHED_PORT);
 		
 		//$this->connect('localhost', 11211);
 	}
