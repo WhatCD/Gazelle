@@ -4,7 +4,7 @@ function compare($X, $Y){
 	return($Y['score'] - $X['score']);
 }
 
-define(MAX_PERS_COLLAGES, 3); // How many personal collages should be shown by default
+define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by default
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
