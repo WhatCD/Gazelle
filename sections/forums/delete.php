@@ -58,7 +58,6 @@ if($LastID < $PostID) { // Last post in a topic was removed
 			'NumPosts' => '-1',
 			'LastPostID' => $LastTopicPostID,
 			'LastPostAuthorID' => $LastTopicAuthorID,
-			'Username' => $LastTopicAuthorName,
 			'LastPostTime' => $LastTopicPostTime,
 			'LastPostTopicID' => $LastTopicID,
 			'Title' => $LastTopicTitle);
@@ -68,7 +67,6 @@ if($LastID < $PostID) { // Last post in a topic was removed
 			'NumPosts' => '-1',
 			'LastPostID' => $LastID,
 			'LastPostAuthorID' => $LastAuthorID,
-			'Username' => $LastAuthorName,
 			'LastPostTime' => $LastTime);
 	}
 	$UpdateArrayThread = array('Posts' => '-1', 'LastPostAuthorID' => $LastAuthorID);

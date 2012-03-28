@@ -72,7 +72,7 @@ if($ShowGrouped) {
 	$sql .= '
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = '.$UserID.'
-		AND ((f.MinClassRead <= '.$LoggedUser['Class'];
+		AND ((f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
 	if(!empty($RestrictedForums)) {
 		$sql.='
 		AND f.ID NOT IN (\''.$RestrictedForums.'\')';
@@ -153,7 +153,7 @@ if($ShowGrouped) {
 		JOIN forums AS f ON f.ID = t.ForumID
 		LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
 		WHERE p.AuthorID = '.$UserID.'
-		AND f.MinClassRead <= '.$LoggedUser['Class'];
+		AND f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
 
 	if(!empty($RestrictedForums)) {
 		$sql.='
@@ -315,7 +315,7 @@ if(empty($Results)) {
 					<a href="#content<?=$PostID?>" onclick="LoadEdit(<?=$PostID?>, 1)">&laquo;</a>
 <? 				} ?>		   
 					Last edited by
-					<?=format_username($EditedUserID, $EditedUsername) ?> <?=time_diff($EditedTime,2,true,true)?>
+					<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <?			} ?>		
 				</div>
 			</td>

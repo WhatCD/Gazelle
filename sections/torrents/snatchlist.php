@@ -44,18 +44,14 @@ $i = 0;
 foreach($Results as $ID=>$Data) {
 	list($SnatcherID, $Timestamp) = array_values($Data);
 	
-	$UserInfo = user_info($SnatcherID);
-	
-	$User = format_username($SnatcherID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
-	
-	if($i % 2 == 0 && $i>0){
+	if($i % 2 == 0 && $i>0) {
 ?> 
 	</tr>
 	<tr>	
 <?
 	}
 ?> 
-		<td><?=$User?></td>
+		<td><?=format_username($SnatcherID, true, true, true, true)?></td>
 		<td><?=time_diff($Timestamp)?></td>
 <?
 	$i++;

@@ -91,7 +91,6 @@ if(isset($_POST['delete'])) {
 			'NumTopics'=>'-1',
 			'LastPostID'=>$NewLastPostID,
 			'LastPostAuthorID'=>$NewLastAuthorID,
-			'Username'=>$NewLastAuthorName,
 			'LastPostTopicID'=>$NewLastTopic,
 			'LastPostTime'=>$NewLastAddedTime,
 			'Title'=>$NewLastTitle,
@@ -176,7 +175,6 @@ if(isset($_POST['delete'])) {
 			'NumTopics'=>'-1',
 			'LastPostID'=>$NewLastPostID,
 			'LastPostAuthorID'=>$NewLastAuthorID,
-			'Username'=>$NewLastAuthorName,
 			'LastPostTopicID'=>$NewLastTopic,
 			'LastPostTime'=>$NewLastAddedTime,
 			'Title'=>$NewLastTitle,
@@ -219,7 +217,6 @@ if(isset($_POST['delete'])) {
 			'NumTopics'=>'+1',
 			'LastPostID'=>$NewLastPostID,
 			'LastPostAuthorID'=>$NewLastAuthorID,
-			'Username'=>$NewLastAuthorName,
 			'LastPostTopicID'=>$NewLastTopic,
 			'LastPostTime'=>$NewLastAddedTime,
 			'Title'=>$NewLastTitle

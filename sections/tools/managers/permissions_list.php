@@ -17,7 +17,11 @@ function confirmDelete(id) {
 		[<a href="tools.php">Back to Tools</a>]
 	</div>
 <?
-$DB->query("SELECT p.ID,p.Name,p.Level,COUNT(u.ID) FROM permissions AS p LEFT JOIN users_main AS u ON u.PermissionID=p.ID GROUP BY p.ID ORDER BY p.Level ASC");
+$DB->query("SELECT p.ID,p.Name,p.Level,p.Secondary,COUNT(u.ID)+COUNT(DISTINCT l.UserID) 
+            FROM permissions AS p 
+			LEFT JOIN users_main AS u ON u.PermissionID=p.ID 
+			LEFT JOIN users_levels AS l ON l.PermissionID=p.ID 
+			GROUP BY p.ID ORDER BY p.Secondary ASC, p.Level ASC");
 if($DB->record_count()) {
 ?>
 	<table width="100%">
@@ -27,10 +31,10 @@ if($DB->record_count()) {
 			<td>User Count</td>
 			<td class="center">Actions</td>
 		</tr>
-<?	while(list($ID,$Name,$Level,$UserCount)=$DB->next_record()) { ?>
+<?	while(list($ID,$Name,$Level,$Secondary,$UserCount)=$DB->next_record()) { ?>
 		<tr>
 			<td><?=display_str($Name); ?></td>
-			<td><?=$Level; ?></td>
+			<td><?=($Secondary?'Secondary':$Level) ?></td>
 			<td><?=number_format($UserCount); ?></td>
 			<td class="center">[<a href="tools.php?action=permissions&amp;id=<?=$ID ?>">Edit</a> | <a href="#" onclick="return confirmDelete(<?=$ID?>)">Remove</a>]</td>
 		</tr>

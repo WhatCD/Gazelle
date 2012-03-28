@@ -42,13 +42,8 @@ if (!empty($Groups['matches'][$GroupID])) {
 <?				}
 			} else { ?>
 				<td />
-<?			}
-			
-			$DB->query("SELECT Username FROM users_main WHERE ID = ".$UserID);
-			list($Username) = $DB->next_record();
-			$DB->set_query_id($Log);
-?>
-			<td><?=format_username($UserID, $Username)?></td>
+<?			}	?>
+			<td><?=format_username($UserID, false, false, false)?></td>
 			<td><?=$Info?></td>
 		</tr>
 <?

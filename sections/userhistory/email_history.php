@@ -14,8 +14,8 @@ user.
 $UserID = $_GET['userid'];
 if (!is_number($UserID)) { error(404); }
 
-$DB->query("SELECT um.Username, ui.JoinDate, p.Level AS Class FROM users_main AS um JOIN users_info AS ui ON um.ID=ui.UserID JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = $UserID");
-list($Username, $Joined, $Class) = $DB->next_record();
+$DB->query("SELECT ui.JoinDate, p.Level AS Class FROM users_main AS um JOIN users_info AS ui ON um.ID=ui.UserID JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = $UserID");
+list($Joined, $Class) = $DB->next_record();
 
 if(!check_perms('users_view_email', $Class)) {
 	error(403);
@@ -94,7 +94,7 @@ foreach($History as $Key => $Values){
 <?
 	if ($UsersOnly == 1) {
 		$ueQuery = $DB->query("SELECT ue.UserID, Username, ue.Time, ue.IP FROM users_history_emails AS ue, users_main WHERE ue.Email = '".db_string($Values['Email'])."' AND UserID != ".$UserID." AND ID = UserID");
-		while (list($UserID2, $Username, $Time, $IP) = $DB->next_record()) { ?>
+		while (list($UserID2, $Time, $IP) = $DB->next_record()) { ?>
 	</tr>
 	<tr>
 		<td />
@@ -105,7 +105,7 @@ foreach($History as $Key => $Values){
 			list($Enabled)=$DB->next_record();
 			$DB->set_query_id($ueQuery);
 ?>
-		<td><a href="<?=display_str($UserURL)?>"><?=format_username($UserID2, $Username, 0, 0, $Enabled == 2 ? false : true, "")?></a></td>
+		<td><a href="<?=display_str($UserURL)?>"><?=format_username($UserID2, false, false, true)?></a></td>
 	</tr>	
 <?
 		}

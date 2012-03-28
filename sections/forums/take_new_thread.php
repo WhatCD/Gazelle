@@ -136,7 +136,6 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 		'ID' => $TopicID,
 		'Title' => $Title,
 		'AuthorID' => $LoggedUser['ID'],
-		'AuthorUsername' => $LoggedUser['Username'],
 		'IsLocked' => 0,
 		'IsSticky' => 0,
 		'NumPosts' => 1,
@@ -157,7 +156,6 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 		'NumTopics'=>'+1',
 		'LastPostID'=>$PostID,
 		'LastPostAuthorID'=>$LoggedUser['ID'],
-		'Username'=>$LoggedUser['Username'],
 		'LastPostTopicID'=>$TopicID,
 		'LastPostTime'=>sqltime(),
 		'Title'=>$Title,
@@ -178,7 +176,6 @@ $Post = array(
 	'Body'=>$Body,
 	'EditedUserID'=>0,
 	'EditedTime'=>'0000-00-00 00:00:00',
-	'Username'=>''
 	);
 $Cache->insert('', $Post);
 $Cache->commit_transaction(0);

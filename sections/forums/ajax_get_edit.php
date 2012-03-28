@@ -25,18 +25,17 @@ $Text = new TEXT;
 
 $Edits = $Cache->get_value($Type.'_edits_'.$PostID);
 if(!is_array($Edits)) {
-	$DB->query("SELECT ce.EditUser, um.Username, ce.EditTime, ce.Body
+	$DB->query("SELECT ce.EditUser, ce.EditTime, ce.Body
 			FROM comments_edits AS ce 
-				JOIN users_main AS um ON um.ID=ce.EditUser
 			WHERE Page = '".$Type."' AND PostID = ".$PostID."
 			ORDER BY ce.EditTime DESC");
 	$Edits = $DB->to_array();
 	$Cache->cache_value($Type.'_edits_'.$PostID, $Edits, 0);
 }
 	
-list($UserID, $Username, $Time) = $Edits[$Depth];
+list($UserID, $Time) = $Edits[$Depth];
 if($Depth != 0) {
-	list(,,,$Body) = $Edits[$Depth - 1];
+	list(,,$Body) = $Edits[$Depth - 1];
 } else {
 	//Not an edit, have to get from the original
 	switch($Type) {
@@ -66,7 +65,7 @@ if($Depth != 0) {
 <? if($Depth < count($Edits)) { ?>
 					<a href="#edit_info_<?=$PostID?>" onclick="LoadEdit('<?=$Type?>', <?=$PostID?>, <?=($Depth + 1)?>); return false;">&laquo;</a>
 					<?=(($Depth == 0) ? 'Last edited by' : 'Edited by')?>
-					<?=format_username($UserID, $Username) ?> <?=time_diff($Time,2,true,true)?>
+					<?=format_username($UserID, false, false, false) ?> <?=time_diff($Time,2,true,true)?>
 <? } else { ?>
 					<em>Original Post</em>
 <? }

@@ -4,7 +4,7 @@ $ArticleID=$_GET['id'];
 
 $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $Author) = array_shift($Article);
-if($Edit > $LoggedUser['Class']){ 
+if($Edit > $LoggedUser['EffectiveClass']){ 
 	error('You do not have access to edit this article.');
 }
 

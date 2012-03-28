@@ -3,6 +3,8 @@ function class_list($Selected=0){
 	global $Classes;
 	$Return = '';
 	foreach ($Classes as $ID => $Class) {
+		if ($Class['Secondary']) { continue; }
+		
 		$Name = $Class['Name'];
 		$Level = $Class['Level'];
 		$Return.='<option value="'.$Level.'"';

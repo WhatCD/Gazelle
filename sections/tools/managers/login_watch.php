@@ -14,14 +14,7 @@ $DB->query('SELECT
 	l.Attempts,
 	l.BannedUntil,
 	l.Bans,
-	m.Username,
-	m.PermissionID,
-	m.Enabled,
-	i.Donor,
-	i.Warned
 	FROM login_attempts AS l
-	LEFT JOIN users_main AS m ON m.ID=l.UserID
-	LEFT JOIN users_info AS i ON i.UserID=l.UserID
 	WHERE l.BannedUntil > "'.sqltime().'"
 	ORDER BY l.BannedUntil ASC');
 
@@ -41,7 +34,7 @@ show_header('Login Watch');
 	</tr>
 <?
 $Row = 'b';
-while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans, $Username, $PermissionID, $Enabled, $Donor, $Warned) = $DB->next_record()){
+while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $DB->next_record()){
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
 	<tr class="row<?=$Row?>">
@@ -49,7 +42,7 @@ while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans, $Use
 				<?=$IP?>
 			</td>
 			<td>
-				<? if ($UserID != 0) { echo format_username($UserID, $Username, $Donor, $Warned, $Enabled, $PermissionID); } ?>
+				<? if ($UserID != 0) { echo format_username($UserID, true, true, true, true); } ?>
 			</td>
 			<td>
 				<?=$Bans?>

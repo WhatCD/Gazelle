@@ -9,7 +9,7 @@ if ($ConvID = (int)$_GET['id']) {
 	$DB->query("SELECT Subject, UserID, Level, AssignedToUser, Unread, Status FROM staff_pm_conversations WHERE ID=$ConvID");
 	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
 
-	if (!(($UserID == $LoggedUser['ID']) || ($AssignedToUser == $LoggedUser['ID']) || (($Level > 0 && $Level <= $LoggedUser['Class']) || ($Level == 0 && $IsFLS)))) {
+	if (!(($UserID == $LoggedUser['ID']) || ($AssignedToUser == $LoggedUser['ID']) || (($Level > 0 && $Level <= $LoggedUser['EffectiveClass']) || ($Level == 0 && $IsFLS)))) {
 	// User is trying to view someone else's conversation
 		error(403);
 	}
@@ -22,8 +22,8 @@ if ($ConvID = (int)$_GET['id']) {
 
 	show_header('Staff PM', 'staffpm,bbcode');
 
-	$UserInfo = user_info($UserID);
-	$UserStr = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+	//$UserInfo = user_info($UserID);
+	$UserStr = format_username($UserID, true, true, true, true);
 
 	$OwnerID   = $UserID;
 	$OwnerName = $UserInfo['Username'];
@@ -72,7 +72,7 @@ if ($ConvID = (int)$_GET['id']) {
 		} else {
 			// Staff/FLS
 			$UserInfo = user_info($UserID);
-			$UserString = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+			$UserString = format_username($UserID, true, true, true, true);
 			$Username = $UserInfo['Username'];
 		}
 ?>

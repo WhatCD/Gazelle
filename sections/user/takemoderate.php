@@ -24,6 +24,10 @@ $Title = db_string($_POST['Title']);
 $AdminComment = db_string($_POST['AdminComment']);
 $Donor = (isset($_POST['Donor']))? 1 : 0;
 $Artist = (isset($_POST['Artist']))? 1 : 0;
+$SecondaryClasses = isset($_POST['secondary_classes'])?$_POST['secondary_classes']:array();
+foreach ($SecondaryClasses as $i => $Val) {
+	if(!is_number($Val)) { unset($SecondaryClasses[$i]); }
+}
 $Visible = (isset($_POST['Visible']))? 1 : 0;
 $Invites = (int)$_POST['Invites'];
 $SupportFor = db_string($_POST['SupportFor']);
@@ -120,11 +124,14 @@ $DB->query("SELECT
 	m.RequiredRatio,
 	m.FLTokens,
 	i.RatioWatchEnds,
-	SHA1(i.AdminComment) AS CommentHash
+	SHA1(i.AdminComment) AS CommentHash,
+	GROUP_CONCAT(l.PermissionID SEPARATOR ',') AS SecondaryClasses
 	FROM users_main AS m
 	JOIN users_info AS i ON i.UserID = m.ID
 	LEFT JOIN permissions AS p ON p.ID=m.PermissionID
-	WHERE m.ID = $UserID");
+	LEFT JOIN users_levels AS l ON l.UserID = m.ID
+	WHERE m.ID = $UserID
+	GROUP BY m.ID");
 
 if ($DB->record_count() == 0) { // If user doesn't exist
 	header("Location: log.php?search=User+".$UserID);
@@ -301,6 +308,36 @@ if ($Artist!=$Cur['Artist']  && (check_perms('users_promote_below') || check_per
 	}
 }
 
+// Secondary classes
+$OldClasses = $Cur['SecondaryClasses']?explode(',', $Cur['SecondaryClasses']):array();
+$DroppedClasses = array_diff($OldClasses, $SecondaryClasses);
+$AddedClasses   = array_diff($SecondaryClasses, $OldClasses);
+if (count($DroppedClasses) > 0) {
+	$ClassChanges = array();
+	foreach ($DroppedClasses as $PermID) {
+		$ClassChanges[] = $Classes[$PermID]['Name'];
+	}
+	$EditSummary[] = "Secondary classes dropped: ".implode(', ',$ClassChanges);
+	$DB->query("DELETE FROM users_levels WHERE UserID = '$UserID' AND PermissionID IN (".implode(',',$DroppedClasses).")");
+	if (count($SecondaryClasses) > 0) {
+		$LightUpdates['ExtraClasses']= array_fill_keys($SecondaryClasses, 1);
+	} else {
+		$LightUpdates['ExtraClasses']= array();
+	}
+}
+if (count($AddedClasses) > 0) {
+	$ClassChanges = array();
+	foreach ($AddedClasses as $PermID) {
+		$ClassChanges[] = $Classes[$PermID]['Name'];
+	}
+	$EditSummary[] = "Secondary classes added: ".implode(', ',$ClassChanges);
+	$Values = array();
+	foreach ($AddedClasses as $PermID) {
+		$Values[] = "($UserID, $PermID)";
+	}
+	$DB->query("INSERT INTO users_levels (UserID, PermissionID) VALUES ".implode(', ',$Values));
+	$LightUpdates['ExtraClasses']= array_fill_keys($SecondaryClasses, 1);
+}
 
 if ($Visible!=$Cur['Visible']  && check_perms('users_make_invisible')) {
 	$UpdateSet[]="Visible='$Visible'";
@@ -385,7 +422,7 @@ if ($PermittedForums != db_string($Cur['PermittedForums']) && check_perms('users
 	$ForumSet=explode(',',$PermittedForums);
 	$ForumList = array();
 	foreach ($ForumSet as $ForumID) {
-		if ($Forums[$ForumID]['MinClassCreate'] <= $LoggedUser['Class']) {
+		if ($Forums[$ForumID]['MinClassCreate'] <= $LoggedUser['EffectiveClass']) {
 			$ForumList[] = $ForumID;
 		}
 	}

@@ -6,11 +6,9 @@ $sql = "SELECT SQL_CALC_FOUND_ROWS
 	w.ID, 
 	w.Title, 
 	w.Date,
-	w.Author,
-	u.Username 
+	w.Author
 	FROM wiki_articles AS w
-	LEFT JOIN users_main AS u ON u.ID=w.Author 
-	WHERE w.MinClassRead <= '".$LoggedUser['Class']."'";
+	WHERE w.MinClassRead <= '".$LoggedUser['EffectiveClass']."'";
 if($Letter!=='1') {
 	$sql .= " AND UPPER(LEFT(w.Title,1)) = '".db_string($Letter)."'";
 } else {
@@ -32,11 +30,11 @@ if($Letter) { $Title.= ' ('.$Letter.')'; }
 			<td>Last Updated</td>
 			<td>Last edited by</td>
 		</tr>
-<? 	while(list($ID, $Title, $Date, $UserID, $Username) = $DB->next_record()) {?>
+<? 	while(list($ID, $Title, $Date, $UserID) = $DB->next_record()) {?>
 		<tr>
 			<td><a href="wiki.php?action=article&id=<?=$ID?>"><?=$Title?></a></td>
 			<td><?=$Date?></td>
-			<td><?=format_username($UserID, $Username)?></td>
+			<td><?=format_username($UserID, false, false, false)?></td>
 		</tr>
 <? 	} ?>
 	</table>

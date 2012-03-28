@@ -19,17 +19,11 @@ if(!empty($_GET['search'])) {
 $sql = "SELECT 
 	SQL_CALC_FOUND_ROWS
 	um.ID,
-	um.Username,
-	um.PermissionID,
-	um.Enabled,
-	ui.Donor,
-	ui.Warned,
 	i.InviteKey,
 	i.Expires,
 	i.Email
 	FROM invites as i
-	JOIN users_main AS um ON um.ID=i.InviterID
-	JOIN users_info AS ui ON ui.UserID=um.ID ";
+	JOIN users_main AS um ON um.ID=i.InviterID ";
 if($Search) {
 	$sql .= "WHERE i.Email LIKE '%$Search%' ";
 }
@@ -78,11 +72,11 @@ $DB->set_query_id($RS);
 		</tr>
 <?
 	$Row = 'b';
-	while(list($UserID, $Username, $PermissionID, $Enabled, $Donor, $Warned, $InviteKey, $Expires, $Email)=$DB->next_record()) {
+	while(list($UserID, $InviteKey, $Expires, $Email)=$DB->next_record()) {
 	$Row = ($Row == 'b') ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
-			<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?></td>
+			<td><?=format_username($UserID, true, true, true, true)?></td>
 			<td><?=display_str($Email)?></td>
 			<td><?=display_str($InviteKey)?></td>
 			<td><?=time_diff($Expires)?></td>

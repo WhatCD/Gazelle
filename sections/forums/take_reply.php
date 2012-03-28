@@ -124,7 +124,6 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			$Thread['LastPostID'] = $PostID; //Set postid for read/unread
 			$Thread['LastPostTime'] = sqltime(); //Time of last post
 			$Thread['LastPostAuthorID'] = $LoggedUser['ID']; //Last poster id
-			$Thread['LastPostUsername'] = $LoggedUser['Username']; //Last poster username
 			$Part2 = array($TopicID=>$Thread); //Bumped thread
 			
 		//if we're bumping from an older page
@@ -136,20 +135,18 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			//Never know if we get a page full of stickies...
 			if ($Stickies < TOPICS_PER_PAGE || $ThreadInfo['IsSticky'] == 1) {
 				//Pull the data for the thread we're bumping
-				$DB->query("SELECT f.AuthorID, f.IsLocked, f.IsSticky, f.NumPosts, u.Username, ISNULL(p.TopicID) AS NoPoll FROM forums_topics AS f INNER JOIN users_main AS u ON u.ID=f.AuthorID LEFT JOIN forums_polls AS p ON p.TopicID=f.ID WHERE f.ID ='$TopicID'");
-				list($AuthorID,$IsLocked,$IsSticky,$NumPosts,$AuthorName,$NoPoll) = $DB->next_record();
+				$DB->query("SELECT f.AuthorID, f.IsLocked, f.IsSticky, f.NumPosts, ISNULL(p.TopicID) AS NoPoll FROM forums_topics AS f LEFT JOIN forums_polls AS p ON p.TopicID=f.ID WHERE f.ID ='$TopicID'");
+				list($AuthorID,$IsLocked,$IsSticky,$NumPosts,$NoPoll) = $DB->next_record();
 				$Part2 = array($TopicID => array(
 					'ID' => $TopicID,
 					'Title' => $ThreadInfo['Title'],
 					'AuthorID' => $AuthorID,
-					'AuthorUsername' => $AuthorName,
 					'IsLocked' => $IsLocked,
 					'IsSticky' => $IsSticky,
 					'NumPosts' => $NumPosts,
 					'LastPostID' => $PostID,
 					'LastPostTime' => sqltime(),
 					'LastPostAuthorID' => $LoggedUser['ID'],
-					'LastPostUsername' => $LoggedUser['Username'],
 					'NoPoll' => $NoPoll
 				)); //Bumped
 			} else {
@@ -178,7 +175,6 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			'NumPosts'=>'+1', 
 			'LastPostID'=>$PostID, 
 			'LastPostAuthorID'=>$LoggedUser['ID'], 
-			'Username'=>$LoggedUser['Username'], 
 			'LastPostTopicID'=>$TopicID, 
 			'LastPostTime'=>sqltime(),
 			'Title'=>$ThreadInfo['Title'],

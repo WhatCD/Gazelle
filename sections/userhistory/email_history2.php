@@ -13,8 +13,8 @@ user.
 $UserID = $_GET['userid'];
 if (!is_number($UserID)) { error(404); }
 
-$DB->query("SELECT um.Username, ui.JoinDate, p.Level AS Class FROM users_main AS um JOIN users_info AS ui ON um.ID=ui.UserID JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = $UserID");
-list($Username, $Joined, $Class) = $DB->next_record();
+$DB->query("SELECT ui.JoinDate, p.Level AS Class FROM users_main AS um JOIN users_info AS ui ON um.ID=ui.UserID JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = $UserID");
+list($Joined, $Class) = $DB->next_record();
 
 if(!check_perms('users_view_email', $Class)) {
 	error(403);
@@ -84,7 +84,7 @@ if ($CurrentEmail['Usernames'] != '') {
 	$UserIPs=explode('|', $CurrentEmail['UserIPs']);
 
 	foreach($UserIDs as $Key => $Val) {
-		$CurrentMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.format_username($Val, $Usernames[$Key], $UsersDonor[$Key], $UsersWarned[$Key], $UsersEnabled[$Key] == 2 ? false : true);
+		$CurrentMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.format_username($Val, true, true, true);
 		$CurrentMatches[$Key]['IP'] = $UserIPs[$Key];
 		$CurrentMatches[$Key]['EndTime'] = $UserSetTimes[$Key];
 	}
@@ -130,7 +130,7 @@ if (count($History) == 1) {
 		if ($Val['Usernames'] != '') {
 			// Match with old email
 			$OldMatches[$Key]['Email'] = $Val['Email'];
-			$OldMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.format_username($Val['UserIDs'], $Val['Usernames'], $Val['UsersDonor'], $Val['UsersWarned'], $Val['UsersEnabled'] == 2 ? false : true);
+			$OldMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.format_username($Val['UserIDs'], true, true, true);
 			$OldMatches[$Key]['EndTime'] = $Val['UserSetTimes'];
 			$OldMatches[$Key]['IP'] = $Val['UserIPs'];
 		}

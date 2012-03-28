@@ -34,7 +34,6 @@ else {
 			f.NumPosts,
 			f.LastPostID,
 			f.LastPostAuthorID,
-			um.Username,
 			f.LastPostTopicID,
 			f.LastPostTime,
 			COUNT(sr.ThreadID) AS SpecificRules,
@@ -44,7 +43,6 @@ else {
 			FROM forums AS f
 			JOIN forums_categories AS fc ON fc.ID = f.CategoryID
 			LEFT JOIN forums_topics as t ON t.ID = f.LastPostTopicID
-			LEFT JOIN users_main AS um ON um.ID=f.LastPostAuthorID
 			LEFT JOIN forums_specific_rules AS sr ON sr.ForumID = f.ID
 			GROUP BY f.ID
 			ORDER BY fc.Sort, fc.Name, f.CategoryID, f.Sort");

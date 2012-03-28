@@ -461,7 +461,9 @@ show_header('User search');
 				<td>
 					<select name="class">
 						<option value="" <? if($_GET['class']==='') {echo ' selected="selected"';}?>>Any</option>
-<?	foreach($ClassLevels as $Class){ ?>
+<?	foreach($ClassLevels as $Class){ 
+		if ($Class['Secondary']) { continue; }
+?>
 					<option value="<?=$Class['ID'] ?>" <? if($_GET['class']===$Class['ID']) {echo ' selected="selected"';}?>><?=cut_string($Class['Name'], 10, 1, 1).' ('.$Class['Level'].')'?></option>
 <?	} ?>
 					</select>
@@ -697,7 +699,7 @@ echo $Pages;
 <?
 while(list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email, $Enabled, $IP, $Invites, $DisableInvites, $Warned, $Donor, $JoinDate, $LastAccess) = $DB->next_record()){ ?>
 		<tr>
-			<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true, $Class)?></td>
+			<td><?=format_username($UserID, true, true, true, true)?></td>
 			<td><?=ratio($Uploaded, $Downloaded)?></td>
 			<td><?=display_str($IP)?></td>
 			<td><?=display_str($Email)?></td>

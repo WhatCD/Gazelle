@@ -55,9 +55,8 @@ $i = 0;
 
 foreach($Results as $ID=>$Data) {
 	list($SnatcherID, $Timestamp) = array_values($Data);
-	$UserInfo = user_info($SnatcherID);
 	
-	$User = format_username($SnatcherID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+	$User = format_username($SnatcherID, true, true, true, true);
 	
 	if(!array_key_exists($SnatcherID, $Snatched) && $SnatcherID!=$UserID) {
 		$User = '<em>'.$User.'</em>';

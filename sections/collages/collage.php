@@ -515,7 +515,7 @@ foreach ($Users as $ID => $User) {
 	$i++;
 	if($i>5) { break; }
 ?>
-					<li><?=format_username($ID, $User['name'])?> (<?=$User['count']?>)</li>
+					<li><?=format_username($ID, false, false, false)?> (<?=$User['count']?>)</li>
 <?
 }
 ?>
@@ -569,7 +569,7 @@ foreach ($CommentList as $Comment) {
 	list($CommentID, $Body, $UserID, $Username, $CommentTime) = $Comment;
 ?>
 		<div class="box">
-			<div class="head">By <?=format_username($UserID, $Username) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>">[Report Comment]</a></div>
+			<div class="head">By <?=format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>">[Report Comment]</a></div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
 <?

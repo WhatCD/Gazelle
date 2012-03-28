@@ -65,7 +65,7 @@ list($NumResults) = $DB->next_record();
 $Pages=get_pages($Page, $NumResults, 25);
 
 ?>
-<h2>Freeleech token history for <?=format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'])?></h2>
+<h2>Freeleech token history for <?=format_username($UserID, true, true, true)?></h2>
 
 <div class="linkbox"><?=$Pages?></div>
 <table>

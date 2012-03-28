@@ -64,7 +64,7 @@ function reset() {
 	}
 }
 </script>
-<h2><?=format_username($UserID,$Username)?> > Permissions</h2>
+<h2><?=format_username($UserID, false, false, false)?> > Permissions</h2>
 <div class="linkbox">
 	[<a href="#" onclick="reset();return false;">Defaults</a>]
 </div>

@@ -65,7 +65,7 @@ show_header($Username.' > Settings','user,validate');
 echo $Val->GenerateJS('userform');
 ?>
 <div class="thin">
-	<h2><?=format_username($UserID,$Username)?> &gt; Settings</h2>
+	<h2><?=format_username($UserID, false, false, false)?> &gt; Settings</h2>
 	<form id="userform" name="userform" action="" method="post" onsubmit="return formVal();" autocomplete="off">
 		<div>
 			<input type="hidden" name="action" value="takeedit" />

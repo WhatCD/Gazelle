@@ -7,12 +7,10 @@ list($Name, $UserID, $CategoryID) = $DB->next_record();
 if($CategoryID == 0 && $UserID!=$LoggedUser['ID'] && !check_perms('site_collages_delete')) { error(403); }
 
 $DB->query("SELECT ct.GroupID,
-	um.ID,
-	um.Username,
+	ct.UserID,
 	ct.Sort
 	FROM collages_torrents AS ct
 	JOIN torrents_group AS tg ON tg.ID=ct.GroupID
-	LEFT JOIN users_main AS um ON um.ID=ct.UserID
 	WHERE ct.CollageID='$CollageID'
 	ORDER BY ct.Sort");
 
@@ -43,7 +41,7 @@ show_header('Manage collage '.$Name);
 $Number = 0;
 foreach ($TorrentList as $GroupID=>$Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists) = array_values($Group);
-	list($GroupID2, $UserID, $Username, $Sort) = array_values($CollageDataList[$GroupID]);
+	list($GroupID2, $UserID, $Sort) = array_values($CollageDataList[$GroupID]);
 	
 	
 	$Number++;
@@ -74,7 +72,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 					<?=$DisplayName?>
 				</td>
 				<td>
-					<?=format_username($UserID, $Username)?>
+					<?=format_username($UserID, false, false, false)?>
 				</td>
 				<td>
 					<input type="submit" name="submit" value="Edit" />

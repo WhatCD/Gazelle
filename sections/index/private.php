@@ -30,11 +30,11 @@ show_header('News','bbcode');
 	<div class="sidebar">
 <?
 	$DB->query("SELECT lc.UserID,
-			   SUM(lc.Points),
-			   um.Username,
-			   ui.Donor,
-			   ui.Warned,
-			   um.Enabled,									   um.PermissionID							           FROM library_contest AS lc						           JOIN users_main AS um ON um.ID=lc.UserID				           JOIN users_info AS ui ON ui.UserID=um.ID				           GROUP BY lc.UserID							           ORDER BY SUM(lc.Points) DESC						           LIMIT 10");
+			   SUM(lc.Points)
+			   FROM library_contest AS lc
+			   GROUP BY lc.UserID
+			   ORDER BY SUM(lc.Points) DESC
+			   LIMIT 10");
 	$Contest = $DB->to_array();
 	?>
 	<div class="box">
@@ -55,7 +55,7 @@ show_header('News','bbcode');
 			?>
 				<tr class="row<?=$Class?>">
 					<td><strong><?=$Num?></td>
-					<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?></td>
+					<td><?=format_username($UserID, true, true, true, true)?></td>
 					<td><?=number_format($Uploads)?></td>
 				</tr>
 			<?
@@ -432,7 +432,7 @@ $Cache->increment('usage_index');
 			<tr>
 				<td>
 					<?=display_artists($Recommend_artists[$GroupID]) ?>
-					<a href="torrents.php?id=<?=$GroupID?>"><?=$GroupName?></a> (by <?=format_username($UserID, $Username)?>)
+					<a href="torrents.php?id=<?=$GroupID?>"><?=$GroupName?></a> (by <?=format_username($UserID, false, false, false)?>)
 					<?=$TagStr?>
 				</td>
 			</tr>
@@ -506,7 +506,7 @@ function contest() {
 	foreach ($Contest as $User) {
 		list($UserID, $Points, $Username) = $User;
 ?>
-					<li><?=format_username($UserID, $Username)?> (<?=number_format($Points)?>)</li>
+					<li><?=format_username($UserID, false, false, false)?> (<?=number_format($Points)?>)</li>
 <?
 	}
 ?>

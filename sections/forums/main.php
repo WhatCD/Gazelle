@@ -41,7 +41,7 @@ list($RestrictedForums) = $DB->next_record();
 $RestrictedForums = explode(',', $RestrictedForums);
 $PermittedForums = array_keys($LoggedUser['PermittedForums']);
 foreach ($Forums as $Forum) {
-	list($ForumID, $CategoryID, $ForumName, $ForumDescription, $MinRead, $MinWrite, $MinCreate, $NumTopics, $NumPosts, $LastPostID, $LastAuthorID, $LastPostAuthorName, $LastTopicID, $LastTime, $SpecificRules, $LastTopic, $Locked, $Sticky) = array_values($Forum);
+	list($ForumID, $CategoryID, $ForumName, $ForumDescription, $MinRead, $MinWrite, $MinCreate, $NumTopics, $NumPosts, $LastPostID, $LastAuthorID, $LastTopicID, $LastTime, $SpecificRules, $LastTopic, $Locked, $Sticky) = array_values($Forum);
 	if ($LoggedUser['CustomForums'][$ForumID] != 1 && ($MinRead>$LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== FALSE)) {
 		continue;
 	}
@@ -98,7 +98,7 @@ foreach ($Forums as $Forum) {
 				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>&amp;page=<?=$LastRead[$LastTopicID]['Page']?>#post<?=$LastRead[$LastTopicID]['PostID']?>"></a>
 			</span>
 <? } ?>
-			<span style="float:right;" class="last_poster">by <?=format_username($LastAuthorID, $LastPostAuthorName)?> <?=time_diff($LastTime,1)?></span>
+			<span style="float:right;" class="last_poster">by <?=format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?></span>
 		</td>
 		<td><?=number_format($NumTopics)?></td>
 		<td><?=number_format($NumPosts)?></td>

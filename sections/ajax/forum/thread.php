@@ -86,9 +86,7 @@ if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueI
 		p.Body,
 		p.EditedUserID,
 		p.EditedTime,
-		ed.Username
 		FROM forums_posts as p
-		LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
 		WHERE p.TopicID = '$ThreadID' AND p.ID != '".$ThreadInfo['StickyPostID']."'
 		LIMIT $CatalogueLimit");
 	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
@@ -217,15 +215,16 @@ if($ThreadInfo['StickyPostID']) {
 
 $JsonPosts = array();
 foreach ($Thread as $Key => $Post) {
-	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
+	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
+	$UserInfo = user_info($EditedUserID);
 	$JsonPosts[] = array(
 		'postId' => (int) $PostID,
 		'addedTime' => $AddedTime,
 		'body' => $Text->full_format($Body),
 		'editedUserId' => (int) $EditedUserID,
 		'editedTime' => $EditedTime,
-		'editedUsername' => $EditedUsername,
+		'editedUsername' => $UserInfo['Username'],
 		'author' => array(
 			'authorId' => (int) $AuthorID,
 			'authorName' => $Username,

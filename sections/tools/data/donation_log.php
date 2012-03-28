@@ -13,15 +13,8 @@ $sql = "SELECT
 	d.Amount, 
 	d.Currency, 
 	d.Email, 
-	m.Username,
-	m.PermissionID,
-	m.Enabled,
-	i.Donor,
-	i.Warned,
 	d.Time 
-	FROM donations AS d 
-	LEFT JOIN users_main AS m ON m.ID=d.UserID
-	LEFT JOIN users_info AS i ON i.UserID=d.UserID ";
+	FROM donations AS d ";
 if(!empty($_GET['search'])) {
 	$sql .= "WHERE d.Email LIKE '%".db_string($_GET['search'])."%' ";
 }
@@ -89,10 +82,10 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 	</tr>
 <?
 	foreach($Donations as $Donation) {
-		list($UserID, $Amount, $Currency, $Email, $Username, $PermissionID, $Enabled, $Donor, $Warned, $DonationTime) = $Donation;
+		list($UserID, $Amount, $Currency, $Email, $DonationTime) = $Donation;
 ?>
 	<tr>
-		<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?></td>
+		<td><?=format_username($UserID, true, true, true, true)?></td>
 		<td><?=display_str($Amount)?> <?=$Currency?></td>
 		<td><?=display_str($Email)?></td>
 		<td><?=time_diff($DonationTime)?></td>

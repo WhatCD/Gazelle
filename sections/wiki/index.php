@@ -13,7 +13,7 @@ function class_list($Selected=0){
 	global $Classes, $LoggedUser;
 	$Return = '';
 	foreach ($Classes as $ID => $Class) {
-		if($Class['Level'] <= $LoggedUser['Class']){
+		if($Class['Level'] <= $LoggedUser['EffectiveClass']){
 			$Return.='<option value="'.$Class['Level'].'"';
 			if($Selected == $Class['Level']){
 				$Return.=' selected="selected"';

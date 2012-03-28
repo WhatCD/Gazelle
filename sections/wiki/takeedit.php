@@ -18,14 +18,14 @@ $P=db_array($_POST);
 
 $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $CurRead, $CurEdit, $Date, $Author) = array_shift($Article);
-if($CurEdit > $LoggedUser['Class']){ error(403); }
+if($CurEdit > $LoggedUser['EffectiveClass']){ error(403); }
 
 if(check_perms('admin_manage_wiki')){
 	$Read=$_POST['minclassread'];
 	$Edit=$_POST['minclassedit'];
 	if(!is_number($Read)) { error(0); } //int?
 	if(!is_number($Edit)) { error(0); }
-	if($Edit > $LoggedUser['Class']){ error('You can\'t restrict articles above your own level.'); }
+	if($Edit > $LoggedUser['EffectiveClass']){ error('You can\'t restrict articles above your own level.'); }
 	if($Edit < $Read){ $Edit = $Read; } //Human error fix.
 }
 

@@ -36,7 +36,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=format_username($ID, $Username)?>
+					<?=format_username($ID, false, false, false)?>
 				</td>
 				<td class="nobr">
 					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by user'; }?>
@@ -66,7 +66,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=format_username($ID, $Username)?>
+					<?=format_username($ID, false, false, false)?>
 				</td>
 				<td class="nobr">
 					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by user'; }?>
@@ -109,7 +109,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=format_username($ID, $Username)?>
+					<?=format_username($ID, false, false, false)?>
 				</td>
 				<td class="nobr">
 					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by staff member'; }?>

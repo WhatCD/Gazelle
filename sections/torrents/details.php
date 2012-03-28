@@ -4,7 +4,7 @@ function compare($X, $Y){
 	return($Y['score'] - $X['score']);
 }
 
-define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by default
+define(MAX_PERS_COLLAGES, 3); // How many personal collages should be shown by default
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
@@ -385,12 +385,12 @@ foreach ($TorrentList as $Torrent) {
 	
 		//t.ID,	t.Media, t.Format, t.Encoding, t.Remastered, t.RemasterYear, t.RemasterTitle, t.RemasterRecordLabel,t.RemasterCatalogueNumber,
 		//t.Scene, t.HasLog, t.HasCue, t.LogScore, t.FileCount, t.Size, t.Seeders, t.Leechers, t.Snatched, t.FreeTorrent, t.Time, t.Description,
-		//t.FileList, t.FilePath, t.UserID, um.Username, t.last_action,
+		//t.FileList, t.FilePath, t.UserID, t.last_action,
 	    //(bad tags), (bad folders), (bad filenames), (cassette approved), (lossy master approved), t.LastReseedRequest, LogInDB
 	
 	list($TorrentID, $Media, $Format, $Encoding, $Remastered, $RemasterYear, $RemasterTitle, $RemasterRecordLabel, $RemasterCatalogueNumber, 
 		$Scene, $HasLog, $HasCue, $LogScore, $FileCount, $Size, $Seeders, $Leechers, $Snatched, $FreeTorrent, $TorrentTime, $Description, 
-		$FileList, $FilePath, $UserID, $Username, $LastActive,
+		$FileList, $FilePath, $UserID, $LastActive,
 		$BadTags, $BadFolders, $BadFiles, $CassetteApproved, $LossymasterApproved, $LastReseedRequest, $LogInDB, $HasFile) = $Torrent;
 
 	if($Remastered && !$RemasterYear) {
@@ -544,7 +544,7 @@ foreach ($TorrentList as $Torrent) {
 			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> torrentdetails pad <? if(!isset($_GET['torrentid']) || $_GET['torrentid']!=$TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
 				<td colspan="5">
 					<blockquote>
-						Uploaded by <?=format_username($UserID, $TorrentUploader)?> <?=time_diff($TorrentTime);?>
+						Uploaded by <?=format_username($UserID, false, false, false)?> <?=time_diff($TorrentTime);?>
 <? if($Seeders == 0){ ?>
 						<?
 						if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
@@ -664,7 +664,7 @@ if(count($Collages)>0) {
 $PersonalCollages = $Cache->get_value('torrent_collages_personal_'.$GroupID);
 if(!is_array($PersonalCollages)) {
 	$DB->query("SELECT c.Name, c.NumTorrents, c.ID FROM collages AS c JOIN collages_torrents AS ct ON ct.CollageID=c.ID WHERE ct.GroupID='$GroupID' AND Deleted='0' AND CategoryID='0'");
-	$PersonalCollages = $DB->to_array(false, MYSQLI_NUM);
+	$PersonalCollages = $DB->to_array(false, MYSQL_NUM);
 	$Cache->cache_value('torrent_collages_personal_'.$GroupID, $PersonalCollages, 3600*6);
 }
 
@@ -776,7 +776,7 @@ foreach($Thread as $Key => $Post){
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<span style="float:left;"><a class="post_id" href='torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
-				<strong><?=format_username($AuthorID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true, $PermissionID)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
+				<strong><?=format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
 <?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
 if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
@@ -810,7 +810,7 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('torrents', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
-				<?=format_username($EditedUserID, $EditedUsername) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <? } ?>
 			</div>
 		</td>
@@ -829,8 +829,7 @@ if(!$LoggedUser['DisablePosting']) { ?>
 					<tr class="colhead_dark">
 						<td colspan="2">
 							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=format_username($LoggedUser['ID'], $LoggedUser['Username'], $LoggedUser['Donor'], $LoggedUser['Warned'], $LoggedUser['Enabled'] == 2 ? false : true, $LoggedUser['PermissionID'])?></strong>
-							Just now
+								by <strong><?=format_username($LoggedUser['ID'], true, true, true, true)?></strong>	Just now
 							<a href="#quickreplypreview">[Report Comment]</a>
 							</span>
 							<span id="barpreview" style="float:right;">

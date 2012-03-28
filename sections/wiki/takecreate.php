@@ -28,7 +28,7 @@ if(check_perms('admin_manage_wiki')){
 	$Edit=$_POST['minclassedit'];
 	if(!is_number($Read)) { error(0); } //int?
 	if(!is_number($Edit)) { error(0); }
-	if($Edit > $LoggedUser['Class']){ error('You can\'t restrict articles above your own level'); }
+	if($Edit > $LoggedUser['EffectiveClass']){ error('You can\'t restrict articles above your own level'); }
 	if($Edit < $Read){ $Edit = $Read; } //Human error fix.
 } else {
 	$Read=100;

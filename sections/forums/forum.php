@@ -36,17 +36,13 @@ if(!isset($Forum) || !is_array($Forum)) {
 		t.ID,
 		t.Title,
 		t.AuthorID,
-		author.Username AS AuthorUsername,
 		t.IsLocked,
 		t.IsSticky,
 		t.NumPosts,
 		t.LastPostID,
 		t.LastPostTime,
-		t.LastPostAuthorID,
-		last_author.Username AS LastPostUsername
+		t.LastPostAuthorID
 		FROM forums_topics AS t
-		LEFT JOIN users_main AS last_author ON last_author.ID = t.LastPostAuthorID
-		LEFT JOIN users_main AS author ON author.ID = t.AuthorID
 		WHERE t.ForumID = '$ForumID'
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
@@ -63,6 +59,7 @@ if(!isset($Forums[$ForumID])) { error(404); }
 if (!check_perms('site_moderate_forums')) {
 	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) { error(403); }
 }
+
 if($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
 
 // Start printing
@@ -162,7 +159,7 @@ if (count($Forum) == 0) {
 
 	$Row='a';
 	foreach($Forum as $Topic){
-		list($TopicID, $Title, $AuthorID, $AuthorName, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID, $LastAuthorName) = array_values($Topic);
+		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
 		$Row = ($Row == 'a') ? 'b' : 'a';
 
 			// Build list of page links
@@ -216,11 +213,11 @@ if (count($Forum) == 0) {
 			</span>
 <?		} ?>
 			<span style="float:right;" class="last_poster">
-				by <?=format_username($LastAuthorID, $LastAuthorName)?> <?=time_diff($LastTime,1)?>
+				by <?=format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?>
 			</span>
 		</td>
 		<td><?=number_format($PostCount-1)?></td>
-		<td><?=format_username($AuthorID, $AuthorName)?></td>
+		<td><?=format_username($AuthorID, false, false, false)?></td>
 	</tr>
 <?	}
 } ?>

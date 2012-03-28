@@ -329,6 +329,10 @@ class DB_MYSQL {
 		$this->QueryID = $ResultSet;
 		$this->Row = 0;
 	}
+	
+	function get_query_id() {
+		return $this->QueryID;
+	}
 
 	function beginning() {
 		mysqli_data_seek($this->QueryID, 0);

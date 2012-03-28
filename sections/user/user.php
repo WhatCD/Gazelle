@@ -366,6 +366,20 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 			<ul class="stats nobullet">
 				<li>Class: <?=$ClassLevels[$Class]['Name']?></li>
 <?
+$UserInfo = user_info($UserID);
+if (!empty($UserInfo['ExtraClasses'])) {
+?>
+				<li>
+					<ul class="stats">
+<?
+	foreach($UserInfo['ExtraClasses'] as $PermID => $Val) { ?>
+						<li><?=$Classes[$PermID]['Name']?></li>
+<?	}
+?>
+					</ul>
+				</li>
+<?
+}
 // An easy way for people to measure the paranoia of a user, for e.g. contest eligibility
 if($ParanoiaLevel == 0) {
 	$ParanoiaLevelText = 'Off';
@@ -854,7 +868,7 @@ foreach($FLS as $F) {
 	}
 }
 if (check_perms('users_mod', $Class) || $IsFLS) { 
-	$UserLevel = $LoggedUser['Class'];
+	$UserLevel = $LoggedUser['EffectiveClass'];
 	$DB->query("SELECT 
 					SQL_CALC_FOUND_ROWS
 					ID, 
@@ -890,13 +904,11 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 					
 			} else {
 				// Assigned to user
-				$UserInfo = user_info($AssignedToUser);
-				$Assigned = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);	
+				$Assigned = format_username($UserID, true, true, true, true);
 			} 
 			
 			if ($ResolverID) {
-				$UserInfo = user_info($ResolverID);
-				$Resolver = format_username($ResolverID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+				$Resolver = format_username($ResolverID, true, true, true, true);
 			} else {
 				$Resolver = "(unresolved)";
 			}
@@ -965,8 +977,9 @@ if (check_perms('users_mod', $Class)) { ?>
 					<select name="Class">
 <?
 		foreach ($ClassLevels as $CurClass) {
-			if (check_perms('users_promote_below', $Class) && $CurClass['ID']>=$LoggedUser['Class']) { break; }
-			if ($CurClass['ID']>$LoggedUser['Class']) { break; }
+			if (check_perms('users_promote_below', $Class) && $CurClass['ID']>=$LoggedUser['EffectiveClass']) { break; }
+			if ($CurClass['ID']>$LoggedUser['EffectiveClass']) { break; }
+			if ($CurClass['Secondary']) { continue; }
 			if ($Class===$CurClass['Level']) { $Selected='selected="selected"'; } else { $Selected=""; }
 ?>
 						<option value="<?=$CurClass['ID']?>" <?=$Selected?>><?=$CurClass['Name'].' ('.$CurClass['Level'].')'?></option>
@@ -985,14 +998,26 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 <?
 	}
-	if (check_perms('users_promote_below') || check_perms('users_promote_to')) {
-?>
-			<tr>
-				<td class="label">Artist:</td>
-				<td><input type="checkbox" name="Artist" <? if ($Artist == 1) { ?>checked="checked" <? } ?> /></td>
-			</tr>
+	if (check_perms('users_promote_below') || check_perms('users_promote_to')) { ?>
+		<tr>
+			<td class="label">Secondary Classes:</td>
+			<td>
 <?
-	}
+		$DB->query("SELECT p.ID, p.Name, l.UserID
+					FROM permissions AS p
+					LEFT JOIN users_levels AS l ON l.PermissionID = p.ID AND l.UserID = '$UserID'
+					WHERE p.Secondary = 1
+					ORDER BY p.Name");
+		$i = 0;
+		while (list($PermID, $PermName, $IsSet) = $DB->next_record()) {
+			$i++;
+?>
+				<input type="checkbox" id="perm_<?=$PermID?>" name="secondary_classes[]" value="<?=$PermID?>" <? if ($IsSet) { ?>checked="checked" <? } ?> />&nbsp;<label for="perm_<?=$PermID?>" style="margin-right: 10px;"><?=$PermName?></label>
+<?			if ($i % 5 == 0) { echo '<br />'; }
+		} ?>
+			</td>
+		</tr>
+<?	}
 	if (check_perms('users_make_invisible')) {
 ?>
 			<tr>

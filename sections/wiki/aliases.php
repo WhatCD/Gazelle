@@ -4,7 +4,7 @@ $ArticleID = $_GET['id'];
 
 $Latest = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Latest);
-if($Edit > $LoggedUser['Class']){ error(404); }
+if($Edit > $LoggedUser['EffectiveClass']){ error(404); }
 
 show_header($Title." Aliases");
 ?>

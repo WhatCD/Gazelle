@@ -82,7 +82,6 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			t.FileList,
 			t.FilePath,
 			t.UserID,
-			um.Username,
 			t.last_action,
 			tbt.TorrentID,
 			tbf.TorrentID,
@@ -93,7 +92,6 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			tln.TorrentID AS LogInDB,
 			t.ID AS HasFile
 			FROM torrents AS t
-			LEFT JOIN users_main AS um ON um.ID=t.UserID
 			LEFT JOIN torrents_bad_tags AS tbt ON tbt.TorrentID=t.ID
 			LEFT JOIN torrents_bad_folders AS tbf on tbf.TorrentID=t.ID
 			LEFT JOIN torrents_bad_files AS tfi on tfi.TorrentID=t.ID

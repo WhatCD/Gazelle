@@ -51,40 +51,25 @@ if($MyTorrents) {
 else {
 	$Conditions = "WHERE tc.AuthorID = $UserID";
 	$Title = 'Comments made by '.($Self?'you':$Username);
-	$Header = 'Torrent comments left by '.($Self?'you':format_username($UserID, $Username)).'';
+	$Header = 'Torrent comments left by '.($Self?'you':format_username($UserID, false, false, false)).'';
 	if($Self) $OtherLink = '<a href="comments.php?action=my_torrents">Display comments left on your uploads</a>';
 }
 
 $Comments = $DB->query("SELECT
 	SQL_CALC_FOUND_ROWS
-	m.ID,
-	m.Username,
-	m.PermissionID,
-	m.Enabled,
-	
-	i.Avatar,
-	i.Donor,
-	i.Warned,
-	
+	tc.AuthorID,
 	t.ID,
 	t.GroupID,
-	
 	tg.Name,
-	
 	tc.ID,
 	tc.Body,
 	tc.AddedTime,
 	tc.EditedTime,
-	
-	em.ID as EditorID,
-	em.Username as EditorUsername
+	tc.EditedUserID as EditorID
 	
 	FROM torrents as t
 	JOIN torrents_comments as tc ON tc.GroupID = t.GroupID
-	JOIN users_main as m ON tc.AuthorID = m.ID
-	JOIN users_info as i ON i.UserID = m.ID
 	JOIN torrents_group as tg ON t.GroupID = tg.ID
-	LEFT JOIN users_main as em ON em.ID = tc.EditedUserID
 	
 	$Conditions
 	
@@ -119,13 +104,14 @@ show_header($Title,'bbcode');
 	</div>
 <?php
 
-while(list($UserID, $Username, $Class, $Enabled, $Avatar, $Donor, $Warned, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $EditedTime, $EditorID, $EditorUsername) = $DB->next_record()) {
+while(list($UserID, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $EditedTime, $EditorID) = $DB->next_record()) {
+	$UserInfo = user_info($UserID);
 	?>
 	<table class='forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>' id="post<?=$PostID?>">
 		<tr class='colhead_dark'>
 			<td  colspan="2">
 				<span style="float:left;"><a href='torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
-					by <strong><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled, $Class)?></strong> <?=time_diff($AddedTime) ?>
+					by <strong><?=format_username($UserID, true, true, true, true, false)?></strong> <?=time_diff($AddedTime) ?>
 					on <?=display_artists($Artists[$GroupID])?><a href="torrents.php?id=<?=$GroupID?>"><?=$Title?></a>
 				</span>
 			</td>
@@ -136,9 +122,9 @@ if(empty($HeavyInfo['DisableAvatars'])) {
 ?>
 			<td class='avatar' valign="top">
 <?
-				if($Avatar){ 
+				if($UserInfo['Avatar']){ 
 ?>
-				<img src='<?=$Avatar?>' width='150' alt="<?=$Username ?>'s avatar" />
+				<img src='<?=$UserInfo['Avatar']?>' width='150' alt="<?=$UserInfo['Username']?>'s avatar" />
 <?
 				} else { ?>
 				<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
@@ -156,7 +142,7 @@ if(empty($HeavyInfo['DisableAvatars'])) {
 ?>
 				<br /><br />
 				Last edited by
-				<?=format_username($EditorID, $EditorUsername) ?> <?=time_diff($EditedTime)?>
+				<?=format_username($EditorID, false, false, false) ?> <?=time_diff($EditedTime)?>
 <?
 				}
 ?>

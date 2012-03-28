@@ -167,20 +167,15 @@ switch ($_REQUEST['action']){
 			$Val->SetFields('maxcollages',true,'number','You did not enter a valid number of personal collages.');
 			//$Val->SetFields('test',true,'number','You did not enter a valid level for this permission set.');
 
-			$Values=array();
 			if (is_numeric($_REQUEST['id'])) {
-				$DB->query("SELECT p.ID,p.Name,p.Level,p.Values,p.DisplayStaff,COUNT(u.ID) FROM permissions AS p LEFT JOIN users_main AS u ON u.PermissionID=p.ID WHERE p.ID='".db_string($_REQUEST['id'])."' GROUP BY p.ID");
-				list($ID,$Name,$Level,$Values,$DisplayStaff,$UserCount)=$DB->next_record(MYSQLI_NUM, array(3));
+				$DB->query("SELECT p.ID,p.Name,p.Level,p.Secondary,p.PermittedForums,p.Values,p.DisplayStaff,COUNT(u.ID) FROM permissions AS p LEFT JOIN users_main AS u ON u.PermissionID=p.ID WHERE p.ID='".db_string($_REQUEST['id'])."' GROUP BY p.ID");
+				list($ID,$Name,$Level,$Secondary,$Forums,$Values,$DisplayStaff,$UserCount)=$DB->next_record(MYSQLI_NUM, array(5));
 
-				if($Level > $LoggedUser['Class']  || $_REQUEST['level'] > $LoggedUser['Class']) {
+				if($Level > $LoggedUser['EffectiveClass']  || $_REQUEST['level'] > $LoggedUser['EffectiveClass']) {
 					error(403);
 				}
-
-
-				$Values=unserialize($Values);
-			}
-			
-		
+				$Values = unserialize($Values);
+			}		
 
 			if (!empty($_POST['submit'])) {
 				$Err = $Val->ValidateForm($_POST);
@@ -201,15 +196,35 @@ switch ($_REQUEST['action']){
 
 				$Name=$_REQUEST['name'];
 				$Level=$_REQUEST['level'];
+				$Secondary=empty($_REQUEST['secondary'])?0:1;
+				$Forums = $_REQUEST['forums'];
 				$DisplayStaff=$_REQUEST['displaystaff'];
 				$Values['MaxCollages']=$_REQUEST['maxcollages'];
 
 				if (!$Err) {
 					if (!is_numeric($_REQUEST['id'])) {
-						$DB->query("INSERT INTO permissions (Level,Name,`Values`,DisplayStaff) VALUES ('".db_string($Level)."','".db_string($Name)."','".db_string(serialize($Values))."','".db_string($DisplayStaff)."')");
+						$DB->query("INSERT INTO permissions (Level,Name,Secondary,PermittedForums,`Values`,DisplayStaff)
+						            VALUES ('".db_string($Level)."',
+									        '".db_string($Name)."',
+											".$Secondary.",
+											'".db_string($Forums)."',
+											'".db_string(serialize($Values))."',
+											'".db_string($DisplayStaff)."')");
 					} else {
-						$DB->query("UPDATE permissions SET Level='".db_string($Level)."',Name='".db_string($Name)."',`Values`='".db_string(serialize($Values))."',DisplayStaff='".db_string($DisplayStaff)."' WHERE ID='".db_string($_REQUEST['id'])."'");
+						$DB->query("UPDATE permissions SET Level='".db_string($Level)."',
+						                                   Name='".db_string($Name)."',
+														   Secondary=".$Secondary.",
+														   PermittedForums='".db_string($Forums)."',
+														   `Values`='".db_string(serialize($Values))."',
+														   DisplayStaff='".db_string($DisplayStaff)."'
+									WHERE ID='".db_string($_REQUEST['id'])."'");
 						$Cache->delete_value('perm_'.$_REQUEST['id']);
+						if ($Secondary) {
+							$DB->query("SELECT DISTINCT UserID FROM users_levels WHERE PermissionID = ".db_string($_REQUEST['id']));
+							while ($UserID = $DB->next_record()) {
+								$Cache->delete_value('user_info_heavy_'.$UserID);
+							}
+						}
 					}
 					$Cache->delete_value('classes');
 				} else {
@@ -222,6 +237,17 @@ switch ($_REQUEST['action']){
 		} else {
 			if (!empty($_REQUEST['removeid'])) {
 				$DB->query("DELETE FROM permissions WHERE ID='".db_string($_REQUEST['removeid'])."'");
+				$DB->query("SELECT UserID FROM users_levels WHERE PermissionID='".db_string($_REQUEST['removeid'])."'");
+				while (list($UserID) = $DB->next_record()) {
+					$Cache->delete_value('user_info_'.$UserID);
+					$Cache->delete_value('user_info_heavy_'.$UserID);
+				}
+				$DB->query("DELETE FROM users_levels WHERE PermissionID='".db_string($_REQUEST['removeid'])."'");
+				$DB->query("SELECT ID FROM users_main WHERE PermissionID='".db_string($_REQUEST['removeid'])."'");
+				while (list($UserID) = $DB->next_record()) {
+					$Cache->delete_value('user_info_'.$UserID);
+					$Cache->delete_value('user_info_heavy_'.$UserID);
+				}
 				$DB->query("UPDATE users_main SET PermissionID='".USER."' WHERE PermissionID='".db_string($_REQUEST['removeid'])."'");
 
 				$Cache->delete_value('classes');

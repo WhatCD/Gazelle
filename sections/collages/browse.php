@@ -74,11 +74,9 @@ $BaseSQL = $SQL = "SELECT SQL_CALC_FOUND_ROWS
 	c.NumTorrents,
 	c.TagList,
 	c.CategoryID,
-	c.UserID,
-	um.Username 
+	c.UserID
 	FROM collages AS c 
 	$BookmarkJoin
-	LEFT JOIN users_main AS um ON um.ID=c.UserID 
 	WHERE Deleted = '0'";
 
 if ($BookmarkView) {
@@ -271,7 +269,7 @@ echo $Pages;
 <?
 $Row = 'a'; // For the pretty colours
 foreach ($Collages as $Collage) {
-	list($ID, $Name, $NumTorrents, $TagList, $CategoryID, $UserID, $Username) = $Collage;
+	list($ID, $Name, $NumTorrents, $TagList, $CategoryID, $UserID) = $Collage;
 	$Row = ($Row == 'a') ? 'b' : 'a';
 	$TagList = explode(' ', $TagList);
 	$Tags = array();
@@ -298,7 +296,7 @@ foreach ($Collages as $Collage) {
 			</div>
 		</td>
 		<td><?=(int)$NumTorrents?></td>
-		<td><?=format_username($UserID, $Username)?></td>
+		<td><?=format_username($UserID, false, false, false)?></td>
 	</tr>
 <? } ?>
 </table>

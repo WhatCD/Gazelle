@@ -74,7 +74,7 @@ foreach($Thread as $Post){
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<span style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
-				by <strong><?=format_username($AuthorID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?></strong> <? if ($UserTitle) { echo '('.$UserTitle.')'; }?> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
+				by <?=format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
 <? if (!$ThreadInfo['IsLocked']){ ?>				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a><? }
 if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>');">[Edit]</a><? }
 if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>

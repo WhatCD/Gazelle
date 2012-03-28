@@ -74,11 +74,6 @@ $CurrentURL = get_url(array('action', 'order', 'sort'));
 
 $DB->query("SELECT
 	ID,
-	Username,
-	Donor,
-	Warned,
-	Enabled,
-	PermissionID,
 	Email,
 	Uploaded,
 	Downloaded,
@@ -94,7 +89,7 @@ $Invited = $DB->to_array();
 show_header('Invites');
 ?>
 <div class="thin">
-	<h2><?=format_username($UserID,$Username)?> &gt; Invites</h2>
+	<h2><?=format_username($UserID, false, false, false)?> &gt; Invites</h2>
 	<div class="linkbox">
 		[<a href="user.php?action=invitetree<? if($Sneaky){ echo '&amp;userid='.$UserID; }?>">Invite tree</a>]
 	</div>
@@ -198,11 +193,11 @@ if (!empty($Pending)) {
 <?
 	$Row = 'a';
 	foreach ($Invited as $User) {
-		list($ID, $Username, $Donor, $Warned, $Enabled, $Class, $Email, $Uploaded, $Downloaded, $JoinDate, $LastAccess) = $User;
+		list($ID, $Email, $Uploaded, $Downloaded, $JoinDate, $LastAccess) = $User;
 		$Row = ($Row == 'a') ? 'b' : 'a';
 ?> 
 			<tr class="row<?=$Row?>">
-				<td><?=format_username($ID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true, $Class)?></td>
+				<td><?=format_username($ID, true, true, true, true)?></td>
 				<td><?=display_str($Email)?></td>
 				<td><?=time_diff($JoinDate,1)?></td>
 				<td><?=time_diff($LastAccess,1);?></td>

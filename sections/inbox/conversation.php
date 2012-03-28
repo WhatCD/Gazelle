@@ -27,23 +27,20 @@ $DB->query("SELECT
 	c.Subject,
 	cu.Sticky,
 	cu.UnRead,
-	cu.ForwardedTo,
-	um.Username
+	cu.ForwardedTo
 	FROM pm_conversations AS c
 	JOIN pm_conversations_users AS cu ON c.ID=cu.ConvID
-	LEFT JOIN users_main AS um ON um.ID=cu.ForwardedTo
 	WHERE c.ID='$ConvID' AND UserID='$UserID'");
-list($Subject, $Sticky, $UnRead, $ForwardedID, $ForwardedName) = $DB->next_record();
+list($Subject, $Sticky, $UnRead, $ForwardedID) = $DB->next_record();
 
-$DB->query("SELECT UserID, Username, PermissionID, Enabled, Donor, Warned
+$DB->query("SELECT um.ID, Username
 	FROM pm_messages AS pm
-	JOIN users_info AS ui ON ui.UserID=pm.SenderID
 	JOIN users_main AS um ON um.ID=pm.SenderID
 	WHERE pm.ConvID='$ConvID'");
 
-while(list($PMUserID, $Username, $PermissionID, $Enabled, $Donor, $Warned) = $DB->next_record()) {
+while(list($PMUserID, $Username) = $DB->next_record()) {
 	$PMUserID = (int)$PMUserID;
-	$Users[$PMUserID]['UserStr'] = format_username($PMUserID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true, $PermissionID);
+	$Users[$PMUserID]['UserStr'] = format_username($PMUserID, true, true, true, true);
 	$Users[$PMUserID]['Username'] = $Username;
 }
 $Users[0]['UserStr'] = 'System'; // in case it's a message from the system

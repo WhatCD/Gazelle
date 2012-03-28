@@ -59,7 +59,6 @@ class USER_RANK {
 	}
 	
 	function get_rank($TableName, $Value) {
-		return false;
 		if($Value == 0) { return 0; }
 		global $Cache, $DB;
 			

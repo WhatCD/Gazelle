@@ -7,7 +7,6 @@ $DB->query("SELECT
 	d.Name, 
 	d.Comment, 
 	d.UserID, 
-	um.Username, 
 	d.Time 
 	FROM do_not_upload as d
 	LEFT JOIN users_main AS um ON um.ID=d.UserID
@@ -21,7 +20,7 @@ $DB->query("SELECT
 		<td>Added</td>
 		<td>Submit</td>
 	</tr>
-<? while(list($ID, $Name, $Comment, $UserID, $Username, $DNUTime) = $DB->next_record()){ ?>
+<? while(list($ID, $Name, $Comment, $UserID, $DNUTime) = $DB->next_record()){ ?>
 	<tr>
 		<form action="tools.php" method="post">
 			<td>
@@ -34,7 +33,7 @@ $DB->query("SELECT
 				<input type="text" name="comment" value="<?=display_str($Comment)?>" size="60" />
 			</td>
 			<td>
-				<?=format_username($UserID, $Username)?><br />
+				<?=format_username($UserID, false, false, false)?><br />
 				<?=time_diff($DNUTime, 1)?></td>
 			<td>
 				<input type="submit" name="submit" value="Edit" />

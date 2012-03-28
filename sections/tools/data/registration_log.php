@@ -63,7 +63,7 @@ if($DB->record_count()) {
 	$Row = ($IP == $InviterIP) ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
-			<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?><br /><?=format_username($InviterID, $InviterUsername, $InviterDonor, $InviterWarned, $InviterEnabled, $InviterPermissionID)?></td>
+			<td><?=format_username($UserID, true, true, true, true)?><br /><?=format_username($InviterID, true, true, true, true)?></td>
 			<td><?=ratio($Uploaded,$Downloaded)?><br /><?=ratio($InviterUploaded,$InviterDownloaded)?></td>
 			<td>
 				<span style="float:left;"><?=display_str($Email)?></span>

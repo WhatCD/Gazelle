@@ -77,7 +77,7 @@ $ArticleID = $_GET['id'];
 
 $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Article);
-if($Read > $LoggedUser['Class']){ error(404); }
+if($Read > $LoggedUser['EffectiveClass']){ error(404); }
 
 show_header('Compare Article Revisions');
 $Diff2 = get_body($ArticleID, $_GET['new']);

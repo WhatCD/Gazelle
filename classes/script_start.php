@@ -73,7 +73,7 @@ $Debug->set_flag('start user handling');
 // Get permissions
 list($Classes, $ClassLevels) = $Cache->get_value('classes');
 if(!$Classes || !$ClassLevels) {
-	$DB->query('SELECT ID, Name, Level FROM permissions ORDER BY Level');
+	$DB->query('SELECT ID, Name, Level, Secondary FROM permissions ORDER BY Level');
 	$Classes = $DB->to_array('ID');
 	$ClassLevels = $DB->to_array('Level');
 	$Cache->cache_value('classes', array($Classes, $ClassLevels), 0);
@@ -260,10 +260,11 @@ $Debug->set_flag('start function definitions');
 
 // Get cached user info, is used for the user loading the page and usernames all over the site
 function user_info($UserID) {
-	global $DB, $Cache;
+	global $DB, $Cache, $Classes;
 	$UserInfo = $Cache->get_value('user_info_'.$UserID);
 	// the !isset($UserInfo['Paranoia']) can be removed after a transition period
 	if(empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia'])) {
+		$OldQueryID = $DB->get_query_id();
 
 
 		$DB->query("SELECT
@@ -278,9 +279,11 @@ function user_info($UserID) {
 			m.Enabled,
 			m.Title,
 			i.CatchupTime,
-			m.Visible
+			m.Visible,
+			GROUP_CONCAT(ul.PermissionID SEPARATOR ',') AS Levels
 			FROM users_main AS m
 			INNER JOIN users_info AS i ON i.UserID=m.ID
+			JOIN users_levels AS ul ON ul.UserID = m.ID
 			WHERE m.ID='$UserID'");
 		if($DB->record_count() == 0) { // Deleted user, maybe?
 			$UserInfo = array('ID'=>'','Username'=>'','PermissionID'=>0,'Artist'=>false,'Donor'=>false,'Warned'=>'0000-00-00 00:00:00','Avatar'=>'','Enabled'=>0,'Title'=>'', 'CatchupTime'=>0, 'Visible'=>'1');
@@ -293,7 +296,21 @@ function user_info($UserID) {
 				$UserInfo['Paranoia'] = array();
 			}
 		}
+		
+		if (!empty($UserInfo['Levels'])) {
+			$UserInfo['ExtraClasses'] = array_fill_keys(explode(',', $UserInfo['Levels']), 1);
+		} else {
+			$UserInfo['ExtraClasses'] = array();
+		}
+		unset($UserInfo['Levels']);
+		$EffectiveClass = $Classes[$UserInfo['PermissionID']]['Level'];
+		foreach($UserInfo['ExtraClasses'] as $Class => $Val) {
+			$EffectiveClass = max($EffectiveClass, $Classes[$Class]['Level']);
+		}
+		$UserInfo['EffectiveClass'] = $EffectiveClass;
+		
 		$Cache->cache_value('user_info_'.$UserID, $UserInfo, 2592000);
+		$DB->set_query_id($OldQueryID);
 	}
 	if(strtotime($UserInfo['Warned']) < time()) {
 		$UserInfo['Warned'] = '0000-00-00 00:00:00';
@@ -337,7 +354,8 @@ function user_heavy_info($UserID) {
 			i.LastReadNews,
 			i.RestrictedForums,
 			i.PermittedForums,
-			m.FLTokens
+			m.FLTokens,
+			m.PermissionID
 			FROM users_main AS m
 			INNER JOIN users_info AS i ON i.UserID=m.ID
 			WHERE m.ID='$UserID'");
@@ -348,7 +366,7 @@ function user_heavy_info($UserID) {
 		} else {
 			$HeavyInfo['CustomPermissions'] = array();
 		}
-
+		
 		if (!empty($HeavyInfo['RestrictedForums'])) {
 			$RestrictedForums = explode(',', $HeavyInfo['RestrictedForums']);
 		} else {
@@ -361,6 +379,19 @@ function user_heavy_info($UserID) {
 			$PermittedForums = array();
 		}
 		unset($HeavyInfo['PermittedForums']);
+		
+		$DB->query("SELECT PermissionID FROM users_levels WHERE UserID = $UserID");
+		$PermIDs = $DB->collect('PermissionID');
+		foreach ($PermIDs AS $PermID) {
+			$Perms = get_permissions($PermID);
+			if(!empty($Perms['PermittedForums'])) {
+				$PermittedForums = array_merge($PermittedForums,explode(',',$Perms['PermittedForums']));
+			}
+		}
+		$Perms = get_permissions($HeavyInfo['PermissionID']);
+		unset($HeavyInfo['PermissionID']);
+		$PermittedForums = array_merge($PermittedForums,explode(',',$Perms['PermittedForums']));
+		
 		if (!empty($PermittedForums) || !empty($RestrictedForums)) {
 			$HeavyInfo['CustomForums'] = array();
 			foreach ($RestrictedForums as $ForumID) {
@@ -422,7 +453,7 @@ function get_permissions($PermissionID) {
 	global $DB, $Cache;
 	$Permission = $Cache->get_value('perm_'.$PermissionID);
 	if(empty($Permission)) {
-		$DB->query("SELECT p.Level AS Class, p.Values as Permissions FROM permissions AS p WHERE ID='$PermissionID'");
+		$DB->query("SELECT p.Level AS Class, p.Values as Permissions, p.Secondary, p.PermittedForums FROM permissions AS p WHERE ID='$PermissionID'");
 		$Permission = $DB->next_record(MYSQLI_ASSOC, array('Permissions'));
 		$Permission['Permissions'] = unserialize($Permission['Permissions']);
 		$Cache->cache_value('perm_'.$PermissionID, $Permission, 2592000);
@@ -448,17 +479,14 @@ function get_permissions_for_user($UserID, $CustomPermissions = false) {
 	$Permissions = get_permissions($UserInfo['PermissionID']);
 	
 
-	// Manage 'special' inherited permissions
-	if($UserInfo['Artist']) {
-		$ArtistPerms = get_permissions(ARTIST);
-	} else {
-		$ArtistPerms = array('Permissions' => array());
-	}
-
-	if($UserInfo['Donor']) {
-		$DonorPerms = get_permissions(DONOR);
-	} else {
-		$DonorPerms = array('Permissions' => array());
+	// Manage 'special' inherited permissions	
+	$BonusPerms = array();
+	$BonusCollages = 0;
+	foreach ($UserInfo['ExtraClasses'] as $PermID => $Value) {
+		$ClassPerms = get_permissions($PermID);
+		$BonusCollages += $ClassPerms['Permissions']['MaxCollages'];
+		unset($ClassPerms['Permissions']['MaxCollages']);
+		$BonusPerms = array_merge($BonusPerms, $ClassPerms['Permissions']);
 	}
 
 	if(!empty($CustomPermissions)) {
@@ -467,10 +495,20 @@ function get_permissions_for_user($UserID, $CustomPermissions = false) {
 		$CustomPerms = array();
 	}
 
-	$MaxCollages = $Permissions['Permissions']['MaxCollages'] + $DonorPerms['Permissions']['MaxCollages'] + $ArtistPerms['Permissions']['MaxCollages'] + $CustomPerms['MaxCollages'];
-	
+	// This is legacy donor cruft
+	if($UserInfo['Donor']) {
+		$DonorPerms = get_permissions(DONOR);
+	} else {
+		$DonorPerms = array('Permissions' => array());
+	}
+
+	$MaxCollages = $Permissions['Permissions']['MaxCollages'] + $BonusCollages + $CustomPerms['MaxCollages'] + $DonorPerms['Permissions']['MaxCollages'];
 	//Combine the permissions
-	return array_merge($Permissions['Permissions'], $DonorPerms['Permissions'], $ArtistPerms['Permissions'], $CustomPerms, array('MaxCollages' => $MaxCollages));
+	return array_merge($Permissions['Permissions'], $BonusPerms, $CustomPerms, $DonorPerms['Permissions'], array('MaxCollages' => $MaxCollages));
+	
+	//$MaxCollages = $Permissions['Permissions']['MaxCollages'] + $BonusCollages + $CustomPerms['MaxCollages'];
+	//Combine the permissions
+	//return array_merge($Permissions['Permissions'], $BonusPerms, $CustomPerms, array('MaxCollages' => $MaxCollages));
 }
 
 // This function is slow. Don't call it unless somebody's logging in.
@@ -1044,21 +1082,62 @@ Returns a username string for display
 $Class and $Title can be omitted for an abbreviated version
 $IsDonor, $IsWarned and $IsEnabled can be omitted for a *very* abbreviated version
 */
-function format_username($UserID, $Username, $IsDonor = false, $IsWarned = '0000-00-00 00:00:00', $IsEnabled = true, $Class = false, $Title = false) {
+function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled = true, $Class = false, $Title = false) {
+	global $Classes;
+	
 	if($UserID == 0) {
 		return 'System';
-	} elseif($Username == '') {
+	} 
+	
+	$UserInfo = user_info($UserID);
+	if($UserInfo['Username'] == '') {
 		return "Unknown [$UserID]";
 	}
-	$str='<a href="user.php?id='.$UserID.'">'.$Username.'</a>';
-	$str.=($IsDonor) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>' : '';
+	
+	$str = '';
+	
+	if ($Title) {
+		$str .= '<strong>';
+	}
+	
+	$str.='<a href="user.php?id='.$UserID.'">'.$UserInfo['Username'].'</a>';
+	if ($Title) {
+		$str .= '</strong>';
+	}
+
+	if ($Badges) {
+		$str.=($UserInfo['Donor'] == 1) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>' : '';
+	}
+	$str.=($IsWarned && $UserInfo['Warned']!='0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned" /></a>' : '';
+	$str.=($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '';
+
+	
+	}
 
 
-	$str.=($IsWarned!='0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned" />' : '';
-	$str.=(!$IsEnabled) ? '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" />' : '';
+	$str.=($IsWarned && $UserInfo['Warned']!='0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned" />' : '';
+	$str.=($IsEnabled && $UserInfo['Enabled'] == 2) ? '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" />' : '';
 
-	$str.=($Class) ? ' ('.make_class_string($Class).')' : '';
-	$str.=($Title) ? ' ('.$Title.')' : '';
+	if ($Title && $Class) {
+		$str .= '<strong>';
+	}
+	$str.=($Class) ? ' ('.make_class_string($UserInfo['PermissionID']).')' : '';
+	if ($Title && $Class) {
+		$str .= '</strong>';
+	}
+	if ($Title) {
+		// Image proxy CTs
+		if(check_perms('site_proxy_images') && !empty($UserTitle)) {
+			$UserTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
+																				return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
+																			  }, $UserTitle);
+		}
+		
+		$str.='</strong>';
+		if ($UserInfo['Title']) {
+			$str.= ' <span class="user_title">('.$UserInfo['Title'].')</span>';
+		}
+	}
 	return $str;
 }
 
@@ -1579,7 +1658,8 @@ function create_thread($ForumID, $AuthorID, $Title, $PostBody) {
 // Check to see if a user has the permission to perform an action
 function check_perms($PermissionName,$MinClass = 0) {
 	global $LoggedUser;
-	return (isset($LoggedUser['Permissions'][$PermissionName]) && $LoggedUser['Permissions'][$PermissionName] && $LoggedUser['Class']>=$MinClass)?true:false;
+	return (isset($LoggedUser['Permissions'][$PermissionName]) && $LoggedUser['Permissions'][$PermissionName] 
+	        && ($LoggedUser['Class']>=$MinClass || $LoggedUser['EffectiveClass']>=$MinClass))?true:false;
 }
 
 // TODO: make stricter, e.g. on all whitespace characters or Unicode normalisation

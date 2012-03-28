@@ -31,7 +31,7 @@ if(!$ArticleID) { //No article found
 }
 $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName, $Aliases, $UserIDs) = array_shift($Article);
-if($Read > $LoggedUser['Class']){ error(404); }
+if($Read > $LoggedUser['EffectiveClass']){ error(404); }
 
 show_header($Title,'wiki,bbcode');
 ?>
@@ -82,7 +82,7 @@ show_header($Title,'wiki,bbcode');
 					<strong>Details:</strong>
 					<ul>
 						<li>Version: r<?=$Revision?></li>
-						<li>Last edited by: <?=format_username($AuthorID, $AuthorName)?></li>
+						<li>Last edited by: <?=format_username($AuthorID, false, false, false)?></li>
 						<li>Last updated: <?=time_diff($Date)?></li>
 					</ul>
 				</li>
@@ -104,7 +104,7 @@ show_header($Title,'wiki,bbcode');
 				</li>
 			</ul>
 		</div>
-<? if($Edit <= $LoggedUser['Class']){ ?>
+<? if($Edit <= $LoggedUser['EffectiveClass']){ ?>
 		<div class="box">
 			<div style="padding:5px;">
 				<form action="wiki.php" method="post">

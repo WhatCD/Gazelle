@@ -366,20 +366,12 @@ if($ThreadInfo['StickyPostID']) {
 foreach($Thread as $Key => $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
-	
-	// Image proxy CTs
-	if(check_perms('site_proxy_images') && !empty($UserTitle)) {
-		$UserTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
-																		return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
-																	  }, $UserTitle);
-	}
 ?>
 <table class="forum_post box vertical_margin<? if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) { echo ' forum_unread'; } if($HeavyInfo['DisableAvatars']) { echo ' noavatar'; } ?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<span style="float:left;"><a class="post_id" href='forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
-				<strong><?=format_username($AuthorID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true, $PermissionID)?></strong> 
-				<span class="user_title"><?=!empty($UserTitle) ? '('.$UserTitle.')' : '' ?></span> 
+				<?=format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?> 
 <? if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')){ ?> 
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a> 
@@ -429,7 +421,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
-				<?=format_username($EditedUserID, $EditedUsername) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <? } ?>
 			</div>
 		</td>
@@ -456,8 +448,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 					<tr class="colhead_dark">
 						<td colspan="2">
 							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=format_username($LoggedUser['ID'], $LoggedUser['Username'], $LoggedUser['Donor'], $LoggedUser['Warned'], $LoggedUser['Enabled'] == 2 ? false : true, $LoggedUser['PermissionID'])?></strong> <? if (!empty($LoggedUser['Title'])) { echo '('.$LoggedUser['Title'].')'; }?>
-							Just now
+								by <?=format_username($LoggedUser['ID'], true, true, true, true, true)?> Just now
 							</span>
 							<span id="barpreview" style="float:right;">
 								<a href="#quickreplypreview">[Report Post]</a>

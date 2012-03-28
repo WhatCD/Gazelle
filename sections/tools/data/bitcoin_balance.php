@@ -7,7 +7,7 @@ show_header('Bitcoin donation balance');
 
 $Balance = btc_balance() . " BTC";
 $Receiveds = btc_received();
-$DB->query("SELECT m.ID, m.Username, i.Donor, i.BitcoinAddress FROM users_main m INNER JOIN users_info i ON m.ID = i.UserID WHERE BitcoinAddress IS NOT NULL");
+$DB->query("SELECT i.UserID, i.BitcoinAddress FROM users_info AS i WHERE BitcoinAddress IS NOT NULL");
 ?>
 <div class="thin">
 	<h3><?=$Balance?></h3>
@@ -28,7 +28,7 @@ while ($row = $DB->next_record()) {
 	if ($amount === false) { continue; }
 	?>
 	<tr>
-		<td><?=format_username($row['ID'],$row['Username'],$row['Donor'])?></td>
+		<td><?=format_username($row['UserID'], true, false, false, false)?></td>
 		<td><tt><?=$row['BitcoinAddress']?></tt></td>
 		<td><?=$amount?></td>
 	</tr>

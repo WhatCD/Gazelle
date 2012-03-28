@@ -31,12 +31,13 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<a href="feeds.php?feed=torrents_notify_<?=$N['ID']?>_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode($N['Label'])?>"><img src="<?=STATIC_SERVER?>/common/symbols/rss.png" alt="RSS feed" /></a>
 				<?=display_str($N['Label'])?>
 				<a href="user.php?action=notify_delete&amp;id=<?=$N['ID']?>&amp;auth=<?=$LoggedUser['AuthKey']?>">(Delete)</a>
+				<a href="#" onClick="$('#filter_<?=$N['ID']?>').toggle(); return false;">(Show)</a>
 			</h3>
 <?	} ?>
 	<form action="user.php" method="post">
 		<input type="hidden" name="action" value="notify_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table>
+		<table <?=($i<=$NumFilters)?'id="filter_'.$N['ID'].'" class="hidden"':''?>>
 <?	if($i>$NumFilters){ ?>
 			<tr>
 				<td class="label"><strong>Label</strong></td>
@@ -143,8 +144,10 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			</tr>
 		</table>
 	</form>
+<?	if($i==$NumFilters){ ?>
 	<br /><br />
-<? } ?>
+<?	}
+} ?>
 </div>
 <?
 show_footer();

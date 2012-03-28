@@ -3,7 +3,7 @@
 show_header('Staff Inbox');
 
 $View = display_str($_GET['view']);
-$UserLevel = $LoggedUser['Class'];
+$UserLevel = $LoggedUser['EffectiveClass'];
 
 // Setup for current view mode
 $SortStr = "IF(AssignedToUser = ".$LoggedUser['ID'].",0,1) ASC, ";
@@ -133,8 +133,8 @@ if ($DB->record_count() == 0) {
 		$Row = ($Row === 'a') ? 'b' : 'a';
 		$RowClass = 'row'.$Row;
 
-		$UserInfo = user_info($UserID);
-		$UserStr = format_username($UserID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+		//$UserInfo = user_info($UserID);
+		$UserStr = format_username($UserID, true, true, true, true);
 
 		// Get assigned
 		if ($AssignedToUser == '') {
@@ -145,15 +145,15 @@ if ($DB->record_count() == 0) {
 
 		} else {
 			// Assigned to user
-			$UserInfo = user_info($AssignedToUser);
-			$Assigned = format_username($AssignedToUser, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+			// $UserInfo = user_info($AssignedToUser);
+			$Assigned = format_username($AssignedToUser, true, true, true, true);
 
 		}
 
 		// Get resolver
 		if ($ViewString == 'Resolved') {
-			$UserInfo = user_info($ResolverID);
-			$ResolverStr = format_username($ResolverID, $UserInfo['Username'], $UserInfo['Donor'], $UserInfo['Warned'], $UserInfo['Enabled'], $UserInfo['PermissionID']);
+			//$UserInfo = user_info($ResolverID);
+			$ResolverStr = format_username($ResolverID, true, true, true, true);
 		}
 
 		// Table row

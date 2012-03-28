@@ -41,12 +41,10 @@ class INVITE_TREE {
 		if(!$TreeID){ return; }
 		$TreeQuery = $DB->query("
 			SELECT 
-			it.UserID, 
-			Username,
-			Donor,
-			Warned,
+			it.UserID,
 			Enabled,
 			PermissionID,
+			Donor,
 			Uploaded,
 			Downloaded,
 			Paranoia,
@@ -85,7 +83,7 @@ class INVITE_TREE {
 		
 		// We store this in an output buffer, so we can show the summary at the top without having to loop through twice
 		ob_start();
-		while(list($ID, $Username, $Donor, $Warned, $Enabled, $Class, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = $DB->next_record()){ 
+		while(list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = $DB->next_record()){ 
 			
 			// Do stats
 			$Count++;
@@ -116,7 +114,7 @@ class INVITE_TREE {
 			}
 ?>
 			<li>
-				<strong><?=format_username($ID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true, $Class)?></strong>
+				<strong><?=format_username($ID, true, true, $Enabled != 2 ? false : true, true)?></strong>
 <?
 			if(check_paranoia(array('uploaded', 'downloaded'), $Paranoia, $UserClass)) {
 				$TotalUpload += $Uploaded;

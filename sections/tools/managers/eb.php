@@ -8,9 +8,7 @@ $DB->query("SELECT
 	eb.Time,
 	eb.Email,
 	eb.Comment,
-	um.Username 
 	FROM email_blacklist AS eb 
-	LEFT JOIN users_main AS um ON um.ID=eb.UserID
 	ORDER BY eb.Time DESC");
 ?>
 <h2>Email Blacklist</h2>
@@ -21,7 +19,7 @@ $DB->query("SELECT
 		<td>Added</td>
 		<td>Submit</td>
 	</tr>
-<? while(list($ID, $UserID, $Time, $Email, $Comment, $Username) = $DB->next_record()) { ?>
+<? while(list($ID, $UserID, $Time, $Email, $Comment) = $DB->next_record()) { ?>
 	<tr>
 		<form action="tools.php" method="post">
 			<td>
@@ -34,7 +32,7 @@ $DB->query("SELECT
 				<input type="text" name="comment" value="<?=display_str($Comment)?>" size="60" />
 			</td>
 			<td>
-				<?=format_username($UserID, $Username)?><br />
+				<?=format_username($UserID, false, false, false)?><br />
 				<?=time_diff($Time, 1)?></td>
 			<td>
 				<input type="submit" name="submit" value="Edit" />

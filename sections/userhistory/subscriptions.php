@@ -169,7 +169,7 @@ if(!$NumResults) {
 		<? if($EditedUserID) { ?>
 					<br /><br />
 					Last edited by
-					<?=format_username($EditedUserID, $EditedUsername) ?> <?=time_diff($EditedTime)?>
+					<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime)?>
 		<? } ?>
 				</div>
 			</td>

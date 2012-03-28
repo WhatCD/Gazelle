@@ -29,12 +29,20 @@ echo $Val->GenerateJS('permform');
 			<td><input type="text" name="level" id="level" value="<?=(!empty($Level) ? display_str($Level) : '')?>" /></td>
 		</tr>
 		<tr>
+			<td class="label">Secondary Class</td>
+			<td><input type="checkbox" name="secondary" value="1" <? if (!empty($Secondary)) { ?>checked<? } ?> /></td>
+		</tr>
+		<tr>
 			<td class="label">Show on Staff page</td>
 			<td><input type="checkbox" name="displaystaff" value="1" <? if (!empty($DisplayStaff)) { ?>checked<? } ?> /></td>
 		</tr>
 		<tr>
 			<td class="label">Maximum number of personal collages</td>
 			<td><input type="text" name="maxcollages" size="5" value="<?=$Values['MaxCollages']?>" /></td>
+		</tr>
+		<tr>
+			<td class="label">Additional Forums</td>
+			<td><input type="text" size="30" name="forums" value="<?=display_str($Forums)?>" /></td>
 		</tr>
 <? if (is_numeric($_REQUEST['id'])) { ?>
 		<tr>

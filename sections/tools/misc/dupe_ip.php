@@ -47,7 +47,7 @@ if($DB->record_count()) {
 	$Row = ($Row == 'b') ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
-			<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?></td>
+			<td><?=format_username($UserID, true, true, true, true)?></td>
 			<td><span style="float:left;"><?=get_host($IP)." ($IP)"?></span><span style="float:right;">[<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History">H</a>|<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search">S</a>]</span></td>
 			<td><?=display_str($Uses)?></td>
 			<td><?=time_diff($Joined)?></td>

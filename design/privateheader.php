@@ -168,7 +168,7 @@ if($NewSubscriptions === FALSE) {
 			<li id="nav_requests"><a href="requests.php">Requests</a></li>
 			<li id="nav_forums"><a href="forums.php">Forums</a></li>
 			<li id="nav_irc"><a href="chat.php">IRC</a></li>
-<!--			<li id="nav_top10"><a href="top10.php">Top 10</a></li>-->
+			<li id="nav_top10"><a href="top10.php">Top 10</a></li>
 			<li id="nav_rules"><a href="rules.php">Rules</a></li>
 			<li id="nav_wiki"><a href="wiki.php">Wiki</a></li>
 			<li id="nav_staff"><a href="staff.php">Staff</a></li>

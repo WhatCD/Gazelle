@@ -127,7 +127,7 @@ foreach($Results as $Index => $Result) {
 		if(!$UserEndTimes[$Key]){ $UserEndTimes[$Key] = sqltime(); }
 ?>
 		<tr class="rowb<?=($HideMe ? ' hidden' : '')?>" name="<?=$Index?>">
-			<td>&nbsp;&nbsp;&#187;&nbsp;<?=format_username($Val, $Usernames[$Key], $UsersDonor[$Key], $UsersWarned[$Key], $UsersEnabled[$Key] == 2 ? false : true)?></td>
+			<td>&nbsp;&nbsp;&#187;&nbsp;<?=format_username($Val, true, true, true)?></td>
 			<td><?=time_diff($UserStartTimes[$Key])?></td>
 			<td><?=time_diff($UserEndTimes[$Key])?></td>
 			<td><?//time_diff(strtotime($UserStartTimes[$Key]), strtotime($UserEndTimes[$Key])); ?></td>

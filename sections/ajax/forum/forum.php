@@ -43,17 +43,13 @@ if(!isset($Forum) || !is_array($Forum)) {
 		t.ID,
 		t.Title,
 		t.AuthorID,
-		author.Username AS AuthorUsername,
 		t.IsLocked,
 		t.IsSticky,
 		t.NumPosts,
 		t.LastPostID,
 		t.LastPostTime,
 		t.LastPostAuthorID,
-		last_author.Username AS LastPostUsername
 		FROM forums_topics AS t
-		LEFT JOIN users_main AS last_author ON last_author.ID = t.LastPostAuthorID
-		LEFT JOIN users_main AS author ON author.ID = t.AuthorID
 		WHERE t.ForumID = '$ForumID'
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
@@ -114,7 +110,7 @@ else {
 	
 	$JsonTopics = array();
 	foreach ($Forum as $Topic) {
-		list($TopicID, $Title, $AuthorID, $AuthorName, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID, $LastAuthorName) = array_values($Topic);
+		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
 
 		// handle read/unread posts - the reason we can't cache the whole page
 		if((!$Locked || $Sticky) && ((empty($LastRead[$TopicID]) || $LastRead[$TopicID]['PostID']<$LastID) && strtotime($LastTime)>$LoggedUser['CatchupTime'])) {
@@ -122,6 +118,10 @@ else {
 		} else {
 			$Read = 'read';
 		}
+		$UserInfo = user_info($AuthorID);
+		$AuthorName = $UserInfo['Username'];
+		$UserInfo = user_info($LastAuthorID);
+		$LastAuthorName = $UserInfo['Username'];
 		
 		$JsonTopics[] = array(
 			'topicId' => (int) $TopicID,

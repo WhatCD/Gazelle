@@ -60,7 +60,7 @@ switch($Short) {
 		$DB->query("SELECT MinClassRead FROM forums WHERE ID = ".$ForumID);
 		list($MinClassRead) = $DB->next_record();
 		if(!empty($LoggedUser['DisableForums']) ||
-				($MinClassRead > $LoggedUser['Class'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) ||
+				($MinClassRead > $LoggedUser['EffectiveClass'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) ||
 				(isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] == 0)) {
 			error(403);
 		}
@@ -77,7 +77,7 @@ switch($Short) {
 		$DB->query("SELECT MinClassRead FROM forums WHERE ID = ".$ForumID);
 		list($MinClassRead) = $DB->next_record();
 		if(!empty($LoggedUser['DisableForums']) ||
-				($MinClassRead > $LoggedUser['Class'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) ||
+				($MinClassRead > $LoggedUser['EffectiveClass'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) ||
 				(isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] == 0)) {
 			error(403);
 		}

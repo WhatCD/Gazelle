@@ -13,7 +13,6 @@ if(!empty($_GET['page']) && is_number($_GET['page'])) {
 $Result = $DB->query("SELECT SQL_CALC_FOUND_ROWS
 	xu.uid,
 	t.Size,
-	um.Username,
 	xu.active,
 	xu.connectable,
 	xu.uploaded,
@@ -40,22 +39,18 @@ $DB->set_query_id($Result);
 	<tr class="colhead_dark" style="font-weight: bold;">
 		<td>User</td>
 		<td>Active</td>
-
 		<td>Connectable</td>
-
 		<td>Up</td>
 		<td>%</td>
 		<td>Client</td>
 	</tr>
 <?
-while(list($PeerUserID, $Size, $Username, $Active, $Connectable, $Uploaded, $Remaining, $UserAgent) = $DB->next_record()) {
+while(list($PeerUserID, $Size, $Active, $Connectable, $Uploaded, $Remaining, $UserAgent) = $DB->next_record()) {
 ?>
 	<tr>
-		<td><?=format_username($PeerUserID, $Username)?></td>
+		<td><?=format_username($PeerUserID, false, false, false)?></td>
 		<td><?= ($Active) ? '<span style="color:green">Yes</span>' : '<span style="color:red">No</span>' ?></td>
-
 		<td><?= ($Connectable) ? '<span style="color:green">Yes</span>' : '<span style="color:red">No</span>' ?></td>
-
 		<td><?=get_size($Uploaded) ?></td>
 		<td><?=number_format(($Size-$Remaining)/$Size*100, 2)?></td>
 		<td><?=display_str($UserAgent)?></td>

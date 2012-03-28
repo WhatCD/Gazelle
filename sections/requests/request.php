@@ -254,7 +254,7 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 			<tr>
 				<td class="label">Created</td>
 				<td>
-					<?=time_diff($TimeAdded)?>	by  <strong><?=format_username($RequestorID, $RequestorName)?></strong>
+					<?=time_diff($TimeAdded)?>	by  <strong><?=format_username($RequestorID, false, false, false)?></strong>
 				</td>
 			</tr>
 <?	if($CategoryName == "Music") {
@@ -373,7 +373,7 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 				<td class="label">Filled</td>
 				<td>
 					<strong><a href="torrents.php?<?=(strtotime($TimeFilled)<$TimeCompare?'id=':'torrentid=').$TorrentID?>">Yes</a></strong>, 
-					by user <?=format_username($FillerID, $FillerName)?>
+					by user <?=format_username($FillerID, false, false, false)?>
 <?		if($LoggedUser['ID'] == $RequestorID || $LoggedUser['ID'] == $FillerID || check_perms('site_moderate_requests')) { ?>
 						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>">(Unfill)</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning. 
 <?		} ?>
@@ -470,7 +470,7 @@ foreach($Thread as $Key => $Post){
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<span style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
-				by <strong><?=format_username($AuthorID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
+				by <strong><?=format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
 <?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
 if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
@@ -504,7 +504,7 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('requests', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
-				<?=format_username($EditedUserID, $EditedUsername) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <? } ?>
 			</div>
 		</td>
@@ -523,8 +523,7 @@ if(!$LoggedUser['DisablePosting']) { ?>
 					<tr class="colhead_dark">
 						<td colspan="2">
 							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=format_username($LoggedUser['ID'], $LoggedUser['Username'], $LoggedUser['Donor'], $LoggedUser['Warned'], $LoggedUser['Enabled'] == 2 ? false : true, $LoggedUser['PermissionID'])?></strong> <? if (!empty($LoggedUser['Title'])) { echo '('.$LoggedUser['Title'].')'; }?>
-								Just now
+								by <strong><?=format_username($LoggedUser['ID'], true, true, true, true)?> Just now
 								<a href="#quickreplypreview">[Report Comment]</a>
 							</span>
 							<span style="float:right;">

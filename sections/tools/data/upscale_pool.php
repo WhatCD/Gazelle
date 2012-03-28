@@ -59,7 +59,7 @@ if($DB->record_count()) {
 
 ?>
 		<tr class="row<?=$Row?>">
-			<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?></td>
+			<td><?=format_username($UserID, true, true, true, true)?></td>
 			<td><?=get_size($Uploaded)?></td>
 			<td><?=get_size($Downloaded)?></td>
 			<td><?=ratio($Uploaded, $Downloaded)?></td>

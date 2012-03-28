@@ -28,7 +28,6 @@ $Limit = in_array($Limit, array(10,100,250)) ? $Limit : 10;
 
 $BaseQuery = "SELECT
 	u.ID,
-	u.Username,
 	ui.JoinDate,
 	u.Uploaded,
 	u.Downloaded,
@@ -151,7 +150,7 @@ function generate_user_table($Caption, $Tag, $Details, $Limit) {
 ?>
 	<tr class="row<?=$Highlight?>">
 		<td class="center"><?=$Rank?></td>
-		<td><?=format_username($Detail['ID'],$Detail['Username'])?></td>
+		<td><?=format_username($Detail['ID'], false, false, false)?></td>
 		<td style="text-align:right"><?=get_size($Detail['Uploaded'])?></td>
 		<td style="text-align:right"><?=get_size($Detail['UpSpeed'])?>/s</td>
 		<td style="text-align:right"><?=get_size($Detail['Downloaded'])?></td>

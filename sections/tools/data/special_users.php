@@ -4,15 +4,7 @@ show_header('Special Users List');
 ?>
 <div class="thin">
 <?
-$DB->query("SELECT 
-	m.ID,
-	m.Username,
-	m.PermissionID,
-	m.Enabled,
-	i.Donor,
-	i.Warned
-	FROM users_main AS m
-	LEFT JOIN users_info AS i ON i.UserID=m.ID
+$DB->query("SELECT m.ID FROM users_main AS m
 	WHERE m.CustomPermissions != ''
 	AND m.CustomPermissions != 'a:0:{}'");
 if($DB->record_count()) {
@@ -23,10 +15,10 @@ if($DB->record_count()) {
 			<td>Access</td>
 		</tr>
 <?
-	while(list($UserID, $Username, $PermissionID, $Enabled, $Donor, $Warned)=$DB->next_record()) {
+	while(list($UserID)=$DB->next_record()) {
 ?>
 		<tr>
-			<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled, $PermissionID)?></td>
+			<td><?=format_username($UserID, true, true, true, true)?></td>
 			<td><a href="user.php?action=permissions&amp;userid=<?=$UserID?>">Manage</a></td>
 		</tr>
 <?	} ?>

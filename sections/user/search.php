@@ -72,7 +72,7 @@ foreach($Results as $Result) {
 	list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned) = $Result;
 ?>
 			<tr>
-				<td><?=format_username($UserID, $Username, $Donor, $Warned, $Enabled == 2 ? false : true);?></td>
+				<td><?=format_username($UserID, true, true, true, true);?></td>
 				<td><?=make_class_string($PermissionID);?></td>
 			</tr>
 <? } ?>
