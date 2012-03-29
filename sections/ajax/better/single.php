@@ -22,17 +22,21 @@ foreach ($Results as $GroupID=>$Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 	
-	$DisplayName = '';
+	$JsonArtists = array();
 	if(count($Artists)>0) {
-		$DisplayName = display_artists(array('1'=>$Artists));
+		foreach ($Artists as $Artist) {
+			$JsonArtists[] = array(
+				'id' => (int) $Artist['id'],
+				'name' => $Artist['name'],
+				'aliasId' => (int) $Artist['aliasid']
+			);
+		}
 	}
-	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
-	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 	
 	$JsonResults[] = array(
 		'torrentId' => (int) $FlacID,
 		'groupId' => (int) $GroupID,
-		'artist' => $Artists,
+		'artist' => $JsonArtists,
 		'groupName' => $GroupName,
 		'groupYear' => (int) $GroupYear,
 		'downloadUrl' => 'torrents.php?action=download&id='.$FlacID.'&authkey='.$LoggedUser['AuthKey'].'&torrent_pass='.$LoggedUser['torrent_pass']

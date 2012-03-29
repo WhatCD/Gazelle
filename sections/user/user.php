@@ -189,6 +189,10 @@ if (check_perms('admin_reports')) {
 if (check_perms('users_mod')) {
 ?>
 		[<a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">FL Tokens</a>]
+<? } 
+if (check_perms('admin_clear_cache') && check_perms('users_mod')) {
+?>
+		[<a href="user.php?action=clearcache&amp;id=<?=$UserID?>">Clear Cache</a>]
 <? } ?>
 	</div>
 

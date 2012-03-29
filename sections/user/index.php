@@ -72,7 +72,20 @@ switch ($_REQUEST['action']) {
 		break;	
 	case 'moderate':
 		include('takemoderate.php');
-		break;	
+		break;
+	case 'clearcache':
+		if (!check_perms('admin_clear_cache') || !check_perms('users_mod')) {
+			error(403);
+		}
+		$UserID = $_REQUEST['id'];
+		$Cache->delete_value('user_info_'.$UserID);
+		$Cache->delete_value('user_info_heavy_'.$UserID);
+		$Cache->delete_value('subscriptions_user_new_'.$UserID);
+		$Cache->delete_value('staff_pm_new_'.$UserID);
+		$Cache->delete_value('inbox_new_'.$UserID);
+		$Cache->delete_value('notifications_new_'.$UserID);
+		$Cache->delete_value('collage_subs_user_new_'.$UserID);
+		// no break, load the profile
 	default:
 		if (isset($_REQUEST['id'])) {
 			include(SERVER_ROOT.'/sections/user/user.php');

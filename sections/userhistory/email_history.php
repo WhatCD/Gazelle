@@ -23,6 +23,8 @@ if(!check_perms('users_view_email', $Class)) {
 
 $UsersOnly = $_GET['usersonly'];
 
+$DB->query("SELECT Username FROM users_main WHERE ID = ".$UserID);
+list($Username)= $DB->next_record();
 show_header("Email history for $Username");
 
 if ($UsersOnly == 1) {

@@ -16,6 +16,7 @@ authorize();
 // End checking for moronity
 
 $UserID = $_POST['userid'];
+$DeleteKeys = false;
 
 // Variables for database input
 $Class = (int)$_POST['Class'];
@@ -253,6 +254,7 @@ if ($Classes[$Class]['Level']!=$Cur['Class'] && (
 	$UpdateSet[]="PermissionID='$Class'";
 	$EditSummary[]="class changed to ".make_class_string($Class);
 	$LightUpdates['PermissionID']=$Class;
+	$DeleteKeys = true;
 
 	$DB->query("SELECT DISTINCT DisplayStaff FROM permissions WHERE ID = $Class OR ID = ".$ClassLevels[$Cur['Class']]['ID']);
 	if($DB->record_count() == 2) {
@@ -324,6 +326,7 @@ if (count($DroppedClasses) > 0) {
 	} else {
 		$LightUpdates['ExtraClasses']= array();
 	}
+	$DeleteKeys = true;
 }
 if (count($AddedClasses) > 0) {
 	$ClassChanges = array();
@@ -336,7 +339,8 @@ if (count($AddedClasses) > 0) {
 		$Values[] = "($UserID, $PermID)";
 	}
 	$DB->query("INSERT INTO users_levels (UserID, PermissionID) VALUES ".implode(', ',$Values));
-	$LightUpdates['ExtraClasses']= array_fill_keys($SecondaryClasses, 1);
+	//$LightUpdates['ExtraClasses']= array_fill_keys($SecondaryClasses, 1);
+	$DeleteKeys = true;
 }
 
 if ($Visible!=$Cur['Visible']  && check_perms('users_make_invisible')) {
@@ -666,13 +670,18 @@ if (empty($UpdateSet) && empty($EditSummary)) {
 	}
 }
 
-$Cache->begin_transaction('user_info_'.$UserID);
-$Cache->update_row(false, $LightUpdates);
-$Cache->commit_transaction(0);
+if ($DeleteKeys) {
+	$Cache->delete_value('user_info_'.$UserID);
+	$Cache->delete_value('user_info_heavy_'.$UserID);
+} else {
+	$Cache->begin_transaction('user_info_'.$UserID);
+	$Cache->update_row(false, $LightUpdates);
+	$Cache->commit_transaction(0);
 
-$Cache->begin_transaction('user_info_heavy_'.$UserID);
-$Cache->update_row(false, $HeavyUpdates);
-$Cache->commit_transaction(0);
+	$Cache->begin_transaction('user_info_heavy_'.$UserID);
+	$Cache->update_row(false, $HeavyUpdates);
+	$Cache->commit_transaction(0);
+}
 
 $Summary = '';
 // Create edit summary
