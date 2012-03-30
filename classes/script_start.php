@@ -327,6 +327,8 @@ function user_info($UserID) {
 // Only used for current user
 function user_heavy_info($UserID) {
 	global $DB, $Cache;
+	//global $Debug;
+
 	$HeavyInfo = $Cache->get_value('user_info_heavy_'.$UserID);
 
 	if(empty($HeavyInfo)) {
@@ -368,29 +370,35 @@ function user_heavy_info($UserID) {
 		}
 		
 		if (!empty($HeavyInfo['RestrictedForums'])) {
-			$RestrictedForums = explode(',', $HeavyInfo['RestrictedForums']);
+			$RestrictedForums = array_map('trim', explode(',', $HeavyInfo['RestrictedForums']));
 		} else {
 			$RestrictedForums = array();
 		}
 		unset($HeavyInfo['RestrictedForums']);
 		if (!empty($HeavyInfo['PermittedForums'])) {
-			$PermittedForums = explode(',', $HeavyInfo['PermittedForums']);
+			$PermittedForums = array_map('trim', explode(',', $HeavyInfo['PermittedForums']));
 		} else {
 			$PermittedForums = array();
 		}
 		unset($HeavyInfo['PermittedForums']);
+		//$Debug->log_var($PermittedForums, 'PermittedForums - User');
 		
 		$DB->query("SELECT PermissionID FROM users_levels WHERE UserID = $UserID");
 		$PermIDs = $DB->collect('PermissionID');
 		foreach ($PermIDs AS $PermID) {
 			$Perms = get_permissions($PermID);
 			if(!empty($Perms['PermittedForums'])) {
-				$PermittedForums = array_merge($PermittedForums,explode(',',$Perms['PermittedForums']));
+				//$Debug->log_var("'".$Perms['PermittedForums']."'", "PermittedForums - Perm $PermID");
+				$PermittedForums = array_merge($PermittedForums, array_map('trim', explode(',',$Perms['PermittedForums'])));
+				//$Debug->log_var($PermittedForums, "PermittedForums - After Perm $PermID");
 			}
 		}
 		$Perms = get_permissions($HeavyInfo['PermissionID']);
 		unset($HeavyInfo['PermissionID']);
-		$PermittedForums = array_merge($PermittedForums,explode(',',$Perms['PermittedForums']));
+		if(!empty($Perms['PermittedForums'])) {
+			$PermittedForums = array_merge($PermittedForums, array_map('trim', explode(',',$Perms['PermittedForums'])));
+		}
+		//$Debug->log_var($PermittedForums, 'PermittedForums - Done');
 		
 		if (!empty($PermittedForums) || !empty($RestrictedForums)) {
 			$HeavyInfo['CustomForums'] = array();
@@ -403,6 +411,7 @@ function user_heavy_info($UserID) {
 		} else {
 			$HeavyInfo['CustomForums'] = null;
 		}
+		//$Debug->log_var($HeavyInfo['CustomForums'], 'CustomForums');
 		
 		$HeavyInfo['SiteOptions'] = unserialize($HeavyInfo['SiteOptions']);
 		if(!empty($HeavyInfo['SiteOptions'])) {

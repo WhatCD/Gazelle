@@ -191,8 +191,13 @@ if($Details=='all' || $Details=='month') {
 
 if($Details=='all' || $Details=='year') {
 	if (!$TopTorrentsActiveLastYear = $Cache->get_value('top10tor_year_'.$Limit.$WhereSum)) {
+		// IMPORTANT NOTE - we use WHERE t.Seeders>200 in order to speed up this query. You should remove it!
 		$Query = $BaseQuery.' WHERE ';
-		if (!empty($Where)) { $Query .= $Where.' AND '; }
+		if ($Details=='all' && !$Filtered) {
+			$Query .= 't.Seeders>=200 AND ';
+			if (!empty($Where)) { $Query .= $Where.' AND '; }
+		}
+		elseif (!empty($Where)) { $Query .= $Where.' AND '; }
 		$Query .= "
 			t.Time>'".sqltime()."' - INTERVAL 1 YEAR
 			ORDER BY (t.Seeders + t.Leechers) DESC
