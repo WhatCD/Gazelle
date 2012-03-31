@@ -136,15 +136,15 @@ while(list($Message, $LogTime) = $DB->next_record()) {
 					if (is_numeric($MessageParts[$i + 1])) {
 						$UserID = $MessageParts[++$i];
 					}
-					$URL = "user ".$UserID." ".'<a href="user.php?id='.$UserID.'">'.$MessageParts[++$i]."</a>";
-				} elseif (strtolower($MessageParts[$i - 1]) != 'performed') {
+					$URL = "user ".$UserID." ".'(<a href="user.php?id='.$UserID.'">'.substr($MessageParts[++$i],1,-1)."</a>)";
+				} elseif (in_array($MessageParts[$i - 1], array('deleted','uploaded','edited','created','recovered'))) {
 					$User = $MessageParts[++$i];
 					if(substr($User,-1) == ':') {
 						$User = substr($User, 0, -1);
 						$Colon = true;
 					}
 					if(!isset($Usernames[$User])) {
-						$DB->query("SELECT ID FROM users_main WHERE Username = '".$User."'");
+						$DB->query("SELECT ID FROM users_main WHERE Username = _utf8 '".$User."' COLLATE utf8_bin");
 						list($UserID) = $DB->next_record();
 						$Usernames[$User] = $UserID ? $UserID : '';
 					} else {
@@ -183,7 +183,7 @@ while(list($Message, $LogTime) = $DB->next_record()) {
 				if ($i == 1) {
 					$User = $MessageParts[$i - 1];
 					if(!isset($Usernames[$User])) {
-						$DB->query("SELECT ID FROM users_main WHERE Username = '".$User."'");
+						$DB->query("SELECT ID FROM users_main WHERE Username = _utf8 '".$User."' COLLATE utf8_bin");
 						list($UserID) = $DB->next_record();
 						$Usernames[$User] = $UserID ? $UserID : '';
 						$DB->set_query_id($Log);

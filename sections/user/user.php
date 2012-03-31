@@ -862,15 +862,7 @@ if (check_paranoia_here('requestsvoted_list')) {
 	}
 }
 
-include_once(SERVER_ROOT.'/sections/staff/functions.php');
-$FLS = get_fls();
-$IsFLS = false;
-foreach($FLS as $F) {
-	if($LoggedUser['ID'] == $F['ID']) {
-		$IsFLS = true;
-		break;
-	}
-}
+$IsFLS = $LoggedUser['ExtraClasses'][41];
 if (check_perms('users_mod', $Class) || $IsFLS) { 
 	$UserLevel = $LoggedUser['EffectiveClass'];
 	$DB->query("SELECT 

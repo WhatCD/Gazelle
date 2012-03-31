@@ -134,6 +134,7 @@ abstract class IRC_BOT {
 
 	protected function listen() {
 		global $Cache,$DB;
+		$Cache->InternalCache = false;
 		stream_set_timeout($this->Socket, 10000000000);
 		while($this->State == 1){
 			if($this->Data = fgets($this->Socket, 256)) {

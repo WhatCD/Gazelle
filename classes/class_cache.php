@@ -41,6 +41,7 @@ class CACHE extends Memcache {
 	);
 	
 	public $CanClear = false;
+	public $InternalCache = true;
 
 	function __construct() {
 		$this->pconnect(MEMCACHED_HOST, MEMCACHED_PORT);
@@ -77,6 +78,9 @@ class CACHE extends Memcache {
 	}
 
 	public function get_value($Key, $NoCache=false) {
+		if(!$this->InternalCache) {
+			$NoCache = true;
+		}
 		$StartTime=microtime(true);
 		if (empty($Key)) {
 			trigger_error("Cache retrieval failed for empty key");

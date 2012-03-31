@@ -18,7 +18,7 @@ list($SupportFor, $DisplayStaff) = $DB->next_record();
 // Logged in user is staff
 $IsStaff = ($DisplayStaff == 1);
 // Logged in user is Staff or FLS
-$IsFLS = ($SupportFor != '' || $IsStaff);
+$IsFLS = ($IsStaff || $LoggedUser['ExtraClasses'][41]);
 
 switch($_REQUEST['action']) {
 	case 'viewconv':	
