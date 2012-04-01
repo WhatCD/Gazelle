@@ -13,7 +13,7 @@ $DB->query('SELECT
 	l.LastAttempt,
 	l.Attempts,
 	l.BannedUntil,
-	l.Bans,
+	l.Bans
 	FROM login_attempts AS l
 	WHERE l.BannedUntil > "'.sqltime().'"
 	ORDER BY l.BannedUntil ASC');
