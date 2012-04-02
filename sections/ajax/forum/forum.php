@@ -48,7 +48,7 @@ if(!isset($Forum) || !is_array($Forum)) {
 		t.NumPosts,
 		t.LastPostID,
 		t.LastPostTime,
-		t.LastPostAuthorID,
+		t.LastPostAuthorID
 		FROM forums_topics AS t
 		WHERE t.ForumID = '$ForumID'
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC

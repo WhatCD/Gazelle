@@ -70,6 +70,25 @@ show_header('Edit artist');
 		</form>
 	</div>
 	
+	<h2>Make into non-redirecting alias</h2>
+	<div class="box pad">
+		<form action="artist.php" method="post">
+			<input type="hidden" name="action" value="change_artistid" />
+			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
+			<div>
+				<em>Merges this artist (<?=Name?>) into the artist specified below (without redirection), so that "<?=Name?>" (and its aliases) will appear as a non-redirecting alias of the artist entered in the text box below.</em><br /><br />
+				<div style="text-align: center;">
+					<label for="newartistid">ArtistID:</label>&nbsp;<input type="text" id="newartistid" name="newartistid" size="40" value="" /><br />
+					<strong>OR</strong><br />
+					<label for="newartistid">Artist Name:</label>&nbsp;<input type="text" id="newartistname" name="newartistname" size="40" value="" />
+					<br /><br />
+					<input type="submit" value="Change ArtistID" />
+				</div>
+				
+			</div>
+		</form>
+	</div>
 	
 	<h2>Aliases</h2>
 	<div class="box pad">

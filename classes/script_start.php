@@ -1122,10 +1122,6 @@ function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled 
 
 	
 
-
-	$str.=($IsWarned && $UserInfo['Warned']!='0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned" />' : '';
-	$str.=($IsEnabled && $UserInfo['Enabled'] == 2) ? '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" />' : '';
-
 	if ($Title && $Class) {
 		$str .= '<strong>';
 	}

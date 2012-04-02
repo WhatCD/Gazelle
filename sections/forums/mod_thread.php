@@ -25,10 +25,14 @@ $TopicID = (int)$_POST['threadid'];
 $Sticky = (isset($_POST['sticky'])) ? 1 : 0;
 $Locked = (isset($_POST['locked'])) ? 1 : 0;
 $Title = db_string($_POST['title']);
+$RawTitle = $_POST['title'];
 $ForumID = (int)$_POST['forumid'];
 $Page = (int)$_POST['page'];
 
+
+
 if ($Locked == 1) {
+
 	$DB->query("DELETE FROM forums_last_read_topics WHERE TopicID='$TopicID'");
 }
 
@@ -108,11 +112,12 @@ if(isset($_POST['delete'])) {
 	}
 
 } else { // If we're just editing it
+	
 	$Cache->begin_transaction('thread_'.$TopicID.'_info');
 	$UpdateArray = array(
 		'IsSticky'=>$Sticky,
 		'IsLocked'=>$Locked,
-		'Title'=>cut_string($_POST['title'], 150, 1, 0),
+		'Title'=>cut_string($RawTitle, 150, 1, 0),
 		'ForumID'=>$ForumID
 		);
 	$Cache->update_row(false, $UpdateArray);
@@ -231,7 +236,7 @@ if(isset($_POST['delete'])) {
 		list($LastTopicID) = $DB->next_record();
 		if($LastTopicID == $TopicID) {
 			$UpdateArray = array(
-				'Title'=>$_POST['title'],
+				'Title'=>$RawTitle,
 				'IsLocked'=>$Locked,
 				'IsSticky'=>$Sticky
 			);

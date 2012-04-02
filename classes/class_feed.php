@@ -5,6 +5,8 @@ class FEED {
 	function open_feed() {
 		header("Content-type: application/xml; charset=UTF-8");
 		echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n","<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n\t<channel>\n";
+		echo '<xhtml:meta xmlns:xhtml="http://www.w3.org/1999/xhtml" name="robots" content="noindex" />'."\n";
+		echo '<meta xmlns="http://pipes.yahoo.com" name="pipes" content="noprocess" />'."\n";
 	}
 	function close_feed() {
 		echo "\t</channel>\n</rss>";

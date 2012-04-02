@@ -98,7 +98,10 @@ if ($_GET['updatelastread'] != '0') {
 	reset($Thread);
 
 	//Handle last read
+	
+	
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
+	
 		$DB->query("SELECT PostID From forums_last_read_topics WHERE UserID='$LoggedUser[ID]' AND TopicID='$ThreadID'");
 		list($LastRead) = $DB->next_record();
 		if($LastRead < $LastPost) {

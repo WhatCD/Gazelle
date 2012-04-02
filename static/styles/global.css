@@ -166,7 +166,7 @@ div#AddArtists a {
 	max-width: 100%;
 }
 
-.rippywrap { z-index:25; display: block; position: fixed; background: transparent url('../rippy/loggy.png') no-repeat bottom center; color: black; text-align: center; width: 190px; height: 180px; bottom: 0px; right: 0px; }
+.rippywrap { z-index:25; display: block; position: fixed; background: transparent url('../rippy/rippy.png') no-repeat bottom center; color: black; text-align: center; width: 190px; height: 180px; bottom: 0px; right: 0px; }
 .rippywrap div.rippy { z-index: 25; height: 111px; width: 190px; position: fixed; bottom: 0px; right: 0px; }
 span.rbt { display: block; padding: 8px 0 0; background: url('../rippy/rippy_top.gif') no-repeat top; }
 span.rbm { display: block; background: url('../rippy/rippy_middle.gif') repeat bottom; padding: 2px; }

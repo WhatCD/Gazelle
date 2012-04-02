@@ -32,6 +32,9 @@ if(!empty($_POST['action'])) {
 		case 'add_alias':
 			require(SERVER_ROOT.'/sections/artist/add_alias.php');
 			break;
+		case 'change_artistid':
+			require(SERVER_ROOT.'/sections/artist/change_artistid.php');
+			break;
 		default:
 			error(0);
 	}
@@ -69,6 +72,9 @@ if(!empty($_POST['action'])) {
 			break;
 		case 'delete_alias':
 			require(SERVER_ROOT.'/sections/artist/delete_alias.php');
+			break;
+		case 'change_artistid':
+			require(SERVER_ROOT.'/sections/artist/change_artistid.php');
 			break;
 		default:
 			error(0);

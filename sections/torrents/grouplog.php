@@ -25,9 +25,10 @@ if (!empty($Groups['matches'][$GroupID])) {
 		</tr>
 <?
 	$Log = $DB->query("SELECT TorrentID, UserID, Info, Time FROM group_log WHERE GroupID = ".$GroupID." ORDER BY Time DESC");
-
-	while (list($TorrentID, $UserID, $Info, $Time) = $DB->next_record())
+	$LogEntries = $DB->to_array(false, MYSQL_NUM);
+	foreach ($LogEntries AS $LogEntry)
 	{
+		list($TorrentID, $UserID, $Info, $Time) = $LogEntry;
 ?>
 		<tr class="rowa">
 			<td><?=$Time?></td>

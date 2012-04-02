@@ -126,8 +126,13 @@ if(count($_GET)){
 	$DateRegex = array('regex'=>'/\d{4}-\d{2}-\d{2}/');
 
 	$ClassIDs = array();
+	$SecClassIDs = array();
 	foreach ($Classes as $ClassID => $Value) {
-		$ClassIDs[]=$ClassID;
+		if ($Value['Secondary']) {
+			$SecClassIDs[]=$ClassID;
+		} else {
+			$ClassIDs[]=$ClassID;
+		}
 	}
 
 	$Val->SetFields('comment','0','string','Comment is too long.', array('maxlength'=>512));
@@ -152,6 +157,7 @@ if(count($_GET)){
 
 	$Val->SetFields('enabled', '0', 'inarray', 'Invalid enabled field', array('inarray'=>array('', 0, 1, 2)));
 	$Val->SetFields('class', '0', 'inarray', 'Invalid class', array('inarray'=>$ClassIDs));
+	$Val->SetFields('secclass', '0', 'inarray', 'Invalid class', array('inarray'=>$SecClassIDs));
 	$Val->SetFields('donor', '0', 'inarray', 'Invalid donor field', $YesNo);
 	$Val->SetFields('warned', '0', 'inarray', 'Invalid warned field', $YesNo);
 	$Val->SetFields('disabled_uploads', '0', 'inarray', 'Invalid disabled_uploads field', $YesNo);
@@ -344,6 +350,10 @@ if(count($_GET)){
 		if($_GET['class']!=''){
 			$Where[]='um1.PermissionID='.wrap($_GET['class'], '=');
 		}
+		if($_GET['secclass']!=''){
+			$Join['ul']=' JOIN users_levels AS ul ON um1.ID=ul.UserID ';
+			$Where[]='ul.PermissionID='.wrap($_GET['secclass'], '=');
+		}
 
 		if($_GET['donor'] == 'yes'){
 			$Where[]='ui1.Donor=\'1\'';
@@ -469,6 +479,30 @@ show_header('User search');
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<td class="label nobr"></td>
+				<td></td>
+				<td class="label nobr"></td>
+				<td></td>
+				<td class="label nobr">Secondary Class:</td>
+				<td>
+					<select name="secclass">
+						<option value="" <? if($_GET['secclass']==='') {echo ' selected="selected"';}?>>Any</option>
+<?	$Secondaries = array();
+	// Neither level nor ID is particularly useful when search secondary classes, so let's do some
+	// kung-fu to sort them alphabetically.
+	$fnc = function($Class1, $Class2) { return strcmp($Class1['Name'], $Class2['Name']);};
+	foreach($ClassLevels as $Class) {
+		if (!$Class['Secondary']) { continue; }
+		$Secondaries[] = $Class;
+	}
+	usort($Secondaries, $fnc);
+	foreach($Secondaries as $Class) {
+?>
+					<option value="<?=$Class['ID'] ?>" <? if($_GET['secclass']===$Class['ID']) {echo ' selected="selected"';}?>><?=cut_string($Class['Name'], 20, 1, 1)?></option>
+<?	} ?>
+					</select>
+				</td>
 			<tr>
 				<td class="label nobr">IP:</td>
 				<td>
