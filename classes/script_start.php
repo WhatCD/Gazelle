@@ -258,7 +258,11 @@ $Debug->set_flag('end user handling');
 
 $Debug->set_flag('start function definitions');
 
-// Get cached user info, is used for the user loading the page and usernames all over the site
+/**
+ * Get cached user info, is used for the user loading the page and usernames all over the site
+ *
+ * @param $UserID int   The UserID to get info for
+ */
 function user_info($UserID) {
 	global $DB, $Cache, $Classes;
 	$UserInfo = $Cache->get_value('user_info_'.$UserID);
@@ -324,7 +328,12 @@ function user_info($UserID) {
 	return $UserInfo;
 }
 
-// Only used for current user
+/**
+ * Gets the heavy user info
+ * Only used for current user
+ * @param $UserID The userid to get the information for
+ * @return fetched heavy info
+ */
 function user_heavy_info($UserID) {
 	global $DB, $Cache;
 	//global $Debug;
@@ -424,6 +433,13 @@ function user_heavy_info($UserID) {
 	return $HeavyInfo;
 }
 
+/**
+ * Updates the site options in the database
+ *
+ * @param $UserID the UserID to set the options for
+ * @param $NewOptions the new options to set
+ * @return false if $NewOptions is empty, otherwise void.
+ */
 function update_site_options($UserID, $NewOptions) {
 	if(!is_number($UserID)) {
 		error(0);
@@ -458,6 +474,12 @@ function update_site_options($UserID, $NewOptions) {
 	}
 }
 
+/**
+ * Gets the permissions associated with a certain permissionid
+ * 
+ * @param $PermissionID the kind of permissions to fetch
+ * @return permissions
+ */
 function get_permissions($PermissionID) {
 	global $DB, $Cache;
 	$Permission = $Cache->get_value('perm_'.$PermissionID);
@@ -546,7 +568,12 @@ function ip2unsigned($IP) {
 	return sprintf("%u", ip2long($IP));
 }
 
-// Geolocate an IP address. Two functions - a database one, and a dns one.
+/**
+ * Geolocate an IP address using the database
+ *
+ * @param $IP the ip to fetch the country for
+ * @return the country of origin
+ */ 
 function geoip($IP) {
 	static $IPs = array();
 	if (isset($IPs[$IP])) {
@@ -565,6 +592,12 @@ function geoip($IP) {
 	return $Country;
 }
 
+/** 
+ * Geolocate an IP address using DNS
+ *
+ * @param $IP the ip to fetch the country for
+ * @return the country of origin
+ */
 function old_geoip($IP) {
 	static $Countries = array();
 	if(empty($Countries[$IP])) {
@@ -592,6 +625,11 @@ function old_geoip($IP) {
 	return $Countries[$IP];
 }
 
+/**
+ * Gets the hostname for an ip
+ * @param $ip the ip to get the hostname for
+ * @return hostname fetched
+ */
 function gethostbyip($ip)
 {
 	$testar = explode('.',$ip);
@@ -609,6 +647,12 @@ function gethostbyip($ip)
 }
 
 
+/**
+ * Gets an hostname using AJAX
+ * 
+ * @param $IP the IP to fetch
+ * @return a span with javascript code
+ */
 function get_host($IP) {
 	static $ID = 0;
 	++$ID;
@@ -643,6 +687,9 @@ function display_ip($IP) {
 	return $Line;
 }
 
+/**
+ * Log out the current session
+ */
 function logout() {
 	global $SessionID, $LoggedUser, $DB, $Cache;
 	setcookie('session','',time()-60*60*24*365,'/','',false);
@@ -674,8 +721,13 @@ function enforce_login() {
 	}
 }
 
-// Make sure $_GET['auth'] is the same as the user's authorization key
-// Should be used for any user action that relies solely on GET.
+/**
+ * Make sure $_GET['auth'] is the same as the user's authorization key
+ * Should be used for any user action that relies solely on GET.
+ *
+ * @param Are we using ajax?
+ * @return authorisation status. Prints an error message to LAB_CHAN on IRC on failure.
+ */
 function authorize($Ajax = false) {
 	global $LoggedUser;
 	if(empty($_REQUEST['auth']) || $_REQUEST['auth'] != $LoggedUser['AuthKey']) {
@@ -686,11 +738,14 @@ function authorize($Ajax = false) {
 	return true;
 }
 
-// This function is to include the header file on a page.
-// $JSIncludes is a comma separated list of js files to be inclides on
-// the page, ONLY PUT THE RELATIVE LOCATION WITHOUT .js
-// ex: 'somefile,somdire/somefile'
-
+/**
+ * This function is to include the header file on a page.
+ *
+ * @param $PageTitle the title of the page 
+ * @param $JSIncludes is a comma separated list of js files to be inclides on
+ *                    the page, ONLY PUT THE RELATIVE LOCATION WITHOUT .js
+ *                    ex: 'somefile,somdire/somefile'
+ */
 function show_header($PageTitle='',$JSIncludes='') {
 	global $Document, $Cache, $DB, $LoggedUser, $Mobile, $Classes;
 
@@ -704,22 +759,30 @@ function show_header($PageTitle='',$JSIncludes='') {
 	}
 }
 
-/*-- show_footer function ------------------------------------------------*/
-/*------------------------------------------------------------------------*/
-/* This function is to include the footer file on a page.				 */
-/* $Options is an optional array that you can pass information to the	 */
-/*  header through as well as setup certain limitations				   */
-/*  Here is a list of parameters that work in the $Options array:		 */
-/*  ['disclaimer']	= [boolean]		Displays the disclaimer in the footer */
-/*								  Default is false					  */
-/**************************************************************************/
+/**
+ * This function is to include the footer file on a page.
+ *
+ * @param $Options an optional array that you can pass information to the
+ *                 header through as well as setup certain limitations
+ *	               Here is a list of parameters that work in the $Options array:
+ *                 ['disclaimer'] = [boolean] (False) Displays the disclaimer in the footer
+ */
 function show_footer($Options=array()) {
 	global $ScriptStartTime, $LoggedUser, $Cache, $DB, $SessionID, $UserSessions, $Debug, $Time;
 	if (!is_array($LoggedUser)) { require(SERVER_ROOT.'/design/publicfooter.php'); }
 	else { require(SERVER_ROOT.'/design/privatefooter.php'); }
 }
 
-function cut_string($Str,$Length,$Hard=0,$ShowDots=1) {
+/**
+ * Shorten a string 
+ * 
+ * @param $Str string to cut
+ * @param $Length cut at length
+ * @param $Hard force cut at length instead of at closest word
+ * @param $ShowDots Show dots at the end
+ * @return string formatted string
+ */
+function cut_string($Str,$Length,$Hard = false,$ShowDots = true) {
 	if (strlen($Str)>$Length) {
 		if ($Hard==0) {
 			// Not hard, cut at closest word
@@ -738,6 +801,12 @@ function cut_string($Str,$Length,$Hard=0,$ShowDots=1) {
 	}
 }
 
+/**
+ * Gets the CSS class corresponding to a ratio 
+ *
+ * @param $Ratio ratio to get the css class for
+ * @return string the CSS class corresponding to the ratio range
+ */
 function get_ratio_color($Ratio) {
 	if ($Ratio < 0.1) { return 'r00'; }
 	if ($Ratio < 0.2) { return 'r01'; }
