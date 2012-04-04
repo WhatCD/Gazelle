@@ -238,7 +238,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		}
 	}
 	if (!empty($Artists[3]) && count($Artists[3]) > 0) {
-		print '				<li class="artists_remix"><strong>Remixed By:</strong></li>';
+		print '				<li class="artists_remix"><strong>Remixed by:</strong></li>';
 		foreach($Artists[3] as $Artist) {
 ?>
 				<li class="artists_remix">
@@ -258,7 +258,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		}
 	}
 	if (!empty($Artists[7]) && count($Artists[7]) > 0) {
-		print '				<li class="artists_producer"><strong>Produced By:</strong></li>';
+		print '				<li class="artists_producer"><strong>Produced by:</strong></li>';
 		foreach($Artists[7] as $Artist) {
 ?>
 				<li class="artists_producer">

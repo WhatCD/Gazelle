@@ -1200,10 +1200,10 @@ function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled 
 	}
 	if ($Title) {
 		// Image proxy CTs
-		if(check_perms('site_proxy_images') && !empty($UserTitle)) {
-			$UserTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
+		if(check_perms('site_proxy_images') && !empty($UserInfo['Title'])) {
+			$UserInfo['Title'] = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
 																				return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
-																			  }, $UserTitle);
+																			  }, $UserInfo['Title']);
 		}
 		
 		$str.='</strong>';
