@@ -583,14 +583,14 @@ if(!$LoggedUser['DisablePosting']) {
 ?>
 		<div class="box">
 			<div class="head"><strong>Add comment</strong></div>
-			<form action="collages.php" method="post">
+			<form id="quickpostform" onsubmit="quickpostform.submit_button.disabled=true;" action="collages.php" method="post">
 				<input type="hidden" name="action" value="add_comment" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="collageid" value="<?=$CollageID?>" />
 				<div class="pad">
 					<textarea name="body" cols="24" rows="5"></textarea>
 					<br />
-					<input type="submit" value="Add comment" />
+					<input type="submit" id="submit_button" value="Add comment" />
 				</div>
 			</form>
 		</div>

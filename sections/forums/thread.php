@@ -473,7 +473,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 						</td>
 					</tr>
 				</table>
-				<form id="quickpostform" action="" method="post" style="display: block; text-align: center;">
+				<form id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post" style="display: block; text-align: center;">
 					<input type="hidden" name="action" value="reply" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="thread" value="<?=$ThreadID?>" />
@@ -493,7 +493,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 						<label for="mergebox">Merge</label>
 <? } ?>
 						<input id="post_preview" type="button" value="Preview" tabindex="1" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
-						<input type="submit" value="Post reply" tabindex="1" />
+						<input type="submit" id="submit_button" value="Post reply" tabindex="1" />
 					</div>
 				</form>
 			</div>

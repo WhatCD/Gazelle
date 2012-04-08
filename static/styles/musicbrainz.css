@@ -1,0 +1,49 @@
+#popup_background {
+	display: none;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+#musicbrainz_popup {
+	display: none;
+	position: absolute;
+	overflow: auto;
+	left: 25%;
+	right: 25%;
+	background: #FFFFFF;
+	border: 2px solid #cecece;
+	z-index: 2;
+	padding: 12px;
+	font-size: 13px;
+}
+#musicbrainz_popup h1 {
+	text-align: left;
+	color: #6FA5FD;
+	font-size: 22px;
+	font-weight: 700;
+	padding-bottom: 2px;
+	margin-bottom: 0px;
+}
+#musicbrainz_popup h2 {
+        text-align: left;
+        color: #6FA5FD;
+        font-size: 17px;
+        font-weight: 700;
+	border-bottom: 1px dotted #D3D3D3;
+	margin-bottom: 20px;
+}
+
+#popup_close {
+	font-size: 20px;
+	line-height: 14px;
+	right: 6px;
+	top: 4px;
+	position: absolute;
+	color: #6fa5fd;
+	font-weight: 700;
+	display: block;
+}
+

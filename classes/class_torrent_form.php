@@ -253,6 +253,53 @@ class TORRENT_FORM {
 					<p class="min_padding">Do not include the words remaster, re-issue, MSFL Gold, limited edition, bonus tracks, bonus disc or country specific information in this field. That belongs in the edition information fields below, see <a href="wiki.php?action=article&amp;id=159">this</a> for further information. Also remember to use the correct capitalization for your upload. See the <a href="wiki.php?action=article&amp;id=317">Capitalization Guidelines</a> for more information.
 				</td>
 			</tr>
+<tr id="musicbrainz_tr">
+   <td class="label">MusicBrainz</td>
+   <td><input type="button" value="Find Info" id="musicbrainz_button" /></td>
+</tr>
+<div id="musicbrainz_popup">
+   <a href="#null" id="popup_close">x</a>
+   <h1 id="popup_title"></h1>
+   <h2 id="popup_back"></h2>
+   <div id="results1"></div>
+   <div id="results2"></div>
+</div>
+<div id="popup_background"></div>
+
+<script>
+hide();
+if(document.getElementById("categories").disabled == false){
+	if(navigator.appName == 'Opera') {
+		var useragent = navigator.userAgent;
+		var match = useragent.split('Version/');
+		var version = parseFloat(match[1]);
+			if(version >= 12.00) {
+        			show();
+			}
+		}
+
+	else if (navigator.appName != 'Microsoft Internet Explorer') {
+        	show();
+	}
+}
+
+
+function hide() {
+  document.getElementById("musicbrainz_tr").style.display="none";
+  document.getElementById("musicbrainz_popup").style.display="none";
+  document.getElementById("popup_background").style.display="none";
+  }
+
+ function show() {
+  document.getElementById("musicbrainz_tr").style.display="";
+  document.getElementById("musicbrainz_popup").style.display="";
+  document.getElementById("popup_background").style.display="";
+
+  }
+
+</script>
+
+
 			<tr id="year_tr">
 				<td class="label">
 					<span id="year_label_not_remaster"<? if($IsRemaster) { echo ' class="hidden"';}?>>Year</span>
@@ -708,12 +755,6 @@ class TORRENT_FORM {
 					<textarea name="album_desc" id="album_desc" cols="60" rows="8"><?=display_str($Torrent['GroupDescription']); ?></textarea>
 					<p class="min_padding">Contains information like the track listing, and maybe a review.</p>
 				</td>
-			</tr>
-			<tr>
-			     <td class="label" style="font-weight: bold;">Library Contest Image Location</td>
-			     <td>
-				    <input type="text" id="library_image" name="library_image" size="60" />&nbsp;&nbsp;<input type="checkbox" id="multi_disc" name="multi_disc" />Multi-disc Upload
-			     </td>
 			</tr>
 <?		}?> 
 			<tr>

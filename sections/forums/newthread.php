@@ -71,7 +71,7 @@ show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 		</table>
 	</div>
 	<div class="box pad">
-		<form action="" id="newthreadform" method="post">
+		<form action="" id="newthreadform" onsubmit="newthreadform.submit_button.disabled=true;" method="post">
 			<input type="hidden" name="action" value="new" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="forum" value="<?=$ForumID?>" />
@@ -142,7 +142,7 @@ show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 			</div>
 			<input type="button" value="Preview" onclick="Newthread_Preview(1);" id="newthreadpreviewbutton"/>
 			<input type="button" value="Editor" onclick="Newthread_Preview(0);" id="newthreadeditbutton" class="hidden" />
-			<input type="submit" value="Create thread" />
+			<input type="submit" id="submit_button" value="Create thread" />
 		</form>
 	</div>
 </div>

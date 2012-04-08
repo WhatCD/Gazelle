@@ -10,7 +10,7 @@
 //*********************************************************************//
 
 ini_set('max_file_uploads','100');
-show_header('Upload','upload');
+show_header('Upload','upload,jquery,valid_tags,musicbrainz');
 
 if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	$DB->query("SELECT 
