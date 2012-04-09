@@ -9,6 +9,7 @@ much.
 
 // Number of users per page 
 define('FRIENDS_PER_PAGE', '20');
+include_once(SERVER_ROOT.'/classes/class_paranoia.php');
 
 
 
@@ -37,7 +38,7 @@ $DB->query("SELECT
 	JOIN users_info AS i ON f.FriendID=i.UserID
 	WHERE f.UserID='$UserID'
 	ORDER BY Username LIMIT $Limit");
-$Friends = $DB->to_array(false, MYSQLI_BOTH, array(7));
+$Friends = $DB->to_array(false, MYSQLI_BOTH, array(6, 'Paranoia'));
 
 // Number of results (for pagination)
 $DB->query('SELECT FOUND_ROWS()');

@@ -141,6 +141,7 @@ echo $Val->GenerateJS('userform');
 	$ReleaseTypes[1024] = "Guest Appearance";
 	$ReleaseTypes[1023] = "Remixed By";
 	$ReleaseTypes[1022] = "Composition";
+	$ReleaseTypes[1021] = "Produced By";
 	for($i = 0; list($Key,$Val) = each($ReleaseTypes); $i++) {
 		if(!($i % 7)) {
 			if($i) {

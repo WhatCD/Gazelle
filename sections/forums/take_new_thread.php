@@ -142,7 +142,6 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 		'LastPostID' => $PostID,
 		'LastPostTime' => sqltime(),
 		'LastPostAuthorID' => $LoggedUser['ID'],
-		'LastPostUsername' => $LoggedUser['Username'],
 		'NoPoll' => $NoPoll
 	)); //Bumped
 	$Forum = $Part1 + $Part2 + $Part3;

@@ -137,7 +137,7 @@ if($NewSubscriptions === FALSE) {
                         JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
                         JOIN forums_topics AS t ON l.TopicID = t.ID
                         JOIN forums AS f ON t.ForumID = f.ID
-                WHERE (f.MinClassRead <= ".$LoggedUser['Class']." OR f.ID IN ('$PermittedForums'))
+                WHERE (f.MinClassRead <= ".$LoggedUser['EffectiveClass']." OR f.ID IN ('$PermittedForums'))
                         AND l.PostID < t.LastPostID
                         AND s.UserID = ".$LoggedUser['ID'].
                 (!empty($RestrictedForums) ? "
