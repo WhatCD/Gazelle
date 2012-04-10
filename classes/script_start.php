@@ -267,7 +267,7 @@ function user_info($UserID) {
 	global $DB, $Cache, $Classes;
 	$UserInfo = $Cache->get_value('user_info_'.$UserID);
 	// the !isset($UserInfo['Paranoia']) can be removed after a transition period
-	if(empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia'])) {
+	if(empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia']) || empty($UserInfo['Class'])) {
 		$OldQueryID = $DB->get_query_id();
 
 
@@ -300,6 +300,8 @@ function user_info($UserID) {
 				$UserInfo['Paranoia'] = array();
 			}
 		}
+		
+		$UserInfo['Class'] = $Classes[$UserInfo['PermissionID']]['Level'];
 		
 		if (!empty($UserInfo['Levels'])) {
 			$UserInfo['ExtraClasses'] = array_fill_keys(explode(',', $UserInfo['Levels']), 1);

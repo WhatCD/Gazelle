@@ -352,6 +352,7 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 						<input type="hidden" id="amount" name="amount" value="0">
 						<input type="hidden" id="current_uploaded" value="<?=$LoggedUser['BytesUploaded']?>" />
 						<input type="hidden" id="current_downloaded" value="<?=$LoggedUser['BytesDownloaded']?>" />
+						<input type="hidden" id="current_rr" value="<?=(float)$LoggedUser['RequiredRatio']?>" />
 						<input id="total_bounty" type="hidden" value="<?=$RequestVotes['TotalBounty']?>" />
 						If you add the entered <strong><span id="new_bounty">0.00 MB</span></strong> of bounty, your new stats will be: <br/>
 						Uploaded: <span id="new_uploaded"><?=get_size($LoggedUser['BytesUploaded'])?></span>

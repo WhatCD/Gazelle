@@ -625,12 +625,6 @@ function hide() {
 					<p class="min_padding">Contains background information such as album history and maybe a review.</p> 
 				</td>
 			</tr>
-			<tr>
-				<td class="label" style="font-weight: bold;">Library Contest Image Location</td>
-				<td>
-					<input type="text" id="library_image" name="library_image" size="60" />&nbsp;&nbsp;<input type="checkbox" id="multi_disc" name="multi_disc" />Multi-disc Upload
-				</td>
-			</tr>
 <?		} // if new torrent ?> 
 			<tr>
 				<td class="label">Release Description (optional)</td>

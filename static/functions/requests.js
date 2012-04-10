@@ -19,6 +19,17 @@ function Vote(amount, requestid) {
 		index = true;
 	}
 	
+	if (amount > 20*1024*1024) {
+		upload   = $('#current_uploaded').raw().value;
+		download = $('#current_downloaded').raw().value;
+		rr       = $('#current_rr').raw().value;
+		if (amount > .3*(upload - rr * download)) {
+			if(!confirm('This vote is more than 30% of your buffer.  Please confirm that you wish to place this large a vote.')) {
+				return false;
+			}
+		}
+	}
+	
 	ajax.get('requests.php?action=takevote&id=' + requestid + '&auth=' + $('#auth').raw().value + '&amount=' + amount, function (response) {
 			if(response == 'bankrupt') {
 				error_message("You do not have sufficient upload credit to add " + get_size(amount) + " to this request");
