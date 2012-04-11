@@ -322,7 +322,7 @@ foreach ($Importances as $Group) {
 
 	
 	$DisplayName ='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
-	if(check_perms('users_mod')) {
+	if(check_perms('users_mod') || check_perms('torrents_fix_ghosts')) {
 		$DisplayName .= ' [<a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'">Fix</a>]';
 	}
 

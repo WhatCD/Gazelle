@@ -483,7 +483,7 @@ ul.collage_images li a:hover img {
   height: 300px !important;
 }
 
-#collages,#collage_table,.forum_index,.torrent_table,.forum_post.box,.recent,table.border,.torrent_table.grouping,#userhistory table {
+#collages,#personal_collages,#collage_table,.forum_index,.torrent_table,.forum_post.box,.recent,table.border,.torrent_table.grouping,#userhistory table {
 	width: 100% !important;
 }
 

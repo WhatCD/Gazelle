@@ -48,7 +48,7 @@ if(!isset($_REQUEST['action'])) {
 			authorize();
 
 			enforce_login();
-			if (!isset($_POST['requestid']) || !is_number($_POST['requestid']) || empty($_POST['body'])) { 
+			if (!isset($_POST['requestid']) || !is_number($_POST['requestid']) || $_POST['body']==='' || !isset($_POST['body'])) { 
 				error(0);
 			}
 			if($LoggedUser['DisablePosting']) {

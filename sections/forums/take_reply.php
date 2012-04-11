@@ -35,7 +35,7 @@ if(isset($_POST['forum']) && !is_number($_POST['forum'])) {
 }
 
 //If you're not sending anything, go back
-if(empty($_POST['body'])) {
+if($_POST['body']==='' || !isset($_POST['body'])) {
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	die();
 }

@@ -199,7 +199,7 @@ if(!empty($_REQUEST['action'])) {
 			enforce_login();
 			authorize();
 
-			if (!isset($_POST['groupid']) || !is_number($_POST['groupid']) || empty($_POST['body'])) { 
+			if (!isset($_POST['groupid']) || !is_number($_POST['groupid']) || $_POST['body']==='' || !isset($_POST['body'])) { 
 				error(0);
 			}
 			if($LoggedUser['DisablePosting']) {
@@ -365,7 +365,7 @@ if(!empty($_REQUEST['action'])) {
 			}
 			break;
 		case 'fix_group' :
-			if(check_perms('users_mod') && authorize() && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
+			if((check_perms('users_mod') || check_perms('torrents_fix_ghosts')) && authorize() && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 				$DB->query("SELECT COUNT(ID) FROM torrents WHERE GroupID = ".$_GET['groupid']);
 				list($Count) = $DB->next_record();
 				if($Count == 0) {

@@ -81,6 +81,7 @@
 	'torrents_freeleech' => 'Can make torrents freeleech.',
 	'torrents_search_fast' => 'Rapid search (for scripts).',
 	'torrents_hide_dnu' => 'Hide the Do Not Upload list by default.',
+	'torrents_fix_ghosts' => 'Can fix "ghost" groups on artist pages.',
 	'admin_manage_news' => 'Can manage news.',
 	'admin_manage_blog' => 'Can manage blog.',
 	'admin_manage_polls' => 'Can manage polls.',
@@ -224,6 +225,7 @@ function permissions_form(){ ?>
 					<? display_perm('artist_edit_vanityhouse', 'Can mark Artists as part of Vanity House.'); ?>
 					<? display_perm('site_add_logs', 'Can add logs to torrents after upload'); ?>
 					<? display_perm('torrents_hide_dnu', 'Hide the Do Not Upload list by default.'); ?>
+					<? display_perm('torrents_fix_ghosts', 'Can fix ghost groups on artist pages.'); ?>
 				</td>
 			</tr>
 		</table>

@@ -1,7 +1,7 @@
 <?
 authorize();
 
-if(empty($_POST['collageid']) || !is_number($_POST['collageid']) || empty($_POST['body'])) { error(0); }
+if(empty($_POST['collageid']) || !is_number($_POST['collageid']) || $_POST['body']==='' || !isset($_POST['body'])) { error(0); }
 $CollageID = $_POST['collageid'];
 
 if($LoggedUser['DisablePosting']) {

@@ -35,7 +35,7 @@ if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 	}
 }
 $Body = trim($_POST['body']);
-if(empty($Body)) {
+if($Body === '' || $Body === false) {
 	$Err = "You can't send a message without a body!";
 }
 
