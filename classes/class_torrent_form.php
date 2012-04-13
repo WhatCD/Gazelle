@@ -320,6 +320,7 @@ function hide() {
 				<td class="label">Catalogue Number (Optional):</td>
 				<td>
 					<input type="text" id="catalogue_number" name="catalogue_number" size="40" value="<?=display_str($Torrent['CatalogueNumber']) ?>"<?=$this->Disabled?> />
+					Please double check the record label and catalogue number when using MusicBrainz. See <a href="wiki.php?action=article&amp;id=688">this guide</a> for more details.
 				</td>
 			</tr>
 			<tr id="releasetype_tr">
