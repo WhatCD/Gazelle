@@ -71,6 +71,9 @@ switch ($_GET['action']){
 	case 'bookmarks':
 		require(SERVER_ROOT.'/sections/ajax/bookmarks.php');
 		break;
+	case 'announcements':
+		require(SERVER_ROOT.'/sections/ajax/announcements.php');
+                break;
 	case 'notifications':
 		require(SERVER_ROOT.'/sections/ajax/notifications.php');
 		break;

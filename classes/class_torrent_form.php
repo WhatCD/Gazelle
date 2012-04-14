@@ -190,13 +190,6 @@ class TORRENT_FORM {
 		$BadFiles = $Torrent['BadFiles'];
 		$CassetteApproved = $Torrent['CassetteApproved'];
 		$LossymasterApproved = $Torrent['LossymasterApproved'];
-		if (!$this->NewTorrent) {
-			$DB->query("SELECT UserID, Points FROM library_contest WHERE TorrentID = ".$this->TorrentID);
-			list($LibraryUser, $LibraryPoints) = $DB->next_record();
-		}
-		if ($LibraryUser != "") {
-			$LibraryUpload = '1';
-		}
 		global $ReleaseTypes;
 ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="border<? if($this->NewTorrent) { echo ' slice'; }?>" width="100%">
@@ -571,19 +564,7 @@ function hide() {
 					<input type="checkbox" id="lossymaster_approved" name="lossymaster_approved"<? if ($LossymasterApproved) {echo " checked='checked'";}?>/> Check this box if the torrent is an approved lossy master.
 				</td>
 			</tr>
-			<tr>
-				<td class="label">Library Contest Upload</td>
-				<td>
-					<input type="checkbox" id="library_upload" name="library_upload"<? if ($LibraryUpload) { echo " checked='checked'";}?>/> Check this box if the torrent is library contest upload.
-				</td>
-			</tr>
-			<tr>
-				<td class="label">Library Contest Points</td>
-				<td>
-					<input type="text" name="library_points" value="<?=$LibraryPoints?>" size="10" />
-				</td>
-			</tr>
-<?		} ?>
+<?		 }?>
 <?		 if($this->NewTorrent) { ?> 
 			<tr>
 				<td class="label">Tags</td>
@@ -643,14 +624,6 @@ function hide() {
 
 	function audiobook_form() { 
 		$Torrent = $this->Torrent;
-		if (!$this->NewTorrent) {
-			global $DB;
-			$DB->query("SELECT UserID, Points FROM library_contest WHERE TorrentID = ".$this->TorrentID);
-			list($LibraryUser, $LibraryPoints) = $DB->next_record();
-			if ($LibraryUser != "") {
-				$LibraryUpload = '1';
-			}
-		}
 ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="border slice" width="100%">
 <?		if($this->NewTorrent){ ?>
@@ -717,20 +690,6 @@ function hide() {
 					</span>
 				</td>
 			</tr>
-<?			if(!$this->NewTorrent && check_perms('users_mod')) {?>
-			<tr>
-			     <td class="label">Library Contest Upload</td>
-			     <td>
-				    <input type="checkbox" id="library_upload" name="library_upload"<? if ($LibraryUpload) { echo " checked='checked'";}?>/> Check this box if the torrent is library contest upload.
-			     </td>
-			</tr>
-			<tr>
-			     <td class="label">Library Contest Points</td>
-			     <td>
-				    <input type="text" name="library_points" value="<?=$LibraryPoints?>" size="10" />
-			     </td>
-			</tr>
-<?			}?>
 <?		if($this->NewTorrent) { ?> 
 			<tr>
 				<td class="label">Tags</td>

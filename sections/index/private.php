@@ -29,46 +29,6 @@ show_header('News','bbcode');
 <div class="thin">
 	<div class="sidebar">
 <?
-	$DB->query("SELECT lc.UserID,
-			   SUM(lc.Points)
-			   FROM library_contest AS lc
-			   GROUP BY lc.UserID
-			   ORDER BY SUM(lc.Points) DESC
-			   LIMIT 10");
-	$Contest = $DB->to_array();
-	?>
-	<div class="box">
-		<div class="head colhead_dark"><strong><a href="index.php?action=library_scoreboard">Library Contest Scoreboard</a></strong></div>
-		<div class="center pad">
-		<table>
-			<tr class="colhead">
-				<td><strong>Place</strong></td>
-				<td><strong>Username</strong></td>
-				<td><strong>Points</strong></td>
-			</tr>
-			<?
-			$i = 1;
-			foreach ($Contest as $Contestant) {
-				list($UserID, $Uploads, $Username, $Donor, $Warned, $Enabled, $PermissionID) = $Contestant;
-				$Class = ($i%2 == 0) ? 'a':'b';
-				$Num = $i;
-			?>
-				<tr class="row<?=$Class?>">
-					<td><strong><?=$Num?></td>
-					<td><?=format_username($UserID, true, true, true, true)?></td>
-					<td><?=number_format($Uploads)?></td>
-				</tr>
-			<?
-				$i++;
-			}
-			?>
-		</table>
-		</div>
-		<div class="center">
-			<i><a href="forums.php?action=viewthread&threadid=151451">Announcement</a></i>
-		</div>
-	</div>
-<?
 	$FeaturedAlbum = $Cache->get_value('featured_album');
 	if($FeaturedAlbum === false) {
 		$DB->query("SELECT fa.GroupID, tg.Name, tg.WikiImage, fa.ThreadID, fa.Title FROM featured_albums AS fa JOIN torrents_group AS tg ON tg.ID=fa.GroupID WHERE Ended = 0");
