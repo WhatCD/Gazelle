@@ -8,7 +8,11 @@ show_header('Other reports stats');
 
 ?>
 <h2>Other reports stats!</h2>
-<br />
+<div class="linkbox">
+	<a href="reports.php">New</a> |
+	<a href="reports.php?view=old">Old</a> |
+	<a href="reports.php?action=stats">Stats</a>
+</div>
 <div class="box pad thin" style="padding: 0px 0px 0px 20px; margin-left: auto; margin-right: auto">
 <?
 $DB->query("SELECT um.Username, COUNT(r.ID) AS Reports FROM reports AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.ReportedTime > '2009-08-21 22:39:41' AND r.ReportedTime > NOW() - INTERVAL 24 HOUR GROUP BY r.ResolverID ORDER BY Reports DESC");
