@@ -119,7 +119,9 @@ if(!$Sneaky
 	&& ($UserCount <= USER_LIMIT || USER_LIMIT == 0 || check_perms('site_can_invite_always'))
 	){ ?>
 	<div class="box pad">
-		<p>Please note that the selling, trading or public giving away of our invitations is strictly forbidden, and will result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
+		<p>Please note that the selling, trading or public giving away of our invitations, or responding to public requests, is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
+		<p>Remember that you are responsible for ALL invitees, and your account and/or privileges may be lost due to their actions. You should know the person you're inviting. If you aren't familiar enough with the user enough to trust them, we suggest not inviting them.</p>
+		<p><em>Do not send an invite if you haven't read and understood the information above.</em></p>
 	</div>
 	<div class="box pad">
 		<form action="user.php" method="post">
