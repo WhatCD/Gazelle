@@ -80,8 +80,9 @@ if(!$NewRequest) {
 			if($MediaList == "Any") {
 				$MediaArray = array_keys($Media);
 			} else {
+				$MediaTemp = explode('|', $MediaList);
 				foreach ($Media as $Key => $Val) {
-					if(strpos($MediaList, $Val) !== false) {
+					if(in_array($Val, $MediaTemp)) {
 						$MediaArray[] = $Key;
 					}
 				}

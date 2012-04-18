@@ -58,7 +58,7 @@ if(($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('s
 						<li><strong>Charts</strong> - A collage containing all the releases that comprise a certain chart (Billboard Top 100, Pitchfork Top 100, What.cd Top 10 for a certain week)</li>
 <?
    if(($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
-						<li><strong>Personal</strong> - You can put whatever your want here.  It's your personal collage.</li>	
+						<li><strong>Personal</strong> - You can put whatever you want here.  It's your personal collage.</li>	
 <? } ?>					
 					</ul>
 				</td>

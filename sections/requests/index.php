@@ -161,7 +161,7 @@ if(!isset($_REQUEST['action'])) {
 			$DB->query("SELECT DISTINCT
 				RequestID,
 				CEIL((SELECT COUNT(rc1.ID) FROM requests_comments AS rc1 WHERE rc1.RequestID=rc.RequestID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
-				CEIL((SELECT COUNT(rc2.ID) FROM requests_comments AS rc2 WHERE rc2.ID<'".db_string($_GET['postid'])."')/".TORRENT_COMMENTS_PER_PAGE.") AS Page
+				CEIL((SELECT COUNT(rc2.ID) FROM requests_comments AS rc2 WHERE rc2.ID<='".db_string($_GET['postid'])."')/".TORRENT_COMMENTS_PER_PAGE.") AS Page
 				FROM requests_comments AS rc
 				WHERE rc.RequestID=(SELECT RequestID FROM requests_comments WHERE ID='".db_string($_GET['postid'])."')");
 			list($RequestID,$Pages,$Page)=$DB->next_record();
@@ -175,7 +175,7 @@ if(!isset($_REQUEST['action'])) {
 			//We need to clear all subsequential catalogues as they've all been bumped with the absence of this post
 			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
 			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Pages-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
-			for($i=$ThisCatalogue;$i<=$LastCatalogue;$i++) {
+			for($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
 				$Cache->delete('request_comments_'.$RequestID.'_catalogue_'.$i);
 			}
 			
