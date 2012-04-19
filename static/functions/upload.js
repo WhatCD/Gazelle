@@ -179,7 +179,7 @@ function Media() {
 var ArtistCount = 1;
 
 function AddArtistField() {
-	if(ArtistCount >= 100) { return; }
+	if(ArtistCount >= 200) { return; }
 	var ArtistField = document.createElement("input");
 	ArtistField.type = "text";
 	ArtistField.id = "artist";
