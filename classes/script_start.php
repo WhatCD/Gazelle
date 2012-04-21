@@ -362,6 +362,7 @@ function user_heavy_info($UserID) {
 			i.DisableAvatar,
 			i.DisablePM,
 			i.DisableRequests,
+			i.DisableForums,
 			i.SiteOptions,
 			i.DownloadAlt,
 			i.LastReadNews,
