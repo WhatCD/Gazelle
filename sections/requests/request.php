@@ -97,8 +97,10 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 		<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?	} ?>
 		<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report Request]</a>
+<?	if(!$IsFilled) { ?>
 		<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&groupid=$GroupID":'')?>">[Upload Request]</a>
-<? if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
+<?	}
+	if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
 		<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Request Update]</a>
 <? } ?>
 	</div>
