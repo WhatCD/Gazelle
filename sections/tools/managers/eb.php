@@ -7,7 +7,7 @@ $DB->query("SELECT
 	eb.UserID,
 	eb.Time,
 	eb.Email,
-	eb.Comment,
+	eb.Comment
 	FROM email_blacklist AS eb 
 	ORDER BY eb.Time DESC");
 ?>

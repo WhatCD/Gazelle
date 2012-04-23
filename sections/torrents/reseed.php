@@ -4,10 +4,11 @@ $TorrentID = $_GET['torrentid'];
 
 if(!is_number($GroupID) || !is_number($TorrentID)) { error(0); }
 
-$DB->query("SELECT LastReseedRequest, UserID, Time FROM torrents WHERE ID='$TorrentID'");
-list($LastReseedRequest, $UploaderID, $UploadedTime) = $DB->next_record();
+$DB->query("SELECT last_action, LastReseedRequest, UserID, Time FROM torrents WHERE ID='$TorrentID'");
+list($LastActive, $LastReseedRequest, $UploaderID, $UploadedTime) = $DB->next_record();
 
 if(time()-strtotime($LastReseedRequest)<864000) { error("There was already a re-seed request for this torrent within the past 10 days."); }
+if ($LastActive == '0000-00-00 00:00:00' || time() - strtotime($LastActive) < 345678) { error(403); }
 
 $DB->query("UPDATE torrents SET LastReseedRequest=NOW() WHERE ID='$TorrentID'");
 
