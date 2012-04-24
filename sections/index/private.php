@@ -221,27 +221,33 @@ if ($SnatchStats = $Cache->get_value('stats_snatches')) {
 
 if(($PeerStats = $Cache->get_value('stats_peers')) === false) {
 	//Cache lock!
-	$Lock = $Cache->get_value('stats_peers_lock');
-	if($Lock) {
-		?><script type="script/javascript">setTimeout('window.location="http://<?=NONSSL_SITE_URL?><?=$_SERVER['REQUEST_URI']?>"', 5)</script><?
-	} else {
-		$Cache->cache_value('stats_peers_lock', '1', 10);
+	$PeerStatsLocked = $Cache->get_value('stats_peers_lock');
+	if(!$PeerStatsLocked) {
+		$Cache->cache_value('stats_peers_lock', 1, 30);
 		$DB->query("SELECT IF(remaining=0,'Seeding','Leeching') AS Type, COUNT(uid) FROM xbt_files_users WHERE active=1 GROUP BY Type");
 		$PeerCount = $DB->to_array(0, MYSQLI_NUM, false);
-		$SeederCount = isset($PeerCount['Seeding'][1]) ? $PeerCount['Seeding'][1] : 0;
-		$LeecherCount = isset($PeerCount['Leeching'][1]) ? $PeerCount['Leeching'][1] : 0;
-		$Cache->cache_value('stats_peers',array($LeecherCount,$SeederCount),0);
+		$SeederCount = $PeerCount['Seeding'][1] ?: 0;
+		$LeecherCount = $PeerCount['Leeching'][1] ?: 0;
+		$Cache->cache_value('stats_peers', array($LeecherCount,$SeederCount), 0);
+		$Cache->delete_value('stats_peers_lock');
 	}
 } else {
+	$PeerStatsLocked = false;
 	list($LeecherCount,$SeederCount) = $PeerStats;
 }
 
-$Ratio = ratio($SeederCount, $LeecherCount);
-$PeerCount = $SeederCount + $LeecherCount;
+if(!$PeerStatsLocked) {
+	$Ratio = ratio($SeederCount, $LeecherCount);
+	$PeerCount = number_format($SeederCount + $LeecherCount);
+	$SeederCount = number_format($SeederCount);
+	$LeecherCount = number_format($LeecherCount);
+} else {
+	$PeerCount = $SeederCount = $LeecherCount = $Ratio = 'Server busy';
+}
 ?>
-				<li>Peers: <?=number_format($PeerCount) ?></li>
-				<li>Seeders: <?=number_format($SeederCount) ?></li>
-				<li>Leechers: <?=number_format($LeecherCount) ?></li>
+				<li>Peers: <?=$PeerCount?></li>
+				<li>Seeders: <?=$SeederCount?></li>
+				<li>Leechers: <?=$LeecherCount?></li>
 				<li>Seeder/Leecher Ratio: <?=$Ratio?></li>
 			</ul>
 		</div>
