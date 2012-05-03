@@ -13,7 +13,7 @@ $DB->query("
 );
 list($SupportFor, $DisplayStaff) = $DB->next_record();
 
-if (!($SupportFor != '' || $DisplayStaff == '1')) {
+if (!$IsFLS) {
 	// Logged in user is not FLS or Staff
 	error(403);
 }

@@ -91,7 +91,10 @@ show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 						<label for="subscribebox">Subscribe to topic</label>
 					</td>
 				</tr>
-<? if (check_perms('forums_polls_create')) { ?>
+<? 
+
+if (check_perms('forums_polls_create')) { 
+?>
 				<script type="text/javascript">
 				var AnswerCount = 1;
 

@@ -74,7 +74,7 @@ switch ($_REQUEST['action']) {
 		include('takemoderate.php');
 		break;
 	case 'clearcache':
-		if (!check_perms('admin_clear_cache') || !check_perms('users_mod')) {
+		if (!check_perms('admin_clear_cache') || !check_perms('users_override_paranoia')) {
 			error(403);
 		}
 		$UserID = $_REQUEST['id'];
