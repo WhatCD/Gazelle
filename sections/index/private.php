@@ -43,7 +43,7 @@ show_header('News','bbcode');
 			<div class="head colhead_dark"><strong>Featured Album</strong></div>
 			<div class="center pad"><?=display_artists($Artists, true, true)?><a href="torrents.php?id=<?=$FeaturedAlbum['GroupID']?>"><?=$FeaturedAlbum['Name']?></a></div>
 			<div class="center"><a href="torrents.php?id=<?=$FeaturedAlbum['GroupID']?>" title="<?=display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>"><img src="<?=$FeaturedAlbum['WikiImage']?>" alt="<?=display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>" width="100%" /></a></div>
-			<div class="center pad"><a href="forums.php?action=viewthread&amp;threadid=<?=$FeaturedAlbum['ThreadID']?>"><em>Read the interview with the band, discuss here</em></a></div>
+			<div class="center pad"><a href="forums.php?action=viewthread&amp;threadid=<?=$FeaturedAlbum['ThreadID']?>"><em>Read the interview with the artist, discuss here</em></a></div>
 		</div>
 <?
 	}

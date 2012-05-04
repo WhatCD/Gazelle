@@ -233,7 +233,7 @@ if(!empty($_GET['year'])) {
 	}
 }
 if(!empty($_GET['encoding'])) {
-	$Queries[]='@encoding "'.$SS->EscapeString($_GET['encoding']).'"'; // Note the quotes, for 24bit lossless
+	$Queries[]='@encoding "'.$SS->EscapeString(strtr($_GET['encoding'], '.', ' ')).'"'; // Conversion from period to space is necessary due to a sphinx limitation/bug
 }
 
 if(isset($_GET['haslog']) && $_GET['haslog']!=='') {

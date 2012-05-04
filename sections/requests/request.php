@@ -109,7 +109,12 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 <? if($CategoryID != 0) { ?>
 		<div class="box box_albumart">
 			<div class="head"><strong>Cover</strong></div>
-<?	if (!empty($Image)) { ?>
+<?
+if (!empty($Image)) {
+	if(check_perms('site_proxy_images')) {
+		$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
+	}
+?>
 			<p align="center"><img style="max-width: 220px;" src="<?=$Image?>" alt="<?=$FullName?>" onclick="lightbox.init(this,220);" /></p>
 <?	} else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID-1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>

@@ -128,7 +128,7 @@ if(!empty($_GET['formats'])) {
 		$FormatNameArray = array();
 		foreach($FormatArray as $Index => $MasterIndex) {
 			if(array_key_exists($Index, $Formats)) {
-				$FormatNameArray[$Index] = $Formats[$MasterIndex];
+				$FormatNameArray[$Index] = '"'.strtr($Formats[$MasterIndex], '-.', '  ').'"';
 			} else {
 				//Hax
 				error(0);
@@ -145,7 +145,7 @@ if(!empty($_GET['media'])) {
 		$MediaNameArray = array();
 		foreach($MediaArray as $Index => $MasterIndex) {
 			if(array_key_exists($Index, $Media)) {
-				$MediaNameArray[$Index] = $Media[$MasterIndex];
+				$MediaNameArray[$Index] = '"'.strtr($Media[$MasterIndex], '-.', '  ').'"';
 			} else {
 				//Hax
 				error(0);
@@ -162,7 +162,7 @@ if(!empty($_GET['bitrates'])) {
 		$BitrateNameArray = array();
 		foreach($BitrateArray as $Index => $MasterIndex) {
 			if(array_key_exists($Index, $Bitrates)) {
-				$BitrateNameArray[$Index] = $SS->EscapeString($Bitrates[$MasterIndex]);
+				$BitrateNameArray[$Index] = '"'.strtr($SS->EscapeString($Bitrates[$MasterIndex]), '-.', '  ').'"';
 			} else {
 				//Hax
 				error(0);
