@@ -27,7 +27,7 @@ if(!is_array($AutoSuggest)) {
 		FROM artists_group AS a 
 		INNER JOIN torrents_artists AS ta ON ta.ArtistID=a.ArtistID 
 		INNER JOIN torrents AS t ON t.GroupID=ta.GroupID 
-		WHERE a.Name LIKE '".db_string($Letters)."%' 
+		WHERE a.Name LIKE '".db_string($Letters)."%'
 		GROUP BY ta.ArtistID 
 		ORDER BY Snatches DESC 
 		LIMIT $Limit");
@@ -50,5 +50,4 @@ foreach ($AutoSuggest as $Suggestion) {
 		}
 	}
 }
-
 echo json_encode(array($FullName,$Suggestions,$Snatches,$Links));

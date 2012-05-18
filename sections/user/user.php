@@ -1020,14 +1020,14 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_edit_ratio',$Class) || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID'])) {
 ?>
 			<tr>
-				<td class="label">Uploaded:</td>
+				<td class="label"><span title="Upload amount in bytes.  Also accepts e.g. +20GB or -35.6364MB on the end">Uploaded:</span></td>
 				<td>
 					<input type="hidden" name="OldUploaded" value="<?=$Uploaded?>" />
 					<input type="text" size="20" name="Uploaded" value="<?=$Uploaded?>" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Downloaded:</td>
+				<td class="label"><span title="Download amount in bytes.  Also accepts e.g. +20GB or -35.6364MB on the end">Downloaded:</span></td>
 				<td>
 					<input type="hidden" name="OldDownloaded" value="<?=$Downloaded?>" />
 					<input type="text" size="20" name="Downloaded" value="<?=$Downloaded?>" />

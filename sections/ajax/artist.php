@@ -19,6 +19,7 @@ include(SERVER_ROOT.'/classes/class_artists_similar.php');
 $ArtistID = $_GET['id'];
 if(!is_number($ArtistID)) {
 	print json_encode(array('status' => 'failure'));
+	die();
 }
 
 if (empty($ArtistID)) {

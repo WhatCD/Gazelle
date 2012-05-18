@@ -11,81 +11,69 @@ if (check_perms('admin_schedule')) {
 }
 
 ignore_user_abort();
-ini_set('max_execution_time',600);
-ini_set('memory_limit','4096M');
+ini_set('max_execution_time',300);
 ob_end_flush();
 gc_enable();
 
-
+$Cache->InternalCache = false; // We don't want PHP to cache all results internally
 $DB->query("TRUNCATE TABLE torrents_peerlists_compare");
-$DB->query("INSERT INTO torrents_peerlists_compare (GroupID, SeedersList, LeechersList, SnatchedList)
-	SELECT GroupID,
-	GROUP_CONCAT(CONCAT(ID,'.',Seeders) ORDER BY ID SEPARATOR '|'),
-	GROUP_CONCAT(CONCAT(ID,'.',Leechers) ORDER BY ID SEPARATOR '|'),
-	GROUP_CONCAT(CONCAT(ID,'.',Snatched) ORDER BY ID SEPARATOR '|')
-	FROM torrents GROUP BY GroupID;
-");
-	
-$DB->query("select t1.GroupID,t2.SeedersList,t2.LeechersList,t2.SnatchedList FROM torrents_peerlists AS t1 JOIN torrents_peerlists_compare AS t2 ON t1.GroupID=t2.GroupID WHERE t1.SeedersList!=t2.SeedersList OR t1.LeechersList!=t2.LeechersList OR t1.SnatchedList!=t2.SnatchedList ORDER BY t1.GroupID");
+$DB->query("INSERT INTO torrents_peerlists_compare
+	SELECT ID, GroupID, Seeders, Leechers, Snatched FROM torrents
+	ON DUPLICATE KEY UPDATE Seeders=VALUES(Seeders), Leechers=VALUES(Leechers), Snatches=VALUES(Snatches)");
+$DB->query("CREATE TEMPORARY TABLE tpc_temp
+	(TorrentID int, GroupID int, Seeders int, Leechers int, Snatched int,
+	PRIMARY KEY (GroupID,TorrentID))");
+$DB->query("INSERT INTO tpc_temp SELECT t2.* FROM torrents_peerlists t1 JOIN torrents_peerlists_compare t2 USING(TorrentID)
+	WHERE t1.Seeders != t2.Seeders OR t1.Leechers != t2.Leechers OR t1.Snatches != t2.Snatches");
 
-while(list($GroupID,$Seeders,$Leechers,$Snatched) = $DB->next_record(MYSQLI_NUM)) {
-	$Data = $Cache->get_value('torrent_group_'.$GroupID);
-	if (!(is_array($Data) && (@$Data['ver'] >= 4))) { continue; }
-	$Data = $Data['d'];
-	
-	$Changed = false;
-	
-	$Seeders = explode('|',$Seeders);
-	$Leechers = explode('|',$Leechers);
-	$Snatched = explode('|',$Snatched);
-	
-	$TotalSeeders = 0;
-	$TotalLeechers = 0;
-	$TotalSnatched = 0;
-	
-	foreach($Seeders as $Nums) {
-		list($TorrentID, $Val) = explode('.',$Nums);
-		if(is_array($Data['Torrents']) && isset($Data['Torrents'][$TorrentID]) && is_array($Data['Torrents'][$TorrentID])) {
-			if($Data['Torrents'][$TorrentID]['Seeders']!=$Val) {
-				$Data['Torrents'][$TorrentID]['Seeders']=$Val;
-				$Changed = true;
+$StepSize = 30000;
+$DB->query("SELECT * FROM tpc_temp ORDER BY GroupID ASC, TorrentID ASC LIMIT $StepSize");
+
+$RowNum = 0;
+$LastGroupID = 0;
+$UpdatedKeys = $UncachedGroups = 0;
+list($TorrentID, $GroupID, $Seeders, $Leechers, $Snatches) = $DB->next_record(MYSQLI_NUM, false);
+while($TorrentID) {
+	if($LastGroupID != $GroupID) {
+		$CachedData = $Cache->get_value('torrent_group_'.$GroupID);
+		if($CachedData !== false) {
+			if(isset($CachedData['ver']) && $CachedData['ver'] >= 4) {
+				$CachedStats = &$CachedData['d']['Torrents'];
 			}
+		} else {
+			$UncachedGroups++;
 		}
-		$TotalSeeders+=$Val;
+		$LastGroupID = $GroupID;
 	}
-	foreach($Leechers as $Nums) {
-		list($TorrentID, $Val) = explode('.',$Nums);
-		if(is_array($Data['Torrents']) && isset($Data['Torrents'][$TorrentID]) && is_array($Data['Torrents'][$TorrentID])) {
-			if($Data['Torrents'][$TorrentID]['Leechers']!=$Val) {
-				$Data['Torrents'][$TorrentID]['Leechers']=$Val;
-				$Changed = true;
-			}
+	while($LastGroupID == $GroupID) {
+		$RowNum++;
+		if(isset($CachedStats) && is_array($CachedStats[$TorrentID])) {
+			$OldValues = &$CachedStats[$TorrentID];
+			$OldValues['Seeders'] = $Seeders;
+			$OldValues['Leechers'] = $Leechers;
+			$OldValues['Snatched'] = $Snatches;
+			$Changed = true;
+			unset($OldValues);
 		}
-		$TotalLeechers+=$Val;
-	}
-	foreach($Snatched as $Nums) {
-		list($TorrentID, $Val) = explode('.',$Nums);
-		if(is_array($Data['Torrents']) && isset($Data['Torrents'][$TorrentID]) && is_array($Data['Torrents'][$TorrentID])) {
-			if($Data['Torrents'][$TorrentID]['Snatched']!=$Val) {
-				$Data['Torrents'][$TorrentID]['Snatched']=$Val;
-				$Changed = true;
-			}
+		if(!($RowNum % $StepSize)) {
+			$DB->query("SELECT * FROM tpc_temp WHERE GroupID > $GroupID OR (GroupID = $GroupID AND TorrentID > $TorrentID)
+				ORDER BY GroupID ASC, TorrentID ASC LIMIT $StepSize");
 		}
-		$TotalSnatched=$Val;
+		$LastGroupID = $GroupID;
+		list($TorrentID, $GroupID, $Seeders, $Leechers, $Snatches) = $DB->next_record(MYSQLI_NUM, false);
 	}
 	if($Changed) {
-		$Cache->cache_value('torrent_group_'.$GroupID, array('ver'=>4,'d'=>$Data), 0);
+		$Cache->cache_value('torrent_group_'.$LastGroupID, $CachedData, 0);
+		unset($CachedStats);
+		$UpdatedKeys++;
+		$Changed = false;
 	}
-	unset($Data);
 }
+printf("Updated %d keys, skipped %d keys in %.6fs (%d kB memory)\n", $UpdatedKeys, $UncachedGroups, microtime(true)-$ScriptStartTime, memory_get_usage(true)>>10);
 
 $DB->query("TRUNCATE TABLE torrents_peerlists");
-$DB->query("INSERT INTO torrents_peerlists 
-	(GroupID, SeedersList, LeechersList, SnatchedList)
-	SELECT GroupID, SeedersList, LeechersList, SnatchedList FROM torrents_peerlists_compare");
-	
+$DB->query("INSERT INTO torrents_peerlists SELECT * FROM torrents_peerlists_compare");
 
-echo microtime(true)-$ScriptStartTime;
 if (check_perms('admin_schedule')) {	
 	echo '<pre>';
 	show_footer();

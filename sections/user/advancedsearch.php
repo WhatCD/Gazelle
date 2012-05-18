@@ -29,7 +29,7 @@ function wrap($String, $ForceMatch = '', $IPSearch = false){
 		$Match = $ForceMatch;
 	}
 	if($Match == ' REGEXP '){
-		if(strpos($String, '\'') || preg_match('/^.*\\\\$/i', $String)){
+		if(strpos($String, '\'') !== false || preg_match('/^.*\\\\$/i', $String)){
 			error('Regex contains illegal characters.');
 		}
 	} else {
@@ -480,8 +480,10 @@ show_header('User search');
 				</td>
 			</tr>
 			<tr>
-				<td class="label nobr"></td>
-				<td></td>
+				<td class="label nobr">IP:</td>
+				<td>
+					<input type="text" name="ip" size="20" value="<?=display_str($_GET['ip'])?>" />
+				</td>
 				<td class="label nobr"></td>
 				<td></td>
 				<td class="label nobr">Secondary Class:</td>
@@ -504,9 +506,13 @@ show_header('User search');
 					</select>
 				</td>
 			<tr>
-				<td class="label nobr">IP:</td>
+				<td class="label nobr">Extra:</td>
 				<td>
-					<input type="text" name="ip" size="20" value="<?=display_str($_GET['ip'])?>" />
+					<input type="checkbox" name="ip_history" id="ip_history"<? if($_GET['ip_history']){ echo ' checked="checked"'; }?> />
+					<label for="ip_history">IP History</label>
+
+					<input type="checkbox" name="email_history" id="email_history"<? if($_GET['email_history']){ echo ' checked="checked"'; }?> />
+					<label for="email_history">Email History</label>
 				</td>
 				<td class="label nobr">Ratio:</td>
 				<td width="30%">
@@ -625,13 +631,8 @@ show_header('User search');
 				<td>
 					<input type="text" name="tracker_ip" size="20" value="<?=display_str($_GET['tracker_ip'])?>" />
 				</td>
-				<td class="label nobr">Extra</td>
+				<td class="label nobr"></td>
 				<td>
-					<input type="checkbox" name="ip_history" id="ip_history"<? if($_GET['ip_history']){ echo ' checked="checked"'; }?> />
-					<label for="ip_history">IP History</label>
-
-					<input type="checkbox" name="email_history" id="email_history"<? if($_GET['email_history']){ echo ' checked="checked"'; }?> />
-					<label for="email_history">Email History</label>
 				</td>
 			</tr>
 			

@@ -77,7 +77,7 @@ show_header('Edit artist');
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
 			<div>
-				<em>Merges this artist (<?=Name?>) into the artist specified below (without redirection), so that "<?=Name?>" (and its aliases) will appear as a non-redirecting alias of the artist entered in the text box below.</em><br /><br />
+				<em>Merges this artist (<?=$Name?>) into the artist specified below (without redirection), so that "<?=$Name?>" (and its aliases) will appear as a non-redirecting alias of the artist entered in the text box below.</em><br /><br />
 				<div style="text-align: center;">
 					<label for="newartistid">ArtistID:</label>&nbsp;<input type="text" id="newartistid" name="newartistid" size="40" value="" /><br />
 					<strong>OR</strong><br />

@@ -45,8 +45,7 @@ if(!is_array($Info) || !array_key_exists('PlainArtists', $Info) || empty($Info[1
 		INNER JOIN torrents_group AS tg ON tg.ID=t.GroupID
 		WHERE t.ID='".db_string($TorrentID)."'");
 	if($DB->record_count() < 1) {
-		header('Location: log.php?search='.$TorrentID);
-		die();
+		error(404);
 	}
 	$Info = array($DB->next_record(MYSQLI_NUM, array(4,5,6,10)));
 	$Artists = get_artist($Info[0][4],false);

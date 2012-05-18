@@ -309,12 +309,13 @@ if(!empty($_REQUEST['action'])) {
 			if (!check_perms('site_moderate_forums')) { error(403); }
 		
 			// Get topicid, forumid, number of pages
-			$DB->query("SELECT DISTINCT
+			$DB->query("SELECT
 				GroupID,
-				CEIL((SELECT COUNT(tc1.ID) FROM torrents_comments AS tc1 WHERE tc1.GroupID=tc.GroupID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
-				CEIL((SELECT COUNT(tc2.ID) FROM torrents_comments AS tc2 WHERE tc2.ID<'".db_string($_GET['postid'])."')/".TORRENT_COMMENTS_PER_PAGE.") AS Page
+				CEIL(COUNT(tc.ID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
+				CEIL(SUM(IF(tc.ID<=".$_GET['postid'].",1,0))/".TORRENT_COMMENTS_PER_PAGE.") AS Page
 				FROM torrents_comments AS tc
-				WHERE tc.GroupID=(SELECT GroupID FROM torrents_comments WHERE ID='".db_string($_GET['postid'])."')");
+				WHERE tc.GroupID=(SELECT GroupID FROM torrents_comments WHERE ID=".$_GET['postid'].")
+				GROUP BY tc.GroupID");
 			list($GroupID,$Pages,$Page)=$DB->next_record();
 		
 			// $Pages = number of pages in the thread
@@ -353,8 +354,8 @@ if(!empty($_REQUEST['action'])) {
 						list($Size, $Name) = $File;
 						$TmpFileList []= $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
 					}
-					$FilePath = $Tor->Val['info']->Val['files'] ? db_string($Tor->Val['info']->Val['name']) : "";
-					$FileString = db_string(implode('|||', $TmpFileList));
+					$FilePath = $Tor->Val['info']->Val['files'] ? make_utf8($Tor->Val['info']->Val['name']) : "";
+					$FileString = make_utf8(implode('|||', $TmpFileList));
 					$DB->query("UPDATE torrents SET Size = ".$TotalSize.", FilePath = '".db_string($FilePath)."', FileList = '".db_string($FileString)."' WHERE ID = ".$TorrentID);
 					$Cache->delete_value('torrents_details_'.$GroupID);
 				}

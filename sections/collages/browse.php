@@ -24,7 +24,7 @@ if(!empty($_GET['type'])) {
 
 if(!empty($_GET['search'])) {
 	// What are we looking for? Let's make sure it isn't dangerous.
-	$Search = strtr(db_string(trim($_GET['search'])),$SpecialChars);
+	$Search = db_string(trim($_GET['search']));
 	// Break search string down into individual words
 	$Words = explode(' ', $Search);
 }

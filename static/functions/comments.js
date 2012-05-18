@@ -87,8 +87,8 @@ function Delete(post) {
 			ajax.get("forums.php?action=delete&auth=" + authkey + "&postid=" + postid, function () {
 				$('#post' + postid).hide();
 			});
-		} else if (location.href.match(/collage\.php/)) {
-			ajax.get("collage.php?action=delete_comment&auth=" + authkey + "&postid=" + postid, function () {
+		} else if (location.href.match(/collages?\.php/)) {
+			ajax.get("collages.php?action=delete_comment&auth=" + authkey + "&postid=" + postid, function () {
 				$('#post' + postid).hide();
 			});
 		} else if (location.href.match(/requests\.php/)) {

@@ -298,18 +298,6 @@ if ($Donor!=$Cur['Donor']  && check_perms('users_give_donor')) {
 	$LightUpdates['Donor']=$Donor;
 }
 
-if ($Artist!=$Cur['Artist']  && (check_perms('users_promote_below') || check_perms('users_promote_to'))) {
-	$UpdateSet[]="Artist='$Artist'";
-	$EditSummary[]="artist status changed";
-	$LightUpdates['Artist']=$Artist;
-	if($Artist == 1) {
-		send_pm($UserID, 0, db_string("Artist Class"), db_string("Hi,\n\nCongratulations on your promotion to the artist class. 
-			To add a recommendation, please go to [url=http://".NONSSL_SITE_URL."/tools.php?action=recommend]this tool[/url] (for the first time, you may have to go to [url=http://".NONSSL_SITE_URL."/tools.php?action=recommend&resetsession=1]this link[/url]) instead.
-			Please only recommend albums that you created yourself, or albums where you officially represent the artist in question.
-			\n\nThanks,\n	".SITE_NAME." staff"),'');
-	}
-}
-
 // Secondary classes
 $OldClasses = $Cur['SecondaryClasses']?explode(',', $Cur['SecondaryClasses']):array();
 $DroppedClasses = array_diff($OldClasses, $SecondaryClasses);
@@ -337,6 +325,7 @@ if (count($AddedClasses) > 0) {
 	$Values = array();
 	foreach ($AddedClasses as $PermID) {
 		$Values[] = "($UserID, $PermID)";
+		
 	}
 	$DB->query("INSERT INTO users_levels (UserID, PermissionID) VALUES ".implode(', ',$Values));
 	//$LightUpdates['ExtraClasses']= array_fill_keys($SecondaryClasses, 1);

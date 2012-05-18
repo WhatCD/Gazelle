@@ -160,8 +160,8 @@ if(!isset($_REQUEST['action'])) {
 			// Get topicid, forumid, number of pages
 			$DB->query("SELECT DISTINCT
 				RequestID,
-				CEIL((SELECT COUNT(rc1.ID) FROM requests_comments AS rc1 WHERE rc1.RequestID=rc.RequestID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
-				CEIL((SELECT COUNT(rc2.ID) FROM requests_comments AS rc2 WHERE rc2.ID<='".db_string($_GET['postid'])."')/".TORRENT_COMMENTS_PER_PAGE.") AS Page
+				CEIL(COUNT(rc.ID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
+				CEIL(SUM(IF(rc.ID<=".$_GET['postid'].",1,0))/".TORRENT_COMMENTS_PER_PAGE.") AS Page
 				FROM requests_comments AS rc
 				WHERE rc.RequestID=(SELECT RequestID FROM requests_comments WHERE ID='".db_string($_GET['postid'])."')");
 			list($RequestID,$Pages,$Page)=$DB->next_record();

@@ -11,23 +11,14 @@ if(!check_perms('site_admin_forums')) {
 
 // Get topicid, forumid, number of pages
 $DB->query("SELECT 
-	DISTINCT
 	TopicID,
 	ForumID,
-	CEIL(
-		(SELECT COUNT(ID) 
-		FROM forums_posts 
-		WHERE TopicID=p.TopicID)/".POSTS_PER_PAGE."
-	) AS Pages,
-	CEIL(
-		(SELECT COUNT(ID) 
-		FROM forums_posts 
-		WHERE ID<'$PostID'
-		AND TopicID=p.TopicID)/".POSTS_PER_PAGE."
-	) AS Page
+	CEIL(COUNT(p.ID)/".POSTS_PER_PAGE.") AS Pages,
+	CEIL(SUM(IF(p.ID<='$PostID',1,0))/".POSTS_PER_PAGE.") AS Page
 	FROM forums_posts AS p
 	JOIN forums_topics AS t ON t.ID=p.TopicID
-	WHERE p.TopicID=(SELECT TopicID FROM forums_posts WHERE ID='$PostID')");
+	WHERE p.TopicID=(SELECT TopicID FROM forums_posts WHERE ID='$PostID')
+	GROUP BY t.ID");
 list($TopicID, $ForumID, $Pages, $Page) = $DB->next_record();
 
 // $Pages = number of pages in the thread

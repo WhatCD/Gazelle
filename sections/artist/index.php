@@ -85,12 +85,9 @@ if(!empty($_POST['action'])) {
 		include (SERVER_ROOT.'/sections/artist/artist.php');
 		
 	} elseif (!empty($_GET['artistname'])) {
-		$Name = db_string(trim($_GET['artistname']));
-		$DB->query("SELECT ArtistID FROM artists_alias WHERE Name LIKE '$Name'");
-		if(list($ID) = $DB->next_record(MYSQLI_NUM, false)) {
-			header('Location: artist.php?id='.$ID);
-			die();
-		} else {
+		$NameSearch = trim($_GET['artistname']);
+		$DB->query("SELECT ArtistID, Name FROM artists_alias WHERE Name LIKE '".db_string($NameSearch)."'");
+		if($DB->record_count() == 0) {
 			if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) {
 				header('Location: torrents.php?action=advanced&artistname='.urlencode($_GET['artistname']));
 			} else {
@@ -98,6 +95,19 @@ if(!empty($_POST['action'])) {
 			}
 			die();
 		}
+		list($FirstID, $Name) = $DB->next_record(MYSQLI_NUM, false);
+		if($DB->record_count() == 1 || !strcasecmp($Name,$NameSearch)) {
+			header('Location: artist.php?id='.$FirstID);
+			die();
+		}
+		while(list($ID, $Name) = $DB->next_record(MYSQLI_NUM, false)) {
+			if(!strcasecmp($Name,$NameSearch)) {
+				header('Location: artist.php?id='.$ID);
+				die();
+			}
+		}
+		header('Location: artist.php?id='.$FirstID);
+		die();
 	} else {
 		header('Location: torrents.php');
 	}

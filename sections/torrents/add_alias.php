@@ -29,7 +29,15 @@ for($i = 0; $i < count($AliasNames); $i++) {
 			$DB->query("INSERT INTO artists_alias (ArtistID, Name) VALUES ('$ArtistID', '$AliasName')");
 			$AliasID = $DB->inserted_id();
 		} else {
-			list($AliasID, $ArtistID, $Redirect, $AliasName) = $DB->next_record();
+			list($AliasID, $ArtistID, $Redirect, $FoundAliasName) = $DB->next_record(MYSQLI_NUM, false);
+			if($DB->record_count() > 1 && strcasecmp($AliasName, $FoundAliasName)) {
+				while($Result = $DB->next_record(MYSQLI_NUM, false)) {
+					list($AliasID, $ArtistID, $Redirect, $FoundAliasName) = $Result;
+					if(!strcasecmp($AliasName, $FoundAliasName)) {
+						break;
+					}
+				}
+			}
 			if($Redirect) {
 				$AliasID = $Redirect;
 			}

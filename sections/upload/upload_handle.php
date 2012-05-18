@@ -8,6 +8,7 @@
 
 ini_set('upload_max_filesize',2097152);
 ini_set('max_file_uploads',100);
+define(MAX_FILENAME_LENGTH, 180);
 require(SERVER_ROOT.'/classes/class_torrent.php');
 include(SERVER_ROOT.'/classes/class_validate.php');
 include(SERVER_ROOT.'/classes/class_feed.php');
@@ -354,6 +355,7 @@ $Private = $Tor->make_private();
 
 // File list and size
 list($TotalSize, $FileList) = $Tor->file_list();
+$DirName = $Tor->Val['info']->Val['name'];
 
 $TmpFileList = array();
 $HasLog = "'0'";
@@ -386,15 +388,20 @@ foreach($FileList as $File) {
 	if(preg_match('/\:/i', $Name)) {
 		$Err = 'The torrent contains one or more files with a :, which is a forbidden character. Please rename the files as necessary and recreate the .torrent file.';
 	}
+	// Make sure the filename is not too long
+	if(mb_strlen($Name, 'UTF-8') + mb_strlen($DirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
+		$Err = 'The torrent contained one or more files with too long a name ('.$Name.')';
+	}
+
 	// Add file and size to array
 	$TmpFileList []= $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
 }
 
 // To be stored in the database
-$FilePath = $Tor->Val['info']->Val['files'] ? db_string($Tor->Val['info']->Val['name']) : "";
+$FilePath = $Tor->Val['info']->Val['files'] ? db_string(make_utf8($Tor->Val['info']->Val['name'])) : "";
 
 // Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}
-$FileString = "'".db_string(implode('|||', $TmpFileList))."'";
+$FileString = "'".db_string(make_utf8(implode('|||', $TmpFileList)))."'";
 
 // Number of files described in torrent
 $NumFiles = count($FileList);
@@ -504,15 +511,21 @@ if($Type == 'Music') {
 						SELECT
 						aa.ArtistID,
 						aa.AliasID,
+						aa.Name,
 						aa.Redirect
 						FROM artists_alias AS aa
 						WHERE aa.Name LIKE '".db_string($Artist['name'])."'");
 					if($DB->record_count() > 0){
-						list($ArtistID, $AliasID, $Redirect) = $DB->next_record();
-						if($Redirect) {
-							$AliasID = $Redirect;
+						while($Result = $DB->next_record(MYSQLI_NUM, false)) {
+							list($ArtistID, $AliasID, $AliasName, $Redirect) = $Result;
+							if(!strcasecmp($Artist['name'], $AliasName)) {
+								if($Redirect) {
+									$AliasID = $Redirect;
+								}
+								break;
+							}
 						}
-						$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $Artist['name']);
+						$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $AliasName);
 					}
 				}
 			}
