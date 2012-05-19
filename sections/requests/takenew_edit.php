@@ -159,7 +159,7 @@ if($CategoryName == "Music") {
 		} 
 		$NeedCue = empty($_POST['needcue']) ? false : true;
 		//FLAC was picked, require either Lossless or 24 bit Lossless
-		if(!$AllBitrates && !in_array(9, $BitrateArray) && !in_array(10, $BitrateArray)) {
+		if(!$AllBitrates && !in_array(8, $BitrateArray) && !in_array(9, $BitrateArray)) {
 			$Err = "You selected FLAC as a format but no possible bitrate to fill it (Lossless or 24 bit Lossless)";
 		}
 

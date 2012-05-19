@@ -385,8 +385,7 @@ The Uploading Rules require that all uploads contain torrent directories with me
 					'delete' => '1',
 					'pm' => '2.1.1. The only formats allowed for music are:
 Lossy: MP3, AAC, AC3, DTS
-Lossless: FLAC
-Because the torrent you uploaded contained disallowed formats, you have been issued a 1-week warning.'
+Lossless: FLAC.'
 				)
 			),
 			'bitrate' => array(
