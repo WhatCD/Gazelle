@@ -47,7 +47,7 @@ $Types = array(
 					'warn' => '4',
 					'delete' => '1',
 					'pm' => '1.2. You have uploaded material that is currently forbidden. Items on the Do Not Upload list (at the top of the upload page) cannot be uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comments of the DNU list.
-Because the torrent you uploaded contained material on the Do Not Upload list, you have been issued a 4-week warning.'
+The torrent you uploaded contained material on the Do Not Upload list.'
 				)
 			),
 			'urgent' => array(
@@ -193,7 +193,7 @@ Because the torrent you uploaded contained material on the Do Not Upload list, y
 					'delete' => '1',
 					'pm' => '2.1.19. All music torrents must represent a complete release, and may not be missing tracks (or discs in the case of a multi-disc release).
 2.1.19.2. A single track (e.g., one MP3 file) cannot be uploaded on its own unless it is an officially released single. If a specific track can only be found on an album, the entire album must be uploaded in the torrent.
-Because the torrent you uploaded was missing a track (or tracks), you have been issued a 1-week warning.'
+The torrent you uploaded was missing a track (or tracks).'
 				)
 			),
 			'discs_missing' => array(
@@ -212,7 +212,7 @@ Because the torrent you uploaded was missing a track (or tracks), you have been 
 					'delete' => '1',
 					'pm' => '2.1.19. All music torrents must represent a complete release, and may not be missing tracks (or discs in the case of a multi-disc release).
 2.1.19.1. If an album is released as a multi-disc set (or box set) of CDs or vinyl discs, then it must be uploaded as a single torrent. Preferably, each individual CD rip in a multi-disc set should be organized in its own folder (see 2.3.12).
-Because the torrent you uploaded was missing a disc (or discs), you have been issued a 1-week warning.'
+The torrent you uploaded was missing a disc (or discs).'
 				)
 			),
 			'bonus_tracks' => array(
@@ -230,7 +230,7 @@ Because the torrent you uploaded was missing a disc (or discs), you have been is
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '2.1.19.3. Bonus discs may be uploaded separately in accordance with 2.4. Please note that individual bonus tracks cannot be uploaded without the rest of the album. Bonus tracks are not bonus discs. Enhanced audio CDs with data or video tracks must be uploaded without the non-audio tracks. If you want to share the videos or data, you may host the files off-site with a file sharing service and include the link to that service in your torrent description.
-Because the torrent you uploaded contained only bonus tracks, you have been issued a 1-week warning.'
+The torrent you uploaded contained only bonus tracks.'
 				)
 			),
 			'transcode' => array(
@@ -249,7 +249,7 @@ Because the torrent you uploaded contained only bonus tracks, you have been issu
 					'warn' => '2',
 					'delete' => '1',
 					'pm' => '2.1.2. No transcodes or re-encodes of lossy releases are acceptable here.
-Because the torrent you uploaded consisted of transcoded audio files, you have been issued a 2-week warning.'
+The torrent you uploaded consisted of transcoded audio files.'
 				)
 			),
 			'low' => array(
@@ -266,7 +266,7 @@ Because the torrent you uploaded consisted of transcoded audio files, you have b
 					'warn' => '2',
 					'delete' => '1',
 					'pm' => '2.1.3. Music releases must have an average bitrate of at least 192 kbps regardless of the format. Exceptions: The following VBR encodes may go under the 192 kbps limit: LAME V2 (VBR), V1 (VBR), V0 (VBR), APS (VBR), APX (VBR), MP3 192 (VBR), and AAC ~192 (VBR) to AAC ~256 (VBR) releases.
-Because the torrent you uploaded contained files that were below the minimum bitrate, you have been issued a 2-week warning.'
+The torrent you uploaded contained files that were below the minimum bitrate.'
 				)
 			),
 			'mutt' => array(
@@ -283,7 +283,7 @@ Because the torrent you uploaded contained files that were below the minimum bit
 					'warn' => '2',
 					'delete' => '1',
 					'pm' => '2.1.6. All music torrents must be encoded with a single encoder using the same settings.
-Because the torrent you uploaded contained files that were encoded by multiple encoders, you have been issued a 2-week warning.'
+The torrent you uploaded contained files that were encoded by multiple encoders.'
 				)
 			),
 			'single_track' => array(
@@ -303,7 +303,7 @@ Because the torrent you uploaded contained files that were encoded by multiple e
 					'delete' => '1',
 					'pm' => '2.1.5. Albums must not be ripped or uploaded as a single track.
 2.1.5.1. If the tracks on the original CD were separate, you must rip them to separate files. Any unsplit FLAC rips lacking a cue sheet will be deleted outright. Any unsplit FLAC rip that includes a cue sheet will be trumpable by a properly split FLAC torrent. CDs with single tracks can be uploaded without prior splitting.
-Because the torrent you uploaded was ripped as a single track, you have been issued a 1-week warning.'
+The torrent you uploaded was ripped as a single track.'
 				)
 			),
 			'tags_lots' => array(
@@ -420,7 +420,7 @@ Lossless: FLAC.'
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => "2.1.11. Music ripped from the radio (Satellite or FM), television, the web, or podcasts are not allowed.
-Because the torrent you uploaded contained audio files ripped from broadcast sources, you have been issued a 1-week warning."
+The torrent you uploaded contained audio files ripped from broadcast sources."
 				)
 			),
 			'discog' => array(
@@ -437,7 +437,7 @@ Because the torrent you uploaded contained audio files ripped from broadcast sou
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => "2.1.20. User made discographies may not be uploaded. Multi-album torrents are not allowed on the site under any circumstances. That means no discographies, Pitchfork compilations, etc. If releases (e.g., CD singles) were never released as a bundled set, do not upload them together. Live Soundboard material should be uploaded as one torrent per night, per show, or per venue. Including more than one show in a torrent results in a multi-album torrent.
-Because the torrent you uploaded is a discography, you have been issued a 1-week warning."
+The torrent you uploaded is a discography."
 				)
 			),
 			'user_discog' => array(
@@ -455,7 +455,7 @@ Because the torrent you uploaded is a discography, you have been issued a 1-week
 					'delete' => '1',
 					'pm' => "2.1.16. User-made compilations are not allowed.
 2.1.16.1. These are defined as compilations made by the uploader or anyone else who does not officially represent the artist or the label. Compilations must be reasonably official. User-made and unofficial multichannel mixes are also not allowed.
-Because the torrent you uploaded is a user compilation, you have been issued a 1-week warning."
+The torrent you uploaded is a user compilation."
 				)
 			),
 			'lineage' => array(
@@ -488,7 +488,7 @@ Because the torrent you uploaded is a user compilation, you have been issued a 1
 					'delete' => '1',
 					'pm' => "2.2.10.9. No log editing is permitted.
 2.2.10.9.1. Forging log data is a serious misrepresentation of quality, and will result in a warning and the loss of your uploading privileges when the edited log is found. We recommend that you do not open the rip log file for any reason. However, if you must open the rip log, do not edit anything in the file for any reason. If you discover that one of your software settings is incorrect in the ripping software preferences, you must rip the CD again with the proper settings. Do not consolidate logs under any circumstances. If you must re-rip specific tracks or an entire disc and the rip results happen to have the new log appended to the original, leave them as is. Do not remove any part of either log, and never copy/paste parts of a new log over an old log.
-Because the torrent you uploaded contained an edited log you have been issued a 4-week warning. In addition, your uploading privileges will be suspended for the duration of your warning. To have your privileges restored, you must PM the staff member who handled this log case."
+The torrent you uploaded contained an edited log."
 				)
 			),
 			'audience' => array(
@@ -505,7 +505,7 @@ Because the torrent you uploaded contained an edited log you have been issued a 
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => "2.1.12. No unofficial audience recordings may be uploaded. These include but are not limited to AUD (Audience), IEM (In Ear Monitor), ALD (Assistive Listening Device), Mini-Disc, and Matrix-sourced recordings (see 2.6.3).
-Because the torrent you uploaded is sourced from an audience recording, you have been issued a 1-week warning."
+The torrent you uploaded is sourced from an audience recording."
 				)
 			),
 			'filename' => array(
@@ -541,7 +541,7 @@ The Uploading Rules require that all uploads contain audio tracks with accurate 
 					'pm' => "2.10.1 Cassettes are allowed under strict conditions.
 2.10.1.1. Releases available only on cassette may be uploaded under special strict conditions (see this wiki for information on cassette ripping). Cassette-sourced uploads must be approved by staff first (see this wiki for details on the approval process). This also applies to soundboard releases where a tape generation can be found in the lineage (either the tape is not in the first generation or there are multiple tape generations). See 2.6.6 for more information.
 2.10.1.2. You must contact a moderator privately for approval before uploading. Include proof in the form of discography information from a reputable source as well as the spectrals for 2 songs in your message.
-Because the torrent you uploaded is an unapproved rip of a cassette, you have been issued a 1-week warning."
+The torrent you uploaded is an unapproved rip of a cassette."
 				)
 			),
 			'skips' => array(
@@ -593,7 +593,7 @@ Because the torrent you uploaded is an unapproved rip of a cassette, you have be
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '4.1.2. All applications must come with a crack, keygen, or other method of ensuring that downloaders can install them easily. App torrents with keygens, cracks, or patches that do not work or torrents missing clear installation instructions will be deleted if reported. No exceptions.
-Because the torrent you uploaded is missing an installation method, you have been issued a 1-week warning.'
+The torrent you uploaded is missing an installation method.'
 				)
 			),
 			'game' => array(
@@ -611,7 +611,7 @@ Because the torrent you uploaded is missing an installation method, you have bee
 					'delete' => '1',
 					'pm' => '1.2.5. Games of any kind. No games of any kind for PC, Mac, Linux, mobile devices, or any other platform are allowed.
 4.1.7. Games of any kind are prohibited (see 1.2.5).
-Because the torrent you uploaded contains a game, you have been issued a 4-week warning.'
+The torrent you uploaded contains a game.'
 				)
 			),
 			'free' => array(
@@ -628,7 +628,7 @@ Because the torrent you uploaded contains a game, you have been issued a 4-week 
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '4.1.3. App releases must not be freely available tools. Application releases cannot be freely downloaded anywhere from any official source. Nor may you upload open source applications where the source code is available for free.
-Because the torrent you uploaded contains a freely available application, you have been issued a 1-week warning.'
+The torrent you uploaded contains a freely available application.'
 				)
 			),
 			'description' => array(
@@ -645,7 +645,7 @@ Because the torrent you uploaded contains a freely available application, you ha
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '4.1.4. Release descriptions for applications must contain good information about the application. You should either have a small description of the program (either taken from its website or from an NFO file) or a link to the information -- but ideally both. Torrents missing this information will be deleted when reported.
-Because the torrent you uploaded had inadequate release information, you have been issued a 1-week warning.'
+The torrent you uploaded had inadequate release information.'
 				)
 			),
 			'pack' => array(
@@ -663,7 +663,7 @@ Because the torrent you uploaded had inadequate release information, you have be
 					'delete' => '1',
 					'pm' => '2.1.18. Sound Sample Packs must be uploaded as applications.
 4.1.9. Sound sample packs, template collections, and font collections are allowed if they are official releases, not freely available, and unarchived. Sound sample packs, template collections, and font collections must be official compilations and they must not be uploaded as an archive. The files contained inside the torrent must not be archived so that users can see what the pack contains. That means if sound sample packs are in WAV format, they must be uploaded as WAV. If the font collection, template collection, or sound sample pack was originally released as an archive, you must unpack the files before uploading them in a torrent. None of the contents in these packs and collections may be freely available.
-Because the torrent you uploaded contains either a freely available application or an archived collection, you have been issued a 1-week warning.'
+The torrent you uploaded contains either a freely available application or an archived collection.'
 				)
 			),
 			'collection' => array(
@@ -680,7 +680,7 @@ Because the torrent you uploaded contains either a freely available application 
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '4.1.11. Collections of cracks, keygens or serials are not allowed. The crack, keygen, or serial for an application must be in a torrent with its corresponding application. It cannot be uploaded separately from the application.
-Because the torrent you uploaded was a collection of serials, keygens, or cracks, you have been issued a 1-week warning.'
+The torrent you uploaded was a collection of serials, keygens, or cracks.'
 				)
 			),
 			'hack' => array(
@@ -697,7 +697,7 @@ Because the torrent you uploaded was a collection of serials, keygens, or cracks
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '4.1.12. Torrents containing hacking or cracking tools are prohibited.
-Because the torrent you uploaded contained a hacking tool, you have been issued a 1-week warning.'
+The torrent you uploaded contained a hacking tool.'
 				)
 			),
 			'virus' => array(
@@ -784,7 +784,7 @@ Because the torrent you uploaded contained a hacking tool, you have been issued 
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '7.3. Tutorials on how to use musical instruments, vocal training, producing music, or otherwise learning the theory and practice of music are the only allowed topics. No material outside of these topics is allowed. For example, instruction videos about Kung Fu training, dance lessons, beer brewing, or photography are not permitted here. What is considered allowable under these topics is ultimately at the discretion of the staff.
-Because the torrent you uploaded contains a video of a disallowed topic, you have been issued a 1-week warning.'
+The torrent you uploaded contains a video of a disallowed topic.'
 				)
 			)
 		),
@@ -803,7 +803,7 @@ Because the torrent you uploaded contains a video of a disallowed topic, you hav
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '3.3. No radio talk shows or podcasts are allowed. What.CD is primarily a music site, and those recordings do not belong in any torrent category.
-Because the torrent you uploaded contains files sourced from a talk show or podcast, you have been issued a 1-week warning.'
+The torrent you uploaded contains files sourced from a talk show or podcast.'
 				)
 			)
 		),
