@@ -76,6 +76,8 @@ if(check_perms('torrents_freeleech')) {
 	$Properties['FreeLeechType'] = $FreeType;
 }
 
+
+
 //******************************************************************************//
 //--------------- Validate data in edit form -----------------------------------//
 
