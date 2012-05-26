@@ -173,8 +173,8 @@ CREATE TABLE `comments_edits` (
   `EditUser` int(10) DEFAULT NULL,
   `EditTime` datetime DEFAULT NULL,
   `Body` mediumtext,
-  KEY `Page` (`Page`,`PostID`),
-  KEY `EditUser` (`EditUser`)
+  KEY `EditUser` (`EditUser`),
+  KEY `PostHistory` (`Page`,`PostID`,`EditTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `do_not_upload` (

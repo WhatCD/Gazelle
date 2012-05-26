@@ -17,10 +17,10 @@ if(empty($Sent)) {
 <?	} ?>
 	<table cellpadding="2" cellspacing="1" border="0" align="center">
 		<tr valign="top">
-			<td align="right">Username&nbsp;</td>
+			<td align="right" style="width:100px;">Username&nbsp;</td>
 			<td align="left">
 				<input type="text" name="username" id="username" class="inputtext" value="<?=(!empty($_REQUEST['username']) ? display_str($_REQUEST['username']) : '')?>" />
-				<p>It is recommended that you do NOT use your real name for personal security! We will not be changing it for you.</p>
+				<p>Use common sense when choosing your username. Offensive usernames will not be tolerated. Also, do not choose a username that can be associated with your real name. If you do so, we will not be changing it for you.</p>
 			</td>
 		</tr>
 		<tr valign="top">
