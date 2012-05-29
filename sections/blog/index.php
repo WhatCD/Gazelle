@@ -61,8 +61,17 @@ if(check_perms('admin_manage_blog')) {
 					}
 				}
 				
-				$DB->query("INSERT INTO blog (UserID, Title, Body, Time, ThreadID) VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."', ".$ThreadID.")");
+				$DB->query("INSERT INTO blog (UserID, Title, Body, Time, ThreadID, Important) 
+				                      VALUES ('".$LoggedUser['ID']."', 
+									          '".db_string($_POST['title'])."', 
+											  '".db_string($_POST['body'])."', 
+											  '".sqltime()."', 
+											  ".$ThreadID.", 
+											  '".(($_POST['important']=='1')?'1':'0')."')");
 				$Cache->delete_value('blog');
+				if ($_POST['important']=='1') {
+					$Cache->delete_value('blog_latest_id');
+				}
 				if(isset($_POST['subscribe'])) {
 					$DB->query("INSERT IGNORE INTO users_subscriptions VALUES ('$LoggedUser[ID]', $ThreadID)");
 					$Cache->delete_value('subscriptions_user_'.$LoggedUser['ID']);
@@ -89,6 +98,7 @@ if(check_perms('admin_manage_blog')) {
 					<input type="text" name="title" size="95" <? if(!empty($Title)) { echo 'value="'.display_str($Title).'"'; } ?> /><br />
 					<h3>Body</h3>
 					<textarea name="body" cols="95" rows="15"><? if(!empty($Body)) { echo display_str($Body); } ?></textarea> <br />
+					<input type="checkbox" value='1' name="important" id="important" <?=$Important?'checked':''?> /><label for="important">Important</label><br />
 					<h3>Thread ID</h3>
 					<input type="text" name="thread" size="8"<? if(!empty($ThreadID)) { echo 'value="'.display_str($ThreadID).'"'; } ?> />
 					(Leave blank to create thread automatically)
@@ -120,6 +130,14 @@ if (!$Blog = $Cache->get_value('blog')) {
 		LIMIT 20");
 	$Blog = $DB->to_array();
 	$Cache->cache_value('Blog',$Blog,1209600);
+}
+
+if ($LoggedUser['LastReadBlog'] < $Blog[0][0]) {
+	$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
+	$Cache->update_row(false, array('LastReadBlog' => $Blog[0][0]));
+	$Cache->commit_transaction(0);
+	$DB->query("UPDATE users_info SET LastReadBlog = '".$Blog[0][0]."' WHERE UserID = ".$LoggedUser['ID']);
+	$LoggedUser['LastReadBlog'] = $Blog[0][0];
 }
 
 foreach ($Blog as $BlogItem) {

@@ -196,6 +196,22 @@ if ($MyNews < $CurrentNews) {
 	$Alerts[] = '<a href="index.php">'.'New Announcement!'.'</a>';
 }
 
+// Blog
+$MyBlog = $LoggedUser['LastReadBlog'];
+$CurrentBlog = $Cache->get_value('blog_latest_id');
+if ($CurrentBlog === false) {
+	$DB->query("SELECT ID FROM blog WHERE Important = 1 ORDER BY Time DESC LIMIT 1");
+	if ($DB->record_count() == 1) {
+		list($CurrentBlog) = $DB->next_record();
+	} else {
+		$CurrentBlog = -1;
+	}
+	$Cache->cache_value('blog_latest_id', $CurrentBlog, 0);
+}
+if ($MyBlog < $CurrentBlog) {
+	$Alerts[] = '<a href="blog.php">'.'New Blog Post!'.'</a>';
+}
+
 //Staff PM
 $NewStaffPMs = $Cache->get_value('staff_pm_new_'.$LoggedUser['ID']);
 if ($NewStaffPMs === false) {

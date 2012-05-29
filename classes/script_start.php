@@ -366,6 +366,7 @@ function user_heavy_info($UserID) {
 			i.SiteOptions,
 			i.DownloadAlt,
 			i.LastReadNews,
+			i.LastReadBlog,
 			i.RestrictedForums,
 			i.PermittedForums,
 			m.FLTokens,

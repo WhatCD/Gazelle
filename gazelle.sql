@@ -89,6 +89,7 @@ CREATE TABLE `blog` (
   `Body` text COLLATE utf8_bin NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ThreadID` int(10) unsigned DEFAULT NULL,
+  `Important` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `UserID` (`UserID`),
   KEY `Time` (`Time`)
@@ -1226,6 +1227,7 @@ CREATE TABLE `users_info` (
   `DisableRequests` enum('0','1') NOT NULL DEFAULT '0',
   `PermittedForums` varchar(150) NOT NULL DEFAULT '',
   `UnseededAlerts` enum('0','1') NOT NULL DEFAULT '0',
+  `LastReadBlog` int(10) NOT NULL DEFAULT '0',
   UNIQUE KEY `UserID` (`UserID`),
   KEY `SupportFor` (`SupportFor`),
   KEY `DisableInvites` (`DisableInvites`),
