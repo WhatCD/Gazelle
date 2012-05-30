@@ -526,22 +526,28 @@ if($Day != next_day() || $_GET['runday']){
 	sleep(5);
 	// Send email
 	$DB->query("SELECT um.Username, um.Email FROM  users_info AS ui JOIN users_main AS um ON um.ID=ui.UserID
+		LEFT JOIN users_levels AS ul ON ul.UserID = um.ID AND ul.PermissionID = '".TC."'
 		WHERE um.PermissionID IN ('".USER."', '".MEMBER	."')
 		AND um.LastAccess<'".time_minus(3600*24*110, true)."'
 		AND um.LastAccess>'".time_minus(3600*24*111, true)."'
 		AND um.LastAccess!='0000-00-00 00:00:00'
 		AND ui.Donor='0'
-		AND um.Enabled!='2'");
+		AND um.Enabled!='2'
+		AND ul.UserID IS NULL
+		GROUP BY um.ID");
 	while(list($Username, $Email) = $DB->next_record()) {
 		$Body = "Hi $Username, \n\nIt has been almost 4 months since you used your account at http://".NONSSL_SITE_URL.". This is an automated email to inform you that your account will be disabled in 10 days if you do not sign in. ";
 		send_email($Email, 'Your '.SITE_NAME.' account is about to be disabled', $Body);
 	}
 	$DB->query("SELECT um.ID FROM  users_info AS ui JOIN users_main AS um ON um.ID=ui.UserID
+		LEFT JOIN users_levels AS ul ON ul.UserID = um.ID AND ul.PermissionID = '".TC."'
 		WHERE um.PermissionID IN ('".USER."', '".MEMBER	."')
 		AND um.LastAccess<'".time_minus(3600*24*30*4)."' 
 		AND um.LastAccess!='0000-00-00 00:00:00'
 		AND ui.Donor='0'
-		AND um.Enabled!='2'");
+		AND um.Enabled!='2'
+		AND ul.UserID IS NULL
+		GROUP BY um.ID");
 
 	if($DB->record_count() > 0) {
 		disable_users($DB->collect('ID'), "Disabled for inactivity.", 3);

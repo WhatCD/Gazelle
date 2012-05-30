@@ -41,7 +41,7 @@ if (check_perms('site_collages_delete') || ($CategoryID == 0 && $UserID == $Logg
 	$DB->query("UPDATE collages SET Name='".db_string($_POST['name'])."' WHERE ID='$CollageID'");
 }
 
-if(!empty($_POST['category']) && !empty($CollageCats[$_POST['category']]) && $_POST['category']!=$CategoryID && $_POST['category']!=0) {
+if(isset($_POST['category']) && !empty($CollageCats[$_POST['category']]) && $_POST['category']!=$CategoryID && ($_POST['category']!=0 || check_perms('site_collages_delete'))) {
 	$DB->query("UPDATE collages SET CategoryID='".db_string($_POST['category'])."' WHERE ID='$CollageID'");
 }
 

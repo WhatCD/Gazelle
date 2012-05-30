@@ -23,15 +23,15 @@ show_header('Edit collage');
 				<td><input type="text" name="name" size="60" value="<?=$Name?>" /></td>
 			</tr>
 <? } ?>
-<? if($CategoryID>0) { ?>
+<? if($CategoryID>0 || check_perms('site_collages_delete')) { ?>
 			<tr>
 				<td class="label"><strong>Category</strong></td>
 				<td>
 					<select name="category">
 <?
-	array_shift($CollageCats);
+	if (!check_perms('site_collages_delete')) { array_shift($CollageCats); }
 	foreach($CollageCats as $CatID=>$CatName) { ?>
-						<option value="<?=$CatID+1?>" <? if($CatID+1 == $CategoryID) { echo ' selected="selected"'; }?>><?=$CatName?></option>
+						<option value="<?=$CatID?>" <? if($CatID == $CategoryID) { echo ' selected="selected"'; }?>><?=$CatName?></option>
 <?	} ?>
 					</select>
 				</td>

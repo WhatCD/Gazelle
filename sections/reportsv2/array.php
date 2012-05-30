@@ -409,8 +409,8 @@ Your torrent was reported because it contained a disallowed format.'
 				),
 				'resolve_options' => array(
 					'upload' => '0',
-					'warn' => '1',
-					'delete' => '1',
+					'warn' => '0',
+					'delete' => '0',
 					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.1.4]2.1.4[/url]. Bitrates must accurately reflect encoder presets or the average bitrate of the audio files. You are responsible for supplying correct format and bitrate information on the upload page.
 Your torrent was reported because the bitrates of one or more audio files had been misrepresented.'
 				)
