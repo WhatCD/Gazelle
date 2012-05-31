@@ -1314,6 +1314,7 @@ function delete_torrent($ID, $GroupID=0) {
 	$DB->query("DELETE FROM torrents_bad_files WHERE TorrentID = ".$ID);
 	$DB->query("DELETE FROM torrents_cassette_approved WHERE TorrentID = ".$ID);
 	$DB->query("DELETE FROM torrents_lossymaster_approved WHERE TorrentID = ".$ID);
+	$DB->query("DELETE FROM torrents_lossyweb_approved WHERE TorrentID = ".$ID);
 	$Cache->delete_value('torrent_download_'.$ID);
 	$Cache->delete_value('torrent_group_'.$GroupID);
 	$Cache->delete_value('torrents_details_'.$GroupID);

@@ -386,12 +386,12 @@ foreach ($TorrentList as $Torrent) {
 		//t.ID,	t.Media, t.Format, t.Encoding, t.Remastered, t.RemasterYear, t.RemasterTitle, t.RemasterRecordLabel,t.RemasterCatalogueNumber,
 		//t.Scene, t.HasLog, t.HasCue, t.LogScore, t.FileCount, t.Size, t.Seeders, t.Leechers, t.Snatched, t.FreeTorrent, t.Time, t.Description,
 		//t.FileList, t.FilePath, t.UserID, t.last_action,
-	    //(bad tags), (bad folders), (bad filenames), (cassette approved), (lossy master approved), t.LastReseedRequest, LogInDB
+	    //(bad tags), (bad folders), (bad filenames), (cassette approved), (lossy master approved), (lossy web approved), t.LastReseedRequest, LogInDB
 	
 	list($TorrentID, $Media, $Format, $Encoding, $Remastered, $RemasterYear, $RemasterTitle, $RemasterRecordLabel, $RemasterCatalogueNumber, 
 		$Scene, $HasLog, $HasCue, $LogScore, $FileCount, $Size, $Seeders, $Leechers, $Snatched, $FreeTorrent, $TorrentTime, $Description, 
 		$FileList, $FilePath, $UserID, $LastActive,
-		$BadTags, $BadFolders, $BadFiles, $CassetteApproved, $LossymasterApproved, $LastReseedRequest, $LogInDB, $HasFile) = $Torrent;
+		$BadTags, $BadFolders, $BadFiles, $CassetteApproved, $LossymasterApproved, $LossywebApproved, $LastReseedRequest, $LogInDB, $HasFile) = $Torrent;
 
 	if($Remastered && !$RemasterYear) {
 		$FirstUnknown = !isset($FirstUnknown);
@@ -468,6 +468,7 @@ foreach ($TorrentList as $Torrent) {
 	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra.'<strong>Bad Folders</strong>'; $AddExtra=' / '; }
 	if(!empty($CassetteApproved)) { $ExtraInfo.=$AddExtra.'<strong>Cassette Approved</strong>'; $AddExtra=' / '; }
 	if(!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra.'<strong>Lossy Master Approved</strong>'; $AddExtra=' / '; }
+	if(!empty($LossywebApproved)) { $ExtraInfo.=$AddExtra.'<strong>Lossy WEB Approved</strong>'; $AddExtra = ' / '; }
 	if(!empty($BadFiles)) { $ExtraInfo.=$AddExtra.'<strong>Bad File Names</strong>'; $AddExtra=' / '; }
 	
 	if($GroupCategoryID == 1 

@@ -46,6 +46,7 @@ $Properties['BadFolders'] = (isset($_POST['bad_folders']))? 1 : 0;
 $Properties['BadFiles'] = (isset($_POST['bad_files'])) ? 1 : 0;
 $Properties['CassetteApproved'] = (isset($_POST['cassette_approved']))? 1 : 0;
 $Properties['LossymasterApproved'] = (isset($_POST['lossymaster_approved']))? 1 : 0;
+$Properties['LossywebApproved'] = (isset($_POST['lossyweb_approved'])) ? 1 : 0;
 $Properties['LibraryUpload'] = (isset($_POST['library_upload']))? 1 : 0;
 $Properties['LibraryPoints'] = (isset($_POST['library_points']))? $_POST['library_points'] : 0;
 $Properties['Format'] = $_POST['format'];
@@ -363,6 +364,15 @@ if(check_perms('users_mod')) {
 	}
 	if ($lmaID && !$Properties['LossymasterApproved']) {
 	    $DB->query("DELETE FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
+	}
+
+	$DB->query("SELECT TorrentID FROM torrents_lossyweb_approved WHERE TorrentID='$TorrentID'");
+	list($lwID) = $DB->next_record();
+	if (!$lwID && $Properties['LossywebApproved']) {
+		$DB->query("INSERT INTO torrents_lossyweb_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+	}
+	if ($lwID && !$Properties['LossywebApproved']) {
+		$DB->query("DELETE FROM torrents_lossyweb_approved WHERE TorrentID='$TorrentID'");
 	}
 }
 

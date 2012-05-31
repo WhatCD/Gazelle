@@ -190,6 +190,7 @@ class TORRENT_FORM {
 		$BadFiles = $Torrent['BadFiles'];
 		$CassetteApproved = $Torrent['CassetteApproved'];
 		$LossymasterApproved = $Torrent['LossymasterApproved'];
+		$LossywebApproved = $Torrent['LossywebApproved'];
 		global $ReleaseTypes;
 ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="border<? if($this->NewTorrent) { echo ' slice'; }?>" width="100%">
@@ -559,9 +560,15 @@ function hide() {
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Lossy master Approved</td>
+				<td class="label">Lossy Master Approved</td>
 				<td>
 					<input type="checkbox" id="lossymaster_approved" name="lossymaster_approved"<? if ($LossymasterApproved) {echo " checked='checked'";}?>/> Check this box if the torrent is an approved lossy master.
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Lossy Web Approved</td>
+				<td>
+					<input type="checkbox" id="lossyweb_approved" name="lossyweb_approved"<? if ($LossywebApproved) { echo " checked='checked'";}?>/> Check this box if the torrent is an approved lossy WEB release.
 				</td>
 			</tr>
 <?		 }?>

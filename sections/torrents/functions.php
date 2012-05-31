@@ -88,6 +88,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			tfi.TorrentID,
 			ca.TorrentID,
 			lma.TorrentID,
+			lwa.TorrentID,
 			t.LastReseedRequest,
 			tln.TorrentID AS LogInDB,
 			t.ID AS HasFile
@@ -97,6 +98,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			LEFT JOIN torrents_bad_files AS tfi on tfi.TorrentID=t.ID
 			LEFT JOIN torrents_cassette_approved AS ca on ca.TorrentID=t.ID
 			LEFT JOIN torrents_lossymaster_approved AS lma on lma.TorrentID=t.ID
+			LEFT JOIN torrents_lossyweb_approved AS lwa on lwa.TorrentID=t.ID
 			LEFT JOIN torrents_logs_new AS tln ON tln.TorrentID=t.ID
 			WHERE t.GroupID='".db_string($GroupID)."'
 			GROUP BY t.ID

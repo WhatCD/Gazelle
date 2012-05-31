@@ -1039,6 +1039,13 @@ CREATE TABLE `torrents_lossymaster_approved` (
   KEY `TimeAdded` (`TimeAdded`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `torrents_lossyweb_approved` (
+  `TorrentID` int(10) NOT NULL DEFAULT '0',
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `TimeAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  KEY `TimeAdded` (`TimeAdded`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `torrents_peerlists` (
   `TorrentID` int(11) NOT NULL,
   `GroupID` int(11) DEFAULT NULL,

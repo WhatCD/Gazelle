@@ -105,7 +105,7 @@ $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
 	<p><?=$NewDNU?'<strong class="important_text">':''?>Last Updated: <?=time_diff($Updated)?><?=$NewDNU?'</strong>':''?></p>
 	<p>The following releases are currently forbidden from being uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comment.
 <? if ($HideDNU) { ?>
-   <span id="showdnu"><a href="#" <a href="#" onclick="$('#dnulist').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span>
+   <span id="showdnu"><a href="#" onclick="$('#dnulist').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span>
 <? } ?>
 	</p>
 	<table id="dnulist" class="<?=($HideDNU?'hidden':'')?>" style="">
