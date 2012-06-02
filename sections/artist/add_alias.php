@@ -4,7 +4,8 @@ authorize();
 if(!check_perms('torrents_edit')) { error(403); }
 $ArtistID = $_POST['artistid'];
 $Redirect = $_POST['redirect'];
-$AliasName = db_string(normalise_artist_name($_POST['name']));
+$AliasName = normalise_artist_name($_POST['name']);
+$DBAliasName = db_string($AliasName);
 if(!$Redirect) { $Redirect = 0; }
 
 if(!is_number($ArtistID) || !($Redirect === 0 || is_number($Redirect)) || !$ArtistID) {
@@ -23,7 +24,7 @@ if($AliasName == '') {
  * 3. For foo, there's two, same ArtistID, diff names, no redirect
  */
 
-$DB->query("SELECT AliasID, ArtistID, Name FROM artists_alias WHERE Name LIKE '".$AliasName."'");
+$DB->query("SELECT AliasID, ArtistID, Name FROM artists_alias WHERE Name = '".$DBAliasName."'");
 if($DB->record_count()) {
 	while(list($CloneAliasID, $CloneArtistID, $CloneAliasName) = $DB->next_record(MYSQLI_NUM, false)) {
 		if(!strcasecmp($CloneAliasName, $AliasName)) {
@@ -41,13 +42,13 @@ if($DB->record_count()) {
 if(!$CloneAliasID) {
 	$DB->query("INSERT INTO artists_alias(ArtistID, Name, Redirect, UserID)
 		VALUES
-		(".$ArtistID.", '".$AliasName."', ".$Redirect.", ".$LoggedUser['ID'].")");
+		(".$ArtistID.", '".$DBAliasName."', ".$Redirect.", ".$LoggedUser['ID'].")");
 	$AliasID = $DB->inserted_id();
 
 	$DB->query("SELECT Name FROM artists_group WHERE ArtistID=".$ArtistID);
 	list($ArtistName) = $DB->next_record();
 
-	write_log("The alias ".$AliasID." (".$AliasName.") was added to the artist ".$ArtistID." (".$ArtistName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+	write_log("The alias ".$AliasID." (".$DBAliasName.") was added to the artist ".$ArtistID." (".$ArtistName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
 }
 header('Location: '.$_SERVER['HTTP_REFERER']);
 ?>

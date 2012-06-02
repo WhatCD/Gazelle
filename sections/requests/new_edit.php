@@ -31,7 +31,7 @@ if(!$NewRequest) {
 		}
 		
 		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel, 
-		     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID) = $Request;
+		     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 		$VoteArray = get_votes_array($RequestID);
 		$VoteCount = count($VoteArray['Voters']);
 		
@@ -208,6 +208,12 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 					<td class="label">Catalogue Number</td>
 					<td>
 						<input type="text" name="cataloguenumber" size="15" value="<?=(!empty($CatalogueNumber) ? display_str($CatalogueNumber) : '')?>" />
+					</td>
+				</tr>
+				<tr id="oclc_tr">
+					<td class="label">WorldCat (OCLC) ID</td>
+					<td>
+						<input type="text" name="oclc" size="15" value="<?=(!empty($OCLC) ? display_str($OCLC) : '')?>" />
 					</td>
 				</tr>
 <?	} ?>

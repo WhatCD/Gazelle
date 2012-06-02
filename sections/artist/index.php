@@ -85,7 +85,7 @@ if(!empty($_POST['action'])) {
 		include (SERVER_ROOT.'/sections/artist/artist.php');
 		
 	} elseif (!empty($_GET['artistname'])) {
-		$NameSearch = trim($_GET['artistname']);
+		$NameSearch = str_replace('\\', '\\\\', trim($_GET['artistname']));
 		$DB->query("SELECT ArtistID, Name FROM artists_alias WHERE Name LIKE '".db_string($NameSearch)."'");
 		if($DB->record_count() == 0) {
 			if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) {

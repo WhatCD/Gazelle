@@ -484,8 +484,8 @@ if($Type == 'Music') {
 					FROM torrents_group AS tg
 					LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID
 					LEFT JOIN artists_group AS ag ON ta.ArtistID = ag.ArtistID
-					WHERE ag.Name LIKE '".db_string($Artist['name'])."'
-					AND tg.Name LIKE ".$T['Title']."
+					WHERE ag.Name = '".db_string($Artist['name'])."'
+					AND tg.Name = ".$T['Title']."
 					AND tg.ReleaseType = ".$T['ReleaseType']."
 					AND tg.Year = ".$T['Year']);
 
@@ -514,7 +514,7 @@ if($Type == 'Music') {
 						aa.Name,
 						aa.Redirect
 						FROM artists_alias AS aa
-						WHERE aa.Name LIKE '".db_string($Artist['name'])."'");
+						WHERE aa.Name = '".db_string($Artist['name'])."'");
 					if($DB->record_count() > 0){
 						while($Result = $DB->next_record(MYSQLI_NUM, false)) {
 							list($ArtistID, $AliasID, $AliasName, $Redirect) = $Result;
@@ -796,9 +796,9 @@ if(!empty($ArtistsUnescaped)) {
 	foreach($ArtistsUnescaped as $Importance => $Artists) {
 		foreach($Artists as $Artist) {
 			if($Importance == 1 || $Importance == 4 || $Importance == 5 || $Importance == 6) {
-				$ArtistNameList[] = "Artists LIKE '%|".db_string($Artist['name'])."|%'";
+				$ArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\','\\\\',$Artist['name']))."|%'";
 			} else {
-				$GuestArtistNameList[] = "Artists LIKE '%|".db_string($Artist['name'])."|%'";
+				$GuestArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\','\\\\',$Artist['name']))."|%'";
 			}
 		}
 	}

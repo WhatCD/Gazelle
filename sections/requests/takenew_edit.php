@@ -33,7 +33,7 @@ if($NewRequest) {
 	}
 	
 	list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
-	     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID) = $Request;
+	     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 	$VoteArray = get_votes_array($RequestID);
 	$VoteCount = count($VoteArray['Voters']);
 	
@@ -207,6 +207,11 @@ if($CategoryName == "Music") {
 	} else {
 		$RecordLabel = "";
 	}
+	if (!empty($_POST['oclc'])) {
+		$OCLC = trim($_POST['oclc']);
+	} else {
+		$OCLC = "";
+	}
 }
 
 if($CategoryName == "Music" || $CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
@@ -325,10 +330,10 @@ if($CategoryName == "Music") {
 	if($NewRequest) {
 		$DB->query("INSERT INTO requests (     
 						UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, RecordLabel,
-						CatalogueNumber, ReleaseType, BitrateList, FormatList, MediaList, LogCue, Visible, GroupID)
+						CatalogueNumber, ReleaseType, BitrateList, FormatList, MediaList, LogCue, Visible, GroupID, OCLC)
 					VALUES
 						(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."','".db_string($RecordLabel)."',
-					 	'".db_string($CatalogueNumber)."', ".$ReleaseType.", '".$BitrateList."','".$FormatList."', '".$MediaList."', '".$LogCue."', '1', '$GroupID')");
+					 	'".db_string($CatalogueNumber)."', ".$ReleaseType.", '".$BitrateList."','".$FormatList."', '".$MediaList."', '".$LogCue."', '1', '$GroupID', '".db_string($OCLC)."')");
 		
 		$RequestID = $DB->inserted_id();
 	} else {
@@ -345,7 +350,8 @@ if($CategoryName == "Music") {
 						FormatList = '".$FormatList."',
 						MediaList = '".$MediaList."',
 						LogCue = '".$LogCue."',
-						GroupID = '".$GroupID."'
+						GroupID = '".$GroupID."',
+						OCLC = '".db_string($OCLC)."'
 					WHERE ID = ".$RequestID);
 		
 		//I almost didn't think of this, we need to be able to delete artists / tags
@@ -381,7 +387,7 @@ if($CategoryName == "Music") {
 				aa.Name,
 				aa.Redirect
 				FROM artists_alias AS aa
-				WHERE aa.Name LIKE '".db_string($Artist['name'])."'");
+				WHERE aa.Name = '".db_string($Artist['name'])."'");
 			
 			if($DB->record_count() > 0) {
 				while($Result = $DB->next_record(MYSQLI_NUM, false)) {

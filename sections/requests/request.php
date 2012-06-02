@@ -23,7 +23,7 @@ if(empty($Request)) {
 }
 
 list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel, $ReleaseType,
-	$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID) = $Request;
+	$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 
 //Convenience variables
 $IsFilled = !empty($TorrentID);
@@ -313,8 +313,28 @@ if (!empty($Image)) {
 				</td>
 			</tr>
 <?		}
-	} 
-	if ($GroupID) { 
+	}
+	$Worldcat = "";
+	$OCLC = str_replace(" ", "", $OCLC);
+	if ($OCLC != "") {
+		$OCLCs = explode(",", $OCLC);
+		for ($i = 0; $i < count($OCLCs); $i++) {
+			if (!empty($Worldcat)) {
+				$Worldcat .= ', <a href="http://www.worldcat.org/oclc/'.$OCLCs[$i].'">'.$OCLCs[$i].'</a>';
+			} else {
+				$Worldcat = '<a href="http://www.worldcat.org/oclc/'.$OCLCs[$i].'">'.$OCLCs[$i].'</a>';
+			}
+		}
+	}
+	if (!empty($Worldcat)) { ?>
+		<tr>
+			<td class="label">WorldCat (OCLC) ID</td>
+			<td>
+				<?=$Worldcat?>
+			</td>
+		</tr>
+<? 	}
+	if ($GroupID) {
 		/*$Groups = get_groups(array($GroupID), true, true, false);
 		$Group = $Groups['matches'][$GroupID];
 		$GroupLink = display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';*/

@@ -550,6 +550,7 @@ CREATE TABLE `requests` (
   `Visible` binary(1) NOT NULL DEFAULT '1',
   `RecordLabel` varchar(80) COLLATE utf8_bin DEFAULT NULL,
   `GroupID` int(10) DEFAULT NULL,
+  `OCLC` varchar(55) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`ID`),
   KEY `Userid` (`UserID`),
   KEY `Name` (`Title`),

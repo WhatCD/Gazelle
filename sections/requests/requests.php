@@ -85,20 +85,35 @@ if(!empty($_GET['tags'])){
 	$Tags = explode(',', $_GET['tags']);
 	$TagNames = array();
 	foreach ($Tags as $Tag) {
+		$Tag = ltrim($Tag);
+		$Exclude = (!empty($_GET['tags_type']) && $Tag[0] == '!'); // Negations aren't supported in the "any" mode
 		$Tag = sanitize_tag($Tag);
 		if(!empty($Tag)) {
 			$TagNames[] = $Tag;
+			$TagsExclude[$Tag] = $Exclude;
 		}
 	}
 	$Tags = get_tags($TagNames);
+
+	// Sphinx can't handle queries consisting of only exclusions
+	if(!in_array(false, $TagsExclude)) {
+		$TagsExclude = array();
+	}
+	// Replace the ! characters that sanitize_tag removed
+	foreach($TagNames as &$TagName) {
+		if($TagsExclude[$TagName]) {
+			$TagName = '!'.$TagName;
+		}
+	}
+	unset($TagName);
 }
 
 if(empty($_GET['tags_type']) && !empty($Tags)) {
 	$_GET['tags_type'] = '0';
 	$SS->set_filter('tagid', array_keys($Tags));
 } elseif(!empty($Tags)) {
-	foreach(array_keys($Tags) as $Tag) {
-		$SS->set_filter('tagid', array($Tag));
+	foreach($Tags as $TagID => $TagName) {
+		$SS->set_filter('tagid', array($TagID), $TagsExclude[$TagName]);
 	}
 } else {
 	$_GET['tags_type'] = '1';

@@ -21,7 +21,7 @@ for($i = 0; $i < count($AliasNames); $i++) {
 	}
 	
 	if(strlen($AliasName) > 0) {
-		$DB->query("SELECT AliasID, ArtistID, Redirect, Name FROM artists_alias WHERE Name LIKE '".db_string($AliasName,true)."'");
+		$DB->query("SELECT AliasID, ArtistID, Redirect, Name FROM artists_alias WHERE Name = '".db_string($AliasName)."'");
 		if($DB->record_count() == 0) {
 			$AliasName = db_string($AliasName);
 			$DB->query("INSERT INTO artists_group (Name) VALUES ('$AliasName')");

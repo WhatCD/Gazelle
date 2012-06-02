@@ -16,6 +16,8 @@ if($UserID == $LoggedUser['ID']) {
 	$OwnProfile = false;
 }
 
+
+
 if(check_perms('users_mod')) { // Person viewing is a staff member
 	$DB->query("SELECT
 		m.Username,

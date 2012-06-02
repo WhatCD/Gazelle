@@ -21,7 +21,7 @@ if(!is_number($OldGroupID) || !is_number($TorrentID) || !is_number($Year) || !$O
 	error(0);
 }
 
-$DB->query("SELECT ArtistID, AliasID, Redirect, Name FROM artists_alias WHERE Name LIKE '$ArtistName'");
+$DB->query("SELECT ArtistID, AliasID, Redirect, Name FROM artists_alias WHERE Name = '$ArtistName'");
 if($DB->record_count() == 0) {
 	$Redirect = 0;
 	$DB->query("INSERT INTO artists_group (Name) VALUES ('$ArtistName')");

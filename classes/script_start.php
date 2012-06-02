@@ -2046,7 +2046,8 @@ function get_requests($RequestIDs, $Return = true) {
 					filler.Username,
 					r.TorrentID,
 					r.TimeFilled,
-					r.GroupID
+					r.GroupID,
+					r.OCLC
 				FROM requests AS r
 					LEFT JOIN users_main AS u ON u.ID=r.UserID
 					LEFT JOIN users_main AS filler ON filler.ID=FillerID AND FillerID!=0

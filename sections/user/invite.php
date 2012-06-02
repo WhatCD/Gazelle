@@ -1,6 +1,4 @@
 <?
-
-
 if(isset($_GET['userid']) && check_perms('users_view_invites')){
 	if(!is_number($_GET['userid'])){ error(403); }
 	
@@ -15,6 +13,7 @@ if(isset($_GET['userid']) && check_perms('users_view_invites')){
 	
 	$UserID = $LoggedUser['ID'];
 	$Sneaky = false;
+	
 }
 
 list($UserID, $Username, $PermissionID) = array_values(user_info($UserID));
