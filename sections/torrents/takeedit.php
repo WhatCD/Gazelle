@@ -83,6 +83,9 @@ if(check_perms('torrents_freeleech')) {
 //--------------- Validate data in edit form -----------------------------------//
 
 $DB->query('SELECT UserID, Remastered, RemasterYear, FreeTorrent FROM torrents WHERE ID='.$TorrentID);
+if($DB->record_count() == 0) {
+	error(404);
+}
 list($UserID, $Remastered, $RemasterYear, $CurFreeLeech) = $DB->next_record(MYSQLI_BOTH, false);
 
 if($LoggedUser['ID']!=$UserID && !check_perms('torrents_edit')) {
@@ -93,13 +96,9 @@ if($Remastered == '1' && !$RemasterYear && !check_perms('edit_unknowns')) {
 	error(403);
 }
 
-$DB->query("SELECT UserID FROM torrents WHERE ID = ".$TorrentID);
-list($UploaderID) = $DB->next_record();
-
-
 if($Properties['UnknownRelease'] && !($Remastered == '1' && !$RemasterYear) && !check_perms('edit_unknowns')) {
 	//It's Unknown now, and it wasn't before
-	if($LoggedUser['ID'] != $UploaderID) {
+	if($LoggedUser['ID'] != $UserID) {
 		//Hax
 		die();
 	}

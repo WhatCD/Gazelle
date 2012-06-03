@@ -222,7 +222,9 @@ if (check_perms('site_collages_personal')) {
 } 
 if (check_perms('site_collages_subscribe')) { ?>
 		<a href="userhistory.php?action=subscribed_collages">[My Subscribed Collages]</a>
-<? }
+<? } ?>
+		<a href="bookmarks.php?type=collages">[Bookmarked Collages]</a>
+<?
 if (check_perms('site_collages_recover')) { ?>
 		<a href="collages.php?action=recover">[Recover collage]</a>
 <?

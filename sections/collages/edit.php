@@ -29,9 +29,9 @@ show_header('Edit collage');
 				<td>
 					<select name="category">
 <?
-	if (!check_perms('site_collages_delete')) { array_shift($CollageCats); }
-	foreach($CollageCats as $CatID=>$CatName) { ?>
-						<option value="<?=$CatID?>" <? if($CatID == $CategoryID) { echo ' selected="selected"'; }?>><?=$CatName?></option>
+	foreach($CollageCats as $CatID=>$CatName) { 
+		if (!check_perms('site_collages_delete') && $CatID == 0) { continue; } // Only mod-type get to make things personal ?>
+		<option value="<?=$CatID?>" <? if($CatID == $CategoryID) { echo ' selected="selected"'; }?>><?=$CatName?></option>
 <?	} ?>
 					</select>
 				</td>
