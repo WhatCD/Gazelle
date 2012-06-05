@@ -36,8 +36,8 @@ $(document).ready(function() {
     jQuery('#results1').show();
     jQuery('#results2').show();
     $searched = true;
-    var $artist_encoded = encodeURI($artist);
-    var $album_encoded = encodeURI($album);
+    var $artist_encoded = encodeURIComponent($artist);
+    var $album_encoded = encodeURIComponent($album);
     $.ajax({
        type: "GET",
        url : "http://www.musicbrainz.org/ws/2/release-group/?query=artist:%22" + $artist_encoded + "%22%20AND%20releasegroup:%22" + $album_encoded + "%22",

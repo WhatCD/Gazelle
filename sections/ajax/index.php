@@ -34,6 +34,9 @@ switch ($_GET['action']){
 		require(SERVER_ROOT.'/sections/ajax/stats.php');
 		break;
 	
+	case 'checkprivate':
+		include('checkprivate.php');
+		break;
 	// things not yet used on the site
 	case 'torrentgroup':
 		require('torrentgroup.php');

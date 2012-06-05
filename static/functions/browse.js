@@ -186,3 +186,10 @@ function ToggleEditionRows() {
 	$('#edition_label').toggle();
 	$('#edition_catalogue').toggle();
 }
+
+function check_private(TorrentID) {
+	$('#checkprivate-'+TorrentID).raw().innerHTML = "Checking...";
+	ajax.get('ajax.php?action=checkprivate&torrentid=' + TorrentID,function(response){
+		$('#checkprivate-'+TorrentID).raw().innerHTML = response;
+	});
+}
