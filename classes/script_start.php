@@ -886,8 +886,8 @@ function page_limit($PerPage, $DefaultResult = 1) {
 			error(0);
 		}
 		$Page = $_GET['page'];
-		if ($Page == 0) { $Page = 1; }
-		$Limit=$PerPage*$_GET['page']-$PerPage . ', ' . $PerPage;
+		if ($Page <= 0) { $Page = 1; }
+		$Limit=$PerPage*$Page-$PerPage . ', ' . $PerPage;
 	}
 	return array($Page,$Limit);
 }
