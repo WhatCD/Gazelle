@@ -14,12 +14,13 @@ $DB->query("SELECT
 	TopicID,
 	ForumID,
 	CEIL(COUNT(p.ID)/".POSTS_PER_PAGE.") AS Pages,
-	CEIL(SUM(IF(p.ID<='$PostID',1,0))/".POSTS_PER_PAGE.") AS Page
+	CEIL(SUM(IF(p.ID<='$PostID',1,0))/".POSTS_PER_PAGE.") AS Page,
+	StickyPostID
 	FROM forums_posts AS p
 	JOIN forums_topics AS t ON t.ID=p.TopicID
 	WHERE p.TopicID=(SELECT TopicID FROM forums_posts WHERE ID='$PostID')
 	GROUP BY t.ID");
-list($TopicID, $ForumID, $Pages, $Page) = $DB->next_record();
+list($TopicID, $ForumID, $Pages, $Page, $StickyPostID) = $DB->next_record();
 
 // $Pages = number of pages in the thread
 // $Page = which page the post is on
@@ -64,6 +65,10 @@ if($LastID < $PostID) { // Last post in a topic was removed
 } else {
 	$UpdateArrayForums = array('NumPosts' => '-1');
 	$UpdateArrayThread = array('Posts' => '-1');
+}
+
+if($StickyPostID == $PostID) {
+	$DB->query("UPDATE forums_topics SET StickyPostID = 0 WHERE ID = $TopicID");
 }
 
 //We need to clear all subsequential catalogues as they've all been bumped with the absence of this post

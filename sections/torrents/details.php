@@ -571,9 +571,8 @@ foreach ($TorrentList as $Torrent) {
 <? if(check_perms('site_view_torrent_snatchlist')) { ?> 
 						<a href="#" onclick="show_downloads('<?=$TorrentID?>', 0);return false;">(View Downloadlist)</a>
 						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;">(View Snatchlist)</a>
-						<a href="#" id="checkprivate-<?=$TorrentID?>" onclick="check_private('<?=$TorrentID?>'); return false;">(Check Private Flag)</a>
 <? } ?>
-						<a href="#" onclick="show_files('<?=$TorrentID?>');return false;">(View Filelist)</a>
+		<a href="#" onclick="show_files('<?=$TorrentID?>');return false;">(View Filelist)</a>
 <? if($Reported) { ?> 
 						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View Report Information)</a>
 <? } ?>
