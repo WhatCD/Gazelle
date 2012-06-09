@@ -52,7 +52,7 @@ if($Recipient == 'Uploader') {
 	}
 } else if($Recipient == 'Reporter') {
 	$ToID = $_POST['reporterid'];
-	$Message = "You reported the above torrent for the reason ".$ReportType['title'].":\n\"".$_POST['report_reason']."\"\n\n".$Message;
+	$Message = "You reported [url=http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]the above torrent[/url] for the reason ".$ReportType['title'].":\n\"".$_POST['report_reason']."\"\n\n".$Message;
 } else {
 	$Err = "Something went horribly wrong";
 }

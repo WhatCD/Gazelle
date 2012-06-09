@@ -2122,7 +2122,7 @@ function get_tags($TagNames) {
 	return($TagIDs);
 }
 
-function torrent_info($Data) {
+function torrent_info($Data, $ShowMedia = false) {
 	$Info = array();
 	if(!empty($Data['Format'])) { $Info[]=$Data['Format']; }
 	if(!empty($Data['Encoding'])) { $Info[]=$Data['Encoding']; }
@@ -2135,6 +2135,7 @@ function torrent_info($Data) {
 	}
 	if(!empty($Data['HasCue'])) { $Info[]='Cue'; }
 	if(!empty($Data['Scene'])) { $Info[]='Scene'; }
+	if(!empty($Data['Media']) && $ShowMedia) { $Info[]=$Data['Media']; }
 	if($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
 	if($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
 	if($Data['PersonalFL'] == 1) { $Info[]='<strong>Personal Freeleech!</strong>'; }

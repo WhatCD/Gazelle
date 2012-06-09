@@ -230,6 +230,7 @@ foreach ($TorrentList as $Torrent) {
 		'tagList' => $Torrent['TagList'],
 		'releaseType' => $Torrent['ReleaseType'],
 		'vanityHouse' => $Torrent['VanityHouse'] == 1,
+		'image' => $CollageDataList[$Torrent['ID']]['WikiImage'],
 		'torrents' => $JsonTorrents
 	);
 }

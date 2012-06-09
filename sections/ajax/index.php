@@ -72,7 +72,7 @@ switch ($_GET['action']){
 		require(SERVER_ROOT.'/sections/ajax/info.php');
 		break;
 	case 'bookmarks':
-		require(SERVER_ROOT.'/sections/ajax/bookmarks.php');
+		require(SERVER_ROOT.'/sections/ajax/bookmarks/index.php');
 		break;
 	case 'announcements':
 		require(SERVER_ROOT.'/sections/ajax/announcements.php');

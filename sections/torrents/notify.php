@@ -4,70 +4,53 @@ if(!check_perms('site_torrents_notify')) { error(403); }
 define('NOTIFICATIONS_PER_PAGE', 50);
 list($Page,$Limit) = page_limit(NOTIFICATIONS_PER_PAGE);
 
-$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+$TokenTorrents = $Cache->get_value('users_tokens_'.$LoggedUser['ID']);
 if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$LoggedUser[ID] AND Expired=FALSE");
 	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+	$Cache->cache_value('users_tokens_'.$LoggedUser['ID'], $TokenTorrents);
 }
 
-$Results = $DB->query("SELECT SQL_CALC_FOUND_ROWS
-		t.ID,
-		g.ID,
-		g.Name,
-		g.CategoryID,
-		g.TagList,
-		t.Size,
-		t.FileCount,
-		t.Format,
-		t.Encoding,
-		t.Media,
-		t.Scene,
-		t.RemasterYear,
-		g.Year,
-		t.RemasterYear,
-		t.RemasterTitle,
-		t.Snatched,
-		t.Seeders,
-		t.Leechers,
-		t.Time,
-		t.HasLog,
-		t.HasCue,
-		t.LogScore,
-		t.FreeTorrent,
-		tln.TorrentID AS LogInDB,
-		unt.UnRead,
-		unt.FilterID,
-		unf.Label,
-		g.ReleaseType
+
+$UserID = $LoggedUser['ID'];
+
+$Results = $DB->query("SELECT SQL_CALC_FOUND_ROWS unt.TorrentID, unt.UnRead, unt.FilterID, unf.Label, t.GroupID
 		FROM users_notify_torrents AS unt
-		JOIN torrents AS t ON t.ID=unt.TorrentID
-		JOIN torrents_group AS g ON g.ID = t.GroupID 
-		LEFT JOIN users_notify_filters AS unf ON unf.ID=unt.FilterID
-		LEFT JOIN torrents_logs_new AS tln ON tln.TorrentID=t.ID
-		WHERE unt.UserID='$LoggedUser[ID]'
-		GROUP BY t.ID
-		ORDER BY t.ID DESC LIMIT $Limit");
+		JOIN torrents AS t ON t.ID = unt.TorrentID
+		LEFT JOIN users_notify_filters AS unf ON unf.ID = unt.FilterID
+		WHERE unt.UserID=$UserID".
+		((!empty($_GET['filterid']) && is_number($_GET['filterid']))
+			? " AND unf.ID='$_GET[filterid]'"
+			: "")."
+		ORDER BY TorrentID DESC LIMIT $Limit");
+$GroupIDs = array_unique($DB->collect('GroupID'));
+
 $DB->query('SELECT FOUND_ROWS()');
 list($TorrentCount) = $DB->next_record();
+$Debug->log_var($TorrentCount, 'Torrent count');
+$Pages = get_pages($Page, $TorrentCount, NOTIFICATIONS_PER_PAGE, 9);
 
-//Clear before header but after query so as to not have the alert bar on this page load
-$DB->query("UPDATE users_notify_torrents SET UnRead='0' WHERE UserID=".$LoggedUser['ID']);
-$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
-show_header('My notifications','notifications');
+if(count($GroupIDs)) {
+	$TorrentGroups = get_groups($GroupIDs);
+	$TorrentGroups = $TorrentGroups['matches'];
 
+	// Need some extra info that get_groups() doesn't return
+	$DB->query("SELECT ID, CategoryID FROM torrents_group WHERE ID IN (".implode(',', $GroupIDs).")");
+	$GroupCategoryIDs = $DB->to_array('ID', MYSQLI_ASSOC, false);
+
+	//Clear before header but after query so as to not have the alert bar on this page load
+	$DB->query("UPDATE users_notify_torrents SET UnRead='0' WHERE UserID=".$LoggedUser['ID']);
+	$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
+}
+
+show_header('My notifications', 'notifications');
 $DB->set_query_id($Results);
-
-$Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
-
-
-
 ?>
 <h2>Latest notifications <a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear all)</a> <a href="javascript:SuperGroupClear()">(clear selected)</a> <a href="user.php?action=notify">(edit filters)</a></h2>
 <div class="linkbox">
 	<?=$Pages?>
 </div>
-<? if($DB->record_count()==0) { ?>
+<? if(!$DB->record_count()) { ?>
 <table class="border">
 	<tr class="rowb">
 		<td colspan="8" class="center">
@@ -77,21 +60,28 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 </table>
 <? } else {
 	$FilterGroups = array();
-	while($Result = $DB->next_record()) {
+	while($Result = $DB->next_record(MYSQLI_ASSOC)) {
 		if(!$Result['FilterID']) {
 			$Result['FilterID'] = 0;
 		}
 		if(!isset($FilterGroups[$Result['FilterID']])) {
 			$FilterGroups[$Result['FilterID']] = array();
-			$FilterGroups[$Result['FilterID']]['FilterLabel'] = ($Result['FilterID'] && !empty($Result['Label']) ? $Result['Label'] : 'unknown filter'.($Result['FilterID']?' ['.$Result['FilterID'].']':''));
+			$FilterGroups[$Result['FilterID']]['FilterLabel'] = $Result['Label'] ? $Result['Label'] : false;
 		}
 		array_push($FilterGroups[$Result['FilterID']], $Result);
 	}
 	unset($Result);
-	foreach($FilterGroups as $ID => $FilterResults) {
+	$Debug->log_var($FilterGroups, 'Filter groups');
+	foreach($FilterGroups as $FilterID => $FilterResults) {
 ?>
-<h3>Matches for <?=$FilterResults['FilterLabel']?> <a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$ID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear)</a> <a href="javascript:GroupClear($('#notificationform_<?=$ID?>').raw())">(clear selected)</a></h3>
-<form id="notificationform_<?=$ID?>">
+<h3>
+	Matches for <?=$FilterResults['FilterLabel'] !== false
+			? '<a href="torrents.php?action=notify&amp;filterid='.$FilterID.'">'.$FilterResults['FilterLabel'].'</a>'
+			: 'unknown filter['.$FilterID.']'?>
+	<a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear)</a>
+	<a href="javascript:GroupClear($('#notificationform_<?=$FilterID?>').raw())">(clear selected)</a>
+</h3>
+<form id="notificationform_<?=$FilterID?>">
 <table class="border">
 	<tr class="colhead">
 		<td style="text-align: center"><input type="checkbox" name="toggle" onClick="ToggleBoxes(this.form, this.checked)" /></td>
@@ -107,57 +97,45 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 <?
 		unset($FilterResults['FilterLabel']);
 		foreach($FilterResults as $Result) {
-			list($TorrentID, $GroupID, $GroupName, $GroupCategoryID, $TorrentTags, $Size, $FileCount, $Format, $Encoding,
-				$Media, $Scene, $RemasterYear, $GroupYear, $RemasterYear, $RemasterTitle, $Snatched, $Seeders, 
-				$Leechers, $NotificationTime, $HasLog, $HasCue, $LogScore, $FreeTorrent, $LogInDB, $UnRead, $FilterLabel, $FilterLabel, $ReleaseType) = $Result;
+			$TorrentID = $Result['TorrentID'];
+			$GroupID = $Result['GroupID'];
+			$GroupCategoryID = $GroupCategoryIDs[$GroupID]['CategoryID'];
+
+			$GroupInfo = $TorrentGroups[$Result['GroupID']];
+			if(!$TorrentInfo = $GroupInfo['Torrents'][$TorrentID]) {
+				continue;
+			}
+
 			// generate torrent's title
-			$DisplayName='';
-			
-			$Artists = get_artist($GroupID);
-			
-			if(!empty($Artists)) {
-				$DisplayName = display_artists($Artists, true, true);
+			$DisplayName = '';
+			if(!empty($GroupInfo['ExtendedArtists'])) {
+				$DisplayName = display_artists($GroupInfo['ExtendedArtists'], true, true);
 			}
-			
-			if (in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent'])) {
-				$Data['PersonalFL'] = 1;
+			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID' title='View Torrent'>".$GroupInfo['Name']."</a>";
+
+			if($GroupCategoryID == 1) {
+				if($GroupInfo['Year'] > 0) {
+					$DisplayName .= " [$GroupInfo[Year]]";
+				}
+				if($GroupInfo['ReleaseType'] > 0) {
+					$DisplayName.= " [".$ReleaseTypes[$GroupInfo['ReleaseType']]."]";
+				}
 			}
-			
-			$DisplayName.= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID'  title='View Torrent'>".$GroupName."</a>";
-	
-			if($GroupCategoryID==1 && $GroupYear>0) {
-				$DisplayName.= " [$GroupYear]";
-			}
-			if($GroupCategoryID==1 && $ReleaseType>0) {
-				$DisplayName.= " [".$ReleaseTypes[$ReleaseType]."]";
-			}
-	
+
 			// append extra info to torrent title
-			$ExtraInfo='';
-			$AddExtra='';
-			if($Format) 		{ $ExtraInfo.=$Format; $AddExtra=' / '; }
-			if($Encoding) 		{ $ExtraInfo.=$AddExtra.$Encoding; $AddExtra=' / '; }
-			if($HasLog) 		{ $ExtraInfo.=$AddExtra.'Log'; $AddExtra=' / '; }
-			if($HasLog && $LogInDB)	{ $ExtraInfo.=' ('.(int) $LogScore.'%)'; }
-			if($HasCue) 		{ $ExtraInfo.=$AddExtra.'Cue'; $AddExtra=' / '; }
-			if($Media) 		{ $ExtraInfo.=$AddExtra.$Media; $AddExtra=' / '; }
-			if($Scene) 		{ $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
-			if($RemasterYear)	{ $ExtraInfo.=$AddExtra.$RemasterYear; $AddExtra=' '; }
-			if($RemasterTitle) 	{ $ExtraInfo.=$AddExtra.$RemasterTitle; }
-			if($ExtraInfo!='') 	{
-				$ExtraInfo = "- [$ExtraInfo]";
-			}
-			
-			$TagLinks=array();
-			if($TorrentTags!='') {
-				$TorrentTags=explode(' ',$TorrentTags);
+			$ExtraInfo = torrent_info($TorrentInfo, true);
+			$Debug->log_var($ExtraInfo, "Extra torrent info ($TorrentID)");
+
+			$TagLinks = array();
+			if($GroupInfo['TagList'] != '') {
+				$TorrentTags = explode(' ', $GroupInfo['TagList']);
 				$MainTag = $TorrentTags[0];
 				foreach ($TorrentTags as $TagKey => $TagName) {
-					$TagName = str_replace('_','.',$TagName);
-					$TagLinks[]='<a href="torrents.php?taglist='.$TagName.'">'.$TagName.'</a>';
+					$TagName = str_replace('_', '.', $TagName);
+					$TagLinks[] = '<a href="torrents.php?taglist='.$TagName.'">'.$TagName.'</a>';
 				}
 				$TagLinks = implode(', ', $TagLinks);
-				$TorrentTags='<br /><div class="tags">'.$TagLinks.'</div>';
+				$TorrentTags = '<br /><div class="tags">'.$TagLinks.'</div>';
 			} else {
 				$MainTag = $Categories[$GroupCategoryID-1];
 			}
@@ -171,21 +149,21 @@ $Pages=get_pages($Page,$TorrentCount,NOTIFICATIONS_PER_PAGE,9);
 			<span>
 				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> 
 <?			if (($LoggedUser['FLTokens'] > 0) && ($Size < 1073741824) 
-				&& !in_array($TorrentID, $TokenTorrents) && empty($FreeTorrent) && ($LoggedUser['CanLeech'] == '1')) { ?>
+				&& !in_array($TorrentID, $TokenTorrents) && empty($TorrentInfo['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onClick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?			} ?>
 				| <a href="#" onclick="Clear(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a>]
 			</span>
-			<strong><?=$DisplayName?></strong> <?=$ExtraInfo ?>
-			<? if($UnRead) { echo '<strong>New!</strong>'; } ?>
+			<strong><?=$DisplayName?></strong> <?=$ExtraInfo?>
+			<? if($Result['UnRead']) { echo '<strong>New!</strong>'; } ?>
 			<?=$TorrentTags?>
 		</td>
-		<td><?=$FileCount ?></td>
-		<td style="text-align:right" class="nobr"><?=time_diff($NotificationTime)?></td>
-		<td class="nobr" style="text-align:right"><?=get_size($Size)?></td>
-		<td style="text-align:right"><?=number_format($Snatched)?></td>
-		<td style="text-align:right"><?=number_format($Seeders)?></td>
-		<td style="text-align:right"><?=number_format($Leechers)?></td>
+		<td><?=$TorrentInfo['FileCount']?></td>
+		<td style="text-align:right" class="nobr"><?=time_diff($TorrentInfo['Time'])?></td>
+		<td class="nobr" style="text-align:right"><?=get_size($TorrentInfo['Size'])?></td>
+		<td style="text-align:right"><?=number_format($TorrentInfo['Snatched'])?></td>
+		<td style="text-align:right"><?=number_format($TorrentInfo['Seeders'])?></td>
+		<td style="text-align:right"><?=number_format($TorrentInfo['Leechers'])?></td>
 	</tr>
 <?
 		}

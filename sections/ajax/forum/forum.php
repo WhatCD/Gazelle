@@ -136,7 +136,8 @@ else {
 			'lastAuthorId' => $LastAuthorID == null ? 0 : (int) $LastAuthorID,
 			'lastAuthorName' => $LastAuthorName == null ? "" : $LastAuthorName,
 			'lastReadPage' => $LastRead[$TopicID]['Page'] == null ? 0 : (int) $LastRead[$TopicID]['Page'],
-			'lastReadPostId' => $LastRead[$TopicID]['PostID'] == null ? 0 : (int) $LastRead[$TopicID]['PostID']
+			'lastReadPostId' => $LastRead[$TopicID]['PostID'] == null ? 0 : (int) $LastRead[$TopicID]['PostID'],
+			'read' => $Read == "read"
 		);
 	}
 
