@@ -736,7 +736,7 @@ while(list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email
 		<tr>
 			<td><?=format_username($UserID, true, true, true, true)?></td>
 			<td><?=ratio($Uploaded, $Downloaded)?></td>
-			<td><?=display_str($IP)?></td>
+			<td><?=display_str($IP)?> (<?=get_cc($IP)?>)</td>
 			<td><?=display_str($Email)?></td>
 			<td><?=time_diff($JoinDate)?></td>
 			<td><?=time_diff($LastAccess)?></td>
