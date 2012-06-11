@@ -354,15 +354,29 @@ foreach($Results as $GroupID=>$Data) {
 	list($Artists, $GroupCatalogueNumber, $ExtendedArtists, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupVanityHouse, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
 	
 	$TagList = explode(' ',str_replace('_','.',$TagList));
-	
+        $JsonArtists = array();
 	if(count($Torrents)>1 || $CategoryID==1) {
 		// These torrents are in a group
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
 			$DisplayName = display_artists($ExtendedArtists, false, false, true);
+                        foreach ($ExtendedArtists[1] as $Artist) {
+                            $JsonArtists[] = array(
+                                'id' => (int) $Artist['id'],
+                                'name' => $Artist['name'],
+                                'aliasid' => (int) $Artist['id']
+                                );
+                        }
 		} elseif(!empty($Artists)) {
 			$DisplayName = display_artists(array(1=>$Artists), false, false, true);
+                        foreach ($Artists as $Artist) {
+                            $JsonArtists[] = array(
+                                'id' => (int) $Artist['id'],
+                                'name' => $Artist['name'],
+                                'aliasid' => (int) $Artist['id']
+                                );
+                        }
 		} else {
 			$DisplayName='';
 		}
@@ -511,6 +525,7 @@ foreach($Results as $GroupID=>$Data) {
 			$JsonTorrents[] = array(
 				'torrentId' => (int) $TorrentID,
 				'editionId' => (int) $EditionID,
+                                'artists' => $JsonArtists,
 				'remastered' => $Data['Remastered'] == '1',
 				'remasterYear' => (int) $Data['RemasterYear'],
 				'remasterCatalogueNumber' => $Data['RemasterCatalogueNumber'],
