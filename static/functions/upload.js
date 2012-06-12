@@ -208,7 +208,7 @@ function AddArtistField() {
 function RemoveArtistField() {
 	if(ArtistCount == 1) { return; }
 	var x = $('#artistfields').raw();
-	for (i=0; i<3; i++) { x.removeChild(x.lastChild); }
+	for (i=0; i<4; i++) { x.removeChild(x.lastChild); }
 	ArtistCount--;
 }
 

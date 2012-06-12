@@ -1,6 +1,7 @@
 <?
 
 if(isset($LoggedUser)) {
+	
 	//Silly user, what are you doing here!
 	header('Location: index.php');
 	die();
