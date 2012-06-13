@@ -389,19 +389,17 @@ if($CategoryName == "Music") {
 				FROM artists_alias AS aa
 				WHERE aa.Name = '".db_string($Artist['name'])."'");
 			
-			if($DB->record_count() > 0) {
-				while($Result = $DB->next_record(MYSQLI_NUM, false)) {
-					list($ArtistID, $AliasID, $AliasName, $Redirect) = $Result;
-					if(!strcasecmp($Artist['name'], $AliasName)) {
-						if($Redirect) {
-							$AliasID = $Redirect;
-						}
-						break;
+			while(list($ArtistID, $AliasID, $AliasName, $Redirect) = $DB->next_record(MYSQLI_NUM, false)) {
+				if(!strcasecmp($Artist['name'], $AliasName)) {
+					if($Redirect) {
+						$AliasID = $Redirect;
 					}
+					$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $AliasName);
+					$Cache->delete_value('artist_'.$ArtistID);
+					break;
 				}
-				$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $AliasName);
-				$Cache->delete_value('artist_'.$ArtistID);
-			} else {
+			}
+			if(!$ArtistID) {
 				//2. For each artist that didn't exist, create an artist.
 				$DB->query("INSERT INTO artists_group (Name) VALUES ('".db_string($Artist['name'])."')");
 				$ArtistID = $DB->inserted_id();

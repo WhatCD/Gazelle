@@ -515,17 +515,16 @@ if($Type == 'Music') {
 						aa.Redirect
 						FROM artists_alias AS aa
 						WHERE aa.Name = '".db_string($Artist['name'])."'");
-					if($DB->record_count() > 0){
-						while($Result = $DB->next_record(MYSQLI_NUM, false)) {
-							list($ArtistID, $AliasID, $AliasName, $Redirect) = $Result;
+					if($DB->record_count() > 0) {
+						while(list($ArtistID, $AliasID, $AliasName, $Redirect) = $DB->next_record(MYSQLI_NUM, false)) {
 							if(!strcasecmp($Artist['name'], $AliasName)) {
 								if($Redirect) {
 									$AliasID = $Redirect;
 								}
+								$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $AliasName);
 								break;
 							}
 						}
-						$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $AliasName);
 					}
 				}
 			}

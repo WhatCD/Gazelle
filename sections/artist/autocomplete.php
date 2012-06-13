@@ -44,10 +44,10 @@ foreach ($AutoSuggest as $Suggestion) {
 	if (stripos($Name,$FullName) === 0) {
 		$Suggestions[] = display_str($Name);
 		$Snatches[] = number_format($Snatch).' snatches';
-		$Links[] = 'http'.($SSL?'s':'').'://'.$_SERVER['HTTP_HOST'].'/artist.php?id='.$ID;
+		$ArtistIDs[] = $ID;
 		if (++$Matched > 9) {
 			break;
 		}
 	}
 }
-echo json_encode(array($FullName,$Suggestions,$Snatches,$Links));
+echo json_encode(array($FullName,$Suggestions,$Snatches,$ArtistIDs));

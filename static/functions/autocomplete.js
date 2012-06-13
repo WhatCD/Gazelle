@@ -5,7 +5,7 @@ Spent hours debugging opera, turns out they reserve the global variable autocomp
 var autocomp = {
 	id: "",
 	value: "",
-	href: null,
+	artistid: null,
 	timer: null,
 	input: null,
 	list: null,
@@ -23,7 +23,7 @@ var autocomp = {
 	},
 	end: function () {
 		//this.input.value = this.value;
-		this.href = null;
+		this.artistid = null;
 		this.highlight(-1);
 		this.list.style.visibility = 'hidden';
 		clearTimeout(this.timer);
@@ -35,7 +35,7 @@ var autocomp = {
 			case 27: //esc
 				break;
 			case 8: //backspace
-				this.href = null;
+				this.artistid = null;
 				this.list.style.visibility = 'hidden';
 				this.timer = setTimeout("autocomp.get('" + escape(this.input.value) + "');",500);
 				break;
@@ -43,17 +43,17 @@ var autocomp = {
 			case 40: //down
 				this.highlight(key);
 				if(this.pos !== -1) {
-					this.href = this.list.children[this.pos].href;
+					this.artistid = this.list.children[this.pos].artistid;
 					this.input.value = this.list.children[this.pos].textContent || this.list.children[this.pos].value;
 				}
 				break;
 			case 13:
-				if(this.href != null) {
-					window.location = this.href;
+				if(this.artistid != null) {
+					window.location = this.id + '.php?id='+this.artistid;
 				}
 				return 0;
 			default:
-				this.href = null;
+				this.artistid = null;
 				this.timer = setTimeout("autocomp.get('" + escape(this.input.value) + "');",300);
 				return 1;
 		}
@@ -107,7 +107,7 @@ var autocomp = {
 		if (this.pos !== -1) {
 			this.list.children[this.pos].className = "highlight";
 		} else {
-			this.href = null;
+			this.artistid = null;
 			this.input.value = this.value;
 		}
 	},
@@ -133,12 +133,12 @@ var autocomp = {
 			li = document.createElement('li');
 			li.innerHTML = data[1][i];
 			li.i = i;
-			li.href = data[3][i];
+			li.artistid = data[3][i];
 			listener.set(li,'mouseover',function(){
 				autocomp.highlight(this.i);
 			});
 			listener.set(li,'click',function(){
-				window.location = this.href;
+				window.location = autocomp.id + '.php?id='+this.artistid;
 			});
 			this.list.appendChild(li);
 		}
