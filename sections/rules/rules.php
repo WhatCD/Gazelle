@@ -23,7 +23,7 @@ show_header('Rule Index');
 				Do not post our .torrent files on other sites. Every .torrent file has your personal passkey embedded in it. The tracker will automatically disable your account if you share your torrent files with others. You will not get your account back. This doesn't prohibit you from sharing the content on other sites, but does prohibit you from sharing the .torrent file.
 			</li>
 			<li>
-				Any torrent you are seeding to this tracker must only have our tracker's URL in it. Adding another tracker's URL will cause incorrect data to be sent to our tracker, and will lead to your getting disabled for cheating.
+				Any torrent you are seeding to this tracker must only have our tracker's URL in it. Adding another tracker's URL will cause incorrect data to be sent to our tracker, and will lead to your getting disabled for cheating.  Similarly, your client must have DHT and PEX disabled for all What.CD torrents.
 			</li>
 			<li>
 				This is a torrent site which promotes sharing amongst the community. If you are not willing to give back to the community what you take from it, this site is not for you. In other words, we expect you to have an acceptable share ratio. If you download a torrent, please, seed the copy you have until there are sufficient people seeding the torrent data before you stop.
