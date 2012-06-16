@@ -49,11 +49,14 @@ if (isset($LoggedUser['PostsPerPage'])) {
 // Thread information, constant across all pages
 $ThreadInfo = get_thread_info($ThreadID, true, true);
 $ForumID = $ThreadInfo['ForumID'];
-
 // Make sure they're allowed to look at the page
 if(!check_forumperm($ForumID)) {
 	error(403);
 }
+
+//Escape strings for later display
+$ThreadTitle = display_str($ThreadInfo['Title']);
+$ForumName = display_str($Forums[$ForumID]['Name']);
 
 //Post links utilize the catalogue & key params to prevent issues with custom posts per page
 if($ThreadInfo['Posts'] > $PerPage) {
@@ -134,8 +137,8 @@ show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],
 <div class="thin">
 	<h2>
 		<a href="forums.php">Forums</a> &gt;
-		<a href="forums.php?action=viewforum&amp;forumid=<?=$ThreadInfo['ForumID']?>"><?=$Forums[$ForumID]['Name']?></a> &gt;
-		<?=display_str($ThreadInfo['Title'])?>
+		<a href="forums.php?action=viewforum&amp;forumid=<?=$ThreadInfo['ForumID']?>"><?=$ForumName?></a> &gt;
+		<?=$ThreadTitle?>
 	</h2>
 	<div class="linkbox">
 		<div class="center">
@@ -433,8 +436,8 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 <?	} ?>
 <div class="breadcrumbs">
 	<a href="forums.php">Forums</a> &gt;
-	<a href="forums.php?action=viewforum&amp;forumid=<?=$ThreadInfo['ForumID']?>"><?=$Forums[$ForumID]['Name']?></a> &gt;
-	<?=display_str($ThreadInfo['Title'])?>
+	<a href="forums.php?action=viewforum&amp;forumid=<?=$ThreadInfo['ForumID']?>"><?=$ForumName?></a> &gt;
+	<?=$ThreadTitle?>
 </div>
 <div class="linkbox">
 	<?=$Pages?>

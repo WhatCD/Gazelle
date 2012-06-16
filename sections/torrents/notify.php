@@ -123,7 +123,7 @@ $DB->set_query_id($Results);
 			}
 
 			// append extra info to torrent title
-			$ExtraInfo = torrent_info($TorrentInfo, true);
+			$ExtraInfo = torrent_info($TorrentInfo, true, true);
 			$Debug->log_var($ExtraInfo, "Extra torrent info ($TorrentID)");
 
 			$TagLinks = array();
@@ -137,6 +137,7 @@ $DB->set_query_id($Results);
 				$TagLinks = implode(', ', $TagLinks);
 				$TorrentTags = '<br /><div class="tags">'.$TagLinks.'</div>';
 			} else {
+				$TorrentTags = '';
 				$MainTag = $Categories[$GroupCategoryID-1];
 			}
 
@@ -148,7 +149,7 @@ $DB->set_query_id($Results);
 		<td>
 			<span>
 				[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> 
-<?			if (($LoggedUser['FLTokens'] > 0) && ($Size < 1073741824) 
+<?			if (($LoggedUser['FLTokens'] > 0) && ($TorrentInfo['Size'] < 1073741824)
 				&& !in_array($TorrentID, $TokenTorrents) && empty($TorrentInfo['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onClick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?			} ?>

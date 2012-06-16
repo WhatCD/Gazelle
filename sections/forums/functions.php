@@ -17,7 +17,7 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 			WHERE t.ID = '$ThreadID'
 			GROUP BY fp.TopicID");
 		if($DB->record_count()==0) { error(404); }
-		$ThreadInfo = $DB->next_record(MYSQLI_ASSOC);
+		$ThreadInfo = $DB->next_record(MYSQLI_ASSOC, false);
 		if($ThreadInfo['StickyPostID']) {
 			$ThreadInfo['Posts']--;
 			$DB->query("SELECT

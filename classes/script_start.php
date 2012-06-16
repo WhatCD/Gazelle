@@ -786,18 +786,20 @@ function show_footer($Options=array()) {
  * @param $ShowDots Show dots at the end
  * @return string formatted string
  */
-function cut_string($Str,$Length,$Hard = false,$ShowDots = true) {
-	if (strlen($Str)>$Length) {
-		if ($Hard==0) {
+function cut_string($Str, $Length, $Hard = false, $ShowDots = true) {
+	if (mb_strlen($Str, 'UTF-8') > $Length) {
+		if ($Hard == 0) {
 			// Not hard, cut at closest word
-			$CutDesc=substr($Str,0,$Length);
-			$DescArr=explode(' ',$CutDesc);
-			$DescArr=array_slice($DescArr,0,count($DescArr)-1);
-			$CutDesc=implode($DescArr,' ');
-			if ($ShowDots==1) { $CutDesc.='...'; }
+			$CutDesc = mb_substr($Str, 0, $Length, 'UTF-8');
+			$DescArr = explode(' ', $CutDesc);
+			if (count($DescArr) > 1) {
+				array_pop($DescArr);
+				$CutDesc = implode(' ', $DescArr);
+			}
+			if ($ShowDots) { $CutDesc .= '...'; }
 		} else {
-			$CutDesc=substr($Str,0,$Length);
-			if ($ShowDots==1) { $CutDesc.='...'; }
+			$CutDesc = mb_substr($Str, 0, $Length, 'UTF-8');
+			if ($ShowDots) { $CutDesc .= '...'; }
 		}
 		return $CutDesc;
 	} else {
@@ -1558,8 +1560,8 @@ function update_hash($GroupID) {
 // if $ConvID is not set, it auto increments it, ie. starting a new conversation
 function send_pm($ToID,$FromID,$Subject,$Body,$ConvID='') {
 	global $DB, $Cache, $Time;
-	if($ToID==0) {
-		// Don't allow users to send messages to the system
+	if($ToID == 0 || $ToID == $FromID) {
+		// Don't allow users to send messages to the system or themselves
 		return;
 	}
 	if($ConvID=='') {
@@ -2122,7 +2124,7 @@ function get_tags($TagNames) {
 	return($TagIDs);
 }
 
-function torrent_info($Data, $ShowMedia = false) {
+function torrent_info($Data, $ShowMedia = false, $ShowEdition = false) {
 	$Info = array();
 	if(!empty($Data['Format'])) { $Info[]=$Data['Format']; }
 	if(!empty($Data['Encoding'])) { $Info[]=$Data['Encoding']; }
@@ -2134,8 +2136,14 @@ function torrent_info($Data, $ShowMedia = false) {
 		$Info[]=$Str;
 	}
 	if(!empty($Data['HasCue'])) { $Info[]='Cue'; }
+	if($ShowMedia && !empty($Data['Media'])) { $Info[]=$Data['Media']; }
 	if(!empty($Data['Scene'])) { $Info[]='Scene'; }
-	if(!empty($Data['Media']) && $ShowMedia) { $Info[]=$Data['Media']; }
+	if($ShowEdition) {
+		$EditionInfo = array();
+		if(!empty($Data['RemasterYear'])) { $EditionInfo[]=$Data['RemasterYear']; }
+		if(!empty($Data['RemasterTitle'])) { $EditionInfo[]=$Data['RemasterTitle']; }
+		if(count($EditionInfo)) { $Info[]=implode(' ',$EditionInfo); }
+	}
 	if($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
 	if($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
 	if($Data['PersonalFL'] == 1) { $Info[]='<strong>Personal Freeleech!</strong>'; }

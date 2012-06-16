@@ -79,8 +79,9 @@ CREATE TABLE `artists_tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `bad_passwords` (
-  `Password` char(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `Password` char(32) CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY (`Password`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `blog` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,

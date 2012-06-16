@@ -661,6 +661,8 @@ body#index #recommended .head {
 
 body#index #recommended #vanityhouse {
 	margin-top: 21px;
+	margin-bottom: 0px;
+	width: 100%;
 }
 
 .hide_torrents a,.show_torrents a {

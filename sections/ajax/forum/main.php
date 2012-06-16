@@ -77,7 +77,7 @@ foreach ($Forums as $Forum) {
 		'lastTopicId' => (float) $LastTopicID,
 		'lastTime' => $LastTime,
 		'specificRules' => $SpecificRules,
-		'lastTopic' => $LastTopic,
+		'lastTopic' => display_str($LastTopic),
 		'read' => $Read == 1,
 		'locked' => $Locked == 1,
 		'sticky' => $Sticky == 1

@@ -53,7 +53,7 @@ if(!isset($Forum) || !is_array($Forum)) {
 		WHERE t.ForumID = '$ForumID'
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
-	$Forum = $DB->to_array('ID',MYSQLI_ASSOC);
+	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
 	if($Page==1) {
 		$DB->query("SELECT COUNT(ID) FROM forums_topics WHERE ForumID='$ForumID' AND IsSticky='1'");
 		list($Stickies) = $DB->next_record();
@@ -71,12 +71,13 @@ if (!check_perms('site_moderate_forums')) {
 }
 if($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
 
+$ForumName = display_str($Forums[$ForumID]['Name']);
 $JsonSpecificRules = array();
 foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
 	$Thread = get_thread_info($ThreadIDs);
 	$JsonSpecificRules[] = array(
 		'threadId' => (int) $ThreadIDs,
-		'thread' => $Thread['Title']
+		'thread' => display_str($Thread['Title'])
 	);
 }
 
@@ -87,7 +88,7 @@ if (count($Forum) == 0) {
 		json_encode(
 			array(
 				'status' => 'success',
-				'forumName' => $Forums[$ForumID]['Name'],
+				'forumName' => $ForumName,
 				'threads' => array()
 			)
 		);
@@ -125,7 +126,7 @@ else {
 		
 		$JsonTopics[] = array(
 			'topicId' => (int) $TopicID,
-			'title' => $Title,
+			'title' => display_str($Title),
 			'authorId' => (int) $AuthorID,
 			'authorName' => $AuthorName,
 			'locked' => $Locked == 1,
@@ -146,7 +147,7 @@ else {
 			array(
 				'status' => 'success',
 				'response' => array(
-					'forumName' => $Forums[$ForumID]['Name'],
+					'forumName' => $ForumName,
 					'specificRules' => $JsonSpecificRules,
 					'currentPage' => (int) $Page,
 					'pages' => ceil($Forums[$ForumID]['NumTopics']/TOPICS_PER_PAGE),

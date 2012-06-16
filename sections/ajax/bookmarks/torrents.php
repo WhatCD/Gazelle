@@ -184,12 +184,12 @@ $i = 0;
 foreach ($Tags as $TagName => $Tag) {
 	$i++;
 	if($i>5) { break; }
+}
 uasort($Artists, 'compare');
 $i = 0;
 foreach ($Artists as $ID => $Artist) {
 	$i++;
 	if($i>10) { break; }
-}
 }
 
 $JsonBookmarks = array();

@@ -32,6 +32,6 @@ list($ArtistID, $ArtistName, $AliasName) = $DB->next_record(MYSQLI_NUM, false);
 $DB->query("DELETE FROM artists_alias WHERE AliasID='$AliasID'");
 $DB->query("UPDATE artists_alias SET Redirect='0' WHERE Redirect='$AliasID'");
 
-write_log("The alias ".$AliasID." (".db_string($AliasName).") was removed from the artist ".$ArtistID." (".db_string($ArtistName).") by user ".$LoggedUser['ID']." (".db_string($LoggedUser['Username']).")");
+write_log("The alias ".$AliasID." (".$AliasName.") was removed from the artist ".$ArtistID." (".$ArtistName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
 
 header('Location: '.$_SERVER['HTTP_REFERER']);

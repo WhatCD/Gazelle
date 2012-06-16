@@ -13,7 +13,7 @@ if(!is_number($ArtistID) || !($Redirect === 0 || is_number($Redirect)) || !$Arti
 }
 
 if($AliasName == '') {
-	error('Blank artist name');
+	error('Blank artist name.');
 }
 
 /*
@@ -24,31 +24,47 @@ if($AliasName == '') {
  * 3. For foo, there's two, same ArtistID, diff names, no redirect
  */
 
-$DB->query("SELECT AliasID, ArtistID, Name FROM artists_alias WHERE Name = '".$DBAliasName."'");
+$DB->query("SELECT AliasID, ArtistID, Name, Redirect FROM artists_alias WHERE Name = '".$DBAliasName."'");
 if($DB->record_count()) {
-	while(list($CloneAliasID, $CloneArtistID, $CloneAliasName) = $DB->next_record(MYSQLI_NUM, false)) {
+	while(list($CloneAliasID, $CloneArtistID, $CloneAliasName, $CloneRedirect) = $DB->next_record(MYSQLI_NUM, false)) {
 		if(!strcasecmp($CloneAliasName, $AliasName)) {
 			break;
 		}
 	}
 	if($CloneAliasID) {
-		if($Redirect == 0) {
-			$DB->query("UPDATE artists_alias SET ArtistID='".$ArtistID."', Redirect=0 WHERE AliasID='".$CloneAliasID."'");
+		if($ArtistID == $CloneArtistID && $Redirect == 0) {
+			if($CloneRedirect != 0) {
+				$DB->query("UPDATE artists_alias SET ArtistID='".$ArtistID."', Redirect=0 WHERE AliasID='".$CloneAliasID."'");
+				write_log("Redirection for the alias $CloneAliasID ($DBAliasName) for the artist $ArtistID was removed by user $LoggedUser[ID] ($LoggedUser[Username])");
+			} else {
+				error('No changes were made as the target alias did not redirect anywhere.');
+			}
 		} else {
 			error('An alias by that name already exists <a href="artist.php?id='.$CloneArtistID.'">here</a>. You can try renaming that artist to this one.');
 		}
 	}
 }
 if(!$CloneAliasID) {
+	$DB->query("SELECT ArtistID, Redirect FROM artists_alias WHERE AliasID = $Redirect");
+	if(!$DB->record_count()) {
+		error('Cannot redirect to a nonexistent artist alias.');
+	}
+	list($FoundArtistID, $FoundRedirect) = $DB->next_record();
+	if($ArtistID != $FoundArtistID) {
+		error('Redirection must target an alias for the current artist.');
+	}
+	if($FoundRedirect != 0) {
+		$Redirect = $FoundRedirect;
+	}
 	$DB->query("INSERT INTO artists_alias(ArtistID, Name, Redirect, UserID)
 		VALUES
 		(".$ArtistID.", '".$DBAliasName."', ".$Redirect.", ".$LoggedUser['ID'].")");
 	$AliasID = $DB->inserted_id();
 
-	$DB->query("SELECT Name FROM artists_group WHERE ArtistID=".$ArtistID);
-	list($ArtistName) = $DB->next_record();
+	$DB->query("SELECT Name FROM artists_group WHERE ArtistID = ".$ArtistID);
+	list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
 
-	write_log("The alias ".$AliasID." (".$DBAliasName.") was added to the artist ".$ArtistID." (".$ArtistName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+	write_log("The alias ".$AliasID." (".$DBAliasName.") was added to the artist ".$ArtistID." (".db_string($ArtistName).") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
 }
 header('Location: '.$_SERVER['HTTP_REFERER']);
 ?>

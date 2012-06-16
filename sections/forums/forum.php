@@ -46,7 +46,7 @@ if(!isset($Forum) || !is_array($Forum)) {
 		WHERE t.ForumID = '$ForumID'
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
-	$Forum = $DB->to_array('ID',MYSQLI_ASSOC);
+	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
 	if($Page==1) {
 		$DB->query("SELECT COUNT(ID) FROM forums_topics WHERE ForumID='$ForumID' AND IsSticky='1'");
 		list($Stickies) = $DB->next_record();
@@ -60,13 +60,14 @@ if (!check_perms('site_moderate_forums')) {
 	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) { error(403); }
 }
 
+$ForumName = display_str($Forums[$ForumID]['Name']);
 if($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
 
 // Start printing
 show_header('Forums > '. $Forums[$ForumID]['Name']);
 ?>
 <div class="thin">
-	<h2><a href="forums.php">Forums</a> &gt; <?=$Forums[$ForumID]['Name']?></h2>
+	<h2><a href="forums.php">Forums</a> &gt; <?=$ForumName?></h2>
 	<div class="linkbox">
 <? if(check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')){ ?>
 		[<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>">New Thread</a>]
@@ -112,7 +113,7 @@ show_header('Forums > '. $Forums[$ForumID]['Name']);
 	$Thread = get_thread_info($ThreadIDs);
 ?>
 		<br />
-		[<a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadIDs?>"><?=$Thread['Title']?></a>]
+		[<a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadIDs?>"><?=display_str($Thread['Title'])?></a>]
 <? } ?>
 	</div>
 <? } ?>
@@ -223,7 +224,7 @@ if (count($Forum) == 0) {
 } ?>
 </table>
 <!--<div class="breadcrumbs">
-	<a href="forums.php">Forums</a> &gt; <?=$Forums[$ForumID]['Name']?>
+	<a href="forums.php">Forums</a> &gt; <?=$ForumName?>
 </div>-->
 	<div class="linkbox pager">
 		<?=$Pages?>

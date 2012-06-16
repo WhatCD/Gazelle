@@ -22,25 +22,20 @@ for($i = 0; $i < count($AliasNames); $i++) {
 	
 	if(strlen($AliasName) > 0) {
 		$DB->query("SELECT AliasID, ArtistID, Redirect, Name FROM artists_alias WHERE Name = '".db_string($AliasName)."'");
-		if($DB->record_count() == 0) {
+		while(list($AliasID, $ArtistID, $Redirect, $FoundAliasName) = $DB->next_record(MYSQLI_NUM, false)) {
+			if(!strcasecmp($AliasName, $FoundAliasName)) {
+				if($Redirect) {
+					$AliasID = $Redirect;
+				}
+				break;
+			}
+		}
+		if(!$AliasID) {
 			$AliasName = db_string($AliasName);
 			$DB->query("INSERT INTO artists_group (Name) VALUES ('$AliasName')");
 			$ArtistID = $DB->inserted_id();
 			$DB->query("INSERT INTO artists_alias (ArtistID, Name) VALUES ('$ArtistID', '$AliasName')");
 			$AliasID = $DB->inserted_id();
-		} else {
-			list($AliasID, $ArtistID, $Redirect, $FoundAliasName) = $DB->next_record(MYSQLI_NUM, false);
-			if($DB->record_count() > 1 && strcasecmp($AliasName, $FoundAliasName)) {
-				while($Result = $DB->next_record(MYSQLI_NUM, false)) {
-					list($AliasID, $ArtistID, $Redirect, $FoundAliasName) = $Result;
-					if(!strcasecmp($AliasName, $FoundAliasName)) {
-						break;
-					}
-				}
-			}
-			if($Redirect) {
-				$AliasID = $Redirect;
-			}
 		}
 		
 		$DB->query("SELECT Name FROM torrents_group WHERE ID=".$GroupID);

@@ -35,6 +35,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			</h3>
 <?	} ?>
 	<form action="user.php" method="post">
+		<input type="hidden" name="formid" value="<?=$i?>" />
 		<input type="hidden" name="action" value="notify_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<table <?=($i<=$NumFilters)?'id="filter_'.$N['ID'].'" class="hidden"':''?>>
@@ -42,7 +43,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			<tr>
 				<td class="label"><strong>Label</strong></td>
 				<td>
-					<input type="text" name="label" style="width: 100%" />
+					<input type="text" name="label<?=$i?>" style="width: 100%" />
 					<p class="min_padding">A label for the filter set, to tell different filters apart.</p>
 				</td>
 			</tr>
@@ -52,28 +53,28 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				</td>
 			</tr>
 <?	} else { ?>
-			<input type="hidden" name="id" value="<?=$N['ID']?>" />
+			<input type="hidden" name="id<?=$i?>" value="<?=$N['ID']?>" />
 <?	} ?>
 			<tr>
 				<td class="label"><strong>One of these artists</strong></td>
 				<td>
-					<textarea name="artists" style="width:100%" rows="5"><?=display_str($N['Artists'])?></textarea>
+					<textarea name="artists<?=$i?>" style="width:100%" rows="5"><?=display_str($N['Artists'])?></textarea>
 					<p class="min_padding">Comma-separated list - eg. <em>Pink Floyd, Led Zeppelin, Neil Young</em></p>
-					<input type="checkbox" name="excludeva" id="excludeva_<?=$N['ID']?>"<? if($N['ExcludeVA']=="1") { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="excludeva<?=$i?>" id="excludeva_<?=$N['ID']?>"<? if($N['ExcludeVA']=="1") { echo ' checked="checked"';} ?> />
 					<label for="excludeva_<?=$N['ID']?>">Exclude Various Artists releases</label>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>At least one of these tags</strong></td>
 				<td>
-					<textarea name="tags" style="width:100%" rows="2"><?=display_str($N['Tags'])?></textarea>
+					<textarea name="tags<?=$i?>" style="width:100%" rows="2"><?=display_str($N['Tags'])?></textarea>
 					<p class="min_padding">Comma-separated list - eg. <em>rock, jazz, pop</em></p>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>None of these tags</strong></td>
 				<td>
-					<textarea name="nottags" style="width:100%" rows="2"><?=display_str($N['NotTags'])?></textarea>
+					<textarea name="nottags<?=$i?>" style="width:100%" rows="2"><?=display_str($N['NotTags'])?></textarea>
 					<p class="min_padding">Comma-separated list - eg. <em>rock, jazz, pop</em></p>
 				</td>
 			</tr>
@@ -81,7 +82,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td class="label"><strong>Only these categories</strong></td>
 				<td>
 <?	foreach($Categories as $Category){ ?>
-					<input type="checkbox" name="categories[]" id="<?=$Category?>_<?=$N['ID']?>" value="<?=$Category?>"<? if(in_array($Category, $N['Categories'])) { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="categories<?=$i?>[]" id="<?=$Category?>_<?=$N['ID']?>" value="<?=$Category?>"<? if(in_array($Category, $N['Categories'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$Category?>_<?=$N['ID']?>"><?=$Category?></label>
 <?	} ?>
 				</td>
@@ -90,7 +91,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td class="label"><strong>Only these types</strong></td>
 				<td>
 <?	foreach($ReleaseTypes as $ReleaseType){ ?>
-					<input type="checkbox" name="releasetypes[]" id="<?=$ReleaseType?>_<?=$N['ID']?>" value="<?=$ReleaseType?>"<? if(in_array($ReleaseType, $N['ReleaseTypes'])) { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="releasetypes<?=$i?>[]" id="<?=$ReleaseType?>_<?=$N['ID']?>" value="<?=$ReleaseType?>"<? if(in_array($ReleaseType, $N['ReleaseTypes'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$ReleaseType?>_<?=$N['ID']?>"><?=$ReleaseType?></label>
 <?	} ?>
 				</td>
@@ -99,7 +100,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td class="label"><strong>Only these formats</strong></td>
 				<td>
 <?	foreach($Formats as $Format){ ?>
-					<input type="checkbox" name="formats[]" id="<?=$Format?>_<?=$N['ID']?>" value="<?=$Format?>"<? if(in_array($Format, $N['Formats'])) { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="formats<?=$i?>[]" id="<?=$Format?>_<?=$N['ID']?>" value="<?=$Format?>"<? if(in_array($Format, $N['Formats'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$Format?>_<?=$N['ID']?>"><?=$Format?></label>
 <?	} ?>
 				</td>
@@ -108,7 +109,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td class="label"><strong>Only these bitrates</strong></td>
 				<td>
 <?	foreach($Bitrates as $Bitrate){ ?>
-					<input type="checkbox" name="bitrates[]" id="<?=$Bitrate?>_<?=$N['ID']?>" value="<?=$Bitrate?>"<? if(in_array($Bitrate, $N['Encodings'])) { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="bitrates<?=$i?>[]" id="<?=$Bitrate?>_<?=$N['ID']?>" value="<?=$Bitrate?>"<? if(in_array($Bitrate, $N['Encodings'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$Bitrate?>_<?=$N['ID']?>"><?=$Bitrate?></label>
 <?	} ?>
 				</td>
@@ -117,7 +118,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td class="label"><strong>Only these media</strong></td>
 				<td>
 <?	foreach($Media as $Medium){ ?>
-					<input type="checkbox" name="media[]" id="<?=$Medium?>_<?=$N['ID']?>" value="<?=$Medium?>"<? if(in_array($Medium, $N['Media'])) { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="media<?=$i?>[]" id="<?=$Medium?>_<?=$N['ID']?>" value="<?=$Medium?>"<? if(in_array($Medium, $N['Media'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$Medium?>_<?=$N['ID']?>"><?=$Medium?></label>
 <?	} ?>
 				</td>
@@ -125,15 +126,15 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			<tr>
 				<td class="label"><strong>Between the years</strong></td>
 				<td>
-					<input type="text" name="fromyear" value="<?=$N['FromYear']?>" size="6" />
+					<input type="text" name="fromyear<?=$i?>" value="<?=$N['FromYear']?>" size="6" />
 					and
-					<input type="text" name="toyear" value="<?=$N['ToYear']?>" size="6" />
+					<input type="text" name="toyear<?=$i?>" value="<?=$N['ToYear']?>" size="6" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Only new releases</strong></td>
 				<td>
-					<input type="checkbox" name="newgroupsonly" id="newgroupsonly_<?=$N['ID']?>"<? if($N['NewGroupsOnly']=="1") { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="newgroupsonly<?=$i?>" id="newgroupsonly_<?=$N['ID']?>"<? if($N['NewGroupsOnly']=="1") { echo ' checked="checked"';} ?> />
 <label for="newgroupsonly_<?=$N['ID']?>">Only notify for new releases, not new formats</label>
 				</td>
 			</tr>

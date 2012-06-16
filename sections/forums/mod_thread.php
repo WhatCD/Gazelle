@@ -75,7 +75,7 @@ if(isset($_POST['delete'])) {
 			WHERE t.ForumID='$ForumID'
 			GROUP BY t.ID
 			ORDER BY t.LastPostID DESC LIMIT 1");
-		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts, $NewLocked, $NewSticky) = $DB->next_record(MYSQLI_BOTH, false);
+		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts, $NewLocked, $NewSticky) = $DB->next_record(MYSQLI_NUM, false);
 		
 		$DB->query("UPDATE forums SET 
 			NumTopics=NumTopics-1, 
@@ -134,7 +134,7 @@ if(isset($_POST['delete'])) {
 	if($ForumID!=$OldForumID) { // If we're moving a thread, change the forum stats
 		
 		$DB->query("SELECT MinClassRead, MinClassWrite, Name FROM forums WHERE ID='$ForumID'");
-		list($MinClassRead, $MinClassWrite, $ForumName) = $DB->next_record();
+		list($MinClassRead, $MinClassWrite, $ForumName) = $DB->next_record(MYSQLI_NUM, false);
 		$Cache->begin_transaction('thread_'.$TopicID.'_info');
 		$UpdateArray = array(
 			'ForumName'=>$ForumName,
@@ -205,7 +205,7 @@ if(isset($_POST['delete'])) {
 			LEFT JOIN users_main AS um ON um.ID=p.AuthorID
 			WHERE t.ForumID='$ForumID'
 			ORDER BY t.LastPostID DESC LIMIT 1");
-		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts) = $DB->next_record();
+		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts) = $DB->next_record(MYSQLI_NUM, false);
 		
 		$DB->query("UPDATE forums SET 
 			NumTopics=NumTopics+1, 
