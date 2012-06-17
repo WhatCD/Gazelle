@@ -12,7 +12,7 @@ if(empty($Reset)) {
 ?>
 		<font color="red"><strong><?=display_str($Err)?></strong></font><br /><br />
 <?	} ?>
-		Please choose a password between 6 and 15 characters long<br /><br />
+		Please choose a password between 8 and 40 characters long<br /><br />
 		<table cellpadding="2" cellspacing="1" border="0" align="center">
 			<tr valign="top">
 				<td align="right">Password&nbsp;</td>

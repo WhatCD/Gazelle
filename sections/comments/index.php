@@ -89,8 +89,8 @@ $GroupIDs = $DB->collect('GroupID');
 
 $Artists = get_artists($GroupIDs);
 
-$DB->set_query_id($Comments);
 show_header($Title,'bbcode');
+$DB->set_query_id($Comments);
 
 ?><div class="thin">
 	<h2>

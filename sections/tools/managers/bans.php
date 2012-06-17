@@ -70,8 +70,8 @@ list($Results) = $DB->next_record();
 
 $PageLinks=get_pages($Page,$Results,BANS_PER_PAGE,11);
 
-$DB->set_query_id($Bans);
 show_header('IP Bans');
+$DB->set_query_id($Bans);
 ?>
 
 <h2>IP Bans</h2>

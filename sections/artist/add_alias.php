@@ -45,16 +45,18 @@ if($DB->record_count()) {
 	}
 }
 if(!$CloneAliasID) {
-	$DB->query("SELECT ArtistID, Redirect FROM artists_alias WHERE AliasID = $Redirect");
-	if(!$DB->record_count()) {
-		error('Cannot redirect to a nonexistent artist alias.');
-	}
-	list($FoundArtistID, $FoundRedirect) = $DB->next_record();
-	if($ArtistID != $FoundArtistID) {
-		error('Redirection must target an alias for the current artist.');
-	}
-	if($FoundRedirect != 0) {
-		$Redirect = $FoundRedirect;
+	if($Redirect) {
+		$DB->query("SELECT ArtistID, Redirect FROM artists_alias WHERE AliasID = $Redirect");
+		if(!$DB->record_count()) {
+			error('Cannot redirect to a nonexistent artist alias.');
+		}
+		list($FoundArtistID, $FoundRedirect) = $DB->next_record();
+		if($ArtistID != $FoundArtistID) {
+			error('Redirection must target an alias for the current artist.');
+		}
+		if($FoundRedirect != 0) {
+			$Redirect = $FoundRedirect;
+		}
 	}
 	$DB->query("INSERT INTO artists_alias(ArtistID, Name, Redirect, UserID)
 		VALUES

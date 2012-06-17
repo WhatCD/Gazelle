@@ -2,6 +2,8 @@
 show_header('Register','validate');
 echo $Val->GenerateJS('regform');
 ?>
+<script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
+<script src="<?=STATIC_SERVER?>functions/password_validate.js" type="text/javascript"></script>
 <form name="regform" id="regform" method="post" action="" onsubmit="return formVal();">
 <div style="width:500px;">
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -29,11 +31,11 @@ if(empty($Sent)) {
 		</tr>
 		<tr valign="top">
 			<td align="right">Password&nbsp;</td>
-			<td align="left"><input type="password" name="password" id="password" class="inputtext" /></td>
+			<td align="left"><input type="password" name="password" id="new_pass_1" class="inputtext" /> <b id="pass_strength"/> </td>
 		</tr>
 		<tr valign="top">
 			<td align="right">Verify Password&nbsp;</td>
-			<td align="left"><input type="password" name="confirm_password" id="confirm_password" class="inputtext" /></td>
+			<td align="left"><input type="password" name="confirm_password" id="new_pass_2" class="inputtext" /> <b id="pass_match"/> </td>
 		</tr>
 		<tr valign="top">
 			<td></td>

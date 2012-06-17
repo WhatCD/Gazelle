@@ -71,6 +71,8 @@ if(empty($_POST['confirm'])) {
 	list($TorrentsInGroup) = $DB->next_record();
 	if($TorrentsInGroup == 0) {
 		$DB->query("UPDATE torrents_comments SET GroupID='$GroupID' WHERE GroupID='$OldGroupID'");
+		$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_0');
+		$Cache->delete_value('torrent_comments_'.$GroupID);
 		delete_group($OldGroupID);
 	} else {
 		update_hash($OldGroupID);

@@ -61,7 +61,7 @@ if ($SiteOptions) {
 	$SiteOptions = array();
 }
 
-show_header($Username.' > Settings','user,validate');
+show_header($Username.' > Settings','user,jquery,password_validate,validate');
 echo $Val->GenerateJS('userform');
 ?>
 <div class="thin">
@@ -413,16 +413,24 @@ list($ArtistsAdded) = $DB->next_record();
 				</td>
 			</tr>
 			<tr>
+			<td/>
+				<td>
+					<p class="min_padding">A strong password is 8 characters or longer</p>
+					<p class="min_padding">Contains at least 1 lowercase and uppercase letter</p>
+					<p class="min_padding">Contains at least a number or symbol</p>
+				</td>
+			</tr>
+			<tr>
 				<td class="label"><strong>Current password</strong></td>
 				<td><input type="password" size="40" name="cur_pass" id="cur_pass" value="" /></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>New password</strong></td>
-				<td><input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" /></td>
+				<td><input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" />  <b id="pass_strength"/></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Re-type new password</strong></td>
-				<td><input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" /></td>
+				<td><input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" />  <b id="pass_match"/></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Reset passkey</strong></td>
