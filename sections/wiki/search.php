@@ -49,9 +49,9 @@ $SQL.=" ORDER BY $Order $Way LIMIT $Limit ";
 $RS = $DB->query($SQL);
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
-$DB->set_query_id($RS);
 
 show_header('Search articles');
+$DB->set_query_id($RS);
 ?>
 <div class="thin">
 	<h2>Search articles</h2>

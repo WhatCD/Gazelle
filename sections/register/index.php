@@ -25,7 +25,7 @@ if(!empty($_REQUEST['confirm'])) {
 } elseif(OPEN_REGISTRATION || !empty($_REQUEST['invite'])) {
 	$Val->SetFields('username',true,'regex', 'You did not enter a valid username.',array('regex'=>'/^[a-z0-9_?]{1,20}$/iD'));
 	$Val->SetFields('email',true,'email', 'You did not enter a valid email address.');
-	$Val->SetFields('password',true,'string', 'You did not enter a valid password (6 - 40 characters).',array('minlength'=>6,'maxlength'=>40));
+	$Val->SetFields('password',true,'string', 'You did not enter a valid password, must be at least 8 characters long.',array('minlength'=>8,'maxlength'=>150));
 	$Val->SetFields('confirm_password',true,'compare', 'Your passwords do not match.',array('comparefield'=>'password'));
 	$Val->SetFields('readrules',true,'checkbox', 'You did not check the box that says you will read the rules.');
 	$Val->SetFields('readwiki',true,'checkbox', 'You did not check the box that says you will read the wiki.');

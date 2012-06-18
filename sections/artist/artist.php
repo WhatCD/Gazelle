@@ -16,6 +16,8 @@ include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_artist.php');
 include(SERVER_ROOT.'/classes/class_artists_similar.php');
 
+include(SERVER_ROOT.'/classes/class_image_tools.php');
+
 $ArtistID = $_GET['id'];
 if(!is_number($ArtistID)) { error(0); }
 

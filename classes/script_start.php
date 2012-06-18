@@ -1669,14 +1669,12 @@ function create_thread($ForumID, $AuthorID, $Title, $PostBody) {
 				'ID' => $TopicID,
 				'Title' => $Title,
 				'AuthorID' => $AuthorID,
-				'AuthorUsername' => $AuthorName,
 				'IsLocked' => $IsLocked,
 				'IsSticky' => $IsSticky,
 				'NumPosts' => $NumPosts,
 				'LastPostID' => $PostID,
 				'LastPostTime' => sqltime(),
 				'LastPostAuthorID' => $AuthorID,
-				'LastPostUsername' => $AuthorName
 				)
 			); //Bumped thread
 		$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE,true); //Rest of page
@@ -1697,9 +1695,9 @@ function create_thread($ForumID, $AuthorID, $Title, $PostBody) {
 	$Cache->begin_transaction('forums_list');
 	$UpdateArray = array(
 		'NumPosts'=>'+1',
+		'NumTopics'=>'+1',
 		'LastPostID'=>$PostID,
 		'LastPostAuthorID'=>$AuthorID,
-		'Username'=>$AuthorName,
 		'LastPostTopicID'=>$TopicID,
 		'LastPostTime'=>sqltime(),
 		'Title'=>$Title,

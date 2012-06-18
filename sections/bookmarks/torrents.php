@@ -1,5 +1,7 @@
 <?
+include(SERVER_ROOT.'/classes/class_image_tools.php'); 
 set_time_limit(0);
+
 //~~~~~~~~~~~ Main bookmarks page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 function compare($X, $Y){

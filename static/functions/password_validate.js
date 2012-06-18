@@ -93,7 +93,7 @@ function calculateComplexity(password) {
 		username = $(".username").text();
 	}
 	else {
-		username = $("#username").val();
+		username = $("#username").val() || '';
 	}
 
 	var irckey;

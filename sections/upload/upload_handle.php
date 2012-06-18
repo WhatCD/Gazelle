@@ -15,6 +15,8 @@ include(SERVER_ROOT.'/classes/class_feed.php');
 include(SERVER_ROOT.'/classes/class_text.php');
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
+include(SERVER_ROOT.'/classes/class_file_checker.php');
+
 enforce_login();
 authorize();
 
@@ -372,22 +374,9 @@ foreach($FileList as $File) {
 		$HasCue = "'1'";
 	}
 
-	// Forbidden files
-	if($Type == 'Music' && preg_match('/\.(mov|avi|mpg|exe|zip|rar|mkv|bat|iso|dat|torrent|!ut|nzb|wav)$/i', $Name)) {
-		$Err = 'The torrent contained one or more invalid files ('.$Name.').';
-	}
-	if($Type == 'Music' && preg_match('/demonoid.*\.txt$/i', $Name)) {
-		$Err = 'The torrent contained one or more forbidden files ('.$Name.').';
-	}
-	if(preg_match('/INCOMPLETE~\*/i', $Name)) {
-		$Err = 'The torrent contained one or more forbidden files ('.$Name.').';
-	}
-	if(preg_match('/\?/i', $Name)) {
-		$Err = 'The torrent contains one or more files with a ?, which is a forbidden character. Please rename the files as necessary and recreate the .torrent file.';
-	}
-	if(preg_match('/\:/i', $Name)) {
-		$Err = 'The torrent contains one or more files with a :, which is a forbidden character. Please rename the files as necessary and recreate the .torrent file.';
-	}
+	check_file($Type, $Name);
+
+
 	// Make sure the filename is not too long
 	if(mb_strlen($Name, 'UTF-8') + mb_strlen($DirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
 		$Err = 'The torrent contained one or more files with too long a name ('.$Name.')';

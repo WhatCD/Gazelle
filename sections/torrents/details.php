@@ -8,6 +8,8 @@ define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/class_image_tools.php');
+
 $Text = NEW TEXT;
 
 $GroupID=ceil($_GET['id']);

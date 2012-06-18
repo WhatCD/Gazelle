@@ -4,6 +4,7 @@ include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
 include(SERVER_ROOT.'/sections/requests/functions.php');
+include(SERVER_ROOT.'/classes/class_image_tools.php');
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) { error(0); }
 $UserID = $_GET['id'];

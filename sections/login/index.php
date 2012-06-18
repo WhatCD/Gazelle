@@ -43,7 +43,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 
 		if ($UserID && strtotime($Expires)>time()) {
 			// If the user has requested a password change, and his key has not expired
-			$Validate->SetFields('password','1','string','You entered an invalid password.',array('maxlength'=>'40','minlength'=>'6'));
+			$Validate->SetFields('password','1','string','You entered an invalid password.',array('minlength'=>'8','maxlength'=>'150'));
 			$Validate->SetFields('verifypassword','1','compare','Your passwords did not match.',array('comparefield'=>'password'));
 
 			if (!empty($_REQUEST['password'])) {
@@ -164,7 +164,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 // Normal login
 else {
 	$Validate->SetFields('username',true,'regex','You did not enter a valid username.',array('regex'=>'/^[a-z0-9_?]{1,20}$/i'));
-	$Validate->SetFields('password','1','string','You entered an invalid password.',array('maxlength'=>'40','minlength'=>'6'));
+	$Validate->SetFields('password','1','string','You entered an invalid password.',array('minlength'=>'6','maxlength'=>'150'));
 
 	$DB->query("SELECT ID, Attempts, Bans, BannedUntil FROM login_attempts WHERE IP='".db_string($_SERVER['REMOTE_ADDR'])."'");
 	list($AttemptID,$Attempts,$Bans,$BannedUntil)=$DB->next_record();

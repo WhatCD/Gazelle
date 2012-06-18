@@ -10,6 +10,11 @@ function toggleChecks(formElem,masterElem) {
 //Lightbox stuff
 var lightbox = {
 	init: function (image, size) {
+		if(typeof(image)=='string') {
+                        var src = image;
+                        image = new Image();
+                        image.src = src;
+                }
 		if (image.naturalWidth === undefined) {
 			var tmp = document.createElement('img');
 			tmp.style.visibility = 'hidden';
@@ -18,11 +23,15 @@ var lightbox = {
 			delete tmp;
 		}
 		if (image.naturalWidth > size) {
-			lightbox.box(image);
+			lightbox.box(image);			
 		}
 	},
 	box: function (image) {
-		if(image.parentNode.tagName.toUpperCase() != 'A') {
+		var hasA = false;
+		if(image.parentNode != null && image.parentNode.tagName.toUpperCase() == 'A') {
+			hasA = true;
+		}
+		if(!hasA) {
 			$('#lightbox').show().listen('click',lightbox.unbox).raw().innerHTML = '<img src="' + image.src + '" />';
 			$('#curtain').show().listen('click',lightbox.unbox);
 		}

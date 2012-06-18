@@ -6,6 +6,8 @@ if(isset($_POST['submit']) && isset($_POST['id']) && $_POST['submit'] == 'Unban'
 	$DB->query('DELETE FROM login_attempts WHERE ID='.$_POST['id']);
 }
 
+show_header('Login Watch');
+
 $DB->query('SELECT 
 	l.ID,
 	l.IP,
@@ -17,9 +19,6 @@ $DB->query('SELECT
 	FROM login_attempts AS l
 	WHERE l.BannedUntil > "'.sqltime().'"
 	ORDER BY l.BannedUntil ASC');
-
-
-show_header('Login Watch');
 ?>
 <div class="thin">
 <h2>Login Watch Management</h2>

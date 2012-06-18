@@ -7,6 +7,8 @@ function compare($X, $Y){
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include(SERVER_ROOT.'/classes/class_image_tools.php'); 
+
 $Text = new TEXT;
 
 $CollageID = $_GET['id'];

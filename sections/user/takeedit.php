@@ -31,8 +31,8 @@ $Val->SetFields('showtags',1,"number","You forgot to select your show tags optio
 $Val->SetFields('avatar',0,"regex","You did not enter a valid avatar url.",array('regex'=>"/^".IMAGE_REGEX."$/i"));
 $Val->SetFields('email',1,"email","You did not enter a valid email address.");
 $Val->SetFields('irckey',0,"string","You did not enter a valid IRCKey, must be between 6 and 32 characters long.",array('minlength'=>6,'maxlength'=>32));
-$Val->SetFields('cur_pass',0,"string","You did not enter a valid password, must be between 6 and 40 characters long.",array('minlength'=>6,'maxlength'=>40));
-$Val->SetFields('new_pass_1',0,"string","You did not enter a valid password, must be between 6 and 40 characters long.",array('minlength'=>6,'maxlength'=>40));
+$Val->SetFields('cur_pass',0,"string","You did not enter a valid password, must be at least 6 characters long.",array('minlength'=>6,'maxlength'=>150));
+$Val->SetFields('new_pass_1',0,"string","You did not enter a valid password, must be at least 8 characters long.",array('minlength'=>8,'maxlength'=>150));
 $Val->SetFields('new_pass_2',1,"compare","Your passwords do not match.",array('comparefield'=>'new_pass_1'));
 if (check_perms('site_advanced_search')) {
 	$Val->SetFields('searchtype',1,"number","You forgot to select your default search preference.",array('minlength'=>0,'maxlength'=>1));
