@@ -426,11 +426,11 @@ list($ArtistsAdded) = $DB->next_record();
 			</tr>
 			<tr>
 				<td class="label"><strong>New password</strong></td>
-				<td><input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" />  <b id="pass_strength"/></td>
+				<td><input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" maxlength="100" />  <b id="pass_strength"/></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Re-type new password</strong></td>
-				<td><input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" />  <b id="pass_match"/></td>
+				<td><input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" maxlength="100" />  <b id="pass_match"/></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Reset passkey</strong></td>

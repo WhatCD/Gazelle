@@ -13,9 +13,10 @@ $keywords = array("scc.nfo", "torrentday", "demonoid.com", "demonoid.me", "djtun
 		  "housexclusive.net", "plixid.com", "h33t", "reggaeme.com" ,"ThePirateBay.org",
 		  "Limetorrents.com", "AhaShare.com", "MixFiend.blogstop", "MixtapeTorrent.blogspot");
 
+
 function check_file($Type, $Name) {
 	check_name(strtolower($Name));
-	check_extensions($Type, $Name);
+	check_extensions($Type, strtolower($Name));
 }
 
 function check_name($Name) {
