@@ -4,6 +4,7 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 	$TorrentPass = $LoggedUser['torrent_pass'];
 	$DownloadAlt = $LoggedUser['DownloadAlt'];
 	$UserID      = $LoggedUser['ID'];
+	$AuthKey     = $LoggedUser['AuthKey'];
 } else {
 	$UserInfo = $Cache->get_value('user_'.$_REQUEST['torrent_pass']);
 	if(!is_array($UserInfo)) {
@@ -21,13 +22,14 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 	list($UserID,$DownloadAlt)=array_shift($UserInfo);
 	if(!$UserID) { error(403); }
 	$TorrentPass = $_REQUEST['torrent_pass'];
+	$AuthKey = $_REQUEST['authkey'];
 }
 require(SERVER_ROOT.'/classes/class_torrent.php');
 
 $TorrentID = $_REQUEST['id'];
 
 $uih = user_heavy_info($UserID);
-if ($_REQUEST['authkey'] != $uih['AuthKey']) {
+if ($AuthKey != $uih['AuthKey']) {
 
 	error(403);
 	die;
