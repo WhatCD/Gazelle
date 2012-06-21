@@ -279,7 +279,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
 ?>
 		<li class="image_group_<?=$GroupID?>">
-			<a href="#group_<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
+			<a href="torrents.php?id=<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
 <?	if($Image) { 
 		if(check_perms('site_proxy_images')) {
 			$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);

@@ -523,7 +523,23 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 				<img style="max-width: 220px;" src="<?=$Image?>" alt="<?=$Name?>" onclick="lightbox.init(this,220);" />
 			</div>
 		</div>
-<?	}
+<?	} ?>
+
+		<div class="box">
+                        <div class="head"><strong>Search File Lists</strong></div>
+                        <ul class="nobullet">
+                                <li>
+                                <form name="filelistsearchform" action="torrents.php">
+                                <input type="hidden" name="artistname" value="<?=$Name?>" />
+                                <input type="hidden" name="action" value="advanced" />
+				<input type="text" autocomplete="off" id="filelist" name="filelist" size="20" />
+                                <input type="submit" value=">"/>
+                                </form>
+                                </li>  
+                        </ul>
+                </div>
+<?
+
 if(check_perms('zip_downloader')){
 	if(isset($LoggedUser['Collector'])) {
 		list($ZIPList,$ZIPPrefs) = $LoggedUser['Collector'];
