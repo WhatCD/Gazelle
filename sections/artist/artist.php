@@ -520,7 +520,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 		<div class="box">
 			<div class="head"><strong><?=$Name?></strong></div>
 			<div style="text-align:center;padding:10px 0px;">
-				<img style="max-width: 220px;" src="<?=$Image?>" alt="<?=$Name?>" onclick="lightbox.init(this,220);" />
+				<img style="max-width: 220px;" src="<?=to_thumbnail($Image)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=$Image?>',220);" />
 			</div>
 		</div>
 <?	} ?>

@@ -121,7 +121,7 @@ if ($WikiImage!="") {
 		$WikiImage = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($WikiImage);
 	}
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=$WikiImage?>" alt="<?=$AltName?>" onclick="lightbox.init(this,220);" /></p>
+			<p align="center"><img style="max-width: 220px;" src="<?=to_thumbnail($WikiImage)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=$WikiImage?>',220);" /></p>
 <?
 } else {
 ?>

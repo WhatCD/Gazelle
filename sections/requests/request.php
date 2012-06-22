@@ -6,6 +6,8 @@
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/class_image_tools.php');
+
 $Text = new TEXT;
 
 if(empty($_GET['id']) || !is_number($_GET['id'])) { 
@@ -115,7 +117,7 @@ if (!empty($Image)) {
 		$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
 	}
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=$Image?>" alt="<?=$FullName?>" onclick="lightbox.init(this,220);" /></p>
+			<p align="center"><img style="max-width: 220px;" src="<?=to_thumbnail($Image)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=$Image?>',220);" /></p>
 <?	} else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID-1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
 <?	} ?>

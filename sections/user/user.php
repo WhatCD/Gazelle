@@ -412,7 +412,7 @@ if (check_perms('users_view_ips',$Class)) {
 
 if (check_perms('users_view_keys',$Class) || $OwnProfile) {
 ?>
-				<li>Passkey: <a href="#" onclick="this.innerHTML='<?=display_str($torrent_pass)?>'; return false;">[view]</a></li>
+				<li>Passkey: <a href="#" onclick="this.innerHTML='<?=display_str($torrent_pass)?>'; return false;">[View]</a></li>
 <? }
 if (check_perms('users_view_invites')) {
 	if (!$InviterID) {
@@ -643,7 +643,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 <?		
 		foreach($RecentSnatches as $RS) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=$RS['WikiImage']?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=to_thumbnail($RS['WikiImage'])?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
 			</td>
 <?		} ?>
 		</tr>
@@ -682,7 +682,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 		<tr>
 <?		foreach($RecentUploads as $RU) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=$RU['WikiImage']?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=to_thumbnail($RU['WikiImage'])?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
 			</td>
 <?		} ?>
 		</tr>
@@ -726,7 +726,7 @@ foreach ($Collages as $CollageInfo) {
 			$Name .= $GroupName;
 ?>
 			<td>
-				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=$C['WikiImage']?>" alt="<?=$Name?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=to_thumbnail($C['WikiImage'])?>" alt="<?=$Name?>" width="107" /></a>
 			</td>
 <?	} ?>
 		</tr>
