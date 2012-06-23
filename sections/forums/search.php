@@ -3,7 +3,8 @@
 /*
 Forums search result page
 */
-
+include(SERVER_ROOT.'/classes/class_text.php');
+$Text = new TEXT;
 
 list($Page,$Limit) = page_limit(POSTS_PER_PAGE);
 
@@ -172,14 +173,15 @@ if (empty($ThreadID)) { ?>
 $Words = explode(' ',  db_string($Search));
 
 if($Type == 'body') {
-
+	
 	$sql = "SELECT SQL_CALC_FOUND_ROWS
 		t.ID,
 		".(!empty($ThreadID) ? "SUBSTRING_INDEX(p.Body, ' ', 40)":"t.Title").",
 		t.ForumID,
 		f.Name,
 		p.AddedTime,
-		p.ID
+		p.ID,
+		p.Body
 		FROM forums_posts AS p
 		JOIN forums_topics AS t ON t.ID=p.TopicID
 		JOIN forums AS f ON f.ID=t.ForumID
@@ -269,7 +271,7 @@ echo $Pages;
 <? }
 
 $Row = 'a'; // For the pretty colours
-while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID) = $DB->next_record()) {
+while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB->next_record()) {
 	$Row = ($Row == 'a') ? 'b' : 'a';
 	// Print results
 ?>
@@ -284,7 +286,7 @@ while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID) = $DB->next_re
 				<?=cut_string($Title, 80); ?>
 <? }
    if ($Type == 'body') { ?>
-				<span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if(!empty($PostID)) { echo '&amp;postid='.$PostID.'#post'.$PostID; } ?>"></a></span>
+				<a href="#" onClick="$('#post_<?=$PostID?>_text').toggle(); return false;">(show)</a> <span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if(!empty($PostID)) { echo '&amp;postid='.$PostID.'#post'.$PostID; } ?>"></a></span>
 <? } ?>
 			</td>
 			<td>
@@ -292,8 +294,12 @@ while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID) = $DB->next_re
 			</td>
 		</tr>
 <?
+	if($Type == 'body') { ?>
+		<tr class="row<?=$Row?> hidden" id="post_<?=$PostID?>_text">
+			<td colspan="3"><?=$Text->full_format($Body)?></td>
+		</tr>
+<?	}
 }
-
 ?>
 	</table>
 

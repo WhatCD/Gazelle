@@ -105,7 +105,23 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 	if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
 		<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Request Update]</a>
 <? } ?>
-	</div>
+
+<?
+//create a search url to worldcat and google based on title
+$encoded_title = urlencode(preg_replace("/\([^\)]+\)/", "", $Title));
+$encoded_artist = substr(str_replace("&amp;","and",$ArtistName), 0, -3);
+$encoded_artist = str_ireplace("Performed By", "", $encoded_artist);
+$encoded_artist = preg_replace("/\([^\)]+\)/", "", $encoded_artist);
+$encoded_artist = urlencode($encoded_artist);
+
+$worldcat_url = "http://worldcat.org/search?q=" . $encoded_artist . " " . $encoded_title;
+$google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . " " . $encoded_title;
+
+?>
+<a href="<? echo $worldcat_url; ?>">[Find in Library]</a>
+<a href="<? echo $google_url; ?>">[Find in Stores]</a>
+
+</div>
 	
 	<div class="sidebar">
 <? if($CategoryID != 0) { ?>
