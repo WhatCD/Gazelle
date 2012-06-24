@@ -61,7 +61,7 @@ function cleanImgurUrl($url) {
 	$path = preg_replace('/\.[^.]*$/', '', $url);
 	$last = $path[strlen($path)-1];
 
-	if($last == 'm' || $last == 'l' || $last == 's' || $last == 'h' || $last == 'b') {
+	if($last == 'm' || $last == 'l' || $last == 's' || $last == 'b') {
 		$path = substr($path, 0, -1);
 	} 
 	return $path . "." . $extension;  
