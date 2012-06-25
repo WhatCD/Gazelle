@@ -408,6 +408,7 @@ function hide() {
 		} 
 ?>
 					</select>
+				<b id="format_warning" style="color:red"></b>
 				</td>
 			</tr>
 			<tr>
