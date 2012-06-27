@@ -41,6 +41,9 @@ switch ($_GET['action']){
 	case 'torrentgroup':
 		require('torrentgroup.php');
 		break;
+	case 'tcomments':
+		require(SERVER_ROOT.'/sections/ajax/tcomments.php');
+		break;
 	case 'user':
 		require(SERVER_ROOT.'/sections/ajax/user.php');
 		break;

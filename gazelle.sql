@@ -1247,7 +1247,8 @@ CREATE TABLE `users_info` (
   KEY `RatioWatchEnds` (`RatioWatchEnds`),
   KEY `RatioWatchDownload` (`RatioWatchDownload`),
   KEY `BitcoinAddress` (`BitcoinAddress`(4)),
-  KEY `BitcoinAddress_2` (`BitcoinAddress`(4))
+  KEY `BitcoinAddress_2` (`BitcoinAddress`(4)),
+  KEY `AuthKey` (`AuthKey`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_levels` (
