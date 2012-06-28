@@ -92,6 +92,12 @@ switch ($_GET['action']){
 	case 'better':
 		require(SERVER_ROOT.'/sections/ajax/better/index.php');
 		break;
+	case 'password_validate':
+                require(SERVER_ROOT.'/sections/ajax/password_validate.php');
+                break;
+	case 'similar_artists':
+                require(SERVER_ROOT.'/sections/ajax/similar_artists.php');
+                break;
 	default:
 		// If they're screwing around with the query string
 		print json_encode(array('status' => 'failure'));

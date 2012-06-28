@@ -801,14 +801,90 @@ if($NumSimilar>0) {
 ?>
 
 		<div id="similar_artist_map" class="box">
-			<div class="head"><strong>Similar artist map</strong></div>
-			<div style="width:<?=WIDTH?>px;height:<?=HEIGHT?>px;position:relative;background-image:url(static/similar/<?=$ArtistID?>.png?t=<?=time()?>)">
+			<div id="flipper_head" class="head">
+			<strong id="flipper_title">Similar Artist Map</strong>
+			<a id="flip_to" href="#null" onclick="flipView();"></a>
+		</div>
+	<div id="flip_view_1" style="display:block;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;position:relative;background-image:url(static/similar/<?=$ArtistID?>.png?t=<?=time()?>)">
 <?
 	$Similar->write_artists();
 ?>
-			</div>
-		</div>
-<? } // if $NumSimilar>0 ?> 
+	</div>
+
+
+
+<? } // if $NumSimilar>0 
+
+if($NumSimilar>0) { ?>
+
+<div id="flip_view_2" style="display:none;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;">
+<canvas width="<?=WIDTH?>px" height="<?=HEIGHT-20?>px" id="similarArtistsCanvas"></canvas>
+<div id="artistTags" style="display:none;">
+<ul/>
+</div>
+<strong style="margin-left:10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
+</div>
+</div>
+
+
+<script>
+var cloudLoaded = false;
+
+function flipView() {
+        var state = document.getElementById('flip_view_1').style.display == 'block';
+
+        if(state) {
+
+        document.getElementById('flip_view_1').style.display='none';
+        document.getElementById('flip_view_2').style.display='block';
+        document.getElementById('flipper_title').innerHTML = 'Similar Artist Cloud';
+        document.getElementById('flip_to').innerHTML = ' [Switch to Map]';
+
+        if(!cloudLoaded) {
+                require("static/functions/jquery.js", function () {
+			  require("static/functions/tagcanvas.js", function () {
+		  	  	require("static/functions/artist_cloud.js", function () {
+	                	});
+			});
+		});
+                cloudLoaded = true;
+        }
+
+        }
+        else {
+
+        document.getElementById('flip_view_1').style.display='block';
+        document.getElementById('flip_view_2').style.display='none';
+        document.getElementById('flipper_title').innerHTML = 'Similar Artist Map';
+        document.getElementById('flip_to').innerHTML = ' [Switch to Cloud]';
+
+        }
+}
+
+//TODO move this to global, perhaps it will be used elsewhere in the future
+//http://stackoverflow.com/questions/7293344/load-javascript-dynamically
+function require(file, callback) {
+   var script = document.getElementsByTagName('script')[0],
+   newjs = document.createElement('script');
+
+  // IE
+  newjs.onreadystatechange = function () {
+     if (newjs.readyState === 'loaded' || newjs.readyState === 'complete') {
+        newjs.onreadystatechange = null;
+        callback();
+     }
+  };
+  // others
+  newjs.onload = function () {
+     callback();
+  };
+  newjs.src = file;
+  script.parentNode.insertBefore(newjs, script);
+}
+
+</script>
+
+<? } ?>
 		<div class="box">
 			<div class="head"><strong>Artist info</strong></div>
 			<div class="body"><?=$Text->full_format($Body)?></div>

@@ -10,7 +10,7 @@ And join <?=BOT_DISABLED_CHAN?><br /><br />
 Be honest - at this point, lying will get you nowhere.<br /><br/><br/>
 </p>
 
-<strong>Before joining the disabled channel please read our <br/> "Golden Rules"  which can be found <a style="color:#1464F4;" href="#" onclick="toggle_visibility('golden_rules')">here.</a></strong> <br/><br/>
+<strong>Before joining the disabled channel please read our <br/> <span style="color:gold;">Golden Rules</span> which can be found <a style="color:#1464F4;" href="#" onclick="toggle_visibility('golden_rules')">here.</a></strong> <br/><br/>
 
 <script type="text/javascript">
     function toggle_visibility(id) {
