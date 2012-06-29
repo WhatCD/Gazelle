@@ -1,6 +1,7 @@
 <?php
 
 $artist_id = $_GET["id"];
+$artist_limit = $_GET["limit"];
 
 $DB->query("
                         SELECT
@@ -13,7 +14,7 @@ $DB->query("
                         JOIN artists_group AS ag ON ag.ArtistID=s2.ArtistID
                         WHERE s1.ArtistID=".$artist_id."
                         ORDER BY ass.Score DESC
-                        LIMIT 14");
+                        LIMIT $artist_limit");
 
 		
 		while(list($ArtistID, $Name, $Score) = $DB->next_record(MYSQLI_NUM, false)){

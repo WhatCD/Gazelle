@@ -1,5 +1,6 @@
 (function($) {
 
+var LIMIT = 10;
 var artistId, artistName;
 var artistTags;
  $(document).ready(function() {
@@ -17,11 +18,17 @@ function initArtistCloud() {
 
 
 function loadArtists() {
-	$.getJSON('ajax.php?action=similar_artists&id='+artistId, function(data) {
-		var items = [];
-
-  		$.each(data, function(key, val) {
-			addArtist(val['id'], val['name'], val['score']);
+	$.getJSON('ajax.php?action=similar_artists&id='+artistId+'&limit='+LIMIT, function(data) {
+		var first = true;
+  		var ratio;
+		$.each(data, function(key, val) {
+			if(first) {
+				ratio = val['score'] / 300;
+				first = false;
+			}
+			var score = val['score'] / ratio;
+			score = score <= 150 ? 150 : score;
+			addArtist(val['id'], val['name'], score);
   		});
 
 	createCloud();
@@ -30,8 +37,7 @@ function loadArtists() {
 }
 
 function addArtist(id, name, score) {
-	 var item = $('<li><a data-weight="' + score + '">' + name + '</a></li>');
-//	 var item = $('<li><a class="green large">' + name + '</a></li>');
+	 var item = $('<li><a style="color:#007DC6;" data-weight="' + score + '">' + name + '</a></li>');
 
 
         $(item).click(function(e) {
@@ -44,10 +50,8 @@ function addArtist(id, name, score) {
 }
 
 function addArtistMain(name) {
-        var item = $('<li><a data-weight="350">' + name + '</a></li>');
-	
-//   var item = $('<li><a class="red large">' + name + '</a></li>');
-	
+        var item = $('<li><a style="color:#007DC6;" data-weight="350">' + name + '</a></li>');
+		
 	$("#currentArtist").attr('href', 'artist.php?id=' + artistId);
 	$("#currentArtist").text(artistName);
 	

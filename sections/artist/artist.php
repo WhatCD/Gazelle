@@ -803,7 +803,7 @@ if($NumSimilar>0) {
 		<div id="similar_artist_map" class="box">
 			<div id="flipper_head" class="head">
 			<strong id="flipper_title">Similar Artist Map</strong>
-			<a id="flip_to" href="#null" onclick="flipView();"></a>
+			<a id="flip_to" href="#null" onclick="flipView();"> [Switch to Cloud]</a>
 		</div>
 	<div id="flip_view_1" style="display:block;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;position:relative;background-image:url(static/similar/<?=$ArtistID?>.png?t=<?=time()?>)">
 <?
