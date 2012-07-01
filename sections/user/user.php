@@ -10,7 +10,6 @@ if (empty($_GET['id']) || !is_numeric($_GET['id'])) { error(0); }
 $UserID = $_GET['id'];
 
 
-
 if($UserID == $LoggedUser['ID']) { 
 	$OwnProfile = true;
 } else { 
