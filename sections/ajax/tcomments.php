@@ -62,6 +62,7 @@ foreach ($Thread as $Key => $Post) {
 	$JsonComments[] = array(
 		'postId' => (int) $PostID,
 		'addedTime' => $AddedTime,
+		'bbBody' => $Body,
 		'body' => $Text->full_format($Body),
 		'editedUserId' => (int) $EditedUserID,
 		'editedTime' => $EditedTime,

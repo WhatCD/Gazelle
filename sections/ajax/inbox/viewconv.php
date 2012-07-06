@@ -71,6 +71,7 @@ while(list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) {
 		'senderId' => (int) $SenderID,
 		'senderName' => $Users[(int)$SenderID]['Username'],
 		'sentDate' => $SentDate,
+		'bbBody' => $Body,
 		'body' => $Text->full_format($Body)
 	);
 	$JsonMessages[] = $JsonMessage;

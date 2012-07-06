@@ -221,6 +221,7 @@ foreach ($Thread as $Key => $Post) {
 	$JsonPosts[] = array(
 		'postId' => (int) $PostID,
 		'addedTime' => $AddedTime,
+		'bbBody' => $Body,
 		'body' => $Text->full_format($Body),
 		'editedUserId' => (int) $EditedUserID,
 		'editedTime' => $EditedTime,

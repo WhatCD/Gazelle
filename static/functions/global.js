@@ -8,11 +8,23 @@ function toggleChecks(formElem,masterElem) {
 }
 
 //Lightbox stuff
+
+/* 
+ *  If loading from a thumbnail the lightbox is shown first with a "loading" screen
+ *  while the full size image loads, then the html of the lightbox is replaced with the image.
+ */ 
+
 var lightbox = {
 	init: function (image, size) {
 		if(typeof(image)=='string') {
+			$('#lightbox').show().listen('click',lightbox.unbox).raw().innerHTML = 
+				'<p size="7" style="color:gray;font-size:50px">Loading...<p>';
+                        $('#curtain').show().listen('click',lightbox.unbox);
                         var src = image;
                         image = new Image();
+			image.onload = function() {
+				lightbox.box_async(image);
+			}
                         image.src = src;
                 }
 		if (image.naturalWidth === undefined) {
@@ -36,6 +48,15 @@ var lightbox = {
 			$('#curtain').show().listen('click',lightbox.unbox);
 		}
 	},
+	box_async: function (image) {
+                var hasA = false;
+                if(image.parentNode != null && image.parentNode.tagName.toUpperCase() == 'A') {
+                        hasA = true;
+                }
+                if(!hasA) {
+                         $('#lightbox').raw().innerHTML = '<img src="' + image.src + '" />';
+                }
+        },
 	unbox: function (data) {
 		$('#curtain').hide();
 		$('#lightbox').hide().raw().innerHTML = '';

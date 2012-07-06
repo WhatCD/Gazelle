@@ -47,6 +47,32 @@ if (check_perms('site_torrents_notify')) {
         }
 }
 
+// News
+$MyNews = $LoggedUser['LastReadNews'];
+$CurrentNews = $Cache->get_value('news_latest_id');
+if ($CurrentNews === false) {
+	$DB->query("SELECT ID FROM news ORDER BY Time DESC LIMIT 1");
+	if ($DB->record_count() == 1) {
+		list($CurrentNews) = $DB->next_record();
+	} else {
+		$CurrentNews = -1;
+	}
+	$Cache->cache_value('news_latest_id', $CurrentNews, 0);
+}
+
+// Blog
+$MyBlog = $LoggedUser['LastReadBlog'];
+$CurrentBlog = $Cache->get_value('blog_latest_id');
+if ($CurrentBlog === false) {
+	$DB->query("SELECT ID FROM blog WHERE Important = 1 ORDER BY Time DESC LIMIT 1");
+	if ($DB->record_count() == 1) {
+		list($CurrentBlog) = $DB->next_record();
+	} else {
+		$CurrentBlog = -1;
+	}
+	$Cache->cache_value('blog_latest_id', $CurrentBlog, 0);
+}
+
 print json_encode(
 	array(
 		'status' => 'success',
@@ -57,7 +83,9 @@ print json_encode(
 			'passkey'=> $LoggedUser['torrent_pass'],
 			'notifications' => array(
 				'messages'=> (int) $NewMessages,
-				'notifications' => (int) $NewNotifications
+				'notifications' => (int) $NewNotifications,
+				'newAnnouncement' => $MyNews < $CurrentNews,
+				'newBlog' => $MyBlog < $CurrentBlog
 			),
 			'userstats' => array(
 				'uploaded' => (int) $LoggedUser['BytesUploaded'],
@@ -65,7 +93,7 @@ print json_encode(
 				'ratio' => (float) $Ratio,
 				'requiredratio' => (float) $LoggedUser['RequiredRatio'],
 				'class' => $ClassLevels[$LoggedUser['Class']]['Name']
-			),
+			)
 		)
 	)
 );
