@@ -1,6 +1,5 @@
 <?
 
-authorize();
 
 if(isset($_GET['details'])) {
 	if(in_array($_GET['details'], array('day','week','overall','snatched','data','seeded'))) {

@@ -1,6 +1,5 @@
 <?
 
-authorize(true);
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 include(SERVER_ROOT.'/sections/torrents/functions.php');

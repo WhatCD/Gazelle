@@ -1,9 +1,6 @@
 <?
-//no authorization because this page needs to be accessed to get the authkey
 
-//authorize(true);
-
-//calculate ratio --Gwindow
+//calculate ratio
 //returns 0 for DNE and -1 for infiinity, because we dont want strings being returned for a numeric value in our java
 $Ratio = 0;
 if($LoggedUser['BytesUploaded'] == 0 && $LoggedUser['BytesDownloaded'] == 0) {

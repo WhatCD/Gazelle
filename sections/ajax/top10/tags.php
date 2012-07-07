@@ -1,6 +1,5 @@
 <?
 
-authorize();
 
 // error out on invalid requests (before caching)
 if(isset($_GET['details'])) {

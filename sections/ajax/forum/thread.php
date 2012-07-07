@@ -1,6 +1,5 @@
 <?
 
-authorize(true);
 
 //TODO: Normalize thread_*_info don't need to waste all that ram on things that are already in other caches
 /**********|| Page to show individual threads || ********************************\

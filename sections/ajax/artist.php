@@ -1,5 +1,4 @@
 <?
-authorize(true);
 
 //For sorting tags
 function compare($X, $Y){

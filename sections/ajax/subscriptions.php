@@ -1,6 +1,5 @@
 <?
 
-authorize(true);
 
 /*
 User topic subscription page

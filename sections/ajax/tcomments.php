@@ -1,6 +1,5 @@
 <?
 
-authorize(true);
 
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;

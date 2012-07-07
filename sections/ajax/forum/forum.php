@@ -1,6 +1,5 @@
 <?
 
-authorize(true);
 
 /**********|| Page to show individual forums || ********************************\
 

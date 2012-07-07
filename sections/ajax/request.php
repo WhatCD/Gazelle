@@ -1,6 +1,5 @@
 <?
 
-authorize(true);
 
 $RequestTax = 0.1;
 

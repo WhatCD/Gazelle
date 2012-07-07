@@ -1,8 +1,5 @@
 <?php
 
-
-authorize(true);  
-
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 

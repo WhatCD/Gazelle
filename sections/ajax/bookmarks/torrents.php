@@ -2,7 +2,6 @@
 ini_set('memory_limit', -1);
 //~~~~~~~~~~~ Main bookmarks page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-authorize(true);
 
 function compare($X, $Y){
 	return($Y['count'] - $X['count']);

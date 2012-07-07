@@ -1,6 +1,5 @@
 <?
 
-authorize(true);
 
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];

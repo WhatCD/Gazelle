@@ -1,6 +1,5 @@
 <?
 
-authorize(true);
 
 if(!check_perms('site_torrents_notify')) {
 	print
