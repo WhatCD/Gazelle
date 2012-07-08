@@ -50,6 +50,9 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 	if(!preg_match("/^".IMAGE_REGEX."$/i", $Image)) {
 		$Image = '';
 	}
+    if(strpos($Image, 'tinypic') || strpos($Image, 'dsimg')) {
+      error($Image . " This image host is not allowed");
+    }
 	$Summary = db_string($_POST['summary']);
 }
 

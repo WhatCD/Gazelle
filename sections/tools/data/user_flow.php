@@ -97,9 +97,9 @@ $RS = $DB->query("SELECT
 		LIMIT $Limit");
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
-$DB->set_query_id($RS);
 
 show_header('User Flow');
+$DB->set_query_id($RS);
 ?>
 <div class="thin">
 <? if(!isset($_GET['page'])) { ?>

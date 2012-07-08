@@ -73,7 +73,7 @@ if(!empty($_GET['threadid'])) {
 }
 
 // Let's hope we got some results - start printing out the content.
-show_header('Forums'.' > '.'Search');
+show_header('Forums'.' > '.'Search', 'bbcode');
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; Search<?=$Title?></h2>

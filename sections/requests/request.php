@@ -281,7 +281,7 @@ if (!empty($Image)) {
 				<td>
 					<?=time_diff($TimeAdded)?>	by  <strong><?=format_username($RequestorID, false, false, false)?></strong>
 				</td>
-			</tr>
+			</tr>			
 <?	if($CategoryName == "Music") {
 		if(!empty($RecordLabel)) { ?>
 			<tr>
@@ -372,6 +372,14 @@ if (!empty($Image)) {
 <?	} ?> 
 				</td>
 			</tr>
+<?	if ($LastVote > $TimeAdded) { ?>
+			<tr>
+				<td class="label">Last Voted</td>
+				<td>
+					<?=time_diff($LastVote)?>
+				</td>
+			</tr>
+<?	} ?>		
 <?	if($CanVote) { ?>
 			<tr id="voting">
 				<td class="label">Custom Vote (MB)</td>
