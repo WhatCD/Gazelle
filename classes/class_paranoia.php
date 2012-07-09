@@ -37,14 +37,16 @@
  * @param $Paranoia The paranoia level to check against.
  * @param $UserClass The user class to check against (Staff can see through paranoia of lower classed staff)
  * @param $UserID Optional. The user ID of the person being viewed
- * @return Boolean representing whether the current user can see through the paranoia setting
+ * @return mixed   1 representing the user has normal access
+				   2 representing that the paranoia was overridden,
+				   false representing access denied.
  */
 
+define("PARANOIA_ALLOWED", 1);
+define("PARANOIA_OVERRIDDEN", 2);
+ 
 function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
 	global $LoggedUser, $Classes;
-	if(check_perms('users_override_paranoia', $UserClass)) {
-		return true;
-	}
 	if ($Property == false) {
 		return false;
 	}
@@ -60,29 +62,39 @@ function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
 		return $all;
 	} else {
 		if(($UserID !== false) && ($LoggedUser['ID'] == $UserID)) {
-			return true;
+			return PARANOIA_ALLOWED;
 		}
 
 		$May = !in_array($Property, $Paranoia) && !in_array($Property . '+', $Paranoia);
+		if($May)
+			return PARANOIA_ALLOWED;
+			
+		if(check_perms('users_override_paranoia', $UserClass)) 
+			return PARANOIA_OVERRIDDEN;
+		$Override=false;
 		switch ($Property) {
 			case 'downloaded':
 			case 'ratio':
 			case 'uploaded':
 			case 'lastseen':
-				$May = $May || check_perms('users_mod', $UserClass);
+				if(check_perms('users_mod', $UserClass))
+					return PARANOIA_OVERRIDDEN;	
 				break;
 			case 'snatched': case 'snatched+':
-				$May = $May || check_perms('site_view_torrent_snatchlist', $UserClass);
+				if(check_perms('users_view_torrents_snatchlist', $UserClass)) 
+					return PARANOIA_OVERRIDDEN;
 				break;
 			case 'uploads': case 'uploads+':
 			case 'seeding': case 'seeding+':
 			case 'leeching': case 'leeching+':
-				$May = $May || check_perms('users_view_seedleech', $UserClass);
+				if(check_perms('users_view_seedleech', $UserClass)) 
+					return PARANOIA_OVERRIDDEN;
 				break;
 			case 'invitedcount':
-				$May = $May || check_perms('users_view_invites', $UserClass);
+				if(check_perms('users_view_invites', $UserClass)) 
+					return PARANOIA_OVERRIDDEN;
 				break;
 		}
-		return $May;
+		return false;
 	}
 }

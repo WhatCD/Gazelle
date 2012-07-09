@@ -6,10 +6,10 @@ $Text = new TEXT;
 include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_image_tools.php');
 
-if (empty($_GET['id']) || !is_numeric($_GET['id'])) { error(0); }
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) 
+	error(0); 
+	
 $UserID = $_GET['id'];
-
-
 if($UserID == $LoggedUser['ID']) { 
 	$OwnProfile = true;
 } else { 
@@ -213,23 +213,23 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 			<div class="head colhead_dark">Stats</div>
 			<ul class="stats nobullet">
 				<li>Joined: <?=$JoinedDate?></li>
-<? if (check_paranoia_here('lastseen')) { ?>
-				<li>Last Seen: <?=$LastAccess?></li>
+<? if (($Override = check_paranoia_here('lastseen'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Last Seen: <?=$LastAccess?></li>
 <? } ?>
-<? if (check_paranoia_here('uploaded')) { ?>
-				<li>Uploaded: <?=get_size($Uploaded)?></li>
+<? if (($Override=check_paranoia_here('uploaded'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Uploaded: <?=get_size($Uploaded)?></li>
 <? } ?>
-<? if (check_paranoia_here('downloaded')) { ?>
-				<li>Downloaded: <?=get_size($Downloaded)?></li>
+<? if (($Override=check_paranoia_here('downloaded'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Downloaded: <?=get_size($Downloaded)?></li>
 <? } ?>
-<? if (check_paranoia_here('ratio')) { ?>
-				<li>Ratio: <?=ratio($Uploaded, $Downloaded)?></li>
+<? if (($Override=check_paranoia_here('ratio'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Ratio: <?=ratio($Uploaded, $Downloaded)?></li>
 <? } ?>
-<? if (check_paranoia_here('requiredratio') && isset($RequiredRatio)) { ?>
-				<li>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
+<? if (($Override=check_paranoia_here('requiredratio')) && isset($RequiredRatio)) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
 <? } ?>
-<? if ($OwnProfile || check_paranoia_here(false)) { //if ($OwnProfile || check_perms('users_mod')) { ?>
-				<li><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
+<? if ($OwnProfile || ($Override=check_paranoia_here(false))) { //if ($OwnProfile || check_perms('users_mod')) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> ><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <? } ?>
 			</ul>
 		</div>
@@ -287,24 +287,24 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 		<div class="box">
 			<div class="head colhead_dark">Percentile Rankings (Hover for values)</div>
 			<ul class="stats nobullet">
-<? if (check_paranoia_here('uploaded')) { ?>
-				<li title="<?=get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
+<? if (($Override=check_paranoia_here('uploaded'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
 <? } ?>
-<? if (check_paranoia_here('downloaded')) { ?>
-				<li title="<?=get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
+<? if (($Override=check_paranoia_here('downloaded'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
 <? } ?>
-<? if (check_paranoia_here('uploads+')) { ?>
-				<li title="<?=$Uploads?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
+<? if (($Override=check_paranoia_here('uploads+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=$Uploads?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
 <? } ?>
-<? if (check_paranoia_here('requestsfilled_count')) { ?>
-				<li title="<?=$RequestsFilled?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
+<? if (($Override=check_paranoia_here('requestsfilled_count'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=$RequestsFilled?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
 <? } ?>
-<? if (check_paranoia_here('requestsvoted_bounty')) { ?>
-				<li title="<?=get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
+<? if (($Override=check_paranoia_here('requestsvoted_bounty'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
 <? } ?>
 				<li title="<?=$ForumPosts?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
-<? if (check_paranoia_here('artistsadded')) { ?>
-				<li title="<?=$ArtistsAdded?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
+<? if (($Override=check_paranoia_here('artistsadded'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=$ArtistsAdded?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
 <? } ?>
 <? if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfilled_count', 'requestsvoted_bounty', 'artistsadded'))) { ?>
 				<li><strong>Overall rank: <?=$OverallRank === false ? 'Server busy' : number_format($OverallRank)?></strong></li>
@@ -439,9 +439,9 @@ if (!isset($SupportFor)) {
 	$DB->query("SELECT SupportFor FROM users_info WHERE UserID = ".$LoggedUser['ID']);
 	list($SupportFor) = $DB->next_record();
 }
-if (check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
+if ($Override=check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
 	?>
-		<li>Clients: <?
+		<li <?= $Override===2 || $SupportFor ? 'class="paranoia_override"' : ''?>>Clients: <?
 		$DB->query("SELECT DISTINCT useragent FROM xbt_files_users WHERE uid = ".$UserID);
 		while(list($Client) = $DB->next_record()) {
 			if (strlen($Clients) > 0) {
@@ -483,55 +483,88 @@ list($PerfectFLACs) = $DB->next_record();
 			<div class="head colhead_dark">Community</div>
 			<ul class="stats nobullet">
 				<li>Forum Posts: <?=number_format($ForumPosts)?> [<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>" title="View">View</a>]</li>
-<? if (check_paranoia_here('torrentcomments')) { ?>
-				<li>Torrent Comments: <?=number_format($NumComments)?> [<a href="comments.php?id=<?=$UserID?>" title="View">View</a>]</li>
-<? } elseif (check_paranoia_here('torrentcomments+')) { ?>
-				<li>Torrent Comments: <?=number_format($NumComments)?></li>
-<? } ?>
-<? if (check_paranoia_here('collages')) { ?>
-				<li>Collages started: <?=number_format($NumCollages)?> [<a href="collages.php?userid=<?=$UserID?>" title="View">View</a>]</li>
-<? } elseif (check_paranoia_here('collages+')) { ?>
-				<li>Collages started: <?=number_format($NumCollages)?></li>
-<? } ?>
-<? if (check_paranoia_here('collagecontribs')) { ?>
-				<li>Collages contributed to: <?=number_format($NumCollageContribs)?> [<a href="collages.php?userid=<?=$UserID?>&amp;contrib=1" title="View">View</a>]</li>
-<? } elseif(check_paranoia_here('collagecontribs+')) { ?>
-				<li>Collages contributed to: <?=number_format($NumCollageContribs)?></li>
-<? } ?>
-<? if (check_paranoia_here('requestsfilled_list')) { ?>
-				<li>Requests filled: <?=number_format($RequestsFilled)?> for <?=get_size($TotalBounty)?> [<a href="requests.php?type=filled&amp;userid=<?=$UserID?>" title="View">View</a>]</li>
-<? } elseif (check_paranoia_here(array('requestsfilled_count', 'requestsfilled_bounty'))) { ?>
-				<li>Requests filled: <?=number_format($RequestsFilled)?> for <?=get_size($TotalBounty)?></li>
-<? } elseif (check_paranoia_here('requestsfilled_count')) { ?>
+<? if (($Override=check_paranoia_here('torrentcomments+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Torrent Comments: <?=number_format($NumComments)?>
+					<? if($Override=check_paranoia_here('torrentcomments')) { ?>[<a href="comments.php?id=<?=$UserID?>" <?= $Override===2 ? 'class="paranoia_override"' 
+																																		 : '' 
+																				?> title="View">View</a>] 
+																		 <? } ?>
+				</li>
+<? }
+   if (($Override=check_paranoia_here('collages+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Collages started: <?=number_format($NumCollages)?> 
+					<? if(($Override=check_paranoia_here('collages'))) { ?>[<a <?= ($Override===2) ? 'class="paranoia_override'
+																							  :'' ?> 
+																		href="collages.php?userid=<?=$UserID?>" title="View">View</a>] 
+																	<? } ?>
+				</li>
+<? }
+   if (($Override=check_paranoia_here('collagecontribs+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Collages contributed to: <? echo number_format($NumCollageContribs); 
+																				if (($Override=check_paranoia_here('collagecontribs'))) { 
+																						?> [<a <?= ($Override===2) ? 
+																							'class="paranoia_override"'  : ''?> href="collages.php?userid=<?=$UserID?>&amp;contrib=1" title="View">View</a>]
+																			 <? } ?>
+				</li>
+<? }
+
+//Let's see if we can view requests because of reasons
+$ViewAll     = check_paranoia_here('requestsfilled_list');
+$ViewCount   = check_paranoia_here('requestsfilled_count');
+$ViewBounty  = check_paranoia_here('requestsfilled_bounty');
+
+   if ($ViewCount && !$ViewBounty && !$ViewAll) { ?>
 				<li>Requests filled: <?=number_format($RequestsFilled)?></li>
-<? } elseif (check_paranoia_here('requestsfilled_bounty')) { ?>
-				<li>Requests filled: <?=get_size($TotalBounty)?> collected</li>
-<? } ?>
-<? if (check_paranoia_here('requestsvoted_list')) { ?>
-				<li>Requests voted: <?=number_format($RequestsVoted)?> for <?=get_size($TotalSpent)?> [<a href="requests.php?type=voted&amp;userid=<?=$UserID?>" title="View">View</a>]</li>
-<? } elseif (check_paranoia_here(array('requestsvoted_count', 'requestsvoted_bounty'))) { ?>
-				<li>Requests voted: <?=number_format($RequestsVoted)?> for <?=get_size($TotalSpent)?></li>
-<? } elseif (check_paranoia_here('requestsvoted_count')) { ?>
+<? } elseif(!$ViewCount && $ViewBounty && !$ViewAll) { ?>
+				<li>Requests voted: <?=get_size($TotalSpent)?> collected</li>
+<? } elseif($ViewCount && $ViewBounty && !$ViewAll) { ?>
+				<li>Requests filled: <?=number_format($RequestsFilled)?> for <?=get_size($TotalBounty)?></li>
+<? } elseif($ViewAll) { ?>
+				<li>
+					<span <?= ($ViewCount===2) ? 'class="paranoia_override"' : ''?> >Requests filled: <?=number_format($RequestsFilled)?> </span>
+					<span <?= ($ViewBounty===2) ? 'class="paranoia_override"' : ''?>> for <?=get_size($TotalBounty) ?> </span> 
+					[<a href="requests.php?type=filled&amp;userid=<?=$UserID?>" <?= ($ViewAll===2) ? 'class="paranoia_override"' : ''?> title="View">View</a>]
+				</li>
+<? } 
+
+//Let's see if we can view requests because of reasons
+$ViewAll     = check_paranoia_here('requestsvoted_list');
+$ViewCount   = check_paranoia_here('requestsvoted_count');
+$ViewBounty  = check_paranoia_here('requestsvoted_bounty');
+
+   if ($ViewCount && !$ViewBounty && !$ViewAll) { ?>
 				<li>Requests voted: <?=number_format($RequestsVoted)?></li>
-<? } elseif (check_paranoia_here('requestsvoted_bounty')) { ?>
+<? } elseif(!$ViewCount && $ViewBounty && !$ViewAll) { ?>
 				<li>Requests voted: <?=get_size($TotalSpent)?> spent</li>
-<? } ?>
-<? if (check_paranoia_here('uploads')) { ?>
-				<li>Uploaded: <?=number_format($Uploads)?> [<a href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>" title="View">View</a>]<? if(check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=uploads&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]<? } ?></li>
-<? } elseif (check_paranoia_here('uploads+')) { ?>
-				<li>Uploaded: <?=number_format($Uploads)?></li>
-<? } ?>
-<? if (check_paranoia_here('uniquegroups')) { ?>
-				<li>Unique Groups: <?=number_format($UniqueGroups)?> [<a href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>&amp;filter=uniquegroup">View</a>]</li>
-<? } elseif (check_paranoia_here('uniquegroups+')) { ?>
-				<li>Unique Groups: <?=number_format($UniqueGroups)?></li>
-<? } ?>
-<? if (check_paranoia_here('perfectflacs')) { ?>
-				<li>"Perfect" FLACs: <?=number_format($PerfectFLACs)?> [<a href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>&amp;filter=perfectflac">View</a>]</li>
-<? } elseif (check_paranoia_here('perfectflacs+')) { ?>
-				<li>"Perfect" FLACs: <?=number_format($PerfectFLACs)?></li>
-<? } ?>
-<?
+<? } elseif($ViewCount && $ViewBounty && !$ViewAll) { ?>
+				<li>Requests voted: <?=number_format($RequestsVoted)?> for <?=get_size($TotalSpent)?></li>
+<? } elseif($ViewAll) { ?>
+				<li>
+					<span <?= ($ViewCount===2) ? 'class="paranoia_override"' : ''?> >Requests voted: <?=number_format($RequestsVoted)?> </span>
+					<span <?= ($ViewBounty===2) ? 'class="paranoia_override"' : ''?>> for <?=get_size($TotalSpent)?> </span> 
+					[<a href="requests.php?type=voted&amp;userid=<?=$UserID?>" <?= ($ViewAll===2) ? 'class="paranoia_override"' : ''?> title="View">View</a>]
+				</li>
+<? } 
+   if (($Override=check_paranoia_here('uploads+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Uploaded: <?=number_format($Uploads)?> 
+					<? if(($Override=check_paranoia_here('uploads'))) { ?>[<a <?= $Override===2 ? 'class="paranoia_override"' :'' ?> href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>" title="View">View</a>]<? } if(check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=uploads&amp;userid=<?=$UserID?>" 
+																																																			onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]<? } ?>
+				</li>
+<? }
+   if (($Override=check_paranoia_here('uniquegroups+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >
+					Unique Groups: <?echo number_format($UniqueGroups); 
+									if(($Override=check_paranoia_here('uniquegroups'))) {?> 
+										[<a <?= $Override===2 ? 'class="paranoia_override"' :'' ?> href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>&amp;filter=uniquegroup">View</a>]
+									<?}?>
+				</li>
+<? }
+   if (($Override=check_paranoia_here('perfectflacs+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >"Perfect" FLACs: <?echo number_format($PerfectFLACs);
+				   if (($Override=check_paranoia_here('perfectflacs'))) { ?>
+					[<a <?= $Override===2 ? 'class="paranoia_override"' :'' ?> href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>&amp;filter=perfectflac">View</a>]</li>
+<? 				}
+   }
 
 if (check_paranoia_here('seeding+') || check_paranoia_here('leeching+')) {
 	$DB->query("SELECT IF(remaining=0,'Seeding','Leeching') AS Type, COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.active=1 GROUP BY Type");
@@ -540,37 +573,46 @@ if (check_paranoia_here('seeding+') || check_paranoia_here('leeching+')) {
 	$Leeching = isset($PeerCount['Leeching'][1]) ? $PeerCount['Leeching'][1] : 0;
 }
 ?>
-<? if (check_paranoia_here('seeding')) { ?>
-				<li>Seeding: <?=number_format($Seeding)?> <?=(check_paranoia_here('snatched') && $Snatched )?'(' . 100*min(1,round($Seeding/$UniqueSnatched,2)).'%) ':''?>[<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" title="View">View</a>]<? if (check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]<? } ?></li>
-<? } elseif (check_paranoia_here('seeding+')) { ?>
-				<li>Seeding: <?=number_format($Seeding)?></li>
-<? } ?>
-<? if (check_paranoia_here('leeching')) { ?>
-				<li>Leeching: <?=number_format($Leeching)?> [<a href="torrents.php?type=leeching&amp;userid=<?=$UserID?>" title="View">View</a>]<?=($DisableLeech == 0 && check_perms('users_view_ips')) ? "<strong> (Disabled)</strong>" : ""?></li>
-<? } elseif (check_paranoia_here('leeching+')) { ?>
-				<li>Leeching: <?=number_format($Leeching)?></li>
+<? if (($Override=check_paranoia_here('seeding+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Seeding: <?=number_format($Seeding)?> <?
+					if(($AOverride=check_paranoia_here('seeding'))) {
+						echo (($Override=check_paranoia_here('snatched')) && $Snatched )? '<span style="' .($Override===2 ? 'class="paranoia_override" ' : '').'"(' . 100*min(1,round($Seeding/$UniqueSnatched,2)).'%)</span> ':''?>
+						[<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" <?= $AOverride===2 ? 'class="paranoia_override"' :'' ?> title="View">View</a>]
+						<? if (check_perms('zip_downloader')) { ?> 
+							[<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]
+						<? } ?>
+					<?} ?>
+				</li>
+<? }
+   if (($Override=check_paranoia_here('leeching+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Leeching: <? echo number_format($Leeching); 
+				if(($Override=check_paranoia_here('leeching'))) { ?>
+					[<a <?= $Override===2 ? 'class="paranoia_override"' : ''?> href="torrents.php?type=leeching&amp;userid=<?=$UserID?>" title="View">View</a>] 
+				<? } 
+					echo ($DisableLeech == 0 && check_perms('users_view_ips')) ? "<strong> (Disabled)</strong>" : ""?>
+				</li>
 <? } 
 ?>
-<? if (check_paranoia_here('snatched+')) { ?>
-				<li>Snatched: <?=number_format($Snatched)?> 
-<? 	if(check_perms('site_view_torrent_snatchlist', $Class)) { ?>
-					(<?=number_format($UniqueSnatched)?>)
+<? if (($Override=check_paranoia_here('snatched+'))) { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Snatched: <?=number_format($Snatched)?> 
+<? 	if(($Override=check_perms('site_view_torrent_snatchlist', $Class))) { ?>
+					(<?= $Override === 2 ? '<span class="paranoia_override >"'.number_format($UniqueSnatched).'</span>' :	number_format($UniqueSnatched) ?>)
 <?	} ?>
 <? } ?>
-<? if (check_paranoia_here('snatched')) { ?>
-				[<a href="torrents.php?type=snatched&amp;userid=<?=$UserID?>" title="View">View</a>]<? if(check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=snatches&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]<? } ?>
+<? if (($Override=check_paranoia_here('snatched'))) { ?>
+				[<a href="torrents.php?type=snatched&amp;userid=<?=$UserID?>" <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="View">View</a>]<? if(check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=snatches&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]<? } ?>
  				</li>
 <? }
 
-if(check_perms('site_view_torrent_snatchlist', $Class)) {
+if(($Override=check_perms('site_view_torrent_snatchlist', $Class))) {
 	$DB->query("SELECT COUNT(ud.UserID), COUNT(DISTINCT ud.TorrentID) FROM users_downloads AS ud INNER JOIN torrents AS t ON t.ID=ud.TorrentID WHERE ud.UserID='$UserID'");
 	list($NumDownloads, $UniqueDownloads) = $DB->next_record();
 ?>
-				<li>Downloaded: <?=number_format($NumDownloads)?> (<?=number_format($UniqueDownloads)?>) [<a href="torrents.php?type=downloaded&amp;userid=<?=$UserID?>" title="View">View</a>]</li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Downloaded: <?=number_format($NumDownloads)?> (<?=number_format($UniqueDownloads)?>) [<a href="torrents.php?type=downloaded&amp;userid=<?=$UserID?>" title="View">View</a>]</li>
 <?
 }
 
-if(check_paranoia_here('invitedcount')) {
+if(($Override=check_paranoia_here('invitedcount'))) {
 	$DB->query("SELECT COUNT(UserID) FROM users_info WHERE Inviter='$UserID'");
 	list($Invited) = $DB->next_record();
 ?>
