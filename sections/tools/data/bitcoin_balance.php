@@ -7,7 +7,8 @@ show_header('Bitcoin donation balance');
 
 $Balance = btc_balance() . " BTC";
 $Receiveds = btc_received();
-$DB->query("SELECT i.UserID, i.BitcoinAddress FROM users_info AS i WHERE BitcoinAddress IS NOT NULL");
+$DB->query("SELECT i.UserID, i.BitcoinAddress FROM users_info AS i JOIN users_main AS m ON m.ID = i.UserID
+			WHERE BitcoinAddress IS NOT NULL ORDER BY m.Username ASC");
 ?>
 <div class="thin">
 	<h3><?=$Balance?></h3>
