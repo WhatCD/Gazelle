@@ -528,7 +528,7 @@ margin-left:20px;
 	width: 100%;
 }
 
-#content table td {
+#content table td, #content table th {
   padding: 5px;
   border-top: 1px solid #252525;
 }
@@ -884,7 +884,7 @@ td.body {width:100%;}
   
 } 
 
-.colhead td, .colhead_dark td {
+.colhead td, .colhead th, .colhead_dark td {
 	background: #212121 url('images/bar2.png') !important;
 	font-weight: bold;
 	border-top: 1px solid #1f1f1f !important;

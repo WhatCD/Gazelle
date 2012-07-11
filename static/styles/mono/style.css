@@ -505,7 +505,7 @@ table[width="100%"],.box,.torrent_table,#request_table,#collages,.forum_index,ta
 	-moz-box-shadow: none;
 }
 
-.head,.colhead td,.recent .colhead td,.colhead_dark td {
+.head,.colhead td,.recent .colhead td,.colhead th,.colhead_dark td {
 	margin: -11px;
 	margin-bottom: 10px;
 	padding: 8px !important;
@@ -1027,17 +1027,17 @@ h3#irc+div.box.pad,h3#general+div.box.pad {
 	-moz-border-radius: 5px;
 }
 
-h3#irc+div.box.pad ul,h3#general+div.box.pad ul {
+h3#irc+div.box.pad ul,h3#general+div.box.pad ul,#drag_drop_textnote ul {
 	list-style: none;
 }
 
-h3#irc+div.box.pad ul li,h3#general+div.box.pad ul li {
+h3#irc+div.box.pad ul li,h3#general+div.box.pad ul li,#drag_drop_textnote ul li {
 	margin-bottom: 8px;
 	padding-bottom: 8px;
 	border-bottom: 1px solid #ddd;
 }
 
-h3#irc+div.box.pad ul li:last-child,h3#general+div.box.pad ul li:last-child {
+h3#irc+div.box.pad ul li:last-child,h3#general+div.box.pad ul li:last-child,#drag_drop_textnote ul li:last-child {
 	margin-bottom: 0;
 	padding-bottom: 0;
 	border-bottom: none;
@@ -1115,6 +1115,10 @@ li.graph .center_poll {
 
 #inbox #searchbox input[type="text"] {
 	margin-top: 10px;
+}
+
+#manage_collage_table input[type="text"] {
+    width: 40px;
 }
 
 td  {

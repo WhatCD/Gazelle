@@ -169,7 +169,7 @@ a img {
     top: 1px;
 }
 
-table td {
+table td, table th {
     padding: 2px;
 }
 
@@ -289,7 +289,7 @@ table {
 tr.colhead, tr.colhead_dark {   
     border: 1px solid #b93dd6;
 }
-tr.colhead td, tr.colhead_dark td {
+tr.colhead td, tr.colhead th, tr.colhead_dark td {
     background: #8E2FA4;
     color: #FFF;
     font-weight: bold;
@@ -301,6 +301,10 @@ tr.colhead td, tr.colhead_dark td {
 table tr.rowa td {
     background-color: #1a1f25;
     border-top: 1px solid #5F7187;
+}
+.nobr {
+    word-wrap: normal;
+    white-space: nowrap;
 }
 
 /* ************************************************************************** */

@@ -608,7 +608,7 @@ tr.rowb {
 	background-color: #FFFFFF;
 }
 
-td {
+td, th {
 	border: none;
 	padding: 5px;
 	text-align: left;
@@ -629,7 +629,7 @@ td {
 	outline: 0;
 }
 
-td.colhead, .colhead td {
+td.colhead, .colhead td, .colhead th {
 	padding-left: 10px;
 	padding-right: 10px;
 }

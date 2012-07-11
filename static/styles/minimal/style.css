@@ -168,7 +168,7 @@ table tr td{border:1px solid #757575}
 #content h2:first-child{border-bottom:1px solid #ACBFA9;}
 #content .box h2{background:none;  margin:0;  padding:0; position:static;  border-bottom:0}
 #content table{padding:0; border-collapse:collapse; width:100%}
-#content table td{padding:5px}
+#content table td, #content table th{padding:5px}
 #content table td h4{margin:0}
 #content table .colhead td{background-color:#454545; font-weight:bold}
 #content table .colhead_dark td{background-color:#555}

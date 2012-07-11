@@ -458,7 +458,7 @@ tr.rowa {
 	background-color: #DDD;
 }
 
-td {
+td, th {
 	border: 1px solid #666666;
 	padding: 5px;
 	text-align: left;
@@ -470,7 +470,7 @@ td {
 	color: #ffffff;
 }
 
-td.colhead, .colhead td {
+td.colhead, .colhead td, .colhead th {
 	padding-left: 10px;
 	padding-right: 10px;
 }

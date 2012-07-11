@@ -111,6 +111,10 @@ echo $Pages;
 		<form action="inbox.php" method="post" id="messageform">
 			<input type="hidden" name="action" value="masschange" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+                        <input type="submit" name="read" value="Mark as read" />&nbsp;
+                        <input type="submit" name="unread" value="Mark as unread" />&nbsp;
+                        <input type="submit" name="delete" value="Delete message(s)" />
+
 			<table>
 				<tr class="colhead">
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>

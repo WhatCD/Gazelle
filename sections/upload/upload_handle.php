@@ -16,7 +16,7 @@ include(SERVER_ROOT.'/classes/class_text.php');
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 include(SERVER_ROOT.'/classes/class_file_checker.php');
-
+include(SERVER_ROOT.'/classes/class_image_tools.php');
 enforce_login();
 authorize();
 
@@ -322,9 +322,7 @@ $Matches = array();
 if (preg_match($RegX, $Properties['Image'], $Matches)) {
 	$Properties['Image'] = $Matches[1].'.jpg';
 }
-if(strpos($Properties['Image'], 'tinypic') || strpos($Properties['Image'], 'dsimg')) {
-    $Err = $Properties['Image'] . " This image host is not allowed";
-}
+check_imagehost($Properties['Image']);
 
 //******************************************************************************//
 //--------------- Make variables ready for database input ----------------------//

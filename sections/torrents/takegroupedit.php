@@ -3,6 +3,7 @@
 authorize();
 
 include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/class_image_tools.php');
 $Text = new TEXT;
 
 // Quick SQL injection check
@@ -50,9 +51,7 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 	if(!preg_match("/^".IMAGE_REGEX."$/i", $Image)) {
 		$Image = '';
 	}
-    if(strpos($Image, 'tinypic') || strpos($Image, 'dsimg')) {
-      error($Image . " This image host is not allowed");
-    }
+    check_imagehost($Image);
 	$Summary = db_string($_POST['summary']);
 }
 

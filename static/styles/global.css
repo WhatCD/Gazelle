@@ -178,6 +178,11 @@ span.secondary_class {	font-size:85%; font-weight:bold; }
 .paranoia_override {
     font-style: italic;
 }
+
+#manage_collage_table.ui-sortable .drag {
+    cursor: n-resize;
+}
+
 #manage_collage_table.ui-sortable .ui-sortable-helper.drag {
   cursor:grabbing;
   cursor:-moz-grabbing;
@@ -204,5 +209,4 @@ span.secondary_class {	font-size:85%; font-weight:bold; }
 .headerSortUp span {
     background: url("../common/table-order.png") no-repeat scroll right  -79px transparent;
 }
-	padding: 6px 0
-}
+

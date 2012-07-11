@@ -1,4 +1,5 @@
 <?
+
 authorize();
 
 include(SERVER_ROOT.'/classes/class_validate.php');
@@ -111,5 +112,3 @@ if ($_REQUEST['action'] == 'add_torrent') {
 }
 
 header('Location: collages.php?id='.$CollageID);
-
-?>

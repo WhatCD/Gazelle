@@ -526,7 +526,7 @@ ul#userinfo_username {
 	width: 100%;
 }
 
-#content table td {
+#content table td, #content table th {
   padding: 5px;
   border-top: 1px solid #e6e6e6;
 }
@@ -944,7 +944,7 @@ ul#userinfo_username {
   background-color: #f5f5f5 !important;
 }
 
-.colhead td, .colhead_dark td {
+.colhead td, .colhead th, .colhead_dark td {
 	background-color: #E6E6E6 !important;
 	font-weight: bold;
 	border-top: 1px solid #cccccc !important;

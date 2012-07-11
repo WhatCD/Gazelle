@@ -1,9 +1,11 @@
 "use strict";
 
 /* Prototypes */
-String.prototype.trim = function () {
-	return this.replace(/^\s+|\s+$/g, '');	
-};
+if(!String.prototype.trim) {  
+  String.prototype.trim = function () {  
+    return this.replace(/^\s+|\s+$/g,'');  
+  };  
+}
 
 var listener = {
 	set: function (el,type,callback) {

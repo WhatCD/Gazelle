@@ -3,6 +3,7 @@
 The page that handles the backend of the 'edit artist' function. 
 \*********************************************************************/
 
+include(SERVER_ROOT.'/classes/class_image_tools.php');
 authorize();
 
 if(!$_REQUEST['artistid'] || !is_number($_REQUEST['artistid'])) {
@@ -27,6 +28,7 @@ if($_GET['action'] == 'revert') { // if we're reverting to a previous revision
 	$Body = db_string($_POST['body']);
 	$Summary = db_string($_POST['summary']);
 	$Image = db_string($_POST['image']);
+	check_imagehost($Image);
 	// Trickery
 	if(!preg_match("/^".IMAGE_REGEX."$/i", $Image)) {
 		$Image = '';

@@ -11,6 +11,8 @@ authorize();
 
 
 require(SERVER_ROOT.'/classes/class_validate.php');
+include(SERVER_ROOT.'/classes/class_image_tools.php');
+
 $Validate = new VALIDATE;
 
 //******************************************************************************//
@@ -225,6 +227,7 @@ $Matches = array();
 if (preg_match($RegX, $Properties['Image'], $Matches)) {
 	$Properties['Image'] = $Matches[1].'.jpg';
 }
+check_imagehost($Properties['Image']);
 
 if($Err){ // Show the upload form, with the data the user entered
 	if(check_perms('site_debug')) {
