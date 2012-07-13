@@ -409,13 +409,26 @@ list($ArtistsAdded) = $DB->next_record();
 			</tr>
 			<tr class="colhead_dark">
 				<td colspan="2">
+					<strong>Reset Passkey</strong>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><strong>Reset passkey</strong></td>
+				<td>
+					<label><input type="checkbox" name="resetpasskey" />
+					Any active torrents must be downloaded again to continue leeching/seeding.</label> <br />
+					<a href="wiki.php?action=article&name=Passkey" >See also this wiki article</a>
+				</td>
+			</tr>
+			<tr class="colhead_dark">
+				<td colspan="2">
 					<strong>Change password</strong>
 				</td>
 			</tr>
 			<tr>
 			<td/>
 				<td>
-					<p class="min_padding">A strong password is 8 characters or longer</p>
+					<p class="min_padding">A strong password is between 8 and 40 characters long</p>
 					<p class="min_padding">Contains at least 1 lowercase and uppercase letter</p>
 					<p class="min_padding">Contains at least a number or symbol</p>
 				</td>
@@ -426,18 +439,11 @@ list($ArtistsAdded) = $DB->next_record();
 			</tr>
 			<tr>
 				<td class="label"><strong>New password</strong></td>
-				<td><input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" maxlength="100" />  <b id="pass_strength"/></td>
+				<td><input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" maxlength="40" />  <b id="pass_strength"/></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Re-type new password</strong></td>
-				<td><input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" maxlength="100" />  <b id="pass_match"/></td>
-			</tr>
-			<tr>
-				<td class="label"><strong>Reset passkey</strong></td>
-				<td>
-					<input type="checkbox" name="resetpasskey" />
-					<label for="ResetPasskey">Any active torrents must be downloaded again to continue leeching/seeding.</label>
-				</td>
+				<td><input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" maxlength="40" />  <b id="pass_match"/></td>
 			</tr>
 			<tr>
 				<td colspan="2" class="right">
