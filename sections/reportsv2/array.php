@@ -429,8 +429,7 @@ Your torrent was reported because the bitrates of one or more audio files had be
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.1.11]2.1.11[/url]. Music ripped from the radio (Satellite or FM), television, the web, or podcasts are not allowed.
-The only allowable media formats are CD, DVD, Vinyl, Soundboard, SACD, DAT, Cassette, WEB, and Blu-ray.
-Your torrent has now been labeled using the appropriate media type.'
+The only allowable media formats are CD, DVD, Vinyl, Soundboard, SACD, DAT, Cassette, WEB, and Blu-ray.'
 				)
 			),
 			'discog' => array(

@@ -276,7 +276,8 @@ foreach ($Collages as $Collage) {
 	$TagList = explode(' ', $TagList);
 	$Tags = array();
 	foreach($TagList as $Tag) {
-		$Tags[]='<a href="collages.php?action=search&amp;tags='.$Tag.'">'.$Tag.'</a>';
+		if(!empty($Tag))
+			$Tags[]='<a href="collages.php?action=search&amp;tags='.$Tag.'">'.$Tag.'</a>';
 	}
 	$Tags = implode(', ', $Tags);
 	
@@ -292,10 +293,13 @@ foreach ($Collages as $Collage) {
 			<span style="float:right">
 				<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;">[Remove bookmark]</a>
 			</span>
-<?	} ?>
+<?	} 
+		if(!empty($Tags)) {
+?>
 			<div class="tags">
 				<?=$Tags?>
 			</div>
+<? } ?>
 		</td>
 		<td><?=(int)$NumTorrents?></td>
 		<td><?=format_username($UserID, false, false, false)?></td>
