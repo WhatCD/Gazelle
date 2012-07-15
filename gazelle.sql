@@ -1185,7 +1185,8 @@ CREATE TABLE `users_history_passkeys` (
 CREATE TABLE `users_history_passwords` (
   `UserID` int(10) NOT NULL,
   `ChangeTime` datetime DEFAULT NULL,
-  `ChangerIP` varchar(15) DEFAULT NULL
+  `ChangerIP` varchar(15) DEFAULT NULL,
+  KEY `User_Time` (`UserID`,`ChangeTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `users_info` (

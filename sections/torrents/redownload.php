@@ -44,7 +44,7 @@ if (empty($_GET['type'])) {
 ZIP::unlimit();
 
 $DB->query("SELECT 
-	DATE_FORMAT(".$Month.",'%b \'%y') AS Month,
+	DATE_FORMAT(".$Month.",'%Y \ %m') AS Month,
 	t.GroupID,
 	t.Media,
 	t.Format,
