@@ -158,7 +158,10 @@ switch ($_REQUEST['action']){
 		include('managers/official_tags.php');
 		break;
 
-	case 'permissions':
+    case 'tag_aliases':
+        include('managers/tag_aliases.php');
+        break;
+    case 'permissions':
 		if (!check_perms('admin_manage_permissions')) { error(403); }
 
 		if (!empty($_REQUEST['id'])) {

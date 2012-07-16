@@ -29,6 +29,8 @@ show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=email_blacklist">Email Blacklist</a></td></tr>
 			<tr><td><a href="tools.php?action=tokens">Manage freeleech tokens</a></td></tr>
 			<tr><td><a href="tools.php?action=official_tags">Official Tags Manager</a></td></tr>
+			<tr><td><a href="tools.php?action=tag_aliases">Tag Aliases</a></td></tr>
+
 
 <? } ?>
 		</table>

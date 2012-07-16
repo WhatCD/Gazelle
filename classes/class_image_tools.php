@@ -13,7 +13,7 @@
     global $blacklist;
     
     foreach ($blacklist as &$value) { 
-        if(contains(strtolower($url), $value)) {
+        if(strpos(strtolower($url), $value)) {
             $parsed_url = parse_url($url);
             error($parsed_url['host'] . " is not an allowed imagehost. Please use a different imagehost.");
             break;

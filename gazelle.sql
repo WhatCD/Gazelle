@@ -801,6 +801,21 @@ CREATE TABLE `stylesheets` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `subscribed_users` (
+  `UserID` int(10) NOT NULL,
+  `SubscriberID` int(10) NOT NULL,
+  PRIMARY KEY (`UserID`,`SubscriberID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `tag_aliases` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `BadTag` varchar(22) COLLATE utf8_bin NOT NULL,
+  `AliasTag` varchar(22) COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `BadTag` (`BadTag`),
+  KEY `AliasTag` (`AliasTag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE `tags` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) COLLATE utf8_bin DEFAULT NULL,

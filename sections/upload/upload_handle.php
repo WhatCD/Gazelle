@@ -599,6 +599,7 @@ if(!$Properties['GroupID']) {
 	foreach($Tags as $Tag) {
 		$Tag = sanitize_tag($Tag);
 		if(!empty($Tag)) {
+		$Tag = get_alias_tag($Tag);
 			$DB->query("INSERT INTO tags
 				(Name, UserID) VALUES
 				('".$Tag."', $LoggedUser[ID])

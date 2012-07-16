@@ -11,7 +11,9 @@ if(!is_number($GroupID) || !$GroupID) {
 $Tags = explode(',', $_POST['tagname']);
 foreach($Tags as $TagName) {
 	$TagName = sanitize_tag($TagName);
+   
 	if(!empty($TagName)) {
+	    $TagName = get_alias_tag($TagName);
 		// Check DB for tag matching name
 		$DB->query("SELECT t.ID FROM tags AS t WHERE t.Name LIKE '".$TagName."'");
 		list($TagID) = $DB->next_record();

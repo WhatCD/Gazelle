@@ -90,7 +90,7 @@ if($NewRequest) {
 if(empty($_POST['image'])) {
 	$Image = "";
 } else {
-    check_imagehost($Image);
+    check_imagehost($_POST['image']);
 	if(preg_match("/".IMAGE_REGEX."/", trim($_POST['image'])) > 0) {
 			$Image = trim($_POST['image']);
 	} else {

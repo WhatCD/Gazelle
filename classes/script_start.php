@@ -1127,9 +1127,25 @@ function display_array($Array, $Escape = array()) {
 function sanitize_tag($str) {
 	$str = strtolower($str);
 	$str = preg_replace('/[^a-z0-9.]/', '', $str);
+	$str = preg_replace('/(^[.,]*)|([.,]*$)/','',$str);
 	$str = htmlspecialchars($str);
 	$str = db_string(trim($str));
 	return $str;
+}
+
+
+/**
+ * Gets the alias of the tag, if there is no alias silently returns the original tag.
+ * @return the tag
+ */
+function get_alias_tag($str) {
+     global $DB;
+     $DB->query("SELECT AliasTag FROM tag_aliases WHERE BadTag = '". $str ."' LIMIT 1");
+        if($DB->record_count() > 0) {
+            list($AliasTag) = $DB->next_record();
+            return $AliasTag;
+     }
+     return $str;
 }
 
 // Generate a random string
