@@ -112,7 +112,8 @@ if(check_perms('site_send_unlimited_invites')) {
 ?>
 			<li id="nav_invite" class="brackets"><a href="user.php?action=invite">Invite<?=$Invites?></a></li>
 			<li id="nav_donate" class="brackets"><a href="donate.php">Donate</a></li>
-		</ul>
+	    	        
+</ul>
 		<ul id="userinfo_stats">
 			<li id="stats_seeding"><a href="torrents.php?type=seeding&amp;userid=<?=$LoggedUser['ID']?>">Up</a>: <span class="stat"><?=get_size($LoggedUser['BytesUploaded'])?></span></li>
 			<li id="stats_leeching"><a href="torrents.php?type=leeching&amp;userid=<?=$LoggedUser['ID']?>">Down</a>: <span class="stat"><?=get_size($LoggedUser['BytesDownloaded'])?></span></li>

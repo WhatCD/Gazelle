@@ -106,14 +106,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 
 		$TorrentList = $DB->to_array();
 		if(count($TorrentList) == 0) {
-			//error(404,'','','',true);
-			if(isset($_GET['torrentid']) && is_number($_GET['torrentid'])) {
-				error("Cannot find the torrent with the ID ".$_GET['torrentid']);
-				header("Location: log.php?search=Torrent+".$_GET['torrentid']);
-			} else {
-				error(404);
-			}
-			die();
+			error(404);
 		}
 		if(in_array(0, $DB->collect('Seeders'))) {
 			$CacheTime = 600;

@@ -74,6 +74,9 @@ if($ThreadInfo['Posts'] > $PerPage) {
 	$PostNum = 1;
 }
 list($Page,$Limit) = page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
+if(($Page-1)*$PerPage > $ThreadInfo['Posts']) {
+	$Page = ceil($ThreadInfo['Posts']/$PerPage);
+}
 list($CatalogueID,$CatalogueLimit) = catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
@@ -95,11 +98,13 @@ if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueI
 }
 $Thread = catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
 
-$LastPost = end($Thread);
-$LastPost = $LastPost['ID'];
-reset($Thread);
-
 if ($_GET['updatelastread'] != '0') {
+	$LastPost = end($Thread);
+	$LastPost = $LastPost['ID'];
+	reset($Thread);
+	if($ThreadInfo['Posts'] <= $PerPage*$Page && $ThreadInfo['StickyPostID'] > $LastPost) {
+		$LastPost = $ThreadInfo['StickyPostID'];
+	}
 	//Handle last read
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
 		$DB->query("SELECT PostID From forums_last_read_topics WHERE UserID='$LoggedUser[ID]' AND TopicID='$ThreadID'");

@@ -409,7 +409,7 @@ if(!empty($_REQUEST['action'])) {
 		if($GroupID) {
 			header("Location: torrents.php?id=".$GroupID."&torrentid=".$_GET['torrentid']."#torrent".$_GET['torrentid']);
 		} else {
-			header("Location: log.php?search=Torrent+".$_GET['torrentid']);
+			error(404);
 		}
 	} elseif(!empty($_GET['type'])) {
 		include(SERVER_ROOT.'/sections/torrents/user.php');

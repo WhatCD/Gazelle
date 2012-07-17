@@ -7,7 +7,7 @@ include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_image_tools.php');
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) 
-	error(0); 
+	error(404); 
 	
 $UserID = $_GET['id'];
 if($UserID == $LoggedUser['ID']) { 

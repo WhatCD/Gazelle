@@ -157,7 +157,7 @@ foreach ($Blog as $BlogItem) {
 					<br /><br />
 					<em><a href="forums.php?action=viewthread&threadid=<?=$ThreadID?>">Discuss this post here</a></em>
 		<? 		if(check_perms('admin_manage_blog')) { ?> 
-					<a href="blog.php?action=deadthread&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Dead]</a>
+					<a href="blog.php?action=deadthread&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Remove link]</a>
 		<? 		}
 			} ?>
 				</div>
