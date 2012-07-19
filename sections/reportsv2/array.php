@@ -118,7 +118,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 				),
 				'resolve_options' => array(
 					'upload' => '0',
-					'warn' => '1',
+					'warn' => '0',
 					'delete' => '1',
 					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.3.16]2.3.16[/url]. Properly tag your music files. Certain meta tags (e.g., ID3, Vorbis) are required on all music uploads. Make sure to use the appropriate tag format for your files (e.g., no ID3 tags for FLAC - see [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.2.10.8]2.2.10.8[/url]). ID3v2 tags for files are highly recommended over ID3v1. ID3 are recommended for AC3 torrents but are not mandatory because the format does not natively support file metadata tagging (for AC3, the file names become the vehicle for correctly labeling media files). Torrents uploaded with both good ID3v1 tags and blank ID3v2 tags (a dual set of tags) are trumpable by torrents with either just good ID3v1 tags or good ID3v2 tags (a single set of tags). If you upload an album missing one or more of the required tags, then another user may add the tags, re-upload, and report your torrent for deletion.
 Your torrent was reported because it was trumped by another torrent with improved metadata tags.'
