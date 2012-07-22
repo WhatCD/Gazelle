@@ -29,7 +29,45 @@ show_header("IP history for $Username");
 <script type="text/javascript">
 function ShowIPs(rowname) {
 	$('tr[name="'+rowname+'"]').toggle();
+
 }
+function Ban(ip, id, elemID) {
+	var notes = prompt("Enter notes for this ban"); 
+	if(notes != null && notes.length > 0) {
+		var xmlhttp;
+		if (window.XMLHttpRequest) {
+  			xmlhttp=new XMLHttpRequest();
+  		} else {
+  			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  		}
+		xmlhttp.onreadystatechange=function() {
+  			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+				document.getElementById(elemID).innerHTML = "<strong>[Banned]</strong>";
+			}
+  		}
+		xmlhttp.open("GET","tools.php?action=quick_ban&perform=create&ip=" + ip + "&notes=" + notes,true);
+		xmlhttp.send();
+	}
+
+}
+/*
+function UnBan(ip, id, elemID) {
+		var xmlhttp;
+		if (window.XMLHttpRequest) {
+  			xmlhttp=new XMLHttpRequest();
+  		} else {
+  			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  		}
+		xmlhttp.onreadystatechange=function() {
+  			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+				document.getElementById(elemID).innerHTML = "Ban";
+				document.getElementById(elemID).onClick = function() { Ban(ip, id, elemID); return false;};
+			}
+		}
+		xmlhttp.open("GET","tools.php?action=quick_ban&perform=delete&id="+id,true);
+		xmlhttp.send();
+}
+ */
 </script>
 <div class="thin">
 <?
@@ -92,6 +130,8 @@ $Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 			<td>Elapsed</td>
 		</tr>
 <?
+$counter = 0;
+$IPs = array();
 $Results = $DB->to_array();
 foreach($Results as $Index => $Result) {
 	list($IP, $StartTime, $EndTime, $UserIDs, $UserStartTimes, $UserEndTimes, $Usernames, $UsersEnabled, $UsersDonor, $UsersWarned) = $Result;
@@ -111,8 +151,28 @@ foreach($Results as $Index => $Result) {
 ?>
 		<tr class="rowa">
 			<td>
-				<?=$IP?> (<?=get_cc($IP)?>)				<br />
-				<?=get_host($IP)?>
+				<?=$IP?> (<?=get_cc($IP)?>)
+<?
+        	if(!isset($IPs[$IP])) {
+                	$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".ip2unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
+			$DB->query($sql);
+			
+			if($DB->record_count() > 0) {
+                        	$IPs[$IP] = true; 
+			?>
+				<strong>[Banned]
+			<? }
+                	else {
+				$IPs[$IP] = false; ?>
+				<a id="<?=$counter?>" href="#" onclick="Ban('<?=$IP?>', '<?=$ID?>', '<?=$counter?>'); this.onclick=null;return false;">[Ban]</a>
+<?			}
+			$counter++;
+        	}       
+?>
+
+
+			<br />
+			<?=get_host($IP)?>
 			<?=($HasDupe ? 
 			'<a href="#" onclick="ShowIPs('.$Index.'); return false;">('.count($UserIDs).')</a>' 
 			: '(0)')?></td>
@@ -149,3 +209,4 @@ foreach($Results as $Index => $Result) {
 <?
 show_footer();
 ?>
+

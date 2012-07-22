@@ -82,6 +82,11 @@ foreach ($Forums as $Forum) {
 		'sticky' => $Sticky == 1
 	);
 }
+// ...And an extra one to catch the last category.
+if (!empty($JsonForums) && !empty($JsonCategory)) {
+	$JsonCategory['forums'] = $JsonForums;
+	$JsonCategories[] = $JsonCategory;
+}
 
 print json_encode(
 	array(

@@ -265,7 +265,9 @@ switch ($_REQUEST['action']){
 		//TODO: Clean up db table ip_bans.
 		include("managers/bans.php");
 		break;
-
+	case 'quick_ban':
+		include("misc/quick_ban.php");
+		break;
 	//Data
 	case 'registration_log':
 		include('data/registration_log.php');
