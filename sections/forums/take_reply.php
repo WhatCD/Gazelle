@@ -49,6 +49,7 @@ if($LoggedUser['DisablePosting']) {
 $TopicID = $_POST['thread'];
 $ThreadInfo = get_thread_info($TopicID);
 $ForumID = $ThreadInfo['ForumID'];
+$SQLTime = sqltime();
 
 if(!check_forumperm($ForumID)) { error(403); }
 if(!check_forumperm($ForumID, 'Write') || $LoggedUser['DisablePosting'] || $ThreadInfo['IsLocked'] == "1" && !check_perms('site_moderate_forums')) { error(403); }
@@ -61,11 +62,16 @@ if(isset($_POST['subscribe'])) {
 //Now lets handle the special case of merging posts, we can skip bumping the thread and all that fun
 if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site_forums_double_post') && !in_array($ForumID, $ForumsDoublePost)) || isset($_POST['merge']))) {
 	//Get the id for this post in the database to append
-	$DB->query("SELECT ID FROM forums_posts WHERE TopicID='$TopicID' AND AuthorID='".$LoggedUser['ID']."' ORDER BY ID DESC LIMIT 1");
-	list($PostID) = $DB->next_record();
+	$DB->query("SELECT ID, Body FROM forums_posts WHERE TopicID='$TopicID' AND AuthorID='".$LoggedUser['ID']."' ORDER BY ID DESC LIMIT 1");
+	list($PostID, $OldBody) = $DB->next_record(MYSQLI_NUM, false);
 	
 	//Edit the post
-	$DB->query("UPDATE forums_posts SET Body = CONCAT(Body,'"."\n\n".db_string($Body)."'), EditedUserID = '".$LoggedUser['ID']."', EditedTime = '".sqltime()."' WHERE ID='$PostID'");
+	$DB->query("UPDATE forums_posts SET Body = CONCAT(Body,'"."\n\n".db_string($Body)."'), EditedUserID = '".$LoggedUser['ID']."', EditedTime = '".$SQLTime."' WHERE ID='$PostID'");
+
+	//Store edit history
+	$DB->query("INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
+				VALUES ('forums', ".$PostID.", ".$LoggedUser['ID'].", '".$SQLTime."', '".db_string($OldBody)."')");
+	$Cache->delete_value("forums_edits_$PostID");
 	
 	//Get the catalogue it is in
 	$CatalogueID = floor((POSTS_PER_PAGE*ceil($ThreadInfo['Posts']/POSTS_PER_PAGE)-POSTS_PER_PAGE)/THREAD_CATALOGUE);
@@ -76,13 +82,19 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	} else {
 		$Key = ($ThreadInfo['Posts']%THREAD_CATALOGUE)-1;
 	}
+	if($ThreadInfo['StickyPostID'] == $PostID) {
+		$ThreadInfo['StickyPost']['Body'] .= "\n\n$Body";
+		$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];
+		$ThreadInfo['StickyPost']['EditedTime'] = $SQLTime;
+		$Cache->cache_value('thread_'.$TopicID.'_info', $ThreadInfo, 0);
+	}
 
 	//Edit the post in the cache
 	$Cache->begin_transaction('thread_'.$TopicID.'_catalogue_'.$CatalogueID);
 	$Cache->update_row($Key, array(
 			'Body'=>$Cache->MemcacheDBArray[$Key]['Body']."\n\n".$Body,
 			'EditedUserID'=>$LoggedUser['ID'],
-			'EditedTime'=>sqltime(),
+			'EditedTime'=>$SQLTime,
 			'Username'=>$LoggedUser['Username']
 			));
 	$Cache->commit_transaction(0);
@@ -91,7 +103,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 } else {
 	//Insert the post into the posts database
 	$DB->query("INSERT INTO forums_posts (TopicID, AuthorID, AddedTime, Body)
-			VALUES ('$TopicID', '".$LoggedUser['ID']."', '".sqltime()."', '".db_string($Body)."')");
+			VALUES ('$TopicID', '".$LoggedUser['ID']."', '".$SQLTime."', '".db_string($Body)."')");
 	
 	$PostID = $DB->inserted_id();
 
@@ -101,7 +113,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			LastPostID		= '$PostID',
 			LastPostAuthorID  = '".$LoggedUser['ID']."',
 			LastPostTopicID   = '$TopicID',
-			LastPostTime	  = '".sqltime()."'
+			LastPostTime	  = '".$SQLTime."'
 			WHERE ID = '$ForumID'");
 			
 	//Update the topic
@@ -109,7 +121,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			NumPosts		  = NumPosts+1, 
 			LastPostID		= '$PostID',
 			LastPostAuthorID  = '".$LoggedUser['ID']."',
-			LastPostTime	  = '".sqltime()."'
+			LastPostTime	  = '".$SQLTime."'
 			WHERE ID = '$TopicID'");
 
 	//if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
@@ -122,7 +134,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			unset($Forum[$TopicID]);
 			$Thread['NumPosts'] = $Thread['NumPosts']+1; //Increment post count
 			$Thread['LastPostID'] = $PostID; //Set postid for read/unread
-			$Thread['LastPostTime'] = sqltime(); //Time of last post
+			$Thread['LastPostTime'] = $SQLTime; //Time of last post
 			$Thread['LastPostAuthorID'] = $LoggedUser['ID']; //Last poster id
 			$Part2 = array($TopicID=>$Thread); //Bumped thread
 			
@@ -145,7 +157,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 					'IsSticky' => $IsSticky,
 					'NumPosts' => $NumPosts,
 					'LastPostID' => $PostID,
-					'LastPostTime' => sqltime(),
+					'LastPostTime' => $SQLTime,
 					'LastPostAuthorID' => $LoggedUser['ID'],
 					'NoPoll' => $NoPoll
 				)); //Bumped
@@ -176,7 +188,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			'LastPostID'=>$PostID, 
 			'LastPostAuthorID'=>$LoggedUser['ID'], 
 			'LastPostTopicID'=>$TopicID, 
-			'LastPostTime'=>sqltime(),
+			'LastPostTime'=>$SQLTime,
 			'Title'=>$ThreadInfo['Title'],
 			'IsLocked'=>$ThreadInfo['IsLocked'],
 			'IsSticky'=>$ThreadInfo['IsSticky']
@@ -196,7 +208,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$Cache->insert('', array(
 		'ID'=>$PostID,
 		'AuthorID'=>$LoggedUser['ID'],
-		'AddedTime'=>sqltime(),
+		'AddedTime'=>$SQLTime,
 		'Body'=>$Body,
 		'EditedUserID'=>0,
 		'EditedTime'=>'0000-00-00 00:00:00',

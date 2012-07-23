@@ -29,6 +29,7 @@ $UserID = $LoggedUser['ID'];
 $Body = db_string($_POST['body']); //Don't URL Decode
 $PostID = $_POST['post'];
 $Key = $_POST['key'];
+$SQLTime = sqltime();
 
 // Mainly 
 $DB->query("SELECT
@@ -68,7 +69,7 @@ if($DB->record_count()==0) {
 $DB->query("UPDATE forums_posts SET
 	Body = '$Body',
 	EditedUserID = '$UserID',
-	EditedTime = '".sqltime()."'
+	EditedTime = '".$SQLTime."'
 	WHERE ID='$PostID'");
 
 $CatalogueID = floor((POSTS_PER_PAGE*$Page-POSTS_PER_PAGE)/THREAD_CATALOGUE);
@@ -83,15 +84,21 @@ if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 			'AddedTime'=>$Cache->MemcacheDBArray[$Key]['AddedTime'],
 			'Body'=>$_POST['body'], //Don't url decode.
 			'EditedUserID'=>$LoggedUser['ID'],
-			'EditedTime'=>sqltime(),
+			'EditedTime'=>$SQLTime,
 			'Username'=>$LoggedUser['Username']
 			));
 	$Cache->commit_transaction(3600*24*5);
 }
-//$Cache->delete('thread_'.$TopicID.'_page_'.$Page); // Delete thread cache
+$ThreadInfo = get_thread_info($TopicID);
+if($ThreadInfo['StickyPostID'] == $PostID) {
+	$ThreadInfo['StickyPost']['Body'] = $_POST['body'];
+	$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];
+	$ThreadInfo['StickyPost']['EditedTime'] = $SQLTime;
+	$Cache->cache_value('thread_'.$TopicID.'_info', $ThreadInfo, 0);
+}
 
 $DB->query("INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
-								VALUES ('forums', ".$PostID.", ".$UserID.", '".sqltime()."', '".db_string($OldBody)."')");
+								VALUES ('forums', ".$PostID.", ".$UserID.", '".$SQLTime."', '".db_string($OldBody)."')");
 $Cache->delete_value("forums_edits_$PostID");
 // This gets sent to the browser, which echoes it in place of the old body
 echo $Text->full_format($_POST['body']);
