@@ -1138,9 +1138,7 @@ CREATE TABLE `users_downloads` (
   `Time` datetime NOT NULL,
   PRIMARY KEY (`UserID`,`TorrentID`,`Time`),
   KEY `TorrentID` (`TorrentID`),
-  KEY `UserID` (`UserID`),
-  KEY `UserID_2` (`UserID`),
-  KEY `TorrentID_2` (`TorrentID`)
+  KEY `UserID` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_dupes` (
@@ -1185,8 +1183,7 @@ CREATE TABLE `users_history_ips` (
   KEY `UserID` (`UserID`),
   KEY `IP` (`IP`),
   KEY `StartTime` (`StartTime`),
-  KEY `EndTime` (`EndTime`),
-  KEY `IP_2` (`IP`)
+  KEY `EndTime` (`EndTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_history_passkeys` (
