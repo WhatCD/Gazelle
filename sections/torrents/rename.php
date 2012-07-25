@@ -3,7 +3,7 @@ authorize();
 
 $GroupID = $_POST['groupid'];
 $OldGroupID = $GroupID;
-$NewName = db_string($_POST['name']);
+$NewName = $_POST['name'];
 
 if(!$GroupID || !is_number($GroupID)) { error(404); }
 
@@ -14,9 +14,9 @@ if(empty($NewName)) {
 if(!check_perms('torrents_edit')) { error(403); }
 
 $DB->query("SELECT Name FROM torrents_group WHERE ID = ".$GroupID);
-list($OldName) = $DB->next_record();
+list($OldName) = $DB->next_record(MYSQLI_NUM, false);
 
-$DB->query("UPDATE torrents_group SET Name='$NewName' WHERE ID='$GroupID'");
+$DB->query("UPDATE torrents_group SET Name='".db_string($NewName)."' WHERE ID='$GroupID'");
 $Cache->delete_value('torrents_details_'.$GroupID);
 
 $DB->query("SELECT ArtistID FROM torrents_artists WHERE GroupID='$GroupID'");

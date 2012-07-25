@@ -1436,7 +1436,7 @@ function delete_artist($ArtistID) {
 	global $DB, $LoggedUser, $Cache;
 
 	$DB->query("SELECT Name FROM artists_group WHERE ArtistID = ".$ArtistID);
-	list($Name) = $DB->next_record();
+	list($Name) = $DB->next_record(MYSQLI_NUM, false);
 	
 	// Delete requests
 	$DB->query("SELECT RequestID FROM requests_artists WHERE ArtistID=".$ArtistID." AND ArtistID != 0");

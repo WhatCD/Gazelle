@@ -18,7 +18,7 @@ if (empty($NewArtistName) && (!$NewArtistID || !is_number($NewArtistID))) {
 }
 
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID = $ArtistID LIMIT 1");
-if(!(list($ArtistName) = $DB->next_record())) {
+if(!(list($ArtistName) = $DB->next_record(MYSQLI_NUM, false))) {
 	error('An error has occured.');
 }
 

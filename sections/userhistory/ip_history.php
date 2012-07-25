@@ -133,6 +133,8 @@ $Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 $counter = 0;
 $IPs = array();
 $Results = $DB->to_array();
+$CanManageIPBans = check_perms('admin_manage_ipbans');
+
 foreach($Results as $Index => $Result) {
 	list($IP, $StartTime, $EndTime, $UserIDs, $UserStartTimes, $UserEndTimes, $Usernames, $UsersEnabled, $UsersDonor, $UsersWarned) = $Result;
 
@@ -153,6 +155,7 @@ foreach($Results as $Index => $Result) {
 			<td>
 				<?=$IP?> (<?=get_cc($IP)?>)
 <?
+	if($CanManageIPBans) {
         	if(!isset($IPs[$IP])) {
                 	$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".ip2unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
 			$DB->query($sql);
@@ -167,7 +170,8 @@ foreach($Results as $Index => $Result) {
 				<a id="<?=$counter?>" href="#" onclick="Ban('<?=$IP?>', '<?=$ID?>', '<?=$counter?>'); this.onclick=null;return false;">[Ban]</a>
 <?			}
 			$counter++;
-        	}       
+		} 
+	}	
 ?>
 
 

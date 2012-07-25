@@ -28,7 +28,7 @@ if(count($CleanArtists) > 0) {
 		$DB->query("SELECT Name FROM torrents_group WHERE ID = '".$_POST['groupid']."'");
 		list($GroupName) = $DB->next_record();
 		$DB->query("SELECT ArtistID, Name FROM artists_group WHERE ArtistID IN (".$ArtistsString.")");
-		$ArtistNames = $DB->to_array('ArtistID');
+		$ArtistNames = $DB->to_array('ArtistID', MYSQLI_ASSOC, false);
 		print_r($ArtistNames);
 		foreach ($CleanArtists AS $Artist) {
 			list($Importance,$ArtistID) = $Artist;

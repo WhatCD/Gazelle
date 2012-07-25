@@ -77,7 +77,7 @@ $DB->query("INSERT INTO collages
 
 $CollageID = $DB->inserted_id();
 $Cache->delete_value('collage_'.$CollageID);
-write_log("Collage ".$CollageID." (".$P[name].") was created by ".$LoggedUser['Username']);
+write_log("Collage ".$CollageID." (".$_POST['name'].") was created by ".$LoggedUser['Username']);
 header('Location: collages.php?id='.$CollageID);
 
 ?>

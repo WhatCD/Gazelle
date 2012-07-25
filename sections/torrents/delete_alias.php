@@ -12,10 +12,10 @@ if(!check_perms('torrents_edit')) {
 
 $DB->query("DELETE FROM torrents_artists WHERE GroupID='$GroupID' AND ArtistID='$ArtistID' AND Importance='$Importance'");
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID=".$ArtistID);
-list($ArtistName) = $DB->next_record();
+list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
 
 $DB->query("SELECT Name FROM torrents_group WHERE ID=".$GroupID);
-list($GroupName) = $DB->next_record();
+list($GroupName) = $DB->next_record(MYSQLI_NUM, false);
 
 //Get a count of how many groups or requests use this artist ID
 $DB->query("SELECT ag.ArtistID

@@ -421,7 +421,7 @@ if ($Properties['Trumpable'] == 0 && $LogScore == 99 && $Enabled == 1 && strtoti
 }
 
 $DB->query("SELECT Name FROM torrents_group WHERE ID=$GroupID");
-list($Name) = $DB->next_record();
+list($Name) = $DB->next_record(MYSQLI_NUM, false);
 
 write_log("Torrent $TorrentID ($Name) in group $GroupID was edited by ".$LoggedUser['Username']." (".$LogDetails.")"); // TODO: this is probably broken
 write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $LogDetails, 0);

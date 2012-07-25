@@ -10,7 +10,7 @@ if($DB->record_count() < 1) {
 	error(404);
 }
 
-list($Title) = $DB->next_record();
+list($Title) = $DB->next_record(MYSQLI_NUM, false);
 //Log
 write_log("Wiki article ".$ID." (".$Title.") was deleted by ".$LoggedUser['Username']);
 //Delete

@@ -39,10 +39,10 @@ for($i = 0; $i < count($AliasNames); $i++) {
 		}
 		
 		$DB->query("SELECT Name FROM torrents_group WHERE ID=".$GroupID);
-		list($GroupName) = $DB->next_record();
+		list($GroupName) = $DB->next_record(MYSQLI_NUM, false);
 
 		$DB->query("SELECT Name FROM artists_group WHERE ArtistID=".$ArtistID);
-		list($ArtistName) = $DB->next_record();
+		list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
 		
 		
 		$DB->query("INSERT IGNORE INTO torrents_artists 
