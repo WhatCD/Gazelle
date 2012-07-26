@@ -13,8 +13,7 @@ if(empty($Reset)) {
 	if(!empty($Err)) {
 ?>
 		<font color="red"><strong><?=display_str($Err)?></strong></font><br /><br />
-<?	} ?>
-		Please choose a password between 8 and 40 characters long<br /><br />
+<?	} ?> A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, contains at least a number or symbol<br /><br />
 		<table cellpadding="2" cellspacing="1" border="0" align="center" width="100%">
 			<tr valign="top">
 				<td align="right" style="width:100px;">Password&nbsp;</td>

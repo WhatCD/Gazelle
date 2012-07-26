@@ -43,12 +43,8 @@ if(count($GroupIDs)) {
 	$DB->query("SELECT ID, CategoryID FROM torrents_group WHERE ID IN (".implode(',', $GroupIDs).")");
 	$GroupCategoryIDs = $DB->to_array('ID', MYSQLI_ASSOC, false);
 
-	// Only clear the alert if they've specified to.
-	if (isset($_GET['clear']) && $_GET['clear'] == "1") {
-		//Clear before header but after query so as to not have the alert bar on this page load
-		$DB->query("UPDATE users_notify_torrents SET UnRead='0' WHERE UserID=".$LoggedUser['ID']);
-		$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
-	}
+	$DB->query("UPDATE users_notify_torrents SET UnRead='0' WHERE UserID=".$LoggedUser['ID']);
+	$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
 }
 
 $DB->set_query_id($Results);

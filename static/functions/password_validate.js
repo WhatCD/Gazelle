@@ -1,8 +1,6 @@
 /**
 *
 * Validates passwords to make sure they are powerful
-* w@author Gwindow
-*
 **/
 
 (function($) {
