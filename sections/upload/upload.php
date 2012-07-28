@@ -91,9 +91,9 @@ $DB->query("SELECT
 	d.Comment,
 	d.Time
 	FROM do_not_upload as d
-	ORDER BY d.Time");
+	ORDER BY d.Time DESC");
 $DNU = $DB->to_array();
-list($Name,$Comment,$Updated) = end($DNU);
+list($Name,$Comment,$Updated) = reset($DNU);
 reset($DNU);
 $DB->query("SELECT IF(MAX(t.Time) < '$Updated' OR MAX(t.Time) IS NULL,1,0) FROM torrents AS t
 			WHERE UserID = ".$LoggedUser['ID']);
@@ -113,11 +113,16 @@ $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
 			<td width="50%"><strong>Name</strong></td>
 			<td><strong>Comment</strong></td>
 		</tr>
-<? foreach($DNU as $BadUpload) { 
+<? 	$TimeDiff = strtotime('-1 month', strtotime('now'));
+	foreach($DNU as $BadUpload) { 
 		list($Name, $Comment, $Updated) = $BadUpload;
 ?>		
 		<tr>
-			<td><?=$Text->full_format($Name)?></td>
+			<td><?=$Text->full_format($Name)?>
+<?		if($TimeDiff < strtotime($Updated)) { ?>
+				 <strong class="important_text">(New!)</strong>
+		<? } ?>		
+			</td>
 			<td><?=$Text->full_format($Comment)?></td>
 		</tr>
 <? } ?>

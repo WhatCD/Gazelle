@@ -98,6 +98,9 @@ switch ($_GET['action']){
 	case 'similar_artists':
                 require(SERVER_ROOT.'/sections/ajax/similar_artists.php');
                 break;
+	case 'userhistory':
+                require(SERVER_ROOT.'/sections/ajax/userhistory/index.php');
+                break;
 	default:
 		// If they're screwing around with the query string
 		print json_encode(array('status' => 'failure'));
