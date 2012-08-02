@@ -20,6 +20,7 @@ $Types = array(
 		'master' => array(
 			'dupe' => array(
 				'priority' => '10',
+				'reason' => '0',
 				'title' => 'Dupe',
 				'report_messages' => array(
 					'Please specify a link to the original torrent.'
@@ -36,6 +37,7 @@ $Types = array(
 			),
 			'banned' => array(
 				'priority' => '230',
+				'reason' => '13',
 				'title' => 'Specifically Banned',
 				'report_messages' => array(
 					'Please specify exactly which entry on the Do Not Upload list this is violating.'
@@ -52,6 +54,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 			),
 			'urgent' => array(
 				'priority' => '280',
+				'reason' => '-1',
 				'title' => 'Urgent',
 				'report_messages' => array(
 					'This report type is only for the very urgent reports, usually for personal information being found within a torrent.',
@@ -73,6 +76,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 			),
 			'other' => array(
 				'priority' => '200',
+				'reason' => '-1',
 				'title' => 'Other',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -88,6 +92,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 			),
 			'trump' => array(
 				'priority' => '20',
+				'reason' => '1',
 				'title' => 'Trump',
 				'report_messages' => array(
 					'Please list the specific reason(s) the newer torrent trumps the older one.',
@@ -108,6 +113,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 		'1' => array( //Music Resolves
 			'tag_trump' => array (
 				'priority' => '50',
+				'reason' => '4',
 				'title' => 'Tag Trump',
 				'report_messages' => array(
 					'Please list the specific tag(s) the newer torrent trumps the older one.',
@@ -126,6 +132,7 @@ Your torrent was reported because it was trumped by another torrent with improve
 			),
 			'vinyl_trump' => array(
 				'priority' => '60',
+				'reason' => '1',
 				'title' => 'Vinyl Trump',
 				'report_messages' => array(
 					'Please list the specific reason(s) the newer torrent trumps the older one.',
@@ -145,6 +152,7 @@ Your torrent was reported as it was trumped by a better-sounding vinyl rip.'
 			),
 			'folder_trump' => array (
 				'priority' => '40',
+				'reason' => '3',
 				'title' => 'Bad Folder Name Trump',
 				'report_messages' => array(
 					'Please list the folder name and what is wrong with it',
@@ -164,6 +172,7 @@ Your torrent was reported because it was trumped by another torrent with an impr
 			),
 			'file_trump' => array (
 				'priority' => '30',
+				'reason' => '2',
 				'title' => 'Bad File Names Trump',
 				'report_messages' => array(
 					'Please describe what is wrong with the file names.',
@@ -182,6 +191,7 @@ Your torrent was reported because it was trumped by another torrent with improve
 			),
 			'tracks_missing' => array(
 				'priority' => '240',
+				'reason' => '14',
 				'title' => 'Track(s) Missing',
 				'report_messages' => array(
 					'Please list the track number and title of the missing track',
@@ -202,6 +212,7 @@ Your torrent was reported because it was missing tracks.'
 			),
 			'discs_missing' => array(
 				'priority' => '120',
+				'reason' => '6',
 				'title' => 'Disc(s) Missing',
 				'report_messages' => array(
 					'If possible, please provide a link to Amazon.com or another source showing the proper track listing.'
@@ -221,6 +232,7 @@ Your torrent was reported because it was missing discs.'
 			),
 			'bonus_tracks' => array(
 				'priority' => '90',
+				'reason' => '-1',
 				'title' => 'Bonus Tracks Only',
 				'report_messages' => array(
 					'If possible, please provide a link to Amazon.com or another source showing the proper track listing.'
@@ -239,6 +251,7 @@ Your torrent was reported because it contained only bonus tracks without the ful
 			),
 			'transcode' => array(
 				'priority' => '250',
+				'reason' => '15',
 				'title' => 'Transcode',
 				'report_messages' => array(
 					"Please list the tracks you checked, and the method used to determine the transcode.",
@@ -258,6 +271,7 @@ Your torrent was reported because it contained transcoded audio files.'
 			),
 			'low' => array(
 				'priority' => '170',
+				'reason' => '9',
 				'title' => 'Low Bitrate',
 				'report_messages' => array(
 					"Please tell us the actual bitrate, and the software used to check."
@@ -275,6 +289,7 @@ Your torrent was reported because it contained one of more audio files that did 
 			),
 			'mutt' => array(
 				'priority' => '180',
+				'reason' => '10',
 				'title' => 'Mutt Rip',
 				'report_messages' => array(
 					"Please list at least two (2) tracks which have different bitrates and/or encoders."
@@ -292,6 +307,7 @@ Your torrent was reported because it contained one or more audio files that were
 			),
 			'single_track' => array(
 				'priority' => '270',
+				'reason' => '17',
 				'title' => 'Unsplit Album Rip',
 				'report_messages' => array(
 					"If possible, please provide a link to Amazon.com or another source showing the proper track listing.",
@@ -312,6 +328,7 @@ Your torrent was reported because it contained a single-track rip instead of a r
 			),
 			'tags_lots' => array(
 				'priority' => '82',
+				'reason' => '4',
 				'title' => 'Bad Tags / No Tags at All',
 				'report_messages' => array(
 					"Please specify which tags are missing, and whether they're missing from all tracks.",
@@ -331,6 +348,7 @@ Your torrent has been labeled as having bad tags and is now eligible for trumpin
 			),
 			'folders_bad' => array(
 				'priority' => '81',
+				'reason' => '3',
 				'title' => 'Bad Folder Names',
 				'report_messages' => array(
 					"Please specify the issue with the folder names.",
@@ -348,6 +366,7 @@ Your torrent has been labeled as having a bad folder name (or directory structur
 			),
 			'wrong_format' => array(
 				'priority' => '320',
+				'reason' => '19',
 				'title' => 'Wrong Specified Format',
 				'report_messages' => array(
 					"Please specify the correct format."
@@ -364,6 +383,7 @@ Your torrent has now been labeled using the appropriate format and bitrate.'
 			),
 			'wrong_media' => array(
 				'priority' => '330',
+				'reason' => '20',
 				'title' => 'Wrong Specified Media',
 				'report_messages' => array(
 					"Please specify the correct media."
@@ -379,6 +399,7 @@ Your torrent has now been labeled using the appropriate format and bitrate.'
 			),
 			'format' => array(
 				'priority' => '100',
+				'reason' => '5',
 				'title' => 'Disallowed Format',
 				'report_messages' => array(
 					"If applicable, list the relevant tracks"
@@ -398,6 +419,7 @@ Your torrent was reported because it contained a disallowed format.'
 			),
 			'bitrate' => array(
 				'priority' => '150',
+				'reason' => '8',
 				'title' => 'Inaccurate Bitrate',
 				'report_messages' => array(
 					"Please tell us the actual bitrate, and the software used to check.",
@@ -417,6 +439,7 @@ Your torrent was reported because the bitrates of one or more audio files had be
 			),
 			'source' => array(
 				'priority' => '210',
+				'reason' => '11',
 				'title' => 'Radio/TV/FM/WEB Rip',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -434,6 +457,7 @@ The only allowable media formats are CD, DVD, Vinyl, Soundboard, SACD, DAT, Cass
 			),
 			'discog' => array(
 				'priority' => '130',
+				'reason' => '7',
 				'title' => 'Discography',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -451,6 +475,7 @@ Your torrent was reported because it consisted of a discography.'
 			),
 			'user_discog' => array(
 				'priority' => '290',
+				'reason' => '18',
 				'title' => 'User Compilation',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -469,6 +494,7 @@ Your torrent was reported because it was a user compilation.'
 			),
 			'lineage' => array(
 				'priority' => '190',
+				'reason' => '-1',
 				'title' => 'No Lineage Info',
 				'report_messages' => array(
 					"Please list the specific information missing from the torrent (hardware, software, etc.)"
@@ -485,6 +511,7 @@ Your torrent is now eligible for trumping by a better-sounding rip with complete
 			),
 			'edited' => array(
 				'priority' => '140',
+				'reason' => '8',
 				'title' => 'Edited Log',
 				'report_messages' => array(
 					"Please explain exactly where you believe the log was edited.",
@@ -503,6 +530,7 @@ Your torrent was reported because it contained an edited log (either edited by y
 			),
 			'audience' => array(
 				'priority' => '70',
+				'reason' => '21',
 				'title' => 'Audience Recording',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -520,6 +548,7 @@ Your torrent was reported because it was sourced from an audience recording.'
 			),
 			'filename' => array(
 				'priority' => '80',
+				'reason' => '2',
 				'title' => 'Bad File Names',
 				'report_messages' => array(
 				),
@@ -538,6 +567,7 @@ Your torrent has been labeled as having bad file names and is now eligible for t
 			),
 			'cassette' => array(
 				'priority' => '260',
+				'reason' => '16',
 				'title' => 'Unapproved Cassette',
 				'report_messages' => array(
 					"If the album was never released other than on cassette, please include a source."
@@ -557,6 +587,7 @@ Your torrent was reported because it contains an unapproved cassette rip.'
 			),
 			'skips' => array(
 				'priority' => '220',
+				'reason' => '12',
 				'title' => 'Skips / Encode Errors',
 				'report_messages' => array(
 					"Please tell us which track(s) we should check.",
@@ -575,6 +606,7 @@ Your torrent was reported because one or more tracks contain encoding errors.'
 			),
 			'rescore' => array(
 				'priority' => '160',
+				'reason' => '-1',
 				'title' => 'Log Rescore Request',
 				'report_messages' => array(
 					"It could help us if you say exactly why you believe this log requires rescoring.",
@@ -597,6 +629,7 @@ Your torrent has now been properly scored by the staff.'
 		'2' => array( //Applications Rules Broken
 			'missing_crack' => array(
 				'priority' => '70',
+				'reason' => '-1',
 				'title' => 'No Crack/Keygen/Patch',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report',
@@ -614,6 +647,7 @@ Your torrent was reported because it was missing an installation method.'
 			),
 			'game' => array(
 				'priority' => '50',
+				'reason' => '-1',
 				'title' => 'Game',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report',
@@ -632,6 +666,7 @@ Your torrent was reported because it contained a game disc rip.'
 			),
 			'free' => array(
 				'priority' => '40',
+				'reason' => '-1',
 				'title' => 'Freely Available',
 				'report_messages' => array(
 					'Please include a link to a source of information or to the freely available app itself.',
@@ -649,6 +684,7 @@ Your torrent was reported because it contained a freely available application.'
 			),
 			'description' => array(
 				'priority' => '80',
+				'reason' => '-1',
 				'title' => 'No Description',
 				'report_messages' => array(
 					'If possible, please provide a link to an accurate description',
@@ -666,6 +702,7 @@ Your torrent was reported because it lacked adequate release information.'
 			),
 			'pack' => array(
 				'priority' => '20',
+				'reason' => '-1',
 				'title' => 'Archived Pack',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -684,6 +721,7 @@ Your torrent was reported because it was an archived collection.'
 			),
 			'collection' => array(
 				'priority' => '30',
+				'reason' => '-1',
 				'title' => 'Collection of Cracks',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -701,6 +739,7 @@ Your torrent was reported because it contained a collection of serials, keygens,
 			),
 			'hack' => array(
 				'priority' => '60',
+				'reason' => '-1',
 				'title' => 'Hacking Tool',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report',
@@ -718,6 +757,7 @@ Your torrent was reported because it contained a hacking tool.'
 			),
 			'virus' => array(
 				'priority' => '60',
+				'reason' => '-1',
 				'title' => 'Contains Virus',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report.  Please also double check that your virus scanner is not incorrectly identifying a keygen or crack as a virus.',
@@ -736,6 +776,7 @@ Your torrent was reported because it contained a virus or trojan.'
 			),
 			'notwork' => array(
 				'priority' => '60',
+				'reason' => '-1',
 				'title' => 'Not Working',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report.',
@@ -756,6 +797,7 @@ Your torrent was reported because it contained a program that did not work or no
 		'3' => array( //Ebook Rules Broken
 			'unrelated' => array(
 				'priority' => '270',
+				'reason' => '-1',
 				'title' => 'Unrelated Ebooks',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -774,6 +816,7 @@ Your torrent was reported because it contained a collection or pack of ebooks.'
 		'4' => array( //Audiobook Rules Broken
 			'skips' => array(
 				'priority' => '210',
+				'reason' => '12',
 				'title' => 'Skips / Encode Errors',
 				'report_messages' => array(
 					"Please tell us which track(s) we should check.",
@@ -794,6 +837,7 @@ Your torrent was reported because one or more audiobook tracks contain encoding 
 		'5' => array( //E-Learning vidoes Rules Broken
 			'dissallowed' => array(
 				'priority' => '20',
+				'reason' => '-1',
 				'title' => 'Disallowed Topic',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -813,6 +857,7 @@ Your torrent was reported because it contained a video that has no relevance to 
 		'6' => array( //Comedy Rules Broken
 			'talkshow' => array(
 				'priority' => '270',
+				'reason' => '-1',
 				'title' => 'Talkshow/Podcast',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -832,6 +877,7 @@ Your torrent was reported because it contained audio files sourced from a talk s
 		'7' => array( //Comics Rules Broken
 			'titles' => array(
 				'priority' => '180',
+				'reason' => '-1',
 				'title' => 'Multiple Comic Titles',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'
@@ -849,6 +895,7 @@ Your torrent was reported because it contained comics from multiple unrelated se
 			),
 			'volumes' => array(
 				'priority' => '190',
+				'reason' => '-1',
 				'title' => 'Multiple Volumes',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report'

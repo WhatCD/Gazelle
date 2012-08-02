@@ -1274,7 +1274,7 @@ function send_irc($Raw) {
 	fclose($IRCSocket);
 }
 
-function delete_torrent($ID, $GroupID=0) {
+function delete_torrent($ID, $GroupID=0, $OcelotReason=-1) {
 	global $DB, $Cache, $LoggedUser;
 	if(!$GroupID) {
 		$DB->query("SELECT GroupID, UserID FROM torrents WHERE ID='$ID'");
@@ -1299,7 +1299,7 @@ function delete_torrent($ID, $GroupID=0) {
 	$DB->query("SELECT info_hash FROM torrents WHERE ID = ".$ID);
 	list($InfoHash) = $DB->next_record(MYSQLI_BOTH, false);
 	$DB->query("DELETE FROM torrents WHERE ID = ".$ID);
-	update_tracker('delete_torrent', array('info_hash' => rawurlencode($InfoHash), 'id' => $ID));
+	update_tracker('delete_torrent', array('info_hash' => rawurlencode($InfoHash), 'id' => $ID, 'reason' => $OcelotReason));
 	
 	$Cache->decrement('stats_torrent_count');
 

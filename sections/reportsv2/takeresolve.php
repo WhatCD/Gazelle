@@ -180,7 +180,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 		}
 		$DB->query("SELECT GroupID FROM torrents WHERE ID = ".$TorrentID);
 		list($GroupID) = $DB->next_record();
-		delete_torrent($TorrentID);
+		delete_torrent($TorrentID, 0, $ResolveType['reason']);
 		write_log($Log);
 		$Log = "deleted torrent for the reason: ".$ResolveType['title'].". ( ".$Escaped['log_message']." )";
 		write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $Log, 0);

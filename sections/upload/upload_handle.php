@@ -448,7 +448,7 @@ if($Type == 'Music') {
 		WHERE tg.id = ".$Properties['GroupID']);
 		if($DB->record_count() > 0) {
 			list($GroupID, $WikiImage, $WikiBody, $RevisionID, $Properties['Title'], $Properties['Year'], $Properties['ReleaseType'], $Properties['TagList']) = $DB->next_record();
-			$Properties['TagList'] = str_replace(array(" ","."), array(", ","."), $Properties['TagList']);
+			$Properties['TagList'] = str_replace(array(" ",".","_"), array(", ",".","."), $Properties['TagList']);
 			if(!$Properties['Image'] && $WikiImage){
 				$Properties['Image'] = $WikiImage;
 				$T['Image'] = "'".db_string($WikiImage)."'";
