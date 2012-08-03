@@ -76,6 +76,10 @@ if(check_perms('admin_manage_blog')) {
 					$DB->query("INSERT IGNORE INTO users_subscriptions VALUES ('$LoggedUser[ID]', $ThreadID)");
 					$Cache->delete_value('subscriptions_user_'.$LoggedUser['ID']);
 				}
+				$Tweet = trim($_POST['tweet']);
+				if(!empty($Tweet)) {
+					send_irc("PRIVMSG #what.cd-twitter !tweet ".$Tweet); 
+				}
 		
 				header('Location: blog.php');
 				break;
@@ -105,6 +109,19 @@ if(check_perms('admin_manage_blog')) {
 					<br /><br />
 					<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> tabindex="2" />
 					<label for="subscribebox">Subscribe</label>
+
+					<h3>Tweet</h3>
+					<input type="text" id="tweettext" name="tweet" size="95" onkeyup="charCount()"/><br />
+					<label for="tweettext" id="tweetlabel">0/140</label>
+					<script type="text/javascript">
+						function charCount() {	
+							var count = document.getElementById("tweettext").value.length;
+							document.getElementById("tweetlabel").innerHTML = "Characters " + count +"/140";
+							if(count > 140) {
+								document.getElementById("tweetlabel").innerHTML = "<strong style='color:red'>Exceeded Max Length!</strong>";
+							}
+						}
+					</script>	
 					<div class="center">
 						<input type="submit" value="<?=((!isset($_GET['action'])) ? 'Create blog post' : 'Edit blog post') ?>" />
 					</div>

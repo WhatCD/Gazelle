@@ -15,6 +15,10 @@ switch($_GET['action']) {
 			$DB->query("UPDATE news SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."' WHERE ID='".db_string($_POST['newsid'])."'");
 			$Cache->delete_value('news');
 			$Cache->delete_value('feed_news');
+			$Tweet = trim($_POST['tweet']);
+			if(!empty($Tweet)) {
+			send_irc("PRIVMSG #what.cd-twitter !tweet ".$Tweet); 
+			}
 		}
 		header('Location: index.php');
 		break;
@@ -41,6 +45,20 @@ switch($_GET['action']) {
 			<br />
 			<h3>Body</h3>
 			<textarea name="body" cols="95" rows="15"><? if(!empty($Body)) { echo display_str($Body); } ?></textarea> <br /><br />
+			
+			<h3>Tweet</h3>
+					<input type="text" id="tweettext" name="tweet" size="95" onkeyup="charCount()"/><br />
+					<label for="tweettext" id="tweetlabel">0/140</label>
+					<script type="text/javascript">
+						function charCount() {	
+							var count = document.getElementById("tweettext").value.length;
+							document.getElementById("tweetlabel").innerHTML = "Characters " + count +"/140";
+							if(count > 140) {
+								document.getElementById("tweetlabel").innerHTML = "<strong style='color:red'>Exceeded Max Length!</strong>";
+							}
+						}
+					</script>	
+
 			<div class="center">
 				<input type="submit" value="<?= ($_GET['action'] == 'news')? 'Create news post' : 'Edit news post';?>" />
 			</div>

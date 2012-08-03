@@ -9,6 +9,7 @@ $RS = $DB->query("SELECT
 	SQL_CALC_FOUND_ROWS
 	m.ID,
 	m.IP,
+	m.ipcc,
 	m.Email,
 	m.Username,
 	m.PermissionID,
@@ -21,6 +22,7 @@ $RS = $DB->query("SELECT
 	(SELECT COUNT(h1.UserID) FROM users_history_ips AS h1 WHERE h1.IP=m.IP) AS Uses,
 	im.ID,
 	im.IP,
+	im.ipcc,
 	im.Email,
 	im.Username,
 	im.PermissionID,
@@ -55,11 +57,12 @@ if($DB->record_count()) {
 			<td>Ratio</td>
 			<td>Email</td>
 			<td>IP</td>
+			<td>Country</td>
 			<td>Host</td>
 			<td>Registered</td>
 		</tr>
 <?
-	while(list($UserID, $IP, $Email, $Username, $PermissionID, $Uploaded, $Downloaded, $Enabled, $Donor, $Warned, $Joined, $Uses, $InviterID, $InviterIP, $InviterEmail, $InviterUsername, $InviterPermissionID, $InviterUploaded, $InviterDownloaded, $InviterEnabled, $InviterDonor, $InviterWarned, $InviterJoined, $InviterUses)=$DB->next_record()) {
+	while(list($UserID, $IP, $IPCC, $Email, $Username, $PermissionID, $Uploaded, $Downloaded, $Enabled, $Donor, $Warned, $Joined, $Uses, $InviterID, $InviterIP, $InviterIPCC, $InviterEmail, $InviterUsername, $InviterPermissionID, $InviterUploaded, $InviterDownloaded, $InviterEnabled, $InviterDonor, $InviterWarned, $InviterJoined, $InviterUses)=$DB->next_record()) {
 	$Row = ($IP == $InviterIP) ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
@@ -76,6 +79,10 @@ if($DB->record_count()) {
 				<span style="float:right;"><?=display_str($Uses)?> [<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History">H</a>|<a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search">S</a>]</span><br />
 				<span style="float:left;"><?=display_str($InviterIP)?></span>
 				<span style="float:right;"><?=display_str($InviterUses)?> [<a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History">H</a>|<a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search">S</a>]</span><br />
+			</td>
+			<td>
+				<?=$IPCC?> <br />
+				<?=$InviterIPCC?>
 			</td>
 			<td>
 				<?=get_host($IP)?><br />

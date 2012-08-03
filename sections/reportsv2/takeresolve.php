@@ -178,9 +178,12 @@ if($DB->affected_rows() > 0 || !$Report) {
 		if(isset($Escaped['log_message']) && $Escaped['log_message'] != "") {
 			$Log .= " ( ".$Escaped['log_message']." )";
 		}
-		$DB->query("SELECT GroupID FROM torrents WHERE ID = ".$TorrentID);
-		list($GroupID) = $DB->next_record();
+		$DB->query("SELECT GroupID, hex(info_hash) FROM torrents WHERE ID = ".$TorrentID);
+		list($GroupID, $InfoHash) = $DB->next_record();
 		delete_torrent($TorrentID, 0, $ResolveType['reason']);
+		
+		//$InfoHash = unpack("H*", $InfoHash);
+		$Log .= " (".strtoupper($InfoHash).")";
 		write_log($Log);
 		$Log = "deleted torrent for the reason: ".$ResolveType['title'].". ( ".$Escaped['log_message']." )";
 		write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $Log, 0);
