@@ -15,14 +15,14 @@
 /* <theme name here>            */
 /* Last update: <update here>   */
 
-/* TODO: 
+/* TODO:
  * torrent table anything but music stylings
  * add hover styles to dropdowns (including artist autocomplete)
  * graph poll images (homepage)
  * torrent table cat images
  * artist page link box
  * wiki!
- * 
+ *
  * give some shadow/definition to main nav bar css letterpress?
  * input type text
  * torrent table images (snatched, leechers, seeders)
@@ -30,9 +30,9 @@
  * DL / RP buttons images?
  * torrent table ?order_way= bg images
  * collage images hover styles
- * 
- * 
- * 
+ *
+ *
+ *
  */
 
 /* icons by http://glyphicons.com/ */
@@ -169,7 +169,7 @@ a img {
     top: 1px;
 }
 
-table td, table th {
+table td {
     padding: 2px;
 }
 
@@ -286,10 +286,10 @@ div.linkbox {
 table {
     width: 100%;
 }
-tr.colhead, tr.colhead_dark {   
+tr.colhead, tr.colhead_dark {
     border: 1px solid #b93dd6;
 }
-tr.colhead td, tr.colhead th, tr.colhead_dark td {
+tr.colhead td, tr.colhead_dark td {
     background: #8E2FA4;
     color: #FFF;
     font-weight: bold;
@@ -301,10 +301,6 @@ tr.colhead td, tr.colhead th, tr.colhead_dark td {
 table tr.rowa td {
     background-color: #1a1f25;
     border-top: 1px solid #5F7187;
-}
-.nobr {
-    word-wrap: normal;
-    white-space: nowrap;
 }
 
 /* ************************************************************************** */
@@ -485,19 +481,29 @@ div#header div#alerts .alertbar.blend a {
 ul#userinfo_major {
 }
 /* floating right would be easier but then icons would be reversed and i dont feel like reworking my sprites */
-ul#userinfo_major li#nav_donate a {
+ul#userinfo_major li#nav_store a {
     position: absolute;
     right: 0;
     top:0;
     display: block;
-    background: transparent url("images/much-luv.png") no-repeat scroll 0 0;
+    background: transparent url("images/store.png") no-repeat scroll 0 0;
     width: 24px;
+    height: 30px;
+    text-indent: -9999px;
+}
+ul#userinfo_major li#nav_donate a {
+    position: absolute;
+    right: 30px;
+    top:0;
+    display: block;
+    background: transparent url("images/much-luv.png") no-repeat scroll 0 0;
+    width: 32px;
     height: 30px;
     text-indent: -9999px;
 }
 ul#userinfo_major li#nav_invite a {
     position: absolute;
-    right: 33px;
+    right: 68px;
     top:0;
     display: block;
     background: transparent url("images/yo-dawg-i-heard-you-like-cds.png") no-repeat scroll 0 0;
@@ -507,7 +513,7 @@ ul#userinfo_major li#nav_invite a {
 }
 ul#userinfo_major li#nav_upload a {
     position: absolute;
-    right: 80px;
+    right: 115px;
     top:0;
     display: block;
     background: transparent url("images/icanhaztm.png") no-repeat scroll 0 0;
@@ -771,7 +777,7 @@ body#torrents #torrent_table tr.group td + td + td + td {
 body#torrents #content > div.linkbox:last-child {
     -moz-box-shadow: 0 1px 3px #01A9D3, 0 -1px 1px #01A9D3;
     -webkit-box-shadow: 0 1px 3px #01A9D3, 0 -1px 1px #01A9D3;
-    background: #222;   
+    background: #222;
     padding: 8px 2px;
     margin-top: 20px;
 }
@@ -875,7 +881,7 @@ body#collage #content div.thin h2 + div table.border {
     -moz-box-shadow:0 3px 10px #01A9D3, 0 -1px 5px #01A9D3;
     -webkit-box-shadow:0 3px 10px #01A9D3, 0 -1px 5px #01A9D3;
     background: #222;
-    font-size: 85%;    
+    font-size: 85%;
 }
 body#collage #content div.thin h2 + div table.border td {
     padding: 10px;
@@ -953,7 +959,7 @@ body#requests #content div.thin h2 + .linkbox + div > form {
     -moz-box-shadow:0 3px 10px #01A9D3, 0 -1px 5px #01A9D3;
     -webkit-box-shadow:0 3px 10px #01A9D3, 0 -1px 5px #01A9D3;
     background: #222;
-    font-size: 85%;    
+    font-size: 85%;
 }
 body#requests #content div.thin h2 + .linkbox + div .label {
     text-align: right;
@@ -1018,7 +1024,7 @@ body#requests .tags a:hover {
 body#requests div.thin > h2 + div.linkbox, body#requests div.thin > div.linkbox:last-child {
     -moz-box-shadow: 0 1px 3px #01A9D3, 0 -1px 1px #01A9D3;
     -webkit-box-shadow: 0 1px 3px #01A9D3, 0 -1px 1px #01A9D3;
-    background: #222;   
+    background: #222;
     padding: 8px 2px;
     margin-top: 20px;
 }
@@ -1084,7 +1090,7 @@ body#forums .forum_index td + td + td + td, body#forums .forum_index td + td + t
 body#forums .linkbox {
     -moz-box-shadow: 0 1px 3px #01A9D3, 0 -1px 1px #01A9D3;
     -webkit-box-shadow: 0 1px 3px #01A9D3, 0 -1px 1px #01A9D3;
-    background: #222;   
+    background: #222;
     padding: 8px 2px;
     margin-top: 20px;
 }
@@ -1191,7 +1197,7 @@ body#top10 #content div.thin h2 + .linkbox + div > form {
     -moz-box-shadow:0 3px 10px #01A9D3, 0 -1px 5px #01A9D3;
     -webkit-box-shadow:0 3px 10px #01A9D3, 0 -1px 5px #01A9D3;
     background: #222;
-    font-size: 85%;    
+    font-size: 85%;
 }
 body#top10 #content div.thin h2 + .linkbox + div .label, body#top10 #content div.thin h2 + .linkbox + div .center {
     text-align: right;
@@ -1251,7 +1257,7 @@ body#user table.border tr + tr td:last-child {
 body#user #content div.thin h2 + .linkbox {
     -moz-box-shadow: 0 1px 3px #01A9D3, 0 -1px 1px #01A9D3;
     -webkit-box-shadow: 0 1px 3px #01A9D3, 0 -1px 1px #01A9D3;
-    background: #222;   
+    background: #222;
     padding: 8px 2px;
     margin: 20px 0 30px;
 }
@@ -1317,7 +1323,7 @@ body#forums .poll li.graph {
     background-image: url("images/poll-wide-bg.png");
 }
 .poll span.left_poll,
-.poll span.center_poll, 
+.poll span.center_poll,
 .poll span.right_poll {
     background-color: #01a9d3;
     opacity: 0.75;

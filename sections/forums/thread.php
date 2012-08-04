@@ -72,7 +72,7 @@ if($ThreadInfo['Posts'] > $PerPage) {
 	$PostNum = 1;
 }
 list($Page,$Limit) = page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
-if(($Page-1)*$PerPage > $ThreadInfo['Posts']) {
+if(($Page-1)*$PerPage >= $ThreadInfo['Posts']) {
 	$Page = ceil($ThreadInfo['Posts']/$PerPage);
 }
 list($CatalogueID,$CatalogueLimit) = catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
