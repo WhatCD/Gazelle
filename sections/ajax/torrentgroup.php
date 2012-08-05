@@ -38,6 +38,9 @@ if ($CategoryName == "Music") {
 		'producer' => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
 	);
 }
+else {
+	$JsonMusicInfo = NULL;
+}
 
 $JsonTorrentDetails = array(
 	'wikiBody' => $Text->full_format($TorrentDetails['WikiBody']),
