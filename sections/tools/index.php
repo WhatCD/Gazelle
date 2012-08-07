@@ -285,7 +285,6 @@ switch ($_REQUEST['action']){
 	case 'invite_pool':
 		include('data/invite_pool.php');
 		break;
-
 	case 'torrent_stats':
 		include('data/torrent_stats.php');
 		break;

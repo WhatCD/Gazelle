@@ -21,7 +21,10 @@ if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 			break;
 		case '404':
 			$Title = "Error 404";
-			$Description = "You just tried to go to a page that doesn't really exist.";
+			if(check_perms('users_mod')) {
+				$LogLink = "<a href='log.php'> View Log</a>";
+			}
+			$Description = "You just tried to go to a page that doesn't really exist.".$LogLink;
 			break;
 		case '0':
 			$Title = "Invalid Input";
