@@ -230,17 +230,15 @@ if(!empty($_GET['filter_cat'])) {
 }
 
 
-if(!empty($_GET['page']) && is_number($_GET['page'])) {
+if(!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
 	if(check_perms('site_search_many')) {
 		$Page = $_GET['page'];
 	} else {
 		$Page = min(SPHINX_MAX_MATCHES/TORRENTS_PER_PAGE, $_GET['page']);
 	}
-	$MaxMatches = min(SPHINX_MAX_MATCHES, SPHINX_MATCHES_START + SPHINX_MATCHES_STEP*floor(($Page-1)*TORRENTS_PER_PAGE/SPHINX_MATCHES_STEP));
-	$SS->limit(($Page-1)*TORRENTS_PER_PAGE, TORRENTS_PER_PAGE, $MaxMatches);
+	$SS->limit(($Page-1)*TORRENTS_PER_PAGE, TORRENTS_PER_PAGE);
 } else {
 	$Page = 1;
-	$MaxMatches = SPHINX_MATCHES_START;
 	$SS->limit(0, TORRENTS_PER_PAGE);
 }
 
@@ -259,7 +257,7 @@ if(empty($_GET['order_by']) || !in_array($_GET['order_by'], array('year','time',
 } elseif($_GET['order_by'] == 'random') {
 	$OrderBy = '@random';
 	$Way = SPH_SORT_EXTENDED;
-	$SS->limit(0, TORRENTS_PER_PAGE, TORRENTS_PER_PAGE);
+	$SS->limit(0, TORRENTS_PER_PAGE);
 } else {
 	$OrderBy = $_GET['order_by'];
 }
@@ -278,7 +276,11 @@ if(count($Queries)>0) {
 
 $SS->set_index(SPHINX_INDEX.' delta');
 $Results = $SS->search($Query, '', 0, array(), '', '');
-$TorrentCount = $SS->TotalResults;
+if(check_perms('site_search_many')) {
+	$TorrentCount = $SS->TotalResults;
+} else {
+	$TorrentCount = min($SS->TotalResults, SPHINX_MAX_MATCHES);
+}
 
 // These ones were not found in the cache, run SQL
 if(!empty($Results['notfound'])) {
@@ -310,6 +312,7 @@ if(((!empty($_GET['action']) && strtolower($_GET['action'])=="advanced") || (!em
 
 
 if(count($Results)==0) {
+
 $DB->query("SELECT 
 	tags.Name,
 	((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
@@ -327,11 +330,11 @@ $DB->query("SELECT
 	GROUP BY tt.TagID
 	ORDER BY Score DESC
 	LIMIT 8");
-
 	$JsonYouMightLike = array();
 	while(list($Tag)=$DB->next_record()) {
 		$JsonYouMightLike[] = $Tag;
 	}
+
 
 	print
 		json_encode(

@@ -208,10 +208,10 @@ if(isset($_GET['year'])) {
 
 if(!empty($_GET['page']) && is_number($_GET['page'])) {
 	$Page = min($_GET['page'], 50000/REQUESTS_PER_PAGE);
-	$SS->limit(($Page - 1) * REQUESTS_PER_PAGE, REQUESTS_PER_PAGE, 50000);
+	$SS->limit(($Page - 1) * REQUESTS_PER_PAGE, REQUESTS_PER_PAGE);
 } else {
 	$Page = 1;
-	$SS->limit(0, REQUESTS_PER_PAGE, 50000);
+	$SS->limit(0, REQUESTS_PER_PAGE);
 }
 
 if(empty($_GET['order'])) {

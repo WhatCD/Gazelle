@@ -922,74 +922,83 @@ function get_pages($StartPage,$TotalRecords,$ItemsPerPage,$ShowPages=11,$Anchor=
 	$ShowPages: The number of page links that are shown.
 		eg. If there are 20 pages that exist, but $ShowPages is only 11, only 11 links will be shown.
 	//----------------------------------------------------------------------------*/
-	$StartPage=ceil($StartPage);
-	if ($StartPage==0) { $StartPage=1; }
+	$StartPage = ceil($StartPage);
 	$TotalPages = 0;
-	if ($TotalRecords>0) {
-		if ($StartPage>ceil($TotalRecords/$ItemsPerPage)) { $StartPage=ceil($TotalRecords/$ItemsPerPage); }
+	if ($TotalRecords > 0) {
+		$StartPage = min($StartPage, ceil($TotalRecords/$ItemsPerPage));
 
 		$ShowPages--;
-		$TotalPages=ceil($TotalRecords/$ItemsPerPage);
+		$TotalPages = ceil($TotalRecords/$ItemsPerPage);
 
-		if ($TotalPages>$ShowPages) {
-			$StartPosition=$StartPage-round($ShowPages/2);
+		if ($TotalPages > $ShowPages) {
+			$StartPosition = $StartPage-round($ShowPages/2);
 
-			if ($StartPosition<=0) {
-				$StartPosition=1;
+			if ($StartPosition <= 0) {
+				$StartPosition = 1;
 			} else {
-				if ($StartPosition>=($TotalPages-$ShowPages)) {
-					$StartPosition=$TotalPages-$ShowPages;
+				if ($StartPosition >= ($TotalPages-$ShowPages)) {
+					$StartPosition = $TotalPages-$ShowPages;
 				}
 			}
 
-			$StopPage=$ShowPages+$StartPosition;
+			$StopPage = $ShowPages+$StartPosition;
 
 		} else {
-			$StopPage=$TotalPages;
-			$StartPosition=1;
+			$StopPage = $TotalPages;
+			$StartPosition = 1;
 		}
 
-		if ($StartPosition<1) { $StartPosition=1; }
+		$StartPosition = max($StartPosition, 1);
 
 		$QueryString = get_url(array('page','post'));
-		if($QueryString != '') { $QueryString = '&amp;'.$QueryString; }
-		
+		if ($QueryString != '') {
+			$QueryString = '&amp;'.$QueryString;
+		}
+
 		$Pages = '';
 
-		if ($StartPage>1) {
-			$Pages.='<a href="'.$Location.'?page=1'.$QueryString.$Anchor.'"><strong>&lt;&lt; First</strong></a> ';
-			$Pages.='<a href="'.$Location.'?page='.($StartPage-1).$QueryString.$Anchor.'" class="pager_prev"><strong>&lt; Prev</strong></a> | ';
+		if ($StartPage > 1) {
+			$Pages .= '<a href="'.$Location.'?page=1'.$QueryString.$Anchor.'"><strong>&lt;&lt; First</strong></a> ';
+			$Pages .= '<a href="'.$Location.'?page='.($StartPage-1).$QueryString.$Anchor.'" class="pager_prev"><strong>&lt; Prev</strong></a> | ';
 		}
 		//End change
 		
 		if (!$Mobile) {
-			for ($i=$StartPosition; $i<=$StopPage; $i++) {
+			for ($i = $StartPosition; $i <= $StopPage; $i++) {
 				//if ($i!=$StartPage) { $Pages.='<a href="'.$Location.'?page='.$i.$QueryString.'">'; }
-				if ($i!=$StartPage) { $Pages.='<a href="'.$Location.'?page='.$i.$QueryString.$Anchor.'">'; }
-				$Pages.="<strong>";
-				if($i*$ItemsPerPage>$TotalRecords) {
-					$Pages.=((($i-1)*$ItemsPerPage)+1).'-'.($TotalRecords);
+				if ($i != $StartPage) {
+					$Pages .= '<a href="'.$Location.'?page='.$i.$QueryString.$Anchor.'">';
+				}
+				$Pages .= "<strong>";
+				if($i*$ItemsPerPage > $TotalRecords) {
+					$Pages .= ((($i-1)*$ItemsPerPage)+1).'-'.($TotalRecords);
 				} else {
-					$Pages.=((($i-1)*$ItemsPerPage)+1).'-'.($i*$ItemsPerPage);
+					$Pages .= ((($i-1)*$ItemsPerPage)+1).'-'.($i*$ItemsPerPage);
 				}
 
-				$Pages.="</strong>";
-				if ($i!=$StartPage) { $Pages.='</a>'; }
-				if ($i<$StopPage) { $Pages.=" | "; }
+				$Pages .= "</strong>";
+				if ($i != $StartPage) {
+					$Pages.='</a>';
+				}
+				if ($i < $StopPage) {
+					$Pages.=" | ";
+				}
 			}
 		} else {
 			$Pages .= $StartPage;
 		}
 
-		if ($StartPage<$TotalPages) {
-			$Pages.=' | <a href="'.$Location.'?page='.($StartPage+1).$QueryString.$Anchor.'" class="pager_next"><strong>Next &gt;</strong></a> ';
-			$Pages.='<a href="'.$Location.'?page='.$TotalPages.$QueryString.$Anchor.'"><strong> Last &gt;&gt;</strong></a>';
+		if ($StartPage && $StartPage < $TotalPages) {
+			$Pages .= ' | <a href="'.$Location.'?page='.($StartPage+1).$QueryString.$Anchor.'" class="pager_next"><strong>Next &gt;</strong></a> ';
+			$Pages .= '<a href="'.$Location.'?page='.$TotalPages.$QueryString.$Anchor.'"><strong> Last &gt;&gt;</strong></a>';
 		}
-		
+
 	}
-	
-	if ($TotalPages>1) { return $Pages; }
-	
+
+	if ($TotalPages > 1) {
+		return $Pages;
+	}
+
 }
 
 function send_email($To,$Subject,$Body,$From='noreply',$ContentType='text/plain') {

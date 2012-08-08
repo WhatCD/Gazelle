@@ -481,7 +481,7 @@ ul#userinfo_username {
 }
 
 #torrents #content h2 {
-  margin: 10px 0 10px 0;
+  margin: 10px 0 10px 0 !important;
 }
 
 #content h2:first-child {

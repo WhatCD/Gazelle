@@ -1,5 +1,5 @@
 <?php
-if (!check_perms('users_mod')) { error(403);
+if (!check_perms('users_view_invites')) { error(403);
 }
 
 show_header('Fishy Invites');

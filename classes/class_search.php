@@ -68,7 +68,7 @@ class SPHINX_SEARCH extends SphinxClient {
 			send_irc('PRIVMSG '.LAB_CHAN.' :Search for "'.$Query.'" ('.str_replace("\n",'',print_r($this->Filters, true)).') failed: '.$this->GetLastError());
 		}
 		
-		$this->TotalResults = $Result['total'];
+		$this->TotalResults = $Result['total_found'];
 		$this->SearchTime = $Result['time'];
 		
 		if(empty($Result['matches'])) {
@@ -136,11 +136,10 @@ class SPHINX_SEARCH extends SphinxClient {
 		return $Matches;
 	}
 	
-	function limit($Start, $Length, $MaxMatches=SPHINX_MATCHES_START) {
-		if(check_perms('site_search_many') && empty($_GET['limit_matches'])) {
-			$MaxMatches = 500000; 
-		}
-		$this->SetLimits((int)$Start, (int)$Length, $MaxMatches, 0);
+	function limit($Start, $Length) {
+		$Start = (int)$Start;
+		$Length = (int)$Length;
+		$this->SetLimits($Start, $Length, $Start+$Length);
 	}
 	
 	

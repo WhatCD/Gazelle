@@ -25,8 +25,10 @@ show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=dnu">Do not upload list</a></td></tr>
 <? } if (check_perms('site_recommend_own') || check_perms('site_manage_recommendations')) { ?>
 			<tr><td><a href="tools.php?action=recommend">Vanity House additions</a></td></tr>
-<? } if (check_perms('users_mod')) { ?>
+
+<? } if (check_perms('users_view_email')) { ?>
 			<tr><td><a href="tools.php?action=email_blacklist">Email Blacklist</a></td></tr>
+<? } if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=tokens">Manage freeleech tokens</a></td></tr>
 			<tr><td><a href="tools.php?action=official_tags">Official Tags Manager</a></td></tr>
 			<tr><td><a href="tools.php?action=tag_aliases">Tag Aliases</a></td></tr>
@@ -47,6 +49,7 @@ if (check_perms('admin_donor_log')) { ?>
 			<tr><td><a href="tools.php?action=registration_log">Registration Log</a></td></tr>
 <? } if (check_perms('users_view_invites')) { ?>
 			<tr><td><a href="tools.php?action=invite_pool">Invite Pool</a></td></tr>
+			
 <? } if (check_perms('site_view_flow')) { ?>
 			<tr><td><a href="tools.php?action=upscale_pool">Upscale Pool</a></td></tr>
 			<tr><td><a href="tools.php?action=user_flow">User Flow</a></td></tr>

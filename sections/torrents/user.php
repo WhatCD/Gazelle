@@ -18,7 +18,7 @@ $UserID = $_GET['userid'];
 if(!is_number($UserID)) { error(0); }
 
 
-if(!empty($_GET['page']) && is_number($_GET['page'])) {
+if(!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
 	$Page = $_GET['page'];
 	$Limit = ($Page-1)*TORRENTS_PER_PAGE.', '.TORRENTS_PER_PAGE;
 } else {

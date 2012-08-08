@@ -204,12 +204,12 @@ if(isset($_GET['year'])) {
 	}
 }
 
-if(!empty($_GET['page']) && is_number($_GET['page'])) {
-	$Page = min($_GET['page'], 50000/REQUESTS_PER_PAGE);
-	$SS->limit(($Page - 1) * REQUESTS_PER_PAGE, REQUESTS_PER_PAGE, 50000);
+if(!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
+	$Page = $_GET['page'];
+	$SS->limit(($Page - 1) * REQUESTS_PER_PAGE, REQUESTS_PER_PAGE);
 } else {
 	$Page = 1;
-	$SS->limit(0, REQUESTS_PER_PAGE, 50000);
+	$SS->limit(0, REQUESTS_PER_PAGE);
 }
 
 if(empty($_GET['order'])) {
@@ -267,34 +267,11 @@ if(count($Queries) > 0) {
 $SS->set_index('requests requests_delta');
 $SphinxResults = $SS->search($Query, '', 0, array(), '', '');
 $NumResults = $SS->TotalResults;
-//We don't use sphinxapi's default cache searcher, we use our own functions
-
-if(!empty($SphinxResults['notfound'])) {
-	$SQLResults = get_requests($SphinxResults['notfound']);
-	if(is_array($SQLResults['notfound'])) {
-		//Something wasn't found in the db, remove it from results
-		reset($SQLResults['notfound']);
-		foreach($SQLResults['notfound'] as $ID) {
-			unset($SQLResults['matches'][$ID]);
-			unset($SphinxResults['matches'][$ID]);
-		}
-	}
-	
-	// Merge SQL results with memcached results
-	foreach($SQLResults['matches'] as $ID => $SQLResult) {
-		$SphinxResults['matches'][$ID] = $SQLResult;
-		
-		//$Requests['matches'][$ID] = array_merge($Requests['matches'][$ID], $SQLResult);
-		//We ksort because depending on the filter modes, we're given our data in an unpredictable order
-		//ksort($Requests['matches'][$ID]);
-	}
+if($NumResults && $NumResults < ($Page - 1) * REQUESTS_PER_PAGE + 1) {
+	$PageLinks = get_pages(0, $NumResults, REQUESTS_PER_PAGE);
+} else {
+	$PageLinks = get_pages($Page, $NumResults, REQUESTS_PER_PAGE);
 }
-
-$PageLinks = get_pages($Page, $NumResults, REQUESTS_PER_PAGE);
-
-$Requests = $SphinxResults['matches'];
-
-$CurrentURL = get_url(array('order', 'sort'));
 
 show_header($Title, 'requests');
 
@@ -450,10 +427,12 @@ foreach($Categories as $CatKey => $CatName) {
 			</table>	
 		</form>
 	</div>
-	
+
+<?		if($NumResults) { ?>
 	<div class="linkbox">
 		<?=$PageLinks?>
 	</div>
+<?		} ?>
 	<table id="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;" class="nobr">
@@ -487,7 +466,39 @@ foreach($Categories as $CatKey => $CatName) {
 				Nothing found!
 			</td>
 		</tr>
+<?	} elseif($NumResults < ($Page - 1) * REQUESTS_PER_PAGE + 1) { ?>
+		<tr class="rowb">
+			<td colspan="8">
+				The requested page contains no matches!
+			</td>
+		</tr>
 <?	} else {
+
+	//We don't use sphinxapi's default cache searcher, we use our own functions
+	if(!empty($SphinxResults['notfound'])) {
+		$SQLResults = get_requests($SphinxResults['notfound']);
+		if(is_array($SQLResults['notfound'])) {
+			//Something wasn't found in the db, remove it from results
+			reset($SQLResults['notfound']);
+			foreach($SQLResults['notfound'] as $ID) {
+				unset($SQLResults['matches'][$ID]);
+				unset($SphinxResults['matches'][$ID]);
+			}
+		}
+
+		// Merge SQL results with memcached results
+		foreach($SQLResults['matches'] as $ID => $SQLResult) {
+			$SphinxResults['matches'][$ID] = $SQLResult;
+
+			//$Requests['matches'][$ID] = array_merge($Requests['matches'][$ID], $SQLResult);
+			//We ksort because depending on the filter modes, we're given our data in an unpredictable order
+			//ksort($Requests['matches'][$ID]);
+		}
+	}
+
+	$Requests = $SphinxResults['matches'];
+
+	$CurrentURL = get_url(array('order', 'sort'));
 		$Row = 'a';
 		$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
 		foreach ($Requests as $RequestID => $Request) {
