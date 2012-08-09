@@ -120,20 +120,31 @@ if(empty($_GET['tags_type']) && !empty($Tags)) {
 }
 
 if(!empty($_GET['filter_cat'])) {
-	$Keys = array_keys($_GET['filter_cat']);
-	$SS->set_filter('categoryid', $Keys);
+	$CategoryArray = array_keys($_GET['filter_cat']);
+	$Debug->log_var(array($CategoryArray, $Categories));
+	if(count($CategoryArray) != count($Categories)) {
+		foreach($CategoryArray as $Key => $Index) {
+			if(!isset($Categories[$Index])) {
+				unset($CategoryArray[$Key]);
+			}
+		}
+		if(count($CategoryArray) >= 1) {
+			$SS->set_filter('categoryid', $CategoryArray);
+		}
+	}
 }
 
 if(!empty($_GET['releases'])) {
 	$ReleaseArray = $_GET['releases'];
 	if(count($ReleaseArray) != count($ReleaseTypes)) {
 		foreach($ReleaseArray as $Index => $Value) {
-			if(!is_number($Value)) {
-				error(0);
+			if(!isset($ReleaseTypes[$Value])) {
+				unset($ReleaseArray[$Index]);
 			}
 		}
-		
-		$SS->set_filter('releasetype', $ReleaseArray);
+		if(count($ReleaseArray) >= 1) {
+			$SS->set_filter('releasetype', $ReleaseArray);
+		}
 	}
 }
 
@@ -142,15 +153,13 @@ if(!empty($_GET['formats'])) {
 	if(count($FormatArray) != count($Formats)) {
 		$FormatNameArray = array();
 		foreach($FormatArray as $Index => $MasterIndex) {
-			if(array_key_exists($Index, $Formats)) {
+			if(isset($Formats[$MasterIndex])) {
 				$FormatNameArray[$Index] = '"'.strtr($Formats[$MasterIndex], '-.', '  ').'"';
-			} else {
-				//Hax
-				error(0);
 			}
 		}
-		
-		$Queries[]='@formatlist '.implode(' | ', $FormatNameArray);
+		if(count($FormatNameArray) >= 1) {
+			$Queries[]='@formatlist (any | '.implode(' | ', $FormatNameArray).')';
+		}
 	}
 }
 
@@ -159,15 +168,14 @@ if(!empty($_GET['media'])) {
 	if(count($MediaArray) != count($Media)) {
 		$MediaNameArray = array();
 		foreach($MediaArray as $Index => $MasterIndex) {
-			if(array_key_exists($Index, $Media)) {
+			if(isset($Media[$MasterIndex])) {
 				$MediaNameArray[$Index] = '"'.strtr($Media[$MasterIndex], '-.', '  ').'"';
-			} else {
-				//Hax
-				error(0);
 			}
 		}
 
-		$Queries[]='@medialist '.implode(' | ', $MediaNameArray);
+		if(count($MediaNameArray) >= 1) {
+			$Queries[]='@medialist (any | '.implode(' | ', $MediaNameArray).')';
+		}
 	}
 }
 
@@ -176,15 +184,14 @@ if(!empty($_GET['bitrates'])) {
 	if(count($BitrateArray) != count($Bitrates)) {
 		$BitrateNameArray = array();
 		foreach($BitrateArray as $Index => $MasterIndex) {
-			if(array_key_exists($Index, $Bitrates)) {
+			if(isset($Bitrates[$MasterIndex])) {
 				$BitrateNameArray[$Index] = '"'.strtr($SS->EscapeString($Bitrates[$MasterIndex]), '-.', '  ').'"';
-			} else {
-				//Hax
-				error(0);
 			}
 		}
 
-		$Queries[]='@bitratelist '.implode(' | ', $BitrateNameArray);
+		if(count($BitrateNameArray) >= 1) {
+			$Queries[]='@bitratelist (any | '.implode(' | ', $BitrateNameArray).')';
+		}
 	}
 }
 
@@ -273,6 +280,7 @@ if($NumResults && $NumResults < ($Page - 1) * REQUESTS_PER_PAGE + 1) {
 	$PageLinks = get_pages($Page, $NumResults, REQUESTS_PER_PAGE);
 }
 
+$CurrentURL = get_url(array('order', 'sort'));
 show_header($Title, 'requests');
 
 ?>
@@ -498,7 +506,6 @@ foreach($Categories as $CatKey => $CatName) {
 
 	$Requests = $SphinxResults['matches'];
 
-	$CurrentURL = get_url(array('order', 'sort'));
 		$Row = 'a';
 		$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
 		foreach ($Requests as $RequestID => $Request) {

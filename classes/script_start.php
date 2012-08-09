@@ -287,8 +287,9 @@ function user_info($UserID) {
 			GROUP_CONCAT(ul.PermissionID SEPARATOR ',') AS Levels
 			FROM users_main AS m
 			INNER JOIN users_info AS i ON i.UserID=m.ID
-			JOIN users_levels AS ul ON ul.UserID = m.ID
-			WHERE m.ID='$UserID'");
+			LEFT JOIN users_levels AS ul ON ul.UserID = m.ID
+			WHERE m.ID='$UserID'
+			GROUP BY m.ID");
 		if($DB->record_count() == 0) { // Deleted user, maybe?
 			$UserInfo = array('ID'=>'','Username'=>'','PermissionID'=>0,'Artist'=>false,'Donor'=>false,'Warned'=>'0000-00-00 00:00:00','Avatar'=>'','Enabled'=>0,'Title'=>'', 'CatchupTime'=>0, 'Visible'=>'1');
 
