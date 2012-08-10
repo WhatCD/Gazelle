@@ -5,6 +5,7 @@ function compare($X, $Y){
 }
 
 define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by default
+define('MAX_COLLAGES', 5);      // How many normal collages should be shown by default
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
@@ -646,16 +647,35 @@ if(!is_array($Collages)) {
 	$Cache->cache_value('torrent_collages_'.$GroupID, $Collages, 3600*6);
 }
 if(count($Collages)>0) {
+	if (count($Collages) > MAX_COLLAGES) {
+		// Pick some at random
+		$Range = range(0,count($Collages) - 1);
+		shuffle($Range);
+		$Indices = array_slice($Range, 0, MAX_COLLAGES);
+		$SeeAll = ' <a href="#" onClick="$(\'.collage_rows\').toggle(); return false;">(See all)</a>';
+	} else {
+		$Indices = range(0, count($Collages)-1);
+		$SeeAll = '';
+	}
 ?>
 		<table id="collages">
 			<tr class="colhead">
-				<td width="85%">Collage name</td>
+				<td width="85%">This album is in <?=count($Collages)?> collage<?=((count($Collages)>1)?'s':'')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
-<?	foreach ($Collages as $Collage) { 
-		list($CollageName, $CollageTorrents, $CollageID) = $Collage;
+<?	foreach ($Indices as $i) { 
+		list($CollageName, $CollageTorrents, $CollageID) = $Collages[$i];
+		unset($Collages[$i]);
 ?>
 			<tr>
+				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
+				<td><?=$CollageTorrents?></td>
+			</tr>
+<?	}
+	foreach ($Collages as $Collage) { 
+		list($CollageName, $CollageTorrents, $CollageID) = $Collage;
+?>
+			<tr class="collage_rows hidden">
 				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
 				<td><?=$CollageTorrents?></td>
 			</tr>
@@ -673,7 +693,7 @@ if(!is_array($PersonalCollages)) {
 
 if(count($PersonalCollages)>0) { 
 	if (count($PersonalCollages) > MAX_PERS_COLLAGES) {
-		// Pick 5 at random
+		// Pick some at random
 		$Range = range(0,count($PersonalCollages) - 1);
 		shuffle($Range);
 		$Indices = array_slice($Range, 0, MAX_PERS_COLLAGES);
