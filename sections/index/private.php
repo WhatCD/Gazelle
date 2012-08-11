@@ -47,8 +47,13 @@ show_header('News','bbcode');
 			<div class="center pad"><a href="forums.php?action=viewthread&amp;threadid=<?=$FeaturedAlbum['ThreadID']?>"><em>Read the interview with the artist, discuss here</em></a></div>
 		</div>
 <?
-	}
-	if (check_perms('users_mod')) {
+	} 
+?>
+
+
+
+<? 
+		if (check_perms('users_mod')) {
 ?>
 
 		<div class="box">

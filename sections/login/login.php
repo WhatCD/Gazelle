@@ -54,6 +54,7 @@ if ($Attempts > 0) {
 	<br /><br />
 	Lost your password? <a href="login.php?act=recover">Recover it here!</a>
 <? } ?>
+<script type="text/javascript" src="static/functions/detect_mobile.js"></script>
 <script type="text/javascript">
 cookie.set('cookie_test',1,1);
 if (cookie.get('cookie_test') != null) {
