@@ -3,6 +3,10 @@ pre br {
 	display:none;
 }
 
+.center {
+	text-align: center;
+}
+
 ul.collage_images {
 	padding: 0px;
 	width: 590px;

@@ -523,7 +523,21 @@ EXPLANATION OF PARSER LOGIC
 				case 'quote':
 					$this->NoImg++; // No images inside quote tags
 					if(!empty($Block['Attr'])) {
-						$Str.= '<strong>'.$this->to_html($Block['Attr']).'</strong> wrote: ';
+						$Exploded = explode("|", $this->to_html($Block['Attr']));
+						if(isset($Exploded[1]) && is_numeric($Exploded[1]))  {
+							$PostURL = 'forums.php?action=viewthread&postid='.trim($Exploded[1]);
+						/*	$Current = substr($_SERVER['PHP_SELF'], 1, -4);
+							switch($Current) {
+								case 'forums':
+									$PostURL = $Current.'?action=viewthread&postid='.$PostID;
+									break;
+							}*/
+							$Str.= '<a href="' .$PostURL. '"><strong>'.$Exploded[0].'</strong> wrote: </a>';	
+						//	$Str.= '<strong>'.$Exploded[0].'</strong> wrote: ';
+						}
+						else {
+							$Str.= '<strong>'.$Exploded[0].'</strong> wrote: ';
+						}	
 					}
 					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
 					$this->NoImg--;

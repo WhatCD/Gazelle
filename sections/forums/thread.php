@@ -386,7 +386,7 @@ foreach($Thread as $Key => $Post){
 				<?=format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?> 
 <? if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')){ ?> 
-				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a> 
+				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);">[Quote]</a> 
 <? }
 if (((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write')) && ($AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums'))) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a> 
@@ -482,7 +482,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 						</td>
 					</tr>
 				</table>
-				<form id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post" style="display: block; text-align: center;">
+				<form id="quickpostform" action="" <? if(!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?> method="post" style="display: block; text-align: center;">
 					<input type="hidden" name="action" value="reply" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="thread" value="<?=$ThreadID?>" />

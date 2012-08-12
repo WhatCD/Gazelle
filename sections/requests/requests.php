@@ -124,7 +124,7 @@ if(!empty($_GET['filter_cat'])) {
 	$Debug->log_var(array($CategoryArray, $Categories));
 	if(count($CategoryArray) != count($Categories)) {
 		foreach($CategoryArray as $Key => $Index) {
-			if(!isset($Categories[$Index])) {
+			if(!isset($Categories[$Index-1])) {
 				unset($CategoryArray[$Key]);
 			}
 		}
