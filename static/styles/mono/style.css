@@ -816,6 +816,10 @@ table.forum_post td.body > div { /* Narrow main column (torrent comments, reques
 	margin-left: 25px;
 }
 
+strong.quoteheader{
+  color: #626262;
+}
+
 .forum_post blockquote, #inbox div.body>blockquote {
 	padding: 10px;
 	background: #fafafa url('icons/quote-mark.png') no-repeat 98% 5px;

@@ -73,7 +73,7 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 	}
 ?>
 		<tr><td><?=$DisplayName?>
-			[<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a>]
+			[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
 <?	if(check_perms('admin_reports')) { ?>
 			<a href="better.php?method=folders&amp;remove=<?=$TorrentID?>">[X]</a>
 <? 	} ?>

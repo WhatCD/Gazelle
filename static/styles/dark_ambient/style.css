@@ -731,6 +731,8 @@ margin-left:20px;
 
 td.body {width:100%;}
 
+strong.quoteheader{color: #878787;}
+
 /* TORRENTS */
 
 #torrents input[value="Edit torrent"] {

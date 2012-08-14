@@ -660,6 +660,7 @@ ul.poll li.graph {
 .read_locked{background: url(images/locked_read.png) no-repeat center center;}
 .unread{background: url(images/unread.png) no-repeat center center;}
 .read{background: url(images/read.png) no-repeat center center;}
+strong.quoteheader{color:#492801;}
 
 table.forum_post {
 	margin: 10px 0px;

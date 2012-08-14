@@ -931,6 +931,8 @@ forum_post box vertical_margin pre {
 	height: 200px;
 }
 
+strong.quoteheader { color: #f1f1f1; }
+
 .main_column {
 	width: 700px;
 }

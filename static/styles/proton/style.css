@@ -770,7 +770,9 @@ ul#userinfo_username {
   padding: 0;
 }
 
-
+strong.quoteheader {
+  color: #575757;
+}
 
 /* TORRENTS */
 

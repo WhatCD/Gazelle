@@ -825,6 +825,10 @@ table.forum_post td.body {
 	padding: 5px;
 }
 
+strong.quoteheader{
+  color:#444;
+}
+
 blockquote {
 	margin: 10px;
 	padding: 10px;

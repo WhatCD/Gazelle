@@ -532,11 +532,11 @@ EXPLANATION OF PARSER LOGIC
 									$PostURL = $Current.'?action=viewthread&postid='.$PostID;
 									break;
 							}*/
-							$Str.= '<a href="' .$PostURL. '"><strong>'.$Exploded[0].'</strong> wrote: </a>';	
+							$Str.= '<a href="' .$PostURL. '"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';	
 						//	$Str.= '<strong>'.$Exploded[0].'</strong> wrote: ';
 						}
 						else {
-							$Str.= '<strong>'.$Exploded[0].'</strong> wrote: ';
+							$Str.= '<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
 						}	
 					}
 					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';

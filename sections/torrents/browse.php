@@ -953,8 +953,8 @@ if ($LoggedUser['DefaultSearch']) {
 	<tr class="group_torrent groupid_<?=$GroupID?> <?=$HideGroup?>">
 		<td colspan="3">
 			<span>
-				[<a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][$Key]?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-				| <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][$Key]?>" title="Report">RP</a>]
+				[ <a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][$Key]?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+				| <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][$Key]?>" title="Report">RP</a> ]
 			</span>
 			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$Val?>"><?=$ExtraInfo?></a>
 		</td>
@@ -1000,7 +1000,7 @@ if ($LoggedUser['DefaultSearch']) {
 <?			} ?>
 		<td class="center cats_col"><div title="<?=ucfirst(str_replace('.',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div></td>
 		<td>
-			<span>[<a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][0].$DownloadString?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> | <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][0]?>" title="Report">RP</a>]</span>
+			<span>[ <a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][0].$DownloadString?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> | <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][0]?>" title="Report">RP</a> ]</span>
 			<?=$DisplayName?>
 			<?=$ExtraInfo?>
 			<?=$TorrentTags?>

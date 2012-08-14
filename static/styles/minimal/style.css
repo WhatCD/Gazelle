@@ -242,6 +242,7 @@ table tr.colhead_dark td{background:#555; border:0}
 #forums #content .thin td.unread_locked{background:#373737 url(images/lock-unread.png) no-repeat 50%; width:18px; height:18px}
 #forums #content .thin td.read_locked_sticky{background:#373737 url(images/lock-sticky.png) no-repeat 50%; width:18px; height:18px}
 #forums #content .thin td.unread_locked_sticky{background:#373737 url(images/lock-sticky-unread.png) no-repeat 50%; width:18px; height:18px}
+strong.quoteheader {color: #f1f1f1;}
 
 /* log checker fix */
 #logchecker input[type="file"]{color:#000}
