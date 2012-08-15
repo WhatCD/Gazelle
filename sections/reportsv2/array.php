@@ -37,7 +37,7 @@ $Types = array(
 			),
 			'banned' => array(
 				'priority' => '230',
-				'reason' => '13',
+				'reason' => '14',
 				'title' => 'Specifically Banned',
 				'report_messages' => array(
 					'Please specify exactly which entry on the Do Not Upload list this is violating.'
@@ -191,7 +191,7 @@ Your torrent was reported because it was trumped by another torrent with improve
 			),
 			'tracks_missing' => array(
 				'priority' => '240',
-				'reason' => '14',
+				'reason' => '15',
 				'title' => 'Track(s) Missing',
 				'report_messages' => array(
 					'Please list the track number and title of the missing track',
@@ -251,7 +251,7 @@ Your torrent was reported because it contained only bonus tracks without the ful
 			),
 			'transcode' => array(
 				'priority' => '250',
-				'reason' => '15',
+				'reason' => '16',
 				'title' => 'Transcode',
 				'report_messages' => array(
 					"Please list the tracks you checked, and the method used to determine the transcode.",
@@ -271,7 +271,7 @@ Your torrent was reported because it contained transcoded audio files.'
 			),
 			'low' => array(
 				'priority' => '170',
-				'reason' => '9',
+				'reason' => '10',
 				'title' => 'Low Bitrate',
 				'report_messages' => array(
 					"Please tell us the actual bitrate, and the software used to check."
@@ -289,7 +289,7 @@ Your torrent was reported because it contained one of more audio files that did 
 			),
 			'mutt' => array(
 				'priority' => '180',
-				'reason' => '10',
+				'reason' => '11',
 				'title' => 'Mutt Rip',
 				'report_messages' => array(
 					"Please list at least two (2) tracks which have different bitrates and/or encoders."
@@ -307,7 +307,7 @@ Your torrent was reported because it contained one or more audio files that were
 			),
 			'single_track' => array(
 				'priority' => '270',
-				'reason' => '17',
+				'reason' => '18',
 				'title' => 'Unsplit Album Rip',
 				'report_messages' => array(
 					"If possible, please provide a link to Amazon.com or another source showing the proper track listing.",
@@ -366,7 +366,7 @@ Your torrent has been labeled as having a bad folder name (or directory structur
 			),
 			'wrong_format' => array(
 				'priority' => '320',
-				'reason' => '19',
+				'reason' => '20',
 				'title' => 'Wrong Specified Format',
 				'report_messages' => array(
 					"Please specify the correct format."
@@ -383,7 +383,7 @@ Your torrent has now been labeled using the appropriate format and bitrate.'
 			),
 			'wrong_media' => array(
 				'priority' => '330',
-				'reason' => '20',
+				'reason' => '21',
 				'title' => 'Wrong Specified Media',
 				'report_messages' => array(
 					"Please specify the correct media."
@@ -419,7 +419,7 @@ Your torrent was reported because it contained a disallowed format.'
 			),
 			'bitrate' => array(
 				'priority' => '150',
-				'reason' => '8',
+				'reason' => '9',
 				'title' => 'Inaccurate Bitrate',
 				'report_messages' => array(
 					"Please tell us the actual bitrate, and the software used to check.",
@@ -439,7 +439,7 @@ Your torrent was reported because the bitrates of one or more audio files had be
 			),
 			'source' => array(
 				'priority' => '210',
-				'reason' => '11',
+				'reason' => '12',
 				'title' => 'Radio/TV/FM/WEB Rip',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -475,7 +475,7 @@ Your torrent was reported because it consisted of a discography.'
 			),
 			'user_discog' => array(
 				'priority' => '290',
-				'reason' => '18',
+				'reason' => '19',
 				'title' => 'User Compilation',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -530,7 +530,7 @@ Your torrent was reported because it contained an edited log (either edited by y
 			),
 			'audience' => array(
 				'priority' => '70',
-				'reason' => '21',
+				'reason' => '22',
 				'title' => 'Audience Recording',
 				'report_messages' => array(
 					"Please include as much information as possible to verify the report"
@@ -567,7 +567,7 @@ Your torrent has been labeled as having bad file names and is now eligible for t
 			),
 			'cassette' => array(
 				'priority' => '260',
-				'reason' => '16',
+				'reason' => '17',
 				'title' => 'Unapproved Cassette',
 				'report_messages' => array(
 					"If the album was never released other than on cassette, please include a source."
@@ -587,7 +587,7 @@ Your torrent was reported because it contains an unapproved cassette rip.'
 			),
 			'skips' => array(
 				'priority' => '220',
-				'reason' => '12',
+				'reason' => '13',
 				'title' => 'Skips / Encode Errors',
 				'report_messages' => array(
 					"Please tell us which track(s) we should check.",
@@ -816,7 +816,7 @@ Your torrent was reported because it contained a collection or pack of ebooks.'
 		'4' => array( //Audiobook Rules Broken
 			'skips' => array(
 				'priority' => '210',
-				'reason' => '12',
+				'reason' => '13',
 				'title' => 'Skips / Encode Errors',
 				'report_messages' => array(
 					"Please tell us which track(s) we should check.",

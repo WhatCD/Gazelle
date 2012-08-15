@@ -525,15 +525,8 @@ EXPLANATION OF PARSER LOGIC
 					if(!empty($Block['Attr'])) {
 						$Exploded = explode("|", $this->to_html($Block['Attr']));
 						if(isset($Exploded[1]) && is_numeric($Exploded[1]))  {
-							$PostURL = 'forums.php?action=viewthread&postid='.trim($Exploded[1]);
-						/*	$Current = substr($_SERVER['PHP_SELF'], 1, -4);
-							switch($Current) {
-								case 'forums':
-									$PostURL = $Current.'?action=viewthread&postid='.$PostID;
-									break;
-							}*/
-							$Str.= '<a href="' .$PostURL. '"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';	
-						//	$Str.= '<strong>'.$Exploded[0].'</strong> wrote: ';
+							$PostID = trim($Exploded[1]);
+							$Str.= '<a href="#" onclick="QuoteJump('.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';	
 						}
 						else {
 							$Str.= '<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';

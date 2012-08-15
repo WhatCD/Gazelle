@@ -1,6 +1,16 @@
 var username;
 var postid;
 
+function QuoteJump(post) {
+	var hash = "#post" + post;
+	if($(hash).raw() != null) {
+		window.location.hash = hash;
+	}
+	else {
+		window.open("forums.php?action=viewthread&postid="+post, '_self');
+	}
+}
+
 function Quote(post, user) {
 	Quote(post, user, false) 
 }
