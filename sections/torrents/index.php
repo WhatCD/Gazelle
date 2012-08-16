@@ -409,7 +409,11 @@ if(!empty($_REQUEST['action'])) {
 		if($GroupID) {
 			header("Location: torrents.php?id=".$GroupID."&torrentid=".$_GET['torrentid']."#torrent".$_GET['torrentid']);
 		} else {
-			error(404);
+			if(check_perms('users_mod')) {
+				error(404, false, 'torrent+'.$_GET['torrentid']);
+			} else {
+				error(404);
+			}
 		}
 	} elseif(!empty($_GET['type'])) {
 		include(SERVER_ROOT.'/sections/torrents/user.php');

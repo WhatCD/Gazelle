@@ -44,6 +44,7 @@ if($Artists) {
 if($GroupYear>0) {
 	$DisplayName.=' ['.$GroupYear.']';
 	$AltName.=' ['.$GroupYear.']';
+	$Title.= ' ['.$GroupYear.']';
 }
 if($GroupVanityHouse){
 	$DisplayName.=' [Vanity House]';

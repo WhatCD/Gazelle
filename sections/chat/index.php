@@ -1,6 +1,6 @@
 <?
 enforce_login();
-show_header('IRC');	
+show_header('IRC');
 
 $DB->query("SELECT IRCKey FROM users_main WHERE ID = $LoggedUser[ID]");
 list($IRCKey) = $DB->next_record();
@@ -24,7 +24,7 @@ if(empty($IRCKey)) {
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>
-				Staff have the final decision, if they say stop and you continue, expect at least to be banned from the IRC server. 
+				Staff have the final decision, if they say stop and you continue, expect at least to be banned from the IRC server.
 			</li>
 			<li>
 				Be respectful to IRC Operators and Administrators. These people are site staff who volunteer their time for little compensation. They are there for the benefit of all and to aid in conflict resolution, do not waste their time.
@@ -60,7 +60,7 @@ if(empty($IRCKey)) {
 				Don't PM, DCC, or Query anyone you don't know or have never talked to without asking, this applies specifically to staff.
 			</li>
 			<li>
-				No language other than English is permitted in the official IRC channels. If we can't understand it, we can't moderate it. 
+				No language other than English is permitted in the official IRC channels. If we can't understand it, we can't moderate it.
 			</li>
 			<li>
 				The offering, selling, trading and giving away of invites to this or any other site on our IRC network is <strong>strictly forbidden</strong>.
@@ -69,14 +69,12 @@ if(empty($IRCKey)) {
 				<strong>Read the topic before asking questions.</strong>
 			</li>
 		</ul>
+		<form method="post" action="chat.php" class="center">
+			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+			<input type="submit" name="accept" value="I agree to these rules" />
+		</form>
 	</div>
 </div>
-<form method="post" action="chat.php">
-	<center>
-		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<input type="submit" name="accept" value="I agree to these rules" />
-	</center>
-</form>
 <?
 	} else {
 		$nick = $LoggedUser["Username"];
@@ -103,6 +101,7 @@ if(empty($IRCKey)) {
 				<param name="host" value="<?=BOT_SERVER?>">
 				<param name="multiserver" value="true">
 				<param name="autorejoin" value="false">
+
 
 				<param name="gui" value="sbox">
 				<param name="pixx:highlight" value="true">

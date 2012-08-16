@@ -106,7 +106,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 
 		$TorrentList = $DB->to_array();
 		if(count($TorrentList) == 0) {
-			error(404);
+			error(404, false, 'torrent+'.$GroupID);
 		}
 		if(in_array(0, $DB->collect('Seeders'))) {
 			$CacheTime = 600;

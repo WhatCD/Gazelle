@@ -21,10 +21,7 @@ if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 			break;
 		case '404':
 			$Title = "Error 404";
-			if(check_perms('users_mod')) {
-				$LogLink = "<a href='log.php'> View Log</a>";
-			}
-			$Description = "You just tried to go to a page that doesn't really exist.".$LogLink;
+			$Description = "You just tried to go to a page that doesn't really exist.";
 			break;
 		case '0':
 			$Title = "Invalid Input";
@@ -43,6 +40,10 @@ if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 				$Title = "Unexpected Error";
 				$Description = "You have encountered an unexpected error.";
 			}
+	}
+
+	if($Log) {
+		$Description .= ' <a href="log.php?search='.$Log.'">Search Log</a>';
 	}
 
 	if(empty($Ajax)) {

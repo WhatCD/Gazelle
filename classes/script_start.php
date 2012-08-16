@@ -2214,7 +2214,7 @@ function selected($Name, $Value, $Attribute='selected', $Array = array()) {
 		}
 	}
 }
-function error($Error, $Ajax=false) {
+function error($Error, $Ajax=false, $Log=false) {
 	global $Debug;
 	require(SERVER_ROOT.'/sections/error/index.php');
 	$Debug->profile();

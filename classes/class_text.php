@@ -1,7 +1,7 @@
 <?
 class TEXT {
 	// tag=>max number of attributes
-	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0, 'torrent'=>0
+	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'headline'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0, 'torrent'=>0, 'rule'=>0,
 	);
 	private $Smileys = array(
 		':angry:'			=> 'angry.gif',
@@ -377,6 +377,9 @@ EXPLANATION OF PARSER LOGIC
 				case 'tex':
 					$Array[$ArrayPos] = array('Type'=>'tex', 'Val'=>$Block);
 					break;
+                case 'rule':
+                    $Array[$ArrayPos] = array('Type'=>'rule', 'Val'=>$Block);
+                    break;
 				case 'pre':
 				case 'code':
 				case 'plain':
@@ -454,6 +457,13 @@ EXPLANATION OF PARSER LOGIC
 				case 'artist':
 					$Str.='<a href="artist.php?artistname='.urlencode(undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
 					break;
+                case 'rule':
+                    $Rule = trim(strtolower($Block['Val']));
+                    if($Rule[0] != 'r' && $Rule[0] != 'h') {
+                        $Rule = 'r'.$Rule;
+                    }
+                    $Str.='<a href="rules.php?p=upload#'.urlencode(undisplay_str($Rule)).'">'.preg_replace('/[aA-zZ]/', '', $Block['Val']).'</a>';
+                    break;
 				case 'torrent':
 					$Pattern = '/('.NONSSL_SITE_URL.'\/torrents\.php.*[\?&]id=)?(\d+)($|&|\#).*/i';
 					$Matches = array();
