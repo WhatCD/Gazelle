@@ -204,12 +204,12 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 			$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&avatar='.$UserID.'&i='.urlencode($Avatar);
 		}
 ?>
-		<div class="box">
+		<div class="box box_image box_image_avatar">
 			<div class="head colhead_dark">Avatar</div>
 			<div align="center"><img src="<?=display_str($Avatar)?>" width="150" style="max-height:400px;" alt="<?=$Username?>'s avatar" /></div>
 		</div>
 <? } ?>
-		<div class="box">
+		<div class="box box_info box_userinfo_stats">
 			<div class="head colhead_dark">Stats</div>
 			<ul class="stats nobullet">
 				<li>Joined: <?=$JoinedDate?></li>
@@ -284,7 +284,7 @@ if($Downloaded == 0) {
 $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio);
 
 ?>
-		<div class="box">
+		<div class="box box_info box_userinfo_percentile">
 			<div class="head colhead_dark">Percentile Rankings (Hover for values)</div>
 			<ul class="stats nobullet">
 <? if (($Override=check_paranoia_here('uploaded'))) { ?>
@@ -330,7 +330,7 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 			list($EmailChanges) = $DB->next_record();
 		}
 ?>
-	<div class="box">
+	<div class="box box_info box_userinfo_history">
 		<div class="head colhead_dark">History</div>
 		<ul class="stats nobullet">
 <?	if (check_perms('users_view_email',$Class)) { ?>
@@ -361,7 +361,7 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 		</ul>
 	</div>
 <?	} ?>
-		<div class="box">
+		<div class="box box_info box_userinfo_personal">
 			<div class="head colhead_dark">Personal</div>
 			<ul class="stats nobullet">
 				<li>Class: <?=$ClassLevels[$Class]['Name']?></li>
@@ -479,7 +479,7 @@ list($UniqueGroups) = $DB->next_record();
 $DB->query("SELECT COUNT(ID) FROM torrents WHERE ((LogScore = 100 AND Format = 'FLAC') OR (Media = 'Vinyl' AND Format = 'FLAC') OR (Media = 'WEB' AND Format = 'FLAC') OR (Media = 'DVD' AND Format = 'FLAC') OR (Media = 'Soundboard' AND Format = 'FLAC') OR (Media = 'Cassette' AND Format = 'FLAC') OR (Media = 'SACD' AND Format = 'FLAC') OR (Media = 'Blu-ray' AND Format = 'FLAC') OR (Media = 'DAT' AND Format = 'FLAC')) AND UserID = '$UserID'");
 list($PerfectFLACs) = $DB->next_record();
 ?>
-		<div class="box">
+		<div class="box box_info box_userinfo_community">
 			<div class="head colhead_dark">Community</div>
 			<ul class="stats nobullet">
 				<li>Forum Posts: <?=number_format($ForumPosts)?> [<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>" title="View">View</a>]</li>

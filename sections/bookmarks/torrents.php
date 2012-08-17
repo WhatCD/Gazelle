@@ -356,7 +356,7 @@ foreach ($Tags as $TagName => $Tag) {
 				</ol>
 			</div>
 		</div>
-		<div class="box">
+		<div class="box box_artists">
 			<div class="head"><strong>Top artists</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">

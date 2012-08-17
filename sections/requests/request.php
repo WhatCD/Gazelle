@@ -125,7 +125,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 	
 	<div class="sidebar">
 <? if($CategoryID != 0) { ?>
-		<div class="box box_albumart">
+		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
 <?
 if (!empty($Image)) {

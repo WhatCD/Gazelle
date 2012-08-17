@@ -115,7 +115,7 @@ show_header($Title,'browse,comments,torrent,bbcode');
 	</div>
 
 	<div class="sidebar">
-		<div class="box box_albumart">
+		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
 <?
 if ($WikiImage!="") {
@@ -348,7 +348,7 @@ if(count($Tags) > 0) {
 }
 ?>
 		</div>
-		<div class="box">
+		<div class="box box_addtag">
 			<div class="head"><strong>Add tag</strong></div>
 			<div class="body">
 				<form action="torrents.php" method="post">

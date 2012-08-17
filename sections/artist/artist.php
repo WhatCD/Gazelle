@@ -517,7 +517,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 	</div>
 	<div class="sidebar">
 <? if($Image) { ?>
-		<div class="box">
+		<div class="box box_image">
 			<div class="head"><strong><?=$Name?></strong></div>
 			<div style="text-align:center;padding:10px 0px;">
 				<img style="max-width: 220px;" src="<?=to_thumbnail($Image)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=$Image?>',220);" />
@@ -525,7 +525,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 		</div>
 <?	} ?>
 
-		<div class="box">
+		<div class="box box_search">
                         <div class="head"><strong>Search File Lists</strong></div>
                         <ul class="nobullet">
                                 <li>
@@ -600,7 +600,7 @@ foreach ($ZIPOptions as $Option) {
 			</div>
 		</div>
 <? } ?>
-		<div class="box">
+		<div class="box box_tags">
 			<div class="head"><strong>Tags</strong></div>
 			<ul class="stats nobullet">
 <?
@@ -617,7 +617,7 @@ foreach ($Tags as $TagName => $Tag) {
 
 // Stats
 ?>
-			<div class="box">
+			<div class="box box_info box_statistics_artist">
 			<div class="head"><strong>Statistics</strong></div>
 			<ul class="stats nobullet">
 				<li>Number of groups: <?=$NumGroups?></li>
@@ -649,7 +649,7 @@ if(empty($SimilarArray)) {
 	$NumSimilar = count($SimilarArray);
 }
 ?>
-		<div class="box">
+		<div class="box box_artists">
 			<div class="head"><strong>Similar artists</strong></div>
 			<ul class="stats nobullet">
 <?
@@ -681,7 +681,7 @@ if(empty($SimilarArray)) {
 <?		} ?>
 			</ul>
 		</div>
-		<div class="box">
+		<div class="box box_addartists">
 			<div class="head"><strong>Add similar artist</strong></div>
 			<ul class="nobullet">
 				<li>

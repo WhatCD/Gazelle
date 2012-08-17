@@ -69,7 +69,7 @@ show_header($Title,'wiki,bbcode');
 			<br style="line-height:10px;"/>
 			<strong><a href="wiki.php?action=browse">Browse articles</a></strong>
 		</div>
-		<div class="box pad">
+		<div class="box box_info pad">
 			<ul>
 				<li>
 					<strong>Protection:</strong>
@@ -105,7 +105,7 @@ show_header($Title,'wiki,bbcode');
 			</ul>
 		</div>
 <? if($Edit <= $LoggedUser['EffectiveClass']){ ?>
-		<div class="box">
+		<div class="box box_addalias">
 			<div style="padding:5px;">
 				<form action="wiki.php" method="post">
 					<input type="hidden" name="action" value="add_alias" />

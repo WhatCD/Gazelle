@@ -450,7 +450,7 @@ function contest() {
 
 ?>
 <!-- Contest Section -->
-		<div class="box">
+		<div class="box box_contest">
 			<div class="head colhead_dark"><strong>Quality time scoreboard</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">

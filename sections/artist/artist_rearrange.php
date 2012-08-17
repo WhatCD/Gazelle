@@ -449,7 +449,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 	</div>
 	<div class="sidebar">
 <? if($Image) { ?>
-		<div class="box">
+		<div class="box box_image">
 			<div class="head"><strong><?=$Name?></strong></div>
 			<div style="text-align:center;padding:10px 0px;">
 				<img style="max-width: 220px;" src="<?=$Image?>" alt="<?=$Name?>" onclick="lightbox.init(this,220);" />
@@ -475,7 +475,7 @@ foreach ($Tags as $TagName => $Tag) {
 
 // Stats
 ?>
-			<div class="box">
+			<div class="box box_info box_statistics_artist">
 			<div class="head"><strong>Statistics</strong></div>
 			<ul class="stats nobullet">
 				<li>Number of groups: <?=$NumGroups?></li>
@@ -507,7 +507,7 @@ if(empty($SimilarArray)) {
 	$NumSimilar = count($SimilarArray);
 }
 ?>
-		<div class="box">
+		<div class="box box_artists box_artists_similar">
 			<div class="head"><strong>Similar artists</strong></div>
 			<ul class="stats nobullet">
 <?
@@ -539,7 +539,7 @@ if(empty($SimilarArray)) {
 <?		} ?>
 			</ul>
 		</div>
-		<div class="box">
+		<div class="box box_addartists box_addartists_similar">
 			<div class="head"><strong>Add similar artist</strong></div>
 			<ul class="nobullet">
 				<li>

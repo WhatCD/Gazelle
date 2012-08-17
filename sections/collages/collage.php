@@ -393,11 +393,11 @@ if (check_perms('site_collages_manage') && !$Locked) { ?>
 <? } ?>
 	</div>
 	<div class="sidebar">
-		<div class="box">
+		<div class="box box_category">
 			<div class="head"><strong>Category</strong></div>
 			<div class="pad"><a href="collages.php?action=search&amp;cats[<?=(int)$CollageCategoryID?>]=1"><?=$CollageCats[(int)$CollageCategoryID]?></a></div>
 		</div>
-		<div class="box">
+		<div class="box box_description">
 			<div class="head"><strong>Description</strong></div>
 			<div class="pad"><?=$Text->full_format($Description)?></div>
 		</div>
@@ -411,7 +411,7 @@ if(check_perms('zip_downloader')){
 		$ZIPPrefs = 1;
 	}
 ?>
-		<div class="box">
+		<div class="box box_zipdownload">
 			<div class="head colhead_dark"><strong>Collector</strong></div>
 			<div class="pad">
 				<form action="collages.php" method="post">
@@ -462,7 +462,7 @@ foreach ($ZIPOptions as $Option) {
 			</div>
 		</div>
 <? } ?>
-		<div class="box">
+		<div class="box box_info box_statistics_collage_torrents">
 			<div class="head"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
 				<li>Torrents: <?=$NumGroups?></li>
@@ -470,7 +470,7 @@ foreach ($ZIPOptions as $Option) {
 				<li>Built by <?=count($Users)?> user<?=(count($Users)>1) ? 's' : ''?></li>
 			</ul>
 		</div>
-		<div class="box">
+		<div class="box box_tags">
 			<div class="head"><strong>Top tags</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">
@@ -489,7 +489,7 @@ foreach ($Tags as $TagName => $Tag) {
 			</div>
 		</div>
 <? if(!empty($Artists)) { ?>		
-		<div class="box">
+		<div class="box box_artists">
 			<div class="head"><strong>Top artists</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">
@@ -508,7 +508,7 @@ foreach ($Artists as $ID => $Artist) {
 			</div>
 		</div>
 <? } ?>
-		<div class="box">
+		<div class="box box_contributors">
 			<div class="head"><strong>Top contributors</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">
@@ -528,7 +528,7 @@ foreach ($Users as $ID => $User) {
 			</div>
 		</div>
 <? if(check_perms('site_collages_manage') && !$Locked) { ?>
-		<div class="box">
+		<div class="box box_addtorrent">
 			<div class="head"><strong>Add torrent</strong><span style="float: right"><a href="#" onClick="$('#addtorrent').toggle(); $('#batchadd').toggle(); this.innerHTML = (this.innerHTML == '[Batch Add]'?'[Individual Add]':'[Batch Add]'); return false;">[Batch Add]</a></span></div>
 			<div class="pad" id="addtorrent">
 				<form action="collages.php" method="post">
@@ -572,7 +572,7 @@ if(empty($CommentList)) {
 foreach ($CommentList as $Comment) {
 	list($CommentID, $Body, $UserID, $Username, $CommentTime) = $Comment;
 ?>
-		<div class="box">
+		<div class="box comment">
 			<div class="head">By <?=format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>">[Report Comment]</a></div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
@@ -585,7 +585,7 @@ foreach ($CommentList as $Comment) {
 <?
 if(!$LoggedUser['DisablePosting']) {
 ?>
-		<div class="box">
+		<div class="box box_addcomment">
 			<div class="head"><strong>Add comment</strong></div>
 			<form id="quickpostform" onsubmit="quickpostform.submit_button.disabled=true;" action="collages.php" method="post">
 				<input type="hidden" name="action" value="add_comment" />
