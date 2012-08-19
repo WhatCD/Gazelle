@@ -40,7 +40,9 @@ if(isset($_GET['username'])){
 show_header('User search');
 ?>
 <div class="thin">
-	<h3>Search results</h3>
+	<div class="header">
+		<h3>Search results</h3>
+	</div>
 	<div class="linkbox">
 <?
 $Pages=get_pages($Page,$NumResults,USERS_PER_PAGE,9);

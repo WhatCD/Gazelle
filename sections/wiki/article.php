@@ -15,7 +15,9 @@ if(!$ArticleID) { //No article found
 	show_header('No article found');
 ?>
 <div class="thin">
-	<h2>No article found</h2>
+	<div class="header">
+		<h2>No article found</h2>
+	</div>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		There is no article matching the name you requested.
 		<ul>
@@ -36,8 +38,9 @@ if($Read > $LoggedUser['EffectiveClass']){ error(404); }
 show_header($Title,'wiki,bbcode');
 ?>
 <div class="thin">
-	<h2><?=$Title?></h2>
-	<div class="linkbox box">
+	<div class="header">
+		<h2><?=$Title?></h2>
+		<div class="linkbox box">
 			<a href="wiki.php?action=create">[Create]</a>
 			<a href="wiki.php?action=edit&amp;id=<?=$ArticleID?>">[Contribute]</a>
 			<a href="wiki.php?action=revisions&amp;id=<?=$ArticleID?>">[History]</a>
@@ -45,8 +48,8 @@ show_header($Title,'wiki,bbcode');
 			<a href="wiki.php?action=delete&amp;id=<?=$ArticleID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete?\nYes, DELETE, not as in \'Oh hey, if this is wrong we can get someone to magically undelete it for us later\' it will be GONE.\nGiven this new information, do you still want to DELETE this article and all its revisions and all its alias\' and act like it never existed?')">[Delete]</a>
 <? } ?>
 			<!--<a href="reports.php?action=submit&amp;type=wiki&amp;article=<?=$ArticleID ?>">[Report]</a>-->
+		</div>
 	</div>
-	<br />
 	<div class="sidebar">
 		<!--
 		<div class="box pad">

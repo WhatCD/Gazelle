@@ -12,9 +12,11 @@ function confirmDelete(id) {
 //]]>
 </script>
 <div class="thin">
-	<div class="linkbox">
-		[<a href="tools.php?action=permissions&amp;id=new">Create a new permission set</a>]
-		[<a href="tools.php">Back to Tools</a>]
+	<div class="header">
+		<div class="linkbox">
+			[<a href="tools.php?action=permissions&amp;id=new">Create a new permission set</a>]
+			[<a href="tools.php">Back to Tools</a>]
+		</div>
 	</div>
 <?
 $DB->query("SELECT p.ID,p.Name,p.Level,p.Secondary,COUNT(u.ID)+COUNT(DISTINCT l.UserID) 

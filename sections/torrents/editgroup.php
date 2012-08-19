@@ -42,7 +42,9 @@ show_header('Edit torrent group');
 // Start printing form
 ?>
 <div class="thin">
-	<h2>Edit <a href="torrents.php?id=<?=$GroupID?>"><?=$Name?></a></h2>
+	<div class="header">
+		<h2>Edit <a href="torrents.php?id=<?=$GroupID?>"><?=$Name?></a></h2>
+	</div>
 	<div class="box pad">
 		<form action="torrents.php" method="post">
 			<div>
@@ -77,7 +79,7 @@ show_header('Edit torrent group');
 <?	$DB->query("SELECT UserID FROM torrents WHERE GroupID = ".$GroupID);
 	//Users can edit the group info if they've uploaded a torrent to the group or have torrents_edit
 	if(in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?> 
-	<h2>Non-wiki group editing</h2>
+	<h3>Non-wiki group editing</h3>
 	<div class="box pad">
 		<form action="torrents.php" method="post">
 			<input type="hidden" name="action" value="nonwikiedit" />
@@ -130,7 +132,7 @@ show_header('Edit torrent group');
 	}
 	if(check_perms('torrents_edit')) { 
 ?> 
-	<h2>Rename (won't merge)</h2>
+	<h3>Rename (won't merge)</h3>
 	<div class="box pad">
 		<form action="torrents.php" method="post">
 			<div>
@@ -145,7 +147,7 @@ show_header('Edit torrent group');
 			</div>
 		</form>
 	</div>
-	<h2>Merge with another group</h2>
+	<h3>Merge with another group</h3>
 	<div class="box pad">
 		<form action="torrents.php" method="post">
 			<div>

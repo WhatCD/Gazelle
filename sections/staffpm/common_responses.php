@@ -11,20 +11,22 @@ $Text = new TEXT;
 
 ?>
 <div class="thin">
-	<h2>Staff PMs - Manage common responses</h2>
-	<div class="linkbox">
+	<div class="header">
+		<h2>Staff PMs - Manage common responses</h2>
+		<div class="linkbox">
 <? 	if ($IsStaff) { ?>
-		<a href="staffpm.php">[My unanswered]</a>
+			<a href="staffpm.php">[My unanswered]</a>
 <? 	} ?>
-		<a href="staffpm.php?view=unanswered">[All unanswered]</a>
-		<a href="staffpm.php?view=open">[Open]</a>
-		<a href="staffpm.php?view=resolved">[Resolved]</a>
+			<a href="staffpm.php?view=unanswered">[All unanswered]</a>
+			<a href="staffpm.php?view=open">[Open]</a>
+			<a href="staffpm.php?view=resolved">[Resolved]</a>
 <?	if ($ConvID = (int)$_GET['convid']) { ?>
-		<a href="staffpm.php?action=viewconv&id=<?=$ConvID?>">[Back to conversation]</a>
+			<a href="staffpm.php?action=viewconv&id=<?=$ConvID?>">[Back to conversation]</a>
 <?	} ?>
-		<br />
-		<br />
+		</div>
 	</div>
+	<br />
+	<br />
 	<div id="commonresponses" class="center">
 		<br />
 		<div id="ajax_message_0" class="hidden center alertbar"></div>

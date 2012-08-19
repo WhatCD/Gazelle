@@ -23,7 +23,9 @@ if($Letter) { $Title.= ' ('.$Letter.')'; }
 ?>
 <div class="thin">
 <? if($Letter) { ?>
-	<h2>Browse articles (<?=$Letter?>)</h2>
+	<div class="header">
+		<h2>Browse articles (<?=$Letter?>)</h2>
+	</div>
 	<table width="100%" style="margin-bottom:10px;">
 		<tr class="colhead">
 			<td>Article</td>

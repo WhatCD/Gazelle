@@ -29,7 +29,9 @@ if(empty($_POST['confirm'])) {
 	show_header();
 ?>
 	<div class="center thin">
-	<h2>Merge Confirm!</h2>
+	<div class="header">
+		<h2>Merge Confirm!</h2>
+	</div>
 	<div class="box pad">
 		<form action="torrents.php" method="post">
 			<input type="hidden" name="action" value="merge" />
@@ -37,9 +39,9 @@ if(empty($_POST['confirm'])) {
 			<input type="hidden" name="confirm" value="true" />
 			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
 			<input type="hidden" name="targetgroupid" value="<?=$NewGroupID?>" />
-			<h2>You are attempting to merge the group:</h2>
+			<h3>You are attempting to merge the group:</h3>
 			<ul><li><?= display_artists($Artists[$GroupID], true, false)?> - <a href="torrents.php?id=<?=$GroupID?>"><?=$Name?></a></li></ul>
-			<h2>Into the group:</h2>
+			<h3>Into the group:</h3>
 			<ul><li><?= display_artists($Artists[$NewGroupID], true, false)?> - <a href="torrents.php?id=<?=$NewGroupID?>"><?=$NewName?></a></li></ul>
 			<input type="submit" value="Confirm" />
 		</form>

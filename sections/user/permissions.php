@@ -64,9 +64,11 @@ function reset() {
 	}
 }
 </script>
-<h2><?=format_username($UserID, false, false, false)?> > Permissions</h2>
-<div class="linkbox">
-	[<a href="#" onclick="reset();return false;">Defaults</a>]
+<div class="header">
+	<h2><?=format_username($UserID, false, false, false)?> > Permissions</h2>
+	<div class="linkbox">
+		[<a href="#" onclick="reset();return false;">Defaults</a>]
+	</div>
 </div>
 <div class="box pad">
 	Before using permissions, please understand that it allows you to both add and remove access to specific features. If you think that to add access to a feature, you need to uncheck everything else, <strong>YOU ARE WRONG</strong>. The checkmarks on the left, which are grayed out, are the standard permissions granted by their class (and donor/artist status), any changes you make to the right side will overwrite this. It's not complicated, and if you screw up, click the defaults link at the top. It will reset the user to their respective features granted by class, then you can check or uncheck the one or two things you want to change. <strong>DO NOT UNCHECK EVERYTHING.</strong> If you need further clarification, ask A9 before using this tool.

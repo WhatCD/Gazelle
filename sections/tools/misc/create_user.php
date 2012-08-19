@@ -74,7 +74,9 @@ if (isset($_POST['Username'])) {
 } else {
 
 	?>
-	<h2>Create a User</h2>
+	<div class="header">
+		<h2>Create a User</h2>
+	</div>
 	
 	<form method="post" action="" name="create_user">
 		<input type="hidden" name="action" value="create_user" />

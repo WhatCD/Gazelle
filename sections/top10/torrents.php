@@ -41,11 +41,13 @@ $Filtered = !empty($Where);
 show_header('Top '.$Limit.' Torrents');
 ?>
 <div class="thin">
-	<h2> Top <?=$Limit?> Torrents </h2>
-	<div class="linkbox">
-		<a href="top10.php?type=torrents"><strong>[Torrents]</strong></a>
-		<a href="top10.php?type=users">[Users]</a>
-		<a href="top10.php?type=tags">[Tags]</a>
+	<div class="header">
+		<h2>Top <?=$Limit?> Torrents</h2>
+		<div class="linkbox">
+			<a href="top10.php?type=torrents"><strong>[Torrents]</strong></a>
+			<a href="top10.php?type=users">[Users]</a>
+			<a href="top10.php?type=tags">[Tags]</a>
+		</div>
 	</div>
 <?
 

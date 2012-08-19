@@ -84,7 +84,9 @@ $Diff2 = get_body($ArticleID, $_GET['new']);
 $Diff1 = get_body($ArticleID, $_GET['old']);
 ?>
 <div class="thin">
-	<h2>Compare <a href="wiki.php?action=article&id=<?=$ArticleID?>"><?=$Title?></a> Revisions</h2>
+	<div class="header">
+		<h2>Compare <a href="wiki.php?action=article&id=<?=$ArticleID?>"><?=$Title?></a> Revisions</h2>
+	</div>
 	<div class="box center_revision" id="center">
 		<div class="body"><? foreach(diff($Diff1, $Diff2) AS $Line) { echo $Line; } ?></div>
 	</div>

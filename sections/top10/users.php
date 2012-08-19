@@ -13,13 +13,14 @@ if(isset($_GET['details'])) {
 show_header('Top 10 Users');
 ?>
 <div class="thin">
-	<h2> Top 10 Users </h2>
-	<div class="linkbox">
-		<a href="top10.php?type=torrents">[Torrents]</a>
-		<a href="top10.php?type=users"><strong>[Users]</strong></a>
-		<a href="top10.php?type=tags">[Tags]</a>
+	<div class="header">
+		<h2>Top 10 Users</h2>
+		<div class="linkbox">
+			<a href="top10.php?type=torrents">[Torrents]</a>
+			<a href="top10.php?type=users"><strong>[Users]</strong></a>
+			<a href="top10.php?type=tags">[Tags]</a>
+		</div>
 	</div>
-
 <?
 
 // defaults to 10 (duh)

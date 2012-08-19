@@ -35,7 +35,9 @@ if(isset($_GET['ip']) && isset($_GET['port'])){
 show_header('Connectability Checker');
 ?>
 <div class="thin">
-	<h2><a href="user.php?id=<?=$LoggedUser['ID']?>"><?=$LoggedUser['Username']?></a> &gt; Connectability Checker</h2>
+	<div class="header">
+		<h2><a href="user.php?id=<?=$LoggedUser['ID']?>"><?=$LoggedUser['Username']?></a> &gt; Connectability Checker</h2>
+	</div>
 	<form action="javascript:check_ip();" method="get">
 		<table>
 			<tr>

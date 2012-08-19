@@ -20,7 +20,9 @@ if(!$Username) { error(404); }
 show_header('Compose', 'inbox,bbcode');
 ?>
 <div class="thin">
-	<h2>Send a message to <a href="user.php?id=<?=$ToID?>"><?=$Username?></a></h2>
+	<div class="header">
+		<h2>Send a message to <a href="user.php?id=<?=$ToID?>"><?=$Username?></a></h2>
+	</div>
 	<form action="inbox.php" method="post" id="messageform">
 		<div class="box pad">
 			<input type="hidden" name="action" value="takecompose" />

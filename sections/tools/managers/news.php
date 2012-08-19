@@ -28,7 +28,9 @@ switch($_GET['action']) {
 }
 ?>
 <div class="thin">
-	<h2><?= ($_GET['action'] == 'news')? 'Create a news post' : 'Edit news post';?></h2>
+	<div class="header">
+		<h2><?= ($_GET['action'] == 'news')? 'Create a news post' : 'Edit news post';?></h2>
+	</div>
 	<form action="tools.php" method="post">
 		<div class="box pad">
 			<input type="hidden" name="action" value="<?= ($_GET['action'] == 'news')? 'takenewnews' : 'takeeditnews';?>" />

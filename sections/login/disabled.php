@@ -68,7 +68,9 @@ Please use your What.CD? username.
 	}
 ?>
 <div class="thin">
-	<h3 id="general">Disabled IRC</h3>
+	<div class="header">
+		<h3 id="general">Disabled IRC</h3>
+	</div>
 	<div class="box pad" style="padding:10px 0px 10px 0px;">
 		<div style="padding:0px 10px 10px 20px;">
 			<p>Please read the topic carefully.</p>

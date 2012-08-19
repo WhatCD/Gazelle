@@ -390,17 +390,18 @@ $TorrentDisplayList = ob_get_clean();
 show_header($Name, 'browse,requests,artists,bbcode');
 ?>
 <div class="thin">
-	<h2><?=$Name?><? if ($RevisionID) { ?> (Revision #<?=$RevisionID?>)<? } if ($VanityHouseArtist) { ?> [Vanity House] <? } ?></h2>
-		<span style="font-size: 0.7em;float:right;">
-			<a href="#" onclick="editOrdering();return false;" class="" id="editlayout">[Edit ordering]</a>
-			<span class="hidden" id="savinglayout">Saving ordering...</span>
-			<a href="#" onclick="saveOrdering();return false;" class="hidden" id="savelayout">[Save ordering]</a>
-		</span>
-	</h2>
-	<div id="emptylinkbox" class="linkbox hidden"></div>
-	<div id="linkbox" class="linkbox">
+	<div class="header">
+		<h2><?=$Name?><? if ($RevisionID) { ?> (Revision #<?=$RevisionID?>)<? } if ($VanityHouseArtist) { ?> [Vanity House] <? } ?></h2>
+			<span style="font-size: 0.7em;float:right;">
+				<a href="#" onclick="editOrdering();return false;" class="" id="editlayout">[Edit ordering]</a>
+				<span class="hidden" id="savinglayout">Saving ordering...</span>
+				<a href="#" onclick="saveOrdering();return false;" class="hidden" id="savelayout">[Save ordering]</a>
+			</span>
+		</h2>
+		<div id="emptylinkbox" class="linkbox hidden"></div>
+		<div id="linkbox" class="linkbox">
 <? if (check_perms('site_submit_requests')) { ?>
-		<a href="requests.php?action=new&amp;artistid=<?=$ArtistID?>">[Add Request]</a>
+			<a href="requests.php?action=new&amp;artistid=<?=$ArtistID?>">[Add Request]</a>
 <? }
 
 if (check_perms('site_torrents_notify')) {
@@ -411,41 +412,42 @@ if (check_perms('site_torrents_notify')) {
 	}
 	if (stripos($Notify['Artists'], '|'.$Name.'|') === FALSE) {
 ?>
-		<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Notify of new uploads]</a>
+			<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Notify of new uploads]</a>
 <?
 	} else {
 ?>
-		<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Do not notify of new uploads]</a>
+			<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Do not notify of new uploads]</a>
 <?
 	}
 }
 
 if (has_bookmarked('artist', $ArtistID)) {
 ?>
-		<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
 
 <?
 	} else { 
 ?>
-		<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?
 }
 
 if (check_perms('site_edit_wiki')) {
 ?>
-		<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>">[Edit]</a>
+			<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>">[Edit]</a>
 <? } ?>
-		<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>">[View history]</a>
+			<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>">[View history]</a>
 <? if (check_perms('site_delete_artist') && check_perms('torrents_delete')) { ?>
-		<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Delete]</a>
+			<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Delete]</a>
 <? }
 
 if ($RevisionID && check_perms('site_edit_wiki')) {
 ?>
-		<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">
-			[Revert to this revision]
-		</a>
+			<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">
+				[Revert to this revision]
+			</a>
 <? } ?>
+		</div>
 	</div>
 	<div class="sidebar">
 <? if($Image) { ?>

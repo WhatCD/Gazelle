@@ -21,22 +21,24 @@ $DB->query('SELECT
 	ORDER BY l.BannedUntil ASC');
 ?>
 <div class="thin">
-<h2>Login Watch Management</h2>
-<table width="100%">
-	<tr class="colhead">
-		<td>IP</td>
-		<td>User</td>
-		<td>Bans</td>
-		<td>Remaining</td>
-		<td>Submit</td>
-		<? if(check_perms('admin_manage_ipbans')) { ?>		<td>Submit</td><? } ?>
-	</tr>
+	<div class="header">
+		<h2>Login Watch Management</h2>
+	</div>
+	<table width="100%">
+		<tr class="colhead">
+			<td>IP</td>
+			<td>User</td>
+			<td>Bans</td>
+			<td>Remaining</td>
+			<td>Submit</td>
+			<? if(check_perms('admin_manage_ipbans')) { ?>		<td>Submit</td><? } ?>
+		</tr>
 <?
 $Row = 'b';
 while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $DB->next_record()){
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
-	<tr class="row<?=$Row?>">
+		<tr class="row<?=$Row?>">
 			<td>
 				<?=$IP?>
 			</td>
@@ -70,10 +72,10 @@ while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $D
 				</form>
 			</td>
 <? } ?>
-	</tr>
+		</tr>
 <?
 }
 ?>
-</table>
+	</table>
 </div>
 <? show_footer(); ?>

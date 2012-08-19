@@ -74,8 +74,9 @@ show_header('IP Bans');
 $DB->set_query_id($Bans);
 ?>
 
-<h2>IP Bans</h2>
-
+<div class="header">
+	<h2>IP Bans</h2>
+</div>
 <div>
 	<form action="" method="get">
 		<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">

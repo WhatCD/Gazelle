@@ -62,7 +62,9 @@ Thanks!";
 show_header();
 ?>
 <div class="thin">
-	<h2>Successfully sent re-seed request</h2>
+	<div class="header">
+		<h2>Successfully sent re-seed request</h2>
+	</div>
 	<p>Successfully sent re-seed request for torrent <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=display_str($Name)?></a> to <?=$NumUsers?> user(s).</p>
 </div>
 <?show_footer();?>

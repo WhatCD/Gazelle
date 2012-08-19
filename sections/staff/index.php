@@ -10,7 +10,9 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 
 ?>
 <div class="thin">
-	<h2><?=SITE_NAME?> Staff</h2>
+	<div class="header">
+		<h2><?=SITE_NAME?> Staff</h2>
+	</div>
 	<div class="box pad" style="padding:0px 10px 10px 10px;">
 		<br />
 		<h3>Contact Staff</h3>

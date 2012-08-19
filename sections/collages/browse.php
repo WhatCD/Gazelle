@@ -141,11 +141,13 @@ list($NumResults) = $DB->next_record();
 show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 ?>
 <div class="thin">
+	<div class="header">
 <? if ($BookmarkView) { ?>
-	<h2>Your bookmarked collages</h2>
+		<h2>Your bookmarked collages</h2>
 <? } else { ?>
-	<h2>Browse collages<?=(!empty($UserLink) ? (isset($CollageIDs) ? ' with contributions by '.$UserLink : ' started by '.$UserLink) : '')?></h2>
+		<h2>Browse collages<?=(!empty($UserLink) ? (isset($CollageIDs) ? ' with contributions by '.$UserLink : ' started by '.$UserLink) : '')?></h2>
 <? } ?>
+	</div>
 <? if (!$BookmarkView) { ?>
 	<div>
 		<form action="" method="get">

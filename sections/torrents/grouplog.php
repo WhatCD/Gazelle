@@ -14,8 +14,9 @@ if (!empty($Groups['matches'][$GroupID])) {
 ?>
 
 <div class="thin">
-	<h2>History for <?=$Title?></h2>
-
+	<div class="header">
+		<h2>History for <?=$Title?></h2>
+	</div>
 	<table>
 		<tr class="colhead">
 			<td>Date</td>

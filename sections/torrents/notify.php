@@ -46,7 +46,9 @@ if(count($GroupIDs)) {
 show_header('My notifications', 'notifications');
 $DB->set_query_id($Results);
 ?>
-<h2>Latest notifications <a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear all)</a> <a href="javascript:SuperGroupClear()">(clear selected)</a> <a href="user.php?action=notify">(edit filters)</a></h2>
+<div class="header">
+	<h2>Latest notifications <a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear all)</a> <a href="javascript:SuperGroupClear()">(clear selected)</a> <a href="user.php?action=notify">(edit filters)</a></h2>
+</div>
 <div class="linkbox">
 	<?=$Pages?>
 </div>

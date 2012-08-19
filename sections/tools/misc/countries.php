@@ -24,8 +24,9 @@ if (isset($_POST['changecountry'])) {
 }
 ?>
 
-
-<h2>IRC highlight on (fishy) invites sent to countries</h2>
+<div class="header">
+	<h2>IRC highlight on (fishy) invites sent to countries</h2>
+</div>
 <table width="100%">
 	<tr class="colhead">
 		<td>Country</td>

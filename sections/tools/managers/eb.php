@@ -12,7 +12,9 @@ $DB -> query("SELECT
 	FROM email_blacklist AS eb 
 	ORDER BY eb.Time DESC");
 ?>
-<h2>Email Blacklist</h2>
+<div class="header">
+	<h2>Email Blacklist</h2>
+</div>
 <table>
 	<tr class="colhead">
 		<td>Email</td>

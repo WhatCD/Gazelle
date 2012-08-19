@@ -103,7 +103,9 @@ switch($Short) {
 show_header('Report a '.$Type['title'],'bbcode');
 ?>
 <div class="thin">
-	<h2>Report <?=$Type['title']?></h2>
+	<div class="header">
+		<h2>Report <?=$Type['title']?></h2>
+	</div>
 	<h3>Reporting guidelines</h3>
 	<div class="box pad">
 		<p>Following these guidelines will help the moderators deal with your report in a timely fashion. </p>

@@ -245,15 +245,17 @@ show_header($Title, 'requests');
 
 ?>
 <div class="thin">
-	<h2><?=$Title?></h2>
-	<div class="linkbox">
+	<div class="header">
+		<h2><?=$Title?></h2>
+		<div class="linkbox">
 <?	if(check_perms('site_submit_requests')){ ?> 
-		<a href="requests.php?action=new">[New request]</a>
-		<a href="requests.php?type=created">[My requests]</a>
+			<a href="requests.php?action=new">[New request]</a>
+			<a href="requests.php?type=created">[My requests]</a>
 <?	} 
 	if(check_perms('site_vote')){?> 
-		<a href="requests.php?type=voted">[Requests I've voted on]</a>
+			<a href="requests.php?type=voted">[Requests I've voted on]</a>
 <?	} ?> 
+		</div>
 	</div>
 	<div class="center">
 		<form action="" method="get">

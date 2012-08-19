@@ -37,7 +37,9 @@
 <script src="static/functions/jquery.tablesorter.min.js" type="text/javascript"></script>
 <script src="static/functions/sort.js" type="text/javascript"></script>
 <div class="thin">
-	<h2>Manage collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>
+	<div class="header">
+		<h2>Manage collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>
+	</div>
 	<table width="100%">
 		<tr class="colhead"><td>Sorting</td></tr>
 		<tr>
@@ -70,7 +72,7 @@
 			</tr>
 		</thead> 
 		<tbody>
-<?php
+<?
 
 	$Number = 0;
 	foreach ($TorrentList as $GroupID=>$Group) {
@@ -113,7 +115,7 @@
 							</td>
 						</form>
 					</tr>
-<?php } ?>
+<? } ?>
 		</tbody>
 	</table>
 	<div class="drag_drop_save hidden">
@@ -129,4 +131,4 @@
 		</div>
 	</form>
 </div>
-<?php show_footer(); ?>
+<? show_footer(); ?>

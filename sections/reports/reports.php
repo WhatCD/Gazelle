@@ -71,40 +71,42 @@ $DB->set_query_id($Reports);
 // Start printing stuff
 ?>
 <div class="thin">
-<h2>Active Reports</h2>
-<div class="linkbox">
-	<a href="reports.php">New</a> |
-	<a href="reports.php?view=old">Old</a> |
-	<a href="reports.php?action=stats">Stats</a>
-</div>
-<div class="linkbox">
+	<div class="header">
+		<h2>Active Reports</h2>
+		<div class="linkbox">
+			<a href="reports.php">New</a> |
+			<a href="reports.php?view=old">Old</a> |
+			<a href="reports.php?action=stats">Stats</a>
+		</div>
+	</div>
+	<div class="linkbox">
 <?
-	// pagination
-	$Pages = get_pages($Page,$Results,REPORTS_PER_PAGE,11);
-	echo $Pages;
+// pagination
+$Pages = get_pages($Page,$Results,REPORTS_PER_PAGE,11);
+echo $Pages;
 ?>
-</div>
+	</div>
 <?
 while(list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $Reason, $Status) = $DB->next_record()) {
 	$Type = $Types[$Short];
 	$Reference = "reports.php?id=".$ReportID."#report".$ReportID;
 ?>
-<div id="report<?=$ReportID?>">
-<form action="reports.php" method="post">
-	<div>
-		<input type="hidden" name="reportid" value="<?=$ReportID?>" />
-		<input type="hidden" name="action" value="takeresolve" />
-		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-	</div>
-	<table cellpadding="5" id="report_<?=$ReportID?>">
-		<tr>
-			<td><strong><a href="<?=$Reference?>">Report</a></strong></td>
-			<td><strong><?=$Type['title']?></strong> was reported by <a href="user.php?id=<?=$SnitchID?>"><?=$SnitchName?></a> <?=time_diff($ReportedTime)?></td>
-		</tr>
-		<tr>
+	<div id="report<?=$ReportID?>">
+	<form action="reports.php" method="post">
+		<div>
+			<input type="hidden" name="reportid" value="<?=$ReportID?>" />
+			<input type="hidden" name="action" value="takeresolve" />
+			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+		</div>
+		<table cellpadding="5" id="report_<?=$ReportID?>">
+			<tr>
+				<td><strong><a href="<?=$Reference?>">Report</a></strong></td>
+				<td><strong><?=$Type['title']?></strong> was reported by <a href="user.php?id=<?=$SnitchID?>"><?=$SnitchName?></a> <?=time_diff($ReportedTime)?></td>
+			</tr>
+			<tr>
 			
-			<td class="center" colspan="2">
-				<strong>
+				<td class="center" colspan="2">
+					<strong>
 <?
 	switch($Short) {
 		case "user" :
@@ -191,32 +193,32 @@ while(list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $
 			break;
 	}
 ?>
-				</strong>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2"><?=$Text->full_format($Reason)?></td>
-		</tr>
+					</strong>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><?=$Text->full_format($Reason)?></td>
+			</tr>
 <? if($Status != "Resolved") { ?>
-		<tr>
-			<td class="center" colspan="2">
-				<input type="submit" name="submit" value="Resolved" />
-			</td>
-		</tr>
+			<tr>
+				<td class="center" colspan="2">
+					<input type="submit" name="submit" value="Resolved" />
+				</td>
+			</tr>
 <? } ?>
-	</table>
-</form>
-</div>
-<br />
+		</table>
+	</form>
+	</div>
+	<br />
 <?
 	$DB->set_query_id($Reports);
 }
 ?>
-</div>
-<div class="linkbox">
+	<div class="linkbox">
 <?
 	echo $Pages;
 ?>
+	</div>
 </div>
 <?
 show_footer();

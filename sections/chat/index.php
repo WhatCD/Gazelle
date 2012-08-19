@@ -8,7 +8,9 @@ list($IRCKey) = $DB->next_record();
 if(empty($IRCKey)) {
 ?>
 <div class="thin">
-	<h3 id="irc">IRC Rules - Please read these carefully!</h3>
+	<div class="header">
+		<h3 id="irc">IRC Rules - Please read these carefully!</h3>
+	</div>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<p>
 			<strong>Please set your IRC Key on your <a href="user.php?action=edit&amp;userid=<?=$LoggedUser['ID']?>">profile</a> first! For more information on IRC, please read the <a href="wiki.php?action=article&amp;name=IRC+-+How+to+join">wiki article</a>.</strong>
@@ -20,7 +22,9 @@ if(empty($IRCKey)) {
 	if(!isset($_POST["accept"])) {
 ?>
 <div class="thin">
-	<h3 id="irc">IRC Rules - Please read these carefully!</h3>
+	<div class="header">
+		<h3 id="irc">IRC Rules - Please read these carefully!</h3>
+	</div>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>
@@ -88,7 +92,9 @@ if(empty($IRCKey)) {
 		}
 ?>
 <div class="thin">
-	<h3 id="general">IRC</h3>
+	<div class="header">
+		<h3 id="general">IRC</h3>
+	</div>
 	<div class="box pad" style="padding:10px 0px 10px 0px;">
 		<div style="padding:0px 10px 10px 20px;">
 			<p>If you have an IRC client, visit <a href="wiki.php?action=article&amp;name=IRC+-+How+to+join">this wiki entry</a> for more information how to connect. (IRC Applet users are automatically identified with Drone.)</p>

@@ -18,8 +18,9 @@ if(!empty($_GET['key']) && $_GET['type'] == "clear") {
 	}
 }
 ?>
-	<h2>Clear a cache key</h2>
-	
+	<div class="header">
+		<h2>Clear a cache key</h2>
+	</div>
 	<form method="get" action="" name="clear_cache">
 		<input type="hidden" name="action" value="clear_cache" />
 		<table cellpadding="2" cellspacing="1" border="0" align="center">

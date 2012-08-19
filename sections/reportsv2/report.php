@@ -19,7 +19,9 @@ show_header('Report', 'reportsv2');
 ?>
 
 <div class="thin">
-	<h2>Report a torrent</h2>
+	<div class="header">
+		<h2>Report a torrent</h2>
+	</div>
 
 	<form action="reportsv2.php?action=takereport" enctype="multipart/form-data" method="post" id="report_table">
 		<div>

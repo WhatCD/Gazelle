@@ -79,16 +79,20 @@ $Row = 'a';
 // Start page
 ?>
 <div class="thin">
-	<h2><?=$ViewString?> Staff PMs</h2>
-	<div class="linkbox">
+	<div class="header">
+		<h2><?=$ViewString?> Staff PMs</h2>
+		<div class="linkbox">
 <? 	if ($IsStaff) {
-?>		<a href="staffpm.php">[My unanswered]</a>
+?>			<a href="staffpm.php">[My unanswered]</a>
 <? 	} ?>
-		<a href="staffpm.php?view=unanswered">[All unanswered]</a>
-		<a href="staffpm.php?view=open">[Open]</a>
-		<a href="staffpm.php?view=resolved">[Resolved]</a>
-		<br />
-		<br />
+			<a href="staffpm.php?view=unanswered">[All unanswered]</a>
+			<a href="staffpm.php?view=open">[Open]</a>
+			<a href="staffpm.php?view=resolved">[Resolved]</a>
+		</div>
+	</div>
+	<br />
+	<br />
+	<div class="linkbox">
 		<?=$Pages?>
 	</div>
 	<div class="box pad" id="inbox">

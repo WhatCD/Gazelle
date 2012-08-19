@@ -8,11 +8,13 @@ if($Edit > $LoggedUser['EffectiveClass']){ error(404); }
 
 show_header($Title." Aliases");
 ?>
-<h2><a href="wiki.php?action=article&id=<?=$ArticleID?>"><?=$Title?></a> Aliases</h2>
-<div class="linkbox">
-	Aliases are exact search strings or names that can be used to link to an article. [[Alias]]
-</div>
 <div class="thin">
+	<div class="header">
+		<h2><a href="wiki.php?action=article&id=<?=$ArticleID?>"><?=$Title?></a> Aliases</h2>
+		<div class="linkbox">
+			Aliases are exact search strings or names that can be used to link to an article. [[Alias]]
+		</div>
+	</div>
 	<form action="wiki.php" method="get">
 		<input type="hidden" name="action" id="action" value="compare" />
 		<input type="hidden" name="id" id="id" value="<?=$ArticleID?>" />

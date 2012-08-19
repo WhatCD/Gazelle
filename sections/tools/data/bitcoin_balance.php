@@ -11,7 +11,9 @@ $DB->query("SELECT i.UserID, i.BitcoinAddress FROM users_info AS i JOIN users_ma
 			WHERE BitcoinAddress IS NOT NULL ORDER BY m.Username ASC");
 ?>
 <div class="thin">
-	<h3><?=$Balance?></h3>
+	<div class="header">
+		<h3><?=$Balance?></h3>
+	</div>
 	<table>
 	<tr>
 		<th>Username</th>

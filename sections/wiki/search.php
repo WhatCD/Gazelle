@@ -54,9 +54,11 @@ show_header('Search articles');
 $DB->set_query_id($RS);
 ?>
 <div class="thin">
-	<h2>Search articles</h2>
-	<div class="linkbox">
-		[<a href="wiki.php?action=create&amp;alias=<?=display_str($Alias->convert($_GET['search']))?>">Create an article</a>] [<a  href="wiki.php?action=link&amp;alias=<?=display_str($Alias->convert($_GET['search']))?>">Link this search</a>]
+	<div class="header">
+		<h2>Search articles</h2>
+		<div class="linkbox">
+			[<a href="wiki.php?action=create&amp;alias=<?=display_str($Alias->convert($_GET['search']))?>">Create an article</a>] [<a  href="wiki.php?action=link&amp;alias=<?=display_str($Alias->convert($_GET['search']))?>">Link this search</a>]
+		</div>
 	</div>
 	<div>
 		<form action="" method="get">

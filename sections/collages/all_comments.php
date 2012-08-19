@@ -53,15 +53,17 @@ list($Name) = $DB->next_record();
 show_header('Comments for collage '.$Name, 'comments,bbcode');
 ?>
 <div class="thin">
-	<h2>
-		<a href="collages.php">Collages</a> &gt;
-		<a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a>
-	</h2>
-	<div class="linkbox">
+	<div class="header">
+		<h2>
+			<a href="collages.php">Collages</a> &gt;
+			<a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a>
+		</h2>
+		<div class="linkbox">
 <?
 $Pages=get_pages($Page,$Posts,POSTS_PER_PAGE,9);
 echo $Pages;
 ?>
+		</div>
 	</div>
 <?
 

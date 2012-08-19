@@ -1,6 +1,8 @@
 <?show_header('Wiki');?>
 <div class="thin">
-<h2>Wiki</h2>
+	<div class="header">
+		<h2>Wiki</h2>
+	</div>
 	<div class="box pad center">
 		<p>Search the wiki for user created tutorials and information.</p>
 		<form action="wiki.php" method="get">

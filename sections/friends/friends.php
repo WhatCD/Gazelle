@@ -47,7 +47,9 @@ list($Results) = $DB->next_record();
 // Start printing stuff
 ?>
 <div class="thin">
-	<h2>Friends list</h2>
+	<div class="header">
+		<h2>Friends list</h2>
+	</div>
 	<div class="linkbox">
 <?
 // Pagination

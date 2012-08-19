@@ -3,7 +3,9 @@
 show_header('Request Rules');
 ?>
 <div class="thin">
-<h2 class="center">Requests</h2>
+	<div class="header">
+		<h2 class="center">Requests</h2>
+	</div>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>

@@ -185,7 +185,8 @@ if($ShowGrouped) {
 
 ?>
 <div class="thin">
-	<h2>
+	<div class="header">
+		<h2>
 <?
 	if($ShowGrouped) {
 		echo "Grouped ".($ShowUnread?"unread ":"")."post history for <a href=\"user.php?id=$UserID\">$Username</a>";
@@ -197,9 +198,8 @@ if($ShowGrouped) {
 		echo "Post history for <a href=\"user.php?id=$UserID\">$Username</a>";
 	}
 ?>
-	</h2>
-	
-	<div class="linkbox">
+		</h2>
+		<div class="linkbox">
 <?
 if($ViewingOwn) {
 	if(($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === FALSE) {
@@ -232,8 +232,8 @@ if($ViewingOwn) {
 			<a href="userhistory.php?action=subscriptions">Go to subscriptions</a>
 <?
 }
-
 ?>
+		</div>
 	</div>
 <?
 if(empty($Results)) {

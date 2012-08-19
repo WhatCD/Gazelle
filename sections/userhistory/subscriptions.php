@@ -92,9 +92,10 @@ if($NumResults > $PerPage*($Page-1)) {
 }
 ?>
 <div class="thin">
-	<h2><?='Subscribed topics'.($ShowUnread?' with unread posts':'')?></h2>
+	<div class="header">
+		<h2><?='Subscribed topics'.($ShowUnread?' with unread posts':'')?></h2>
 
-	<div class="linkbox">
+		<div class="linkbox">
 <?
 if(!$ShowUnread) {
 ?>
@@ -115,6 +116,7 @@ if($NumResults) {
 ?>
 			<a href="userhistory.php?action=catchup&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a>&nbsp;&nbsp;&nbsp;
 			<a href="userhistory.php?action=posts&amp;userid=<?=$LoggedUser['ID']?>">Go to post history</a>&nbsp;&nbsp;&nbsp;
+		</div>
 	</div>
 <?
 if(!$NumResults) {

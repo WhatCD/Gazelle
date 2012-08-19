@@ -48,8 +48,9 @@ $DB->query('SELECT
 	FROM forums
 	ORDER BY CategoryID, Sort ASC');
 ?>
-
-<h2>Forum control panel</h2>
+<div class="header">
+	<h2>Forum control panel</h2>
+</div>
 <table width="100%">
 	<tr class="colhead">
 		<td>Category</td>

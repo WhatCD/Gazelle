@@ -88,9 +88,11 @@ $Invited = $DB->to_array();
 show_header('Invites');
 ?>
 <div class="thin">
-	<h2><?=format_username($UserID, false, false, false)?> &gt; Invites</h2>
-	<div class="linkbox">
-		[<a href="user.php?action=invitetree<? if($Sneaky){ echo '&amp;userid='.$UserID; }?>">Invite tree</a>]
+	<div class="header">
+		<h2><?=format_username($UserID, false, false, false)?> &gt; Invites</h2>
+		<div class="linkbox">
+			[<a href="user.php?action=invitetree<? if($Sneaky){ echo '&amp;userid='.$UserID; }?>">Invite tree</a>]
+		</div>
 	</div>
 <? if ($UserCount >= USER_LIMIT && !check_perms('site_can_invite_always')) { ?>
 	<div class="box pad notice">

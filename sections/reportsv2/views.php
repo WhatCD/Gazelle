@@ -10,7 +10,7 @@ if(!check_perms('admin_reports')){
 }
 
 show_header('Reports V2!', 'reportsv2');
-include('header.php');
+
 
 //Grab owners ID, just for examples
 $DB->query("SELECT ID, Username FROM users_main ORDER BY ID ASC LIMIT 1");
@@ -18,7 +18,10 @@ list($OwnerID, $Owner) = $DB->next_record();
 $Owner = display_str($Owner);
 
 ?>
-<h2>Reports v2 Information!</h2>
+<div class="header">
+	<h2>Reports v2 Information!</h2>
+	<? include('header.php'); ?>
+</div>
 <br />
 <div class="box pad thin" style="padding: 0px 0px 0px 20px; width: 70%; margin-left: auto; margin-right: auto">
 	<table><tr><td style="width: 50%;">

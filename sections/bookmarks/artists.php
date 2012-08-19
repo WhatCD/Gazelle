@@ -31,12 +31,14 @@ show_header($Title,'browse');
 
 ?>
 <div class="thin">
-	<h2><?=$Title?></h2>
-	<div class="linkbox">
-		<a href="bookmarks.php?type=torrents">[Torrents]</a>
-		<a href="bookmarks.php?type=artists">[Artists]</a>
-		<a href="bookmarks.php?type=collages">[Collages]</a>
-		<a href="bookmarks.php?type=requests">[Requests]</a>
+	<div class="header">
+		<h2><?=$Title?></h2>
+		<div class="linkbox">
+			<a href="bookmarks.php?type=torrents">[Torrents]</a>
+			<a href="bookmarks.php?type=artists">[Artists]</a>
+			<a href="bookmarks.php?type=collages">[Collages]</a>
+			<a href="bookmarks.php?type=requests">[Requests]</a>
+		</div>
 	</div>
 	<div class="box pad" align="center">
 <? if (count($ArtistList) == 0) { ?>

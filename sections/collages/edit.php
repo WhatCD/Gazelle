@@ -11,7 +11,9 @@ if($CategoryID == 0 && $UserID!=$LoggedUser['ID'] && !check_perms('site_collages
 show_header('Edit collage');
 ?>
 <div class="thin">
-	<h2>Edit collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>
+	<div class="header">
+		<h2>Edit collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>
+	</div>
 	<form action="collages.php" method="post">
 		<input type="hidden" name="action" value="edit_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

@@ -22,10 +22,11 @@ function Taste(torrent_id, report_id, taste) {
 	});
 }
 </script>
-<?
-include('header.php');
-?>
-<h2>New reports, auto assigned!</h2>
+
+<div class="header">
+	<h2>New reports, auto assigned!</h2>
+	<? include('header.php'); ?>
+</div>
 <div class="buttonbox thin center">
 	<input type="button" onclick="AddMore();" value="Add More" /><input type="text" name="repop_amount" id="repop_amount" size="2" value="10" />
 	| <span title="Changes whether to automatically replace resolved ones with new ones"><input type="checkbox" checked="checked" id="dynamic"/> <label for="dynamic">Dynamic</label></span>

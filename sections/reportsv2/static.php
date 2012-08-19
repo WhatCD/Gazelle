@@ -187,10 +187,12 @@ list($Results) = $DB->next_record();
 $PageLinks=get_pages($Page,$Results,REPORTS_PER_PAGE,11);
 
 show_header('Reports V2!', 'reportsv2,bbcode');
-include('header.php');
 
 ?>
-<h2><?=$Title?></h2>
+<div class="header">
+	<h2><?=$Title?></h2>
+    <? include('header.php'); ?>
+</div>
 <div class="buttonbox thin center">
 	<? if($View != "resolved") { ?>
 		<span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-Resolve" /></span>

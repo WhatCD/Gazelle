@@ -4,7 +4,9 @@ show_header('Rule Index');
 ?>
 <!-- General Rules -->
 <div class="thin">
-	<h3 id="general">Golden Rules</h3>
+	<div class="header">
+		<h3 id="general">Golden Rules</h3>
+	</div>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>

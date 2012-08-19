@@ -3,7 +3,9 @@
 show_header('Collages Rules');
 ?>
 <div class="thin">
-<h2 class="center">Collages</h2>
+	<div class="header">
+		<h2 class="center">Collages</h2>
+	</div>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>Collages in the Discography, Staff Picks, Label, and Charts categories must be based on fact, and not opinion. If something is a published Best Of (for instance, "Pitchfork's Best Albums of the 1990's") then it should go in the Charts category.</li>

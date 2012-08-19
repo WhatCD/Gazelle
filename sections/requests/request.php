@@ -85,25 +85,26 @@ show_header('View request: '.$FullName, 'comments,requests,bbcode');
 
 ?>
 <div class="thin">
-	<h2><a href="requests.php">Requests</a> &gt; <?=$CategoryName?> &gt; <?=$DisplayLink?></h2>
-	<div class="linkbox">
+	<div class="header">
+		<h2><a href="requests.php">Requests</a> &gt; <?=$CategoryName?> &gt; <?=$DisplayLink?></h2>
+		<div class="linkbox">
 <? if($CanEdit) { ?> 
-		<a href="requests.php?action=edit&amp;id=<?=$RequestID?>">[Edit]</a>
+			<a href="requests.php?action=edit&amp;id=<?=$RequestID?>">[Edit]</a>
 <? }
 if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requests')) { ?>
-		<a href="requests.php?action=delete&amp;id=<?=$RequestID?>">[Delete]</a>
+			<a href="requests.php?action=delete&amp;id=<?=$RequestID?>">[Delete]</a>
 <? } ?>
 <?	if(has_bookmarked('request', $RequestID)) { ?>
-		<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
 <?	} else { ?>
-		<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?	} ?>
-		<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report Request]</a>
+			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report Request]</a>
 <?	if(!$IsFilled) { ?>
-		<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&groupid=$GroupID":'')?>">[Upload Request]</a>
+			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&groupid=$GroupID":'')?>">[Upload Request]</a>
 <?	}
 	if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
-		<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Request Update]</a>
+			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Request Update]</a>
 <? } ?>
 
 <?
@@ -118,11 +119,10 @@ $worldcat_url = "http://worldcat.org/search?q=" . $encoded_artist . " " . $encod
 $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . " " . $encoded_title;
 
 ?>
-<a href="<? echo $worldcat_url; ?>">[Find in Library]</a>
-<a href="<? echo $google_url; ?>">[Find in Stores]</a>
-
-</div>
-	
+			<a href="<? echo $worldcat_url; ?>">[Find in Library]</a>
+			<a href="<? echo $google_url; ?>">[Find in Stores]</a>
+		</div>
+	</div>
 	<div class="sidebar">
 <? if($CategoryID != 0) { ?>
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->

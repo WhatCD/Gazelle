@@ -93,16 +93,18 @@ show_header($Title,'bbcode');
 $DB->set_query_id($Comments);
 
 ?><div class="thin">
-	<h2>
-		<?=$Header?>
-	</h2>
-	
-	<div class="linkbox">
-	<?=$OtherLink?>
-	<br /><br />
-	<?=$Pages?>
+	<div class="header">
+		<h2><?=$Header?></h2>
+<? if ($OtherLink !== '') { ?>
+		<div class="linkbox">
+			<?=$OtherLink?>
+		</div>
+<? } ?>
 	</div>
-<?php
+	<div class="linkbox">
+		<?=$Pages?>
+	</div>
+<?
 
 while(list($UserID, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $EditedTime, $EditorID) = $DB->next_record()) {
 	$UserInfo = user_info($UserID);

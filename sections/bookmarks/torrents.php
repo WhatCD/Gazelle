@@ -310,16 +310,18 @@ for ($i=0; $i < $NumGroups/$CollageCovers; $i++) {
 show_header($Title, 'browse,collage');
 ?>
 <div class="thin">
-	<h2><? if (!$Sneaky) { ?><a href="feeds.php?feed=torrents_bookmarks_t_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode(SITE_NAME.': Bookmarked Torrents')?>"><img src="<?=STATIC_SERVER?>/common/symbols/rss.png" alt="RSS feed" /></a>&nbsp;<? } ?><?=$Title?></h2>
-	<div class="linkbox">
-		<a href="bookmarks.php?type=torrents">[Torrents]</a>
-		<a href="bookmarks.php?type=artists">[Artists]</a>
-		<a href="bookmarks.php?type=collages">[Collages]</a>
-		<a href="bookmarks.php?type=requests">[Requests]</a>
+	<div class="header">
+		<h2><? if (!$Sneaky) { ?><a href="feeds.php?feed=torrents_bookmarks_t_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode(SITE_NAME.': Bookmarked Torrents')?>"><img src="<?=STATIC_SERVER?>/common/symbols/rss.png" alt="RSS feed" /></a>&nbsp;<? } ?><?=$Title?></h2>
+		<div class="linkbox">
+			<a href="bookmarks.php?type=torrents">[Torrents]</a>
+			<a href="bookmarks.php?type=artists">[Artists]</a>
+			<a href="bookmarks.php?type=collages">[Collages]</a>
+			<a href="bookmarks.php?type=requests">[Requests]</a>
 <? if (count($TorrentList) > 0) { ?>
-		<br /><br />
-		<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">[Remove Snatched]</a>
+			<br /><br />
+			<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">[Remove Snatched]</a>
 <? } ?>
+		</div>
 	</div>
 <? if (count($TorrentList) == 0) { ?>
 	<div class="box pad" align="center">

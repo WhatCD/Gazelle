@@ -7,11 +7,13 @@ if(!check_perms('admin_reports')){
 show_header('Other reports stats');
 
 ?>
-<h2>Other reports stats!</h2>
-<div class="linkbox">
-	<a href="reports.php">New</a> |
-	<a href="reports.php?view=old">Old</a> |
-	<a href="reports.php?action=stats">Stats</a>
+<div class="header">
+	<h2>Other reports stats!</h2>
+	<div class="linkbox">
+		<a href="reports.php">New</a> |
+		<a href="reports.php?view=old">Old</a> |
+		<a href="reports.php?action=stats">Stats</a>
+	</div>
 </div>
 <div class="box pad thin" style="padding: 0px 0px 0px 20px; margin-left: auto; margin-right: auto">
 <?

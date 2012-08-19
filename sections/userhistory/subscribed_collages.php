@@ -39,9 +39,10 @@ $NumResults = $DB->record_count();
 $CollageSubs = $DB->to_array();
 ?>
 <div class="thin">
-	<h2>Subscribed collages<?=($ShowAll?'':' with new additions')?></h2>
+	<div class="header">
+		<h2>Subscribed collages<?=($ShowAll?'':' with new additions')?></h2>
 
-	<div class="linkbox">
+		<div class="linkbox">
 <?
 if($ShowAll) {
 ?>
@@ -56,6 +57,7 @@ if($ShowAll) {
 }
 ?>
 			[<a href="userhistory.php?action=catchup_collages&auth=<?=$LoggedUser['AuthKey']?>">Catch up</a>]&nbsp;&nbsp;&nbsp;
+		</div>
 	</div>
 <?
 if(!$NumResults) {

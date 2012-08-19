@@ -271,8 +271,9 @@ $Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 
 ?>
 <div class="thin">
-	<h2><a href="user.php?id=<?=$UserID?>"><?=$User['Username']?></a><?='\'s '.$Action.' torrents'?></h2>
-	
+	<div class="header">
+		<h2><a href="user.php?id=<?=$UserID?>"><?=$User['Username']?></a><?='\'s '.$Action.' torrents'?></h2>
+	</div>
 	<div>
 		<form action="" method="get">
 			<table>

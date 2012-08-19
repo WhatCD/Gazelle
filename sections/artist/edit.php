@@ -33,7 +33,9 @@ list($Name, $Image, $Body, $VanityHouse) = $DB->next_record(MYSQLI_NUM, true);
 show_header('Edit artist');
 ?>
 <div class="thin">
-	<h2>Edit <a href="artist.php?id=<?=$ArtistID?>"><?=$Name?></a></h2>
+	<div class="header">
+		<h2>Edit <a href="artist.php?id=<?=$ArtistID?>"><?=$Name?></a></h2>
+	</div>
 	<div class="box pad">
 		<form action="artist.php" method="post">
 			<input type="hidden" name="action" value="edit" />

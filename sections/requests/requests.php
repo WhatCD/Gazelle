@@ -285,8 +285,9 @@ show_header($Title, 'requests');
 
 ?>
 <div class="thin">
-	<h2><?=$Title?></h2>
-	<div class="linkbox">
+	<div class="header">
+		<h2><?=$Title?></h2>
+		<div class="linkbox">
 <?	if (!$BookmarkView) { ?>
 <?		if(check_perms('site_submit_requests')){ ?> 
 		<a href="requests.php?action=new">[New request]</a>
@@ -301,6 +302,7 @@ show_header($Title, 'requests');
 		<a href="bookmarks.php?type=collages">[Collages]</a>
 		<a href="bookmarks.php?type=requests">[Requests]</a>
 <?	} ?>
+		</div>
 	</div>
 	<div>
 		<form action="" method="get">

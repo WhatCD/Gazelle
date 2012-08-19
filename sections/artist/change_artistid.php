@@ -122,7 +122,9 @@ if (isset($_POST['confirm'])) {
 } else {
 	show_header('Merging Artists');
 ?>
-	<h2>Confirm merge</h2>
+	<div class="header">
+		<h2>Confirm merge</h2>
+	</div>
 	<form action="artist.php" method="post">
 		<input type="hidden" name="action" value="change_artistid" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

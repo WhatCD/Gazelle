@@ -23,7 +23,9 @@ $Tree = new INVITE_TREE($UserID);
 show_header($Username.' &gt; Invites &gt; Tree');
 ?>
 <div class="thin">
-	<h2><?=format_username($UserID, false, false, false)?> &gt; <a href="user.php?action=invite&amp;userid=<?=$UserID?>">Invites</a> &gt; Tree</h2>
+	<div class="header">
+		<h2><?=format_username($UserID, false, false, false)?> &gt; <a href="user.php?action=invite&amp;userid=<?=$UserID?>">Invites</a> &gt; Tree</h2>
+	</div>
 	<div class="box pad">
 <?	$Tree->make_tree(); ?>
 	</div>

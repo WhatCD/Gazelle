@@ -3,7 +3,9 @@
 show_header('Ratio Requirements');
 ?>
 <div class="thin">
-<h2 class="center">Ratio Rules</h2>
+	<div class="header">
+		<h2 class="center">Ratio Rules</h2>
+	</div>
 	<div class="box pad">
 		<p>
 			Your ratio is the amount you've uploaded divided by the amount you've downloaded. 

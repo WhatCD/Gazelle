@@ -25,20 +25,21 @@ foreach($TorrentsInfo as $Torrent) {
 $Results = get_groups($GroupIDs);
 $Results = $Results['matches'];
 ?>
-<div class="linkbox">
+<div class="header">
 <? if($All) { ?>
-	<a href="better.php?method=files">Just those you've snatched</a>
+		<h2>All torrents trumpable for bad file names</h2>
 <? } else { ?>
-	<a href="better.php?method=files&amp;filter=all">Show all</a>
+		<h2>Torrents trumpable for bad file names, that you've snatched</h2>
 <? } ?>
+
+	<div class="linkbox">
+<? if($All) { ?>
+		<a href="better.php?method=files">Just those you've snatched</a>
+<? } else { ?>
+		<a href="better.php?method=files&amp;filter=all">Show all</a>
+<? } ?>
+	</div>
 </div>
-
-<? if($All) { ?>
-	<h2>All torrents trumpable for bad file names</h2>
-<? } else { ?>
-	<h2>Torrents trumpable for bad file names, that you've snatched</h2>
-<? } ?>
-
 <div class="thin box pad">
 	<h3>There are <?=count($TorrentsInfo)?> torrents remaining</h3>
 	<table>

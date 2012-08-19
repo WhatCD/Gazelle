@@ -40,22 +40,24 @@ if(empty($_POST['confirm'])) {
 	show_header();
 ?>
 	<div class="thin">
-	<h2>Change Group Confirm!</h2>
-	<div class="box pad">
-		<form action="torrents.php" method="post">
-			<input type="hidden" name="action" value="editgroupid" />
-			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-			<input type="hidden" name="confirm" value="true" />
-			<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
-			<input type="hidden" name="oldgroupid" value="<?=$OldGroupID?>" />
-			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-			<h2>You are attempting to move the torrent with ID <?=$TorrentID?> from the group:</h2>
-			<ul><li><?= display_artists($Artists[$OldGroupID], true, false)?> - <a href="torrents.php?id=<?=$OldGroupID?>"><?=$Name?></a></li></ul>
-			<h2>Into the group:</h2>
-			<ul><li><?= display_artists($Artists[$GroupID], true, false)?> - <a href="torrents.php?id=<?=$GroupID?>"><?=$NewName?></a></li></ul>
-			<input type="submit" value="Confirm" />
-		</form>
-	</div>
+		<div class="header">
+			<h2>Change Group Confirm!</h2>
+		</div>
+		<div class="box pad">
+			<form action="torrents.php" method="post">
+				<input type="hidden" name="action" value="editgroupid" />
+				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+				<input type="hidden" name="confirm" value="true" />
+				<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
+				<input type="hidden" name="oldgroupid" value="<?=$OldGroupID?>" />
+				<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+				<h3>You are attempting to move the torrent with ID <?=$TorrentID?> from the group:</h3>
+				<ul><li><?= display_artists($Artists[$OldGroupID], true, false)?> - <a href="torrents.php?id=<?=$OldGroupID?>"><?=$Name?></a></li></ul>
+				<h3>Into the group:</h3>
+				<ul><li><?= display_artists($Artists[$GroupID], true, false)?> - <a href="torrents.php?id=<?=$GroupID?>"><?=$NewName?></a></li></ul>
+				<input type="submit" value="Confirm" />
+			</form>
+		</div>
 	</div>
 <?
 	show_footer();

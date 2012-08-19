@@ -90,30 +90,31 @@ if (empty($TokenTorrents)) {
 show_header($Title,'browse,comments,torrent,bbcode');
 ?>
 <div class="thin">
-	<h2><?=$DisplayName?></h2>
-	<div class="linkbox">
+	<div class="header">
+		<h2><?=$DisplayName?></h2>
+		<div class="linkbox">
 <?	if(check_perms('site_edit_wiki')) { ?>
-		<a href="torrents.php?action=editgroup&amp;groupid=<?=$GroupID?>">[Edit description]</a>
+			<a href="torrents.php?action=editgroup&amp;groupid=<?=$GroupID?>">[Edit description]</a>
 <?	} ?>
-		<a href="torrents.php?action=history&amp;groupid=<?=$GroupID?>">[View history]</a>
+			<a href="torrents.php?action=history&amp;groupid=<?=$GroupID?>">[View history]</a>
 <?	if($RevisionID && check_perms('site_edit_wiki')) { ?>
-		<a href="/torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Revert to this revision]</a>
+			<a href="/torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Revert to this revision]</a>
 <?	}
 	if(has_bookmarked('torrent', $GroupID)) {
 ?>
-		<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
 <?	} else { ?>
-		<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Bookmark('torrent', <?=$GroupID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Bookmark('torrent', <?=$GroupID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?	}
 	if($Categories[$GroupCategoryID-1] == 'Music') { ?>
-		<a href="upload.php?groupid=<?=$GroupID?>">[Add format]</a>
+			<a href="upload.php?groupid=<?=$GroupID?>">[Add format]</a>
 <?	} 
 	if(check_perms('site_submit_requests')) { ?>
-		<a href="requests.php?action=new&amp;groupid=<?=$GroupID?>">[Request format]</a>
+			<a href="requests.php?action=new&amp;groupid=<?=$GroupID?>">[Request format]</a>
 <?	}?>
-	<a href="torrents.php?action=grouplog&amp;groupid=<?=$GroupID?>">[View log]</a>
+			<a href="torrents.php?action=grouplog&amp;groupid=<?=$GroupID?>">[View log]</a>
+		</div>
 	</div>
-
 	<div class="sidebar">
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>

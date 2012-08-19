@@ -26,7 +26,9 @@ show_header("Revision history for ".$Name); // Set title
 // Start printing form
 ?>
 <div class="thin">
-	<h2>Revision history for <a href="artist.php?id=<?=$ArtistID?>"><?=$Name?></a></h2>
+	<div class="header">
+		<h2>Revision history for <a href="artist.php?id=<?=$ArtistID?>"><?=$Name?></a></h2>
+	</div>
 <?
 $Wiki->revision_history(); // the wiki class takes over from here
 ?>

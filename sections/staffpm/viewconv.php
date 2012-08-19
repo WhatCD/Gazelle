@@ -30,34 +30,35 @@ if ($ConvID = (int)$_GET['id']) {
 
 ?>
 <div id="thin">
-	<h2>Staff PM - <?=display_str($Subject)?></h2>
-	<div class="linkbox">
+	<div class="header">
+		<h2>Staff PM - <?=display_str($Subject)?></h2>
+		<div class="linkbox">
 <?
 	// Staff only
 	if ($IsStaff) {
 ?>
-	<a href="staffpm.php">[My unanswered]</a>
+		<a href="staffpm.php">[My unanswered]</a>
 <?
 	}
 
 	// FLS/Staff
 	if ($IsFLS) {
 ?>
-		<a href="staffpm.php?view=unanswered">[All unanswered]</a>
-		<a href="staffpm.php?view=open">[Open]</a>
-		<a href="staffpm.php?view=resolved">[Resolved]</a>
+			<a href="staffpm.php?view=unanswered">[All unanswered]</a>
+			<a href="staffpm.php?view=open">[Open]</a>
+			<a href="staffpm.php?view=resolved">[Resolved]</a>
 <?
 		// User
 	} else {
 ?>
-		<a href="staffpm.php">[Back to inbox]</a>
+			<a href="staffpm.php">[Back to inbox]</a>
 <?
 	}
 
-?>
-		<br />
-		<br />
+?>		</div>
 	</div>
+	<br />
+	<br />
 	<div id="inbox">
 <?
 	// Get messages

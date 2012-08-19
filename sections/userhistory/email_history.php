@@ -68,7 +68,9 @@ if ($UsersOnly == 1) {
 }
 $History = $DB->to_array();
 ?>
-<h2>Email history for <a href="user.php?id=<?=$UserID ?>"><?=$Username ?></a></h2>
+<div class="header">
+	<h2>Email history for <a href="user.php?id=<?=$UserID ?>"><?=$Username ?></a></h2>
+</div>
 <table width="100%">
 	<tr class="colhead">
 		<td>Email</td>

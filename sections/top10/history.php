@@ -4,14 +4,15 @@ if(!check_perms('users_mod')) { error(404); }
 show_header('Top 10 Torrents history!');
 ?>
 <div class="thin">
-	<h2> Top 10 Torrents </h2>
-	<div class="linkbox">
-		<a href="top10.php?type=torrents"><strong>[Torrents]</strong></a>
-		<a href="top10.php?type=users">[Users]</a>
-		<a href="top10.php?type=tags">[Tags]</a>
-		<a href="top10.php?type=history">[History]</a>
+	<div class="header">
+		<h2>Top 10 Torrents</h2>
+		<div class="linkbox">
+			<a href="top10.php?type=torrents"><strong>[Torrents]</strong></a>
+			<a href="top10.php?type=users">[Users]</a>
+			<a href="top10.php?type=tags">[Tags]</a>
+			<a href="top10.php?type=history">[History]</a>
+		</div>
 	</div>
-
 	<div class="pad box">
 		<form method="get" action="">
 			<input type="hidden" name="type" value="history" />

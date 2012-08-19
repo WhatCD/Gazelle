@@ -41,7 +41,9 @@ list($Results) = $DB->next_record();
 $DB->set_query_id($Log);
 ?>
 <div class="thin">
-	<h2>Site log</h2>
+	<div class="header">
+		<h2>Site log</h2>
+	</div>
 	<div>
 		<form action="" method="get">
 			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
@@ -56,8 +58,6 @@ $DB->set_query_id($Log);
 			</table>	
 		</form>
 	</div>
-	
-	
 	
 	<div class="linkbox">
 <?

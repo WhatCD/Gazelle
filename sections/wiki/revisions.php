@@ -9,8 +9,10 @@ if($Edit > $LoggedUser['EffectiveClass']){ error(403); }
 
 show_header("Revisions of ".$Title);
 ?>
-<h2>Revision history for <a href="wiki.php?action=article&id=<?=$ArticleID?>"><?=$Title?></a></h2>
 <div class="thin">
+	<div class="header">
+		<h2>Revision history for <a href="wiki.php?action=article&id=<?=$ArticleID?>"><?=$Title?></a></h2>
+	</div>
 	<form action="wiki.php" method="get">
 		<input type="hidden" name="action" id="action" value="compare" />
 		<input type="hidden" name="id" id="id" value="<?=$ArticleID?>" />

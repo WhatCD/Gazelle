@@ -40,7 +40,9 @@ if(!check_perms('site_moderate_requests')) {
 
 ?>
 <div class="thin">
-	<h2>Send PM To All Snatchers Of "<?=$Properties['ArtistName']?> - <?=$Properties['Title']?>"</h2>
+	<div class="header">
+		<h2>Send PM To All Snatchers Of "<?=$Properties['ArtistName']?> - <?=$Properties['Title']?>"</h2>
+	</div>
 	<form action="torrents.php" method="post">
 		<input type="hidden" name="action" value="takemasspm" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

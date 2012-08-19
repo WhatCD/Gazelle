@@ -69,7 +69,6 @@ function UnBan(ip, id, elemID) {
 }
  */
 </script>
-<div class="thin">
 <?
 list($Page,$Limit) = page_limit(IPS_PER_PAGE);
 
@@ -120,7 +119,10 @@ $DB->set_query_id($RS);
 $Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 
 ?>
-	<h2>IP history for <a href="/user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
+<div class="thin">
+	<div class="header">
+		<h2>IP history for <a href="/user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
+	</div>
 	<div class="linkbox"><?=$Pages?></div>
 	<table>
 		<tr class="colhead">
