@@ -33,7 +33,7 @@ if(!$ArticleID) { //No article found
 }
 $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName, $Aliases, $UserIDs) = array_shift($Article);
-if($Read > $LoggedUser['EffectiveClass']){ error(404); }
+if($Read > $LoggedUser['EffectiveClass']){ error('You must be a higher user class to view this wiki article'); }
 
 show_header($Title,'wiki,bbcode');
 ?>

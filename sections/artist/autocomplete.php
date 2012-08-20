@@ -38,7 +38,7 @@ if(!is_array($AutoSuggest)) {
 $Matched = 0;
 $Suggestions = array();
 $Snatches = array();
-$Links = array();
+$ArtistIDs = array();
 foreach ($AutoSuggest as $Suggestion) {
 	list($ID,$Name, $Snatch) = $Suggestion;
 	if (stripos($Name,$FullName) === 0) {
