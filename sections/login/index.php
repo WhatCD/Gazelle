@@ -32,14 +32,15 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 		// User has entered a new password, use step 2
 		$DB->query("SELECT 
 			m.ID,
-			m.Email,
+            m.Email,
+            m.ipcc,
 			i.ResetExpires 
 			FROM users_main AS m 
 			INNER JOIN users_info AS i ON i.UserID=m.ID 
 			WHERE i.ResetKey='".db_string($_REQUEST['key'])."' 
 			AND i.ResetKey<>'' 
 			AND m.Enabled='1'");
-		list($UserID,$Email,$Expires)=$DB->next_record();
+		list($UserID,$Email,$Country,$Expires)=$DB->next_record();
 
 		if ($UserID && strtotime($Expires)>time()) {
 			// If the user has requested a password change, and his key has not expired
@@ -63,7 +64,8 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 						WHERE m.ID='".db_string($UserID)."' 
 						AND i.UserID=m.ID");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
-				}
+                    
+                }
 			}
 			
 			// Either a form asking for them to enter the password
