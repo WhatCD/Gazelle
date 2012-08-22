@@ -123,7 +123,7 @@ show_header('Ratio Requirements');
 		</p>
 		
 		<p>
-			If you download over 10GB while you're on ratio watch, you will be instantly disabled. 
+			If you download over 10GB while you're on ratio watch, your downloading privileges will be disabled. 
 		</p>
 		
 		<p>
