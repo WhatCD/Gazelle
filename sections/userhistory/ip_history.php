@@ -24,6 +24,11 @@ if(!check_perms('users_view_ips', $Class)) {
 
 $UsersOnly = $_GET['usersonly'];
 
+if(isset($_POST['ip'])) {
+	$SearchIP = db_string($_POST['ip']);
+	$SearchIPQuery = " AND h1.IP = '$SearchIP' ";
+}
+
 show_header("IP history for $Username");
 ?>
 <script type="text/javascript">
@@ -89,7 +94,7 @@ if ($UsersOnly == 1) {
 	        LEFT JOIN users_main AS um2 ON um2.ID=h2.UserID
 	        LEFT JOIN users_info AS ui2 ON ui2.UserID=h2.UserID
 		WHERE h1.UserID='$UserID'
-		AND h2.UserID>0
+		AND h2.UserID>0 $SearchIPQuery
 	        GROUP BY h1.IP, h1.StartTime
 		ORDER BY h1.StartTime DESC LIMIT $Limit");
 } else {
@@ -108,7 +113,7 @@ if ($UsersOnly == 1) {
 		LEFT JOIN users_history_ips AS h2 ON h2.IP=h1.IP AND h2.UserID!=$UserID
 		LEFT JOIN users_main AS um2 ON um2.ID=h2.UserID
 		LEFT JOIN users_info AS ui2 ON ui2.UserID=h2.UserID
-		WHERE h1.UserID='$UserID'
+		WHERE h1.UserID='$UserID' $SearchIPQuery
 		GROUP BY h1.IP, h1.StartTime
 		ORDER BY h1.StartTime DESC LIMIT $Limit");
 }
@@ -123,8 +128,28 @@ $Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 	<div class="header">
 		<h2>IP history for <a href="/user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
 	</div>
-	<div class="linkbox"><?=$Pages?></div>
+	<div class="linkbox">
+	<? if($UsersOnly) { ?>
+	<a href="userhistory.php?action=ips&userid=<?=$UserID?>">[View All IPs]</a>
+	<? } else { ?>
+	<a href="userhistory.php?action=ips&userid=<?=$UserID?>&usersonly=1">[View IPs With Users]</a>
+	<? } ?>
+	<br/>
+	<?=$Pages?>
+	</div>
 	<table>
+		<tr class="colhead">
+			<td>IP Search</td>
+		</tr>
+		
+		<tr><td>
+			<form method="post" action="">
+				<input type="text" name="ip"/>
+				<input type="submit" value="Search"/>
+		</td></tr>	
+	</table>
+
+<table>
 		<tr class="colhead">
 			<td>IP address</td>
 			<td>Started</td>

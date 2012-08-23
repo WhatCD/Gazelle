@@ -72,7 +72,7 @@ class DEBUG {
 			),
 			$Time
 		);
-		send_irc('PRIVMSG '.LAB_CHAN.' :'.$Message.' '.$Document.' '.' http://'.NONSSL_SITE_URL.'/tools.php?action=analysis&case='.$Identifier.' http://'.NONSSL_SITE_URL.$_SERVER['REQUEST_URI']);
+		send_irc('PRIVMSG '.LAB_CHAN.' :'.$Message.' '.$Document.' '.' https://'.SSL_SITE_URL.'/tools.php?action=analysis&case='.$Identifier.' https://'.SSL_SITE_URL.$_SERVER['REQUEST_URI']);
 	}
 
 	public function log_var($Var, $VarName = FALSE) {

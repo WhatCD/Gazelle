@@ -235,11 +235,29 @@ util.fn = util.prototype = {
 		for (var i=0,il=this.objects.length;i<il;i++) {
 			var object = this.objects[i];
 			var classes = object.className.split(' ');
-			if(array_search(class_name, classes)) {
+			if (array_search(class_name, classes)) {
 				return true;
 			}
 		}
 		return false;
+	},
+	toggle_class: function(class_name) {
+		for (var i=0,il=this.objects.length;i<il;i++) {
+			var object = this.objects[i];
+			var classes = object.className.split(' ');
+			var result = array_search(class_name, classes);
+			if (result !== false) {
+				classes.splice(result,1);
+				object.className = classes.join(' ');
+			} else {
+				if (object.className === '') {
+					object.className = class_name;
+				} else {
+					object.className = object.className + ' ' + class_name;
+				}				
+			}
+		}
+		return this;
 	},
 	disable : function () {
 		for (var i=0,il=this.objects.length;i<il;i++) {

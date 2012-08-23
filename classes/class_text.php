@@ -426,6 +426,7 @@ EXPLANATION OF PARSER LOGIC
 	}
 	
 	function to_html($Array) {
+		global $SSL;
 		$this->Levels++;
 		if($this->Levels>10) { return $Block['Val']; } // Hax prevention
 		$Str = '';

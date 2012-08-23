@@ -264,7 +264,7 @@ $Debug->set_flag('start function definitions');
  * @param $UserID int   The UserID to get info for
  */
 function user_info($UserID) {
-	global $DB, $Cache, $Classes;
+	global $DB, $Cache, $Classes, $SSL;
 	$UserInfo = $Cache->get_value('user_info_'.$UserID);
 	// the !isset($UserInfo['Paranoia']) can be removed after a transition period
 	if(empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia']) || empty($UserInfo['Class'])) {

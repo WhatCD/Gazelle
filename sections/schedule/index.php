@@ -297,23 +297,25 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
         $DB->query("SELECT ID FROM users_info AS i JOIN users_main AS m ON m.ID=i.UserID
                 WHERE i.RatioWatchEnds!='0000-00-00 00:00:00'
                 AND i.RatioWatchDownload+10*1024*1024*1024<m.Downloaded
-                And m.Enabled='1'");
+				AND m.Enabled='1'
+				AND m.can_leech='1'");
 
         $UserIDs = $DB->collect('ID'  );
     if(count($UserIDs) > 0) {
         $Subject = 'Leeching Disabled';
-        $Message = 'You have downloaded more then 10gb while on Ratio Watch. Your Leeching privleges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://ssl.what.cd/wiki.php?action=article&id=110';            
+        $Message = 'You have downloaded more then 10gb while on Ratio Watch. Your Leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://ssl.what.cd/wiki.php?action=article&id=110';            
         foreach($UserIDs as $UserID) {
-            send_pm($UserID,0,db_string($Subject),db_string($Message));
+			send_pm($UserID,0,db_string($Subject),db_string($Message));
+			send_irc("PRIVMSG #reports : Leeching Disabled. Downloaded 10GB+ on Ratio Watch. https://what.cd/user.php?id=$UserID");
         }
  
             $DB->query("UPDATE users_info AS i JOIN users_main AS m ON m.ID=i.UserID
             SET 
             m.can_leech='0',
-            i.AdminComment=CONCAT('$sqltime - Leeching ability disabled by ratio watch system - required ratio: ', m.RequiredRatio,'
+            i.AdminComment=CONCAT('$sqltime - Leech disabled by ratio watch system for downloading more than 10 gigs on ratio watch.  - required ratio: ', m.RequiredRatio,'
 
 '           , i.AdminComment)
-            WHERE m.ID IN(".implode(',',$UserIDs).")");
+WHERE m.ID IN(".implode(',',$UserIDs).")");
     }
 
 }

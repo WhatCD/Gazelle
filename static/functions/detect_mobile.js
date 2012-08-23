@@ -27,7 +27,7 @@ var isMobile = {
 if(isMobile.Android()) {
 	if(!hasCookie(ANDROID_COOKIE_NAME)) {
 		setCookie(ANDROID_COOKIE_NAME, true, 365);
-		var result=confirm("A Android App is available for What.CD, would you like to download it?");
+		var result=confirm("An Android App is available for What.CD, would you like to download it?");
 		if (result==true) {
   			window.location = ANDROID_APP_URL;
   		}
