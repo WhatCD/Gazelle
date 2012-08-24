@@ -208,11 +208,6 @@ if($CategoryName == "Music") {
 	} else {
 		$RecordLabel = "";
 	}
-	if (!empty($_POST['oclc'])) {
-		$OCLC = trim($_POST['oclc']);
-	} else {
-		$OCLC = "";
-	}
 }
 
 if($CategoryName == "Music" || $CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
@@ -225,6 +220,14 @@ if($CategoryName == "Music" || $CategoryName == "Audiobooks" || $CategoryName ==
 		}
 	}
 }
+
+//Apply OCLC to all types
+if (!empty($_POST['oclc'])) {
+	$OCLC = trim($_POST['oclc']);
+} else {
+	$OCLC = "";
+}
+
 
 //For refilling on error
 if($CategoryName == "Music") {
@@ -463,9 +466,9 @@ if($CategoryName == "Music") {
 		//These types require a year field.
 		if($NewRequest) {
 			$DB->query("INSERT INTO requests (     
-							UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, Visible)
+							UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, Visible, OCLC)
 						VALUES
-							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."', '1')");
+							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
 			
 			$RequestID = $DB->inserted_id();
 		} else {
@@ -474,15 +477,16 @@ if($CategoryName == "Music") {
 					Title = '".db_string($Title)."', 
 					Year = ".$Year.", 
 					Image = '".db_string($Image)."',
-					Description = '".db_string($Description)."'
+					Description = '".db_string($Description)."',
+					OCLC = '".db_string($OCLC)."' 
 				WHERE ID = ".$RequestID);
 		}
 	} else {
 		if($NewRequest) {
 			$DB->query("INSERT INTO requests (     
-							UserID, TimeAdded, LastVote, CategoryID, Title, Image, Description, Visible)
+							UserID, TimeAdded, LastVote, CategoryID, Title, Image, Description, Visible, OCLC)
 						VALUES
-							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."',  ".$CategoryID.", '".db_string($Title)."', '".db_string($Image)."', '".db_string($Description)."', '1')");
+							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."',  ".$CategoryID.", '".db_string($Title)."', '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
 				
 			$RequestID = $DB->inserted_id();
 		} else {
@@ -490,7 +494,8 @@ if($CategoryName == "Music") {
 				SET CategoryID = ".$CategoryID.",
 					Title = '".db_string($Title)."', 
 					Image = '".db_string($Image)."',
-					Description = '".db_string($Description)."'
+					Description = '".db_string($Description)."',
+					OCLC = '".db_string($OCLC)."'
 				WHERE ID = ".$RequestID);
 		}
 	}

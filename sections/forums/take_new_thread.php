@@ -112,7 +112,7 @@ if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forum
 	$Cache->cache_value('polls_'.$TopicID, array($Question,$Answers,$Votes,'0000-00-00 00:00:00','0'), 0);
 
 	if($ForumID == STAFF_FORUM) {
-		send_irc("PRIVMSG ".ADMIN_CHAN." :!mod Poll created by ".$LoggedUser['Username'].": '".$Question."' http://".NONSSL_SITE_URL."/forums.php?action=viewthread&threadid=".$TopicID);
+		send_irc("PRIVMSG ".ADMIN_CHAN." :!mod Poll created by ".$LoggedUser['Username'].": '".$Question."' https://".SSL_SITE_URL."/forums.php?action=viewthread&threadid=".$TopicID);
 	}
 }
 
