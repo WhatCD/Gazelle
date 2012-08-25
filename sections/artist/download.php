@@ -203,4 +203,6 @@ if(!isset($LoggedUser['Collector']) || $LoggedUser['Collector'] != $Settings) {
 	$Cache->insert('Collector',$Settings);
 	$Cache->commit_transaction(0);
 }
+
+define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);
 ?>

@@ -102,3 +102,5 @@ foreach($Downloads as $Download) {
 	$Zip->add_file($Tor->enc(), file_string($Month).'/'.$FileName);
 }
 $Zip->close_stream();
+
+define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);

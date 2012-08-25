@@ -216,3 +216,5 @@ if($DownloadAlt) {
 header('Content-disposition: attachment; filename="'.$FileName.'"');
 
 echo $Tor->enc();
+
+define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);

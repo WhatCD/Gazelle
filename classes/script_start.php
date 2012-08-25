@@ -2443,9 +2443,14 @@ require(SERVER_ROOT.'/sections/'.$Document.'/index.php');
 $Debug->set_flag('completed module execution');
 
 /* Required in the absence of session_start() for providing that pages will change 
-upon hit rather than being browser cache'd for changing content. */
-header('Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0');
-header('Pragma: no-cache');
+upon hit rather than being browser cache'd for changing content.
+
+Old versions of Internet explorer choke when downloading binary files over HTTPS with disabled cache.
+Define the following constant in files that handle file downloads */
+if(!defined('IE_WORKAROUND_NO_CACHE_HEADERS')) {
+	header('Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0');
+	header('Pragma: no-cache');
+}
 
 //Flush to user
 ob_end_flush();
