@@ -256,4 +256,5 @@ if(isset($_POST['delete'])) {
 		$Cache->delete_value('polls_'.$TopicID);
 	}
 	header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.$Page);
+    
 }
