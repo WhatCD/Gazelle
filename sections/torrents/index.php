@@ -382,6 +382,12 @@ if(!empty($_REQUEST['action'])) {
 				error(403);
 			}
 			break;
+        case 'warn' :
+            include(SERVER_ROOT.'/sections/torrents/warn.php');
+            break;
+         case 'take_warn' :
+            include(SERVER_ROOT.'/sections/torrents/take_warn.php');
+            break;
 		default:
 			enforce_login();
 		

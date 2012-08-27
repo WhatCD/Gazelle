@@ -802,6 +802,12 @@ foreach($Thread as $Key => $Post){
 		<td colspan="2">
 			<span style="float:left;"><a class="post_id" href='torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
 				<strong><?=format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
+                    <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
+                        $AuthorInfo = user_info($AuthorID);
+                        if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
+                        - <a href="torrents.php?action=warn&groupid=<?=$GroupID?>&postid=<?=$PostID?>&userid=<?=$AuthorID?>&key=<?=$Key?>">[Warn]</a>
+                    <? }
+                } ?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
 <?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
 if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>

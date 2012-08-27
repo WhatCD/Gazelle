@@ -2431,6 +2431,28 @@ function freeleech_groups($GroupIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
 	}
 }
 
+/**
+ * Used to check if keys in $_POST and $_GET are all set
+ * This reduces if statement redundancy for alot of variables
+ */
+function isset_request($Request, $Keys=NULL, $AllowEmpty = False, $Error=0) {
+    if(isset($Keys)) {
+        foreach($Keys as $K) {
+            if(!isset($Request[$K]) || ($AllowEmpty == False && $Request[$K] == '')) {
+                error($Error);
+                break;
+            }
+        }
+    }
+    else {
+        foreach($Request as $R) {
+            if(!isset($R) || ($AllowEmpty == False && $R == '')) {
+                error($Error);
+                break;
+            }
+        }
+    }
+}
 
 $Debug->set_flag('ending function definitions');
 //Include /sections/*/index.php

@@ -296,6 +296,7 @@ show_header($Title, 'requests');
 		if(check_perms('site_vote')){?> 
 		<a href="requests.php?type=voted">[Requests I've voted on]</a>
 <?		} ?>
+		<a href="bookmarks.php?type=requests">[Bookmarked requests]</a>
 <?	} else { ?>
 		<a href="bookmarks.php?type=torrents">[Torrents]</a>
 		<a href="bookmarks.php?type=artists">[Artists]</a>

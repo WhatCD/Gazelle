@@ -72,7 +72,7 @@ if($ThreadInfo['Posts'] > $PerPage) {
 	$PostNum = 1;
 }
 list($Page,$Limit) = page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
-if(($Page-1)*$PerPage >= $ThreadInfo['Posts']) {
+if(($Page-1)*$PerPage > $ThreadInfo['Posts']) {
 	$Page = ceil($ThreadInfo['Posts']/$PerPage);
 }
 list($CatalogueID,$CatalogueLimit) = catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
@@ -408,7 +408,15 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 			</span>
 			<span id="bar<?=$PostID?>" style="float:right;">
 				<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>">[Report]</a>
-				&nbsp;
+<?
+                if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
+                    $AuthorInfo = user_info($AuthorID);
+                    if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
+                    - <a href="forums.php?action=warn&postid=<?=$PostID?>&userid=<?=$AuthorID?>&key=<?=$Key?>">[Warn]</a>
+<?                  }
+                }
+?>
+                &nbsp;
 				<a href="#">&uarr;</a>
 			</span>
 		</td>

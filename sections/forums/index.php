@@ -75,6 +75,9 @@ if(!empty($_POST['action'])){
 		case 'add_poll_option':
 			require(SERVER_ROOT.'/sections/forums/add_poll_option.php');
 			break;
+		case 'take_warn':
+            require(SERVER_ROOT.'/sections/forums/take_warn.php');
+            break;
 		default:
 			error(0);
 	}
@@ -131,7 +134,10 @@ if(!empty($_POST['action'])){
 			require(SERVER_ROOT.'/sections/forums/edit_rules.php');
 			break;
 		case 'thread_subscribe':
-			break;
+            break;
+        case 'warn':
+            require(SERVER_ROOT.'/sections/forums/warn.php');
+            break;
 		default:
 			error(404);
 	}
