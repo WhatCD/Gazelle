@@ -965,7 +965,21 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 <br />
 <?
 
-
+if($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
+	$DB->query("SELECT Comment FROM users_warnings_forums WHERE UserID = '$UserID'");
+	list($ForumWarnings) = $DB->next_record();
+	if($DB->record_count() > 0) {
+?>
+<div class="box">
+	<div class="head">Forum Warnings</div>
+	<div class="pad">
+		<div id="forumwarningslinks" class="AdminComment box" style="width:98%;"><?=$Text->full_format($ForumWarnings)?></div>
+	</div>
+</div>
+<br />
+<? 
+	}
+}
 if (check_perms('users_mod', $Class)) { ?>
 		<form id="form" action="user.php" method="post">
 		<input type="hidden" name="action" value="moderate" />

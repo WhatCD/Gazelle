@@ -35,8 +35,6 @@ define('MEMCACHED_PORT', 0);
 define('SPHINX_HOST', 'localhost');
 define('SPHINX_PORT', 9312);
 define('SPHINX_MAX_MATCHES', 1000); // Must be <= the server's max_matches variable (default 1000)
-define('SPHINX_MATCHES_START', 100); // Number of matches to load on first page
-define('SPHINX_MATCHES_STEP', 50); // Load more torrents every SPHINX_MATCHES_STEP/TORRENTS_PER_PAGE page (Should be lower than SPHINX_MATCHES_START)
 define('SPHINX_INDEX', 'torrents');
 
 // Ocelot details

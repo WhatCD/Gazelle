@@ -1435,6 +1435,12 @@ CREATE TABLE `users_torrent_history_temp` (
   PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `users_warnings_forums` (
+  `UserID` int(10) unsigned NOT NULL,
+  `Comment` text NOT NULL,
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `wiki_aliases` (
   `Alias` varchar(50) NOT NULL,
   `UserID` int(10) NOT NULL,

@@ -18,6 +18,8 @@ if ($Length != 'verbal') {
     warn_user($UserID, $Time, "$URL - ". $Reason);
     $Subject = "You have received a warning";
     $PrivateMessage = "You have received a $Length week warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;
+	$WarnTime = time_plus($Time);
+	$AdminComment = date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $URL - $Reason\n\n";   
 } else {
     $Subject = "You have received a verbal warning";
     $PrivateMessage = "You have received a verbal warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;
@@ -28,7 +30,9 @@ if ($Length != 'verbal') {
             WarnedTimes=WarnedTimes+1,
             AdminComment=CONCAT(\'' . db_string($AdminComment) . '\',AdminComment)
             WHERE UserID=\'' . db_string($UserID) . '\'');
-}
+	}
+$DB -> query("INSERT INTO users_warnings_forums (UserID, Comment) VALUES('$UserID', '" . db_string($AdminComment) . "')
+	        ON DUPLICATE KEY UPDATE Comment = CONCAT('" . db_string($AdminComment) . "', Comment)");
 send_pm($UserID, $LoggedUser['ID'], $Subject, $PrivateMessage);
 
 // Mainly

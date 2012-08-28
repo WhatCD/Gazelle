@@ -64,7 +64,7 @@ function Calculate() {
 		$('#button').raw().disabled = true;
 	} else if(isNaN($('#amount_box').raw().value)
 			|| (window.location.search.indexOf('action=new') != -1 && $('#amount_box').raw().value*mul < 100*1024*1024)
-			|| (window.location.search.indexOf('action=view') != -1 && $('#amount_box').raw().value*mul < 10*1024*1024)) {
+			|| (window.location.search.indexOf('action=view') != -1 && $('#amount_box').raw().value*mul < 20*1024*1024)) {
 		$('#new_uploaded').raw().innerHTML = get_size(($('#current_uploaded').raw().value));
 		$('#new_bounty').raw().innerHTML = "0.00 MB";
 		$('#button').raw().disabled = true;
