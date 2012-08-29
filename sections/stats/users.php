@@ -127,36 +127,36 @@ show_header('Detailed User Statistics');
 ?>
 <h3>User Flow</h3>
 <div class="box pad center">
-	<img src="http://chart.apis.google.com/chart?cht=lc&chs=880x160&chco=000D99,99000D&chg=0,-1,1,1&chxt=y,x&chxs=0,h&chxl=1:|<?=implode('|',$Labels)?>&chxr=0,0,<?=$Max?>&chd=t:<?=implode(',',$InFlow)?>|<?=implode(',',$OutFlow)?>&chls=2,4,0&chdl=New+Registrations|Disabled+Users&amp;chf=bg,s,FFFFFF00" />
+	<img src="http://chart.apis.google.com/chart?cht=lc&chs=880x160&chco=000D99,99000D&chg=0,-1,1,1&chxt=y,x&chxs=0,h&chxl=1:|<?=implode('|',$Labels)?>&chxr=0,0,<?=$Max?>&chd=t:<?=implode(',',$InFlow)?>|<?=implode(',',$OutFlow)?>&chls=2,4,0&chdl=New+Registrations|Disabled+Users&amp;chf=bg,s,FFFFFF00" alt="User Flow Chart" />
 </div>
 <br />
 <h3>User Classes</h3>
 <div class="box pad center">
-	<img src="<?=$ClassDistribution?>" />
+	<img src="<?=$ClassDistribution?>" alt="User Class Distribution" />
 </div>
 <br />
 <h3>User Platforms</h3>
 <div class="box pad center">
-	<img src="<?=$PlatformDistribution?>" />
+	<img src="<?=$PlatformDistribution?>" alt="User Platform Distribution" />
 </div>
 <br />
 <h3>User Browsers</h3>
 <div class="box pad center">
-	<img src="<?=$BrowserDistribution?>" />
+	<img src="<?=$BrowserDistribution?>" alt="User Browsers Market Share" />
 </div>
 <br />
 <h3>Geographical Distribution Map</h3>
 <div class="box center">
-	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-55,-180,73,180&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
-	<img src="http://chart.apis.google.com/chart?cht=map:fixed=37,-26,65,67&chs=440x220&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-55,-180,73,180&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" alt="Geographical Distribution Map - Worldwide" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=37,-26,65,67&chs=440x220&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" alt="Geographical Distribution Map - Europe" />
 	<br />
-	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-46,-132,24,21.5&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
-	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-11,22,50,160&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-46,-132,24,21.5&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" alt="Geographical Distribution Map - South America" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-11,22,50,160&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" alt="Geographical Distribution Map - Asia" />
 	<br />
-	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-36,-57,37,100&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
-	<img src="http://chart.apis.google.com/chart?cht=map:fixed=14.8,15,45,86&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-36,-57,37,100&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" alt="Geographical Distribution Map - Africa" />
+	<img src="http://chart.apis.google.com/chart?cht=map:fixed=14.8,15,45,86&chs=440x220&chd=t:<?=implode(',',$Rank)?>&chco=FFFFFF,EDEDED,1F0066&chld=<?=implode('|',$Countries)?>&chf=bg,s,CCD6FF" alt="Geographical Distribution Map - Middle East" />
 	<br />
-	<img src="http://chart.apis.google.com/chart?chxt=y,x&chg=0,-1,1,1&chxs=0,h&cht=bvs&chco=76A4FB&chs=880x300&chd=t:<?=implode(',',array_slice($CountryUsers,0,31))?>&chxl=1:|<?=implode('|',array_slice($Countries,0,31))?>|0:|<?=implode('|',$LogIncrements)?>&amp;chf=bg,s,FFFFFF00" />
+	<img src="http://chart.apis.google.com/chart?chxt=y,x&chg=0,-1,1,1&chxs=0,h&cht=bvs&chco=76A4FB&chs=880x300&chd=t:<?=implode(',',array_slice($CountryUsers,0,31))?>&chxl=1:|<?=implode('|',array_slice($Countries,0,31))?>|0:|<?=implode('|',$LogIncrements)?>&amp;chf=bg,s,FFFFFF00" alt="Number of users by country" />
 </div>
 <?
 show_footer();

@@ -77,11 +77,15 @@ class BENCODE {
 	var $Pos = 1; // Pointer that indicates our position in the string
 	var $Str = ''; // Torrent string
 	
-	function BENCODE($Val){
-		$this->Str = $Val;
-		$this->dec();
+	function __construct($Val, $IsParsed = false){
+		if(!$IsParsed) {
+			$this->Str = $Val;
+			$this->dec();
+		} else {
+			$this->Val = $Val;
+		}
 	}
-	
+
 	// Decode an element based on the type
 	function decode($Type, $Key){
 		if(ctype_digit($Type)) { // Element is a string
@@ -248,16 +252,21 @@ class TORRENT extends BENCODE_DICT {
 			$TotalSize = substr($this->Val['info']->Val['length'],7);
 			$FileList[]= array($TotalSize, $this->Val['info']->Val['name']);
 		} else { // Multiple file mode
+			$FileNames = array();
+			$FileSizes = array();
 			$TotalSize = 0;
 			$Files = $this->Val['info']->Val['files']->Val;
 			foreach($Files as $File) {
-				$TotalSize+=substr($File->Val['length'], 7);
-				$FileSize = substr($File->Val['length'],7);
+				$FileSize = substr($File->Val['length'], 7);
+				$TotalSize += $FileSize;
 				
-				$FileName = implode('/',$File->Val['path']->Val);
-				
-				$FileList[]=array($FileSize, $FileName);
-				
+				$FileName = ltrim(implode('/',$File->Val['path']->Val), '/');
+				$FileSizes[] = $FileSize;
+				$FileNames[] = $FileName;
+			}
+			natcasesort($FileNames);
+			foreach($FileNames as $Index => $FileName) {
+				$FileList[] = array($FileSizes[$Index], $FileName);
 			}
 		}
 		return array($TotalSize, $FileList);

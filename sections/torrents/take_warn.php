@@ -12,6 +12,10 @@ $PostID = (int)$_POST['postid'];
 $UserID = (int)$_POST['userid'];
 $Key = (int)$_POST['key'];
 $SQLTime = sqltime();
+$UserInfo = user_info($UserID);
+if($UserInfo['Class'] > $LoggedUser['Class']) {
+    error(403);
+}
 $URL = "https://". SSL_SITE_URL."/torrents.php?id=$GroupID&postid=$PostID#post$PostID";
 if ($Length != 'verbal') {
     $Time = ((int)$Length) * (7 * 24 * 60 * 60);

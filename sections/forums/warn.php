@@ -1,9 +1,9 @@
 <?php
 if (!check_perms('users_warn')) { error(404);}
-isset_request($_GET, array('postid', 'userid', 'key'));
-$PostID = (int) $_GET['postid'];
-$UserID = (int)$_GET['userid'];
-$Key = (int)$_GET['key'];
+isset_request($_POST, array('postid', 'userid', 'key'));
+$PostID = (int) $_POST['postid'];
+$UserID = (int)$_POST['userid'];
+$Key = (int)$_POST['key'];
 $UserInfo = user_info($UserID);
 $DB -> query("SELECT
     p.Body, t.ForumID

@@ -805,7 +805,15 @@ foreach($Thread as $Key => $Post){
                     <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
                         $AuthorInfo = user_info($AuthorID);
                         if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
-                        - <a href="torrents.php?action=warn&groupid=<?=$GroupID?>&postid=<?=$PostID?>&userid=<?=$AuthorID?>&key=<?=$Key?>">[Warn]</a>
+                        <form action="" style="display: none;" name="warn<?=$PostID?>" method="post">
+                        <input type="hidden" name="action" value="warn" />
+                        <input type="hidden" name="groupid" value="<?=$GroupID?>" />
+                        <input type="hidden" name="postid" value="<?=$PostID?>" />
+                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
+                        <input type="hidden" name="key" value="<?=$Key?>" />
+                        </form>
+                        - <a href="#" onclick="document.warn<?=$PostID?>.submit(); return false;">[Warn]</a>
+
                     <? }
                 } ?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>

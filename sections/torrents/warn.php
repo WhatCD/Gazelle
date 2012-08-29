@@ -1,11 +1,11 @@
 <?php
 if (!check_perms('users_warn')) { error(404);}
-isset_request($_GET, array('groupid', 'postid', 'userid', 'key'));
+isset_request($_POST, array('groupid', 'postid', 'userid', 'key'));
 
-$GroupID = (int) $_GET['groupid'];
-$PostID = (int) $_GET['postid'];
-$UserID = (int) $_GET['userid'];
-$Key = (int) $_GET['key'];
+$GroupID = (int) $_POST['groupid'];
+$PostID = (int) $_POST['postid'];
+$UserID = (int) $_POST['userid'];
+$Key = (int) $_POST['key'];
 $UserInfo = user_info($UserID);
 $DB -> query("SELECT
     tc.Body,

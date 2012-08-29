@@ -235,7 +235,8 @@ Your torrent was reported because it was missing discs.'
 				'reason' => '-1',
 				'title' => 'Bonus Tracks Only',
 				'report_messages' => array(
-					'If possible, please provide a link to Amazon.com or another source showing the proper track listing.'
+					'If possible, please provide a link to Amazon.com or another source showing the proper track listing.',
+					'Per <a href="rules.php?p=upload#r2.4.5">rule 2.4.5</a>, exclusive WEB-sourced bonus tracks are allowed to be uploaded separately.'
 				),
 				'report_fields' => array(
 					'track' => '0',

@@ -74,7 +74,10 @@ if(!empty($_POST['action'])){
 			break;
 		case 'add_poll_option':
 			require(SERVER_ROOT.'/sections/forums/add_poll_option.php');
-			break;
+            break;
+        case 'warn':
+            require(SERVER_ROOT.'/sections/forums/warn.php');
+            break;
 		case 'take_warn':
             require(SERVER_ROOT.'/sections/forums/take_warn.php');
             break;

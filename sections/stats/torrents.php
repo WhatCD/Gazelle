@@ -60,11 +60,11 @@ show_header();
 
 <div class="box pad center">
 	<h1>Uploads by month</h1>
-	<img src="http://chart.apis.google.com/chart?cht=lc&chs=880x160&chco=000D99,99000D,00990D&chg=0,-1,1,1&chxt=y,x&chxs=0,h&chxl=1:|<?=implode('|',$Labels)?>&chxr=0,0,<?=$Max?>&chd=t:<?=implode(',',$InFlow)?>|<?=implode(',',$OutFlow)?>|<?=implode(',',$NetFlow)?>&chls=2,4,0&chdl=Uploads|Deletions|Remaining&amp;chf=bg,s,FFFFFF00" />
+	<img src="http://chart.apis.google.com/chart?cht=lc&chs=880x160&chco=000D99,99000D,00990D&chg=0,-1,1,1&chxt=y,x&chxs=0,h&chxl=1:|<?=implode('|',$Labels)?>&chxr=0,0,<?=$Max?>&chd=t:<?=implode(',',$InFlow)?>|<?=implode(',',$OutFlow)?>|<?=implode(',',$NetFlow)?>&chls=2,4,0&chdl=Uploads|Deletions|Remaining&amp;chf=bg,s,FFFFFF00" alt="User Flow Chart" />
 </div>
 <div class="box pad center">
 	<h1>Torrents by category</h1>
-	<img src="<?=$Categories?>" />
+	<img src="<?=$Categories?>" alt="" />
 </div>
 <?
 show_footer();

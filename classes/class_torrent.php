@@ -256,18 +256,21 @@ class TORRENT extends BENCODE_DICT {
 			$FileList[]= array($this->Val['info']->Val['length'], $this->Val['info']->Val['name']);
 		} else { // Multiple file mode
 			$FileNames = array();
+			$FileSizes = array();
 			$TotalSize = 0;
 			$Files = $this->Val['info']->Val['files']->Val;
 			foreach($Files as $File) {
-				$TotalSize+=$File->Val['length'];
+				$TotalSize += $File->Val['length'];
 				$FileSize = $File->Val['length'];
 				
 				$FileName = ltrim(implode('/',$File->Val['path']->Val), '/');
-				
-				$FileList[] = array($FileSize, $FileName);
+				$FileSizes[] = $FileSize;
 				$FileNames[] = $FileName;
 			}
-			array_multisort($FileNames, $FileList);
+			natcasesort($FileNames);
+			foreach($FileNames as $Index => $FileName) {
+				$FileList[] = array($FileSizes[$Index], $FileName);
+			}
 		}
 		return array($TotalSize, $FileList);
 	}
