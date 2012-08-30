@@ -299,14 +299,14 @@ if(empty($Properties['GroupID']) && empty($ArtistForm) && $Type == "Music") {
 		$Err = "Please enter at least one main artist";
 		$ArtistForm = array();
 	}
-	$LogName .= display_artists($ArtistForm, false);
+	$LogName .= display_artists($ArtistForm, false, true, false);
 } elseif($Type == "Music" && empty($ArtistForm)) {
 	$DB->query("SELECT ta.ArtistID,aa.Name,ta.Importance FROM torrents_artists AS ta JOIN artists_alias AS aa ON ta.AliasID = aa.AliasID WHERE ta.GroupID = ".$Properties['GroupID']." ORDER BY ta.Importance ASC, aa.Name ASC;");
 	while(list($ArtistID,$ArtistName,$ArtistImportance) = $DB->next_record(MYSQLI_BOTH, false)) {
 		$ArtistForm[$ArtistImportance][] = array('id' => $ArtistID, 'name' => display_str($ArtistName));
 		$ArtistsUnescaped[$ArtistImportance][] = array('name' => $ArtistName);
 	}
-	$LogName .= display_artists($ArtistForm, false);
+	$LogName .= display_artists($ArtistsUnescaped, false, true, false);
 }
 
 
@@ -447,7 +447,8 @@ if($Type == 'Music') {
 		FROM torrents_group AS tg
 		WHERE tg.id = ".$Properties['GroupID']);
 		if($DB->record_count() > 0) {
-			list($GroupID, $WikiImage, $WikiBody, $RevisionID, $Properties['Title'], $Properties['Year'], $Properties['ReleaseType'], $Properties['TagList']) = $DB->next_record();
+			// Don't escape tg.Name. It's written directly to the log table
+			list($GroupID, $WikiImage, $WikiBody, $RevisionID, $Properties['Title'], $Properties['Year'], $Properties['ReleaseType'], $Properties['TagList']) = $DB->next_record(MYSQLI_NUM, array(4));
 			$Properties['TagList'] = str_replace(array(" ",".","_"), array(", ",".","."), $Properties['TagList']);
 			if(!$Properties['Image'] && $WikiImage){
 				$Properties['Image'] = $WikiImage;

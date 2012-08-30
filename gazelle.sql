@@ -670,6 +670,12 @@ CREATE TABLE `sphinx_hash` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `sphinx_index_last_id` (
+  `Type` varchar(16) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `ID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE `sphinx_requests` (
   `ID` int(10) unsigned NOT NULL,
   `UserID` int(10) unsigned NOT NULL DEFAULT '0',

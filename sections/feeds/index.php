@@ -93,7 +93,11 @@ switch($_GET['feed']) {
 		}
 		foreach ($Blog as $BlogItem) {
 			list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
-			echo $Feed->item($Title, $Text->strip_bbcode($Body), 'forums.php?action=viewthread&amp;threadid='.$ThreadID, SITE_NAME.' Staff','','',$BlogTime);
+			if($ThreadID) {
+				echo $Feed->item($Title, $Text->strip_bbcode($Body), 'forums.php?action=viewthread&amp;threadid='.$ThreadID, SITE_NAME.' Staff','','',$BlogTime);
+			} else {
+				echo $Feed->item($Title, $Text->strip_bbcode($Body), 'blog.php#blog'.$BlogID, SITE_NAME.' Staff','','',$BlogTime);
+			}
 		}
 		break;
 	case 'torrents_all': 

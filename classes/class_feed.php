@@ -1,6 +1,6 @@
 <?
 class FEED {
-	var $UseSSL = false; // If we're using SSL for blog and news links
+	var $UseSSL = true; // If we're using SSL for blog and news links
 
 	function open_feed() {
 		header("Content-type: application/xml; charset=UTF-8");

@@ -244,6 +244,18 @@ class DEBUG {
 		return $SS->Time;
 	}
 
+	public function get_sphinxql_queries() {
+		if(class_exists(SPHINXQL)) {
+			return SPHINXQL::$Queries;
+		}
+	}
+
+	public function get_sphinxql_time() {
+		if(class_exists(SPHINXQL)) {
+			return SPHINXQL::$Time;
+		}
+	}
+
 	public function get_queries() {
 		global $DB;
 		return $DB->Queries;
@@ -470,7 +482,10 @@ class DEBUG {
 		$Header = 'Searches';
 		if (!is_array($Queries)) {
 			$Queries = $this->get_sphinx_queries();
-			$Header .= ' ('.number_format($this->get_sphinx_time(), 5).' ms)';
+			if($QueriesQL = $this->get_sphinxql_queries()) {
+				$Queries = array_merge($Queries, $QueriesQL);
+			}
+			$Header .= ' ('.number_format($this->get_sphinx_time()+$this->get_sphinxql_time(), 5).' ms)';
 		}
 		if (empty($Queries)) {
 			return;
@@ -488,7 +503,7 @@ class DEBUG {
 			list($Params,$Time) = $Query;
 ?>
 		<tr valign="top">
-			<td class="debug_data debug_sphinx_data"><pre><?=str_replace("\t", '	', display_str($Params))?></pre></td>
+			<td class="debug_data debug_sphinx_data"><pre><?=str_replace("\t", '	', $Params)?></pre></td>
 			<td class="rowa" style="width:130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 		</tr>
 <?

@@ -38,7 +38,7 @@ show_header('Collages Rules');
 			Power Users and Donors get one personal collage.  Elites can have two, Torrent Masters can have up to three, Power TMs up to four and Elite TM+ up to five. Donors always receive one more than the class maximum.
 			</li>
 			<li>
-			Every collage must have at least 3 albums in it.
+			Every collage must have at least 3 torrent groups in it, except for collages of type "Label", "Personal", and "Staff Picks".
 			</li>
 			<li>
 			Please check to see that a similar collage does not already exist. If a similar collage does exist, please contribute to the existing collage.
