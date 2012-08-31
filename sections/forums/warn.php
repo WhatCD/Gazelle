@@ -45,18 +45,19 @@ show_header('Warn User');
                 </tr>
 				<tr>
 					<td class="label">Private Message:</td>
-					<td/>
+					<td>
 					<textarea id="message" style="width: 95%;" tabindex="1" onkeyup="resize('message');" name="privatemessage" cols="90" rows="4"></textarea>
+					</td>
 				</tr>
-				
 				<tr>
 					<td class="label">Edit Post:</td>
 					<td>
 						<textarea id="body" style="width: 95%;" tabindex="1" onkeyup="resize('body');" name="body" cols="90" rows="8"><?=$PostBody?></textarea>
 						<br />
-					<input type="submit" id="submit_button" value="Warn User" tabindex="1" />
+						<input type="submit" id="submit_button" value="Warn User" tabindex="1" />
 					</td>
 				</tr>
 			</table>
 		</form>
 	</div>
+<? show_footer(); ?>

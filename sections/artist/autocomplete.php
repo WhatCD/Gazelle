@@ -50,4 +50,4 @@ foreach ($AutoSuggest as $Suggestion) {
 		}
 	}
 }
-echo json_encode(array($FullName,$Suggestions,$Snatches,$ArtistIDs));
+echo json_encode(array(display_str($FullName),$Suggestions,$Snatches,$ArtistIDs));

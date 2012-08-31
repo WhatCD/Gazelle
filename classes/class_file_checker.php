@@ -58,13 +58,13 @@ function get_file_extension($file_name) {
 
 function invalid_error($Name) {
 	global $Err;
-	$Err = 'The torrent contained one or more invalid files ('.$Name.')';
+	$Err = 'The torrent contained one or more invalid files ('.display_str($Name).')';
 
 }
 
 function forbidden_error($Name) {
 	global $Err;
-	$Err = 'The torrent contained one or more forbidden files ('.$Name.')';
+	$Err = 'The torrent contained one or more forbidden files ('.display_str($Name).')';
 }
 
 function character_error() {

@@ -43,24 +43,26 @@ show_header('Warn User');
 						<option value="1">1 week</option>
 						<option value="2">2 week</option>
 						<option value="4">4 week</option>
-						<? if(check_perms("users_mod")) {
-						?>
+						<? if(check_perms("users_mod")) { ?>
 						<option value="8">8 week</option>
-						<? }?>
+						<? } ?>
 					</select></td>
 				</tr>
 				<tr>
 					<td class="label">Private Message:</td>
-					<td/>
+					<td>
 					<textarea id="message" style="width: 95%;" tabindex="1" onkeyup="resize('message');" name="privatemessage" cols="90" rows="4"></textarea>
+					</td>
 				</tr>
 				<tr>
 					<td class="label">Edit Post:</td>
-					<td>					<textarea id="body" style="width: 95%;" tabindex="1" onkeyup="resize('body');" name="body" cols="90" rows="8"><?=$PostBody?></textarea>
-					<br />
-					<input type="submit" id="submit_button" value="Warn User" tabindex="1" />
+					<td>
+						<textarea id="body" style="width: 95%;" tabindex="1" onkeyup="resize('body');" name="body" cols="90" rows="8"><?=$PostBody?></textarea>
+						<br />
+						<input type="submit" id="submit_button" value="Warn User" tabindex="1" />
 					</td>
 				</tr>
 			</table>
 		</form>
 	</div>
+<? show_footer(); ?>

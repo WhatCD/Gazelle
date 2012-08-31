@@ -31,7 +31,6 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 </head>
 <body>
 <div id="head">
-<?=($SSL)?'<span>SSL</span>':''?>
 </div>
 <table id="maincontent">
 	<tr>
