@@ -40,7 +40,7 @@
 	<div class="header">
 		<h2>Manage collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>
 	</div>
-	<table width="100%">
+	<table width="100%" class="layout">
 		<tr class="colhead"><td>Sorting</td></tr>
 		<tr>
 			<td id="drag_drop_textnote">

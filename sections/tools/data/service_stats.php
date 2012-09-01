@@ -16,8 +16,8 @@ show_header("Service Stats");
 <div class="permissions">
 	<div class="permission_container">
 		<table>
-			<tr>
-				<td colspan="2" class="colhead">Service</td>
+			<tr class="colhead">
+				<td colspan="2">Service</td>
 			</tr>
 			<tr><td colspan="2"><strong>Threads (Active)</strong></td></tr>
 			<tr>
@@ -69,8 +69,8 @@ show_header("Service Stats");
 	</div>
 	<div class="permission_container">
 		<table>
-			<tr>
-				<td colspan="2" class="colhead">Activity</td>
+			<tr class="colhead">
+				<td colspan="2">Activity</td>
 			</tr>
 			<tr><td colspan="2"><strong>Total Reads</strong></td></tr>
 			<tr>
@@ -173,8 +173,8 @@ show_header("Service Stats");
 	</div>
 	<div class="permission_container">
 		<table>
-			<tr>
-				<td colspan="2" class="colhead">Concurrency</td>
+			<tr class="colhead">
+				<td colspan="2">Concurrency</td>
 			</tr>
 			<tr><td colspan="2"><strong>Total Reads</strong></td></tr>
 			<tr>

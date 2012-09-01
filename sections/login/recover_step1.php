@@ -12,7 +12,7 @@ if(empty($Sent) || (!empty($Sent) && $Sent!=1)) {
 		<font color="red"><strong><?=$Err ?></strong></font><br /><br />
 <?	} ?>
 	An email will be sent to your email address with information on how to reset your password<br /><br />
-		<table cellpadding="2" cellspacing="1" border="0" align="center">
+		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
 			<tr valign="top">
 				<td align="right">Email&nbsp;</td>
 				<td align="left"><input type="text" name="email" id="email" class="inputtext" /></td>

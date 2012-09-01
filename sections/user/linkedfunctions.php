@@ -168,7 +168,7 @@ function user_dupes_table($UserID) {
 			<input type="hidden" id="form_comment_hash" name="form_comment_hash" value="<?=$CommentHash?>">
 			<div class="box">
 				<div class="head"><?=max($DupeCount - 1, 0)?> Linked Account<?=(($DupeCount == 2)?'':'s')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;">(View)</a></div>
-				<table width="100%" class="hidden linkedaccounts">
+				<table width="100%" class="layout hidden linkedaccounts">
 					<?=$DupeCount?'<tr>':''?>
 <?
 	$i = 0;

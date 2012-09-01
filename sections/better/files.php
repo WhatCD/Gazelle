@@ -42,7 +42,7 @@ $Results = $Results['matches'];
 </div>
 <div class="thin box pad">
 	<h3>There are <?=count($TorrentsInfo)?> torrents remaining</h3>
-	<table>
+	<table class="torrent_table">
 <?
 foreach($TorrentsInfo as $TorrentID => $Info) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Results[$Info['GroupID']]);

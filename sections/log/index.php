@@ -21,7 +21,7 @@ if(!isset($_GET['beta']) || $_GET['beta'] == 1) {
 	</div>
 	<div>
 		<form action="" method="get">
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
 					<td>
@@ -47,11 +47,10 @@ if(!isset($_GET['beta']) || $_GET['beta'] == 1) {
 	<div class="linkbox">
 <?
 	$Pages = get_pages($Page,$TotalMatches,LOG_ENTRIES_PER_PAGE,9);
-	echo $Pages;
-?>
+	echo $Pages;?>
 	</div>
 <? } ?>
-	<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+	<table cellpadding="6" cellspacing="1" border="0" class="log_table border" width="100%">
 		<tr class="colhead">
 			<td style="width: 180px;"><strong>Time</strong></td>
 			<td><strong>Message</strong></td>
@@ -201,7 +200,7 @@ while(list($ID, $Message, $LogTime) = $DB->next_record()) {
 				<?=time_diff($LogTime)?>
 			</td>
 			<td>
-				<span<? if($Color) { ?> style="color: <?=$Color ?>;"<? } ?>><?=$Message?></span>
+				<span<? if($Color) { ?> style="color: <?=$Color?>;"<? } ?>><?=$Message?></span>
 			</td>
 		</tr>
 <?
@@ -213,4 +212,4 @@ while(list($ID, $Message, $LogTime) = $DB->next_record()) {
 	</div>
 </div>
 <?
-show_footer() ?>
+show_footer(); ?>

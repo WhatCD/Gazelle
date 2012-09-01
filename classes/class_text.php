@@ -264,7 +264,7 @@ EXPLANATION OF PARSER LOGIC
 				if($CloseTag === false) { // block finishes with URL
 					$CloseTag = $Len;
 				}
-				if(preg_match('/[!;,.?:]+$/',substr($Str, $i, $CloseTag), $Match)) {
+				if(preg_match('/[!,.?:]+$/',substr($Str, $i, $CloseTag), $Match)) {
 					$CloseTag -= strlen($Match[0]);
 				}
 				$URL = substr($Str, $i, $CloseTag);

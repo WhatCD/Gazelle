@@ -19,7 +19,7 @@ echo $Val->GenerateJS('permform');
 		[<a href="tools.php?action=permissions">Back to permission list</a>]
 		[<a href="tools.php">Back to Tools</a>]
 	</div>
-	<table class="permission_head">
+	<table class="permission_head layout">
 		<tr>
 			<td class="label">Permission Name</td>
 			<td><input type="text" name="name" id="name" value="<?=(!empty($Name) ? display_str($Name) : '')?>" /></td>

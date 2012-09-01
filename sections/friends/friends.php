@@ -69,8 +69,8 @@ foreach($Friends as $Friend) {
 <form action="friends.php" method="post">
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<table class="friends_table vertical_margin">
-		<tr>
-			<td class="colhead" colspan="3">
+		<tr class="colhead">
+			<td colspan="3">
 				<span style="float:left;"><?=format_username($FriendID, true, true, true, true)?>
 <?	if(check_paranoia('ratio', $Paranoia, $Class, $FriendID)) { ?>
 				&nbsp;Ratio: <strong><?=ratio($Uploaded, $Downloaded)?></strong>

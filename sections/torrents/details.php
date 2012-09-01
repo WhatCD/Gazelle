@@ -365,7 +365,7 @@ if(count($Tags) > 0) {
 		</div>
 	</div>
 	<div class="main_column">
-		<table class="torrent_table">
+		<table class="torrent_table details" id="torrent_details">
 			<tr class="colhead_dark">
 				<td width="80%"><strong>Torrents</strong></td>
 				<td><strong>Size</strong></td>
@@ -448,7 +448,7 @@ foreach ($TorrentList as $Torrent) {
 	$FileList = str_replace(array('_','-'), ' ', $FileList);
 	$FileList = str_replace('|||','<tr><td>',display_str($FileList));
 	$FileList = preg_replace_callback('/\{\{\{([^\{]*)\}\}\}/i','filelist',$FileList);
-	$FileList = '<table style="overflow-x:auto;"><tr class="colhead_dark"><td><strong><div style="float: left; display: block;">File Name'.(check_perms('users_mod') ? ' [<a href="torrents.php?action=regen_filelist&amp;torrentid='.$TorrentID.'">Regenerate</a>]' : '').'</div></strong><div style="float:right; display:block;">'.(empty($FilePath) ? '' : '/'.$FilePath.'/' ).'</div></td><td><strong>Size</strong></td></tr><tr><td>'.$FileList."</table>";
+	$FileList = '<table class="filelist_table" style="overflow-x:auto;"><tr class="colhead_dark"><td><strong><div style="float: left; display: block;">File Name'.(check_perms('users_mod') ? ' [<a href="torrents.php?action=regen_filelist&amp;torrentid='.$TorrentID.'">Regenerate</a>]' : '').'</div></strong><div style="float:right; display:block;">'.(empty($FilePath) ? '' : '/'.$FilePath.'/' ).'</div></td><td><strong>Size</strong></td></tr><tr><td>'.$FileList."</table>";
 
 	$ExtraInfo=''; // String that contains information on the torrent, eg. format and encoding
 	$AddExtra=''; // Separator between torrent properties
@@ -603,7 +603,7 @@ if (count($Requests) > 0) {
 ?>
 		<div class="box">
 			<div class="head"><span style="font-weight: bold;">Requests (<?=count($Requests)?>)</span> <span style="float:right;"><a href="#" onClick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span></div>
-			<table id="requests" class="hidden">
+			<table id="requests" class="request_table hidden">
 				<tr class="colhead">
 					<td>Format / Bitrate / Media</td>
 					<td>Votes</td>
@@ -660,7 +660,7 @@ if(count($Collages)>0) {
 		$SeeAll = '';
 	}
 ?>
-		<table id="collages">
+		<table class="collage_table" id="collages">
 			<tr class="colhead">
 				<td width="85%">This album is in <?=count($Collages)?> collage<?=((count($Collages)>1)?'s':'')?><?=$SeeAll?></td>
 				<td># torrents</td>
@@ -705,7 +705,7 @@ if(count($PersonalCollages)>0) {
 		$SeeAll = '';
 	}
 ?>
-		<table id="personal_collages">
+		<table class="collage_table" id="personal_collages">
 			<tr class="colhead">
 				<td width="85%">This album is in <?=count($PersonalCollages)?> personal collage<?=((count($PersonalCollages)>1)?'s':'')?><?=$SeeAll?></td>
 				<td># torrents</td>

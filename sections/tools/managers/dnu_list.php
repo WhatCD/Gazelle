@@ -44,8 +44,8 @@ $DB->query("SELECT
 		</form>
 	</tr>
 <? } ?>
-<tr>
-	<td colspan="4" class="colhead">Add Do Not Upload</td>
+<tr class="colhead">
+	<td colspan="4">Add Do Not Upload</td>
 </tr>
 <tr class="rowa">
 	<form action="tools.php" method="post">

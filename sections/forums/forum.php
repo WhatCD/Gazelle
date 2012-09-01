@@ -77,7 +77,7 @@ show_header('Forums > '. $Forums[$ForumID]['Name']);
 			<div style="display: inline-block;">
 				<h3>Search this forum:</h3>
 				<form action="forums.php" method="get">
-					<table cellpadding="6" cellspacing="1" border="0" class="border">	
+					<table cellpadding="6" cellspacing="1" border="0" class="layout border">	
 						<input type="hidden" name="action" value="search" />
 						<input type="hidden" name="forums[]" value="<?=$ForumID?>" />
 						<tr>

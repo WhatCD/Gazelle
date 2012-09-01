@@ -56,7 +56,7 @@ if(check_perms('site_advanced_top10')) {
 	<div>
 		<form action="" method="get">
 			<input type="hidden" name="advanced" value="1" />
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label">Tags (comma-separated):</td>
 					<td>
@@ -309,7 +309,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		</small>
 <?	} ?> 
 		</h3>
-	<table class="border">
+	<table class="torrent_table cats numbering border">
 	<tr class="colhead">
 		<td class="center" style="width:15px;"></td>
 		<td></td>
@@ -370,7 +370,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		$AddExtra='';
 		if($Format) { $ExtraInfo.=$Format; $AddExtra=' / '; }
 		if($Encoding) { $ExtraInfo.=$AddExtra.$Encoding; $AddExtra=' / '; }
-		"FLAC / Lossless / Log (100%) / Cue / CD";
+		// "FLAC / Lossless / Log (100%) / Cue / CD";
 		if($HasLog) { $ExtraInfo.=$AddExtra."Log (".$LogScore."%)"; $AddExtra=' / '; }
 		if($HasCue) { $ExtraInfo.=$AddExtra."Cue"; $AddExtra=' / '; }
 		if($Media) { $ExtraInfo.=$AddExtra.$Media; $AddExtra=' / '; }
@@ -397,7 +397,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 
 		// print row
 ?>
-	<tr class="group_torrent row<?=$Highlight?>">
+	<tr class="torrent row<?=$Highlight?>">
 		<td style="padding:8px;text-align:center;"><strong><?=$Rank?></strong></td>
 <?
 		//fix array offset php error

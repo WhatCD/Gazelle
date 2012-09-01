@@ -74,7 +74,7 @@ echo $Val->GenerateJS('userform');
 			<input type="hidden" name="userid" value="<?=$UserID?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		</div>
-		<table cellpadding='6' cellspacing='1' border='0' width='100%' class='border'>
+		<table cellpadding='6' cellspacing='1' border='0' width='100%' class='layout border'>
 			<tr class="colhead_dark">
 				<td colspan="2">
 					<strong>Site preferences</strong>
@@ -138,7 +138,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Hide release types</strong></td>
 				<td>
-					<table style="border:none;">
+					<table class="layout" style="border:none;">
 <?
 	$ReleaseTypes[1024] = "Guest Appearance";
 	$ReleaseTypes[1023] = "Remixed By";

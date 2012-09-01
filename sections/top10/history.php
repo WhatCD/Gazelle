@@ -17,7 +17,7 @@ show_header('Top 10 Torrents history!');
 		<form method="get" action="">
 			<input type="hidden" name="type" value="history" />
 			<h3>Search for a date! (After 2010-09-05)</h3>
-			<table>
+			<table class="layout">
 				<tr>
 					<td class="label">Date:</td>
 					<td><input type="text" id="date" name="date" value="<?=!empty($_GET['date']) ? display_str($_GET['date']) : 'YYYY-MM-DD'?>" onfocus="if($('#date').raw().value == 'YYYY-MM-DD') $('#date').raw().value = ''" /></td>
@@ -90,7 +90,7 @@ if(!empty($_GET['date'])) {
 	<br />
 	<div class="pad box">
 		<h3>Top 10 for <?=($Type == 'day' ? $Date : 'the first week after '.$Date)?></h3>
-	<table class="border">
+	<table class="torrent_table cats numbering border">
 	<tr class="colhead">
 		<td class="center" style="width:15px;"></td>
 		<td class="center"></td>

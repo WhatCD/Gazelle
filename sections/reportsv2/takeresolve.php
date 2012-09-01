@@ -83,7 +83,7 @@ if(($Escaped['resolve_type'] == "manual" || $Escaped['resolve_type'] == "dismiss
 	} else {
 	//Someone beat us to it. Inform the staffer.
 ?>
-	<table cellpadding="5">
+	<table class="layout" cellpadding="5">
 		<tr>
 			<td>
 				<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Somebody has already resolved this report</a>
@@ -282,7 +282,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 } else {
 	//Someone beat us to it. Inform the staffer.
 ?>
-	<table cellpadding="5">
+	<table class="layout" cellpadding="5">
 		<tr>
 			<td>
 				<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Somebody has already resolved this report</a>

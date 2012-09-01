@@ -156,7 +156,7 @@ show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],
 			<div style="display: inline-block;">
 				<h3>Search this thread:</h3>
 				<form action="forums.php" method="get">
-					<table cellpadding="6" cellspacing="1" border="0" class="border">	
+					<table cellpadding="6" cellspacing="1" border="0" class="layout border">	
 						<input type="hidden" name="action" value="search" />
 						<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
 						<tr>
@@ -535,7 +535,7 @@ if(check_perms('site_moderate_forums')) {
 		<input type="hidden" name="page" value="<?=$Page?>" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		</div>
-		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="border">
+		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border">
 			<tr>
 				<td class="label">Sticky</td>
 				<td>

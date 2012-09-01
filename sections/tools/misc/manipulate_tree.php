@@ -105,7 +105,7 @@ if($_POST['id']) {
 	<form action="" method="post">
 		<input type="hidden" id="action" name="action" value="manipulate_tree" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table>
+		<table class="layout">
 			<tr>
 				<td class="label"><strong>UserID</strong></td>
 				<td>

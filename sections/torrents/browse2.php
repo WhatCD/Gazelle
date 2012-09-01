@@ -553,7 +553,7 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 				</td>
 			</tr>
 		</table>
-		<table class="cat_list">
+		<table class="layout cat_list">
 <?
 $x=0;
 reset($Categories);
@@ -577,7 +577,7 @@ foreach($Categories as $CatKey => $CatName) {
 ?>
 			</tr>
 		</table>
-		<table class="cat_list <? if(empty($LoggedUser['ShowTags'])) { ?>hidden<? } ?>" id="taglist">
+		<table class="layout cat_list <? if(empty($LoggedUser['ShowTags'])) { ?>hidden<? } ?>" id="taglist">
 			<tr>
 <?
 $GenreTags = $Cache->get_value('genre_tags');
@@ -606,7 +606,7 @@ if($x%7!=0) { // Padding
 <? } ?>
 			</tr>
 		</table>
-		<table class="cat_list" width="100%">
+		<table class="layout cat_list" width="100%">
 			<tr>
 				<td class="label">
 					<a href="#" onclick="$('#taglist').toggle(); if(this.innerHTML=='(View Tags)'){this.innerHTML='(Hide Tags)';} else {this.innerHTML='(View Tags)';}; return false;"><?=(empty($LoggedUser['ShowTags'])) ? '(View Tags)' : '(Hide Tags)'?></a>
@@ -681,7 +681,7 @@ $Bookmarks = all_bookmarks('torrent');
 
 <div class="linkbox"><?=$Pages?></div>
 
-<table class="torrent_table grouping" id="torrent_table">
+<table class="torrent_table cats grouping" id="torrent_table">
 	<tr class="colhead">
 		<td class="small"></td>
 		<td class="small cats_col"></td>

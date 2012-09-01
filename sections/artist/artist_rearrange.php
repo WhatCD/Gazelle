@@ -230,7 +230,7 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 		$HideDiscogDefault = false;	
 	}	
 	?>
-	<table class="torrent_table releases_<?=$ReleaseType?>_table<?=$NumTorrentsReleaseType==0?" empty hidden":""?>" id="torrents_<?=$ReleaseTypeLabel?>">
+	<table class="torrent_table grouped release_table releases_<?=$ReleaseType?>_table<?=$NumTorrentsReleaseType==0?" empty hidden":""?>" id="torrents_<?=$ReleaseTypeLabel?>">
 		<tr class="colhead_dark">
 			<td class="small" style="width: 28px;"></td>
 			<td width="70%">
@@ -564,7 +564,7 @@ echo $TorrentDisplayList;
 if($NumRequests > 0) {
 	
 ?>
-	<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%" id="requests">
+	<table cellpadding="6" cellspacing="1" border="0" class="requests_table border" width="100%" id="requests">
 		<tr class="colhead_dark">
 			<td style="width:48%;">
 				<a href="#">&uarr;</a>&nbsp;

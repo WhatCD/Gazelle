@@ -78,7 +78,7 @@ class TORRENT_FORM {
 		} ?>
 		</div>
 <?		if($this->NewTorrent) { ?>
-		<table cellpadding="3" cellspacing='1' border='0' class='border' width="100%">
+		<table cellpadding="3" cellspacing='1' border='0' class='layout border' width="100%">
 			<tr>
 				<td class="label">
 					Torrent file
@@ -115,7 +115,7 @@ class TORRENT_FORM {
 ?>
 		</div>
 	
-		<table cellpadding="3" cellspacing="1" border="0" class="border slice" width="100%">
+		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
 <?		if(!$this->NewTorrent) {
 			if(check_perms('torrents_freeleech')) {
 ?>
@@ -193,7 +193,7 @@ class TORRENT_FORM {
 		$LossywebApproved = $Torrent['LossywebApproved'];
 		global $ReleaseTypes;
 ?>
-		<table cellpadding="3" cellspacing="1" border="0" class="border<? if($this->NewTorrent) { echo ' slice'; }?>" width="100%">
+		<table cellpadding="3" cellspacing="1" border="0" class="layout border<? if($this->NewTorrent) { echo ' slice'; }?>" width="100%">
 <?		if($this->NewTorrent) { ?>
 			<tr id="artist_tr">
 			<td class="label">Artist(s)</td>		
@@ -633,7 +633,7 @@ function hide() {
 	function audiobook_form() { 
 		$Torrent = $this->Torrent;
 ?>
-		<table cellpadding="3" cellspacing="1" border="0" class="border slice" width="100%">
+		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
 <?		if($this->NewTorrent){ ?>
 			<tr id="title_tr">
 				<td class="label">Author - Title</td>
@@ -736,7 +736,7 @@ function hide() {
 
 	function simple_form($CategoryID) {
 		$Torrent = $this->Torrent; 
-?>		<table cellpadding="3" cellspacing="1" border="0" class="border slice" width="100%">
+?>		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
 			<tr id="name">
 <?		if ($this->NewTorrent) { 
 			if ($this->Categories[$CategoryID] == 'E-Books') { ?>

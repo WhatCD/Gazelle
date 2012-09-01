@@ -75,7 +75,7 @@ show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 			<input type="hidden" name="action" value="new" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="forum" value="<?=$ForumID?>" />
-			<table id="newthreadtext">
+			<table id="newthreadtext" class="layout">
 				<tr>
 					<td class="label">Title</td>
 					<td><input id="title" type="text" name="title" style="width: 98%;" /></td>

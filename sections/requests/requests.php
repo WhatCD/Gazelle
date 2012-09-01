@@ -317,7 +317,7 @@ show_header($Title, 'requests');
 <?	if(!empty($_GET['userid']) && is_number($_GET['userid'])) { ?>
 			<input type="hidden" name="userid" value="<?=$_GET['userid']?>" />
 <?	} ?>
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label">Search terms:</td>
 					<td>
@@ -354,7 +354,7 @@ show_header($Title, 'requests');
 				</tr>
 <?	*/} ?>
 			</table>
-			<table class="cat_list">
+			<table class="layout cat_list">
 <?
 $x=1;
 reset($Categories);
@@ -377,7 +377,7 @@ foreach($Categories as $CatKey => $CatName) {
 }
 ?>
 			</table>
-			<table>
+			<table class="layout">
 				<tr id="release_list">
 					<td class="label">Release Types</td>
 					<td>
@@ -428,8 +428,6 @@ foreach($Categories as $CatKey => $CatName) {
 <?		}?>
 					</td>
 				</tr>
-			</table>
-			<table>
 				<tr>
 					<td colspan="2" class="center">
 						<input type="submit" value="Search requests" />
@@ -444,7 +442,7 @@ foreach($Categories as $CatKey => $CatName) {
 		<?=$PageLinks?>
 	</div>
 <?		} ?>
-	<table id="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+	<table id="request_table" class="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;" class="nobr">
 				<strong>Request Name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder == 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>

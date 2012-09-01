@@ -115,7 +115,7 @@ echo $Pages;
                         <input type="submit" name="unread" value="Mark as unread" />&nbsp;
                         <input type="submit" name="delete" value="Delete message(s)" />
 
-			<table>
+			<table class="message_table checkboxes">
 				<tr class="colhead">
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>
 					<td width="50%">Subject</td>

@@ -20,7 +20,7 @@ show_header('Other reports stats');
 $DB->query("SELECT um.Username, COUNT(r.ID) AS Reports FROM reports AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.ReportedTime > '2009-08-21 22:39:41' AND r.ReportedTime > NOW() - INTERVAL 24 HOUR GROUP BY r.ResolverID ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<table>
+		<table class="layout">
 		<tr>
 		<td class="label"><strong>Reports resolved in the last 24h</strong></td>
 		<td>

@@ -154,7 +154,7 @@ switch($Short) {
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="id" value="<?=$ID?>" />
 			<input type="hidden" name="type" value="<?=$Short?>" />
-			<table>
+			<table class="layout">
 				<tr>
 					<td class="label">Year (required)</td>
 					<td>

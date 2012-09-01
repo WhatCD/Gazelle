@@ -81,7 +81,7 @@ if (isset($_POST['Username'])) {
 	<form method="post" action="" name="create_user">
 		<input type="hidden" name="action" value="create_user" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table cellpadding="2" cellspacing="1" border="0" align="center">
+		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
 		<tr valign="top">
 			<td align="right">Username&nbsp;</td>
 			<td align="left"><input type="text" name="Username" id="username" class="inputtext" /></td>

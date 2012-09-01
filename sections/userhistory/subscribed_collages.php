@@ -284,7 +284,7 @@ if(!$NumResults) {
 		</tr>
 	</table>
 	<!--</div>-->
-	<table class="torrent_table <?=$ShowAll?'hidden':''?>" id="discog_table_<?=$CollageID?>">
+	<table class="torrent_table grouped<?=!$LoggedUser['HideCollage']?' artwork':''?><?=$ShowAll?' hidden':''?>" id="discog_table_<?=$CollageID?>">
 			<tr class="colhead">
 				<td><!-- expand/collapse --></td>
 <? 		if(!$LoggedUser['HideCollage']) {?>

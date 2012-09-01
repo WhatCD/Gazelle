@@ -30,7 +30,7 @@ show_header('Report', 'reportsv2');
 			<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
 			<input type="hidden" name="categoryid" value="<?=$CategoryID?>" />
 		</div>
-		<table>
+		<table class="layout">
 			<tr>
 				<td class="label">Reason :</td>
 				<td>

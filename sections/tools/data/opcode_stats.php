@@ -57,7 +57,7 @@ show_header("Opcode Stats");
 				<input type="hidden" name="action" value="opcode_stats" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			</div>
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td><strong>Enable:</strong></td>
 					<td>
@@ -90,8 +90,8 @@ show_header("Opcode Stats");
 	</div>
 	<br /><br />
 	<table>
-		<tr>
-			<td colspan="6" class="colhead">Status</td>
+		<tr class="colhead">
+			<td colspan="6">Status</td>
 		</tr>
 		<tr>
 			<td>Total Storage:</td>

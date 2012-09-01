@@ -66,7 +66,7 @@ $DB->set_query_id($RS);
 				<input type="hidden" name="action" value="search" />
 				<input type="hidden" name="nojump" value="1" />
 			</div>
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
 					<td colspan="3">

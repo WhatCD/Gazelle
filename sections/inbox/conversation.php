@@ -109,7 +109,7 @@ if(!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect($
 			<input type="hidden" name="convid" value="<?=$ConvID?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 
-			<table width="100%">
+			<table class="layout" width="100%">
 				<tr>
 					<td class="label"><label for="sticky">Sticky</label></td>
 					<td>

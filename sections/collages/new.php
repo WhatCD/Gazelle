@@ -24,7 +24,7 @@ if (!empty($Error)) { ?>
 	<form action="collages.php" method="post" name="newcollage">
 		<input type="hidden" name="action" value="new_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table>
+		<table class="layout">
 			<tr id="collagename">
 				<td class="label"><strong>Name</strong></td>
 				<td>

@@ -363,7 +363,7 @@ $Cache->increment('usage_index');
 			<a href="#" onclick="$('#vanityhouse').toggle();return false;">(View)</a>
 		</div>
 
-		<table class="hidden" id="vanityhouse">
+		<table class="torrent_table hidden" id="vanityhouse">
 <?
 	foreach($Recommend as $Recommendations) {
 		list($GroupID, $UserID, $Username, $GroupName, $TagList) = $Recommendations;

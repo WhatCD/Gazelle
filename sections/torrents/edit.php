@@ -106,7 +106,7 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
 		<input type="hidden" name="oldgroupid" value="<?=$Properties['GroupID']?>" />
-		<table>
+		<table class="layout">
 			<tr>
 				<td class="label">Group ID</td>
 				<td>
@@ -127,7 +127,7 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 		<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
 		<input type="hidden" name="oldgroupid" value="<?=$Properties['GroupID']?>" />
 		<input type="hidden" name="oldartistid" value="<?=$Properties['ArtistID']?>" />
-		<table>
+		<table class="layout">
 			<tr>
 				<td class="label">Artist</td>
 				<td>

@@ -40,7 +40,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 		<input type="hidden" name="formid" value="<?=$i?>" />
 		<input type="hidden" name="action" value="notify_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table <?=($i<=$NumFilters)?'id="filter_'.$N['ID'].'" class="hidden"':''?>>
+		<table <?=($i<=$NumFilters)?'id="filter_'.$N['ID'].'" class="layout hidden"':'class="layout"'?>>
 <?	if($i>$NumFilters){ ?>
 			<tr>
 				<td class="label"><strong>Label</strong></td>

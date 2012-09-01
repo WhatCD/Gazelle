@@ -6,8 +6,8 @@ show_header('Staff Tools');
 ?>
 <div class="permissions">
 	<div class="permission_container">
-		<table>
-			<tr><td class="colhead">Managers</td></tr>
+		<table class="layout">
+			<tr class="colhead"><td>Managers</td></tr>
 <?   if (check_perms('admin_manage_permissions')) { ?>
 			<tr><td><a href="tools.php?action=permissions">Permissions</a></td></tr>
 <? } if (check_perms('admin_whitelist')) { ?>
@@ -38,8 +38,8 @@ show_header('Staff Tools');
 		</table>
 	</div>
 	<div class="permission_container">
-		<table>
-			<tr><td class="colhead">Data</td></tr>
+		<table class="layout">
+			<tr class="colhead"><td>Data</td></tr>
 
 <?
 if (check_perms('admin_donor_log')) { ?>
@@ -65,8 +65,8 @@ if (check_perms('admin_donor_log')) { ?>
 		</table>
 	</div>
 	<div class="permission_container">
-		<table>
-			<tr><td class="colhead">Misc</td></tr>
+		<table class="layout">
+			<tr class="colhead"><td>Misc</td></tr>
 
 <? if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=manipulate_tree">Manipulate Tree</a></td></tr>

@@ -115,8 +115,8 @@ function permissions_form(){ ?>
 <div class="permissions">
 	<div class="permission_container">
 		<table>
-			<tr>
-				<td class="colhead">Site</td>
+			<tr class="colhead">
+				<td>Site</td>
 			</tr>
 			<tr>
 				<td>
@@ -165,8 +165,8 @@ function permissions_form(){ ?>
 	</div>
 	<div class="permission_container">
 		<table>
-			<tr>
-				<td class="colhead">Users</td>
+			<tr class="colhead">
+				<td>Users</td>
 			</tr>
 			<tr>
 				<td>
@@ -207,8 +207,8 @@ function permissions_form(){ ?>
 	</div>
 	<div class="permission_container">
 		<table>
-			<tr>
-				<td class="colhead">Torrents</td>
+			<tr class="colhead">
+				<td>Torrents</td>
 			</tr>
 			<tr>
 				<td>
@@ -232,8 +232,8 @@ function permissions_form(){ ?>
 	</div>
 	<div class="permission_container">
 		<table>
-			<tr>
-				<td class="colhead">Administrative</td>
+			<tr class="colhead">
+				<td>Administrative</td>
 			</tr>
 			<tr>
 				<td>

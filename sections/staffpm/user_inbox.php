@@ -47,7 +47,7 @@ if ($DB->record_count() == 0) {
 		<form method="post" action="staffpm.php" id="messageform">
 			<input type="hidden" name="action" value="multiresolve" />
 			<h3>Open messages</h3>
-			<table>
+			<table class="message_table checkboxes">
 				<tr class="colhead">
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>
 					<td width="50%">Subject</td>
@@ -73,7 +73,7 @@ if ($DB->record_count() == 0) {
 			</table>
 			<br />
 			<h3>Resolved messages</h3>
-			<table>	
+			<table class="message_table checkboxes">	
 				<tr class="colhead">
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>
 					<td width="50%">Subject</td>

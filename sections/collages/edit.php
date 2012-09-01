@@ -18,7 +18,7 @@ show_header('Edit collage');
 		<input type="hidden" name="action" value="edit_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="collageid" value="<?=$CollageID?>" />
-		<table id="edit_collage">
+		<table id="edit_collage" class="layout">
 <? if (check_perms('site_collages_delete') || ($CategoryID == 0 && $UserID == $LoggedUser['ID'] && check_perms('site_collages_renamepersonal'))) { ?>
 			<tr>
 				<td class="label">Name</td>

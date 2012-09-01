@@ -407,7 +407,7 @@ if($CollageCovers != 0) { ?>
 <?		} 
 } ?>
 		<br />
-		<table class="torrent_table" id="torrent_table">
+		<table class="torrent_table grouping cats" id="torrent_table">
 			<tr class="colhead_dark">
 				<td><!-- expand/collapse --></td>
 				<td><!-- Category --></td>

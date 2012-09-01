@@ -51,7 +51,7 @@ echo $Pages;
 	</div>
 	<form action="user.php" method="get">
 	<input type="hidden" name="action" value="search" />
-		<table width="100%">
+		<table class="layout" width="100%">
 			<tr>
 				<td class="label nobr">Username:</td>
 				<td>

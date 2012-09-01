@@ -424,7 +424,7 @@ show_header('User search');
 <div class="thin">
 	<form action="user.php" method="get">
 		<input type="hidden" name="action" value="search" />
-		<table>
+		<table class="layout">
 			<tr>
 				<td class="label nobr">Username:</td>
 				<td width="24%">

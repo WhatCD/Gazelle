@@ -235,7 +235,7 @@ if (!empty($Image)) {
 		</div>
 		<div class="box box_votes">
 			<div class="head"><strong>Top Contributors</strong></div>
-			<table>
+			<table class="layout">
 <?	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 	$ViewerVote = false;
 	for($i = 0; $i < $VoteMax; $i++) { 
@@ -275,7 +275,7 @@ if (!empty($Image)) {
 		</div>
 	</div>
 	<div class="main_column">
-		<table>
+		<table class="layout">
 			<tr>
 				<td class="label">Created</td>
 				<td>

@@ -47,7 +47,7 @@ show_header($Username.' &gt; Sessions');
                 <p>Note: Clearing cookies can result in ghost sessions which are automatically removed after 30 days.</p>
         </div>
         <div class="box pad">
-                <table cellpadding="5" cellspacing="1" border="0" class="border" width="100%">
+                <table cellpadding="5" cellspacing="1" border="0" class="session_table border" width="100%">
                         <tr class="colhead">
                                 <td><strong>IP</strong></td>
                                 <td><strong>Browser</strong></td>

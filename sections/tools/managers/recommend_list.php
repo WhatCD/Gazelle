@@ -24,7 +24,7 @@ $DB->query("SELECT
 		<form action="tools.php" method="post" class="pad">
 			<input type="hidden" name="action" value="recommend_add" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td rowspan="2" class="label"><strong>Add Recommendation:</strong></td>
 					<td>Link to a torrent group on site. E.g. <strong>http://<?=NONSSL_SITE_URL?>/torrents.php?id=10000</strong></td>

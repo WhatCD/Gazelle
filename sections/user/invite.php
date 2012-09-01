@@ -129,7 +129,7 @@ if(!$Sneaky
 			<input type="hidden" name="action" value="takeinvite" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
 				<td class="label">Email:</td>
 				<td>

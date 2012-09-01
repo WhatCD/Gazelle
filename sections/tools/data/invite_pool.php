@@ -41,7 +41,7 @@ $DB->set_query_id($RS);
 	<br />
 	<div>
 		<form action="" method="get">
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label"><strong>Email:</strong></td>
 					<td>

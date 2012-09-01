@@ -210,7 +210,7 @@ show_header('Reports V2!', 'reportsv2,bbcode');
 if(count($Reports) == 0) {
 ?>
 	<div>
-		<table>
+		<table class="layout">
 			<tr>
 				<td class='center'>
 					<strong>No new reports! \o/</strong>
@@ -236,10 +236,10 @@ if(count($Reports) == 0) {
 			WHERE ID=".$ReportID);
 			$Cache->decrement('num_torrent_reportsv2');
 ?>
-	<div id=report<?=$ReportID?>>
-		<table>
+	<div id="report<?=$ReportID?>">
+		<table class="layout">
 			<tr>
-				<td class='center'>
+				<td class="center">
 					<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Report <?=$ReportID?></a> for torrent <?=$TorrentID?> (deleted) has been automatically resolved. <input type="button" value="Hide" onclick="ClearReport(<?=$ReportID?>);" />
 				</td>
 			</tr>
@@ -294,7 +294,7 @@ if(count($Reports) == 0) {
 						<input type="hidden" id="type<?=$ReportID?>" name="type" value="<?=$Type?>" />
 						<input type="hidden" id="categoryid<?=$ReportID?>" name="categoryid" value="<?=$CategoryID?>" />
 					</div>
-					<table cellpadding="5">
+					<table class="layout" cellpadding="5">
 						<tr>
 							<td class="label"><a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Reported </a>Torrent:</td>
 							<td colspan="3">

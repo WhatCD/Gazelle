@@ -276,7 +276,7 @@ $Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 	</div>
 	<div>
 		<form action="" method="get">
-			<table>
+			<table class="layout">
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
 					<td>
@@ -368,7 +368,7 @@ $Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 				</tr>
 			</table>
 			
-			<table class="cat_list">
+			<table class="layout cat_list">
 <?
 $x=0;
 reset($Categories);
@@ -403,7 +403,7 @@ foreach($Categories as $CatKey => $CatName) {
 	</div>
 <?	} else { ?>
 	<div class="linkbox"><?=$Pages?></div>
-	<table width="100%">
+	<table class="torrent_table cats" width="100%">
 		<tr class="colhead">
 			<td></td>
 			<td><a href="<?=header_link('Name', 'ASC')?>">Torrent</a></td>

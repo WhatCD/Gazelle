@@ -152,7 +152,7 @@ show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 	<div>
 		<form action="" method="get">
 			<div><input type="hidden" name="action" value="search" /></div>
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
 					<td colspan="3">
@@ -263,7 +263,7 @@ echo $Pages;
 </div><!--content-->
 <? show_footer(); die();
 } ?>
-<table width="100%">
+<table width="100%" class="collage_table">
 	<tr class="colhead">
 		<td>Category</td>
 		<td>Collage</td>

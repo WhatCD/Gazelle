@@ -79,7 +79,7 @@ show_header('Forums'.' > '.'Search', 'bbcode');
 	<h2><a href="forums.php">Forums</a> &gt; Search<?=$Title?></h2>
 	<form action="" method="get">
 		<input type="hidden" name="action" value="search" />
-		<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
 				<td><strong>Search for:</strong></td>
 				<td>
@@ -100,7 +100,7 @@ if (empty($ThreadID)) { ?>
 			<tr>
 				<td><strong>Forums:</strong></td>
 				<td>
-		<table class="cat_list">
+		<table class="cat_list layout">
 	
 							
 	<?// List of forums
@@ -260,7 +260,7 @@ $Pages=get_pages($Page,$Results,POSTS_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
-	<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+	<table cellpadding="6" cellspacing="1" border="0" class="forum_list border" width="100%">
 	<tr class="colhead">
 		<td>Forum</td>
 		<td><?=(!empty($ThreadID))?'Post Begins':'Topic'?></td>

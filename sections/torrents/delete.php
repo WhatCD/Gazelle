@@ -147,7 +147,7 @@ if(check_perms('admin_reports')) {
 				<input type="hidden" id="pm_type<?=$ReportID?>" name="pm_type" value="Uploader" />
 				<input type="hidden" id="from_delete<?=$ReportID?>" name="from_delete" value="<?=$GroupID?>" />
 			</div>
-			<table cellpadding="5">
+			<table cellpadding="5" class="layout">
 				<tr>
 					<td class="label">Torrent:</td>
 					<td colspan="3">

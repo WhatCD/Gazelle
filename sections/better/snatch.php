@@ -61,7 +61,7 @@ show_header('Transcode Snatches');
 <? } ?>
 </div>
 <div class="thin">
-	<table width="100%">
+	<table width="100%" class="torrent_table">
 		<tr class="colhead">
 			<td>Torrent</td>
 			<td>V2</td>

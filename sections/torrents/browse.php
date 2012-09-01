@@ -559,7 +559,7 @@ show_header($Title,'browse');
 <? } ?>
 	</h3>
 	<div class="box pad">
-		<table>
+		<table class="layout">
 <? $AdvancedSearch = false;
    if((strtolower($_GET['action'])=="advanced" || ($LoggedUser['SearchType'] && strtolower($_GET['action'])!="basic")) && check_perms('site_advanced_search')) {
 	$AdvancedSearch = true;
@@ -701,7 +701,7 @@ foreach($Bitrates as $BitrateName) { ?>
 				</td>
 			</tr>
 		</table>
-		<table class="cat_list">
+		<table class="layout cat_list">
 <?
 $x=1;
 reset($Categories);
@@ -725,7 +725,7 @@ foreach($Categories as $CatKey => $CatName) {
 }
 ?>
 		</table>
-		<table class="cat_list <? if(!$LoggedUser['ShowTags']) { ?>hidden<? } ?>" id="taglist">
+		<table class="layout cat_list <? if(!$LoggedUser['ShowTags']) { ?>hidden<? } ?>" id="taglist">
 			<tr>
 <?
 $GenreTags = $Cache->get_value('genre_tags');
@@ -754,7 +754,7 @@ if($x%7!=0) { // Padding
 <? } ?>
 			</tr>
 		</table>
-		<table class="cat_list" width="100%">
+		<table class="layout cat_list" width="100%">
 			<tr>
 				<td class="label"><a href="#" onclick="$('#taglist').toggle();return false;">(View Tags)</a></td>
 			</tr>
@@ -780,7 +780,7 @@ if ($LoggedUser['DefaultSearch']) {
 
 <div class="linkbox"><?=$Pages?></div>
 <? if (count($TorrentList)>0) { ?>
-<table class="torrent_table <?=(($DisableGrouping)?'no_grouping':'grouping')?>" id="torrent_table">
+<table class="torrent_table cats <?=(($DisableGrouping)?'no_grouping':'grouping')?>" id="torrent_table">
 	<tr class="colhead">
 <?	if(!$DisableGrouping) { ?>
 		<td class="small"></td>

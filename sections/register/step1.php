@@ -17,7 +17,7 @@ if(empty($Sent)) {
 ?>
 	<font color="red"><strong><?=$Err?></strong></font><br /><br />
 <?	} ?>
-	<table cellpadding="2" cellspacing="1" border="0" align="center">
+	<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
 		<tr valign="top">
 			<td align="right" style="width:100px;">Username&nbsp;</td>
 			<td align="left">

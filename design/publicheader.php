@@ -32,7 +32,7 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 <body>
 <div id="head">
 </div>
-<table id="maincontent">
+<table class="layout" id="maincontent">
 	<tr>
 		<td align="center" valign="middle">
 			<div id="logo">

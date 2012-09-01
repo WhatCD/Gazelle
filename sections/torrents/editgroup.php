@@ -85,7 +85,7 @@ show_header('Edit torrent group');
 			<input type="hidden" name="action" value="nonwikiedit" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-			<table cellpadding="3" cellspacing="1" border="0" class="border" width="100%">
+			<table cellpadding="3" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td colspan="2" class="center">This is for editing the information related to the <strong>original release</strong> only.</td>
 				</tr>

@@ -108,7 +108,7 @@ $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
    <span id="showdnu"><a href="#" onclick="$('#dnulist').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span>
 <? } ?>
 	</p>
-	<table id="dnulist" class="<?=($HideDNU?'hidden':'')?>" style="">
+	<table id="dnulist" class="<?=($HideDNU?'hidden':'')?>">
 		<tr class="colhead">
 			<td width="50%"><strong>Name</strong></td>
 			<td><strong>Comment</strong></td>

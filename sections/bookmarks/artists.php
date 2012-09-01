@@ -49,7 +49,7 @@ show_header($Title,'browse');
 	show_footer();
 	die();
 } ?>
-	<table width="100%">
+	<table width="100%" class="artist_table">
 		<tr class="colhead">
 			<td>Artist</td>
 		</tr>

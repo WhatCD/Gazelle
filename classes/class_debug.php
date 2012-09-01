@@ -277,7 +277,7 @@ class DEBUG {
 			$Includes = $this->get_includes();
 		}
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_include').toggle();return false;">(View)</a> <?=number_format(count($Includes))?> Includes:</strong></td>
 		</tr>
@@ -301,7 +301,7 @@ class DEBUG {
 			$Classes = $this->get_classes();
 		}
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_classes').toggle();return false;">(View)</a> Classes:</strong></td>
 		</tr>
@@ -318,7 +318,7 @@ class DEBUG {
 
 	public function extension_table() {
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_extensions').toggle();return false;">(View)</a> Extensions:</strong></td>
 		</tr>
@@ -341,7 +341,7 @@ class DEBUG {
 			return;
 		}
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_flags').toggle();return false;">(View)</a> Flags:</strong></td>
 		</tr>
@@ -368,7 +368,7 @@ class DEBUG {
 			$Constants = $this->get_constants();
 		}
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_constants').toggle();return false;">(View)</a> Constants:</strong></td>
 		</tr>
@@ -396,7 +396,7 @@ class DEBUG {
 		$Header = ' '.number_format(count($CacheKeys)).' '.$Header.':';
 
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_cache').toggle();return false;">(View)</a><?=$Header?></strong></td>
 		</tr>
@@ -424,7 +424,7 @@ class DEBUG {
 			return;
 		}
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_error').toggle();return false;">(View)</a> <?=number_format(count($Errors))?> Errors:</strong></td>
 		</tr>
@@ -457,7 +457,7 @@ class DEBUG {
 		}
 		$Header = ' '.number_format(count($Queries)).' '.$Header.':';
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_database').toggle();return false;">(View)</a><?=$Header?></strong></td>
 		</tr>
@@ -492,7 +492,7 @@ class DEBUG {
 		}
 		$Header = ' '.number_format(count($Queries)).' '.$Header.':';
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_sphinx').toggle();return false;">(View)</a><?=$Header?></strong></td>
 		</tr>
@@ -524,7 +524,7 @@ class DEBUG {
 		$Header = ' '.number_format(count($Vars)).' '.$Header.':';
 
 ?>
-	<table width="100%">
+	<table class="layout" width="100%">
 		<tr>
 			<td align="left"><strong><a href="#" onclick="$('#debug_loggedvars').toggle();return false;">(View)</a><?=$Header?></strong></td>
 		</tr>

@@ -117,7 +117,7 @@ if ($DB->record_count() == 0) {
 
 	// Table head
 ?>
-			<table>
+			<table class="message_table<?=($ViewString != 'Resolved' && $IsStaff)?' checkboxes':''?>">
 				<tr class="colhead">
 <? 				if ($ViewString != 'Resolved' && $IsStaff) { ?>
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>

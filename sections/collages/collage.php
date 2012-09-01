@@ -633,7 +633,7 @@ if($CollageCovers != 0) { ?>
 		</script>
 <?		} 
 } ?>
-		<table class="torrent_table" id="discog_table">
+		<table class="torrent_table grouping cats" id="discog_table">
 			<tr class="colhead_dark">
 				<td><!-- expand/collapse --></td>
 				<td><!-- Category --></td>

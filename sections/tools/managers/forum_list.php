@@ -119,8 +119,8 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 <?
 }
 ?>
-	<tr>
-		<td colspan="8" class="colhead">Create forum</td>
+	<tr class="colhead">
+		<td colspan="8">Create forum</td>
 	</tr>
 	<tr class="rowa">
 		<form action="" method="post">

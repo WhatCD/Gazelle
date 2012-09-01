@@ -79,7 +79,7 @@ $DB->set_query_id($Bans);
 </div>
 <div>
 	<form action="" method="get">
-		<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
 				<td class="label"><label for="ip">IP:</label></td>
 				<td>

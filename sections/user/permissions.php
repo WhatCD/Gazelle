@@ -76,7 +76,7 @@ function reset() {
 <br />
 
 <form name="permform" id="permform" method="post" action="">
-	<table class="permission_head">
+	<table class="layout permission_head">
 		<tr>
 			<td class="label">Extra personal collages</td>
 			<td><input type="text" name="maxcollages" size="5" value="<?=($MaxCollages?$MaxCollages:'0')?>" /></td>

@@ -309,7 +309,7 @@ foreach ($Importances as $Group) {
 		if($OpenTable) { ?>
 		</table>
 <?		} ?>
-			<table class="torrent_table" id="torrents_<?=$ReleaseTypeLabel?>">
+			<table class="torrent_table grouped release_table" id="torrents_<?=$ReleaseTypeLabel?>">
 				<tr class="colhead_dark">
 					<td class="small"><!-- expand/collapse --></td>
 					<td width="70%"><a href="#">&uarr;</a>&nbsp;<strong><?=$DisplayName?></strong> (<a href="#" onclick="$('.releases_<?=$ReleaseType?>').toggle(true);return false;">View</a>)</td>
@@ -706,7 +706,7 @@ echo $TorrentDisplayList;
 if($NumRequests > 0) {
 	
 ?>
-	<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%" id="requests">
+	<table cellpadding="6" cellspacing="1" border="0" class="request_table border" width="100%" id="requests">
 		<tr class="colhead_dark">
 			<td style="width:48%;">
 				<a href="#">&uarr;</a>&nbsp;

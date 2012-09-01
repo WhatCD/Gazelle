@@ -19,7 +19,7 @@ if(strtotime($BannedUntil)<time() && !$BanID) {
 	You have <span class="info"><?=(6-$Attempts)?></span> attempts remaining.<br /><br />
 	<strong>WARNING:</strong> You will be banned for 6 hours after your login attempts run out!<br /><br />
 <? } ?>
-	<table>
+	<table class="layout">
 		<tr>
 			<td>Username&nbsp;</td>
 			<td colspan="2"><input type="text" name="username" id="username" class="inputtext" required="required" maxlength="20" pattern="[A-Za-z0-9_?]{1,20}" autofocus="autofocus" /></td>

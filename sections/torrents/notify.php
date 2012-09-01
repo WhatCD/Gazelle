@@ -53,7 +53,7 @@ $DB->set_query_id($Results);
 	<?=$Pages?>
 </div>
 <? if(!$DB->record_count()) { ?>
-<table class="border">
+<table class="layout border">
 	<tr class="rowb">
 		<td colspan="8" class="center">
 			No new notifications found! <a href="user.php?action=notify">Edit notification filters</a>
@@ -84,7 +84,7 @@ $DB->set_query_id($Results);
 	<a href="javascript:GroupClear($('#notificationform_<?=$FilterID?>').raw())">(clear selected)</a>
 </h3>
 <form id="notificationform_<?=$FilterID?>">
-<table class="border">
+<table class="torrent_table cats checkboxes border">
 	<tr class="colhead">
 		<td style="text-align: center"><input type="checkbox" name="toggle" onClick="ToggleBoxes(this.form, this.checked)" /></td>
 		<td class="small cats_col"></td>
@@ -145,9 +145,9 @@ $DB->set_query_id($Results);
 
 		// print row
 ?>
-	<tr class="group_torrent" id="torrent<?=$TorrentID?>">
+	<tr class="torrent" id="torrent<?=$TorrentID?>">
 		<td style="text-align: center"><input type="checkbox" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
-		<td class="center cats_cols"><div title="<?=ucfirst(str_replace('_',' ',$MainTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1])).' tags_'.str_replace('.','_',$MainTag)?>"></div></td>
+		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$MainTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1])).' tags_'.str_replace('.','_',$MainTag)?>"></div></td>
 		<td>
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> 

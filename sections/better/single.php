@@ -18,7 +18,7 @@ $Results = get_groups(array_keys($GroupIDs));
 show_header('Single seeder FLACs');
 ?>
 <div class="thin">
-	<table width="100%">
+	<table width="100%" class="torrent_table">
 		<tr class="colhead">
 			<td>Torrent</td>
 		</tr>

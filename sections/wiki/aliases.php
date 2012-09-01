@@ -18,7 +18,7 @@ show_header($Title." Aliases");
 	<form action="wiki.php" method="get">
 		<input type="hidden" name="action" id="action" value="compare" />
 		<input type="hidden" name="id" id="id" value="<?=$ArticleID?>" />
-		<table>
+		<table class="layout">
 			<tr class="colhead">
 				<td>Add an alias to this article</td>
 			</tr>

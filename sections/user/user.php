@@ -678,7 +678,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 		$Cache->cache_value('recent_snatches_'.$UserID, $RecentSnatches, 0); //inf cache
 	}
 ?>
-	<table class="recent" cellpadding="0" cellspacing="0" border="0">
+	<table class="layout recent" id="recent_snatches" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">Recent Snatches</td>
 		</tr>
@@ -718,7 +718,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 		$Cache->cache_value('recent_uploads_'.$UserID, $RecentUploads, 0); //inf cache
 	}
 ?>
-	<table class="recent" cellpadding="0" cellspacing="0" border="0">
+	<table class="layout recent" id="recent_uploads" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">Recent Uploads</td>
 		</tr>
@@ -747,18 +747,18 @@ foreach ($Collages as $CollageInfo) {
 		ORDER BY ct.Sort LIMIT 5");
 	$Collage = $DB->to_array();
 ?>
-	<table class="recent" cellpadding="0" cellspacing="0" border="0">
+	<table class="layout recent" id="collage<?=$CollageID?>" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">
 				<span style="float:left;">
 					<?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>">see full</a>
 				</span>
 				<span style="float:right;">
-					<a href="#" onclick="$('#collage<?=$CollageID?>').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;"><?=$FirstCol?'(Hide)':'(Show)'?></a>
+					<a href="#" onclick="$('#collage<?=$CollageID?> .images').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;"><?=$FirstCol?'(Hide)':'(Show)'?></a>
 				</span>
 			</td>
 		</tr>
-		<tr id="collage<?=$CollageID?>" <?=$FirstCol?'':'class="hidden"'?>>
+		<tr class="images <?=$FirstCol?'':' hidden'?>">
 <?	foreach($Collage as $C) {
 			$Group = get_groups(array($C['GroupID']));
 			$Group = array_pop($Group['matches']);
@@ -822,7 +822,7 @@ if (check_paranoia_here('requestsvoted_list')) {
 ?>
 		<div class="box">
 			<div class="head">Requests <a href="#" onclick="$('#requests').toggle();return false;">(View)</a></div>
-			<div id="requests" class="hidden">
+			<div id="requests" class="request_table hidden">
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 					<tr class="colhead_dark">
 						<td style="width:48%;">
@@ -922,7 +922,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 ?>
 		<div class="box">
 			<div class="head">Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;">(View)</a></div>
-			<table width="100%" class="hidden" id="staffpms">
+			<table width="100%" class="message_table hidden" id="staffpms">
 				<tr class="colhead">
 					<td>Subject</td>
 					<td>Date</td>
@@ -999,9 +999,9 @@ if (check_perms('users_mod', $Class)) { ?>
 			</div>
 		</div>
 
-		<table>
-			<tr>
-				<td class="colhead" colspan="2">User Info</td>
+		<table class="layout">
+			<tr class="colhead">
+				<td colspan="2">User Info</td>
 			</tr>
 <?	if (check_perms('users_edit_usernames', $Class)) { ?>
 			<tr>
@@ -1170,7 +1170,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		</table><br />
 
 <?	if (check_perms('users_warn')) { ?>
-		<table>
+		<table class="layout">
 			<tr class="colhead">
 				<td colspan="2">Warn User</td>
 			</tr>
@@ -1227,7 +1227,7 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 <?	} ?>
 		</table><br />
-		<table>
+		<table class="layout">
 			<tr class="colhead"><td colspan="2">User Privileges</td></tr>
 <?	if (check_perms('users_disable_posts') || check_perms('users_disable_any')) {
 		$DB->query("SELECT DISTINCT Email, IP FROM users_history_emails WHERE UserID = ".$UserID." ORDER BY Time ASC");
@@ -1309,7 +1309,7 @@ if (check_perms('users_mod', $Class)) { ?>
 <?	} ?>
 		</table><br />
 <?	if(check_perms('users_logout')) { ?>
-		<table>
+		<table class="layout">
 			<tr class="colhead"><td colspan="2">Session</td></tr>
 			<tr>
 				<td class="label">Reset session:</td>
@@ -1322,7 +1322,7 @@ if (check_perms('users_mod', $Class)) { ?>
 
 		</table>
 <?	} ?>
-		<table>
+		<table class="layout">
 			<tr class="colhead"><td colspan="2">Submit</td></tr>
 			<tr>
 				<td class="label">Reason:</td>

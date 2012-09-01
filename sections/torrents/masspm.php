@@ -48,22 +48,22 @@ if(!check_perms('site_moderate_requests')) {
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
 		<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-		<table>
+		<table class="layout">
 			<tr>
 				<td class="label">Subject</td>
 				<td>
-						<input type="text" name="subject" value="" size="60" />
+					<input type="text" name="subject" value="" size="60" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">Message</td>
 				<td>
-						<textarea name="message" id="message" cols="60" rows="8"></textarea>
+					<textarea name="message" id="message" cols="60" rows="8"></textarea>
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2" class="center">
-						<input type="submit" value="Send Mass PM" />
+					<input type="submit" value="Send Mass PM" />
 				</td>
 			</tr>
 		</table>

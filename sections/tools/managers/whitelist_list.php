@@ -43,8 +43,8 @@ while(list($ID, $Client, $Peer_ID) = $DB->next_record()){
 	<input type="hidden" name="action" value="whitelist_alter" />
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<table>
-		<tr>
-			<td colspan="4" class="colhead">Add Client</td>
+		<tr class="colhead">
+			<td colspan="4">Add Client</td>
 		</tr>
 		<tr class="rowa">		
 			

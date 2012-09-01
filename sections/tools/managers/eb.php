@@ -22,8 +22,8 @@ $DB -> query("SELECT
 		<td>Added</td>
 		<td>Submit</td>
 	</tr>
-	<tr>
-		<td colspan="4" class="colhead">Add To Email or Domain to Blacklist</td>
+	<tr class="colhead">
+		<td colspan="4">Add To Email or Domain to Blacklist</td>
 	</tr>
 	<tr class="rowa">
 		<form action="tools.php" method="post">

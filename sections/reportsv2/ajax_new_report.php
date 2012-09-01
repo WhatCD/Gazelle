@@ -92,7 +92,7 @@ $DB->query("SELECT
 			WHERE ID=".$ReportID);
 ?>
 	<div>
-		<table>
+		<table class="layout">
 			<tr>
 				<td class='center'>
 					<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Report <?=$ReportID?></a> for torrent <?=$TorrentID?> (deleted) has been automatically resolved. <input type="button" value="Clear" onclick="ClearReport(<?=$ReportID?>);" />
@@ -150,7 +150,7 @@ $DB->query("SELECT
 					<input type="hidden" id="type<?=$ReportID?>" name="type" value="<?=$Type?>" />
 					<input type="hidden" id="categoryid<?=$ReportID?>" name="categoryid" value="<?=$CategoryID?>" />
 				</div>
-				<table cellpadding="5">
+				<table class="layout" cellpadding="5">
 					<tr>
 						<td class="label"><a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Reported </a>Torrent:</td>
 						<td colspan="3">

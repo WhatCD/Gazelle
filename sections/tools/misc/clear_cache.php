@@ -23,7 +23,7 @@ if(!empty($_GET['key']) && $_GET['type'] == "clear") {
 	</div>
 	<form method="get" action="" name="clear_cache">
 		<input type="hidden" name="action" value="clear_cache" />
-		<table cellpadding="2" cellspacing="1" border="0" align="center">
+		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
 			<tr valign="top">
 				<td align="right">Key</td>
 				<td align="left">
