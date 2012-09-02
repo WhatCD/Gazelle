@@ -61,62 +61,152 @@ if($Submitted && empty($_GET['show_filled'])) {
 	$SS->set_filter('torrentid', array(0));
 }
 
-if(!empty($_GET['search'])) {
-	$Words = explode(' ', $_GET['search']);
-	foreach($Words as $Key => &$Word) {
-		if($Word[0] == '!' && strlen($Word) > 2) {
-			if(strpos($Word,'!',1) === false) {
-				$Word = '!'.$SS->EscapeString(substr($Word,1));
-			} else {
-				$Word = $SS->EscapeString($Word);
+$EnableNegation = false; // Sphinx needs at least one positive search condition to support the NOT operator
+
+if(!empty($_GET['formats'])) {
+	$FormatArray = $_GET['formats'];
+	if(count($FormatArray) != count($Formats)) {
+		$FormatNameArray = array();
+		foreach($FormatArray as $Index => $MasterIndex) {
+			if(isset($Formats[$MasterIndex])) {
+				$FormatNameArray[$Index] = '"'.strtr($Formats[$MasterIndex], '-.', '  ').'"';
 			}
-		} elseif(strlen($Word) >= 2) {
-			$Word = $SS->EscapeString($Word);
-		} else {
-			unset($Words[$Key]);
+		}
+		if(count($FormatNameArray) >= 1) {
+			$EnableNegation = true;
+			if(!empty($_GET['formats_strict'])) {
+				$Queries[]='@formatlist ('.implode(' | ', $FormatNameArray).')';
+			} else {
+				$Queries[]='@formatlist (any | '.implode(' | ', $FormatNameArray).')';
+			}
 		}
 	}
-	if(!empty($Words)) {
-		$Queries[] = "@* ".implode(' ', $Words);
+}
+
+if(!empty($_GET['media'])) {
+	$MediaArray = $_GET['media'];
+	if(count($MediaArray) != count($Media)) {
+		$MediaNameArray = array();
+		foreach($MediaArray as $Index => $MasterIndex) {
+			if(isset($Media[$MasterIndex])) {
+				$MediaNameArray[$Index] = '"'.strtr($Media[$MasterIndex], '-.', '  ').'"';
+			}
+		}
+
+		if(count($MediaNameArray) >= 1) {
+			$EnableNegation = true;
+			if(!empty($_GET['media_strict'])) {
+				$Queries[]='@medialist ('.implode(' | ', $MediaNameArray).')';
+			} else {
+				$Queries[]='@medialist (any | '.implode(' | ', $MediaNameArray).')';
+			}
+		}
+	}
+}
+
+if(!empty($_GET['bitrates'])) {
+	$BitrateArray = $_GET['bitrates'];
+	if(count($BitrateArray) != count($Bitrates)) {
+		$BitrateNameArray = array();
+		foreach($BitrateArray as $Index => $MasterIndex) {
+			if(isset($Bitrates[$MasterIndex])) {
+				$BitrateNameArray[$Index] = '"'.strtr($SS->EscapeString($Bitrates[$MasterIndex]), '-.', '  ').'"';
+			}
+		}
+
+		if(count($BitrateNameArray) >= 1) {
+			$EnableNegation = true;
+			if(!empty($_GET['bitrate_strict'])) {
+				$Queries[]='@bitratelist ('.implode(' | ', $BitrateNameArray).')';
+			} else {
+				$Queries[]='@bitratelist (any | '.implode(' | ', $BitrateNameArray).')';
+			}
+		}
+	}
+}
+
+if(!empty($_GET['search'])) {
+	$SearchString = trim($_GET['search']);
+	if($SearchString != '') {
+		$SearchWords = array('include' => array(), 'exclude' => array());
+		$Words = explode(' ', $SearchString);
+		foreach($Words as $Word) {
+			$Word = trim($Word);
+			if($Word[0] == '!' && strlen($Word) >= 2) {
+				if(strpos($Word,'!',1) === false) {
+					$SearchWords['exclude'][] = $Word;
+				} else {
+					$SearchWords['include'][] = $Word;
+					$EnableNegation = true;
+				}
+			} elseif($Word != '') {
+				$SearchWords['include'][] = $Word;
+				$EnableNegation = true;
+			}
+		}
+		$QueryParts = array();
+		if(!$EnableNegation && !empty($SearchWords['exclude'])) {
+			$SearchWords['include'] = array_merge($SearchWords['include'], $SearchWords['exclude']);
+			unset($SearchWords['exclude']);
+		}
+		foreach($SearchWords['include'] as $Word) {
+			$QueryParts[] = $SS->EscapeString($Word);
+		}
+		if(!empty($SearchWords['exclude'])) {
+			foreach($SearchWords['exclude'] as $Word) {
+				$QueryParts[] = '!'.$SS->EscapeString(substr($Word,1));
+			}
+		}
+		if(!empty($QueryParts)) {
+			$Queries[] = "@* ".implode(' ', $QueryParts);
+		}
 	}
 }
 
 if(!empty($_GET['tags'])){
 	$Tags = explode(',', $_GET['tags']);
 	$TagNames = array();
-	foreach ($Tags as $Tag) {
+	if(!isset($_GET['tags_type']) || $_GET['tags_type'] == 1) {
+		$TagType = 1;
+		$_GET['tags_type'] = '1';
+	} else {
+		$TagType = 0;
+		$_GET['tags_type'] = '0';
+	}
+	foreach($Tags as $Tag) {
 		$Tag = ltrim($Tag);
-		$Exclude = (!empty($_GET['tags_type']) && $Tag[0] == '!'); // Negations aren't supported in the "any" mode
+		$Exclude = ($Tag[0] == '!');
 		$Tag = sanitize_tag($Tag);
 		if(!empty($Tag)) {
 			$TagNames[] = $Tag;
 			$TagsExclude[$Tag] = $Exclude;
 		}
 	}
+	$AllNegative = !in_array(false, $TagsExclude);
 	$Tags = get_tags($TagNames);
 
-	// Sphinx can't handle queries consisting of only exclusions
-	if(!in_array(false, $TagsExclude)) {
-		$TagsExclude = array();
-	}
 	// Replace the ! characters that sanitize_tag removed
-	foreach($TagNames as &$TagName) {
-		if($TagsExclude[$TagName]) {
-			$TagName = '!'.$TagName;
+	if($TagType == 1 || $AllNegative) {
+		foreach($TagNames as &$TagName) {
+			if($TagsExclude[$TagName]) {
+				$TagName = '!'.$TagName;
+			}
 		}
+		unset($TagName);
 	}
-	unset($TagName);
+} elseif(!isset($_GET['tags_type']) || $_GET['tags_type'] != 0) {
+	$_GET['tags_type'] = 1;
+} else {
+	$_GET['tags_type'] = 0;
 }
 
-if(empty($_GET['tags_type']) && !empty($Tags)) {
-	$_GET['tags_type'] = '0';
-	$SS->set_filter('tagid', array_keys($Tags));
-} elseif(!empty($Tags)) {
+// 'All' tags
+if($TagType == 1 && !empty($Tags)) {
 	foreach($Tags as $TagID => $TagName) {
 		$SS->set_filter('tagid', array($TagID), $TagsExclude[$TagName]);
 	}
-} else {
-	$_GET['tags_type'] = '1';
+} elseif(!empty($Tags)) {
+	$SS->set_filter('tagid', array_keys($Tags), $AllNegative);
 }
 
 if(!empty($_GET['filter_cat'])) {
@@ -144,53 +234,6 @@ if(!empty($_GET['releases'])) {
 		}
 		if(count($ReleaseArray) >= 1) {
 			$SS->set_filter('releasetype', $ReleaseArray);
-		}
-	}
-}
-
-if(!empty($_GET['formats'])) {
-	$FormatArray = $_GET['formats'];
-	if(count($FormatArray) != count($Formats)) {
-		$FormatNameArray = array();
-		foreach($FormatArray as $Index => $MasterIndex) {
-			if(isset($Formats[$MasterIndex])) {
-				$FormatNameArray[$Index] = '"'.strtr($Formats[$MasterIndex], '-.', '  ').'"';
-			}
-		}
-		if(count($FormatNameArray) >= 1) {
-			$Queries[]='@formatlist (any | '.implode(' | ', $FormatNameArray).')';
-		}
-	}
-}
-
-if(!empty($_GET['media'])) {
-	$MediaArray = $_GET['media'];
-	if(count($MediaArray) != count($Media)) {
-		$MediaNameArray = array();
-		foreach($MediaArray as $Index => $MasterIndex) {
-			if(isset($Media[$MasterIndex])) {
-				$MediaNameArray[$Index] = '"'.strtr($Media[$MasterIndex], '-.', '  ').'"';
-			}
-		}
-
-		if(count($MediaNameArray) >= 1) {
-			$Queries[]='@medialist (any | '.implode(' | ', $MediaNameArray).')';
-		}
-	}
-}
-
-if(!empty($_GET['bitrates'])) {
-	$BitrateArray = $_GET['bitrates'];
-	if(count($BitrateArray) != count($Bitrates)) {
-		$BitrateNameArray = array();
-		foreach($BitrateArray as $Index => $MasterIndex) {
-			if(isset($Bitrates[$MasterIndex])) {
-				$BitrateNameArray[$Index] = '"'.strtr($SS->EscapeString($Bitrates[$MasterIndex]), '-.', '  ').'"';
-			}
-		}
-
-		if(count($BitrateNameArray) >= 1) {
-			$Queries[]='@bitratelist (any | '.implode(' | ', $BitrateNameArray).')';
 		}
 	}
 }
@@ -396,6 +439,7 @@ foreach($Categories as $CatKey => $CatName) {
 					<td class="label">Formats</td>
 					<td>
 						<input type="checkbox" id="toggle_formats" onchange="Toggle('formats', 0);" <?=(!$Submitted || !empty($FormatArray) && count($FormatArray) == count($Formats) ? ' checked="checked"' : '')?>/> <label for="toggle_formats">All</label>
+						<input type="checkbox" id="formats_strict" name="formats_strict"<?=(!empty($_GET['formats_strict']) ? ' checked="checked"' : '')?> /> <label for="formats_strict">Only selected</label>
 <?		foreach ($Formats as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
 						<input type="checkbox" name="formats[]" value="<?=$Key?>" id="format_<?=$Key?>"
@@ -408,6 +452,7 @@ foreach($Categories as $CatKey => $CatName) {
 					<td class="label">Bitrates</td>
 					<td>
 						<input type="checkbox" id="toggle_bitrates" onchange="Toggle('bitrates', 0);"<?=(!$Submitted || !empty($BitrateArray) && count($BitrateArray) == count($Bitrates) ? ' checked="checked"' : '')?> /> <label for="toggle_bitrates">All</label>
+						<input type="checkbox" id="bitrate_strict" name="bitrate_strict"<?=(!empty($_GET['bitrate_strict']) ? ' checked="checked"' : '')?>/> <label for="bitrate_strict">Only selected</label>
 <?		foreach ($Bitrates as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
 						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
@@ -420,6 +465,7 @@ foreach($Categories as $CatKey => $CatName) {
 					<td class="label">Media</td>
 					<td>
 						<input type="checkbox" id="toggle_media" onchange="Toggle('media', 0);"<?=(!$Submitted || !empty($MediaArray) && count($MediaArray) == count($Media) ? ' checked="checked"' : '')?> /> <label for="toggle_media">All</label>
+						<input type="checkbox" id="media_strict" name="media_strict"<?=(!empty($_GET['media_strict']) ? ' checked="checked"' : '')?> /> <label for="media_strict">Only selected</label>
 <?		foreach ($Media as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
 						<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"

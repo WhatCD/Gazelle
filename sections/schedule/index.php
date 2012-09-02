@@ -45,6 +45,8 @@ $DB->query("SELECT NextHour, NextDay, NextBiWeekly FROM schedule");
 list($Hour, $Day, $BiWeek) = $DB->next_record();
 $DB->query("UPDATE schedule SET NextHour = ".next_hour().", NextDay = ".next_day().", NextBiWeekly = ".next_biweek());
 
+$NoDaily = isset($argv[2]) && $argv[2] == 'nodaily';
+
 $sqltime = sqltime();
 
 echo "$sqltime\n";
@@ -326,7 +328,7 @@ These functions are run in the first 15 minutes of every day.
 
 \*************************************************************************/
 
-if($Day != next_day() || $_GET['runday']){
+if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 	echo "Ran daily functions\n";
 	if($Day%2 == 0) { // If we should generate the drive database (at the end)
 		$GenerateDriveDB = true;

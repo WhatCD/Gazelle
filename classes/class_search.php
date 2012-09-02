@@ -149,7 +149,11 @@ class SPHINX_SEARCH extends SphinxClient {
 	
 	function set_filter($Name, $Vals, $Exclude=false) {
 		foreach($Vals as $Val) {
-			$this->Filters[$Name][] = $Val;
+			if($Exclude) {
+				$this->Filters[$Name][] = "!$Val";
+			} else {
+				$this->Filters[$Name][] = $Val;
+			}
 		}
 		$this->SetFilter($Name, $Vals, $Exclude);
 	}

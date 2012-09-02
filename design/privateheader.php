@@ -122,7 +122,7 @@ if(check_perms('site_send_unlimited_invites')) {
 			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
 <?	} 
     if($LoggedUser['FLTokens'] > 0) { ?>
-			<li id="fl_tokens">Tokens: <span class="stat"><?=$LoggedUser['FLTokens']?></span></li>
+			<li id="fl_tokens"><a href="wiki.php?action=article&id=754">Tokens: </a><span class="stat"><a href="userhistory.php?action=token_history&userid=<?=$LoggedUser['ID']?>"><?=$LoggedUser['FLTokens']?></a></span></li>
 <?	} ?>
 		</ul>
 <?

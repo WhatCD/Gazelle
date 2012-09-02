@@ -114,107 +114,165 @@ foreach($Formats as $ID=>$Val) {
 
 $Queries = array();
 
+$EnableNegation = false; // Sphinx needs at least one positive search condition to support the NOT operator
+
+// Filelist searches makes use of the proximity operator to ensure that all keywords match the same file
+if(!empty($_GET['filelist'])) {
+	$SearchString = trim($_GET['filelist']);
+	if($SearchString != '') {
+		$Queries[] = '@filelist "'.$SS->EscapeString($_GET['filelist']).'"~20';
+		$EnableNegation = true;
+	}
+}
+
+// Collect all entered search terms to find out whether to enable the NOT operator
+foreach(array('artistname','groupname', 'recordlabel', 'cataloguenumber', 
+				'remastertitle', 'remasteryear', 'remasterrecordlabel', 'remastercataloguenumber',
+				'format', 'media', 'taglist') as $Search) {
+	if(!empty($_GET[$Search])) {
+		$SearchString = trim($_GET[$Search]);
+		if($SearchString != '') {
+			$SearchWords[$Search] = array('include' => array(), 'exclude' => array());
+			if($Search == 'taglist') {
+				$SearchString = strtr($SearchString, '.', '_');
+				$Words = explode(',', $SearchString);
+			} else {
+				$Words = explode(' ', $SearchString);
+			}
+			foreach($Words as $Word) {
+				$Word = trim($Word);
+				if($Word[0] == '!' && strlen($Word) >= 2) {
+					if(strpos($Word,'!',1) === false) {
+						$SearchWords[$Search]['exclude'][] = $Word;
+					} else {
+						$SearchWords[$Search]['include'][] = $Word;
+						$EnableNegation = true;
+					}
+				} elseif($Word != '') {
+					$SearchWords[$Search]['include'][] = $Word;
+					$EnableNegation = true;
+				}
+			}
+		}
+	}
+}
+
 //Simple search
 if(!empty($_GET['searchstr'])) {
-	$Words = explode(' ',strtolower($_GET['searchstr']));
-	$FilterBitrates = array_intersect($Words, $SearchBitrates);
-	if(count($FilterBitrates)>0) {
-		$Queries[]='@encoding '.implode(' ',$FilterBitrates);
-	}
-	
-	$FilterFormats = array_intersect($Words, $SearchFormats);
-	if(count($FilterFormats)>0) {
-		$Queries[]='@format '.implode(' ',$FilterFormats);
-	}
-	
-	if(in_array('100%', $Words)) {
-		$_GET['haslog'] = '100';
-		unset($Words[array_search('100%',$Words)]);
-	}
-	
-	$Words = array_diff($Words, $FilterBitrates, $FilterFormats);
+	$SearchString = trim($_GET['searchstr']);
+	$Words = explode(' ',strtolower($SearchString));
 	if(!empty($Words)) {
-		foreach($Words as $Key => &$Word) {
-			if($Word[0] == '!' && strlen($Word) >= 3 && count($Words) >= 2) {
-				if(strpos($Word,'!',1) === false) {
-					$Word = '!'.$SS->EscapeString(substr($Word,1));
+		$FilterBitrates = $FilterFormats = array();
+		$BasicSearch = array('include' => array(), 'exclude' => array());
+		foreach($Words as $Word) {
+			$Word = trim($Word);
+			if($Word[0] == '!' && strlen($Word) >= 2) {
+				if($Word == '!100%') {
+					$_GET['haslog'] = '-1';
+				} elseif(strpos($Word,'!',1) === false) {
+					$BasicSearch['exclude'][] = $Word;
 				} else {
-					$Word = $SS->EscapeString($Word);
+					$BasicSearch['include'][] = $Word;
+					$EnableNegation = true;
 				}
-			} elseif(strlen($Word) >= 2) {
-				$Word = $SS->EscapeString($Word);
-			} else {
-				unset($Words[$Key]);
+			} elseif(in_array($Word, $SearchBitrates)) {
+				$FilterBitrates[] = $Word;
+				$EnableNegation = true;
+			} elseif(in_array($Word, $SearchFormats)) {
+				$FilterFormats[] = $Word;
+				$EnableNegation = true;
+			} elseif($Word == '100%') {
+				$_GET['haslog'] = '100';
+			} elseif($Word != '') {
+				$BasicSearch['include'][] = $Word;
+				$EnableNegation = true;
 			}
 		}
-		unset($Word);
-		$Words = trim(implode(' ',$Words));
-		if(!empty($Words)) {
-			$Queries[]='@(groupname,artistname,yearfulltext) '.$Words;
+		if(!$EnableNegation && !empty($BasicSearch['exclude'])) {
+			$BasicSearch['include'] = array_merge($BasicSearch['include'], $BasicSearch['exclude']);
+			unset($BasicSearch['exclude']);
+		}
+		$QueryParts = array();
+		foreach($BasicSearch['include'] as $Word) {
+			$QueryParts[] = $SS->EscapeString($Word);
+		}
+		if(!empty($BasicSearch['exclude'])) {
+			foreach($BasicSearch['exclude'] as $Word) {
+				$QueryParts[] = '!'.$SS->EscapeString(substr($Word,1));
+			}
+		}
+		if(!empty($FilterBitrates)) {
+			$Queries[] = "@encoding ".implode(' ', $FilterBitrates);
+		}
+		if(!empty($FilterFormats)) {
+			$Queries[] = "@format ".implode(' ', $FilterFormats);
+		}
+		if(!empty($QueryParts)) {
+			$Queries[] = "@(groupname,artistname,yearfulltext) ".implode(' ', $QueryParts);
 		}
 	}
 }
 
-if(!empty($_GET['taglist'])) {
-	$_GET['taglist'] = str_replace('.','_',$_GET['taglist']);
-	$TagList = explode(',',$_GET['taglist']);
-	$TagListEx = array();
-	foreach($TagList as $Key => &$Tag) {
-		$Tag = trim($Tag);
-		if(strlen($Tag) >= 2) {
-			if($Tag[0] == '!' && strlen($Tag) >= 3) {
-				$TagListEx[] = '!'.$SS->EscapeString(substr($Tag,1));
-				unset($TagList[$Key]);
-			} else {
-				$Tag = $SS->EscapeString($Tag);
-			}
-		} else {
-			unset($TagList[$Key]);
+// Tag list
+if(!empty($SearchWords['taglist'])) {
+	$Tags = $SearchWords['taglist'];
+	if(!$EnableNegation && !empty($Tags['exclude'])) {
+		$Tags['include'] = array_merge($Tags['include'], $Tags['exclude']);
+		unset($Tags['exclude']);
+	}
+	foreach($Tags['include'] as &$Tag) {
+		$Tag = $SS->EscapeString($Tag);
+	}
+	if(!empty($Tags['exclude'])) {
+		foreach($Tags['exclude'] as &$Tag) {
+			$Tag = '!'.$SS->EscapeString(substr($Tag,1));
 		}
 	}
-	unset($Tag);
-}
 
-if(empty($_GET['tags_type']) && !empty($TagList) && count($TagList) > 1) {
-	$_GET['tags_type'] = '0';
-	if(!empty($TagListEx)) {
-		$Queries[]='@taglist ( '.implode(' | ', $TagList).' ) '.implode(' ', $TagListEx);
-	} else {
-		$Queries[]='@taglist ( '.implode(' | ', $TagList).' )';
+	$QueryParts = array();
+	// 'All' tags
+	if(!isset($_GET['tags_type']) || $_GET['tags_type'] == 1) {
+		$_GET['tags_type'] = '1';
+		$Tags = array_merge($Tags['include'], $Tags['exclude']);
+		if(!empty($Tags)) {
+			$QueryParts[] = implode(' ', $Tags);
+		}
 	}
-} elseif(!empty($TagList)) {
-	$Queries[]='@taglist '.implode(' ', array_merge($TagList,$TagListEx));
-} else {
+	// 'Any' tags
+	else {
+		$_GET['tags_type'] = '0';
+		if(!empty($Tags['include'])) {
+			$QueryParts[] = '( '.implode(' | ', $Tags['include']).' )';
+		}
+		if(!empty($Tags['exclude'])) {
+			$QueryParts[] = implode(' ', $Tags['exclude']);
+		}
+	}
+	if(!empty($QueryParts)) {
+		$Queries[] = "@taglist ".implode(' ', $QueryParts);
+	}
+	unset($SearchWords['taglist']);
+}
+elseif(!isset($_GET['tags_type'])) {
 	$_GET['tags_type'] = '1';
 }
 
-foreach(array('artistname','groupname', 'recordlabel', 'cataloguenumber', 
-				'remastertitle', 'remasteryear', 'remasterrecordlabel', 'remastercataloguenumber',
-				'filelist', 'format', 'media') as $Search) {
-	if(!empty($_GET[$Search])) {
-		$_GET[$Search] = str_replace(array('%'), '', $_GET[$Search]);
-		if($Search == 'filelist') {
-			$Queries[]='@filelist "'.$SS->EscapeString($_GET['filelist']).'"~20';
-		} else {
-			$Words = explode(' ', $_GET[$Search]);
-			foreach($Words as $Key => &$Word) {
-				if($Word[0] == '!' && strlen($Word) >= 3 && count($Words) >= 2) {
-					if(strpos($Word,'!',1) === false) {
-						$Word = '!'.$SS->EscapeString(substr($Word,1));
-					} else {
-						$Word = $SS->EscapeString($Word);
-					}
-				} elseif(strlen($Word) >= 2) {
-					$Word = $SS->EscapeString($Word);
-				} else {
-					unset($Words[$Key]);
-				}
-			}
-			$Words = trim(implode(' ',$Words));
-			if(!empty($Words)) {
-				$Queries[]="@$Search ".$Words;
-			}
+foreach($SearchWords as $Search => $Words) {
+	$QueryParts = array();
+	if(!$EnableNegation && !empty($Words['exclude'])) {
+		$Words['include'] = array_merge($Words['include'], $Words['exclude']);
+		unset($Words['exclude']);
+	}
+	foreach($Words['include'] as $Word) {
+		$QueryParts[] = $SS->EscapeString($Word);
+	}
+	if(!empty($Words['exclude'])) {
+		foreach($Words['exclude'] as $Word) {
+			$QueryParts[] = '!'.$SS->EscapeString(substr($Word,1));
 		}
+	}
+	if(!empty($QueryParts)) {
+		$Queries[] = "@$Search ".implode(' ', $QueryParts);
 	}
 }
 
@@ -316,9 +374,7 @@ if(count($Queries)>0) {
 $SS->set_index(SPHINX_INDEX.' delta');
 $Results = $SS->search($Query, '', 0, array(), '', '');
 if(check_perms('site_search_many')) {
-
 	$TorrentCount = $SS->TotalResults;
-
 } else {
 	$TorrentCount = min($SS->TotalResults, SPHINX_MAX_MATCHES);
 }
