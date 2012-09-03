@@ -512,7 +512,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 }
 	if($ThreadInfo['LastPostAuthorID']==$LoggedUser['ID'] && (check_perms('site_forums_double_post') || in_array($ForumID, $ForumsDoublePost))) {
 ?>
-						<input id="mergebox" type="checkbox" name="merge" checked="checked" tabindex="2" />
+						<input id="mergebox" type="checkbox" name="merge" tabindex="2" />
 						<label for="mergebox">Merge</label>
 <? } ?>
 						<input id="post_preview" type="button" value="Preview" tabindex="1" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
