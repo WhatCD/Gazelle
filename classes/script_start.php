@@ -210,7 +210,10 @@ if(isset($LoginCookie)) {
 	}
 	
 	// IP changed
+	
+	
 	if($LoggedUser['IP'] != $_SERVER['REMOTE_ADDR'] && !check_perms('site_disable_ip_history')) {
+	
 		if(site_ban_ip($_SERVER['REMOTE_ADDR'])) {
 			error('Your IP has been banned.');
 		}

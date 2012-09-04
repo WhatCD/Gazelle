@@ -56,7 +56,7 @@ $Reports = $DB->query("SELECT SQL_CALC_FOUND_ROWS
 		r.Reason, 
 		r.Status
 	FROM reports AS r 
-		JOIN users_main AS um ON r.UserID=um.ID 
+	JOIN users_main AS um ON r.UserID=um.ID
 	WHERE ".$Where." 
 	ORDER BY ReportedTime 
 	DESC LIMIT ".$Limit);
@@ -101,7 +101,7 @@ while(list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $
 		<table cellpadding="5" id="report_<?=$ReportID?>">
 			<tr>
 				<td><strong><a href="<?=$Reference?>">Report</a></strong></td>
-				<td><strong><?=$Type['title']?></strong> was reported by <a href="user.php?id=<?=$SnitchID?>"><?=$SnitchName?></a> <?=time_diff($ReportedTime)?></td>
+				<td><strong><?=$Type['title']?></strong> was reported by <a href="user.php?id=<?=$SnitchID?>"><?=$SnitchName?></a> <?=time_diff($ReportedTime)?> <a href="reports.php?action=compose&to=<?=$SnitchID?>&reportid=<?=$ReportID?>&type=<?=$Short?>&thingid=<?=$ThingID?>">[Contact]</a></td>
 			</tr>
 			<tr>
 			
