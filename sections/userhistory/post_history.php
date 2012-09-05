@@ -262,7 +262,7 @@ if(empty($Results)) {
 <?
 		if($ViewingOwn) {
 			if ((!$Locked  || $Sticky) && (!$LastRead || $LastRead < $LastPostID)) { ?> 
-					<span style="color: red;">(New!)</span>
+					<span class="new">(New!)</span>
 <?
 			}
 ?>

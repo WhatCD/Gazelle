@@ -143,7 +143,7 @@ if(!$NumResults) {
 					<a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$ForumName?></a> &gt;
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($ThreadTitle)?>"><?=cut_string($ThreadTitle, 75)?></a>
 		<? if($PostID<$LastPostID && !$Locked) { ?>
-					<span style="color: red;">(New!)</span>
+					<span class="new">(New!)</span>
 		<? } ?>
 				</span>
 				<span style="float:left;" class="last_read" title="Jump to last read">

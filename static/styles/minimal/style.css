@@ -299,7 +299,6 @@ strong.quoteheader {color: #f1f1f1;}
 #forums #content form .box{width:510px; margin:0 auto; padding:1ex; text-align:left; background-color:#404040}
 
 /* TORRENTS */
-#torrents .group_torrent td strong+strong{color:#F00}
 #torrents .filter_torrents{width:75%; margin:0 auto}
 #torrents .filter_torrents td{border:0}
 #torrents .filter_torrents .cat_list .label{border-right:0}

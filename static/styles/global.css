@@ -131,7 +131,7 @@ strong.important_text {
 	color: red;
 	font-weight: bold;
 }
-.invalid, .warning, .error {
+.invalid, .warning, .error, .new {
 	color: #ff0000;
 }
 

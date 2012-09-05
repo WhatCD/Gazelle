@@ -782,15 +782,6 @@ CREATE TABLE `staff_pm_messages` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `staff_pm_messages_utf8` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `UserID` int(11) DEFAULT NULL,
-  `SentDate` datetime DEFAULT NULL,
-  `Message` text,
-  `ConvID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `staff_pm_responses` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Message` text,
@@ -1031,20 +1022,6 @@ CREATE TABLE `torrents_group` (
   KEY `RevisionID` (`RevisionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `torrents_groups_log` (
-  `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `GroupID` int(10) NOT NULL,
-  `TorrentID` int(10) NOT NULL DEFAULT '0',
-  `UserID` int(10) NOT NULL,
-  `Info` mediumtext COLLATE utf8_bin,
-  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Hidden` enum('0','1') COLLATE utf8_bin NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ID`),
-  KEY `TorrentID` (`TorrentID`),
-  KEY `GroupID` (`GroupID`),
-  KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 CREATE TABLE `torrents_logs_new` (
   `LogID` int(10) NOT NULL AUTO_INCREMENT,
   `TorrentID` int(10) NOT NULL DEFAULT '0',
@@ -1125,15 +1102,6 @@ CREATE TABLE `torrents_tags_votes` (
   `Way` enum('up','down') COLLATE utf8_bin NOT NULL DEFAULT 'up',
   PRIMARY KEY (`GroupID`,`TagID`,`UserID`,`Way`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-CREATE TABLE `tpc_temp` (
-  `TorrentID` int(11) NOT NULL DEFAULT '0',
-  `GroupID` int(11) NOT NULL DEFAULT '0',
-  `Seeders` int(11) DEFAULT NULL,
-  `Leechers` int(11) DEFAULT NULL,
-  `Snatched` int(11) DEFAULT NULL,
-  PRIMARY KEY (`GroupID`,`TorrentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `users_collage_subs` (
   `UserID` int(10) NOT NULL,
@@ -1286,7 +1254,7 @@ CREATE TABLE `users_main` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Username` varchar(20) NOT NULL,
   `Email` varchar(255) NOT NULL,
-  `PassHash` char(40) NOT NULL,
+  `PassHash` varchar(60) NOT NULL,
   `Secret` char(32) NOT NULL,
   `TorrentKey` char(32) NOT NULL,
   `IRCKey` char(32) DEFAULT NULL,
@@ -1503,32 +1471,6 @@ CREATE TABLE `wiki_torrents` (
   KEY `Time` (`Time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `xbt_announce_log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ipa` int(10) unsigned NOT NULL,
-  `port` int(11) NOT NULL,
-  `event` int(11) NOT NULL,
-  `info_hash` blob NOT NULL,
-  `peer_id` blob NOT NULL,
-  `downloaded` bigint(20) NOT NULL,
-  `left0` bigint(20) NOT NULL,
-  `uploaded` bigint(20) NOT NULL,
-  `uid` int(11) NOT NULL,
-  `mtime` int(11) NOT NULL,
-  `useragent` varchar(51) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE `xbt_cheat` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL,
-  `ipa` int(10) unsigned NOT NULL,
-  `upspeed` bigint(20) NOT NULL,
-  `tstamp` int(11) NOT NULL,
-  `uploaded` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `xbt_client_whitelist` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `peer_id` varchar(20) DEFAULT NULL,
@@ -1536,39 +1478,6 @@ CREATE TABLE `xbt_client_whitelist` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `peer_id` (`peer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `xbt_config` (
-  `name` varchar(255) NOT NULL,
-  `value` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `xbt_deny_from_hosts` (
-  `begin` int(11) NOT NULL,
-  `end` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE `xbt_files` (
-  `fid` int(11) NOT NULL AUTO_INCREMENT,
-  `info_hash` blob NOT NULL,
-  `leechers` int(11) NOT NULL,
-  `seeders` int(11) NOT NULL,
-  `completed` int(11) NOT NULL,
-  `announced_http` int(11) NOT NULL,
-  `announced_http_compact` int(11) NOT NULL,
-  `announced_http_no_peer_id` int(11) NOT NULL,
-  `announced_udp` int(11) NOT NULL,
-  `scraped_http` int(11) NOT NULL,
-  `scraped_udp` int(11) NOT NULL,
-  `started` int(11) NOT NULL,
-  `stopped` int(11) NOT NULL,
-  `flags` int(11) NOT NULL,
-  `mtime` int(11) NOT NULL,
-  `ctime` int(11) NOT NULL,
-  `balance` int(11) NOT NULL,
-  `freetorrent` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`fid`),
-  UNIQUE KEY `info_hash` (`info_hash`(20))
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `xbt_files_users` (
   `uid` int(11) NOT NULL,
@@ -1595,15 +1504,6 @@ CREATE TABLE `xbt_files_users` (
   KEY `uid_active` (`uid`,`active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `xbt_scrape_log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ipa` int(11) NOT NULL,
-  `info_hash` blob,
-  `uid` int(11) NOT NULL,
-  `mtime` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 CREATE TABLE `xbt_snatched` (
   `uid` int(11) NOT NULL DEFAULT '0',
   `tstamp` int(11) NOT NULL,
@@ -1613,22 +1513,6 @@ CREATE TABLE `xbt_snatched` (
   KEY `uid` (`uid`),
   KEY `tstamp` (`tstamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `xbt_users` (
-  `uid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` char(8) NOT NULL,
-  `pass` blob NOT NULL,
-  `can_leech` tinyint(4) NOT NULL DEFAULT '1',
-  `wait_time` int(11) NOT NULL,
-  `peers_limit` int(11) NOT NULL,
-  `torrents_limit` int(11) NOT NULL,
-  `torrent_pass` char(32) NOT NULL,
-  `torrent_pass_secret` bigint(20) NOT NULL,
-  `downloaded` bigint(20) NOT NULL,
-  `uploaded` bigint(20) NOT NULL,
-  `fid_end` int(11) NOT NULL,
-  PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO permissions (ID, Level, Name, `Values`, DisplayStaff) VALUES (15, 1000, 'Sysop', 'a:98:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:21:\"site_see_old_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:19:\"site_advanced_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:20:\"site_collages_delete\";i:1;s:23:\"site_collages_subscribe\";i:1;s:22:\"site_collages_personal\";i:1;s:28:\"site_collages_renamepersonal\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:22:\"site_can_invite_always\";i:1;s:27:\"site_send_unlimited_invites\";i:1;s:22:\"site_moderate_requests\";i:1;s:18:\"site_delete_artist\";i:1;s:20:\"site_moderate_forums\";i:1;s:17:\"site_admin_forums\";i:1;s:23:\"site_forums_double_post\";i:1;s:14:\"site_view_flow\";i:1;s:18:\"site_view_full_log\";i:1;s:28:\"site_view_torrent_snatchlist\";i:1;s:18:\"site_recommend_own\";i:1;s:27:\"site_manage_recommendations\";i:1;s:15:\"site_delete_tag\";i:1;s:23:\"site_disable_ip_history\";i:1;s:14:\"zip_downloader\";i:1;s:10:\"site_debug\";i:1;s:17:\"site_proxy_images\";i:1;s:16:\"site_search_many\";i:1;s:20:\"users_edit_usernames\";i:1;s:16:\"users_edit_ratio\";i:1;s:20:\"users_edit_own_ratio\";i:1;s:17:\"users_edit_titles\";i:1;s:18:\"users_edit_avatars\";i:1;s:18:\"users_edit_invites\";i:1;s:22:\"users_edit_watch_hours\";i:1;s:21:\"users_edit_reset_keys\";i:1;s:19:\"users_edit_profiles\";i:1;s:18:\"users_view_friends\";i:1;s:20:\"users_reset_own_keys\";i:1;s:19:\"users_edit_password\";i:1;s:19:\"users_promote_below\";i:1;s:16:\"users_promote_to\";i:1;s:16:\"users_give_donor\";i:1;s:10:\"users_warn\";i:1;s:19:\"users_disable_users\";i:1;s:19:\"users_disable_posts\";i:1;s:17:\"users_disable_any\";i:1;s:18:\"users_delete_users\";i:1;s:18:\"users_view_invites\";i:1;s:20:\"users_view_seedleech\";i:1;s:19:\"users_view_uploaded\";i:1;s:15:\"users_view_keys\";i:1;s:14:\"users_view_ips\";i:1;s:16:\"users_view_email\";i:1;s:23:\"users_override_paranoia\";i:1;s:12:\"users_logout\";i:1;s:20:\"users_make_invisible\";i:1;s:9:\"users_mod\";i:1;s:13:\"torrents_edit\";i:1;s:15:\"torrents_delete\";i:1;s:20:\"torrents_delete_fast\";i:1;s:18:\"torrents_freeleech\";i:1;s:20:\"torrents_search_fast\";i:1;s:17:\"torrents_hide_dnu\";i:1;s:19:\"torrents_fix_ghosts\";i:1;s:17:\"admin_manage_news\";i:1;s:17:\"admin_manage_blog\";i:1;s:18:\"admin_manage_polls\";i:1;s:19:\"admin_manage_forums\";i:1;s:16:\"admin_manage_fls\";i:1;s:13:\"admin_reports\";i:1;s:26:\"admin_advanced_user_search\";i:1;s:18:\"admin_create_users\";i:1;s:15:\"admin_donor_log\";i:1;s:19:\"admin_manage_ipbans\";i:1;s:9:\"admin_dnu\";i:1;s:17:\"admin_clear_cache\";i:1;s:15:\"admin_whitelist\";i:1;s:24:\"admin_manage_permissions\";i:1;s:14:\"admin_schedule\";i:1;s:17:\"admin_login_watch\";i:1;s:17:\"admin_manage_wiki\";i:1;s:18:\"admin_update_geoip\";i:1;s:21:\"site_collages_recover\";i:1;s:19:\"torrents_add_artist\";i:1;s:13:\"edit_unknowns\";i:1;s:19:\"forums_polls_create\";i:1;s:21:\"forums_polls_moderate\";i:1;s:12:\"project_team\";i:1;s:25:\"torrents_edit_vanityhouse\";i:1;s:23:\"artist_edit_vanityhouse\";i:1;}', '1'), (2, 100, 'User', 'a:7:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:14:\"site_edit_wiki\";i:1;s:19:\"torrents_add_artist\";i:1;}', '0'), (3, 150, 'Member', 'a:10:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:19:\"torrents_add_artist\";i:1;}', '0'), (4, 200, 'Power User', 'a:14:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;s:19:\"torrents_add_artist\";i:1;} ', '0'), (5, 250, 'Elite', 'a:18:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_advanced_top10\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:15:\"site_delete_tag\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;s:13:\"torrents_edit\";i:1;s:19:\"torrents_add_artist\";i:1;s:17:\"admin_clear_cache\";i:1;}', '0'), (20, 202, 'Donor', 'a:9:{s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;}', '0'), (19, 201, 'Artist', 'a:9:{s:10:\"site_leech\";s:1:\"1\";s:11:\"site_upload\";s:1:\"1\";s:9:\"site_vote\";s:1:\"1\";s:20:\"site_submit_requests\";s:1:\"1\";s:20:\"site_advanced_search\";s:1:\"1\";s:10:\"site_top10\";s:1:\"1\";s:19:\"site_make_bookmarks\";s:1:\"1\";s:14:\"site_edit_wiki\";s:1:\"1\";s:18:\"site_recommend_own\";s:1:\"1\";}', '0');
 

@@ -705,9 +705,11 @@ show_header('User search');
 <?
 if($RunQuery){
 	$Results = $DB->query($SQL);
-	$DB->query('SELECT FOUND_ROWS();');
+	$DB->query('SELECT FOUND_ROWS()');
 	list($NumResults) = $DB->next_record();
-$DB->set_query_id($Results);
+	$DB->set_query_id($Results);
+} else {
+	$DB->query('SET @nothing = 0');
 }
 ?>
 <div class="linkbox">

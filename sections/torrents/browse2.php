@@ -439,7 +439,7 @@ show_header('Browse Torrents','browse');
 ?>
 	</h3>
 	<div class="box pad">
-		<table>
+		<table class="layout">
 <? if($AdvancedSearch) { ?>
 			<tr>
 				<td class="label">Artist Name:</td>

@@ -158,7 +158,7 @@ $DB->set_query_id($Results);
 				| <a href="#" onclick="Clear(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a> ]
 			</span>
 			<strong><?=$DisplayName?></strong> <?=$ExtraInfo?>
-			<? if($Result['UnRead']) { echo '<strong>New!</strong>'; } ?>
+			<? if($Result['UnRead']) { echo '<strong class="new">New!</strong>'; } ?>
 			<?=$TorrentTags?>
 		</td>
 		<td><?=$TorrentInfo['FileCount']?></td>
