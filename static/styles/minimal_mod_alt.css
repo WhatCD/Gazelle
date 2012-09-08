@@ -40,7 +40,7 @@ input:focus,textarea:focus {
 }
 
 blockquote {
-	background: transparent url(http://what.cd/static/styles/minimal/images/blockquote.png) repeat;
+	background: transparent url(https://what.cd/static/styles/minimal/images/blockquote.png) repeat;
 	color: #f1f1f1!important;
 	border: 1px #000 dotted;
 	margin: 10px;
@@ -402,7 +402,7 @@ textarea#quickpost {
 }
 
 #searchbars ul li ul {
-	background: #262626 url(http://what.cd/static/styles/minimal/images/bg.png) repeat-x 0 -3px;
+	background: #262626 url(https://what.cd/static/styles/minimal/images/bg.png) repeat-x 0 -3px;
 	border: 1px solid #757575;
 	display: block;
 	left: 0;
@@ -635,7 +635,7 @@ table tr.colhead_dark td {
 }
 
 .last_read {
-	background: url(http://what.cd/static/styles/minimal/images/go_last_read.png) no-repeat center center;
+	background: url(https://what.cd/static/styles/minimal/images/go_last_read.png) no-repeat center center;
 	height: 15px;
 	margin-left: 5px;
 	width: 15px;
@@ -653,49 +653,49 @@ table tr.colhead_dark td {
 }
 
 #forums #content .thin td.read {
-	background: #373737 url(http://what.cd/static/styles/minimal/images/balloon.png) no-repeat 50%;
+	background: #373737 url(https://what.cd/static/styles/minimal/images/balloon.png) no-repeat 50%;
 	height: 18px;
 	width: 18px;
 }
 
 #forums #content .thin td.unread {
-	background: #373737 url(http://what.cd/static/styles/minimal/images/balloon-unread.png) no-repeat 50%;
+	background: #373737 url(https://what.cd/static/styles/minimal/images/balloon-unread.png) no-repeat 50%;
 	height: 18px;
 	width: 18px;
 }
 
 #forums #content .thin td.read_sticky {
-	background: #373737 url(http://what.cd/static/styles/minimal/images/sticky.png) no-repeat 50%;
+	background: #373737 url(https://what.cd/static/styles/minimal/images/sticky.png) no-repeat 50%;
 	height: 18px;
 	width: 18px;
 }
 
 #forums #content .thin td.unread_sticky {
-	background: #373737 url(http://what.cd/static/styles/minimal/images/sticky-unread.png) no-repeat 50%;
+	background: #373737 url(https://what.cd/static/styles/minimal/images/sticky-unread.png) no-repeat 50%;
 	height: 18px;
 	width: 18px;
 }
 
 #forums #content .thin td.read_locked {
-	background: #373737 url(http://what.cd/static/styles/minimal/images/lock.png) no-repeat 50%;
+	background: #373737 url(https://what.cd/static/styles/minimal/images/lock.png) no-repeat 50%;
 	height: 18px;
 	width: 18px;
 }
 
 #forums #content .thin td.unread_locked {
-	background: #373737 url(http://what.cd/static/styles/minimal/images/lock-unread.png) no-repeat 50%;
+	background: #373737 url(https://what.cd/static/styles/minimal/images/lock-unread.png) no-repeat 50%;
 	height: 18px;
 	width: 18px;
 }
 
 #forums #content .thin td.read_locked_sticky {
-	background: #373737 url(http://what.cd/static/styles/minimal/images/lock-sticky.png) no-repeat 50%;
+	background: #373737 url(https://what.cd/static/styles/minimal/images/lock-sticky.png) no-repeat 50%;
 	height: 18px;
 	width: 18px;
 }
 
 #forums #content .thin td.unread_locked_sticky {
-	background: #373737 url(http://what.cd/static/styles/minimal/images/lock-sticky-unread.png) no-repeat 50%;
+	background: #373737 url(https://what.cd/static/styles/minimal/images/lock-sticky-unread.png) no-repeat 50%;
 	height: 18px;
 	width: 18px;
 }
@@ -1036,16 +1036,16 @@ strong.quoteheader { color: #f1f1f1; }
 }
 
 .poll .graph #left_poll {
-	background: url(http://what.cd/static/styles/minimal/images/poll_left.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/poll_left.png) top left no-repeat;
 	width: 9px;
 }
 
 .poll .graph #center_poll {
-	background: url(http://what.cd/static/styles/minimal/images/poll_middle.png) top left repeat-x;
+	background: url(https://what.cd/static/styles/minimal/images/poll_middle.png) top left repeat-x;
 }
 
 .poll .graph #right_poll {
-	background: url(http://what.cd/static/styles/minimal/images/poll_right.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/poll_right.png) top left no-repeat;
 	width: 11px;
 }
 
@@ -1272,43 +1272,43 @@ h3 {
 }
 
 .cats_music {
-	background: url(http://what.cd/static/styles/minimal/images/icons/music.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/icons/music.png) top left no-repeat;
 	height: 30px;
 	width: 30px;
 }
 
 .cats_applications {
-	background: url(http://what.cd/static/styles/minimal/images/icons/apps.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/icons/apps.png) top left no-repeat;
 	height: 30px;
 	width: 30px;
 }
 
 .cats_ebooks {
-	background: url(http://what.cd/static/styles/minimal/images/icons/ebook.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/icons/ebook.png) top left no-repeat;
 	height: 30px;
 	width: 30px;
 }
 
 .cats_audiobooks {
-	background: url(http://what.cd/static/styles/minimal/images/icons/audiobook.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/icons/audiobook.png) top left no-repeat;
 	height: 30px;
 	width: 30px;
 }
 
 .cats_elearningvideos {
-	background: url(http://what.cd/static/styles/minimal/images/icons/elearning.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/icons/elearning.png) top left no-repeat;
 	height: 30px;
 	width: 30px;
 }
 
 .cats_comedy {
-	background: url(http://what.cd/static/styles/minimal/images/icons/comedy.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/icons/comedy.png) top left no-repeat;
 	height: 30px;
 	width: 30px;
 }
 
 .cats_comics {
-	background: url(http://what.cd/static/styles/minimal/images/icons/comics.png) top left no-repeat;
+	background: url(https://what.cd/static/styles/minimal/images/icons/comics.png) top left no-repeat;
 	height: 30px;
 	width: 30px;
 }

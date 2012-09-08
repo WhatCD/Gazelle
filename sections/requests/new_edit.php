@@ -331,7 +331,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 				<tr>
 					<td class="label">Torrent Group</td>
 					<td>
-						http://what.cd/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15"><br />
+						https://what.cd/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15"><br />
 						If this request matches a torrent group <span style="font-weight: bold;">already existing</span> on the site, please indicate that here.
 					</td>
 				</tr>
@@ -340,7 +340,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 				<tr>
 					<td class="label">Torrent Group</td>
 					<td>
-						<a href="torrents.php?id=<?=$GroupID?>">http://what.cd/torrents.php?id=<?=$GroupID?></a><br />
+						<a href="torrents.php?id=<?=$GroupID?>">https://what.cd/torrents.php?id=<?=$GroupID?></a><br />
 						This request <?=($NewRequest?'will be':'is')?> associated with the above torrent group.
 <?		if (!$NewRequest) { 	?>
 						If this is incorrect, please <a href="reports.php?action=report&type=request&id=<?=$RequestID?>">report this request</a> so that staff can fix it.

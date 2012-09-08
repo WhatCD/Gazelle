@@ -5,6 +5,6 @@ Allow: /register.php
 #<skip>
 Allow: /what-network/
 Allow: /gazelle/
-Sitemap: http://what.cd/sitemap.xml
+Sitemap: https://what.cd/sitemap.xml
 #</skip>
 Disallow: /
