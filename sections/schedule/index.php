@@ -294,7 +294,7 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
 
         $DB->query("UPDATE users_info SET Warned='0000-00-00 00:00:00' WHERE Warned<'$sqltime'");
 
-	   // If a user has downloaded more than 10 gigs while on ratio watch disable leeching and send message
+	   // If a user has downloaded more than 10 GiBs while on ratio watch, disable leeching privileges and send the user a message
 
         $DB->query("SELECT ID FROM users_info AS i JOIN users_main AS m ON m.ID=i.UserID
                 WHERE i.RatioWatchEnds!='0000-00-00 00:00:00'
@@ -305,16 +305,16 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
         $UserIDs = $DB->collect('ID'  );
     if(count($UserIDs) > 0) {
         $Subject = 'Leeching Disabled';
-        $Message = 'You have downloaded more then 10gb while on Ratio Watch. Your Leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://ssl.what.cd/wiki.php?action=article&id=110';            
+        $Message = 'You have downloaded more then 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://what.cd/wiki.php?action=article&amp;id=110';            
         foreach($UserIDs as $UserID) {
 			send_pm($UserID,0,db_string($Subject),db_string($Message));
-			send_irc("PRIVMSG #reports : !leechdisabled Downloaded 10GB+ on Ratio Watch. https://what.cd/user.php?id=$UserID");
+			send_irc("PRIVMSG #reports : !leechdisabled Downloaded 10 GB+ on Ratio Watch. https://what.cd/user.php?id=$UserID");
         }
  
             $DB->query("UPDATE users_info AS i JOIN users_main AS m ON m.ID=i.UserID
             SET 
             m.can_leech='0',
-            i.AdminComment=CONCAT('$sqltime - Leech disabled by ratio watch system for downloading more than 10 gigs on ratio watch.  - required ratio: ', m.RequiredRatio,'
+            i.AdminComment=CONCAT('$sqltime - Leech disabled by ratio watch system for downloading more than 10 GBs on ratio watch.  - required ratio: ', m.RequiredRatio,'
 
 '           , i.AdminComment)
 WHERE m.ID IN(".implode(',',$UserIDs).")");
@@ -930,7 +930,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 			$TorrentAlerts[$UserID]['Count']++;
 		}
 		foreach($TorrentAlerts as $UserID => $MessageInfo){
-			send_pm($UserID, 0, db_string('Unseeded torrent notification'), db_string($MessageInfo['Count']." of your uploads will be deleted for inactivity soon.  Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=https://what.cd/wiki.php?action=article&id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count']>1?'s':'')." will be removed for inactivity:".$MessageInfo['Msg']."\n\nIf you no longer wish to receive these notifications, please disable them in your profile settings."));
+			send_pm($UserID, 0, db_string('Unseeded torrent notification'), db_string($MessageInfo['Count']." of your uploads will be deleted for inactivity soon.  Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=https://what.cd/wiki.php?action=article&amp;id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count']>1?'s':'')." will be removed for inactivity:".$MessageInfo['Msg']."\n\nIf you no longer wish to receive these notifications, please disable them in your profile settings."));
 		}
 	}
 }

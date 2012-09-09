@@ -103,7 +103,7 @@ foreach ($Tokens as $Token) {
 	<tr class="<?=($i?'rowa':'rowb')?>">
 		<td><?=$Name?></td>
 		<td><?=time_diff($Time)?></td>
-		<td><?=($Expired ? 'Yes' : 'No')?><?=(check_perms('users_mod') && !$Expired)?" <a href=\"userhistory.php?action=token_history&expire=1&userid=$UserID&torrentid=$TorrentID\">(expire)</a>":''?>
+		<td><?=($Expired ? 'Yes' : 'No')?><?=(check_perms('users_mod') && !$Expired)?" <a href=\"userhistory.php?action=token_history&amp;expire=1&amp;userid=$UserID&amp;torrentid=$TorrentID\">(expire)</a>":''?>
 		</td>
 <?	if (check_perms('users_mod')) { ?>
 		<td><?=get_size($Downloaded)?></td>

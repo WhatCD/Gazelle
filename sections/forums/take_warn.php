@@ -17,7 +17,7 @@ if($UserInfo['Class'] > $LoggedUser['Class']) {
     error(403);
 }
 
-$URL = "https://".SSL_SITE_URL."/forums.php?action=viewthread&postid=$PostID#post$PostID";
+$URL = "https://".SSL_SITE_URL."/forums.php?action=viewthread&amp;postid=$PostID#post$PostID";
 if ($Length != 'verbal') {
     $Time = ((int)$Length) * (7 * 24 * 60 * 60);
     warn_user($UserID, $Time, "$URL - " . $Reason);

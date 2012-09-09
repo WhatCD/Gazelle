@@ -528,7 +528,7 @@ foreach ($TorrentList as $Torrent) {
 					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$HasFile ? 'DL' : 'Missing'?></a>
 <?	if (($LoggedUser['FLTokens'] > 0) && $HasFile && ($Size < 1073741824) 
 		&& !in_array($TorrentID, $TokenTorrents) && ($FreeTorrent == '0') && ($LoggedUser['CanLeech'] == '1')) { ?>
-						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onClick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?	} ?>					
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
 <?	if($CanEdit) { ?>
@@ -602,7 +602,7 @@ if (count($Requests) > 0) {
 	$i = 0;
 ?>
 		<div class="box">
-			<div class="head"><span style="font-weight: bold;">Requests (<?=count($Requests)?>)</span> <span style="float:right;"><a href="#" onClick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span></div>
+			<div class="head"><span style="font-weight: bold;">Requests (<?=count($Requests)?>)</span> <span style="float:right;"><a href="#" onclick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span></div>
 			<table id="requests" class="request_table hidden">
 				<tr class="colhead">
 					<td>Format / Bitrate / Media</td>
@@ -626,7 +626,7 @@ if (count($Requests) > 0) {
 		}
 ?>
 				<tr class="requestrows <?=(++$i%2?'rowa':'rowb')?>">
-					<td><a href="requests.php?action=view&id=<?=$Request['ID']?>"><?=$FormatString?> / <?=$BitrateString?> / <?=$MediaString?></a></td>
+					<td><a href="requests.php?action=view&amp;id=<?=$Request['ID']?>"><?=$FormatString?> / <?=$BitrateString?> / <?=$MediaString?></a></td>
 					<td>
 						<form id="form_<?=$Request['ID']?>">
 							<span id="vote_count_<?=$Request['ID']?>"><?=count($RequestVotes['Voters'])?></span>
@@ -654,7 +654,7 @@ if(count($Collages)>0) {
 		$Range = range(0,count($Collages) - 1);
 		shuffle($Range);
 		$Indices = array_slice($Range, 0, MAX_COLLAGES);
-		$SeeAll = ' <a href="#" onClick="$(\'.collage_rows\').toggle(); return false;">(See all)</a>';
+		$SeeAll = ' <a href="#" onclick="$(\'.collage_rows\').toggle(); return false;">(See all)</a>';
 	} else {
 		$Indices = range(0, count($Collages)-1);
 		$SeeAll = '';
@@ -699,7 +699,7 @@ if(count($PersonalCollages)>0) {
 		$Range = range(0,count($PersonalCollages) - 1);
 		shuffle($Range);
 		$Indices = array_slice($Range, 0, MAX_PERS_COLLAGES);
-		$SeeAll = ' <a href="#" onClick="$(\'.personal_rows\').toggle(); return false;">(See all)</a>';
+		$SeeAll = ' <a href="#" onclick="$(\'.personal_rows\').toggle(); return false;">(See all)</a>';
 	} else {
 		$Indices = range(0, count($PersonalCollages)-1);
 		$SeeAll = '';

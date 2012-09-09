@@ -157,15 +157,19 @@ show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],
 				<h3>Search this thread:</h3>
 				<form action="forums.php" method="get">
 					<table cellpadding="6" cellspacing="1" border="0" class="layout border">	
-						<input type="hidden" name="action" value="search" />
-						<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
 						<tr>
 							<td><strong>Search for:</strong></td><td><input type="text" id="searchbox" name="search" size="70" /></td>
 						</tr>
 						<tr>
 							<td><strong>Username:</strong></td><td><input type="text" id="username" name="user" size="70" /></td>
 						</tr>
-						<tr><td colspan="2" style="text-align: center"><input type="submit" name="submit" value="Search" /></td></tr>
+						<tr>
+							<td colspan="2" style="text-align: center">
+								<input type="hidden" name="action" value="search" />
+								<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
+								<input type="submit" name="submit" value="Search" />
+							</td>
+						</tr>
 					</table>
 				</form>
 				<br />
@@ -465,7 +469,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 <?
 if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 	if(check_forumperm($ForumID, 'Write') && !$LoggedUser['DisablePosting']) {
-	//TODO: Preview, come up with a standard, make it look like post or just a block of formatted bbcode, but decide and write some proper html
+	//TODO: Preview, come up with a standard, make it look like post or just a block of formatted BBcode, but decide and write some proper XHTML
 ?>
 			<br />
 			<h3>Post reply</h3>
@@ -576,7 +580,7 @@ foreach ($Forums as $Forum) {
 <?		$OpenGroup = true;
 	}
 ?>
-						<option value="<?=$Forum['ID']?>"<? if($ThreadInfo['ForumID'] == $Forum['ID']) { echo ' selected="selected"';} ?>><?=$Forum['Name']?></option>
+						<option value="<?=$Forum['ID']?>"<? if($ThreadInfo['ForumID'] == $Forum['ID']) { echo ' selected="selected"';} ?>><?=display_str($Forum['Name'])?></option>
 <? } ?>
 					</optgroup>
 					</select>

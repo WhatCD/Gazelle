@@ -72,7 +72,7 @@ if(!empty($_POST['user']) && check_perms('site_moderate_requests')) {
 }
 
 if(time_ago($UploadTime) < 3600 && $UploaderID != $FillerID && !check_perms('site_moderate_requests')) {
-	$Err = "There is a one hour grace period for new uploads, to allow the torrent's uploader to fill the request";
+	$Err = "There is a one hour grace period for new uploads to allow the torrent's uploader to fill the request.";
 }
 
 
@@ -94,10 +94,10 @@ list($Title, $RequesterID, $OldTorrentID, $RequestCategoryID, $RequestReleaseTyp
 
 
 if(!empty($OldTorrentID)) {
-	$Err = "This request has already been filled";
+	$Err = "This request has already been filled.";
 }
 if($RequestCategoryID != 0 && $TorrentCategoryID != $RequestCategoryID) {
-	$Err = "This torrent is of a different category than the request";
+	$Err = "This torrent is of a different category than the request. If the request is actually miscategorized, please contact staff.";
 }
 
 $CategoryName = $Categories[$RequestCategoryID - 1];
@@ -116,7 +116,7 @@ if($CategoryName == "Music") {
 	//if($Format == "FLAC" && $LogCue && !$WEBOverride && !$VinylOverride) {
 	if($Format == "FLAC" && $LogCue && $Media == 'CD') {
 		if(strpos($LogCue, "Log") && !$HasLog) {
-			$Err = "This request requires a log";
+			$Err = "This request requires a log.";
 		}
 
 		/*
@@ -124,33 +124,33 @@ if($CategoryName == "Music") {
 		 */
 
 		//if(strpos($LogCue, "Cue") && !$HasCue) {
-		//	$Err = "This request requires a cue";
+		//	$Err = "This request requires a cue.";
 		//}
 		 
 		if(strpos($LogCue, "%")) {
 			preg_match("/\d+/", $LogCue, $Matches);
 			if((int) $LogScore < (int) $Matches[0]) {
-				$Err = "This torrent's log score is too low";
+				$Err = "This torrent's log score is too low.";
 			}
 		}
 	}
 
 	if ($BitrateList === "Other") {
 		if ($Bitrate === "Lossless" || $Bitrate === "APS (VBR)" || $Bitrate === "V2 (VBR)" || $Bitrate === "V1 (VBR)" || $Bitrate === "256" || $Bitrate === "APX (VBR)" || $Bitrate === "V0 (VBR)" || $Bitrate === "q8.x (VBR)" || $Bitrate === "320" || $Bitrate === "24bit Lossless")
-			$Err = $Bitrate." is not allowed bitrate for this request";
+			$Err = $Bitrate." is not an allowed bitrate for this request.";
 	} else if($BitrateList && $BitrateList != "Any") {
 		if(strpos($BitrateList, $Bitrate) === false) {
-			$Err = $Bitrate." is not an allowed bitrate for this request";
+			$Err = $Bitrate." is not an allowed bitrate for this request.";
 		}
 	}
 	if($FormatList && $FormatList != "Any") {
 		if(strpos($FormatList, $Format) === false) {
-			$Err = $Format." is not an allowed format for this request";
+			$Err = $Format." is not an allowed format for this request.";
 		}
 	}
 	if($MediaList && $MediaList != "Any") {
 		if(strpos($MediaList, $Media) === false) {
-			$Err = $Media." is not allowed media for this request";
+			$Err = $Media." is not allowed media for this request.";
 		}
 	}
 }
@@ -181,7 +181,7 @@ $DB->query("SELECT UserID FROM requests_votes WHERE RequestID = ".$RequestID);
 $UserIDs = $DB->to_array();
 foreach ($UserIDs as $User) {
 	list($VoterID) = $User;
-	send_pm($VoterID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID), '');
+	send_pm($VoterID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."[/url]"), '');
 }
 
 $RequestVotes = get_votes_array($RequestID);

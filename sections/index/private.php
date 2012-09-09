@@ -376,7 +376,7 @@ $Cache->increment('usage_index');
 				if ($Tag == 'vanity.house') {
 					continue;
 				}
-				$TagLinks[] = "<a href=\"torrents.php?action=basic&taglist=$Tag\">$Tag</a> ";
+				$TagLinks[] = "<a href=\"torrents.php?action=basic&amp;taglist=$Tag\">$Tag</a> ";
 			}
 			$TagStr = "<br />\n<div class=\"tags\">".implode(', ', $TagLinks).'</div>';
 		}

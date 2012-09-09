@@ -15,7 +15,7 @@ if(!$Err) {
 	$DB->query("SELECT ID FROM wiki_articles WHERE Title='$P[title]'");
 	if($DB->record_count()>0) {
 		list($ID) = $DB->next_record();
-		$Err = 'An article with that name already exists <a href="wiki.php?action=article&id='.$ID.'">here</a>.';
+		$Err = 'An article with that name already exists <a href="wiki.php?action=article&amp;id='.$ID.'">here</a>.';
 	}
 }
 

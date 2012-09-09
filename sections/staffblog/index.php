@@ -117,7 +117,7 @@ foreach ($Blog as $BlogItem) {
 					<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <?=$Author?>
 		<? if(check_perms('admin_manage_blog')) { ?> 
 					- <a href="staffblog.php?action=editblog&amp;id=<?=$BlogID?>">[Edit]</a>
-					<a href="staffblog.php?action=deleteblog&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onClick="return confirm('Do you want to delete this?')">[Delete]</a>
+					<a href="staffblog.php?action=deleteblog&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Do you want to delete this?')">[Delete]</a>
 		 <? } ?>
 				</div>
 				<div class="pad">

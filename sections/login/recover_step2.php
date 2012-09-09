@@ -7,13 +7,13 @@ echo $Validate->GenerateJS('recoverform');
 <form name="recoverform" id="recoverform" method="post" action="" onsubmit="return formVal();">
 	<input type="hidden" name="key" value="<?=display_str($_REQUEST['key'])?>" />
 	<div style="width:500px;">
-		<font class="titletext">Reset your password - Final Step</font><br /><br />
+		<span class="titletext">Reset your password - Final Step</span><br /><br />
 <?
 if(empty($Reset)) {
 	if(!empty($Err)) {
 ?>
-		<font color="red"><strong><?=display_str($Err)?></strong></font><br /><br />
-<?	} ?> A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, contains at least a number or symbol<br /><br />
+		<strong class="important_text"><?=display_str($Err)?></strong><br /><br />
+<?	} ?> A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol.<br /><br />
 		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center" width="100%">
 			<tr valign="top">
 				<td align="right" style="width:100px;">Password&nbsp;</td>

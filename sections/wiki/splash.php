@@ -6,12 +6,12 @@
 	<div class="box pad center">
 		<p>Search the wiki for user created tutorials and information.</p>
 		<form action="wiki.php" method="get">
-			<input type="hidden" name="action" value="search">
+			<input type="hidden" name="action" value="search" />
 			<input type="text" name="search" size="80" />
 			<input value="Search" type="submit" class="hidden" />
 		</form>
 		<br />
-		<p>Additionally you can manually browse through the articles by their first letter.</p>
+		<p>Additionally, you can manually browse through the articles by their first letter.</p>
 		<span>
 			<a href="wiki.php?action=browse&amp;letter=a">A</a>&nbsp;&nbsp;
 			<a href="wiki.php?action=browse&amp;letter=b">B</a>&nbsp;&nbsp;

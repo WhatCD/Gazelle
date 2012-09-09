@@ -18,7 +18,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 		<h3>Contact Staff</h3>
 		<div id="below_box">
 			<p>If you are looking for help with a general question, we appreciate it if you would only message through the staff inbox, where we can all help you.</p>
-			<p>You can do that by <strong><a href="#" onClick="$('#compose').toggle();">sending a message to the Staff Inbox</a></strong>.</p>
+			<p>You can do that by <strong><a href="#" onclick="$('#compose').toggle();">sending a message to the Staff Inbox</a></strong>.</p>
 		</div>
 		<? print_compose_staff_pm(true); ?>
 		<br />

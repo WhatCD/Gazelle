@@ -85,7 +85,7 @@ while(list($ID, $Message, $LogTime) = $DB->next_record()) {
 			case "Request":
 				$RequestID = $MessageParts[$i + 1];
 				if (is_numeric($RequestID)) {
-					$Message = $Message.' '.$MessageParts[$i].' <a href="requests.php?action=view&id='.$RequestID.'"> '.$RequestID.'</a>';
+					$Message = $Message.' '.$MessageParts[$i].' <a href="requests.php?action=view&amp;id='.$RequestID.'"> '.$RequestID.'</a>';
 					$i++;
 				} else {
 					$Message = $Message.' '.$MessageParts[$i];

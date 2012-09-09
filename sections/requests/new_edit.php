@@ -155,7 +155,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 				<tr id="artist_tr">
 					<td class="label">Artist(s)</td>		
 					<td id="artistfields">
-						<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding 'Various Artists' as an artist, read <a href='wiki.php?action=article&id=369'>this</a> for more information on why.</p>
+						<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding 'Various Artists' as an artist, read <a href='wiki.php?action=article&amp;id=369'>this</a> for more information on why.</p>
 <?
 
 		if(!empty($ArtistForm)) {
@@ -343,7 +343,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 						<a href="torrents.php?id=<?=$GroupID?>">https://what.cd/torrents.php?id=<?=$GroupID?></a><br />
 						This request <?=($NewRequest?'will be':'is')?> associated with the above torrent group.
 <?		if (!$NewRequest) { 	?>
-						If this is incorrect, please <a href="reports.php?action=report&type=request&id=<?=$RequestID?>">report this request</a> so that staff can fix it.
+						If this is incorrect, please <a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">report this request</a> so that staff can fix it.
 <? 		}	?>
 						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
 					</td>

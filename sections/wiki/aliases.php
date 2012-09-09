@@ -10,7 +10,7 @@ show_header($Title." Aliases");
 ?>
 <div class="thin">
 	<div class="header">
-		<h2><a href="wiki.php?action=article&id=<?=$ArticleID?>"><?=$Title?></a> Aliases</h2>
+		<h2><a href="wiki.php?action=article&amp;id=<?=$ArticleID?>"><?=$Title?></a> Aliases</h2>
 		<div class="linkbox">
 			Aliases are exact search strings or names that can be used to link to an article. [[Alias]]
 		</div>

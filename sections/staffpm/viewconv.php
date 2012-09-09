@@ -117,8 +117,8 @@ if ($ConvID = (int)$_GET['id']) {
 					<option value="<?=$ID?>"><?=$Name?></option>
 <?		} ?>
 				</select>
-				<input type="button" value="Set message" onClick="SetMessage();" />
-				<input type="button" value="Create new / Edit" onClick="location.href='staffpm.php?action=responses&convid=<?=$ConvID?>'" />
+				<input type="button" value="Set message" onclick="SetMessage();" />
+				<input type="button" value="Create new / Edit" onclick="location.href='staffpm.php?action=responses&amp;convid=<?=$ConvID?>'" />
 			</div>
 		</div>
 <?	}
@@ -198,25 +198,25 @@ if ($ConvID = (int)$_GET['id']) {
 <?		} ?>
 						</optgroup>
 					</select>
-					<input type="button" onClick="Assign();" value="Assign" />
+					<input type="button" onclick="Assign();" value="Assign" />
 <?	} elseif ($IsFLS) {	// FLS assign button ?>
-					<input type="button" value="Assign to staff" onClick="location.href='staffpm.php?action=assign&to=staff&convid=<?=$ConvID?>';" />
-					<input type="button" value="Assign to forum staff" onClick="location.href='staffpm.php?action=assign&to=forum&convid=<?=$ConvID?>';" />
+					<input type="button" value="Assign to staff" onclick="location.href='staffpm.php?action=assign&amp;to=staff&amp;convid=<?=$ConvID?>';" />
+					<input type="button" value="Assign to forum staff" onclick="location.href='staffpm.php?action=assign&amp;to=forum&amp;convid=<?=$ConvID?>';" />
 <?	}
 
 	if ($Status != 'Resolved') { ?>
-					<input type="button" value="Resolve" onClick="location.href='staffpm.php?action=resolve&id=<?=$ConvID?>';" />
+					<input type="button" value="Resolve" onclick="location.href='staffpm.php?action=resolve&amp;id=<?=$ConvID?>';" />
 <?			if ($IsFLS) {  //Moved by request ?>
-					<input type="button" value="Common answers" onClick="$('#common_answers').toggle();" />
+					<input type="button" value="Common answers" onclick="$('#common_answers').toggle();" />
 					<input type="button" id="previewbtn" value="Preview" onclick="PreviewMessage();" />
 <?			} ?>
 					<input type="submit" value="Send message" />
 <?	} else { ?>
-					<input type="button" value="Unresolve" onClick="location.href='staffpm.php?action=unresolve&id=<?=$ConvID?>';" />
+					<input type="button" value="Unresolve" onclick="location.href='staffpm.php?action=unresolve&amp;id=<?=$ConvID?>';" />
 <?	} 
 	if (check_perms('users_give_donor')) { ?>
 					<br />	
-					<input type="button" value="Make Donor" onClick="location.href='staffpm.php?action=make_donor&id=<?=$ConvID?>';" />
+					<input type="button" value="Make Donor" onclick="location.href='staffpm.php?action=make_donor&amp;id=<?=$ConvID?>';" />
 <?	} ?>
 				</form>
 			</div>

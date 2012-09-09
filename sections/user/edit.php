@@ -297,9 +297,9 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label">Preset</td>
 				<td>
-					<button type="button" onClick="ParanoiaResetOff()">Show everything</button>
-					<button type="button" onClick="ParanoiaResetStats()">Show stats only</button>
-					<!--<button type="button" onClick="ParanoiaResetOn()">Show nothing</button>-->
+					<button type="button" onclick="ParanoiaResetOff()">Show everything</button>
+					<button type="button" onclick="ParanoiaResetStats()">Show stats only</button>
+					<!--<button type="button" onclick="ParanoiaResetOn()">Show nothing</button>-->
 				</td>
 			</tr>
 			<tr>
@@ -419,7 +419,7 @@ list($ArtistsAdded) = $DB->next_record();
 				<td>
 					<label><input type="checkbox" name="resetpasskey" />
 					Any active torrents must be downloaded again to continue leeching/seeding.</label> <br />
-					<a href="wiki.php?action=article&name=Passkey" >See also this wiki article</a>
+					<a href="wiki.php?action=article&amp;name=Passkey">See also this wiki article</a>
 				</td>
 			</tr>
 			<tr class="colhead_dark">

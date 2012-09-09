@@ -26,7 +26,7 @@ $StaffPMs = $DB->query("
 	<div class="header">
 		<h2>Staff PMs</h2>
 		<div class="linkbox">
-			<a href="#" onClick="$('#compose').toggle();">[Compose New]</a>
+			<a href="#" onclick="$('#compose').toggle();">[Compose New]</a>
 		</div>
 	</div>
 	<br />

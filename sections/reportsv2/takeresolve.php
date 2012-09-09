@@ -249,7 +249,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 		}
 		
 		if($Warning > 0) {
-			$PM .= "\nThis has resulted in a [url=http://".NONSSL_SITE_URL."/wiki.php?action=article&id=218]".$Warning." week warning.[/url]\n";	
+			$PM .= "\nThis has resulted in a [url=http://".NONSSL_SITE_URL."/wiki.php?action=article&amp;id=218]".$Warning." week warning.[/url]\n";	
 		}
 		
 		if($Upload) {

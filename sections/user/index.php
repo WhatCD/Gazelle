@@ -31,10 +31,14 @@ switch ($_REQUEST['action']) {
 		header('Location: user.php?action=notify');
 		break;
 	case 'search':// User search
+		
+		
 		if (check_perms('admin_advanced_user_search') && check_perms('users_view_ips') && check_perms('users_view_email')) {
+		
 			include('advancedsearch.php');
-		} else 
+		} else { 
 			include('search.php');
+		}
 		break;
 	case 'edit':
 		include('edit.php');

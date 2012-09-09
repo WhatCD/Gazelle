@@ -59,7 +59,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 				'report_messages' => array(
 					'This report type is only for the very urgent reports, usually for personal information being found within a torrent.',
 					'Abusing the Urgent reports could result in a warning or worse',
-					'As by default this report type gives the staff absolutely no information about the problem, please be as clear as possible in your comments as to the problem'
+					'As this report type gives the staff absolutely no information about the problem, please be as clear as possible in your comments about what the problem is.'
 				),
 				'report_fields' => array(
 					'sitelink' => '0',
@@ -581,7 +581,7 @@ Your torrent has been labeled as having bad file names and is now eligible for t
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.10.1]2.10.1[/url]. Cassettes are allowed under strict conditions.
-[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.10.1.1]2.10.1.1[/url]. Releases available only on cassette may be uploaded under special strict conditions (see [url=http://'.NONSSL_SITE_URL.'/wiki.php?action=article&id=593]this wiki[/url] for information on cassette ripping). Cassette-sourced uploads must be approved by staff first (see [url=http://'.NONSSL_SITE_URL.'/wiki.php?action=article&id=681]this wiki[/url] for details on the approval process). This also applies to soundboard releases where a tape generation can be found in the lineage (either the tape is not in the first generation or there are multiple tape generations). See [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.6.6]2.6.6[/url] for more information.
+[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.10.1.1]2.10.1.1[/url]. Releases available only on cassette may be uploaded under special strict conditions (see [url=http://'.NONSSL_SITE_URL.'/wiki.php?action=article&amp;id=593]this wiki[/url] for information on cassette ripping). Cassette-sourced uploads must be approved by staff first (see [url=http://'.NONSSL_SITE_URL.'/wiki.php?action=article&amp;id=681]this wiki[/url] for details on the approval process). This also applies to soundboard releases where a tape generation can be found in the lineage (either the tape is not in the first generation or there are multiple tape generations). See [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.6.6]2.6.6[/url] for more information.
 [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.10.1.2]2.10.1.2[/url]. You must contact a moderator privately for approval before uploading. Include proof in the form of discography information from a reputable source as well as the spectrals for 2 songs in your message.
 Your torrent was reported because it contains an unapproved cassette rip.'
 				)
@@ -619,7 +619,7 @@ Your torrent was reported because one or more tracks contain encoding errors.'
 					'upload' => '0',
 					'warn' => '0',
 					'delete' => '0',
-					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.2.10.3]2.2.10.3[/url]. A FLAC upload with an EAC or XLD rip log that scores 100% on the log checker replaces one with a lower score... . Note: A FLAC upload with a log that scores 95% for not defeating the audio cache may be rescored to 100% following the procedure outlined in [url=http://'.NONSSL_SITE_URL.'/wiki.php?action=article&id=219]this wiki[/url].
+					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.2.10.3]2.2.10.3[/url]. A FLAC upload with an EAC or XLD rip log that scores 100% on the log checker replaces one with a lower score... . Note: A FLAC upload with a log that scores 95% for not defeating the audio cache may be rescored to 100% following the procedure outlined in [url=http://'.NONSSL_SITE_URL.'/wiki.php?action=article&amp;id=219]this wiki[/url].
 [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.2.10.5]2.2.10.5[/url]. XLD and EAC logs in languages other than English require a manual log checker score adjustment by staff.
 [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.2.10.6.2]2.2.10.6.2[/url]. If you created a CD range rip that has matching CRCs for test and copy, and where every track has an AccurateRip score of 2 or more, then you may submit your torrent for manual score adjustment.
 [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.2.10.9.2]2.2.10.9.2[/url]. If you find that an appended log has not been scored properly, please report the torrent and use the log rescore option.

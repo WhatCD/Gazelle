@@ -105,19 +105,19 @@ $DB->set_query_id($RS);
 	<br />
 	<div class="linkbox">
 <?
-$Pages=get_pages($Page,$NumResults,ARTICLES_PER_PAGE,'action=search&amp;type='.display_str($_GET['type']).'&amp;search='.display_str($_GET['search']));
+$Pages=get_pages($Page,$NumResults,ARTICLES_PER_PAGE);
 echo $Pages;
 ?>
 	</div>
 <table width="100%">
 	<tr class="colhead">
 		<td>Article</td>
-		<td>Last Updated</td>
+		<td>Last updated on</td>
 		<td>Last edited by</td>
 	</tr>
 <? while(list($ID, $Title, $Date, $UserID) = $DB->next_record()) {?>
 	<tr>
-		<td><a href="wiki.php?action=article&id=<?=$ID?>"><?=$Title?></a></td>
+		<td><a href="wiki.php?action=article&amp;id=<?=$ID?>"><?=$Title?></a></td>
 		<td><?=$Date?></td>
 		<td><?=format_username($UserID, false, false, false)?></td>
 	</tr>

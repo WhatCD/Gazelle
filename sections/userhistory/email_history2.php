@@ -159,7 +159,7 @@ if ($Old) {
 	<div class="header">
 		<h2>Email history for <a href="user.php?id=<?=$UserID ?>"><?=$Username ?></a></h2>
 		<div class=" linkbox center">
-			<a href="userhistory.php?action=email&userid=<?=$UserID?>"><strong>Old email history</strong></a>
+			<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>"><strong>Old email history</strong></a>
 		</div>
 	</div>
 	<br />
@@ -246,7 +246,7 @@ if ($Old) {
 		ob_end_clean();
 ?>
 		<tr class="rowa">
-			<td><?=display_str($Record['Email'])?><?=(($MatchCount > 0) ? ' <a href="#" onClick="$(\'#matches_'.$j.'\').toggle();return false;">('.$MatchCount.')</a>' : '')?></td>
+			<td><?=display_str($Record['Email'])?><?=(($MatchCount > 0) ? ' <a href="#" onclick="$(\'#matches_'.$j.'\').toggle();return false;">('.$MatchCount.')</a>' : '')?></td>
 			<td><?=time_diff($Record['StartTime'])?></td>
 			<td><?=time_diff($Record['EndTime'])?></td>
 			<td><?=time_diff($Record['ElapsedTime'])?></td>
@@ -303,7 +303,7 @@ if ($OldMatches) {
 }
 ?>
 		<tr class="rowa">
-			<td><?=display_str($Invite['Email'])?><?=(($MatchCount > 0) ? ' <a href="#" onClick="$(\'#matches_invite\').toggle();return false;">('.$MatchCount.')</a>' : '')?></td>
+			<td><?=display_str($Invite['Email'])?><?=(($MatchCount > 0) ? ' <a href="#" onclick="$(\'#matches_invite\').toggle();return false;">('.$MatchCount.')</a>' : '')?></td>
 			<td>Never</td>
 			<td><?=time_diff($Invite['EndTime'])?></td>
 			<td><?=time_diff($Invite['AccountAge'])?></td>

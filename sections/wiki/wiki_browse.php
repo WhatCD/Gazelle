@@ -1,6 +1,13 @@
 <?
+$Title = 'Browse wiki articles';
+if(!empty($_GET['letter'])) {
+	$Letter = strtoupper(substr($_GET['letter'], 0, 1));
+	if($Letter !== '1') {
+		$Title .= ' ('.$Letter.')';
+	}
+}
+
 show_header($Title);
-$Letter = strtoupper(substr($_GET['letter'],0,1));
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS 
 	w.ID, 
@@ -9,8 +16,8 @@ $sql = "SELECT SQL_CALC_FOUND_ROWS
 	w.Author
 	FROM wiki_articles AS w
 	WHERE w.MinClassRead <= '".$LoggedUser['EffectiveClass']."'";
-if($Letter!=='1') {
-	$sql .= " AND UPPER(LEFT(w.Title,1)) = '".db_string($Letter)."'";
+if($Letter !== '1') {
+	$sql .= " AND LEFT(w.Title,1) = '".db_string($Letter)."'";
 } else {
 	$Letter = 'All';
 }
@@ -18,23 +25,21 @@ $sql .= " ORDER BY Title";
 
 $DB->query($sql);
 
-$Title = 'Browse articles';
-if($Letter) { $Title.= ' ('.$Letter.')'; }
 ?>
 <div class="thin">
 <? if($Letter) { ?>
 	<div class="header">
-		<h2>Browse articles (<?=$Letter?>)</h2>
+		<h2><?=$Title?></h2>
 	</div>
 	<table width="100%" style="margin-bottom:10px;">
 		<tr class="colhead">
 			<td>Article</td>
-			<td>Last Updated</td>
+			<td>Last updated on</td>
 			<td>Last edited by</td>
 		</tr>
 <? 	while(list($ID, $Title, $Date, $UserID) = $DB->next_record()) {?>
 		<tr>
-			<td><a href="wiki.php?action=article&id=<?=$ID?>"><?=$Title?></a></td>
+			<td><a href="wiki.php?action=article&amp;id=<?=$ID?>"><?=$Title?></a></td>
 			<td><?=$Date?></td>
 			<td><?=format_username($UserID, false, false, false)?></td>
 		</tr>
@@ -44,13 +49,13 @@ if($Letter) { $Title.= ' ('.$Letter.')'; }
 	<div class="box pad center">
 		<p>Search the wiki for user created tutorials and information.</p>
 		<form action="wiki.php" method="get">
-			<input type="hidden" name="action" value="search">
+			<input type="hidden" name="action" value="search" />
 			<input type="hidden" name="nojump" value="1" />
 			<input type="text" name="search" size="80" />
 			<input value="Search" type="submit" class="hidden" />
 		</form>
 		<br />
-		<p>Additionally you can manually browse through the articles by their first letter.</p>
+		<p>Additionally, you can manually browse through the articles by their first letter.</p>
 		<span>
 			<a href="wiki.php?action=browse&amp;letter=a">A</a>&nbsp;&nbsp;
 			<a href="wiki.php?action=browse&amp;letter=b">B</a>&nbsp;&nbsp;

@@ -1212,22 +1212,19 @@ function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled 
 		return "Unknown [$UserID]";
 	}
 	
-	$str = '';
+	$Str = '';
 	
 	if ($Title) {
-		$str .= '<strong>';
-	}
-	
-	$str.='<a href="user.php?id='.$UserID.'">'.$UserInfo['Username'].'</a>';
-	if ($Title) {
-		$str .= '</strong>';
+		$Str .= '<strong><a href="user.php?id='.$UserID.'">'.$UserInfo['Username'].'</a></strong>';
+	} else {
+		$Str .= '<a href="user.php?id='.$UserID.'">'.$UserInfo['Username'].'</a>';
 	}
 
 	if ($Badges) {
-		$str.=($UserInfo['Donor'] == 1) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>' : '';
+		$Str .= ($UserInfo['Donor'] == 1) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>' : '';
 	}
-	$str.=($IsWarned && $UserInfo['Warned']!='0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned" /></a>' : '';
-	$str.=($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '';
+	$Str .= ($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned" /></a>' : '';
+	$Str .= ($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '';
 
 	if ($Badges) {
 		$ClassesDisplay = array();
@@ -1236,30 +1233,34 @@ function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled 
 				$ClassesDisplay[] = '<span class="secondary_class" title="'.$Classes[$PermID]['Name'].'">'.$PermHTML.'</span>';
 			}
 		}
-		$str .= ((!empty($ClassesDisplay))?'&nbsp;':'').implode('&nbsp;', $ClassesDisplay);
+		if(!empty($ClassesDisplay)) {
+			$Str .= implode('&nbsp;', $ClassesDisplay);
+		}
 	}
 
-	if ($Title && $Class) {
-		$str .= '<strong>';
+	if ($Class) {
+		if ($Title) {
+			$Str .= ' <strong>('.make_class_string($UserInfo['PermissionID']).')</strong>';
+		} else {
+			$Str .= ' ('.make_class_string($UserInfo['PermissionID']).')';
+		}
 	}
-	$str.=($Class) ? ' ('.make_class_string($UserInfo['PermissionID']).')' : '';
-	if ($Title && $Class) {
-		$str .= '</strong>';
-	}
+
 	if ($Title) {
 		// Image proxy CTs
 		if(check_perms('site_proxy_images') && !empty($UserInfo['Title'])) {
-			$UserInfo['Title'] = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
-																				return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
-																			  }, $UserInfo['Title']);
+			$UserInfo['Title'] = preg_replace_callback('~src=("?)(http.+?)(["\s>])~',
+				function($Matches) {
+					return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
+				},
+				$UserInfo['Title']);
 		}
 		
-		$str.='</strong>';
 		if ($UserInfo['Title']) {
-			$str.= ' <span class="user_title">('.$UserInfo['Title'].')</span>';
+			$Str .= ' <span class="user_title">('.$UserInfo['Title'].')</span>';
 		}
 	}
-	return $str;
+	return $Str;
 }
 
 function make_class_string($ClassID) {
@@ -2436,7 +2437,7 @@ function freeleech_groups($GroupIDs, $FreeNeutral = 1, $FreeLeechType = 0) {
 
 /**
  * Used to check if keys in $_POST and $_GET are all set
- * This reduces if statement redundancy for alot of variables
+ * This reduces 'if' statement redundancy for a lot of variables
  */
 function isset_request($Request, $Keys=NULL, $AllowEmpty = False, $Error=0) {
     if(isset($Keys)) {
@@ -2468,9 +2469,9 @@ require(SERVER_ROOT.'/sections/'.$Document.'/index.php');
 $Debug->set_flag('completed module execution');
 
 /* Required in the absence of session_start() for providing that pages will change 
-upon hit rather than being browser cache'd for changing content.
+upon hit rather than being browser cached for changing content.
 
-Old versions of Internet explorer choke when downloading binary files over HTTPS with disabled cache.
+Old versions of Internet Explorer choke when downloading binary files over HTTPS with disabled cache.
 Define the following constant in files that handle file downloads */
 if(!defined('IE_WORKAROUND_NO_CACHE_HEADERS')) {
 	header('Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0');

@@ -122,7 +122,7 @@ if(check_perms('site_send_unlimited_invites')) {
 			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
 <?	} 
     if($LoggedUser['FLTokens'] > 0) { ?>
-			<li id="fl_tokens"><a href="wiki.php?action=article&id=754">Tokens: </a><span class="stat"><a href="userhistory.php?action=token_history&userid=<?=$LoggedUser['ID']?>"><?=$LoggedUser['FLTokens']?></a></span></li>
+			<li id="fl_tokens"><a href="wiki.php?action=article&amp;id=754">Tokens: </a><span class="stat"><a href="userhistory.php?action=token_history&amp;userid=<?=$LoggedUser['ID']?>"><?=$LoggedUser['FLTokens']?></a></span></li>
 <?	} ?>
 		</ul>
 <?
@@ -451,7 +451,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 			<li id="searchbar_wiki">
 				<span class="hidden">Wiki: </span>
 				<form action="wiki.php" method="get">
-					<input type="hidden" name="action" value="search">
+					<input type="hidden" name="action" value="search" />
 					<input 
 						onfocus="if (this.value == 'Wiki') this.value='';"
 						onblur="if (this.value == '') this.value='Wiki';"

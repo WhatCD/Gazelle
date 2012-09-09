@@ -178,7 +178,7 @@ function user_dupes_table($UserID) {
 		$DupeInfo = user_info($DupeID);
 ?>
 					<td align="left"><?=format_username($DupeID, true, true, true, true)?>
-						(<a href="user.php?action=dupes&dupeaction=remove&auth=<?=$LoggedUser['AuthKey']?>&userid=<?=$UserID?>&removeid=<?=$DupeID?>" onClick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');">x</a>)</td>
+						(<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');">x</a>)</td>
 <?
 		if ($i == 5) {
 			$i = 0;
@@ -201,7 +201,7 @@ function user_dupes_table($UserID) {
 							<div id="editdupecomments" class="<?=$DupeCount?'hidden':''?>">
 								<textarea name="dupecomments" onkeyup="resize('dupecommentsbox');" id="dupecommentsbox" cols="65" rows="5" style="width:98%;"><?=display_str($Comments)?></textarea>
 							</div>
-							<span style="float:right; font-style: italic;"><a href="#" onClick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;">(Edit linked account comments)</a>
+							<span style="float:right; font-style: italic;"><a href="#" onclick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;">(Edit linked account comments)</a>
 						</td>
 					</tr>
 				</table>

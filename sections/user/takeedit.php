@@ -15,7 +15,7 @@ if (!$U) {
 
 $Permissions = get_permissions($U['PermissionID']);
 if ($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Permissions['Class'])) {
-	send_irc("PRIVMSG ".ADMIN_CHAN." :User ".$LoggedUser['Username']." (http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID'].") just tried to edit the profile of http://".NONSSL_SITE_URL."/user.php?id=".$_REQUEST['userid']);
+	send_irc("PRIVMSG ".ADMIN_CHAN." :User ".$LoggedUser['Username']." (https://".SSL_SITE_URL."/user.php?id=".$LoggedUser['ID'].") just tried to edit the profile of https://".SSL_SITE_URL."/user.php?id=".$_REQUEST['userid']);
 	error(403);
 }
 

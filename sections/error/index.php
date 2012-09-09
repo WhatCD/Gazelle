@@ -21,16 +21,16 @@ if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 			break;
 		case '404':
 			$Title = "Error 404";
-			$Description = "You just tried to go to a page that doesn't really exist.";
+			$Description = "You just tried to go to a page that doesn't exist.";
 			break;
 		case '0':
 			$Title = "Invalid Input";
-			$Description = "Something was wrong with the input provided with your request and the server is refusing to fulfill it.";
+			$Description = "Something was wrong with the input provided with your request, and the server is refusing to fulfill it.";
 			notify(STATUS_CHAN,'PHP-0');
 			break;
 		case '-1':
 			$Title = "Invalid request";
-			$Description = "Something was wrong with your request and the server is refusing to fulfill it.";
+			$Description = "Something was wrong with your request, and the server is refusing to fulfill it.";
 			break;
 		default:
 			if(!empty($Error)) {

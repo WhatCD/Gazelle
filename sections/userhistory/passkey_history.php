@@ -40,14 +40,14 @@ $DB->query("SELECT
 		<td>Old</td>
 		<td>New</td>
 		<td>Changed</td>
-		<td>IP [<a href="/userhistory.php?action=ips&userid=<?=$UserID?>">H</a>]</td>
+		<td>IP [<a href="/userhistory.php?action=ips&amp;userid=<?=$UserID?>">H</a>]</td>
 	</tr>
 <? while(list($OldPassKey, $NewPassKey, $ChangeTime, $ChangerIP) = $DB->next_record()){ ?>
 	<tr class="rowa">
 		<td><?=display_str($OldPassKey)?></td>
 		<td><?=display_str($NewPassKey)?></td>
 		<td><?=time_diff($ChangeTime)?></td>
-		<td><?=display_str($ChangerIP)?> [<a href="user.php?action=search&ip_history=on&ip=<?=display_str($ChangerIP)?>" title="Search">S</a>]<br /><?=display_str(gethostbyip($ChangerIP))?></td>
+		<td><?=display_str($ChangerIP)?> [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" title="Search">S</a>]<br /><?=display_str(gethostbyip($ChangerIP))?></td>
 	</tr>
 <? } ?>
 </table>

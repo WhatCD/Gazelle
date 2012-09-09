@@ -93,7 +93,7 @@ foreach($Friends as $Friend) {
 	if(empty($HeavyInfo['DisableAvatars'])) {
 		if(!empty($Avatar)) {
 			if(check_perms('site_proxy_images')) {
-				$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&i='.urlencode($Avatar);
+				$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Avatar);
 			}
 	?> 
 					<img src="<?=$Avatar?>" alt="<?=$Username?>'s avatar" width="50px" />

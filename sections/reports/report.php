@@ -148,7 +148,7 @@ switch($Short) {
 	<br />
 
 	<div class="box pad center">
-		<p><strong>It will greatly increase the turnover rate of the updates if you can fill in as much of the following details in as possible</strong></p>
+		<p><strong>It will greatly increase the turnover rate of the updates if you can fill in as much of the following details as possible.</strong></p>
 		<form action="" method="post">
 			<input type="hidden" name="action" value="takereport" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

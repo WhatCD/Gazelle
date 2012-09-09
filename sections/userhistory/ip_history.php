@@ -66,7 +66,7 @@ function UnBan(ip, id, elemID) {
 		xmlhttp.onreadystatechange=function() {
   			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 				document.getElementById(elemID).innerHTML = "Ban";
-				document.getElementById(elemID).onClick = function() { Ban(ip, id, elemID); return false;};
+				document.getElementById(elemID).onclick = function() { Ban(ip, id, elemID); return false;};
 			}
 		}
 		xmlhttp.open("GET","tools.php?action=quick_ban&perform=delete&id="+id,true);
@@ -130,9 +130,9 @@ $Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 	</div>
 	<div class="linkbox">
 	<? if($UsersOnly) { ?>
-	<a href="userhistory.php?action=ips&userid=<?=$UserID?>">[View All IPs]</a>
+	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>">[View All IPs]</a>
 	<? } else { ?>
-	<a href="userhistory.php?action=ips&userid=<?=$UserID?>&usersonly=1">[View IPs With Users]</a>
+	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1">[View IPs With Users]</a>
 	<? } ?>
 	<br/>
 	<?=$Pages?>

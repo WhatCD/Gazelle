@@ -52,7 +52,7 @@ if (isset($_REQUEST['addtokens'])) {
 <div class="header">
 	<h2>Add freeleech tokens to all enabled users</h2>
 	<div class="linkbox">
-		<a href="tools.php?action=tokens&showabusers=1">[Show Abusers]</a>
+		<a href="tools.php?action=tokens&amp;showabusers=1">[Show Abusers]</a>
 	</div>
 </div>
 <div class="box pad" style="margin-left: auto; margin-right: auto; text-align:center; max-width: 40%">

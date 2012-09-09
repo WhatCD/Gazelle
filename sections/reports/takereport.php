@@ -83,7 +83,7 @@ if(in_array($Short, array('collages_comment', 'post', 'requests_comment', 'threa
 }
 
 foreach($Channels as $Channel) {
-	send_irc("PRIVMSG ".$Channel." :".$ReportID." - ".$LoggedUser['Username']." just reported a ".$Short.": http://".NONSSL_SITE_URL."/".$Link." : ".$Reason);
+	send_irc("PRIVMSG ".$Channel." :".$ReportID." - ".$LoggedUser['Username']." just reported a ".$Short.": https://".SSL_SITE_URL."/".$Link." : ".$Reason);
 }
 
 $Cache->delete_value('num_other_reports');

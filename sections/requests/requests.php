@@ -438,8 +438,10 @@ foreach($Categories as $CatKey => $CatName) {
 				<tr id="format_list">
 					<td class="label">Formats</td>
 					<td>
-						<input type="checkbox" id="toggle_formats" onchange="Toggle('formats', 0);" <?=(!$Submitted || !empty($FormatArray) && count($FormatArray) == count($Formats) ? ' checked="checked"' : '')?>/> <label for="toggle_formats">All</label>
-						<input type="checkbox" id="formats_strict" name="formats_strict"<?=(!empty($_GET['formats_strict']) ? ' checked="checked"' : '')?> /> <label for="formats_strict">Only selected</label>
+						<input type="checkbox" id="toggle_formats" onchange="Toggle('formats', 0);" <?=(!$Submitted || !empty($FormatArray) && count($FormatArray) == count($Formats) ? ' checked="checked"' : '')?>/>
+						<label for="toggle_formats">All</label>
+						<input type="checkbox" id="formats_strict" name="formats_strict"<?=(!empty($_GET['formats_strict']) ? ' checked="checked"' : '')?> />
+						<label for="formats_strict">Only specified</label>
 <?		foreach ($Formats as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
 						<input type="checkbox" name="formats[]" value="<?=$Key?>" id="format_<?=$Key?>"
@@ -451,8 +453,10 @@ foreach($Categories as $CatKey => $CatName) {
 				<tr id="bitrate_list">
 					<td class="label">Bitrates</td>
 					<td>
-						<input type="checkbox" id="toggle_bitrates" onchange="Toggle('bitrates', 0);"<?=(!$Submitted || !empty($BitrateArray) && count($BitrateArray) == count($Bitrates) ? ' checked="checked"' : '')?> /> <label for="toggle_bitrates">All</label>
-						<input type="checkbox" id="bitrate_strict" name="bitrate_strict"<?=(!empty($_GET['bitrate_strict']) ? ' checked="checked"' : '')?>/> <label for="bitrate_strict">Only selected</label>
+						<input type="checkbox" id="toggle_bitrates" onchange="Toggle('bitrates', 0);"<?=(!$Submitted || !empty($BitrateArray) && count($BitrateArray) == count($Bitrates) ? ' checked="checked"' : '')?> />
+						<label for="toggle_bitrates">All</label>
+						<input type="checkbox" id="bitrate_strict" name="bitrate_strict"<?=(!empty($_GET['bitrate_strict']) ? ' checked="checked"' : '')?>/>
+						<label for="bitrate_strict">Only specified</label>
 <?		foreach ($Bitrates as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
 						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
@@ -464,8 +468,10 @@ foreach($Categories as $CatKey => $CatName) {
 				<tr id="media_list">
 					<td class="label">Media</td>
 					<td>
-						<input type="checkbox" id="toggle_media" onchange="Toggle('media', 0);"<?=(!$Submitted || !empty($MediaArray) && count($MediaArray) == count($Media) ? ' checked="checked"' : '')?> /> <label for="toggle_media">All</label>
-						<input type="checkbox" id="media_strict" name="media_strict"<?=(!empty($_GET['media_strict']) ? ' checked="checked"' : '')?> /> <label for="media_strict">Only selected</label>
+						<input type="checkbox" id="toggle_media" onchange="Toggle('media', 0);"<?=(!$Submitted || !empty($MediaArray) && count($MediaArray) == count($Media) ? ' checked="checked"' : '')?> />
+						<label for="toggle_media">All</label>
+						<input type="checkbox" id="media_strict" name="media_strict"<?=(!empty($_GET['media_strict']) ? ' checked="checked"' : '')?> />
+						<label for="media_strict">Only specified</label>
 <?		foreach ($Media as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
 						<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"

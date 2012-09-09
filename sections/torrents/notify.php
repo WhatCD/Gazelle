@@ -86,7 +86,7 @@ $DB->set_query_id($Results);
 <form id="notificationform_<?=$FilterID?>">
 <table class="torrent_table cats checkboxes border">
 	<tr class="colhead">
-		<td style="text-align: center"><input type="checkbox" name="toggle" onClick="ToggleBoxes(this.form, this.checked)" /></td>
+		<td style="text-align: center"><input type="checkbox" name="toggle" onclick="ToggleBoxes(this.form, this.checked)" /></td>
 		<td class="small cats_col"></td>
 		<td style="width:100%;"><strong>Name</strong></td>
 		<td><strong>Files</strong></td>
@@ -153,7 +153,7 @@ $DB->set_query_id($Results);
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> 
 <?			if (($LoggedUser['FLTokens'] > 0) && ($TorrentInfo['Size'] < 1073741824)
 				&& !in_array($TorrentID, $TokenTorrents) && empty($TorrentInfo['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
-				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onClick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?			} ?>
 				| <a href="#" onclick="Clear(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a> ]
 			</span>

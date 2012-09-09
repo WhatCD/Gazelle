@@ -21,7 +21,7 @@ $Text = new TEXT;
 			<a href="staffpm.php?view=open">[Open]</a>
 			<a href="staffpm.php?view=resolved">[Resolved]</a>
 <?	if ($ConvID = (int)$_GET['convid']) { ?>
-			<a href="staffpm.php?action=viewconv&id=<?=$ConvID?>">[Back to conversation]</a>
+			<a href="staffpm.php?action=viewconv&amp;id=<?=$ConvID?>">[Back to conversation]</a>
 <?	} ?>
 		</div>
 	</div>
@@ -49,7 +49,7 @@ $Text = new TEXT;
 							  rows="10" cols="87"
 							  id="response_message_0">New message</textarea>
 					<br />
-					<input type="button" value="Save" id="save_0" onClick="SaveMessage(0);" />
+					<input type="button" value="Save" id="save_0" onclick="SaveMessage(0);" />
 				</div>
 			</form>
 		</div>
@@ -81,9 +81,9 @@ while(list($ID, $Message, $Name) = $DB->next_record()) {
 					</div>
 					<textarea rows="10" cols="87" id="response_message_<?=$ID?>" name="message"><?=display_str($Message)?></textarea>
 					<br />
-					<input type="button" value="Toggle preview" onClick="PreviewResponse(<?=$ID?>);" />
-					<input type="button" value="Delete" onClick="DeleteMessage(<?=$ID?>);" />
-					<input type="button" value="Save" id="save_<?=$ID?>" onClick="SaveMessage(<?=$ID?>);" />
+					<input type="button" value="Toggle preview" onclick="PreviewResponse(<?=$ID?>);" />
+					<input type="button" value="Delete" onclick="DeleteMessage(<?=$ID?>);" />
+					<input type="button" value="Save" id="save_<?=$ID?>" onclick="SaveMessage(<?=$ID?>);" />
 				</div>
 			</form>
 		</div>

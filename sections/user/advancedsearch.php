@@ -22,6 +22,8 @@ if (!empty($_GET['search'])) {
  
 define('USERS_PER_PAGE', 30);
 
+if(check_perms("tc_advanced_user_search")) { $IsTC = true; }
+
 function wrap($String, $ForceMatch = '', $IPSearch = false){
 	if(!$ForceMatch){
 		global $Match;
@@ -228,10 +230,12 @@ if(count($_GET)){
 				$Distinct = 'DISTINCT ';
 				$Join['he']=' JOIN users_history_emails AS he ON he.UserID=um1.ID ';
 				$Where[]= ' he.Email '.$Match.wrap($_GET['email']);
+				
 			} else {
 				$Where[]='um1.Email'.$Match.wrap($_GET['email']);
 			}
 		}
+		
 
 		if (!empty($_GET['email_cnt'])) {
 			$Query = "SELECT UserID FROM users_history_emails GROUP BY UserID HAVING COUNT(DISTINCT Email) ";
@@ -258,10 +262,12 @@ if(count($_GET)){
 				$Distinct = 'DISTINCT ';
 				$Join['hi']=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
 				$Where[]= ' hi.IP '.$Match.wrap($_GET['ip'], '', true);
+				
 			} else {
 				$Where[]='um1.IP'.$Match.wrap($_GET['ip'], '', true);
 			}
 		}
+		
 
 		if (!empty($_GET['cc'])) {
 			if ($_GET['cc_op'] == "equal") {
@@ -350,6 +356,8 @@ if(count($_GET)){
 		if($_GET['class']!=''){
 			$Where[]='um1.PermissionID='.wrap($_GET['class'], '=');
 		}
+		
+		
 		if($_GET['secclass']!=''){
 			$Join['ul']=' JOIN users_levels AS ul ON um1.ID=ul.UserID ';
 			$Where[]='ul.PermissionID='.wrap($_GET['secclass'], '=');
