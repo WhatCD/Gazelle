@@ -1234,7 +1234,7 @@ function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled 
 			}
 		}
 		if(!empty($ClassesDisplay)) {
-			$Str .= implode('&nbsp;', $ClassesDisplay);
+			$Str .= '&nbsp;'.implode('&nbsp;', $ClassesDisplay);
 		}
 	}
 
