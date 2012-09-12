@@ -88,6 +88,9 @@ switch ($_REQUEST['action']) {
 		$Cache->delete_value('notifications_new_'.$UserID);
 		$Cache->delete_value('collage_subs_user_new_'.$UserID);
 		// no break, load the profile
+	case 'user_subscribe':
+		include('subscribe.php');
+		break;
 	default:
 		if (isset($_REQUEST['id'])) {
 			include(SERVER_ROOT.'/sections/user/user.php');

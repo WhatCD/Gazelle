@@ -618,24 +618,8 @@ if(!$Properties['GroupID']) {
 }
 
 // Use this section to control freeleeches
-
-/*if($HasLog == "'4'" && $LogScoreAverage== 100){
-
-$T['FreeLeech']="'1'";
-$T['FreeLeechType']="'1'";
-$DB->query("INSERT IGNORE INTO users_points (UserID, GroupID, Points) VALUES ('$LoggedUser[ID]', '$GroupID', '1')");
-*/
-
-/*if($T['Format'] == "'FLAC'") {
-	$T['FreeLeech'] = "'1'";
-	$T['FreeLeechType'] = "'1'";
-} else {
-	$T['FreeLeech']="'0'";
-	$T['FreeLeechType']="'0'";
-}*/
-
-$T['FreeLeech']="'0'";
-$T['FreeLeechType']="'0'";
+$T['FreeLeech'] = 0;
+$T['FreeLeechType'] = 0;
 
 // Torrent
 $DB->query("
@@ -648,12 +632,12 @@ $DB->query("
 		(".$GroupID.", ".$LoggedUser['ID'].", ".$T['Media'].", ".$T['Format'].", ".$T['Encoding'].", 
 		".$T['Remastered'].", ".$T['RemasterYear'].", ".$T['RemasterTitle'].", ".$T['RemasterRecordLabel'].", ".$T['RemasterCatalogueNumber'].", 
 		".$T['Scene'].", ".$HasLog.", ".$HasCue.", '".db_string($InfoHash)."', ".$NumFiles.", ".$FileString.", '".$FilePath."', ".$TotalSize.", '".sqltime()."',
-		".$T['TorrentDescription'].", '".(($HasLog == "'1'") ? $LogScoreAverage : 0)."', ".$T['FreeLeech'].", ".$T['FreeLeechType'].")");
+		".$T['TorrentDescription'].", '".(($HasLog == "'1'") ? $LogScoreAverage : 0)."', '".$T['FreeLeech']."', '".$T['FreeLeechType']."')");
 
 $Cache->increment('stats_torrent_count');
 $TorrentID = $DB->inserted_id();
 
-update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => (int)$Properties['FreeLeech']));
+update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => $T['FreeLeech']));
 
 
 
@@ -727,7 +711,7 @@ if($Type == 'Music'){
 	if ($HasCue == "'1'") { $Announce .= " / Cue"; }
 	$Announce .= " / ".trim($Properties['Media']);
 	if ($Properties['Scene'] == "1") { $Announce .= " / Scene"; }
-	if ($Properties['FreeLeech'] == "1") { $Announce .= " / Freeleech!"; }
+	if ($T['FreeLeech'] == "1") { $Announce .= " / Freeleech!"; }
 }
 $Title = $Announce;
 

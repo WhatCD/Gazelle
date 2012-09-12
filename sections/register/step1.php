@@ -60,11 +60,7 @@ if(empty($Sent)) {
 		</tr>
 	</table>
 <? } else { ?>
-<<<<<<< HEAD
-	An email has been sent to the address that you provided. After you confirm your email address you will be able to log into your account.
-=======
 	An email has been sent to the address that you provided. After you confirm your email address, you will be able to log into your account.
->>>>>>> 3631ffa... Fixes a bunch of XHTML errors (e.g. unencoded ampersands) and other typos
 
 <? 		if($NewInstall) { echo "Since this is a new installation, you can log in directly without having to confirm your account."; }
 } ?>

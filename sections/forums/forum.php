@@ -100,6 +100,16 @@ show_header('Forums > '. $Forums[$ForumID]['Name']);
 				<br />
 			</div>
 		</div>
+<?     	
+	if(check_perms('users_mod')) {
+	$DB->query("SELECT ForumID from subscribed_forums WHERE ForumID='$ForumID' AND SubscriberID='$LoggedUser[ID]'");
+        if($DB->record_count() == 0) { ?>
+		[<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Subscribe to Forum</a>]
+<?      } else { ?> 
+		[<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Unsubscribe from Forum</a>]
+<?      } 
+	}?>
+
 	</div>
 <? if(check_perms('site_moderate_forums')) { ?>
 	<div class="linkbox">

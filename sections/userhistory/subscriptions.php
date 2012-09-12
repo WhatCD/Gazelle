@@ -30,13 +30,14 @@ $ShowCollapsed = (!isset($_GET['collapse']) && !isset($HeavyInfo['SubscriptionsC
 $sql = 'SELECT
 	SQL_CALC_FOUND_ROWS
 	MAX(p.ID) AS ID
-	FROM forums_posts AS p
-	LEFT JOIN forums_topics AS t ON t.ID = p.TopicID
-	JOIN users_subscriptions AS s ON s.TopicID = t.ID
-	LEFT JOIN forums AS f ON f.ID = t.ForumID
-	LEFT JOIN forums_last_read_topics AS l ON p.TopicID = l.TopicID AND l.UserID = s.UserID
-	WHERE s.UserID = '.$LoggedUser['ID'].'
-	AND p.ID <= IFNULL(l.PostID,t.LastPostID)
+	FROM (SELECT TopicID
+	FROM users_subscriptions 
+	WHERE UserID = '.$LoggedUser['ID'].') AS s
+	LEFT JOIN forums_last_read_topics AS l ON s.TopicID = l.TopicID AND l.UserID = '.$LoggedUser['ID'].'
+	JOIN forums_topics AS t ON  t.ID = s.TopicID
+	JOIN forums_posts AS p ON t.ID = p.TopicID
+	JOIN forums AS f ON f.ID = t.ForumID
+	WHERE p.ID <= IFNULL(l.PostID,t.LastPostID)
 	AND ((f.MinClassRead <= '.$LoggedUser['Class'];
 if(!empty($RestrictedForums)) {
 	$sql.=' AND f.ID NOT IN (\''.$RestrictedForums.'\')';
@@ -51,6 +52,7 @@ if($ShowUnread) {
 
 	$sql .= '
 	AND IF(l.PostID IS NULL OR (t.IsLocked = \'1\' && t.IsSticky = \'0\'), t.LastPostID, l.PostID) < t.LastPostID';
+	$sql .= ' OR (t.AuthorID != '.$LoggedUser['ID'].' AND l.PostID IS NULL)'; 
 
 }
 $sql .= '
