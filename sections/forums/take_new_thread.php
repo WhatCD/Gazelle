@@ -88,6 +88,7 @@ if(isset($_POST['subscribe'])) {
 }
 
 //auto subscribe
+/*
 if(check_perms('users_mod')) {
 $DB->query("SELECT SubscriberID FROM subscribed_forums WHERE ForumID = '$ForumID' AND SubscriberID <> '$LoggedUser[ID]'");
 while(list($SubscriberID) = $DB->next_record()) {
@@ -99,7 +100,7 @@ while(list($SubscriberID) = $DB->next_record()) {
 	 $Cache->delete_value('subscriptions_user_'.$SubscriberID);
 }
 }
-
+ */
 
 if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forums_polls_create')) {
 	$NoPoll = 1;
