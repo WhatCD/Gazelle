@@ -22,8 +22,6 @@ if (!empty($_GET['search'])) {
  
 define('USERS_PER_PAGE', 30);
 
-if(check_perms("tc_advanced_user_search")) { $IsTC = true; }
-
 function wrap($String, $ForceMatch = '', $IPSearch = false){
 	if(!$ForceMatch){
 		global $Match;

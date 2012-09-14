@@ -611,14 +611,16 @@ foreach($Categories as $CatKey => $CatName) {
 				</div>
 			</td>
 			<td class="nobr">
+<?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
 				<form id="form_<?=$RequestID?>">
 					<span id="vote_count_<?=$RequestID?>"><?=$VoteCount?></span>
-<?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
 					<input type="hidden" id="requestid_<?=$RequestID?>" name="requestid" value="<?=$RequestID?>" />
 					<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)"><strong>(+)</strong></a>
 				</form>
-<?  		} ?> 
+<?  		} else { ?>
+				<span id="vote_count_<?=$RequestID?>"><?=$VoteCount?></span>
+<?			} ?>
 			</td>
 			<td class="nobr">
 				<?=get_size($RequestVotes['TotalBounty'])?>

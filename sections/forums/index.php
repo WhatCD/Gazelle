@@ -136,11 +136,13 @@ if(!empty($_POST['action'])){
 		case 'edit_rules':
 			require(SERVER_ROOT.'/sections/forums/edit_rules.php');
 			break;
-        case 'warn':
-            require(SERVER_ROOT.'/sections/forums/warn.php');
-            break;
-	case 'forum_subscribe':
-	         	include('subscribe.php');
+		case 'thread_subscribe':
+			break;
+		case 'warn':
+			require(SERVER_ROOT.'/sections/forums/warn.php');
+			break;
+		case 'forum_subscribe':
+			include('subscribe.php');
 			break;
 		default:
 			error(404);
