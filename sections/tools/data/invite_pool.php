@@ -40,7 +40,7 @@ $DB->set_query_id($RS);
 	</div>
 	<br />
 	<div>
-		<form action="" method="get">
+		<form class="search_form" name="invites" action="" method="get">
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label"><strong>Email:</strong></td>
@@ -82,7 +82,7 @@ $DB->set_query_id($RS);
 			<td><?=time_diff($Expires)?></td>
 <? if(check_perms('users_edit_invites')){ ?>
 			<td>
-				<form action="" method="post">
+				<form class="delete_form" name="invite" action="" method="post">
 					<input type="hidden" name="action" value="invite_pool" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="invitekey" value="<?=display_str($InviteKey)?>" />

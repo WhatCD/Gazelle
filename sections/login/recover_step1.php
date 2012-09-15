@@ -2,7 +2,7 @@
 show_header('Recover Password','validate');
 echo $Validate->GenerateJS('recoverform');
 ?>
-<form name="recoverform" id="recoverform" method="post" action="" onsubmit="return formVal();">
+<form class="auth_form" name="recovery" id="recoverform" method="post" action="" onsubmit="return formVal();">
 	<div style="width:320px;">
 		<span class="titletext">Reset your password - Step 1</span><br /><br />
 <?

@@ -393,7 +393,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 		<ul>
 			<li id="searchbar_torrents">
 				<span class="hidden">Torrents: </span>
-				<form action="torrents.php" method="get">
+				<form class="search_form" name="torrents" action="torrents.php" method="get">
 <? if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?> 
 					<input type="hidden" name="action" value="advanced" />
 <? } ?>
@@ -412,7 +412,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 			</li>
 			<li id="searchbar_artists">
 				<span class="hidden">Artist: </span>
-				<form action="artist.php" method="get">
+				<form class="search_form" name="artists" action="artist.php" method="get">
 					<script type="text/javascript" src="static/functions/autocomplete.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/autocomplete.js')?>"></script>
 					<input id="artistsearch" 
 						onkeyup="autocomp.keyup(event);"
@@ -427,7 +427,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 			</li>
 			<li id="searchbar_requests">
 				<span class="hidden">Requests: </span>
-				<form action="requests.php" method="get">
+				<form class="search_form" name="requests" action="requests.php" method="get">
 					<input
 						spellcheck="false"
 						onfocus="if (this.value == 'Requests') this.value='';"
@@ -438,7 +438,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 			</li>
 			<li id="searchbar_forums">
 				<span class="hidden">Forums: </span>
-				<form action="forums.php" method="get">
+				<form class="search_form" name="forums" action="forums.php" method="get">
 					<input value="search" type="hidden" name="action" />
 					<input
 						onfocus="if (this.value == 'Forums') this.value='';"
@@ -450,7 +450,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 <!--
 			<li id="searchbar_wiki">
 				<span class="hidden">Wiki: </span>
-				<form action="wiki.php" method="get">
+				<form class="search_form" name="wiki" action="wiki.php" method="get">
 					<input type="hidden" name="action" value="search" />
 					<input 
 						onfocus="if (this.value == 'Wiki') this.value='';"
@@ -462,7 +462,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 -->
 			<li id="searchbar_log">
 				<span class="hidden">Log: </span>
-				<form action="log.php" method="get">
+				<form class="search_form" name="log" action="log.php" method="get">
 					<input
 						onfocus="if (this.value == 'Log') this.value='';"
 						onblur="if (this.value == '') this.value='Log';"
@@ -472,7 +472,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 			</li>
 			<li id="searchbar_users">
 				<span class="hidden">Users: </span>
-				<form action="user.php" method="get">
+				<form class="search_form" name="users" action="user.php" method="get">
 					<input type="hidden" name="action" value="search" />
 					<input
 						onfocus="if (this.value == 'Users') this.value='';"

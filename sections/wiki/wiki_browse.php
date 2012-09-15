@@ -48,7 +48,7 @@ $DB->query($sql);
 <? } ?>
 	<div class="box pad center">
 		<p>Search the wiki for user created tutorials and information.</p>
-		<form action="wiki.php" method="get">
+		<form class="search_form" name="wiki" action="wiki.php" method="get">
 			<input type="hidden" name="action" value="search" />
 			<input type="hidden" name="nojump" value="1" />
 			<input type="text" name="search" size="80" />

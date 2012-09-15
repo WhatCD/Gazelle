@@ -307,8 +307,8 @@ if($TopicID) {
 				</ul>
 				<strong>Votes:</strong> <?=number_format($TotalVotes)?><br />
 <? 	} else { ?>
-				<div id="poll_results">
-				<form id="polls" action="">
+				<div id="poll_container">
+				<form class="vote_form" name="poll" id="poll" action="">
 					<input type="hidden" name="action" value="poll"/>
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>"/>
 					<input type="hidden" name="topicid" value="<?=$TopicID?>" />
@@ -317,7 +317,7 @@ if($TopicID) {
 					<label for="answer_<?=$i?>"><?=display_str($Answers[$i])?></label><br />
 <? 		} ?>
 					<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank - Show the results!</label><br /><br />
-					<input type="button" onclick="ajax.post('index.php','polls',function(response){$('#poll_results').raw().innerHTML = response});" value="Vote" />
+					<input type="button" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote" />
 				</form>
 				</div>
 <? 	} ?>

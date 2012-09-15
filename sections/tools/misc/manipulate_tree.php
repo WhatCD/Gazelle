@@ -102,7 +102,7 @@ if($_POST['id']) {
 		<p style="color: red;text-align:center;"><?=$Msg?></p>
 	</div>
 	<? } ?>
-	<form action="" method="post">
+	<form class="manage_form" name="user" action="" method="post">
 		<input type="hidden" id="action" name="action" value="manipulate_tree" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<table class="layout">
@@ -132,8 +132,4 @@ if($_POST['id']) {
 	</form>
 </div>
 
-<?
-
-show_footer();
-
-?>
+<? show_footer(); ?>

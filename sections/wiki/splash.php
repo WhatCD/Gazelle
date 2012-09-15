@@ -5,7 +5,7 @@
 	</div>
 	<div class="box pad center">
 		<p>Search the wiki for user created tutorials and information.</p>
-		<form action="wiki.php" method="get">
+		<form class="search_form" name="wiki" action="wiki.php" method="get">
 			<input type="hidden" name="action" value="search" />
 			<input type="text" name="search" size="80" />
 			<input value="Search" type="submit" class="hidden" />
@@ -42,4 +42,4 @@
 		</span>
 	</div>
 </div>
-<?show_footer();?>
+<? show_footer(); ?>

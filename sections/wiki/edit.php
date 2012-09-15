@@ -12,7 +12,7 @@ show_header('Edit '.$Title);
 ?>
 <div class="thin">
 	<div class="box pad">
-		<form action="wiki.php" method="post">
+		<form class="edit_form" name="wiki_article" action="wiki.php" method="post">
 			<input type="hidden" name="action" value="edit" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="id" value="<?=$ArticleID?>" />

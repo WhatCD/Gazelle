@@ -52,7 +52,7 @@ while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $D
 				<?=time_diff($BannedUntil)?>
 			</td>	
 			<td>
-				<form action="" method="post">
+				<form class="manage_form" name="bans" action="" method="post">
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="id" value="<?=$ID?>" />
 					<input type="hidden" name="action" value="login_watch" />
@@ -61,7 +61,7 @@ while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $D
 			</td>
 <? if(check_perms('admin_manage_ipbans')) { ?>
 			<td>
-				<form action="" method="post">
+				<form class="manage_form" name="bans" action="" method="post">
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="id" value="<?=$ID?>" />
 					<input type="hidden" name="action" value="ip_ban" />

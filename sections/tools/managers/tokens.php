@@ -57,7 +57,7 @@ if (isset($_REQUEST['addtokens'])) {
 </div>
 <div class="box pad" style="margin-left: auto; margin-right: auto; text-align:center; max-width: 40%">
 	<?=$message?>
-	<form action="" method="post">
+	<form class="add_form" name="fltokens" action="" method="post">
 		<input type="hidden" name="action" value="tokens" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		Tokens to add: <input type="text" name="numtokens" size="5" style="text-align: right" value="0"><br /><br />
@@ -68,7 +68,7 @@ if (isset($_REQUEST['addtokens'])) {
 <br />
 <div class="box pad" style="margin-left: auto; margin-right: auto; text-align:center; max-width: 40%">
 	<?=$message?>
-	<form action="" method="post">
+	<form class="manage_form" name="fltokens" action="" method="post">
 		<input type="hidden" name="action" value="tokens" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		Tokens to set: <input type="text" name="numtokens" size="5" style="text-align: right" value="0"><br /><br />

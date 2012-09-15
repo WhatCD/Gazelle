@@ -3,7 +3,7 @@ show_header('Link an article');
 ?>
 <div class="thin">
 	<div class="box pad">
-		<form action="wiki.php" method="post">
+		<form class="add_form" name="aliases" action="wiki.php" method="post">
 			<input type="hidden" name="action" value="link" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<div>

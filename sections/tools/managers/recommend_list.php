@@ -21,7 +21,7 @@ $DB->query("SELECT
 	<div class="box" id="recommended">
 		<div class="head colhead_dark"><strong>Recommendations</strong></div>
 <?		if(!in_array($LoggedUser['ID'], $DB->collect('UserID'))){ ?>
-		<form action="tools.php" method="post" class="pad">
+		<form class="add_form" name="recommendations" action="tools.php" method="post" class="pad">
 			<input type="hidden" name="action" value="recommend_add" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">

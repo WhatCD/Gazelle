@@ -60,7 +60,7 @@ show_header($Title,'wiki,bbcode');
 		</div>
 		-->
 		<div class="box pad center">
-			<form action="wiki.php" method="get">
+			<form class="search_form" name="articles" action="wiki.php" method="get">
 				<input type="hidden" name="action" value="search" />
 				<input 
 					onfocus="if (this.value == 'Search Articles') this.value='';"
@@ -110,7 +110,7 @@ show_header($Title,'wiki,bbcode');
 <? if($Edit <= $LoggedUser['EffectiveClass']){ ?>
 		<div class="box box_addalias">
 			<div style="padding:5px;">
-				<form action="wiki.php" method="post">
+				<form class="add_form" name="aliases" action="wiki.php" method="post">
 					<input type="hidden" name="action" value="add_alias" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="article" value="<?=$ArticleID?>" />

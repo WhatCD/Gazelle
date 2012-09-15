@@ -132,7 +132,7 @@ $DB->query("SELECT
 		}	
 	?>	
 		<div id="report<?=$ReportID?>">
-			<form id="report_form<?=$ReportID?>" action="reports.php" method="post">
+			<form class="edit_form" name="report" id="reportform_<?=$ReportID?>" action="reports.php" method="post">
 				<? 
 					/*
 					* Some of these are for takeresolve, some for the javascript.			

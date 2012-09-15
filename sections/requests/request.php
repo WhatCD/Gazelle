@@ -396,7 +396,7 @@ if (!empty($Image)) {
 			<tr>
 				<td class="label">Post vote information</td>
 				<td>
-					<form action="requests.php" method="get" id="request_form">
+					<form class="add_form" name="request" action="requests.php" method="get" id="request_form">
 						<input type="hidden" name="action" value="vote" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" id="request_tax" value="<?=$RequestTax?>" />
@@ -437,7 +437,7 @@ if (!empty($Image)) {
 			<tr>
 				<td class="label" valign="top">Fill request</td>
 				<td>
-					<form action="" method="post">
+					<form class="edit_form" name="request" action="" method="post">
 						<div>
 							<input type="hidden" name="action" value="takefill" />
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -453,7 +453,6 @@ if (!empty($Image)) {
 							<br /> 
 						</div>
 					</form>
-					
 				</td>
 			</tr>
 <?	} ?>
@@ -598,7 +597,7 @@ if(!$LoggedUser['DisablePosting']) { ?>
 						</td>
 					</tr>
 				</table>
-				<form id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post" style="display: block; text-align: center;">
+				<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
 					<div id="quickreplytext">
 						<input type="hidden" name="action" value="reply" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

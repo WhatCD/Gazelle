@@ -258,7 +258,7 @@ show_header($Title, 'requests');
 		</div>
 	</div>
 	<div class="center">
-		<form action="" method="get">
+		<form class="search_form" name="requests" action="" method="get">
 			<input type="hidden" name="submit" value="true" />
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>

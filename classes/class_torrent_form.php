@@ -59,7 +59,7 @@ class TORRENT_FORM {
 			echo '<p style="color: red;text-align:center;">'.$this->Error.'</p>';
 		}
 ?>
-	<form action="" enctype="multipart/form-data" method="post" id="upload_table" onsubmit="$('#post').raw().disabled = 'disabled'">
+	<form class="create_form" name="torrent" action="" enctype="multipart/form-data" method="post" id="upload_table" onsubmit="$('#post').raw().disabled = 'disabled'">
 		<div>
 			<input type="hidden" name="submit" value="true" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

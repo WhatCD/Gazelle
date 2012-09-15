@@ -428,7 +428,7 @@ if(count($_GET)){
 show_header('User search');
 ?>
 <div class="thin">
-	<form action="user.php" method="get">
+	<form class="search_form" name="users" action="user.php" method="get">
 		<input type="hidden" name="action" value="search" />
 		<table class="layout">
 			<tr>

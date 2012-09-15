@@ -26,7 +26,7 @@ show_header('Donate');
 		<h3>Test IPN</h3>
 	</div>
 	<div class="box pad">
-		<form method="post" action="donate.php">
+		<form class="donate_form" name="test_paypal" method="post" action="donate.php">
 			<input type="hidden" name="action" value="ipn">
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<?=PAYPAL_SYMBOL?> <input type="text" name="mc_gross" value="<?=number_format(PAYPAL_MINIMUM,2)?>">
@@ -52,7 +52,7 @@ show_header('Donate');
 		<p>Because we do not have any advertisements or sponsorships and this service is provided free of charge, we are entirely reliant upon user donations. If you are financially able, please consider making a donation to help us pay the bills!</p>
 		<p>We currently only accept one payment method; PayPal. Because of the fees they charge, there is a <strong>minimum donation amount of <?=PAYPAL_SYMBOL?> <?=PAYPAL_MINIMUM?></strong> (Please note, this is only a minimum amount and we greatly appreciate any extra you can afford.).</b></p>
 		<p>You don't have to be a PayPal member to make a donation, you can simply donate with your credit/debit card. If you do not have a credit/debit card, you should be able to donate from your bank account, but you will need to make an account with them to do this.</p>
-		<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+		<form class="donate_form" name="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
 			<input type="hidden" name="rm" value="2">
 			<input type="hidden" name="cmd" value="_donations">
 			<input type="hidden" name="business" value="<?=PAYPAL_ADDRESS?>">

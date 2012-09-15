@@ -19,7 +19,7 @@ $Row = 'b';
 while(list($ID, $Client, $Peer_ID) = $DB->next_record()){
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
-<form action="" method="post">
+<form class="manage_form" name="clients" action="" method="post">
 	<input type="hidden" name="action" value="whitelist_alter" />
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<table>
@@ -39,7 +39,7 @@ while(list($ID, $Client, $Peer_ID) = $DB->next_record()){
 	</table>
 </form>
 <? } ?>
-<form action="" method="post">
+<form class="add_form" name="clients" action="" method="post">
 	<input type="hidden" name="action" value="whitelist_alter" />
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<table>

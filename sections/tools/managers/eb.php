@@ -26,7 +26,7 @@ $DB -> query("SELECT
 		<td colspan="4">Add To Email or Domain to Blacklist</td>
 	</tr>
 	<tr class="rowa">
-		<form action="tools.php" method="post">
+		<form class="add_form" name="email_blacklist" action="tools.php" method="post">
 			<input type="hidden" name="action" value="eb_alter" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<td>
@@ -43,7 +43,7 @@ $DB -> query("SELECT
 	<? while(list($ID, $UserID, $Time, $Email, $Comment) = $DB->next_record()) {
 	?>
 	<tr>
-		<form action="tools.php" method="post">
+		<form class="manage_form" name="email_blacklist" action="tools.php" method="post">
 			<td>
 			<input type="hidden" name="action" value="eb_alter" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

@@ -155,7 +155,7 @@ show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],
 		<div id="searchthread" class="hidden center">
 			<div style="display: inline-block;">
 				<h3>Search this thread:</h3>
-				<form action="forums.php" method="get">
+				<form class="search_form" name="forum_thread" action="forums.php" method="get">
 					<table cellpadding="6" cellspacing="1" border="0" class="layout border">	
 						<tr>
 							<td><strong>Search for:</strong></td><td><input type="text" id="searchbox" name="search" size="70" /></td>
@@ -319,8 +319,8 @@ if ($ThreadInfo['NoPoll'] == 0) {
 	} else { 
 	//User has not voted
 ?>
-			<div id="poll_results">
-				<form id="polls">
+			<div id="poll_container">
+				<form class="vote_form" name="poll" id="poll">
 					<input type="hidden" name="action" value="poll"/>
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="large" value="1"/>
@@ -342,13 +342,13 @@ if ($ThreadInfo['NoPoll'] == 0) {
 					<br />
 					<br />
 <? } ?>
-					<input type="button" style="float: left;" onclick="ajax.post('index.php','polls',function(response){$('#poll_results').raw().innerHTML = response});" value="Vote">
+					<input type="button" style="float: left;" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote">
 				</form>
 			</div>
 <? } ?>
 <? if(check_perms('forums_polls_moderate') && !$RevealVoters) { ?>
 	<? if (!$Featured || $Featured == '0000-00-00 00:00:00') { ?>
-			<form action="forums.php" method="post">
+			<form class="manage_form" name="poll" action="forums.php" method="post">
 				<input type="hidden" name="action" value="poll_mod"/>
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
@@ -356,7 +356,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				<input type="submit" style="float: left;" onclick="return confirm('Are you sure you want to feature this poll?');"; value="Feature">
 			</form>
 	<? } ?>
-			<form action="forums.php" method="post">
+			<form class="manage_form" name="poll" action="forums.php" method="post">
 				<input type="hidden" name="action" value="poll_mod"/>
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
@@ -416,13 +416,13 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
                 if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
                     $AuthorInfo = user_info($AuthorID);
                     if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
-                        <form action="" style="display: none;" name="warn<?=$PostID?>" method="post">
-                        <input type="hidden" name="action" value="warn" />
-                        <input type="hidden" name="postid" value="<?=$PostID?>" />
-                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
-                        <input type="hidden" name="key" value="<?=$Key?>" />
+                        <form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
+	                        <input type="hidden" name="action" value="warn" />
+	                        <input type="hidden" name="postid" value="<?=$PostID?>" />
+	                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
+	                        <input type="hidden" name="key" value="<?=$Key?>" />
                         </form>
-                        - <a href="#" onclick="document.warn<?=$PostID?>.submit(); return false;">[Warn]</a>
+                        - <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
 <?                  } ?>
 <?  }
 ?>
@@ -500,7 +500,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 						</td>
 					</tr>
 				</table>
-				<form id="quickpostform" action="" <? if(!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?> method="post" style="display: block; text-align: center;">
+				<form class="send_form center" name="reply" id="quickpostform" action="" <? if(!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?> method="post">
 					<input type="hidden" name="action" value="reply" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="thread" value="<?=$ThreadID?>" />
@@ -531,7 +531,7 @@ if(check_perms('site_moderate_forums')) {
 ?>
 	<br />
 	<h3>Edit thread</h3>
-	<form action="forums.php" method="post">
+	<form class="edit_form" name="forum_thread" action="forums.php" method="post">
 		<div>
 		<input type="hidden" name="action" value="mod_thread" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

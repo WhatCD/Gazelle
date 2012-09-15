@@ -52,7 +52,7 @@ show_header("Opcode Stats");
 ?>
 <div class="thin">
 	<div>
-		<form action="" method="post">
+		<form class="manage_form" name="opcode_stats" action="" method="post">
 			<div>
 				<input type="hidden" name="action" value="opcode_stats" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

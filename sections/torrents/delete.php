@@ -32,7 +32,7 @@ show_header('Delete torrent', 'reportsv2');
 			Delete torrent
 		</div>
 		<div class="pad">
-			<form action="torrents.php" method="post">
+			<form class="delete_form" name="torrent" action="torrents.php" method="post">
 				<input type="hidden" name="action" value="takedelete" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
@@ -127,7 +127,7 @@ if(check_perms('admin_reports')) {
 	}	
 ?>	
 	<div id="report<?=$ReportID?>">
-		<form id="report_form<?=$ReportID?>" action="reports.php" method="post">
+		<form class="create_form" name="report" id="reportform_<?=$ReportID?>" action="reports.php" method="post">
 			<? 
 				/*
 				* Some of these are for takeresolve, some for the javascript.			
@@ -275,5 +275,4 @@ foreach($TypeList as $IType => $Data) {
 </div>
 <?
 }
-show_footer();
-?>
+show_footer(); ?>

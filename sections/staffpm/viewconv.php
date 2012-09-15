@@ -134,7 +134,7 @@ if ($ConvID = (int)$_GET['id']) {
 		<div class="box pad">
 			<div id="preview" class="hidden"></div>
 			<div id="buttons" class="center">
-				<form action="staffpm.php" method="post" id="messageform">
+				<form class="manage_form" name="staff_messages" action="staffpm.php" method="post" id="messageform">
 					<input type="hidden" name="action" value="takepost" />
 					<input type="hidden" name="convid" value="<?=$ConvID?>" id="convid" />
 					<textarea id="quickpost" name="message" cols="90" rows="10"></textarea> <br />

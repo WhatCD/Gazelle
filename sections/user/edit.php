@@ -68,7 +68,7 @@ echo $Val->GenerateJS('userform');
 	<div class="header">
 		<h2><?=format_username($UserID, false, false, false)?> &gt; Settings</h2>
 	</div>
-	<form id="userform" name="userform" action="" method="post" onsubmit="return formVal();" autocomplete="off">
+	<form class="edit_form" name="user" id="userform" action="" method="post" onsubmit="return formVal();" autocomplete="off">
 		<div>
 			<input type="hidden" name="action" value="takeedit" />
 			<input type="hidden" name="userid" value="<?=$UserID?>" />
@@ -455,6 +455,4 @@ list($ArtistsAdded) = $DB->next_record();
 		</table>
 	</form>
 </div>
-<?
-show_footer();
-?>
+<? show_footer(); ?>

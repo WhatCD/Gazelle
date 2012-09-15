@@ -85,7 +85,7 @@ $ReceiverIDs = $DB->collect('UserID');
 if(!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect($ReceiverIDs, array_keys($StaffIDs)))) {
 ?>
 	<h3>Reply</h3>
-	<form action="inbox.php" method="post" id="messageform">
+	<form class="send_form" name="reply" action="inbox.php" method="post" id="messageform">
 		<div class="box pad">
 			<input type="hidden" name="action" value="takecompose" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -103,7 +103,7 @@ if(!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect($
 }
 ?>
 	<h3>Manage conversation</h3>
-	<form action="inbox.php" method="post">
+	<form class="manage_form" name="messages" action="inbox.php" method="post">
 		<div class="box pad">
 			<input type="hidden" name="action" value="takeedit" />
 			<input type="hidden" name="convid" value="<?=$ConvID?>" />
@@ -137,7 +137,7 @@ list($FLS) = $DB->next_record();
 if((check_perms('users_mod') || $FLS != "") && (!$ForwardedID || $ForwardedID == $LoggedUser['ID'])) {
 ?>
 	<h3>Forward conversation</h3>
-	<form action="inbox.php" method="post">
+	<form class="send_form" name="forward" action="inbox.php" method="post">
 		<div class="box pad">
 			<input type="hidden" name="action" value="forward" />
 			<input type="hidden" name="convid" value="<?=$ConvID?>" />

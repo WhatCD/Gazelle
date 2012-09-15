@@ -68,22 +68,20 @@ show_header('Transcode Search');
 ?>
 <br />
 <div class="thin">
-	<div>
-		<form action="" method="get">
-			<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
-				<tr>
-					<td class="label"><strong>Search:</strong></td>
-					<td>
-						<input type="hidden" name="method" value="transcode" />
-						<input type="hidden" name="type" value="<?=$_GET['type']?>" />
-						<input type="text" name="search" size="60" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
-						&nbsp;
-						<input type="submit" value="Search" />
-					</td>
-				</tr>
-			</table>	
-		</form>
-	</div>
+	<form class="search_form" name="transcodes" action="" method="get">
+		<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+			<tr>
+				<td class="label"><strong>Search:</strong></td>
+				<td>
+					<input type="hidden" name="method" value="transcode" />
+					<input type="hidden" name="type" value="<?=$_GET['type']?>" />
+					<input type="text" name="search" size="60" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
+					&nbsp;
+					<input type="submit" value="Search" />
+				</td>
+			</tr>
+		</table>
+	</form>
 	<table width="100%" class="torrent_table">
 		<tr class="colhead">
 			<td>Torrent</td>

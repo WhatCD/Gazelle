@@ -24,7 +24,7 @@ $DB->query("SELECT
 	</tr>
 <? while(list($ID, $Name, $Comment, $UserID, $DNUTime) = $DB->next_record()){ ?>
 	<tr>
-		<form action="tools.php" method="post">
+		<form class="manage_form" class="dnu" action="tools.php" method="post">
 			<td>
 				<input type="hidden" name="action" value="dnu_alter" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -48,7 +48,7 @@ $DB->query("SELECT
 	<td colspan="4">Add Do Not Upload</td>
 </tr>
 <tr class="rowa">
-	<form action="tools.php" method="post">
+	<form class="add_form" name="dnu" action="tools.php" method="post">
 		<input type="hidden" name="action" value="dnu_alter" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<td>

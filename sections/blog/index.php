@@ -87,7 +87,7 @@ if(check_perms('admin_manage_blog')) {
 			<div class="head">
 				<?=((empty($_GET['action'])) ? 'Create a blog post' : 'Edit blog post')?>
 			</div>
-			<form action="blog.php" method="post">
+			<form class="<?=empty($_GET['action'])?'create_form':'edit_form'?>" name="blog_post" action="blog.php" method="post">
 				<div class="pad">
 					<input type="hidden" name="action" value="<?=((empty($_GET['action'])) ? 'takenewblog' : 'takeeditblog')?>" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

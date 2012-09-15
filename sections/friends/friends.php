@@ -66,7 +66,7 @@ if($Results == 0) {
 foreach($Friends as $Friend) {
 	list($FriendID, $Comment, $Username, $Uploaded, $Downloaded, $Class, $Paranoia, $LastAccess, $Avatar) = $Friend;
 ?>
-<form action="friends.php" method="post">
+<form class="manage_form" name="friends" action="friends.php" method="post">
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<table class="friends_table vertical_margin">
 		<tr class="colhead">

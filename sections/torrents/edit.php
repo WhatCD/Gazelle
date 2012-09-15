@@ -101,7 +101,7 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 ?>
 <div class="thin">
 	<h2>Change Group</h2>
-	<form action="torrents.php" method="post">
+	<form cass="edit_form" name="torrent_group" action="torrents.php" method="post">
 		<input type="hidden" name="action" value="editgroupid" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
@@ -121,7 +121,7 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 		</table>
 	</form>
 	<h2>Split off into new group</h2>
-	<form action="torrents.php" method="post">
+	<form class="split_form" name="torrent_group" action="torrents.php" method="post">
 		<input type="hidden" name="action" value="newgroup" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
@@ -158,5 +158,4 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 <?
 } // if check_perms('torrents_edit')
 
-show_footer();
-?>
+show_footer(); ?>

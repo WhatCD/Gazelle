@@ -9,9 +9,9 @@ function display_perm($Key,$Title) {
 
 show_header('Manage Permissions','validate');
 
-echo $Val->GenerateJS('permform');
+echo $Val->GenerateJS('permissionsform');
 ?>
-<form name="permform" id="permform" method="post" action="" onsubmit="return formVal();">
+<form class="manage_form" name="permissions" id="permissionsform" method="post" action="" onsubmit="return formVal();">
 	<input type="hidden" name="action" value="permissions" />
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<input type="hidden" name="id" value="<?=display_str($_REQUEST['id']); ?>" />

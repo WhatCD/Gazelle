@@ -545,7 +545,7 @@ if(empty($SimilarArray)) {
 			<div class="head"><strong>Add similar artist</strong></div>
 			<ul class="nobullet">
 				<li>
-					<form action="artist.php" method="post">
+					<form class="add_form" name="similar_artists" action="artist.php" method="post">
 						<input type="hidden" name="action" value="add_similar" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="artistid" value="<?=$ArtistID?>" />

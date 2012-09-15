@@ -46,7 +46,7 @@ show_header('Edit torrent group');
 		<h2>Edit <a href="torrents.php?id=<?=$GroupID?>"><?=$Name?></a></h2>
 	</div>
 	<div class="box pad">
-		<form action="torrents.php" method="post">
+		<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
 			<div>
 				<input type="hidden" name="action" value="takegroupedit" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -81,7 +81,7 @@ show_header('Edit torrent group');
 	if(in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?> 
 	<h3>Non-wiki group editing</h3>
 	<div class="box pad">
-		<form action="torrents.php" method="post">
+		<form cass="edit_form" name="torrent_group" action="torrents.php" method="post">
 			<input type="hidden" name="action" value="nonwikiedit" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
@@ -134,7 +134,7 @@ show_header('Edit torrent group');
 ?> 
 	<h3>Rename (won't merge)</h3>
 	<div class="box pad">
-		<form action="torrents.php" method="post">
+		<form class="rename_form" name="torrent_group" action="torrents.php" method="post">
 			<div>
 				<input type="hidden" name="action" value="rename" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -149,7 +149,7 @@ show_header('Edit torrent group');
 	</div>
 	<h3>Merge with another group</h3>
 	<div class="box pad">
-		<form action="torrents.php" method="post">
+		<form class="merge_form" name="torrent_group" action="torrents.php" method="post">
 			<div>
 				<input type="hidden" name="action" value="merge" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -165,6 +165,4 @@ show_header('Edit torrent group');
 	</div>
 <?	} ?> 
 </div>
-<?
-show_footer();
-?>
+<? show_footer(); ?>

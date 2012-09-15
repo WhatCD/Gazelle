@@ -3,7 +3,7 @@ show_header('Create an article');
 ?>
 <div class="thin">
 	<div class="box pad">
-		<form action="wiki.php" method="post">
+		<form class="create_form" name="wiki_article" action="wiki.php" method="post">
 			<input type="hidden" name="action" value="create" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<div>

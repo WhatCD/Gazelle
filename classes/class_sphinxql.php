@@ -8,7 +8,7 @@ class SPHINXQL extends mysqli {
 	private $Server;
 	private $Port;
 	private $Socket;
-	public $Ident;
+	private $Ident;
 	private $Connected = false;
 
 	public static $Queries = array();
@@ -18,9 +18,9 @@ class SPHINXQL extends mysqli {
 	/**
 	 * Initialize SphinxQL object
 	 *
-	 * @string $Server server address or hostname
-	 * @int $Port listening port
-	 * @string $Socket Unix socket address, overrides $Server:$Port
+	 * @param string $Server server address or hostname
+	 * @param int $Port listening port
+	 * @param string $Socket Unix socket address, overrides $Server:$Port
 	 */
 	public function __construct($Server, $Port, $Socket) {
 		$this->Server = $Server;
@@ -32,9 +32,9 @@ class SPHINXQL extends mysqli {
 	/**
 	 * Create server ident based on connection information
 	 *
-	 * @string $Server server address or hostname
-	 * @int $Port listening port
-	 * @string $Socket Unix socket address, overrides $Server:$Port
+	 * @param string $Server server address or hostname
+	 * @param int $Port listening port
+	 * @param string $Socket Unix socket address, overrides $Server:$Port
 	 * @return identification string
 	 */
 	private function get_ident($Server, $Port, $Socket) {
@@ -48,9 +48,9 @@ class SPHINXQL extends mysqli {
 	/**
 	 * Create SphinxQL object or return existing one
 	 *
-	 * @string $Server server address or hostname
-	 * @int $Port listening port
-	 * @string $Socket Unix socket address, overrides $Server:$Port
+	 * @param string $Server server address or hostname
+	 * @param int $Port listening port
+	 * @param string $Socket Unix socket address, overrides $Server:$Port
 	 * @return SphinxQL object
 	 */
 	public static function init_connection($Server, $Port, $Socket) {
@@ -82,8 +82,8 @@ class SPHINXQL extends mysqli {
 	/**
 	 * Print a message to privileged users and optionally halt page processing
 	 *
-	 * @string $Msg message to display
-	 * @bool $Halt halt page processing. Default is to continue processing the page
+	 * @param string $Msg message to display
+	 * @param bool $Halt halt page processing. Default is to continue processing the page
 	 * @return SphinxQL object
 	 */
 	public function error($Msg, $Halt = false) {
@@ -102,7 +102,7 @@ class SPHINXQL extends mysqli {
 	 * Escape special characters before sending them to the Sphinx server.
 	 * Two escapes needed because the first one is eaten up by the mysql driver.
 	 *
-	 * @string $String string to escape
+	 * @param string $String string to escape
 	 * @return escaped string
 	 */
 	public function escape_string($String) {
@@ -125,8 +125,8 @@ class SPHINXQL extends mysqli {
 	/**
 	 * Register sent queries globally for later retrieval by debug functions
 	 *
-	 * @string $QueryString query text
-	 * @param $QueryProcessTime time building and processing the query
+	 * @param string $QueryString query text
+	 * @param param $QueryProcessTime time building and processing the query
 	 */
 	public function register_query($QueryString, $QueryProcessTime) {
 		SPHINXQL::$Queries[] = array($QueryString, $QueryProcessTime);
@@ -151,9 +151,9 @@ class SPHINXQL_QUERY {
 	/**
 	 * Initialize SphinxQL object
 	 *
-	 * @string $Server server address or hostname
-	 * @int $Port listening port
-	 * @string $Socket Unix socket address, overrides $Server:$Port
+	 * @param string $Server server address or hostname
+	 * @param int $Port listening port
+	 * @param string $Socket Unix socket address, overrides $Server:$Port
 	 */
 	public function __construct($Server = SPHINXQL_HOST, $Port = SPHINXQL_PORT, $Socket = SPHINXQL_SOCK) {
 		$this->SphinxQL = SPHINXQL::init_connection($Server, $Port, $Socket);
@@ -162,7 +162,7 @@ class SPHINXQL_QUERY {
 	/**
 	 * Specify what data the Sphinx query is supposed to return
 	 *
-	 * @string $Fields Attributes and expressions
+	 * @param string $Fields Attributes and expressions
 	 * @return current SphinxQL query object
 	 */
 	public function select($Fields) {
@@ -174,7 +174,7 @@ class SPHINXQL_QUERY {
 	/**
 	 * Specify the indexes to use in the search
 	 *
-	 * @string $Indexes comma separated list of indexes
+	 * @param string $Indexes comma separated list of indexes
 	 * @return current SphinxQL query object
 	 */
 	public function from($Indexes) {
@@ -185,9 +185,9 @@ class SPHINXQL_QUERY {
 	/**
 	 * Add attribute filter. Calling this function multiple times results in boolean AND between each condition
 	 *
-	 * @string $Attribute attribute which the filter will apply to
-	 * @mixed $Values scalar or array of numerical values. Array uses boolean OR in query condition
-	 * @bool $Exclude whether to exclude or include matching documents. Default mode is to include matches
+	 * @param string $Attribute attribute which the filter will apply to
+	 * @param mixed $Values scalar or array of numerical values. Array uses boolean OR in query condition
+	 * @param bool $Exclude whether to exclude or include matching documents. Default mode is to include matches
 	 * @return current SphinxQL query object
 	 */
 	public function where($Attribute, $Values, $Exclude = false) {
@@ -223,8 +223,8 @@ class SPHINXQL_QUERY {
 	/**
 	 * Add attribute range filter. Calling this function multiple times results in boolean AND between each condition
 	 *
-	 * @string $Attribute attribute which the filter will apply to
-	 * @array $Values pair of numerical values that defines the filter range
+	 * @param string $Attribute attribute which the filter will apply to
+	 * @param array $Values pair of numerical values that defines the filter range
 	 * @return current SphinxQL query object
 	 */
 	public function where_between($Attribute, $Values) {
@@ -239,8 +239,8 @@ class SPHINXQL_QUERY {
 	 * Add fulltext query expression. Calling this function multiple times results in boolean AND between each condition.
 	 * Query expression is escaped automatically
 	 *
-	 * @string $Expr query expression
-	 * @string $Field field to match $Expr against. Default is *, which means all available fields
+	 * @param string $Expr query expression
+	 * @param string $Field field to match $Expr against. Default is *, which means all available fields
 	 * @return current SphinxQL query object
 	 */
 	public function where_match($Expr, $Field = '*') {
@@ -254,8 +254,8 @@ class SPHINXQL_QUERY {
 	/**
 	 * Specify the order of the matches. Calling this function multiple times sets secondary priorities
 	 *
-	 * @string $Attribute attribute to use for sorting
-	 * @string $Mode sort method to apply to the selected attribute
+	 * @param string $Attribute attribute to use for sorting
+	 * @param string $Mode sort method to apply to the selected attribute
 	 * @return current SphinxQL query object
 	 */
 	public function order_by($Attribute, $Mode) {
@@ -266,7 +266,7 @@ class SPHINXQL_QUERY {
 	/**
 	 * Specify how the results are grouped
 	 *
-	 * @string $Attribute group matches with the same $Attribute value
+	 * @param string $Attribute group matches with the same $Attribute value
 	 * @return current SphinxQL query object
 	 */
 	public function group_by($Attribute) {
@@ -277,8 +277,8 @@ class SPHINXQL_QUERY {
 	/**
 	 * Specify the order of the results within groups
 	 *
-	 * @string $Attribute attribute to use for sorting
-	 * @string $Mode sort method to apply to the selected attribute
+	 * @param string $Attribute attribute to use for sorting
+	 * @param string $Mode sort method to apply to the selected attribute
 	 * @return current SphinxQL query object
 	 */
 	public function order_group_by($Attribute, $Mode) {
@@ -289,9 +289,9 @@ class SPHINXQL_QUERY {
 	/**
 	 * Specify the offset and amount of matches to return
 	 *
-	 * @int $Offset number of matches to discard
-	 * @int $Limit number of matches to return
-	 * @int $MaxMatches number of results to store in the Sphinx server's memory
+	 * @param int $Offset number of matches to discard
+	 * @param int $Limit number of matches to return
+	 * @param int $MaxMatches number of results to store in the Sphinx server's memory. Must be >= ($Offset+$Limit)
 	 * @return current SphinxQL query object
 	 */
 	public function limit($Offset, $Limit, $MaxMatches = SPHINX_MATCHES_START) {
@@ -316,7 +316,7 @@ class SPHINXQL_QUERY {
 	/**
 	 * Combine the query conditions into a valid Sphinx query segment
 	 *
-	 * @return string of conditions
+	 * @return SphinxQL query string
 	 */
 	private function build_query() {
 		if(!$this->Indexes) {
@@ -350,7 +350,7 @@ class SPHINXQL_QUERY {
 	/**
 	 * Construct and send the query. Register the query in the global SphinxQL object
 	 *
-	 * @bool GetMeta whether to fetch meta data for the executed query. Default is yes
+	 * @param bool GetMeta whether to fetch meta data for the executed query. Default is yes
 	 * @return SphinxQL result object
 	 */
 	public function query($GetMeta = true) {
@@ -366,8 +366,8 @@ class SPHINXQL_QUERY {
 	/**
 	 * Run a manually constructed query
 	 *
-	 * @string Query query expression
-	 * @bool GetMeta whether to fetch meta data for the executed query. Default is yes
+	 * @param string Query query expression
+	 * @param bool GetMeta whether to fetch meta data for the executed query. Default is yes
 	 * @return SphinxQL result object
 	 */
 	public function raw_query($Query, $GetMeta = true) {
@@ -378,7 +378,7 @@ class SPHINXQL_QUERY {
 	/**
 	 * Run a pre-processed query. Only used internally
 	 *
-	 * @bool GetMeta whether to fetch meta data for the executed query
+	 * @param bool GetMeta whether to fetch meta data for the executed query
 	 * @return SphinxQL result object
 	 */
 	private function send_query($GetMeta) {
@@ -439,10 +439,10 @@ class SPHINXQL_RESULT {
 	/**
 	 * Create SphinxQL result object
 	 *
-	 * @mysqli_result $Result query results
-	 * @array $Meta meta data for the query
-	 * @int $Errno error code returned by the query upon failure
-	 * @string $Error error message returned by the query upon failure
+	 * @param mysqli_result $Result query results
+	 * @param array $Meta meta data for the query
+	 * @param int $Errno error code returned by the query upon failure
+	 * @param string $Error error message returned by the query upon failure
 	 */
 	public function __construct($Result, $Meta, $Errno, $Error) {
 		$this->Result = $Result;
@@ -454,8 +454,8 @@ class SPHINXQL_RESULT {
 	/**
 	 * Redirect to the Mysqli result object if a nonexistent method is called
 	 *
-	 * @string $Name method name
-	 * @array $Arguments arguments used in the function call
+	 * @param string $Name method name
+	 * @param array $Arguments arguments used in the function call
 	 * @return whatever the parent function returns
 	 */
 	public function __call($Name, $Arguments) {
@@ -465,7 +465,7 @@ class SPHINXQL_RESULT {
 	/**
 	 * Collect and return the specified key of all results as a list
 	 *
-	 * @string $Key key containing the desired data
+	 * @param string $Key key containing the desired data
 	 * @return array with the $Key value of all results
 	 */
 	public function collect($Key) {
@@ -480,8 +480,8 @@ class SPHINXQL_RESULT {
 	/**
 	 * Collect and return all available data for the matches optionally indexed by a specified key
 	 *
-	 * @string $Key key to use as indexing value
-	 * @string $ResultType method to use when fetching data from the mysqli_result object. Default is MYSQLI_ASSOC
+	 * @param string $Key key to use as indexing value
+	 * @param string $ResultType method to use when fetching data from the mysqli_result object. Default is MYSQLI_ASSOC
 	 * @return array with all available data for the matches
 	 */
 	public function to_array($Key, $ResultType = MYSQLI_ASSOC) {
@@ -500,8 +500,8 @@ class SPHINXQL_RESULT {
 	/**
 	 * Collect pairs of keys for all matches
 	 *
-	 * @string $Key1 key to use as indexing value
-	 * @string $Key2 key to use as value
+	 * @param string $Key1 key to use as indexing value
+	 * @param string $Key2 key to use as value
 	 * @return array with $Key1 => $Key2 pairs for matches
 	 */
 	public function to_pair($Key1, $Key2) {
@@ -516,7 +516,7 @@ class SPHINXQL_RESULT {
 	/**
 	 * Return specified portions of the current SphinxQL result object's meta data
 	 *
-	 * @mixed $Keys scalar or array with keys to return. Default is false, which returns all meta data
+	 * @param mixed $Keys scalar or array with keys to return. Default is false, which returns all meta data
 	 * @return array with meta data
 	 */
 	public function get_meta($Keys = false) {
@@ -541,7 +541,7 @@ class SPHINXQL_RESULT {
 	/**
 	 * Return specified portions of the current Mysqli result object's information
 	 *
-	 * @mixed $Keys scalar or array with keys to return. Default is false, which returns all available information
+	 * @param mixed $Keys scalar or array with keys to return. Default is false, which returns all available information
 	 * @return array with result information
 	 */
 	public function get_result_info($Keys = false) {

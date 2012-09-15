@@ -531,7 +531,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
                         <div class="head"><strong>Search File Lists</strong></div>
                         <ul class="nobullet">
                                 <li>
-                                <form name="filelistsearchform" action="torrents.php">
+                                <form cass="search_form" name="filelists" action="torrents.php">
                                 <input type="hidden" name="artistname" value="<?=$Name?>" />
                                 <input type="hidden" name="action" value="advanced" />
 				<input type="text" autocomplete="off" id="filelist" name="filelist" size="20" />
@@ -554,7 +554,7 @@ if(check_perms('zip_downloader')){
 		<div class="box">
 			<div class="head colhead_dark"><strong>Collector</strong></div>
 			<div class="pad">
-				<form action="artist.php" method="post">
+				<form class="download_form" name="zip" action="artist.php" method="post">
 					<input type="hidden" name="action" value="download" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="artistid" value="<?=$ArtistID?>" /> 
@@ -683,11 +683,11 @@ if(empty($SimilarArray)) {
 <?		} ?>
 			</ul>
 		</div>
-		<div class="box box_addartists">
+		<div class="box box_addartists box_addartists_similar">
 			<div class="head"><strong>Add similar artist</strong></div>
 			<ul class="nobullet">
 				<li>
-					<form action="artist.php" method="post">
+					<form class="add_form" name="similar_artists" action="artist.php" method="post">
 						<input type="hidden" name="action" value="add_similar" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="artistid" value="<?=$ArtistID?>" />

@@ -43,7 +43,7 @@ if(!check_perms('site_moderate_requests')) {
 	<div class="header">
 		<h2>Send PM To All Snatchers Of "<?=$Properties['ArtistName']?> - <?=$Properties['Title']?>"</h2>
 	</div>
-	<form action="torrents.php" method="post">
+	<form class="send_form" name="mass_message" action="torrents.php" method="post">
 		<input type="hidden" name="action" value="takemasspm" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
@@ -69,6 +69,4 @@ if(!check_perms('site_moderate_requests')) {
 		</table>
 	</form>
 </div>
-<?
-show_footer();
-?>
+<? show_footer(); ?>

@@ -38,7 +38,7 @@ show_header('Connectability Checker');
 	<div class="header">
 		<h2><a href="user.php?id=<?=$LoggedUser['ID']?>"><?=$LoggedUser['Username']?></a> &gt; Connectability Checker</h2>
 	</div>
-	<form action="javascript:check_ip();" method="get">
+	<form class="manage_form" name="connections" action="javascript:check_ip();" method="get">
 		<table class="layout">
 			<tr>
 				<td class="label">IP</td>

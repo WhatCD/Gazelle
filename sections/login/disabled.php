@@ -50,7 +50,7 @@ If you do not have access to an IRC client you can use the WebIRC interface prov
 Please use your What.CD? username.
 </p>
 <br />
-<form action="" method="post">
+<form class="confirm_form" name="chat" action="" method="post">
 	<input type="text" name="username" width="20" />
 	<input type="submit" name="submit" value="Join WebIRC" />
 </form>

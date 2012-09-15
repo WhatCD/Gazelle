@@ -34,7 +34,7 @@ if (isset($_POST['changecountry'])) {
 	</tr>
 	<tr/>
 	<tr>
-		<form method="post">
+		<form class="add_form" name="countries" method="post">
 			<input type="hidden" name="newcountry" value="1" />
 			<td>
 			<input type="text" name="country"/>
@@ -49,7 +49,7 @@ $DB->query("SELECT ID, Country FROM country_invites ORDER BY Country");
 while (list($ID, $Country) = $DB->next_record()) {
 	?>
 	<tr>
-		<form method="post">
+		<form class="manage_form" name="countries" method="post">
 			<input type="hidden" name="changecountry" value="1" />
 			<input type="hidden" name="id" value="<?=$ID?>" />
 			<td>
@@ -63,6 +63,4 @@ while (list($ID, $Country) = $DB->next_record()) {
 	</tr>
 	<? }?>
 </table>
-<?
-show_footer();
-?>
+<? show_footer(); ?>

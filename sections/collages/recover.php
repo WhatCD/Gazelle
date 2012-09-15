@@ -25,7 +25,7 @@ show_header("Collage recovery!");
 			Recover deleted collage
 		</div>
 		<div class="pad">
-			<form action="collages.php" method="post">
+			<form class="undelete_form" name="collage" action="collages.php" method="post">
 				<input type="hidden" name="action" value="recover" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<strong>ID: </strong>

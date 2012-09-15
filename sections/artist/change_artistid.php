@@ -125,7 +125,7 @@ if (isset($_POST['confirm'])) {
 	<div class="header">
 		<h2>Confirm merge</h2>
 	</div>
-	<form action="artist.php" method="post">
+	<form class="merge_form" name="artist" action="artist.php" method="post">
 		<input type="hidden" name="action" value="change_artistid" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="artistid" value="<?=$ArtistID?>" />

@@ -107,16 +107,16 @@ h3 {
 .r50 {color: #418B00;}
 .r99 {color: #418B00;}
 
-.size1 { font-size: 0.75em }
-.size2 { font-size: 1em }
-.size3 { font-size: 1.25em }
-.size4 { font-size: 1.5em }
-.size5 { font-size: 1.75em }
-.size6 { font-size: 2em }
-.size7 { font-size: 2.25em }
-.size8 { font-size: 2.5em }
-.size9 { font-size: 2.75em }
-.size10 { font-size: 3em }
+.size1 { font-size: 0.75em; line-height: normal; }
+.size2 { font-size: 1em; line-height: normal; }
+.size3 { font-size: 1.25em; line-height: normal; }
+.size4 { font-size: 1.5em; line-height: normal; }
+.size5 { font-size: 1.75em; line-height: normal; }
+.size6 { font-size: 2em; line-height: normal; }
+.size7 { font-size: 2.25em; line-height: normal; }
+.size8 { font-size: 2.5em; line-height: normal; }
+.size9 { font-size: 2.75em; line-height: normal; }
+.size10 { font-size: 3em; line-height: normal; }
 
 #discog_table.torrent_table .colhead_dark td:nth-child(4) {
 	width: 15%;
@@ -828,7 +828,7 @@ strong.quoteheader{
 	-moz-border-radius: 3px;
 }
 
-#torrents .filter_torrents .box.pad,#torrents div.thin >h2+div >form,#requests div.thin div:nth-child(3) form,#collage div.thin form,#inbox #searchbox {
+#torrents .filter_torrents .box.pad,#torrents div.thin form.search_form,#requests div.thin form.search_form,#collage div.thin form.search_form,#inbox #searchbox {
 	padding: 15px !important;
 	background: #e4e4e4;
 	border: none;
@@ -843,46 +843,46 @@ strong.quoteheader{
 	-moz-box-shadow: none;
 }
 
-#requests div.thin div:nth-child(3) form table:nth-child(6) td {
+#requests form.search_form table:nth-child(6) td {
 	padding-top: 13px !important;
 	padding: 13px 0 0 0 !important;
 	border-bottom: 0 !important;
 }
 
-#torrents div.thin >h2+div >form div.submit,#collage div.thin form div.submit {
+#torrents form.search_form div.submit,#collage div.thin form div.submit {
 	padding-top: 13px;
 }
 
-div.thin >h2+div,div.thin >h2+.linkbox+div {
+div.thin .header+form,div.thin .header+.linkbox+div {
 	margin-bottom: 20px;
 }
 
-div.thin >h2+div >form table,div.thin >h2+.linkbox+div table,.filter_torrents table {
+div.thin form.search_form table,div.thin .header+.linkbox+div table,.filter_torrents table {
 	width: 100%;
 }
 
-div.thin >h2+.linkbox+div table {
+div.thin .header+.linkbox+div table {
 	border: none;
 	background: none;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 }
 
-div.thin >h2+div table td,div.thin >h2+.linkbox+div table td,.filter_torrents table td {
+div.thin form.search_form table td, div.thin .header+.linkbox+div table td,.filter_torrents table td {
 	padding: 10px 0;
 	border: none !important;
 	border-bottom: 1px solid #d1d1d1 !important;
 }
 
-div.thin >h2+.linkbox+div td {
+div.thin .header+.linkbox+div td {
 	padding-left: 10px !important;
 }
 
-div.thin >h2+.linkbox+div table td:first-child,.filter_torrents table:nth-child(1) td:first-child {
+div.thin .header+.linkbox+div table td:first-child,.filter_torrents table:nth-child(1) td:first-child {
 	font-size: 10pt;
 }
 
-#torrents .filter_torrents .box.pad table:nth-child(1) tr:first-child td,#requests div.thin div:nth-child(3) form table:nth-child(3) tr:first-child td,#collage div.thin form table:nth-child(2) tr:first-child td {
+#torrents .filter_torrents .box.pad table:nth-child(1) tr:first-child td,#requests div.thin form.search_form table:nth-child(3) tr:first-child td,#collage div.thin form table:nth-child(2) tr:first-child td {
 	padding-top: 0 !important;
 }
 
@@ -903,13 +903,13 @@ div.thin >h2+.linkbox+div table td:first-child,.filter_torrents table:nth-child(
 	-moz-box-shadow: none;
 }
 
-div.thin >h2+div >form table td.label,div.thin >h2+.linkbox+div form table td.label,.filter_torrents table td:first-child {
+div.thin form.search_form table td.label,.filter_torrents table td:first-child {
 	width: 20%;
 	padding-right: 10px;
 	text-align: right;
 }
 
-div.thin >h2+div >form table td.label {
+div.thin form.search_form table td.label {
 	width: 12%;
 }
 
@@ -1051,7 +1051,7 @@ table.border[width="100%"] {
 	margin-bottom: 0;
 }
 
-table.border[width="100%"] tbody tr:nth-child(5) td {
+#collage form > table.border[width="100%"] tbody tr:nth-child(5) td {
 	padding-bottom: 0;
 	border-bottom: none !important;
 }

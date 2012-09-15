@@ -88,7 +88,7 @@ echo $Pages;
 <? if($DB->record_count()==0) { ?>
 	<h2>Your <?= ($Section == 'sentbox') ? 'sentbox' : 'inbox' ?> is currently empty</h2>
 <? } else { ?>
-		<form action="inbox.php" method="get" id="searchbox">
+		<form class="search_form" name="<?= ($Section == 'sentbox')?'sentbox':'inbox'?>" name="" action="inbox.php" method="get" id="searchbox">
 			<div>
 				<input type="hidden" name="action" value="<?=$Section?>" />
 				<input type="radio" name="searchtype" value="user" checked="checked" /> User
@@ -108,7 +108,7 @@ echo $Pages;
 				/>
 			</div>
 		</form>
-		<form action="inbox.php" method="post" id="messageform">
+		<form class="manage_form" name="messages" action="inbox.php" method="post" id="messageform">
 			<input type="hidden" name="action" value="masschange" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
                         <input type="submit" name="read" value="Mark as read" />&nbsp;

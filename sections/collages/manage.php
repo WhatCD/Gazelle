@@ -96,7 +96,7 @@
 		$AltCSS = $Number % 2 === 0 ? 'rowa' : 'rowb';
 ?>
 					<tr class="drag <?=$AltCSS?>" id="li_<?=$GroupID?>">
-						<form action="collages.php" method="post">
+						<form class="manage_form" name="collage" action="collages.php" method="post">
 							<td>
 								<input class="sort_numbers" type="text" name="sort" value="<?=$Sort?>" id="sort_<?=$GroupID?>" size="4" />
 							</td>
@@ -121,7 +121,7 @@
 	<div class="drag_drop_save hidden">
 		<input type="button" name="submit" value="Save All Changes" title="Save your changes." class="save_sortable_collage" />
 	</div>
-	<form action="collages.php" method="post" id="drag_drop_collage_form" class="hidden">
+	<form class="dragdrop_form hidden" name="collage" action="collages.php" method="post" id="drag_drop_collage_form">
 		<div>
 			<input type="hidden" name="action" value="manage_handle" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

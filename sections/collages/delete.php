@@ -20,7 +20,7 @@ show_header('Delete collage');
 			Delete collage
 		</div>
 		<div class="pad">
-			<form action="collages.php" method="post">
+			<form class="delete_form" name="collage" action="collages.php" method="post">
 				<input type="hidden" name="action" value="take_delete" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="collageid" value="<?=$CollageID?>" />

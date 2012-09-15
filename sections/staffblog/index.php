@@ -68,7 +68,7 @@ if(check_perms('admin_manage_blog')) {
 					<a href="#" onclick="$('#postform').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;"><?=($_REQUEST['action']!='editblog')?'(Show)':'(Hide)'?></a>
 				</span>
 			</div>
-			<form action="staffblog.php" method="post">
+			<form class="<?=((empty($_GET['action'])) ? 'create_form' : 'edit_form')?>" name="blog_post" action="staffblog.php" method="post">
 				<div id="postform" class="pad<?=($_REQUEST['action']!='editblog')?' hidden':''?>">	
 					<input type="hidden" name="action" value="<?=((empty($_GET['action'])) ? 'takenewblog' : 'takeeditblog')?>" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

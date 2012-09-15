@@ -143,7 +143,7 @@ $Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 		</tr>
 		
 		<tr><td>
-			<form method="post" action="">
+			<form class="search_form" name="ip_log" method="post" action="">
 				<input type="text" name="ip"/>
 				<input type="submit" value="Search"/>
 		</td></tr>	
@@ -237,7 +237,4 @@ foreach($Results as $Index => $Result) {
 	</div>
 </div>
 
-<?
-show_footer();
-?>
-
+<? show_footer(); ?>

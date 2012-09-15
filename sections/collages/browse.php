@@ -150,7 +150,7 @@ show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 	</div>
 <? if (!$BookmarkView) { ?>
 	<div>
-		<form action="" method="get">
+		<form class="search_form" name="collages" action="" method="get">
 			<div><input type="hidden" name="action" value="search" /></div>
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>

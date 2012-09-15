@@ -27,7 +27,7 @@ show_header(ucwords($Action)." Request");
 			<?=ucwords($Action)?> Request
 		</div>
 		<div class="pad">
-			<form action="requests.php" method="post">
+			<form class="<?=($Action == 'delete')?'delete_form':'edit_form'?>" name="request" action="requests.php" method="post">
 				<input type="hidden" name="action" value="take<?=$Action?>" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="id" value="<?=$_GET['id']?>" />

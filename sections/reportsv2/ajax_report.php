@@ -28,7 +28,7 @@ foreach($ReportType['report_messages'] as $Message) {
 ?>
 </ul>
 <br />
-<table class="layout" cellpadding="3" cellspacing="1" border="0" class="border" width="100%">
+<table class="layout border" cellpadding="3" cellspacing="1" border="0" width="100%">
 <?
 if(array_key_exists('image', $ReportType['report_fields'])) {
 ?>

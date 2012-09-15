@@ -69,7 +69,7 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
 	<tr class="row<?=$Row?>">
-		<form action="" method="post">
+		<form class="manage_form" name="forums" action="" method="post">
 			<input type="hidden" name="id" value="<?=$ID?>" />
 			<input type="hidden" name="action" value="forum_alter" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -123,7 +123,7 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 		<td colspan="8">Create forum</td>
 	</tr>
 	<tr class="rowa">
-		<form action="" method="post">
+		<form class="create_form" name="forum" action="" method="post">
 			<input type="hidden" name="action" value="forum_alter" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<td>

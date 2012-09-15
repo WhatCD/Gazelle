@@ -1,5 +1,5 @@
 function ChangeReportType() {
-	ajax.post("reportsv2.php?action=ajax_report","report_table", function (response) {
+	ajax.post("reportsv2.php?action=ajax_report","reportform", function (response) {
 		$('#dynamic_form').raw().innerHTML = response;
 	});
 }
@@ -59,7 +59,7 @@ function HideErrors() {
 
 function TakeResolve(reportid) {
 	$('#submit_' + reportid).disable();
-	ajax.post("reportsv2.php?action=takeresolve","report_form" + reportid, function (response) {
+	ajax.post("reportsv2.php?action=takeresolve","reportform_" + reportid, function (response) {
 		if(response) {
 			ErrorBox(reportid, response);
 		} else {
@@ -128,7 +128,7 @@ function AddMore(view, id) {
 }
 
 function SendPM(reportid) {
-	ajax.post("reportsv2.php?action=ajax_take_pm", "report_form" + reportid, function (response) {
+	ajax.post("reportsv2.php?action=ajax_take_pm", "reportform_" + reportid, function (response) {
 		if(response) {
 			$('#uploader_pm' + reportid).raw().value = response;
 		} else {
@@ -138,7 +138,7 @@ function SendPM(reportid) {
 }
 
 function UpdateComment(reportid) {
-	ajax.post("reportsv2.php?action=ajax_update_comment", 'report_form' + reportid, function (response) {
+	ajax.post("reportsv2.php?action=ajax_update_comment", "reportform_" + reportid, function (response) {
 		if(response) {
 			alert(response);
 		}

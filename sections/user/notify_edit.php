@@ -36,7 +36,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<a href="#" onclick="$('#filter_<?=$N['ID']?>').toggle(); return false;">(Show)</a>
 			</h3>
 <?	} ?>
-	<form action="user.php" method="post">
+	<form class="<?=($i>$NumFilters)?'create_form':'edit_form'?>" name="notification" action="user.php" method="post">
 		<input type="hidden" name="formid" value="<?=$i?>" />
 		<input type="hidden" name="action" value="notify_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -152,6 +152,4 @@ foreach($Notifications as $N) { //$N stands for Notifications
 <?	}
 } ?>
 </div>
-<?
-show_footer();
-?>
+<? show_footer(); ?>

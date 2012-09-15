@@ -275,7 +275,7 @@ if(count($Reports) == 0) {
 			}	
 		?>	
 			<div id="report<?=$ReportID?>">
-				<form id="report_form<?=$ReportID?>" action="reports.php" method="post">
+				<form class="manage_form" name="report" id="reportform_<?=$ReportID?>" action="reports.php" method="post">
 					<? 
 						/*
 						* Some of these are for takeresolve, namely the ones that aren't inputs, some for the javascript.			

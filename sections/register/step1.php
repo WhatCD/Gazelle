@@ -1,10 +1,10 @@
 <?
 show_header('Register','validate');
-echo $Val->GenerateJS('regform');
+echo $Val->GenerateJS('registerform');
 ?>
 <script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
 <script src="<?=STATIC_SERVER?>functions/password_validate.js" type="text/javascript"></script>
-<form name="regform" id="regform" method="post" action="" onsubmit="return formVal();">
+<form class="create_form" name="user" id="registerform" method="post" action="" onsubmit="return formVal();">
 <div style="width:500px;">
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 <?

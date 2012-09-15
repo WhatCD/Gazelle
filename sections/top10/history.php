@@ -14,7 +14,7 @@ show_header('Top 10 Torrents history!');
 		</div>
 	</div>
 	<div class="pad box">
-		<form method="get" action="">
+		<form class="search_form" name="top10" method="get" action="">
 			<input type="hidden" name="type" value="history" />
 			<h3>Search for a date! (After 2010-09-05)</h3>
 			<table class="layout">

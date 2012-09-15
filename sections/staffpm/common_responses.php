@@ -35,7 +35,7 @@ $Text = new TEXT;
 			<h3>Create new response:</h3>
 		</div>
 		<div id="response_new" class="box">
-			<form id="response_form_0" action="">
+			<form class="send_form" name="response" id="response_form_0" action="">
 				<div class="head">
 					<strong>Name:</strong> 
 					<input onfocus="if (this.value == 'New name') this.value='';" 
@@ -69,7 +69,7 @@ while(list($ID, $Message, $Name) = $DB->next_record()) {
 		<div id="ajax_message_<?=$ID?>" class="hidden center alertbar"></div>
 		<br />
 		<div id="response_<?=$ID?>" class="box">
-			<form id="response_form_<?=$ID?>" action="">
+			<form class="send_form" name="response" id="response_form_<?=$ID?>" action="">
 				<div class="head">
 					<strong>Name:</strong> 
 					<input type="hidden" name="id" value="<?=$ID?>" />
@@ -94,8 +94,4 @@ while(list($ID, $Message, $Name) = $DB->next_record()) {
 ?>
 	</div>
 </div>
-<?
-
-show_footer();
-
-?>
+<? show_footer(); ?>

@@ -427,7 +427,7 @@ show_header('Browse Torrents','browse');
 
 
 ?>
-<form name="filter" method="get" action=''>
+<form class="search_form" name="torrents" method="get" action="">
 <div class="filter_torrents">
 	<h3>
 		Filter		

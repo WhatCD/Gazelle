@@ -4,7 +4,7 @@
 <?
 if(strtotime($BannedUntil)<time() && !$BanID) {
 ?>
-	<form id="loginform" method="post" action="login.php">
+	<form class="auth_form" name="login" id="loginform" method="post" action="login.php">
 <?
 
 	if(!empty($BannedUntil) && $BannedUntil != '0000-00-00 00:00:00') {

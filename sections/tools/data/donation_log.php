@@ -52,7 +52,7 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 <br / >
 <? } ?>
 <div>
-	<form action="" method="get">
+	<form class="search_form" name="donation_log" action="" method="get">
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
 				<td class="label"><strong>Email:</strong></td>

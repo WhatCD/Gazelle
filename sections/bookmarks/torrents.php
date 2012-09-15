@@ -1,5 +1,6 @@
 <?
 include(SERVER_ROOT.'/classes/class_image_tools.php'); 
+ini_set('max_execution_time',600);
 set_time_limit(0);
 
 //~~~~~~~~~~~ Main bookmarks page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//

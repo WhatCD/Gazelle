@@ -23,7 +23,7 @@ show_header('Report', 'reportsv2');
 		<h2>Report a torrent</h2>
 	</div>
 
-	<form action="reportsv2.php?action=takereport" enctype="multipart/form-data" method="post" id="report_table">
+	<form class="create_form" name="report" action="reportsv2.php?action=takereport" enctype="multipart/form-data" method="post" id="reportform">
 		<div>
 			<input type="hidden" name="submit" value="true" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -85,4 +85,3 @@ show_header('Report', 'reportsv2');
 <?
 show_footer();
 ?>
-

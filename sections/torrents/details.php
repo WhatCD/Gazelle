@@ -290,7 +290,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		<div class="box box_addartists">
 			<div class="head"><strong>Add artist</strong><span style="float:right;"><a onclick="AddArtistField(); return false;" href="#">[+]</a></span></div>
 			<div class="body">
-				<form action="torrents.php" method="post">
+				<form class="add_form" name="artists" action="torrents.php" method="post">
 					<div id="AddArtists">
 						<input type="hidden" name="action" value="add_alias" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -352,7 +352,7 @@ if(count($Tags) > 0) {
 		<div class="box box_addtag">
 			<div class="head"><strong>Add tag</strong></div>
 			<div class="body">
-				<form action="torrents.php" method="post">
+				<form class="add_form" name="tags" action="torrents.php" method="post">
 					<input type="hidden" name="action" value="add_tag" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="groupid" value="<?=$GroupID?>" />
@@ -628,7 +628,7 @@ if (count($Requests) > 0) {
 				<tr class="requestrows <?=(++$i%2?'rowa':'rowb')?>">
 					<td><a href="requests.php?action=view&amp;id=<?=$Request['ID']?>"><?=$FormatString?> / <?=$BitrateString?> / <?=$MediaString?></a></td>
 					<td>
-						<form id="form_<?=$Request['ID']?>">
+						<form class="add_form" name="bounty" id="form_<?=$Request['ID']?>">
 							<span id="vote_count_<?=$Request['ID']?>"><?=count($RequestVotes['Voters'])?></span>
 							<input type="hidden" id="requestid_<?=$Request['ID']?>" name="requestid" value="<?=$Request['ID']?>" />
 							<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -805,14 +805,14 @@ foreach($Thread as $Key => $Post){
                     <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
                         $AuthorInfo = user_info($AuthorID);
                         if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
-                        <form action="" style="display: none;" name="warn<?=$PostID?>" method="post">
-                        <input type="hidden" name="action" value="warn" />
-                        <input type="hidden" name="groupid" value="<?=$GroupID?>" />
-                        <input type="hidden" name="postid" value="<?=$PostID?>" />
-                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
-                        <input type="hidden" name="key" value="<?=$Key?>" />
+                        <form  class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
+	                        <input type="hidden" name="action" value="warn" />
+	                        <input type="hidden" name="groupid" value="<?=$GroupID?>" />
+	                        <input type="hidden" name="postid" value="<?=$PostID?>" />
+	                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
+	                        <input type="hidden" name="key" value="<?=$Key?>" />
                         </form>
-                        - <a href="#" onclick="document.warn<?=$PostID?>.submit(); return false;">[Warn]</a>
+                        - <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
 
                     <? }
                 } ?>
@@ -889,7 +889,7 @@ if(!$LoggedUser['DisablePosting']) { ?>
 						</td>
 					</tr>
 				</table>
-				<form id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post" style="display: block; text-align: center;">
+				<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
 					<div id="quickreplytext">
 						<input type="hidden" name="action" value="reply" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -903,7 +903,4 @@ if(!$LoggedUser['DisablePosting']) { ?>
 <? } ?>
 	</div>
 </div>
-<?
-
-show_footer();
-?>
+<? show_footer(); ?>

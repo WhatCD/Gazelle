@@ -56,8 +56,8 @@ show_header($Username.' &gt; Permissions');
 ?>
 <script type="text/javascript">
 function reset() {
-	for (i = 0; i < $('#permform').raw().elements.length; i++) {
-		element = $('#permform').raw().elements[i];
+	for (i = 0; i < $('#permissionsform').raw().elements.length; i++) {
+		element = $('#permissionsform').raw().elements[i];
 		if (element.id.substr(0,8) == 'default_') {
 			$('#' + element.id.substr(8)).raw().checked = element.checked;
 		}
@@ -75,7 +75,7 @@ function reset() {
 </div>
 <br />
 
-<form name="permform" id="permform" method="post" action="">
+<form class="manage_form" name="permissions" id="permissionsform" method="post" action="">
 	<table class="layout permission_head">
 		<tr>
 			<td class="label">Extra personal collages</td>

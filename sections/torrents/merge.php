@@ -33,7 +33,7 @@ if(empty($_POST['confirm'])) {
 		<h2>Merge Confirm!</h2>
 	</div>
 	<div class="box pad">
-		<form action="torrents.php" method="post">
+		<form class="confirm_form" name="torrent_group" action="torrents.php" method="post">
 			<input type="hidden" name="action" value="merge" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="confirm" value="true" />

@@ -275,7 +275,7 @@ $Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 		<h2><a href="user.php?id=<?=$UserID?>"><?=$User['Username']?></a><?='\'s '.$Action.' torrents'?></h2>
 	</div>
 	<div>
-		<form action="" method="get">
+		<form class="search_form" name="torrents" action="" method="get">
 			<table class="layout">
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
@@ -482,9 +482,6 @@ foreach($Categories as $CatKey => $CatName) {
 
 	}
 ?>
-	</table>
 	<div class="linkbox"><?=$Pages?></div>
 </div>
-<?
-show_footer();
-?>
+<? show_footer(); ?>

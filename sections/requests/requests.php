@@ -348,153 +348,151 @@ show_header($Title, 'requests');
 <?	} ?>
 		</div>
 	</div>
-	<div>
-		<form action="" method="get">
+	<form class="search_form" name="requests" action="" method="get">
 <?	if ($BookmarkView) { ?>
-			<input type="hidden" name="action" value="view" />
-			<input type="hidden" name="type" value="requests" />
+		<input type="hidden" name="action" value="view" />
+		<input type="hidden" name="type" value="requests" />
 <?	} else { ?>
-			<input type="hidden" name="type" value="<?=$_GET['type']?>" />
+		<input type="hidden" name="type" value="<?=$_GET['type']?>" />
 <?	} ?>
-			<input type="hidden" name="submit" value="true" />
+		<input type="hidden" name="submit" value="true" />
 <?	if(!empty($_GET['userid']) && is_number($_GET['userid'])) { ?>
-			<input type="hidden" name="userid" value="<?=$_GET['userid']?>" />
+		<input type="hidden" name="userid" value="<?=$_GET['userid']?>" />
 <?	} ?>
-			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
-				<tr>
-					<td class="label">Search terms:</td>
-					<td>
-						<input type="text" name="search" size="75" value="<?if(isset($_GET['search'])) { echo display_str($_GET['search']); } ?>" />
-					</td>
-				</tr>
-				<tr>
-					<td class="label">Tags (comma-separated):</td>
-					<td>
-						<input type="text" name="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />&nbsp;
-						<input type="radio" name="tags_type" id="tags_type0" value="0" <?selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
-						<input type="radio" name="tags_type" id="tags_type1" value="1"  <?selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
-					</td>
-				</tr>
-				<tr>
-					<td class="label">Include filled:</td>
-					<td>
-						<input type="checkbox" name="show_filled" <? if(!$Submitted || !empty($_GET['show_filled']) || (!$Submitted && !empty($_GET['type']) && $_GET['type'] == "filled")) { ?>checked="checked"<? } ?> />
-					</td>
-				</tr>
+		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
+			<tr>
+				<td class="label">Search terms:</td>
+				<td>
+					<input type="text" name="search" size="75" value="<?if(isset($_GET['search'])) { echo display_str($_GET['search']); } ?>" />
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Tags (comma-separated):</td>
+				<td>
+					<input type="text" name="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />&nbsp;
+					<input type="radio" name="tags_type" id="tags_type0" value="0" <?selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="label">Include filled:</td>
+				<td>
+					<input type="checkbox" name="show_filled" <? if(!$Submitted || !empty($_GET['show_filled']) || (!$Submitted && !empty($_GET['type']) && $_GET['type'] == "filled")) { ?>checked="checked"<? } ?> />
+				</td>
+			</tr>
 <?	if(check_perms('site_see_old_requests')){ ?> 
-				<tr>
-					<td class="label">Include old:</td>
-					<td>
-						<input type="checkbox" name="showall" <? if(!empty($_GET['showall'])) {?>checked="checked"<? } ?> />
-					</td>
-				</tr>
+			<tr>
+				<td class="label">Include old:</td>
+				<td>
+					<input type="checkbox" name="showall" <? if(!empty($_GET['showall'])) {?>checked="checked"<? } ?> />
+				</td>
+			</tr>
 <?	/* ?> 
-				<tr>
-					<td class="label">Requested by:</td>
-					<td>
-						<input type="text" name="requester" size="75" value="<?=display_str($_GET['requester'])?>" />
-					</td>
-				</tr>
+			<tr>
+				<td class="label">Requested by:</td>
+				<td>
+					<input type="text" name="requester" size="75" value="<?=display_str($_GET['requester'])?>" />
+				</td>
+			</tr>
 <?	*/} ?>
-			</table>
-			<table class="layout cat_list">
+		</table>
+		<table class="layout cat_list">
 <?
 $x=1;
 reset($Categories);
 foreach($Categories as $CatKey => $CatName) {
 	if($x%8==0 || $x==1) {
 ?>
-					<tr class="cat_list">
+				<tr class="cat_list">
 <?	} ?>
-						<td>
-							<input type="checkbox" name="filter_cat[<?=($CatKey+1)?>]" id="cat_<?=($CatKey+1)?>" value="1" <? if(isset($_GET['filter_cat'][$CatKey+1])) { ?>checked="checked"<? } ?> />
-							<label for="cat_<?=($CatKey+1)?>"><?=$CatName?></label>
-						</td>
+					<td>
+						<input type="checkbox" name="filter_cat[<?=($CatKey+1)?>]" id="cat_<?=($CatKey+1)?>" value="1" <? if(isset($_GET['filter_cat'][$CatKey+1])) { ?>checked="checked"<? } ?> />
+						<label for="cat_<?=($CatKey+1)?>"><?=$CatName?></label>
+					</td>
 <?
 	if($x%7==0) {
 ?>
-					</tr>
+				</tr>
 <?
 	}
 	$x++;
 }
 ?>
-			</table>
-			<table class="layout">
-				<tr id="release_list">
-					<td class="label">Release Types</td>
-					<td>
-						<input type="checkbox" id="toggle_releases" onchange="Toggle('releases', 0)" <?=(!$Submitted || !empty($ReleaseArray) && count($ReleaseArray) == count($ReleaseTypes) ? ' checked="checked"' : '')?>/> <label for="toggle_releases">All</label>
+		</table>
+		<table class="layout">
+			<tr id="release_list">
+				<td class="label">Release Types</td>
+				<td>
+					<input type="checkbox" id="toggle_releases" onchange="Toggle('releases', 0)" <?=(!$Submitted || !empty($ReleaseArray) && count($ReleaseArray) == count($ReleaseTypes) ? ' checked="checked"' : '')?>/> <label for="toggle_releases">All</label>
 <?		$i = 0;
 		foreach ($ReleaseTypes as $Key => $Val) {
 			if($i % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="releases[]" value="<?=$Key?>" id="release_<?=$Key?>"
-							<?=(((!$Submitted) || !empty($ReleaseArray) && in_array($Key, $ReleaseArray)) ? ' checked="checked" ' : '')?>
-						/> <label for="release_<?=$Key?>"><?=$Val?></label>
+					<input type="checkbox" name="releases[]" value="<?=$Key?>" id="release_<?=$Key?>"
+						<?=(((!$Submitted) || !empty($ReleaseArray) && in_array($Key, $ReleaseArray)) ? ' checked="checked" ' : '')?>
+					/> <label for="release_<?=$Key?>"><?=$Val?></label>
 <?			$i++;
 		}?>
-					</td>
-				</tr>
-				<tr id="format_list">
-					<td class="label">Formats</td>
-					<td>
-						<input type="checkbox" id="toggle_formats" onchange="Toggle('formats', 0);" <?=(!$Submitted || !empty($FormatArray) && count($FormatArray) == count($Formats) ? ' checked="checked"' : '')?>/>
-						<label for="toggle_formats">All</label>
-						<input type="checkbox" id="formats_strict" name="formats_strict"<?=(!empty($_GET['formats_strict']) ? ' checked="checked"' : '')?> />
-						<label for="formats_strict">Only specified</label>
+				</td>
+			</tr>
+			<tr id="format_list">
+				<td class="label">Formats</td>
+				<td>
+					<input type="checkbox" id="toggle_formats" onchange="Toggle('formats', 0);" <?=(!$Submitted || !empty($FormatArray) && count($FormatArray) == count($Formats) ? ' checked="checked"' : '')?>/>
+					<label for="toggle_formats">All</label>
+					<input type="checkbox" id="formats_strict" name="formats_strict"<?=(!empty($_GET['formats_strict']) ? ' checked="checked"' : '')?> />
+					<label for="formats_strict">Only specified</label>
 <?		foreach ($Formats as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="formats[]" value="<?=$Key?>" id="format_<?=$Key?>"
-							<?=(((!$Submitted) || !empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
-						/> <label for="format_<?=$Key?>"><?=$Val?></label>
+					<input type="checkbox" name="formats[]" value="<?=$Key?>" id="format_<?=$Key?>"
+						<?=(((!$Submitted) || !empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
+					/> <label for="format_<?=$Key?>"><?=$Val?></label>
 <?		}?>
-					</td>
-				</tr>				
-				<tr id="bitrate_list">
-					<td class="label">Bitrates</td>
-					<td>
-						<input type="checkbox" id="toggle_bitrates" onchange="Toggle('bitrates', 0);"<?=(!$Submitted || !empty($BitrateArray) && count($BitrateArray) == count($Bitrates) ? ' checked="checked"' : '')?> />
-						<label for="toggle_bitrates">All</label>
-						<input type="checkbox" id="bitrate_strict" name="bitrate_strict"<?=(!empty($_GET['bitrate_strict']) ? ' checked="checked"' : '')?>/>
-						<label for="bitrate_strict">Only specified</label>
+				</td>
+			</tr>				
+			<tr id="bitrate_list">
+				<td class="label">Bitrates</td>
+				<td>
+					<input type="checkbox" id="toggle_bitrates" onchange="Toggle('bitrates', 0);"<?=(!$Submitted || !empty($BitrateArray) && count($BitrateArray) == count($Bitrates) ? ' checked="checked"' : '')?> />
+					<label for="toggle_bitrates">All</label>
+					<input type="checkbox" id="bitrate_strict" name="bitrate_strict"<?=(!empty($_GET['bitrate_strict']) ? ' checked="checked"' : '')?>/>
+					<label for="bitrate_strict">Only specified</label>
 <?		foreach ($Bitrates as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
-							<?=(((!$Submitted) || !empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
-						/> <label for="bitrate_<?=$Key?>"><?=$Val?></label>
+					<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
+						<?=(((!$Submitted) || !empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
+					/> <label for="bitrate_<?=$Key?>"><?=$Val?></label>
 <?		}?>
-					</td>
-				</tr>
-				<tr id="media_list">
-					<td class="label">Media</td>
-					<td>
-						<input type="checkbox" id="toggle_media" onchange="Toggle('media', 0);"<?=(!$Submitted || !empty($MediaArray) && count($MediaArray) == count($Media) ? ' checked="checked"' : '')?> />
-						<label for="toggle_media">All</label>
-						<input type="checkbox" id="media_strict" name="media_strict"<?=(!empty($_GET['media_strict']) ? ' checked="checked"' : '')?> />
-						<label for="media_strict">Only specified</label>
+				</td>
+			</tr>
+			<tr id="media_list">
+				<td class="label">Media</td>
+				<td>
+					<input type="checkbox" id="toggle_media" onchange="Toggle('media', 0);"<?=(!$Submitted || !empty($MediaArray) && count($MediaArray) == count($Media) ? ' checked="checked"' : '')?> />
+					<label for="toggle_media">All</label>
+					<input type="checkbox" id="media_strict" name="media_strict"<?=(!empty($_GET['media_strict']) ? ' checked="checked"' : '')?> />
+					<label for="media_strict">Only specified</label>
 <?		foreach ($Media as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"
-							<?=(((!$Submitted) || !empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
-						/> <label for="media_<?=$Key?>"><?=$Val?></label>
+					<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"
+						<?=(((!$Submitted) || !empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
+					/> <label for="media_<?=$Key?>"><?=$Val?></label>
 <?		}?>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" class="center">
-						<input type="submit" value="Search requests" />
-					</td>
-				</tr>
-			</table>	
-		</form>
-	</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="center">
+					<input type="submit" value="Search requests" />
+				</td>
+			</tr>
+		</table>	
+	</form>
 
 <?		if($NumResults) { ?>
 	<div class="linkbox">
 		<?=$PageLinks?>
 	</div>
 <?		} ?>
-	<table id="request_table" class="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
+	<table id="request_table" class="request_table border" cellpadding="6" cellspacing="1" border="0" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;" class="nobr">
 				<strong>Request Name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder == 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
@@ -612,7 +610,7 @@ foreach($Categories as $CatKey => $CatName) {
 			</td>
 			<td class="nobr">
 <?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
-				<form id="form_<?=$RequestID?>">
+				<form class="add_form" name="request" id="form_<?=$RequestID?>">
 					<span id="vote_count_<?=$RequestID?>"><?=$VoteCount?></span>
 					<input type="hidden" id="requestid_<?=$RequestID?>" name="requestid" value="<?=$RequestID?>" />
 					<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

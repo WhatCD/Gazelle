@@ -71,7 +71,7 @@ switch($Type) {
 	case "thread" :
 		$DB->query("SELECT Title FROM forums_topics WHERE ID=".$ThingID);
 		if($DB->record_count() < 1) {
-			$Error = "No thread with the reported ID found";
+			$Error = "No forum thread with the reported ID found";
 		} else {
 			list($Title) = $DB->next_record();
 			$TypeLink = "[url=https://".NONSSL_SITE_URL."forums.php?action=viewthread&amp;threadid=".$ThingID."]".display_str($Title)."[/url]";
@@ -87,10 +87,10 @@ switch($Type) {
 		}
 		$DB->query("SELECT p.ID, p.Body, p.TopicID, (SELECT COUNT(ID) FROM forums_posts WHERE forums_posts.TopicID = p.TopicID AND forums_posts.ID<=p.ID) AS PostNum FROM forums_posts AS p WHERE ID=".$ThingID);
 		if($DB->record_count() < 1) {
-			$Error =  "No post with the reported ID found";
+			$Error =  "No forum post with the reported ID found";
 		} else {
 			list($PostID,$Body,$TopicID,$PostNum) = $DB->next_record();
-			$TypeLink = "[url=https://".NONSSL_SITE_URL."forums.php?action=viewthread&amp;threadid=".$TopicID."&post=".$PostNum."#post".$PostID."]POST[/url]";
+			$TypeLink = "[url=https://".NONSSL_SITE_URL."forums.php?action=viewthread&amp;threadid=".$TopicID."&amp;post=".$PostNum."#post".$PostID."]FORUM POST[/url]";
 			$Subject = "Post Report";
 
 		}
@@ -98,23 +98,23 @@ switch($Type) {
 	case "requests_comment" :
 		$DB->query("SELECT rc.RequestID, rc.Body, (SELECT COUNT(ID) FROM requests_comments WHERE ID <= ".$ThingID." AND requests_comments.RequestID = rc.RequestID) AS CommentNum FROM requests_comments AS rc WHERE ID=".$ThingID);
 		if($DB->record_count() < 1) {
-			$Error =  "No comment with the reported ID found";
+			$Error =  "No request comment with the reported ID found";
 		} else {
 			list($RequestID, $Body, $PostNum) = $DB->next_record();
 			$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-			$TypeLink = "[url=https://".NONSSL_SITE_URL."requests.php?action=view&amp;id=".$RequestID."&page=".$PageNum."#post".$ThingID."]COMMENT[/url]";
-			$Subject = "Requests Comment Report";
+			$TypeLink = "[url=https://".NONSSL_SITE_URL."requests.php?action=view&amp;id=".$RequestID."&amp;page=".$PageNum."#post".$ThingID."]REQUEST COMMENT[/url]";
+			$Subject = "Request Comment Report";
 
 		}
 		break;
 	case "torrents_comment" :
 		$DB->query("SELECT tc.GroupID, tc.Body, (SELECT COUNT(ID) FROM torrents_comments WHERE ID <= ".$ThingID." AND torrents_comments.GroupID = tc.GroupID) AS CommentNum FROM torrents_comments AS tc WHERE ID=".$ThingID);
 		if($DB->record_count() < 1) {
-			$Error =  "No comment with the reported ID found";
+			$Error =  "No torrent comment with the reported ID found";
 		} else {
 			list($GroupID, $Body, $PostNum) = $DB->next_record();
 			$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-			$TypeLink = "[url=https://".NONSSL_SITE_URL."torrents.php?id=".$GroupID."&page=".$PageNum."#post".$ThingID."]COMMENT[/url]";
+			$TypeLink = "[url=https://".NONSSL_SITE_URL."torrents.php?id=".$GroupID."&amp;page=".$PageNum."#post".$ThingID."]TORRENT COMMENT[/url]";
 			$Subject = "Torrent Comment Report";
 
 		}
@@ -122,12 +122,12 @@ switch($Type) {
 	case "collages_comment" :
 		$DB->query("SELECT cc.CollageID, cc.Body, (SELECT COUNT(ID) FROM collages_comments WHERE ID <= ".$ThingID." AND collages_comments.CollageID = cc.CollageID) AS CommentNum FROM collages_comments AS cc WHERE ID=".$ThingID);
 		if($DB->record_count() < 1) {
-			$Error =  "No comment with the reported ID found";
+			$Error =  "No collage comment with the reported ID found";
 		} else {
 			list($CollageID, $Body, $PostNum) = $DB->next_record();
 			$PerPage = POSTS_PER_PAGE;
 			$PageNum = ceil($PostNum / $PerPage);
-			$TypeLink = "[url=https://".NONSSL_SITE_URL."collage.php?action=comments&amp;collageid=".$CollageID."&page=".$PageNum."#post".$ThingID."]COMMENT[/url]";
+			$TypeLink = "[url=https://".NONSSL_SITE_URL."collage.php?action=comments&amp;collageid=".$CollageID."&amp;page=".$PageNum."#post".$ThingID."]COLLAGE COMMENT[/url]";
 			$Subject = "Collage Comment Report";
 		}
 		break;
@@ -153,7 +153,7 @@ $Body = "You reported this $TypeLink for the reason:\n[quote]".$Reason."[/quote]
 			</a>
 		</h2>
 	</div>
-	<form action="reports.php" method="post" id="messageform">
+	<form class="send_form" name="message" action="reports.php" method="post" id="messageform">
 		<div class="box pad">
 			<input type="hidden" name="action" value="takecompose" /> <input
 				type="hidden" name="toid" value="<?=$ToID?>" /> <input type="hidden"

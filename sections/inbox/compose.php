@@ -23,7 +23,7 @@ show_header('Compose', 'inbox,bbcode');
 	<div class="header">
 		<h2>Send a message to <a href="user.php?id=<?=$ToID?>"><?=$Username?></a></h2>
 	</div>
-	<form action="inbox.php" method="post" id="messageform">
+	<form class="send_form" name="message" action="inbox.php" method="post" id="messageform">
 		<div class="box pad">
 			<input type="hidden" name="action" value="takecompose" />
 			<input type="hidden" name="toid" value="<?=$ToID?>" />
@@ -32,7 +32,7 @@ show_header('Compose', 'inbox,bbcode');
 				<h3>Subject</h3>
 				<input type="text" name="subject" size="95" value="<?=(!empty($Subject) ? $Subject : '')?>"/><br />
 				<h3>Body</h3>
-				<textarea id="body" name="body" cols="95" rows="10"><?=(!empty($Body) ? $Body : '')?></textarea>
+				<textarea id="body" name="body"  cols="95"  rows="10"><?=(!empty($Body) ? $Body : '')?></textarea>
 			</div>
 			<div id="preview" class="hidden"></div>
 			<div id="buttons" class="center">

@@ -125,25 +125,25 @@ if(!$Sneaky
 		<p><em>Do not send an invite if you haven't read and understood the information above.</em></p>
 	</div>
 	<div class="box pad">
-		<form action="user.php" method="post">
+		<form class="send_form" name="invite" action="user.php" method="post">
 			<input type="hidden" name="action" value="takeinvite" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
-			<tr>
-				<td class="label">Email:</td>
-				<td>
-					<input type="text" name="email" size="60" />
-					<input type="submit" value="Invite" />
-				</td>
-			</tr>
+			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
+				<tr>
+					<td class="label">Email:</td>
+					<td>
+						<input type="text" name="email" size="60" />
+						<input type="submit" value="Invite" />
+					</td>
+				</tr>
 			</table>
 		</form>
 	</div>
 <?
 } elseif (!empty($LoggedUser['DisableInvites'])) {?>
 	<div class="box pad" style="text-align: center">
-		<strong class="important_text">Your invites have been disabled.  Please read <a href="wiki.php?action=article&amp;id=310">this article</a> for more information.</strong>
+		<strong class="important_text">Your invites have been disabled. Please read <a href="wiki.php?action=article&amp;id=310">this article</a> for more information.</strong>
 	</div>
 <?
 } elseif ($LoggedUser['RatioWatch'] || !$CanLeech) { ?>
@@ -212,5 +212,4 @@ if (!empty($Pending)) {
 		</table>
 	</div>
 </div>
-<?
-show_footer();
+<? show_footer(); ?>

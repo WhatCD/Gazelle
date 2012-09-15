@@ -149,7 +149,7 @@ switch($Short) {
 
 	<div class="box pad center">
 		<p><strong>It will greatly increase the turnover rate of the updates if you can fill in as much of the following details as possible.</strong></p>
-		<form action="" method="post">
+		<form class="create_form" name="report" action="" method="post">
 			<input type="hidden" name="action" value="takereport" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="id" value="<?=$ID?>" />
@@ -273,7 +273,7 @@ if(empty($NoReason)) {
 ?>
 	<h3>Reason</h3>
 	<div class="box pad center">
-		<form action="" method="post">
+		<form class="create_form" name="report" action="" method="post">
 			<input type="hidden" name="action" value="takereport" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="id" value="<?=$ID?>" />
@@ -289,4 +289,3 @@ if(empty($NoReason)) {
 <?
 show_footer();
 ?>
-

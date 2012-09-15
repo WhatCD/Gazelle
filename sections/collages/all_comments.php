@@ -110,7 +110,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 		<br />
 		<h3>Post reply</h3>
 		<div class="box pad" style="padding:20px 10px 10px 10px;">
-			<form id="quickpostform" action="" method="post" style="display: block; text-align: center;">
+			<form class="send_form center" name="comment" id="quickpostform" action="" method="post">
 				<input type="hidden" name="action" value="add_comment" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="collageid" value="<?=$CollageID?>" />

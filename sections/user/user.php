@@ -981,7 +981,7 @@ if($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
 	}
 }
 if (check_perms('users_mod', $Class)) { ?>
-		<form id="form" action="user.php" method="post">
+		<form class="manage_form" name="user" id="form" action="user.php" method="post">
 		<input type="hidden" name="action" value="moderate" />
 		<input type="hidden" name="userid" value="<?=$UserID?>" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -1209,7 +1209,7 @@ if (check_perms('users_mod', $Class)) { ?>
 			<tr id="ReduceWarningTR">
 				<td class="label">Reduction:</td>
 				<td>
-					<select name="ReduceWarning"ReduceWarning">
+					<select name="ReduceWarning">
 						<option>---</option>
 						<option value="1"> 1 Week</option>
 						<option value="2"> 2 Weeks</option>

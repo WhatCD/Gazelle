@@ -37,7 +37,7 @@ show_header('Edit artist');
 		<h2>Edit <a href="artist.php?id=<?=$ArtistID?>"><?=$Name?></a></h2>
 	</div>
 	<div class="box pad">
-		<form action="artist.php" method="post">
+		<form class="edit_form" name="artist" action="artist.php" method="post">
 			<input type="hidden" name="action" value="edit" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
@@ -58,7 +58,7 @@ show_header('Edit artist');
 <? if(check_perms('torrents_edit')) { ?> 
 	<h2>Rename</h2>
 	<div class="box pad">
-		<form action="artist.php" method="post">
+		<form class="rename_form" name="artist" action="artist.php" method="post">
 			<input type="hidden" name="action" value="rename" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
@@ -74,7 +74,7 @@ show_header('Edit artist');
 	
 	<h2>Make into non-redirecting alias</h2>
 	<div class="box pad">
-		<form action="artist.php" method="post">
+		<form class="merge_form" name="artist" action="artist.php" method="post">
 			<input type="hidden" name="action" value="change_artistid" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
@@ -87,7 +87,6 @@ show_header('Edit artist');
 					<br /><br />
 					<input type="submit" value="Change ArtistID" />
 				</div>
-				
 			</div>
 		</form>
 	</div>
@@ -109,23 +108,18 @@ show_header('Edit artist');
 <?	}
 ?>
 		</ul>
-		<form action="artist.php" method="post">
-			<div>
-				<input type="hidden" name="action" value="add_alias" />
-				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
-				<h3>Name:</h3>
-				<input type="text" name="name" size="40" value="<?=$Name?>" /><br />
-				<h3>Writes redirect to (Alias ID, blank for no redirect):</h3>
-				<input type="text" name="redirect" size="40" value="<?=$DefaultRedirectID?>" /><br />
-				<em>This redirects artist names as they are written, eg. new torrents and added artists. All uses of this new alias will be redirected to the alias ID you enter here. Use for common misspellings, etc.</em><br />
-				<input type="submit" value="Add alias" />
-				
-			</div>
+		<form class="add_form" name="aliases" action="artist.php" method="post">
+			<input type="hidden" name="action" value="add_alias" />
+			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
+			<h3>Name:</h3>
+			<input type="text" name="name" size="40" value="<?=$Name?>" /><br />
+			<h3>Writes redirect to (Alias ID, blank for no redirect):</h3>
+			<input type="text" name="redirect" size="40" value="<?=$DefaultRedirectID?>" /><br />
+			<em>This redirects artist names as they are written, eg. new torrents and added artists. All uses of this new alias will be redirected to the alias ID you enter here. Use for common misspellings, etc.</em><br />
+			<input type="submit" value="Add alias" />
 		</form>
 	</div>
-	
-	
 <? } ?> 
 </div>
 <? show_footer() ?>

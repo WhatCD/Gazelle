@@ -71,7 +71,7 @@ show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 		</table>
 	</div>
 	<div class="box pad">
-		<form action="" id="newthreadform" onsubmit="newthreadform.submit_button.disabled=true;" method="post">
+		<form class="create_form" name="forum_thread" action="" id="newthreadform" onsubmit="newthreadform.submit_button.disabled=true;" method="post">
 			<input type="hidden" name="action" value="new" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="forum" value="<?=$ForumID?>" />

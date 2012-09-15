@@ -48,7 +48,7 @@ show_header();
 			<td></td>
 		</tr>
 		<tr>
-			<form action="" method="post">
+			<form class="add_form" name="forum_rules" action="" method="post">
 				<td>
 					<input name="new_thread" type="text" size="8" />
 				</td>
@@ -60,7 +60,7 @@ show_header();
 		<tr>
 			<td><?=$ThreadID?></td>
 			<td>
-				<form action="" method="post">
+				<form class="delete_form" name="forum_rules" action="" method="post">
 					<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
 					<input type="submit" name="del" value="Delete link" />
 				</form>

@@ -17,7 +17,7 @@ show_header('Common Snatches');
 	</tr>
 	<tr/>
 	<tr>
-		<form method="post">
+		<form class="manage_form" name="common_snatches" method="post">
 			<input type="hidden" name="compare" value="1" />
 			<td>
 			<input type="text" name="userida"/>

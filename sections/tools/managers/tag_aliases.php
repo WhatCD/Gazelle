@@ -42,7 +42,7 @@ if (isset($_POST['changealias'])) {
 	</tr>
 	<tr/>
 	<tr>
-		<form method="post">
+		<form class="add_form" name="aliases" action="" method="post">
 			<input type="hidden" name="newalias" value="1" />
 			<td>
 			<input type="text" name="aliastag"/>
@@ -60,7 +60,7 @@ $DB->query("SELECT ID,BadTag,AliasTag FROM tag_aliases ORDER BY " . $orderby);
 while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 	?>
 	<tr>
-		<form method="post">
+		<form class="manage_form" name="aliases" method="post">
 			<input type="hidden" name="changealias" value="1" />
 			<input type="hidden" name="aliasid" value="<?=$ID?>" />
 			<td>
@@ -77,6 +77,4 @@ while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 	</tr>
 	<? }?>
 </table>
-<?
-show_footer();
-?>
+<? show_footer(); ?>

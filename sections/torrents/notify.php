@@ -83,7 +83,7 @@ $DB->set_query_id($Results);
 	<a href="torrents.php?action=notify_cleargroup&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">(clear)</a>
 	<a href="javascript:GroupClear($('#notificationform_<?=$FilterID?>').raw())">(clear selected)</a>
 </h3>
-<form id="notificationform_<?=$FilterID?>">
+<form class="manage_form" name="torrents" id="notificationform_<?=$FilterID?>">
 <table class="torrent_table cats checkboxes border">
 	<tr class="colhead">
 		<td style="text-align: center"><input type="checkbox" name="toggle" onclick="ToggleBoxes(this.form, this.checked)" /></td>
@@ -181,7 +181,4 @@ $DB->set_query_id($Results);
 <div class="linkbox">
 	<?=$Pages?>
 </div>
-
-<?
-show_footer();
-?>
+<? show_footer(); ?>

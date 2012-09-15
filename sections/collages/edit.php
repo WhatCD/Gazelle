@@ -14,7 +14,7 @@ show_header('Edit collage');
 	<div class="header">
 		<h2>Edit collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>
 	</div>
-	<form action="collages.php" method="post">
+	<form class="edit_form" name="collage" action="collages.php" method="post">
 		<input type="hidden" name="action" value="edit_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="collageid" value="<?=$CollageID?>" />

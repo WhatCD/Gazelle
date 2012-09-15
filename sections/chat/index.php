@@ -73,7 +73,7 @@ if(empty($IRCKey)) {
 				<strong>Read the topic before asking questions.</strong>
 			</li>
 		</ul>
-		<form method="post" action="chat.php" class="center">
+		<form class="confirm_form center" name="chat" method="post" action="chat.php">
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="submit" name="accept" value="I agree to these rules" />
 		</form>

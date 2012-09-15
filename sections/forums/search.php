@@ -78,7 +78,7 @@ show_header('Forums'.' > '.'Search', 'bbcode');
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; Search<?=$Title?></h2>
-	<form action="" method="get">
+	<form class="search_form" name="forums" action="" method="get">
 		<input type="hidden" name="action" value="search" />
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>

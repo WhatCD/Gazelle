@@ -160,12 +160,12 @@ function user_dupes_table($UserID) {
 		$Dupes = array();
 	}
 ?>
-		<form method="POST" id="linkedform">
-			<input type="hidden" name="action" value="dupes">
-			<input type="hidden" name="dupeaction" value="update">
-			<input type="hidden" name="userid" value="<?=$UserID?>">
-			<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>">
-			<input type="hidden" id="form_comment_hash" name="form_comment_hash" value="<?=$CommentHash?>">
+		<form class="manage_form" name="user" method="post" id="linkedform">
+			<input type="hidden" name="action" value="dupes" />
+			<input type="hidden" name="dupeaction" value="update" />
+			<input type="hidden" name="userid" value="<?=$UserID?>" />
+			<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+			<input type="hidden" id="form_comment_hash" name="form_comment_hash" value="<?=$CommentHash?>" />
 			<div class="box">
 				<div class="head"><?=max($DupeCount - 1, 0)?> Linked Account<?=(($DupeCount == 2)?'':'s')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;">(View)</a></div>
 				<table width="100%" class="layout hidden linkedaccounts">
@@ -201,12 +201,12 @@ function user_dupes_table($UserID) {
 							<div id="editdupecomments" class="<?=$DupeCount?'hidden':''?>">
 								<textarea name="dupecomments" onkeyup="resize('dupecommentsbox');" id="dupecommentsbox" cols="65" rows="5" style="width:98%;"><?=display_str($Comments)?></textarea>
 							</div>
-							<span style="float:right; font-style: italic;"><a href="#" onclick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;">(Edit linked account comments)</a>
+							<span style="float:right; font-style: italic;"><a href="#" onclick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;">(Edit linked account comments)</a></span>
 						</td>
 					</tr>
 				</table>
 				<div class="pad hidden linkedaccounts">
-					<label for="target">Link this user with: </label><input type="text" name="target" id="target"><input type="submit" value="Link" id="submitlink" />
+					<label for="target">Link this user with: </label><input type="text" name="target" id="target" /><input type="submit" value="Link" id="submitlink" />
 				</div>
 			</div>
 		</form>

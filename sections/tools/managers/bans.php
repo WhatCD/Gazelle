@@ -78,7 +78,7 @@ $DB->set_query_id($Bans);
 	<h2>IP Bans</h2>
 </div>
 <div>
-	<form action="" method="get">
+	<form class="search_form" name="bans" action="" method="get">
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
 				<td class="label"><label for="ip">IP:</label></td>
@@ -109,7 +109,7 @@ $DB->set_query_id($Bans);
 		<td>Submit</td>
 	</tr>
 	<tr class="rowa">
-		<form action="" method="post">
+		<form class="create_form" name="ban" action="" method="post">
 			<input type="hidden" name="action" value="ip_ban" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<td colspan="2">
@@ -133,7 +133,7 @@ while(list($ID, $Start, $End, $Reason) = $DB->next_record()){
 	$End=long2ip($End);
 ?>
 	<tr class="row<?=$Row?>">
-		<form action="" method="post">
+		<form class="manage_form" name="ban" action="" method="post">
 			<input type="hidden" name="id" value="<?=$ID?>" />
 			<input type="hidden" name="action" value="ip_ban" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

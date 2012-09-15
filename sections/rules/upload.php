@@ -45,8 +45,10 @@ show_header('Uploading Rules');
 	</div>
 <!-- Uploading Rules Index Links -->
 	<br />
-	<input type="text" id="search_string" value="Filter (empty to reset)" />
-	<span id="Index">Example: The search term <strong>FLAC</strong> returns all rules containing <strong>FLAC</strong>. The search term <strong>FLAC+trump</strong> returns all rules containing both <strong>FLAC</strong> and <strong>trump</strong>.</span>
+	<form class="search_form" name="rules" onsubmit="return false">
+		<input type="text" id="search_string" value="Filter (empty to reset)" />
+		<span id="Index">Example: The search term <strong>FLAC</strong> returns all rules containing <strong>FLAC</strong>. The search term <strong>FLAC+trump</strong> returns all rules containing both <strong>FLAC</strong> and <strong>trump</strong>.</span>
+	</form>
 	<br />
 	<div class="before_rules">
 		<div class="box pad" style="padding:10px 10px 10px 20px;">

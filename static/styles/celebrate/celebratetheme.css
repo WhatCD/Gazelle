@@ -34,7 +34,7 @@ body {
 	overflow: auto;
 }
 
-table tbody, .main_column, .sidebar, .box, .thin, .pad, #threadpoll, #polls {
+table tbody, .main_column, .sidebar, .box, .thin, .pad, #threadpoll, #poll {
 	color: #444;
 }
 

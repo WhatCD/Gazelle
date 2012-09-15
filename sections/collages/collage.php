@@ -416,7 +416,7 @@ if(check_perms('zip_downloader')){
 		<div class="box box_zipdownload">
 			<div class="head colhead_dark"><strong>Collector</strong></div>
 			<div class="pad">
-				<form action="collages.php" method="post">
+				<form class="download_form" name="zip" action="collages.php" method="post">
 				<input type="hidden" name="action" value="download" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="collageid" value="<?=$CollageID?>" /> 
@@ -531,9 +531,9 @@ foreach ($Users as $ID => $User) {
 		</div>
 <? if(check_perms('site_collages_manage') && !$Locked) { ?>
 		<div class="box box_addtorrent">
-			<div class="head"><strong>Add torrent</strong><span style="float: right"><a href="#" onclick="$('#addtorrent').toggle(); $('#batchadd').toggle(); this.innerHTML = (this.innerHTML == '[Batch Add]'?'[Individual Add]':'[Batch Add]'); return false;">[Batch Add]</a></span></div>
-			<div class="pad" id="addtorrent">
-				<form action="collages.php" method="post">
+			<div class="head"><strong>Add torrent</strong><span style="float: right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == '[Batch Add]'?'[Individual Add]':'[Batch Add]'); return false;">[Batch Add]</a></span></div>
+			<div class="pad add_torrent_container">
+				<form class="add_form" name="torrent" action="collages.php" method="post">
 					<input type="hidden" name="action" value="add_torrent" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
@@ -543,8 +543,8 @@ foreach ($Users as $ID => $User) {
 					<i>Enter the URL of a torrent on the site.</i>
 				</form>
 			</div>
-			<div class="pad hidden" id="batchadd">
-				<form action="collages.php" method="post">
+			<div class="pad hidden add_torrent_container">
+				<form class="add_form" name="torrents" action="collages.php" method="post">
 					<input type="hidden" name="action" value="add_torrent_batch" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
@@ -589,7 +589,7 @@ if(!$LoggedUser['DisablePosting']) {
 ?>
 		<div class="box box_addcomment">
 			<div class="head"><strong>Add comment</strong></div>
-			<form id="quickpostform" onsubmit="quickpostform.submit_button.disabled=true;" action="collages.php" method="post">
+			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled=true;" action="collages.php" method="post">
 				<input type="hidden" name="action" value="add_comment" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="collageid" value="<?=$CollageID?>" />

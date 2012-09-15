@@ -78,7 +78,7 @@ if (isset($_POST['Username'])) {
 		<h2>Create a User</h2>
 	</div>
 	
-	<form method="post" action="" name="create_user">
+	<form class="create_form" name="user" method="post" action="">
 		<input type="hidden" name="action" value="create_user" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
@@ -100,10 +100,6 @@ if (isset($_POST['Username'])) {
 	</table>
 	</form>
 	<?
-
 }
 
-//Show the footer
-show_footer();
-
-?>
+show_footer(); ?>

@@ -15,7 +15,7 @@ show_header($Title." Aliases");
 			Aliases are exact search strings or names that can be used to link to an article. [[Alias]]
 		</div>
 	</div>
-	<form action="wiki.php" method="get">
+	<form class="add_form" name="aliases" action="wiki.php" method="get">
 		<input type="hidden" name="action" id="action" value="compare" />
 		<input type="hidden" name="id" id="id" value="<?=$ArticleID?>" />
 		<table class="layout">

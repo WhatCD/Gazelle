@@ -68,7 +68,7 @@ if (!empty($Votes)) {
 if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 ?>
 <span class="error">Please select an option.</span><br />
-<form id="polls">
+<form class="vote_form" name="poll" id="poll">
 	<input type="hidden" name="action" value="poll"/>
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<input type="hidden" name="large" value="<?=display_str($_POST['large'])?>"/>
@@ -78,7 +78,7 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 	<label for="answer_<?=$i?>"><?=display_str($Answers[$i])?></label><br />
 <? } ?>
 	<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank - Show the results!</label><br /><br />
-	<input type="button" onclick="ajax.post('index.php','polls',function(response){$('#poll_results').raw().innerHTML = response});" value="Vote">
+	<input type="button" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote" />
 </form>
 <?
 } else {

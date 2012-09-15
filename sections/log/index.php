@@ -20,7 +20,7 @@ if(!isset($_GET['beta']) || $_GET['beta'] == 1) {
 		<h2>Site log<?=$BetaLog ? ' (beta)' : ''?></h2>
 	</div>
 	<div>
-		<form action="" method="get">
+		<form class="search_form" name="log" action="" method="get">
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
