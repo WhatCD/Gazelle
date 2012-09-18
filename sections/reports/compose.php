@@ -28,8 +28,8 @@ if(!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$ToID])) {
 }
 
 $DB->query("SELECT Username FROM users_main WHERE ID='$ToID'");
-list($Username) = $DB->next_record();
-if(!$Username) {
+list($ComposeToUsername) = $DB->next_record();
+if(!$ComposeToUsername) {
 	error(404);
 }
 show_header('Compose', 'inbox,bbcode');
@@ -148,9 +148,7 @@ $Body = "You reported this $TypeLink for the reason:\n[quote]".$Reason."[/quote]
 <div class="thin">
 	<div class="header">
 		<h2>
-			Send a message to <a href="user.php?id=<?=$ToID?>
-"> <?=$Username?>
-			</a>
+			Send a message to <a href="user.php?id=<?=$ToID?>"> <?=$ComposeToUsername?></a>
 		</h2>
 	</div>
 	<form class="send_form" name="message" action="reports.php" method="post" id="messageform">

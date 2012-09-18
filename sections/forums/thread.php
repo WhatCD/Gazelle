@@ -321,9 +321,9 @@ if ($ThreadInfo['NoPoll'] == 0) {
 ?>
 			<div id="poll_container">
 				<form class="vote_form" name="poll" id="poll">
-					<input type="hidden" name="action" value="poll"/>
+					<input type="hidden" name="action" value="poll" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					<input type="hidden" name="large" value="1"/>
+					<input type="hidden" name="large" value="1" />
 					<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
 					<ul style="list-style: none;" id="poll_options">
 <? foreach($Answers as $i => $Answer) { //for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
@@ -342,26 +342,26 @@ if ($ThreadInfo['NoPoll'] == 0) {
 					<br />
 					<br />
 <? } ?>
-					<input type="button" style="float: left;" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote">
+					<input type="button" style="float: left;" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote" />
 				</form>
 			</div>
 <? } ?>
 <? if(check_perms('forums_polls_moderate') && !$RevealVoters) { ?>
 	<? if (!$Featured || $Featured == '0000-00-00 00:00:00') { ?>
 			<form class="manage_form" name="poll" action="forums.php" method="post">
-				<input type="hidden" name="action" value="poll_mod"/>
+				<input type="hidden" name="action" value="poll_mod" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
-				<input type="hidden" name="feature" value="1">
-				<input type="submit" style="float: left;" onclick="return confirm('Are you sure you want to feature this poll?');"; value="Feature">
+				<input type="hidden" name="feature" value="1" />
+				<input type="submit" style="float: left;" onclick="return confirm('Are you sure you want to feature this poll?');" value="Feature" />
 			</form>
 	<? } ?>
 			<form class="manage_form" name="poll" action="forums.php" method="post">
-				<input type="hidden" name="action" value="poll_mod"/>
+				<input type="hidden" name="action" value="poll_mod" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
-				<input type="hidden" name="close" value="1">
-				<input type="submit" style="float: left;" value="<?=(!$Closed ? 'Close' : 'Open')?>">
+				<input type="hidden" name="close" value="1" />
+				<input type="submit" style="float: left;" value="<?=(!$Closed ? 'Close' : 'Open')?>" />
 			</form>
 <? } ?>
 		</div>

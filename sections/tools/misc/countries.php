@@ -32,15 +32,14 @@ if (isset($_POST['changecountry'])) {
 		<td>Country</td>
 		<td>Submit</td>
 	</tr>
-	<tr/>
 	<tr>
 		<form class="add_form" name="countries" method="post">
 			<input type="hidden" name="newcountry" value="1" />
 			<td>
-			<input type="text" name="country"/>
+				<input type="text" name="country" />
 			</td>
 			<td>
-			<input type="submit" value="Add Country"/>
+				<input type="submit" value="Add Country" />
 			</td>
 		</form>
 	</tr>
@@ -53,11 +52,11 @@ while (list($ID, $Country) = $DB->next_record()) {
 			<input type="hidden" name="changecountry" value="1" />
 			<input type="hidden" name="id" value="<?=$ID?>" />
 			<td>
-			<input type="text" name="country" value="<?=$Country?>"/>
+				<input type="text" name="country" value="<?=$Country?>" />
 			</td>
 			<td>
-			<input type="submit" name="save" value="Save Country"/>
-			<input type="submit" name="delete" value="Delete Country"/>
+				<input type="submit" name="save" value="Save Country" />
+				<input type="submit" name="delete" value="Delete Country" />
 			</td>
 		</form>
 	</tr>
