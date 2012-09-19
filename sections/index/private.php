@@ -309,8 +309,8 @@ if($TopicID) {
 <? 	} else { ?>
 				<div id="poll_container">
 				<form class="vote_form" name="poll" id="poll" action="">
-					<input type="hidden" name="action" value="poll"/>
-					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>"/>
+					<input type="hidden" name="action" value="poll" />
+					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="topicid" value="<?=$TopicID?>" />
 <? 		for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
 					<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />

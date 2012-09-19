@@ -29,7 +29,7 @@ function Taste(torrent_id, report_id, taste) {
 </div>
 <div class="buttonbox thin center">
 	<input type="button" onclick="AddMore();" value="Add More" /><input type="text" name="repop_amount" id="repop_amount" size="2" value="10" />
-	| <span title="Changes whether to automatically replace resolved ones with new ones"><input type="checkbox" checked="checked" id="dynamic"/> <label for="dynamic">Dynamic</label></span>
+	| <span title="Changes whether to automatically replace resolved ones with new ones"><input type="checkbox" checked="checked" id="dynamic" /> <label for="dynamic">Dynamic</label></span>
 	| <span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-Resolve" /></span>
 	| <span title="Un-In Progress all the reports currently displayed"><input type="button" onclick="GiveBack();" value="Give back all" /></span>
 </div>

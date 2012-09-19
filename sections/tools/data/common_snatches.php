@@ -20,16 +20,16 @@ show_header('Common Snatches');
 		<form class="manage_form" name="common_snatches" method="post">
 			<input type="hidden" name="compare" value="1" />
 			<td>
-			<input type="text" name="userida"/>
+				<input type="text" name="userida" />
 			</td>
 			<td>
-			<input type="text" name="useridb"/>
+				<input type="text" name="useridb" />
 			</td>
 			<td>
-			<input type="text" name="limit" value="50"/>
+				<input type="text" name="limit" value="50" />
 			</td>
 			<td>
-			<input type="submit" value="Compare"/>
+				<input type="submit" value="Compare" />
 			</td>
 		</form>
 	</tr>

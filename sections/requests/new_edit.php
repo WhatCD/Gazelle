@@ -281,8 +281,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 <?		foreach ($Formats as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
 						<input type="checkbox" name="formats[]" value="<?=$Key?>" onchange="ToggleLogCue(); if(!this.checked) { $('#toggle_formats').raw().checked = false; }" id="format_<?=$Key?>"
-							<?=(!empty($FormatArray) && in_array($Key, $FormatArray) ? ' checked="checked" ' : '')?>
-						/><label for="format_<?=$Key?>"> <?=$Val?></label>
+							<?=(!empty($FormatArray) && in_array($Key, $FormatArray) ? ' checked="checked"' : '')?> /><label for="format_<?=$Key?>"> <?=$Val?></label>
 <?		}?>
 					</td>
 				</tr>
@@ -294,7 +293,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 			if($Key % 8 == 0) echo "<br />";?>
 						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>" 
 							<?=(!empty($BitrateArray) && in_array($Key, $BitrateArray) ? ' checked="checked" ' : '')?>
-						onchange="if(!this.checked) { $('#toggle_bitrates').raw().checked = false; }"/><label for="bitrate_<?=$Key?>"> <?=$Val?></label>
+						onchange="if(!this.checked) { $('#toggle_bitrates').raw().checked = false; }" /><label for="bitrate_<?=$Key?>"> <?=$Val?></label>
 <?		}?>
 					</td>
 				</tr>
@@ -306,7 +305,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 			if($Key % 8 == 0) echo "<br />";?>	
 						<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>" 
 							<?=(!empty($MediaArray) && in_array($Key, $MediaArray) ? ' checked="checked" ' : '')?>
-						onchange="if(!this.checked) { $('#toggle_media').raw().checked = false; }"/><label for="media_<?=$Key?>"> <?=$Val?></label>
+						onchange="if(!this.checked) { $('#toggle_media').raw().checked = false; }" /><label for="media_<?=$Key?>"> <?=$Val?></label>
 <?		}?>
 					</td>
 				</tr>
@@ -314,7 +313,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 					<td class="label">Log / Cue (FLAC only)</td>
 					<td>
 						<input type="checkbox" id="needlog" name="needlog" onchange="ToggleLogScore()" <?=(!empty($NeedLog) ? 'checked="checked" ' : '')?>/><label for="needlog"> Require Log</label>
-						<span id="minlogscore_span" class="hidden">&nbsp;<input type="text" name="minlogscore" id="minlogscore"  size="4" value="<?=(!empty($MinLogScore) ? $MinLogScore : '')?>"/> Minimum Log Score</span>
+						<span id="minlogscore_span" class="hidden">&nbsp;<input type="text" name="minlogscore" id="minlogscore" size="4" value="<?=(!empty($MinLogScore) ? $MinLogScore : '')?>" /> Minimum Log Score</span>
 						<br />
 						<input type="checkbox" id="needcue" name="needcue" <?=(!empty($NeedCue) ? 'checked="checked" ' : '')?>/><label for="needcue"> Require Cue</label>
 						<br />
@@ -331,7 +330,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 				<tr>
 					<td class="label">Torrent Group</td>
 					<td>
-						https://what.cd/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15"><br />
+						https://what.cd/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15" /><br />
 						If this request matches a torrent group <span style="font-weight: bold;">already existing</span> on the site, please indicate that here.
 					</td>
 				</tr>
@@ -358,7 +357,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 							<option value='mb'<?=(!empty($_POST['unit']) && $_POST['unit'] == 'mb' ? ' selected="selected"' : '') ?>>MB</option>
 							<option value='gb'<?=(!empty($_POST['unit']) && $_POST['unit'] == 'gb' ? ' selected="selected"' : '') ?>>GB</option>
 						</select>
-						<input type="button" value="Preview" onclick="Calculate();"/>
+						<input type="button" value="Preview" onclick="Calculate();" />
 						<strong><?=($RequestTax * 100)?>% of this is deducted as tax by the system.</strong>
 					</td>
 				</tr>

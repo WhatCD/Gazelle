@@ -40,7 +40,7 @@ switch($_GET['action']) {
 <? }?> 
 			<h3>Title</h3>
 			<input type="text" name="title" size="95" <? if(!empty($Title)) { echo 'value="'.display_str($Title).'"'; } ?> />
-<!-- Why did someone add this?	<input type="datetime" name="datetime" value="<?=sqltime()?>"/> -->
+<!-- Why did someone add this?	<input type="datetime" name="datetime" value="<?=sqltime()?>" /> -->
 			<br />
 			<h3>Body</h3>
 			<textarea name="body" cols="95" rows="15"><? if(!empty($Body)) { echo display_str($Body); } ?></textarea> <br /><br />

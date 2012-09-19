@@ -45,13 +45,13 @@ if (isset($_POST['changealias'])) {
 		<form class="add_form" name="aliases" action="" method="post">
 			<input type="hidden" name="newalias" value="1" />
 			<td>
-			<input type="text" name="aliastag"/>
+				<input type="text" name="aliastag" />
 			</td>
 			<td>
-			<input type="text" name="badtag"/>
+				<input type="text" name="badtag" />
 			</td>
 			<td>
-			<input type="submit" value="Add Alias"/>
+				<input type="submit" value="Add Alias" />
 			</td>
 		</form>
 	</tr>
@@ -64,14 +64,14 @@ while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 			<input type="hidden" name="changealias" value="1" />
 			<input type="hidden" name="aliasid" value="<?=$ID?>" />
 			<td>
-			<input type="text" name="aliastag" value="<?=$AliasTag?>"/>
+				<input type="text" name="aliastag" value="<?=$AliasTag?>" />
 			</td>
 			<td>
-			<input type="text" name="badtag" value="<?=$BadTag?>"/>
+				<input type="text" name="badtag" value="<?=$BadTag?>" />
 			</td>
 			<td>
-			<input type="submit" name="save" value="Save Alias"/>
-			<input type="submit" name="delete" value="Delete Alias"/>
+				<input type="submit" name="save" value="Save Alias" />
+				<input type="submit" name="delete" value="Delete Alias" />
 			</td>
 		</form>
 	</tr>

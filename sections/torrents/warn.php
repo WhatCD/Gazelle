@@ -23,16 +23,16 @@ show_header('Warn User');
 	</div>
 	<div class="thin box pad">
 		<form class="create_form" name="warning" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
-			<input type="hidden" name="groupid" value="<?=$GroupID?>"/>
-			<input type="hidden" name="postid" value="<?=$PostID?>"/>
-			<input type="hidden" name="userid" value="<?=$UserID?>"/>
-			<input type="hidden" name="key" value="<?=$Key?>"/>
-			<input type="hidden" name="action" value="take_warn"/>
+			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+			<input type="hidden" name="postid" value="<?=$PostID?>" />
+			<input type="hidden" name="userid" value="<?=$UserID?>" />
+			<input type="hidden" name="key" value="<?=$Key?>" />
+			<input type="hidden" name="action" value="take_warn" />
 			<table class="layout" align="center">
 				<tr>
 					<td class="label">Reason:</td>
 					<td>
-					<input type="text" name="reason" size="30" />
+						<input type="text" name="reason" size="30" />
 					</td>
 				</tr>
 				<tr>
@@ -41,10 +41,10 @@ show_header('Warn User');
 					<select name="length">
 						<option value="verbal">Verbal</option>
 						<option value="1">1 week</option>
-						<option value="2">2 week</option>
-						<option value="4">4 week</option>
+						<option value="2">2 weeks</option>
+						<option value="4">4 weeks</option>
 						<? if(check_perms("users_mod")) { ?>
-						<option value="8">8 week</option>
+						<option value="8">8 weeks</option>
 						<? } ?>
 					</select></td>
 				</tr>

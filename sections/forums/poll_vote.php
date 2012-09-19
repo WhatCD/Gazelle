@@ -69,9 +69,9 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 ?>
 <span class="error">Please select an option.</span><br />
 <form class="vote_form" name="poll" id="poll">
-	<input type="hidden" name="action" value="poll"/>
+	<input type="hidden" name="action" value="poll" />
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-	<input type="hidden" name="large" value="<?=display_str($_POST['large'])?>"/>
+	<input type="hidden" name="large" value="<?=display_str($_POST['large'])?>" />
 	<input type="hidden" name="topicid" value="<?=$TopicID?>" />
 <? for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
 	<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />

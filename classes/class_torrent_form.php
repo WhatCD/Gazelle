@@ -347,7 +347,7 @@ function hide() {
 					<div id="remaster_true"<? if(!$IsRemaster) { echo ' class="hidden"';}?>>
 <? if(check_perms('edit_unknowns') || $LoggedUser['ID'] == $Torrent['UserID']) { ?>
 						<br />
-						<input type="checkbox" id="unknown" name="unknown"<? if($UnknownRelease) { echo " checked='checked' ";}?> onclick="<?if($this->NewTorrent) {?> CheckYear();<? } ?>ToggleUnknown();"/> Unknown Release
+						<input type="checkbox" id="unknown" name="unknown"<? if($UnknownRelease) { echo " checked='checked'";}?> onclick="<?if($this->NewTorrent) {?> CheckYear();<? } ?>ToggleUnknown();" /> Unknown Release
 <? } ?>
 						<br /><br />
 <? if(!empty($GroupRemasters)) { ?>
@@ -376,7 +376,7 @@ function hide() {
 						<input type="text" id="remaster_year" name="remaster_year" size="5" value="<? if($Torrent['RemasterYear']) { echo display_str($Torrent['RemasterYear']);} ?>"<? if($UnknownRelease) { echo " disabled";}?> /> <br />
 						<strong>Title:</strong>
 						<input type="text" id="remaster_title" name="remaster_title" size="50" value="<?=display_str($Torrent['RemasterTitle']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
-						<p class="min_padding">Title of the release, eg. <i>'Deluxe Edition' or 'Remastered'</i>.</p>
+						<p class="min_padding">Title of the release (e.g. <span style="font-style: italic;">'Deluxe Edition' or 'Remastered'</span>).</p>
 						<strong>Record Label:</strong>
 						<input type="text" id="remaster_record_label" name="remaster_record_label" size="50" value="<?=display_str($Torrent['RemasterRecordLabel']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
 						<p class="min_padding">This is for the record label of the <strong>release</strong> (It may differ from the original).</p>
@@ -412,7 +412,7 @@ function hide() {
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Bit Rate</td>
+				<td class="label">Bitrate</td>
 				<td>
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>

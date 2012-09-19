@@ -389,7 +389,7 @@ if (!empty($Image)) {
 						<option value='mb'>MB</option>
 						<option value='gb'>GB</option>
 					</select>
-					<input type="button" value="Preview" onclick="Calculate();"/>
+					<input type="button" value="Preview" onclick="Calculate();" />
 					<strong><?=($RequestTax * 100)?>% of this is deducted as tax by the system.</strong>
 				</td>
 			</tr>
@@ -402,7 +402,7 @@ if (!empty($Image)) {
 						<input type="hidden" id="request_tax" value="<?=$RequestTax?>" />
 						<input type="hidden" id="requestid" name="id" value="<?=$RequestID?>" />
 						<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-						<input type="hidden" id="amount" name="amount" value="0">
+						<input type="hidden" id="amount" name="amount" value="0" />
 						<input type="hidden" id="current_uploaded" value="<?=$LoggedUser['BytesUploaded']?>" />
 						<input type="hidden" id="current_downloaded" value="<?=$LoggedUser['BytesDownloaded']?>" />
 						<input type="hidden" id="current_rr" value="<?=(float)$LoggedUser['RequiredRatio']?>" />
@@ -410,7 +410,7 @@ if (!empty($Image)) {
 						If you add the entered <strong><span id="new_bounty">0.00 MB</span></strong> of bounty, your new stats will be: <br/>
 						Uploaded: <span id="new_uploaded"><?=get_size($LoggedUser['BytesUploaded'])?></span>
 						Ratio: <span id="new_ratio"><?=ratio($LoggedUser['BytesUploaded'],$LoggedUser['BytesDownloaded'])?></span>
-						<input type="button" id="button" value="Vote!" disabled="disabled" onclick="Vote();"/> 
+						<input type="button" id="button" value="Vote!" disabled="disabled" onclick="Vote();" />
 					</form>
 				</td>
 			</tr>

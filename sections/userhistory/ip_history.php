@@ -144,8 +144,9 @@ $Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 		
 		<tr><td>
 			<form class="search_form" name="ip_log" method="post" action="">
-				<input type="text" name="ip"/>
-				<input type="submit" value="Search"/>
+				<input type="text" name="ip" />
+				<input type="submit" value="Search" />
+			</form>
 		</td></tr>	
 	</table>
 
