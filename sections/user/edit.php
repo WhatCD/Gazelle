@@ -44,8 +44,8 @@ function paranoia_level($Setting) {
 
 function display_paranoia($FieldName) {
        $Level = paranoia_level($FieldName);
-       print '<label><input type="checkbox" name="p_'.$FieldName.'_c" '.checked($Level >= 1).' onChange="AlterParanoia()" /> Show count</label>'."&nbsp;&nbsp;\n";
-       print '<label><input type="checkbox" name="p_'.$FieldName.'_l" '.checked($Level >= 2).' onChange="AlterParanoia()" /> Show list</label>';
+       print '<label><input type="checkbox" name="p_'.$FieldName.'_c" '.checked($Level >= 1).' onchange="AlterParanoia()" /> Show count</label>'."&nbsp;&nbsp;\n";
+       print '<label><input type="checkbox" name="p_'.$FieldName.'_l" '.checked($Level >= 2).' onchange="AlterParanoia()" /> Show list</label>';
 }
 
 function checked($Checked) {
@@ -270,7 +270,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>IRCKey</strong></td>
 				<td>
 					<input type="text" size="50" name="irckey" id="irckey" value="<?=display_str($IRCKey)?>" />
-					<p class="min_padding">This field, if set will be used in place of the password in the IRC login.</p>
+					<p class="min_padding">If set, this field will be used in place of the password in the IRC login.</p>
 					<p class="min_padding">Note: This value is stored in plaintext and should not be your password.</p>
 					<p class="min_padding">Note: In order to be accepted as correct, your IRCKey must be between 6 and 32 characters.</p>
 				</td>
@@ -291,7 +291,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label">Recent activity</td>
 				<td>
-					<label><input type="checkbox" name="p_lastseen" <?=checked(!in_array('lastseen', $Paranoia))?>> Last seen</label>
+					<label><input type="checkbox" name="p_lastseen" <?=checked(!in_array('lastseen', $Paranoia))?>/> Last seen</label>
 				</td>
 			</tr>
 			<tr>
@@ -310,9 +310,9 @@ $UploadChecked = checked(!in_array('uploaded', $Paranoia));
 $DownloadChecked = checked(!in_array('downloaded', $Paranoia));
 $RatioChecked = checked(!in_array('ratio', $Paranoia));
 ?>
-					<label><input type="checkbox" name="p_uploaded" onChange="AlterParanoia()"<?=$UploadChecked?> /> Uploaded</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_downloaded" onChange="AlterParanoia()"<?=$DownloadChecked?> /> Downloaded</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_ratio" onChange="AlterParanoia()"<?=$RatioChecked?> /> Ratio</label>
+					<label><input type="checkbox" name="p_uploaded" onchange="AlterParanoia()"<?=$UploadChecked?> /> Uploaded</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_downloaded" onchange="AlterParanoia()"<?=$DownloadChecked?> /> Downloaded</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_ratio" onchange="AlterParanoia()"<?=$RatioChecked?> /> Ratio</label>
 				</td>
 			</tr>
 			<tr>
@@ -333,6 +333,7 @@ $RatioChecked = checked(!in_array('ratio', $Paranoia));
 <? display_paranoia('collagecontribs'); ?>
 				</td>
 			</tr>
+			<tr>
 				<td class="label">Requests filled</td>
 				<td>
 <?
@@ -340,11 +341,12 @@ $RequestsFilledCountChecked = checked(!in_array('requestsfilled_count', $Paranoi
 $RequestsFilledBountyChecked = checked(!in_array('requestsfilled_bounty', $Paranoia));
 $RequestsFilledListChecked = checked(!in_array('requestsfilled_list', $Paranoia));
 ?>
-					<label><input type="checkbox" name="p_requestsfilled_count" onChange="AlterParanoia()" <?=$RequestsFilledCountChecked?> /> Show count</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_requestsfilled_bounty" onChange="AlterParanoia()" <?=$RequestsFilledBountyChecked?> /> Show bounty</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_requestsfilled_list" onChange="AlterParanoia()" <?=$RequestsFilledListChecked?> /> Show list</label>
+					<label><input type="checkbox" name="p_requestsfilled_count" onchange="AlterParanoia()" <?=$RequestsFilledCountChecked?> /> Show count</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_requestsfilled_bounty" onchange="AlterParanoia()" <?=$RequestsFilledBountyChecked?> /> Show bounty</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_requestsfilled_list" onchange="AlterParanoia()" <?=$RequestsFilledListChecked?> /> Show list</label>
 				</td>
 			</tr>
+			<tr>
 				<td class="label">Requests voted</td>
 				<td>
 <?
@@ -352,9 +354,9 @@ $RequestsVotedCountChecked = checked(!in_array('requestsvoted_count', $Paranoia)
 $RequestsVotedBountyChecked = checked(!in_array('requestsvoted_bounty', $Paranoia));
 $RequestsVotedListChecked = checked(!in_array('requestsvoted_list', $Paranoia));
 ?>
-					<label><input type="checkbox" name="p_requestsvoted_count" onChange="AlterParanoia()" <?=$RequestsVotedCountChecked?> /> Show count</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_requestsvoted_bounty" onChange="AlterParanoia()" <?=$RequestsVotedBountyChecked?> /> Show bounty</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_requestsvoted_list" onChange="AlterParanoia()" <?=$RequestsVotedListChecked?> /> Show list</label>
+					<label><input type="checkbox" name="p_requestsvoted_count" onchange="AlterParanoia()" <?=$RequestsVotedCountChecked?> /> Show count</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_requestsvoted_bounty" onchange="AlterParanoia()" <?=$RequestsVotedBountyChecked?> /> Show bounty</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_requestsvoted_list" onchange="AlterParanoia()" <?=$RequestsVotedListChecked?> /> Show list</label>
 				</td>
 			</tr>
 			<tr>
@@ -396,17 +398,17 @@ $RequestsVotedListChecked = checked(!in_array('requestsvoted_list', $Paranoia));
 			<tr>
 				<td class="label">Miscellaneous</td>
 				<td>
-					<label><input type="checkbox" name="p_requiredratio" <?=checked(!in_array('requiredratio', $Paranoia))?>> Required ratio</label>
+					<label><input type="checkbox" name="p_requiredratio" <?=checked(!in_array('requiredratio', $Paranoia))?>/> Required ratio</label>
 <?
 $DB->query("SELECT COUNT(UserID) FROM users_info WHERE Inviter='$UserID'");
 list($Invited) = $DB->next_record();
 ?>
-					<br /><label><input type="checkbox" name="p_invitedcount" <?=checked(!in_array('invitedcount', $Paranoia))?>> Number of users invited</label>
+					<br /><label><input type="checkbox" name="p_invitedcount" <?=checked(!in_array('invitedcount', $Paranoia))?>/> Number of users invited</label>
 <?
 $DB->query("SELECT COUNT(ta.ArtistID) FROM torrents_artists AS ta WHERE ta.UserID = ".$UserID);
 list($ArtistsAdded) = $DB->next_record();
 ?>
-					<br /><label><input type="checkbox" name="p_artistsadded" <?=checked(!in_array('artistsadded', $Paranoia))?>> Number of artists added</label>
+					<br /><label><input type="checkbox" name="p_artistsadded" <?=checked(!in_array('artistsadded', $Paranoia))?>/> Number of artists added</label>
 				</td>
 			</tr>
 			<tr class="colhead_dark">
@@ -428,7 +430,7 @@ list($ArtistsAdded) = $DB->next_record();
 				</td>
 			</tr>
 			<tr>
-			<td/>
+				<td/>
 				<td>
 					<p class="min_padding">A strong password is between 8 and 40 characters long</p>
 					<p class="min_padding">Contains at least 1 lowercase and uppercase letter</p>
@@ -441,11 +443,11 @@ list($ArtistsAdded) = $DB->next_record();
 			</tr>
 			<tr>
 				<td class="label"><strong>New password</strong></td>
-				<td><input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" maxlength="40" />  <b id="pass_strength" /></td>
+				<td><input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" maxlength="40" /> <strong id="pass_strength"></strong></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Re-type new password</strong></td>
-				<td><input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" maxlength="40" />  <b id="pass_match" /></td>
+				<td><input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" maxlength="40" /> <strong id="pass_match"></strong></td>
 			</tr>
 			<tr>
 				<td colspan="2" class="right">

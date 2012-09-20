@@ -31,13 +31,12 @@ if(empty($Sent)) {
 		</tr>
 		<tr valign="top">
 			<td align="right">Password&nbsp;</td>
-			<td align="left"><input type="password" name="password" id="new_pass_1" class="inputtext" /> <b id="pass_strength" /> </td>
+			<td align="left"><input type="password" name="password" id="new_pass_1" class="inputtext" /> <strong id="pass_strength"></strong></td>
 		</tr>
 		<tr valign="top">
 			<td align="right">Verify Password&nbsp;</td>
-			<td align="left"><input type="password" name="confirm_password" id="new_pass_2" class="inputtext" /> <b id="pass_match" />
+			<td align="left"><input type="password" name="confirm_password" id="new_pass_2" class="inputtext" /> <strong id="pass_match"></strong>
 			<p>A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or a symbol.</p>
-
 			</td>
 		</tr>
 		<tr valign="top">

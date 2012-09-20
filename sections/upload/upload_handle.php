@@ -716,7 +716,7 @@ if($Type == 'Music'){
 $Title = $Announce;
 
 $AnnounceSSL = $Announce . " - https://".SSL_SITE_URL."/torrents.php?id=$GroupID / https://".SSL_SITE_URL."/torrents.php?action=download&id=$TorrentID";
-$Announce .= " - https://".NONSSL_SITE_URL."/torrents.php?id=$GroupID / https://".NONSSL_SITE_URL."/torrents.php?action=download&id=$TorrentID";
+$Announce .= " - https://".SSL_SITE_URL."/torrents.php?id=$GroupID / https://".SSL_SITE_URL."/torrents.php?action=download&id=$TorrentID";
 
 $AnnounceSSL .= " - ".trim($Properties['TagList']);
 $Announce .= " - ".trim($Properties['TagList']);
@@ -935,7 +935,7 @@ if (!$Private) {
 	show_header("Warning");
 ?>
 	<h1>Warning</h1>
-	<p><strong>Your torrent has been uploaded however, you must download your torrent from <a href="torrents.php?id=<?=$GroupID?>">here</a> because you didn't choose the private option.</strong></p>
+	<p><strong>Your torrent has been uploaded; however, you must download your torrent from <a href="torrents.php?id=<?=$GroupID?>">here</a> because you didn't make your torrent using the "private" option.</strong></p>
 <?
 	show_footer();
 	die();

@@ -17,11 +17,11 @@ if(empty($Reset)) {
 		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center" width="100%">
 			<tr valign="top">
 				<td align="right" style="width:100px;">Password&nbsp;</td>
-				<td align="left"><input type="password" name="password" id="new_pass_1" class="inputtext" /> <b id="pass_strength" /></td>
+				<td align="left"><input type="password" name="password" id="new_pass_1" class="inputtext" /> <strong id="pass_strength"></strong></td>
 			</tr>
 			<tr valign="top">
 				<td align="right">Confirm Password&nbsp;</td>
-				<td align="left"><input type="password" name="verifypassword" id="new_pass_2" class="inputtext" /> <b id="pass_match" /></td>
+				<td align="left"><input type="password" name="verifypassword" id="new_pass_2" class="inputtext" /> <strong id="pass_match"></strong></td>
 			</tr>
 			<tr>
 				<td colspan="2" align="right"><input type="submit" name="reset" value="Reset!" class="submit" /></td>

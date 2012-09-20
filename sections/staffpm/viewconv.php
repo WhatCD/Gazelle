@@ -107,7 +107,7 @@ if ($ConvID = (int)$_GET['id']) {
 			</div>
 			<br />
 			<div class="center">
-				<select id="common_answers_select" onChange="UpdateMessage();">
+				<select id="common_answers_select" onchange="UpdateMessage();">
 					<option id="first_common_response">Select a message</option>
 <?
 		// List common responses

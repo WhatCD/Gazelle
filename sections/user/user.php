@@ -1197,7 +1197,7 @@ if (check_perms('users_mod', $Class)) { ?>
 			<tr>
 				<td class="label">Extension:</td>
 				<td>
-					<select name="ExtendWarning" onChange="ToggleWarningAdjust(this)">
+					<select name="ExtendWarning" onchange="ToggleWarningAdjust(this)">
 						<option>---</option>
 						<option value="1"> 1 Week</option>
 						<option value="2"> 2 Weeks</option>
