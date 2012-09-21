@@ -74,6 +74,9 @@ switch ($_REQUEST['action']) {
 	case 'moderate':
 		include('takemoderate.php');
 		break;
+	case 'user_subscribe':
+		include('subscribe.php');
+		break;
 	case 'clearcache':
 		if (!check_perms('admin_clear_cache') || !check_perms('users_override_paranoia')) {
 			error(403);
@@ -86,9 +89,7 @@ switch ($_REQUEST['action']) {
 		$Cache->delete_value('inbox_new_'.$UserID);
 		$Cache->delete_value('notifications_new_'.$UserID);
 		$Cache->delete_value('collage_subs_user_new_'.$UserID);
-		// no break, load the profile
-	case 'user_subscribe':
-		include('subscribe.php');
+		include(SERVER_ROOT.'/sections/user/user.php');
 		break;
 	default:
 		if (isset($_REQUEST['id'])) {
