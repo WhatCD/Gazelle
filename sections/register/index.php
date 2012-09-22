@@ -66,7 +66,6 @@ if(!empty($_REQUEST['confirm'])) {
 		}
 		
 		if(!$Err) {
-			$Secret=make_secret();
 			$torrent_pass=make_secret();
 			
 			//Previously SELECT COUNT(ID) FROM users_main, which is a lot slower.
@@ -86,8 +85,8 @@ if(!empty($_REQUEST['confirm'])) {
 			
 			
 			$DB->query("INSERT INTO users_main 
-				(Username,Email,PassHash,Secret,torrent_pass,IP,PermissionID,Enabled,Invites,Uploaded,ipcc) VALUES
-				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(make_hash($_POST['password'],$Secret))."','".db_string($Secret)."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000', '$ipcc')");
+				(Username,Email,PassHash,torrent_pass,IP,PermissionID,Enabled,Invites,Uploaded,ipcc) VALUES
+				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(make_crypt_hash($_POST['password']))."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000', '$ipcc')");
 
 			$UserID = $DB->inserted_id();
 			

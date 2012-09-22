@@ -53,12 +53,10 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 				$Err=$Validate->ValidateForm($_REQUEST);
 				if ($Err=='') {
 					// Form validates without error, set new secret and password. 
-					$Secret=make_secret();
 					$DB->query("UPDATE 
 						users_main AS m,
 						users_info AS i 
-						SET m.PassHash='".db_string(make_hash($_REQUEST['password'],$Secret))."',
-						m.Secret='".db_string($Secret)."',
+						SET m.PassHash='".db_string(make_crypt_hash($_REQUEST['password']))."',
 						i.ResetKey='',
 						i.ResetExpires='0000-00-00 00:00:00' 
 						WHERE m.ID='".db_string($UserID)."' 
@@ -237,7 +235,11 @@ else {
 				AND Username<>''");
 			list($UserID,$PermissionID,$CustomPermissions,$PassHash,$Secret,$Enabled)=$DB->next_record(MYSQLI_NUM, array(2));
 			if (strtotime($BannedUntil)<time()) {
-				if ($UserID && $PassHash==make_hash($_POST['password'],$Secret)) {
+				if ($UserID && check_password($_POST['password'], $PassHash, $Secret)) {
+					if (!is_crypt_hash($PassHash)) {
+						$CryptHash = make_crypt_hash($_POST['password']);
+						$DB->query("UPDATE users_main SET passhash = '".db_string($CryptHash)."' WHERE ID = $UserID");
+					}
 					if ($Enabled == 1) {
 						$SessionID = make_secret();
 						$Cookie = $Enc->encrypt($Enc->encrypt($SessionID.'|~|'.$UserID));

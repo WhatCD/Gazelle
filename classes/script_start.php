@@ -16,7 +16,7 @@ require 'config.php'; //The config contains all site wide configuration informat
 if(isset($_REQUEST['info_hash']) && isset($_REQUEST['peer_id'])) { die('d14:failure reason40:Invalid .torrent, try downloading again.e'); }
 
 require(SERVER_ROOT.'/classes/class_proxies.php');
-if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && proxyCheck($_SERVER['REMOTE_ADDR'])) {
+if (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) && proxyCheck($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
 	$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
 }
 
@@ -1185,9 +1185,85 @@ function make_secret($Length = 32) {
 }
 */
 
-// Password hashes, feel free to make your own algorithm here
+/**
+ * Create a password hash. This method is deprecated and
+ * should not be used to create new passwords
+ *
+ * @param $Str password
+ * @param $Secret salt
+ * @return password hash
+ */
 function make_hash($Str,$Secret) {
 	return sha1(md5($Secret).$Str.sha1($Secret).SITE_SALT);
+}
+
+/**
+ * Verify a password against a password hash
+ *
+ * @param $Password password
+ * @param $Hash password hash
+ * @param $Secret salt - Only used if the hash was created
+ *                       with the deprecated make_hash() method
+ * @return true on correct password
+ */
+function check_password($Password, $Hash, $Secret='') {
+	if(!$Password || !$Hash) {
+		return false;
+	}
+	if(is_crypt_hash($Hash)) {
+		return crypt($Password, $Hash) == $Hash;
+	} elseif($Secret) {
+		return make_hash($Password, $Secret) == $Hash;
+	}
+	return false;
+}
+
+/**
+ * Test if a given hash is a crypt hash
+ *
+ * @param $Hash password hash
+ * @return true if hash is a crypt hash
+ */
+function is_crypt_hash($Hash) {
+	return preg_match('/\$\d[axy]?\$/', substr($Hash, 0, 4));
+}
+
+/**
+ * Create salted crypt hash for a given string with
+ * settings specified in CRYPT_HASH_PREFIX
+ *
+ * @param $Str string to hash
+ * @return salted crypt hash
+ */
+function make_crypt_hash($Str) {
+	$Salt = CRYPT_HASH_PREFIX.gen_crypt_salt().'$';
+	return crypt($Str, $Salt);
+}
+
+/**
+ * Create salt string for eksblowfish hashing. If /dev/urandom cannot be read,
+ * fall back to an unsecure method based on mt_rand(). The last character needs
+ * a special case as it must be either '.', 'O', 'e', or 'u'.
+ *
+ * @return salt suitable for eksblowfish hashing
+ */
+function gen_crypt_salt() {
+	$Salt = '';
+	$Chars = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	$Numchars = strlen($Chars) - 1;
+	if($Handle = @fopen('/dev/urandom', 'r')) {
+		$Bytes = fread($Handle, 22);
+		for($i = 0; $i < 21; $i++) {
+			$Salt .= $Chars[ord($Bytes[$i]) & $Numchars];
+		}
+		$Salt[$i] = $Chars[(ord($Bytes[$i]) & 3) << 4];
+	} else {
+		for($i = 0; $i < 21; $i++) {
+			$Salt .= $Chars[mt_rand(0, $Numchars)];
+		}
+		$Salt[$i] = $Chars[mt_rand(0, 3) << 4];
+	}
+	return $Salt;
 }
 
 /*

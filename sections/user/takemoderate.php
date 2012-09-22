@@ -32,7 +32,7 @@ foreach ($SecondaryClasses as $i => $Val) {
 $Visible = (isset($_POST['Visible']))? 1 : 0;
 $Invites = (int)$_POST['Invites'];
 $SupportFor = db_string($_POST['SupportFor']);
-$Pass = db_string($_POST['ChangePassword']);
+$Pass = $_POST['ChangePassword'];
 $Warned = (isset($_POST['Warned']))? 1 : 0;
 $Logs095 = (int)$_POST['095logs']; 
 if(isset($_POST['Uploaded']) && isset($_POST['Downloaded'])) {
@@ -624,9 +624,7 @@ if ($MergeStatsFrom && check_perms('users_edit_ratio')) {
 }
 
 if ($Pass && check_perms('users_edit_password')) {
-	$Secret=make_secret();
-	$UpdateSet[]="Secret='$Secret'";
-	$UpdateSet[]="PassHash='".db_string(make_hash($Pass,$Secret))."'";
+	$UpdateSet[]="PassHash='".db_string(make_crypt_hash($Pass))."'";
 	$EditSummary[]='password reset';
        
 	$Cache->delete_value('user_info_'.$UserID);

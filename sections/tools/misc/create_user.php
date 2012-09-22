@@ -22,7 +22,7 @@ if (isset($_POST['Username'])) {
 		$torrent_pass=make_secret();
 
 		//Create the account
-		$DB->query("INSERT INTO users_main (Username,Email,PassHash,Secret,torrent_pass,Enabled,PermissionID, Language) VALUES ('".db_string($Username)."','".db_string($Email)."','".db_string(make_hash($Password, $Secret))."','".db_string($Secret)."','".db_string($torrent_pass)."','1','".USER."', 'en')");
+		$DB->query("INSERT INTO users_main (Username,Email,PassHash,torrent_pass,Enabled,PermissionID, Language) VALUES ('".db_string($Username)."','".db_string($Email)."','".db_string(make_crypt_hash($Password))."','".db_string($torrent_pass)."','1','".USER."', 'en')");
 		
 		//Increment site user count
 		$Cache->increment('stats_user_count');
