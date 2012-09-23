@@ -86,7 +86,7 @@ if(!empty($_POST['track'])) {
 	if(preg_match('/([0-9]+( [0-9]+)*)|All/is', $_POST['track'], $Matches)) {
 		$Tracks = $Matches[0];
 	} else {
-		$Err = "Tracks should be given in a space seperated list of numbers (No other characters)";
+		$Err = "Tracks should be given in a space separated list of numbers (no other characters)";
 	}
 } else {
 	$Tracks = "";

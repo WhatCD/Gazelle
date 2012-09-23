@@ -13,7 +13,7 @@ class TEMPLATE {
 		$this->file=file($file);
 	}
 
-	function set($name,$var,$ifnone="<i>-None-</i>") {
+	function set($name,$var,$ifnone='<span style="font-style: italic;">-None-</span>') {
 		if ($name!='') {
 			$this->vars[$name][0]=$var;
 			$this->vars[$name][1]=$ifnone;

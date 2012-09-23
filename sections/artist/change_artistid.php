@@ -3,7 +3,7 @@ authorize();
 
 if (!check_perms('torrents_edit')) { error(403); }
 if (!empty($_POST['newartistid']) && !empty($_POST['newartistname'])) {
-	error("Please enter either an artist id OR an artist name.");
+	error("Please enter a valid artist ID number or a valid artist name.");
 }
 $ArtistID = (int)$_POST['artistid'];
 $NewArtistID = (int)$_POST['newartistid'];
@@ -23,7 +23,7 @@ if(!(list($ArtistName) = $DB->next_record(MYSQLI_NUM, false))) {
 }
 
 if ($NewArtistID > 0) {
-	// Make sure that's a real artist id number, and grab the name
+	// Make sure that's a real artist ID number, and grab the name
 	$DB->query("SELECT Name FROM artists_group WHERE ArtistID = $NewArtistID LIMIT 1");	
 	if(!(list($NewArtistName) = $DB->next_record())) {
 		error('Please enter a valid artist ID number.');
@@ -37,7 +37,7 @@ if ($NewArtistID > 0) {
 }
 
 if ($ArtistID == $NewArtistID) {
-	error("You cannot merge an artist with himself.");
+	error("You cannot merge an artist with itself.");
 }
 if (isset($_POST['confirm'])) {
 	// Get the information for the cache update
@@ -133,7 +133,7 @@ if (isset($_POST['confirm'])) {
 		<input type="hidden" name="confirm" value="1" />
 		<div style="text-align: center;">
 			<p>Please confirm that you wish to make <a href="artist.php?id=<?=$ArtistID?>"><?=display_str($ArtistName)?> (<?=$ArtistID?>)</a> into a non-redirecting alias of <a href="artist.php?id=<?=$NewArtistID?>"><?=display_str($NewArtistName)?> (<?=$NewArtistID?>)</a>.</p>
-			<br>
+			<br />
 			<input type="submit" value="Confirm" />
 		</div>
 	</form>

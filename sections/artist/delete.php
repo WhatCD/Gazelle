@@ -28,8 +28,8 @@ $Count = $DB->record_count();
 if($DB->record_count() > 0) {
 ?>
 	<div class="thin">
-		There are still torrents that have <a href="artist.php?id=<?=$ArtistID?>" title="View Artist"><?=$Name?></a> as an artist<br>
-		Please remove the artist from these torrents manually before attempting to delete.<br>
+		There are still torrents that have <a href="artist.php?id=<?=$ArtistID?>" title="View Artist"><?=$Name?></a> as an artist.<br />
+		Please remove the artist from these torrents manually before attempting to delete.<br />
 		<div class="box pad">
 			<ul>
 <?
@@ -56,8 +56,8 @@ $Count += $DB->record_count();
 if($DB->record_count() > 0) {
 ?>
 	<div class="thin">
-		There are still requests that have <a href="artist.php?id=<?=$ArtistID?>" title="View Artist"><?=$Name?></a> as an artist<br>
-		Please remove the artist from these requests manually before attempting to delete.<br>
+		There are still requests that have <a href="artist.php?id=<?=$ArtistID?>" title="View Artist"><?=$Name?></a> as an artist.<br />
+		Please remove the artist from these requests manually before attempting to delete.<br />
 		<div class="box pad">
 			<ul>
 <?

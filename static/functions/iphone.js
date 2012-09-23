@@ -1,4 +1,4 @@
-// We had to sacrafice a bit of the beauty of this structure to accomodate OS 1.1
+// We had to sacrafice a bit of the beauty of this structure to accommodate OS 1.1
 // If/when we drop OS <2 just switch all onclick events to ontouchend events.
 
 var elements; // Shortcut to handle html elements

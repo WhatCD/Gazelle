@@ -47,9 +47,9 @@ show_header('Donation log');
 if (empty($_GET['search']) && !isset($_GET['page'])) {
 ?>
 <div class="box pad">
-	<img src="<?=$DonationTimeline?>" />
+	<img src="<?=$DonationTimeline?>" alt="Donation timeline. The &quot;y&quot; axis is donation amount." />
 </div>
-<br / >
+<br />
 <? } ?>
 <div>
 	<form class="search_form" name="donation_log" action="" method="get">
@@ -60,13 +60,13 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 					<input type="hidden" name="action" value="donation_log" />
 					<input type="text" name="search" size="60" value="<? if (!empty($_GET['search'])) { echo display_str($_GET['search']); } ?>" />
 					&nbsp;
-					<input type="submit" value="Search log" />
+					<input type="submit" value="Search donation log" />
 				</td>
 			</tr>
 		</table>	
 	</form>
 </div>
-<br / >
+<br />
 <div class="linkbox">
 <?
 	$Pages=get_pages($Page,$Results,DONATIONS_PER_PAGE,11) ;

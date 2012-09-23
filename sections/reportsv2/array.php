@@ -697,7 +697,7 @@ Your torrent was reported because it contained a freely available application.'
 					'upload' => '0',
 					'warn' => '1',
 					'delete' => '1',
-					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r4.1.4]4.1.4[/url]. Release descriptions for applications must contain good information about the application. You should either have a small description of the program (either taken from its website or from an NFO file) or a link to the information -- but ideally both. Torrents missing this information will be deleted when reported.
+					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r4.1.4]4.1.4[/url]. Release descriptions for applications must contain good information about the application. You should either have a small description of the program (either taken from its web site or from an NFO file) or a link to the information -- but ideally both. Torrents missing this information will be deleted when reported.
 Your torrent was reported because it lacked adequate release information.'
 				)
 			),

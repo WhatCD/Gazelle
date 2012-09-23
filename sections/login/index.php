@@ -62,6 +62,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 						WHERE m.ID='".db_string($UserID)."' 
 						AND i.UserID=m.ID");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
+					
                     
                 }
 			}

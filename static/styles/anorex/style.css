@@ -171,7 +171,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 	outline: none;
 }
 
-#nav_index a { /* extraneous link which can be removed to accomodate for small screen resolutions - alt link is provided in the form of the logo */
+#nav_index a { /* extraneous link which can be removed to accommodate for small screen resolutions - alt link is provided in the form of the logo */
 	display: none;
 }
 

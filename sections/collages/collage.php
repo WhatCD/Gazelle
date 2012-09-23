@@ -540,7 +540,7 @@ foreach ($Users as $ID => $User) {
 					<input type="text" size="20" name="url" />
 					<input type="submit" value="+" />
 					<br />
-					<i>Enter the URL of a torrent on the site.</i>
+					<span style="font-style: italic;">Enter the URL of a torrent on the site.</span>
 				</form>
 			</div>
 			<div class="pad hidden add_torrent_container">
@@ -551,7 +551,7 @@ foreach ($Users as $ID => $User) {
 					<textarea name="urls" rows="5" cols="25" wrap="off"></textarea><br />
 					<input type="submit" value="Add" />
 					<br />
-					<i>Enter the URLs of torrents on the site, one to a line.</i>
+					<span style="font-style: italic;">Enter the URLs of torrents on the site, one per line.</span>
 				</form>
 			</div>
 		</div>

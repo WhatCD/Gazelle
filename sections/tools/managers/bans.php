@@ -9,9 +9,9 @@ if (isset($_POST['submit'])) {
 		$DB->query('DELETE FROM ip_bans WHERE ID='.$_POST['id']);
 		$Bans = $Cache->delete_value('ip_bans');
 	} else { //Edit & Create, Shared Validation
-		$Val->SetFields('start', '1','regex','You must inculde starting IP address.',array('regex'=>'/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i'));
-		$Val->SetFields('end', '1','regex','You must inculde ending IP address.',array('regex'=>'/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i'));
-		$Val->SetFields('notes', '1','string','You must inculde a note regarding the reason for the ban.');
+		$Val->SetFields('start', '1','regex','You must include the starting IP address.',array('regex'=>'/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i'));
+		$Val->SetFields('end', '1','regex','You must include the ending IP address.',array('regex'=>'/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i'));
+		$Val->SetFields('notes', '1','string','You must include the reason for the ban.');
 		$Err=$Val->ValidateForm($_POST); // Validate the form
 		if($Err){ error($Err); }
 	
@@ -98,13 +98,15 @@ $DB->set_query_id($Bans);
 		</table>	
 	</form>
 </div>
-<br / >
+<br />
 
 <h3>Manage</h3>
 <?=$PageLinks?>
 <table width="100%">
 	<tr class="colhead">
-		<td colspan="2">Range</td>
+		<td colspan="2">
+			<span title="The IP addresses specified are &#42;inclusive&#42;. The left box is the beginning of the IP range, and the right box is the end of the IP range.">Range</span>
+		</td>
 		<td>Notes</td>
 		<td>Submit</td>
 	</tr>
@@ -122,7 +124,6 @@ $DB->set_query_id($Bans);
 			<td>
 				<input type="submit" name="submit" value="Create" />
 			</td>
-			
 		</form>
 	</tr>
 <?
@@ -148,7 +149,6 @@ while(list($ID, $Start, $End, $Reason) = $DB->next_record()){
 				<input type="submit" name="submit" value="Edit" />
 				<input type="submit" name="submit" value="Delete" />
 			</td>
-			
 		</form>
 	</tr>
 <?

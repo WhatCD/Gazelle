@@ -49,15 +49,15 @@ show_header('Edit collage');
 				<td class="label">Tags</td>
 				<td><input type="text" name="tags" size="60" value="<?=$TagList?>" /></td>
 			</tr>
-<? if($CategoryID == 0) { ?>
+<? if($CategoryID == 0) { ?> // CategoryID==0 is "Personal" collages
 			<tr>
-				<td class="label">Featured</td>
+				<td class="label"><span title="A &quot;featured&quot; personal collage will be listed first on your profile.">Featured</span></td>
 				<td><input type="checkbox" name="featured" <?=($Featured?'checked':'')?> /></td>
 			</tr>
 <? }
    if(check_perms('site_collages_delete')) { ?>
 			<tr>
-				<td class="label">Locked</td>
+				<td class="label"><span title="This feature has not been implemented yet. It currently does nothing.">Locked</span></td>
 				<td><input type="checkbox" name="locked" <?if($Locked) { ?>checked="checked" <? }?>/></td>
 			</tr>
 			<tr>

@@ -514,27 +514,27 @@ if(empty($SimilarArray)) {
 			<ul class="stats nobullet">
 <?
 	if($NumSimilar == 0) { ?>
-				<li><i>None found</i></li> 
+				<li><span style="font-style: italic;">None found</span></li>
 <?	}
 	$First = true;
-	foreach ($SimilarArray as $SimilarArtist) {	
+	foreach ($SimilarArray as $SimilarArtist) {
 		list($Artist2ID, $Artist2Name, $Score, $SimilarID) = $SimilarArtist;
 		$Score = $Score/100;
 		if($First) {
-			$Max = $Score + 1	;
+			$Max = $Score + 1;
 			$First = false;
 		}
-		
+
 		$FontSize = (ceil((((($Score - 2)/$Max - 2) * 4)))) + 8;
-		
+
 ?>
 				<li>
 					<span title=<?=$Score?>><a href="artist.php?id=<?=$Artist2ID?>" style="float:left; display:block;"><?=$Artist2Name?></a></span>										<div style="float:right; display:block; letter-spacing: -1px;">
 					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;">[&minus;]</a>
 					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;">[+]</a>
-<?		if(check_perms('site_delete_tag')) { ?> 
+<?		if(check_perms('site_delete_tag')) { ?>
 					<a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[X]</a>
-<?		} ?> 
+<?		} ?>
 					</div>
 					<br style="clear:both" />
 				</li>
@@ -562,7 +562,7 @@ if(empty($SimilarArray)) {
 echo $TorrentDisplayList;
 
 if($NumRequests > 0) {
-	
+
 ?>
 	<table cellpadding="6" cellspacing="1" border="0" class="requests_table border" width="100%" id="requests">
 		<tr class="colhead_dark">
@@ -583,9 +583,9 @@ if($NumRequests > 0) {
 <?
 	foreach($Requests as $Request) {
 		list($RequestID, $CategoryID, $Title, $Year, $TimeAdded, $Votes, $Bounty) = $Request;
-		
+
 			$CategoryName = $Categories[$CategoryID - 1];
-			
+
 			if($CategoryName == "Music") {
 				$ArtistForm = get_request_artists($RequestID);
 				$ArtistLink = display_artists($ArtistForm, true, true);
@@ -595,16 +595,16 @@ if($NumRequests > 0) {
 			} else {
 				$FullName ="<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title."</a>";
 			}
-			
+
 			$Row = ($Row == 'a') ? 'b' : 'a';
-			
+
 			$Tags = get_request_tags($RequestID);
 ?>
 		<tr class="row<?=$Row?>">
 			<td>
 				<?=$FullName?>
 				<div class="tags">
-<?			
+<?
 		$TagList = array();
 		foreach($Tags as $TagID => $TagName) {
 			$TagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
@@ -615,7 +615,7 @@ if($NumRequests > 0) {
 				</div>
 			</td>
 			<td>
-				<?=$Votes?> 
+				<?=$Votes?>
 <?  	if(check_perms('site_vote')){ ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				&nbsp;&nbsp; <a href="javascript:Vote(0)"><strong>(+)</strong></a>
@@ -637,21 +637,21 @@ if($NumRequests > 0) {
 
 if($NumSimilar>0) {
 	$SimilarData = $Cache->get_value('similar_positions_'.$ArtistID);
-	
+
 	if(!$Data) {
 		include(SERVER_ROOT.'/classes/class_image.php');
 		$Img = new IMAGE;
 		$Img->create(WIDTH, HEIGHT);
 		$Img->color(255,255,255, 127);
-		
+
 		$Similar = new ARTISTS_SIMILAR($ArtistID, $Name);
 		$Similar->set_up();
 		$Similar->set_positions();
 		$Similar->background_image();
-		
-		
+
+
 		$SimilarData = $Similar->dump_data();
-		
+
 		$Cache->cache_value('similar_positions_'.$ArtistID, $SimilarData, 3600*24);
 	} else {
 		$Similar = new ARTISTS_SIMILAR($ArtistID);
@@ -667,7 +667,7 @@ if($NumSimilar>0) {
 ?>
 			</div>
 		</div>
-<? } // if $NumSimilar>0 ?> 
+<? } // if $NumSimilar>0 ?>
 		<div class="box">
 			<div class="head"><strong>Artist info</strong></div>
 			<div class="body"><?=$Text->full_format($Body)?></div>
@@ -680,9 +680,9 @@ show_footer();
 
 // Cache page for later use
 
-if($RevisionID) { 
+if($RevisionID) {
 	$Key = "artist_$ArtistID"."_revision_$RevisionID";
-} else { 
+} else {
 	$Key = 'artist_'.$ArtistID;
 }
 

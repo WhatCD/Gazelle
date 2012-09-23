@@ -390,7 +390,7 @@ function hide() {
 				<td class="label">Scene</td>
 				<td>
 					<input type="checkbox" id="scene" name="scene" <? if($Torrent['Scene']) { echo "checked='checked' ";}?>/>
-					Check this only if this is a 'scene release'. If you ripped it yourself, it is <strong>not</strong> a scene release. <br />If you are not sure, <strong>DO NOT</strong> check it, you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29">Wikipedia</a>.
+					Check this only if this is a 'scene release'. If you ripped it yourself, it is <strong>not</strong> a scene release. <br />If you are not sure, <strong>DO NOT</strong> check it; you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29">Wikipedia</a>.
 				</td>
 			</tr>
 			<tr>
@@ -408,7 +408,7 @@ function hide() {
 		} 
 ?>
 					</select>
-				<b id="format_warning" style="color:red"></b>
+				<span id="format_warning" class="important_text"></span>
 				</td>
 			</tr>
 			<tr>
@@ -453,7 +453,7 @@ function hide() {
 				<td class="label">Vanity House</td>
 				<td>
 					<label><input type="checkbox" id="vanity_house" name="vanity_house" <? if(!$Torrent['GroupID']) { echo 'disabled '; }?><? if($Torrent['VanityHouse']){ echo "checked='checked' ";}?>/>
-					Check this only if you are the submitting artist or submitting on behalf of the artist and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.</label>
+					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.</label>
 				</td>
 			</tr>
 <?		} ?>
@@ -471,7 +471,7 @@ function hide() {
 		} 
 ?>
 					</select>
-					<span id="cassette_true" class="hidden"><strong style="color:red;">Do NOT upload a cassette rip without first getting approval from a moderator!</strong></span>
+					<span id="cassette_true" class="hidden"><span class="important_text">Do NOT upload a cassette rip without first getting approval from a moderator!</span></span>
 				</td>
 			</tr>
 <?
@@ -491,8 +491,8 @@ function hide() {
 			<tr>
 				<td class="label">Log/Cue</td>
 				<td>
-					<input type="checkbox" id="flac_log" name="flac_log"<? if($HasLog) { echo " checked='checked'";}?>/> Check this box if the torrent has (or should have) a log file.<br />
-					<input type="checkbox" id="flac_cue" name="flac_cue"<? if($HasCue) { echo " checked='checked'";}?>/> Check this box if the torrent has (or should have) a cue file.<br />
+					<input type="checkbox" id="flac_log" name="flac_log"<? if($HasLog) { echo " checked='checked'";}?> /> Check this box if the torrent has (or should have) a log file.<br />
+					<input type="checkbox" id="flac_cue" name="flac_cue"<? if($HasCue) { echo " checked='checked'";}?> /> Check this box if the torrent has (or should have) a cue file.<br />
 <?
 		}
 		global $LoggedUser;
@@ -510,7 +510,7 @@ function hide() {
 				}
 ?>
 							<input type="checkbox" id="make_trumpable" name="make_trumpable"<? if ($Torrent['LogScore'] == 99) { echo " checked='checked'";}?>/> Check this box if you want this torrent to be trumpable (subtracts 1 point).
-<?			
+<?
 				if (!check_perms('users_mod')) {
 ?>						</td>
 					</tr>
@@ -532,7 +532,7 @@ function hide() {
 				<td class="label">Log Adjustment Reason</td>
 				<td>
 					<textarea name="adjustment_reason" id="adjustment_reason" cols="60" rows="8"><?=display_str($Torrent['AdjustmentReason']); ?></textarea>
-					<p class="min_padding">Contains reason for adjusting a score. <b>This field is displayed on the torrent page</b>.</p> 
+					<p class="min_padding">Contains reason for adjusting a score. <strong>This field is displayed on the torrent page</strong>.</p> 
 				</td>
 			</tr>
 <?			}*/?>
@@ -620,7 +620,7 @@ function hide() {
 				<td class="label">Release Description (optional)</td>
 				<td>
 					<textarea name="release_desc" id="release_desc" cols="60" rows="8"><?=display_str($Torrent['TorrentDescription']); ?></textarea>
-					<p class="min_padding">Contains information like encoder settings or details of the ripping process. <b>DO NOT PASTE THE RIPPING LOG HERE.</b></p>
+					<p class="min_padding">Contains information like encoder settings or details of the ripping process. <strong>DO NOT PASTE THE RIPPING LOG HERE.</strong></p>
 				</td>
 			</tr>
 		</table>
@@ -661,7 +661,7 @@ function hide() {
 			echo ">";
 			echo $Format;
 			echo "</option>\n";
-		} 
+		}
 ?>
 					</select>
 				</td>
@@ -715,15 +715,15 @@ function hide() {
 				<td class="label">Description</td>
 				<td>
 					<textarea name="album_desc" id="album_desc" cols="60" rows="8"><?=display_str($Torrent['GroupDescription']); ?></textarea>
-					<p class="min_padding">Contains information like the track listing, and maybe a review.</p>
+					<p class="min_padding">Contains information like the track listing, a review, a link to Discogs or MusicBrainz, etc.</p>
 				</td>
 			</tr>
-<?		}?> 
+<?		}?>
 			<tr>
 				<td class="label">Release Description (optional)</td>
 				<td>
 					<textarea name="release_desc" id="release_desc" cols="60" rows="8"><?=display_str($Torrent['TorrentDescription']); ?></textarea>
-					<p class="min_padding">Contains information like encoder settings, and/or a log of the ripping process.</p>
+					<p class="min_padding">Contains information like encoder settings. For analog rips, this frequently contains lineage information.</p>
 				</td>
 			</tr>
 		</table>
@@ -732,7 +732,7 @@ function hide() {
 
 
 
-	
+
 
 	function simple_form($CategoryID) {
 		$Torrent = $this->Torrent; 

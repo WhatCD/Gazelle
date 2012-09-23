@@ -415,21 +415,21 @@ if (check_perms('users_view_keys',$Class) || $OwnProfile) {
 <? }
 if (check_perms('users_view_invites')) {
 	if (!$InviterID) {
-		$Invited="<i>Nobody</i>";
+		$Invited='<span style="font-style: italic;">Nobody</span>';
 	} else {
 		$Invited='<a href="user.php?id='.$InviterID.'">'.$InviterName.'</a>';
 	}
 	
 ?>
 				<li>Invited By: <?=$Invited?></li>
-				<li>Invites: <? 
+				<li>Invites: <?
 				$DB->query("SELECT count(InviterID) FROM invites WHERE InviterID = '$UserID'");
 				list($Pending) = $DB->next_record();
-				if($DisableInvites) { 
-					echo 'X'; 
-				} else { 
-					echo number_format($Invites); 
-				} 
+				if($DisableInvites) {
+					echo 'X';
+				} else {
+					echo number_format($Invites);
+				}
 				echo " (".$Pending.")"
 				?></li>
 <?
@@ -548,7 +548,7 @@ $ViewBounty  = check_paranoia_here('requestsvoted_bounty');
    if (($Override=check_paranoia_here('uploads+'))) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Uploaded: <?=number_format($Uploads)?> 
 					<? if(($Override=check_paranoia_here('uploads'))) { ?>[<a <?= $Override===2 ? 'class="paranoia_override"' :'' ?> href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>" title="View">View</a>]<?  if(check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=uploads&amp;userid=<?=$UserID?>" 
-																																																			onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');">Download</a>]<? } } ?>
+						onclick="return confirm('If you no longer have the content, your ratio WILL be affected; be sure to check the size of all albums before redownloading.');">Download</a>]<? } } ?>
 				</li>
 <? }
    if (($Override=check_paranoia_here('uniquegroups+'))) { ?>
@@ -576,27 +576,27 @@ if (check_paranoia_here('seeding+') || check_paranoia_here('leeching+')) {
 <? if (($Override=check_paranoia_here('seeding+'))) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Seeding: <?=number_format($Seeding)?> <?
 					if(($AOverride=check_paranoia_here('seeding'))) {
-						echo ((($Override=check_paranoia_here('snatched')) && $UniqueSnatched > 0 ) 
+						echo ((($Override=check_paranoia_here('snatched')) && $UniqueSnatched > 0 )
 							? '<span ' .($Override===2 ? 'class="paranoia_override" ' : '').' >(' . 100*min(1,round($Seeding/$UniqueSnatched,2)).'%)</span> '
 							: ''); ?>
 						[<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" <?= $AOverride===2 ? 'class="paranoia_override"' :'' ?> title="View">View</a>]
-						<? if (check_perms('zip_downloader')) { ?> 
+						<? if (check_perms('zip_downloader')) { ?>
 							[<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected; be sure to check the size of all albums before redownloading.');">Download</a>]
 						<? } ?>
 					<?} ?>
 				</li>
 <? }
    if (($Override=check_paranoia_here('leeching+'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Leeching: <? echo number_format($Leeching); 
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Leeching: <? echo number_format($Leeching);
 				if(($Override=check_paranoia_here('leeching'))) { ?>
-					[<a <?= $Override===2 ? 'class="paranoia_override"' : ''?> href="torrents.php?type=leeching&amp;userid=<?=$UserID?>" title="View">View</a>] 
-				<? } 
+					[<a <?= $Override===2 ? 'class="paranoia_override"' : ''?> href="torrents.php?type=leeching&amp;userid=<?=$UserID?>" title="View">View</a>]
+				<? }
 					echo ($DisableLeech == 0 && check_perms('users_view_ips')) ? "<strong> (Disabled)</strong>" : ""?>
 				</li>
-<? } 
+<? }
 ?>
 <? if (($Override=check_paranoia_here('snatched+'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Snatched: <?=number_format($Snatched)?> 
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Snatched: <?=number_format($Snatched)?>
 <? 	if(($Override=check_perms('site_view_torrent_snatchlist', $Class))) { ?>
 					(<?= $Override === 2 ? '<span class="paranoia_override">'.number_format($UniqueSnatched).'</span>' :	number_format($UniqueSnatched) ?>)
 <?	} ?>
