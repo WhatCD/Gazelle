@@ -191,7 +191,7 @@ ul.thin li {
 }
 
 #footer {
-	margin-top: 40px;
+	margin-top: 60px;
 	width: 100%;
 	text-align: center;
 	padding: 1em 0;
@@ -678,6 +678,10 @@ ul.poll li.graph {
 .filter_torrents .submit {
 	text-align: right;
 	padding-top: 5px;
+}
+
+#content form.search_form + .torrent_table {
+	margin-top: 20px;
 }
 
 .cat_list tr td {

@@ -665,6 +665,10 @@ ul.poll li.graph {
 	font-weight: bold;
 }
 
+#content form.search_form + .torrent_table {
+	margin-top: 20px;
+}
+
 .torrent_table tr.group, tr.torrent {
 	background-color: #DDD;
 }

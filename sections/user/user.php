@@ -633,7 +633,7 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 ?>
 		<div class="box">
 			<div class="head">Ratio watch</div>
-			<div class="pad">This user is currently on ratio watch, and must upload <?=get_size(($Downloaded*$RequiredRatio)-$Uploaded)?> in the next <?=time_diff($RatioWatchEnds)?>, or their leeching privileges will be revoked. Amount downloaded while on ratio watch: <?=get_size($Downloaded-$RatioWatchDownload)?></div>
+			<div class="pad">This user is currently on ratio watch and must upload <?=get_size(($Downloaded*$RequiredRatio)-$Uploaded)?> in the next <?=time_diff($RatioWatchEnds)?>, or their leeching privileges will be revoked. Amount downloaded while on ratio watch: <?=get_size($Downloaded-$RatioWatchDownload)?></div>
 		</div>
 <? } ?>
 		<div class="box">
@@ -670,7 +670,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 		ORDER BY s.tstamp DESC
 		LIMIT 5");
 		$RecentSnatches = $DB->to_array();
-		
+
 		$Artists = get_artists($DB->collect('ID'));
 		foreach($RecentSnatches as $Key => $SnatchInfo) {
 			$RecentSnatches[$Key]['Artist'] = display_artists($Artists[$SnatchInfo['ID']], false, true);

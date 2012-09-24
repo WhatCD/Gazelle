@@ -480,13 +480,9 @@ ul#userinfo_username {
 	border: 1px solid #b5b5b5;
 }
 
-#torrents #content h2 {
-  margin: 10px 0 10px 0 !important;
-}
-
-#content h2:first-child {
+#content .header h2 {
   background-color: #f0f0f0;
-  margin: -20px -20px -1px -20px !important;
+  margin: 20px -20px -1px -20px !important;
   padding: 20px;
 	-moz-border-radius-topleft: 11px;
 	-webkit-border-radius-topleft: 11px;
@@ -497,6 +493,10 @@ ul#userinfo_username {
 	border-bottom: 1px solid #c6c6c6;
 	position: relative;
 	z-index:3;
+}
+
+#content .header:first-child h2 {
+	margin-top: -20px !important;
 }
 
 
@@ -919,6 +919,10 @@ strong.quoteheader {
 
 .tags a:hover {
 	color: #007dc6;
+}
+
+#content form.search_form + .torrent_table {
+	margin-top: 20px;
 }
 
 #torrent_table {

@@ -26,9 +26,9 @@ $DB->query("
 			ORDER BY ass.Score DESC
 			LIMIT $artist_limit");
 
-		
+
 		while(list($ArtistID, $Name, $Score) = $DB->next_record(MYSQLI_NUM, false)){
-		       	if($Score<0){
+			if($Score<0){
 				continue;
 			}
 			$results[] = array('id' => (int) $ArtistID, 'name' => $Name, 'score' => (int) $Score);

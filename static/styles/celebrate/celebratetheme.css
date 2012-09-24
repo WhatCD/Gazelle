@@ -742,6 +742,10 @@ ul.poll li.graph {
 	padding-top:5px;
 }
 
+#content form.search_form + .torrent_table {
+	margin-top: 20px;
+}
+
 .cat_list tr td {
 	border:none;
 }

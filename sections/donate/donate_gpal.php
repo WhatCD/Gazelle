@@ -23,7 +23,7 @@ show_header('Donate');
 <div class="thin">
 <? if (check_perms('site_debug')) { ?>
 	<div class="header">
-		<h3>Test IPN</h3>
+		<h2>Test IPN</h2>
 	</div>
 	<div class="box pad">
 		<form class="donate_form" name="test_paypal" method="post" action="donate.php">
@@ -45,7 +45,7 @@ show_header('Donate');
 }
 ?>
 	<div class="header">
-		<h3>Donate</h3>
+		<h2>Donate</h2>
 	</div>
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<p>We accept donations to cover the costs associated with running the site and tracker. These costs come from the rental and purchase of the hardware the site runs on (servers, components, etc.), in addition to operating expenses (bandwidth, power, etc.).</p>

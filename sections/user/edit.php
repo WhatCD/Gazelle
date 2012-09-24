@@ -283,7 +283,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label">&nbsp;</td>
 				<td>
-					<p><span class="warning">Note: Paranoia has nothing to do with your security on this site, the only thing affected by this setting is other users ability to see your site activity and taste in music.</span></p>
+					<p><span class="warning">Note: Paranoia has nothing to do with your security on this site; the only thing affected by this setting is other users' ability to see your site activity and taste in music.</span></p>
 					<p>Select the elements <strong>you want to show</strong> on your profile. For example, if you tick "Show count" for "Snatched", users will be able to see that you have snatched <?=number_format($Snatched)?> torrents. If you tick "Show list", they will be able to see the full list of torrents you've snatched.</p>
 					<p><span class="warning">Some information will still be available in the site log.</span></p>
 				</td>

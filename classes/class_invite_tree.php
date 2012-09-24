@@ -186,8 +186,8 @@ class INVITE_TREE {
 			
 			echo '<p style="font-weight: bold;">';
 			echo 'The total amount uploaded by direct invitees (the top level) was '.get_size($TopLevelUpload);
-			echo ', the total amount downloaded was '.get_size($TopLevelDownload);
-			echo ', and the total ratio is '.ratio($TopLevelUpload, $TopLevelDownload).'. ';
+			echo '; the total amount downloaded was '.get_size($TopLevelDownload);
+			echo '; and the total ratio is '.ratio($TopLevelUpload, $TopLevelDownload).'. ';
 			
 			
 			echo 'These numbers include the stats of paranoid users, and will be factored in to the invitation giving script.</p>';

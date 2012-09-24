@@ -50,8 +50,8 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 <?	} ?>
 		</table>
 	</div>
-	<br />
 	<div class="box pad" style="padding:0px 10px 10px 10px;">
+		<br />
 		<h3>Forum Moderators</h3>
 		<p>Forum Mods are users who have been promoted to help moderate the forums. They can only help with forum oriented questions</p>
 		<table class="staff" width="100%">

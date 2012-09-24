@@ -328,7 +328,8 @@ form#quickpostform textarea {
 	margin: 0 auto;
 }
 
-div.thin br+h3 {
+div.thin br+h3,
+div.thin > h3:first-child {
 	margin: 0 0 15px 15px;
 }
 
@@ -1024,24 +1025,24 @@ form[action="user.php"] table textarea,form[action="user.php"] table input[type=
 	-moz-box-sizing: border-box;
 }
 
-h3#irc+div.box.pad,h3#general+div.box.pad {
+h3#irc+div.box.pad,body#rules .header+div.box.pad,h3#forums+div.box.pad {
 	padding: 30px !important;
 	background: #f8f8f8;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 }
 
-h3#irc+div.box.pad ul,h3#general+div.box.pad ul,#drag_drop_textnote ul {
+h3#irc+div.box.pad ul,h3#forums+div.box.pad ul,body#rules .header+div.box.pad ul,#drag_drop_textnote ul {
 	list-style: none;
 }
 
-h3#irc+div.box.pad ul li,h3#general+div.box.pad ul li,#drag_drop_textnote ul li {
+h3#irc+div.box.pad ul li,h3#forums+div.box.pad ul li,body#rules .header+div.box.pad ul li,#drag_drop_textnote ul li {
 	margin-bottom: 8px;
 	padding-bottom: 8px;
 	border-bottom: 1px solid #ddd;
 }
 
-h3#irc+div.box.pad ul li:last-child,h3#general+div.box.pad ul li:last-child,#drag_drop_textnote ul li:last-child {
+h3#irc+div.box.pad ul li:last-child,h3#forums+div.box.pad ul li:last-child,body#rules .header+div.box.pad ul li:last-child,#drag_drop_textnote ul li:last-child {
 	margin-bottom: 0;
 	padding-bottom: 0;
 	border-bottom: none;

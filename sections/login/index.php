@@ -32,8 +32,8 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 		// User has entered a new password, use step 2
 		$DB->query("SELECT 
 			m.ID,
-            m.Email,
-            m.ipcc,
+			m.Email,
+			m.ipcc,
 			i.ResetExpires 
 			FROM users_main AS m 
 			INNER JOIN users_info AS i ON i.UserID=m.ID 
@@ -63,8 +63,8 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 						AND i.UserID=m.ID");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
 					
-                    
-                }
+					
+				}
 			}
 			
 			// Either a form asking for them to enter the password
@@ -312,7 +312,7 @@ else {
 					$Err="Your username or password was incorrect.";
 					setcookie('keeplogged','',time()+60*60*24*365,'/','',false);
 				}
-				
+
 			} else {
 				log_attempt($UserID);
 				setcookie('keeplogged','',time()+60*60*24*365,'/','',false);
