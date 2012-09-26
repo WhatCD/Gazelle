@@ -24,18 +24,18 @@ function diff($OldText, $NewText) {
 			$Result[] = '<span class="line_deleted">&larr; '.$OldString.'</span><br />';
 			$LineOffset = $LineOffset - 1;
 		} elseif ($Found ==$OldLine+$LineOffset) { 
-			$Result[] = '<span class="line_unchanged"><strong>&#8597; '.$OldString.'</strong></span><br />';
+			$Result[] = '<span class="line_unchanged">&#8597; '.$OldString.'</span><br />';
 		} elseif ($Found != $OldLine+$LineOffset) {
 			if ($Found < $OldLine+$LineOffset) {
-				$Result[] = '<span class="line_moved"><strong>&#8676; '.$OldString.'</strong></span><br />'; 
+				$Result[] = '<span class="line_moved">&#8676; '.$OldString.'</span><br />'; 
 			} else { 
 				$Result[] = '<span class="line_moved">&larr; '.$OldString.'</span><br />';
 				$Key = $OldLine + $LineOffset;
 				while ($Key<$Found) {
-					$Result[] = '<span class="line_new"><strong>&rarr; '.$LineArrayNew[$Key].'</strong></span><br />';
+					$Result[] = '<span class="line_new">&rarr; '.$LineArrayNew[$Key].'</span><br />';
 					$Key++;
 				}
-				$Result[] = '<span class="line_moved"><strong>&rarr; '.$OldString.'</strong></span><br />'; 
+				$Result[] = '<span class="line_moved">&rarr; '.$OldString.'</span><br />'; 
 			}
 				$LineOffset = $Found-$OldLine; 
 		}
@@ -43,7 +43,7 @@ function diff($OldText, $NewText) {
 	if(count($LineArrayNew)>count($LineArrayOld) + $LineOffset) { 
 		$Key = count($LineArrayOld) + $LineOffset;
 		while($Key<count($LineArrayNew)) {
-			$Result[] = '<span class="line_new"><strong>&rarr; '.$LineArrayNew[$Key].'</strong></span><br />';
+			$Result[] = '<span class="line_new">&rarr; '.$LineArrayNew[$Key].'</span><br />';
 			$Key++;
 		}
 	}

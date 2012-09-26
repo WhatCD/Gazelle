@@ -989,7 +989,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<div class="box">
 			<div class="head">Staff Notes <a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;">(Edit)</a></div>
 			<div class="pad">
-				<input type="hidden" name="comment_hash" value="<?=$CommentHash?>">
+				<input type="hidden" name="comment_hash" value="<?=$CommentHash?>" />
 				<div id="admincommentlinks" class="AdminComment box" style="width:98%;"><?=$Text->full_format($AdminComment)?></div>
 				<textarea id="admincomment" onkeyup="resize('admincomment');" class="AdminComment hidden" name="AdminComment" cols="65" rows="26" style="width:98%;"><?=display_str($AdminComment)?></textarea>
 				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;">Toggle Edit</a>
@@ -1013,7 +1013,7 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_edit_titles')) {
 ?>
 			<tr>
-				<td class="label">CustomTitle:</td>
+				<td class="label">Custom Title:</td>
 				<td><input type="text" size="50" name="Title" value="<?=display_str($CustomTitle)?>" /></td>
 			</tr>
 <?

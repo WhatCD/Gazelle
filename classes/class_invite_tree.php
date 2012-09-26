@@ -180,8 +180,8 @@ class INVITE_TREE {
 			
 			echo '<p style="font-weight: bold;">';
 			echo 'The total amount uploaded by the entire tree was '.get_size($TotalUpload);
-			echo ', the total amount downloaded was '.get_size($TotalDownload);
-			echo ', and the total ratio is '.ratio($TotalUpload, $TotalDownload).'. ';
+			echo '; the total amount downloaded was '.get_size($TotalDownload);
+			echo '; and the total ratio is '.ratio($TotalUpload, $TotalDownload).'. ';
 			echo '</p>';
 			
 			echo '<p style="font-weight: bold;">';
@@ -191,7 +191,6 @@ class INVITE_TREE {
 			
 			
 			echo 'These numbers include the stats of paranoid users, and will be factored in to the invitation giving script.</p>';
-			
 			
 			if($ParanoidCount){
 				echo '<p style="font-weight: bold;">';

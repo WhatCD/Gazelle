@@ -1339,8 +1339,7 @@ CREATE TABLE `users_notify_torrents` (
   `TorrentID` int(10) NOT NULL,
   `UnRead` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`UserID`,`TorrentID`),
-  KEY `TorrentID` (`TorrentID`),
-  KEY `UserID` (`UserID`,`UnRead`)
+  KEY `TorrentID` (`TorrentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users_points` (
