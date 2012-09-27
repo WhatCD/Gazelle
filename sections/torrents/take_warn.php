@@ -23,17 +23,11 @@ if ($Length != 'verbal') {
     $Subject = "You have received a warning";
     $PrivateMessage = "You have received a $Length week warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;
 	$WarnTime = time_plus($Time);
-	$AdminComment = date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $URL - $Reason\n\n";   
+	$AdminComment = date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']." for $URL \nReason: $Reason\n\n";
 } else {
     $Subject = "You have received a verbal warning";
     $PrivateMessage = "You have received a verbal warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;
-
     $AdminComment = date("Y-m-d") . ' - Verbally warned by ' . $LoggedUser['Username'] . " for $URL \nReason: $Reason\n\n";
-    $DB -> query('UPDATE users_info SET
-        Warned=\'' . db_string($WarnTime) . '\',
-            WarnedTimes=WarnedTimes+1,
-            AdminComment=CONCAT(\'' . db_string($AdminComment) . '\',AdminComment)
-            WHERE UserID=\'' . db_string($UserID) . '\'');
 	}
 $DB -> query("INSERT INTO users_warnings_forums (UserID, Comment) VALUES('$UserID', '" . db_string($AdminComment) . "')
 	        ON DUPLICATE KEY UPDATE Comment = CONCAT('" . db_string($AdminComment) . "', Comment)");

@@ -7,8 +7,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 		$TorrentCache=$Cache->get_value('torrents_details_'.$GroupID);
 	}
 	
-	//TODO: Remove LogInDB at a much later date.
-	if($RevisionID || !is_array($TorrentCache) || !isset($TorrentCache[1][0]['LogInDB']) || !isset($TorrentCache[1][0]['VanityHouse'])) {
+	if($RevisionID || !is_array($TorrentCache)) {
 		// Fetch the group details
 
 		$SQL = "SELECT ";
@@ -106,7 +105,8 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 
 		$TorrentList = $DB->to_array();
 		if(count($TorrentList) == 0) {
-			error(404, false, 'torrent+'.$GroupID);
+			header("Location: log.php?search=Torrent+$GroupID");
+			die();
 		}
 		if(in_array(0, $DB->collect('Seeders'))) {
 			$CacheTime = 600;
