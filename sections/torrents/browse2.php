@@ -128,7 +128,7 @@ if(!empty($_GET['filelist'])) {
 // Collect all entered search terms to find out whether to enable the NOT operator
 foreach(array('artistname','groupname', 'recordlabel', 'cataloguenumber', 
 				'remastertitle', 'remasteryear', 'remasterrecordlabel', 'remastercataloguenumber',
-				'format', 'media', 'taglist') as $Search) {
+				'encoding', 'format', 'media', 'taglist') as $Search) {
 	if(!empty($_GET[$Search])) {
 		$SearchString = trim($_GET[$Search]);
 		if($SearchString != '') {
@@ -290,9 +290,6 @@ if(!empty($_GET['year'])) {
 			$SS->set_filter_range('year', (int)$Years[0], (int)$Years[1]);
 		}
 	}
-}
-if(!empty($_GET['encoding'])) {
-	$Queries[]='@encoding "'.$SS->EscapeString(strtr($_GET['encoding'], '.', ' ')).'"'; // Conversion from period to space is necessary due to a sphinx limitation/bug
 }
 
 if(isset($_GET['haslog']) && $_GET['haslog']!=='') {
