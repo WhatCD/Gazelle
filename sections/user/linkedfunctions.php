@@ -160,7 +160,7 @@ function user_dupes_table($UserID) {
 		$Dupes = array();
 	}
 ?>
-		<form class="manage_form" name="user" method="post" id="linkedform">
+		<form class="manage_form" name="user" method="post" id="linkedform" action="">
 			<input type="hidden" name="action" value="dupes" />
 			<input type="hidden" name="dupeaction" value="update" />
 			<input type="hidden" name="userid" value="<?=$UserID?>" />

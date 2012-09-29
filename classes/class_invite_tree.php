@@ -108,12 +108,16 @@ class INVITE_TREE {
 			
 			// Manage tree depth
 			if($TreeLevel > $PreviousTreeLevel){
-				for($i = 0; $i<$TreeLevel-$PreviousTreeLevel; $i++){ echo "<ul class=\"invitetree\">\n"; }
+				for($i = 0; $i<$TreeLevel-$PreviousTreeLevel; $i++){ echo "<ul class=\"invitetree\"><li>"; }
 			} elseif($TreeLevel < $PreviousTreeLevel){
-				for($i = 0; $i<$PreviousTreeLevel-$TreeLevel; $i++){ echo "</ul>\n"; }
+				for($i = 0; $i<$PreviousTreeLevel-$TreeLevel; $i++){ echo "</li></ul>"; }
+				echo "</li>";
+				echo "<li>";
+			} else {
+				echo "</li>";
+				echo "<li>";
 			}
 ?>
-			<li>
 				<strong><?=format_username($ID, true, true, $Enabled != 2 ? false : true, true)?></strong>
 <?
 			if(check_paranoia(array('uploaded', 'downloaded'), $Paranoia, $UserClass)) {
@@ -131,11 +135,14 @@ class INVITE_TREE {
 <?
 			}
 ?>			
-			</li>
+
 <?			$PreviousTreeLevel = $TreeLevel;
 			$DB->set_query_id($TreeQuery);
 		}
+
 		$Tree = ob_get_clean();
+		for($i = 0; $i<$PreviousTreeLevel-$OriginalTreeLevel; $i++){ $Tree .= "</li></ul>\n"; }
+
 		if($Count){
 		
 ?> 		<p style="font-weight: bold;">
