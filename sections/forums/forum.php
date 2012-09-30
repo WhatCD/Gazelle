@@ -78,10 +78,12 @@ show_header('Forums > '. $Forums[$ForumID]['Name']);
 				<h3>Search this forum:</h3>
 				<form class="search_form" name="forum" action="forums.php" method="get">
 					<table cellpadding="6" cellspacing="1" border="0" class="layout border">	
-						<input type="hidden" name="action" value="search" />
-						<input type="hidden" name="forums[]" value="<?=$ForumID?>" />
 						<tr>
-							<td><strong>Search for:</strong></td><td><input type="text" id="searchbox" name="search" size="70" /></td>
+							<td>
+								<input type="hidden" name="action" value="search" />
+								<input type="hidden" name="forums[]" value="<?=$ForumID?>" />
+								<strong>Search for:</strong></td><td><input type="text" id="searchbox" name="search" size="70" />
+							</td>
 						</tr>
 						<tr>
 							<td><strong>Search in:</strong></td>
@@ -91,10 +93,13 @@ show_header('Forums > '. $Forums[$ForumID]['Name']);
 								<input type="radio" name="type" id="type_body" value="body" /> 
 								<label for="type_body">Post bodies</label>
 							</td>
+						</tr>
 						<tr>
 							<td><strong>Username:</strong></td><td><input type="text" id="username" name="user" size="70" /></td>
 						</tr>
-						<tr><td colspan="2" style="text-align: center"><input type="submit" name="submit" value="Search" /></td></tr>
+						<tr>
+							<td colspan="2" style="text-align: center"><input type="submit" name="submit" value="Search" /></td>
+						</tr>
 					</table>
 				</form>
 				<br />

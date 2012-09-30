@@ -49,7 +49,7 @@ show_header('Edit collage');
 				<td class="label">Tags</td>
 				<td><input type="text" name="tags" size="60" value="<?=$TagList?>" /></td>
 			</tr>
-<? if($CategoryID == 0) { ?> // CategoryID==0 is "Personal" collages
+<? if($CategoryID == 0) { // CategoryID==0 is "Personal" collages ?>
 			<tr>
 				<td class="label"><span title="A &quot;featured&quot; personal collage will be listed first on your profile.">Featured</span></td>
 				<td><input type="checkbox" name="featured" <?=($Featured?'checked':'')?> /></td>

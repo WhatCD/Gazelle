@@ -138,16 +138,16 @@ class SPHINXQL extends mysqli {
 class SPHINXQL_QUERY {
 	private $SphinxQL;
 
-	private $Expressions = array();
-	private $Filters = array();
-	private $GroupBy = '';
-	private $Indexes = '';
-	private $Limits = array();
-	private $Options = array();
-	private $QueryString = '';
-	private $Select = '*';
-	private $SortBy = array();
-	private $SortGroupBy = '';
+	private $Expressions;
+	private $Filters;
+	private $GroupBy;
+	private $Indexes;
+	private $Limits;
+	private $Options;
+	private $QueryString;
+	private $Select;
+	private $SortBy;
+	private $SortGroupBy;
 
 	/**
 	 * Initialize SphinxQL object
@@ -158,6 +158,7 @@ class SPHINXQL_QUERY {
 	 */
 	public function __construct($Server = SPHINXQL_HOST, $Port = SPHINXQL_PORT, $Socket = SPHINXQL_SOCK) {
 		$this->SphinxQL = SPHINXQL::init_connection($Server, $Port, $Socket);
+		$this->reset();
 	}
 
 	/**
@@ -167,7 +168,6 @@ class SPHINXQL_QUERY {
 	 * @return current SphinxQL query object
 	 */
 	public function select($Fields) {
-		$this->reset_query();
 		$this->Select = $Fields;
 		return $this;
 	}
@@ -316,8 +316,6 @@ class SPHINXQL_QUERY {
 
 	/**
 	 * Combine the query conditions into a valid Sphinx query segment
-	 *
-	 * @return SphinxQL query string
 	 */
 	private function build_query() {
 		if(!$this->Indexes) {
@@ -325,7 +323,7 @@ class SPHINXQL_QUERY {
 		}
 		$this->QueryString = "SELECT $this->Select FROM $this->Indexes";
 		if(!empty($this->Expressions)) {
-			$this->Filters[] = "MATCH('".implode(" ", $this->Expressions)."')";
+			$this->Filters['expr'] = "MATCH('".implode(" ", $this->Expressions)."')";
 		}
 		if(!empty($this->Filters)) {
 			$this->QueryString .= "\nWHERE ".implode("\n\tAND ", $this->Filters);
@@ -401,7 +399,7 @@ class SPHINXQL_QUERY {
 	/**
 	 * Reset all query options and conditions
 	 */
-	private function reset_query() {
+	public function reset() {
 		$this->Expressions = array();
 		$this->Filters = array();
 		$this->GroupBy = '';
