@@ -405,7 +405,7 @@ class SPHINXQL_QUERY {
 		$this->GroupBy = '';
 		$this->Indexes = '';
 		$this->Limits = array();
-		$this->Options = array();
+		$this->Options = array('ranker' => 'none');
 		$this->QueryString = '';
 		$this->Select = '*';
 		$this->SortBy = array();

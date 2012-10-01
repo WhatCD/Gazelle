@@ -5,27 +5,18 @@ if (!defined('LOG_ENTRIES_PER_PAGE')) {
 }
 show_header("Site log");
 
-if(!isset($_GET['beta']) || $_GET['beta'] == 1) {
-	$BetaLog = true;
-	$URL = get_url(array('beta'));
-	include(SERVER_ROOT.'/sections/log/sphinx.php');
-} else {
-	$BetaLog = false;
-	$URL = get_url(array('beta'));
-	include(SERVER_ROOT.'/sections/log/sql.php');
-}
+include(SERVER_ROOT.'/sections/log/sphinx.php');
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>Site log<?=$BetaLog ? ' (beta)' : ''?></h2>
+		<h2>Site log</h2>
 	</div>
-	<div>
+	<div class="box pad">
 		<form class="search_form" name="log" action="" method="get">
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
 					<td>
-						<input type="hidden" name="beta" value="<?=$BetaLog ? 1 : 0?>" />
 						<input type="text" name="search" size="60"<?=!empty($_GET['search']) ? ' value="'.display_str($_GET['search']).'"' : '' ?> />
 						&nbsp;
 						<input type="submit" value="Search log" />
@@ -33,14 +24,6 @@ if(!isset($_GET['beta']) || $_GET['beta'] == 1) {
 				</tr>
 			</table>	
 		</form>
-	</div>
-	
-	<div class="linkbox">
-<? if($BetaLog) { ?>
-		<a href="log.php?<?=$URL?>&amp;beta=0">Go to normal page (slower)</a>
-<? } else { ?>
-		<a href="log.php?<?=$URL?>&amp;beta=1">Go to beta page (faster)</a>
-<? } ?>
 	</div>
 
 <? if($TotalMatches > LOG_ENTRIES_PER_PAGE) { ?>
@@ -50,7 +33,7 @@ if(!isset($_GET['beta']) || $_GET['beta'] == 1) {
 	echo $Pages;?>
 	</div>
 <? } ?>
-	<table cellpadding="6" cellspacing="1" border="0" class="log_table border" width="100%">
+	<table cellpadding="6" cellspacing="1" border="0" class="log_table border" id="log_table" width="100%">
 		<tr class="colhead">
 			<td style="width: 180px;"><strong>Time</strong></td>
 			<td><strong>Message</strong></td>

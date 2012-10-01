@@ -488,7 +488,7 @@ ul.collage_images li a:hover img {
 	width: 100% !important;
 }
 
-table[width="100%"],.box,.torrent_table,#request_table,#collages,.forum_index,table.border,.linkbox+table,form#messageform table ,.main_column table ,form[action="user.php"] table,table.staff,#userhistory table {
+table[width="100%"],.box,.torrent_table,#log_table,#request_table,#collages,.forum_index,table.border,.linkbox+table,form#messageform table ,.main_column table ,form[action="user.php"] table,table.staff,#userhistory table {
 	margin-bottom: 20px;
 	padding: 10px;
 	background: #fff;

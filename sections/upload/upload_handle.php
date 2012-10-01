@@ -665,7 +665,9 @@ if (!empty($LogScores) && $HasLog) {
 	$LogQuery .= implode('),(', $LogScores).')';
 	$DB->query($LogQuery);
 	$LogInDB = true;
-}
+}/* elseif ($HasLog) {
+	send_irc("PRIVMSG #taste :!logs $TorrentID");
+}*/
 
 //******************************************************************************//
 //--------------- Stupid Recent Uploads ----------------------------------------//
