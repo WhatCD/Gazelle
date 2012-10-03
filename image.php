@@ -23,7 +23,7 @@ require(SERVER_ROOT.'/classes/class_cache.php'); //Require the caching class
 require(SERVER_ROOT.'/classes/class_encrypt.php'); //Require the encryption class
 require(SERVER_ROOT.'/classes/regex.php');
 
-$Cache = NEW CACHE; //Load the caching class
+$Cache = NEW CACHE($MemcachedServers); //Load the caching class
 $Enc = NEW CRYPT; //Load the encryption class
 
 if (isset($_COOKIE['session'])) { $LoginCookie=$Enc->decrypt($_COOKIE['session']); }

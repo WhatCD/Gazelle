@@ -21,7 +21,7 @@ if($Short == "request_update") {
 	}
 	$Reason  = "[b]Year[/b]: ".$_POST['year'].".\n\n";
 	// If the release type is somehow invalid, return "Not given"; otherwise, return the release type.
-	$Reason .= "[b]Release Type[/b]: ".((empty($_POST['releasetype']) || !is_number($_POST['releasetype']) || $_POST['releasetype'] == 0) ? 'Not given' : $ReleaseTypes[$_POST['releasetype']]).".\n\n";
+	$Reason .= "[b]Release Type[/b]: ".((empty($_POST['releasetype']) || !is_number($_POST['releasetype']) || $_POST['releasetype'] == 0) ? 'Not given' : $ReleaseTypes[$_POST['releasetype']]).". \n\n";
 	$Reason .= "[b]Additional Comments[/b]: ".$_POST['comment'];
 } else {
 	$Reason = $_POST['reason'];

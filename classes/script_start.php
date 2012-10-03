@@ -54,7 +54,7 @@ $Debug->handle_errors();
 $Debug->set_flag('Debug constructed');
 
 $DB = new DB_MYSQL;
-$Cache = new CACHE;
+$Cache = new CACHE($MemcachedServers);
 $Enc = new CRYPT;
 $UA = new USER_AGENT;
 $SS = new SPHINX_SEARCH;

@@ -679,8 +679,8 @@ td.avatar {
 	padding: 0px;
 }
 
-table.forum_post td.body {
-	width:690px;
+table.forum_post td.body div {
+	width: 677px;
 }
 
 blockquote {

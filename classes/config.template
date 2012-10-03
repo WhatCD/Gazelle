@@ -28,8 +28,10 @@ define('SQLPORT', 3306); //The MySQL port to connect on
 define('SQLSOCK', '/var/run/mysqld/mysql.sock');
 
 // Memcached details
-define('MEMCACHED_HOST', 'unix:///var/run/memcached.sock'); // unix sockets are fast, and other people can't telnet into them
-define('MEMCACHED_PORT', 0);
+$MemcachedServers = array(
+	// unix sockets are fast, and other people can't telnet into them
+	array('host' => 'unix:///var/run/memcached.sock', 'port' => 0, 'buckets' => 1),
+);
 
 // Sphinx details
 define('SPHINX_HOST', 'localhost');

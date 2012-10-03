@@ -43,10 +43,10 @@ class CACHE extends Memcache {
 	public $CanClear = false;
 	public $InternalCache = true;
 
-	function __construct() {
-		$this->pconnect(MEMCACHED_HOST, MEMCACHED_PORT);
-		
-		//$this->connect('localhost', 11211);
+	function __construct($Servers) {
+		foreach ($Servers as $Server) {
+			$this->addServer($Server['host'], $Server['port'], true, $Server['buckets']);
+		}
 	}
 
 	//---------- Caching functions ----------//

@@ -5,7 +5,7 @@ require(SERVER_ROOT.'/classes/class_cache.php'); //Require the caching class
 require(SERVER_ROOT.'/classes/class_encrypt.php'); //Require the caching class
 
 $Debug = new DEBUG;
-$Cache = NEW CACHE; //Load the caching class
+$Cache = NEW CACHE($MemcachedServers); //Load the caching class
 $Enc = NEW CRYPT; //Load the encryption class
 
 $SSL = ($_SERVER['SERVER_PORT'] === '443');
