@@ -28,12 +28,7 @@ require(SERVER_ROOT.'/classes/class_torrent.php');
 
 $TorrentID = $_REQUEST['id'];
 
-$uih = user_heavy_info($UserID);
-if ($AuthKey != $uih['AuthKey']) {
 
-	error(403);
-	die;
-}
 
 if (!is_number($TorrentID)){ error(0); }
 

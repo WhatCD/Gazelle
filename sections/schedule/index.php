@@ -98,7 +98,6 @@ $DB->query("UPDATE users_freeleeches SET Expired = True WHERE Time < '$sqltime' 
 
 
 
-
 /*************************************************************************\
 //--------------Run every hour ------------------------------------------//
 

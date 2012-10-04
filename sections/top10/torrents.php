@@ -310,7 +310,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 	<table class="torrent_table cats numbering border">
 	<tr class="colhead">
 		<td class="center" style="width:15px;"></td>
-		<td></td>
+		<td class="cats_col"></td>
 		<td><strong>Name</strong></td>
 		<td style="text-align:right"><strong>Data</strong></td>
 		<td style="text-align:right"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>

@@ -405,7 +405,7 @@ foreach($Categories as $CatKey => $CatName) {
 	<div class="linkbox"><?=$Pages?></div>
 	<table class="torrent_table cats" width="100%">
 		<tr class="colhead">
-			<td></td>
+			<td class="cats_col"></td>
 			<td><a href="<?=header_link('Name', 'ASC')?>">Torrent</a></td>
 			<td><a href="<?=header_link('Time')?>">Time</a></td>
 			<td><a href="<?=header_link('Size')?>">Size</a></td>

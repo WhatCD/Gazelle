@@ -679,7 +679,7 @@ td.avatar {
 	padding: 0px;
 }
 
-table.forum_post td.body div {
+#forums table.forum_post td.body div {
 	width: 677px;
 }
 
