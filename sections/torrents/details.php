@@ -156,7 +156,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 				}
 ?>
 				&nbsp;(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?			} ?>
 				</li>
 <?		}
@@ -175,7 +175,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
                                 }
 ?>
 				&nbsp;(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=6');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=6');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?		      } ?>
 				</li>
 <?
@@ -197,7 +197,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 			}
 ?>
 			&nbsp;(<?=$AliasID?>)&nbsp;
-				<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=1');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+				<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=1');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?		} ?>
 				</li>
 <?
@@ -216,7 +216,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 				}
 ?>
 				&nbsp;(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=2');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=2');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?			} ?>
 				</li>
 <?
@@ -236,7 +236,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 				}
 ?>
 				&nbsp;(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=5');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=5');this.parentNode.parentNode.style.display = 'none';" title="Remove conductor">[X]</a></span>
 <?			} ?>
 				</li>
 <?
@@ -256,7 +256,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
                                 }
 ?>
 				&nbsp;(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=3');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=3');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?		      } ?>
 				</li>
 <?
@@ -276,7 +276,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
                                 }
 ?>
 				&nbsp;(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=7');this.parentNode.parentNode.style.display = 'none';">[X]</a></span>
+					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=7');this.parentNode.parentNode.style.display = 'none';" title="Remove producer">[X]</a></span>
 <?		      } ?>
 				</li>
 <?
@@ -325,14 +325,14 @@ if(count($Tags) > 0) {
 				<li>
 					<a href="torrents.php?taglist=<?=$Tag['name']?>" style="float:left; display:block;"><?=display_str($Tag['name'])?></a>
 					<div style="float:right; display:block; letter-spacing: -1px;">
-					<a href="torrents.php?action=vote_tag&amp;way=down&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" >[-]</a>
+					<a href="torrents.php?action=vote_tag&amp;way=down&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag down">[-]</a>
 					<?=$Tag['score']?>
-					<a href="torrents.php?action=vote_tag&amp;way=up&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;">[+]</a>
+					<a href="torrents.php?action=vote_tag&amp;way=up&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag up">[+]</a>
 <?		if(check_perms('users_warn')){ ?>
-					<a href="user.php?id=<?=$Tag['userid']?>" >[U]</a>
+					<a href="user.php?id=<?=$Tag['userid']?>" title="View the profile of the user that added this tag">[U]</a>
 <?		} ?>
 <?		if(check_perms('site_delete_tag')){ ?>
-					<a href="torrents.php?action=delete_tag&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" >[X]</a>
+					<a href="torrents.php?action=delete_tag&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove tag">[X]</a>
 <?		} ?>
 					</div>
 					<br style="clear:both" />
@@ -342,9 +342,9 @@ if(count($Tags) > 0) {
 ?>
 			</ul>
 <?
-} else {
+} else { // The "no tags to display" message was wrapped in <ul> tags to pad the text.
 ?>
-			There are no tags to display.
+			<ul><li>There are no tags to display.</li></ul>
 <?
 }
 ?>

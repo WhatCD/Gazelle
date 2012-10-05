@@ -25,8 +25,7 @@ $Types = array(
 			"guidelines" => array(
 				"This option is for asking the moderators to update your request to the new system.",
 				"If your request has no other votes, you can just edit it yourself!",
-				"Please do not report every single request on the old system, but only those that you really want updated. That way we can move them over in an order that benefits you most.",
-				"If possible, please include a discogs link in the comments field."
+				"If possible, please include a <a href=\"http://www.discogs.com\">Discogs</a> or <a href=\"http://musicbrainz.org\">MusicBrainz</a> link in the comments field."
 			)
 			),
 		"request" => array(
@@ -34,7 +33,7 @@ $Types = array(
 			"guidelines" => array(
 				"The report request option is for reporting a request which breaks any of the rules found <a href=\"rules.php?p=requests\">here</a>.",
 				"We encourage all users to use this feature whenever possible. This will get quicker action than PMing a staff member will.",
-				"In your report description below, please be specific and include as much information as possible that will help our staff resolve the issue. Links to reliable, external sources of information are extremely useful when resolving reports. Examples of such sources include the artist's official web site, Discogs, and MusicBrainz.",
+				"In your report description below, please be specific and include as much information as possible that will help our staff resolve the issue. Links to reliable, external sources of information are extremely useful when resolving reports. Examples of such sources include the artist's official web site, <a href=\"http://www.discogs.com\">Discogs</a>, and <a href=\"http://musicbrainz.org\">MusicBrainz</a>.",
 				"<strong>Do not report requests simply because they are unfillable.</strong> Requests for currently unfillable releases are allowed because the request may become fillable in the future. An example of such a scenario would be an iTunes-only release of a given album \"X\" that could have a physical CD, vinyl, etc. release at some future date. The probability of such a physical release is not relevant.",
 				"<strong>If you are reporting this request to get it updated to the new requests system, please go back and click '[Request Update]'</strong>."
 			)
@@ -42,36 +41,42 @@ $Types = array(
 		"requests_comment" => array(
 			"title" => "Request Comment",
 			"guidelines" => array(
-				"The Report comment option is specifically for reporting when the Chat Rules have been broken.",
+				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken.",
 				"Such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",
 				"We encourage all users to use this feature when they see a rules violation of any form.",
 				"This will get quicker action than PMing a staff member will.",
-				"Please restrict the use of this feature to reporting Rules violations, and remember, this is for reporting comments, not replying to them."
+				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting comments, not replying to them."
 			)
 			),
 		"thread" => array(
 			"title" => "Forum Thread",
 			"guidelines" => array(
-				"The Report Thread option is specifically for reporting when the Chat Rules have been broken. Such as posts containing racism, offensive language, flaming, pornography, and other rules violations. We encourage all users to use this feature when they see a rules violation of any form.",
+				"Please use the Report Thread option in the following situations:
+				<ul>
+				<li>Reporting when <a href=\"rules.php?p=chat\">chat rules</a> have been broken, such as posts containing racism, offensive language, flaming, pornography, and other rules violations. We encourage all users to use this feature when they see a rules violation of any form.
+				<li>Requesting that a thread be unlocked.
+				<li>Reporting threads that are in the wrong forum.
+				<li>Reporting answered questions in the Help forum.
+				</ul>",
 				"This will get quicker action than PMing a staff member will.",
-				"Please restrict the use of this feature to reporting Rules violations, and remember, this is for reporting threads, not replying to them."
+				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting threads, not replying to them."
 				)
 			),
 		"post" => array(
 			"title" => "Forum Post",
 			"guidelines" => array(
-				"The Report comment option is specifically for reporting when the Chat Rules have been broken.",
+				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken.",
 				"Such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",
 				"We encourage all users to use this feature when they see a rules violation of any form.",
 				"This will get quicker action than PMing a staff member will.",
-				"Please restrict the use of this feature to reporting Rules violations, and remember, this is for reporting comments, not replying to them."
+				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting comments, not replying to them."
 			)
 			),
 		"collage" => array(
 			"title" => "Collage",
 			"guidelines" => array(
 				"The report collage option is for reporting a collage which breaks one of the collage guidelines found on the <a href=\"rules.php?p=collages\">collage rules page</a>.",
-				"Collage rules are an interpreted concept, and it is up to staff to interpret these rules. If you feel like this collage might be a borderline case between allowed and not allowed, feel free to report it and we will look into it.",
+				"Collage rules are an interpreted concept, and it is up to staff to interpret these rules. If you feel like this collage might be a borderline case between allowed and not allowed, feel free to report it, and we will look into it.",
 				"We encourage all users to use this feature whenever possible. This will get quicker action than PMing a staff member will.",
 				"In your report description below, please be specific and include as much information as possible that will help our staff resolve the issue."
 			)
@@ -79,21 +84,21 @@ $Types = array(
 		"collages_comment" => array(
 			"title" => "Collage Comment",
 			"guidelines" => array(
-				"The Report comment option is specifically for reporting when the Chat Rules have been broken.",
+				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken.",
 				"Such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",
 				"We encourage all users to use this feature when they see a rules violation of any form.",
 				"This will get quicker action than PMing a staff member will.",
-				"Please restrict the use of this feature to reporting Rules violations, and remember, this is for reporting comments, not replying to them."
+				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting comments, not replying to them."
 			)
 			),
 		"torrents_comment" => array(
 			"title" => "Torrent Comment",
 			"guidelines" => array(
-				"The Report comment option is specifically for reporting when the Chat Rules have been broken.",
+				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken.",
 				"Such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",
 				"We encourage all users to use this feature when they see a rules violation of any form.",
 				"This will get quicker action than PMing a staff member will.",
-				"Please restrict the use of this feature to reporting Rules violations, and remember, this is for reporting comments, not replying to them."
+				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting comments, not replying to them."
 			)
 			)
 	);

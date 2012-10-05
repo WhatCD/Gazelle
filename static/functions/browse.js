@@ -101,7 +101,7 @@ function toggle_group(groupid, link, event) {
 		if (allGroups || relevantRow.has_class('groupid_' + groupid)) {
 			row = $(group_rows[i]); // idk why we need this :S
 			if (row.has_class('group')) {
-				$('a.show_torrents_link', row.raw()).raw().title = (showing) ? 'Collapse this group' : 'Expand this group';
+				$('a.show_torrents_link', row.raw()).raw().title = (showing) ? 'Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups/editions in this section.' : 'Expand this group. Hold &quot;Ctrl&quot; while clicking to expand all groups/editions in this section.';
 				$('a.show_torrents_link', row.raw()).raw().parentNode.className = (showing) ? 'hide_torrents' : 'show_torrents';
 			} else {
 				if (showing) {

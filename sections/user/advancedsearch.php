@@ -436,7 +436,7 @@ show_header('User search');
 				<td width="24%">
 					<input type="text" name="username" size="20" value="<?=display_str($_GET['username'])?>" />
 				</td>
-				<td class="label nobr">Joined:</td>
+				<td class="label nobr"><span title="Date format is YYYY-MM-DD">Joined:</span></td>
 				<td width="24%">
 					<select name="joined">
 						<option value="on"<? if($_GET['joined']==='on'){echo ' selected="selected"';}?>>On</option>
@@ -462,7 +462,7 @@ show_header('User search');
 				<td>
 					<input type="text" name="email" size="20" value="<?=display_str($_GET['email'])?>" />
 				</td>
-				<td class="label nobr">Last active:</td>
+				<td class="label nobr"><span title="Date format is YYYY-MM-DD">Last active:</span></td>
 				<td width="30%">
 					<select name="lastactive">
 						<option value="on"<? if($_GET['lastactive']==='on'){echo ' selected="selected"';}?>>On</option>
@@ -473,7 +473,7 @@ show_header('User search');
 					<input type="text" name="lastactive1" size="6" value="<?=display_str($_GET['lastactive1'])?>" />
 					<input type="text" name="lastactive2" size="6" value="<?=display_str($_GET['lastactive2'])?>" />
 				</td>
-				<td class="label nobr">Class:</td>
+				<td class="label nobr">Primary Class:</td>
 				<td>
 					<select name="class">
 						<option value="" <? if($_GET['class']==='') {echo ' selected="selected"';}?>>Any</option>
@@ -486,7 +486,7 @@ show_header('User search');
 				</td>
 			</tr>
 			<tr>
-				<td class="label nobr">IP:</td>
+				<td class="label nobr"><span title="To fuzzy search (default) for a block of addresses (e.g. 55.66.77.*), enter &quot;55.66.77.&quot; without the quotes">IP address:</span></td>
 				<td>
 					<input type="text" name="ip" size="20" value="<?=display_str($_GET['ip'])?>" />
 				</td>
@@ -497,7 +497,7 @@ show_header('User search');
 					<select name="secclass">
 						<option value="" <? if($_GET['secclass']==='') {echo ' selected="selected"';}?>>Any</option>
 <?	$Secondaries = array();
-	// Neither level nor ID is particularly useful when search secondary classes, so let's do some
+	// Neither level nor ID is particularly useful when searching secondary classes, so let's do some
 	// kung-fu to sort them alphabetically.
 	$fnc = function($Class1, $Class2) { return strcmp($Class1['Name'], $Class2['Name']);};
 	foreach($ClassLevels as $Class) {
@@ -511,6 +511,7 @@ show_header('User search');
 <?	} ?>
 					</select>
 				</td>
+			</tr>
 			<tr>
 				<td class="label nobr">Extra:</td>
 				<td>
@@ -539,14 +540,13 @@ show_header('User search');
 						<option value="no" <? if($_GET['donor']==='no') {echo ' selected="selected"';}?>>No</option>
 					</select>
 				</td>
-
 			</tr>
 			<tr>
 				<td class="label nobr">Comment:</td>
 				<td>
 					<input type="text" name="comment" size="20" value="<?=display_str($_GET['comment'])?>" />
 				</td>
-				<td class="label nobr">Uploaded:</td>
+				<td class="label nobr"><span title="Units are in bytes">Uploaded:</span></td>
 				<td width="30%">
 					<select name="uploaded">
 						<option value="equal"<? if($_GET['uploaded']==='equal'){echo ' selected="selected"';}?>>Equal</option>
@@ -566,10 +566,10 @@ show_header('User search');
 						<option value="no" <? if($_GET['warned']==='no') {echo ' selected="selected"';}?>>No</option>
 					</select>
 				</td>
-
 			</tr>
+
 			<tr>
-				<td class="label nobr">Invites:</td>
+				<td class="label nobr"># of Invites:</td>
 				<td>
 					<select name="invites">
 						<option value="equal"<? if($_GET['invites']==='equal'){echo ' selected="selected"';}?>>Equal</option>
@@ -579,9 +579,8 @@ show_header('User search');
 					</select>
 					<input type="text" name="invites1" size="6" value="<?=display_str($_GET['invites1'])?>" />
 					<input type="text" name="invites2" size="6" value="<?=display_str($_GET['invites2'])?>" />
-
 				</td>
-				<td class="label nobr">Downloaded:</td>
+				<td class="label nobr"><span title="Units are in bytes">Downloaded:</span></td>
 				<td width="30%">
 					<select name="downloaded">
 						<option value="equal"<? if($_GET['downloaded']==='equal'){echo ' selected="selected"';}?>>Equal</option>
@@ -596,8 +595,8 @@ show_header('User search');
 				<td>
 					<input type="checkbox" name="disabled_ip" <? if($_GET['disabled_ip']){ echo ' checked="checked"'; }?> />
 				</td>
-
 			</tr>
+
 			<tr>
 				<td class="label nobr">Disabled invites</td>
 				<td>
@@ -641,12 +640,9 @@ show_header('User search');
 				<td>
 				</td>
 			</tr>
-			
-			
-			
-			
+
 			<tr>
-				<td class="label nobr">Avatar:</td>
+				<td class="label nobr"><span title="Supports partial URL matching, e.g. entering &quot;&#124;https://whatimg.com&quot; will search for avatars hosted on https://whatimg.com">Avatar URL:</span></td>
 				<td>
 					<input type="text" name="avatar" size="20" value="<?=display_str($_GET['avatar'])?>" />
 				</td>
@@ -659,7 +655,7 @@ show_header('User search');
 <? } ?>
 					</select>
 				</td>
-				<td class="label nobr">Country Code:</td>
+				<td class="label nobr"><span title="Two-letter codes as defined in ISO 3166-1 alpha-2">Country Code:</span></td>
 				<td width="30%">
 					<select name="cc_op">
 						<option value="equal"<? if ($_GET['cc_op']==='equal'){ echo ' selected="selected"';}?>>Equals</option>
@@ -668,13 +664,13 @@ show_header('User search');
 					<input type="text" name="cc" size="2" value="<?=display_str($_GET['cc'])?>" />
 				</td>
 			</tr>
-			
+
 			<tr>
 				<td class="label nobr">Type</td>
 				<td>
-					Strict <input type="radio" name="matchtype" value="strict"<? if($_GET['matchtype'] == 'strict' || !$_GET['matchtype']){ echo ' checked="checked"'; } ?> /> |
-					Fuzzy <input type="radio" name="matchtype" value="fuzzy"<? if($_GET['matchtype'] == 'fuzzy' || !$_GET['matchtype']){ echo ' checked="checked"'; } ?> /> |
-					Regex <input type="radio" name="matchtype" value="regex"<? if($_GET['matchtype'] == 'regex'){ echo ' checked="checked"'; } ?> />
+					<label title="A &quot;strict&quot; search uses no wildcards in search fields, and it is analogous to &#96;grep -E &quot;&circ;SEARCHTERM&#36;&quot;&#96;">Strict <input type="radio" name="matchtype" value="strict"<? if($_GET['matchtype'] == 'strict' || !$_GET['matchtype']){ echo ' checked="checked"'; } ?> /></label> |
+					<label title="A &quot;fuzzy&quot; search automatically prepends and appends wildcards to search strings, except for IP address searches, unless the search string begins or ends with a &quot;&#124;&quot; (pipe). It is analogous to a vanilla grep search (except for the pipe stuff).">Fuzzy <input type="radio" name="matchtype" value="fuzzy"<? if($_GET['matchtype'] == 'fuzzy' || !$_GET['matchtype']){ echo ' checked="checked"'; } ?> /></label> |
+					<label title="A &quot;regex&quot; search uses MySQL's regular expression syntax.">Regex <input type="radio" name="matchtype" value="regex"<? if($_GET['matchtype'] == 'regex'){ echo ' checked="checked"'; } ?> /></label>
 				</td>
 				<td class="label nobr">Order:</td>
 				<td class="nobr">
@@ -690,7 +686,7 @@ show_header('User search');
 					<?	}?>
 					</select>
 				</td>
-				<td class="label nobr"># Of Emails:</td>
+				<td class="label nobr"># of Emails:</td>
 				<td>
 					<select name="emails_opt">
 						<option value="equal"<? if($_GET['emails_opt']==='equal'){echo ' selected="selected"';}?>>Equal</option>

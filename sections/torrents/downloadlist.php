@@ -59,7 +59,7 @@ foreach($Results as $ID=>$Data) {
 	$User = format_username($SnatcherID, true, true, true, true);
 	
 	if(!array_key_exists($SnatcherID, $Snatched) && $SnatcherID!=$UserID) {
-		$User = '<em>'.$User.'</em>';
+		$User = '<span style="font-style: italic;">'.$User.'</span>';
 		if(array_key_exists($SnatcherID, $Seeding)) {
 			$User = '<strong>'.$User.'</strong>';
 		}

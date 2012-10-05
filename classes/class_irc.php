@@ -22,6 +22,8 @@ abstract class IRC_BOT {
 	protected $LastChan = false;
 	protected $ListenSocket =false;
 	protected $Listened = false;
+	protected $Connecting = false;
+	protected $Bound = false; //Did we successfully bind to the socket?
 	protected $State = 1; //Drones live
 	public $Restart = 0; //Die by default
 
@@ -32,19 +34,35 @@ abstract class IRC_BOT {
 	}
 
 	public function connect() {
-		//Open a socket to the IRC server
-		$this->Socket = fsockopen('tls://'.BOT_SERVER, BOT_PORT_SSL);
-		stream_set_blocking($this->Socket, 0);
+		$this->connect_irc();
+		$this->connect_listener();
+		$this->post_connect();
+	}
 
+	public function connect_irc($Reconnect = false) {
+		$this->Connecting = true;
+		//Open a socket to the IRC server
+		while (!$this->Socket = fsockopen('tls://'.BOT_SERVER, BOT_PORT_SSL)) {
+			sleep(15);
+		}
+		stream_set_blocking($this->Socket, 0);
+		$this->Connecting = false;
+		if ($Reconnect) {
+			$this->post_connect();
+		}
+	}
+
+	public function connect_listener() {
 		//create a socket to listen on
 		$this->ListenSocket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 		//socket_set_option($this->ListenSocket, SOL_TCP, SO_REUSEADDR, 1);
 		socket_set_option($this->ListenSocket, SOL_SOCKET, SO_REUSEADDR, 1);
-		socket_bind($this->ListenSocket, SOCKET_LISTEN_ADDRESS, SOCKET_LISTEN_PORT);
+		$this->Bound = socket_bind($this->ListenSocket, SOCKET_LISTEN_ADDRESS, SOCKET_LISTEN_PORT);
 		socket_listen($this->ListenSocket);
 		socket_set_nonblock($this->ListenSocket);
+	}
 
-		$this->Debug = $Debug;
+	public function post_connect() {
 		fwrite($this->Socket, "NICK ".BOT_NICK."Init\n");
 		fwrite($this->Socket, "USER ".BOT_NICK." * * :IRC Bot\n");
 		$this->listen();
@@ -91,11 +109,17 @@ abstract class IRC_BOT {
 	}
 
 	protected function send_raw($Text) {
-		fwrite($this->Socket, $Text."\n");
+		if (!feof($this->Socket)) {
+			fwrite($this->Socket, $Text."\n");
+		} elseif (!$this->Connecting) {
+			$this->Connecting = true;
+			sleep(120);
+			$this->connect_irc(true);
+		}
 	}
 
 	public function send_to($Channel, $Text) {
-		fwrite($this->Socket, "PRIVMSG $Channel :$Text\n");
+		$this->send_raw("PRIVMSG $Channel :$Text");
 	}
 
 	protected function whois($Nick) {

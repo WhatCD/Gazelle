@@ -646,6 +646,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 <br />
 <?
 
+// Displays a table of forum warnings viewable only to Forum Moderators
 if($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
 	$DB->query("SELECT Comment FROM users_warnings_forums WHERE UserID = '$UserID'");
 	list($ForumWarnings) = $DB->next_record();
@@ -703,7 +704,7 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_promote_below', $Class) || check_perms('users_promote_to', $Class-1)) {
 ?>
 			<tr>
-				<td class="label">Class:</td>
+				<td class="label">Primary Class:</td>
 				<td>
 					<select name="Class">
 <?
@@ -752,7 +753,7 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_make_invisible')) {
 ?>
 			<tr>
-				<td class="label">Visible:</td>
+				<td class="label"><span title="Visible in Peer Lists">Visible in Peer Lists:</span></td>
 				<td><input type="checkbox" name="Visible" <? if ($Visible == 1) { ?>checked="checked" <? } ?> /></td>
 			</tr>
 <?
@@ -761,14 +762,14 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_edit_ratio',$Class) || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID'])) {
 ?>
 			<tr>
-				<td class="label"><span title="Upload amount in bytes.  Also accepts e.g. +20GB or -35.6364MB on the end">Uploaded:</span></td>
+				<td class="label"><span title="Upload amount in bytes. Also accepts e.g. +20GB or -35.6364MB on the end">Uploaded:</span></td>
 				<td>
 					<input type="hidden" name="OldUploaded" value="<?=$Uploaded?>" />
 					<input type="text" size="20" name="Uploaded" value="<?=$Uploaded?>" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><span title="Download amount in bytes.  Also accepts e.g. +20GB or -35.6364MB on the end">Downloaded:</span></td>
+				<td class="label"><span title="Download amount in bytes. Also accepts e.g. +20GB or -35.6364MB on the end">Downloaded:</span></td>
 				<td>
 					<input type="hidden" name="OldDownloaded" value="<?=$Downloaded?>" />
 					<input type="text" size="20" name="Downloaded" value="<?=$Downloaded?>" />
@@ -792,7 +793,7 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_edit_invites')) {
 ?>
 			<tr>
-				<td class="label">Invites:</td>
+				<td class="label"><span title="Number of Invites">Invites:</span></td>
 				<td><input type="text" size="5" name="Invites" value="<?=$Invites?>" /></td>
 			</tr>
 <?
@@ -801,7 +802,7 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('admin_manage_fls') || (check_perms('users_mod') && $OwnProfile)) {
 ?>
 			<tr>
-				<td class="label">First Line Support:</td>
+				<td class="label"><span title="This is the message shown in the right-hand column on /staff.php">FLS/Staff Remark:</span></td>
 				<td><input type="text" size="50" name="SupportFor" value="<?=display_str($SupportFor)?>" /></td>
 			</tr>
 <?
@@ -901,7 +902,7 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label">Reason:</td>
+				<td class="label"><span title="This message *will* be sent to the user in the warning PM!">Warning Reason:</span></td>
 				<td>
 					<input type="text" size="60" name="WarnReason" />
 				</td>
@@ -921,12 +922,11 @@ if (check_perms('users_mod', $Class)) { ?>
 <?		if (check_perms('users_disable_any')) { ?>  |
 					<input type="checkbox" name="DisableAvatar" id="DisableAvatar"<? if ($DisableAvatar==1) { ?>checked="checked"<? } ?> /> <label for="DisableAvatar">Avatar</label> |
 					<input type="checkbox" name="DisableInvites" id="DisableInvites"<? if ($DisableInvites==1) { ?>checked="checked"<? } ?> /> <label for="DisableInvites">Invites</label> |
-					
 					<input type="checkbox" name="DisableForums" id="DisableForums"<? if ($DisableForums==1) { ?>checked="checked"<? } ?> /> <label for="DisableForums">Forums</label> |
 					<input type="checkbox" name="DisableTagging" id="DisableTagging"<? if ($DisableTagging==1) { ?>checked="checked"<? } ?> /> <label for="DisableTagging">Tagging</label> |
 					<input type="checkbox" name="DisableRequests" id="DisableRequests"<? if ($DisableRequests==1) { ?>checked="checked"<? } ?> /> <label for="DisableRequests">Requests</label>
 					<br />
-					 <input type="checkbox" name="DisableUpload" id="DisableUpload"<? if ($DisableUpload==1) { ?>checked="checked"<? } ?> /> <label for="DisableUpload">Upload</label> |
+					<input type="checkbox" name="DisableUpload" id="DisableUpload"<? if ($DisableUpload==1) { ?>checked="checked"<? } ?> /> <label for="DisableUpload">Upload</label> |
 					<input type="checkbox" name="DisableWiki" id="DisableWiki"<? if ($DisableWiki==1) { ?>checked="checked"<? } ?> /> <label for="DisableWiki">Wiki</label> |
 					<input type="checkbox" name="DisableLeech" id="DisableLeech"<? if ($DisableLeech==0) { ?>checked="checked"<? } ?> /> <label for="DisableLeech">Leech</label> |
 					<input type="checkbox" name="DisablePM" id="DisablePM"<? if ($DisablePM==1) { ?>checked="checked"<? } ?> /> <label for="DisablePM">PM</label> |
@@ -975,13 +975,13 @@ if (check_perms('users_mod', $Class)) { ?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Restricted Forums (comma-delimited):</td>
+				<td class="label"><span title="Enter a comma-delimited list of forum IDs">Restricted Forums:</span></td>
 				<td>
 						<input type="text" size="60" name="RestrictedForums" value="<?=display_str($RestrictedForums)?>" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Extra Forums (comma-delimited):</td>
+				<td class="label"><span title="Enter a comma-delimited list of forum IDs">Extra Forums:</span></td>
 				<td>
 						<input type="text" size="60" name="PermittedForums" value="<?=display_str($PermittedForums)?>" />
 				</td>
@@ -1006,7 +1006,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout">
 			<tr class="colhead"><td colspan="2">Submit</td></tr>
 			<tr>
-				<td class="label">Reason:</td>
+				<td class="label"><span title="This message will be entered into staff notes only.">Reason:</span></td>
 				<td>
 					<textarea rows="1" cols="50" name="Reason" id="Reason" onkeyup="resize('Reason');"></textarea>
 				</td>

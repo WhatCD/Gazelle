@@ -325,7 +325,7 @@ foreach ($Importances as $Group) {
 	
 	$DisplayName ='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if(check_perms('users_mod') || check_perms('torrents_fix_ghosts')) {
-		$DisplayName .= ' [<a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'">Fix</a>]';
+		$DisplayName .= ' [<a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'" title="Fix ghost DB entry">Fix</a>]';
 	}
 
 	
@@ -366,7 +366,7 @@ foreach ($Importances as $Group) {
 			<tr class="releases_<?=$ReleaseType?> group discog<?=$HideDiscog?>">
 				<td class="center">
 					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group"></a>
+						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups in this release type."></a>
 					</div>
 				</td>
 				<td colspan="5">
@@ -408,7 +408,7 @@ foreach ($Importances as $Group) {
 					
 ?>
 	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog<?=$HideDiscog.$HideTorrents?>">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$RemasterName?></strong></a></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></a></td>
 	</tr>
 <?
 			} else {
@@ -423,7 +423,7 @@ foreach ($Importances as $Group) {
 				$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
 	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent<?=$HideDiscog.$HideTorrents?>">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$MasterName?></strong></a></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></a></td>
 	</tr>
 <?
 			}
@@ -563,7 +563,7 @@ if(check_perms('zip_downloader')){
 					<li id="list<?=$ListItem?>">
 						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
 						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-						<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;">[X]</a>
+						<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" title="Remove format from the Collector">[X]</a>
 						<br style="clear:all;" />
 					</li>
 <? } ?>
