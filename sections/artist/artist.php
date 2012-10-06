@@ -622,11 +622,11 @@ foreach ($Tags as $TagName => $Tag) {
 			<div class="box box_info box_statistics_artist">
 			<div class="head"><strong>Statistics</strong></div>
 			<ul class="stats nobullet">
-				<li>Number of groups: <?=$NumGroups?></li>
-				<li>Number of torrents: <?=$NumTorrents?></li>
-				<li>Number of seeders: <?=$NumSeeders?></li>
-				<li>Number of leechers: <?=$NumLeechers?></li>
-				<li>Number of snatches: <?=$NumSnatches?></li>
+				<li>Number of groups: <?=number_format($NumGroups)?></li>
+				<li>Number of torrents: <?=number_format($NumTorrents)?></li>
+				<li>Number of seeders: <?=number_format($NumSeeders)?></li>
+				<li>Number of leechers: <?=number_format($NumLeechers)?></li>
+				<li>Number of snatches: <?=number_format($NumSnatches)?></li>
 			</ul>
 		</div>
 <?
@@ -672,10 +672,10 @@ if(empty($SimilarArray)) {
 ?>
 				<li>
 					<span title=<?=$Score?>><a href="artist.php?id=<?=$Artist2ID?>" style="float:left; display:block;"><?=$Artist2Name?></a></span>										<div style="float:right; display:block; letter-spacing: -1px;">
-					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;">[-]</a>
-					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;">[+]</a>
+					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar.">[-]</a>
+					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar.">[+]</a>
 <?		if(check_perms('site_delete_tag')) { ?>
-					<a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[X]</a>
+					<a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove this similar artist">[X]</a>
 <?		} ?>
 					</div>
 					<br style="clear:both" />

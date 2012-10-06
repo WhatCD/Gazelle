@@ -496,7 +496,7 @@ foreach ($TorrentList as $Torrent) {
 			$RemasterName .= $AddExtra.display_str($Media);
 ?>
 			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
-				<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$RemasterName?></strong></td>
+				<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
 			</tr>
 <?
 		} else {
@@ -511,7 +511,7 @@ foreach ($TorrentList as $Torrent) {
 			$MasterName .= $AddExtra.display_str($Media);
 ?>
 		<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
-			<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$MasterName?></strong></td>
+			<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
 		</tr>
 <?
 		}

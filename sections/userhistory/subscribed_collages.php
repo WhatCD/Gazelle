@@ -195,7 +195,7 @@ if(!$NumResults) {
 					
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID?><?=$GroupID?> edition hidden">
-		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$RemasterName?></strong></td>
+		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
 	</tr>
 <?
 						} else {
@@ -210,7 +210,7 @@ if(!$NumResults) {
 							$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID?><?=$GroupID?> edition hidden">
-		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition">&minus;</a> <?=$MasterName?></strong></td>
+		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
 	</tr>
 <?
 						}

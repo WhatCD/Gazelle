@@ -34,7 +34,7 @@ $Types = array(
 				"The report request option is for reporting a request which breaks any of the rules found <a href=\"rules.php?p=requests\">here</a>.",
 				"We encourage all users to use this feature whenever possible. This will get quicker action than PMing a staff member will.",
 				"In your report description below, please be specific and include as much information as possible that will help our staff resolve the issue. Links to reliable, external sources of information are extremely useful when resolving reports. Examples of such sources include the artist's official web site, <a href=\"http://www.discogs.com\">Discogs</a>, and <a href=\"http://musicbrainz.org\">MusicBrainz</a>.",
-				"<strong>Do not report requests simply because they are unfillable.</strong> Requests for currently unfillable releases are allowed because the request may become fillable in the future. An example of such a scenario would be an iTunes-only release of a given album \"X\" that could have a physical CD, vinyl, etc. release at some future date. The probability of such a physical release is not relevant.",
+				"<strong>Do not report requests simply because they are unfillable.</strong> Requests for currently unfillable releases are allowed because the request may become fillable in the future. An example of such a scenario would be an iTunes-only release of a given album &quot;X&quot; that could have a physical CD, vinyl, etc. release at some future date. The probability of such a physical release is not relevant.",
 				"<strong>If you are reporting this request to get it updated to the new requests system, please go back and click '[Request Update]'</strong>."
 			)
 			),
@@ -51,12 +51,12 @@ $Types = array(
 		"thread" => array(
 			"title" => "Forum Thread",
 			"guidelines" => array(
-				"Please use the Report Thread option in the following situations:
+				"Please use the &quot;Report Thread&quot; option in the following situations:
 				<ul>
-				<li>Reporting when <a href=\"rules.php?p=chat\">chat rules</a> have been broken, such as posts containing racism, offensive language, flaming, pornography, and other rules violations. We encourage all users to use this feature when they see a rules violation of any form.
-				<li>Requesting that a thread be unlocked.
-				<li>Reporting threads that are in the wrong forum.
-				<li>Reporting answered questions in the Help forum.
+				<li>Reporting when <a href=\"rules.php?p=chat\">chat rules</a> have been broken, such as posts containing racism, offensive language, flaming, pornography, and other rules violations. We encourage all users to use this feature when they see a rules violation of any form.</li>
+				<li>Requesting that a thread be unlocked.</li>
+				<li>Reporting threads that are in the wrong forum.</li>
+				<li>Reporting answered questions in the Help forum.</li>
 				</ul>",
 				"This will get quicker action than PMing a staff member will.",
 				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting threads, not replying to them."

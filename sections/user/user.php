@@ -753,7 +753,7 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_make_invisible')) {
 ?>
 			<tr>
-				<td class="label"><span title="Visible in Peer Lists">Visible in Peer Lists:</span></td>
+				<td class="label">Visible in Peer Lists:</td>
 				<td><input type="checkbox" name="Visible" <? if ($Visible == 1) { ?>checked="checked" <? } ?> /></td>
 			</tr>
 <?

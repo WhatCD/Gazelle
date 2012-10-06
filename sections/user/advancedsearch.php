@@ -750,9 +750,9 @@ while(list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email
 			list($Downloads) = $DB->next_record();
 			$DB->set_query_id($Results);
 ?>
-			<td><?=(int)$Downloads?></td>
+			<td><?=number_format((int)$Downloads)?></td>
 			<td><?=is_numeric($Snatched) ? number_format($Snatched) : display_str($Snatched)?></td>
-			<td><? if($DisableInvites) { echo 'X'; } else { echo $Invites; } ?></td>
+			<td><? if($DisableInvites) { echo 'X'; } else { echo number_format($Invites); } ?></td>
 		</tr>
 <?
 }

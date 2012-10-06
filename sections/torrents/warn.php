@@ -65,4 +65,5 @@ show_header('Warn User');
 			</table>
 		</form>
 	</div>
+</div>
 <? show_footer(); ?>

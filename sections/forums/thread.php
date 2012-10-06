@@ -386,7 +386,7 @@ foreach($Thread as $Key => $Post){
 <table class="forum_post box vertical_margin<? if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) { echo ' forum_unread'; } if($HeavyInfo['DisableAvatars']) { echo ' noavatar'; } ?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
-			<span style="float:left;"><a class="post_id" href='forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
+			<div style="float:left;"><a class="post_id" href='forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
 				<?=format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?> 
 <? if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')){ ?> 
@@ -409,8 +409,8 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 <? 	}
 }
 ?>
-			</span>
-			<span id="bar<?=$PostID?>" style="float:right;">
+			</div>
+			<div id="bar<?=$PostID?>" style="float:right;">
 				<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>">[Report]</a>
 <?
                 if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
@@ -428,7 +428,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 ?>
                 &nbsp;
 				<a href="#">&uarr;</a>
-			</span>
+			</div>
 		</td>
 	</tr>
 	<tr>
