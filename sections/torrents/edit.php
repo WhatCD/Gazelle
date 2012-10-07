@@ -101,7 +101,7 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 ?>
 <div class="thin">
 	<h2>Change Group</h2>
-	<form cass="edit_form" name="torrent_group" action="torrents.php" method="post">
+	<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
 		<input type="hidden" name="action" value="editgroupid" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />

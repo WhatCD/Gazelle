@@ -531,7 +531,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 			<div class="head"><strong>Search File Lists</strong></div>
 				<ul class="nobullet">
 					<li>
-						<form cass="search_form" name="filelists" action="torrents.php">
+						<form class="search_form" name="filelists" action="torrents.php">
 							<input type="hidden" name="artistname" value="<?=$Name?>" />
 							<input type="hidden" name="action" value="advanced" />
 							<input type="text" autocomplete="off" id="filelist" name="filelist" size="20" />

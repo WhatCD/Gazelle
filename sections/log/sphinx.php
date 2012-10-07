@@ -29,7 +29,7 @@ if(empty($_GET['search']) || trim($_GET['search']) == '') {
 	$SphQL->select('id')
 		->from('log, log_delta')
 		->where_match($_GET['search'], 'message')
-		->order_by('time', 'DESC')
+		->order_by('id', 'DESC')
 		->limit($Offset, LOG_ENTRIES_PER_PAGE, $Offset+LOG_ENTRIES_PER_PAGE);
 
 	$Result = $SphQL->query();

@@ -122,7 +122,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			<tr class="group discog" id="group_<?=$GroupID?>">
 				<td class="center">
 					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group"></a>
+						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collape all groups on this page."></a>
 					</div>
 				</td>
 				<td class="center">

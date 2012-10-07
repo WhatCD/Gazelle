@@ -297,7 +297,19 @@ class SPHINXQL_QUERY {
 	 */
 	public function limit($Offset, $Limit, $MaxMatches = SPHINX_MATCHES_START) {
 		$this->Limits = "$Offset, $Limit";
-		$this->Options['max_matches'] = $MaxMatches;
+		$this->set('max_matches', $MaxMatches);
+		return $this;
+	}
+
+	/**
+	 * Tweak the settings to use for the query. Sanity checking shouldn't be needed as Sphinx already does it
+	 *
+	 * @param string $Name setting name
+	 * @param mixed $Value value
+	 * @return current SphinxQL query object
+	 */
+	public function set($Name, $Value) {
+		$this->Options[$Name] = $Value;
 		return $this;
 	}
 

@@ -38,7 +38,7 @@ show_header('Official Tags');
 </div>
 <div style="text-align: center">
 	<div style="display: inline-block;">
-		<form cass="manage_form" name="tags" method="post">
+		<form class="manage_form" name="tags" method="post">
 			<input type="hidden" name="action" value="official_tags" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="doit" value="1" />

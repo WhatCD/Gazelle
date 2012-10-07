@@ -81,7 +81,7 @@ show_header('Edit torrent group');
 	if(in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?> 
 	<h3>Non-wiki group editing</h3>
 	<div class="box pad">
-		<form cass="edit_form" name="torrent_group" action="torrents.php" method="post">
+		<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
 			<input type="hidden" name="action" value="nonwikiedit" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
