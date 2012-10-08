@@ -29,7 +29,7 @@ show_header('Ratio Requirements');
 			The first step is by determining how high and how low your required ratio can be. This is determined by looking up how much you have downloaded from the following table:
 		</p>
 
-		<table>
+		<table class="ratio_table">
 			<tr class="colhead">
 				<td><span title="These units are actually in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Amount downloaded</span></td>
 				<td>Required ratio (0% seeded)</td>
