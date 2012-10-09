@@ -2534,6 +2534,40 @@ function isset_request($Request, $Keys=NULL, $AllowEmpty = False, $Error=0) {
     }
 }
 
+/**
+ * Test if there's an active lock with the given name
+ *
+ * @param string $LockName name on the lock
+ * @return true if lock is active
+ */
+function query_locked($LockName) {
+	global $Cache;
+	if ($Cache->get_value('query_lock_'.$LockName) !== false) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Add lock. Expiry time is one hour to avoid indefinite locks
+ *
+ * @param string $LockName name on the lock
+ */
+function set_query_lock($LockName) {
+	global $Cache;
+	$Cache->cache_value('query_lock_'.$LockName, 1, 3600);
+}
+
+/**
+ * Remove lock. Expiry time is one hour to avoid indefinite locks
+ *
+ * @param string $LockName name on the lock
+ */
+function clear_query_lock($LockName) {
+	global $Cache;
+	$Cache->delete_value('query_lock_'.$LockName);
+}
+
 $Debug->set_flag('ending function definitions');
 //Include /sections/*/index.php
 $Document = basename(parse_url($_SERVER['SCRIPT_FILENAME'], PHP_URL_PATH), '.php');

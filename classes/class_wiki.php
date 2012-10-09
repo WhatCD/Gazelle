@@ -1,6 +1,6 @@
 <?
 /*########################################################################
-##							 Wiki class							  ##
+##							 Wiki class									##
 ##########################################################################
 
 Seeing as each page has to manage its wiki separately (for performance 
@@ -12,19 +12,19 @@ table with the revision history for that particular wiki page.
 
 class_wiki depends on your wiki table being structured like this:
 
-+------------+---------------+------+-----+---------------------+-------+
-| Field	  | Type		  | Null | Key | Default			 | Extra |
-+------------+---------------+------+-----+---------------------+-------+
-| RevisionID | int(12)	   | NO   | PRI | 0				   |	   |
-| PageID	 | int(10)	   | NO   | MUL | 0				   |	   |
-| Body	   | text		  | YES  |	 | NULL				|	   |
-| UserID	 | int(10)	   | NO   | MUL | 0				   |	   |
-| Summary	| varchar(100)  | YES  |	 | NULL				|	   |
-| Time	   | datetime	  | NO   | MUL | 0000-00-00 00:00:00 |	   |
-+------------+---------------+------+-----+---------------------+-------+
++------------+--------------+------+-----+----------------------+-------+
+| Field		 | Type			| Null | Key | Default				| Extra |
++------------+--------------+------+-----+----------------------+-------+
+| RevisionID | int(12)		| NO   | PRI | 0					|		|
+| PageID	 | int(10)		| NO   | MUL | 0					|		|
+| Body		 | text			| YES  |	 | NULL					|		|
+| UserID	 | int(10)		| NO   | MUL | 0					|		|
+| Summary	 | varchar(100) | YES  |	 | NULL					|		|
+| Time		 | datetime		| NO   | MUL | 0000-00-00 00:00:00  |		|
++------------+--------------+------+-----+----------------------+-------+
 
 It is also recommended that you have a field in the main table for 
-whatever the page is (eg. details.php main table = torrents), so you can
+whatever the page is (e.g. details.php main table = torrents), so you can
 do a JOIN. 
 
 
@@ -55,7 +55,7 @@ class WIKI {
 				WHERE wiki.PageID = ".$this->PageID."
 				ORDER BY RevisionID DESC");
 //----------------------------------------------- ?>
-	<table cellpadding='6' cellspacing='1' border='0' width='100%' class='border'>
+	<table cellpadding="6" cellspacing="1" border="0" width="100%" class="border">
 		<tr class="colhead">
 			<td>Revision</td>
 			<td>Summary</td>

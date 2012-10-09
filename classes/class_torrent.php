@@ -251,28 +251,41 @@ class TORRENT extends BENCODE_DICT {
 	//	* the total size of files described therein
 	function file_list() {
 		$FileList = array();
-		if(!$this->Val['info']->Val['files']) { // Single file mode
+		if (!isset($this->Val['info']->Val['files'])) { // Single file mode
 			$TotalSize = $this->Val['info']->Val['length'];
-			$FileList[]= array($this->Val['info']->Val['length'], $this->Val['info']->Val['name']);
+			$FileList[] = array($TotalSize, $this->get_name());
 		} else { // Multiple file mode
 			$FileNames = array();
 			$FileSizes = array();
 			$TotalSize = 0;
 			$Files = $this->Val['info']->Val['files']->Val;
-			foreach($Files as $File) {
-				$TotalSize += $File->Val['length'];
+			if (isset($Files[0]->Val['path.utf-8'])) {
+				$PathKey = 'path.utf-8';
+			} else {
+				$PathKey = 'path';
+			}
+			foreach ($Files as $File) {
 				$FileSize = $File->Val['length'];
+				$TotalSize += $FileSize;
 				
-				$FileName = ltrim(implode('/',$File->Val['path']->Val), '/');
+				$FileName = ltrim(implode('/',$File->Val[$PathKey]->Val), '/');
 				$FileSizes[] = $FileSize;
 				$FileNames[] = $FileName;
 			}
 			natcasesort($FileNames);
-			foreach($FileNames as $Index => $FileName) {
+			foreach ($FileNames as $Index => $FileName) {
 				$FileList[] = array($FileSizes[$Index], $FileName);
 			}
 		}
 		return array($TotalSize, $FileList);
+	}
+
+	function get_name() {
+		if (isset($this->Val['info']->Val['name.utf-8'])) {
+			return $this->Val['info']->Val['name.utf-8'];
+		} else {
+			return $this->Val['info']->Val['name'];
+		}
 	}
 	
 	function make_private() {

@@ -354,7 +354,7 @@ if(!empty($_REQUEST['action'])) {
 						list($Size, $Name) = $File;
 						$TmpFileList []= $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
 					}
-					$FilePath = $Tor->Val['info']->Val['files'] ? make_utf8($Tor->Val['info']->Val['name']) : "";
+					$FilePath = isset($Tor->Val['info']->Val['files']) ? make_utf8($Tor->get_name()) : "";
 					$FileString = make_utf8(implode('|||', $TmpFileList));
 					$DB->query("UPDATE torrents SET Size = ".$TotalSize.", FilePath = '".db_string($FilePath)."', FileList = '".db_string($FileString)."' WHERE ID = ".$TorrentID);
 					$Cache->delete_value('torrents_details_'.$GroupID);

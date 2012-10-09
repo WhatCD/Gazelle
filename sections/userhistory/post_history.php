@@ -253,8 +253,8 @@ if(empty($Results)) {
 <?
 	while(list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername, $TopicID, $ThreadTitle, $LastPostID, $LastRead, $Locked, $Sticky) = $DB->next_record()){
 ?>
-	<table class='forum_post vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>' id='post<?=$PostID ?>'>
-		<tr class='colhead_dark'>
+	<table class="forum_post vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID ?>">
+		<tr class="colhead_dark">
 			<td  colspan="2">
 				<span style="float:left;">
 					<?=time_diff($AddedTime) ?>
@@ -293,11 +293,11 @@ if(empty($Results)) {
 <?
 			if(empty($HeavyInfo['DisableAvatars'])) {
 ?>
-			<td class='avatar' valign="top">
+			<td class="avatar" valign="top">
 <?
 				if($Avatar) {
 ?>
-				<img src='<?=$Avatar?>' width='150' style="max-height:400px;" alt="<?=$Username?>'s avatar" />
+				<img src="<?=$Avatar?>" width="150" style="max-height:400px;" alt="<?=$Username?>'s avatar" />
 <?
 				} 
 ?>
@@ -305,7 +305,7 @@ if(empty($Results)) {
 <?
 			}
 ?>
-			<td class='body' valign="top">
+			<td class="body" valign="top">
 				<div id="content<?=$PostID?>">
 					<?=$Text->full_format($Body)?>
 <?			if($EditedUserID) { ?>       

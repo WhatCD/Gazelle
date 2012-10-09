@@ -37,7 +37,8 @@ class CACHE extends Memcache {
 	private $PersistentKeys = array(
 		'stats_*',
 		'percentiles_*',
-		'top10tor_*'
+		'top10tor_*',
+		'query_lock_*'
 	);
 	
 	public $CanClear = false;

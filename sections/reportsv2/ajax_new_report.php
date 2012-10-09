@@ -94,7 +94,7 @@ $DB->query("SELECT
 	<div>
 		<table class="layout">
 			<tr>
-				<td class='center'>
+				<td class="center">
 					<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Report <?=$ReportID?></a> for torrent <?=$TorrentID?> (deleted) has been automatically resolved. <input type="button" value="Clear" onclick="ClearReport(<?=$ReportID?>);" />
 				</td>
 			</tr>

@@ -358,7 +358,7 @@ $Private = $Tor->make_private();
 
 // File list and size
 list($TotalSize, $FileList) = $Tor->file_list();
-$DirName = $Tor->Val['info']->Val['name'];
+$DirName = $Tor->get_name();
 
 $TmpFileList = array();
 $HasLog = "'0'";
@@ -384,11 +384,11 @@ foreach($FileList as $File) {
 	}
 
 	// Add file and size to array
-	$TmpFileList []= $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
+	$TmpFileList[] = $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
 }
 
 // To be stored in the database
-$FilePath = $Tor->Val['info']->Val['files'] ? db_string(make_utf8($Tor->Val['info']->Val['name'])) : "";
+$FilePath = isset($Tor->Val['info']->Val['files']) ? db_string(make_utf8($DirName)) : "";
 
 // Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}
 $FileString = "'".db_string(make_utf8(implode('|||', $TmpFileList)))."'";

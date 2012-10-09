@@ -78,7 +78,7 @@ class TORRENT_FORM {
 		} ?>
 		</div>
 <?		if($this->NewTorrent) { ?>
-		<table cellpadding="3" cellspacing='1' border='0' class='layout border' width="100%">
+		<table cellpadding="3" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
 				<td class="label">
 					Torrent file
@@ -94,8 +94,8 @@ class TORRENT_FORM {
 				<td>
 				<select id="categories" name="type" onchange="Categories()"<?=$this->Disabled?>>
 <?			foreach(display_array($this->Categories) as $Index => $Cat) {
-				echo "<option value='$Index'";
-				if($Cat == $this->Torrent['CategoryName']) { echo " selected='selected'"; }
+				echo "<option value=\"$Index\"";
+				if($Cat == $this->Torrent['CategoryName']) { echo ' selected="selected"'; }
 				echo ">";
 				echo $Cat;
 				echo "</option>\n";
@@ -145,7 +145,7 @@ class TORRENT_FORM {
 				<td colspan="2" style="text-align: center;">
 					<p>Be sure that your torrent is approved by the <a href="rules.php?p=upload">rules</a>. Not doing this will result in a <strong>warning</strong> or <strong>worse</strong>.</p>
 <?		if($this->NewTorrent) { ?>
-					<p>After uploading the torrent, you will have a one hour grace period during which no one other than you can fill requests with this torrent. Make use of this time wisely, and search the requests. </p>
+					<p>After uploading the torrent, you will have a one hour grace period during which no one other than you can fill requests with this torrent. Make use of this time wisely, and search the requests.</p>
 <?		} ?>
 					<input id="post" type="submit" <? if($this->NewTorrent) { echo "value=\"Upload torrent\""; } else { echo "value=\"Edit torrent\"";} ?> />
 				</td>
@@ -300,7 +300,7 @@ function hide() {
 					<span id="year_label_remaster"<? if(!$IsRemaster) { echo ' class="hidden"';}?>>Year of original release</span>
 				</td>
 				<td>
-					<p id="yearwarning" class="hidden">You have entered a year for a release which predates the medium's availibility. You will need to change the year, enter additional edition information or if this information cannot be provided, select the 'Unknown Release' checkbox below</p>
+					<p id="yearwarning" class="hidden">You have entered a year for a release which predates the medium's availibility. You will need to change the year, enter additional edition information. If this information cannot be provided, select the &quot;Unknown Release&quot; checkbox below</p>
 					<input type="text" id="year" name="year" size="5" value="<?=display_str($Torrent['Year']) ?>"<?=$this->Disabled?> onblur="CheckYear();" /> This is the year of the original release.
 				</td>
 			</tr>

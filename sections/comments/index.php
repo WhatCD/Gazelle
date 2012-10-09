@@ -109,10 +109,10 @@ $DB->set_query_id($Comments);
 while(list($UserID, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $EditedTime, $EditorID) = $DB->next_record()) {
 	$UserInfo = user_info($UserID);
 	?>
-	<table class='forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>' id="post<?=$PostID?>">
-		<tr class='colhead_dark'>
+	<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+		<tr class="colhead_dark">
 			<td  colspan="2">
-				<span style="float:left;"><a href='torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
+				<span style="float:left;"><a href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 					by <strong><?=format_username($UserID, true, true, true, true, false)?></strong> <?=time_diff($AddedTime) ?>
 					on <?=display_artists($Artists[$GroupID])?><a href="torrents.php?id=<?=$GroupID?>"><?=$Title?></a>
 				</span>
@@ -122,11 +122,11 @@ while(list($UserID, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $E
 <?
 if(empty($HeavyInfo['DisableAvatars'])) {
 ?>
-			<td class='avatar' valign="top">
+			<td class="avatar" valign="top">
 <?
 				if($UserInfo['Avatar']){ 
 ?>
-				<img src='<?=$UserInfo['Avatar']?>' width='150' alt="<?=$UserInfo['Username']?>'s avatar" />
+				<img src="<?=$UserInfo['Avatar']?>" width="150" alt="<?=$UserInfo['Username']?>'s avatar" />
 <?
 				} else { ?>
 				<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
@@ -137,7 +137,7 @@ if(empty($HeavyInfo['DisableAvatars'])) {
 <?
 }
 ?>
-			<td class='body' valign="top">
+			<td class="body" valign="top">
 				<?=$Text->full_format($Body) ?> 
 <?
 				if($EditorID){ 

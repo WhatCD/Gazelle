@@ -212,7 +212,7 @@ if(count($Reports) == 0) {
 	<div>
 		<table class="layout">
 			<tr>
-				<td class='center'>
+				<td class="center">
 					<strong>No new reports! \o/</strong>
 				</td>
 			</tr>

@@ -74,7 +74,7 @@ echo $Val->GenerateJS('userform');
 			<input type="hidden" name="userid" value="<?=$UserID?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		</div>
-		<table cellpadding='6' cellspacing='1' border='0' width='100%' class='layout border'>
+		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border">
 			<tr class="colhead_dark">
 				<td colspan="2">
 					<strong>Site preferences</strong>

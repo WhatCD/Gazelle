@@ -138,8 +138,8 @@ if(!$NumResults) {
 <?
 	while(list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()){
 ?>
-	<table class='forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>'>
-		<tr class='colhead_dark'>
+	<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>">
+		<tr class="colhead_dark">
 			<td colspan="2">
 				<span style="float:left;">
 					<a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$ForumName?></a> &gt;
@@ -160,7 +160,7 @@ if(!$NumResults) {
 		</tr>
 		<tr class="row<?=$ShowCollapsed?' hidden':''?>">
 		<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
-			<td class='avatar' valign="top">
+			<td class="avatar" valign="top">
 			<? if(check_perms('site_proxy_images') && preg_match('/^https?:\/\/(localhost(:[0-9]{2,5})?|[0-9]{1,3}(\.[0-9]{1,3}){3}|([a-zA-Z0-9\-\_]+\.)+([a-zA-Z]{1,5}[^\.]))(:[0-9]{2,5})?(\/[^<>]+)+\.(jpg|jpeg|gif|png|tif|tiff|bmp)$/is',$AuthorAvatar)) { ?>
 				<img src="<?='http://'.SITE_URL.'/image.php?c=1&i='.urlencode($AuthorAvatar)?>" width="150" style="max-height:400px;" alt="<?=$AuthorName?>'s avatar" />
 			<? } elseif(!$AuthorAvatar) { ?>
@@ -170,7 +170,7 @@ if(!$NumResults) {
 			<? } ?>
 			</td>
 		<? } ?>
-			<td class='body' valign="top">
+			<td class="body" valign="top">
 				<div class="content3">
 					<?=$Text->full_format($Body) ?>
 		<? if($EditedUserID) { ?>
