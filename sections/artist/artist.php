@@ -227,7 +227,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 	$TorrentTags = array();
 	
 	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
-	if (!in_array($ReleaseType, array(7, 3))) {
+	if ($Group['ReleaseType'] != 7 && $Group['ReleaseType'] != 3) {
 		foreach($TagList as $Tag) {	
 			if(!isset($Tags[$Tag])) {
 				$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
