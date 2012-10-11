@@ -19,9 +19,9 @@ if($Results === false) {
 if(isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
 	$DB->query("SELECT COUNT(ID) FROM torrents_comments WHERE GroupID = $GroupID AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
-	list($Page,$Limit) = page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
 } else {
-	list($Page,$Limit) = page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
 }
 
 //Get the cache catalogue
@@ -57,7 +57,7 @@ $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMME
 $JsonComments = array();
 foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
+	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 	$JsonComments[] = array(
 		'postId' => (int) $PostID,
 		'addedTime' => $AddedTime,

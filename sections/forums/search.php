@@ -6,7 +6,7 @@ Forums search result page
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
-list($Page,$Limit) = page_limit(POSTS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(POSTS_PER_PAGE);
 
 if($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
@@ -74,7 +74,7 @@ if(!empty($_GET['threadid'])) {
 }
 
 // Let's hope we got some results - start printing out the content.
-show_header('Forums'.' > '.'Search', 'bbcode');
+View::show_header('Forums'.' > '.'Search', 'bbcode');
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; Search<?=$Title?></h2>
@@ -257,7 +257,7 @@ $DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 $DB->set_query_id($Records);
 
-$Pages=get_pages($Page,$Results,POSTS_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$Results,POSTS_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
@@ -282,9 +282,9 @@ while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB->
 			</td>
 			<td>
 <? if(empty($ThreadID)) { ?>
-				<a href="forums.php?action=viewthread&amp;threadid=<?=$ID?>"><?=cut_string($Title, 80); ?></a>
+				<a href="forums.php?action=viewthread&amp;threadid=<?=$ID?>"><?=Format::cut_string($Title, 80); ?></a>
 <? } else { ?>
-				<?=cut_string($Title, 80); ?>
+				<?=Format::cut_string($Title, 80); ?>
 <? }
    if ($Type == 'body') { ?>
 				<a href="#" onclick="$('#post_<?=$PostID?>_text').toggle(); return false;">(show)</a> <span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if(!empty($PostID)) { echo '&amp;postid='.$PostID.'#post'.$PostID; } ?>"></a></span>
@@ -308,4 +308,4 @@ while(list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB->
 		<?=$Pages?>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

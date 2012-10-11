@@ -27,10 +27,10 @@ if(
 	die('Invalid IP.');
 }
 
-$Host = lookup_ip($_GET['ip']);
+$Host = Tools::lookup_ip($_GET['ip']);
 
 if ($Host === '') {
-	trigger_error("get_host() command failed with no output, ensure that the host command exists on your system and accepts the argument -W");
+	trigger_error("Tools::get_host_by_ajax() command failed with no output, ensure that the host command exists on your system and accepts the argument -W");
 } elseif ($Host === false) {
 	print 'Could not retrieve host.';
 } else {

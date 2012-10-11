@@ -21,7 +21,7 @@ if(!empty($_GET['tags'])){
 	$Tags = explode(',', $_GET['tags']);
 	$TagNames = array();
 	foreach ($Tags as $Tag){
-		$Tag = sanitize_tag($Tag);
+		$Tag = Misc::sanitize_tag($Tag);
 		if(!empty($Tag)) {
 			$TagNames[] = $Tag;
 		}

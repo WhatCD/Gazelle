@@ -13,7 +13,6 @@ $Text = new TEXT;
 
 
 // Similar artist map
-include(SERVER_ROOT.'/classes/class_artist.php');
 include(SERVER_ROOT.'/classes/class_artists_similar.php');
 
 $ArtistID = $_GET['id'];
@@ -31,7 +30,7 @@ if(!empty($_GET['revisionid'])) { // if they're viewing an old revision
 if($Data) {
 	$Data = unserialize($Data);
 	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $GroupMeta)) = each($Data);
-	
+
 } else {
 	$sql = "SELECT
 		a.Name,
@@ -48,9 +47,9 @@ if($Data) {
 	}
 	$sql .= " GROUP BY a.ArtistID";
 	$DB->query($sql, MYSQLI_NUM, true);
-	
+
 	if($DB->record_count()==0) { error(404); }
-	
+
 	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record();
 }
 
@@ -72,12 +71,12 @@ if(!is_array($Requests)) {
 			SUM(rv.Bounty) AS Bounty
 		FROM requests AS r
 			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID 
+			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
 		WHERE ra.ArtistID = ".$ArtistID."
 			AND r.TorrentID = 0
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
-	
+
 	if($DB->record_count() > 0) {
 		$Requests = $DB->to_array();
 	} else {
@@ -89,17 +88,17 @@ $NumRequests = count($Requests);
 
 $LastReleaseType = 0;
 if(empty($GroupMeta) || empty($TorrentList)) {
-	$DB->query("SELECT 
+	$DB->query("SELECT
 			DISTINCT ta.GroupID, ta.Importance, tg.VanityHouse
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
 			ORDER BY ta.Importance, tg.ReleaseType ASC, tg.Year DESC");
-	
+
 	$GroupIDs = $DB->collect('GroupID');
 	$GroupMeta = $DB->to_array('GroupID', MYSQLI_BOTH, false);
 	if(count($GroupIDs)>0) {
-		$TorrentList = get_groups($GroupIDs, true, true);
+		$TorrentList = Torrents::get_groups($GroupIDs, true, true);
 		$TorrentList = $TorrentList['matches'];
 	} else {
 		$TorrentList = array();
@@ -204,7 +203,7 @@ function display_name($ReleaseType) {
 $OpenTable = false;
 foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType) {
 	$NumTorrentsReleaseType = count($TorrentListForReleaseType);
-	if($OpenTable) { 
+	if($OpenTable) {
 		?></table><?
 		$OpenTable = false;
 	}
@@ -223,12 +222,12 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 
 	if ((isset($LoggedUser['ArtistOptions']) && array_key_exists($ReleaseType, $LoggedUser['ArtistOptions'])) && $LoggedUser['ArtistOptions'][$ReleaseType] == 0) {
 		$HideDiscog = " hidden";
-		$HideDiscogDefault = true;		
+		$HideDiscogDefault = true;
 	}
 	else {
 		$HideDiscog = "";
-		$HideDiscogDefault = false;	
-	}	
+		$HideDiscogDefault = false;
+	}
 	?>
 	<table class="torrent_table grouped release_table releases_<?=$ReleaseType?>_table<?=$NumTorrentsReleaseType==0?" empty hidden":""?>" id="torrents_<?=$ReleaseTypeLabel?>">
 		<tr class="colhead_dark">
@@ -267,7 +266,7 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 		$TagList = explode(' ',str_replace('_','.',$TagList));
 
 		$TorrentTags = array();
-	
+
 		// $Tags array is for the sidebar on the right
 		foreach($TagList as $Tag) {
 			if(!isset($Tags[$Tag])) {
@@ -281,11 +280,11 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 		$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
 
 		if (($ReleaseType == 1023) || ($ReleaseType == 1024)) {
-			$ArtistPrefix = display_artists(array(1 => $GroupArtists));
+			$ArtistPrefix = Artists::display_artists(array(1 => $GroupArtists));
 		} else {
 			$ArtistPrefix = '';
 		}
-	
+
 		$DisplayName = $ArtistPrefix . '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 		if($GroupYear>0) { $DisplayName = $GroupYear. ' - '.$DisplayName; }
 
@@ -307,33 +306,33 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 		$LastRemasterRecordLabel = '';
 		$LastRemasterCatalogueNumber = '';
 		$LastMedia = '';
-	
+
 		$EditionID = 0;
-	
+
 		foreach ($Torrents as $TorrentID => $Torrent) {
 			$NumTorrents++;
-		
+
 			$Torrent['Seeders'] = (int)$Torrent['Seeders'];
 			$Torrent['Leechers'] = (int)$Torrent['Leechers'];
 			$Torrent['Snatched'] = (int)$Torrent['Snatched'];
-		
+
 			$NumSeeders+=$Torrent['Seeders'];
 			$NumLeechers+=$Torrent['Leechers'];
 			$NumSnatches+=$Torrent['Snatched'];
-		
+
 			if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $Torrent['Media'] != $LastMedia) {
-		
+
 				$EditionID++;
-			
-				if($Torrent['RemasterTitle']  || $Torrent['RemasterYear'] || $Torrent['RemasterRecordLabel'] || $Torrent['RemasterCatalogueNumber']) {				
+
+				if($Torrent['RemasterTitle']  || $Torrent['RemasterYear'] || $Torrent['RemasterRecordLabel'] || $Torrent['RemasterCatalogueNumber']) {
 					$RemasterName = $Torrent['RemasterYear'];
 					$AddExtra = " - ";
 					if($Torrent['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']); $AddExtra=' / '; }
 					if($Torrent['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']); $AddExtra=' / '; }
 					if($Torrent['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterTitle']); $AddExtra=' / '; }
 					$RemasterName .= $AddExtra.display_str($Torrent['Media']);
-				
+
 ?>
 	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog <?=$HideDiscog?>">
 		<td colspan="7" class="artist_normalcol edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></a></td>
@@ -363,9 +362,9 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]
 			</span>
-			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=torrent_info($Torrent)?></a>
+			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
-		<td class="artist_normalcol nobr"><?=get_size($Torrent['Size'])?></td>
+		<td class="artist_normalcol nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td class="artist_normalcol"><?=number_format($Torrent['Snatched'])?></td>
 		<td class="artist_normalcol<?=($Torrent['Seeders']==0)?' r00':''?>"><?=number_format($Torrent['Seeders'])?></td>
 		<td class="artist_normalcol"><?=number_format($Torrent['Leechers'])?></td>
@@ -387,7 +386,7 @@ $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
-show_header($Name, 'browse,requests,artists,bbcode');
+View::show_header($Name, 'browse,requests,artists,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -426,7 +425,7 @@ if (has_bookmarked('artist', $ArtistID)) {
 			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
 
 <?
-	} else { 
+	} else {
 ?>
 			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?
@@ -588,7 +587,7 @@ if($NumRequests > 0) {
 
 			if($CategoryName == "Music") {
 				$ArtistForm = get_request_artists($RequestID);
-				$ArtistLink = display_artists($ArtistForm, true, true);
+				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 				$FullName = $ArtistLink."<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
 			} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
 				$FullName = "<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
@@ -619,10 +618,10 @@ if($NumRequests > 0) {
 <?  	if(check_perms('site_vote')){ ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				&nbsp;&nbsp; <a href="javascript:Vote(0)"><strong>(+)</strong></a>
-<?		} ?> 
+<?		} ?>
 			</td>
 			<td>
-				<?=get_size($Bounty)?>
+				<?=Format::get_size($Bounty)?>
 			</td>
 			<td>
 				<?=time_diff($TimeAdded)?>
@@ -675,7 +674,7 @@ if($NumSimilar>0) {
 	</div>
 </div>
 <?
-show_footer();
+View::show_footer();
 
 
 // Cache page for later use

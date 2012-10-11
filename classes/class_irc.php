@@ -9,7 +9,7 @@ class IRC_DB extends DB_MYSQL {
 abstract class IRC_BOT {
 	abstract protected function connect_events();
 	abstract protected function channel_events();
-	abstract protected function query_events(); 
+	abstract protected function query_events();
 	abstract protected function listener_events();
 
 	protected $Debug = false;
@@ -92,7 +92,7 @@ abstract class IRC_BOT {
 		return trim($Msg[1]);
 	}
 
-	protected function get_host() {
+	protected function get_irc_host() {
 		preg_match('/:[^!:]+!.+@([^\s]+) PRIVMSG [^:]+ :.+/', $this->Data, $Host);
 		return trim($Host[1]);
 	}
@@ -126,10 +126,10 @@ abstract class IRC_BOT {
 		$this->Whois = $Nick;
 		$this->send_raw("WHOIS $Nick");
 	}
-	
+
 	/*
-	This function uses blacklisted_ip, which is no longer in RC2. 
-	You can probably find it in old RC1 code kicking aronud if you need it. 
+	This function uses blacklisted_ip, which is no longer in RC2.
+	You can probably find it in old RC1 code kicking aronud if you need it.
 	protected function ip_check($IP,$Gline=false,$Channel=BOT_REPORT_CHAN) {
 		global $Cache, $DB;
 		if(blacklisted_ip($IP)) {
@@ -209,7 +209,7 @@ abstract class IRC_BOT {
 			if($this->Listened = @socket_accept($this->ListenSocket)) {
 				$this->listener_events();
 			}
-			
+
 			$DB->LinkID = false;
 			$DB->Queries = array();
 			usleep(5000);

@@ -2,7 +2,7 @@
 if (!check_perms('users_view_email')) { error(403);
 }
 
-show_header('Manage email blacklist');
+View::show_header('Manage email blacklist');
 $DB -> query("SELECT 
 	eb.ID,
 	eb.UserID,
@@ -53,7 +53,7 @@ $DB -> query("SELECT
 			<td>
 				<input type="text" name="comment" value="<?=display_str($Comment)?>" size="60" />
 			</td>
-			<td><?=format_username($UserID, false, false, false)
+			<td><?=Users::format_username($UserID, false, false, false)
 			?><br /><?=time_diff($Time, 1)
 			?></td>
 			<td>
@@ -64,4 +64,4 @@ $DB -> query("SELECT
 	</tr>
 	<?  }?>
 </table>
-<? show_footer();?>
+<? View::show_footer();?>

@@ -12,7 +12,7 @@ if(!check_perms('site_torrents_notify')) {
 }
 
 define('NOTIFICATIONS_PER_PAGE', 50);
-list($Page,$Limit) = page_limit(NOTIFICATIONS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
 
 $TokenTorrents = $Cache->get_value('users_tokens_'.$LoggedUser['ID']);
 if (empty($TokenTorrents)) {
@@ -36,10 +36,10 @@ $DB->query('SELECT FOUND_ROWS()');
 list($TorrentCount) = $DB->next_record();
 
 if(count($GroupIDs)) {
-	$TorrentGroups = get_groups($GroupIDs);
+	$TorrentGroups = Torrents::get_groups($GroupIDs);
 	$TorrentGroups = $TorrentGroups['matches'];
 
-	// Need some extra info that get_groups() doesn't return
+	// Need some extra info that Torrents::get_groups() doesn't return
 	$DB->query("SELECT ID, CategoryID FROM torrents_group WHERE ID IN (".implode(',', $GroupIDs).")");
 	$GroupCategoryIDs = $DB->to_array('ID', MYSQLI_ASSOC, false);
 

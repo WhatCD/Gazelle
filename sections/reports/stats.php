@@ -4,7 +4,7 @@ if(!check_perms('admin_reports')){
 	error(403);
 }
 
-show_header('Other reports stats');
+View::show_header('Other reports stats');
 
 ?>
 <div class="header">
@@ -112,5 +112,5 @@ $Results = $DB->to_array();
 		</table>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

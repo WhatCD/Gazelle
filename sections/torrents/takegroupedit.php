@@ -61,7 +61,7 @@ if(empty($RevisionID)) { // edit
 				VALUES ('$GroupID', '".db_string($Body)."', '".db_string($Image)."', '$UserID', '$Summary', '".sqltime()."')");
 	
 	$DB->query("UPDATE torrents_group SET ReleaseType='$ReleaseType' WHERE ID='$GroupID'");
-	update_hash($GroupID);
+	Torrents::update_hash($GroupID);
 	
 	$DB->query("SELECT ArtistID FROM torrents_artists WHERE GroupID = ".$GroupID);
 	$Artists = $DB->collect('ArtistID');

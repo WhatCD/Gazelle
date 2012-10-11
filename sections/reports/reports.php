@@ -11,12 +11,12 @@ define('REPORTS_PER_PAGE', '10');
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = NEW TEXT;
 
-list($Page,$Limit) = page_limit(REPORTS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(REPORTS_PER_PAGE);
 
 include(SERVER_ROOT.'/sections/reports/array.php');
 
 // Header
-show_header('Reports','bbcode');
+View::show_header('Reports','bbcode');
 
 if($_GET['id'] && is_number($_GET['id'])) {
 	$View = "Single report";
@@ -82,7 +82,7 @@ $DB->set_query_id($Reports);
 	<div class="linkbox">
 <?
 // pagination
-$Pages = get_pages($Page,$Results,REPORTS_PER_PAGE,11);
+$Pages = Format::get_pages($Page,$Results,REPORTS_PER_PAGE,11);
 echo $Pages;
 ?>
 	</div>
@@ -221,5 +221,5 @@ while(list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $
 	</div>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

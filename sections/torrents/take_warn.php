@@ -1,7 +1,7 @@
 <?php
 if (!check_perms('users_warn')) { error(404);
 }
-isset_request($_POST, array('reason', 'privatemessage', 'body', 'length', 'groupid', 'postid', 'userid'));
+Misc::assert_isset_request($_POST, array('reason', 'privatemessage', 'body', 'length', 'groupid', 'postid', 'userid'));
 
 $Reason = db_string($_POST['reason']);
 $PrivateMessage = db_string($_POST['privatemessage']);
@@ -12,14 +12,14 @@ $PostID = (int)$_POST['postid'];
 $UserID = (int)$_POST['userid'];
 $Key = (int)$_POST['key'];
 $SQLTime = sqltime();
-$UserInfo = user_info($UserID);
+$UserInfo = Users::user_info($UserID);
 if($UserInfo['Class'] > $LoggedUser['Class']) {
     error(403);
 }
 $URL = "https://". SSL_SITE_URL."/torrents.php?id=$GroupID&postid=$PostID#post$PostID";
 if ($Length != 'verbal') {
     $Time = ((int)$Length) * (7 * 24 * 60 * 60);
-    warn_user($UserID, $Time, "$URL - ". $Reason);
+    Tools::warn_user($UserID, $Time, "$URL - ". $Reason);
     $Subject = "You have received a warning";
     $PrivateMessage = "You have received a $Length week warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;
 	$WarnTime = time_plus($Time);
@@ -31,7 +31,7 @@ if ($Length != 'verbal') {
 	}
 $DB -> query("INSERT INTO users_warnings_forums (UserID, Comment) VALUES('$UserID', '" . db_string($AdminComment) . "')
 	        ON DUPLICATE KEY UPDATE Comment = CONCAT('" . db_string($AdminComment) . "', Comment)");
-send_pm($UserID, $LoggedUser['ID'], $Subject, $PrivateMessage);
+Misc::send_pm($UserID, $LoggedUser['ID'], $Subject, $PrivateMessage);
 
 // Mainly
 $DB -> query("SELECT

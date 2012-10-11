@@ -3,7 +3,7 @@ if (!check_perms('site_debug')) { error(403); }
 
 if (!isset($_GET['case']) || !$Analysis = $Cache->get_value('analysis_'.$_GET['case'])) { error(404); }
 
-show_header('Case Analysis');
+View::show_header('Case Analysis');
 ?>
 <div class="header">
 	<h2>Case Analysis (<a href="<?=display_str($Analysis['url'])?>"><?=$_GET['case']?></a>)</h2>
@@ -19,5 +19,5 @@ $Debug->class_table();
 $Debug->extension_table();
 $Debug->constant_table();
 $Debug->vars_table($Analysis['vars']);
-show_footer();
+View::show_footer();
 ?>

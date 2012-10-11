@@ -13,10 +13,10 @@ if(!$UserCount = $Cache->get_value('stats_user_count')){
 	$Cache->cache_value('stats_user_count', $UserCount, 0); //inf cache
 }
 
-$DonorPerms = get_permissions(DONOR);
+$DonorPerms = Permissions::get_permissions(DONOR);
 
 if ($_GET['miner']) { $LoggedUser['BitcoinMiner'] = 1; $_GET['showminer'] = 1; }
-show_header('Donate');
+View::show_header('Donate');
 
 
 ?>
@@ -103,4 +103,4 @@ if(USER_LIMIT != 0 && $UserCount >= USER_LIMIT && !check_perms('site_can_invite_
 	</div>
 </div>
 <!-- END Donate -->
-<? show_footer(); ?>
+<? View::show_footer(); ?>

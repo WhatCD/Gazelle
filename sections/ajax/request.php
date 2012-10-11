@@ -31,7 +31,7 @@ $RequestID = $_GET['id'];
 
 //First things first, lets get the data for the request.
 
-$Request = get_requests(array($RequestID));	
+$Request = Requests::get_requests(array($RequestID));	
 $Request = $Request['matches'][$RequestID];
 if(empty($Request)) {
 	print
@@ -59,8 +59,8 @@ if($CategoryID == 0) {
 //Do we need to get artists?
 if($CategoryName == "Music") {
 	$ArtistForm = get_request_artists($RequestID);
-	$ArtistName = display_artists($ArtistForm, false, true);
-	$ArtistLink = display_artists($ArtistForm, true, true);
+	$ArtistName = Artists::display_artists($ArtistForm, false, true);
+	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 	
 	if($IsFilled) {
 		$DisplayLink = $ArtistLink."<a href='torrents.php?torrentid=".$TorrentID."'>".$Title."</a> [".$Year."]";
@@ -141,7 +141,7 @@ if($Results === false) {
 	$Cache->cache_value('request_comments_'.$RequestID, $Results, 0);
 }
 
-list($Page,$Limit) = page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
 
 //Get the cache catalogue
 $CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
@@ -175,7 +175,7 @@ $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMME
 $JsonRequestComments = array();
 foreach($Thread as $Key => $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
+	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 	$JsonRequestComments[] = array(
 		'postId' => (int) $PostID,
 		'authorId' => (int) $AuthorID,
@@ -183,7 +183,7 @@ foreach($Thread as $Key => $Post){
 		'donor' => $Donor == 1,
 		'warned' => ($Warned!='0000-00-00 00:00:00'),
 		'enabled' => ($Enabled == 2 ? false : true),
-		'class' => make_class_string($PermissionID),
+		'class' => Users::make_class_string($PermissionID),
 		'addedTime' => $AddedTime,
 		'avatar' => $Avatar,
 		'comment' => $Text->full_format($Body),

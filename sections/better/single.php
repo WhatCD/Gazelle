@@ -13,9 +13,9 @@ if(($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
 	$Cache->cache_value('better_single_groupids', $GroupIDs, 30*60);
 }
 
-$Results = get_groups(array_keys($GroupIDs));
+$Results = Torrents::get_groups(array_keys($GroupIDs));
 
-show_header('Single seeder FLACs');
+View::show_header('Single seeder FLACs');
 ?>
 <div class="thin">
 	<table width="100%" class="torrent_table">
@@ -30,7 +30,7 @@ foreach ($Results as $GroupID=>$Group) {
 	
 	$DisplayName = '';
 	if(count($Artists)>0) {
-		$DisplayName = display_artists(array('1'=>$Artists));
+		$DisplayName = Artists::display_artists(array('1'=>$Artists));
 	}
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
@@ -59,5 +59,5 @@ foreach ($Results as $GroupID=>$Group) {
 	</table>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

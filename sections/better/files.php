@@ -16,13 +16,13 @@ if(!empty($_GET['filter']) && $_GET['filter'] == "all") {
 	$All = false;
 }
 
-show_header('Torrents with bad file names');
+View::show_header('Torrents with bad file names');
 $DB->query("SELECT tfi.TorrentID, t.GroupID FROM torrents_bad_files AS tfi JOIN torrents AS t ON t.ID = tfi.TorrentID ".$Join." ORDER BY tfi.TimeAdded ASC");
 $TorrentsInfo = $DB->to_array('TorrentID', MYSQLI_ASSOC);
 foreach($TorrentsInfo as $Torrent) {
 	$GroupIDs[] = $Torrent['GroupID'];
 }
-$Results = get_groups($GroupIDs);
+$Results = Torrents::get_groups($GroupIDs);
 $Results = $Results['matches'];
 ?>
 <div class="header">
@@ -49,13 +49,13 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 
 	$DisplayName = '';
 	if(count($Artists)>0) {
-		$DisplayName = display_artists(array('1'=>$Artists));
+		$DisplayName = Artists::display_artists(array('1'=>$Artists));
 	}
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 	if($ReleaseType>0) { $DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]"; }
 	
-	$ExtraInfo = torrent_info($Torrents[$TorrentID]);
+	$ExtraInfo = Torrents::torrent_info($Torrents[$TorrentID]);
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;
 	}
@@ -85,5 +85,5 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 	</table>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

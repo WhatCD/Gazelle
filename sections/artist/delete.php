@@ -14,7 +14,7 @@ if(!is_number($ArtistID) || empty($ArtistID)) { error(0); }
 
 if(!check_perms('site_delete_artist') || !check_perms('torrents_delete')) { error(403); }
 
-show_header('Artist deleted');
+View::show_header('Artist deleted');
 
 $DB->query('SELECT Name FROM artists_group WHERE ArtistID='.$ArtistID);
 list($Name) = $DB->next_record();
@@ -76,9 +76,9 @@ if($DB->record_count() > 0) {
 }
 
 if($Count == 0) {
-	delete_artist($ArtistID);
+	Artists::delete_artist($ArtistID);
 ?>
 	<div class="thin">Artist deleted!</div>
 <?
 }
-show_footer();?>
+View::show_footer();?>

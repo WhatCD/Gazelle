@@ -255,7 +255,7 @@ class DB_MYSQL {
 			if (!is_array($this->Record)) {
 				$this->QueryID = FALSE;
 			} elseif($Escape !== FALSE){
-				$this->Record = display_array($this->Record, $Escape);
+				$this->Record = Misc::display_array($this->Record, $Escape);
 			}
 			return $this->Record;
 		}
@@ -303,7 +303,7 @@ class DB_MYSQL {
 		$Return = array();
 		while($Row = mysqli_fetch_array($this->QueryID,$Type)){
 			if($Escape!==FALSE) {
-				$Row = display_array($Row, $Escape);
+				$Row = Misc::display_array($Row, $Escape);
 			}
 			if($Key !== false) {
 				$Return[$Row[$Key]] = $Row;

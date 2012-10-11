@@ -180,13 +180,13 @@ if($DB->affected_rows() > 0 || !$Report) {
 		}
 		$DB->query("SELECT GroupID, hex(info_hash) FROM torrents WHERE ID = ".$TorrentID);
 		list($GroupID, $InfoHash) = $DB->next_record();
-		delete_torrent($TorrentID, 0, $ResolveType['reason']);
+		Torrents::delete_torrent($TorrentID, 0, $ResolveType['reason']);
 		
 		//$InfoHash = unpack("H*", $InfoHash);
 		$Log .= " (".strtoupper($InfoHash).")";
-		write_log($Log);
+		Misc::write_log($Log);
 		$Log = "deleted torrent for the reason: ".$ResolveType['title'].". ( ".$Escaped['log_message']." )";
-		write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $Log, 0);
+		Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $Log, 0);
 	} else {
 		$Log = "No log message (Torrent wasn't deleted)";
 	}
@@ -212,7 +212,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 			$Reason .= " (Upload privileges Removed).";
 		}
 
-		warn_user($UploaderID, $WarnLength, $Reason);
+		Tools::warn_user($UploaderID, $WarnLength, $Reason);
 	} else {
 		//This is a bitch for people that don't warn but do other things, it makes me sad.
 		$AdminComment = "";
@@ -266,7 +266,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 		
 		$PM .= "\n\nReport was handled by [user]".$LoggedUser['Username']."[/user].";
 		
-		send_pm($UploaderID, 0, db_string($Escaped['raw_name']), db_string($PM));
+		Misc::send_pm($UploaderID, 0, db_string($Escaped['raw_name']), db_string($PM));
 	}
 
 	$Cache->delete_value('reports_torrent_'.$TorrentID);

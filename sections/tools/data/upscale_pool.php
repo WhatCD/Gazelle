@@ -1,8 +1,8 @@
 <?
 if(!check_perms('site_view_flow')) { error(403); }
-show_header('Upscale Pool');
+View::show_header('Upscale Pool');
 define('USERS_PER_PAGE', 50);
-list($Page,$Limit) = page_limit(USERS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 
 $RS = $DB->query("SELECT 
 	SQL_CALC_FOUND_ROWS
@@ -36,7 +36,7 @@ if($DB->record_count()) {
 	</div>
 	<div class="linkbox">
 <?
-	$Pages=get_pages($Page,$Results,USERS_PER_PAGE,11) ;
+	$Pages=Format::get_pages($Page,$Results,USERS_PER_PAGE,11) ;
 	echo $Pages;
 ?>
 	</div>
@@ -59,13 +59,13 @@ if($DB->record_count()) {
 
 ?>
 		<tr class="row<?=$Row?>">
-			<td><?=format_username($UserID, true, true, true, true)?></td>
-			<td><?=get_size($Uploaded)?></td>
-			<td><?=get_size($Downloaded)?></td>
-			<td><?=ratio($Uploaded, $Downloaded)?></td>
+			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
+			<td><?=Format::get_size($Uploaded)?></td>
+			<td><?=Format::get_size($Downloaded)?></td>
+			<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
 			<td><?=number_format($RequiredRatio, 2)?></td>
-			<td><? if(($Downloaded*$RequiredRatio)>$Uploaded) { echo get_size(($Downloaded*$RequiredRatio)-$Uploaded);}?></td>
-			<td><?=get_size($Downloaded-$RatioWatchDownload)?></td>
+			<td><? if(($Downloaded*$RequiredRatio)>$Uploaded) { echo Format::get_size(($Downloaded*$RequiredRatio)-$Uploaded);}?></td>
+			<td><?=Format::get_size($Downloaded-$RatioWatchDownload)?></td>
 			<td><?=time_diff($Joined,2)?></td>
 			<td><?=time_diff($RatioWatchEnds)?></td>
 			<td><?//time_diff(strtotime($Joined), strtotime($RatioWatchEnds))?></td>
@@ -78,5 +78,5 @@ if($DB->record_count()) {
 <? } else { ?>
 	<h2 align="center">There are currently no users on ratio watch.</h2>
 <? }
-show_footer();
+View::show_footer();
 ?>

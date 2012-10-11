@@ -32,7 +32,7 @@ list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
 
 if(!$Properties) { error(404); }
 
-show_header('Edit torrent', 'upload');
+View::show_header('Edit torrent', 'upload');
 
 if(!check_perms('site_moderate_requests')) {
 	error(403);
@@ -69,4 +69,4 @@ if(!check_perms('site_moderate_requests')) {
 		</table>
 	</form>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

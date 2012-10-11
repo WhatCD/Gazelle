@@ -37,7 +37,7 @@ list($Name, $Image, $Body, $WikiImage, $WikiBody, $Year, $RecordLabel, $Catalogu
 
 if(!$Body) { $Body = $WikiBody; $Image = $WikiImage; }
 
-show_header('Edit torrent group');
+View::show_header('Edit torrent group');
 
 // Start printing form
 ?>
@@ -165,4 +165,4 @@ show_header('Edit torrent group');
 	</div>
 <?	} ?> 
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

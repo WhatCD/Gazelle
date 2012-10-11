@@ -35,7 +35,7 @@ if ($CategoryID == 0) {
 	$DB->query("UPDATE collages SET Deleted = '1' WHERE ID='$CollageID'");
 }
 
-write_log("Collage ".$CollageID." (".$Name.") was deleted by ".$LoggedUser['Username'].": ".$Reason);
+Misc::write_log("Collage ".$CollageID." (".$Name.") was deleted by ".$LoggedUser['Username'].": ".$Reason);
 
 $Cache->delete_value('collage_'.$CollageID);
 header('Location: collages.php');

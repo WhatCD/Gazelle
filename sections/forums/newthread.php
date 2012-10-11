@@ -20,7 +20,7 @@ if($Forum === false) {
 
 
 if(!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) { error(403); }
-show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
+View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$Forum['Name']?></a> &gt; <span id="newthreadtitle">New Topic</span></h2>
@@ -46,7 +46,7 @@ show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 			<tr class="colhead_dark">
 				<td colspan="2">
 					<span style="float:left;"><a href='#newthreadpreview'>#XXXXXX</a>
-						by <strong><?=format_username($LoggedUser['ID'], true, true, true, true, true)?></strong>
+						by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?></strong>
 					Just now
 					</span>
 					<span id="barpreview" style="float:right;">
@@ -149,4 +149,4 @@ if (check_perms('forums_polls_create')) {
 		</form>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

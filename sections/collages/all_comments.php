@@ -19,7 +19,7 @@ if(!is_number($CollageID)) {
 	error(0);
 }
 
-list($Page,$Limit) = page_limit(POSTS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(POSTS_PER_PAGE);
 
 //Get the cache catalogue
 $CatalogueID = floor((POSTS_PER_PAGE*$Page-POSTS_PER_PAGE)/THREAD_CATALOGUE);
@@ -50,7 +50,7 @@ $DB->query("SELECT Name FROM collages WHERE ID='$CollageID'");
 list($Name) = $DB->next_record();
 
 // Start printing
-show_header('Comments for collage '.$Name, 'comments,bbcode');
+View::show_header('Comments for collage '.$Name, 'comments,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -60,7 +60,7 @@ show_header('Comments for collage '.$Name, 'comments,bbcode');
 		</h2>
 		<div class="linkbox">
 <?
-$Pages=get_pages($Page,$Posts,POSTS_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$Posts,POSTS_PER_PAGE,9);
 echo $Pages;
 ?>
 		</div>
@@ -70,13 +70,13 @@ echo $Pages;
 //---------- Begin printing
 foreach($Thread as $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body) = $Post;
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
+	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<span style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
-				by <?=format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
+				by <?=Users::format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
 <? if (!$ThreadInfo['IsLocked']){ ?>				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a><? }
 if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>');">[Edit]</a><? }
 if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
@@ -130,4 +130,4 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 		<?=$Pages?>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

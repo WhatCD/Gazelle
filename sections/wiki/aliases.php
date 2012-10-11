@@ -6,7 +6,7 @@ $Latest = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Latest);
 if($Edit > $LoggedUser['EffectiveClass']){ error(404); }
 
-show_header($Title." Aliases");
+View::show_header($Title." Aliases");
 ?>
 <div class="thin">
 	<div class="header">
@@ -57,4 +57,4 @@ while(list($Revision, $Title, $AuthorID, $AuthorName, $Date) = $DB->next_record(
 		</table>
 	</form>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

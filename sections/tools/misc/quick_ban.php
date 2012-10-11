@@ -9,7 +9,7 @@ if(!check_perms('admin_manage_ipbans')) { error(403); }
 		}
 		elseif($_GET['perform'] == 'create') {
 			$Notes = db_string($_GET['notes']);
-        		$IP = ip2unsigned($_GET['ip']); //Sanitized by Validation regex
+        		$IP = Tools::ip_to_unsigned($_GET['ip']); //Sanitized by Validation regex
                         $DB->query("INSERT INTO ip_bans
                                 (FromIP, ToIP, Reason) VALUES
                                 ('$IP','$IP', '$Notes')");

@@ -354,8 +354,8 @@ if(!empty($_REQUEST['action'])) {
 						list($Size, $Name) = $File;
 						$TmpFileList []= $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
 					}
-					$FilePath = isset($Tor->Val['info']->Val['files']) ? make_utf8($Tor->get_name()) : "";
-					$FileString = make_utf8(implode('|||', $TmpFileList));
+					$FilePath = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : "";
+					$FileString = Format::make_utf8(implode('|||', $TmpFileList));
 					$DB->query("UPDATE torrents SET Size = ".$TotalSize.", FilePath = '".db_string($FilePath)."', FileList = '".db_string($FileString)."' WHERE ID = ".$TorrentID);
 					$Cache->delete_value('torrents_details_'.$GroupID);
 				}
@@ -370,7 +370,7 @@ if(!empty($_REQUEST['action'])) {
 				$DB->query("SELECT COUNT(ID) FROM torrents WHERE GroupID = ".$_GET['groupid']);
 				list($Count) = $DB->next_record();
 				if($Count == 0) {
-					delete_group($_GET['groupid']);
+					Torrents::delete_group($_GET['groupid']);
 				} else {
 				}
 				if(!empty($_GET['artistid']) && is_number($_GET['artistid'])) {

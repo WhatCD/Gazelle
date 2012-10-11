@@ -25,7 +25,7 @@ if ($LoggedUser['LastReadNews'] != $News[0][0]) {
 	$LoggedUser['LastReadNews'] = $News[0][0];
 }
 
-show_header('News','bbcode');
+View::show_header('News','bbcode');
 ?>
 <div class="thin">
 	<div class="sidebar">
@@ -223,7 +223,7 @@ if(($PeerStats = $Cache->get_value('stats_peers')) === false) {
 }
 
 if(!$PeerStatsLocked) {
-	$Ratio = ratio($SeederCount, $LeecherCount);
+	$Ratio = Format::get_ratio_html($SeederCount, $LeecherCount);
 	$PeerCount = number_format($SeederCount + $LeecherCount);
 	$SeederCount = number_format($SeederCount);
 	$LeecherCount = number_format($LeecherCount);
@@ -350,7 +350,7 @@ if (!is_array($Recommend) || !is_array($Recommend_artists)) {
 	$Recommend = $DB->to_array();
 	$Cache->cache_value('recommend',$Recommend,1209600);
 	
-	$Recommend_artists = get_artists($DB->collect('GroupID'));
+	$Recommend_artists = Artists::get_artists($DB->collect('GroupID'));
 	$Cache->cache_value('recommend_artists',$Recommend_artists,1209600);
 }
 
@@ -383,8 +383,8 @@ $Cache->increment('usage_index');
 ?>
 			<tr>
 				<td>
-					<?=display_artists($Recommend_artists[$GroupID]) ?>
-					<a href="torrents.php?id=<?=$GroupID?>"><?=$GroupName?></a> (by <?=format_username($UserID, false, false, false)?>)
+					<?=Artists::display_artists($Recommend_artists[$GroupID]) ?>
+					<a href="torrents.php?id=<?=$GroupID?>"><?=$GroupName?></a> (by <?=Users::format_username($UserID, false, false, false)?>)
 					<?=$TagStr?>
 				</td>
 			</tr>
@@ -424,7 +424,7 @@ foreach ($News as $NewsItem) {
 	</div>
 </div>
 <?
-show_footer(array('disclaimer'=>true));
+View::show_footer(array('disclaimer'=>true));
 
 function contest() {
 	global $DB, $Cache, $LoggedUser;
@@ -458,7 +458,7 @@ function contest() {
 	foreach ($Contest as $User) {
 		list($UserID, $Points, $Username) = $User;
 ?>
-					<li><?=format_username($UserID, false, false, false)?> (<?=number_format($Points)?>)</li>
+					<li><?=Users::format_username($UserID, false, false, false)?> (<?=number_format($Points)?>)</li>
 <?
 	}
 ?>

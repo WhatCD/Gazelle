@@ -73,11 +73,11 @@ if($ThreadInfo['Posts'] > $PerPage) {
 } else {
 	$PostNum = 1;
 }
-list($Page,$Limit) = page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
+list($Page,$Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
 if(($Page-1)*$PerPage > $ThreadInfo['Posts']) {
 	$Page = ceil($ThreadInfo['Posts']/$PerPage);
 }
-list($CatalogueID,$CatalogueLimit) = catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
+list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
 if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
@@ -96,7 +96,7 @@ if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueI
 		$Cache->cache_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
 	}
 }
-$Thread = catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
+$Thread = Format::catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
 
 if ($_GET['updatelastread'] != '0') {
 	$LastPost = end($Thread);
@@ -220,8 +220,8 @@ if($ThreadInfo['StickyPostID']) {
 $JsonPosts = array();
 foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime) = array_values($Post);
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
-	$UserInfo = user_info($EditedUserID);
+	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
+	$UserInfo = Users::user_info($EditedUserID);
 	$JsonPosts[] = array(
 		'postId' => (int) $PostID,
 		'addedTime' => $AddedTime,

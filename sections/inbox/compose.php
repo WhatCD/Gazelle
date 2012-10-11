@@ -17,7 +17,7 @@ if(!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$ToID])) {
 $DB->query("SELECT Username FROM users_main WHERE ID='$ToID'");
 list($Username) = $DB->next_record();
 if(!$Username) { error(404); }
-show_header('Compose', 'inbox,bbcode');
+View::show_header('Compose', 'inbox,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -44,5 +44,5 @@ show_header('Compose', 'inbox,bbcode');
 </div>
 
 <?
-show_footer();
+View::show_footer();
 ?>

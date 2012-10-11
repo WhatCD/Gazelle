@@ -1,6 +1,6 @@
 <?
 //Include the header
-show_header('Uploading Rules');
+View::show_header('Uploading Rules');
 ?>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
 <script type="text/javascript">//<![CDATA[
@@ -705,5 +705,5 @@ show_header('Uploading Rules');
 <? include('jump.php'); ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

@@ -17,14 +17,14 @@ if(isset($_GET['id'])) {
 	if(!is_number($UserID)) {
 		error(404);
 	}
-	$UserInfo = user_info($UserID);
+	$UserInfo = Users::user_info($UserID);
 	$Username = $UserInfo['Username'];
 	if($LoggedUser['ID'] == $UserID) {
 		$Self = true;
 	} else {
 		$Self = false;
 	}
-	$Perms = get_permissions($UserInfo['PermissionID']);
+	$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
 	$UserClass = $Perms['Class'];
 	if (!check_paranoia('torrentcomments', $UserInfo['Paranoia'], $UserClass, $UserID)) { error(403); }
 } else {
@@ -39,7 +39,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-list($Page,$Limit) = page_limit($PerPage);
+list($Page,$Limit) = Format::page_limit($PerPage);
 $OtherLink = '';
 
 if($MyTorrents) {
@@ -51,7 +51,7 @@ if($MyTorrents) {
 else {
 	$Conditions = "WHERE tc.AuthorID = $UserID";
 	$Title = 'Comments made by '.($Self?'you':$Username);
-	$Header = 'Torrent comments left by '.($Self?'you':format_username($UserID, false, false, false)).'';
+	$Header = 'Torrent comments left by '.($Self?'you':Users::format_username($UserID, false, false, false)).'';
 	if($Self) $OtherLink = '<a href="comments.php?action=my_torrents">Display comments left on your uploads</a>';
 }
 
@@ -82,14 +82,14 @@ $Comments = $DB->query("SELECT
 
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
-$Pages=get_pages($Page,$Results,$PerPage, 11);
+$Pages=Format::get_pages($Page,$Results,$PerPage, 11);
 
 $DB->set_query_id($Comments);
 $GroupIDs = $DB->collect('GroupID');
 
-$Artists = get_artists($GroupIDs);
+$Artists = Artists::get_artists($GroupIDs);
 
-show_header($Title,'bbcode');
+View::show_header($Title,'bbcode');
 $DB->set_query_id($Comments);
 
 ?><div class="thin">
@@ -107,14 +107,14 @@ $DB->set_query_id($Comments);
 <?
 
 while(list($UserID, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $EditedTime, $EditorID) = $DB->next_record()) {
-	$UserInfo = user_info($UserID);
+	$UserInfo = Users::user_info($UserID);
 	?>
 	<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 		<tr class="colhead_dark">
 			<td  colspan="2">
 				<span style="float:left;"><a href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
-					by <strong><?=format_username($UserID, true, true, true, true, false)?></strong> <?=time_diff($AddedTime) ?>
-					on <?=display_artists($Artists[$GroupID])?><a href="torrents.php?id=<?=$GroupID?>"><?=$Title?></a>
+					by <strong><?=Users::format_username($UserID, true, true, true, true, false)?></strong> <?=time_diff($AddedTime) ?>
+					on <?=Artists::display_artists($Artists[$GroupID])?><a href="torrents.php?id=<?=$GroupID?>"><?=$Title?></a>
 				</span>
 			</td>
 		</tr>
@@ -144,7 +144,7 @@ if(empty($HeavyInfo['DisableAvatars'])) {
 ?>
 				<br /><br />
 				Last edited by
-				<?=format_username($EditorID, false, false, false) ?> <?=time_diff($EditedTime)?>
+				<?=Users::format_username($EditorID, false, false, false) ?> <?=time_diff($EditedTime)?>
 <?
 				}
 ?>
@@ -164,6 +164,6 @@ echo $Pages;
 </div>
 <?
 
-show_footer();
+View::show_footer();
 
 ?>

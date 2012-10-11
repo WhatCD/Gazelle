@@ -117,7 +117,7 @@ if(isset($_POST['delete'])) {
 	$UpdateArray = array(
 		'IsSticky'=>$Sticky,
 		'IsLocked'=>$Locked,
-		'Title'=>cut_string($RawTitle, 150, 1, 0),
+		'Title'=>Format::cut_string($RawTitle, 150, 1, 0),
 		'ForumID'=>$ForumID
 		);
 	$Cache->update_row(false, $UpdateArray);

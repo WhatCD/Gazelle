@@ -22,7 +22,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-list($Page,$Limit) = page_limit(TOPICS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(TOPICS_PER_PAGE);
 
 //---------- Get some data to start processing
 
@@ -64,7 +64,7 @@ $ForumName = display_str($Forums[$ForumID]['Name']);
 if($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
 
 // Start printing
-show_header('Forums > '. $Forums[$ForumID]['Name']);
+View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <?=$ForumName?></h2>
@@ -137,7 +137,7 @@ show_header('Forums > '. $Forums[$ForumID]['Name']);
 <? } ?>
 	<div class="linkbox pager">
 <?
-$Pages=get_pages($Page,$Forums[$ForumID]['NumTopics'],TOPICS_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$Forums[$ForumID]['NumTopics'],TOPICS_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
@@ -222,7 +222,7 @@ if (count($Forum) == 0) {
 		unset($PageLinks);
 ?>
 				<strong>
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($Title)?>"><?=display_str(cut_string($Title, $TopicLength)) ?></a>
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($Title)?>"><?=display_str(Format::cut_string($Title, $TopicLength)) ?></a>
 				</strong>
 				<?=$PagesText?>
 			</span>
@@ -232,11 +232,11 @@ if (count($Forum) == 0) {
 			</span>
 <?		} ?>
 			<span style="float:right;" class="last_poster">
-				by <?=format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?>
+				by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?>
 			</span>
 		</td>
 		<td><?=number_format($PostCount-1)?></td>
-		<td><?=format_username($AuthorID, false, false, false)?></td>
+		<td><?=Users::format_username($AuthorID, false, false, false)?></td>
 	</tr>
 <?	}
 } ?>
@@ -249,4 +249,4 @@ if (count($Forum) == 0) {
 	</div>
 	<div class="linkbox">[<a href="forums.php?action=catchup&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a>]</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

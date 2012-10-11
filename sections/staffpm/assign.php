@@ -48,7 +48,7 @@ if ($ConvID = (int)$_GET['convid']) {
 			// Assign to class
 			$DB->query("UPDATE staff_pm_conversations SET Status='Unanswered', Level=$NewLevel, AssignedToUser=NULL WHERE ID=$ConvID");
 		} else {
-			$UserInfo = user_info($NewLevel);
+			$UserInfo = Users::user_info($NewLevel);
 			$Level    = $Classes[$UserInfo['PermissionID']]['Level'];
 			if (!$Level) {
 				error("Assign to user not found.");

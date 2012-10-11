@@ -32,7 +32,7 @@ if(check_perms('torrents_freeleech') && (isset($_POST['freeleech']) xor isset($_
 		error(404);
 	}
 
-	freeleech_groups($GroupID, $Free, $FreeType);
+	Torrents::freeleech_groups($GroupID, $Free, $FreeType);
 }
 
 //Escape fields
@@ -61,7 +61,7 @@ $DB->query("SELECT ID FROM torrents WHERE GroupID='$GroupID'");
 while(list($TorrentID) = $DB->next_record()) {
 	$Cache->delete_value('torrent_download_'.$TorrentID);
 }
-update_hash($GroupID);
+Torrents::update_hash($GroupID);
 $Cache->delete_value('torrents_details_'.$GroupID);
 
 header("Location: torrents.php?id=".$GroupID);

@@ -10,7 +10,7 @@ if(isset($_GET['details'])) {
 	$Details = 'all';
 }
 
-show_header('Top 10 Tags');
+View::show_header('Top 10 Tags');
 ?>
 <div class="thin">
 	<div class="header">
@@ -88,7 +88,7 @@ if ($Details=='all' || $Details=='v') {
 }
 
 echo '</div>';
-show_footer();
+View::show_footer();
 exit;
 
 // generate a table based on data from most recent query to $DB

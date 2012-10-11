@@ -30,7 +30,7 @@ if(!empty($_POST['add']) || (!empty($_POST['del']))) {
 $DB->query("SELECT ThreadID FROM forums_specific_rules WHERE ForumID = ".$ForumID);
 $ThreadIDs = $DB->collect('ThreadID');
 
-show_header();
+View::show_header();
 ?>
 <div class="thin box pad">
 	<div class="header">
@@ -70,5 +70,5 @@ show_header();
 	</table>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

@@ -2,7 +2,7 @@
 enforce_login();
 
 define('ANNOUNCEMENT_FORUM_ID', 19);
-show_header('Blog','bbcode');
+View::show_header('Blog','bbcode');
 require(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
@@ -55,7 +55,7 @@ if(check_perms('admin_manage_blog')) {
 						header('Location: blog.php');
 					} 
 				} else {
-					$ThreadID = create_thread(ANNOUNCEMENT_FORUM_ID, $LoggedUser[ID], $Title, $Body);
+					$ThreadID = Misc::create_thread(ANNOUNCEMENT_FORUM_ID, $LoggedUser[ID], $Title, $Body);
 					if($ThreadID < 1) {
 						error(0);
 					}
@@ -169,5 +169,5 @@ foreach ($Blog as $BlogItem) {
 ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

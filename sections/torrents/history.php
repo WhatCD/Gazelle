@@ -26,7 +26,7 @@ list($Name) = $DB->next_record();
 
 if(!$Name) { error(404); }
 
-show_header("Revision history for $Name"); // Set title
+View::show_header("Revision history for $Name"); // Set title
 
 // Start printing form
 ?>
@@ -39,5 +39,5 @@ $Wiki->revision_history(); // the wiki class takes over from here
 ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

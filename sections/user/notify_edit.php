@@ -1,6 +1,6 @@
 <?
 if(!check_perms('site_torrents_notify')){ error(403); }
-show_header('Manage notifications');
+View::show_header('Manage notifications');
 ?>
 <div class="thin">
 	<div class="header">
@@ -152,4 +152,4 @@ foreach($Notifications as $N) { //$N stands for Notifications
 <?	}
 } ?>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

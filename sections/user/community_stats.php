@@ -23,9 +23,9 @@ list($PerfectFLACs) = $DB->next_record();
 		<div class="box box_info box_userinfo_community">
 			<div class="head colhead_dark">Community</div>
 			<ul class="stats nobullet">
-				<li>Forum Posts: <?=number_format($ForumPosts)?> [<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>" title="View">View</a>]</li>
+				<li>Forum posts: <?=number_format($ForumPosts)?> [<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>" title="View">View</a>]</li>
 <? if (($Override=check_paranoia_here('torrentcomments+'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Torrent Comments: <?=number_format($NumComments)?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Torrent comments: <?=number_format($NumComments)?>
 					<? if($Override=check_paranoia_here('torrentcomments')) { ?>[<a href="comments.php?id=<?=$UserID?>" <?= $Override===2 ? 'class="paranoia_override"'
 																																		 : ''
 																				?> title="View">View</a>]
@@ -33,7 +33,7 @@ list($PerfectFLACs) = $DB->next_record();
 				</li>
 <? }
    if (($Override=check_paranoia_here('collages+'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Collages Started: <?=number_format($NumCollages)?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Collages started: <?=number_format($NumCollages)?>
 					<? if(($Override=check_paranoia_here('collages'))) { ?>[<a <?= ($Override===2) ? 'class="paranoia_override"'
 																							  :'' ?>
 																		href="collages.php?userid=<?=$UserID?>" title="View">View</a>]
@@ -55,15 +55,15 @@ $ViewCount   = check_paranoia_here('requestsfilled_count');
 $ViewBounty  = check_paranoia_here('requestsfilled_bounty');
 
    if ($ViewCount && !$ViewBounty && !$ViewAll) { ?>
-				<li>Requests Filled: <?=number_format($RequestsFilled)?></li>
+				<li>Requests filled: <?=number_format($RequestsFilled)?></li>
 <? } elseif(!$ViewCount && $ViewBounty && !$ViewAll) { ?>
-				<li>Requests Voted: <?=get_size($TotalSpent)?> collected</li>
+				<li>Requests voted: <?=Format::get_size($TotalSpent)?> collected</li>
 <? } elseif($ViewCount && $ViewBounty && !$ViewAll) { ?>
-				<li>Requests Filled: <?=number_format($RequestsFilled)?> for <?=get_size($TotalBounty)?></li>
+				<li>Requests filled: <?=number_format($RequestsFilled)?> for <?=Format::get_size($TotalBounty)?></li>
 <? } elseif($ViewAll) { ?>
 				<li>
 					<span <?= ($ViewCount===2) ? 'class="paranoia_override"' : ''?> >Requests filled: <?=number_format($RequestsFilled)?> </span>
-					<span <?= ($ViewBounty===2) ? 'class="paranoia_override"' : ''?>> for <?=get_size($TotalBounty) ?> </span>
+					<span <?= ($ViewBounty===2) ? 'class="paranoia_override"' : ''?>> for <?=Format::get_size($TotalBounty) ?> </span>
 					[<a href="requests.php?type=filled&amp;userid=<?=$UserID?>" <?= ($ViewAll===2) ? 'class="paranoia_override"' : ''?> title="View">View</a>]
 				</li>
 <? }
@@ -74,15 +74,15 @@ $ViewCount   = check_paranoia_here('requestsvoted_count');
 $ViewBounty  = check_paranoia_here('requestsvoted_bounty');
 
    if ($ViewCount && !$ViewBounty && !$ViewAll) { ?>
-				<li>Requests Voted: <?=number_format($RequestsVoted)?></li>
+				<li>Requests voted: <?=number_format($RequestsVoted)?></li>
 <? } elseif(!$ViewCount && $ViewBounty && !$ViewAll) { ?>
-				<li>Requests Voted: <?=get_size($TotalSpent)?> spent</li>
+				<li>Requests voted: <?=Format::get_size($TotalSpent)?> spent</li>
 <? } elseif($ViewCount && $ViewBounty && !$ViewAll) { ?>
-				<li>Requests Voted: <?=number_format($RequestsVoted)?> for <?=get_size($TotalSpent)?></li>
+				<li>Requests voted: <?=number_format($RequestsVoted)?> for <?=Format::get_size($TotalSpent)?></li>
 <? } elseif($ViewAll) { ?>
 				<li>
-					<span <?= ($ViewCount===2) ? 'class="paranoia_override"' : ''?> >Requests Voted: <?=number_format($RequestsVoted)?> </span>
-					<span <?= ($ViewBounty===2) ? 'class="paranoia_override"' : ''?>> for <?=get_size($TotalSpent)?> </span>
+					<span <?= ($ViewCount===2) ? 'class="paranoia_override"' : ''?> >Requests voted: <?=number_format($RequestsVoted)?> </span>
+					<span <?= ($ViewBounty===2) ? 'class="paranoia_override"' : ''?>> for <?=Format::get_size($TotalSpent)?> </span>
 					[<a href="requests.php?type=voted&amp;userid=<?=$UserID?>" <?= ($ViewAll===2) ? 'class="paranoia_override"' : ''?> title="View">View</a>]
 				</li>
 <? }
@@ -94,7 +94,7 @@ $ViewBounty  = check_paranoia_here('requestsvoted_bounty');
 <? }
    if (($Override=check_paranoia_here('uniquegroups+'))) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >
-					Unique Groups: <?echo number_format($UniqueGroups);
+					Unique groups: <?echo number_format($UniqueGroups);
 									if(($Override=check_paranoia_here('uniquegroups'))) {?>
 										[<a <?= $Override===2 ? 'class="paranoia_override"' :'' ?> href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>&amp;filter=uniquegroup">View</a>]
 									<?}?>

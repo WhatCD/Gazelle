@@ -51,7 +51,7 @@ foreach($Results as $ID=>$Data) {
 <?
 	}
 ?> 
-		<td><?=format_username($SnatcherID, true, true, true, true)?></td>
+		<td><?=Users::format_username($SnatcherID, true, true, true, true)?></td>
 		<td><?=time_diff($Timestamp)?></td>
 <?
 	$i++;

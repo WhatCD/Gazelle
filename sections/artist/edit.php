@@ -30,7 +30,7 @@ if($DB->record_count() < 1) {
 list($Name, $Image, $Body, $VanityHouse) = $DB->next_record(MYSQLI_NUM, true);
 
 // Start printing form
-show_header('Edit artist');
+View::show_header('Edit artist');
 ?>
 <div class="thin">
 	<div class="header">
@@ -122,4 +122,4 @@ show_header('Edit artist');
 	</div>
 <? } ?> 
 </div>
-<? show_footer() ?>
+<? View::show_footer() ?>

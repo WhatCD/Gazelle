@@ -1,6 +1,6 @@
 <?
 enforce_login();
-show_header('Donation Canceled');
+View::show_header('Donation Canceled');
 ?>
 <div class="thin">
 	<div class="header">
@@ -10,4 +10,4 @@ show_header('Donation Canceled');
 		<p>It's the thought that counts. Please reconsider donating in the future.</p>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

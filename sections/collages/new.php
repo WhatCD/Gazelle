@@ -1,5 +1,5 @@
 <?
-show_header('Create a collage');
+View::show_header('Create a collage');
 
 if (!check_perms('site_collages_renamepersonal')) {
 	$ChangeJS = "OnChange=\"if ( this.options[this.selectedIndex].value == '0') { $('#namebox').hide(); $('#personal').show(); } else { $('#namebox').show(); $('#personal').hide(); }\"";
@@ -86,4 +86,4 @@ if(($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('s
 		</table>
 	</form>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

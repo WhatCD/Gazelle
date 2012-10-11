@@ -4,7 +4,7 @@ if (!($IsFLS)) {
 	error(403);
 }
 
-show_header('Staff PMs', 'staffpm');
+View::show_header('Staff PMs', 'staffpm');
 
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
@@ -94,4 +94,4 @@ while(list($ID, $Message, $Name) = $DB->next_record()) {
 ?>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

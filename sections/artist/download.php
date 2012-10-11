@@ -126,7 +126,7 @@ ORDER BY t.GroupID ASC, Rank DESC, t.$Preference";
 
 $DB->query($SQL);
 $Downloads = $DB->to_array('1',MYSQLI_NUM,false);
-$Artists = get_artists($GroupIDs, false);
+$Artists = Artists::get_artists($GroupIDs, false);
 $Skips = array();
 $TotalSize = 0;
 if(count($Downloads)) {
@@ -139,10 +139,10 @@ if(count($Downloads)) {
 
 require(SERVER_ROOT.'/classes/class_torrent.php');
 require(SERVER_ROOT.'/classes/class_zip.php');
-$Zip = new ZIP(file_string($ArtistName));
+$Zip = new ZIP(Misc::file_string($ArtistName));
 foreach($Downloads as $Download) {
 	list($Rank, $GroupID, $TorrentID, $Media, $Format, $Encoding, $ReleaseType, $Year, $Album, $Size) = $Download;
-	$Artist = display_artists($Artists[$GroupID],false,true,false);
+	$Artist = Artists::display_artists($Artists[$GroupID],false,true,false);
 	if ($Rank == 100) {
 		$Skips[] = $Artist.$Album.' '.$Year;
 		continue;
@@ -163,22 +163,22 @@ foreach($Downloads as $Download) {
 	// We need this section for long file names :/
 	$TorrentName='';
 	$TorrentInfo='';
-	$TorrentName = file_string($Artist.$Album);
-	if ($Year   >   0) { $TorrentName.=' - '.file_string($Year); }
-	if ($Media  != '') { $TorrentInfo .= file_string($Media); }
+	$TorrentName = Misc::file_string($Artist.$Album);
+	if ($Year   >   0) { $TorrentName.=' - '.Misc::file_string($Year); }
+	if ($Media  != '') { $TorrentInfo .= Misc::file_string($Media); }
 	if ($Format != '') {
 		if ($TorrentInfo!='') { $TorrentInfo .= ' - '; }
-		$TorrentInfo .= file_string($Format);
+		$TorrentInfo .= Misc::file_string($Format);
 	}
 	if ($Encoding!='') {
 		if ($TorrentInfo != '') { $TorrentInfo.=' - '; }
-		$TorrentInfo .= file_string($Encoding);
+		$TorrentInfo .= Misc::file_string($Encoding);
 	}
 	if ($TorrentInfo != '') { $TorrentInfo = " ($TorrentInfo)"; }
 	if (strlen($TorrentName) + strlen($TorrentInfo) + 3 > 200) {
-		$TorrentName = file_string($Album).(($Year>0)?(' - '.file_string($Year)):'');
+		$TorrentName = Misc::file_string($Album).(($Year>0)?(' - '.Misc::file_string($Year)):'');
 	}
-	$FileName = cut_string($TorrentName.$TorrentInfo, 180, true, false);
+	$FileName = Format::cut_string($TorrentName.$TorrentInfo, 180, true, false);
 	
 	$Zip->add_file($Tor->enc(), $ReleaseTypeName.'/'.$FileName.'.torrent');
 }
@@ -186,9 +186,9 @@ $Analyzed = count($Downloads);
 $Skipped = count($Skips);
 $Downloaded = $Analyzed - $Skipped;
 $Time = number_format(((microtime(true)-$ScriptStartTime)*1000),5).' ms';
-$Used = get_size(memory_get_usage(true));
+$Used = Format::get_size(memory_get_usage(true));
 $Date = date('M d Y, H:i');
-$Zip->add_file('Collector Download Summary - '.SITE_NAME."\r\n\r\nUser:\t\t$LoggedUser[Username]\r\nPasskey:\t$LoggedUser[torrent_pass]\r\n\r\nTime:\t\t$Time\r\nUsed:\t\t$Used\r\nDate:\t\t$Date\r\n\r\nTorrents Analyzed:\t\t$Analyzed\r\nTorrents Filtered:\t\t$Skipped\r\nTorrents Downloaded:\t$Downloaded\r\n\r\nTotal Size of Torrents (Ratio Hit): ".get_size($TotalSize)."\r\n\r\nAlbums Unavailable within your criteria (consider making a request for your desired format):\r\n".implode("\r\n",$Skips), 'Summary.txt');
+$Zip->add_file('Collector Download Summary - '.SITE_NAME."\r\n\r\nUser:\t\t$LoggedUser[Username]\r\nPasskey:\t$LoggedUser[torrent_pass]\r\n\r\nTime:\t\t$Time\r\nUsed:\t\t$Used\r\nDate:\t\t$Date\r\n\r\nTorrents Analyzed:\t\t$Analyzed\r\nTorrents Filtered:\t\t$Skipped\r\nTorrents Downloaded:\t$Downloaded\r\n\r\nTotal Size of Torrents (Ratio Hit): ".Format::get_size($TotalSize)."\r\n\r\nAlbums Unavailable within your criteria (consider making a request for your desired format):\r\n".implode("\r\n",$Skips), 'Summary.txt');
 $Settings = array(implode(':',$_REQUEST['list']),$_REQUEST['preference']);
 $Zip->close_stream();
 

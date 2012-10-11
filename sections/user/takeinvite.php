@@ -52,7 +52,7 @@ foreach($Emails as $CurEmail){
 		header('Location: user.php?action=invite');
 		die();
 	}
-	$InviteKey = db_string(make_secret());
+	$InviteKey = db_string(Users::make_secret());
 		
 $Message = <<<EOT
 The user $Username has invited you to join $SiteName, and has specified this address ($CurEmail) as your email address. If you do not know this person, please ignore this email, and do not reply.
@@ -80,7 +80,7 @@ EOT;
 		$Cache->commit_transaction(0);
 	}
 	
-	send_email($CurEmail, 'You have been invited to '.SITE_NAME, $Message,'noreply');
+	Misc::send_email($CurEmail, 'You have been invited to '.SITE_NAME, $Message,'noreply');
 
 	
 }

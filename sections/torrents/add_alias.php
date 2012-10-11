@@ -13,7 +13,7 @@ if(!is_number($GroupID) || !$GroupID) {
 $Changed = false;
 
 for($i = 0; $i < count($AliasNames); $i++) {
-	$AliasName = normalise_artist_name($AliasNames[$i]);
+	$AliasName = Artists::normalise_artist_name($AliasNames[$i]);
 	$Importance = $Importances[$i];
 	
 	if($Importance!='1' && $Importance!='2' && $Importance!='3' && $Importance!='4' && $Importance!='5' && $Importance!='6' && $Importance!='7') {
@@ -60,8 +60,8 @@ for($i = 0; $i < count($AliasNames); $i++) {
 				ON DUPLICATE KEY UPDATE 
 				NumArtists=VALUES(NumArtists);");
 			
-			write_log("Artist ".$ArtistID." (".$ArtistName.") was added to the group ".$GroupID." (".$GroupName.") as ".$ArtistTypes[$Importance]." by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
-			write_group_log($GroupID, 0, $LoggedUser['ID'], "added artist ".$ArtistName." as ".$ArtistTypes[$Importance], 0);
+			Misc::write_log("Artist ".$ArtistID." (".$ArtistName.") was added to the group ".$GroupID." (".$GroupName.") as ".$ArtistTypes[$Importance]." by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+			Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "added artist ".$ArtistName." as ".$ArtistTypes[$Importance], 0);
 		}
 	}
 }
@@ -70,7 +70,7 @@ if($Changed) {
 	$Cache->delete_value('torrents_details_'.$GroupID);
 	$Cache->delete_value('groups_artists_'.$GroupID); // Delete group artist cache
 	$Cache->delete_value('artist_'.$ArtistID);
-	update_hash($GroupID);
+	Torrents::update_hash($GroupID);
 }
 
 header('Location: '.$_SERVER['HTTP_REFERER']);

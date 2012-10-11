@@ -1,5 +1,5 @@
 <?
-show_header('Register');
+View::show_header('Register');
 ?>
 <div style="width:500px;">
 	<form class="auth_form" name="invite" method="get" action="register.php">
@@ -16,5 +16,5 @@ show_header('Register');
 	</form>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

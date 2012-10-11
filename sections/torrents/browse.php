@@ -92,7 +92,7 @@ function header_link($SortKey,$DefaultWay="DESC") {
 		else { $NewWay="DESC"; }
 	} else { $NewWay=$DefaultWay; }
 	
-	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".get_url(array('order_way','order_by'));
+	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
 }
 
 // Setting default search options
@@ -137,7 +137,7 @@ if($_SERVER['QUERY_STRING'] != '' && !check_perms('torrents_search_fast') && $_S
 $OrderBy="s3"; // We order by GroupTime by default
 $OrderWay="DESC"; // We also order descending by default
 
-list($Page,$Limit) = page_limit(TORRENTS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(TORRENTS_PER_PAGE);
 
 if (preg_match('/^s[1-7]$/',$_GET['order_by'])) { $OrderBy=strtolower($_GET['order_by']); }
 if (in_array(strtolower($_GET['order_way']),array('desc','asc'))) { $OrderWay=strtoupper($_GET['order_way']); }
@@ -535,14 +535,14 @@ if(!is_array($TorrentCache)) {
 }
  
  // List of pages
-$Pages=get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
+$Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 
 // Gets tacked onto torrent download URLs
 $DownloadString="&amp;authkey=".$LoggedUser['AuthKey']."&amp;torrent_pass=".$LoggedUser['torrent_pass'];
 
 if($Title) { $Title=$TitleUser."'s  ".$Title; } else { $Title="Browse Torrents"; }
 
-show_header($Title,'browse');
+View::show_header($Title,'browse');
 ?>
 <form name="filter" method="get" action=''>
 <? if($UserID) { ?>
@@ -553,9 +553,9 @@ show_header($Title,'browse');
 	<h3>
 		Filter
 <? if(strtolower($_GET['action'])!="advanced" && (!$LoggedUser['SearchType'] || strtolower($_GET['action'])=="basic") && check_perms('site_advanced_search')) { ?>
-		(<a href="torrents.php?action=advanced&amp;<?=get_url(array('action'))?>">Advanced Search</a>)
+		(<a href="torrents.php?action=advanced&amp;<?=Format::get_url(array('action'))?>">Advanced Search</a>)
 <? } elseif((strtolower($_GET['action'])=="advanced" || ($LoggedUser['SearchType'] && strtolower($_GET['action'])!="basic")) && check_perms('site_advanced_search')) { ?>
-		(<a href="torrents.php?<? if($LoggedUser['SearchType']) { ?>action=basic&amp;<? } echo get_url(array('action')); ?>">Basic Search</a>)
+		(<a href="torrents.php?<? if($LoggedUser['SearchType']) { ?>action=basic&amp;<? } echo Format::get_url(array('action')); ?>">Basic Search</a>)
 <? } ?>
 	</h3>
 	<div class="box pad">
@@ -810,7 +810,7 @@ if ($LoggedUser['DefaultSearch']) {
 	foreach($TorrentList as $Key => $Properties) {
 		$GroupIDs[] = $Properties[0];
 	}
-	$Artists = get_artists($GroupIDs);
+	$Artists = Artists::get_artists($GroupIDs);
 	foreach ($TorrentList as $Key => $Properties) {
 		list($GroupID,$GroupName,$GroupYear,$GroupCategoryID,$GroupTime,$MaxSize,$TotalSnatched,$TotalSeeders,$TotalLeechers,$TorrentsID,$TorrentTags,$TorrentsMedia,$TorrentsFormat,$TorrentsEncoding,$TorrentsYear,$TorrentsRemastered,$TorrentsRemasterTitle,$TorrentsScene,$TorrentsLog,$TorrentsCue,$TorrentsLogScores,$TorrentsFileCount,$TorrentsFreeTorrent,$TorrentsSize,$TorrentsLeechers,$TorrentsSeeders,$TorrentsSnatched,$TorrentsTime) = $Properties;
 		$Torrents['id']		=explode('|',$TorrentsID);
@@ -872,7 +872,7 @@ if ($LoggedUser['DefaultSearch']) {
 		}
 
 		if ($GroupName=='') { $GroupName="- None -"; }
-		$DisplayName = display_artists($Artists[$GroupID]);
+		$DisplayName = Artists::display_artists($Artists[$GroupID]);
 		if((count($Torrents['id'])>1 || $GroupCategoryID==1) && !$DisableGrouping) {
 			// These torrents are in a group
 			$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
@@ -887,7 +887,7 @@ if ($LoggedUser['DefaultSearch']) {
 			<?=$TorrentTags?>
 		</td>
 		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
-		<td class="nobr"><?=get_size($MaxSize)?> (Max)</td>
+		<td class="nobr"><?=Format::get_size($MaxSize)?> (Max)</td>
 		<td><?=number_format($TotalSnatched)?></td>
 		<td<?=($TotalSeeders==0)?' class="r00"':''?>><?=number_format($TotalSeeders)?></td>
 		<td><?=number_format($TotalLeechers)?></td>
@@ -960,7 +960,7 @@ if ($LoggedUser['DefaultSearch']) {
 		</td>
 		<td><?=$Torrents['filecount'][$Key]?></td>
 		<td class="nobr"><?=time_diff($Torrents['time'][$Key],1)?></td>
-		<td class="nobr"><?=get_size($Torrents['size'][$Key])?></td>
+		<td class="nobr"><?=Format::get_size($Torrents['size'][$Key])?></td>
 		<td><?=number_format($Torrents['snatched'][$Key])?></td>
 		<td<?=($Torrents['seeders'][$Key]==0)?' class="r00"':''?>><?=number_format($Torrents['seeders'][$Key])?></td>
 		<td><?=number_format($Torrents['leechers'][$Key])?></td>
@@ -1007,7 +1007,7 @@ if ($LoggedUser['DefaultSearch']) {
 		</td>
 		<td><?=$Torrents['filecount'][0]?></td>
 		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
-		<td class="nobr"><?=get_size($Torrents['size'][0])?></td>
+		<td class="nobr"><?=Format::get_size($Torrents['size'][0])?></td>
 		<td><?=number_format($TotalSnatched)?></td>
 		<td<?=($TotalSeeders==0)?' class="r00"':''?>><?=number_format($TotalSeeders)?></td>
 		<td><?=number_format($TotalLeechers)?></td>
@@ -1043,4 +1043,4 @@ $DB->query("SELECT
 </div>
 <? } ?>
 <div class="linkbox"><?=$Pages?></div>
-<? show_footer(array('disclaimer'=>false)); ?>
+<? View::show_footer(array('disclaimer'=>false)); ?>

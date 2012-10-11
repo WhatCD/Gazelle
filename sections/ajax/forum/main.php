@@ -62,7 +62,7 @@ foreach ($Forums as $Forum) {
 	} else {
 		$Read = 'read';
 	}
-	$UserInfo = user_info($LastAuthorID);
+	$UserInfo = Users::user_info($LastAuthorID);
 	
 	$JsonForums[] = array(
 		'forumId' => (int) $ForumID,

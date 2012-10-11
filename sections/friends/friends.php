@@ -13,13 +13,13 @@ include_once(SERVER_ROOT.'/classes/class_paranoia.php');
 
 
 
-show_header('Friends');
+View::show_header('Friends');
  
 
 $UserID = $LoggedUser['ID'];
 
 
-list($Page,$Limit) = page_limit(FRIENDS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(FRIENDS_PER_PAGE);
 
 // Main query
 $DB->query("SELECT 
@@ -53,7 +53,7 @@ list($Results) = $DB->next_record();
 	<div class="linkbox">
 <?
 // Pagination
-$Pages=get_pages($Page,$Results,FRIENDS_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$Results,FRIENDS_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
@@ -71,15 +71,15 @@ foreach($Friends as $Friend) {
 	<table class="friends_table vertical_margin">
 		<tr class="colhead">
 			<td colspan="3">
-				<span style="float:left;"><?=format_username($FriendID, true, true, true, true)?>
+				<span style="float:left;"><?=Users::format_username($FriendID, true, true, true, true)?>
 <?	if(check_paranoia('ratio', $Paranoia, $Class, $FriendID)) { ?>
-				&nbsp;Ratio: <strong><?=ratio($Uploaded, $Downloaded)?></strong>
+				&nbsp;Ratio: <strong><?=Format::get_ratio_html($Uploaded, $Downloaded)?></strong>
 <?	} ?>
 <?	if(check_paranoia('uploaded', $Paranoia, $Class, $FriendID)) { ?>
-				&nbsp;Up: <strong><?=get_size($Uploaded)?></strong>
+				&nbsp;Up: <strong><?=Format::get_size($Uploaded)?></strong>
 <?	} ?>
 <?	if(check_paranoia('downloaded', $Paranoia, $Class, $FriendID)) { ?>
-				&nbsp;Down: <strong><?=get_size($Downloaded)?></strong>
+				&nbsp;Down: <strong><?=Format::get_size($Downloaded)?></strong>
 <?	} ?>
 				</span>
 <?	if(check_paranoia('lastseen', $Paranoia, $Class, $FriendID)) { ?>
@@ -128,5 +128,5 @@ foreach($Friends as $Friend) {
 <? // close <div class="thin">  ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

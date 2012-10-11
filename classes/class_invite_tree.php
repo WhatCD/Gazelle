@@ -118,15 +118,15 @@ class INVITE_TREE {
 				echo "<li>";
 			}
 ?>
-				<strong><?=format_username($ID, true, true, $Enabled != 2 ? false : true, true)?></strong>
+				<strong><?=Users::format_username($ID, true, true, $Enabled != 2 ? false : true, true)?></strong>
 <?
 			if(check_paranoia(array('uploaded', 'downloaded'), $Paranoia, $UserClass)) {
 				$TotalUpload += $Uploaded;
 				$TotalDownload += $Downloaded;
 ?>
-				&nbsp;Uploaded: <strong><?=get_size($Uploaded)?></strong>
-				&nbsp;Downloaded: <strong><?=get_size($Downloaded)?></strong>
-				&nbsp;Ratio: <strong><?=ratio($Uploaded, $Downloaded)?></strong>
+				&nbsp;Uploaded: <strong><?=Format::get_size($Uploaded)?></strong>
+				&nbsp;Downloaded: <strong><?=Format::get_size($Downloaded)?></strong>
+				&nbsp;Ratio: <strong><?=Format::get_ratio_html($Uploaded, $Downloaded)?></strong>
 <?
 			} else {
 				$ParanoidCount++;
@@ -152,7 +152,7 @@ class INVITE_TREE {
 			$ClassStrings = array();
 			foreach ($ClassSummary as $ClassID => $ClassCount) {
 				if($ClassCount == 0) { continue; }
-				$LastClass = make_class_string($ClassID);
+				$LastClass = Users::make_class_string($ClassID);
 				if($ClassCount>1) { 
 					if($LastClass == "Torrent Celebrity") {
 						 $LastClass = 'Torrent Celebrities';
@@ -186,15 +186,15 @@ class INVITE_TREE {
 			echo '. </p>';
 			
 			echo '<p style="font-weight: bold;">';
-			echo 'The total amount uploaded by the entire tree was '.get_size($TotalUpload);
-			echo '; the total amount downloaded was '.get_size($TotalDownload);
-			echo '; and the total ratio is '.ratio($TotalUpload, $TotalDownload).'. ';
+			echo 'The total amount uploaded by the entire tree was '.Format::get_size($TotalUpload);
+			echo '; the total amount downloaded was '.Format::get_size($TotalDownload);
+			echo '; and the total ratio is '.Format::get_ratio_html($TotalUpload, $TotalDownload).'. ';
 			echo '</p>';
 			
 			echo '<p style="font-weight: bold;">';
-			echo 'The total amount uploaded by direct invitees (the top level) was '.get_size($TopLevelUpload);
-			echo '; the total amount downloaded was '.get_size($TopLevelDownload);
-			echo '; and the total ratio is '.ratio($TopLevelUpload, $TopLevelDownload).'. ';
+			echo 'The total amount uploaded by direct invitees (the top level) was '.Format::get_size($TopLevelUpload);
+			echo '; the total amount downloaded was '.Format::get_size($TopLevelDownload);
+			echo '; and the total ratio is '.Format::get_ratio_html($TopLevelUpload, $TopLevelDownload).'. ';
 			
 			
 			echo 'These numbers include the stats of paranoid users, and will be factored in to the invitation giving script.</p>';

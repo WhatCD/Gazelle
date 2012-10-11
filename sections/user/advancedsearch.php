@@ -420,12 +420,12 @@ if(count($_GET)){
 			$RunQuery = true;
 		}
 
-		list($Page,$Limit) = page_limit(USERS_PER_PAGE);
+		list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 		$SQL.=" LIMIT $Limit";
 	} else { error($Err); }
 
 }
-show_header('User search');
+View::show_header('User search');
 ?>
 <div class="thin">
 	<form class="search_form" name="users" action="user.php" method="get">
@@ -480,7 +480,7 @@ show_header('User search');
 <?	foreach($ClassLevels as $Class){ 
 		if ($Class['Secondary']) { continue; }
 ?>
-					<option value="<?=$Class['ID'] ?>" <? if($_GET['class']===$Class['ID']) {echo ' selected="selected"';}?>><?=cut_string($Class['Name'], 10, 1, 1).' ('.$Class['Level'].')'?></option>
+					<option value="<?=$Class['ID'] ?>" <? if($_GET['class']===$Class['ID']) {echo ' selected="selected"';}?>><?=Format::cut_string($Class['Name'], 10, 1, 1).' ('.$Class['Level'].')'?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -507,7 +507,7 @@ show_header('User search');
 	usort($Secondaries, $fnc);
 	foreach($Secondaries as $Class) {
 ?>
-					<option value="<?=$Class['ID'] ?>" <? if($_GET['secclass']===$Class['ID']) {echo ' selected="selected"';}?>><?=cut_string($Class['Name'], 20, 1, 1)?></option>
+					<option value="<?=$Class['ID'] ?>" <? if($_GET['secclass']===$Class['ID']) {echo ' selected="selected"';}?>><?=Format::cut_string($Class['Name'], 20, 1, 1)?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -651,7 +651,7 @@ show_header('User search');
 					<select name="stylesheet" id="stylesheet">
 						<option value="">Any</option>
 <? foreach($Stylesheets as $Style) { ?>
-						<option value="<?=$Style['ID']?>"<?selected('stylesheet',$Style['ID'])?>><?=$Style['ProperName']?></option>
+						<option value="<?=$Style['ID']?>"<?Format::selected('stylesheet',$Style['ID'])?>><?=$Style['ProperName']?></option>
 <? } ?>
 					</select>
 				</td>
@@ -716,7 +716,7 @@ if($RunQuery){
 ?>
 <div class="linkbox">
 <?
-$Pages=get_pages($Page,$NumResults,USERS_PER_PAGE,11);
+$Pages=Format::get_pages($Page,$NumResults,USERS_PER_PAGE,11);
 echo $Pages;
 ?>
 </div>
@@ -738,14 +738,14 @@ echo $Pages;
 <?
 while(list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email, $Enabled, $IP, $Invites, $DisableInvites, $Warned, $Donor, $JoinDate, $LastAccess) = $DB->next_record()){ ?>
 		<tr>
-			<td><?=format_username($UserID, true, true, true, true)?></td>
-			<td><?=ratio($Uploaded, $Downloaded)?></td>
-			<td><?=display_str($IP)?> (<?=get_cc($IP)?>)</td>
+			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
+			<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
+			<td><?=display_str($IP)?> (<?=Tools::get_country_code_by_ajax($IP)?>)</td>
 			<td><?=display_str($Email)?></td>
 			<td><?=time_diff($JoinDate)?></td>
 			<td><?=time_diff($LastAccess)?></td>
-			<td><?=get_size($Uploaded)?></td>
-			<td><?=get_size($Downloaded)?></td>
+			<td><?=Format::get_size($Uploaded)?></td>
+			<td><?=Format::get_size($Downloaded)?></td>
 <?			$DB->query("SELECT COUNT(ud.UserID) FROM users_downloads AS ud JOIN torrents AS t ON t.ID = ud.TorrentID WHERE ud.UserID = ".$UserID);
 			list($Downloads) = $DB->next_record();
 			$DB->set_query_id($Results);
@@ -763,5 +763,5 @@ while(list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email
 <?=$Pages?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

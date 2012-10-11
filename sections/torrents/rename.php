@@ -24,9 +24,9 @@ while(list($ArtistID) = $DB->next_record()) {
 	$Cache->delete_value('artist_'.$ArtistID); 
 }
 
-update_hash($GroupID);
+Torrents::update_hash($GroupID);
 
-write_log("Torrent Group ".$GroupID." (".$OldName.")  was renamed to '".$NewName."' by ".$LoggedUser['Username']);
-write_group_log($GroupID, 0, $LoggedUser['ID'], "renamed to ".$NewName." from ".$OldName, 0);
+Misc::write_log("Torrent Group ".$GroupID." (".$OldName.")  was renamed to '".$NewName."' by ".$LoggedUser['Username']);
+Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "renamed to ".$NewName." from ".$OldName, 0);
 
 header('Location: torrents.php?id='.$GroupID);

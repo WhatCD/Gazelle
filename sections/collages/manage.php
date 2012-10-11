@@ -21,13 +21,13 @@
 
 	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
 	if(count($GroupIDs)>0) {
-		$TorrentList = get_groups($GroupIDs);
+		$TorrentList = Torrents::get_groups($GroupIDs);
 		$TorrentList = $TorrentList['matches'];
 	} else {
 		$TorrentList = array();
 	}
 
-	show_header('Manage collage '.$Name);
+	View::show_header('Manage collage '.$Name);
 
 ?>
 
@@ -85,9 +85,9 @@
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
-			$DisplayName .= display_artists($ExtendedArtists, true, false);
+			$DisplayName .= Artists::display_artists($ExtendedArtists, true, false);
 		} elseif(count($GroupArtists)>0) {
-			$DisplayName .= display_artists(array('1'=>$GroupArtists), true, false);
+			$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists), true, false);
 		}
 		$TorrentLink = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 		$GroupYear = $GroupYear > 0 ? $GroupYear : '';
@@ -104,7 +104,7 @@
 							<td><?=$GroupYear?></td>
 							<td><?=$DisplayName?>	</td>
 							<td><?=$TorrentLink?></td>
-							<td class="nobr"><?=format_username($UserID, $Username)?></td>
+							<td class="nobr"><?=Users::format_username($UserID, $Username)?></td>
 							<td class="nobr">
 								<input type="hidden" name="action" value="manage_handle" />
 								<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -131,4 +131,4 @@
 		</div>
 	</form>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

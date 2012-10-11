@@ -71,11 +71,11 @@ if($ThreadInfo['Posts'] > $PerPage) {
 } else {
 	$PostNum = 1;
 }
-list($Page,$Limit) = page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
+list($Page,$Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
 if(($Page-1)*$PerPage > $ThreadInfo['Posts']) {
 	$Page = ceil($ThreadInfo['Posts']/$PerPage);
 }
-list($CatalogueID,$CatalogueLimit) = catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
+list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
 if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
@@ -96,7 +96,7 @@ if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueI
 		$Cache->cache_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
 	}
 }
-$Thread = catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
+$Thread = Format::catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
 
 if($_GET['updatelastread'] != '0') {
 	$LastPost = end($Thread);
@@ -138,7 +138,7 @@ if(in_array($ThreadID, $UserSubscriptions)) {
 }
 
 // Start printing
-show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],'comments,subscriptions,bbcode');
+View::show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],'comments,subscriptions,bbcode');
 ?>
 <div class="thin">
 	<h2>
@@ -176,7 +176,7 @@ show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],
 			</div>
 		</div>
 <?
-$Pages=get_pages($Page,$ThreadInfo['Posts'],$PerPage,9);
+$Pages=Format::get_pages($Page,$ThreadInfo['Posts'],$PerPage,9);
 echo $Pages;
 ?>
 	</div>
@@ -381,13 +381,13 @@ if($ThreadInfo['StickyPostID']) {
 
 foreach($Thread as $Key => $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
+	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<? if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) { echo ' forum_unread'; } if($HeavyInfo['DisableAvatars']) { echo ' noavatar'; } ?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
-			<div style="float:left;"><a class="post_id" href='forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
-				<?=format_username($AuthorID, true, true, true, true, true)?>
+			<div style="float:left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
+				<?=Users::format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?> 
 <? if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')){ ?> 
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);">[Quote]</a> 
@@ -414,7 +414,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 				<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>">[Report]</a>
 <?
                 if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
-                    $AuthorInfo = user_info($AuthorID);
+                    $AuthorInfo = Users::user_info($AuthorID);
                     if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
                         <form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
 	                        <input type="hidden" name="action" value="warn" />
@@ -451,7 +451,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
-				<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <? } ?>
 			</div>
 		</td>
@@ -478,7 +478,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 					<tr class="colhead_dark">
 						<td colspan="2">
 							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <?=format_username($LoggedUser['ID'], true, true, true, true, true)?> Just now
+								by <?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?> Just now
 							</span>
 							<span id="barpreview" style="float:right;">
 								<a href="#quickreplypreview">[Report Post]</a>
@@ -606,4 +606,4 @@ foreach ($Forums as $Forum) {
 } // If user is moderator
 ?>
 </div>
-<? show_footer();
+<? View::show_footer();

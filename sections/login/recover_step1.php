@@ -1,5 +1,5 @@
 <?
-show_header('Recover Password','validate');
+View::show_header('Recover Password','validate');
 echo $Validate->GenerateJS('recoverform');
 ?>
 <form class="auth_form" name="recovery" id="recoverform" method="post" action="" onsubmit="return formVal();">
@@ -27,5 +27,5 @@ if(empty($Sent) || (!empty($Sent) && $Sent!=1)) {
 	</div>
 </form>
 <?
-show_footer();
+View::show_footer();
 ?>

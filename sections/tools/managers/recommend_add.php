@@ -31,7 +31,7 @@ if(empty($GroupID) || !is_number($GroupID)) {
 }
 
 $DB->query("INSERT INTO torrents_recommended (GroupID, UserID, Time) VALUES ('".db_string($GroupID)."', $LoggedUser[ID], '".sqltime()."')");
-freeleech_groups($GroupID, 2, 3);
+Torrents::freeleech_groups($GroupID, 2, 3);
 
 $Cache->delete_value('recommend');
 header('Location: '.$_SERVER['HTTP_REFERER']);

@@ -53,7 +53,7 @@ function invisible($Image) {
 		$TotalAlpha += $Color['alpha'];
 	}
 	return (($TotalAlpha/$Count) == 127) ? true : false;
-	
+
 }
 
 function is_number($Str) {

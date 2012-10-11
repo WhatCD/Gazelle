@@ -15,7 +15,7 @@ if (isset($_POST['doit'])) {
 	}
 
 	if ($_POST['newtag']) {
-		$TagName = sanitize_tag($_POST['newtag']);
+		$TagName = Misc::sanitize_tag($_POST['newtag']);
 
 		$DB->query("SELECT t.ID FROM tags AS t WHERE t.Name LIKE '".$TagName."'");
 		list($TagID) = $DB->next_record();
@@ -31,7 +31,7 @@ if (isset($_POST['doit'])) {
 	$Cache->delete_value('genre_tags');
 }
 
-show_header('Official Tags');
+View::show_header('Official Tags');
 ?>
 <div class="header">
 	<h2>Official Tags</h2>
@@ -101,4 +101,4 @@ for ($i = 0; $i < $TagCount / 3; $i++) {
 		</form>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

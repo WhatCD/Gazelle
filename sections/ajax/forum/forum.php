@@ -28,7 +28,7 @@ else if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-list($Page,$Limit) = page_limit(TOPICS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(TOPICS_PER_PAGE);
 
 //---------- Get some data to start processing
 
@@ -80,7 +80,7 @@ foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
 	);
 }
 
-$Pages=get_pages($Page,$Forums[$ForumID]['NumTopics'],TOPICS_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$Forums[$ForumID]['NumTopics'],TOPICS_PER_PAGE,9);
 
 if (count($Forum) == 0) {
 	print
@@ -118,9 +118,9 @@ else {
 		} else {
 			$Read = 'read';
 		}
-		$UserInfo = user_info($AuthorID);
+		$UserInfo = Users::user_info($AuthorID);
 		$AuthorName = $UserInfo['Username'];
-		$UserInfo = user_info($LastAuthorID);
+		$UserInfo = Users::user_info($LastAuthorID);
 		$LastAuthorName = $UserInfo['Username'];
 		
 		$JsonTopics[] = array(

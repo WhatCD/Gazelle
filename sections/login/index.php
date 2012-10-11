@@ -14,7 +14,7 @@ if (BLOCK_OPERA_MINI && isset($_SERVER['HTTP_X_OPERAMINI_PHONE'])) {
 }
 
 // Check if IP is banned
-if(site_ban_ip($_SERVER['REMOTE_ADDR'])) {
+if(Tools::site_ban_ip($_SERVER['REMOTE_ADDR'])) {
 	error('Your IP has been banned.');
 }
 
@@ -56,7 +56,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 					$DB->query("UPDATE 
 						users_main AS m,
 						users_info AS i 
-						SET m.PassHash='".db_string(make_crypt_hash($_REQUEST['password']))."',
+						SET m.PassHash='".db_string(Users::make_crypt_hash($_REQUEST['password']))."',
 						i.ResetKey='',
 						i.ResetExpires='0000-00-00 00:00:00' 
 						WHERE m.ID='".db_string($UserID)."' 
@@ -111,7 +111,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 				if ($UserID) {
 					// Email exists in the database
 					// Set ResetKey, send out email, and set $Sent to 1 to show success page
-					$ResetKey=make_secret();
+					$ResetKey=Users::make_secret();
 					$DB->query("UPDATE users_info SET 
 						ResetKey='".db_string($ResetKey)."',
 						ResetExpires='".time_plus(60*60)."' 
@@ -127,7 +127,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 					$TPL->set('SITE_NAME',SITE_NAME);
 					$TPL->set('SITE_URL',NONSSL_SITE_URL);
 
-					send_email($Email,'Password reset information for '.SITE_NAME,$TPL->get(),'noreply');
+					Misc::send_email($Email,'Password reset information for '.SITE_NAME,$TPL->get(),'noreply');
 					$Sent=1; // If $Sent is 1, recover_step1.php displays a success message
 					
 					//Log out all of the users current sessions
@@ -185,7 +185,7 @@ else {
 					WHERE ID='".db_string($AttemptID)."'");
 				
 				if ($Bans>9) { // Automated bruteforce prevention
-					$IP = ip2unsigned($_SERVER['REMOTE_ADDR']);
+					$IP = Tools::ip_to_unsigned($_SERVER['REMOTE_ADDR']);
 					$DB->query("SELECT Reason FROM ip_bans WHERE ".$IP." BETWEEN FromIP AND ToIP");
 					if($DB->record_count() > 0) {
 						//Ban exists already, only add new entry if not for same reason
@@ -236,13 +236,13 @@ else {
 				AND Username<>''");
 			list($UserID,$PermissionID,$CustomPermissions,$PassHash,$Secret,$Enabled)=$DB->next_record(MYSQLI_NUM, array(2));
 			if (strtotime($BannedUntil)<time()) {
-				if ($UserID && check_password($_POST['password'], $PassHash, $Secret)) {
-					if (!is_crypt_hash($PassHash)) {
-						$CryptHash = make_crypt_hash($_POST['password']);
+				if ($UserID && Users::check_password($_POST['password'], $PassHash, $Secret)) {
+					if (!Users::is_crypt_hash($PassHash)) {
+						$CryptHash = Users::make_crypt_hash($_POST['password']);
 						$DB->query("UPDATE users_main SET passhash = '".db_string($CryptHash)."' WHERE ID = $UserID");
 					}
 					if ($Enabled == 1) {
-						$SessionID = make_secret();
+						$SessionID = Users::make_secret();
 						$Cookie = $Enc->encrypt($Enc->encrypt($SessionID.'|~|'.$UserID));
 
 						if(isset($_POST['keeplogged']) && $_POST['keeplogged']) {
@@ -255,7 +255,7 @@ else {
 						
 						//TODO: another tracker might enable this for donors, I think it's too stupid to bother adding that
 						// Because we <3 our staff
-						$Permissions = get_permissions($PermissionID);
+						$Permissions = Permissions::get_permissions($PermissionID);
 						$CustomPermissions = unserialize($CustomPermissions);
 						if (
 							isset($Permissions['Permissions']['site_disable_ip_history']) || 

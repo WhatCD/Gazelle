@@ -20,7 +20,7 @@ if(!check_perms('users_view_keys', $Class)) {
 	error(403);
 }
 
-show_header("PassKey history for $Username");
+View::show_header("PassKey history for $Username");
 
 $DB->query("SELECT 
 	OldPassKey, 
@@ -47,8 +47,8 @@ $DB->query("SELECT
 		<td><?=display_str($OldPassKey)?></td>
 		<td><?=display_str($NewPassKey)?></td>
 		<td><?=time_diff($ChangeTime)?></td>
-		<td><?=display_str($ChangerIP)?> [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" title="Search">S</a>]<br /><?=display_str(gethostbyip($ChangerIP))?></td>
+		<td><?=display_str($ChangerIP)?> [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" title="Search">S</a>]<br /><?=display_str(Tools::get_host_by_ip($ChangerIP))?></td>
 	</tr>
 <? } ?>
 </table>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

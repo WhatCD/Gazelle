@@ -41,7 +41,7 @@ if($LoggedUser['DisablePosting']) {
 	error('Your posting rights have been removed');
 }
 
-$Title = cut_string(trim($_POST['title']), 150, 1, 0);
+$Title = Format::cut_string(trim($_POST['title']), 150, 1, 0);
 
 
 $ForumID = $_POST['forum'];

@@ -1,6 +1,6 @@
 <?
 enforce_login();
-show_header('Donation Complete');
+View::show_header('Donation Complete');
 ?>
 <div class="thin">
 	<div class="header">
@@ -10,4 +10,4 @@ show_header('Donation Complete');
 		<p>Thank you for your donation! If this is your first time donating you will now have received 2 invitations and a <img src="<?=STATIC_SERVER?>common/symbols/donor.png" alt="Donor" />.</p>
 	</div>
 </div>
-<? show_footer();?>
+<? View::show_footer();?>

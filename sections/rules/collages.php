@@ -1,6 +1,6 @@
 <?
 //Include the header
-show_header('Collages Rules');
+View::show_header('Collages Rules');
 ?>
 <div class="thin">
 	<div class="header">
@@ -55,5 +55,5 @@ show_header('Collages Rules');
 <? include('jump.php'); ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

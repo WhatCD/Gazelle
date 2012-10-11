@@ -18,7 +18,7 @@ if (list($TagName) = $DB->next_record()) {
 $DB->query("DELETE FROM torrents_tags_votes WHERE GroupID='$GroupID' AND TagID='$TagID'");
 $DB->query("DELETE FROM torrents_tags WHERE GroupID='$GroupID' AND TagID='$TagID'");
 
-update_hash($GroupID);
+Torrents::update_hash($GroupID);
 
 $DB->query("SELECT COUNT(GroupID) FROM torrents_tags WHERE TagID=".$TagID);
 list($Count) = $DB->next_record();

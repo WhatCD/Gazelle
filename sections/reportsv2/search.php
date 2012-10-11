@@ -6,7 +6,7 @@ if(!check_perms('admin_reports')){
 	error(403);
 }
 
-show_header('Reports V2!', 'reportsv2');
+View::show_header('Reports V2!', 'reportsv2');
 
 ?>
 <div class="header">
@@ -16,5 +16,5 @@ show_header('Reports V2!', 'reportsv2');
 <br />
 On hold until FZeroX fixes the main torrents search; then I will steal all his work and claim it as my own.
 <?
-show_footer();
+View::show_footer();
 ?>

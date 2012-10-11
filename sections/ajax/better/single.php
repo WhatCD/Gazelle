@@ -13,7 +13,7 @@ if(($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
 	$Cache->cache_value('better_single_groupids', $GroupIDs, 30*60);
 }
 
-$Results = get_groups(array_keys($GroupIDs));
+$Results = Torrents::get_groups(array_keys($GroupIDs));
 
 $Results = $Results['matches'];
 

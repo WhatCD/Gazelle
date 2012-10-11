@@ -6,7 +6,7 @@ if(!check_perms('users_mod')) {
 }
 
 define('ANNOUNCEMENT_FORUM_ID', 19);
-show_header('Staff Blog','bbcode');
+View::show_header('Staff Blog','bbcode');
 require(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
@@ -130,5 +130,5 @@ foreach ($Blog as $BlogItem) {
 ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

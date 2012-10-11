@@ -6,7 +6,7 @@ if ((!isset($argv[1]) || $argv[1]!=SCHEDULE_KEY) && !check_perms('admin_schedule
 }
 
 if (check_perms('admin_schedule')) {
-	show_header();
+	View::show_header();
 	echo '<pre>';
 }
 
@@ -76,6 +76,6 @@ $DB->query("INSERT INTO torrents_peerlists SELECT * FROM torrents_peerlists_comp
 
 if (check_perms('admin_schedule')) {	
 	echo '<pre>';
-	show_footer();
+	View::show_footer();
 }
 ?>

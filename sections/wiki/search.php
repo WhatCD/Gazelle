@@ -7,7 +7,7 @@ if(empty($_GET['nojump'])) {
 }
 
 define('ARTICLES_PER_PAGE', 25);
-list($Page,$Limit) = page_limit(ARTICLES_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(ARTICLES_PER_PAGE);
 
 $OrderVals = array('Title', 'Created', 'Edited');
 $WayVals = array('Ascending', 'Descending');
@@ -50,7 +50,7 @@ $RS = $DB->query($SQL);
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 
-show_header('Search articles');
+View::show_header('Search articles');
 $DB->set_query_id($RS);
 ?>
 <div class="thin">
@@ -105,7 +105,7 @@ $DB->set_query_id($RS);
 	<br />
 	<div class="linkbox">
 <?
-$Pages=get_pages($Page,$NumResults,ARTICLES_PER_PAGE);
+$Pages=Format::get_pages($Page,$NumResults,ARTICLES_PER_PAGE);
 echo $Pages;
 ?>
 	</div>
@@ -119,10 +119,10 @@ echo $Pages;
 	<tr>
 		<td><a href="wiki.php?action=article&amp;id=<?=$ID?>"><?=$Title?></a></td>
 		<td><?=$Date?></td>
-		<td><?=format_username($UserID, false, false, false)?></td>
+		<td><?=Users::format_username($UserID, false, false, false)?></td>
 	</tr>
 <? } ?>
 </table>
 	<div class="linkbox"><?=$Pages?></div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

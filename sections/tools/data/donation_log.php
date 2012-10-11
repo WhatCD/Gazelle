@@ -4,7 +4,7 @@ if(!check_perms('admin_donor_log')) { error(403); }
 include(SERVER_ROOT.'/sections/donate/config.php');
 
 define('DONATIONS_PER_PAGE', 50);
-list($Page,$Limit) = page_limit(DONATIONS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(DONATIONS_PER_PAGE);
 
 
 $sql = "SELECT 
@@ -43,7 +43,7 @@ if (empty($_GET['search']) && !isset($_GET['page']) && !$DonationTimeline = $Cac
 	$Cache->cache_value('donation_timeline',$DonationTimeline,mktime(0,0,0,date('n')+1,2));
 }
 
-show_header('Donation log');
+View::show_header('Donation log');
 if (empty($_GET['search']) && !isset($_GET['page'])) {
 ?>
 <div class="box pad">
@@ -69,7 +69,7 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 <br />
 <div class="linkbox">
 <?
-	$Pages=get_pages($Page,$Results,DONATIONS_PER_PAGE,11) ;
+	$Pages=Format::get_pages($Page,$Results,DONATIONS_PER_PAGE,11) ;
 	echo $Pages;
 ?>
 </div>
@@ -85,7 +85,7 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 		list($UserID, $Amount, $Currency, $Email, $DonationTime) = $Donation;
 ?>
 	<tr>
-		<td><?=format_username($UserID, true, true, true, true)?></td>
+		<td><?=Users::format_username($UserID, true, true, true, true)?></td>
 		<td><?=display_str($Amount)?> <?=$Currency?></td>
 		<td><?=display_str($Email)?></td>
 		<td><?=time_diff($DonationTime)?></td>
@@ -95,4 +95,4 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 <div class="linkbox">
 	<?=$Pages?>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

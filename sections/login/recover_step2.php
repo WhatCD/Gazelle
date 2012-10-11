@@ -1,5 +1,5 @@
 <?
-show_header('Recover Password','validate');
+View::show_header('Recover Password','validate');
 echo $Validate->GenerateJS('recoverform');
 ?>
 <script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
@@ -34,5 +34,5 @@ if(empty($Reset)) {
 	</div>
 </form>
 <?
-show_footer();
+View::show_footer();
 ?>

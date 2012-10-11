@@ -1,6 +1,6 @@
 <?
 
-show_header('Staff Inbox');
+View::show_header('Staff Inbox');
 
 $View = display_str($_GET['view']);
 $UserLevel = $LoggedUser['EffectiveClass'];
@@ -42,7 +42,7 @@ switch ($View) {
 		break;
 }
 
-list($Page,$Limit) = page_limit(MESSAGES_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 // Get messages
 $StaffPMs = $DB->query("
 	SELECT
@@ -66,13 +66,13 @@ $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($StaffPMs);
 
-$CurURL = get_url();
+$CurURL = Format::get_url();
 if(empty($CurURL)) {
 	$CurURL = "staffpm.php?";
 } else {
 	$CurURL = "staffpm.php?".$CurURL."&";
 }
-$Pages=get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
 
 $Row = 'a';
 
@@ -137,8 +137,8 @@ if ($DB->record_count() == 0) {
 		$Row = ($Row === 'a') ? 'b' : 'a';
 		$RowClass = 'row'.$Row;
 
-		//$UserInfo = user_info($UserID);
-		$UserStr = format_username($UserID, true, true, true, true);
+		//$UserInfo = Users::user_info($UserID);
+		$UserStr = Users::format_username($UserID, true, true, true, true);
 
 		// Get assigned
 		if ($AssignedToUser == '') {
@@ -149,15 +149,15 @@ if ($DB->record_count() == 0) {
 
 		} else {
 			// Assigned to user
-			// $UserInfo = user_info($AssignedToUser);
-			$Assigned = format_username($AssignedToUser, true, true, true, true);
+			// $UserInfo = Users::user_info($AssignedToUser);
+			$Assigned = Users::format_username($AssignedToUser, true, true, true, true);
 
 		}
 
 		// Get resolver
 		if ($ViewString == 'Resolved') {
-			//$UserInfo = user_info($ResolverID);
-			$ResolverStr = format_username($ResolverID, true, true, true, true);
+			//$UserInfo = Users::user_info($ResolverID);
+			$ResolverStr = Users::format_username($ResolverID, true, true, true, true);
 		}
 
 		// Table row
@@ -196,6 +196,6 @@ if ($DB->record_count() == 0) {
 </div>
 <?
 
-show_footer();
+View::show_footer();
 
 ?>

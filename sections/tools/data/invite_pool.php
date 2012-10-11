@@ -1,8 +1,8 @@
 <?
 if(!check_perms('users_view_invites')) { error(403); }
-show_header('Invite Pool');
+View::show_header('Invite Pool');
 define('INVITES_PER_PAGE', 50);
-list($Page,$Limit) = page_limit(INVITES_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(INVITES_PER_PAGE);
 
 if(!empty($_POST['invitekey']) && check_perms('users_edit_invites')) {
 	authorize();
@@ -56,7 +56,7 @@ $DB->set_query_id($RS);
 	</div>
 	<div class="linkbox">
 <?
-	$Pages=get_pages($Page,$Results,INVITES_PER_PAGE,11) ;
+	$Pages=Format::get_pages($Page,$Results,INVITES_PER_PAGE,11) ;
 	echo $Pages;
 ?>
 	</div>
@@ -76,7 +76,7 @@ $DB->set_query_id($RS);
 	$Row = ($Row == 'b') ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
-			<td><?=format_username($UserID, true, true, true, true)?></td>
+			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
 			<td><?=display_str($Email)?></td>
 			<td><?=display_str($InviteKey)?></td>
 			<td><?=time_diff($Expires)?></td>
@@ -96,4 +96,4 @@ $DB->set_query_id($RS);
 	<div class="linkbox">
 <? echo $Pages; ?>
 	</div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

@@ -2,7 +2,7 @@
 if (!check_perms('users_mod')) {
 	error(403);
 }
-show_header('Staff Tools');
+View::show_header('Staff Tools');
 ?>
 <div class="permissions">
 	<div class="permission_container">
@@ -100,4 +100,4 @@ if (check_perms('admin_update_geoip')) { ?>
 		</table>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

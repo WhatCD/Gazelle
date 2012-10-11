@@ -10,7 +10,7 @@ if(isset($_GET['details'])) {
 	$Details = 'all';
 }
 
-show_header('Top 10 Users');
+View::show_header('Top 10 Users');
 ?>
 <div class="thin">
 	<div class="header">
@@ -92,7 +92,7 @@ $BaseQuery = "SELECT
 
 
 echo '</div>';
-show_footer();
+View::show_footer();
 exit;
 
 // generate a table based on data from most recent query to $DB
@@ -151,13 +151,13 @@ function generate_user_table($Caption, $Tag, $Details, $Limit) {
 ?>
 	<tr class="row<?=$Highlight?>">
 		<td class="center"><?=$Rank?></td>
-		<td><?=format_username($Detail['ID'], false, false, false)?></td>
-		<td style="text-align:right"><?=get_size($Detail['Uploaded'])?></td>
-		<td style="text-align:right"><?=get_size($Detail['UpSpeed'])?>/s</td>
-		<td style="text-align:right"><?=get_size($Detail['Downloaded'])?></td>
-		<td style="text-align:right"><?=get_size($Detail['DownSpeed'])?>/s</td>
+		<td><?=Users::format_username($Detail['ID'], false, false, false)?></td>
+		<td style="text-align:right"><?=Format::get_size($Detail['Uploaded'])?></td>
+		<td style="text-align:right"><?=Format::get_size($Detail['UpSpeed'])?>/s</td>
+		<td style="text-align:right"><?=Format::get_size($Detail['Downloaded'])?></td>
+		<td style="text-align:right"><?=Format::get_size($Detail['DownSpeed'])?>/s</td>
 		<td style="text-align:right"><?=number_format($Detail['NumUploads'])?></td>
-		<td style="text-align:right"><?=ratio($Detail['Uploaded'], $Detail['Downloaded'])?></td>
+		<td style="text-align:right"><?=Format::get_ratio_html($Detail['Uploaded'], $Detail['Downloaded'])?></td>
 		<td style="text-align:right"><?=time_diff($Detail['JoinDate'])?></td>
 	</tr>
 <?

@@ -8,7 +8,7 @@ if(!check_perms('admin_reports')){
 	error(403);
 }
 
-show_header('Reports V2!', 'reportsv2');
+View::show_header('Reports V2!', 'reportsv2');
 ?>
 <script type="text/javascript">
 function Taste(torrent_id, report_id, taste) {
@@ -37,5 +37,5 @@ function Taste(torrent_id, report_id, taste) {
 <div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto">
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

@@ -9,8 +9,8 @@ if(!check_perms('zip_downloader')) {
 	error(403);
 }
 
-$User = user_info($UserID);
-$Perms = get_permissions($User['PermissionID']);
+$User = Users::user_info($UserID);
+$Perms = Permissions::get_permissions($User['PermissionID']);
 $UserClass = $Perms['Class'];
 
 require(SERVER_ROOT.'/classes/class_torrent.php');
@@ -59,13 +59,13 @@ $DB->query("SELECT
 	".$SQL."
 	GROUP BY t.ID");
 $Downloads = $DB->to_array(false,MYSQLI_NUM,false);
-$Artists = get_artists($DB->collect('GroupID'));
+$Artists = Artists::get_artists($DB->collect('GroupID'));
 
-list($UserID, $Username) = array_values(user_info($UserID));
+list($UserID, $Username) = array_values(Users::user_info($UserID));
 $Zip = new ZIP($Username.'\'s '.ucfirst($_GET['type']));
 foreach($Downloads as $Download) {
 	list($Month, $GroupID, $Media, $Format, $Encoding, $Year, $Album, $Size, $Contents) = $Download;
-	$Artist = display_artists($Artists[$GroupID],false,true,false);
+	$Artist = Artists::display_artists($Artists[$GroupID],false,true,false);
 	$Contents = unserialize(base64_decode($Contents));
 	$Tor = new TORRENT($Contents, true);
 	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');
@@ -94,12 +94,12 @@ foreach($Downloads as $Download) {
 
 	if (!$TorrentName) { $TorrentName="No Name"; }
 
-	$FileName = file_string($TorrentName);
+	$FileName = Misc::file_string($TorrentName);
 	if ($Browser == 'Internet Explorer') {
 		$FileName = urlencode($FileName);
 	}
 	$FileName .= '.torrent';
-	$Zip->add_file($Tor->enc(), file_string($Month).'/'.$FileName);
+	$Zip->add_file($Tor->enc(), Misc::file_string($Month).'/'.$FileName);
 }
 $Zip->close_stream();
 

@@ -1,6 +1,6 @@
 <?
 //Include the header
-show_header('Rule Index');
+View::show_header('Rule Index');
 ?>
 <!-- General Rules -->
 <div class="thin">
@@ -31,5 +31,5 @@ show_header('Rule Index');
 <? include('jump.php'); ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

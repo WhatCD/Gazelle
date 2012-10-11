@@ -11,7 +11,7 @@ function class_list($Selected=0){
 		if($Selected == $Level){
 			$Return.=' selected="selected"';
 		}
-		$Return.='>'.cut_string($Name, 20, 1).'</option>'."\n";
+		$Return.='>'.Format::cut_string($Name, 20, 1).'</option>'."\n";
 	}
 	reset($Classes);
 	return $Return;
@@ -19,7 +19,7 @@ function class_list($Selected=0){
 
 if(!check_perms('admin_manage_forums')) { error(403); }
 
-show_header('Forum Management');
+View::show_header('Forum Management');
 $DB->query('SELECT ID, Name FROM forums ORDER BY Sort');
 $ForumArray = $DB->to_array(); // used for generating the 'parent' drop down list
 
@@ -168,4 +168,4 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 		</form>
 	</tr>
 </table>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

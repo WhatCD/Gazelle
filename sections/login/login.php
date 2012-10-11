@@ -1,4 +1,4 @@
-<? show_header('Login'); ?>
+<? View::show_header('Login'); ?>
 	<span id="no-cookies" class="hidden warning">You appear to have cookies disabled.<br /><br /></span>
 	<noscript><span class="warning">You appear to have javascript disabled.</span><br /><br /></noscript> 
 <?
@@ -63,4 +63,4 @@ if (cookie.get('cookie_test') != null) {
 	$('#no-cookies').show();
 }
 </script>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

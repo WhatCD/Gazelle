@@ -2,7 +2,7 @@
 if(!check_perms('site_recommend_own') && !check_perms('site_manage_recommendations')){
 	error(403);
 }
-show_header('Recommendations');
+View::show_header('Recommendations');
 
 $DB->query("SELECT 
 	tr.GroupID,
@@ -43,7 +43,7 @@ $DB->query("SELECT
 	while(list($GroupID, $UserID, $GroupName, $ArtistID, $ArtistName)=$DB->next_record()) {
 ?>
 			<li>
-				<strong><?=format_username($UserID, false, false, false)?></strong>
+				<strong><?=Users::format_username($UserID, false, false, false)?></strong>
 <?		if($ArtistID){ ?> 
 				- <a href="artist.php?id=<?=$ArtistID?>"><?=$ArtistName?></a>
 <?		} ?> 
@@ -56,4 +56,4 @@ $DB->query("SELECT
 		</ul>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

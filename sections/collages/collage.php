@@ -83,7 +83,7 @@ if(!is_array($TorrentList)) {
 	$GroupIDs = $DB->collect('GroupID');
 	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
 	if(count($GroupIDs)>0) {
-		$TorrentList = get_groups($GroupIDs);
+		$TorrentList = Torrents::get_groups($GroupIDs);
 		$TorrentList = $TorrentList['matches'];
 	} else {
 		$TorrentList = array();
@@ -157,9 +157,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
-			$DisplayName .= display_artists($ExtendedArtists);
+			$DisplayName .= Artists::display_artists($ExtendedArtists);
 	} elseif(count($GroupArtists)>0) {
-			$DisplayName .= display_artists(array('1'=>$GroupArtists));
+			$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists));
 	}
 	
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
@@ -255,9 +255,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <?			} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
-			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=torrent_info($Torrent)?></a>
+			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
-		<td class="nobr"><?=get_size($Torrent['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
 		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
@@ -295,7 +295,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			<strong><?=$DisplayName?></strong>
 			<?=$TorrentTags?>
 		</td>
-		<td class="nobr"><?=get_size($Torrent['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
 		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
@@ -312,9 +312,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
 		unset($ExtendedArtists[2]);
 		unset($ExtendedArtists[3]);
-		$DisplayName .= display_artists($ExtendedArtists, false);
+		$DisplayName .= Artists::display_artists($ExtendedArtists, false);
 	} elseif(count($GroupArtists)>0) {
-		$DisplayName .= display_artists(array('1'=>$GroupArtists), false);
+		$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists), false);
 	}
 	$DisplayName .= $GroupName;
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
@@ -361,7 +361,7 @@ for ($i=0; $i < $NumGroups/$CollageCovers; $i++) {
 	$CollagePages[] = $CollagePage;
 }
 
-show_header($Name,'browse,collage,bbcode');
+View::show_header($Name,'browse,collage,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -521,7 +521,7 @@ foreach ($Users as $ID => $User) {
 	$i++;
 	if($i>5) { break; }
 ?>
-					<li><?=format_username($ID, false, false, false)?> (<?=$User['count']?>)</li>
+					<li><?=Users::format_username($ID, false, false, false)?> (<?=$User['count']?>)</li>
 <?
 }
 ?>
@@ -575,7 +575,7 @@ foreach ($CommentList as $Comment) {
 	list($CommentID, $Body, $UserID, $Username, $CommentTime) = $Comment;
 ?>
 		<div class="box comment">
-			<div class="head">By <?=format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>">[Report Comment]</a></div>
+			<div class="head">By <?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>">[Report Comment]</a></div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
 <?
@@ -648,7 +648,7 @@ if($CollageCovers != 0) { ?>
 	</div>
 </div>
 <?
-show_footer();
+View::show_footer();
 
 $Cache->cache_value('collage_'.$CollageID, serialize(array(array($Name, $Description, $CollageDataList, $TorrentList, $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser))), 3600);
 ?>

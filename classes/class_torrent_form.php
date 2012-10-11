@@ -93,9 +93,9 @@ class TORRENT_FORM {
 				</td>
 				<td>
 				<select id="categories" name="type" onchange="Categories()"<?=$this->Disabled?>>
-<?			foreach(display_array($this->Categories) as $Index => $Cat) {
+<?			foreach(Misc::display_array($this->Categories) as $Index => $Cat) {
 				echo "<option value=\"$Index\"";
-				if($Cat == $this->Torrent['CategoryName']) { echo ' selected="selected"'; }
+				if($Cat == $this->Torrent['CategoryName']) { echo " selected='selected'"; }
 				echo ">";
 				echo $Cat;
 				echo "</option>\n";
@@ -398,7 +398,7 @@ function hide() {
 				<td>
 					<select id="format" name="format" onchange="Format()">
 						<option>---</option>
-<?		foreach(display_array($this->Formats) as $Format) {
+<?		foreach(Misc::display_array($this->Formats) as $Format) {
 			echo "<option value='$Format'";
 			if($Format == $Torrent['Format']) { echo " selected='selected'"; }
 			echo ">";
@@ -432,7 +432,7 @@ function hide() {
 		$SimpleBitrate = $SimpleBitrate[0];
 		
 		
-		foreach(display_array($this->Bitrates) as $Bitrate) {
+		foreach(Misc::display_array($this->Bitrates) as $Bitrate) {
 			echo "<option value='$Bitrate'";
 			if(($SimpleBitrate && preg_match('/^'.$SimpleBitrate.'.*/', $Bitrate)) || ($OtherBitrate && $Bitrate == "Other")) {
 				echo ' selected="selected"';
@@ -580,7 +580,7 @@ function hide() {
 <?			if($GenreTags) { ?>
 					<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;" <?=$this->Disabled?>>
 						<option>---</option>
-<?				foreach(display_array($GenreTags) as $Genre) { ?>
+<?				foreach(Misc::display_array($GenreTags) as $Genre) { ?>
 						<option value="<?=$Genre ?>"><?=$Genre ?></option>
 <?				} ?>
 					</select>
@@ -655,7 +655,7 @@ function hide() {
 					<select name="format" onchange="Format()">
 						<option value="">---</option>
 <?
-		foreach(display_array($this->Formats) as $Format) {
+		foreach(Misc::display_array($this->Formats) as $Format) {
 			echo "<option value='$Format'";
 			if($Format == $Torrent['Format']) { echo " selected='selected'"; }
 			echo ">";
@@ -681,7 +681,7 @@ function hide() {
 		} else {
 			$OtherBitrate = false;
 		}
-		foreach(display_array($this->Bitrates) as $Bitrate) {
+		foreach(Misc::display_array($this->Bitrates) as $Bitrate) {
 			echo "<option value='$Bitrate'";
 			if($Bitrate == $Torrent['Bitrate'] || ($OtherBitrate && $Bitrate == "Other")) {
 				echo " selected='selected'";

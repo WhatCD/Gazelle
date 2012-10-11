@@ -1,7 +1,7 @@
 <?
 if(!check_perms('users_mod')) { error(404); }
 //if(!check_perms('site_top10_history')) { error(403); }
-show_header('Top 10 Torrents history!');
+View::show_header('Top 10 Torrents history!');
 ?>
 <div class="thin">
 	<div class="header">
@@ -109,10 +109,10 @@ if(!empty($_GET['date'])) {
 			//Group still exists
 			$DisplayName='';
 			
-			$Artists = get_artist($GroupID);
+			$Artists = Artists::get_artist($GroupID);
 			
 			if(!empty($Artists)) {
-				$DisplayName = display_artists($Artists, true, true);
+				$DisplayName = Artists::display_artists($Artists, true, true);
 			}
 			
 			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID'  title='View Torrent'>$GroupName</a>";
@@ -180,5 +180,5 @@ if(!empty($_GET['date'])) {
 </div>
 <?
 }
-show_footer();
+View::show_footer();
 ?>

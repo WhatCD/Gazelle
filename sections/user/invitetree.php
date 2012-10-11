@@ -15,19 +15,19 @@ if(isset($_GET['userid']) && check_perms('users_view_invites')){
 	$Sneaky = false;
 }
 
-list($UserID, $Username, $PermissionID) = array_values(user_info($UserID));
+list($UserID, $Username, $PermissionID) = array_values(Users::user_info($UserID));
 
 include(SERVER_ROOT.'/classes/class_invite_tree.php');
 $Tree = new INVITE_TREE($UserID);
 
-show_header($Username.' &gt; Invites &gt; Tree');
+View::show_header($Username.' &gt; Invites &gt; Tree');
 ?>
 <div class="thin">
 	<div class="header">
-		<h2><?=format_username($UserID, false, false, false)?> &gt; <a href="user.php?action=invite&amp;userid=<?=$UserID?>">Invites</a> &gt; Tree</h2>
+		<h2><?=Users::format_username($UserID, false, false, false)?> &gt; <a href="user.php?action=invite&amp;userid=<?=$UserID?>">Invites</a> &gt; Tree</h2>
 	</div>
 	<div class="box pad">
 <?	$Tree->make_tree(); ?>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

@@ -8,7 +8,7 @@ if($Edit > $LoggedUser['EffectiveClass']){
 	error('You do not have access to edit this article.');
 }
 
-show_header('Edit '.$Title);
+View::show_header('Edit '.$Title);
 ?>
 <div class="thin">
 	<div class="box pad">
@@ -35,4 +35,4 @@ show_header('Edit '.$Title);
 		</form>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

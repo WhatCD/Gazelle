@@ -2,7 +2,7 @@
 
 function notify ($Channel, $Message) {
 	global $LoggedUser;
-	send_irc("PRIVMSG ".$Channel." :".$Message." error by ".(!empty($LoggedUser['ID']) ? "https://".SSL_SITE_URL."/user.php?id=".$LoggedUser['ID'] ." (".$LoggedUser['Username'].")" : $_SERVER['REMOTE_ADDR']." (".geoip($_SERVER['REMOTE_ADDR']).")")." accessing https://".SSL_SITE_URL."".$_SERVER['REQUEST_URI'].(!empty($_SERVER['HTTP_REFERER'])? " from ".$_SERVER['HTTP_REFERER'] : ''));
+	send_irc("PRIVMSG ".$Channel." :".$Message." error by ".(!empty($LoggedUser['ID']) ? "https://".SSL_SITE_URL."/user.php?id=".$LoggedUser['ID'] ." (".$LoggedUser['Username'].")" : $_SERVER['REMOTE_ADDR']." (".Tools::geoip($_SERVER['REMOTE_ADDR']).")")." accessing https://".SSL_SITE_URL."".$_SERVER['REQUEST_URI'].(!empty($_SERVER['HTTP_REFERER'])? " from ".$_SERVER['HTTP_REFERER'] : ''));
 }
 
 $Errors = array('403','404','413','504');
@@ -47,7 +47,7 @@ if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 	}
 
 	if(empty($Ajax) && $Error != -1) {
-		show_header($Title);
+		View::show_header($Title);
 ?>
 	<div class="thin">
 		<div class="header">
@@ -58,7 +58,7 @@ if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 		</div>
 	</div>
 <?
-		show_footer();
+		View::show_footer();
 	} else {
 		echo $Description;
 	}

@@ -53,9 +53,9 @@ if(!is_array($Info) || !array_key_exists('PlainArtists', $Info) || empty($Info[1
 		error(404);
 	}
 	$Info = array($DB->next_record(MYSQLI_NUM, array(4,5,6,10)));
-	$Artists = get_artist($Info[0][4],false);
-	$Info['Artists'] = display_artists($Artists, false, true);
-	$Info['PlainArtists'] = display_artists($Artists, false, true, false);
+	$Artists = Artists::get_artist($Info[0][4],false);
+	$Info['Artists'] = Artists::display_artists($Artists, false, true);
+	$Info['PlainArtists'] = Artists::display_artists($Artists, false, true, false);
 	$Cache->cache_value('torrent_download_'.$TorrentID, $Info, 0);
 }
 if(!is_array($Info[0])) {
@@ -74,7 +74,7 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 		}
 	}
 	else {
-		$UInfo = user_heavy_info($UserID);
+		$UInfo = Users::user_heavy_info($UserID);
 		if ($UInfo['CanLeech'] != '1') {
 			error('You may not use tokens while leech disabled.');
 		}
@@ -97,7 +97,7 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 		}
 		
 		// Let the tracker know about this
-		if (!update_tracker('add_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID))) {
+		if (!Tracker::update_tracker('add_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID))) {
 			error("Sorry! An error occurred while trying to register your token. Most often, this is due to the tracker being down or under heavy load. Please try again later.");
 		}
 		
@@ -115,7 +115,7 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 			$DB->query("UPDATE users_main SET FLTokens = FLTokens - 1 WHERE ID=$UserID");
 			
 			// Fix for downloadthemall messing with the cached token count
-			$UInfo = user_heavy_info($UserID);
+			$UInfo = Users::user_heavy_info($UserID);
 			$FLTokens = $UInfo['FLTokens'];
 			
 			$Cache->begin_transaction('user_info_heavy_'.$UserID);
@@ -197,9 +197,9 @@ if(!empty($_GET['mode']) && $_GET['mode'] == 'bbb'){
 
 if (!$TorrentName) { $TorrentName="No Name"; }
 
-$FileName = ($Browser == 'Internet Explorer') ? urlencode(file_string($TorrentName)) : file_string($TorrentName);
+$FileName = ($Browser == 'Internet Explorer') ? urlencode(Misc::file_string($TorrentName)) : Misc::file_string($TorrentName);
 $MaxLength = $DownloadAlt ? 192 : 196;
-$FileName = cut_string($FileName, $MaxLength, true, false);
+$FileName = Format::cut_string($FileName, $MaxLength, true, false);
 $FileName = $DownloadAlt ? $FileName.'.txt' : $FileName.'.torrent';
 
 

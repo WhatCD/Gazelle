@@ -47,11 +47,11 @@ if ($DB->record_count()>0) {
 	// Save this because send_pm uses $DB to run its own query... Oops...
 	$Snatchers = $DB->to_array();
 	foreach ($Snatchers as $UserID) { 
-		send_pm($UserID[0],0,db_string($Subject),db_string($Message)); 
+		Misc::send_pm($UserID[0],0,db_string($Subject),db_string($Message)); 
 	}
 }
 
-write_log($LoggedUser['Username']." sent mass notice to snatches of torrent $TorrentID in group $GroupID");
+Misc::write_log($LoggedUser['Username']." sent mass notice to snatches of torrent $TorrentID in group $GroupID");
 
 header("Location: torrents.php?id=$GroupID");
 

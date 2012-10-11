@@ -152,6 +152,6 @@ function get_group_requests($GroupID) {
 		$Requests = $DB->collect('ID');
 		$Cache->cache_value('requests_group_'.$GroupID, $Requests, 0);
 	}
-	$Requests = get_requests($Requests);
+	$Requests = Requests::get_requests($Requests);
 	return $Requests['matches'];
 }

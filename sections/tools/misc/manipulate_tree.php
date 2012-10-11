@@ -6,7 +6,7 @@ if (
 	!check_perms('users_edit_invites') && 
 	!check_perms('users_disable_any')
 ) { error(404); }
-show_header("Manipulate Invite Tree");
+View::show_header("Manipulate Invite Tree");
 
 if($_POST['id']) {
 	authorize();
@@ -132,4 +132,4 @@ if($_POST['id']) {
 	</form>
 </div>
 
-<? show_footer(); ?>
+<? View::show_footer(); ?>

@@ -48,7 +48,7 @@ $CachedScripts = eaccelerator_cached_scripts();
 
 
 
-show_header("Opcode Stats");
+View::show_header("Opcode Stats");
 ?>
 <div class="thin">
 	<div>
@@ -95,11 +95,11 @@ show_header("Opcode Stats");
 		</tr>
 		<tr>
 			<td>Total Storage:</td>
-			<td><?=get_size($Opcode['memorySize'])?></td>
+			<td><?=Format::get_size($Opcode['memorySize'])?></td>
 			<td>Used Storage:</td>
-			<td><?=get_size($Opcode['memoryAllocated'])?> (<?=number_format(($Opcode['memoryAllocated']/$Opcode['memorySize'])*100, 3);?>%)</td>
+			<td><?=Format::get_size($Opcode['memoryAllocated'])?> (<?=number_format(($Opcode['memoryAllocated']/$Opcode['memorySize'])*100, 3);?>%)</td>
 			<td>Free Storage:</td>
-			<td><?=get_size($Opcode['memoryAvailable'])?> (<?=number_format(($Opcode['memoryAvailable']/$Opcode['memorySize'])*100, 3);?>%)</td>
+			<td><?=Format::get_size($Opcode['memoryAvailable'])?> (<?=number_format(($Opcode['memoryAvailable']/$Opcode['memorySize'])*100, 3);?>%)</td>
 		</tr>
 		<tr>
 			<td>Cached Scripts:</td>
@@ -134,7 +134,7 @@ foreach ($CachedScripts as $Script) {
 		<tr class="row<?=$Row?>">
 			<td><?=$FilePath?></td>
 			<td><?=time_diff($Modified)?></td>
-			<td><?=get_size($Size)?></td>
+			<td><?=Format::get_size($Size)?></td>
 			<td><?=number_format($Hits)?></td>
 		</tr>
 <?
@@ -142,4 +142,4 @@ foreach ($CachedScripts as $Script) {
 ?>
 	</table>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

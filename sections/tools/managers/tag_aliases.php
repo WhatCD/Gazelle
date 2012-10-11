@@ -2,7 +2,7 @@
 if (!check_perms('users_mod')) { error(403);
 }
 
-show_header('Tag Aliases');
+View::show_header('Tag Aliases');
 
 $orderby = ($_GET['order']) == "badtags" ? "BadTag" : "AliasTag";        
 
@@ -77,4 +77,4 @@ while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 	</tr>
 	<? }?>
 </table>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

@@ -1,12 +1,12 @@
 <?php
 if (!check_perms('users_warn')) { error(404);}
-isset_request($_POST, array('groupid', 'postid', 'userid', 'key'));
+Misc::assert_isset_request($_POST, array('groupid', 'postid', 'userid', 'key'));
 
 $GroupID = (int) $_POST['groupid'];
 $PostID = (int) $_POST['postid'];
 $UserID = (int) $_POST['userid'];
 $Key = (int) $_POST['key'];
-$UserInfo = user_info($UserID);
+$UserInfo = Users::user_info($UserID);
 $DB -> query("SELECT
     tc.Body,
     tc.AddedTime
@@ -14,7 +14,7 @@ $DB -> query("SELECT
     WHERE tc.ID='" . db_string($PostID) . "'");
 list($PostBody) = $DB -> next_record();
 
-show_header('Warn User');
+View::show_header('Warn User');
 ?>
 
 <div class="thin">
@@ -66,4 +66,4 @@ show_header('Warn User');
 		</form>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

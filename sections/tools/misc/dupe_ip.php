@@ -1,9 +1,9 @@
 <?
 if(!check_perms('users_view_ips')) { error(403); }
-show_header('Dupe IPs');
+View::show_header('Dupe IPs');
 define('USERS_PER_PAGE', 50);
 define('IP_OVERLAPS', 5);
-list($Page,$Limit) = page_limit(USERS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 
 
 $RS = $DB->query("SELECT 
@@ -31,7 +31,7 @@ if($DB->record_count()) {
 ?>
 	<div class="linkbox">
 <?
-	$Pages=get_pages($Page,$Results,USERS_PER_PAGE, 11) ;
+	$Pages=Format::get_pages($Page,$Results,USERS_PER_PAGE, 11) ;
 	echo $Pages;
 ?>
 	</div>
@@ -47,8 +47,8 @@ if($DB->record_count()) {
 	$Row = ($Row == 'b') ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
-			<td><?=format_username($UserID, true, true, true, true)?></td>
-			<td><span style="float:left;"><?=get_host($IP)." ($IP)"?></span><span style="float:right;">[<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History">H</a>|<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search">S</a>]</span></td>
+			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
+			<td><span style="float:left;"><?=Tools::get_host_by_ajax($IP)." ($IP)"?></span><span style="float:right;">[<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History">H</a>|<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search">S</a>]</span></td>
 			<td><?=display_str($Uses)?></td>
 			<td><?=time_diff($Joined)?></td>
 		</tr>
@@ -60,5 +60,5 @@ if($DB->record_count()) {
 <? } else { ?>
 	<h2 align="center">There are currently no users with more than <?=IP_OVERLAPS?> IP overlaps.</h2>
 <? }
-show_footer();
+View::show_footer();
 ?>

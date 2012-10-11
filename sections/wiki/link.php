@@ -1,5 +1,5 @@
 <?
-show_header('Link an article');
+View::show_header('Link an article');
 ?>
 <div class="thin">
 	<div class="box pad">
@@ -15,4 +15,4 @@ show_header('Link an article');
 		</form>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

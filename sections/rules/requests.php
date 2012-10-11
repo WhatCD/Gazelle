@@ -1,6 +1,6 @@
 <?
 //Include the header
-show_header('Request Rules');
+View::show_header('Request Rules');
 ?>
 <div class="thin">
 	<div class="header">
@@ -28,5 +28,5 @@ show_header('Request Rules');
 <? include('jump.php'); ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

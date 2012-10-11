@@ -3,7 +3,7 @@ enforce_login();
 if (!defined('LOG_ENTRIES_PER_PAGE')) {
 	define('LOG_ENTRIES_PER_PAGE', 100);
 }
-show_header("Site log");
+View::show_header("Site log");
 
 include(SERVER_ROOT.'/sections/log/sphinx.php');
 ?>
@@ -22,14 +22,14 @@ include(SERVER_ROOT.'/sections/log/sphinx.php');
 						<input type="submit" value="Search log" />
 					</td>
 				</tr>
-			</table>	
+			</table>
 		</form>
 	</div>
 
 <? if($TotalMatches > LOG_ENTRIES_PER_PAGE) { ?>
 	<div class="linkbox">
 <?
-	$Pages = get_pages($Page,$TotalMatches,LOG_ENTRIES_PER_PAGE,9);
+	$Pages = Format::get_pages($Page,$TotalMatches,LOG_ENTRIES_PER_PAGE,9);
 	echo $Pages;?>
 	</div>
 <? } ?>
@@ -195,4 +195,4 @@ while(list($ID, $Message, $LogTime) = $DB->next_record()) {
 	</div>
 </div>
 <?
-show_footer(); ?>
+View::show_footer(); ?>

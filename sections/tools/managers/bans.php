@@ -16,8 +16,8 @@ if (isset($_POST['submit'])) {
 		if($Err){ error($Err); }
 	
 		$Notes = db_string($_POST['notes']);
-		$Start = ip2unsigned($_POST['start']); //Sanitized by Validation regex
-		$End = ip2unsigned($_POST['end']); //See above
+		$Start = Tools::ip_to_unsigned($_POST['start']); //Sanitized by Validation regex
+		$End = Tools::ip_to_unsigned($_POST['end']); //See above
 
 		if($_POST['submit'] == 'Edit'){ //Edit
 			if(empty($_POST['id']) || !is_number($_POST['id'])) {
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
 }
 
 define('BANS_PER_PAGE', '20');
-list($Page,$Limit) = page_limit(BANS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(BANS_PER_PAGE);
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS ID, FromIP, ToIP, Reason FROM ip_bans AS i ";
 
@@ -55,9 +55,9 @@ if(!empty($_REQUEST['notes'])) {
 
 if(!empty($_REQUEST['ip']) && preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $_REQUEST['ip'])) {
 	if (!empty($_REQUEST['notes'])) {
-		$sql .= "AND '".ip2unsigned($_REQUEST['ip'])."' BETWEEN FromIP AND ToIP ";
+		$sql .= "AND '".Tools::ip_to_unsigned($_REQUEST['ip'])."' BETWEEN FromIP AND ToIP ";
 	} else {
-		$sql .= "WHERE '".ip2unsigned($_REQUEST['ip'])."' BETWEEN FromIP AND ToIP ";
+		$sql .= "WHERE '".Tools::ip_to_unsigned($_REQUEST['ip'])."' BETWEEN FromIP AND ToIP ";
 	}
 }
 
@@ -68,9 +68,9 @@ $Bans = $DB->query($sql);
 $DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 
-$PageLinks=get_pages($Page,$Results,BANS_PER_PAGE,11);
+$PageLinks=Format::get_pages($Page,$Results,BANS_PER_PAGE,11);
 
-show_header('IP Bans');
+View::show_header('IP Bans');
 $DB->set_query_id($Bans);
 ?>
 
@@ -156,4 +156,4 @@ while(list($ID, $Start, $End, $Reason) = $DB->next_record()){
 ?>
 </table>
 <?=$PageLinks?>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

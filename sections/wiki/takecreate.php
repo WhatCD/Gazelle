@@ -53,7 +53,7 @@ if($TitleAlias!=$Alias) {
 
 $Alias->flush();
 
-write_log("Wiki article ".$ArticleID." (".$_POST['title'].") was created by ".$LoggedUser['Username']);
+Misc::write_log("Wiki article ".$ArticleID." (".$_POST['title'].") was created by ".$LoggedUser['Username']);
 
 header('Location: wiki.php?action=article&id='.$ArticleID);
 

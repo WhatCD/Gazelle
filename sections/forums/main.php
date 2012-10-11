@@ -27,7 +27,7 @@ if(!empty($TopicIDs)) {
 	$LastRead = array();
 }
 
-show_header('Forums');
+View::show_header('Forums');
 ?>
 <div class="thin">
 	<h2>Forums</h2>
@@ -91,14 +91,14 @@ foreach ($Forums as $Forum) {
 <? } else { ?>
 		<td>
 			<span style="float:left;" class="last_topic">
-				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>" title="<?=display_str($LastTopic)?>"><?=display_str(cut_string($LastTopic, 50, 1))?></a>
+				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>" title="<?=display_str($LastTopic)?>"><?=display_str(Format::cut_string($LastTopic, 50, 1))?></a>
 			</span>
 <? if (!empty($LastRead[$LastTopicID])) { ?>
 			<span style="float: left;" class="last_read" title="Jump to last read">
 				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>&amp;page=<?=$LastRead[$LastTopicID]['Page']?>#post<?=$LastRead[$LastTopicID]['PostID']?>"></a>
 			</span>
 <? } ?>
-			<span style="float:right;" class="last_poster">by <?=format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?></span>
+			<span style="float:right;" class="last_poster">by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?></span>
 		</td>
 		<td><?=number_format($NumTopics)?></td>
 		<td><?=number_format($NumPosts)?></td>
@@ -108,4 +108,4 @@ foreach ($Forums as $Forum) {
 	</table>
 	<div class="linkbox"><a href="forums.php?action=catchup&amp;forumid=all&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a></div>
 </div>
-<? show_footer();
+<? View::show_footer();

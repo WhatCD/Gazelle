@@ -32,8 +32,8 @@ if(count($CleanArtists) > 0) {
 		print_r($ArtistNames);
 		foreach ($CleanArtists AS $Artist) {
 			list($Importance,$ArtistID) = $Artist;
-			write_log("Artist (".$ArtistTypes[$Importance].") ".$ArtistID." (".$ArtistNames[$ArtistID]['Name'].") was removed from the group ".$_POST['groupid']." (".$GroupName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
-			write_group_log($GroupID, 0, $LoggedUser['ID'], "Removed artist ".$ArtistNames[$ArtistID]['Name']." (".$ArtistTypes[$Importance].")", 0);
+			Misc::write_log("Artist (".$ArtistTypes[$Importance].") ".$ArtistID." (".$ArtistNames[$ArtistID]['Name'].") was removed from the group ".$_POST['groupid']." (".$GroupName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+			Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "Removed artist ".$ArtistNames[$ArtistID]['Name']." (".$ArtistTypes[$Importance].")", 0);
 			$DB->query("DELETE FROM torrents_artists WHERE GroupID = '$GroupID' AND ArtistID = '$ArtistID' AND Importance = '$Importance'");
 		}
 		$DB->query("SELECT ArtistID
@@ -45,7 +45,7 @@ if(count($CleanArtists) > 0) {
 		$Items = $DB->collect('ArtistID');
 		$EmptyArtists = array_diff($ArtistIDs, $Items);
 		foreach($EmptyArtists as $ArtistID) {
-			delete_artist($ArtistID);
+			Artists::delete_artist($ArtistID);
 		}
 	} else {
 		$DB->query("UPDATE IGNORE torrents_artists SET Importance = '".$_POST['importance']."' WHERE GroupID = '$GroupID' AND ArtistID IN (".$ArtistsString.")");

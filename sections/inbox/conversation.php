@@ -40,7 +40,7 @@ $DB->query("SELECT um.ID, Username
 
 while(list($PMUserID, $Username) = $DB->next_record()) {
 	$PMUserID = (int)$PMUserID;
-	$Users[$PMUserID]['UserStr'] = format_username($PMUserID, true, true, true, true);
+	$Users[$PMUserID]['UserStr'] = Users::format_username($PMUserID, true, true, true, true);
 	$Users[$PMUserID]['Username'] = $Username;
 }
 $Users[0]['UserStr'] = 'System'; // in case it's a message from the system
@@ -55,7 +55,7 @@ if($UnRead=='1') {
 	$Cache->decrement('inbox_new_'.$UserID);
 }
 
-show_header('View conversation '.$Subject, 'comments,inbox,bbcode');
+View::show_header('View conversation '.$Subject, 'comments,inbox,bbcode');
 
 // Get messages
 $DB->query("SELECT SentDate, SenderID, Body, ID FROM pm_messages AS m WHERE ConvID='$ConvID' ORDER BY ID");
@@ -165,5 +165,5 @@ if((check_perms('users_mod') || $FLS != "") && (!$ForwardedID || $ForwardedID ==
 ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

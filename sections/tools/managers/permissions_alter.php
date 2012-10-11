@@ -7,7 +7,7 @@ function display_perm($Key,$Title) {
 	echo $Perm;
 }
 
-show_header('Manage Permissions','validate');
+View::show_header('Manage Permissions','validate');
 
 echo $Val->GenerateJS('permissionsform');
 ?>
@@ -56,4 +56,4 @@ include(SERVER_ROOT."/classes/permissions_form.php");
 permissions_form();
 ?>
 </form>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

@@ -12,7 +12,7 @@ if(!empty($_GET['id']) && is_number($_GET['id'])){ //Visiting article via ID
 }
 
 if(!$ArticleID) { //No article found
-	show_header('No article found');
+	View::show_header('No article found');
 ?>
 <div class="thin">
 	<div class="header">
@@ -28,14 +28,14 @@ if(!$ArticleID) { //No article found
 	</div>
 </div>
 <?
-	show_footer();
+	View::show_footer();
 	die();
 }
 $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName, $Aliases, $UserIDs) = array_shift($Article);
 if($Read > $LoggedUser['EffectiveClass']){ error('You must be a higher user class to view this wiki article'); }
 
-show_header($Title,'wiki,bbcode');
+View::show_header($Title,'wiki,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -85,7 +85,7 @@ show_header($Title,'wiki,bbcode');
 					<strong>Details:</strong>
 					<ul>
 						<li>Version: r<?=$Revision?></li>
-						<li>Last edited by: <?=format_username($AuthorID, false, false, false)?></li>
+						<li>Last edited by: <?=Users::format_username($AuthorID, false, false, false)?></li>
 						<li>Last updated: <?=time_diff($Date)?></li>
 					</ul>
 				</li>
@@ -98,7 +98,7 @@ show_header($Title,'wiki,bbcode');
 		$i = 0;
 		foreach($AliasArray as $AliasItem){
 ?>
-						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=cut_string($AliasItem,20,1)?></a><? if(check_perms('admin_manage_wiki')){ ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>');return false;" title="Delete Alias">[X]</a> <a href="user.php?id=<?=$UserArray[$i]?>" title="View User">[U]</a><? } ?></li>
+						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem,20,1)?></a><? if(check_perms('admin_manage_wiki')){ ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>');return false;" title="Delete Alias">[X]</a> <a href="user.php?id=<?=$UserArray[$i]?>" title="View User">[U]</a><? } ?></li>
 <?			$i++;
 		} 
 	}
@@ -131,4 +131,4 @@ show_header($Title,'wiki,bbcode');
 	</div>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

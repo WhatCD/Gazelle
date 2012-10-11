@@ -7,13 +7,13 @@ if(!is_number($UserID)) {
 }
 
 //For the entire of this page we should in general be using $UserID not $LoggedUser['ID'] and $U[] not $LoggedUser[]	
-$U = user_info($UserID);
+$U = Users::user_info($UserID);
 
 if (!$U) {
 	error(404);
 }
 
-$Permissions = get_permissions($U['PermissionID']);
+$Permissions = Permissions::get_permissions($U['PermissionID']);
 if ($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Permissions['Class'])) {
 	send_irc("PRIVMSG ".ADMIN_CHAN." :User ".$LoggedUser['Username']." (https://".SSL_SITE_URL."/user.php?id=".$LoggedUser['ID'].") just tried to edit the profile of https://".SSL_SITE_URL."/user.php?id=".$_REQUEST['userid']);
 	error(403);
@@ -130,7 +130,7 @@ if ($CurEmail != $_POST['email']) {
 	if(!check_perms('users_edit_profiles')) { // Non-admins have to authenticate to change email
 		$DB->query("SELECT PassHash,Secret FROM users_main WHERE ID='".db_string($UserID)."'");
 		list($PassHash,$Secret)=$DB->next_record();
-		if(!check_password($_POST['cur_pass'], $PassHash, $Secret)) {
+		if(!Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
 			$Err = "You did not enter the correct password.";
 		}
 	}
@@ -159,7 +159,7 @@ if (!$Err && ($_POST['cur_pass'] || $_POST['new_pass_1'] || $_POST['new_pass_2']
 	$DB->query("SELECT PassHash,Secret FROM users_main WHERE ID='".db_string($UserID)."'");
 	list($PassHash,$Secret)=$DB->next_record();
 
-	if (check_password($_POST['cur_pass'], $PassHash, $Secret)) {
+	if (Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
 		if ($_POST['new_pass_1'] && $_POST['new_pass_2']) { 
 			$ResetPassword = true; 
 		}
@@ -258,7 +258,7 @@ $SQL .= "m.Paranoia='".db_string(serialize($Paranoia))."'";
 
 if($ResetPassword) {
 	$ChangerIP = db_string($LoggedUser['IP']);
-	$PassHash=make_crypt_hash($_POST['new_pass_1']);
+	$PassHash=Users::make_crypt_hash($_POST['new_pass_1']);
 	$SQL.=",m.PassHash='".db_string($PassHash)."'";
 	$DB->query("INSERT INTO users_history_passwords
 		(UserID, ChangerIP, ChangeTime) VALUES
@@ -271,9 +271,9 @@ if (isset($_POST['resetpasskey'])) {
 	
 	
 	
-	$UserInfo = user_heavy_info($UserID);
+	$UserInfo = Users::user_heavy_info($UserID);
 	$OldPassKey = db_string($UserInfo['torrent_pass']);
-	$NewPassKey = db_string(make_secret());
+	$NewPassKey = db_string(Users::make_secret());
 	$ChangerIP = db_string($LoggedUser['IP']);
 	$SQL.=",m.torrent_pass='$NewPassKey'";
 	$DB->query("INSERT INTO users_history_passkeys
@@ -284,7 +284,7 @@ if (isset($_POST['resetpasskey'])) {
 	$Cache->commit_transaction(0);
 	$Cache->delete_value('user_'.$OldPassKey);
 	
-	update_tracker('change_passkey', array('oldpasskey' => $OldPassKey, 'newpasskey' => $NewPassKey));
+	Tracker::update_tracker('change_passkey', array('oldpasskey' => $OldPassKey, 'newpasskey' => $NewPassKey));
 }
 
 $SQL.="WHERE m.ID='".db_string($UserID)."'";

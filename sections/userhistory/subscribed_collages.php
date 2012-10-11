@@ -7,7 +7,7 @@ if(!check_perms('site_collages_subscribe')) { error(403); }
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
-show_header('Subscribed collages','browse,collage');
+View::show_header('Subscribed collages','browse,collage');
 
 $ShowAll = !empty($_GET['showall']);
 
@@ -86,23 +86,23 @@ if(!$NumResults) {
 					ORDER BY ct.AddedOn");
 		$NewTorrentCount = $DB->record_count();
 		//$NewTorrents = $DB->to_array();
-		//$Artists = get_artists($GroupID);
+		//$Artists = Artists::get_artists($GroupID);
 		
 		$GroupIDs = $DB->collect('GroupID');
 		$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
 		if(count($GroupIDs)>0) {
-			$TorrentList = get_groups($GroupIDs);
+			$TorrentList = Torrents::get_groups($GroupIDs);
 			$TorrentList = $TorrentList['matches'];
 		} else {
 			$TorrentList = array();
 		}
 		
-		$Artists = get_artists($GroupIDs);
+		$Artists = Artists::get_artists($GroupIDs);
 		$Number = 0;
 		
 	//	foreach ($NewTorrents as $TorrentGroup) {
 	//		list($GroupID, $GroupName, $GroupYear, $ReleaseType, $RecordLabel, $CatalogueNumber, $WikiImage) = $TorrentGroup;
-	//		$DisplayName = display_artists($Artists[$GroupID]);
+	//		$DisplayName = Artists::display_artists($Artists[$GroupID]);
 	//		$AltName=$GroupName;
 		foreach ($TorrentList as $GroupID => $Group) {
 			list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists) = array_values($Group);
@@ -128,9 +128,9 @@ if(!$NumResults) {
 			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 				unset($ExtendedArtists[2]);
 				unset($ExtendedArtists[3]);
-				$DisplayName .= display_artists($ExtendedArtists);
+				$DisplayName .= Artists::display_artists($ExtendedArtists);
 			} elseif(count($GroupArtists)>0) {
-				$DisplayName .= display_artists(array('1'=>$GroupArtists));
+				$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists));
 			}
 			$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 			if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
@@ -226,9 +226,9 @@ if(!$NumResults) {
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]
 			</span>
-			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=torrent_info($Torrent)?></a>
+			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
-		<td class="nobr"><?=get_size($Torrent['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
 		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
@@ -260,7 +260,7 @@ if(!$NumResults) {
 			<strong><?=$DisplayName?></strong>
 			<?=$TorrentTags?>
 		</td>
-		<td class="nobr"><?=get_size($Torrent['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
 		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
@@ -304,6 +304,6 @@ if(!$NumResults) {
 </div>
 <?
 
-show_footer();
+View::show_footer();
 
 ?>

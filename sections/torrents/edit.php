@@ -67,7 +67,7 @@ if(($LoggedUser['ID']!=$Properties['UserID'] && !check_perms('torrents_edit')) |
 }
 
 
-show_header('Edit torrent', 'upload');
+View::show_header('Edit torrent', 'upload');
 
 
 if(!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms('edit_unknowns')) {
@@ -158,4 +158,4 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 <?
 } // if check_perms('torrents_edit')
 
-show_footer(); ?>
+View::show_footer(); ?>

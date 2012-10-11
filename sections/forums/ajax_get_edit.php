@@ -65,7 +65,7 @@ if($Depth != 0) {
 <? if($Depth < count($Edits)) { ?>
 					<a href="#edit_info_<?=$PostID?>" onclick="LoadEdit('<?=$Type?>', <?=$PostID?>, <?=($Depth + 1)?>); return false;">&laquo;</a>
 					<?=(($Depth == 0) ? 'Last edited by' : 'Edited by')?>
-					<?=format_username($UserID, false, false, false) ?> <?=time_diff($Time,2,true,true)?>
+					<?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($Time,2,true,true)?>
 <? } else { ?>
 					<em>Original Post</em>
 <? }

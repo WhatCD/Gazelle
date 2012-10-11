@@ -15,9 +15,9 @@ if (isset($LoggedUser['PostsPerPage'])) {
 } else {
 	$PerPage = POSTS_PER_PAGE;
 }
-list($Page,$Limit) = page_limit($PerPage);
+list($Page,$Limit) = Format::page_limit($PerPage);
 
-show_header('Subscribed topics','subscriptions,bbcode');
+View::show_header('Subscribed topics','subscriptions,bbcode');
 
 if($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
@@ -131,7 +131,7 @@ if(!$NumResults) {
 ?>
 	<div class="linkbox">
 <?
-	$Pages=get_pages($Page,$NumResults,$PerPage, 11);
+	$Pages=Format::get_pages($Page,$NumResults,$PerPage, 11);
 	echo $Pages;
 ?>
 	</div>
@@ -143,7 +143,7 @@ if(!$NumResults) {
 			<td colspan="2">
 				<span style="float:left;">
 					<a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$ForumName?></a> &gt;
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($ThreadTitle)?>"><?=cut_string($ThreadTitle, 75)?></a>
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>
 		<? if($PostID<$LastPostID && !$Locked) { ?>
 					<span class="new">(New!)</span>
 		<? } ?>
@@ -176,7 +176,7 @@ if(!$NumResults) {
 		<? if($EditedUserID) { ?>
 					<br /><br />
 					Last edited by
-					<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime)?>
+					<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime)?>
 		<? } ?>
 				</div>
 			</td>
@@ -190,6 +190,6 @@ if(!$NumResults) {
 </div>
 <?
 
-show_footer();
+View::show_footer();
 
 ?>

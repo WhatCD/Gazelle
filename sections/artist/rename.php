@@ -23,7 +23,7 @@
 authorize();
 
 $ArtistID = $_POST['artistid'];
-$NewName = normalise_artist_name($_POST['name']);
+$NewName = Artists::normalise_artist_name($_POST['name']);
 
 if(!$ArtistID || !is_number($ArtistID)) { error(404); }
 
@@ -56,7 +56,7 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 	if(!empty($Groups)) {
 		foreach($Groups as $GroupID) {
 			$Cache->delete_value('groups_artists_'.$GroupID); // Delete group artist cache
-			update_hash($GroupID);
+			Torrents::update_hash($GroupID);
 		}
 	}
 
@@ -67,7 +67,7 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 	if(!empty($Requests)) {
 		foreach($Requests as $RequestID) {
 			$Cache->delete_value('request_artists_'.$RequestID); // Delete group artist cache
-			update_sphinx_requests($RequestID);
+			Requests::update_sphinx_requests($RequestID);
 		}
 	}
 	$TargetArtistID = $ArtistID;
@@ -89,7 +89,7 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 	if(!empty($Groups)) {
 		foreach($Groups as $GroupID) {
 			$Cache->delete_value('groups_artists_'.$GroupID);
-			update_hash($GroupID);
+			Torrents::update_hash($GroupID);
 		}
 	}
 
@@ -100,7 +100,7 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 	if(!empty($Requests)) {
 		foreach($Requests as $RequestID) {
 			$Cache->delete_value('request_artists_'.$RequestID);
-			update_sphinx_requests($RequestID);
+			Requests::update_sphinx_requests($RequestID);
 		}
 	}
 
@@ -112,7 +112,7 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 		if(!empty($Groups)) {
 			foreach($Groups as $GroupID) {
 				$Cache->delete_value('groups_artists_'.$GroupID);
-				update_hash($GroupID);
+				Torrents::update_hash($GroupID);
 			}
 		}
 
@@ -123,7 +123,7 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 		if(!empty($Requests)) {
 			foreach($Requests as $RequestID) {
 				$Cache->delete_value('request_artists_'.$RequestID);
-				update_sphinx_requests($RequestID);
+				Requests::update_sphinx_requests($RequestID);
 			}
 		}
 	}

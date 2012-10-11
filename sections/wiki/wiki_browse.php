@@ -7,7 +7,7 @@ if(!empty($_GET['letter'])) {
 	}
 }
 
-show_header($Title);
+View::show_header($Title);
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS 
 	w.ID, 
@@ -41,7 +41,7 @@ $DB->query($sql);
 		<tr>
 			<td><a href="wiki.php?action=article&amp;id=<?=$ID?>"><?=$Title?></a></td>
 			<td><?=$Date?></td>
-			<td><?=format_username($UserID, false, false, false)?></td>
+			<td><?=Users::format_username($UserID, false, false, false)?></td>
 		</tr>
 <? 	} ?>
 	</table>
@@ -87,4 +87,4 @@ $DB->query($sql);
 		</span>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

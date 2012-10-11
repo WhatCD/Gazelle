@@ -1,5 +1,5 @@
 <?
-show_header('Client Rules');
+View::show_header('Client Rules');
 
 if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 	$DB->query('SELECT vstring FROM xbt_client_whitelist WHERE vstring NOT LIKE \'//%\' ORDER BY vstring ASC');
@@ -55,4 +55,4 @@ if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 	</div>
 <? include('jump.php'); ?>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

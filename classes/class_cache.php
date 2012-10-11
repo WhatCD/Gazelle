@@ -40,7 +40,7 @@ class CACHE extends Memcache {
 		'top10tor_*',
 		'query_lock_*'
 	);
-	
+
 	public $CanClear = false;
 	public $InternalCache = true;
 
@@ -72,6 +72,14 @@ class CACHE extends Memcache {
 		$this->Time+=(microtime(true)-$StartTime)*1000;
 	}
 
+	// Wrapper for Memcache::add, with the zlib option removed and default duration of 30 days
+	public function add_value($Key, $Value, $Duration=2592000) {
+		$StartTime=microtime(true);
+		$Added=$this->add($Key, $Value, 0, $Duration);
+		$this->Time+=(microtime(true)-$StartTime)*1000;
+		return $Added;
+	}
+
 	public function replace_value($Key, $Value, $Duration=2592000) {
 		$StartTime=microtime(true);
 		$this->replace($Key, $Value, false, $Duration);
@@ -87,13 +95,13 @@ class CACHE extends Memcache {
 			trigger_error("Cache retrieval failed for empty key");
 		}
 
-		if (isset($_GET['clearcache']) && $this->CanClear && !in_array_partial($Key, $this->PersistentKeys)) {
+		if (isset($_GET['clearcache']) && $this->CanClear && !Misc::in_array_partial($Key, $this->PersistentKeys)) {
 			if ($_GET['clearcache'] == 1) {
 				//Because check_perms isn't true until loggeduser is pulled from the cache, we have to remove the entries loaded before the loggeduser data
 				//Because of this, not user cache data will require a secondary pageload following the clearcache to update
 				if (count($this->CacheHits) > 0) {
 					foreach (array_keys($this->CacheHits) as $HitKey) {
-						if (!in_array_partial($HitKey, $this->PersistentKeys)) {
+						if (!Misc::in_array_partial($HitKey, $this->PersistentKeys)) {
 							$this->delete($HitKey);
 							unset($this->CacheHits[$HitKey]);
 						}
@@ -308,23 +316,22 @@ class CACHE extends Memcache {
 
 	}
 
-	// Built-in increment/decrement functions are said not to be thread safe
-/* Supposedly fixed in v1.4.6
-	public function increment($Key, $Value=1) {
-		if(($OldValue = $this->get($Key)) === false || !is_number($Value)) {
-			return false;
-		}
-		$this->replace_value($Key, $OldValue+$Value);
+	/**
+	 * Tries to set a lock. Expiry time is one hour to avoid indefinite locks
+	 *
+	 * @param string $LockName name on the lock
+	 * @return true if lock was acquired
+	 */
+	public function get_query_lock($LockName) {
+		return $this->add_value('query_lock_'.$LockName, 1, 3600);
 	}
 
-	public function decrement($Key, $Value=1) {
-		if(($OldValue = $this->get($Key)) === false || !is_number($Value) || !is_number($OldValue)) {
-			return false;
-		}
-		if($Value > $OldValue) {
-			$OldValue = $Value = 0;
-		}
-		$this->replace_value($Key, $OldValue-$Value);
+	/**
+	 * Remove lock
+	 *
+	 * @param string $LockName name on the lock
+	 */
+	public function clear_query_lock($LockName) {
+		$this->delete_value('query_lock_'.$LockName);
 	}
-*/
 }

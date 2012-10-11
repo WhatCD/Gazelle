@@ -20,7 +20,7 @@ if($DB->record_count()) {
 
 $TagList = explode(',',$_POST['tags']);
 foreach($TagList as $ID=>$Tag) {
-	$TagList[$ID] = sanitize_tag($Tag);
+	$TagList[$ID] = Misc::sanitize_tag($Tag);
 }
 $TagList = implode(' ',$TagList);
 

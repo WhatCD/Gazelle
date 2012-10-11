@@ -1,5 +1,5 @@
 <?
-show_header('Manage Permissions');
+View::show_header('Manage Permissions');
 ?>
 <script type="text/javascript" language="javascript">
 //<![CDATA[
@@ -47,5 +47,5 @@ if($DB->record_count()) {
 <? } ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

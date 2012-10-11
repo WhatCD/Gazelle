@@ -20,7 +20,7 @@ if(!check_perms('users_view_keys', $Class)) {
 	error(403);
 }
 
-show_header("Password reset history for $Username");
+View::show_header("Password reset history for $Username");
 
 $DB->query("SELECT 
 	ChangeTime,
@@ -41,8 +41,8 @@ $DB->query("SELECT
 <? while(list($ChangeTime, $ChangerIP) = $DB->next_record()){ ?>
 	<tr class="rowa">
 		<td><?=time_diff($ChangeTime)?></td>
-		<td><?=display_str($ChangerIP)?> [<a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" title="Search">S</a>]<br /><?=get_host($ChangerIP)?></td>
+		<td><?=display_str($ChangerIP)?> [<a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" title="Search">S</a>]<br /><?=Tools::get_host_by_ajax($ChangerIP)?></td>
 	</tr>
 <? } ?>
 </table>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

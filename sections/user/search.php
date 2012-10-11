@@ -18,7 +18,7 @@ if(isset($_GET['username'])){
 	
 	if(!$Err){
 		// Passed validation. Let's rock.
-		list($Page,$Limit) = page_limit(USERS_PER_PAGE);
+		list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 		$DB->query("SELECT SQL_CALC_FOUND_ROWS
 			ID,
 			Username,
@@ -37,7 +37,7 @@ if(isset($_GET['username'])){
 	}
 
 }
-show_header('User search');
+View::show_header('User search');
 ?>
 <div class="thin">
 	<div class="header">
@@ -45,7 +45,7 @@ show_header('User search');
 	</div>
 	<div class="linkbox">
 <?
-$Pages=get_pages($Page,$NumResults,USERS_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$NumResults,USERS_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
@@ -74,8 +74,8 @@ foreach($Results as $Result) {
 	list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned) = $Result;
 ?>
 			<tr>
-				<td><?=format_username($UserID, true, true, true, true);?></td>
-				<td><?=make_class_string($PermissionID);?></td>
+				<td><?=Users::format_username($UserID, true, true, true, true);?></td>
+				<td><?=Users::make_class_string($PermissionID);?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -85,4 +85,4 @@ foreach($Results as $Result) {
 	</div>
 </div>
 
-<? show_footer(); ?>
+<? View::show_footer(); ?>

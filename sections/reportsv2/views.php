@@ -9,7 +9,7 @@ if(!check_perms('admin_reports')){
 	error(403);
 }
 
-show_header('Reports V2!', 'reportsv2');
+View::show_header('Reports V2!', 'reportsv2');
 
 
 //Grab owners ID, just for examples
@@ -247,5 +247,5 @@ $Results = $DB->to_array();
 	</td></tr></table>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

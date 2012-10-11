@@ -3,7 +3,7 @@
 if(!check_perms('admin_create_users')) { error(403); }
 
 //Show our beautiful header
-show_header('Create a User');
+View::show_header('Create a User');
 
 //Make sure the form was sent
 if (isset($_POST['Username'])) {
@@ -18,11 +18,11 @@ if (isset($_POST['Username'])) {
 	if (!empty($Username) && !empty($Email) && !empty($Password)) {
 
 		//Create hashes...
-		$Secret=make_secret();
-		$torrent_pass=make_secret();
+		$Secret=Users::make_secret();
+		$torrent_pass=Users::make_secret();
 
 		//Create the account
-		$DB->query("INSERT INTO users_main (Username,Email,PassHash,torrent_pass,Enabled,PermissionID, Language) VALUES ('".db_string($Username)."','".db_string($Email)."','".db_string(make_crypt_hash($Password))."','".db_string($torrent_pass)."','1','".USER."', 'en')");
+		$DB->query("INSERT INTO users_main (Username,Email,PassHash,torrent_pass,Enabled,PermissionID, Language) VALUES ('".db_string($Username)."','".db_string($Email)."','".db_string(Users::make_crypt_hash($Password))."','".db_string($torrent_pass)."','1','".USER."', 'en')");
 		
 		//Increment site user count
 		$Cache->increment('stats_user_count');
@@ -30,14 +30,14 @@ if (isset($_POST['Username'])) {
 		//Grab the userid
 		$UserID=$DB->inserted_id();
 		
-		update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
+		Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
 
 		//Default stylesheet
 		$DB->query("SELECT ID FROM stylesheets");
 		list($StyleID)=$DB->next_record();
 		
 		//Auth key
-		$AuthKey = make_secret();
+		$AuthKey = Users::make_secret();
 		
 		//Give them a row in users_info
 		$DB->query("INSERT INTO users_info 
@@ -102,4 +102,4 @@ if (isset($_POST['Username'])) {
 	<?
 }
 
-show_footer(); ?>
+View::show_footer(); ?>

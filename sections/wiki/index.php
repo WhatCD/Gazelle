@@ -18,7 +18,7 @@ function class_list($Selected=0){
 			if($Selected == $Class['Level']){
 				$Return.=' selected="selected"';
 			}
-			$Return.='>'.cut_string($Class['Name'], 20, 1).'</option>'."\n";
+			$Return.='>'.Format::cut_string($Class['Name'], 20, 1).'</option>'."\n";
 		}
 	}
 	reset($Classes);

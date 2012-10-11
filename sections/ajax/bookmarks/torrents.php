@@ -41,7 +41,7 @@ if($Data) {
 	$GroupIDs = $DB->collect('GroupID');
 	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
 	if(count($GroupIDs)>0) {
-		$TorrentList = get_groups($GroupIDs);
+		$TorrentList = Torrents::get_groups($GroupIDs);
 		$TorrentList = $TorrentList['matches'];
 	} else {
 		$TorrentList = array();
@@ -94,7 +94,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 
 	$DisplayName = '';
 	if(count($GroupArtists)>0) {
-		$DisplayName = display_artists(array('1'=>$GroupArtists));
+		$DisplayName = Artists::display_artists(array('1'=>$GroupArtists));
 	}
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
@@ -170,7 +170,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	
 	$DisplayName = '';
 	if(!empty($GroupArtists)) {
-		$DisplayName.= display_artists(array('1'=>$GroupArtists), false);
+		$DisplayName.= Artists::display_artists(array('1'=>$GroupArtists), false);
 	}
 	$DisplayName .= $GroupName;
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}

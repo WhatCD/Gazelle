@@ -12,12 +12,12 @@ if ($LastActive == '0000-00-00 00:00:00' || time() - strtotime($LastActive) < 34
 
 $DB->query("UPDATE torrents SET LastReseedRequest=NOW() WHERE ID='$TorrentID'");
 
-$Group = get_groups(array($GroupID));
+$Group = Torrents::get_groups(array($GroupID));
 $Group = array_pop($Group['matches']);
 list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
 
 $Name = '';
-$Name .= display_artists(array('1'=>$GroupArtists), false, true);
+$Name .= Artists::display_artists(array('1'=>$GroupArtists), false, true);
 $Name .= $GroupName;
 
 $DB->query("SELECT uid, tstamp FROM xbt_snatched WHERE fid='$TorrentID' ORDER BY tstamp DESC LIMIT 10");
@@ -29,7 +29,7 @@ if($DB->record_count()>0) {
 		$DB->query("SELECT UserID FROM top_snatchers WHERE UserID='$UserID'");
 		if($DB->record_count()>0) { continue; }
 		
-		$UserInfo = user_info($UserID);
+		$UserInfo = Users::user_info($UserID);
 		$Username = $UserInfo['Username'];
 		$TimeStamp = $User['tstamp'];
 		$Request = "Hi $Username,
@@ -40,11 +40,11 @@ The exact process for re-seeding a torrent is slightly different for each client
 
 Thanks!";
 		
-		send_pm($UserID, 0, 'Re-seed request for torrent '.db_string($Name), db_string($Request));
+		Misc::send_pm($UserID, 0, 'Re-seed request for torrent '.db_string($Name), db_string($Request));
 	}
 	$NumUsers = count($Users);
 } else {
-	$UserInfo = user_info($UploaderID);
+	$UserInfo = Users::user_info($UploaderID);
 	$Username = $UserInfo['Username'];
 	
 	$Request = "Hi $Username,
@@ -54,12 +54,12 @@ The user [url=http://".SITE_URL."/user.php?id=$LoggedUser[ID]]$LoggedUser[Userna
 The exact process for re-seeding a torrent is slightly different for each client, but the concept is the same. The idea is to download the .torrent file and open it in your client, and point your client to the location where the data files are, then initiate a hash check.
 
 Thanks!";
-	send_pm($UploaderID, 0, 'Re-seed request for torrent '.db_string($Name), db_string($Request));
+	Misc::send_pm($UploaderID, 0, 'Re-seed request for torrent '.db_string($Name), db_string($Request));
 	
 	$NumUsers = 1;
 	
 }
-show_header();
+View::show_header();
 ?>
 <div class="thin">
 	<div class="header">
@@ -67,5 +67,5 @@ show_header();
 	</div>
 	<p>Successfully sent re-seed request for torrent <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=display_str($Name)?></a> to <?=$NumUsers?> user(s).</p>
 </div>
-<?show_footer();?>
+<?View::show_footer();?>
 

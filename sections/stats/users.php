@@ -31,7 +31,7 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 	reset($Rank);
 	
 	for ($i=$CountryMin;$i<=$CountryMax;$i++) {
-		$LogIncrements[] = human_format(pow(2,$i));
+		$LogIncrements[] = Format::human_format(pow(2,$i));
 	}
 	$Cache->cache_value('geodistribution',array($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements),0);
 }
@@ -123,7 +123,7 @@ if (!list($Labels,$InFlow,$OutFlow,$Max) = $Cache->get_value('users_timeline')) 
 }
 //End timeline generation
 
-show_header('Detailed User Statistics');
+View::show_header('Detailed User Statistics');
 ?>
 <h3>User Flow</h3>
 <div class="box pad center">
@@ -159,4 +159,4 @@ show_header('Detailed User Statistics');
 	<img src="http://chart.apis.google.com/chart?chxt=y,x&amp;chg=0,-1,1,1&amp;chxs=0,h&amp;cht=bvs&amp;chco=76A4FB&amp;chs=880x300&amp;chd=t:<?=implode(',',array_slice($CountryUsers,0,31))?>&amp;chxl=1:|<?=implode('|',array_slice($Countries,0,31))?>|0:|<?=implode('|',$LogIncrements)?>&amp;chf=bg,s,FFFFFF00" alt="Number of users by country" />
 </div>
 <?
-show_footer();
+View::show_footer();

@@ -33,7 +33,7 @@ if(count($Results) == 0) { error('No results found!'); }
 // If some were fetched from memcached, get their artists
 if(!empty($Results['matches'])) { // Fetch the artists for groups
 	$GroupIDs = array_keys($Results['matches']);
-	$Artists = get_artists($GroupIDs);
+	$Artists = Artists::get_artists($GroupIDs);
 	foreach($Artists as $GroupID=>$Data) {
 		if(!empty($Data[1])) {
 			$Results['matches'][$GroupID]['Artists']=$Data[1]; // Only use main artists
@@ -44,7 +44,7 @@ if(!empty($Results['matches'])) { // Fetch the artists for groups
 */
  // These ones were not found in the cache, run SQL
 if(!empty($Results['notfound'])) {
-	$SQLResults = get_groups($Results['notfound']);
+	$SQLResults = Torrents::get_groups($Results['notfound']);
 	
 	if(is_array($SQLResults['notfound'])) { // Something wasn't found in the db, remove it from results
 		reset($SQLResults['notfound']);
@@ -64,7 +64,7 @@ if(!empty($Results['notfound'])) {
 $Results = $Results['matches'];
 
 
-show_header('Transcode Search');
+View::show_header('Transcode Search');
 ?>
 <br />
 <div class="thin">
@@ -96,7 +96,7 @@ $Debug->log_var($Data);
 	
 	$DisplayName = '';
 	if(count($Artists)>0) {
-		$DisplayName = display_artists(array('1'=>$Artists));
+		$DisplayName = Artists::display_artists(array('1'=>$Artists));
 	}
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
@@ -142,5 +142,5 @@ $Debug->log_var($Data);
 	</table>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

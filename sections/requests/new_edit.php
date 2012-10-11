@@ -24,7 +24,7 @@ if($NewRequest && ($LoggedUser['BytesUploaded'] < 250*1024*1024 || !check_perms(
 if(!$NewRequest) {
 	if(empty($ReturnEdit)) {
 		
-		$Request = get_requests(array($RequestID));
+		$Request = Requests::get_requests(array($RequestID));
 		$Request = $Request['matches'][$RequestID];
 		if(empty($Request)) {
 			error(404);
@@ -102,7 +102,7 @@ if($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 		3 => array()
 	);
 } elseif($NewRequest && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
-	$ArtistForm = get_artist($_GET['groupid']);
+	$ArtistForm = Artists::get_artist($_GET['groupid']);
 	$DB->query("SELECT tg.Name, 
 					tg.Year, 
 					tg.ReleaseType, 
@@ -118,7 +118,7 @@ if($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 	}
 }
 
-show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
+View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 ?>
 <div class="thin">
 	<div class="header">
@@ -146,7 +146,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 					</td>
 					<td>
 						<select id="categories" name="type" onchange="Categories()">
-<?		foreach(display_array($Categories) as $Cat){ ?>
+<?		foreach(Misc::display_array($Categories) as $Cat){ ?>
 							<option value='<?=$Cat?>' <?=(!empty($CategoryName) && ($CategoryName ==  $Cat) ? 'selected="selected"' : '')?>><?=$Cat?></option>
 <?		} ?>
 						</select>
@@ -246,7 +246,7 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 ?>
 						<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;" >
 							<option>---</option>
-<?	foreach(display_array($GenreTags) as $Genre){ ?>
+<?	foreach(Misc::display_array($GenreTags) as $Genre){ ?>
 							<option value="<?=$Genre ?>"><?=$Genre ?></option>
 <?	} ?>
 						</select>
@@ -368,8 +368,8 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 						<input type="hidden" id="current_uploaded" value="<?=$LoggedUser['BytesUploaded']?>" />
 						<input type="hidden" id="current_downloaded" value="<?=$LoggedUser['BytesDownloaded']?>" />
 						If you add the entered <strong><span id="new_bounty">100.00 MB</span></strong> of bounty, your new stats will be: <br/>
-						Uploaded: <span id="new_uploaded"><?=get_size($LoggedUser['BytesUploaded'])?></span>
-						Ratio: <span id="new_ratio"><?=ratio($LoggedUser['BytesUploaded'],$LoggedUser['BytesDownloaded'])?></span>
+						Uploaded: <span id="new_uploaded"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span>
+						Ratio: <span id="new_ratio"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'],$LoggedUser['BytesDownloaded'])?></span>
 					</td>
 				</tr>
 				<tr>
@@ -391,5 +391,5 @@ show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
 	</div>
 </div>
 <?
-show_footer(); 
+View::show_footer(); 
 ?>

@@ -18,7 +18,7 @@ $RequestID = $_GET['id'];
 
 //First things first, lets get the data for the request.
 
-$Request = get_requests(array($RequestID));	
+$Request = Requests::get_requests(array($RequestID));	
 $Request = $Request['matches'][$RequestID];
 if(empty($Request)) {
 	error(404);
@@ -40,8 +40,8 @@ if($CategoryID == 0) {
 //Do we need to get artists?
 if($CategoryName == "Music") {
 	$ArtistForm = get_request_artists($RequestID);
-	$ArtistName = display_artists($ArtistForm, false, true);
-	$ArtistLink = display_artists($ArtistForm, true, true);
+	$ArtistName = Artists::display_artists($ArtistForm, false, true);
+	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 	
 	if($IsFilled) {
 		$DisplayLink = $ArtistLink."<a href='torrents.php?torrentid=".$TorrentID."'>".$Title."</a> [".$Year."]";
@@ -81,7 +81,7 @@ $ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID ==
 $UserCanEdit = (!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2);
 $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
-show_header('View request: '.$FullName, 'comments,requests,bbcode');
+View::show_header('View request: '.$FullName, 'comments,requests,bbcode');
 
 ?>
 <div class="thin">
@@ -150,7 +150,7 @@ if (!empty($Image)) {
 <?			foreach($ArtistForm[4] as $Artist) {
 ?>
 				<li class="artists_composer">
-					<?=display_artist($Artist)?>
+					<?=Artists::display_artist($Artist)?>
 				</li>
 <?			}
 		}
@@ -160,7 +160,7 @@ if (!empty($Image)) {
 <?			foreach($ArtistForm[6] as $Artist) {
 ?>
 				<li class="artists_dj">
-					<?=display_artist($Artist)?>
+					<?=Artists::display_artist($Artist)?>
 				</li>
 <?
 			}
@@ -173,7 +173,7 @@ if (!empty($Image)) {
 		foreach($ArtistForm[1] as $Artist) {
 ?>
 				<li class="artists_main">
-					<?=display_artist($Artist)?>
+					<?=Artists::display_artist($Artist)?>
 				</li>
 <?		}
 		if(!empty($ArtistForm[2]) && count($ArtistForm[2]) > 0) { 
@@ -182,7 +182,7 @@ if (!empty($Image)) {
 <?			foreach($ArtistForm[2] as $Artist) {
 ?>
 				<li class="artists_with">
-					<?=display_artist($Artist)?>
+					<?=Artists::display_artist($Artist)?>
 				</li>
 <?			}
 		}
@@ -192,7 +192,7 @@ if (!empty($Image)) {
 <?			foreach($ArtistForm[5] as $Artist) {
 ?>
 				<li class="artist_guest">
-					<?=display_artist($Artist)?>
+					<?=Artists::display_artist($Artist)?>
 				</li>
 <?			}
 		}
@@ -202,7 +202,7 @@ if (!empty($Image)) {
 <?			foreach($ArtistForm[3] as $Artist) {
 ?>
 				<li class="artists_remix">
-					<?=display_artist($Artist)?>
+					<?=Artists::display_artist($Artist)?>
 				</li>
 <?
 			}
@@ -213,7 +213,7 @@ if (!empty($Image)) {
 <?			foreach($ArtistForm[7] as $Artist) {
 ?>
 				<li class="artists_remix">
-					<?=display_artist($Artist)?>
+					<?=Artists::display_artist($Artist)?>
 				</li>
 <?
 			}
@@ -251,7 +251,7 @@ if (!empty($Image)) {
 						<a href="user.php?id=<?=$User['UserID']?>"><?=$Boldify?'<strong>':''?><?=display_str($User['Username'])?><?=$Boldify?'</strong>':''?></a>
 					</td>
 					<td>
-						<?=$Boldify?'<strong>':''?><?=get_size($User['Bounty'])?><?=$Boldify?'</strong>':''?>
+						<?=$Boldify?'<strong>':''?><?=Format::get_size($User['Bounty'])?><?=$Boldify?'</strong>':''?>
 					</td>
 				</tr>
 <?	} 
@@ -264,7 +264,7 @@ if (!empty($Image)) {
 						<a href="user.php?id=<?=$User['UserID']?>"><strong><?=display_str($User['Username'])?></strong></a>
 					</td>
 					<td>
-						<strong><?=get_size($User['Bounty'])?></strong>
+						<strong><?=Format::get_size($User['Bounty'])?></strong>
 					</td>
 				</tr>
 <?			}
@@ -279,7 +279,7 @@ if (!empty($Image)) {
 			<tr>
 				<td class="label">Created</td>
 				<td>
-					<?=time_diff($TimeAdded)?>	by  <strong><?=format_username($RequestorID, false, false, false)?></strong>
+					<?=time_diff($TimeAdded)?>	by  <strong><?=Users::format_username($RequestorID, false, false, false)?></strong>
 				</td>
 			</tr>			
 <?	if($CategoryName == "Music") {
@@ -353,9 +353,9 @@ if (!empty($Image)) {
 		</tr>
 <? 	}
 	if ($GroupID) {
-		/*$Groups = get_groups(array($GroupID), true, true, false);
+		/*$Groups = Torrents::get_groups(array($GroupID), true, true, false);
 		$Group = $Groups['matches'][$GroupID];
-		$GroupLink = display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';*/
+		$GroupLink = Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';*/
 ?>
 			<tr>
 				<td class="label">Torrent Group</td>
@@ -368,7 +368,7 @@ if (!empty($Image)) {
 					<span id="votecount"><?=$VoteCount?></span> 
 <?	if($CanVote) { ?>
 					&nbsp;<a href="javascript:Vote(0)"><strong>(+)</strong></a>
-					<strong>Costs <?=get_size($MinimumVote, 0)?></strong>
+					<strong>Costs <?=Format::get_size($MinimumVote, 0)?></strong>
 <?	} ?> 
 				</td>
 			</tr>
@@ -408,8 +408,8 @@ if (!empty($Image)) {
 						<input type="hidden" id="current_rr" value="<?=(float)$LoggedUser['RequiredRatio']?>" />
 						<input id="total_bounty" type="hidden" value="<?=$RequestVotes['TotalBounty']?>" />
 						If you add the entered <strong><span id="new_bounty">0.00 MB</span></strong> of bounty, your new stats will be: <br/>
-						Uploaded: <span id="new_uploaded"><?=get_size($LoggedUser['BytesUploaded'])?></span>
-						Ratio: <span id="new_ratio"><?=ratio($LoggedUser['BytesUploaded'],$LoggedUser['BytesDownloaded'])?></span>
+						Uploaded: <span id="new_uploaded"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span>
+						Ratio: <span id="new_ratio"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'],$LoggedUser['BytesDownloaded'])?></span>
 						<input type="button" id="button" value="Vote!" disabled="disabled" onclick="Vote();" />
 					</form>
 				</td>
@@ -417,7 +417,7 @@ if (!empty($Image)) {
 <? }?> 
 			<tr id="bounty">
 				<td class="label">Bounty</td>
-				<td id="formatted_bounty"><?=get_size($RequestVotes['TotalBounty'])?></td>
+				<td id="formatted_bounty"><?=Format::get_size($RequestVotes['TotalBounty'])?></td>
 			</tr>
 <?
 	if($IsFilled) {
@@ -427,7 +427,7 @@ if (!empty($Image)) {
 				<td class="label">Filled</td>
 				<td>
 					<strong><a href="torrents.php?<?=(strtotime($TimeFilled)<$TimeCompare?'id=':'torrentid=').$TorrentID?>">Yes</a></strong>, 
-					by user <?=format_username($FillerID, false, false, false)?>
+					by user <?=Users::format_username($FillerID, false, false, false)?>
 <?		if($LoggedUser['ID'] == $RequestorID || $LoggedUser['ID'] == $FillerID || check_perms('site_moderate_requests')) { ?>
 						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>">(Unfill)</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning. 
 <?		} ?>
@@ -475,7 +475,7 @@ if($Results === false) {
 	$Cache->cache_value('request_comments_'.$RequestID, $Results, 0);
 }
 
-list($Page,$Limit) = page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
 
 //Get the cache catalogue
 $CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
@@ -508,7 +508,7 @@ $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMME
 ?>
 	<div class="linkbox"><a name="comments"></a>
 <?
-$Pages=get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
+$Pages=Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
 echo $Pages;
 ?>
 	</div>
@@ -517,13 +517,13 @@ echo $Pages;
 //---------- Begin printing
 foreach($Thread as $Key => $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
+	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<span style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
-				by <strong><?=format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
+				by <strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
 <?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
 if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
@@ -557,7 +557,7 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('requests', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
-				<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <? } ?>
 			</div>
 		</td>
@@ -576,7 +576,7 @@ if(!$LoggedUser['DisablePosting']) { ?>
 					<tr class="colhead_dark">
 						<td colspan="2">
 							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=format_username($LoggedUser['ID'], true, true, true, true)?> Just now
+								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?> Just now
 								<a href="#quickreplypreview">[Report Comment]</a>
 							</span>
 							<span style="float:right;">
@@ -611,4 +611,4 @@ if(!$LoggedUser['DisablePosting']) { ?>
 <? } ?>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

@@ -15,7 +15,7 @@ if(!isset($_GET['id']) || !is_number($_GET['id'])) {
 	list($CategoryID) = $DB->next_record();
 }
 
-show_header('Report', 'reportsv2');
+View::show_header('Report', 'reportsv2');
 ?>
 
 <div class="thin">
@@ -83,5 +83,5 @@ show_header('Report', 'reportsv2');
 	</form>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

@@ -32,7 +32,7 @@ function header_link($SortKey,$DefaultWay="desc") {
 		else { $NewWay="desc"; }
 	} else { $NewWay=$DefaultWay; }
 	
-	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".get_url(array('order_way','order_by'));
+	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
 }
 
 $TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
@@ -379,7 +379,7 @@ if(check_perms('site_search_many')) {
 // If some were fetched from memcached, get their artists
 if(!empty($Results['matches'])) { // Fetch the artists for groups
 	$GroupIDs = array_keys($Results['matches']);
-	$Artists = get_artists($GroupIDs);
+	$Artists = Artists::get_artists($GroupIDs);
 	
 	foreach($Artists as $GroupID=>$Data) {
 		if(!empty($Data[1])) {
@@ -391,7 +391,7 @@ if(!empty($Results['matches'])) { // Fetch the artists for groups
 */
 // These ones were not found in the cache, run SQL
 if(!empty($Results['notfound'])) {
-	$SQLResults = get_groups($Results['notfound']);
+	$SQLResults = Torrents::get_groups($Results['notfound']);
 	
 	if(is_array($SQLResults['notfound'])) { // Something wasn't found in the db, remove it from results
 		reset($SQLResults['notfound']);
@@ -420,7 +420,7 @@ if(((!empty($_GET['action']) && strtolower($_GET['action'])=="advanced") || (!em
 
 
 
-show_header('Browse Torrents','browse');
+View::show_header('Browse Torrents','browse');
 
 
 ?>
@@ -429,9 +429,9 @@ show_header('Browse Torrents','browse');
 	<h3>
 		Filter		
 <? if($AdvancedSearch) { ?>
-			(<a href="torrents.php?<? if(!empty($LoggedUser['SearchType'])) { ?>action=basic&amp;<? } echo get_url(array('action')); ?>">Basic Search</a>)
+			(<a href="torrents.php?<? if(!empty($LoggedUser['SearchType'])) { ?>action=basic&amp;<? } echo Format::get_url(array('action')); ?>">Basic Search</a>)
 <? } else { ?>
-			(<a href="torrents.php?action=advanced&amp;<?=get_url(array('action'))?>">Advanced Search</a>)
+			(<a href="torrents.php?action=advanced&amp;<?=Format::get_url(array('action'))?>">Advanced Search</a>)
 <? } 
 ?>
 	</h3>
@@ -441,38 +441,38 @@ show_header('Browse Torrents','browse');
 			<tr>
 				<td class="label">Artist Name:</td>
 				<td colspan="3">
-					<input type="text" spellcheck="false" size="40" name="artistname" class="inputtext smaller" value="<?form('artistname')?>" />
+					<input type="text" spellcheck="false" size="40" name="artistname" class="inputtext smaller" value="<?Format::form('artistname')?>" />
 					<input type="hidden" name="action" value="advanced" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">Album/Torrent Name:</td>
 				<td colspan="3">
-					<input type="text" spellcheck="false" size="40" name="groupname" class="inputtext smaller" value="<?form('groupname')?>" />
+					<input type="text" spellcheck="false" size="40" name="groupname" class="inputtext smaller" value="<?Format::form('groupname')?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">Record Label:</td>
 				<td colspan="3">
-					<input type="text" spellcheck="false" size="40" name="recordlabel" class="inputtext smaller" value="<?form('recordlabel')?>" />
+					<input type="text" spellcheck="false" size="40" name="recordlabel" class="inputtext smaller" value="<?Format::form('recordlabel')?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">Catalogue Number:</td>
 				<td>
-					<input type="text" size="40" name="cataloguenumber" class="inputtext smallest" value="<?form('cataloguenumber')?>"  />
+					<input type="text" size="40" name="cataloguenumber" class="inputtext smallest" value="<?Format::form('cataloguenumber')?>"  />
 				</td>
 				<td class="label">Year:</td>
 				<td>
-					<input type="text" name="year" class="inputtext smallest" value="<?form('year')?>" size="4" />
+					<input type="text" name="year" class="inputtext smallest" value="<?Format::form('year')?>" size="4" />
 				</td>
 			</tr>
 			<tr id="edition_expand">
 				<td colspan="4" class="center">[<a href="#" onclick="ToggleEditionRows();return false;">Click here to toggle searching for specific remaster information</a>]</td>
 			</tr>
 <?
-if(form('remastertitle', true) == "" && form('remasteryear', true) == "" && 
-	form('remasterrecordlabel', true) == "" && form('remastercataloguenumber', true) == "") {
+if(Format::form('remastertitle', true) == "" && Format::form('remasteryear', true) == "" && 
+	Format::form('remasterrecordlabel', true) == "" && Format::form('remastercataloguenumber', true) == "") {
 		$Hidden = 'hidden';
 } else {
 	$Hidden = '';
@@ -481,29 +481,29 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 			<tr id="edition_title" class="<?=$Hidden?>">
 				<td class="label">Edition Title:</td>
 				<td>
-					<input type="text" spellcheck="false" size="40" name="remastertitle" class="inputtext smaller" value="<?form('remastertitle')?>" />
+					<input type="text" spellcheck="false" size="40" name="remastertitle" class="inputtext smaller" value="<?Format::form('remastertitle')?>" />
 				</td>
 				<td class="label">Edition Year:</td>
 				<td>
-					<input type="text" name="remasteryear" class="inputtext smallest" value="<?form('remasteryear')?>" size="4" />
+					<input type="text" name="remasteryear" class="inputtext smallest" value="<?Format::form('remasteryear')?>" size="4" />
 				</td>
 			</tr>
 			<tr id="edition_label" class="<?=$Hidden?>">
 				<td class="label">Edition Release Label:</td>
 				<td colspan="3">
-					<input type="text" spellcheck="false" size="40" name="remasterrecordlabel" class="inputtext smaller" value="<?form('remasterrecordlabel')?>" />
+					<input type="text" spellcheck="false" size="40" name="remasterrecordlabel" class="inputtext smaller" value="<?Format::form('remasterrecordlabel')?>" />
 				</td>
 			</tr>
 			<tr id="edition_catalogue" class="<?=$Hidden?>">
 				<td class="label">Edition Catalogue Number:</td>
 				<td colspan="3">
-					<input type="text" size="40" name="remastercataloguenumber" class="inputtext smallest" value="<?form('remastercataloguenumber')?>" />
+					<input type="text" size="40" name="remastercataloguenumber" class="inputtext smallest" value="<?Format::form('remastercataloguenumber')?>" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">File List:</td>
 				<td colspan="3">
-					<input type="text" spellcheck="false" size="40" name="filelist" class="inputtext" value="<?form('filelist')?>" />
+					<input type="text" spellcheck="false" size="40" name="filelist" class="inputtext" value="<?Format::form('filelist')?>" />
 				</td>
 			</tr>
 			<tr>
@@ -512,24 +512,24 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 					<select id="bitrate" name="encoding">
 						<option value="">Bitrate</option>
 <?	foreach($Bitrates as $BitrateName) { ?>
-						<option value="<?=display_str($BitrateName); ?>" <?selected('encoding', $BitrateName)?>><?=display_str($BitrateName); ?></option>
+						<option value="<?=display_str($BitrateName); ?>" <?Format::selected('encoding', $BitrateName)?>><?=display_str($BitrateName); ?></option>
 <?	} ?>			</select>
 					
 					<select name="format">
 						<option value="">Format</option>
 <?	foreach($Formats as $FormatName) { ?>
-						<option value="<?=display_str($FormatName); ?>" <?selected('format', $FormatName)?>><?=display_str($FormatName); ?></option>
+						<option value="<?=display_str($FormatName); ?>" <?Format::selected('format', $FormatName)?>><?=display_str($FormatName); ?></option>
 <?	} ?>			</select>
 					<select name="media">
 						<option value="">Media</option>
 <?	foreach($Media as $MediaName) { ?>
-						<option value="<?=display_str($MediaName); ?>" <?selected('media',$MediaName)?>><?=display_str($MediaName); ?></option>
+						<option value="<?=display_str($MediaName); ?>" <?Format::selected('media',$MediaName)?>><?=display_str($MediaName); ?></option>
 <?	} ?>
 					</select>
 					<select name="releasetype">
 						<option value="">Release type</option>
 <?	foreach($ReleaseTypes as $ID=>$Type) { ?>
-						<option value="<?=display_str($ID); ?>" <?selected('releasetype',$ID)?>><?=display_str($Type); ?></option>
+						<option value="<?=display_str($ID); ?>" <?Format::selected('releasetype',$ID)?>><?=display_str($Type); ?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -539,32 +539,32 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 				<td class="nobr" colspan="3">
 					<select name="haslog">
 						<option value="">Has Log</option>
-						<option value="1" <?selected('haslog','1')?>>Yes</option>
-						<option value="0" <?selected('haslog','0')?>>No</option>
-						<option value="100" <?selected('haslog','100')?>>100% only</option>
-						<option value="-1" <?selected('haslog','-1')?>>&lt;100%/Unscored</option>
+						<option value="1" <?Format::selected('haslog','1')?>>Yes</option>
+						<option value="0" <?Format::selected('haslog','0')?>>No</option>
+						<option value="100" <?Format::selected('haslog','100')?>>100% only</option>
+						<option value="-1" <?Format::selected('haslog','-1')?>>&lt;100%/Unscored</option>
 					</select>
 					<select name="hascue">
 						<option value="">Has Cue</option>
-						<option value="1" <?selected('hascue',1)?>>Yes</option>
-						<option value="0" <?selected('hascue',0)?>>No</option>
+						<option value="1" <?Format::selected('hascue',1)?>>Yes</option>
+						<option value="0" <?Format::selected('hascue',0)?>>No</option>
 					</select>
 					<select name="scene">
 						<option value="">Scene</option>
-						<option value="1" <?selected('scene',1)?>>Yes</option>
-						<option value="0" <?selected('scene',0)?>>No</option>
+						<option value="1" <?Format::selected('scene',1)?>>Yes</option>
+						<option value="0" <?Format::selected('scene',0)?>>No</option>
 					</select>
 					<select name="vanityhouse">
 						<option value="">Vanity House</option>
-						<option value="1" <?selected('vanityhouse',1)?>>Yes</option>
-						<option value="0" <?selected('vanityhouse',0)?>>No</option>
+						<option value="1" <?Format::selected('vanityhouse',1)?>>Yes</option>
+						<option value="0" <?Format::selected('vanityhouse',0)?>>No</option>
 					</select>
 					<select name="freetorrent">
 						<option value="">Leech Status</option>
-						<option value="1" <?selected('freetorrent',1)?>>Freeleech</option>
-						<option value="2" <?selected('freetorrent',2)?>>Neutral Leech</option>
-						<option value="3" <?selected('freetorrent',3)?>>Either</option>
-						<option value="0" <?selected('freetorrent',0)?>>Normal</option>
+						<option value="1" <?Format::selected('freetorrent',1)?>>Freeleech</option>
+						<option value="2" <?Format::selected('freetorrent',2)?>>Neutral Leech</option>
+						<option value="3" <?Format::selected('freetorrent',3)?>>Either</option>
+						<option value="0" <?Format::selected('freetorrent',0)?>>Normal</option>
 					</select>
 				</td>
 			</tr>
@@ -572,7 +572,7 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 			<tr>
 				<td class="label">Search terms:</td>
 				<td colspan="3">
-					<input type="text" spellcheck="false" size="40" name="searchstr" class="inputtext" value="<?form('searchstr')?>" />
+					<input type="text" spellcheck="false" size="40" name="searchstr" class="inputtext" value="<?Format::form('searchstr')?>" />
 <?	if(!empty($LoggedUser['SearchType'])) { ?>
 					<input type="hidden" name="action" value="basic" />
 <?	} ?>
@@ -582,26 +582,26 @@ if(form('remastertitle', true) == "" && form('remasteryear', true) == "" &&
 			<tr>
 				<td class="label">Tags (comma-separated):</td>
 				<td colspan="3">
-					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_','.',form('taglist', true))?>" />&nbsp;
-					<input type="radio" name="tags_type" id="tags_type0" value="0" <?selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
-					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
+					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_','.',Format::form('taglist', true))?>" />&nbsp;
+					<input type="radio" name="tags_type" id="tags_type0" value="0" <?Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 				</td>
 			</tr>
 			<tr>
 				<td class="label">Order by:</td>
 				<td colspan="<?=($AdvancedSearch)?'3':'1'?>">
 					<select name="order_by" style="width:auto;">
-						<option value="time"<?selected('order_by','time')?>>Time added</option>
-						<option value="year"<?selected('order_by','year')?>>Year</option>
-						<option value="size"<?selected('order_by','size')?>>Size</option>
-						<option value="snatched"<?selected('order_by','snatched')?>>Snatched</option>
-						<option value="seeders"<?selected('order_by','seeders')?>>Seeders</option>
-						<option value="leechers"<?selected('order_by','leechers')?>>Leechers</option>
-						<option value="random"<?selected('order_by','random')?>>Random</option>
+						<option value="time"<?Format::selected('order_by','time')?>>Time added</option>
+						<option value="year"<?Format::selected('order_by','year')?>>Year</option>
+						<option value="size"<?Format::selected('order_by','size')?>>Size</option>
+						<option value="snatched"<?Format::selected('order_by','snatched')?>>Snatched</option>
+						<option value="seeders"<?Format::selected('order_by','seeders')?>>Seeders</option>
+						<option value="leechers"<?Format::selected('order_by','leechers')?>>Leechers</option>
+						<option value="random"<?Format::selected('order_by','random')?>>Random</option>
 					</select>
 					<select name="order_way">
-						<option value="desc"<?selected('order_way','desc')?>>Descending</option>
-						<option value="asc" <?selected('order_way','asc')?>>Ascending</option>
+						<option value="desc"<?Format::selected('order_way','desc')?>>Descending</option>
+						<option value="asc" <?Format::selected('order_way','asc')?>>Ascending</option>
 					</select>
 				</td>
 			</tr>
@@ -710,12 +710,12 @@ $DB->query("SELECT
 	<p>You might like (Beta): <? while(list($Tag)=$DB->next_record()) { ?><a href="torrents.php?taglist=<?=$Tag?>"><?=$Tag?></a> <? } ?></p>
 </div>
 <? 
-show_footer();die();
+View::show_footer();die();
 }
 
 if($TorrentCount < ($Page-1)*TORRENTS_PER_PAGE+1) {
 	$LastPage = ceil($TorrentCount/TORRENTS_PER_PAGE);
-	$Pages = get_pages(0, $TorrentCount, TORRENTS_PER_PAGE);
+	$Pages = Format::get_pages(0, $TorrentCount, TORRENTS_PER_PAGE);
 ?>
 <div class="box pad" align="center">
 	<h2>The requested page contains no matches.</h2>
@@ -723,11 +723,11 @@ if($TorrentCount < ($Page-1)*TORRENTS_PER_PAGE+1) {
 </div>
 <div class="linkbox">Go to page <?=$Pages?></div>
 <?
-show_footer();die();
+View::show_footer();die();
 }
 
 // List of pages
-$Pages = get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
+$Pages = Format::get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
 
 $Bookmarks = all_bookmarks('torrent');
 ?>
@@ -765,9 +765,9 @@ foreach($Results as $GroupID=>$Data) {
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
-			$DisplayName = display_artists($ExtendedArtists);
+			$DisplayName = Artists::display_artists($ExtendedArtists);
 		} elseif(!empty($Artists)) {
-			$DisplayName = display_artists(array(1=>$Artists));
+			$DisplayName = Artists::display_artists(array(1=>$Artists));
 		} else {
 			$DisplayName='';
 		}
@@ -802,7 +802,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			</div>
 		</td>
 		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
-		<td class="nobr"><?=get_size($MaxSize*1024)?> (Max)</td>
+		<td class="nobr"><?=Format::get_size($MaxSize*1024)?> (Max)</td>
 		<td><?=number_format($TotalSnatched)?></td>
 		<td<?=($TotalSeeders==0)?' class="r00"':''?>><?=number_format($TotalSeeders)?></td>
 		<td><?=number_format($TotalLeechers)?></td>
@@ -969,11 +969,11 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 <?			} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
-			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=torrent_info($Data)?></a>
+			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Data)?></a>
 		</td>
 		<td><?=$Data['FileCount']?></td>
 		<td class="nobr"><?=time_diff($Data['Time'],1)?></td>
-		<td class="nobr"><?=get_size($Data['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Data['Size'])?></td>
 		<td><?=number_format($Data['Snatched'])?></td>
 		<td<?=($Data['Seeders']==0)?' class="r00"':''?>><?=number_format($Data['Seeders'])?></td>
 		<td><?=number_format($Data['Leechers'])?></td>
@@ -1016,7 +1016,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		</td>
 		<td><?=$Data['FileCount']?></td>
 		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
-		<td class="nobr"><?=get_size($Data['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Data['Size'])?></td>
 		<td><?=number_format($TotalSnatched)?></td>
 		<td<?=($TotalSeeders==0)?' class="r00"':''?>><?=number_format($TotalSeeders)?></td>
 		<td><?=number_format($TotalLeechers)?></td>
@@ -1027,4 +1027,4 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 ?>
 </table>
 <div class="linkbox"><?=$Pages?></div>
-<? show_footer(array('disclaimer'=>false)); ?>
+<? View::show_footer(array('disclaimer'=>false)); ?>

@@ -3,7 +3,7 @@ if (!extension_loaded('mysqli')) {
 	error('Mysqli Extension not loaded.');
 }
 
-class SPHINXQL extends mysqli {
+class SphinxQL extends mysqli {
 	private static $Connections = array();
 	private $Server;
 	private $Port;
@@ -56,7 +56,7 @@ class SPHINXQL extends mysqli {
 	public static function init_connection($Server, $Port, $Socket) {
 		$Ident = self::get_ident($Server, $Port, $Socket);
 		if(!isset(self::$Connections[$Ident])) {
-			self::$Connections[$Ident] = new SPHINXQL($Server, $Port, $Socket);
+			self::$Connections[$Ident] = new SphinxQL($Server, $Port, $Socket);
 		}
 		return self::$Connections[$Ident];
 	}
@@ -130,12 +130,12 @@ class SPHINXQL extends mysqli {
 	 * @param param $QueryProcessTime time building and processing the query
 	 */
 	public function register_query($QueryString, $QueryProcessTime) {
-		SPHINXQL::$Queries[] = array($QueryString, $QueryProcessTime);
-		SPHINXQL::$Time += $QueryProcessTime;
+		SphinxQL::$Queries[] = array($QueryString, $QueryProcessTime);
+		SphinxQL::$Time += $QueryProcessTime;
 	}
 }
 
-class SPHINXQL_QUERY {
+class SphinxQL_Query {
 	private $SphinxQL;
 
 	private $Expressions;
@@ -157,7 +157,7 @@ class SPHINXQL_QUERY {
 	 * @param string $Socket Unix socket address, overrides $Server:$Port
 	 */
 	public function __construct($Server = SPHINXQL_HOST, $Port = SPHINXQL_PORT, $Socket = SPHINXQL_SOCK) {
-		$this->SphinxQL = SPHINXQL::init_connection($Server, $Port, $Socket);
+		$this->SphinxQL = SphinxQL::init_connection($Server, $Port, $Socket);
 		$this->reset();
 	}
 
@@ -248,7 +248,7 @@ class SPHINXQL_QUERY {
 		if(empty($Expr)) {
 			return $this;
 		}
-		$this->Expressions[] = "@$Field ".SPHINXQL::escape_string($Expr);
+		$this->Expressions[] = "@$Field ".SphinxQL::escape_string($Expr);
 		return $this;
 	}
 
@@ -370,7 +370,7 @@ class SPHINXQL_QUERY {
 		$QueryString = $this->QueryString;
 		$Result = $this->send_query($GetMeta);
 		$QueryProcessTime = (microtime(true) - $QueryStartTime)*1000;
-		SPHINXQL::register_query($QueryString, $QueryProcessTime);
+		SphinxQL::register_query($QueryString, $QueryProcessTime);
 		return $Result;
 	}
 
@@ -405,7 +405,7 @@ class SPHINXQL_QUERY {
 		} else {
 			$Meta = $GetMeta ? $this->get_meta() : null;
 		}
-		return new SPHINXQL_RESULT($Result, $Meta, $Errno, $Error);
+		return new SphinxQL_Result($Result, $Meta, $Errno, $Error);
 	}
 
 	/**
@@ -441,7 +441,7 @@ class SPHINXQL_QUERY {
 	}
 }
 
-class SPHINXQL_RESULT {
+class SphinxQL_Result {
 	private $Result;
 	private $Meta;
 	public $Errno;

@@ -61,7 +61,7 @@ close_stream();
 require('classes/class_zip.php');
 $Zip = new ZIP('FileName');
 $Name = 'Ubuntu-8.10';
-$Zip->add_file($TorrentData, 'Torrents/'.file_string($Name).'.torrent');
+$Zip->add_file($TorrentData, 'Torrents/'.Misc::file_string($Name).'.torrent');
 $Zip->add_file(file_get_contents('zip.php'), 'zip.php');
 $Zip->close_stream();
 

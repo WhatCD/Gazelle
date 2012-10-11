@@ -52,18 +52,18 @@ $DB->query("UPDATE torrents SET
 // Delete old group if needed
 $DB->query("SELECT ID FROM torrents WHERE GroupID='$OldGroupID'");
 if($DB->record_count() == 0) {
-	delete_group($OldGroupID);
+	Torrents::delete_group($OldGroupID);
 } else {
-	update_hash($OldGroupID);
+	Torrents::update_hash($OldGroupID);
 }
 
-update_hash($GroupID);
+Torrents::update_hash($GroupID);
 
 $Cache->delete_value('torrent_download_'.$TorrentID);
 $Cache->delete_value('artist_'.$ArtistID);
 $Cache->delete_value('artist_'.$OldArtistID);
 
-write_log("Torrent $TorrentID was edited by " . $LoggedUser['Username']);
+Misc::write_log("Torrent $TorrentID was edited by " . $LoggedUser['Username']);
 
 header("Location: torrents.php?id=$GroupID");
 ?>

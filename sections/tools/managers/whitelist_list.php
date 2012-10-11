@@ -1,7 +1,7 @@
 <?
 if(!check_perms('admin_whitelist')) { error(403); }
 
-show_header('Whitelist Management');
+View::show_header('Whitelist Management');
 $DB->query('SELECT id, vstring, peer_id FROM xbt_client_whitelist ORDER BY peer_id ASC');
 ?>
 <div class="header">
@@ -60,4 +60,4 @@ while(list($ID, $Client, $Peer_ID) = $DB->next_record()){
 		</tr>
 	</table>
 </form>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

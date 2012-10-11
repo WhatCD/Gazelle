@@ -24,7 +24,7 @@
 	<? if(!empty($LastActive)){ ?><p><a href="user.php?action=sessions" title="Manage Sessions">Last activity <?=time_diff($LastActive['LastUpdate'])?> from <?=$LastActive['IP']?>.</a></p><? } ?>
 	<p>
 		<strong>Time:</strong> <?=number_format(((microtime(true)-$ScriptStartTime)*1000),5)?> ms
-		<strong>Used:</strong> <?=get_size(memory_get_usage(true))?>
+		<strong>Used:</strong> <?=Format::get_size(memory_get_usage(true))?>
 		<strong>Load:</strong> <?=number_format($Load[0],2).' '.number_format($Load[1],2).' '.number_format($Load[2],2)?>
 		<strong>Date:</strong> <?=date('M d Y, H:i')?>
 

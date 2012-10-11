@@ -32,7 +32,7 @@ if(isset($_GET['ip']) && isset($_GET['port'])){
 	}
 }
 
-show_header('Connectability Checker');
+View::show_header('Connectability Checker');
 ?>
 <div class="thin">
 	<div class="header">
@@ -69,4 +69,4 @@ function check_ip() {
 	});
 }
 </script>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

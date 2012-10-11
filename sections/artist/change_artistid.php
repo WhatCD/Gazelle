@@ -90,13 +90,13 @@ if (isset($_POST['confirm'])) {
 	if(!empty($Groups)) {
 		foreach($Groups as $GroupID) {
 			$Cache->delete_value('groups_artists_'.$GroupID);
-			update_hash($GroupID);
+			Torrents::update_hash($GroupID);
 		}
 	}
 	if(!empty($Requests)) {
 		foreach($Requests as $RequestID) {
 			$Cache->delete_value('request_artist_'.$RequestID);
-			update_sphinx_requests($RequestID);
+			Requests::update_sphinx_requests($RequestID);
 		}
 	}
 	if(!empty($BookmarkUsers)) {
@@ -116,11 +116,11 @@ if (isset($_POST['confirm'])) {
 	// Delete the old artist
 	$DB->query("DELETE FROM artists_group WHERE ArtistID = $ArtistID");
 
-	write_log("The artist ".$ArtistID." (".$ArtistName.") was made into a non-redirecting alias of artist ".$NewArtistID." (".$NewArtistName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+	Misc::write_log("The artist ".$ArtistID." (".$ArtistName.") was made into a non-redirecting alias of artist ".$NewArtistID." (".$NewArtistName.") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
 
 	header("Location: artist.php?action=edit&artistid=$NewArtistID");
 } else {
-	show_header('Merging Artists');
+	View::show_header('Merging Artists');
 ?>
 	<div class="header">
 		<h2>Confirm merge</h2>
@@ -138,6 +138,6 @@ if (isset($_POST['confirm'])) {
 		</div>
 	</form>
 <?
-	show_footer();
+	View::show_footer();
 }
 ?>

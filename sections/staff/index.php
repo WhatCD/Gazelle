@@ -1,6 +1,6 @@
 <?
 enforce_login();
-show_header('Staff');
+View::show_header('Staff');
 
 include(SERVER_ROOT.'/sections/staff/functions.php');
 include(SERVER_ROOT.'/sections/staffpm/functions.php');
@@ -38,7 +38,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=format_username($ID, false, false, false)?>
+					<?=Users::format_username($ID, false, false, false)?>
 				</td>
 				<td class="nobr">
 					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by user'; }?>
@@ -68,7 +68,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=format_username($ID, false, false, false)?>
+					<?=Users::format_username($ID, false, false, false)?>
 				</td>
 				<td class="nobr">
 					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by user'; }?>
@@ -111,7 +111,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=format_username($ID, false, false, false)?>
+					<?=Users::format_username($ID, false, false, false)?>
 				</td>
 				<td class="nobr">
 					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by staff member'; }?>
@@ -126,5 +126,5 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 	</div>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

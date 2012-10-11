@@ -4,7 +4,7 @@ define('COLLAGES_PER_PAGE', 25);
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
-list($Page,$Limit) = page_limit(COLLAGES_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(COLLAGES_PER_PAGE);
 
 
 $OrderVals = array('Time', 'Name', 'Torrents');
@@ -32,7 +32,7 @@ if(!empty($_GET['search'])) {
 if(!empty($_GET['tags'])) {
 	$Tags = explode(',',db_string(trim($_GET['tags'])));
 	foreach($Tags as $ID=>$Tag) {
-		$Tags[$ID] = sanitize_tag($Tag);
+		$Tags[$ID] = Misc::sanitize_tag($Tag);
 	}
 }
 
@@ -102,8 +102,8 @@ if(!empty($_GET['userid'])) {
 	if(!is_number($UserID)) {
 		error(404);
 	}
-	$User = user_info($UserID);
-	$Perms = get_permissions($User['PermissionID']);
+	$User = Users::user_info($UserID);
+	$Perms = Permissions::get_permissions($User['PermissionID']);
 	$UserClass = $Perms['Class'];
 
 	$UserLink = '<a href="user.php?id='.$UserID.'">'.$User['Username'].'</a>';
@@ -138,7 +138,7 @@ $Collages = $DB->to_array();
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 
-show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
+View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 ?>
 <div class="thin">
 	<div class="header">
@@ -247,7 +247,7 @@ if (check_perms('site_collages_create') || check_perms('site_collages_personal')
 <? } ?>
 <br /><br />
 <?
-$Pages=get_pages($Page,$NumResults,COLLAGES_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$NumResults,COLLAGES_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
@@ -261,7 +261,7 @@ echo $Pages;
 <?	} ?>
 </div><!--box-->
 </div><!--content-->
-<? show_footer(); die();
+<? View::show_footer(); die();
 } ?>
 <table width="100%" class="collage_table">
 	<tr class="colhead">
@@ -304,12 +304,12 @@ foreach ($Collages as $Collage) {
 <? } ?>
 		</td>
 		<td><?=(int)$NumTorrents?></td>
-		<td><?=format_username($UserID, false, false, false)?></td>
+		<td><?=Users::format_username($UserID, false, false, false)?></td>
 	</tr>
 <? } ?>
 </table>
 	<div class="linkbox"><?=$Pages?></div>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

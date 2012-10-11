@@ -4,7 +4,7 @@ set_time_limit(0);
 
 //if (!check_perms('site_debug')) { error(403); }
 
-show_header();
+View::show_header();
 
 //requires wget, unzip commands to be installed
 shell_exec('wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity_CSV/GeoLiteCity_'.date('Ym').'02.zip');
@@ -62,7 +62,7 @@ if(count($Values) > 0) {
 }
 
 
-show_footer();
+View::show_footer();
 
 /*
 	The following way works perfectly fine, we just foung the APNIC data to be to outdated for us.
@@ -100,7 +100,7 @@ foreach ($Registries as $Registry) {
 	foreach ($CountryData as $Country) {
 		if (preg_match('/\|([A-Z]{2})\|ipv4\|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\|(\d+)\|/', $Country, $Matches)) {
 
-			$Start = ip2unsigned($Matches[2]);
+			$Start = Tools::ip_to_unsigned($Matches[2]);
 			if($Start == 2147483647) { continue; }
 			
 			if (!isset($Current)) {

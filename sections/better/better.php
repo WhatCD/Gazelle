@@ -1,6 +1,6 @@
 <?
 //Include the header
-show_header('Better');
+View::show_header('Better');
 ?>
 <div class="thin">
 	<h3 id="general">Pursuit of Perfection</h3>
@@ -98,4 +98,4 @@ show_header('Better');
 		</table>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

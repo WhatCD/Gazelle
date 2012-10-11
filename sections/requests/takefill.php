@@ -171,7 +171,7 @@ $DB->query("UPDATE requests SET
 
 if($CategoryName == "Music") {
 	$ArtistForm = get_request_artists($RequestID);
-	$ArtistName = display_artists($ArtistForm, false, true);
+	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$FullName = $ArtistName.$Title;
 } else {
 	$FullName = $Title;
@@ -181,11 +181,11 @@ $DB->query("SELECT UserID FROM requests_votes WHERE RequestID = ".$RequestID);
 $UserIDs = $DB->to_array();
 foreach ($UserIDs as $User) {
 	list($VoterID) = $User;
-	send_pm($VoterID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."[/url]"), '');
+	Misc::send_pm($VoterID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."[/url]"), '');
 }
 
 $RequestVotes = get_votes_array($RequestID);
-write_log("Request ".$RequestID." (".$FullName.") was filled by user ".$FillerID." (".$FillerUsername.") with the torrent ".$TorrentID.", for a ".get_size($RequestVotes['TotalBounty'])." bounty.");
+Misc::write_log("Request ".$RequestID." (".$FullName.") was filled by user ".$FillerID." (".$FillerUsername.") with the torrent ".$TorrentID.", for a ".Format::get_size($RequestVotes['TotalBounty'])." bounty.");
 
 // Give bounty
 $DB->query("UPDATE users_main
@@ -209,7 +209,7 @@ foreach($ArtistIDs as $ArtistID) {
 }
 
 $SS->UpdateAttributes('requests', array('torrentid','fillerid'), array($RequestID => array((int)$TorrentID,(int)$FillerID)));
-update_sphinx_requests($RequestID);
+Requests::update_sphinx_requests($RequestID);
 
 header('Location: requests.php?action=view&id='.$RequestID);
 ?>

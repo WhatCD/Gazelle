@@ -36,7 +36,7 @@ class DEBUG {
 		*/
 		$Ram = memory_get_usage(true);
 		if ($Ram > MAX_MEMORY && !defined('MEMORY_EXCEPTION')) {
-			$Reason[] = get_size($Ram).' Ram Used';
+			$Reason[] = Format::get_size($Ram).' Ram Used';
 		}
 
 		if (isset($_REQUEST['profile'])) {
@@ -57,7 +57,7 @@ class DEBUG {
 		if (empty($Report)) {
 			$Report = $Message;
 		}
-		$Identifier = make_secret(5);
+		$Identifier = Users::make_secret(5);
 		$Cache->cache_value(
 			'analysis_'.$Identifier,
 			array(
@@ -245,14 +245,14 @@ class DEBUG {
 	}
 
 	public function get_sphinxql_queries() {
-		if(class_exists(SPHINXQL)) {
-			return SPHINXQL::$Queries;
+		if(class_exists(SphinxQL)) {
+			return SphinxQL::$Queries;
 		}
 	}
 
 	public function get_sphinxql_time() {
-		if(class_exists(SPHINXQL)) {
-			return SPHINXQL::$Time;
+		if(class_exists(SphinxQL)) {
+			return SphinxQL::$Time;
 		}
 	}
 
@@ -354,7 +354,7 @@ class DEBUG {
 		<tr valign="top">
 			<td align="left"><?=$Event?></td>
 			<td align="left"><?=$MicroTime?> ms</td>
-			<td align="left"><?=get_size($Memory)?></td>
+			<td align="left"><?=Format::get_size($Memory)?></td>
 		</tr>
 <?
 		}

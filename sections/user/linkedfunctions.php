@@ -28,8 +28,8 @@ function link_users($UserID, $TargetID) {
 	$DB->query("SELECT u.GroupID, d.Comments FROM users_dupes AS u JOIN dupe_groups AS d ON d.ID = u.GroupID WHERE UserID = $UserID");
 	list($UserGroupID, $Comments) = $DB->next_record();
 
-	$UserInfo = user_info($UserID);
-	$TargetInfo = user_info($TargetID);
+	$UserInfo = Users::user_info($UserID);
+	$TargetInfo = Users::user_info($TargetID);
 	if (!$UserInfo || !$TargetInfo) {
 		return;
 	}
@@ -75,7 +75,7 @@ function unlink_user($UserID) {
 	if (!is_number($UserID)) {
 		error(403);
 	}
-	$UserInfo = user_info($UserID);
+	$UserInfo = Users::user_info($UserID);
 	if ($UserInfo === FALSE) {
 		return;
 	}
@@ -175,9 +175,9 @@ function user_dupes_table($UserID) {
 	foreach ($Dupes as $Dupe) {
 		$i++;
 		list($DupeID) = $Dupe;
-		$DupeInfo = user_info($DupeID);
+		$DupeInfo = Users::user_info($DupeID);
 ?>
-					<td align="left"><?=format_username($DupeID, true, true, true, true)?>
+					<td align="left"><?=Users::format_username($DupeID, true, true, true, true)?>
 						(<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');">x</a>)</td>
 <?
 		if ($i == 5) {
@@ -206,7 +206,7 @@ function user_dupes_table($UserID) {
 					</tr>
 				</table>
 				<div class="pad hidden linkedaccounts">
-					<label for="target">Link this user with: </label><input type="text" name="target" id="target" /><input type="submit" value="Link" id="submitlink" />
+					<label for="target">Link this user with: </label><input type="text" name="target" id="target" /><input type="submit" value="Update" id="submitlink" />
 				</div>
 			</div>
 		</form>

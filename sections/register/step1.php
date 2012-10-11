@@ -1,5 +1,5 @@
 <?
-show_header('Register','validate');
+View::show_header('Register','validate');
 echo $Val->GenerateJS('registerform');
 ?>
 <script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
@@ -66,4 +66,4 @@ if(empty($Sent)) {
 </div>
 </form>
 <?
-show_footer();
+View::show_footer();

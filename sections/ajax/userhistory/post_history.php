@@ -1,5 +1,5 @@
 <?
-//TODO: replace 24-43 with user_info()
+//TODO: replace 24-43 with Users::user_info()
 /*
 User post history page
 */
@@ -32,7 +32,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-list($Page,$Limit) = page_limit($PerPage);
+list($Page,$Limit) = Format::page_limit($PerPage);
 
 if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
 	$DB->query("SELECT

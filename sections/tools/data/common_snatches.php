@@ -2,7 +2,7 @@
 if (!check_perms('users_mod')) { error(403);
 }
 
-show_header('Common Snatches');
+View::show_header('Common Snatches');
 
 
 ?>
@@ -66,5 +66,5 @@ if(isset($_POST['compare'])) {
 	}
 }
 
-show_footer();
+View::show_footer();
 ?>

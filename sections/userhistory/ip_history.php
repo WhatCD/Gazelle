@@ -29,7 +29,7 @@ if(isset($_POST['ip'])) {
 	$SearchIPQuery = " AND h1.IP = '$SearchIP' ";
 }
 
-show_header("IP history for $Username");
+View::show_header("IP history for $Username");
 ?>
 <script type="text/javascript">
 function ShowIPs(rowname) {
@@ -75,7 +75,7 @@ function UnBan(ip, id, elemID) {
  */
 </script>
 <?
-list($Page,$Limit) = page_limit(IPS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(IPS_PER_PAGE);
 
 if ($UsersOnly == 1) {
 	$RS = $DB->query("SELECT SQL_CALC_FOUND_ROWS
@@ -121,7 +121,7 @@ $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($RS);
 
-$Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 
 ?>
 <div class="thin">
@@ -181,11 +181,11 @@ foreach($Results as $Index => $Result) {
 ?>
 		<tr class="rowa">
 			<td>
-				<?=$IP?> (<?=get_cc($IP)?>)
+				<?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)
 <?
 	if($CanManageIPBans) {
         	if(!isset($IPs[$IP])) {
-                	$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".ip2unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
+                	$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".Tools::ip_to_unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
 			$DB->query($sql);
 			
 			if($DB->record_count() > 0) {
@@ -204,7 +204,7 @@ foreach($Results as $Index => $Result) {
 
 
 			<br />
-			<?=get_host($IP)?>
+			<?=Tools::get_host_by_ajax($IP)?>
 			<?=($HasDupe ? 
 			'<a href="#" onclick="ShowIPs('.$Index.'); return false;">('.count($UserIDs).')</a>' 
 			: '(0)')?></td>
@@ -219,7 +219,7 @@ foreach($Results as $Index => $Result) {
 		if(!$UserEndTimes[$Key]){ $UserEndTimes[$Key] = sqltime(); }
 ?>
 		<tr class="rowb<?=($HideMe ? ' hidden' : '')?>" name="<?=$Index?>">
-			<td>&nbsp;&nbsp;&#187;&nbsp;<?=format_username($Val, true, true, true)?></td>
+			<td>&nbsp;&nbsp;&#187;&nbsp;<?=Users::format_username($Val, true, true, true)?></td>
 			<td><?=time_diff($UserStartTimes[$Key])?></td>
 			<td><?=time_diff($UserEndTimes[$Key])?></td>
 			<td><?//time_diff(strtotime($UserStartTimes[$Key]), strtotime($UserEndTimes[$Key])); ?></td>
@@ -238,4 +238,4 @@ foreach($Results as $Index => $Result) {
 	</div>
 </div>
 
-<? show_footer(); ?>
+<? View::show_footer(); ?>

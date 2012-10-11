@@ -21,7 +21,7 @@ $Wiki = new WIKI('wiki_artists', $ArtistID, "artist.php?id=$ArtistID");
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
 list($Name) = $DB->next_record(MYSQLI_NUM, true);
 
-show_header("Revision history for ".$Name); // Set title
+View::show_header("Revision history for ".$Name); // Set title
 
 // Start printing form
 ?>
@@ -34,5 +34,5 @@ $Wiki->revision_history(); // the wiki class takes over from here
 ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

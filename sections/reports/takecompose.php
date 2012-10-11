@@ -48,7 +48,7 @@ if(!empty($Err)) {
 	die();
 }
 
-$ConvID = send_pm($ToID,$LoggedUser['ID'],db_string($Subject),db_string($Body),$ConvID);
+$ConvID = Misc::send_pm($ToID,$LoggedUser['ID'],db_string($Subject),db_string($Body),$ConvID);
 
 header('Location: reports.php');
 ?>

@@ -289,7 +289,7 @@ $DB->query("SELECT
 									GROUP BY tg.ID");
 						
 						list($ExtraGroupName, $ExtraGroupID, $ExtraArtistID, $ExtraArtistName, $ExtraYear, $ExtraTime, $ExtraRemastered, $ExtraRemasterTitle, 
-							$ExtraRemasterYear, $ExtraMedia, $ExtraFormat, $ExtraEncoding, $ExtraSize, $ExtraHasCue, $ExtraHasLog, $ExtraLogScore, $ExtraUploaderID, $ExtraUploaderName) = display_array($DB->next_record());
+							$ExtraRemasterYear, $ExtraMedia, $ExtraFormat, $ExtraEncoding, $ExtraSize, $ExtraHasCue, $ExtraHasLog, $ExtraLogScore, $ExtraUploaderID, $ExtraUploaderName) = Misc::display_array($DB->next_record());
 						
 					
 					if($ExtraGroupName) {

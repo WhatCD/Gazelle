@@ -385,7 +385,7 @@ $SQL .= "
 $DB->query($SQL);
 
 if(check_perms('torrents_freeleech') && $Properties['FreeLeech'] != $CurFreeLeech) {
-	freeleech_torrents($TorrentID, $Properties['FreeLeech'], $Properties['FreeLeechType']);
+	Torrents::freeleech_torrents($TorrentID, $Properties['FreeLeech'], $Properties['FreeLeechType']);
 }
 
 $DB->query("SELECT GroupID, Time FROM torrents WHERE ID='$TorrentID'");
@@ -423,8 +423,8 @@ if ($Properties['Trumpable'] == 0 && $LogScore == 99 && $Enabled == 1 && strtoti
 $DB->query("SELECT Name FROM torrents_group WHERE ID=$GroupID");
 list($Name) = $DB->next_record(MYSQLI_NUM, false);
 
-write_log("Torrent $TorrentID ($Name) in group $GroupID was edited by ".$LoggedUser['Username']." (".$LogDetails.")"); // TODO: this is probably broken
-write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $LogDetails, 0);
+Misc::write_log("Torrent $TorrentID ($Name) in group $GroupID was edited by ".$LoggedUser['Username']." (".$LogDetails.")"); // TODO: this is probably broken
+Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $LogDetails, 0);
 $Cache->delete_value('torrents_details_'.$GroupID);
 $Cache->delete_value('torrent_download_'.$TorrentID);
 
@@ -434,7 +434,7 @@ foreach($Artists as $ArtistID) {
 	$Cache->delete_value('artist_'.$ArtistID);
 }
 
-update_hash($GroupID);
+Torrents::update_hash($GroupID);
 // All done!
 
 header("Location: torrents.php?id=$GroupID");

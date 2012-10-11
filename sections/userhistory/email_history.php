@@ -25,7 +25,7 @@ $UsersOnly = $_GET['usersonly'];
 
 $DB->query("SELECT Username FROM users_main WHERE ID = ".$UserID);
 list($Username)= $DB->next_record();
-show_header("Email history for $Username");
+View::show_header("Email history for $Username");
 
 if ($UsersOnly == 1) {
 	$DB->query("SELECT
@@ -109,7 +109,7 @@ foreach($History as $Key => $Values){
 			list($Enabled)=$DB->next_record();
 			$DB->set_query_id($ueQuery);
 ?>
-		<td><a href="<?=display_str($UserURL)?>"><?=format_username($UserID2, false, false, true)?></a></td>
+		<td><a href="<?=display_str($UserURL)?>"><?=Users::format_username($UserID2, false, false, true)?></a></td>
 	</tr>	
 <?
 		}
@@ -117,4 +117,4 @@ foreach($History as $Key => $Values){
 ?>
 <? } ?>
 </table>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

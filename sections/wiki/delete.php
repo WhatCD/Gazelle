@@ -12,7 +12,7 @@ if($DB->record_count() < 1) {
 
 list($Title) = $DB->next_record(MYSQLI_NUM, false);
 //Log
-write_log("Wiki article ".$ID." (".$Title.") was deleted by ".$LoggedUser['Username']);
+Misc::write_log("Wiki article ".$ID." (".$Title.") was deleted by ".$LoggedUser['Username']);
 //Delete
 $DB->query("DELETE FROM wiki_articles WHERE ID = $ID");
 $DB->query("DELETE FROM wiki_aliases WHERE ArticleID = $ID");

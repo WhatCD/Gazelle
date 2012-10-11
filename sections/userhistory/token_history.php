@@ -15,8 +15,8 @@ if (isset($_GET['userid'])) {
 }
 if (!is_number($UserID)) { error(404); }
 
-$UserInfo = user_info($UserID);
-$Perms = get_permissions($UserInfo['PermissionID']);
+$UserInfo = Users::user_info($UserID);
+$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
 $UserClass = $Perms['Class'];
 
 if(!check_perms('users_mod')) {
@@ -35,14 +35,14 @@ if (isset($_GET['expire'])) {
 	if (list($InfoHash) = $DB->next_record(MYSQLI_NUM, FALSE)) {
 		$DB->query("UPDATE users_freeleeches SET Expired=TRUE WHERE UserID=$UserID AND TorrentID=$TorrentID");
 		$Cache->delete_value('users_tokens_'.$UserID);
-		update_tracker('remove_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID));
+		Tracker::update_tracker('remove_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID));
 	}
 	header("Location: userhistory.php?action=token_history&userid=$UserID");
 }
 
-show_header('Freeleech token history');
+View::show_header('Freeleech token history');
 
-list($Page,$Limit) = page_limit(25);
+list($Page,$Limit) = Format::page_limit(25);
 
 $DB->query("SELECT SQL_CALC_FOUND_ROWS
 			   f.TorrentID,
@@ -64,11 +64,11 @@ $Tokens = $DB->to_array();
 
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
-$Pages=get_pages($Page, $NumResults, 25);
+$Pages=Format::get_pages($Page, $NumResults, 25);
 
 ?>
 <div class="header">
-	<h2>Freeleech token history for <?=format_username($UserID, true, true, true)?></h2>
+	<h2>Freeleech token history for <?=Users::format_username($UserID, true, true, true)?></h2>
 </div>
 <div class="linkbox"><?=$Pages?></div>
 <table>
@@ -85,14 +85,14 @@ $Pages=get_pages($Page, $NumResults, 25);
 foreach ($Tokens as $Token) {
 	$GroupIDs[] = $Token['GroupID'];
 }
-$Artists = get_artists($GroupIDs);
+$Artists = Artists::get_artists($GroupIDs);
 
 $i = true;
 foreach ($Tokens as $Token) {
 	$i = !$i;
 	list($TorrentID, $GroupID, $Time, $Expired, $Downloaded, $Uses, $Name, $Format, $Encoding) = $Token; 
 	$Name = "<a href=\"torrents.php?torrentid=$TorrentID\">$Name</a>";
-	$ArtistName = display_artists($Artists[$GroupID]);
+	$ArtistName = Artists::display_artists($Artists[$GroupID]);
 	if($ArtistName) {
 		$Name = $ArtistName.$Name;
 	}
@@ -106,7 +106,7 @@ foreach ($Tokens as $Token) {
 		<td><?=($Expired ? 'Yes' : 'No')?><?=(check_perms('users_mod') && !$Expired)?" <a href=\"userhistory.php?action=token_history&amp;expire=1&amp;userid=$UserID&amp;torrentid=$TorrentID\">(expire)</a>":''?>
 		</td>
 <?	if (check_perms('users_mod')) { ?>
-		<td><?=get_size($Downloaded)?></td>
+		<td><?=Format::get_size($Downloaded)?></td>
 		<td><?=$Uses?></td>
 <?	} ?>
 	</tr>
@@ -115,5 +115,5 @@ foreach ($Tokens as $Token) {
 </table>
 <div class="linkbox"><?=$Pages?></div>
 <?
-show_footer();
+View::show_footer();
 ?>

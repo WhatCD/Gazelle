@@ -470,7 +470,7 @@ EXPLANATION OF PARSER LOGIC
 					$Str.='<a href="user.php?action=search&amp;search='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'artist':
-					$Str.='<a href="artist.php?artistname='.urlencode(undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
+					$Str.='<a href="artist.php?artistname='.urlencode(Format::undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
 					break;
 				case 'wiki':
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';

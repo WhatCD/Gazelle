@@ -1,6 +1,6 @@
 <?
 enforce_login();
-show_header('IRC');
+View::show_header('IRC');
 
 $DB->query("SELECT IRCKey FROM users_main WHERE ID = $LoggedUser[ID]");
 list($IRCKey) = $DB->next_record();
@@ -89,5 +89,5 @@ if(empty($IRCKey)) {
 	}
 }
 
-show_footer();
+View::show_footer();
 ?>

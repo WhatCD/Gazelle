@@ -1,5 +1,5 @@
 <?
-show_header('Disabled');
+View::show_header('Disabled');
 if(empty($_POST['submit']) || empty($_POST['username'])) {
 ?>
 <p class="warning">
@@ -90,5 +90,5 @@ Please use your What.CD username.
 </div>
 <?
 }
-show_footer();
+View::show_footer();
 ?>

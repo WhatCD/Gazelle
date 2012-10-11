@@ -10,9 +10,9 @@ else {
 }
 if(!in_array($Section, array('inbox', 'sentbox'))) { error(404); }
 
-list($Page,$Limit) = page_limit(MESSAGES_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 
-show_header('Inbox');
+View::show_header('Inbox');
 ?>
 <div class="thin">
 	<h2><?= ($Section == 'sentbox') ? 'Sentbox' : 'Inbox' ?></h2>
@@ -72,14 +72,14 @@ $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($Results);
 
-$CurURL = get_url(array('sort'));
+$CurURL = Format::get_url(array('sort'));
 if(empty($CurURL)) {
 	$CurURL = "inbox.php?";
 } else {
 	$CurURL = "inbox.php?".$CurURL."&";
 }
 
-$Pages=get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
@@ -145,10 +145,10 @@ echo $Pages;
 <?
 		if($Unread) { echo '</strong>';} ?>
 					</td>
-					<td><?=format_username($SenderID, true, true, true, true)?></td>
+					<td><?=Users::format_username($SenderID, true, true, true, true)?></td>
 					<td><?=time_diff($Date)?></td>
 <?		if(check_perms('users_mod')) { ?>
-					<td><?=($ForwardedID && $ForwardedID != $LoggedUser['ID'] ? format_username($ForwardedID, false, false, false):'')?></td>
+					<td><?=($ForwardedID && $ForwardedID != $LoggedUser['ID'] ? Users::format_username($ForwardedID, false, false, false):'')?></td>
 <?		} ?>
 				</tr>
 <?	} ?>
@@ -162,5 +162,5 @@ echo $Pages;
 	<div class="linkbox"><?=$Pages?></div>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

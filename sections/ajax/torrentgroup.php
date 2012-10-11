@@ -20,7 +20,7 @@ function filter_by_key($input, $keys) { return array_intersect_key($input, array
 
 $TorrentDetails = filter_by_key($TorrentCache[0][0], $GroupAllowed);
 
-$ArtistForm = get_artist($GroupID);
+$ArtistForm = Artists::get_artist($GroupID);
 if($TorrentDetails['CategoryID'] == 0) {
 	$CategoryName = "Unknown";
 } else {

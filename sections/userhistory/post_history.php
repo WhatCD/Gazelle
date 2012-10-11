@@ -1,5 +1,5 @@
 <?
-//TODO: replace 24-43 with user_info()
+//TODO: replace 24-43 with Users::user_info()
 /*
 User post history page
 */
@@ -24,7 +24,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-list($Page,$Limit) = page_limit($PerPage);
+list($Page,$Limit) = Format::page_limit($PerPage);
 
 if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
 	$DB->query("SELECT
@@ -50,7 +50,7 @@ if(check_perms('site_proxy_images') && !empty($Avatar)) {
 	$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&i='.urlencode($Avatar);
 }
 
-show_header('Post history for '.$Username,'subscriptions,comments,bbcode');
+View::show_header('Post history for '.$Username,'subscriptions,comments,bbcode');
 
 if($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
@@ -246,7 +246,7 @@ if(empty($Results)) {
 ?>
 	<div class="linkbox">
 <?
-	$Pages=get_pages($Page,$Results,$PerPage, 11);
+	$Pages=Format::get_pages($Page,$Results,$PerPage, 11);
 	echo $Pages;
 ?>
 	</div>
@@ -258,7 +258,7 @@ if(empty($Results)) {
 			<td  colspan="2">
 				<span style="float:left;">
 					<?=time_diff($AddedTime) ?>
-					in <a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>" title="<?=display_str($ThreadTitle)?>"><?=cut_string($ThreadTitle, 75)?></a>
+					in <a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>
 <?
 		if($ViewingOwn) {
 			if ((!$Locked  || $Sticky) && (!$LastRead || $LastRead < $LastPostID)) { ?> 
@@ -315,7 +315,7 @@ if(empty($Results)) {
 					<a href="#content<?=$PostID?>" onclick="LoadEdit(<?=$PostID?>, 1)">&laquo;</a>
 <? 				} ?>		   
 					Last edited by
-					<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+					<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <?			} ?>		
 				</div>
 			</td>
@@ -332,6 +332,6 @@ if(empty($Results)) {
 </div>
 <?
 
-show_footer();
+View::show_footer();
 
 ?>

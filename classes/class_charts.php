@@ -171,7 +171,7 @@ class POLL_GRAPH extends GOOGLE_CHARTS {
 
 	public function add($Label, $Data) {
 		if ($Label !== false) {
-			$this->Labels[] = cut_string($Label,35);
+			$this->Labels[] = Format::cut_string($Label,35);
 		}
 		$this->Data[] = $Data;
 	}

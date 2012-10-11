@@ -1,6 +1,6 @@
 <?
 //Include the header
-show_header('Chat Rules');
+View::show_header('Chat Rules');
 ?>
 <!-- Forum Rules -->
 <div class="thin">
@@ -134,5 +134,5 @@ show_header('Chat Rules');
 <? include('jump.php'); ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

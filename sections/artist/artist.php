@@ -13,7 +13,6 @@ $Text = new TEXT;
 include(SERVER_ROOT.'/sections/requests/functions.php');
 
 // Similar artist map
-include(SERVER_ROOT.'/classes/class_artist.php');
 include(SERVER_ROOT.'/classes/class_artists_similar.php');
 
 include(SERVER_ROOT.'/classes/class_image_tools.php');
@@ -33,7 +32,7 @@ if(!empty($_GET['revisionid'])) { // if they're viewing an old revision
 if($Data) {
 	$Data = unserialize($Data);
 	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $Importances, $VanityHouseArtist)) = each($Data);
-	
+
 } else {
 	if ($RevisionID) {
 		$sql = "SELECT
@@ -41,7 +40,7 @@ if($Data) {
 			wiki.Image,
 			wiki.body,
 			a.VanityHouse
-			FROM wiki_artists AS wiki 
+			FROM wiki_artists AS wiki
 			LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
 			WHERE wiki.RevisionID='$RevisionID' ";
 	} else {
@@ -56,9 +55,9 @@ if($Data) {
 	}
 	$sql .= " GROUP BY a.ArtistID";
 	$DB->query($sql);
-	
+
 	if($DB->record_count()==0) { error(404); }
-	
+
 	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record(MYSQLI_NUM, array(0));
 }
 
@@ -86,12 +85,12 @@ if(!is_array($Requests)) {
 			SUM(rv.Bounty) AS Bounty
 		FROM requests AS r
 			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID 
+			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
 		WHERE ra.ArtistID = ".$ArtistID."
 			AND r.TorrentID = 0
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
-	
+
 	if($DB->record_count() > 0) {
 		$Requests = $DB->to_array();
 	} else {
@@ -103,19 +102,19 @@ $NumRequests = count($Requests);
 
 $LastReleaseType = 0;
 if(empty($Importances) || empty($TorrentList)) {
-	$DB->query("SELECT 
+	$DB->query("SELECT
 			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),1000 + ta.Importance, tg.ReleaseType) ASC, 
+			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),1000 + ta.Importance, tg.ReleaseType) ASC,
 			    tg.Year DESC, tg.Name DESC");
-	
+
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
-	
+
 	if(count($GroupIDs)>0) {
-		$TorrentList = get_groups($GroupIDs, true,true);
+		$TorrentList = Torrents::get_groups($GroupIDs, true,true);
 		$TorrentList = $TorrentList['matches'];
 	} else {
 		$TorrentList = array();
@@ -138,32 +137,32 @@ foreach($Importances as $ID=>$Group) {
 			//$TorrentList[$GroupID]['ReleaseType'] = 1024;
 			$GuestAlbums = true;
 			break;
-			
+
 		case '3':
 			$Importances[$ID]['ReleaseType'] = 1023;
 			//$TorrentList[$GroupID]['ReleaseType'] = 1023;
 			$RemixerAlbums = true;
 			break;
-			
+
 		case '4':
 			$Importances[$ID]['ReleaseType'] = 1022;
 			//$TorrentList[$GroupID]['ReleaseType'] = 1022;
 			$ComposerAlbums = true;
 			break;
-			
+
 		case '7':
 			$Importances[$ID]['ReleaseType'] = 1021;
 			//$TorrentList[$GroupID]['ReleaseType'] = 1021;
 			$ProducerAlbums = true;
 			break;
-			
+
 		default:
 			$Importances[$ID]['ReleaseType'] = $TorrentList[$Group['GroupID']]['ReleaseType'];
 	}
-	
+
 	if(!in_array($Importances[$ID]['ReleaseType'], $UsedReleases)) {
 		$UsedReleases[] = $Importances[$ID]['ReleaseType'];
-	}	
+	}
 }
 
 if(!empty($GuestAlbums)) {
@@ -199,7 +198,7 @@ if(!empty($UsedReleases)) { ?>
 				$DisplayName = $ReleaseTypes[$ReleaseID]."s";
 				break;
 		}
-		
+
 		if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['HideTypes']) && in_array($ReleaseID, $LoggedUser['HideTypes']))) {
 			$ToggleStr = " onclick=\"$('.releases_$ReleaseID').show(); return true;\"";
 		} else {
@@ -225,7 +224,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 	$TagList = explode(' ',str_replace('_','.',$Group['TagList']));
 
 	$TorrentTags = array();
-	
+
 	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
 	if ($Group['ReleaseType'] != 7 && $Group['ReleaseType'] != 3) {
 		foreach($TagList as $Tag) {	
@@ -238,14 +237,14 @@ foreach ($TorrentList as $GroupID => $Group) {
 	}
 	$TorrentTags = implode(', ', $TorrentTags);
 	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
-	
+
 	foreach ($Group['Torrents'] as $TorrentID => $Torrent) {
 		$NumTorrents++;
-		
+
 		$Torrent['Seeders'] = (int)$Torrent['Seeders'];
 		$Torrent['Leechers'] = (int)$Torrent['Leechers'];
 		$Torrent['Snatched'] = (int)$Torrent['Snatched'];
-		
+
 		$NumSeeders+=$Torrent['Seeders'];
 		$NumLeechers+=$Torrent['Leechers'];
 		$NumSnatches+=$Torrent['Snatched'];
@@ -264,31 +263,31 @@ foreach ($Importances as $Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($TorrentList[$Group['GroupID']]);
 	$ReleaseType = $Group['ReleaseType'];
 	$GroupVanityHouse = $Group['VanityHouse'];
-	
+
 	if ($GroupID == $OldGroupID && $ReleaseType == $OldReleaseType) {
 		continue;
 	} else {
 		$OldGroupID = $GroupID;
 		$OldReleaseType = $ReleaseType;
 	}
-	
+
 	if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['HideTypes']) && in_array($ReleaseType, $LoggedUser['HideTypes']))) {
 		$HideDiscog = ' hidden';
 	} else {
 		$HideDiscog = '';
 	}
-	
+
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 
 	$TorrentTags = array();
-	
+
 	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
 	foreach($TagList as $Tag) {
 		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
 	}
 	$TorrentTags = implode(', ', $TorrentTags);
 	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
-	
+
 	if($ReleaseType!=$LastReleaseType) {
 		switch($ReleaseTypes[$ReleaseType]) {
 			case "Remix" :
@@ -322,13 +321,13 @@ foreach ($Importances as $Group) {
 		$LastReleaseType = $ReleaseType;
 	}
 
-	
+
 	$DisplayName ='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if(check_perms('users_mod') || check_perms('torrents_fix_ghosts')) {
 		$DisplayName .= ' [<a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'" title="Fix ghost DB entry">Fix</a>]';
 	}
 
-	
+
 	switch($ReleaseType){
 		case 1023: // Remixes, DJ Mixes, Guest artists, and Producers need the artist name
 		case 1024:
@@ -337,9 +336,9 @@ foreach ($Importances as $Group) {
 			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 				unset($ExtendedArtists[2]);
 				unset($ExtendedArtists[3]);
-				$DisplayName = display_artists($ExtendedArtists).$DisplayName;
+				$DisplayName = Artists::display_artists($ExtendedArtists).$DisplayName;
 			} elseif(count($GroupArtists)>0) {
-				$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
+				$DisplayName = Artists::display_artists(array(1 => $Artists), true, true).$DisplayName;
 			}
 			break;
 		case 1022:  // Show performers on composer pages
@@ -347,14 +346,14 @@ foreach ($Importances as $Group) {
 				unset($ExtendedArtists[4]);
 				unset($ExtendedArtists[3]);
 				unset($ExtendedArtists[6]);
-				$DisplayName = display_artists($ExtendedArtists).$DisplayName;
+				$DisplayName = Artists::display_artists($ExtendedArtists).$DisplayName;
 			} elseif(count($GroupArtists)>0) {
-				$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
+				$DisplayName = Artists::display_artists(array(1 => $Artists), true, true).$DisplayName;
 			}
 			break;
 		default: // Show composers otherwise
 			if (!empty($ExtendedArtists[4])) {
-				$DisplayName = display_artists(array(4 => $ExtendedArtists[4]), true, true).$DisplayName;
+				$DisplayName = Artists::display_artists(array(4 => $ExtendedArtists[4]), true, true).$DisplayName;
 			}
 	}
 
@@ -383,19 +382,19 @@ foreach ($Importances as $Group) {
 
 	$EditionID = 0;
 	unset($FirstUnknown);
-	
+
 	foreach ($Torrents as $TorrentID => $Torrent) {
 		if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 			$FirstUnknown = !isset($FirstUnknown);
 		}
-			
+
 		if (in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent'])) {
 			$Torrent['PersonalFL'] = 1;
 		}
 
 		if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 		   $Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
-	
+
 			$EditionID++;
 
 			if($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
@@ -405,7 +404,7 @@ foreach ($Importances as $Group) {
 				if($Torrent['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']); $AddExtra=' / '; }
 				if($Torrent['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterTitle']); $AddExtra=' / '; }
 				$RemasterName .= $AddExtra.display_str($Torrent['Media']);
-					
+
 ?>
 	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog<?=$HideDiscog.$HideTorrents?>">
 		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></a></td>
@@ -438,14 +437,14 @@ foreach ($Importances as $Group) {
 		<td colspan="2">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>
-<?		if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824) 
+<?		if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824)
 			&& !in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?> ]
 			</span>
-			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=torrent_info($Torrent)?></a>
+			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
-		<td class="nobr"><?=get_size($Torrent['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
 		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
@@ -457,12 +456,12 @@ if(!empty($TorrentList)) { ?>
 			</table>
 		</div>
 <?}
-	
+
 $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
-show_header($Name, 'browse,requests,bbcode');
+View::show_header($Name, 'browse,requests,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -494,7 +493,7 @@ if (has_bookmarked('artist', $ArtistID)) {
 			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
 
 <?
-	} else { 
+	} else {
 ?>
 			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?
@@ -557,11 +556,11 @@ if(check_perms('zip_downloader')){
 				<form class="download_form" name="zip" action="artist.php" method="post">
 					<input type="hidden" name="action" value="download" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					<input type="hidden" name="artistid" value="<?=$ArtistID?>" /> 
+					<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
 				<ul id="list" class="nobullet">
 <? foreach ($ZIPList as $ListItem) { ?>
 					<li id="list<?=$ListItem?>">
-						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
+						<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
 						<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" title="Remove format from the Collector">[X]</a>
 						<br style="clear:all;" />
@@ -597,7 +596,7 @@ foreach ($ZIPOptions as $Option) {
 					<option value="1"<? if($ZIPPrefs==1){ echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
 					<option value="2"<? if($ZIPPrefs==2){ echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
 				</select>
-				<input type="submit" style="width:210px" value="Download" /> 
+				<input type="submit" style="width:210px" value="Download" />
 				</form>
 			</div>
 		</div>
@@ -656,10 +655,10 @@ if(empty($SimilarArray)) {
 			<ul class="stats nobullet">
 <?
 	if($NumSimilar == 0) { ?>
-				<li><span style="font-style: italic;">None found</span></li> 
+				<li><span style="font-style: italic;">None found</span></li>
 <?	}
 	$First = true;
-	foreach ($SimilarArray as $SimilarArtist) {	
+	foreach ($SimilarArray as $SimilarArtist) {
 		list($Artist2ID, $Artist2Name, $Score, $SimilarID) = $SimilarArtist;
 		$Score = $Score/100;
 		if($First) {
@@ -730,7 +729,7 @@ if($NumRequests > 0) {
 
 			if($CategoryName == "Music") {
 				$ArtistForm = get_request_artists($RequestID);
-				$ArtistLink = display_artists($ArtistForm, true, true);
+				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 				$FullName = $ArtistLink."<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
 			} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
 				$FullName = "<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
@@ -764,7 +763,7 @@ if($NumRequests > 0) {
 <?		} ?>
 			</td>
 			<td>
-				<span id="bounty_<?=$RequestID?>"><?=get_size($Bounty)?></span>
+				<span id="bounty_<?=$RequestID?>"><?=Format::get_size($Bounty)?></span>
 			</td>
 			<td>
 				<?=time_diff($TimeAdded)?>
@@ -815,7 +814,7 @@ if($NumSimilar>0) {
 
 
 
-<? } // if $NumSimilar>0 
+<? } // if $NumSimilar>0
 
 if($NumSimilar>0) { ?>
 
@@ -894,14 +893,14 @@ function require(file, callback) {
 	</div>
 </div>
 <?
-show_footer();
+View::show_footer();
 
 
 // Cache page for later use
 
-if($RevisionID) { 
+if($RevisionID) {
 	$Key = "artist_$ArtistID"."_revision_$RevisionID";
-} else { 
+} else {
 	$Key = 'artist_'.$ArtistID;
 }
 

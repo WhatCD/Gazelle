@@ -3,12 +3,12 @@
 $Queries = array();
 
 $OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
-list($Page,$Limit) = page_limit(REQUESTS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(REQUESTS_PER_PAGE);
 $Submitted = !empty($_GET['submit']);
 					
 //Paranoia					
-$UserInfo = user_info((int)$_GET['userid']);
-$Perms = get_permissions($UserInfo['PermissionID']);
+$UserInfo = Users::user_info((int)$_GET['userid']);
+$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
 $UserClass = $Perms['Class'];
 
 $BookmarkView = false;
@@ -176,14 +176,14 @@ if(!empty($_GET['tags'])){
 	foreach($Tags as $Tag) {
 		$Tag = ltrim($Tag);
 		$Exclude = ($Tag[0] == '!');
-		$Tag = sanitize_tag($Tag);
+		$Tag = Misc::sanitize_tag($Tag);
 		if(!empty($Tag)) {
 			$TagNames[] = $Tag;
 			$TagsExclude[$Tag] = $Exclude;
 		}
 	}
 	$AllNegative = !in_array(false, $TagsExclude);
-	$Tags = get_tags($TagNames);
+	$Tags = Misc::get_tags($TagNames);
 
 	// Replace the ! characters that sanitize_tag removed
 	if($TagType == 1 || $AllNegative) {
@@ -318,13 +318,13 @@ $SS->set_index('requests requests_delta');
 $SphinxResults = $SS->search($Query, '', 0, array(), '', '');
 $NumResults = $SS->TotalResults;
 if($NumResults && $NumResults < ($Page - 1) * REQUESTS_PER_PAGE + 1) {
-	$PageLinks = get_pages(0, $NumResults, REQUESTS_PER_PAGE);
+	$PageLinks = Format::get_pages(0, $NumResults, REQUESTS_PER_PAGE);
 } else {
-	$PageLinks = get_pages($Page, $NumResults, REQUESTS_PER_PAGE);
+	$PageLinks = Format::get_pages($Page, $NumResults, REQUESTS_PER_PAGE);
 }
 
-$CurrentURL = get_url(array('order', 'sort'));
-show_header($Title, 'requests');
+$CurrentURL = Format::get_url(array('order', 'sort'));
+View::show_header($Title, 'requests');
 
 ?>
 <div class="thin">
@@ -370,8 +370,8 @@ show_header($Title, 'requests');
 				<td class="label">Tags (comma-separated):</td>
 				<td>
 					<input type="text" name="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />&nbsp;
-					<input type="radio" name="tags_type" id="tags_type0" value="0" <?selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
-					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
+					<input type="radio" name="tags_type" id="tags_type0" value="0" <?Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 				</td>
 			</tr>
 			<tr>
@@ -535,7 +535,7 @@ foreach($Categories as $CatKey => $CatName) {
 
 	//We don't use sphinxapi's default cache searcher, we use our own functions
 	if(!empty($SphinxResults['notfound'])) {
-		$SQLResults = get_requests($SphinxResults['notfound']);
+		$SQLResults = Requests::get_requests($SphinxResults['notfound']);
 		if(is_array($SQLResults['notfound'])) {
 			//Something wasn't found in the db, remove it from results
 			reset($SQLResults['notfound']);
@@ -582,7 +582,7 @@ foreach($Categories as $CatKey => $CatName) {
 			
 			if($CategoryName == "Music") {
 				$ArtistForm = get_request_artists($RequestID);
-				$ArtistLink = display_artists($ArtistForm, true, true);
+				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 				$FullName = $ArtistLink."<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
 			} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
 				$FullName = "<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
@@ -621,7 +621,7 @@ foreach($Categories as $CatKey => $CatName) {
 <?			} ?>
 			</td>
 			<td class="nobr">
-				<?=get_size($RequestVotes['TotalBounty'])?>
+				<?=Format::get_size($RequestVotes['TotalBounty'])?>
 			</td>
 			<td>
 <?   		if($IsFilled){ ?>
@@ -657,5 +657,5 @@ foreach($Categories as $CatKey => $CatName) {
 	</div>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

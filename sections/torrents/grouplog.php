@@ -2,12 +2,12 @@
 $GroupID = $_GET['groupid'];
 if (!is_number($GroupID)) { error(404); }
 
-show_header("History for Group $GroupID");
+View::show_header("History for Group $GroupID");
 
-$Groups = get_groups(array($GroupID), true, true, false);
+$Groups = Torrents::get_groups(array($GroupID), true, true, false);
 if (!empty($Groups['matches'][$GroupID])) {
 	$Group = $Groups['matches'][$GroupID];
-	$Title = display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';
+	$Title = Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';
 } else {
 	$Title = "Group $GroupID";
 }
@@ -47,7 +47,7 @@ if (!empty($Groups['matches'][$GroupID])) {
 			} else { ?>
 				<td />
 <?			}	?>
-			<td><?=format_username($UserID, false, false, false)?></td>
+			<td><?=Users::format_username($UserID, false, false, false)?></td>
 			<td><?=$Info?></td>
 		</tr>
 <?
@@ -56,5 +56,5 @@ if (!empty($Groups['matches'][$GroupID])) {
 	</table>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

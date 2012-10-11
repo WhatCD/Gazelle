@@ -16,7 +16,7 @@ if(isset($_GET['userid']) && check_perms('users_view_invites')){
 	
 }
 
-list($UserID, $Username, $PermissionID) = array_values(user_info($UserID));
+list($UserID, $Username, $PermissionID) = array_values(Users::user_info($UserID));
 
 
 $DB->query("SELECT InviteKey, Email, Expires FROM invites WHERE InviterID='$UserID' ORDER BY Expires");
@@ -69,7 +69,7 @@ switch($CurrentOrder) {
 		break;
 }
 
-$CurrentURL = get_url(array('action', 'order', 'sort'));
+$CurrentURL = Format::get_url(array('action', 'order', 'sort'));
 
 $DB->query("SELECT
 	ID,
@@ -85,11 +85,11 @@ $DB->query("SELECT
 
 $Invited = $DB->to_array();
 
-show_header('Invites');
+View::show_header('Invites');
 ?>
 <div class="thin">
 	<div class="header">
-		<h2><?=format_username($UserID, false, false, false)?> &gt; Invites</h2>
+		<h2><?=Users::format_username($UserID, false, false, false)?> &gt; Invites</h2>
 		<div class="linkbox">
 			[<a href="user.php?action=invitetree<? if($Sneaky){ echo '&amp;userid='.$UserID; }?>">Invite tree</a>]
 		</div>
@@ -200,16 +200,16 @@ if (!empty($Pending)) {
 		$Row = ($Row == 'a') ? 'b' : 'a';
 ?> 
 			<tr class="row<?=$Row?>">
-				<td><?=format_username($ID, true, true, true, true)?></td>
+				<td><?=Users::format_username($ID, true, true, true, true)?></td>
 				<td><?=display_str($Email)?></td>
 				<td><?=time_diff($JoinDate,1)?></td>
 				<td><?=time_diff($LastAccess,1);?></td>
-				<td><?=get_size($Uploaded)?></td>
-				<td><?=get_size($Downloaded)?></td>
-				<td><?=ratio($Uploaded, $Downloaded)?></td>
+				<td><?=Format::get_size($Uploaded)?></td>
+				<td><?=Format::get_size($Downloaded)?></td>
+				<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
 			</tr>
 <? } ?>
 		</table>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

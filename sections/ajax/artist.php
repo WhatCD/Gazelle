@@ -11,10 +11,6 @@ include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
-// Similar artist map
-include(SERVER_ROOT.'/classes/class_artist.php');
-include(SERVER_ROOT.'/classes/class_artists_similar.php');
-
 $ArtistID = $_GET['id'];
 if(!is_number($ArtistID)) {
 	print json_encode(array('status' => 'failure'));
@@ -53,7 +49,7 @@ if($Data) {
 			wiki.Image,
 			wiki.body,
 			a.VanityHouse
-			FROM wiki_artists AS wiki 
+			FROM wiki_artists AS wiki
 			LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
 			WHERE wiki.RevisionID='$RevisionID' ";
 	} else {
@@ -91,7 +87,7 @@ if(!is_array($Requests)) {
 			SUM(rv.Bounty) AS Bounty
 		FROM requests AS r
 			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID 
+			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
 		WHERE ra.ArtistID = ".$ArtistID."
 			AND r.TorrentID = 0
 		GROUP BY r.ID
@@ -108,18 +104,18 @@ $NumRequests = count($Requests);
 
 $LastReleaseType = 0;
 if(empty($Importances) || empty($TorrentList)) {
-	$DB->query("SELECT 
+	$DB->query("SELECT
 			DISTINCT ta.GroupID, ta.Importance, tg.VanityHouse
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),ta.Importance, 1), 
+			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),ta.Importance, 1),
 			    tg.ReleaseType ASC, tg.Year DESC, tg.Name DESC");
 
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array('GroupID', MYSQLI_BOTH, false);
 	if(count($GroupIDs)>0) {
-		$TorrentList = get_groups($GroupIDs, true,true);
+		$TorrentList = Torrents::get_groups($GroupIDs, true,true);
 		$TorrentList = $TorrentList['matches'];
 	} else {
 		$TorrentList = array();
@@ -181,8 +177,8 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			$Tags[$Tag]['count']++;
 		}
 	}
-	
-	
+
+
 
 	$DisplayName ='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if(check_perms('users_mod')) {
@@ -197,9 +193,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 				unset($ExtendedArtists[2]);
 				unset($ExtendedArtists[3]);
-				$DisplayName = display_artists($ExtendedArtists).$DisplayName;
+				$DisplayName = Artists::display_artists($ExtendedArtists).$DisplayName;
 			} elseif(count($GroupArtists)>0) {
-				$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
+				$DisplayName = Artists::display_artists(array(1 => $Artists), true, true).$DisplayName;
 			}
 			break;
 		case 1022:  // Show performers on composer pages
@@ -207,14 +203,14 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				unset($ExtendedArtists[4]);
 				unset($ExtendedArtists[3]);
 				unset($ExtendedArtists[6]);
-				$DisplayName = display_artists($ExtendedArtists).$DisplayName;
+				$DisplayName = Artists::display_artists($ExtendedArtists).$DisplayName;
 			} elseif(count($GroupArtists)>0) {
-				$DisplayName = display_artists(array(1 => $Artists), true, true).$DisplayName;
+				$DisplayName = Artists::display_artists(array(1 => $Artists), true, true).$DisplayName;
 			}
 			break;
 		default: // Show composers otherwise
 			if (!empty($ExtendedArtists[4])) {
-				$DisplayName = display_artists(array(4 => $ExtendedArtists[4]), true, true).$DisplayName;
+				$DisplayName = Artists::display_artists(array(4 => $ExtendedArtists[4]), true, true).$DisplayName;
 			}
 	}
 

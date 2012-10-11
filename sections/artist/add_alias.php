@@ -4,7 +4,7 @@ authorize();
 if(!check_perms('torrents_edit')) { error(403); }
 $ArtistID = $_POST['artistid'];
 $Redirect = $_POST['redirect'];
-$AliasName = normalise_artist_name($_POST['name']);
+$AliasName = Artists::normalise_artist_name($_POST['name']);
 $DBAliasName = db_string($AliasName);
 if(!$Redirect) { $Redirect = 0; }
 
@@ -35,7 +35,7 @@ if($DB->record_count()) {
 		if($ArtistID == $CloneArtistID && $Redirect == 0) {
 			if($CloneRedirect != 0) {
 				$DB->query("UPDATE artists_alias SET ArtistID='".$ArtistID."', Redirect=0 WHERE AliasID='".$CloneAliasID."'");
-				write_log("Redirection for the alias $CloneAliasID ($DBAliasName) for the artist $ArtistID was removed by user $LoggedUser[ID] ($LoggedUser[Username])");
+				Misc::write_log("Redirection for the alias $CloneAliasID ($DBAliasName) for the artist $ArtistID was removed by user $LoggedUser[ID] ($LoggedUser[Username])");
 			} else {
 				error('No changes were made as the target alias did not redirect anywhere.');
 			}
@@ -66,7 +66,7 @@ if(!$CloneAliasID) {
 	$DB->query("SELECT Name FROM artists_group WHERE ArtistID = ".$ArtistID);
 	list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
 
-	write_log("The alias ".$AliasID." (".$DBAliasName.") was added to the artist ".$ArtistID." (".db_string($ArtistName).") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
+	Misc::write_log("The alias ".$AliasID." (".$DBAliasName.") was added to the artist ".$ArtistID." (".db_string($ArtistName).") by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].")");
 }
 header('Location: '.$_SERVER['HTTP_REFERER']);
 ?>

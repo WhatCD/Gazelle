@@ -26,7 +26,7 @@ if($NewRequest) {
 		error(0);
 	}
 	
-	$Request = get_requests(array($RequestID));
+	$Request = Requests::get_requests(array($RequestID));
 	$Request = $Request['matches'][$RequestID];
 	if(empty($Request)) {
 		error(404);
@@ -452,7 +452,7 @@ if($CategoryName == "Music") {
 			list($GroupCount) = $DB->next_record();
 			if(($ReqCount + $GroupCount) == 0) {
 				//The only group to use this artist
-				delete_artist($ArtistID);
+				Artists::delete_artist($ArtistID);
 			} else {
 				//Not the only group, still need to clear cache
 				$Cache->delete_value('artist_'.$ArtistID);
@@ -508,7 +508,7 @@ if(!$NewRequest) {
 
 $Tags = array_unique(explode(',', $Tags));
 foreach($Tags as $Index => $Tag) {
-	$Tag = sanitize_tag($Tag);
+	$Tag = Misc::sanitize_tag($Tag);
 	$Tags[$Index] = $Tag; //For announce
 	
 	$DB->query("INSERT INTO tags 
@@ -538,7 +538,7 @@ if($NewRequest) {
 	
 	
 	if($CategoryName == "Music") {
-		$Announce = "'".$Title."' - ".display_artists($ArtistForm, false, false)." http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
+		$Announce = "'".$Title."' - ".Artists::display_artists($ArtistForm, false, false)." http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
 	} else {
 		$Announce = "'".$Title."' - http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
 	}
@@ -549,7 +549,7 @@ if($NewRequest) {
 	$Cache->delete_value('request_artists_'.$RequestID);
 }
 
-update_sphinx_requests($RequestID);
+Requests::update_sphinx_requests($RequestID);
 
 header('Location: requests.php?action=view&id='.$RequestID);
 ?>

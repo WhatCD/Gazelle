@@ -24,7 +24,7 @@ if($Snatches > 4 && !check_perms('torrents_delete')) { // Should this be torrent
 	error('You can no longer delete this torrent as it has been snatched by 5 or more users. If you believe there is a problem with the torrent please report it instead.');
 }
 
-show_header('Delete torrent', 'reportsv2');
+View::show_header('Delete torrent', 'reportsv2');
 ?>
 <div class="thin center">
 	<div class="box" style="width:600px; margin:0px auto;">
@@ -275,4 +275,4 @@ foreach($TypeList as $IType => $Data) {
 </div>
 <?
 }
-show_footer(); ?>
+View::show_footer(); ?>

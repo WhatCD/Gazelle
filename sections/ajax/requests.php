@@ -5,12 +5,12 @@ include(SERVER_ROOT.'/sections/requests/functions.php');
 $Queries = array();
 
 $OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
-list($Page,$Limit) = page_limit(REQUESTS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(REQUESTS_PER_PAGE);
 $Submitted = !empty($_GET['submit']);
 					
 //Paranoia					
-$UserInfo = user_info((int)$_GET['userid']);
-$Perms = get_permissions($UserInfo['PermissionID']);
+$UserInfo = Users::user_info((int)$_GET['userid']);
+$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
 $UserClass = $Perms['Class'];
 
 $BookmarkView = false;
@@ -96,12 +96,12 @@ if(!empty($_GET['tags'])){
 	$Tags = explode(',', $_GET['tags']);
 	$TagNames = array();
 	foreach ($Tags as $Tag) {
-		$Tag = sanitize_tag($Tag);
+		$Tag = Misc::sanitize_tag($Tag);
 		if(!empty($Tag)) {
 			$TagNames[] = $Tag;
 		}
 	}
-	$Tags = get_tags($TagNames);
+	$Tags = Misc::get_tags($TagNames);
 }
 
 if(empty($_GET['tags_type']) && !empty($Tags)) {
@@ -278,7 +278,7 @@ $NumResults = $SS->TotalResults;
 //We don't use sphinxapi's default cache searcher, we use our own functions
 
 if(!empty($SphinxResults['notfound'])) {
-	$SQLResults = get_requests($SphinxResults['notfound']);
+	$SQLResults = Requests::get_requests($SphinxResults['notfound']);
 	if(is_array($SQLResults['notfound'])) {
 		//Something wasn't found in the db, remove it from results
 		reset($SQLResults['notfound']);

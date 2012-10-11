@@ -81,7 +81,7 @@ if (!empty ($_GET['order_way']) && $_GET['order_way'] == 'asc') {
 array_multisort($Sort, $SortWay, $Tables);
 //End sorting
 
-show_header('Database Specifics');
+View::show_header('Database Specifics');
 ?>
 <h3>Breakdown</h3>
 <div class="box pad center">
@@ -116,10 +116,10 @@ foreach ($Tables as $Table) {
 		<td><?=display_str($Name)?></td>
 		<td><?=display_str($Engine)?></td>
 		<td><?=number_format($Rows)?></td>
-		<td><?=get_size($RowSize)?></td>
-		<td><?=get_size($DataSize)?></td>
-		<td><?=get_size($IndexSize)?></td>
-		<td><?=get_size($DataSize + $IndexSize)?></td>
+		<td><?=Format::get_size($RowSize)?></td>
+		<td><?=Format::get_size($DataSize)?></td>
+		<td><?=Format::get_size($IndexSize)?></td>
+		<td><?=Format::get_size($DataSize + $IndexSize)?></td>
 		<td>[<a href="tools.php?action=database_specifics&amp;table=<?=display_str($Name)?>">Schema</a>]</td>
 	</tr>
 <?
@@ -130,11 +130,11 @@ foreach ($Tables as $Table) {
 		<td></td>
 		<td><?=number_format($TotalRows)?></td>
 		<td></td>
-		<td><?=get_size($TotalDataSize)?></td>
-		<td><?=get_size($TotalIndexSize)?></td>
-		<td><?=get_size($TotalDataSize + $TotalIndexSize)?></td>
+		<td><?=Format::get_size($TotalDataSize)?></td>
+		<td><?=Format::get_size($TotalIndexSize)?></td>
+		<td><?=Format::get_size($TotalDataSize + $TotalIndexSize)?></td>
 		<td></td>
 	</tr>
 </table>
 <?
-show_footer();
+View::show_footer();

@@ -1,5 +1,5 @@
 <?
-show_header('Create an article');
+View::show_header('Create an article');
 ?>
 <div class="thin">
 	<div class="box pad">
@@ -31,4 +31,4 @@ show_header('Create an article');
 		</form>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

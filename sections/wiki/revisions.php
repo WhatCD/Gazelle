@@ -7,7 +7,7 @@ list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = ar
 if($Read > $LoggedUser['EffectiveClass']){ error(404); }
 if($Edit > $LoggedUser['EffectiveClass']){ error(403); }
 
-show_header("Revisions of ".$Title);
+View::show_header("Revisions of ".$Title);
 ?>
 <div class="thin">
 	<div class="header">
@@ -28,7 +28,7 @@ show_header("Revisions of ".$Title);
 			<tr>
 				<td><?=$Revision?></td>
 				<td><?=$Title?></td>
-				<td><?=format_username($AuthorID, false, false, false)?></td>
+				<td><?=Users::format_username($AuthorID, false, false, false)?></td>
 				<td><?=time_diff($Date)?></td>
 				<td><input type="radio" name="old" value="<?=$Revision?>" disabled /></td>
 				<td><input type="radio" name="new" value="<?=$Revision?>" /></td>
@@ -46,7 +46,7 @@ while(list($Revision, $Title, $AuthorID, $Date) = $DB->next_record()) { ?>
 			<tr>
 				<td><?=$Revision?></td>
 				<td><?=$Title?></td>
-				<td><?=format_username($AuthorID, false, false, false)?></td>
+				<td><?=Users::format_username($AuthorID, false, false, false)?></td>
 				<td><?=time_diff($Date)?></td>
 				<td><input type="radio" name="old" value="<?=$Revision?>" /></td>
 				<td><input type="radio" name="new" value="<?=$Revision?>" /></td>
@@ -60,4 +60,4 @@ while(list($Revision, $Title, $AuthorID, $Date) = $DB->next_record()) { ?>
 		</table>
 	</form>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

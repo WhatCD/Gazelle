@@ -24,9 +24,9 @@ list($Name) = $DB->next_record();
 
 //Everything is legit, let's just confim they're not retarded
 if(empty($_POST['confirm'])) {
-	$Artists = get_artists(array($GroupID, $NewGroupID));
+	$Artists = Artists::get_artists(array($GroupID, $NewGroupID));
 	
-	show_header();
+	View::show_header();
 ?>
 	<div class="center thin">
 	<div class="header">
@@ -40,15 +40,15 @@ if(empty($_POST['confirm'])) {
 			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
 			<input type="hidden" name="targetgroupid" value="<?=$NewGroupID?>" />
 			<h3>You are attempting to merge the group:</h3>
-			<ul><li><?= display_artists($Artists[$GroupID], true, false)?> - <a href="torrents.php?id=<?=$GroupID?>"><?=$Name?></a></li></ul>
+			<ul><li><?= Artists::display_artists($Artists[$GroupID], true, false)?> - <a href="torrents.php?id=<?=$GroupID?>"><?=$Name?></a></li></ul>
 			<h3>Into the group:</h3>
-			<ul><li><?= display_artists($Artists[$NewGroupID], true, false)?> - <a href="torrents.php?id=<?=$NewGroupID?>"><?=$NewName?></a></li></ul>
+			<ul><li><?= Artists::display_artists($Artists[$NewGroupID], true, false)?> - <a href="torrents.php?id=<?=$NewGroupID?>"><?=$NewName?></a></li></ul>
 			<input type="submit" value="Confirm" />
 		</form>
 	</div>
 	</div>
 <?
-	show_footer();
+	View::show_footer();
 } else {
 	authorize();
 
@@ -56,9 +56,9 @@ if(empty($_POST['confirm'])) {
 	$DB->query("UPDATE wiki_torrents SET PageID='$NewGroupID' WHERE PageID='$GroupID'");
 	$DB->query("UPDATE torrents_comments SET GroupID='$NewGroupID' WHERE GroupID='$GroupID'");
 	
-	delete_group($GroupID);
+	Torrents::delete_group($GroupID);
 
-	write_group_log($NewGroupID, 0, $LoggedUser['ID'], "Merged Group ".$GroupID." (".$Name.") to ".$NewGroupID." (".$NewName.")", 0);
+	Torrents::write_group_log($NewGroupID, 0, $LoggedUser['ID'], "Merged Group ".$GroupID." (".$Name.") to ".$NewGroupID." (".$NewName.")", 0);
 	$DB->query("UPDATE group_log SET GroupID = ".$NewGroupID." WHERE GroupID = ".$GroupID);
 	
 	$GroupID=$NewGroupID;
@@ -93,7 +93,7 @@ if(empty($_POST['confirm'])) {
 	$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_0');
 	$Cache->delete_value('torrent_comments_'.$GroupID);
 	$Cache->delete_value('groups_artists_'.$GroupID);
-	update_hash($GroupID);
+	Torrents::update_hash($GroupID);
 	
 	header('Location: torrents.php?id='.$GroupID);
 }

@@ -20,10 +20,10 @@ if ($ConvID = (int)$_GET['id']) {
 		$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
 	}
 
-	show_header('Staff PM', 'staffpm,bbcode');
+	View::show_header('Staff PM', 'staffpm,bbcode');
 
-	$UserInfo = user_info($UserID);
-	$UserStr = format_username($UserID, true, true, true, true);
+	$UserInfo = Users::user_info($UserID);
+	$UserStr = Users::format_username($UserID, true, true, true, true);
 
 	$OwnerID   = $UserID;
 	$OwnerName = $UserInfo['Username'];
@@ -72,8 +72,8 @@ if ($ConvID = (int)$_GET['id']) {
 			$Username   = $OwnerName;
 		} else {
 			// Staff/FLS
-			$UserInfo = user_info($UserID);
-			$UserString = format_username($UserID, true, true, true, true);
+			$UserInfo = Users::user_info($UserID);
+			$UserString = Users::format_username($UserID, true, true, true, true);
 			$Username = $UserInfo['Username'];
 		}
 ?>
@@ -225,7 +225,7 @@ if ($ConvID = (int)$_GET['id']) {
 </div>
 <?
 
-	show_footer();
+	View::show_footer();
 } else {
 	// No id
 	header('Location: staffpm.php');

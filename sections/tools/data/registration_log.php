@@ -1,8 +1,8 @@
 <?
 if(!check_perms('users_view_ips') || !check_perms('users_view_email')) { error(403); }
-show_header('Registration log');
+View::show_header('Registration log');
 define('USERS_PER_PAGE', 50);
-list($Page,$Limit) = page_limit(USERS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 
 
 $RS = $DB->query("SELECT 
@@ -47,7 +47,7 @@ if($DB->record_count()) {
 ?>
 	<div class="linkbox">
 <?
-	$Pages=get_pages($Page,$Results,USERS_PER_PAGE,11) ;
+	$Pages=Format::get_pages($Page,$Results,USERS_PER_PAGE,11) ;
 	echo $Pages;
 ?>
 	</div>
@@ -66,8 +66,8 @@ if($DB->record_count()) {
 	$Row = ($IP == $InviterIP) ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
-			<td><?=format_username($UserID, true, true, true, true)?><br /><?=format_username($InviterID, true, true, true, true)?></td>
-			<td><?=ratio($Uploaded,$Downloaded)?><br /><?=ratio($InviterUploaded,$InviterDownloaded)?></td>
+			<td><?=Users::format_username($UserID, true, true, true, true)?><br /><?=Users::format_username($InviterID, true, true, true, true)?></td>
+			<td><?=Format::get_ratio_html($Uploaded,$Downloaded)?><br /><?=Format::get_ratio_html($InviterUploaded,$InviterDownloaded)?></td>
 			<td>
 				<span style="float:left;"><?=display_str($Email)?></span>
 				<span style="float:right;">[<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" title="History">H</a>|<a href="/user.php?action=search&email_history=on&email=<?=display_str($Email)?>" title="Search">S</a>]</span><br />
@@ -85,8 +85,8 @@ if($DB->record_count()) {
 				<?=$InviterIPCC?>
 			</td>
 			<td>
-				<?=get_host($IP)?><br />
-				<?=get_host($InviterIP)?>
+				<?=Tools::get_host_by_ajax($IP)?><br />
+				<?=Tools::get_host_by_ajax($InviterIP)?>
 			</td>
 			<td><?=time_diff($Joined)?><br /><?=time_diff($InviterJoined)?></td>
 		</tr>
@@ -98,5 +98,5 @@ if($DB->record_count()) {
 <? } else { ?>
 	<h2 align="center">There have been no new registrations in the past 72 hours.</h2>
 <? }
-show_footer();
+View::show_footer();
 ?>

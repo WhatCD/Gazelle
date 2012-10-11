@@ -8,7 +8,7 @@ $TagList = implode(', ', explode(' ', $TagList));
 
 if($CategoryID == 0 && $UserID!=$LoggedUser['ID'] && !check_perms('site_collages_delete')) { error(403); }
 
-show_header('Edit collage');
+View::show_header('Edit collage');
 ?>
 <div class="thin">
 	<div class="header">
@@ -76,4 +76,4 @@ show_header('Edit collage');
 		</table>
 	</form>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

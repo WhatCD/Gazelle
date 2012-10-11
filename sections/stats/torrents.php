@@ -55,7 +55,7 @@ $Pie->color('FF33CC');
 $Pie->generate();
 $Categories = $Pie->url();
 
-show_header();
+View::show_header();
 ?>
 
 <div class="box pad center">
@@ -67,4 +67,4 @@ show_header();
 	<img src="<?=$Categories?>" alt="" />
 </div>
 <?
-show_footer();
+View::show_footer();

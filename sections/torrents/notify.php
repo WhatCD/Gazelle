@@ -2,7 +2,7 @@
 if(!check_perms('site_torrents_notify')) { error(403); }
 
 define('NOTIFICATIONS_PER_PAGE', 50);
-list($Page,$Limit) = page_limit(NOTIFICATIONS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
 
 $TokenTorrents = $Cache->get_value('users_tokens_'.$LoggedUser['ID']);
 if (empty($TokenTorrents)) {
@@ -28,13 +28,13 @@ $GroupIDs = array_unique($DB->collect('GroupID'));
 $DB->query('SELECT FOUND_ROWS()');
 list($TorrentCount) = $DB->next_record();
 $Debug->log_var($TorrentCount, 'Torrent count');
-$Pages = get_pages($Page, $TorrentCount, NOTIFICATIONS_PER_PAGE, 9);
+$Pages = Format::get_pages($Page, $TorrentCount, NOTIFICATIONS_PER_PAGE, 9);
 
 if(count($GroupIDs)) {
-	$TorrentGroups = get_groups($GroupIDs);
+	$TorrentGroups = Torrents::get_groups($GroupIDs);
 	$TorrentGroups = $TorrentGroups['matches'];
 
-	// Need some extra info that get_groups() doesn't return
+	// Need some extra info that Torrents::get_groups() doesn't return
 	$DB->query("SELECT ID, CategoryID FROM torrents_group WHERE ID IN (".implode(',', $GroupIDs).")");
 	$GroupCategoryIDs = $DB->to_array('ID', MYSQLI_ASSOC, false);
 
@@ -43,7 +43,7 @@ if(count($GroupIDs)) {
 	$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
 }
 
-show_header('My notifications', 'notifications');
+View::show_header('My notifications', 'notifications');
 $DB->set_query_id($Results);
 ?>
 <div class="header">
@@ -111,7 +111,7 @@ $DB->set_query_id($Results);
 			// generate torrent's title
 			$DisplayName = '';
 			if(!empty($GroupInfo['ExtendedArtists'])) {
-				$DisplayName = display_artists($GroupInfo['ExtendedArtists'], true, true);
+				$DisplayName = Artists::display_artists($GroupInfo['ExtendedArtists'], true, true);
 			}
 			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID' title='View Torrent'>".$GroupInfo['Name']."</a>";
 
@@ -125,7 +125,7 @@ $DB->set_query_id($Results);
 			}
 
 			// append extra info to torrent title
-			$ExtraInfo = torrent_info($TorrentInfo, true, true);
+			$ExtraInfo = Torrents::torrent_info($TorrentInfo, true, true);
 			$Debug->log_var($ExtraInfo, "Extra torrent info ($TorrentID)");
 
 			$TagLinks = array();
@@ -163,7 +163,7 @@ $DB->set_query_id($Results);
 		</td>
 		<td><?=$TorrentInfo['FileCount']?></td>
 		<td style="text-align:right" class="nobr"><?=time_diff($TorrentInfo['Time'])?></td>
-		<td class="nobr" style="text-align:right"><?=get_size($TorrentInfo['Size'])?></td>
+		<td class="nobr" style="text-align:right"><?=Format::get_size($TorrentInfo['Size'])?></td>
 		<td style="text-align:right"><?=number_format($TorrentInfo['Snatched'])?></td>
 		<td style="text-align:right"><?=number_format($TorrentInfo['Seeders'])?></td>
 		<td style="text-align:right"><?=number_format($TorrentInfo['Leechers'])?></td>
@@ -181,4 +181,4 @@ $DB->set_query_id($Results);
 <div class="linkbox">
 	<?=$Pages?>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

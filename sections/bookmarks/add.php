@@ -46,7 +46,7 @@ if($DB->record_count() == 0) {
 			if ($Freeleech == "1") { $Title .= " / Freeleech!"; }
 			if ($Freeleech == "2") { $Title .= " / Neutral leech!"; }
 	
-			$UploaderInfo = user_info($UploaderID);
+			$UploaderInfo = Users::user_info($UploaderID);
 			$Item = $Feed->item($Title, 
 								$Text->strip_bbcode($Body),
 								'torrents.php?action=download&amp;authkey=[[AUTHKEY]]&amp;torrent_pass=[[PASSKEY]]&amp;id='.$TorrentID,

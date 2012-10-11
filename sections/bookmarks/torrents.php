@@ -43,7 +43,7 @@ if($Data) {
 	$GroupIDs = $DB->collect('GroupID');
 	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
 	if(count($GroupIDs)>0) {
-		$TorrentList = get_groups($GroupIDs);
+		$TorrentList = Torrents::get_groups($GroupIDs);
 		$TorrentList = $TorrentList['matches'];
 	} else {
 		$TorrentList = array();
@@ -103,9 +103,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
-			$DisplayName = display_artists($ExtendedArtists);
+			$DisplayName = Artists::display_artists($ExtendedArtists);
 	} elseif(count($GroupArtists)>0) {
-			$DisplayName = display_artists(array('1'=>$GroupArtists));
+			$DisplayName = Artists::display_artists(array('1'=>$GroupArtists));
 	} else {
 		$DisplayName = '';
 	}
@@ -210,9 +210,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <?			} ?>
 			| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
-			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=torrent_info($Torrent)?></a>
+			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
-		<td class="nobr"><?=get_size($Torrent['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
 		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
@@ -255,7 +255,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			<span style="float:right;"><?=time_diff($AddedTime);?></span>
 
 		</td>
-		<td class="nobr"><?=get_size($Torrent['Size'])?></td>
+		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
 		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
@@ -272,9 +272,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
 		unset($ExtendedArtists[2]);
 		unset($ExtendedArtists[3]);
-		$DisplayName .= display_artists($ExtendedArtists, false);
+		$DisplayName .= Artists::display_artists($ExtendedArtists, false);
 	} elseif(count($GroupArtists)>0) {
-		$DisplayName .= display_artists(array('1'=>$GroupArtists), false);
+		$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists), false);
 	}
 	$DisplayName .= $GroupName;
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
@@ -308,7 +308,7 @@ for ($i=0; $i < $NumGroups/$CollageCovers; $i++) {
 	$CollagePages[] = $CollagePage;
 }
 
-show_header($Title, 'browse,collage');
+View::show_header($Title, 'browse,collage');
 ?>
 <div class="thin">
 	<div class="header">
@@ -330,7 +330,7 @@ show_header($Title, 'browse,collage');
 	</div>
 </div><!--content-->
 <?
-	show_footer();
+	View::show_footer();
 	die();
 } ?>
 	<div class="sidebar">
@@ -423,6 +423,6 @@ if($CollageCovers != 0) { ?>
 	</div>
 </div>
 <?
-show_footer();
+View::show_footer();
 $Cache->cache_value('bookmarks_torrent_'.$UserID.'_full', serialize(array(array($TorrentList, $CollageDataList))), 3600);
 ?>

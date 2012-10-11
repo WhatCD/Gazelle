@@ -38,11 +38,11 @@ if(!is_array($UserSessions)) {
 	$Cache->cache_value('users_sessions_'.$UserID, $UserSessions, 0);
 }
 
-list($UserID, $Username) = array_values(user_info($UserID));
-show_header($Username.' &gt; Sessions');
+list($UserID, $Username) = array_values(Users::user_info($UserID));
+View::show_header($Username.' &gt; Sessions');
 ?>
 <div class="thin">
-<h2><?=format_username($UserID,$Username)?> &gt; Sessions</h2>
+<h2><?=Users::format_username($UserID,$Username)?> &gt; Sessions</h2>
 	<div class="box pad">
 		<p>Note: Clearing cookies can result in ghost sessions which are automatically removed after 30 days.</p>
 	</div>
@@ -87,5 +87,5 @@ show_header($Username.' &gt; Sessions');
 	</div>
 </div>
 
-show_footer();
+View::show_footer();
 ?>

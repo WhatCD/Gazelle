@@ -37,7 +37,7 @@ $CategoryName = $Categories[$CategoryID - 1];
 
 if($CategoryName == "Music") {
 	$ArtistForm = get_request_artists($RequestID);
-	$ArtistName = display_artists($ArtistForm, false, true);
+	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$FullName = $ArtistName.$Title;
 } else {
 	$FullName = $Title;
@@ -52,15 +52,15 @@ if ($RequestVotes['TotalBounty'] > $Uploaded) {
 } else {
 	$DB->query("UPDATE users_main SET Uploaded = Uploaded - ".$RequestVotes['TotalBounty']." WHERE ID = ".$FillerID);
 }
-send_pm($FillerID, 0, db_string("A request you filled has been unfilled"), db_string("The request '[url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
+Misc::send_pm($FillerID, 0, db_string("A request you filled has been unfilled"), db_string("The request '[url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
 
 $Cache->delete_value('user_stats_'.$FillerID);
 
 if($UserID != $LoggedUser['ID']) {
-	send_pm($UserID, 0, db_string("A request you created has been unfilled"), db_string("The request '[url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
+	Misc::send_pm($UserID, 0, db_string("A request you created has been unfilled"), db_string("The request '[url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
 }
 
-write_log("Request $RequestID ($FullName), with a ".get_size($RequestVotes['TotalBounty'])." bounty, was unfilled by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].") for the reason: ".$_POST['reason']);
+Misc::write_log("Request $RequestID ($FullName), with a ".Format::get_size($RequestVotes['TotalBounty'])." bounty, was unfilled by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].") for the reason: ".$_POST['reason']);
 
 $Cache->delete_value('request_'.$RequestID);
 $Cache->delete_value('request_artists_'.$RequestID);
@@ -68,7 +68,7 @@ if ($GroupID) {
 	$Cache->delete_value('requests_group_'.$GroupID);
 }
 
-update_sphinx_requests($RequestID);
+Requests::update_sphinx_requests($RequestID);
 
 if(!empty($ArtistForm)) {
 	foreach($ArtistForm as $ArtistType) {

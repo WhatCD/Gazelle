@@ -33,11 +33,11 @@ $AltName=$GroupName; // Goes in the alt text of the image
 $Title=$GroupName; // goes in <title>
 $WikiBody = $Text->full_format($WikiBody);
 
-$Artists = get_artist($GroupID);
+$Artists = Artists::get_artist($GroupID);
 
 if($Artists) {
-	$DisplayName = '<span dir="ltr">'.display_artists($Artists, true).$DisplayName.'</span>';
-	$AltName = display_str(display_artists($Artists, false)).$AltName;
+	$DisplayName = '<span dir="ltr">'.Artists::display_artists($Artists, true).$DisplayName.'</span>';
+	$AltName = display_str(Artists::display_artists($Artists, false)).$AltName;
 	$Title = $AltName;
 }
 
@@ -87,7 +87,7 @@ if (empty($TokenTorrents)) {
 }
 
 // Start output
-show_header($Title,'browse,comments,torrent,bbcode');
+View::show_header($Title,'browse,comments,torrent,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -147,7 +147,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[4] as $Artist) {
 ?>
 				<li class="artists_composers">
-					<?=display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).'&lrm;'?>
 <?			if(check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
@@ -166,7 +166,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[6] as $Artist) {
 ?>
 				<li class="artists_dj">
-					<?=display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).'&lrm;'?>
 <?		      if(check_perms('torrents_edit')){
 			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
                                 list($AliasID) = $DB->next_record();
@@ -189,7 +189,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 	foreach($Artists[1] as $Artist) {
 ?>
 				<li class="artist_main">
-					<?=display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).'&lrm;'?>
 <?		if(check_perms('torrents_edit')){
 			$AliasID = $Artist['aliasid'];
 			if (empty($AliasID)) {
@@ -207,7 +207,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[2] as $Artist) {
 ?>
 				<li class="artist_guest">
-					<?=display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).'&lrm;'?>
 <?			if(check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
@@ -227,7 +227,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[5] as $Artist) {
 ?>
 				<li class="artists_conductors">
-					<?=display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).'&lrm;'?>
 <?			if(check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
@@ -247,7 +247,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[3] as $Artist) {
 ?>
 				<li class="artists_remix">
-					<?=display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).'&lrm;'?>
 <?		      if(check_perms('torrents_edit')){
 			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
                                 list($AliasID) = $DB->next_record();
@@ -267,7 +267,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[7] as $Artist) {
 ?>
 				<li class="artists_producer">
-					<?=display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).'&lrm;'?>
 <?		      if(check_perms('torrents_edit')){
 			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
                                 list($AliasID) = $DB->next_record();
@@ -376,7 +376,7 @@ if(count($Tags) > 0) {
 <?
 
 function filelist($Str) {
-	return "</td><td>".get_size($Str[1])."</td></tr>";
+	return "</td><td>".Format::get_size($Str[1])."</td></tr>";
 }
 
 $LastRemasterYear = '-';
@@ -426,7 +426,7 @@ foreach ($TorrentList as $Torrent) {
 		foreach($Reports as $Report) {
 			list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
 
-			$Reporter = user_info($ReporterID);
+			$Reporter = Users::user_info($ReporterID);
 			$ReporterName = $Reporter['Username'];
 
 			if (array_key_exists($ReportType, $Types[$GroupCategoryID])) {
@@ -455,7 +455,7 @@ foreach ($TorrentList as $Torrent) {
 
 	$TorrentUploader = $Username; // Save this for "Uploaded by:" below
 
-	// similar to torrent_info()
+	// similar to Torrents::torrent_info()
 	if($Format) { $ExtraInfo.=display_str($Format); $AddExtra=' / '; }
 	if($Encoding) { $ExtraInfo.=$AddExtra.display_str($Encoding); $AddExtra=' / '; }
 	if($HasLog) { $ExtraInfo.=$AddExtra.'Log'; $AddExtra=' / '; }
@@ -542,7 +542,7 @@ foreach ($TorrentList as $Torrent) {
 					]</span>
 					&raquo; <a href="#" onclick="$('#torrent_<?=$TorrentID?>').toggle(); return false;"><?=$ExtraInfo; ?></a>
 				</td>
-				<td class="nobr"><?=get_size($Size)?></td>
+				<td class="nobr"><?=Format::get_size($Size)?></td>
 				<td><?=number_format($Snatched)?></td>
 				<td><?=number_format($Seeders)?></td>
 				<td><?=number_format($Leechers)?></td>
@@ -550,7 +550,7 @@ foreach ($TorrentList as $Torrent) {
 			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> torrentdetails pad <? if(!isset($_GET['torrentid']) || $_GET['torrentid']!=$TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
 				<td colspan="5">
 					<blockquote>
-						Uploaded by <?=format_username($UserID, false, false, false)?> <?=time_diff($TorrentTime);?>
+						Uploaded by <?=Users::format_username($UserID, false, false, false)?> <?=time_diff($TorrentTime);?>
 <? if($Seeders == 0){ ?>
 						<?
 						if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
@@ -635,7 +635,7 @@ if (count($Requests) > 0) {
 							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$Request['ID']?>)"><strong>(+)</strong></a>
 						</form>
 					</td>
-					<td><?=get_size($RequestVotes['TotalBounty'])?></td>
+					<td><?=Format::get_size($RequestVotes['TotalBounty'])?></td>
 				</tr>
 <?	} ?>
 			</table>
@@ -750,9 +750,9 @@ if($Results === false) {
 if(isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
 	$DB->query("SELECT COUNT(ID) FROM torrents_comments WHERE GroupID = $GroupID AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
-	list($Page,$Limit) = page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
 } else {
-	list($Page,$Limit) = page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
 }
 
 //Get the cache catalogue
@@ -786,7 +786,7 @@ $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMME
 ?>
 	<div class="linkbox"><a name="comments"></a>
 <?
-$Pages=get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
+$Pages=Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
 echo $Pages;
 ?>
 	</div>
@@ -795,15 +795,15 @@ echo $Pages;
 //---------- Begin printing
 foreach($Thread as $Key => $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(user_info($AuthorID));
+	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<span style="float:left;"><a class="post_id" href='torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
-				<strong><?=format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
+				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
                     <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
-                        $AuthorInfo = user_info($AuthorID);
+                        $AuthorInfo = Users::user_info($AuthorID);
                         if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
                         <form  class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
 	                        <input type="hidden" name="action" value="warn" />
@@ -849,7 +849,7 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('torrents', <?=$PostID?>, 1); return false;">&laquo;</a> 
 <? 	} ?>
 				Last edited by
-				<?=format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <? } ?>
 			</div>
 		</td>
@@ -868,7 +868,7 @@ if(!$LoggedUser['DisablePosting']) { ?>
 					<tr class="colhead_dark">
 						<td colspan="2">
 							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=format_username($LoggedUser['ID'], true, true, true, true)?></strong>	Just now
+								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong>	Just now
 							<a href="#quickreplypreview">[Report Comment]</a>
 							</span>
 							<span id="barpreview" style="float:right;">
@@ -903,4 +903,4 @@ if(!$LoggedUser['DisablePosting']) { ?>
 <? } ?>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

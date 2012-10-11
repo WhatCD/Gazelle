@@ -24,7 +24,7 @@ $UsersOnly = $_GET['usersonly'];
 
 $DB->query("SELECT Username FROM users_main WHERE ID = ".$UserID);
 list($Username)= $DB->next_record();
-show_header("Email history for $Username");
+View::show_header("Email history for $Username");
 
 // Get current email (and matches)
 $DB->query("
@@ -86,7 +86,7 @@ if ($CurrentEmail['Usernames'] != '') {
 	$UserIPs=explode('|', $CurrentEmail['UserIPs']);
 
 	foreach($UserIDs as $Key => $Val) {
-		$CurrentMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.format_username($Val, true, true, true);
+		$CurrentMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.Users::format_username($Val, true, true, true);
 		$CurrentMatches[$Key]['IP'] = $UserIPs[$Key];
 		$CurrentMatches[$Key]['EndTime'] = $UserSetTimes[$Key];
 	}
@@ -132,7 +132,7 @@ if (count($History) == 1) {
 		if ($Val['Usernames'] != '') {
 			// Match with old email
 			$OldMatches[$Key]['Email'] = $Val['Email'];
-			$OldMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.format_username($Val['UserIDs'], true, true, true);
+			$OldMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.Users::format_username($Val['UserIDs'], true, true, true);
 			$OldMatches[$Key]['EndTime'] = $Val['UserSetTimes'];
 			$OldMatches[$Key]['IP'] = $Val['UserIPs'];
 		}
@@ -176,12 +176,12 @@ if ($Old) {
 			<td><?=time_diff($Current['StartTime'])?></td>
 			<td></td>
 			<td>
-				<?=display_str($Current['CurrentIP'])?> (<?=get_cc($Current['CurrentIP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Current['CurrentIP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Current['CurrentIP'])?>" title="WIPA">WI</a>]<br />
-				<?=get_host($Current['CurrentIP'])?>
+				<?=display_str($Current['CurrentIP'])?> (<?=Tools::get_country_code_by_ajax($Current['CurrentIP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Current['CurrentIP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Current['CurrentIP'])?>" title="WIPA">WI</a>]<br />
+				<?=Tools::get_host_by_ajax($Current['CurrentIP'])?>
 			</td>
 			<td>
-				<?=display_str($Current['IP'])?> (<?=get_cc($Current['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Current['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Current['IP'])?>" title="WIPA">WI</a>]<br />
-				<?=get_host($Current['IP'])?>
+				<?=display_str($Current['IP'])?> (<?=Tools::get_country_code_by_ajax($Current['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Current['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Current['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=Tools::get_host_by_ajax($Current['IP'])?>
 			</td>
 		</tr>
 <?
@@ -195,8 +195,8 @@ if ($CurrentMatches) {
 			<td><?=time_diff($Match['EndTime'])?></td>
 			<td></td>
 			<td>
-				<?=display_str($Match['IP'])?> (<?=get_cc($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
-				<?=get_host($Match['IP'])?>
+				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
 		</tr>			
 <? 
@@ -232,8 +232,8 @@ if ($Old) {
 			<td><?=time_diff($Match['EndTime'])?></td>
 			<td></td>
 			<td>
-				<?=display_str($Match['IP'])?> (<?=get_cc($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
-				<?=get_host($Match['IP'])?>
+				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
 		</tr>	
 <?			
@@ -251,8 +251,8 @@ if ($Old) {
 			<td><?=time_diff($Record['EndTime'])?></td>
 			<td><?=time_diff($Record['ElapsedTime'])?></td>
 			<td>
-				<?=display_str($Record['IP'])?> (<?=get_cc($Record['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Record['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Record['IP'])?>" title="WIPA">WI</a>]<br />
-				<?=get_host($Record['IP'])?>
+				<?=display_str($Record['IP'])?> (<?=Tools::get_country_code_by_ajax($Record['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Record['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Record['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=Tools::get_host_by_ajax($Record['IP'])?>
 			</td>
 		</tr>			
 <?		
@@ -290,8 +290,8 @@ if ($OldMatches) {
 			<td><?=time_diff($Match['EndTime'])?></td>
 			<td></td>
 			<td>
-				<?=display_str($Match['IP'])?> (<?=get_cc($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
-				<?=get_host($Match['IP'])?>
+				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
 		</tr>	
 <?
@@ -308,8 +308,8 @@ if ($OldMatches) {
 			<td><?=time_diff($Invite['EndTime'])?></td>
 			<td><?=time_diff($Invite['AccountAge'])?></td>
 			<td>
-				<?=display_str($Invite['IP'])?> (<?=get_cc($Invite['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Invite['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Invite['IP'])?>" title="WIPA">WI</a>]<br />
-				<?=get_host($Invite['IP'])?>
+				<?=display_str($Invite['IP'])?> (<?=Tools::get_country_code_by_ajax($Invite['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Invite['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Invite['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=Tools::get_host_by_ajax($Invite['IP'])?>
 			</td>
 		</tr>
 <?
@@ -321,4 +321,4 @@ if ($Matches) {
 ?>		
 	</table>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

@@ -1,6 +1,6 @@
 <?
 //Include the header
-show_header('Ratio Requirements');
+View::show_header('Ratio Requirements');
 ?>
 <div class="thin">
 	<div class="header">
@@ -130,5 +130,5 @@ show_header('Ratio Requirements');
 <? include('jump.php'); ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

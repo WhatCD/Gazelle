@@ -3,7 +3,7 @@ if(!check_perms('admin_donor_log')) { error(403); }
 
 include(SERVER_ROOT.'/sections/donate/config.php');
 
-show_header('Bitcoin donation balance');
+View::show_header('Bitcoin donation balance');
 
 $Balance = btc_balance() . " BTC";
 $Receiveds = btc_received();
@@ -31,7 +31,7 @@ while ($row = $DB->next_record()) {
 	if ($amount === false) { continue; }
 	?>
 	<tr>
-		<td><?=format_username($row['UserID'], true, false, false, false)?></td>
+		<td><?=Users::format_username($row['UserID'], true, false, false, false)?></td>
 		<td><tt><?=$row['BitcoinAddress']?></tt></td>
 		<td><?=$amount?></td>
 	</tr>
@@ -40,4 +40,4 @@ while ($row = $DB->next_record()) {
 ?>
 	</table>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

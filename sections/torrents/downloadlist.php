@@ -56,7 +56,7 @@ $i = 0;
 foreach($Results as $ID=>$Data) {
 	list($SnatcherID, $Timestamp) = array_values($Data);
 	
-	$User = format_username($SnatcherID, true, true, true, true);
+	$User = Users::format_username($SnatcherID, true, true, true, true);
 	
 	if(!array_key_exists($SnatcherID, $Snatched) && $SnatcherID!=$UserID) {
 		$User = '<span style="font-style: italic;">'.$User.'</span>';

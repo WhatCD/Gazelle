@@ -287,7 +287,7 @@ if(empty($Properties['GroupID']) && empty($ArtistForm) && $Type == "Music") {
 	for($i = 0, $il = count($Artists); $i < $il; $i++) {
 		if(trim($Artists[$i]) != "") {
 			if(!in_array($Artists[$i], trim($ArtistNames))) {
-				$ArtistForm[$Importance[$i]][] = array('name' => normalise_artist_name($Artists[$i]));
+				$ArtistForm[$Importance[$i]][] = array('name' => Artists::normalise_artist_name($Artists[$i]));
 				if($Importance[$i] == 1) {
 					$MainArtistCount++;
 				}
@@ -299,14 +299,14 @@ if(empty($Properties['GroupID']) && empty($ArtistForm) && $Type == "Music") {
 		$Err = "Please enter at least one main artist";
 		$ArtistForm = array();
 	}
-	$LogName .= display_artists($ArtistForm, false, true, false);
+	$LogName .= Artists::display_artists($ArtistForm, false, true, false);
 } elseif($Type == "Music" && empty($ArtistForm)) {
 	$DB->query("SELECT ta.ArtistID,aa.Name,ta.Importance FROM torrents_artists AS ta JOIN artists_alias AS aa ON ta.AliasID = aa.AliasID WHERE ta.GroupID = ".$Properties['GroupID']." ORDER BY ta.Importance ASC, aa.Name ASC;");
 	while(list($ArtistID,$ArtistName,$ArtistImportance) = $DB->next_record(MYSQLI_BOTH, false)) {
 		$ArtistForm[$ArtistImportance][] = array('id' => $ArtistID, 'name' => display_str($ArtistName));
 		$ArtistsUnescaped[$ArtistImportance][] = array('name' => $ArtistName);
 	}
-	$LogName .= display_artists($ArtistsUnescaped, false, true, false);
+	$LogName .= Artists::display_artists($ArtistsUnescaped, false, true, false);
 }
 
 
@@ -388,10 +388,10 @@ foreach($FileList as $File) {
 }
 
 // To be stored in the database
-$FilePath = isset($Tor->Val['info']->Val['files']) ? db_string(make_utf8($DirName)) : "";
+$FilePath = isset($Tor->Val['info']->Val['files']) ? db_string(Format::make_utf8($DirName)) : "";
 
 // Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}
-$FileString = "'".db_string(make_utf8(implode('|||', $TmpFileList)))."'";
+$FileString = "'".db_string(Format::make_utf8(implode('|||', $TmpFileList)))."'";
 
 // Number of files described in torrent
 $NumFiles = count($FileList);
@@ -460,7 +460,7 @@ if($Type == 'Music') {
 					$NoRevision = true;
 				}
 			}
-			$Properties['Artist'] = display_artists(get_artist($GroupID), false, false);
+			$Properties['Artist'] = Artists::display_artists(Artists::get_artist($GroupID), false, false);
 		}
 	}
 	if(!$GroupID) {
@@ -492,7 +492,7 @@ if($Type == 'Music') {
 							$NoRevision = true;
 						}
 					}
-					$ArtistForm = get_artist($GroupID);
+					$ArtistForm = Artists::get_artist($GroupID);
 					//This torrent belongs in a group
 					break;
 
@@ -598,9 +598,9 @@ if(!$NoRevision) {
 $Tags = explode(',', $Properties['TagList']);
 if(!$Properties['GroupID']) {
 	foreach($Tags as $Tag) {
-		$Tag = sanitize_tag($Tag);
+		$Tag = Misc::sanitize_tag($Tag);
 		if(!empty($Tag)) {
-		$Tag = get_alias_tag($Tag);
+		$Tag = Misc::get_alias_tag($Tag);
 			$DB->query("INSERT INTO tags
 				(Name, UserID) VALUES
 				('".$Tag."', $LoggedUser[ID])
@@ -637,7 +637,7 @@ $DB->query("
 $Cache->increment('stats_torrent_count');
 $TorrentID = $DB->inserted_id();
 
-update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => $T['FreeLeech']));
+Tracker::update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => $T['FreeLeech']));
 
 
 
@@ -646,10 +646,10 @@ update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlenc
 
 $DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($TorrentID, '".db_string($Tor->dump_data())."')");
 
-write_log("Torrent $TorrentID ($LogName) (".number_format($TotalSize/(1024*1024), 2)." MB) was uploaded by " . $LoggedUser['Username']);
-write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "uploaded (".number_format($TotalSize/(1024*1024), 2)." MB)", 0);
+Misc::write_log("Torrent $TorrentID ($LogName) (".number_format($TotalSize/(1024*1024), 2)." MB) was uploaded by " . $LoggedUser['Username']);
+Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "uploaded (".number_format($TotalSize/(1024*1024), 2)." MB)", 0);
 
-update_hash($GroupID);
+Torrents::update_hash($GroupID);
 
 
 
@@ -682,7 +682,7 @@ if(trim($Properties['Image']) != "") {
 			if(count($RecentUploads) == 5) {
 				array_pop($RecentUploads);
 			}
-			array_unshift($RecentUploads, array('ID'=>$GroupID,'Name'=>trim($Properties['Title']),'Artist'=>display_artists($ArtistForm, false, true),'WikiImage'=>trim($Properties['Image'])));
+			array_unshift($RecentUploads, array('ID'=>$GroupID,'Name'=>trim($Properties['Title']),'Artist'=>Artists::display_artists($ArtistForm, false, true),'WikiImage'=>trim($Properties['Image'])));
 			$Cache->cache_value('recent_uploads_'.$UserID, $RecentUploads, 0);
 		} while (0);
 	}
@@ -699,7 +699,7 @@ if ($Properties['LibraryImage'] != "") {
 //--------------- IRC announce and feeds ---------------------------------------//
 $Announce = "";
 
-if($Type == 'Music'){ $Announce .= display_artists($ArtistForm, false); }
+if($Type == 'Music'){ $Announce .= Artists::display_artists($ArtistForm, false); }
 $Announce .= trim($Properties['Title'])." ";
 if($Type == 'Music'){
 	$Announce .= '['.trim($Properties['Year']).']';
@@ -932,12 +932,12 @@ foreach($ArtistForm as $Importance => $Artists) {
 }
 
 if (!$Private) {
-	show_header("Warning");
+	View::show_header("Warning");
 ?>
 	<h1>Warning</h1>
 	<p><strong>Your torrent has been uploaded; however, you must download your torrent from <a href="torrents.php?id=<?=$GroupID?>">here</a> because you didn't make your torrent using the "private" option.</strong></p>
 <?
-	show_footer();
+	View::show_footer();
 	die();
 } elseif($RequestID) {
 	header("Location: requests.php?action=takefill&requestid=".$RequestID."&torrentid=".$TorrentID."&auth=".$LoggedUser['AuthKey']);

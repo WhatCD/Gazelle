@@ -35,9 +35,9 @@ if(empty($_POST['confirm'])) {
 		error('Target must be a music group.');
 	}
 
-	$Artists = get_artists(array($OldGroupID, $GroupID));
+	$Artists = Artists::get_artists(array($OldGroupID, $GroupID));
 	
-	show_header();
+	View::show_header();
 ?>
 	<div class="thin">
 		<div class="header">
@@ -52,15 +52,15 @@ if(empty($_POST['confirm'])) {
 				<input type="hidden" name="oldgroupid" value="<?=$OldGroupID?>" />
 				<input type="hidden" name="groupid" value="<?=$GroupID?>" />
 				<h3>You are attempting to move the torrent with ID <?=$TorrentID?> from the group:</h3>
-				<ul><li><?= display_artists($Artists[$OldGroupID], true, false)?> - <a href="torrents.php?id=<?=$OldGroupID?>"><?=$Name?></a></li></ul>
+				<ul><li><?= Artists::display_artists($Artists[$OldGroupID], true, false)?> - <a href="torrents.php?id=<?=$OldGroupID?>"><?=$Name?></a></li></ul>
 				<h3>Into the group:</h3>
-				<ul><li><?= display_artists($Artists[$GroupID], true, false)?> - <a href="torrents.php?id=<?=$GroupID?>"><?=$NewName?></a></li></ul>
+				<ul><li><?= Artists::display_artists($Artists[$GroupID], true, false)?> - <a href="torrents.php?id=<?=$GroupID?>"><?=$NewName?></a></li></ul>
 				<input type="submit" value="Confirm" />
 			</form>
 		</div>
 	</div>
 <?
-	show_footer();
+	View::show_footer();
 } else {
 	authorize();
 
@@ -75,11 +75,11 @@ if(empty($_POST['confirm'])) {
 		$DB->query("UPDATE torrents_comments SET GroupID='$GroupID' WHERE GroupID='$OldGroupID'");
 		$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_0');
 		$Cache->delete_value('torrent_comments_'.$GroupID);
-		delete_group($OldGroupID);
+		Torrents::delete_group($OldGroupID);
 	} else {
-		update_hash($OldGroupID);
+		Torrents::update_hash($OldGroupID);
 	}
-	update_hash($GroupID);
+	Torrents::update_hash($GroupID);
 	
 	// Clear artist caches
 	$DB->query("SELECT DISTINCT ArtistID FROM torrents_artists WHERE GroupID IN ('$GroupID', '$OldGroupID')");
@@ -87,8 +87,8 @@ if(empty($_POST['confirm'])) {
 		$Cache->delete_value('artist_'.$ArtistID); 
 	}
 	
-	write_log("Torrent $TorrentID was edited by " . $LoggedUser['Username']); // TODO: this is probably broken
-	write_group_log($GroupID, 0, $LoggedUser['ID'], "merged group ".$OldGroupID, 0);
+	Misc::write_log("Torrent $TorrentID was edited by " . $LoggedUser['Username']); // TODO: this is probably broken
+	Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "merged group ".$OldGroupID, 0);
 	$DB->query("UPDATE group_log SET GroupID = ".$GroupID." WHERE GroupID = ".$OldGroupID);
 	
 	$Cache->delete_value('torrents_details_'.$GroupID);	

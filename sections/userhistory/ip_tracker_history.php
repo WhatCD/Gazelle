@@ -26,7 +26,7 @@ if(!check_perms('users_view_ips', $Class)) {
 
 $UsersOnly = $_GET['usersonly'];
 
-show_header("Tracker IP history for $Username");
+View::show_header("Tracker IP history for $Username");
 ?>
 <script type="text/javascript">
 function ShowIPs(rowname) {
@@ -34,7 +34,7 @@ function ShowIPs(rowname) {
 }
 </script>
 <?
-list($Page,$Limit) = page_limit(IPS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(IPS_PER_PAGE);
 
 $TrackerIps = $DB->query("SELECT IP, fid, tstamp FROM xbt_snatched WHERE uid = ".$UserID." AND IP != '' ORDER BY tstamp DESC LIMIT $Limit");
 
@@ -42,7 +42,7 @@ $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($TrackerIps);
 
-$Pages=get_pages($Page,$NumResults,IPS_PER_PAGE,9);
+$Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 
 ?>
 <div class="thin">
@@ -63,7 +63,7 @@ foreach($Results as $Index => $Result) {
 
 ?>
 	<tr class="rowa">
-		<td><?=$IP?> (<?=get_cc($IP)?>)<br /><?=get_host($IP)?>
+		<td><?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)<br /><?=Tools::get_host_by_ajax($IP)?> 
 		[<a href="http://whatismyipaddress.com/ip/<?=display_str($IP)?>" title="Search WIMIA.com">WI</a>] 
 		<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a></td>
 		<td><?=date("Y-m-d g:i:s", $Time)?></td>
@@ -78,5 +78,5 @@ foreach($Results as $Index => $Result) {
 </div>
 
 <?
-show_footer();
+View::show_footer();
 ?>

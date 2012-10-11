@@ -46,7 +46,7 @@ $DB->query("SELECT um.ID, Username
 
 while(list($PMUserID, $Username) = $DB->next_record()) {
 	$PMUserID = (int)$PMUserID;
-	$Users[$PMUserID]['UserStr'] = format_username($PMUserID, true, true, true, true);
+	$Users[$PMUserID]['UserStr'] = Users::format_username($PMUserID, true, true, true, true);
 	$Users[$PMUserID]['Username'] = $Username;
 }
 $Users[0]['UserStr'] = 'System'; // in case it's a message from the system

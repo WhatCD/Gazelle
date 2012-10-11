@@ -61,12 +61,12 @@ if ($SiteOptions) {
 	$SiteOptions = array();
 }
 
-show_header($Username.' > Settings','user,jquery,password_validate,validate');
+View::show_header($Username.' > Settings','user,jquery,password_validate,validate');
 echo $Val->GenerateJS('userform');
 ?>
 <div class="thin">
 	<div class="header">
-		<h2><?=format_username($UserID, false, false, false)?> &gt; Settings</h2>
+		<h2><?=Users::format_username($UserID, false, false, false)?> &gt; Settings</h2>
 	</div>
 	<form class="edit_form" name="user" id="userform" action="" method="post" onsubmit="return formVal();" autocomplete="off">
 		<div>
@@ -457,4 +457,4 @@ list($ArtistsAdded) = $DB->next_record();
 		</table>
 	</form>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

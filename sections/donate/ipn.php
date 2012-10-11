@@ -47,10 +47,10 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 						$Cache->begin_transaction('user_info_heavy_'.$_POST['custom']);
 						$Cache->update_row(false, array('Invites' => $Invites));
 						$Cache->commit_transaction(0);
-						send_pm($_POST['custom'],0,db_string('Thank you for your donation'),db_string('Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Because this is your first time donating, you have now been awarded Donor status as represented by the <3 found on your profile and next to your username where it appears. This has entitled you to a additional site features which you can now explore, and has granted you '.DONOR_INVITES.' invitations to share with others. Thank you for supporting '.SITE_NAME.'.'),'');
+						Misc::send_pm($_POST['custom'],0,db_string('Thank you for your donation'),db_string('Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Because this is your first time donating, you have now been awarded Donor status as represented by the <3 found on your profile and next to your username where it appears. This has entitled you to a additional site features which you can now explore, and has granted you '.DONOR_INVITES.' invitations to share with others. Thank you for supporting '.SITE_NAME.'.'),'');
 					} else {
 						//Repeat donor
-						send_pm($_POST['custom'],0,db_string('Thank you for your donation'),db_string('Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Your continued support is highly appreciated and helps to make this place possible.'),'');
+						Misc::send_pm($_POST['custom'],0,db_string('Thank you for your donation'),db_string('Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Your continued support is highly appreciated and helps to make this place possible.'),'');
 					}
 					
 					
@@ -60,7 +60,7 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 	} else {
 		if ($_POST['mc_gross'] > 0) {
 			//Donation less than minimum
-			send_pm($_POST['custom'],0,db_string('Thank you for your donation'),db_string('Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Unfortunately however this donation was less than the specified minimum donation of '.PAYPAL_MINIMUM.' '.PAYPAL_CURRENCY.' and while we are grateful, no special privileges have been awarded to you.'),'');
+			Misc::send_pm($_POST['custom'],0,db_string('Thank you for your donation'),db_string('Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Unfortunately however this donation was less than the specified minimum donation of '.PAYPAL_MINIMUM.' '.PAYPAL_CURRENCY.' and while we are grateful, no special privileges have been awarded to you.'),'');
 		} else {
 			//Failed pending donation
 			$Message = "User http://".NONSSL_SITE_URL."/user.php?id=".$_POST['custom']." had donation of ".$TotalDonated." ".PAYPAL_CURRENCY." at ".$DonationTime." UTC from ".$_POST['payer_email']." returned.";
@@ -83,7 +83,7 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 				$Cache->begin_transaction('user_info_heavy_'.$_POST['custom']);
 				$Cache->update_row(false, array('Invites' => $Invites));
 				$Cache->commit_transaction(0);
-				send_pm($_POST['custom'],0,db_string('Notice of donation failure'),db_string('PapPal has just notified us that the donation you sent from '.$_POST['payer_email'].' of '.$TotalDonated.' '.PAYPAL_CURRENCY.' at '.$DonationTime.' UTC has been revoked. Because of this your special privileges have been revoked, and your invites removed.'),'');
+				Misc::send_pm($_POST['custom'],0,db_string('Notice of donation failure'),db_string('PapPal has just notified us that the donation you sent from '.$_POST['payer_email'].' of '.$TotalDonated.' '.PAYPAL_CURRENCY.' at '.$DonationTime.' UTC has been revoked. Because of this your special privileges have been revoked, and your invites removed.'),'');
 				
 				
 				send_irc("PRIVMSG ".BOT_REPORT_CHAN." :".$Message);
@@ -100,7 +100,7 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 } else {
 	$DB->query("INSERT INTO ip_bans
 	(FromIP, ToIP, Reason) VALUES
-	('".ip2unsigned($_SERVER['REMOTE_ADDR'])."','".ip2long($_SERVER['REMOTE_ADDR'])."', 'Attempted to exploit donation system.')");
+	('".Tools::ip_to_unsigned($_SERVER['REMOTE_ADDR'])."','".ip2long($_SERVER['REMOTE_ADDR'])."', 'Attempted to exploit donation system.')");
 }
 fclose ($Socket);
 if (check_perms('site_debug')) {

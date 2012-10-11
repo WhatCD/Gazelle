@@ -66,7 +66,7 @@ if($Err) {
 
 $TagList = explode(',',$_POST['tags']);
 foreach($TagList as $ID=>$Tag) {
-	$TagList[$ID] = sanitize_tag($Tag);
+	$TagList[$ID] = Misc::sanitize_tag($Tag);
 }
 $TagList = implode(' ',$TagList);
 
@@ -77,7 +77,7 @@ $DB->query("INSERT INTO collages
 
 $CollageID = $DB->inserted_id();
 $Cache->delete_value('collage_'.$CollageID);
-write_log("Collage ".$CollageID." (".$_POST['name'].") was created by ".$LoggedUser['Username']);
+Misc::write_log("Collage ".$CollageID." (".$_POST['name'].") was created by ".$LoggedUser['Username']);
 header('Location: collages.php?id='.$CollageID);
 
 ?>

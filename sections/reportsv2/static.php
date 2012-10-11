@@ -17,7 +17,7 @@ include(SERVER_ROOT.'/classes/class_text.php');
 $Text = NEW TEXT;
 
 define('REPORTS_PER_PAGE', '10');
-list($Page,$Limit) = page_limit(REPORTS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(REPORTS_PER_PAGE);
 
 
 if(isset($_GET['view'])){
@@ -184,9 +184,9 @@ $Reports = $DB->to_array();
 
 $DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
-$PageLinks=get_pages($Page,$Results,REPORTS_PER_PAGE,11);
+$PageLinks=Format::get_pages($Page,$Results,REPORTS_PER_PAGE,11);
 
-show_header('Reports V2!', 'reportsv2,bbcode');
+View::show_header('Reports V2!', 'reportsv2,bbcode');
 
 ?>
 <div class="header">
@@ -225,7 +225,7 @@ if(count($Reports) == 0) {
 		
 		list($ReportID, $ReporterID, $ReporterName, $TorrentID, $Type, $UserComment, $ResolverID, $ResolverName, $Status, $ReportedTime, $LastChangeTime, 
 			$ModComment, $Tracks, $Images, $ExtraIDs, $Links, $LogMessage, $GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle, 
-			$RemasterYear, $Media, $Format, $Encoding, $Size, $HasCue, $HasLog, $LogScore, $UploaderID, $UploaderName) = display_array($Report, array("ModComment"));
+			$RemasterYear, $Media, $Format, $Encoding, $Size, $HasCue, $HasLog, $LogScore, $UploaderID, $UploaderName) = Misc::display_array($Report, array("ModComment"));
 		
 		if(!$GroupID && $Status != "Resolved") {
 			//Torrent already deleted
@@ -438,7 +438,7 @@ if(count($Reports) == 0) {
 									GROUP BY tg.ID");
 						
 						list($ExtraGroupName, $ExtraGroupID, $ExtraArtistID, $ExtraArtistName, $ExtraYear, $ExtraTime, $ExtraRemastered, $ExtraRemasterTitle, 
-							$ExtraRemasterYear, $ExtraMedia, $ExtraFormat, $ExtraEncoding, $ExtraSize, $ExtraHasCue, $ExtraHasLog, $ExtraLogScore, $ExtraUploaderID, $ExtraUploaderName) = display_array($DB->next_record());
+							$ExtraRemasterYear, $ExtraMedia, $ExtraFormat, $ExtraEncoding, $ExtraSize, $ExtraHasCue, $ExtraHasLog, $ExtraLogScore, $ExtraUploaderID, $ExtraUploaderName) = Misc::display_array($DB->next_record());
 						
 						if($ExtraGroupName) {
 			if ($ArtistID == 0 && empty($ArtistName)) {
@@ -650,5 +650,5 @@ if(count($Reports) == 0) {
 	<?=$PageLinks?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

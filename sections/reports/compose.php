@@ -32,7 +32,7 @@ list($ComposeToUsername) = $DB->next_record();
 if(!$ComposeToUsername) {
 	error(404);
 }
-show_header('Compose', 'inbox,bbcode');
+View::show_header('Compose', 'inbox,bbcode');
 
 switch($Type) {
 	case "user" :
@@ -52,7 +52,7 @@ switch($Type) {
 			$Error = "No request with the reported ID found";
 		} else {
 			list($Name) = $DB->next_record();
-			$TypeLink = "[url=https://".SSL_SITE_URL."requests.php?action=view&amp;id=".$ThingID."]".display_str($Name)."[/url]";
+			$TypeLink = "[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$ThingID."]".display_str($Name)."[/url]";
 			$Subject = "Request Report: ". display_str($Name);
 
 		}
@@ -63,7 +63,7 @@ switch($Type) {
 			$Error = "No collage with the reported ID found";
 		} else {
 			list($Name) = $DB->next_record();
-			$TypeLink = "[url=https://".SSL_SITE_URL."collage.php?id=".$ThingID."]".display_str($Name)."[/url]";
+			$TypeLink = "[url=https://".SSL_SITE_URL."/collage.php?id=".$ThingID."]".display_str($Name)."[/url]";
 			$Subject = "Collage Report: ". display_str($Name);
 
 		}
@@ -74,7 +74,7 @@ switch($Type) {
 			$Error = "No forum thread with the reported ID found";
 		} else {
 			list($Title) = $DB->next_record();
-			$TypeLink = "[url=https://".SSL_SITE_URL."forums.php?action=viewthread&amp;threadid=".$ThingID."]".display_str($Title)."[/url]";
+			$TypeLink = "[url=https://".SSL_SITE_URL."/forums.php?action=viewthread&amp;threadid=".$ThingID."]".display_str($Title)."[/url]";
 			$Subject = "Thread Report: ". display_str($Title);
 
 		}
@@ -90,7 +90,7 @@ switch($Type) {
 			$Error =  "No forum post with the reported ID found";
 		} else {
 			list($PostID,$Body,$TopicID,$PostNum) = $DB->next_record();
-			$TypeLink = "[url=https://".SSL_SITE_URL."forums.php?action=viewthread&amp;threadid=".$TopicID."&amp;post=".$PostNum."#post".$PostID."]FORUM POST[/url]";
+			$TypeLink = "[url=https://".SSL_SITE_URL."/forums.php?action=viewthread&amp;threadid=".$TopicID."&amp;post=".$PostNum."#post".$PostID."]FORUM POST[/url]";
 			$Subject = "Post Report";
 
 		}
@@ -102,7 +102,7 @@ switch($Type) {
 		} else {
 			list($RequestID, $Body, $PostNum) = $DB->next_record();
 			$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-			$TypeLink = "[url=https://".SSL_SITE_URL."requests.php?action=view&amp;id=".$RequestID."&amp;page=".$PageNum."#post".$ThingID."]REQUEST COMMENT[/url]";
+			$TypeLink = "[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."&amp;page=".$PageNum."#post".$ThingID."]REQUEST COMMENT[/url]";
 			$Subject = "Request Comment Report";
 
 		}
@@ -114,7 +114,7 @@ switch($Type) {
 		} else {
 			list($GroupID, $Body, $PostNum) = $DB->next_record();
 			$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-			$TypeLink = "[url=https://".SSL_SITE_URL."torrents.php?id=".$GroupID."&amp;page=".$PageNum."#post".$ThingID."]TORRENT COMMENT[/url]";
+			$TypeLink = "[url=https://".SSL_SITE_URL."/torrents.php?id=".$GroupID."&amp;page=".$PageNum."#post".$ThingID."]TORRENT COMMENT[/url]";
 			$Subject = "Torrent Comment Report";
 
 		}
@@ -127,7 +127,7 @@ switch($Type) {
 			list($CollageID, $Body, $PostNum) = $DB->next_record();
 			$PerPage = POSTS_PER_PAGE;
 			$PageNum = ceil($PostNum / $PerPage);
-			$TypeLink = "[url=https://".SSL_SITE_URL."collage.php?action=comments&amp;collageid=".$CollageID."&amp;page=".$PageNum."#post".$ThingID."]COLLAGE COMMENT[/url]";
+			$TypeLink = "[url=https://".SSL_SITE_URL."/collage.php?action=comments&amp;collageid=".$CollageID."&amp;page=".$PageNum."#post".$ThingID."]COLLAGE COMMENT[/url]";
 			$Subject = "Collage Comment Report";
 		}
 		break;
@@ -173,5 +173,5 @@ $Body = "You reported this $TypeLink for the reason:\n[quote]".$Reason."[/quote]
 </div>
 
 <?
-show_footer();
+View::show_footer();
 ?>

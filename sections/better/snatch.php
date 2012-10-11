@@ -49,9 +49,9 @@ $GroupIDs = $DB->collect('GroupID');
 
 if(count($GroupIDs) == 0) { error('No results found'); }
 
-$Results = get_groups($GroupIDs);
+$Results = Torrents::get_groups($GroupIDs);
 
-show_header('Transcode Snatches');
+View::show_header('Transcode Snatches');
 ?>
 <div class="linkbox">
 <? if($SeedingOnly) { ?>
@@ -76,7 +76,7 @@ foreach ($Results as $GroupID=>$Group) {
 	
 	$DisplayName = '';
 	if(count($Artists)>0) {
-		$DisplayName = display_artists(array('1'=>$Artists));
+		$DisplayName = Artists::display_artists(array('1'=>$Artists));
 	}
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
@@ -116,5 +116,5 @@ foreach ($Results as $GroupID=>$Group) {
 	</table>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

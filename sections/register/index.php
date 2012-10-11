@@ -66,7 +66,7 @@ if(!empty($_REQUEST['confirm'])) {
 		}
 		
 		if(!$Err) {
-			$torrent_pass=make_secret();
+			$torrent_pass=Users::make_secret();
 			
 			//Previously SELECT COUNT(ID) FROM users_main, which is a lot slower.
 			$DB->query("SELECT ID FROM users_main LIMIT 1");
@@ -81,12 +81,12 @@ if(!empty($_REQUEST['confirm'])) {
 				$Enabled = '0';
 			}
 
-			$ipcc = geoip($_SERVER['REMOTE_ADDR']);
+			$ipcc = Tools::geoip($_SERVER['REMOTE_ADDR']);
 			
 			
 			$DB->query("INSERT INTO users_main 
 				(Username,Email,PassHash,torrent_pass,IP,PermissionID,Enabled,Invites,Uploaded,ipcc) VALUES
-				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(make_crypt_hash($_POST['password']))."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000', '$ipcc')");
+				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(Users::make_crypt_hash($_POST['password']))."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000', '$ipcc')");
 
 			$UserID = $DB->inserted_id();
 			
@@ -96,7 +96,7 @@ if(!empty($_REQUEST['confirm'])) {
 
 			$DB->query("SELECT ID FROM stylesheets WHERE `Default`='1'");
 			list($StyleID) = $DB->next_record();
-			$AuthKey = make_secret();
+			$AuthKey = Users::make_secret();
 			
 			$DB->query("INSERT INTO users_info (UserID,StyleID,AuthKey, Inviter, JoinDate) VALUES ('$UserID','$StyleID','".db_string($AuthKey)."', '$InviterID', '".sqltime()."')");
 			
@@ -187,8 +187,8 @@ if(!empty($_REQUEST['confirm'])) {
 			$TPL->set('SITE_NAME',SITE_NAME);
 			$TPL->set('SITE_URL',SITE_URL);
 
-			send_email($_REQUEST['email'],'New account confirmation at '.SITE_NAME,$TPL->get(),'noreply');
-			update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
+			Misc::send_email($_REQUEST['email'],'New account confirmation at '.SITE_NAME,$TPL->get(),'noreply');
+			Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
 			$Sent=1;
 			
 			

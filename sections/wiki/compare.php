@@ -79,7 +79,7 @@ $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Article);
 if($Read > $LoggedUser['EffectiveClass']){ error(404); }
 
-show_header('Compare Article Revisions');
+View::show_header('Compare Article Revisions');
 $Diff2 = get_body($ArticleID, $_GET['new']);
 $Diff1 = get_body($ArticleID, $_GET['old']);
 ?>
@@ -92,5 +92,5 @@ $Diff1 = get_body($ArticleID, $_GET['old']);
 	</div>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

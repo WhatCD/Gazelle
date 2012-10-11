@@ -2,7 +2,7 @@
 if (!check_perms('users_view_invites')) { error(403);
 }
 
-show_header('Fishy Invites');
+View::show_header('Fishy Invites');
 
 
 if (isset($_POST['newcountry'])) {
@@ -62,4 +62,4 @@ while (list($ID, $Country) = $DB->next_record()) {
 	</tr>
 	<? }?>
 </table>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

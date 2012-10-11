@@ -36,7 +36,7 @@ if(!isset($_GET['page'])) {
 
 
 define('DAYS_PER_PAGE', 100);
-list($Page,$Limit) = page_limit(DAYS_PER_PAGE);
+list($Page,$Limit) = Format::page_limit(DAYS_PER_PAGE);
 
 $RS = $DB->query("SELECT
 		SQL_CALC_FOUND_ROWS
@@ -98,7 +98,7 @@ $RS = $DB->query("SELECT
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
 
-show_header('User Flow');
+View::show_header('User Flow');
 $DB->set_query_id($RS);
 ?>
 <div class="thin">
@@ -109,7 +109,7 @@ $DB->set_query_id($RS);
 <? } ?>
 	<div class="linkbox">
 <?
-$Pages=get_pages($Page,$Results,DAYS_PER_PAGE,11) ;
+$Pages=Format::get_pages($Page,$Results,DAYS_PER_PAGE,11) ;
 echo $Pages;
 ?>
 	</div>
@@ -143,4 +143,4 @@ echo $Pages;
 		<?=$Pages?>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

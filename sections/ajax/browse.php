@@ -12,7 +12,7 @@ function header_link($SortKey,$DefaultWay="desc") {
 		else { $NewWay="desc"; }
 	} else { $NewWay=$DefaultWay; }
 	
-	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".get_url(array('order_way','order_by'));
+	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
 }
 
 $TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
@@ -284,7 +284,7 @@ if(check_perms('site_search_many')) {
 
 // These ones were not found in the cache, run SQL
 if(!empty($Results['notfound'])) {
-	$SQLResults = get_groups($Results['notfound']);
+	$SQLResults = Torrents::get_groups($Results['notfound']);
 	
 	if(is_array($SQLResults['notfound'])) { // Something wasn't found in the db, remove it from results
 		reset($SQLResults['notfound']);
@@ -362,7 +362,7 @@ foreach($Results as $GroupID=>$Data) {
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
-			$DisplayName = display_artists($ExtendedArtists, false, false, true);
+			$DisplayName = Artists::display_artists($ExtendedArtists, false, false, true);
                         foreach ($ExtendedArtists[1] as $Artist) {
                             $JsonArtists[] = array(
                                 'id' => (int) $Artist['id'],
@@ -371,7 +371,7 @@ foreach($Results as $GroupID=>$Data) {
                                 );
                         }
 		} elseif(!empty($Artists)) {
-			$DisplayName = display_artists(array(1=>$Artists), false, false, true);
+			$DisplayName = Artists::display_artists(array(1=>$Artists), false, false, true);
                         foreach ($Artists as $Artist) {
                             $JsonArtists[] = array(
                                 'id' => (int) $Artist['id'],

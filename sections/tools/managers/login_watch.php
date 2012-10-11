@@ -6,7 +6,7 @@ if(isset($_POST['submit']) && isset($_POST['id']) && $_POST['submit'] == 'Unban'
 	$DB->query('DELETE FROM login_attempts WHERE ID='.$_POST['id']);
 }
 
-show_header('Login Watch');
+View::show_header('Login Watch');
 
 $DB->query('SELECT 
 	l.ID,
@@ -43,7 +43,7 @@ while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $D
 				<?=$IP?>
 			</td>
 			<td>
-				<? if ($UserID != 0) { echo format_username($UserID, true, true, true, true); } ?>
+				<? if ($UserID != 0) { echo Users::format_username($UserID, true, true, true, true); } ?>
 			</td>
 			<td>
 				<?=$Bans?>
@@ -78,4 +78,4 @@ while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $D
 ?>
 	</table>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

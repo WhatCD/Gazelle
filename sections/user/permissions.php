@@ -5,7 +5,7 @@ if(!isset($_REQUEST['userid']) || !is_number($_REQUEST['userid'])){ error(404); 
 
 include(SERVER_ROOT."/classes/permissions_form.php");
 
-list($UserID, $Username, $PermissionID) = array_values(user_info($_REQUEST['userid']));
+list($UserID, $Username, $PermissionID) = array_values(Users::user_info($_REQUEST['userid']));
 
 $DB->query("SELECT 
 		u.CustomPermissions 
@@ -15,7 +15,7 @@ $DB->query("SELECT
 list($Customs)=$DB->next_record(MYSQLI_NUM, false);
 
 
-$Defaults = get_permissions_for_user($UserID, array());
+$Defaults = Permissions::get_permissions_for_user($UserID, array());
 
 $Delta=array();
 if (isset($_POST['action'])) {
@@ -52,7 +52,7 @@ function display_perm($Key,$Title) {
 	echo $Perm;
 }
 
-show_header($Username.' &gt; Permissions');
+View::show_header($Username.' &gt; Permissions');
 ?>
 <script type="text/javascript">
 function reset() {
@@ -65,7 +65,7 @@ function reset() {
 }
 </script>
 <div class="header">
-	<h2><?=format_username($UserID, false, false, false)?> > Permissions</h2>
+	<h2><?=Users::format_username($UserID, false, false, false)?> > Permissions</h2>
 	<div class="linkbox">
 		[<a href="#" onclick="reset();return false;">Defaults</a>]
 	</div>
@@ -89,4 +89,4 @@ function reset() {
 permissions_form();
 ?>
 </form>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

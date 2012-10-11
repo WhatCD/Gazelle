@@ -1,6 +1,6 @@
 <?
 if(!check_perms('admin_manage_permissions')) { error(403); }
-show_header('Special Users List');
+View::show_header('Special Users List');
 ?>
 <div class="thin">
 <?
@@ -18,7 +18,7 @@ if($DB->record_count()) {
 	while(list($UserID)=$DB->next_record()) {
 ?>
 		<tr>
-			<td><?=format_username($UserID, true, true, true, true)?></td>
+			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
 			<td><a href="user.php?action=permissions&amp;userid=<?=$UserID?>">Manage</a></td>
 		</tr>
 <?	} ?>
@@ -27,4 +27,4 @@ if($DB->record_count()) {
 	<h2 align="center">There are no special users.</h2>
 <? } ?>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

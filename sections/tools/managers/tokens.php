@@ -46,7 +46,7 @@ if (isset($_REQUEST['addtokens'])) {
 }
 
 
-	show_header('Add tokens sitewide');
+	View::show_header('Add tokens sitewide');
 
 ?>
 <div class="header">
@@ -79,5 +79,5 @@ if (isset($_REQUEST['addtokens'])) {
 </div>
 <?
 
-show_footer()
+View::show_footer()
 ?>

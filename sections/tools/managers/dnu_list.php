@@ -1,7 +1,7 @@
 <?
 if(!check_perms('admin_dnu')) { error(403); }
 
-show_header('Manage do not upload list');
+View::show_header('Manage do not upload list');
 $DB->query("SELECT 
 	d.ID,
 	d.Name, 
@@ -35,7 +35,7 @@ $DB->query("SELECT
 				<input type="text" name="comment" value="<?=display_str($Comment)?>" size="60" />
 			</td>
 			<td>
-				<?=format_username($UserID, false, false, false)?><br />
+				<?=Users::format_username($UserID, false, false, false)?><br />
 				<?=time_diff($DNUTime, 1)?></td>
 			<td>
 				<input type="submit" name="submit" value="Edit" />
@@ -63,4 +63,4 @@ $DB->query("SELECT
 	</form>
 </tr>
 </table>
-<? show_footer(); ?>
+<? View::show_footer(); ?>

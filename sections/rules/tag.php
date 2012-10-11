@@ -1,6 +1,6 @@
 <?
 //Include the header
-show_header('Tagging rules');
+View::show_header('Tagging rules');
 ?>
 <!-- General Rules -->
 <div class="thin">
@@ -27,5 +27,5 @@ show_header('Tagging rules');
 <? include('jump.php'); ?>
 </div>
 <?
-show_footer();
+View::show_footer();
 ?>

@@ -48,10 +48,10 @@ $DB->set_query_id($Result);
 while(list($PeerUserID, $Size, $Active, $Connectable, $Uploaded, $Remaining, $UserAgent) = $DB->next_record()) {
 ?>
 	<tr>
-		<td><?=format_username($PeerUserID, false, false, false)?></td>
+		<td><?=Users::format_username($PeerUserID, false, false, false)?></td>
 		<td><?= ($Active) ? '<span style="color:green">Yes</span>' : '<span style="color:red">No</span>' ?></td>
 		<td><?= ($Connectable) ? '<span style="color:green">Yes</span>' : '<span style="color:red">No</span>' ?></td>
-		<td><?=get_size($Uploaded) ?></td>
+		<td><?=Format::get_size($Uploaded) ?></td>
 		<td><?=number_format(($Size-$Remaining)/$Size*100, 2)?></td>
 		<td><?=display_str($UserAgent)?></td>
 	</tr>

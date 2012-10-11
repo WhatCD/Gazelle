@@ -10,7 +10,7 @@
 //*********************************************************************//
 
 ini_set('max_file_uploads','100');
-show_header('Upload','upload,jquery,valid_tags,musicbrainz');
+View::show_header('Upload','upload,jquery,valid_tags,musicbrainz');
 
 if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	$DB->query("SELECT 
@@ -32,7 +32,7 @@ if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])
 		list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
 		$UploadForm = $Categories[$Properties['CategoryID']-1];
 		$Properties['CategoryName'] = $Categories[$Properties['CategoryID']-1];
-		$Properties['Artists'] = get_artist($_GET['groupid']);
+		$Properties['Artists'] = Artists::get_artist($_GET['groupid']);
 		
 		$DB->query("SELECT 
 			GROUP_CONCAT(tags.Name SEPARATOR ', ') AS TagList 
@@ -158,5 +158,5 @@ $TorrentForm->foot();
 </script>
 
 <?
-show_footer();
+View::show_footer();
 ?>

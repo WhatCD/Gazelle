@@ -2,7 +2,7 @@
 
 include(SERVER_ROOT.'/sections/staffpm/functions.php');
 
-show_header('Staff PMs', 'staffpm');
+View::show_header('Staff PMs', 'staffpm');
 
 // Get messages
 $StaffPMs = $DB->query("
@@ -113,4 +113,4 @@ if ($DB->record_count() == 0) {
 ?>
 	</div>
 </div>
-<? show_footer(); ?>
+<? View::show_footer(); ?>
