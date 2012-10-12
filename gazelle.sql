@@ -1411,6 +1411,18 @@ CREATE TABLE `users_torrent_history_temp` (
   PRIMARY KEY (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `users_votes` (
+  `UserID` int(10) unsigned NOT NULL,
+  `GroupID` int(10) NOT NULL,
+  `Type` enum('Up','Down') DEFAULT NULL,
+  PRIMARY KEY (`UserID`,`GroupID`),
+  KEY `GroupID` (`GroupID`),
+  KEY `UserID` (`UserID`),
+  KEY `Type` (`Type`),
+  CONSTRAINT `users_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE,
+  CONSTRAINT `users_votes_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `users_warnings_forums` (
   `UserID` int(10) unsigned NOT NULL,
   `Comment` text NOT NULL,

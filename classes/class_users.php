@@ -6,7 +6,7 @@ class Users {
 	 * @return array ($Classes, $ClassLevels)
 	 */
 	public static function get_classes() {
-		global $Cache, $DB, $Debug;
+		global $Cache, $DB, $Debug, $UserClassesHidePMs;
 		// Get permissions
 		list($Classes, $ClassLevels) = $Cache->get_value('classes');
 		if (!$Classes || !$ClassLevels) {

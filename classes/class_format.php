@@ -347,7 +347,7 @@ class Format {
 	 */
 	public static function selected($Name, $Value, $Attribute='selected', $Array = array()) {
 		if (empty($Array)) {
-			$Array == $_GET;
+			$Array = $_GET;
 		}
 		if (isset($Array[$Name]) && $Array[$Name]!=='') {
 			if ($Array[$Name] == $Value) {
