@@ -1105,6 +1105,16 @@ CREATE TABLE `torrents_tags_votes` (
   PRIMARY KEY (`GroupID`,`TagID`,`UserID`,`Way`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `torrents_votes` (
+  `GroupID` int(10) NOT NULL,
+  `Ups` int(10) unsigned NOT NULL DEFAULT '0',
+  `Total` int(10) unsigned NOT NULL DEFAULT '0',
+  `Score` float NOT NULL DEFAULT '0',
+  PRIMARY KEY (`GroupID`),
+  KEY `Score` (`Score`),
+  CONSTRAINT `torrents_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `users_collage_subs` (
   `UserID` int(10) NOT NULL,
   `CollageID` int(10) NOT NULL,
