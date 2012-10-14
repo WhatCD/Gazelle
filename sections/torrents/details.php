@@ -568,18 +568,18 @@ foreach ($TorrentList as $Torrent) {
 					</blockquote>
 <? if(check_perms('site_moderate_requests')) { ?>
 					<div class="linkbox">
-						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>">[Mass PM Snatchers]</a>
+						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>">[Mass PM snatchers]</a>
 					</div>
 <? } ?>
 					<div class="linkbox">
-						<a href="#" onclick="show_peers('<?=$TorrentID?>', 0);return false;">(View Peerlist)</a>
+						<a href="#" onclick="show_peers('<?=$TorrentID?>', 0);return false;">(View peer list)</a>
 <? if(check_perms('site_view_torrent_snatchlist')) { ?> 
-						<a href="#" onclick="show_downloads('<?=$TorrentID?>', 0);return false;">(View Downloadlist)</a>
-						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;">(View Snatchlist)</a>
+						<a href="#" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button">(View downloader list)</a>
+						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker">(View snatcher list)</a>
 <? } ?>
-		<a href="#" onclick="show_files('<?=$TorrentID?>');return false;">(View Filelist)</a>
+						<a href="#" onclick="show_files('<?=$TorrentID?>');return false;">(View file list)</a>
 <? if($Reported) { ?> 
-						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View Report Information)</a>
+						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View report information)</a>
 <? } ?>
 					</div>
 					<div id="peers_<?=$TorrentID?>" class="hidden"></div>
@@ -800,7 +800,7 @@ foreach($Thread as $Key => $Post){
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
-			<span style="float:left;"><a class="post_id" href='torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
+			<div style="float:left;"><a class="post_id" href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
                     <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
                         $AuthorInfo = Users::user_info($AuthorID);
@@ -819,7 +819,7 @@ foreach($Thread as $Key => $Post){
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
 <?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
 if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
-			</span>
+			</div>
 			<span id="bar<?=$PostID?>" style="float:right;">
 				<a href="#">&uarr;</a>
 			</span>

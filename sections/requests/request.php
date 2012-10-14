@@ -99,12 +99,12 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 <?	} else { ?>
 			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?	} ?>
-			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report Request]</a>
+			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report request]</a>
 <?	if(!$IsFilled) { ?>
-			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&groupid=$GroupID":'')?>">[Upload Request]</a>
+			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&amp;groupid=$GroupID":'')?>">[Upload request]</a>
 <?	}
 	if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
-			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Request Update]</a>
+			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Requestsv2 update]</a>
 <? } ?>
 
 <?
@@ -116,11 +116,11 @@ $encoded_artist = preg_replace("/\([^\)]+\)/", "", $encoded_artist);
 $encoded_artist = urlencode($encoded_artist);
 
 $worldcat_url = "http://worldcat.org/search?q=" . $encoded_artist . " " . $encoded_title;
-$google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . " " . $encoded_title;
+$google_url = "https://www.google.com/search?&amp;tbm=shop&amp;q=" . $encoded_artist . " " . $encoded_title;
 
 ?>
-			<a href="<? echo $worldcat_url; ?>">[Find in Library]</a>
-			<a href="<? echo $google_url; ?>">[Find in Stores]</a>
+			<a href="<? echo $worldcat_url; ?>">[Find in library]</a>
+			<a href="<? echo $google_url; ?>">[Find in stores]</a>
 		</div>
 	</div>
 	<div class="sidebar">
@@ -234,7 +234,7 @@ if (!empty($Image)) {
 			</ul>
 		</div>
 		<div class="box box_votes">
-			<div class="head"><strong>Top Contributors</strong></div>
+			<div class="head"><strong>Top contributors</strong></div>
 			<table class="layout">
 <?	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 	$ViewerVote = false;
@@ -285,7 +285,7 @@ if (!empty($Image)) {
 <?	if($CategoryName == "Music") {
 		if(!empty($RecordLabel)) { ?>
 			<tr>
-				<td class="label">Record Label</td>
+				<td class="label">Record label</td>
 				<td>
 					<?=$RecordLabel?>
 				</td>
@@ -293,39 +293,39 @@ if (!empty($Image)) {
 <?		} 
 		if(!empty($CatalogueNumber)) { ?>
 			<tr>
-				<td class="label">Catalogue Number</td>
+				<td class="label">Catalogue number</td>
 				<td>
 					<?=$CatalogueNumber?>
 				</td>
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label">Release Type</td>
+				<td class="label">Release type</td>
 				<td>
 					<?=$ReleaseName?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable Bitrates</td>
+				<td class="label">Acceptable bitrates</td>
 				<td>
 					<?=$BitrateString?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable Formats</td>
+				<td class="label">Acceptable formats</td>
 				<td>
 					<?=$FormatString?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable Media</td>
+				<td class="label">Acceptable media</td>
 				<td>
 					<?=$MediaString?>
 				</td>
 			</tr>
 <?		if(!empty($LogCue)) { ?>
 			<tr>
-				<td class="label">Required FLAC only extra(s)</td>
+				<td class="label">Required FLAC-only extras</td>
 				<td>
 					<?=$LogCue?>
 				</td>
@@ -358,8 +358,8 @@ if (!empty($Image)) {
 		$GroupLink = Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';*/
 ?>
 			<tr>
-				<td class="label">Torrent Group</td>
-				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></td>
+				<td class="label">Torrent group</td>
+				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></a></td>
 			</tr>
 <?	} ?>
 			<tr>
@@ -374,7 +374,7 @@ if (!empty($Image)) {
 			</tr>
 <?	if ($LastVote > $TimeAdded) { ?>
 			<tr>
-				<td class="label">Last Voted</td>
+				<td class="label">Last voted</td>
 				<td>
 					<?=time_diff($LastVote)?>
 				</td>
@@ -382,7 +382,7 @@ if (!empty($Image)) {
 <?	} ?>		
 <?	if($CanVote) { ?>
 			<tr id="voting">
-				<td class="label">Custom Vote (MB)</td>
+				<td class="label" title="These units are in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Custom vote (MB)</td>
 				<td>
 					<input type="text" id="amount_box" size="8" onchange="Calculate();" />
 					<select id="unit" name="unit" onchange="Calculate();">
@@ -576,8 +576,8 @@ if(!$LoggedUser['DisablePosting']) { ?>
 					<tr class="colhead_dark">
 						<td colspan="2">
 							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?> Just now
-								<a href="#quickreplypreview">[Report Comment]</a>
+								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong> Just now
+								<a href="#quickreplypreview">[Report comment]</a>
 							</span>
 							<span style="float:right;">
 								<a href="#">&uarr;</a>

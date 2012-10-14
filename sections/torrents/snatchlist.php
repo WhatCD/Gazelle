@@ -23,7 +23,7 @@ $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 
 ?>
-<h4>Snatches</h4>
+<h4 title="List of users that have reported a snatch to the tracker">List of Snatchers</h4>
 
 <? if($NumResults>100) { ?>
 <div class="linkbox"><?=js_pages('show_snatches', $_GET['torrentid'], $NumResults, $Page)?></div>

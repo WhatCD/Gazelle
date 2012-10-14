@@ -1041,3 +1041,7 @@ select:hover, option:hover {
 	font-size: 1.25em;
 	font-weight: bold;
 }
+
+ul, ol{
+	list-style-position: inside;
+}

@@ -89,7 +89,7 @@ $ViewBounty  = check_paranoia_here('requestsvoted_bounty');
    if (($Override=check_paranoia_here('uploads+'))) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Uploaded: <?=number_format($Uploads)?>
 					<? if(($Override=check_paranoia_here('uploads'))) { ?>[<a <?= $Override===2 ? 'class="paranoia_override"' :'' ?> href="torrents.php?type=uploaded&amp;userid=<?=$UserID?>" title="View">View</a>]<?  if(check_perms('zip_downloader')) { ?> [<a href="torrents.php?action=redownload&amp;type=uploads&amp;userid=<?=$UserID?>"
-						onclick="return confirm('If you no longer have the content, your ratio WILL be affected; be sure to check the size of all albums before redownloading.');">Download</a>]<? } } ?>
+						onclick="return confirm('If you no longer have the content, your ratio WILL be affected; be sure to check the size of all torrents before redownloading.');">Download</a>]<? } } ?>
 				</li>
 <? }
    if (($Override=check_paranoia_here('uniquegroups+'))) { ?>

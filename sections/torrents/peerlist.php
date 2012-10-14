@@ -30,7 +30,7 @@ list($NumResults) = $DB->next_record();
 $DB->set_query_id($Result);
 
 ?>
-<h4>Peerlist</h4>
+<h4>Peer List</h4>
 <? if($NumResults>100) { ?>
 <div class="linkbox"><?=js_pages('show_peers', $_GET['torrentid'], $NumResults, $Page)?></div>
 <? } ?>

@@ -201,7 +201,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 	<div class="sidebar">
 <?	if ($Avatar && empty($HeavyInfo['DisableAvatars'])) {
 		if(check_perms('site_proxy_images') && !empty($Avatar)) {
-			$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&avatar='.$UserID.'&i='.urlencode($Avatar);
+			$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($Avatar);
 		}
 ?>
 		<div class="box box_image box_image_avatar">
@@ -214,7 +214,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 			<ul class="stats nobullet">
 				<li>Joined: <?=$JoinedDate?></li>
 <? if (($Override = check_paranoia_here('lastseen'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Last Seen: <?=$LastAccess?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Last seen: <?=$LastAccess?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('uploaded'))) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Uploaded: <?=Format::get_size($Uploaded)?></li>
@@ -411,7 +411,7 @@ if (check_perms('users_view_ips',$Class)) {
 
 if (check_perms('users_view_keys',$Class) || $OwnProfile) {
 ?>
-				<li>Passkey: <a href="#" onclick="this.innerHTML='<?=display_str($torrent_pass)?>'; return false;">[View]</a></li>
+				<li>Passkey: [<a href="#" onclick="this.innerHTML='<?=display_str($torrent_pass)?>'; return false;">View</a>]</li>
 <? }
 if (check_perms('users_view_invites')) {
 	if (!$InviterID) {
@@ -421,7 +421,7 @@ if (check_perms('users_view_invites')) {
 	}
 	
 ?>
-				<li>Invited By: <?=$Invited?></li>
+				<li>Invited by: <?=$Invited?></li>
 				<li>Invites: <?
 				$DB->query("SELECT count(InviterID) FROM invites WHERE InviterID = '$UserID'");
 				list($Pending) = $DB->next_record();

@@ -120,7 +120,7 @@ $EnableNegation = false; // Sphinx needs at least one positive search condition 
 if(!empty($_GET['filelist'])) {
 	$SearchString = trim($_GET['filelist']);
 	if($SearchString != '') {
-		$Queries[] = '@filelist "'.$SS->EscapeString($_GET['filelist']).'"~20';
+		$Queries[] = '@filelist "'.$SS->escape_string($_GET['filelist']).'"~20';
 		$EnableNegation = true;
 	}
 }
@@ -194,11 +194,11 @@ if(!empty($_GET['searchstr'])) {
 		}
 		$QueryParts = array();
 		foreach($BasicSearch['include'] as $Word) {
-			$QueryParts[] = $SS->EscapeString($Word);
+			$QueryParts[] = $SS->escape_string($Word);
 		}
 		if(!empty($BasicSearch['exclude'])) {
 			foreach($BasicSearch['exclude'] as $Word) {
-				$QueryParts[] = '!'.$SS->EscapeString(substr($Word,1));
+				$QueryParts[] = '!'.$SS->escape_string(substr($Word,1));
 			}
 		}
 		if(!empty($FilterBitrates)) {
@@ -221,11 +221,11 @@ if(!empty($SearchWords['taglist'])) {
 		unset($Tags['exclude']);
 	}
 	foreach($Tags['include'] as &$Tag) {
-		$Tag = $SS->EscapeString($Tag);
+		$Tag = $SS->escape_string($Tag);
 	}
 	if(!empty($Tags['exclude'])) {
 		foreach($Tags['exclude'] as &$Tag) {
-			$Tag = '!'.$SS->EscapeString(substr($Tag,1));
+			$Tag = '!'.$SS->escape_string(substr($Tag,1));
 		}
 	}
 
@@ -264,11 +264,11 @@ foreach($SearchWords as $Search => $Words) {
 		unset($Words['exclude']);
 	}
 	foreach($Words['include'] as $Word) {
-		$QueryParts[] = $SS->EscapeString($Word);
+		$QueryParts[] = $SS->escape_string($Word);
 	}
 	if(!empty($Words['exclude'])) {
 		foreach($Words['exclude'] as $Word) {
-			$QueryParts[] = '!'.$SS->EscapeString(substr($Word,1));
+			$QueryParts[] = '!'.$SS->escape_string(substr($Word,1));
 		}
 	}
 	if(!empty($QueryParts)) {

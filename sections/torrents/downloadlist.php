@@ -36,7 +36,7 @@ if(count($UserIDs)>0) {
 
 
 ?>
-<h4>Downloadlist</h4>
+<h4 title="List of users that have clicked the &quot;DL&quot; button">List of Downloaders</h4>
 <? if($NumResults>100) { ?>
 <div class="linkbox"><?=js_pages('show_downloads', $_GET['torrentid'], $NumResults, $Page)?></div>
 <? } ?>

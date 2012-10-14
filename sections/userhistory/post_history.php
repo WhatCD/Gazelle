@@ -47,7 +47,7 @@ if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
 }
 
 if(check_perms('site_proxy_images') && !empty($Avatar)) {
-	$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&i='.urlencode($Avatar);
+	$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Avatar);
 }
 
 View::show_header('Post history for '.$Username,'subscriptions,comments,bbcode');
