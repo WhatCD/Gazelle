@@ -6,7 +6,7 @@ View::show_header('Ratio Requirements');
 	<div class="header">
 		<h2 class="center">Ratio Rules</h2>
 	</div>
-	<div class="box pad">
+	<div class="box pad rule_summary">
 		<p>
 			Your ratio is the amount you have uploaded divided by the amount you have downloaded.
 		</p>

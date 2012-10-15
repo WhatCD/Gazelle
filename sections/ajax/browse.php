@@ -97,12 +97,12 @@ if(!empty($_GET['searchstr'])) {
 		foreach($Words as $Key => &$Word) {
 			if($Word[0] == '!' && strlen($Word) >= 3 && count($Words) >= 2) {
 				if(strpos($Word,'!',1) === false) {
-					$Word = '!'.$SS->EscapeString(substr($Word,1));
+					$Word = '!'.$SS->escape_string(substr($Word,1));
 				} else {
-					$Word = $SS->EscapeString($Word);
+					$Word = $SS->escape_string($Word);
 				}
 			} elseif(strlen($Word) >= 2) {
-				$Word = $SS->EscapeString($Word);
+				$Word = $SS->escape_string($Word);
 			} else {
 				unset($Words[$Key]);
 			}
@@ -123,10 +123,10 @@ if(!empty($_GET['taglist'])) {
 		$Tag = trim($Tag);
 		if(strlen($Tag) >= 2) {
 			if($Tag[0] == '!' && strlen($Tag) >= 3) {
-				$TagListEx[] = '!'.$SS->EscapeString(substr($Tag,1));
+				$TagListEx[] = '!'.$SS->escape_string(substr($Tag,1));
 				unset($TagList[$Key]);
 			} else {
-				$Tag = $SS->EscapeString($Tag);
+				$Tag = $SS->escape_string($Tag);
 			}
 		} else {
 			unset($TagList[$Key]);
@@ -154,18 +154,18 @@ foreach(array('artistname','groupname', 'recordlabel', 'cataloguenumber',
 	if(!empty($_GET[$Search])) {
 		$_GET[$Search] = str_replace(array('%'), '', $_GET[$Search]);
 		if($Search == 'filelist') {
-			$Queries[]='@filelist "'.$SS->EscapeString($_GET['filelist']).'"~20';
+			$Queries[]='@filelist "'.$SS->escape_string($_GET['filelist']).'"~20';
 		} else {
 			$Words = explode(' ', $_GET[$Search]);
 			foreach($Words as $Key => &$Word) {
 				if($Word[0] == '!' && strlen($Word) >= 3 && count($Words) >= 2) {
 					if(strpos($Word,'!',1) === false) {
-						$Word = '!'.$SS->EscapeString(substr($Word,1));
+						$Word = '!'.$SS->escape_string(substr($Word,1));
 					} else {
-						$Word = $SS->EscapeString($Word);
+						$Word = $SS->escape_string($Word);
 					}
 				} elseif(strlen($Word) >= 2) {
-					$Word = $SS->EscapeString($Word);
+					$Word = $SS->escape_string($Word);
 				} else {
 					unset($Words[$Key]);
 				}
@@ -194,7 +194,7 @@ if(!empty($_GET['year'])) {
 	}
 }
 if(!empty($_GET['encoding'])) {
-	$Queries[]='@encoding "'.$SS->EscapeString($_GET['encoding']).'"'; // Note the quotes, for 24bit lossless
+	$Queries[]='@encoding "'.$SS->escape_string($_GET['encoding']).'"'; // Note the quotes, for 24bit lossless
 }
 
 if(isset($_GET['haslog']) && $_GET['haslog']!=='') {

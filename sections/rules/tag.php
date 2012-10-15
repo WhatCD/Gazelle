@@ -7,7 +7,7 @@ View::show_header('Tagging rules');
 	<div class="header">
 		<h3 id="general">Tagging rules</h3>
 	</div>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad rule_summary" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>Tags should be comma separated, and you should use a period ('.') to separate words inside a tag - eg. '<strong style="color:green;">hip.hop</strong>'. 
 			</li><li>

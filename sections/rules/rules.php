@@ -7,7 +7,7 @@ View::show_header('Rule Index');
 	<div class="header">
 		<h3 id="general">Golden Rules</h3>
 	</div>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad rule_summary" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>All staff decisions must be respected. If you take issue with a decision, you must do so privately with the staff member who issued the decision or with an administrator of the site. Complaining about staff decisions in public or otherwise disrespecting staff members will not be taken lightly.</li>
 			<li>Access to this web site is a privilege, not a right, and it can be taken away from you for any reason.</li>

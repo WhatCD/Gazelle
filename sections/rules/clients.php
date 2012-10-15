@@ -33,7 +33,7 @@ if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 	</div>
 
 	<h3>Further Rules</h3>
-	<div class="box pad">
+	<div class="box pad rule_summary">
 		<p>
 			The modification of clients to bypass our client requirements (spoofing) is explicitly forbidden. People caught doing this will be instantly and permanently banned. This is your only warning.
 		</p>
@@ -45,7 +45,7 @@ if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 		</p>
 	</div>
 	<h3>Further Details</h3>
-	<div class="box pad">
+	<div class="box pad rule_summary">
 		<p>
 			If someone you invited to the site breaks the above rules you will receive a 2 month warning and lose the right to invite people to this site.
 		</p>

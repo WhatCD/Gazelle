@@ -67,7 +67,7 @@ if(isset($_GET['avatar'])) {
 
 			// Send PM
 
-			Misc::send_pm($UserID,0,"Your avatar has been automatically reset","The following avatar rules have been in effect for months now:
+			send_pm($UserID,0,"Your avatar has been automatically reset","The following avatar rules have been in effect for months now:
 
 [b]Avatars must not exceed 256kB or be vertically longer than 400px. [/b]
 
