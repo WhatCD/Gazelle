@@ -17,7 +17,7 @@ if ($_GET['type'] == 3) {
 $Query = '@format FLAC @encoding '.$List;
 
 if(!empty($_GET['search'])) {
-	$Query.=' @(groupname,artistname,yearfulltext) '.$SS->escape_string($_GET['search']);
+	$Query.=' @(groupname,artistname,yearfulltext,taglist) '.$SS->escape_string($_GET['search']);
 }
 
 $SS->SetFilter('logscore', array(100));

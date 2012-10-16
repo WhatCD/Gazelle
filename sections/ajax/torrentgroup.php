@@ -14,11 +14,7 @@ $GroupID = (int)$_GET['id'];
 if ($GroupID == 0) { error('bad id parameter', true); }
 
 $TorrentCache = get_group_info($GroupID, true, 0);
-
-// http://stackoverflow.com/questions/4260086/php-how-to-use-array-filter-to-filter-array-keys
-function filter_by_key($input, $keys) { return array_intersect_key($input, array_flip($keys)); }
-
-$TorrentDetails = filter_by_key($TorrentCache[0][0], $GroupAllowed);
+list($TorrentDetails, $TorrentList) = $TorrentCache;
 
 $ArtistForm = Artists::get_artist($GroupID);
 if($TorrentDetails['CategoryID'] == 0) {
@@ -57,10 +53,7 @@ $JsonTorrentDetails = array(
 	'vanityHouse' => $TorrentDetails['VanityHouse'] == 1,
 	'musicInfo' => $JsonMusicInfo
 );
-$TorrentList = array();
-foreach ($TorrentCache[1] as $Torrent) {
-	$TorrentList[] = filter_by_key($Torrent, $TorrentAllowed);
-}
+
 $JsonTorrentList = array();
 foreach ($TorrentList as $Torrent) {
 	$JsonTorrentList[] = array(

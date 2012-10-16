@@ -20,13 +20,14 @@ if(!empty($_GET['revisionid']) && is_number($_GET['revisionid'])) {
 
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 $TorrentCache = get_group_info($GroupID, true, $RevisionID);
-
 $TorrentDetails = $TorrentCache[0];
 $TorrentList = $TorrentCache[1];
 
 // Group details
-list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $ReleaseType, $GroupCategoryID,
-	$GroupTime, $GroupVanityHouse, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs, $TagPositiveVotes, $TagNegativeVotes) = array_shift($TorrentDetails);
+list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear,
+	$GroupRecordLabel, $GroupCatalogueNumber, $ReleaseType, $GroupCategoryID,
+	$GroupTime, $GroupVanityHouse, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs,
+	$TagPositiveVotes, $TagNegativeVotes) = array_values($TorrentDetails);
 
 $DisplayName=$GroupName;
 $AltName=$GroupName; // Goes in the alt text of the image
@@ -78,13 +79,6 @@ if ($TorrentTags != '') {
 	print_r($TorrentTagUserIDs);
 	die();
 }*/
-
-$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
-}
 
 // Start output
 View::show_header($Title,'browse,comments,torrent,bbcode');
@@ -387,16 +381,20 @@ $LastRemasterCatalogueNumber = '';
 $EditionID = 0;
 
 foreach ($TorrentList as $Torrent) {
-	
-		//t.ID,	t.Media, t.Format, t.Encoding, t.Remastered, t.RemasterYear, t.RemasterTitle, t.RemasterRecordLabel,t.RemasterCatalogueNumber,
-		//t.Scene, t.HasLog, t.HasCue, t.LogScore, t.FileCount, t.Size, t.Seeders, t.Leechers, t.Snatched, t.FreeTorrent, t.Time, t.Description,
-		//t.FileList, t.FilePath, t.UserID, t.last_action,
-	    //(bad tags), (bad folders), (bad filenames), (cassette approved), (lossy master approved), (lossy web approved), t.LastReseedRequest, LogInDB
-	
-	list($TorrentID, $Media, $Format, $Encoding, $Remastered, $RemasterYear, $RemasterTitle, $RemasterRecordLabel, $RemasterCatalogueNumber, 
-		$Scene, $HasLog, $HasCue, $LogScore, $FileCount, $Size, $Seeders, $Leechers, $Snatched, $FreeTorrent, $TorrentTime, $Description, 
-		$FileList, $FilePath, $UserID, $LastActive,
-		$BadTags, $BadFolders, $BadFiles, $CassetteApproved, $LossymasterApproved, $LossywebApproved, $LastReseedRequest, $LogInDB, $HasFile) = $Torrent;
+		//t.ID,	t.Media, t.Format, t.Encoding, t.Remastered, t.RemasterYear,
+		//t.RemasterTitle, t.RemasterRecordLabel, t.RemasterCatalogueNumber, t.Scene,
+		//t.HasLog, t.HasCue, t.LogScore, t.FileCount, t.Size, t.Seeders, t.Leechers,
+		//t.Snatched, t.FreeTorrent, t.Time, t.Description, t.FileList,
+		//t.FilePath, t.UserID, t.last_action, (bad tags), (bad folders), (bad filenames),
+		//(cassette approved), (lossy master approved), (lossy web approved), t.LastReseedRequest,
+		//LogInDB, (has file), Torrents::torrent_properties()
+	list($TorrentID, $Media, $Format, $Encoding, $Remastered, $RemasterYear,
+		$RemasterTitle, $RemasterRecordLabel, $RemasterCatalogueNumber, $Scene,
+		$HasLog, $HasCue, $LogScore, $FileCount, $Size, $Seeders, $Leechers,
+		$Snatched, $FreeTorrent, $TorrentTime, $Description, $FileList,
+		$FilePath, $UserID, $LastActive, $BadTags, $BadFolders, $BadFiles,
+		$CassetteApproved, $LossymasterApproved, $LossywebApproved, $LastReseedRequest,
+		$LogInDB, $HasFile, $PersonalFL) = array_values($Torrent);
 
 	if($Remastered && !$RemasterYear) {
 		$FirstUnknown = !isset($FirstUnknown);
@@ -417,7 +415,7 @@ foreach ($TorrentList as $Torrent) {
 				AND Status != 'Resolved'");
 		$Reports = $DB->to_array();
 		$Cache->cache_value('reports_torrent_'.$TorrentID, $Reports, 0);
-	}	
+	}
 	if(count($Reports) > 0) {
 		$Reported = true;
 		include(SERVER_ROOT.'/sections/reportsv2/array.php');
@@ -467,7 +465,7 @@ foreach ($TorrentList as $Torrent) {
 	}
 	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra.'<strong>Freeleech!</strong>'; $AddExtra=' / '; }
 	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra.'<strong>Neutral Leech!</strong>'; $AddExtra=' / '; }
-	if(in_array($TorrentID, $TokenTorrents)) { $ExtraInfo.=$AddExtra.'<strong>Personal Freeleech!</strong>'; $AddExtra=' / '; }
+	if($PersonalFL) { $ExtraInfo.=$AddExtra.'<strong>Personal Freeleech!</strong>'; $AddExtra=' / '; }
 	if($Reported) { $ExtraInfo.=$AddExtra.'<strong>Reported</strong>'; $AddExtra=' / '; }
 	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra.'<strong>Bad Tags</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra.'<strong>Bad Folders</strong>'; $AddExtra=' / '; }
@@ -527,7 +525,7 @@ foreach ($TorrentList as $Torrent) {
 				<td>
 					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$HasFile ? 'DL' : 'Missing'?></a>
 <?	if (($LoggedUser['FLTokens'] > 0) && $HasFile && ($Size < 1073741824) 
-		&& !in_array($TorrentID, $TokenTorrents) && ($FreeTorrent == '0') && ($LoggedUser['CanLeech'] == '1')) { ?>
+		&& !$PersonalFL && ($FreeTorrent == '0') && ($LoggedUser['CanLeech'] == '1')) { ?>
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?	} ?>					
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>

@@ -95,16 +95,15 @@ class Artists {
 			$ampersand = ($Escape) ? ' &amp; ' : ' & ';
 			$link = '';
 
-			$MainArtists = $Artists[1];
-			$Guests      = $Artists[2];
-			$Composers   = $Artists[4];
-			$Conductors  = $Artists[5];
-			$DJs         = $Artists[6];
+			$MainArtists = isset($Artists[1]) ? $Artists[1] : null;
+			$Guests      = isset($Artists[2]) ? $Artists[2] : null;
+			$Composers   = isset($Artists[4]) ? $Artists[4] : null;
+			$Conductors  = isset($Artists[5]) ? $Artists[5] : null;
+			$DJs         = isset($Artists[6]) ? $Artists[6] : null;
 
 			if ((count($MainArtists) + count($Conductors) + count($DJs) == 0) && (count($Composers) == 0)) {
 				return '';
 			}
-
 			// Various Composers is not needed and is ugly and should die
 			switch(count($Composers)) {
 				case 0:
@@ -121,7 +120,7 @@ class Artists {
 				$link .= ' performed by ';
 			}
 
-			$ComposerStr .= $link;
+			$ComposerStr = $link;
 
 			switch(count($MainArtists)) {
 				case 0:
@@ -182,7 +181,6 @@ class Artists {
 				default :
 					$link = 'Various DJs';
 			}
-
 			return $link.($IncludeHyphen?' - ':'');
 		} else {
 			return '';

@@ -14,13 +14,6 @@ if(!check_perms('site_torrents_notify')) {
 define('NOTIFICATIONS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
 
-$TokenTorrents = $Cache->get_value('users_tokens_'.$LoggedUser['ID']);
-if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$LoggedUser[ID] AND Expired=FALSE");
-	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$LoggedUser['ID'], $TokenTorrents);
-}
-
 $Results = $DB->query("SELECT SQL_CALC_FOUND_ROWS unt.TorrentID, unt.UnRead, unt.FilterID, unf.Label, t.GroupID
 		FROM users_notify_torrents AS unt
 		JOIN torrents AS t ON t.ID = unt.TorrentID

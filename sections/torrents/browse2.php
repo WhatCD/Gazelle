@@ -35,13 +35,6 @@ function header_link($SortKey,$DefaultWay="desc") {
 	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
 }
 
-$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
-}
-
 // Search by infohash
 if(!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
 	if(!empty($_GET['searchstr'])) {
@@ -126,6 +119,7 @@ if(!empty($_GET['filelist'])) {
 }
 
 // Collect all entered search terms to find out whether to enable the NOT operator
+$SearchWords = array();
 foreach(array('artistname','groupname', 'recordlabel', 'cataloguenumber', 
 				'remastertitle', 'remasteryear', 'remasterrecordlabel', 'remastercataloguenumber',
 				'encoding', 'format', 'media', 'taglist') as $Search) {
@@ -749,8 +743,11 @@ $Bookmarks = all_bookmarks('torrent');
 <?
 // Start printing torrent list
 
-foreach($Results as $GroupID=>$Data) {
-	list($Artists, $GroupCatalogueNumber, $ExtendedArtists, $GroupID2, $GroupName, $GroupRecordLabel, $ReleaseType, $TagList, $Torrents, $GroupVanityHouse, $GroupYear, $CategoryID, $FreeTorrent, $HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders, $MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
+foreach($Results as $GroupID => $Data) {
+	list($Artists, $GroupCatalogueNumber, $ExtendedArtists, $GroupID2, $GroupName, $GroupRecordLabel,
+	$ReleaseType, $TagList, $Torrents, $GroupVanityHouse, $GroupYear, $CategoryID, $FreeTorrent,
+	$HasCue, $HasLog, $TotalLeechers, $LogScore, $ReleaseType, $ReleaseType, $TotalSeeders,
+	$MaxSize, $TotalSnatched, $GroupTime) = array_values($Data);
 	
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 	
@@ -815,7 +812,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		$LastMedia = '';
 		
 		$EditionID = 0;
-		unset($FirstUnknown);
+		$FirstUnknown = null;
 
 		foreach($Torrents as $TorrentID => $Data) {
 			// All of the individual torrents in the group
@@ -914,10 +911,6 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 				$FirstUnknown = !isset($FirstUnknown);
 			}
 			
-			if (in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent'])) {
-				$Data['PersonalFL'] = 1;
-			}
-
 			if($CategoryID == 1 && ($Data['RemasterTitle'] != $LastRemasterTitle || $Data['RemasterYear'] != $LastRemasterYear ||
 			$Data['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Data['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber) || $FirstUnknown || $Data['Media'] != $LastMedia) {
 				$EditionID++;
@@ -964,7 +957,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Data['HasFile'] ? 'DL' : 'Missing'?></a>
 <?			if (($LoggedUser['FLTokens'] > 0) && $Data['HasFile'] && ($Data['Size'] < 1073741824) 
-				&& !in_array($TorrentID, $TokenTorrents) && empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+				&& !$Data['PersonalFL'] && empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?			} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
@@ -986,12 +979,13 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		list($TorrentID, $Data) = each($Torrents);
 		
 		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
-		if($Data['FreeTorrent'] == '1') {
+
+		if ($Data['FreeTorrent'] == '1') {
 			$DisplayName .= ' <strong>Freeleech!</strong>';
-		} elseif($Data['FreeTorrent'] == '2') {
+		} elseif ($Data['FreeTorrent'] == '2') {
 			$DisplayName .= ' <strong>Neutral Leech!</strong>';
-		}  elseif(in_array($TorrentID, $TokenTorrents)) { 
-			$DisplayName .= $AddExtra.'<strong>Personal Freeleech!</strong>';
+		} elseif ($Data['PersonalFL']) {
+			$DisplayName .= $AddExtra.' <strong>Personal Freeleech!</strong>';
 		}
 ?>
 	<tr class="torrent">
@@ -1003,7 +997,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (($LoggedUser['FLTokens'] > 0) && $Data['HasFile'] && ($Data['Size'] < 1073741824) 
-			&& !in_array($TorrentID, $TokenTorrents) && empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+			&& !$Data['PersonalFL'] && empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?>				
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]

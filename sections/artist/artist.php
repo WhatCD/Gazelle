@@ -61,13 +61,6 @@ if($Data) {
 	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record(MYSQLI_NUM, array(0));
 }
 
-$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
-}
-
 //----------------- Build list and get stats
 
 ob_start();
@@ -388,10 +381,6 @@ foreach ($Importances as $Group) {
 			$FirstUnknown = !isset($FirstUnknown);
 		}
 
-		if (in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent'])) {
-			$Torrent['PersonalFL'] = 1;
-		}
-
 		if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 		   $Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
 
@@ -438,7 +427,7 @@ foreach ($Importances as $Group) {
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>
 <?		if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824)
-			&& !in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+			&& !$Torrent['PersonalFL'] && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?> ]
 			</span>

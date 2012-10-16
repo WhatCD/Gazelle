@@ -6,7 +6,7 @@ class Users {
 	 * @return array ($Classes, $ClassLevels)
 	 */
 	public static function get_classes() {
-		global $Cache, $DB, $Debug, $UserClassesHidePMs;
+		global $Cache, $DB, $Debug;
 		// Get permissions
 		list($Classes, $ClassLevels) = $Cache->get_value('classes');
 		if (!$Classes || !$ClassLevels) {
@@ -120,7 +120,6 @@ class Users {
 	 */
 	public static function user_heavy_info($UserID) {
 		global $DB, $Cache;
-		//global $Debug;
 
 		$HeavyInfo = $Cache->get_value('user_info_heavy_'.$UserID);
 	
@@ -176,16 +175,13 @@ class Users {
 				$PermittedForums = array();
 			}
 			unset($HeavyInfo['PermittedForums']);
-			//$Debug->log_var($PermittedForums, 'PermittedForums - User');
 
 			$DB->query("SELECT PermissionID FROM users_levels WHERE UserID = $UserID");
 			$PermIDs = $DB->collect('PermissionID');
 			foreach ($PermIDs AS $PermID) {
 				$Perms = Permissions::get_permissions($PermID);
 				if (!empty($Perms['PermittedForums'])) {
-					//$Debug->log_var("'".$Perms['PermittedForums']."'", "PermittedForums - Perm $PermID");
 					$PermittedForums = array_merge($PermittedForums, array_map('trim', explode(',',$Perms['PermittedForums'])));
-					//$Debug->log_var($PermittedForums, "PermittedForums - After Perm $PermID");
 				}
 			}
 			$Perms = Permissions::get_permissions($HeavyInfo['PermissionID']);
@@ -193,7 +189,6 @@ class Users {
 			if (!empty($Perms['PermittedForums'])) {
 				$PermittedForums = array_merge($PermittedForums, array_map('trim', explode(',',$Perms['PermittedForums'])));
 			}
-			//$Debug->log_var($PermittedForums, 'PermittedForums - Done');
 
 			if (!empty($PermittedForums) || !empty($RestrictedForums)) {
 				$HeavyInfo['CustomForums'] = array();
@@ -206,7 +201,6 @@ class Users {
 			} else {
 				$HeavyInfo['CustomForums'] = null;
 			}
-			//$Debug->log_var($HeavyInfo['CustomForums'], 'CustomForums');
 
 			$HeavyInfo['SiteOptions'] = unserialize($HeavyInfo['SiteOptions']);
 			if (!empty($HeavyInfo['SiteOptions'])) {

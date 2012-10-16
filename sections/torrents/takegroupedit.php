@@ -37,8 +37,8 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 		$VanityHouse = 0;
 	}
 
-	if($GroupInfo = $Cache->get_value('torrents_details_'.$GroupID)) {
-		$GroupCategoryID = $GroupInfo[0][0]['CategoryID'];
+	if(($GroupInfo = $Cache->get_value('torrents_details_'.$GroupID)) && !isset($GroupInfo[0][0])) {
+		$GroupCategoryID = $GroupInfo[0]['CategoryID'];
 	} else {
 		$DB->query("SELECT CategoryID FROM torrents_group WHERE ID='$GroupID'");
 		list($GroupCategoryID) = $DB->next_record();

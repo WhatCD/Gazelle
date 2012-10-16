@@ -24,7 +24,7 @@ class Torrents {
 	 *			GroupID, Media, Format, Encoding, RemasterYear, Remastered,
 	 *			RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Scene,
 	 *			HasLog, HasCue, LogScore, FileCount, FreeTorrent, Size, Leechers,
-	 *			Seeders, Snatched, Time, HasFile
+	 *			Seeders, Snatched, Time, HasFile, PersonalFL
 	 *		}
 	 *	}
 	 *	ExtendedArtists => {
@@ -57,7 +57,7 @@ class Torrents {
 		and anywhere else the get_groups function is used.
 		*/
 
-		if (count($NotFound)>0) {
+		if (count($NotFound) > 0) {
 			$DB->query("SELECT
 				g.ID, g.Name, g.Year, g.RecordLabel, g.CatalogueNumber, g.TagList, g.ReleaseType, g.VanityHouse
 				FROM torrents_group AS g WHERE g.ID IN ($IDs)");
@@ -67,6 +67,13 @@ class Torrents {
 				$Found[$Group['ID']] = $Group;
 				$Found[$Group['ID']]['Torrents'] = array();
 				$Found[$Group['ID']]['Artists'] = array();
+			}
+
+			// Orphan torrents. There shouldn't ever be any
+			if (count($NotFound) > 0) {
+				foreach (array_keys($NotFound) as $GroupID) {
+					unset($Found[$GroupID]);
+				}
 			}
 
 			if ($Torrents) {
@@ -99,25 +106,38 @@ class Torrents {
 		}
 
 		if ($Return) { // If we're interested in the data, and not just caching it
-			foreach ($Artists as $GroupID=>$Data) {
+			foreach ($Artists as $GroupID => $Data) {
 				if (array_key_exists(1, $Data) || array_key_exists(4, $Data) || array_key_exists(6, $Data)) {
-					$Found[$GroupID]['Artists']=$Data[1]; // Only use main artists (legacy)
-					$Found[$GroupID]['ExtendedArtists'][1]=$Data[1];
-					$Found[$GroupID]['ExtendedArtists'][2]=$Data[2];
-					$Found[$GroupID]['ExtendedArtists'][3]=$Data[3];
-					$Found[$GroupID]['ExtendedArtists'][4]=$Data[4];
-					$Found[$GroupID]['ExtendedArtists'][5]=$Data[5];
-					$Found[$GroupID]['ExtendedArtists'][6]=$Data[6];
+					$Found[$GroupID]['Artists'] = isset($Data[1]) ? $Data[1] : null; // Only use main artists (legacy)
+					for ($i = 1; $i <= 6; $i++) {
+						$Found[$GroupID]['ExtendedArtists'][$i] = isset($Data[$i]) ? $Data[$i] : null;
+					}
 				}
 				else {
 					$Found[$GroupID]['ExtendedArtists'] = false;
 				}
 			}
-
+			// Fetch all user specific torrent properties
+			foreach ($Found as &$Group) {
+				if (!empty($Group['Torrents'])) {
+					array_walk($Group['Torrents'], 'self::torrent_properties');
+				}
+			}
 			$Matches = array('matches'=>$Found, 'notfound'=>array_flip($NotFound));
 
 			return $Matches;
 		}
+	}
+
+
+	/**
+	 * Supplements a torrent array with information that only concerns certain users and therefore cannot be cached
+	 *
+	 * @param array $Torrent torrent array preferably in the form used by Torrents::get_groups() or get_group_info()
+	 * @param int $TorrentID
+	 */
+	public static function torrent_properties(&$Torrent, $TorrentID) {
+		$Torrent['PersonalFL'] = empty($Torrent['FreeTorrent']) && self::has_token($TorrentID);
 	}
 
 
@@ -417,7 +437,7 @@ class Torrents {
 		}
 		if ($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
 		if ($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
-		if ($Data['PersonalFL'] == 1) { $Info[]='<strong>Personal Freeleech!</strong>'; }
+		if ($Data['PersonalFL']) { $Info[]='<strong>Personal Freeleech!</strong>'; }
 		return implode(' / ', $Info);
 	}
 
@@ -475,6 +495,32 @@ class Torrents {
 			$TorrentIDs = $DB->collect('ID');
 			Torrents::freeleech_torrents($TorrentIDs, $FreeNeutral, $FreeLeechType);
 		}
+	}
+
+	/**
+	 * Check if the logged in user has an active freeleech token
+	 *
+	 * @param int $TorrentID
+	 * @return true if an active token exists
+	 */
+
+	public static function has_token($TorrentID) {
+		global $DB, $Cache, $LoggedUser;
+		if (empty($LoggedUser) || empty($LoggedUser['ID'])) {
+			return false;
+		}
+
+		static $TokenTorrents;
+		$UserID = $LoggedUser['ID'];
+		if (!isset($TokenTorrents)) {
+			$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+			if ($TokenTorrents === false) {
+				$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=0");
+				$TokenTorrents = array_fill_keys($DB->collect('TorrentID', false), true);
+				$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+			}
+		}
+		return isset($TokenTorrents[$TorrentID]);
 	}
 
 }

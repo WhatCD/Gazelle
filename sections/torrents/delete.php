@@ -2,11 +2,18 @@
 $TorrentID = $_GET['torrentid'];
 if (!$TorrentID || !is_number($TorrentID)) { error(404); }
 
+
+
 $DB->query("SELECT t.UserID, t.Time, COUNT(x.uid) FROM torrents AS t LEFT JOIN xbt_snatched AS x ON x.fid=t.ID WHERE t.ID=".$TorrentID." GROUP BY t.UserID");
+
 if($DB->record_count() < 1) {
 	error('Torrent already deleted.');
 }
+
+
+
 list($UserID, $Time, $Snatches) = $DB->next_record();
+
 
 if ($LoggedUser['ID']!=$UserID && !check_perms('torrents_delete')) {
 	error(403);
@@ -23,6 +30,7 @@ if(time_ago($Time) > 3600*24*7 && !check_perms('torrents_delete')) { // Should t
 if($Snatches > 4 && !check_perms('torrents_delete')) { // Should this be torrents_delete or torrents_delete_fast?
 	error('You can no longer delete this torrent as it has been snatched by 5 or more users. If you believe there is a problem with the torrent please report it instead.');
 }
+
 
 View::show_header('Delete torrent', 'reportsv2');
 ?>

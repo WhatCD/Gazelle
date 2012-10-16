@@ -3,21 +3,21 @@ include(SERVER_ROOT.'/sections/requests/functions.php'); // get_request_tags()
 
 function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 	global $Cache, $DB;
-	if(!$RevisionID) {
+	if (!$RevisionID) {
 		$TorrentCache=$Cache->get_value('torrents_details_'.$GroupID);
 	}
-	
-	if($RevisionID || !is_array($TorrentCache)) {
+
+	if ($RevisionID || !is_array($TorrentCache) || isset($TorrentCache[0][0])) {
 		// Fetch the group details
 
 		$SQL = "SELECT ";
 
-		if(!$RevisionID) {
-			$SQL.="
+		if (!$RevisionID) {
+			$SQL .= "
 				g.WikiBody,
 				g.WikiImage, ";
 		} else {
-			$SQL.="
+			$SQL .= "
 				w.Body,
 				w.Image, ";
 		}
@@ -41,17 +41,17 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			LEFT JOIN torrents_tags AS tt ON tt.GroupID=g.ID
 			LEFT JOIN tags ON tags.ID=tt.TagID";
 
-		if($RevisionID) {
-			$SQL.="
+		if ($RevisionID) {
+			$SQL .= "
 				LEFT JOIN wiki_torrents AS w ON w.PageID='".db_string($GroupID)."' AND w.RevisionID='".db_string($RevisionID)."' ";
 		}
 
-		$SQL .="
+		$SQL .= "
 			WHERE g.ID='".db_string($GroupID)."'
 			GROUP BY NULL";
 
 		$DB->query($SQL);
-		$TorrentDetails=$DB->to_array();
+		$TorrentDetails = $DB->next_record(MYSQLI_ASSOC);
 
 		// Fetch the individual torrents
 
@@ -82,12 +82,12 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			t.FilePath,
 			t.UserID,
 			t.last_action,
-			tbt.TorrentID,
-			tbf.TorrentID,
-			tfi.TorrentID,
-			ca.TorrentID,
-			lma.TorrentID,
-			lwa.TorrentID,
+			tbt.TorrentID AS BadTags,
+			tbf.TorrentID AS BadFolders,
+			tfi.TorrentID AS BadFiles,
+			ca.TorrentID AS CassetteApproved,
+			lma.TorrentID AS LossymasterApproved,
+			lwa.TorrentID AS LossywebApproved,
 			t.LastReseedRequest,
 			tln.TorrentID AS LogInDB,
 			t.ID AS HasFile
@@ -103,27 +103,30 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			GROUP BY t.ID
 			ORDER BY t.Remastered ASC, (t.RemasterYear <> 0) DESC, t.RemasterYear ASC, t.RemasterTitle ASC, t.RemasterRecordLabel ASC, t.RemasterCatalogueNumber ASC, t.Media ASC, t.Format, t.Encoding, t.ID");
 
-		$TorrentList = $DB->to_array();
-		if(count($TorrentList) == 0) {
+		$TorrentList = $DB->to_array('ID', MYSQLI_ASSOC);
+		if (count($TorrentList) == 0) {
 			header("Location: log.php?search=Torrent+$GroupID");
 			die();
 		}
-		if(in_array(0, $DB->collect('Seeders'))) {
+		if (in_array(0, $DB->collect('Seeders'))) {
 			$CacheTime = 600;
 		} else {
 			$CacheTime = 3600;
 		}
 		// Store it all in cache
-		if(!$RevisionID) {
-			$Cache->cache_value('torrents_details_'.$GroupID,array($TorrentDetails,$TorrentList),$CacheTime);
+		if (!$RevisionID) {
+			$Cache->cache_value('torrents_details_'.$GroupID, array($TorrentDetails, $TorrentList), $CacheTime);
 		}
 	} else { // If we're reading from cache
-		$TorrentDetails=$TorrentCache[0];
-		$TorrentList=$TorrentCache[1];
+		$TorrentDetails = $TorrentCache[0];
+		$TorrentList = $TorrentCache[1];
 	}
 
-	if($Return) {
-		return array($TorrentDetails,$TorrentList);
+	// Fetch all user specific torrent properties
+	array_walk($TorrentList, 'Torrents::torrent_properties');
+
+	if ($Return) {
+		return array($TorrentDetails, $TorrentList);
 	}
 }
 
@@ -144,6 +147,9 @@ function set_torrent_logscore($TorrentID) {
 }
 
 function get_group_requests($GroupID) {
+	if (empty($GroupID) || !is_number($GroupID)) {
+		return array();
+	}
 	global $DB, $Cache;
 	
 	$Requests = $Cache->get_value('requests_group_'.$GroupID);

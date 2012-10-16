@@ -288,7 +288,7 @@ if($TopicID) {
 				<p><strong><?=display_str($Question)?></strong></p>
 <?	if ($UserResponse !== null || $Closed) { ?>
 				<ul class="poll nobullet">
-<?		for ($i = 1, $il = count($Answers); $i <= $il; $i++) {
+<?		foreach ($Answers as $i => $Answer) {
 			if ($TotalVotes > 0) {
 				$Ratio = $Votes[$i]/$MaxVotes;
 				$Percent = $Votes[$i]/$TotalVotes;
@@ -312,7 +312,7 @@ if($TopicID) {
 					<input type="hidden" name="action" value="poll" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="topicid" value="<?=$TopicID?>" />
-<? 		for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
+<? 		foreach ($Answers as $i => $Answer) { ?>
 					<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />
 					<label for="answer_<?=$i?>"><?=display_str($Answers[$i])?></label><br />
 <? 		} ?>

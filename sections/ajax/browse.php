@@ -15,13 +15,6 @@ function header_link($SortKey,$DefaultWay="desc") {
 	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
 }
 
-$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
-}
-
 // Setting default search options
 if(!empty($_GET['setdefault'])) {
 	$UnsetList = array('page','setdefault');
@@ -490,10 +483,6 @@ foreach($Results as $GroupID=>$Data) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
 			
-			if (in_array($TorrentID, $TokenTorrents) && empty($Torrent['FreeTorrent'])) {
-				$Data['PersonalFL'] = 1;
-			}
-
 			if($CategoryID == 1 && ($Data['RemasterTitle'] != $LastRemasterTitle || $Data['RemasterYear'] != $LastRemasterYear ||
 			$Data['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Data['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber) || $FirstUnknown || $Data['Media'] != $LastMedia) {
 				$EditionID++;
@@ -548,10 +537,10 @@ foreach($Results as $GroupID=>$Data) {
 				'leechers' => (int) $Data['Leechers'],
 				'isFreeleech' => $Data['FreeTorrent'] == '1',
 				'isNeutralLeech' => $Data['FreeTorrent'] == '2',
-				'isPersonalFreeleech' => in_array($TorrentID, $TokenTorrents),
+				'isPersonalFreeleech' => $Data['PersonalFL'],
 				'canUseToken' => ($LoggedUser['FLTokens'] > 0)
 									&& $Data['HasFile'] && ($Data['Size'] < 1073741824)
-									&& !in_array($TorrentID, $TokenTorrents)
+									&& !$Data['PersonalFL']
 									&& empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')
 			);
 		}
@@ -592,10 +581,10 @@ foreach($Results as $GroupID=>$Data) {
 			'leechers' => (int) $TotalLeechers,
 			'isFreeleech' => $Data['FreeTorrent'] == '1',
 			'isNeutralLeech' => $Data['FreeTorrent'] == '2',
-			'isPersonalFreeleech' => in_array($TorrentID, $TokenTorrents),
+			'isPersonalFreeleech' => $Data['PersonalFL'],
 			'canUseToken' => ($LoggedUser['FLTokens'] > 0)
 								&& $Data['HasFile'] && ($Data['Size'] < 1073741824)
-								&& !in_array($TorrentID, $TokenTorrents)
+								&& !$Data['PersonalFL']
 								&& empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')
 		);
 	}

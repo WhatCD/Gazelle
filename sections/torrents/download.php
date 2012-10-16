@@ -82,13 +82,8 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 	}
 	
 	// First make sure this isn't already FL, and if it is, do nothing
-	$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-	if (empty($TokenTorrents)) {
-		$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-		$TokenTorrents = $DB->collect('TorrentID');
-	}
 	
-	if (!in_array($TorrentID, $TokenTorrents)) {
+	if (!Torrents::has_token($TorrentID)) {
 		if ($FLTokens <= 0) {
 			error("You do not have any freeleech tokens left.  Please use the regular DL link.");
 		}
@@ -101,15 +96,7 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 			error("Sorry! An error occurred while trying to register your token. Most often, this is due to the tracker being down or under heavy load. Please try again later.");
 		}
 		
-		// We need to fetch and check this again here because of people 
-		// double-clicking the FL link while waiting for a tracker response.
-		$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-		if (empty($TokenTorrents)) {
-			$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-			$TokenTorrents = $DB->collect('TorrentID');
-		}
-		
-		if (!in_array($TorrentID, $TokenTorrents)) {
+		if (!Torrents::has_token($TorrentID)) {
 			$DB->query("INSERT INTO users_freeleeches (UserID, TorrentID, Time) VALUES ($UserID, $TorrentID, NOW())
 							ON DUPLICATE KEY UPDATE Time=VALUES(Time), Expired=FALSE, Uses=Uses+1");
 			$DB->query("UPDATE users_main SET FLTokens = FLTokens - 1 WHERE ID=$UserID");
@@ -122,8 +109,7 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 			$Cache->update_row(false, array('FLTokens'=>($FLTokens - 1)));
 			$Cache->commit_transaction(0);
 			
-			$TokenTorrents[] = $TorrentID;
-			$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+			$Cache->delete_value('users_tokens_'.$UserID);
 		}
 	}
 }
