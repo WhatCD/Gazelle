@@ -235,5 +235,18 @@ class Tools {
 				WHERE UserID=\''.db_string($UserID).'\'');
 		}
 	}
+	
+	/**
+	 * Update the notes of a user
+	 * @param unknown $UserID ID of user
+	 * @param unknown $AdminComment Comment to update with
+	 */
+	public static function update_user_notes($UserID, $AdminComment) {
+		global $DB;
+		$DB->query('UPDATE users_info SET
+					AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
+					WHERE UserID=\''.db_string($UserID).'\'');
+	}
+	
 }
 ?>

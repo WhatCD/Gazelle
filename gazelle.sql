@@ -1425,10 +1425,12 @@ CREATE TABLE `users_votes` (
   `UserID` int(10) unsigned NOT NULL,
   `GroupID` int(10) NOT NULL,
   `Type` enum('Up','Down') DEFAULT NULL,
+  `Time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`UserID`,`GroupID`),
   KEY `GroupID` (`GroupID`),
   KEY `UserID` (`UserID`),
   KEY `Type` (`Type`),
+  KEY `Time` (`Time`),
   CONSTRAINT `users_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `users_votes_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
