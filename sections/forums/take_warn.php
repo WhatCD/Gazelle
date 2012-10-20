@@ -32,11 +32,11 @@ if ($Length != 'verbal') {
 	$Subject = "You have received a verbal warning";
 	$PrivateMessage = "You have received a verbal warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;
 	$AdminComment = date("Y-m-d") . ' - Verbally warned by ' . $LoggedUser['Username'] . " for $URL \nReason: $Reason\n\n";
+    Tools::update_user_notes($UserID, $AdminComment);
 }
 
 $DB->query("INSERT INTO users_warnings_forums (UserID, Comment) VALUES('$UserID', '" . db_string($AdminComment) . "')
 		ON DUPLICATE KEY UPDATE Comment = CONCAT('" . db_string($AdminComment) . "', Comment)");
-Tools::update_user_notes($UserID, $AdminComment);
 Misc::send_pm($UserID, $LoggedUser['ID'], $Subject, $PrivateMessage);
 
 //edit the post

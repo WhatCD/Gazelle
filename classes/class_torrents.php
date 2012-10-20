@@ -476,6 +476,7 @@ class Torrents {
 		}
 	}
 
+
 	/**
 	 * Convenience function to allow for passing groups to Torrents::freeleech_torrents()
 	 *
@@ -497,13 +498,13 @@ class Torrents {
 		}
 	}
 
+
 	/**
 	 * Check if the logged in user has an active freeleech token
 	 *
 	 * @param int $TorrentID
 	 * @return true if an active token exists
 	 */
-
 	public static function has_token($TorrentID) {
 		global $DB, $Cache, $LoggedUser;
 		if (empty($LoggedUser) || empty($LoggedUser['ID'])) {
@@ -523,5 +524,23 @@ class Torrents {
 		return isset($TokenTorrents[$TorrentID]);
 	}
 
+
+	/**
+	 * Check if the logged in user can use a freeleech token on this torrent
+	 *
+	 * @param int $Torrent
+	 * @return true if user is allowed to use a token
+	 */
+	public static function can_use_token($Torrent) {
+		global $LoggedUser;
+		if (empty($LoggedUser) || empty($LoggedUser['ID'])) {
+			return false;
+		}
+		return ($LoggedUser['FLTokens'] > 0
+			&& $Torrent['Size'] < 1073741824
+			&& !$Torrent['PersonalFL']
+			&& empty($Torrent['FreeTorrent'])
+			&& $LoggedUser['CanLeech'] == '1');
+	}
 }
 ?>
