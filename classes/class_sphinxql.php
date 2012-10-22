@@ -244,11 +244,18 @@ class SphinxQL_Query {
 	 * @param string $Field field to match $Expr against. Default is *, which means all available fields
 	 * @return current SphinxQL query object
 	 */
-	public function where_match($Expr, $Field = '*') {
+	public function where_match($Expr, $Field = '*', $Escape = true) {
 		if(empty($Expr)) {
 			return $this;
 		}
-		$this->Expressions[] = "@$Field ".SphinxQL::escape_string($Expr);
+		if ($Field !== false) {
+			$Field = "@$Field ";
+		}
+		if ($Escape === true) {
+			$this->Expressions[] = "$Field".SphinxQL::escape_string($Expr);
+		} else {
+			$this->Expressions[] = $Field.$Expr;
+		}
 		return $this;
 	}
 
