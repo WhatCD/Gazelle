@@ -32,6 +32,17 @@ $TorrentID = $_REQUEST['id'];
 
 if (!is_number($TorrentID)){ error(0); }
 
+/* uTorrent remote redownloads .torrent files every fifteen minutes
+   to prevent this retardation from blowing bandwidth etc., let's block it
+   if he's downloaded the .torrent file twice before */
+if (strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== FALSE) {
+	$DB->query("SELECT 1 FROM users_downloads WHERE UserID=$UserID AND TorrentID=$TorrentID LIMIT 3");
+	if ($DB->record_count() > 2) {
+		error('You have already downloaded this .torrent three times.  If you need to download it again, please do so from your browser, not through uTorrent remote.');
+		die();
+	}
+}
+
 $Info = $Cache->get_value('torrent_download_'.$TorrentID);
 if(!is_array($Info) || !array_key_exists('PlainArtists', $Info) || empty($Info[10])) {
 	$DB->query("SELECT
@@ -131,7 +142,7 @@ if($CategoryID == '1' && $Image != "") {
 	}
 }
 
-$DB->query("INSERT INTO users_downloads (UserID, TorrentID, Time) VALUES ('$UserID', '$TorrentID', '".sqltime()."') ON DUPLICATE KEY UPDATE Time=VALUES(Time)");
+$DB->query("INSERT IGNORE INTO users_downloads (UserID, TorrentID, Time) VALUES ('$UserID', '$TorrentID', '".sqltime()."')");
 
 
 $DB->query("SELECT File FROM torrents_files WHERE TorrentID='$TorrentID'");
