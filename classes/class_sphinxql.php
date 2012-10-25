@@ -203,9 +203,9 @@ class SphinxQL_Query {
 				}
 			}
 			if($Exclude) {
-				$Filters[] = "$Attribute NOT IN (".implode(",", $Value).")";
+				$Filters[] = "$Attribute NOT IN (".implode(",", $Values).")";
 			} else {
-				$Filters[] = "$Attribute IN (".implode(",", $Value).")";
+				$Filters[] = "$Attribute IN (".implode(",", $Values).")";
 			}
 		} else {
 			if(!is_number($Values)) {

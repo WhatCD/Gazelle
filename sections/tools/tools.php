@@ -61,7 +61,6 @@ if (check_perms('admin_donor_log')) { ?>
 <? } if (check_perms('admin_manage_permissions')) { ?>
 			<tr><td><a href="tools.php?action=special_users">Special Users</a></td></tr>
 
-<? } ?>
 		</table>
 	</div>
 	<div class="permission_container">
