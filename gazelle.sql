@@ -126,6 +126,8 @@ CREATE TABLE `bookmarks_torrents` (
   `UserID` int(10) NOT NULL,
   `GroupID` int(10) NOT NULL,
   `Time` datetime NOT NULL,
+  `Sort` int(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY `groups_users` (`GroupID`,`UserID`),
   KEY `UserID` (`UserID`),
   KEY `GroupID` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
