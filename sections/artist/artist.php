@@ -61,6 +61,15 @@ if($Data) {
 	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record(MYSQLI_NUM, array(0));
 }
 
+$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+if (empty($TokenTorrents)) {
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$TokenTorrents = $DB->collect('TorrentID');
+	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+}
+
+$SnatchedTorrents = Torrents::get_snatched_torrents();
+
 //----------------- Build list and get stats
 
 ob_start();
@@ -96,16 +105,14 @@ $NumRequests = count($Requests);
 $LastReleaseType = 0;
 if(empty($Importances) || empty($TorrentList)) {
 	$DB->query("SELECT
-			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse
+			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.ReleaseType
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
 			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),1000 + ta.Importance, tg.ReleaseType) ASC,
 			    tg.Year DESC, tg.Name DESC");
-
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
-
 	if(count($GroupIDs)>0) {
 		$TorrentList = Torrents::get_groups($GroupIDs, true,true);
 		$TorrentList = $TorrentList['matches'];
@@ -170,8 +177,19 @@ if(!empty($ComposerAlbums)) {
 if(!empty($ProducerAlbums)) {
 	$ReleaseTypes[1021] = "Produced By";
 }
-
-
+//Custom sorting for releases
+if(!empty($LoggedUser['SortHide'])) {
+	$SortOrder = array_keys($LoggedUser['SortHide']);
+	uasort($Importances, function ($a, $b) {
+		global $SortOrder;
+		$c = array_search($a['ReleaseType'], $SortOrder);
+		$d = array_search($b['ReleaseType'], $SortOrder);
+		if ($c == $d) {
+			return 0;
+		}
+		return $c < $d ? -1 : 1;
+	});
+}
 reset($TorrentList);
 if(!empty($UsedReleases)) { ?>
 	<div class="box center">
@@ -191,8 +209,8 @@ if(!empty($UsedReleases)) { ?>
 				$DisplayName = $ReleaseTypes[$ReleaseID]."s";
 				break;
 		}
-
-		if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['HideTypes']) && in_array($ReleaseID, $LoggedUser['HideTypes']))) {
+		
+		if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['SortHide']) && array_key_exists($ReleaseType, $LoggedUser['SortHide']) && $LoggedUser['SortHide'][$ReleaseType] == 1)) {
 			$ToggleStr = " onclick=\"$('.releases_$ReleaseID').show(); return true;\"";
 		} else {
 			$ToggleStr = '';
@@ -264,7 +282,12 @@ foreach ($Importances as $Group) {
 		$OldReleaseType = $ReleaseType;
 	}
 
-	if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['HideTypes']) && in_array($ReleaseType, $LoggedUser['HideTypes']))) {
+/* 	if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['HideTypes']) && in_array($ReleaseType, $LoggedUser['HideTypes']))) {
+		$HideDiscog = ' hidden';
+	} else {
+		$HideDiscog = '';
+	} */
+	if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['SortHide']) && array_key_exists($ReleaseType, $LoggedUser['SortHide']) && $LoggedUser['SortHide'][$ReleaseType] == 1)) {
 		$HideDiscog = ' hidden';
 	} else {
 		$HideDiscog = '';
@@ -430,8 +453,12 @@ foreach ($Importances as $Group) {
 			&& !$Torrent['PersonalFL'] && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?> ]
-			</span>
-			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
+			</span> 
+<? 		if(array_key_exists($TorrentID, $SnatchedTorrents)) {
+				$Torrent['SnatchedTorrent'] = '1';
+		}
+?>
+		&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
@@ -450,7 +477,7 @@ $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
-View::show_header($Name, 'browse,requests,bbcode');
+View::show_header($Name, 'browse,requests,bbcode,comments');
 ?>
 <div class="thin">
 	<div class="header">
@@ -879,6 +906,174 @@ function require(file, callback) {
 			<div class="head"><strong>Artist info</strong></div>
 			<div class="body"><?=$Text->full_format($Body)?></div>
 		</div>
+<?php
+// --- Comments ---
+
+// gets the amount of comments for this group
+$Results = $Cache->get_value('artist_comments_'.$ArtistID);
+if($Results === false) {
+	$DB->query("SELECT
+			COUNT(c.ID)
+			FROM artist_comments as c
+			WHERE c.ArtistID = '$ArtistID'");
+	list($Results) = $DB->next_record();
+	$Cache->cache_value('artist_comments_'.$ArtistID, $Results, 0);
+}
+
+if(isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
+	$DB->query("SELECT COUNT(ID) FROM artist_comments WHERE ArtistID = $ArtistID AND ID <= $_GET[postid]");
+	list($PostNum) = $DB->next_record();
+	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+} else {
+	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+}
+
+//Get the cache catalogue
+$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
+$CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
+
+//---------- Get some data to start processing
+
+// Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
+$Catalogue = $Cache->get_value('artist_comments_'.$ArtistID.'_catalogue_'.$CatalogueID);
+if($Catalogue === false) {
+	$DB->query("SELECT
+			c.ID,
+			c.AuthorID,
+			c.AddedTime,
+			c.Body,
+			c.EditedUserID,
+			c.EditedTime,
+			u.Username
+			FROM artist_comments as c
+			LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
+			WHERE c.ArtistID = '$ArtistID'
+			ORDER BY c.ID
+			LIMIT $CatalogueLimit");
+	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
+	$Cache->cache_value('artist_comments_'.$ArtistID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
+}
+
+//This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
+$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)%THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
+?>
+	<div class="linkbox"><a name="comments"></a>
+<?
+$Pages=Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
+echo $Pages;
+?>
+	</div>
+<?
+
+//---------- Begin printing
+foreach($Thread as $Key => $Post){
+	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
+	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
+?>
+<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+	<tr class="colhead_dark">
+		<td colspan="2">
+			<span style="float:left;"><a class="post_id" href='artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
+				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=artist_comment&amp;id=<?=$PostID?>">[Report]</a>
+                    <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
+                        $AuthorInfo = Users::user_info($AuthorID);
+                        if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
+                        <form  class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
+	                        <input type="hidden" name="action" value="warn" />
+	                        <input type="hidden" name="artistid" value="<?=$ArtistID?>" />
+	                        <input type="hidden" name="postid" value="<?=$PostID?>" />
+	                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
+	                        <input type="hidden" name="key" value="<?=$Key?>" />
+                        </form>
+                        - <a href="#" onclick="document.warn<?=$PostID?>.submit(); return false;">[Warn]</a>
+
+                    <? }
+                } ?>
+				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
+<?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
+if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
+			</span>
+			<span id="bar<?=$PostID?>" style="float:right;">
+				<a href="#">&uarr;</a>
+			</span>
+		</td>
+	</tr>
+	<tr>
+<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+		<td class="avatar" valign="top">
+	<? if ($Avatar) { ?>
+			<img src="<?=$Avatar?>" width="150" alt="<?=$Username ?>'s avatar" />
+	<? } else { ?>
+			<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
+	<?
+	}
+	?>
+		</td>
+<?
+}
+?>
+		<td class="body" valign="top">
+			<div id="content<?=$PostID?>">
+<?=$Text->full_format($Body)?>
+<? if($EditedUserID){ ?>
+				<br />
+				<br />
+<?	if(Paranoia::check_perms('site_admin_forums')) { ?>
+				<a href="#content<?=$PostID?>" onclick="LoadEdit('artist', <?=$PostID?>, 1); return false;">&laquo;</a> 
+<? 	} ?>
+				Last edited by
+				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+<? } ?>
+			</div>
+		</td>
+	</tr>
+</table>
+<?	} ?>
+		<div class="linkbox">
+		<?=$Pages?>
+		</div>
+<?
+if(!$LoggedUser['DisablePosting']) { ?>
+			<br />
+			<h3>Post reply</h3>
+			<div class="box pad">
+				<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
+					<tr class="colhead_dark">
+						<td colspan="2">
+							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
+								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong>	Just now
+							<a href="#quickreplypreview">[Report Comment]</a>
+							</span>
+							<span id="barpreview" style="float:right;">
+								<a href="#">&uarr;</a>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="avatar" valign="top">
+				<? if (!empty($LoggedUser['Avatar'])) { ?>
+							<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
+				<? } else { ?>
+							<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
+				<? } ?>
+						</td>
+						<td class="body" valign="top">
+							<div id="contentpreview" style="text-align:left;"></div>
+						</td>
+					</tr>
+				</table>
+				<form id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post" style="display: block; text-align: center;">
+					<div id="quickreplytext">
+						<input type="hidden" name="action" value="reply" />
+						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+						<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
+						<textarea id="quickpost" name="body"  cols="70"  rows="8"></textarea> <br />
+					</div>
+					<input id="post_preview" type="button" value="Preview" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
+					<input type="submit" id="submit_button" value="Post reply" />
+				</form>
+			</div>
+<? } ?>
 	</div>
 </div>
 <?

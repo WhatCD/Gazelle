@@ -19,6 +19,8 @@ View::show_header('Top 10 Users');
 			<a href="top10.php?type=torrents">[Torrents]</a>
 			<a href="top10.php?type=users"><strong>[Users]</strong></a>
 			<a href="top10.php?type=tags">[Tags]</a>
+		<!-- 			<a href="top10.php?type=votes">[Favorites]</a>
+ -->
 		</div>
 	</div>
 <?

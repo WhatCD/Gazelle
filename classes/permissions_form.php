@@ -16,6 +16,7 @@
 	'site_advanced_search' => 'Advanced search access.',
 	'site_top10' => 'Top 10 access.',
 	'site_advanced_top10' => 'Advanced Top 10 access.',
+	'site_album_votes' => 'Voting for favorite torrents.',
 	'site_torrents_notify' => 'Notifications access.',
 	'site_collages_create' => 'Collage create access.',
 	'site_collages_manage' => 'Collage manage access.',
@@ -135,6 +136,7 @@ function permissions_form(){ ?>
 					<? display_perm('site_collages_personal','Can have a personal collage.'); ?>
 					<? display_perm('site_collages_renamepersonal','Can rename own personal collages.'); ?>
 					<? display_perm('site_advanced_top10','Can access advanced top 10.'); ?>
+					<? display_perm('site_album_votes', 'Can vote for favorite torrents.'); ?>
 					<? display_perm('site_make_bookmarks','Can make bookmarks.'); ?>
 					<? display_perm('site_edit_wiki','Can edit wiki pages.'); ?>
 					<? display_perm('site_can_invite_always', 'Can invite users even when invites are closed.'); ?>

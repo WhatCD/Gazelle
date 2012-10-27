@@ -1,6 +1,6 @@
 <?
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
-$Text = new TEXT;
+$Text = new TEXT(true);
 
 if(!empty($_GET['id']) && is_number($_GET['id'])){ //Visiting article via ID
 	$ArticleID = $_GET['id'];
@@ -35,6 +35,9 @@ $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName, $Aliases, $UserIDs) = array_shift($Article);
 if($Read > $LoggedUser['EffectiveClass']){ error('You must be a higher user class to view this wiki article'); }
 
+$TextBody = $Text->full_format($Body, false);
+$TOC = $Text->parse_toc(0);
+
 View::show_header($Title,'wiki,bbcode');
 ?>
 <div class="thin">
@@ -51,18 +54,16 @@ View::show_header($Title,'wiki,bbcode');
 		</div>
 	</div>
 	<div class="sidebar">
-		<!--
-		<div class="box pad">
-			Table of Contents
-			<ul>
-				<li>Deferred for later with the KB broken</li>
-			</ul>
+		<div class="box">
+			<div class="head">Table of Contents</div>
+			<div class="body">
+				<?=$TOC?>
+			</div>
 		</div>
-		-->
 		<div class="box pad center">
 			<form class="search_form" name="articles" action="wiki.php" method="get">
 				<input type="hidden" name="action" value="search" />
-				<input 
+				<input
 					onfocus="if (this.value == 'Search Articles') this.value='';"
 					onblur="if (this.value == '') this.value='Search Articles';"
 					value="Search Articles" type="text" name="search" size="20"
@@ -100,7 +101,7 @@ View::show_header($Title,'wiki,bbcode');
 ?>
 						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem,20,1)?></a><? if(check_perms('admin_manage_wiki')){ ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>');return false;" title="Delete Alias">[X]</a> <a href="user.php?id=<?=$UserArray[$i]?>" title="View User">[U]</a><? } ?></li>
 <?			$i++;
-		} 
+		}
 	}
 ?>
 					</ul>
@@ -127,7 +128,7 @@ View::show_header($Title,'wiki,bbcode');
 	</div>
 	<div class="main_column">
 	<div class="box">
-		<div class="pad"><?=$Text->full_format($Body)?></div>
+		<div class="pad"><?=$TextBody?></div>
 	</div>
 	</div>
 </div>

@@ -1,6 +1,8 @@
 function Categories() {
 	ajax.get('ajax.php?action=upload_section&categoryid=' + $('#categories').raw().value, function (response) {
 		$('#dynamic_form').raw().innerHTML = response;
+		// Evaluate the code that generates previews.
+		eval(jQuery('#dynamic_form script.preview_code').html());
 	});
 }
 

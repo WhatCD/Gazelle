@@ -61,7 +61,18 @@ if ($SiteOptions) {
 	$SiteOptions = array();
 }
 
-View::show_header($Username.' > Settings','user,jquery,password_validate,validate');
+View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings');
+
+$DB->query("SELECT PushService, PushOptions FROM 
+    users_push_notifications WHERE UserID = '$LoggedUser[ID]'");
+
+list($PushService, $PushOptions) = $DB->next_record(MYSQLI_NUM, false);
+
+if ($PushOptions) { 
+	$PushOptions = unserialize($PushOptions); 
+} else { 
+	$PushOptions = array();
+}
 echo $Val->GenerateJS('userform');
 ?>
 <div class="thin">
@@ -126,6 +137,14 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
+				<td class="label"><strong>Show Snatched Torrents</strong></td>
+				<td>
+					<input type="checkbox" name="showsnatched" id="showsnatched" <? if (!empty($SiteOptions['ShowSnatched'])) { ?>checked="checked"<? } ?> />
+					<label for="showsnatched">"Snatched!" next to snatched torrents</label>
+				</td>
+				</td>
+			</tr>
+			<tr>
 				<td class="label"><strong>Posts per page (Forum)</strong></td>
 				<td>
 					<select name="postsperpage" id="postsperpage">
@@ -136,7 +155,7 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Hide release types</strong></td>
+				<td class="label"><strong>Sort/Hide release types</strong></td>
 				<td>
 					<table class="layout" style="border:none;">
 <?
@@ -144,6 +163,52 @@ echo $Val->GenerateJS('userform');
 	$ReleaseTypes[1023] = "Remixed By";
 	$ReleaseTypes[1022] = "Composition";
 	$ReleaseTypes[1021] = "Produced By";
+?>
+    
+	<a href="#" id="toggle_sortable" onclick="return false;">Expand</a>
+	<div id="sortable_container" style="display: none;">
+	<ul class="sortable_list" id="sortable">
+
+<?
+//Generate list of release types for sorting and hiding. 
+//If statement is in place because on the first usage user will not have 'SortHide' set in $SiteOptions 
+if(empty($SiteOptions['SortHide'])) {
+	for($i = 0; list($Key,$Val) = each($ReleaseTypes); $i++) {
+		if(!empty($SiteOptions['HideTypes']) && in_array($Key, $SiteOptions['HideTypes'])) {
+			$Checked = 'checked="checked" ';
+		} else {
+			$Checked='';
+		}
+?>
+		<li class="sortable_item"><input type="checkbox" <?=$Checked?> 
+			id="<?=$Key."_".($Checked == 'checked="checked" ' ? 1 : 0)?>"><?=$Val?></li>
+<?	} 
+}
+else {
+	for($i = 0; list($Key,$Val) = each($SiteOptions['SortHide']); $i++) {
+		if($Val == true) {
+			$Checked = 'checked="checked" ';
+		} else {
+			$Checked='';
+		}
+		if(array_key_exists($Key, $ReleaseTypes)) {
+			$Name = $ReleaseTypes[$Key];
+		}
+		else {
+			$Name = "Error";
+		}
+	?>
+		<li class="sortable_item"><input type="checkbox" <?=$Checked?> 
+			id="<?=$Key."_".($Checked == 'checked="checked" ' ? 1 : 0)?>"><?=$Name?></li>
+<?	} 
+}
+?>
+		</ul>
+	</div>
+	<input type="hidden" id="sorthide" name="sorthide" value=""/>
+		
+<?
+/*
 	for($i = 0; list($Key,$Val) = each($ReleaseTypes); $i++) {
 		if(!($i % 7)) {
 			if($i) {
@@ -161,10 +226,10 @@ echo $Val->GenerateJS('userform');
 			$Checked='';
 		}
 ?>
-							<td style="border:none;">
-								<label><input type="checkbox" id="hide_type_<?=$Key?>" name="hidetypes[]=" value="<?=$Key?>" <?=$Checked?>/>
-								<?=$Val?></label>
-							</td>
+			<td style="border:none;">
+				<label><input type="checkbox" id="hide_type_<?=$Key?>" name="hidetypes[]=" value="<?=$Key?>" <?=$Checked?>/>
+				<?=$Val?></label>
+			</td>
 <?
 	}
 	if($i % 7) {
@@ -172,6 +237,7 @@ echo $Val->GenerateJS('userform');
 							<td style="border:none;" colspan="<?=7 - ($i % 7)?>"></td>
 <?
 	}
+	*/
 	unset($ReleaseTypes[1023], $ReleaseTypes[1024], $ReleaseTypes[1022]);
 ?>
 						</tr>
@@ -217,6 +283,13 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
+				<td class="label"><strong>Quote Notifications</strong></td>
+				<td>
+					<input type="checkbox" name="notifyquotes" id="notifyquotes" <? if (!empty($SiteOptions['NotifyOnQuote'])) { ?>checked="checked"<? } ?> />
+					<label for="notifyquotes">Notifications when somebody quotes you in the forum</label>
+				</td>
+			</tr>
+			<tr>
 				<td class="label"><strong>Smileys</strong></td>
 				<td>
 					<input type="checkbox" name="disablesmileys" id="disablesmileys" <? if (!empty($SiteOptions['DisableSmileys'])) { ?>checked="checked"<? } ?> />
@@ -228,6 +301,56 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<input type="checkbox" name="disableavatars" id="disableavatars" <? if (!empty($SiteOptions['DisableAvatars'])) { ?>checked="checked"<? } ?> />
 					<label for="disableavatars">Disable avatars</label>
+				</td>
+			</tr>
+<? /*
+              <tr>
+                <td class="label"><strong>Push Notifications</strong></td>
+                <td>
+                    <select name="pushservice" id="pushservice">
+                        <option value="0" <? if(empty($PushService)) { ?> selected="selected" <? } ?>/>Disable Push Notifications</option>
+                        <option value="1" <? if($PushService == 1) { ?> selected="selected" <? } ?>/>Notify My Android</option>
+                        <option value="2" <? if($PushService == 2) { ?> selected="selected" <? } ?>/>Prowl</option>
+                        <option value="3" <? if($PushService == 3) { ?> selected="selected" <? } ?>/>Notifo</option>
+                    </select>
+                    <div id="pushsettings" style="display: none">
+                    <br />
+                        <label for="pushkey">API Key</label>
+                        <input type="text" size="50" name="pushkey" id="pushkey" value="<?=display_str($PushOptions['PushKey'])?>" />
+                        <div id="pushsettings_username" style="display: none">
+                            <label for="pushusername">Username</label> <input type="text"
+                                size="50" name="pushusername" id="pushusername"
+                                value="<?=display_str($PushOptions['PushUsername'])?>" />
+                        </div>
+                        <br />
+                    Push me on
+                    <br />
+                    <input type="checkbox" name="pushfilters[]" value="News" <? if(isset($PushOptions['PushFilters']['News'])) { ?> checked="checked"  <? } ?>/>Announcements<br />
+                    <input type="checkbox" name="pushfilters[]" value="PM" <? if(isset($PushOptions['PushFilters']['PM'])) { ?> checked="checked"  <? } ?>/>Private Messages<br />
+                   <? 
+					<input type="checkbox" name="pushfilters[]" value="Rippy" <? if(isset($PushOptions['PushFilters']['Rippy'])) { ?> checked="checked"  <? } ?>/>Rippys<br /> 
+					?>
+                   [<a href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Test Push</a>]
+                    	[<a href="wiki.php?action=article&id=1017>">Wiki Guide</a>]
+                    </div>
+                 </td>
+            </tr>
+            */ ?>
+        <tr>
+				<td class="label"><strong>Rippy!</strong></td>
+				<td>
+					<select name="rippy">
+						<option value="On" <? if($SiteOptions['Rippy'] == 'On') { ?> selected="selected" <? } ?> >On</option>
+						<option value="Off" <? if($SiteOptions['Rippy'] == 'Off') { ?> selected="selected" <? } ?> >Off</option>
+						<option value="PM" <? if($SiteOptions['Rippy'] == 'PM' || empty($SiteOptions['Rippy'])) { ?> selected="selected" <? } ?> >Personal rippies only</option>
+					</select>
+				</td>
+			</tr>	
+			<tr>
+				<td class="label"><strong>Auto-save Text</strong></td>
+				<td>
+					<input type="checkbox" name="disableautosave" id="disableautosave" <? if (!empty($SiteOptions['DisableAutoSave'])) { ?>checked="checked"<? } ?> />
+					<label for="disableautosave">Disable reply text from being saved automatically when change pages in a thread</label>
 				</td>
 			</tr>
 			<tr>
@@ -264,7 +387,7 @@ echo $Val->GenerateJS('userform');
 			</tr>
 			<tr>
 				<td class="label"><strong>Info</strong></td>
-				<td><textarea name="info" cols="50" rows="8"><?=display_str($Info)?></textarea></td>
+				<td><?php $textarea = new TEXTAREA_PREVIEW('info', 'info', display_str($Info), 50, 8); ?></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>IRCKey</strong></td>

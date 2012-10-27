@@ -1409,3 +1409,7 @@ body#forums .poll li.graph {
 .lightbox .colhead span {
     font-weight: bold;
 }
+
+.navigation_list li {
+    margin-left: 20px;
+}

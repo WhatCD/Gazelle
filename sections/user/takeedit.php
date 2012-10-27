@@ -192,19 +192,25 @@ $Options['AutoSubscribe'] = (!empty($_POST['autosubscribe']) ? 1 : 0);
 $Options['DisableSmileys'] = (!empty($_POST['disablesmileys']) ? 1 : 0);
 $Options['DisableAvatars'] = (!empty($_POST['disableavatars']) ? 1 : 0);
 $Options['DisablePMAvatars'] = (!empty($_POST['disablepmavatars']) ? 1 : 0);
+$Options['NotifyOnQuote'] = (!empty($_POST['notifyquotes']) ? 1 : 0);
+$Options['ShowSnatched'] = (!empty($_POST['showsnatched']) ? 1 : 0);
+
 
 
 if(isset($LoggedUser['DisableFreeTorrentTop10'])) {
 	$Options['DisableFreeTorrentTop10'] = $LoggedUser['DisableFreeTorrentTop10'];
 }
 
-if(!empty($_POST['hidetypes'])) {
-	foreach($_POST['hidetypes'] as $Type) {
-		$Options['HideTypes'][] = (int) $Type;
+if(!empty($_POST['sorthide'])) {
+	$JSON = json_decode($_POST['sorthide']);
+	foreach($JSON as $J) {
+		$E = explode("_", $J);
+		$Options['SortHide'][$E[0]] = $E[1];
 	}
 } else {
-	$Options['HideTypes'] = array();
+	$Options['SortHide'] = array();
 }
+
 if (check_perms('site_advanced_search')) {
 	$Options['SearchType'] = $_POST['searchtype'];
 } else {
@@ -219,6 +225,32 @@ unset($Options['ShowCacheList']);
 $DownloadAlt = (isset($_POST['downloadalt']))? 1:0;
 $UnseededAlerts = (isset($_POST['unseededalerts']))? 1:0;
 
+if(isset($_POST['pushnotifications'])) {
+	if($_POST['pushnotifications'] == 1) {
+		$Options['PushService'] = "nma";
+		$Options['PushKey'] = $_POST['pushkey'];
+	}
+}
+else {
+	$Options['PushService'] = "0";
+}
+
+if(is_numeric($_POST['pushservice'])) {
+    $CanInsert = true;
+    if($_POST['pushservice'] == 0) {
+        $DB->query("SELECT PushService FROM users_push_notifications WHERE UserID = '$LoggedUser[ID]'");
+        if($DB->record_count() == 0) {
+            $CanInsert = false;
+        }
+    }
+    if($CanInsert) {
+        $PushService = db_string($_POST['pushservice']);
+        $PushOptions = array("PushKey" => trim($_POST['pushkey']), "PushUsername" => trim($_POST['pushusername']), "PushFilters" => array_flip($_POST['pushfilters']));
+        $PushOptions = db_string(serialize($PushOptions));
+        $DB->query("INSERT INTO users_push_notifications (UserID, PushService, PushOptions) VALUES ('$LoggedUser[ID]', '$PushService', '$PushOptions')
+            ON DUPLICATE KEY UPDATE PushService = '$PushService', PushOptions = '$PushOptions'");
+    }
+}
 // Information on how the user likes to download torrents is stored in cache
 if($DownloadAlt != $LoggedUser['DownloadAlt']) {
 	$Cache->delete_value('user_'.$LoggedUser['torrent_pass']);
@@ -248,6 +280,7 @@ $SQL="UPDATE users_main AS m JOIN users_info AS i ON m.ID=i.UserID SET
 	i.StyleURL='".db_string($_POST['styleurl'])."',
 	i.Avatar='".db_string($_POST['avatar'])."',
 	i.SiteOptions='".db_string(serialize($Options))."',
+	i.NotifyOnQuote = '".db_string($Options['NotifyOnQuote'])."',
 	i.Info='".db_string($_POST['info'])."',
 	i.DownloadAlt='$DownloadAlt',
 	i.UnseededAlerts='$UnseededAlerts',

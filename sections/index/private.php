@@ -1,7 +1,7 @@
 <?
 include(SERVER_ROOT.'/classes/class_text.php');
 
-$Text = new TEXT;
+$Text = new TEXT(true);
 
 if (!$News = $Cache->get_value('news')) {
 	$DB->query("SELECT
@@ -75,7 +75,7 @@ for($i = 0; $i < $Limit; $i++) {
 				<li>
 					<?=($ReadTime < strtotime($BlogTime))?'<strong>':''?><?=($i + 1)?>. <a href="staffblog.php#blog<?=$BlogID?>"><?=$Title?></a><?=($ReadTime < strtotime($BlogTime))?'</strong>':''?>
 				</li>
-<? 
+<?
 }
 ?>
 			</ul>
@@ -112,7 +112,7 @@ for($i = 0; $i < $Limit; $i++) {
 				<li>
 					<?=($i + 1)?>. <a href="blog.php#blog<?=$BlogID?>"><?=$Title?></a>
 				</li>
-<? 
+<?
 }
 ?>
 			</ul>
@@ -147,7 +147,7 @@ if (($UserStats = $Cache->get_value('stats_users')) === false) {
 	list($UserStats['Month']) = $DB->next_record();
 
 	$Cache->cache_value('stats_users',$UserStats,0);
-}	
+}
 ?>
 				<li>Users active today: <?=number_format($UserStats['Day'])?> (<?=number_format($UserStats['Day']/$UserCount*100,2)?>%)</li>
 				<li>Users active this week: <?=number_format($UserStats['Week'])?> (<?=number_format($UserStats['Week']/$UserCount*100,2)?>%)</li>
@@ -192,7 +192,7 @@ if (($RequestStats = $Cache->get_value('stats_requests')) === false) {
 	list($FilledCount) = $DB->next_record();
 	$Cache->cache_value('stats_requests',array($RequestCount,$FilledCount),11280);
 } else {
-	list($RequestCount,$FilledCount) = $RequestStats; 
+	list($RequestCount,$FilledCount) = $RequestStats;
 }
 
 ?>
@@ -250,13 +250,13 @@ if($TopicID) {
 		$Answers = unserialize($Answers);
 		$DB->query("SELECT Vote, COUNT(UserID) FROM forums_polls_votes WHERE TopicID='$TopicID' AND Vote <> '0' GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
-		
+
 		$Votes = array();
 		foreach ($VoteArray as $VoteSet) {
-			list($Key,$Value) = $VoteSet; 
+			list($Key,$Value) = $VoteSet;
 			$Votes[$Key] = $Value;
 		}
-		
+
 		for ($i = 1, $il = count($Answers); $i <= $il; ++$i) {
 			if (!isset($Votes[$i])) {
 				$Votes[$i] = 0;
@@ -266,7 +266,7 @@ if($TopicID) {
 	} else {
 		list($Question,$Answers,$Votes,$Featured,$Closed) = $Poll;
 	}
-	
+
 	if (!empty($Votes)) {
 		$TotalVotes = array_sum($Votes);
 		$MaxVotes = max($Votes);
@@ -274,13 +274,13 @@ if($TopicID) {
 		$TotalVotes = 0;
 		$MaxVotes = 0;
 	}
-	
+
 	$DB->query("SELECT Vote FROM forums_polls_votes WHERE UserID='".$LoggedUser['ID']."' AND TopicID='$TopicID'");
 	list($UserResponse) = $DB->next_record();
 	if (!empty($UserResponse) && $UserResponse != 0) {
 		$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
 	}
-	
+
 ?>
 		<div class="box">
 			<div class="head colhead_dark"><strong>Poll<? if ($Closed) { echo ' ['.'Closed'.']'; } ?></strong></div>
@@ -295,7 +295,7 @@ if($TopicID) {
 			} else {
 				$Ratio=0;
 				$Percent=0;
-			} 
+			}
 ?>					<li><?=display_str($Answers[$i])?> (<?=number_format($Percent*100,2)?>%)</li>
 					<li class="graph">
 						<span class="left_poll"></span>
@@ -349,7 +349,7 @@ if (!is_array($Recommend) || !is_array($Recommend_artists)) {
 		");
 	$Recommend = $DB->to_array();
 	$Cache->cache_value('recommend',$Recommend,1209600);
-	
+
 	$Recommend_artists = Artists::get_artists($DB->collect('GroupID'));
 	$Cache->cache_value('recommend_artists',$Recommend_artists,1209600);
 }
@@ -405,7 +405,7 @@ foreach ($News as $NewsItem) {
 			<div class="head">
 				<strong><?=$Text->full_format($Title)?></strong> <?=time_diff($NewsTime);?>
 <? if(check_perms('admin_manage_news')) {?>
-				- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>">[Edit]</a> 
+				- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>">[Edit]</a>
 <? } ?>
 			</div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>
@@ -431,20 +431,20 @@ function contest() {
 
 	list($Contest, $TotalPoints) = $Cache->get_value('contest');
 	if(!$Contest) {
-		$DB->query("SELECT 
+		$DB->query("SELECT
 			UserID,
 			SUM(Points),
 			Username
 			FROM users_points AS up
 			JOIN users_main AS um ON um.ID=up.UserID
-			GROUP BY UserID 
-			ORDER BY SUM(Points) DESC 
+			GROUP BY UserID
+			ORDER BY SUM(Points) DESC
 			LIMIT 20");
 		$Contest = $DB->to_array();
-		
+
 		$DB->query("SELECT SUM(Points) FROM users_points");
 		list($TotalPoints) = $DB->next_record();
-		
+
 		$Cache->cache_value('contest', array($Contest,$TotalPoints), 600);
 	}
 

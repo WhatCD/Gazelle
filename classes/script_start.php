@@ -1,10 +1,9 @@
 <?
-
 /*-- Script Start Class --------------------------------*/
 /*------------------------------------------------------*/
-/* This isnt really a class but a way to tie other	  */
+/* This isnt really a class but a way to tie other      */
 /* classes and functions used all over the site to the  */
-/* page currently being displayed.					  */
+/* page currently being displayed.                      */
 /*------------------------------------------------------*/
 /* The code that includes the main php files and		*/
 /* generates the page are at the bottom.				*/
@@ -116,6 +115,18 @@ spl_autoload_register(function ($ClassName) {
 			break;
 		case 'View':
 			$FileName = 'class_view';
+			break;
+		case 'MASS_USER_TORRENTS_EDITOR':
+			$FileName = 'class_mass_user_torrents_editor';
+			break;
+		case 'MASS_USER_BOOKMARKS_EDITOR':
+			$FileName = 'class_mass_user_bookmarks_editor';
+			break;
+		case 'MASS_USER_TORRENTS_TABLE_VIEW':
+			$FileName = 'class_mass_user_torrents_table_view';
+		    break;
+        case 'TEXTAREA_PREVIEW':
+			$FileName = 'class_textarea_preview';
 			break;
 		default:
 			die("Couldn't import class " . $ClassName);

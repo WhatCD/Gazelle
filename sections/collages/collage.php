@@ -16,6 +16,14 @@ $Text = new TEXT;
 $CollageID = $_GET['id'];
 if(!is_number($CollageID)) { error(0); }
 
+$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+if (empty($TokenTorrents)) {
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$TokenTorrents = $DB->collect('TorrentID');
+	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+}
+$SnatchedTorrents = Torrents::get_snatched_torrents();
+
 $Data = $Cache->get_value('collage_'.$CollageID);
 
 if($Data) {
@@ -244,6 +252,10 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <?			} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
+<?			if(array_key_exists($TorrentID, $SnatchedTorrents)) {
+				$Torrent['SnatchedTorrent'] = '1';
+			}
+?>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>

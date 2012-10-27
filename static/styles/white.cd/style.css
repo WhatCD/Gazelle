@@ -25,3 +25,12 @@ ul.collage_images img {
 #drag_drop_textnote ul {
     padding-left: 25px;
 }
+
+
+tr.torrent .bookmark > a:before { content:""; }
+tr.torrent .bookmark > a:after { content:""; }
+
+.navigation_list li {
+    margin-left: 20px;
+}
+

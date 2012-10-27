@@ -41,7 +41,7 @@ if(!check_perms('admin_reports')) {
 		$Where .= " AND Type = 'request_update'";
 	}
 	if(check_perms('site_moderate_forums')) {
-		$Where .= " AND Type IN('collages_comment', 'Post', 'requests_comment', 'thread', 'torrents_comment')";
+		$Where .= " AND Type IN('collages_comment', 'Post', 'requests_comment', 'thread', 'torrents_comment', 'torrent_comments')";
 	}
 
 }
@@ -179,7 +179,18 @@ while(list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $
 				$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
 				echo "<a href='torrents.php?id=".$GroupID."&amp;page=".$PageNum."#post".$ThingID."'>TORRENT COMMENT</a>";
 			}
+            break;
+		case "artist_comment" :
+			$DB->query("SELECT ac.ArtistID, ac.Body, (SELECT COUNT(ID) FROM artist_comments WHERE ID <= ".$ThingID." AND artist_comments.ArtistID = ac.ArtistID) AS CommentNum FROM artist_comments AS ac WHERE ID=".$ThingID);
+			if($DB->record_count() < 1) {
+				echo "No comment with the reported ID found";
+			} else {
+				list($ArtistID, $Body, $PostNum) = $DB->next_record();
+				$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
+				echo "<a href='artist.php?id=".$ArtistID."&page=".$PageNum."#post".$ThingID."'>COMMENT</a>";
+			}
 			break;
+
 		case "collages_comment" :
 			$DB->query("SELECT cc.CollageID, cc.Body, (SELECT COUNT(ID) FROM collages_comments WHERE ID <= ".$ThingID." AND collages_comments.CollageID = cc.CollageID) AS CommentNum FROM collages_comments AS cc WHERE ID=".$ThingID);
 			if($DB->record_count() < 1) {

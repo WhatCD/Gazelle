@@ -57,14 +57,17 @@ if ($_GET['action']) {
 			break;
 		case 'subscribed_collages':
 			require('subscribed_collages.php');
-			break;
-		case 'catchup_collages':
-			require('catchup_collages.php');
-			break;
-
-		case 'token_history':
-			require('token_history.php');
-			break;
+            break;
+        case 'catchup_collages':
+            require('catchup_collages.php');
+            break;
+            
+        case 'token_history':
+            require('token_history.php');
+            break;
+        case 'quote_notifications':
+            require('quote_notifications.php');
+            break;
 		default:
 			//You trying to mess with me query string? To the home page with you!
 			header('Location: index.php');

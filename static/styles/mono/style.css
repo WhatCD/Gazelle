@@ -1185,3 +1185,6 @@ table.debug_table td.debug_query_data>div {
 .nobr {
 	white-space: nowrap;
 }
+
+tr.torrent .bookmark > a:before { content:""; }
+tr.torrent .bookmark > a:after { content:""; }

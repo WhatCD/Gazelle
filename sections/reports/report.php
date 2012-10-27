@@ -84,7 +84,8 @@ switch($Short) {
 		break;
 
 	case "requests_comment" :
-	case "torrents_comment" :
+    case "torrents_comment" :
+    case "artist_comment":
 	case "collages_comment" :
 		$Table = $Short.'s';
 		if($Short == "collages_comment") {
@@ -252,7 +253,8 @@ switch($Short) {
 <?	
 		break;
 	case "requests_comment" :
-	case "torrents_comment" :
+    case "torrents_comment" :
+    case "artist_comment":
 	case "collages_comment" :
 ?>
 		<p>You are reporting the <?=$Types[$Short]['title']?>:</p>

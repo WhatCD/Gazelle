@@ -255,14 +255,14 @@ strong.quoteheader {color: #f1f1f1;}
 
 #forums .rowb .min_padding img, #forums .rowa .min_padding img{position:relative; top:3px}
 
-#forums .forum_post tr, 
-#userhistory .forum_post tr, 
-#collage .forum_post tr, 
+#forums .forum_post tr,
+#userhistory .forum_post tr,
+#collage .forum_post tr,
 #torrents .forum_post tr{border-bottom:1px solid #757575}
 
-#forums .forum_post, 
-#userhistory .forum_post, 
-#collage .forum_post, 
+#forums .forum_post,
+#userhistory .forum_post,
+#collage .forum_post,
 #torrents .forum_post{border:0;  margin:0}
 
 .avatar{border:0 !important;  padding:1px 1px 1px 0;  background-color:#161616 !important;  width:150px}
@@ -271,26 +271,26 @@ strong.quoteheader {color: #f1f1f1;}
 #requests .forum_post .body{border:0}
 #requests .forum_post{margin-bottom:0}
 
-#forums .forum_post .body, 
-#userhistory .forum_post .body, 
-#collage .forum_post .body, 
+#forums .forum_post .body,
+#userhistory .forum_post .body,
+#collage .forum_post .body,
 #torrents .forum_post .body{padding:0; border-left:0}
 
-#forums .forum_post td, 
-#userhistory .forum_post td, 
-#collage .forum_post td, 
+#forums .forum_post td,
+#userhistory .forum_post td,
+#collage .forum_post td,
 #torrents .forum_post td{border-left:0;  border-right:0}
 
-#forums .forum_post .body div, 
-#collage .forum_post .body div, 
+#forums .forum_post .body div,
+#collage .forum_post .body div,
 #torrents .forum_post .body div,
 #requests .forum_post .body div{padding:10px 15px}
 
 #userhistory .forum_post .body{padding:20px}
 #userhistory .forum_post tr.colhead_dark{background-image:none}
 
-#forums .forum_post .body div div, 
-#collage .forum_post .body div div, 
+#forums .forum_post .body div div,
+#collage .forum_post .body div div,
 #torrents .forum_post .body div div{background:none;  padding:0}
 
 #forums .forum_post ul{margin:5px 0 0 0; padding:0}
@@ -338,18 +338,18 @@ strong.quoteheader {color: #f1f1f1;}
 .torrent_table tr.group_torrent a, #torrent_table tr.group_torrent a{color:#999; font-weight:normal}
 .torrent_table tr.group_torrent a:hover, #torrent_table tr.group_torrent a:hover{color:#007dc6}
 
-#torrents #content .center .box form div input[type="text"], 
-#wiki #content .center .box form div input[type="text"], 
+#torrents #content .center .box form div input[type="text"],
+#wiki #content .center .box form div input[type="text"],
 #artist #content .center .box form div input[type="text"]{width:500px;  margin-bottom:10px}
 
-#torrents #content .center .box form div textarea, 
-#wiki #content .center .box form div textarea, 
-#upload textarea#album_desc, 
-#forums #content .thin .box form .box textarea, 
+#torrents #content .center .box form div textarea,
+#wiki #content .center .box form div textarea,
+#upload textarea#album_desc,
+#forums #content .thin .box form .box textarea,
 #forums #quickpost{height:200px}
 
-#torrents #content .center .box form div, 
-#wiki #content .center .box form div, 
+#torrents #content .center .box form div,
+#wiki #content .center .box form div,
 #artist #content .center .box form div{text-align:left !important}
 
 /* PROFILE PAGE */
@@ -363,10 +363,10 @@ strong.quoteheader {color: #f1f1f1;}
 .box table{margin:0;  background-color:#FFF}
 
 #discog_table, #collage_table{margin-top:1px}
-.sidebar form br, 
+.sidebar form br,
 .sidebar .pad br{line-height:1em}
 
-.main_column .body, 
+.main_column .body,
 .sidebar .box .body{/*ADD TAG ON ALBUM PAGE */ padding:10px}
 
 .sidebar .box .stats{list-style:none; margin:0; padding:10px}
@@ -495,11 +495,11 @@ h3{margin:10px 0}
 
 #user #userform{padding:20px 0 0 0}
 
-#user .linkbox, 
-#artist .linkbox, 
-#collage .linkbox, 
-#forums .linkbox, 
-#bookmarks .linkbox, 
+#user .linkbox,
+#artist .linkbox,
+#collage .linkbox,
+#forums .linkbox,
+#bookmarks .linkbox,
 #torrents .linkbox{border-bottom:0}
 
 #rules #content li{margin:0 0 5px 0}
@@ -532,8 +532,17 @@ h3{margin:10px 0}
 	text-align: center;
 }
 
-.spellcheck { 
+.spellcheck {
 	margin: 10px 0;
 	font-size: 1.25em;
 	font-weight: bold;
 }
+
+
+tr.torrent .bookmark > a:before { content:""; }
+tr.torrent .bookmark > a:after { content:""; }
+
+.sidebar .navigation_list li {
+    margin-left: 20px;
+}
+

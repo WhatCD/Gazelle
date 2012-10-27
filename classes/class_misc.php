@@ -88,10 +88,19 @@ class Misc {
 			list($UnRead) = $DB->next_record();
 			$Cache->cache_value('inbox_new_'.$ID, $UnRead);
 		}
+		
+		$DB->query("SELECT Username FROM users_main WHERE ID = '$FromID'");
+		list($SenderName) = $DB->next_record();
+		foreach($ToID as $ID) {
+			$DB->query("SELECT COUNT(ConvID) FROM pm_conversations_users WHERE UnRead = '1' and UserID='$ID' AND InInbox = '1'");
+			list($UnRead) = $DB->next_record();
+			$Cache->cache_value('inbox_new_'.$ID, $UnRead);
+	        
+        }
 
 		return $ConvID;
 	}
-
+	
 
 	/**
 	 * Create thread function, things should already be escaped when sent here.

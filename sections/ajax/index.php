@@ -101,6 +101,9 @@ switch ($_GET['action']){
 	case 'userhistory':
                 require(SERVER_ROOT.'/sections/ajax/userhistory/index.php');
                 break;
+	case 'votefavorite':
+		require(SERVER_ROOT.'/sections/ajax/takevote.php');
+        break;
 	default:
 		// If they're screwing around with the query string
 		print json_encode(array('status' => 'failure'));

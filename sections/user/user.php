@@ -159,7 +159,16 @@ View::show_header($Username,'user,bbcode,requests');
 	<div class="linkbox">
 <? if (!$OwnProfile) { ?>
 		[<a href="inbox.php?action=compose&amp;to=<?=$UserID?>">Send Message</a>]
-<? 	$DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
+		
+<? 	if(check_perms("users_mod")) {
+	$DB->query("SELECT PushService FROM users_push_notifications WHERE UserID = '$UserID'");
+	if($DB->record_count() > 0) { ?>
+		[<a
+			href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Push
+			User</a>]
+		<?	}
+}
+	$DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
 	if($DB->record_count() == 0) { ?>
 		[<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Add to friends</a>]
 <?	}?>
@@ -214,22 +223,22 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 			<ul class="stats nobullet">
 				<li>Joined: <?=$JoinedDate?></li>
 <? if (($Override = check_paranoia_here('lastseen'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Last seen: <?=$LastAccess?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Last seen: <?=$LastAccess?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('uploaded'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Uploaded: <?=Format::get_size($Uploaded)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded, 2)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('downloaded'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Downloaded: <?=Format::get_size($Downloaded)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded, 2)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('ratio'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('requiredratio')) && isset($RequiredRatio)) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> >Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size((double)$RequiredRatio, 5)?>">Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
 <? } ?>
 <? if ($OwnProfile || ($Override=check_paranoia_here(false)) || check_perms('users_mod')) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> ><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <? } ?>
 			</ul>
 		</div>

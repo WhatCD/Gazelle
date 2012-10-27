@@ -781,3 +781,10 @@ ul .invitetree {
 	font-size: 1.25em;
 	font-weight: bold;
 }
+
+tr.torrent .bookmark > a:before {
+    color:black;
+}
+tr.torrent .bookmark > a:after {
+    color:black;
+}

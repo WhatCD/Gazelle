@@ -252,3 +252,53 @@ function Vote(amount, requestid) {
 		}
 	);
 }
+
+function DownVoteGroup(groupid, authkey) {
+	ajax.get('ajax.php?action=votefavorite&do=vote&groupid='+groupid+'&vote=down'+'&auth='+authkey, function (response) {
+			if (response == 'noaction') {
+				//No increment
+			} else if (response == 'success') {
+				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) + 1;
+			}
+		}
+	);
+	$('#vote_message').hide();
+	$('#unvote_message').show();
+	$('#upvoted').hide();
+	$('#downvoted').show();
+}
+
+function UpVoteGroup(groupid, authkey) {
+	ajax.get('ajax.php?action=votefavorite&do=vote&groupid='+groupid+'&vote=up'+'&auth='+authkey, function (response) {
+			if (response == 'noaction') {
+				//No increment
+			} else if (response == 'success') {
+				// Increment both the upvote count and the total votes count
+				$('#upvotes').raw().innerHTML    = (parseInt($('#upvotes').raw().innerHTML)) + 1;
+				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) + 1;
+			}
+		}
+	);
+	$('#vote_message').hide();
+	$('#unvote_message').show();
+	$('#upvoted').show();
+	$('#downvoted').hide();
+}
+
+function UnvoteGroup(groupid, authkey) {
+	ajax.get('ajax.php?action=votefavorite&do=unvote&groupid='+groupid+'&auth='+authkey, function (response) {
+			if (response == 'noaction') {
+				//No increment
+			} else if (response == 'success-down') {
+				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) - 1;
+			} else if (response == 'success-up') {
+				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) - 1;
+				$('#upvotes').raw().innerHTML = (parseInt($('#upvotes').raw().innerHTML)) - 1;
+			} 
+		}
+	);
+	$('#vote_message').show();
+	$('#unvote_message').hide();
+	$('#upvoted').hide();
+	$('#downvoted').hide();
+}

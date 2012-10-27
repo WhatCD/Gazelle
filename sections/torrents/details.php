@@ -80,6 +80,13 @@ if ($TorrentTags != '') {
 	die();
 }*/
 
+$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+if (empty($TokenTorrents)) {
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$TokenTorrents = $DB->collect('TorrentID');
+	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+}
+$SnatchedTorrents = Torrents::get_snatched_torrents();
 // Start output
 View::show_header($Title,'browse,comments,torrent,bbcode');
 ?>
@@ -357,6 +364,9 @@ if(count($Tags) > 0) {
 				<strong><a href="rules.php?p=tag">Tagging rules</a></strong>
 			</div>
 		</div>
+		
+<? //include(SERVER_ROOT.'/sections/torrents/vote.php'); 
+?>		
 	</div>
 	<div class="main_column">
 		<table class="torrent_table details" id="torrent_details">
@@ -463,6 +473,7 @@ foreach ($TorrentList as $Torrent) {
 	if(!$ExtraInfo) {
 		$ExtraInfo = $GroupName ; $AddExtra=' / ';
 	}
+	if(array_key_exists($TorrentID, $SnatchedTorrents)) {$ExtraInfo.=$AddExtra.'<strong>Snatched!</strong>'; $AddExtra=' / '; }
 	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra.'<strong>Freeleech!</strong>'; $AddExtra=' / '; }
 	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra.'<strong>Neutral Leech!</strong>'; $AddExtra=' / '; }
 	if($PersonalFL) { $ExtraInfo.=$AddExtra.'<strong>Personal Freeleech!</strong>'; $AddExtra=' / '; }
@@ -566,18 +577,18 @@ foreach ($TorrentList as $Torrent) {
 					</blockquote>
 <? if(check_perms('site_moderate_requests')) { ?>
 					<div class="linkbox">
-						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>">[Mass PM snatchers]</a>
+						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>">[Mass PM Snatchers]</a>
 					</div>
 <? } ?>
 					<div class="linkbox">
-						<a href="#" onclick="show_peers('<?=$TorrentID?>', 0);return false;">(View peer list)</a>
+						<a href="#" onclick="show_peers('<?=$TorrentID?>', 0);return false;">(View Peerlist)</a>
 <? if(check_perms('site_view_torrent_snatchlist')) { ?> 
-						<a href="#" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button">(View downloader list)</a>
-						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker">(View snatcher list)</a>
+						<a href="#" onclick="show_downloads('<?=$TorrentID?>', 0);return false;">(View Downloadlist)</a>
+						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;">(View Snatchlist)</a>
 <? } ?>
 						<a href="#" onclick="show_files('<?=$TorrentID?>');return false;">(View file list)</a>
 <? if($Reported) { ?> 
-						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View report information)</a>
+						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View Report Information)</a>
 <? } ?>
 					</div>
 					<div id="peers_<?=$TorrentID?>" class="hidden"></div>
@@ -728,13 +739,17 @@ if(count($PersonalCollages)>0) {
 		</table>
 <?
 }
+// Matched Votes
+//include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 ?>
 		<div class="box">
 			<div class="head"><strong><?=(!empty($ReleaseType) ? $ReleaseTypes[$ReleaseType].' info' : 'Info' )?></strong></div>
 			<div class="body"><? if ($WikiBody!="") { echo $WikiBody; } else { echo "There is no information on this torrent."; } ?></div>
 		</div>
 <?
+// --- Comments ---
 
+// gets the amount of comments for this group
 $Results = $Cache->get_value('torrent_comments_'.$GroupID);
 if($Results === false) {
 	$DB->query("SELECT
@@ -798,7 +813,7 @@ foreach($Thread as $Key => $Post){
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
-			<div style="float:left;"><a class="post_id" href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
+			<span style="float:left;"><a class="post_id" href='torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
                     <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
                         $AuthorInfo = Users::user_info($AuthorID);
@@ -817,7 +832,7 @@ foreach($Thread as $Key => $Post){
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
 <?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
 if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
-			</div>
+			</span>
 			<span id="bar<?=$PostID?>" style="float:right;">
 				<a href="#">&uarr;</a>
 			</span>
@@ -860,43 +875,45 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 <?
 if(!$LoggedUser['DisablePosting']) { ?>
 			<br />
-			<h3>Post reply</h3>
-			<div class="box pad">
-				<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
-					<tr class="colhead_dark">
-						<td colspan="2">
-							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
+			<div id="reply_box">
+				<h3>Post reply</h3>
+				<div class="box pad">
+					<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
+						<tr class="colhead_dark">
+							<td colspan="2">
+								<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
 								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong>	Just now
-							<a href="#quickreplypreview">[Report Comment]</a>
-							</span>
-							<span id="barpreview" style="float:right;">
-								<a href="#">&uarr;</a>
-							</span>
-						</td>
-					</tr>
-					<tr>
-						<td class="avatar" valign="top">
-				<? if (!empty($LoggedUser['Avatar'])) { ?>
-							<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-				<? } else { ?>
-							<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-				<? } ?>
-						</td>
-						<td class="body" valign="top">
-							<div id="contentpreview" style="text-align:left;"></div>
-						</td>
-					</tr>
-				</table>
+								<a href="#quickreplypreview">[Report Comment]</a>
+								</span>
+								<span id="barpreview" style="float:right;">
+									<a href="#">&uarr;</a>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="avatar" valign="top">
+<? if (!empty($LoggedUser['Avatar'])) { ?>
+								<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
+<? } else { ?>
+								<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
+<? } ?>
+							</td>
+							<td class="body" valign="top">
+								<div id="contentpreview" style="text-align:left;"></div>
+							</td>
+						</tr>
+					</table>
 				<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
-					<div id="quickreplytext">
-						<input type="hidden" name="action" value="reply" />
-						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-						<textarea id="quickpost" name="body"  cols="70"  rows="8"></textarea> <br />
-					</div>
-					<input id="post_preview" type="button" value="Preview" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
-					<input type="submit" id="submit_button" value="Post reply" />
-				</form>
+						<div id="quickreplytext">
+							<input type="hidden" name="action" value="reply" />
+							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+							<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+							<textarea id="quickpost" name="body"  cols="70"  rows="8"></textarea> <br />
+						</div>
+						<input id="post_preview" type="button" value="Preview" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
+						<input type="submit" id="submit_button" value="Post reply" />
+					</form>
+				</div>
 			</div>
 <? } ?>
 	</div>

@@ -11,6 +11,7 @@ View::show_header('Top 10 Torrents history!');
 			<a href="top10.php?type=users">[Users]</a>
 			<a href="top10.php?type=tags">[Tags]</a>
 			<a href="top10.php?type=history">[History]</a>
+			<a href="top10.php?type=votes">[Favorites]</a>
 		</div>
 	</div>
 	<div class="pad box">

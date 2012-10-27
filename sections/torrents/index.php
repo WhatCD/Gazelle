@@ -153,44 +153,19 @@ if(!empty($_REQUEST['action'])) {
 			enforce_login();
 			require(SERVER_ROOT.'/sections/torrents/manage_artists.php');			
 			break;
+
 		case 'notify_clear':
-			enforce_login();
+		case 'notify_clear_item':
+		case 'notify_clearitem':
+		case 'notify_clear_filter':
+		case 'notify_cleargroup':
+		case 'notify_catchup':
+		case 'notify_catchup_filter':
 			authorize();
-			if(!check_perms('site_torrents_notify')) { 
-			 	$DB->query("DELETE FROM users_notify_filters WHERE UserID='$LoggedUser[ID]'");
-			}
-			$DB->query("DELETE FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]' AND UnRead='0'");
-			$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
-			header('Location: torrents.php?action=notify');
+			enforce_login();
+			require(SERVER_ROOT.'/sections/torrents/notify_actions.php');
 			break;
 
-		case 'notify_cleargroup':
-			enforce_login();
-			authorize();
-			if(!isset($_GET['filterid']) || !is_number($_GET['filterid'])) {
-				error(0);
-			}
-			if(!check_perms('site_torrents_notify')) { 
-			 	$DB->query("DELETE FROM users_notify_filters WHERE UserID='$LoggedUser[ID]'");
-			}
-			$DB->query("DELETE FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]' AND FilterID='$_GET[filterid]' AND UnRead='0'");
-			$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
-			header('Location: torrents.php?action=notify');
-			break;
-		
-		case 'notify_clearitem':
-			enforce_login();
-			authorize();
-			if(!isset($_GET['torrentid']) || !is_number($_GET['torrentid'])) {
-				error(0);
-			}
-			if(!check_perms('site_torrents_notify')) { 
-			 	$DB->query("DELETE FROM users_notify_filters WHERE UserID='$LoggedUser[ID]'");
-			}
-			$DB->query("DELETE FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]' AND TorrentID='$_GET[torrentid]'");
-			$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
-			break;
-			
 		case 'download':
 			require(SERVER_ROOT.'/sections/torrents/download.php');
 			break;
@@ -199,7 +174,7 @@ if(!empty($_REQUEST['action'])) {
 			enforce_login();
 			authorize();
 
-			if (!isset($_POST['groupid']) || !is_number($_POST['groupid']) || $_POST['body']==='' || !isset($_POST['body'])) { 
+			if (!isset($_POST['groupid']) || !is_number($_POST['groupid']) || trim($_POST['body'])==='' || !isset($_POST['body'])) { 
 				error(0);
 			}
 			if($LoggedUser['DisablePosting']) {

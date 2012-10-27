@@ -38,7 +38,9 @@ class CACHE extends Memcache {
 		'stats_*',
 		'percentiles_*',
 		'top10tor_*',
-		'query_lock_*'
+		'query_lock_*',
+		'top10votes_*',
+		'similar_albums_*'
 	);
 
 	public $CanClear = false;

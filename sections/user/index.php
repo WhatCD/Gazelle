@@ -91,6 +91,7 @@ switch ($_REQUEST['action']) {
 		$Cache->delete_value('collage_subs_user_new_'.$UserID);
 		include(SERVER_ROOT.'/sections/user/user.php');
 		break;
+    
 	default:
 		if (isset($_REQUEST['id'])) {
 			include(SERVER_ROOT.'/sections/user/user.php');

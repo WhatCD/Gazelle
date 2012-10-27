@@ -1045,3 +1045,10 @@ select:hover, option:hover {
 ul, ol{
 	list-style-position: inside;
 }
+
+tr.torrent .bookmark > a:before {
+    color:#646054;
+}
+tr.torrent .bookmark > a:after {
+    color:#646054;
+}

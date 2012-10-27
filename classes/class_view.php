@@ -1,5 +1,11 @@
 <?
-class View {
+class View
+{
+	/**
+	 * @var string Path relative to where (P)HTML templates reside
+	 */
+	const IncludePath = './design/views/';
+
 	/**
 	 * This function is to include the header file on a page.
 	 *
@@ -8,7 +14,8 @@ class View {
 	 *                    the page, ONLY PUT THE RELATIVE LOCATION WITHOUT .js
 	 *                    ex: 'somefile,somdire/somefile'
 	 */
-	public static function show_header($PageTitle='',$JSIncludes='') {
+	public static function show_header($PageTitle='',$JSIncludes='')
+	{
 		global $Document, $Cache, $DB, $LoggedUser, $Mobile, $Classes;
 
 		if($PageTitle!='') { $PageTitle.=' :: '; }
@@ -29,7 +36,8 @@ class View {
 	 *	               Here is a list of parameters that work in the $Options array:
 	 *                 ['disclaimer'] = [boolean] (False) Displays the disclaimer in the footer
 	 */
-	public static function show_footer($Options=array()) {
+	public static function show_footer ($Options=array())
+	{
 		global $ScriptStartTime, $LoggedUser, $Cache, $DB, $SessionID, $UserSessions, $Debug, $Time;
 		if (!is_array($LoggedUser)) { require(SERVER_ROOT.'/design/publicfooter.php'); }
 		else { require(SERVER_ROOT.'/design/privatefooter.php'); }
@@ -51,7 +59,8 @@ class View {
 	 * @param string $TemplateName The name of the template, in underscore_format
 	 * @param array $Args the arguments passed to the template.
 	 */
-	public static function render_template($TemplateName, $Args) {
+	public static function render_template ($TemplateName, $Args)
+	{
 		static $LoadedTemplates; // Keep track of templates we've already loaded.
 		$ClassName = '';
 		if (isset($LoadedTemplates[$TemplateName])) {
@@ -69,5 +78,31 @@ class View {
 		}
 		$ClassName::render($Args);
 	}
+
+	/**
+	 * This method is similar to render_template, but does not require a
+	 * template class.
+	 *
+	 * Instead, this method simply renders a PHP file (PHTML) with the supplied
+	 * variables.
+	 *
+	 * All files must be placed within {self::IncludePath}. Create and organize
+	 * new paths and files. (eg: /design/views/artist/, design/view/forums/, etc.)
+	 *
+	 * @static
+	 * @param string $TemplateFile A relative path to a PHTML file
+	 * @param array $Variables Assoc. array of variables to extract for the template
+	 * @example <pre><?php
+	 *  // The variable $id within box.phtml will be filled by $some_id
+	 *	View::parse('section/box.phtml', array('id' => $some_id));
+	 * </pre>
+	 */
+	static public function parse ($TemplateFile, array $Variables = null)
+	{
+		$Template = self::IncludePath . $TemplateFile;
+		if (file_exists($Template)) {
+			extract($Variables);
+			include $Template;
+		}
+	}
 }
-?>

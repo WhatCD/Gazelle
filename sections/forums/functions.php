@@ -10,8 +10,9 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 			COUNT(fp.id) AS Posts,
 			t.LastPostAuthorID,
 			ISNULL(p.TopicID) AS NoPoll,
-			t.StickyPostID
-			FROM forums_topics AS t
+			t.StickyPostID,
+            t.AuthorID as OP
+            FROM forums_topics AS t
 			JOIN forums_posts AS fp ON fp.TopicID = t.ID
 			LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
 			WHERE t.ID = '$ThreadID'

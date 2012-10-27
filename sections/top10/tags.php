@@ -19,7 +19,9 @@ View::show_header('Top 10 Tags');
 			<a href="top10.php?type=torrents">[Torrents]</a>
 			<a href="top10.php?type=users">[Users]</a>
 			<a href="top10.php?type=tags"><strong>[Tags]</strong></a>
-		</div>
+<!-- 			<a href="top10.php?type=votes">[Favorites]</a>
+ -->
+ 		</div>
 	</div>
 
 <?

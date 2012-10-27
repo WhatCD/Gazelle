@@ -1,4 +1,6 @@
 <?
+include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
+
 $Where = array();
 
 if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
@@ -38,6 +40,7 @@ if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Limit = in_array($Limit, array(10, 100, 250)) ? $Limit : 10;
 }
 $Filtered = !empty($Where);
+$SnatchedTorrents = Torrents::get_snatched_torrents();
 View::show_header('Top '.$Limit.' Torrents');
 ?>
 <div class="thin">
@@ -47,6 +50,8 @@ View::show_header('Top '.$Limit.' Torrents');
 			<a href="top10.php?type=torrents"><strong>[Torrents]</strong></a>
 			<a href="top10.php?type=users">[Users]</a>
 			<a href="top10.php?type=tags">[Tags]</a>
+			<!-- 			<a href="top10.php?type=votes">[Favorites]</a>
+ -->
 		</div>
 	</div>
 <?
@@ -62,6 +67,12 @@ if(check_perms('site_advanced_top10')) {
 					<input type="text" name="tags" size="75" value="<? if(!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />
 				</td>
 			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked':'')?>><label for="rdoAll"> All</label>&nbsp;
+					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked':'')?>><label for="rdoAny"> Any</label>
+				</td>
 			<tr>
 				<td class="label">Format</td>
 				<td>
@@ -116,7 +127,11 @@ $FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
 	</div>
 <?
 
-$Where = implode(' AND ', $Where);
+if ($_GET['anyall'] == 'any') {
+	$Where = '('.implode(' OR ', $Where).')';
+} else {
+	$Where = implode(' AND ', $Where);
+}
 
 $WhereSum = (empty($Where)) ? '' : md5($Where);
 $BaseQuery = "SELECT
@@ -329,7 +344,7 @@ View::show_footer();
 
 // generate a table based on data from most recent query to $DB
 function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
-	global $LoggedUser,$Categories,$ReleaseTypes;
+	global $LoggedUser,$Categories,$ReleaseTypes, $SnatchedTorrents;
 ?>
 		<h3>Top <?=$Limit.' '.$Caption?>
 <?	if(empty($_GET['advanced'])){ ?> 
@@ -421,7 +436,6 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		if($GroupCategoryID==1 && $ReleaseType > 0) {
 			$DisplayName.= ' ['.$ReleaseTypes[$ReleaseType].']';
 		}
-
 		// append extra info to torrent title
 		$ExtraInfo='';
 		$AddExtra='';
@@ -434,9 +448,12 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		if($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
 		if($Year>0) { $ExtraInfo.=$AddExtra.$Year; $AddExtra=' '; }
 		if($RemasterTitle) { $ExtraInfo.=$AddExtra.$RemasterTitle; }
+		if(array_key_exists($TorrentID, $SnatchedTorrents)) { $ExtraInfo.=' / <strong>Snatched!</strong>'; }
 		if($ExtraInfo!='') {
 			$ExtraInfo = "- [$ExtraInfo]";
 		}
+	
+		
 		
 		$TagList=array();
 		
@@ -454,7 +471,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 
 		// print row
 ?>
-	<tr class="torrent row<?=$Highlight?>">
+	<tr class="torrent row<?=$Highlight?> <? has_bookmarked('torrent', $GroupID) ? "bookmarked" : ""?>">
 		<td style="padding:8px;text-align:center;"><strong><?=$Rank?></strong></td>
 <?
 		//fix array offset php error
@@ -465,7 +482,20 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCatOffset]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div></td>
 		<td>
 		<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]</span>
+
 			<strong><?=$DisplayName?></strong> <?=$ExtraInfo?>
+			<span class="bookmark" style="float:right;">
+<?
+		if(has_bookmarked('torrent', $GroupID)) {
+?>
+				<a href="#" class="bookmarklink_torrent_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>,'Bookmark');return false;">Remove Bookmark</a>
+<?
+		} else {
+?>
+				<a href="#" class="bookmarklink_torrent_<?=$GroupID?>" onclick="Bookmark('torrent', <?=$GroupID?>,'Remove Bookmark');return false;">Bookmark</a>
+<? }?>
+			</span>
+			
 			<?=$TorrentTags?>
 		</td>
 		<td style="text-align:right" class="nobr"><?=Format::get_size($Data)?></td>

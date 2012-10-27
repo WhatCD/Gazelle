@@ -15,7 +15,7 @@ if(!isset($_GET['depth']) || !is_number($_GET['depth'])) {
 
 $Depth = $_GET['depth'];
 
-if(empty($_GET['type']) || !in_array($_GET['type'], array('forums', 'collages', 'requests', 'torrents'))) {
+if(empty($_GET['type']) || !in_array($_GET['type'], array('forums', 'collages', 'requests', 'torrents', 'artist'))) {
 	die();
 }
 $Type = $_GET['type'];
@@ -48,6 +48,7 @@ if($Depth != 0) {
 			break;
 		case 'collages' :
 		case 'requests' :
+		case 'artist' :
 		case 'torrents' :
 			$DB->query("SELECT Body
 					FROM ".$Type."_comments

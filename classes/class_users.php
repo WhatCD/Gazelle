@@ -442,5 +442,70 @@ class Users {
 		global $Classes;
 		return $Classes[$ClassID]['Name'];
 	}
+
+	/**
+	 * Returns an array with User Bookmark data: group ids, collage data list, etc
+	 * @global CACHE $Cache
+	 * @global DB_MYSQL $DB
+	 * @param string|int $UserID
+	 * @return array
+	 */
+	function bookmark_data ($UserID)
+	{
+		global $Cache, $DB;
+
+		$UserID = (int) $UserID;
+
+		$Data = $Cache->get_value('bookmarks_torrent_'.$UserID.'_full');
+
+		if($Data) {
+			$Data = unserialize($Data);
+			list($K, list($TorrentList, $CollageDataList)) = each($Data);
+		} else {
+			// Build the data for the collage and the torrent list
+			$DB->query("SELECT
+				bt.GroupID,
+				bt.Sort,
+				tg.WikiImage,
+				tg.CategoryID,
+				bt.Time
+				FROM bookmarks_torrents AS bt
+				JOIN torrents_group AS tg ON tg.ID=bt.GroupID
+				WHERE bt.UserID='$UserID'
+				ORDER BY bt.Sort ASC");
+
+			$GroupIDs = $DB->collect('GroupID');
+			$CollageDataList = $DB->to_array('GroupID', MYSQLI_ASSOC);
+
+			if(count($GroupIDs) > 0) {
+				$TorrentList = Torrents::get_groups($GroupIDs);
+				$TorrentList = $TorrentList['matches'];
+			} else {
+				$TorrentList = array();
+			}
+		}
+
+		return array($K, $GroupIDs, $CollageDataList, $TorrentList);
+	}
+
+	/**
+	 * Returns a list of torrents that a user has spent tokens on
+	 * @global CACHE $Cache
+	 * @global DB_MYSQL $DB
+	 * @param type $UserID
+	 * @return type
+	 */
+	function token_torrents ($UserID)
+	{
+		global $Cache, $DB;
+
+		$UserID = (int) $UserID;
+		$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+		if (empty($TokenTorrents)) {
+			$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+			$TokenTorrents = $DB->collect('TorrentID');
+			$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
+		}
+		return $TokenTorrents;
+	}
 }
-?>

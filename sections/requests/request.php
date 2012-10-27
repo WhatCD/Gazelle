@@ -99,12 +99,12 @@ if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requ
 <?	} else { ?>
 			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
 <?	} ?>
-			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report request]</a>
+			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report Request]</a>
 <?	if(!$IsFilled) { ?>
-			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&amp;groupid=$GroupID":'')?>">[Upload request]</a>
+			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&groupid=$GroupID":'')?>">[Upload Request]</a>
 <?	}
 	if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
-			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Requestsv2 update]</a>
+			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Request Update]</a>
 <? } ?>
 
 <?
@@ -116,11 +116,11 @@ $encoded_artist = preg_replace("/\([^\)]+\)/", "", $encoded_artist);
 $encoded_artist = urlencode($encoded_artist);
 
 $worldcat_url = "http://worldcat.org/search?q=" . $encoded_artist . " " . $encoded_title;
-$google_url = "https://www.google.com/search?&amp;tbm=shop&amp;q=" . $encoded_artist . " " . $encoded_title;
+$google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . " " . $encoded_title;
 
 ?>
-			<a href="<? echo $worldcat_url; ?>">[Find in library]</a>
-			<a href="<? echo $google_url; ?>">[Find in stores]</a>
+			<a href="<? echo $worldcat_url; ?>">[Find in Library]</a>
+			<a href="<? echo $google_url; ?>">[Find in Stores]</a>
 		</div>
 	</div>
 	<div class="sidebar">
@@ -234,7 +234,7 @@ if (!empty($Image)) {
 			</ul>
 		</div>
 		<div class="box box_votes">
-			<div class="head"><strong>Top contributors</strong></div>
+			<div class="head"><strong>Top Contributors</strong></div>
 			<table class="layout">
 <?	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 	$ViewerVote = false;
@@ -285,7 +285,7 @@ if (!empty($Image)) {
 <?	if($CategoryName == "Music") {
 		if(!empty($RecordLabel)) { ?>
 			<tr>
-				<td class="label">Record label</td>
+				<td class="label">Record Label</td>
 				<td>
 					<?=$RecordLabel?>
 				</td>
@@ -293,39 +293,39 @@ if (!empty($Image)) {
 <?		} 
 		if(!empty($CatalogueNumber)) { ?>
 			<tr>
-				<td class="label">Catalogue number</td>
+				<td class="label">Catalogue Number</td>
 				<td>
 					<?=$CatalogueNumber?>
 				</td>
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label">Release type</td>
+				<td class="label">Release Type</td>
 				<td>
 					<?=$ReleaseName?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable bitrates</td>
+				<td class="label">Acceptable Bitrates</td>
 				<td>
 					<?=$BitrateString?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable formats</td>
+				<td class="label">Acceptable Formats</td>
 				<td>
 					<?=$FormatString?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable media</td>
+				<td class="label">Acceptable Media</td>
 				<td>
 					<?=$MediaString?>
 				</td>
 			</tr>
 <?		if(!empty($LogCue)) { ?>
 			<tr>
-				<td class="label">Required FLAC-only extras</td>
+				<td class="label">Required FLAC only extra(s)</td>
 				<td>
 					<?=$LogCue?>
 				</td>
@@ -358,8 +358,8 @@ if (!empty($Image)) {
 		$GroupLink = Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';*/
 ?>
 			<tr>
-				<td class="label">Torrent group</td>
-				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></a></td>
+				<td class="label">Torrent Group</td>
+				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></td>
 			</tr>
 <?	} ?>
 			<tr>
@@ -374,7 +374,7 @@ if (!empty($Image)) {
 			</tr>
 <?	if ($LastVote > $TimeAdded) { ?>
 			<tr>
-				<td class="label">Last voted</td>
+				<td class="label">Last Voted</td>
 				<td>
 					<?=time_diff($LastVote)?>
 				</td>
@@ -570,43 +570,45 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 <?
 if(!$LoggedUser['DisablePosting']) { ?>
 			<br />
-			<h3>Post comment</h3>
-			<div class="box pad" style="padding:20px 10px 10px 10px;">
-				<table id="quickreplypreview" class="hidden forum_post box vertical_margin" id="preview">
-					<tr class="colhead_dark">
-						<td colspan="2">
-							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong> Just now
-								<a href="#quickreplypreview">[Report comment]</a>
-							</span>
-							<span style="float:right;">
-								<a href="#">&uarr;</a>
-							</span>
-						</td>
-					</tr>
-					<tr>
-						<td class="avatar" valign="top">
-				<? if (!empty($LoggedUser['Avatar'])) { ?>
-							<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-				<? } else { ?>
-							<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-				<? } ?>
-						</td>
-						<td class="body" valign="top">
-							<div id="contentpreview" style="text-align:left;"></div>
-						</td>
-					</tr>
-				</table>
+			<div id="reply_box">
+				<h3>Post comment</h3>
+				<div class="box pad" style="padding:20px 10px 10px 10px;">
+					<table id="quickreplypreview" class="hidden forum_post box vertical_margin" id="preview">
+						<tr class="colhead_dark">
+							<td colspan="2">
+								<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
+								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?> Just now
+									<a href="#quickreplypreview">[Report Comment]</a>
+								</span>
+								<span style="float:right;">
+									<a href="#">&uarr;</a>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="avatar" valign="top">
+<? if (!empty($LoggedUser['Avatar'])) { ?>
+								<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
+<? } else { ?>
+								<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
+<? } ?>
+							</td>
+							<td class="body" valign="top">
+								<div id="contentpreview" style="text-align:left;"></div>
+							</td>
+						</tr>
+					</table>
 				<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
-					<div id="quickreplytext">
-						<input type="hidden" name="action" value="reply" />
-						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-						<input type="hidden" name="requestid" value="<?=$RequestID?>" />
-						<textarea id="quickpost" name="body" cols="70" rows="8"></textarea> <br />
-					</div>
-					<input id="post_preview" type="button" value="Preview" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
-					<input type="submit" id="submit_button" value="Post reply" />
-				</form>
+						<div id="quickreplytext">
+							<input type="hidden" name="action" value="reply" />
+							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+							<input type="hidden" name="requestid" value="<?=$RequestID?>" />
+							<textarea id="quickpost" name="body" cols="70" rows="8"></textarea> <br />
+						</div>
+						<input id="post_preview" type="button" value="Preview" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
+						<input type="submit" id="submit_button" value="Post reply" />
+					</form>
+				</div>
 			</div>
 <? } ?>
 	</div>

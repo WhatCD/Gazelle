@@ -30,10 +30,11 @@ function Quote(post, user, link) {
 	});
 }
 
-
 function Edit_Form(post,key) {
+	$('#reply_box').toggle();
 	postid = post;
-	if (location.href.match(/torrents\.php/)) {
+	if (location.href.match(/torrents\.php/) ||
+        location.href.match(/artist\.php/)) {
 		boxWidth="50";
 	} else {
 		boxWidth="80";
@@ -49,6 +50,7 @@ function Edit_Form(post,key) {
 }
 
 function Cancel_Edit(postid) {
+	$('#reply_box').toggle();
 	$('#bar' + postid).raw().innerHTML = $('#bar' + postid).raw().oldbar;
 	$('#content' + postid).raw().innerHTML = $('#bar' + postid).raw().cancel;
 }
@@ -68,6 +70,7 @@ function Cancel_Preview(postid) {
 }
 
 function Save_Edit(postid) {
+	$('#reply_box').toggle();
 	if (location.href.match(/forums\.php/)) {
 		ajax.post("forums.php?action=takeedit","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "";
@@ -82,6 +85,12 @@ function Save_Edit(postid) {
 		});
 	} else if (location.href.match(/requests\.php/)) {
 		ajax.post("requests.php?action=takeedit_comment","form" + postid, function (response) {
+			$('#bar' + postid).raw().innerHTML = "";
+			$('#preview' + postid).raw().innerHTML = response;
+			$('#editbox' + postid).hide();
+		});
+	} else if (location.href.match(/artist\.php/)) {
+		ajax.post("artist.php?action=takeedit_post","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "";
 			$('#preview' + postid).raw().innerHTML = response;
 			$('#editbox' + postid).hide();
@@ -110,6 +119,10 @@ function Delete(post) {
 			ajax.get("requests.php?action=delete_comment&auth=" + authkey + "&postid=" + postid, function () {
 				$('#post' + postid).hide();
 			});
+        } else if (location.href.match(/artist\.php/)) {
+            ajax.get("artist.php?action=delete_comment&auth="+authkey+ "&postid=" + postid, function (){
+                $('#post' + postid).hide();
+            });
 		} else {
 			ajax.get("torrents.php?action=delete_post&auth=" + authkey + "&postid=" + postid, function () {
 				$('#post' + postid).hide();
@@ -226,3 +239,59 @@ function AddPollOption(id) {
 		item.appendChild(form);
 	list.appendChild(item);
 }
+
+/**
+ * HTML5-compatible storage system
+ * Tries to use 'oninput' event to detect text changes and sessionStorage to save it.
+ *
+ * new StoreText('some_textarea_id', 'some_form_id')
+ * The form is required to remove the stored text once it is submitted.
+ **/
+function StoreText (field, form) {
+	this.field = document.getElementById(field);
+	this.form = document.getElementById(form);
+	this.key = 'auto_save_temp';
+	this.load();
+}
+StoreText.prototype = {
+	constructor : StoreText,
+	load : function () {
+		if(this.field && this.enabled()){
+			this.retrieve();
+			this.autosave();
+			this.clearForm();
+		}
+	},
+	enabled : function () {
+		return window.sessionStorage && typeof window.sessionStorage === 'object';
+	},
+	retrieve : function () {
+		var r = sessionStorage.getItem(this.key);
+		if (r) {
+			this.field.value = sessionStorage.getItem(this.key);
+		}
+	},
+	remove : function () {
+		sessionStorage.removeItem(this.key);
+	},
+	save : function () {
+		sessionStorage.setItem(this.key, this.field.value);
+	},
+	autosave : function () {
+		jQuery(this.field).on(this.getInputEvent(), jQuery.proxy(this.save, this));
+	},
+	getInputEvent : function () {
+		var e;
+		if ('oninput' in this.field) {
+			e = 'input';
+		} else if (document.body.addEventListener) {
+			e = 'change keyup paste cut';
+		} else {
+			e = 'propertychange';
+		}
+		return e;
+	},
+	clearForm : function () {
+		jQuery(this.form).submit(jQuery.proxy(this.remove, this));
+	}
+};

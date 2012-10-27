@@ -11,7 +11,7 @@
  ** When it is called from the edit page, the forms are shortened quite a bit. **
  **                                                                            **
  ********************************************************************************/
- 
+
 class TORRENT_FORM {
 	var $Categories = array();
 	var $Formats = array();
@@ -23,21 +23,21 @@ class TORRENT_FORM {
 	var $TorrentID = false;
 	var $Disabled = '';
 	var $DisabledFlag = false;
-	
+
 	function TORRENT_FORM($Torrent = false, $Error = false, $NewTorrent = true) {
-		
+
 		$this->NewTorrent = $NewTorrent;
 		$this->Torrent = $Torrent;
 		$this->Error = $Error;
-		
+
 		global $Categories, $Formats, $Bitrates, $Media, $TorrentID;
-		
+
 		$this->Categories = $Categories;
 		$this->Formats = $Formats;
 		$this->Bitrates = $Bitrates;
 		$this->Media = $Media;
 		$this->TorrentID = $TorrentID;
-		
+
 		if($this->Torrent && $this->Torrent['GroupID']) {
 			$this->Disabled = ' disabled="disabled"';
 			$this->DisabledFlag = true;
@@ -71,7 +71,7 @@ class TORRENT_FORM {
 			if($this->Torrent && $this->Torrent['GroupID']) { ?>
 			<input type="hidden" name="groupid" value="<?=display_str($this->Torrent['GroupID'])?>" />
 			<input type="hidden" name="type" value="Music" />
-<?			} 
+<?			}
 			if($this->Torrent && $this->Torrent['RequestID']) { ?>
 			<input type="hidden" name="requestid" value="<?=display_str($this->Torrent['RequestID'])?>" />
 <?			}
@@ -99,7 +99,7 @@ class TORRENT_FORM {
 				echo ">";
 				echo $Cat;
 				echo "</option>\n";
-			} 
+			}
 ?>
 				</select>
 				</td>
@@ -109,12 +109,12 @@ class TORRENT_FORM {
 		<div id="dynamic_form">
 <?	} // function head
 
-	
+
 	function foot() {
 		$Torrent = $this->Torrent;
 ?>
 		</div>
-	
+
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
 <?		if(!$this->NewTorrent) {
 			if(check_perms('torrents_freeleech')) {
@@ -124,14 +124,14 @@ class TORRENT_FORM {
 				<td>
 					<select name="freeleech">
 <?	$FL = array("Normal", "Free", "Neutral");
-	foreach($FL as $Key => $Name) { ?>	
+	foreach($FL as $Key => $Name) { ?>
 						<option value="<?=$Key?>" <?=($Key == $Torrent['FreeTorrent'] ? ' selected="selected"' : '')?>><?=$Name?></option>
 <?	} ?>
 					</select>
-					 because 
+					 because
 					<select name="freeleechtype">
 <?	$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
-	foreach($FL as $Key => $Name) { ?>	
+	foreach($FL as $Key => $Name) { ?>
 						<option value="<?=$Key?>" <?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$Name?></option>
 <?	} ?>
 					</select>
@@ -154,34 +154,34 @@ class TORRENT_FORM {
 	</form>
 </div>
 <?	} //function foot
-	
-	
+
+
 	function music_form($GenreTags) {
 		$Torrent = $this->Torrent;
 		$IsRemaster = !empty($Torrent['Remastered']);
 		$UnknownRelease = !$this->NewTorrent && $IsRemaster && !$Torrent['RemasterYear'];
-		
+
 		if($Torrent['GroupID']) {
 			global $DB;
 			$DB->query("SELECT ID,
 							RemasterYear,
-							RemasterTitle, 
-							RemasterRecordLabel, 
-							RemasterCatalogueNumber 
-						FROM torrents 
-						WHERE GroupID = ".$Torrent['GroupID']." 
-							AND Remastered = '1' 
+							RemasterTitle,
+							RemasterRecordLabel,
+							RemasterCatalogueNumber
+						FROM torrents
+						WHERE GroupID = ".$Torrent['GroupID']."
+							AND Remastered = '1'
 							AND RemasterYear != 0
-						ORDER BY RemasterYear DESC, 
-							RemasterTitle DESC, 
-							RemasterRecordLabel DESC, 
+						ORDER BY RemasterYear DESC,
+							RemasterTitle DESC,
+							RemasterRecordLabel DESC,
 							RemasterCatalogueNumber DESC");
-			
+
 			if($DB->record_count() > 0) {
 				$GroupRemasters = $DB->to_array(false, MYSQLI_BOTH, false);
 			}
 		}
-		
+
 		global $DB;
 		$HasLog = $Torrent['HasLog'];
 		$HasCue = $Torrent['HasCue'];
@@ -196,7 +196,7 @@ class TORRENT_FORM {
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border<? if($this->NewTorrent) { echo ' slice'; }?>" width="100%">
 <?		if($this->NewTorrent) { ?>
 			<tr id="artist_tr">
-			<td class="label">Artist(s)</td>		
+			<td class="label">Artist(s)</td>
 			<td id="artistfields">
 				<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding 'Various Artists' as an artist, read <a href='wiki.php?action=article&amp;id=369'>this</a> for more information on why.</p>
 <?			if(!empty($Torrent['Artists'])) {
@@ -213,7 +213,7 @@ class TORRENT_FORM {
 						<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
 						<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 					</select>
-<?				if ($FirstArtist) { 
+<?				if ($FirstArtist) {
 					if (!$this->DisabledFlag) { ?>
 					[<a href="javascript:AddArtistField()">+</a>] [<a href="javascript:RemoveArtistField()">-</a>]
 <?					}
@@ -234,10 +234,10 @@ class TORRENT_FORM {
 						<option value="3">Remixer</option>
 						<option value="7">Producer</option>
 					</select>
-					[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]					
+					[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]
 <?
 			}
-?>	
+?>
 				</td>
 			</tr>
 			<tr id="title_tr">
@@ -325,7 +325,7 @@ function hide() {
 					<select id="releasetype" name="releasetype"<?=$this->Disabled?>>
 						<option>---</option>
 <?
-			
+
 			foreach ($ReleaseTypes as $Key => $Val) {
 				echo "<option value='$Key'";
 				if($Key == $Torrent['ReleaseType']) { echo " selected='selected'"; }
@@ -356,12 +356,12 @@ function hide() {
 							<option value="">-------</option>
 <?
 	$LastLine = "";
-	
+
 	foreach($GroupRemasters as $Index => $Remaster) {
 		$Line = $Remaster['RemasterYear']." / ".$Remaster['RemasterTitle']." / ".$Remaster['RemasterRecordLabel']." / ".$Remaster['RemasterCatalogueNumber'];
 		if($Line != $LastLine) {
 			$LastLine = $Line;
-				
+
 ?>
 							<option value="<?=$Index?>"<?=($Remaster['ID'] == $this->TorrentID) ? ' selected="selected"' : ''?>><?=$Line?></option>
 <?
@@ -372,7 +372,7 @@ function hide() {
 						<br />
 <?	} ?>
 						<br />
-						<strong>Year (Required):</strong> 
+						<strong>Year (Required):</strong>
 						<input type="text" id="remaster_year" name="remaster_year" size="5" value="<? if($Torrent['RemasterYear']) { echo display_str($Torrent['RemasterYear']);} ?>"<? if($UnknownRelease) { echo " disabled";}?> /> <br />
 						<strong>Title:</strong>
 						<input type="text" id="remaster_title" name="remaster_title" size="50" value="<?=display_str($Torrent['RemasterTitle']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
@@ -385,7 +385,7 @@ function hide() {
 						<p class="min_padding">This is for the catalogue number of the <strong>release</strong>.</p>
 					</div>
 				</td>
-			</tr> 
+			</tr>
 			<tr>
 				<td class="label">Scene</td>
 				<td>
@@ -405,7 +405,7 @@ function hide() {
 			echo $Format;
 			echo "</option>\n";
 			// <option value='$Format' selected='selected'>$Format</option>
-		} 
+		}
 ?>
 					</select>
 				<span id="format_warning" class="important_text"></span>
@@ -425,13 +425,13 @@ function hide() {
 		} else {
 			$OtherBitrate = false;
 		}
-		
+
 		// See if they're the same bitrate
-		// We have to do this screwery because '(' is a regex character. 
+		// We have to do this screwery because '(' is a regex character.
 		$SimpleBitrate = explode(' ', $Torrent['Bitrate']);
 		$SimpleBitrate = $SimpleBitrate[0];
-		
-		
+
+
 		foreach(Misc::display_array($this->Bitrates) as $Bitrate) {
 			echo "<option value='$Bitrate'";
 			if(($SimpleBitrate && preg_match('/^'.$SimpleBitrate.'.*/', $Bitrate)) || ($OtherBitrate && $Bitrate == "Other")) {
@@ -468,7 +468,7 @@ function hide() {
 			echo ">";
 			echo $Media;
 			echo "</option>\n";
-		} 
+		}
 ?>
 					</select>
 					<span id="cassette_true" class="hidden"><span class="important_text">Do NOT upload a cassette rip without first getting approval from a moderator!</span></span>
@@ -502,7 +502,7 @@ function hide() {
 			list($LogID) = $DB->next_record();
 			if ($LogID) {
 				if (!check_perms('users_mod')) {
-?>				
+?>
 					<tr>
 						<td class="label">Trumpable</td>
 						<td>
@@ -517,7 +517,7 @@ function hide() {
 <?
 				}
 			}
-		} 
+		}
 		if(!$this->NewTorrent && check_perms('users_mod')) {?>
 				</td>
 			</tr>
@@ -532,7 +532,7 @@ function hide() {
 				<td class="label">Log Adjustment Reason</td>
 				<td>
 					<textarea name="adjustment_reason" id="adjustment_reason" cols="60" rows="8"><?=display_str($Torrent['AdjustmentReason']); ?></textarea>
-					<p class="min_padding">Contains reason for adjusting a score. <strong>This field is displayed on the torrent page</strong>.</p> 
+					<p class="min_padding">Contains reason for adjusting a score. <strong>This field is displayed on the torrent page</strong>.</p>
 				</td>
 			</tr>
 <?			}*/?>
@@ -573,7 +573,7 @@ function hide() {
 				</td>
 			</tr>
 <?		 }?>
-<?		 if($this->NewTorrent) { ?> 
+<?		 if($this->NewTorrent) { ?>
 			<tr>
 				<td class="label">Tags</td>
 				<td>
@@ -584,20 +584,20 @@ function hide() {
 						<option value="<?=$Genre ?>"><?=$Genre ?></option>
 <?				} ?>
 					</select>
-<?			} ?> 
+<?			} ?>
 					<input type="text" id="tags" name="tags" size="40" value="<?=display_str($Torrent['TagList']) ?>" <?=$this->Disabled?>/>
 					<br />
-					Tags should be comma separated, and you should use a period ('.') to separate words inside a tag - eg. '<strong style="color:green;">hip.hop</strong>'. 
+					Tags should be comma separated, and you should use a period ('.') to separate words inside a tag - eg. '<strong style="color:green;">hip.hop</strong>'.
 					<br /><br />
 					There is a list of official tags to the left of the text box. Please use these tags instead of 'unofficial' tags (e.g. use the official '<strong style="color:green;">drum.and.bass</strong>' tag, instead of an unofficial '<strong style="color:red;">dnb</strong>' tag).  <strong>Please note that the '2000s' tag refers to music produced between 2000 and 2009.</strong>
 					<br /><br />
-					Avoid abbreviations if at all possible. So instead of tagging an album as '<strong style="color:red;">alt</strong>', tag it as '<strong style="color:green;">alternative</strong>'. Make sure that you use correct spelling. 
+					Avoid abbreviations if at all possible. So instead of tagging an album as '<strong style="color:red;">alt</strong>', tag it as '<strong style="color:green;">alternative</strong>'. Make sure that you use correct spelling.
 					<br /><br />
-					Avoid using multiple synonymous tags. Using both '<strong style="color:red;">prog.rock</strong>' and '<strong style="color:green;">progressive.rock</strong>' is redundant and annoying - just use the official '<strong style="color:green;">progressive.rock</strong>' tag. 
+					Avoid using multiple synonymous tags. Using both '<strong style="color:red;">prog.rock</strong>' and '<strong style="color:green;">progressive.rock</strong>' is redundant and annoying - just use the official '<strong style="color:green;">progressive.rock</strong>' tag.
 					<br /><br />
-					Don't use 'useless' tags, such as '<strong style="color:red;">seen.live</strong>', '<strong style="color:red;">awesome</strong>', '<strong style="color:red;">rap</strong>' (is encompassed by '<strong style="color:green;">hip.hop</strong>'), etc. If an album is live, you can tag it as '<strong style="color:green;">live</strong>'. 
+					Don't use 'useless' tags, such as '<strong style="color:red;">seen.live</strong>', '<strong style="color:red;">awesome</strong>', '<strong style="color:red;">rap</strong>' (is encompassed by '<strong style="color:green;">hip.hop</strong>'), etc. If an album is live, you can tag it as '<strong style="color:green;">live</strong>'.
 					<br /><br />
-					Only tag information on the album itself - NOT THE INDIVIDUAL RELEASE. Tags such as '<strong style="color:red;">v0</strong>', '<strong style="color:red;">eac</strong>', '<strong style="color:red;">vinyl</strong>', '<strong style="color:red;">from.oink</strong>' etc. are strictly forbidden. Remember that these tags will be used for other versions of the same album. 
+					Only tag information on the album itself - NOT THE INDIVIDUAL RELEASE. Tags such as '<strong style="color:red;">v0</strong>', '<strong style="color:red;">eac</strong>', '<strong style="color:red;">vinyl</strong>', '<strong style="color:red;">from.oink</strong>' etc. are strictly forbidden. Remember that these tags will be used for other versions of the same album.
 					<br /><br />
 					<strong>You should be able to build up a list of tags using only the official tags to the left of the text box. If you are in any doubt about whether or not a tag is acceptable, do not add it.</strong>
 				</td>
@@ -611,26 +611,31 @@ function hide() {
 			<tr>
 				<td class="label">Album Description</td>
 				<td>
-					<textarea name="album_desc" id="album_desc" cols="60" rows="8" <?=$this->Disabled?>><?=display_str($Torrent['GroupDescription']); ?></textarea>
-					<p class="min_padding">Contains background information such as album history and maybe a review.</p> 
+<?php new TEXTAREA_PREVIEW('album_desc', 'album_desc', display_str($Torrent['GroupDescription']), 60, 8, true, true, array($this->Disabled)); ?>
+					<p class="min_padding">Contains background information such as album history and maybe a review.</p>
 				</td>
 			</tr>
-<?		} // if new torrent ?> 
+<?		} // if new torrent ?>
 			<tr>
 				<td class="label">Release Description (optional)</td>
 				<td>
-					<textarea name="release_desc" id="release_desc" cols="60" rows="8"><?=display_str($Torrent['TorrentDescription']); ?></textarea>
+<?php new TEXTAREA_PREVIEW('release_desc', 'release_desc', display_str($Torrent['TorrentDescription']), 60, 8); ?>
 					<p class="min_padding">Contains information like encoder settings or details of the ripping process. <strong>DO NOT PASTE THE RIPPING LOG HERE.</strong></p>
 				</td>
 			</tr>
 		</table>
 <?
+
+//	For AJAX requests (ie when changing the type from Music to Applications)
+//	we don't need to include all scripts, but we do need to include the code
+//	that generates previews. It will have to be eval'd after an AJAX request.
+	if ($_SERVER['SCRIPT_NAME'] === '/ajax.php')
+		TEXTAREA_PREVIEW::JavaScript(false);
+
 	}//function music_form
 
-	
 
-
-	function audiobook_form() { 
+	function audiobook_form() {
 		$Torrent = $this->Torrent;
 ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
@@ -690,7 +695,7 @@ function hide() {
 			echo $Bitrate;
 			echo "</option>\n";
 		}
-?> 
+?>
 					</select>
 					<span id="other_bitrate_span"<? if(!$OtherBitrate) { echo ' class="hidden"'; } ?> >
 						<input type="text" name="other_bitrate" size="5" id="other_bitrate"<? if($OtherBitrate) { echo " value='".display_str($Torrent['Bitrate'])."'";} ?> onchange="AltBitrate()" />
@@ -698,7 +703,7 @@ function hide() {
 					</span>
 				</td>
 			</tr>
-<?		if($this->NewTorrent) { ?> 
+<?		if($this->NewTorrent) { ?>
 			<tr>
 				<td class="label">Tags</td>
 				<td>
@@ -714,7 +719,7 @@ function hide() {
 			<tr>
 				<td class="label">Description</td>
 				<td>
-					<textarea name="album_desc" id="album_desc" cols="60" rows="8"><?=display_str($Torrent['GroupDescription']); ?></textarea>
+<?php new TEXTAREA_PREVIEW('album_desc', 'album_desc', display_str($Torrent['GroupDescription']), 60, 8); ?>
 					<p class="min_padding">Contains information like the track listing, a review, a link to Discogs or MusicBrainz, etc.</p>
 				</td>
 			</tr>
@@ -722,23 +727,21 @@ function hide() {
 			<tr>
 				<td class="label">Release Description (optional)</td>
 				<td>
-					<textarea name="release_desc" id="release_desc" cols="60" rows="8"><?=display_str($Torrent['TorrentDescription']); ?></textarea>
+<?php new TEXTAREA_PREVIEW('release_desc', 'release_desc', display_str($Torrent['TorrentDescription']), 60, 8); ?>
 					<p class="min_padding">Contains information like encoder settings. For analog rips, this frequently contains lineage information.</p>
 				</td>
 			</tr>
 		</table>
 <?
+	TEXTAREA_PREVIEW::JavaScript(false);
 	}//function audiobook_form
 
 
-
-
-
 	function simple_form($CategoryID) {
-		$Torrent = $this->Torrent; 
+		$Torrent = $this->Torrent;
 ?>		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
 			<tr id="name">
-<?		if ($this->NewTorrent) { 
+<?		if ($this->NewTorrent) {
 			if ($this->Categories[$CategoryID] == 'E-Books') { ?>
 				<td class="label">Author - Title</td>
 <?			} else { ?>
@@ -763,7 +766,10 @@ function hide() {
 			<tr>
 				<td class="label">Description</td>
 				<td>
-					<textarea name="desc" id="desc" cols="60" rows="8"><?=display_str($Torrent['GroupDescription']); ?></textarea>
+<?php
+	new TEXTAREA_PREVIEW('desc', 'desc', display_str($Torrent['GroupDescription']), 60, 8);
+	TEXTAREA_PREVIEW::JavaScript(false);
+?>
 				</td>
 			</tr>
 <?		} ?>

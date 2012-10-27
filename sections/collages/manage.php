@@ -41,7 +41,7 @@
 		<h2>Manage collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>
 	</div>
 	<table width="100%" class="layout">
-		<tr class="colhead"><td>Sorting</td></tr>
+		<tr class="colhead"><td id="sorting_head">Sorting</td></tr>
 		<tr>
 			<td id="drag_drop_textnote">
 			<ul>
@@ -51,7 +51,7 @@
 				<li>Press <em>Save All Changes</em> when you are finished sorting.</li>
 				<li>Press <em>Edit</em> or <em>Remove</em> to simply modify one entry.</li>
 			</ul>
-			<noscript><ul><li><strong class="important_text">Note: You cannot drag and drop while JavaScript is disabled.</strong></li></ul></noscript>
+			<noscript><ul><li><strong class="important_text">Note: Enable JavaScript!</strong></li></ul></noscript>
 			</td>
 		</tr>
 	</table>
@@ -63,14 +63,14 @@
 		<thead>
 			<tr class="colhead">
 				<th style="width:7%">Order</th>
-				<th style="width:1%"><span><abbr title="Changes">&Delta;</abbr></span></th>
+				<th style="width:1%"><span><abbr title="Current Rank">#</abbr></span></th>
 				<th style="width:1%"><span>Year</span></th>
 				<th style="width:15%"><span>Artist</span></th>
 				<th><span>Torrent</span></th>
 				<th style="width:1%"><span>User</span></th>
-				<th style="width:1%; text-align: right" class="nobr"><abbr title="Modify an individual row.">Tweak</abbr></th>
+				<th style="width:1%; text-align: right" class="nobr"><span><abbr title="Modify an individual row.">Tweak</abbr></span></th>
 			</tr>
-		</thead> 
+		</thead>
 		<tbody>
 <?
 
@@ -101,10 +101,10 @@
 								<input class="sort_numbers" type="text" name="sort" value="<?=$Sort?>" id="sort_<?=$GroupID?>" size="4" />
 							</td>
 							<td><?=$Number?></td>
-							<td><?=$GroupYear?></td>
-							<td><?=$DisplayName?>	</td>
-							<td><?=$TorrentLink?></td>
-							<td class="nobr"><?=Users::format_username($UserID, $Username)?></td>
+							<td><?=trim($GroupYear)?></td>
+							<td><?=trim($DisplayName)?></td>
+							<td><?=trim($TorrentLink)?></td>
+							<td class="nobr"><?=Users::format_username($UserID, $Username, false, false, false)?></td>
 							<td class="nobr">
 								<input type="hidden" name="action" value="manage_handle" />
 								<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

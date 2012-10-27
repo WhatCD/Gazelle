@@ -10,7 +10,7 @@ body {
 
 a, a:visited, a:active {
 	color: #007dc6;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a:hover {
@@ -60,7 +60,7 @@ a img {
 	height: 50px;
 	border-left: 1px solid #6f6f6f;
 	margin: 0 20px 0 0;
-  padding: 0 0 0 20px;   
+  padding: 0 0 0 20px;
 }
 
 #footer p:first-child {
@@ -131,7 +131,7 @@ input[type="text"] {
 input, select, textarea {
 	font-family: Arial, sans-serif;
 	font-size: 1em;
-	border: 1px solid #9c9c9c;	
+	border: 1px solid #9c9c9c;
 }
 
 textarea {
@@ -153,7 +153,7 @@ select {
   padding: 0 !important;
 }
 
-.main_column .pad, 
+.main_column .pad,
 .sidebar .pad,
 #blog .pad {
 	padding: 10px !important;
@@ -178,7 +178,7 @@ input:focus, textarea:focus, #searchbars input:focus {
 }
 
 #searchbars input:focus {
-  background: transparent url('images/searchbox.png') 0 -23px no-repeat;  
+  background: transparent url('images/searchbox.png') 0 -23px no-repeat;
 }
 
 input[type="submit"], input[type="button"] {
@@ -231,15 +231,15 @@ ul#userinfo_minor {
 	width: 200px;
 }
 
-#menu ul li, 
+#menu ul li,
 ul#userinfo_minor li {
 	float: left;
 	display: block;
-	width: 74px;	
+	width: 74px;
 }
 
 ul#userinfo_minor li {
-	width: 95px;	
+	width: 95px;
 }
 
 ul#userinfo_username, ul#userinfo_major, ul#userinfo_stats {
@@ -277,7 +277,7 @@ ul#userinfo_major li a {
 
 ul#userinfo_major li a:hover {
 	background-color: #575757;
-	color: #e6e6e6;	
+	color: #e6e6e6;
 }
 
 ul#userinfo_stats li {
@@ -313,7 +313,7 @@ ul#userinfo_stats li a {
 
 .blend a:hover {
 	background-color: #575757;
-	color: #e6e6e6;	
+	color: #e6e6e6;
 }
 
 ul#userinfo_stats li span.stat {
@@ -345,7 +345,7 @@ ul#userinfo_minor a:hover {
 #top10 #nav_top10 a,
 #wiki #nav_wiki a {
   font-weight: bold;
-} 
+}
 
 /* ARRANGING MENUS */
 
@@ -396,7 +396,7 @@ ul#userinfo_stats {
 
 ul#userinfo_username {
 	z-index: 5;
-	padding-left: 290px; 
+	padding-left: 290px;
 }
 
 #alerts {
@@ -468,7 +468,7 @@ ul#userinfo_username {
 
 
 #content {
-	padding: 20px 20px 20px 20px;	
+	padding: 20px 20px 20px 20px;
 	margin: 38px 0 0 0;
 	background-color: white;
 	color: #575757;
@@ -516,7 +516,7 @@ ul#userinfo_username {
 }
 
 .label {
-  width: 15%;  
+  width: 15%;
   border-right: 1px solid #e6e6e6;
 }
 
@@ -535,14 +535,14 @@ ul#userinfo_username {
   margin: 0;
 }
 
-#content table .colhead a, 
+#content table .colhead a,
 #content table .colhead_dark a {
 	color: #575757;
 	font-weight: bold;
 }
 
 
-#content table .colhead a:hover, 
+#content table .colhead a:hover,
 #content table .colhead_dark a:hover {
 	color: #007dc6;
 }
@@ -567,7 +567,7 @@ ul#userinfo_username {
 }
 
 
-#friends br, 
+#friends br,
 #footer br {
   display: none;
 }
@@ -580,7 +580,7 @@ ul#userinfo_username {
 
 #inbox .vertical_space {
   width: 50%;
-  margin: 0 auto;  
+  margin: 0 auto;
   padding: 20px;
   background: transparent url('images/convo.png') 50% 35px no-repeat;
 }
@@ -592,7 +592,7 @@ ul#userinfo_username {
 
 #inbox form .box {
   width: 100%;
-  margin: 0 0 20px 0;  
+  margin: 0 0 20px 0;
   padding: 0;
 }
 
@@ -641,9 +641,9 @@ ul#userinfo_username {
   margin: 0 0 10px 0;
 }
 
-#forums .forum_post td.avatar, 
-#userhistory .forum_post td.avatar, 
-#collage .forum_post td.avatar, 
+#forums .forum_post td.avatar,
+#userhistory .forum_post td.avatar,
+#collage .forum_post td.avatar,
 #torrents .forum_post td.avatar,
 #comments .forum_post td.avatar,
 #requests .forum_post td.avatar {
@@ -734,7 +734,7 @@ ul#userinfo_username {
 #userhistory .forum_post tr,
 #comments .forum_post tr,
 #requests .forum_post tr {
-  background: transparent url('images/forum_postbgspeech3.png') 149px 100% no-repeat;  
+  background: transparent url('images/forum_postbgspeech3.png') 149px 100% no-repeat;
 }
 
 #userhistory .forum_post tr.colhead_dark {
@@ -787,11 +787,11 @@ strong.quoteheader {
 #torrents .sidebar .box .stats li span.remove_artist a {
   color: #575757;
   font-family: monospace;
-} 
+}
 
 #torrents .sidebar .box .stats li span.remove_artist a:hover {
   color: red;
-} 
+}
 
 #torrents input[value="Edit torrent"] {
   margin: 5px 0 30px 0;
@@ -1007,7 +1007,7 @@ strong.quoteheader {
 	color: #007dc6;
 }
 
-#torrents #content .center .box form div input[type="text"], 
+#torrents #content .center .box form div input[type="text"],
 #wiki #content .center .box form div input[type="text"],
 #artist #content .center .box form div input[type="text"] {
   width: 500px !important;
@@ -1023,7 +1023,7 @@ strong.quoteheader {
   height: 200px;
 }
 
-#torrents #content .center .box form div, 
+#torrents #content .center .box form div,
 #wiki #content .center .box form div,
 #artist #content .center .box form div {
   text-align: left !important;
@@ -1066,7 +1066,7 @@ strong.quoteheader {
   padding: 10px 0;
 }
 
-.sidebar .box .head, 
+.sidebar .box .head,
 .main_column .box .head,
 #blog .box .head {
 	background-color: #f0f0f0;
@@ -1106,7 +1106,7 @@ strong.quoteheader {
   padding: 0;
 }
 
-#wiki .sidebar ul ul {
+#wiki .sidebar ul ul, #wiki .sidebar ol ol {
   margin: 0 0 0 10px;
 }
 
@@ -1137,7 +1137,7 @@ strong.quoteheader {
   margin: 0 !important;
 }
 
-.sidebar form br, 
+.sidebar form br,
 .sidebar .pad br {
   line-height: 1em;
 }
@@ -1336,7 +1336,7 @@ td.r00 {
 	overflow: auto;
 }
 
-.lightbox img { 
+.lightbox img {
 	max-width: 100%;
 	max-height: 100%;
 	background-color: transparent;
@@ -1502,11 +1502,11 @@ h3 {
   width: 130px;
 }
 
-#user .linkbox, 
-#artist .linkbox, 
-#collage .linkbox, 
+#user .linkbox,
+#artist .linkbox,
+#collage .linkbox,
 #forums .linkbox,
-#bookmarks .linkbox, 
+#bookmarks .linkbox,
 #torrents .linkbox,
 #wiki .linkbox,
 #friends .linkbox {
@@ -1582,7 +1582,7 @@ h3 {
 
 #bookmarks .group span a {
   float: right;
-} 
+}
 
 #bookmarks .group span div a, #bookmarks .group span strong a {
   float: none;
@@ -1726,7 +1726,7 @@ div.invitetree ul.invitetree {
 	text-align: center;
 }
 
-.spellcheck { 
+.spellcheck {
 	margin: 25px 0;
 	font-size: 1.25em;
 	font-weight: bold;
@@ -1735,3 +1735,6 @@ div.invitetree ul.invitetree {
 table.noavatar, table.noavatar tr, table.noavatar td.body, table.noavatar td.body div {
 	background-image: none !important;
 }
+
+tr.torrent .bookmark > a:before { content:""; }
+tr.torrent .bookmark > a:after { content:""; }

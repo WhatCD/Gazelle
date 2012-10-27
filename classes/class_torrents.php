@@ -35,7 +35,13 @@ class Torrents {
 	 */
 	public static function get_groups($GroupIDs, $Return = true, $GetArtists = true, $Torrents = true) {
 		global $DB, $Cache;
-
+		
+		// Make sure there's something in $GroupIDs, otherwise the SQL
+		// will break
+		if (count($GroupIDs) == 0) {
+			return array('matches'=>array(),'notfound'=>array());
+		}
+		
 		$Found = array_flip($GroupIDs);
 		$NotFound = array_flip($GroupIDs);
 		$Key = $Torrents ? 'torrent_group_' : 'torrent_group_light_';
@@ -435,6 +441,7 @@ class Torrents {
 			if (!empty($Data['RemasterTitle'])) { $EditionInfo[]=$Data['RemasterTitle']; }
 			if (count($EditionInfo)) { $Info[]=implode(' ',$EditionInfo); }
 		}
+		if ($Data['SnatchedTorrent'] == '1') { $Info[]='<strong>Snatched!</strong>'; }
 		if ($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
 		if ($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
 		if ($Data['PersonalFL']) { $Info[]='<strong>Personal Freeleech!</strong>'; }
@@ -498,7 +505,6 @@ class Torrents {
 		}
 	}
 
-
 	/**
 	 * Check if the logged in user has an active freeleech token
 	 *
@@ -542,5 +548,23 @@ class Torrents {
 			&& empty($Torrent['FreeTorrent'])
 			&& $LoggedUser['CanLeech'] == '1');
 	}
+	
+	public static function get_snatched_torrents($UserID = false) {
+		global $DB, $Cache, $LoggedUser;
+		if($LoggedUser['ShowSnatched']) { 
+			$UserID = $LoggedUser['ID'];
+			$SnatchedTorrents = $Cache->get_value('users_snatched_'.$UserID);
+			if (empty($SnatchedTorrents)) {
+				$DB->query("SELECT DISTINCT fid as TorrentID FROM xbt_snatched WHERE uid='$UserID'");
+				$SnatchedTorrents = array_flip($DB->collect('TorrentID'));
+				$Cache->cache_value('users_snatched_'.$UserID, $SnatchedTorrents, 86400);
+			}
+		}
+		else {
+			$SnatchedTorrents = array();
+		}
+		return $SnatchedTorrents;
+	}
+	
 }
 ?>

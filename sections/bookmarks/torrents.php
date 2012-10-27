@@ -1,5 +1,5 @@
 <?
-include(SERVER_ROOT.'/classes/class_image_tools.php'); 
+include(SERVER_ROOT.'/classes/class_image_tools.php');
 ini_set('max_execution_time',600);
 set_time_limit(0);
 
@@ -23,33 +23,17 @@ if(!empty($_GET['userid'])) {
 
 $Sneaky = ($UserID != $LoggedUser['ID']);
 
-$Data = $Cache->get_value('bookmarks_torrent_'.$UserID.'_full');
+list($K, $GroupIDs, $CollageDataList, $TorrentList) = Users::bookmark_data($UserID);
 
-if($Data) {
-	$Data = unserialize($Data);
-	list($K, list($TorrentList, $CollageDataList)) = each($Data);
-} else {
-	// Build the data for the collage and the torrent list
-	$DB->query("SELECT 
-		bt.GroupID, 
-		tg.WikiImage,
-		tg.CategoryID,
-		bt.Time
-		FROM bookmarks_torrents AS bt
-		JOIN torrents_group AS tg ON tg.ID=bt.GroupID
-		WHERE bt.UserID='$UserID'
-		ORDER BY bt.Time");
-	
-	$GroupIDs = $DB->collect('GroupID');
-	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
-	if(count($GroupIDs)>0) {
-		$TorrentList = Torrents::get_groups($GroupIDs);
-		$TorrentList = $TorrentList['matches'];
-	} else {
-		$TorrentList = array();
-	}
+$TokenTorrents = Users::token_torrents($UserID);
+
+$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
+if (empty($TokenTorrents)) {
+	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
+	$TokenTorrents = $DB->collect('TorrentID');
+	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
 }
-
+$SnatchedTorrents = Torrents::get_snatched_torrents();
 $Title = ($Sneaky)?"$Username's bookmarked torrents":'Your bookmarked torrents';
 
 // Loop through the result set, building up $Collage and $TorrentTable
@@ -63,11 +47,11 @@ $Tags = array();
 
 foreach ($TorrentList as $GroupID=>$Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists) = array_values($Group);
-	list($GroupID2, $Image, $GroupCategoryID, $AddedTime) = array_values($CollageDataList[$GroupID]);
-	
+	list($GroupID2, $Sort, $Image, $GroupCategoryID, $AddedTime) = array_values($CollageDataList[$GroupID]);
+
 	// Handle stats and stuff
 	$NumGroups++;
-	
+
 	if($GroupArtists) {
 		foreach($GroupArtists as $Artist) {
 			if(!isset($Artists[$Artist['id']])) {
@@ -77,7 +61,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			}
 		}
 	}
-	
+
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 
 	$TorrentTags = array();
@@ -105,9 +89,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
 	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
-	
+
 	// Start an output buffer, so we can store this output in $TorrentTable
-	ob_start(); 
+	ob_start();
 	if(count($Torrents)>1 || $GroupCategoryID==1) {
 			// Grouped torrents
 			$ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
@@ -139,10 +123,10 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$LastRemasterRecordLabel = '';
 		$LastRemasterCatalogueNumber = '';
 		$LastMedia = '';
-		
+
 		$EditionID = 0;
 		unset($FirstUnknown);
-		
+
 		foreach ($Torrents as $TorrentID => $Torrent) {
 
 			if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
@@ -151,17 +135,17 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			
 			if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
-				
+
 				$EditionID++;
 				if($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
-					
+
 					$RemasterName = $Torrent['RemasterYear'];
 					$AddExtra = " - ";
 					if($Torrent['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']); $AddExtra=' / '; }
 					if($Torrent['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']); $AddExtra=' / '; }
 					if($Torrent['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterTitle']); $AddExtra=' / '; }
 					$RemasterName .= $AddExtra.display_str($Torrent['Media']);
-					
+
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> edition<? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
 		<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
@@ -199,6 +183,10 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <?			} ?>
 			| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
+<?			if(array_key_exists($TorrentID, $SnatchedTorrents)) {
+				$Torrent['SnatchedTorrent'] = '1';
+			}
+?>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
@@ -210,9 +198,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		}
 	} else {
 		// Viewing a type that does not require grouping
-		
+
 		list($TorrentID, $Torrent) = each($Torrents);
-		
+
 		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 
 		if(!empty($Torrent['FreeTorrent'])) {
@@ -233,7 +221,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <?		if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824) 
 			&& !$Torrent['PersonalFL'] && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
-<?		} ?>		
+<?		} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
 			<strong><?=$DisplayName?></strong>
@@ -252,11 +240,11 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <?
 	}
 	$TorrentTable.=ob_get_clean();
-	
+
 	// Album art
-	
+
 	ob_start();
-	
+
 	$DisplayName = '';
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
 		unset($ExtendedArtists[2]);
@@ -270,7 +258,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 ?>
 		<li class="image_group_<?=$GroupID?>">
 			<a href="torrents.php?id=<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
-<?	if($Image) { 
+<?	if($Image) {
 		if(check_perms('site_proxy_images')) {
 			$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
 		}
@@ -283,7 +271,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		</li>
 <?
 	$Collage[]=ob_get_clean();
-	
+
 }
 
 $CollageCovers = isset($LoggedUser['CollageCovers'])?$LoggedUser['CollageCovers']:25;
@@ -310,6 +298,7 @@ View::show_header($Title, 'browse,collage');
 <? if (count($TorrentList) > 0) { ?>
 			<br /><br />
 			<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">[Remove Snatched]</a>
+			<a href="bookmarks.php?action=edit&amp;type=torrents">[Manage Torrents]</a>
 <? } ?>
 		</div>
 	</div>
@@ -341,7 +330,7 @@ foreach ($Tags as $TagName => $Tag) {
 	$i++;
 	if($i>5) { break; }
 ?>
-					<li><a href="torrents.php?taglist=<?=$TagName?>"><?=$TagName?></a> (<?=$Tag['count']?>)</li>
+					<li><a href="torrents.php?taglist=<?=display_str($TagName)?>"><?=display_str($TagName)?></a> (<?=$Tag['count']?>)</li>
 <?
 }
 ?>
@@ -359,7 +348,7 @@ foreach ($Artists as $ID => $Artist) {
 	$i++;
 	if($i>10) { break; }
 ?>
-					<li><a href="artist.php?id=<?=$ID?>"><?=$Artist['name']?></a> (<?=$Artist['count']?>)</li>
+					<li><a href="artist.php?id=<?=$ID?>"><?=display_str($Artist['name'])?></a> (<?=$Artist['count']?>)</li>
 <?
 }
 ?>
@@ -394,7 +383,7 @@ if($CollageCovers != 0) { ?>
 		<script type="text/javascript">
 			collageShow.init(<?=json_encode($CollagePages)?>);
 		</script>
-<?		} 
+<?		}
 } ?>
 		<br />
 		<table class="torrent_table grouping cats" id="torrent_table">
@@ -414,4 +403,3 @@ if($CollageCovers != 0) { ?>
 <?
 View::show_footer();
 $Cache->cache_value('bookmarks_torrent_'.$UserID.'_full', serialize(array(array($TorrentList, $CollageDataList))), 3600);
-?>

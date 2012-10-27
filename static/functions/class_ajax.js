@@ -116,13 +116,26 @@ var ajax = {
 };
 //Bookmarks
 function Bookmark(type, id, newName) {
-	var lnk = $('#bookmarklink_' + type + '_' + id).raw();
-	var oldName = lnk.innerHTML;
-	ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
-		lnk.onclick = function() { Unbookmark(type, id, oldName); return false; };
-		lnk.innerHTML = newName;
-		lnk.title = 'Remove bookmark';
-	});
+	if (window.location.pathname.indexOf('top10.php') != -1) {
+		var oldName = $('.bookmarklink_' + type + '_' + id).raw().innerHTML;
+		ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
+			var bookmarklinks = $('.bookmarklink_' + type + '_' + id).objects;
+			for (var i = 0; i < bookmarklinks.length; i++) {
+				$(bookmarklinks[i].parentNode.parentNode.parentNode).add_class('bookmarked');
+				bookmarklinks[i].onclick = function() { Unbookmark(type, id, oldName); return false; };
+				bookmarklinks[i].innerHTML = newName;
+				bookmarklinks[i].title = 'Remove bookmark';
+			}
+		});
+	} else {
+		var lnk = $('#bookmarklink_' + type + '_' + id).raw();
+		var oldName = lnk.innerHTML;
+		ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
+			lnk.onclick = function() { Unbookmark(type, id, oldName); return false; };
+			lnk.innerHTML = newName;
+			lnk.title = 'Remove bookmark';
+		});
+	}
 }
 
 function Unbookmark(type, id, newName) {
@@ -131,6 +144,17 @@ function Unbookmark(type, id, newName) {
 			$('#group_' + id).remove();
 			$('.groupid_' + id).remove();
 			$('.bookmark_' + id).remove();
+		});
+	} else if (window.location.pathname.indexOf('top10.php') != -1) {
+		var oldName = $('.bookmarklink_' + type + '_' + id).raw().innerHTML;
+		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
+			var bookmarklinks = $('.bookmarklink_' + type + '_' + id).objects;
+			for (var i = 0; i < bookmarklinks.length; i++) {
+				$(bookmarklinks[i].parentNode.parentNode.parentNode).remove_class('bookmarked');
+				bookmarklinks[i].onclick = function() { Bookmark(type, id, oldName); return false; };
+				bookmarklinks[i].innerHTML = newName;
+				bookmarklinks[i].title = 'Add bookmark';
+			}
 		});
 	} else {
 		var lnk = $('#bookmarklink_' + type + '_' + id).raw();

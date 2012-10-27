@@ -10,7 +10,7 @@ body {
 
 a, a:visited, a:active {
 	color: #007dc6;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 a:hover {
@@ -77,7 +77,7 @@ a img {
 	height: 50px;
 	border-right: 1px solid #4f4f4f;
 	margin: 0 0 0 20px;
-  padding: 0 20px 0 10px;   
+  padding: 0 20px 0 10px;
 }
 
 #footer p:last-child {
@@ -147,7 +147,7 @@ input[type="text"] {
 input, select, textarea {
 	font-family: Arial, sans-serif;
 	font-size: 1em;
-	border: 1px solid #323232;	
+	border: 1px solid #323232;
 }
 
 textarea {
@@ -169,7 +169,7 @@ select {
   padding: 0 !important;
 }
 
-.main_column .pad, 
+.main_column .pad,
 .sidebar .pad {
 	padding: 10px !important;
 }
@@ -228,15 +228,15 @@ ul#userinfo_minor {
 	width: 200px;
 }
 
-#menu ul li, 
+#menu ul li,
 ul#userinfo_minor li {
 	float: left;
 	display: block;
-	width: 74px;	
+	width: 74px;
 }
 
 ul#userinfo_minor li {
-	width: 95px;	
+	width: 95px;
 }
 
 ul#userinfo_username, ul#userinfo_major, ul#userinfo_stats {
@@ -271,7 +271,7 @@ ul#userinfo_major li a {
 }
 
 ul#userinfo_major li a:hover {
-	color: #ffffff;	
+	color: #ffffff;
 }
 
 ul#userinfo_stats li {
@@ -291,7 +291,7 @@ ul#userinfo_stats li a {
 }
 
 .blend a:hover, .alertbar a:hover {
-	color: #fff;	
+	color: #fff;
 }
 
 ul#userinfo_stats li span.stat {
@@ -323,7 +323,7 @@ ul#userinfo_minor a:hover {
 #top10 #nav_top10 a,
 #wiki #nav_wiki a {
   font-weight: bold;
-} 
+}
 
 .error_message {
 	border: 1px solid #666;
@@ -396,7 +396,7 @@ ul#userinfo_stats {
 
 ul#userinfo_username {
 	z-index: 6;
-	padding-left: 320px; 
+	padding-left: 320px;
 }
 
 #alerts {
@@ -518,7 +518,7 @@ margin-left:20px;
 }
 
 .label {
-  width: 15%;  
+  width: 15%;
   border-right: 1px solid #252525;
 }
 
@@ -537,14 +537,14 @@ margin-left:20px;
   margin: 0;
 }
 
-#content table .colhead a, 
+#content table .colhead a,
 #content table .colhead_dark a {
 	color: #989898;
 	font-weight: bold;
 }
 
 
-#content table .colhead a:hover, 
+#content table .colhead a:hover,
 #content table .colhead_dark a:hover {
 	color: #007dc6;
 }
@@ -569,7 +569,7 @@ margin-left:20px;
 }
 
 
-#friends br, 
+#friends br,
 #footer br {
   display: none;
 }
@@ -582,7 +582,7 @@ margin-left:20px;
 
 #inbox .vertical_space {
   width: 50%;
-  margin: 0 auto;  
+  margin: 0 auto;
   padding: 20px;
 }
 
@@ -593,7 +593,7 @@ margin-left:20px;
 
 #inbox form .box {
   width: 100%;
-  margin: 0 0 20px 0;  
+  margin: 0 0 20px 0;
   padding: 0;
 }
 
@@ -638,9 +638,9 @@ margin-left:20px;
   margin: 0;
 }
 
-#forums .forum_post td.avatar, 
-#userhistory .forum_post td.avatar, 
-#collage .forum_post td.avatar, 
+#forums .forum_post td.avatar,
+#userhistory .forum_post td.avatar,
+#collage .forum_post td.avatar,
 #torrents .forum_post td.avatar {
   border: 1px solid #303030;
   padding: 1px;
@@ -883,8 +883,8 @@ strong.quoteheader{color: #878787;}
 }
 
 .group_torrent td:first-child {
-  
-} 
+
+}
 
 .colhead td, .colhead th, .colhead_dark td {
 	background: #212121 url('images/bar2.png') !important;
@@ -936,7 +936,7 @@ strong.quoteheader{color: #878787;}
 	color: #47a9ef;
 }
 
-#torrents #content .center .box form div input[type="text"], 
+#torrents #content .center .box form div input[type="text"],
 #wiki #content .center .box form div input[type="text"],
 #artist #content .center .box form div input[type="text"] {
   width: 500px !important;
@@ -952,7 +952,7 @@ strong.quoteheader{color: #878787;}
   height: 200px;
 }
 
-#torrents #content .center .box form div, 
+#torrents #content .center .box form div,
 #wiki #content .center .box form div,
 #artist #content .center .box form div {
   text-align: left !important;
@@ -995,7 +995,7 @@ strong.quoteheader{color: #878787;}
   padding: 10px 0;
 }
 
-.sidebar .box .head, 
+.sidebar .box .head,
 .main_column .box .head {
 	background-color: #212121;
 	padding: 10px !important;
@@ -1030,7 +1030,7 @@ strong.quoteheader{color: #878787;}
   padding: 0;
 }
 
-#wiki .sidebar ul ul {
+#wiki .sidebar ul ul, #wiki .sidebar ol ol {
   margin: 0 0 0 10px;
 }
 
@@ -1061,7 +1061,7 @@ strong.quoteheader{color: #878787;}
   margin: 0 !important;
 }
 
-.sidebar form br, 
+.sidebar form br,
 .sidebar .pad br {
   line-height: 1em;
 }
@@ -1427,11 +1427,11 @@ h3 {
   width: 130px;
 }
 
-#user .linkbox, 
-#artist .linkbox, 
-#collage .linkbox, 
+#user .linkbox,
+#artist .linkbox,
+#collage .linkbox,
 #forums .linkbox,
-#bookmarks .linkbox, 
+#bookmarks .linkbox,
 #torrents .linkbox,
 #wiki .linkbox,
 #friends .linkbox {
@@ -1505,7 +1505,7 @@ h3 {
 
 #bookmarks .group span a {
   float: right;
-} 
+}
 
 #bookmarks .group span div a, #bookmarks .group span strong a {
   float: none;
@@ -1996,8 +1996,11 @@ ul#userinfo_random li a:hover {
 	text-align: center;
 }
 
-.spellcheck { 
+.spellcheck {
 	margin: 25px 0;
 	font-size: 1.25em;
 	font-weight: bold;
 }
+
+tr.torrent .bookmark > a:before { content:""; }
+tr.torrent .bookmark > a:after { content:""; }

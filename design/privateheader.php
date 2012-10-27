@@ -115,12 +115,12 @@ if(check_perms('site_send_unlimited_invites')) {
 	    	
 </ul>
 		<ul id="userinfo_stats">
-			<li id="stats_seeding"><a href="torrents.php?type=seeding&amp;userid=<?=$LoggedUser['ID']?>">Up</a>: <span class="stat"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span></li>
-			<li id="stats_leeching"><a href="torrents.php?type=leeching&amp;userid=<?=$LoggedUser['ID']?>">Down</a>: <span class="stat"><?=Format::get_size($LoggedUser['BytesDownloaded'])?></span></li>
+			<li id="stats_seeding"><a href="torrents.php?type=seeding&amp;userid=<?=$LoggedUser['ID']?>">Up</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesUploaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesUploaded'], 2)?></span></li>
+			<li id="stats_leeching"><a href="torrents.php?type=leeching&amp;userid=<?=$LoggedUser['ID']?>">Down</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesDownloaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesDownloaded'], 2)?></span></li>
 			<li id="stats_ratio">Ratio: <span class="stat"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'], $LoggedUser['BytesDownloaded'])?></span></li>
 <?	if(!empty($LoggedUser['RequiredRatio'])) {?>
-			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
-<?	} 
+			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat" title="<?=number_format($LoggedUser['RequiredRatio'], 5)?>"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
+<?	}
     if($LoggedUser['FLTokens'] > 0) { ?>
 			<li id="fl_tokens"><a href="wiki.php?action=article&amp;id=754">Tokens: </a><span class="stat"><a href="userhistory.php?action=token_history&amp;userid=<?=$LoggedUser['ID']?>"><?=$LoggedUser['FLTokens']?></a></span></li>
 <?	} ?>
@@ -180,6 +180,36 @@ if($NewSubscriptions === FALSE) {
 //Start handling alert bars
 $Alerts = array();
 $ModBar = array();
+
+//Quotes
+if($LoggedUser['NotifyOnQuote']) {
+	$QuoteNotificationsCount = $Cache->get_value('forums_quotes_'.$LoggedUser['ID']);
+	if($QuoteNotificationsCount === FALSE) {
+		if ($LoggedUser['CustomForums']) {
+			unset($LoggedUser['CustomForums']['']);
+			$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+			$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
+		}
+		$sql = "SELECT COUNT(UnRead) FROM users_notify_quoted AS q
+            LEFT JOIN forums AS f ON f.ID = q.ForumID
+            WHERE UserID='".$LoggedUser['ID']."'
+            AND UnRead = '1' AND ((f.MinClassRead <= '$LoggedUser[Class]'";
+		if(!empty($RestrictedForums)) {
+			$sql.=' AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+		}
+		$sql .= ')';
+		if(!empty($PermittedForums)) {
+			$sql.=' OR f.ID IN (\''.$PermittedForums.'\')';
+		}
+		$sql .= ')';
+		$DB->query($sql);
+		list($QuoteNotificationsCount) = $DB->next_record();
+		$Cache->cache_value('forums_quotes_'.$LoggedUser['ID'], $QuoteNotificationsCount, 0);
+		if($QuoteNotificationsCount > 0) {
+			$Alerts[] = '<a href="userhistory.php?action=quote_notifications">'. 'New Quote'. ($QuoteNotificationsCount > 1 ? 's' : '');
+		}
+	}
+}
 
 // News
 $MyNews = $LoggedUser['LastReadNews'];
@@ -260,7 +290,7 @@ if (check_perms('site_torrents_notify')) {
 }
 
 // Collage subscriptions
-if(check_perms('site_collages_subscribe')) { 
+if(check_perms('site_collages_subscribe')) {
 	$NewCollages = $Cache->get_value('collage_subs_user_new_'.$LoggedUser['ID']);
 	if($NewCollages === FALSE) {
 			$DB->query("SELECT COUNT(DISTINCT s.CollageID)
@@ -285,7 +315,7 @@ if (check_perms('users_mod')) {
 		list($NumStaffPMs) = $DB->next_record();
 		$Cache->cache_value('num_staff_pms_'.$LoggedUser['ID'], $NumStaffPMs , 1000);
 	}
-	
+
 	if ($NumStaffPMs > 0) {
 		$ModBar[] = '<a href="staffpm.php">'.$NumStaffPMs.' Staff PMs</a>';
 	}
@@ -308,7 +338,7 @@ if(check_perms('admin_reports')) {
 		list($NumOtherReports) = $DB->next_record();
 		$Cache->cache_value('num_other_reports', $NumOtherReports, 0);
 	}
-	
+
 	if ($NumOtherReports > 0) {
 		$ModBar[] = '<a href="reports.php">'.$NumOtherReports.(($NumTorrentReports == 1) ? ' Other Report' : ' Other Reports').'</a>';
 	}
@@ -319,7 +349,7 @@ if(check_perms('admin_reports')) {
 		list($NumUpdateReports) = $DB->next_record();
 		$Cache->cache_value('num_update_reports', $NumUpdateReports, 0);
 	}
-	
+
 	if ($NumUpdateReports > 0) {
 		$ModBar[] = '<a href="reports.php">'.'Request update reports'.'</a>';
 	}
@@ -330,7 +360,7 @@ if(check_perms('admin_reports')) {
 		list($NumForumReports) = $DB->next_record();
 		$Cache->cache_value('num_forum_reports', $NumForumReports, 0);
 	}
-	
+
 	if ($NumForumReports > 0) {
 		$ModBar[] = '<a href="reports.php">'.'Forum reports'.'</a>';
 	}
@@ -351,7 +381,7 @@ if (!empty($Alerts) || !empty($ModBar)) {
 <?
 }
 //Done handling alertbars
-
+	
 if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 	switch($LoggedUser['Rippy']) {
 		case 'PM' :
@@ -394,7 +424,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 			<li id="searchbar_torrents">
 				<span class="hidden">Torrents: </span>
 				<form class="search_form" name="torrents" action="torrents.php" method="get">
-<? if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?> 
+<? if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
 					<input type="hidden" name="action" value="advanced" />
 <? } ?>
 					<input
@@ -402,7 +432,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 						spellcheck="false"
 						onfocus="if (this.value == 'Torrents') this.value='';"
 						onblur="if (this.value == '') this.value='Torrents';"
-<? if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?> 
+<? if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
 						value="Torrents" type="text" name="groupname" size="17"
 <? } else { ?>
 						value="Torrents" type="text" name="searchstr" size="17"
@@ -414,7 +444,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 				<span class="hidden">Artist: </span>
 				<form class="search_form" name="artists" action="artist.php" method="get">
 					<script type="text/javascript" src="static/functions/autocomplete.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/autocomplete.js')?>"></script>
-					<input id="artistsearch" 
+					<input id="artistsearch"
 						onkeyup="autocomp.keyup(event);"
 						onkeydown="autocomp.keydown(event);"
 						accesskey="a" spellcheck="false" autocomplete="off"
@@ -452,7 +482,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 				<span class="hidden">Wiki: </span>
 				<form class="search_form" name="wiki" action="wiki.php" method="get">
 					<input type="hidden" name="action" value="search" />
-					<input 
+					<input
 						onfocus="if (this.value == 'Wiki') this.value='';"
 						onblur="if (this.value == '') this.value='Wiki';"
 						value="Wiki" type="text" name="search" size="17"

@@ -15,7 +15,6 @@ switch($_GET['action']) {
 			$DB->query("UPDATE news SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."' WHERE ID='".db_string($_POST['newsid'])."'");
 			$Cache->delete_value('news');
 			$Cache->delete_value('feed_news');
-			
 		}
 		header('Location: index.php');
 		break;
@@ -35,9 +34,9 @@ switch($_GET['action']) {
 		<div class="box pad">
 			<input type="hidden" name="action" value="<?= ($_GET['action'] == 'news')? 'takenewnews' : 'takeeditnews';?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-<? if($_GET['action'] == 'editnews'){?> 
+<? if($_GET['action'] == 'editnews'){?>
 			<input type="hidden" name="newsid" value="<?=$NewsID; ?>" />
-<? }?> 
+<? }?>
 			<h3>Title</h3>
 			<input type="text" name="title" size="95" <? if(!empty($Title)) { echo 'value="'.display_str($Title).'"'; } ?> />
 <!-- Why did someone add this?	<input type="datetime" name="datetime" value="<?=sqltime()?>" /> -->
@@ -53,7 +52,7 @@ switch($_GET['action']) {
 	</form>
 
 	<h2>News archive</h2>
-	
+
 <?
 $DB->query("SELECT n.ID,n.Title,n.Body,n.Time FROM news AS n ORDER BY n.Time DESC");// LIMIT 20
 while(list($NewsID,$Title,$Body,$NewsTime)=$DB->next_record()) {
@@ -61,10 +60,10 @@ while(list($NewsID,$Title,$Body,$NewsTime)=$DB->next_record()) {
 	<div class="box vertical_space">
 		<div class="head">
 			<strong><?=display_str($Title) ?></strong> - posted <?=time_diff($NewsTime) ?>
-			- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>">[Edit]</a> 
+			- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>">[Edit]</a>
 			<a href="tools.php?action=deletenews&amp;id=<?=$NewsID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Delete]</a>
 		</div>
-		
+
 		<div class="pad"><?=$Text->full_format($Body) ?></div>
 	</div>
 <? } ?>

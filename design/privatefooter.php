@@ -1,4 +1,5 @@
 </div>
+<?php TEXTAREA_PREVIEW::JavaScript(); ?>
 <div id="footer">
 <? 	if (!empty($Options['disclaimer'])) { ?>
 	<br /><br />

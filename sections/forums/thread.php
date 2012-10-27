@@ -13,7 +13,7 @@ Things to expect in $_GET:
 
 include(SERVER_ROOT.'/classes/class_text.php');
 
-$Text = new TEXT;
+$Text = new TEXT(true);
 
 // Check for lame SQL injection attempts
 if(!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
@@ -137,8 +137,10 @@ if(in_array($ThreadID, $UserSubscriptions)) {
 	$Cache->delete_value('subscriptions_user_new_'.$LoggedUser['ID']);
 }
 
+$DB->query("UPDATE users_notify_quoted SET Unread = '0' WHERE UserID = '$LoggedUser[ID]' AND TopicID = '$ThreadID'");
+
 // Start printing
-View::show_header('Forums'.' > '.$Forums[$ForumID]['Name'].' > '.$ThreadInfo['Title'],'comments,subscriptions,bbcode');
+View::show_header($ThreadInfo['Title'] . ' < '.$Forums[$ForumID]['Name'].' < '. 'Forums','comments,subscriptions,bbcode,jquery');
 ?>
 <div class="thin">
 	<h2>
@@ -188,13 +190,13 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		$Answers = unserialize($Answers);
 		$DB->query("SELECT Vote, COUNT(UserID) FROM forums_polls_votes WHERE TopicID='$ThreadID' GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
-		
+
 		$Votes = array();
 		foreach ($VoteArray as $VoteSet) {
-			list($Key,$Value) = $VoteSet; 
+			list($Key,$Value) = $VoteSet;
 			$Votes[$Key] = $Value;
 		}
-		
+
 		foreach(array_keys($Answers) as $i) {
 			if (!isset($Votes[$i])) {
 				$Votes[$i] = 0;
@@ -202,7 +204,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		}
 		$Cache->cache_value('polls_'.$ThreadID, array($Question,$Answers,$Votes,$Featured,$Closed), 0);
 	}
-	
+
 	if (!empty($Votes)) {
 		$TotalVotes = array_sum($Votes);
 		$MaxVotes = max($Votes);
@@ -210,7 +212,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		$TotalVotes = 0;
 		$MaxVotes = 0;
 	}
-	
+
 	$RevealVoters = in_array($ForumID, $ForumsRevealVoters);
 	//Polls lose the you voted arrow thingy
 	$DB->query("SELECT Vote FROM forums_polls_votes WHERE UserID='".$LoggedUser['ID']."' AND TopicID='$ThreadID'");
@@ -230,7 +232,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			<p><strong><?=display_str($Question)?></strong></p>
 <?	if ($UserResponse !== null || $Closed || $ThreadInfo['IsLocked'] || !check_forumperm($ForumID)) { ?>
 			<ul class="poll nobullet">
-<?		
+<?
 		if(!$RevealVoters) {
 			foreach($Answers as $i => $Answer) {
 				if (!empty($Votes[$i]) && $TotalVotes > 0) {
@@ -273,11 +275,11 @@ if ($ThreadInfo['NoPoll'] == 0) {
 
 			$DB->query("SELECT fpv.Vote AS Vote,
 						GROUP_CONCAT(um.Username SEPARATOR ', ')
-						FROM users_main AS um 
+						FROM users_main AS um
 							LEFT JOIN forums_polls_votes AS fpv ON um.ID = fpv.UserID
 						WHERE TopicID = ".$ThreadID."
 						GROUP BY fpv.Vote");
-			
+
 			$StaffVotesTmp = $DB->to_array();
 			$StaffCount = count($StaffNames);
 
@@ -316,7 +318,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?
 		}
 
-	} else { 
+	} else {
 	//User has not voted
 ?>
 			<div id="poll_container">
@@ -366,7 +368,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <? } ?>
 		</div>
 	</div>
-<? 
+<?
 } //End Polls
 
 //Sqeeze in stickypost
@@ -383,7 +385,7 @@ foreach($Thread as $Key => $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
-<table class="forum_post box vertical_margin<? if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) { echo ' forum_unread'; } if($HeavyInfo['DisableAvatars']) { echo ' noavatar'; } ?>" id="post<?=$PostID?>">
+<table class="forum_post box vertical_margin<? if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) { echo ' forum_unread'; } if($HeavyInfo['DisableAvatars']) { echo ' noavatar'; } ?> <? if($ThreadInfo['OP'] == $AuthorID) { echo "important_user"; }?> id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<div style="float:left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
@@ -448,7 +450,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 				<br />
 				<br />
 <?	if(check_perms('site_admin_forums')) { ?>
-				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a> 
+				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a>
 <? 	} ?>
 				Last edited by
 				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
@@ -472,56 +474,64 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 	//TODO: Preview, come up with a standard, make it look like post or just a block of formatted BBcode, but decide and write some proper XHTML
 ?>
 			<br />
-			<h3>Post reply</h3>
-			<div class="box pad">
-				<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
-					<tr class="colhead_dark">
-						<td colspan="2">
-							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
+			<div id="reply_box">
+				<h3>Post reply</h3>
+				<div class="box pad">
+					<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
+						<tr class="colhead_dark">
+							<td colspan="2">
+								<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
 								by <?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?> Just now
-							</span>
-							<span id="barpreview" style="float:right;">
-								<a href="#quickreplypreview">[Report Post]</a>
-								&nbsp;
-								<a href="#">&uarr;</a>
-							</span>
-						</td>
-					</tr>
-					<tr>
-						<td class="avatar" valign="top">
-				<? if (!empty($LoggedUser['Avatar'])) { ?>
-							<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-				<? } else { ?>
-							<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-				<? } ?>
-						</td>
-						<td class="body" valign="top">
-							<div id="contentpreview" style="text-align:left;"></div>
-						</td>
-					</tr>
-				</table>
+								</span>
+								<span id="barpreview" style="float:right;">
+									<a href="#quickreplypreview">[Report Post]</a>
+									&nbsp;
+									<a href="#">&uarr;</a>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="avatar" valign="top">
+<? if (!empty($LoggedUser['Avatar'])) { ?>
+								<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
+<? } else { ?>
+								<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
+<? } ?>
+							</td>
+							<td class="body" valign="top">
+								<div id="contentpreview" style="text-align:left;"></div>
+							</td>
+						</tr>
+					</table>
 				<form class="send_form center" name="reply" id="quickpostform" action="" <? if(!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?> method="post">
-					<input type="hidden" name="action" value="reply" />
-					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					<input type="hidden" name="thread" value="<?=$ThreadID?>" />
+						<input type="hidden" name="action" value="reply" />
+						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+						<input type="hidden" name="thread" value="<?=$ThreadID?>" />
 
-					<div id="quickreplytext">
-						<textarea id="quickpost" style="width: 95%;" tabindex="1" onkeyup="resize('quickpost');" name="body" cols="90" rows="8"></textarea> <br />
-					</div>
-					<div>
+						<div id="quickreplytext">
+							<textarea id="quickpost" style="width: 95%;" tabindex="1" onkeyup="resize('quickpost');" name="body" cols="90" rows="8"></textarea> <br />
+						</div>
+						<div>
 <? if(!in_array($ThreadID, $UserSubscriptions)) { ?>
-						<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> tabindex="2" />
-						<label for="subscribebox">Subscribe</label>
+							<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> tabindex="2" />
+							<label for="subscribebox">Subscribe</label>
 <?
 }
 	if($ThreadInfo['LastPostAuthorID']==$LoggedUser['ID'] && (check_perms('site_forums_double_post') || in_array($ForumID, $ForumsDoublePost))) {
 ?>
-						<input id="mergebox" type="checkbox" name="merge" tabindex="2" />
-						<label for="mergebox">Merge</label>
+							<input id="mergebox" type="checkbox" name="merge" tabindex="2" />
+							<label for="mergebox">Merge</label>
 <? } ?>
 						<input id="post_preview" type="button" value="Preview" tabindex="1" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
 						<input type="submit" id="submit_button" value="Post reply" tabindex="1" />
 					</div>
+<?
+	if (!$LoggedUser['DisableAutoSave']) {
+?>
+					<script type="application/javascript">new StoreText('quickpost', 'quickpostform');</script>
+<?
+	}
+?>
 				</form>
 			</div>
 <?
@@ -562,7 +572,7 @@ if(check_perms('site_moderate_forums')) {
 				<td class="label">Move thread</td>
 				<td>
 					<select name="forumid" tabindex="2">
-<? 
+<?
 $OpenGroup = false;
 $LastCategoryID=-1;
 

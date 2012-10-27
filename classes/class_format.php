@@ -60,24 +60,39 @@ class Format {
 	 * @param int $Dividend AKA numerator
 	 * @param int $Divisor
 	 * @param boolean $Color if true, ratio will be coloured.
-	 * @return formatted ratio HTML
+	 * @return string formatted ratio HTML
 	 */
-	public static function get_ratio_html($Dividend, $Divisor, $Color = true) {
-		if ($Divisor == 0 && $Dividend == 0) {
-			return '--';
-		} elseif ($Divisor == 0) {
-			return '<span class="r99">∞</span>';
-		}
-		$Ratio = number_format(max($Dividend/$Divisor-0.005,0), 2); //Subtract .005 to floor to 2 decimals
-		if ($Color) {
-			$Class = Format::get_ratio_color($Ratio);
-			if ($Class) {
-				$Ratio = '<span class="'.$Class.'">'.$Ratio.'</span>';
-			}
-		}
+	public static function get_ratio_html($Dividend, $Divisor, $Color = true)
+	{
+		$Ratio = self::get_ratio($Dividend, $Divisor);
+
+		if ($Ratio === false) return '--';
+		if ($Ratio === '∞') return '<span class="r99" title="Infinite">∞</span>';
+
+		if ($Color)
+			$Ratio = sprintf('<span class="%s" title="%s">%s</span>',
+				self::get_ratio_color($Ratio),
+				self::get_ratio($Dividend, $Divisor, 5),
+				$Ratio
+			);
+
 		return $Ratio;
 	}
 
+	/**
+	 * Returns ratio
+	 * @param int $Dividend
+	 * @param int $Divisor
+	 * @return boolean|string|float
+	 */
+	public function get_ratio ($Dividend, $Divisor, $Decimal = 2)
+	{
+		if ($Divisor == 0 && $Dividend == 0) return false;
+		if ($Divisor == 0) return '∞';
+
+//		Subtract .005 to floor to 2 decimals
+		return number_format(max($Dividend/$Divisor - 0.005, 0), $Decimal);
+	}
 
 	/**
 	 * Gets the query string of the current page, minus the parameters in $Exclude
@@ -192,7 +207,7 @@ class Format {
 
 			$StartPosition = max($StartPosition, 1);
 
-			$QueryString = Format::get_url(array('page','post'));
+			$QueryString = self::get_url(array('page','post'));
 			if ($QueryString != '') {
 				$QueryString = '&amp;'.$QueryString;
 			}
@@ -254,7 +269,7 @@ class Format {
 		if (func_num_args() == 1 && $Steps >= 4) {
 			$Levels++;
 		}
-		return number_format($Size,$Levels) . $Units[$Steps];
+		return number_format($Size, $Levels) . $Units[$Steps];
 	}
 
 
@@ -364,7 +379,7 @@ class Format {
 	 */
 	public static function make_utf8($Str) {
 		if ($Str!="") {
-			if (Format::is_utf8($Str)) { $Encoding="UTF-8"; }
+			if (self::is_utf8($Str)) { $Encoding="UTF-8"; }
 			if (empty($Encoding)) { $Encoding=mb_detect_encoding($Str,'UTF-8, ISO-8859-1'); }
 			if (empty($Encoding)) { $Encoding="ISO-8859-1"; }
 			if ($Encoding=="UTF-8") { return $Str; }
@@ -393,4 +408,3 @@ class Format {
 	}
 
 }
-?>

@@ -2,7 +2,7 @@
 enforce_login();
 include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 
-// Number of users per page 
+// Number of users per page
 define('BOOKMARKS_PER_PAGE', '20');
 
 if (empty($_REQUEST['action'])) { $_REQUEST['action'] = 'view'; }
@@ -15,7 +15,11 @@ switch($_REQUEST['action']) {
 	case 'remove':
 		require(SERVER_ROOT.'/sections/bookmarks/remove.php');
 		break;
-		
+
+	case 'mass_edit':
+		require(SERVER_ROOT.'/sections/bookmarks/mass_edit.php');
+		break;
+
 	case 'remove_snatched':
 		authorize();
 		$DB->query("CREATE TEMPORARY TABLE snatched_groups_temp (GroupID int PRIMARY KEY)");
@@ -26,7 +30,18 @@ switch($_REQUEST['action']) {
 		header('Location: bookmarks.php');
 		die();
 		break;
-		
+
+	case 'edit':
+		if (empty($_REQUEST['type'])) { $_REQUEST['type'] = false; }
+		switch ($_REQUEST['type']) {
+			case 'torrents':
+				require(SERVER_ROOT.'/sections/bookmarks/edit_torrents.php');
+				break;
+			default : error(404);
+		}
+		break;
+
+
 	case 'view':
 		if (empty($_REQUEST['type'])) { $_REQUEST['type'] = 'torrents'; }
 		switch ($_REQUEST['type']) {
@@ -52,4 +67,3 @@ switch($_REQUEST['action']) {
 	default:
 		error(404);
 }
-?>
