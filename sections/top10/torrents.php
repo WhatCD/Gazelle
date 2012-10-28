@@ -40,7 +40,6 @@ if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Limit = in_array($Limit, array(10, 100, 250)) ? $Limit : 10;
 }
 $Filtered = !empty($Where);
-$SnatchedTorrents = Torrents::get_snatched_torrents();
 View::show_header('Top '.$Limit.' Torrents');
 ?>
 <div class="thin">
@@ -50,8 +49,7 @@ View::show_header('Top '.$Limit.' Torrents');
 			<a href="top10.php?type=torrents"><strong>[Torrents]</strong></a>
 			<a href="top10.php?type=users">[Users]</a>
 			<a href="top10.php?type=tags">[Tags]</a>
-			<!-- 			<a href="top10.php?type=votes">[Favorites]</a>
- -->
+			<a href="top10.php?type=votes">[Favorites]</a>
 		</div>
 	</div>
 <?
@@ -73,6 +71,7 @@ if(check_perms('site_advanced_top10')) {
 					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked':'')?>><label for="rdoAll"> All</label>&nbsp;
 					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked':'')?>><label for="rdoAny"> Any</label>
 				</td>
+			</tr>
 			<tr>
 				<td class="label">Format</td>
 				<td>
@@ -344,7 +343,7 @@ View::show_footer();
 
 // generate a table based on data from most recent query to $DB
 function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
-	global $LoggedUser,$Categories,$ReleaseTypes, $SnatchedTorrents;
+	global $LoggedUser,$Categories,$ReleaseTypes;
 ?>
 		<h3>Top <?=$Limit.' '.$Caption?>
 <?	if(empty($_GET['advanced'])){ ?> 
@@ -436,6 +435,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		if($GroupCategoryID==1 && $ReleaseType > 0) {
 			$DisplayName.= ' ['.$ReleaseTypes[$ReleaseType].']';
 		}
+
 		// append extra info to torrent title
 		$ExtraInfo='';
 		$AddExtra='';
@@ -448,15 +448,13 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		if($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
 		if($Year>0) { $ExtraInfo.=$AddExtra.$Year; $AddExtra=' '; }
 		if($RemasterTitle) { $ExtraInfo.=$AddExtra.$RemasterTitle; }
-		if(array_key_exists($TorrentID, $SnatchedTorrents)) { $ExtraInfo.=' / <strong>Snatched!</strong>'; }
+		if(Torrents::has_snatched($TorrentID)) { $ExtraInfo.=' / <strong class="snatched_torrent">Snatched!</strong>'; }
 		if($ExtraInfo!='') {
 			$ExtraInfo = "- [$ExtraInfo]";
 		}
-	
-		
-		
+
 		$TagList=array();
-		
+
 		$PrimaryTag = '';
 		if($TorrentTags!='') {
 			$TorrentTags=explode(' ',$TorrentTags);

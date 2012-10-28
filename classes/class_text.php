@@ -658,11 +658,12 @@ class TEXT {
 					break;
 				case 'headline':
 					$text = $this->to_html($Block['Val']);
+					$raw = $this->raw_text($Block['Val']);
 					if(!in_array($Block['Attr'], $this->HeadlineLevels)) {
 						$Str .= sprintf('%1$s%2$s%1$s', str_repeat('=', $Block['Attr'] + 1), $text);
 					} else {
-						$id = '_' . crc32($text . $this->HeadlineID);
-						if ($this->InQuotes === 0) $this->Headlines[] = array($Block['Attr'], $text, $id);
+						$id = '_' . crc32($raw . $this->HeadlineID);
+						if ($this->InQuotes === 0) $this->Headlines[] = array($Block['Attr'], $raw, $id);
 
 						$Str .= sprintf('<h%1$d id="%3$s">%2$s</h%1$d>', ($Block['Attr']+2), $text, $id);
 						$this->HeadlineID++;

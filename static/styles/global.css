@@ -238,8 +238,6 @@ span.secondary_class {
 	text-align: right;
 }
 
-<<<<<<<
-HEAD
 .paranoia_override {
 	font-style: italic;
 }
@@ -331,7 +329,8 @@ tr.torrent .bookmark>a:after {
 	width: 50%;
 	
 }
-.navigation_list {
+.navigation_list,
+.navigation_list ol {
 	list-style-position: inside;
 	margin-top: 10px;
 	margin-bottom: 20px;
@@ -348,6 +347,8 @@ tr.torrent .bookmark>a:after {
 .navigation_list li li li li {
     list-style-type: lower-alpha;
 }
+
+.torrent_table .group .votes_info_td strong { font-size: inherit; }
 
 .text_preview { min-height: 100px }
 

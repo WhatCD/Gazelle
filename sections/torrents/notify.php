@@ -65,7 +65,7 @@ if ($OrderTbl == 'tg') {
 
 	$DB->query("CREATE TEMPORARY TABLE temp_notify_torrents
 		(TorrentID int, GroupID int, UnRead tinyint, FilterID int, Year smallint, PRIMARY KEY(GroupID, TorrentID), KEY(Year)) ENGINE=MyISAM");
-	$DB->query("INSERT INTO temp_notify_torrents (TorrentID, GroupID, UnRead, FilterID)
+	$DB->query("INSERT IGNORE INTO temp_notify_torrents (TorrentID, GroupID, UnRead, FilterID)
 		SELECT t.ID, t.GroupID, unt.UnRead, unt.FilterID
 		FROM users_notify_torrents AS unt JOIN torrents AS t ON t.ID=unt.TorrentID
 		WHERE unt.UserID=$UserID".

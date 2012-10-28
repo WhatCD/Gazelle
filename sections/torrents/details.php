@@ -80,13 +80,6 @@ if ($TorrentTags != '') {
 	die();
 }*/
 
-$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
-}
-$SnatchedTorrents = Torrents::get_snatched_torrents();
 // Start output
 View::show_header($Title,'browse,comments,torrent,bbcode');
 ?>
@@ -365,8 +358,7 @@ if(count($Tags) > 0) {
 			</div>
 		</div>
 		
-<? //include(SERVER_ROOT.'/sections/torrents/vote.php'); 
-?>		
+<? include(SERVER_ROOT.'/sections/torrents/vote.php'); ?>		
 	</div>
 	<div class="main_column">
 		<table class="torrent_table details" id="torrent_details">
@@ -404,7 +396,7 @@ foreach ($TorrentList as $Torrent) {
 		$Snatched, $FreeTorrent, $TorrentTime, $Description, $FileList,
 		$FilePath, $UserID, $LastActive, $BadTags, $BadFolders, $BadFiles,
 		$CassetteApproved, $LossymasterApproved, $LossywebApproved, $LastReseedRequest,
-		$LogInDB, $HasFile, $PersonalFL) = array_values($Torrent);
+		$LogInDB, $HasFile, $PersonalFL, $IsSnatched) = array_values($Torrent);
 
 	if($Remastered && !$RemasterYear) {
 		$FirstUnknown = !isset($FirstUnknown);
@@ -473,7 +465,7 @@ foreach ($TorrentList as $Torrent) {
 	if(!$ExtraInfo) {
 		$ExtraInfo = $GroupName ; $AddExtra=' / ';
 	}
-	if(array_key_exists($TorrentID, $SnatchedTorrents)) {$ExtraInfo.=$AddExtra.'<strong>Snatched!</strong>'; $AddExtra=' / '; }
+	if($IsSnatched) { $ExtraInfo.=$AddExtra.'<strong class="snatched_torrent">Snatched!</strong>'; $AddExtra=' / '; }
 	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra.'<strong>Freeleech!</strong>'; $AddExtra=' / '; }
 	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra.'<strong>Neutral Leech!</strong>'; $AddExtra=' / '; }
 	if($PersonalFL) { $ExtraInfo.=$AddExtra.'<strong>Personal Freeleech!</strong>'; $AddExtra=' / '; }
@@ -535,8 +527,7 @@ foreach ($TorrentList as $Torrent) {
 			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
 				<td>
 					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$HasFile ? 'DL' : 'Missing'?></a>
-<?	if (($LoggedUser['FLTokens'] > 0) && $HasFile && ($Size < 1073741824) 
-		&& !$PersonalFL && ($FreeTorrent == '0') && ($LoggedUser['CanLeech'] == '1')) { ?>
+<?	if (Torrents::can_use_token($Torrent)) { ?>
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?	} ?>					
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
@@ -740,7 +731,7 @@ if(count($PersonalCollages)>0) {
 <?
 }
 // Matched Votes
-//include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
+include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 ?>
 		<div class="box">
 			<div class="head"><strong><?=(!empty($ReleaseType) ? $ReleaseTypes[$ReleaseType].' info' : 'Info' )?></strong></div>

@@ -487,25 +487,4 @@ class Users {
 
 		return array($K, $GroupIDs, $CollageDataList, $TorrentList);
 	}
-
-	/**
-	 * Returns a list of torrents that a user has spent tokens on
-	 * @global CACHE $Cache
-	 * @global DB_MYSQL $DB
-	 * @param type $UserID
-	 * @return type
-	 */
-	function token_torrents ($UserID)
-	{
-		global $Cache, $DB;
-
-		$UserID = (int) $UserID;
-		$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-		if (empty($TokenTorrents)) {
-			$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-			$TokenTorrents = $DB->collect('TorrentID');
-			$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
-		}
-		return $TokenTorrents;
-	}
 }

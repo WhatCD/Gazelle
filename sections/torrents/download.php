@@ -144,30 +144,6 @@ if($CategoryID == '1' && $Image != "") {
 
 $DB->query("INSERT IGNORE INTO users_downloads (UserID, TorrentID, Time) VALUES ('$UserID', '$TorrentID', '".sqltime()."')");
 
-$SnatchedTorrents = $Cache->get_value('users_snatched_'.$UserID);
-if (empty($SnatchedTorrents)) {
-	$DB->query("SELECT DISTINCT fid as TorrentID FROM xbt_snatched WHERE uid='$UserID' ORDER BY TorrentID ASC");
-	$SnatchedTorrents = array_flip($DB->collect('TorrentID'));
-	$Cache->cache_value('users_snatched_'.$UserID, $SnatchedTorrents, 86400);
-}
-if(!array_key_exists($TorrentID, $SnatchedTorrents)) {
-	$SnatchedTorrents[$TorrentID] = 1;
-	$Cache->cache_value('users_snatched_'.$UserID, $SnatchedTorrents, 86400);
-}
-
-
-$SnatchedTorrents = $Cache->get_value('users_snatched_'.$UserID);
-if (empty($SnatchedTorrents)) {
-	$DB->query("SELECT DISTINCT fid as TorrentID FROM xbt_snatched WHERE uid='$UserID' ORDER BY TorrentID ASC");
-	$SnatchedTorrents = array_flip($DB->collect('TorrentID'));
-	$Cache->cache_value('users_snatched_'.$UserID, $SnatchedTorrents, 86400);
-}
-if(!array_key_exists($TorrentID, $SnatchedTorrents)) {
-	$SnatchedTorrents[$TorrentID] = 1;
-	$Cache->cache_value('users_snatched_'.$UserID, $SnatchedTorrents, 86400);
-}
-
-
 
 $DB->query("SELECT File FROM torrents_files WHERE TorrentID='$TorrentID'");
 

@@ -244,37 +244,46 @@ function AddPollOption(id) {
  * HTML5-compatible storage system
  * Tries to use 'oninput' event to detect text changes and sessionStorage to save it.
  *
- * new StoreText('some_textarea_id', 'some_form_id')
+ * new StoreText('some_textarea_id', 'some_form_id', 'some_topic_id')
  * The form is required to remove the stored text once it is submitted.
+ *
+ * Topic ID is required to retrieve the right text on the right topic
  **/
-function StoreText (field, form) {
+function StoreText (field, form, topic) {
 	this.field = document.getElementById(field);
 	this.form = document.getElementById(form);
 	this.key = 'auto_save_temp';
+	this.keyID = 'auto_save_temp_id';
+	this.topic = +topic;
 	this.load();
 }
 StoreText.prototype = {
 	constructor : StoreText,
 	load : function () {
-		if(this.field && this.enabled()){
+		if (this.enabled() && this.valid()) {
 			this.retrieve();
 			this.autosave();
 			this.clearForm();
 		}
+	},
+	valid : function () {
+		return this.field && this.form && !isNaN(this.topic);
 	},
 	enabled : function () {
 		return window.sessionStorage && typeof window.sessionStorage === 'object';
 	},
 	retrieve : function () {
 		var r = sessionStorage.getItem(this.key);
-		if (r) {
-			this.field.value = sessionStorage.getItem(this.key);
+		if (this.topic === +sessionStorage.getItem(this.keyID) && r) {
+			this.field.value = r;
 		}
 	},
 	remove : function () {
+		sessionStorage.removeItem(this.keyID);
 		sessionStorage.removeItem(this.key);
 	},
 	save : function () {
+		sessionStorage.setItem(this.keyID, this.topic);
 		sessionStorage.setItem(this.key, this.field.value);
 	},
 	autosave : function () {

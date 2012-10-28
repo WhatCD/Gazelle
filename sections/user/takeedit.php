@@ -196,7 +196,6 @@ $Options['NotifyOnQuote'] = (!empty($_POST['notifyquotes']) ? 1 : 0);
 $Options['ShowSnatched'] = (!empty($_POST['showsnatched']) ? 1 : 0);
 
 
-
 if(isset($LoggedUser['DisableFreeTorrentTop10'])) {
 	$Options['DisableFreeTorrentTop10'] = $LoggedUser['DisableFreeTorrentTop10'];
 }

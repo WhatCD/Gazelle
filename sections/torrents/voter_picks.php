@@ -28,7 +28,7 @@ if ($Top10 === False) {
 
 	arsort($GroupScores);
 	$Top10 = array_slice($GroupScores, 0, 10, true);
-	$Cache->cache_value('similar_albums_'.$GroupID, $Top10, 12*3600);
+	$Cache->cache_value('similar_albums_'.$GroupID, $Top10, 2*3600);
 }
 if (count($Top10) > 0) {
 ?>

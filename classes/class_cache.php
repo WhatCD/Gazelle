@@ -40,7 +40,8 @@ class CACHE extends Memcache {
 		'top10tor_*',
 		'query_lock_*',
 		'top10votes_*',
-		'similar_albums_*'
+		'similar_albums_*',
+		'users_snatched_*'
 	);
 
 	public $CanClear = false;
@@ -129,8 +130,8 @@ class CACHE extends Memcache {
 		}
 
 		$Return = $this->get($Key);
-		if ($Return !== false && !$NoCache) {
-			$this->CacheHits[$Key] = $Return;
+		if ($Return !== false) {
+			$this->CacheHits[$Key] = $NoCache ? null : $Return;
 		}
 		$this->Time+=(microtime(true)-$StartTime)*1000;
 		return $Return;

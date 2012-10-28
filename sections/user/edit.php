@@ -52,9 +52,6 @@ function checked($Checked) {
 	return $Checked ? 'checked="checked"' : '';
 }
 
-$DB->query("SELECT COUNT(x.uid) FROM xbt_snatched AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID'");
-list($Snatched) = $DB->next_record();
-
 if ($SiteOptions) { 
 	$SiteOptions = unserialize($SiteOptions); 
 } else { 
@@ -141,7 +138,6 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<input type="checkbox" name="showsnatched" id="showsnatched" <? if (!empty($SiteOptions['ShowSnatched'])) { ?>checked="checked"<? } ?> />
 					<label for="showsnatched">"Snatched!" next to snatched torrents</label>
-				</td>
 				</td>
 			</tr>
 			<tr>
@@ -303,7 +299,6 @@ else {
 					<label for="disableavatars">Disable avatars</label>
 				</td>
 			</tr>
-<? /*
               <tr>
                 <td class="label"><strong>Push Notifications</strong></td>
                 <td>
@@ -327,15 +322,13 @@ else {
                     <br />
                     <input type="checkbox" name="pushfilters[]" value="News" <? if(isset($PushOptions['PushFilters']['News'])) { ?> checked="checked"  <? } ?>/>Announcements<br />
                     <input type="checkbox" name="pushfilters[]" value="PM" <? if(isset($PushOptions['PushFilters']['PM'])) { ?> checked="checked"  <? } ?>/>Private Messages<br />
-                   <? 
-					<input type="checkbox" name="pushfilters[]" value="Rippy" <? if(isset($PushOptions['PushFilters']['Rippy'])) { ?> checked="checked"  <? } ?>/>Rippys<br /> 
-					?>
+			<? /*		<input type="checkbox" name="pushfilters[]" value="Rippy" <? if(isset($PushOptions['PushFilters']['Rippy'])) { ?> checked="checked"  <? } ?>/>Rippys<br /> */ ?>
+					
                    [<a href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Test Push</a>]
-                    	[<a href="wiki.php?action=article&id=1017>">Wiki Guide</a>]
+                    	[<a href="wiki.php?action=article&id=1017">Wiki Guide</a>]
                     </div>
                  </td>
             </tr>
-            */ ?>
         <tr>
 				<td class="label"><strong>Rippy!</strong></td>
 				<td>
@@ -407,7 +400,7 @@ else {
 				<td class="label">&nbsp;</td>
 				<td>
 					<p><span class="warning">Note: Paranoia has nothing to do with your security on this site; the only thing affected by this setting is other users' ability to see your site activity and taste in music.</span></p>
-					<p>Select the elements <strong>you want to show</strong> on your profile. For example, if you tick "Show count" for "Snatched", users will be able to see that you have snatched <?=number_format($Snatched)?> torrents. If you tick "Show list", they will be able to see the full list of torrents you've snatched.</p>
+					<p>Select the elements <strong>you want to show</strong> on your profile. For example, if you tick "Show count" for "Snatched", users will be able to see how many torrents you have snatched. If you tick "Show list", they will be able to see the full list of torrents you've snatched.</p>
 					<p><span class="warning">Some information will still be available in the site log.</span></p>
 				</td>
 			</tr>

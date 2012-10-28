@@ -80,7 +80,7 @@ $DB->set_query_id($Comments);
 
 while(list($UserID, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $EditedTime, $EditorID) = $DB->next_record()) {
   $permalink = "torrents.php?id=$GroupID&amp;postid=$PostID#post$PostID";
-  $postheader = " on " . Artists::display_artists($Artists[$GroupID]) . " <a href=\"torrents.php?id=$GroupID?>\">$Title</a>";
+  $postheader = " on " . Artists::display_artists($Artists[$GroupID]) . " <a href=\"torrents.php?id=$GroupID\">$Title</a>";
 
   comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorID, $AddedTime, $EditedTime);
 

@@ -40,7 +40,7 @@ list($NumResults) = $DB->next_record();
 	<div class="header">
 		<h2>
 			Quote notifications
-			<?=$NumResults ? " ($NumResults new)" : ""
+			<?=$NumResults && !empty($UnreadSQL) ? " ($NumResults new)" : ""
 			?>
 		</h2>
 		<div class="linkbox pager">

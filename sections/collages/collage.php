@@ -16,19 +16,13 @@ $Text = new TEXT;
 $CollageID = $_GET['id'];
 if(!is_number($CollageID)) { error(0); }
 
-$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
-}
-$SnatchedTorrents = Torrents::get_snatched_torrents();
-
 $Data = $Cache->get_value('collage_'.$CollageID);
 
 if($Data) {
-	$Data = unserialize($Data);
-	list($K, list($Name, $Description, $CollageDataList, $TorrentList, $CommentList, $Deleted, $CollageCategoryID, $CreatorID)) = each($Data);
+	if (!is_array($Data)) {
+		$Data = unserialize($Data);
+	}
+	list($K, list($Name, $Description, ,,,, $CommentList, $Deleted, $CollageCategoryID, $CreatorID)) = each($Data);
 } else {
 	$DB->query("SELECT Name, Description, UserID, Deleted, CategoryID, Locked, MaxGroups, MaxGroupsPerUser FROM collages WHERE ID='$CollageID'");
 	if($DB->record_count() > 0) {
@@ -69,27 +63,26 @@ $DB->query("UPDATE users_collage_subs SET LastVisit=NOW() WHERE UserID = ".$Logg
 
 
 // Build the data for the collage and the torrent list
-if(!is_array($TorrentList)) {
-	$DB->query("SELECT ct.GroupID,
-			tg.WikiImage,
-			tg.CategoryID,
-			um.ID,
-			um.Username
-			FROM collages_torrents AS ct
-			JOIN torrents_group AS tg ON tg.ID=ct.GroupID
-			LEFT JOIN users_main AS um ON um.ID=ct.UserID
-			WHERE ct.CollageID='$CollageID'
-			ORDER BY ct.Sort");
-	
-	$GroupIDs = $DB->collect('GroupID');
-	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
-	if(count($GroupIDs)>0) {
-		$TorrentList = Torrents::get_groups($GroupIDs);
-		$TorrentList = $TorrentList['matches'];
-	} else {
-		$TorrentList = array();
-	}
+$DB->query("SELECT ct.GroupID,
+		tg.WikiImage,
+		tg.CategoryID,
+		um.ID,
+		um.Username
+		FROM collages_torrents AS ct
+		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
+		LEFT JOIN users_main AS um ON um.ID=ct.UserID
+		WHERE ct.CollageID='$CollageID'
+		ORDER BY ct.Sort");
+
+$GroupIDs = $DB->collect('GroupID');
+$CollageDataList = $DB->to_array('GroupID', MYSQLI_ASSOC);
+if(count($GroupIDs)>0) {
+	$TorrentList = Torrents::get_groups($GroupIDs);
+	$TorrentList = $TorrentList['matches'];
+} else {
+	$TorrentList = array();
 }
+
 
 // Loop through the result set, building up $Collage and $TorrentTable
 // Then we print them.
@@ -246,16 +239,11 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		<td colspan="3">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-<?			if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824) 
-				&& !$Torrent['PersonalFL'] && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+<?			if (Torrents::can_use_token($Torrent)) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?			} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
-<?			if(array_key_exists($TorrentID, $SnatchedTorrents)) {
-				$Torrent['SnatchedTorrent'] = '1';
-			}
-?>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
@@ -272,9 +260,14 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		
 		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 
-		if(!empty($Torrent['FreeTorrent'])) {
-			$DisplayName .=' <strong>Freeleech!</strong>';
-		} elseif($Torrent['PersonalFL']) {
+		if ($Torrent['IsSnatched']) {
+			$DisplayName .= ' <strong class="snatched_torrent">Snatched!</strong>';
+		}
+		if ($Torrent['FreeTorrent'] == '1') {
+			$DisplayName .= ' <strong>Freeleech!</strong>';
+		} elseif ($Torrent['FreeTorrent'] == '2') {
+			$DisplayName .= ' <strong>Neutral Leech!</strong>';
+		} elseif ($Torrent['PersonalFL']) {
 			$DisplayName .= $AddExtra.'<strong>Personal Freeleech!</strong>';
 		}
 ?>
@@ -287,8 +280,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		<td>
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-<?		if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824) 
-			&& !$Torrent['PersonalFL'] && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+<?		if (Torrents::can_use_token($Torrent)) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?>						
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
@@ -570,7 +562,7 @@ if(empty($CommentList)) {
 		LEFT JOIN users_main AS um ON um.ID=cc.UserID
 		WHERE CollageID='$CollageID' 
 		ORDER BY ID DESC LIMIT 15");
-	$CommentList = $DB->to_array();	
+	$CommentList = $DB->to_array(false, MYSQLI_NUM);
 }
 foreach ($CommentList as $Comment) {
 	list($CommentID, $Body, $UserID, $Username, $CommentTime) = $Comment;
@@ -651,5 +643,5 @@ if($CollageCovers != 0) { ?>
 <?
 View::show_footer();
 
-$Cache->cache_value('collage_'.$CollageID, serialize(array(array($Name, $Description, $CollageDataList, $TorrentList, $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser))), 3600);
+$Cache->cache_value('collage_'.$CollageID, array(array($Name, $Description, array(), array(), $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser)), 3600);
 ?>

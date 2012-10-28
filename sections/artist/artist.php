@@ -23,16 +23,20 @@ if(!is_number($ArtistID)) { error(0); }
 
 if(!empty($_GET['revisionid'])) { // if they're viewing an old revision
 	$RevisionID=$_GET['revisionid'];
-	if(!is_number($RevisionID)){ error(0); }
-	$Data = $Cache->get_value("artist_$ArtistID"."_revision_$RevisionID");
+	if(!is_number($RevisionID)) {
+		error(0);
+	}
+	$Data = $Cache->get_value("artist_$ArtistID"."_revision_$RevisionID", true);
 } else { // viewing the live version
-	$Data = $Cache->get_value('artist_'.$ArtistID);
+	$Data = $Cache->get_value('artist_'.$ArtistID, true);
 	$RevisionID = false;
 }
-if($Data) {
-	$Data = unserialize($Data);
-	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $Importances, $VanityHouseArtist)) = each($Data);
 
+if($Data) {
+	if (!is_array($Data)) {
+		$Data = unserialize($Data);
+	}
+	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, ,,,, $VanityHouseArtist)) = each($Data);
 } else {
 	if ($RevisionID) {
 		$sql = "SELECT
@@ -61,14 +65,6 @@ if($Data) {
 	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record(MYSQLI_NUM, array(0));
 }
 
-$TokenTorrents = $Cache->get_value('users_tokens_'.$UserID);
-if (empty($TokenTorrents)) {
-	$DB->query("SELECT TorrentID FROM users_freeleeches WHERE UserID=$UserID AND Expired=FALSE");
-	$TokenTorrents = $DB->collect('TorrentID');
-	$Cache->cache_value('users_tokens_'.$UserID, $TokenTorrents);
-}
-
-$SnatchedTorrents = Torrents::get_snatched_torrents();
 
 //----------------- Build list and get stats
 
@@ -102,23 +98,22 @@ if(!is_array($Requests)) {
 }
 $NumRequests = count($Requests);
 
+
 $LastReleaseType = 0;
-if(empty($Importances) || empty($TorrentList)) {
-	$DB->query("SELECT
-			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.ReleaseType
-			FROM torrents_artists AS ta
-			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),1000 + ta.Importance, tg.ReleaseType) ASC,
-			    tg.Year DESC, tg.Name DESC");
-	$GroupIDs = $DB->collect('GroupID');
-	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
-	if(count($GroupIDs)>0) {
-		$TorrentList = Torrents::get_groups($GroupIDs, true,true);
-		$TorrentList = $TorrentList['matches'];
-	} else {
-		$TorrentList = array();
-	}
+$DB->query("SELECT
+		DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
+		FROM torrents_artists AS ta
+		JOIN torrents_group AS tg ON tg.ID=ta.GroupID
+		WHERE ta.ArtistID='$ArtistID'
+		ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),1000 + ta.Importance, tg.ReleaseType) ASC,
+		    tg.Year DESC, tg.Name DESC");
+$GroupIDs = $DB->collect('GroupID');
+$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
+if(count($GroupIDs)>0) {
+	$TorrentList = Torrents::get_groups($GroupIDs, true,true);
+	$TorrentList = $TorrentList['matches'];
+} else {
+	$TorrentList = array();
 }
 $NumGroups = count($TorrentList);
 
@@ -182,10 +177,16 @@ if(!empty($LoggedUser['SortHide'])) {
 	$SortOrder = array_keys($LoggedUser['SortHide']);
 	uasort($Importances, function ($a, $b) {
 		global $SortOrder;
+//		global $Debug;
+//		$Debug->log_var($a);
 		$c = array_search($a['ReleaseType'], $SortOrder);
 		$d = array_search($b['ReleaseType'], $SortOrder);
 		if ($c == $d) {
-			return 0;
+			if ($a['Year'] == $b['Year']) {
+				return 0;
+			} else {
+				return ($a['Year'] > $b['Year']) ? -1 : 1;
+			}
 		}
 		return $c < $d ? -1 : 1;
 	});
@@ -449,16 +450,11 @@ foreach ($Importances as $Group) {
 		<td colspan="2">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>
-<?		if (($LoggedUser['FLTokens'] > 0) && ($Torrent['Size'] < 1073741824)
-			&& !$Torrent['PersonalFL'] && empty($Torrent['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')) { ?>
+<?		if (Torrents::can_use_token($Torrent)) { ?>
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?> ]
-			</span> 
-<? 		if(array_key_exists($TorrentID, $SnatchedTorrents)) {
-				$Torrent['SnatchedTorrent'] = '1';
-		}
-?>
-		&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
+			</span>
+			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
@@ -967,7 +963,7 @@ echo $Pages;
 
 //---------- Begin printing
 foreach($Thread as $Key => $Post){
-	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
+	list($PostID, $AuthorID, $AddedTime, $CommentBody, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
@@ -1014,7 +1010,7 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 ?>
 		<td class="body" valign="top">
 			<div id="content<?=$PostID?>">
-<?=$Text->full_format($Body)?>
+<?=$Text->full_format($CommentBody)?>
 <? if($EditedUserID){ ?>
 				<br />
 				<br />
@@ -1088,7 +1084,7 @@ if($RevisionID) {
 	$Key = 'artist_'.$ArtistID;
 }
 
-$Data = serialize(array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $Importances, $VanityHouseArtist)));
+$Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), array(), $VanityHouseArtist));
 
 $Cache->cache_value($Key, $Data, 3600);
 ?>

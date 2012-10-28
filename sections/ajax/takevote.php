@@ -39,22 +39,27 @@ if ($_REQUEST['do'] == 'vote') {
 	}
 	$Type = ($_REQUEST['vote'] == 'up')?"Up":"Down";
 	
+	// Update the two votes tables if needed
+	$DB->query("INSERT IGNORE INTO users_votes (UserID, GroupID, Type) VALUES ($UserID, $GroupID, '$Type')");
+	if ($DB->affected_rows() == 0) {
+		echo 'noaction';
+		die();
+	}
+	
 	// Update the group's cache key
 	$GroupVotes['Total'] += 1;
 	if ($Type == "Up") {
 		$GroupVotes['Ups'] += 1;
 	}
 	$Cache->cache_value('votes_'.$GroupID, $GroupVotes);
-
-	// Update the two votes tables
-	$DB->query("INSERT INTO users_votes (UserID, GroupID, Type) VALUES ($UserID, $GroupID, '$Type') ON DUPLICATE KEY UPDATE Type = '$Type'");
+	
 	// If the group has no votes yet, we need an insert, otherwise an update
 	// so we can cut corners and use the magic of INSERT...ON DUPLICATE KEY UPDATE...
 	// to accomplish both in one query
 	$DB->query("INSERT INTO torrents_votes (GroupID, Total, Ups, Score)
 				VALUES ($GroupID, 1, ".($Type=='Up'?1:0).", 0)
 				ON DUPLICATE KEY UPDATE Total = Total + 1, 
-				Score = binomial_ci(".$GroupVotes['Ups'].",". $GroupVotes['Total'].")".
+				Score = IFNULL(binomial_ci(".$GroupVotes['Ups'].",". $GroupVotes['Total']."),0)".
 				($Type=='Up'?', Ups = Ups+1':''));
 	
 	$UserVotes[$GroupID] = array('GroupID' => $GroupID, 'Type' => $Type);
@@ -137,7 +142,7 @@ if ($_REQUEST['do'] == 'vote') {
 	$Cache->cache_value('votes_'.$GroupID, $GroupVotes);
 
 	$DB->query("UPDATE torrents_votes SET Total = GREATEST(0, Total - 1),
-				Score = binomial_ci(".$GroupVotes['Ups'].",".$GroupVotes['Total'].")".
+				Score = IFNULL(binomial_ci(".$GroupVotes['Ups'].",".$GroupVotes['Total']."),0)".
 			    ($Type=='Up'?', Ups = GREATEST(0, Ups - 1)':'')."
 				WHERE GroupID=$GroupID");
 	// Update paired cache keys

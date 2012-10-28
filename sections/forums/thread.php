@@ -385,7 +385,16 @@ foreach($Thread as $Key => $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
-<table class="forum_post box vertical_margin<? if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) { echo ' forum_unread'; } if($HeavyInfo['DisableAvatars']) { echo ' noavatar'; } ?> <? if($ThreadInfo['OP'] == $AuthorID) { echo "important_user"; }?> id="post<?=$PostID?>">
+<table class="forum_post box vertical_margin<?
+		if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) {
+			echo ' forum_unread';
+		}
+		if ($HeavyInfo['DisableAvatars']) {
+			echo ' noavatar';
+		}
+		if ($ThreadInfo['OP'] == $AuthorID) {
+			echo ' important_user';
+		} ?>" id="post<?=$PostID?>">
 	<tr class="colhead_dark">
 		<td colspan="2">
 			<div style="float:left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
@@ -528,7 +537,7 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 <?
 	if (!$LoggedUser['DisableAutoSave']) {
 ?>
-					<script type="application/javascript">new StoreText('quickpost', 'quickpostform');</script>
+					<script type="application/javascript">new StoreText('quickpost', 'quickpostform', <?=$ThreadID?>);</script>
 <?
 	}
 ?>

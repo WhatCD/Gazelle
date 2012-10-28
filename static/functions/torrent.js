@@ -253,7 +253,12 @@ function Vote(amount, requestid) {
 	);
 }
 
+var voteLock = false;
 function DownVoteGroup(groupid, authkey) {
+	if (voteLock) {
+		return;
+	}
+	voteLock = true;
 	ajax.get('ajax.php?action=votefavorite&do=vote&groupid='+groupid+'&vote=down'+'&auth='+authkey, function (response) {
 			if (response == 'noaction') {
 				//No increment
@@ -266,9 +271,14 @@ function DownVoteGroup(groupid, authkey) {
 	$('#unvote_message').show();
 	$('#upvoted').hide();
 	$('#downvoted').show();
+	voteLock = false;
 }
 
 function UpVoteGroup(groupid, authkey) {
+	if (voteLock) {
+		return;
+	}
+	voteLock = true;
 	ajax.get('ajax.php?action=votefavorite&do=vote&groupid='+groupid+'&vote=up'+'&auth='+authkey, function (response) {
 			if (response == 'noaction') {
 				//No increment
@@ -283,9 +293,14 @@ function UpVoteGroup(groupid, authkey) {
 	$('#unvote_message').show();
 	$('#upvoted').show();
 	$('#downvoted').hide();
+	voteLock = false;
 }
 
 function UnvoteGroup(groupid, authkey) {
+	if (voteLock) {
+		return;
+	}
+	voteLock = true;
 	ajax.get('ajax.php?action=votefavorite&do=unvote&groupid='+groupid+'&auth='+authkey, function (response) {
 			if (response == 'noaction') {
 				//No increment
@@ -301,4 +316,5 @@ function UnvoteGroup(groupid, authkey) {
 	$('#unvote_message').hide();
 	$('#upvoted').hide();
 	$('#downvoted').hide();
+	voteLock = false;
 }

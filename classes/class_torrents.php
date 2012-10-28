@@ -24,7 +24,7 @@ class Torrents {
 	 *			GroupID, Media, Format, Encoding, RemasterYear, Remastered,
 	 *			RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, Scene,
 	 *			HasLog, HasCue, LogScore, FileCount, FreeTorrent, Size, Leechers,
-	 *			Seeders, Snatched, Time, HasFile, PersonalFL
+	 *			Seeders, Snatched, Time, HasFile, PersonalFL, IsSnatched
 	 *		}
 	 *	}
 	 *	ExtendedArtists => {
@@ -34,14 +34,14 @@ class Torrents {
 	 *	}
 	 */
 	public static function get_groups($GroupIDs, $Return = true, $GetArtists = true, $Torrents = true) {
-		global $DB, $Cache;
-		
+		global $DB, $Cache, $Debug;
+
 		// Make sure there's something in $GroupIDs, otherwise the SQL
 		// will break
 		if (count($GroupIDs) == 0) {
 			return array('matches'=>array(),'notfound'=>array());
 		}
-		
+
 		$Found = array_flip($GroupIDs);
 		$NotFound = array_flip($GroupIDs);
 		$Key = $Torrents ? 'torrent_group_' : 'torrent_group_light_';
@@ -99,6 +99,7 @@ class Torrents {
 					$Cache->cache_value('torrent_group_light_'.$Torrent['GroupID'],
 							array('ver'=>4, 'd'=>$Found[$Torrent['GroupID']]), 0);
 				}
+
 			} else {
 				foreach ($Found as $Group) {
 					$Cache->cache_value('torrent_group_light_'.$Group['ID'], array('ver'=>4, 'd'=>$Found[$Group['ID']]), 0);
@@ -129,6 +130,7 @@ class Torrents {
 					array_walk($Group['Torrents'], 'self::torrent_properties');
 				}
 			}
+
 			$Matches = array('matches'=>$Found, 'notfound'=>array_flip($NotFound));
 
 			return $Matches;
@@ -144,6 +146,7 @@ class Torrents {
 	 */
 	public static function torrent_properties(&$Torrent, $TorrentID) {
 		$Torrent['PersonalFL'] = empty($Torrent['FreeTorrent']) && self::has_token($TorrentID);
+		$Torrent['IsSnatched'] = self::has_snatched($TorrentID);
 	}
 
 
@@ -441,7 +444,7 @@ class Torrents {
 			if (!empty($Data['RemasterTitle'])) { $EditionInfo[]=$Data['RemasterTitle']; }
 			if (count($EditionInfo)) { $Info[]=implode(' ',$EditionInfo); }
 		}
-		if ($Data['SnatchedTorrent'] == '1') { $Info[]='<strong>Snatched!</strong>'; }
+		if ($Data['IsSnatched']) { $Info[]='<strong class="snatched_torrent">Snatched!</strong>'; }
 		if ($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
 		if ($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
 		if ($Data['PersonalFL']) { $Info[]='<strong>Personal Freeleech!</strong>'; }
@@ -505,6 +508,7 @@ class Torrents {
 		}
 	}
 
+
 	/**
 	 * Check if the logged in user has an active freeleech token
 	 *
@@ -513,7 +517,7 @@ class Torrents {
 	 */
 	public static function has_token($TorrentID) {
 		global $DB, $Cache, $LoggedUser;
-		if (empty($LoggedUser) || empty($LoggedUser['ID'])) {
+		if (empty($LoggedUser)) {
 			return false;
 		}
 
@@ -539,7 +543,7 @@ class Torrents {
 	 */
 	public static function can_use_token($Torrent) {
 		global $LoggedUser;
-		if (empty($LoggedUser) || empty($LoggedUser['ID'])) {
+		if (empty($LoggedUser)) {
 			return false;
 		}
 		return ($LoggedUser['FLTokens'] > 0
@@ -548,23 +552,73 @@ class Torrents {
 			&& empty($Torrent['FreeTorrent'])
 			&& $LoggedUser['CanLeech'] == '1');
 	}
+
 	
-	public static function get_snatched_torrents($UserID = false) {
+	public static function has_snatched($TorrentID) {
 		global $DB, $Cache, $LoggedUser;
-		if($LoggedUser['ShowSnatched']) { 
-			$UserID = $LoggedUser['ID'];
-			$SnatchedTorrents = $Cache->get_value('users_snatched_'.$UserID);
-			if (empty($SnatchedTorrents)) {
-				$DB->query("SELECT DISTINCT fid as TorrentID FROM xbt_snatched WHERE uid='$UserID'");
-				$SnatchedTorrents = array_flip($DB->collect('TorrentID'));
-				$Cache->cache_value('users_snatched_'.$UserID, $SnatchedTorrents, 86400);
+		if (empty($LoggedUser) || !$LoggedUser['ShowSnatched']) {
+			return false;
+		}
+
+		$UserID = $LoggedUser['ID'];
+		$Buckets = 64;
+		$LastBucket = $Buckets - 1;
+		$BucketID = $TorrentID & $LastBucket;
+		static $SnatchedTorrents = array(), $LastUpdate = 0;
+
+		if (empty($SnatchedTorrents)) {
+			$SnatchedTorrents = array_fill(0, $Buckets, false);
+			$LastUpdate = $Cache->get_value('users_snatched_'.$UserID.'_lastupdate') ?: 0;
+		} else if (isset($SnatchedTorrents[$BucketID][$TorrentID])) {
+			return true;
+		}
+
+		// Torrent was not found in the previously inspected snatch lists
+		$CurSnatchedTorrents =& $SnatchedTorrents[$BucketID];
+		if (empty($CurSnatchedTorrents)) {
+			$CurTime = time();
+			// This bucket hasn't been checked before
+			$CurSnatchedTorrents = $Cache->get_value('users_snatched_'.$UserID.'_'.$BucketID, true);
+			if ($CurSnatchedTorrents === false || $CurTime - $LastUpdate > 1800) {
+				if ($CurSnatchedTorrents === false) {
+					// Not found in cache. Since we don't have a suitable index, it's faster to update everything
+					$DB->query("SELECT fid, tstamp AS TorrentID FROM xbt_snatched WHERE uid='$UserID'");
+				} elseif (isset($CurSnatchedTorrents[$TorrentID])) {
+					// Old cache, but torrent is snatched, so no need to update
+					return true;
+				} else {
+					// Old cache, check if torrent has been snatched recently
+					$DB->query("SELECT fid AS TorrentID FROM xbt_snatched WHERE uid='$UserID' AND tstamp>=".$LastUpdate);
+				}
+				$Updated = array();
+				while (list($ID) = $DB->next_record(MYSQLI_NUM, false)) {
+					$CurBucketID = $ID & $LastBucket;
+					if ($SnatchedTorrents[$CurBucketID] === false) {
+						$SnatchedTorrents[$CurBucketID] = $Cache->get_value('users_snatched_'.$UserID.'_'.$CurBucketID, true);
+						if ($SnatchedTorrents[$CurBucketID] === false) {
+							$SnatchedTorrents[$CurBucketID] = array();
+						}
+					}
+					$SnatchedTorrents[$CurBucketID][(int)$ID] = true;
+					$Updated[$CurBucketID] = true;
+				}
+				for ($i = 0; $i < $Buckets; $i++) {
+					if (empty($SnatchedTorrents[$i])) {
+						$SnatchedTorrents[$i] = $Cache->get_value('users_snatched_'.$UserID.'_'.$i, true);
+						if ($SnatchedTorrents[$i] === false) {
+							// No snatched torrents with this bucket number
+							$SnatchedTorrents[$i] = array();
+							$Updated[$i] = true;
+						}
+					}
+					if ($Updated[$i]) {
+						$Cache->cache_value('users_snatched_'.$UserID.'_'.$i, $SnatchedTorrents[$i], 0);
+					}
+				}
+				$Cache->cache_value('users_snatched_'.$UserID.'_lastupdate', $CurTime, 21600);
 			}
 		}
-		else {
-			$SnatchedTorrents = array();
-		}
-		return $SnatchedTorrents;
+		return isset($CurSnatchedTorrents[$TorrentID]);
 	}
-	
 }
 ?>
