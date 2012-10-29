@@ -68,7 +68,7 @@ $Pages=Format::get_pages($Page, $NumResults, 25);
 
 ?>
 <div class="header">
-	<h2>Freeleech token history for <?=Users::format_username($UserID, true, true, true)?></h2>
+	<h2>Freeleech token history for <?=Users::format_username($UserID, false, false, false)?></h2>
 </div>
 <div class="linkbox"><?=$Pages?></div>
 <table>

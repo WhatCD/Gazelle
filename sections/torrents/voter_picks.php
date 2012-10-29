@@ -5,7 +5,7 @@ include(SERVER_ROOT.'/sections/torrents/ranking_funcs.php');
 $Top10 = $Cache->get_value('similar_albums_'.$GroupID);
 if ($Top10 === False) {
 
-	$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID);
+	$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
 	if ($VotePairs === False) {
 		$DB->query("SELECT v.GroupID, SUM(IF(v.Type='Up',1,0)) AS Ups, COUNT(1) AS Total
 					FROM (SELECT UserID FROM users_votes WHERE GroupID = $GroupID AND Type='Up') AS a

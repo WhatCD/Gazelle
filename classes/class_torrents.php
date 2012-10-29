@@ -615,7 +615,8 @@ class Torrents {
 						$Cache->cache_value('users_snatched_'.$UserID.'_'.$i, $SnatchedTorrents[$i], 0);
 					}
 				}
-				$Cache->cache_value('users_snatched_'.$UserID.'_lastupdate', $CurTime, 21600);
+				$Cache->cache_value('users_snatched_'.$UserID.'_lastupdate', $CurTime, 0);
+				$LastUpdate = $CurTime;
 			}
 		}
 		return isset($CurSnatchedTorrents[$TorrentID]);

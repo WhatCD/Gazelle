@@ -126,7 +126,7 @@ $FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
 	</div>
 <?
 
-if ($_GET['anyall'] == 'any') {
+if ($_GET['anyall'] == 'any' && !empty($Where)) {
 	$Where = '('.implode(' OR ', $Where).')';
 } else {
 	$Where = implode(' AND ', $Where);

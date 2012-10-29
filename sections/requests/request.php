@@ -515,90 +515,106 @@ echo $Pages;
 <?
 
 //---------- Begin printing
-foreach($Thread as $Key => $Post){
+foreach($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+	<colgroup>
+<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
+		<col class="col_avatar" />
+<? 	} ?>
+		<col class="col_post_body" />
+	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="2">
-			<span style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
-				by <strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
+		<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+			<div style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
+				by <strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
-<?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
-if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
-			</span>
-			<span id="bar<?=$PostID?>" style="float:right;">
+<?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a>
+<?	}
+	if (check_perms('site_moderate_forums')) { ?>
+				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a>
+<?	} ?>
+			</div>
+			<div id="bar<?=$PostID?>" style="float:right;">
+				<a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>">[Report]</a>
+				&nbsp;
 				<a href="#">&uarr;</a>
-			</span>
+			</div>
 		</td>
 	</tr>
 	<tr>
-<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
 		<td class="avatar" valign="top">
-	<? if ($Avatar) { ?>
+<?		if ($Avatar) { ?>
 			<img src="<?=$Avatar?>" width="150" alt="<?=$Username ?>'s avatar" />
-	<? } else { ?>
+<?		} else { ?>
 			<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-	<?
-	}
-?>
+<?		} ?>
 		</td>
-<?
-}
-?>
+<?	} ?>
 		<td class="body" valign="top">
 			<div id="content<?=$PostID?>">
 <?=$Text->full_format($Body)?>
-<? if($EditedUserID){ ?>
+<?	if ($EditedUserID) { ?>
 				<br />
 				<br />
-<?	if(check_perms('site_moderate_forums')) { ?>
+<?		if(check_perms('site_moderate_forums')) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('requests', <?=$PostID?>, 1); return false;">&laquo;</a> 
-<? 	} ?>
+<? 		} ?>
 				Last edited by
 				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
-<? } ?>
+<?	} ?>
 			</div>
 		</td>
 	</tr>
 </table>
-<?	} ?>
+<? } ?>
 		<div class="linkbox">
 		<?=$Pages?>
 		</div>
-<?
-if(!$LoggedUser['DisablePosting']) { ?>
+<? if (!$LoggedUser['DisablePosting']) { ?>
 			<br />
 			<div id="reply_box">
 				<h3>Post comment</h3>
 				<div class="box pad" style="padding:20px 10px 10px 10px;">
 					<table id="quickreplypreview" class="hidden forum_post box vertical_margin" id="preview">
+						<colgroup>
+<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
+							<col class="col_avatar" />
+<?	} ?>
+							<col class="col_post_body" />
+						</colgroup>
 						<tr class="colhead_dark">
-							<td colspan="2">
-								<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?> Just now
-									<a href="#quickreplypreview">[Report Comment]</a>
-								</span>
-								<span style="float:right;">
+							<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+								<div style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
+									by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong> Just now
+								</div>
+								<div style="float:right;">
+									<a href="#quickreplypreview">[Report]</a>
+									&nbsp;
 									<a href="#">&uarr;</a>
-								</span>
+								</div>
 							</td>
 						</tr>
 						<tr>
+<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
 							<td class="avatar" valign="top">
-<? if (!empty($LoggedUser['Avatar'])) { ?>
+<?		if (!empty($LoggedUser['Avatar'])) { ?>
 								<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-<? } else { ?>
+<?		} else { ?>
 								<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<? } ?>
+<?		} ?>
 							</td>
+<?	} ?>
 							<td class="body" valign="top">
 								<div id="contentpreview" style="text-align:left;"></div>
 							</td>
 						</tr>
 					</table>
-				<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
+					<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
 						<div id="quickreplytext">
 							<input type="hidden" name="action" value="reply" />
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

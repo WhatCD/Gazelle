@@ -141,7 +141,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[4] as $Artist) {
 ?>
 				<li class="artists_composers">
-					<?=Artists::display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if(check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
@@ -149,7 +149,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 					$AliasID = $Artist['id'];
 				}
 ?>
-				&nbsp;(<?=$AliasID?>)&nbsp;
+				(<?=$AliasID?>)&nbsp;
 					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?			} ?>
 				</li>
@@ -160,17 +160,17 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[6] as $Artist) {
 ?>
 				<li class="artists_dj">
-					<?=Artists::display_artist($Artist).'&lrm;'?>
-<?		      if(check_perms('torrents_edit')){
-			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
-                                list($AliasID) = $DB->next_record();
-                                if (empty($AliasID)) {
-                                        $AliasID = $Artist['id'];
-                                }
+					<?=Artists::display_artist($Artist).' &lrm;'?>
+<?			if(check_perms('torrents_edit')){
+				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+					list($AliasID) = $DB->next_record();
+					if (empty($AliasID)) {
+						$AliasID = $Artist['id'];
+					}
 ?>
-				&nbsp;(<?=$AliasID?>)&nbsp;
+				(<?=$AliasID?>)&nbsp;
 					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=6');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
-<?		      } ?>
+<?			} ?>
 				</li>
 <?
 		}
@@ -183,14 +183,14 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 	foreach($Artists[1] as $Artist) {
 ?>
 				<li class="artist_main">
-					<?=Artists::display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?		if(check_perms('torrents_edit')){
 			$AliasID = $Artist['aliasid'];
 			if (empty($AliasID)) {
 				$AliasID = $Artist['id'];
 			}
 ?>
-			&nbsp;(<?=$AliasID?>)&nbsp;
+			(<?=$AliasID?>)&nbsp;
 				<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=1');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?		} ?>
 				</li>
@@ -201,7 +201,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[2] as $Artist) {
 ?>
 				<li class="artist_guest">
-					<?=Artists::display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if(check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
@@ -209,7 +209,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 					$AliasID = $Artist['id'];
 				}
 ?>
-				&nbsp;(<?=$AliasID?>)&nbsp;
+				(<?=$AliasID?>)&nbsp;
 					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=2');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?			} ?>
 				</li>
@@ -221,7 +221,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[5] as $Artist) {
 ?>
 				<li class="artists_conductors">
-					<?=Artists::display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if(check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
@@ -229,7 +229,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 					$AliasID = $Artist['id'];
 				}
 ?>
-				&nbsp;(<?=$AliasID?>)&nbsp;
+				(<?=$AliasID?>)&nbsp;
 					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=5');this.parentNode.parentNode.style.display = 'none';" title="Remove conductor">[X]</a></span>
 <?			} ?>
 				</li>
@@ -241,7 +241,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[3] as $Artist) {
 ?>
 				<li class="artists_remix">
-					<?=Artists::display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?		      if(check_perms('torrents_edit')){
 			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
                                 list($AliasID) = $DB->next_record();
@@ -249,7 +249,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
                                         $AliasID = $Artist['id'];
                                 }
 ?>
-				&nbsp;(<?=$AliasID?>)&nbsp;
+				(<?=$AliasID?>)&nbsp;
 					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=3');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?		      } ?>
 				</li>
@@ -261,7 +261,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		foreach($Artists[7] as $Artist) {
 ?>
 				<li class="artists_producer">
-					<?=Artists::display_artist($Artist).'&lrm;'?>
+					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?		      if(check_perms('torrents_edit')){
 			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
                                 list($AliasID) = $DB->next_record();
@@ -269,7 +269,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
                                         $AliasID = $Artist['id'];
                                 }
 ?>
-				&nbsp;(<?=$AliasID?>)&nbsp;
+				(<?=$AliasID?>)&nbsp;
 					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=7');this.parentNode.parentNode.style.display = 'none';" title="Remove producer">[X]</a></span>
 <?		      } ?>
 				</li>
@@ -305,7 +305,9 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 			</div>
 		</div>
 <?		}
-	}?>
+	}
+include(SERVER_ROOT.'/sections/torrents/vote.php');
+?>		
 		<div class="box box_tags">
 			<div class="head"><strong>Tags</strong></div>
 <?
@@ -357,8 +359,7 @@ if(count($Tags) > 0) {
 				<strong><a href="rules.php?p=tag">Tagging rules</a></strong>
 			</div>
 		</div>
-		
-<? include(SERVER_ROOT.'/sections/torrents/vote.php'); ?>		
+
 	</div>
 	<div class="main_column">
 		<table class="torrent_table details" id="torrent_details">
@@ -797,83 +798,97 @@ echo $Pages;
 <?
 
 //---------- Begin printing
-foreach($Thread as $Key => $Post){
+foreach($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+	<colgroup>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+		<col class="col_avatar" />
+<? 	} ?>
+		<col class="col_post_body" />
+	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="2">
-			<span style="float:left;"><a class="post_id" href='torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
-				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
-                    <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
-                        $AuthorInfo = Users::user_info($AuthorID);
-                        if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
-                        <form  class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
-	                        <input type="hidden" name="action" value="warn" />
-	                        <input type="hidden" name="groupid" value="<?=$GroupID?>" />
-	                        <input type="hidden" name="postid" value="<?=$PostID?>" />
-	                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
-	                        <input type="hidden" name="key" value="<?=$Key?>" />
-                        </form>
-                        - <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
-
-                    <? }
-                } ?>
+		<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+			<div style="float:left;"><a class="post_id" href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
+				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
-<?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
-if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
-			</span>
-			<span id="bar<?=$PostID?>" style="float:right;">
+<? 	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a>
+<? 	}
+	if (check_perms('site_moderate_forums')) { ?>
+				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a>
+<?	} ?>
+			</div>
+			<div id="bar<?=$PostID?>" style="float:right;">
+				<a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>">[Report]</a>
+<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
+		$AuthorInfo = Users::user_info($AuthorID);
+		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
+?>
+				<form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
+					<input type="hidden" name="action" value="warn" />
+					<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+					<input type="hidden" name="postid" value="<?=$PostID?>" />
+					<input type="hidden" name="userid" value="<?=$AuthorID?>" />
+					<input type="hidden" name="key" value="<?=$Key?>" />
+				</form>
+				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
+<?		}
+	}
+?>
+				&nbsp;
 				<a href="#">&uarr;</a>
-			</span>
+			</div>
 		</td>
 	</tr>
 	<tr>
-<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
 		<td class="avatar" valign="top">
-	<? if ($Avatar) { ?>
+<?		if ($Avatar) { ?>
 			<img src="<?=$Avatar?>" width="150" alt="<?=$Username ?>'s avatar" />
-	<? } else { ?>
+<?		} else { ?>
 			<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-	<?
-	}
-	?>
+<?		} ?>
 		</td>
-<?
-}
-?>
+<?	} ?>
 		<td class="body" valign="top">
 			<div id="content<?=$PostID?>">
 <?=$Text->full_format($Body)?>
-<? if($EditedUserID){ ?>
+<?	if ($EditedUserID) { ?>
 				<br />
 				<br />
-<?	if(check_perms('site_admin_forums')) { ?>
+<?		if (check_perms('site_admin_forums')) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('torrents', <?=$PostID?>, 1); return false;">&laquo;</a> 
-<? 	} ?>
+<? 		} ?>
 				Last edited by
 				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
-<? } ?>
+<?	} ?>
 			</div>
 		</td>
 	</tr>
 </table>
-<?	} ?>
+<? } ?>
 		<div class="linkbox">
 		<?=$Pages?>
 		</div>
-<?
-if(!$LoggedUser['DisablePosting']) { ?>
+<? if (!$LoggedUser['DisablePosting']) { ?>
 			<br />
 			<div id="reply_box">
 				<h3>Post reply</h3>
 				<div class="box pad">
 					<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
+						<colgroup>
+<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
+							<col class="col_avatar" />
+<? 	} ?>
+							<col class="col_post_body" />
+						</colgroup>
 						<tr class="colhead_dark">
-							<td colspan="2">
+							<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
 								<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong>	Just now
+								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong> Just now
 								<a href="#quickreplypreview">[Report Comment]</a>
 								</span>
 								<span id="barpreview" style="float:right;">
@@ -883,18 +898,18 @@ if(!$LoggedUser['DisablePosting']) { ?>
 						</tr>
 						<tr>
 							<td class="avatar" valign="top">
-<? if (!empty($LoggedUser['Avatar'])) { ?>
+<?	if (!empty($LoggedUser['Avatar'])) { ?>
 								<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-<? } else { ?>
+<?	} else { ?>
 								<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<? } ?>
+<?	} ?>
 							</td>
 							<td class="body" valign="top">
 								<div id="contentpreview" style="text-align:left;"></div>
 							</td>
 						</tr>
 					</table>
-				<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
+					<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
 						<div id="quickreplytext">
 							<input type="hidden" name="action" value="reply" />
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

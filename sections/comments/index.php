@@ -57,4 +57,3 @@ default:
 	require(SERVER_ROOT.'/sections/comments/torrentcomments.php');
 	break;
 }
-

@@ -5,7 +5,7 @@ include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 
 if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Details = 'all';
-	$Limit = 10;
+	$Limit = 25;
 
 	if($_GET['tags']) {
 		$Tags = explode(',', str_replace(".","_",trim($_GET['tags'])));
@@ -28,12 +28,12 @@ if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 } else {
 	$Details = 'all';
 	// defaults to 10 (duh)
-	$Limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
-	$Limit = in_array($Limit, array(10, 100, 250)) ? $Limit : 10;
+	$Limit = isset($_GET['limit']) ? intval($_GET['limit']) : 25;
+	$Limit = in_array($Limit, array(25, 100, 250)) ? $Limit : 25;
 }
 $Filtered = !empty($Where);
 
-if ($_GET['anyall'] == 'any') {
+if ($_GET['anyall'] == 'any' && !empty($Where)) {
 	$Where = '('.implode(' OR ', $Where).')';
 } else {
 	$Where = implode(' AND ', $Where);
@@ -143,17 +143,17 @@ if(empty($_GET['advanced'])){ ?>
 <?
 	switch($Limit) {
 		case 100: ?>
-			- [<a href="top10.php?type=votes">Top 10</a>]
+			- [<a href="top10.php?type=votes">Top 25</a>]
 			- [Top 100]
 			- [<a href="top10.php?type=votes&amp;limit=250">Top 250</a>]
 		<?	break;
 		case 250: ?>
-			- [<a href="top10.php?type=votes">Top 10</a>]
+			- [<a href="top10.php?type=votes">Top 25</a>]
 			- [<a href="top10.php?type=votes&amp;limit=100">Top 100</a>]
 			- [Top 250]
 		<?	break;
 		default: ?>
-			- [Top 10]
+			- [Top 25]
 			- [<a href="top10.php?type=votes&amp;limit=100">Top 100</a>]
 			- [<a href="top10.php?type=votes&amp;limit=250">Top 250</a>]
 <?	} ?>
@@ -221,7 +221,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 		<?	} ?>
 					<?=$TorrentTags?>
 					</td>
-					<td colspan="4" class="votes_info_td"><strong><?=$Ups?></strong> upvotes out of <strong><?=$Total?></strong> total (Score: <?=round($Score*100)?>).</td>
+					<td colspan="4" class="votes_info_td"><strong><?=$Ups?></strong> upvotes out of <strong><?=$Total?></strong> total (<span title="Score: <?=round($Score*100,4)?>">Score: <?=round($Score*100)?></span>).</td>
 				</tr>
 <?
 		$LastRemasterYear = '-';

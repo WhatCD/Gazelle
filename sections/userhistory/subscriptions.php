@@ -140,8 +140,14 @@ if(!$NumResults) {
 	while(list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()){
 ?>
 	<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>">
+		<colgroup>
+<?		if(empty($HeavyInfo['DisableAvatars'])) { ?>
+			<col class="col_avatar" />
+<? 		} ?>
+			<col class="col_post_body" />
+		</colgroup>
 		<tr class="colhead_dark">
-			<td colspan="2">
+			<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
 				<span style="float:left;">
 					<a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$ForumName?></a> &gt;
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>

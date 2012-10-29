@@ -34,7 +34,7 @@ function Edit_Form(post,key) {
 	$('#reply_box').toggle();
 	postid = post;
 	if (location.href.match(/torrents\.php/) ||
-        location.href.match(/artist\.php/)) {
+			location.href.match(/artist\.php/)) {
 		boxWidth="50";
 	} else {
 		boxWidth="80";

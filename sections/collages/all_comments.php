@@ -73,8 +73,14 @@ foreach($Thread as $Post){
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+	<colgroup>
+<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
+		<col class="col_avatar" />
+<? 	} ?>
+		<col class="col_post_body" />
+	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="2">
+		<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
 			<span style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
 				by <?=Users::format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
 <? if (!$ThreadInfo['IsLocked']){ ?>				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a><? }

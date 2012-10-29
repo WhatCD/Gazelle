@@ -1614,7 +1614,10 @@ CREATE TABLE `xbt_snatched` (
   KEY `tstamp` (`tstamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-;
+CREATE DEFINER=`root`@`localhost` FUNCTION `binomial_ci`(p int, n int) RETURNS float
+    DETERMINISTIC
+    SQL SECURITY INVOKER
+RETURN IF(n = 0,0.0,((p + 1.9208) / n - 1.96 * SQRT((p * (n-p)) / n + 0.9604) / n) / (1 + 3.8416 / n));
 
 SET FOREIGN_KEY_CHECKS = 1;
 

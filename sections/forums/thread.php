@@ -328,28 +328,29 @@ if ($ThreadInfo['NoPoll'] == 0) {
 					<input type="hidden" name="large" value="1" />
 					<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
 					<ul style="list-style: none;" id="poll_options">
-<? foreach($Answers as $i => $Answer) { //for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
+<?		foreach($Answers as $i => $Answer) { //for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
 						<li>
 							<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />
 							<label for="answer_<?=$i?>"><?=display_str($Answer)?></label>
 						</li>
-<? } ?>
+<?		} ?>
 						<li>
 							<br />
 							<input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank - Show the results!</label><br />
 						</li>
 					</ul>
-<? if($ForumID == STAFF_FORUM) { ?>
+<?		if($ForumID == STAFF_FORUM) { ?>
 					<a href="#" onclick="AddPollOption(<?=$ThreadID?>); return false;">[+]</a>
 					<br />
 					<br />
-<? } ?>
+<?		} ?>
 					<input type="button" style="float: left;" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote" />
 				</form>
 			</div>
-<? } ?>
-<? if(check_perms('forums_polls_moderate') && !$RevealVoters) { ?>
-	<? if (!$Featured || $Featured == '0000-00-00 00:00:00') { ?>
+<?	} ?>
+<?	if(check_perms('forums_polls_moderate') && !$RevealVoters) {
+		if (!$Featured || $Featured == '0000-00-00 00:00:00') {
+?>
 			<form class="manage_form" name="poll" action="forums.php" method="post">
 				<input type="hidden" name="action" value="poll_mod" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -357,7 +358,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				<input type="hidden" name="feature" value="1" />
 				<input type="submit" style="float: left;" onclick="return confirm('Are you sure you want to feature this poll?');" value="Feature" />
 			</form>
-	<? } ?>
+<?		} ?>
 			<form class="manage_form" name="poll" action="forums.php" method="post">
 				<input type="hidden" name="action" value="poll_mod" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -365,7 +366,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				<input type="hidden" name="close" value="1" />
 				<input type="submit" style="float: left;" value="<?=(!$Closed ? 'Close' : 'Open')?>" />
 			</form>
-<? } ?>
+<?	} ?>
 		</div>
 	</div>
 <?
@@ -381,94 +382,100 @@ if($ThreadInfo['StickyPostID']) {
 	}
 }
 
-foreach($Thread as $Key => $Post){
+foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?
-		if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) {
-			echo ' forum_unread';
-		}
-		if ($HeavyInfo['DisableAvatars']) {
-			echo ' noavatar';
-		}
-		if ($ThreadInfo['OP'] == $AuthorID) {
-			echo ' important_user';
-		} ?>" id="post<?=$PostID?>">
+	if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) {
+		echo ' forum_unread';
+	}
+	if ($HeavyInfo['DisableAvatars']) {
+		echo ' noavatar';
+	}
+	if ($ThreadInfo['OP'] == $AuthorID) {
+		echo ' important_user';
+	} ?>" id="post<?=$PostID?>">
+	<colgroup>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+		<col class="col_avatar" />
+<? 	} ?>
+		<col class="col_post_body" />
+	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="2">
+		<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
 			<div style="float:left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<?=Users::format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?> 
-<? if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')){ ?> 
+<?	if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) { ?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);">[Quote]</a> 
-<? }
-if (((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write')) && ($AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums'))) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a> 
-<? }
-if(check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?> 
-				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> 
-<? }
-if($PostID == $ThreadInfo['StickyPostID']) { ?>
-				<strong><span class="sticky_post">[Sticky]</span></strong>
-<?	if(check_perms('site_moderate_forums')) { ?>
-				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" >[X]</a>
 <?	}
-} else {
-	if(check_perms('site_moderate_forums')) { ?>
+	if ((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write') && $AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums')) { ?>
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a> 
+<?	}
+	if(check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?> 
+				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> 
+<?	}
+	if($PostID == $ThreadInfo['StickyPostID']) { ?>
+				<strong><span class="sticky_post">[Sticky]</span></strong>
+<?		if(check_perms('site_moderate_forums')) { ?>
+				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" >[X]</a>
+<?		}
+	} else {
+		if(check_perms('site_moderate_forums')) { ?>
 				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" >[&#x21d5;]</a>
-<? 	}
-}
+<? 		}
+	}
 ?>
 			</div>
 			<div id="bar<?=$PostID?>" style="float:right;">
 				<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>">[Report]</a>
-<?
-                if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
-                    $AuthorInfo = Users::user_info($AuthorID);
-                    if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
-                        <form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
-	                        <input type="hidden" name="action" value="warn" />
-	                        <input type="hidden" name="postid" value="<?=$PostID?>" />
-	                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
-	                        <input type="hidden" name="key" value="<?=$Key?>" />
-                        </form>
-                        - <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
-<?                  } ?>
-<?  }
+<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
+		$AuthorInfo = Users::user_info($AuthorID);
+		if($LoggedUser['Class'] >= $AuthorInfo['Class']) {
 ?>
-                &nbsp;
+				<form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
+					<input type="hidden" name="action" value="warn" />
+					<input type="hidden" name="postid" value="<?=$PostID?>" />
+					<input type="hidden" name="userid" value="<?=$AuthorID?>" />
+					<input type="hidden" name="key" value="<?=$Key?>" />
+				</form>
+				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
+<?		}
+	}
+?>
+				&nbsp;
 				<a href="#">&uarr;</a>
 			</div>
 		</td>
 	</tr>
 	<tr>
-<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
 		<td class="avatar" valign="top">
-	<? if ($Avatar) { ?>
+<?		if ($Avatar) { ?>
 			<img src="<?=$Avatar?>" width="150" style="max-height:400px;" alt="<?=$Username ?>'s avatar" />
-	<? } else { ?>
+<?		} else { ?>
 			<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-	<? } ?>
-	</td>
-<? } ?>
+<?		} ?>
+		</td>
+<?	} ?>
 		<td class="body" valign="top"<? if(!empty($HeavyInfo['DisableAvatars'])) { echo ' colspan="2"'; } ?>>
 			<div id="content<?=$PostID?>">
 				<?=$Text->full_format($Body) ?>
-<? if($EditedUserID){ ?>
+<?	if ($EditedUserID) { ?>
 				<br />
 				<br />
-<?	if(check_perms('site_admin_forums')) { ?>
+<?		if(check_perms('site_admin_forums')) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a>
-<? 	} ?>
+<?		} ?>
 				Last edited by
 				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
-<? } ?>
+<?	} ?>
 			</div>
 		</td>
 	</tr>
 </table>
-<?	} ?>
+<? } ?>
 <div class="breadcrumbs">
 	<a href="forums.php">Forums</a> &gt;
 	<a href="forums.php?action=viewforum&amp;forumid=<?=$ThreadInfo['ForumID']?>"><?=$ForumName?></a> &gt;
@@ -478,7 +485,7 @@ if($PostID == $ThreadInfo['StickyPostID']) { ?>
 	<?=$Pages?>
 </div>
 <?
-if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
+if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 	if(check_forumperm($ForumID, 'Write') && !$LoggedUser['DisablePosting']) {
 	//TODO: Preview, come up with a standard, make it look like post or just a block of formatted BBcode, but decide and write some proper XHTML
 ?>
@@ -487,8 +494,14 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 				<h3>Post reply</h3>
 				<div class="box pad">
 					<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
+						<colgroup>
+<?		if(empty($HeavyInfo['DisableAvatars'])) { ?>
+							<col class="col_avatar" />
+<? 		} ?>
+							<col class="col_post_body" />
+						</colgroup>
 						<tr class="colhead_dark">
-							<td colspan="2">
+							<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
 								<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
 								by <?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?> Just now
 								</span>
@@ -500,19 +513,21 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 							</td>
 						</tr>
 						<tr>
+<?		if (empty($HeavyInfo['DisableAvatars'])) { ?>
 							<td class="avatar" valign="top">
-<? if (!empty($LoggedUser['Avatar'])) { ?>
+<?			if (!empty($LoggedUser['Avatar'])) { ?>
 								<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-<? } else { ?>
+<?			} else { ?>
 								<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<? } ?>
+<?			} ?>
 							</td>
+<?		} ?>
 							<td class="body" valign="top">
 								<div id="contentpreview" style="text-align:left;"></div>
 							</td>
 						</tr>
 					</table>
-				<form class="send_form center" name="reply" id="quickpostform" action="" <? if(!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?> method="post">
+					<form class="send_form center" name="reply" id="quickpostform" action="" <? if(!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?> method="post">
 						<input type="hidden" name="action" value="reply" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="thread" value="<?=$ThreadID?>" />
@@ -521,27 +536,28 @@ if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 							<textarea id="quickpost" style="width: 95%;" tabindex="1" onkeyup="resize('quickpost');" name="body" cols="90" rows="8"></textarea> <br />
 						</div>
 						<div>
-<? if(!in_array($ThreadID, $UserSubscriptions)) { ?>
+<?		if(!in_array($ThreadID, $UserSubscriptions)) { ?>
 							<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> tabindex="2" />
 							<label for="subscribebox">Subscribe</label>
 <?
-}
-	if($ThreadInfo['LastPostAuthorID']==$LoggedUser['ID'] && (check_perms('site_forums_double_post') || in_array($ForumID, $ForumsDoublePost))) {
+		}
+		if($ThreadInfo['LastPostAuthorID']==$LoggedUser['ID'] && (check_perms('site_forums_double_post') || in_array($ForumID, $ForumsDoublePost))) {
 ?>
 							<input id="mergebox" type="checkbox" name="merge" tabindex="2" />
 							<label for="mergebox">Merge</label>
-<? } ?>
+<?		} ?>
 						<input id="post_preview" type="button" value="Preview" tabindex="1" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
 						<input type="submit" id="submit_button" value="Post reply" tabindex="1" />
 					</div>
 <?
-	if (!$LoggedUser['DisableAutoSave']) {
+		if (!$LoggedUser['DisableAutoSave']) {
 ?>
 					<script type="application/javascript">new StoreText('quickpost', 'quickpostform', <?=$ThreadID?>);</script>
 <?
-	}
+		}
 ?>
-				</form>
+					</form>
+				</div>
 			</div>
 <?
 	}
@@ -582,37 +598,37 @@ if(check_perms('site_moderate_forums')) {
 				<td>
 					<select name="forumid" tabindex="2">
 <?
-$OpenGroup = false;
-$LastCategoryID=-1;
+	$OpenGroup = false;
+	$LastCategoryID = -1;
 
-foreach ($Forums as $Forum) {
-	if ($Forum['MinClassRead'] > $LoggedUser['Class']) {
-		continue;
-	}
+	foreach ($Forums as $Forum) {
+		if ($Forum['MinClassRead'] > $LoggedUser['Class']) {
+			continue;
+		}
 
-	if ($Forum['CategoryID'] != $LastCategoryID) {
-		$LastCategoryID = $Forum['CategoryID'];
-		if($OpenGroup) { ?>
+		if ($Forum['CategoryID'] != $LastCategoryID) {
+			$LastCategoryID = $Forum['CategoryID'];
+			if($OpenGroup) { ?>
 					</optgroup>
-<?		} ?>
+<?			} ?>
 					<optgroup label="<?=$ForumCats[$Forum['CategoryID']]?>">
-<?		$OpenGroup = true;
-	}
+<?			$OpenGroup = true;
+		}
 ?>
 						<option value="<?=$Forum['ID']?>"<? if($ThreadInfo['ForumID'] == $Forum['ID']) { echo ' selected="selected"';} ?>><?=display_str($Forum['Name'])?></option>
-<? } ?>
+<?	} ?>
 					</optgroup>
 					</select>
 				</td>
 			</tr>
-<? if(check_perms('site_admin_forums')) { ?>
+<?	if(check_perms('site_admin_forums')) { ?>
 			<tr>
 				<td class="label">Delete thread</td>
 				<td>
 					<input type="checkbox" name="delete" tabindex="2" />
 				</td>
 			</tr>
-<? } ?>
+<?	} ?>
 			<tr>
 				<td colspan="2" class="center">
 					<input type="submit" value="Edit thread" tabindex="2" />

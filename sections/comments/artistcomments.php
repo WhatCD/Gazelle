@@ -30,13 +30,13 @@ $Comments = $DB->query("SELECT
 
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
-$Pages=get_pages($Page,$Results,$PerPage, 11);
+$Pages=Format::get_pages($Page,$Results,$PerPage, 11);
 
 $DB->set_query_id($Comments);
 $GroupIDs = $DB->collect('GroupID');
 
 
-show_header($Title,'bbcode');
+View::show_header($Title,'bbcode');
 $DB->set_query_id($Comments);
 
 ?><div class="thin">
@@ -64,5 +64,5 @@ while(list($UserID, $ArtistID, $ArtistName, $PostID, $Body, $AddedTime, $EditedT
 </div>
 <?  
 
-  show_footer();
+  View::show_footer();
 

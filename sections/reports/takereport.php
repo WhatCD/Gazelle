@@ -58,6 +58,12 @@ switch($Short) {
 		$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
 		$Link = "torrents.php?id=".$GroupID."&page=".$PageNum."#post".$ID;
 		break;
+	case "artist_comment" :
+		$DB->query("SELECT ac.ArtistID, ac.Body, (SELECT COUNT(ID) FROM artist_comments WHERE ID <= ".$ID." AND artist_comments.ArtistID = ac.ArtistID) AS CommentNum FROM artist_comments AS ac WHERE ID=".$ID);
+		list($ArtistID, $Body, $PostNum) = $DB->next_record();
+		$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
+		$Link = "artist.php?id=".$ArtistID."&page=".$PageNum."#post".$ID;
+		break;
 	case "collages_comment" :
 		$DB->query("SELECT cc.CollageID, cc.Body, (SELECT COUNT(ID) FROM collages_comments WHERE ID <= ".$ID." AND collages_comments.CollageID = cc.CollageID) AS CommentNum FROM collages_comments AS cc WHERE ID=".$ID);
 		list($CollageID, $Body, $PostNum) = $DB->next_record();

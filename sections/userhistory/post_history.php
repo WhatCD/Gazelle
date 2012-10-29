@@ -254,8 +254,14 @@ if(empty($Results)) {
 	while(list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername, $TopicID, $ThreadTitle, $LastPostID, $LastRead, $Locked, $Sticky) = $DB->next_record()){
 ?>
 	<table class="forum_post vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID ?>">
+		<colgroup>
+<?		if(empty($HeavyInfo['DisableAvatars'])) { ?>
+			<col class="col_avatar" />
+<? 		} ?>
+			<col class="col_post_body" />
+		</colgroup>
 		<tr class="colhead_dark">
-			<td  colspan="2">
+			<td  colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
 				<span style="float:left;">
 					<?=time_diff($AddedTime) ?>
 					in <a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>

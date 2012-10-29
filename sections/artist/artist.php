@@ -420,7 +420,7 @@ foreach ($Importances as $Group) {
 
 ?>
 	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog<?=$HideDiscog.$HideTorrents?>">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></a></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
 	</tr>
 <?
 			} else {
@@ -435,7 +435,7 @@ foreach ($Importances as $Group) {
 				$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
 	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent<?=$HideDiscog.$HideTorrents?>">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></a></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
 	</tr>
 <?
 			}
@@ -540,17 +540,17 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 
 		<div class="box box_search">
 			<div class="head"><strong>Search File Lists</strong></div>
-				<ul class="nobullet">
-					<li>
-						<form class="search_form" name="filelists" action="torrents.php">
-							<input type="hidden" name="artistname" value="<?=$Name?>" />
-							<input type="hidden" name="action" value="advanced" />
-							<input type="text" autocomplete="off" id="filelist" name="filelist" size="20" />
-							<input type="submit" value=">" />
-						</form>
-					</li>
-				</ul>
-			</div>
+			<ul class="nobullet">
+				<li>
+					<form class="search_form" name="filelists" action="torrents.php">
+						<input type="hidden" name="artistname" value="<?=$Name?>" />
+						<input type="hidden" name="action" value="advanced" />
+						<input type="text" autocomplete="off" id="filelist" name="filelist" size="20" />
+						<input type="submit" value="&gt;" />
+					</form>
+				</li>
+			</ul>
+		</div>
 <?
 
 if(check_perms('zip_downloader')){
@@ -569,17 +569,17 @@ if(check_perms('zip_downloader')){
 					<input type="hidden" name="action" value="download" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
-				<ul id="list" class="nobullet">
+					<ul id="list" class="nobullet">
 <? foreach ($ZIPList as $ListItem) { ?>
-					<li id="list<?=$ListItem?>">
-						<input type="hidden" name="list[]" value="<?=$ListItem?>" />
-						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-						<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" title="Remove format from the Collector">[X]</a>
-						<br style="clear:all;" />
-					</li>
+						<li id="list<?=$ListItem?>">
+							<input type="hidden" name="list[]" value="<?=$ListItem?>" />
+							<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
+							<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" title="Remove format from the Collector">[X]</a>
+							<br style="clear:all;" />
+						</li>
 <? } ?>
-				</ul>
-				<select id="formats" style="width:180px">
+					</ul>
+					<select id="formats" style="width:180px">
 <?
 $OpenGroup = false;
 $LastGroupID=-1;
@@ -590,25 +590,25 @@ foreach ($ZIPOptions as $Option) {
 	if($GroupID!=$LastGroupID) {
 		$LastGroupID=$GroupID;
 		if($OpenGroup) { ?>
-					</optgroup>
+						</optgroup>
 <?		} ?>
-					<optgroup label="<?=$ZIPGroups[$GroupID]?>">
+						<optgroup label="<?=$ZIPGroups[$GroupID]?>">
 <?		$OpenGroup = true;
 	}
 ?>
-						<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if(in_array($GroupID.$OptionID,$ZIPList)){ echo ' disabled="disabled"'; }?>><?=$OptName?></option>
+							<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if(in_array($GroupID.$OptionID,$ZIPList)){ echo ' disabled="disabled"'; }?>><?=$OptName?></option>
 <?
 }
 ?>
-					</optgroup>
-				</select>
-				<button type="button" onclick="add_selection()">+</button>
-				<select name="preference" style="width:210px">
-					<option value="0"<? if($ZIPPrefs==0){ echo ' selected="selected"'; } ?>>Prefer Original</option>
-					<option value="1"<? if($ZIPPrefs==1){ echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
-					<option value="2"<? if($ZIPPrefs==2){ echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
-				</select>
-				<input type="submit" style="width:210px" value="Download" />
+						</optgroup>
+					</select>
+					<button type="button" onclick="add_selection()">+</button>
+					<select name="preference" style="width:210px">
+						<option value="0"<? if($ZIPPrefs==0){ echo ' selected="selected"'; } ?>>Prefer Original</option>
+						<option value="1"<? if($ZIPPrefs==1){ echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
+						<option value="2"<? if($ZIPPrefs==2){ echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
+					</select>
+					<input type="submit" style="width:210px" value="Download" />
 				</form>
 			</div>
 		</div>
@@ -620,7 +620,7 @@ foreach ($ZIPOptions as $Option) {
 uasort($Tags, 'compare');
 foreach ($Tags as $TagName => $Tag) {
 ?>
-					<li><a href="torrents.php?taglist=<?=$TagName?>"><?=$TagName?></a> (<?=$Tag['count']?>)</li>
+				<li><a href="torrents.php?taglist=<?=$TagName?>"><?=$TagName?></a> (<?=$Tag['count']?>)</li>
 <?
 }
 ?>
@@ -630,7 +630,7 @@ foreach ($Tags as $TagName => $Tag) {
 
 // Stats
 ?>
-			<div class="box box_info box_statistics_artist">
+		<div class="box box_info box_statistics_artist">
 			<div class="head"><strong>Statistics</strong></div>
 			<ul class="stats nobullet">
 				<li>Number of groups: <?=number_format($NumGroups)?></li>
@@ -815,30 +815,22 @@ if($NumSimilar>0) {
 
 		<div id="similar_artist_map" class="box">
 			<div id="flipper_head" class="head">
-			<strong id="flipper_title">Similar Artist Map</strong>
-			<a id="flip_to" href="#null" onclick="flipView();"> [Switch to Cloud]</a>
-		</div>
-	<div id="flip_view_1" style="display:block;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;position:relative;background-image:url(static/similar/<?=$ArtistID?>.png?t=<?=time()?>)">
+				<strong id="flipper_title">Similar Artist Map</strong>
+				<a id="flip_to" href="#null" onclick="flipView();"> [Switch to Cloud]</a>
+			</div>
+			<div id="flip_view_1" style="display:block;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;position:relative;background-image:url(static/similar/<?=$ArtistID?>.png?t=<?=time()?>)">
 <?
 	$Similar->write_artists();
 ?>
-	</div>
-
-
-
-<? } // if $NumSimilar>0
-
-if($NumSimilar>0) { ?>
-
-<div id="flip_view_2" style="display:none;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;">
-<canvas width="<?=WIDTH?>px" height="<?=HEIGHT-20?>px" id="similarArtistsCanvas"></canvas>
-<div id="artistTags" style="display:none;">
-<ul/>
-</div>
-<strong style="margin-left:10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
-</div>
-</div>
-
+			</div>
+		</div>
+		<div id="flip_view_2" style="display:none;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;">
+			<canvas width="<?=WIDTH?>px" height="<?=HEIGHT-20?>px" id="similarArtistsCanvas"></canvas>
+			<div id="artistTags" style="display:none;">
+				<ul></ul>
+			</div>
+			<strong style="margin-left:10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
+		</div>
 
 <script>
 var cloudLoaded = false;
@@ -897,7 +889,7 @@ function require(file, callback) {
 
 </script>
 
-<? } ?>
+<? } // if $NumSimilar>0 ?>
 		<div class="box">
 			<div class="head"><strong>Artist info</strong></div>
 			<div class="body"><?=$Text->full_format($Body)?></div>
@@ -953,106 +945,125 @@ if($Catalogue === false) {
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
 $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)%THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
 ?>
-	<div class="linkbox"><a name="comments"></a>
+	<div class="linkbox">
+		<a name="comments"></a>
 <?
-$Pages=Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
+$Pages = Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
 echo $Pages;
 ?>
 	</div>
 <?
 
 //---------- Begin printing
-foreach($Thread as $Key => $Post){
+foreach($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $CommentBody, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+	<colgroup>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+		<col class="col_avatar" />
+<? 	} ?>
+		<col class="col_post_body" />
+	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="2">
-			<span style="float:left;"><a class="post_id" href='artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
-				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=artist_comment&amp;id=<?=$PostID?>">[Report]</a>
-                    <? if(check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) { 
-                        $AuthorInfo = Users::user_info($AuthorID);
-                        if($LoggedUser['Class'] >= $AuthorInfo['Class']) { ?>
-                        <form  class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
-	                        <input type="hidden" name="action" value="warn" />
-	                        <input type="hidden" name="artistid" value="<?=$ArtistID?>" />
-	                        <input type="hidden" name="postid" value="<?=$PostID?>" />
-	                        <input type="hidden" name="userid" value="<?=$AuthorID?>" />
-	                        <input type="hidden" name="key" value="<?=$Key?>" />
-                        </form>
-                        - <a href="#" onclick="document.warn<?=$PostID?>.submit(); return false;">[Warn]</a>
-
-                    <? }
-                } ?>
+		<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+			<div style="float:left;"><a class="post_id" href='artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
+				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
-<?if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a><? }
-if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> <? } ?>
-			</span>
-			<span id="bar<?=$PostID?>" style="float:right;">
+<?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a>
+<?	}
+	if (check_perms('site_moderate_forums')) { ?>
+				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a>
+<?	} ?>
+			</div>
+			<div id="bar<?=$PostID?>" style="float:right;">
+				<a href="reports.php?action=report&amp;type=artist_comment&amp;id=<?=$PostID?>">[Report]</a>
+<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
+		$AuthorInfo = Users::user_info($AuthorID);
+		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
+?>
+				<form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
+					<input type="hidden" name="action" value="warn" />
+					<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
+					<input type="hidden" name="postid" value="<?=$PostID?>" />
+					<input type="hidden" name="userid" value="<?=$AuthorID?>" />
+					<input type="hidden" name="key" value="<?=$Key?>" />
+				</form>
+				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
+<?		}
+	}
+?>
+				&nbsp;
 				<a href="#">&uarr;</a>
-			</span>
+			</div>
 		</td>
 	</tr>
 	<tr>
-<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
 		<td class="avatar" valign="top">
-	<? if ($Avatar) { ?>
+<?		if ($Avatar) { ?>
 			<img src="<?=$Avatar?>" width="150" alt="<?=$Username ?>'s avatar" />
-	<? } else { ?>
+<?		} else { ?>
 			<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-	<?
-	}
-	?>
+<?		} ?>
 		</td>
-<?
-}
-?>
+<?	} ?>
 		<td class="body" valign="top">
 			<div id="content<?=$PostID?>">
 <?=$Text->full_format($CommentBody)?>
-<? if($EditedUserID){ ?>
+<?	if ($EditedUserID) { ?>
 				<br />
 				<br />
-<?	if(Paranoia::check_perms('site_admin_forums')) { ?>
+<?		if (check_perms('site_admin_forums')) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('artist', <?=$PostID?>, 1); return false;">&laquo;</a> 
-<? 	} ?>
+<? 		} ?>
 				Last edited by
 				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
-<? } ?>
+<?	} ?>
 			</div>
 		</td>
 	</tr>
 </table>
-<?	} ?>
+<? } ?>
 		<div class="linkbox">
 		<?=$Pages?>
 		</div>
-<?
-if(!$LoggedUser['DisablePosting']) { ?>
-			<br />
+<? if (!$LoggedUser['DisablePosting']) { ?>
+		<br />
+		<div id="reply_box">
 			<h3>Post reply</h3>
 			<div class="box pad">
 				<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
+					<colgroup>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+						<col class="col_avatar" />
+<? 	} ?>
+						<col class="col_post_body" />
+					</colgroup>
 					<tr class="colhead_dark">
 						<td colspan="2">
-							<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
+							<div style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
 								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong>	Just now
-							<a href="#quickreplypreview">[Report Comment]</a>
-							</span>
-							<span id="barpreview" style="float:right;">
+							</div>
+							<div id="barpreview" style="float:right;">
+								<a href="#quickreplypreview">[Report]</a>
+								&nbsp;
 								<a href="#">&uarr;</a>
-							</span>
+							</div>
 						</td>
 					</tr>
 					<tr>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
 						<td class="avatar" valign="top">
-				<? if (!empty($LoggedUser['Avatar'])) { ?>
+<?		if (!empty($LoggedUser['Avatar'])) { ?>
 							<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-				<? } else { ?>
+<?		} else { ?>
 							<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-				<? } ?>
+<?		} ?>
 						</td>
+<?	} ?>
 						<td class="body" valign="top">
 							<div id="contentpreview" style="text-align:left;"></div>
 						</td>
@@ -1069,6 +1080,7 @@ if(!$LoggedUser['DisablePosting']) { ?>
 					<input type="submit" id="submit_button" value="Post reply" />
 				</form>
 			</div>
+		</div>
 <? } ?>
 	</div>
 </div>
@@ -1078,7 +1090,7 @@ View::show_footer();
 
 // Cache page for later use
 
-if($RevisionID) {
+if ($RevisionID) {
 	$Key = "artist_$ArtistID"."_revision_$RevisionID";
 } else {
 	$Key = 'artist_'.$ArtistID;

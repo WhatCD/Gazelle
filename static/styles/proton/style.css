@@ -624,6 +624,7 @@ ul#userinfo_username {
 #forums .forum_post td,
 #userhistory .forum_post td,
 #collage .forum_post td,
+#artist .forum_post td,
 #torrents .forum_post td,
 #comments .forum_post td,
 #requests .forum_post td {
@@ -641,9 +642,11 @@ ul#userinfo_username {
   margin: 0 0 10px 0;
 }
 
+.col_avatar,
 #forums .forum_post td.avatar,
 #userhistory .forum_post td.avatar,
 #collage .forum_post td.avatar,
+#artist .forum_post td.avatar,
 #torrents .forum_post td.avatar,
 #comments .forum_post td.avatar,
 #requests .forum_post td.avatar {
@@ -656,6 +659,7 @@ ul#userinfo_username {
 #forums .forum_post blockquote,
 #userhistory .forum_post blockquote,
 #collage .forum_post blockquote,
+#artist .forum_post blockquote,
 #torrents .forum_post blockquote,
 #comments .forum_post blockquote,
 #requests .forum_post blockquote,
@@ -669,6 +673,7 @@ ul#userinfo_username {
 #forums .forum_post blockquote.spoiler,
 #userhistory .forum_post blockquote.spoiler,
 #collage .forum_post blockquote.spoiler,
+#artist .forum_post blockquote.spoiler,
 #torrents .forum_post blockquote.spoiler,
 #comments .forum_post blockquote.spoiler,
 #requests .forum_post blockquote.spoiler,
@@ -680,6 +685,7 @@ ul#userinfo_username {
 #forums .forum_post .body,
 #userhistory .forum_post .body,
 #collage .forum_post .body,
+#artist .forum_post .body,
 #torrents .forum_post .body,
 #comments .forum_post .body,
 #requests .forum_post .body {
@@ -691,6 +697,7 @@ ul#userinfo_username {
 #forums .forum_post,
 #userhistory .forum_post,
 #collage .forum_post,
+#artist .forum_post,
 #torrents .forum_post,
 #comments .forum_post,
 #requests .forum_post {
@@ -700,6 +707,7 @@ ul#userinfo_username {
 #forums .forum_post td,
 #userhistory .forum_post td,
 #collage .forum_post td,
+#artist .forum_post td,
 #torrents .forum_post td,
 #comments .forum_post td,
 #requests .forum_post td {
@@ -709,6 +717,7 @@ ul#userinfo_username {
 
 #forums .forum_post .body div,
 #collage .forum_post .body div,
+#artist .forum_post .body div,
 #torrents .forum_post .body div,
 #userhistory .forum_post .body,
 #comments .forum_post .body,
@@ -720,11 +729,18 @@ ul#userinfo_username {
 
 #forums .forum_post .body div a,
 #collage .forum_post .body div a,
+#artist .forum_post .body div a,
 #torrents .forum_post .body div a,
 #userhistory .forum_post .body a,
 #comments .forum_post .body div a,
 #requests .forum_post .body div a {
 	word-wrap: break-word;
+}
+
+#artist .forum_post .body textarea,
+#torrents .forum_post .body textarea,
+#requests .forum_post .body textarea {
+	width: 420px !important;
 }
 
 #userhistory .forum_post .body {
@@ -744,6 +760,7 @@ ul#userinfo_username {
 
 #forums .forum_post .body div div,
 #collage .forum_post .body div div,
+#artist .forum_post .body div div,
 #torrents .forum_post .body div div{
   background: none;
   padding: 0;
@@ -1014,6 +1031,7 @@ strong.quoteheader {
   margin-bottom: 10px;
 }
 
+#artist #content .center .box form div textarea,
 #torrents #content .center .box form div textarea,
 #wiki #content .center .box form div textarea,
 #upload textarea#album_desc,

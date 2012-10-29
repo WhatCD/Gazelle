@@ -43,8 +43,14 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 		</div>
 <? } ?>
 		<table class="forum_post box vertical_margin" style="text-align:left;">
+			<colgroup>
+<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+				<col class="col_avatar" />
+<? } ?>
+				<col class="col_post_body" />
+			</colgroup>
 			<tr class="colhead_dark">
-				<td colspan="2">
+				<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
 					<span style="float:left;"><a href='#newthreadpreview'>#XXXXXX</a>
 						by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?></strong>
 					Just now
