@@ -22,7 +22,7 @@ $UpVotes    = $GroupVotes['Ups'];
 $Voted = isset($UserVotes[$GroupID])?$UserVotes[$GroupID]['Type']:false;
 ?>
 <div class="box" id="votes">
-	<div class="head"><strong>Favorite Album Votes</strong></div>
+	<div class="head"><strong>Album Votes</strong></div>
 	<div class="album_votes body">
 		This has <span id="upvotes" class="favoritecount"><?=$UpVotes?></span> <?=(($UpVotes==1)?'upvote':'upvotes')?> out of <span id="totalvotes" class="favoritecount"><?=$TotalVotes?></span> total<span id="upvoted" <?=($Voted!='Up'?'class="hidden"':'')?>>, including your upvote</span><span id="downvoted" <?=($Voted!='Down'?'class="hidden"':'')?>>, including your downvote</span>.
 		<br /><br />

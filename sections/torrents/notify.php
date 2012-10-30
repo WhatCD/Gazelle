@@ -114,7 +114,7 @@ if (!empty($GroupIDs)) {
 
 	// Get the relevant filter labels
 	$DB->query("SELECT ID, Label, Artists FROM users_notify_filters WHERE ID IN (".implode(',', $FilterIDs).")");
-	$Filters = $DB->to_array('ID', MYSQLI_ASSOC, array(2));
+	$Filters = $DB->to_array('ID', MYSQLI_ASSOC, array('Artists'));
 	foreach ($Filters as &$Filter) {
 		$Filter['Artists'] = explode('|', trim($Filter['Artists'], '|'));
 	}
@@ -216,7 +216,7 @@ if (empty($Results)) {
 				foreach ($GroupInfo['ExtendedArtists'] as $GroupArtists) {
 					foreach ($GroupArtists as $GroupArtist) {
 						foreach ($Filters[$FilterID]['Artists'] as $FilterArtist) {
-							if (!strcasecmp($FilterArtist, $GroupArtist['name'])) {
+							if (mb_strtolower($FilterArtist, 'UTF-8') == mb_strtolower($GroupArtist['name'], 'UTF-8')) {
 								$MatchingArtists[] = $GroupArtist['name'];
 							}
 						}
@@ -259,7 +259,7 @@ if (empty($Results)) {
 
 		// print row
 ?>
-	<tr class="torrent" id="torrent<?=$TorrentID?>"<?=$MatchingArtistsText ? 'title="'.$MatchingArtistsText.'"' : ''?>>
+	<tr class="torrent" id="torrent<?=$TorrentID?>"<?=$MatchingArtistsText ? 'title="'.display_str($MatchingArtistsText).'"' : ''?>>
 		<td style="text-align: center"><input type="checkbox" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
 		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$MainTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1])).' tags_'.str_replace('.','_',$MainTag)?>"></div></td>
 		<td>

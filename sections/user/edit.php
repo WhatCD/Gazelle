@@ -163,6 +163,7 @@ echo $Val->GenerateJS('userform');
     
 	<a href="#" id="toggle_sortable" onclick="return false;">Expand</a>
 	<div id="sortable_container" style="display: none;">
+	<a href="#" id="reset_sortable" onclick="return false;">Reset to Default</a>
 	<ul class="sortable_list" id="sortable">
 
 <?
@@ -204,36 +205,6 @@ else {
 	<input type="hidden" id="sorthide" name="sorthide" value=""/>
 		
 <?
-/*
-	for($i = 0; list($Key,$Val) = each($ReleaseTypes); $i++) {
-		if(!($i % 7)) {
-			if($i) {
-?>
-						</tr>
-<?
-			}
-?>
-						<tr style="border:none;">
-<?
-		}
-		if(!empty($SiteOptions['HideTypes']) && in_array($Key, $SiteOptions['HideTypes'])) {
-			$Checked = 'checked="checked" ';
-		} else {
-			$Checked='';
-		}
-?>
-			<td style="border:none;">
-				<label><input type="checkbox" id="hide_type_<?=$Key?>" name="hidetypes[]=" value="<?=$Key?>" <?=$Checked?>/>
-				<?=$Val?></label>
-			</td>
-<?
-	}
-	if($i % 7) {
-?>
-							<td style="border:none;" colspan="<?=7 - ($i % 7)?>"></td>
-<?
-	}
-	*/
 	unset($ReleaseTypes[1023], $ReleaseTypes[1024], $ReleaseTypes[1022]);
 ?>
 						</tr>

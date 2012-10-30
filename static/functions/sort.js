@@ -1,5 +1,17 @@
 var sortableTable;
 jQuery(document).ready(function ($) {
+
+	$.tablesorter.addParser({
+		id: 'relative_time',
+		is: function (s) {
+			return false;
+		},
+		format: function(str, table, td) {
+			return td.title;
+		},
+		type: 'text'
+	});
+
 	sortableTable = {
 		container : $('#manage_collage_table'),
 		form : $('#drag_drop_collage_form'),
@@ -57,17 +69,14 @@ jQuery(document).ready(function ($) {
 			});
 		},
 		tableSorter : function () {
+			var obj =  { 0: { sorter : false }, 6: { sorter : false } };
+			if (this.check.length !== 0) {
+				obj[5] = { sorter :  'relative_time' };
+			}
 			this.container.tablesorter({
 				cssHeader : 'headerSort',
 				textExtraction: sortableTable.extractor,
-				headers : {
-					0: {
-						sorter : false
-					},
-					6: {
-						sorter : false
-					}
-				}
+				headers : obj
 			}).on('sortEnd', sortableTable.postSort);
 		},
 		extractor : function (node) {
@@ -81,7 +90,7 @@ jQuery(document).ready(function ($) {
 			var span = $('<a href="#" title="Toggle Note">(Hide)</a>').click(function (e) {
 				e.preventDefault();
 				$('#drag_drop_textnote > :first-child').toggle();
-				$this = $(this);
+				var $this = $(this);
 				$this.text($this.text() === '(Hide)' ? '(Show)' : '(Hide)');
 			});
 			$('#sorting_head').append(' ', span);

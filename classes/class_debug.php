@@ -9,6 +9,7 @@ define('MAX_QUERIES', 30); //Maxmimum queries
 class DEBUG {
 	public $Errors = array();
 	public $Flags = array();
+	public $Perf = array();
 	private $LoggedVars = array();
 
 	public function profile($Automatic='') {
@@ -44,6 +45,15 @@ class DEBUG {
 			$Reason[] = 'Requested by '.$LoggedUser['Username'];
 		}
 
+		$this->Perf['Memory usage'] = (($Ram>>10)/1024)." MB";
+		$this->Perf['Page process time'] = (round($Micro)/1000)." s";
+
+		if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
+			global $CPUTimeStart;
+			$RUsage = getrusage();
+			$this->Perf['CPU time'] = (round(($RUsage["ru_utime.tv_sec"]*1000000 + $RUsage['ru_utime.tv_usec'] - $CPUTimeStart)/1000)/1000)." s";
+		}
+
 		if (isset($Reason[0])) {
 			$this->analysis(implode(', ', $Reason));
 			return true;
@@ -68,7 +78,8 @@ class DEBUG {
 				'flags' => $this->get_flags(),
 				'includes' => $this->get_includes(),
 				'cache' => $this->get_cache_keys(),
-				'vars' => $this->get_logged_vars()
+				'vars' => $this->get_logged_vars(),
+				'perf' => $this->get_perf()
 			),
 			$Time
 		);
@@ -187,6 +198,10 @@ class DEBUG {
 
 	/* Data wrappers */
 
+	public function get_perf() {
+		return $this->Perf;
+	}
+
 	public function get_flags() {
 		return $this->Flags;
 	}
@@ -271,6 +286,34 @@ class DEBUG {
 	}
 
 	/* Output Formatting */
+
+	public function perf_table($Perf=false) {
+		if (!is_array($Perf)) {
+			$Perf = $this->get_perf();
+		}
+		if (empty($Perf)) {
+			return;
+		}
+?>
+	<table class="layout" width="100%">
+		<tr>
+			<td align="left"><strong><a href="#" onclick="$('#debug_perf').toggle();return false;">(View)</a> Performance stats:</strong></td>
+		</tr>
+	</table>
+	<table id="debug_perf" class="debug_table hidden" width="100%">
+<?
+		foreach ($Perf as $Stat => $Value) {
+?>
+		<tr valign="top">
+			<td class="debug_perf_stat"><?=$Stat?></td>
+			<td class="debug_perf_data"><?=$Value?></td>
+		</tr>
+<?
+		}
+?>
+	</table>
+<?
+	}
 
 	public function include_table($Includes=false) {
 		if (!is_array($Includes)) {

@@ -3,7 +3,7 @@
 $OtherLink = '';
 
 $Title = 'Artist comments made by '.($Self?'you':$Username);
-$Header = 'Artist comments left by '.($Self?'you':format_username($UserID, false, false, false)).'';
+$Header = 'Artist comments left by '.($Self?'you':Users::format_username($UserID, false, false, false)).'';
 
 $Comments = $DB->query("SELECT
   SQL_CALC_FOUND_ROWS

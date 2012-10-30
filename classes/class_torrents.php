@@ -47,7 +47,7 @@ class Torrents {
 		$Key = $Torrents ? 'torrent_group_' : 'torrent_group_light_';
 
 		foreach ($GroupIDs as $GroupID) {
-			$Data = $Cache->get_value($Key.$GroupID);
+			$Data = $Cache->get_value($Key.$GroupID, true);
 			if (!empty($Data) && (@$Data['ver'] >= 4)) {
 				unset($NotFound[$GroupID]);
 				$Found[$GroupID] = $Data['d'];
@@ -93,11 +93,14 @@ class Torrents {
 							RemasterRecordLabel, RemasterCatalogueNumber, Media, Format, Encoding, ID");
 				while($Torrent = $DB->next_record(MYSQLI_ASSOC, true)) {
 					$Found[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;
-
-					$Cache->cache_value('torrent_group_'.$Torrent['GroupID'],
-							array('ver'=>4, 'd'=>$Found[$Torrent['GroupID']]), 0);
-					$Cache->cache_value('torrent_group_light_'.$Torrent['GroupID'],
-							array('ver'=>4, 'd'=>$Found[$Torrent['GroupID']]), 0);
+				}
+				
+				// Cache it all
+				foreach ($Found as $GroupID=>$GroupInfo) {
+					$Cache->cache_value('torrent_group_'.$GroupID,
+							array('ver'=>4, 'd'=>$GroupInfo), 0);
+					$Cache->cache_value('torrent_group_light_'.$GroupID,
+							array('ver'=>4, 'd'=>$GroupInfo), 0);
 				}
 
 			} else {
@@ -580,37 +583,36 @@ class Torrents {
 			// This bucket hasn't been checked before
 			$CurSnatchedTorrents = $Cache->get_value('users_snatched_'.$UserID.'_'.$BucketID, true);
 			if ($CurSnatchedTorrents === false || $CurTime - $LastUpdate > 1800) {
-				if ($CurSnatchedTorrents === false) {
+				$Updated = array();
+				if ($CurSnatchedTorrents === false || $LastUpdate == 0) {
+					for ($i = 0; $i < $Buckets; $i++) {
+						$SnatchedTorrents[$i] = array();
+					}
 					// Not found in cache. Since we don't have a suitable index, it's faster to update everything
 					$DB->query("SELECT fid, tstamp AS TorrentID FROM xbt_snatched WHERE uid='$UserID'");
+					while (list($ID) = $DB->next_record(MYSQLI_NUM, false)) {
+						$SnatchedTorrents[$ID & $LastBucket][(int)$ID] = true;
+					}
+					$Updated = array_fill(0, $Buckets, true);
 				} elseif (isset($CurSnatchedTorrents[$TorrentID])) {
 					// Old cache, but torrent is snatched, so no need to update
 					return true;
 				} else {
 					// Old cache, check if torrent has been snatched recently
-					$DB->query("SELECT fid AS TorrentID FROM xbt_snatched WHERE uid='$UserID' AND tstamp>=".$LastUpdate);
-				}
-				$Updated = array();
-				while (list($ID) = $DB->next_record(MYSQLI_NUM, false)) {
-					$CurBucketID = $ID & $LastBucket;
-					if ($SnatchedTorrents[$CurBucketID] === false) {
-						$SnatchedTorrents[$CurBucketID] = $Cache->get_value('users_snatched_'.$UserID.'_'.$CurBucketID, true);
+					$DB->query("SELECT fid FROM xbt_snatched WHERE uid='$UserID' AND tstamp>=$LastUpdate");
+					while (list($ID) = $DB->next_record(MYSQLI_NUM, false)) {
+						$CurBucketID = $ID & $LastBucket;
 						if ($SnatchedTorrents[$CurBucketID] === false) {
-							$SnatchedTorrents[$CurBucketID] = array();
+							$SnatchedTorrents[$CurBucketID] = $Cache->get_value('users_snatched_'.$UserID.'_'.$CurBucketID, true);
+							if ($SnatchedTorrents[$CurBucketID] === false) {
+								$SnatchedTorrents[$CurBucketID] = array();
+							}
 						}
+						$SnatchedTorrents[$CurBucketID][(int)$ID] = true;
+						$Updated[$CurBucketID] = true;
 					}
-					$SnatchedTorrents[$CurBucketID][(int)$ID] = true;
-					$Updated[$CurBucketID] = true;
 				}
 				for ($i = 0; $i < $Buckets; $i++) {
-					if (empty($SnatchedTorrents[$i])) {
-						$SnatchedTorrents[$i] = $Cache->get_value('users_snatched_'.$UserID.'_'.$i, true);
-						if ($SnatchedTorrents[$i] === false) {
-							// No snatched torrents with this bucket number
-							$SnatchedTorrents[$i] = array();
-							$Updated[$i] = true;
-						}
-					}
 					if ($Updated[$i]) {
 						$Cache->cache_value('users_snatched_'.$UserID.'_'.$i, $SnatchedTorrents[$i], 0);
 					}

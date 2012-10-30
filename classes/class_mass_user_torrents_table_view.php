@@ -126,9 +126,6 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	<div class="header">
 		<h2><?=display_str($this->Heading)?></h2>
 	</div>
-	<script src="static/functions/jquery-ui.js" type="text/javascript"></script>
-	<script src="static/functions/jquery.tablesorter.min.js" type="text/javascript"></script>
-	<script src="static/functions/sort.js" type="text/javascript"></script>
 
 	<table width="100%" class="layout">
 		<tr class="colhead"><td id="sorting_head">Sorting</td></tr>
@@ -157,8 +154,8 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 					<th style="width:1%"><span>Year</span></th>
 					<th style="width:15%"><span>Artist</span></th>
 					<th><span>Torrent</span></th>
-					<th style="width:1%"><span>User</span></th>
-					<th style="width:3%" id="check_all"><span>Remove</span></th>
+					<th style="width:5%"><span>Bookmarked</span></th>
+					<th style="width:1%" id="check_all"><span>Remove</span></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -171,7 +168,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 */
 	public function footer ()
 	{
-		if ($this->HasTorrents) :
+		if ($this->HasTorrents) :  
 ?>
 
 			</tbody>
@@ -200,6 +197,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 		if ($this->HasTorrents)
 			foreach ($this->TorrentList as $GroupID => $Group) {
 				$Artists = array();
+
 				extract($Group);
 				extract($this->CollageDataList[$GroupID]);
 
@@ -208,8 +206,9 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 				$DisplayName = self::display_name($ExtendedArtists, $Artists, $VanityHouse);
 				$TorrentLink = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$Name.'</a>';
 				$Year = $Year > 0 ? $Year : '';
+				$DateAdded = date($Time);
 
-				$this->row($Sort, $GroupID, $Year, $DisplayName, $TorrentLink);
+				$this->row($Sort, $GroupID, $Year, $DisplayName, $TorrentLink, $DateAdded);
 			}
 	}
 
@@ -222,7 +221,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 * @param string $DisplayName
 	 * @param string $TorrentLink
 	 */
-	public function row ($Sort, $GroupID, $GroupYear, $DisplayName, $TorrentLink)
+	public function row ($Sort, $GroupID, $GroupYear, $DisplayName, $TorrentLink, $DateAdded)
 	{
 		$CSS = $this->NumGroups % 2 === 0 ? 'rowa' : 'rowb';
 ?>
@@ -232,10 +231,10 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 							<input class="sort_numbers" type="text" name="sort[<?=$GroupID?>]" value="<?=$Sort?>" id="sort_<?=$GroupID?>" size="4" />
 						</td>
 						<td><?=$this->NumGroups?></td>
-						<td><?=trim($GroupYear)?></td>
-						<td><?=trim($DisplayName)?></td>
-						<td><?=trim($TorrentLink)?></td>
-						<td class="nobr"><?=Users::format_username($this->UserID, false, false, false)?></td>
+						<td><?=$GroupYear?trim($GroupYear):' '?></td>
+						<td><?=$DisplayName?trim($DisplayName):' '?></td>
+						<td><?=$TorrentLink?trim($TorrentLink):' '?></td>
+						<td class="nobr" title="<?=$DateAdded?>"><?=$DateAdded?time_diff($DateAdded):' '?></td>
 						<td class="center"><input type="checkbox" name="remove[<?=$GroupID?>]" value="" /></td>
 					</tr>
 <?

@@ -137,7 +137,16 @@ if(in_array($ThreadID, $UserSubscriptions)) {
 	$Cache->delete_value('subscriptions_user_new_'.$LoggedUser['ID']);
 }
 
+
 $DB->query("UPDATE users_notify_quoted SET Unread = '0' WHERE UserID = '$LoggedUser[ID]' AND TopicID = '$ThreadID'");
+
+$QuoteNotifiactionsCount = $Cache->get_value('forums_quotes_'.$LoggedUser['ID']);
+if($QuoteNotificationsCount > 0) {
+     $Cache->cache_value('forums_quotes_'.$LoggedUser['ID'], $QuoteNotificationsCount - 1, 0);
+}
+else {
+    $Cache->delete_value('forums_quotes_'.$LoggedUser['ID']);
+}
 
 // Start printing
 View::show_header($ThreadInfo['Title'] . ' < '.$Forums[$ForumID]['Name'].' < '. 'Forums','comments,subscriptions,bbcode,jquery');

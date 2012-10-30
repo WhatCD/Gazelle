@@ -51,6 +51,41 @@ if(empty($_POST['confirm'])) {
 	View::show_footer();
 } else {
 	authorize();
+	
+	// Votes ninjutsu.  This is so annoyingly complicated.
+	// 1. Get a list of everybody who voted on the old group and clear their cache keys
+	$DB->query("SELECT UserID FROM users_votes WHERE GroupID='$GroupID'");
+	while (list($UserID) = $DB->next_record()) {
+		$Cache->delete_value('voted_albums_'.$UserID);
+	}
+	// 2. Update the existing votes where possible, clear out the duplicates left by key
+	// conflicts, and update the torrents_votes table
+	$DB->query("UPDATE IGNORE users_votes SET GroupID='$NewGroupID' WHERE GroupID='$GroupID'");
+	$DB->query("DELETE FROM users_votes WHERE GroupID='$GroupID'");
+	$DB->query("INSERT INTO torrents_votes (GroupID, Ups, Total, Score)
+				SELECT $NewGroupID, UpVotes, TotalVotes, VoteScore
+				FROM (SELECT IFNULL(SUM(IF(Type='Up',1,0)),0) As UpVotes, 
+							 COUNT(1) AS TotalVotes, 
+							 binomial_ci(IFNULL(SUM(IF(Type='Up',1,0)),0), COUNT(1)) AS VoteScore
+					  FROM users_votes 
+					  WHERE GroupID = $NewGroupID
+					  GROUP BY GroupID) AS a
+				ON DUPLICATE KEY UPDATE
+				Ups = a.UpVotes,
+				Total = a.TotalVotes,
+				Score = a.VoteScore;");
+	// 3. Clear the votes_pairs keys!
+	$DB->query("SELECT v2.GroupID 
+				FROM users_votes AS v1
+				INNER JOIN users_votes AS v2 USING (UserID)
+				WHERE (v1.Type = 'Up' OR v2.Type='Up')
+				AND (v1.GroupID IN($GroupID, $NewGroupID))
+				AND (v2.GroupID NOT IN($GroupID, $NewGroupID));");
+	while (list($CacheGroupID) = $DB->next_record()) {
+		$Cache->delete_value('vote_pairs_'.$CacheGroupID);
+	}
+	// 4. Clear the new groups vote keys
+	
 
 	$DB->query("UPDATE torrents SET GroupID='$NewGroupID' WHERE GroupID='$GroupID'");
 	$DB->query("UPDATE wiki_torrents SET PageID='$NewGroupID' WHERE PageID='$GroupID'");

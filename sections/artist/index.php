@@ -79,6 +79,57 @@ if(!empty($_POST['action'])) {
             include(SERVER_ROOT.'/sections/artist/take_warn.php');
             break;
 	
+
+		
+	default:
+			error(0);
+	}
+} elseif(!empty($_GET['action'])) {
+  switch ($_GET['action']) {
+		case 'get_post':
+			if (!$_GET['post'] || !is_number($_GET['post'])) { error(0); }
+			$DB->query("SELECT Body FROM artist_comments WHERE ID='".db_string($_GET['post'])."'");
+			list($Body) = $DB->next_record(MYSQLI_NUM);
+			echo trim($Body);
+			break;
+	
+		case 'delete_comment':
+			authorize();
+		
+			// Quick SQL injection check
+			if (!$_GET['postid'] || !is_number($_GET['postid'])) { error(0); }
+		
+			// Make sure they are moderators
+			if (!check_perms('site_moderate_forums')) { error(403); }
+		
+			// Get topicid, forumid, number of pages
+			$DB->query("SELECT
+				ArtistID,
+				CEIL(COUNT(ac.ID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
+				CEIL(SUM(IF(ac.ID<=".$_GET['postid'].",1,0))/".TORRENT_COMMENTS_PER_PAGE.") AS Page
+				FROM artist_comments AS ac
+				WHERE ac.ArtistID=(SELECT ArtistID FROM artist_comments WHERE ID=".$_GET['postid'].")
+				GROUP BY ac.ArtistID");
+			list($ArtistID,$Pages,$Page)=$DB->next_record();
+		
+			// $Pages = number of pages in the thread
+			// $Page = which page the post is on
+			// These are set for cache clearing.
+		
+			$DB->query("DELETE FROM artist_comments WHERE ID='".db_string($_GET['postid'])."'");
+		
+			//We need to clear all subsequential catalogues as they've all been bumped with the absence of this post
+			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
+			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Pages-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
+			for($i=$ThisCatalogue;$i<=$LastCatalogue;$i++) {
+				$Cache->delete('artist_comments_'.$ArtistID.'_catalogue_'.$i);
+			}
+			
+			// Delete thread info cache (eg. number of pages)
+			$Cache->delete('artist_comments_'.$ArtistID);
+			
+			break;
+	
 		case 'takeedit_post':
 			authorize();
 
@@ -131,55 +182,6 @@ if(!empty($_POST['action'])) {
 			
 			// This gets sent to the browser, which echoes it in place of the old body
 			echo $Text->full_format($_POST['body']);
-			break;
-		
-	default:
-			error(0);
-	}
-} elseif(!empty($_GET['action'])) {
-  switch ($_GET['action']) {
-		case 'get_post':
-			if (!$_GET['post'] || !is_number($_GET['post'])) { error(0); }
-			$DB->query("SELECT Body FROM artist_comments WHERE ID='".db_string($_GET['post'])."'");
-			list($Body) = $DB->next_record(MYSQLI_NUM);
-			echo trim($Body);
-			break;
-	
-		case 'delete_comment':
-			authorize();
-		
-			// Quick SQL injection check
-			if (!$_GET['postid'] || !is_number($_GET['postid'])) { error(0); }
-		
-			// Make sure they are moderators
-			if (!check_perms('site_moderate_forums')) { error(403); }
-		
-			// Get topicid, forumid, number of pages
-			$DB->query("SELECT
-				ArtistID,
-				CEIL(COUNT(ac.ID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
-				CEIL(SUM(IF(ac.ID<=".$_GET['postid'].",1,0))/".TORRENT_COMMENTS_PER_PAGE.") AS Page
-				FROM artist_comments AS ac
-				WHERE ac.ArtistID=(SELECT ArtistID FROM artist_comments WHERE ID=".$_GET['postid'].")
-				GROUP BY ac.ArtistID");
-			list($ArtistID,$Pages,$Page)=$DB->next_record();
-		
-			// $Pages = number of pages in the thread
-			// $Page = which page the post is on
-			// These are set for cache clearing.
-		
-			$DB->query("DELETE FROM artist_comments WHERE ID='".db_string($_GET['postid'])."'");
-		
-			//We need to clear all subsequential catalogues as they've all been bumped with the absence of this post
-			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
-			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Pages-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
-			for($i=$ThisCatalogue;$i<=$LastCatalogue;$i++) {
-				$Cache->delete('artist_comments_'.$ArtistID.'_catalogue_'.$i);
-			}
-			
-			// Delete thread info cache (eg. number of pages)
-			$Cache->delete('artist_comments_'.$ArtistID);
-			
 			break;
 	
 		case 'edit':

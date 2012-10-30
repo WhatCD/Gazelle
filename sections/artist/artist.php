@@ -516,6 +516,8 @@ if (check_perms('site_edit_wiki')) {
 			<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>">[Edit]</a>
 <? } ?>
 			<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>">[View history]</a>
+			<a href="artist.php?id=<?=$ArtistID?>#info">[Info]</a>
+			<a href="artist.php?id=<?=$ArtistID?>#artistcomments">[Comments]</a>
 <? if (check_perms('site_delete_artist') && check_perms('torrents_delete')) { ?>
 			<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Delete]</a>
 <? }
@@ -891,8 +893,11 @@ function require(file, callback) {
 
 <? } // if $NumSimilar>0 ?>
 		<div class="box">
-			<div class="head"><strong>Artist info</strong></div>
-			<div class="body"><?=$Text->full_format($Body)?></div>
+			<div id="info" class="head">
+				<strong>Artist info</strong>
+				<a href="#" onclick="$('#body').toggle(); return false;">[Toggle]</a>
+			</div>
+			<div id="body" class="body"><?=$Text->full_format($Body)?></div>
 		</div>
 <?php
 // --- Comments ---
@@ -945,7 +950,7 @@ if($Catalogue === false) {
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
 $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)%THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
 ?>
-	<div class="linkbox">
+	<div id="artistcomments" class="linkbox">
 		<a name="comments"></a>
 <?
 $Pages = Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');

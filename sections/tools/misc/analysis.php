@@ -10,6 +10,7 @@ View::show_header('Case Analysis');
 </div>
 <pre id="#debug_report"><?=display_str($Analysis['message'])?></pre>
 <?
+$Debug->perf_table($Analysis['perf']);
 $Debug->flag_table($Analysis['flags']);
 $Debug->include_table($Analysis['includes']);
 $Debug->error_table($Analysis['errors']);

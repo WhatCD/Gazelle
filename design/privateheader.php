@@ -205,10 +205,10 @@ if($LoggedUser['NotifyOnQuote']) {
 		$DB->query($sql);
 		list($QuoteNotificationsCount) = $DB->next_record();
 		$Cache->cache_value('forums_quotes_'.$LoggedUser['ID'], $QuoteNotificationsCount, 0);
+        }
 		if($QuoteNotificationsCount > 0) {
-			$Alerts[] = '<a href="userhistory.php?action=quote_notifications">'. 'New Quote'. ($QuoteNotificationsCount > 1 ? 's' : '');
+			$Alerts[] = '<a href="userhistory.php?action=quote_notifications">'. 'New Quote'. ($QuoteNotificationsCount > 1 ? 's' : '') . '</a>';
 		}
-	}
 }
 
 // News
