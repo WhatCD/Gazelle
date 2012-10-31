@@ -640,6 +640,7 @@ CREATE TABLE `schedule` (
 
 CREATE TABLE `sphinx_delta` (
   `ID` int(10) NOT NULL,
+  `GroupID` int(11) NOT NULL DEFAULT '0',
   `GroupName` varchar(255) DEFAULT NULL,
   `ArtistName` varchar(2048) DEFAULT NULL,
   `TagList` varchar(728) DEFAULT NULL,
@@ -662,12 +663,13 @@ CREATE TABLE `sphinx_delta` (
   `Media` varchar(255) DEFAULT NULL,
   `Format` varchar(255) DEFAULT NULL,
   `Encoding` varchar(255) DEFAULT NULL,
-  `RemasterYear` int(4) DEFAULT NULL,
+  `RemasterYear` varchar(50) NOT NULL DEFAULT '',
   `RemasterTitle` varchar(512) DEFAULT NULL,
   `RemasterRecordLabel` varchar(50) DEFAULT NULL,
   `RemasterCatalogueNumber` varchar(50) DEFAULT NULL,
   `FileList` mediumtext,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `GroupID` (`GroupID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sphinx_hash` (

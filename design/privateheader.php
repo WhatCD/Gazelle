@@ -406,7 +406,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 
 	if($Show) {
 ?>
-	<div class="rippywrap">
+	<div id="rippywrap" class="rippywrap">
 		<div id="bubble" style="display: <?=($Says ? 'block' : 'none')?>">
 			<span class="rbt"></span>
 			<span id="rippy-says" class="rbm"><?=$Says?></span>
@@ -414,6 +414,13 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 		</div>
 		<div class="rippy" onclick="rippyclick();"></div>
 	</div>
+	
+	<script>
+	//Random rippy image script, moved to here instead of js file because opera sucks
+	var n = Math.floor((Math.random()*3)+1);
+	var background = "transparent url('static/rippy/rippy_halloween_" + n + ".png') no-repeat bottom center";
+	document.getElementById('rippywrap').style.background = background;
+	</script>
 <?
 	}
 }

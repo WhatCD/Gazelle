@@ -538,10 +538,8 @@ foreach($Results as $GroupID=>$Data) {
 				'isFreeleech' => $Data['FreeTorrent'] == '1',
 				'isNeutralLeech' => $Data['FreeTorrent'] == '2',
 				'isPersonalFreeleech' => $Data['PersonalFL'],
-				'canUseToken' => ($LoggedUser['FLTokens'] > 0)
-									&& $Data['HasFile'] && ($Data['Size'] < 1073741824)
-									&& !$Data['PersonalFL']
-									&& empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')
+				'canUseToken' => Torrents::can_use_token($Data),
+				'hasSnatched' => $Data['IsSnatched']
 			);
 		}
 		
@@ -582,10 +580,8 @@ foreach($Results as $GroupID=>$Data) {
 			'isFreeleech' => $Data['FreeTorrent'] == '1',
 			'isNeutralLeech' => $Data['FreeTorrent'] == '2',
 			'isPersonalFreeleech' => $Data['PersonalFL'],
-			'canUseToken' => ($LoggedUser['FLTokens'] > 0)
-								&& $Data['HasFile'] && ($Data['Size'] < 1073741824)
-								&& !$Data['PersonalFL']
-								&& empty($Data['FreeTorrent']) && ($LoggedUser['CanLeech'] == '1')
+			'canUseToken' => Torrents::can_use_token($Data),
+			'hasSnatched' => $Data['IsSnatched']
 		);
 	}
 }

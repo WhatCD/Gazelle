@@ -13,3 +13,5 @@ function say() {
 function rippyclick() {
 	$('.rippywrap').remove();
 }
+
+

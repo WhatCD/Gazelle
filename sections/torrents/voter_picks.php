@@ -3,10 +3,10 @@
 include(SERVER_ROOT.'/sections/torrents/ranking_funcs.php');
 
 $Top10 = $Cache->get_value('similar_albums_'.$GroupID);
-if ($Top10 === False) {
+if ($Top10 === False || isset($Top10[$GroupID])) {
 
 	$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
-	if ($VotePairs === False) {
+	if ($VotePairs === False|| isset($VotePairs[$GroupID])) {
 		$DB->query("SELECT v.GroupID, SUM(IF(v.Type='Up',1,0)) AS Ups, COUNT(1) AS Total
 					FROM (SELECT UserID FROM users_votes WHERE GroupID = $GroupID AND Type='Up') AS a
 					JOIN users_votes AS v USING (UserID)
@@ -28,7 +28,7 @@ if ($Top10 === False) {
 
 	arsort($GroupScores);
 	$Top10 = array_slice($GroupScores, 0, 10, true);
-	$Cache->cache_value('similar_albums_'.$GroupID, $Top10, 2*3600);
+	$Cache->cache_value('similar_albums_'.$GroupID, $Top10, .5*3600);
 }
 if (count($Top10) > 0) {
 ?>

@@ -143,7 +143,7 @@ class TORRENT_FORM {
 ?>
 			<tr>
 				<td colspan="2" style="text-align: center;">
-					<p>Be sure that your torrent is approved by the <a href="rules.php?p=upload">rules</a>. Not doing this will result in a <strong>warning</strong> or <strong>worse</strong>.</p>
+					<p>Be sure that your torrent is approved by the <a href="rules.php?p=upload" target="_blank">rules</a>. Not doing this will result in a <strong>warning</strong> or <strong>worse</strong>.</p>
 <?		if($this->NewTorrent) { ?>
 					<p>After uploading the torrent, you will have a one hour grace period during which no one other than you can fill requests with this torrent. Make use of this time wisely, and search the requests.</p>
 <?		} ?>
@@ -198,7 +198,7 @@ class TORRENT_FORM {
 			<tr id="artist_tr">
 			<td class="label">Artist(s)</td>
 			<td id="artistfields">
-				<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding 'Various Artists' as an artist, read <a href='wiki.php?action=article&amp;id=369'>this</a> for more information on why.</p>
+				<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding 'Various Artists' as an artist, read <a href='wiki.php?action=article&amp;id=369' target='_blank'>this</a> for more information on why.</p>
 <?			if(!empty($Torrent['Artists'])) {
 				$FirstArtist = true;
 				foreach($Torrent['Artists'] as $Importance => $Artists) {
@@ -244,7 +244,7 @@ class TORRENT_FORM {
 				<td class="label">Album title:</td>
 				<td>
 					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>"<?=$this->Disabled?>/>
-					<p class="min_padding">Do not include the words remaster, re-issue, MSFL Gold, limited edition, bonus tracks, bonus disc or country specific information in this field. That belongs in the edition information fields below, see <a href="wiki.php?action=article&amp;id=159">this</a> for further information. Also remember to use the correct capitalization for your upload. See the <a href="wiki.php?action=article&amp;id=317">Capitalization Guidelines</a> for more information.
+					<p class="min_padding">Do not include the words remaster, re-issue, MSFL Gold, limited edition, bonus tracks, bonus disc or country specific information in this field. That belongs in the edition information fields below, see <a href="wiki.php?action=article&amp;id=159" target="_blank">this</a> for further information. Also remember to use the correct capitalization for your upload. See the <a href="wiki.php?action=article&amp;id=317" target="_blank">Capitalization Guidelines</a> for more information.
 				</td>
 			</tr>
 <tr id="musicbrainz_tr">
@@ -314,7 +314,7 @@ function hide() {
 				<td class="label">Catalogue Number (Optional):</td>
 				<td>
 					<input type="text" id="catalogue_number" name="catalogue_number" size="40" value="<?=display_str($Torrent['CatalogueNumber']) ?>"<?=$this->Disabled?> />
-					Please double check the record label and catalogue number when using MusicBrainz. See <a href="wiki.php?action=article&amp;id=688">this guide</a> for more details.
+					Please double check the record label and catalogue number when using MusicBrainz. See <a href="wiki.php?action=article&amp;id=688" target="_blank">this guide</a> for more details.
 				</td>
 			</tr>
 			<tr id="releasetype_tr">
@@ -335,7 +335,7 @@ function hide() {
 			}
 
 ?>
-					</select> Please take the time to fill this out properly (try searching <a href="http://musicbrainz.org/search.html">MusicBrainz</a>).
+					</select> Please take the time to fill this out properly (try searching <a href="http://musicbrainz.org/search.html" target="_blank">MusicBrainz</a>).
 				</td>
 			</tr>
 <?		} ?>
@@ -390,7 +390,7 @@ function hide() {
 				<td class="label">Scene</td>
 				<td>
 					<input type="checkbox" id="scene" name="scene" <? if($Torrent['Scene']) { echo "checked='checked' ";}?>/>
-					Check this only if this is a 'scene release'. If you ripped it yourself, it is <strong>not</strong> a scene release. <br />If you are not sure, <strong>DO NOT</strong> check it; you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29">Wikipedia</a>.
+					Check this only if this is a 'scene release'. If you ripped it yourself, it is <strong>not</strong> a scene release. <br />If you are not sure, <strong>DO NOT</strong> check it; you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29" target="_blank">Wikipedia</a>.
 				</td>
 			</tr>
 			<tr>
@@ -481,7 +481,7 @@ function hide() {
 					Log Files
 				</td>
 				<td id="logfields">
-					Check your log files here before uploading: <a href="logchecker.php">logchecker.php</a><br />
+					Check your log files here before uploading: <a href="logchecker.php" target="_blank">logchecker.php</a><br />
 					<input id="file" type="file" name="logfiles[]" size="50" /> [<a href="javascript:;" onclick="AddLogField();">+</a>] [<a href="javascript:;" onclick="RemoveLogField();">-</a>]
 				</td>
 			</tr>

@@ -40,7 +40,7 @@ class CACHE extends Memcache {
 		'top10tor_*',
 		'query_lock_*',
 		'top10votes_*',
-		'similar_albums_*',
+//		'similar_albums_*',
 		'users_snatched_*'
 	);
 
