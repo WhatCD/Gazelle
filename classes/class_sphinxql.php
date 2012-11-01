@@ -119,6 +119,9 @@ class SphinxQL extends mysqli {
 			'!'=>'\\\\!',
 			'"'=>'\\\\"',
 			'/'=>'\\\\/',
+			'*'=>'\\\\*',
+			'$'=>'\\\\$',
+			'^'=>'\\\\^',
 			'\\'=>'\\\\\\\\')
 		);
 	}
@@ -262,35 +265,50 @@ class SphinxQL_Query {
 	/**
 	 * Specify the order of the matches. Calling this function multiple times sets secondary priorities
 	 *
-	 * @param string $Attribute attribute to use for sorting
+	 * @param string $Attribute attribute to use for sorting.
+	 *     Passing an empty attribute value will clear the current sort settings
 	 * @param string $Mode sort method to apply to the selected attribute
 	 * @return current SphinxQL query object
 	 */
-	public function order_by($Attribute, $Mode) {
-		$this->SortBy[] = "$Attribute $Mode";
+	public function order_by($Attribute = false, $Mode) {
+		if (empty($Attribute)) {
+			$this->SortBy = array();
+		} else {
+			$this->SortBy[] = "$Attribute $Mode";
+		}
 		return $this;
 	}
 
 	/**
 	 * Specify how the results are grouped
 	 *
-	 * @param string $Attribute group matches with the same $Attribute value
+	 * @param string $Attribute group matches with the same $Attribute value.
+	 *     Passing an empty attribute value will clear the current group settings
 	 * @return current SphinxQL query object
 	 */
-	public function group_by($Attribute) {
-		$this->GroupBy = "$Attribute";
+	public function group_by($Attribute = false) {
+		if (empty($Attribute)) {
+			$this->GroupBy = '';
+		} else {
+			$this->GroupBy = $Attribute;
+		}
 		return $this;
 	}
 
 	/**
 	 * Specify the order of the results within groups
 	 *
-	 * @param string $Attribute attribute to use for sorting
+	 * @param string $Attribute attribute to use for sorting.
+	 *     Passing an empty attribute will clear the current group sort settings
 	 * @param string $Mode sort method to apply to the selected attribute
 	 * @return current SphinxQL query object
 	 */
-	public function order_group_by($Attribute, $Mode) {
-		$this->SortGroupBy = "$Attribute $Mode";
+	public function order_group_by($Attribute = false, $Mode) {
+		if (empty($Attribute)) {
+			$this->SortGroupBy = '';
+		} else {
+			$this->SortGroupBy = "$Attribute $Mode";
+		}
 		return $this;
 	}
 
@@ -302,7 +320,7 @@ class SphinxQL_Query {
 	 * @param int $MaxMatches number of results to store in the Sphinx server's memory. Must be >= ($Offset+$Limit)
 	 * @return current SphinxQL query object
 	 */
-	public function limit($Offset, $Limit, $MaxMatches = SPHINX_MATCHES_START) {
+	public function limit($Offset, $Limit, $MaxMatches = SPHINX_MAX_MATCHES) {
 		$this->Limits = "$Offset, $Limit";
 		$this->set('max_matches', $MaxMatches);
 		return $this;
@@ -340,7 +358,7 @@ class SphinxQL_Query {
 		if(!$this->Indexes) {
 			$this->error('Index name is required.');
 		}
-		$this->QueryString = "SELECT $this->Select FROM $this->Indexes";
+		$this->QueryString = "SELECT $this->Select\nFROM $this->Indexes";
 		if(!empty($this->Expressions)) {
 			$this->Filters['expr'] = "MATCH('".implode(" ", $this->Expressions)."')";
 		}
@@ -524,7 +542,7 @@ class SphinxQL_Result {
 	 */
 	public function to_pair($Key1, $Key2) {
 		$Return = array();
-		while($Row = $this->fetch_row()) {
+		while($Row = $this->fetch_array()) {
 			$Return[$Row[$Key1]] = $Row[$Key2];
 		}
 		$this->data_seek(0);

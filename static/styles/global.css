@@ -190,7 +190,7 @@ div#AddArtists a {
 	z-index: 25;
 	display: block;
 	position: fixed;
-	background: transparent no-repeat bottom
+	background: transparent url('../rippy/rippy_halloween_1.png') no-repeat bottom
 		center;
 	color: black;
 	text-align: center;

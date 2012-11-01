@@ -115,8 +115,8 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Torrent Grouping</strong></td>
 				<td>
 					<select name="disablegrouping" id="disablegrouping">
-						<option value="0"<? if ($SiteOptions['DisableGrouping'] == 0) { ?>selected="selected"<? } ?>>Group torrents by default</option>
-						<option value="1"<? if ($SiteOptions['DisableGrouping'] == 1) { ?>selected="selected"<? } ?>>DO NOT Group torrents by default</option>
+						<option value="0"<? if ($SiteOptions['DisableGrouping2'] == 0) { ?>selected="selected"<? } ?>>Group torrents by default</option>
+						<option value="1"<? if ($SiteOptions['DisableGrouping2'] == 1) { ?>selected="selected"<? } ?>>DO NOT Group torrents by default</option>
 					</select>&nbsp;
 					<select name="torrentgrouping" id="torrentgrouping">
 						<option value="0"<? if ($SiteOptions['TorrentGrouping'] == 0) { ?>selected="selected"<? } ?>>Groups are open by default</option>
@@ -264,12 +264,25 @@ else {
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Avatars</strong></td>
-				<td>
-					<input type="checkbox" name="disableavatars" id="disableavatars" <? if (!empty($SiteOptions['DisableAvatars'])) { ?>checked="checked"<? } ?> />
-					<label for="disableavatars">Disable avatars</label>
-				</td>
-			</tr>
+            	<td class="label"><strong>Avatars</strong></td>
+                <td>
+                    <select name="disableavatars" id="disableavatars" onclick="ToggleIdenticons();"> 
+                        <option value="1" <? if($SiteOptions['DisableAvatars'] == 1) { ?> selected="selected" <? } ?>/>Disable avatars</option>
+                        <option value="0" <? if($SiteOptions['DisableAvatars'] == 0) { ?> selected="selected" <? } ?>/>Show avatars</option>
+                        <option value="2" <? if($SiteOptions['DisableAvatars'] == 2) { ?> selected="selected" <? } ?>/>Show avatars or:</option>
+                        <option value="3" <? if($SiteOptions['DisableAvatars'] == 3) { ?> selected="selected" <? } ?>/>Replace all avatars with:</option>
+                    </select>
+                    <select name="identicons" id="identicons">
+                        <option value="0" <? if($SiteOptions['Identicons'] == 0) { ?> selected="selected" <? } ?>/>Identicon</option>
+                        <option value="1" <? if($SiteOptions['Identicons'] == 1) { ?> selected="selected" <? } ?>/>MonsterID</option>
+                        <option value="2" <? if($SiteOptions['Identicons'] == 2) { ?> selected="selected" <? } ?>/>Wavatar</option>
+                        <option value="3" <? if($SiteOptions['Identicons'] == 3) { ?> selected="selected" <? } ?>/>Retro</option>
+                        <option value="4" <? if($SiteOptions['Identicons'] == 4) { ?> selected="selected" <? } ?>/>Robots 1</option>
+                        <option value="5" <? if($SiteOptions['Identicons'] == 5) { ?> selected="selected" <? } ?>/>Robots 2</option>
+                        <option value="6" <? if($SiteOptions['Identicons'] == 6) { ?> selected="selected" <? } ?>/>Robots 3</option>
+                    </select>
+                </td>
+            </tr>
               <tr>
                 <td class="label"><strong>Push Notifications</strong></td>
                 <td>

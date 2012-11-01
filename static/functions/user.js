@@ -145,3 +145,14 @@ function ToggleWarningAdjust(selector) {
 		$('#ReduceWarning').raw().disabled = true;
 	}
 }
+
+addDOMLoadEvent(ToggleIdenticons);
+function ToggleIdenticons() {
+       var selected = $('#disableavatars').raw().selectedIndex;
+       if(selected == 2 || selected == 3) {
+               $('#identicons').show();
+       }
+       else {
+               $('#identicons').hide();                
+       }
+}

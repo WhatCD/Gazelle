@@ -181,7 +181,7 @@ if ($Err) {
 if(!empty($LoggedUser['DefaultSearch'])) {
 	$Options['DefaultSearch'] = $LoggedUser['DefaultSearch'];
 }
-$Options['DisableGrouping'] = (!empty($_POST['disablegrouping']) ? 1 : 0);
+$Options['DisableGrouping2'] = (!empty($_POST['disablegrouping']) ? 1 : 0);
 $Options['TorrentGrouping'] = (!empty($_POST['torrentgrouping']) ? 1 : 0);
 $Options['DiscogView'] = (!empty($_POST['discogview']) ? 1 : 0);
 $Options['PostsPerPage'] = (int) $_POST['postsperpage'];
@@ -190,7 +190,8 @@ $Options['CollageCovers'] = empty($_POST['collagecovers']) ? 0 : $_POST['collage
 $Options['ShowTags'] = (!empty($_POST['showtags']) ? 1 : 0);
 $Options['AutoSubscribe'] = (!empty($_POST['autosubscribe']) ? 1 : 0);
 $Options['DisableSmileys'] = (!empty($_POST['disablesmileys']) ? 1 : 0);
-$Options['DisableAvatars'] = (!empty($_POST['disableavatars']) ? 1 : 0);
+$Options['DisableAvatars'] = db_string($_POST['disableavatars']);
+$Options['Identicons'] = (!empty($_POST['identicons']) ? (int) $_POST['identicons'] : 0);
 $Options['DisablePMAvatars'] = (!empty($_POST['disablepmavatars']) ? 1 : 0);
 $Options['NotifyOnQuote'] = (!empty($_POST['notifyquotes']) ? 1 : 0);
 $Options['ShowSnatched'] = (!empty($_POST['showsnatched']) ? 1 : 0);

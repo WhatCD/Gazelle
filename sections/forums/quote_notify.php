@@ -29,7 +29,7 @@ while (list($UserID) = $DB->next_record()) {
 	$ForumID = db_string($ForumID);
 	$TopicID = db_string($TopicID);
 	$PostID = db_string($PostID);
-	$DB->query("INSERT INTO users_notify_quoted (UserID, QuoterID, ForumID, TopicID, PostID, Date)
+	$DB->query("INSERT IGNORE INTO users_notify_quoted (UserID, QuoterID, ForumID, TopicID, PostID, Date)
 		VALUES ('$UserID', '$QuoterID', '$ForumID', '$TopicID', '$PostID', '" . sqltime() . "')");
 	$Cache->delete_value('forums_quotes_' . $UserID);
 }

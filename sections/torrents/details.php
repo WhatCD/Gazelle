@@ -802,15 +802,15 @@ foreach($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
-<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+<table class="forum_post box vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 	<colgroup>
-<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 		<col class="col_avatar" />
 <? 	} ?>
 		<col class="col_post_body" />
 	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<div style="float:left;"><a class="post_id" href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
@@ -844,13 +844,9 @@ foreach($Thread as $Key => $Post) {
 		</td>
 	</tr>
 	<tr>
-<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 		<td class="avatar" valign="top">
-<?		if ($Avatar) { ?>
-			<img src="<?=$Avatar?>" width="150" alt="<?=$Username ?>'s avatar" />
-<?		} else { ?>
-			<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<?		} ?>
+		<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
 		</td>
 <?	} ?>
 		<td class="body" valign="top">
@@ -880,13 +876,13 @@ foreach($Thread as $Key => $Post) {
 				<div class="box pad">
 					<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
 						<colgroup>
-<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if(Users::has_avatars_enabled()) { ?>
 							<col class="col_avatar" />
 <? 	} ?>
 							<col class="col_post_body" />
 						</colgroup>
 						<tr class="colhead_dark">
-							<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+							<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 								<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
 								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong> Just now
 								<a href="#quickreplypreview">[Report Comment]</a>
@@ -897,13 +893,11 @@ foreach($Thread as $Key => $Post) {
 							</td>
 						</tr>
 						<tr>
+					<?	if (Users::has_avatars_enabled()) { ?>
 							<td class="avatar" valign="top">
-<?	if (!empty($LoggedUser['Avatar'])) { ?>
-								<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-<?	} else { ?>
-								<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<?	} ?>
+							<?=Users::show_avatar($LoggedUser['Avatar'], $LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
 							</td>
+					<?	} ?>
 							<td class="body" valign="top">
 								<div id="contentpreview" style="text-align:left;"></div>
 							</td>

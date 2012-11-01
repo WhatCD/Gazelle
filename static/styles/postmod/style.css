@@ -767,7 +767,8 @@ tr.group td,
 tr.torrent td {
 	color: #646054;
 }
-.torrent_table.grouping tr.torrent {
+.torrent_table.grouping tr.torrent,
+.torrent_table.no_grouping tr.torrent {
 	background-color:#EFEFEF;
 }
 

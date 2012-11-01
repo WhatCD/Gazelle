@@ -399,20 +399,20 @@ foreach ($Thread as $Key => $Post) {
 	if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) {
 		echo ' forum_unread';
 	}
-	if ($HeavyInfo['DisableAvatars']) {
+	if (!Users::has_avatars_enabled()) {
 		echo ' noavatar';
 	}
 	if ($ThreadInfo['OP'] == $AuthorID) {
 		echo ' important_user';
 	} ?>" id="post<?=$PostID?>">
 	<colgroup>
-<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 		<col class="col_avatar" />
 <? 	} ?>
 		<col class="col_post_body" />
 	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<div style="float:left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<?=Users::format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?> 
@@ -459,16 +459,12 @@ foreach ($Thread as $Key => $Post) {
 		</td>
 	</tr>
 	<tr>
-<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 		<td class="avatar" valign="top">
-<?		if ($Avatar) { ?>
-			<img src="<?=$Avatar?>" width="150" style="max-height:400px;" alt="<?=$Username ?>'s avatar" />
-<?		} else { ?>
-			<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<?		} ?>
+		<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
 		</td>
 <?	} ?>
-		<td class="body" valign="top"<? if(!empty($HeavyInfo['DisableAvatars'])) { echo ' colspan="2"'; } ?>>
+		<td class="body" valign="top"<? if(!Users::has_avatars_enabled()) { echo ' colspan="2"'; } ?>>
 			<div id="content<?=$PostID?>">
 				<?=$Text->full_format($Body) ?>
 <?	if ($EditedUserID) { ?>
@@ -504,13 +500,13 @@ if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 				<div class="box pad">
 					<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
 						<colgroup>
-<?		if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?		if(Users::has_avatars_enabled()) { ?>
 							<col class="col_avatar" />
 <? 		} ?>
 							<col class="col_post_body" />
 						</colgroup>
 						<tr class="colhead_dark">
-							<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+							<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 								<span style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
 								by <?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?> Just now
 								</span>
@@ -522,15 +518,11 @@ if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 							</td>
 						</tr>
 						<tr>
-<?		if (empty($HeavyInfo['DisableAvatars'])) { ?>
-							<td class="avatar" valign="top">
-<?			if (!empty($LoggedUser['Avatar'])) { ?>
-								<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-<?			} else { ?>
-								<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<?			} ?>
-							</td>
-<?		} ?>
+				<?	if (Users::has_avatars_enabled()) { ?>
+						<td class="avatar" valign="top">
+						<?=Users::show_avatar($LoggedUser['Avatar'], $LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
+						</td>
+				<?	} ?>
 							<td class="body" valign="top">
 								<div id="contentpreview" style="text-align:left;"></div>
 							</td>

@@ -668,6 +668,7 @@ CREATE TABLE `sphinx_delta` (
   `RemasterRecordLabel` varchar(50) DEFAULT NULL,
   `RemasterCatalogueNumber` varchar(50) DEFAULT NULL,
   `FileList` mediumtext,
+  `VoteScore` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `GroupID` (`GroupID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

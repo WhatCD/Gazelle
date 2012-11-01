@@ -31,6 +31,7 @@ View::show_header('Forums');
 ?>
 <div class="thin">
 	<h2>Forums</h2>
+	<div class="forum_list">   
 <?
 
 $Row = 'a';
@@ -106,6 +107,7 @@ foreach ($Forums as $Forum) {
 	</tr>
 <? } ?>
 	</table>
+	</div> 
 	<div class="linkbox"><a href="forums.php?action=catchup&amp;forumid=all&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a></div>
 </div>
 <? View::show_footer();

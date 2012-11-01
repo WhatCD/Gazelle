@@ -72,15 +72,15 @@ foreach($Thread as $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body) = $Post;
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
-<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+<table class="forum_post box vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 	<colgroup>
-<?	if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if(Users::has_avatars_enabled()) { ?>
 		<col class="col_avatar" />
 <? 	} ?>
 		<col class="col_post_body" />
 	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<span style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
 				by <?=Users::format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>">[Report Comment]</a>
 <? if (!$ThreadInfo['IsLocked']){ ?>				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a><? }
@@ -93,15 +93,11 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 		</td>
 	</tr>
 	<tr>
-<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 		<td class="avatar" valign="top">
-<? if ($Avatar) { ?>
-			<img src="<?=$Avatar?>" width="150" alt="<?=$Username ?>'s avatar" />
-<? } else { ?>
-			<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<? } ?>
+		<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
 		</td>
-<? } ?>
+<?	} ?>
 		<td class="body" valign="top">
 			<div id="content<?=$PostID?>">
 <?=$Text->full_format($Body)?>

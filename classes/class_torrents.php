@@ -42,8 +42,7 @@ class Torrents {
 			return array('matches'=>array(),'notfound'=>array());
 		}
 
-		$Found = array_flip($GroupIDs);
-		$NotFound = array_flip($GroupIDs);
+		$Found = $NotFound = array_flip($GroupIDs);
 		$Key = $Torrents ? 'torrent_group_' : 'torrent_group_light_';
 
 		foreach ($GroupIDs as $GroupID) {
@@ -247,6 +246,10 @@ class Torrents {
 		$DB->query("DELETE FROM torrents_cassette_approved WHERE TorrentID = ".$ID);
 		$DB->query("DELETE FROM torrents_lossymaster_approved WHERE TorrentID = ".$ID);
 		$DB->query("DELETE FROM torrents_lossyweb_approved WHERE TorrentID = ".$ID);
+
+		// Tells Sphinx that the group is removed
+		$DB->query("REPLACE INTO sphinx_delta (ID,Time) VALUES ($ID, UNIX_TIMESTAMP())");
+
 		$Cache->delete_value('torrent_download_'.$ID);
 		$Cache->delete_value('torrent_group_'.$GroupID);
 		$Cache->delete_value('torrents_details_'.$GroupID);
@@ -332,9 +335,6 @@ class Torrents {
 		$DB->query("DELETE FROM bookmarks_torrents WHERE GroupID='$GroupID'");
 		$DB->query("DELETE FROM wiki_torrents WHERE PageID='$GroupID'");
 
-		// Tells Sphinx that the group is removed
-		$DB->query("REPLACE INTO sphinx_delta (ID,Time) VALUES ('$GroupID',UNIX_TIMESTAMP())");
-
 		$Cache->delete_value('torrents_details_'.$GroupID);
 		$Cache->delete_value('torrent_group_'.$GroupID);
 		$Cache->delete_value('groups_artists_'.$GroupID);
@@ -356,53 +356,38 @@ class Torrents {
 			WHERE ID='$GroupID'");
 
 		$DB->query("REPLACE INTO sphinx_delta
-			(ID, GroupName, TagList, Year, CategoryID, Time, ReleaseType, RecordLabel,
-			CatalogueNumber, VanityHouse, Size, Snatched, Seeders, Leechers, LogScore,
-			Scene, HasLog, HasCue, FreeTorrent, Media, Format, Encoding, RemasterYear,
-			RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, FileList)
+				(ID, GroupID, GroupName, TagList, Year, CategoryID, Time, ReleaseType, RecordLabel,
+				CatalogueNumber, VanityHouse, Size, Snatched, Seeders, Leechers, LogScore,
+				Scene, HasLog, HasCue, FreeTorrent, Media, Format, Encoding, RemasterYear,
+				RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, FileList)
 			SELECT
-			g.ID AS ID,
-			g.Name AS GroupName,
-			g.TagList,
-			g.Year,
-			g.CategoryID,
-			UNIX_TIMESTAMP(g.Time) AS Time,
-			g.ReleaseType,
-			g.RecordLabel,
-			g.CatalogueNumber,
-			g.VanityHouse,
-			MAX(CEIL(t.Size/1024)) AS Size,
-			SUM(t.Snatched) AS Snatched,
-			SUM(t.Seeders) AS Seeders,
-			SUM(t.Leechers) AS Leechers,
-			MAX(t.LogScore) AS LogScore,
-			MAX(t.Scene) AS Scene,
-			MAX(t.HasLog) AS HasLog,
-			MAX(t.HasCue) AS HasCue,
-			BIT_OR(t.FreeTorrent-1) AS FreeTorrent,
-			GROUP_CONCAT(DISTINCT t.Media SEPARATOR ' ') AS Media,
-			GROUP_CONCAT(DISTINCT t.Format SEPARATOR ' ') AS Format,
-			GROUP_CONCAT(DISTINCT t.Encoding SEPARATOR ' ') AS Encoding,
-			GROUP_CONCAT(DISTINCT t.RemasterYear SEPARATOR ' ') AS RemasterYear,
-			GROUP_CONCAT(DISTINCT t.RemasterTitle SEPARATOR ' ') AS RemasterTitle,
-			GROUP_CONCAT(DISTINCT t.RemasterRecordLabel SEPARATOR ' ') AS RemasterRecordLabel,
-			GROUP_CONCAT(DISTINCT t.RemasterCatalogueNumber SEPARATOR ' ') AS RemasterCatalogueNumber,
-			GROUP_CONCAT(REPLACE(REPLACE(FileList, '|||', '\n '), '_', ' ') SEPARATOR '\n ') AS FileList
+				t.ID, g.ID, Name, TagList, Year, CategoryID, UNIX_TIMESTAMP(t.Time), ReleaseType,
+				RecordLabel, CatalogueNumber, VanityHouse, Size >> 10 AS Size, Snatched, Seeders,
+				Leechers, LogScore, CAST(Scene AS CHAR), CAST(HasLog AS CHAR), CAST(HasCue AS CHAR),
+				CAST(FreeTorrent AS CHAR), Media, Format, Encoding,
+				RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
+				REPLACE(REPLACE(REPLACE(REPLACE(FileList,
+						'.flac', ' .flac'),
+						'.mp3', ' .mp3'),
+						'|||', '\n '),
+						'_', ' ')
+					AS FileList
 			FROM torrents AS t
 			JOIN torrents_group AS g ON g.ID=t.GroupID
-			WHERE g.ID=$GroupID
-			GROUP BY g.ID");
+			WHERE g.ID=$GroupID");
 
 		$DB->query("INSERT INTO sphinx_delta
 			(ID, ArtistName)
-			SELECT
-			GroupID,
-			GROUP_CONCAT(aa.Name separator ' ')
-			FROM torrents_artists AS ta
-			JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-			WHERE ta.GroupID=$GroupID AND ta.Importance IN ('1', '4', '5', '6')
-			GROUP BY tg.ID
+			SELECT torrents.ID, artists.ArtistName FROM (
+				SELECT
+				GroupID,
+				GROUP_CONCAT(aa.Name separator ' ') AS ArtistName
+				FROM torrents_artists AS ta
+				JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
+				WHERE ta.GroupID=$GroupID AND ta.Importance IN ('1', '4', '5', '6')
+				GROUP BY ta.GroupID
+			) AS artists
+			JOIN torrents USING(GroupID)
 			ON DUPLICATE KEY UPDATE ArtistName=values(ArtistName)");
 
 		$Cache->delete_value('torrents_details_'.$GroupID);

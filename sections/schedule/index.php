@@ -932,6 +932,11 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 			Misc::send_pm($UserID, 0, db_string('Unseeded torrent notification'), db_string($MessageInfo['Count']." of your uploads will be deleted for inactivity soon.  Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=https://what.cd/wiki.php?action=article&amp;id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count']>1?'s':'')." will be removed for inactivity:".$MessageInfo['Msg']."\n\nIf you no longer wish to receive these notifications, please disable them in your profile settings."));
 		}
 	}
+	
+	$DB->query("UPDATE staff_pm_conversations 
+					SET Status = 'Resolved', ResolverID = '0'
+					WHERE Date < NOW() - INTERVAL 1 MONTH AND Status = 'Open' AND AssignedToUser IS NULL");
+	
 }
 /*************************************************************************\
 //--------------Run twice per month -------------------------------------//
