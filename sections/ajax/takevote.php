@@ -8,24 +8,10 @@ if (!is_number($GroupID)) {
 }
 
 // What groups has this guy voted?
-$UserVotes = $Cache->get_value('voted_albums_'.$LoggedUser['ID'], true);
-if ($UserVotes === FALSE) {
-	$DB->query('SELECT GroupID, Type FROM users_votes WHERE UserID='.$LoggedUser['ID']);
-	$UserVotes = $DB->to_array('GroupID', MYSQL_ASSOC, false);
-	$Cache->cache_value('voted_albums_'.$LoggedUser['ID'], $UserVotes);
-}
+$UserVotes = Votes::get_user_votes($LoggedUser['ID']);
 
 // What are the votes for this group?
-$GroupVotes = $Cache->get_value('votes_'.$GroupID, true);
-if ($GroupVotes === FALSE) {
-	$DB->query("SELECT Ups AS Ups, Total AS Total FROM torrents_votes WHERE GroupID=$GroupID");
-	if ($DB->record_count() == 0) {
-		$GroupVotes = array('Ups'=>0, 'Total'=>0);
-	} else {
-		$GroupVotes = $DB->next_record(MYSQLI_ASSOC, false);
-	}
-	$Cache->cache_value('votes_'.$GroupID, $GroupVotes);
-}
+$GroupVotes = Votes::get_group_votes($GroupID);
 
 $UserID = $LoggedUser['ID'];
 if ($_REQUEST['do'] == 'vote') {

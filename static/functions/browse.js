@@ -17,6 +17,7 @@ function show_peers (TorrentID, Page) {
 	$('#downloads_' + TorrentID).hide();
 	$('#files_' + TorrentID).hide();
 	$('#reported_' + TorrentID).hide();
+	$('#spectrals_' + TorrentID).hide();
 }
 
 function show_snatches (TorrentID, Page){
@@ -38,6 +39,7 @@ function show_snatches (TorrentID, Page){
 	$('#downloads_' + TorrentID).hide();
 	$('#files_' + TorrentID).hide();
 	$('#reported_' + TorrentID).hide();
+	$('#spectrals_' + TorrentID).hide();
 }
 
 function show_downloads (TorrentID, Page){
@@ -59,6 +61,7 @@ function show_downloads (TorrentID, Page){
 	$('#snatches_' + TorrentID).hide();
 	$('#files_' + TorrentID).hide();
 	$('#reported_' + TorrentID).hide();
+	$('#spectrals_' + TorrentID).hide();
 }
 
 function show_files(TorrentID){
@@ -67,6 +70,7 @@ function show_files(TorrentID){
 	$('#snatches_' + TorrentID).hide();
 	$('#downloads_' + TorrentID).hide();
 	$('#reported_' + TorrentID).hide();
+	$('#spectrals_' + TorrentID).hide();
 }
 
 function show_reported(TorrentID){
@@ -75,6 +79,32 @@ function show_reported(TorrentID){
 	$('#snatches_' + TorrentID).hide();
 	$('#downloads_' + TorrentID).hide();
 	$('#reported_' + TorrentID).toggle();
+	$('#spectrals_' + TorrentID).hide();
+}
+
+function show_spectrals (TorrentID){
+	$('#snatches_' + TorrentID).hide();
+	$('#peers_' + TorrentID).hide();
+	$('#downloads_' + TorrentID).hide();
+	$('#files_' + TorrentID).hide();
+	$('#reported_' + TorrentID).hide();
+	
+	$('#spectrals_' + TorrentID).toggle();
+	ajax.get('http://archive.org/~abuie/spectral.php?q=' + TorrentID,function(response){
+	    	var json = JSON.parse(response);
+	    	var html = "";
+	    	if(json['status']['state'] == 'success') {
+    	    	for (var i = 0; i < json['count']; i++) { 
+    	    		    html += "<img src='" + json['files'][i] + "' alt='" + json['files'][i] + "' style='max-width:440px;' onclick='lightbox.init(\""+json['files'][i] + "\", 440);'></a>";
+    	    		    html += "<br /> <br />";
+    	    	}
+	    	}
+	    	else {
+	    		html = "<br /> <strong>Error: " + json['status']['reason'] + "</strong>"
+	    	}
+		$('#spectrals_' + TorrentID).show().raw().innerHTML=html;
+	});
+
 }
 
 function add_tag(tag) {

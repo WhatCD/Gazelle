@@ -117,6 +117,10 @@ if (!empty($GroupIDs)) {
 	$Filters = $DB->to_array('ID', MYSQLI_ASSOC, array('Artists'));
 	foreach ($Filters as &$Filter) {
 		$Filter['Artists'] = explode('|', trim($Filter['Artists'], '|'));
+		foreach ($Filter['Artists'] as &$FilterArtist) {
+			$FilterArtist = mb_strtolower($FilterArtist, 'UTF-8');
+		}
+		$Filter['Artists'] = array_flip($Filter['Artists']);
 	}
 	unset($Filter);
 
@@ -215,10 +219,8 @@ if (empty($Results)) {
 				$MatchingArtists = array();
 				foreach ($GroupInfo['ExtendedArtists'] as $GroupArtists) {
 					foreach ($GroupArtists as $GroupArtist) {
-						foreach ($Filters[$FilterID]['Artists'] as $FilterArtist) {
-							if (mb_strtolower($FilterArtist, 'UTF-8') == mb_strtolower($GroupArtist['name'], 'UTF-8')) {
-								$MatchingArtists[] = $GroupArtist['name'];
-							}
+						if (isset($Filters[$FilterID]['Artists'][mb_strtolower($GroupArtist['name'], 'UTF-8')])) {
+							$MatchingArtists[] = $GroupArtist['name'];
 						}
 					}
 				}

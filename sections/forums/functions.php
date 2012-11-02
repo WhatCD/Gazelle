@@ -1,7 +1,7 @@
 <?
 function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 	global $DB, $Cache;
-	if(!$ThreadInfo = $Cache->get_value('thread_'.$ThreadID.'_info')) {
+	if((!$ThreadInfo = $Cache->get_value('thread_'.$ThreadID.'_info')) || !isset($ThreadInfo['OP'])) {
 		$DB->query("SELECT
 			t.Title,
 			t.ForumID,

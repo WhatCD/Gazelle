@@ -17,6 +17,8 @@ include(SERVER_ROOT.'/classes/class_artists_similar.php');
 
 include(SERVER_ROOT.'/classes/class_image_tools.php');
 
+$UserVotes = Votes::get_user_votes($LoggedUser['ID']);
+
 $ArtistID = $_GET['id'];
 if(!is_number($ArtistID)) { error(0); }
 
@@ -386,7 +388,7 @@ foreach ($Importances as $Group) {
 					</div>
 				</td>
 				<td colspan="5">
-					<strong><?=$DisplayName?></strong>
+					<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
 					<?=$TorrentTags?>
 				</td>
 			</tr>
@@ -473,7 +475,7 @@ $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
-View::show_header($Name, 'browse,requests,bbcode,comments');
+View::show_header($Name, 'browse,requests,bbcode,comments,voting');
 ?>
 <div class="thin">
 	<div class="header">

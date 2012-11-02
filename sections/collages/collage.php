@@ -13,6 +13,8 @@ include(SERVER_ROOT.'/classes/class_image_tools.php');
 
 $Text = new TEXT;
 
+$UserVotes = Votes::get_user_votes($LoggedUser['ID']);
+
 $CollageID = $_GET['id'];
 if(!is_number($CollageID)) { error(0); }
 
@@ -176,7 +178,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 					<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div>
 				</td>
 				<td colspan="5">
-					<strong><?=$DisplayName?></strong>
+					<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
 					<?=$TorrentTags?>
 				</td>
 			</tr>
@@ -285,7 +287,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <?		} ?>						
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
-			<strong><?=$DisplayName?></strong>
+			<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
 			<?=$TorrentTags?>
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
@@ -354,7 +356,7 @@ for ($i=0; $i < $NumGroups/$CollageCovers; $i++) {
 	$CollagePages[] = $CollagePage;
 }
 
-View::show_header($Name,'browse,collage,bbcode');
+View::show_header($Name,'browse,collage,bbcode,voting');
 ?>
 <div class="thin">
 	<div class="header">

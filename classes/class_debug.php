@@ -199,6 +199,20 @@ class DEBUG {
 	/* Data wrappers */
 
 	public function get_perf() {
+		if (empty($this->Perf)) {
+			global $ScriptStartTime;
+			$PageTime = (microtime(true) - $ScriptStartTime);
+			$Perf = array();
+			$Perf['Memory usage'] = Format::get_size(memory_get_usage(true));
+			$Perf['Page process time'] = number_format($PageTime, 3).' s';
+			if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
+				global $CPUTimeStart;
+				$RUsage = getrusage();
+				$CPUTime = ($RUsage["ru_utime.tv_sec"]*1000000 + $RUsage['ru_utime.tv_usec'] - $CPUTimeStart) / 1000000;
+				$Perf['CPU time'] = number_format($CPUTime, 3)." s";
+			}
+			return $Perf;
+		}
 		return $this->Perf;
 	}
 

@@ -190,7 +190,7 @@ div#AddArtists a {
 	z-index: 25;
 	display: block;
 	position: fixed;
-	background: transparent url('../rippy/rippy_halloween_1.png') no-repeat bottom
+	background: transparent url('../rippy/rippy.png') no-repeat bottom
 		center;
 	color: black;
 	text-align: center;
@@ -347,6 +347,8 @@ tr.torrent .bookmark>a:after {
 .navigation_list li li li li {
     list-style-type: lower-alpha;
 }
+
+.voted_type { font-weight: bold; }
 
 .torrent_table .group .votes_info_td strong { font-size: inherit; }
 

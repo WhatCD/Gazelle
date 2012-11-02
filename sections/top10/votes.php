@@ -3,6 +3,8 @@
 include(SERVER_ROOT.'/sections/torrents/ranking_funcs.php');
 include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 
+$UserVotes = Votes::get_user_votes($LoggedUser['ID']);
+
 if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Details = 'all';
 	$Limit = 25;
@@ -84,7 +86,7 @@ if ($TopVotes === false) {
 	}
 }
 
-View::show_header('Top '.$Limit.' Voted Groups','browse');
+View::show_header('Top '.$Limit.' Voted Groups','browse,voting');
 ?>
 <div class="thin">
 	<div class="header">
@@ -213,11 +215,11 @@ foreach ($TopVotes as $GroupID=>$Group) {
 						<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div>
 					</td>
 					<td>
-						<strong><?=$DisplayName?></strong>
+						<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
 		<?	if(in_array($GroupID, $Bookmarks)) { ?>
-						<span style="float:right;">[ <a href="#" class="bookmarklink_torrent_<?=$GroupID?>" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a> ]</span>
+						<span class="bookmark" style="float:right;">[ <a href="#" class="bookmarklink_torrent_<?=$GroupID?>" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a> ]</span>
 		<?	} else { ?>
-						<span style="float:right;">[ <a href="#" class="bookmarklink_torrent_<?=$GroupID?>" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a> ]</span>
+						<span class="bookmark" style="float:right;">[ <a href="#" class="bookmarklink_torrent_<?=$GroupID?>" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a> ]</span>
 		<?	} ?>
 					<?=$TorrentTags?>
 					</td>
@@ -334,7 +336,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 <?		} ?>
 					]
 				</span>
-				<strong><?=$DisplayName?></strong>
+				<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
 				<?=$TorrentTags?>
 			</td>
 			<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>

@@ -35,6 +35,7 @@
 	<!-- Begin Debugging -->
 	<div id="site_debug">
 <?
+$Debug->perf_table();
 $Debug->flag_table();
 $Debug->error_table();
 $Debug->sphinx_table();

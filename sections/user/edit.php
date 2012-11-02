@@ -327,7 +327,14 @@ else {
 				<td class="label"><strong>Auto-save Text</strong></td>
 				<td>
 					<input type="checkbox" name="disableautosave" id="disableautosave" <? if (!empty($SiteOptions['DisableAutoSave'])) { ?>checked="checked"<? } ?> />
-					<label for="disableautosave">Disable reply text from being saved automatically when change pages in a thread</label>
+					<label for="disableautosave">Disable reply text from being saved automatically when changing pages in a thread</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><strong>Voting links</strong></td>
+				<td>
+					<input type="checkbox" name="novotelinks" id="novotelinks" <? if (!empty($SiteOptions['NoVoteLinks'])) { ?>checked="checked"<? } ?> />
+					<label for="novotelinks">Disable voting links on artist pages, collages, and snatched lists</label>
 				</td>
 			</tr>
 			<tr>

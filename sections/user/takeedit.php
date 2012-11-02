@@ -196,6 +196,7 @@ $Options['DisablePMAvatars'] = (!empty($_POST['disablepmavatars']) ? 1 : 0);
 $Options['NotifyOnQuote'] = (!empty($_POST['notifyquotes']) ? 1 : 0);
 $Options['ShowSnatched'] = (!empty($_POST['showsnatched']) ? 1 : 0);
 $Options['DisableAutoSave'] = (!empty($_POST['disableautosave']) ? 1 : 0);
+$Options['NoVoteLinks'] = (!empty($_POST['novotelinks']) ? 1 : 0);
 
 
 if(isset($LoggedUser['DisableFreeTorrentTop10'])) {

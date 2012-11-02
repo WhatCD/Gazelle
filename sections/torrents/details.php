@@ -1,8 +1,8 @@
 <?
-
 function compare($X, $Y){
 	return($Y['score'] - $X['score']);
 }
+header('Access-Control-Allow-Origin: *');
 
 define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by default
 define('MAX_COLLAGES', 5);      // How many normal collages should be shown by default
@@ -81,7 +81,7 @@ if ($TorrentTags != '') {
 }*/
 
 // Start output
-View::show_header($Title,'browse,comments,torrent,bbcode');
+View::show_header($Title,'jquery,browse,comments,torrent,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -587,6 +587,7 @@ foreach ($TorrentList as $Torrent) {
 					<div id="downloads_<?=$TorrentID?>" class="hidden"></div>
 					<div id="snatches_<?=$TorrentID?>" class="hidden"></div>
 					<div id="files_<?=$TorrentID?>" class="hidden"><?=$FileList?></div>
+					<div id="spectrals_<?=$TorrentID?>" class="hidden"></div>
 <?  if($Reported) { ?> 
 					<div id="reported_<?=$TorrentID?>" class="hidden"><?=$ReportInfo?></div>
 <? } ?>

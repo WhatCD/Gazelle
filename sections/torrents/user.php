@@ -2,6 +2,7 @@
 
 $Orders = array('Time', 'Name', 'Seeders', 'Leechers', 'Snatched', 'Size');
 $Ways = array('ASC'=>'Ascending', 'DESC'=>'Descending');
+$UserVotes = Votes::get_user_votes($LoggedUser['ID']);
 
 // The "order by x" links on columns headers
 function header_link($SortKey,$DefaultWay="DESC") {
@@ -264,7 +265,7 @@ $Results = Torrents::get_groups($GroupIDs);
 $Action = display_str($_GET['type']);
 $User = Users::user_info($UserID);
 
-View::show_header($User['Username'].'\'s '.$Action.' torrents');
+View::show_header($User['Username'].'\'s '.$Action.' torrents','voting');
 
 $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 
@@ -465,7 +466,7 @@ foreach($Categories as $CatKey => $CatName) {
 					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 				</span>
-				<?=$DisplayName?>
+				<?=$DisplayName?> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
 				<br />
 				<div class="tags">
 					<?=$TorrentTags?>

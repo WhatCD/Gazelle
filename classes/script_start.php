@@ -131,6 +131,9 @@ spl_autoload_register(function ($ClassName) {
         case 'TEXTAREA_PREVIEW':
 			$FileName = 'class_textarea_preview';
 			break;
+		case 'Votes':
+			$FileName = 'class_votes';
+			break;
 		default:
 			die("Couldn't import class " . $ClassName);
 	}
