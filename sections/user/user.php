@@ -226,10 +226,10 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Last seen: <?=$LastAccess?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('uploaded'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded, 2)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('downloaded'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded, 2)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('ratio'))) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>

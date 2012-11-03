@@ -16,7 +16,9 @@ $Text = new TEXT;
 $UserVotes = Votes::get_user_votes($LoggedUser['ID']);
 
 $CollageID = $_GET['id'];
-if(!is_number($CollageID)) { error(0); }
+if (!is_number($CollageID)) {
+	error(0);
+}
 
 $Data = $Cache->get_value('collage_'.$CollageID);
 
@@ -42,8 +44,8 @@ if($Deleted == '1') {
 }
 
 if($CollageCategoryID == 0 && !check_perms('site_collages_delete')) {
-	if(!check_perms('site_collages_personal') || $CreatorID!=$LoggedUser['ID']) {
-		$Locked = true;
+	if(!check_perms('site_collages_personal') || $CreatorID != $LoggedUser['ID']) {
+		$PreventAdditions = true;
 	}
 }
 
@@ -331,8 +333,8 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	$Collage[]=ob_get_clean();
 }
 
-if(($MaxGroups>0 && $NumGroups>=$MaxGroups)  || ($MaxGroupsPerUser>0 && $NumGroupsByUser>=$MaxGroupsPerUser)) {
-	$Locked = true;
+if (!check_perms('site_collages_delete') && ($Locked || ($MaxGroups > 0 && $NumGroups >= $MaxGroups) || ($MaxGroupsPerUser > 0 && $NumGroupsByUser >= $MaxGroupsPerUser))) {
+	$PreventAdditions = true;
 }
 
 // Silly hack for people who are on the old setting
@@ -370,8 +372,10 @@ View::show_header($Name,'browse,collage,bbcode,voting');
 <? if(check_perms('site_collages_subscribe')) { ?>
 			<a href="#" onclick="CollageSubscribe(<?=$CollageID?>);return false;" id="subscribelink<?=$CollageID?>">[<?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?>]</a>
 <? }
-   if (check_perms('site_edit_wiki') && !$Locked) { ?>
+   if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
 			<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>">[Edit description]</a>
+<? } else { ?>
+			[Locked]
 <? }
 	if(has_bookmarked('collage', $CollageID)) {
 ?>
@@ -463,7 +467,9 @@ foreach ($ZIPOptions as $Option) {
 			<div class="head"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
 				<li>Torrents: <?=$NumGroups?></li>
-<? if(count($Artists) >0) { ?>	<li>Artists: <?=count($Artists)?></li> <? } ?>
+<? if(count($Artists) >0) { ?>
+				<li>Artists: <?=count($Artists)?></li>
+<? } ?>
 				<li>Built by <?=count($Users)?> user<?=(count($Users)>1) ? 's' : ''?></li>
 			</ul>
 		</div>
@@ -524,7 +530,7 @@ foreach ($Users as $ID => $User) {
 			
 			</div>
 		</div>
-<? if(check_perms('site_collages_manage') && !$Locked) { ?>
+<? if(check_perms('site_collages_manage') && !$PreventAdditions) { ?>
 		<div class="box box_addtorrent">
 			<div class="head"><strong>Add torrent</strong><span style="float: right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == '[Batch Add]'?'[Individual Add]':'[Batch Add]'); return false;">[Batch Add]</a></span></div>
 			<div class="pad add_torrent_container">

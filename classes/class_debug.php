@@ -45,14 +45,9 @@ class DEBUG {
 			$Reason[] = 'Requested by '.$LoggedUser['Username'];
 		}
 
-		$this->Perf['Memory usage'] = (($Ram>>10)/1024)." MB";
-		$this->Perf['Page process time'] = (round($Micro)/1000)." s";
-
-		if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
-			global $CPUTimeStart;
-			$RUsage = getrusage();
-			$this->Perf['CPU time'] = (round(($RUsage["ru_utime.tv_sec"]*1000000 + $RUsage['ru_utime.tv_usec'] - $CPUTimeStart)/1000)/1000)." s";
-		}
+		$this->Perf['Memory usage'] = (($Ram>>10)/1024).' MB';
+		$this->Perf['Page process time'] = number_format($Micro / 1000, 3).' s';
+		$this->Perf['CPU time'] = number_format($this->get_cpu_time() / 1000000, 3).' s';
 
 		if (isset($Reason[0])) {
 			$this->analysis(implode(', ', $Reason));
@@ -86,6 +81,16 @@ class DEBUG {
 		send_irc('PRIVMSG '.LAB_CHAN.' :'.$Message.' '.$Document.' '.' https://'.SSL_SITE_URL.'/tools.php?action=analysis&case='.$Identifier.' https://'.SSL_SITE_URL.$_SERVER['REQUEST_URI']);
 	}
 
+	public function get_cpu_time() {
+		if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
+			global $CPUTimeStart;
+			$RUsage = getrusage();
+			$CPUTime = $RUsage['ru_utime.tv_sec']*1000000 + $RUsage['ru_utime.tv_usec'] - $CPUTimeStart;
+			return $CPUTime;
+		}
+		return false;
+	}
+
 	public function log_var($Var, $VarName = FALSE) {
 		$BackTrace = debug_backtrace();
 		$ID = uniqid();
@@ -98,7 +103,7 @@ class DEBUG {
 
 	public function set_flag($Event) {
 		global $ScriptStartTime;
-		$this->Flags[] = array($Event,(microtime(true)-$ScriptStartTime)*1000,memory_get_usage(true));
+		$this->Flags[] = array($Event, (microtime(true)-$ScriptStartTime)*1000, memory_get_usage(true), $this->get_cpu_time());
 	}
 
 	//This isn't in the constructor because $this is not available, and the function cannot be made static
@@ -202,14 +207,12 @@ class DEBUG {
 		if (empty($this->Perf)) {
 			global $ScriptStartTime;
 			$PageTime = (microtime(true) - $ScriptStartTime);
-			$Perf = array();
-			$Perf['Memory usage'] = Format::get_size(memory_get_usage(true));
-			$Perf['Page process time'] = number_format($PageTime, 3).' s';
-			if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
-				global $CPUTimeStart;
-				$RUsage = getrusage();
-				$CPUTime = ($RUsage["ru_utime.tv_sec"]*1000000 + $RUsage['ru_utime.tv_usec'] - $CPUTimeStart) / 1000000;
-				$Perf['CPU time'] = number_format($CPUTime, 3)." s";
+			$CPUTime = $this->get_cpu_time();
+			$Perf = array(
+				'Memory usage' => Format::get_size(memory_get_usage(true)),
+				'Page process time' => number_format($PageTime, 3).' s');
+			if ($CPUTime) {
+				$Perf['CPU time'] = number_format($CPUTime / 1000000, 3).' s';
 			}
 			return $Perf;
 		}
@@ -404,13 +407,24 @@ class DEBUG {
 		</tr>
 	</table>
 	<table id="debug_flags" class="debug_table hidden" width="100%">
+		<tr valign="top">
+			<td align="left" class="debug_flags_event"><strong>Event</strong></td>
+			<td align="left" class="debug_flags_time"><strong>Page time</strong></td>
+<?		if ($Flags[0][3] !== false) { ?>
+			<td align="left" class="debug_flags_time"><strong>CPU time</strong></td>
+<?		} ?>
+			<td align="left" class="debug_flags_memory"><strong>Memory</strong></td>
+		</tr>
 <?
 		foreach ($Flags as $Flag) {
-			list($Event,$MicroTime,$Memory) = $Flag;
+			list($Event, $MicroTime, $Memory, $CPUTime) = $Flag;
 ?>
 		<tr valign="top">
 			<td align="left"><?=$Event?></td>
-			<td align="left"><?=$MicroTime?> ms</td>
+			<td align="left"><?=number_format($MicroTime, 3)?> ms</td>
+<?			if ($CPUTime !== false) { ?>
+			<td align="left"><?=number_format($CPUTime / 1000, 3)?> ms</td>
+<?			} ?>
 			<td align="left"><?=Format::get_size($Memory)?></td>
 		</tr>
 <?
@@ -461,7 +475,7 @@ class DEBUG {
 	<table id="debug_cache" class="debug_table hidden" width="100%">
 <? 		foreach($CacheKeys as $Key) { ?>
 		<tr>
-			<td align="left">
+			<td align="left" class="debug_info debug_cache_key">
 				<a href="#" onclick="$('#debug_cache_<?=$Key?>').toggle(); return false;"><?=display_str($Key)?></a>
 			</td>
 			<td align="left" class="debug_data debug_cache_data">
@@ -492,9 +506,15 @@ class DEBUG {
 			list($Error,$Location,$Call,$Args) = $Error;
 ?>
 		<tr valign="top">
-			<td align="left"><?=display_str($Call)?>(<?=display_str($Args)?>)</td>
-			<td class="debug_data debug_error_data" align="left"><?=display_str($Error)?></td>
-			<td align="left"><?=display_str($Location)?></td>
+			<td align="left" class="debug_info debug_error_call">
+				<?=display_str($Call)?>(<?=display_str($Args)?>)
+			</td>
+			<td class="debug_data debug_error_data" align="left">
+				<?=display_str($Error)?>
+			</td>
+			<td align="left">
+				<?=display_str($Location)?>
+			</td>
 		</tr>
 <?
 		}
@@ -526,7 +546,7 @@ class DEBUG {
 ?>
 		<tr valign="top">
 			<td class="debug_data debug_query_data"><div><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str($SQL)))?></div></td>
-			<td class="rowa" style="width:130px;" align="left"><?=number_format($Time, 5)?> ms</td>
+			<td class="rowa debug_info debug_query_time" style="width:130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 		</tr>
 <?
 		}
@@ -561,7 +581,7 @@ class DEBUG {
 ?>
 		<tr valign="top">
 			<td class="debug_data debug_sphinx_data"><pre><?=str_replace("\t", '	', $Params)?></pre></td>
-			<td class="rowa" style="width:130px;" align="left"><?=number_format($Time, 5)?> ms</td>
+			<td class="rowa debug_info debug_sphinx_time" style="width:130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 		</tr>
 <?
 		}
@@ -593,7 +613,7 @@ class DEBUG {
 			$Size = count($Data['data']);
 ?>
 		<tr>
-			<td align="left">
+			<td align="left" class="debug_info debug_loggedvars_name">
 				<a href="#" onclick="$('#debug_loggedvars_<?=$ID?>').toggle(); return false;"><?=display_str($Key)?></a> (<?=$Size . ($Size == 1 ? ' element' : ' elements')?>)
 				<div><?=$Data['bt']['path'].':'.$Data['bt']['line'];?></div>
 			</td>

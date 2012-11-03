@@ -355,11 +355,31 @@ class Torrents {
 			GROUP BY t.GroupID)
 			WHERE ID='$GroupID'");
 
+		// Fetch album vote score
+		$DB->query("SELECT Score FROM torrents_votes WHERE GroupID=$GroupID");
+		if ($DB->record_count()) {
+			list($VoteScore) = $DB->next_record();
+		} else {
+			$VoteScore = 0;
+		}
+
+		// Fetch album artists
+		$DB->query("SELECT GROUP_CONCAT(aa.Name separator ' ')
+			FROM torrents_artists AS ta
+				JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
+			WHERE ta.GroupID=$GroupID AND ta.Importance IN ('1', '4', '5', '6')
+			GROUP BY ta.GroupID");
+		if ($DB->record_count()) {
+			list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
+		} else {
+			$ArtistName = '';
+		}
+
 		$DB->query("REPLACE INTO sphinx_delta
 				(ID, GroupID, GroupName, TagList, Year, CategoryID, Time, ReleaseType, RecordLabel,
-				CatalogueNumber, VanityHouse, Size, Snatched, Seeders, Leechers, LogScore,
-				Scene, HasLog, HasCue, FreeTorrent, Media, Format, Encoding, RemasterYear,
-				RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, FileList)
+				CatalogueNumber, VanityHouse, Size, Snatched, Seeders, Leechers, LogScore, Scene,
+				HasLog, HasCue, FreeTorrent, Media, Format, Encoding, RemasterYear, RemasterTitle,
+				RemasterRecordLabel, RemasterCatalogueNumber, FileList, VoteScore, ArtistName)
 			SELECT
 				t.ID, g.ID, Name, TagList, Year, CategoryID, UNIX_TIMESTAMP(t.Time), ReleaseType,
 				RecordLabel, CatalogueNumber, VanityHouse, Size >> 10 AS Size, Snatched, Seeders,
@@ -371,12 +391,12 @@ class Torrents {
 						'.mp3', ' .mp3'),
 						'|||', '\n '),
 						'_', ' ')
-					AS FileList
+					AS FileList, $VoteScore, '".db_string($ArtistName)."'
 			FROM torrents AS t
 			JOIN torrents_group AS g ON g.ID=t.GroupID
 			WHERE g.ID=$GroupID");
 
-		$DB->query("INSERT INTO sphinx_delta
+/*		$DB->query("INSERT INTO sphinx_delta
 			(ID, ArtistName)
 			SELECT torrents.ID, artists.ArtistName FROM (
 				SELECT
@@ -389,7 +409,7 @@ class Torrents {
 			) AS artists
 			JOIN torrents USING(GroupID)
 			ON DUPLICATE KEY UPDATE ArtistName=values(ArtistName)");
-
+*/
 		$Cache->delete_value('torrents_details_'.$GroupID);
 		$Cache->delete_value('torrent_group_'.$GroupID);
 

@@ -53,7 +53,7 @@ if (!isset($argv) && !empty($_SERVER['HTTP_HOST'])) {
 $ScriptStartTime = microtime(true); //To track how long a page takes to create
 if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
 	$RUsage = getrusage();
-	$CPUTimeStart = $RUsage["ru_utime.tv_sec"]*1000000 + $RUsage['ru_utime.tv_usec'];
+	$CPUTimeStart = $RUsage['ru_utime.tv_sec']*1000000 + $RUsage['ru_utime.tv_usec'];
 }
 ob_start(); //Start a buffer, mainly in case there is a mysql error
 

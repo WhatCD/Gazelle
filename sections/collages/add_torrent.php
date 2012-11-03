@@ -13,7 +13,7 @@ function AddTorrent($CollageID, $GroupID) {
 	$Sort+=10;
 
 	$DB->query("SELECT GroupID FROM collages_torrents WHERE CollageID='$CollageID' AND GroupID='$GroupID'");
-	if($DB->record_count() == 0) {
+	if ($DB->record_count() == 0) {
 		$DB->query("INSERT IGNORE INTO collages_torrents
 			(CollageID, GroupID, UserID, Sort, AddedOn) 
 			VALUES
@@ -34,15 +34,28 @@ function AddTorrent($CollageID, $GroupID) {
 }
 
 $CollageID = $_POST['collageid'];
-if(!is_number($CollageID)) { error(404); }
+if (!is_number($CollageID)) {
+	error(404);
+}
 $DB->query("SELECT UserID, CategoryID, Locked, NumTorrents, MaxGroups, MaxGroupsPerUser FROM collages WHERE ID='$CollageID'");
 list($UserID, $CategoryID, $Locked, $NumTorrents, $MaxGroups, $MaxGroupsPerUser) = $DB->next_record();
-if($CategoryID == 0 && $UserID!=$LoggedUser['ID'] && !check_perms('site_collages_delete')) { error(403); }
-if($Locked) { error(403); }
-if($MaxGroups>0 && $NumTorrents>=$MaxGroups) { error(403); }
-if($MaxGroupsPerUser>0) {
-	$DB->query("SELECT COUNT(ID) FROM collages_torrents WHERE CollageID='$CollageID' AND UserID='$LoggedUser[ID]'");
-	if($DB->record_count()>=$MaxGroupsPerUser) {
+
+if (!check_perms('site_collages_delete')) {
+	if ($Locked) {
+		$Err = "This collage is locked";
+	}
+	if ($CategoryID == 0 && $UserID != $LoggedUser['ID']) {
+		$Err = "You cannot edit someone else's personal collage";
+	}
+	if ($MaxGroups > 0 && $NumTorrents >= $MaxGroups) {
+		$Err = "This collage already holds its maximum allowed number of torrents";
+	}
+}
+
+if ($MaxGroupsPerUser > 0) {
+	$DB->query("SELECT COUNT(*) FROM collages_torrents WHERE CollageID='$CollageID' AND UserID='$LoggedUser[ID]'");
+	list($GroupsForUser) = $DB->next_record();
+	if (!check_perms('site_collages_delete') && $GroupsForUser >= $MaxGroupsPerUser) {
 		error(403);
 	}
 }
@@ -52,10 +65,8 @@ if ($_REQUEST['action'] == 'add_torrent') {
 	$Val->SetFields('url', '1','regex','The URL must be a link to a torrent on the site.',array('regex'=>$URLRegex));
 	$Err = $Val->ValidateForm($_POST);
 
-	if($Err) {
+	if ($Err) {
 		error($Err);
-		header('Location: collages.php?id='.$CollageID);
-		die();
 	}
 
 	$URL = $_POST['url'];
@@ -63,12 +74,14 @@ if ($_REQUEST['action'] == 'add_torrent') {
 	// Get torrent ID
 	$URLRegex = '/torrents\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
 	preg_match($URLRegex, $URL, $Matches);
-	$TorrentID=$Matches[2];
-	if(!$TorrentID || (int)$TorrentID == 0) { error(404); }
+	$TorrentID = $Matches[2];
+	if (!$TorrentID || (int)$TorrentID == 0) {
+		error(404);
+	}
 
 	$DB->query("SELECT ID FROM torrents_group WHERE ID='$TorrentID'");
 	list($GroupID) = $DB->next_record();
-	if(!$GroupID) {
+	if (!$GroupID) {
 		error('The torrent was not found in the database.');
 	}
 	
@@ -79,11 +92,24 @@ if ($_REQUEST['action'] == 'add_torrent') {
 	$URLs = explode("\n",$_REQUEST['urls']);
 	$GroupIDs = array();
 	$Err = '';
-	
-	foreach ($URLs as $URL) {
+	foreach ($URLs as $Key => &$URL) {
 		$URL = trim($URL);
-		if ($URL == '') { continue; }
-		
+		if ($URL == '') {
+			unset($URLs[$Key]);
+		}
+	}
+	unset($URL);
+
+	if (!check_perms('site_collages_delete')) {
+		if ($MaxGroups > 0 && ($NumTorrents + count($URLs) > $MaxGroups)) {
+			$Err = "This collage can only hold $MaxGroups torrents.";
+		}
+		if ($MaxGroupsPerUser > 0 && ($GroupsForUser + count($URLs) > $MaxGroupsPerUser)) {
+			$Err = "You may only have $MaxGroupsPerUser torrents in this collage.";
+		}
+	}
+
+	foreach ($URLs as $URL) {
 		$Matches = array();
 		if (preg_match($URLRegex, $URL, $Matches)) {
 			$GroupIDs[] = $Matches[3];
@@ -94,21 +120,18 @@ if ($_REQUEST['action'] == 'add_torrent') {
 		}
 		
 		$DB->query("SELECT ID FROM torrents_group WHERE ID='$GroupID'");
-		if(!$DB->record_count()) {
+		if (!$DB->record_count()) {
 			$Err = "One of the entered URLs ($URL) does not correspond to a torrent on the site.";
 			break;
 		}
 	}
 	
-	if($Err) {
+	if ($Err) {
 		error($Err);
-		header('Location: collages.php?id='.$CollageID);
-		die();
 	}
 
 	foreach ($GroupIDs as $GroupID) {
 		AddTorrent($CollageID, $GroupID);
 	}	
 }
-
 header('Location: collages.php?id='.$CollageID);
