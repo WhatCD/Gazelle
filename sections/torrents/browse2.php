@@ -1031,7 +1031,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			$LastRemasterCatalogueNumber = $Data['RemasterCatalogueNumber'];
 			$LastMedia = $Data['Media'];
 ?>
-	<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><? if (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; }?>">
+	<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><?=(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1 ? ' hidden' : '') . ($Data['IsSnatched'] ? ' snatched_torrent' : '')?>">
 		<td colspan="3">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Data['HasFile'] ? 'DL' : 'Missing'?></a>
@@ -1064,11 +1064,13 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 				$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 			}
 			$ExtraInfo = Torrents::torrent_info($Data, true, true);
+		} elseif ($Data['IsSnatched']) {
+			$ExtraInfo = '<strong class="snatched_torrent_label">Snatched!</strong>';
 		} else {
 			$ExtraInfo = '';
 		}
 ?>
-	<tr class="torrent">
+	<tr class="torrent<?=$Data['IsSnatched'] ? ' snatched_torrent' : ''?>">
 <?	if ($GroupResults) { ?>
 		<td></td>
 <?	} ?>

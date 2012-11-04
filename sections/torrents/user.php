@@ -457,7 +457,7 @@ foreach($Categories as $CatKey => $CatName) {
 	
 	
 ?>
-		<tr class="torrent">
+		<tr class="torrent<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>">
 			<td class="center cats_col">
 				<div title="<?=ucfirst(str_replace('.',' ',$TagList[0]))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$CategoryID-1]))?> tags_<?=str_replace('.','_',$TagList[0])?>"></div>
 			</td>

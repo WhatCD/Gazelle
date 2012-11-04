@@ -150,7 +150,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 				}
 ?>
 				(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?			} ?>
 				</li>
 <?		}
@@ -169,7 +169,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 					}
 ?>
 				(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=6');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=6');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?			} ?>
 				</li>
 <?
@@ -191,7 +191,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 			}
 ?>
 			(<?=$AliasID?>)&nbsp;
-				<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=1');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
+				<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=1');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?		} ?>
 				</li>
 <?
@@ -210,7 +210,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 				}
 ?>
 				(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=2');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=2');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?			} ?>
 				</li>
 <?
@@ -230,7 +230,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 				}
 ?>
 				(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=5');this.parentNode.parentNode.style.display = 'none';" title="Remove conductor">[X]</a></span>
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=5');this.parentNode.parentNode.style.display = 'none';" title="Remove conductor">[X]</a></span>
 <?			} ?>
 				</li>
 <?
@@ -250,7 +250,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
                                 }
 ?>
 				(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=3');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=3');this.parentNode.parentNode.style.display = 'none';" title="Remove artist">[X]</a></span>
 <?		      } ?>
 				</li>
 <?
@@ -270,7 +270,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
                                 }
 ?>
 				(<?=$AliasID?>)&nbsp;
-					<span class="remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=7');this.parentNode.parentNode.style.display = 'none';" title="Remove producer">[X]</a></span>
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=7');this.parentNode.parentNode.style.display = 'none';" title="Remove producer">[X]</a></span>
 <?		      } ?>
 				</li>
 <?
@@ -328,7 +328,7 @@ if(count($Tags) > 0) {
 					<a href="user.php?id=<?=$Tag['userid']?>" title="View the profile of the user that added this tag">[U]</a>
 <?		} ?>
 <?		if(check_perms('site_delete_tag')){ ?>
-					<a href="torrents.php?action=delete_tag&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove tag">[X]</a>
+					<span class="remove remove_tag"><a href="torrents.php?action=delete_tag&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove tag">[X]</a></span>
 <?		} ?>
 					</div>
 					<br style="clear:both" />
@@ -466,7 +466,7 @@ foreach ($TorrentList as $Torrent) {
 	if(!$ExtraInfo) {
 		$ExtraInfo = $GroupName ; $AddExtra=' / ';
 	}
-	if($IsSnatched) { $ExtraInfo.=$AddExtra.'<strong class="snatched_torrent">Snatched!</strong>'; $AddExtra=' / '; }
+	if($IsSnatched) { $ExtraInfo.=$AddExtra.'<strong class="snatched_torrent_label">Snatched!</strong>'; $AddExtra=' / '; }
 	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra.'<strong>Freeleech!</strong>'; $AddExtra=' / '; }
 	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra.'<strong>Neutral Leech!</strong>'; $AddExtra=' / '; }
 	if($PersonalFL) { $ExtraInfo.=$AddExtra.'<strong>Personal Freeleech!</strong>'; $AddExtra=' / '; }
@@ -525,7 +525,7 @@ foreach ($TorrentList as $Torrent) {
 	$LastMedia = $Media;
 ?>
 
-			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
+			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent<?=$IsSnatched ? ' snatched_torrent' : ''?>" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
 				<td>
 					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$HasFile ? 'DL' : 'Missing'?></a>
 <?	if (Torrents::can_use_token($Torrent)) { ?>

@@ -239,7 +239,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 			$LastMedia = $Torrent['Media'];
 ?>
-<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
+<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><?=(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '') . ($Torrent['IsSnatched'] ? ' snatched_torrent' : '')?>">
 		<td colspan="3">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
@@ -265,7 +265,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 
 		if ($Torrent['IsSnatched']) {
-			$DisplayName .= ' <strong class="snatched_torrent">Snatched!</strong>';
+			$DisplayName .= ' <strong class="snatched_torrent_label">Snatched!</strong>';
 		}
 		if ($Torrent['FreeTorrent'] == '1') {
 			$DisplayName .= ' <strong>Freeleech!</strong>';
@@ -275,7 +275,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			$DisplayName .= $AddExtra.'<strong>Personal Freeleech!</strong>';
 		}
 ?>
-	<tr class="torrent" id="group_<?=$GroupID?>">
+	<tr class="torrent<?=$IsSnatched ? ' snatched_torrent' : ''?>" id="group_<?=$GroupID?>">
 		<td></td>
 		<td class="center">
 			<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>">
@@ -424,7 +424,7 @@ if(check_perms('zip_downloader')){
 					<li id="list<?=$ListItem?>">
 						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
 						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-						<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;">[X]</a>
+						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;">[X]</a></span>
 						<br style="clear:all;" />
 					</li>
 <? } ?>

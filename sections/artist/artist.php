@@ -448,7 +448,7 @@ foreach ($Importances as $Group) {
 		$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 		$LastMedia = $Torrent['Media'];
 ?>
-	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent discog<?=$HideDiscog.$HideTorrents?>">
+	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent discog<?=$HideDiscog . $HideTorrents . ($Torrent['IsSnatched'] ? ' snatched_torrent' : '')?>">
 		<td colspan="2">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>
@@ -578,7 +578,7 @@ if(check_perms('zip_downloader')){
 						<li id="list<?=$ListItem?>">
 							<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 							<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-							<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" title="Remove format from the Collector">[X]</a>
+							<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" title="Remove format from the Collector">[X]</a></span>
 							<br style="clear:all;" />
 						</li>
 <? } ?>
@@ -686,11 +686,12 @@ if(empty($SimilarArray)) {
 
 ?>
 				<li>
-					<span title=<?=$Score?>><a href="artist.php?id=<?=$Artist2ID?>" style="float:left; display:block;"><?=$Artist2Name?></a></span>										<div style="float:right; display:block; letter-spacing: -1px;">
-					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar.">[-]</a>
-					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar.">[+]</a>
+					<span title=<?=$Score?>><a href="artist.php?id=<?=$Artist2ID?>" style="float:left; display:block;"><?=$Artist2Name?></a></span>
+					<div style="float:right; display:block; letter-spacing: -1px;">
+						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar.">[-]</a>
+						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar.">[+]</a>
 <?		if(check_perms('site_delete_tag')) { ?>
-					<a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove this similar artist">[X]</a>
+						<span class="remove remove_artist"><a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove this similar artist">[X]</a></span>
 <?		} ?>
 					</div>
 					<br style="clear:both" />

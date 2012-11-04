@@ -194,7 +194,7 @@ if(!$NumResults) {
 							$RemasterName .= $AddExtra.display_str($Torrent['Media']);
 					
 ?>
-	<tr class="group_torrent groupid_<?=$CollageID?><?=$GroupID?> edition hidden">
+	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition hidden">
 		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
 	</tr>
 <?
@@ -209,7 +209,7 @@ if(!$NumResults) {
 							}
 							$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
-	<tr class="group_torrent groupid_<?=$CollageID?><?=$GroupID?> edition hidden">
+	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition hidden">
 		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
 	</tr>
 <?
@@ -221,7 +221,7 @@ if(!$NumResults) {
 					$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 					$LastMedia = $Torrent['Media'];
 ?>
-<tr class="group_torrent groupid_<?=$CollageID?><?=$GroupID?> edition_<?=$EditionID?> hidden">
+<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition_<?=$EditionID?> hidden<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>">
 		<td colspan="<?=($LoggedUser['HideCollage']?'2':'3')?>">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]
@@ -242,11 +242,14 @@ if(!$NumResults) {
 				
 				$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 				
+				if(!$Torrent['IsSnatched']) {
+					$DisplayName .=' <strong class="snatched_torrent_label">Snatched!</strong>';
+				}
 				if(!empty($Torrent['FreeTorrent'])) {
-					$DisplayName .=' <strong>Freeleech!</strong>'; 
+					$DisplayName .=' <strong>Freeleech!</strong>';
 				}
 ?>
-	<tr class="torrent" id="group_<?=$CollageID?><?=$GroupID?>">
+	<tr class="torrent<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>" id="group_<?=$CollageID . $GroupID?>">
 		<td></td>
 		<td class="center">
 			<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>">

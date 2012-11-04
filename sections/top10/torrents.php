@@ -415,6 +415,9 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
 			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType) = $Detail;
 
+		$IsBookmarked = has_bookmarked('torrent', $GroupID);
+		$IsSnatched = Torrents::has_snatched($TorrentID);
+
 		// highlight every other row
 		$Rank++;
 		$Highlight = ($Rank % 2 ? 'a' : 'b');
@@ -448,7 +451,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		if($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
 		if($Year>0) { $ExtraInfo.=$AddExtra.$Year; $AddExtra=' '; }
 		if($RemasterTitle) { $ExtraInfo.=$AddExtra.$RemasterTitle; }
-		if(Torrents::has_snatched($TorrentID)) { $ExtraInfo.=' / <strong class="snatched_torrent">Snatched!</strong>'; }
+		if($IsSnatched) { $ExtraInfo.=' / <strong class="snatched_torrent_label">Snatched!</strong>'; }
 		if($ExtraInfo!='') {
 			$ExtraInfo = "- [$ExtraInfo]";
 		}
@@ -469,7 +472,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 
 		// print row
 ?>
-	<tr class="torrent row<?=$Highlight?> <? has_bookmarked('torrent', $GroupID) ? "bookmarked" : ""?>">
+	<tr class="torrent row<?=$Highlight . ($IsBookmarked ? ' bookmarked' : '') . ($IsSnatched ? ' snatched_torrent' : '')?>">
 		<td style="padding:8px;text-align:center;"><strong><?=$Rank?></strong></td>
 <?
 		//fix array offset php error
@@ -484,7 +487,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			<strong><?=$DisplayName?></strong> <?=$ExtraInfo?>
 			<span class="bookmark" style="float:right;">
 <?
-		if(has_bookmarked('torrent', $GroupID)) {
+		if($IsBookmarked) {
 ?>
 				<a href="#" class="bookmarklink_torrent_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>,'Bookmark');return false;">Remove Bookmark</a>
 <?

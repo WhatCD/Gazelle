@@ -452,7 +452,7 @@ class Torrents {
 			if (!empty($Data['RemasterTitle'])) { $EditionInfo[]=$Data['RemasterTitle']; }
 			if (count($EditionInfo)) { $Info[]=implode(' ',$EditionInfo); }
 		}
-		if ($Data['IsSnatched']) { $Info[]='<strong class="snatched_torrent">Snatched!</strong>'; }
+		if ($Data['IsSnatched']) { $Info[]='<strong class="snatched_torrent_label">Snatched!</strong>'; }
 		if ($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
 		if ($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
 		if ($Data['PersonalFL']) { $Info[]='<strong>Personal Freeleech!</strong>'; }

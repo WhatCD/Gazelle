@@ -165,7 +165,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 			$LastMedia = $Torrent['Media'];
 ?>
-<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><? if(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; } ?>">
+<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><?=(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '') . ($Torrent['IsSnatched'] ? ' snatched_torrent' : '')?>">
 		<td colspan="3">
 			<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?			if (Torrents::can_use_token($Torrent)) { ?>
@@ -190,7 +190,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 
 		if ($Torrent['IsSnatched']) {
-			$DisplayName .= ' <strong class="snatched_torrent">Snatched!</strong>';
+			$DisplayName .= ' <strong class="snatched_torrent_label">Snatched!</strong>';
 		}
 		if ($Torrent['FreeTorrent'] == '1') {
 			$DisplayName .= ' <strong>Freeleech!</strong>';

@@ -147,6 +147,11 @@ strong.important_text {
 	font-weight: bold;
 }
 
+strong.important_text_alt {
+	color: green;
+	font-weight: bold;
+}
+
 .invalid,.warning,.error,.new {
 	color: #ff0000;
 }
