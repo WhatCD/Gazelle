@@ -948,7 +948,7 @@ if ($LoggedUser['DefaultSearch']) {
 				if(trim($Torrents['remastertitle'][$Key])) {  $ExtraInfo.=$AddExtra.$Torrents['remastertitle'][$Key]; $AddExtra=" - "; }
 				elseif($Torrents['remastered'][$Key]=="1") { $ExtraInfo.=$AddExtra."Remastered"; $AddExtra=" - "; }
 				if($Torrents['year'][$Key]>"0") 	{ $ExtraInfo.=$AddExtra.$Torrents['year'][$Key]; $AddExtra=" / "; }
-				if($Torrents['freetorrent'][$Key]=="1") { $ExtraInfo.=$AddExtra."<strong>Freeleech!</strong>"; $AddExtra=" / "; }
+				if($Torrents['freetorrent'][$Key]=="1") { $ExtraInfo.=$AddExtra.'<strong class="freeleech_torrent_label">Freeleech!</strong>'; $AddExtra=" / "; }
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> <?=$HideGroup?>">
 		<td colspan="3">
@@ -988,7 +988,7 @@ if ($LoggedUser['DefaultSearch']) {
 			if(trim($Torrents['remastertitle'][0])) {  $ExtraInfo.=$AddExtra.$Torrents['remastertitle'][0]; $AddExtra=" - "; }
 			elseif($Torrents['remastered'][0]=="1") { $ExtraInfo.=$AddExtra."Remastered"; $AddExtra=" - "; }
 			if($Torrents['year'][0]>"0") 		{ $ExtraInfo.=$AddExtra.$Torrents['year'][0]; $AddExtra=" / "; }
-			if($Torrents['freetorrent'][0]=="1") 	{ $ExtraInfo.=$AddExtra."<strong>Freeleech!</strong>"; $AddExtra=" / "; }
+			if($Torrents['freetorrent'][0]=="1") 	{ $ExtraInfo.=$AddExtra.'<strong class="freeleech_torrent_label">Freeleech!</strong>'; $AddExtra=" / "; }
 			if($ExtraInfo!='') 			{ $ExtraInfo="[".$ExtraInfo."]"; }
 			if($GroupYear>0) 			{ $ExtraInfo.=" [".$GroupYear."]"; }
 			

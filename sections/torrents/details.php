@@ -467,9 +467,9 @@ foreach ($TorrentList as $Torrent) {
 		$ExtraInfo = $GroupName ; $AddExtra=' / ';
 	}
 	if($IsSnatched) { $ExtraInfo.=$AddExtra.'<strong class="snatched_torrent_label">Snatched!</strong>'; $AddExtra=' / '; }
-	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra.'<strong>Freeleech!</strong>'; $AddExtra=' / '; }
-	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra.'<strong>Neutral Leech!</strong>'; $AddExtra=' / '; }
-	if($PersonalFL) { $ExtraInfo.=$AddExtra.'<strong>Personal Freeleech!</strong>'; $AddExtra=' / '; }
+	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra.'<strong class="freeleech_torrent_label">Freeleech!</strong>'; $AddExtra=' / '; }
+	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra.'<strong class="neutral_leech_torrent_label">Neutral Leech!</strong>'; $AddExtra=' / '; }
+	if($PersonalFL) { $ExtraInfo.=$AddExtra.'<strong class="personal_freeleech_torrent_label">Personal Freeleech!</strong>'; $AddExtra=' / '; }
 	if($Reported) { $ExtraInfo.=$AddExtra.'<strong>Reported</strong>'; $AddExtra=' / '; }
 	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra.'<strong>Bad Tags</strong>'; $AddExtra=' / '; }
 	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra.'<strong>Bad Folders</strong>'; $AddExtra=' / '; }

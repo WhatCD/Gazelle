@@ -246,7 +246,7 @@ if(!$NumResults) {
 					$DisplayName .=' <strong class="snatched_torrent_label">Snatched!</strong>';
 				}
 				if(!empty($Torrent['FreeTorrent'])) {
-					$DisplayName .=' <strong>Freeleech!</strong>';
+					$DisplayName .=' <strong class="freeleech_torrent_label">Freeleech!</strong>';
 				}
 ?>
 	<tr class="torrent<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>" id="group_<?=$CollageID . $GroupID?>">

@@ -312,11 +312,11 @@ foreach ($TopVotes as $GroupID=>$Group) {
 			$DisplayName .= ' <strong class="snatched_torrent_label">Snatched!</strong>';
 		}
 		if ($Torrent['FreeTorrent'] == '1') {
-			$DisplayName .= ' <strong>Freeleech!</strong>';
+			$DisplayName .= ' <strong class="freeleech_torrent_label">Freeleech!</strong>';
 		} elseif ($Torrent['FreeTorrent'] == '2') {
-			$DisplayName .= ' <strong>Neutral Leech!</strong>';
-		} elseif(Torrents::has_token($TorrentID)) {
-			$DisplayName .= $AddExtra.'<strong>Personal Freeleech!</strong>';
+			$DisplayName .= ' <strong class="neutral_leech_torrent_label">Neutral Leech!</strong>';
+		} elseif (Torrents::has_token($TorrentID)) {
+			$DisplayName .= '<strong class="personal_freeleech_torrent_label">Personal Freeleech!</strong>';
 		}
 
 ?>

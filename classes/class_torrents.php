@@ -453,9 +453,9 @@ class Torrents {
 			if (count($EditionInfo)) { $Info[]=implode(' ',$EditionInfo); }
 		}
 		if ($Data['IsSnatched']) { $Info[]='<strong class="snatched_torrent_label">Snatched!</strong>'; }
-		if ($Data['FreeTorrent'] == '1') { $Info[]='<strong>Freeleech!</strong>'; }
-		if ($Data['FreeTorrent'] == '2') { $Info[]='<strong>Neutral Leech!</strong>'; }
-		if ($Data['PersonalFL']) { $Info[]='<strong>Personal Freeleech!</strong>'; }
+		if ($Data['FreeTorrent'] == '1') { $Info[]='<strong class="freeleech_torrent_label">Freeleech!</strong>'; }
+		if ($Data['FreeTorrent'] == '2') { $Info[]='<strong class="neutral_leech_torrent_label">Neutral Leech!</strong>'; }
+		if ($Data['PersonalFL']) { $Info[]='<strong class="personal_freeleech_torrent_label">Personal Freeleech!</strong>'; }
 		return implode(' / ', $Info);
 	}
 
