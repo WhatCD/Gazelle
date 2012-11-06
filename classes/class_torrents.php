@@ -583,7 +583,7 @@ class Torrents {
 
 		// Torrent was not found in the previously inspected snatch lists
 		$CurSnatchedTorrents =& $SnatchedTorrents[$BucketID];
-		if (empty($CurSnatchedTorrents)) {
+		if ($CurSnatchedTorrents === false) {
 			$CurTime = time();
 			// This bucket hasn't been checked before
 			$CurSnatchedTorrents = $Cache->get_value('users_snatched_'.$UserID.'_'.$BucketID, true);

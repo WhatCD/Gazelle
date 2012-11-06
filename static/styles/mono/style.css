@@ -879,7 +879,7 @@ div.thin .header+.linkbox+div td {
 	padding-left: 10px !important;
 }
 
-div.thin .header+.linkbox+div table td:first-child,.filter_torrents table:nth-child(1) td:first-child {
+td.label {
 	font-size: 10pt;
 }
 
@@ -908,10 +908,6 @@ div.thin form.search_form table td.label,.filter_torrents table td:first-child {
 	width: 20%;
 	padding-right: 10px;
 	text-align: right;
-}
-
-div.thin form.search_form table td.label {
-	width: 12%;
 }
 
 .filter_torrents .submit {

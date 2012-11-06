@@ -59,23 +59,18 @@ if(check_perms('site_advanced_top10')) {
 	<form class="search_form" name="torrents" action="" method="get">
 		<input type="hidden" name="advanced" value="1" />
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
-			<tr>
+			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
-				<td>
-					<input type="text" name="tags" size="75" value="<? if(!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked':'')?>><label for="rdoAll"> All</label>&nbsp;
+				<td class="ft_taglist">
+					<input type="text" name="tags" size="75" value="<? if(!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />&nbsp;
+					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked':'')?>><label for="rdoAll"> All</label>&nbsp;&nbsp;
 					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked':'')?>><label for="rdoAny"> Any</label>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Format</td>
+				<td class="label">Format:</td>
 				<td>
-					<select name="format" style="width:auto;">
+					<select name="format" style="width:auto;" class="ft_format">
 						<option value="">Any</option>
 <?	foreach ($Formats as $FormatName) { ?>
 						<option value="<?=display_str($FormatName)?>" <? if(isset($_GET['format']) && $FormatName==$_GET['format']) { ?>selected="selected"<? } ?>><?=display_str($FormatName)?></option>

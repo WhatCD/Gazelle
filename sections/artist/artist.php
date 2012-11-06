@@ -828,13 +828,13 @@ if($NumSimilar>0) {
 	$Similar->write_artists();
 ?>
 			</div>
-		</div>
 		<div id="flip_view_2" style="display:none;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;">
 			<canvas width="<?=WIDTH?>px" height="<?=HEIGHT-20?>px" id="similarArtistsCanvas"></canvas>
 			<div id="artistTags" style="display:none;">
 				<ul></ul>
 			</div>
 			<strong style="margin-left:10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
+		</div>
 		</div>
 
 <script>

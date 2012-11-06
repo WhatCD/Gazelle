@@ -105,22 +105,17 @@ if(check_perms('site_advanced_top10')) { ?>
 		<input type="hidden" name="advanced" value="1" />
 		<input type="hidden" name="type" value="votes" />
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
-			<tr>
+			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
-				<td>
-					<input type="text" name="tags" size="75" value="<? if(!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked':'')?>><label for="rdoAll"> All</label>&nbsp;
+				<td class="ft_taglist">
+					<input type="text" name="tags" size="75" value="<? if(!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />&nbsp;
+					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked':'')?>><label for="rdoAll"> All</label>&nbsp;&nbsp;
 					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked':'')?>><label for="rdoAny"> Any</label>
 				</td>
 			</tr>
-			<tr>
+			<tr id="yearfilter">
 				<td class="label">Year:</td>
-				<td>
+				<td class="ft_year">
 					<input type="text" name="year1" size="4" value="<? if(!empty($_GET['year1'])) { echo display_str($_GET['year1']);} ?>" />
 					to
 					<input type="text" name="year2" size="4" value="<? if(!empty($_GET['year2'])) { echo display_str($_GET['year2']);} ?>" />

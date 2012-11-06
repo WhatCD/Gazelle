@@ -553,37 +553,37 @@ View::show_header('Browse Torrents','browse');
 	<div class="box pad">
 		<table class="layout">
 <? if ($AdvancedSearch) { ?>
-			<tr>
-				<td class="label">Artist Name:</td>
-				<td colspan="3" class="fta_artistname">
+			<tr id="artist_name">
+				<td class="label">Artist name:</td>
+				<td colspan="3" class="ft_artistname">
 					<input type="text" spellcheck="false" size="40" name="artistname" class="inputtext smaller" value="<?Format::form('artistname')?>" />
 					<input type="hidden" name="action" value="advanced" />
 				</td>
 			</tr>
-			<tr>
-				<td class="label">Album/Torrent Name:</td>
-				<td colspan="3" class="fta_groupname">
+			<tr id="album_torrent_name">
+				<td class="label">Album/Torrent name:</td>
+				<td colspan="3" class="ft_groupname">
 					<input type="text" spellcheck="false" size="40" name="groupname" class="inputtext smaller" value="<?Format::form('groupname')?>" />
 				</td>
 			</tr>
-			<tr>
-				<td class="label">Record Label:</td>
-				<td colspan="3" class="fta_recordlabel">
+			<tr id="record_label">
+				<td class="label">Record label:</td>
+				<td colspan="3" class="ft_recordlabel">
 					<input type="text" spellcheck="false" size="40" name="recordlabel" class="inputtext smaller" value="<?Format::form('recordlabel')?>" />
 				</td>
 			</tr>
-			<tr>
-				<td class="label">Catalogue Number:</td>
-				<td class="fta_cataloguenumber">
+			<tr id="catalogue_number_year">
+				<td class="label">Catalogue number:</td>
+				<td class="ft_cataloguenumber">
 					<input type="text" size="40" name="cataloguenumber" class="inputtext smallest" value="<?Format::form('cataloguenumber')?>"  />
 				</td>
 				<td class="label">Year:</td>
-				<td class="fta_year">
+				<td class="ft_year">
 					<input type="text" name="year" class="inputtext smallest" value="<?Format::form('year')?>" size="4" />
 				</td>
 			</tr>
 			<tr id="edition_expand">
-				<td colspan="4" class="center fta_edition_expand">[<a href="#" onclick="ToggleEditionRows();return false;">Click here to toggle searching for specific remaster information</a>]</td>
+				<td colspan="4" class="center ft_edition_expand">[<a href="#" onclick="ToggleEditionRows();return false;">Click here to toggle searching for specific remaster information</a>]</td>
 			</tr>
 <?
 if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', true) == "" && 
@@ -594,54 +594,54 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 }
 ?>
 			<tr id="edition_title" class="<?=$Hidden?>">
-				<td class="label">Edition Title:</td>
-				<td class="fta_remastertitle">
+				<td class="label">Edition title:</td>
+				<td class="ft_remastertitle">
 					<input type="text" spellcheck="false" size="40" name="remastertitle" class="inputtext smaller" value="<?Format::form('remastertitle')?>" />
 				</td>
-				<td class="label">Edition Year:</td>
-				<td class="fta_remasteryear">
+				<td class="label">Edition year:</td>
+				<td class="ft_remasteryear">
 					<input type="text" name="remasteryear" class="inputtext smallest" value="<?Format::form('remasteryear')?>" size="4" />
 				</td>
 			</tr>
 			<tr id="edition_label" class="<?=$Hidden?>">
-				<td class="label">Edition Release Label:</td>
-				<td colspan="3" class="fta_remasterrecordlabel">
+				<td class="label">Edition release label:</td>
+				<td colspan="3" class="ft_remasterrecordlabel">
 					<input type="text" spellcheck="false" size="40" name="remasterrecordlabel" class="inputtext smaller" value="<?Format::form('remasterrecordlabel')?>" />
 				</td>
 			</tr>
 			<tr id="edition_catalogue" class="<?=$Hidden?>">
-				<td class="label">Edition Catalogue Number:</td>
-				<td colspan="3" class="fta_remastercataloguenumber">
+				<td class="label">Edition catalogue number:</td>
+				<td colspan="3" class="ft_remastercataloguenumber">
 					<input type="text" size="40" name="remastercataloguenumber" class="inputtext smallest" value="<?Format::form('remastercataloguenumber')?>" />
 				</td>
 			</tr>
-			<tr>
-				<td class="label">File List:</td>
-				<td colspan="3" class="fta_filelist">
+			<tr id="file_list">
+				<td class="label">File list:</td>
+				<td colspan="3" class="ft_filelist">
 					<input type="text" spellcheck="false" size="40" name="filelist" class="inputtext" value="<?Format::form('filelist')?>" />
 				</td>
 			</tr>
-			<tr>
-				<td class="label">Rip Specifics:</td>
-				<td class="nobr" colspan="3" class="fta_encoding">
-					<select id="bitrate" name="encoding">
+			<tr id="rip_specifics">
+				<td class="label">Rip specifics:</td>
+				<td class="nobr" colspan="3" class="ft_ripspecifics">
+					<select id="bitrate" name="encoding" class="ft_bitrate">
 						<option value="">Bitrate</option>
 <?	foreach ($Bitrates as $BitrateName) { ?>
 						<option value="<?=display_str($BitrateName); ?>" <?Format::selected('encoding', $BitrateName)?>><?=display_str($BitrateName); ?></option>
 <?	} ?>			</select>
 
-					<select name="format">
+					<select name="format" class="ft_format">
 						<option value="">Format</option>
 <?	foreach ($Formats as $FormatName) { ?>
 						<option value="<?=display_str($FormatName); ?>" <?Format::selected('format', $FormatName)?>><?=display_str($FormatName); ?></option>
 <?	} ?>			</select>
-					<select name="media">
+					<select name="media" class="ft_media">
 						<option value="">Media</option>
 <?	foreach ($Media as $MediaName) { ?>
 						<option value="<?=display_str($MediaName); ?>" <?Format::selected('media',$MediaName)?>><?=display_str($MediaName); ?></option>
 <?	} ?>
 					</select>
-					<select name="releasetype">
+					<select name="releasetype" class="ft_releasetype">
 						<option value="">Release type</option>
 <?	foreach ($ReleaseTypes as $ID=>$Type) { ?>
 						<option value="<?=display_str($ID); ?>" <?Format::selected('releasetype',$ID)?>><?=display_str($Type); ?></option>
@@ -649,32 +649,32 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 					</select>
 				</td>
 			</tr>
-			<tr>
+			<tr id="misc">
 				<td class="label">Misc:</td>
-				<td class="nobr" colspan="3" class="fta_misc">
-					<select name="haslog" class="fta_haslog">
+				<td class="nobr" colspan="3" class="ft_misc">
+					<select name="haslog" class="ft_haslog">
 						<option value="">Has Log</option>
 						<option value="1" <?Format::selected('haslog','1')?>>Yes</option>
 						<option value="0" <?Format::selected('haslog','0')?>>No</option>
 						<option value="100" <?Format::selected('haslog','100')?>>100% only</option>
 						<option value="-1" <?Format::selected('haslog','-1')?>>&lt;100%/Unscored</option>
 					</select>
-					<select name="hascue" class="fta_hascue">
+					<select name="hascue" class="ft_hascue">
 						<option value="">Has Cue</option>
 						<option value="1" <?Format::selected('hascue',1)?>>Yes</option>
 						<option value="0" <?Format::selected('hascue',0)?>>No</option>
 					</select>
-					<select name="scene" class="fta_scene">
+					<select name="scene" class="ft_scene">
 						<option value="">Scene</option>
 						<option value="1" <?Format::selected('scene',1)?>>Yes</option>
 						<option value="0" <?Format::selected('scene',0)?>>No</option>
 					</select>
-					<select name="vanityhouse" class="fta_vanityhouse">
+					<select name="vanityhouse" class="ft_vanityhouse">
 						<option value="">Vanity House</option>
 						<option value="1" <?Format::selected('vanityhouse',1)?>>Yes</option>
 						<option value="0" <?Format::selected('vanityhouse',0)?>>No</option>
 					</select>
-					<select name="freetorrent" class="fta_freetorrent">
+					<select name="freetorrent" class="ft_freetorrent">
 						<option value="">Leech Status</option>
 						<option value="1" <?Format::selected('freetorrent',1)?>>Freeleech</option>
 						<option value="2" <?Format::selected('freetorrent',2)?>>Neutral Leech</option>
@@ -684,7 +684,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 				</td>
 			</tr>
 <? } else { // BASIC SEARCH ?>
-			<tr>
+			<tr id="search_terms">
 				<td class="label">Search terms:</td>
 				<td colspan="3" class="ftb_searchstr">
 					<input type="text" spellcheck="false" size="40" name="searchstr" class="inputtext" value="<?Format::form('searchstr')?>" />
@@ -694,7 +694,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 				</td>
 			</tr>
 <? } ?>
-			<tr>
+			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td colspan="3" class="ft_taglist">
 					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_','.',Format::form('taglist', true))?>" />&nbsp;
@@ -702,7 +702,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 				</td>
 			</tr>
-			<tr>
+			<tr id="order">
 				<td class="label">Order by:</td>
 				<td colspan="<?=($AdvancedSearch)?'3':'1'?>" class="ft_order">
 					<select name="order_by" style="width:auto;" class="ft_order_by">
@@ -720,7 +720,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 					</select>
 				</td>
 			</tr>
-			<tr>
+			<tr id="group_results">
 				<td class="label">
 					<label for="group_results">Group by release:</label>
 				</td>

@@ -129,7 +129,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 	$TagList = explode(' ',str_replace('_','.',$GroupInfo['TagList']));
 	$TorrentTags = array();
 	foreach ($TagList as $Tag) {
-		$TorrentTags[] = '<a href="torrents.php?'.$Action.'&amp;taglist='.$Tag.'">'.$Tag.'</a>';
+		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
 	}
 	$TorrentTags = implode(', ', $TorrentTags);
 	foreach ($Editions as $RemIdent => $Edition) {
@@ -179,9 +179,9 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				<div class="torrent_info"><?=$ExtraInfo?></div>
 				<div class="tags"><?=$TorrentTags?></div>
 			</td>
-			<td><strong><?=isset($Edition['Formats']['V2 (VBR)'])?'<span style="color: green;">YES</span>':'<span style="color: red;">NO</span>'?></strong></td>
-			<td><strong><?=isset($Edition['Formats']['V0 (VBR)'])?'<span style="color: green;">YES</span>':'<span style="color: red;">NO</span>'?></strong></td>
-			<td><strong><?=isset($Edition['Formats']['320'])?'<span style="color: green;">YES</span>':'<span style="color: red;">NO</span>'?></strong></td>
+			<td><strong><?=isset($Edition['Formats']['V2 (VBR)'])?'<span class="important_text_alt">YES</span>':'<span class="important_text">NO</span>'?></strong></td>
+			<td><strong><?=isset($Edition['Formats']['V0 (VBR)'])?'<span class="important_text_alt">YES</span>':'<span class="important_text">NO</span>'?></strong></td>
+			<td><strong><?=isset($Edition['Formats']['320'])?'<span class="important_text_alt">YES</span>':'<span class="important_text">NO</span>'?></strong></td>
 		</tr>
 <?
 		}

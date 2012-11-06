@@ -360,13 +360,13 @@ View::show_header($Title, 'requests');
 		<input type="hidden" name="userid" value="<?=$_GET['userid']?>" />
 <?	} ?>
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
-			<tr>
+			<tr id="search_terms">
 				<td class="label">Search terms:</td>
 				<td>
 					<input type="text" name="search" size="75" value="<?if(isset($_GET['search'])) { echo display_str($_GET['search']); } ?>" />
 				</td>
 			</tr>
-			<tr>
+			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td>
 					<input type="text" name="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />&nbsp;
@@ -374,14 +374,14 @@ View::show_header($Title, 'requests');
 					<input type="radio" name="tags_type" id="tags_type1" value="1"  <?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 				</td>
 			</tr>
-			<tr>
+			<tr id="include_filled">
 				<td class="label">Include filled:</td>
 				<td>
 					<input type="checkbox" name="show_filled" <? if(!$Submitted || !empty($_GET['show_filled']) || (!$Submitted && !empty($_GET['type']) && $_GET['type'] == "filled")) { ?>checked="checked"<? } ?> />
 				</td>
 			</tr>
 <?	if(check_perms('site_see_old_requests')){ ?> 
-			<tr>
+			<tr id="include_old">
 				<td class="label">Include old:</td>
 				<td>
 					<input type="checkbox" name="showall" <? if(!empty($_GET['showall'])) {?>checked="checked"<? } ?> />

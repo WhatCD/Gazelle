@@ -83,11 +83,11 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 			<input type="hidden" name="forum" value="<?=$ForumID?>" />
 			<table id="newthreadtext" class="layout">
 				<tr>
-					<td class="label">Title</td>
+                    <td class="label">Title:</td> 
 					<td><input id="title" type="text" name="title" style="width: 98%;" /></td>
 				</tr>
 				<tr>
-					<td class="label">Body</td>
+					<td class="label">Body:</td>
 					<td><textarea id="posttext" style="width: 98%;" onkeyup="resize('posttext');" name="body" cols="90" rows="8"></textarea></td>
 				</tr>
 				<tr>
@@ -132,15 +132,22 @@ if (check_perms('forums_polls_create')) {
 					</td>
 				</tr>
 				<tr id="poll_question" class="hidden">
-					<td class="label">Question</td>
+					<td class="label">Question:</td>
 					<td><input type="text" name="question" id="pollquestionfield" style="width: 98%;" /></td>
 				</tr>
 				<tr id="poll_answers" class="hidden">
-					<td class="label">Answers</td>
+					<td class="label">Answers:</td>
 					<td id="answer_block">
 						<input type="text" name="answers[]" style="width: 90%;" />
 						[<a href="#" onclick="AddAnswerField();return false;">+</a>]
 						[<a href="#" onclick="RemoveAnswerField();return false;">-</a>]
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="center">
+						<input type="button" value="Preview" onclick="Newthread_Preview(1);" id="newthreadpreviewbutton" />
+						<input type="button" value="Editor" onclick="Newthread_Preview(0);" id="newthreadeditbutton" class="hidden" />
+						<input type="submit" id="submit_button" value="Create thread" />
 					</td>
 				</tr>
 <? } ?>
@@ -149,9 +156,6 @@ if (check_perms('forums_polls_create')) {
 				<input id="subscribeboxpreview" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> />
 				<label for="subscribebox">Subscribe to topic</label>
 			</div>
-			<input type="button" value="Preview" onclick="Newthread_Preview(1);" id="newthreadpreviewbutton" />
-			<input type="button" value="Editor" onclick="Newthread_Preview(0);" id="newthreadeditbutton" class="hidden" />
-			<input type="submit" id="submit_button" value="Create thread" />
 		</form>
 	</div>
 </div>

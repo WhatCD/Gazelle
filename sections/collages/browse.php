@@ -47,14 +47,14 @@ if(!empty($_GET['cats'])) {
 }
 
 // Ordering
-if(!empty($_GET['order']) && !empty($OrderTable[$_GET['order']])) {
-	$Order = $OrderTable[$_GET['order']];
+if(!empty($_GET['order_by']) && !empty($OrderTable[$_GET['order_by']])) {
+	$Order = $OrderTable[$_GET['order_by']];
 } else {
 	$Order = 'ID';
 }
 
-if(!empty($_GET['way']) && !empty($WayTable[$_GET['way']])) {
-	$Way = $WayTable[$_GET['way']];
+if(!empty($_GET['order_way']) && !empty($WayTable[$_GET['order_way']])) {
+	$Way = $WayTable[$_GET['order_way']];
 } else {
 	$Way = 'DESC';
 }
@@ -91,10 +91,20 @@ if(!empty($Search)) {
 	$SQL .= "%'";
 }
 
+if (isset($_GET['tags_type']) && $_GET['tags_type'] == 0) { // Any
+	$_GET['tags_type'] = 0;
+} else { // All
+	$_GET['tags_type'] = 1;
+}
+
 if(!empty($Tags)) {
-	$SQL.= " AND TagList LIKE '%";
-	$SQL .= implode("%' AND TagList LIKE '%", $Tags);
-	$SQL .= "%'";
+	$SQL.= " AND (TagList LIKE '%";
+	if ($_GET['tags_type'] == 0) {
+		$SQL .= implode("%' OR TagList LIKE '%", $Tags);
+	} else {
+		$SQL .= implode("%' AND TagList LIKE '%", $Tags);
+	}
+	$SQL .= "%')";
 }
 
 if(!empty($_GET['userid'])) {
@@ -153,50 +163,54 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 		<form class="search_form" name="collages" action="" method="get">
 			<div><input type="hidden" name="action" value="search" /></div>
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
-				<tr>
-					<td class="label"><strong>Search for:</strong></td>
-					<td colspan="3">
+				<tr id="search_terms">
+					<td class="label">Search terms:</td>
+					<td>
 						<input type="text" name="search" size="70" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : '')?>" />
 					</td>
 				</tr>
-				<tr>
-					<td class="label"><strong>Tags:</strong></td>
-					<td colspan="3">
-						<input type="text" name="tags" size="70" value="<?=(!empty($_GET['tags']) ? display_str($_GET['tags']) : '')?>" />
+				<tr id="tagfilter">
+					<td class="label">Tags (comma-separated):</td>
+					<td>
+						<input type="text" name="tags" size="70" value="<?=(!empty($_GET['tags']) ? display_str($_GET['tags']) : '')?>" />&nbsp;
+						<input type="radio" name="tags_type" id="tags_type0" value="0" <?Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+						<input type="radio" name="tags_type" id="tags_type1" value="1"  <?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 					</td>
 				</tr>
-				<tr>
-					<td class="label"><strong>Categories:</strong></td>
-					<td colspan="3">
+				<tr id="categories">
+					<td class="label">Categories:</td>
+					<td>
 <? foreach($CollageCats as $ID=>$Cat) { ?>
 						<input type="checkbox" value="1" name="cats[<?=$ID?>]" id="cats_<?=$ID?>" <?if(in_array($ID, $Categories)) { echo ' checked="checked"'; }?>>
-						<label for="cats_<?=$ID?>"><?=$Cat?></label>
+						<label for="cats_<?=$ID?>"><?=$Cat?></label>&nbsp;&nbsp;
 <? } ?>
 					</td>
 				</tr>
-				<tr>
-					<td class="label"><strong>Search in:</strong></td>
+				<tr id="search_name_description">
+					<td class="label">Search in:</td>
 					<td>
-						<input type="radio" name="type" value="c.name" <? if($Type == 'c.name') { echo 'checked="checked" '; }?>/> Names
+						<input type="radio" name="type" value="c.name" <? if($Type == 'c.name') { echo 'checked="checked" '; }?>/> Names&nbsp;&nbsp;
 						<input type="radio" name="type" value="description" <? if($Type == 'description') { echo 'checked="checked" '; }?>/> Descriptions
 					</td>
-					<td class="label"><strong>Order by:</strong></td>
+				</tr>
+				<tr id="order_by">
+					<td class="label">Order by:</td>
 					<td>
-						<select name="order">
+						<select name="order_by" class="ft_order_by">
 						<?
 							foreach($OrderVals as $Cur){ ?>
-							<option value="<?=$Cur?>"<? if(isset($_GET['order']) && $_GET['order'] == $Cur || (!isset($_GET['order']) && $Cur == 'Time')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
+							<option value="<?=$Cur?>"<? if(isset($_GET['order_by']) && $_GET['order_by'] == $Cur || (!isset($_GET['order_by']) && $Cur == 'Time')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
 						<?	}?>
 						</select>
-						<select name="way">
+						<select name="order_way" class="ft_order_way">
 						<?	foreach($WayVals as $Cur){ ?>
-							<option value="<?=$Cur?>"<? if(isset($_GET['way']) && $_GET['way'] == $Cur || (!isset($_GET['way']) && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
+							<option value="<?=$Cur?>"<? if(isset($_GET['order_way']) && $_GET['order_way'] == $Cur || (!isset($_GET['order_way']) && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
 						<?	}?>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="4" class="center">
+					<td colspan="2" class="center">
 						<input type="submit" value="Search" />
 					</td>
 				</tr>
@@ -217,15 +231,15 @@ if (check_perms('site_collages_personal')) {
 	if ($CollageCount == 1) {
 		list($CollageID) = $DB->next_record();
 ?>
-		<a href="collages.php?id=<?=$CollageID?>">[My personal collage]</a>
+		<a href="collages.php?id=<?=$CollageID?>">[Personal collage]</a>
 <?	} elseif ($CollageCount > 1) { ?>
-		<a href="collages.php?action=mine">[My personal collages]</a>
+		<a href="collages.php?action=mine">[Personal collages]</a>
 <?	}
 } 
 if (check_perms('site_collages_subscribe')) { ?>
-		<a href="userhistory.php?action=subscribed_collages">[My Subscribed Collages]</a>
+		<a href="userhistory.php?action=subscribed_collages">[Subscribed collages]</a>
 <? } ?>
-		<a href="bookmarks.php?type=collages">[Bookmarked Collages]</a>
+		<a href="bookmarks.php?type=collages">[Bookmarked collages]</a>
 <?
 if (check_perms('site_collages_recover')) { ?>
 		<a href="collages.php?action=recover">[Recover collage]</a>
@@ -238,7 +252,7 @@ if (check_perms('site_collages_create') || check_perms('site_collages_personal')
 }
 ?>
 		<a href="collages.php?userid=<?=$LoggedUser['ID']?>">[Collages you started]</a>
-		<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1">[Collages you've contributed to]</a>
+		<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1">[Collages you contributed to]</a>
 <? } else { ?>
 		<a href="bookmarks.php?type=torrents">[Torrents]</a>
 		<a href="bookmarks.php?type=artists">[Artists]</a>
