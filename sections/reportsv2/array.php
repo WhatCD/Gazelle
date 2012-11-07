@@ -58,7 +58,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 				'title' => 'Urgent',
 				'report_messages' => array(
 					'This report type is only for the very urgent reports, usually for personal information being found within a torrent.',
-					'Abusing the Urgent reports could result in a warning or worse',
+					'Abusing the Urgent reports could result in a warning or worse.',
 					'As this report type gives the staff absolutely no information about the problem, please be as clear as possible in your comments about what the problem is.'
 				),
 				'report_fields' => array(
@@ -79,7 +79,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 				'reason' => '-1',
 				'title' => 'Other',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report'
+					'Please include as much information as possible to verify the report.'
 				),
 				'report_fields' => array(
 				),
@@ -96,7 +96,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 				'title' => 'Trump',
 				'report_messages' => array(
 					'Please list the specific reason(s) the newer torrent trumps the older one.',
-					'Please make sure you are reporting the torrent <strong>which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
+					'Please make sure you are reporting the torrent <strong class="important_text">which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
 				),
 
 				'report_fields' => array(
@@ -117,7 +117,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 				'title' => 'Tag Trump',
 				'report_messages' => array(
 					'Please list the specific tag(s) the newer torrent trumps the older one.',
-					'Please make sure you are reporting the torrent <strong>which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
+					'Please make sure you are reporting the torrent <strong class="important_text">which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
 				),
 				'report_fields' => array(
 					'sitelink' => '1'
@@ -136,7 +136,7 @@ Your torrent was reported because it was trumped by another torrent with improve
 				'title' => 'Vinyl Trump',
 				'report_messages' => array(
 					'Please list the specific reason(s) the newer torrent trumps the older one.',
-					'Please make sure you are reporting the torrent <strong>which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
+					'Please make sure you are reporting the torrent <strong class="important_text">which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
 				),
 
 				'report_fields' => array(
@@ -155,8 +155,8 @@ Your torrent was reported as it was trumped by a better-sounding vinyl rip.'
 				'reason' => '3',
 				'title' => 'Bad Folder Name Trump',
 				'report_messages' => array(
-					'Please list the folder name and what is wrong with it',
-					'Please make sure you are reporting the torrent <strong>which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
+					'Please list the folder name and what is wrong with it.',
+					'Please make sure you are reporting the torrent <strong class="important_text">which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
 				),
 				'report_fields' => array(
 					'sitelink' => '1'
@@ -176,7 +176,7 @@ Your torrent was reported because it was trumped by another torrent with an impr
 				'title' => 'Bad File Names Trump',
 				'report_messages' => array(
 					'Please describe what is wrong with the file names.',
-					'Please make sure you are reporting the torrent <strong>which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
+					'Please make sure you are reporting the torrent <strong class="important_text">which has been trumped</strong> and should be deleted, not the torrent that you think should remain on site.'
 				),
 				'report_fields' => array(
 					'sitelink' => '1'
@@ -194,7 +194,7 @@ Your torrent was reported because it was trumped by another torrent with improve
 				'reason' => '15',
 				'title' => 'Track(s) Missing',
 				'report_messages' => array(
-					'Please list the track number and title of the missing track',
+					'Please list the track number and title of the missing track.',
 					'If possible, please provide a link to Amazon.com or another source showing the proper track listing.'
 				),
 				'report_fields' => array(
@@ -312,8 +312,8 @@ Your torrent was reported because it contained one or more audio files that were
 				'title' => 'Unsplit Album Rip',
 				'report_messages' => array(
 					"If possible, please provide a link to Amazon.com or another source showing the proper track listing.",
-					"This option is for uploads of CDs ripped as a single track when it should be split as on the CD",
-					"This option is not to be confused with uploads of a single track, taken from a CD with multiple tracks (Tracks Missing)"
+					"This option is for uploads of CDs ripped as a single track when it should be split as on the CD.",
+					"This option is not to be confused with uploads of a single track, taken from a CD with multiple tracks (Tracks Missing)."
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -403,7 +403,7 @@ Your torrent has now been labeled using the appropriate format and bitrate.'
 				'reason' => '5',
 				'title' => 'Disallowed Format',
 				'report_messages' => array(
-					"If applicable, list the relevant tracks"
+					"If applicable, list the relevant tracks."
 				),
 				'report_fields' => array(
 					'track' => '0'
@@ -443,7 +443,7 @@ Your torrent was reported because the bitrates of one or more audio files had be
 				'reason' => '12',
 				'title' => 'Radio/TV/FM/WEB Rip',
 				'report_messages' => array(
-					"Please include as much information as possible to verify the report"
+					"Please include as much information as possible to verify the report."
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -461,7 +461,7 @@ The only allowable media formats are CD, DVD, Vinyl, Soundboard, SACD, DAT, Cass
 				'reason' => '7',
 				'title' => 'Discography',
 				'report_messages' => array(
-					"Please include as much information as possible to verify the report"
+					"Please include as much information as possible to verify the report."
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -479,7 +479,7 @@ Your torrent was reported because it consisted of a discography.'
 				'reason' => '19',
 				'title' => 'User Compilation',
 				'report_messages' => array(
-					"Please include as much information as possible to verify the report"
+					"Please include as much information as possible to verify the report."
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -498,7 +498,7 @@ Your torrent was reported because it was a user compilation.'
 				'reason' => '-1',
 				'title' => 'No Lineage Info',
 				'report_messages' => array(
-					"Please list the specific information missing from the torrent (hardware, software, etc.)"
+					"Please list the specific information missing from the torrent (hardware, software, etc.)."
 				),
 				'report_fields' => array(
 				),
@@ -534,7 +534,7 @@ Your torrent was reported because it contained an edited log (either edited by y
 				'reason' => '22',
 				'title' => 'Audience Recording',
 				'report_messages' => array(
-					"Please include as much information as possible to verify the report"
+					"Please include as much information as possible to verify the report."
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -611,7 +611,7 @@ Your torrent was reported because one or more tracks contain encoding errors.'
 				'title' => 'Log Rescore Request',
 				'report_messages' => array(
 					"It could help us if you say exactly why you believe this log requires rescoring.",
-					"For example, if it's a foreign log which needs scoring, or if the log wasn't uploaded at all"
+					"For example, if it's a foreign log which needs scoring, or if the log wasn't uploaded at all."
 				),
 				'report_fields' => array(
 				),
@@ -633,7 +633,7 @@ Your torrent has now been properly scored by the staff.'
 				'reason' => '-1',
 				'title' => 'No Crack/Keygen/Patch',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report',
+					'Please include as much information as possible to verify the report.',
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -651,7 +651,7 @@ Your torrent was reported because it was missing an installation method.'
 				'reason' => '-1',
 				'title' => 'Game',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report',
+					'Please include as much information as possible to verify the report.',
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -688,7 +688,7 @@ Your torrent was reported because it contained a freely available application.'
 				'reason' => '-1',
 				'title' => 'No Description',
 				'report_messages' => array(
-					'If possible, please provide a link to an accurate description',
+					'If possible, please provide a link to an accurate description.',
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -706,7 +706,7 @@ Your torrent was reported because it lacked adequate release information.'
 				'reason' => '-1',
 				'title' => 'Archived Pack',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report'
+					'Please include as much information as possible to verify the report.'
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -725,7 +725,7 @@ Your torrent was reported because it was an archived collection.'
 				'reason' => '-1',
 				'title' => 'Collection of Cracks',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report'
+					'Please include as much information as possible to verify the report.'
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -743,7 +743,7 @@ Your torrent was reported because it contained a collection of serials, keygens,
 				'reason' => '-1',
 				'title' => 'Hacking Tool',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report',
+					'Please include as much information as possible to verify the report.',
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -801,7 +801,7 @@ Your torrent was reported because it contained a program that did not work or no
 				'reason' => '-1',
 				'title' => 'Unrelated Ebooks',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report'
+					'Please include as much information as possible to verify the report.'
 				),
 				'report_fields' => array(
 				),
@@ -841,7 +841,7 @@ Your torrent was reported because one or more audiobook tracks contain encoding 
 				'reason' => '-1',
 				'title' => 'Disallowed Topic',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report'
+					'Please include as much information as possible to verify the report.'
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -861,7 +861,7 @@ Your torrent was reported because it contained a video that has no relevance to 
 				'reason' => '-1',
 				'title' => 'Talkshow/Podcast',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report'
+					'Please include as much information as possible to verify the report.'
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -881,7 +881,7 @@ Your torrent was reported because it contained audio files sourced from a talk s
 				'reason' => '-1',
 				'title' => 'Multiple Comic Titles',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report'
+					'Please include as much information as possible to verify the report.'
 				),
 				'report_fields' => array(
 					'link' => '0'
@@ -899,7 +899,7 @@ Your torrent was reported because it contained comics from multiple unrelated se
 				'reason' => '-1',
 				'title' => 'Multiple Volumes',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report'
+					'Please include as much information as possible to verify the report.'
 				),
 				'report_fields' => array(
 					'link' => '0'

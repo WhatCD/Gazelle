@@ -1,4 +1,4 @@
-<?	
+﻿<?	
 class Votes {
 	/**
 	 * Generate voting links for torrent pages, etc.
@@ -11,10 +11,10 @@ class Votes {
 		if (!$LoggedUser['NoVoteLinks'] && check_perms('site_album_votes')) { ?>
 			<span class="votespan" style="white-space: nowrap">
 				( Vote: 
-				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>">Up</a>
-				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote))?' hidden':'')?>">Up</span>
-				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>">Down</a>
-				<span class="voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up'|| empty($Vote))?' hidden':'')?>">Down</span>
+				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>">↑</a>
+				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote))?' hidden':'')?>">↑</span>
+				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>">↓</a>
+				<span class="voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up'|| empty($Vote))?' hidden':'')?>">↓</span>
 				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote)?' hidden':'')?>">x</a>
 				)
 			</span>
@@ -160,13 +160,137 @@ class Votes {
 	 */
 	public static function binomial_score($Ups, $Total) {	
 		// Confidence level for binomial scoring (p-value .95)
-		define(Z_VAL, 1.645211440143815);
+		//define(Z_VAL, 1.645211440143815);
+		// Confidence level for binomial scoring (p-value .90)
+		define(Z_VAL, 1.281728756502709);
 		
 		if (($Total <= 0) || ($Ups < 0)) {
 			return 0;
 		}
 		$phat = $Ups/$Total;
 		return ($phat + Z_VAL*Z_VAL/(2*$Total) - Z_VAL*sqrt(($phat*(1-$phat)+Z_VAL*Z_VAL/(4*$Total))/$Total))/(1+Z_VAL*Z_VAL/$Total);
+	}
+
+	/**
+	 * Gets where this album ranks overall, for its year, and for its decade.  This is really just a wrapper.
+	 * @param int $GroupID GroupID of the album
+	 * @param int $Year Year it was released
+	 * @return array ('overall'=><overall rank>, 'year'=><rank for its year>, 'decade'=><rank for its decade>)
+	 */
+	public static function get_ranking($GroupID, $Year) {
+		$GroupID = (int)$GroupID;
+		$Year    = (int)$Year;
+		if ($GroupID <= 0 || $Year <= 0) {
+			return false;
+		}
+
+		return array('overall'=>Votes::get_rank_all($GroupID),
+					 'year'   =>Votes::get_rank_year($GroupID, $Year),
+					 'decade' =>Votes::get_rank_decade($GroupID, $Year));
+	}
+	
+	/**
+	 * Gets where this album ranks overall.
+	 * @global CACHE $Cache
+	 * @global DB_MYSQL $DB
+	 * @param int $GroupID GroupID of the album
+	 * @return int Rank
+	 */
+	public static function get_rank_all($GroupID) {
+		global $Cache, $DB;
+		
+		$GroupID = (int)$GroupID;
+		if ($GroupID <= 0) {
+			return false;
+		}
+		
+		$Rankings = $Cache->get_value('voting_ranks_overall');
+		if ($Rankings === FALSE) {
+			$Rankings = array();
+			$i = 0;
+			$DB->query("SELECT GroupID FROM torrents_votes ORDER BY Score DESC LIMIT 100");
+			while (list($GID) = $DB->next_record()) {
+				$Rankings[$GID] = ++$i;
+			}
+			$Cache->cache_value('voting_ranks_overall', $Rankings);
+		}
+		
+		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
+	}
+	
+	/**
+	 * Gets where this album ranks in its year.
+	 * @global CACHE $Cache
+	 * @global DB_MYSQL $DB
+	 * @param int $GroupID GroupID of the album
+	 * @param int $Year Year it was released
+	 * @return int Rank for its year
+	 */
+	public static function get_rank_year($GroupID, $Year) {
+		global $Cache, $DB;
+		
+		$GroupID = (int)$GroupID;
+		$Year    = (int)$Year;
+		if ($GroupID <= 0 || $Year <= 0) {
+			return false;
+		}
+		
+		$Rankings = $Cache->get_value('voting_ranks_year_'.$Year);
+		if ($Rankings === FALSE) {
+			$Rankings = array();
+			$i = 0;
+			$DB->query("SELECT GroupID 
+						FROM torrents_votes  AS v
+						JOIN torrents_group AS g ON g.ID = v.GroupID
+						WHERE g.Year = $Year
+						ORDER BY Score DESC LIMIT 100");
+			while (list($GID) = $DB->next_record()) {
+				$Rankings[$GID] = ++$i;
+			}
+			$Cache->cache_value('voting_ranks_year_'.$Year , $Rankings);
+		}
+		
+		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
+	}
+
+	/**
+	 * Gets where this album ranks in its decade.
+	 * @global CACHE $Cache
+	 * @global DB_MYSQL $DB
+	 * @param int $GroupID GroupID of the album
+	 * @param int $Year Year it was released
+	 * @return int Rank for its year
+	 */
+	public static function get_rank_decade($GroupID, $Year) {
+		global $Cache, $DB;
+		
+		$GroupID = (int)$GroupID;
+		$Year    = (int)$Year;
+		$Year    = (int)$Year;
+		if ((int)$GroupID <= 0 || (int)$Year <= 0) {
+			return false;
+		}
+		
+		// First year of the decade
+		$Year = $Year - ($Year % 10);
+		
+		$Rankings = $Cache->get_value('voting_ranks_decade_'.$Year);
+		if ($Rankings === FALSE) {
+			$Rankings = array();
+			$i = 0;
+			$DB->query("SELECT GroupID 
+						FROM torrents_votes  AS v
+						JOIN torrents_group AS g ON g.ID = v.GroupID
+						WHERE g.Year BETWEEN $Year AND ".($Year+9)."
+						  AND g.CategoryID = 1
+						ORDER BY Score DESC LIMIT 100");
+			while (list($GID) = $DB->next_record()) {
+				$Rankings[$GID] = ++$i;
+			}
+			$Cache->cache_value('voting_ranks_decade_'.$Year , $Rankings);
+		}
+		
+		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
 	}
 }
 ?>

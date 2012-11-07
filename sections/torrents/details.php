@@ -306,6 +306,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		</div>
 <?		}
 	}
+include(SERVER_ROOT.'/sections/torrents/vote_ranks.php');
 include(SERVER_ROOT.'/sections/torrents/vote.php');
 ?>		
 		<div class="box box_tags">

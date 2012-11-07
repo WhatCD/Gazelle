@@ -9,17 +9,17 @@ View::show_header('Tagging rules');
 	</div>
 	<div class="box pad rule_summary" style="padding:10px 10px 10px 20px;">
 		<ul>
-			<li>Tags should be comma separated, and you should use a period ('.') to separate words inside a tag - eg. '<strong style="color:green;">hip.hop</strong>'. 
+			<li>Tags should be comma separated, and you should use a period ('.') to separate words inside a tag - eg. '<strong class="important_text_alt">hip.hop</strong>'.
 			</li><li>
-			There is a list of official tags on upload.php. Please use these tags instead of 'unofficial' tags (eg. use the official '<strong style="color:green;">drum.and.bass</strong>' tag, instead of an unofficial '<strong style="color:red;">dnb</strong>' tag.)
+			There is a list of official tags on upload.php. Please use these tags instead of 'unofficial' tags (eg. use the official '<strong class="important_text_alt">drum.and.bass</strong>' tag, instead of an unofficial '<strong class="important_text">dnb</strong>' tag.)
 			</li><li>
-			Avoid abbreviations if at all possible. So instead of tagging an album as '<strong style="color:red;">alt</strong>', tag it as '<strong style="color:green;">alternative</strong>'. Make sure that you use correct spelling. 
+			Avoid abbreviations if at all possible. So instead of tagging an album as '<strong class="important_text">alt</strong>', tag it as '<strong class="important_text_alt">alternative</strong>'. Make sure that you use correct spelling.
 			</li><li>
-			Avoid using multiple synonymous tags. Using both '<strong style="color:red;">prog.rock</strong>' and '<strong style="color:green;">progressive.rock</strong>' is redundant and annoying - just use the official '<strong style="color:green;">progressive.rock</strong>' tag. 
+			Avoid using multiple synonymous tags. Using both '<strong class="important_text">prog.rock</strong>' and '<strong class="important_text_alt">progressive.rock</strong>' is redundant and annoying - just use the official '<strong class="important_text_alt">progressive.rock</strong>' tag.
 			</li><li>
-			Don't use 'useless' tags, such as '<strong style="color:red;">seen.live</strong>', '<strong style="color:red;">awesome</strong>', '<strong style="color:red;">rap</strong>' (is encompassed by '<strong style="color:green;">hip.hop</strong>'), etc. If an album is live, you can tag it as '<strong style="color:green;">live</strong>'. 
+			Don't use 'useless' tags, such as '<strong class="important_text">seen.live</strong>', '<strong class="important_text">awesome</strong>', '<strong class="important_text">rap</strong>' (is encompassed by '<strong class="important_text_alt">hip.hop</strong>'), etc. If an album is live, you can tag it as '<strong class="important_text_alt">live</strong>'.
 			</li><li>
-			Only tag information on the album itself - NOT THE INDIVIDUAL RELEASE. Tags such as '<strong style="color:red;">v0</strong>', '<strong style="color:red;">eac</strong>', '<strong style="color:red;">vinyl</strong>', '<strong style="color:red;">from.oink</strong>' etc are strictly forbidden. Remember that these tags will be used for other versions of the same album. 
+			Only tag information on the album itself - NOT THE INDIVIDUAL RELEASE. Tags such as '<strong class="important_text">v0</strong>', '<strong class="important_text">eac</strong>', '<strong class="important_text">vinyl</strong>', '<strong class="important_text">from.oink</strong>' etc are strictly forbidden. Remember that these tags will be used for other versions of the same album.
 			</li>
 		</ul>
 	</div>
