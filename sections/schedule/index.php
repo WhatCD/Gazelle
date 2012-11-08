@@ -392,7 +392,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 		
 		$DB->query("UPDATE users_main SET RequiredRatio=$MinRatio WHERE Downloaded >= '$Download' AND Downloaded < '$DownloadBarrier' AND RequiredRatio<$MinRatio");
 		
-		$DB->query("UPDATE users_main SET RequiredRatio=$Ratio WHERE Downloaded >= '$Download' AND Downloaded < '$DownloadBarrier' AND can_leech='0' AND Enabled='1'");
+		//$DB->query("UPDATE users_main SET RequiredRatio=$Ratio WHERE Downloaded >= '$Download' AND Downloaded < '$DownloadBarrier' AND can_leech='0' AND Enabled='1'");
 		
 		$DownloadBarrier = $Download;
 	}
@@ -521,6 +521,9 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 
 '			, i.AdminComment)
 			WHERE m.ID IN(".implode(',',$UserIDs).")");
+
+		
+		$DB->query("DELETE FROM users_torrent_history WHERE UserID IN (".implode(',',$UserIDs).")");
 	}
 	
 	foreach($UserIDs as $UserID) {
