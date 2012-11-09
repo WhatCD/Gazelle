@@ -1069,7 +1069,7 @@ foreach($Thread as $Key => $Post) {
 						</td>
 					</tr>
 				</table>
-				<form id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post" style="display: block; text-align: center;">
+				<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
 					<div id="quickreplytext">
 						<input type="hidden" name="action" value="reply" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

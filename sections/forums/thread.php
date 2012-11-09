@@ -62,8 +62,12 @@ $ForumName = display_str($Forums[$ForumID]['Name']);
 if($ThreadInfo['Posts'] > $PerPage) {
 	if(isset($_GET['post']) && is_number($_GET['post'])) {
 		$PostNum = $_GET['post'];
-	} elseif(isset($_GET['postid']) && is_number($_GET['postid'])) {
-		$DB->query("SELECT COUNT(ID) FROM forums_posts WHERE TopicID = $ThreadID AND ID <= $_GET[postid]");
+	} elseif(isset($_GET['postid']) && is_number($_GET['postid']) && $_GET['postid'] != $ThreadInfo['StickyPostID']) {
+		$SQL = "SELECT COUNT(ID) FROM forums_posts WHERE TopicID = $ThreadID AND ID <= $_GET[postid]";
+		if ($ThreadInfo['StickyPostID'] < $_GET['postid']) {
+			$SQL .= " AND ID != $ThreadInfo[StickyPostID]";
+		}
+		$DB->query($SQL);
 		list($PostNum) = $DB->next_record();
 	} else {
 		$PostNum = 1;
@@ -404,6 +408,9 @@ foreach ($Thread as $Key => $Post) {
 	}
 	if ($ThreadInfo['OP'] == $AuthorID) {
 		echo ' important_user';
+	}
+	if ($PostID == $ThreadInfo['StickyPostID']) {
+		echo ' sticky_post';
 	} ?>" id="post<?=$PostID?>">
 	<colgroup>
 <?	if (Users::has_avatars_enabled()) { ?>
@@ -426,7 +433,7 @@ foreach ($Thread as $Key => $Post) {
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a> 
 <?	}
 	if($PostID == $ThreadInfo['StickyPostID']) { ?>
-				<strong><span class="sticky_post">[Sticky]</span></strong>
+				<strong><span class="sticky_post_label">[Sticky]</span></strong>
 <?		if(check_perms('site_moderate_forums')) { ?>
 				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" >[X]</a>
 <?		}

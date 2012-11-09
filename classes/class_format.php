@@ -83,15 +83,14 @@ class Format {
 	 * Returns ratio
 	 * @param int $Dividend
 	 * @param int $Divisor
-	 * @return boolean|string|float
+	 * @param int $Decimal floor to n decimals (eg Subtract .005 to floor to 2 decimals)
+	 * @return boolean|string
 	 */
 	public function get_ratio ($Dividend, $Divisor, $Decimal = 2)
 	{
 		if ($Divisor == 0 && $Dividend == 0) return false;
 		if ($Divisor == 0) return '∞';
-
-//		Subtract .005 to floor to 2 decimals
-		return number_format(max($Dividend/$Divisor - 0.005, 0), $Decimal);
+		return number_format(max($Dividend/$Divisor - (0.5/pow(10, $Decimal)), 0), $Decimal);
 	}
 
 	/**

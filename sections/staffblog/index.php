@@ -100,8 +100,7 @@ if (!$Blog = $Cache->get_value('staff_blog')) {
 		b.Body,
 		b.Time
 		FROM staff_blog AS b LEFT JOIN users_main AS um ON b.UserID=um.ID
-		ORDER BY Time DESC
-		LIMIT 20");
+		ORDER BY Time DESC");
 	$Blog = $DB->to_array();
 	$Cache->cache_value('Blog',$Blog,1209600);
 }

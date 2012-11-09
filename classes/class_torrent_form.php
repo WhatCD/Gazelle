@@ -80,17 +80,11 @@ class TORRENT_FORM {
 <?		if($this->NewTorrent) { ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
-				<td class="label">
-					Torrent file
-				</td>
-				<td>
-					<input id="file" type="file" name="file_input" size="50" />
-				</td>
+				<td class="label">Torrent file:</td>
+				<td><input id="file" type="file" name="file_input" size="50" /></td>
 			</tr>
 			<tr>
-				<td class="label">
-					Type
-				</td>
+				<td class="label">Type:</td>
 				<td>
 				<select id="categories" name="type" onchange="Categories()"<?=$this->Disabled?>>
 <?			foreach(Misc::display_array($this->Categories) as $Index => $Cat) {
@@ -143,7 +137,7 @@ class TORRENT_FORM {
 ?>
 			<tr>
 				<td colspan="2" style="text-align: center;">
-					<p>Be sure that your torrent is approved by the <a href="rules.php?p=upload" target="_blank">rules</a>. Not doing this will result in a <strong>warning</strong> or <strong>worse</strong>.</p>
+					<p>Be sure that your torrent is approved by the <a href="rules.php?p=upload" target="_blank">rules</a>. Not doing this will result in a <strong class="important_text">warning</strong> or <strong class="important_text">worse</strong>.</p>
 <?		if($this->NewTorrent) { ?>
 					<p>After uploading the torrent, you will have a one hour grace period during which no one other than you can fill requests with this torrent. Make use of this time wisely, and search the requests.</p>
 <?		} ?>
@@ -247,18 +241,18 @@ class TORRENT_FORM {
 					<p class="min_padding">Do not include the words remaster, re-issue, MSFL Gold, limited edition, bonus tracks, bonus disc or country specific information in this field. That belongs in the edition information fields below, see <a href="wiki.php?action=article&amp;id=159" target="_blank">this</a> for further information. Also remember to use the correct capitalization for your upload. See the <a href="wiki.php?action=article&amp;id=317" target="_blank">Capitalization Guidelines</a> for more information.
 				</td>
 			</tr>
-<tr id="musicbrainz_tr">
-   <td class="label">MusicBrainz</td>
-   <td><input type="button" value="Find Info" id="musicbrainz_button" /></td>
-</tr>
-<div id="musicbrainz_popup">
-   <a href="#null" id="popup_close">x</a>
-   <h1 id="popup_title"></h1>
-   <h2 id="popup_back"></h2>
-   <div id="results1"></div>
-   <div id="results2"></div>
-</div>
-<div id="popup_background"></div>
+			<tr id="musicbrainz_tr">
+   				<td class="label">MusicBrainz:</td>
+				<td><input type="button" value="Find Info" id="musicbrainz_button" /></td>
+			</tr>
+			<div id="musicbrainz_popup">
+   				<a href="#null" id="popup_close">x</a>
+   				<h1 id="popup_title"></h1>
+   				<h2 id="popup_back"></h2>
+   				<div id="results1"></div>
+   				<div id="results2"></div>
+			</div>
+			<div id="popup_background"></div>
 
 <script>
 hide();
@@ -306,9 +300,7 @@ function hide() {
 			</tr>
 			<tr id="label_tr">
 				<td class="label">Record Label (Optional):</td>
-				<td>
-					<input type="text" id="record_label" name="record_label" size="40" value="<?=display_str($Torrent['RecordLabel']) ?>"<?=$this->Disabled?> />
-				</td>
+				<td><input type="text" id="record_label" name="record_label" size="40" value="<?=display_str($Torrent['RecordLabel']) ?>"<?=$this->Disabled?> /></td>
 			</tr>
 			<tr id="catalogue_tr">
 				<td class="label">Catalogue Number (Optional):</td>
@@ -319,7 +311,7 @@ function hide() {
 			</tr>
 			<tr id="releasetype_tr">
 				<td class="label">
-					<span id="releasetype_label">Release Type</span>
+					<span id="releasetype_label">Release Type:</span>
 				</td>
 				<td>
 					<select id="releasetype" name="releasetype"<?=$this->Disabled?>>
@@ -340,7 +332,7 @@ function hide() {
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label">Edition Information</td>
+				<td class="label">Edition Information:</td>
 				<td>
 					<input type="checkbox" id="remaster" name="remaster"<? if($IsRemaster) { echo " checked='checked' ";}?> onclick="Remaster();<?if($this->NewTorrent) {?> CheckYear();<? } ?>" />
 					Check this box if this torrent is a different release to the original, for example a limited or country specific edition or a release that includes additional bonus tracks or is a bonus disc.
@@ -371,30 +363,47 @@ function hide() {
 						</select>
 						<br />
 <?	} ?>
-						<br />
-						<strong>Year (Required):</strong>
-						<input type="text" id="remaster_year" name="remaster_year" size="5" value="<? if($Torrent['RemasterYear']) { echo display_str($Torrent['RemasterYear']);} ?>"<? if($UnknownRelease) { echo " disabled";}?> /> <br />
-						<strong>Title:</strong>
-						<input type="text" id="remaster_title" name="remaster_title" size="50" value="<?=display_str($Torrent['RemasterTitle']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
-						<p class="min_padding">Title of the release (e.g. <span style="font-style: italic;">'Deluxe Edition' or 'Remastered'</span>).</p>
-						<strong>Record Label:</strong>
-						<input type="text" id="remaster_record_label" name="remaster_record_label" size="50" value="<?=display_str($Torrent['RemasterRecordLabel']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
-						<p class="min_padding">This is for the record label of the <strong>release</strong> (It may differ from the original).</p>
-						<strong>Catalogue Number:</strong>
-						<input type="text" id="remaster_catalogue_number" name="remaster_catalogue_number" size="50" value="<?=display_str($Torrent['RemasterCatalogueNumber']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
-						<p class="min_padding">This is for the catalogue number of the <strong>release</strong>.</p>
+						<table id="edition_information" class="layout border" border="0" width="100%">
+							<tbody>
+								<tr id="edition_year">
+									<td class="label">Year (Required):</td>
+									<td>
+										<input type="text" id="remaster_year" name="remaster_year" size="5" value="<? if($Torrent['RemasterYear']) { echo display_str($Torrent['RemasterYear']);} ?>"<? if($UnknownRelease) { echo " disabled";}?> />
+									</td>
+								</tr>
+								<tr id="edition_title">
+									<td class="label">Title:</td>
+									<td>
+										<input type="text" id="remaster_title" name="remaster_title" size="50" value="<?=display_str($Torrent['RemasterTitle']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
+										<p class="min_padding">Title of the release (e.g. <span style="font-style: italic;">'Deluxe Edition' or 'Remastered'</span>).</p>
+									</td>
+								<tr id="edition_record_label">
+									<td class="label">Record Label:</td>
+									<td>
+										<input type="text" id="remaster_record_label" name="remaster_record_label" size="50" value="<?=display_str($Torrent['RemasterRecordLabel']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
+										<p class="min_padding">This is for the record label of the <strong>release</strong> (It may differ from the original).</p>
+									</td>
+								</tr>
+								<tr id="edition_catalogue_number">
+									<td class="label">Catalogue Number:</td>
+									<td><input type="text" id="remaster_catalogue_number" name="remaster_catalogue_number" size="50" value="<?=display_str($Torrent['RemasterCatalogueNumber']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
+										<p class="min_padding">This is for the catalogue number of the <strong>release</strong>.</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Scene</td>
+				<td class="label">Scene:</td>
 				<td>
 					<input type="checkbox" id="scene" name="scene" <? if($Torrent['Scene']) { echo "checked='checked' ";}?>/>
-					Check this only if this is a 'scene release'. If you ripped it yourself, it is <strong>not</strong> a scene release. <br />If you are not sure, <strong>DO NOT</strong> check it; you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29" target="_blank">Wikipedia</a>.
+					Check this only if this is a 'scene release'.<br />If you ripped it yourself, it is <strong>not</strong> a scene release. If you are not sure, <strong class="important_text">do not</strong> check it; you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29" target="_blank">Wikipedia</a>.
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Format</td>
+				<td class="label">Format:</td>
 				<td>
 					<select id="format" name="format" onchange="Format()">
 						<option>---</option>
@@ -450,7 +459,7 @@ function hide() {
 			</tr>
 <?		if (check_perms('torrents_edit_vanityhouse') && $this->NewTorrent) { ?>
 			<tr>
-				<td class="label">Vanity House</td>
+				<td class="label">Vanity House:</td>
 				<td>
 					<label><input type="checkbox" id="vanity_house" name="vanity_house" <? if(!$Torrent['GroupID']) { echo 'disabled '; }?><? if($Torrent['VanityHouse']){ echo "checked='checked' ";}?>/>
 					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.</label>
@@ -458,7 +467,7 @@ function hide() {
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label">Media</td>
+				<td class="label">Media:</td>
 				<td>
 					<select name="media" onchange="Media(); CheckYear();" id="media">
 						<option>---</option>
@@ -477,9 +486,7 @@ function hide() {
 <?
 		if($this->NewTorrent) { ?>
 			<tr id="upload_logs" class="hidden">
-				<td class="label">
-					Log Files
-				</td>
+				<td class="label">Log Files:</td>
 				<td id="logfields">
 					Check your log files here before uploading: <a href="logchecker.php" target="_blank">logchecker.php</a><br />
 					<input id="file" type="file" name="logfiles[]" size="50" /> [<a href="javascript:;" onclick="AddLogField();">+</a>] [<a href="javascript:;" onclick="RemoveLogField();">-</a>]
@@ -489,7 +496,7 @@ function hide() {
 		} ?>
 <?		if(!$this->NewTorrent && check_perms('users_mod')) { ?>
 			<tr>
-				<td class="label">Log/Cue</td>
+				<td class="label">Log/Cue:</td>
 				<td>
 					<input type="checkbox" id="flac_log" name="flac_log"<? if($HasLog) { echo " checked='checked'";}?> /> Check this box if the torrent has (or should have) a log file.<br />
 					<input type="checkbox" id="flac_cue" name="flac_cue"<? if($HasCue) { echo " checked='checked'";}?> /> Check this box if the torrent has (or should have) a cue file.<br />
@@ -504,7 +511,7 @@ function hide() {
 				if (!check_perms('users_mod')) {
 ?>
 					<tr>
-						<td class="label">Trumpable</td>
+						<td class="label">Trumpable:</td>
 						<td>
 <?
 				}
@@ -524,9 +531,7 @@ function hide() {
 <?/*			if($HasLog) { ?>
 			<tr>
 				<td class="label">Log Score</td>
-				<td>
-					<input type="text" name="log_score" size="5" id="log_score" value="<?=display_str($Torrent['LogScore']) ?>" />
-				</td>
+				<td><input type="text" name="log_score" size="5" id="log_score" value="<?=display_str($Torrent['LogScore']) ?>" /></td>
 			</tr>
 			<tr>
 				<td class="label">Log Adjustment Reason</td>
@@ -537,45 +542,33 @@ function hide() {
 			</tr>
 <?			}*/?>
 			<tr>
-				<td class="label">Bad Tags</td>
-				<td>
-					<input type="checkbox" id="bad_tags" name="bad_tags"<? if($BadTags) { echo " checked='checked'";}?>/> Check this box if the torrent has bad tags.
-				</td>
+				<td class="label">Bad Tags:</td>
+				<td><input type="checkbox" id="bad_tags" name="bad_tags"<? if($BadTags) { echo " checked='checked'";}?>/> Check this box if the torrent has bad tags.</td>
 			</tr>
 			<tr>
-				<td class="label">Bad Folder Names</td>
-				<td>
-					<input type="checkbox" id="bad_folders" name="bad_folders"<? if($BadFolders) { echo " checked='checked'";}?>/> Check this box if the torrent has bad folder names.
-				</td>
+				<td class="label">Bad Folder Names:</td>
+				<td><input type="checkbox" id="bad_folders" name="bad_folders"<? if($BadFolders) { echo " checked='checked'";}?>/> Check this box if the torrent has bad folder names.</td>
 			</tr>
 			<tr>
-				<td class="label">Bad File Names</td>
-				<td>
-					<input type="checkbox" id="bad_files" name="bad_files"<? if ($BadFiles) {echo " checked='checked'";}?>/> Check this box if the torrent has bad file names.
-				</td>
+				<td class="label">Bad File Names:</td>
+				<td><input type="checkbox" id="bad_files" name="bad_files"<? if ($BadFiles) {echo " checked='checked'";}?>/> Check this box if the torrent has bad file names.</td>
 			</tr>
 			<tr>
-				<td class="label">Cassette Approved</td>
-				<td>
-					<input type="checkbox" id="cassette_approved" name="cassette_approved"<? if ($CassetteApproved) {echo " checked='checked'";}?>/> Check this box if the torrent is an approved cassette rip.
-				</td>
+				<td class="label">Cassette Approved:</td>
+				<td><input type="checkbox" id="cassette_approved" name="cassette_approved"<? if ($CassetteApproved) {echo " checked='checked'";}?>/> Check this box if the torrent is an approved cassette rip.</td>
 			</tr>
 			<tr>
-				<td class="label">Lossy Master Approved</td>
-				<td>
-					<input type="checkbox" id="lossymaster_approved" name="lossymaster_approved"<? if ($LossymasterApproved) {echo " checked='checked'";}?>/> Check this box if the torrent is an approved lossy master.
-				</td>
+				<td class="label">Lossy Master Approved:</td>
+				<td><input type="checkbox" id="lossymaster_approved" name="lossymaster_approved"<? if ($LossymasterApproved) {echo " checked='checked'";}?>/> Check this box if the torrent is an approved lossy master.</td>
 			</tr>
 			<tr>
-				<td class="label">Lossy Web Approved</td>
-				<td>
-					<input type="checkbox" id="lossyweb_approved" name="lossyweb_approved"<? if ($LossywebApproved) { echo " checked='checked'";}?>/> Check this box if the torrent is an approved lossy WEB release.
-				</td>
+				<td class="label">Lossy Web Approved:</td>
+				<td><input type="checkbox" id="lossyweb_approved" name="lossyweb_approved"<? if ($LossywebApproved) { echo " checked='checked'";}?>/> Check this box if the torrent is an approved lossy WEB release.</td>
 			</tr>
 <?		 }?>
 <?		 if($this->NewTorrent) { ?>
 			<tr>
-				<td class="label">Tags</td>
+				<td class="label">Tags:</td>
 				<td>
 <?			if($GenreTags) { ?>
 					<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;" <?=$this->Disabled?>>
@@ -603,13 +596,11 @@ function hide() {
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Image (optional)</td>
-				<td>
-					<input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/>
-				</td>
+				<td class="label">Image (optional):</td>
+				<td><input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/></td>
 			</tr>
 			<tr>
-				<td class="label">Album Description</td>
+				<td class="label">Album Description:</td>
 				<td>
 <?php new TEXTAREA_PREVIEW('album_desc', 'album_desc', display_str($Torrent['GroupDescription']), 60, 8, true, true, array($this->Disabled)); ?>
 					<p class="min_padding">Contains background information such as album history and maybe a review.</p>
@@ -617,10 +608,10 @@ function hide() {
 			</tr>
 <?		} // if new torrent ?>
 			<tr>
-				<td class="label">Release Description (optional)</td>
+				<td class="label">Release Description (optional):</td>
 				<td>
 <?php new TEXTAREA_PREVIEW('release_desc', 'release_desc', display_str($Torrent['TorrentDescription']), 60, 8); ?>
-					<p class="min_padding">Contains information like encoder settings or details of the ripping process. <strong>DO NOT PASTE THE RIPPING LOG HERE.</strong></p>
+					<p class="min_padding">Contains information like encoder settings or details of the ripping process. <strong class="important_text">Do not paste the ripping log here.</strong></p>
 				</td>
 			</tr>
 		</table>
@@ -641,21 +632,19 @@ function hide() {
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
 <?		if($this->NewTorrent){ ?>
 			<tr id="title_tr">
-				<td class="label">Author - Title</td>
+				<td class="label">Author - Title:</td>
 				<td>
 					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>" />
-					<p class="min_padding">Should only include the author if applicable</p>
+					<p class="min_padding">Should only include the author if applicable.</p>
 				</td>
 			</tr>
 <?		} ?>
 			<tr id="year_tr">
-				<td class="label">Year</td>
-				<td>
-					<input type="text" id="year" name="year" size="5" value="<?=display_str($Torrent['Year']) ?>" />
-				</td>
+				<td class="label">Year:</td>
+				<td><input type="text" id="year" name="year" size="5" value="<?=display_str($Torrent['Year']) ?>" /></td>
 			</tr>
 			<tr>
-				<td class="label">Format</td>
+				<td class="label">Format:</td>
 				<td>
 					<select name="format" onchange="Format()">
 						<option value="">---</option>
@@ -672,7 +661,7 @@ function hide() {
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Bitrate</td>
+				<td class="label">Bitrate:</td>
 				<td>
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
@@ -705,19 +694,17 @@ function hide() {
 			</tr>
 <?		if($this->NewTorrent) { ?>
 			<tr>
-				<td class="label">Tags</td>
+				<td class="label">Tags:</td>
 				<td>
 					<input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Image (optional)</td>
-				<td>
-					<input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/>
-				</td>
+				<td class="label">Image (optional):</td>
+				<td><input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/></td>
 			</tr>
 			<tr>
-				<td class="label">Description</td>
+				<td class="label">Description:</td>
 				<td>
 <?php new TEXTAREA_PREVIEW('album_desc', 'album_desc', display_str($Torrent['GroupDescription']), 60, 8); ?>
 					<p class="min_padding">Contains information like the track listing, a review, a link to Discogs or MusicBrainz, etc.</p>
@@ -725,7 +712,7 @@ function hide() {
 			</tr>
 <?		}?>
 			<tr>
-				<td class="label">Release Description (optional)</td>
+				<td class="label">Release Description (optional):</td>
 				<td>
 <?php new TEXTAREA_PREVIEW('release_desc', 'release_desc', display_str($Torrent['TorrentDescription']), 60, 8); ?>
 					<p class="min_padding">Contains information like encoder settings. For analog rips, this frequently contains lineage information.</p>
@@ -743,28 +730,22 @@ function hide() {
 			<tr id="name">
 <?		if ($this->NewTorrent) {
 			if ($this->Categories[$CategoryID] == 'E-Books') { ?>
-				<td class="label">Author - Title</td>
+				<td class="label">Author - Title:</td>
 <?			} else { ?>
-				<td class="label">Title</td>
+				<td class="label">Title:</td>
 <?			} ?>
-				<td>
-					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>" />
-				</td>
+				<td><input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>" /></td>
 			</tr>
 			<tr>
-				<td class="label">Tags</td>
-				<td>
-					<input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>" />
-				</td>
+				<td class="label">Tags:</td>
+				<td><input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>" /></td>
 			</tr>
 			<tr>
-				<td class="label">Image (optional)</td>
-				<td>
-					<input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/>
-				</td>
+				<td class="label">Image (optional):</td>
+				<td><input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/></td>
 			</tr>
 			<tr>
-				<td class="label">Description</td>
+				<td class="label">Description:</td>
 				<td>
 <?php
 	new TEXTAREA_PREVIEW('desc', 'desc', display_str($Torrent['GroupDescription']), 60, 8);
