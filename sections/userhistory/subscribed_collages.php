@@ -221,7 +221,7 @@ if(!$NumResults) {
 					$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 					$LastMedia = $Torrent['Media'];
 ?>
-<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition_<?=$EditionID?> hidden<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>">
+	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition_<?=$EditionID?> hidden<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>">
 		<td colspan="<?=($LoggedUser['HideCollage']?'2':'3')?>">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]
@@ -274,7 +274,7 @@ if(!$NumResults) {
 		} ?>
 	<!-- I hate that proton is making me do it like this -->
 	<!--<div class="head colhead_dark" style="margin-top: 8px">-->
-	<table style="margin-top: 8px" id="subscribed_collages" class="subscribed_collages_table details">
+	<table style="margin-top: 8px" class="subscribed_collages_table">
 		<tr class="colhead_dark">
 			<td>
 				<span style="float:left;">

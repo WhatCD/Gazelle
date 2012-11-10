@@ -23,7 +23,7 @@ $Result = $DB->query("SELECT SQL_CALC_FOUND_ROWS
 	JOIN torrents AS t ON t.ID=xu.fid
 	WHERE xu.fid='$TorrentID'
 	AND um.Visible='1'
-	ORDER BY xu.uploaded DESC
+	ORDER BY xu.uid = '$LoggedUser[ID]' DESC, xu.uploaded DESC
 	LIMIT $Limit");
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();

@@ -105,7 +105,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 
 		$TorrentList = $DB->to_array('ID', MYSQLI_ASSOC);
 		if (count($TorrentList) == 0) {
-			header("Location: log.php?search=Torrent+$GroupID");
+			header("Location: log.php?search=Group+$GroupID");
 			die();
 		}
 		if (in_array(0, $DB->collect('Seeders'))) {
