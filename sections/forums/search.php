@@ -24,10 +24,11 @@ if((isset($_GET['type']) && $_GET['type'] == 'body')) {
 // What are we looking for? Let's make sure it isn't dangerous.
 if(isset($_GET['search'])) {
 	$Search = trim($_GET['search']);
-	
 } else {
 	$Search = '';
 }
+
+
 
 // Searching for posts by a specific user
 if(!empty($_GET['user'])) {
