@@ -205,6 +205,15 @@ CREATE TABLE `comments_edits` (
   KEY `PostHistory` (`Page`,`PostID`,`EditTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `concerts` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ConcertID` int(10) NOT NULL,
+  `TopicID` int(10) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `ConcertID` (`ConcertID`),
+  KEY `TopicID` (`TopicID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `do_not_upload` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) COLLATE utf8_bin NOT NULL,

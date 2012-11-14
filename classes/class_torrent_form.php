@@ -420,7 +420,7 @@ function hide() {
 				<span id="format_warning" class="important_text"></span>
 				</td>
 			</tr>
-			<tr>
+			<tr id="bitrate_row">
 				<td class="label">Bitrate</td>
 				<td>
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
@@ -457,6 +457,25 @@ function hide() {
 					</span>
 				</td>
 			</tr>
+			<?
+		if($this->NewTorrent) { ?>
+			<tr id="upload_logs" class="hidden">
+				<td class="label">
+					Log Files
+				</td>
+				<td id="logfields">
+					Check your log files here before uploading: <a href="logchecker.php" target="_blank">logchecker.php</a><br />
+					<input id="file" type="file" name="logfiles[]" size="50" /> [<a href="javascript:;" onclick="AddLogField();">+</a>] [<a href="javascript:;" onclick="RemoveLogField();">-</a>]
+				</td>
+			</tr>
+<?
+		} ?>
+		<tr>
+		   <td class="label">Multi Format Uploader</td>
+		   <td><input type="button" value="+" id="add_format" /><input type="button" style="display: none" value="-" id="remove_format" /></td>
+		</tr>
+		<tr id="placeholder_row_top"></tr>
+		<tr id="placeholder_row_bottom"></tr>
 <?		if (check_perms('torrents_edit_vanityhouse') && $this->NewTorrent) { ?>
 			<tr>
 				<td class="label">Vanity House:</td>

@@ -149,9 +149,11 @@ if (check_perms('forums_polls_create')) {
 				<input id="subscribeboxpreview" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> />
 				<label for="subscribebox">Subscribe to topic</label>
 			</div>
-            <input type="button" value="Preview" onclick="Newthread_Preview(1);" id="newthreadpreviewbutton" />
-            <input type="button" value="Editor" onclick="Newthread_Preview(0);" id="newthreadeditbutton" class="hidden" />
-            <input type="submit" id="submit_button" value="Create thread" />
+			<div id="buttons" class="center">
+				<input type="button" value="Preview" onclick="Newthread_Preview(1);" id="newthreadpreviewbutton" />
+				<input type="button" value="Editor" onclick="Newthread_Preview(0);" id="newthreadeditbutton" class="hidden" />
+				<input type="submit" id="submit_button" value="Create thread" />
+			</div>
 		</form>
 	</div>
 </div>

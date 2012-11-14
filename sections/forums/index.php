@@ -151,29 +151,3 @@ if(!empty($_POST['action'])){
 	require(SERVER_ROOT.'/sections/forums/main.php');
 }
 
-// Function to get basic information on a forum
-// Uses class CACHE
-function get_forum_info($ForumID) {
-	global $DB, $Cache;
-	$Forum = $Cache->get_value('ForumInfo_'.$ForumID);
-	if(!$Forum) {
-		$DB->query("SELECT
-			Name,
-			MinClassRead,
-			MinClassWrite,
-			MinClassCreate,
-			COUNT(forums_topics.ID) AS Topics
-			FROM forums
-			LEFT JOIN forums_topics ON forums_topics.ForumID=forums.ID
-			WHERE forums.ID='$ForumID'
-			GROUP BY ForumID");
-		if($DB->record_count() == 0) {
-			return false;
-		}
-		// Makes an array, with $Forum['Name'], etc.
-		$Forum = $DB->next_record(MYSQLI_ASSOC);
-		
-		$Cache->cache_value('ForumInfo_'.$ForumID, $Forum, 86400); // Cache for a day
-	}
-	return $Forum;
-}

@@ -247,6 +247,10 @@ if (!is_uploaded_file($TorrentName) || !filesize($TorrentName)) {
 	$Err = "You seem to have put something other than a torrent file into the upload field. (".$File['name'].").";
 }
 
+if($Type == 'Music') {
+	include(SERVER_ROOT.'/sections/upload/get_extra_torrents.php');
+}
+
 $LogScoreAverage = 0;
 $SendPM = 0;
 $LogMessage = "";
@@ -415,7 +419,9 @@ if($DB->record_count()>0) {
 		$Err = '<a href="torrents.php?torrentid='.$ID.'">Thankyou for fixing this torrent</a>';
 	}
 }
-
+if($Type == 'Music') {
+	include(SERVER_ROOT.'/sections/upload/generate_extra_torrents.php');
+}
 
 if(!empty($Err)) { // Show the upload form, with the data the user entered
 	$UploadForm=$Type;
@@ -637,6 +643,7 @@ $DB->query("
 $Cache->increment('stats_torrent_count');
 $TorrentID = $DB->inserted_id();
 
+
 Tracker::update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => $T['FreeLeech']));
 
 
@@ -650,6 +657,11 @@ Misc::write_log("Torrent $TorrentID ($LogName) (".number_format($TotalSize/(1024
 Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "uploaded (".number_format($TotalSize/(1024*1024), 2)." MB)", 0);
 
 Torrents::update_hash($GroupID);
+
+if($Type == 'Music') {
+	include(SERVER_ROOT.'/sections/upload/insert_extra_torrents.php');
+}
+
 
 
 

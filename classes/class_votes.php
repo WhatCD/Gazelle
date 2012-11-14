@@ -1,4 +1,4 @@
-﻿<?	
+<?
 class Votes {
 	/**
 	 * Generate voting links for torrent pages, etc.

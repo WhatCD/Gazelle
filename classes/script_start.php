@@ -134,6 +134,9 @@ spl_autoload_register(function ($ClassName) {
 		case 'Votes':
 			$FileName = 'class_votes';
 			break;
+		case 'LastFM':
+			$FileName = 'class_lastfm';
+			break;
 		default:
 			die("Couldn't import class " . $ClassName);
 	}

@@ -12,6 +12,7 @@ function Remaster() {
 	} else {
 		$('#remaster_true').hide();
 	}
+	
 }
 
 function Format() {
@@ -87,6 +88,28 @@ function RemoveLogField() {
 		LogCount--;
 }
 
+var ExtraLogCount = 1;
+
+function AddExtraLogField(id) {
+		if(LogCount >= 200) { return; }
+		var LogField = document.createElement("input");
+		LogField.type = "file";
+		LogField.id = "file_" + id;
+		LogField.name = "logfiles_" + id + "[]";
+		LogField.size = 50;
+		var x = $('#logfields_' + id).raw();
+		x.appendChild(document.createElement("br"));
+		x.appendChild(LogField);
+		LogCount++;
+}
+
+function RemoveLogField() {
+		if(LogCount == 1) { return; }
+		var x = $('#logfields').raw();
+		for (i=0; i<2; i++) { x.removeChild(x.lastChild); }
+		LogCount--;
+}
+
 var FormatCount = 0;
 
 function AddFormat() {
@@ -113,9 +136,6 @@ function AddFormat() {
 	NewRow.appendChild(NewCell1);
 	NewRow.appendChild(NewCell2);	
 
-	var x = $('#tags_row').raw();
-	x.parentNode.insertBefore(NewRow, x);
-	
 	NewRow = document.createElement("tr");
 	NewRow.id = "new_format_row"+FormatCount;
 	NewRow.setAttribute("style","border-left-width: 5px; border-right-width: 5px;");
@@ -125,12 +145,12 @@ function AddFormat() {
 	
 	NewCell2 = document.createElement("td");
 	tmp = '<select id="releasetype" name="extra_formats[]"><option value="">---</option>';
-	
+	var formats=["Saab","Volvo","BMW"];
 	for(var i in formats) {
 		tmp += "<option value='"+formats[i]+"'>"+formats[i]+"</option>\n";
 	}
 	tmp += "</select>";
-	
+	var bitrates=["1","2","3"];
 	tmp += '<select id="releasetype" name="extra_bitrates[]"><option value="">---</option>';
 	for(var i in bitrates) {
 		tmp += "<option value='"+bitrates[i]+"'>"+bitrates[i]+"</option>\n";
@@ -141,8 +161,6 @@ function AddFormat() {
 	NewRow.appendChild(NewCell1);
 	NewRow.appendChild(NewCell2);	
 
-	x = $('#tags_row').raw();
-	x.parentNode.insertBefore(NewRow, x);
 	
 	NewRow = document.createElement("tr");
 	NewRow.id = "new_description_row"+FormatCount;
@@ -156,9 +174,6 @@ function AddFormat() {
 	
 	NewRow.appendChild(NewCell1);
 	NewRow.appendChild(NewCell2);	
-
-	x = $('#tags_row').raw();
-	x.parentNode.insertBefore(NewRow, x);
 }
 
 function RemoveFormat() {
@@ -281,7 +296,6 @@ function ToggleUnknown() {
 
 function GroupRemaster() {
 	var remasters = json.decode($('#json_remasters').raw().value);
-	
 	var index = $('#groupremasters').raw().options[$('#groupremasters').raw().selectedIndex].value;
 	if(index != "") {
 		$('#remaster_year').raw().value = remasters[index][1];
@@ -290,3 +304,4 @@ function GroupRemaster() {
 		$('#remaster_catalogue_number').raw().value = remasters[index][4];
 	}
 }
+

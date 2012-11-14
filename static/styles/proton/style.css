@@ -1703,10 +1703,11 @@ div.box[style=""] .head{
 #forums img[width="500"] {width:100%;height:100%;border-right:5px #007DC6 solid;cursor:pointer;margin:2px auto;}
 
 .forum_post ul, .main_column .box ul {
-  margin: 0 0 -7px 10px;
+  margin: 0 0 -0px 10px;
   list-style-position: inside;
   padding:0;
 }
+
 
 /* update - 07/12/2009 */
 
@@ -1726,6 +1727,7 @@ div.box[style=""] .head{
   display: inline-block;
   padding: 5px;
 }
+
 
 #inbox #searchbox {
   margin: 0 auto 20px auto;

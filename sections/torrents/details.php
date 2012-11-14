@@ -133,11 +133,11 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 ?>
 		<div class="box box_artists">
 			<div class="head"><strong>Artists</strong>
-			<?=(check_perms('torrents_edit')) ? '<span style="float:right;"><a onclick="ArtistManager(); return false;" href="#">[Edit]</a></span>' : ''?>
+			<?=(check_perms('torrents_edit')) ? '<span style="float:right;" class="edit_artists"><a onclick="ArtistManager(); return false;" href="#">[Edit]</a></span>' : ''?>
 			</div>
 			<ul class="stats nobullet" id="artist_list">
 <?	if(!empty($Artists[4]) && count($Artists[4]) > 0) {
-		print '				<li class="artists_composers"><strong>Composers:</strong></li>';
+		print '				<li class="artists_composers"><strong class="artists_label">Composers:</strong></li>';
 		foreach($Artists[4] as $Artist) {
 ?>
 				<li class="artists_composers">
@@ -156,7 +156,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 <?		}
 	}
 	if (!empty($Artists[6]) && count($Artists[6]) > 0) {
-		print '				<li class="artists_dj"><strong>DJ / Compiler:</strong></li>';
+		print '				<li class="artists_dj"><strong class="artists_label">DJ / Compiler:</strong></li>';
 		foreach($Artists[6] as $Artist) {
 ?>
 				<li class="artists_dj">
@@ -176,9 +176,9 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		}
 	}
 	if ((count($Artists[6]) > 0) && (count($Artists[1]) > 0)) {
-		print '				<li class="artists_main"><strong>Artists:</strong></li>';
+		print '				<li class="artists_main"><strong class="artists_label">Artists:</strong></li>';
 	} elseif ((count($Artists[4]) > 0) && (count($Artists[1]) > 0)) {
-		print '				<li class="artists_main"><strong>Performers:</strong></li>';
+		print '				<li class="artists_main"><strong class="artists_label">Performers:</strong></li>';
 	}
 	foreach($Artists[1] as $Artist) {
 ?>
@@ -197,7 +197,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 <?
 	}
 	if(!empty($Artists[2]) && count($Artists[2]) > 0) {
-		print '				<li class="artists_with"><strong>With:</strong></li>';
+		print '				<li class="artists_with"><strong class="artists_label">With:</strong></li>';
 		foreach($Artists[2] as $Artist) {
 ?>
 				<li class="artist_guest">
@@ -217,7 +217,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		}
 	}
 	if(!empty($Artists[5]) && count($Artists[5]) > 0) {
-		print '				<li class="artists_conductors"><strong>Conducted by:</strong></li>';
+		print '				<li class="artists_conductors"><strong class="artists_label">Conducted by:</strong></li>';
 		foreach($Artists[5] as $Artist) {
 ?>
 				<li class="artists_conductors">
@@ -237,7 +237,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		}
 	}
 	if (!empty($Artists[3]) && count($Artists[3]) > 0) {
-		print '				<li class="artists_remix"><strong>Remixed by:</strong></li>';
+		print '				<li class="artists_remix"><strong class="artists_label">Remixed by:</strong></li>';
 		foreach($Artists[3] as $Artist) {
 ?>
 				<li class="artists_remix">
@@ -257,7 +257,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 		}
 	}
 	if (!empty($Artists[7]) && count($Artists[7]) > 0) {
-		print '				<li class="artists_producer"><strong>Produced by:</strong></li>';
+		print '				<li class="artists_producer"><strong class="artists_label">Produced by:</strong></li>';
 		foreach($Artists[7] as $Artist) {
 ?>
 				<li class="artists_producer">
@@ -282,7 +282,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 <? 
 		if(check_perms('torrents_add_artist')) { ?>
 		<div class="box box_addartists">
-			<div class="head"><strong>Add artist</strong><span style="float:right;"><a onclick="AddArtistField(); return false;" href="#">[+]</a></span></div>
+			<div class="head"><strong>Add artist</strong><span style="float:right;" class="additional_add_artist"><a onclick="AddArtistField(); return false;" href="#">[+]</a></span></div>
 			<div class="body">
 				<form class="add_form" name="artists" action="torrents.php" method="post">
 					<div id="AddArtists">
@@ -308,7 +308,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 	}
 include(SERVER_ROOT.'/sections/torrents/vote_ranks.php');
 include(SERVER_ROOT.'/sections/torrents/vote.php');
-?>		
+?>
 		<div class="box box_tags">
 			<div class="head"><strong>Tags</strong></div>
 <?
@@ -321,12 +321,12 @@ if(count($Tags) > 0) {
 ?>
 				<li>
 					<a href="torrents.php?taglist=<?=$Tag['name']?>" style="float:left; display:block;"><?=display_str($Tag['name'])?></a>
-					<div style="float:right; display:block; letter-spacing: -1px;">
-					<a href="torrents.php?action=vote_tag&amp;way=down&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag down">[-]</a>
+					<div style="float:right; display:block; letter-spacing: -1px;" class="edit_tags_votes">
+					<a href="torrents.php?action=vote_tag&amp;way=down&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag down" class="vote_tag_down">[-]</a>
 					<?=$Tag['score']?>
-					<a href="torrents.php?action=vote_tag&amp;way=up&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag up">[+]</a>
+					<a href="torrents.php?action=vote_tag&amp;way=up&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag up" class="vote_tag_up">[+]</a>
 <?		if(check_perms('users_warn')){ ?>
-					<a href="user.php?id=<?=$Tag['userid']?>" title="View the profile of the user that added this tag">[U]</a>
+					<a href="user.php?id=<?=$Tag['userid']?>" title="View the profile of the user that added this tag" class="view_tag_user">[U]</a>
 <?		} ?>
 <?		if(check_perms('site_delete_tag')){ ?>
 					<span class="remove remove_tag"><a href="torrents.php?action=delete_tag&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove tag">[X]</a></span>
