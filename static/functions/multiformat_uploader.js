@@ -1,7 +1,7 @@
 (function ($) {
 	var count = 1;
 	var MAX_EXTRAS = 5;
-	var FORMATS = [ 'MP3', 'FLAC', 'Ogg Vorbis', 'AAC', 'AC3', 'DTS' ];
+	var FORMATS = [ 'MP3', 'FLAC', 'AAC', 'AC3', 'DTS' ];
 	var BITRATES = [ '192', 'APS (VBR)', 'V2 (VBR)', 'V1 (VBR)', '256', 'APX (VBR)', 'V0 (VBR)', 'q8.x (VBR)', '320', 'Lossless', '24bit Lossless'];
 	var filenames = new Array();
 	$(document).ready(function () {

@@ -470,13 +470,14 @@ function hide() {
 			</tr>
 <?
 		} ?>
+<? if($this->NewTorrent) { ?>
 		<tr>
 		   <td class="label">Multi Format Uploader</td>
 		   <td><input type="button" value="+" id="add_format" /><input type="button" style="display: none" value="-" id="remove_format" /></td>
 		</tr>
 		<tr id="placeholder_row_top"></tr>
 		<tr id="placeholder_row_bottom"></tr>
-<?		if (check_perms('torrents_edit_vanityhouse') && $this->NewTorrent) { ?>
+<?	} if (check_perms('torrents_edit_vanityhouse') && $this->NewTorrent) { ?>
 			<tr>
 				<td class="label">Vanity House:</td>
 				<td>
@@ -502,17 +503,6 @@ function hide() {
 					<span id="cassette_true" class="hidden"><span class="important_text">Do NOT upload a cassette rip without first getting approval from a moderator!</span></span>
 				</td>
 			</tr>
-<?
-		if($this->NewTorrent) { ?>
-			<tr id="upload_logs" class="hidden">
-				<td class="label">Log Files:</td>
-				<td id="logfields">
-					Check your log files here before uploading: <a href="logchecker.php" target="_blank">logchecker.php</a><br />
-					<input id="file" type="file" name="logfiles[]" size="50" /> [<a href="javascript:;" onclick="AddLogField();">+</a>] [<a href="javascript:;" onclick="RemoveLogField();">-</a>]
-				</td>
-			</tr>
-<?
-		} ?>
 <?		if(!$this->NewTorrent && check_perms('users_mod')) { ?>
 			<tr>
 				<td class="label">Log/Cue:</td>

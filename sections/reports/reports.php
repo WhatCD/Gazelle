@@ -213,7 +213,7 @@ while(list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $
 <? if($Status != "Resolved") { ?>
 			<tr>
 				<td class="center" colspan="2">
-					<input type="submit" name="submit" value="Resolved" />
+					<input type="submit" name="submit" value="Resolve" />
 				</td>
 			</tr>
 <? } ?>
