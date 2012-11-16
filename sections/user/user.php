@@ -468,6 +468,162 @@ if ($Override=check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
 		</div>
 <?
 include(SERVER_ROOT.'/sections/user/community_stats.php');
+?>
+	</div>
+	<div class="main_column">
+<?
+if ($RatioWatchEnds!='0000-00-00 00:00:00'
+		&& (time() < strtotime($RatioWatchEnds))
+		&& ($Downloaded*$RequiredRatio)>$Uploaded
+		) {
+?>
+		<div class="box">
+			<div class="head">Ratio watch</div>
+			<div class="pad">This user is currently on ratio watch and must upload <?=Format::get_size(($Downloaded*$RequiredRatio)-$Uploaded)?> in the next <?=time_diff($RatioWatchEnds)?>, or their leeching privileges will be revoked. Amount downloaded while on ratio watch: <?=Format::get_size($Downloaded-$RatioWatchDownload)?></div>
+		</div>
+<? } ?>
+		<div class="box">
+			<div class="head">
+				<span style="float:left;">Profile<? if ($CustomTitle) { echo " - ".html_entity_decode($DisplayCustomTitle); } ?></span>
+				<span style="float:right;"><?=!empty($Badges)?"$Badges&nbsp;&nbsp;":''?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Hide)</a></span>&nbsp;
+			</div>
+			<div class="pad" id="profilediv">
+<? if (!$Info) { ?>
+				This profile is currently empty.
+<?
+} else {
+	echo $Text->full_format($Info);
+}
+
+?>
+			</div>
+		</div>
+<?
+if ($Snatched > 4 && check_paranoia_here('snatched')) {
+	$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
+	if(!is_array($RecentSnatches)){
+		$DB->query("SELECT
+		g.ID,
+		g.Name,
+		g.WikiImage
+		FROM xbt_snatched AS s
+		INNER JOIN torrents AS t ON t.ID=s.fid
+		INNER JOIN torrents_group AS g ON t.GroupID=g.ID
+		WHERE s.uid='$UserID'
+		AND g.CategoryID='1'
+		AND g.WikiImage <> ''
+		GROUP BY g.ID
+		ORDER BY s.tstamp DESC
+		LIMIT 5");
+		$RecentSnatches = $DB->to_array();
+
+		$Artists = Artists::get_artists($DB->collect('ID'));
+		foreach($RecentSnatches as $Key => $SnatchInfo) {
+			$RecentSnatches[$Key]['Artist'] = Artists::display_artists($Artists[$SnatchInfo['ID']], false, true);
+		}
+		$Cache->cache_value('recent_snatches_'.$UserID, $RecentSnatches, 0); //inf cache
+	}
+?>
+	<table class="layout recent" id="recent_snatches" cellpadding="0" cellspacing="0" border="0">
+		<tr class="colhead">
+			<td colspan="5">Recent Snatches</td>
+		</tr>
+		<tr>
+<?
+		foreach($RecentSnatches as $RS) { ?>
+			<td>
+				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=to_thumbnail($RS['WikiImage'])?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
+			</td>
+<?		} ?>
+		</tr>
+	</table>
+<?
+}
+
+if(!isset($Uploads)) { $Uploads = 0; }
+if ($Uploads > 4 && check_paranoia_here('uploads')) {
+	$RecentUploads = $Cache->get_value('recent_uploads_'.$UserID);
+	if(!is_array($RecentUploads)){
+		$DB->query("SELECT
+		g.ID,
+		g.Name,
+		g.WikiImage
+		FROM torrents_group AS g
+		INNER JOIN torrents AS t ON t.GroupID=g.ID
+		WHERE t.UserID='$UserID'
+		AND g.CategoryID='1'
+		AND g.WikiImage <> ''
+		GROUP BY g.ID
+		ORDER BY t.Time DESC
+		LIMIT 5");
+		$RecentUploads = $DB->to_array();
+		$Artists = Artists::get_artists($DB->collect('ID'));
+		foreach($RecentUploads as $Key => $UploadInfo) {
+			$RecentUploads[$Key]['Artist'] = Artists::display_artists($Artists[$UploadInfo['ID']], false, true);
+		}
+		$Cache->cache_value('recent_uploads_'.$UserID, $RecentUploads, 0); //inf cache
+	}
+?>
+	<table class="layout recent" id="recent_uploads" cellpadding="0" cellspacing="0" border="0">
+		<tr class="colhead">
+			<td colspan="5">Recent Uploads</td>
+		</tr>
+		<tr>
+<?		foreach($RecentUploads as $RU) { ?>
+			<td>
+				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=to_thumbnail($RU['WikiImage'])?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
+			</td>
+<?		} ?>
+		</tr>
+	</table>
+<?
+}
+
+$DB->query("SELECT ID, Name FROM collages WHERE UserID='$UserID' AND CategoryID='0' AND Deleted='0' ORDER BY Featured DESC, Name ASC");
+$Collages = $DB->to_array();
+$FirstCol = true;
+foreach ($Collages as $CollageInfo) {
+	list($CollageID, $CName) = $CollageInfo;
+	$DB->query("SELECT ct.GroupID,
+		tg.WikiImage,
+		tg.CategoryID
+		FROM collages_torrents AS ct
+		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
+		WHERE ct.CollageID='$CollageID'
+		ORDER BY ct.Sort LIMIT 5");
+	$Collage = $DB->to_array();
+?>
+	<table class="layout recent" id="collage<?=$CollageID?>" cellpadding="0" cellspacing="0" border="0">
+		<tr class="colhead">
+			<td colspan="5">
+				<span style="float:left;">
+					<?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>">see full</a>
+				</span>
+				<span style="float:right;">
+					<a href="#" onclick="$('#collage<?=$CollageID?> .images').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;"><?=$FirstCol?'(Hide)':'(Show)'?></a>
+				</span>
+			</td>
+		</tr>
+		<tr class="images <?=$FirstCol?'':' hidden'?>">
+<?	foreach($Collage as $C) {
+			$Group = Torrents::get_groups(array($C['GroupID']));
+			$Group = array_pop($Group['matches']);
+			list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
+
+			$Name = '';
+			$Name .= Artists::display_artists(array('1'=>$GroupArtists), false, true);
+			$Name .= $GroupName;
+?>
+			<td>
+				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=to_thumbnail($C['WikiImage'])?>" alt="<?=$Name?>" width="107" /></a>
+			</td>
+<?	} ?>
+		</tr>
+	</table>
+<?
+	$FirstCol = false;
+}
+
 
 
 // Linked accounts

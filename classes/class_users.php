@@ -255,6 +255,59 @@ class Users {
 		return true;
 	}
 
+	/**
+	 * Generates a check list of release types, ordered by the user or default
+	 * @global array $SiteOptions
+	 * @param boolean $Default Returns the default list if true
+	 */
+	public static function release_order ($Default = false)
+	{
+		global $SiteOptions, $ReleaseTypes;
+
+		$RT = $ReleaseTypes + array(
+			1024 => 'Guest Appearance',
+			1023 => 'Remixed By',
+			1022 => 'Composition',
+			1021 => 'Produced By');
+
+		if ($Default || empty($SiteOptions['SortHide'])) {
+			$Sort =& $RT;
+			$Defaults = !empty($SiteOptions['HideTypes']);
+		} else {
+			$Sort =& $SiteOptions['SortHide'];
+		}
+
+		foreach ($Sort as $Key => $Val) {
+			if (isset($Defaults)) {
+				$Checked = $Defaults && isset($SiteOptions['HideTypes'][$Key]) ? 'checked="checked"' : '';
+			} else {
+				$Checked = $Val ? 'checked="checked"' : '';
+				$Val = isset($RT[$Key]) ? $RT[$Key] : 'Error';
+			}
+
+			$ID = $Key . '_' . (int) !!$Checked;
+?>
+
+			<li class="sortable_item">
+				<label><input type="checkbox" <?=$Checked?> id="<?=$ID?>" /> <?=$Val?></label>
+			</li>
+
+<?
+		}
+	}
+
+	/**
+	 * Returns the default order for the sort list in a JS-friendly string
+	 * @return string
+	 */
+	public static function release_order_default_js ()
+	{
+		ob_start();
+		self::release_order(true);
+		$HTML = ob_get_contents();
+		ob_end_clean();
+		return json_encode($HTML);
+	}
 
 	/**
 	 * Generate a random string
@@ -487,7 +540,7 @@ class Users {
 
 		return array($K, $GroupIDs, $CollageDataList, $TorrentList);
 	}
-	
+
 	/**
 	 * Generate HTML for a user's avatar or just return the avatar url
 	 * @param unknown $Avatar
@@ -561,7 +614,7 @@ class Users {
 		}
 		return $ToReturn;
 	}
-	
+
 	public static function has_avatars_enabled() {
 		global $HeavyInfo;
 		return $HeavyInfo['DisableAvatars'] != 1;

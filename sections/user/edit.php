@@ -32,8 +32,8 @@ if($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Class)) 
 }
 
 $Paranoia = unserialize($Paranoia);
-if(!is_array($Paranoia)) { 
-	$Paranoia = array(); 
+if(!is_array($Paranoia)) {
+	$Paranoia = array();
 }
 
 function paranoia_level($Setting) {
@@ -52,22 +52,22 @@ function checked($Checked) {
 	return $Checked ? 'checked="checked"' : '';
 }
 
-if ($SiteOptions) { 
-	$SiteOptions = unserialize($SiteOptions); 
-} else { 
+if ($SiteOptions) {
+	$SiteOptions = unserialize($SiteOptions);
+} else {
 	$SiteOptions = array();
 }
 
 View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings');
 
-$DB->query("SELECT PushService, PushOptions FROM 
+$DB->query("SELECT PushService, PushOptions FROM
     users_push_notifications WHERE UserID = '$LoggedUser[ID]'");
 
 list($PushService, $PushOptions) = $DB->next_record(MYSQLI_NUM, false);
 
-if ($PushOptions) { 
-	$PushOptions = unserialize($PushOptions); 
-} else { 
+if ($PushOptions) {
+	$PushOptions = unserialize($PushOptions);
+} else {
 	$PushOptions = array();
 }
 echo $Val->GenerateJS('userform');
@@ -153,62 +153,19 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Sort/Hide release types</strong></td>
 				<td>
-					<table class="layout" style="border:none;">
-<?
-	$ReleaseTypes[1024] = "Guest Appearance";
-	$ReleaseTypes[1023] = "Remixed By";
-	$ReleaseTypes[1022] = "Composition";
-	$ReleaseTypes[1021] = "Produced By";
-?>
-    
-	<a href="#" id="toggle_sortable" onclick="return false;">Expand</a>
-	<div id="sortable_container" style="display: none;">
-	<a href="#" id="reset_sortable" onclick="return false;">Reset to Default</a>
-	<ul class="sortable_list" id="sortable">
-
-<?
-//Generate list of release types for sorting and hiding. 
-//If statement is in place because on the first usage user will not have 'SortHide' set in $SiteOptions 
-if(empty($SiteOptions['SortHide'])) {
-	for($i = 0; list($Key,$Val) = each($ReleaseTypes); $i++) {
-		if(!empty($SiteOptions['HideTypes']) && in_array($Key, $SiteOptions['HideTypes'])) {
-			$Checked = 'checked="checked" ';
-		} else {
-			$Checked='';
-		}
-?>
-		<li class="sortable_item"><input type="checkbox" <?=$Checked?> 
-			id="<?=$Key."_".($Checked == 'checked="checked" ' ? 1 : 0)?>"><?=$Val?></li>
-<?	} 
-}
-else {
-	for($i = 0; list($Key,$Val) = each($SiteOptions['SortHide']); $i++) {
-		if($Val == true) {
-			$Checked = 'checked="checked" ';
-		} else {
-			$Checked='';
-		}
-		if(array_key_exists($Key, $ReleaseTypes)) {
-			$Name = $ReleaseTypes[$Key];
-		}
-		else {
-			$Name = "Error";
-		}
-	?>
-		<li class="sortable_item"><input type="checkbox" <?=$Checked?> 
-			id="<?=$Key."_".($Checked == 'checked="checked" ' ? 1 : 0)?>"><?=$Name?></li>
-<?	} 
-}
-?>
-		</ul>
-	</div>
-	<input type="hidden" id="sorthide" name="sorthide" value=""/>
-		
-<?
-	unset($ReleaseTypes[1023], $ReleaseTypes[1024], $ReleaseTypes[1022]);
-?>
-						</tr>
-					</table>
+					<noscript>Please enable JavaScript to use these options.</noscript>
+					<a href="#" id="toggle_sortable">Expand</a>
+					<div id="sortable_container" style="display: none;">
+						<a href="#" id="reset_sortable">Reset to Default</a>
+						<ul class="sortable_list" id="sortable">
+<?Users::release_order()?>
+						</ul>
+						<p><small>Note: Checked items will be hidden.</small></p>
+						<script type="text/javascript" id="sortable_default">
+							var sortable_list_default = <?=Users::release_order_default_js()?>;
+						</script>
+					</div>
+					<input type="hidden" id="sorthide" name="sorthide" value="" />
 				</td>
 			</tr>
 <!--			<tr>
@@ -266,7 +223,7 @@ else {
 			<tr>
             	<td class="label"><strong>Avatars</strong></td>
                 <td>
-                    <select name="disableavatars" id="disableavatars" onclick="ToggleIdenticons();"> 
+                    <select name="disableavatars" id="disableavatars" onclick="ToggleIdenticons();">
                         <option value="1" <? if($SiteOptions['DisableAvatars'] == 1) { ?> selected="selected" <? } ?>/>Disable avatars</option>
                         <option value="0" <? if($SiteOptions['DisableAvatars'] == 0) { ?> selected="selected" <? } ?>/>Show avatars</option>
                         <option value="2" <? if($SiteOptions['DisableAvatars'] == 2) { ?> selected="selected" <? } ?>/>Show avatars or:</option>
@@ -307,7 +264,7 @@ else {
                     <input type="checkbox" name="pushfilters[]" value="News" <? if(isset($PushOptions['PushFilters']['News'])) { ?> checked="checked"  <? } ?>/>Announcements<br />
                     <input type="checkbox" name="pushfilters[]" value="PM" <? if(isset($PushOptions['PushFilters']['PM'])) { ?> checked="checked"  <? } ?>/>Private Messages<br />
 			<? /*		<input type="checkbox" name="pushfilters[]" value="Rippy" <? if(isset($PushOptions['PushFilters']['Rippy'])) { ?> checked="checked"  <? } ?>/>Rippys<br /> */ ?>
-					
+
                    [<a href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Test Push</a>]
                     	[<a href="wiki.php?action=article&id=1017">Wiki Guide</a>]
                     </div>
@@ -322,7 +279,7 @@ else {
 						<option value="PM" <? if($SiteOptions['Rippy'] == 'PM' || empty($SiteOptions['Rippy'])) { ?> selected="selected" <? } ?> >Personal rippies only</option>
 					</select>
 				</td>
-			</tr>	
+			</tr>
 			<tr>
 				<td class="label"><strong>Auto-save Text</strong></td>
 				<td>

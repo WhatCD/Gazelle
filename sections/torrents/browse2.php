@@ -814,6 +814,7 @@ if (!empty($LoggedUser['DefaultSearch'])) {
 
 
 if ($TorrentCount == 0) {
+	$DB->query("SELECT
 	tags.Name,
 	((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
 	FROM xbt_snatched AS s

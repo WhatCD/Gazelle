@@ -41,7 +41,7 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 		$Announce .= ' [' . $ReleaseTypes[$Properties['ReleaseType']] . ']';
 	}
 	$Announce .= " - ";
-	$Announce .= trim($ExtraTorrent['Format']) . " / " . trim($ExtraTorrent['Bitrate']);
+	$Announce .= trim(str_replace("'", "", $ExtraTorrent['Format'])) . " / " . trim(str_replace("'", "", $ExtraTorrent['Encoding']));
 	$Announce .= " / " . trim($Properties['Media']);
 	if ($T['FreeLeech'] == "1") {
 		$Announce .= " / Freeleech!";
