@@ -328,7 +328,7 @@ if(count($Tags) > 0) {
 <?		if(check_perms('users_warn')){ ?>
 					<a href="user.php?id=<?=$Tag['userid']?>" title="View the profile of the user that added this tag" class="view_tag_user">[U]</a>
 <?		} ?>
-<?		if(check_perms('site_delete_tag')){ ?>
+<?		if(empty($LoggedUser['DisableTagging']) && check_perms('site_delete_tag')){ ?>
 					<span class="remove remove_tag"><a href="torrents.php?action=delete_tag&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove tag">[X]</a></span>
 <?		} ?>
 					</div>
@@ -346,6 +346,9 @@ if(count($Tags) > 0) {
 }
 ?>
 		</div>
+<?
+if (empty($LoggedUser['DisableTagging'])) {
+?>
 		<div class="box box_addtag">
 			<div class="head"><strong>Add tag</strong></div>
 			<div class="body">
@@ -360,7 +363,9 @@ if(count($Tags) > 0) {
 				<strong><a href="rules.php?p=tag">Tagging rules</a></strong>
 			</div>
 		</div>
-
+<?
+}
+?>
 	</div>
 	<div class="main_column">
 		<table class="torrent_table details" id="torrent_details">

@@ -1,10 +1,13 @@
 <?
 authorize();
+if (!empty($LoggedUser['DisableTagging'])) {
+	error(403);
+}
 
 $UserID = $LoggedUser['ID'];
-$GroupID = db_string($_POST['groupid']);
+$GroupID = $_POST['groupid'];
 
-if(!is_number($GroupID) || !$GroupID) {
+if (!is_number($GroupID) || !$GroupID) {
 	error(0);
 }
 

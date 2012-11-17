@@ -144,6 +144,7 @@ class Users {
 				i.DisablePM,
 				i.DisableRequests,
 				i.DisableForums,
+				i.DisableTagging,
 				i.SiteOptions,
 				i.DownloadAlt,
 				i.LastReadNews,

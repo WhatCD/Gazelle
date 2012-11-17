@@ -1,12 +1,13 @@
 <?
-$TagID = db_string($_GET['tagid']);
-$GroupID = db_string($_GET['groupid']);
-
-if(!is_number($TagID) || !is_number($GroupID)) {
-	error(404);
-}
-if(!check_perms('site_delete_tag')) {
+if (!empty($LoggedUser['DisableTagging']) || !check_perms('site_delete_tag')) {
 	error(403);
+}
+
+$TagID = $_GET['tagid'];
+$GroupID = $_GET['groupid'];
+
+if (!is_number($TagID) || !is_number($GroupID)) {
+	error(404);
 }
 
 $DB->query("SELECT Name FROM tags WHERE ID='$TagID'");

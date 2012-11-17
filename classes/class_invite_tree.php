@@ -18,29 +18,28 @@ class INVITE_TREE {
 		}
 	}
 	
-	function make_tree(){
+	function make_tree() {
 		$UserID = $this->UserID;
 		global $DB;
 ?>
 		<div class="invitetree pad">
 <?
-		$DB->query("SELECT 
-			t1.TreePosition, 
-			t1.TreeID, 
-			t1.TreeLevel, 
-			(SELECT 
-				t2.TreePosition FROM invite_tree AS t2 
-				WHERE TreeID=t1.TreeID AND TreeLevel=t1.TreeLevel AND t2.TreePosition>t1.TreePosition 
-				ORDER BY TreePosition LIMIT 1
-			) AS MaxPosition
-			FROM invite_tree AS t1
-			WHERE t1.UserID=$UserID");
-		
-		list($TreePosition, $TreeID, $TreeLevel, $MaxPosition) = $DB->next_record();
-		if(!$MaxPosition){ $MaxPosition = 1000000; } // $MaxPermission is null if the user is the last one in that tree on that level
-		if(!$TreeID){ return; }
-		$TreeQuery = $DB->query("
-			SELECT 
+		$DB->query("SELECT TreePosition, TreeID, TreeLevel FROM invite_tree WHERE UserID=$UserID");
+		list($TreePosition, $TreeID, $TreeLevel) = $DB->next_record(MYSQLI_NUM, false);
+
+		if (!$TreeID) {
+			return;
+		}
+		$DB->query("SELECT
+			TreePosition FROM invite_tree
+			WHERE TreeID=$TreeID AND TreeLevel=$TreeLevel AND TreePosition>$TreePosition
+			ORDER BY TreePosition ASC LIMIT 1");
+		if ($DB->record_count()) {
+			list($MaxPosition) = $DB->next_record(MYSQLI_NUM, false);
+		} else {
+			$MaxPosition = false;
+		}
+		$TreeQuery = $DB->query("SELECT 
 			it.UserID,
 			Enabled,
 			PermissionID,
@@ -54,8 +53,8 @@ class INVITE_TREE {
 			JOIN users_main AS um ON um.ID=it.UserID
 			JOIN users_info AS ui ON ui.UserID=it.UserID
 			WHERE TreeID=$TreeID
-			AND TreePosition>$TreePosition
-			AND TreePosition<$MaxPosition
+			AND TreePosition>$TreePosition".
+			($MaxPosition ? " AND TreePosition<$MaxPosition" : "")."
 			AND TreeLevel>$TreeLevel
 			ORDER BY TreePosition");
 		
