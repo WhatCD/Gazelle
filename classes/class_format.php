@@ -371,6 +371,63 @@ class Format {
 	}
 
 	/**
+	 * Return a css class name if certain conditions are met. Mainly useful to mark links as 'active'
+	 *
+	 * @param mixed $Target The variable to compare all values against
+	 * @param mixed $Tests The condition values. Type and dimension determines test type
+	 *                 Scalar: $Tests must be equal to $Target for a match
+	 *                 Vector: All elements in $Tests must correspond to equal values in $Target
+	 *                 2-dimensional array: At least one array must be identical to $Target
+	 * @param string $ClassName CSS class name to return
+	 * @param bool $AddAttribute Whether to include the "class" attribute in the output
+	 * @param string $UserIDKey Key in _REQUEST for a user id parameter, which if given will be compared to $LoggedUser[ID]
+	 *
+	 * @return class name on match, otherwise an empty string
+	 */
+	public static function add_class($Target, $Tests, $ClassName, $AddAttribute, $UserIDKey = false) {
+		global $LoggedUser;
+		if ($UserIDKey && isset($_REQUEST[$UserIDKey]) && $LoggedUser['ID'] != $_REQUEST[$UserIDKey]) {
+			return '';
+		}
+		$Pass = true;
+		if (!is_array($Tests)) {
+			// Scalars are nice and easy
+			$Pass = $Tests === $Target;
+		} elseif (!is_array($Tests[0])) {
+			// Test all values in vectors
+			foreach ($Tests as $Type => $Part) {
+				if (!isset($Target[$Type]) || $Target[$Type] !== $Part) {
+					$Pass = false;
+					break;
+				}
+			}
+		} else {
+			// Loop to the end of the array or until we find a matching test
+			foreach ($Tests as $Test) {
+				$Pass = true;
+				// If $Pass remains true after this test, it's a match
+				foreach ($Test as $Type => $Part) {
+					if (!isset($Target[$Type]) || $Target[$Type] !== $Part) {
+						$Pass = false;
+						break;
+					}
+				}
+				if ($Pass) {
+					break;
+				}
+			}
+		}
+		if (!$Pass) {
+			return '';
+		}
+		if ($AddAttribute) {
+			return ' class="'.$ClassName.'"';
+		}
+		return " $ClassName";
+	}
+
+
+	/**
 	 * Detect the encoding of a string and transform it to UTF-8.
 	 *
 	 * @param string $Str

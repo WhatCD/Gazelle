@@ -720,7 +720,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 					</select>
 				</td>
 			</tr>
-			<tr id="group_results">
+			<tr id="search_group_results">
 				<td class="label">
 					<label for="group_results">Group by release:</label>
 				</td>

@@ -48,8 +48,8 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 	}
 	$Title = $Announce;
 
-	$AnnounceSSL = $Announce . " - https://" . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$TorrentID";
-	$Announce .= " - https://" . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$TorrentID";
+	$AnnounceSSL = $Announce . " - https://" . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
+	$Announce .= " - https://" . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
 
 	$AnnounceSSL .= " - " . trim($Properties['TagList']);
 	$Announce .= " - " . trim($Properties['TagList']);

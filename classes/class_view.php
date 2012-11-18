@@ -18,10 +18,17 @@ class View
 	{
 		global $Document, $Cache, $DB, $LoggedUser, $Mobile, $Classes;
 
-		if($PageTitle!='') { $PageTitle.=' :: '; }
+		if ($PageTitle != '') {
+			$PageTitle .= ' :: ';
+		}
 		$PageTitle .= SITE_NAME;
+		$PageID = array(
+			$Document, // Document
+			empty($_REQUEST['action']) ? false : $_REQUEST['action'], // Action
+			empty($_REQUEST['type']) ? false : $_REQUEST['type'] // Type
+		);
 
-		if(!is_array($LoggedUser) || empty($LoggedUser['ID'])) {
+		if (!is_array($LoggedUser) || empty($LoggedUser['ID'])) {
 			require(SERVER_ROOT.'/design/publicheader.php');
 		} else {
 			require(SERVER_ROOT.'/design/privateheader.php');
@@ -42,7 +49,6 @@ class View
 		if (!is_array($LoggedUser)) { require(SERVER_ROOT.'/design/publicfooter.php'); }
 		else { require(SERVER_ROOT.'/design/privatefooter.php'); }
 	}
-
 
 	/**
 	 * This is a generic function to load a template fromm /design and render it.

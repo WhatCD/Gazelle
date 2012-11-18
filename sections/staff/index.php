@@ -91,11 +91,11 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 			$Row = 'a';
 			if($CloseTable) {
 				$CloseTable = false;
-				echo "\t</table>";
+				echo "\t</table><br />";
 			}
 			$CurClass = $Class;
 			$CloseTable = true;
-			echo '<br /><h3>'.$ClassName.'s</h3>';
+			echo '<h3>'.$ClassName.'s</h3>';
 ?>
 		<table class="staff" width="100%">
 			<tr class="colhead">

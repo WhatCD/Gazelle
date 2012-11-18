@@ -569,7 +569,7 @@ if(check_perms('zip_downloader')){
 		$ZIPPrefs = 1;
 	}
 ?>
-		<div class="box">
+		<div class="box box_zipdownload">
 			<div class="head colhead_dark"><strong>Collector</strong></div>
 			<div class="pad">
 				<form class="download_form" name="zip" action="artist.php" method="post">
