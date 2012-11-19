@@ -289,26 +289,26 @@ $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 				<tr>
 					<td class="label"><strong>Rip Specifics:</strong></td>
 					<td class="nobr" colspan="3">
-						<select id="bitrate" name="bitrate">
+						<select id="bitrate" name="bitrate" class="ft_bitrate">
 							<option value="">Bitrate</option>
 <?	foreach($Bitrates as $BitrateName) { ?>
 							<option value="<?=display_str($BitrateName); ?>" <?Format::selected('bitrate', $BitrateName)?>><?=display_str($BitrateName); ?></option>
 <?	} ?>				</select>
 						
-						<select name="format">
+						<select name="format" class="ft_format">
 							<option value="">Format</option>
 <?	foreach($Formats as $FormatName) { ?>
 							<option value="<?=display_str($FormatName); ?>" <?Format::selected('format', $FormatName)?>><?=display_str($FormatName); ?></option>
 <?	} ?>				
 							<option value="perfectflac" <?Format::selected('filter', 'perfectflac')?>>Perfect FLACs</option>
 						</select>
-						<select name="media">
+						<select name="media" class="ft_media">
 							<option value="">Media</option>
 <?	foreach($Media as $MediaName) { ?>
 							<option value="<?=display_str($MediaName); ?>" <?Format::selected('media',$MediaName)?>><?=display_str($MediaName); ?></option>
 <?	} ?>
 						</select>
-						<select name="releasetype">
+						<select name="releasetype" class="ft_releasetype">
 							<option value="">Release type</option>
 <?	foreach($ReleaseTypes as $ID=>$Type) { ?>
 							<option value="<?=display_str($ID); ?>" <?Format::selected('releasetype',$ID)?>><?=display_str($Type); ?></option>
@@ -319,24 +319,24 @@ $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 				<tr>
 					<td class="label"><strong>Misc:</strong></td>
 					<td class="nobr" colspan="3">
-						<select name="log">
+						<select name="log" class="ft_haslog">
 							<option value="">Has Log</option>
 							<option value="1" <?Format::selected('log','1')?>>Yes</option>
 							<option value="0" <?Format::selected('log','0')?>>No</option>
 							<option value="100" <?Format::selected('log','100')?>>100% only</option>
 							<option value="-1" <?Format::selected('log','-1')?>>&lt;100%/Unscored</option>
 						</select>
-						<select name="cue">
+						<select name="cue" class="ft_hascue">
 							<option value="">Has Cue</option>
 							<option value="1" <?Format::selected('cue',1)?>>Yes</option>
 							<option value="0" <?Format::selected('cue',0)?>>No</option>
 						</select>
-						<select name="scene">
+						<select name="scene" class="ft_scene">
 							<option value="">Scene</option>
 							<option value="1" <?Format::selected('scene',1)?>>Yes</option>
 							<option value="0" <?Format::selected('scene',0)?>>No</option>
 						</select>
-						<select name="vanityhouse">
+						<select name="vanityhouse" class="ft_vanityhouse">
 							<option value="">Vanity House</option>
 							<option value="1" <?Format::selected('vanityhouse',1)?>>Yes</option>
 							<option value="0" <?Format::selected('vanityhouse',0)?>>No</option>
@@ -355,12 +355,12 @@ $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 				<tr>
 					<td class="label"><strong>Order by</strong></td>
 					<td>
-						<select name="order">
+						<select name="order" class="ft_order_by">
 <? foreach($Orders as $OrderText) { ?>
 							<option value="<?=$OrderText?>" <?Format::selected('order', $OrderText)?>><?=$OrderText?></option>
 <? }?>
 						</select>&nbsp;
-						<select name="way">
+						<select name="way" class="ft_order_way">
 <? foreach($Ways as $WayKey=>$WayText) { ?>
 							<option value="<?=$WayKey?>" <?Format::selected('way', $WayKey)?>><?=$WayText?></option>
 <? }?>
