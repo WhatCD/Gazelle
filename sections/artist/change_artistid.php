@@ -112,6 +112,8 @@ if (isset($_POST['confirm'])) {
 
 	$Cache->delete_value('artist_'.$ArtistID);
 	$Cache->delete_value('artist_'.$NewArtistID);
+	$Cache->delete_value('artist_groups_'.$ArtistID);
+	$Cache->delete_value('artist_groups_'.$NewArtistID);
 
 	// Delete the old artist
 	$DB->query("DELETE FROM artists_group WHERE ArtistID = $ArtistID");

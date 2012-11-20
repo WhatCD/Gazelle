@@ -119,12 +119,6 @@ if(empty($_POST['confirm'])) {
 		$Cache->delete_value('torrent_download_'.$TorrentID);
 	}
 	$Cache->delete_value('torrents_details_'.$GroupID);
-	
-	$DB->query("SELECT DISTINCT ArtistID FROM torrents_artists WHERE GroupID IN ('$GroupID', '$OldGroupID')");
-	while(list($ArtistID) = $DB->next_record()) {
-		$Cache->delete_value('artist_'.$ArtistID); 
-	}
-	
 	$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_0');
 	$Cache->delete_value('torrent_comments_'.$GroupID);
 	$Cache->delete_value('groups_artists_'.$GroupID);

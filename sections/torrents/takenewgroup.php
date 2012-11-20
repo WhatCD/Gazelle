@@ -15,8 +15,6 @@ $Title = db_string(trim($_POST['title']));
 $Year = trim($_POST['year']);
 $SearchText = db_string(trim($_POST['artist']) . ' ' . trim($_POST['title']) . ' ' . trim($_POST['year']));
 
-$OldArtistID = (int)$_POST['oldartistid']; // Doesn't hit the database, so we don't have to be especially paranoid
-
 if(!is_number($OldGroupID) || !is_number($TorrentID) || !is_number($Year) || !$OldGroupID || !$TorrentID || !$Year || empty($Title) || empty($ArtistName)) {
 	error(0);
 }
@@ -60,8 +58,6 @@ if($DB->record_count() == 0) {
 Torrents::update_hash($GroupID);
 
 $Cache->delete_value('torrent_download_'.$TorrentID);
-$Cache->delete_value('artist_'.$ArtistID);
-$Cache->delete_value('artist_'.$OldArtistID);
 
 Misc::write_log("Torrent $TorrentID was edited by " . $LoggedUser['Username']);
 

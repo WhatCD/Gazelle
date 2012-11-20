@@ -62,13 +62,6 @@ if(empty($RevisionID)) { // edit
 	
 	$DB->query("UPDATE torrents_group SET ReleaseType='$ReleaseType' WHERE ID='$GroupID'");
 	Torrents::update_hash($GroupID);
-	
-	$DB->query("SELECT ArtistID FROM torrents_artists WHERE GroupID = ".$GroupID);
-	$Artists = $DB->collect('ArtistID');
-	foreach($Artists as $ArtistID) {
-		$Cache->delete_value('artist_'.$ArtistID);
-	}
-	
 }
 else { // revert
 	$DB->query("SELECT PageID,Body,Image FROM wiki_torrents WHERE RevisionID='$RevisionID'");
@@ -100,7 +93,6 @@ if ($OldVH != $VanityHouse && check_perms('torrents_edit_vanityhouse')) {
 
 // There we go, all done!
 
-//$Cache->delete_value("artist_".$GroupID); // Delete artist cache
 $Cache->delete_value('torrents_details_'.$GroupID);
 $DB->query("SELECT CollageID FROM collages_torrents WHERE GroupID='$GroupID'");
 if($DB->record_count()>0) {

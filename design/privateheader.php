@@ -169,7 +169,7 @@ if($NewSubscriptions === FALSE) {
         $Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
 } ?>
 
-		<ul id="userinfo_minor">
+		<ul id="userinfo_minor"<?=$NewSubscriptions ? ' class="highlite"' : ''?>>
 			<li id="nav_inbox"<?=Format::add_class($PageID, array('inbox'), 'active', true)?>>
 				<a onmousedown="Stats('inbox');" href="inbox.php">Inbox</a>
 			</li>

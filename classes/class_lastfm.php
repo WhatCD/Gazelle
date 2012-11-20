@@ -1,6 +1,5 @@
 <?
 define('LASTFM_API_URL', 'http://ws.audioscrobbler.com/2.0/?method=');
-
 class LastFM {
 	
 	public static function get_artist_events($ArtistID, $Artist, $Limit = 15) {
@@ -14,12 +13,15 @@ class LastFM {
 	}
 
 	private static function lastfm_request($Method, $Args) {
+		if (!defined('LASTFM_API_KEY')) {
+			return false;
+		}
 		$Url = LASTFM_API_URL.$Method;
 		if(is_array($Args)) {
 			foreach ($Args as $Key => $Value) {
 				$Url .= "&".$Key."=".urlencode($Value); 
 			}
-			$Url .= "&format=json&api_key=".LASTFM_KEY;
+			$Url .= "&format=json&api_key=".LASTFM_API_KEY;
 
 			$Curl=curl_init();
 			curl_setopt($Curl,CURLOPT_HEADER,0);

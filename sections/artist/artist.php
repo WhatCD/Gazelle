@@ -101,17 +101,23 @@ if(!is_array($Requests)) {
 $NumRequests = count($Requests);
 
 
-$LastReleaseType = 0;
-$DB->query("SELECT
-		DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
-		FROM torrents_artists AS ta
-		JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-		WHERE ta.ArtistID='$ArtistID'
-		ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),1000 + ta.Importance, tg.ReleaseType) ASC,
-		    tg.Year DESC, tg.Name DESC");
-$GroupIDs = $DB->collect('GroupID');
-$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
-if(count($GroupIDs)>0) {
+if (($Importances = $Cache->get_value('artist_groups_'.$ArtistID)) === false) {
+	$DB->query("SELECT
+			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
+			FROM torrents_artists AS ta
+			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
+			WHERE ta.ArtistID='$ArtistID'
+			ORDER BY tg.Year DESC, tg.Name DESC");
+	$GroupIDs = $DB->collect('GroupID');
+	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
+	$Cache->cache_value('artist_groups_'.$ArtistID, $Importances, 0);
+} else {
+	$GroupIDs = array();
+	foreach ($Importances as $Group) {
+		$GroupIDs[] = $Group['GroupID'];
+	}
+}
+if (count($GroupIDs) > 0) {
 	$TorrentList = Torrents::get_groups($GroupIDs, true,true);
 	$TorrentList = $TorrentList['matches'];
 } else {
@@ -119,7 +125,7 @@ if(count($GroupIDs)>0) {
 }
 $NumGroups = count($TorrentList);
 
-if(!empty($TorrentList)) {
+if (!empty($TorrentList)) {
 ?>
 <div id="discog_table">
 <?
@@ -127,7 +133,7 @@ if(!empty($TorrentList)) {
 
 //Get list of used release types
 $UsedReleases = array();
-foreach($Importances as $ID=>$Group) {
+foreach ($Importances as $ID => $Group) {
 	switch ($Importances[$ID]['Importance']) {
 		case '2':
 			$Importances[$ID]['ReleaseType'] = 1024;
@@ -157,44 +163,49 @@ foreach($Importances as $ID=>$Group) {
 			$Importances[$ID]['ReleaseType'] = $TorrentList[$Group['GroupID']]['ReleaseType'];
 	}
 
-	if(!in_array($Importances[$ID]['ReleaseType'], $UsedReleases)) {
-		$UsedReleases[] = $Importances[$ID]['ReleaseType'];
+	if (!isset($UsedReleases[$Importances[$ID]['ReleaseType']])) {
+		$UsedReleases[$Importances[$ID]['ReleaseType']] = true;
 	}
+	$Importances[$ID]['Sort'] = $ID;
 }
 
-if(!empty($GuestAlbums)) {
+if (!empty($GuestAlbums)) {
 	$ReleaseTypes[1024] = "Guest Appearance";
 }
-if(!empty($RemixerAlbums)) {
+if (!empty($RemixerAlbums)) {
 	$ReleaseTypes[1023] = "Remixed By";
 }
-if(!empty($ComposerAlbums)) {
+if (!empty($ComposerAlbums)) {
 	$ReleaseTypes[1022] = "Composition";
 }
-if(!empty($ProducerAlbums)) {
+if (!empty($ProducerAlbums)) {
 	$ReleaseTypes[1021] = "Produced By";
 }
+
 //Custom sorting for releases
-if(!empty($LoggedUser['SortHide'])) {
-	$SortOrder = array_keys($LoggedUser['SortHide']);
-	uasort($Importances, function ($a, $b) {
-		global $SortOrder;
-//		global $Debug;
-//		$Debug->log_var($a);
-		$c = array_search($a['ReleaseType'], $SortOrder);
-		$d = array_search($b['ReleaseType'], $SortOrder);
-		if ($c == $d) {
-			if ($a['Year'] == $b['Year']) {
-				return 0;
-			} else {
-				return ($a['Year'] > $b['Year']) ? -1 : 1;
-			}
-		}
-		return $c < $d ? -1 : 1;
-	});
+if (!empty($LoggedUser['SortHide'])) {
+	$SortOrder = array_flip(array_keys($LoggedUser['SortHide']));
+} else {
+	$SortOrder = $ReleaseTypes;
 }
+// If the $SortOrder array doesn't have all release types, put the missing ones at the end
+if (count($SortOrder) != count($ReleaseTypes)) {
+	$MaxOrder = max($SortOrder);
+	foreach (array_keys(array_diff_key($ReleaseTypes, $SortOrder)) as $Missing) {
+		$SortOrder[$Missing] = ++$MaxOrder;
+	}
+}
+uasort($Importances, function ($A, $B) use ($SortOrder) {
+	if ($SortOrder[$A['ReleaseType']] == $SortOrder[$B['ReleaseType']]) {
+		return $A['Sort'] < $B['Sort'] ? -1 : 1;
+	}
+	return $SortOrder[$A['ReleaseType']] < $SortOrder[$B['ReleaseType']] ? -1 : 1;
+});
+// Sort the anchors at the top of the page the same way as release types
+$UsedReleases = array_flip(array_intersect_key($SortOrder, $UsedReleases));
+
 reset($TorrentList);
-if(!empty($UsedReleases)) { ?>
+if (!empty($UsedReleases)) { ?>
 	<div class="box center">
 <?
 	foreach($UsedReleases as $ReleaseID) {
@@ -272,6 +283,7 @@ $ShowGroups = !isset($LoggedUser['TorrentGrouping']) || $LoggedUser['TorrentGrou
 $HideTorrents = ($ShowGroups ? '' : ' hidden');
 $OldGroupID = 0;
 $ReleaseType = 0;
+$LastReleaseType = 0;
 
 foreach ($Importances as $Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($TorrentList[$Group['GroupID']]);

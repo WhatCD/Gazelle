@@ -210,14 +210,6 @@ class Torrents {
 			Torrents::delete_group($GroupID);
 		} else {
 			Torrents::update_hash($GroupID);
-			//Artists
-			$DB->query("SELECT ArtistID
-					FROM torrents_artists
-					WHERE GroupID = ".$GroupID);
-			$ArtistIDs = $DB->collect('ArtistID');
-			foreach ($ArtistIDs as $ArtistID) {
-				$Cache->delete_value('artist_'.$ArtistID);
-			}
 		}
 
 		// Torrent notifications
@@ -316,7 +308,7 @@ class Torrents {
 				Artists::delete_artist($ArtistID);
 			} else {
 				//Not the only group, still need to clear cache
-				$Cache->delete_value('artist_'.$ArtistID);
+				$Cache->delete_value('artist_groups_'.$ArtistID);
 			}
 		}
 
@@ -416,7 +408,7 @@ class Torrents {
 		$ArtistInfo = Artists::get_artist($GroupID);
 		foreach ($ArtistInfo as $Importances => $Importance) {
 			foreach ($Importance as $Artist) {
-				$Cache->delete_value('artist_'.$Artist['id']); //Needed for at least freeleech change, if not others.
+				$Cache->delete_value('artist_groups_'.$Artist['id']); //Needed for at least freeleech change, if not others.
 			}
 		}
 

@@ -550,8 +550,6 @@ if(!$GroupID && $Type == 'Music') {
 				$AliasID = $DB->inserted_id();
 
 				$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $Artist['name']);
-			} else {
-				$Cache->delete_value('artist_'.$Artist['id']);
 			}
 		}
 	}
@@ -935,13 +933,6 @@ if($Type == 'Comics')		{ $Feed->populate('torrents_comics',$Item); }
 
 // Clear Cache
 $Cache->delete('torrents_details_'.$GroupID);
-foreach($ArtistForm as $Importance => $Artists) {
-	foreach($Artists as $Num => $Artist) {
-		if(!empty($Artist['id'])) {
-			$Cache->delete('artist_'.$Artist['id']);
-		}
-	}
-}
 
 if (!$Private) {
 	View::show_header("Warning");

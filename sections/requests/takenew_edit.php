@@ -399,7 +399,6 @@ if($CategoryName == "Music") {
 						$AliasID = $Redirect;
 					}
 					$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $AliasName);
-					$Cache->delete_value('artist_'.$ArtistID);
 					break;
 				}
 			}
@@ -455,7 +454,6 @@ if($CategoryName == "Music") {
 				Artists::delete_artist($ArtistID);
 			} else {
 				//Not the only group, still need to clear cache
-				$Cache->delete_value('artist_'.$ArtistID);
 				$Cache->delete_value('artists_requests_'.$ArtistID);
 			}
 		}

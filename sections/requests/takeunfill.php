@@ -73,7 +73,6 @@ Requests::update_sphinx_requests($RequestID);
 if(!empty($ArtistForm)) {
 	foreach($ArtistForm as $ArtistType) {
 		foreach($ArtistType as $Artist) {
-			$Cache->delete_value('artist_'.$Artist['id']);
 			$Cache->delete_value('artists_requests_'.$Artist['id']);
 		}
 	}

@@ -19,11 +19,6 @@ list($OldName) = $DB->next_record(MYSQLI_NUM, false);
 $DB->query("UPDATE torrents_group SET Name='".db_string($NewName)."' WHERE ID='$GroupID'");
 $Cache->delete_value('torrents_details_'.$GroupID);
 
-$DB->query("SELECT ArtistID FROM torrents_artists WHERE GroupID='$GroupID'");
-while(list($ArtistID) = $DB->next_record()) {
-	$Cache->delete_value('artist_'.$ArtistID); 
-}
-
 Torrents::update_hash($GroupID);
 
 Misc::write_log("Torrent Group ".$GroupID." (".$OldName.")  was renamed to '".$NewName."' by ".$LoggedUser['Username']);

@@ -81,12 +81,6 @@ if(empty($_POST['confirm'])) {
 	}
 	Torrents::update_hash($GroupID);
 	
-	// Clear artist caches
-	$DB->query("SELECT DISTINCT ArtistID FROM torrents_artists WHERE GroupID IN ('$GroupID', '$OldGroupID')");
-	while(list($ArtistID) = $DB->next_record()) {
-		$Cache->delete_value('artist_'.$ArtistID); 
-	}
-	
 	Misc::write_log("Torrent $TorrentID was edited by " . $LoggedUser['Username']); // TODO: this is probably broken
 	Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "merged group ".$OldGroupID, 0);
 	$DB->query("UPDATE group_log SET GroupID = ".$GroupID." WHERE GroupID = ".$OldGroupID);

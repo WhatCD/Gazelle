@@ -243,6 +243,7 @@ class Artists {
 		$DB->query('DELETE FROM artists_tags WHERE ArtistID='.$ArtistID);
 
 		$Cache->delete_value('artist_'.$ArtistID);
+		$Cache->delete_value('artist_groups_'.$ArtistID);
 		// Record in log
 
 		if(!empty($LoggedUser['Username'])) {

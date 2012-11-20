@@ -6,31 +6,31 @@ $GroupID = db_string($_POST['groupid']);
 $Importances = $_POST['importance'];
 $AliasNames = $_POST['aliasname'];
 
-if(!is_number($GroupID) || !$GroupID) {
+if (!is_number($GroupID) || !$GroupID) {
 	error(0);
 }
 
 $Changed = false;
 
-for($i = 0; $i < count($AliasNames); $i++) {
+for ($i = 0; $i < count($AliasNames); $i++) {
 	$AliasName = Artists::normalise_artist_name($AliasNames[$i]);
 	$Importance = $Importances[$i];
 	
-	if($Importance!='1' && $Importance!='2' && $Importance!='3' && $Importance!='4' && $Importance!='5' && $Importance!='6' && $Importance!='7') {
+	if ($Importance!='1' && $Importance!='2' && $Importance!='3' && $Importance!='4' && $Importance!='5' && $Importance!='6' && $Importance!='7') {
 		break;
 	}
 	
-	if(strlen($AliasName) > 0) {
+	if (strlen($AliasName) > 0) {
 		$DB->query("SELECT AliasID, ArtistID, Redirect, Name FROM artists_alias WHERE Name = '".db_string($AliasName)."'");
-		while(list($AliasID, $ArtistID, $Redirect, $FoundAliasName) = $DB->next_record(MYSQLI_NUM, false)) {
-			if(!strcasecmp($AliasName, $FoundAliasName)) {
-				if($Redirect) {
+		while (list($AliasID, $ArtistID, $Redirect, $FoundAliasName) = $DB->next_record(MYSQLI_NUM, false)) {
+			if (!strcasecmp($AliasName, $FoundAliasName)) {
+				if ($Redirect) {
 					$AliasID = $Redirect;
 				}
 				break;
 			}
 		}
-		if(!$AliasID) {
+		if (!$AliasID) {
 			$AliasName = db_string($AliasName);
 			$DB->query("INSERT INTO artists_group (Name) VALUES ('$AliasName')");
 			$ArtistID = $DB->inserted_id();
@@ -66,10 +66,9 @@ for($i = 0; $i < count($AliasNames); $i++) {
 	}
 }
 
-if($Changed) {
+if ($Changed) {
 	$Cache->delete_value('torrents_details_'.$GroupID);
 	$Cache->delete_value('groups_artists_'.$GroupID); // Delete group artist cache
-	$Cache->delete_value('artist_'.$ArtistID);
 	Torrents::update_hash($GroupID);
 }
 

@@ -66,7 +66,7 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 	$DB->query("DELETE FROM requests_artists WHERE AliasID='$OldAliasID'");
 	if(!empty($Requests)) {
 		foreach($Requests as $RequestID) {
-			$Cache->delete_value('request_artists_'.$RequestID); // Delete group artist cache
+			$Cache->delete_value('request_artists_'.$RequestID); // Delete request artist cache
 			Requests::update_sphinx_requests($RequestID);
 		}
 	}
@@ -128,8 +128,6 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 		}
 	}
 }
-
-$Cache->delete_value('artist_'.$ArtistID);
 
 // Clear torrent caches
 $DB->query("SELECT GroupID FROM torrents_artists WHERE ArtistID='$ArtistID'");

@@ -1,5 +1,4 @@
 <?
-
 //For sorting tags
 function compare($X, $Y){
 	return($Y['count'] - $X['count']);
@@ -32,15 +31,19 @@ if (empty($ArtistID)) {
 
 if(!empty($_GET['revisionid'])) { // if they're viewing an old revision
 	$RevisionID=$_GET['revisionid'];
-	if(!is_number($RevisionID)){ error(0); }
+	if (!is_number($RevisionID)) {
+		error(0);
+	}
 	$Data = $Cache->get_value("artist_$ArtistID"."_revision_$RevisionID");
 } else { // viewing the live version
 	$Data = $Cache->get_value('artist_'.$ArtistID);
 	$RevisionID = false;
 }
 if($Data) {
-	$Data = unserialize($Data);
-	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, $TorrentList, $Importances)) = each($Data);
+	if (!is_array($Data)) {
+		$Data = unserialize($Data);
+	}
+	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, , , $VanityHouseArtist)) = each($Data);
 
 } else {
 	if ($RevisionID) {
@@ -65,18 +68,16 @@ if($Data) {
 	$sql .= " GROUP BY a.ArtistID";
 	$DB->query($sql);
 
-	if($DB->record_count()==0) {
+	if($DB->record_count() == 0) {
 		print json_encode(array('status' => 'failure'));
 	}
 
 	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record(MYSQLI_NUM, array(0));
 }
 
-ob_start();
-
 // Requests
 $Requests = $Cache->get_value('artists_requests_'.$ArtistID);
-if(!is_array($Requests)) {
+if (!is_array($Requests)) {
 	$DB->query("SELECT
 			r.ID,
 			r.CategoryID,
@@ -102,24 +103,27 @@ if(!is_array($Requests)) {
 }
 $NumRequests = count($Requests);
 
-$LastReleaseType = 0;
-if(empty($Importances) || empty($TorrentList)) {
+if (($Importances = $Cache->get_value('artist_groups_'.$ArtistID)) === false) {
 	$DB->query("SELECT
-			DISTINCT ta.GroupID, ta.Importance, tg.VanityHouse
+			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
 			FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
 			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY IF(ta.Importance IN ('2', '3', '4', '7'),ta.Importance, 1),
-			    tg.ReleaseType ASC, tg.Year DESC, tg.Name DESC");
-
+			ORDER BY tg.Year DESC, tg.Name DESC");
 	$GroupIDs = $DB->collect('GroupID');
-	$Importances = $DB->to_array('GroupID', MYSQLI_BOTH, false);
-	if(count($GroupIDs)>0) {
-		$TorrentList = Torrents::get_groups($GroupIDs, true,true);
-		$TorrentList = $TorrentList['matches'];
-	} else {
-		$TorrentList = array();
+	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
+	$Cache->cache_value('artist_groups_'.$ArtistID, $Importances, 0);
+} else {
+	$GroupIDs = array();
+	foreach ($Importances as $Group) {
+		$GroupIDs[] = $Group['GroupID'];
 	}
+}
+if (count($GroupIDs) > 0) {
+	$TorrentList = Torrents::get_groups($GroupIDs, true,true);
+	$TorrentList = $TorrentList['matches'];
+} else {
+	$TorrentList = array();
 }
 $NumGroups = count($TorrentList);
 
@@ -163,6 +167,7 @@ if(!empty($ProducerAlbums)) {
 reset($TorrentList);
 
 $JsonTorrents = array();
+$Tags = array();
 foreach ($TorrentList as $GroupID=>$Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($Group);
 	$GroupVanityHouse = $Importances[$GroupID]['VanityHouse'];
@@ -177,86 +182,13 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			$Tags[$Tag]['count']++;
 		}
 	}
-
-
-
-	$DisplayName ='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
-	if(check_perms('users_mod')) {
-		$DisplayName .= ' [<a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'">Fix</a>]';
-	}
-
-	switch($ReleaseType){
-		case 1023: // Remixes, DJ Mixes, Guest artists, and Producers need the artist name
-		case 1024:
-		case 1021:
-		case 8:
-			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
-				unset($ExtendedArtists[2]);
-				unset($ExtendedArtists[3]);
-				$DisplayName = Artists::display_artists($ExtendedArtists).$DisplayName;
-			} elseif(count($GroupArtists)>0) {
-				$DisplayName = Artists::display_artists(array(1 => $Artists), true, true).$DisplayName;
-			}
-			break;
-		case 1022:  // Show performers on composer pages
-			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
-				unset($ExtendedArtists[4]);
-				unset($ExtendedArtists[3]);
-				unset($ExtendedArtists[6]);
-				$DisplayName = Artists::display_artists($ExtendedArtists).$DisplayName;
-			} elseif(count($GroupArtists)>0) {
-				$DisplayName = Artists::display_artists(array(1 => $Artists), true, true).$DisplayName;
-			}
-			break;
-		default: // Show composers otherwise
-			if (!empty($ExtendedArtists[4])) {
-				$DisplayName = Artists::display_artists(array(4 => $ExtendedArtists[4]), true, true).$DisplayName;
-			}
-	}
-
-	if($GroupYear>0) { $DisplayName = $GroupYear. ' - '.$DisplayName; }
-
-	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
-
-?>
-			<tr class="releases_<?=$ReleaseType?> group discog<?=$HideDiscog?>">
-				<td class="center">
-					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group"></a>
-					</div>
-				</td>
-				<td colspan="5">
-					<strong><?=$DisplayName?></strong>
-					<?=$TorrentTags?>
-				</td>
-			</tr>
-<?
-	$LastRemasterYear = '-';
-	$LastRemasterTitle = '';
-	$LastRemasterRecordLabel = '';
-	$LastRemasterCatalogueNumber = '';
-	$LastMedia = '';
-
-	$EditionID = 0;
-	unset($FirstUnknown);
-
 	$InnerTorrents = array();
-	foreach ($Torrents as $TorrentID => $Torrent) {
-		$NumTorrents++;
-
-		if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
-			$FirstUnknown = !isset($FirstUnknown);
-		}
-
-		$Torrent['Seeders'] = (int)$Torrent['Seeders'];
-		$Torrent['Leechers'] = (int)$Torrent['Leechers'];
-		$Torrent['Snatched'] = (int)$Torrent['Snatched'];
-
-		$NumSeeders+=$Torrent['Seeders'];
-		$NumLeechers+=$Torrent['Leechers'];
-		$NumSnatches+=$Torrent['Snatched'];
-	}
 	foreach ($Torrents as $Torrent) {
+		$NumTorrents++;
+		$NumSeeders += $Torrent['Seeders'];
+		$NumLeechers += $Torrent['Leechers'];
+		$NumSnatches += $Torrent['Snatched'];
+
 		$InnerTorrents[] = array(
 			'id' => (int) $Torrent['ID'],
 			'groupId' => (int) $Torrent['GroupID'],
@@ -294,8 +226,6 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		'torrent' => $InnerTorrents
 	);
 }
-
-$TorrentDisplayList = ob_get_clean();
 
 $JsonSimilar = array();
 if(empty($SimilarArray)) {
@@ -340,20 +270,19 @@ foreach ($Requests as $Request) {
 }
 
 //notifications disabled by default
-$notificationsEnabled = False;
+$notificationsEnabled = false;
 if (check_perms('site_torrents_notify')) {
-        if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === false) {
-                $DB->query("SELECT ID, Artists FROM users_notify_filters WHERE UserID='$LoggedUser[ID]' AND Label='Artist notifications' LIMIT 1");
-                $Notify = $DB->next_record(MYSQLI_ASSOC, false);
-                $Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
-        }
-        if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
-		$notificationsEnabled = False;
-        } else {
-		$notificationsEnabled = True;
-        }
+	if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === false) {
+		$DB->query("SELECT ID, Artists FROM users_notify_filters WHERE UserID='$LoggedUser[ID]' AND Label='Artist notifications' LIMIT 1");
+		$Notify = $DB->next_record(MYSQLI_ASSOC, false);
+		$Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
+	}
+	if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
+		$notificationsEnabled = false;
+	} else {
+		$notificationsEnabled = true;
+	}
 }
-
 
 print
 	json_encode(
@@ -380,5 +309,17 @@ print
 				'requests' => $JsonRequests
 			)
 		)
-	)
+	);
+
+// Cache page for later use
+
+if ($RevisionID) {
+	$Key = "artist_$ArtistID"."_revision_$RevisionID";
+} else {
+	$Key = 'artist_'.$ArtistID;
+}
+
+$Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), array(), $VanityHouseArtist));
+
+$Cache->cache_value($Key, $Data, 3600);
 ?>

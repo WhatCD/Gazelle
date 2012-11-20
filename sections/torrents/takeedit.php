@@ -428,12 +428,6 @@ Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $LogDetails, 
 $Cache->delete_value('torrents_details_'.$GroupID);
 $Cache->delete_value('torrent_download_'.$TorrentID);
 
-$DB->query("SELECT ArtistID FROM torrents_artists WHERE GroupID = ".$GroupID);
-$Artists = $DB->collect('ArtistID');
-foreach($Artists as $ArtistID) {
-	$Cache->delete_value('artist_'.$ArtistID);
-}
-
 Torrents::update_hash($GroupID);
 // All done!
 

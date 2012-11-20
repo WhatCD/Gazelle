@@ -33,9 +33,6 @@ $GroupCount = $DB->record_count();
 if(($ReqCount + $GroupCount) == 0) {
 	//The only group to use this artist
 	Artists::delete_artist($ArtistID);
-} else {
-	//Not the only group, still need to clear cache
-	$Cache->delete_value('artist_'.$ArtistID);
 }
 
 $DB->query("INSERT INTO torrents_group (ID, NumArtists) 
@@ -53,6 +50,7 @@ Misc::write_log("Artist (".$ArtistTypes[$Importance].") ".$ArtistID." (".$Artist
 Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "removed artist ".$ArtistName." (".$ArtistTypes[$Importance].")", 0);
 
 Torrents::update_hash($GroupID);
+$Cache->delete_value('artist_groups_'.$ArtistID);
 
 header('Location: '.$_SERVER['HTTP_REFERER']);
 ?>
