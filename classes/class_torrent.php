@@ -244,6 +244,7 @@ class TORRENT extends BENCODE_DICT {
 	
 	function set_announce_url($Announce) {
 		$this->Val['announce'] = $Announce;
+		ksort($this->Val);
 	}
 	
 	// Returns an array of:
