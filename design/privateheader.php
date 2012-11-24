@@ -119,10 +119,10 @@ if(check_perms('site_send_unlimited_invites')) {
 }
 ?>
 			<li id="nav_invite" class="brackets<?=Format::add_class($PageID, array('user','invite'), 'active', false)?>">
-				<a href="user.php?action=invite">Invite') . $Invites?></a>
+				<a href="user.php?action=invite">Invite<?=$Invites?></a>
 			</li>
 			<li id="nav_donate" class="brackets<?=Format::add_class($PageID, array('donate'), 'active', false)?>">
-				<a href="donate.php"><?='Donate</a>
+				<a href="donate.php">Donate</a>
 			</li>
 			
 </ul>
@@ -160,7 +160,7 @@ if($NewSubscriptions === FALSE) {
                         JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
                         JOIN forums_topics AS t ON l.TopicID = t.ID
                         JOIN forums AS f ON t.ForumID = f.ID
-                WHERE (f.MinClassRead <= ".$LoggedUser['Class']." OR f.ID IN ('$PermittedForums')
+                WHERE (f.MinClassRead <= ".$LoggedUser['Class']." OR f.ID IN ('$PermittedForums'))
                         AND l.PostID < t.LastPostID
                         AND s.UserID = ".$LoggedUser['ID'].
                 (!empty($RestrictedForums) ? "
