@@ -20,6 +20,10 @@ if(isset($_GET['username'])){
 	if(!$Err){
 		// Passed validation. Let's rock.
 		list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
+		if ($Page > 10) {
+			$Page = 10;
+			$Limit = sprintf("%d, %d", ($Page-1)*USERS_PER_PAGE, USERS_PER_PAGE);
+		}
 		$DB->query("SELECT SQL_CALC_FOUND_ROWS
 			ID,
 			Username,
@@ -35,6 +39,9 @@ if(isset($_GET['username'])){
 		$Results = $DB->to_array();
 		$DB->query('SELECT FOUND_ROWS()');
 		list($NumResults) = $DB->next_record();
+		if ($NumResults > 300) {
+			$NumResults = 300;
+		}
 	}
 
 }
