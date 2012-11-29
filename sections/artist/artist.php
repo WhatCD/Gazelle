@@ -531,10 +531,10 @@ if (check_perms('site_edit_wiki')) {
 <? } ?>
 			<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>">[View history]</a>
 			<a href="artist.php?id=<?=$ArtistID?>#info">[Info]</a>
+<!--		<strip>-->
+			<a href="artist.php?id=<?=$ArtistID?>#concerts">[Concerts]</a>
+<!--		</strip>-->
 			<a href="artist.php?id=<?=$ArtistID?>#artistcomments">[Comments]</a>
-<!--			<strip>-->
-            <a href="artist.php?id=<?=$ArtistID?>#concerts">[Concerts]</a>
-<!--			</strip>-->
 <? if (check_perms('site_delete_artist') && check_perms('torrents_delete')) { ?>
 			<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Delete]</a>
 <? }

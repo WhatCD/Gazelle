@@ -128,8 +128,10 @@ h3 {
 	right: 0;
 	-webkit-border-bottom-left-radius: 5px;
 	-moz-border-radius-bottomleft: 5px;
+	border-radius-bottomleft: 5px;
 	-webkit-border-bottom-right-radius: 5px;
 	-moz-border-radius-bottomright: 5px;
+	border-radius-bottomright: 5px;
 	padding: 15px 8px 15px 15px;
 	background: #ddd !important;
 }
@@ -158,6 +160,8 @@ h3 {
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-bottomleft: 4px;
 	-moz-border-radius-bottomright: 4px;
+	border-radius-bottomleft: 4px;
+	border-radius-bottomright: 4px;
 	background: #f4f4f4;
 }
 
@@ -211,6 +215,7 @@ h1.hidden {
 	padding: 10px 14px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
+	border-radius: 4px;
 	background: #5e5e5e;
 	color: #fff;
 }
@@ -270,6 +275,7 @@ button,input[type="button"],input[type="submit"],#userinfo_username .brackets a 
 	text-shadow: 0 1px 0 rgba(0,0,0,0.15);
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
+	border-radius: 4px;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.15),inset -1px 1px 0 rgba(255,255,255,0.18);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.15),inset -1px 1px 0 rgba(255,255,255,0.18);
 	background: -webkit-gradient(linear,left 40%,left 120%,from(#5f5f5f),to(#575757));
@@ -294,20 +300,26 @@ button:active,input[type="button"]:active,input[type="submit"]:active,#userinfo_
 #userinfo_username .brackets a {
 	-webkit-border-top-right-radius: 0;
 	-moz-border-radius-topright: 0;
+	border-radius-topright: 0;
 	-webkit-border-bottom-right-radius: 0;
 	-moz-border-radius-bottomright: 0;
+	border-radius-bottomright: 0;
 }
 
 #userinfo_username .brackets:last-child a {
 	border-left: none;
 	-webkit-border-top-right-radius: 4px;
 	-moz-border-radius-topright: 4px;
+	border-radius-topright: 4px;
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-bottomright: 4px;
+	border-radius-bottomright: 4px;
 	-webkit-border-top-left-radius: 0;
 	-moz-border-radius-topleft: 0;
+	border-radius-topleft: 0;
 	-webkit-border-bottom-left-radius: 0;
 	-moz-border-radius-bottomleft: 0;
+	border-radius-bottomleft: 0;
 }
 
 input[type="submit"]:active {
@@ -339,6 +351,7 @@ textarea,input[type="text"],input[type="password"],.select {
 	background: #fff;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
+	border-radius: 4px;
 	border: 1px solid #adadad;
 	font: 12pt 'Lucida Grande',Helvetica,Arial,sans-serif;
 	color: #444;
@@ -394,6 +407,7 @@ textarea {
 	background: #e4e4e4;
 	-webkit-border-radius: 6px;
 	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
 
 #searchbars input {
@@ -694,6 +708,8 @@ body#index #recommended #vanityhouse {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 #discog_table .box.center a {
@@ -827,6 +843,7 @@ strong.quoteheader{
 	border: 1px solid #ddd;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
+	border-radius: 3px;
 }
 
 #torrents .filter_torrents .box.pad,#torrents div.thin form.search_form,#requests div.thin form.search_form,#collage div.thin form.search_form,#inbox #searchbox {
@@ -835,6 +852,7 @@ strong.quoteheader{
 	border: none;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 #collage div.thin form table {
@@ -952,8 +970,10 @@ ul#artistcomplete {
 	list-style: decimal;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
+	border-radius: 4px;
 	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 	-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+	box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 	border: 1px solid #bbb;
 	background: #fff;
 	color: #444;
@@ -962,15 +982,19 @@ ul#artistcomplete {
 #artistcomplete li:first-child {
 	-webkit-border-top-left-radius: 4px;
 	-moz-border-radius-topleft: 4px;
+	border-radius-topleft: 4px;
 	-webkit-border-top-right-radius: 4px;
 	-moz-border-radius-topright: 4px;
+	border-radius-topright: 4px;
 }
 
 #artistcomplete li:last-child {
 	-webkit-border-bottom-left-radius: 4px;
 	-moz-border-radius-bottomleft: 4px;
+	border-radius-bottomleft: 4px;
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-bottomright: 4px;
+	border-radius-bottomright: 4px;
 }
 
 #artistcomplete li {
@@ -1026,6 +1050,7 @@ h3#irc+div.box.pad,body#rules .header+div.box.pad,h3#forums+div.box.pad {
 	background: #f8f8f8;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 }
 
 h3#irc+div.box.pad ul,h3#forums+div.box.pad ul,body#rules .header+div.box.pad ul,#drag_drop_textnote ul {
@@ -1071,6 +1096,7 @@ li.graph {
 	background: #f4f4f4;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
+	border-radius: 8px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 }
@@ -1082,6 +1108,7 @@ li.graph .center_poll {
 	border: 1px solid #5a5a5a;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	border-radius: 5px;
 	-webkit-box-shadow: inset 0 -2px 3px #555;
 	-moz-box-shadow: inset 0 -2px 3px #555;
 }
@@ -1184,3 +1211,102 @@ table.debug_table td.debug_query_data>div {
 
 tr.torrent .bookmark > a:before { content:""; }
 tr.torrent .bookmark > a:after { content:""; }
+
+/* Fixes by Trico beyond here. All credit for the style sheet goes to callumj */
+
+/* General fixes */
+/* Give dropdowns a bit of style */
+/*select {
+	padding: 7px;
+	background: #fff;
+	color: #565656;
+	border: 1px solid #aeaeae;
+}
+*/
+
+/* Fix for upload.php, the "Do not upload" section */
+#dnulist tr {
+	/* Previously unstyled */
+	background: #fff;
+}
+
+
+/* Fixes for friends.php */
+form.manage_form[name=friends] table tr {
+	/* Previously unfinished */
+	border: 1px solid #aeaeae !important;
+	background: #fff;
+}
+
+form.manage_form[name=friends] {
+	margin-bottom: 20px;
+}
+
+form.manage_form[name=friends] .left input[type=submit] {
+	margin-bottom: 10px;
+}
+
+
+/* Fixes for staffpm.php, wiki.php, user.php?action=edit and inbox.php, when composing new message/wiki, and some other stuff */
+#compose h3,
+[class="create_form"][name=wiki_article] h3,
+#messageform #quickpost h3 {
+	margin: 20px 0 10px 0;
+}
+
+[class="create_form"][name=wiki_article] input[type=submit],
+#messageform input[type=submit],
+.preview_submit input[type=button],
+#newthreadform #buttons input[type=button],
+#newthreadform #poll_answers input[type=text] {
+	margin-top: 10px;
+}
+
+
+/* Fix for artist.php sidebar layout */
+[class="box box_search"] #filelist, [class="box box_addartists box_addartists_similar"] #artistsimilar {
+	width: 150px;
+}
+
+
+/* Fix for artist.php artist map margin */
+#similar_artist_map {
+	margin-top: 20px;
+}
+
+
+/* Fix for requests.php, search section */
+[class="layout border"] #search_terms input[name=search] {
+	margin-top: 10px;
+}
+
+
+/* Fix for forums.php?action=search, search section */
+[class="search_form"] table tr > td > strong {
+	padding-left: 10px;
+}
+
+
+/* Fix for wiki.php, sidebar details section */
+.sidebar [class="box box_info pad"] > ul {
+	/* Previously unstyled */
+	margin-bottom: 20px;
+	padding: 10px;
+	background: #fff;
+	border: 1px solid #aeaeae;
+	-webkit-box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+	color: #565656;
+}
+
+
+/* Fix for index.php, more news section at the very bottom of the page */
+#more_news.box {
+	height: 0;
+}
+
+
+/* Fix for forums.php, search specific forum */
+.search_form[action="forums.php"] td > strong {
+	margin-right: 10px;
+}

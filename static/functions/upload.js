@@ -238,9 +238,9 @@ function RemoveArtistField() {
 	ArtistCount--;
 }
 
-function CheckVA() {
-	var x = $('#artist').raw();
-	if(x.value.toLowerCase() == 'various artists' || x.value.toLowerCase() == 'va' || x.value.toLowerCase() == 'various') {
+
+function CheckVA () {
+	if ($('#artist').raw().value.toLowerCase().trim().match(/^(va|various(\sa|a)rtis(t|ts)|various)$/)) {
 		$('#vawarning').show();
 	} else {
 		$('#vawarning').hide();

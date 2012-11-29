@@ -179,7 +179,7 @@ class Tools {
 		$PassKeys = $DB->collect('torrent_pass');
 		$Concat = "";
 		foreach($PassKeys as $PassKey) {
-			if(strlen($Concat) > 4000) {
+			if(strlen($Concat) > 3950) { // Ocelot's read buffer is 4 KiB and anything exceeding it is truncated
 				Tracker::update_tracker('remove_users', array('passkeys' => $Concat));
 				$Concat = $PassKey;
 			} else {
