@@ -3,26 +3,34 @@ include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 
 $Where = array();
 
-if(!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
+if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Details = 'all';
 	$Limit = 10;
-	
-	if($_GET['tags']) {
+
+	if ($_GET['tags']) {
+		$TagWhere = array();
 		$Tags = explode(',', str_replace(".","_",trim($_GET['tags'])));
 		foreach ($Tags as $Tag) {
 			$Tag = preg_replace('/[^a-z0-9_]/', '', $Tag);
-			if($Tag != '') {
-				$Where[]="g.TagList REGEXP '[[:<:]]".db_string($Tag)."[[:>:]]'";
+			if ($Tag != '') {
+				$TagWhere[] = "g.TagList REGEXP '[[:<:]]".db_string($Tag)."[[:>:]]'";
+			}
+		}
+		if (!empty($TagWhere)) {
+			if ($_GET['anyall'] == 'any') {
+				$Where[] = '('.implode(' OR ', $TagWhere).')';
+			} else {
+				$Where[] = '('.implode(' AND ', $TagWhere).')';
 			}
 		}
 	}
-	
-	if($_GET['format']) {
-		if(in_array($_GET['format'], $Formats)) {
-			$Where[]="t.Format='".db_string($_GET['format'])."'";
+
+	if ($_GET['format']) {
+		if (in_array($_GET['format'], $Formats)) {
+			$Where[] = "t.Format='".db_string($_GET['format'])."'";
 		}
 	}
-	
+
 } else {
 	// error out on invalid requests (before caching)
 	if(isset($_GET['details'])) {
@@ -121,13 +129,12 @@ $FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
 	</div>
 <?
 
-if ($_GET['anyall'] == 'any' && !empty($Where)) {
-	$Where = '('.implode(' OR ', $Where).')';
+if (!empty($Where)) {
+	$Where = '('.implode(' AND ', $Where).')';
+	$WhereSum = md5($Where);
 } else {
-	$Where = implode(' AND ', $Where);
+	$WhereSum = '';
 }
-
-$WhereSum = (empty($Where)) ? '' : md5($Where);
 $BaseQuery = "SELECT
 	t.ID,
 	g.ID,

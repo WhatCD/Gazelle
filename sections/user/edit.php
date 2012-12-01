@@ -263,51 +263,8 @@ echo $Val->GenerateJS('userform');
                     <br />
                     <input type="checkbox" name="pushfilters[]" value="News" <? if(isset($PushOptions['PushFilters']['News'])) { ?> checked="checked"  <? } ?>/>Announcements<br />
                     <input type="checkbox" name="pushfilters[]" value="PM" <? if(isset($PushOptions['PushFilters']['PM'])) { ?> checked="checked"  <? } ?>/>Private Messages<br />
-			<? /*		<input type="checkbox" name="pushfilters[]" value="Rippy" <? if(isset($PushOptions['PushFilters']['Rippy'])) { ?> checked="checked"  <? } ?>/>Rippys<br /> */ ?>
-
-                   [<a href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Test Push</a>]
-                    	[<a href="wiki.php?action=article&id=1017">Wiki Guide</a>]
-                    </div>
-                 </td>
-            </tr>
-        <tr>
-				<td class="label"><strong>Rippy!</strong></td>
-				<td>
-					<select name="rippy">
-						<option value="On" <? if($SiteOptions['Rippy'] == 'On') { ?> selected="selected" <? } ?> >On</option>
-						<option value="Off" <? if($SiteOptions['Rippy'] == 'Off') { ?> selected="selected" <? } ?> >Off</option>
-						<option value="PM" <? if($SiteOptions['Rippy'] == 'PM' || empty($SiteOptions['Rippy'])) { ?> selected="selected" <? } ?> >Personal rippies only</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td class="label"><strong>Auto-save Text</strong></td>
-				<td>
-					<input type="checkbox" name="disableautosave" id="disableautosave" <? if (!empty($SiteOptions['DisableAutoSave'])) { ?>checked="checked"<? } ?> />
-					<label for="disableautosave">Disable reply text from being saved automatically when changing pages in a thread</label>
-				</td>
-			</tr>
-			<tr>
-				<td class="label"><strong>Voting links</strong></td>
-				<td>
-					<input type="checkbox" name="novotelinks" id="novotelinks" <? if (!empty($SiteOptions['NoVoteLinks'])) { ?>checked="checked"<? } ?> />
-					<label for="novotelinks">Disable voting links on artist pages, collages, and snatched lists</label>
-				</td>
-			</tr>
-			<tr>
-				<td class="label"><strong>Download torrents as text files</strong></td>
-				<td>
-					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked"<? } ?> />
-					<label for="downloadalt">For users whose ISP block the downloading of torrent files</label>
-				</td>
-			</tr>
-			<tr>
-				<td class="label"><strong>Unseeded torrent alerts</strong></td>
-				<td>
-					<input type="checkbox" name="unseededalerts" id="unseededalerts" <?=checked($UnseededAlerts)?> />
-					<label for="unseededalerts">Receive a PM alert before your uploads are deleted for being unseeded</label>
-				</td>
-			</tr>
+<!--						
+?>
 			<tr class="colhead_dark">
 				<td colspan="2">
 					<strong>User info</strong>

@@ -40,9 +40,8 @@ if(($Blog = $Cache->get_value('blog')) === false) {
 	$Blog = $DB->to_array();
 	$Cache->cache_value('blog',$Blog,1209600);
 }
-
 $JsonBlog = array();
-for ($i = 0; $i < $Limit; $i++) {
+for ($i = 0; $i < 5; $i++) {
 	list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $Blog[$i];
 	$JsonBlog[] = array(
 		'blogId' => (int) $BlogID,

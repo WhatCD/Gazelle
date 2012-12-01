@@ -93,6 +93,7 @@ foreach($Channels as $Channel) {
 	send_irc("PRIVMSG ".$Channel." :".$ReportID." - ".$LoggedUser['Username']." just reported a ".$Short.": https://".SSL_SITE_URL."/".$Link." : ".strtr($Reason, "\n", " "));
 }
 
+
 $Cache->delete_value('num_other_reports');
 
 header('Location: '.$Link);
