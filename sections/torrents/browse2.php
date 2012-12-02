@@ -540,6 +540,7 @@ View::show_header('Browse Torrents','browse');
 
 
 ?>
+<div class="thin">
 <form class="search_form" name="torrents" method="get" action="">
 <div class="filter_torrents <?=$AdvancedSearch ? 'ft_advanced' : 'ft_basic'?>">
 	<h3>
@@ -1103,4 +1104,5 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 ?>
 </table>
 <div class="linkbox"><?=$Pages?></div>
+</div>
 <? View::show_footer(); ?>
