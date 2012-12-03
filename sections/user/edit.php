@@ -220,6 +220,15 @@ echo $Val->GenerateJS('userform');
 					<label for="disablesmileys">Disable smileys</label>
 				</td>
 			</tr>
+		<? if(check_perms('users_warn')) { ?>
+        <tr>
+            <td class="label"><strong>Mature Content</strong></td>
+            <td>
+                <input type="checkbox" name="enablematurecontent" id="enablematurecontent" <? if (!empty($SiteOptions['EnableMatureContent'])) { ?>checked="checked"<? } ?> />
+                <label for="enablematurecontent">Show mature content</label>
+            </td>
+        </tr>
+		<? } ?>
 			<tr>
             	<td class="label"><strong>Avatars</strong></td>
                 <td>

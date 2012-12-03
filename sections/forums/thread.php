@@ -144,12 +144,11 @@ if(in_array($ThreadID, $UserSubscriptions)) {
 
 $DB->query("UPDATE users_notify_quoted SET Unread = '0' WHERE UserID = '$LoggedUser[ID]' AND TopicID = '$ThreadID'");
 
-$QuoteNotifiactionsCount = $Cache->get_value('forums_quotes_'.$LoggedUser['ID']);
-if($QuoteNotificationsCount > 0) {
-     $Cache->cache_value('forums_quotes_'.$LoggedUser['ID'], $QuoteNotificationsCount - 1, 0);
-}
-else {
-    $Cache->delete_value('forums_quotes_'.$LoggedUser['ID']);
+$QuoteNotificationsCount = $Cache->get_value('forums_quotes_' . $LoggedUser['ID']);
+if ($QuoteNotificationsCount > 0) {
+	$Cache->cache_value('forums_quotes_' . $LoggedUser['ID'], $QuoteNotificationsCount - 1, 0);
+} else {
+	$Cache->delete_value('forums_quotes_' . $LoggedUser['ID']);
 }
 
 // Start printing

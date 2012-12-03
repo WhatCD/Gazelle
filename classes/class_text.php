@@ -1,7 +1,7 @@
 <?
 class TEXT {
 	// tag=>max number of attributes
-	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'headline'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0, 'torrent'=>0, 'rule'=>0,
+	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'headline'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0, 'torrent'=>0, 'rule'=>0, 'mature'=>1,
 	);
 
 	private $Smileys = array(
@@ -463,6 +463,9 @@ class TEXT {
 				case 'hide':
 					$Array[$ArrayPos] = array('Type'=>'hide', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
 					break;
+				case 'mature':
+					$Array[$ArrayPos] = array('Type'=>'mature', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
+					break;
 				case '#':
 				case '*':
 						$Array[$ArrayPos] = array('Type'=>'list');
@@ -698,6 +701,21 @@ class TEXT {
 				case 'hide':
 					$Str.='<strong>'.(($Block['Attr']) ? $Block['Attr'] : 'Hidden text').'</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
 					$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
+					break;
+				case 'mature':
+					global $LoggedUser;
+					if($LoggedUser['EnableMatureContent']) {
+						if(!empty($Block['Attr'])) {
+							$Str.='<strong class="mature" style="font-size: 1.2em;">Mature content:</strong><strong> ' . $Block['Attr'] . '</strong><br \> <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
+							$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
+						}
+						else {
+							$Str .= '<strong>Use of the [mature] tag requires a description.</strong> The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post. Misleading descriptions will be penalized. For further information on our mature content policies, please refer to this <a href="wiki.php?action=article&id=1063">wiki</a>.';
+						}
+					}
+					else {
+						$Str .= '<span class="mature_blocked" style="font-style:italic;"><a href="wiki.php?action=article&id=1063">Mature content </a>has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
+					}
 					break;
 				case 'img':
 					if($this->NoImg>0 && $this->valid_url($Block['Val'])) {
