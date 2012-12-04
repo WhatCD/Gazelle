@@ -52,7 +52,7 @@ class TORRENT_FORM {
 <?		if($this->NewTorrent) { ?>
 	<p style="text-align: center;">
 		Your personal announce url is:<br />
-		<input type="text" value="<?= ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce'?>" size="71" onfocus="this.select()" />
+		<input type="text" value="<?= ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce'?>" size="71" onclick="this.select()" readonly="readonly"/>
 	</p>
 <?		}
 		if($this->Error) {
