@@ -68,11 +68,17 @@ View::show_header('Chat Rules');
 			<li>
 				No requesting invites to any sites anywhere on the site or IRC. Invites may be <strong>offered</strong> in the invite forum, and nowhere else.
 			</li>
+            <li>
+                No language other than English is permitted in the forums. If we can't understand it, we can't moderate it.
+            </li>
 			<li>
-				Do not include pornographic or semi-pornographic material in your posts.
+                Be cautious when posting mature content on the forums. All mature imagery must abide by <a href="wiki.php?action=article&id=1063">the rules found here</a>. Gratuitously sexual or violent content which falls outside of the allowable categories will result in a warning or worse.
 			</li>
 			<li>
-				No language other than English is permitted in the forums. If we can't understand it, we can't moderate it. 
+                Mature content in posts must be properly tagged. The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where “description” is a mandatory description of the post contents. Misleading or inadequate descriptions will be penalized.
+			</li>
+			<li>
+                Threads created for the exclusive purpose of posting mature imagery will be trashed. Mature content (including graphic album art) should be contextually relevant to the thread and/or forum you’re posting in. Mature content is only allowed in: The Lounge, The Lounge +1, Music, Power Users, Elite, Torrent Masters, VIPs, Comics, Contests & Designs, The Laboratory. If you are in doubt about a post’s appropriateness, send a <a href="staff.php">Staff PM to the Forum Moderators</a> and wait for a reply before proceeding.
 			</li>
 		</ul>
 	</div>

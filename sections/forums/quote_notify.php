@@ -19,11 +19,14 @@ if (array_key_exists(0, $Matches)) {
 //remove any dupes in the array
 $Usernames = array_unique($Usernames);
 
-$DB->query("SELECT m.ID FROM users_main AS m
-	JOIN users_info AS i ON i.UserID = m.ID  WHERE m.Username IN " . "('" . implode("', '", $Usernames)
-				. "') 
+$DB->query("SELECT m.ID, p.PushService
+			FROM users_main AS m
+			LEFT JOIN users_info AS i ON i.UserID = m.ID
+			LEFT JOIN users_push_notifications AS p ON p.UserID = m.ID
+			WHERE m.Username IN " . "('" . implode("', '", $Usernames)
+	. "')
 	AND i.NotifyOnQuote = '1' AND i.UserID != $LoggedUser[ID]");
-while (list($UserID) = $DB->next_record()) {
+while (list($UserID, $PushService) = $DB->next_record()) {
 	$QuoterID = db_string($LoggedUser['ID']);
 	$UserID = db_string($UserID);
 	$ForumID = db_string($ForumID);
@@ -32,12 +35,16 @@ while (list($UserID) = $DB->next_record()) {
 	$DB->query("INSERT IGNORE INTO users_notify_quoted (UserID, QuoterID, ForumID, TopicID, PostID, Date)
 		VALUES ('$UserID', '$QuoterID', '$ForumID', '$TopicID', '$PostID', '" . sqltime() . "')");
 	$Cache->delete_value('forums_quotes_' . $UserID);
+
+	
 }
+
 
 /*
  * Validate the username and add it into the $Usernames array
  */
-function add_username($Str) {
+function add_username($Str)
+{
 	global $Usernames;
 	$Matches = array();
 	if (preg_match('/\[quote=(.*)]/', $Str, $Matches)) {
@@ -51,4 +58,5 @@ function add_username($Str) {
 		}
 	}
 }
+
 ?>

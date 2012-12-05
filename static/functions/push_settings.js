@@ -15,6 +15,13 @@
 	    	 else {
 	    		 $('#pushsettings_username').hide();
 	    	 }
+
+			 if($(this).val() == 4) {
+				 $('#pushservice_title').text("Device ID");
+			 }
+			 else {
+				 $('#pushservice_title').text("API Key");
+			 }
 	     }
 	     else {
 	    	 $('#pushsettings').hide(500);

@@ -220,15 +220,13 @@ echo $Val->GenerateJS('userform');
 					<label for="disablesmileys">Disable smileys</label>
 				</td>
 			</tr>
-		<? if(check_perms('users_warn')) { ?>
-        <tr>
-            <td class="label"><strong>Mature Content</strong></td>
-            <td>
-                <input type="checkbox" name="enablematurecontent" id="enablematurecontent" <? if (!empty($SiteOptions['EnableMatureContent'])) { ?>checked="checked"<? } ?> />
-                <label for="enablematurecontent">Show mature content</label>
-            </td>
-        </tr>
-		<? } ?>
+            <tr>
+                <td class="label"><strong>Mature Content</strong></td>
+                <td>
+                    <input type="checkbox" name="enablematurecontent" id="enablematurecontent" <? if (!empty($SiteOptions['EnableMatureContent'])) { ?>checked="checked"<? } ?> />
+                    <label for="enablematurecontent">Show mature content</label>
+                </td>
+            </tr>
 			<tr>
             	<td class="label"><strong>Avatars</strong></td>
                 <td>
@@ -257,10 +255,11 @@ echo $Val->GenerateJS('userform');
                         <option value="1" <? if($PushService == 1) { ?> selected="selected" <? } ?>/>Notify My Android</option>
                         <option value="2" <? if($PushService == 2) { ?> selected="selected" <? } ?>/>Prowl</option>
                         <option value="3" <? if($PushService == 3) { ?> selected="selected" <? } ?>/>Notifo</option>
-                    </select>
+                        <option value="4" <? if($PushService == 4) { ?> selected="selected" <? } ?>/>Super Toasty</option>
+					</select>
                     <div id="pushsettings" style="display: none">
                     <br />
-                        <label for="pushkey">API Key</label>
+                        <label id="pushservice_title" for="pushkey">API Key</label>
                         <input type="text" size="50" name="pushkey" id="pushkey" value="<?=display_str($PushOptions['PushKey'])?>" />
                         <div id="pushsettings_username" style="display: none">
                             <label for="pushusername">Username</label> <input type="text"
@@ -272,7 +271,9 @@ echo $Val->GenerateJS('userform');
                     <br />
                     <input type="checkbox" name="pushfilters[]" value="News" <? if(isset($PushOptions['PushFilters']['News'])) { ?> checked="checked"  <? } ?>/>Announcements<br />
                     <input type="checkbox" name="pushfilters[]" value="PM" <? if(isset($PushOptions['PushFilters']['PM'])) { ?> checked="checked"  <? } ?>/>Private Messages<br />
-<!--						
+                    <input type="checkbox" name="pushfilters[]" value="Quote" <? if(isset($PushOptions['PushFilters']['Quote'])) { ?> checked="checked"  <? } ?>/>Quote Notifications<br />
+
+                        <!--						
 ?>
 			<tr class="colhead_dark">
 				<td colspan="2">

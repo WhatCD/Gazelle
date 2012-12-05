@@ -10,7 +10,8 @@
 	$DB->query("SELECT ct.GroupID,
 		um.ID,
 		um.Username,
-		ct.Sort
+		ct.Sort,
+		tg.CatalogueNumber
 		FROM collages_torrents AS ct
 		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
 		LEFT JOIN users_main AS um ON um.ID=ct.UserID
@@ -64,6 +65,7 @@
 			<tr class="colhead">
 				<th style="width:7%">Order</th>
 				<th style="width:1%"><span><abbr title="Current Rank">#</abbr></span></th>
+				<th style="width:7%"><span>Cat #</span></th>
 				<th style="width:1%"><span>Year</span></th>
 				<th style="width:15%"><span>Artist</span></th>
 				<th><span>Torrent</span></th>
@@ -77,7 +79,7 @@
 	$Number = 0;
 	foreach ($TorrentList as $GroupID=>$Group) {
 		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists) = array_values($Group);
-		list($GroupID2, $UserID, $Username, $Sort) = array_values($CollageDataList[$GroupID]);
+		list($GroupID2, $UserID, $Username, $Sort, $CatNum) = array_values($CollageDataList[$GroupID]);
 
 		$Number++;
 
@@ -101,6 +103,7 @@
 								<input class="sort_numbers" type="text" name="sort" value="<?=$Sort?>" id="sort_<?=$GroupID?>" size="4" />
 							</td>
 							<td><?=$Number?></td>
+							<td><?=trim($CatNum)?></td>
 							<td><?=trim($GroupYear)?></td>
 							<td><?=trim($DisplayName)?></td>
 							<td><?=trim($TorrentLink)?></td>
