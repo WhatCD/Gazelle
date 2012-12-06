@@ -286,7 +286,7 @@ $ReleaseType = 0;
 $LastReleaseType = 0;
 
 foreach ($Importances as $Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($TorrentList[$Group['GroupID']]);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($TorrentList[$Group['GroupID']]);
 	$ReleaseType = $Group['ReleaseType'];
 	$GroupVanityHouse = $Group['VanityHouse'];
 
@@ -392,8 +392,9 @@ foreach ($Importances as $Group) {
 
 	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 
+	$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
 ?>
-			<tr class="releases_<?=$ReleaseType?> group discog<?=$HideDiscog?>">
+			<tr class="releases_<?=$ReleaseType?> group discog<?=$SnatchedGroupClass . $HideDiscog?>">
 				<td class="center">
 					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
 						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups in this release type."></a>
@@ -418,6 +419,7 @@ foreach ($Importances as $Group) {
 		if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 			$FirstUnknown = !isset($FirstUnknown);
 		}
+		$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
 
 		if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 		   $Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
@@ -433,7 +435,7 @@ foreach ($Importances as $Group) {
 				$RemasterName .= $AddExtra.display_str($Torrent['Media']);
 
 ?>
-	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog<?=$HideDiscog.$HideTorrents?>">
+	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog<?=$SnatchedGroupClass . $HideDiscog . $HideTorrents?>">
 		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
 	</tr>
 <?
@@ -448,7 +450,7 @@ foreach ($Importances as $Group) {
 				}
 				$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
-	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent<?=$HideDiscog.$HideTorrents?>">
+	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent<?=$SnatchedGroupClass . $HideDiscog . $HideTorrents?>">
 		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
 	</tr>
 <?
@@ -460,7 +462,7 @@ foreach ($Importances as $Group) {
 		$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 		$LastMedia = $Torrent['Media'];
 ?>
-	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent discog<?=$HideDiscog . $HideTorrents . ($Torrent['IsSnatched'] ? ' snatched_torrent' : '')?>">
+	<tr class="releases_<?=$ReleaseType?> torrent_row groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent discog<?=$SnatchedTorrentClass . $SnatchedGroupClass . $HideDiscog . $HideTorrents?>">
 		<td colspan="2">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>

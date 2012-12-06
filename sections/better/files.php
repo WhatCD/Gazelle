@@ -27,9 +27,9 @@ $Results = $Results['matches'];
 ?>
 <div class="header">
 <? if($All) { ?>
-		<h2>All torrents trumpable for bad file names</h2>
+	<h2>All torrents trumpable for bad file names</h2>
 <? } else { ?>
-		<h2>Torrents trumpable for bad file names, that you've snatched</h2>
+	<h2>Torrents trumpable for bad file names, that you've snatched</h2>
 <? } ?>
 
 	<div class="linkbox">
@@ -44,12 +44,14 @@ $Results = $Results['matches'];
 	<h3>There are <?=count($TorrentsInfo)?> torrents remaining</h3>
 	<table class="torrent_table">
 <?
-foreach($TorrentsInfo as $TorrentID => $Info) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Results[$Info['GroupID']]);
-
-	$DisplayName = '';
-	if(count($Artists)>0) {
-		$DisplayName = Artists::display_artists(array('1'=>$Artists));
+foreach ($TorrentsInfo as $TorrentID => $Info) {
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($Results[$Info['GroupID']]);
+	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+		unset($ExtendedArtists[2]);
+		unset($ExtendedArtists[3]);
+		$DisplayName = Artists::display_artists($ExtendedArtists);
+	} else {
+		$DisplayName = '';
 	}
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
@@ -72,16 +74,19 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 		$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
 	}
 ?>
-		<tr><td><?=$DisplayName?>
-			[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
-<?	if(check_perms('admin_reports')) { ?>
-			<a href="better.php?method=files&amp;remove=<?=$TorrentID?>">[X]</a>
-<? 	} ?>	
-			<?=$TorrentTags?>
-		</td></tr>
-<?
-}
-?>
+		<tr class="torrent torrent_row<?=$GroupFlags['IsSnatched'] ? ' snatched_torrent"' : ''?>">
+			<td>
+				<span class="torrent_links_block">
+					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
+				</span>
+				<?=$DisplayName?>
+<?	if (check_perms('admin_reports')) { ?>
+				<a href="better.php?method=files&amp;remove=<?=$TorrentID?>">[X]</a>
+<? 	} ?>
+				<?=$TorrentTags?>
+			</td>
+		</tr>
+<? } ?>
 	</table>
 </div>
 <?

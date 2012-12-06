@@ -58,16 +58,28 @@ View::show_header('Transcode Uploads');
 <?
 $Results = $Results['matches'];
 foreach ($Results as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($Group);
+	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+		unset($ExtendedArtists[2]);
+		unset($ExtendedArtists[3]);
+		$DisplayName = Artists::display_artists($ExtendedArtists);
+	} else {
+		$DisplayName = '';
+	}
 	$FlacID = $Uploads[$GroupID]['ID'];
 	
 	$DisplayName = '';
 	if(count($Artists)>0) {
 		$DisplayName = Artists::display_artists(array('1'=>$Artists));
 	}
-	$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'#torrent'.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 	if($ReleaseType>0) { $DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]"; }
+
+	$ExtraInfo = Torrents::torrent_info($Torrents[$FlacID]);
+	if($ExtraInfo) {
+		$DisplayName.=' - '.$ExtraInfo;
+	}
 	
 	$MissingEncodings = array('V0 (VBR)'=>1, 'V2 (VBR)'=>1, '320'=>1);
 	
@@ -89,10 +101,12 @@ foreach ($Results as $GroupID=>$Group) {
 		$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
 	}
 ?>
-		<tr>
+		<tr<?=$Torrents[$FlacID]['IsSnatched'] ? ' class="snatched_torrent"' : ''?>>
 			<td>
+				<span class="torrent_links_block">
+					[ <a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
+				</span>
 				<?=$DisplayName?>	
-				[ <a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
 				<?=$TorrentTags?>
 			</td>
 			<td><strong><?=($MissingEncodings['V2 (VBR)'] == 0)?'<span style="color: green;">YES</span>':'<span style="color: red;">NO</span>'?></strong></td>

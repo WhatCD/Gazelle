@@ -27,7 +27,7 @@ $TorrentList = $TorrentCache[1];
 list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear,
 	$GroupRecordLabel, $GroupCatalogueNumber, $ReleaseType, $GroupCategoryID,
 	$GroupTime, $GroupVanityHouse, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs,
-	$TagPositiveVotes, $TagNegativeVotes) = array_values($TorrentDetails);
+	$TagPositiveVotes, $TagNegativeVotes, $GroupFlags) = array_values($TorrentDetails);
 
 $DisplayName=$GroupName;
 $AltName=$GroupName; // Goes in the alt text of the image
@@ -368,7 +368,7 @@ if (empty($LoggedUser['DisableTagging'])) {
 ?>
 	</div>
 	<div class="main_column">
-		<table class="torrent_table details" id="torrent_details">
+		<table class="torrent_table details<?=$GroupFlags['IsSnatched'] ? ' snatched' : ''?>" id="torrent_details">
 			<tr class="colhead_dark">
 				<td width="80%"><strong>Torrents</strong></td>
 				<td><strong>Size</strong></td>
@@ -531,7 +531,7 @@ foreach ($TorrentList as $Torrent) {
 	$LastMedia = $Media;
 ?>
 
-			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent<?=$IsSnatched ? ' snatched_torrent' : ''?>" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
+			<tr class="torrent_row releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent<?=$IsSnatched ? ' snatched_torrent' : ''?>" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
 				<td>
 					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$HasFile ? 'DL' : 'Missing'?></a>
 <?	if (Torrents::can_use_token($Torrent)) { ?>

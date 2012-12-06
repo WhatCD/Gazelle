@@ -316,7 +316,6 @@ switch ($_REQUEST['action']){
 		include('data/special_users.php');
 		break;
 
-
 	case 'browser_support':
 		include('data/browser_support.php');
 		break;

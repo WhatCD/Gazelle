@@ -425,9 +425,8 @@ foreach($Categories as $CatKey => $CatName) {
 	foreach($TorrentsInfo as $TorrentID=>$Info) {
 		list($GroupID,, $Time, $CategoryID) = array_values($Info);
 		
-		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($Results[$GroupID]);
+		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($Results[$GroupID]);
 		$Torrent = $Torrents[$TorrentID];
-		
 		
 		$TagList = explode(' ',str_replace('_','.',$TagList));
 		
@@ -454,10 +453,8 @@ foreach($Categories as $CatKey => $CatName) {
 		if($ExtraInfo) {
 			$DisplayName.=' - '.$ExtraInfo;
 		}
-	
-	
 ?>
-		<tr class="torrent<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>">
+		<tr class="torrent torrent_row<?=($Torrent['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupFlags['IsSnatched'] ? ' snatched_group' : '')?>">
 			<td class="center cats_col">
 				<div title="<?=ucfirst(str_replace('.',' ',$TagList[0]))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$CategoryID-1]))?> tags_<?=str_replace('.','_',$TagList[0])?>"></div>
 			</td>

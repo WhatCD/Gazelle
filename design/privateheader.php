@@ -304,13 +304,18 @@ if(check_perms('site_collages_subscribe')) {
 		$Alerts[] = '<a href="userhistory.php?action=subscribed_collages">'.'You have '.$NewCollages.(($NewCollages > 1) ? ' new collage updates' : ' new collage update').'</a>';
 	}
 }
-
-if (check_perms('users_mod')) {
+if(check_perms('users_mod')) {
 	$ModBar[] = '<a href="tools.php">'.'Toolbox'.'</a>';
-
+}
+if (check_perms('users_mod') || $LoggedUser['PermissionID'] == FORUM_MOD) {
 	$NumStaffPMs = $Cache->get_value('num_staff_pms_'.$LoggedUser['ID']);
 	if ($NumStaffPMs === false) {
-		$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR (Level >= ".max(700,$Classes[MOD]['Level'])." AND Level <=".$LoggedUser['Class']."))");
+		if(check_perms('users_mod')) {
+			$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR (Level >= ".max(700,$Classes[MOD]['Level'])." AND Level <=".$LoggedUser['Class']."))");
+		}
+		if($LoggedUser['PermissionID'] == FORUM_MOD) {
+			$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR Level = '". $Classes[FORUM_MOD]['Level'] . "')");
+		}
 		list($NumStaffPMs) = $DB->next_record();
 		$Cache->cache_value('num_staff_pms_'.$LoggedUser['ID'], $NumStaffPMs , 1000);
 	}

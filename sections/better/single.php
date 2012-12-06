@@ -25,17 +25,25 @@ View::show_header('Single seeder FLACs');
 <?
 $Results = $Results['matches'];
 foreach ($Results as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
-	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
-	
-	$DisplayName = '';
-	if(count($Artists)>0) {
-		$DisplayName = Artists::display_artists(array('1'=>$Artists));
+	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($Group);
+	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+		unset($ExtendedArtists[2]);
+		unset($ExtendedArtists[3]);
+		$DisplayName = Artists::display_artists($ExtendedArtists);
+	} else {
+		$DisplayName = '';
 	}
+	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
+
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 	if($ReleaseType>0) { $DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]"; }
 	
+	$ExtraInfo = Torrents::torrent_info($Torrents[$FlacID]);
+	if($ExtraInfo) {
+		$DisplayName.=' - '.$ExtraInfo;
+	}
+
 	$TagList=array();
 	if($TorrentTags!='') {
 		$TorrentTags=explode(' ',$TorrentTags);
@@ -48,10 +56,12 @@ foreach ($Results as $GroupID=>$Group) {
 		$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
 	}
 ?>
-		<tr>
+		<tr class="torrent torrent_row<?=$Torrents[$FlacID]['IsSnatched'] ? ' snatched_torrent"' : ''?>">
 			<td>
-				<?=$DisplayName?>	
-				[ <a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
+				<span class="torrent_links_block">
+					[ <a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
+				</span>
+				<?=$DisplayName?>
 				<?=$TorrentTags?>
 			</td>
 		</tr>

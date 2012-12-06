@@ -27,10 +27,18 @@ class Torrents {
 	 *			Seeders, Snatched, Time, HasFile, PersonalFL, IsSnatched
 	 *		}
 	 *	}
+	 *	Artists => {
+	 *		{
+	 *			id, name, aliasid // Only main artists
+	 *		}
+	 *	}
 	 *	ExtendedArtists => {
 	 *		[1-6] => { // See documentation on Artists::get_artists
 	 *			id, name, aliasid
 	 *		}
+	 *	}
+	 *	Flags => {
+	 *		IsSnatched
 	 *	}
 	 */
 	public static function get_groups($GroupIDs, $Return = true, $GetArtists = true, $Torrents = true) {
@@ -128,8 +136,11 @@ class Torrents {
 			}
 			// Fetch all user specific torrent properties
 			foreach ($Found as &$Group) {
+				$Group['Flags'] = array('IsSnatched' => false);
 				if (!empty($Group['Torrents'])) {
-					array_walk($Group['Torrents'], 'self::torrent_properties');
+					foreach ($Group['Torrents'] as &$Torrent) {
+						self::torrent_properties($Torrent, $Group['Flags']);
+					}
 				}
 			}
 
@@ -146,9 +157,11 @@ class Torrents {
 	 * @param array $Torrent torrent array preferably in the form used by Torrents::get_groups() or get_group_info()
 	 * @param int $TorrentID
 	 */
-	public static function torrent_properties(&$Torrent, $TorrentID) {
-		$Torrent['PersonalFL'] = empty($Torrent['FreeTorrent']) && self::has_token($TorrentID);
-		$Torrent['IsSnatched'] = self::has_snatched($TorrentID);
+	public static function torrent_properties(&$Torrent, &$Flags) {
+		$Torrent['PersonalFL'] = empty($Torrent['FreeTorrent']) && self::has_token($Torrent['ID']);
+		if ($Torrent['IsSnatched'] = self::has_snatched($Torrent['ID'])) {
+			$Flags['IsSnatched'] = true;
+		}
 	}
 
 

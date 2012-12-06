@@ -77,6 +77,7 @@ foreach ($Groups as $GroupID => $Group) {
 				$TorRemIdent => array(
 					'FlacID' => 0,
 					'Formats' => array(),
+					'IsSnatched' => $Torrent['IsSnatched'],
 					'Medium' => $Torrent['Media'],
 					'RemasterTitle' => $Torrent['RemasterTitle'],
 					'RemasterYear' => $Torrent['RemasterYear'],
@@ -88,6 +89,7 @@ foreach ($Groups as $GroupID => $Group) {
 			$TorrentGroups[$Group['ID']][$TorRemIdent] = array(
 				'FlacID' => 0,
 				'Formats' => array(),
+				'IsSnatched' => $Torrent['IsSnatched'],
 				'Medium' => $Torrent['Media'],
 				'RemasterTitle' => $Torrent['RemasterTitle'],
 				'RemasterYear' => $Torrent['RemasterYear'],
@@ -178,7 +180,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		}
 		$ExtraInfo .= implode(' / ', $EditionInfo);
 ?>
-		<tr<?=$Edition['IsSnatched'] ? ' class="snatched_torrent"' : ''?>>
+		<tr class="torrent torrent_row<?=$Edition['IsSnatched'] ? ' snatched_torrent' : ''?>">
 			<td>
 				<span class="torrent_links_block">
 					[ <a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]

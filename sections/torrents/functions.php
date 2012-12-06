@@ -122,8 +122,11 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 		$TorrentList = $TorrentCache[1];
 	}
 
-	// Fetch all user specific torrent properties
-	array_walk($TorrentList, 'Torrents::torrent_properties');
+	// Fetch all user specific torrent and group properties
+	$TorrentDetails['Flags'] = array('IsSnatched' => false);
+	foreach ($TorrentList as &$Torrent) {
+		Torrents::torrent_properties($Torrent, $TorrentDetails['Flags']);
+	}
 
 	if ($Return) {
 		return array($TorrentDetails, $TorrentList);

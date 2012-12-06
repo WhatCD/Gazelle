@@ -262,7 +262,7 @@ if (empty($Results)) {
 
 		// print row
 ?>
-	<tr class="torrent<?=$TorrentInfo['IsSnatched'] ? ' snatched_torrent' : ''?>" id="torrent<?=$TorrentID?>"<?=$MatchingArtistsText ? 'title="'.display_str($MatchingArtistsText).'"' : ''?>>
+	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '')?>" id="torrent<?=$TorrentID?>"<?=$MatchingArtistsText ? 'title="'.display_str($MatchingArtistsText).'"' : ''?>>
 		<td style="text-align: center"><input type="checkbox" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
 		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$MainTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1])).' tags_'.str_replace('.','_',$MainTag)?>"></div></td>
 		<td>

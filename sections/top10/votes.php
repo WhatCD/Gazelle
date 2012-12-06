@@ -166,7 +166,7 @@ $NumGroups = 0;
 foreach ($TopVotes as $GroupID=>$Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel,
 		 $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse,
-		 $Torrents, $GroupArtists, $ExtendedArtists, $GroupCategoryID,$Ups,$Total,$Score) = array_values($Group);
+		 $Torrents, $GroupArtists, $ExtendedArtists, $GroupFlags, $GroupCategoryID,$Ups,$Total,$Score) = array_values($Group);
 
 	$IsBookmarked = in_array($GroupID, $Bookmarks);
 
@@ -200,9 +200,16 @@ foreach ($TopVotes as $GroupID=>$Group) {
 	ob_start();
 
 	if(count($Torrents)>1 || $GroupCategoryID==1) {
-			// Grouped torrents
+		// Grouped torrents
+		$GroupSnatched = false;
+		foreach ($Torrents as &$Torrent) {
+			if (($Torrent['IsSnatched'] = Torrents::has_snatched($Torrent['ID'])) && !$GroupSnatched) {
+				$GroupSnatched = true;
+			}
+		}
+		$SnatchedGroupClass = $GroupSnatched ? ' snatched_group' : '';
 ?>
-				<tr class="group discog" id="group_<?=$GroupID?>">
+				<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 					<td class="center">
 						<div title="View" id="showimg_<?=$GroupID?>" class="show_torrents">
 							<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group"></a>
@@ -233,11 +240,10 @@ foreach ($TopVotes as $GroupID=>$Group) {
 		unset($FirstUnknown);
 
 		foreach ($Torrents as $TorrentID => $Torrent) {
-
-			$Torrent['IsSnatched'] = Torrents::has_snatched($TorrentID);
 			if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
+			$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
 
 			if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
@@ -251,7 +257,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 					$RemasterName .= $AddExtra.display_str($Torrent['Media']);
 
 ?>
-		<tr class="group_torrent groupid_<?=$GroupID?> edition hidden">
+		<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass?> hidden">
 			<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
 		</tr>
 <?
@@ -266,7 +272,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 					}
 					$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
-		<tr class="group_torrent groupid_<?=$GroupID?> edition hidden">
+		<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass?> hidden">
 			<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
 		</tr>
 <?
@@ -278,7 +284,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 			$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 			$LastMedia = $Torrent['Media'];
 ?>
-		<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?> hidden<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>">
+		<tr class="group_torrent torrent_row groupid_<?=$GroupID?> edition_<?=$EditionID?><?=$SnatchedTorrentClass . $SnatchedGroupClass?> hidden">
 			<td colspan="3">
 				<span>
 					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
@@ -311,11 +317,11 @@ foreach ($TopVotes as $GroupID=>$Group) {
 		} elseif ($Torrent['FreeTorrent'] == '2') {
 			$DisplayName .= ' <strong class="neutral_leech_torrent_label">Neutral Leech!</strong>';
 		} elseif (Torrents::has_token($TorrentID)) {
-			$DisplayName .= '<strong class="personal_freeleech_torrent_label">Personal Freeleech!</strong>';
+			$DisplayName .= ' <strong class="personal_freeleech_torrent_label">Personal Freeleech!</strong>';
 		}
-
+		$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
 ?>
-		<tr class="torrent<?=$Torrent['IsSnatched'] ? ' snatched_torrent' : ''?>" id="group_<?=$GroupID?>">
+		<tr class="torrent torrent_row<?=$SnatchedTorrentClass . $SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 			<td></td>
 			<td class="center">
 				<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>">

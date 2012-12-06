@@ -923,6 +923,8 @@ foreach ($Results as $Result) {
 	} else {
 		$DisplayName = '';
 	}
+	$SnatchedGroupClass = $GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '';
+
 	if ($GroupResults && (count($Torrents)>1 || isset($GroupedCategories[$CategoryID-1]))) {
 		// These torrents are in a group
 		$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
@@ -934,7 +936,7 @@ foreach ($Results as $Result) {
 		}
 		$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 ?>
-	<tr class="group">
+	<tr class="group<?=$SnatchedGroupClass?>">
 <?
 $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
 ?>
@@ -986,6 +988,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			if ($Data['Remastered'] && !$Data['RemasterYear']) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
+			$SnatchedTorrentClass = $Data['IsSnatched'] ? ' snatched_torrent' : '';
 			
 			if (isset($GroupedCategories[$CategoryID-1])
 					&& ($Data['RemasterTitle'] != $LastRemasterTitle
@@ -1006,7 +1009,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 					$RemasterName .= $AddExtra.display_str($Data['Media']);
 
 ?>
-	<tr class="group_torrent groupid_<?=$GroupID?> edition<? if (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; }?>">
+	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
 		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
 	</tr>
 <?
@@ -1021,7 +1024,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 					}
 					$MasterName .= $AddExtra.display_str($Data['Media']);
 ?>
-	<tr class="group_torrent groupid_<?=$GroupID?> edition<? if (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1) { echo ' hidden'; }?>">
+	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
 		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
 	</tr>
 <?
@@ -1033,7 +1036,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			$LastRemasterCatalogueNumber = $Data['RemasterCatalogueNumber'];
 			$LastMedia = $Data['Media'];
 ?>
-	<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><?=(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1 ? ' hidden' : '') . ($Data['IsSnatched'] ? ' snatched_torrent' : '')?>">
+	<tr class="group_torrent groupid_<?=$GroupID?> edition_<?=$EditionID?><?=$SnatchedTorrentClass . $SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping']==1 ? ' hidden' : '')?>">
 		<td colspan="3">
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Data['HasFile'] ? 'DL' : 'Missing'?></a>
@@ -1071,11 +1074,12 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		} else {
 			$ExtraInfo = '';
 		}
+		$SnatchedTorrentClass = $Data['IsSnatched'] ? ' snatched_torrent' : '';
 ?>
-	<tr class="torrent<?=$Data['IsSnatched'] ? ' snatched_torrent' : ''?>">
-<?	if ($GroupResults) { ?>
+	<tr class="torrent<?=$SnatchedTorrentClass . $SnatchedGroupClass?>">
+<?		if ($GroupResults) { ?>
 		<td></td>
-<?	} ?>
+<?		} ?>
 		<td class="center cats_col">
 			<div title="<?=ucfirst(str_replace('.',' ',$TagList[0]))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$CategoryID-1]))?> tags_<?=str_replace('.','_',$TagList[0])?>"></div>
 		</td>
