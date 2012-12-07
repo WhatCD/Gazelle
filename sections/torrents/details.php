@@ -394,14 +394,14 @@ foreach ($TorrentList as $Torrent) {
 		//t.RemasterTitle, t.RemasterRecordLabel, t.RemasterCatalogueNumber, t.Scene,
 		//t.HasLog, t.HasCue, t.LogScore, t.FileCount, t.Size, t.Seeders, t.Leechers,
 		//t.Snatched, t.FreeTorrent, t.Time, t.Description, t.FileList,
-		//t.FilePath, t.UserID, t.last_action, (bad tags), (bad folders), (bad filenames),
+		//t.FilePath, t.UserID, t.last_action, HEX(t.info_hash), (bad tags), (bad folders), (bad filenames),
 		//(cassette approved), (lossy master approved), (lossy web approved), t.LastReseedRequest,
 		//LogInDB, (has file), Torrents::torrent_properties()
 	list($TorrentID, $Media, $Format, $Encoding, $Remastered, $RemasterYear,
 		$RemasterTitle, $RemasterRecordLabel, $RemasterCatalogueNumber, $Scene,
 		$HasLog, $HasCue, $LogScore, $FileCount, $Size, $Seeders, $Leechers,
 		$Snatched, $FreeTorrent, $TorrentTime, $Description, $FileList,
-		$FilePath, $UserID, $LastActive, $BadTags, $BadFolders, $BadFiles,
+		$FilePath, $UserID, $LastActive, $InfoHash, $BadTags, $BadFolders, $BadFiles,
 		$CassetteApproved, $LossymasterApproved, $LossywebApproved, $LastReseedRequest,
 		$LogInDB, $HasFile, $PersonalFL, $IsSnatched) = array_values($Torrent);
 

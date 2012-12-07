@@ -215,6 +215,10 @@ foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 			}
 			foreach ($Words as $Word) {
 				$Word = trim($Word);
+				// Skip isolated hyphens to enable "Artist - Title" searches
+				if ($Word == '-') {
+					continue;
+				}
 				if ($Word[0] == '!' && strlen($Word) >= 2) {
 					if (strpos($Word,'!',1) === false) {
 						$SearchWords[$Search]['exclude'][] = $Word;
@@ -240,6 +244,10 @@ if (!empty($_GET['searchstr'])) {
 		$BasicSearch = array('include' => array(), 'exclude' => array());
 		foreach ($Words as $Word) {
 			$Word = trim($Word);
+			// Skip isolated hyphens to enable "Artist - Title" searches
+			if ($Word == '-') {
+				continue;
+			}
 			if ($Word[0] == '!' && strlen($Word) >= 2) {
 				if ($Word == '!100%') {
 					$_GET['haslog'] = '-1';
@@ -897,13 +905,13 @@ foreach ($Results as $Result) {
 		$Torrents = $GroupInfo['Torrents'];
 		$GroupTime = $MaxSize = $TotalLeechers = $TotalSeeders = $TotalSnatched = 0;
 		foreach ($Torrents as $T) {
-			$GroupTime = max($GroupTime, strtotime($T['Time']));
-			if ($T['Size'] > $MaxSize) {
-				$MaxSize = $T['Size'];
+			if (isset($TorrentIDs[$T['ID']])) {
+				$GroupTime = max($GroupTime, strtotime($T['Time']));
+				$MaxSize = max($MaxSize, $T['Size']);
+				$TotalLeechers += $T['Leechers'];
+				$TotalSeeders += $T['Seeders'];
+				$TotalSnatched += $T['Snatched'];
 			}
-			$TotalLeechers += $T['Leechers'];
-			$TotalSeeders += $T['Seeders'];
-			$TotalSnatched += $T['Snatched'];
 		}
 	} else {
 		$Torrents = array($Result['id'] => $GroupInfo['Torrents'][$Result['id']]);

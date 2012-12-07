@@ -60,6 +60,9 @@ switch($_REQUEST['action']) {
 	case 'get_post':
 		require('get_post.php');
 		break;
+	case 'scoreboard':
+		require('scoreboard.php');
+		break;
 	default:
 		if ($IsStaff || $IsFLS) {
 			require('staff_inbox.php');

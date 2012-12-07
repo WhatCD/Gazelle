@@ -78,7 +78,7 @@ View::show_header('Chat Rules');
                 Mature content in posts must be properly tagged. The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where “description” is a mandatory description of the post contents. Misleading or inadequate descriptions will be penalized.
 			</li>
 			<li>
-                Threads created for the exclusive purpose of posting mature imagery will be trashed. Mature content (including graphic album art) should be contextually relevant to the thread and/or forum you’re posting in. Mature content is only allowed in: The Lounge, The Lounge +1, Music, Power Users, Elite, Torrent Masters, VIPs, Comics, Contests & Designs, The Laboratory. If you are in doubt about a post’s appropriateness, send a <a href="staff.php">Staff PM to the Forum Moderators</a> and wait for a reply before proceeding.
+                Threads created for the exclusive purpose of posting mature imagery will be trashed. Mature content (including graphic album art) should be contextually relevant to the thread and/or forum you’re posting in. Mature content is only allowed in: The Lounge, The Lounge +1, The Library, Music, Power Users, Elite, Torrent Masters, VIPs, Comics, Contests & Designs, The Laboratory. If you are in doubt about a post’s appropriateness, send a <a href="staff.php">Staff PM to the Forum Moderators</a> and wait for a reply before proceeding.
 			</li>
 		</ul>
 	</div>

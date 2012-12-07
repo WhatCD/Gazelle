@@ -4,10 +4,19 @@ include(SERVER_ROOT.'/sections/requests/functions.php'); // get_request_tags()
 function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 	global $Cache, $DB;
 	if (!$RevisionID) {
-		$TorrentCache=$Cache->get_value('torrents_details_'.$GroupID);
-	}
+		$TorrentCache = $Cache->get_value('torrents_details_'.$GroupID);
 
-	if ($RevisionID || !is_array($TorrentCache) || isset($TorrentCache[0][0])) {
+		// This block can be used to test if the cached data predates structure changes
+		if (isset($TorrentCache[0][0])) {
+			$OutdatedCache = true;
+		} else {
+			$Torrent = current($TorrentCache[1]);
+			if (!isset($Torrent['InfoHash'])) {
+				$OutdatedCache = true;
+			}
+		}
+	}
+	if ($RevisionID || !is_array($TorrentCache) || isset($OutdatedCache)) {
 		// Fetch the group details
 
 		$SQL = "SELECT ";
@@ -82,6 +91,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 			t.FilePath,
 			t.UserID,
 			t.last_action,
+			HEX(t.info_hash) AS InfoHash,
 			tbt.TorrentID AS BadTags,
 			tbf.TorrentID AS BadFolders,
 			tfi.TorrentID AS BadFiles,
