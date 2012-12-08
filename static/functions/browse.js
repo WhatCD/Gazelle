@@ -92,7 +92,8 @@ function show_spectrals (TorrentID){
 	$('#spectrals_' + TorrentID).toggle();
 	ajax.get('http://archive.org/~abuie/spectral.php?q=' + TorrentID,function(response){
 	    	var json = JSON.parse(response);
-	    	var html = "";
+			html = "<br /> <strong>Loading...</strong>"
+			$('#spectrals_' + TorrentID).show().raw().innerHTML=html;
 	    	if(json['status']['state'] == 'success') {
     	    	for (var i = 0; i < json['count']; i++) { 
     	    		    html += "<img src='" + json['files'][i] + "' alt='" + json['files'][i] + "' style='max-width:440px;' onclick='lightbox.init(\""+json['files'][i] + "\", 440);'></a>";
