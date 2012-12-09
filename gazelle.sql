@@ -1629,7 +1629,7 @@ CREATE TABLE `xbt_snatched` (
 CREATE DEFINER=`root`@`localhost` FUNCTION `binomial_ci`(p int, n int) RETURNS float
     DETERMINISTIC
     SQL SECURITY INVOKER
-RETURN IF(n = 0,0.0,((p + 1.9208) / n - 1.96 * SQRT((p * (n-p)) / n + 0.9604) / n) / (1 + 3.8416 / n));
+RETURN IF(n = 0,0.0,((p + 1.35336) / n - 1.6452 * SQRT((p * (n-p)) / n + 0.67668) / n) / (1 + 2.7067 / n));
 
 SET FOREIGN_KEY_CHECKS = 1;
 

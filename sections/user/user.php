@@ -208,7 +208,8 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 	</div>
 
 	<div class="sidebar">
-<?	if ($Avatar && empty($HeavyInfo['DisableAvatars'])) {
+<?
+	if ($Avatar && Users::has_avatars_enabled()) {
 		if(check_perms('site_proxy_images') && !empty($Avatar)) {
 			$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($Avatar);
 		}
