@@ -538,6 +538,8 @@ CREATE TABLE `reports` (
   `ResolvedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ReportedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Reason` text COLLATE utf8_bin NOT NULL,
+  `ClaimerID` int(10) unsigned NOT NULL DEFAULT '0',
+  `Notes` text COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `Status` (`Status`),
   KEY `Type` (`Type`),

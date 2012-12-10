@@ -24,6 +24,12 @@ switch($_REQUEST['action']){
 	case 'takecompose':
 		include(SERVER_ROOT.'/sections/reports/takecompose.php');
 		break;
+	case 'add_notes':
+		include(SERVER_ROOT.'/sections/reports/ajax_add_notes.php');
+		break;
+	case 'claim':
+		include(SERVER_ROOT.'/sections/reports/ajax_claim_report.php');
+		break;
 	default:
 		include(SERVER_ROOT.'/sections/reports/reports.php');
 		break;

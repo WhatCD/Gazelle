@@ -103,9 +103,9 @@
 								<input class="sort_numbers" type="text" name="sort" value="<?=$Sort?>" id="sort_<?=$GroupID?>" size="4" />
 							</td>
 							<td><?=$Number?></td>
-							<td><?=trim($CatNum)?></td>
-							<td><?=trim($GroupYear)?></td>
-							<td><?=trim($DisplayName)?></td>
+							<td><?=trim($CatNum) ?: '&nbsp;'?></td>
+							<td><?=trim($GroupYear) ?: '&nbsp;'?></td>
+							<td><?=trim($DisplayName) ?: '&nbsp;'?></td>
 							<td><?=trim($TorrentLink)?></td>
 							<td class="nobr"><?=Users::format_username($UserID, $Username, false, false, false)?></td>
 							<td class="nobr">
