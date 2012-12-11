@@ -35,7 +35,7 @@ class ALIAS {
 		return $ArticleID;
 	}
 */
-	function article($ArticleID) {
+	function article($ArticleID, $Error = true) {
 		global $Cache, $DB;
 		$Contents = $Cache->get_value('wiki_article_'.$ArticleID);
 		if(!$Contents){
@@ -55,7 +55,7 @@ class ALIAS {
 					LEFT JOIN users_main AS u ON u.ID=w.Author
 					WHERE w.ID='$ArticleID'
 					GROUP BY w.ID");
-			if(!$DB->record_count()) { error(404); }
+			if(!$DB->record_count() && $Error) { error(404); }
 			$Contents = $DB->to_array();
 			$Cache->cache_value('wiki_article_'.$ArticleID, $Contents, 3600*24*14);
 		}

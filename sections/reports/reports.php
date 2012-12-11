@@ -210,7 +210,7 @@ $DB->set_query_id($Reports);
                 <tr>
                     <td colspan="2">
 						<?    if ($ClaimerID) { ?>
-                        Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?>
+                        <span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?></span>
 						<? } else { ?>
            					<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;"; return false;">Claim</a>
 					<? } ?>
@@ -231,7 +231,7 @@ $DB->set_query_id($Reports);
                             <input type="hidden" name="reportid" value="<?=$ReportID?>"/>
                             <input type="hidden" name="action" value="takeresolve"/>
                             <input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>"/>
-                            <input type="submit" name="submit" value="Resolve"/>
+                            <input type="submit" onclick="return resolve(<?=$ReportID?>)" name="submit" value="Resolve"/>
                     </td>
                 </tr>
 				<? } ?>

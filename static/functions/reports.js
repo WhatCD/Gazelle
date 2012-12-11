@@ -35,3 +35,13 @@ function claim(id) {
 	});
 }
 
+function resolve(id) {
+	if ($('#claimed_' + id).raw()) {
+		var answer = confirm("This is a claimed report, are you sure you want to resolve it?");
+		if (answer)
+			return true;
+		else
+			return false;
+	}
+	return true;
+}
