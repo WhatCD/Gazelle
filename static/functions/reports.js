@@ -35,13 +35,24 @@ function claim(id) {
 	});
 }
 
-function resolve(id) {
-	if ($('#claimed_' + id).raw()) {
-		var answer = confirm("This is a claimed report, are you sure you want to resolve it?");
-		if (answer)
-			return true;
-		else
-			return false;
+function unClaim(id) {
+	ajax.get('reports.php?action=unclaim&remove=1&id=' + id, function (response) {
+		var json = JSON.parse(response);
+		if (json['status'] == 'success') {
+			$('#claimed_' + id).raw().innerHTML = '<a href="#" id="claim_' + id + '" onclick="claim(' + id + '); return false;"; return false;">Claim</a>';
+		}
+	});
+}
+
+function resolve(id, claimer) {
+	if (!claimer) {
+		if ($('#claimed_' + id).raw()) {
+			var answer = confirm("This is a claimed report, are you sure you want to resolve it?");
+			if (answer)
+				return true;
+			else
+				return false;
+		}
 	}
 	return true;
 }

@@ -30,6 +30,9 @@ switch($_REQUEST['action']){
 	case 'claim':
 		include(SERVER_ROOT.'/sections/reports/ajax_claim_report.php');
 		break;
+	case 'unclaim':
+		include(SERVER_ROOT.'/sections/reports/ajax_unclaim_report.php');
+		break;
 	default:
 		include(SERVER_ROOT.'/sections/reports/reports.php');
 		break;

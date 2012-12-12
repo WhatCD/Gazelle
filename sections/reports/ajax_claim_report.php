@@ -20,7 +20,7 @@ if ($ClaimerID) {
 				'status' => 'dupe'
 			)
 		);
-	exit();
+	die();
 } else {
 	$UserID = $LoggedUser['ID'];
 	$DB->query("UPDATE reports SET ClaimerID = '$UserID' WHERE ID = '$ID'");
@@ -31,5 +31,5 @@ if ($ClaimerID) {
 				'username' => $LoggedUser['Username']
 			)
 		);
-	exit();
+	die();
 }

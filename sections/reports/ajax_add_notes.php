@@ -22,4 +22,4 @@ print
 			'status' => 'success'
 		)
 	);
-exit();
+die();

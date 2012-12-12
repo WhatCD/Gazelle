@@ -209,10 +209,12 @@ $DB->set_query_id($Reports);
                 </tr>
                 <tr>
                     <td colspan="2">
-						<?    if ($ClaimerID) { ?>
+						<?    if ($ClaimerID == $LoggedUser['ID']) { ?>
+                        <span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?> <a href="#" onclick="unClaim(<?=$ReportID?>); return false;">[Unclaim]</a></span>
+						<? } else if ($ClaimerID) { ?>
                         <span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?></span>
 						<? } else { ?>
-           					<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;"; return false;">Claim</a>
+           					<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;">Claim</a>
 					<? } ?>
                         &nbsp;&nbsp;
                         <a onclick="toggleNotes(<?=$ReportID?>); return false;" href="#">Toggle Notes</a>
@@ -231,7 +233,7 @@ $DB->set_query_id($Reports);
                             <input type="hidden" name="reportid" value="<?=$ReportID?>"/>
                             <input type="hidden" name="action" value="takeresolve"/>
                             <input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>"/>
-                            <input type="submit" onclick="return resolve(<?=$ReportID?>)" name="submit" value="Resolve"/>
+                            <input type="submit" onclick="return resolve(<?=$ReportID?>, <?=($ClaimerID == $LoggedUser['ID'] || !$ClaimerID) ? "true" : "false"?>)" name="submit" value="Resolve"/>
                     </td>
                 </tr>
 				<? } ?>

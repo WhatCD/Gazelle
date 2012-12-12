@@ -846,6 +846,7 @@ if ($TorrentCount == 0) {
 	<p>Make sure all names are spelled correctly, or try making your search less specific.</p>
 	<p>You might like (Beta): <? while (list($Tag)=$DB->next_record()) { ?><a href="torrents.php?taglist=<?=$Tag?>"><?=$Tag?></a> <? } ?></p>
 </div>
+</div>
 <? 
 View::show_footer();die();
 }
@@ -859,6 +860,7 @@ if ($TorrentCount < ($Page-1)*TORRENTS_PER_PAGE+1) {
 	<p>You are requesting page <?=$Page?>, but the search returned only <?=$LastPage?> pages.</p>
 </div>
 <div class="linkbox">Go to page <?=$Pages?></div>
+</div>
 <?
 View::show_footer();die();
 }
