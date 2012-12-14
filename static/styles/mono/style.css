@@ -616,6 +616,7 @@ table.staff td.nobr:last-child {
 	border-right: 1px solid #ccc;
 	border-left: none;
 	border-top: none;
+	word-break: break-all;
 }
 
 .recent td:first-child {
