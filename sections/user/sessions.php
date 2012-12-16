@@ -86,6 +86,7 @@ View::show_header($Username.' &gt; Sessions');
 		</table>
 	</div>
 </div>
+<?
 
 View::show_footer();
 ?>
