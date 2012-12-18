@@ -1,9 +1,8 @@
 <?
 
-if(!check_perms('admin_reports')){
+if(!check_perms('admin_reports') && !check_perms('site_moderate_forums')){
 	error(403);
 }
-
 View::show_header('Other reports stats');
 
 ?>
@@ -16,11 +15,12 @@ View::show_header('Other reports stats');
 	</div>
 </div>
 <div class="box pad thin" style="padding: 0px 0px 0px 20px; margin-left: auto; margin-right: auto">
+    <table class="layout">
 <?
+if(check_perms('admin_reports')) {
 $DB->query("SELECT um.Username, COUNT(r.ID) AS Reports FROM reports AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.ReportedTime > '2009-08-21 22:39:41' AND r.ReportedTime > NOW() - INTERVAL 24 HOUR GROUP BY r.ResolverID ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<table class="layout">
 		<tr>
 		<td class="label"><strong>Reports resolved in the last 24h</strong></td>
 		<td>
@@ -109,6 +109,34 @@ $Results = $DB->to_array();
 		</table>
 		</td>
 		</tr>
+<? } ?>
+            <tr>
+				<?
+				$DB->query("select u.Username, count(LastPostAuthorID) as Trashed from forums_topics as f left join users_main as u on u.id = LastPostAuthorID where ForumID = 12 group by LastPostAuthorID order by Trashed desc limit 30;");
+				$Results = $DB->to_array();
+				?>
+                <td class="label"><strong>Threads trashed since the beginning of time</strong></td>
+                <td>
+                    <table style="width: 50%; margin-left: auto; margin-right: auto;" class="border">
+                        <tr>
+                            <td class="head colhead_dark">Place</td>
+                            <td class="head colhead_dark">Username</td>
+                            <td class="head colhead_dark">Trashed</td>
+						</tr>
+						<?
+						$i = 1;
+						foreach($Results as $Result) {
+							list($Username, $Trashed) = $Result;
+						?>
+                        <tr>
+                            <td><?=$i?></td>
+                            <td><?=$Username?></td>
+                            <td><?=$Trashed?></td>
+                        </tr>
+						<? $i++; } ?>
+                    </table>
+                </td>
+            </tr>
 		</table>
 </div>
 <?

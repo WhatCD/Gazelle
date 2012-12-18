@@ -58,7 +58,7 @@ $(document).ready(function() {
     jQuery('#popup_back').empty();
     $.ajax({
     type: "GET",
-    url: "http://musicbrainz.org/ws/2/release-group/" + $id + "?inc=artist-credits%2Breleases+tags+media",
+    url: "https://musicbrainz.org/ws/2/release-group/" + $id + "?inc=artist-credits%2Breleases+tags+media",
     dataType: "xml",
     success: showReleases
  }); 
@@ -72,7 +72,7 @@ $(document).ready(function() {
 
     $.ajax({
     type: "GET",
-    url: "http://musicbrainz.org/ws/2/release/" + $id + "?inc=artist-credits%2Blabels%2Bdiscids%2Brecordings+tags+media+label-rels",
+    url: "https://musicbrainz.org/ws/2/release/" + $id + "?inc=artist-credits%2Blabels%2Bdiscids%2Brecordings+tags+media+label-rels",
     dataType: "xml",
     success: populateForm
     });
@@ -136,7 +136,7 @@ function showReleases(xml) {
     $year_original = $date_release_group.substring(0,4);
     $release_type = $(xml).find("release-group").attr("type");
     $release_group_id = $(xml).find("release-group").attr("id");
-    jQuery('#popup_title').html("Choose Release " + "<a href='http://musicbrainz.org/release-group/" 
+    jQuery('#popup_title').html("Choose Release " + "<a href='https://musicbrainz.org/release-group/" 
     		+ $release_group_id + "'target=_new>(View on MusicBrainz)</a>");
       jQuery('#popup_back').html("<a href='#null' id='back'>[Go Back]</a>");
     
@@ -158,7 +158,7 @@ function showReleases(xml) {
 	var $result =  $title + " [Year: " + $year + ", Format: " + $format + ", Tracks: " + $tracks + ", Country: " + $country + "]";
 	$("<a href='#null'>" + $result +  "</a>").attr("id", $release_id).appendTo("#results2");
 	
-	$("<a href='http://musicbrainz.org/release/" + $release_id +"' target=_new> (View on MB)</a>" + "<p/>").attr("id", "mb").appendTo("#results2");
+	$("<a href='https://musicbrainz.org/release/" + $release_id +"' target=_new> (View on MB)</a>" + "<p/>").attr("id", "mb").appendTo("#results2");
 	});
 	
 	parseTags(xml);
@@ -231,7 +231,7 @@ function showReleases(xml) {
                 $barcode_text =  "Barcode: " + $barcode + "\n";
             }
 	    var $description = $amazon_link + 
-	                       "[url=http://musicbrainz.org/release-group/" + $release_group_id + "]MusicBrainz[/url]" + "\n" + "\n" + 
+	                       "[url=https://musicbrainz.org/release-group/" + $release_group_id + "]MusicBrainz[/url]" + "\n" + "\n" + 
 			       $country_text +
 			       $barcode_text +
 	                       "Tracks: " + $track_count + "\n" + "\n" + 
