@@ -368,6 +368,8 @@ $TmpFileList = array();
 $HasLog = "'0'";
 $HasCue = "'0'";
 
+$TooLongPaths = array();
+
 foreach($FileList as $File) {
 	list($Size, $Name) = $File;
 	// add +log to encoding
@@ -381,14 +383,20 @@ foreach($FileList as $File) {
 
 	check_file($Type, $Name);
 
-
 	// Make sure the filename is not too long
 	if(mb_strlen($Name, 'UTF-8') + mb_strlen($DirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
-		$Err = 'The torrent contained one or more files with too long a name ('.$Name.')';
+		$TooLongPaths[] = $Name;
 	}
 
 	// Add file and size to array
 	$TmpFileList[] = $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
+}
+
+if(count($TooLongPaths)!=0) {
+	$Names = '';
+	foreach($TooLongPaths as $Name) {$Names .= '<br>'.$Name;}
+	/* $Err = 'The torrent contained one or more files with too long a name ('.$Name.')'; */
+	$Err = 'The torrent contained one or more files with too long a name:'.$Names;
 }
 
 // To be stored in the database

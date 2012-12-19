@@ -317,6 +317,11 @@ input.hidden {
 	margin-right:auto;
 }
 
+.widethin { /* overriding the thin class on torrents.php */
+	width: 95% !important;
+	margin: 0px auto;
+}
+
 div.linkbox {
 	text-align:center;
 	padding: 5px;

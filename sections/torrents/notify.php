@@ -134,7 +134,7 @@ if (!empty($GroupIDs)) {
 View::show_header('My notifications', 'notifications');
 
 ?>
-<div class="thin">
+<div class="thin widethin">
 <div class="header">
 	<h2>Latest notifications</h2>
 </div>

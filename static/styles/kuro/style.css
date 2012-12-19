@@ -436,6 +436,11 @@ input.hidden {
 	margin: 0px auto;
 }
 
+.widethin { /* overriding the thin class on torrents.php */
+	width: 95% !important;
+	margin: 0px auto;
+}
+
 #userinfo_username .brackets:before {
 	content: "[";
 }

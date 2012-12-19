@@ -548,7 +548,7 @@ View::show_header('Browse Torrents','browse');
 
 
 ?>
-<div class="thin">
+<div class="thin widethin">
 <form class="search_form" name="torrents" method="get" action="">
 <div class="filter_torrents <?=$AdvancedSearch ? 'ft_advanced' : 'ft_basic'?>">
 	<h3>
