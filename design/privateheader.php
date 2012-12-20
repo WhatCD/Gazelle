@@ -63,7 +63,7 @@ $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
 		var userid = <?=$LoggedUser['ID']?>;
 	//]]></script>
 	<script src="<?=STATIC_SERVER?>functions/global.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/global.js')?>" type="text/javascript"></script>
-<?
+	<?
 
 $Scripts=explode(',',$JSIncludes);
 
@@ -433,6 +433,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 					<input type="hidden" name="action" value="advanced" />
 <? } ?>
 					<input
+						id="torrentssearch"
 						accesskey="t"
 						spellcheck="false"
 						onfocus="if (this.value == 'Torrents') this.value='';"
@@ -464,6 +465,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 				<span class="hidden">Requests: </span>
 				<form class="search_form" name="requests" action="requests.php" method="get">
 					<input
+						id="requestssearch"
 						spellcheck="false"
 						onfocus="if (this.value == 'Requests') this.value='';"
 						onblur="if (this.value == '') this.value='Requests';"
@@ -476,6 +478,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 				<form class="search_form" name="forums" action="forums.php" method="get">
 					<input value="search" type="hidden" name="action" />
 					<input
+						id="forumssearch"
 						onfocus="if (this.value == 'Forums') this.value='';"
 						onblur="if (this.value == '') this.value='Forums';"
 						value="Forums" type="text" name="search" size="17"
@@ -499,6 +502,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 				<span class="hidden">Log: </span>
 				<form class="search_form" name="log" action="log.php" method="get">
 					<input
+						id="logsearch"
 						onfocus="if (this.value == 'Log') this.value='';"
 						onblur="if (this.value == '') this.value='Log';"
 						value="Log" type="text" name="search" size="17"
@@ -510,6 +514,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 				<form class="search_form" name="users" action="user.php" method="get">
 					<input type="hidden" name="action" value="search" />
 					<input
+						id="userssearch"
 						onfocus="if (this.value == 'Users') this.value='';"
 						onblur="if (this.value == '') this.value='Users';"
 						value="Users" type="text" name="search" size="20"

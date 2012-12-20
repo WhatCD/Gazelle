@@ -305,14 +305,14 @@ View::show_header($Title, 'browse,collage');
 	die();
 } ?>
 	<div class="sidebar">
-		<div class="box">
+		<div class="box box_info box_statistics_bookmarked_torrents">
 			<div class="head"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
 				<li>Torrents: <?=$NumGroups?></li>
 <? if(count($Artists) >0) { ?>	<li>Artists: <?=count($Artists)?></li> <? } ?>
 			</ul>
 		</div>
-		<div class="box">
+		<div class="box box_tags">
 			<div class="head"><strong>Top tags</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">
