@@ -217,11 +217,11 @@ if($Properties['Remastered'] && !$Properties['RemasterYear']) {
 	if($LoggedUser['ID'] == $UserID || check_perms('edit_unknowns')) {
 		//Fine!
 	} else {
-		$Err = "You may not edit somebody elses upload to unknown";
+		$Err = "You may not edit somebody else's upload to unknown release.";
 	}
 }
 
-// Strip out amazon's padding
+// Strip out Amazon's padding
 $AmazonReg = '/(http:\/\/ecx.images-amazon.com\/images\/.+)(\._.*_\.jpg)/i';
 $Matches = array();
 if (preg_match($RegX, $Properties['Image'], $Matches)) {

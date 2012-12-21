@@ -237,24 +237,25 @@ class TORRENT_FORM {
 			<tr id="title_tr">
 				<td class="label">Album title:</td>
 				<td>
-					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>"<?=$this->Disabled?>/>
-					<p class="min_padding">Do not include the words remaster, re-issue, MSFL Gold, limited edition, bonus tracks, bonus disc or country specific information in this field. That belongs in the edition information fields below, see <a href="wiki.php?action=article&amp;id=159" target="_blank">this</a> for further information. Also remember to use the correct capitalization for your upload. See the <a href="wiki.php?action=article&amp;id=317" target="_blank">Capitalization Guidelines</a> for more information.
+					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>"<?=$this->Disabled?> />
+					<p class="min_padding">Do not include the words remaster, re-issue, MSFL Gold, limited edition, bonus tracks, bonus disc or country-specific information in this field. That belongs in the edition information fields below; see <a href="wiki.php?action=article&amp;id=159" target="_blank">this</a> for further information. Also remember to use the correct capitalization for your upload. See the <a href="wiki.php?action=article&amp;id=317" target="_blank">Capitalization Guidelines</a> for more information.
 				</td>
 			</tr>
 			<tr id="musicbrainz_tr">
-   				<td class="label">MusicBrainz:</td>
+				<td class="label" title="Click the &quot;Find Info&quot; button to automatically fill out parts of the upload form by selecting an entry in MusicBrainz">MusicBrainz:</td>
 				<td><input type="button" value="Find Info" id="musicbrainz_button" /></td>
 			</tr>
 			<div id="musicbrainz_popup">
-   				<a href="#null" id="popup_close">x</a>
-   				<h1 id="popup_title"></h1>
-   				<h2 id="popup_back"></h2>
-   				<div id="results1"></div>
-   				<div id="results2"></div>
+				<a href="#null" id="popup_close">x</a>
+				<h1 id="popup_title"></h1>
+				<h2 id="popup_back"></h2>
+				<div id="results1"></div>
+				<div id="results2"></div>
 			</div>
 			<div id="popup_background"></div>
 
-<script>
+<script type="text/javascript">
+//<![CDATA[
 hide();
 if(document.getElementById("categories").disabled == false){
 	if(navigator.appName == 'Opera') {
@@ -262,31 +263,28 @@ if(document.getElementById("categories").disabled == false){
 		var match = useragent.split('Version/');
 		var version = parseFloat(match[1]);
 			if(version >= 12.00) {
-        			show();
+				show();
 			}
-		}
+	}
 
 	else if (navigator.appName != 'Microsoft Internet Explorer') {
-        	show();
+		show();
 	}
 }
 
-
 function hide() {
-  document.getElementById("musicbrainz_tr").style.display="none";
-  document.getElementById("musicbrainz_popup").style.display="none";
-  document.getElementById("popup_background").style.display="none";
-  }
+	document.getElementById("musicbrainz_tr").style.display="none";
+	document.getElementById("musicbrainz_popup").style.display="none";
+	document.getElementById("popup_background").style.display="none";
+}
 
- function show() {
-  document.getElementById("musicbrainz_tr").style.display="";
-  document.getElementById("musicbrainz_popup").style.display="";
-  document.getElementById("popup_background").style.display="";
-
-  }
-
+function show() {
+	document.getElementById("musicbrainz_tr").style.display="";
+	document.getElementById("musicbrainz_popup").style.display="";
+	document.getElementById("popup_background").style.display="";
+}
+//]]>
 </script>
-
 
 			<tr id="year_tr">
 				<td class="label">
@@ -465,7 +463,7 @@ function hide() {
 				</td>
 				<td id="logfields">
 					Check your log files here before uploading: <a href="logchecker.php" target="_blank">logchecker.php</a><br />
-					<input id="file" type="file" name="logfiles[]" size="50" /> [<a href="javascript:;" onclick="AddLogField();">+</a>] [<a href="javascript:;" onclick="RemoveLogField();">-</a>]
+					<input id="file" type="file" multiple="multiple" name="logfiles[]" size="50" /> [<a href="javascript:;" onclick="AddLogField();">+</a>] [<a href="javascript:;" onclick="RemoveLogField();">-</a>]
 				</td>
 			</tr>
 <?
@@ -481,8 +479,9 @@ function hide() {
 			<tr>
 				<td class="label">Vanity House:</td>
 				<td>
-					<label><input type="checkbox" id="vanity_house" name="vanity_house" <? if(!$Torrent['GroupID']) { echo 'disabled '; }?><? if($Torrent['VanityHouse']){ echo "checked='checked' ";}?>/>
-					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.</label>
+					<label><input type="checkbox" id="vanity_house" name="vanity_house"<? if(!$Torrent['GroupID']) { echo ' disabled="disabled"'; }?><? if($Torrent['VanityHouse']){ echo ' checked="checked"';} ?> />
+					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.
+					</label>
 				</td>
 			</tr>
 <?		} ?>

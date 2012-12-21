@@ -307,7 +307,7 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
         $Message = 'You have downloaded more then 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://what.cd/wiki.php?action=article&amp;id=110';            
         foreach($UserIDs as $UserID) {
 			Misc::send_pm($UserID,0,db_string($Subject),db_string($Message));
-			send_irc("PRIVMSG #reports : !leechdisabled Downloaded 10 GB+ on Ratio Watch. https://what.cd/user.php?id=$UserID");
+			send_irc("PRIVMSG #reports : !leechdisabled Downloaded 10 GB+ on Ratio Watch. https://".SSL_SITE_URL."/user.php?id=$UserID");
         }
  
             $DB->query("UPDATE users_info AS i JOIN users_main AS m ON m.ID=i.UserID

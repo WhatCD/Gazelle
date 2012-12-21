@@ -121,17 +121,17 @@ if(check_perms('admin_reports')) {
 		$ReportType = $Types['master']['other'];
 	}
 	if ($ArtistID == 0 && empty($ArtistName)) {
-		$RawName = $GroupName.($Year ? " ($Year)" : "").($Format || $Encoding || $Media ? " [$Format/$Encoding/$Media]" : "").($Remastered ? " <$RemasterTitle - $RemasterYear>" : "").($HasLog ? " ($LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
+		$RawName = $GroupName.($Year ? " ($Year)" : "").($Format || $Encoding || $Media ? " [$Format/$Encoding/$Media]" : "").($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "").($HasLog ? " ($LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 		$LinkName = "<a href='torrents.php?id=$GroupID'>$GroupName".($Year ? " ($Year)" : "")."</a> <a href='torrents.php?torrentid=$TorrentID'>".($Format || $Encoding || $Media ? " [$Format/$Encoding/$Media]" : "").($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."</a>".($HasLog ? " <a href='torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'>(Log: $LogScore %)</a>" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
-		$BBName = "[url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " <$RemasterTitle - $RemasterYear>" : "")."[/url] ".($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
+		$BBName = "[url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."[/url] ".($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 	} elseif ($ArtistID == 0 && $ArtistName == 'Various Artists') {
-		$RawName = "Various Artists - $GroupName".($Year ? " ($Year)" : "")." [$Format/$Encoding/$Media]".($Remastered ? " <$RemasterTitle - $RemasterYear>" : "").($HasLog ? " ($LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
+		$RawName = "Various Artists - $GroupName".($Year ? " ($Year)" : "")." [$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "").($HasLog ? " ($LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 		$LinkName = "Various Artists - <a href='torrents.php?id=$GroupID'>$GroupName".($Year ? " ($Year)" : "")."</a> <a href='torrents.php?torrentid=$TorrentID'> [$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."</a> ".($HasLog ? " <a href='torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'>(Log: $LogScore %)</a>" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
-		$BBName = "Various Artists - [url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " <$RemasterTitle - $RemasterYear>" : "")."[/url] ".($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
+		$BBName = "Various Artists - [url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."[/url] ".($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 	} else {
-		$RawName = "$ArtistName - $GroupName".($Year ? " ($Year)" : "")." [$Format/$Encoding/$Media]".($Remastered ? " <$RemasterTitle - $RemasterYear>" : "").($HasLog ? " ($LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
+		$RawName = "$ArtistName - $GroupName".($Year ? " ($Year)" : "")." [$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "").($HasLog ? " ($LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 		$LinkName = "<a href='artist.php?id=$ArtistID'>$ArtistName</a> - <a href='torrents.php?id=$GroupID'>$GroupName".($Year ? " ($Year)" : "")."</a> <a href='torrents.php?torrentid=$TorrentID'> [$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."</a> ".($HasLog ? " <a href='torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'>(Log: $LogScore %)</a>" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
-		$BBName = "[url=artist.php?id=$ArtistID]".$ArtistName."[/url] - [url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " <$RemasterTitle - $RemasterYear>" : "")."[/url] ".($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
+		$BBName = "[url=artist.php?id=$ArtistID]".$ArtistName."[/url] - [url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."[/url] ".($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 	}	
 ?>	
 	<div id="report<?=$ReportID?>">
@@ -233,9 +233,9 @@ foreach($TypeList as $IType => $Data) {
 <? } ?>
 						</select>
 						<span id="options<?=$ReportID?>">
-							<span title="Delete Torrent?">	
+							<span title="Delete torrent?">
 								<strong>Delete</strong>
-								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete']?' checked="checked"':'')?>>
+								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete']?' checked="checked"':'')?> />
 							</span>
 							<span title="Warning length in weeks">
 								<strong>Warning</strong>
@@ -247,15 +247,15 @@ foreach($TypeList as $IType => $Data) {
 							</span>
 							<span title="Remove upload privileges?">
 								<strong>Upload</strong>
-								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload']?' checked="checked"':'')?>>
+								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload']?' checked="checked"':'')?> />
 							</span>
 						</span>
 						</td>
 				</tr>
 				<tr>
-					<td class="label">PM Uploader</td> 
+					<td class="label">PM Uploader</td>
 					<td colspan="3">
-						<span title="Appended to the regular message unless using send now.">
+						<span title="Appended to the regular message unless using &quot;Send Now&quot;.">
 							<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 						</span>
 						<input type="button" value="Send Now" onclick="SendPM(<?=$ReportID?>)" />
