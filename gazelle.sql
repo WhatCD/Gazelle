@@ -857,8 +857,8 @@ CREATE TABLE `subscribed_users` (
 
 CREATE TABLE `tag_aliases` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `BadTag` varchar(22) COLLATE utf8_bin NOT NULL,
-  `AliasTag` varchar(22) COLLATE utf8_bin NOT NULL,
+  `BadTag` varchar(30) COLLATE utf8_bin DEFAULT NULL,
+  `AliasTag` varchar(30) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `BadTag` (`BadTag`),
   KEY `AliasTag` (`AliasTag`)
