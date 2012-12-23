@@ -837,6 +837,7 @@ if($NumSimilar>0) {
 
 		<div id="similar_artist_map" class="box">
 			<div id="flipper_head" class="head">
+				<a href="#">&uarr;</a>&nbsp;
 				<strong id="flipper_title">Similar Artist Map</strong>
 				<a id="flip_to" href="#null" onclick="flipView();"> [Switch to Cloud]</a>
 			</div>
@@ -914,6 +915,7 @@ function require(file, callback) {
 <? } // if $NumSimilar>0 ?>
 		<div class="box">
 			<div id="info" class="head">
+				<a href="#">&uarr;</a>&nbsp;
 				<strong>Artist info</strong>
 				<a href="#" onclick="$('#body').toggle(); return false;">[Toggle]</a>
 			</div>

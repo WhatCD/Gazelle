@@ -670,7 +670,7 @@ if(count($Collages)>0) {
 ?>
 		<table class="collage_table" id="collages">
 			<tr class="colhead">
-				<td width="85%">This album is in <?=count($Collages)?> collage<?=((count($Collages)>1)?'s':'')?><?=$SeeAll?></td>
+				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=count($Collages)?> collage<?=((count($Collages)>1)?'s':'')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
 <?	foreach ($Indices as $i) { 
@@ -715,7 +715,7 @@ if(count($PersonalCollages)>0) {
 ?>
 		<table class="collage_table" id="personal_collages">
 			<tr class="colhead">
-				<td width="85%">This album is in <?=count($PersonalCollages)?> personal collage<?=((count($PersonalCollages)>1)?'s':'')?><?=$SeeAll?></td>
+				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=count($PersonalCollages)?> personal collage<?=((count($PersonalCollages)>1)?'s':'')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
 <?	foreach ($Indices as $i) { 
@@ -742,7 +742,7 @@ if(count($PersonalCollages)>0) {
 include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 ?>
 		<div class="box">
-			<div class="head"><strong><?=(!empty($ReleaseType) ? $ReleaseTypes[$ReleaseType].' info' : 'Info' )?></strong></div>
+			<div class="head"><a href="#">&uarr;</a>&nbsp;<strong><?=(!empty($ReleaseType) ? $ReleaseTypes[$ReleaseType].' info' : 'Info' )?></strong></div>
 			<div class="body"><? if ($WikiBody!="") { echo $WikiBody; } else { echo "There is no information on this torrent."; } ?></div>
 		</div>
 <?
