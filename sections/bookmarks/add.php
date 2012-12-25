@@ -36,7 +36,7 @@ if($DB->record_count() == 0) {
 	$Cache->delete_value('bookmarks_'.$Type.'_'.$LoggedUser['ID']);
 	if ($Type == 'torrent') {
 		$Cache->delete_value('bookmarks_torrent_'.$LoggedUser['ID'].'_full');
-		$GroupID = $_GET['id'];
+		$GroupID = (int) $_GET['id'];
 
 		$DB->query("SELECT Name, Year, WikiBody, TagList FROM torrents_group WHERE ID = '$GroupID'");
 		list($GroupTitle, $Year, $Body, $TagList) = $DB->next_record();
