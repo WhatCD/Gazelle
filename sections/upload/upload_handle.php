@@ -630,8 +630,8 @@ if(!$Properties['GroupID']) {
 }
 
 // Use this section to control freeleeches
-$T['FreeLeech'] = 1;
-$T['FreeLeechType'] = 1;
+$T['FreeLeech'] = 0;
+$T['FreeLeechType'] = 0;
 
 // Torrent
 $DB->query("

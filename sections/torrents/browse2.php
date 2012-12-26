@@ -425,7 +425,7 @@ foreach (array('hascue','scene','vanityhouse','releasetype') as $Search) {
 	}
 }
 
-if (!empty($_GET['freetorrent'])) {
+if (!empty($_GET['freetorrent']) || $_GET['freetorrent'] === '0') {
 	switch ($_GET['freetorrent']) {
 		case 0: // Only normal freeleech
 			$SphQL->where('freetorrent', 0);
