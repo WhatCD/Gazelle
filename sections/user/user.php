@@ -273,7 +273,7 @@ if (check_paranoia_here('artistsadded')) {
 	$ArtistsAdded = 0;
 }
 
-/*include(SERVER_ROOT.'/classes/class_user_rank.php');
+include(SERVER_ROOT.'/classes/class_user_rank.php');
 $Rank = new USER_RANK;
 
 $UploadedRank = $Rank->get_rank('uploaded', $Uploaded);
@@ -291,7 +291,7 @@ if($Downloaded == 0) {
 } else {
 	$Ratio = round($Uploaded/$Downloaded, 2);
 }
-$OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio);*/
+$OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio);
 
 ?>
 		<div class="box box_info box_userinfo_percentile">

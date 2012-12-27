@@ -71,8 +71,8 @@ if(check_perms('site_advanced_top10')) {
 				<td class="label">Tags (comma-separated):</td>
 				<td class="ft_taglist">
 					<input type="text" name="tags" size="75" value="<? if(!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />&nbsp;
-					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked':'')?>><label for="rdoAll"> All</label>&nbsp;&nbsp;
-					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked':'')?>><label for="rdoAny"> Any</label>
+					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked="checked"':'')?>><label for="rdoAll"> All</label>&nbsp;&nbsp;
+					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked="checked"':'')?>><label for="rdoAny"> Any</label>
 				</td>
 			</tr>
 			<tr>
@@ -81,7 +81,7 @@ if(check_perms('site_advanced_top10')) {
 					<select name="format" style="width:auto;" class="ft_format">
 						<option value="">Any</option>
 <?	foreach ($Formats as $FormatName) { ?>
-						<option value="<?=display_str($FormatName)?>" <? if(isset($_GET['format']) && $FormatName==$_GET['format']) { ?>selected="selected"<? } ?>><?=display_str($FormatName)?></option>
+						<option value="<?=display_str($FormatName)?>"<? if(isset($_GET['format']) && $FormatName==$_GET['format']) { ?> selected="selected"<? } ?>><?=display_str($FormatName)?></option>
 <?	} ?>				</select>
 				</td>
 			</tr>
@@ -124,7 +124,7 @@ if (!empty($FreeleechToggleQuery))
 $FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
 
 ?>
-	<div style="text-align: right;">
+	<div style="text-align: right;" class="linkbox">
 		<a href="top10.php?<?=$FreeleechToggleQuery?>">[<?=ucfirst($FreeleechToggleName)?> Freeleech in Top 10]</a>
 	</div>
 <?

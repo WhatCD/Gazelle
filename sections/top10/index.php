@@ -5,7 +5,7 @@ if(!check_perms('site_top10')){
 	View::show_header();
 ?>
 <div class="content_basiccontainer">
-	You do not have access to view this feature
+	You do not have access to view this feature.
 </div>
 <?
 	View::show_footer();

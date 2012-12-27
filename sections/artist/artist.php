@@ -703,7 +703,7 @@ if(empty($SimilarArray)) {
 
 ?>
 				<li>
-					<span title=<?=$Score?>><a href="artist.php?id=<?=$Artist2ID?>" style="float:left; display:block;"><?=$Artist2Name?></a></span>
+					<span title="<?=$Score?>"><a href="artist.php?id=<?=$Artist2ID?>" style="float:left; display:block;"><?=$Artist2Name?></a></span>
 					<div style="float:right; display:block; letter-spacing: -1px;">
 						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar.">[-]</a>
 						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar.">[+]</a>
@@ -849,13 +849,14 @@ if($NumSimilar>0) {
 		<div id="flip_view_2" style="display:none;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;">
 			<canvas width="<?=WIDTH?>px" height="<?=HEIGHT-20?>px" id="similarArtistsCanvas"></canvas>
 			<div id="artistTags" style="display:none;">
-				<ul></ul>
+				<ul><li></li></ul>
 			</div>
 			<strong style="margin-left:10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
 		</div>
 		</div>
 
-<script>
+<script type="text/javascript">
+//<![CDATA[
 var cloudLoaded = false;
 
 function flipView() {
@@ -909,7 +910,7 @@ function require(file, callback) {
   newjs.src = file;
   script.parentNode.insertBefore(newjs, script);
 }
-
+//]]>
 </script>
 
 <? } // if $NumSimilar>0 ?>

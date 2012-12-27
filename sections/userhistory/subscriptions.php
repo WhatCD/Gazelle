@@ -118,7 +118,7 @@ if($NumResults) {
 ?>
 			<a href="userhistory.php?action=catchup&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a>&nbsp;&nbsp;&nbsp;
 			<a href="userhistory.php?action=posts&amp;userid=<?=$LoggedUser['ID']?>">Go to post history</a>&nbsp;&nbsp;&nbsp;
-			<a href="userhistory.php?action=quote_notifications">Quote Notifications</a>&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=quote_notifications">Quote notifications</a>&nbsp;&nbsp;&nbsp;
 		</div>
 	</div>
 <?

@@ -40,17 +40,14 @@ list($NumResults) = $DB->next_record();
 	<div class="header">
 		<h2>
 			Quote notifications
-			<?=$NumResults && !empty($UnreadSQL) ? " ($NumResults new)" : ""
-			?>
+			<?=$NumResults && !empty($UnreadSQL) ? " ($NumResults new)" : "" ?>
 		</h2>
 		<div class="linkbox pager">
 			<br />
 			<? if ($UnreadSQL) { ?>
-			<a href="userhistory.php?action=quote_notifications&showall=1">Show
-				all quotes</a>&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=quote_notifications&amp;showall=1">Show all quotes</a>&nbsp;&nbsp;&nbsp;
 			<? } else { ?>
-			<a href="userhistory.php?action=quote_notifications">Show unread
-				quotes</a>&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=quote_notifications">Show unread quotes</a>&nbsp;&nbsp;&nbsp;
 			<? } ?>
 			<a href="userhistory.php?action=subscriptions">Show subscriptions</a>&nbsp;&nbsp;&nbsp;
 			<br /> <br />
@@ -71,24 +68,20 @@ list($NumResults) = $DB->next_record();
 	?>
 	<table class='forum_post box vertical_margin noavatar'>
 		<tr class='colhead_dark'>
-			<td colspan="2"><span style="float: left;"> <a
-					href="forums.php?action=viewforum&amp;forumid=<?=$Result['ForumID'] ?>"><?=$Result['ForumName']
-																							?></a>
-					&gt; <a
-					href="forums.php?action=viewthread&amp;threadid=<?=$Result['TopicID'] ?>"
-					title="<?=display_str($Result['Title']) ?>"><?=Format::cut_string($Result['Title'], 75)
-																?></a>
+			<td colspan="2">
+				<span style="float: left;">
+					<a href="forums.php?action=viewforum&amp;forumid=<?=$Result['ForumID'] ?>"><?=$Result['ForumName'] ?></a>
+					&gt;
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$Result['TopicID'] ?>" title="<?=display_str($Result['Title']) ?>"><?=Format::cut_string($Result['Title'], 75) ?></a>
 					&gt; Quoted by <?=Users::format_username($Result['QuoterID'], false, false, false, false) ?>
-			</span><span style="float: left;" class="last_read"
-				title="Jump to last read"> <a
-					href="forums.php?action=viewthread&amp;threadid=<?=$Result['TopicID']
-																						. ($Result['PostID'] ? '&amp;postid=' . $Result['PostID']
-																														. '#post' . $Result['PostID']
-																										: '')
-																	?>"></a>
-			</span><span id="bar<?=$Result['PostID'] ?>" style="float: right;"> <a
-					href="#">&uarr;</a>
-			</span></td>
+				</span>
+				<span style="float: left;" class="last_read" title="Jump to last read">
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$Result['TopicID'].($Result['PostID'] ? '&amp;postid=' . $Result['PostID'].'#post'.$Result['PostID'] : '') ?>"></a>
+				</span>
+				<span id="bar<?=$Result['PostID'] ?>" style="float: right;">
+					<a href="#">&uarr;</a>
+				</span>
+			</td>
 		</tr>
 	</table>
 	<? } ?>

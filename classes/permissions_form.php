@@ -35,14 +35,14 @@
 	'site_forums_double_post' => 'Can double post in the forums.',
 	'site_view_flow' => 'Can view stats and data pools.',
 	'site_view_full_log' => 'Can view old log entries.',
-	'site_view_torrent_snatchlist' => 'Can view torrent snatchlists.',
+	'site_view_torrent_snatchlist' => 'Can view torrent snatch lists.',
 	'site_recommend_own' => 'Can recommend own torrents.',
 	'site_manage_recommendations' => 'Recommendations management access.',
 	'site_delete_tag' => 'Can delete tags.',
 	'site_disable_ip_history' => 'Disable IP history.',
 	'zip_downloader' => 'Download multiple torrents at once.',
 	'site_debug' => 'Developer access.',
-	'site_proxy_images' => 'Image proxy & Anti-Canary.',
+	'site_proxy_images' => 'Image proxy & anti-canary.',
 	'site_search_many' => 'Can go past low limit of search results.',
 
 	'users_edit_usernames' => 'Can edit usernames.',
@@ -83,8 +83,8 @@
 	'torrents_search_fast' => 'Rapid search (for scripts).',
 	'torrents_hide_dnu' => 'Hide the Do Not Upload list by default.',
 	'torrents_fix_ghosts' => 'Can fix "ghost" groups on artist pages.',
-	'admin_manage_news' => 'Can manage news.',
-	'admin_manage_blog' => 'Can manage blog.',
+	'admin_manage_news' => 'Can manage site news.',
+	'admin_manage_blog' => 'Can manage the site blog.',
 	'admin_manage_polls' => 'Can manage polls.',
 	'admin_manage_forums' => 'Can manage forums (add/edit/delete).',
 	'admin_manage_fls' => 'Can manage FLS.',
@@ -100,7 +100,7 @@
 	'admin_schedule' => 'Can run the site schedule.',
 	'admin_login_watch' => 'Can manage login watch.',
 	'admin_manage_wiki' => 'Can manage wiki access.',
-	'admin_update_geoip' => 'Can update geoip data.',
+	'admin_update_geoip' => 'Can update geoIP data.',
  	'site_collages_recover' => 'Can recover \'deleted\' collages.',
  	'torrents_add_artist' => 'Can add artists to any group.',
  	'edit_unknowns' => 'Can edit unknown release information.',
@@ -108,7 +108,7 @@
  	'forums_polls_moderate' => 'Can feature and close polls.',
 	'project_team' => 'Is part of the project team.',
 	'torrents_edit_vanityhouse' => 'Can mark groups as part of Vanity House.',
-	'artist_edit_vanityhouse' => 'Can mark Artists as part of Vanity House.'
+	'artist_edit_vanityhouse' => 'Can mark artists as part of Vanity House.'
 
  );
  
@@ -149,7 +149,7 @@ function permissions_form(){ ?>
 					<? display_perm('site_admin_forums', 'Can administrate the forums.'); ?>
 					<? display_perm('site_view_flow', 'Can view site stats and data pools.'); ?>
 					<? display_perm('site_view_full_log', 'Can view the full site log.'); ?>
-					<? display_perm('site_view_torrent_snatchlist', 'Can view torrent snatchlists.'); ?>
+					<? display_perm('site_view_torrent_snatchlist', 'Can view torrent snatch lists.'); ?>
 					<? display_perm('site_recommend_own', 'Can add own torrents to recommendations list.'); ?>
 					<? display_perm('site_manage_recommendations', 'Can edit recommendations list.'); ?>
 					<? display_perm('site_delete_tag', 'Can delete tags.'); ?>
@@ -224,7 +224,7 @@ function permissions_form(){ ?>
 					<? display_perm('torrents_add_artist', 'Can add artists to any group.'); ?>
 					<? display_perm('edit_unknowns', 'Can edit unknown release information.'); ?>
 					<? display_perm('torrents_edit_vanityhouse', 'Can mark groups as part of Vanity House.'); ?>
-					<? display_perm('artist_edit_vanityhouse', 'Can mark Artists as part of Vanity House.'); ?>
+					<? display_perm('artist_edit_vanityhouse', 'Can mark artists as part of Vanity House.'); ?>
 					<? display_perm('site_add_logs', 'Can add logs to torrents after upload'); ?>
 					<? display_perm('torrents_hide_dnu', 'Hide the Do Not Upload list by default.'); ?>
 					<? display_perm('torrents_fix_ghosts', 'Can fix ghost groups on artist pages.'); ?>
@@ -239,8 +239,8 @@ function permissions_form(){ ?>
 			</tr>
 			<tr>
 				<td>
-					<? display_perm('admin_manage_news', 'Can manage news'); ?>
-					<? display_perm('admin_manage_blog', 'Can manage blog'); ?>
+					<? display_perm('admin_manage_news', 'Can manage site news'); ?>
+					<? display_perm('admin_manage_blog', 'Can manage the site blog'); ?>
 					<? display_perm('admin_manage_polls', 'Can manage polls'); ?>
 					<? display_perm('admin_manage_forums', 'Can manage forums (add/edit/delete)'); ?>
 					<? display_perm('admin_manage_fls', 'Can manage FLS'); ?>
@@ -256,7 +256,7 @@ function permissions_form(){ ?>
 					<? display_perm('admin_schedule', 'Can run the site schedule.'); ?>
 					<? display_perm('admin_login_watch', 'Can manage login watch.'); ?>
 					<? display_perm('admin_manage_wiki', 'Can manage wiki access.'); ?>
-					<? display_perm('admin_update_geoip', 'Can update geoip data.'); ?>
+					<? display_perm('admin_update_geoip', 'Can update geoIP data.'); ?>
 				</td>
 			</tr>
 		</table>

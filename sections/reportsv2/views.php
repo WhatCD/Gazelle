@@ -59,7 +59,7 @@ $Results = $DB->to_array();
 	list($Username, $Reports) = $Result;
 ?>
 			<tr>
-				<td><?=$Username?></td>
+				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
 				<td><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
@@ -79,7 +79,7 @@ $Results = $DB->to_array();
 	list($Username, $Reports) = $Result;
 ?>
 			<tr>
-				<td><?=$Username?></td>
+				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
 				<td><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
@@ -113,7 +113,7 @@ $Results = $DB->to_array();
 				Reports of torrents with ID = 1
 			</li>
 			<li>
-				<a href="reportsv2.php?view=torrent&amp;id=1">http://<?=NONSSL_SITE_URL?>/reportsv2.php?view=torrent&amp;id=1</a>
+				<a href="reportsv2.php?view=torrent&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=torrent&amp;id=1</a>
 			</li>
 		</ul>
 		<br />
@@ -123,7 +123,7 @@ $Results = $DB->to_array();
 				Reports of torrents within the group with ID = 1
 			</li>
 			<li>
-				<a href="reportsv2.php?view=group&amp;id=1">http://<?=NONSSL_SITE_URL?>/reportsv2.php?view=group&amp;id=1</a>
+				<a href="reportsv2.php?view=group&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=group&amp;id=1</a>
 			</li>
 		</ul>
 		<br />
@@ -133,7 +133,7 @@ $Results = $DB->to_array();
 				The report with ID = 1
 			</li>
 			<li>
-				<a href="reportsv2.php?view=report&amp;id=1">http://<?=NONSSL_SITE_URL?>/reportsv2.php?view=report&amp;id=1</a>
+				<a href="reportsv2.php?view=report&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=report&amp;id=1</a>
 			</li>
 		</ul>
 		<br />
@@ -143,7 +143,7 @@ $Results = $DB->to_array();
 				Reports created by <?=$Owner?>
 			</li>
 			<li>
-				<a href="reportsv2.php?view=reporter&amp;id=<?=$OwnerID?>">http://<?=NONSSL_SITE_URL?>/reportsv2.php?view=reporter&amp;id=<?=$OwnerID?></a>
+				<a href="reportsv2.php?view=reporter&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=reporter&amp;id=<?=$OwnerID?></a>
 			</li>
 		</ul>
 		<br />
@@ -153,7 +153,7 @@ $Results = $DB->to_array();
 				Reports for torrents uploaded by <?=$Owner?>
 			</li>
 			<li>
-				<a href="reportsv2.php?view=uploader&amp;id=<?=$OwnerID?>">http://<?=NONSSL_SITE_URL?>/reportsv2.php?view=uploader&amp;id=<?=$OwnerID?></a>
+				<a href="reportsv2.php?view=uploader&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=uploader&amp;id=<?=$OwnerID?></a>
 			</li>
 		</ul>
 		<br />
@@ -163,7 +163,7 @@ $Results = $DB->to_array();
 				Reports for torrents resolved by <?=$Owner?>
 			</li>
 			<li>
-				<a href="reportsv2.php?view=resolver&amp;id=<?=$OwnerID?>">http://<?=NONSSL_SITE_URL?>/reportsv2.php?view=resolver&amp;id=<?=$OwnerID?></a>
+				<a href="reportsv2.php?view=resolver&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=resolver&amp;id=<?=$OwnerID?></a>
 			</li>
 		</ul>
 		<br /><br />
@@ -187,7 +187,7 @@ $Results = $DB->to_array();
 			<tr class="colhead">
 				<td>Staff member</td>
 				<td>Current count</td>
-				<td>Tasted</td>
+				<td>Tasted count</td>
 			</tr>
 		
 	<?	
@@ -196,9 +196,9 @@ $Results = $DB->to_array();
 				<td>
 					<a href="reportsv2.php?view=staff&amp;id=<?=$Array['ResolverID']?>"><?=display_str($Array['Username'])?>'s reports</a>
 				</td>
-				<td><?=$Array['Count']?></td>
+				<td><?=number_format($Array['Count'])?></td>
 				<td>
-					<a href="reportsv2.php?view=tasted&amp;id=<?=$Array['ResolverID']?>"><?=display_str($Array['Tasted'])?></a>
+					<a href="reportsv2.php?view=tasted&amp;id=<?=$Array['ResolverID']?>"><?=number_format($Array['Tasted'])?></a>
 				</td>
 			</tr>
 	<?	

@@ -31,7 +31,7 @@ if(!empty($_REQUEST['confirm'])) {
 	$Val->SetFields('confirm_password',true,'compare', 'Your passwords do not match.',array('comparefield'=>'password'));
 	$Val->SetFields('readrules',true,'checkbox', 'You did not check the box that says you will read the rules.');
 	$Val->SetFields('readwiki',true,'checkbox', 'You did not check the box that says you will read the wiki.');
-	$Val->SetFields('agereq',true,'checkbox', 'You did not check the box that says you are 13 or older.');
+	$Val->SetFields('agereq',true,'checkbox', 'You did not check the box that says you are 13 years of age or older.');
 	//$Val->SetFields('captcha',true,'string', 'You did not enter a captcha code.',array('minlength'=>6,'maxlength'=>6));
 
 	if(!empty($_POST['submit'])) {
@@ -68,7 +68,7 @@ if(!empty($_REQUEST['confirm'])) {
 		if(!$Err) {
 			$torrent_pass=Users::make_secret();
 			
-			//Previously SELECT COUNT(ID) FROM users_main, which is a lot slower.
+			// Previously SELECT COUNT(ID) FROM users_main, which is a lot slower.
 			$DB->query("SELECT ID FROM users_main LIMIT 1");
 			$UserCount = $DB->record_count();
 			if($UserCount == 0) {
@@ -91,7 +91,7 @@ if(!empty($_REQUEST['confirm'])) {
 			$UserID = $DB->inserted_id();
 			
 			
-			//User created, delete invite. If things break after this point then it's better to have a broken account to fix, or a 'free' invite floating around that can be reused
+			// User created, delete invite. If things break after this point, then it's better to have a broken account to fix than a 'free' invite floating around that can be reused
 			$DB->query("DELETE FROM invites WHERE InviteKey='".db_string($_REQUEST['invite'])."'");
 
 			$DB->query("SELECT ID FROM stylesheets WHERE `Default`='1'");
@@ -128,7 +128,7 @@ if(!empty($_REQUEST['confirm'])) {
 				list($InviterTreePosition, $TreeID, $TreeLevel) = $DB->next_record();
 				
 				// If the inviter doesn't have an invite tree
-				// Note - this should never happen unless you've transfered from another db, like we have
+				// Note: This should never happen unless you've transferred from another database, like What.CD did
 				if($DB->record_count() == 0) {
 					$DB->query("SELECT MAX(TreeID)+1 FROM invite_tree");
 					list($TreeID) = $DB->next_record();

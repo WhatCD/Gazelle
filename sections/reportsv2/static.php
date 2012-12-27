@@ -59,9 +59,9 @@ if(!$ID) {
 			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
 			list($Username) = $DB->next_record();
 			if($Username) {
-				$Title = $Username."'s in progress reports";
+				$Title = $Username."'s in-progress reports";
 			} else {
-				$Title = $ID."'s in progress reports";
+				$Title = $ID."'s in-progress reports";
 			}
 			$Where = "WHERE r.Status = 'InProgress' AND r.ResolverID = ".$ID;
 			break;
@@ -69,15 +69,15 @@ if(!$ID) {
 			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
 			list($Username) = $DB->next_record();
 			if($Username) {
-				$Title = $Username."'s in resolved reports";
+				$Title = $Username."'s resolved reports";
 			} else {
-				$Title = $ID."'s in resolved reports";
+				$Title = $ID."'s resolved reports";
 			}
 			$Where = "WHERE r.Status = 'Resolved' AND r.ResolverID = ".$ID;
 			$Order = "ORDER BY r.LastChangeTime DESC";
 			break;
 		case "group" :
-			$Title = "Non resolved reports for the group ".$ID;
+			$Title = "Unresolved reports for the group ".$ID;
 			$Where = "WHERE r.Status != 'Resolved' AND tg.ID = ".$ID;
 			break;
 		case "torrent" :
@@ -85,7 +85,7 @@ if(!$ID) {
 			$Where = "WHERE r.TorrentID = ".$ID;
 			break;
 		case "report" :
-			$Title = "Seeing resolution of report ".$ID;
+			$Title = "Viewing resolution of report ".$ID;
 			$Where = "WHERE r.ID = ".$ID;
 			break;
 		case "reporter" :
@@ -110,7 +110,7 @@ if(!$ID) {
 			$Where = "WHERE r.Status != 'Resolved' AND t.UserID = ".$ID;
 			break;
 		case "type":
-			$Title = "All New reports for the chosen type";
+			$Title = "All new reports for the chosen type";
 			$Where = "WHERE r.Status = 'New' AND r.Type = '".$ID."'";
 			break;
 			break;

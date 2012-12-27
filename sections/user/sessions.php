@@ -58,7 +58,7 @@ View::show_header($Username.' &gt; Sessions');
 						<input type="hidden" name="action" value="sessions" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="all" value="1" />
-						<input type="submit" value="Logout All" />
+						<input type="submit" value="Log out all" />
 					</form>
 				</td>
 			</tr>
@@ -78,7 +78,7 @@ View::show_header($Username.' &gt; Sessions');
 						<input type="hidden" name="action" value="sessions" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="session" value="<?=$ThisSessionID?>" />
-						<input type="submit" value="<?=(($ThisSessionID == $SessionID)?'Current" disabled="disabled':'Logout')?>" />
+						<input type="submit" value="<?=(($ThisSessionID == $SessionID)?'Current" disabled="disabled':'Log out')?>" />
 					</form>
 				</td>
 			</tr>

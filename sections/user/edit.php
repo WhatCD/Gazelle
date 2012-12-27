@@ -102,7 +102,7 @@ echo $Val->GenerateJS('userform');
 			</tr>
 <? if (check_perms('site_advanced_search')) { ?>
 			<tr>
-				<td class="label"><strong>Default Search Type</strong></td>
+				<td class="label"><strong>Default search type</strong></td>
 				<td>
 					<select name="searchtype" id="searchtype">
 						<option value="0"<? if ($SiteOptions['SearchType'] == 0) { ?>selected="selected"<? } ?>>Simple</option>
@@ -112,7 +112,7 @@ echo $Val->GenerateJS('userform');
 			</tr>
 <? } ?>
 			<tr>
-				<td class="label"><strong>Torrent Grouping</strong></td>
+				<td class="label"><strong>Torrent grouping</strong></td>
 				<td>
 					<select name="disablegrouping" id="disablegrouping">
 						<option value="0"<? if ($SiteOptions['DisableGrouping2'] == 0) { ?>selected="selected"<? } ?>>Group torrents by default</option>
@@ -125,7 +125,7 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Discography View</strong></td>
+				<td class="label"><strong>Discography view</strong></td>
 				<td>
 					<select name="discogview" id="discogview">
 						<option value="0"<? if ($SiteOptions['DiscogView'] == 0) { ?>selected="selected"<? } ?>>Open by default</option>
@@ -141,7 +141,7 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Posts per page (Forum)</strong></td>
+				<td class="label"><strong>Forum posts per page</strong></td>
 				<td>
 					<select name="postsperpage" id="postsperpage">
 						<option value="25"<? if ($SiteOptions['PostsPerPage'] == 25) { ?>selected="selected"<? } ?>>25 (Default)</option>
@@ -191,7 +191,7 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Browse Page Tag list</strong></td>
+				<td class="label"><strong>Browse page tag list</strong></td>
 				<td>
 					<select name="showtags" id="showtags">
 						<option value="1"<? if ($SiteOptions['ShowTags'] == 1) { ?>selected="selected"<? } ?>>Open by default.</option>
@@ -290,7 +290,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Email</strong></td>
 				<td><input type="text" size="50" name="email" id="email" value="<?=display_str($Email)?>" />
-					<p class="min_padding">If changing this field you must enter your current password in the "Current password" field before saving your changes.</p>
+					<p class="min_padding">If changing this field, you must enter your current password in the "Current password" field before saving your changes.</p>
 				</td>
 			</tr>
 			<tr>
@@ -444,7 +444,7 @@ list($ArtistsAdded) = $DB->next_record();
 			</tr>
 			<tr class="colhead_dark">
 				<td colspan="2">
-					<strong>Reset Passkey</strong>
+					<strong>Reset passkey</strong>
 				</td>
 			</tr>
 			<tr>

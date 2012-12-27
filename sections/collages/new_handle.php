@@ -40,7 +40,7 @@ if(!$Err) {
 	if($DB->record_count()) {
 		list($ID, $Deleted) = $DB->next_record();
 		if($Deleted) {
-			$Err = 'That collection already exists but needs to be recovered, please <a href="staffpm.php">contact</a> the staff team!';
+			$Err = "That collection already exists but needs to be recovered; please <a href=\"staffpm.php\">contact</a> the staff team!";
 		} else {
 			$Err = "That collection already exists: <a href=\"/collages.php?id=$ID\">$ID</a>.";
 		}

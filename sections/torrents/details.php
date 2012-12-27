@@ -575,18 +575,18 @@ foreach ($TorrentList as $Torrent) {
 					</blockquote>
 <? if(check_perms('site_moderate_requests')) { ?>
 					<div class="linkbox">
-						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>">[Mass PM Snatchers]</a>
+						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>">[Mass PM snatchers]</a>
 					</div>
 <? } ?>
 					<div class="linkbox">
-						<a href="#" onclick="show_peers('<?=$TorrentID?>', 0);return false;">(View Peerlist)</a>
+						<a href="#" onclick="show_peers('<?=$TorrentID?>', 0);return false;">(View peer list)</a>
 <? if(check_perms('site_view_torrent_snatchlist')) { ?> 
-						<a href="#" onclick="show_downloads('<?=$TorrentID?>', 0);return false;">(View Downloadlist)</a>
-						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;">(View Snatchlist)</a>
+						<a href="#" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">(View download list)</a>
+						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">(View snatch list)</a>
 <? } ?>
 						<a href="#" onclick="show_files('<?=$TorrentID?>');return false;">(View file list)</a>
 <? if($Reported) { ?> 
-						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View Report Information)</a>
+						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View report information)</a>
 <? } ?>
 					</div>
 					<div id="peers_<?=$TorrentID?>" class="hidden"></div>
@@ -610,7 +610,7 @@ if (count($Requests) > 0) {
 	$i = 0;
 ?>
 		<div class="box">
-			<div class="head"><span style="font-weight: bold;">Requests (<?=count($Requests)?>)</span> <span style="float:right;"><a href="#" onclick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span></div>
+			<div class="head"><span style="font-weight: bold;">Requests (<?=count($Requests)?>)</span> <a href="#" style="float:right;" onclick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></div>
 			<table id="requests" class="request_table hidden">
 				<tr class="colhead">
 					<td>Format / Bitrate / Media</td>

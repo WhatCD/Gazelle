@@ -32,7 +32,7 @@ $Types = array(
 					'upload' => '0',
 					'warn' => '0',
 					'delete' => '1',
-					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.2]2.2[/url]. Your torrent was reported because it was a duplicate of another torrent.'
+					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#h2.2]2.2[/url]. Your torrent was reported because it was a duplicate of another torrent.'
 				)
 			),
 			'banned' => array(
@@ -48,7 +48,7 @@ $Types = array(
 					'upload' => '0',
 					'warn' => '4',
 					'delete' => '1',
-					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r1.2]1.2[/url]. You have uploaded material that is currently forbidden. Items on the Do Not Upload list (at the top of the [url=http://'.NONSSL_SITE_URL.'/upload.php]upload page[/url]) and in the [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r1.2]Specifically Banned[/url] portion of the uploading rules cannot be uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comments of the DNU list.
+					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#h1.2]1.2[/url]. You have uploaded material that is currently forbidden. Items on the Do Not Upload list (at the top of the [url=http://'.NONSSL_SITE_URL.'/upload.php]upload page[/url]) and in the [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#h1.2]Specifically Banned[/url] portion of the uploading rules cannot be uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comments of the DNU list.
 Your torrent was reported because it contained material from the DNU list or from the Specifically Banned section of the rules.'
 				)
 			),
@@ -106,7 +106,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 					'upload' => '0',
 					'warn' => '0',
 					'delete' => '1',
-					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.2]2.2[/url]. Your torrent was reported because it was trumped by another torrent.'
+					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#h2.2]2.2[/url]. Your torrent was reported because it was trumped by another torrent.'
 				)
 			)
 		),
@@ -246,7 +246,7 @@ Your torrent was reported because it was missing discs.'
 					'upload' => '0',
 					'warn' => '1',
 					'delete' => '1',
-					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.1.19.3]2.1.19.3[/url]. Bonus discs may be uploaded separately in accordance with [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.4]2.4[/url]. Please note that individual bonus tracks cannot be uploaded without the rest of the album. Bonus tracks are not bonus discs. Enhanced audio CDs with data or video tracks must be uploaded without the non-audio tracks. If you want to share the videos or data, you may host the files off-site with a file sharing service and include the link to that service in your torrent description.
+					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.1.19.3]2.1.19.3[/url]. Bonus discs may be uploaded separately in accordance with [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#h2.4]2.4[/url]. Please note that individual bonus tracks cannot be uploaded without the rest of the album. Bonus tracks are not bonus discs. Enhanced audio CDs with data or video tracks must be uploaded without the non-audio tracks. If you want to share the videos or data, you may host the files off-site with a file sharing service and include the link to that service in your torrent description.
 Your torrent was reported because it contained only bonus tracks without the full album.'
 				)
 			),
@@ -303,7 +303,7 @@ Your torrent was reported because it contained one of more audio files that did 
 					'warn' => '2',
 					'delete' => '1',
 					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.1.6]2.1.6[/url]. All music torrents must be encoded with a single encoder using the same settings.
-Your torrent was reported because it contained one or more audio files that were encoded by different audio encoders.'
+Your torrent was reported because it contained one or more audio files that were encoded by different audio encoders or with different encoder settings.'
 				)
 			),
 			'single_track' => array(
@@ -506,7 +506,7 @@ Your torrent was reported because it was a user compilation.'
 					'upload' => '0',
 					'warn' => '0',
 					'delete' => '0',
-					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.3.9]2.3.9[/url]. All lossless analog rips should include clear information about source lineage. All lossless SACD digital layer analog rips and vinyl rips must include clear information about recording equipment used (see [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.8]2.8[/url]). If you used a USB turntable for a vinyl rip, clearly indicate this in your lineage information. Also include all intermediate steps up to lossless encoding, such as the program used for mastering, sound card used, etc. Lossless analog rips missing rip information can be trumped by better documented lossless analog rips of equal or better quality. In order to trump a lossless analog rip without a lineage, this lineage must be included as a .txt or .log file within the new torrent.
+					'pm' => '[url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#r2.3.9]2.3.9[/url]. All lossless analog rips should include clear information about source lineage. All lossless SACD digital layer analog rips and vinyl rips must include clear information about recording equipment used (see [url=http://'.NONSSL_SITE_URL.'/rules.php?p=upload#h2.8]2.8[/url]). If you used a USB turntable for a vinyl rip, clearly indicate this in your lineage information. Also include all intermediate steps up to lossless encoding, such as the program used for mastering, sound card used, etc. Lossless analog rips missing rip information can be trumped by better documented lossless analog rips of equal or better quality. In order to trump a lossless analog rip without a lineage, this lineage must be included as a .txt or .log file within the new torrent.
 Your torrent is now eligible for trumping by a better-sounding rip with complete lineage information.'
 				)
 			),

@@ -125,27 +125,27 @@ if (!list($Labels,$InFlow,$OutFlow,$Max) = $Cache->get_value('users_timeline')) 
 
 View::show_header('Detailed User Statistics');
 ?>
-<h3>User Flow</h3>
+<h3 id="User_Flow"><a href="#User_Flow">User Flow</a></h3>
 <div class="box pad center">
 	<img src="http://chart.apis.google.com/chart?cht=lc&amp;chs=880x160&amp;chco=000D99,99000D&amp;chg=0,-1,1,1&amp;chxt=y,x&amp;chxs=0,h&amp;chxl=1:|<?=implode('|',$Labels)?>&amp;chxr=0,0,<?=$Max?>&amp;chd=t:<?=implode(',',$InFlow)?>|<?=implode(',',$OutFlow)?>&amp;chls=2,4,0&amp;chdl=New+Registrations|Disabled+Users&amp;chf=bg,s,FFFFFF00" alt="User Flow Chart" />
 </div>
 <br />
-<h3>User Classes</h3>
+<h3 id="User_Classes"><a href="#User_Classes">User Classes</a></h3>
 <div class="box pad center">
 	<img src="<?=$ClassDistribution?>" alt="User Class Distribution" />
 </div>
 <br />
-<h3>User Platforms</h3>
+<h3 id="User_Platforms"><a href="#User_Platforms">User Platforms</a></h3>
 <div class="box pad center">
 	<img src="<?=$PlatformDistribution?>" alt="User Platform Distribution" />
 </div>
 <br />
-<h3>User Browsers</h3>
+<h3 id="User_Browsers"><a href="#User_Browsers">User Browsers</a></h3>
 <div class="box pad center">
 	<img src="<?=$BrowserDistribution?>" alt="User Browsers Market Share" />
 </div>
 <br />
-<h3>Geographical Distribution Map</h3>
+<h3 id="Geo_Dist_Map"><a href="#Geo_Dist_Map">Geographical Distribution Map</a></h3>
 <div class="box center">
 	<img src="http://chart.apis.google.com/chart?cht=map:fixed=-55,-180,73,180&amp;chs=440x220&amp;chd=t:<?=implode(',',$Rank)?>&amp;chco=FFFFFF,EDEDED,1F0066&amp;chld=<?=implode('|',$Countries)?>&amp;chf=bg,s,CCD6FF" alt="Geographical Distribution Map - Worldwide" />
 	<img src="http://chart.apis.google.com/chart?cht=map:fixed=37,-26,65,67&amp;chs=440x220&amp;chs=440x220&amp;chd=t:<?=implode(',',$Rank)?>&amp;chco=FFFFFF,EDEDED,1F0066&amp;chld=<?=implode('|',$Countries)?>&amp;chf=bg,s,CCD6FF" alt="Geographical Distribution Map - Europe" />

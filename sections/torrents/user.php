@@ -287,7 +287,7 @@ $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 					</td>
 				</tr>
 				<tr>
-					<td class="label"><strong>Rip Specifics:</strong></td>
+					<td class="label"><strong>Rip specifics:</strong></td>
 					<td class="nobr" colspan="3">
 						<select id="bitrate" name="bitrate" class="ft_bitrate">
 							<option value="">Bitrate</option>

@@ -632,7 +632,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 			</tr>
 			<tr id="rip_specifics">
 				<td class="label">Rip specifics:</td>
-				<td class="nobr" colspan="3" class="ft_ripspecifics">
+				<td class="nobr ft_ripspecifics" colspan="3">
 					<select id="bitrate" name="encoding" class="ft_bitrate">
 						<option value="">Bitrate</option>
 <?	foreach ($Bitrates as $BitrateName) { ?>
@@ -660,7 +660,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 			</tr>
 			<tr id="misc">
 				<td class="label">Misc:</td>
-				<td class="nobr" colspan="3" class="ft_misc">
+				<td class="nobr ft_misc" colspan="3">
 					<select name="haslog" class="ft_haslog">
 						<option value="">Has Log</option>
 						<option value="1" <?Format::selected('haslog','1')?>>Yes</option>
@@ -754,7 +754,7 @@ foreach ($Categories as $CatKey => $CatName) {
 	$x++;
 ?>
 				<td>
-					<input type="checkbox" name="filter_cat[<?=($CatKey+1)?>]" id="cat_<?=($CatKey+1)?>" value="1" <? if (isset($_GET['filter_cat'][$CatKey+1])) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="filter_cat[<?=($CatKey+1)?>]" id="cat_<?=($CatKey+1)?>" value="1" <? if (isset($_GET['filter_cat'][$CatKey+1])) { ?>checked="checked" <? } ?>/>
 					<label for="cat_<?=($CatKey+1)?>"><?=$CatName?></label>
 				</td>
 <?
@@ -762,7 +762,7 @@ foreach ($Categories as $CatKey => $CatName) {
 ?>
 			</tr>
 		</table>
-		<table class="layout cat_list <? if (empty($LoggedUser['ShowTags'])) { ?>hidden<? } ?>" id="taglist">
+		<table class="layout cat_list<? if (empty($LoggedUser['ShowTags'])) { ?> hidden<? } ?>" id="taglist">
 			<tr>
 <?
 $GenreTags = $Cache->get_value('genre_tags');

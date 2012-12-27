@@ -109,8 +109,8 @@ if(check_perms('site_advanced_top10')) { ?>
 				<td class="label">Tags (comma-separated):</td>
 				<td class="ft_taglist">
 					<input type="text" name="tags" size="75" value="<? if(!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />&nbsp;
-					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked':'')?>><label for="rdoAll"> All</label>&nbsp;&nbsp;
-					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked':'')?>><label for="rdoAny"> Any</label>
+					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked="checked"':'')?>><label for="rdoAll"> All</label>&nbsp;&nbsp;
+					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked="checked"':'')?>><label for="rdoAny"> Any</label>
 				</td>
 			</tr>
 			<tr id="yearfilter">
@@ -212,7 +212,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 				<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 					<td class="center">
 						<div title="View" id="showimg_<?=$GroupID?>" class="show_torrents">
-							<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group"></a>
+							<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
 						</div>
 					</td>
 					<td class="center">
