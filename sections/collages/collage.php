@@ -390,7 +390,7 @@ View::show_header($Name,'browse,collage,bbcode,voting');
 if (check_perms('site_collages_manage') && !$Locked) { ?>
 			<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>">[Manage torrents]</a>
 <? } ?>
-			<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>">[Report collage]</a>
+			<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>">[Report Collage]</a>
 <? if (check_perms('site_collages_delete') || $CreatorID == $LoggedUser['ID']) { ?>
 			<a href="collages.php?action=delete&amp;collageid=<?=$CollageID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this collage?.');">[Delete]</a>
 <? } ?>

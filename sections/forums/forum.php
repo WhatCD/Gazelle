@@ -70,9 +70,9 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 	<h2><a href="forums.php">Forums</a> &gt; <?=$ForumName?></h2>
 	<div class="linkbox">
 <? if(check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')){ ?>
-		[<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>">New thread</a>]
+		[<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>">New Thread</a>]
 <? } ?>
-		[<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this forum'?'Hide search':'Search this forum'); return false;">Search this forum</a>]
+		[<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this Forum'?'Hide Search':'Search this Forum'); return false;">Search this Forum</a>]
 		<div id="searchforum" class="hidden center">
 			<div style="display: inline-block;">
 				<h3>Search this forum:</h3>
@@ -110,9 +110,9 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 	if(check_perms('users_mod')) {
 	$DB->query("SELECT ForumID from subscribed_forums WHERE ForumID='$ForumID' AND SubscriberID='$LoggedUser[ID]'");
         if($DB->record_count() == 0) { ?>
-		[<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Subscribe to forum</a>]
+		[<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Subscribe to Forum</a>]
 <?      } else { ?> 
-		[<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Unsubscribe from forum</a>]
+		[<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Unsubscribe from Forum</a>]
 <?      } 
 	}
  */
@@ -121,7 +121,7 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 	</div>
 <? if(check_perms('site_moderate_forums')) { ?>
 	<div class="linkbox">
-		[<a href="forums.php?action=edit_rules&amp;forumid=<?=$ForumID?>">Change specific rules</a>]
+		<a href="forums.php?action=edit_rules&amp;forumid=<?=$ForumID?>">Change specific rules</a>
 	</div>
 <? } ?>
 <? if(!empty($Forums[$ForumID]['SpecificRules'])) { ?>

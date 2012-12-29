@@ -282,6 +282,7 @@ CREATE TABLE `forums` (
   `LastPostTopicID` int(10) NOT NULL DEFAULT '0',
   `LastPostTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `AutoLock` enum('0','1') COLLATE utf8_bin DEFAULT '1',
+  `AutoLockWeeks` int(3) unsigned NOT NULL DEFAULT '4',
   PRIMARY KEY (`ID`),
   KEY `Sort` (`Sort`),
   KEY `MinClassRead` (`MinClassRead`)

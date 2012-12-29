@@ -27,7 +27,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 	<div class="hidden" id="newthreadpreview">
 		<div class="linkbox">
 			<div class="center">
-				<a href="#" onclick="return false;">[Report thread]</a>
+				<a href="#" onclick="return false;">[Report Thread]</a>
 				<a href="#" onclick="return false;"><?=!empty($HeavyInfo['AutoSubscribe']) ? '[Unsubscribe]' : '[Subscribe]'?></a>
 			</div>
 		</div>
@@ -56,7 +56,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 					Just now
 					</span>
 					<span id="barpreview" style="float:right;">
-						<a href="#newthreadpreview">[Report post]</a>
+						<a href="#newthreadpreview">[Report Post]</a>
 						&nbsp;
 						<a href="#">&uarr;</a>
 					</span>
