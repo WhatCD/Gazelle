@@ -155,7 +155,7 @@ View::show_header('Ratio Requirements');
             </li>
             <li>In this example, Rippy has snatched 90 torrents, and is currently seeding 45 torrents.</li>
             <li>To calculate Rippy&#39;s actual required ratio, we take his maximum required ratio (0% seeded), which is 0.30, and multiply it by [1 - seeding/snatched] (which is 0.50). Written out:
-                0.05 * [1 - (45/90)] = 0.15.
+                0.3 * [1 - (45/90)] = 0.15.
             </li>
             <li>The resulting required ratio is 0.15, which falls between the maximum required ratio of 0.30 and the minimum required ratio of 0.05 for his amount downloaded bracket.</li>
             <li>If Rippy&#39;s on-site required ratio was listed as a value greater than the calculated value, this would be because he hadn&#39;t seeded those 45 torrents for a 72 hour period in the

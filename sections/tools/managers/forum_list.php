@@ -44,11 +44,13 @@ $DB->query('SELECT
 	MinClassRead,
 	MinClassWrite,
 	MinClassCreate,
-	AutoLock
+	AutoLock,
+	AutoLockWeeks
 	FROM forums
 	ORDER BY CategoryID, Sort ASC');
 ?>
 <div class="header">
+	<script type="text/javacript">document.getElementByID('content').style.overflow='visible';</script>
 	<h2>Forum control panel</h2>
 </div>
 <table width="100%">
@@ -61,11 +63,12 @@ $DB->query('SELECT
 		<td>Min class write</td>
 		<td>Min class create</td>
 		<td>Autolock</td>
+		<td>Autolock weeks</td>
 		<td>Submit</td>
 	</tr>
 <?
 $Row = 'b';
-while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClassWrite, $MinClassCreate, $AutoLock) = $DB->next_record()){
+while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClassWrite, $MinClassCreate, $AutoLock, $AutoLockWeeks) = $DB->next_record()){
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
 	<tr class="row<?=$Row?>">
@@ -108,6 +111,9 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 			</td>
 			<td>
 				<input type="checkbox" name="autolock" <?=($AutoLock == '1')?'checked ':''?>/>
+			</td>
+			<td>
+				<input type="text" name="autolockweeks" value="<?=$AutoLockWeeks?>" />
 			</td>
 			<td>
 				<input type="submit" name="submit" value="Edit" />
@@ -160,6 +166,9 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 			</td>
 			<td>
 				<input type="checkbox" name="autolock" checked />
+			</td>
+			<td>
+				<input type="text" name="autolockweeks" value="4" />
 			</td>
 			<td>
 				<input type="submit" value="Create" />

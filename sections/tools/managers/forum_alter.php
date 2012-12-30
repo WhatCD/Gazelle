@@ -42,12 +42,13 @@ if($_POST['submit'] == 'Delete'){ //Delete
 			MinClassRead='$P[minclassread]',
 			MinClassWrite='$P[minclasswrite]',
 			MinClassCreate='$P[minclasscreate]',
-			AutoLock='$P[autolock]'
+			AutoLock='$P[autolock]',
+			AutoLockWeeks='$P[autolockweeks]'
 			WHERE ID='$P[id]'");
 	} else { //Create
 		$DB->query("INSERT INTO forums
-			(Sort, CategoryID, Name, Description, MinClassRead, MinClassWrite, MinClassCreate, AutoLock) VALUES
-			('$P[sort]', '$P[categoryid]', '$P[name]','$P[description]','$P[minclassread]','$P[minclasswrite]','$P[minclasscreate]','$P[autolock]')");
+			(Sort, CategoryID, Name, Description, MinClassRead, MinClassWrite, MinClassCreate, AutoLock, AutoLockWeeks) VALUES
+			('$P[sort]', '$P[categoryid]', '$P[name]','$P[description]','$P[minclassread]','$P[minclasswrite]','$P[minclasscreate]','$P[autolock]','$P[autolockweeks]')");
 	}
 }
 

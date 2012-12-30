@@ -619,7 +619,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 				FROM forums_topics AS t
 				JOIN forums AS f ON t.ForumID = f.ID
 				WHERE t.IsLocked='0' AND t.IsSticky='0'
-				  AND t.LastPostTime<'".time_minus(3600*24*28)."'
+				  AND DATEDIFF(CURDATE(),DATE(t.LastPostTime))/7>f.AutoLockWeeks
 				  AND f.AutoLock = '1'");
 	$IDs = $DB->collect('ID');
 	
