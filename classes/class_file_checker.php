@@ -3,7 +3,7 @@
 $music_extensions = array("mp3","flac","mp4","m4a","m3u","m4b","pls","m3u8","log","txt",
 			  "cue","jpg","jpeg","png","gif","dts","ac3","nfo",
 		          "sfv","md5","accurip","ffp","pdf", "mobi", "epub", "htm", "html", "lit",
-			   "chm", "rtf", "doc", "djv", "djvu");
+			   "chm", "rtf", "doc", "djv", "djvu", "azw3");
 
 $comics_extensions = array("cbr", "cbz", "pdf", "jpg","jpeg","png","gif");
 
