@@ -60,16 +60,8 @@ if ($SiteOptions) {
 
 View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings');
 
-$DB->query("SELECT PushService, PushOptions FROM
-    users_push_notifications WHERE UserID = '$LoggedUser[ID]'");
 
-list($PushService, $PushOptions) = $DB->next_record(MYSQLI_NUM, false);
 
-if ($PushOptions) {
-	$PushOptions = unserialize($PushOptions);
-} else {
-	$PushOptions = array();
-}
 echo $Val->GenerateJS('userform');
 ?>
 <div class="thin">
@@ -293,6 +285,8 @@ echo $Val->GenerateJS('userform');
 					<p class="min_padding">If changing this field, you must enter your current password in the "Current password" field before saving your changes.</p>
 				</td>
 			</tr>
+<!--		-->
+
 			<tr>
 				<td class="label"><strong>Info</strong></td>
 				<td><?php $textarea = new TEXTAREA_PREVIEW('info', 'info', display_str($Info), 50, 8); ?></td>

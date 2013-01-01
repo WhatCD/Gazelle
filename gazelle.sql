@@ -424,12 +424,6 @@ CREATE TABLE `ip_bans` (
   KEY `ToIP` (`ToIP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `lastfm_users` (
-  `ID` int(10) unsigned NOT NULL,
-  `Username` varchar(20) NOT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `library_contest` (
   `UserID` int(10) NOT NULL,
   `TorrentID` int(10) NOT NULL,

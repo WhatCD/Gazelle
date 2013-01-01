@@ -228,32 +228,7 @@ unset($Options['ShowCacheList']);
 $DownloadAlt = (isset($_POST['downloadalt']))? 1:0;
 $UnseededAlerts = (isset($_POST['unseededalerts']))? 1:0;
 
-if(isset($_POST['pushnotifications'])) {
-	if($_POST['pushnotifications'] == 1) {
-		$Options['PushService'] = "nma";
-		$Options['PushKey'] = $_POST['pushkey'];
-	}
-}
-else {
-	$Options['PushService'] = "0";
-}
 
-if(is_numeric($_POST['pushservice'])) {
-    $CanInsert = true;
-    if($_POST['pushservice'] == 0) {
-        $DB->query("SELECT PushService FROM users_push_notifications WHERE UserID = '$LoggedUser[ID]'");
-        if($DB->record_count() == 0) {
-            $CanInsert = false;
-        }
-    }
-    if($CanInsert) {
-        $PushService = db_string($_POST['pushservice']);
-        $PushOptions = array("PushKey" => trim($_POST['pushkey']), "PushUsername" => trim($_POST['pushusername']), "PushFilters" => array_flip($_POST['pushfilters']));
-        $PushOptions = db_string(serialize($PushOptions));
-        $DB->query("INSERT INTO users_push_notifications (UserID, PushService, PushOptions) VALUES ('$LoggedUser[ID]', '$PushService', '$PushOptions')
-            ON DUPLICATE KEY UPDATE PushService = '$PushService', PushOptions = '$PushOptions'");
-    }
-}
 // Information on how the user likes to download torrents is stored in cache
 if($DownloadAlt != $LoggedUser['DownloadAlt']) {
 	$Cache->delete_value('user_'.$LoggedUser['torrent_pass']);

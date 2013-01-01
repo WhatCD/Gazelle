@@ -89,6 +89,10 @@ switch ($_REQUEST['action']){
 	case 'recommend_alter':
 		include('managers/recommend_alter.php');
 		break;
+		
+	case 'recommend_restore':
+		include('managers/recommend_restore.php');
+		break;
 
 	case 'email_blacklist':
 		include('managers/eb.php');
