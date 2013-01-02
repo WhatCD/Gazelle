@@ -62,6 +62,10 @@ View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,pa
 
 
 
+$DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
+$LastFMUsername = "";
+list($LastFMUsername) = $DB->next_record();
+
 echo $Val->GenerateJS('userform');
 ?>
 <div class="thin">
@@ -285,7 +289,12 @@ echo $Val->GenerateJS('userform');
 					<p class="min_padding">If changing this field, you must enter your current password in the "Current password" field before saving your changes.</p>
 				</td>
 			</tr>
-<!--		-->
+        <tr>
+            <td class="label"><strong>Last.FM Username</strong></td>
+            <td><input type="text" size="50" name="lastfm_username" id="lastfm_username" value="<?=display_str($LastFMUsername)?>" />
+                <p class="min_padding">Your Last.FM username. Will be used to display Last.FM information on your profile which can be seen by other users.</p>
+            </td>
+        </tr>
 
 			<tr>
 				<td class="label"><strong>Info</strong></td>

@@ -229,6 +229,24 @@ $DownloadAlt = (isset($_POST['downloadalt']))? 1:0;
 $UnseededAlerts = (isset($_POST['unseededalerts']))? 1:0;
 
 
+
+$LastFMUsername = db_string($_POST['lastfm_username']);
+$OldLastFMUsername = "";
+$DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
+if($DB->record_count() > 0) {
+	list($OldLastFMUsername) = $DB->next_record();
+	if($OldLastFMUsername != $LastFMUsername) {
+		if(empty($LastFMUsername)) {
+			$DB->query("DELETE FROM lastfm_users WHERE ID = '$UserID'");
+		} else {
+			$DB->query("UPDATE lastfm_users SET Username = '$LastFMUsername' WHERE ID = '$UserID'");
+		}
+	}
+}
+elseif(!empty($LastFMUsername)) {
+	$DB->query("INSERT INTO lastfm_users (ID, Username) VALUES ('$UserID', '$LastFMUsername')");
+}
+
 // Information on how the user likes to download torrents is stored in cache
 if($DownloadAlt != $LoggedUser['DownloadAlt']) {
 	$Cache->delete_value('user_'.$LoggedUser['torrent_pass']);

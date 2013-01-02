@@ -627,6 +627,8 @@ foreach ($Collages as $CollageInfo) {
 	$FirstCol = false;
 }
 
+include(SERVER_ROOT.'/sections/user/lastfm.php');
+
 
 
 // Linked accounts

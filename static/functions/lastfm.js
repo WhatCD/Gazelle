@@ -1,4 +1,4 @@
-//skipfile
+
 (function ($) {
 	var TAB_COUNT = 0;
 	var topArtistsLoaded = false;
