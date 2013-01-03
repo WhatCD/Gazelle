@@ -453,7 +453,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		if($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
 		if($Year>0) { $ExtraInfo.=$AddExtra.$Year; $AddExtra=' '; }
 		if($RemasterTitle) { $ExtraInfo.=$AddExtra.$RemasterTitle; }
-		if($IsSnatched) { if($GroupCategoryID == 1) { $ExtraInfo .= ' / '; } $ExtraInfo.='<strong class="snatched_torrent_label">Snatched!</strong>'; }
+		if($IsSnatched) { if($GroupCategoryID == 1) { $ExtraInfo .= ' / '; } $ExtraInfo.= Format::torrent_label('Snatched!'); }
 		if($ExtraInfo!='') {
 			$ExtraInfo = "- [$ExtraInfo]";
 		}

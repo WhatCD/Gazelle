@@ -246,10 +246,10 @@ if(!$NumResults) {
 				$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 				
 				if($Torrent['IsSnatched']) {
-					$DisplayName .=' <strong class="snatched_torrent_label">Snatched!</strong>';
+					$DisplayName .=' ' . Format::torrent_label('Snatched!');
 				}
 				if(!empty($Torrent['FreeTorrent'])) {
-					$DisplayName .=' <strong class="freeleech_torrent_label">Freeleech!</strong>';
+					$DisplayName .=' ' . Format::torrent_label('Freeleech!');
 				}
 				$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
 ?>

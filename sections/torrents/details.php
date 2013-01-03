@@ -472,17 +472,17 @@ foreach ($TorrentList as $Torrent) {
 	if(!$ExtraInfo) {
 		$ExtraInfo = $GroupName ; $AddExtra=' / ';
 	}
-	if($IsSnatched) { $ExtraInfo.=$AddExtra.'<strong class="snatched_torrent_label">Snatched!</strong>'; $AddExtra=' / '; }
-	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra.'<strong class="freeleech_torrent_label">Freeleech!</strong>'; $AddExtra=' / '; }
-	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra.'<strong class="neutral_leech_torrent_label">Neutral Leech!</strong>'; $AddExtra=' / '; }
-	if($PersonalFL) { $ExtraInfo.=$AddExtra.'<strong class="personal_freeleech_torrent_label">Personal Freeleech!</strong>'; $AddExtra=' / '; }
-	if($Reported) { $ExtraInfo.=$AddExtra.'<strong>Reported</strong>'; $AddExtra=' / '; }
-	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra.'<strong>Bad Tags</strong>'; $AddExtra=' / '; }
-	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra.'<strong>Bad Folders</strong>'; $AddExtra=' / '; }
-	if(!empty($CassetteApproved)) { $ExtraInfo.=$AddExtra.'<strong>Cassette Approved</strong>'; $AddExtra=' / '; }
-	if(!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra.'<strong>Lossy Master Approved</strong>'; $AddExtra=' / '; }
-	if(!empty($LossywebApproved)) { $ExtraInfo.=$AddExtra.'<strong>Lossy WEB Approved</strong>'; $AddExtra = ' / '; }
-	if(!empty($BadFiles)) { $ExtraInfo.=$AddExtra.'<strong>Bad File Names</strong>'; $AddExtra=' / '; }
+	if($IsSnatched) { $ExtraInfo.=$AddExtra. Format::torrent_label('Snatched!'); $AddExtra=' / '; }
+	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra. Format::torrent_label('Freeleech!'); $AddExtra=' / '; }
+	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra. Format::torrent_label('Neutral Leech!'); $AddExtra=' / '; }
+	if($PersonalFL) { $ExtraInfo.=$AddExtra. Format::torrent_label('Personal Freeleech!'); $AddExtra=' / '; }
+	if($Reported) { $ExtraInfo.=$AddExtra. Format::torrent_label('Reported'); $AddExtra=' / '; }
+	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad Tags'); $AddExtra=' / '; }
+	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad Folders'); $AddExtra=' / '; }
+	if(!empty($CassetteApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Cassette Approved'); $AddExtra=' / '; }
+	if(!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Lossy Master Approved'); $AddExtra=' / '; }
+	if(!empty($LossywebApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Lossy WEB Approved'); $AddExtra = ' / '; }
+	if(!empty($BadFiles)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad File Names'); $AddExtra=' / '; }
 	
 	if($GroupCategoryID == 1 
 		&& ($RemasterTitle != $LastRemasterTitle

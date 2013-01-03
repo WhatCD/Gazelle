@@ -1,5 +1,39 @@
 <?
-class Format {
+class Format
+{
+	/**
+	 * Torrent Labels
+	 * Map a common display string to a CSS class
+	 * Indexes are lower case
+	 * Note the "tl_" prefix for "torrent label"
+	 *
+	 * There are five basic types:
+	 * * tl_free (leech status)
+	 * * tl_snatched
+	 * * tl_reported
+	 * * tl_approved
+	 * * tl_notice (default)
+	 *
+	 * @var array Strings
+	 */
+	private static $TorrentLabels = array(
+		'default'  => 'tl_notice',
+		'snatched' => 'tl_snatched',
+
+		'freeleech'          => 'tl_free',
+		'neutral leech'      => 'tl_free tl_neutral',
+		'personal freeleech' => 'tl_free tl_personal',
+
+		'reported'       => 'tl_reported',
+		'bad tags'       => 'tl_reported tl_bad_tags',
+		'bad folders'    => 'tl_reported tl_bad_folders',
+		'bad file names' => 'tl_reported tl_bad_file_names',
+
+		'cassette approved'     => 'tl_approved tl_cassete',
+		'lossy master approved' => 'tl_approved tl_lossy_master',
+		'lossy web approved'    => 'tl_approved tl_lossy_web'
+	);
+	
 	/**
 	 * Shorten a string
 	 *
@@ -463,4 +497,35 @@ class Format {
 		);
 	}
 
+	/**
+	 * Modified accessor for the $TorrentLabels array
+	 * 
+	 * Converts $text to lowercase and strips non-word characters
+	 * 
+	 * @param string $text Search string
+	 * @return string CSS class(es)
+	 */
+	public static function find_torrent_label_class ($text)
+	{
+		$index = mb_eregi_replace('(?:[^\w\d\s]+)', '', strtolower($text));
+		if (isset(self::$TorrentLabels[$index])) return self::$TorrentLabels[$index];
+		return self::$TorrentLabels['default'];
+	}
+
+	/**
+	 * Creates a strong element that notes the torrent's state.
+	 * Eg: snatched/freeleech/neutral leech/reported
+	 *
+	 * The CSS class is infered using find_torrent_label_class($text)
+	 *
+	 * @param string $text Display text
+	 * @param string $class Custom CSS class
+	 * @return string Strong element
+	 */
+	public static function torrent_label ($text, $class='')
+	{
+		if (empty($class)) $class = self::find_torrent_label_class($text);
+		return sprintf('<strong class="torrent_label %1$s" title="%2$s">%2$s</strong>',
+				display_str($class), display_str($text));
+	}
 }

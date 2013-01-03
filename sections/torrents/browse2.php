@@ -1080,7 +1080,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			}
 			$ExtraInfo = Torrents::torrent_info($Data, true, true);
 		} elseif ($Data['IsSnatched']) {
-			$ExtraInfo = '<strong class="snatched_torrent_label">Snatched!</strong>';
+			$ExtraInfo = Format::torrent_label('Snatched!');
 		} else {
 			$ExtraInfo = '';
 		}
