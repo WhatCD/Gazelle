@@ -238,7 +238,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('requiredratio')) && isset($RequiredRatio)) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size((double)$RequiredRatio, 5)?>">Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
 <? } ?>
 <? if ($OwnProfile || ($Override=check_paranoia_here(false)) || check_perms('users_mod')) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>

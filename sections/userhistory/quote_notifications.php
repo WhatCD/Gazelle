@@ -8,9 +8,11 @@ if ($_GET['showall']) {
 	$UnreadSQL = "";
 }
 
-list($Page, $Limit) = Format::page_limit(TOPICS_PER_PAGE);
+if ($_GET['catchup']) {
+	$DB->query("UPDATE users_notify_quoted SET UnRead = '0' WHERE UserID = '$LoggedUser[ID]'");
+}
 
-View::show_header('Quote Notifications');
+list($Page, $Limit) = Format::page_limit(TOPICS_PER_PAGE);
 
 if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
@@ -34,6 +36,8 @@ $Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 
+//Start printing page
+View::show_header('Quote Notifications');
 ?>
 
 <div class="thin">
@@ -50,6 +54,7 @@ list($NumResults) = $DB->next_record();
 			<a href="userhistory.php?action=quote_notifications">Show unread quotes</a>&nbsp;&nbsp;&nbsp;
 			<? } ?>
 			<a href="userhistory.php?action=subscriptions">Show subscriptions</a>&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=quote_notifications&amp;catchup=1">Catch up</a>&nbsp;&nbsp;&nbsp;
 			<br /> <br />
 			<?
 			$Pages = Format::get_pages($Page, $NumResults, TOPICS_PER_PAGE, 9);

@@ -142,7 +142,7 @@ if(in_array($ThreadID, $UserSubscriptions)) {
 }
 
 
-$DB->query("UPDATE users_notify_quoted SET Unread = '0' WHERE UserID = '$LoggedUser[ID]' AND TopicID = '$ThreadID'");
+$DB->query("UPDATE users_notify_quoted SET UnRead = '0' WHERE UserID = '$LoggedUser[ID]' AND TopicID = '$ThreadID'");
 
 $QuoteNotificationsCount = $Cache->get_value('forums_quotes_' . $LoggedUser['ID']);
 if ($QuoteNotificationsCount > 0) {
