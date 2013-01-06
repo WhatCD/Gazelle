@@ -46,7 +46,7 @@ $Results = $DB->to_array();
 		</table>
 		<br />
 <?
-$DB->query("SELECT um.Username, COUNT(r.ID) AS Reports FROM reportsv2 AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.LastChangeTime > NOW() - INTERVAL 1 WEEK GROUP BY r.ResolverID ORDER BY Reports DESC");
+$DB->query("SELECT um.ID, um.Username, COUNT(r.ID) AS Reports FROM reportsv2 AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.LastChangeTime > NOW() - INTERVAL 1 WEEK GROUP BY r.ResolverID ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<strong>Reports resolved in the last week</strong>
@@ -56,7 +56,7 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Reports</td>
 			</tr>
 <? foreach($Results as $Result) {
-	list($Username, $Reports) = $Result;
+	list($UserID, $Username, $Reports) = $Result;
 ?>
 			<tr>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
@@ -66,7 +66,7 @@ $Results = $DB->to_array();
 		</table>
 		<br />
 <?
-$DB->query("SELECT um.Username, COUNT(r.ID) AS Reports FROM reportsv2 AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.LastChangeTime > NOW() - INTERVAL 1 MONTH GROUP BY r.ResolverID ORDER BY Reports DESC");
+$DB->query("SELECT um.ID, um.Username, COUNT(r.ID) AS Reports FROM reportsv2 AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.LastChangeTime > NOW() - INTERVAL 1 MONTH GROUP BY r.ResolverID ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<strong>Reports resolved in the last month</strong>
@@ -76,7 +76,7 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Reports</td>
 			</tr>
 <? foreach($Results as $Result) {
-	list($Username, $Reports) = $Result;
+	list($UserID, $Username, $Reports) = $Result;
 ?>
 			<tr>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
