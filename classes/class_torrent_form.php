@@ -479,7 +479,7 @@ function show() {
 			<tr>
 				<td class="label">Vanity House:</td>
 				<td>
-					<label><input type="checkbox" id="vanity_house" name="vanity_house"<? if(!$Torrent['GroupID']) { echo ' disabled="disabled"'; }?><? if($Torrent['VanityHouse']){ echo ' checked="checked"';} ?> />
+					<label><input type="checkbox" id="vanity_house" name="vanity_house"<? if($Torrent['GroupID']) { echo ' disabled="disabled"'; }?><? if($Torrent['VanityHouse']){ echo ' checked="checked"';} ?> />
 					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.
 					</label>
 				</td>
