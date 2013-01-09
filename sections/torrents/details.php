@@ -585,7 +585,7 @@ foreach ($TorrentList as $Torrent) {
 						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">(View snatch list)</a>
 <? } ?>
 						<a href="#" onclick="show_files('<?=$TorrentID?>');return false;">(View file list)</a>
-<? if($Reported) { ?> 
+<? if($Reported) { ?>
 						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View report information)</a>
 <? } ?>
 					</div>
@@ -593,8 +593,7 @@ foreach ($TorrentList as $Torrent) {
 					<div id="downloads_<?=$TorrentID?>" class="hidden"></div>
 					<div id="snatches_<?=$TorrentID?>" class="hidden"></div>
 					<div id="files_<?=$TorrentID?>" class="hidden"><?=$FileList?></div>
-					<div id="spectrals_<?=$TorrentID?>" class="hidden"></div>
-<?  if($Reported) { ?> 
+<?  if($Reported) { ?>
 					<div id="reported_<?=$TorrentID?>" class="hidden"><?=$ReportInfo?></div>
 <? } ?>
 					<? if(!empty($Description)) {
