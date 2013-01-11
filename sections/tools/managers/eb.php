@@ -67,7 +67,7 @@ list($NumResults) = $DB->next_record();
             <td>
                 <input type="text" name="comment" value="<?=display_str($Result['Comment'])?>" size="60"/>
             </td>
-            <td><?=Users::format_username($Result['$UserID'], false, false, false)
+            <td><?=Users::format_username($Result['UserID'], false, false, false)
 				?><br/><?=time_diff($Result['Time'], 1)
 				?></td>
             <td>
@@ -78,4 +78,8 @@ list($NumResults) = $DB->next_record();
     </tr>
 	<? }?>
 </table>
+<div class="linkbox pager">
+    <br />
+	<?=$Pages?>
+</div>
 <? View::show_footer(); ?>

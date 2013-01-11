@@ -419,7 +419,7 @@ class Users {
 	 * @return HTML formatted username
 	 */
 	public static function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled = true, $Class = false, $Title = false) {
-		global $Classes;
+		global $Classes, $LoggedUser;
 
 		// This array is a hack that should be made less retarded, but whatevs
 		// 						  PermID => ShortForm
@@ -445,8 +445,12 @@ class Users {
 
 		if ($Badges) {
 			$Str .= ($UserInfo['Donor'] == 1) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>' : '';
-		}
-		$Str .= ($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned" /></a>' : '';
+        }
+
+        $Str .= ($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"' 
+					. '><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned' 
+					. ($LoggedUser['ID'] === $UserID ? ' - Expires ' . date('Y-m-d h:i', strtotime($UserInfo['Warned'])) : '') 
+					. '" /></a>' : '';
 		$Str .= ($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '';
 
 		if ($Badges) {

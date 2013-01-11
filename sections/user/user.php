@@ -151,9 +151,7 @@ $Badges=($Donor) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbo
 $Badges.=($Warned!='0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" />' : '';
 $Badges.=($Enabled == '1' || $Enabled == '0' || !$Enabled) ? '': '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" />';
 
-
-
-View::show_header($Username,'user,bbcode,requests');
+View::show_header($Username,'user,bbcode,requests,jquery,lastfm');
 
 ?>
 <div class="thin">
@@ -242,10 +240,17 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 <? } ?>
 <? if ($OwnProfile || ($Override=check_paranoia_here(false)) || check_perms('users_mod')) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
+<? } 
+   if (($OwnProfile || check_perms('users_mod')) && $Warned!='0000-00-00 00:00:00') { ?>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Warning expires: <?= date('Y-m-d h:i', strtotime($Warned)) ?></li>
 <? } ?>
 			</ul>
 		</div>
+                
+                
 <?
+//Last.fm statistics and comparability
+include(SERVER_ROOT.'/sections/user/lastfm.php');
 
 if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requestsfilled_bounty')) {
 	$DB->query("SELECT COUNT(DISTINCT r.ID), SUM(rv.Bounty) FROM requests AS r LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID WHERE r.FillerID = ".$UserID);
@@ -627,7 +632,6 @@ foreach ($Collages as $CollageInfo) {
 	$FirstCol = false;
 }
 
-include(SERVER_ROOT.'/sections/user/lastfm.php');
 
 
 

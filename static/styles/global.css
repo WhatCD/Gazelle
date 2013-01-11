@@ -359,3 +359,12 @@ tr.torrent .bookmark>a:after {
 
 .text_preview { min-height: 100px }
 
+#lastfm_compatibilitybar_container {
+    width: 100%;
+    height: 5px;
+    background: #969696
+}
+
+#lastfm_compatibilitybar {
+    height: 100%;
+}
