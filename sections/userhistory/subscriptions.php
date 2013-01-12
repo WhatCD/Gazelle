@@ -153,6 +153,9 @@ if(!$NumResults) {
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>
 		<? if($PostID<$LastPostID && !$Locked) { ?>
 					<span class="new">(New!)</span>
+		<? }
+		if($LastPostID == $PostID && !$Locked) { ?>
+		<span class="new">(New Thread!)</span>
 		<? } ?>
 				</span>
 				<span style="float:left;" class="last_read" title="Jump to last read">

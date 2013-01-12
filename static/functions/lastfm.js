@@ -9,6 +9,7 @@
     var topArtists = "";
     var topAlbums = "";
     var topTracks = "";
+    var expanded = false;
     // Failed request flag.
     var flag = 0;
     $(document).ready(function () {
@@ -43,6 +44,19 @@
             }
             updateDivContents(div);
         });
+        // Allow expanding or collapsing the Last.fm data.
+        $("#lastfm_expand").on('click', function () {
+            if(expanded == false){
+                expanded = true;
+                $(this).html("Show less info");
+            } else {
+                expanded = false;
+                $(this).html("Show more info");
+            }
+            updateDivContents(div);
+        });
+        // Hide the reload button until data is expanded.
+        $("#lastfm_reload_container").addClass("hidden");
         // Allow reloading the data manually.
         $.urlParam = function(name){
             var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
@@ -60,7 +74,8 @@
             topTracks = "";
             // Revert the sidebar box to its initial state.
             $("#lastfm_stats").html("");
-            $(".box_lastfm").children("ul").append('<li id="lastfm_loading">Loading...</li>');
+            //$(".box_lastfm").children("ul").append('<li id="lastfm_loading">Loading...</li>');
+            $("#lastfm_stats").append('<li id="lastfm_loading">Loading...</li>');
             // Remove the stats reload button.
             $("#lastfm_reload_container").remove();
             getTasteometer(div);
@@ -81,7 +96,15 @@
         html += topArtists;
         html += topAlbums;
         html += topTracks;
+        html += '<li id="lastfm_loading">Loading...</li>';
         div.html(html);
+        // If the data isn't expanded hide most of the info.
+        if( expanded == false ){
+            $("#lastfm_stats").children(":not(.lastfm_essential)").addClass("hidden");
+            $("#lastfm_reload_container").addClass("hidden");
+        } else {
+            $("#lastfm_reload_container").removeClass("hidden");
+        }
         // Once all requests are completed, remove the loading message.
         if(tasteometer && lastPlayedTrack && sharedArtists && topArtists && topAlbums && topTracks){
             $('#lastfm_loading').remove();
@@ -97,70 +120,77 @@
     // Functions for fetching the required data are as follows.
     // Also gets the data for shared artists as they're bundled.
     function getTasteometer(div) {
-        $.get('user.php?action=lastfm_compare&username=' + username, function (response) {
-            // Two separate elements are received from one Last.fm API call.
-            var tasteometerHtml = "";
-            var sharedArtistsHtml = "";
-            if ( response ){
-                json = JSON.parse(response);
-                if (json != null && json['error']) {
-                    console.log("Tasteometer: " + json['message']);
-                    // Specified non-existant username for Last.fm, remove Last.fm box from page.
-                    if (json['error'] == "7" ){
+        if ($("#lastfm_stats").attr("data-uid")){
+            //Own profile, don't show tasteometer and shared artists.
+            tasteometer = " ";
+            sharedArtists = " ";
+        } else {
+            $.get('user.php?action=lastfm_compare&username=' + username, function (response) {
+                // Two separate elements are received from one Last.fm API call.
+                var tasteometerHtml = "";
+                var sharedArtistsHtml = "";
+                if ( response ){
+                    json = JSON.parse(response);
+                    if (json != null && json['error']) {
+                        console.log("Tasteometer: " + json['message']);
+                        // Specified non-existant username for Last.fm, remove Last.fm box from page.
+                        if (json['error'] == "7" ){
+                            tasteometer = " ";
+                            sharedArtists = " ";
+                        }
+                    } else if (json == null) {
+                        // No Last.fm compare possible.
                         tasteometer = " ";
                         sharedArtists = " ";
-                    }
-                } else if (json == null) {
-                    // No Last.fm compare possible.
-                    tasteometer = " ";
-                    sharedArtists = " ";
-                } else {
-                    var j = json['comparison']['result'];
-                    var a = j['artists']['artist'];
-                    tasteometerHtml += "<li>Compatibility: ";
-                    var compatibility = Math.round(j['score'] * 100);
-                    var background;
-                    if  (compatibility < 50){
-                        background = 'rgb(255, '+Math.floor(255*compatibility/50)+', 0)'
                     } else {
-                        background = 'rgb('+Math.floor((1-(compatibility-50)/50)*255)+', 255, 0)'
-                    }
-                    tasteometerHtml += compatibility + '%\r\
-                        <li>\r\
+                        var j = json['comparison']['result'];
+                        var a = j['artists']['artist'];
+                        tasteometerHtml += '<li class="lastfm_essential">Compatibility: ';
+                        var compatibility = Math.round(j['score'] * 100);
+                        var background;
+                        if  (compatibility < 50){
+                            background = 'rgb(255, '+Math.floor(255*compatibility/50)+', 0)'
+                        } else {
+                            background = 'rgb('+Math.floor((1-(compatibility-50)/50)*255)+', 255, 0)'
+                        }
+                        tasteometerHtml += compatibility + '%\r\
+                        <li class="lastfm_essential">\r\
                             <div id="lastfm_compatibilitybar_container">\n\
                                 <div id="lastfm_compatibilitybar" style="width: '+compatibility+'%; background: '+background+';">\n\
                                 </div>\r\
                             </div>\r\
                         </li>';
-                    // Only print shared artists if there are any
-                    if (j['artists']['matches'] != 0){
-                        sharedArtistsHtml += '<li>Shared artists:</li><li><ul class="nobullet">';
-                        var k = initialCount;
-                        if (a.length < 3) k = a.length;
-                        for (var i = 0; i < k; i++) {
-                            sharedArtistsHtml += '<li><a href="artist.php?artistname=' + escapeAmp(a[i]['name']) + '">' + a[i]['name'] + '</a></li>'
-                        }
-                        if ( a.length > 3 ){
-                            for (i = 3; i < a.length; i++) {
-                                sharedArtistsHtml += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmp(a[i]['name']) + '">' + a[i]['name'] + '</a></li>'
+                        // Only print shared artists if there are any
+                        if (j['artists']['matches'] != 0){
+                            sharedArtistsHtml += '<li>Shared artists:</li><li><ul class="nobullet">';
+                            var k = initialCount;
+                            if (a.length < 3) k = a.length;
+                            for (var i = 0; i < k; i++) {
+                                sharedArtistsHtml += '<li><a href="artist.php?artistname=' + escapeAmp(a[i]['name']) + '">' + a[i]['name'] + '</a></li>'
                             }
-                            sharedArtistsHtml += '<li>[<a href="#sharedartists" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
+                            if ( a.length > 3 ){
+                                for (i = 3; i < a.length; i++) {
+                                    sharedArtistsHtml += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmp(a[i]['name']) + '">' + a[i]['name'] + '</a></li>'
+                                }
+                                sharedArtistsHtml += '<li>[<a href="#sharedartists" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
+                            }
+                            sharedArtistsHtml += '</ul></li>';
+                            sharedArtists = sharedArtistsHtml;
+                        } else {
+                            // Allow removing loading message regardless.
+                            sharedArtists = " ";
+                            sharedArtistsHtml += '<li class="lastfm_expand">[<a href="#sharedartists" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
                         }
-                        sharedArtistsHtml += '</ul></li>';
-                        sharedArtists = sharedArtistsHtml;
-                    } else {
-                        // Allow removing loading message regardless.
-                        sharedArtists = " ";
+                        tasteometerHtml += "</li>";
+                        tasteometer = tasteometerHtml;
                     }
-                    tasteometerHtml += "</li>";
-                    tasteometer = tasteometerHtml;
+                } else {
+                    sharedArtists = " ";
+                    tasteometer = " ";
                 }
-            } else {
-                sharedArtists = " ";
-                tasteometer = " ";
-            }
-            updateDivContents(div);
-        });
+                updateDivContents(div);
+            });
+        }
     }
     
     function getLastPlayedTrack(div) {
@@ -176,11 +206,10 @@
                     // No last played track available.
                     // Allow removing the loading message regardless.
                     lastPlayedTrack = " ";
-                }
-                else {
+                } else {
                     // Fix Last.fm API returning more than one entry despite limit on certain conditions.
                     if ( typeof(json[0]) === "object" ) json = json[0];
-                    html += "<li>Last played: ";
+                    html += '<li class="lastfm_essential">Last played: ';
                     html += '<a href="artist.php?artistname=' + escapeAmp(json['artist']['#text']) + '">' + json['artist']['#text'] + '</a> - <a href="torrents.php?searchstr=' + escapeAmp(json['name']) + '">' + json['name'] + '</a>';
                     html += "</li>";
                     lastPlayedTrack = html;

@@ -57,7 +57,7 @@ while(list($UserID, $ArtistID, $ArtistName, $PostID, $Body, $AddedTime, $EditedT
   $permalink = "artist.php?id=$ArtistID&amp;postid=$PostID#post$PostID";
   $postheader = " on " . "<a href=\"artist.php?id=$ArtistID\">$ArtistName</a>";
 
-  comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorID, $EditedTime);
+  comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorID, $AddedTime, $EditedTime);
 
 } /* end while loop*/ ?>
 	<div class="linkbox"><?= $Pages; ?></div>

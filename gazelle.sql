@@ -852,8 +852,8 @@ CREATE TABLE `stylesheets` (
 
 CREATE TABLE `subscribed_forums` (
   `ForumID` int(10) NOT NULL,
-  `SubscriberID` int(10) NOT NULL,
-  PRIMARY KEY (`ForumID`,`SubscriberID`)
+  `UserID` int(10) NOT NULL,
+  PRIMARY KEY (`ForumID`,`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `subscribed_users` (

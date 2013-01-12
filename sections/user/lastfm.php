@@ -9,23 +9,23 @@ if ($DB->record_count()) {
     <div class="box box_info box_lastfm">
         <div class="head colhead_dark">Last.fm</div>
         <ul class="stats nobullet">
-            <li>
+            <li class="lastfm_username">
                 Username: <a id="lastfm_username" href="<?= $LastFMInfo['user']['url'] ?>" title="<?= $LastFMInfo['user']['name'] ?> on Last.fm: <?= $LastFMInfo['user']['playcount'] ?> plays, <?= $LastFMInfo['user']['playlists'] ?> playlists."><?= $LastFMInfo['user']['name'] ?></a>
             </li>
-            <div id="lastfm_stats">
+            <div id="lastfm_stats" <? if ($OwnProfile == true): ?>data-uid="<?= $OwnProfile ?>"<? endif; ?>>
             </div>
-            <li id="lastfm_loading">
-                Loading...
-            </li>
-            <?
-            //Append the reload stats button only if allowed on the current user page.
-            $Response = $Cache->get_value('lastfm_clear_cache_' . $LoggedUser . '_' . $_GET['id']);
-            if (empty($Response)) :
+            <li>
+                [<a href="#" id="lastfm_expand" onclick="return false">Show more info</a>]
+                <?
+                //Append the reload stats button only if allowed on the current user page.
+                $Response = $Cache->get_value('lastfm_clear_cache_' . $LoggedUser . '_' . $_GET['id']);
+                if (empty($Response)) :
                 ?>
-                <li id="lastfm_reload_container">
+                <span id="lastfm_reload_container">
                     [<a href="#" id="lastfm_reload" onclick="return false">Reload stats</a>]
-                </li>
-            <? endif; ?>
+                </span>
+                <? endif; ?>
+            </li>
         </ul>
     </div>
 

@@ -63,6 +63,23 @@ if (!check_perms('site_moderate_forums')) {
 $ForumName = display_str($Forums[$ForumID]['Name']);
 if($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
 
+$SubscribedForumIDs = $Cache->get("subscribed_forum_ids_".$LoggedUser['ID']);
+if(empty($SubscribedForumIDs)) {
+	$SubscribedForumIDs = array();
+	$DB->query("SELECT ForumID FROM subscribed_forums WHERE UserID = $LoggedUser[ID]");
+	if($DB->record_count() > 0) {
+		$SubscribedForumIDs = $DB->collect('ForumID');
+	}
+	$Cache->cache_value("subscribed_forum_ids_".$LoggedUser['ID'], $SubscribedForumIDs, 0);
+}
+$ForumSubscribeAction = "add";
+$ForumSubscribeActionText = "Subscribe";
+if(in_array($ForumID, $SubscribedForumIDs)) {
+	$ForumSubscribeAction = "remove";
+	$ForumSubscribeActionText = "Unsubscribe";
+
+}
+
 // Start printing
 View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 ?>
@@ -73,6 +90,9 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 		[<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>">New Thread</a>]
 <? } ?>
 		[<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this Forum'?'Hide Search':'Search this Forum'); return false;">Search this Forum</a>]
+		<?if(check_perms("users_mod")) { ?>
+       [<a href="forums.php?action=forum_subscribe&do=<?=$ForumSubscribeAction?>&forumid=<?=$ForumID?>"><?=$ForumSubscribeActionText?></a>]
+		<? } ?>
 		<div id="searchforum" class="hidden center">
 			<div style="display: inline-block;">
 				<h3>Search this forum:</h3>
