@@ -90,7 +90,7 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 		[<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>">New Thread</a>]
 <? } ?>
 		[<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this Forum'?'Hide Search':'Search this Forum'); return false;">Search this Forum</a>]
-		<?if(check_perms("users_mod")) { ?>
+		<?if(check_perms("site_moderate_forums")) { ?>
        [<a href="forums.php?action=forum_subscribe&do=<?=$ForumSubscribeAction?>&forumid=<?=$ForumID?>"><?=$ForumSubscribeActionText?></a>]
 		<? } ?>
 		<div id="searchforum" class="hidden center">

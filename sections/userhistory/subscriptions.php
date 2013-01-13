@@ -2,7 +2,7 @@
 /*
 User topic subscription page
 */
-
+define('FORUM_AUTO_SUBSCRIPTION_DATE', '2013-01-12');
 if(!empty($LoggedUser['DisableForums'])) {
 	error(403);
 }
