@@ -88,17 +88,19 @@ if(isset($_POST['subscribe'])) {
 }
 
 //auto subscribe
-$DB->query("SELECT UserID FROM subscribed_forums WHERE ForumID = '$ForumID' AND UserID <> '$LoggedUser[ID]'");
-if($DB->record_count() > 0) {
-	$Users = $DB->to_array(false, MYSQLI_BOTH, false);
-	foreach ($Users as $User) {
-		$SubscriberID = $User['UserID'];
-		$DB->query("INSERT INTO users_subscriptions VALUES ($SubscriberID, $TopicID)");
-		$Cache->delete_value('subscriptions_user_'.$SubscriberID);
-
-	}
+/*
+if(check_perms('users_mod')) {
+$DB->query("SELECT SubscriberID FROM subscribed_forums WHERE ForumID = '$ForumID' AND SubscriberID <> '$LoggedUser[ID]'");
+while(list($SubscriberID) = $DB->next_record()) {
+	 $DB->query("INSERT INTO users_subscriptions VALUES ($SubscriberID, $TopicID)");
+      //   $DB->query("INSERT INTO forums_last_read_topics
+        //                        (UserID, TopicID, PostID) VALUES
+          //                      ('$SubscriberID', '".$TopicID ."', '".db_string($PostID)."')
+            //                    ON DUPLICATE KEY UPDATE PostID='$LastPost'");
+	 $Cache->delete_value('subscriptions_user_'.$SubscriberID);
 }
-
+}
+ */
 
 if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forums_polls_create')) {
 	$NoPoll = 1;
