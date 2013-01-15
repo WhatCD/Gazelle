@@ -334,7 +334,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 	//User has not voted
 ?>
 			<div id="poll_container">
-				<form class="vote_form" name="poll" id="poll">
+				<form class="vote_form" name="poll" id="poll" action="">
 					<input type="hidden" name="action" value="poll" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="large" value="1" />

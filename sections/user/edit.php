@@ -112,7 +112,7 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<select name="disablegrouping" id="disablegrouping">
 						<option value="0"<? if ($SiteOptions['DisableGrouping2'] == 0) { ?>selected="selected"<? } ?>>Group torrents by default</option>
-						<option value="1"<? if ($SiteOptions['DisableGrouping2'] == 1) { ?>selected="selected"<? } ?>>DO NOT Group torrents by default</option>
+						<option value="1"<? if ($SiteOptions['DisableGrouping2'] == 1) { ?>selected="selected"<? } ?>>DO NOT group torrents by default</option>
 					</select>&nbsp;
 					<select name="torrentgrouping" id="torrentgrouping">
 						<option value="0"<? if ($SiteOptions['TorrentGrouping'] == 0) { ?>selected="selected"<? } ?>>Groups are open by default</option>
@@ -130,10 +130,10 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Show Snatched Torrents</strong></td>
+				<td class="label"><strong>Show snatched torrents</strong></td>
 				<td>
 					<input type="checkbox" name="showsnatched" id="showsnatched" <? if (!empty($SiteOptions['ShowSnatched'])) { ?>checked="checked"<? } ?> />
-					<label for="showsnatched">"Snatched!" next to snatched torrents</label>
+					<label for="showsnatched">Display "Snatched!" next to snatched torrents</label>
 				</td>
 			</tr>
 			<tr>
@@ -168,8 +168,8 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Collage album art view</strong></td>
 				<td>
 					<select name="hidecollage" id="hidecollage">
-						<option value="0"<? if ($SiteOptions['HideCollage'] == 0) { ?>selected="selected"<? } ?>>Show album art</option>
-						<option value="1"<? if ($SiteOptions['HideCollage'] == 1) { ?>selected="selected"<? } ?>>Hide album art</option>
+						<option value="0"<? if ($SiteOptions['HideCollage'] == 0) { ?> selected="selected"<? } ?>>Show album art</option>
+						<option value="1"<? if ($SiteOptions['HideCollage'] == 1) { ?> selected="selected"<? } ?>>Hide album art</option>
 					</select>
 				</td>
 			</tr>-->
@@ -177,12 +177,12 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Collage album covers to show per page</strong></td>
 				<td>
 					<select name="collagecovers" id="collagecovers">
-						<option value="10"<? if ($SiteOptions['CollageCovers'] == 10) { ?>selected="selected"<? } ?>>10</option>
-						<option value="25"<? if (($SiteOptions['CollageCovers'] == 25) || !isset($SiteOptions['CollageCovers'])) { ?>selected="selected"<? } ?>>25 (default)</option>
-						<option value="50"<? if ($SiteOptions['CollageCovers'] == 50) { ?>selected="selected"<? } ?>>50</option>
-						<option value="100"<? if ($SiteOptions['CollageCovers'] == 100) { ?>selected="selected"<? } ?>>100</option>
-						<option value="1000000"<? if ($SiteOptions['CollageCovers'] == 1000000) { ?>selected="selected"<? } ?>>All</option>
-						<option value="0"<? if (($SiteOptions['CollageCovers'] === 0) || (!isset($SiteOptions['CollageCovers']) && $SiteOptions['HideCollage'])) { ?>selected="selected"<? } ?>>None</option>
+						<option value="10"<? if ($SiteOptions['CollageCovers'] == 10) { ?> selected="selected"<? } ?>>10</option>
+						<option value="25"<? if (($SiteOptions['CollageCovers'] == 25) || !isset($SiteOptions['CollageCovers'])) { ?> selected="selected"<? } ?>>25 (default)</option>
+						<option value="50"<? if ($SiteOptions['CollageCovers'] == 50) { ?> selected="selected"<? } ?>>50</option>
+						<option value="100"<? if ($SiteOptions['CollageCovers'] == 100) { ?> selected="selected"<? } ?>>100</option>
+						<option value="1000000"<? if ($SiteOptions['CollageCovers'] == 1000000) { ?> selected="selected"<? } ?>>All</option>
+						<option value="0"<? if (($SiteOptions['CollageCovers'] === 0) || (!isset($SiteOptions['CollageCovers']) && $SiteOptions['HideCollage'])) { ?> selected="selected"<? } ?>>None</option>
 					</select>
 				</td>
 			</tr>
@@ -190,8 +190,8 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Browse page tag list</strong></td>
 				<td>
 					<select name="showtags" id="showtags">
-						<option value="1"<? if ($SiteOptions['ShowTags'] == 1) { ?>selected="selected"<? } ?>>Open by default.</option>
-						<option value="0"<? if ($SiteOptions['ShowTags'] == 0) { ?>selected="selected"<? } ?>>Closed by default.</option>
+						<option value="1"<? if ($SiteOptions['ShowTags'] == 1) { ?> selected="selected"<? } ?>>Open by default.</option>
+						<option value="0"<? if ($SiteOptions['ShowTags'] == 0) { ?> selected="selected"<? } ?>>Closed by default.</option>
 					</select>
 				</td>
 			</tr>
@@ -203,10 +203,10 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Quote Notifications</strong></td>
+				<td class="label"><strong>Quote notifications</strong></td>
 				<td>
 					<input type="checkbox" name="notifyquotes" id="notifyquotes" <? if (!empty($SiteOptions['NotifyOnQuote'])) { ?>checked="checked"<? } ?> />
-					<label for="notifyquotes">Notifications when somebody quotes you in the forum</label>
+					<label for="notifyquotes">Notifications when someone quotes you in the forum</label>
 				</td>
 			</tr>
 			<tr>
@@ -217,7 +217,7 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
             <tr>
-                <td class="label"><strong>Mature Content</strong></td>
+                <td class="label"><strong>Mature content</strong></td>
                 <td>
                     <input type="checkbox" name="enablematurecontent" id="enablematurecontent" <? if (!empty($SiteOptions['EnableMatureContent'])) { ?>checked="checked"<? } ?> />
                     <label for="enablematurecontent">Show mature content</label>
@@ -245,7 +245,7 @@ echo $Val->GenerateJS('userform');
             </tr>
         <!--						-->
 			<tr>
-				<td class="label"><strong>Auto-save Text</strong></td>
+				<td class="label"><strong>Auto-save text</strong></td>
 				<td>
 					<input type="checkbox" name="disableautosave" id="disableautosave" <? if (!empty($SiteOptions['DisableAutoSave'])) { ?>checked="checked"<? } ?> />
 					<label for="disableautosave">Disable reply text from being saved automatically when changing pages in a thread</label>
@@ -262,7 +262,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Download torrents as text files</strong></td>
 				<td>
 					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked"<? } ?> />
-					<label for="downloadalt">For users whose ISP block the downloading of torrent files</label>
+					<label for="downloadalt">For users whose ISP blocks the downloading of torrent files</label>
 				</td>
 			</tr>
 			<tr>
@@ -291,9 +291,9 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
         <tr>
-            <td class="label"><strong>Last.FM Username</strong></td>
+            <td class="label"><strong>Last.fm Username</strong></td>
             <td><input type="text" size="50" name="lastfm_username" id="lastfm_username" value="<?=display_str($LastFMUsername)?>" />
-                <p class="min_padding">Your Last.FM username. Will be used to display Last.FM information on your profile which can be seen by other users.</p>
+                <p class="min_padding">Your Last.fm username. Will be used to display Last.fm information on your profile which can be seen by other users.</p>
             </td>
         </tr>
 
@@ -456,7 +456,7 @@ list($ArtistsAdded) = $DB->next_record();
 				<td>
 					<label><input type="checkbox" name="resetpasskey" />
 					Any active torrents must be downloaded again to continue leeching/seeding.</label> <br />
-					<a href="wiki.php?action=article&amp;name=Passkey">See also this wiki article</a>
+					<a href="wiki.php?action=article&amp;name=Passkey">See this wiki article for more information.</a>
 				</td>
 			</tr>
 			<tr class="colhead_dark">

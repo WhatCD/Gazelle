@@ -60,7 +60,7 @@ $DB->query("SELECT ID,BadTag,AliasTag FROM tag_aliases ORDER BY " . $orderby);
 while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 	?>
 	<tr>
-		<form class="manage_form" name="aliases" method="post">
+		<form class="manage_form" name="aliases" method="post" action="">
 			<input type="hidden" name="changealias" value="1" />
 			<input type="hidden" name="aliasid" value="<?=$ID?>" />
 			<td>

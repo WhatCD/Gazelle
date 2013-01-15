@@ -68,7 +68,7 @@ list($NumResults) = $DB->next_record();
                 <input type="text" name="comment" value="<?=display_str($Result['Comment'])?>" size="60"/>
             </td>
             <td><?=Users::format_username($Result['UserID'], false, false, false)
-				?><br/><?=time_diff($Result['Time'], 1)
+				?><br /><?=time_diff($Result['Time'], 1)
 				?></td>
             <td>
                 <input type="submit" name="submit" value="Edit"/>

@@ -134,7 +134,7 @@ $Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 	<? } else { ?>
 	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1">[View IPs With Users]</a>
 	<? } ?>
-	<br/>
+	<br />
 	<?=$Pages?>
 	</div>
 	<table>

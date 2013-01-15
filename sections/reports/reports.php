@@ -201,55 +201,55 @@ $DB->set_query_id($Reports);
 									break;
 							}
 							?>
-                        </strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"><?=$Text->full_format($Reason)?></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
+						</strong>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2"><?=$Text->full_format($Reason)?></td>
+				</tr>
+				<tr>
+					<td colspan="2">
 						<?    if ($ClaimerID == $LoggedUser['ID']) { ?>
-                        <span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?> <a href="#" onclick="unClaim(<?=$ReportID?>); return false;">[Unclaim]</a></span>
+						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?> [<a href="#" onclick="unClaim(<?=$ReportID?>); return false;">Unclaim</a>]</span>
 						<? } else if ($ClaimerID) { ?>
-                        <span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?></span>
+						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?></span>
 						<? } else { ?>
-           					<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;">Claim</a>
-					<? } ?>
-                        &nbsp;&nbsp;
-                        <a onclick="toggleNotes(<?=$ReportID?>); return false;" href="#">Toggle Notes</a>
+						[<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;">Claim</a>]
+						<? } ?>
+						&nbsp;&nbsp;
+						[<a onclick="toggleNotes(<?=$ReportID?>); return false;" href="#">Toggle Notes</a>]
 
-                        <div id="notes_div_<?=$ReportID?>" style="display: <?=empty($Notes) ? "none" : "block"?>;">
-                            <textarea cols="50" rows="3" id="notes_<?=$ReportID?>"><?=$Notes?></textarea>
-                            <br/>
-                            <input type="submit" onclick="saveNotes(<?=$ReportID?>)" value="Save"/>
-                        </div>
-                    </td>
-                </tr>
+						<div id="notes_div_<?=$ReportID?>" style="display: <?=empty($Notes) ? "none" : "block"?>;">
+							<textarea cols="50" rows="3" id="notes_<?=$ReportID?>"><?=$Notes?></textarea>
+							<br />
+							<input type="submit" onclick="saveNotes(<?=$ReportID?>)" value="Save" />
+						</div>
+					</td>
+				</tr>
 				<? if ($Status != "Resolved") { ?>
-                <tr>
-                    <td class="center" colspan="2">
-                        <form class="manage_form" name="report" action="reports.php" method="post">
-                            <input type="hidden" name="reportid" value="<?=$ReportID?>"/>
-                            <input type="hidden" name="action" value="takeresolve"/>
-                            <input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>"/>
-                            <input type="submit" onclick="return resolve(<?=$ReportID?>, <?=($ClaimerID == $LoggedUser['ID'] || !$ClaimerID) ? "true" : "false"?>)" name="submit" value="Resolve"/>
-                    </td>
-                </tr>
+				<tr>
+					<td class="center" colspan="2">
+						<form class="manage_form" name="report" action="reports.php" method="post">
+							<input type="hidden" name="reportid" value="<?=$ReportID?>" />
+							<input type="hidden" name="action" value="takeresolve" />
+							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+							<input type="submit" onclick="return resolve(<?=$ReportID?>, <?=($ClaimerID == $LoggedUser['ID'] || !$ClaimerID) ? "true" : "false"?>)" name="submit" value="Resolve" />
+						</form>
+					</td>
+				</tr>
 				<? } ?>
-            </table>
-            </form>
-        </div>
-        <br/>
+			</table>
+		</div>
+		<br />
 		<?
 		$DB->set_query_id($Reports);
 	}
 	?>
-    <div class="linkbox">
+	<div class="linkbox">
 		<?
 		echo $Pages;
 		?>
-    </div>
+	</div>
 </div>
 <?
 View::show_footer();

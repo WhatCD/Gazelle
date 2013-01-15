@@ -92,10 +92,10 @@ View::show_header('Top '.$Limit.' Voted Groups','browse,voting');
 	<div class="header">
 		<h2>Top <?=$Limit?> Voted Groups</h2>
 		<div class="linkbox">
-			<a href="top10.php?type=torrents">[Torrents]</a>
-			<a href="top10.php?type=users">[Users]</a>
-			<a href="top10.php?type=tags">[Tags]</a>
-			<a href="top10.php?type=votes"><strong>[Favorites]</strong></a>
+			[<a href="top10.php?type=torrents">Torrents</a>]
+			[<a href="top10.php?type=users">Users</a>]
+			[<a href="top10.php?type=tags">Tags</a>]
+			[<a href="top10.php?type=votes"><strong>Favorites</strong></a>]
 		</div>
 	</div>
 <?
@@ -109,8 +109,8 @@ if(check_perms('site_advanced_top10')) { ?>
 				<td class="label">Tags (comma-separated):</td>
 				<td class="ft_taglist">
 					<input type="text" name="tags" size="75" value="<? if(!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />&nbsp;
-					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked="checked"':'')?>><label for="rdoAll"> All</label>&nbsp;&nbsp;
-					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked="checked"':'')?>><label for="rdoAny"> Any</label>
+					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall']!='any'?' checked="checked"':'')?> /><label for="rdoAll"> All</label>&nbsp;&nbsp;
+					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall']=='any'?' checked="checked"':'')?> /><label for="rdoAny"> Any</label>
 				</td>
 			</tr>
 			<tr id="yearfilter">

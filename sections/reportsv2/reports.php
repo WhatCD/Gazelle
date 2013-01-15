@@ -1,6 +1,6 @@
 <?
 /*
- * This is the outline page for auto reports, it calls the AJAX functions
+ * This is the outline page for auto reports. It calls the AJAX functions
  * that actually populate the page and shows the proper header and footer.
  * The important function is AddMore().
  */
@@ -10,7 +10,7 @@ if(!check_perms('admin_reports')){
 
 View::show_header('Reports V2!', 'reportsv2');
 ?>
-<script type="text/javascript">
+<script type="text/javascript">//<![CDATA[
 function Taste(torrent_id, report_id, taste) {
 	ajax.get('reportsv2.php?action=ajax_taste&torrent_id='+torrent_id+'&report_id='+report_id+'&taste='+taste, function(data) {
 		if (data == '1') {
@@ -21,7 +21,7 @@ function Taste(torrent_id, report_id, taste) {
 		}
 	});
 }
-</script>
+//]]></script>
 
 <div class="header">
 	<h2>New reports, auto assigned!</h2>

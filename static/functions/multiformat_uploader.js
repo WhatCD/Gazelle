@@ -26,7 +26,7 @@
 			id:'extra_format_row_' + count
 		}).insertAfter(after);
 
-		$(document.createElement("td")).addClass('label').html("Extra Format " + count).appendTo(master);
+		$(document.createElement("td")).addClass('label').html("Extra format " + count + ":").appendTo(master);
 		var row = $(document.createElement("td")).appendTo(master);
 		addFile(row);
 		addFormats(row);

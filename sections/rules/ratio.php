@@ -7,8 +7,8 @@ View::show_header('Ratio Requirements');
         <h2 class="center">Ratio Rules</h2>
     </div>
     <div class="box pad rule_summary">
-        <br/>
-        <strong>Ratio System Overview:</strong><br/>
+        <br />
+        <strong>Ratio System Overview:</strong><br />
         <ul>
             <li>Your <strong>ratio</strong> is calculated by dividing the amount of data you&#39;ve uploaded by the amount of data you&#39;ve downloaded. You can view your ratio in the site header, or
                 in the &#39;stats&#39; section of your user profile.
@@ -21,9 +21,9 @@ View::show_header('Ratio Requirements');
                 account will remain enabled.
             </li>
         </ul>
-        <br/>
-        <br/>
-        <strong>Required Ratio Overview:</strong><br/>
+        <br />
+        <br />
+        <strong>Required Ratio Overview:</strong><br />
         <ul>
             <li>Your required ratio represents the minimum ratio you must maintain to avoid ratio watch. You can view your required ratio in the site header after the word &#39;required,&#39; or in
                 the &#39;stats&#39; section of your user profile.
@@ -36,10 +36,10 @@ View::show_header('Ratio Requirements');
                 required ratio is, the less likely it is that you&#39;ll enter ratio watch.
             </li>
         </ul>
-        <br/>
-        <br/>
+        <br />
+        <br />
 
-        <div style="text-align:center"><strong>Required Ratio Table</strong><br/><br />
+        <div style="text-align:center"><strong>Required Ratio Table</strong><br /><br />
             <table class="ratio_table">
                 <tr class="colhead">
                     <td><span title="These units are actually in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Amount Downloaded</span></td>
@@ -98,9 +98,9 @@ View::show_header('Ratio Requirements');
                 </tr>
             </table>
         </div>
-        <br/>
-        <br/>
-        <strong>Required Ratio Calculation:</strong><br/>
+        <br />
+        <br />
+        <strong>Required Ratio Calculation:</strong><br />
         <ul>
             <li><strong>1: Determine the maximum and minimum possible values of your required ratio.</strong> Using the table above, determine your amount downloaded bracket from the first column.
                 Next, locate the values in the adjacent columns. The second column lists the maximum required ratio for each bracket, and the third column lists the minimum required ratio for each
@@ -111,14 +111,14 @@ View::show_header('Ratio Requirements');
                 differently, the calculation performed by the system looks like this:
             </li>
         </ul>
-        <br/>
-        <br/>
+        <br />
+        <br />
 
         <div style="text-align:center"><img style="vertical-align: middle" src="static/blank.gif"
                                             onload="if (this.src.substr(this.src.length-9,this.src.length) == 'blank.gif') { this.src = 'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=%5Ctextrm%7B%28maximum+required+ratio%29+%2A+%281-%5Cfrac%7Bseeding%7D%7Bsnatched%7D%29%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode,null).color); }"/>
         </div>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <ul>
             <li>In this formula, <strong>snatched</strong> is the number of non-deleted unique snatches you have made. If you snatch a torrent twice, it only counts once. If a snatched torrent is
                 deleted from the site, it is not counted at all.
@@ -131,9 +131,9 @@ View::show_header('Ratio Requirements');
                 most amount downloaded brackets have a minimum required ratio (100% seeded) greater than zero, and the value returned by the above calculation is zero when seeding equals snatched.
             </li>
         </ul>
-        <br/>
-        <br/>
-        <strong>Required Ratio Details:</strong><br/>
+        <br />
+        <br />
+        <strong>Required Ratio Details:</strong><br />
         <ul>
             <li>If you stop seeding for one week, your required ratio will become the maximum required ratio (0% seeded) for your amount downloaded bracket. Once you have resumed seeding for a 72 hour
                 period, your required ratio will decrease according to the above calculations.
@@ -146,9 +146,9 @@ View::show_header('Ratio Requirements');
                 other. This means that users with download totals greater than or equal to 100 GB have a minimum required ratio (100% seeded) of 0.60 from that point forward.
             </li>
         </ul>
-        <br/>
-        <br/>
-        <strong>Required Ratio Example:</strong><br/>
+        <br />
+        <br />
+        <strong>Required Ratio Example:</strong><br />
         <ul>
             <li>In this example, Rippy has downloaded 25 GB. Rippy falls into the 20-30 GB amount downloaded bracket in the table above. Rippy&#39;s maximum required ratio (0% seeded) is 0.30, and his
                 minimum required ratio (100% seeded) is 0.05.
@@ -162,9 +162,9 @@ View::show_header('Ratio Requirements');
                 last week. In this case, the system would not be counting all 45 torrents as seeded.
             </li>
         </ul>
-        <br/>
-        <br/>
-        <strong>Ratio Watch Overview:</strong><br/>
+        <br />
+        <br />
+        <strong>Ratio Watch Overview:</strong><br />
         <ul>
             <li>Everyone gets to download their first 5 GB before ratio watch eligibility begins.</li>
             <li>If you&#39;ve downloaded more than 5 GB and your ratio does not meet or surpass your required ratio, you will be put on ratio watch and have <strong>two weeks</strong> to raise your
@@ -176,9 +176,9 @@ View::show_header('Ratio Requirements');
             </li>
             <li>The ratio watch system is automated and cannot be interrupted by staff.</li>
         </ul>
-        <br/>
-        <br/>
-        <strong>Leaving Ratio Watch:</strong><br/>
+        <br />
+        <br />
+        <strong>Leaving Ratio Watch:</strong><br />
         <ul>
             <li>To leave ratio watch, you must either raise your ratio by uploading more, or lower your required ratio by seeding more. Your ratio must be equal to or above your required ratio in
                 order for ratio watch to end.
@@ -191,8 +191,8 @@ View::show_header('Ratio Requirements');
             </li>
             <li>Leeching privileges will be restored once your ratio has become greater than or equal to your required ratio.</li>
         </ul>
-        <br/>
-        <br/>
+        <br />
+        <br />
 		<? include('jump.php'); ?>
     </div>
 	</div>

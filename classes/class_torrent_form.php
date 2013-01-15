@@ -190,7 +190,7 @@ class TORRENT_FORM {
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border<? if($this->NewTorrent) { echo ' slice'; }?>" width="100%">
 <?		if($this->NewTorrent) { ?>
 			<tr id="artist_tr">
-			<td class="label">Artist(s)</td>
+			<td class="label">Artist(s):</td>
 			<td id="artistfields">
 				<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding 'Various Artists' as an artist, read <a href='wiki.php?action=article&amp;id=369' target='_blank'>this</a> for more information on why.</p>
 <?			if(!empty($Torrent['Artists'])) {
@@ -288,7 +288,7 @@ function show() {
 
 			<tr id="year_tr">
 				<td class="label">
-					<span id="year_label_not_remaster"<? if($IsRemaster) { echo ' class="hidden"';}?>>Year</span>
+					<span id="year_label_not_remaster"<? if($IsRemaster) { echo ' class="hidden"';}?>>Year:</span>
 					<span id="year_label_remaster"<? if(!$IsRemaster) { echo ' class="hidden"';}?>>Year of original release</span>
 				</td>
 				<td>
@@ -297,11 +297,11 @@ function show() {
 				</td>
 			</tr>
 			<tr id="label_tr">
-				<td class="label">Record Label (Optional):</td>
+				<td class="label">Record label (optional):</td>
 				<td><input type="text" id="record_label" name="record_label" size="40" value="<?=display_str($Torrent['RecordLabel']) ?>"<?=$this->Disabled?> /></td>
 			</tr>
 			<tr id="catalogue_tr">
-				<td class="label">Catalogue Number (Optional):</td>
+				<td class="label">Catalogue number (optional):</td>
 				<td>
 					<input type="text" id="catalogue_number" name="catalogue_number" size="40" value="<?=display_str($Torrent['CatalogueNumber']) ?>"<?=$this->Disabled?> />
 					Please double check the record label and catalogue number when using MusicBrainz. See <a href="wiki.php?action=article&amp;id=688" target="_blank">this guide</a> for more details.
@@ -309,7 +309,7 @@ function show() {
 			</tr>
 			<tr id="releasetype_tr">
 				<td class="label">
-					<span id="releasetype_label">Release Type:</span>
+					<span id="releasetype_label">Release type:</span>
 				</td>
 				<td>
 					<select id="releasetype" name="releasetype"<?=$this->Disabled?>>
@@ -330,7 +330,7 @@ function show() {
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label">Edition Information:</td>
+				<td class="label">Edition information:</td>
 				<td>
 					<input type="checkbox" id="remaster" name="remaster"<? if($IsRemaster) { echo " checked='checked' ";}?> onclick="Remaster();<?if($this->NewTorrent) {?> CheckYear();<? } ?>" />
 					Check this box if this torrent is a different release to the original, for example a limited or country specific edition or a release that includes additional bonus tracks or is a bonus disc.
@@ -364,7 +364,7 @@ function show() {
 						<table id="edition_information" class="layout border" border="0" width="100%">
 							<tbody>
 								<tr id="edition_year">
-									<td class="label">Year (Required):</td>
+									<td class="label">Year (required):</td>
 									<td>
 										<input type="text" id="remaster_year" name="remaster_year" size="5" value="<? if($Torrent['RemasterYear']) { echo display_str($Torrent['RemasterYear']);} ?>"<? if($UnknownRelease) { echo " disabled";}?> />
 									</td>
@@ -376,14 +376,14 @@ function show() {
 										<p class="min_padding">Title of the release (e.g. <span style="font-style: italic;">'Deluxe Edition' or 'Remastered'</span>).</p>
 									</td>
 								<tr id="edition_record_label">
-									<td class="label">Record Label:</td>
+									<td class="label">Record label:</td>
 									<td>
 										<input type="text" id="remaster_record_label" name="remaster_record_label" size="50" value="<?=display_str($Torrent['RemasterRecordLabel']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
 										<p class="min_padding">This is for the record label of the <strong>release</strong> (It may differ from the original).</p>
 									</td>
 								</tr>
 								<tr id="edition_catalogue_number">
-									<td class="label">Catalogue Number:</td>
+									<td class="label">Catalogue number:</td>
 									<td><input type="text" id="remaster_catalogue_number" name="remaster_catalogue_number" size="50" value="<?=display_str($Torrent['RemasterCatalogueNumber']) ?>"<? if($UnknownRelease) { echo " disabled";}?> />
 										<p class="min_padding">This is for the catalogue number of the <strong>release</strong>.</p>
 									</td>
@@ -419,7 +419,7 @@ function show() {
 				</td>
 			</tr>
 			<tr id="bitrate_row">
-				<td class="label">Bitrate</td>
+				<td class="label">Bitrate:</td>
 				<td>
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
@@ -459,10 +459,10 @@ function show() {
 		if($this->NewTorrent) { ?>
 			<tr id="upload_logs" class="hidden">
 				<td class="label">
-					Log Files
+					Log files:
 				</td>
 				<td id="logfields">
-					Check your log files here before uploading: <a href="logchecker.php" target="_blank">logchecker.php</a><br />
+					Check your log files before uploading <a href="logchecker.php" target="_blank">here</a>. For multi-disc releases, click the [+] button to add multiple log files.<br />
 					<input id="file" type="file" multiple="multiple" name="logfiles[]" size="50" /> [<a href="javascript:;" onclick="AddLogField();">+</a>] [<a href="javascript:;" onclick="RemoveLogField();">-</a>]
 				</td>
 			</tr>
@@ -470,7 +470,7 @@ function show() {
 		} ?>
 <? if($this->NewTorrent) { ?>
 		<tr>
-		   <td class="label">Multi Format Uploader</td>
+		   <td class="label">Multi-format uploader:</td>
 		   <td><input type="button" value="+" id="add_format" /><input type="button" style="display: none" value="-" id="remove_format" /></td>
 		</tr>
 		<tr id="placeholder_row_top"></tr>
@@ -608,7 +608,7 @@ function show() {
 				<td><input type="text" id="image" name="image" size="60" value="<?=display_str($Torrent['Image']) ?>" <?=$this->Disabled?>/></td>
 			</tr>
 			<tr>
-				<td class="label">Album Description:</td>
+				<td class="label">Album description:</td>
 				<td>
 <?php new TEXTAREA_PREVIEW('album_desc', 'album_desc', display_str($Torrent['GroupDescription']), 60, 8, true, true, array($this->Disabled)); ?>
 					<p class="min_padding">Contains background information such as album history and maybe a review.</p>
@@ -616,7 +616,7 @@ function show() {
 			</tr>
 <?		} // if new torrent ?>
 			<tr>
-				<td class="label">Release Description (optional):</td>
+				<td class="label">Release description (optional):</td>
 				<td>
 <?php new TEXTAREA_PREVIEW('release_desc', 'release_desc', display_str($Torrent['TorrentDescription']), 60, 8); ?>
 					<p class="min_padding">Contains information like encoder settings or details of the ripping process. <strong class="important_text">Do not paste the ripping log here.</strong></p>
@@ -625,7 +625,7 @@ function show() {
 		</table>
 <?
 
-//	For AJAX requests (ie when changing the type from Music to Applications)
+//	For AJAX requests (e.g. when changing the type from Music to Applications),
 //	we don't need to include all scripts, but we do need to include the code
 //	that generates previews. It will have to be eval'd after an AJAX request.
 	if ($_SERVER['SCRIPT_NAME'] === '/ajax.php')
@@ -720,7 +720,7 @@ function show() {
 			</tr>
 <?		}?>
 			<tr>
-				<td class="label">Release Description (optional):</td>
+				<td class="label">Release description (optional):</td>
 				<td>
 <?php new TEXTAREA_PREVIEW('release_desc', 'release_desc', display_str($Torrent['TorrentDescription']), 60, 8); ?>
 					<p class="min_padding">Contains information like encoder settings. For analog rips, this frequently contains lineage information.</p>

@@ -728,7 +728,7 @@ echo $Pages;
 			<td>IP</td>
 			<td>Email</td>
 			<td>Joined</td>
-			<td>Last Seen</td>
+			<td>Last seen</td>
 			<td>Upload</td>
 			<td>Download</td>
 			<td>Downloads</td>

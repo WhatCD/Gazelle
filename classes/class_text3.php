@@ -62,7 +62,7 @@ class TEXT_3 {
 
 		//Inline links
 		$Str = preg_replace('/(?<!(\[url\]|\[url\=|\[img\=|\[img\]))http(s)?:\/\//i', '$1[inlineurl]http$2://', $Str);
-		// For anonym.to links. We can't have this in the regex because php freaks out at the ?, even if it's escaped
+		// For anonym.to links. We can't have this in the regex because PHP freaks out at the ?, even if it's escaped
 		$Str = strtr($Str, array('?[inlineurl]http'=>'?http', '=[inlineurl]http'=>'=http')); 
 		$Str = preg_replace('/\=\=\=\=([^=].*)\=\=\=\=/i', '[inlinesize=3]$1[/inlinesize]', $Str);
 		$Str = preg_replace('/\=\=\=([^=].*)\=\=\=/i', '[inlinesize=5]$1[/inlinesize]', $Str);
@@ -160,7 +160,7 @@ EXPLANATION OF PARSER LOGIC
 4) Move the pointer past the end of the tag
 5) Find out where the tag closes (beginning of [/tag])
 	5a) Different for different types of tag. Some tags don't close, others are weird like [*]
-	5b) If it's a normal tag, it may have versions of itself nested inside - eg:
+	5b) If it's a normal tag, it may have versions of itself nested inside - e.g.:
 		[quote=bob]*
 			[quote=joe]I am a redneck!**[/quote]
 			Me too!

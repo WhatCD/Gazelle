@@ -407,7 +407,7 @@ if (!empty($Image)) {
 						<input type="hidden" id="current_downloaded" value="<?=$LoggedUser['BytesDownloaded']?>" />
 						<input type="hidden" id="current_rr" value="<?=(float)$LoggedUser['RequiredRatio']?>" />
 						<input id="total_bounty" type="hidden" value="<?=$RequestVotes['TotalBounty']?>" />
-						If you add the entered <strong><span id="new_bounty">0.00 MB</span></strong> of bounty, your new stats will be: <br/>
+						If you add the entered <strong><span id="new_bounty">0.00 MB</span></strong> of bounty, your new stats will be: <br />
 						Uploaded: <span id="new_uploaded"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span>
 						Ratio: <span id="new_ratio"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'],$LoggedUser['BytesDownloaded'])?></span>
 						<input type="button" id="button" value="Vote!" disabled="disabled" onclick="Vote();" />

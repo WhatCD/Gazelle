@@ -18,10 +18,10 @@ class TEXT {
 		':frown:'			=> 'frown.gif',
 		'&lt;3'				=> 'heart.gif',
 		':unsure:'			=> 'hmm.gif',
-		//':\\'			=> 'hmm.gif',
+		//':\\'				=> 'hmm.gif',
 		':whatlove:'		=> 'ilu.gif',
 		':lol:'				=> 'laughing.gif',
-		':loveflac:'        => 'loveflac.gif',
+		':loveflac:'		=> 'loveflac.gif',
 		':flaclove:'		=> 'loveflac.gif',
 		':ninja:'			=> 'ninja.gif',
 		':no:'				=> 'no.gif',
@@ -58,7 +58,7 @@ class TEXT {
 	private $Levels = 0;
 
 	/**
-	 * Used to detect and disable parsing (eg TOC) within quotes
+	 * Used to detect and disable parsing (e.g. TOC) within quotes
 	 * @var int $InQuotes
 	 */
 	private $InQuotes = 0;
@@ -99,7 +99,7 @@ class TEXT {
 	}
 
     /**
-	 * Output BB Code as xHTML
+	 * Output BBCode as XHTML
 	 * @param string $Str BBCode text
 	 * @param bool $OutputTOC Ouput TOC near (above) text
 	 * @param int $Min See {@link parse_toc}
@@ -225,7 +225,7 @@ class TEXT {
 	4) Move the pointer past the end of the tag
 	5) Find out where the tag closes (beginning of [/tag])
 		5a) Different for different types of tag. Some tags don't close, others are weird like [*]
-		5b) If it's a normal tag, it may have versions of itself nested inside - eg:
+		5b) If it's a normal tag, it may have versions of itself nested inside - e.g.:
 			[quote=bob]*
 				[quote=joe]I am a redneck!**[/quote]
 				Me too!
@@ -303,7 +303,7 @@ class TEXT {
 
 			// 5) Find out where the tag closes (beginning of [/tag])
 
-			// Unfortunately, BBCode doesn't have nice standards like xhtml
+			// Unfortunately, BBCode doesn't have nice standards like XHTML
 			// [*], [img=...], and http:// follow different formats
 			// Thus, we have to handle these before we handle the majority of tags
 

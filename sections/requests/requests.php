@@ -610,7 +610,7 @@ foreach($Categories as $CatKey => $CatName) {
 			</td>
 			<td class="nobr">
 <?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
-				<form class="add_form" name="request" id="form_<?=$RequestID?>">
+				<form class="add_form" name="request" id="form_<?=$RequestID?>" action="">
 					<span id="vote_count_<?=$RequestID?>"><?=$VoteCount?></span>
 					<input type="hidden" id="requestid_<?=$RequestID?>" name="requestid" value="<?=$RequestID?>" />
 					<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

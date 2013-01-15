@@ -11,13 +11,13 @@ class TEXT_2 {
 		':-|'				=> 'blank.gif',
 		':blush:'			=> 'blush.gif',
 		':cool:'			=> 'cool.gif',
-		':&#39;('				=> 'crying.gif',
-		':crying:'				=> 'crying.gif',
+		':&#39;('			=> 'crying.gif',
+		':crying:'			=> 'crying.gif',
 		'&gt;.&gt;'			=> 'eyesright.gif',
 		':frown:'			=> 'frown.gif',
 		'&lt;3'				=> 'heart.gif',
 		':unsure:'			=> 'hmm.gif',
-		':\\'			=> 'hmm.gif',
+		':\\'				=> 'hmm.gif',
 		':whatlove:'		=> 'ilu.gif',
 		':lol:'				=> 'laughing.gif',
 		':loveflac:'		=> 'loveflac.gif',
@@ -168,7 +168,7 @@ EXPLANATION OF PARSER LOGIC
 4) Move the pointer past the end of the tag
 5) Find out where the tag closes (beginning of [/tag])
 	5a) Different for different types of tag. Some tags don't close, others are weird like [*]
-	5b) If it's a normal tag, it may have versions of itself nested inside - eg:
+	5b) If it's a normal tag, it may have versions of itself nested inside - e.g.:
 		[quote=bob]*
 			[quote=joe]I am a redneck!**[/quote]
 			Me too!

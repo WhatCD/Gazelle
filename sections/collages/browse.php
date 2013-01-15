@@ -221,7 +221,7 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 	<div class="linkbox">
 <? if (!$BookmarkView) {
 if (check_perms('site_collages_create')) { ?>
-		<a href="collages.php?action=new">[New collage]</a>
+		[<a href="collages.php?action=new">New collage</a>]
 <? } 
 if (check_perms('site_collages_personal')) {
 	
@@ -231,18 +231,18 @@ if (check_perms('site_collages_personal')) {
 	if ($CollageCount == 1) {
 		list($CollageID) = $DB->next_record();
 ?>
-		<a href="collages.php?id=<?=$CollageID?>">[Personal collage]</a>
+		[<a href="collages.php?id=<?=$CollageID?>">Personal collage</a>]
 <?	} elseif ($CollageCount > 1) { ?>
-		<a href="collages.php?action=mine">[Personal collages]</a>
+		[<a href="collages.php?action=mine">Personal collages</a>]
 <?	}
 } 
 if (check_perms('site_collages_subscribe')) { ?>
-		<a href="userhistory.php?action=subscribed_collages">[Subscribed collages]</a>
+		[<a href="userhistory.php?action=subscribed_collages">Subscribed collages</a>]
 <? } ?>
-		<a href="bookmarks.php?type=collages">[Bookmarked collages]</a>
+		[<a href="bookmarks.php?type=collages">Bookmarked collages</a>]
 <?
 if (check_perms('site_collages_recover')) { ?>
-		<a href="collages.php?action=recover">[Recover collage]</a>
+		[<a href="collages.php?action=recover">Recover collage</a>]
 <?
 }
 if (check_perms('site_collages_create') || check_perms('site_collages_personal') || check_perms('site_collages_recover')) {
@@ -251,13 +251,13 @@ if (check_perms('site_collages_create') || check_perms('site_collages_personal')
 <?
 }
 ?>
-		<a href="collages.php?userid=<?=$LoggedUser['ID']?>">[Collages you started]</a>
-		<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1">[Collages you contributed to]</a>
+		[<a href="collages.php?userid=<?=$LoggedUser['ID']?>">Collages you started</a>]
+		[<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1">Collages you contributed to</a>]
 <? } else { ?>
-		<a href="bookmarks.php?type=torrents">[Torrents]</a>
-		<a href="bookmarks.php?type=artists">[Artists]</a>
-		<a href="bookmarks.php?type=collages">[Collages]</a>
-		<a href="bookmarks.php?type=requests">[Requests]</a>
+		[<a href="bookmarks.php?type=torrents">Torrents</a>]
+		[<a href="bookmarks.php?type=artists">Artists</a>]
+		[<a href="bookmarks.php?type=collages">Collages</a>]
+		[<a href="bookmarks.php?type=requests">Requests</a>]
 <? } ?>
 <br /><br />
 <?
@@ -307,7 +307,7 @@ foreach ($Collages as $Collage) {
 			<a href="collages.php?id=<?=$ID?>"><?=$Name?></a>
 <?	if ($BookmarkView) { ?>
 			<span style="float:right">
-				<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;">[Remove bookmark]</a>
+				[<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;">Remove bookmark</a>]
 			</span>
 <?	} 
 		if(!empty($Tags)) {

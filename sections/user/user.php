@@ -843,8 +843,11 @@ if (check_perms('users_mod', $Class)) { ?>
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 
 		<div class="box">
-			<div class="head">Staff Notes <a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;">(Edit)</a></div>
-			<div class="pad">
+			<div class="head">Staff Notes
+				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;">(Edit)</a>
+				<a href="#" onclick="$('#staffnotes').toggle(); return false;">(Toggle)</a>
+			</div>
+			<div id="staffnotes" class="pad">
 				<input type="hidden" name="comment_hash" value="<?=$CommentHash?>" />
 				<div id="admincommentlinks" class="AdminComment box" style="width:98%;"><?=$Text->full_format($AdminComment)?></div>
 				<textarea id="admincomment" onkeyup="resize('admincomment');" class="AdminComment hidden" name="AdminComment" cols="65" rows="26" style="width:98%;"><?=display_str($AdminComment)?></textarea>
@@ -1097,7 +1100,7 @@ if (check_perms('users_mod', $Class)) { ?>
 					<input type="checkbox" name="DisableAvatar" id="DisableAvatar"<? if ($DisableAvatar==1) { ?>checked="checked"<? } ?> /> <label for="DisableAvatar">Avatar</label> |
 					<input type="checkbox" name="DisableInvites" id="DisableInvites"<? if ($DisableInvites==1) { ?>checked="checked"<? } ?> /> <label for="DisableInvites">Invites</label> |
 					<input type="checkbox" name="DisableForums" id="DisableForums"<? if ($DisableForums==1) { ?>checked="checked"<? } ?> /> <label for="DisableForums">Forums</label> |
-					<input type="checkbox" name="DisableTagging" id="DisableTagging"<? if ($DisableTagging==1) { ?>checked="checked"<? } ?> /> <label for="DisableTagging">Tagging</label> |
+					<input type="checkbox" name="DisableTagging" id="DisableTagging"<? if ($DisableTagging==1) { ?>checked="checked"<? } ?> /> <label for="DisableTagging" title="This only disables a user's ability to delete tags.">Tagging</label> |
 					<input type="checkbox" name="DisableRequests" id="DisableRequests"<? if ($DisableRequests==1) { ?>checked="checked"<? } ?> /> <label for="DisableRequests">Requests</label>
 					<br />
 					<input type="checkbox" name="DisableUpload" id="DisableUpload"<? if ($DisableUpload==1) { ?>checked="checked"<? } ?> /> <label for="DisableUpload">Upload</label> |

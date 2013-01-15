@@ -22,7 +22,7 @@ $DB->query("SELECT um.Username, COUNT(r.ID) AS Reports FROM reports AS r JOIN us
 $Results = $DB->to_array();
 ?>
 		<tr>
-		<td class="label"><strong>Reports resolved in the last 24h</strong></td>
+		<td class="label"><strong>Reports resolved in the last 24 hours</strong></td>
 		<td>
 		<table style="width: 50%; margin-left: auto; margin-right: auto;" class="border">
 			<tr>
@@ -34,7 +34,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><?=$Username?></td>
-				<td><?=$Reports?></td>
+				<td><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -57,7 +57,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><?=$Username?></td>
-				<td><?=$Reports?></td>
+				<td><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -80,7 +80,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><?=$Username?></td>
-				<td><?=$Reports?></td>
+				<td><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -103,7 +103,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><?=$Username?></td>
-				<td><?=$Reports?></td>
+				<td><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -131,7 +131,7 @@ $Results = $DB->to_array();
                         <tr>
                             <td><?=$i?></td>
                             <td><?=$Username?></td>
-                            <td><?=$Trashed?></td>
+                            <td><?=number_format($Trashed)?></td>
                         </tr>
 						<? $i++; } ?>
                     </table>

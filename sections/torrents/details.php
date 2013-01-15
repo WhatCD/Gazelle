@@ -635,7 +635,7 @@ if (count($Requests) > 0) {
 				<tr class="requestrows <?=(++$i%2?'rowa':'rowb')?>">
 					<td><a href="requests.php?action=view&amp;id=<?=$Request['ID']?>"><?=$FormatString?> / <?=$BitrateString?> / <?=$MediaString?></a></td>
 					<td>
-						<form class="add_form" name="bounty" id="form_<?=$Request['ID']?>">
+						<form class="add_form" name="bounty" id="form_<?=$Request['ID']?>" action="">
 							<span id="vote_count_<?=$Request['ID']?>"><?=count($RequestVotes['Voters'])?></span>
 							<input type="hidden" id="requestid_<?=$Request['ID']?>" name="requestid" value="<?=$Request['ID']?>" />
 							<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

@@ -544,7 +544,7 @@ if($Title) { $Title=$TitleUser."'s  ".$Title; } else { $Title="Browse Torrents";
 
 View::show_header($Title,'browse');
 ?>
-<form name="filter" method="get" action=''>
+<form name="filter" method="get" action="">
 <? if($UserID) { ?>
 <input type="hidden" name="type" value="<?=display_str($_GET['type'])?>" />
 <input type="hidden" name="userid" value="<?=display_str($_GET['userid'])?>" />
