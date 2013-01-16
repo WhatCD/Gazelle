@@ -101,9 +101,9 @@ View::show_header('Edit artist');
 		if($AliasName == $Name) { $DefaultRedirectID = $AliasID; }
 ?>
 			<li><?=$AliasID?>. <?=$AliasName?>
-<?		if($User) { ?> <a href="user.php?id=<?=$User?>">User</a>. <?}
+<?		if($User) { ?> [<a href="user.php?id=<?=$User?>">User</a>] <?}
 		if($Redirect) { ?> (writes redirect to <?=$Redirect?>)<? } ?>
-			<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[X]</a>
+			[<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">X</a>]
 			</li>
 <?	}
 ?>
@@ -116,7 +116,7 @@ View::show_header('Edit artist');
 			<input type="text" name="name" size="40" value="<?=$Name?>" /><br />
 			<h3>Writes redirect to (Alias ID, blank for no redirect):</h3>
 			<input type="text" name="redirect" size="40" value="<?=$DefaultRedirectID?>" /><br />
-			<em>This redirects artist names as they are written, eg. new torrents and added artists. All uses of this new alias will be redirected to the alias ID you enter here. Use for common misspellings, etc.</em><br />
+			<em>This redirects artist names as they are written (e.g. when new torrents are uploaded or artists added). All uses of this new alias will be redirected to the alias ID you enter here. Use for common misspellings, etc.</em><br />
 			<input type="submit" value="Add alias" />
 		</form>
 	</div>

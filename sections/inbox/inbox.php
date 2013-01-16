@@ -20,9 +20,9 @@ View::show_header('Inbox');
 <?
 
 if($Section == 'inbox') { ?>
-		<a href="inbox.php?action=sentbox">[Sentbox]</a>
+		[<a href="inbox.php?action=sentbox">Sentbox</a>]
 <? } elseif($Section == 'sentbox') { ?>
-		<a href="inbox.php">[Inbox]</a>
+		[<a href="inbox.php">Inbox</a>]
 <? }
 
 ?>
@@ -76,7 +76,7 @@ $CurURL = Format::get_url(array('sort'));
 if(empty($CurURL)) {
 	$CurURL = "inbox.php?";
 } else {
-	$CurURL = "inbox.php?".$CurURL."&";
+	$CurURL = "inbox.php?".$CurURL."&amp;";
 }
 
 $Pages=Format::get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
@@ -88,7 +88,7 @@ echo $Pages;
 <? if($DB->record_count()==0) { ?>
 	<h2>Your <?= ($Section == 'sentbox') ? 'sentbox' : 'inbox' ?> is currently empty</h2>
 <? } else { ?>
-		<form class="search_form" name="<?= ($Section == 'sentbox')?'sentbox':'inbox'?>" name="" action="inbox.php" method="get" id="searchbox">
+		<form class="search_form" name="<?= ($Section == 'sentbox')?'sentbox':'inbox'?>" action="inbox.php" method="get" id="searchbox">
 			<div>
 				<input type="hidden" name="action" value="<?=$Section?>" />
 				<input type="radio" name="searchtype" value="user" checked="checked" /> User
@@ -96,9 +96,9 @@ echo $Pages;
 				<input type="radio" name="searchtype" value="message" /> Message
 				<span style="float: right;">
 <?			if(empty($_GET['sort']) || $_GET['sort'] != "unread") { ?>
-					<a href="<?=$CurURL?>sort=unread">List unread first</a>
+					[<a href="<?=$CurURL?>sort=unread">List unread first</a>]
 <?			} else { ?>
-					<a href="<?=$CurURL?>">List latest first</a>
+					[<a href="<?=$CurURL?>">List latest first</a>]
 <?			} ?>
 				</span>
 				<br />

@@ -34,6 +34,7 @@ if(!$ComposeToUsername) {
 }
 View::show_header('Compose', 'inbox,bbcode');
 
+// $TypeLink is placed directly in the <textarea> when composing a PM
 switch($Type) {
 	case "user" :
 		$DB->query("SELECT Username FROM users_main WHERE ID=".$ThingID);
@@ -41,8 +42,8 @@ switch($Type) {
 			$Error = "No user with the reported ID found";
 		} else {
 			list($Username) = $DB->next_record();
-			$TypeLink = "[user]".$Username."[/user]";
-			$Subject = "User Report: ". display_str($Username);
+			$TypeLink = "the user [user]".$Username."[/user]";
+			$Subject = "User Report: ".display_str($Username);
 		}
 		break;
 	case "request" :
@@ -52,9 +53,8 @@ switch($Type) {
 			$Error = "No request with the reported ID found";
 		} else {
 			list($Name) = $DB->next_record();
-			$TypeLink = "[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$ThingID."]".display_str($Name)."[/url]";
-			$Subject = "Request Report: ". display_str($Name);
-
+			$TypeLink = "the request [url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$ThingID."]".display_str($Name)."[/url]";
+			$Subject = "Request Report: ".display_str($Name);
 		}
 		break;
 	case "collage" :
@@ -63,9 +63,8 @@ switch($Type) {
 			$Error = "No collage with the reported ID found";
 		} else {
 			list($Name) = $DB->next_record();
-			$TypeLink = "[url=https://".SSL_SITE_URL."/collage.php?id=".$ThingID."]".display_str($Name)."[/url]";
-			$Subject = "Collage Report: ". display_str($Name);
-
+			$TypeLink = "the collage [url=https://".SSL_SITE_URL."/collage.php?id=".$ThingID."]".display_str($Name)."[/url]";
+			$Subject = "Collage Report: ".display_str($Name);
 		}
 		break;
 	case "thread" :
@@ -74,9 +73,8 @@ switch($Type) {
 			$Error = "No forum thread with the reported ID found";
 		} else {
 			list($Title) = $DB->next_record();
-			$TypeLink = "[url=https://".SSL_SITE_URL."/forums.php?action=viewthread&amp;threadid=".$ThingID."]".display_str($Title)."[/url]";
-			$Subject = "Thread Report: ". display_str($Title);
-
+			$TypeLink = "the forum thread [url=https://".SSL_SITE_URL."/forums.php?action=viewthread&amp;threadid=".$ThingID."]".display_str($Title)."[/url]";
+			$Subject = "Forum Thread Report: ".display_str($Title);
 		}
 		break;
 	case "post" :
@@ -90,9 +88,8 @@ switch($Type) {
 			$Error =  "No forum post with the reported ID found";
 		} else {
 			list($PostID,$Body,$TopicID,$PostNum) = $DB->next_record();
-			$TypeLink = "[url=https://".SSL_SITE_URL."/forums.php?action=viewthread&amp;threadid=".$TopicID."&amp;post=".$PostNum."#post".$PostID."]FORUM POST[/url]";
-			$Subject = "Post Report";
-
+			$TypeLink = "this [url=https://".SSL_SITE_URL."/forums.php?action=viewthread&amp;threadid=".$TopicID."&amp;post=".$PostNum."#post".$PostID."]forum post[/url]";
+			$Subject = "Forum Post Report: Post ID #".display_str($PostID);
 		}
 		break;
 	case "requests_comment" :
@@ -102,9 +99,8 @@ switch($Type) {
 		} else {
 			list($RequestID, $Body, $PostNum) = $DB->next_record();
 			$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-			$TypeLink = "[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."&amp;page=".$PageNum."#post".$ThingID."]REQUEST COMMENT[/url]";
-			$Subject = "Request Comment Report";
-
+			$TypeLink = "this [url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."&amp;page=".$PageNum."#post".$ThingID."]request comment[/url]";
+			$Subject = "Request Comment Report: ID #".display_str($ThingID);
 		}
 		break;
 	case "torrents_comment" :
@@ -114,9 +110,8 @@ switch($Type) {
 		} else {
 			list($GroupID, $Body, $PostNum) = $DB->next_record();
 			$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-			$TypeLink = "[url=https://".SSL_SITE_URL."/torrents.php?id=".$GroupID."&amp;page=".$PageNum."#post".$ThingID."]TORRENT COMMENT[/url]";
-			$Subject = "Torrent Comment Report";
-
+			$TypeLink = "this [url=https://".SSL_SITE_URL."/torrents.php?id=".$GroupID."&amp;page=".$PageNum."#post".$ThingID."]torrent comment[/url]";
+			$Subject = "Torrent Comment Report: ID #".display_str($ThingID);
 		}
 		break;
 	case "collages_comment" :
@@ -127,8 +122,8 @@ switch($Type) {
 			list($CollageID, $Body, $PostNum) = $DB->next_record();
 			$PerPage = POSTS_PER_PAGE;
 			$PageNum = ceil($PostNum / $PerPage);
-			$TypeLink = "[url=https://".SSL_SITE_URL."/collage.php?action=comments&amp;collageid=".$CollageID."&amp;page=".$PageNum."#post".$ThingID."]COLLAGE COMMENT[/url]";
-			$Subject = "Collage Comment Report";
+			$TypeLink = "this [url=https://".SSL_SITE_URL."/collage.php?action=comments&amp;collageid=".$CollageID."&amp;page=".$PageNum."#post".$ThingID."]collage comment[/url]";
+			$Subject = "Collage Comment Report: ID #".display_str($ThingID);
 		}
 		break;
 	default:
@@ -142,7 +137,7 @@ if(isset($Error)) {
 $DB->query("SELECT r.Reason FROM reports AS r WHERE r.ID = $ReportID");
 list($Reason) = $DB->next_record();
 
-$Body = "You reported this $TypeLink for the reason:\n[quote]".$Reason."[/quote]";
+$Body = "You reported $TypeLink for the reason:\n[quote]".$Reason."[/quote]";
 
 ?>
 <div class="thin">
@@ -153,20 +148,20 @@ $Body = "You reported this $TypeLink for the reason:\n[quote]".$Reason."[/quote]
 	</div>
 	<form class="send_form" name="message" action="reports.php" method="post" id="messageform">
 		<div class="box pad">
-			<input type="hidden" name="action" value="takecompose" /> <input
-				type="hidden" name="toid" value="<?=$ToID?>" /> <input type="hidden"
-				name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+			<input type="hidden" name="action" value="takecompose" />
+			<input type="hidden" name="toid" value="<?=$ToID?>" />
+			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<div id="quickpost">
 				<h3>Subject</h3>
-				<input type="text" name="subject" size="95"
-					value="<?=(!empty($Subject) ? $Subject : '')?>" /><br />
+				<input type="text" name="subject" size="95" value="<?=(!empty($Subject) ? $Subject : '')?>" />
+				<br />
 				<h3>Body</h3>
 				<textarea id="body" name="body" cols="95" rows="10"><?=(!empty($Body) ? $Body : '')?></textarea>
 			</div>
 			<div id="preview" class="hidden"></div>
 			<div id="buttons" class="center">
-				<input type="button" value="Preview" onclick="Quick_Preview();" /> <input
-					type="submit" value="Send message" />
+				<input type="button" value="Preview" onclick="Quick_Preview();" />
+				<input type="submit" value="Send message" />
 			</div>
 		</div>
 	</form>

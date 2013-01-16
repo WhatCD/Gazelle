@@ -212,24 +212,24 @@ if($ViewingOwn) {
 	if(!$ShowUnread){ ?>
 		<br /><br />
 		<? if($ShowGrouped) { ?>
-			<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=0&amp;group=0">Show all posts</a>&nbsp;&nbsp;&nbsp;
+			[<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=0&amp;group=0">Show all posts</a>]&nbsp;&nbsp;&nbsp;
 		<? } else { ?>
-			<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=0&amp;group=1">Show all posts (grouped)</a>&nbsp;&nbsp;&nbsp;
+			[<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=0&amp;group=1">Show all posts (grouped)</a>]&nbsp;&nbsp;&nbsp;
 		<? } ?>
-		<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=1&amp;group=1">Only display posts with unread replies (grouped)</a>&nbsp;&nbsp;&nbsp;
+		[<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=1&amp;group=1">Only display posts with unread replies (grouped)</a>]&nbsp;&nbsp;&nbsp;
 <?	} else { ?>
 		<br /><br />
-		<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=0&amp;group=0">Show all posts</a>&nbsp;&nbsp;&nbsp;
+		[<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=0&amp;group=0">Show all posts</a>]&nbsp;&nbsp;&nbsp;
 <?	
 		if(!$ShowGrouped) {
-			?><a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=1&amp;group=1">Only display posts with unread replies (grouped)</a>&nbsp;&nbsp;&nbsp;<?
+			?>[<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=1&amp;group=1">Only display posts with unread replies (grouped)</a>]&nbsp;&nbsp;&nbsp;<?
 		}
 		else {
-			?><a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=1&amp;group=0">Only display posts with unread replies</a>&nbsp;&nbsp;&nbsp;<?
+			?>[<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=1&amp;group=0">Only display posts with unread replies</a>]&nbsp;&nbsp;&nbsp;<?
 		}
 	}
 ?>
-			<a href="userhistory.php?action=subscriptions">Go to subscriptions</a>
+			[<a href="userhistory.php?action=subscriptions">Go to subscriptions</a>]
 <?
 }
 ?>
@@ -285,7 +285,7 @@ if(empty($Results)) {
 ?>
 				<span id="bar<?=$PostID ?>" style="float:right;">
 <? 		if($ViewingOwn && !in_array($TopicID, $UserSubscriptions)) { ?>
-					<a href="#" onclick="Subscribe(<?=$TopicID?>);$('.subscribelink<?=$TopicID?>').remove();return false;" class="subscribelink<?=$TopicID?>">[Subscribe]</a>
+					[<a href="#" onclick="Subscribe(<?=$TopicID?>);$('.subscribelink<?=$TopicID?>').remove();return false;" class="subscribelink<?=$TopicID?>">Subscribe</a>]
 					&nbsp;
 <? 		} ?>
 					<a href="#">&uarr;</a>

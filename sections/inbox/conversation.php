@@ -63,14 +63,14 @@ $DB->query("SELECT SentDate, SenderID, Body, ID FROM pm_messages AS m WHERE Conv
 <div class="thin">
 	<h2><?=$Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')':'')?></h2>
 	<div class="linkbox">
-		<a href="inbox.php">[Back to inbox]</a>
+		[<a href="inbox.php">Back to inbox</a>]
 	</div>
 <?
 
 while(list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) { ?>
 	<div class="box vertical_space">
 		<div class="head">
-			<strong><?=$Users[(int)$SenderID]['UserStr']?></strong> <?=time_diff($SentDate)?> - <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Users[(int)$SenderID]['Username']?>');">[Quote]</a>	
+			<strong><?=$Users[(int)$SenderID]['UserStr']?></strong> <?=time_diff($SentDate)?> - [<a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Users[(int)$SenderID]['Username']?>');">Quote</a>]
 		</div>
 		<div class="body" id="message<?=$MessageID?>">
 			<?=$Text->full_format($Body)?>

@@ -82,7 +82,10 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 							<td>
 								<input type="hidden" name="action" value="search" />
 								<input type="hidden" name="forums[]" value="<?=$ForumID?>" />
-								<strong>Search for:</strong></td><td><input type="text" id="searchbox" name="search" size="70" />
+								<strong>Search for:</strong>
+							</td>
+							<td>
+								<input type="text" id="searchbox" name="search" size="70" />
 							</td>
 						</tr>
 						<tr>
@@ -95,7 +98,8 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 							</td>
 						</tr>
 						<tr>
-							<td><strong>Username:</strong></td><td><input type="text" id="username" name="user" size="70" /></td>
+							<td><strong>Username:</strong></td>
+							<td><input type="text" id="username" name="user" size="70" /></td>
 						</tr>
 						<tr>
 							<td colspan="2" style="text-align: center"><input type="submit" name="submit" value="Search" /></td>
@@ -121,7 +125,7 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 	</div>
 <? if(check_perms('site_moderate_forums')) { ?>
 	<div class="linkbox">
-		<a href="forums.php?action=edit_rules&amp;forumid=<?=$ForumID?>">Change specific rules</a>
+		[<a href="forums.php?action=edit_rules&amp;forumid=<?=$ForumID?>">Change specific rules</a>]
 	</div>
 <? } ?>
 <? if(!empty($Forums[$ForumID]['SpecificRules'])) { ?>

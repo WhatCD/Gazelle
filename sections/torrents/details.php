@@ -96,9 +96,9 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode');
 <?	}
 	if(has_bookmarked('torrent', $GroupID)) {
 ?>
-			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
-<?	} else { ?>
-			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" onclick="Bookmark('torrent', <?=$GroupID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+<?	} else {  ?>
+			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?	}
 	if($Categories[$GroupCategoryID-1] == 'Music') { ?>
 			<a href="upload.php?groupid=<?=$GroupID?>">[Add format]</a>

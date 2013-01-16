@@ -367,32 +367,32 @@ View::show_header($Name,'browse,collage,bbcode,voting');
 	<div class="header">
 		<h2><?=$Name?></h2>
 		<div class="linkbox">
-			<a href="collages.php">[List of collages]</a>
+			[<a href="collages.php">List of collages</a>]
 <? if (check_perms('site_collages_create')) { ?>
-			<a href="collages.php?action=new">[New collage]</a>
+			[<a href="collages.php?action=new">New collage</a>]
 <? } ?>
 			<br /><br />
 <? if(check_perms('site_collages_subscribe')) { ?>
-			<a href="#" onclick="CollageSubscribe(<?=$CollageID?>);return false;" id="subscribelink<?=$CollageID?>">[<?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?>]</a>
+			[<a href="#" onclick="CollageSubscribe(<?=$CollageID?>);return false;" id="subscribelink<?=$CollageID?>"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>]
 <? }
    if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
-			<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>">[Edit description]</a>
+			[<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>">Edit description</a>]
 <? } else { ?>
 			[Locked]
 <? }
 	if(has_bookmarked('collage', $CollageID)) {
 ?>
-			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" onclick="Unbookmark('collage', <?=$CollageID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+			[<a href="#" id="bookmarklink_collage_<?=$CollageID?>" onclick="Unbookmark('collage', <?=$CollageID?>,'[Bookmark]');return false;">Remove bookmark</a>]
 <?	} else { ?>
-			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" onclick="Bookmark('collage', <?=$CollageID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+			[<a href="#" id="bookmarklink_collage_<?=$CollageID?>" onclick="Bookmark('collage', <?=$CollageID?>,'[Remove bookmark]');return false;">Bookmark</a>]
 <?	}
 
 if (check_perms('site_collages_manage') && !$Locked) { ?>
-			<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>">[Manage torrents]</a>
+			[<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>">Manage torrents</a>]
 <? } ?>
-			<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>">[Report Collage]</a>
+			[<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>">Report collage</a>]
 <? if (check_perms('site_collages_delete') || $CreatorID == $LoggedUser['ID']) { ?>
-			<a href="collages.php?action=delete&amp;collageid=<?=$CollageID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this collage?.');">[Delete]</a>
+			[<a href="collages.php?action=delete&amp;collageid=<?=$CollageID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this collage?');">Delete</a>]
 <? } ?>
 		</div>
 	</div>
@@ -427,7 +427,7 @@ if(check_perms('zip_downloader')){
 					<li id="list<?=$ListItem?>">
 						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
 						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;">[X]</a></span>
+						<span class="remove remove_collector">[<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;">X</a>]</span>
 						<br style="clear:all;" />
 					</li>
 <? } ?>
@@ -494,7 +494,7 @@ foreach ($Tags as $TagName => $Tag) {
 				</ol>
 			</div>
 		</div>
-<? if(!empty($Artists)) { ?>		
+<? if(!empty($Artists)) { ?>
 		<div class="box box_artists">
 			<div class="head"><strong>Top artists</strong></div>
 			<div class="pad">
@@ -535,7 +535,7 @@ foreach ($Users as $ID => $User) {
 		</div>
 <? if(check_perms('site_collages_manage') && !$PreventAdditions) { ?>
 		<div class="box box_addtorrent">
-			<div class="head"><strong>Add torrent</strong><span style="float: right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == '[Batch Add]'?'[Individual Add]':'[Batch Add]'); return false;">[Batch Add]</a></span></div>
+			<div class="head"><strong>Add torrent</strong><span style="float: right">[<a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch Add'?'Individual Add':'Batch Add'); return false;">Batch Add</a>]</span></div>
 			<div class="pad add_torrent_container">
 				<form class="add_form" name="torrent" action="collages.php" method="post">
 					<input type="hidden" name="action" value="add_torrent" />
@@ -579,7 +579,7 @@ foreach ($CommentList as $Comment) {
 	list($CommentID, $Body, $UserID, $Username, $CommentTime) = $Comment;
 ?>
 		<div class="box comment">
-			<div class="head">By <?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>">[Report Comment]</a></div>
+			<div class="head">By <?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> [<a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>">Report Comment</a>]</div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
 <?

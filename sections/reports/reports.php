@@ -72,38 +72,39 @@ $DB->set_query_id($Reports);
 // Start printing stuff
 ?>
 <div class="thin">
-    <div class="header">
-        <h2>Active Reports</h2>
+	<div class="header">
+		<h2>Active Reports</h2>
 
-        <div class="linkbox">
-            <a href="reports.php">New</a> |
-            <a href="reports.php?view=old">Old</a> |
-            <a href="reports.php?action=stats">Stats</a>
-        </div>
-    </div>
-    <div class="linkbox">
+		<div class="linkbox">
+			<a href="reports.php">New</a> |
+			<a href="reports.php?view=old">Old</a> |
+			<a href="reports.php?action=stats">Stats</a>
+		</div>
+	</div>
+	<div class="linkbox">
 		<?
 // pagination
 		$Pages = Format::get_pages($Page, $Results, REPORTS_PER_PAGE, 11);
 		echo $Pages;
 		?>
-    </div>
+	</div>
 	<?
 	while (list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $Reason, $Status, $ClaimerID, $Notes) = $DB->next_record()) {
 		$Type = $Types[$Short];
 		$Reference = "reports.php?id=" . $ReportID . "#report" . $ReportID;
 		?>
-        <div id="report<?=$ReportID?>">
-            <table cellpadding="5" id="report_<?=$ReportID?>">
-                <tr>
-                    <td><strong><a href="<?=$Reference?>">Report #<?=$ReportID?></a></strong></td>
-                    <td><strong><?=$Type['title']?></strong> was reported by <a href="user.php?id=<?=$SnitchID?>"><?=$SnitchName?></a> <?=time_diff($ReportedTime)?> <a
-                            href="reports.php?action=compose&amp;to=<?=$SnitchID?>&amp;reportid=<?=$ReportID?>&amp;type=<?=$Short?>&amp;thingid=<?=$ThingID?>">[Contact]</a></td>
-                </tr>
-                <tr>
-
-                    <td class="center" colspan="2">
-                        <strong>
+		<div id="report<?=$ReportID?>">
+			<table cellpadding="5" id="report_<?=$ReportID?>">
+				<tr>
+					<td><strong><a href="<?=$Reference?>">Report #<?=$ReportID?></a></strong></td>
+					<td>
+						<strong><?=$Type['title']?></strong> was reported by <a href="user.php?id=<?=$SnitchID?>"><?=$SnitchName?></a> <?=time_diff($ReportedTime)?>
+						[<a href="reports.php?action=compose&amp;to=<?=$SnitchID?>&amp;reportid=<?=$ReportID?>&amp;type=<?=$Short?>&amp;thingid=<?=$ThingID?>">Contact</a>]
+					</td>
+				</tr>
+				<tr>
+					<td class="center" colspan="2">
+						<strong>
 							<?
 							switch ($Short) {
 								case "user" :
@@ -184,7 +185,7 @@ $DB->set_query_id($Reports);
 									} else {
 										list($ArtistID, $Body, $PostNum) = $DB->next_record();
 										$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-										echo "<a href='artist.php?id=" . $ArtistID . "&page=" . $PageNum . "#post" . $ThingID . "'>COMMENT</a>";
+										echo "<a href='artist.php?id=" . $ArtistID . "&amp;page=" . $PageNum . "#post" . $ThingID . "'>ARTIST COMMENT</a>";
 									}
 									break;
 

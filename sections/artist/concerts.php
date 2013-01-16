@@ -1,16 +1,16 @@
 <div class="box">
-    <div id="concerts" class="head">
-        <a href="#">&uarr;</a>&nbsp;<strong>Upcoming Concerts</strong>
-        <a href="#" onclick="$('#concertsbody').toggle(); return false;">[Toggle]</a>
-    </div>
+	<div id="concerts" class="head">
+		<a href="#">&uarr;</a>&nbsp;<strong>Upcoming concerts</strong>
+		[<a href="#" onclick="$('#concertsbody').toggle(); return false;">Toggle</a>]
+	</div>
     <div id="concertsbody">
 <?
 			$ArtistEvents = LastFM::get_artist_events($ArtistID, $Name);
 			$Debug->log_var($ArtistEvents);
 			if ($ArtistEvents === false) { // Something went wrong
-				echo 'An error occurred when retrieving concert info.';
+				echo '<br />An error occurred when retrieving concert info.<br />';
 			} elseif (!isset($ArtistEvents['events']['event'])) { // No upcoming events
-				echo 'This artist has no upcoming concerts.';
+				echo '<br />This artist has no upcoming concerts.<br />';
 			} else {
 				echo '<ul>';
 				if (isset($ArtistEvents['events']['event'][0])) { // Multiple events
@@ -44,7 +44,7 @@ function make_concert_link($Event)
 		<input type="hidden" name="concert_id" value="<?=$Event['id']?>"/>
 		<input type="hidden" name="concert_template" value="<?=get_concert_post_template($Name, $Event)?>"/>
 	</form>
-	<li><?=$Concert?> - <a href="#" onclick="$('#concert<?=$Event['id']?>').raw().submit(); return false;">[Go to Thread]</a></li>
+	<li><?=$Concert?> - [<a href="#" onclick="$('#concert<?=$Event['id']?>').raw().submit(); return false;">Go to thread</a>]</li>
 <?
 }
 ?>
@@ -77,7 +77,7 @@ function get_concert_post_template($Artist, $Event)
 		if (strpos ($Url, '://') === false) {
 			$Url = 'http://' . $Url;
 		}
-		$Website = "[b]Website:[/b] " . $Url;
+		$Website = "[b]Web site:[/b] " . $Url;
 	}
 	if (isset($Event['artists']['artist']) && (count($Event['artists']['artist']) == 1 && strtolower($Event['artists']['artist'][1]) == strtolower($Artist))) {
 		$i = 0;

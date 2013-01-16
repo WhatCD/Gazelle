@@ -491,12 +491,10 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 <?
 		if($IsBookmarked) {
 ?>
-				<a href="#" class="bookmarklink_torrent_<?=$GroupID?>" onclick="Unbookmark('torrent', <?=$GroupID?>,'Bookmark');return false;">Remove Bookmark</a>
-<?
-		} else {
-?>
-				<a href="#" class="bookmarklink_torrent_<?=$GroupID?>" onclick="Bookmark('torrent', <?=$GroupID?>,'Remove Bookmark');return false;">Bookmark</a>
-<? }?>
+				<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+<?	} else {  ?>
+				<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+<?  }  ?>
 			</span>
 			
 			<?=$TorrentTags?>

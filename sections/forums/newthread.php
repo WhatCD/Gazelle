@@ -27,8 +27,8 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 	<div class="hidden" id="newthreadpreview">
 		<div class="linkbox">
 			<div class="center">
-				<a href="#" onclick="return false;">[Report Thread]</a>
-				<a href="#" onclick="return false;"><?=!empty($HeavyInfo['AutoSubscribe']) ? '[Unsubscribe]' : '[Subscribe]'?></a>
+				[<a href="#" onclick="return false;">Report Thread</a>]
+				[<a href="#" onclick="return false;"><?=!empty($HeavyInfo['AutoSubscribe']) ? 'Unsubscribe' : 'Subscribe'?></a>]
 			</div>
 		</div>
 <? if (check_perms('forums_polls_create')) { ?>
@@ -56,7 +56,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 					Just now
 					</span>
 					<span id="barpreview" style="float:right;">
-						<a href="#newthreadpreview">[Report Post]</a>
+						[<a href="#newthreadpreview">Report Post</a>]
 						&nbsp;
 						<a href="#">&uarr;</a>
 					</span>
@@ -101,7 +101,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 
 if (check_perms('forums_polls_create')) {
 ?>
-				<script type="text/javascript">
+				<script type="text/javascript">//<![CDATA[
 				var AnswerCount = 1;
 
 				function AddAnswerField() {
@@ -124,6 +124,7 @@ if (check_perms('forums_polls_create')) {
 						for (i=0; i<2; i++) { x.removeChild(x.lastChild); }
 						AnswerCount--;
 				}
+				//]]>
 				</script>
 				<tr>
 					<td colspan="2" class="center">
