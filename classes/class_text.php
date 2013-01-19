@@ -62,6 +62,12 @@ class TEXT {
 	 * @var int $InQuotes
 	 */
 	private $InQuotes = 0;
+	
+	/**
+	 * Used to [hide] quote trains beyond the specified depth
+	 * @var int $QuoteHideDepth
+	 */
+	private $QuoteHideDepth = 5;
 
 	/**
 	 * Array of headlines for Table Of Contents (TOC)
@@ -684,17 +690,24 @@ class TEXT {
 				case 'quote':
 					$this->NoImg++; // No images inside quote tags
 					$this->InQuotes++;
+					if($this->InQuotes == $this->QuoteHideDepth) { //Put quotes that are nested beyond the specified limit in [hide] tags.
+					    $Str.='<strong>Older quotes</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
+					    $Str.='<blockquote class="hidden spoiler">';
+					}
 					if(!empty($Block['Attr'])) {
 						$Exploded = explode("|", $this->to_html($Block['Attr']));
 						if(isset($Exploded[1]) && is_numeric($Exploded[1]))  {
 							$PostID = trim($Exploded[1]);
-							$Str.= '<a href="#" onclick="QuoteJump('.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';	
+							$Str.= '<a href="#" onclick="QuoteJump('.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
 						else {
 							$Str.= '<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
 						}	
 					}
 					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
+					if($this->InQuotes == $this->QuoteHideDepth) { //Close quote the deeply nested quote [hide].
+					    $Str.='</blockquote><br />'; // Ensure new line after quote train hiding
+					}
 					$this->NoImg--;
 					$this->InQuotes--;
 					break;

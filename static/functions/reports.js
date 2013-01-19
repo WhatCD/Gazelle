@@ -45,14 +45,26 @@ function unClaim(id) {
 }
 
 function resolve(id, claimer) {
+	var answer = true;
 	if (!claimer) {
 		if ($('#claimed_' + id).raw()) {
 			var answer = confirm("This is a claimed report, are you sure you want to resolve it?");
 			if (answer)
-				return true;
+				answer = true;
 			else
-				return false;
+				answer = false;
 		}
 	}
-	return true;
+	if (answer) {
+		ajax.post('reports.php?action=resolve', 'report_form_' + id, function (response) {
+				var json = JSON.parse(response);
+				if (json['status'] == 'success') {
+					$('#report_' + id).remove();
+				} else {
+					alert(json['status']);
+				}
+			}
+		);
+	}
+	return false;
 }

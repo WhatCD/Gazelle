@@ -111,7 +111,7 @@ class Tools {
 		if(count($Output) != 5) {
 			return false;
 		} else {
-			return $Output[4];
+			return trim($Output[4]);
 		}
 	}
 

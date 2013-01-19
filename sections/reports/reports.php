@@ -93,7 +93,7 @@ $DB->set_query_id($Reports);
 		$Type = $Types[$Short];
 		$Reference = "reports.php?id=" . $ReportID . "#report" . $ReportID;
 		?>
-		<div id="report<?=$ReportID?>">
+		<div id="report_<?=$ReportID?>">
 			<table cellpadding="5" id="report_<?=$ReportID?>">
 				<tr>
 					<td><strong><a href="<?=$Reference?>">Report #<?=$ReportID?></a></strong></td>
@@ -230,9 +230,8 @@ $DB->set_query_id($Reports);
 				<? if ($Status != "Resolved") { ?>
 				<tr>
 					<td class="center" colspan="2">
-						<form class="manage_form" name="report" action="reports.php" method="post">
+						<form id="report_form_<?=$ReportID?>">
 							<input type="hidden" name="reportid" value="<?=$ReportID?>" />
-							<input type="hidden" name="action" value="takeresolve" />
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 							<input type="submit" onclick="return resolve(<?=$ReportID?>, <?=($ClaimerID == $LoggedUser['ID'] || !$ClaimerID) ? "true" : "false"?>)" name="submit" value="Resolve" />
 						</form>
