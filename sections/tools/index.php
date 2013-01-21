@@ -101,6 +101,10 @@ switch ($_REQUEST['action']){
 	case 'eb_alter':
 		include('managers/eb_alter.php');
 		break;
+	
+	case 'eb_search':
+		include('managers/eb_search.php');
+		break;
 
 	case 'dnu':
 		include('managers/dnu_list.php');

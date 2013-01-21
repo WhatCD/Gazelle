@@ -30,6 +30,7 @@ $Body = db_string($_POST['body']); //Don't URL Decode
 $PostID = $_POST['post'];
 $Key = $_POST['key'];
 $SQLTime = sqltime();
+$DoPM = isset($_POST['pm']) ? $_POST['pm'] : 0;
 
 // Mainly 
 $DB->query("SELECT
@@ -63,6 +64,15 @@ if($LoggedUser['DisablePosting']) {
 }
 if($DB->record_count()==0) {
 	error(404,true);
+}
+
+// Send a PM to the user to notify them of the edit
+if($UserID != $AuthorID && $DoPM) {
+	$PMSubject = 'Your post #'.$PostID.' has been edited';
+	$PMurl = 'https://'.NONSSL_SITE_URL.'/forums.php?action=viewthread&postid='.$PostID.'#post'.$PostID;
+	$ProfLink = '[url=https://'.NONSSL_SITE_URL.'/user.php?id='.$UserID.']'.$LoggedUser['Username'].'[/url]';
+	$PMBody = 'One of your posts has been edited by '.$ProfLink.': [url]'.$PMurl.'[/url]';
+	Misc::send_pm($AuthorID,0,$PMSubject,$PMBody,$ConvID='');
 }
 
 // Perform the update
