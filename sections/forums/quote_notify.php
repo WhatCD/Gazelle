@@ -26,12 +26,17 @@ $DB->query("SELECT m.ID, p.PushService
 			WHERE m.Username IN " . "('" . implode("', '", $Usernames)
 	. "')
 	AND i.NotifyOnQuote = '1' AND i.UserID != $LoggedUser[ID]");
-while (list($UserID, $PushService) = $DB->next_record()) {
+
+$Results = $DB->to_array();
+foreach($Results as $Result) {
+	$UserID = $Result['ID'];
+	$PushService = $Result['PushService'];
 	$QuoterID = db_string($LoggedUser['ID']);
 	$UserID = db_string($UserID);
 	$ForumID = db_string($ForumID);
 	$TopicID = db_string($TopicID);
 	$PostID = db_string($PostID);
+	
 	$DB->query("INSERT IGNORE INTO users_notify_quoted (UserID, QuoterID, ForumID, TopicID, PostID, Date)
 		VALUES ('$UserID', '$QuoterID', '$ForumID', '$TopicID', '$PostID', '" . sqltime() . "')");
 	$Cache->delete_value('forums_quotes_' . $UserID);

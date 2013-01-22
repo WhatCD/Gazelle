@@ -1,13 +1,18 @@
 var username;
 var postid;
 
-function QuoteJump(post) {
+function QuoteJump(event, post) {
+	var button = event.button;
 	var hash = "#post" + post;
-	if($(hash).raw() != null) {
-		window.location.hash = hash;
-	}
-	else {
-		window.open("forums.php?action=viewthread&postid="+post, '_self');
+	if(button == 0) {
+		if($(hash).raw() != null) {
+			window.location.hash = hash;
+		}
+		else {
+			window.open("forums.php?action=viewthread&postid="+post, '_self');
+		}
+	} else if(button == 1) {
+		window.open("forums.php?action=viewthread&postid="+post, '_window');
 	}
 }
 
@@ -39,7 +44,12 @@ function Edit_Form(post,key) {
 	} else {
 		boxWidth="80";
 	}
+	postuserid = $('#post' + postid + ' strong a').raw().getAttribute('href').split('=')[1]
+	/*	jQuery isnt enabled on comments, artist comments, or basically anywhere but thread.php
+		Re-enable this clause as soon as hateradio's "bye sizzle" changes go into effect, changing
+		the jQuery object to $ (which will, then, be jQuery rather than sizzle)
 	postuserid = jQuery('#post' + postid + ' strong a').attr('href').split('=')[1];
+	*/
 	if (postuserid != userid) {
 		pmbox = '<span id="pmbox'+postid+'">PM user on edit? <input type="checkbox" name="pm" value="1" /></span>';
 	} else {
