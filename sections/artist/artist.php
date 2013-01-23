@@ -489,7 +489,7 @@ $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
-View::show_header($Name, 'browse,requests,bbcode,comments,voting');
+View::show_header($Name, 'browse,requests,bbcode,comments,voting,jquery');
 ?>
 <div class="thin">
 	<div class="header">
@@ -1055,54 +1055,11 @@ foreach($Thread as $Key => $Post) {
 		<div class="linkbox">
 		<?=$Pages?>
 		</div>
-<? if (!$LoggedUser['DisablePosting']) { ?>
-		<br />
-		<div id="reply_box">
-			<h3>Post reply</h3>
-			<div class="box pad">
-				<table id="quickreplypreview" class="forum_post box vertical_margin hidden" style="text-align:left;">
-					<colgroup>
-<?	if (Users::has_avatars_enabled()) { ?>
-						<col class="col_avatar" />
-<? 	} ?>
-						<col class="col_post_body" />
-					</colgroup>
-					<tr class="colhead_dark">
-						<td colspan="2">
-							<div style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
-								by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong>	Just now
-							</div>
-							<div id="barpreview" style="float:right;">
-								[<a href="#quickreplypreview">Report</a>]
-								&nbsp;
-								<a href="#">&uarr;</a>
-							</div>
-						</td>
-					</tr>
-					<tr>
-				<?	if (Users::has_avatars_enabled()) { ?>
-						<td class="avatar" valign="top">
-						<?=Users::show_avatar($LoggedUser['Avatar'], $LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
-						</td>
-				<?	} ?>
-						<td class="body" valign="top">
-							<div id="contentpreview" style="text-align:left;"></div>
-						</td>
-					</tr>
-				</table>
-				<form class="send_form center" name="reply" id="quickpostform" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
-					<div id="quickreplytext">
-						<input type="hidden" name="action" value="reply" />
-						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-						<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
-						<textarea id="quickpost" name="body"  cols="70"  rows="8"></textarea> <br />
-					</div>
-					<input id="post_preview" type="button" value="Preview" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
-					<input type="submit" id="submit_button" value="Post reply" />
-				</form>
-			</div>
-		</div>
-<? } ?>
+<?
+	View::parse('generic/reply/quickreply.php', array(
+			'InputName' => 'artistid',
+			'InputID' => $ArtistID));
+?>
 	</div>
 </div>
 <?

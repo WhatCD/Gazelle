@@ -125,6 +125,12 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 	 private $preview = false;
 
 	/**
+	 * String table
+	 * @var string Buffer
+	 */
+	private $buffer = null;
+
+	/**
 	 * This method creates a textarea
 	 *
 	 * @param string $Name  name attribute
@@ -132,16 +138,20 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 	 * @param string $Value default text attribute
 	 * @param string $Cols  cols attribute
 	 * @param string $Rows  rows attribute
-	 * @param bool $Preview add the preview divs near the textarea
-	 * @param bool $Buttons add the edit/preview buttons near the textarea
+	 * @param bool   $Preview add the preview divs near the textarea
+	 * @param bool   $Buttons add the edit/preview buttons near the textarea
+	 * @param bool   $Buffer  doesn't output the textarea, use getBuffer()
+	 * @param array  $ExtraAttributes array of attribute="value"
 	 *
-	 * If false for either, use the appropriate methods to add the those
-	 * elements elsewhere. Alternatively, use getID to create your own.
+	 * If false for $Preview, $Buttons, or $Buffer, use the appropriate
+	 * methods to add the those elements manually. Alternatively, use getID
+	 * to create your own.
 	 *
-	 * @param array $ExtraAttributes array of attribute="value"
+	 * It's important to have the right IDs as they make the JS function properly.
 	 */
 	public function __construct ($Name, $ID = '', $Value='', $Cols=50, $Rows=10,
-		$Preview = true, $Buttons = true, array $ExtraAttributes = array()
+		$Preview = true, $Buttons = true, $Buffer = false,
+		array $ExtraAttributes = array()
 	) {
 		$this->id = parent::$Textareas;
 		parent::$Textareas += 1;
@@ -156,7 +166,7 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 
 		if ($Preview === true) $this->preview();
 
-		View::parse('generic/textarea/textarea.phtml', array(
+		$this->buffer = View::parse('generic/textarea/textarea.phtml', array(
 			'ID' => $ID,
 			'NID' => $this->id,
 			'Name' => &$Name,
@@ -164,7 +174,7 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 			'Cols' => &$Cols,
 			'Rows' => &$Rows,
 			'Attributes' => &$Attributes
-		));
+		), $Buffer);
 
 		if ($Buttons === true) $this->buttons();
 	}
@@ -195,5 +205,14 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 	public function getID ()
 	{
 		return $this->id;
+	}
+
+	/**
+	 * Returns textarea string when buffer is enabled in the constructor
+	 * @return string
+	 */
+	public function getBuffer ()
+	{
+		return $this->buffer;
 	}
 }

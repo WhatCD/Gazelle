@@ -179,6 +179,10 @@ div#AddArtists a {
 	font-weight: bold;
 }
 
+#forums #quickpost {
+	width: 95%
+}
+
 .scale_image {
 	max-width: 500px;
 }

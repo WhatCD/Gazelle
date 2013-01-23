@@ -50,7 +50,7 @@ $DB->query("SELECT Name FROM collages WHERE ID='$CollageID'");
 list($Name) = $DB->next_record();
 
 // Start printing
-View::show_header('Comments for collage '.$Name, 'comments,bbcode');
+View::show_header('Comments for collage '.$Name, 'comments,bbcode,jquery');
 ?>
 <div class="thin">
 	<div class="header">
@@ -108,25 +108,12 @@ if (check_perms('site_moderate_forums')){ ?>				- [<a href="#post<?=$PostID?>" o
 <?	} 
 if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 	if($ThreadInfo['MinClassWrite'] <= $LoggedUser['Class'] && !$LoggedUser['DisablePosting']) {
-?>
-		<br />
-		<div id="reply_box">
-			<h3>Post reply</h3>
-			<div class="box pad" style="padding:20px 10px 10px 10px;">
-				<form class="send_form center" name="comment" id="quickpostform" action="" method="post">
-					<input type="hidden" name="action" value="add_comment" />
-					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
-					<div id="quickreplypreview" class="box" style="text-align: left; display: none; padding: 10px;"></div>
-					<div id="quickreplytext">
-						<textarea id="quickpost" name="body"  cols="90"  rows="8"></textarea> <br />
-					</div>
-					<input type="submit" value="Post reply" />
-					<input id="post_preview" type="button" value="Preview" onclick="if(this.preview){Quick_Edit();}else{Quick_Preview();}" />
-				</form>
-			</div>
-		</div>
-<?
+
+	View::parse('generic/reply/quickreply.php', array(
+			'InputName' => 'collageid',
+			'InputID' => $CollageID,
+			'InputAction' => 'add_comment',
+			'TextareaCols' => 90));
 	}
 }
 ?>

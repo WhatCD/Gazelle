@@ -610,7 +610,7 @@ function show() {
 			<tr>
 				<td class="label">Album description:</td>
 				<td>
-<?php new TEXTAREA_PREVIEW('album_desc', 'album_desc', display_str($Torrent['GroupDescription']), 60, 8, true, true, array($this->Disabled)); ?>
+<?php new TEXTAREA_PREVIEW('album_desc', 'album_desc', display_str($Torrent['GroupDescription']), 60, 8, true, true, false, array($this->Disabled)); ?>
 					<p class="min_padding">Contains background information such as album history and maybe a review.</p>
 				</td>
 			</tr>
