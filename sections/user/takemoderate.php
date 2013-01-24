@@ -409,6 +409,7 @@ if ($SupportFor!=db_string($Cur['SupportFor']) && (check_perms('admin_manage_fls
 if ($RestrictedForums != db_string($Cur['RestrictedForums']) && check_perms('users_mod')) {
 	$UpdateSet[]="RestrictedForums='$RestrictedForums'";
 	$EditSummary[]="restricted forum(s): $RestrictedForums";
+	$DeleteKeys = true;
 }
 
 if ($PermittedForums != db_string($Cur['PermittedForums']) && check_perms('users_mod')) {
@@ -422,22 +423,8 @@ if ($PermittedForums != db_string($Cur['PermittedForums']) && check_perms('users
 	$PermittedForums = implode(',',$ForumSet);
 	$UpdateSet[]="PermittedForums='$PermittedForums'";
 	$EditSummary[]="permitted forum(s): $PermittedForums";
+	$DeleteKeys = true;
 }
-
-if(empty($RestrictedForums) && empty($PermittedForums)) {
-	$HeavyUpdates['CustomForums'] = null;
-} else {
-	$HeavyUpdates['CustomForums'] = array();
-	$Forums = explode(',',$RestrictedForums);
-	foreach ($Forums as $Forum) {
-		$HeavyUpdates['CustomForums'][$Forum] = 0;
-	}
-	$Forums = explode(',',$PermittedForums);
-	foreach ($Forums as $Forum) {
-		$HeavyUpdates['CustomForums'][$Forum] = 1;
-	}
-}
-
 
 if ($DisableAvatar!=$Cur['DisableAvatar'] && check_perms('users_disable_any')) {
 	$UpdateSet[]="DisableAvatar='$DisableAvatar'";
@@ -626,22 +613,21 @@ if ($MergeStatsFrom && check_perms('users_edit_ratio')) {
 if ($Pass && check_perms('users_edit_password')) {
 	$UpdateSet[]="PassHash='".db_string(Users::make_crypt_hash($Pass))."'";
 	$EditSummary[]='password reset';
-       
-	$Cache->delete_value('user_info_'.$UserID);
-        $Cache->delete_value('user_info_heavy_'.$UserID);
-        $Cache->delete_value('user_stats_'.$UserID);
-        $Cache->delete_value('enabled_'.$UserID);
 
-        $DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
-        while(list($SessionID) = $DB->next_record()) {
+	$Cache->delete_value('user_info_'.$UserID);
+	$Cache->delete_value('user_info_heavy_'.$UserID);
+	$Cache->delete_value('user_stats_'.$UserID);
+	$Cache->delete_value('enabled_'.$UserID);
+
+	$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
+	while(list($SessionID) = $DB->next_record()) {
 		$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 	}
-        $Cache->delete_value('users_sessions_'.$UserID);
-        
+	$Cache->delete_value('users_sessions_'.$UserID);
+	
 	
 	$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
 	
-        
 }
 
 if (empty($UpdateSet) && empty($EditSummary)) {

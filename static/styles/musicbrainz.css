@@ -47,3 +47,10 @@
 	display: block;
 }
 
+.linkbox .brackets:before {
+	content: "[";
+}
+
+.linkbox .brackets:after {
+	content: "]";
+}

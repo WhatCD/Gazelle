@@ -270,7 +270,7 @@ class SphinxQL_Query {
 	 * @param string $Mode sort method to apply to the selected attribute
 	 * @return current SphinxQL query object
 	 */
-	public function order_by($Attribute = false, $Mode) {
+	public function order_by($Attribute = false, $Mode = false) {
 		if (empty($Attribute)) {
 			$this->SortBy = array();
 		} else {
@@ -303,7 +303,7 @@ class SphinxQL_Query {
 	 * @param string $Mode sort method to apply to the selected attribute
 	 * @return current SphinxQL query object
 	 */
-	public function order_group_by($Attribute = false, $Mode) {
+	public function order_group_by($Attribute = false, $Mode = false) {
 		if (empty($Attribute)) {
 			$this->SortGroupBy = '';
 		} else {

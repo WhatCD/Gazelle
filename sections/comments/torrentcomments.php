@@ -24,7 +24,7 @@ else {
   $Conditions = "WHERE tc.AuthorID = $UserID";
   $Title = 'Comments made by '.($Self?'you':$Username);
   $Header = 'Torrent comments left by '.($Self?'you':Users::format_username($UserID, false, false, false)).'';
-  if($Self) $OtherLink = '<a href="comments.php?action=my_torrents">Display comments left on your uploads</a>';
+  if($Self) $OtherLink = '<a href="comments.php?action=my_torrents" class="brackets">Display comments left on your uploads</a>';
 }
 
 $Comments = $DB->query("SELECT

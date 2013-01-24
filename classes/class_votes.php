@@ -9,14 +9,13 @@ class Votes {
 	public static function vote_link($GroupID, $Vote = '') {
 		global $LoggedUser;
 		if (!$LoggedUser['NoVoteLinks'] && check_perms('site_album_votes')) { ?>
-			<span class="votespan" style="white-space: nowrap">
-				( Vote: 
+			<span class="votespan brackets" style="white-space: nowrap">
+				Vote: 
 				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>">↑</a>
 				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote))?' hidden':'')?>">↑</span>
 				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>">↓</a>
 				<span class="voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up'|| empty($Vote))?' hidden':'')?>">↓</span>
 				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote)?' hidden':'')?>">x</a>
-				)
 			</span>
 <?		}
 	}

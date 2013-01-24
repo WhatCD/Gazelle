@@ -422,12 +422,12 @@ if (check_perms('site_torrents_notify')) {
 
 if (has_bookmarked('artist', $ArtistID)) {
 ?>
-			[<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'[Bookmark]');return false;">Remove bookmark</a>]
+			[<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" class="brackets" onclick="Unbookmark('artist', <?=$ArtistID?>,'Bookmark');return false;">Remove bookmark</a>]
 
 <?
 	} else {
 ?>
-			[<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'[Remove bookmark]');return false;">Bookmark</a>]
+			[<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" class="brackets" onclick="Bookmark('artist', <?=$ArtistID?>,'Remove bookmark');return false;">Bookmark</a>]
 <?
 }
 

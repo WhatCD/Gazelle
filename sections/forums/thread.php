@@ -164,9 +164,9 @@ View::show_header($ThreadInfo['Title'] . ' < '.$Forums[$ForumID]['Name'].' < '. 
 	</h2>
 	<div class="linkbox">
 		<div class="center">
-			[<a href="reports.php?action=report&amp;type=thread&amp;id=<?=$ThreadID?>">Report Thread</a>]
-			[<a href="#" onclick="Subscribe(<?=$ThreadID?>);return false;" id="subscribelink<?=$ThreadID?>"><?=(in_array($ThreadID, $UserSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>]
-			[<a href="#" onclick="$('#searchthread').toggle(); this.innerHTML = (this.innerHTML == 'Search this Thread'?'Hide Search':'Search this Thread'); return false;">Search this Thread</a>]
+			<a href="reports.php?action=report&amp;type=thread&amp;id=<?=$ThreadID?>" class="brackets">Report Thread</a>
+			<a href="#" onclick="Subscribe(<?=$ThreadID?>);return false;" id="subscribelink<?=$ThreadID?>" class="brackets"><?=(in_array($ThreadID, $UserSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
+			<a href="#" class="brackets" onclick="$('#searchthread').toggle(); this.innerHTML = (this.innerHTML == 'Search this Thread'?'Hide Search':'Search this Thread'); return false;">Search this Thread</a>
 		</div>
 		<div id="searchthread" class="hidden center">
 			<div style="display: inline-block;">

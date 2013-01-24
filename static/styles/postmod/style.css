@@ -1057,3 +1057,13 @@ tr.torrent .bookmark > a:after {
 #requests .forum_post textarea { /* overriding the inline 80-character monospace */
 	max-width: 409px;
 }
+
+.linkbox .brackets:before {
+	content: "[";
+	color: #FCFCFC;
+}
+
+.linkbox .brackets:after {
+	content: "]";
+	color: #FCFCFC;
+}

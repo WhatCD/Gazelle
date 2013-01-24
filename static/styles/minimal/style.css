@@ -546,3 +546,13 @@ tr.torrent .bookmark > a:after { content:""; }
     margin-left: 20px;
 }
 
+.linkbox .brackets:before {
+    content: "[ ";
+    color: #F1F1F1;
+}
+
+.linkbox .brackets:after {
+    content: " ]";
+    color: #F1F1F1;
+}
+

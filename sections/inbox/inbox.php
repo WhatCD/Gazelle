@@ -20,9 +20,9 @@ View::show_header('Inbox');
 <?
 
 if($Section == 'inbox') { ?>
-		[<a href="inbox.php?action=sentbox">Sentbox</a>]
+		<a href="inbox.php?action=sentbox" class="brackets">Sentbox</a>
 <? } elseif($Section == 'sentbox') { ?>
-		[<a href="inbox.php">Inbox</a>]
+		<a href="inbox.php" class="brackets">Inbox</a>
 <? }
 
 ?>

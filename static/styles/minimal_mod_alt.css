@@ -1489,3 +1489,13 @@ ul.collage_images li a:hover img {
 ul.collage_images {
   width: 695px !important;
 }
+
+.linkbox .brackets:before {
+    content: "[ ";
+    color: #F1F1F1;
+}
+
+.linkbox .brackets:after {
+    content: " ]";
+    color: #F1F1F1;
+}

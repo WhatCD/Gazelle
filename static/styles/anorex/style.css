@@ -802,3 +802,13 @@ ul .invitetree {
 	font-size: 1.25em;
 	font-weight: bold;
 }
+
+.linkbox .brackets:before {
+	content: "[";
+	color: #492802;
+}
+
+.linkbox .brackets:after {
+	content: "]";
+	color: #492802;
+}

@@ -757,3 +757,12 @@ tr.torrent .bookmark > a:after { content:""; }
     margin-left: 20px;
 }
 
+.linkbox .brackets:before {
+	content: "[";
+	color: #666;
+}
+
+.linkbox .brackets:after {
+	content: "]";
+	color: #666;
+}

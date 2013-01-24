@@ -70,9 +70,9 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 	<h2><a href="forums.php">Forums</a> &gt; <?=$ForumName?></h2>
 	<div class="linkbox">
 <? if(check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')){ ?>
-		[<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>">New Thread</a>]
+		<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>" class="brackets">New thread</a>
 <? } ?>
-		[<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this Forum'?'Hide Search':'Search this Forum'); return false;">Search this Forum</a>]
+		<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this Forum'?'Hide Search':'Search this Forum'); return false;" class="brackets">Search this forum</a>
 		<div id="searchforum" class="hidden center">
 			<div style="display: inline-block;">
 				<h3>Search this forum:</h3>
@@ -125,7 +125,7 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 	</div>
 <? if(check_perms('site_moderate_forums')) { ?>
 	<div class="linkbox">
-		[<a href="forums.php?action=edit_rules&amp;forumid=<?=$ForumID?>">Change specific rules</a>]
+		<a href="forums.php?action=edit_rules&amp;forumid=<?=$ForumID?>" class="brackets">Change specific rules</a>
 	</div>
 <? } ?>
 <? if(!empty($Forums[$ForumID]['SpecificRules'])) { ?>
@@ -135,7 +135,7 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 	$Thread = get_thread_info($ThreadIDs);
 ?>
 		<br />
-		[<a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadIDs?>"><?=display_str($Thread['Title'])?></a>]
+		<a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadIDs?>" class="brackets"><?=display_str($Thread['Title'])?></a>
 <? } ?>
 	</div>
 <? } ?>
@@ -251,6 +251,6 @@ if (count($Forum) == 0) {
 	<div class="linkbox pager">
 		<?=$Pages?>
 	</div>
-	<div class="linkbox">[<a href="forums.php?action=catchup&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a>]</div>
+	<div class="linkbox"><a href="forums.php?action=catchup&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Catch up</a></div>
 </div>
 <? View::show_footer(); ?>

@@ -140,13 +140,14 @@ View::show_header('My notifications', 'notifications');
 </div>
 <div class="linkbox">
 <? if($FilterID) { ?>
-	<a href="torrents.php?action=notify">View all</a>&nbsp;&nbsp;&nbsp;
+	<a href="torrents.php?action=notify" class="brackets">View all</a>&nbsp;&nbsp;&nbsp;
 <? } else { ?>
-	<a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>">Clear all</a>&nbsp;&nbsp;&nbsp;
+	<a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all</a>&nbsp;&nbsp;&nbsp;
 	<a href="javascript:SuperGroupClear()">Clear selected</a>&nbsp;&nbsp;&nbsp;
-	<a href="torrents.php?action=notify_catchup&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a>&nbsp;&nbsp;&nbsp;
+	<a href="torrents.php?action=notify_catchup&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;
 <? } ?>
 	<a href="user.php?action=notify">Edit filters</a>&nbsp;&nbsp;&nbsp;
+	<a href="user.php?action=notify" class="brackets">Edit filters</a>&nbsp;&nbsp;&nbsp;
 </div>
 <? if ($TorrentCount > NOTIFICATIONS_PER_PAGE) { ?>
 <div class="linkbox">
@@ -159,7 +160,7 @@ if (empty($Results)) {
 <table class="layout border">
 	<tr class="rowb">
 		<td colspan="8" class="center">
-			No new notifications found! <a href="user.php?action=notify">Edit notification filters</a>
+			No new notifications found! <a href="user.php?action=notify" class="brackets">Edit notification filters</a>
 		</td>
 	</tr>
 </table>
@@ -186,9 +187,9 @@ if (empty($Results)) {
 	</h3>
 </div>
 <div class="notify_filter_links">
-	<a href="javascript:GroupClear($('#notificationform_<?=$FilterID?>').raw())">Clear selected in filter</a>&nbsp;&nbsp;&nbsp;
-	<a href="torrents.php?action=notify_clear_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Clear all in filter</a>&nbsp;&nbsp;&nbsp;
-	<a href="torrents.php?action=notify_catchup_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Mark all in filter as read</a>
+	<a href="javascript:GroupClear($('#notificationform_<?=$FilterID?>').raw())" class="brackets">Clear selected in filter</a>&nbsp;&nbsp;&nbsp;
+	<a href="torrents.php?action=notify_clear_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all in filter</a>&nbsp;&nbsp;&nbsp;
+    <a href="torrents.php?action=notify_catchup_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Mark all in filter as read</a>
 </div>
 <form class="manage_form" name="torrents" id="notificationform_<?=$FilterID?>" action="">
 <table class="torrent_table cats checkboxes border">

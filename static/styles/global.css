@@ -372,3 +372,11 @@ tr.torrent .bookmark>a:after {
 #lastfm_compatibilitybar {
     height: 100%;
 }
+
+.votespan.brackets:before {
+	content: "( ";
+}
+
+.votespan.brackets:after {
+	content: " )";
+}

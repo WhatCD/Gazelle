@@ -27,6 +27,7 @@ if ($Message = db_string($_POST['message'])) {
 		list($UserID, $AssignedToUser) = $DB->next_record();
 		
 		
+		
 		if ($UserID == $LoggedUser['ID'] || $IsFLS || $UserID == $AssignedToUser) {
 			// Response to existing conversation
 			$DB->query("

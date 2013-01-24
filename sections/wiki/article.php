@@ -44,13 +44,13 @@ View::show_header($Title,'wiki,bbcode');
 	<div class="header">
 		<h2><?=$Title?></h2>
 		<div class="linkbox box">
-			<a href="wiki.php?action=create">[Create]</a>
-			<a href="wiki.php?action=edit&amp;id=<?=$ArticleID?>">[Contribute]</a>
-			<a href="wiki.php?action=revisions&amp;id=<?=$ArticleID?>">[History]</a>
+			<a href="wiki.php?action=create" class="brackets">Create</a>
+			<a href="wiki.php?action=edit&amp;id=<?=$ArticleID?>" class="brackets">Contribute</a>
+			<a href="wiki.php?action=revisions&amp;id=<?=$ArticleID?>" class="brackets">History</a>
 <? if(check_perms('admin_manage_wiki') && $_GET['id'] != '136'){ ?>
-			<a href="wiki.php?action=delete&amp;id=<?=$ArticleID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete?\nYes, DELETE, not as in \'Oh hey, if this is wrong we can get someone to magically undelete it for us later\' it will be GONE.\nGiven this new information, do you still want to DELETE this article and all its revisions and all its alias\' and act like it never existed?')">[Delete]</a>
+			<a href="wiki.php?action=delete&amp;id=<?=$ArticleID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" class="brackets" onclick="return confirm('Are you sure you want to delete?\nYes, DELETE, not as in \'Oh hey, if this is wrong we can get someone to magically undelete it for us later\' it will be GONE.\nGiven this new information, do you still want to DELETE this article and all its revisions and all its alias\' and act like it never existed?')">Delete</a>
 <? } ?>
-			<!--<a href="reports.php?action=submit&amp;type=wiki&amp;article=<?=$ArticleID ?>">[Report]</a>-->
+			<!--<a href="reports.php?action=submit&amp;type=wiki&amp;article=<?=$ArticleID ?>" class="brackets">Report</a>-->
 		</div>
 	</div>
 	<div class="sidebar">

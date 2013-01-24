@@ -3,9 +3,9 @@ function Subscribe(topicid) {
 		var subscribeLink = $("#subscribelink" + topicid).raw();
 		if(subscribeLink) {
 			if(subscribeLink.firstChild.nodeValue.substr(1,1) == 'U') {
-				subscribeLink.firstChild.nodeValue = "[Subscribe]";
+				subscribeLink.firstChild.nodeValue = "Subscribe";
 			} else {
-				subscribeLink.firstChild.nodeValue = "[Unsubscribe]";
+				subscribeLink.firstChild.nodeValue = "Unsubscribe";
 			}
 		}
 	});

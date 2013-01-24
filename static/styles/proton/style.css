@@ -1758,3 +1758,13 @@ table.noavatar, table.noavatar tr, table.noavatar td.body, table.noavatar td.bod
 
 tr.torrent .bookmark > a:before { content:""; }
 tr.torrent .bookmark > a:after { content:""; }
+
+.linkbox .brackets:before {
+	content: "[";
+	color: #575757;
+}
+
+.linkbox .brackets:after {
+	content: "]";
+	color: #575757;
+}

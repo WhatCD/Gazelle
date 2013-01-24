@@ -117,3 +117,11 @@ input[type="text"]:invalid, input[type="password"]:invalid {
 	color: red;
 	font-weight: bold;
 }
+
+.linkbox .brackets:before {
+	content: "[";
+}
+
+.linkbox .brackets:after {
+	content: "]";
+}

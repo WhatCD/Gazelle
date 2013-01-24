@@ -54,10 +54,10 @@ View::show_header('Top '.$Limit.' Torrents');
 	<div class="header">
 		<h2>Top <?=$Limit?> Torrents</h2>
 		<div class="linkbox">
-			[<a href="top10.php?type=torrents"><strong>Torrents</strong></a>]
-			[<a href="top10.php?type=users">Users</a>]
-			[<a href="top10.php?type=tags">Tags</a>]
-			[<a href="top10.php?type=votes">Favorites</a>]
+			<a href="top10.php?type=torrents" class="brackets"><strong>Torrents</strong></a>
+			<a href="top10.php?type=users" class="brackets">Users</a>
+			<a href="top10.php?type=tags" class="brackets">Tags</a>
+			<a href="top10.php?type=votes" class="brackets">Favorites</a>
 		</div>
 	</div>
 <?
@@ -125,7 +125,7 @@ $FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
 
 ?>
 	<div style="text-align: right;" class="linkbox">
-		[<a href="top10.php?<?=$FreeleechToggleQuery?>"><?=ucfirst($FreeleechToggleName)?> Freeleech in Top 10</a>]
+		<a href="top10.php?<?=$FreeleechToggleQuery?>" class="brackets"><?=ucfirst($FreeleechToggleName)?> Freeleech in Top 10</a>
 	</div>
 <?
 

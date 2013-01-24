@@ -202,6 +202,9 @@ class Users {
 			} else {
 				$HeavyInfo['CustomForums'] = null;
 			}
+			if (isset($HeavyInfo['CustomForums'][''])) {
+				unset($HeavyInfo['CustomForums']['']);
+			}
 
 			$HeavyInfo['SiteOptions'] = unserialize($HeavyInfo['SiteOptions']);
 			if (!empty($HeavyInfo['SiteOptions'])) {

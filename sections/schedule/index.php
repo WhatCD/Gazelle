@@ -659,7 +659,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 		t.Encoding,
 		t.UserID,
 		t.Media,
-		t.info_hash
+		HEX(t.info_hash) AS InfoHash
 		FROM torrents AS t
 		JOIN torrents_group AS tg ON tg.ID = t.GroupID
 		LEFT JOIN artists_group AS ag ON ag.ArtistID = tg.ArtistID
@@ -689,8 +689,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 			$Name.=' ['.(empty($Media)?'':"$Media / ").$Format.' / '.$Encoding.']';
 		}
 		Torrents::delete_torrent($ID, $GroupID);
-		$InfoHash = unpack("H*", $InfoHash);
-		$LogEntries[] = "Torrent ".$ID." (".$Name.") (".strtoupper($InfoHash[1]).") was deleted for inactivity (unseeded)";
+		$LogEntries[] = "Torrent ".$ID." (".$Name.") (".strtoupper($InfoHash).") was deleted for inactivity (unseeded)";
 		
 		if (!array_key_exists($UserID, $DeleteNotes))
 				$DeleteNotes[$UserID] = array('Count' => 0, 'Msg' => '');

@@ -746,3 +746,15 @@ ul .invitetree {
 	z-index:1002;
 	overflow: auto;
 }
+
+.linkbox .brackets:before {
+	content: "[";
+}
+
+.linkbox .brackets:after {
+	content: "]";
+}
+
+#userinfo_major .brackets {
+	display: none;
+}

@@ -2004,3 +2004,13 @@ ul#userinfo_random li a:hover {
 
 tr.torrent .bookmark > a:before { content:""; }
 tr.torrent .bookmark > a:after { content:""; }
+
+.linkbox .brackets:before {
+	content: "[";
+	color: #878787;
+}
+
+.linkbox .brackets:after {
+	content: "]";
+	color: #878787;
+}

@@ -772,3 +772,11 @@ ul .invitetree {
 	font-size: 1.25em;
 	font-weight: bold;
 }
+
+.linkbox .brackets:before {
+	content: "[";
+}
+
+.linkbox .brackets:after {
+	content: "]";
+}

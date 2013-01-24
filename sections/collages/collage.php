@@ -367,32 +367,32 @@ View::show_header($Name,'browse,collage,bbcode,voting');
 	<div class="header">
 		<h2><?=$Name?></h2>
 		<div class="linkbox">
-			[<a href="collages.php">List of collages</a>]
+			<a href="collages.php" class="brackets">List of collages</a>
 <? if (check_perms('site_collages_create')) { ?>
-			[<a href="collages.php?action=new">New collage</a>]
+			<a href="collages.php?action=new" class="brackets">New collage</a>
 <? } ?>
 			<br /><br />
 <? if(check_perms('site_collages_subscribe')) { ?>
-			[<a href="#" onclick="CollageSubscribe(<?=$CollageID?>);return false;" id="subscribelink<?=$CollageID?>"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>]
+			<a href="#" id="subscribelink<?=$CollageID?>" class="brackets" onclick="CollageSubscribe(<?=$CollageID?>);return false;"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
 <? }
    if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
-			[<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>">Edit description</a>]
+			<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>" class="brackets">Edit description</a>
 <? } else { ?>
-			[Locked]
+			<span class="brackets">Locked</span>
 <? }
 	if(has_bookmarked('collage', $CollageID)) {
 ?>
-			[<a href="#" id="bookmarklink_collage_<?=$CollageID?>" onclick="Unbookmark('collage', <?=$CollageID?>,'[Bookmark]');return false;">Remove bookmark</a>]
+			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>,'Bookmark');return false;">Remove bookmark</a>
 <?	} else { ?>
-			[<a href="#" id="bookmarklink_collage_<?=$CollageID?>" onclick="Bookmark('collage', <?=$CollageID?>,'[Remove bookmark]');return false;">Bookmark</a>]
+			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>,'Remove bookmark');return false;">Bookmark</a>
 <?	}
 
 if (check_perms('site_collages_manage') && !$Locked) { ?>
-			[<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>">Manage torrents</a>]
+			<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>" class="brackets">Manage torrents</a>
 <? } ?>
-			[<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>">Report collage</a>]
+			<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>" class="brackets">Report collage</a>
 <? if (check_perms('site_collages_delete') || $CreatorID == $LoggedUser['ID']) { ?>
-			[<a href="collages.php?action=delete&amp;collageid=<?=$CollageID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this collage?');">Delete</a>]
+			<a href="collages.php?action=delete&amp;collageid=<?=$CollageID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets" onclick="return confirm('Are you sure you want to delete this collage?');">Delete</a>
 <? } ?>
 		</div>
 	</div>

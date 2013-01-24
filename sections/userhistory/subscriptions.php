@@ -102,23 +102,23 @@ if($NumResults > $PerPage*($Page-1)) {
 if(!$ShowUnread) {
 ?>
 			<br /><br />
-			[<a href="userhistory.php?action=subscriptions&amp;showunread=1">Only display topics with unread replies</a>]&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=subscriptions&amp;showunread=1" class="brackets">Only display topics with unread replies</a>&nbsp;&nbsp;&nbsp;
 <?
 } else {
 ?>
 			<br /><br />
-			[<a href="userhistory.php?action=subscriptions&amp;showunread=0">Show all subscribed topics</a>]&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=subscriptions&amp;showunread=0" class="brackets">Show all subscribed topics</a>&nbsp;&nbsp;&nbsp;
 <?
 }
 if($NumResults) {
 ?>
-			[<a href="#" onclick="Collapse();return false;" id="collapselink"><?=$ShowCollapsed?'Show':'Hide'?> post bodies</a>]&nbsp;&nbsp;&nbsp;
+			<a href="#" onclick="Collapse();return false;" id="collapselink" class="brackets"><?=$ShowCollapsed?'Show':'Hide'?> post bodies</a>&nbsp;&nbsp;&nbsp;
 <?
 }
 ?>
-			[<a href="userhistory.php?action=catchup&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a>]&nbsp;&nbsp;&nbsp;
-			[<a href="userhistory.php?action=posts&amp;userid=<?=$LoggedUser['ID']?>">Go to post history</a>]&nbsp;&nbsp;&nbsp;
-			[<a href="userhistory.php?action=quote_notifications">Quote notifications</a>]&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=catchup&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=posts&amp;userid=<?=$LoggedUser['ID']?>" class="brackets">Go to post history</a>&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=quote_notifications" class="brackets">Quote notifications</a>&nbsp;&nbsp;&nbsp;
 		</div>
 	</div>
 <?

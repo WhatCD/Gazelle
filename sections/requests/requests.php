@@ -333,18 +333,18 @@ View::show_header($Title, 'requests');
 		<div class="linkbox">
 <?	if (!$BookmarkView) { ?>
 <?		if(check_perms('site_submit_requests')){ ?> 
-		<a href="requests.php?action=new">[New request]</a>
-		<a href="requests.php?type=created">[My requests]</a>
+		<a href="requests.php?action=new" class="brackets">New request</a>
+		<a href="requests.php?type=created" class="brackets">My requests</a>
 <?		} 
 		if(check_perms('site_vote')){?> 
-		<a href="requests.php?type=voted">[Requests I've voted on]</a>
+		<a href="requests.php?type=voted" class="brackets">Requests I've voted on</a>
 <?		} ?>
-		<a href="bookmarks.php?type=requests">[Bookmarked requests]</a>
+		<a href="bookmarks.php?type=requests" class="brackets">Bookmarked requests</a>
 <?	} else { ?>
-		<a href="bookmarks.php?type=torrents">[Torrents]</a>
-		<a href="bookmarks.php?type=artists">[Artists]</a>
-		<a href="bookmarks.php?type=collages">[Collages]</a>
-		<a href="bookmarks.php?type=requests">[Requests]</a>
+		<a href="bookmarks.php?type=torrents" class="brackets">Torrents</a>
+		<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
+		<a href="bookmarks.php?type=collages" class="brackets">Collages</a>
+		<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
 <?	} ?>
 		</div>
 	</div>

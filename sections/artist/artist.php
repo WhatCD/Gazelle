@@ -496,7 +496,7 @@ View::show_header($Name, 'browse,requests,bbcode,comments,voting,jquery');
 		<h2><?=display_str($Name)?><? if ($RevisionID) { ?> (Revision #<?=$RevisionID?>)<? } if ($VanityHouseArtist) { ?> [Vanity House] <? } ?></h2>
 		<div class="linkbox">
 <? if (check_perms('site_submit_requests')) { ?>
-			[<a href="requests.php?action=new&amp;artistid=<?=$ArtistID?>">Add request</a>]
+			<a href="requests.php?action=new&amp;artistid=<?=$ArtistID?>" class="brackets">Add request</a>
 <? }
 
 if (check_perms('site_torrents_notify')) {
@@ -507,38 +507,38 @@ if (check_perms('site_torrents_notify')) {
 	}
 	if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
 ?>
-			[<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Notify of new uploads</a>]
+			<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
 <?
 	} else {
 ?>
-			[<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Do not notify of new uploads</a>]
+			<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Do not notify of new uploads</a>
 <?
 	}
 }
 
 if (has_bookmarked('artist', $ArtistID)) {
 ?>
-			[<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'[Bookmark]');return false;">Remove bookmark</a>]
+			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
 
 <?
 	} else {
 ?>
-			[<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'[Remove bookmark]');return false;">Bookmark</a>]
+			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'Remove bookmark');return false;" class="brackets">Bookmark</a>
 <?
 }
 
 if (check_perms('site_edit_wiki')) {
 ?>
-			[<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>">Edit</a>]
+			<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>" class="brackets">Edit</a>
 <? } ?>
-			[<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>">View history</a>]
-			[<a href="artist.php?id=<?=$ArtistID?>#info">Info</a>]
+			<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>" class="brackets">View history</a>
+			<a href="artist.php?id=<?=$ArtistID?>#info" class="brackets">Info</a>
 <!--		<strip>-->
-			[<a href="artist.php?id=<?=$ArtistID?>#concerts">Concerts</a>]
+			<a href="artist.php?id=<?=$ArtistID?>#concerts" class="brackets">Concerts</a>
 <!--		</strip>-->
-			[<a href="artist.php?id=<?=$ArtistID?>#artistcomments">Comments</a>]
+			<a href="artist.php?id=<?=$ArtistID?>#artistcomments" class="brackets">Comments</a>
 <? if (check_perms('site_delete_artist') && check_perms('torrents_delete')) { ?>
-			[<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Delete</a>]
+			<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Delete</a>
 <? }
 
 if ($RevisionID && check_perms('site_edit_wiki')) {

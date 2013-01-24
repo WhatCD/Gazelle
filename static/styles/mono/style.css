@@ -1231,7 +1231,6 @@ tr.torrent .bookmark > a:after { content:""; }
 	background: #fff;
 }
 
-
 /* Fixes for friends.php */
 form.manage_form[name=friends] table tr {
 	/* Previously unfinished */
@@ -1246,7 +1245,6 @@ form.manage_form[name=friends] {
 form.manage_form[name=friends] .left input[type=submit] {
 	margin-bottom: 10px;
 }
-
 
 /* Fixes for staffpm.php, wiki.php, user.php?action=edit and inbox.php, when composing new message/wiki, and some other stuff */
 #compose h3,
@@ -1263,12 +1261,10 @@ form.manage_form[name=friends] .left input[type=submit] {
 	margin-top: 10px;
 }
 
-
 /* Fix for artist.php sidebar layout */
 [class="box box_search"] #filelist, [class="box box_addartists box_addartists_similar"] #artistsimilar {
 	width: 150px;
 }
-
 
 /* Fix for artist.php artist map margin */
 #similar_artist_map {
@@ -1281,12 +1277,10 @@ form.manage_form[name=friends] .left input[type=submit] {
 	margin-top: 10px;
 }
 
-
 /* Fix for forums.php?action=search, search section */
 [class="search_form"] table tr > td > strong {
 	padding-left: 10px;
 }
-
 
 /* Fix for wiki.php, sidebar details section */
 .sidebar [class="box box_info pad"] > ul {
@@ -1300,14 +1294,22 @@ form.manage_form[name=friends] .left input[type=submit] {
 	color: #565656;
 }
 
-
 /* Fix for index.php, more news section at the very bottom of the page */
 #more_news.box {
 	height: 0;
 }
 
-
 /* Fix for forums.php, search specific forum */
 .search_form[action="forums.php"] td > strong {
 	margin-right: 10px;
+}
+
+.linkbox .brackets:before {
+	content: "[";
+	color: #444;
+}
+
+.linkbox .brackets:after {
+	content: "]";
+	color: #444;
 }

@@ -962,9 +962,9 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		<td colspan="2">
 			<?=$DisplayName?>
 <?	if (in_array($GroupID, $Bookmarks)) { ?>
-			<span class="remove_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
+			<span class="remove_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">[Unbookmark]</a></span>
 <?	} else { ?>
-			<span class="add_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
+			<span class="add_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">[Bookmark]</a></span>
 <?	} ?>
 			<br />
 			<div class="tags">

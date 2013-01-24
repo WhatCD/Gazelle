@@ -7,11 +7,11 @@ View::show_header('Top 10 Torrents history!');
 	<div class="header">
 		<h2>Top 10 Torrents</h2>
 		<div class="linkbox">
-			<a href="top10.php?type=torrents"><strong>[Torrents]</strong></a>
-			<a href="top10.php?type=users">[Users]</a>
-			<a href="top10.php?type=tags">[Tags]</a>
-			<a href="top10.php?type=history">[History]</a>
-			<a href="top10.php?type=votes">[Favorites]</a>
+			<a href="top10.php?type=torrents" class="brackets"><strong>Torrents</strong></a>
+			<a href="top10.php?type=users" class="brackets">Users</a>
+			<a href="top10.php?type=tags" class="brackets">Tags</a>
+			<a href="top10.php?type=history" class="brackets">History</a>
+			<a href="top10.php?type=votes" class="brackets">Favorites</a>
 		</div>
 	</div>
 	<div class="pad box">

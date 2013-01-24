@@ -88,25 +88,25 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode');
 		<h2><?=$DisplayName?></h2>
 		<div class="linkbox">
 <?	if(check_perms('site_edit_wiki')) { ?>
-			<a href="torrents.php?action=editgroup&amp;groupid=<?=$GroupID?>">[Edit description]</a>
+			<a href="torrents.php?action=editgroup&amp;groupid=<?=$GroupID?>" class="brackets">Edit description</a>
 <?	} ?>
-			<a href="torrents.php?action=history&amp;groupid=<?=$GroupID?>">[View history]</a>
+			<a href="torrents.php?action=history&amp;groupid=<?=$GroupID?>" class="brackets">View history</a>
 <?	if($RevisionID && check_perms('site_edit_wiki')) { ?>
-			<a href="/torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Revert to this revision]</a>
+			<a href="/torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Revert to this revision</a>
 <?	}
 	if(has_bookmarked('torrent', $GroupID)) {
 ?>
-			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
 <?	} else {  ?>
-			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?	}
 	if($Categories[$GroupCategoryID-1] == 'Music') { ?>
-			<a href="upload.php?groupid=<?=$GroupID?>">[Add format]</a>
+			<a href="upload.php?groupid=<?=$GroupID?>" class="brackets">Add format</a>
 <?	} 
 	if(check_perms('site_submit_requests')) { ?>
-			<a href="requests.php?action=new&amp;groupid=<?=$GroupID?>">[Request format]</a>
+			<a href="requests.php?action=new&amp;groupid=<?=$GroupID?>" class="brackets">Request format</a>
 <?	}?>
-			<a href="torrents.php?action=grouplog&amp;groupid=<?=$GroupID?>">[View log]</a>
+			<a href="torrents.php?action=grouplog&amp;groupid=<?=$GroupID?>" class="brackets">View log</a>
 		</div>
 	</div>
 	<div class="sidebar">
@@ -575,26 +575,26 @@ foreach ($TorrentList as $Torrent) {
 					</blockquote>
 <? if(check_perms('site_moderate_requests')) { ?>
 					<div class="linkbox">
-						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>">[Mass PM snatchers]</a>
+						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>" class="brackets">Mass PM snatchers</a>
 					</div>
 <? } ?>
 					<div class="linkbox">
-						<a href="#" onclick="show_peers('<?=$TorrentID?>', 0);return false;">(View peer list)</a>
+						<a href="#" class="brackets" onclick="show_peers('<?=$TorrentID?>', 0);return false;">View peer list</a>
 <? if(check_perms('site_view_torrent_snatchlist')) { ?> 
-						<a href="#" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">(View download list)</a>
-						<a href="#" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">(View snatch list)</a>
+						<a href="#" class="brackets" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
+						<a href="#" class="brackets" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
 <? } ?>
-						<a href="#" onclick="show_files('<?=$TorrentID?>');return false;">(View file list)</a>
+						<a href="#" class="brackets" onclick="show_files('<?=$TorrentID?>');return false;">View file list</a>
 <? if($Reported) { ?>
-						<a href="#" onclick="show_reported('<?=$TorrentID?>');return false;">(View report information)</a>
+						<a href="#" class="brackets" onclick="show_reported('<?=$TorrentID?>');return false;">View report information</a>
 <? } ?>
 					</div>
-					<div id="peers_<?=$TorrentID?>" class="hidden"></div>
-					<div id="downloads_<?=$TorrentID?>" class="hidden"></div>
-					<div id="snatches_<?=$TorrentID?>" class="hidden"></div>
-					<div id="files_<?=$TorrentID?>" class="hidden"><?=$FileList?></div>
+					<div id="peers_<?=$TorrentID?>" class="hidden brackets"></div>
+					<div id="downloads_<?=$TorrentID?>" class="hidden brackets"></div>
+					<div id="snatches_<?=$TorrentID?>" class="hidden brackets"></div>
+					<div id="files_<?=$TorrentID?>" class="hidden brackets"><?=$FileList?></div>
 <?  if($Reported) { ?>
-					<div id="reported_<?=$TorrentID?>" class="hidden"><?=$ReportInfo?></div>
+					<div id="reported_<?=$TorrentID?>" class="hidden brackets"><?=$ReportInfo?></div>
 <? } ?>
 					<? if(!empty($Description)) {
 						echo '<blockquote>'.$Text->full_format($Description).'</blockquote>';}

@@ -783,8 +783,20 @@ ul .invitetree {
 }
 
 tr.torrent .bookmark > a:before {
-    color:black;
+    color: black;
 }
 tr.torrent .bookmark > a:after {
-    color:black;
+    color: black;
+}
+
+.linkbox .brackets:before {
+	content: "[";
+}
+
+.linkbox .brackets:after {
+	content: "]";
+}
+
+#userinfo_major .brackets {
+	display: none;
 }
