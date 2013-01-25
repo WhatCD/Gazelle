@@ -796,7 +796,3 @@ tr.torrent .bookmark > a:after {
 .linkbox .brackets:after {
 	content: "]";
 }
-
-#userinfo_major .brackets {
-	display: none;
-}

@@ -754,7 +754,3 @@ ul .invitetree {
 .linkbox .brackets:after {
 	content: "]";
 }
-
-#userinfo_major .brackets {
-	display: none;
-}

@@ -143,10 +143,11 @@ View::show_header('My notifications', 'notifications');
 	<a href="torrents.php?action=notify" class="brackets">View all</a>&nbsp;&nbsp;&nbsp;
 <? } else { ?>
 	<a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all</a>&nbsp;&nbsp;&nbsp;
-	<a href="javascript:SuperGroupClear()">Clear selected</a>&nbsp;&nbsp;&nbsp;
+	<a href="javascript:SuperGroupClear()" class="brackets">Clear selected</a>&nbsp;&nbsp;&nbsp;
 	<a href="torrents.php?action=notify_catchup&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;
-<? } ?>
-	<a href="user.php?action=notify">Edit filters</a>&nbsp;&nbsp;&nbsp;
+<? }
+
+?>
 	<a href="user.php?action=notify" class="brackets">Edit filters</a>&nbsp;&nbsp;&nbsp;
 </div>
 <? if ($TorrentCount > NOTIFICATIONS_PER_PAGE) { ?>
@@ -188,7 +189,7 @@ if (empty($Results)) {
 </div>
 <div class="notify_filter_links">
 	<a href="javascript:GroupClear($('#notificationform_<?=$FilterID?>').raw())" class="brackets">Clear selected in filter</a>&nbsp;&nbsp;&nbsp;
-	<a href="torrents.php?action=notify_clear_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all in filter</a>&nbsp;&nbsp;&nbsp;
+	<a href="torrents.php?action=notify_clear_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all old in filter</a>&nbsp;&nbsp;&nbsp;
     <a href="torrents.php?action=notify_catchup_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Mark all in filter as read</a>
 </div>
 <form class="manage_form" name="torrents" id="notificationform_<?=$FilterID?>" action="">
