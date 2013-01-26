@@ -16,10 +16,10 @@ View::show_header('Top 10 Users');
 	<div class="header">
 		<h2>Top 10 Users</h2>
 		<div class="linkbox">
-			[<a href="top10.php?type=torrents">Torrents</a>]
-			[<a href="top10.php?type=users"><strong>Users</strong></a>]
-			[<a href="top10.php?type=tags">Tags</a>]
-			[<a href="top10.php?type=votes">Favorites</a>]
+			<a href="top10.php?type=torrents" class="brackets">Torrents</a>
+			<a href="top10.php?type=users" class="brackets"><strong>Users</strong></a>
+			<a href="top10.php?type=tags" class="brackets">Tags</a>
+			<a href="top10.php?type=votes" class="brackets">Favorites</a>
 		</div>
 	</div>
 <?

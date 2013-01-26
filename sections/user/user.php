@@ -158,52 +158,52 @@ View::show_header($Username,'user,bbcode,requests,jquery,lastfm');
 	<h2><?=$Username?></h2>
 	<div class="linkbox">
 <? if (!$OwnProfile) { ?>
-		[<a href="inbox.php?action=compose&amp;to=<?=$UserID?>">Send Message</a>]
+		<a href="inbox.php?action=compose&amp;to=<?=$UserID?>" class="brackets">Send Message</a>
 		
 <? 	if(check_perms("users_mod")) {
 	$DB->query("SELECT PushService FROM users_push_notifications WHERE UserID = '$UserID'");
 	if($DB->record_count() > 0) { ?>
-		[<a
-			href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Push
-			User</a>]
+		<a
+			href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets"
+			>Push User</a>
 		<?	}
 }
 	$DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
 	if($DB->record_count() == 0) { ?>
-		[<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Add to friends</a>]
+		<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Add to friends</a>
 <?	}?>
-		[<a href="reports.php?action=report&amp;type=user&amp;id=<?=$UserID?>">Report User</a>]
+		<a href="reports.php?action=report&amp;type=user&amp;id=<?=$UserID?>" class="brackets">Report User</a>
 <?
 
 }
 
 if (check_perms('users_edit_profiles', $Class)) {
 ?>
-		[<a href="user.php?action=edit&amp;userid=<?=$UserID?>">Settings</a>]
+		<a href="user.php?action=edit&amp;userid=<?=$UserID?>" class="brackets">Settings</a>
 <? }
 if (check_perms('users_view_invites', $Class)) {
 ?>
-		[<a href="user.php?action=invite&amp;userid=<?=$UserID?>">Invites</a>]
+		<a href="user.php?action=invite&amp;userid=<?=$UserID?>" class="brackets">Invites</a>
 <? }
 if (check_perms('admin_manage_permissions', $Class)) {
 ?>
-		[<a href="user.php?action=permissions&amp;userid=<?=$UserID?>">Permissions</a>]
+		<a href="user.php?action=permissions&amp;userid=<?=$UserID?>" class="brackets">Permissions</a>
 <? }
 if (check_perms('users_logout', $Class) && check_perms('users_view_ips', $Class)) {
 ?>
-		[<a href="user.php?action=sessions&amp;userid=<?=$UserID?>">Sessions</a>]
+		<a href="user.php?action=sessions&amp;userid=<?=$UserID?>" class="brackets">Sessions</a>
 <? }
 if (check_perms('admin_reports')) {
 ?>
-		[<a href="reportsv2.php?view=reporter&amp;id=<?=$UserID?>">Reports</a>]
+		<a href="reportsv2.php?view=reporter&amp;id=<?=$UserID?>" class="brackets">Reports</a>
 <? }
 if (check_perms('users_mod')) {
 ?>
-		[<a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">FL Tokens</a>]
+		<a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>" class="brackets">FL Tokens</a>
 <? }
 if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) {
 ?>
-		[<a href="user.php?action=clearcache&amp;id=<?=$UserID?>">Clear Cache</a>]
+		<a href="user.php?action=clearcache&amp;id=<?=$UserID?>" class="brackets">Clear Cache</a>
 <? } ?>
 	</div>
 
