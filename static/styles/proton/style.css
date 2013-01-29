@@ -196,7 +196,7 @@ input[type="submit"]:active, input[type="button"]:active {
   color: #007dc7 !important;
 }
 
-input[value="Upload torrent"] {
+input[value="Upload torrent"], input[value="Upload torrents"] {
   margin: 15px 0 0 0;
   background-color: #007dc7;
   color: white;
@@ -207,7 +207,7 @@ input[value="Upload torrent"] {
   border-right: 1px solid #005488;
 }
 
-input[value="Upload torrent"]:active {
+input[value="Upload torrent"],input[value="Upload torrents"]:active {
   color: #f4f4f4 !important;
 }
 

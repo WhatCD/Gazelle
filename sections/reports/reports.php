@@ -55,7 +55,8 @@ $Reports = $DB->query("SELECT SQL_CALC_FOUND_ROWS
 		r.Reason, 
 		r.Status,
 		r.ClaimerID,
-		r.Notes
+        r.Notes,
+        r.ResolverID
 	FROM reports AS r 
 	JOIN users_main AS um ON r.UserID=um.ID
 	WHERE " . $Where . "
@@ -89,7 +90,7 @@ $DB->set_query_id($Reports);
 		?>
 	</div>
 	<?
-	while (list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $Reason, $Status, $ClaimerID, $Notes) = $DB->next_record()) {
+	while (list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $Reason, $Status, $ClaimerID, $Notes, $ResolverID) = $DB->next_record()) {
 		$Type = $Types[$Short];
 		$Reference = "reports.php?id=" . $ReportID . "#report" . $ReportID;
 		?>
@@ -237,7 +238,15 @@ $DB->set_query_id($Reports);
 						</form>
 					</td>
 				</tr>
-				<? } ?>
+                <? } else { 
+                        $ResolverInfo = Users::user_info($ResolverID);
+                    ?>
+                    <tr>
+                        <td colspan="2">
+                            Resolved By <a href="users.php?id=<?=$ResolverID?>"><?=$ResolverInfo['Username']?></a>
+                        </td>
+                    </tr>
+                <? } ?>
 			</table>
 		</div>
 		<br />

@@ -32,6 +32,7 @@
 		addFormats(row);
 		addBitrates(row);
 		addReleaseDescription(row);
+		$("#post").val("Upload torrents");
 		count++;
 	}
 
@@ -104,9 +105,11 @@
 			$("#add_format").show();
 			filenames.pop();
 			count--;
+			$("#post").val("Upload torrents");
 		}
 		if (count == 1) {
 			$("#remove_format").hide();
+			$("#post").val("Upload torrent");
 		}
 
 	}

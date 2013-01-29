@@ -117,8 +117,8 @@
     }
     
     // Escape ampersands with html code to avoid breaking the search links
-    function escapeAmpHtml(input){
-        return input.replace(/&/g,"&#38;");
+    function escapeHtml(input){
+        return input.replace(/&/g,"&#38;").replace(/</g,"&#60;");
     }
 
     
@@ -171,11 +171,11 @@
                             var k = initialCount;
                             if (a.length < 3) k = a.length;
                             for (var i = 0; i < k; i++) {
-                                sharedArtistsHtml += '<li><a href="artist.php?artistname=' + escapeAmpUrl(a[i]['name']) + '">' + escapeAmpHtml(a[i]['name']) + '</a></li>'
+                                sharedArtistsHtml += '<li><a href="artist.php?artistname=' + escapeAmpUrl(a[i]['name']) + '">' + escapeHtml(a[i]['name']) + '</a></li>'
                             }
                             if ( a.length > 3 ){
                                 for (i = 3; i < a.length; i++) {
-                                    sharedArtistsHtml += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(a[i]['name']) + '">' + escapeAmpHtml(a[i]['name']) + '</a></li>'
+                                    sharedArtistsHtml += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(a[i]['name']) + '">' + escapeHtml(a[i]['name']) + '</a></li>'
                                 }
                                 sharedArtistsHtml += '<li>[<a href="#sharedartists" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
                             }
@@ -215,7 +215,7 @@
                     // Fix Last.fm API returning more than one entry despite limit on certain conditions.
                     if ( typeof(json[0]) === "object" ) json = json[0];
                     html += '<li class="lastfm_essential">Last played: ';
-                    html += '<a href="artist.php?artistname=' + escapeAmpUrl(json['artist']['#text']) + '">' + escapeAmpHtml(json['artist']['#text']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(json['name']) + '">' + escapeAmpHtml(json['name']) + '</a>';
+                    html += '<a href="artist.php?artistname=' + escapeAmpUrl(json['artist']['#text']) + '">' + escapeHtml(json['artist']['#text']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(json['name']) + '">' + escapeHtml(json['name']) + '</a>';
                     html += "</li>";
                     lastPlayedTrack = html;
                 }
@@ -250,11 +250,11 @@
                     var k = initialCount;
                     if (j.length < 3) k = j.length;
                     for (var i = 0; i < k; i++) {
-                        html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['name']) + '">' + escapeAmpHtml(j[i]['name']) + '</a></li>'
+                        html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                     }
                     if ( j.length>3 ){
                         for (i = 3; i < j.length; i++) {
-                            html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['name']) + '">' + escapeAmpHtml(j[i]['name']) + '</a></li>'
+                            html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                         }
                         html+= '<li>[<a href="#topartists" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
                     }
@@ -293,11 +293,11 @@
                     var k = initialCount;
                     if (j.length < 3) k = j.length;
                     for (var i = 0; i < k; i++) {
-                        html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeAmpHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeAmpHtml(j[i]['name']) + '</a></li>'
+                        html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                     }
                     if ( j.length>3 ){
                         for (i = 3; i < j.length; i++) {
-                            html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeAmpHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeAmpHtml(j[i]['name']) + '</a></li>'
+                            html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                         }
                         html+= '<li>[<a href="#topalbums" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
                     }
@@ -336,11 +336,11 @@
                     var k = initialCount;
                     if (j.length < 3) k = j.length;
                     for (var i = 0; i < k; i++) {
-                        html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeAmpHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeAmpHtml(j[i]['name']) + '</a></li>'
+                        html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                     }
                     if ( j.length>3 ){
                         for (i = 3; i < j.length; i++) {
-                            html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeAmpHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeAmpHtml(j[i]['name']) + '</a></li>'
+                            html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                         }
                         html+= '<li>[<a href="#toptracks" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
                     }
