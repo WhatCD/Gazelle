@@ -507,8 +507,8 @@ if(!$NewRequest) {
 $Tags = array_unique(explode(',', $Tags));
 foreach($Tags as $Index => $Tag) {
 	$Tag = Misc::sanitize_tag($Tag);
+	$Tag = Misc::get_alias_tag($Tag);
 	$Tags[$Index] = $Tag; //For announce
-	
 	$DB->query("INSERT INTO tags 
 					(Name, UserID)
 				VALUES 

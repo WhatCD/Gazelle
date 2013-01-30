@@ -324,8 +324,9 @@ $DB->query("SELECT
 		<?
 				$Images = explode(" ", $Images);
 				foreach($Images as $Image) {
+					$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Image);
 		?>
-							<img style="max-width: 200px;" onclick="lightbox.init(this,200);" src="<?=$Image?>" alt="<?=$Image?>" />	
+							<img style="max-width: 200px;" onclick="lightbox.init(this,200);" src="<?=$Image?>" alt="Relevant image" />
 		<? 
 				}
 		?>
