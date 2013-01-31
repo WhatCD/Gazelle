@@ -547,7 +547,7 @@ if ($EnableUser!=$Cur['Enabled'] && check_perms('users_disable_users')) {
 			$UpdateSet[]="m.can_leech='1'";
 			$UpdateSet[]="i.RatioWatchDownload='0'";	
 		} else {
-			$EnableStr .= ' (Ratio: '.number_format($Cur['Uploaded']/$Cur['Downloaded'],2).', RR: '.number_format($Cur['RequiredRatio'],2).')';
+			$EnableStr .= ' (Ratio: '.Format::get_ratio_html($Cur['Uploaded'], $Cur['Downloaded'], false).', RR: '.number_format($Cur['RequiredRatio'],2).')';
 			if ($Cur['RatioWatchEnds'] != '0000-00-00 00:00:00') {
 				$UpdateSet[]="i.RatioWatchEnds=NOW()";
 				$UpdateSet[]="i.RatioWatchDownload=m.Downloaded";

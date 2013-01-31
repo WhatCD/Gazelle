@@ -1,28 +1,36 @@
+<?
+$Concerts = '';
+ob_start();
+
+$ArtistEvents = LastFM::get_artist_events($ArtistID, $Name);
+$Hidden = false;
+$Debug->log_var($ArtistEvents);
+if ($ArtistEvents === false) { // Something went wrong
+	echo '<br />An error occurred when retrieving concert info.<br />';
+} elseif (!isset($ArtistEvents['events']['event'])) { // No upcoming events
+	echo '<br />This artist has no upcoming concerts.<br />';
+	$Hidden = true;
+} else {
+	echo '<ul>';
+	if (isset($ArtistEvents['events']['event'][0])) { // Multiple events
+		foreach ($ArtistEvents['events']['event'] as $Event) {
+			make_concert_link($Event);
+		}
+	} else { // Single event
+		make_concert_link($ArtistEvents['events']['event']);
+	}
+	echo '</ul>';
+}
+$Concerts .= ob_get_clean();
+?>
+
 <div class="box">
 	<div id="concerts" class="head">
 		<a href="#">&uarr;</a>&nbsp;<strong>Upcoming concerts</strong>
 		[<a href="#" onclick="$('#concertsbody').toggle(); return false;">Toggle</a>]
 	</div>
-    <div id="concertsbody">
-<?
-			$ArtistEvents = LastFM::get_artist_events($ArtistID, $Name);
-			$Debug->log_var($ArtistEvents);
-			if ($ArtistEvents === false) { // Something went wrong
-				echo '<br />An error occurred when retrieving concert info.<br />';
-			} elseif (!isset($ArtistEvents['events']['event'])) { // No upcoming events
-				echo '<br />This artist has no upcoming concerts.<br />';
-			} else {
-				echo '<ul>';
-				if (isset($ArtistEvents['events']['event'][0])) { // Multiple events
-					foreach ($ArtistEvents['events']['event'] as $Event) {
-						make_concert_link($Event);
-					}
-				} else { // Single event
-					make_concert_link($ArtistEvents['events']['event']);
-				}
-				echo '</ul>';
-			}
-?>
+    <div id="concertsbody" <?=$Hidden ? "class='hidden'" : ""?>>
+	<?=$Concerts?>
 	</div>
 </div>
 
@@ -47,9 +55,7 @@ function make_concert_link($Event)
 	<li><?=$Concert?> - [<a href="#" onclick="$('#concert<?=$Event['id']?>').raw().submit(); return false;">Go to thread</a>]</li>
 <?
 }
-?>
 
-<?
 function get_concert_post_template($Artist, $Event)
 {
 	$With = "";
