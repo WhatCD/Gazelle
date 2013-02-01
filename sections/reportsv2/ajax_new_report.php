@@ -202,7 +202,7 @@ $DB->query("SELECT
 					while(list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 			?>
 								<div style="text-align: right;">
-									<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=view&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?>
+									<strong class="important_text"><a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=view&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?></strong>
 								</div>
 			<?		}
 				}

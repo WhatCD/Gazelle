@@ -2,6 +2,12 @@
 set_time_limit(50000);
 ob_end_flush();
 gc_enable();
+
+$PCount = shell_exec("/usr/bin/pgrep -cf schedule.php");
+if ($PCount >= 0) {
+	die();
+}
+
 //TODO: make it awesome, make it flexible!
 //INSERT INTO users_geodistribution (Code, Users) SELECT g.Code, COUNT(u.ID) AS Users FROM geoip_country AS g JOIN users_main AS u ON INET_ATON(u.IP) BETWEEN g.StartIP AND g.EndIP WHERE u.Enabled='1' GROUP BY g.Code ORDER BY Users DESC
 /*************************************************************************\
