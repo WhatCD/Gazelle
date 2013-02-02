@@ -3,9 +3,10 @@ set_time_limit(50000);
 ob_end_flush();
 gc_enable();
 
-$PCount = shell_exec("/usr/bin/pgrep -cf schedule.php");
-if ($PCount >= 0) {
-	die();
+$PCount = chop(shell_exec("/usr/bin/pgrep -cf schedule.php"));
+if ($PCount > 3) {
+	// 3 because the cron job starts two processes and pgrep finds itself
+	die("schedule.php is already running. Exiting ($PCount)\n");
 }
 
 //TODO: make it awesome, make it flexible!
