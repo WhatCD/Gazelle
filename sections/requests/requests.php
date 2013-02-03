@@ -330,23 +330,6 @@ View::show_header($Title, 'requests');
 <div class="thin">
 	<div class="header">
 		<h2><?=$Title?></h2>
-		<div class="linkbox">
-<?	if (!$BookmarkView) { ?>
-<?		if(check_perms('site_submit_requests')){ ?> 
-		<a href="requests.php?action=new" class="brackets">New request</a>
-		<a href="requests.php?type=created" class="brackets">My requests</a>
-<?		} 
-		if(check_perms('site_vote')){?> 
-		<a href="requests.php?type=voted" class="brackets">Requests I've voted on</a>
-<?		} ?>
-		<a href="bookmarks.php?type=requests" class="brackets">Bookmarked requests</a>
-<?	} else { ?>
-		<a href="bookmarks.php?type=torrents" class="brackets">Torrents</a>
-		<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
-		<a href="bookmarks.php?type=collages" class="brackets">Collages</a>
-		<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
-<?	} ?>
-		</div>
 	</div>
 	<form class="search_form" name="requests" action="" method="get">
 <?	if ($BookmarkView) { ?>
@@ -486,6 +469,23 @@ foreach($Categories as $CatKey => $CatName) {
 			</tr>
 		</table>	
 	</form>
+	<div class="linkbox">
+<?	if (!$BookmarkView) {
+		if (check_perms('site_submit_requests')) { ?>
+		<a href="requests.php?action=new" class="brackets">New request</a>
+		<a href="requests.php?type=created" class="brackets">My requests</a>
+<?		}
+		if (check_perms('site_vote')) { ?>
+		<a href="requests.php?type=voted" class="brackets">Requests I've voted on</a>
+<?		} ?>
+		<a href="bookmarks.php?type=requests" class="brackets">Bookmarked requests</a>
+<?	} else { ?>
+		<a href="bookmarks.php?type=torrents" class="brackets">Torrents</a>
+		<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
+		<a href="bookmarks.php?type=collages" class="brackets">Collages</a>
+		<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
+<?	} ?>
+	</div>
 
 <?		if($NumResults) { ?>
 	<div class="linkbox">

@@ -873,7 +873,7 @@ strong.quoteheader{
 	padding-top: 13px;
 }
 
-div.thin .header+form,div.thin .header+.linkbox+div {
+div.thin .header+form,div.thin .header+div>form,div.thin .header+.linkbox+div {
 	margin-bottom: 20px;
 }
 
