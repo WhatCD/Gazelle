@@ -41,7 +41,8 @@ class CACHE extends Memcache {
 		'query_lock_*',
 		'top10votes_*',
 //		'similar_albums_*',
-		'users_snatched_*'
+		'users_snatched_*',
+		'ajax_requests_*'
 	);
 
 	public $CanClear = false;
@@ -146,6 +147,12 @@ class CACHE extends Memcache {
 		if (!$this->delete($Key)) {
 			//trigger_error("Cache delete failed for key $Key");
 		}
+		$this->Time+=(microtime(true)-$StartTime)*1000;
+	}
+	
+	public function increment_value($Key,$Value=1) {
+		$StartTime=microtime(true);
+		$this->increment($Key,$Value);
 		$this->Time+=(microtime(true)-$StartTime)*1000;
 	}
 

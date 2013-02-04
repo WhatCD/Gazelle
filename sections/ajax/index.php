@@ -10,7 +10,32 @@ The required page is determined by $_GET['action'].
 
 enforce_login();
 
+/*	AJAX_LIMIT = array(x,y) = 'x' requests every 'y' seconds.
+	e.g. array(5,10) = 5 requests every 10 seconds	*/
+$AJAX_LIMIT = array(5,10);
+$Limited_Pages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki');
+
 header('Content-Type: application/json; charset=utf-8');
+
+//	Enforce rate limiting everywhere except info.php
+if (isset($_GET['action']) && in_array($_GET['action'],$Limited_Pages)) {
+	if (!$userrequests = $Cache->get_value('ajax_requests_'.$UserID)) {
+		$userrequests = 0;
+		$Cache->cache_value('ajax_requests_'.$UserID,'0',$AJAX_LIMIT[1]);
+	}
+	if ($userrequests > $AJAX_LIMIT[0]) {
+		print json_encode(
+			array(
+				'status' => 'failure',
+				'response' => 'Rate limit exceeded.'
+				)
+            );
+        
+		die();
+	} else {
+		$Cache->increment_value('ajax_requests_'.$UserID);
+	}
+}
 
 switch ($_GET['action']) {
 	// things that (may be) used on the site
@@ -40,6 +65,9 @@ switch ($_GET['action']) {
 	// things not yet used on the site
 	case 'torrentgroup':
 		require('torrentgroup.php');
+		break;
+	case 'torrentgroupalbumart':		// so the album art script can function without breaking the ratelimit
+		require(SERVER_ROOT . '/sections/ajax/torrentgroupalbumart.php');
 		break;
 	case 'tcomments':
 		require(SERVER_ROOT . '/sections/ajax/tcomments.php');

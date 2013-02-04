@@ -1,7 +1,7 @@
 <?
 include(SERVER_ROOT.'/sections/requests/functions.php'); // get_request_tags()
 
-function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
+function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProperties = true) {
 	global $Cache, $DB;
 	if (!$RevisionID) {
 		$TorrentCache = $Cache->get_value('torrents_details_'.$GroupID);
@@ -132,10 +132,12 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0) {
 		$TorrentList = $TorrentCache[1];
 	}
 
-	// Fetch all user specific torrent and group properties
-	$TorrentDetails['Flags'] = array('IsSnatched' => false);
-	foreach ($TorrentList as &$Torrent) {
-		Torrents::torrent_properties($Torrent, $TorrentDetails['Flags']);
+	if ($PersonalProperties) {
+		// Fetch all user specific torrent and group properties
+		$TorrentDetails['Flags'] = array('IsSnatched' => false);
+		foreach ($TorrentList as &$Torrent) {
+			Torrents::torrent_properties($Torrent, $TorrentDetails['Flags']);
+		}
 	}
 
 	if ($Return) {

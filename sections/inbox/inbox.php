@@ -96,9 +96,9 @@ echo $Pages;
 				<input type="radio" name="searchtype" value="message" /> Message
 				<span style="float: right;">
 <?			if(empty($_GET['sort']) || $_GET['sort'] != "unread") { ?>
-					[<a href="<?=$CurURL?>sort=unread">List unread first</a>]
+					<a href="<?=$CurURL?>sort=unread" class="brackets">List unread first</a>
 <?			} else { ?>
-					[<a href="<?=$CurURL?>">List latest first</a>]
+					<a href="<?=$CurURL?>" class="brackets">List latest first</a>
 <?			} ?>
 				</span>
 				<br />
