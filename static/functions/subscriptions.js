@@ -2,10 +2,15 @@ function Subscribe(topicid) {
 	ajax.get("userhistory.php?action=thread_subscribe&topicid=" + topicid + "&auth=" + authkey, function() {
 		var subscribeLink = $("#subscribelink" + topicid).raw();
 		if(subscribeLink) {
-			if(subscribeLink.firstChild.nodeValue.substr(1,1) == 'U') {
-				subscribeLink.firstChild.nodeValue = "Subscribe";
-			} else {
-				subscribeLink.firstChild.nodeValue = "Unsubscribe";
+			if(subscribeLink.firstChild.nodeValue.charAt(0) == '[') {
+				subscribeLink.firstChild.nodeValue = subscribeLink.firstChild.nodeValue.charAt(1) == 'U'
+					? '[Subscribe]'
+					: '[Unsubscribe]';
+			}
+			else {
+				subscribeLink.firstChild.nodeValue = subscribeLink.firstChild.nodeValue.charAt(0) == 'U'
+					? "Subscribe"
+					: "Unsubscribe";
 			}
 		}
 	});
