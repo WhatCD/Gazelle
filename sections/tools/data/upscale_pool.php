@@ -47,7 +47,7 @@ if($DB->record_count()) {
 			<td>Down</td>
 			<td>Ratio</td>
 			<td>Required Ratio</td>
-			<td>Defecit</td>
+			<td>Deficit</td>
 			<td>Gamble</td>
 			<td>Registered</td>
 			<td>Remaining</td>

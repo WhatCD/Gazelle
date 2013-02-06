@@ -1,8 +1,7 @@
 <?
 View::show_header('Manage Permissions');
 ?>
-<script type="text/javascript" language="javascript">
-//<![CDATA[
+<script type="text/javascript">//<![CDATA[
 function confirmDelete(id) {
 	if (confirm("Are you sure you want to remove this permission class?")) {
 		location.href="tools.php?action=permissions&removeid="+id;
@@ -15,14 +14,14 @@ function confirmDelete(id) {
 	<div class="header">
 		<div class="linkbox">
 			[<a href="tools.php?action=permissions&amp;id=new">Create a new permission set</a>]
-			[<a href="tools.php">Back to Tools</a>]
+			[<a href="tools.php">Back to tools</a>]
 		</div>
 	</div>
 <?
-$DB->query("SELECT p.ID,p.Name,p.Level,p.Secondary,COUNT(u.ID)+COUNT(DISTINCT l.UserID) 
-            FROM permissions AS p 
-			LEFT JOIN users_main AS u ON u.PermissionID=p.ID 
-			LEFT JOIN users_levels AS l ON l.PermissionID=p.ID 
+$DB->query("SELECT p.ID,p.Name,p.Level,p.Secondary,COUNT(u.ID)+COUNT(DISTINCT l.UserID)
+			FROM permissions AS p
+			LEFT JOIN users_main AS u ON u.PermissionID=p.ID
+			LEFT JOIN users_levels AS l ON l.PermissionID=p.ID
 			GROUP BY p.ID ORDER BY p.Secondary ASC, p.Level ASC");
 if($DB->record_count()) {
 ?>

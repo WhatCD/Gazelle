@@ -4,45 +4,45 @@ if (!check_perms('users_mod')) { error(403);
 
 View::show_header('Tag Aliases');
 
-$orderby = ($_GET['order']) == "badtags" ? "BadTag" : "AliasTag";        
+$orderby = ($_GET['order']) == "badtags" ? "BadTag" : "AliasTag";
 
 if (isset($_POST['newalias'])) {
-    $badtag = mysql_escape_string($_POST['badtag']);
-    $aliastag = mysql_escape_string($_POST['aliastag']);
+	$badtag = mysql_escape_string($_POST['badtag']);
+	$aliastag = mysql_escape_string($_POST['aliastag']);
 
-    $DB -> query("INSERT INTO tag_aliases (BadTag, AliasTag) VALUES ('$badtag', '$aliastag')");
+	$DB -> query("INSERT INTO tag_aliases (BadTag, AliasTag) VALUES ('$badtag', '$aliastag')");
 
 }
 
 if (isset($_POST['changealias'])) {
-    $aliasid = $_POST['aliasid'];
-    $badtag = mysql_escape_string($_POST['badtag']);
-    $aliastag = mysql_escape_string($_POST['aliastag']);
+	$aliasid = $_POST['aliasid'];
+	$badtag = mysql_escape_string($_POST['badtag']);
+	$aliastag = mysql_escape_string($_POST['aliastag']);
 
-    if ($_POST['save']) {
-        $DB -> query("UPDATE tag_aliases SET BadTag = '$badtag', AliasTag = '$aliastag' WHERE ID = '$aliasid' ");
-    }
-    if ($_POST['delete']) {
-        $DB -> query("DELETE FROM tag_aliases WHERE ID = '$aliasid'");
-    }
+	if ($_POST['save']) {
+		$DB -> query("UPDATE tag_aliases SET BadTag = '$badtag', AliasTag = '$aliastag' WHERE ID = '$aliasid' ");
+	}
+	if ($_POST['delete']) {
+		$DB -> query("DELETE FROM tag_aliases WHERE ID = '$aliasid'");
+	}
 }
 ?>
 <div class="header">
 	<h2>Tag Aliases</h2>
 	<div class="linkbox">
-	        [<a href="tools.php?action=tag_aliases&amp;order=goodtags">Sort by Good Tags</a>]
-	        [<a href="tools.php?action=tag_aliases&amp;order=badtags">Sort by Bad Tags</a>]
-    </div>
+			[<a href="tools.php?action=tag_aliases&amp;order=goodtags">Sort by good tags</a>]
+			[<a href="tools.php?action=tag_aliases&amp;order=badtags">Sort by bad tags</a>]
+	</div>
 </div>
 <table width="100%">
 	<tr class="colhead">
 		<td>Tag</td>
-		<td>Renamed From</td>
+		<td>Renamed from</td>
 		<td>Submit</td>
 	</tr>
 	<tr/>
 	<tr>
-		<form class="add_form" name="aliases" action="" method="post">
+		<form class="add_form" name="aliases" method="post" action="">
 			<input type="hidden" name="newalias" value="1" />
 			<td>
 				<input type="text" name="aliastag" />

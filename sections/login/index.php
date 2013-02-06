@@ -172,7 +172,7 @@ else {
 
 	// Function to log a user's login attempt
 	function log_attempt($UserID) {
-		global $DB, $AttemptID, $Attempts, $Bans, $BannedUntil, $Time;
+		global $DB, $Cache, $AttemptID, $Attempts, $Bans, $BannedUntil, $Time;
 		if($AttemptID) { // User has attempted to log in recently
 			$Attempts++;
 			if ($Attempts>5) { // Only 6 allowed login attempts, ban user's IP
@@ -200,7 +200,8 @@ else {
 						$DB->query("INSERT INTO ip_bans
 							(FromIP, ToIP, Reason) VALUES
 							('$IP','$IP', 'Automated ban per >60 failed login attempts')");
-						$Cache->delete_value('ip_bans');
+						$A = substr($_SERVER['REMOTE_ADDR'], 0, strcspn($_SERVER['REMOTE_ADDR'], '.'));
+						$Cache->delete_value('ip_bans_'.$A);
 					}
 				}
 			} else {

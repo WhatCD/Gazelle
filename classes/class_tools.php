@@ -6,22 +6,25 @@ class Tools {
 	 * @param string $IP
 	 */
   public static function site_ban_ip($IP) {
-    global $DB, $Cache;
-    $IPNum = Tools::ip_to_unsigned($IP);
-    $IPBans = $Cache->get_value('ip_bans');
-    if (!is_array($IPBans)) {
-      $DB->query("SELECT ID, FromIP, ToIP FROM ip_bans");
-      $IPBans = $DB->to_array(0, MYSQLI_NUM);
-      $Cache->cache_value('ip_bans', $IPBans, 0);
-    }
-    foreach ($IPBans as $Index => $IPBan) {
-      list ($ID, $FromIP, $ToIP) = $IPBan;
-      if ($IPNum >= $FromIP && $IPNum <= $ToIP) {
-        return true;
-      }
-    }
+	global $DB, $Cache, $Debug;
+	$A = substr($IP, 0, strcspn($IP, '.'));
+	$IPNum = Tools::ip_to_unsigned($IP);
+	$IPBans = $Cache->get_value('ip_bans_'.$A);
+	if (!is_array($IPBans)) {
+		$SQL = sprintf("SELECT ID, FromIP, ToIP FROM ip_bans WHERE FromIP BETWEEN %d << 24 AND (%d << 24) - 1", $A, $A+1);
+		$DB->query($SQL);
+		$IPBans = $DB->to_array(0, MYSQLI_NUM);
+		$Cache->cache_value('ip_bans_'.$A, $IPBans, 0);
+	}
+	$Debug->log_var($IPBans, 'IP bans for class '.$A);
+	foreach ($IPBans as $Index => $IPBan) {
+		list ($ID, $FromIP, $ToIP) = $IPBan;
+		if ($IPNum >= $FromIP && $IPNum <= $ToIP) {
+			return true;
+		}
+	}
   
-    return false;
+	return false;
   }
 
 	/**

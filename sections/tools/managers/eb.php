@@ -40,10 +40,9 @@ list ($NumResults) = $DB->next_record();
 		<td colspan="4">Add Email or Domain to Blacklist</td>
 	</tr>
 	<tr class="rowa">
-		<form class="add_form" name="email_blacklist" action="tools.php"
-			method="post">
-			<input type="hidden" name="action" value="eb_alter" /> <input
-				type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+		<form class="add_form" name="email_blacklist" action="tools.php" method="post">
+			<input type="hidden" name="action" value="eb_alter" />
+			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<td><input type="text" name="email" size="30" /></td>
 			<td colspan="2"><input type="text" name="comment" size="60" /></td>
 			<td><input type="submit" value="Create" /></td>
@@ -53,19 +52,20 @@ list ($NumResults) = $DB->next_record();
 	
 	foreach ($Results as $Result) {
 		?>
-    <tr>
-		<form class="manage_form" name="email_blacklist" action="tools.php"
-			method="post">
-			<td><input type="hidden" name="action" value="eb_alter" /> <input
-				type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" /> <input
-				type="hidden" name="id" value="<?=$Result['ID']?>" /> <input
-				type="text" name="email" value="<?=display_str($Result['Email'])?>"
-				size="30" /></td>
-			<td><input type="text" name="comment"
-				value="<?=display_str($Result['Comment'])?>" size="60" /></td>
+	<tr>
+		<form class="manage_form" name="email_blacklist" action="tools.php" method="post">
+			<td>
+				<input type="hidden" name="action" value="eb_alter" />
+				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+				<input type="hidden" name="id" value="<?=$Result['ID']?>" />
+				<input type="text" name="email" value="<?=display_str($Result['Email'])?>" size="30" />
+			</td>
+			<td><input type="text" name="comment" value="<?=display_str($Result['Comment'])?>" size="60" /></td>
 			<td><?=Users::format_username($Result ['UserID'], false, false, false)?><br /><?=time_diff($Result ['Time'], 1)?></td>
-			<td><input type="submit" name="submit" value="Edit" /> <input
-				type="submit" name="submit" value="Delete" /></td>
+			<td>
+				<input type="submit" name="submit" value="Edit" />
+				<input type="submit" name="submit" value="Delete" />
+			</td>
 		</form>
 	</tr>
 	<? }?>

@@ -24,11 +24,9 @@ function CollageSubscribe(collageid) {
 	ajax.get("userhistory.php?action=collage_subscribe&collageid=" + collageid + "&auth=" + authkey, function() {
 		var subscribeLink = $("#subscribelink" + collageid).raw();
 		if(subscribeLink) {
-			if(subscribeLink.firstChild.nodeValue.substr(1,1) == 'U') {
-				subscribeLink.firstChild.nodeValue = "[Subscribe]";
-			} else {
-				subscribeLink.firstChild.nodeValue = "[Unsubscribe]";
-			}
+			subscribeLink.firstChild.nodeValue = subscribeLink.firstChild.nodeValue.charAt(0) == 'U'
+				? "Subscribe"
+				: "Unsubscribe";
 		}
 	});
 }

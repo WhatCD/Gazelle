@@ -420,7 +420,6 @@ CREATE TABLE `ip_bans` (
   `Reason` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `FromIP_2` (`FromIP`,`ToIP`),
-  KEY `FromIP` (`FromIP`,`ToIP`),
   KEY `ToIP` (`ToIP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1575,7 +1574,8 @@ CREATE TABLE `wiki_revisions` (
   `Title` varchar(100) DEFAULT NULL,
   `Body` mediumtext,
   `Date` datetime DEFAULT NULL,
-  `Author` int(10) DEFAULT NULL
+  `Author` int(10) DEFAULT NULL,
+  KEY `ID_Revision` (`ID`,`Revision`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `wiki_torrents` (
