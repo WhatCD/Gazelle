@@ -20,7 +20,7 @@ if(isset($_GET['ip']) && isset($_GET['port'])){
 		die('Invalid IP');
 	}
 	
-	if (empty($_GET['port']) || !is_number($_GET['port']) ||  $_GET['port']<1 || $_GET['port']>65535){
+	if (empty($_GET['port']) || !is_number($_GET['port']) || $_GET['port']<1 || $_GET['port']>65535){
 		die('Invalid Port');
 	}
 
@@ -41,7 +41,7 @@ View::show_header('Connectability Checker');
 	<form class="manage_form" name="connections" action="javascript:check_ip();" method="get">
 		<table class="layout">
 			<tr>
-				<td class="label">IP</td>
+				<td class="label">IP address</td>
 				<td>
 					<input type="text" id="ip" name="ip" value="<?=$_SERVER['REMOTE_ADDR']?>" size="20" />
 				</td>
@@ -57,7 +57,7 @@ View::show_header('Connectability Checker');
 	</form>
 	<div id="result" class="box pad"></div>
 </div>
-<script type="text/javascript">
+<script type="text/javascript">//<![CDATA[
 var result = $('#result').raw();
 
 function check_ip() {
@@ -68,5 +68,6 @@ function check_ip() {
 		result.innerHTML = response;
 	});
 }
+//]]>
 </script>
 <? View::show_footer(); ?>

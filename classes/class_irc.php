@@ -138,20 +138,10 @@ abstract class IRC_BOT {
 				$this->send_raw('GLINE *@'.$IP.' 90d :DNSBL Proxy');
 			}
 		}
-		$IPBans = $Cache->get_value('ip_bans');
-		if(!is_array($IPBans)) {
-			$DB->query("SELECT FromIP, ToIP FROM ip_bans");
-			$IPBans = $DB->to_array();
-			$Cache->cache_value('ip_bans', $IPBans, 0);
-		}
-		foreach($IPBans as $IPBan) {
-			list($FromIP, $ToIP) = $IPBan;
-			$Long = ip2long($IP);
-			if($Long >= $FromIP && $Long <= $ToIP) {
-				$this->send_to($Channel, 'Site IP Ban Detected: '.$IP);
-				if ($Gline) {
-					$this->send_raw('GLINE *@'.$IP.' 90d :IP Ban');
-				}
+		if(Tools::site_ban_ip($IP)) {
+			$this->send_to($Channel, 'Site IP Ban Detected: '.$IP);
+			if ($Gline) {
+				$this->send_raw('GLINE *@'.$IP.' 90d :IP Ban');
 			}
 		}
 	}*/

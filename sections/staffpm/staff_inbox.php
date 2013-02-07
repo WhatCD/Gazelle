@@ -89,7 +89,7 @@ $Row = 'a';
 			<a href="staffpm.php?view=open">[Open]</a>
 			<a href="staffpm.php?view=resolved">[Resolved]</a>
 <? 	if ($IsStaff) { ?>
-            <a href="staffpm.php?action=scoreboard">[Scoreboard]</a>
+			<a href="staffpm.php?action=scoreboard">[Scoreboard]</a>
 <?	} ?>
 		</div>
 	</div>

@@ -52,7 +52,7 @@ if(empty($_POST['confirm'])) {
 } else {
 	authorize();
 	
-	// Votes ninjutsu.  This is so annoyingly complicated.
+	// Votes ninjutsu. This is so annoyingly complicated.
 	// 1. Get a list of everybody who voted on the old group and clear their cache keys
 	$DB->query("SELECT UserID FROM users_votes WHERE GroupID='$GroupID'");
 	while (list($UserID) = $DB->next_record()) {
@@ -64,12 +64,12 @@ if(empty($_POST['confirm'])) {
 	$DB->query("DELETE FROM users_votes WHERE GroupID='$GroupID'");
 	$DB->query("INSERT INTO torrents_votes (GroupID, Ups, Total, Score)
 				SELECT $NewGroupID, UpVotes, TotalVotes, VoteScore
-				FROM (SELECT IFNULL(SUM(IF(Type='Up',1,0)),0) As UpVotes, 
+				FROM (SELECT IFNULL(SUM(IF(Type='Up',1,0)),0) As UpVotes,
 							 COUNT(1) AS TotalVotes, 
 							 binomial_ci(IFNULL(SUM(IF(Type='Up',1,0)),0), COUNT(1)) AS VoteScore
-					  FROM users_votes 
-					  WHERE GroupID = $NewGroupID
-					  GROUP BY GroupID) AS a
+						FROM users_votes 
+						WHERE GroupID = $NewGroupID
+						GROUP BY GroupID) AS a
 				ON DUPLICATE KEY UPDATE
 				Ups = a.UpVotes,
 				Total = a.TotalVotes,

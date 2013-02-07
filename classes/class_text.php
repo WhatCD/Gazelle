@@ -623,7 +623,7 @@ class TEXT {
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'tex':
-					$Str.='<img style="vertical-align: middle" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" />';
+					$Str.='<img style="vertical-align: middle" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="TeX" />';
 					break;
 				case 'plain':
 					$Str.=$Block['Val'];
@@ -710,11 +710,11 @@ class TEXT {
 							$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
 						}
 						else {
-							$Str .= '<strong>Use of the [mature] tag requires a description.</strong> The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post. Misleading descriptions will be penalized. For further information on our mature content policies, please refer to this <a href="wiki.php?action=article&id=1063">wiki</a>.';
+							$Str .= '<strong>Use of the [mature] tag requires a description.</strong> The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post. Misleading descriptions will be penalized. For further information on our mature content policies, please refer to this <a href="wiki.php?action=article&amp;id=1063">wiki</a>.';
 						}
 					}
 					else {
-						$Str .= '<span class="mature_blocked" style="font-style:italic;"><a href="wiki.php?action=article&id=1063">Mature content </a>has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
+						$Str .= '<span class="mature_blocked" style="font-style:italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content </a>has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
 					}
 					break;
 				case 'img':

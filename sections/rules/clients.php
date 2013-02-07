@@ -16,7 +16,7 @@ if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 		<table cellpadding="5" cellspacing="1" border="0" class="border" width="100%">
 			<tr class="colhead">
 				<td style="width:150px;"><strong>Allowed Client</strong></td>
-				<!-- td style="width:400px;"><strong>Additional Notes</strong></td>  -->
+				<!-- td style="width:400px;"><strong>Additional Notes</strong></td> -->
 			</tr>
 <?
 	$Row = 'a';

@@ -3,8 +3,8 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 	enforce_login();
 	$TorrentPass = $LoggedUser['torrent_pass'];
 	$DownloadAlt = $LoggedUser['DownloadAlt'];
-	$UserID      = $LoggedUser['ID'];
-	$AuthKey     = $LoggedUser['AuthKey'];
+	$UserID		 = $LoggedUser['ID'];
+	$AuthKey	 = $LoggedUser['AuthKey'];
 } else {
 	$UserInfo = $Cache->get_value('user_'.$_REQUEST['torrent_pass']);
 	if(!is_array($UserInfo)) {
@@ -33,12 +33,12 @@ $TorrentID = $_REQUEST['id'];
 if (!is_number($TorrentID)){ error(0); }
 
 /* uTorrent remote redownloads .torrent files every fifteen minutes
-   to prevent this retardation from blowing bandwidth etc., let's block it
-   if he's downloaded the .torrent file twice before */
+	to prevent this retardation from blowing bandwidth etc., let's block it
+	if he's downloaded the .torrent file twice before */
 if (strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== FALSE) {
 	$DB->query("SELECT 1 FROM users_downloads WHERE UserID=$UserID AND TorrentID=$TorrentID LIMIT 3");
 	if ($DB->record_count() > 2) {
-		error('You have already downloaded this .torrent three times.  If you need to download it again, please do so from your browser, not through uTorrent remote.');
+		error('You have already downloaded this .torrent three times. If you need to download it again, please do so from your browser, not through uTorrent remote.');
 		die();
 	}
 }
@@ -96,10 +96,10 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 	
 	if (!Torrents::has_token($TorrentID)) {
 		if ($FLTokens <= 0) {
-			error("You do not have any freeleech tokens left.  Please use the regular DL link.");
+			error("You do not have any freeleech tokens left. Please use the regular DL link.");
 		}
 		if ($Size >= 1073741824) {
-			error("This torrent is too large.  Please use the regular DL link.");
+			error("This torrent is too large. Please use the regular DL link.");
 		}
 		
 		// Let the tracker know about this

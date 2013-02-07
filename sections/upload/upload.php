@@ -1,13 +1,13 @@
 <?
-//*********************************************************************//
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Upload form ~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-// This page relies on the TORRENT_FORM class. All it does is call	 //
-// the necessary functions.											//
-//---------------------------------------------------------------------//
-// $Properties, $Err and $UploadForm are set in takeupload.php, and	//
-// are only used when the form doesn't validate and this page must be  //
-// called again.													   //
-//*********************************************************************//
+//**********************************************************************//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Upload form ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+// This page relies on the TORRENT_FORM class. All it does is call		//
+// the necessary functions.												//
+//----------------------------------------------------------------------//
+// $Properties, $Err and $UploadForm are set in takeupload.php, and		//
+// are only used when the form doesn't validate and this page must be	//
+// called again.														//
+//**********************************************************************//
 
 ini_set('max_file_uploads','100');
 View::show_header('Upload','upload,jquery,valid_tags,musicbrainz,multiformat_uploader');
@@ -82,7 +82,7 @@ if(!isset($Text)) {
 $GenreTags = $Cache->get_value('genre_tags');
 if(!$GenreTags) {
 	$DB->query("SELECT Name FROM tags WHERE TagType='genre' ORDER BY Name");
-	$GenreTags =  $DB->collect('Name');
+	$GenreTags = $DB->collect('Name');
 	$Cache->cache_value('genre_tags', $GenreTags, 3600*6);
 }
 
@@ -105,7 +105,7 @@ $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
 	<p><?=$NewDNU?'<strong class="important_text">':''?>Last Updated: <?=time_diff($Updated)?><?=$NewDNU?'</strong>':''?></p>
 	<p>The following releases are currently forbidden from being uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comment.
 <? if ($HideDNU) { ?>
-   <span id="showdnu"><a href="#" onclick="$('#dnulist').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span>
+	<span id="showdnu"><a href="#" onclick="$('#dnulist').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></span>
 <? } ?>
 	</p>
 	<table id="dnulist" class="<?=($HideDNU?'hidden':'')?>">

@@ -310,7 +310,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					</td>
 				</tr>
 				<tr id="logcue_tr" class="hidden">
-					<td class="label">Log / Cue (FLAC only)</td>
+					<td class="label">Log / Cue (CD FLAC only)</td>
 					<td>
 						<input type="checkbox" id="needlog" name="needlog" onchange="ToggleLogScore()" <?=(!empty($NeedLog) ? 'checked="checked" ' : '')?>/><label for="needlog"> Require Log</label>
 						<span id="minlogscore_span" class="hidden">&nbsp;<input type="text" name="minlogscore" id="minlogscore" size="4" value="<?=(!empty($MinLogScore) ? $MinLogScore : '')?>" /> Minimum Log Score</span>

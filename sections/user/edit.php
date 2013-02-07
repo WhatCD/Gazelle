@@ -37,15 +37,15 @@ if(!is_array($Paranoia)) {
 }
 
 function paranoia_level($Setting) {
-       global $Paranoia;
-       // 0: very paranoid; 1: stats allowed, list disallowed; 2: not paranoid
-       return (in_array($Setting . '+', $Paranoia)) ? 0 : (in_array($Setting, $Paranoia) ? 1 : 2);
+	global $Paranoia;
+	// 0: very paranoid; 1: stats allowed, list disallowed; 2: not paranoid
+	return (in_array($Setting . '+', $Paranoia)) ? 0 : (in_array($Setting, $Paranoia) ? 1 : 2);
 }
 
 function display_paranoia($FieldName) {
-       $Level = paranoia_level($FieldName);
-       print '<label><input type="checkbox" name="p_'.$FieldName.'_c" '.checked($Level >= 1).' onchange="AlterParanoia()" /> Show count</label>'."&nbsp;&nbsp;\n";
-       print '<label><input type="checkbox" name="p_'.$FieldName.'_l" '.checked($Level >= 2).' onchange="AlterParanoia()" /> Show list</label>';
+	$Level = paranoia_level($FieldName);
+	print '<label><input type="checkbox" name="p_'.$FieldName.'_c" '.checked($Level >= 1).' onchange="AlterParanoia()" /> Show count</label>'."&nbsp;&nbsp;\n";
+	print '<label><input type="checkbox" name="p_'.$FieldName.'_l" '.checked($Level >= 2).' onchange="AlterParanoia()" /> Show list</label>';
 }
 
 function checked($Checked) {
@@ -89,7 +89,7 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<select name="stylesheet" id="stylesheet">
 <? foreach($Stylesheets as $Style) { ?>
-						<option value="<?=$Style['ID']?>"<? if ($Style['ID'] == $StyleID) { ?>selected="selected"<? } ?>><?=$Style['ProperName']?></option>
+						<option value="<?=$Style['ID']?>"<? if ($Style['ID'] == $StyleID) { ?> selected="selected"<? } ?>><?=$Style['ProperName']?></option>
 <? } ?>
 					</select>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Or -&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -101,8 +101,8 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Default search type</strong></td>
 				<td>
 					<select name="searchtype" id="searchtype">
-						<option value="0"<? if ($SiteOptions['SearchType'] == 0) { ?>selected="selected"<? } ?>>Simple</option>
-						<option value="1"<? if ($SiteOptions['SearchType'] == 1) { ?>selected="selected"<? } ?>>Advanced</option>
+						<option value="0"<? if ($SiteOptions['SearchType'] == 0) { ?> selected="selected"<? } ?>>Simple</option>
+						<option value="1"<? if ($SiteOptions['SearchType'] == 1) { ?> selected="selected"<? } ?>>Advanced</option>
 					</select>
 				</td>
 			</tr>
@@ -111,12 +111,12 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Torrent grouping</strong></td>
 				<td>
 					<select name="disablegrouping" id="disablegrouping">
-						<option value="0"<? if ($SiteOptions['DisableGrouping2'] == 0) { ?>selected="selected"<? } ?>>Group torrents by default</option>
-						<option value="1"<? if ($SiteOptions['DisableGrouping2'] == 1) { ?>selected="selected"<? } ?>>DO NOT group torrents by default</option>
+						<option value="0"<? if ($SiteOptions['DisableGrouping2'] == 0) { ?> selected="selected"<? } ?>>Group torrents by default</option>
+						<option value="1"<? if ($SiteOptions['DisableGrouping2'] == 1) { ?> selected="selected"<? } ?>>DO NOT group torrents by default</option>
 					</select>&nbsp;
 					<select name="torrentgrouping" id="torrentgrouping">
-						<option value="0"<? if ($SiteOptions['TorrentGrouping'] == 0) { ?>selected="selected"<? } ?>>Groups are open by default</option>
-						<option value="1"<? if ($SiteOptions['TorrentGrouping'] == 1) { ?>selected="selected"<? } ?>>Groups are closed by default</option>
+						<option value="0"<? if ($SiteOptions['TorrentGrouping'] == 0) { ?> selected="selected"<? } ?>>Groups are open by default</option>
+						<option value="1"<? if ($SiteOptions['TorrentGrouping'] == 1) { ?> selected="selected"<? } ?>>Groups are closed by default</option>
 					</select>
 				</td>
 			</tr>
@@ -124,15 +124,15 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Discography view</strong></td>
 				<td>
 					<select name="discogview" id="discogview">
-						<option value="0"<? if ($SiteOptions['DiscogView'] == 0) { ?>selected="selected"<? } ?>>Open by default</option>
-						<option value="1"<? if ($SiteOptions['DiscogView'] == 1) { ?>selected="selected"<? } ?>>Closed by default</option>
+						<option value="0"<? if ($SiteOptions['DiscogView'] == 0) { ?> selected="selected"<? } ?>>Open by default</option>
+						<option value="1"<? if ($SiteOptions['DiscogView'] == 1) { ?> selected="selected"<? } ?>>Closed by default</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Show snatched torrents</strong></td>
 				<td>
-					<input type="checkbox" name="showsnatched" id="showsnatched" <? if (!empty($SiteOptions['ShowSnatched'])) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="showsnatched" id="showsnatched" <? if (!empty($SiteOptions['ShowSnatched'])) { ?>checked="checked" <? } ?>/>
 					<label for="showsnatched">Display "Snatched!" next to snatched torrents</label>
 				</td>
 			</tr>
@@ -140,9 +140,9 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Forum posts per page</strong></td>
 				<td>
 					<select name="postsperpage" id="postsperpage">
-						<option value="25"<? if ($SiteOptions['PostsPerPage'] == 25) { ?>selected="selected"<? } ?>>25 (Default)</option>
-						<option value="50"<? if ($SiteOptions['PostsPerPage'] == 50) { ?>selected="selected"<? } ?>>50</option>
-						<option value="100"<? if ($SiteOptions['PostsPerPage'] == 100) { ?>selected="selected"<? } ?>>100</option>
+						<option value="25"<? if ($SiteOptions['PostsPerPage'] == 25) { ?> selected="selected"<? } ?>>25 (Default)</option>
+						<option value="50"<? if ($SiteOptions['PostsPerPage'] == 50) { ?> selected="selected"<? } ?>>50</option>
+						<option value="100"<? if ($SiteOptions['PostsPerPage'] == 100) { ?> selected="selected"<? } ?>>100</option>
 					</select>
 				</td>
 			</tr>
@@ -216,52 +216,52 @@ echo $Val->GenerateJS('userform');
 					<label for="disablesmileys">Disable smileys</label>
 				</td>
 			</tr>
-            <tr>
-                <td class="label"><strong>Mature content</strong></td>
-                <td>
-                    <input type="checkbox" name="enablematurecontent" id="enablematurecontent" <? if (!empty($SiteOptions['EnableMatureContent'])) { ?>checked="checked"<? } ?> />
-                    <label for="enablematurecontent">Show mature content</label>
-                </td>
-            </tr>
 			<tr>
-            	<td class="label"><strong>Avatars</strong></td>
-                <td>
-                    <select name="disableavatars" id="disableavatars" onclick="ToggleIdenticons();">
-                        <option value="1" <? if($SiteOptions['DisableAvatars'] == 1) { ?> selected="selected" <? } ?>/>Disable avatars</option>
-                        <option value="0" <? if($SiteOptions['DisableAvatars'] == 0) { ?> selected="selected" <? } ?>/>Show avatars</option>
-                        <option value="2" <? if($SiteOptions['DisableAvatars'] == 2) { ?> selected="selected" <? } ?>/>Show avatars or:</option>
-                        <option value="3" <? if($SiteOptions['DisableAvatars'] == 3) { ?> selected="selected" <? } ?>/>Replace all avatars with:</option>
-                    </select>
-                    <select name="identicons" id="identicons">
-                        <option value="0" <? if($SiteOptions['Identicons'] == 0) { ?> selected="selected" <? } ?>/>Identicon</option>
-                        <option value="1" <? if($SiteOptions['Identicons'] == 1) { ?> selected="selected" <? } ?>/>MonsterID</option>
-                        <option value="2" <? if($SiteOptions['Identicons'] == 2) { ?> selected="selected" <? } ?>/>Wavatar</option>
-                        <option value="3" <? if($SiteOptions['Identicons'] == 3) { ?> selected="selected" <? } ?>/>Retro</option>
-                        <option value="4" <? if($SiteOptions['Identicons'] == 4) { ?> selected="selected" <? } ?>/>Robots 1</option>
-                        <option value="5" <? if($SiteOptions['Identicons'] == 5) { ?> selected="selected" <? } ?>/>Robots 2</option>
-                        <option value="6" <? if($SiteOptions['Identicons'] == 6) { ?> selected="selected" <? } ?>/>Robots 3</option>
-                    </select>
-                </td>
-            </tr>
-        <!--						-->
+				<td class="label"><strong>Mature content</strong></td>
+				<td>
+					<input type="checkbox" name="enablematurecontent" id="enablematurecontent" <? if (!empty($SiteOptions['EnableMatureContent'])) { ?>checked="checked"<? } ?> />
+					<label for="enablematurecontent">Show mature content</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><strong>Avatars</strong></td>
+				<td>
+					<select name="disableavatars" id="disableavatars" onclick="ToggleIdenticons();">
+						<option value="1" <? if($SiteOptions['DisableAvatars'] == 1) { ?>selected="selected" <? } ?>/>Disable avatars</option>
+						<option value="0" <? if($SiteOptions['DisableAvatars'] == 0) { ?>selected="selected" <? } ?>/>Show avatars</option>
+						<option value="2" <? if($SiteOptions['DisableAvatars'] == 2) { ?>selected="selected" <? } ?>/>Show avatars or:</option>
+						<option value="3" <? if($SiteOptions['DisableAvatars'] == 3) { ?>selected="selected" <? } ?>/>Replace all avatars with:</option>
+					</select>
+					<select name="identicons" id="identicons">
+						<option value="0" <? if($SiteOptions['Identicons'] == 0) { ?>selected="selected" <? } ?>/>Identicon</option>
+						<option value="1" <? if($SiteOptions['Identicons'] == 1) { ?>selected="selected" <? } ?>/>MonsterID</option>
+						<option value="2" <? if($SiteOptions['Identicons'] == 2) { ?>selected="selected" <? } ?>/>Wavatar</option>
+						<option value="3" <? if($SiteOptions['Identicons'] == 3) { ?>selected="selected" <? } ?>/>Retro</option>
+						<option value="4" <? if($SiteOptions['Identicons'] == 4) { ?>selected="selected" <? } ?>/>Robots 1</option>
+						<option value="5" <? if($SiteOptions['Identicons'] == 5) { ?>selected="selected" <? } ?>/>Robots 2</option>
+						<option value="6" <? if($SiteOptions['Identicons'] == 6) { ?>selected="selected" <? } ?>/>Robots 3</option>
+					</select>
+				</td>
+			</tr>
+		<!--						-->
 			<tr>
 				<td class="label"><strong>Auto-save text</strong></td>
 				<td>
-					<input type="checkbox" name="disableautosave" id="disableautosave" <? if (!empty($SiteOptions['DisableAutoSave'])) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="disableautosave" id="disableautosave" <? if (!empty($SiteOptions['DisableAutoSave'])) { ?>checked="checked" <? } ?>/>
 					<label for="disableautosave">Disable reply text from being saved automatically when changing pages in a thread</label>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Voting links</strong></td>
 				<td>
-					<input type="checkbox" name="novotelinks" id="novotelinks" <? if (!empty($SiteOptions['NoVoteLinks'])) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="novotelinks" id="novotelinks" <? if (!empty($SiteOptions['NoVoteLinks'])) { ?>checked="checked" <? } ?>/>
 					<label for="novotelinks">Disable voting links on artist pages, collages, and snatched lists</label>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Download torrents as text files</strong></td>
 				<td>
-					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked" <? } ?>/>
 					<label for="downloadalt">For users whose ISP blocks the downloading of torrent files</label>
 				</td>
 			</tr>
@@ -290,12 +290,12 @@ echo $Val->GenerateJS('userform');
 					<p class="min_padding">If changing this field, you must enter your current password in the "Current password" field before saving your changes.</p>
 				</td>
 			</tr>
-        <tr>
-            <td class="label"><strong>Last.fm Username</strong></td>
-            <td><input type="text" size="50" name="lastfm_username" id="lastfm_username" value="<?=display_str($LastFMUsername)?>" />
-                <p class="min_padding">Your Last.fm username. Will be used to display Last.fm information on your profile which can be seen by other users.</p>
-            </td>
-        </tr>
+		<tr>
+			<td class="label"><strong>Last.fm username</strong></td>
+			<td><input type="text" size="50" name="lastfm_username" id="lastfm_username" value="<?=display_str($LastFMUsername)?>" />
+				<p class="min_padding">Your Last.fm username. Will be used to display Last.fm information on your profile which can be seen by other users.</p>
+			</td>
+		</tr>
 
 			<tr>
 				<td class="label"><strong>Info</strong></td>

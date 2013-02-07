@@ -20,8 +20,8 @@ if ($LoggedUser['CustomForums']) {
 	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 }
 $sql = "SELECT SQL_CALC_FOUND_ROWS f.ID as ForumID, f.Name as ForumName, t.Title, q.TopicID, q.PostID, q.QuoterID
-        FROM users_notify_quoted AS q LEFT JOIN forums_topics AS t ON t.ID = q.TopicID LEFT JOIN forums AS f ON f.ID = q.ForumID 
-        WHERE q.UserID = $LoggedUser[ID] AND ((f.MinClassRead <= '$LoggedUser[Class]'";
+		FROM users_notify_quoted AS q LEFT JOIN forums_topics AS t ON t.ID = q.TopicID LEFT JOIN forums AS f ON f.ID = q.ForumID
+		WHERE q.UserID = $LoggedUser[ID] AND ((f.MinClassRead <= '$LoggedUser[Class]'";
 
 if (!empty($RestrictedForums)) {
 	$sql .= ' AND f.ID NOT IN (\'' . $RestrictedForums . '\')';

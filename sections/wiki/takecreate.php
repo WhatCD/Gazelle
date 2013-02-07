@@ -46,7 +46,7 @@ $ArticleID = $DB->inserted_id();
 //	$DB->query("INSERT INTO wiki_aliases (Alias, ArticleID) VALUES ('$NewAlias', '$ArticleID')");
 //}
 
-$TitleAlias =  $Alias->convert($_POST['title']);
+$TitleAlias = $Alias->convert($_POST['title']);
 if($TitleAlias!=$Alias) {
 	$DB->query("INSERT INTO wiki_aliases (Alias, ArticleID) VALUES ('".db_string($TitleAlias)."', '$ArticleID')");
 }

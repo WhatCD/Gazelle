@@ -1,12 +1,12 @@
 <?
-//*********************************************************************//
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Edit form ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-// This page relies on the TORRENT_FORM class. All it does is call     //
-// the necessary functions.                                            //
-//---------------------------------------------------------------------//
-// At the bottom, there are grouping functions which are off limits to //
-// most members.                                                       //
-//*********************************************************************//
+//**********************************************************************//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Edit form ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+// This page relies on the TORRENT_FORM class. All it does is call		//
+// the necessary functions.												//
+//----------------------------------------------------------------------//
+// At the bottom, there are grouping functions which are off limits to	//
+// most members.														//
+//**********************************************************************//
 
 require(SERVER_ROOT.'/classes/class_torrent_form.php');
 

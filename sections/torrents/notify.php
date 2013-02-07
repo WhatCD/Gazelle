@@ -190,7 +190,7 @@ if (empty($Results)) {
 <div class="notify_filter_links">
 	<a href="javascript:GroupClear($('#notificationform_<?=$FilterID?>').raw())" class="brackets">Clear selected in filter</a>&nbsp;&nbsp;&nbsp;
 	<a href="torrents.php?action=notify_clear_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all old in filter</a>&nbsp;&nbsp;&nbsp;
-    <a href="torrents.php?action=notify_catchup_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Mark all in filter as read</a>
+	<a href="torrents.php?action=notify_catchup_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Mark all in filter as read</a>
 </div>
 <form class="manage_form" name="torrents" id="notificationform_<?=$FilterID?>" action="">
 <table class="torrent_table cats checkboxes border">

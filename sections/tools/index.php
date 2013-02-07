@@ -169,10 +169,10 @@ switch ($_REQUEST['action']){
 		include('managers/official_tags.php');
 		break;
 
-    case 'tag_aliases':
-        include('managers/tag_aliases.php');
-        break;
-    case 'permissions':
+	case 'tag_aliases':
+		include('managers/tag_aliases.php');
+		break;
+	case 'permissions':
 		if (!check_perms('admin_manage_permissions')) { error(403); }
 
 		if (!empty($_REQUEST['id'])) {
@@ -218,15 +218,15 @@ switch ($_REQUEST['action']){
 				if (!$Err) {
 					if (!is_numeric($_REQUEST['id'])) {
 						$DB->query("INSERT INTO permissions (Level,Name,Secondary,PermittedForums,`Values`,DisplayStaff)
-						            VALUES ('".db_string($Level)."',
-									        '".db_string($Name)."',
+									VALUES ('".db_string($Level)."',
+											'".db_string($Name)."',
 											".$Secondary.",
 											'".db_string($Forums)."',
 											'".db_string(serialize($Values))."',
 											'".db_string($DisplayStaff)."')");
 					} else {
 						$DB->query("UPDATE permissions SET Level='".db_string($Level)."',
-						                                   Name='".db_string($Name)."',
+														   Name='".db_string($Name)."',
 														   Secondary=".$Secondary.",
 														   PermittedForums='".db_string($Forums)."',
 														   `Values`='".db_string(serialize($Values))."',

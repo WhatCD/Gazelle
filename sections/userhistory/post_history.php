@@ -261,13 +261,13 @@ if(empty($Results)) {
 			<col class="col_post_body" />
 		</colgroup>
 		<tr class="colhead_dark">
-			<td  colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+			<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
 				<span style="float:left;">
 					<?=time_diff($AddedTime) ?>
 					in <a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>
 <?
 		if($ViewingOwn) {
-			if ((!$Locked  || $Sticky) && (!$LastRead || $LastRead < $LastPostID)) { ?> 
+			if ((!$Locked || $Sticky) && (!$LastRead || $LastRead < $LastPostID)) { ?>
 					<span class="new">(New!)</span>
 <?
 			}
@@ -314,12 +314,12 @@ if(empty($Results)) {
 			<td class="body" valign="top">
 				<div id="content<?=$PostID?>">
 					<?=$Text->full_format($Body)?>
-<?			if($EditedUserID) { ?>       
+<?			if($EditedUserID) { ?>
 					<br />
 					<br />
 <?				if(check_perms('site_moderate_forums')) { ?>
 					<a href="#content<?=$PostID?>" onclick="LoadEdit(<?=$PostID?>, 1)">&laquo;</a>
-<? 				} ?>		   
+<? 				} ?>
 					Last edited by
 					<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
 <?			} ?>		

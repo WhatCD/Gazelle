@@ -1,9 +1,9 @@
 <?
 //******************************************************************************//
 //--------------- Take edit ----------------------------------------------------//
-// This pages handles the backend of the 'edit torrent' function. It checks     //
-// the data, and if it all validates, it edits the values in the database	//
-// that correspond to the torrent in question.                                  //
+// This pages handles the backend of the 'edit torrent' function. It checks		//
+// the data, and if it all validates, it edits the values in the database		//
+// that correspond to the torrent in question.									//
 //******************************************************************************//
 
 enforce_login();
@@ -17,8 +17,8 @@ $Validate = new VALIDATE;
 
 //******************************************************************************//
 //--------------- Set $Properties array ----------------------------------------//
-// This is used if the form doesn't validate, and when the time comes to enter  //
-// it into the database.                                                        //
+// This is used if the form doesn't validate, and when the time comes to enter	//
+// it into the database.														//
 //******************************************************************************//
 
 $Properties=array();
@@ -297,9 +297,9 @@ if(check_perms('torrents_freeleech')) {
 if(check_perms('users_mod')) {
 	if($T[Format] != "'FLAC'") {
 		$SQL .= "
-	                HasLog='0',
-	                HasCue='0',
-	        ";
+					HasLog='0',
+					HasCue='0',
+			";
 	} else {
 		$SQL .= "
 			HasLog=$T[HasLog],
@@ -352,20 +352,20 @@ if(check_perms('users_mod')) {
 	list($caID) = $DB->next_record();
 
 	if (!$caID && $Properties['CassetteApproved']) {
-	    $DB->query("INSERT INTO torrents_cassette_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+		$DB->query("INSERT INTO torrents_cassette_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
 	}
 	if ($caID && !$Properties['CassetteApproved']) {
-	    $DB->query("DELETE FROM torrents_cassette_approved WHERE TorrentID='$TorrentID'");
+		$DB->query("DELETE FROM torrents_cassette_approved WHERE TorrentID='$TorrentID'");
 	}
 	
 	$DB->query("SELECT TorrentID FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
 	list($lmaID) = $DB->next_record();
 
 	if (!$lmaID && $Properties['LossymasterApproved']) {
-	    $DB->query("INSERT INTO torrents_lossymaster_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+		$DB->query("INSERT INTO torrents_lossymaster_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
 	}
 	if ($lmaID && !$Properties['LossymasterApproved']) {
-	    $DB->query("DELETE FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
+		$DB->query("DELETE FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
 	}
 
 	$DB->query("SELECT TorrentID FROM torrents_lossyweb_approved WHERE TorrentID='$TorrentID'");

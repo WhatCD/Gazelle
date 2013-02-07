@@ -29,23 +29,23 @@ View::show_header("Email history for $Username");
 
 if ($UsersOnly == 1) {
 	$DB->query("SELECT
-	                                u.Email,
-	                                '".sqltime()."' AS Time,
-	                                u.IP,
-	                                c.Code
+									u.Email,
+									'".sqltime()."' AS Time,
+									u.IP,
+									c.Code
 					FROM users_main AS u
 					LEFT JOIN users_main AS u2 ON u2.Email = u.Email AND u2.ID != '$UserID'
-	                        LEFT JOIN geoip_country AS c ON INET_ATON(u.IP) BETWEEN c.StartIP AND c.EndIP
-	                        WHERE u.ID='$UserID' AND u2.ID > 0
-	                        UNION SELECT
-	                                h.Email,
-	                                h.Time,
-	                                h.IP,
-	                                c.Code
+							LEFT JOIN geoip_country AS c ON INET_ATON(u.IP) BETWEEN c.StartIP AND c.EndIP
+							WHERE u.ID='$UserID' AND u2.ID > 0
+							UNION SELECT
+									h.Email,
+									h.Time,
+									h.IP,
+									c.Code
 					FROM users_history_emails AS h
 					LEFT JOIN users_history_emails AS h2 ON h2.email=h.email and h2.UserID != '$UserID'
-	                        LEFT JOIN geoip_country AS c ON INET_ATON(h.IP) BETWEEN c.StartIP AND c.EndIP
-	                        WHERE h.UserID='$UserID' AND h2.UserID>0"/*AND Time<>'0000-00-00 00:00:00'*/."
+							LEFT JOIN geoip_country AS c ON INET_ATON(h.IP) BETWEEN c.StartIP AND c.EndIP
+							WHERE h.UserID='$UserID' AND h2.UserID>0"/*AND Time<>'0000-00-00 00:00:00'*/."
 				ORDER BY Time DESC");
 } else {
 	$DB->query("SELECT 

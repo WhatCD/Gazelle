@@ -241,13 +241,13 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 <? if ($OwnProfile || ($Override=check_paranoia_here(false)) || check_perms('users_mod')) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <? } 
-   if (($OwnProfile || check_perms('users_mod')) && $Warned!='0000-00-00 00:00:00') { ?>
+	if (($OwnProfile || check_perms('users_mod')) && $Warned!='0000-00-00 00:00:00') { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Warning expires: <?= date('Y-m-d h:i', strtotime($Warned)) ?></li>
 <? } ?>
 			</ul>
 		</div>
-                
-                
+
+
 <?
 //Last.fm statistics and comparability
 include(SERVER_ROOT.'/sections/user/lastfm.php');
@@ -737,7 +737,7 @@ if (check_paranoia_here('requestsvoted_list')) {
 						</td>
 						<td>
 							<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
-<?		  	if(check_perms('site_vote')){ ?>
+<?			if(check_perms('site_vote')){ ?>
 							<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)"><strong>(+)</strong></a>
 <?			} ?>
@@ -1095,19 +1095,19 @@ if (check_perms('users_mod', $Class)) { ?>
 			<tr>
 				<td class="label">Disable:</td>
 				<td>
-					<input type="checkbox" name="DisablePosting" id="DisablePosting"<? if ($DisablePosting==1) { ?>checked="checked"<? } ?> /> <label for="DisablePosting">Posting</label>
-<?		if (check_perms('users_disable_any')) { ?>  |
-					<input type="checkbox" name="DisableAvatar" id="DisableAvatar"<? if ($DisableAvatar==1) { ?>checked="checked"<? } ?> /> <label for="DisableAvatar">Avatar</label> |
-					<input type="checkbox" name="DisableInvites" id="DisableInvites"<? if ($DisableInvites==1) { ?>checked="checked"<? } ?> /> <label for="DisableInvites">Invites</label> |
-					<input type="checkbox" name="DisableForums" id="DisableForums"<? if ($DisableForums==1) { ?>checked="checked"<? } ?> /> <label for="DisableForums">Forums</label> |
-					<input type="checkbox" name="DisableTagging" id="DisableTagging"<? if ($DisableTagging==1) { ?>checked="checked"<? } ?> /> <label for="DisableTagging" title="This only disables a user's ability to delete tags.">Tagging</label> |
-					<input type="checkbox" name="DisableRequests" id="DisableRequests"<? if ($DisableRequests==1) { ?>checked="checked"<? } ?> /> <label for="DisableRequests">Requests</label>
+					<input type="checkbox" name="DisablePosting" id="DisablePosting"<? if ($DisablePosting==1) { ?> checked="checked"<? } ?> /> <label for="DisablePosting">Posting</label>
+<?		if (check_perms('users_disable_any')) { ?> |
+					<input type="checkbox" name="DisableAvatar" id="DisableAvatar"<? if ($DisableAvatar==1) { ?> checked="checked"<? } ?> /> <label for="DisableAvatar">Avatar</label> |
+					<input type="checkbox" name="DisableInvites" id="DisableInvites"<? if ($DisableInvites==1) { ?> checked="checked"<? } ?> /> <label for="DisableInvites">Invites</label> |
+					<input type="checkbox" name="DisableForums" id="DisableForums"<? if ($DisableForums==1) { ?> checked="checked"<? } ?> /> <label for="DisableForums">Forums</label> |
+					<input type="checkbox" name="DisableTagging" id="DisableTagging"<? if ($DisableTagging==1) { ?> checked="checked"<? } ?> /> <label for="DisableTagging" title="This only disables a user's ability to delete tags.">Tagging</label> |
+					<input type="checkbox" name="DisableRequests" id="DisableRequests"<? if ($DisableRequests==1) { ?> checked="checked"<? } ?> /> <label for="DisableRequests">Requests</label>
 					<br />
-					<input type="checkbox" name="DisableUpload" id="DisableUpload"<? if ($DisableUpload==1) { ?>checked="checked"<? } ?> /> <label for="DisableUpload">Upload</label> |
-					<input type="checkbox" name="DisableWiki" id="DisableWiki"<? if ($DisableWiki==1) { ?>checked="checked"<? } ?> /> <label for="DisableWiki">Wiki</label> |
-					<input type="checkbox" name="DisableLeech" id="DisableLeech"<? if ($DisableLeech==0) { ?>checked="checked"<? } ?> /> <label for="DisableLeech">Leech</label> |
-					<input type="checkbox" name="DisablePM" id="DisablePM"<? if ($DisablePM==1) { ?>checked="checked"<? } ?> /> <label for="DisablePM">PM</label> |
-					<input type="checkbox" name="DisableIRC" id="DisableIRC"<? if ($DisableIRC==1) { ?>checked="checked"<? } ?> /> <label for="DisableIRC">IRC</label>
+					<input type="checkbox" name="DisableUpload" id="DisableUpload"<? if ($DisableUpload==1) { ?> checked="checked"<? } ?> /> <label for="DisableUpload">Upload</label> |
+					<input type="checkbox" name="DisableWiki" id="DisableWiki"<? if ($DisableWiki==1) { ?> checked="checked"<? } ?> /> <label for="DisableWiki">Wiki</label> |
+					<input type="checkbox" name="DisableLeech" id="DisableLeech"<? if ($DisableLeech==0) { ?> checked="checked"<? } ?> /> <label for="DisableLeech">Leech</label> |
+					<input type="checkbox" name="DisablePM" id="DisablePM"<? if ($DisablePM==1) { ?> checked="checked"<? } ?> /> <label for="DisablePM">PM</label> |
+					<input type="checkbox" name="DisableIRC" id="DisableIRC"<? if ($DisableIRC==1) { ?> checked="checked"<? } ?> /> <label for="DisableIRC">IRC</label>
 				</td>
 			</tr>
 			<tr>

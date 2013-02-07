@@ -4,10 +4,11 @@ if(!check_perms('admin_manage_ipbans')) { error(403); }
 if (isset($_POST['submit'])) {
 	authorize();
 
+	$IPA = substr($_POST['start'], 0, strcspn($_POST['start'], '.'));
 	if ($_POST['submit'] == 'Delete') { //Delete
 		if(!is_number($_POST['id']) || $_POST['id'] == ''){ error(0); }
 		$DB->query('DELETE FROM ip_bans WHERE ID='.$_POST['id']);
-		$Bans = $Cache->delete_value('ip_bans');
+		$Cache->delete_value('ip_bans_'.$IPA);
 	} else { //Edit & Create, Shared Validation
 		$Val->SetFields('start', '1','regex','You must include the starting IP address.',array('regex'=>'/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i'));
 		$Val->SetFields('end', '1','regex','You must include the ending IP address.',array('regex'=>'/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i'));
@@ -28,19 +29,12 @@ if (isset($_POST['submit'])) {
 				ToIP='$End',
 				Reason='$Notes'
 				WHERE ID='".$_POST['id']."'");
-			$Bans = $Cache->get_value('ip_bans');
-			$Cache->begin_transaction();
-			$Cache->update_row($_POST['id'], array($_POST['id'], $Start, $End));
-			$Cache->commit_transaction();
 		} else { //Create
 			$DB->query("INSERT INTO ip_bans
 				(FromIP, ToIP, Reason) VALUES
 				('$Start','$End', '$Notes')");
-			$ID = $DB->inserted_id();
-			$Bans = $Cache->get_value('ip_bans');
-			$Bans[$ID] = array($ID, $Start, $End);
-			$Cache->cache_value('ip_bans', $Bans, 0);
 		}
+		$Cache->delete_value('ip_bans_'.$IPA);
 	}
 }
 

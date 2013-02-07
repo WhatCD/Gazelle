@@ -36,7 +36,7 @@ $DB->query("
 		GROUP_CONCAT(h.Time SEPARATOR '|') AS UserSetTimes,
 		GROUP_CONCAT(h.IP SEPARATOR '|') AS UserIPs,
 		GROUP_CONCAT(m2.Username SEPARATOR '|') AS Usernames,
-	   	GROUP_CONCAT(m2.Enabled SEPARATOR '|') AS UsersEnabled,
+		GROUP_CONCAT(m2.Enabled SEPARATOR '|') AS UsersEnabled,
 		GROUP_CONCAT(i.Donor SEPARATOR '|') AS UsersDonor,
 		GROUP_CONCAT(i.Warned SEPARATOR '|') AS UsersWarned
 	FROM users_main AS m
@@ -57,7 +57,7 @@ $DB->query("
 		h3.Time AS UserSetTimes,
 		h3.IP AS UserIPs,
 		m3.Username AS Usernames,
-	   	m3.Enabled AS UsersEnabled,
+		m3.Enabled AS UsersEnabled,
 		i2.Donor AS UsersDonor,
 		i2.Warned AS UsersWarned
 	FROM users_history_emails AS h2
@@ -118,7 +118,7 @@ if (count($History) == 1) {
 			$Old[$Key]['EndTime'] = $Val['Time'];
 			$Old[$Key]['IP'] = $Val['IP'];
 			$Old[$Key]['ElapsedTime'] = date(time() + strtotime($Old[$Key]['EndTime']) - strtotime($Old[$Key]['StartTime']));
-			$Old[$Key]['Email'] =  $Val['Email'];
+			$Old[$Key]['Email'] = $Val['Email'];
 
 		} else {
 			// Shouldn't have to be here but I'll leave it anyway
@@ -126,7 +126,7 @@ if (count($History) == 1) {
 			$Other[$Key]['EndTime'] = $Val['Time'];
 			$Other[$Key]['IP'] = $Val['IP'];
 			$Other[$Key]['ElapsedTime'] = date(time() + strtotime($Other[$Key]['EndTime']) - strtotime($Other[$Key]['StartTime']));
-			$Other[$Key]['Email'] =  $Val['Email'];
+			$Other[$Key]['Email'] = $Val['Email'];
 		}
 
 		if ($Val['Usernames'] != '') {

@@ -325,7 +325,7 @@ if (!empty($Image)) {
 			</tr>
 <?		if(!empty($LogCue)) { ?>
 			<tr>
-				<td class="label">Required FLAC only extra(s)</td>
+				<td class="label">Required CD FLAC only extra(s)</td>
 				<td>
 					<?=$LogCue?>
 				</td>

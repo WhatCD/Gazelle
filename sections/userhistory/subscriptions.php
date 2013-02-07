@@ -34,7 +34,7 @@ $sql = 'SELECT
 	FROM users_subscriptions 
 	WHERE UserID = '.$LoggedUser['ID'].') AS s
 	LEFT JOIN forums_last_read_topics AS l ON s.TopicID = l.TopicID AND l.UserID = '.$LoggedUser['ID'].'
-	JOIN forums_topics AS t ON  t.ID = s.TopicID
+	JOIN forums_topics AS t ON t.ID = s.TopicID
 	JOIN forums_posts AS p ON t.ID = p.TopicID
 	JOIN forums AS f ON f.ID = t.ForumID
 	WHERE p.ID <= IFNULL(l.PostID,t.LastPostID)

@@ -35,7 +35,7 @@ View::show_header('Collages Rules');
 			Collages should not be used to create artist discographies, as the artist pages already exist for this purpose. However, for an artist who has a multitude of side projects, it is allowed to create a collage containing all of the projects, to be placed in the Discography category.
 			</li>
 			<li>
-			Power Users and Donors get one personal collage.  Elites can have two, Torrent Masters can have up to three, Power TMs up to four and Elite TM+ up to five. Donors always receive one more than the class maximum.
+			Power Users and Donors get one personal collage. Elites can have two, Torrent Masters can have up to three, Power TMs up to four and Elite TM+ up to five. Donors always receive one more than the class maximum.
 			</li>
 			<li>
 			Every collage must have at least 3 torrent groups in it, except for collages of type "Label", "Personal", and "Staff Picks".

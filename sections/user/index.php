@@ -34,8 +34,8 @@ switch ($_REQUEST['action']) {
 		if (check_perms('admin_advanced_user_search') && check_perms('users_view_ips') && check_perms('users_view_email')) {
 			include('advancedsearch.php');
 		}
-	        
-		else { 
+		
+		else {
 			include('search.php');
 		}
 		break;
@@ -91,38 +91,38 @@ switch ($_REQUEST['action']) {
 		$Cache->delete_value('collage_subs_user_new_'.$UserID);
 		include(SERVER_ROOT.'/sections/user/user.php');
 		break;
-    
-        //Provide public methods for Last.fm data gets.
-        case 'lastfm_compare':
-            if(isset($_GET['username'])) {
-                echo LastFM::compare_user_with($_GET['username']);
-            }
-            break;
-        case 'lastfm_last_played_track':
-            if(isset($_GET['username'])) {
-                echo LastFM::get_last_played_track($_GET['username']);
-            }
-            break;
-        case 'lastfm_top_artists':
-            if(isset($_GET['username'])) {
-                echo LastFM::get_top_artists($_GET['username']);
-            }
-            break;
-        case 'lastfm_top_albums':
-            if(isset($_GET['username'])) {
-                echo LastFM::get_top_albums($_GET['username']);
-            }
-            break;
-        case 'lastfm_top_tracks':
-            if(isset($_GET['username'])) {
-                echo LastFM::get_top_tracks($_GET['username']);
-            }
-            break;
-        case 'lastfm_clear_cache':
-            if(isset($_GET['username']) && isset($_GET['uid'])) {
-                echo LastFM::clear_cache($_GET['username'],$_GET['uid']);
-            }
-            break;
+	
+		//Provide public methods for Last.fm data gets.
+		case 'lastfm_compare':
+			if(isset($_GET['username'])) {
+				echo LastFM::compare_user_with($_GET['username']);
+			}
+			break;
+		case 'lastfm_last_played_track':
+			if(isset($_GET['username'])) {
+				echo LastFM::get_last_played_track($_GET['username']);
+			}
+			break;
+		case 'lastfm_top_artists':
+			if(isset($_GET['username'])) {
+				echo LastFM::get_top_artists($_GET['username']);
+			}
+			break;
+		case 'lastfm_top_albums':
+			if(isset($_GET['username'])) {
+				echo LastFM::get_top_albums($_GET['username']);
+			}
+			break;
+		case 'lastfm_top_tracks':
+			if(isset($_GET['username'])) {
+				echo LastFM::get_top_tracks($_GET['username']);
+			}
+			break;
+		case 'lastfm_clear_cache':
+			if(isset($_GET['username']) && isset($_GET['uid'])) {
+				echo LastFM::clear_cache($_GET['username'],$_GET['uid']);
+			}
+			break;
 	default:
 		if (isset($_REQUEST['id'])) {
 			include(SERVER_ROOT.'/sections/user/user.php');

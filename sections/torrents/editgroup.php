@@ -55,19 +55,19 @@ View::show_header('Edit torrent group');
 				<input type="text" name="image" size="92" value="<?=$Image?>" /><br />
 				<h3>Description</h3>
 				<textarea name="body" cols="91" rows="20"><?=$Body?></textarea><br />
-<? if($CategoryID == 1) { ?>
+<?	if($CategoryID == 1) { ?>
 				<select id="releasetype" name="releasetype">
-<?	foreach ($ReleaseTypes as $Key => $Val) { ?>
+<?		foreach ($ReleaseTypes as $Key => $Val) { ?>
 					<option value='<?=$Key?>' <?=($Key == $ReleaseType ? " selected='selected'" : '')?>>
 						<?=$Val?>
 					</option>
-<?	} ?>
+<?		} ?>
 				</select>
-<?	if (check_perms('torrents_edit_vanityhouse')) { ?>
+<?		if (check_perms('torrents_edit_vanityhouse')) { ?>
 				<br />
-				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1"  <?=($VanityHouse ? 'checked="checked"' : '')?> /></h3>
-<? 	}
-   } ?>
+				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1" <?=($VanityHouse ? 'checked="checked" ' : '')?>/></h3>
+<?		}
+	} ?>
 				<h3>Edit summary</h3>
 				<input type="text" name="summary" size="92" /><br />
 				<div style="text-align: center;">

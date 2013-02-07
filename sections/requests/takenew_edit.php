@@ -165,7 +165,7 @@ if($CategoryName == "Music") {
 		}
 
 		if (($NeedCue || $NeedLog)) {
-			if (!empty($_POST['all_media']) || $MediaArray[0] != 0) {
+			if (!(empty($_POST['all_media']) && $MediaArray[0] == 0)) {
 				$Err = "Only CD is allowed as media for FLAC Log/Cue Requests.";
 			}
 		}

@@ -3,7 +3,7 @@
 	$GroupVotes = Votes::get_group_votes($GroupID);
 
 	$TotalVotes = $GroupVotes['Total'];
-	$UpVotes    = $GroupVotes['Ups'];
+	$UpVotes	= $GroupVotes['Ups'];
 
 	$Voted = isset($UserVotes[$GroupID])?$UserVotes[$GroupID]['Type']:false;
 ?>

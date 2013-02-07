@@ -58,8 +58,8 @@ function link_users($UserID, $TargetID) {
 	}
 
 	$AdminComment = sqltime()." - Linked accounts updated: [user]".$UserInfo['Username']."[/user] and [user]".$TargetInfo['Username']."[/user] linked by ".$LoggedUser['Username'];
-	$DB->query("UPDATE users_info  AS i
-				JOIN   users_dupes AS d ON d.UserID = i.UserID
+	$DB->query("UPDATE users_info AS i
+				JOIN users_dupes AS d ON d.UserID = i.UserID
 				SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
 				WHERE d.GroupID = $GroupID");
 }
@@ -80,9 +80,9 @@ function unlink_user($UserID) {
 		return;
 	}
 	$AdminComment = sqltime()." - Linked accounts updated: [user]".$UserInfo['Username']."[/user] unlinked by ".$LoggedUser['Username'];
-	$DB->query("UPDATE users_info  AS i
-				JOIN   users_dupes AS d1 ON d1.UserID = i.UserID
-				JOIN   users_dupes AS d2 ON d2.GroupID = d1.GroupID
+	$DB->query("UPDATE users_info AS i
+				JOIN users_dupes AS d1 ON d1.UserID = i.UserID
+				JOIN users_dupes AS d2 ON d2.GroupID = d1.GroupID
 				SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
 				WHERE d2.UserID = $UserID");
 	$DB->query("DELETE FROM users_dupes WHERE UserID='$UserID'");
@@ -126,8 +126,8 @@ function dupe_comments($GroupID, $Comments) {
 			$DB->query("UPDATE dupe_groups SET Comments = CONCAT('".db_string($Comments)."\n\n',Comments) WHERE ID = '$GroupID'");
 		}
 
-		$DB->query("UPDATE users_info  AS i
-					JOIN   users_dupes AS d ON d.UserID = i.UserID
+		$DB->query("UPDATE users_info AS i
+					JOIN users_dupes AS d ON d.UserID = i.UserID
 					SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
 					WHERE d.GroupID = $GroupID");
 	}

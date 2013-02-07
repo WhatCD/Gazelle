@@ -1,8 +1,8 @@
 <?
 //******************************************************************************//
 //--------------- Take upload --------------------------------------------------//
-// This pages handles the backend of the torrent upload function. It checks	 //
-// the data, and if it all validates, it builds the torrent file, then writes   //
+// This pages handles the backend of the torrent upload function. It checks		//
+// the data, and if it all validates, it builds the torrent file, then writes	//
 // the data to the database and the torrent to the disk.						//
 //******************************************************************************//
 
@@ -29,7 +29,7 @@ define('QUERY_EXCEPTION',true); // Shut up debugging
 
 //******************************************************************************//
 //--------------- Set $Properties array ----------------------------------------//
-// This is used if the form doesn't validate, and when the time comes to enter  //
+// This is used if the form doesn't validate, and when the time comes to enter	//
 // it into the database.														//
 
 $Properties=array();
@@ -760,12 +760,12 @@ if(!$IsNewGroup) {
 
 	foreach($GroupInfo[1] as $TorrentInfo) {
 		if (($TorrentInfo['Media'] == $ThisMedia)
-		    && ($TorrentInfo['Remastered'] == $ThisRemastered)
-		    && ($TorrentInfo['RemasterYear'] == (int)$ThisRemasterYear)
-		    && ($TorrentInfo['RemasterTitle'] == $ThisRemasterTitle)
-		    && ($TorrentInfo['RemasterRecordLabel'] == $ThisRemasterRecordLabel)
-		    && ($TorrentInfo['RemasterCatalogueNumber'] == $ThisRemasterCatalogueNumber)
-		    && ($TorrentInfo['ID'] != $TorrentID)) {
+			&& ($TorrentInfo['Remastered'] == $ThisRemastered)
+			&& ($TorrentInfo['RemasterYear'] == (int)$ThisRemasterYear)
+			&& ($TorrentInfo['RemasterTitle'] == $ThisRemasterTitle)
+			&& ($TorrentInfo['RemasterRecordLabel'] == $ThisRemasterRecordLabel)
+			&& ($TorrentInfo['RemasterCatalogueNumber'] == $ThisRemasterCatalogueNumber)
+			&& ($TorrentInfo['ID'] != $TorrentID)) {
 			$UsedFormatBitrates[] = array('format' => $TorrentInfo['Format'], 'bitrate' => $TorrentInfo['Encoding']);
 		}
 	}
@@ -843,21 +843,21 @@ if($Properties['ReleaseType']) {
 
 
 if($Properties['Format']) {
-       $SQL.=" AND (Formats LIKE '%|".db_string(trim($Properties['Format']))."|%' OR Formats='') ";
+	$SQL.=" AND (Formats LIKE '%|".db_string(trim($Properties['Format']))."|%' OR Formats='') ";
 } else {
-       $SQL.=" AND (Formats='') ";
+	$SQL.=" AND (Formats='') ";
 }
 
 if($_POST['bitrate']) {
-       $SQL.=" AND (Encodings LIKE '%|".db_string(trim($_POST['bitrate']))."|%' OR Encodings='') ";
+	$SQL.=" AND (Encodings LIKE '%|".db_string(trim($_POST['bitrate']))."|%' OR Encodings='') ";
 } else {
-       $SQL.=" AND (Encodings='') ";
+	$SQL.=" AND (Encodings='') ";
 }
 
 if($Properties['Media']) {
-        $SQL.=" AND (Media LIKE '%|".db_string(trim($Properties['Media']))."|%' OR Media='') ";
+	$SQL.=" AND (Media LIKE '%|".db_string(trim($Properties['Media']))."|%' OR Media='') ";
 } else {
-        $SQL.=" AND (Media='') ";
+	$SQL.=" AND (Media='') ";
 }
 
 // Either they aren't using NewGroupsOnly

@@ -51,7 +51,7 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 	if(!preg_match("/^".IMAGE_REGEX."$/i", $Image)) {
 		$Image = '';
 	}
-    check_imagehost($Image);
+	check_imagehost($Image);
 	$Summary = db_string($_POST['summary']);
 }
 

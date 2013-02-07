@@ -13,20 +13,20 @@ $ShowAll = !empty($_GET['showall']);
 
 if (!$ShowAll) {
 	$sql = "SELECT c.ID,
-               c.Name,
-			   c.NumTorrents,
-			   s.LastVisit
+				c.Name,
+				c.NumTorrents,
+				s.LastVisit
 		FROM collages AS c
 		JOIN users_collage_subs AS s ON s.CollageID = c.ID
 		JOIN collages_torrents AS ct ON ct.CollageID = c.ID
 		WHERE s.UserID = ".$LoggedUser['ID']." AND c.Deleted='0'
-		  AND ct.AddedOn > s.LastVisit
+			AND ct.AddedOn > s.LastVisit
 		GROUP BY c.ID";
 } else {
 	$sql = "SELECT c.ID,
-               c.Name,
-			   c.NumTorrents,
-			   s.LastVisit
+				c.Name,
+				c.NumTorrents,
+				s.LastVisit
 		FROM collages AS c
 		JOIN users_collage_subs AS s ON s.CollageID = c.ID
 		LEFT JOIN collages_torrents AS ct ON ct.CollageID = c.ID
@@ -79,10 +79,10 @@ if(!$NumResults) {
 		$RS = $DB->query("SELECT ct.GroupID,
 								tg.WikiImage,
 								tg.CategoryID
-		            FROM collages_torrents AS ct
+					FROM collages_torrents AS ct
 					JOIN torrents_group AS tg ON ct.GroupID = tg.ID
 					WHERE ct.CollageID = $CollageID
-					  AND ct.AddedOn > '$LastVisit'
+						AND ct.AddedOn > '$LastVisit'
 					ORDER BY ct.AddedOn");
 		$NewTorrentCount = $DB->record_count();
 		//$NewTorrents = $DB->to_array();

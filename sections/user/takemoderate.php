@@ -36,7 +36,7 @@ $Pass = $_POST['ChangePassword'];
 $Warned = (isset($_POST['Warned']))? 1 : 0;
 $Logs095 = (int)$_POST['095logs']; 
 if(isset($_POST['Uploaded']) && isset($_POST['Downloaded'])) {
-	$Uploaded = ($_POST['Uploaded']  == "" ? 0 : $_POST['Uploaded']);
+	$Uploaded = ($_POST['Uploaded'] == "" ? 0 : $_POST['Uploaded']);
 	if($Arithmetic = strpbrk($Uploaded, '+-')) {
 		$Uploaded += max(-$Uploaded, Format::get_bytes($Arithmetic));
 	}
@@ -140,7 +140,7 @@ if ($DB->record_count() == 0) { // If user doesn't exist
 
 $Cur = $DB->next_record(MYSQLI_ASSOC, false);
 if ($_POST['comment_hash'] != $Cur['CommentHash']) {
-	error("Somebody else has moderated this user since you loaded it.  Please go back and refresh the page.");
+	error("Somebody else has moderated this user since you loaded it. Please go back and refresh the page.");
 }
 
 //NOW that we know the class of the current user, we can see if one staff member is trying to hax0r us.
@@ -292,7 +292,7 @@ if ($Title!=db_string($Cur['Title']) && check_perms('users_edit_titles')) {
 	}
 }
 
-if ($Donor!=$Cur['Donor']  && check_perms('users_give_donor')) {
+if ($Donor!=$Cur['Donor'] && check_perms('users_give_donor')) {
 	$UpdateSet[]="Donor='$Donor'";
 	$EditSummary[]="donor status changed";
 	$LightUpdates['Donor']=$Donor;
@@ -332,7 +332,7 @@ if (count($AddedClasses) > 0) {
 	$DeleteKeys = true;
 }
 
-if ($Visible!=$Cur['Visible']  && check_perms('users_make_invisible')) {
+if ($Visible!=$Cur['Visible'] && check_perms('users_make_invisible')) {
 	$UpdateSet[]="Visible='$Visible'";
 	$EditSummary[]="visibility changed";
 	$LightUpdates['Visible']=$Visible;
@@ -393,7 +393,7 @@ if ($Warned == 1 && $Cur['Warned']=='0000-00-00 00:00:00' && check_perms('users_
 	Misc::send_pm($UserID,0,db_string('Your warning has been reduced'),db_string("Your warning has been reduced by $ReduceWarning week(s) by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason"));
 	
 	$UpdateSet[]="Warned=Warned - INTERVAL $ReduceWarning WEEK";
-	$DB->query("SELECT Warned  - INTERVAL $ReduceWarning WEEK FROM users_info WHERE UserID='$UserID'");
+	$DB->query("SELECT Warned - INTERVAL $ReduceWarning WEEK FROM users_info WHERE UserID='$UserID'");
 	list($WarnedUntil) = $DB->next_record();
 	$Msg = "warning reduced by $ReduceWarning week(s) to $WarnedUntil";
 	if ($WarnReason) { $Msg.=" for $WarnReason"; }

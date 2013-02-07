@@ -8,10 +8,10 @@ $UserID = (int) $_POST['userid'];
 $Key = (int) $_POST['key'];
 $UserInfo = Users::user_info($UserID);
 $DB -> query("SELECT
-    tc.Body,
-    tc.AddedTime
-    FROM torrents_comments AS tc
-    WHERE tc.ID='" . db_string($PostID) . "'");
+	tc.Body,
+	tc.AddedTime
+	FROM torrents_comments AS tc
+	WHERE tc.ID='" . db_string($PostID) . "'");
 list($PostBody) = $DB -> next_record();
 
 View::show_header('Warn User');

@@ -45,15 +45,15 @@ View::show_header('Freeleech token history');
 list($Page,$Limit) = Format::page_limit(25);
 
 $DB->query("SELECT SQL_CALC_FOUND_ROWS
-			   f.TorrentID,
-			   t.GroupID,
-			   f.Time,
-			   f.Expired,			
-			   f.Downloaded,
-			   f.Uses,
-			   g.Name,
-			   t.Format,
-			   t.Encoding
+				f.TorrentID,
+				t.GroupID,
+				f.Time,
+				f.Expired,
+				f.Downloaded,
+				f.Uses,
+				g.Name,
+				t.Format,
+				t.Encoding
 			FROM users_freeleeches AS f
 			JOIN torrents AS t ON t.ID = f.TorrentID
 			JOIN torrents_group AS g ON g.ID = t.GroupID
