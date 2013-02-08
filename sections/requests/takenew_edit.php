@@ -340,6 +340,7 @@ if($CategoryName == "Music") {
 					 	'".db_string($CatalogueNumber)."', ".$ReleaseType.", '".$BitrateList."','".$FormatList."', '".$MediaList."', '".$LogCue."', '1', '$GroupID', '".db_string($OCLC)."')");
 		
 		$RequestID = $DB->inserted_id();
+		
 	} else {
 		$DB->query("UPDATE requests 
 					SET CategoryID = ".$CategoryID.",
@@ -469,6 +470,7 @@ if($CategoryName == "Music") {
 							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
 			
 			$RequestID = $DB->inserted_id();
+			
 		} else {
 			$DB->query("UPDATE requests 
 				SET CategoryID = ".$CategoryID.",
@@ -487,6 +489,7 @@ if($CategoryName == "Music") {
 							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."',  ".$CategoryID.", '".db_string($Title)."', '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
 				
 			$RequestID = $DB->inserted_id();
+			
 		} else {
 				$DB->query("UPDATE requests 
 				SET CategoryID = ".$CategoryID.",

@@ -33,6 +33,7 @@ $DB->query("SELECT
 	WHERE c.ID='$ConvID' AND UserID='$UserID'");
 list($Subject, $Sticky, $UnRead, $ForwardedID) = $DB->next_record();
 
+
 $DB->query("SELECT um.ID, Username
 	FROM pm_messages AS pm
 	JOIN users_main AS um ON um.ID=pm.SenderID

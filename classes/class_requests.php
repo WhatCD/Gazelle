@@ -116,5 +116,6 @@ class Requests {
 			return $Matches;
 		}
 	}
+
 }
 ?>

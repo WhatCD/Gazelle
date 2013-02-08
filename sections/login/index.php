@@ -197,7 +197,7 @@ else {
 						}
 					} else {
 						//No ban
-						$DB->query("INSERT INTO ip_bans
+						$DB->query("INSERT IGNORE INTO ip_bans
 							(FromIP, ToIP, Reason) VALUES
 							('$IP','$IP', 'Automated ban per >60 failed login attempts')");
 						$A = substr($_SERVER['REMOTE_ADDR'], 0, strcspn($_SERVER['REMOTE_ADDR'], '.'));

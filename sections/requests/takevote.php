@@ -61,7 +61,7 @@ if($LoggedUser['BytesUploaded'] >= $Amount && $Filled == 0){
 	// Subtract amount from user
 	$DB->query("UPDATE users_main SET Uploaded = (Uploaded - ".$Amount.") WHERE ID = ".$LoggedUser['ID']);
 	$Cache->delete_value('user_stats_'.$LoggedUser['ID']);
-
+	
 	Requests::update_sphinx_requests($RequestID);
 	echo 'success';
 } elseif($LoggedUser['BytesUploaded'] < $Amount) {
