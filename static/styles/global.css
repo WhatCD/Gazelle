@@ -1,14 +1,14 @@
 .box h3 {
-    font-size: 140%;
+	font-size: 140%;
 }
 .box h4 {
-    font-size: 130%;
+	font-size: 130%;
 }
 .box h5 {
-    font-size: 120%;
+	font-size: 120%;
 }
 .box h6 {
-    font-size: 110%;
+	font-size: 110%;
 }
 
 pre br {
@@ -261,8 +261,7 @@ span.secondary_class {
 	cursor: -webkit-grabbing;
 }
 
-#manage_collage_table .ui-sortable-helper td,#manage_collage_table .ui-sortable-placeholder
-	{
+#manage_collage_table .ui-sortable-helper td, #manage_collage_table .ui-sortable-placeholder {
 	border: 0;
 }
 
@@ -338,39 +337,49 @@ tr.torrent .bookmark>a:after {
 	width: 50%;
 	
 }
-.navigation_list,
-.navigation_list ol {
+
+.navigation_list, .navigation_list ol {
 	list-style-position: inside;
 	margin-top: 10px;
 	margin-bottom: 20px;
 }
+
 .navigation_list > li {
-    list-style-type: upper-roman !important;
+	list-style-type: upper-roman !important;
 }
+
 .navigation_list li li {
-    list-style-type: upper-alpha;
+	list-style-type: upper-alpha;
 }
+
 .navigation_list li li li {
-    list-style-type: decimal;
+	list-style-type: decimal;
 }
+
 .navigation_list li li li li {
-    list-style-type: lower-alpha;
+	list-style-type: lower-alpha;
 }
 
-.voted_type { font-weight: bold; }
+.voted_type {
+	font-weight: bold;
+}
 
-.torrent_table .group .votes_info_td strong { font-size: inherit; }
+.torrent_table .group .votes_info_td strong {
+	font-size: inherit;
+}
 
-.text_preview { min-height: 100px }
+.text_preview {
+	min-height: 100px
+}
 
 #lastfm_compatibilitybar_container {
-    width: 100%;
-    height: 5px;
-    background: #969696
+	width: 100%;
+	height: 5px;
+	background: #969696;
 }
 
 #lastfm_compatibilitybar {
-    height: 100%;
+	height: 100%;
 }
 
 .votespan.brackets:before {
@@ -379,4 +388,16 @@ tr.torrent .bookmark>a:after {
 
 .votespan.brackets:after {
 	content: " )";
+}
+
+.brackets:before {
+	content: "[";
+}
+
+.brackets:after {
+	content: "]";
+}
+
+#userinfo .brackets:before, #userinfo .brackets:after {
+	content: "";
 }

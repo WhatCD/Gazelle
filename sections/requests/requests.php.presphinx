@@ -249,11 +249,11 @@ show_header($Title, 'requests');
 		<h2><?=$Title?></h2>
 		<div class="linkbox">
 <?	if(check_perms('site_submit_requests')){ ?> 
-			<a href="requests.php?action=new">[New request]</a>
-			<a href="requests.php?type=created">[My requests]</a>
+			<a href="requests.php?action=new" class="brackets">New request</a>
+			<a href="requests.php?type=created" class="brackets">My requests</a>
 <?	} 
 	if(check_perms('site_vote')){?> 
-			<a href="requests.php?type=voted">[Requests I've voted on]</a>
+			<a href="requests.php?type=voted" class="brackets">Requests I've voted on</a>
 <?	} ?> 
 		</div>
 	</div>
@@ -461,7 +461,7 @@ foreach($Categories as $CatKey => $CatName) {
 <?   		if($IsFilled){ ?>
 				<a href="torrents.php?id=<?=$TorrentID?>"><strong>Yes - <?=$TimeFilled?></strong></a>
 <?   		} else { ?>
-				<strong>No - <a href="upload.php?requestid=<?=$RequestID?>">[Upload]</a></strong>
+				<strong>No - <a href="upload.php?requestid=<?=$RequestID?>" class="brackets">Upload</a></strong>
 <?   		} ?>
 			</td>
 			<td>

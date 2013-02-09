@@ -56,7 +56,7 @@ if($DB->record_count()) {
 			<td>User</td>
 			<td>Ratio</td>
 			<td>Email</td>
-			<td>IP</td>
+			<td>IP address</td>
 			<td>Country</td>
 			<td>Host</td>
 			<td>Registered</td>
@@ -70,15 +70,15 @@ if($DB->record_count()) {
 			<td><?=Format::get_ratio_html($Uploaded,$Downloaded)?><br /><?=Format::get_ratio_html($InviterUploaded,$InviterDownloaded)?></td>
 			<td>
 				<span style="float:left;"><?=display_str($Email)?></span>
-				<span style="float:right;">[<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" title="History">H</a>|<a href="/user.php?action=search&email_history=on&email=<?=display_str($Email)?>" title="Search">S</a>]</span><br />
+				<span style="float:right;"><a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a></span><br />
 				<span style="float:left;"><?=display_str($InviterEmail)?></span>
-				<span style="float:right;">[<a href="userhistory.php?action=email&amp;userid=<?=$InviterID?>" title="History">H</a>|<a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($InviterEmail)?>" title="Search">S</a>]</span><br />
+				<span style="float:right;"><a href="userhistory.php?action=email&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($InviterEmail)?>" title="Search" class="brackets">S</a></span><br />
 			</td>
 			<td>
 				<span style="float:left;"><?=display_str($IP)?></span>
-				<span style="float:right;"><?=display_str($Uses)?> [<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History">H</a>|<a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search">S</a>]</span><br />
+				<span style="float:right;"><?=display_str($Uses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets">S</a></span><br />
 				<span style="float:left;"><?=display_str($InviterIP)?></span>
-				<span style="float:right;"><?=display_str($InviterUses)?> [<a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History">H</a>|<a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search">S</a>]</span><br />
+				<span style="float:right;"><?=display_str($InviterUses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search" class="brackets">S</a></span><br />
 			</td>
 			<td>
 				<?=$IPCC?> <br />

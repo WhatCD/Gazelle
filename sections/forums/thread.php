@@ -101,7 +101,6 @@ if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueI
 	}
 }
 $Thread = Format::catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
-
 if($_GET['updatelastread'] != '0') {
 	$LastPost = end($Thread);
 	$LastPost = $LastPost['ID'];
@@ -314,7 +313,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				<li>
 					<a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>"><?=display_str($Answer == '' ? "Blank" : $Answer)?></a>
 					 - <?=$StaffVotes[$i]?>&nbsp;(<?=number_format(((float) $Votes[$i]/$TotalVotes)*100, 2)?>%)
-					 [<a href="forums.php?action=delete_poll_option&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>">X</a>]
+					 <a href="forums.php?action=delete_poll_option&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>" class="brackets">X</a>
 </li>
 <?			} ?>
 				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0">Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float) $Votes[0]/$TotalVotes)*100, 2)?>%)</li>
@@ -330,7 +329,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?
 			}
 ?>
-			[<a href="#" onclick="AddPollOption(<?=$ThreadID?>); return false;">+</a>]
+			<a href="#" onclick="AddPollOption(<?=$ThreadID?>); return false;" class="brackets">+</a>
 <?
 		}
 
@@ -356,7 +355,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 						</li>
 					</ul>
 <?		if($ForumID == STAFF_FORUM) { ?>
-					[<a href="#" onclick="AddPollOption(<?=$ThreadID?>); return false;">+</a>]
+					<a href="#" onclick="AddPollOption(<?=$ThreadID?>); return false;" class="brackets">+</a>
 					<br />
 					<br />
 <?		} ?>
@@ -427,28 +426,28 @@ foreach ($Thread as $Key => $Post) {
 				<?=Users::format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?>
 <?	if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) { ?>
-				- [<a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);">Quote</a>]
+				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);" class="brackets">Quote</a>
 <?	}
 	if ((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write') && $AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums')) { ?>
-				- [<a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">Edit</a>]
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
 <?	}
 	if(check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?>
-				- [<a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">Delete</a>]
+				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
 <?	}
 	if($PostID == $ThreadInfo['StickyPostID']) { ?>
-				<strong><span class="sticky_post_label">[Sticky]</span></strong>
+				<strong><span class="sticky_post_label" class="brackets">Sticky</span></strong>
 <?		if(check_perms('site_moderate_forums')) { ?>
-				- [<a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" >X</a>]
+				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">X</a>
 <?		}
 	} else {
 		if(check_perms('site_moderate_forums')) { ?>
-				- [<a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" >&#x21d5;</a>]
+				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">&#x21d5;</a>
 <? 		}
 	}
 ?>
 			</div>
 			<div id="bar<?=$PostID?>" style="float:right;">
-				[<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>">Report</a>]
+				<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>" class="brackets">Report</a>
 <?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);
 		if($LoggedUser['Class'] >= $AuthorInfo['Class']) {
@@ -459,7 +458,7 @@ foreach ($Thread as $Key => $Post) {
 					<input type="hidden" name="userid" value="<?=$AuthorID?>" />
 					<input type="hidden" name="key" value="<?=$Key?>" />
 				</form>
-				- [<a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">Warn</a>]
+				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
 <?		}
 	}
 ?>

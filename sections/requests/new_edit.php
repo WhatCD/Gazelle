@@ -155,7 +155,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 				<tr id="artist_tr">
 					<td class="label">Artist(s)</td>		
 					<td id="artistfields">
-						<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding 'Various Artists' as an artist, read <a href='wiki.php?action=article&amp;id=369'>this</a> for more information on why.</p>
+						<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding "Various Artists" as an artist; read <a href="wiki.php?action=article&amp;id=369">this</a> for more information.</p>
 <?
 
 		if(!empty($ArtistForm)) {
@@ -173,7 +173,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 							<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 							<option value="3"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
 						</select>
-						<?if($First) { ?>[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>] <? } $First = false;?>
+						<?if($First) { ?><a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">-</a> <? } $First = false;?>
 						<br />
 <?				}
 			}
@@ -187,7 +187,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 							<option value="6">DJ / Compiler</option>
 							<option value="3">Remixer</option>
 						</select>
-						[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]
+						<a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">-</a>
 <?
 		}
 ?>	

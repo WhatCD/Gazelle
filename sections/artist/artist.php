@@ -230,12 +230,12 @@ if (!empty($UsedReleases)) { ?>
 			$ToggleStr = '';
 		}
 ?>
-		[<a href="#torrents_<?=str_replace(" ", "_", strtolower($ReleaseTypes[$ReleaseID]))?>"<?=$ToggleStr?>><?=$DisplayName?></a>]
+		<a href="#torrents_<?=str_replace(" ", "_", strtolower($ReleaseTypes[$ReleaseID]))?>" class="brackets"<?=$ToggleStr?>><?=$DisplayName?></a>
 <?
 	}
 	if ($NumRequests > 0) {
 ?>
-	[<a href="#requests">Requests</a>]
+	<a href="#requests" class="brackets">Requests</a>
 <? } ?>
 	</div>
 <? }
@@ -355,7 +355,7 @@ foreach ($Importances as $Group) {
 
 	$DisplayName ='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if(check_perms('users_mod') || check_perms('torrents_fix_ghosts')) {
-		$DisplayName .= ' [<a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'" title="Fix ghost DB entry">Fix</a>]';
+		$DisplayName .= ' <a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'" class="brackets" title="Fix ghost DB entry">Fix</a>';
 	}
 
 
@@ -543,9 +543,9 @@ if (check_perms('site_edit_wiki')) {
 
 if ($RevisionID && check_perms('site_edit_wiki')) {
 ?>
-			[<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">
+			<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">
 				Revert to this revision
-			</a>]
+			</a>
 <? } ?>
 		</div>
 	</div>
@@ -595,7 +595,7 @@ if(check_perms('zip_downloader')){
 						<li id="list<?=$ListItem?>">
 							<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 							<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-							<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" title="Remove format from the Collector">[X]</a></span>
+							<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" class="brackets" title="Remove format from the Collector">X</a></span>
 							<br style="clear:all;" />
 						</li>
 <? } ?>
@@ -705,10 +705,10 @@ if(empty($SimilarArray)) {
 				<li>
 					<span title="<?=$Score?>"><a href="artist.php?id=<?=$Artist2ID?>" style="float:left; display:block;"><?=$Artist2Name?></a></span>
 					<div style="float:right; display:block; letter-spacing: -1px;">
-						[<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar.">-</a>]
-						[<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar.">+</a>]
+						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar." class="brackets">-</a>
+						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar." class="brackets">+</a>
 <?		if(check_perms('site_delete_tag')) { ?>
-						[<span class="remove remove_artist"><a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove this similar artist">X</a>]</span>
+						<span class="remove remove_artist"><a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove this similar artist" class="brackets">X</a></span>
 <?		} ?>
 					</div>
 					<br style="clear:both" />
@@ -793,7 +793,7 @@ if($NumRequests > 0) {
 				<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
 <?  	if(check_perms('site_vote')){ ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)"><strong>(+)</strong></a>
+				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 <?		} ?>
 			</td>
 			<td>
@@ -838,8 +838,8 @@ if($NumSimilar>0) {
 		<div id="similar_artist_map" class="box">
 			<div id="flipper_head" class="head">
 				<a href="#">&uarr;</a>&nbsp;
-				<strong id="flipper_title">Similar Artist Map</strong>
-				[<a id="flip_to" href="#null" onclick="flipView();">Switch to cloud</a>]
+				<strong id="flipper_title">Similar artist map</strong>
+				<a id="flip_to" class="brackets" href="#null" onclick="flipView();">Switch to cloud</a>
 			</div>
 			<div id="flip_view_1" style="display:block;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;position:relative;background-image:url(static/similar/<?=$ArtistID?>.png?t=<?=time()?>)">
 <?
@@ -918,7 +918,7 @@ function require(file, callback) {
 			<div id="info" class="head">
 				<a href="#">&uarr;</a>&nbsp;
 				<strong>Artist info</strong>
-				[<a href="#" onclick="$('#body').toggle(); return false;">Toggle</a>]
+				<a href="#" class="brackets" onclick="$('#body').toggle(); return false;">Toggle</a>
 			</div>
 			<div id="body" class="body"><?=$Text->full_format($Body)?></div>
 		</div>
@@ -999,16 +999,16 @@ foreach($Thread as $Key => $Post) {
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<div style="float:left;"><a class="post_id" href='artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
-				- [<a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">Quote</a>]
+				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
 <?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
-				- [<a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">Edit</a>]
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
 <?	}
 	if (check_perms('site_moderate_forums')) { ?>
-				- [<a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">Delete</a>]
+				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
 <?	} ?>
 			</div>
 			<div id="bar<?=$PostID?>" style="float:right;">
-				[<a href="reports.php?action=report&amp;type=artist_comment&amp;id=<?=$PostID?>">Report</a>]
+				<a href="reports.php?action=report&amp;type=artist_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
 <?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);
 		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
@@ -1020,7 +1020,7 @@ foreach($Thread as $Key => $Post) {
 					<input type="hidden" name="userid" value="<?=$AuthorID?>" />
 					<input type="hidden" name="key" value="<?=$Key?>" />
 				</form>
-				- [<a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">Warn</a>]
+				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
 <?		}
 	}
 ?>

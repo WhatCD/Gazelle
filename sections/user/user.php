@@ -159,7 +159,7 @@ View::show_header($Username,'user,bbcode,requests,jquery,lastfm');
 	<div class="linkbox">
 <? if (!$OwnProfile) { ?>
 		<a href="inbox.php?action=compose&amp;to=<?=$UserID?>" class="brackets">Send Message</a>
-		
+
 <? 	if(check_perms("users_mod")) {
 	$DB->query("SELECT PushService FROM users_push_notifications WHERE UserID = '$UserID'");
 	if($DB->record_count() > 0) { ?>
@@ -240,7 +240,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 <? } ?>
 <? if ($OwnProfile || ($Override=check_paranoia_here(false)) || check_perms('users_mod')) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
-<? } 
+<? }
 	if (($OwnProfile || check_perms('users_mod')) && $Warned!='0000-00-00 00:00:00') { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?>>Warning expires: <?= date('Y-m-d h:i', strtotime($Warned)) ?></li>
 <? } ?>
@@ -351,26 +351,26 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 		<div class="head colhead_dark">History</div>
 		<ul class="stats nobullet">
 <?	if (check_perms('users_view_email',$Class)) { ?>
-<li>Emails: <?=number_format($EmailChanges)?> [<a href="userhistory.php?action=email2&amp;userid=<?=$UserID?>">View</a>]&nbsp;[<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>">Legacy view</a>]</li>
+			<li>Emails: <?=number_format($EmailChanges)?> <a href="userhistory.php?action=email2&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" class="brackets">Legacy view</a></li>
 <?
 	}
 	if (check_perms('users_view_ips',$Class)) {
 ?>
-	<li>IPs: <?=number_format($IPChanges)?> [<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>">View</a>]&nbsp;[<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1">View Users</a>]</li>
+			<li>IPs: <?=number_format($IPChanges)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View Users</a></li>
 <?		if (check_perms('users_view_ips',$Class) && check_perms('users_mod',$Class)) { ?>
-	<li>Tracker IPs: <?=number_format($TrackerIPs)?> [<a href="userhistory.php?action=tracker_ips&amp;userid=<?=$UserID?>">View</a>]</li>
+			<li>Tracker IPs: <?=number_format($TrackerIPs)?> <a href="userhistory.php?action=tracker_ips&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?		} ?>
 <?
 	}
 	if (check_perms('users_view_keys',$Class)) {
 ?>
-			<li>Passkeys: <?=number_format($PasskeyChanges)?> [<a href="userhistory.php?action=passkeys&amp;userid=<?=$UserID?>">View</a>]</li>
+			<li>Passkeys: <?=number_format($PasskeyChanges)?> <a href="userhistory.php?action=passkeys&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?
 	}
 	if (check_perms('users_mod', $Class)) {
 ?>
-			<li>Passwords: <?=number_format($PasswordChanges)?> [<a href="userhistory.php?action=passwords&amp;userid=<?=$UserID?>">View</a>]</li>
-			<li>Stats: N/A [<a href="userhistory.php?action=stats&amp;userid=<?=$UserID?>">View</a>]</li>
+			<li>Passwords: <?=number_format($PasswordChanges)?> <a href="userhistory.php?action=passwords&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+			<li>Stats: N/A <a href="userhistory.php?action=stats&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?
 			
 	}
@@ -414,7 +414,7 @@ if($ParanoiaLevel == 0) {
 <?	if (check_perms('users_view_email',$Class) || $OwnProfile) { ?>
 				<li>Email: <a href="mailto:<?=display_str($Email)?>"><?=display_str($Email)?></a>
 <?		if (check_perms('users_view_email',$Class)) { ?>
-					[<a href="user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search">S</a>]
+					<a href="user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a>
 <?		} ?>
 				</li>
 <?	}
@@ -428,7 +428,7 @@ if (check_perms('users_view_ips',$Class)) {
 
 if (check_perms('users_view_keys',$Class) || $OwnProfile) {
 ?>
-				<li>Passkey: [<a href="#" onclick="this.innerHTML='<?=display_str($torrent_pass)?>'; return false;">View</a>]</li>
+				<li>Passkey: <a href="#" onclick="this.innerHTML='<?=display_str($torrent_pass)?>'; return false;" class="brackets">View</a></li>
 <? }
 if (check_perms('users_view_invites')) {
 	if (!$InviterID) {
@@ -460,14 +460,8 @@ if ($Override=check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
 	?>
 		<li <?= $Override===2 || $SupportFor ? 'class="paranoia_override"' : ''?>>Clients: <?
 		$DB->query("SELECT DISTINCT useragent FROM xbt_files_users WHERE uid = ".$UserID);
-		while(list($Client) = $DB->next_record()) {
-			if (strlen($Clients) > 0) {
-				$Clients .= "; ".$Client;
-			} else {
-				$Clients = $Client;
-			}
-		}
-		echo $Clients;
+		$Clients = $DB->collect(0);
+		echo implode("; ", $Clients);
 		?></li>
 <?
 }
@@ -605,7 +599,7 @@ foreach ($Collages as $CollageInfo) {
 		<tr class="colhead">
 			<td colspan="5">
 				<span style="float:left;">
-					<?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>">see full</a>
+					<?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
 				</span>
 				<span style="float:right;">
 					<a href="#" onclick="$('#collage<?=$CollageID?> .images').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;"><?=$FirstCol?'(Hide)':'(Show)'?></a>
@@ -681,7 +675,7 @@ if (check_paranoia_here('requestsvoted_list')) {
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 					<tr class="colhead_dark">
 						<td style="width:48%;">
-							<strong>Request Name</strong>
+							<strong>Request name</strong>
 						</td>
 						<td>
 							<strong>Vote</strong>
@@ -781,8 +775,8 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 				<tr class="colhead">
 					<td>Subject</td>
 					<td>Date</td>
-					<td>Assigned To</td>
-					<td>Resolved By</td>
+					<td>Assigned to</td>
+					<td>Resolved by</td>
 				</tr>
 <?		foreach($StaffPMs as $StaffPM) {
 			list($ID, $Subject, $Status, $Level, $AssignedTo, $Date, $ResolverID) = $StaffPM;

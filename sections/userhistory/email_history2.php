@@ -168,7 +168,7 @@ if ($Old) {
 			<td>Current email</td>
 			<td>Start</td>
 			<td>End</td>
-			<td>Current IP [<a href="userhistory.php?action=ips&amp;userid=<?=$UserID ?>">H</a>]</td>
+			<td>Current IP <a href="userhistory.php?action=ips&amp;userid=<?=$UserID ?>" class="brackets">H</a></td>
 			<td>Set from IP</td>
 		</tr>
 		<tr class="rowa">
@@ -176,11 +176,11 @@ if ($Old) {
 			<td><?=time_diff($Current['StartTime'])?></td>
 			<td></td>
 			<td>
-				<?=display_str($Current['CurrentIP'])?> (<?=Tools::get_country_code_by_ajax($Current['CurrentIP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Current['CurrentIP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Current['CurrentIP'])?>" title="WIPA">WI</a>]<br />
+				<?=display_str($Current['CurrentIP'])?> (<?=Tools::get_country_code_by_ajax($Current['CurrentIP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Current['CurrentIP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Current['CurrentIP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Current['CurrentIP'])?>
 			</td>
 			<td>
-				<?=display_str($Current['IP'])?> (<?=Tools::get_country_code_by_ajax($Current['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Current['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Current['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=display_str($Current['IP'])?> (<?=Tools::get_country_code_by_ajax($Current['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Current['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Current['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Current['IP'])?>
 			</td>
 		</tr>
@@ -195,7 +195,7 @@ if ($CurrentMatches) {
 			<td><?=time_diff($Match['EndTime'])?></td>
 			<td></td>
 			<td>
-				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
 		</tr>			
@@ -232,7 +232,7 @@ if ($Old) {
 			<td><?=time_diff($Match['EndTime'])?></td>
 			<td></td>
 			<td>
-				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
 		</tr>	
@@ -251,7 +251,7 @@ if ($Old) {
 			<td><?=time_diff($Record['EndTime'])?></td>
 			<td><?=time_diff($Record['ElapsedTime'])?></td>
 			<td>
-				<?=display_str($Record['IP'])?> (<?=Tools::get_country_code_by_ajax($Record['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Record['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Record['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=display_str($Record['IP'])?> (<?=Tools::get_country_code_by_ajax($Record['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Record['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Record['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Record['IP'])?>
 			</td>
 		</tr>			
@@ -290,7 +290,7 @@ if ($OldMatches) {
 			<td><?=time_diff($Match['EndTime'])?></td>
 			<td></td>
 			<td>
-				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
 		</tr>	
@@ -308,7 +308,7 @@ if ($OldMatches) {
 			<td><?=time_diff($Invite['EndTime'])?></td>
 			<td><?=time_diff($Invite['AccountAge'])?></td>
 			<td>
-				<?=display_str($Invite['IP'])?> (<?=Tools::get_country_code_by_ajax($Invite['IP'])?>) [<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Invite['IP'])?>" title="Search">S</a>] [<a href="http://whatismyipaddress.com/ip/<?=display_str($Invite['IP'])?>" title="WIPA">WI</a>]<br />
+				<?=display_str($Invite['IP'])?> (<?=Tools::get_country_code_by_ajax($Invite['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Invite['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Invite['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Invite['IP'])?>
 			</td>
 		</tr>

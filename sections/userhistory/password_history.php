@@ -36,12 +36,12 @@ $DB->query("SELECT
 <table width="100%">
 	<tr class="colhead">
 		<td>Changed</td>
-		<td>IP [<a href="/userhistory.php?action=ips&amp;userid=<?=$UserID?>">H</a>]</td>
+		<td>IP <a href="/userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">H</a></td>
 	</tr>
 <? while(list($ChangeTime, $ChangerIP) = $DB->next_record()){ ?>
 	<tr class="rowa">
 		<td><?=time_diff($ChangeTime)?></td>
-		<td><?=display_str($ChangerIP)?> [<a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" title="Search">S</a>]<br /><?=Tools::get_host_by_ajax($ChangerIP)?></td>
+		<td><?=display_str($ChangerIP)?> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" class="brackets" title="Search">S</a><br /><?=Tools::get_host_by_ajax($ChangerIP)?></td>
 	</tr>
 <? } ?>
 </table>

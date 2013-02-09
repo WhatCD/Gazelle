@@ -341,20 +341,20 @@ ul.thin li {
 }
 
 #searchbars ul li ul {
-		display: block;
-        position: absolute;
-        top: 1em;
-		left: 0;
-        z-index: 1000;
-        width: 12em;
-        margin-top: 12px;
+	display: block;
+	position: absolute;
+	top: 1em;
+	left: 0;
+	z-index: 1000;
+	width: 12em;
+	margin-top: 12px;
 }
 
 #searchbars ul li ul li {
-        margin: 0
-        padding: 0;
-        display: block;
-        width: 100%;
+	margin: 0
+	padding: 0;
+	display: block;
+	width: 100%;
 	background: #303030;
 }
 
@@ -441,22 +441,12 @@ input.hidden {
 	margin: 0px auto;
 }
 
-#userinfo_username .brackets:before {
-	content: "[";
-}
-
-#userinfo_username .brackets:after {
-	content: "]";
-}
-
 #userinfo_major .brackets:before {
 	font-weight: bold;
-	content: "[";
 }
 
 #userinfo_major .brackets:after {
 	font-weight: bold;
-	content: "]";
 }
 
 div.linkbox {
@@ -898,11 +888,9 @@ tr.torrent .bookmark > a:before { color:#999; }
 tr.torrent .bookmark > a:after { color:#999; }
 
 .linkbox .brackets:before {
-	content: "[";
 	color: #999;
 }
 
 .linkbox .brackets:after {
-	content: "]";
 	color: #999;
 }

@@ -592,7 +592,7 @@ View::show_header('Browse Torrents','browse');
 				</td>
 			</tr>
 			<tr id="edition_expand">
-				<td colspan="4" class="center ft_edition_expand">[<a href="#" onclick="ToggleEditionRows();return false;">Click here to toggle searching for specific remaster information</a>]</td>
+				<td colspan="4" class="center ft_edition_expand"><a href="#" class="brackets" onclick="ToggleEditionRows();return false;">Click here to toggle searching for specific remaster information</a></td>
 			</tr>
 <?
 if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', true) == "" && 
@@ -794,7 +794,7 @@ if ($x%7!=0) { // Padding
 		<table class="layout cat_list" width="100%">
 			<tr>
 				<td class="label">
-					<a href="#" onclick="$('#taglist').toggle(); if (this.innerHTML=='(View Tags)'){this.innerHTML='(Hide Tags)';} else {this.innerHTML='(View Tags)';}; return false;"><?=(empty($LoggedUser['ShowTags'])) ? '(View Tags)' : '(Hide Tags)'?></a>
+					<a class="brackets" href="#" onclick="$('#taglist').toggle(); if (this.innerHTML=='View tags'){this.innerHTML='Hide tags';} else {this.innerHTML='View tags';}; return false;"><?=(empty($LoggedUser['ShowTags'])) ? 'View tags' : 'Hide tags'?></a>
 				</td>
 			</tr>
 		</table>
@@ -962,9 +962,9 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		<td colspan="2">
 			<?=$DisplayName?>
 <?	if (in_array($GroupID, $Bookmarks)) { ?>
-			<span class="remove_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">[Unbookmark]</a></span>
+			<span class="remove_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
 <?	} else { ?>
-			<span class="add_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">[Bookmark]</a></span>
+			<span class="add_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
 <?	} ?>
 			<br />
 			<div class="tags">

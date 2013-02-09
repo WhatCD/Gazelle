@@ -34,10 +34,10 @@ View::show_header($Title,'browse');
 	<div class="header">
 		<h2><?=$Title?></h2>
 		<div class="linkbox">
-			<a href="bookmarks.php?type=torrents">[Torrents]</a>
-			<a href="bookmarks.php?type=artists">[Artists]</a>
-			<a href="bookmarks.php?type=collages">[Collages]</a>
-			<a href="bookmarks.php?type=requests">[Requests]</a>
+			<a href="bookmarks.php?type=torrents" class="brackets">Torrents</a>
+			<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
+			<a href="bookmarks.php?type=collages" class="brackets">Collages</a>
+			<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
 		</div>
 	</div>
 	<div class="box pad" align="center">
@@ -72,16 +72,16 @@ foreach ($ArtistList as $Artist) {
 		}
 		if (stripos($Notify['Artists'], '|'.$Name.'|') === FALSE) {
 ?>
-		<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Notify of new uploads]</a>
+		<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
 <?
 		} else {
 ?>
-		<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Do not notify of new uploads]</a>
+		<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Do not notify of new uploads</a>
 <?
 		}
 	}
 ?>
-					<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+					<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
 				</span>
 			</td>
 		</tr>

@@ -302,7 +302,7 @@ if(count($Reports) == 0) {
 								<a href="log.php?search=Torrent+<?=$TorrentID?>"><?=$TorrentID?></a> (Deleted)
 			<?  } else {?>
 								<?=$LinkName?>
-								<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">[DL]</a>
+								<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
 								uploaded by <a href="user.php?id=<?=$UploaderID?>"><?=$UploaderName?></a> <?=time_diff($Time)?>
 								<br />
 								<? if ($ReporterName == "") { $ReporterName = "System"; } ?>
@@ -451,8 +451,8 @@ if(count($Reports) == 0) {
 ?>
 									<?=($First ? "" : "<br />")?>
 									<?=$ExtraLinkName?>
-									<a href="torrents.php?action=download&amp;id=<?=$ExtraID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">[DL]</a>
-									uploaded by <a href="user.php?id=<?=$ExtraUploaderID?>"><?=$ExtraUploaderName?></a>  <?=time_diff($ExtraTime)?> [<a href="#" onclick="Switch(<?=$ReportID?>, <?=$TorrentID?>, <?=$ExtraID?>); return false;">Switch</a>]
+									<a href="torrents.php?action=download&amp;id=<?=$ExtraID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
+									uploaded by <a href="user.php?id=<?=$ExtraUploaderID?>"><?=$ExtraUploaderName?></a>  <?=time_diff($ExtraTime)?> <a href="#" onclick="Switch(<?=$ReportID?>, <?=$TorrentID?>, <?=$ExtraID?>); return false;" class="brackets">Switch</a>
 				<?
 							$First = false;
 						}
@@ -577,7 +577,7 @@ if(count($Reports) == 0) {
 											$Extras = explode(" ", $ExtraIDs);
 											$Value = "";
 											foreach($Extras as $ExtraID) {
-												$Value .= 'http://'.NONSSL_SITE_URL.'/torrents.php?torrentid='.$ExtraID.' ';
+												$Value .= 'https://'.SSL_SITE_URL.'/torrents.php?torrentid='.$ExtraID.' ';
 											}
 											echo 'value="'.trim($Value).'"';
 										} ?>/>
@@ -640,8 +640,7 @@ if(count($Reports) == 0) {
 				</form>
 				<br />
 			</div>
-			<script type="text/javascript">
-			//<![CDATA[
+			<script type="text/javascript">//<![CDATA[
 			Load('<?=$ReportID?>');
 			//]]>
 			</script>

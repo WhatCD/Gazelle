@@ -246,23 +246,23 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 
 #searchbars ul li ul {
-		display: block;
-        position: absolute;
-        top: 1em;
-		left: 0;
-        z-index: 1000;
-    border: 1px solid #65430F;
+	display: block;
+	position: absolute;
+	top: 1em;
+	left: 0;
+	z-index: 1000;
+	border: 1px solid #65430F;
 	background: #DCB881;
-    width: 12em;
-    margin-top: 12px;
+	width: 12em;
+	margin-top: 12px;
 }
 
 #searchbars ul li ul li {
-        margin: 0 0 0 0;
-        padding: 0;
-        display: block;
-        width: 100%;
-    text-align: left;
+	margin: 0 0 0 0;
+	padding: 0;
+	display: block;
+	width: 100%;
+	text-align: left;
 }
 
 #searchbars ul li ul li.highlight {
@@ -442,15 +442,6 @@ td, th {
 .colhead {
 	background: #b78234 url(images/woodnavcenter.png) repeat-x;
 	font-weight: bold;
-	color: #ffffff;
-}
-
-.colhead a {
-	color: #ffffff;
-}
-
-.colhead a:hover {
-	color: #ECDABB;
 }
 
 td.colhead, .colhead td, .colhead th {
@@ -797,18 +788,12 @@ ul .invitetree {
 	text-align: center;
 }
 
-.spellcheck { 
+.spellcheck {
 	margin: 25px 0;
 	font-size: 1.25em;
 	font-weight: bold;
 }
 
-.linkbox .brackets:before {
-	content: "[";
-	color: #492802;
-}
-
-.linkbox .brackets:after {
-	content: "]";
+.brackets:before, .brackets:after {
 	color: #492802;
 }

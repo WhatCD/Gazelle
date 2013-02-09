@@ -47,16 +47,16 @@ $CollageSubs = $DB->to_array();
 if($ShowAll) {
 ?>
 			<br /><br />
-			[<a href="userhistory.php?action=subscribed_collages&amp;showall=0">Only display collages with new additions</a>]&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=subscribed_collages&amp;showall=0" class="brackets">Only display collages with new additions</a>&nbsp;&nbsp;&nbsp;
 <?
 } else {
 ?>
 			<br /><br />
-			[<a href="userhistory.php?action=subscribed_collages&amp;showall=1">Show all subscribed collages</a>]&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=subscribed_collages&amp;showall=1" class="brackets">Show all subscribed collages</a>&nbsp;&nbsp;&nbsp;
 <?
 }
 ?>
-			[<a href="userhistory.php?action=catchup_collages&amp;auth=<?=$LoggedUser['AuthKey']?>">Catch up</a>]&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=catchup_collages&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;
 		</div>
 	</div>
 <?
@@ -285,7 +285,7 @@ if(!$NumResults) {
 					<strong><a href="collage.php?id=<?=$CollageID?>"><?=$CollageName?></a></strong> (<?=$NewTorrentCount?> new torrent<?=($NewTorrentCount==1?'':'s')?>)
 				</span>&nbsp;
 				<span style="float:right;">
-					<a href="#" onclick="$('#discog_table_<?=$CollageID?>').toggle(); this.innerHTML=(this.innerHTML=='[Hide]'?'[Show]':'[Hide]'); return false;"><?=$ShowAll?'[Show]':'[Hide]'?></a>&nbsp;&nbsp;&nbsp;<a href="userhistory.php?action=catchup_collages&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;collageid=<?=$CollageID?>">[Catch up]</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="CollageSubscribe(<?=$CollageID?>); return false;" id="subscribelink<?=$CollageID?>">[Unsubscribe]</a>
+					<a href="#" onclick="$('#discog_table_<?=$CollageID?>').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$ShowAll?'Show':'Hide'?></a>&nbsp;&nbsp;&nbsp;<a href="userhistory.php?action=catchup_collages&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;collageid=<?=$CollageID?>" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="CollageSubscribe(<?=$CollageID?>); return false;" id="subscribelink<?=$CollageID?>" class="brackets">Unsubscribe</a>
 				</span>
 			</td>
 		</tr>

@@ -89,7 +89,7 @@ function Save_Edit(postid) {
 	$('#reply_box').toggle();
 	if (location.href.match(/forums\.php/)) {
 		ajax.post("forums.php?action=takeedit","form" + postid, function (response) {
-			$('#bar' + postid).raw().innerHTML = "<a href=\"reports.php?action=report&amp;type=post&amp;id="+postid+"\">[Report]</a>&nbsp;<a href=\"#\">&uarr;</a>";
+			$('#bar' + postid).raw().innerHTML = "<a href=\"reports.php?action=report&amp;type=post&amp;id="+postid+"\" class=\"brackets\">Report</a>&nbsp;<a href=\"#\">&uarr;</a>";
 			$('#preview' + postid).raw().innerHTML = response;
 			$('#editbox' + postid).hide();
 			$('#pmbox' + postid).hide();

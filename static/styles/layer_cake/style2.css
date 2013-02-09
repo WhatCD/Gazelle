@@ -309,22 +309,12 @@ input.hidden {
 	margin: 0px auto;
 }
 
-#userinfo_username .brackets:before {
-	content: "[";
-}
-
-#userinfo_username .brackets:after {
-	content: "]";
-}
-
 #userinfo_major .brackets:before {
 	font-weight: bold;
-	content: "[";
 }
 
 #userinfo_major .brackets:after {
 	font-weight: bold;
-	content: "]";
 }
 
 div.linkbox {
@@ -745,12 +735,4 @@ ul .invitetree {
 	padding: 0px;
 	z-index:1002;
 	overflow: auto;
-}
-
-.linkbox .brackets:before {
-	content: "[";
-}
-
-.linkbox .brackets:after {
-	content: "]";
 }

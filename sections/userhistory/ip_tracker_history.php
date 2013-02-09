@@ -47,7 +47,7 @@ $Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>Tracker IP history for <a href="/user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
+		<h2>Tracker IP address history for <a href="/user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
 	</div>
 	<div class="linkbox"><?=$Pages?></div>
 	<table>
@@ -63,8 +63,10 @@ foreach($Results as $Index => $Result) {
 
 ?>
 	<tr class="rowa">
-		<td><?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)<br /><?=Tools::get_host_by_ajax($IP)?> 
-		[<a href="http://whatismyipaddress.com/ip/<?=display_str($IP)?>" title="Search WIMIA.com">WI</a>] 
+		<td>
+			<?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)<br /><?=Tools::get_host_by_ajax($IP)?>
+			<a href="http://whatismyipaddress.com/ip/<?=display_str($IP)?>" class="brackets" title="Search WIMIA.com">WI</a>
+		</td>
 		<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a></td>
 		<td><?=date("Y-m-d g:i:s", $Time)?></td>
 	</tr>

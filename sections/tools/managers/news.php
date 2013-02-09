@@ -60,8 +60,8 @@ while(list($NewsID,$Title,$Body,$NewsTime)=$DB->next_record()) {
 	<div class="box vertical_space">
 		<div class="head">
 			<strong><?=display_str($Title) ?></strong> - posted <?=time_diff($NewsTime) ?>
-			- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>">[Edit]</a>
-			<a href="tools.php?action=deletenews&amp;id=<?=$NewsID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">[Delete]</a>
+			- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>" class="brackets">Edit</a>
+			<a href="tools.php?action=deletenews&amp;id=<?=$NewsID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Delete</a>
 		</div>
 
 		<div class="pad"><?=$Text->full_format($Body) ?></div>

@@ -353,19 +353,19 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 <?	
 	switch($Limit) {
 		case 100: ?>
-			- [<a href="top10.php?details=<?=$Tag?>">Top 10</a>]
-			- [Top 100]
-			- [<a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>">Top 250</a>]
+			- <a href="top10.php?details=<?=$Tag?>" class="brackets">Top 10</a>
+			- <span class="brackets">Top 100</span>
+			- <a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
 		<?	break;
 		case 250: ?>
-			- [<a href="top10.php?details=<?=$Tag?>">Top 10</a>]
-			- [<a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>">Top 100</a>]
-			- [Top 250]
+			- <a href="top10.php?details=<?=$Tag?>" class="brackets">Top 10</a>
+			- <a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
+			- <span class="brackets">Top 250</span>
 		<?	break;
 		default: ?>
-			- [Top 10]
-			- [<a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>">Top 100</a>]
-			- [<a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>">Top 250</a>]
+			- <span class="brackets">Top 10</span>
+			- <a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
+			- <a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
 <?	} ?>
 		</small>
 <?	} ?> 
@@ -432,7 +432,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			$DisplayName = Artists::display_artists($Artists[$GroupID], true, true);
 		}
 		
-		$DisplayName.= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID'  title='View Torrent'>$GroupName</a>";
+		$DisplayName.= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\">$GroupName</a>";
 
 		if($GroupCategoryID==1 && $GroupYear>0) {
 			$DisplayName.= " [$GroupYear]";
@@ -484,16 +484,16 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 ?>
 		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCatOffset]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div></td>
 		<td>
-		<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]</span>
+		<span><a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a></span>
 
 			<strong><?=$DisplayName?></strong> <?=$ExtraInfo?>
 			<span class="bookmark" style="float:right;">
 <?
 		if($IsBookmarked) {
 ?>
-				<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+				<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
 <?	} else {  ?>
-				<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+				<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?  }  ?>
 			</span>
 			

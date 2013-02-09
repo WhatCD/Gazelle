@@ -27,7 +27,7 @@ $Concerts .= ob_get_clean();
 <div class="box">
 	<div id="concerts" class="head">
 		<a href="#">&uarr;</a>&nbsp;<strong>Upcoming concerts</strong>
-		[<a href="#" onclick="$('#concertsbody').toggle(); return false;">Toggle</a>]
+		<a href="#" class="brackets" onclick="$('#concertsbody').toggle(); return false;">Toggle</a>
 	</div>
     <div id="concertsbody" <?=$Hidden ? "class='hidden'" : ""?>>
 	<?=$Concerts?>
@@ -52,7 +52,7 @@ function make_concert_link($Event)
 		<input type="hidden" name="concert_id" value="<?=$Event['id']?>"/>
 		<input type="hidden" name="concert_template" value="<?=get_concert_post_template($Name, $Event)?>"/>
 	</form>
-	<li><?=$Concert?> - [<a href="#" onclick="$('#concert<?=$Event['id']?>').raw().submit(); return false;">Go to thread</a>]</li>
+	<li><?=$Concert?> - <a href="#" class="brackets" onclick="$('#concert<?=$Event['id']?>').raw().submit(); return false;">Go to thread</a></li>
 <?
 }
 

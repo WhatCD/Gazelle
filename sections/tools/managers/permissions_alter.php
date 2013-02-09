@@ -16,32 +16,32 @@ echo $Val->GenerateJS('permissionsform');
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<input type="hidden" name="id" value="<?=display_str($_REQUEST['id']); ?>" />
 	<div class="linkbox">
-		[<a href="tools.php?action=permissions">Back to permission list</a>]
-		[<a href="tools.php">Back to Tools</a>]
+		<a href="tools.php?action=permissions" class="brackets">Back to permission list</a>
+		<a href="tools.php" class="brackets">Back to tools</a>
 	</div>
 	<table class="permission_head layout">
 		<tr>
-			<td class="label">Permission Name</td>
+			<td class="label">Permission name</td>
 			<td><input type="text" name="name" id="name" value="<?=(!empty($Name) ? display_str($Name) : '')?>" /></td>
 		</tr>
 		<tr>
-			<td class="label">Class Level</td>
+			<td class="label">Class level</td>
 			<td><input type="text" name="level" id="level" value="<?=(!empty($Level) ? display_str($Level) : '')?>" /></td>
 		</tr>
 		<tr>
-			<td class="label">Secondary Class</td>
-			<td><input type="checkbox" name="secondary" value="1" <? if (!empty($Secondary)) { ?>checked<? } ?> /></td>
+			<td class="label">Secondary class</td>
+			<td><input type="checkbox" name="secondary" value="1"<? if (!empty($Secondary)) { ?> checked="checked"<? } ?> /></td>
 		</tr>
 		<tr>
-			<td class="label">Show on Staff page</td>
-			<td><input type="checkbox" name="displaystaff" value="1" <? if (!empty($DisplayStaff)) { ?>checked<? } ?> /></td>
+			<td class="label">Show on staff page</td>
+			<td><input type="checkbox" name="displaystaff" value="1"<? if (!empty($DisplayStaff)) { ?> checked="checked"<? } ?> /></td>
 		</tr>
 		<tr>
 			<td class="label">Maximum number of personal collages</td>
 			<td><input type="text" name="maxcollages" size="5" value="<?=$Values['MaxCollages']?>" /></td>
 		</tr>
 		<tr>
-			<td class="label">Additional Forums</td>
+			<td class="label">Additional forums</td>
 			<td><input type="text" size="30" name="forums" value="<?=display_str($Forums)?>" /></td>
 		</tr>
 <? if (is_numeric($_REQUEST['id'])) { ?>

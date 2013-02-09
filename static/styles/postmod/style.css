@@ -399,22 +399,22 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 
 #searchbars ul li ul {
-		display: block;
-        position: absolute;
-        top: 1em;
-		left: 0;
-        z-index: 1000;
-        border : 1px solid #EEE;
-		background: url('images/content.png');
-        width: 12em;
-        margin-top: 12px;
+	display: block;
+	position: absolute;
+	top: 1em;
+	left: 0;
+	z-index: 1000;
+	border : 1px solid #EEE;
+	background: url('images/content.png');
+	width: 12em;
+	margin-top: 12px;
 }
 
 #searchbars ul li ul li {
-        margin: 1px 0 1px 4px;
-        padding: 0;
-        display: block;
-        width: 100%;
+	margin: 1px 0 1px 4px;
+	padding: 0;
+	display: block;
+	width: 100%;
 	cursor: pointer;
 }
 
@@ -484,21 +484,11 @@ input.hidden {
 	color: #DFDFDF;
 }
 
-#userinfo_username .brackets:before {
-	content: "[";
-}
-
-#userinfo_username .brackets:after {
-	content: "]";
-}
-
 .linkbox {
 	text-align:center;
 	padding: 5px;
 	color: #FCFCFC;
 }
-
-
 
 .center {
 	text-align: center;
@@ -728,7 +718,7 @@ ul.poll li.graph {
 	display: block;
 }
 
-.torrent_table  a:active img, .torrent_table  a:focus img {
+.torrent_table a:active img, .torrent_table a:focus img {
 	background-color: transparent !important;
 }
 
@@ -831,7 +821,7 @@ table.forum_post td.body {
 }
 
 strong.quoteheader{
-  color:#444;
+	color:#444;
 }
 
 blockquote {
@@ -906,10 +896,10 @@ ul .invitetree {
 .poll{list-style:none; padding:10px; margin:5px}
 .poll li{clear:both}
 .poll .graph{padding:0 0 15px 0}
-.poll .graph span{display:block;  height:19px;  float:left}
-.poll .graph .left_poll{width:9px;  background:url('images/poll_left.png') top left no-repeat}
+.poll .graph span{display:block; height:19px; float:left}
+.poll .graph .left_poll{width:9px; background:url('images/poll_left.png') top left no-repeat}
 .poll .graph .center_poll{background:url('images/poll_middle.png') top left repeat-x}
-.poll .graph .right_poll{width:11px;  background:url('images/poll_right.png') top left no-repeat}
+.poll .graph .right_poll{width:11px; background:url('images/poll_right.png') top left no-repeat}
 
 .curtain {
 	position: fixed;
@@ -996,7 +986,7 @@ input[type=text], input[type="password"], input[type="search"] {
 }
 
 input[type=text]:hover, input[type=text]:focus, input[type="search"]:hover, input[type="search"]:focus, input[type="password"]:hover, input[type="password"]:focus { background-color: #000; color: #FFF; }
-input[type=text]:active, input[type="search"]:active, input[type="password"]:active  { top: 1px; }
+input[type=text]:active, input[type="search"]:active, input[type="password"]:active { top: 1px; }
 
 input[disabled=disabled] { background: #4F4F4F url(images/alert-overlay.png) repeat-x; color: #DFDFDF; }
 input[disabled=disabled]:hover, input[disabled=disabled]:focus, input[disabled=disabled]:active { background-color: #4F4F4F; color: #DFDFDF; }
@@ -1048,22 +1038,16 @@ ul, ol{
 }
 
 tr.torrent .bookmark > a:before {
-    color:#646054;
+	color:#646054;
 }
 tr.torrent .bookmark > a:after {
-    color:#646054;
+	color:#646054;
 }
 
 #requests .forum_post textarea { /* overriding the inline 80-character monospace */
 	max-width: 409px;
 }
 
-.linkbox .brackets:before {
-	content: "[";
-	color: #FCFCFC;
-}
-
-.linkbox .brackets:after {
-	content: "]";
+.linkbox .brackets:before, .linkbox .brackets:after {
 	color: #FCFCFC;
 }

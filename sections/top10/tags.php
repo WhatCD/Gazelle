@@ -16,10 +16,10 @@ View::show_header('Top 10 Tags');
 	<div class="header">
 		<h2>Top 10 Tags</h2>
 		<div class="linkbox">
-			[<a href="top10.php?type=torrents">Torrents</a>]
-			[<a href="top10.php?type=users">Users</a>]
-			[<a href="top10.php?type=tags"><strong>Tags</strong></a>]
-			[<a href="top10.php?type=votes">Favorites</a>]
+			<a href="top10.php?type=torrents" class="brackets">Torrents</a>
+			<a href="top10.php?type=users" class="brackets">Users</a>
+			<a href="top10.php?type=tags" class="brackets"><strong>Tags</strong></a>
+			<a href="top10.php?type=votes" class="brackets">Favorites</a>
 		</div>
 	</div>
 
@@ -105,19 +105,19 @@ function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true, $
 <?	
 	switch($Limit) {
 		case 100: ?>
-			- [<a href="top10.php?type=tags&details=<?=$Tag?>">Top 10</a>]
-			- [Top 100]
-			- [<a href="top10.php?type=tags&amp;limit=250&amp;details=<?=$Tag?>">Top 250</a>]
+			- <a href="top10.php?type=tags&amp;details=<?=$Tag?>" class="brackets">Top 10</a>
+			- <span class="brackets">Top 100</span>
+			- <a href="top10.php?type=tags&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
 		<?	break;
 		case 250: ?>
-			- [<a href="top10.php?type=tags&details=<?=$Tag?>">Top 10</a>]
-			- [<a href="top10.php?type=tags&amp;limit=100&amp;details=<?=$Tag?>">Top 100</a>]
-			- [Top 250]
+			- <a href="top10.php?type=tags&amp;details=<?=$Tag?>" class="brackets">Top 10</a>
+			- <a href="top10.php?type=tags&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
+			- <span class="brackets">Top 250</span>
 		<?	break;
 		default: ?>
-			- [Top 10]
-			- [<a href="top10.php?type=tags&amp;limit=100&amp;details=<?=$Tag?>">Top 100</a>]
-			- [<a href="top10.php?type=tags&amp;limit=250&amp;details=<?=$Tag?>">Top 250</a>]
+			- <span class="brackets">Top 10</span>
+			- <a href="top10.php?type=tags&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
+			- <a href="top10.php?type=tags&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
 <?	} ?>
 		</small>
 	</h3>
@@ -127,8 +127,8 @@ function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true, $
 		<td>Tag</td>
 		<td style="text-align:right">Uses</td>
 <?	if($ShowVotes) {	?>
-		<td style="text-align:right">Pos. Votes</td>
-		<td style="text-align:right">Neg. Votes</td>
+		<td style="text-align:right">Pos. votes</td>
+		<td style="text-align:right">Neg. votes</td>
 <?	}	?>
 	</tr>
 <?

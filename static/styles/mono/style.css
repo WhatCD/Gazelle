@@ -443,7 +443,7 @@ textarea {
 #menu ul li:last-child {
 	margin-right: 0;
 	padding-right: none;
-	border-right:  none;
+	border-right: none;
 }
 
 #content {
@@ -476,12 +476,12 @@ ul.collage_images li {
 }
 
 ul.collage_images li a {
-    height: 135px !important;
+	height: 135px !important;
 	width: 135px !important;
 }
 
 ul.collage_images li a img {
-    height: 135px !important;
+	height: 135px !important;
 	width: 135px !important;
 }
 
@@ -491,11 +491,11 @@ ul.collage_images li a:hover {
 }
 
 ul.collage_images li a:hover img {
-  position: absolute;
-  margin: -80px;
-  z-index: 4;
-  width: 300px !important;
-  height: 300px !important;
+	position: absolute;
+	margin: -80px;
+	z-index: 4;
+	width: 300px !important;
+	height: 300px !important;
 }
 
 #collages,#personal_collages,#collage_table,.forum_index,.torrent_table,.forum_post.box,.recent,table.border,.torrent_table.grouping,#userhistory table {
@@ -835,7 +835,7 @@ table.forum_post td.body > div { /* Narrow main column (torrent comments, reques
 }
 
 strong.quoteheader{
-  color: #626262;
+	color: #626262;
 }
 
 .forum_post blockquote, #inbox div.body>blockquote {
@@ -942,7 +942,7 @@ div.thin form.search_form table td.label,.filter_torrents table td:first-child {
 	position: absolute;
 	left: 120px;
 	font-size: 12pt;
-	color:  #444;
+	color: #444;
 	line-height: 24pt;
 }
 
@@ -1147,16 +1147,16 @@ li.graph .center_poll {
 }
 
 #manage_collage_table input[type="text"] {
-    width: 40px;
+	width: 40px;
 }
 
-td  {
+td {
 	border: 1px solid #BBB;
 	padding: 5px;
 	text-align: left;
 }
 
-td.colhead  {
+td.colhead {
 	margin: -11px;
 	margin-bottom: 10px;
 	padding: 8px !important;
@@ -1304,12 +1304,10 @@ form.manage_form[name=friends] .left input[type=submit] {
 	margin-right: 10px;
 }
 
-.linkbox .brackets:before {
-	content: "[";
+.linkbox .brackets:before, .linkbox .brackets:after {
 	color: #444;
 }
 
-.linkbox .brackets:after {
-	content: "]";
-	color: #444;
+#userinfo .brackets:before, #userinfo .brackets:after {
+	content: "";
 }

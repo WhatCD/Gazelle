@@ -46,11 +46,3 @@
 	font-weight: 700;
 	display: block;
 }
-
-.linkbox .brackets:before {
-	content: "[";
-}
-
-.linkbox .brackets:after {
-	content: "]";
-}

@@ -131,16 +131,16 @@ $Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 	</div>
 	<div class="linkbox">
 	<? if($UsersOnly) { ?>
-	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>">[View All IPs]</a>
+	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View all IP addresses</a>
 	<? } else { ?>
-	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1">[View IPs With Users]</a>
+	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View IP addresses with users</a>
 	<? } ?>
 	<br />
 	<?=$Pages?>
 	</div>
 	<table>
 		<tr class="colhead">
-			<td>IP Search</td>
+			<td>IP address search</td>
 		</tr>
 		
 		<tr><td>
@@ -196,7 +196,7 @@ foreach($Results as $Index => $Result) {
 			<? }
 					else {
 				$IPs[$IP] = false; ?>
-				<a id="<?=$counter?>" href="#" onclick="Ban('<?=$IP?>', '<?=$ID?>', '<?=$counter?>'); this.onclick=null;return false;">[Ban]</a>
+				<a id="<?=$counter?>" href="#" onclick="Ban('<?=$IP?>', '<?=$ID?>', '<?=$counter?>'); this.onclick=null;return false;" class="brackets">Ban</a>
 <?			}
 			$counter++;
 		} 

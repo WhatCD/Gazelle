@@ -65,7 +65,7 @@ if(empty($_POST['confirm'])) {
 	$DB->query("INSERT INTO torrents_votes (GroupID, Ups, Total, Score)
 				SELECT $NewGroupID, UpVotes, TotalVotes, VoteScore
 				FROM (SELECT IFNULL(SUM(IF(Type='Up',1,0)),0) As UpVotes,
-							 COUNT(1) AS TotalVotes, 
+							 COUNT(1) AS TotalVotes,
 							 binomial_ci(IFNULL(SUM(IF(Type='Up',1,0)),0), COUNT(1)) AS VoteScore
 						FROM users_votes 
 						WHERE GroupID = $NewGroupID

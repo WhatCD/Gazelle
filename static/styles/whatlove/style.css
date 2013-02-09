@@ -438,24 +438,20 @@ input.hidden {
 
 #userinfo_username .brackets:before {
 	color: #FE448B;
-	content: "[";
 }
 
 #userinfo_username .brackets:after {
 	color: #FE448B;
-	content: "]";
 }
 
 #userinfo_major .brackets:before {
 	color: #FE448B;
 	font-weight: bold;
-	content: "[";
 }
 
 #userinfo_major .brackets:after {
 	color: #FE448B;
 	font-weight: bold;
-	content: "]";
 }
 
 div.linkbox {
@@ -893,12 +889,4 @@ form tr {
 	margin: 25px 0;
 	font-size: 1.25em;
 	font-weight: bold;
-}
-
-.linkbox .brackets:before {
-	content: "[";
-}
-
-.linkbox .brackets:after {
-	content: "]";
 }

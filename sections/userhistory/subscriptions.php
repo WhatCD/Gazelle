@@ -159,7 +159,7 @@ if(!$NumResults) {
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID.($PostID?'&amp;postid='.$PostID.'#post'.$PostID:'')?>"></a>
 				</span>
 				<span id="bar<?=$PostID ?>" style="float:right;">
-					<a href="#" onclick="Subscribe(<?=$TopicID?>);return false;" id="subscribelink<?=$TopicID?>">[Unsubscribe]</a>
+					<a href="#" onclick="Subscribe(<?=$TopicID?>);return false;" id="subscribelink<?=$TopicID?>" class="brackets">Unsubscribe</a>
 					&nbsp;
 					<a href="#">&uarr;</a>
 				</span>

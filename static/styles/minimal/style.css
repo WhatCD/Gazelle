@@ -133,31 +133,29 @@ textarea#quickpost{margin:0; padding:0}
 #searchbars form{display:inline}
 
 #searchbars ul li ul {
-		display: block;
-        position: absolute;
-        top: 1em;
-		left: 0;
-        z-index: 1000;
-        background: #262626 url(https://what.cd/static/styles/minimal/images/bg.png) repeat-x 0 -3px;
-        border: 1px solid #757575;
-        margin-top: 12px;
-        white-space: nowrap;
-		overflow: hidden;
-
+	display: block;
+	position: absolute;
+	top: 1em;
+	left: 0;
+	z-index: 1000;
+	background: #262626 url(https://what.cd/static/styles/minimal/images/bg.png) repeat-x 0 -3px;
+	border: 1px solid #757575;
+	margin-top: 12px;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 #searchbars ul li ul li {
-        margin: 0 0 0 0;
-        padding: 3px;
-        display: block;
+	margin: 0 0 0 0;
+	padding: 3px;
+	display: block;
 }
 
 #searchbars ul li ul li.highlight {
-    background-position: 0px -771px;
-    background-repeat: repeat-x;
-    color: white;
+	background-position: 0px -771px;
+	background-repeat: repeat-x;
+	color: white;
 }
-
 
 /* TABLE BORDERS */
 table tr td{border:1px solid #757575}
@@ -166,7 +164,7 @@ table tr td{border:1px solid #757575}
 /* content */
 #content{z-index:0; padding:0; margin:0; position:relative}
 #content h2:first-child{border-bottom:1px solid #ACBFA9;}
-#content .box h2{background:none;  margin:0;  padding:0; position:static;  border-bottom:0}
+#content .box h2{background:none; margin:0; padding:0; position:static; border-bottom:0}
 #content table{padding:0; border-collapse:collapse; width:100%}
 #content table td, #content table th{padding:5px}
 #content table td h4{margin:0}
@@ -188,9 +186,9 @@ table tr td{border:1px solid #757575}
 #wiki .linkbox{background-color:transparent; margin-bottom:0}
 
 /* FRIENDS */
-#friends table{width:60%;  margin:0 auto}
-#friends textarea{height:42px;  width:270px !important;  margin:0}
-#friends .left{width:50%;  text-align:right}
+#friends table{width:60%; margin:0 auto}
+#friends textarea{height:42px; width:270px !important; margin:0}
+#friends .left{width:50%; text-align:right}
 
 #friends br,
 #footer br{display:none}
@@ -210,7 +208,7 @@ table tr td{border:1px solid #757575}
 #requests table.border{margin-bottom:8px}
 
 /* STAFF */
-#staff .thin  .box{padding-top:3px !important}
+#staff .thin .box{padding-top:3px !important}
 
 /* UPLOAD */
 #upload #post{font-size:175%; margin-top:10px}
@@ -226,7 +224,7 @@ table tr.colhead_dark td{background:#555; border:0}
 #forums h3{margin:15px 0}
 #forums h3:first-child{margin:0 0 15px 0}
 #forums table.border .cat_list{width:80%}
-#forums table.border .cat_list td{width:20%;  padding:0 !important;  border:0 !important}
+#forums table.border .cat_list td{width:20%; padding:0 !important; border:0 !important}
 .forum_unread .colhead_dark{background-color:#e3f1f9 !important; /*border:2px solid #a8d3ec !important; */}
 #forums table.forum_unread tr.colhead_dark td{background:#3A638C url(images/unread.png) no-repeat 91% 50%}
 
@@ -263,9 +261,9 @@ strong.quoteheader {color: #f1f1f1;}
 #forums .forum_post,
 #userhistory .forum_post,
 #collage .forum_post,
-#torrents .forum_post{border:0;  margin:0}
+#torrents .forum_post{border:0; margin:0}
 
-.avatar{border:0 !important;  padding:1px 1px 1px 0;  background-color:#161616 !important;  width:150px}
+.avatar{border:0 !important; padding:1px 1px 1px 0; background-color:#161616 !important; width:150px}
 #comments .avatar{width:150px}
 
 #requests .forum_post .body{border:0}
@@ -279,7 +277,7 @@ strong.quoteheader {color: #f1f1f1;}
 #forums .forum_post td,
 #userhistory .forum_post td,
 #collage .forum_post td,
-#torrents .forum_post td{border-left:0;  border-right:0}
+#torrents .forum_post td{border-left:0; border-right:0}
 
 #forums .forum_post .body div,
 #collage .forum_post .body div,
@@ -291,11 +289,11 @@ strong.quoteheader {color: #f1f1f1;}
 
 #forums .forum_post .body div div,
 #collage .forum_post .body div div,
-#torrents .forum_post .body div div{background:none;  padding:0}
+#torrents .forum_post .body div div{background:none; padding:0}
 
 #forums .forum_post ul{margin:5px 0 0 0; padding:0}
 #forums .forum_post li{margin:0 0 0 20px; padding:0}
-#forums #content .thin .box form .box input[type="Text"]{font-size:20px;  width:500px}
+#forums #content .thin .box form .box input[type="Text"]{font-size:20px; width:500px}
 #forums #content form .box{width:510px; margin:0 auto; padding:1ex; text-align:left; background-color:#404040}
 
 /* TORRENTS */
@@ -317,7 +315,7 @@ strong.quoteheader {color: #f1f1f1;}
 .torrent a{font-weight:bold}
 .linkbox{text-align:center; padding:0 0 8px; margin-top: 8px;}
 .linkbox a{padding:0 3px}
-.show_torrents_link{border:none; width:28px;  height:28px; display:block}
+.show_torrents_link{border:none; width:28px; height:28px; display:block}
 .show_torrents{background-repeat:no-repeat; background-position:0 -1093px; width:30px; height:30px}
 .hide_torrents{background-repeat:no-repeat; background-position:0 -1033px; width:30px; height:30px}
 .group{font-weight:bold}
@@ -332,15 +330,15 @@ strong.quoteheader {color: #f1f1f1;}
 #torrent_table tr.colhead td{font-weight:bold}
 #torrent_table .group_torrent td{background-color:#333}
 .torrent_table .group_torrent td{background-color:#333}
-.torrent_table .pad td{padding:20px !important;  border:1px solid #ACBFA9 !important}
-.torrent_table .pad td td{border-left:0 !important;  border-right:0 !important;  background:none;  padding:5px !important}
+.torrent_table .pad td{padding:20px !important; border:1px solid #ACBFA9 !important}
+.torrent_table .pad td td{border-left:0 !important; border-right:0 !important; background:none; padding:5px !important}
 .torrent_table tr.group_torrent td span, #torrent_table tr.group_torrent td span{padding-left:18px}
 .torrent_table tr.group_torrent a, #torrent_table tr.group_torrent a{color:#999; font-weight:normal}
 .torrent_table tr.group_torrent a:hover, #torrent_table tr.group_torrent a:hover{color:#007dc6}
 
 #torrents #content .center .box form div input[type="text"],
 #wiki #content .center .box form div input[type="text"],
-#artist #content .center .box form div input[type="text"]{width:500px;  margin-bottom:10px}
+#artist #content .center .box form div input[type="text"]{width:500px; margin-bottom:10px}
 
 #torrents #content .center .box form div textarea,
 #wiki #content .center .box form div textarea,
@@ -360,7 +358,7 @@ strong.quoteheader {color: #f1f1f1;}
 .main_column{width:700px}
 .sidebar{float:right; width:250px}
 .main_column table{margin:0 0 20px 0}
-.box table{margin:0;  background-color:#FFF}
+.box table{margin:0; background-color:#FFF}
 
 #discog_table, #collage_table{margin-top:1px}
 .sidebar form br,
@@ -370,13 +368,13 @@ strong.quoteheader {color: #f1f1f1;}
 .sidebar .box .body{/*ADD TAG ON ALBUM PAGE */ padding:10px}
 
 .sidebar .box .stats{list-style:none; margin:0; padding:10px}
-.sidebar ol{padding:0 !important;  margin:0;  list-style-position:inside}
-.sidebar ul{list-style-type:none;  margin:0}
+.sidebar ol{padding:0 !important; margin:0; list-style-position:inside}
+.sidebar ul{list-style-type:none; margin:0}
 .sidebar .box li{margin:0 0 2px 0}
 .sidebar form textarea{width:220px !important}
 .sidebar form input{margin:0}
 .sidebar .box .pad div{padding:0 !important}
-.sidebar form{padding:0 !important;  margin:0 !important}
+.sidebar form{padding:0 !important; margin:0 !important}
 
 #recommended ul{margin:0 0 0 0; padding:10px}
 #discog_table .center{background-image:none}
@@ -391,14 +389,14 @@ strong.quoteheader {color: #f1f1f1;}
 .main_column .group td{ border:0 !important}
 #discog_table div.tags{padding-left:15px}
 
-/* POLLS  */
+/* POLLS */
 .poll{list-style:none; padding:10px; margin:5px}
 .poll li{clear:both}
 .poll .graph{padding:0 0 15px 0}
-.poll .graph span{display:block;  height:19px;  float:left}
-.poll .graph .left_poll{width:9px;  background:url(images/poll_left.png) top left no-repeat}
+.poll .graph span{display:block; height:19px; float:left}
+.poll .graph .left_poll{width:9px; background:url(images/poll_left.png) top left no-repeat}
 .poll .graph .center_poll{background:url(images/poll_middle.png) top left repeat-x}
-.poll .graph .right_poll{width:11px;  background:url(images/poll_right.png) top left no-repeat}
+.poll .graph .right_poll{width:11px; background:url(images/poll_right.png) top left no-repeat}
 
 /* MISC */
 .r00{color:#F00}
@@ -428,7 +426,7 @@ strong.quoteheader {color: #f1f1f1;}
 
 .curtain{position:fixed; top:0%; left:0%; width:100%; height:100%; background-color:black; z-index:1001; opacity:0.8; filter:alpha(opacity=80)}
 .lightbox{position:fixed; text-align:center; top:5%; left:5%; width:90%; height:90%; padding:0px; z-index:1002; overflow:auto}
-.lightbox table{position:absolute;  top:50%; left:50%; margin-left:-300px !important; background-color:#e6e6e6; border:5px solid #f6f6f6; padding:5px}
+.lightbox table{position:absolute; top:50%; left:50%; margin-left:-300px !important; background-color:#e6e6e6; border:5px solid #f6f6f6; padding:5px}
 .lightbox form{color:#aaa}
 .lightbox table *{text-align:left}
 .lightbox .colhead span{font-weight:bold}
@@ -436,7 +434,7 @@ strong.quoteheader {color: #f1f1f1;}
 .nobullet{list-style:none; margin:0; padding:10px}
 
 /* CLEARFIXES */
-#menu ul:after, ul#userinfo_minor:after, div.sidebar:after, #content:after, #footer:after{content:".";  display:block;  height:0;  clear:both;  visibility:hidden}
+#menu ul:after, ul#userinfo_minor:after, div.sidebar:after, #content:after, #footer:after{content:"."; display:block; height:0; clear:both; visibility:hidden}
 div.sidebar, #content, #footer{display:inline-block}
 
 /* Hides from IE-mac \*/
@@ -446,7 +444,7 @@ div.sidebar, #content, #footer{display:block}
 
 /* COLLAGES + User profile page */
 ul.collage_images {
-    margin: 0 2px 3px !important;
+	margin: 0 2px 3px !important;
 }
 
 ul.collage_images img {
@@ -455,7 +453,7 @@ ul.collage_images img {
 }
 
 ul.collage_images li a {
-    height: 139px !important;
+	height: 139px !important;
 }
 
 ul.collage_images li {
@@ -465,20 +463,20 @@ ul.collage_images li {
 }
 
 ul.collage_images li a:hover {
-  position: relative;
-  overflow: visible !important;
+	position: relative;
+	overflow: visible !important;
 }
 
 ul.collage_images li a:hover img {
-  position: absolute;
-  margin: -80px;
-  z-index: 4;
-  width: 300px !important;
-  height: 300px !important;
+	position: absolute;
+	margin: -80px;
+	z-index: 4;
+	width: 300px !important;
+	height: 300px !important;
 }
 
 ul.collage_images {
-  width: 695px !important;
+	width: 695px !important;
 }
 
 #user .recent td { text-align: center; }
@@ -543,16 +541,15 @@ tr.torrent .bookmark > a:before { content:""; }
 tr.torrent .bookmark > a:after { content:""; }
 
 .sidebar .navigation_list li {
-    margin-left: 20px;
+	margin-left: 20px;
 }
 
 .linkbox .brackets:before {
-    content: "[ ";
-    color: #F1F1F1;
+	content: "[ ";
+	color: #757575;
 }
 
 .linkbox .brackets:after {
-    content: " ]";
-    color: #F1F1F1;
+	content: " ]";
+	color: #757575;
 }
-

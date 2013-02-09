@@ -758,11 +758,9 @@ tr.torrent .bookmark > a:after { content:""; }
 }
 
 .linkbox .brackets:before {
-	content: "[";
 	color: #666;
 }
 
 .linkbox .brackets:after {
-	content: "]";
 	color: #666;
 }

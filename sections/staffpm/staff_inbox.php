@@ -83,13 +83,13 @@ $Row = 'a';
 		<h2><?=$ViewString?> Staff PMs</h2>
 		<div class="linkbox">
 <? 	if ($IsStaff) {
-?>			<a href="staffpm.php">[My unanswered]</a>
+?>			<a href="staffpm.php" class="brackets">My unanswered</a>
 <? 	} ?>
-			<a href="staffpm.php?view=unanswered">[All unanswered]</a>
-			<a href="staffpm.php?view=open">[Open]</a>
-			<a href="staffpm.php?view=resolved">[Resolved]</a>
+			<a href="staffpm.php?view=unanswered" class="brackets">All unanswered</a>
+			<a href="staffpm.php?view=open" class="brackets">Open</a>
+			<a href="staffpm.php?view=resolved" class="brackets">Resolved</a>
 <? 	if ($IsStaff) { ?>
-			<a href="staffpm.php?action=scoreboard">[Scoreboard]</a>
+            <a href="staffpm.php?action=scoreboard" class="brackets">Scoreboard</a>
 <?	} ?>
 		</div>
 	</div>

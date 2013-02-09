@@ -27,8 +27,8 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 	<div class="hidden" id="newthreadpreview">
 		<div class="linkbox">
 			<div class="center">
-				[<a href="#" onclick="return false;">Report Thread</a>]
-				[<a href="#" onclick="return false;"><?=!empty($HeavyInfo['AutoSubscribe']) ? 'Unsubscribe' : 'Subscribe'?></a>]
+				<a href="#" onclick="return false;" class="brackets">Report Thread</a>
+				<a href="#" onclick="return false;" class="brackets"><?=!empty($HeavyInfo['AutoSubscribe']) ? 'Unsubscribe' : 'Subscribe'?></a>
 			</div>
 		</div>
 <? if (check_perms('forums_polls_create')) { ?>
@@ -56,7 +56,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 					Just now
 					</span>
 					<span id="barpreview" style="float:right;">
-						[<a href="#newthreadpreview">Report Post</a>]
+						<a href="#newthreadpreview" class="brackets">Report</a>
 						&nbsp;
 						<a href="#">&uarr;</a>
 					</span>
@@ -140,8 +140,8 @@ if (check_perms('forums_polls_create')) {
 					<td class="label">Answers:</td>
 					<td id="answer_block">
 						<input type="text" name="answers[]" style="width: 90%;" />
-						[<a href="#" onclick="AddAnswerField();return false;">+</a>]
-						[<a href="#" onclick="RemoveAnswerField();return false;">-</a>]
+						<a href="#" onclick="AddAnswerField();return false;" class="brackets">+</a>
+						<a href="#" onclick="RemoveAnswerField();return false;" class="brackets">-</a>
 					</td>
 				</tr>
 <? } ?>

@@ -38,7 +38,7 @@ if($DB->record_count()) {
 	<table width="100%">
 		<tr class="colhead">
 			<td>User</td>
-			<td>IP</td>
+			<td>IP address</td>
 			<td>Dupes</td>
 			<td>Registered</td>
 		</tr>
@@ -48,7 +48,7 @@ if($DB->record_count()) {
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
-			<td><span style="float:left;"><?=Tools::get_host_by_ajax($IP)." ($IP)"?></span><span style="float:right;">[<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History">H</a>|<a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search">S</a>]</span></td>
+			<td><span style="float:left;"><?=Tools::get_host_by_ajax($IP)." ($IP)"?></span><span style="float:right;"><a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets">S</a></span></td>
 			<td><?=display_str($Uses)?></td>
 			<td><?=time_diff($Joined)?></td>
 		</tr>

@@ -82,10 +82,10 @@ foreach($Thread as $Post){
 	<tr class="colhead_dark">
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<span style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
-				by <?=Users::format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?> [<a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>">Report Comment</a>]
-<? if (!$ThreadInfo['IsLocked']){ ?>				- [<a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">Quote</a>]<? }
-if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- [<a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>');">Edit</a>]<? }
-if (check_perms('site_moderate_forums')){ ?>				- [<a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">Delete</a>] <? } ?>
+				by <?=Users::format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>" class="brackets">Report Comment</a>
+<? if (!$ThreadInfo['IsLocked']){ ?>				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a><? }
+if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>');" class="brackets">Edit</a><? }
+if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a> <? } ?>
 			</span>
 			<span id="bar<?=$PostID?>" style="float:right;">
 				<a href="#">&uarr;</a>

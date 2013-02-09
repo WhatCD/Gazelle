@@ -105,19 +105,19 @@ function generate_user_table($Caption, $Tag, $Details, $Limit) {
 <?	
 	switch($Limit) {
 		case 100: ?>
-			- [<a href="top10.php?type=users&details=<?=$Tag?>">Top 10</a>]
-			- [Top 100]
-			- [<a href="top10.php?type=users&amp;limit=250&amp;details=<?=$Tag?>">Top 250</a>]
+			- <a href="top10.php?type=users&amp;details=<?=$Tag?>" class="brackets">Top 10</a>
+			- <span class="brackets">Top 100</span>
+			- <a href="top10.php?type=users&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
 		<?	break;
 		case 250: ?>
-			- [<a href="top10.php?type=users&details=<?=$Tag?>">Top 10</a>]
-			- [<a href="top10.php?type=users&amp;limit=100&amp;details=<?=$Tag?>">Top 100</a>]
-			- [Top 250]
+			- <a href="top10.php?type=users&amp;details=<?=$Tag?>" class="brackets">Top 10</a>
+			- <a href="top10.php?type=users&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
+			- <span class="brackets">Top 250</span>
 		<?	break;
 		default: ?>
-			- [Top 10]
-			- [<a href="top10.php?type=users&amp;limit=100&amp;details=<?=$Tag?>">Top 100</a>]
-			- [<a href="top10.php?type=users&amp;limit=250&amp;details=<?=$Tag?>">Top 250</a>]
+			- <span class="brackets">Top 10</span>
+			- <a href="top10.php?type=users&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
+			- <a href="top10.php?type=users&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
 <?	} ?>
 		</small>
 	</h3>

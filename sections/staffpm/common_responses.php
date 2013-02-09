@@ -15,13 +15,13 @@ $Text = new TEXT;
 		<h2>Staff PMs - Manage common responses</h2>
 		<div class="linkbox">
 <? 	if ($IsStaff) { ?>
-			<a href="staffpm.php">[My unanswered]</a>
+			<a href="staffpm.php" class="brackets">My unanswered</a>
 <? 	} ?>
-			<a href="staffpm.php?view=unanswered">[All unanswered]</a>
-			<a href="staffpm.php?view=open">[Open]</a>
-			<a href="staffpm.php?view=resolved">[Resolved]</a>
+			<a href="staffpm.php?view=unanswered" class="brackets">All unanswered</a>
+			<a href="staffpm.php?view=open" class="brackets">Open</a>
+			<a href="staffpm.php?view=resolved" class="brackets">Resolved</a>
 <?	if ($ConvID = (int)$_GET['convid']) { ?>
-			<a href="staffpm.php?action=viewconv&amp;id=<?=$ConvID?>">[Back to conversation]</a>
+			<a href="staffpm.php?action=viewconv&amp;id=<?=$ConvID?>" class="brackets">Back to conversation</a>
 <?	} ?>
 		</div>
 	</div>

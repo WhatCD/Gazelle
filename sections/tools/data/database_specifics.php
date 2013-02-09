@@ -120,7 +120,7 @@ foreach ($Tables as $Table) {
 		<td><?=Format::get_size($DataSize)?></td>
 		<td><?=Format::get_size($IndexSize)?></td>
 		<td><?=Format::get_size($DataSize + $IndexSize)?></td>
-		<td>[<a href="tools.php?action=database_specifics&amp;table=<?=display_str($Name)?>">Schema</a>]</td>
+		<td><a href="tools.php?action=database_specifics&amp;table=<?=display_str($Name)?>" class="brackets">Schema</a></td>
 	</tr>
 <?
 }

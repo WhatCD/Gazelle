@@ -132,7 +132,7 @@ if(($UserCount = $Cache->get_value('stats_user_count')) === false){
 }
 $UserCount = (int)$UserCount;
 ?>
-				<li>Enabled Users: <?=number_format($UserCount)?> [<a href="stats.php?action=users">Details</a>]</li>
+				<li>Enabled Users: <?=number_format($UserCount)?> <a href="stats.php?action=users" class="brackets">Details</a></li>
 <?
 
 if (($UserStats = $Cache->get_value('stats_users')) === false) {
@@ -404,7 +404,7 @@ foreach ($News as $NewsItem) {
 			<div class="head">
 				<strong><?=$Text->full_format($Title)?></strong> <?=time_diff($NewsTime);?>
 <? if(check_perms('admin_manage_news')) {?>
-				- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>">[Edit]</a>
+				- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>" class="brackets">Edit</a>
 <? } ?>
 			</div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>

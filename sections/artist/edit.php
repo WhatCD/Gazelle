@@ -81,9 +81,9 @@ View::show_header('Edit artist');
 			<div>
 				<em>Merges this artist (<?=$Name?>) into the artist specified below (without redirection), so that "<?=$Name?>" (and its aliases) will appear as a non-redirecting alias of the artist entered in the text box below.</em><br /><br />
 				<div style="text-align: center;">
-					<label for="newartistid">ArtistID:</label>&nbsp;<input type="text" id="newartistid" name="newartistid" size="40" value="" /><br />
+					<label for="newartistid">Artist ID:</label>&nbsp;<input type="text" id="newartistid" name="newartistid" size="40" value="" /><br />
 					<strong>OR</strong><br />
-					<label for="newartistid">Artist Name:</label>&nbsp;<input type="text" id="newartistname" name="newartistname" size="40" value="" />
+					<label for="newartistid">Artist name:</label>&nbsp;<input type="text" id="newartistname" name="newartistname" size="40" value="" />
 					<br /><br />
 					<input type="submit" value="Change ArtistID" />
 				</div>
@@ -101,9 +101,9 @@ View::show_header('Edit artist');
 		if($AliasName == $Name) { $DefaultRedirectID = $AliasID; }
 ?>
 			<li><?=$AliasID?>. <?=$AliasName?>
-<?		if($User) { ?> [<a href="user.php?id=<?=$User?>">User</a>] <?}
+<?		if($User) { ?> <a href="user.php?id=<?=$User?>" class="brackets">User</a> <?}
 		if($Redirect) { ?> (writes redirect to <?=$Redirect?>)<? } ?>
-			[<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">X</a>]
+			<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">X</a>
 			</li>
 <?	}
 ?>
@@ -114,7 +114,7 @@ View::show_header('Edit artist');
 			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
 			<h3>Name:</h3>
 			<input type="text" name="name" size="40" value="<?=$Name?>" /><br />
-			<h3>Writes redirect to (Alias ID, blank for no redirect):</h3>
+			<h3>Writes redirect to (enter an Alias ID; leave blank or enter "0" for no redirect):</h3>
 			<input type="text" name="redirect" size="40" value="<?=$DefaultRedirectID?>" /><br />
 			<em>This redirects artist names as they are written (e.g. when new torrents are uploaded or artists added). All uses of this new alias will be redirected to the alias ID you enter here. Use for common misspellings, etc.</em><br />
 			<input type="submit" value="Add alias" />

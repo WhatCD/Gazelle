@@ -405,22 +405,12 @@ input.hidden {
 	margin: 0px auto;
 }
 
-#userinfo_username .brackets:before {
-	content: "[";
-}
-
-#userinfo_username .brackets:after {
-	content: "]";
-}
-
 #userinfo_major .brackets:before {
 	font-weight: bold;
-	content: "[";
 }
 
 #userinfo_major .brackets:after {
 	font-weight: bold;
-	content: "]";
 }
 
 div.linkbox {
@@ -861,12 +851,4 @@ form tr {
 	margin: 25px 0;
 	font-size: 1.25em;
 	font-weight: bold;
-}
-
-.linkbox .brackets:before {
-	content: "[";
-}
-
-.linkbox .brackets:after {
-	content: "]";
 }

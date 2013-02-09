@@ -177,14 +177,14 @@
                                 for (i = 3; i < a.length; i++) {
                                     sharedArtistsHtml += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(a[i]['name']) + '">' + escapeHtml(a[i]['name']) + '</a></li>'
                                 }
-                                sharedArtistsHtml += '<li>[<a href="#sharedartists" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
+                                sharedArtistsHtml += '<li><a href="#sharedartists" id="lastfm_expand" onclick="return false" class="brackets">Expand</a></li>'
                             }
                             sharedArtistsHtml += '</ul></li>';
                             sharedArtists = sharedArtistsHtml;
                         } else {
                             // Allow removing loading message regardless.
                             sharedArtists = " ";
-                            sharedArtistsHtml += '<li class="lastfm_expand">[<a href="#sharedartists" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
+                            sharedArtistsHtml += '<li class="lastfm_expand"><a href="#sharedartists" id="lastfm_expand" onclick="return false" class="brackets">Expand</a></li>'
                         }
                         tasteometerHtml += "</li>";
                         tasteometer = tasteometerHtml;
@@ -256,7 +256,7 @@
                         for (i = 3; i < j.length; i++) {
                             html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                         }
-                        html+= '<li>[<a href="#topartists" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
+                        html+= '<li><a href="#topartists" id="lastfm_expand" onclick="return false" class="brackets">Expand</a></li>'
                     }
                     html += '</ul>';
                     html += "</li>";

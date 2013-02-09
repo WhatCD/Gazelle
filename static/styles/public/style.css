@@ -85,16 +85,16 @@ input[type="text"]:invalid, input[type="password"]:invalid {
 }
 
 #logo ul {
-		float: left;
-		left: 50%;
-		margin: 0 auto;
-		position: relative;
+	float: left;
+	left: 50%;
+	margin: 0 auto;
+	position: relative;
 }
 
 #logo ul li {
-		float: left;
-		position: relative;
-		right: 50%;
+	float: left;
+	position: relative;
+	right: 50%;
 	margin: 0 1em 0 0;
 	list-style: none;
 }
@@ -116,12 +116,4 @@ input[type="text"]:invalid, input[type="password"]:invalid {
 .warning {
 	color: red;
 	font-weight: bold;
-}
-
-.linkbox .brackets:before {
-	content: "[";
-}
-
-.linkbox .brackets:after {
-	content: "]";
 }

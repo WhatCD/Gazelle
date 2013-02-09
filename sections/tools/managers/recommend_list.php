@@ -27,7 +27,7 @@ $DB->query("SELECT
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td rowspan="2" class="label"><strong>Add Recommendation:</strong></td>
-					<td>Link to a torrent group on site. E.g. <strong>http://<?=NONSSL_SITE_URL?>/torrents.php?id=10000</strong></td>
+					<td>Link to a torrent group on site. For example, <strong>https://<?=SSL_SITE_URL?>/torrents.php?id=12345</strong></td>
 				</tr>
 				<tr>
 					<td>
@@ -49,7 +49,7 @@ $DB->query("SELECT
 <?		} ?> 
 				- <a href="torrents.php?id=<?=$GroupID?>"><?=$GroupName?></a>
 <?		if(check_perms('site_manage_recommendations') || $UserID == $LoggedUser['ID']){ ?>
-				<a href="tools.php?action=recommend_alter&amp;groupid=<?=$GroupID?>">[Delete]</a>
+				<a href="tools.php?action=recommend_alter&amp;groupid=<?=$GroupID?>" class="brackets">Delete</a>
 <?		} ?> 
 			</li>
 <?	} ?>

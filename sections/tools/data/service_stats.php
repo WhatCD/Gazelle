@@ -11,7 +11,7 @@ $MemStats = $Cache->getStats();
 View::show_header("Service Stats");
 ?>
 <div class="linkbox">
-	[<a href="tools.php?action=database_specifics">Database Specifics</a>]
+	<a href="tools.php?action=database_specifics" class="brackets">Database specifics</a>
 </div>
 <div class="permissions">
 	<div class="permission_container">

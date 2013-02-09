@@ -30,13 +30,13 @@ if (isset($_POST['changealias'])) {
 <div class="header">
 	<h2>Tag Aliases</h2>
 	<div class="linkbox">
-			[<a href="tools.php?action=tag_aliases&amp;order=goodtags">Sort by good tags</a>]
-			[<a href="tools.php?action=tag_aliases&amp;order=badtags">Sort by bad tags</a>]
+			<a href="tools.php?action=tag_aliases&amp;order=goodtags" class="brackets">Sort by good tags</a>
+			<a href="tools.php?action=tag_aliases&amp;order=badtags" class="brackets">Sort by bad tags</a>
 	</div>
 </div>
 <table width="100%">
 	<tr class="colhead">
-		<td>Tag</td>
+		<td>Proper tag</td>
 		<td>Renamed from</td>
 		<td>Submit</td>
 	</tr>

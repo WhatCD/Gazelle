@@ -173,16 +173,16 @@ if(!empty($UsedReleases)) { ?>
 		}
 
 ?>
-		[<a href="#torrents_<?=str_replace(" ", "_", strtolower($ReleaseTypes[$ReleaseID]))?>" id="torrents_<?=$ReleaseID?>_anchorlink"><?=$DisplayName?></a>]
+		<a href="#torrents_<?=str_replace(" ", "_", strtolower($ReleaseTypes[$ReleaseID]))?>" id="torrents_<?=$ReleaseID?>_anchorlink" class="brackets"><?=$DisplayName?></a>
 <?
 	}
 	if ($NumRequests > 0) {
 ?>
-	[<a href="#requests" id="requests_anchorlink">Requests</a>]
+	<a href="#requests" id="requests_anchorlink" class="brackets">Requests</a>
 	</span>
 	<span style="position:right" id="torrents_allopenclose" class="hidden">
-		[<a href="#" onclick="setDefaultShow('all', true);return false;">All default open</a>]
-		[<a href="#" onclick="setDefaultShow('all', false);return false;">All default closed</a>]
+		<a href="#" class="brackets" onclick="setDefaultShow('all', true);return false;">All default open</a>
+		<a href="#" class="brackets" onclick="setDefaultShow('all', false);return false;">All default closed</a>
 	</span>
 <? } ?>
 	</div>
@@ -250,8 +250,8 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 			<td class="artist_normalcol sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
 			<td class="artist_normalcol sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
 			<td class="artist_editcol hidden" align="right">
-				[<a href="#"<?=!$HideDiscogDefault?'class="hidden"':''?> id="releases_<?=$ReleaseType?>_openlink" onclick="setDefaultShow('<?=$ReleaseType?>',true);return false;">default closed</a>]
-				[<a href="#"<?=$HideDiscogDefault?'class="hidden"':''?> id="releases_<?=$ReleaseType?>_closedlink" onclick="setDefaultShow('<?=$ReleaseType?>',false);return false;">default open</a>]
+				<a href="#"<?=!$HideDiscogDefault?' class="hidden"':''?> id="releases_<?=$ReleaseType?>_openlink" onclick="setDefaultShow('<?=$ReleaseType?>',true);return false;" class="brackets">default closed</a>
+				<a href="#"<?=$HideDiscogDefault?' class="hidden"':''?> id="releases_<?=$ReleaseType?>_closedlink" onclick="setDefaultShow('<?=$ReleaseType?>',false);return false;" class="brackets">default open</a>
 				<input class="hidden" id="releases_<?=$ReleaseType?>_defaultopen"<?=!$HideDiscogDefault?' checked="checked"':''?> type="checkbox" title="Show" />
 				&nbsp;
 				<span style="cursor:move;" id="torrents_<?=$ReleaseTypeLabel?>_handle">&#9776;</span>
@@ -392,15 +392,15 @@ View::show_header($Name, 'browse,requests,artists,bbcode');
 	<div class="header">
 		<h2><?=$Name?><? if ($RevisionID) { ?> (Revision #<?=$RevisionID?>)<? } if ($VanityHouseArtist) { ?> [Vanity House] <? } ?></h2>
 			<span style="font-size: 0.7em;float:right;">
-				[<a href="#" onclick="editOrdering();return false;" class="" id="editlayout">Edit ordering</a>]
+				<a href="#" onclick="editOrdering();return false;" class="brackets" id="editlayout">Edit ordering</a>
 				<span class="hidden" id="savinglayout">Saving ordering...</span>
-				[<a href="#" onclick="saveOrdering();return false;" class="hidden" id="savelayout">Save ordering</a>]
+				<a href="#" onclick="saveOrdering();return false;" class="brackets hidden" id="savelayout">Save ordering</a>
 			</span>
 		</h2>
 		<div id="emptylinkbox" class="linkbox hidden"></div>
 		<div id="linkbox" class="linkbox">
 <? if (check_perms('site_submit_requests')) { ?>
-			[<a href="requests.php?action=new&amp;artistid=<?=$ArtistID?>">Add request</a>]
+			<a href="requests.php?action=new&amp;artistid=<?=$ArtistID?>" class="brackets">Add request</a>
 <? }
 
 if (check_perms('site_torrents_notify')) {
@@ -411,40 +411,40 @@ if (check_perms('site_torrents_notify')) {
 	}
 	if (stripos($Notify['Artists'], '|'.$Name.'|') === FALSE) {
 ?>
-			[<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Notify of new uploads</a>]
+			<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
 <?
 	} else {
 ?>
-			[<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Do not notify of new uploads</a>]
+			<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Do not notify of new uploads</a>
 <?
 	}
 }
 
 if (has_bookmarked('artist', $ArtistID)) {
 ?>
-			[<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" class="brackets" onclick="Unbookmark('artist', <?=$ArtistID?>,'Bookmark');return false;">Remove bookmark</a>]
+			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" class="brackets" onclick="Unbookmark('artist', <?=$ArtistID?>,'Bookmark');return false;">Remove bookmark</a>
 
 <?
 	} else {
 ?>
-			[<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" class="brackets" onclick="Bookmark('artist', <?=$ArtistID?>,'Remove bookmark');return false;">Bookmark</a>]
+			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" class="brackets" onclick="Bookmark('artist', <?=$ArtistID?>,'Remove bookmark');return false;">Bookmark</a>
 <?
 }
 
 if (check_perms('site_edit_wiki')) {
 ?>
-			[<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>">Edit</a>]
+			<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>" class="brackets">Edit</a>
 <? } ?>
-			[<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>">View history</a>]
+			<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>" class="brackets">View history</a>
 <? if (check_perms('site_delete_artist') && check_perms('torrents_delete')) { ?>
-			[<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Delete</a>]
+			<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Delete</a>
 <? }
 
 if ($RevisionID && check_perms('site_edit_wiki')) {
 ?>
-			[<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">
+			<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">
 				Revert to this revision
-			</a>]
+			</a>
 <? } ?>
 		</div>
 	</div>
@@ -529,10 +529,10 @@ if(empty($SimilarArray)) {
 ?>
 				<li>
 					<span title=<?=$Score?>><a href="artist.php?id=<?=$Artist2ID?>" style="float:left; display:block;"><?=$Artist2Name?></a></span>										<div style="float:right; display:block; letter-spacing: -1px;">
-					[<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;">&minus;</a>]
-					[<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;">+</a>]
+					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" class="brackets">&minus;</a>
+					<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" class="brackets">+</a>
 <?		if(check_perms('site_delete_tag')) { ?>
-					[<a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">X</a>]
+					<a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">X</a>
 <?		} ?>
 					</div>
 					<br style="clear:both" />

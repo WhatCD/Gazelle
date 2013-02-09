@@ -31,6 +31,7 @@
 	'site_moderate_requests' => 'Request moderation access.',
 	'site_delete_artist' => 'Can delete artists (must be able to delete torrents+requests).',
 	'site_moderate_forums' => 'Forum moderation access.',
+	
 	'site_admin_forums' => 'Forum administrator access.',
 	'site_forums_double_post' => 'Can double post in the forums.',
 	'site_view_flow' => 'Can view stats and data pools.',

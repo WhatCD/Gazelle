@@ -7,10 +7,10 @@ This design incorporates some code from the 'Customize Zeal' Greasemonkey script
 
 
 /* Global */
-@font-face { font-family: Akzidenz; src: url('http://ssl.what.cd/static/styles/postmod/images/Akzidenz.otf'); }
-@font-face { font-family: Officina; src: url('http://ssl.what.cd/static/styles/postmod/images/Officina.otf'); }
-@font-face { font-family: Corpid; src: url('http://ssl.what.cd/static/styles/postmod/images/CorpidOffice.ttf'); }
-@font-face { font-family: Avant; src: url('http://ssl.what.cd/static/styles/postmod/images/Avant.otf'); }
+@font-face { font-family: Akzidenz; src: url('https://what.cd/static/styles/postmod/images/Akzidenz.otf'); }
+@font-face { font-family: Officina; src: url('https://what.cd/static/styles/postmod/images/Officina.otf'); }
+@font-face { font-family: Corpid; src: url('https://what.cd/static/styles/postmod/images/CorpidOffice.ttf'); }
+@font-face { font-family: Avant; src: url('https://what.cd/static/styles/postmod/images/Avant.otf'); }
 
 * {
 	padding: 0em;
@@ -69,7 +69,7 @@ a[onclick]:focus {
 
 a[onclick]:active {
 	outline: 0;
-/*	background: url(http://ssl.what.cd/static/styles/postmod/images/load.gif) 100% 4px no-repeat; */
+/*	background: url(https://what.cd/static/styles/postmod/images/load.gif) 100% 4px no-repeat; */
 }
 
 a[onclick^="AddArtistField"]:focus, a[onclick^="AddArtistField"]:active {
@@ -78,11 +78,11 @@ a[onclick^="AddArtistField"]:focus, a[onclick^="AddArtistField"]:active {
 	padding: 0 !important;
 }
 
-.main_column a[href^="http"], .main_column a[href^="https"] { padding: 0 10px 0 0; background: url(http://ssl.what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat; }
-.main_column a[href^="http"]:hover, .main_column a[href^="https"]:hover { padding: 0 10px 0 0; background: url(http://ssl.what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat !important; }
-.forum_post a[href^="http"], .forum_post a[href^="https"] { padding: 0 10px 0 0; background: url(http://ssl.what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat; }
-.forum_post a[href^="http"]:hover, .forum_post a[href^="https"]:hover { padding: 0 10px 0 0; background: url(http://ssl.what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat; }
-.head a[href^="http"]:hover, .head a[href^="https"]:hover, .colhead a[href^="http"]:hover, .colhead a[href^="https"]:hover, .colhead_dark a[href^="http"]:hover, .colhead_dark a[href^="https"]:hover { padding: 0 10px 0 0; background: url(http://ssl.what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat; }
+.main_column a[href^="http"], .main_column a[href^="https"] { padding: 0 10px 0 0; background: url(https://what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat; }
+.main_column a[href^="http"]:hover, .main_column a[href^="https"]:hover { padding: 0 10px 0 0; background: url(https://what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat !important; }
+.forum_post a[href^="http"], .forum_post a[href^="https"] { padding: 0 10px 0 0; background: url(https://what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat; }
+.forum_post a[href^="http"]:hover, .forum_post a[href^="https"]:hover { padding: 0 10px 0 0; background: url(https://what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat; }
+.head a[href^="http"]:hover, .head a[href^="https"]:hover, .colhead a[href^="http"]:hover, .colhead a[href^="https"]:hover, .colhead_dark a[href^="http"]:hover, .colhead_dark a[href^="https"]:hover { padding: 0 10px 0 0; background: url(https://what.cd/static/styles/postmod/images/external.png) 100% 4px no-repeat; }
 .forum_post a[href^="http"] img, .forum_post a[href^="https"] img { padding: 0 0 0 0; background: transparent !important; border: none; }
 .forum_post a[href^="http"] img:hover, .forum_post a[href^="https"] img:hover { padding: 0 0 0 0; background: transparent !important; border: none; }
 
@@ -144,10 +144,10 @@ ul.thin li { margin:0px 0px; padding:0px; }
 #header {
 	width: 950px;
 	margin: 0 auto 0 auto;
-	/*background: url('http://ssl.what.cd/static/styles/postmod/images/bg_header.png') 11px 65px no-repeat;*/
+	/*background: url('https://what.cd/static/styles/postmod/images/bg_header.png') 11px 65px no-repeat;*/
 	height: 173px;
 	padding: 0 0 0 0;
-	background: transparent url('http://ssl.what.cd/static/styles/postmod/images/content.png');
+	background: transparent url('https://what.cd/static/styles/postmod/images/content.png');
 }
 
 #content {
@@ -155,13 +155,13 @@ ul.thin li { margin:0px 0px; padding:0px; }
 	margin: 0 auto 0 auto;
 	border: 1px solid #222;
 	color: #DFDFDF;
-	background: transparent url('http://ssl.what.cd/static/styles/postmod/images/content.png');
+	background: transparent url('https://what.cd/static/styles/postmod/images/content.png');
 	padding: 40px 22px;
 	overflow: hidden;
 }
 
 #alerts {
-	background: transparent url('http://ssl.what.cd/static/styles/postmod/images/content.png');
+	background: transparent url('https://what.cd/static/styles/postmod/images/content.png');
 	padding: 4px 9px;
 	margin: -19px auto 0 auto;
 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -169,7 +169,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 
 #footer {
-	background: transparent url('http://ssl.what.cd/static/styles/postmod/images/bg_footer.png');
+	background: transparent url('https://what.cd/static/styles/postmod/images/bg_footer.png');
 	margin-top: 40px;
 	width: 100%;
 	text-align: center;
@@ -179,7 +179,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 
 #footer:after {
-	content: url('http://ssl.what.cd/static/styles/postmod/images/gazelle.png');
+	content: url('https://what.cd/static/styles/postmod/images/gazelle.png');
 }
 
 #disclaimer_container { 
@@ -190,7 +190,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 #logo {
 	width: 138px;
 	height: 37px;
-	background: url('http://ssl.what.cd/static/styles/postmod/images/woodlogo.png') no-repeat top left;
+	background: url('https://what.cd/static/styles/postmod/images/woodlogo.png') no-repeat top left;
 	margin: 23px 0 0 11px;
 	position: absolute;
 	z-index: 2;
@@ -360,7 +360,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 	padding: 0 2px 0 10px;
 	font-family: Helvetica, Arial, sans-serif;
 	height: 22px;
-	background: url('http://ssl.what.cd/static/styles/postmod/images/content_light.png') transparent;
+	background: url('https://what.cd/static/styles/postmod/images/content_light.png') transparent;
 	color: #FFF;
 	-moz-border-radius: 2px; 
 	-webkit-border-radius: 2px;
@@ -369,14 +369,14 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 
 #autocomplete {
-	background: url('http://ssl.what.cd/static/styles/postmod/images/content.png');
+	background: url('https://what.cd/static/styles/postmod/images/content.png');
 	border: 1px solid #EEE;
 	list-style: none;
 }
 
 #searchbars input:active,
 #searchbars input:focus {
-	background: url('http://ssl.what.cd/static/styles/postmod/images/content.png');
+	background: url('https://what.cd/static/styles/postmod/images/content.png');
 	border: 1px solid #EEE;
 }
 
@@ -399,22 +399,22 @@ ul.thin li { margin:0px 0px; padding:0px; }
 }
 
 #searchbars ul li ul {
-		display: block;
-        position: absolute;
-        top: 1em;
-		left: 0;
-        z-index: 1000;
-        border : 1px solid #EEE;
-		background: url('http://ssl.what.cd/static/styles/postmod/images/content.png');
-        width: 12em;
-        margin-top: 12px;
+	display: block;
+	position: absolute;
+	top: 1em;
+	left: 0;
+	z-index: 1000;
+	border : 1px solid #EEE;
+	background: url('https://what.cd/static/styles/postmod/images/content.png');
+	width: 12em;
+	margin-top: 12px;
 }
 
 #searchbars ul li ul li {
-        margin: 1px 0 1px 4px;
-        padding: 0;
-        display: block;
-        width: 100%;
+	margin: 1px 0 1px 4px;
+	padding: 0;
+	display: block;
+	width: 100%;
 	cursor: pointer;
 }
 
@@ -460,7 +460,7 @@ table.grouping>tbody>tr.colhead>td:first-child+td+td,
 table.no_grouping>tbody>tr.group>td:first-child+td,
 table.no_grouping>tbody>tr.colhead>td:first-child+td { text-indent:-20px; border-left: none;}
 
-.last_read {width: 15px; height: 15px; background: url('http://ssl.what.cd/static/styles/postmod/images/go_last_read.png') no-repeat center center; margin-left: 5px;}
+.last_read {width: 15px; height: 15px; background: url('https://what.cd/static/styles/postmod/images/go_last_read.png') no-repeat center center; margin-left: 5px;}
 .last_read a { border: none; width: 100%; height: 100%; display: block; }
 .last_read a:hover { border: none; }
 .last_read a:active, .last_read a:focus { outline: 0; }
@@ -482,14 +482,6 @@ input.hidden {
 	width: 850px;
 	margin: 0px auto;
 	color: #DFDFDF;
-}
-
-#userinfo_username .brackets:before {
-	content: "[";
-}
-
-#userinfo_username .brackets:after {
-	content: "]";
 }
 
 .linkbox {
@@ -616,7 +608,7 @@ td, th {
 
 .colhead, .colhead_dark, .head {
 	padding: 4px;
-	background: #000 url('http://ssl.what.cd/static/styles/postmod/images/table_header_dark.png') repeat-x;
+	background: #000 url('https://what.cd/static/styles/postmod/images/table_header_dark.png') repeat-x;
 	border-bottom: 1px solid #000;
 	color: #FBFCFD;
 }
@@ -706,7 +698,7 @@ ul.poll li.graph {
 .show_torrents {
 	width: 28px;
 	height: 28px;
-	background: url('http://ssl.what.cd/static/styles/postmod/images/show.png') no-repeat center center;
+	background: url('https://what.cd/static/styles/postmod/images/show.png') no-repeat center center;
 	-moz-opacity: 0.5;
 	opacity:.50;
 	filter: alpha(opacity=50);
@@ -715,7 +707,7 @@ ul.poll li.graph {
 .hide_torrents {
 	width: 28px;
 	height: 28px;
-	background: url('http://ssl.what.cd/static/styles/postmod/images/hide.png') no-repeat center center;
+	background: url('https://what.cd/static/styles/postmod/images/hide.png') no-repeat center center;
 	-moz-opacity: 0.5;
 	opacity:.50;
 	filter: alpha(opacity=50);
@@ -728,7 +720,7 @@ ul.poll li.graph {
 	display: block;
 }
 
-.torrent_table  a:active img, .torrent_table  a:focus img {
+.torrent_table a:active img, .torrent_table a:focus img {
 	background-color: transparent !important;
 }
 
@@ -794,14 +786,14 @@ tr.torrent td {
 
 /* Layout (Forums) */
 
-.unread_locked_sticky{background: url('http://ssl.what.cd/static/styles/postmod/images/locked_sticky_unread.png') no-repeat center center;}
-.read_locked_sticky{background: url('http://ssl.what.cd/static/styles/postmod/images/locked_sticky_read.png') no-repeat center center;}
-.read_sticky{background: url('http://ssl.what.cd/static/styles/postmod/images/sticky_read.png') no-repeat center center;}
-.unread_sticky{background: url('http://ssl.what.cd/static/styles/postmod/images/sticky_unread.png') no-repeat center center;}
-.unread_locked{background: url('http://ssl.what.cd/static/styles/postmod/images/locked_unread.png') no-repeat center center;}
-.read_locked{background: url('http://ssl.what.cd/static/styles/postmod/images/locked_read.png') no-repeat center center;}
-.unread{background: url('http://ssl.what.cd/static/styles/postmod/images/unread.png') no-repeat center center;}
-.read{background: url('http://ssl.what.cd/static/styles/postmod/images/read.png') no-repeat center center;}
+.unread_locked_sticky{background: url('https://what.cd/static/styles/postmod/images/locked_sticky_unread.png') no-repeat center center;}
+.read_locked_sticky{background: url('https://what.cd/static/styles/postmod/images/locked_sticky_read.png') no-repeat center center;}
+.read_sticky{background: url('https://what.cd/static/styles/postmod/images/sticky_read.png') no-repeat center center;}
+.unread_sticky{background: url('https://what.cd/static/styles/postmod/images/sticky_unread.png') no-repeat center center;}
+.unread_locked{background: url('https://what.cd/static/styles/postmod/images/locked_unread.png') no-repeat center center;}
+.read_locked{background: url('https://what.cd/static/styles/postmod/images/locked_read.png') no-repeat center center;}
+.unread{background: url('https://what.cd/static/styles/postmod/images/unread.png') no-repeat center center;}
+.read{background: url('https://what.cd/static/styles/postmod/images/read.png') no-repeat center center;}
 
 table.forum_post {
 	margin: 10px 0px;
@@ -891,13 +883,13 @@ ul .invitetree {
 
 /* Layout (MISC) */
 
-.poll{list-style:none; padding:10px; margin:5px}
-.poll li{clear:both}
+.poll{list-style: none; padding:10px; margin:5px}
+.poll li{clear: both}
 .poll .graph{padding:0 0 15px 0}
-.poll .graph span{display:block;  height:19px;  float:left}
-.poll .graph .left_poll{width:9px;  background:url('http://ssl.what.cd/static/styles/postmod/images/poll_left.png') top left no-repeat}
-.poll .graph .center_poll{background:url('http://ssl.what.cd/static/styles/postmod/images/poll_middle.png') top left repeat-x}
-.poll .graph .right_poll{width:11px;  background:url('http://ssl.what.cd/static/styles/postmod/images/poll_right.png') top left no-repeat}
+.poll .graph span{display: block; height: 19px; float: left}
+.poll .graph .left_poll{width: 9px; background: url('https://what.cd/static/styles/postmod/images/poll_left.png') top left no-repeat}
+.poll .graph .center_poll{background: url('https://what.cd/static/styles/postmod/images/poll_middle.png') top left repeat-x}
+.poll .graph .right_poll{width: 11px; background: url('https://what.cd/static/styles/postmod/images/poll_right.png') top left no-repeat}
 
 .curtain {
 	position: fixed;
@@ -932,7 +924,7 @@ ul .invitetree {
 }
 
 input[type=button], input[type=submit] {
-	background: #111 url(http://ssl.what.cd/static/styles/postmod/images/alert-overlay.png) repeat-x; 
+	background: #111 url(https://what.cd/static/styles/postmod/images/alert-overlay.png) repeat-x; 
 	display: inline-block; 
 	padding: 3px 6px 4px; 
 	margin: 3px;
@@ -953,7 +945,7 @@ input[type=button]:hover, input[type=submit]:hover	 { background-color: #000; co
 input[type=button]:active , input[type=submit]:active { top: 1px; }
 
 input[type="button"]:active, input[type="button"]:focus, input[type="submit"]:active, input[type="submit"]:focus {
-/*	background: #262626 url(http://ssl.what.cd/static/styles/postmod/images/load.gif) no-repeat center center; */
+/*	background: #262626 url(https://what.cd/static/styles/postmod/images/load.gif) no-repeat center center; */
 	display: inline-block; 
 	padding: 3px 6px 4px; 
 	margin: 3px;
@@ -971,7 +963,7 @@ input[type="button"]:active, input[type="button"]:focus, input[type="submit"]:ac
 }
 
 input[type=text], input[type="password"], input[type="search"] {
-	background: #111 url(http://ssl.what.cd/static/styles/postmod/images/alert-overlay.png) repeat-x;
+	background: #111 url(https://what.cd/static/styles/postmod/images/alert-overlay.png) repeat-x;
 	display: inline-block;
 	padding: 3px;
 	margin: 3px;
@@ -984,9 +976,9 @@ input[type=text], input[type="password"], input[type="search"] {
 }
 
 input[type=text]:hover, input[type=text]:focus, input[type="search"]:hover, input[type="search"]:focus, input[type="password"]:hover, input[type="password"]:focus { background-color: #000; color: #FFF; }
-input[type=text]:active, input[type="search"]:active, input[type="password"]:active  { top: 1px; }
+input[type=text]:active, input[type="search"]:active, input[type="password"]:active { top: 1px; }
 
-input[disabled=disabled] { background: #4F4F4F url(http://ssl.what.cd/static/styles/postmod/images/alert-overlay.png) repeat-x; color: #DFDFDF; }
+input[disabled=disabled] { background: #4F4F4F url(https://what.cd/static/styles/postmod/images/alert-overlay.png) repeat-x; color: #DFDFDF; }
 input[disabled=disabled]:hover, input[disabled=disabled]:focus, input[disabled=disabled]:active { background-color: #4F4F4F; color: #DFDFDF; }
 
 /*
@@ -1032,17 +1024,12 @@ select:hover, option:hover {
 }
 
 .rippy {
-  background-image:url(http://puu.sh/AmW/rippy.gif);
-  display: block !important;
-  height: 180px;
-  width: 180px;
-}
-.rippy #bubble { display: none !important; }
-
-.linkbox .brackets:before {
-	content: "[";
+	background-image:url(http://puu.sh/AmW/rippy.gif);
+	display: block !important;
+	height: 180px;
+	width: 180px;
 }
 
-.linkbox .brackets:after {
-	content: "]";
+.rippy #bubble {
+	display: none !important;
 }

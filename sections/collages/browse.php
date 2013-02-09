@@ -307,7 +307,7 @@ foreach ($Collages as $Collage) {
 			<a href="collages.php?id=<?=$ID?>"><?=$Name?></a>
 <?	if ($BookmarkView) { ?>
 			<span style="float:right">
-				[<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;">Remove bookmark</a>]
+				<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;" class="brackets">Remove bookmark</a>
 			</span>
 <?	} 
 		if(!empty($Tags)) {

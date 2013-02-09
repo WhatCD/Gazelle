@@ -92,10 +92,10 @@ View::show_header('Top '.$Limit.' Voted Groups','browse,voting');
 	<div class="header">
 		<h2>Top <?=$Limit?> Voted Groups</h2>
 		<div class="linkbox">
-			[<a href="top10.php?type=torrents">Torrents</a>]
-			[<a href="top10.php?type=users">Users</a>]
-			[<a href="top10.php?type=tags">Tags</a>]
-			[<a href="top10.php?type=votes"><strong>Favorites</strong></a>]
+			<a href="top10.php?type=torrents" class="brackets">Torrents</a>
+			<a href="top10.php?type=users" class="brackets">Users</a>
+			<a href="top10.php?type=tags" class="brackets">Tags</a>
+			<a href="top10.php?type=votes" class="brackets"><strong>Favorites</strong></a>
 		</div>
 	</div>
 <?
@@ -140,19 +140,19 @@ if(empty($_GET['advanced'])){ ?>
 <?
 	switch($Limit) {
 		case 100: ?>
-			- [<a href="top10.php?type=votes">Top 25</a>]
-			- [Top 100]
-			- [<a href="top10.php?type=votes&amp;limit=250">Top 250</a>]
+			- <a href="top10.php?type=votes" class="brackets">Top 25</a>
+			- <span class="brackets">Top 100</span>
+			- <a href="top10.php?type=votes&amp;limit=250" class="brackets">Top 250</a>
 		<?	break;
 		case 250: ?>
-			- [<a href="top10.php?type=votes">Top 25</a>]
-			- [<a href="top10.php?type=votes&amp;limit=100">Top 100</a>]
-			- [Top 250]
+			- <a href="top10.php?type=votes" class="brackets">Top 25</a>
+			- <a href="top10.php?type=votes&amp;limit=100" class="brackets">Top 100</a>
+			- <span class="brackets">Top 250</span>
 		<?	break;
 		default: ?>
-			- [Top 25]
-			- [<a href="top10.php?type=votes&amp;limit=100">Top 100</a>]
-			- [<a href="top10.php?type=votes&amp;limit=250">Top 250</a>]
+			- <span class="brackets">Top 25</span>
+			- <a href="top10.php?type=votes&amp;limit=100" class="brackets">Top 100</a>
+			- <a href="top10.php?type=votes&amp;limit=250" class="brackets">Top 250</a>
 <?	} ?>
 		</small>
 <?
@@ -221,9 +221,9 @@ foreach ($TopVotes as $GroupID=>$Group) {
 					<td>
 						<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
 		<?	if($IsBookmarked) { ?>
-						<span class="bookmark" style="float:right;">[ <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a> ]</span>
+						<span class="bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
 		<?	} else { ?>
-						<span class="bookmark" style="float:right;">[ <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a> ]</span>
+						<span class="bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
 		<?	} ?>
 					<?=$TorrentTags?>
 					</td>

@@ -47,6 +47,7 @@ if(!isset($Forum) || !is_array($Forum)) {
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
 	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
+	
 	if($Page==1) {
 		$DB->query("SELECT COUNT(ID) FROM forums_topics WHERE ForumID='$ForumID' AND IsSticky='1'");
 		list($Stickies) = $DB->next_record();
@@ -114,9 +115,9 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 	if(check_perms('users_mod')) {
 	$DB->query("SELECT ForumID from subscribed_forums WHERE ForumID='$ForumID' AND SubscriberID='$LoggedUser[ID]'");
         if($DB->record_count() == 0) { ?>
-		[<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Subscribe to Forum</a>]
+		<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Subscribe to forum</a>
 <?      } else { ?> 
-		[<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>">Unsubscribe from Forum</a>]
+		<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Unsubscribe from forum</a>
 <?      } 
 	}
  */
@@ -184,7 +185,6 @@ if (count($Forum) == 0) {
 	foreach($Forum as $Topic){
 		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
 		$Row = ($Row == 'a') ? 'b' : 'a';
-
 			// Build list of page links
 		// Only do this if there is more than one page
 		$PageLinks = array();
@@ -224,6 +224,7 @@ if (count($Forum) == 0) {
 <?
 		$TopicLength=75-(2*count($PageLinks));
 		unset($PageLinks);
+		
 ?>
 				<strong>
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($Title)?>"><?=display_str(Format::cut_string($Title, $TopicLength)) ?></a>

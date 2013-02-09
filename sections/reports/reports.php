@@ -100,7 +100,7 @@ $DB->set_query_id($Reports);
 					<td><strong><a href="<?=$Reference?>">Report #<?=$ReportID?></a></strong></td>
 					<td>
 						<strong><?=$Type['title']?></strong> was reported by <a href="user.php?id=<?=$SnitchID?>"><?=$SnitchName?></a> <?=time_diff($ReportedTime)?>
-						[<a href="reports.php?action=compose&amp;to=<?=$SnitchID?>&amp;reportid=<?=$ReportID?>&amp;type=<?=$Short?>&amp;thingid=<?=$ThingID?>">Contact</a>]
+						<a href="reports.php?action=compose&amp;to=<?=$SnitchID?>&amp;reportid=<?=$ReportID?>&amp;type=<?=$Short?>&amp;thingid=<?=$ThingID?>" class="brackets">Contact</a>
 					</td>
 				</tr>
 				<tr>
@@ -212,14 +212,14 @@ $DB->set_query_id($Reports);
 				<tr>
 					<td colspan="2">
 						<?    if ($ClaimerID == $LoggedUser['ID']) { ?>
-						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?> [<a href="#" onclick="unClaim(<?=$ReportID?>); return false;">Unclaim</a>]</span>
+						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?> <a href="#" onclick="unClaim(<?=$ReportID?>); return false;" class="brackets">Unclaim</a></span>
 						<? } else if ($ClaimerID) { ?>
 						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?></span>
 						<? } else { ?>
-						[<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;">Claim</a>]
+						<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;" class="brackets">Claim</a>
 						<? } ?>
 						&nbsp;&nbsp;
-						[<a onclick="toggleNotes(<?=$ReportID?>); return false;" href="#">Toggle Notes</a>]
+						<a href="#" onclick="toggleNotes(<?=$ReportID?>); return false;" class="brackets">Toggle Notes</a>
 
 						<div id="notes_div_<?=$ReportID?>" style="display: <?=empty($Notes) ? "none" : "block"?>;">
 							<textarea cols="50" rows="3" id="notes_<?=$ReportID?>"><?=$Notes?></textarea>

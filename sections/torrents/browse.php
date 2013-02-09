@@ -756,7 +756,7 @@ if($x%7!=0) { // Padding
 		</table>
 		<table class="layout cat_list" width="100%">
 			<tr>
-				<td class="label"><a href="#" onclick="$('#taglist').toggle();return false;">(View Tags)</a></td>
+				<td class="label"><a class="brackets" href="#" onclick="$('#taglist').toggle();return false;">View tags</a></td>
 			</tr>
 		</table>
 		<div class="submit">
@@ -883,7 +883,7 @@ if ($LoggedUser['DefaultSearch']) {
 		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div></td>
 		<td colspan="2">
 			<?=$DisplayName?>
-			<span style="float:right;"><a href="#showimg_<?=$GroupID?>" onclick="Bookmark(<?=$GroupID?>);this.innerHTML='Bookmarked';return false;">[Bookmark]</a></span>
+			<span style="float:right;"><a href="#showimg_<?=$GroupID?>" onclick="Bookmark(<?=$GroupID?>);this.innerHTML='Bookmarked';return false;" class="brackets">Bookmark</a></span>
 			<?=$TorrentTags?>
 		</td>
 		<td class="nobr"><?=time_diff($GroupTime,1)?></td>

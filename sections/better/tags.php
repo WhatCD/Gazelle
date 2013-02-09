@@ -27,16 +27,16 @@ $Results = $Results['matches'];
 ?>
 <div class="header">
 <? if($All) { ?>
-		<h2>All torrents trumpable for tags</h2>
+		<h2>All torrents trumpable for bad tags</h2>
 <? } else { ?>
-		<h2>Torrents trumpable for tags, that you've snatched</h2>
+		<h2>Torrents trumpable for bad tags that you have snatched</h2>
 <? } ?>
 
 	<div class="linkbox">
 <? if($All) { ?>
-		<a href="better.php?method=tags">Just those you've snatched</a>
+		<a href="better.php?method=tags" class="brackets">Show only those you have snatched</a>
 <? } else { ?>
-		<a href="better.php?method=tags&amp;filter=all">Show all</a>
+		<a href="better.php?method=tags&amp;filter=all" class="brackets">Show all</a>
 <? } ?>
 	</div>
 </div>
@@ -78,11 +78,11 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 		<tr class="torrent torrent_row<?=$Torrents[$TorrentID]['IsSnatched'] ? ' snatched_torrent' : ''?>">
 			<td>
 				<span class="torrent_links_block">
-					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
+					<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets" title="Download torrent">DL</a>
 				</span>
 				<?=$DisplayName?>
 <?	if(check_perms('admin_reports')) { ?>
-				<a href="better.php?method=tags&amp;remove=<?=$TorrentID?>">[X]</a>
+				<a href="better.php?method=tags&amp;remove=<?=$TorrentID?>" class="brackets">X</a>
 <? 	} ?>
 				<?=$TorrentTags?>
 			</td>

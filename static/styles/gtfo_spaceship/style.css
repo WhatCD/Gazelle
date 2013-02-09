@@ -1413,11 +1413,3 @@ body#forums .poll li.graph {
 .navigation_list li {
     margin-left: 20px;
 }
-
-.linkbox .brackets:before {
-    content: "[";
-}
-
-.linkbox .brackets:after {
-    content: "]";
-}

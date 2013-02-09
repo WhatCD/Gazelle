@@ -13,8 +13,8 @@ function confirmDelete(id) {
 <div class="thin">
 	<div class="header">
 		<div class="linkbox">
-			[<a href="tools.php?action=permissions&amp;id=new">Create a new permission set</a>]
-			[<a href="tools.php">Back to tools</a>]
+			<a href="tools.php?action=permissions&amp;id=new" class="brackets">Create a new permission set</a>
+			<a href="tools.php" class="brackets">Back to tools</a>
 		</div>
 	</div>
 <?
@@ -37,7 +37,10 @@ if($DB->record_count()) {
 			<td><?=display_str($Name); ?></td>
 			<td><?=($Secondary?'Secondary':$Level) ?></td>
 			<td><?=number_format($UserCount); ?></td>
-			<td class="center">[<a href="tools.php?action=permissions&amp;id=<?=$ID ?>">Edit</a> | <a href="#" onclick="return confirmDelete(<?=$ID?>)">Remove</a>]</td>
+			<td class="center">
+				<a href="tools.php?action=permissions&amp;id=<?=$ID ?>" class="brackets">Edit</a>
+				<a href="#" onclick="return confirmDelete(<?=$ID?>)" class="brackets">Remove</a>
+			</td>
 		</tr>
 <?	} ?>
 	</table>

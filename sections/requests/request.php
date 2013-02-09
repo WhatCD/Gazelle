@@ -89,22 +89,22 @@ View::show_header('View request: '.$FullName, 'comments,requests,bbcode,jquery')
 		<h2><a href="requests.php">Requests</a> &gt; <?=$CategoryName?> &gt; <?=$DisplayLink?></h2>
 		<div class="linkbox">
 <? if($CanEdit) { ?> 
-			<a href="requests.php?action=edit&amp;id=<?=$RequestID?>">[Edit]</a>
+			<a href="requests.php?action=edit&amp;id=<?=$RequestID?>" class="brackets">Edit</a>
 <? }
 if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requests')) { ?>
-			<a href="requests.php?action=delete&amp;id=<?=$RequestID?>">[Delete]</a>
+			<a href="requests.php?action=delete&amp;id=<?=$RequestID?>" class="brackets">Delete</a>
 <? } ?>
 <?	if(has_bookmarked('request', $RequestID)) { ?>
-			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'[Bookmark]');return false;">[Remove bookmark]</a>
+			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'[Bookmark]');return false;" class="brackets">Remove bookmark</a>
 <?	} else { ?>
-			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;">[Bookmark]</a>
+			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;" class="brackets">Bookmark</a>
 <?	} ?>
-			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">[Report Request]</a>
+			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>" class="brackets">Report request</a>
 <?	if(!$IsFilled) { ?>
-			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&groupid=$GroupID":'')?>">[Upload Request]</a>
+			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&groupid=$GroupID":'')?>" class="brackets">Upload request</a>
 <?	}
 	if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
-			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>">[Request Update]</a>
+			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>" class="brackets">Request update</a>
 <? } ?>
 
 <?
@@ -119,8 +119,8 @@ $worldcat_url = "http://worldcat.org/search?q=" . $encoded_artist . " " . $encod
 $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . " " . $encoded_title;
 
 ?>
-			<a href="<? echo $worldcat_url; ?>">[Find in Library]</a>
-			<a href="<? echo $google_url; ?>">[Find in Stores]</a>
+			<a href="<? echo $worldcat_url; ?>" class="brackets">Find in library</a>
+			<a href="<? echo $google_url; ?>" class="brackets">Find in stores</a>
 		</div>
 	</div>
 	<div class="sidebar">
@@ -443,7 +443,7 @@ if (!empty($Image)) {
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 							<input type="hidden" name="requestid" value="<?=$RequestID?>" />
 							<input type="text" size="50" name="link" <?=(!empty($Link) ? "value='$Link' " : '')?>/>
-							<strong>Should be the permalink (PL) to the torrent (e.g. http://<?=NONSSL_SITE_URL?>/torrents.php?torrentid=xxxx).</strong>
+							<strong>Should be the permalink (PL) to the torrent (e.g. https://<?=SSL_SITE_URL?>/torrents.php?torrentid=xxxx).</strong>
 							<br />
 							<br />
 							<? if(check_perms('site_moderate_requests')) { ?> For User: <input type="text" size="25" name="user" <?=(!empty($FillerUsername) ? "value='$FillerUsername' " : '')?>/>
@@ -550,16 +550,16 @@ foreach($Thread as $Key => $Post) {
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<div style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
 				by <strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
-				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');">[Quote]</a>
+				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
 <?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');">[Edit]</a>
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
 <?	}
 	if (check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');">[Delete]</a>
+				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
 <?	} ?>
 			</div>
 			<div id="bar<?=$PostID?>" style="float:right;">
-				<a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>">[Report]</a>
+				<a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
 				&nbsp;
 				<a href="#">&uarr;</a>
 			</div>

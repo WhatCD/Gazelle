@@ -1,5 +1,5 @@
 <?
-View::show_header('Create an article');
+View::show_header('Create an article', 'jquery');
 ?>
 <div class="thin">
 	<div class="box pad">
@@ -17,7 +17,9 @@ View::show_header('Create an article');
 				<input type="text" name="alias" size="50" maxlength="50" />
 <? } */?>
 				<h3>Body </h3>
-				<textarea name="body" cols="91" rows="22" style="width:95%"></textarea>
+<?
+			$ReplyText = new TEXTAREA_PREVIEW('body', 'body', '', 91, 22, true, false);
+?>
 <? if(check_perms('admin_manage_wiki')){ ?>
 				<h3>Access</h3>
 				<p>There are some situations in which the viewing or editing of an article should be restricted to a certain class.</p>
@@ -25,6 +27,7 @@ View::show_header('Create an article');
 				<strong>Restrict Edit:</strong> <select name="minclassedit"><?=class_list()?></select>
 <? } ?>
 				<div style="text-align: center;">
+					<input type="button" value="Preview" class="hidden button_preview_<?=$ReplyText->getID()?>" title="Preview text" tabindex="1" />
 					<input type="submit" value="Submit" />
 				</div>
 			</div>

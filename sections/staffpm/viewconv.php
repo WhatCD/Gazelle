@@ -37,21 +37,21 @@ if ($ConvID = (int)$_GET['id']) {
 	// Staff only
 	if ($IsStaff) {
 ?>
-		<a href="staffpm.php">[My unanswered]</a>
+		<a href="staffpm.php" class="brackets">My unanswered</a>
 <?
 	}
 
 	// FLS/Staff
 	if ($IsFLS) {
 ?>
-			<a href="staffpm.php?view=unanswered">[All unanswered]</a>
-			<a href="staffpm.php?view=open">[Open]</a>
-			<a href="staffpm.php?view=resolved">[Resolved]</a>
+			<a href="staffpm.php?view=unanswered" class="brackets">All unanswered</a>
+			<a href="staffpm.php?view=open" class="brackets">Open</a>
+			<a href="staffpm.php?view=resolved" class="brackets">Resolved</a>
 <?
 		// User
 	} else {
 ?>
-			<a href="staffpm.php">[Back to inbox]</a>
+			<a href="staffpm.php" class="brackets">Back to inbox</a>
 <?
 	}
 
@@ -85,7 +85,7 @@ if ($ConvID = (int)$_GET['id']) {
 				</strong>
 				<?=time_diff($SentDate, 2, true)?>
 <?		if ($Status != 'Resolved') { ?>
-				- <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Username?>');">[Quote]</a>
+				- <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Username?>');" class="brackets">Quote</a>
 <?		} ?>
 			</div>
 			<div class="body"><?=$Text->full_format($Message)?></div>
@@ -103,7 +103,7 @@ if ($ConvID = (int)$_GET['id']) {
 				<div class="head">
 					<strong>Preview</strong>
 				</div>
-				<div id="common_answers_body" class="body">Select an answer from the dropdown to view it.</div>
+				<div id="common_answers_body" class="body">Select an answer from the drop-down to view it.</div>
 			</div>
 			<br />
 			<div class="center">

@@ -427,7 +427,7 @@ if(check_perms('zip_downloader')){
 					<li id="list<?=$ListItem?>">
 						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
 						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-						<span class="remove remove_collector">[<a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;">X</a>]</span>
+						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" class="brackets">X</a></span>
 						<br style="clear:all;" />
 					</li>
 <? } ?>
@@ -535,7 +535,7 @@ foreach ($Users as $ID => $User) {
 		</div>
 <? if(check_perms('site_collages_manage') && !$PreventAdditions) { ?>
 		<div class="box box_addtorrent">
-			<div class="head"><strong>Add torrent</strong><span style="float: right">[<a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch Add'?'Individual Add':'Batch Add'); return false;">Batch Add</a>]</span></div>
+			<div class="head"><strong>Add torrent</strong><span style="float: right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add'?'Individual add':'Batch add'); return false;" class="brackets">Batch add</a></span></div>
 			<div class="pad add_torrent_container">
 				<form class="add_form" name="torrent" action="collages.php" method="post">
 					<input type="hidden" name="action" value="add_torrent" />
@@ -579,14 +579,14 @@ foreach ($CommentList as $Comment) {
 	list($CommentID, $Body, $UserID, $Username, $CommentTime) = $Comment;
 ?>
 		<div class="box comment">
-			<div class="head">By <?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> [<a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>">Report Comment</a>]</div>
+			<div class="head">By <?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>" class="brackets">Report Comment</a></div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
 <?
 }
 ?>
 		<div class="box pad">
-			<a href="collages.php?action=comments&amp;collageid=<?=$CollageID?>">All comments</a>
+			<a href="collages.php?action=comments&amp;collageid=<?=$CollageID?>" class="brackets">View all comments</a>
 		</div>
 <?
 if(!$LoggedUser['DisablePosting']) {
