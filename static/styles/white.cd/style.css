@@ -489,6 +489,8 @@ table tr td.edition_info {
 	position:absolute;
 	top:0;
 	left:734px;
+	right:0;
+	width: 300px;
 	}
 #artist #content .linkbox:first-of-type a {
 	margin-right:5px;

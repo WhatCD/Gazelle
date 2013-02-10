@@ -48,7 +48,11 @@ class Tools {
 		if (isset($IPs[$IP])) {
 			return $IPs[$IP];
 		}
-		$Long = Tools::ip_to_unsigned($IP);
+		if (is_number($IP)) {
+			$Long = $IP;
+		} else {
+			$Long = Tools::ip_to_unsigned($IP);
+		}
 		if(!$Long || $Long == 2130706433) { // No need to check cc for 127.0.0.1
 			return false;
 		}
@@ -126,7 +130,7 @@ class Tools {
 	 */
 	public static function display_ip($IP) {
 		$Line = display_str($IP).' ('.Tools::get_country_code_by_ajax($IP).') ';
-		$Line .= '[<a href="user.php?action=search&amp;ip_history=on&amp;ip='.display_str($IP).'&amp;matchtype=strict" title="Search">S</a>]';
+		$Line .= '<a href="user.php?action=search&amp;ip_history=on&amp;ip='.display_str($IP).'&amp;matchtype=strict" title="Search" class="brackets">S</a>';
 		
 		return $Line;
 	}
@@ -238,7 +242,7 @@ class Tools {
 				WHERE UserID=\''.db_string($UserID).'\'');
 		}
 	}
-	
+
 	/**
 	 * Update the notes of a user
 	 * @param unknown $UserID ID of user
@@ -250,6 +254,6 @@ class Tools {
 					AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
 					WHERE UserID=\''.db_string($UserID).'\'');
 	}
-	
+
 }
 ?>

@@ -536,20 +536,13 @@ h3{margin:10px 0}
 	font-weight: bold;
 }
 
-
-tr.torrent .bookmark > a:before { content:""; }
-tr.torrent .bookmark > a:after { content:""; }
+tr.torrent .bookmark > a:before { content: ""; }
+tr.torrent .bookmark > a:after { content: ""; }
 
 .sidebar .navigation_list li {
 	margin-left: 20px;
 }
 
-.linkbox .brackets:before {
-	content: "[ ";
-	color: #757575;
-}
-
-.linkbox .brackets:after {
-	content: " ]";
+.linkbox .brackets:before, .linkbox .brackets:after {
 	color: #757575;
 }

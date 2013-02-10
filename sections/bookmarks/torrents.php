@@ -125,7 +125,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
 			$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
-			
+
 			if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
 
@@ -290,8 +290,8 @@ View::show_header($Title, 'browse,collage');
 			<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
 <? if (count($TorrentList) > 0) { ?>
 			<br /><br />
-			<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">Remove Snatched</a>
-			<a href="bookmarks.php?action=edit&amp;type=torrents" class="brackets">Manage Torrents</a>
+			<a href="bookmarks.php?action=remove_snatched&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets" onclick="return confirm('Are you sure you want to remove the bookmarks for all items you\'ve snatched?');">Remove snatched</a>
+			<a href="bookmarks.php?action=edit&amp;type=torrents" class="brackets">Manage torrents</a>
 <? } ?>
 		</div>
 	</div>

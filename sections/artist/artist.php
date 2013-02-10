@@ -223,7 +223,7 @@ if (!empty($UsedReleases)) { ?>
 				$DisplayName = $ReleaseTypes[$ReleaseID]."s";
 				break;
 		}
-		
+
 		if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['SortHide']) && array_key_exists($ReleaseType, $LoggedUser['SortHide']) && $LoggedUser['SortHide'][$ReleaseType] == 1)) {
 			$ToggleStr = " onclick=\"$('.releases_$ReleaseID').show(); return true;\"";
 		} else {
@@ -252,7 +252,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 
 	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
 	if ($Group['ReleaseType'] != 7 && $Group['ReleaseType'] != 3) {
-		foreach($TagList as $Tag) {	
+		foreach($TagList as $Tag) {
 			if(!isset($Tags[$Tag])) {
 				$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
 			} else {
@@ -834,7 +834,6 @@ if($NumSimilar>0) {
 		$Cache->cache_value('similar_positions_'.$ArtistID, $SimilarData, 3600*24);
 	}
 ?>
-
 		<div id="similar_artist_map" class="box">
 			<div id="flipper_head" class="head">
 				<a href="#">&uarr;</a>&nbsp;
@@ -855,60 +854,55 @@ if($NumSimilar>0) {
 		</div>
 		</div>
 
-<script type="text/javascript">
-//<![CDATA[
+<script type="text/javascript">//<![CDATA[
 var cloudLoaded = false;
 
 function flipView() {
-        var state = document.getElementById('flip_view_1').style.display == 'block';
+	var state = document.getElementById('flip_view_1').style.display == 'block';
 
-        if(state) {
+	if(state) {
+		document.getElementById('flip_view_1').style.display='none';
+		document.getElementById('flip_view_2').style.display='block';
+		document.getElementById('flipper_title').innerHTML = 'Similar artist cloud';
+		document.getElementById('flip_to').innerHTML = 'Switch to map';
 
-        document.getElementById('flip_view_1').style.display='none';
-        document.getElementById('flip_view_2').style.display='block';
-        document.getElementById('flipper_title').innerHTML = 'Similar Artist Cloud';
-        document.getElementById('flip_to').innerHTML = ' [Switch to Map]';
-
-        if(!cloudLoaded) {
-                require("static/functions/jquery.js", function () {
-			  require("static/functions/tagcanvas.js", function () {
-		  	  	require("static/functions/artist_cloud.js", function () {
-	                	});
+		if(!cloudLoaded) {
+			require("static/functions/jquery.js", function () {
+				require("static/functions/tagcanvas.js", function () {
+					require("static/functions/artist_cloud.js", function () {
+					});
+				});
 			});
-		});
-                cloudLoaded = true;
-        }
-
-        }
-        else {
-
-        document.getElementById('flip_view_1').style.display='block';
-        document.getElementById('flip_view_2').style.display='none';
-        document.getElementById('flipper_title').innerHTML = 'Similar Artist Map';
-        document.getElementById('flip_to').innerHTML = ' [Switch to Cloud]';
-
-        }
+			cloudLoaded = true;
+		}
+	}
+	else {
+		document.getElementById('flip_view_1').style.display='block';
+		document.getElementById('flip_view_2').style.display='none';
+		document.getElementById('flipper_title').innerHTML = 'Similar artist map';
+		document.getElementById('flip_to').innerHTML = 'Switch to cloud';
+	}
 }
 
 //TODO move this to global, perhaps it will be used elsewhere in the future
 //http://stackoverflow.com/questions/7293344/load-javascript-dynamically
 function require(file, callback) {
-   var script = document.getElementsByTagName('script')[0],
-   newjs = document.createElement('script');
+	var script = document.getElementsByTagName('script')[0],
+	newjs = document.createElement('script');
 
-  // IE
-  newjs.onreadystatechange = function () {
-     if (newjs.readyState === 'loaded' || newjs.readyState === 'complete') {
-        newjs.onreadystatechange = null;
-        callback();
-     }
-  };
-  // others
-  newjs.onload = function () {
-     callback();
-  };
-  newjs.src = file;
-  script.parentNode.insertBefore(newjs, script);
+	// IE
+	newjs.onreadystatechange = function () {
+		if (newjs.readyState === 'loaded' || newjs.readyState === 'complete') {
+			newjs.onreadystatechange = null;
+			callback();
+		}
+	};
+	// others
+	newjs.onload = function () {
+		callback();
+	};
+	newjs.src = file;
+	script.parentNode.insertBefore(newjs, script);
 }
 //]]>
 </script>
@@ -1042,7 +1036,7 @@ foreach($Thread as $Key => $Post) {
 				<br />
 				<br />
 <?		if (check_perms('site_admin_forums')) { ?>
-				<a href="#content<?=$PostID?>" onclick="LoadEdit('artist', <?=$PostID?>, 1); return false;">&laquo;</a> 
+				<a href="#content<?=$PostID?>" onclick="LoadEdit('artist', <?=$PostID?>, 1); return false;">&laquo;</a>
 <? 		} ?>
 				Last edited by
 				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>

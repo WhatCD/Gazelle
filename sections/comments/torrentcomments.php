@@ -18,7 +18,7 @@ if($MyTorrents) {
   $Conditions = "WHERE t.UserID = $UserID AND tc.AuthorID != t.UserID AND tc.AddedTime > t.Time";
   $Title = 'Comments left on your torrents';
   $Header = 'Comments left on your uploads';
-  if($Self) $OtherLink = '<a href="comments.php?action=torrents">Display comments you\'ve made</a>';
+  if($Self) $OtherLink = '<a href="comments.php?action=torrents" class="brackets">Display comments you have made</a>';
 }
 else {
   $Conditions = "WHERE tc.AuthorID = $UserID";
@@ -72,7 +72,7 @@ $DB->set_query_id($Comments);
 			<?=$OtherLink?>
 		</div>
 <? } ?>
-	</div>  
+	</div>
 	<div class="linkbox">
 		<?=$Pages?>
 	</div>
@@ -87,7 +87,7 @@ while(list($UserID, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $E
 } /* end while loop*/ ?>
 	<div class="linkbox"><?= $Pages; ?></div>
 </div>
-<?  
+<?
 
   View::show_footer();
 

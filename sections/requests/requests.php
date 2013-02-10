@@ -5,15 +5,15 @@ $Queries = array();
 $OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
 list($Page,$Limit) = Format::page_limit(REQUESTS_PER_PAGE);
 $Submitted = !empty($_GET['submit']);
-					
-//Paranoia					
+
+//Paranoia
 $UserInfo = Users::user_info((int)$_GET['userid']);
 $Perms = Permissions::get_permissions($UserInfo['PermissionID']);
 $UserClass = $Perms['Class'];
 
 $BookmarkView = false;
 
-if(empty($_GET['type'])) { 
+if(empty($_GET['type'])) {
 	$Title = 'Requests';
 	if(!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
 		$SS->set_filter('visible', array(1));
@@ -363,14 +363,14 @@ View::show_header($Title, 'requests');
 					<input type="checkbox" name="show_filled" <? if(!$Submitted || !empty($_GET['show_filled']) || (!$Submitted && !empty($_GET['type']) && $_GET['type'] == "filled")) { ?>checked="checked"<? } ?> />
 				</td>
 			</tr>
-<?	if(check_perms('site_see_old_requests')){ ?> 
+<?	if(check_perms('site_see_old_requests')){ ?>
 			<tr id="include_old">
 				<td class="label">Include old:</td>
 				<td>
 					<input type="checkbox" name="showall" <? if(!empty($_GET['showall'])) {?>checked="checked"<? } ?> />
 				</td>
 			</tr>
-<?	/* ?> 
+<?	/* ?>
 			<tr>
 				<td class="label">Requested by:</td>
 				<td>
@@ -404,7 +404,7 @@ foreach($Categories as $CatKey => $CatName) {
 		</table>
 		<table class="layout">
 			<tr id="release_list">
-				<td class="label">Release Types</td>
+				<td class="label">Release types</td>
 				<td>
 					<input type="checkbox" id="toggle_releases" onchange="Toggle('releases', 0)" <?=(!$Submitted || !empty($ReleaseArray) && count($ReleaseArray) == count($ReleaseTypes) ? ' checked="checked"' : '')?>/> <label for="toggle_releases">All</label>
 <?		$i = 0;
@@ -431,7 +431,7 @@ foreach($Categories as $CatKey => $CatName) {
 					/> <label for="format_<?=$Key?>"><?=$Val?></label>
 <?		}?>
 				</td>
-			</tr>				
+			</tr>
 			<tr id="bitrate_list">
 				<td class="label">Bitrates</td>
 				<td>
@@ -467,7 +467,7 @@ foreach($Categories as $CatKey => $CatName) {
 					<input type="submit" value="Search requests" />
 				</td>
 			</tr>
-		</table>	
+		</table>
 	</form>
 	<div class="linkbox">
 <?	if (!$BookmarkView) {
@@ -495,7 +495,7 @@ foreach($Categories as $CatKey => $CatName) {
 	<table id="request_table" class="request_table border" cellpadding="6" cellspacing="1" border="0" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;" class="nobr">
-				<strong>Request Name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder == 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
+				<strong>Request name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder == 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
 			</td>
 			<td class="nobr">
 				<a href="?order=votes&amp;sort=<?=(($CurrentOrder == 'votes') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Votes</strong></a>
@@ -516,7 +516,7 @@ foreach($Categories as $CatKey => $CatName) {
 				<a href="?order=created&amp;sort=<?=(($CurrentOrder == 'created') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
 			</td>
 			<td class="nobr">
-				<a href="?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Last Vote</strong></a>
+				<a href="?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Last vote</strong></a>
 			</td>
 		</tr>
 <?	if($NumResults == 0) { ?>
@@ -560,26 +560,26 @@ foreach($Categories as $CatKey => $CatName) {
 		$Row = 'a';
 		$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
 		foreach ($Requests as $RequestID => $Request) {
-			
-			//list($BitrateList, $CatalogueNumber, $CategoryID, $Description, $FillerID, $FormatList, $RequestID, $Image, $LogCue, $MediaList, $ReleaseType, 
-			//	$Tags, $TimeAdded, $TimeFilled, $Title, $TorrentID, $RequestorID, $RequestorName, $Year, $RequestID, $Categoryid, $FillerID, $LastVote, 
+
+			//list($BitrateList, $CatalogueNumber, $CategoryID, $Description, $FillerID, $FormatList, $RequestID, $Image, $LogCue, $MediaList, $ReleaseType,
+			//	$Tags, $TimeAdded, $TimeFilled, $Title, $TorrentID, $RequestorID, $RequestorName, $Year, $RequestID, $Categoryid, $FillerID, $LastVote,
 			//	$ReleaseType, $TagIDs, $TimeAdded, $TimeFilled, $TorrentID, $RequestorID, $Voters) = array_values($Request);
-			
+
 			list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
 				$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
-				
+
 			$RequestVotes = get_votes_array($RequestID);
-			
+
 			$VoteCount = count($RequestVotes['Voters']);
-			
+
 			if($CategoryID == 0) {
 				$CategoryName = "Unknown";
 			} else {
 				$CategoryName = $Categories[$CategoryID - 1];
 			}
-			
+
 			$IsFilled = ($TorrentID != 0);
-			
+
 			if($CategoryName == "Music") {
 				$ArtistForm = get_request_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
@@ -589,16 +589,16 @@ foreach($Categories as $CatKey => $CatName) {
 			} else {
 				$FullName ="<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title."</a>";
 			}
-			
+
 			$Row = ($Row == 'a') ? 'b' : 'a';
-			
+
 			$Tags = $Request['Tags'];
 ?>
 		<tr class="row<?=$Row?>">
 			<td>
 				<?=$FullName?>
 				<div class="tags">
-<?			
+<?
 			$TagList = array();
 			foreach($Tags as $TagID => $TagName) {
 				$TagList[] = "<a href='?tags=".$TagName.($BookmarkView ? "&amp;type=requests" : "")."'>".display_str($TagName)."</a>";

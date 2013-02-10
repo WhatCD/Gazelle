@@ -36,8 +36,6 @@ if(!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 	$ThreadID = $_GET['threadid'];
 }
 
-
-
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {
@@ -165,13 +163,13 @@ View::show_header($ThreadInfo['Title'] . ' < '.$Forums[$ForumID]['Name'].' < '. 
 		<div class="center">
 			<a href="reports.php?action=report&amp;type=thread&amp;id=<?=$ThreadID?>" class="brackets">Report Thread</a>
 			<a href="#" onclick="Subscribe(<?=$ThreadID?>);return false;" id="subscribelink<?=$ThreadID?>" class="brackets"><?=(in_array($ThreadID, $UserSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
-			<a href="#" class="brackets" onclick="$('#searchthread').toggle(); this.innerHTML = (this.innerHTML == 'Search this Thread'?'Hide Search':'Search this Thread'); return false;">Search this Thread</a>
+			<a href="#" onclick="$('#searchthread').toggle(); this.innerHTML = (this.innerHTML == 'Search this Thread'?'Hide Search':'Search this Thread'); return false;" class="brackets">Search this Thread</a>
 		</div>
 		<div id="searchthread" class="hidden center">
 			<div style="display: inline-block;">
 				<h3>Search this thread:</h3>
 				<form class="search_form" name="forum_thread" action="forums.php" method="get">
-					<table cellpadding="6" cellspacing="1" border="0" class="layout border">	
+					<table cellpadding="6" cellspacing="1" border="0" class="layout border">
 						<tr>
 							<td><strong>Search for:</strong></td>
 							<td><input type="text" id="searchbox" name="search" size="70" /></td>

@@ -54,7 +54,7 @@ class TEXT {
 	);
 
 	private $NoImg = 0; // If images should be turned into URLs
-	
+
 	private $Levels = 0;
 
 	/**
@@ -98,7 +98,7 @@ class TEXT {
 		reset($this->Smileys);
 	}
 
-    /**
+	/**
 	 * Output BBCode as XHTML
 	 * @param string $Str BBCode text
 	 * @param bool $OutputTOC Ouput TOC near (above) text
@@ -434,9 +434,9 @@ class TEXT {
 				case 'tex':
 					$Array[$ArrayPos] = array('Type'=>'tex', 'Val'=>$Block);
 					break;
-                case 'rule':
-                    $Array[$ArrayPos] = array('Type'=>'rule', 'Val'=>$Block);
-                    break;
+				case 'rule':
+					$Array[$ArrayPos] = array('Type'=>'rule', 'Val'=>$Block);
+					break;
 				case 'pre':
 				case 'code':
 				case 'plain':
@@ -529,10 +529,10 @@ class TEXT {
 	/**
 	 * Generates the list items and proper depth
 	 *
-     * First check if the item should be higher than the current level
+	 * First check if the item should be higher than the current level
 	 * - Close the list and previous lists
 	 *
-     * Then check if the item should go lower than the current level
+	 * Then check if the item should go lower than the current level
 	 * - If the list doesn't open on level one, use the Offset
 	 * - Open appropriate sub lists
 	 *
@@ -584,7 +584,7 @@ class TEXT {
 					$Str.='<em>'.$this->to_html($Block['Val'])."</em>";
 					break;
 				case 's':
-					$Str.='<span style="text-decoration: line-through">'.$this->to_html($Block['Val']).'</span>';
+					$Str.='<span style="text-decoration: line-through;">'.$this->to_html($Block['Val']).'</span>';
 					break;
 				case 'important':
 					$Str.='<strong class="important_text">'.$this->to_html($Block['Val']).'</strong>';
@@ -595,13 +595,13 @@ class TEXT {
 				case 'artist':
 					$Str.='<a href="artist.php?artistname='.urlencode(Format::undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
 					break;
-                case 'rule':
-                    $Rule = trim(strtolower($Block['Val']));
-                    if($Rule[0] != 'r' && $Rule[0] != 'h') {
-                        $Rule = 'r'.$Rule;
-                    }
-                    $Str.='<a href="rules.php?p=upload#'.urlencode(Format::undisplay_str($Rule)).'">'.preg_replace('/[aA-zZ]/', '', $Block['Val']).'</a>';
-                    break;
+				case 'rule':
+					$Rule = trim(strtolower($Block['Val']));
+					if($Rule[0] != 'r' && $Rule[0] != 'h') {
+						$Rule = 'r'.$Rule;
+					}
+					$Str.='<a href="rules.php?p=upload#'.urlencode(Format::undisplay_str($Rule)).'">'.preg_replace('/[aA-zZ]/', '', $Block['Val']).'</a>';
+					break;
 				case 'torrent':
 					$Pattern = '/('.NONSSL_SITE_URL.'\/torrents\.php.*[\?&]id=)?(\d+)($|&|\#).*/i';
 					$Matches = array();
@@ -635,7 +635,7 @@ class TEXT {
 					$Str.='<code>'.$Block['Val'].'</code>';
 					break;
 				case 'list':
-					$Str .= '<'.$Block['ListType'].'>';
+					$Str.='<'.$Block['ListType'].'>';
 					foreach($Block['Val'] as $Line) {
 
 						$Str.='<li>'.$this->to_html($Line).'</li>';
@@ -686,13 +686,13 @@ class TEXT {
 					$this->InQuotes++;
 					if(!empty($Block['Attr'])) {
 						$Exploded = explode("|", $this->to_html($Block['Attr']));
-						if(isset($Exploded[1]) && is_numeric($Exploded[1]))  {
+						if(isset($Exploded[1]) && is_numeric($Exploded[1])) {
 							$PostID = trim($Exploded[1]);
-							$Str.= '<a href="#" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';	
+							$Str.='<a href="#" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
 						else {
-							$Str.= '<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
-						}	
+							$Str.='<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
+						}
 					}
 					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
 					$this->NoImg--;
@@ -710,11 +710,11 @@ class TEXT {
 							$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
 						}
 						else {
-							$Str .= '<strong>Use of the [mature] tag requires a description.</strong> The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post. Misleading descriptions will be penalized. For further information on our mature content policies, please refer to this <a href="wiki.php?action=article&amp;id=1063">wiki</a>.';
+							$Str.='<strong>Use of the [mature] tag requires a description.</strong> The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post. Misleading descriptions will be penalized. For further information on our mature content policies, please refer to this <a href="wiki.php?action=article&amp;id=1063">wiki</a>.';
 						}
 					}
 					else {
-						$Str .= '<span class="mature_blocked" style="font-style:italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content </a>has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
+						$Str.='<span class="mature_blocked" style="font-style:italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content </a>has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
 					}
 					break;
 				case 'img':

@@ -172,7 +172,10 @@ else {
 
 	// Function to log a user's login attempt
 	function log_attempt($UserID) {
-		global $DB, $Cache, $AttemptID, $Attempts, $Bans, $BannedUntil, $Time;
+		global $DB, $Cache, $AttemptID, $Attempts, $Bans, $BannedUntil, $Time, $UserID;
+		$IPStr = $_SERVER['REMOTE_ADDR'];
+		$IPA = substr($IPStr, 0, strcspn($IPStr, '.'));
+		$IP = Tools::ip_to_unsigned($IPStr);
 		if($AttemptID) { // User has attempted to log in recently
 			$Attempts++;
 			if ($Attempts>5) { // Only 6 allowed login attempts, ban user's IP
@@ -185,7 +188,6 @@ else {
 					WHERE ID='".db_string($AttemptID)."'");
 				
 				if ($Bans>9) { // Automated bruteforce prevention
-					$IP = Tools::ip_to_unsigned($_SERVER['REMOTE_ADDR']);
 					$DB->query("SELECT Reason FROM ip_bans WHERE ".$IP." BETWEEN FromIP AND ToIP");
 					if($DB->record_count() > 0) {
 						//Ban exists already, only add new entry if not for same reason
@@ -200,8 +202,7 @@ else {
 						$DB->query("INSERT IGNORE INTO ip_bans
 							(FromIP, ToIP, Reason) VALUES
 							('$IP','$IP', 'Automated ban per >60 failed login attempts')");
-						$A = substr($_SERVER['REMOTE_ADDR'], 0, strcspn($_SERVER['REMOTE_ADDR'], '.'));
-						$Cache->delete_value('ip_bans_'.$A);
+						$Cache->delete_value('ip_bans_'.$IPA);
 					}
 				}
 			} else {
@@ -216,12 +217,16 @@ else {
 			$Attempts=1;
 			$DB->query("INSERT INTO login_attempts 
 				(UserID,IP,LastAttempt,Attempts) VALUES 
-				('".db_string($UserID)."','".db_string($_SERVER['REMOTE_ADDR'])."','".sqltime()."',1)");
+				('".db_string($UserID)."','".db_string($IPStr)."','".sqltime()."',1)");
 		}
 	} // end log_attempt function
 	
 	// If user has submitted form
 	if(isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password'])) {
+		if (strtotime($BannedUntil) > time()) {
+			header("Location: login.php");
+			die();
+		}
 		$Err=$Validate->ValidateForm($_POST);
 
 		if(!$Err) {

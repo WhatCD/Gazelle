@@ -10,7 +10,7 @@ include(SERVER_ROOT.'/classes/class_image_tools.php');
 
 $Text = new TEXT;
 
-if(empty($_GET['id']) || !is_number($_GET['id'])) { 
+if(empty($_GET['id']) || !is_number($_GET['id'])) {
 	error(0);
 }
 
@@ -18,7 +18,7 @@ $RequestID = $_GET['id'];
 
 //First things first, lets get the data for the request.
 
-$Request = Requests::get_requests(array($RequestID));	
+$Request = Requests::get_requests(array($RequestID));
 $Request = $Request['matches'][$RequestID];
 if(empty($Request)) {
 	error(404);
@@ -42,14 +42,14 @@ if($CategoryName == "Music") {
 	$ArtistForm = get_request_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-	
+
 	if($IsFilled) {
 		$DisplayLink = $ArtistLink."<a href='torrents.php?torrentid=".$TorrentID."'>".$Title."</a> [".$Year."]";
 	} else {
 		$DisplayLink = $ArtistLink.$Title." [".$Year."]";
 	}
 	$FullName = $ArtistName.$Title." [".$Year."]";
-	
+
 	if($BitrateList != "") {
 		$BitrateString = implode(", ", explode("|", $BitrateList));
 		$FormatString = implode(", ", explode("|", $FormatList));
@@ -59,13 +59,13 @@ if($CategoryName == "Music") {
 		$FormatString = "Unknown, please read the description.";
 		$MediaString = "Unknown, please read the description.";
 	}
-	
+
 	if(empty($ReleaseType)) {
 		$ReleaseName = "Unknown";
 	} else {
 		$ReleaseName = $ReleaseTypes[$ReleaseType];
 	}
-	
+
 } else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
 	$FullName = $Title." [".$Year."]";
 	$DisplayLink = $Title." [".$Year."]";
@@ -88,20 +88,20 @@ View::show_header('View request: '.$FullName, 'comments,requests,bbcode,jquery')
 	<div class="header">
 		<h2><a href="requests.php">Requests</a> &gt; <?=$CategoryName?> &gt; <?=$DisplayLink?></h2>
 		<div class="linkbox">
-<? if($CanEdit) { ?> 
+<? if($CanEdit) { ?>
 			<a href="requests.php?action=edit&amp;id=<?=$RequestID?>" class="brackets">Edit</a>
 <? }
 if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requests')) { ?>
 			<a href="requests.php?action=delete&amp;id=<?=$RequestID?>" class="brackets">Delete</a>
 <? } ?>
 <?	if(has_bookmarked('request', $RequestID)) { ?>
-			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'[Bookmark]');return false;" class="brackets">Remove bookmark</a>
+			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
 <?	} else { ?>
-			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'[Remove bookmark]');return false;" class="brackets">Bookmark</a>
+			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'Remove bookmark');return false;" class="brackets">Bookmark</a>
 <?	} ?>
 			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>" class="brackets">Report request</a>
 <?	if(!$IsFilled) { ?>
-			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID?"&groupid=$GroupID":'')?>" class="brackets">Upload request</a>
+			<a href="upload.php?requestid=<?=$RequestID?><?= ($GroupID ? "&amp;groupid=$GroupID" : '') ?>" class="brackets">Upload request</a>
 <?	}
 	if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
 			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>" class="brackets">Request update</a>
@@ -138,13 +138,13 @@ if (!empty($Image)) {
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID-1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
 <?	} ?>
 		</div>
-<? } 
-	if($CategoryName == "Music") { ?>	
+<? }
+	if($CategoryName == "Music") { ?>
 		<div class="box box_artists">
 			<div class="head"><strong>Artists</strong></div>
 			<ul class="stats nobullet">
 <?
-		if(!empty($ArtistForm[4]) && count($ArtistForm[4]) > 0) { 
+		if(!empty($ArtistForm[4]) && count($ArtistForm[4]) > 0) {
 ?>
 				<li class="artists_composer"><strong>Composers:</strong></li>
 <?			foreach($ArtistForm[4] as $Artist) {
@@ -154,7 +154,7 @@ if (!empty($Image)) {
 				</li>
 <?			}
 		}
-		if(!empty($ArtistForm[6]) && count($ArtistForm[6]) > 0) { 
+		if(!empty($ArtistForm[6]) && count($ArtistForm[6]) > 0) {
 ?>
 				<li class="artists_dj"><strong>DJ / Compiler:</strong></li>
 <?			foreach($ArtistForm[6] as $Artist) {
@@ -176,7 +176,7 @@ if (!empty($Image)) {
 					<?=Artists::display_artist($Artist)?>
 				</li>
 <?		}
-		if(!empty($ArtistForm[2]) && count($ArtistForm[2]) > 0) { 
+		if(!empty($ArtistForm[2]) && count($ArtistForm[2]) > 0) {
 ?>
 				<li class="artists_with"><strong>With:</strong></li>
 <?			foreach($ArtistForm[2] as $Artist) {
@@ -186,7 +186,7 @@ if (!empty($Image)) {
 				</li>
 <?			}
 		}
-		if(!empty($ArtistForm[5]) && count($ArtistForm[5]) > 0) { 
+		if(!empty($ArtistForm[5]) && count($ArtistForm[5]) > 0) {
 ?>
 				<li class="artists_conductor"><strong>Conducted by:</strong></li>
 <?			foreach($ArtistForm[5] as $Artist) {
@@ -196,7 +196,7 @@ if (!empty($Image)) {
 				</li>
 <?			}
 		}
-		if(!empty($ArtistForm[3]) && count($ArtistForm[3]) > 0) { 
+		if(!empty($ArtistForm[3]) && count($ArtistForm[3]) > 0) {
 ?>
 				<li class="artists_remix"><strong>Remixed by:</strong></li>
 <?			foreach($ArtistForm[3] as $Artist) {
@@ -207,7 +207,7 @@ if (!empty($Image)) {
 <?
 			}
 		}
-		if(!empty($ArtistForm[7]) && count($ArtistForm[7]) > 0) { 
+		if(!empty($ArtistForm[7]) && count($ArtistForm[7]) > 0) {
 ?>
 				<li class="artists_producer"><strong>Produced by:</strong></li>
 <?			foreach($ArtistForm[7] as $Artist) {
@@ -238,7 +238,7 @@ if (!empty($Image)) {
 			<table class="layout">
 <?	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 	$ViewerVote = false;
-	for($i = 0; $i < $VoteMax; $i++) { 
+	for($i = 0; $i < $VoteMax; $i++) {
 		$User = array_shift($RequestVotes['Voters']);
 		$Boldify = false;
 		if ($User['UserID'] == $LoggedUser['ID']) {
@@ -254,7 +254,7 @@ if (!empty($Image)) {
 						<?=$Boldify?'<strong>':''?><?=Format::get_size($User['Bounty'])?><?=$Boldify?'</strong>':''?>
 					</td>
 				</tr>
-<?	} 
+<?	}
 	reset($RequestVotes['Voters']);
 	if (!$ViewerVote) {
 		foreach ($RequestVotes['Voters'] as $User) {
@@ -281,7 +281,7 @@ if (!empty($Image)) {
 				<td>
 					<?=time_diff($TimeAdded)?>	by  <strong><?=Users::format_username($RequestorID, false, false, false)?></strong>
 				</td>
-			</tr>			
+			</tr>
 <?	if($CategoryName == "Music") {
 		if(!empty($RecordLabel)) { ?>
 			<tr>
@@ -290,7 +290,7 @@ if (!empty($Image)) {
 					<?=$RecordLabel?>
 				</td>
 			</tr>
-<?		} 
+<?		}
 		if(!empty($CatalogueNumber)) { ?>
 			<tr>
 				<td class="label">Catalogue Number</td>
@@ -365,11 +365,11 @@ if (!empty($Image)) {
 			<tr>
 				<td class="label">Votes</td>
 				<td>
-					<span id="votecount"><?=$VoteCount?></span> 
+					<span id="votecount"><?=$VoteCount?></span>
 <?	if($CanVote) { ?>
 					&nbsp;<a href="javascript:Vote(0)"><strong>(+)</strong></a>
 					<strong>Costs <?=Format::get_size($MinimumVote, 0)?></strong>
-<?	} ?> 
+<?	} ?>
 				</td>
 			</tr>
 <?	if ($LastVote > $TimeAdded) { ?>
@@ -379,7 +379,7 @@ if (!empty($Image)) {
 					<?=time_diff($LastVote)?>
 				</td>
 			</tr>
-<?	} ?>		
+<?	} ?>
 <?	if($CanVote) { ?>
 			<tr id="voting">
 				<td class="label" title="These units are in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Custom vote (MB)</td>
@@ -414,7 +414,7 @@ if (!empty($Image)) {
 					</form>
 				</td>
 			</tr>
-<? }?> 
+<? }?>
 			<tr id="bounty">
 				<td class="label">Bounty</td>
 				<td id="formatted_bounty"><?=Format::get_size($RequestVotes['TotalBounty'])?></td>
@@ -426,10 +426,10 @@ if (!empty($Image)) {
 			<tr>
 				<td class="label">Filled</td>
 				<td>
-					<strong><a href="torrents.php?<?=(strtotime($TimeFilled)<$TimeCompare?'id=':'torrentid=').$TorrentID?>">Yes</a></strong>, 
+					<strong><a href="torrents.php?<?=(strtotime($TimeFilled)<$TimeCompare?'id=':'torrentid=').$TorrentID?>">Yes</a></strong>,
 					by user <?=Users::format_username($FillerID, false, false, false)?>
 <?		if($LoggedUser['ID'] == $RequestorID || $LoggedUser['ID'] == $FillerID || check_perms('site_moderate_requests')) { ?>
-						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>">(Unfill)</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning. 
+						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>">(Unfill)</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning.
 <?		} ?>
 				</td>
 			</tr>
@@ -450,7 +450,7 @@ if (!empty($Image)) {
 							<br />
 							<? } ?>
 							<input type="submit" value="Fill request" />
-							<br /> 
+							<br />
 						</div>
 					</form>
 				</td>
@@ -458,7 +458,7 @@ if (!empty($Image)) {
 <?	} ?>
 <?
 //<strip>
-if(check_perms("users_mod")) { 
+if(check_perms("users_mod")) {
 $RequestLog = Requests::get_request_log($RequestID);
 	if($RequestLog) {
 ?>
@@ -472,7 +472,7 @@ $RequestLog = Requests::get_request_log($RequestID);
 			</div>
 		</td>
 		</tr>
-<?	} 
+<?	}
 }
 //<strip>
 ?>
@@ -578,7 +578,7 @@ foreach($Thread as $Key => $Post) {
 				<br />
 				<br />
 <?		if(check_perms('site_moderate_forums')) { ?>
-				<a href="#content<?=$PostID?>" onclick="LoadEdit('requests', <?=$PostID?>, 1); return false;">&laquo;</a> 
+				<a href="#content<?=$PostID?>" onclick="LoadEdit('requests', <?=$PostID?>, 1); return false;">&laquo;</a>
 <? 		} ?>
 				Last edited by
 				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>

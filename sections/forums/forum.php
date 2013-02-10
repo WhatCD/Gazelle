@@ -53,7 +53,8 @@ if(!isset($Forum) || !is_array($Forum)) {
 		list($Stickies) = $DB->next_record();
 		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
 	}
-}
+} 
+
 
 if(!isset($Forums[$ForumID])) { error(404); }
 // Make sure they're allowed to look at the page
