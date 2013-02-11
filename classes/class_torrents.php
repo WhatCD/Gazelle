@@ -1,5 +1,7 @@
 <?
 class Torrents {
+	const FilelistDelim = 0xF7; // Hex for &divide; Must be the same as phrase_boundary in sphinx.conf!
+
 	/*
 	 * Function to get data and torrents for an array of GroupIDs.
 	 * In places where the output from this is merged with sphinx filters, it will be in a different order.
@@ -391,9 +393,10 @@ class Torrents {
 				Leechers, LogScore, CAST(Scene AS CHAR), CAST(HasLog AS CHAR), CAST(HasCue AS CHAR),
 				CAST(FreeTorrent AS CHAR), Media, Format, Encoding,
 				RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
-				REPLACE(REPLACE(REPLACE(REPLACE(FileList,
-						'.flac', ' .flac'),
-						'.mp3', ' .mp3'),
+				REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(FileList,
+						'.flac{', ' .flac{'),
+						'.mp3{', ' .mp3{'),
+						'\n', ' \n'),
 						'|||', '\n '),
 						'_', ' ')
 					AS FileList, $VoteScore, '".db_string($ArtistName)."'
@@ -428,6 +431,76 @@ class Torrents {
 		$Cache->delete_value('groups_artists_'.$GroupID);
 	}
 
+	/**
+	 * Regenerate a torrent's filelist from its meta data,
+	 * update the database record and clear relevant cache keys
+	 *
+	 * @param int $TorrentID
+	 */
+	public static function regenerate_filelist($TorrentID) {
+		global $DB, $Cache;
+		$DB->query("SELECT tg.ID,
+				tf.File
+			FROM torrents_files AS tf
+				JOIN torrents AS t ON t.ID=tf.TorrentID
+				JOIN torrents_group AS tg ON tg.ID=t.GroupID
+				WHERE tf.TorrentID = ".$TorrentID);
+		if($DB->record_count() > 0) {
+			require(SERVER_ROOT.'/classes/class_torrent.php');
+			list($GroupID, $Contents) = $DB->next_record(MYSQLI_NUM, false);
+			$Contents = unserialize(base64_decode($Contents));
+			$Tor = new TORRENT($Contents, true);
+			list($TotalSize, $FileList) = $Tor->file_list();
+			foreach($FileList as $File) {
+				$TmpFileList[] = self::filelist_format_file($File);
+			}
+			$FilePath = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : "";
+			$FileString = Format::make_utf8(implode("\n", $TmpFileList));
+			$DB->query("UPDATE torrents SET Size = ".$TotalSize.", FilePath = '".db_string($FilePath)."', FileList = '".db_string($FileString)."' WHERE ID = ".$TorrentID);
+			$Cache->delete_value('torrents_details_'.$GroupID);
+		}
+	}
+
+	/**
+	 * Return UTF-8 encoded string to use as file delimiter in torrent file lists
+	 */
+	public static function filelist_delim() {
+		static $FilelistDelimUTF8;
+		if (isset($FilelistDelimUTF8)) {
+			return $FilelistDelimUTF8;
+		}
+		return $FilelistDelimUTF8 = utf8_encode(chr(self::FilelistDelim));
+	}
+
+	/**
+	 * Create a string that contains file info in a format that's easy to use for Sphinx
+	 *
+	 * @param array $File (File size, File name)
+	 * @return formatted string with the format .EXT sSIZEs NAME DELIMITER
+	 */
+	public static function filelist_format_file($File) {
+		list($Size, $Name) = $File;
+		$Name = Format::make_utf8($Name);
+		$ExtPos = strrpos($Name, '.');
+		$Ext = $ExtPos ? substr($Name, $ExtPos) : '';
+		return sprintf("%s s%ds %s %s", $Ext, $Size, $Name, self::filelist_delim());
+	}
+
+	/**
+	 * Translate a formatted file info string into a more useful array structure
+	 *
+	 * @param string $File string with the format .EXT sSIZEs NAME DELIMITER
+	 * @return file info array with the keys 'ext', 'size' and 'name'
+	 */
+	public static function filelist_get_file($File) {
+		// Need this hack because filelists are always display_str()ed
+		$DelimLen = strlen(display_str(self::filelist_delim())) + 1;
+		list($FileExt, $Size, $Name) = explode(' ', $File, 3);
+		if ($Spaces = strspn($Name, ' ')) {
+			$Name = str_replace(' ', '&nbsp;', substr($Name, 0, $Spaces)) . substr($Name, $Spaces);
+		}
+		return array('ext' => $FileExt, 'size' => substr($Size, 1, -1), 'name' => substr($Name, 0, -$DelimLen));
+	}
 
 	/**
 	 * Format the information about a torrent.

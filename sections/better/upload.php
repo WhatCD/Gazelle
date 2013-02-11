@@ -94,7 +94,7 @@ foreach ($Results as $GroupID=>$Group) {
 		$TorrentTags=explode(' ',$TorrentTags);
 		foreach ($TorrentTags as $TagKey => $TagName) {
 			$TagName = str_replace('_','.',$TagName);
-			$TagList[]='<a href="torrents.php?searchtags='.$TagName.'">'.$TagName.'</a>';
+			$TagList[]='<a href="torrents.php?taglist='.$TagName.'">'.$TagName.'</a>';
 		}
 		$PrimaryTag = $TorrentTags[0];
 		$TagList = implode(', ', $TagList);

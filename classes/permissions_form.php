@@ -72,6 +72,7 @@
 	'users_view_keys' => 'Can view passkeys.',
 	'users_view_ips' => 'Can view IP addresses.',
 	'users_view_email' => 'Can view email addresses.',
+
 	'users_override_paranoia' => 'Can override paranoia.',
 	'users_logout' => 'Can log users out (old?).',
 	'users_make_invisible' => 'Can make users invisible.',

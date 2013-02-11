@@ -387,9 +387,8 @@ foreach($FileList as $File) {
 	if(mb_strlen($Name, 'UTF-8') + mb_strlen($DirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
 		$TooLongPaths[] = $Name;
 	}
-
-	// Add file and size to array
-	$TmpFileList[] = $Name .'{{{'.$Size.'}}}'; // Name {{{Size}}}
+	// Add file info to array
+	$TmpFileList[] = Torrents::filelist_format_file($File);
 }
 
 if(count($TooLongPaths)!=0) {
@@ -402,8 +401,7 @@ if(count($TooLongPaths)!=0) {
 // To be stored in the database
 $FilePath = isset($Tor->Val['info']->Val['files']) ? db_string(Format::make_utf8($DirName)) : "";
 
-// Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}
-$FileString = "'".db_string(Format::make_utf8(implode('|||', $TmpFileList)))."'";
+$FileString = db_string(implode("\n", $TmpFileList));
 
 // Number of files described in torrent
 $NumFiles = count($FileList);
@@ -643,7 +641,7 @@ $DB->query("
 	VALUES
 		(".$GroupID.", ".$LoggedUser['ID'].", ".$T['Media'].", ".$T['Format'].", ".$T['Encoding'].", 
 		".$T['Remastered'].", ".$T['RemasterYear'].", ".$T['RemasterTitle'].", ".$T['RemasterRecordLabel'].", ".$T['RemasterCatalogueNumber'].", 
-		".$T['Scene'].", ".$HasLog.", ".$HasCue.", '".db_string($InfoHash)."', ".$NumFiles.", ".$FileString.", '".$FilePath."', ".$TotalSize.", '".sqltime()."',
+		".$T['Scene'].", ".$HasLog.", ".$HasCue.", '".db_string($InfoHash)."', ".$NumFiles.", '".$FileString."', '".$FilePath."', ".$TotalSize.", '".sqltime()."',
 		".$T['TorrentDescription'].", '".(($HasLog == "'1'") ? $LogScoreAverage : 0)."', '".$T['FreeLeech']."', '".$T['FreeLeechType']."')");
 
 $Cache->increment('stats_torrent_count');

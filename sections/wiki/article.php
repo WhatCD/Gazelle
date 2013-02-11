@@ -43,7 +43,7 @@ View::show_header($Title,'wiki,bbcode');
 <div class="thin">
 	<div class="header">
 		<h2><?=$Title?></h2>
-		<div class="linkbox box">
+		<div class="linkbox">
 			<a href="wiki.php?action=create" class="brackets">Create</a>
 			<a href="wiki.php?action=edit&amp;id=<?=$ArticleID?>" class="brackets">Contribute</a>
 			<a href="wiki.php?action=revisions&amp;id=<?=$ArticleID?>" class="brackets">History</a>

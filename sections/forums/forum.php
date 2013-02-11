@@ -225,10 +225,12 @@ if (count($Forum) == 0) {
 <?
 		$TopicLength=75-(2*count($PageLinks));
 		unset($PageLinks);
+		$Title = display_str($Title);
+		$DisplayTitle = $Title;
 		
 ?>
 				<strong>
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($Title)?>"><?=display_str(Format::cut_string($Title, $TopicLength)) ?></a>
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=$Title?>"><?=Format::cut_string($DisplayTitle, $TopicLength) ?></a>
 				</strong>
 				<?=$PagesText?>
 			</span>

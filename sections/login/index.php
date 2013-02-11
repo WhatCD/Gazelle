@@ -292,7 +292,7 @@ else {
 						$Sql .= "	WHERE ID='".db_string($UserID)."'";
 
 						$DB->query($Sql);
-						
+
 						if (!empty($_COOKIE['redirect'])) {
 							$URL = $_COOKIE['redirect'];
 							setcookie('redirect','',time()-60*60*24,'/','',false);

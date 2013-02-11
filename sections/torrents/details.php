@@ -451,11 +451,38 @@ foreach ($TorrentList as $Torrent) {
 	}
 	
 	$CanEdit = (check_perms('torrents_edit') || (($UserID == $LoggedUser['ID'] && !$LoggedUser['DisableWiki']) && !($Remastered && !$RemasterYear)));
-	
-	$FileList = str_replace(array('_','-'), ' ', $FileList);
-	$FileList = str_replace('|||','<tr><td>',display_str($FileList));
-	$FileList = preg_replace_callback('/\{\{\{([^\{]*)\}\}\}/i','filelist',$FileList);
-	$FileList = '<table class="filelist_table" style="overflow-x:auto;"><tr class="colhead_dark"><td><div style="float: left; display: block; font-weight: bold;">File Name'.(check_perms('users_mod') ? ' <a href="torrents.php?action=regen_filelist&amp;torrentid='.$TorrentID.'" class="brackets">Regenerate</a>' : '').'</div><div style="float:right; display:block;">'.(empty($FilePath) ? '' : '/'.$FilePath.'/' ).'</div></td><td><strong>Size</strong></td></tr><tr><td>'.$FileList."</table>";
+
+	$RegenLink = check_perms('users_mod') ? ' <a href="torrents.php?action=regen_filelist&amp;torrentid='.$TorrentID.'" class="brackets">Regenerate</a>' : '';
+	$FileTable = '
+	<table class="filelist_table">
+		<tr class="colhead_dark"><td>
+			<div class="filelist_title" style="float: left;">File Name' . $RegenLink . '</div>
+			<div class="filelist_path" style="float: right;">' . ($FilePath ? "/$FilePath/" : '') . '</div>
+		</td><td>
+			<strong>Size</strong>
+		</td></tr>';
+	if (substr($FileList, -3) == '}}}') { // Old style
+		$FileListSplit = explode('|||', $FileList);
+		foreach ($FileListSplit as $File) {
+			$NameEnd = strrpos($File, '{{{');
+			$Name = substr($File, 0, $NameEnd);
+			if ($Spaces = strspn($Name, ' ')) {
+				$Name = str_replace(' ', '&nbsp;', substr($Name, 0, $Spaces)) . substr($Name, $Spaces);
+			}
+			$FileSize = substr($File, $NameEnd+3, -3);
+			$FileTable .= sprintf("\n<tr><td>%s</td><td>%s</td></tr>",
+				$Name, Format::get_size($FileSize));
+		}
+	} else {
+		$FileListSplit = explode("\n", $FileList);
+		foreach ($FileListSplit as $File) {
+			$FileInfo = Torrents::filelist_get_file($File);
+			$FileTable .= sprintf("\n<tr><td>%s</td><td>%s</td></tr>",
+				$FileInfo['name'], Format::get_size($FileInfo['size']));
+		}
+	}
+	$FileTable .= '
+	</table>';
 
 	$ExtraInfo=''; // String that contains information on the torrent (e.g. format and encoding)
 	$AddExtra=''; // Separator between torrent properties
@@ -592,7 +619,7 @@ foreach ($TorrentList as $Torrent) {
 					<div id="peers_<?=$TorrentID?>" class="hidden"></div>
 					<div id="downloads_<?=$TorrentID?>" class="hidden"></div>
 					<div id="snatches_<?=$TorrentID?>" class="hidden"></div>
-					<div id="files_<?=$TorrentID?>" class="hidden"><?=$FileList?></div>
+					<div id="files_<?=$TorrentID?>" class="hidden"><?=$FileTable?></div>
 <?  if($Reported) { ?>
 					<div id="reported_<?=$TorrentID?>" class="hidden"><?=$ReportInfo?></div>
 <? } ?>

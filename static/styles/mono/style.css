@@ -729,6 +729,10 @@ body#index #recommended #vanityhouse {
 	text-align: center;
 }
 
+.linkbox.notify_filter_links {
+	margin-bottom: 5px;
+}
+
 .head a {
 	color: #3e3e3e;
 }
@@ -1259,6 +1263,10 @@ form.manage_form[name=friends] .left input[type=submit] {
 #newthreadform #buttons input[type=button],
 #newthreadform #poll_answers input[type=text] {
 	margin-top: 10px;
+}
+
+.torrent_table .filelist_table {
+	width: 100%;
 }
 
 /* Fix for artist.php sidebar layout */

@@ -10,7 +10,7 @@ if (!empty($_GET['search'])) {
  
 define('USERS_PER_PAGE', 30);
 
-if(isset($_GET['username'])){
+if (isset($_GET['username'])) {
 	
 	$_GET['username'] = trim($_GET['username']);
 	// form submitted
