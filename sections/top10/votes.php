@@ -62,7 +62,7 @@ if ($TopVotes === false) {
 
 		$Results = $DB->collect('GroupID');
 		$Data    = $DB->to_array('GroupID');
-		
+
 		$Groups = Torrents::get_groups($Results);
 		if (count($Results) > 0) {
 			$DB->query('SELECT ID, CategoryID FROM torrents_group
@@ -136,7 +136,7 @@ $Bookmarks = all_bookmarks('torrent');
 	<h3>Top <?=$Limit.' '.$Caption?>
 <?
 if(empty($_GET['advanced'])){ ?>
-		<small>
+		<small class="top10_quantity_links">
 <?
 	switch($Limit) {
 		case 100: ?>
@@ -227,7 +227,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 		<?	} ?>
 					<?=$TorrentTags?>
 					</td>
-					<td colspan="4" class="votes_info_td"><strong><?=$Ups?></strong> upvotes out of <strong><?=$Total?></strong> total (<span title="Score: <?=round($Score*100,4)?>">Score: <?=round($Score*100)?></span>).</td>
+					<td colspan="4" class="votes_info_td"><strong><?=number_format($Ups)?></strong> upvotes out of <strong><?=number_format($Total)?></strong> total (<span title="Score: <?=number_format($Score*100,4)?>">Score: <?=number_format($Score*100)?></span>).</td>
 				</tr>
 <?
 		$LastRemasterYear = '-';

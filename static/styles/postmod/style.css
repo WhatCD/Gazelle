@@ -181,7 +181,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 	content: url('images/gazelle.png');
 }
 
-#disclaimer_container { 
+#disclaimer_container {
 	font-size: 7pt;
 	color: #CCC;
 }
@@ -224,7 +224,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 #menu ul {
 	margin: 0;
 	padding: 0;
-	list-style: none;	
+	list-style: none;
 }
 #menu ul li {
 	float: left;
@@ -244,15 +244,15 @@ ul.thin li { margin:0px 0px; padding:0px; }
 	text-decoration: none;
 }
 
-#menu ul li a:active, #menu ul li a:focus { 
+#menu ul li a:active, #menu ul li a:focus {
 	border-bottom: 3px solid #EFA82C;
 }
 
-#index #nav_index a, #torrents #nav_torrents a, #collage #nav_collages a, #requests #nav_requests a, #forums #nav_forums a, #chat #nav_irc a, #top10 #nav_top10 a, #rules #nav_rules a, #wiki #nav_wiki a, #staff #nav_staff a { 
+#index #nav_index a, #torrents #nav_torrents a, #collage #nav_collages a, #requests #nav_requests a, #forums #nav_forums a, #chat #nav_irc a, #top10 #nav_top10 a, #rules #nav_rules a, #wiki #nav_wiki a, #staff #nav_staff a {
 	border-bottom: 4px solid #111;
 }
 
-/* 
+/*
 #nav_index a { background-position: 0 0; width: 75px; }
 #nav_index a:hover { background-position: 0 -34px; }
 #index #nav_index a { background-position: 0 -69px; }
@@ -362,7 +362,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 	height: 22px;
 	background: url('images/content_light.png') transparent;
 	color: #FFF;
-	-moz-border-radius: 2px; 
+	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -385,7 +385,7 @@ ul.thin li { margin:0px 0px; padding:0px; }
 	padding: 0;
 	list-style: none;
 	display: block;
-	
+
 }
 
 #searchbars ul li {
@@ -552,7 +552,7 @@ p.min_padding {
 	margin-bottom: 10px;
 }
 
-.main_column .box .body {	
+.main_column .box .body {
 	font-size: 8pt;
 }
 
@@ -926,7 +926,7 @@ ul .invitetree {
 	overflow: auto;
 }
 
-.lightbox img { 
+.lightbox img {
 	max-width: 100%;
 	max-height: 100%;
 	background-color: transparent;
@@ -934,13 +934,13 @@ ul .invitetree {
 }
 
 input[type=button], input[type=submit] {
-	background: #111 url(images/alert-overlay.png) repeat-x; 
-	display: inline-block; 
-	padding: 3px 6px 4px; 
+	background: #111 url(images/alert-overlay.png) repeat-x;
+	display: inline-block;
+	padding: 3px 6px 4px;
 	margin: 3px;
-	color: #fff; 
+	color: #fff;
 	text-decoration: none;
-	-moz-border-radius: 2px; 
+	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -956,12 +956,12 @@ input[type=button]:active , input[type=submit]:active { top: 1px; }
 
 input[type="button"]:active, input[type="button"]:focus, input[type="submit"]:active, input[type="submit"]:focus {
 /*	background: #262626 url(images/load.gif) no-repeat center center; */
-	display: inline-block; 
-	padding: 3px 6px 4px; 
+	display: inline-block;
+	padding: 3px 6px 4px;
 	margin: 3px;
-	color: #fff; 
+	color: #fff;
 	text-decoration: none;
-	-moz-border-radius: 2px; 
+	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -1018,7 +1018,7 @@ option, option:active, option:focus {
 	border: 0;
 	font-family: Helvetica, Arial, sans-serif;
 }
-	
+
 select:hover, option:hover {
 	background: #3F3F3F;
 }
@@ -1027,7 +1027,7 @@ select:hover, option:hover {
 	color: #444;
 }
 
-.spellcheck { 
+.spellcheck {
 	margin: 10px 0;
 	font-size: 1.25em;
 	font-weight: bold;
@@ -1038,16 +1038,27 @@ ul, ol{
 }
 
 tr.torrent .bookmark > a:before {
-	color:#646054;
+	color: #646054;
 }
 tr.torrent .bookmark > a:after {
-	color:#646054;
+	color: #646054;
 }
 
 #requests .forum_post textarea { /* overriding the inline 80-character monospace */
 	max-width: 409px;
 }
 
-.linkbox .brackets:before, .linkbox .brackets:after {
+.linkbox .brackets:before,
+.linkbox .brackets:after,
+.top10_quantity_links .brackets:before,
+.top10_quantity_links .brackets:after {
 	color: #FCFCFC;
+}
+
+#userinfo_username .brackets:before {
+	content: "[";
+}
+
+#userinfo_username .brackets:after {
+	content: "]";
 }

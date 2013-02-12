@@ -466,6 +466,9 @@ h3{margin:10px 0}
 .cats_comedy{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/comedy.png) top left no-repeat}
 .cats_comics{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/comics.png) top left no-repeat}
 
-.linkbox .brackets:before, .linkbox .brackets:after {
+.linkbox .brackets:before,
+.linkbox .brackets:after,
+.top10_quantity_links .brackets:before,
+.top10_quantity_links .brackets:after {
 	color: #757575;
 }

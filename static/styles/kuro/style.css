@@ -262,7 +262,7 @@ ul.thin li {
 }
 
 #userinfo img {
-	
+
 }
 
 #userinfo ul {
@@ -878,7 +878,7 @@ form tr {
 	text-align: center;
 }
 
-.spellcheck { 
+.spellcheck {
 	margin: 25px 0;
 	font-size: 1.25em;
 	font-weight: bold;
@@ -887,10 +887,9 @@ form tr {
 tr.torrent .bookmark > a:before { color:#999; }
 tr.torrent .bookmark > a:after { color:#999; }
 
-.linkbox .brackets:before {
-	color: #999;
-}
-
-.linkbox .brackets:after {
+.linkbox .brackets:before,
+.linkbox .brackets:after,
+.top10_quantity_links .brackets:before,
+.top10_quantity_links .brackets:after {
 	color: #999;
 }

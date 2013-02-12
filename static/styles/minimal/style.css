@@ -543,6 +543,9 @@ tr.torrent .bookmark > a:after { content: ""; }
 	margin-left: 20px;
 }
 
-.linkbox .brackets:before, .linkbox .brackets:after {
+.linkbox .brackets:before,
+.linkbox .brackets:after,
+.top10_quantity_links .brackets:before,
+.top10_quantity_links .brackets:after {
 	color: #757575;
 }

@@ -480,7 +480,7 @@ class Torrents {
 	 */
 	public static function filelist_format_file($File) {
 		list($Size, $Name) = $File;
-		$Name = Format::make_utf8($Name);
+		$Name = Format::make_utf8(strtr($Name, "\n\r\t", "   "));
 		$ExtPos = strrpos($Name, '.');
 		$Ext = $ExtPos ? substr($Name, $ExtPos) : '';
 		return sprintf("%s s%ds %s %s", $Ext, $Size, $Name, self::filelist_delim());

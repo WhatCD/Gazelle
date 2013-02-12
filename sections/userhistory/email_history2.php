@@ -28,7 +28,7 @@ View::show_header("Email history for $Username");
 
 // Get current email (and matches)
 $DB->query("
-	SELECT 
+	SELECT
 		m.Email,
 		'".sqltime()."' AS Time,
 		m.IP,
@@ -49,8 +49,8 @@ $CurrentEmail = array_shift($DB->to_array());
 
 // Get historic emails (and matches)
 $DB->query("
-	SELECT 
-		h2.Email, 
+	SELECT
+		h2.Email,
 		h2.Time,
 		h2.IP,
 		h3.UserID AS UserIDs,
@@ -158,8 +158,8 @@ if ($Old) {
 <div class="thin">
 	<div class="header">
 		<h2>Email history for <a href="user.php?id=<?=$UserID ?>"><?=$Username ?></a></h2>
-		<div class=" linkbox center">
-			<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>"><strong>Old email history</strong></a>
+		<div class="linkbox center">
+			<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" class="brackets">Old email history</a>
 		</div>
 	</div>
 	<br />
@@ -187,7 +187,7 @@ if ($Old) {
 <?
 if ($CurrentMatches) {
 	// Match on the current email
-	foreach($CurrentMatches as $Match) {		
+	foreach($CurrentMatches as $Match) {
 ?>
 		<tr class="rowb">
 			<td><?=$Match['Username']?></td>
@@ -198,8 +198,8 @@ if ($CurrentMatches) {
 				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
-		</tr>			
-<? 
+		</tr>
+<?
 	}
 }
 // Old emails
@@ -215,7 +215,7 @@ if ($Old) {
 <?
 	$j=0;
 	// Old email
-	foreach ($Old as $Record) { 
+	foreach ($Old as $Record) {
 		++$j;
 
 		// Matches on old email
@@ -235,8 +235,8 @@ if ($Old) {
 				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
-		</tr>	
-<?			
+		</tr>
+<?
 			}
 		}
 
@@ -254,10 +254,10 @@ if ($Old) {
 				<?=display_str($Record['IP'])?> (<?=Tools::get_country_code_by_ajax($Record['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Record['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Record['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Record['IP'])?>
 			</td>
-		</tr>			
-<?		
+		</tr>
+<?
 		if ($MatchCount > 0) {
-			if (isset($Matches)) { 
+			if (isset($Matches)) {
 				echo $Matches;
 				unset($Matches);
 				unset($MatchCount);
@@ -293,7 +293,7 @@ if ($OldMatches) {
 				<?=display_str($Match['IP'])?> (<?=Tools::get_country_code_by_ajax($Match['IP'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Match['IP'])?>" class="brackets" title="Search">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($Match['IP'])?>" class="brackets" title="Search WIMIA.com">WI</a><br />
 				<?=Tools::get_host_by_ajax($Match['IP'])?>
 			</td>
-		</tr>	
+		</tr>
 <?
 		}
 	}
@@ -318,7 +318,7 @@ if ($Matches) {
 	echo $Matches;
 }
 
-?>		
+?>
 	</table>
 </div>
 <? View::show_footer(); ?>

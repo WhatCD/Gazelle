@@ -249,14 +249,14 @@ if (empty($Results)) {
 
 			$TagLinks = array();
 			if ($GroupInfo['TagList'] != '') {
-				$TorrentTags = explode(' ', $GroupInfo['TagList']);
-				$MainTag = $TorrentTags[0];
-				foreach ($TorrentTags as $TagKey => $TagName) {
-					$TagName = str_replace('_', '.', $TagName);
-					$TagLinks[] = '<a href="torrents.php?taglist='.$TagName.'">'.$TagName.'</a>';
+				$TorrentTags = array();
+				$TagList = explode(' ', $GroupInfo['TagList']);
+				$MainTag = $TagList[0];
+				foreach ($TagList as $Tag) {
+					$Tag = str_replace('_', '.', $Tag);
+					$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
 				}
-				$TagLinks = implode(', ', $TagLinks);
-				$TorrentTags = '<br /><div class="tags">'.$TagLinks.'</div>';
+				$TorrentTags = implode(', ', $TorrentTags);
 			} else {
 				$TorrentTags = '';
 				$MainTag = $Categories[$GroupCategoryID-1];
@@ -275,11 +275,14 @@ if (empty($Results)) {
 <?			} ?>
 				| <a href="#" onclick="Clear(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a> ]
 			</span>
-			<strong><?=$DisplayName?></strong> <?=$ExtraInfo?>
+			<strong><?=$DisplayName?></strong>
+			<div class="torrent_info">
+				<?=$ExtraInfo?>
 			<? if ($Result['UnRead']) {
 				echo '<strong class="new">New!</strong>';
 			} ?>
-			<?=$TorrentTags?>
+			</div>
+			<div class="tags"><?=$TorrentTags?></div>
 		</td>
 		<td><?=$TorrentInfo['FileCount']?></td>
 		<td style="text-align:right" class="nobr"><?=time_diff($TorrentInfo['Time'])?></td>

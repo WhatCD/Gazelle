@@ -1090,7 +1090,7 @@ table.border[width="100%"] {
 
 ul.nobullet {
 	list-style-type: none;
-	
+
 }
 
 li.graph {
@@ -1312,10 +1312,13 @@ form.manage_form[name=friends] .left input[type=submit] {
 	margin-right: 10px;
 }
 
-.linkbox .brackets:before, .linkbox .brackets:after {
-	color: #444;
-}
-
 #userinfo .brackets:before, #userinfo .brackets:after {
 	content: "";
+}
+
+.linkbox .brackets:before,
+.linkbox .brackets:after,
+.top10_quantity_links .brackets:before,
+.top10_quantity_links .brackets:after {
+	color: #444;
 }

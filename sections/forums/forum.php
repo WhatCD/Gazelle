@@ -111,6 +111,11 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 				<br />
 			</div>
 		</div>
+<?	if (check_perms('users_mod') || check_perms("site_mark_suggestions")) { ?>
+		<a href="tools.php?action=suggestions" class="brackets">Scoreboard</a>
+<?	} ?>
+		
+
 <?     
 /*
 	if(check_perms('users_mod')) {

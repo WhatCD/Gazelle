@@ -101,8 +101,8 @@ function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true, $
 	}
 ?>
 	<h3>Top <?=$Limit.' '.$Caption?>
-		<small>
-<?	
+		<small class="top10_quantity_links">
+<?
 	switch($Limit) {
 		case 100: ?>
 			- <a href="top10.php?type=tags&amp;details=<?=$Tag?>" class="brackets">Top 10</a>
@@ -125,10 +125,10 @@ function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true, $
 	<tr class="colhead">
 		<td class="center">Rank</td>
 		<td>Tag</td>
-		<td style="text-align:right">Uses</td>
+		<td style="text-align: right;">Uses</td>
 <?	if($ShowVotes) {	?>
-		<td style="text-align:right">Pos. votes</td>
-		<td style="text-align:right">Neg. votes</td>
+		<td style="text-align: right;">Pos. votes</td>
+		<td style="text-align: right;">Neg. votes</td>
 <?	}	?>
 	</tr>
 <?
@@ -153,10 +153,10 @@ function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true, $
 	<tr class="row<?=$Highlight?>">
 		<td class="center"><?=$Rank?></td>
 		<td><a href="<?=$URLString?><?=$Detail['Name']?>"><?=$Detail['Name']?></a></td>
-		<td style="text-align:right"><?=$Detail['Uses']?></td>
+		<td style="text-align: right;"><?=number_format($Detail['Uses'])?></td>
 <?		if($ShowVotes) { ?>
-		<td style="text-align:right"><?=$Detail['PosVotes']?></td>
-		<td style="text-align:right"><?=$Detail['NegVotes']?></td>
+		<td style="text-align: right;"><?=number_format($Detail['PosVotes'])?></td>
+		<td style="text-align: right;"><?=number_format($Detail['NegVotes'])?></td>
 <?		} ?>
 	</tr>
 <?

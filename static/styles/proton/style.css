@@ -1738,6 +1738,9 @@ table.noavatar, table.noavatar tr, table.noavatar td.body, table.noavatar td.bod
 tr.torrent .bookmark > a:before { content:""; }
 tr.torrent .bookmark > a:after { content:""; }
 
-.linkbox .brackets:before, .linkbox .brackets:after {
+.linkbox .brackets:before,
+.linkbox .brackets:after,
+.top10_quantity_links .brackets:before,
+.top10_quantity_links .brackets:after {
 	color: #575757;
 }

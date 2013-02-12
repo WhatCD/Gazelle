@@ -35,7 +35,7 @@ input,select,textarea {
 	font-family: Arial,sans-serif;
 	font-size: 11px;
 	padding: 3px;
-	
+
 }
 
 input:focus,textarea:focus {
@@ -978,7 +978,7 @@ forum_post box vertical_margin {
 }
 
 .torrent_table tr.group_torrent td span,#torrent_table tr.group_torrent td span {
-	
+
 }
 
 .torrent_table tr.group_torrent a,#torrent_table tr.group_torrent a {
@@ -1492,10 +1492,15 @@ ul.collage_images {
 
 .linkbox .brackets:before {
 	content: "[ ";
-	color: #F1F1F1;
 }
 
 .linkbox .brackets:after {
 	content: " ]";
+}
+
+.linkbox .brackets:before,
+.linkbox .brackets:after,
+.top10_quantity_links .brackets:before,
+.top10_quantity_links .brackets:after {
 	color: #F1F1F1;
 }

@@ -42,7 +42,7 @@ if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	} else {
 		$Details = 'all';
 	}
-	
+
 	// defaults to 10 (duh)
 	$Limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 	$Limit = in_array($Limit, array(10, 100, 250)) ? $Limit : 10;
@@ -90,7 +90,7 @@ if(check_perms('site_advanced_top10')) {
 					<input type="submit" value="Filter torrents" />
 				</td>
 			</tr>
-		</table>	
+		</table>
 	</form>
 <?
 }
@@ -158,7 +158,7 @@ $BaseQuery = "SELECT
 	g.ReleaseType
 	FROM torrents AS t
 	LEFT JOIN torrents_group AS g ON g.ID = t.GroupID ";
-	
+
 if($Details=='all' || $Details=='day') {
 	$TopTorrentsActiveLastDay = $Cache->get_value('top10tor_day_'.$Limit.$WhereSum);
 	if ($TopTorrentsActiveLastDay === false) {
@@ -348,9 +348,9 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 	global $LoggedUser,$Categories,$ReleaseTypes;
 ?>
 		<h3>Top <?=$Limit.' '.$Caption?>
-<?	if(empty($_GET['advanced'])){ ?> 
-		<small>
-<?	
+<?	if(empty($_GET['advanced'])){ ?>
+		<small class="top10_quantity_links">
+<?
 	switch($Limit) {
 		case 100: ?>
 			- <a href="top10.php?details=<?=$Tag?>" class="brackets">Top 10</a>
@@ -368,7 +368,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			- <a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
 <?	} ?>
 		</small>
-<?	} ?> 
+<?	} ?>
 		</h3>
 	<table class="torrent_table cats numbering border">
 	<tr class="colhead">
@@ -426,12 +426,12 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 
 		// generate torrent's title
 		$DisplayName='';
-		
-		
+
+
 		if(!empty($Artists[$GroupID])) {
 			$DisplayName = Artists::display_artists($Artists[$GroupID], true, true);
 		}
-		
+
 		$DisplayName.= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\">$GroupName</a>";
 
 		if($GroupCategoryID==1 && $GroupYear>0) {
@@ -496,7 +496,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 				<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?  }  ?>
 			</span>
-			
+
 			<?=$TorrentTags?>
 		</td>
 		<td style="text-align:right" class="nobr"><?=Format::get_size($Data)?></td>

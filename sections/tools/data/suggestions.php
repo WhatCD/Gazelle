@@ -25,6 +25,7 @@ $Categories = array(
 </div>
 
 <?if($_GET['view'] == "scoreboard" || empty($_GET['view'])) { ?>
+<div id="marked_suggestion">
 <h3>Marked</h3>
 <table>
 	<tr class="colhead">
@@ -46,6 +47,8 @@ $Categories = array(
 	</tr>
 		<? }?>
 </table>
+</div>
+<div id="implemented_suggestion">
 <h3>Implemented</h3>
 <table>
 	<tr class="colhead">
@@ -68,6 +71,8 @@ $Categories = array(
 	</tr>
 		<? }?>
 </table>
+</div>
+<div id="rejected_suggestion">
 <h3>Rejected</h3>
 <table>
 	<tr class="colhead">
@@ -90,6 +95,7 @@ $Categories = array(
 	</tr>
 		<? }?>
 </table>
+</div>
 <?
 }
 elseif ($_GET['view'] == "marked") {

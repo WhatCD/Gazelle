@@ -1978,6 +1978,9 @@ ul#userinfo_random li a:hover {
 tr.torrent .bookmark > a:before { content:""; }
 tr.torrent .bookmark > a:after { content:""; }
 
-.linkbox .brackets:before, .linkbox .brackets:after {
+.linkbox .brackets:before,
+.linkbox .brackets:after,
+.top10_quantity_links .brackets:before,
+.top10_quantity_links .brackets:after {
 	color: #878787;
 }

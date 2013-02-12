@@ -40,8 +40,8 @@ $BaseQuery = "SELECT
 	JOIN users_info AS ui ON ui.UserID = u.ID
 	LEFT JOIN torrents AS t ON t.UserID=u.ID
 	WHERE u.Enabled='1'
-	AND Uploaded>'". 5*1024*1024*1024 ."' 
-	AND Downloaded>'". 5*1024*1024*1024 ."' 
+	AND Uploaded>'". 5*1024*1024*1024 ."'
+	AND Downloaded>'". 5*1024*1024*1024 ."'
 	AND (Paranoia IS NULL OR (Paranoia NOT LIKE '%\"uploaded\"%' AND Paranoia NOT LIKE '%\"downloaded\"%'))
 	GROUP BY u.ID";
 
@@ -62,7 +62,7 @@ $BaseQuery = "SELECT
 		}
 		generate_user_table('Downloaders', 'dl', $TopUserDownloads, $Limit);
 	}
-	
+
 	if($Details=='all' || $Details=='numul') {
 		if (!$TopUserNumUploads = $Cache->get_value('topuser_numul_'.$Limit)) {
 			$DB->query("$BaseQuery ORDER BY NumUploads DESC LIMIT $Limit;");
@@ -101,8 +101,8 @@ function generate_user_table($Caption, $Tag, $Details, $Limit) {
 	global $Time;
 ?>
 	<h3>Top <?=$Limit.' '.$Caption;?>
-		<small>
-<?	
+		<small class="top10_quantity_links">
+<?
 	switch($Limit) {
 		case 100: ?>
 			- <a href="top10.php?type=users&amp;details=<?=$Tag?>" class="brackets">Top 10</a>
