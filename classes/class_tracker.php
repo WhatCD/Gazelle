@@ -64,7 +64,7 @@ class Tracker {
 			send_irc("PRIVMSG #tracker :{$Attempts} {$Err} {$Get}");
 			if ($Cache->get_value('ocelot_error_reported') === false) {
 				send_irc("PRIVMSG ".ADMIN_CHAN." :Failed to update ocelot: ".$Err." : ".$Get);
-				$Cache->cache_value('ocelot_error_reported', true, 900);
+				$Cache->cache_value('ocelot_error_reported', true, 3600);
 			}
 		}
 		return ($Return == "success");

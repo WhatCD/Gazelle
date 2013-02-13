@@ -85,7 +85,7 @@
             getTopTracks(div);
         });
     });
-    
+
     // Allow updating the sidebar element contents as get requests are completed.
     function updateDivContents(div) {
         var html = "";
@@ -110,18 +110,18 @@
             $('#lastfm_loading').remove();
         }
     }
-    
+
     // Escape ampersands with url code to avoid breaking the search links
     function escapeAmpUrl(input){
         return input.replace(/&/g,"%26");
     }
-    
+
     // Escape ampersands with html code to avoid breaking the search links
     function escapeHtml(input){
         return input.replace(/&/g,"&#38;").replace(/</g,"&#60;");
     }
 
-    
+
     // Functions for fetching the required data are as follows.
     // Also gets the data for shared artists as they're bundled.
     function getTasteometer(div) {
@@ -197,7 +197,7 @@
             });
         }
     }
-    
+
     function getLastPlayedTrack(div) {
         $.get('user.php?action=lastfm_last_played_track&username=' + username, function (response) {
             var html = "";
@@ -225,7 +225,7 @@
             updateDivContents(div);
         });
     }
-    
+
     function getTopArtists(div) {
         $.get('user.php?action=lastfm_top_artists&username=' + username, function (response) {
             var html;
@@ -299,7 +299,7 @@
                         for (i = 3; i < j.length; i++) {
                             html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                         }
-                        html+= '<li>[<a href="#topalbums" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
+                        html+= '<li><a href="#topalbums" id="lastfm_expand" onclick="return false" class="brackets">Expand</a></li>'
                     }
                     html += '</ul>';
                     html += "</li>";
@@ -311,7 +311,7 @@
             updateDivContents(div);
         });
     }
-    
+
     function getTopTracks(div) {
         $.get('user.php?action=lastfm_top_tracks&username=' + username, function (response) {
             var html;
@@ -342,7 +342,7 @@
                         for (i = 3; i < j.length; i++) {
                             html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '&filelist=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
                         }
-                        html+= '<li>[<a href="#toptracks" id="lastfm_expand" onclick="return false">Expand</a>]</li>'
+                        html+= '<li><a href="#toptracks" id="lastfm_expand" onclick="return false" class="brackets">Expand</a></li>'
                     }
                     html += '</ul>';
                     html += "</li>";

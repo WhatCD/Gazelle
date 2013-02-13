@@ -20,7 +20,7 @@ if ($ConvID = (int)$_GET['id']) {
 		$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
 	}
 
-	View::show_header('Staff PM', 'staffpm,bbcode');
+	View::show_header('Staff PM', 'staffpm,bbcode,jquery');
 
 	$UserInfo = Users::user_info($UserID);
 	$UserStr = Users::format_username($UserID, true, true, true, true);
@@ -132,12 +132,14 @@ if ($ConvID = (int)$_GET['id']) {
 ?>
 		<h3>Reply</h3>
 		<div class="box pad">
-			<div id="preview" class="hidden"></div>
 			<div id="buttons" class="center">
 				<form class="manage_form" name="staff_messages" action="staffpm.php" method="post" id="messageform">
 					<input type="hidden" name="action" value="takepost" />
 					<input type="hidden" name="convid" value="<?=$ConvID?>" id="convid" />
-					<textarea id="quickpost" name="message" cols="90" rows="10"></textarea> <br />
+<?
+					$TextPrev = new TEXTAREA_PREVIEW('message', 'quickpost', '', 90, 10, true, false);
+?>
+					<br />
 <?
 	// Assign to
 	if ($IsStaff) {
@@ -208,8 +210,8 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="button" value="Resolve" onclick="location.href='staffpm.php?action=resolve&amp;id=<?=$ConvID?>';" />
 <?			if ($IsFLS) {  //Moved by request ?>
 					<input type="button" value="Common answers" onclick="$('#common_answers').toggle();" />
-					<input type="button" id="previewbtn" value="Preview" onclick="PreviewMessage();" />
 <?			} ?>
+					<input type="button" id="previewbtn" value="Preview" class="hidden button_preview_<?=$TextPrev->getID()?>" title="Preview text" />
 					<input type="submit" value="Send message" />
 <?	} else { ?>
 					<input type="button" value="Unresolve" onclick="location.href='staffpm.php?action=unresolve&amp;id=<?=$ConvID?>';" />

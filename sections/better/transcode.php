@@ -173,15 +173,15 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		<tr<?=$Edition['IsSnatched'] ? ' class="snatched_torrent"' : ''?>>
 			<td>
 				<span class="torrent_links_block">
-					[ <a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]
+					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
 				</span>
 				<?=$DisplayName?>
 				<div class="torrent_info"><?=$ExtraInfo?></div>
 				<div class="tags"><?=$TorrentTags?></div>
 			</td>
-			<td><strong><?=isset($Edition['Formats']['V2 (VBR)'])?'<span class="important_text_alt">YES</span>':'<span class="important_text">NO</span>'?></strong></td>
-			<td><strong><?=isset($Edition['Formats']['V0 (VBR)'])?'<span class="important_text_alt">YES</span>':'<span class="important_text">NO</span>'?></strong></td>
-			<td><strong><?=isset($Edition['Formats']['320'])?'<span class="important_text_alt">YES</span>':'<span class="important_text">NO</span>'?></strong></td>
+			<td><?=isset($Edition['Formats']['V2 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=isset($Edition['Formats']['V0 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=isset($Edition['Formats']['320']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
 		</tr>
 <?
 		}

@@ -13,8 +13,8 @@ if(!empty($_GET['userid']) && is_number($_GET['userid'])) {
 
 $DB->query("SELECT t.GroupID, t.ID
 	FROM torrents AS t
-	WHERE 
-	t.Format='FLAC' 
+	WHERE
+	t.Format='FLAC'
 	AND ((t.LogScore = '100' AND t.Media = 'CD')
 		OR t.Media = 'Vinyl')
 	AND t.UserID='$UserID'");
@@ -35,8 +35,8 @@ $DB->query("CREATE TEMPORARY TABLE temp_sections_better_upload
 //$DB->query('SELECT * FROM t');
 
 $DB->query("SELECT GroupID FROM temp_sections_better_upload
-		WHERE EncodingList NOT LIKE '%V0 (VBR)%' 
-		OR EncodingList NOT LIKE '%V2 (VBR)%' 
+		WHERE EncodingList NOT LIKE '%V0 (VBR)%'
+		OR EncodingList NOT LIKE '%V2 (VBR)%'
 		OR EncodingList NOT LIKE '%320%'");
 
 $GroupIDs = $DB->collect('GroupID');
@@ -67,7 +67,7 @@ foreach ($Results as $GroupID=>$Group) {
 		$DisplayName = '';
 	}
 	$FlacID = $Uploads[$GroupID]['ID'];
-	
+
 	$DisplayName = '';
 	if(count($Artists)>0) {
 		$DisplayName = Artists::display_artists(array('1'=>$Artists));
@@ -80,15 +80,15 @@ foreach ($Results as $GroupID=>$Group) {
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;
 	}
-	
+
 	$MissingEncodings = array('V0 (VBR)'=>1, 'V2 (VBR)'=>1, '320'=>1);
-	
+
 	foreach($Torrents as $Torrent) {
 		if(!empty($MissingEncodings[$Torrent['Encoding']])) {
 			$MissingEncodings[$Torrent['Encoding']] = 0;
 		}
 	}
-	
+
 	$TagList=array();
 	if($TorrentTags!='') {
 		$TorrentTags=explode(' ',$TorrentTags);
@@ -104,14 +104,14 @@ foreach ($Results as $GroupID=>$Group) {
 		<tr<?=$Torrents[$FlacID]['IsSnatched'] ? ' class="snatched_torrent"' : ''?>>
 			<td>
 				<span class="torrent_links_block">
-					[ <a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
+					<a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets">DL</a>
 				</span>
-				<?=$DisplayName?>	
+				<?=$DisplayName?>
 				<?=$TorrentTags?>
 			</td>
-			<td><strong><?=($MissingEncodings['V2 (VBR)'] == 0)?'<span style="color: green;">YES</span>':'<span style="color: red;">NO</span>'?></strong></td>
-			<td><strong><?=($MissingEncodings['V0 (VBR)'] == 0)?'<span style="color: green;">YES</span>':'<span style="color: red;">NO</span>'?></strong></td>
-			<td><strong><?=($MissingEncodings['320'] == 0)?'<span style="color: green;">YES</span>':'<span style="color: red;">NO</span>'?></strong></td>
+			<td><?=($MissingEncodings['V2 (VBR)'] == 0) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=($MissingEncodings['V0 (VBR)'] == 0) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=($MissingEncodings['320'] == 0) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
 		</tr>
 <?	} ?>
 	</table>

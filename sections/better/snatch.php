@@ -22,7 +22,7 @@ if (!empty($_GET['filter']) && $_GET['filter'] == 'seeding') {
 $DB->query("SELECT t.GroupID, x.fid
 	FROM ".($SeedingOnly ? 'xbt_files_users' : 'xbt_snatched')." AS x
 		JOIN torrents AS t ON t.ID=x.fid
-	WHERE t.Format='FLAC' 
+	WHERE t.Format='FLAC'
 		AND ((t.LogScore = '100' AND t.Media = 'CD')
 			OR t.Media = 'Vinyl')
 		AND x.uid='$UserID'");
@@ -51,8 +51,8 @@ $DB->query("CREATE TEMPORARY TABLE temp_sections_better_snatch
 //$DB->query('SELECT * FROM t');
 
 $DB->query("SELECT GroupID FROM temp_sections_better_snatch
-		WHERE EncodingList NOT LIKE '%V0 (VBR)%' 
-		OR EncodingList NOT LIKE '%V2 (VBR)%' 
+		WHERE EncodingList NOT LIKE '%V0 (VBR)%'
+		OR EncodingList NOT LIKE '%V2 (VBR)%'
 		OR EncodingList NOT LIKE '%320%'");
 
 $GroupIDs = array_fill_keys($DB->collect('GroupID'), true);
@@ -109,9 +109,9 @@ View::show_header('Transcode Snatches');
 ?>
 <div class="linkbox">
 <? if ($SeedingOnly) { ?>
-	<a href="better.php?method=snatch">Show all</a>
+	<a href="better.php?method=snatch" class="brackets">Show all</a>
 <? } else { ?>
-	<a href="better.php?method=snatch&amp;filter=seeding">Just those currently seeding</a>
+	<a href="better.php?method=snatch&amp;filter=seeding" class="brackets">Just those currently seeding</a>
 <? } ?>
 </div>
 <div class="thin">
@@ -183,7 +183,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		<tr class="torrent torrent_row<?=$Edition['IsSnatched'] ? ' snatched_torrent' : ''?>">
 			<td>
 				<span class="torrent_links_block">
-					[ <a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]
+					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
 				</span>
 				<?=$DisplayName?>
 				<div class="torrent_info"><?=$ExtraInfo?></div>

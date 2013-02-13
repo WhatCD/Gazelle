@@ -1,9 +1,9 @@
 <?
 enforce_login();
-View::show_header('Staff');
+View::show_header('Staff', 'jquery');
 
 include(SERVER_ROOT.'/sections/staff/functions.php');
-include(SERVER_ROOT.'/sections/staffpm/functions.php');
+
 $SupportStaff = get_support();
 
 list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
@@ -20,7 +20,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 			<p>If you are looking for help with a general question, we appreciate it if you would only message through the staff inbox, where we can all help you.</p>
 			<p>You can do that by <strong><a href="#" onclick="$('#compose').toggle();">sending a message to the Staff Inbox</a></strong>.</p>
 		</div>
-		<? print_compose_staff_pm(true); ?>
+		<? View::parse('generic/reply/staffpm.php', array('Hidden' => true)); ?>
 		<br />
 		<h3>First-line Support</h3>
 		<p><strong>These users are not official staff members</strong> - they're users who have volunteered their time to help people in need. Please treat them with respect and read <a href="wiki.php?action=article&amp;id=260">this</a> before contacting them.</p>

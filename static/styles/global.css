@@ -368,6 +368,10 @@ tr.torrent .bookmark>a:after {
 	font-size: inherit;
 }
 
+.preview_wrap {
+	text-align: left;
+}
+
 .text_preview {
 	min-height: 100px
 }

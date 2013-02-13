@@ -38,7 +38,7 @@ foreach ($Results as $GroupID=>$Group) {
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 	if($ReleaseType>0) { $DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]"; }
-	
+
 	$ExtraInfo = Torrents::torrent_info($Torrents[$FlacID]);
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;
@@ -56,10 +56,10 @@ foreach ($Results as $GroupID=>$Group) {
 		$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
 	}
 ?>
-		<tr class="torrent torrent_row<?=$Torrents[$FlacID]['IsSnatched'] ? ' snatched_torrent"' : ''?>">
+		<tr class="torrent torrent_row<?=$Torrents[$FlacID]['IsSnatched'] ? ' snatched_torrent' : ''?>">
 			<td>
 				<span class="torrent_links_block">
-					[ <a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&torrent_pass=<?=$LoggedUser['torrent_pass']?>">DL</a> ]
+					<a href="torrents.php?action=download&amp;id=<?=$FlacID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets">DL</a>
 				</span>
 				<?=$DisplayName?>
 				<?=$TorrentTags?>

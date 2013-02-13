@@ -2,7 +2,7 @@
 
 include(SERVER_ROOT.'/sections/staffpm/functions.php');
 
-View::show_header('Staff PMs', 'staffpm');
+View::show_header('Staff PMs', 'staffpm,jquery');
 
 // Get messages
 $StaffPMs = $DB->query("
@@ -31,7 +31,7 @@ $StaffPMs = $DB->query("
 	</div>
 	<br />
 	<br />
-	<? print_compose_staff_pm(true); ?>
+	<? View::parse('generic/reply/staffpm.php', array('Hidden' => true)); ?>
 	<div class="box pad" id="inbox">
 <?
 
