@@ -455,7 +455,7 @@ class Torrents {
 				$TmpFileList[] = self::filelist_format_file($File);
 			}
 			$FilePath = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : "";
-			$FileString = Format::make_utf8(implode("\n", $TmpFileList));
+			$FileString = implode("\n", $TmpFileList);
 			$DB->query("UPDATE torrents SET Size = ".$TotalSize.", FilePath = '".db_string($FilePath)."', FileList = '".db_string($FileString)."' WHERE ID = ".$TorrentID);
 			$Cache->delete_value('torrents_details_'.$GroupID);
 		}
@@ -482,8 +482,8 @@ class Torrents {
 		list($Size, $Name) = $File;
 		$Name = Format::make_utf8(strtr($Name, "\n\r\t", "   "));
 		$ExtPos = strrpos($Name, '.');
-		$Ext = $ExtPos ? substr($Name, $ExtPos) : '';
-		return sprintf("%s s%ds %s %s", $Ext, $Size, $Name, self::filelist_delim());
+		$Ext = $ExtPos ? trim(substr($Name, $ExtPos+1)) : '';
+		return sprintf("%s s%ds %s %s", ".$Ext", $Size, $Name, self::filelist_delim());
 	}
 
 	/**

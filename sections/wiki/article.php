@@ -71,7 +71,7 @@ View::show_header($Title,'wiki,bbcode');
 				<input value="Search" type="submit" class="hidden" />
 			</form>
 			<br style="line-height:10px;" />
-			<strong><a href="wiki.php?action=browse">Browse articles</a></strong>
+			<strong><a href="wiki.php?action=browse" class="brackets">Browse articles</a></strong>
 		</div>
 		<div class="box box_info pad">
 			<ul>

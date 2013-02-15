@@ -331,6 +331,23 @@ View::show_header($Title, 'requests');
 	<div class="header">
 		<h2><?=$Title?></h2>
 	</div>
+	<div class="linkbox">
+<?	if (!$BookmarkView) {
+		if (check_perms('site_submit_requests')) { ?>
+		<a href="requests.php?action=new" class="brackets">New request</a>
+		<a href="requests.php?type=created" class="brackets">My requests</a>
+<?		}
+		if (check_perms('site_vote')) { ?>
+		<a href="requests.php?type=voted" class="brackets">Requests I've voted on</a>
+<?		} ?>
+		<a href="bookmarks.php?type=requests" class="brackets">Bookmarked requests</a>
+<?	} else { ?>
+		<a href="bookmarks.php?type=torrents" class="brackets">Torrents</a>
+		<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
+		<a href="bookmarks.php?type=collages" class="brackets">Collages</a>
+		<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
+<?	} ?>
+	</div>
 	<form class="search_form" name="requests" action="" method="get">
 <?	if ($BookmarkView) { ?>
 		<input type="hidden" name="action" value="view" />
@@ -469,23 +486,6 @@ foreach($Categories as $CatKey => $CatName) {
 			</tr>
 		</table>
 	</form>
-	<div class="linkbox">
-<?	if (!$BookmarkView) {
-		if (check_perms('site_submit_requests')) { ?>
-		<a href="requests.php?action=new" class="brackets">New request</a>
-		<a href="requests.php?type=created" class="brackets">My requests</a>
-<?		}
-		if (check_perms('site_vote')) { ?>
-		<a href="requests.php?type=voted" class="brackets">Requests I've voted on</a>
-<?		} ?>
-		<a href="bookmarks.php?type=requests" class="brackets">Bookmarked requests</a>
-<?	} else { ?>
-		<a href="bookmarks.php?type=torrents" class="brackets">Torrents</a>
-		<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
-		<a href="bookmarks.php?type=collages" class="brackets">Collages</a>
-		<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
-<?	} ?>
-	</div>
 
 <?		if($NumResults) { ?>
 	<div class="linkbox">
@@ -611,13 +611,13 @@ foreach($Categories as $CatKey => $CatName) {
 			<td class="nobr">
 <?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
 				<form class="add_form" name="request" id="form_<?=$RequestID?>" action="">
-					<span id="vote_count_<?=$RequestID?>"><?=$VoteCount?></span>
+					<span id="vote_count_<?=$RequestID?>"><?=number_format($VoteCount)?></span>
 					<input type="hidden" id="requestid_<?=$RequestID?>" name="requestid" value="<?=$RequestID?>" />
 					<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)"><strong>(+)</strong></a>
+					&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 				</form>
 <?  		} else { ?>
-				<span id="vote_count_<?=$RequestID?>"><?=$VoteCount?></span>
+				<span id="vote_count_<?=$RequestID?>"><?=number_format($VoteCount)?></span>
 <?			} ?>
 			</td>
 			<td class="nobr">

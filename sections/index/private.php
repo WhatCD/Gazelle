@@ -48,17 +48,17 @@ if(($Blog = $Cache->get_value('staff_blog')) === false) {
 		b.Time
 		FROM staff_blog AS b LEFT JOIN users_main AS um ON b.UserID=um.ID
 		ORDER BY Time DESC");
-	$Blog = $DB->to_array();
-	$Cache->cache_value('staff_blog',$Blog,1209600);
+	$Blog = $DB->to_array(false, MYSQLI_NUM);
+	$Cache->cache_value('staff_blog', $Blog, 1209600);
 }
-if(($ReadTime = $Cache->get_value('staff_blog_read_'.$LoggedUser['ID'])) === false) {
+if (($SBlogReadTime = $Cache->get_value('staff_blog_read_'.$LoggedUser['ID'])) === false) {
 	$DB->query("SELECT Time FROM staff_blog_visits WHERE UserID = ".$LoggedUser['ID']);
-	if (list($ReadTime) = $DB->next_record()) {
-		$ReadTime = strtotime($ReadTime);
+	if (list($SBlogReadTime) = $DB->next_record()) {
+		$SBlogReadTime = strtotime($SBlogReadTime);
 	} else {
-		$ReadTime = 0;
+		$SBlogReadTime = 0;
 	}
-	$Cache->cache_value('staff_blog_read_'.$LoggedUser['ID'],$ReadTime,1209600);
+	$Cache->cache_value('staff_blog_read_'.$LoggedUser['ID'], $SBlogReadTime, 1209600);
 }
 ?>
 			<ul class="stats nobullet">
@@ -70,9 +70,12 @@ if(count($Blog) < 5) {
 }
 for($i = 0; $i < $Limit; $i++) {
 	list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $Blog[$i];
+	$BlogTime = strtotime($BlogTime);
 ?>
 				<li>
-					<?=($ReadTime < strtotime($BlogTime))?'<strong>':''?><?=($i + 1)?>. <a href="staffblog.php#blog<?=$BlogID?>"><?=$Title?></a><?=($ReadTime < strtotime($BlogTime))?'</strong>':''?>
+					<?=($SBlogReadTime < $BlogTime) ? '<strong>' : ''?><?=($i + 1)?>.
+					<a href="staffblog.php#blog<?=$BlogID?>"><?=$Title?></a>
+					<?=($SBlogReadTime < $BlogTime)?'</strong>':''?>
 				</li>
 <?
 }

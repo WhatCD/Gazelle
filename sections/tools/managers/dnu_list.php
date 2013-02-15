@@ -2,12 +2,12 @@
 if(!check_perms('admin_dnu')) { error(403); }
 
 View::show_header('Manage do not upload list');
-$DB->query("SELECT 
+$DB->query("SELECT
 	d.ID,
-	d.Name, 
-	d.Comment, 
-	d.UserID, 
-	d.Time 
+	d.Name,
+	d.Comment,
+	d.UserID,
+	d.Time
 	FROM do_not_upload as d
 	LEFT JOIN users_main AS um ON um.ID=d.UserID
 	ORDER BY d.Time DESC");
@@ -24,7 +24,7 @@ $DB->query("SELECT
 	</tr>
 <? while(list($ID, $Name, $Comment, $UserID, $DNUTime) = $DB->next_record()){ ?>
 	<tr>
-		<form class="manage_form" class="dnu" action="tools.php" method="post">
+		<form class="manage_form dnu" action="tools.php" method="post">
 			<td>
 				<input type="hidden" name="action" value="dnu_alter" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -36,7 +36,8 @@ $DB->query("SELECT
 			</td>
 			<td>
 				<?=Users::format_username($UserID, false, false, false)?><br />
-				<?=time_diff($DNUTime, 1)?></td>
+				<?=time_diff($DNUTime, 1)?>
+			</td>
 			<td>
 				<input type="submit" name="submit" value="Edit" />
 				<input type="submit" name="submit" value="Delete" />

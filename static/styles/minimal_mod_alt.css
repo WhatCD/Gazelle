@@ -43,7 +43,7 @@ input:focus,textarea:focus {
 }
 
 blockquote {
-	background: transparent url(https://what.cd/static/styles/minimal/images/blockquote.png) repeat;
+	background: transparent url(/static/styles/minimal/images/blockquote.png) repeat;
 	color: #f1f1f1!important;
 	border: 1px #000 dotted;
 	margin: 10px;
@@ -177,7 +177,7 @@ textarea.wbbarea {
 }
 
 #userinfo_username li:first-child,#userinfo_major li:first-child,#userinfo_minor li:first-child,#userinfo_username li:first-child:hover,#userinfo_major li:first-child:hover,#userinfo_minor li:first-child:hover,#userinfo_username li:first-child a,#userinfo_username li:first-child a:hover,#userinfo_minor li:first-child a,#userinfo_minor li:first-child a:hover,#userinfo_major li:first-child a,#userinfo_major li:first-child a:hover,.show_torrents,.hide_torrents {
-	background-image: url(http://emblym.info/css/sprite.png);
+	background-image: url(/static/styles/minimal/images/minimal_mod_alt_sprite.png);
 }
 
 #userinfo {
@@ -337,51 +337,51 @@ textarea.wbbarea {
 }
 
 #userinfo_username>li:first-child + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -322px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -322px;
 }
 
 #userinfo_username>li:first-child + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -679px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -679px;
 }
 
 #userinfo_minor>li:first-child + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -129px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -129px;
 }
 
 #userinfo_minor>li:first-child + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -918px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -918px;
 }
 
 #userinfo_minor>li:first-child + li + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -871px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -871px;
 }
 
 #userinfo_minor>li:first-child + li + li + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -83px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -83px;
 }
 
 #userinfo_minor>li:first-child + li + li + li + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -276px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -276px;
 }
 
 #userinfo_minor>li:first-child + li + li + li + li + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -958px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -958px;
 }
 
 #userinfo_minor>li:first-child + li + li + li + li + li + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -633px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -633px;
 }
 
 #userinfo_major>li:first-child + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -230px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -230px;
 }
 
 #userinfo_major>li:first-child + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -755px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -755px;
 }
 
 #userinfo_major>li:first-child + li + li + li>a {
-	background: transparent no-repeat url(http://emblym.info/css/sprite.png) 0 -725px;
+	background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_alt_sprite.png) 0 -725px;
 }
 
 #alerts {
@@ -444,7 +444,7 @@ textarea.wbbarea {
 }
 
 #searchbars ul li ul {
-	background: #262626 url(https://what.cd/static/styles/minimal/images/bg.png) repeat-x 0 -3px;
+	background: #262626 url(/static/styles/minimal/images/bg.png) repeat-x 0 -3px;
 	border: 1px solid #757575;
 	display: block;
 	left: 0;
@@ -685,7 +685,7 @@ table tr.colhead_dark td {
 }
 
 .last_read {
-	background: url(http://f.cl.ly/items/0X3l2s1g0d1T0e311A3r/new.png) no-repeat center center;
+	background: url(/static/styles/minimal/images/minimal_mod_alt_new.png) no-repeat center center;
 	height: 12px;
 	width: 12px;
 	margin-left: 10px;
@@ -703,49 +703,49 @@ table tr.colhead_dark td {
 }
 
 #forums #content .thin td.read {
-	background: #373737 url(http://f.cl.ly/items/1P1C3A1n3w242G0E2Z2V/balloon.png) no-repeat 50%;
+	background: #373737 url(/static/styles/minimal/images/minimal_mod_alt_balloon.png) no-repeat 50%;
 	height: 14px;
 	width: 14px;
 }
 
 #forums #content .thin td.unread {
-	background: #373737 url(http://f.cl.ly/items/1T1S0L2G1C0T2Y1D2g2H/balloon_unread.png) no-repeat 50%;
+	background: #373737 url(/static/styles/minimal/images/minimal_mod_alt_balloon_unread.png) no-repeat 50%;
 	height: 14px;
 	width: 14px;
 }
 
 #forums #content .thin td.read_sticky {
-	background: #373737 url(http://f.cl.ly/items/0D2l3W3r0J0h1E081O46/sticky.png) no-repeat 50%;
+	background: #373737 url(/static/styles/minimal/images/minimal_mod_alt_sticky.png) no-repeat 50%;
 	height: 14px;
 	width: 14px;
 }
 
 #forums #content .thin td.unread_sticky {
-	background: #373737 url(http://f.cl.ly/items/351i3y1t0M0014313q0e/sticky_unread.png) no-repeat 50%;
+	background: #373737 url(/static/styles/minimal/images/minimal_mod_alt_sticky_unread.png) no-repeat 50%;
 	height: 14px;
 	width: 14px;
 }
 
 #forums #content .thin td.read_locked {
-	background: #373737 url(http://f.cl.ly/items/2F2u2g0D062w0K1I2N35/lock.png) no-repeat 50%;
+	background: #373737 url(/static/styles/minimal/images/minimal_mod_alt_lock.png) no-repeat 50%;
 	height: 14px;
 	width: 14px;
 }
 
 #forums #content .thin td.unread_locked {
-	background: #373737 url(http://f.cl.ly/items/2Y2a3e0a202K243e3d26/lock_unread.png) no-repeat 50%;
+	background: #373737 url(/static/styles/minimal/images/minimal_mod_alt_lock_unread.png) no-repeat 50%;
 	height: 14px;
 	width: 14px;
 }
 
 #forums #content .thin td.read_locked_sticky {
-	background: #373737 url(http://f.cl.ly/items/3B3N1Z3J3X1T3J1W2t0r/lock-sticky-unread.png) no-repeat 50%;
+	background: #373737 url(/static/styles/minimal/images/minimal_mod_alt_lock-sticky-unread.png) no-repeat 50%;
 	height: 14px;
 	width: 14px;
 }
 
 #forums #content .thin td.unread_locked_sticky {
-	background: #373737 url(http://f.cl.ly/items/3B3N1Z3J3X1T3J1W2t0r/lock-sticky-unread.png) no-repeat 50%;
+	background: #373737 url(/static/styles/minimal/images/minimal_mod_alt_lock-sticky-unread.png) no-repeat 50%;
 	height: 14px;
 	width: 14px;
 }
@@ -1080,25 +1080,25 @@ forum_post box vertical_margin {
 .poll {
 	list-style: none;
 	padding: 10px;
-	margin: 5px
+	margin: 5px;
 }
 
 .poll li {
-	clear: both
+	clear: both;
 }
 
 .poll .graph {
-	padding: 0 0 15px 0
+	padding: 0 0 15px 0;
 }
 
 .poll .graph span {
 	display: block;
 	height: 19px;
-	float: left
+	float: left;
 }
 
 .poll .graph .center_poll {
-	background: url(https://what.cd/static/styles/minimal/images/poll_middle.png) top left repeat-x
+	background: url(/static/styles/minimal/images/poll_middle.png) top left repeat-x;
 }
 
 .r00 {
@@ -1302,43 +1302,43 @@ h3 {
 }
 
 .cats_music {
-	background: url(http://f.cl.ly/items/140a1Y2W2t3z3o1g1E0r/music.png) top left no-repeat;
+	background: url(/static/styles/minimal/images/icons/minimal_mod_alt_music.png) top left no-repeat;
 	height: 28px;
 	width: 28px;
 }
 
 .cats_applications {
-	background: url(http://f.cl.ly/items/1Z350I2E1Y0r1M141g1g/apps.png) top left no-repeat;
+	background: url(/static/styles/minimal/images/icons/minimal_mod_alt_apps.png) top left no-repeat;
 	height: 28px;
 	width: 28px;
 }
 
 .cats_ebooks {
-	background: url(http://f.cl.ly/items/3H0M2Z2Q22312r2K073S/ebook.png) top left no-repeat;
+	background: url(/static/styles/minimal/images/icons/minimal_mod_alt_ebook.png) top left no-repeat;
 	height: 28px;
 	width: 28px;
 }
 
 .cats_audiobooks {
-	background: url(http://f.cl.ly/items/0o2I2W2I2k3V0L3i1Q0k/audiobook.png) top left no-repeat;
+	background: url(/static/styles/minimal/images/icons/minimal_mod_alt_audiobook.png) top left no-repeat;
 	height: 28px;
 	width: 28px;
 }
 
 .cats_elearningvideos {
-	background: url(http://f.cl.ly/items/3G1B0M392r1j1F073T3W/learning.png) top left no-repeat;
+	background: url(/static/styles/minimal/images/icons/minimal_mod_alt_learning.png) top left no-repeat;
 	height: 28px;
 	width: 28px;
 }
 
 .cats_comedy {
-	background: url(http://f.cl.ly/items/1i3N0z1T2n2T3X13160H/comedy.png) top left no-repeat;
+	background: url(/static/styles/minimal/images/icons/minimal_mod_alt_comedy.png) top left no-repeat;
 	height: 28px;
 	width: 28px;
 }
 
 .cats_comics {
-	background: url(http://f.cl.ly/items/1M2l2c3f0A2u1q20153j/shield.png) top left no-repeat;
+	background: url(/static/styles/minimal/images/icons/minimal_mod_alt_shield.png) top left no-repeat;
 	height: 28px;
 	width: 28px;
 }

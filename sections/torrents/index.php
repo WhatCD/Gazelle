@@ -156,6 +156,7 @@ if(!empty($_REQUEST['action'])) {
 
 		case 'notify_clear':
 		case 'notify_clear_item':
+		case 'notify_clear_items':
 		case 'notify_clearitem':
 		case 'notify_clear_filter':
 		case 'notify_cleargroup':

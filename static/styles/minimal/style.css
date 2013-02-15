@@ -138,7 +138,7 @@ textarea#quickpost{margin:0; padding:0}
 	top: 1em;
 	left: 0;
 	z-index: 1000;
-	background: #262626 url(https://what.cd/static/styles/minimal/images/bg.png) repeat-x 0 -3px;
+	background: #262626 url(/static/styles/minimal/images/bg.png) repeat-x 0 -3px;
 	border: 1px solid #757575;
 	margin-top: 12px;
 	white-space: nowrap;

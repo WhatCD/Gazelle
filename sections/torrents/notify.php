@@ -195,7 +195,7 @@ if (empty($Results)) {
 <form class="manage_form" name="torrents" id="notificationform_<?=$FilterID?>" action="">
 <table class="torrent_table cats checkboxes border">
 	<tr class="colhead">
-		<td style="text-align: center"><input type="checkbox" name="toggle" onclick="ToggleBoxes(this.form, this.checked)" /></td>
+		<td style="text-align: center"><input type="checkbox" name="toggle" onclick="toggleBoxes(<?=$FilterID?>, this.checked)" /></td>
 		<td class="small cats_col"></td>
 		<td style="width:100%;">Name<?=$TorrentCount <= NOTIFICATIONS_MAX_SLOWSORT ? ' / <a href="'.header_link('year').'">Year</a>' : ''?></td>
 		<td>Files</td>
@@ -265,7 +265,7 @@ if (empty($Results)) {
 		// print row
 ?>
 	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '')?>" id="torrent<?=$TorrentID?>"<?=$MatchingArtistsText ? 'title="'.display_str($MatchingArtistsText).'"' : ''?>>
-		<td style="text-align: center"><input type="checkbox" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
+		<td style="text-align: center"><input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
 		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$MainTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1])).' tags_'.str_replace('.','_',$MainTag)?>"></div></td>
 		<td>
 			<span>

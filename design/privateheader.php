@@ -242,6 +242,34 @@ if ($MyBlog < $CurrentBlog) {
 	$Alerts[] = '<a href="blog.php">'.'New Blog Post!'.'</a>';
 }
 
+// Staff blog
+if(check_perms('users_mod')) {
+	global $SBlogReadTime, $LatestSBlogTime;
+	if (!$SBlogReadTime && ($SBlogReadTime = $Cache->get_value('staff_blog_read_'.$LoggedUser['ID'])) === false) {
+		$DB->query("SELECT Time FROM staff_blog_visits WHERE UserID = ".$LoggedUser['ID']);
+		if (list($SBlogReadTime) = $DB->next_record()) {
+			$SBlogReadTime = strtotime($SBlogReadTime);
+		} else {
+			$SBlogReadTime = 0;
+		}
+		$Cache->cache_value('staff_blog_read_'.$LoggedUser['ID'], $SBlogReadTime, 1209600);
+	}
+	if (!$LatestSBlogTime && ($LatestSBlogTime = $Cache->get_value('staff_blog_latest_time')) === false) {
+		$DB->query("SELECT MAX(Time) FROM staff_blog");
+		if (list($LatestSBlogTime) = $DB->next_record()) {
+			$LatestSBlogTime = strtotime($LatestSBlogTime);
+		} else {
+			$LatestSBlogTime = 0;
+		}
+		$Cache->cache_value('staff_blog_latest_time', $LatestSBlogTime, 1209600);
+	}
+	if ($SBlogReadTime < $LatestSBlogTime) {
+		global $Debug;
+		$Debug->log_var(array('b' => $SBlogReadTime, 'l' => $LatestSBlogTime), 'Times');
+		$Alerts[] = '<a href="staffblog.php">'.'New Staff Blog Post!'.'</a>';
+	}
+}
+
 //Staff PM
 $NewStaffPMs = $Cache->get_value('staff_pm_new_'.$LoggedUser['ID']);
 if ($NewStaffPMs === false) {

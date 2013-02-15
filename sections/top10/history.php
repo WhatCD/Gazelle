@@ -81,7 +81,7 @@ if(!empty($_GET['date'])) {
 				LEFT JOIN torrents_group AS g ON g.ID = t.GroupID
 			".$Where."
 			ORDER BY tht.Rank ASC");
-			
+
 		$Details = $DB->to_array();
 
 		$Cache->cache_value('top10_history_'.$SQLTime, $Details, 3600*24);
@@ -109,13 +109,13 @@ if(!empty($_GET['date'])) {
 		if($GroupID) {
 			//Group still exists
 			$DisplayName='';
-			
+
 			$Artists = Artists::get_artist($GroupID);
-			
+
 			if(!empty($Artists)) {
 				$DisplayName = Artists::display_artists($Artists, true, true);
 			}
-			
+
 			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID'  title='View Torrent'>$GroupName</a>";
 
 			if($GroupCategoryID==1 && $GroupYear>0) {
@@ -145,7 +145,7 @@ if(!empty($_GET['date'])) {
 			$TorrentTags = $TagString;
 		}
 		$TagList=array();
-		
+
 		$PrimaryTag = '';
 		if($TorrentTags!='') {
 			foreach ($TorrentTags as $TagKey => $TagName) {
@@ -168,7 +168,7 @@ if(!empty($_GET['date'])) {
 ?>
 		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCatOffset]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div></td>
 		<td>
-		<span><?=($GroupID ? '[ <a href="torrents.php?action=download&amp;id='.$TorrentID.'&amp;authkey='.$LoggedUser['AuthKey'].'&amp;torrent_pass='.$LoggedUser['torrent_pass'].' title="Download">DL</a> ]' : '(Deleted)')?></span>
+		<span><?=($GroupID ? '<a href="torrents.php?action=download&amp;id='.$TorrentID.'&amp;authkey='.$LoggedUser['AuthKey'].'&amp;torrent_pass='.$LoggedUser['torrent_pass'].' title="Download" class="brackets">DL</a>' : '(Deleted)')?></span>
 			<?=$DisplayName?>
 			<?=$TorrentTags?>
 		</td>

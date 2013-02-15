@@ -11,7 +11,8 @@ $Categories = array(
 		"Already Implemented",
 		"Already Rejected Suggestion/Against The Rules",
 		"Awful Suggestion",
-		"Suggestion" 
+		"Suggestion",
+		"Approved Suggestion"
 )?>
 
 

@@ -71,10 +71,10 @@ if(!$NumResults) {
 	$ActionTitle="Hide";
 	$ActionURL="hide";
 	$ShowGroups = 0;
-	
+
 	foreach ($CollageSubs as $Collage) {
 		unset($TorrentTable);
-		
+
 		list($CollageID, $CollageName, $CollageSize, $LastVisit) = $Collage;
 		$RS = $DB->query("SELECT ct.GroupID,
 								tg.WikiImage,
@@ -87,7 +87,7 @@ if(!$NumResults) {
 		$NewTorrentCount = $DB->record_count();
 		//$NewTorrents = $DB->to_array();
 		//$Artists = Artists::get_artists($GroupID);
-		
+
 		$GroupIDs = $DB->collect('GroupID');
 		$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
 		if(count($GroupIDs)>0) {
@@ -96,10 +96,10 @@ if(!$NumResults) {
 		} else {
 			$TorrentList = array();
 		}
-		
+
 		$Artists = Artists::get_artists($GroupIDs);
 		$Number = 0;
-		
+
 	//	foreach ($NewTorrents as $TorrentGroup) {
 	//		list($GroupID, $GroupName, $GroupYear, $ReleaseType, $RecordLabel, $CatalogueNumber, $WikiImage) = $TorrentGroup;
 	//		$DisplayName = Artists::display_artists($Artists[$GroupID]);
@@ -109,7 +109,7 @@ if(!$NumResults) {
 			list($GroupID2, $Image, $GroupCategoryID) = array_values($CollageDataList[$GroupID]);
 
 			unset($DisplayName);
-			
+
 			$TagList = explode(' ',str_replace('_','.',$TagList));
 
 			$TorrentTags = array();
@@ -124,7 +124,7 @@ if(!$NumResults) {
 			$PrimaryTag = $TagList[0];
 			$TorrentTags = implode(', ', $TorrentTags);
 			$TorrentTags='<br /><div class="tags">'.$TorrentTags.'</div>';
-			
+
 			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 				unset($ExtendedArtists[2]);
 				unset($ExtendedArtists[3]);
@@ -137,9 +137,9 @@ if(!$NumResults) {
 			if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 
 			$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
-			
+
 			// Start an output buffer, so we can store this output in $TorrentTable
-			ob_start();		
+			ob_start();
 			if(count($Torrents)>1 || $GroupCategoryID==1) {
 ?>
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$CollageID?><?=$GroupID?>">
@@ -150,7 +150,7 @@ if(!$NumResults) {
 				</td>
 <?			if (!$LoggedUser['HideCollage']) {?>
 				<td style="width: 60px; padding: 0;">
-<?				if ($Image) { 
+<?				if ($Image) {
 					if(check_perms('site_proxy_images')) {
 						$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
 					}
@@ -158,9 +158,9 @@ if(!$NumResults) {
 					<img style="max-width: 60px; max-height: 60px" src="<?=$Image?>" alt="<?=$AltName?>" onclick="lightbox.init(this,60);" />
 <?				} else { ?>
 					<img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID-1]?>" alt="<?=$Categories[$GroupCategoryID-1]?>" title="<?=$Categories[$GroupCategoryID-1]?>" width="60" height="60" border="0" />
-<?				} ?>				
+<?				} ?>
 				</td>
-<?			} ?>								
+<?			} ?>
 				<td colspan="5" style="vertical-align: middle;">
 					<strong><?=$DisplayName?></strong>
 					<?=$TorrentTags?>
@@ -172,30 +172,30 @@ if(!$NumResults) {
 				$LastRemasterRecordLabel = '';
 				$LastRemasterCatalogueNumber = '';
 				$LastMedia = '';
-				
+
 				$EditionID = 0;
 				unset($FirstUnknown);
-				
+
 				foreach ($Torrents as $TorrentID => $Torrent) {
 
 					if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 						$FirstUnknown = !isset($FirstUnknown);
 					}
 					$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
-					
+
 					if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 					$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
 						if($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
-						
+
 							$EditionID++;
-							
+
 							$RemasterName = $Torrent['RemasterYear'];
 							$AddExtra = " - ";
 							if($Torrent['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']); $AddExtra=' / '; }
 							if($Torrent['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']); $AddExtra=' / '; }
 							if($Torrent['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterTitle']); $AddExtra=' / '; }
 							$RemasterName .= $AddExtra.display_str($Torrent['Media']);
-					
+
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition<?=$SnatchedGroupClass?> hidden">
 		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
@@ -227,7 +227,7 @@ if(!$NumResults) {
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition_<?=$EditionID?> hidden<?=$SnatchedTorrentClass . $SnatchedGroupClass?>">
 		<td colspan="<?=($LoggedUser['HideCollage']?'2':'3')?>">
 			<span>
-				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]
+				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
 			</span>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
@@ -240,11 +240,11 @@ if(!$NumResults) {
 				}
 			} else {
 				// Viewing a type that does not require grouping
-				
+
 				list($TorrentID, $Torrent) = each($Torrents);
-				
+
 				$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
-				
+
 				if($Torrent['IsSnatched']) {
 					$DisplayName .=' ' . Format::torrent_label('Snatched!');
 				}
@@ -261,7 +261,7 @@ if(!$NumResults) {
 		</td>
 		<td>
 			<span>
-				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> 
+				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
 			<strong><?=$DisplayName?></strong>

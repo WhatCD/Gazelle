@@ -234,7 +234,7 @@ if (!empty($Image)) {
 			</ul>
 		</div>
 		<div class="box box_votes">
-			<div class="head"><strong>Top Contributors</strong></div>
+			<div class="head"><strong>Top contributors</strong></div>
 			<table class="layout">
 <?	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 	$ViewerVote = false;
@@ -285,7 +285,7 @@ if (!empty($Image)) {
 <?	if($CategoryName == "Music") {
 		if(!empty($RecordLabel)) { ?>
 			<tr>
-				<td class="label">Record Label</td>
+				<td class="label">Record label</td>
 				<td>
 					<?=$RecordLabel?>
 				</td>
@@ -293,39 +293,39 @@ if (!empty($Image)) {
 <?		}
 		if(!empty($CatalogueNumber)) { ?>
 			<tr>
-				<td class="label">Catalogue Number</td>
+				<td class="label">Catalogue number</td>
 				<td>
 					<?=$CatalogueNumber?>
 				</td>
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label">Release Type</td>
+				<td class="label">Release type</td>
 				<td>
 					<?=$ReleaseName?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable Bitrates</td>
+				<td class="label">Acceptable bitrates</td>
 				<td>
 					<?=$BitrateString?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable Formats</td>
+				<td class="label">Acceptable formats</td>
 				<td>
 					<?=$FormatString?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Acceptable Media</td>
+				<td class="label">Acceptable media</td>
 				<td>
 					<?=$MediaString?>
 				</td>
 			</tr>
 <?		if(!empty($LogCue)) { ?>
 			<tr>
-				<td class="label">Required CD FLAC only extra(s)</td>
+				<td class="label">Required CD FLAC only extras</td>
 				<td>
 					<?=$LogCue?>
 				</td>
@@ -358,23 +358,23 @@ if (!empty($Image)) {
 		$GroupLink = Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';*/
 ?>
 			<tr>
-				<td class="label">Torrent Group</td>
+				<td class="label">Torrent group</td>
 				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></td>
 			</tr>
 <?	} ?>
 			<tr>
 				<td class="label">Votes</td>
 				<td>
-					<span id="votecount"><?=$VoteCount?></span>
+					<span id="votecount"><?=number_format($VoteCount)?></span>
 <?	if($CanVote) { ?>
-					&nbsp;<a href="javascript:Vote(0)"><strong>(+)</strong></a>
+					&nbsp;&nbsp;<a href="javascript:Vote(0)" class="brackets"><strong>+</strong></a>
 					<strong>Costs <?=Format::get_size($MinimumVote, 0)?></strong>
 <?	} ?>
 				</td>
 			</tr>
 <?	if ($LastVote > $TimeAdded) { ?>
 			<tr>
-				<td class="label">Last Voted</td>
+				<td class="label">Last voted</td>
 				<td>
 					<?=time_diff($LastVote)?>
 				</td>
@@ -429,7 +429,7 @@ if (!empty($Image)) {
 					<strong><a href="torrents.php?<?=(strtotime($TimeFilled)<$TimeCompare?'id=':'torrentid=').$TorrentID?>">Yes</a></strong>,
 					by user <?=Users::format_username($FillerID, false, false, false)?>
 <?		if($LoggedUser['ID'] == $RequestorID || $LoggedUser['ID'] == $FillerID || check_perms('site_moderate_requests')) { ?>
-						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>">(Unfill)</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning.
+						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>" class="brackets">Unfill</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning.
 <?		} ?>
 				</td>
 			</tr>
@@ -446,7 +446,7 @@ if (!empty($Image)) {
 							<strong>Should be the permalink (PL) to the torrent (e.g. https://<?=SSL_SITE_URL?>/torrents.php?torrentid=xxxx).</strong>
 							<br />
 							<br />
-							<? if(check_perms('site_moderate_requests')) { ?> For User: <input type="text" size="25" name="user" <?=(!empty($FillerUsername) ? "value='$FillerUsername' " : '')?>/>
+							<? if(check_perms('site_moderate_requests')) { ?> For user: <input type="text" size="25" name="user" <?=(!empty($FillerUsername) ? "value='$FillerUsername' " : '')?>/>
 							<br />
 							<? } ?>
 							<input type="submit" value="Fill request" />
@@ -463,7 +463,7 @@ $RequestLog = Requests::get_request_log($RequestID);
 	if($RequestLog) {
 ?>
 		<tr>
-			<td colspan="2" class="center"><strong><a href="#" onclick="$('#request_log').toggle(); return false;">Request Log</a></strong></td>
+			<td colspan="2" class="center"><strong><a href="#" onclick="$('#request_log').toggle(); return false;">Request log</a></strong></td>
 		</tr>
 		<tr>
 		<td colspan="2">

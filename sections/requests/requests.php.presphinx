@@ -26,13 +26,13 @@ if(!empty($_GET['tags'])){
 			$TagNames[] = $Tag;
 		}
 	}
-	
+
 	if($TagMatcher == "any") {
-		$ExtraJoins[] = "LEFT JOIN requests_tags AS rt ON r.ID=rt.RequestID"; 
+		$ExtraJoins[] = "LEFT JOIN requests_tags AS rt ON r.ID=rt.RequestID";
 		$ExtraJoins[] = "LEFT JOIN tags AS t ON t.ID=rt.TagID";
 		$Wheres[] = "t.Name IN ('".implode("', '", $TagNames)."')";
 	} else {
-		
+
 	}
 }
 
@@ -112,7 +112,7 @@ if(!empty($_GET['bitrates'])) {
 	}
 }
 
-if(empty($_GET['type'])) { 
+if(empty($_GET['type'])) {
 	$Title = 'Requests';
 	if(!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
 		$Wheres[] = "(TorrentID = 0 OR (TimeFilled > (NOW() - INTERVAL 3 DAY)))";
@@ -207,7 +207,7 @@ if(count($ExtraJoins)) {
 
 // Build SQL query
 $DB->query("SELECT
-			SQL_CALC_FOUND_ROWS 
+			SQL_CALC_FOUND_ROWS
 			r.ID,
 			r.CategoryID,
 			r.Title,
@@ -248,13 +248,13 @@ show_header($Title, 'requests');
 	<div class="header">
 		<h2><?=$Title?></h2>
 		<div class="linkbox">
-<?	if(check_perms('site_submit_requests')){ ?> 
+<?	if(check_perms('site_submit_requests')){ ?>
 			<a href="requests.php?action=new" class="brackets">New request</a>
 			<a href="requests.php?type=created" class="brackets">My requests</a>
-<?	} 
-	if(check_perms('site_vote')){?> 
+<?	}
+	if(check_perms('site_vote')){?>
 			<a href="requests.php?type=voted" class="brackets">Requests I've voted on</a>
-<?	} ?> 
+<?	} ?>
 		</div>
 	</div>
 	<div class="center">
@@ -276,14 +276,14 @@ show_header($Title, 'requests');
 					</td>
 				</tr>
 
-<?	if(check_perms('site_see_old_requests')){ ?> 
+<?	if(check_perms('site_see_old_requests')){ ?>
 				<tr>
 					<td class="label">Include filled:</td>
 					<td>
 						<input type="checkbox" name="showall" <? if($_GET['showall']) {?>checked="checked"<? } ?> />
 					</td>
 				</tr>
-<?	/* ?> 
+<?	/* ?>
 				<tr>
 					<td class="label">Requested by:</td>
 					<td>
@@ -336,19 +336,19 @@ foreach($Categories as $CatKey => $CatName) {
 						<input type="checkbox" id="toggle_formats" onchange="Toggle('formats');" /> Toggle All
 <?		foreach ($Formats as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="formats[]" value="<?=$Key?>" 
+						<input type="checkbox" name="formats[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
 <?		}?>
 					</td>
-				</tr>				
+				</tr>
 				<tr id="bitrate_list">
 					<td class="label">Bitrates</td>
 					<td>
 						<input type="checkbox" id="toggle_bitrates" onchange="Toggle('bitrates');" /> Toggle All
 <?		foreach ($Bitrates as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" 
+						<input type="checkbox" name="bitrates[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
 <?		}?>
@@ -360,7 +360,7 @@ foreach($Categories as $CatKey => $CatName) {
 						<input type="checkbox" id="toggle_media" onchange="Toggle('media');" /> Toggle All
 <?		foreach ($Media as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="media[]" value="<?=$Key?>" 
+						<input type="checkbox" name="media[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
 <?		}?>
@@ -371,14 +371,14 @@ foreach($Categories as $CatKey => $CatName) {
 						<input type="submit" value="Search requests" />
 					</td>
 				</tr>
-			</table>	
+			</table>
 		</form>
 	</div>
-	
+
 	<div class="linkbox">
 		<?=$PageLinks?>
 	</div>
-	
+
 	<table id="request_table" class="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;">
@@ -415,10 +415,10 @@ foreach($Categories as $CatKey => $CatName) {
 		$Row = 'a';
 		foreach ($Requests as $Request) {
 			list($RequestID, $CategoryID, $Title, $Year, $Bounty, $Votes, $FillerID, $FillerName, $TorrentID, $TimeFilled, $RequestorID, $RequestorName, $TimeAdded, $LastVote) = $Request;
-			
+
 			$CategoryName = $Categories[$CategoryID - 1];
 			$IsFilled = ($TorrentID != 0);
-			
+
 			if($CategoryName == "Music") {
 				$ArtistForm = get_request_artists($RequestID);
 				$ArtistLink = display_artists($ArtistForm, true, true);
@@ -428,16 +428,16 @@ foreach($Categories as $CatKey => $CatName) {
 			} else {
 				$FullName ="<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title."</a>";
 			}
-			
+
 			$Row = ($Row == 'a') ? 'b' : 'a';
-			
+
 			$Tags = get_request_tags($RequestID);
 ?>
 		<tr class="row<?=$Row?>">
 			<td>
 				<?=$FullName?>
 				<div class="tags">
-<?			
+<?
 			$TagList = array();
 			foreach($Tags as $TagID => $TagName) {
 				$TagList[] = "<a href='requests.php?tag=".$TagID."'>".display_str($TagName)."</a>";
@@ -451,8 +451,8 @@ foreach($Categories as $CatKey => $CatName) {
 				<?=$Votes?>
 <?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				&nbsp;&nbsp; <a href="javascript:Vote()"><strong>(+)</strong></a>
-<?  		} ?> 
+				&nbsp;&nbsp; <a href="javascript:Vote()" class="brackets"><strong>+</strong></a>
+<?  		} ?>
 			</td>
 			<td>
 				<?=get_size($Bounty)?>

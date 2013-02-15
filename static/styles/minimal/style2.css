@@ -1,7 +1,7 @@
 /* inline-block might not work in ie7 */
 
 /* GLOBAL */
-body{background:#262626 url(https://what.cd/static/styles/minimal/images/bg.png) repeat-x; color:#F1F1F1; font-family:Arial,sans-serif; font-size:11px; margin:0}
+body{background:#262626 url(/static/styles/minimal/images/bg.png) repeat-x; color:#F1F1F1; font-family:Arial,sans-serif; font-size:11px; margin:0}
 h1, h2, h3, h4{margin-top:0; padding:0}
 a, a:visited, a:active{color:#5AF; text-decoration:none}
 a:hover{color:#49D; text-decoration:underline}
@@ -10,7 +10,7 @@ p{margin:0px 0 5px 0}
 td p{margin:0}
 input, select, textarea{color:#F1F1F1; padding:3px; background:#262626; border:1px solid #9C9C9C; font-family:Arial,sans-serif; font-size:11px; }
 input:focus, textarea:focus{border:1px solid #CCC}
-blockquote{background:transparent url(https://what.cd/static/styles/minimal/images/blockquote.png) repeat; padding:5px; margin:10px; color:#F1F1F1 !important}
+blockquote{background:transparent url(/static/styles/minimal/images/blockquote.png) repeat; padding:5px; margin:10px; color:#F1F1F1 !important}
 input[type="submit"]:focus, input[type="button"]:focus{background:#333}
 input[type="submit"]:active, input[type="button"]:active{background:#5AF}
 select{padding:1px}
@@ -54,7 +54,7 @@ textarea#quickpost{margin:0; padding:0}
 #userinfo_username li:first-child, #userinfo_major li:first-child, #userinfo_minor li:first-child, #userinfo_username li:first-child:hover, #userinfo_major li:first-child:hover, #userinfo_minor li:first-child:hover,
 #userinfo_username li:first-child a, #userinfo_username li:first-child a:hover, #userinfo_minor li:first-child a, #userinfo_minor li:first-child a:hover,
 #userinfo_major li:first-child a, #userinfo_major li:first-child a:hover,
-.show_torrents, .hide_torrents {background-image:url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png)}
+.show_torrents, .hide_torrents {background-image:url(/static/styles/minimal/images/minimal_mod_sprite.png)}
 
 /* userinfo start */
 #userinfo{z-index:3}
@@ -105,18 +105,18 @@ textarea#quickpost{margin:0; padding:0}
 #userinfo_stats .stat{color:#5AF}
 
 /* greasemonkey replacements */
-#userinfo_username>li:first-child + li>a{ background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -322px;}
-#userinfo_username>li:first-child + li + li>a{ background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -679px; }
+#userinfo_username>li:first-child + li>a{ background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -322px;}
+#userinfo_username>li:first-child + li + li>a{ background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -679px; }
 
-#userinfo_minor>li:first-child + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -918px; }
-#userinfo_minor>li:first-child + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -872px; }
-#userinfo_minor>li:first-child + li + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -83px; }
-#userinfo_minor>li:first-child + li + li + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -276px; }
-#userinfo_minor>li:first-child + li + li + li + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -958px; }
-#userinfo_minor>li:first-child + li + li + li + li + li + li>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -633px; }
+#userinfo_minor>li:first-child + li>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -918px; }
+#userinfo_minor>li:first-child + li + li>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -872px; }
+#userinfo_minor>li:first-child + li + li + li>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -83px; }
+#userinfo_minor>li:first-child + li + li + li + li>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -276px; }
+#userinfo_minor>li:first-child + li + li + li + li + li>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -958px; }
+#userinfo_minor>li:first-child + li + li + li + li + li + li>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -633px; }
 
-#userinfo_major>li:first-child + li>strong>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -230px; }
-#userinfo_major>li:first-child + li + li>strong>a { background: transparent no-repeat url(http://dl.dropbox.com/u/144652/forums/what.cd/styles/Minimal_Mod/sprite.png) 0 -725px; }
+#userinfo_major>li:first-child + li>strong>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -230px; }
+#userinfo_major>li:first-child + li + li>strong>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -725px; }
 
 /* alerts */
 #alerts{position:absolute; top:75px; left:0px; z-index:1; font-weight:bold; font-size: 10px; color:#FFF; text-transform: uppercase;}
@@ -218,18 +218,18 @@ table tr.colhead_dark td{background:#555; border:0}
 .forum_unread .colhead_dark{background-color:#e3f1f9 !important; /*border:2px solid #a8d3ec !important; */}
 #forums table.forum_unread tr.colhead_dark td{background: #3A638C}
 
-.last_read { width: 15px; height: 15px; background: url(https://what.cd/static/styles/minimal/images/go_last_read.png) no-repeat center center; margin-left: 5px; margin-left: 5px;}
+.last_read { width: 15px; height: 15px; background: url(/static/styles/minimal/images/go_last_read.png) no-repeat center center; margin-left: 5px; margin-left: 5px;}
 .last_read a { border: none; width: 100%; height: 100%; display: block; }
 .last_read a:hover { border: none; }
 
-#forums #content .thin td.read{background:#373737 url(https://what.cd/static/styles/minimal/images/balloon.png) no-repeat 50%; width:18px; height:18px}
-#forums #content .thin td.unread{background:#373737 url(https://what.cd/static/styles/minimal/images/balloon-unread.png) no-repeat 50%; width:18px; height:18px}
-#forums #content .thin td.read_sticky{background:#373737 url(https://what.cd/static/styles/minimal/images/sticky.png) no-repeat 50%; width:18px; height:18px}
-#forums #content .thin td.unread_sticky{background:#373737 url(https://what.cd/static/styles/minimal/images/sticky-unread.png) no-repeat 50%; width:18px; height:18px}
-#forums #content .thin td.read_locked{background:#373737 url(https://what.cd/static/styles/minimal/images/lock.png) no-repeat 50%; width:18px; height:18px}
-#forums #content .thin td.unread_locked{background:#373737 url(https://what.cd/static/styles/minimal/images/lock-unread.png) no-repeat 50%; width:18px; height:18px}
-#forums #content .thin td.read_locked_sticky{background:#373737 url(https://what.cd/static/styles/minimal/images/lock-sticky.png) no-repeat 50%; width:18px; height:18px}
-#forums #content .thin td.unread_locked_sticky{background:#373737 url(https://what.cd/static/styles/minimal/images/lock-sticky-unread.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.read{background:#373737 url(/static/styles/minimal/images/balloon.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.unread{background:#373737 url(/static/styles/minimal/images/balloon-unread.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.read_sticky{background:#373737 url(/static/styles/minimal/images/sticky.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.unread_sticky{background:#373737 url(/static/styles/minimal/images/sticky-unread.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.read_locked{background:#373737 url(/static/styles/minimal/images/lock.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.unread_locked{background:#373737 url(/static/styles/minimal/images/lock-unread.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.read_locked_sticky{background:#373737 url(/static/styles/minimal/images/lock-sticky.png) no-repeat 50%; width:18px; height:18px}
+#forums #content .thin td.unread_locked_sticky{background:#373737 url(/static/styles/minimal/images/lock-sticky-unread.png) no-repeat 50%; width:18px; height:18px}
 
 /* log checker fix */
 #logchecker input[type="file"]{color:#fff}
@@ -383,9 +383,9 @@ table tr.colhead_dark td{background:#555; border:0}
 .poll li{clear:both}
 .poll .graph{padding:0 0 15px 0}
 .poll .graph span{display:block; height:19px; float:left}
-.poll .graph #left_poll{width:9px; background:url(https://what.cd/static/styles/minimal/images/poll_left.png) top left no-repeat}
-.poll .graph #center_poll{background:url(https://what.cd/static/styles/minimal/images/poll_middle.png) top left repeat-x}
-.poll .graph #right_poll{width:11px; background:url(https://what.cd/static/styles/minimal/images/poll_right.png) top left no-repeat}
+.poll .graph #left_poll{width:9px; background:url(/static/styles/minimal/images/poll_left.png) top left no-repeat}
+.poll .graph #center_poll{background:url(/static/styles/minimal/images/poll_middle.png) top left repeat-x}
+.poll .graph #right_poll{width:11px; background:url(/static/styles/minimal/images/poll_right.png) top left no-repeat}
 
 /* MISC */
 .r00{color:#F00}
@@ -458,13 +458,13 @@ h3{margin:10px 0}
 #rules #content li{margin:0 0 5px 0}
 
 /* ICONS */
-.cats_music{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/music.png) top left no-repeat}
-.cats_applications{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/apps.png) top left no-repeat}
-.cats_ebooks{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/ebook.png) top left no-repeat}
-.cats_audiobooks{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/audiobook.png) top left no-repeat}
-.cats_elearningvideos{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/elearning.png) top left no-repeat}
-.cats_comedy{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/comedy.png) top left no-repeat}
-.cats_comics{width:30px; height:30px; background:url(https://what.cd/static/styles/minimal/images/icons/comics.png) top left no-repeat}
+.cats_music{width:30px; height:30px; background:url(/static/styles/minimal/images/icons/music.png) top left no-repeat}
+.cats_applications{width:30px; height:30px; background:url(/static/styles/minimal/images/icons/apps.png) top left no-repeat}
+.cats_ebooks{width:30px; height:30px; background:url(/static/styles/minimal/images/icons/ebook.png) top left no-repeat}
+.cats_audiobooks{width:30px; height:30px; background:url(/static/styles/minimal/images/icons/audiobook.png) top left no-repeat}
+.cats_elearningvideos{width:30px; height:30px; background:url(/static/styles/minimal/images/icons/elearning.png) top left no-repeat}
+.cats_comedy{width:30px; height:30px; background:url(/static/styles/minimal/images/icons/comedy.png) top left no-repeat}
+.cats_comics{width:30px; height:30px; background:url(/static/styles/minimal/images/icons/comics.png) top left no-repeat}
 
 .linkbox .brackets:before,
 .linkbox .brackets:after,

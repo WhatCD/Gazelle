@@ -17,7 +17,7 @@ $DB->query("SELECT i.UserID, i.BitcoinAddress FROM users_info AS i JOIN users_ma
 	<table>
 	<tr class="colhead">
 		<th>Username</th>
-		<th>Receiving bitcoin address</th>
+		<th>Receiving Bitcoin address</th>
 		<th>Amount</th>
 	</tr>
 <?
