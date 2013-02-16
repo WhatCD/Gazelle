@@ -199,11 +199,11 @@ if (check_perms('admin_reports')) {
 <? }
 if (check_perms('users_mod')) {
 ?>
-		<a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>" class="brackets">FL Tokens</a>
+		<a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>" class="brackets">FL tokens</a>
 <? }
 if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) {
 ?>
-		<a href="user.php?action=clearcache&amp;id=<?=$UserID?>" class="brackets">Clear Cache</a>
+		<a href="user.php?action=clearcache&amp;id=<?=$UserID?>" class="brackets">Clear cache</a>
 <? } ?>
 	</div>
 
@@ -311,17 +311,17 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('uploads+'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=$Uploads?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=number_format($Uploads)?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('requestsfilled_count'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=$RequestsFilled?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=number_format($RequestsFilled)?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('requestsvoted_bounty'))) { ?>
 				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=Format::get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
 <? } ?>
-				<li title="<?=$ForumPosts?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
+				<li title="<?=number_format($ForumPosts)?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
 <? if (($Override=check_paranoia_here('artistsadded'))) { ?>
-				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=$ArtistsAdded?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
+				<li <?= $Override===2 ? 'class="paranoia_override"' : ''?> title="<?=number_format($ArtistsAdded)?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
 <? } ?>
 <? if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfilled_count', 'requestsvoted_bounty', 'artistsadded'))) { ?>
 				<li><strong>Overall rank: <?=$OverallRank === false ? 'Server busy' : number_format($OverallRank)?></strong></li>

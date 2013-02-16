@@ -151,7 +151,6 @@ $SearchBitrates = array_merge($Bitrates, array('v0','v1','v2','24bit'));
 foreach ($SearchBitrates as $ID=>$Val) {
 	$SearchBitrates[$ID] = strtolower($Val);
 }
-
 foreach ($Formats as $ID => $Val) {
 	$SearchFormats[$ID] = strtolower($Val);
 }
@@ -595,7 +594,7 @@ View::show_header('Browse Torrents','browse');
 				<td colspan="4" class="center ft_edition_expand"><a href="#" class="brackets" onclick="ToggleEditionRows();return false;">Click here to toggle searching for specific remaster information</a></td>
 			</tr>
 <?
-if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', true) == "" && 
+if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', true) == "" &&
 	Format::form('remasterrecordlabel', true) == "" && Format::form('remastercataloguenumber', true) == "") {
 		$Hidden = 'hidden';
 } else {
@@ -999,7 +998,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 				$FirstUnknown = !isset($FirstUnknown);
 			}
 			$SnatchedTorrentClass = $Data['IsSnatched'] ? ' snatched_torrent' : '';
-			
+
 			if (isset($GroupedCategories[$CategoryID-1])
 					&& ($Data['RemasterTitle'] != $LastRemasterTitle
 						|| $Data['RemasterYear'] != $LastRemasterYear
@@ -1098,7 +1097,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Data)) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
-<?		} ?>				
+<?		} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
 			<?=$DisplayName?>

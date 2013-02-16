@@ -57,6 +57,7 @@ $JsonTorrentDetails = array(
 
 $JsonTorrentList = array();
 foreach ($TorrentList as $Torrent) {
+	$Userinfo = Users::user_info($Torrent['UserID']);
 	$JsonTorrentList[] = array(
 		'id' => (int) $Torrent['ID'],
 		'media' => $Torrent['Media'],
@@ -82,7 +83,7 @@ foreach ($TorrentList as $Torrent) {
 		'fileList' => $Torrent['FileList'],
 		'filePath' => $Torrent['FilePath'],
 		'userId' => (int) $Torrent['UserID'],
-		'username' => $Torrent['Username']
+		'username' => $Userinfo['Username']
 	);
 }
 

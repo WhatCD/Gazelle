@@ -10,16 +10,16 @@ class Votes {
 		global $LoggedUser;
 		if (!$LoggedUser['NoVoteLinks'] && check_perms('site_album_votes')) { ?>
 			<span class="votespan brackets" style="white-space: nowrap">
-				Vote: 
-				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>">↑</a>
-				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote))?' hidden':'')?>">↑</span>
-				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>">↓</a>
-				<span class="voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up'|| empty($Vote))?' hidden':'')?>">↓</span>
-				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote)?' hidden':'')?>">x</a>
+				Vote:
+				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>" title="Upvote">↑</a>
+				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote))?' hidden':'')?>" title="Upvoted">↑</span>
+				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>" title="Downvote">↓</a>
+				<span class="voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up'|| empty($Vote))?' hidden':'')?>" title="Downvoted">↓</span>
+				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote)?' hidden':'')?>" title="Clear your vote">x</a>
 			</span>
 <?		}
 	}
-	
+
 	/**
 	 * Returns an array with User Vote data: GroupID and vote type
 	 * @global CACHE $Cache
@@ -29,11 +29,11 @@ class Votes {
 	 */
 	public static function get_user_votes($UserID) {
 		global $DB, $Cache;
-		
+
 		if ((int)$UserID == 0) {
 			return array();
 		}
-		
+
 		$UserVotes = $Cache->get_value('voted_albums_'.$UserID);
 		if ($UserVotes === FALSE) {
 			$DB->query('SELECT GroupID, Type FROM users_votes WHERE UserID='.$UserID);
@@ -42,7 +42,7 @@ class Votes {
 		}
 		return $UserVotes;
 	}
-	
+
 	/**
 	 * Returns an array with torrent group vote data
 	 * @global CACHE $Cache
@@ -52,7 +52,7 @@ class Votes {
 	 */
 	public static function get_group_votes($GroupID) {
 		global $DB, $Cache;
-		
+
 		$GroupVotes = $Cache->get_value('votes_'.$GroupID);
 		if ($GroupVotes === FALSE) {
 			$DB->query("SELECT Ups AS Ups, Total AS Total FROM torrents_votes WHERE GroupID=$GroupID");
@@ -65,7 +65,7 @@ class Votes {
 		}
 		return $GroupVotes;
 	}
-	
+
 	/**
 	 * Computes the inverse normal CDF of a p-value
 	 * @param float $GroupID
@@ -157,12 +157,12 @@ class Votes {
 	 * @param int $Total Number of total votes
 	 * @return float Ranking score
 	 */
-	public static function binomial_score($Ups, $Total) {	
+	public static function binomial_score($Ups, $Total) {
 		// Confidence level for binomial scoring (p-value .95)
 		//define(Z_VAL, 1.645211440143815);
 		// Confidence level for binomial scoring (p-value .90)
 		define(Z_VAL, 1.281728756502709);
-		
+
 		if (($Total <= 0) || ($Ups < 0)) {
 			return 0;
 		}
@@ -187,7 +187,7 @@ class Votes {
 					 'year'   =>Votes::get_rank_year($GroupID, $Year),
 					 'decade' =>Votes::get_rank_decade($GroupID, $Year));
 	}
-	
+
 	/**
 	 * Gets where this album ranks overall.
 	 * @global CACHE $Cache
@@ -197,12 +197,12 @@ class Votes {
 	 */
 	public static function get_rank_all($GroupID) {
 		global $Cache, $DB;
-		
+
 		$GroupID = (int)$GroupID;
 		if ($GroupID <= 0) {
 			return false;
 		}
-		
+
 		$Rankings = $Cache->get_value('voting_ranks_overall');
 		if ($Rankings === FALSE) {
 			$Rankings = array();
@@ -213,10 +213,10 @@ class Votes {
 			}
 			$Cache->cache_value('voting_ranks_overall', $Rankings);
 		}
-		
+
 		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
 	}
-	
+
 	/**
 	 * Gets where this album ranks in its year.
 	 * @global CACHE $Cache
@@ -227,18 +227,18 @@ class Votes {
 	 */
 	public static function get_rank_year($GroupID, $Year) {
 		global $Cache, $DB;
-		
+
 		$GroupID = (int)$GroupID;
 		$Year    = (int)$Year;
 		if ($GroupID <= 0 || $Year <= 0) {
 			return false;
 		}
-		
+
 		$Rankings = $Cache->get_value('voting_ranks_year_'.$Year);
 		if ($Rankings === FALSE) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query("SELECT GroupID 
+			$DB->query("SELECT GroupID
 						FROM torrents_votes  AS v
 						JOIN torrents_group AS g ON g.ID = v.GroupID
 						WHERE g.Year = $Year
@@ -248,7 +248,7 @@ class Votes {
 			}
 			$Cache->cache_value('voting_ranks_year_'.$Year , $Rankings);
 		}
-		
+
 		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
 	}
 
@@ -262,22 +262,22 @@ class Votes {
 	 */
 	public static function get_rank_decade($GroupID, $Year) {
 		global $Cache, $DB;
-		
+
 		$GroupID = (int)$GroupID;
 		$Year    = (int)$Year;
 		$Year    = (int)$Year;
 		if ((int)$GroupID <= 0 || (int)$Year <= 0) {
 			return false;
 		}
-		
+
 		// First year of the decade
 		$Year = $Year - ($Year % 10);
-		
+
 		$Rankings = $Cache->get_value('voting_ranks_decade_'.$Year);
 		if ($Rankings === FALSE) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query("SELECT GroupID 
+			$DB->query("SELECT GroupID
 						FROM torrents_votes  AS v
 						JOIN torrents_group AS g ON g.ID = v.GroupID
 						WHERE g.Year BETWEEN $Year AND ".($Year+9)."
@@ -288,7 +288,7 @@ class Votes {
 			}
 			$Cache->cache_value('voting_ranks_decade_'.$Year , $Rankings);
 		}
-		
+
 		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
 	}
 }

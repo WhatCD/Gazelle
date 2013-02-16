@@ -101,7 +101,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 					<span style="float:left;"><strong><?=$DisplayName?></strong></span>
 					<span style="float:right;text-align:right">
 <? if(!$Sneaky){ ?>
-						<a href="#group_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a>
+						<a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a>
 						<br />
 <? } ?>
 						<?=time_diff($AddedTime);?>
@@ -220,7 +220,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			<strong><?=$DisplayName?></strong>
 			<?=$TorrentTags?>
 <? if(!$Sneaky){ ?>
-			<span style="float:left;"><a href="#group_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a></span>
+			<span style="float:left;"><a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a></span>
 <? } ?>
 			<span style="float:right;"><?=time_diff($AddedTime);?></span>
 

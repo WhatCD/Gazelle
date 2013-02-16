@@ -11,7 +11,7 @@ function header_link($SortKey,$DefaultWay="desc") {
 		if($OrderWay=="desc") { $NewWay="asc"; }
 		else { $NewWay="desc"; }
 	} else { $NewWay=$DefaultWay; }
-	
+
 	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
 }
 
@@ -113,7 +113,6 @@ $SearchBitrates = array_merge($Bitrates, array('v0','v1','v2','24bit'));
 foreach ($SearchBitrates as $ID=>$Val) {
 	$SearchBitrates[$ID] = strtolower($Val);
 }
-
 foreach ($Formats as $ID => $Val) {
 	$SearchFormats[$ID] = strtolower($Val);
 }
@@ -490,12 +489,12 @@ if ($TorrentCount) {
 
 if($TorrentCount == 0) {
 
-$DB->query("SELECT 
+$DB->query("SELECT
 	tags.Name,
 	((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
-	FROM xbt_snatched AS s 
-	INNER JOIN torrents AS t ON t.ID=s.fid 
-	INNER JOIN torrents_group AS g ON t.GroupID=g.ID 
+	FROM xbt_snatched AS s
+	INNER JOIN torrents AS t ON t.ID=s.fid
+	INNER JOIN torrents_group AS g ON t.GroupID=g.ID
 	INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
 	INNER JOIN tags ON tags.ID=tt.TagID
 	WHERE s.uid='$LoggedUser[ID]'
@@ -557,7 +556,7 @@ foreach ($Results as $Result) {
 	} else {
 		$Torrents = array($Result['id'] => $GroupInfo['Torrents'][$Result['id']]);
 	}
-	
+
 	$TagList = explode(' ',str_replace('_','.',$GroupInfo['TagList']));
     $JsonArtists = array();
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
@@ -590,14 +589,14 @@ foreach ($Results as $Result) {
 		$LastRemasterRecordLabel = '';
 		$LastRemasterCatalogueNumber = '';
 		$LastMedia = '';
-		
+
 		$EditionID = 0;
 		unset($FirstUnknown);
 
 		$JsonTorrents = array();
 		foreach($Torrents as $TorrentID => $Data) {
 			// All of the individual torrents in the group
-			
+
 			// If they're using the advanced search and have chosen enabled grouping, we just skip the torrents that don't check out
 			if (!isset($TorrentIDs[$TorrentID])) {
 				continue;
@@ -606,7 +605,7 @@ foreach ($Results as $Result) {
 			if ($Data['Remastered'] && !$Data['RemasterYear']) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
-			
+
 			if (isset($GroupedCategories[$CategoryID-1])
 					&& ($Data['RemasterTitle'] != $LastRemasterTitle
 						|| $Data['RemasterYear'] != $LastRemasterYear
@@ -617,7 +616,7 @@ foreach ($Results as $Result) {
 				$EditionID++;
 
 				if ($Data['Remastered'] && $Data['RemasterYear'] != 0) {
-					
+
 					$RemasterName = $Data['RemasterYear'];
 					$AddExtra = " - ";
 					if ($Data['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Data['RemasterRecordLabel']); $AddExtra=' / '; }
@@ -641,7 +640,7 @@ foreach ($Results as $Result) {
 			$LastRemasterRecordLabel = $Data['RemasterRecordLabel'];
 			$LastRemasterCatalogueNumber = $Data['RemasterCatalogueNumber'];
 			$LastMedia = $Data['Media'];
-			
+
 			$JsonTorrents[] = array(
 				'torrentId' => (int) $TorrentID,
 				'editionId' => (int) $EditionID,
@@ -671,7 +670,7 @@ foreach ($Results as $Result) {
 				'hasSnatched' => $Data['IsSnatched']
 			);
 		}
-		
+
 		$JsonGroups[] = array(
 			'groupId' => (int) $GroupID,
 			'groupName' => $GroupName,
@@ -691,9 +690,9 @@ foreach ($Results as $Result) {
 	}
 	else {
 		// Viewing a type that does not require grouping
-		
+
 		list($TorrentID, $Data) = each($Torrents);
-		
+
 		$JsonGroups[] = array(
 			'groupId' => (int) $GroupID,
 			'groupName' => $GroupName,

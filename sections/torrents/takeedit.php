@@ -79,8 +79,6 @@ if(check_perms('torrents_freeleech')) {
 	$Properties['FreeLeechType'] = $FreeType;
 }
 
-
-
 //******************************************************************************//
 //--------------- Validate data in edit form -----------------------------------//
 
@@ -120,7 +118,7 @@ switch ($Type) {
 			header("Location: torrents.php?action=edit&id=$TorrentID");
 			die();
 		}
-			
+
 		$Validate->SetFields('remaster_title',
 			'0','string','Remaster title must be between 2 and 80 characters.',array('maxlength'=>80, 'minlength'=>2));
 
@@ -129,43 +127,43 @@ switch ($Type) {
 			header("Location: torrents.php?action=edit&id=$TorrentID");
 			die();
 		}
-			
+
 		$Validate->SetFields('remaster_record_label',
 			'0','string','Remaster record label must be between 2 and 80 characters.',array('maxlength'=>80, 'minlength'=>2));
-			
+
 		$Validate->SetFields('remaster_catalogue_number',
 			'0','string','Remaster catalogue number must be between 2 and 80 characters.',array('maxlength'=>80, 'minlength'=>2));
-			
-				
+
+
 		$Validate->SetFields('format',
 			'1','inarray','Not a valid format.',array('inarray'=>$Formats));
-		
+
 		$Validate->SetFields('bitrate',
 			'1','inarray','You must choose a bitrate.', array('inarray'=>$Bitrates));
-		
-		
+
+
 		// Handle 'other' bitrates
 		if($Properties['Encoding'] == 'Other') {
 			$Validate->SetFields('other_bitrate',
 				'1','text','You must enter the other bitrate (max length: 9 characters).', array('maxlength'=>9));
 			$enc = trim($_POST['other_bitrate']);
 			if(isset($_POST['vbr'])) { $enc.=' (VBR)'; }
-			
+
 			$Properties['Encoding'] = $enc;
 			$Properties['Bitrate'] = $enc;
 		} else {
 			$Validate->SetFields('bitrate',
 				'1','inarray','You must choose a bitrate.', array('inarray'=>$Bitrates));
 		}
-		
+
 		$Validate->SetFields('media',
 			'1','inarray','Not a valid media.',array('inarray'=>$Media));
-		
+
 		$Validate->SetFields('release_desc',
 			'0','string','Invalid release description.',array('maxlength'=>1000000, 'minlength'=>0));
-		
+
 		break;
-		
+
 	case 'Audiobooks':
 	case 'Comedy':
 		/*$Validate->SetFields('title',
@@ -173,33 +171,33 @@ switch ($Type) {
 		^ this is commented out because there is no title field on these pages*/
 		$Validate->SetFields('year',
 			'1','number','The year of the release must be entered.');
-		
+
 		$Validate->SetFields('format',
 			'1','inarray','Not a valid format.',array('inarray'=>$Formats));
-		
+
 		$Validate->SetFields('bitrate',
 			'1','inarray','You must choose a bitrate.', array('inarray'=>$Bitrates));
-		
-		
+
+
 		// Handle 'other' bitrates
 		if($Properties['Encoding'] == 'Other') {
 			$Validate->SetFields('other_bitrate',
 				'1','text','You must enter the other bitrate (max length: 9 characters).', array('maxlength'=>9));
 			$enc = trim($_POST['other_bitrate']);
 			if(isset($_POST['vbr'])) { $enc.=' (VBR)'; }
-			
+
 			$Properties['Encoding'] = $enc;
 			$Properties['Bitrate'] = $enc;
 		} else {
 			$Validate->SetFields('bitrate',
 				'1','inarray','You must choose a bitrate.', array('inarray'=>$Bitrates));
 		}
-		
+
 		$Validate->SetFields('release_desc',
 			'0','string','The release description has a minimum length of 10 characters.',array('maxlength'=>1000000, 'minlength'=>10));
-		
+
 		break;
-	
+
 	case 'Applications':
 	case 'Comics':
 	case 'E-Books':
@@ -278,15 +276,15 @@ foreach ($DBTorVals as $Key => $Value) {
 // Update info for the torrent
 $SQL = "
 	UPDATE torrents SET
-		Media=$T[Media], 
-		Format=$T[Format], 
+		Media=$T[Media],
+		Format=$T[Format],
 		Encoding=$T[Encoding],
-		RemasterYear=$T[RemasterYear], 
-		Remastered=$T[Remastered], 
-		RemasterTitle=$T[RemasterTitle], 
-		RemasterRecordLabel=$T[RemasterRecordLabel], 
+		RemasterYear=$T[RemasterYear],
+		Remastered=$T[Remastered],
+		RemasterTitle=$T[RemasterTitle],
+		RemasterRecordLabel=$T[RemasterRecordLabel],
 		RemasterCatalogueNumber=$T[RemasterCatalogueNumber],
-		Scene=$T[Scene], 
+		Scene=$T[Scene],
 		Description=$T[TorrentDescription],";
 
 if(check_perms('torrents_freeleech')) {
@@ -357,7 +355,7 @@ if(check_perms('users_mod')) {
 	if ($caID && !$Properties['CassetteApproved']) {
 		$DB->query("DELETE FROM torrents_cassette_approved WHERE TorrentID='$TorrentID'");
 	}
-	
+
 	$DB->query("SELECT TorrentID FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
 	list($lmaID) = $DB->next_record();
 

@@ -51,7 +51,7 @@ list($PerfectFLACs) = $DB->next_record();
 <? if (($Override=check_paranoia_here('collagecontribs+'))) { ?>
 				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Collages contributed to: <? echo number_format($NumCollageContribs); ?>
 				<? if (($Override=check_paranoia_here('collagecontribs'))) { ?>
-					<a href="collages.php?userid=<?$UserID?>&amp;contrib=1" class="brackets<?= ($Override===2) ? ' paranoia_override' : '' ?>" title="View">View</a>
+					<a href="collages.php?userid=<?=$UserID?>&amp;contrib=1" class="brackets<?= ($Override===2) ? ' paranoia_override' : '' ?>" title="View">View</a>
 				<? } ?>
 				</li>
 <? } ?>

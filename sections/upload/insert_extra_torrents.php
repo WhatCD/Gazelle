@@ -12,7 +12,7 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 		Description, LogScore, FreeTorrent, FreeLeechType) 
 	VALUES
 		(" . $GroupID . ", " . $LoggedUser['ID'] . ", " . $T['Media'] . ", " . $ExtraTorrent['Format'] . ", " . $ExtraTorrent['Encoding'] . ",
-		" . $T['Remastered'] . ", " . $T['RemasterYear'] . ", " . $T['RemasterTitle'] . ", " . $T['RemasterRecordLabel'] . ", " . $T['RemasterCatalogueNumber'] . ", " . $ExtraHasLog . ", " . $ExtraHasCue . ", '" . db_string($ExtraTorrent['InfoHash']) . "', " . $ExtraTorrent['NumFiles'] . ", " . $ExtraTorrent['FileString'] . ", '" . $ExtraTorrent['FilePath'] . "', " . $ExtraTorrent['TotalSize'] . ", '" . sqltime() . "',
+		" . $T['Remastered'] . ", " . $T['RemasterYear'] . ", " . $T['RemasterTitle'] . ", " . $T['RemasterRecordLabel'] . ", " . $T['RemasterCatalogueNumber'] . ", " . $ExtraHasLog . ", " . $ExtraHasCue . ", '" . db_string($ExtraTorrent['InfoHash']) . "', " . $ExtraTorrent['NumFiles'] . ", '" . $ExtraTorrent['FileString'] . "', '" . $ExtraTorrent['FilePath'] . "', " . $ExtraTorrent['TotalSize'] . ", '" . sqltime() . "',
 		" . $ExtraTorrent['TorrentDescription'] . ", '" . (($HasLog == "'1'") ? $LogScoreAverage : 0) . "', '" . $T['FreeLeech'] . "', '" . $T['FreeLeechType'] . "')");
 
 	$Cache->increment('stats_torrent_count');

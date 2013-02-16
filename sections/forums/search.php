@@ -53,22 +53,26 @@ if(isset($_GET['forums']) && is_array($_GET['forums'])) {
 }
 
 // Searching for posts in a specific thread
-if(!empty($_GET['threadid'])) {
-	$ThreadID = db_string($_GET['threadid']);
-	$Type='body';
+if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
+	$ThreadID = $_GET['threadid'];
+	$Type = 'body';
 	$SQL = "SELECT Title FROM forums_topics AS t 
 				JOIN forums AS f ON f.ID=t.ForumID
-				WHERE f.MinClassRead <= '$LoggedUser[Class]'
-				AND t.ID=$ThreadID";
-	if(!empty($RestrictedForums)) {
-		$SQL .= " AND f.ID NOT IN ('".$RestrictedForums."')";	
+				WHERE t.ID=$ThreadID
+				AND ((f.MinClassRead <= '$LoggedUser[Class]'";
+	if (!empty($RestrictedForums)) {
+		$SQL .= " AND f.ID NOT IN ('$RestrictedForums')";
 	}
+	$SQL .= ")";
+	if (!empty($PermittedForums)) {
+		$SQL .= " OR f.ID IN ('$PermittedForums')";
+	}
+	$SQL .= ")";
 	$DB->query($SQL);
 	if (list($Title) = $DB->next_record()) {
 		$Title = " &gt; <a href=\"forums.php?action=viewthread&amp;threadid=$ThreadID\">$Title</a>";
 	} else {
-		$Title = '';
-		$ThreadID = '';
+		error(404);
 	}
 } else {
 	$ThreadID = '';

@@ -456,26 +456,6 @@ if (!empty($Image)) {
 				</td>
 			</tr>
 <?	} ?>
-<?
-//<strip>
-if(check_perms("users_mod")) {
-$RequestLog = Requests::get_request_log($RequestID);
-	if($RequestLog) {
-?>
-		<tr>
-			<td colspan="2" class="center"><strong><a href="#" onclick="$('#request_log').toggle(); return false;">Request log</a></strong></td>
-		</tr>
-		<tr>
-		<td colspan="2">
-			<div id="request_log" class="hidden padding">
-				<?=$Text->full_format($RequestLog)?>
-			</div>
-		</td>
-		</tr>
-<?	}
-}
-//<strip>
-?>
 			<tr>
 				<td colspan="2" class="center"><strong>Description</strong></td>
 			</tr>

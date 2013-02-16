@@ -11,7 +11,7 @@ function header_link($SortKey,$DefaultWay="DESC") {
 		if($Way=="DESC") { $NewWay="ASC"; }
 		else { $NewWay="DESC"; }
 	} else { $NewWay=$DefaultWay; }
-	
+
 	return "torrents.php?way=".$NewWay."&amp;order=".$SortKey."&amp;".Format::get_url(array('way','order'));
 }
 
@@ -40,7 +40,6 @@ if(!empty($_GET['way']) && array_key_exists($_GET['way'], $Ways)) {
 }
 
 $SearchWhere = array();
-
 if(!empty($_GET['format'])) {
 	if(in_array($_GET['format'], $Formats)) {
 		$SearchWhere[]="t.Format='".db_string($_GET['format'])."'";
@@ -222,9 +221,9 @@ if((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 		Size bigint(12) unsigned,
 		PRIMARY KEY (TorrentID)) CHARSET=utf8");
 	$DB->query("INSERT IGNORE INTO temp_sections_torrents_user SELECT
-		t.GroupID, 
-		t.ID AS TorrentID, 
-		$Time AS Time, 
+		t.GroupID,
+		t.ID AS TorrentID,
+		$Time AS Time,
 		tg.CategoryID,
 		t.Seeders,
 		t.Leechers,
@@ -235,14 +234,14 @@ if((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 		JOIN torrents_group AS tg ON tg.ID=t.GroupID
 		LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID
 		LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-		WHERE $UserField='$UserID' $ExtraWhere $SearchWhere 
+		WHERE $UserField='$UserID' $ExtraWhere $SearchWhere
 		GROUP BY TorrentID, Time");
-	
+
 	if(!empty($_GET['search']) && trim($_GET['search']) != '') {
 		$Words = array_unique(explode(' ', db_string($_GET['search'])));
 	}
 
-	$SQL = "SELECT SQL_CALC_FOUND_ROWS 
+	$SQL = "SELECT SQL_CALC_FOUND_ROWS
 		GroupID, TorrentID, Time, CategoryID
 		FROM temp_sections_torrents_user";
 	if(!empty($Words)) {
@@ -294,12 +293,12 @@ $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 <?	foreach($Bitrates as $BitrateName) { ?>
 							<option value="<?=display_str($BitrateName); ?>" <?Format::selected('bitrate', $BitrateName)?>><?=display_str($BitrateName); ?></option>
 <?	} ?>				</select>
-						
+
 						<select name="format" class="ft_format">
 							<option value="">Format</option>
 <?	foreach($Formats as $FormatName) { ?>
 							<option value="<?=display_str($FormatName); ?>" <?Format::selected('format', $FormatName)?>><?=display_str($FormatName); ?></option>
-<?	} ?>				
+<?	} ?>
 							<option value="perfectflac" <?Format::selected('filter', 'perfectflac')?>>Perfect FLACs</option>
 						</select>
 						<select name="media" class="ft_media">
@@ -351,7 +350,7 @@ $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 						<input type="radio" name="tags_type" id="tags_type1" value="1" <?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 					</td>
 				</tr>
-				
+
 				<tr>
 					<td class="label"><strong>Order by</strong></td>
 					<td>
@@ -368,7 +367,7 @@ $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 					</td>
 				</tr>
 			</table>
-			
+
 			<table class="layout cat_list">
 <?
 $x=0;
@@ -424,10 +423,10 @@ foreach($Categories as $CatKey => $CatName) {
 	$Results = $Results['matches'];
 	foreach($TorrentsInfo as $TorrentID=>$Info) {
 		list($GroupID,, $Time, $CategoryID) = array_values($Info);
-		
+
 		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($Results[$GroupID]);
 		$Torrent = $Torrents[$TorrentID];
-		
+
 		$TagList = explode(' ',str_replace('_','.',$TagList));
 		
 		$TorrentTags = array();
@@ -435,7 +434,7 @@ foreach($Categories as $CatKey => $CatName) {
 			$TorrentTags[]='<a href="torrents.php?type='.$Action.'&amp;userid='.$UserID.'&amp;tags='.$Tag.'">'.$Tag.'</a>';
 		}
 		$TorrentTags = implode(', ', $TorrentTags);
-				
+
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
@@ -448,7 +447,7 @@ foreach($Categories as $CatKey => $CatName) {
 		$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'" title="View Torrent">'.$GroupName.'</a>';
 		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
-		
+
 		$ExtraInfo = Torrents::torrent_info($Torrent);
 		if($ExtraInfo) {
 			$DisplayName.=' - '.$ExtraInfo;

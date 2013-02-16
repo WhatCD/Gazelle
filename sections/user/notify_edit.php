@@ -4,7 +4,10 @@ View::show_header('Manage notifications');
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>Notify me of all new torrents with...<a href="torrents.php?action=notify">(View)</a></h2>
+		<h2>Notify me of all new torrents with...</h2>
+		<div class="linkbox">
+			<a href="torrents.php?action=notify" class="brackets">View notifications</a>
+		</div>
 	</div>
 <?
 $DB->query("SELECT ID, Label, Artists, ExcludeVA, NewGroupsOnly, Tags, NotTags, ReleaseTypes, Categories, Formats, Encodings, Media, FromYear, ToYear FROM users_notify_filters WHERE UserID='$LoggedUser[ID]' UNION ALL SELECT NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL");
@@ -15,7 +18,7 @@ $Notifications = $DB->to_array();
 
 foreach($Notifications as $N) { //$N stands for Notifications
 	$N['Artists']		= implode(', ', explode('|', substr($N['Artists'],1,-1)));
-	$N['Tags']		= implode(', ', explode('|', substr($N['Tags'],1,-1)));
+	$N['Tags']			= implode(', ', explode('|', substr($N['Tags'],1,-1)));
 	$N['NotTags']		= implode(', ', explode('|', substr($N['NotTags'],1,-1)));
 	$N['ReleaseTypes'] 	= explode('|', substr($N['ReleaseTypes'],1,-1));
 	$N['Categories'] 	= explode('|', substr($N['Categories'],1,-1));
@@ -46,7 +49,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td class="label"><strong>Label</strong></td>
 				<td>
 					<input type="text" name="label<?=$i?>" style="width: 100%" />
-					<p class="min_padding">A label for the filter set, to tell different filters apart.</p>
+					<p class="min_padding">A label/name for the filter set to tell different filters apart.</p>
 				</td>
 			</tr>
 			<tr>
@@ -61,7 +64,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td class="label"><strong>One of these artists</strong></td>
 				<td>
 					<textarea name="artists<?=$i?>" style="width:100%" rows="5"><?=display_str($N['Artists'])?></textarea>
-					<p class="min_padding">Comma-separated list - eg. <em>Pink Floyd, Led Zeppelin, Neil Young</em></p>
+					<p class="min_padding">Comma-separated list &mdash; e.g. <em>Pink Floyd, Led Zeppelin, Neil Young</em></p>
 					<input type="checkbox" name="excludeva<?=$i?>" id="excludeva_<?=$N['ID']?>"<? if($N['ExcludeVA']=="1") { echo ' checked="checked"';} ?> />
 					<label for="excludeva_<?=$N['ID']?>">Exclude Various Artists releases</label>
 				</td>
@@ -70,14 +73,14 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td class="label"><strong>At least one of these tags</strong></td>
 				<td>
 					<textarea name="tags<?=$i?>" style="width:100%" rows="2"><?=display_str($N['Tags'])?></textarea>
-					<p class="min_padding">Comma-separated list - eg. <em>rock, jazz, pop</em></p>
+					<p class="min_padding">Comma-separated list &mdash; e.g. <em>rock, jazz, pop</em></p>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>None of these tags</strong></td>
 				<td>
 					<textarea name="nottags<?=$i?>" style="width:100%" rows="2"><?=display_str($N['NotTags'])?></textarea>
-					<p class="min_padding">Comma-separated list - eg. <em>rock, jazz, pop</em></p>
+					<p class="min_padding">Comma-separated list &mdash; e.g. <em>rock, jazz, pop</em></p>
 				</td>
 			</tr>
 			<tr>

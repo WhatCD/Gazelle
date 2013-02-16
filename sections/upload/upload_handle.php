@@ -351,6 +351,9 @@ $File = fopen($TorrentName, 'rb'); // open file for reading
 $Contents = fread($File, 10000000);
 $Tor = new TORRENT($Contents); // New TORRENT object
 
+if (isset($Tor->Val['info']->Val['encrypted_files'])) {
+	$Err = "This torrent contains an encrypted file list which is not supported here";
+}
 // Remove uploader's passkey from the torrent.
 // We put the downloader's passkey in on download, so it doesn't matter what's in there now,
 // so long as it's not useful to any leet hax0rs looking in an unprotected /torrents/ directory

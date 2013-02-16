@@ -1,36 +1,35 @@
 <?
-/* 
-This page is something of a hack so those 
-easily scared off by funky solutions, don't 
+/*
+This page is something of a hack so those
+easily scared off by funky solutions, don't
 touch it! :P
 
-There is a central problem to this page, it's 
+There is a central problem to this page, it's
 impossible to order before grouping in SQL, and
-it's slow to run sub queries, so we had to get 
+it's slow to run sub queries, so we had to get
 creative for this one.
 
-The solution I settled on abuses the way 
-$DB->to_array() works. What we've done, is 
+The solution I settled on abuses the way
+$DB->to_array() works. What we've done, is
 backwards ordering. The results returned by the
-query have the best one for each GroupID last, 
-and while to_array traverses the results, it 
+query have the best one for each GroupID last,
+and while to_array traverses the results, it
 overwrites the keys and leaves us with only the
-desired result. This does mean however, that 
-the SQL has to be done in a somewhat backwards 
+desired result. This does mean however, that
+the SQL has to be done in a somewhat backwards
 fashion.
 
-Thats all you get for a disclaimer, just 
-remember, this page isn't for the faint of 
+Thats all you get for a disclaimer, just
+remember, this page isn't for the faint of
 heart. -A9
 
 SQL template:
-SELECT 
-	CASE 
-	WHEN t.Format='Ogg Vorbis' THEN 0 
-	WHEN t.Format='MP3' AND t.Encoding='V0 (VBR)' THEN 1 
-	WHEN t.Format='MP3' AND t.Encoding='V2 (VBR)' THEN 2 
-	ELSE 100 
-	END AS Rank, 
+SELECT
+	CASE
+	WHEN t.Format='MP3' AND t.Encoding='V0 (VBR)' THEN 1
+	WHEN t.Format='MP3' AND t.Encoding='V2 (VBR)' THEN 2
+	ELSE 100
+	END AS Rank,
 	t.GroupID,
 	t.Media,
 	t.Format,
@@ -39,7 +38,7 @@ SELECT
 	tg.Name,
 	a.Name,
 	t.Size
-FROM torrents AS t 
+FROM torrents AS t
 INNER JOIN collages_torrents AS c ON t.GroupID=c.GroupID AND c.CollageID='8'
 INNER JOIN torrents_group AS tg ON tg.ID=t.GroupID AND tg.CategoryID='1'
 LEFT JOIN artists_group AS a ON a.ArtistID=tg.ArtistID
@@ -48,10 +47,10 @@ ORDER BY t.GroupID ASC, Rank DESC, t.Seeders ASC
 */
 
 if(
-	!isset($_REQUEST['collageid']) || 
-	!isset($_REQUEST['preference']) || 
-	!is_number($_REQUEST['preference']) || 
-	!is_number($_REQUEST['collageid']) || 
+	!isset($_REQUEST['collageid']) ||
+	!isset($_REQUEST['preference']) ||
+	!is_number($_REQUEST['preference']) ||
+	!is_number($_REQUEST['collageid']) ||
 	$_REQUEST['preference'] > 2 ||
 	count($_REQUEST['list']) == 0
 ) { error(0); }
@@ -95,7 +94,6 @@ foreach ($_REQUEST['list'] as $Priority => $Selection) {
 		case '36': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless' AND HasLog='1'"; break;
 		case '37': $SQL .= "t.Format='FLAC' AND t.Encoding='Lossless'"; break;
 		case '40': $SQL .= "t.Format='DTS'"; break;
-		case '41': $SQL .= "t.Format='Ogg Vorbis'"; break;
 		case '42': $SQL .= "t.Format='AAC' AND t.Encoding='320'"; break;
 		case '43': $SQL .= "t.Format='AAC' AND t.Encoding='256'"; break;
 		case '44': $SQL .= "t.Format='AAC' AND t.Encoding='q5.5'"; break;
@@ -114,7 +112,7 @@ t.Encoding,
 IF(t.RemasterYear=0,tg.Year,t.RemasterYear),
 tg.Name,
 t.Size
-FROM torrents AS t 
+FROM torrents AS t
 INNER JOIN collages_torrents AS c ON t.GroupID=c.GroupID AND c.CollageID='$CollageID'
 INNER JOIN torrents_group AS tg ON tg.ID=t.GroupID AND tg.CategoryID='1'
 ORDER BY t.GroupID ASC, Rank DESC, t.$Preference";
@@ -148,7 +146,7 @@ foreach($Downloads as $Download) {
 	$Tor = new TORRENT($Contents, true);
 	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');
 	unset($Tor->Val['announce-list']);
-	
+
 	// We need this section for long file names :/
 	$TorrentName='';
 	$TorrentInfo='';
@@ -169,7 +167,7 @@ foreach($Downloads as $Download) {
 	}
 	$FileName = $TorrentName.$TorrentInfo;
 	$FileName = Format::cut_string($FileName, 192, true, false);
-	
+
 	$Zip->add_file($Tor->enc(), $FileName.'.torrent');
 }
 $Analyzed = count($Downloads);

@@ -50,6 +50,10 @@ if (!check_perms('site_collages_delete')) {
 	if ($MaxGroups > 0 && $NumTorrents >= $MaxGroups) {
 		$Err = "This collage already holds its maximum allowed number of torrents";
 	}
+
+	if (isset($Err)) {
+		error($Err);
+	}
 }
 
 if ($MaxGroupsPerUser > 0) {

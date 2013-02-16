@@ -27,6 +27,31 @@ if (!(list($OldVH) = $DB->next_record())) {
 if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverting to a previous revision
 	$RevisionID=$_GET['revisionid'];
 	if(!is_number($RevisionID)) { error(0); }
+
+	// to cite from merge: "Everything is legit, let's just confim they're not retarded"
+	if(empty($_GET['confirm'])) {
+		View::show_header();
+?>
+	<div class="center thin">
+	<div class="header">
+		<h2>Revert Confirm!</h2>
+	</div>
+	<div class="box pad">
+		<form class="confirm_form" name="torrent_group" action="torrents.php" method="get">
+			<input type="hidden" name="action" value="revert" />
+			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+			<input type="hidden" name="confirm" value="true" />
+			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+			<input type="hidden" name="revisionid" value="<?=$RevisionID?>" />
+			<h3>You are attempting to revert to the revision <a href="torrents.php?id=<?=$GroupID?>&revisionid=<?=$RevisionID?>"><?=$RevisionID?></a>.</h3>
+			<input type="submit" value="Confirm" />
+		</form>
+	</div>
+	</div>
+<?
+		View::show_footer();
+		die();
+	}
 } else { // with edit, the variables are passed with POST
 	$Body = $_POST['body'];
 	$Image = $_POST['image'];

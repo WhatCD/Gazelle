@@ -8,6 +8,10 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 	$ExtraFile = fopen($Name, 'rb'); // open file for reading
 	$ExtraContents = fread($ExtraFile, 10000000);
 	$ExtraTor = new TORRENT($ExtraContents); // New TORRENT object
+	if (isset($ExtraTor->Val['info']->Val['encrypted_files'])) {
+		$Err = "At least one of the torrents contain an encrypted file list which is not supported here";
+		break;
+	}
 
 	// Remove uploader's passkey from the torrent.
 	// We put the downloader's passkey in on download, so it doesn't matter what's in there now,
@@ -36,14 +40,13 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 		}
 
 		// Add file and size to array
-		$ExtraTmpFileList[] = $ExtraName . '{{{' . $ExtraSize . '}}}'; // Name {{{Size}}}
+		$ExtraTmpFileList[] = Torrents::filelist_format_file($ExtraFile);
 	}
 
 	// To be stored in the database
 	$ExtraFilePath = isset($ExtraTor->Val['info']->Val['files']) ? db_string(Format::make_utf8($ExtraDirName)) : "";
 	$ExtraTorrentsInsert[$Name]['FilePath'] = $ExtraFilePath;
-	// Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}|||Name {{{Size}}}
-	$ExtraFileString = "'" . db_string(Format::make_utf8(implode('|||', $ExtraTmpFileList))) . "'";
+	$ExtraFileString = db_string(implode("\n", $ExtraTmpFileList));
 	$ExtraTorrentsInsert[$Name]['FileString'] = $ExtraFileString;
 	// Number of files described in torrent
 	$ExtraNumFiles = count($ExtraFileList);
