@@ -131,6 +131,9 @@ class BENCODE {
 
 class BENCODE_LIST extends BENCODE {
 	function enc(){
+		if(empty($this->Val)) {
+			return 'le';
+		}
 		$Str = 'l';
 		reset($this->Val);
 		foreach ($this->Val as $Value) {

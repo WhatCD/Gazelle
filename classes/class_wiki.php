@@ -48,16 +48,16 @@ class WIKI {
 				RevisionID, 
 				Summary,
 				Time,
-				UserID,
-				users.Username
+				UserID
 				FROM ".$this->Table." AS wiki
-				JOIN users_main AS users ON users.ID = wiki.UserID
 				WHERE wiki.PageID = ".$this->PageID."
 				ORDER BY RevisionID DESC");
 //----------------------------------------------- ?>
 	<table cellpadding="6" cellspacing="1" border="0" width="100%" class="border">
 		<tr class="colhead">
 			<td>Revision</td>
+			<td>Date</td>
+			<td>User</td>
 			<td>Summary</td>
 		</tr>
 <? //-----------------------------------------
@@ -68,11 +68,15 @@ class WIKI {
 		<tr class="row<?=$Row?>">
 			<td>
 				<?= "<a href='$BaseURL&amp;revisionid=$RevisionID'>#$RevisionID</a>" ?>
-
 			</td>
 			<td>
-				<strong>Edited by</strong> <a href="user.php?id=<?=$UserID?>"><?=$Username ?></a>
-				<strong>Reason:</strong> <?=$Summary?>
+				<?=$Time?>
+			</td>
+			<td>
+				<?=Users::format_username($UserID, false, false, false)?>
+			</td>
+			<td>
+				<?=($Summary ? $Summary : '(empty)')?>
 			</td>
 		</tr>
 <? //---------------------------------------------------

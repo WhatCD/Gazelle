@@ -396,8 +396,9 @@ foreach($FileList as $File) {
 
 if(count($TooLongPaths)!=0) {
 	$Names = '';
-	foreach($TooLongPaths as $Name) {$Names .= '<br>'.$Name;}
-	/* $Err = 'The torrent contained one or more files with too long a name ('.$Name.')'; */
+	foreach($TooLongPaths as $Name) {
+		$Names .= '<br>'.$Name;
+	}
 	$Err = 'The torrent contained one or more files with too long a name:'.$Names;
 }
 
@@ -411,10 +412,9 @@ $NumFiles = count($FileList);
 
 // The string that will make up the final torrent file
 $TorrentText = $Tor->enc();
-
+$Debug->set_flag('upload: torrent decoded');
 
 // Infohash
-
 $InfoHash = pack("H*", sha1($Tor->Val['info']->enc()));
 $DB->query("SELECT ID FROM torrents WHERE info_hash='".db_string($InfoHash)."'");
 if($DB->record_count()>0) {
@@ -650,10 +650,8 @@ $DB->query("
 $Cache->increment('stats_torrent_count');
 $TorrentID = $DB->inserted_id();
 
-
 Tracker::update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => $T['FreeLeech']));
-
-
+$Debug->set_flag('upload: ocelot updated');
 
 //******************************************************************************//
 //--------------- Write torrent file -------------------------------------------//
@@ -743,7 +741,7 @@ $Announce .= " - ".trim($Properties['TagList']);
 send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce :'.html_entity_decode($Announce));
 send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce-ssl :'.$AnnounceSSL);
 //send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce :'.html_entity_decode($Announce));
-
+$Debug->set_flag('upload: announced on irc');
 
 // Manage notifications
 $UsedFormatBitrates = array();
@@ -890,7 +888,7 @@ if($Properties['Year'] && $Properties['RemasterYear']) {
 $SQL.=" AND UserID != '".$LoggedUser['ID']."' ";
 
 $DB->query($SQL);
-
+$Debug->set_flag('upload: notification query finished');
 
 if($DB->record_count()>0){
 	$UserArray = $DB->to_array('UserID');
@@ -906,7 +904,7 @@ if($DB->record_count()>0){
 	}
 	$InsertSQL.=implode(',', $Rows);
 	$DB->query($InsertSQL);
-
+	$Debug->set_flag('upload: notification inserts finished');
 
 	foreach ($FilterArray as $Filter) {
 		list($FilterID, $UserID, $Passkey) = $Filter;
@@ -924,7 +922,7 @@ while (list($UserID, $Passkey) = $DB->next_record()) {
 }
 
 $Feed->populate('torrents_all',$Item);
-
+$Debug->set_flag('upload: notifications handled');
 if($Type == 'Music'){
 	$Feed->populate('torrents_music',$Item);
 	if($Properties['Media'] == 'Vinyl')		{ $Feed->populate('torrents_vinyl',$Item); }

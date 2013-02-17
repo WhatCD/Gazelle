@@ -24,7 +24,7 @@ $DB->query("SELECT t.GroupID, x.fid
 		JOIN torrents AS t ON t.ID=x.fid
 	WHERE t.Format='FLAC'
 		AND ((t.LogScore = '100' AND t.Media = 'CD')
-			OR t.Media = 'Vinyl')
+			OR t.Media != 'CD')
 		AND x.uid='$UserID'");
 
 $SnatchedTorrentIDs = array_fill_keys($DB->collect('fid'), true);
@@ -35,7 +35,7 @@ if (count($SnatchedGroupIDs) > 1000) {
 }
 
 if (count($SnatchedGroupIDs) == 0) {
-	error(($SeedingOnly ? "You aren't seeding any 100% FLACs!" : "You haven't snatched any 100% FLACs!"));
+	error(($SeedingOnly ? "You aren't seeding any perfect FLACs!" : "You haven't snatched any perfect FLACs!"));
 }
 // Create hash table
 
@@ -104,6 +104,26 @@ foreach ($Groups as $GroupID => $Group) {
 		}
 	}
 }
+// count how many FLAC torrents we have in this list totally (key 'total')
+//		 how many transcodes there are missing totally (key 'miss_total')
+//		 and for each format (keys , 'miss_V0 (VBR)', 'miss_V2 (VBR)', 'miss_320')
+//		 the latter happens by counting the number of existing transcodes and then subtracting because that's easier
+$Counter = array();
+$Counter['total'] = 0;
+foreach($TorrentGroups as $Editions) {
+	foreach($Editions as $Edition) {
+		if($Edition['FlacID'] == 0) { continue; } // no FLAC in this edition
+		$edition_miss = 0; //number of transcodes missing in this edition
+		foreach($Encodings as $Encoding) {
+			if(!isset($Edition['Formats'][$Encoding])) {
+				++$edition_miss;
+				++$Counter['miss_'.$Encoding];
+			}
+		}
+		$Counter['miss_total'] += $edition_miss;
+		$Counter['total'] += (bool)$edition_miss;
+	}
+}
 
 View::show_header('Transcode Snatches');
 ?>
@@ -115,6 +135,16 @@ View::show_header('Transcode Snatches');
 <? } ?>
 </div>
 <div class="thin">
+	<h2>Transcode <?=($SeedingOnly ? 'seeding' : 'snatched')?> torrents</h2>
+	<h3>Stats</h3>
+	<div class="box pad">
+		<p>
+			Number of perfect FLACs you can transcode: <?=$Counter['total']?><br />
+			Number of missing transcodes: <?=$Counter['miss_total']?><br />
+			Number of missing V2 / V0 / 320 transcodes: <?=$Counter['miss_V2 (VBR)']?> / <?=$Counter['miss_V0 (VBR)']?> / <?=$Counter['miss_320']?>
+		</p>
+	</div>
+	<h3>List</h3>
 	<table width="100%" class="torrent_table">
 		<tr class="colhead">
 			<td>Torrent</td>

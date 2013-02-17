@@ -56,7 +56,13 @@ if (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 80) {
 }
 
 // Site settings
-define('CRYPT_HASH_PREFIX', '$2y$07$'); // Crypt salt prefix for hash settings. See http://php.net/crypt for details
+if (PHP_VERSION_ID < 50307) {
+	die("PHP version 5.3.7 or later is highly recommended for gazelle's password hashing methods.".
+		" Uncomment line ".__LINE__." in file ".__FILE__." if you want to continue to use this version.");
+	define('CRYPT_HASH_PREFIX', '$2a$07$'); // Crypt salt prefix for hash settings. See http://php.net/crypt for details
+} else {
+	define('CRYPT_HASH_PREFIX', '$2y$07$');
+}
 define('DEBUG_MODE', false); //Set to false if you dont want everyone to see debug information, can be overriden with 'site_debug' 
 define('OPEN_REGISTRATION', true); //Set to false to disable open regirstration, true to allow anyone to register
 define('USER_LIMIT', 5000); //The maximum number of users the site can have, 0 for no limit
@@ -67,11 +73,10 @@ define('DONOR_INVITES', 2);
 
 // User class IDs needed for automatic promotions. Found in the 'permissions' table
 // Name of class	Class ID (NOT level)
+define('ADMIN',		'1');
 define('USER',		'2');
 define('MEMBER',	'3');
 define('POWER',		'4');
-define('ARTIST',	'19');
-define('DONOR',		'20');
 define('ELITE',		'5');
 define('VIP',		'6');
 define('TORRENT_MASTER','7');
@@ -80,8 +85,12 @@ define('CELEB',		'9');
 define('MOD',		'11');
 define('DESIGNER',	'13');
 define('CODER',		'14');
-define('ADMIN',		'1');
 define('SYSOP',		'15');
+define('ARTIST',	'19');
+define('DONOR',		'20');
+define('FLS_TEAM',	'21');
+define('POWER_TM',	'22');
+define('ELITE_TM',	'23');
 
 //Pagination
 define('TORRENT_COMMENTS_PER_PAGE', 10);

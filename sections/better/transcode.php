@@ -74,7 +74,7 @@ foreach ($Groups as $GroupID => $Group) {
 		}
 		if (isset($EncodingKeys[$Torrent['Encoding']])) {
 			$TorrentGroups[$Group['ID']][$TorRemIdent]['Formats'][$Torrent['Encoding']] = true;
-		} elseif ($TorrentGroups[$Group['ID']][$TorRemIdent]['FlacID'] == 0 && $Torrent['Format'] == 'FLAC' && $Torrent['LogScore'] == 100) {
+		} elseif ($TorrentGroups[$Group['ID']][$TorRemIdent]['FlacID'] == 0 && $Torrent['Format'] == 'FLAC' && ($Torrent['LogScore'] == 100 || $Torrent['Media'] != 'CD')) {
 			$TorrentGroups[$Group['ID']][$TorRemIdent]['FlacID'] = $Torrent['ID'];
 			$TorrentGroups[$Group['ID']][$TorRemIdent]['IsSnatched'] = $Torrent['IsSnatched'];
 		}
