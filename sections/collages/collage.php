@@ -9,7 +9,7 @@ function compare($X, $Y){
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
-include(SERVER_ROOT.'/classes/class_image_tools.php'); 
+include(SERVER_ROOT.'/classes/class_image_tools.php');
 
 $Text = new TEXT;
 
@@ -103,20 +103,20 @@ $Number = 0;
 foreach ($TorrentList as $GroupID=>$Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists, $GroupFlags) = array_values($Group);
 	list($GroupID2, $Image, $GroupCategoryID, $UserID, $Username) = array_values($CollageDataList[$GroupID]);
-	
+
 	// Handle stats and stuff
 	$Number++;
 	$NumGroups++;
 	if($UserID == $LoggedUser['ID']) {
 		$NumGroupsByUser++;
 	}
-	
+
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 		$CountArtists = array_merge((array)$ExtendedArtists[1], (array)$ExtendedArtists[4], (array)$ExtendedArtists[5], (array)$ExtendedArtists[6]);
 	} else{
 		$CountArtists = $GroupArtists;
 	}
-	
+
 	if($CountArtists) {
 		foreach($CountArtists as $Artist) {
 			if(!isset($Artists[$Artist['id']])) {
@@ -126,7 +126,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			}
 		}
 	}
-	
+
 	if($Username) {
 		if(!isset($Users[$UserID])) {
 			$Users[$UserID] = array('name'=>$Username, 'count'=>1);
@@ -134,7 +134,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 			$Users[$UserID]['count']++;
 		}
 	}
-	
+
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 
 	$TorrentTags = array();
@@ -151,7 +151,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	$TorrentTags='<br /><div class="tags">'.$TorrentTags.'</div>';
 
 	$DisplayName = $Number.' - ';
-	
+
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
@@ -159,7 +159,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	} elseif(count($GroupArtists)>0) {
 			$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists));
 	}
-	
+
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
 	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
@@ -191,17 +191,17 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		$LastRemasterRecordLabel = '';
 		$LastRemasterCatalogueNumber = '';
 		$LastMedia = '';
-		
+
 		$EditionID = 0;
 		unset($FirstUnknown);
-		
+
 		foreach ($Torrents as $TorrentID => $Torrent) {
 
 			if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
 			$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
-			
+
 			if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
 				$EditionID++;
@@ -212,7 +212,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 					if($Torrent['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']); $AddExtra=' / '; }
 					if($Torrent['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterTitle']); $AddExtra=' / '; }
 					$RemasterName .= $AddExtra.display_str($Torrent['Media']);
-					
+
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
 		<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
@@ -261,9 +261,9 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		}
 	} else {
 		// Viewing a type that does not require grouping
-		
+
 		list($TorrentID, $Torrent) = each($Torrents);
-		
+
 		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 
 		if ($Torrent['IsSnatched']) {
@@ -289,7 +289,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Torrent)) { ?>
 				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
-<?		} ?>						
+<?		} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
 			<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
@@ -303,11 +303,11 @@ foreach ($TorrentList as $GroupID=>$Group) {
 <?
 	}
 	$TorrentTable.=ob_get_clean();
-	
+
 	// Album art
-	
+
 	ob_start();
-	
+
 	$DisplayName = '';
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
 		unset($ExtendedArtists[2]);
@@ -321,7 +321,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 ?>
 		<li class="image_group_<?=$GroupID?>">
 			<a href="torrents.php?id=<?=$GroupID?>">
-<?	if($Image) { 
+<?	if($Image) {
 		if(check_perms('site_proxy_images')) {
 			$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
 		}
@@ -421,11 +421,11 @@ if(check_perms('zip_downloader')){
 				<form class="download_form" name="zip" action="collages.php" method="post">
 				<input type="hidden" name="action" value="download" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				<input type="hidden" name="collageid" value="<?=$CollageID?>" /> 
+				<input type="hidden" name="collageid" value="<?=$CollageID?>" />
 				<ul id="list" class="nobullet">
 <? foreach ($ZIPList as $ListItem) { ?>
 					<li id="list<?=$ListItem?>">
-						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
+						<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
 						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" class="brackets">X</a></span>
 						<br style="clear:all;" />
@@ -461,7 +461,7 @@ foreach ($ZIPOptions as $Option) {
 					<option value="1"<? if($ZIPPrefs==1){ echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
 					<option value="2"<? if($ZIPPrefs==2){ echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
 				</select>
-				<input type="submit" style="width:210px" value="Download" /> 
+				<input type="submit" style="width:210px" value="Download" />
 				</form>
 			</div>
 		</div>
@@ -530,7 +530,7 @@ foreach ($Users as $ID => $User) {
 }
 ?>
 				</ol>
-			
+
 			</div>
 		</div>
 <? if(check_perms('site_collages_manage') && !$PreventAdditions) { ?>
@@ -563,15 +563,15 @@ foreach ($Users as $ID => $User) {
 		<h3>Comments</h3>
 <?
 if(empty($CommentList)) {
-	$DB->query("SELECT 
-		cc.ID, 
-		cc.Body, 
-		cc.UserID, 
+	$DB->query("SELECT
+		cc.ID,
+		cc.Body,
+		cc.UserID,
 		um.Username,
-		cc.Time 
+		cc.Time
 		FROM collages_comments AS cc
 		LEFT JOIN users_main AS um ON um.ID=cc.UserID
-		WHERE CollageID='$CollageID' 
+		WHERE CollageID='$CollageID'
 		ORDER BY ID DESC LIMIT 15");
 	$CommentList = $DB->to_array(false, MYSQLI_NUM);
 }
@@ -608,8 +608,8 @@ if(!$LoggedUser['DisablePosting']) {
 }
 ?>
 	</div>
-	<div class="main_column">	
-<?	
+	<div class="main_column">
+<?
 if($CollageCovers != 0) { ?>
 		<div id="coverart" class="box">
 			<div class="head" id="coverhead"><strong>Cover Art</strong></div>
@@ -635,7 +635,7 @@ if($CollageCovers != 0) { ?>
 		<script type="text/javascript">//<![CDATA[
 			collageShow.init(<?=json_encode($CollagePages)?>);
 		//]]></script>
-<?		} 
+<?		}
 } ?>
 		<table class="torrent_table grouping cats" id="discog_table">
 			<tr class="colhead_dark">

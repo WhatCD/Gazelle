@@ -72,7 +72,7 @@ foreach ($Groups as $GroupID => $Group) {
 				'IsSnatched' => false
 			);
 		}
-		if (isset($EncodingKeys[$Torrent['Encoding']])) {
+		if ($Torrent['Format'] == 'MP3' && isset($EncodingKeys[$Torrent['Encoding']])) {
 			$TorrentGroups[$Group['ID']][$TorRemIdent]['Formats'][$Torrent['Encoding']] = true;
 		} elseif ($TorrentGroups[$Group['ID']][$TorRemIdent]['FlacID'] == 0 && $Torrent['Format'] == 'FLAC' && ($Torrent['LogScore'] == 100 || $Torrent['Media'] != 'CD')) {
 			$TorrentGroups[$Group['ID']][$TorRemIdent]['FlacID'] = $Torrent['ID'];
@@ -133,9 +133,11 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 	}
 	$TorrentTags = implode(', ', $TorrentTags);
 	foreach ($Editions as $RemIdent => $Edition) {
-		if (!$Edition['FlacID']
-				|| !empty($Edition['Formats']) && $_GET['type'] == 3
-				|| $Edition['Formats'][$Encodings[$_GET['type']]] == true) {
+		if (!$Edition['FlacID'] //no FLAC in this group
+				|| !empty($Edition['Formats']) && $_GET['type'] == 3 //at least one transcode present when we only wanted groups containing no transcodes at all (type 3)
+				|| $Edition['Formats'][$Encodings[$_GET['type']]] == true //the transcode we asked for is already there
+				|| count($Edition['Formats']) == 3) //all 3 transcodes are there already (this can happen due to the caching of Sphinx's better_transcode table)
+		{
 			$Debug->log_var($Edition, 'Skipping '.$RemIdent);
 			continue;
 		}

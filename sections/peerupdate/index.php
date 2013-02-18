@@ -37,7 +37,7 @@ while($TorrentID) {
 	if($LastGroupID != $GroupID) {
 		$CachedData = $Cache->get_value('torrent_group_'.$GroupID);
 		if($CachedData !== false) {
-			if(isset($CachedData['ver']) && $CachedData['ver'] >= 4) {
+			if(isset($CachedData['ver']) && $CachedData['ver'] == CACHE::GROUP_VERSION) {
 				$CachedStats = &$CachedData['d']['Torrents'];
 			}
 		} else {

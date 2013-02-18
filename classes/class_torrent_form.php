@@ -209,7 +209,7 @@ class TORRENT_FORM {
 					</select>
 <?				if ($FirstArtist) {
 					if (!$this->DisabledFlag) { ?>
-					[<a href="javascript:AddArtistField()">+</a>] [<a href="javascript:RemoveArtistField()">-</a>]
+					<a href="javascript:AddArtistField()" class="brackets">+</a> <a href="javascript:RemoveArtistField()" class="brackets">&minus;</a>
 <?					}
 					$FirstArtist = false;
 				}	?>
@@ -228,7 +228,7 @@ class TORRENT_FORM {
 						<option value="3">Remixer</option>
 						<option value="7">Producer</option>
 					</select>
-					[<a href="#" onclick="AddArtistField();return false;">+</a>] [<a href="#" onclick="RemoveArtistField();return false;">-</a>]
+					<a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a>
 <?
 			}
 ?>
@@ -462,8 +462,8 @@ function show() {
 					Log files:
 				</td>
 				<td id="logfields">
-					Check your log files before uploading <a href="logchecker.php" target="_blank">here</a>. For multi-disc releases, click the [+] button to add multiple log files.<br />
-					<input id="file" type="file" multiple="multiple" name="logfiles[]" size="50" /> [<a href="javascript:;" onclick="AddLogField();">+</a>] [<a href="javascript:;" onclick="RemoveLogField();">-</a>]
+					Check your log files before uploading <a href="logchecker.php" target="_blank">here</a>. For multi-disc releases, click the "<span class="brackets">+</span>" button to add multiple log files.<br />
+					<input id="file" type="file" multiple="multiple" name="logfiles[]" size="50" /> <a href="javascript:;" onclick="AddLogField();" class="brackets">+</a> <a href="javascript:;" onclick="RemoveLogField();" class="brackets">&minus;</a>
 				</td>
 			</tr>
 <?

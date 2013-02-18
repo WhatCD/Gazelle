@@ -83,7 +83,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 			<input type="hidden" name="forum" value="<?=$ForumID?>" />
 			<table id="newthreadtext" class="layout">
 				<tr>
-                    <td class="label">Title:</td> 
+                    <td class="label">Title:</td>
 					<td><input id="title" type="text" name="title" style="width: 98%;" /></td>
 				</tr>
 				<tr>
@@ -111,7 +111,7 @@ if (check_perms('forums_polls_create')) {
 						AnswerField.id = "answer_"+AnswerCount;
 						AnswerField.name = "answers[]";
 						AnswerField.style.width = "90%";
-		
+
 						var x = $('#answer_block').raw();
 						x.appendChild(document.createElement("br"));
 						x.appendChild(AnswerField);
@@ -128,8 +128,8 @@ if (check_perms('forums_polls_create')) {
 				</script>
 				<tr>
 					<td colspan="2" class="center">
-						<strong>Poll Settings</strong> 
-						<a href="#" onclick="$('#poll_question, #poll_answers').toggle();return false;">(View)</a> 
+						<strong>Poll Settings</strong>
+						<a href="#" onclick="$('#poll_question, #poll_answers').toggle();return false;">(View)</a>
 					</td>
 				</tr>
 				<tr id="poll_question" class="hidden">
@@ -141,7 +141,7 @@ if (check_perms('forums_polls_create')) {
 					<td id="answer_block">
 						<input type="text" name="answers[]" style="width: 90%;" />
 						<a href="#" onclick="AddAnswerField();return false;" class="brackets">+</a>
-						<a href="#" onclick="RemoveAnswerField();return false;" class="brackets">-</a>
+						<a href="#" onclick="RemoveAnswerField();return false;" class="brackets">&minus;</a>
 					</td>
 				</tr>
 <? } ?>

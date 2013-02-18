@@ -28,7 +28,13 @@ if (!extension_loaded('memcache')) {
 	error('Memcache Extension not loaded.');
 }
 
-class CACHE extends Memcache {
+class CACHE extends Memcache
+{
+	/**
+	 * Torrent Group cache version
+	 */
+	const GROUP_VERSION = 4;
+
 	public $CacheHits = array();
 	public $MemcacheDBArray = array();
 	public $MemcacheDBKey = '';

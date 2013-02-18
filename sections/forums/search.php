@@ -32,9 +32,14 @@ if(isset($_GET['search'])) {
 
 // Searching for posts by a specific user
 if(!empty($_GET['user'])) {
-	$User = $_GET['user'];
+	$User = trim($_GET['user']);
 	$DB->query("SELECT ID FROM users_main WHERE Username='".db_string($User)."'");
 	list($AuthorID) = $DB->next_record();
+	if($AuthorID === null) {
+		$AuthorID = 0;
+		//this will cause the search to return 0 results.
+		//workaround in line 276 to display that the username was wrong.
+	}
 } else {
 	$User = '';
 }
@@ -273,7 +278,7 @@ echo $Pages;
 		<td>Time</td>
 	</tr>
 <? if($DB->record_count() == 0) { ?>
-		<tr><td colspan="3">Nothing found!</td></tr>
+		<tr><td colspan="3">Nothing found<?=(isset($AuthorID) && $AuthorID == 0) ? ' (unknown username)' : ''?>!</td></tr>
 <? }
 
 $Row = 'a'; // For the pretty colours

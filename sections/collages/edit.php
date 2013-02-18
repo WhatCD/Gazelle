@@ -50,7 +50,7 @@ if($CategoryID > 0 || check_perms('site_collages_delete')) { ?>
 			continue;
 		}
 ?>
-		<option value="<?=$CatID?>" <?=$CatID == $CategoryID ? ' selected="selected"' : ''?>><?=$CatName?></option>
+		<option value="<?=$CatID?>"<?=$CatID == $CategoryID ? ' selected="selected"' : ''?>><?=$CatName?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -66,10 +66,10 @@ if($CategoryID > 0 || check_perms('site_collages_delete')) { ?>
 				<td class="label">Tags</td>
 				<td><input type="text" name="tags" size="60" value="<?=$TagList?>" /></td>
 			</tr>
-<? if ($CategoryID == 0) { // CategoryID==0 is "Personal" collages ?>
+<? if ($CategoryID == 0) { // CategoryID==0 is for "personal" collages ?>
 			<tr>
-				<td class="label"><span title="A &quot;featured&quot; personal collage will be listed first on your profile.">Featured</span></td>
-				<td><input type="checkbox" name="featured" <?=($Featured?'checked':'')?> /></td>
+				<td class="label"><span title="A &quot;featured&quot; personal collage will be listed first on your profile, along with a preview of the included torrents.">Featured</span></td>
+				<td><input type="checkbox" name="featured"<?=($Featured ? ' checked="checked"' : '')?> /></td>
 			</tr>
 <? }
 if(check_perms('site_collages_delete')) { ?>
@@ -85,7 +85,7 @@ if(check_perms('site_collages_delete')) { ?>
 				<td class="label">Max groups per user</td>
 				<td><input type="text" name="maxgroupsperuser" size="5" value="<?=$MaxGroupsPerUser?>" /></td>
 			</tr>
-			
+
 <? } ?>
 			<tr>
 				<td colspan="2" class="center"><input type="submit" value="Edit collage" /></td>

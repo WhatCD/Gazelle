@@ -492,9 +492,9 @@ CREATE TABLE `permissions` (
 
 CREATE TABLE `pm_conversations` (
   `ID` int(12) NOT NULL AUTO_INCREMENT,
-  `Subject` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `Subject` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `pm_conversations_users` (
   `UserID` int(10) NOT NULL DEFAULT '0',

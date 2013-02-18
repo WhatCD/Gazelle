@@ -51,16 +51,16 @@ if(!empty($_GET['search']) && $_GET['searchtype'] == "message") {
 }
 $sql .= " WHERE ";
 if(!empty($_GET['search'])) {
-		$Search = db_string($_GET['search']);
-		if($_GET['searchtype'] == "user") {
-			$sql .= "um.Username LIKE '".$Search."' AND ";
-		} elseif($_GET['searchtype'] == "subject") {
-			$Words = explode(' ', $Search);
-			$sql .= "c.Subject LIKE '%".implode("%' AND c.Subject LIKE '%", $Words)."%' AND ";
-		} elseif($_GET['searchtype'] == "message") {
-			$Words = explode(' ', $Search);
-			$sql .= "m.Body LIKE '%".implode("%' AND m.Body LIKE '%", $Words)."%' AND ";
-		}
+	$Search = db_string($_GET['search']);
+	if($_GET['searchtype'] == "user") {
+		$sql .= "um.Username LIKE '".$Search."' AND ";
+	} elseif($_GET['searchtype'] == "subject") {
+		$Words = explode(' ', $Search);
+		$sql .= "c.Subject LIKE '%".implode("%' AND c.Subject LIKE '%", $Words)."%' AND ";
+	} elseif($_GET['searchtype'] == "message") {
+		$Words = explode(' ', $Search);
+		$sql .= "m.Body LIKE '%".implode("%' AND m.Body LIKE '%", $Words)."%' AND ";
+	}
 }
 $sql .= ($Section == 'sentbox')? ' cu.InSentbox' : ' cu.InInbox';
 $sql .="='1'";
@@ -71,6 +71,7 @@ $Results = $DB->query($sql);
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($Results);
+$Count = $DB->record_count();
 
 $CurURL = Format::get_url(array('sort'));
 if(empty($CurURL)) {
@@ -85,15 +86,15 @@ echo $Pages;
 	</div>
 
 	<div class="box pad">
-<? if($DB->record_count()==0) { ?>
+<? if($Count == 0 && empty($_GET['search'])) { ?>
 	<h2>Your <?= ($Section == 'sentbox') ? 'sentbox' : 'inbox' ?> is currently empty</h2>
 <? } else { ?>
 		<form class="search_form" name="<?= ($Section == 'sentbox')?'sentbox':'inbox'?>" action="inbox.php" method="get" id="searchbox">
 			<div>
 				<input type="hidden" name="action" value="<?=$Section?>" />
-				<input type="radio" name="searchtype" value="user" checked="checked" /> User
-				<input type="radio" name="searchtype" value="subject" /> Subject
-				<input type="radio" name="searchtype" value="message" /> Message
+				<input type="radio" name="searchtype" value="user"<?=(empty($_GET['searchtype']) || $_GET['searchtype'] == 'user' ? ' checked="checked"' : '')?> /> User
+				<input type="radio" name="searchtype" value="subject"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'subject' ? ' checked="checked"' : '')?> /> Subject
+				<input type="radio" name="searchtype" value="message"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'message' ? ' checked="checked"' : '')?> /> Message
 				<span style="float: right;">
 <?			if(empty($_GET['sort']) || $_GET['sort'] != "unread") { ?>
 					<a href="<?=$CurURL?>sort=unread" class="brackets">List unread first</a>
@@ -102,7 +103,7 @@ echo $Pages;
 <?			} ?>
 				</span>
 				<br />
-				<input type="text" name="search" value="Search <?= ($Section == 'sentbox') ? 'Sentbox' : 'Inbox' ?>" style="width: 98%;"
+				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section == 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"
 						onfocus="if (this.value == 'Search <?= ($Section == 'sentbox') ? 'Sentbox' : 'Inbox' ?>') this.value='';"
 						onblur="if (this.value == '') this.value='Search <?= ($Section == 'sentbox') ? 'Sentbox' : 'Inbox' ?>';"
 				/>
@@ -111,9 +112,9 @@ echo $Pages;
 		<form class="manage_form" name="messages" action="inbox.php" method="post" id="messageform">
 			<input type="hidden" name="action" value="masschange" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-						<input type="submit" name="read" value="Mark as read" />&nbsp;
-						<input type="submit" name="unread" value="Mark as unread" />&nbsp;
-						<input type="submit" name="delete" value="Delete message(s)" />
+			<input type="submit" name="read" value="Mark as read" />&nbsp;
+			<input type="submit" name="unread" value="Mark as unread" />&nbsp;
+			<input type="submit" name="delete" value="Delete message(s)" />
 
 			<table class="message_table checkboxes">
 				<tr class="colhead">
@@ -126,32 +127,38 @@ echo $Pages;
 <?		} ?>
 				</tr>
 <?
-	$Row = 'a';
-	while(list($ConvID, $Subject, $Unread, $Sticky, $ForwardedID, $SenderID, $Date) = $DB->next_record()) {
-		if($Unread === '1') {
-			$RowClass = 'unreadpm';
-		} else {
-			$Row = ($Row === 'a') ? 'b' : 'a';
-			$RowClass = 'row'.$Row;
-		}
+	if($Count == 0) {?>
+				<tr class="a">
+					<td colspan="5">No results.</td>
+				</tr>
+<?	} else {
+		$Row = 'a';
+		while(list($ConvID, $Subject, $Unread, $Sticky, $ForwardedID, $SenderID, $Date) = $DB->next_record()) {
+			if($Unread === '1') {
+				$RowClass = 'unreadpm';
+			} else {
+				$Row = ($Row === 'a') ? 'b' : 'a';
+				$RowClass = 'row'.$Row;
+			}
 ?>
 				<tr class="<?=$RowClass?>">
 					<td class="center"><input type="checkbox" name="messages[]=" value="<?=$ConvID?>" /></td>
 					<td>
-<?		if($Unread) { echo '<strong>'; } ?>
-<?		if($Sticky) { echo 'Sticky: '; }
+<?			if($Unread) { echo '<strong>'; }
+			if($Sticky) { echo 'Sticky: '; }
 ?>
 						<a href="inbox.php?action=viewconv&amp;id=<?=$ConvID?>"><?=$Subject?></a>
 <?
-		if($Unread) { echo '</strong>';} ?>
+			if($Unread) { echo '</strong>';} ?>
 					</td>
 					<td><?=Users::format_username($SenderID, true, true, true, true)?></td>
 					<td><?=time_diff($Date)?></td>
-<?		if(check_perms('users_mod')) { ?>
+<?			if(check_perms('users_mod')) { ?>
 					<td><?=($ForwardedID && $ForwardedID != $LoggedUser['ID'] ? Users::format_username($ForwardedID, false, false, false):'')?></td>
-<?		} ?>
+<?			} ?>
 				</tr>
-<?	} ?>
+<?		}
+	}?>
 			</table>
 			<input type="submit" name="read" value="Mark as read" />&nbsp;
 			<input type="submit" name="unread" value="Mark as unread" />&nbsp;

@@ -63,7 +63,7 @@ if ($TorrentTags != '') {
 	$TorrentTagUserIDs=explode('|',$TorrentTagUserIDs);
 	$TagPositiveVotes=explode('|',$TagPositiveVotes);
 	$TagNegativeVotes=explode('|',$TagNegativeVotes);
-	
+
 	foreach ($TorrentTags as $TagKey => $TagName) {
 		$Tags[$TagKey]['name'] = $TagName;
 		$Tags[$TagKey]['score'] = ($TagPositiveVotes[$TagKey] - $TagNegativeVotes[$TagKey]);
@@ -102,7 +102,7 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode');
 <?	}
 	if($Categories[$GroupCategoryID-1] == 'Music') { ?>
 			<a href="upload.php?groupid=<?=$GroupID?>" class="brackets">Add format</a>
-<?	} 
+<?	}
 	if(check_perms('site_submit_requests')) { ?>
 			<a href="requests.php?action=new&amp;groupid=<?=$GroupID?>" class="brackets">Request format</a>
 <?	}?>
@@ -279,7 +279,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 ?>
 			</ul>
 		</div>
-<? 
+<?
 		if(check_perms('torrents_add_artist')) { ?>
 		<div class="box box_addartists">
 			<div class="head"><strong>Add artist</strong><span style="float:right;" class="additional_add_artist"><a onclick="AddArtistField(); return false;" href="#" class="brackets">+</a></span></div>
@@ -317,12 +317,12 @@ if(count($Tags) > 0) {
 			<ul class="stats nobullet">
 <?
 	foreach($Tags as $TagKey=>$Tag) {
-			
+
 ?>
 				<li>
 					<a href="torrents.php?taglist=<?=$Tag['name']?>" style="float:left; display:block;"><?=display_str($Tag['name'])?></a>
 					<div style="float:right; display:block; letter-spacing: -1px;" class="edit_tags_votes">
-					<a href="torrents.php?action=vote_tag&amp;way=down&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag down" class="brackets vote_tag_down">-</a>
+					<a href="torrents.php?action=vote_tag&amp;way=down&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag down" class="brackets vote_tag_down">&minus;</a>
 					<?=$Tag['score']?>
 					<a href="torrents.php?action=vote_tag&amp;way=up&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag up" class="brackets vote_tag_up">+</a>
 <?		if(check_perms('users_warn')){ ?>
@@ -449,7 +449,7 @@ foreach ($TorrentList as $Torrent) {
 		}
 		$ReportInfo .= "</table>";
 	}
-	
+
 	$CanEdit = (check_perms('torrents_edit') || (($UserID == $LoggedUser['ID'] && !$LoggedUser['DisableWiki']) && !($Remastered && !$RemasterYear)));
 
 	$RegenLink = check_perms('users_mod') ? ' <a href="torrents.php?action=regen_filelist&amp;torrentid='.$TorrentID.'" class="brackets">Regenerate</a>' : '';
@@ -510,24 +510,24 @@ foreach ($TorrentList as $Torrent) {
 	if(!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Lossy Master Approved'); $AddExtra=' / '; }
 	if(!empty($LossywebApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Lossy WEB Approved'); $AddExtra = ' / '; }
 	if(!empty($BadFiles)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad File Names'); $AddExtra=' / '; }
-	
-	if($GroupCategoryID == 1 
+
+	if($GroupCategoryID == 1
 		&& ($RemasterTitle != $LastRemasterTitle
 		|| $RemasterYear != $LastRemasterYear
-		|| $RemasterRecordLabel != $LastRemasterRecordLabel 
+		|| $RemasterRecordLabel != $LastRemasterRecordLabel
 		|| $RemasterCatalogueNumber != $LastRemasterCatalogueNumber
 		|| $FirstUnknown
 		|| $Media != $LastMedia)) {
-		
+
 		$EditionID++;
 
 		if($Remastered && $RemasterYear != 0){
-		
+
 			$RemasterName = $RemasterYear;
 			$AddExtra = " - ";
 			if($RemasterRecordLabel) { $RemasterName .= $AddExtra.display_str($RemasterRecordLabel); $AddExtra=' / '; }
 			if($RemasterCatalogueNumber) { $RemasterName .= $AddExtra.display_str($RemasterCatalogueNumber); $AddExtra=' / '; }
-			if($RemasterTitle) { $RemasterName .= $AddExtra.display_str($RemasterTitle); $AddExtra=' / '; }			
+			if($RemasterTitle) { $RemasterName .= $AddExtra.display_str($RemasterTitle); $AddExtra=' / '; }
 			$RemasterName .= $AddExtra.display_str($Media);
 ?>
 			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
@@ -563,7 +563,7 @@ foreach ($TorrentList as $Torrent) {
 					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$HasFile ? 'DL' : 'Missing'?></a>
 <?	if (Torrents::can_use_token($Torrent)) { ?>
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
-<?	} ?>					
+<?	} ?>
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
 <?	if($CanEdit) { ?>
 						| <a href="torrents.php?action=edit&amp;id=<?=$TorrentID ?>" title="Edit">ED</a>
@@ -596,7 +596,7 @@ foreach ($TorrentList as $Torrent) {
 						if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time()-strtotime($LastReseedRequest)>=864000) { ?>
 						<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
 						<?} ?>
-						
+
 <? } ?>
 
 					</blockquote>
@@ -607,7 +607,7 @@ foreach ($TorrentList as $Torrent) {
 <? } ?>
 					<div class="linkbox">
 						<a href="#" class="brackets" onclick="show_peers('<?=$TorrentID?>', 0);return false;">View peer list</a>
-<? if(check_perms('site_view_torrent_snatchlist')) { ?> 
+<? if(check_perms('site_view_torrent_snatchlist')) { ?>
 						<a href="#" class="brackets" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
 						<a href="#" class="brackets" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
 <? } ?>
@@ -666,7 +666,7 @@ if (count($Requests) > 0) {
 							<span id="vote_count_<?=$Request['ID']?>"><?=count($RequestVotes['Voters'])?></span>
 							<input type="hidden" id="requestid_<?=$Request['ID']?>" name="requestid" value="<?=$Request['ID']?>" />
 							<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$Request['ID']?>)"><strong>(+)</strong></a>
+							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$Request['ID']?>)" class="brackets">+</a>
 						</form>
 					</td>
 					<td><?=Format::get_size($RequestVotes['TotalBounty'])?></td>
@@ -699,7 +699,7 @@ if(count($Collages)>0) {
 				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=count($Collages)?> collage<?=((count($Collages)>1)?'s':'')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
-<?	foreach ($Indices as $i) { 
+<?	foreach ($Indices as $i) {
 		list($CollageName, $CollageTorrents, $CollageID) = $Collages[$i];
 		unset($Collages[$i]);
 ?>
@@ -708,7 +708,7 @@ if(count($Collages)>0) {
 				<td><?=$CollageTorrents?></td>
 			</tr>
 <?	}
-	foreach ($Collages as $Collage) { 
+	foreach ($Collages as $Collage) {
 		list($CollageName, $CollageTorrents, $CollageID) = $Collage;
 ?>
 			<tr class="collage_rows hidden">
@@ -727,7 +727,7 @@ if(!is_array($PersonalCollages)) {
 	$Cache->cache_value('torrent_collages_personal_'.$GroupID, $PersonalCollages, 3600*6);
 }
 
-if(count($PersonalCollages)>0) { 
+if(count($PersonalCollages)>0) {
 	if (count($PersonalCollages) > MAX_PERS_COLLAGES) {
 		// Pick some at random
 		$Range = range(0,count($PersonalCollages) - 1);
@@ -744,7 +744,7 @@ if(count($PersonalCollages)>0) {
 				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=count($PersonalCollages)?> personal collage<?=((count($PersonalCollages)>1)?'s':'')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
-<?	foreach ($Indices as $i) { 
+<?	foreach ($Indices as $i) {
 		list($CollageName, $CollageTorrents, $CollageID) = $PersonalCollages[$i];
 		unset($PersonalCollages[$i]);
 ?>
@@ -753,7 +753,7 @@ if(count($PersonalCollages)>0) {
 				<td><?=$CollageTorrents?></td>
 			</tr>
 <?	}
-	foreach ($PersonalCollages as $Collage) { 
+	foreach ($PersonalCollages as $Collage) {
 		list($CollageName, $CollageTorrents, $CollageID) = $Collage;
 ?>
 			<tr class="personal_rows hidden">
@@ -889,7 +889,7 @@ foreach($Thread as $Key => $Post) {
 				<br />
 				<br />
 <?		if (check_perms('site_admin_forums')) { ?>
-				<a href="#content<?=$PostID?>" onclick="LoadEdit('torrents', <?=$PostID?>, 1); return false;">&laquo;</a> 
+				<a href="#content<?=$PostID?>" onclick="LoadEdit('torrents', <?=$PostID?>, 1); return false;">&laquo;</a>
 <? 		} ?>
 				Last edited by
 				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>

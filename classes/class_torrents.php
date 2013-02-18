@@ -57,7 +57,7 @@ class Torrents {
 
 		foreach ($GroupIDs as $GroupID) {
 			$Data = $Cache->get_value($Key.$GroupID, true);
-			if (!empty($Data) && (@$Data['ver'] >= 4)) {
+			if (!empty($Data) && (@$Data['ver'] == CACHE::GROUP_VERSION)) {
 				unset($NotFound[$GroupID]);
 				$Found[$GroupID] = $Data['d'];
 			}

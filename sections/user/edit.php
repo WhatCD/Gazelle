@@ -7,7 +7,7 @@ if(!is_number($UserID)){
 
 
 
-$DB->query("SELECT 
+$DB->query("SELECT
 			m.Username,
 			m.Email,
 			m.IRCKey,
@@ -152,7 +152,7 @@ echo $Val->GenerateJS('userform');
 					<noscript>Please enable JavaScript to use these options.</noscript>
 					<a href="#" id="toggle_sortable">Expand</a>
 					<div id="sortable_container" style="display: none;">
-						<a href="#" id="reset_sortable">Reset to Default</a>
+						<a href="#" id="reset_sortable">Reset to default</a>
 						<ul class="sortable_list" id="sortable">
 <?Users::release_order()?>
 						</ul>
@@ -198,28 +198,28 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Subscription</strong></td>
 				<td>
-					<input type="checkbox" name="autosubscribe" id="autosubscribe" <? if (!empty($SiteOptions['AutoSubscribe'])) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="autosubscribe" id="autosubscribe"<? if (!empty($SiteOptions['AutoSubscribe'])) { ?> checked="checked"<? } ?> />
 					<label for="autosubscribe">Subscribe to topics when posting</label>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Quote notifications</strong></td>
 				<td>
-					<input type="checkbox" name="notifyquotes" id="notifyquotes" <? if (!empty($SiteOptions['NotifyOnQuote'])) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="notifyquotes" id="notifyquotes"<? if (!empty($SiteOptions['NotifyOnQuote'])) { ?> checked="checked"<? } ?> />
 					<label for="notifyquotes">Notifications when someone quotes you in the forum</label>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Smileys</strong></td>
 				<td>
-					<input type="checkbox" name="disablesmileys" id="disablesmileys" <? if (!empty($SiteOptions['DisableSmileys'])) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="disablesmileys" id="disablesmileys"<? if (!empty($SiteOptions['DisableSmileys'])) { ?> checked="checked"<? } ?> />
 					<label for="disablesmileys">Disable smileys</label>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Mature content</strong></td>
 				<td>
-					<input type="checkbox" name="enablematurecontent" id="enablematurecontent" <? if (!empty($SiteOptions['EnableMatureContent'])) { ?>checked="checked"<? } ?> />
+					<input type="checkbox" name="enablematurecontent" id="enablematurecontent"<? if (!empty($SiteOptions['EnableMatureContent'])) { ?> checked="checked"<? } ?> />
 					<label for="enablematurecontent">Show mature content</label>
 				</td>
 			</tr>
@@ -274,7 +274,7 @@ echo $Val->GenerateJS('userform');
 			</tr>
 			<tr class="colhead_dark">
 				<td colspan="2">
-					<strong>User info</strong>
+					<strong>User information</strong>
 				</td>
 			</tr>
 			<tr>

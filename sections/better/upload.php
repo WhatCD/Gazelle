@@ -15,10 +15,12 @@ $EncodingKeys = array_fill_keys($Encodings, true);
 // Get list of FLAC uploads
 $DB->query("SELECT t.GroupID, t.ID
 	FROM torrents AS t
+	JOIN torrents_group AS tg ON tg.ID = t.GroupID
 	WHERE
 	t.Format='FLAC'
 	AND ((t.LogScore = '100' AND t.Media = 'CD')
 		OR t.Media != 'CD')
+	AND tg.CategoryID = 1
 	AND t.UserID='$UserID'");
 
 $UploadedTorrentIDs = array_fill_keys($DB->collect('ID'), true);
@@ -35,7 +37,7 @@ $DB->query("CREATE TEMPORARY TABLE temp_sections_better_upload
 	CRC32(CONCAT_WS(' ', Media, Remasteryear, Remastertitle,
 		Remasterrecordlabel, Remastercataloguenumber)) AS RemIdent
 	FROM torrents AS t
-	WHERE t.GroupID IN(".implode(',',$UploadedGroupIDs).")
+	WHERE t.GroupID IN(".implode(',',$UploadedGroupIDs).") AND t.Format IN ('FLAC', 'MP3')
 	GROUP BY t.GroupID, RemIdent");
 
 $DB->query("SELECT GroupID FROM temp_sections_better_upload
@@ -85,7 +87,7 @@ foreach ($Groups as $GroupID => $Group) {
 				'RemasterCatalogueNumber' => $Torrent['RemasterCatalogueNumber']
 			);
 		}
-		if (isset($EncodingKeys[$Torrent['Encoding']])) {
+		if ($Torrent['Format'] == 'MP3' && isset($EncodingKeys[$Torrent['Encoding']])) {
 			$TorrentGroups[$Group['ID']][$TorRemIdent]['Formats'][$Torrent['Encoding']] = true;
 			$Counter['existing'][$Torrent['Encoding']] += 1;
 		} elseif (isset($UploadedTorrentIDs[$Torrent['ID']])) {
@@ -93,12 +95,13 @@ foreach ($Groups as $GroupID => $Group) {
 		}
 	}
 }
-// count how many FLAC torrents we have in this list totally (key 'total')
-//		 how many transcodes there are missing totally (key 'miss_total')
-//		 and for each format (keys , 'miss_V0 (VBR)', 'miss_V2 (VBR)', 'miss_320')
-//		 the latter happens by counting the number of existing transcodes and then subtracting because that's easier
-$Counter = array();
-$Counter['total'] = 0;
+$Counter = array(
+	'total' => 0, //how many FLAC torrents can be transcoded?
+	'miss_total' => 0, //how many transcodes are missing?
+	'miss_V0 (VBR)' => 0, //how many V0 transcodes are missing?
+	'miss_V2 (VBR)' => 0, //how many V2 transcodes are missing?
+	'miss_320' => 0, //how many 320 transcodes are missing?
+);
 foreach($TorrentGroups as $Editions) {
 	foreach($Editions as $Edition) {
 		if($Edition['FlacID'] == 0) { continue; } // no FLAC in this edition
@@ -117,6 +120,7 @@ foreach($TorrentGroups as $Editions) {
 View::show_header('Transcode Uploads');
 ?>
 <div class="thin">
+	<h2>Transcode uploaded torrents</h2>
 	<h3>Stats</h3>
 	<div class="box pad">
 		<p>

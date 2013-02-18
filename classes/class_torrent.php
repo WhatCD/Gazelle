@@ -109,7 +109,9 @@ class BENCODE {
 			$this->Val[$Key] = new BENCODE_DICT(substr($this->Str, $this->Pos));
 			$this->Pos += $this->Val[$Key]->Pos;
 			// Sort by key to respect spec
-			ksort($this->Val[$Key]->Val);
+			if (!empty($this->Val[$Key]->Val)) {
+				ksort($this->Val[$Key]->Val);
+			}
 		
 		} else {
 			die('Invalid torrent file');
@@ -131,7 +133,7 @@ class BENCODE {
 
 class BENCODE_LIST extends BENCODE {
 	function enc(){
-		if(empty($this->Val)) {
+		if (empty($this->Val)) {
 			return 'le';
 		}
 		$Str = 'l';
@@ -160,7 +162,7 @@ class BENCODE_LIST extends BENCODE {
 			// Decode the bencoded element.
 			// This function changes $this->Pos and $this->Val, so you don't have to.
 			$this->decode($Type, $Key);
-			++ $Key;
+			++$Key;
 		}
 		return true;
 	}
@@ -168,6 +170,9 @@ class BENCODE_LIST extends BENCODE {
 
 class BENCODE_DICT extends BENCODE {
 	function enc(){
+		if (empty($this->Val)) {
+			return 'de';
+		}
 		$Str = 'd';
 		reset($this->Val);
 		foreach ($this->Val as $Key => $Value) {

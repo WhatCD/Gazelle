@@ -3,7 +3,7 @@
 /*
  * Yeah, that's right, edit and new are the same place again.
  * It makes the page uglier to read but ultimately better as the alternative means
- * maintaining 2 copies of almost identical files. 
+ * maintaining 2 copies of almost identical files.
  */
 
 
@@ -23,18 +23,18 @@ if($NewRequest && ($LoggedUser['BytesUploaded'] < 250*1024*1024 || !check_perms(
 
 if(!$NewRequest) {
 	if(empty($ReturnEdit)) {
-		
+
 		$Request = Requests::get_requests(array($RequestID));
 		$Request = $Request['matches'][$RequestID];
 		if(empty($Request)) {
 			error(404);
 		}
-		
-		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel, 
+
+		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
 		     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 		$VoteArray = get_votes_array($RequestID);
 		$VoteCount = count($VoteArray['Voters']);
-		
+
 		$NeedCue = (strpos($LogCue, "Cue") !== false);
 		$NeedLog = (strpos($LogCue, "Log") !== false);
 		if($NeedLog) {
@@ -43,27 +43,27 @@ if(!$NewRequest) {
 				$MinLogScore = (int) $Matches[0];
 			}
 		}
-		
+
 		$IsFilled = !empty($TorrentID);
 		$CategoryName = $Categories[$CategoryID - 1];
-		
+
 		$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0)));
 		$CanEdit = ((!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
-		
+
 		if(!$CanEdit) {
 			error(403);
 		}
-		
+
 		if($CategoryName == "Music") {
 			$ArtistForm = get_request_artists($RequestID);
-			
+
 			$BitrateArray = array();
 			if($BitrateList == "Any") {
 				$BitrateArray = array_keys($Bitrates);
 			} else {
 				$BitrateArray = array_keys(array_intersect($Bitrates,explode('|', $BitrateList)));
 			}
-			
+
 			$FormatArray = array();
 			if($FormatList == "Any") {
 				$FormatArray = array_keys($Formats);
@@ -74,8 +74,8 @@ if(!$NewRequest) {
 					}
 				}
 			}
-			
-			
+
+
 			$MediaArray = array();
 			if($MediaList == "Any") {
 				$MediaArray = array_keys($Media);
@@ -88,7 +88,7 @@ if(!$NewRequest) {
 				}
 			}
 		}
-		
+
 		$Tags = implode(", ", $Request['Tags']);
 	}
 }
@@ -103,13 +103,13 @@ if($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 	);
 } elseif($NewRequest && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	$ArtistForm = Artists::get_artist($_GET['groupid']);
-	$DB->query("SELECT tg.Name, 
-					tg.Year, 
-					tg.ReleaseType, 
+	$DB->query("SELECT tg.Name,
+					tg.Year,
+					tg.ReleaseType,
 					tg.WikiImage,
 					GROUP_CONCAT(t.Name SEPARATOR ', '),
 					tg.CategoryID
-				FROM torrents_group AS tg 
+				FROM torrents_group AS tg
 					JOIN torrents_tags AS tt ON tt.GroupID=tg.ID
 					JOIN tags AS t ON t.ID=tt.TagID
 				WHERE tg.ID = ".$_GET['groupid']);
@@ -124,17 +124,17 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 	<div class="header">
 		<h2><?=($NewRequest ? "Create a request" : "Edit a request")?></h2>
 	</div>
-	
+
 	<div class="box pad">
 		<form action="" method="post" id="request_form" onsubmit="Calculate();">
 			<div>
 <? if(!$NewRequest) { ?>
-				<input type="hidden" name="requestid" value="<?=$RequestID?>" /> 
+				<input type="hidden" name="requestid" value="<?=$RequestID?>" />
 <? } ?>
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="action" value="<?=$NewRequest ? 'takenew' : 'takeedit'?>" />
 			</div>
-			
+
 			<table class="layout">
 				<tr>
 					<td colspan="2" class="center">Please make sure your request follows <a href="rules.php?p=requests">the request rules!</a></td>
@@ -147,13 +147,13 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					<td>
 						<select id="categories" name="type" onchange="Categories()">
 <?		foreach(Misc::display_array($Categories) as $Cat){ ?>
-							<option value='<?=$Cat?>' <?=(!empty($CategoryName) && ($CategoryName ==  $Cat) ? 'selected="selected"' : '')?>><?=$Cat?></option>
+							<option value="<?=$Cat?>"<?=(!empty($CategoryName) && ($CategoryName ==  $Cat) ? ' selected="selected"' : '')?>><?=$Cat?></option>
 <?		} ?>
 						</select>
 					</td>
 				</tr>
 				<tr id="artist_tr">
-					<td class="label">Artist(s)</td>		
+					<td class="label">Artist(s)</td>
 					<td id="artistfields">
 						<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding "Various Artists" as an artist; read <a href="wiki.php?action=article&amp;id=369">this</a> for more information.</p>
 <?
@@ -173,7 +173,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 							<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 							<option value="3"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
 						</select>
-						<?if($First) { ?><a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">-</a> <? } $First = false;?>
+						<?if($First) { ?><a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a> <? } $First = false;?>
 						<br />
 <?				}
 			}
@@ -187,10 +187,10 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 							<option value="6">DJ / Compiler</option>
 							<option value="3">Remixer</option>
 						</select>
-						<a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">-</a>
+						<a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a>
 <?
 		}
-?>	
+?>
 					</td>
 				</tr>
 
@@ -201,13 +201,13 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					</td>
 				</tr>
 				<tr id="cataloguenumber_tr">
-					<td class="label">Record Label</td>
+					<td class="label">Record label</td>
 					<td>
 						<input type="text" name="recordlabel" size="45" value="<?=(!empty($RecordLabel) ? display_str($RecordLabel) : '')?>" />
 					</td>
 				</tr>
 				<tr id="cataloguenumber_tr">
-					<td class="label">Catalogue Number</td>
+					<td class="label">Catalogue number</td>
 					<td>
 						<input type="text" name="cataloguenumber" size="15" value="<?=(!empty($CatalogueNumber) ? display_str($CatalogueNumber) : '')?>" />
 					</td>
@@ -252,29 +252,29 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 						</select>
 						<input type="text" id="tags" name="tags" size="45" value="<?=(!empty($Tags) ? display_str($Tags) : '')?>" />
 						<br />
-						Tags should be comma separated, and you should use a period ('.') to separate words inside a tag - eg. '<strong style="color:green;">hip.hop</strong>'. 
+						Tags should be comma-separated, and you should use a period (".") to separate words inside a tag &mdash; e.g. "<strong class="important_text_alt">hip.hop</strong>".
 						<br /><br />
-						There is a list of official tags to the left of the text box. Please use these tags instead of 'unofficial' tags (eg. use the official '<strong style="color:green;">drum.and.bass</strong>' tag, instead of an unofficial '<strong style="color:red;">dnb</strong>' tag.)
+						There is a list of official tags to the left of the text box. Please use these tags instead of "unofficial" tags (e.g. use the official "<strong class="important_text_alt">drum.and.bass</strong>" tag, instead of an unofficial "<strong class="important_text">dnb</strong>" tag.).
 					</td>
 				</tr>
 <?	if($NewRequest || $CanEdit) { ?>
 				<tr id="releasetypes_tr">
-					<td class="label">Release Type</td>
+					<td class="label">Release type</td>
 					<td>
 						<select id="releasetype" name="releasetype">
 							<option value='0'>---</option>
-<?		
+<?
 		foreach ($ReleaseTypes as $Key => $Val) {
 							//echo '<h1>'.$ReleaseType.'</h1>'; die();
-?>							<option value='<?=$Key?>' <?=(!empty($ReleaseType) ? ($Key == $ReleaseType ?" selected='selected'" : "") : '') ?>><?=$Val?></option>
-<?			
+?>							<option value="<?=$Key?>"<?=(!empty($ReleaseType) ? ($Key == $ReleaseType ? ' selected="selected"' : '') : '') ?>><?=$Val?></option>
+<?
 		}
 ?>
 						</select>
 					</td>
 				</tr>
 				<tr id="formats_tr">
-					<td class="label">Allowed Formats</td>
+					<td class="label">Allowed formats</td>
 					<td>
 						<input type="checkbox" name="all_formats" id="toggle_formats" onchange="Toggle('formats', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($FormatArray) && (count($FormatArray) == count($Formats)) ? ' checked="checked"' : '')?> /><label for="toggle_formats"> All</label>
 						<span style="float: right;"><strong>NB: You cannot require a log or cue unless FLAC is an allowed format</strong></span>
@@ -286,24 +286,24 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					</td>
 				</tr>
 				<tr id="bitrates_tr">
-					<td class="label">Allowed Bitrates</td>
+					<td class="label">Allowed bitrates</td>
 					<td>
 						<input type="checkbox" name="all_bitrates" id="toggle_bitrates" onchange="Toggle('bitrates', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($BitrateArray) && (count($BitrateArray) == count($Bitrates)) ? ' checked="checked"' : '')?> /><label for="toggle_bitrates"> All</label>
 <?		foreach ($Bitrates as $Key => $Val) {
 			if($Key % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>" 
+						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
 							<?=(!empty($BitrateArray) && in_array($Key, $BitrateArray) ? ' checked="checked" ' : '')?>
 						onchange="if(!this.checked) { $('#toggle_bitrates').raw().checked = false; }" /><label for="bitrate_<?=$Key?>"> <?=$Val?></label>
 <?		}?>
 					</td>
 				</tr>
 				<tr id="media_tr">
-					<td class="label">Allowed Media</td>
+					<td class="label">Allowed media</td>
 					<td>
 						<input type="checkbox" name="all_media" id="toggle_media" onchange="Toggle('media', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($MediaArray) && (count($MediaArray) == count($Media)) ? ' checked="checked"' : '')?> /><label for="toggle_media"> All</label>
-<?		foreach ($Media as $Key => $Val) { 
-			if($Key % 8 == 0) echo "<br />";?>	
-						<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>" 
+<?		foreach ($Media as $Key => $Val) {
+			if($Key % 8 == 0) echo "<br />";?>
+						<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"
 							<?=(!empty($MediaArray) && in_array($Key, $MediaArray) ? ' checked="checked" ' : '')?>
 						onchange="if(!this.checked) { $('#toggle_media').raw().checked = false; }" /><label for="media_<?=$Key?>"> <?=$Val?></label>
 <?		}?>
@@ -312,10 +312,10 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 				<tr id="logcue_tr" class="hidden">
 					<td class="label">Log / Cue (CD FLAC only)</td>
 					<td>
-						<input type="checkbox" id="needlog" name="needlog" onchange="ToggleLogScore()" <?=(!empty($NeedLog) ? 'checked="checked" ' : '')?>/><label for="needlog"> Require Log</label>
-						<span id="minlogscore_span" class="hidden">&nbsp;<input type="text" name="minlogscore" id="minlogscore" size="4" value="<?=(!empty($MinLogScore) ? $MinLogScore : '')?>" /> Minimum Log Score</span>
+						<input type="checkbox" id="needlog" name="needlog" onchange="ToggleLogScore()" <?=(!empty($NeedLog) ? 'checked="checked" ' : '')?>/><label for="needlog"> Require log</label>
+						<span id="minlogscore_span" class="hidden">&nbsp;<input type="text" name="minlogscore" id="minlogscore" size="4" value="<?=(!empty($MinLogScore) ? $MinLogScore : '')?>" /> Minimum log score</span>
 						<br />
-						<input type="checkbox" id="needcue" name="needcue" <?=(!empty($NeedCue) ? 'checked="checked" ' : '')?>/><label for="needcue"> Require Cue</label>
+						<input type="checkbox" id="needcue" name="needcue" <?=(!empty($NeedCue) ? 'checked="checked" ' : '')?>/><label for="needcue"> Require cue</label>
 						<br />
 					</td>
 				</tr>
@@ -326,9 +326,9 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 						<textarea name="description" cols="70" rows="7"><?=(!empty($Description) ? $Description : '')?></textarea> <br />
 					</td>
 				</tr>
-<?	if(check_perms('site_moderate_requests')) { ?>			
+<?	if(check_perms('site_moderate_requests')) { ?>
 				<tr>
-					<td class="label">Torrent Group</td>
+					<td class="label">Torrent group</td>
 					<td>
 						https://what.cd/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15" /><br />
 						If this request matches a torrent group <span style="font-weight: bold;">already existing</span> on the site, please indicate that here.
@@ -337,7 +337,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 <?	} elseif ($GroupID && ($CategoryID == 1)) {
 ?>
 				<tr>
-					<td class="label">Torrent Group</td>
+					<td class="label">Torrent group</td>
 					<td>
 						<a href="torrents.php?id=<?=$GroupID?>">https://what.cd/torrents.php?id=<?=$GroupID?></a><br />
 						This request <?=($NewRequest?'will be':'is')?> associated with the above torrent group.
@@ -354,8 +354,8 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					<td>
 						<input type="text" id="amount_box" size="8" value="<?=(!empty($Bounty) ? $Bounty : '100')?>" onchange="Calculate();" />
 						<select id="unit" name="unit" onchange="Calculate();">
-							<option value='mb'<?=(!empty($_POST['unit']) && $_POST['unit'] == 'mb' ? ' selected="selected"' : '') ?>>MB</option>
-							<option value='gb'<?=(!empty($_POST['unit']) && $_POST['unit'] == 'gb' ? ' selected="selected"' : '') ?>>GB</option>
+							<option value="mb"<?=(!empty($_POST['unit']) && $_POST['unit'] == 'mb' ? ' selected="selected"' : '') ?>>MB</option>
+							<option value="gb"<?=(!empty($_POST['unit']) && $_POST['unit'] == 'gb' ? ' selected="selected"' : '') ?>>GB</option>
 						</select>
 						<input type="button" value="Preview" onclick="Calculate();" />
 						<strong><?=($RequestTax * 100)?>% of this is deducted as tax by the system.</strong>
@@ -377,7 +377,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 						<input type="submit" id="button" value="Create request" disabled="disabled" />
 					</td>
 				</tr>
-<?	} else { ?>		
+<?	} else { ?>
 				<tr>
 					<td colspan="2" class="center">
 						<input type="submit" id="button" value="Edit request" />
@@ -386,10 +386,10 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 <?	} ?>
 			</table>
 		</form>
-		<script type="text/javascript" >ToggleLogCue(); <?=$NewRequest ? "Calculate();" : '' ?></script>
+		<script type="text/javascript">ToggleLogCue(); <?=$NewRequest ? "Calculate();" : '' ?></script>
 		<script type="text/javascript">Categories();</script>
 	</div>
 </div>
 <?
-View::show_footer(); 
+View::show_footer();
 ?>

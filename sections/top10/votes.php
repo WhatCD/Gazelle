@@ -207,6 +207,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 				$GroupSnatched = true;
 			}
 		}
+		unset($Torrent);
 		$SnatchedGroupClass = $GroupSnatched ? ' snatched_group' : '';
 ?>
 				<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
