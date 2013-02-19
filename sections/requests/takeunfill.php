@@ -11,12 +11,12 @@ if(!is_number($RequestID)){
 
 $DB->query("SELECT
 		r.CategoryID,
-		r.UserID, 
-		r.FillerID, 
+		r.UserID,
+		r.FillerID,
 		r.Title,
 		u.Uploaded,
 		r.GroupID
-	FROM requests AS r 
+	FROM requests AS r
 		LEFT JOIN users_main AS u ON u.ID=FillerID
 	WHERE r.ID= ".$RequestID);
 list($CategoryID, $UserID, $FillerID, $Title, $Uploaded, $GroupID) = $DB->next_record();
@@ -52,12 +52,12 @@ if ($RequestVotes['TotalBounty'] > $Uploaded) {
 } else {
 	$DB->query("UPDATE users_main SET Uploaded = Uploaded - ".$RequestVotes['TotalBounty']." WHERE ID = ".$FillerID);
 }
-Misc::send_pm($FillerID, 0, db_string("A request you filled has been unfilled"), db_string("The request '[url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
+Misc::send_pm($FillerID, 0, db_string("A request you filled has been unfilled"), db_string("The request '[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=https://".SSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
 
 $Cache->delete_value('user_stats_'.$FillerID);
 
 if($UserID != $LoggedUser['ID']) {
-	Misc::send_pm($UserID, 0, db_string("A request you created has been unfilled"), db_string("The request '[url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=http://".NONSSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
+	Misc::send_pm($UserID, 0, db_string("A request you created has been unfilled"), db_string("The request '[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url]' was unfilled by [url=https://".SSL_SITE_URL."/user.php?id=".$LoggedUser['ID']."]".$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']));
 }
 
 Misc::write_log("Request $RequestID ($FullName), with a ".Format::get_size($RequestVotes['TotalBounty'])." bounty, was unfilled by user ".$LoggedUser['ID']." (".$LoggedUser['Username'].") for the reason: ".$_POST['reason']);

@@ -25,25 +25,25 @@ if($NewRequest) {
 	if(!is_number($RequestID)) {
 		error(0);
 	}
-	
+
 	$Request = Requests::get_requests(array($RequestID));
 	$Request = $Request['matches'][$RequestID];
 	if(empty($Request)) {
 		error(404);
 	}
-	
+
 	list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
 	     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 	$VoteArray = get_votes_array($RequestID);
 	$VoteCount = count($VoteArray['Voters']);
-	
+
 	$IsFilled = !empty($TorrentID);
 
 	$CategoryName = $Categories[$CategoryID - 1];
-	
+
 	$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0)));
 	$CanEdit = ((!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
-	
+
 	if(!$CanEdit) {
 		error(403);
 	}
@@ -111,13 +111,13 @@ if($CategoryName == "Music") {
 		$Artists = $_POST['artists'];
 		$Importance = $_POST['importance'];
 	}
-	
+
 	if(!is_number($_POST['releasetype']) || !array_key_exists($_POST['releasetype'], $ReleaseTypes)) {
 		$Err = "Please pick a release type";
 	}
 
 	$ReleaseType = $_POST['releasetype'];
-	
+
 	if(empty($_POST['all_formats']) && count($_POST['formats']) != count($Formats)) {
 		$FormatArray = $_POST['formats'];
 		if(count($FormatArray) < 1) {
@@ -126,7 +126,7 @@ if($CategoryName == "Music") {
 	} else {
 		$AllFormats = true;
 	}
-	
+
 	if(empty($_POST['all_bitrates']) && count($_POST['bitrates']) != count($Bitrates)) {
 		$BitrateArray = $_POST['bitrates'];
 		if(count($BitrateArray) < 1) {
@@ -135,16 +135,16 @@ if($CategoryName == "Music") {
 	} else {
 		$AllBitrates = true;
 	}
-	
+
 	if(empty($_POST['all_media']) && count($_POST['media']) != count($Media)) {
-		$MediaArray = $_POST['media'];	
+		$MediaArray = $_POST['media'];
 		if(count($MediaArray) < 1) {
 			$Err = "You must require at least one type of media";
 		}
 	} else {
 		$AllMedia = true;
 	}
-	
+
 	//$Bitrates[1] = FLAC
 	if(!empty($FormatArray) && in_array(1, $FormatArray)) {
 		$NeedLog = empty($_POST['needlog']) ? false : true;
@@ -157,7 +157,7 @@ if($CategoryName == "Music") {
 			if(!is_number($MinLogScore)) {
 				$Err = "You've entered a minimum log score that isn't a number";
 			}
-		} 
+		}
 		$NeedCue = empty($_POST['needcue']) ? false : true;
 		//FLAC was picked, require either Lossless or 24 bit Lossless
 		if(!$AllBitrates && !in_array(8, $BitrateArray) && !in_array(9, $BitrateArray)) {
@@ -172,9 +172,9 @@ if($CategoryName == "Music") {
 	} else {
 		$NeedLog = false;
 		$NeedCue = false;
-		$MinLogScore = false; 
+		$MinLogScore = false;
 	}
-	
+
 	// GroupID
 	if (!empty($_POST['groupid'])) {
 		$GroupID = trim($_POST['groupid']);
@@ -191,7 +191,7 @@ if($CategoryName == "Music") {
 			$Err = "Torrent Group, if entered, must correspond to a music group on the site.";
 		}
 	}
-	
+
 	//Not required
 	if(!empty($_POST['editioninfo'])) {
 		$EditionInfo = trim($_POST['editioninfo']);
@@ -308,7 +308,7 @@ if($CategoryName == "Music") {
 	} else {
 		$MediaList = "Any";
 	}
-	
+
 	$LogCue = "";
 	if($NeedLog) {
 		$LogCue .= "Log";
@@ -332,20 +332,20 @@ if($CategoryName == "Music") {
 //Query time!
 if($CategoryName == "Music") {
 	if($NewRequest) {
-		$DB->query("INSERT INTO requests (     
+		$DB->query("INSERT INTO requests (
 						UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, RecordLabel,
 						CatalogueNumber, ReleaseType, BitrateList, FormatList, MediaList, LogCue, Visible, GroupID, OCLC)
 					VALUES
 						(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."','".db_string($RecordLabel)."',
 					 	'".db_string($CatalogueNumber)."', ".$ReleaseType.", '".$BitrateList."','".$FormatList."', '".$MediaList."', '".$LogCue."', '1', '$GroupID', '".db_string($OCLC)."')");
-		
+
 		$RequestID = $DB->inserted_id();
 		
 	} else {
-		$DB->query("UPDATE requests 
+		$DB->query("UPDATE requests
 					SET CategoryID = ".$CategoryID.",
-						Title = '".db_string($Title)."', 
-						Year = ".$Year.", 
+						Title = '".db_string($Title)."',
+						Year = ".$Year.",
 						Image = '".db_string($Image)."',
 						Description = '".db_string($Description)."',
 						CatalogueNumber = '".db_string($CatalogueNumber)."',
@@ -358,7 +358,7 @@ if($CategoryName == "Music") {
 						GroupID = '".$GroupID."',
 						OCLC = '".db_string($OCLC)."'
 					WHERE ID = ".$RequestID);
-		
+
 		//I almost didn't think of this, we need to be able to delete artists / tags
 		$DB->query("SELECT ArtistID FROM requests_artists WHERE RequestID = ".$RequestID);
 		$RequestArtists = $DB->to_array();
@@ -368,17 +368,17 @@ if($CategoryName == "Music") {
 		$DB->query("DELETE FROM requests_artists WHERE RequestID = ".$RequestID);
 		$Cache->delete_value('request_artists_'.$RequestID);
 	}
-	
+
 	if ($GroupID) {
 		$Cache->delete_value('requests_group_'.$GroupID);
 	}
-	
+
 	/*
 	 * Multiple Artists!
 	 * For the multiple artists system, we have 3 steps:
 	 * 1. See if each artist given already exists and if it does, grab the ID.
 	 * 2. For each artist that didn't exist, create an artist.
-	 * 3. Create a row in the requests_artists table for each artist, based on the ID. 
+	 * 3. Create a row in the requests_artists table for each artist, based on the ID.
 	 */
 
 
@@ -393,7 +393,7 @@ if($CategoryName == "Music") {
 				aa.Redirect
 				FROM artists_alias AS aa
 				WHERE aa.Name = '".db_string($Artist['name'])."'");
-			
+
 			while(list($ArtistID, $AliasID, $AliasName, $Redirect) = $DB->next_record(MYSQLI_NUM, false)) {
 				if(!strcasecmp($Artist['name'], $AliasName)) {
 					if($Redirect) {
@@ -407,19 +407,19 @@ if($CategoryName == "Music") {
 				//2. For each artist that didn't exist, create an artist.
 				$DB->query("INSERT INTO artists_group (Name) VALUES ('".db_string($Artist['name'])."')");
 				$ArtistID = $DB->inserted_id();
-	
+
 				$Cache->increment('stats_artist_count');
-	
+
 				$DB->query("INSERT INTO artists_alias (ArtistID, Name) VALUES (".$ArtistID.", '".db_string($Artist['name'])."')");
 				$AliasID = $DB->inserted_id();
-	
+
 				$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $Artist['name']);
 			}
 		}
 	}
-	
-	
-	//3. Create a row in the requests_artists table for each artist, based on the ID. 
+
+
+	//3. Create a row in the requests_artists table for each artist, based on the ID.
 	foreach($ArtistForm as $Importance => $Artists) {
 		foreach($Artists as $Num => $Artist) {
 			$DB->query("INSERT IGNORE INTO requests_artists (RequestID, ArtistID, AliasID, Importance) VALUES (".$RequestID.", ".$Artist['id'].", ".$Artist['aliasid'].", '".$Importance."')");
@@ -427,9 +427,9 @@ if($CategoryName == "Music") {
 			$Cache->delete_value('artists_requests_'.$Artist['id']);
 		}
 	}
-	
+
 	//End Music only
-	
+
 } else {
 	//Not a music request anymore, delete music only fields.
 	if(!$NewRequest) {
@@ -439,14 +439,14 @@ if($CategoryName == "Music") {
 			if(empty($ArtistID)) { continue; }
 			//Get a count of how many groups or requests use the artist ID
 			$DB->query("SELECT COUNT(ag.ArtistID)
-						FROM artists_group as ag 
-							LEFT JOIN requests_artists AS ra ON ag.ArtistID=ra.ArtistID 
+						FROM artists_group as ag
+							LEFT JOIN requests_artists AS ra ON ag.ArtistID=ra.ArtistID
 						WHERE ra.ArtistID IS NOT NULL
 							AND ag.ArtistID = '$ArtistID'");
 			list($ReqCount) = $DB->next_record();
 			$DB->query("SELECT COUNT(ag.ArtistID)
-						FROM artists_group as ag 
-							LEFT JOIN torrents_artists AS ta ON ag.ArtistID=ta.ArtistID 
+						FROM artists_group as ag
+							LEFT JOIN torrents_artists AS ta ON ag.ArtistID=ta.ArtistID
 						WHERE ta.ArtistID IS NOT NULL
 							AND ag.ArtistID = '$ArtistID'");
 			list($GroupCount) = $DB->next_record();
@@ -464,36 +464,36 @@ if($CategoryName == "Music") {
 	if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
 		//These types require a year field.
 		if($NewRequest) {
-			$DB->query("INSERT INTO requests (     
+			$DB->query("INSERT INTO requests (
 							UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, Visible, OCLC)
 						VALUES
 							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
-			
+
 			$RequestID = $DB->inserted_id();
 			
 		} else {
-			$DB->query("UPDATE requests 
+			$DB->query("UPDATE requests
 				SET CategoryID = ".$CategoryID.",
-					Title = '".db_string($Title)."', 
-					Year = ".$Year.", 
+					Title = '".db_string($Title)."',
+					Year = ".$Year.",
 					Image = '".db_string($Image)."',
 					Description = '".db_string($Description)."',
-					OCLC = '".db_string($OCLC)."' 
+					OCLC = '".db_string($OCLC)."'
 				WHERE ID = ".$RequestID);
 		}
 	} else {
 		if($NewRequest) {
-			$DB->query("INSERT INTO requests (     
+			$DB->query("INSERT INTO requests (
 							UserID, TimeAdded, LastVote, CategoryID, Title, Image, Description, Visible, OCLC)
 						VALUES
 							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."',  ".$CategoryID.", '".db_string($Title)."', '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
-				
+
 			$RequestID = $DB->inserted_id();
 			
 		} else {
-				$DB->query("UPDATE requests 
+				$DB->query("UPDATE requests
 				SET CategoryID = ".$CategoryID.",
-					Title = '".db_string($Title)."', 
+					Title = '".db_string($Title)."',
 					Image = '".db_string($Image)."',
 					Description = '".db_string($Description)."',
 					OCLC = '".db_string($OCLC)."'
@@ -512,39 +512,39 @@ foreach($Tags as $Index => $Tag) {
 	$Tag = Misc::sanitize_tag($Tag);
 	$Tag = Misc::get_alias_tag($Tag);
 	$Tags[$Index] = $Tag; //For announce
-	$DB->query("INSERT INTO tags 
+	$DB->query("INSERT INTO tags
 					(Name, UserID)
-				VALUES 
-					('".$Tag."', ".$LoggedUser['ID'].") 
+				VALUES
+					('".$Tag."', ".$LoggedUser['ID'].")
 				ON DUPLICATE KEY UPDATE Uses=Uses+1");
-	
+
 	$TagID = $DB->inserted_id();
-	
+
 	$DB->query("INSERT IGNORE INTO requests_tags
 					(TagID, RequestID)
-				VALUES 
+				VALUES
 					(".$TagID.", ".$RequestID.")");
 }
 
 if($NewRequest) {
 	//Remove the bounty and create the vote
-	$DB->query("INSERT INTO requests_votes 
+	$DB->query("INSERT INTO requests_votes
 					(RequestID, UserID, Bounty)
 				VALUES
 					(".$RequestID.", ".$LoggedUser['ID'].", ".($Bytes * (1 - $RequestTax)).")");
-	
+
 	$DB->query("UPDATE users_main SET Uploaded = (Uploaded - ".$Bytes.") WHERE ID = ".$LoggedUser['ID']);
 	$Cache->delete_value('user_stats_'.$LoggedUser['ID']);
 
 	
-	
+
 	if($CategoryName == "Music") {
-		$Announce = "'".$Title."' - ".Artists::display_artists($ArtistForm, false, false)." http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
+		$Announce = "'".$Title."' - ".Artists::display_artists($ArtistForm, false, false)." https://".SSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
 	} else {
-		$Announce = "'".$Title."' - http://".NONSSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
+		$Announce = "'".$Title."' - https://".SSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
 	}
-	send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-requests :'.$Announce);
-	
+	send_irc('PRIVMSG #'.SSL_SITE_URL.'-requests :'.$Announce);
+
 } else {
 	$Cache->delete_value('request_'.$RequestID);
 	$Cache->delete_value('request_artists_'.$RequestID);

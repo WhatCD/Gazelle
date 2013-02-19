@@ -23,11 +23,11 @@ if(!empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {
 			$TorrentID = $Matches[0];
 		}
 	}
-	
+
 	if(!empty($Err)) {
 		error($Err);
 	}
-	
+
 	preg_match("/torrentid=([0-9]+)/i", $Link, $Matches);
 	$TorrentID = $Matches[1];
 	if(!$TorrentID || !is_number($TorrentID)) {
@@ -41,15 +41,15 @@ $DB->query("SELECT t.UserID,
 				tg.ReleaseType,
 				t.Encoding,
 				t.Format,
-				t.Media, 
-				t.HasLog, 
-				t.HasCue, 
+				t.Media,
+				t.HasLog,
+				t.HasCue,
 				t.LogScore,
 				tg.CategoryID,
 				IF(t.Remastered = '1', t.RemasterCatalogueNumber, tg.CatalogueNumber)
 			FROM torrents AS t
 				LEFT JOIN torrents_group AS tg ON t.GroupID=tg.ID
-			WHERE t.ID = ".$TorrentID." 
+			WHERE t.ID = ".$TorrentID."
 			LIMIT 1");
 
 
@@ -126,7 +126,7 @@ if($CategoryName == "Music") {
 		//if(strpos($LogCue, "Cue") && !$HasCue) {
 		//	$Err = "This request requires a cue.";
 		//}
-		 
+
 		if(strpos($LogCue, "%")) {
 			preg_match("/\d+/", $LogCue, $Matches);
 			if((int) $LogScore < (int) $Matches[0]) {
@@ -167,7 +167,7 @@ $DB->query("UPDATE requests SET
 				FillerID = ".$FillerID.",
 				TorrentID = ".$TorrentID.",
 				TimeFilled = '".sqltime()."'
-			WHERE ID = ".$RequestID);	
+			WHERE ID = ".$RequestID);
 
 if($CategoryName == "Music") {
 	$ArtistForm = get_request_artists($RequestID);
@@ -181,7 +181,7 @@ $DB->query("SELECT UserID FROM requests_votes WHERE RequestID = ".$RequestID);
 $UserIDs = $DB->to_array();
 foreach ($UserIDs as $User) {
 	list($VoterID) = $User;
-	Misc::send_pm($VoterID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=http://".NONSSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."[/url]"), '');
+	Misc::send_pm($VoterID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]https://".SSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."[/url]"), '');
 }
 
 $RequestVotes = get_votes_array($RequestID);
@@ -189,7 +189,7 @@ Misc::write_log("Request ".$RequestID." (".$FullName.") was filled by user ".$Fi
 
 // Give bounty
 $DB->query("UPDATE users_main
-			SET Uploaded = (Uploaded + ".$RequestVotes['TotalBounty'].") 
+			SET Uploaded = (Uploaded + ".$RequestVotes['TotalBounty'].")
 			WHERE ID = ".$FillerID);
 
 

@@ -9,8 +9,8 @@ if(!check_perms('site_vote')) {
 
 authorize();
 
-if(empty($_GET['id']) || !is_number($_GET['id'])) { 
-	error(0); 
+if(empty($_GET['id']) || !is_number($_GET['id'])) {
+	error(0);
 }
 
 $RequestID = $_GET['id'];
@@ -27,13 +27,13 @@ $DB->query('SELECT TorrentID FROM requests WHERE ID='.$RequestID);
 list($Filled) = $DB->next_record();
 
 if($LoggedUser['BytesUploaded'] >= $Amount && $Filled == 0){
-	
+
 	// Create vote!
 	$DB->query("INSERT IGNORE INTO requests_votes
 					(RequestID, UserID, Bounty)
 				VALUES
 					(".$RequestID.", ".$LoggedUser['ID'].", ".$Bounty.")");
-	
+
 	if($DB->affected_rows() < 1) {
 		//Insert failed, probably a dupe vote, just increase their bounty.
 			$DB->query("UPDATE requests_votes
@@ -47,7 +47,7 @@ if($LoggedUser['BytesUploaded'] >= $Amount && $Filled == 0){
 	
 
 	$DB->query("UPDATE requests SET LastVote = NOW() WHERE ID = ".$RequestID);
-	
+
 	$Cache->delete_value('request_'.$RequestID);
 	$Cache->delete_value('request_votes_'.$RequestID);
 

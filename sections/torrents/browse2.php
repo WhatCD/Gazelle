@@ -525,11 +525,12 @@ if ($TorrentCount) {
 				$TorrentIDs = array_merge($TorrentIDs, array_keys($Group['Torrents']));
 			}
 		}
-
-		// Get a list of all torrent ids that match the search query
-		$SphQLTor->where('id', $TorrentIDs)->limit(0, count($TorrentIDs), count($TorrentIDs));
-		$SphQLResultTor = $SphQLTor->query();
-		$TorrentIDs = array_fill_keys($SphQLResultTor->collect('id'), true);
+		if (!empty($TorrentIDs)) {
+			// Get a list of all torrent ids that match the search query
+			$SphQLTor->where('id', $TorrentIDs)->limit(0, count($TorrentIDs), count($TorrentIDs));
+			$SphQLResultTor = $SphQLTor->query();
+			$TorrentIDs = array_fill_keys($SphQLResultTor->collect('id'), true);
+		}
 	}
 }
 /** End run search query and collect results **/
