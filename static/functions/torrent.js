@@ -228,7 +228,7 @@ function Vote(amount, requestid) {
 		index = true;
 	}
 	
-	ajax.get('requests.php?action=takevote&id=' + requestid + '&auth=' + $('#auth').raw().value + '&amount=' + amount, function (response) {
+	ajax.get('requests.php?action=takevote&id=' + requestid + '&auth=' + authkey + '&amount=' + amount, function (response) {
 			if(response == 'bankrupt') {
 				error_message("You do not have sufficient upload credit to add " + get_size(amount) + " to this request");
 				return;

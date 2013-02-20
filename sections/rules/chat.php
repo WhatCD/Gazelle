@@ -5,7 +5,7 @@ View::show_header('Chat Rules');
 <!-- Forum Rules -->
 <div class="thin">
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
-		<p>Anything not allowed on the forums, is also not allowed on IRC and vice versa. They are separated for convenience only.</p>
+		<p>Anything not allowed on the forums is also not allowed on IRC and vice versa. They are separated for convenience only.</p>
 	</div>
 	<br />
 	<h3 id="forums">Forum Rules</h3>
@@ -24,7 +24,7 @@ View::show_header('Chat Rules');
 				No asking for money for any reason whatsoever. We don't know or care about your friend who lost everything, or dying relative who wants to enjoy their last few moments alive by being given lots of money.
 			</li>
 			<li>
-				No advertising your uploads. 
+				No advertising your uploads.
 			</li>
 			<li>
 				No posting music requests in forums, there's a request link on the top bar, please use that instead.
@@ -78,7 +78,7 @@ View::show_header('Chat Rules');
 				Mature content in posts must be properly tagged. The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where “description” is a mandatory description of the post contents. Misleading or inadequate descriptions will be penalized.
 			</li>
 			<li>
-				Threads created for the exclusive purpose of posting mature imagery will be trashed. Mature content (including graphic album art) should be contextually relevant to the thread and/or forum you’re posting in. Mature content is only allowed in: The Lounge, The Lounge +1, The Library, Music, Power Users, Elite, Torrent Masters, VIPs, Comics, Contests &amp; Designs, The Laboratory. If you are in doubt about a post’s appropriateness, send a <a href="staff.php">Staff PM to the Forum Moderators</a> and wait for a reply before proceeding.
+				Threads created for the exclusive purpose of posting mature imagery will be trashed. Mature content (including graphic album art) should be contextually relevant to the thread and/or forum you’re posting in. Mature content is only allowed in: The Lounge, The Lounge +1, The Library, Music, Power Users, Elite, Torrent Masters, VIPs, Comics, Contests &amp; Designs, The Laboratory. If you are in doubt about a post’s appropriateness, send a <a href="staffpm.php">Staff PM to the Forum Moderators</a> and wait for a reply before proceeding.
 			</li>
 		</ul>
 	</div>
@@ -91,7 +91,7 @@ View::show_header('Chat Rules');
 	<div class="box pad rule_summary" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>
-				Staff have the final decision, if they say stop and you continue, expect at least to be banned from the IRC server. 
+				Staff have the final decision, if they say stop and you continue, expect at least to be banned from the IRC server.
 			</li>
 			<li>
 				Be respectful to IRC Operators and Administrators. These people are site staff who volunteer their time for little compensation. They are there for the benefit of all and to aid in conflict resolution, do not waste their time.
@@ -127,7 +127,7 @@ View::show_header('Chat Rules');
 				Don't PM, DCC, or Query anyone you don't know or have never talked to without asking, this applies specifically to staff.
 			</li>
 			<li>
-				No language other than English is permitted in the official IRC channels. If we can't understand it, we can't moderate it. 
+				No language other than English is permitted in the official IRC channels. If we can't understand it, we can't moderate it.
 			</li>
 			<li>
 				The offering, selling, trading and giving away of invites to this or any other site on our IRC network is <strong>strictly forbidden</strong>.

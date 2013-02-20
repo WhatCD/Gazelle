@@ -609,15 +609,9 @@ foreach($Categories as $CatKey => $CatName) {
 				</div>
 			</td>
 			<td class="nobr">
-<?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
-				<form class="add_form" name="request" id="form_<?=$RequestID?>" action="">
-					<span id="vote_count_<?=$RequestID?>"><?=number_format($VoteCount)?></span>
-					<input type="hidden" id="requestid_<?=$RequestID?>" name="requestid" value="<?=$RequestID?>" />
-					<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
-				</form>
-<?  		} else { ?>
 				<span id="vote_count_<?=$RequestID?>"><?=number_format($VoteCount)?></span>
+<?  	 	if(!$IsFilled && check_perms('site_vote')){ ?>
+				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 <?			} ?>
 			</td>
 			<td class="nobr">

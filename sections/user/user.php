@@ -732,7 +732,6 @@ if (check_paranoia_here('requestsvoted_list')) {
 						<td>
 							<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
 <?			if(check_perms('site_vote')){ ?>
-							<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets">+</a>
 <?			} ?>
 						</td>
