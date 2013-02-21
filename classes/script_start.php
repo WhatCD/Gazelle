@@ -90,6 +90,18 @@ spl_autoload_register(function ($ClassName) {
 		case 'Format':
 			$FileName = 'class_format';
 			break;
+		case 'LastFM':
+			$FileName = 'class_lastfm';
+			break;
+		case 'MASS_USER_BOOKMARKS_EDITOR':
+			$FileName = 'class_mass_user_bookmarks_editor';
+			break;
+		case 'MASS_USER_TORRENTS_EDITOR':
+			$FileName = 'class_mass_user_torrents_editor';
+			break;
+		case 'MASS_USER_TORRENTS_TABLE_VIEW':
+			$FileName = 'class_mass_user_torrents_table_view';
+		    break;
 		case 'Misc':
 			$FileName = 'class_misc';
 			break;
@@ -104,8 +116,8 @@ spl_autoload_register(function ($ClassName) {
 		case 'SphinxQL_Result':
 			$FileName = 'class_sphinxql';
 			break;
-		case 'Tracker':
-			$FileName = 'class_tracker';
+		case 'TEXTAREA_PREVIEW':
+			$FileName = 'class_textarea_preview';
 			break;
 		case 'Tools':
 			$FileName = 'class_tools';
@@ -113,29 +125,23 @@ spl_autoload_register(function ($ClassName) {
 		case 'Torrents':
 			$FileName = 'class_torrents';
 			break;
+		case 'TorrentsDL':
+			$FileName = 'class_torrentsdl';
+			break;
+		case 'Tracker':
+			$FileName = 'class_tracker';
+			break;
 		case 'Users':
 			$FileName = 'class_users';
 			break;
 		case 'View':
 			$FileName = 'class_view';
 			break;
-		case 'MASS_USER_TORRENTS_EDITOR':
-			$FileName = 'class_mass_user_torrents_editor';
-			break;
-		case 'MASS_USER_BOOKMARKS_EDITOR':
-			$FileName = 'class_mass_user_bookmarks_editor';
-			break;
-		case 'MASS_USER_TORRENTS_TABLE_VIEW':
-			$FileName = 'class_mass_user_torrents_table_view';
-		    break;
-        case 'TEXTAREA_PREVIEW':
-			$FileName = 'class_textarea_preview';
-			break;
 		case 'Votes':
 			$FileName = 'class_votes';
 			break;
-		case 'LastFM':
-			$FileName = 'class_lastfm';
+		case 'Zip':
+			$FileName = 'class_zip';
 			break;
 		default:
 			die("Couldn't import class " . $ClassName);

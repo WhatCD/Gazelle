@@ -400,5 +400,16 @@ class Misc {
 		}
 		return $Array;
 	}
+
+	/**
+	 * Check for a : in the beginning of a torrent meta data string
+	 * to see if it's stored in the old base64-encoded format
+	 *
+	 * @param string $Torrent the torrent data
+	 * @return true if the torrent is stored in binary format
+	 */
+	public static function is_new_torrent(&$Data) {
+		return strpos(substr($Data, 0, 10), ':') !== false;
+	}
 }
 ?>

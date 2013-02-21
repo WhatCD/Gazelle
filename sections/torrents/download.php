@@ -24,7 +24,6 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 	$TorrentPass = $_REQUEST['torrent_pass'];
 	$AuthKey = $_REQUEST['authkey'];
 }
-require(SERVER_ROOT.'/classes/class_torrent.php');
 
 $TorrentID = $_REQUEST['id'];
 
@@ -147,58 +146,25 @@ $DB->query("INSERT IGNORE INTO users_downloads (UserID, TorrentID, Time) VALUES 
 
 $DB->query("SELECT File FROM torrents_files WHERE TorrentID='$TorrentID'");
 
-list($Contents) = $DB->next_record(MYSQLI_NUM, array(0));
-$Contents = unserialize(base64_decode($Contents));
-$Tor = new TORRENT($Contents, true); // New TORRENT object
-// Set torrent announce URL
-$Tor->set_announce_url(ANNOUNCE_URL.'/'.$TorrentPass.'/announce');
-// Remove multiple trackers from torrent
-unset($Tor->Val['announce-list']);
-// Remove web seeds (put here for old torrents not caught by previous commit
-unset($Tor->Val['url-list']);
-// Remove libtorrent resume info
-unset($Tor->Val['libtorrent_resume']);
-// Torrent name takes the format of Artist - Album - YYYY (Media - Format - Encoding)
-
-$TorrentName='';
-$TorrentInfo='';
-
-$TorrentName = $Info['PlainArtists'];
-
-$TorrentName.=$Name;
-
-if ($Year>0) { $TorrentName.=' - '.$Year; }
-
-if ($Media!='') { $TorrentInfo.=$Media; }
-
-if ($Format!='') {
-	if ($TorrentInfo!='') { $TorrentInfo.=' - '; }
-	$TorrentInfo.=$Format;
+list($Contents) = $DB->next_record(MYSQLI_NUM, false);
+if (Misc::is_new_torrent($Contents)) {
+	require(SERVER_ROOT.'/classes/class_bencode.php');
+	$TorEnc = BEncTorrent::add_announce_url($Contents, ANNOUNCE_URL."/$TorrentPass/announce");
+} else {
+	require(SERVER_ROOT.'/classes/class_torrent.php');
+	$Contents = unserialize(base64_decode($Contents));
+	$Tor = new TORRENT($Contents, true); // New TORRENT object
+	// Set torrent announce URL
+	$Tor->set_announce_url(ANNOUNCE_URL."/$TorrentPass/announce");
+	// Remove multiple trackers from torrent
+	unset($Tor->Val['announce-list']);
+	// Remove web seeds (put here for old torrents not caught by previous commit
+	unset($Tor->Val['url-list']);
+	// Remove libtorrent resume info
+	unset($Tor->Val['libtorrent_resume']);
+	$TorEnc = $Tor->enc();
 }
-
-if ($Encoding!='') {
-	if ($TorrentInfo!='') { $TorrentInfo.=' - '; }
-	$TorrentInfo.=$Encoding;
-}
-
-// Let's try to shorten the filename intelligently before chopping it off
-if (strlen($TorrentName) + strlen($TorrentInfo) + 3 > 200) {
-	$TorrentName = $Name . (($Year>0)?(' - '.$Year):'');
-}
-
-if ($TorrentInfo!='') { $TorrentName.=' ('.$TorrentInfo.')'; }
-
-if(!empty($_GET['mode']) && $_GET['mode'] == 'bbb'){
-	$TorrentName = $Artists.' -- '.$Name;
-}
-
-if (!$TorrentName) { $TorrentName="No Name"; }
-
-$FileName = ($Browser == 'Internet Explorer') ? urlencode(Misc::file_string($TorrentName)) : Misc::file_string($TorrentName);
-$MaxLength = $DownloadAlt ? 192 : 196;
-$FileName = Format::cut_string($FileName, $MaxLength, true, false);
-$FileName = $DownloadAlt ? $FileName.'.txt' : $FileName.'.torrent';
-
+$FileName = TorrentsDL::construct_file_name($Info['PlainArtists'], $Name, $Year, $Media, $Format, $Encoding, false, $DownloadAlt);
 
 if($DownloadAlt) {
 	header('Content-Type: text/plain; charset=utf-8');
@@ -207,6 +173,6 @@ if($DownloadAlt) {
 }
 header('Content-disposition: attachment; filename="'.$FileName.'"');
 
-echo $Tor->enc();
+echo $TorEnc;
 
 define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);

@@ -12,9 +12,10 @@ if (!check_perms('zip_downloader')) {
 $User = Users::user_info($UserID);
 $Perms = Permissions::get_permissions($User['PermissionID']);
 $UserClass = $Perms['Class'];
+list($UserID, $Username) = array_values($User);
 
+require(SERVER_ROOT.'/classes/class_bencode.php');
 require(SERVER_ROOT.'/classes/class_torrent.php');
-require(SERVER_ROOT.'/classes/class_zip.php');
 
 if (empty($_GET['type'])) {
 	error(0);
@@ -47,84 +48,52 @@ if (empty($_GET['type'])) {
 	}
 }
 
-ZIP::unlimit();
-
-$DB->query("SELECT 
-	t.ID,
+$DownloadsQ = $DB->query("SELECT
+	t.ID AS TorrentID,
 	DATE_FORMAT(".$Month.",'%Y - %m') AS Month,
 	t.GroupID,
 	t.Media,
 	t.Format,
 	t.Encoding,
-	IF(t.RemasterYear=0,tg.Year,t.RemasterYear),
+	IF(t.RemasterYear=0,tg.Year,t.RemasterYear) AS Year,
 	tg.Name,
 	t.Size
-	FROM torrents as t 
+	FROM torrents as t
 	JOIN torrents_group AS tg ON t.GroupID=tg.ID 
 	".$SQL."
-	GROUP BY t.ID");
-$Downloads = $DB->to_array(0, MYSQLI_NUM, false);
-$Artists = Artists::get_artists($DB->collect('GroupID'));
+	GROUP BY TorrentID");
 
-if (!empty($Downloads)) {
-	$DB->query("SELECT TorrentID, File FROM torrents_files WHERE TorrentID IN (".implode(',', array_keys($Downloads)).")");
-	$TorrentFiles = $DB->to_array(0, MYSQLI_NUM, false);
-}
-list($UserID, $Username) = array_values(Users::user_info($UserID));
-$Zip = new ZIP($Username.'\'s '.ucfirst($_GET['type']));
-foreach ($Downloads as $Download) {
-	list($TorrentID, $Month, $GroupID, $Media, $Format, $Encoding, $Year, $Album, $Size) = $Download;
-	if (!isset($TorrentFiles[$TorrentID])) {
+$Collector = new TorrentsDL($DownloadsQ, "$Username's ".ucfirst($_GET['type']));
+
+while (list($Downloads, $GroupIDs) = $Collector->get_downloads('TorrentID')) {
+	$Artists = Artists::get_artists($GroupIDs);
+	$TorrentIDs = array_keys($GroupIDs);
+	$TorrentFilesQ = $DB->query("SELECT TorrentID, File FROM torrents_files WHERE TorrentID IN (".implode(',', $TorrentIDs).")", false);
+	if (is_int($TorrentFilesQ)) {
+		// Query failed. Let's not create a broken zip archive
+		foreach ($TorrentIDs as $TorrentID) {
+			$Download =& $Downloads[$TorrentID];
+			$Download['Artist'] = Artists::display_artists($Artists[$Download['GroupID']], false, true, false);
+			$Collector->fail_file($Download);
+		}
 		continue;
 	}
-	$Artist = Artists::display_artists($Artists[$GroupID],false,true,false);
-	$Contents = unserialize(base64_decode($TorrentFiles[$TorrentID][1]));
-	$Tor = new TORRENT($Contents, true);
-	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');
-	unset($Tor->Val['announce-list']);
-
-	$TorrentName = '';
-	$TorrentInfo = '';
-	$TorrentName = $Artist;
-	$TorrentName .= $Album;
-
-	if ($Year > 0) {
-		$TorrentName .= ' - '.$Year;
-	}
-
-	if ($Media != '') {
-		$TorrentInfo .= $Media;
-	}
-
-	if ($Format != '') {
-		if ($TorrentInfo != '') {
-			$TorrentInfo .= ' - ';
+	while (list($TorrentID, $TorrentFile) = $DB->next_record(MYSQLI_NUM, false)) {
+		$Download =& $Downloads[$TorrentID];
+		$Download['Artist'] = Artists::display_artists($Artists[$Download['GroupID']], false, true, false);
+		if (Misc::is_new_torrent($TorrentFile)) {
+			$TorEnc = BEncTorrent::add_announce_url($TorrentFile, ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
+		} else {
+			$Contents = unserialize(base64_decode($TorrentFile));
+			$Tor = new TORRENT($Contents, true);
+			$Tor->set_announce_url(ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
+			unset($Tor->Val['announce-list']);
+			$TorEnc = $Tor->enc();
 		}
-		$TorrentInfo .= $Format;
+		$Collector->add_file($TorEnc, $Download, $Download['Month']);
+		unset($Download);
 	}
-
-	if ($Encoding!='') {
-		if ($TorrentInfo != '') {
-			$TorrentInfo .= ' - ';
-		}
-		$TorrentInfo .= $Encoding;
-	}
-
-	if ($TorrentInfo != '') {
-		$TorrentName .= ' ('.$TorrentInfo.')';
-	}
-
-	if (!$TorrentName) {
-		$TorrentName = "No Name";
-	}
-
-	$FileName = Misc::file_string($TorrentName);
-	if ($Browser == 'Internet Explorer') {
-		$FileName = urlencode($FileName);
-	}
-	$FileName .= '.torrent';
-	$Zip->add_file($Tor->enc(), Misc::file_string($Month).'/'.$FileName);
 }
-$Zip->close_stream();
+$Collector->finalize(false);
 
 define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);

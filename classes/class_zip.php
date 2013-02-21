@@ -19,7 +19,7 @@ Basic concept is construct archive, add files, and serve on the fly.
 
 * First, construct the archive:
 
-$Zip = new ZIP('FileName');
+$Zip = new Zip('FileName');
 
 	Adds the headers so that add_file can stream and we don't need to create a massive buffer.
 	open_stream(); was integrated into the constructor to conform with Object-Oriented Standards.
@@ -59,7 +59,7 @@ close_stream();
 //------------- Detailed example -------------//
 
 require('classes/class_zip.php');
-$Zip = new ZIP('FileName');
+$Zip = new Zip('FileName');
 $Name = 'Ubuntu-8.10';
 $Zip->add_file($TorrentData, 'Torrents/'.Misc::file_string($Name).'.torrent');
 $Zip->add_file(file_get_contents('zip.php'), 'zip.php');
@@ -90,7 +90,7 @@ function dostime($TimeStamp = 0) {
 }
 */
 
-class ZIP { 
+class Zip {
 	public $ArchiveSize = 0; //Total size
 	public $ArchiveFiles = 0; // Total files
 	private $Structure = ''; // Structure saved to memory
@@ -99,7 +99,7 @@ class ZIP {
 	
 	public function __construct ($ArchiveName='Archive') {
 		header("Content-type: application/octet-stream"); //Stream download
-		header("Content-disposition: attachment; filename=\"".urlencode($ArchiveName).".zip\""); //Name the archive
+		header("Content-disposition: attachment; filename=\"$ArchiveName.zip\""); //Name the archive - Should not be urlencoded
 	}
 	
 	public static function unlimit () {
@@ -112,7 +112,7 @@ class ZIP {
 		/* File header */
 		$this->Data = "\x50\x4b\x03\x04"; // PK signature
 		$this->Data .= "\x14\x00"; // Version requirements
-		$this->Data .= "\x00\x00"; // Bit flag
+		$this->Data .= "\x00\x08"; // Bit flag - 0x8 = UTF-8 file names
 		$this->Data .= "\x08\x00"; // Compression
 		//$this->Data .= dostime($TimeStamp); //Last modified
 		$this->Data .= "\x00\x00\x00\x00";
@@ -147,9 +147,9 @@ class ZIP {
 
 		/* Central Directory Structure */
 		$CDS = "\x50\x4b\x01\x02"; // CDS signature
-		$CDS .="\x00\x00"; // Constructor version
+		$CDS .="\x14\x00"; // Constructor version
 		$CDS .="\x14\x00"; // Version requirements 
-		$CDS .="\x00\x00"; // Bit flag
+		$CDS .="\x00\x08"; // Bit flag - 0x8 = UTF-8 file names
 		$CDS .="\x08\x00"; // Compression
 		$CDS .="\x00\x00\x00\x00"; // Last modified 
 		$CDS .= pack("V",$CRC32); // CRC-32 

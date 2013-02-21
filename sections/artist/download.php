@@ -46,34 +46,43 @@ LEFT JOIN torrents_files AS f ON t.ID=f.TorrentID
 ORDER BY t.GroupID ASC, Rank DESC, t.Seeders ASC
 */
 
-if(
+if (
 	!isset($_REQUEST['artistid']) ||
 	!isset($_REQUEST['preference']) ||
 	!is_number($_REQUEST['preference']) ||
 	!is_number($_REQUEST['artistid']) ||
 	$_REQUEST['preference'] > 2 ||
 	count($_REQUEST['list']) == 0
-) { error(0); }
+) {
+	error(0);
+}
 
-if(!check_perms('zip_downloader')){ error(403); }
+if (!check_perms('zip_downloader')) {
+	error(403);
+}
 
-$Preferences = array('RemasterTitle DESC','Seeders ASC','Size ASC');
+require(SERVER_ROOT.'/classes/class_bencode.php');
+require(SERVER_ROOT.'/classes/class_torrent.php');
+
+$Preferences = array('RemasterTitle DESC', 'Seeders ASC', 'Size ASC');
 
 $ArtistID = $_REQUEST['artistid'];
 $Preference = $Preferences[$_REQUEST['preference']];
 
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
-list($ArtistName) = $DB->next_record(MYSQLI_NUM,false);
+list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
 
 $DB->query("SELECT GroupID, Importance FROM torrents_artists WHERE ArtistID='$ArtistID'");
-if($DB->record_count() == 0) { error(404); }
-$Releases = $DB->to_array('GroupID',MYSQLI_ASSOC,false);
+if ($DB->record_count() == 0) {
+	error(404);
+}
+$Releases = $DB->to_array('GroupID', MYSQLI_ASSOC, false);
 $GroupIDs = array_keys($Releases);
 
 $SQL = "SELECT CASE ";
 
 foreach ($_REQUEST['list'] as $Priority => $Selection) {
-	if(!is_number($Priority)) {
+	if (!is_number($Priority)) {
 		continue;
 	}
 	$SQL .= "WHEN ";
@@ -110,96 +119,67 @@ foreach ($_REQUEST['list'] as $Priority => $Selection) {
 }
 $SQL .= "ELSE 100 END AS Rank,
 t.GroupID,
-t.ID,
+t.ID AS TorrentID,
 t.Media,
 t.Format,
 t.Encoding,
 tg.ReleaseType,
-IF(t.RemasterYear=0,tg.Year,t.RemasterYear),
+IF(t.RemasterYear=0,tg.Year,t.RemasterYear) AS Year,
 tg.Name,
 t.Size
 FROM torrents AS t
 JOIN torrents_group AS tg ON tg.ID=t.GroupID AND tg.CategoryID='1' AND tg.ID IN (".implode(',',$GroupIDs).")
 ORDER BY t.GroupID ASC, Rank DESC, t.$Preference";
 
-$DB->query($SQL);
-$Downloads = $DB->to_array('1',MYSQLI_NUM,false);
-$Artists = Artists::get_artists($GroupIDs, false);
-$Skips = array();
-$TotalSize = 0;
-if(count($Downloads)) {
-	foreach($Downloads as $Download) {
-		$TorrentIDs[] = $Download[2];
-	}
-	$DB->query("SELECT TorrentID, file FROM torrents_files WHERE TorrentID IN (".implode(',', $TorrentIDs).")");
-	$Torrents = $DB->to_array('TorrentID',MYSQLI_ASSOC,false);
-}
+$DownloadsQ = $DB->query($SQL);
+$Collector = new TorrentsDL($DownloadsQ, $ArtistName);
 
-require(SERVER_ROOT.'/classes/class_torrent.php');
-require(SERVER_ROOT.'/classes/class_zip.php');
-$Zip = new ZIP(Misc::file_string($ArtistName));
-foreach($Downloads as $Download) {
-	list($Rank, $GroupID, $TorrentID, $Media, $Format, $Encoding, $ReleaseType, $Year, $Album, $Size) = $Download;
-	$Artist = Artists::display_artists($Artists[$GroupID],false,true,false);
-	if ($Rank == 100) {
-		$Skips[] = $Artist.$Album.' '.$Year;
+while (list($Downloads, $GroupIDs) = $Collector->get_downloads('GroupID')) {
+	$Debug->log_var($Downloads, '$Downloads');
+	$Debug->log_var($GroupIDs, '$GroupIDs');
+	$Artists = Artists::get_artists($GroupIDs);
+	$TorrentFilesQ = $DB->query("SELECT TorrentID, File FROM torrents_files WHERE TorrentID IN (".implode(',', array_keys($GroupIDs)).")", false);
+	if (is_int($TorrentFilesQ)) {
+		// Query failed. Let's not create a broken zip archive
+		foreach ($GroupIDs as $GroupID) {
+			$Download =& $Downloads[$GroupID];
+			$Download['Artist'] = Artists::display_artists($Artists[$GroupID], false, true, false);
+			$Collector->fail_file($Download);
+		}
 		continue;
 	}
-	if($Releases[$GroupID]['Importance'] == 1) {
-		$ReleaseTypeName = $ReleaseTypes[$ReleaseType];
-	} elseif($Releases[$GroupID]['Importance'] == 2) {
-		$ReleaseTypeName = "Guest Appearance";
-	} elseif($Releases[$GroupID]['Importance'] == 3) {
-		$ReleaseTypeName = "Remixed By";
+	while (list($TorrentID, $TorrentFile) = $DB->next_record(MYSQLI_NUM, false)) {
+		$GroupID = $GroupIDs[$TorrentID];
+		$Download =& $Downloads[$GroupID];
+		$Download['Artist'] = Artists::display_artists($Artists[$Download['GroupID']], false, true, false);
+		if ($Download['Rank'] == 100) {
+			$Collector->skip_file($Download);
+			continue;
+		}
+		if ($Releases[$GroupID]['Importance'] == 1) {
+			$ReleaseTypeName = $ReleaseTypes[$Download['ReleaseType']];
+		} else if ($Releases[$GroupID]['Importance'] == 2) {
+			$ReleaseTypeName = "Guest Appearance";
+		} else if ($Releases[$GroupID]['Importance'] == 3) {
+			$ReleaseTypeName = "Remixed By";
+		}
+		if (Misc::is_new_torrent($TorrentFile)) {
+			$TorEnc = BEncTorrent::add_announce_url($TorrentFile, ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
+		} else {
+			$Contents = unserialize(base64_decode($TorrentFile));
+			$Tor = new TORRENT($Contents, true);
+			$Tor->set_announce_url(ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
+			unset($Tor->Val['announce-list']);
+			$TorEnc = $Tor->enc();
+		}
+		$Collector->add_file($TorEnc, $Download, $ReleaseTypeName);
+		unset($Download);
 	}
-	$TotalSize += $Size;
-	$Contents = unserialize(base64_decode($Torrents[$TorrentID]['file']));
-	$Tor = new TORRENT($Contents, true);
-	$Tor->set_announce_url(ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce');
-	unset($Tor->Val['announce-list']);
-
-	// We need this section for long file names :/
-	$TorrentName='';
-	$TorrentInfo='';
-	$TorrentName = Misc::file_string($Artist.$Album);
-	if ($Year   >   0) { $TorrentName.=' - '.Misc::file_string($Year); }
-	if ($Media  != '') { $TorrentInfo .= Misc::file_string($Media); }
-	if ($Format != '') {
-		if ($TorrentInfo!='') { $TorrentInfo .= ' - '; }
-		$TorrentInfo .= Misc::file_string($Format);
-	}
-	if ($Encoding!='') {
-		if ($TorrentInfo != '') { $TorrentInfo.=' - '; }
-		$TorrentInfo .= Misc::file_string($Encoding);
-	}
-	if ($TorrentInfo != '') { $TorrentInfo = " ($TorrentInfo)"; }
-	if (strlen($TorrentName) + strlen($TorrentInfo) + 3 > 200) {
-		$TorrentName = Misc::file_string($Album).(($Year>0)?(' - '.Misc::file_string($Year)):'');
-	}
-	$FileName = Format::cut_string($TorrentName.$TorrentInfo, 180, true, false);
-
-	$Zip->add_file($Tor->enc(), $ReleaseTypeName.'/'.$FileName.'.torrent');
 }
-$Analyzed = count($Downloads);
-$Skipped = count($Skips);
-$Downloaded = $Analyzed - $Skipped;
-$Time = number_format(((microtime(true)-$ScriptStartTime)*1000),5).' ms';
-$Used = Format::get_size(memory_get_usage(true));
-$Date = date('M d Y, H:i');
-$Zip->add_file('Collector Download Summary - '.SITE_NAME."\r\n\r\nUser:\t\t$LoggedUser[Username]\r\nPasskey:\t$LoggedUser[torrent_pass]\r\n\r\nTime:\t\t$Time\r\nUsed:\t\t$Used\r\nDate:\t\t$Date\r\n\r\nTorrents Analyzed:\t\t$Analyzed\r\nTorrents Filtered:\t\t$Skipped\r\nTorrents Downloaded:\t$Downloaded\r\n\r\nTotal Size of Torrents (Ratio Hit): ".Format::get_size($TotalSize)."\r\n\r\nAlbums Unavailable within your criteria (consider making a request for your desired format):\r\n".implode("\r\n",$Skips), 'Summary.txt');
-$Settings = array(implode(':',$_REQUEST['list']),$_REQUEST['preference']);
-$Zip->close_stream();
-
-$Settings = array(implode(':',$_REQUEST['list']),$_REQUEST['preference']);
-if(!isset($LoggedUser['Collector']) || $LoggedUser['Collector'] != $Settings) {
-	$DB->query("SELECT SiteOptions FROM users_info WHERE UserID='".$LoggedUser['ID']."'");
-	list($Options) = $DB->next_record(MYSQLI_NUM,false);
-	$Options = unserialize($Options);
-	$Options['Collector'] = $Settings;
-	$DB->query("UPDATE users_info SET SiteOptions='".db_string(serialize($Options))."' WHERE UserID='$LoggedUser[ID]'");
-	$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
-	$Cache->insert('Collector',$Settings);
-	$Cache->commit_transaction(0);
+$Collector->finalize();
+$Settings = array(implode(':', $_REQUEST['list']), $_REQUEST['preference']);
+if (!isset($LoggedUser['Collector']) || $LoggedUser['Collector'] != $Settings) {
+	Users::update_site_options($LoggedUser['ID'], array('Collector' => $Settings));
 }
 
 define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);

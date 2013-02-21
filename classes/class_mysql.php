@@ -315,6 +315,19 @@ class DB_MYSQL {
 		return $Return;
 	}
 
+	//  Loops through the result set, collecting the $ValField column into an array with $KeyField as keys
+	function to_pair($KeyField, $ValField, $Escape = true) {
+		$Return = array();
+		while ($Row = mysqli_fetch_array($this->QueryID)) {
+			if ($Escape !== false) {
+				$Row = Misc::display_array($Row[$ValField], $Escape);
+			}
+			$Return[$Row[$KeyField]] = $Row[$ValField];
+		}
+		mysqli_data_seek($this->QueryID, 0);
+		return $Return;
+	}
+
 	//  Loops through the result set, collecting the $Key column into an array
 	function collect($Key, $Escape = true) {
 		$Return = array();
@@ -336,7 +349,7 @@ class DB_MYSQL {
 
 	function beginning() {
 		mysqli_data_seek($this->QueryID, 0);
+		$this->Row = 0;
 	}
-
 }
 ?>
