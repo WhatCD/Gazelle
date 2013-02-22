@@ -93,7 +93,7 @@ if(!empty($_POST['action'])){
 			break;
 		case 'viewthread':
 		case 'viewtopic':
-			// Page that displays threads	
+			// Page that displays threads
 			require(SERVER_ROOT.'/sections/forums/thread.php');
 			break;
 		case 'ajax_get_edit':

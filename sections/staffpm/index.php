@@ -21,7 +21,7 @@ $IsStaff = ($DisplayStaff == 1);
 $IsFLS = ($IsStaff || $LoggedUser['ExtraClasses'][41]);
 
 switch($_REQUEST['action']) {
-	case 'viewconv':	
+	case 'viewconv':
 		require('viewconv.php');
 		break;
 	case 'takepost':

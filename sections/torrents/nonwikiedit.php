@@ -11,7 +11,7 @@ $GroupID = $_POST['groupid'];
 //Usual perm checks
 if(!check_perms('torrents_edit')) {
 	$DB->query("SELECT UserID FROM torrents WHERE GroupID = ".$GroupID);
-	if(!in_array($LoggedUser['ID'], $DB->collect('UserID'))) { 
+	if(!in_array($LoggedUser['ID'], $DB->collect('UserID'))) {
 		error(403);
 	}
 }
@@ -46,7 +46,7 @@ list($OldYear) = $DB->next_record();
 
 
 
-$DB->query("UPDATE torrents_group SET 
+$DB->query("UPDATE torrents_group SET
 	Year = '$Year',
 	RecordLabel = '".$RecordLabel."',
 	CatalogueNumber = '".$CatalogueNumber."'

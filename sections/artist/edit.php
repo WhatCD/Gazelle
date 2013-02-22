@@ -2,10 +2,10 @@
 /************************************************************************
 ||------------|| Edit artist wiki page ||------------------------------||
 
-This page is the page that is displayed when someone feels like editing 
+This page is the page that is displayed when someone feels like editing
 an artist's wiki page.
 
-It is called when $_GET['action'] == 'edit'. $_GET['artistid'] is the 
+It is called when $_GET['action'] == 'edit'. $_GET['artistid'] is the
 ID of the artist, and must be set.
 
 ************************************************************************/
@@ -55,7 +55,7 @@ View::show_header('Edit artist');
 			</div>
 		</form>
 	</div>
-<? if(check_perms('torrents_edit')) { ?> 
+<? if(check_perms('torrents_edit')) { ?>
 	<h2>Rename</h2>
 	<div class="box pad">
 		<form class="rename_form" name="artist" action="artist.php" method="post">
@@ -67,11 +67,11 @@ View::show_header('Edit artist');
 				<div style="text-align: center;">
 					<input type="submit" value="Rename" />
 				</div>
-				
+
 			</div>
 		</form>
 	</div>
-	
+
 	<h2>Make into non-redirecting alias</h2>
 	<div class="box pad">
 		<form class="merge_form" name="artist" action="artist.php" method="post">
@@ -90,14 +90,14 @@ View::show_header('Edit artist');
 			</div>
 		</form>
 	</div>
-	
+
 	<h2>Aliases</h2>
 	<div class="box pad">
 		<ul>
-		
+
 <?
 	$DB->query("SELECT AliasID, Name, UserID, Redirect FROM artists_alias WHERE ArtistID='$ArtistID'");
-	while(list($AliasID, $AliasName, $User, $Redirect) = $DB->next_record(MYSQLI_NUM, true)) { 
+	while(list($AliasID, $AliasName, $User, $Redirect) = $DB->next_record(MYSQLI_NUM, true)) {
 		if($AliasName == $Name) { $DefaultRedirectID = $AliasID; }
 ?>
 			<li><?=$AliasID?>. <?=$AliasName?>
@@ -120,6 +120,6 @@ View::show_header('Edit artist');
 			<input type="submit" value="Add alias" />
 		</form>
 	</div>
-<? } ?> 
+<? } ?>
 </div>
 <? View::show_footer() ?>

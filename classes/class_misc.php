@@ -88,7 +88,7 @@ class Misc {
 			list($UnRead) = $DB->next_record();
 			$Cache->cache_value('inbox_new_'.$ID, $UnRead);
 		}
-		
+
 		$DB->query("SELECT Username FROM users_main WHERE ID = '$FromID'");
 		list($SenderName) = $DB->next_record();
 		foreach($ToID as $ID) {

@@ -26,7 +26,7 @@ list($Count) = $DB->next_record();
 if($Count < 1) {
 	$DB->query("SELECT Name FROM tags WHERE ID=".$TagID);
 	list($TagName) = $DB->next_record();
-	
+
 	$DB->query("DELETE FROM tags WHERE ID=".$TagID);
 }
 

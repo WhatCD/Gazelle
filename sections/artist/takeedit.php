@@ -1,6 +1,6 @@
 <?
 /*********************************************************************\
-The page that handles the backend of the 'edit artist' function. 
+The page that handles the backend of the 'edit artist' function.
 \*********************************************************************/
 
 include(SERVER_ROOT.'/classes/class_image_tools.php');
@@ -40,18 +40,18 @@ if(!$RevisionID) { // edit
 	$DB->query("INSERT INTO wiki_artists (PageID, Body, Image, UserID, Summary, Time)
 				VALUES ('$ArtistID', '$Body', '$Image', '$UserID', '$Summary', '".sqltime()."')");
 } else { // revert
-	$DB->query("INSERT INTO wiki_artists (PageID, Body, Image, UserID, Summary, Time) 
-		SELECT '$ArtistID', Body, Image, '$UserID', 'Reverted to revision $RevisionID', '".sqltime()."' 
+	$DB->query("INSERT INTO wiki_artists (PageID, Body, Image, UserID, Summary, Time)
+		SELECT '$ArtistID', Body, Image, '$UserID', 'Reverted to revision $RevisionID', '".sqltime()."'
 		FROM wiki_artists WHERE RevisionID='$RevisionID'");
 }
 
 $RevisionID=$DB->inserted_id();
 
 // Update artists table (technically, we don't need the RevisionID column, but we can use it for a join which is nice and fast)
-$DB->query("UPDATE artists_group 
-	SET 
+$DB->query("UPDATE artists_group
+	SET
 	".  ( isset($VanityHouse) ? "VanityHouse='$VanityHouse'," : '' ) ."
-	RevisionID='$RevisionID' 
+	RevisionID='$RevisionID'
 	WHERE ArtistID='$ArtistID'");
 
 // There we go, all done!

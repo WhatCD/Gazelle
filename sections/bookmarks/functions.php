@@ -19,7 +19,7 @@ function bookmark_schema($Type) {
 			break;
 		case 'request':
 			return array('bookmarks_requests', 'RequestID');
-			break;			
+			break;
 		default:
 			die('HAX');
 	}

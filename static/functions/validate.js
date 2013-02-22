@@ -2,9 +2,9 @@ var elemStyles=Array();
 var errorElems=Array();
 
 function validEmail(str) {
-	if (str.match(/^[_a-z0-9-]+([.+][_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i)) {			  
+	if (str.match(/^[_a-z0-9-]+([.+][_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i)) {
 		return true;
-	} else { 
+	} else {
 		return false;
 	}
 }

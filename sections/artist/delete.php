@@ -19,10 +19,10 @@ View::show_header('Artist deleted');
 $DB->query('SELECT Name FROM artists_group WHERE ArtistID='.$ArtistID);
 list($Name) = $DB->next_record();
 
-$DB->query('SELECT tg.Name, 
-					tg.ID 
-				FROM torrents_group AS tg 
-				LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID 
+$DB->query('SELECT tg.Name,
+					tg.ID
+				FROM torrents_group AS tg
+				LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID
 				WHERE ta.ArtistID='.$ArtistID);
 $Count = $DB->record_count();
 if($DB->record_count() > 0) {
@@ -47,10 +47,10 @@ if($DB->record_count() > 0) {
 <?
 }
 
-$DB->query('SELECT r.Title, 
-					r.ID 
+$DB->query('SELECT r.Title,
+					r.ID
 				FROM requests AS r
-				LEFT JOIN requests_artists AS ra ON ra.RequestID=r.ID 
+				LEFT JOIN requests_artists AS ra ON ra.RequestID=r.ID
 				WHERE ra.ArtistID='.$ArtistID);
 $Count += $DB->record_count();
 if($DB->record_count() > 0) {

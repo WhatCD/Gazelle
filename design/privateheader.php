@@ -264,8 +264,6 @@ if(check_perms('users_mod')) {
 		$Cache->cache_value('staff_blog_latest_time', $LatestSBlogTime, 1209600);
 	}
 	if ($SBlogReadTime < $LatestSBlogTime) {
-		global $Debug;
-		$Debug->log_var(array('b' => $SBlogReadTime, 'l' => $LatestSBlogTime), 'Times');
 		$Alerts[] = '<a href="staffblog.php">'.'New Staff Blog Post!'.'</a>';
 	}
 }
@@ -359,7 +357,7 @@ if(check_perms('admin_reports')) {
 		list($NumTorrentReports) = $DB->next_record();
 		$Cache->cache_value('num_torrent_reportsv2', $NumTorrentReports, 0);
 	}
-	
+
 	$ModBar[] = '<a href="reportsv2.php">'.$NumTorrentReports.(($NumTorrentReports == 1) ? ' Report' : ' Reports').'</a>';
 }
 
@@ -413,7 +411,7 @@ if (!empty($Alerts) || !empty($ModBar)) {
 <?
 }
 //Done handling alertbars
-	
+
 if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 	switch($LoggedUser['Rippy']) {
 		case 'PM' :
@@ -446,7 +444,7 @@ if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
 		</div>
 		<div class="rippy" onclick="rippyclick();"></div>
 	</div>
-	
+
 <?
 	}
 }

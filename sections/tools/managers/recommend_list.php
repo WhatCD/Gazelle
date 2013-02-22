@@ -4,7 +4,7 @@ if(!check_perms('site_recommend_own') && !check_perms('site_manage_recommendatio
 }
 View::show_header('Recommendations');
 
-$DB->query("SELECT 
+$DB->query("SELECT
 	tr.GroupID,
 	tr.UserID,
 	tg.Name,
@@ -44,13 +44,13 @@ $DB->query("SELECT
 ?>
 			<li>
 				<strong><?=Users::format_username($UserID, false, false, false)?></strong>
-<?		if($ArtistID){ ?> 
+<?		if($ArtistID){ ?>
 				- <a href="artist.php?id=<?=$ArtistID?>"><?=$ArtistName?></a>
-<?		} ?> 
+<?		} ?>
 				- <a href="torrents.php?id=<?=$GroupID?>"><?=$GroupName?></a>
 <?		if(check_perms('site_manage_recommendations') || $UserID == $LoggedUser['ID']){ ?>
 				<a href="tools.php?action=recommend_alter&amp;groupid=<?=$GroupID?>" class="brackets">Delete</a>
-<?		} ?> 
+<?		} ?>
 			</li>
 <?	} ?>
 		</ul>

@@ -1,5 +1,5 @@
 /**
- * List of tags to compare musicbrainz results with. 
+ * List of tags to compare musicbrainz results with.
  *
  * @author Gwindow
  *

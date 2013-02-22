@@ -9,11 +9,11 @@ var cookie = {
 	},
 	set: function (cookie_name, value, days) {
 		var date = new Date();
-		
+
 		if (days === undefined) {
 			days = 365;
 		}
-		
+
 		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
 		document.cookie = cookie_name + "=" + value + "; expires=" + date.toGMTString() + "; path=/";
 	},

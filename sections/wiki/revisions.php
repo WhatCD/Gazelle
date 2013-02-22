@@ -33,10 +33,10 @@ View::show_header("Revisions of ".$Title);
 				<td><input type="radio" name="old" value="<?=$Revision?>" disabled="disabled" /></td>
 				<td><input type="radio" name="new" value="<?=$Revision?>" checked="checked" /></td>
 			</tr>
-<? 	
-$DB->query("SELECT 
-	w.Revision, 
-	w.Title, 
+<?
+$DB->query("SELECT
+	w.Revision,
+	w.Title,
 	w.Author,
 	w.Date
 	FROM wiki_revisions AS w

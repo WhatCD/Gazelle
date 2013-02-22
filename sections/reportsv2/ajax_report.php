@@ -76,7 +76,7 @@ if(array_key_exists('sitelink', $ReportType['report_fields'])) {
 			<input id="sitelink" type="text" name="sitelink" size="50" value="<?=(!empty($_POST['sitelink']) ? display_str($_POST['sitelink']) : '')?>" />
 		</td>
 	</tr>
-	
+
 <?
 }
 ?>
@@ -87,5 +87,5 @@ if(array_key_exists('sitelink', $ReportType['report_fields'])) {
 		<td>
 			<textarea id="extra" rows="5" cols="60" name="extra"><?=display_str($_POST['extra'])?></textarea>
 		</td>
-	</tr>	
+	</tr>
 </table>

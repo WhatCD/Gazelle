@@ -23,7 +23,7 @@ function time_diff($TimeStamp, $Levels=2, $Span=true, $Lowercase=false) {
 	}
 	if($TimeStamp == 0) { return 'Never'; }
 	$Time = time()-$TimeStamp;
-	
+
 	// If the time is negative, then it expires in the future.
 	if($Time < 0) {
 		$Time = -$Time;
@@ -77,7 +77,7 @@ function time_diff($TimeStamp, $Levels=2, $Span=true, $Lowercase=false) {
 		if ($Return!="") {
 			$Return.=', ';
 		}
-		if ($Weeks>1) { 
+		if ($Weeks>1) {
 			$Return.=$Weeks.' weeks';
 		} else {
 			$Return.=$Weeks.' week';
@@ -120,7 +120,7 @@ function time_diff($TimeStamp, $Levels=2, $Span=true, $Lowercase=false) {
 		}
 		$Levels--;
 	}
-	
+
 	if($Return == '') {
 		$Return = 'Just now';
 	} elseif (!isset($HideAgo)) {
@@ -130,7 +130,7 @@ function time_diff($TimeStamp, $Levels=2, $Span=true, $Lowercase=false) {
 	if ($Lowercase) {
 		$Return = strtolower($Return);
 	}
-	
+
 	if ($Span) {
 		return '<span class="time" title="'.date('M d Y, H:i', $TimeStamp).'">'.$Return.'</span>';
 	} else {

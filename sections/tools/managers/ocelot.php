@@ -1,11 +1,11 @@
 <?
 	$Key = $_REQUEST['key'];
 	$Type = $_REQUEST['type'];
-	
+
 	if (($Key != TRACKER_SECRET) || ($_SERVER['REMOTE_ADDR'] != TRACKER_HOST && $_SERVER['REMOTE_HOST'] != TRACKER_HOST)) {
 		error(403);
 	}
-	
+
 	switch ($Type) {
 		case 'expiretoken':
 			if (isset($_GET['tokens'])) {

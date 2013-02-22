@@ -4,7 +4,7 @@ class GOOGLE_CHARTS {
 	protected $Labels = array();
 	protected $Data = array();
 	protected $Options = array();
-	
+
 	public function __construct($Type, $Width, $Height, $Options) {
 		if ($Width * $Height > 300000 || $Height > 1000 || $Width > 1000) {
 			trigger_error('Tried to make chart too large.');
@@ -12,7 +12,7 @@ class GOOGLE_CHARTS {
 		$this->URL .= '?cht='.$Type.'&amp;chs='.$Width.'x'.$Height;
 		$this->Options = $Options;
 	}
-	
+
 	protected function encode($Number) {
 		if ($Number == -1) {
 			return '__';
@@ -20,15 +20,15 @@ class GOOGLE_CHARTS {
 		$CharKey = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-.';
 		return $CharKey[floor($Number/64)].$CharKey[floor($Number%64)];
 	}
-		
+
 	public function color($Colors) {
 		$this->URL .= '&amp;chco='.$Colors;
 	}
-	
+
 	public function lines($Thickness, $Solid=1, $Blank=0) {
 		$this->URL .= '&amp;chls='.$Thickness.','.$Solid.','.$Blank;
 	}
-	
+
 	public function title($Title, $Color='', $Size='') {
 		$this->URL .= '&amp;chtt='.str_replace(array(' ',"\n"), array('+','|'), $Title);
 		if (!empty($Color)) {
@@ -38,7 +38,7 @@ class GOOGLE_CHARTS {
 			$this->URL .= ','.$Size;
 		}
 	}
-	
+
 	public function legend($Items, $Placement='') {
 		$this->URL .= '&amp;chdl='.str_replace(' ', '+', implode('|', $Items));
 		if (!empty($Placement)) {
@@ -48,24 +48,24 @@ class GOOGLE_CHARTS {
 			$this->URL .= '&amp;chdlp='.$Placement;
 		}
 	}
-	
+
 	public function add($Label, $Data) {
 		if ($Label !== false) {
 			$this->Labels[] = $Label;
 		}
 		$this->Data[] = $Data;
 	}
-		
+
 	public function grid_lines($SpacingX=0, $SpacingY=-1, $Solid=1, $Blank=1) {
 		//Can take 2 more parameters for offset, but we're not bothering with that right now
 		$this->URL .= '&amp;chg='.$SpacingX.','.$SpacingY.','.$Solid.','.$Blank.'';
 	}
-	
+
 	public function transparent() {
 		$this->URL .= '&amp;chf=bg,s,FFFFFF00';
 	}
-	
-	
+
+
 	public function url() {
 		return $this->URL;
 	}
@@ -79,7 +79,7 @@ class AREA_GRAPH extends GOOGLE_CHARTS {
 	public function color ($Color) {
 		$this->URL .= '&amp;chco='.$Color.'&amp;chm=B,'.$Color.'50,0,0,0';
 	}
-	
+
 	public function generate() {
 		$Max = max($this->Data);
 		$Min = (isset($this->Options['Break']))?$Min=min($this->Data):0;
@@ -109,12 +109,12 @@ class PIE_CHART extends GOOGLE_CHARTS {
 			sort($this->Data);
 			$this->Data = array_reverse($this->Data);
 		}
-		
+
 		$Data = array();
 		$Labels = $this->Labels;
 		$OtherPercentage = 0.00;
 		$OtherData = 0;
-		
+
 		foreach ($this->Data as $Key => $Value) {
 			$ThisPercentage = number_format(($Value/$Sum)*100, 2);
 			$ThisData = ($Value/$Sum)*4095;
@@ -152,7 +152,7 @@ class LOG_BAR_GRAPH extends GOOGLE_CHARTS {
 	public function color ($Color) {
 		$this->URL .= '&amp;chco='.$Color.'&amp;chm=B,'.$Color.'50,0,0,0';
 	}
-	
+
 	public function generate() {
 		$Max = max($this->Data);
 		$Min = (isset($this->Options['Break']))?$Min=min($this->Data):0;
@@ -175,7 +175,7 @@ class POLL_GRAPH extends GOOGLE_CHARTS {
 		}
 		$this->Data[] = $Data;
 	}
-	
+
 	public function generate() {
 		$Count = count($this->Data);
 		$Height = (30*$Count)+20;

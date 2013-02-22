@@ -5,7 +5,7 @@
  *
  * @param $UserID UserID of the guy/gal who posted the comment
  * @param $PostID The post number
- * @param $postheader the header used in the post. 
+ * @param $postheader the header used in the post.
  * @param $permalink the link to the post elsewhere on the site (torrents.php)
  * @param $Body the post body
  * @param $EditorID the guy who last edited the post
@@ -15,7 +15,7 @@
 function comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorID, $AddedTime, $EditedTime) {
   global $Text,$HeavyInfo;
   $UserInfo = Users::user_info($UserID);
-  $postheader =  "by <strong>" . Users::format_username($UserID, true, true, true, true, false) . "</strong> " 
+  $postheader =  "by <strong>" . Users::format_username($UserID, true, true, true, true, false) . "</strong> "
 	. time_diff($AddedTime) . $postheader;
 
 ?>
@@ -44,7 +44,7 @@ function comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorI
 			</td>
   <? } ?>
 			<td class='body' valign="top">
-				<?=$Text->full_format($Body) ?> 
+				<?=$Text->full_format($Body) ?>
 				<? if($EditorID){ ?>
 				  <br /><br />
 				  Last edited by
@@ -53,4 +53,4 @@ function comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorI
 			</td>
 		</tr>
 	</table>
-<? } 
+<? }

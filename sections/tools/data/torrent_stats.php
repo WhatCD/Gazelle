@@ -2,7 +2,7 @@
 if(!check_perms('site_view_flow')) { error(403); }
 View::show_header('Torrents');
 
-if (!$TorrentStats = $Cache->get_value('new_torrent_stats')) {	
+if (!$TorrentStats = $Cache->get_value('new_torrent_stats')) {
 	$DB->query("SELECT COUNT(ID), SUM(Size), SUM(FileCount) FROM torrents");
 	list($TorrentCount, $TotalSize, $TotalFiles) = $DB->next_record();
 	$DB->query("SELECT COUNT(ID) FROM users_main WHERE Enabled='1'");

@@ -1,4 +1,4 @@
-/* 
+/*
 	TODO: Move to more efficient structure used in class_ajax.
 
 	Example Usage:
@@ -16,14 +16,14 @@
 var count = {
 	update: function (Offset) {
 		if (Offset < 0) {
-			document.getElementById(this.element).innerHTML = this.end; 
+			document.getElementById(this.element).innerHTML = this.end;
 		} else {
-			var Seconds = Offset % 60; 
+			var Seconds = Offset % 60;
 			if (Seconds < 10) {
 				Seconds = '0' + Seconds;
 			}
 			var Remainder = (Offset - Seconds) / 60;
-			var Minutes = Remainder % 60; 
+			var Minutes = Remainder % 60;
 			if (Minutes < 10) {
 				Minutes = '0' + Minutes;
 			}

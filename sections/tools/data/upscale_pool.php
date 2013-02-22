@@ -4,7 +4,7 @@ View::show_header('Upscale Pool');
 define('USERS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 
-$RS = $DB->query("SELECT 
+$RS = $DB->query("SELECT
 	SQL_CALC_FOUND_ROWS
 	m.ID,
 	m.Username,
@@ -18,7 +18,7 @@ $RS = $DB->query("SELECT
 	i.RatioWatchEnds,
 	i.RatioWatchDownload,
 	m.RequiredRatio
-	FROM users_main AS m 
+	FROM users_main AS m
 	LEFT JOIN users_info AS i ON i.UserID=m.ID
 	WHERE i.RatioWatchEnds != '0000-00-00 00:00:00'
 	AND m.Enabled = '1'

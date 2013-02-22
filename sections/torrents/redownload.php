@@ -59,7 +59,7 @@ $DownloadsQ = $DB->query("SELECT
 	tg.Name,
 	t.Size
 	FROM torrents as t
-	JOIN torrents_group AS tg ON t.GroupID=tg.ID 
+	JOIN torrents_group AS tg ON t.GroupID=tg.ID
 	".$SQL."
 	GROUP BY TorrentID");
 

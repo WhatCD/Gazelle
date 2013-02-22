@@ -120,7 +120,7 @@ Your torrent was reported because it contained material from the DNU list or fro
 				'report_fields' => array(
 					'sitelink' => '1'
 				),
-				
+
 				'resolve_options' => array(
 					'upload' => '0',
 					'warn' => '0',

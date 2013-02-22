@@ -12,7 +12,7 @@ function Remaster() {
 	} else {
 		$('#remaster_true').hide();
 	}
-	
+
 }
 
 function Format() {
@@ -32,7 +32,7 @@ function Format() {
  	if($('#format').raw().options[$('#format').raw().selectedIndex].value == 'AAC') {
                 $('#format_warning').raw().innerHTML = 'Lossy AAC torrents may only be uploaded when they represent exclusive content not currently available in any other format. <a href="rules.php?p=upload#r2.1.24">(2.1.24)</a>';
         }
-        else {  
+        else {
                 $('#format_warning').raw().innerHTML = '';
         }
 
@@ -116,15 +116,15 @@ function AddFormat() {
 	if(FormatCount >= 10) { return; }
 	FormatCount++;
 	$('#extras').raw().value = FormatCount;
-	
+
 	var NewRow = document.createElement("tr");
 	NewRow.id = "new_torrent_row"+FormatCount;
 	NewRow.setAttribute("style","border-top-width: 5px; border-left-width: 5px; border-right-width: 5px;");
-	
+
 	var NewCell1 = document.createElement("td");
 	NewCell1.setAttribute("class","label");
 	NewCell1.innerHTML = "Extra Torrent File";
-	
+
 	var NewCell2 = document.createElement("td");
 	var TorrentField = document.createElement("input");
 	TorrentField.type = "file";
@@ -132,9 +132,9 @@ function AddFormat() {
 	TorrentField.name = "extra_torrent_files[]";
 	TorrentField.size = 50;
 	NewCell2.appendChild(TorrentField);
-	
+
 	NewRow.appendChild(NewCell1);
-	NewRow.appendChild(NewCell2);	
+	NewRow.appendChild(NewCell2);
 
 	NewRow = document.createElement("tr");
 	NewRow.id = "new_format_row"+FormatCount;
@@ -142,7 +142,7 @@ function AddFormat() {
 	NewCell1 = document.createElement("td");
 	NewCell1.setAttribute("class","label");
 	NewCell1.innerHTML = "Extra Format / Bitrate";
-	
+
 	NewCell2 = document.createElement("td");
 	tmp = '<select id="releasetype" name="extra_formats[]"><option value="">---</option>';
 	var formats=["Saab","Volvo","BMW"];
@@ -156,41 +156,41 @@ function AddFormat() {
 		tmp += "<option value='"+bitrates[i]+"'>"+bitrates[i]+"</option>\n";
 	}
 	tmp += "</select>";
-	
+
 	NewCell2.innerHTML = tmp;
 	NewRow.appendChild(NewCell1);
-	NewRow.appendChild(NewCell2);	
+	NewRow.appendChild(NewCell2);
 
-	
+
 	NewRow = document.createElement("tr");
 	NewRow.id = "new_description_row"+FormatCount;
 	NewRow.setAttribute("style","border-bottom-width: 5px; border-left-width: 5px; border-right-width: 5px;");
 	NewCell1 = document.createElement("td");
 	NewCell1.setAttribute("class","label");
 	NewCell1.innerHTML = "Extra Release Description";
-	
+
 	NewCell2 = document.createElement("td");
 	NewCell2.innerHTML = '<textarea name="extra_release_desc[]" id="release_desc" cols="60" rows="4"></textarea>';
-	
+
 	NewRow.appendChild(NewCell1);
-	NewRow.appendChild(NewCell2);	
+	NewRow.appendChild(NewCell2);
 }
 
 function RemoveFormat() {
 	if(FormatCount == 0) { return; }
 	$('#extras').raw().value = FormatCount;
-	
+
 	var x = $('#new_torrent_row'+FormatCount).raw();
 	x.parentNode.removeChild(x);
-	
+
 	x = $('#new_format_row'+FormatCount).raw();
 	x.parentNode.removeChild(x);
-	
+
 	x = $('#new_description_row'+FormatCount).raw();
 	x.parentNode.removeChild(x);
-	
+
 	FormatCount--;
-	
+
 }
 
 function Media() {
@@ -211,7 +211,7 @@ function AddArtistField() {
 	ArtistField.id = "artist";
 	ArtistField.name = "artists[]";
 	ArtistField.size = 45;
-	
+
 	var ImportanceField = document.createElement("select");
 	ImportanceField.id = "importance";
 	ImportanceField.name = "importance[]";
@@ -222,7 +222,7 @@ function AddArtistField() {
 	ImportanceField.options[4] = new Option("DJ / Compiler", "6");
 	ImportanceField.options[5] = new Option("Remixer", "3");
 	ImportanceField.options[6] = new Option("Producer", "7");
-	
+
 	var x = $('#artistfields').raw();
 	x.appendChild(document.createElement("br"));
 	x.appendChild(ArtistField);
@@ -272,12 +272,12 @@ function ToggleUnknown() {
 		$('#remaster_title').raw().value = "";
 		$('#remaster_record_label').raw().value = "";
 		$('#remaster_catalogue_number').raw().value = "";
-		
+
 		if($('#groupremasters').raw()) {
 			$('#groupremasters').raw().selectedIndex = 0;
 			$('#groupremasters').raw().disabled = true;
 		}
-		
+
 		$('#remaster_year').raw().disabled = true;
 		$('#remaster_title').raw().disabled = true;
 		$('#remaster_record_label').raw().disabled = true;
@@ -287,7 +287,7 @@ function ToggleUnknown() {
 		$('#remaster_title').raw().disabled = false;
 		$('#remaster_record_label').raw().disabled = false;
 		$('#remaster_catalogue_number').raw().disabled = false;
-		
+
 		if($('#groupremasters').raw()) {
 			$('#groupremasters').raw().disabled = false;
 		}

@@ -19,12 +19,12 @@ switch($UploadForm) {
 	case 'Music':
 		$TorrentForm->music_form($GenreTags);
 		break;
-		
+
 	case 'Audiobooks':
 	case 'Comedy':
 		$TorrentForm->audiobook_form();
 		break;
-	
+
 	case 'Applications':
 	case 'Comics':
 	case 'E-Books':

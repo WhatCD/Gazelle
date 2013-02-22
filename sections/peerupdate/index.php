@@ -1,5 +1,5 @@
 <?
-// We keep torrent groups cached. However, the peer counts change ofter, so our solutions are to not cache them for long, or to update them. Here is where we updated them. 
+// We keep torrent groups cached. However, the peer counts change ofter, so our solutions are to not cache them for long, or to update them. Here is where we updated them.
 
 if ((!isset($argv[1]) || $argv[1]!=SCHEDULE_KEY) && !check_perms('admin_schedule')) { // authorization, Fix to allow people with perms hit this page.
 	error(403);
@@ -74,7 +74,7 @@ printf("Updated %d keys, skipped %d keys in %.6fs (%d kB memory)\n", $UpdatedKey
 $DB->query("TRUNCATE TABLE torrents_peerlists");
 $DB->query("INSERT INTO torrents_peerlists SELECT * FROM torrents_peerlists_compare");
 
-if (check_perms('admin_schedule')) {	
+if (check_perms('admin_schedule')) {
 	echo '<pre>';
 	View::show_footer();
 }

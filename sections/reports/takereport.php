@@ -11,7 +11,7 @@ if(!array_key_exists($_POST['type'], $Types)) {
 	error(403);
 }
 $Short = $_POST['type'];
-$Type = $Types[$Short]; 
+$Type = $Types[$Short];
 $ID = $_POST['id'];
 if($Short == "request_update") {
 	if(empty($_POST['year']) || !is_number($_POST['year'])) {

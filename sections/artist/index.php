@@ -2,11 +2,11 @@
 /**************************************************************************
 Artists Switch Center
 
-This page acts as a switch that includes the real artist pages (to keep 
+This page acts as a switch that includes the real artist pages (to keep
 the root less cluttered).
 
-enforce_login() is run here - the entire artist pages are off limits for 
-non members. 
+enforce_login() is run here - the entire artist pages are off limits for
+non members.
  ****************************************************************************/
 
 // Width and height of similar artist map

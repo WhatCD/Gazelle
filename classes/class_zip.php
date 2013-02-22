@@ -4,9 +4,9 @@
 |*************************************************************************|
 
 This class provides a convenient way for us to generate and serve zip
-archives to our end users, both from physical files, cached 
+archives to our end users, both from physical files, cached
 or already parsed data (torrent files). It's all done on the fly, due to
-the high probability that a filesystem stored archive will never be 
+the high probability that a filesystem stored archive will never be
 downloaded twice.
 
 Utilizes gzcompress, based upon RFC 1950
@@ -39,7 +39,7 @@ $Zip->add_file(file_get_contents("data/file.txt"), "File.txt");
 $Zip->add_file($TorrentData, "Bookmarks/Artist - Album [2008].torrent");
 
 	Adds the parsed torrent to the archive in the Bookmarks folder (created simply by placing it in the path).
-	
+
 -----
 
 * Then, close the archive to the user:
@@ -96,12 +96,12 @@ class Zip {
 	private $Structure = ''; // Structure saved to memory
 	private $FileOffset = 0; // Offset to write data
 	private $Data = ''; //An idea
-	
+
 	public function __construct ($ArchiveName='Archive') {
 		header("Content-type: application/octet-stream"); //Stream download
 		header("Content-disposition: attachment; filename=\"$ArchiveName.zip\""); //Name the archive - Should not be urlencoded
 	}
-	
+
 	public static function unlimit () {
 		ob_end_clean();
 		set_time_limit(3600); //Limit 1 hour
@@ -121,7 +121,7 @@ class Zip {
 		$ZipData = gzcompress($FileData); // Ditto.
 		$ZipData = substr ($ZipData, 2,(strlen($ZipData) - 6)); // Checksum resolution
 		$ZipLength = strlen($ZipData); //Ditto.
-		$this->Data .= pack("V",$CRC32); // CRC-32 
+		$this->Data .= pack("V",$CRC32); // CRC-32
 		$this->Data .= pack("V",$ZipLength); // Compressed filesize
 		$this->Data .= pack("V",$DataLength); // Uncompressed filesize
 		$this->Data .= pack("v",strlen($ArchivePath)); // Pathname length
@@ -136,10 +136,10 @@ class Zip {
         /* Data descriptor
         Not needed (only needed when 3rd bitflag is set), causes problems with OS X archive utility
 		$this->Data .= pack("V",$CRC32); // CRC-32
-        $this->Data .= pack("V",$ZipLength); // Compressed filesize 
-        $this->Data .= pack("V",$DataLength); // Uncompressed filesize 
+        $this->Data .= pack("V",$ZipLength); // Compressed filesize
+        $this->Data .= pack("V",$DataLength); // Uncompressed filesize
 		END data descriptor */
-	
+
 		$FileDataLength = strlen($this->Data);
 		$this->ArchiveSize = $this->ArchiveSize + $FileDataLength; // All we really need is the size
 		$CurrentOffset = $this->ArchiveSize; // Update offsets
@@ -148,14 +148,14 @@ class Zip {
 		/* Central Directory Structure */
 		$CDS = "\x50\x4b\x01\x02"; // CDS signature
 		$CDS .="\x14\x00"; // Constructor version
-		$CDS .="\x14\x00"; // Version requirements 
+		$CDS .="\x14\x00"; // Version requirements
 		$CDS .="\x00\x08"; // Bit flag - 0x8 = UTF-8 file names
 		$CDS .="\x08\x00"; // Compression
-		$CDS .="\x00\x00\x00\x00"; // Last modified 
-		$CDS .= pack("V",$CRC32); // CRC-32 
-		$CDS .= pack("V",$ZipLength); // Compressed filesize 
-		$CDS .= pack("V",$DataLength); // Uncompressed filesize 
-		$CDS .= pack("v",strlen($ArchivePath)); // Pathname length 
+		$CDS .="\x00\x00\x00\x00"; // Last modified
+		$CDS .= pack("V",$CRC32); // CRC-32
+		$CDS .= pack("V",$ZipLength); // Compressed filesize
+		$CDS .= pack("V",$DataLength); // Uncompressed filesize
+		$CDS .= pack("v",strlen($ArchivePath)); // Pathname length
 		$CDS .="\x00\x00"; // Extra field length (0'd so we can ignore this)
 		$CDS .="\x00\x00"; // File comment length  (no comment, 0'd)
 		$CDS .="\x00\x00"; // Disk number start (0 seems valid)
@@ -171,14 +171,14 @@ class Zip {
 	}
 
 	public function close_stream() {
-		echo $this->Structure; // Structure Root 
+		echo $this->Structure; // Structure Root
 		echo "\x50\x4b\x05\x06"; // End of central directory signature
 		echo "\x00\x00"; // This disk
-		echo "\x00\x00"; // CDS start 
+		echo "\x00\x00"; // CDS start
 		echo pack("v", $this->ArchiveFiles); // Handle the numebr of entries
 		echo pack("v", $this->ArchiveFiles); // Ditto
-		echo pack("V", strlen($this->Structure)); //Size 
-		echo pack("V", $this->ArchiveSize); // Offset 
+		echo pack("V", strlen($this->Structure)); //Size
+		echo pack("V", $this->ArchiveSize); // Offset
 		echo "\x00\x00"; // No comment, close it off
 	}
 }

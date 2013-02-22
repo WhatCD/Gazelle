@@ -9,8 +9,8 @@ if(!is_number($AliasID)) {
 }
 
 $DB->query("SELECT aa.AliasID
-			FROM artists_alias AS aa 
-				JOIN artists_alias AS aa2 ON aa.ArtistID=aa2.ArtistID 
+			FROM artists_alias AS aa
+				JOIN artists_alias AS aa2 ON aa.ArtistID=aa2.ArtistID
 			WHERE aa.AliasID=".$AliasID);
 
 if($DB->record_count() == 1) {

@@ -17,7 +17,7 @@ function check_file($Type, $Name) {
 
 function check_name($Name) {
 	global $keywords;
-	foreach ($keywords as &$value) { 
+	foreach ($keywords as &$value) {
 		if(preg_match('/'.$value.'/i', $Name)) {
 			forbidden_error($Name);
        		}

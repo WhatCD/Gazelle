@@ -40,7 +40,7 @@ if (($Message = db_string($_POST['message'])) && ($Name = db_string($_POST['name
 		// No id
 		echo '-2';
 	}
-	
+
 } else {
 	// No message/name
 	echo '-1';

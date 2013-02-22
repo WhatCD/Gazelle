@@ -38,10 +38,10 @@ if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 			The modification of clients to bypass our client requirements (spoofing) is explicitly forbidden. People caught doing this will be instantly and permanently banned. This is your only warning.
 		</p>
 		<p>
-			The use of clients or proxies which have been modified to report incorrect stats to the tracker (cheating) is not allowed, and will result in a permanent ban. Additionally, your information will be passed on to representatives of other trackers, where you are liable to be banned as well. 
+			The use of clients or proxies which have been modified to report incorrect stats to the tracker (cheating) is not allowed, and will result in a permanent ban. Additionally, your information will be passed on to representatives of other trackers, where you are liable to be banned as well.
 		</p>
 		<p>
-			The testing of unstable clients by developers is not allowed unless approved by a staff member. 
+			The testing of unstable clients by developers is not allowed unless approved by a staff member.
 		</p>
 	</div>
 	<h3>Further Details</h3>
@@ -50,7 +50,7 @@ if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 			If someone you invited to the site breaks the above rules you will receive a 2 month warning and lose the right to invite people to this site.
 		</p>
 		<p>
-			If you were invited by someone who broke the above rules, your account will be disabled without warning. 
+			If you were invited by someone who broke the above rules, your account will be disabled without warning.
 		</p>
 	</div>
 <? include('jump.php'); ?>

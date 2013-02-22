@@ -3,11 +3,11 @@
 ##							 Wiki class									##
 ##########################################################################
 
-Seeing as each page has to manage its wiki separately (for performance 
+Seeing as each page has to manage its wiki separately (for performance
 reasons - JOINs instead of multiple queries), this class is rather bare.
 
-The only useful function in here is revision_history(). It creates a 
-table with the revision history for that particular wiki page. 
+The only useful function in here is revision_history(). It creates a
+table with the revision history for that particular wiki page.
 
 
 class_wiki depends on your wiki table being structured like this:
@@ -23,9 +23,9 @@ class_wiki depends on your wiki table being structured like this:
 | Time		 | datetime		| NO   | MUL | 0000-00-00 00:00:00  |		|
 +------------+--------------+------+-----+----------------------+-------+
 
-It is also recommended that you have a field in the main table for 
+It is also recommended that you have a field in the main table for
 whatever the page is (e.g. details.php main table = torrents), so you can
-do a JOIN. 
+do a JOIN.
 
 
 ########################################################################*/
@@ -39,13 +39,13 @@ class WIKI {
 		$this->PageID = $PageID;
 		$this->BaseURL = $BaseURL;
 	}
-	
+
 	function revision_history(){
 		global $DB;
-			
+
 		$BaseURL = $this->BaseURL;
-		$DB->query("SELECT 
-				RevisionID, 
+		$DB->query("SELECT
+				RevisionID,
 				Summary,
 				Time,
 				UserID
@@ -62,7 +62,7 @@ class WIKI {
 		</tr>
 <? //-----------------------------------------
 		$Row = 'a';
-		while(list($RevisionID, $Summary, $Time, $UserID, $Username) = $DB->next_record()){ 
+		while(list($RevisionID, $Summary, $Time, $UserID, $Username) = $DB->next_record()){
 			$Row = ($Row == 'a') ? 'b' : 'a';
 //------------------------------------------------------ ?>
 		<tr class="row<?=$Row?>">
@@ -84,7 +84,7 @@ class WIKI {
 //-------------------------------------------- ?>
 	</table>
 <?
-		
+
 	}
 } // class
 ?>

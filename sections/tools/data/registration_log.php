@@ -5,7 +5,7 @@ define('USERS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 
 
-$RS = $DB->query("SELECT 
+$RS = $DB->query("SELECT
 	SQL_CALC_FOUND_ROWS
 	m.ID,
 	m.IP,
@@ -32,12 +32,12 @@ $RS = $DB->query("SELECT
 	ii.Donor,
 	ii.Warned,
 	ii.JoinDate,
-	(SELECT COUNT(h2.UserID) FROM users_history_ips AS h2 WHERE h2.IP=im.IP) AS InviterUses 
-	FROM users_main AS m 
+	(SELECT COUNT(h2.UserID) FROM users_history_ips AS h2 WHERE h2.IP=im.IP) AS InviterUses
+	FROM users_main AS m
 	LEFT JOIN users_info AS i ON i.UserID=m.ID
 	LEFT JOIN users_main AS im ON i.Inviter = im.ID
 	LEFT JOIN users_info AS ii ON i.Inviter = ii.UserID
-	WHERE i.JoinDate > '".time_minus(3600*24*3)."' 
+	WHERE i.JoinDate > '".time_minus(3600*24*3)."'
 	ORDER BY i.Joindate DESC LIMIT $Limit");
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();

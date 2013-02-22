@@ -7,9 +7,9 @@ include(SERVER_ROOT."/classes/permissions_form.php");
 
 list($UserID, $Username, $PermissionID) = array_values(Users::user_info($_REQUEST['userid']));
 
-$DB->query("SELECT 
-		u.CustomPermissions 
-	FROM users_main AS u 
+$DB->query("SELECT
+		u.CustomPermissions
+	FROM users_main AS u
 	WHERE u.ID='$UserID'");
 
 list($Customs)=$DB->next_record(MYSQLI_NUM, false);
@@ -30,7 +30,7 @@ if (isset($_POST['action'])) {
 	}
 	if (!is_number($_POST['maxcollages']) && !empty($_POST['maxcollages'])) { error("Please enter a valid number of extra personal collages"); }
 	$Delta['MaxCollages'] = $_POST['maxcollages'];
-	
+
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
 	$Cache->update_row(false, array('CustomPermissions' => $Delta));
 	$Cache->commit_transaction(0);

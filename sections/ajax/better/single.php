@@ -21,7 +21,7 @@ $JsonResults = array();
 foreach ($Results as $GroupID=>$Group) {
 	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
-	
+
 	$JsonArtists = array();
 	if(count($Artists)>0) {
 		foreach ($Artists as $Artist) {
@@ -32,7 +32,7 @@ foreach ($Results as $GroupID=>$Group) {
 			);
 		}
 	}
-	
+
 	$JsonResults[] = array(
 		'torrentId' => (int) $FlacID,
 		'groupId' => (int) $GroupID,

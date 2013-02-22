@@ -168,7 +168,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 */
 	public function footer ()
 	{
-		if ($this->HasTorrents) :  
+		if ($this->HasTorrents) :
 ?>
 
 			</tbody>

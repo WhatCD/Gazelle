@@ -25,7 +25,7 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 	<script src="<?=STATIC_SERVER?>functions/global.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/global.js')?>" type="text/javascript"></script>
 <? if ($Mobile) { ?>
 	<script src="<?=STATIC_SERVER?>styles/mobile/style.js?v=<?=filemtime(SERVER_ROOT.'/static/mobile/style.js')?>" type="text/javascript"></script>
-<? } 
+<? }
 
 ?>
 </head>
@@ -39,7 +39,7 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 				<ul>
 					<li><a href="index.php">Home</a></li>
 					<li><a href="login.php">Login</a></li>
-<? if (OPEN_REGISTRATION) { ?> 
+<? if (OPEN_REGISTRATION) { ?>
 					<li><a href="register.php">Register</a></li>
 <? } ?>
 				</ul>

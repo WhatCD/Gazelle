@@ -29,7 +29,7 @@ if(count($UserIDs)>0) {
 	$UserIDs = implode(',',$UserIDs);
 	$DB->query("SELECT uid FROM xbt_snatched WHERE fid='$TorrentID' AND uid IN($UserIDs)");
 	$Snatched = $DB->to_array('uid');
-	
+
 	$DB->query("SELECT uid FROM xbt_files_users WHERE fid='$TorrentID' AND Remaining=0 AND uid IN($UserIDs)");
 	$Seeding = $DB->to_array('uid');
 }
@@ -55,21 +55,21 @@ $i = 0;
 
 foreach($Results as $ID=>$Data) {
 	list($SnatcherID, $Timestamp) = array_values($Data);
-	
+
 	$User = Users::format_username($SnatcherID, true, true, true, true);
-	
+
 	if(!array_key_exists($SnatcherID, $Snatched) && $SnatcherID!=$UserID) {
 		$User = '<span style="font-style: italic;">'.$User.'</span>';
 		if(array_key_exists($SnatcherID, $Seeding)) {
 			$User = '<strong>'.$User.'</strong>';
 		}
 	}
-	if($i % 2 == 0 && $i>0){ ?> 
+	if($i % 2 == 0 && $i>0){ ?>
 	</tr>
-	<tr>	
+	<tr>
 <?
 	}
-?> 
+?>
 		<td><?=$User?></td>
 		<td><?=time_diff($Timestamp)?></td>
 <?

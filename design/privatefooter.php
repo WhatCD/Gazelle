@@ -16,7 +16,7 @@
 			}
 		}
 	}
-	
+
 	$Load = sys_getloadavg();
 ?>
 	<p>

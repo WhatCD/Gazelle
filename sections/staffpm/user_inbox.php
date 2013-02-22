@@ -7,16 +7,16 @@ View::show_header('Staff PMs', 'staffpm,jquery');
 // Get messages
 $StaffPMs = $DB->query("
 	SELECT
-		ID, 
-		Subject, 
-		UserID, 
-		Status, 
-		Level, 
-		AssignedToUser, 
-		Date, 
+		ID,
+		Subject,
+		UserID,
+		Status,
+		Level,
+		AssignedToUser,
+		Date,
 		Unread
-	FROM staff_pm_conversations 
-	WHERE UserID=".$LoggedUser['ID']." 
+	FROM staff_pm_conversations
+	WHERE UserID=".$LoggedUser['ID']."
 	ORDER BY Status, Date DESC"
 );
 
@@ -73,7 +73,7 @@ if ($DB->record_count() == 0) {
 			</table>
 			<br />
 			<h3>Resolved messages</h3>
-			<table class="message_table checkboxes">	
+			<table class="message_table checkboxes">
 				<tr class="colhead">
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>
 					<td width="50%">Subject</td>
@@ -87,7 +87,7 @@ if ($DB->record_count() == 0) {
 		$Assigned = ($Level == 0) ? "First Line Support" : $ClassLevels[$Level]['Name'];
 		// No + on Sysops
 		if ($Assigned != 'Sysop') { $Assigned .= "+"; }
-			
+
 		// Table row
 ?>
 				<tr class="<?=$RowClass?>">

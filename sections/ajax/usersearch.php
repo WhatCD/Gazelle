@@ -4,10 +4,10 @@
  **********************************************************************/
 
 if (!empty($_GET['search'])) {
-	
+
 	$_GET['username'] = $_GET['search'];
 }
- 
+
 define('USERS_PER_PAGE', 30);
 
 if(isset($_GET['username'])){

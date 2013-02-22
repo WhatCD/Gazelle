@@ -44,6 +44,6 @@
 		if(!is_number($Sort)) { error(404); }
 		$DB->query("UPDATE collages_torrents SET Sort='$Sort' WHERE CollageID='$CollageID' AND GroupID='$GroupID'");
 	}
-	
+
 	$Cache->delete_value('collage_'.$CollageID);
 	header('Location: collages.php?action=manage&collageid='.$CollageID);

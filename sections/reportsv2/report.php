@@ -54,20 +54,20 @@ View::show_header('Report', 'reportsv2');
 				</td>
 			</tr>
 		</table>
-			
+
 		<h3>Reporting guidelines</h3>
 		<div class="box pad">
 			<p>Fields that contain lists of values (for example, listing more than one track number) should be separated by a space.</p>
 			<br />
 			<p><strong>Following the below report type specific guidelines will help the moderators deal with your report in a timely fashion. </strong></p>
 			<br />
-			
+
 			<div id="dynamic_form">
-				<? 
+				<?
 				/*
 				 * THIS IS WHERE SEXY AJAX COMES IN
 				 * The following malarky is needed so that if you get sent back here the fields are filled in
-				 */ 
+				 */
 				?>
 				<input id="sitelink" type="hidden" name="sitelink" size="50" value="<?=(!empty($_POST['sitelink']) ? display_str($_POST['sitelink']) : '')?>" />
 				<input id="image" type="hidden" name="image" size="50" value="<?=(!empty($_POST['image']) ? display_str($_POST['image']) : '')?>" />
@@ -77,7 +77,7 @@ View::show_header('Report', 'reportsv2');
 
 				<script type="text/javascript">ChangeReportType();</script>
 			</div>
-			
+
 		</div>
 	<input type="submit" value="Submit report" />
 	</form>

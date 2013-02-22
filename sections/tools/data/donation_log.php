@@ -7,13 +7,13 @@ define('DONATIONS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(DONATIONS_PER_PAGE);
 
 
-$sql = "SELECT 
+$sql = "SELECT
 	SQL_CALC_FOUND_ROWS
-	d.UserID, 
-	d.Amount, 
-	d.Currency, 
-	d.Email, 
-	d.Time 
+	d.UserID,
+	d.Amount,
+	d.Currency,
+	d.Email,
+	d.Time
 	FROM donations AS d ";
 if(!empty($_GET['search'])) {
 	$sql .= "WHERE d.Email LIKE '%".db_string($_GET['search'])."%' ";
@@ -63,7 +63,7 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 					<input type="submit" value="Search donation log" />
 				</td>
 			</tr>
-		</table>	
+		</table>
 	</form>
 </div>
 <br />

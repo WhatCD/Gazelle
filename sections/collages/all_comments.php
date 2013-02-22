@@ -3,7 +3,7 @@
 
 Things to expect in $_GET:
 	ThreadID: ID of the forum curently being browsed
-	page:	The page the user's on. 
+	page:	The page the user's on.
 	page = 1 is the same as no page
 
 ********************************************************************************/
@@ -15,7 +15,7 @@ $Text = new TEXT;
 
 // Check for lame SQL injection attempts
 $CollageID = $_GET['collageid'];
-if(!is_number($CollageID)) { 
+if(!is_number($CollageID)) {
 	error(0);
 }
 
@@ -105,7 +105,7 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 		</td>
 	</tr>
 </table>
-<?	} 
+<?	}
 if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 	if($ThreadInfo['MinClassWrite'] <= $LoggedUser['Class'] && !$LoggedUser['DisablePosting']) {
 

@@ -1,8 +1,8 @@
 <?
 if(!check_perms('site_debug')) { error(403); }
-if(isset($_POST['global_flush'])){ 
+if(isset($_POST['global_flush'])){
 	authorize();
-	$Cache->flush(); 
+	$Cache->flush();
 }
 $DB->query('SHOW GLOBAL STATUS');
 $DBStats =$DB->to_array('Variable_name');

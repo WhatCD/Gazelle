@@ -37,7 +37,7 @@ if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
 		FROM users_main AS m
 		JOIN users_info AS i ON i.UserID = m.ID
 		WHERE m.ID = $UserID");
-	
+
 	if($DB->record_count() == 0){ // If user doesn't exist
 		error(404);
 	}
@@ -164,22 +164,22 @@ if($ShowGrouped) {
 		$sql.='
 		AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\') AND (l.PostID<t.LastPostID OR l.PostID IS NULL)) ';
 	}
-	
+
 	$sql .= '
 		ORDER BY p.ID DESC';
-	
+
 	if($ShowGrouped) {
 		$sql.='
 		) AS sub
 		GROUP BY TopicID ORDER BY ID DESC';
 	}
-	
+
 	$sql.=' LIMIT '.$Limit;
 	$Posts = $DB->query($sql);
-	
+
 	$DB->query("SELECT FOUND_ROWS()");
 	list($Results) = $DB->next_record();
-	
+
 	$DB->set_query_id($Posts);
 }
 
@@ -208,7 +208,7 @@ if($ViewingOwn) {
 		$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
 		$DB->set_query_id($Posts);
 	}
-	
+
 	if(!$ShowUnread){ ?>
 		<br /><br />
 		<? if($ShowGrouped) { ?>
@@ -220,7 +220,7 @@ if($ViewingOwn) {
 <?	} else { ?>
 		<br /><br />
 		<a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=0&amp;group=0" class="brackets">Show all posts</a>&nbsp;&nbsp;&nbsp;
-<?	
+<?
 		if(!$ShowGrouped) {
 			?><a href="userhistory.php?action=posts&amp;userid=<?=$UserID?>&amp;showunread=1&amp;group=1" class="brackets">Only display posts with unread replies (grouped)</a>&nbsp;&nbsp;&nbsp;<?
 		}
@@ -305,7 +305,7 @@ if(empty($Results)) {
 ?>
 				<img src="<?=$Avatar?>" width="150" style="max-height:400px;" alt="<?=$Username?>'s avatar" />
 <?
-				} 
+				}
 ?>
 			</td>
 <?
@@ -322,7 +322,7 @@ if(empty($Results)) {
 <? 				} ?>
 					Last edited by
 					<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
-<?			} ?>		
+<?			} ?>
 				</div>
 			</td>
 		</tr>

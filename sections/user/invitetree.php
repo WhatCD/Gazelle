@@ -1,7 +1,7 @@
 <?
 if(isset($_GET['userid']) && check_perms('users_view_invites')){
 	if(!is_number($_GET['userid'])){ error(403); }
-	
+
 	$UserID=$_GET['userid'];
 	$Sneaky = true;
 } else {
@@ -10,7 +10,7 @@ if(isset($_GET['userid']) && check_perms('users_view_invites')){
 		list($UserCount) = $DB->next_record();
 		$Cache->cache_value('stats_user_count', $UserCount, 0);
 	}
-	
+
 	$UserID = $LoggedUser['ID'];
 	$Sneaky = false;
 }

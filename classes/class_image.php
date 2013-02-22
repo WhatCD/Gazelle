@@ -8,7 +8,7 @@ class IMAGE {
 	var $FontSize = 10;
 	var $Font = '';
 	var $TextAngle = 0;
-	
+
 	function create($Width, $Height) {
 		$this->Image = imagecreate($Width, $Height);
 		$this->Font = SERVER_ROOT.'/classes/fonts/VERDANA.TTF';
@@ -16,11 +16,11 @@ class IMAGE {
 			imageantialias($this->Image, true);
 		}
 	}
-	
+
 	function color($Red, $Green, $Blue, $Alpha=0){
 		return imagecolorallocatealpha($this->Image, $Red, $Green, $Blue, $Alpha);
 	}
-	
+
 	function line($x1, $y1, $x2, $y2, $Color, $Thickness = 1){
 		if($Thickness == 1){
 			return imageline($this->Image, $x1, $y1, $x2, $y2, $Color);
@@ -40,19 +40,19 @@ class IMAGE {
 		imagefilledpolygon($this->Image, $Points, 4, $Color);
 		return imagepolygon($this->Image, $Points, 4, $Color);
 	}
-	
+
 	function ellipse($x, $y, $Width, $Height, $Color){
 		return imageEllipse($this->Image, $x, $y, $Width, $Height, $Color);
 	}
-	
+
 	function text($x, $y, $Color, $Text){
 		return imagettftext ($this->Image, $this->FontSize,$this->TextAngle, $x, $y, $Color, $this->Font, $Text);
 	}
-	
+
 	function make_png($FileName = NULL){
 		return imagepng($this->Image, $FileName);
 	}
-	
-	
+
+
 }
 ?>

@@ -1,7 +1,7 @@
 <?
 /***************************************************************
 * This page handles the backend of the "new group" function
-* which splits a torrent off into a new group. 
+* which splits a torrent off into a new group.
 ****************************************************************/
 
 authorize();
@@ -61,13 +61,13 @@ if(empty($_POST['confirm'])) {
 	}
 
 	$DB->query("INSERT INTO torrents_group
-		(ArtistID, NumArtists, CategoryID, Name, Year, Time, WikiBody, WikiImage, SearchText) 
+		(ArtistID, NumArtists, CategoryID, Name, Year, Time, WikiBody, WikiImage, SearchText)
 		VALUES
 		($ArtistID, '1', '1', '$Title', '$Year', '".sqltime()."', '', '', '$SearchText')");
 	$GroupID = $DB->inserted_id();
 
-	$DB->query("INSERT INTO torrents_artists 
-		(GroupID, ArtistID, AliasID, Importance, UserID) VALUES 
+	$DB->query("INSERT INTO torrents_artists
+		(GroupID, ArtistID, AliasID, Importance, UserID) VALUES
 		('$GroupID', '$ArtistID', '$AliasID', '1', '$LoggedUser[ID]')");
 
 	$DB->query("UPDATE torrents SET

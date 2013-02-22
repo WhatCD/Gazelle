@@ -24,7 +24,7 @@ if($_POST['submit'] == 'Delete'){ //Delete
 			Time='".sqltime()."'
 			WHERE ID='$P[id]'");
 	} else { //Create
-		$DB->query("INSERT INTO do_not_upload 
+		$DB->query("INSERT INTO do_not_upload
 			(Name, Comment, UserID, Time) VALUES
 			('$P[name]','$P[comment]','$LoggedUser[ID]','".sqltime()."')");
 	}

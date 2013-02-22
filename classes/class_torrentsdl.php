@@ -21,6 +21,8 @@ class TorrentsDL {
 	 * @param string $Title name of the collection that will be created
 	 */
 	public function __construct(&$QueryResult, $Title) {
+		global $Cache;
+		$Cache->InternalCache = false; // The internal cache is almost completely useless for this
 		Zip::unlimit(); // Need more memory and longer timeout
 		$this->QueryResult = $QueryResult;
 		$this->Title = $Title;
@@ -168,6 +170,7 @@ class TorrentsDL {
 	 * @return file name with at most 180 characters that is valid on most systems
 	 */
 	public static function construct_file_name($Artist, $Album, $Year, $Media, $Format, $Encoding, $TorrentID = false, $TxtExtension = false) {
+		$TorrentArtist = Misc::file_string($Artist);
 		$TorrentName = Misc::file_string($Album);
 		if ($Year > 0) {
 			$TorrentName .= " - $Year";
@@ -190,8 +193,8 @@ class TorrentsDL {
 
 		if (!$TorrentName) {
 			$TorrentName = "No Name";
-		} else if (strlen($TorrentName . $TorrentInfo) <= 197) {
-			$TorrentName = Misc::file_string($Artist) . $TorrentName;
+		} else if (strlen($Artist . $TorrentName . $TorrentInfo) <= 196) {
+			$TorrentName = $Artist . $TorrentName;
 		}
 
 		// Leave some room to the user in case the file system limits the path length

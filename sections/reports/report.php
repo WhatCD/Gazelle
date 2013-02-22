@@ -10,7 +10,7 @@ if(!array_key_exists($_GET['type'], $Types)) {
 	error(403);
 }
 $Short = $_GET['type'];
-$Type = $Types[$Short]; 
+$Type = $Types[$Short];
 
 $ID = $_GET['id'];
 
@@ -142,7 +142,7 @@ switch($Short) {
 		</tr>
 		<tr>
 			<td><?=display_str($Name)?></td>
-			<td><?=$Text->full_format($Desc)?></td>	
+			<td><?=$Text->full_format($Desc)?></td>
 			<td><strong><?=($Filled == 0 ? 'No' : 'Yes')?></strong></td>
 		</tr>
 	</table>
@@ -167,10 +167,10 @@ switch($Short) {
 					<td>
 						<select id="releasetype" name="releasetype">
 							<option value='0'>---</option>
-<?		
+<?
 		foreach ($ReleaseTypes as $Key => $Val) {
 ?>							<option value='<?=$Key?>' <?=(!empty($ReleaseType) ? ($Key == $ReleaseType ?" selected='selected'" : "") : '') ?>><?=$Val?></option>
-<?			
+<?
 		}
 ?>
 						</select>
@@ -201,11 +201,11 @@ switch($Short) {
 		</tr>
 		<tr>
 			<td><?=display_str($Name)?></td>
-			<td><?=$Text->full_format($Desc)?></td>	
+			<td><?=$Text->full_format($Desc)?></td>
 			<td><strong><?=($Filled == 0 ? 'No' : 'Yes')?></strong></td>
 		</tr>
 	</table>
-<?	
+<?
 		break;
 	case "collage" :
 ?>
@@ -216,11 +216,11 @@ switch($Short) {
 			<td>Description</td>
 		</tr>
 		<tr>
-			<td><?=display_str($Name)?></td>	
+			<td><?=display_str($Name)?></td>
 			<td><?=$Text->full_format($Desc)?></td>
 		</tr>
 	</table>
-<?	
+<?
 		break;
 	case "thread" :
 ?>
@@ -231,11 +231,11 @@ switch($Short) {
 			<td>Title</td>
 		</tr>
 		<tr>
-			<td><?=display_str($Username)?></td>	
+			<td><?=display_str($Username)?></td>
 			<td><?=display_str($Title)?></td>
 		</tr>
 	</table>
-<?	
+<?
 		break;
 	case "post" :
 ?>
@@ -246,11 +246,11 @@ switch($Short) {
 			<td>Body</td>
 		</tr>
 		<tr>
-			<td><?=display_str($Username)?></td>	
+			<td><?=display_str($Username)?></td>
 			<td><?=$Text->full_format($Body)?></td>
 		</tr>
 	</table>
-<?	
+<?
 		break;
 	case "requests_comment" :
     case "torrents_comment" :
@@ -264,12 +264,12 @@ switch($Short) {
 			<td>Body</td>
 		</tr>
 		<tr>
-			<td><?=display_str($Username)?></td>	
+			<td><?=display_str($Username)?></td>
 			<td><?=$Text->full_format($Body)?></td>
 		</tr>
 	</table>
-<?	
-	break;	   
+<?
+	break;
 }
 if(empty($NoReason)) {
 ?>

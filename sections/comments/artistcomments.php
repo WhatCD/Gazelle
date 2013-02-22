@@ -47,7 +47,7 @@ $DB->set_query_id($Comments);
 			<?=$OtherLink?>
 		</div>
 <? } ?>
-	</div>  
+	</div>
 	<div class="linkbox">
 		<?=$Pages?>
 	</div>
@@ -62,7 +62,7 @@ while(list($UserID, $ArtistID, $ArtistName, $PostID, $Body, $AddedTime, $EditedT
 } /* end while loop*/ ?>
 	<div class="linkbox"><?= $Pages; ?></div>
 </div>
-<?  
+<?
 
   View::show_footer();
 

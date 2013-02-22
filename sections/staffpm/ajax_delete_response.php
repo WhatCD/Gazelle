@@ -19,9 +19,9 @@ if (!($SupportFor != '' || $DisplayStaff == '1')) {
 }
 
 if ($ID = (int)$_POST['id']) {
-	$DB->query("DELETE FROM staff_pm_responses WHERE ID=$ID");	
+	$DB->query("DELETE FROM staff_pm_responses WHERE ID=$ID");
 	echo '1';
-		
+
 } else {
 	// No id
 	echo '-1';

@@ -33,7 +33,7 @@ class Format
 		'lossy master approved' => 'tl_approved tl_lossy_master',
 		'lossy web approved'    => 'tl_approved tl_lossy_web'
 	);
-	
+
 	/**
 	 * Shorten a string
 	 *
@@ -499,9 +499,9 @@ class Format
 
 	/**
 	 * Modified accessor for the $TorrentLabels array
-	 * 
+	 *
 	 * Converts $text to lowercase and strips non-word characters
-	 * 
+	 *
 	 * @param string $text Search string
 	 * @return string CSS class(es)
 	 */

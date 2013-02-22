@@ -13,7 +13,7 @@ $DB->query("SELECT
 	eb.Time,
 	eb.Email,
 	eb.Comment
-	FROM email_blacklist AS eb 
+	FROM email_blacklist AS eb
 	ORDER BY eb.Time DESC LIMIT $Limit");
 $Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 $DB->query("SELECT FOUND_ROWS()");
@@ -49,7 +49,7 @@ list ($NumResults) = $DB->next_record();
 		</form>
 	</tr>
 	<?
-	
+
 	foreach ($Results as $Result) {
 		?>
 	<tr>

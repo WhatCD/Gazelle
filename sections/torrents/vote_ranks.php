@@ -8,7 +8,7 @@ if ($GroupCategoryID == 1) {
 	$names = array('overall'=>'<a href="top10.php?type=votes">overall</a>',
 				   'decade'=>check_perms('site_advanced_top10') ? 'for the <a href="top10.php?advanced=1&type=votes&year1='.$GroupDecade.'&year2='.($GroupDecade+9).'">'.$GroupDecade.'s</a>' : 'for the '.$GroupDecade.'s',
 				   'year'=>check_perms('site_advanced_top10') ? 'for <a href="top10.php?advanced=1&type=votes&year1='.$GroupYear.'&year2=">'.$GroupYear.'</a>' : "for $GroupYear");
-				   
+
 	foreach ($names as $key => $text) {
 		if ($Rank = $Rankings[$key]) {
 			if ($Rank <= 10) {
@@ -18,11 +18,11 @@ if ($GroupCategoryID == 1) {
 			} elseif ($Rank <= 50) {
 				$Class = "vr_top_50";
 			}
-			
+
 			$LIs .= '<li id="vote_rank_'.$key.'" class="'.$Class.'">No. '.$Rank.' '.$text.'</li>';
 		}
 	}
-	
+
 	if ($LIs != '') {
 ?>
 		<div class="box" id="votes_ranks">

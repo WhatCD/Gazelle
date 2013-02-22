@@ -37,13 +37,13 @@ if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('poll
 	$Answers = unserialize($Answers);
 	$DB->query("SELECT Vote, COUNT(UserID) FROM forums_polls_votes WHERE TopicID='$TopicID' AND Vote <> '0' GROUP BY Vote");
 	$VoteArray = $DB->to_array(false, MYSQLI_NUM);
-	
+
 	$Votes = array();
 	foreach ($VoteArray as $VoteSet) {
-		list($Key,$Value) = $VoteSet; 
+		list($Key,$Value) = $VoteSet;
 		$Votes[$Key] = $Value;
 	}
-	
+
 	for ($i = 1, $il = count($Answers); $i <= $il; ++$i) {
 		if (!isset($Votes[$i])) {
 			$Votes[$i] = 0;
@@ -112,7 +112,7 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 				} else {
 					$Ratio=0;
 					$Percent=0;
-				} 
+				}
 ?>
 					<li><?=display_str($Answers[$i])?> (<?=number_format($Percent*100,2)?>%)</li>
 					<li class="graph">
@@ -123,13 +123,13 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 <?			}
 		} else {
 			//Staff forum, output voters, not percentages
-			$DB->query("SELECT GROUP_CONCAT(um.Username SEPARATOR ', '), 
-							fpv.Vote 
-						FROM users_main AS um 
+			$DB->query("SELECT GROUP_CONCAT(um.Username SEPARATOR ', '),
+							fpv.Vote
+						FROM users_main AS um
 							JOIN forums_polls_votes AS fpv ON um.ID = fpv.UserID
 						WHERE TopicID = ".$TopicID."
 						GROUP BY fpv.Vote");
-			
+
 			$StaffVotes = $DB->to_array();
 			foreach($StaffVotes as $StaffVote) {
 				list($StaffString, $StaffVoted) = $StaffVote;

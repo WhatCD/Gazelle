@@ -68,14 +68,14 @@ if ($BookmarkView) {
 	$BookmarkJoin = '';
 }
 
-$BaseSQL = $SQL = "SELECT SQL_CALC_FOUND_ROWS 
-	c.ID, 
-	c.Name, 
+$BaseSQL = $SQL = "SELECT SQL_CALC_FOUND_ROWS
+	c.ID,
+	c.Name,
 	c.NumTorrents,
 	c.TagList,
 	c.CategoryID,
 	c.UserID
-	FROM collages AS c 
+	FROM collages AS c
 	$BookmarkJoin
 	WHERE Deleted = '0'";
 
@@ -214,7 +214,7 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 						<input type="submit" value="Search" />
 					</td>
 				</tr>
-			</table>	
+			</table>
 		</form>
 	</div>
 <? } // if (!$BookmarkView) ?>
@@ -222,12 +222,12 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 <? if (!$BookmarkView) {
 if (check_perms('site_collages_create')) { ?>
 		<a href="collages.php?action=new" class="brackets">New collage</a>
-<? } 
+<? }
 if (check_perms('site_collages_personal')) {
-	
+
  	$DB->query("SELECT ID FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
 	$CollageCount = $DB->record_count();
-	
+
 	if ($CollageCount == 1) {
 		list($CollageID) = $DB->next_record();
 ?>
@@ -235,7 +235,7 @@ if (check_perms('site_collages_personal')) {
 <?	} elseif ($CollageCount > 1) { ?>
 		<a href="collages.php?action=mine" class="brackets">Personal collages</a>
 <?	}
-} 
+}
 if (check_perms('site_collages_subscribe')) { ?>
 		<a href="userhistory.php?action=subscribed_collages" class="brackets">Subscribed collages</a>
 <? } ?>
@@ -296,7 +296,7 @@ foreach ($Collages as $Collage) {
 			$Tags[]='<a href="collages.php?action=search&amp;tags='.$Tag.'">'.$Tag.'</a>';
 	}
 	$Tags = implode(', ', $Tags);
-	
+
 	//Print results
 ?>
 	<tr class="row<?=$Row?> <?=($BookmarkView)?'bookmark_'.$ID:''?>">
@@ -309,7 +309,7 @@ foreach ($Collages as $Collage) {
 			<span style="float:right">
 				<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;" class="brackets">Remove bookmark</a>
 			</span>
-<?	} 
+<?	}
 		if(!empty($Tags)) {
 ?>
 			<div class="tags">

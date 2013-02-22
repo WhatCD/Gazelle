@@ -166,7 +166,7 @@ function get_group_requests($GroupID) {
 		return array();
 	}
 	global $DB, $Cache;
-	
+
 	$Requests = $Cache->get_value('requests_group_'.$GroupID);
 	if ($Requests === FALSE) {
 		$DB->query("SELECT ID FROM requests WHERE GroupID = $GroupID AND TimeFilled = '0000-00-00 00:00:00'");

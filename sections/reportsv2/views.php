@@ -172,7 +172,7 @@ $Results = $DB->to_array();
 	<td style="vertical-align: top;">
 <?
 	$DB->query("SELECT r.ResolverID,
-						um.Username, 
+						um.Username,
 						COUNT(r.ID) AS Count,
 						COUNT(tasted.Tasted) AS Tasted
 				FROM reportsv2 AS r
@@ -189,8 +189,8 @@ $Results = $DB->to_array();
 				<td>Current count</td>
 				<td>Tasted count</td>
 			</tr>
-		
-	<?	
+
+	<?
 		foreach($Staff as $Array) {	?>
 			<tr>
 				<td>
@@ -201,7 +201,7 @@ $Results = $DB->to_array();
 					<a href="reportsv2.php?view=tasted&amp;id=<?=$Array['ResolverID']?>"><?=number_format($Array['Tasted'])?></a>
 				</td>
 			</tr>
-	<?	
+	<?
 		}
 	?>
 		</table>
@@ -210,7 +210,7 @@ $Results = $DB->to_array();
 <?
 	$DB->query("SELECT 	r.Type,
 						COUNT(r.ID) AS Count
-				FROM reportsv2 AS r 
+				FROM reportsv2 AS r
 				WHERE r.Status='New'
 				GROUP BY r.Type");
 	$Current = $DB->to_array();

@@ -1,9 +1,9 @@
 <?
 //Props to Leto of StC.
 if (
-	!check_perms('users_view_invites') && 
-	!check_perms('users_disable_users') && 
-	!check_perms('users_edit_invites') && 
+	!check_perms('users_view_invites') &&
+	!check_perms('users_disable_users') &&
+	!check_perms('users_edit_invites') &&
 	!check_perms('users_disable_any')
 ) { error(404); }
 View::show_header("Manipulate Invite Tree");
@@ -12,16 +12,16 @@ if($_POST['id']) {
 	authorize();
 
 	if(!is_number($_POST['id'])) { error(403); }
-	if(!$_POST['comment']) { error('Please enter a comment to add to the users affected.'); 
+	if(!$_POST['comment']) { error('Please enter a comment to add to the users affected.');
 	} else { $Comment = db_string($_POST['comment']); }
 	$UserID = $_POST['id'];
-	$DB->query("SELECT 
-		t1.TreePosition, 
-		t1.TreeID, 
-		t1.TreeLevel, 
-		(SELECT 
-			t2.TreePosition FROM invite_tree AS t2 
-			WHERE TreeID=t1.TreeID AND TreeLevel=t1.TreeLevel AND t2.TreePosition>t1.TreePosition 
+	$DB->query("SELECT
+		t1.TreePosition,
+		t1.TreeID,
+		t1.TreeLevel,
+		(SELECT
+			t2.TreePosition FROM invite_tree AS t2
+			WHERE TreeID=t1.TreeID AND TreeLevel=t1.TreeLevel AND t2.TreePosition>t1.TreePosition
 			ORDER BY TreePosition LIMIT 1
 		) AS MaxPosition
 		FROM invite_tree AS t1
@@ -30,14 +30,14 @@ if($_POST['id']) {
 	if(!$MaxPosition){ $MaxPosition = 1000000; } // $MaxPermission is null if the user is the last one in that tree on that level
 	if(!$TreeID){ return; }
 		$DB->query("
-			SELECT 
+			SELECT
 			UserID
 			FROM invite_tree
 			WHERE TreeID=$TreeID
 			AND TreePosition>$TreePosition
 			AND TreePosition<$MaxPosition
 			AND TreeLevel>$TreeLevel
-			ORDER BY TreePosition");		
+			ORDER BY TreePosition");
 	$BanList = array();
 
 	while(list($Invitee) = $DB->next_record()) {
@@ -73,7 +73,7 @@ if($_POST['id']) {
 					SET Enabled='2'
 					WHERE ID='".$InviteeID."'");
 			$Msg = "Successfully banned entire invite tree!";
-		} elseif ($_POST['perform']=='inviteprivs') { //DisableInvites =1 
+		} elseif ($_POST['perform']=='inviteprivs') { //DisableInvites =1
 			$DB->query("UPDATE
 					users_info
 					SET DisableInvites='1'

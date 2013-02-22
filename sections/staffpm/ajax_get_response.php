@@ -28,7 +28,7 @@ if ($ID = (int)$_GET['id']) {
 		$Text = new TEXT;
 		echo $Text->full_format($Message);
 	}
-	
+
 } else {
 	// No id
 	echo '-1';

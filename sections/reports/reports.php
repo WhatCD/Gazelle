@@ -45,22 +45,22 @@ if (!check_perms('admin_reports')) {
 
 }
 
-$Reports = $DB->query("SELECT SQL_CALC_FOUND_ROWS 
-		r.ID, 
+$Reports = $DB->query("SELECT SQL_CALC_FOUND_ROWS
+		r.ID,
 		r.UserID,
-		um.Username, 
-		r.ThingID, 
-		r.Type, 
-		r.ReportedTime, 
-		r.Reason, 
+		um.Username,
+		r.ThingID,
+		r.Type,
+		r.ReportedTime,
+		r.Reason,
 		r.Status,
 		r.ClaimerID,
         r.Notes,
         r.ResolverID
-	FROM reports AS r 
+	FROM reports AS r
 	JOIN users_main AS um ON r.UserID=um.ID
 	WHERE " . $Where . "
-	ORDER BY ReportedTime 
+	ORDER BY ReportedTime
 	DESC LIMIT " . $Limit);
 
 // Number of results (for pagination)
@@ -219,7 +219,7 @@ $DB->set_query_id($Reports);
 						<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;" class="brackets">Claim</a>
 						<? } ?>
 						&nbsp;&nbsp;
-						<a href="#" onclick="toggleNotes(<?=$ReportID?>); return false;" class="brackets">Toggle Notes</a>
+						<a href="#" onclick="toggleNotes(<?=$ReportID?>); return false;" class="brackets">Toggle notes</a>
 
 						<div id="notes_div_<?=$ReportID?>" style="display: <?=empty($Notes) ? "none" : "block"?>;">
 							<textarea cols="50" rows="3" id="notes_<?=$ReportID?>"><?=$Notes?></textarea>
@@ -238,7 +238,7 @@ $DB->set_query_id($Reports);
 						</form>
 					</td>
 				</tr>
-                <? } else { 
+                <? } else {
                         $ResolverInfo = Users::user_info($ResolverID);
                     ?>
                     <tr>

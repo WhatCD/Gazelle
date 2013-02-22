@@ -9,9 +9,9 @@ if(!empty($_GET['letter'])) {
 
 View::show_header($Title);
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS 
-	w.ID, 
-	w.Title, 
+$sql = "SELECT SQL_CALC_FOUND_ROWS
+	w.ID,
+	w.Title,
 	w.Date,
 	w.Author
 	FROM wiki_articles AS w

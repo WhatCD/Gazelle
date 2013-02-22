@@ -2,7 +2,7 @@
 
 
 require(SERVER_ROOT.'/sections/torrents/functions.php');
-include(SERVER_ROOT.'/sections/bookmarks/functions.php'); 
+include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 

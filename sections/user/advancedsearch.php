@@ -19,7 +19,7 @@ if (!empty($_GET['search'])) {
 		$_GET['comment'] = $_GET['search'];
 	}
 }
- 
+
 define('USERS_PER_PAGE', 30);
 
 function wrap($String, $ForceMatch = '', $IPSearch = false){
@@ -82,14 +82,14 @@ function date_compare($Field, $Operand, $Date1, $Date2 = ''){
 
 
 function num_compare($Field, $Operand, $Num1, $Num2 = ''){
-	
+
 	if($Num1!=0){
 		$Num1 = db_string($Num1);
 	}
 	if($Num2!=0){
 		$Num2 = db_string($Num2);
 	}
-	
+
 	$Return = array();
 
 	switch($Operand){
@@ -164,7 +164,7 @@ if(count($_GET)){
 
 	$Val->SetFields('order', '0', 'inarray', 'Invalid ordering', $OrderVals);
 	$Val->SetFields('way', '0', 'inarray', 'Invalid way', $WayVals);
-	
+
 	$Val->SetFields('passkey', '0', 'string', 'Invalid passkey', array('maxlength'=>32));
 	$Val->SetFields('avatar', '0', 'string', 'Avatar URL too long', array('maxlength'=>512));
 	$Val->SetFields('stylesheet', '0', 'inarray', 'Invalid stylesheet', array_unique(array_keys($Stylesheets)));
@@ -235,7 +235,7 @@ if(count($_GET)){
 		}
 		
 
-		if (!empty($_GET['email_cnt'])) {
+		if (!empty($_GET['email_cnt']) && is_number($_GET['email_cnt'])) {
 			$Query = "SELECT UserID FROM users_history_emails GROUP BY UserID HAVING COUNT(DISTINCT Email) ";
 			if ($_GET['emails_opt'] === 'equal') {
 				$operator = '=';
@@ -269,9 +269,9 @@ if(count($_GET)){
 
 		if (!empty($_GET['cc'])) {
 			if ($_GET['cc_op'] == "equal") {
-				$Where[]="um1.ipcc = '".$_GET['cc']."'";
+				$Where[]="um1.ipcc = '".db_string($_GET['cc'])."'";
 			} else {
-				$Where[]="um1.ipcc != '".$_GET['cc']."'";
+				$Where[]="um1.ipcc != '".db_string($_GET['cc'])."'";
 			}
 		}
 
@@ -285,13 +285,13 @@ if(count($_GET)){
 //				$Distinct = 'DISTINCT ';
 //				$Join['xs']=' JOIN xbt_snatched AS xs ON um1.ID=xs.uid ';
 //				$Where[]= ' xs.IP '.$Match.wrap($_GET['ip']);
-//		}	
-		
+//		}
+
 		if(!empty($_GET['comment'])){
 			$Where[]='ui1.AdminComment'.$Match.wrap($_GET['comment']);
 		}
-		
-		
+
+
 		if(strlen($_GET['invites1'])){
 			$Invites1 = round($_GET['invites1']);
 			$Invites2 = round($_GET['invites2']);
@@ -340,13 +340,13 @@ if(count($_GET)){
 			$Download2 = round($_GET['downloaded2']);
 			$Where[]=implode(' AND ', num_compare('ROUND(Downloaded/1024/1024/1024)', $_GET['downloaded'], $Download1, $Download2));
 		}
-		
+
 		if(strlen($_GET['snatched1'])){
 			$Snatched1 = round($_GET['snatched1']);
 			$Snatched2 = round($_GET['snatched2']);
 			$Having[]=implode(' AND ', num_compare('Snatches', $_GET['snatched'], $Snatched1, $Snatched2));
 		}
-		
+
 		if($_GET['enabled']!=''){
 			$Where[]='um1.Enabled='.wrap($_GET['enabled'], '=');
 		}
@@ -355,7 +355,7 @@ if(count($_GET)){
 			$Where[]='um1.PermissionID='.wrap($_GET['class'], '=');
 		}
 		
-		
+
 		if($_GET['secclass']!=''){
 			$Join['ul']=' JOIN users_levels AS ul ON um1.ID=ul.UserID ';
 			$Where[]='ul.PermissionID='.wrap($_GET['secclass'], '=');
@@ -385,15 +385,15 @@ if(count($_GET)){
 				$Join['um2']=' JOIN users_main AS um2 ON um2.IP=um1.IP AND um2.Enabled=\'2\' ';
 			}
 		}
-		
+
 		if(!empty($_GET['passkey'])){
 			$Where[]='um1.torrent_pass'.$Match.wrap($_GET['passkey']);
 		}
-		
+
 		if(!empty($_GET['avatar'])){
 			$Where[]='ui1.Avatar'.$Match.wrap($_GET['avatar']);
 		}
-		
+
 		if($_GET['stylesheet']!=''){
 			$Where[]='ui1.StyleID='.wrap($_GET['stylesheet'], '=');
 		}
@@ -406,16 +406,16 @@ if(count($_GET)){
 
 		$SQL = 'SELECT '.$Distinct.$SQL;
 		$SQL .= implode(' ', $Join);
-		
+
 		if(count($Where)){
 			$SQL .= ' WHERE '.implode(' AND ', $Where);
 		}
-		
+
 		if(count($Having)){
 			$SQL .= ' HAVING '.implode(' AND ', $Having);
 		}
 		$SQL .= $Order;
-		
+
 		if(count($Where)>0 || count($Join)>0 || count($Having)>0){
 			$RunQuery = true;
 		}
@@ -477,7 +477,7 @@ View::show_header('User search');
 				<td>
 					<select name="class">
 						<option value="" <? if($_GET['class']==='') {echo ' selected="selected"';}?>>Any</option>
-<?	foreach($ClassLevels as $Class){ 
+<?	foreach($ClassLevels as $Class){
 		if ($Class['Secondary']) { continue; }
 ?>
 					<option value="<?=$Class['ID'] ?>" <? if($_GET['class']===$Class['ID']) {echo ' selected="selected"';}?>><?=Format::cut_string($Class['Name'], 10, 1, 1).' ('.$Class['Level'].')'?></option>

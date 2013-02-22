@@ -105,7 +105,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 			</tr>
 <?
 		} // End new class header
-		
+
 		// Display staff members for this class
 		$Row = ($Row == 'a') ? 'b' : 'a';
 ?>
@@ -122,7 +122,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 			</tr>
 <?	} ?>
 		</table>
-		
+
 	</div>
 </div>
 <?

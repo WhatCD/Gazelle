@@ -35,7 +35,7 @@ if(check_perms('admin_manage_wiki')){
 	$Edit=100;
 }
 
-$DB->query("INSERT INTO wiki_articles 
+$DB->query("INSERT INTO wiki_articles
 	(Revision, Title, Body, MinClassRead, MinClassEdit, Date, Author) VALUES
 	('1', '$P[title]', '$P[body]', '$Read', '$Edit', '".sqltime()."', '$LoggedUser[ID]')");
 

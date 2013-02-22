@@ -4,7 +4,7 @@ function class_list($Selected=0){
 	$Return = '';
 	foreach ($Classes as $ID => $Class) {
 		if ($Class['Secondary']) { continue; }
-		
+
 		$Name = $Class['Name'];
 		$Level = $Class['Level'];
 		$Return.='<option value="'.$Level.'"';
@@ -96,17 +96,17 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 			</td>
 			<td>
 				<select name="minclassread">
-					<?=class_list($MinClassRead)?> 
+					<?=class_list($MinClassRead)?>
 				</select>
 			</td>
 			<td>
 				<select name="minclasswrite">
-					<?=class_list($MinClassWrite)?> 
+					<?=class_list($MinClassWrite)?>
 				</select>
 			</td>
 			<td>
 				<select name="minclasscreate">
-					<?=class_list($MinClassCreate)?> 
+					<?=class_list($MinClassCreate)?>
 				</select>
 			</td>
 			<td>
@@ -119,7 +119,7 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 				<input type="submit" name="submit" value="Edit" />
 				<input type="submit" name="submit" value="Delete" />
 			</td>
-			
+
 		</form>
 	</tr>
 <?
@@ -151,17 +151,17 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 			</td>
 			<td>
 				<select name="minclassread">
-					<?=class_list()?> 
+					<?=class_list()?>
 				</select>
 			</td>
 			<td>
 				<select name="minclasswrite">
-					<?=class_list()?> 
+					<?=class_list()?>
 				</select>
 			</td>
 			<td>
 				<select name="minclasscreate">
-					<?=class_list()?> 
+					<?=class_list()?>
 				</select>
 			</td>
 			<td>
@@ -173,7 +173,7 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 			<td>
 				<input type="submit" value="Create" />
 			</td>
-			
+
 		</form>
 	</tr>
 </table>

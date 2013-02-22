@@ -1,8 +1,8 @@
 <?
 
 $CollageID = $_GET['collageid'];
-if(!is_number($CollageID) || !$CollageID) { 
-	error(404); 
+if(!is_number($CollageID) || !$CollageID) {
+	error(404);
 }
 
 $DB->query("SELECT Name, UserID FROM collages WHERE ID='$CollageID'");

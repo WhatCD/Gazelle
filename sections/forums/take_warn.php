@@ -45,15 +45,15 @@ $DB->query("SELECT
     p.AuthorID,
     p.TopicID,
     t.ForumID,
-    CEIL((SELECT COUNT(ID) 
-    FROM forums_posts 
-    WHERE forums_posts.TopicID = p.TopicID 
+    CEIL((SELECT COUNT(ID)
+    FROM forums_posts
+    WHERE forums_posts.TopicID = p.TopicID
     AND forums_posts.ID <= '$PostID')/" . POSTS_PER_PAGE
-				. ") 
+				. ")
     AS Page
     FROM forums_posts as p
     JOIN forums_topics as t on p.TopicID = t.ID
-    JOIN forums as f ON t.ForumID=f.ID 
+    JOIN forums as f ON t.ForumID=f.ID
     WHERE p.ID='$PostID'");
 list($OldBody, $AuthorID, $TopicID, $ForumID, $Page) = $DB->next_record();
 

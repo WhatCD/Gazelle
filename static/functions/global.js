@@ -9,15 +9,15 @@ function toggleChecks(formElem,masterElem) {
 
 //Lightbox stuff
 
-/* 
+/*
  *  If loading from a thumbnail the lightbox is shown first with a "loading" screen
  *  while the full size image loads, then the html of the lightbox is replaced with the image.
- */ 
+ */
 
 var lightbox = {
 	init: function (image, size) {
 		if(typeof(image)=='string') {
-			$('#lightbox').show().listen('click',lightbox.unbox).raw().innerHTML = 
+			$('#lightbox').show().listen('click',lightbox.unbox).raw().innerHTML =
 				'<p size="7" style="color:gray;font-size:50px">Loading...<p>';
                         $('#curtain').show().listen('click',lightbox.unbox);
                         var src = image;
@@ -35,7 +35,7 @@ var lightbox = {
 			delete tmp;
 		}
 		if (image.naturalWidth > size) {
-			lightbox.box(image);			
+			lightbox.box(image);
 		}
 	},
 	box: function (image) {

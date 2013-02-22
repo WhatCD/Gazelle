@@ -5,14 +5,14 @@
  **/
 
  $blacklist = array("tinypic", "dsimg");
- 
+
  /**
   * Checks if image host is good, otherwise displays an error.
   */
  function check_imagehost($url) {
     global $blacklist;
-    
-    foreach ($blacklist as &$value) { 
+
+    foreach ($blacklist as &$value) {
         if(strpos(strtolower($url), $value)) {
             $parsed_url = parse_url($url);
             error($parsed_url['host'] . " is not an allowed imagehost. Please use a different imagehost.");
@@ -20,7 +20,7 @@
         }
     }
  }
- 
+
 /**
  * The main function, called to get the thumbnail url.
  */

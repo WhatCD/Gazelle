@@ -226,7 +226,7 @@ switch ($Type) {
 
 		$Validate->SetFields('release_desc',
 			'0','string','The release description has a minimum length of 10 characters.',array('maxlength'=>1000000, 'minlength'=>10));
-		
+
 		$Validate->SetFields('image',
 			'0','link','The image URL you entered was invalid.',array('maxlength'=>255, 'minlength'=>12));
 		break;
@@ -637,13 +637,13 @@ $T['FreeLeechType'] = 0;
 // Torrent
 $DB->query("
 	INSERT INTO torrents
-		(GroupID, UserID, Media, Format, Encoding, 
-		Remastered, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, 
-		Scene, HasLog, HasCue, info_hash, FileCount, FileList, FilePath, Size, Time, 
-		Description, LogScore, FreeTorrent, FreeLeechType) 
+		(GroupID, UserID, Media, Format, Encoding,
+		Remastered, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
+		Scene, HasLog, HasCue, info_hash, FileCount, FileList, FilePath, Size, Time,
+		Description, LogScore, FreeTorrent, FreeLeechType)
 	VALUES
-		(".$GroupID.", ".$LoggedUser['ID'].", ".$T['Media'].", ".$T['Format'].", ".$T['Encoding'].", 
-		".$T['Remastered'].", ".$T['RemasterYear'].", ".$T['RemasterTitle'].", ".$T['RemasterRecordLabel'].", ".$T['RemasterCatalogueNumber'].", 
+		(".$GroupID.", ".$LoggedUser['ID'].", ".$T['Media'].", ".$T['Format'].", ".$T['Encoding'].",
+		".$T['Remastered'].", ".$T['RemasterYear'].", ".$T['RemasterTitle'].", ".$T['RemasterRecordLabel'].", ".$T['RemasterCatalogueNumber'].",
 		".$T['Scene'].", ".$HasLog.", ".$HasCue.", '".db_string($InfoHash)."', ".$NumFiles.", '".$FileString."', '".$FilePath."', ".$TotalSize.", '".sqltime()."',
 		".$T['TorrentDescription'].", '".(($HasLog == "'1'") ? $LogScoreAverage : 0)."', '".$T['FreeLeech']."', '".$T['FreeLeechType']."')");
 
@@ -676,8 +676,8 @@ if($Type == 'Music') {
 
 if (!empty($LogScores) && $HasLog) {
 	$LogQuery = 'INSERT INTO torrents_logs_new (TorrentID,Log,Details,NotEnglish,Score,Revision,Adjusted,AdjustedBy,AdjustmentReason) VALUES (';
-	foreach ($LogScores as $LogKey => $LogScore) { 
-		$LogScores[$LogKey] = "$TorrentID,$LogScore,1,0,0,NULL"; 
+	foreach ($LogScores as $LogKey => $LogScore) {
+		$LogScores[$LogKey] = "$TorrentID,$LogScore,1,0,0,NULL";
 	}
 	$LogQuery .= implode('),(', $LogScores).')';
 	$DB->query($LogQuery);
@@ -708,7 +708,7 @@ if(trim($Properties['Image']) != "") {
 //******************************************************************************//
 //--------------- Contest ------------------------------------------------------//
 if ($Properties['LibraryImage'] != "") {
-	$DB->query("INSERT INTO reportsv2 (ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, Track, Image, ExtraID, Link) 
+	$DB->query("INSERT INTO reportsv2 (ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, Track, Image, ExtraID, Link)
 			VALUES (0, ".$TorrentID.", 'library', '".db_string(($Properties['MultiDisc'] ? "Multi-disc" : ""))."', 'New', '".sqltime()."', '', '".db_string($Properties['LibraryImage'])."', '', '')");
 }
 
@@ -870,7 +870,7 @@ foreach ($UsedFormatBitrates as $UsedFormatBitrate) {
 	$BitrateReq = "(Encodings LIKE '%|".db_string($UsedFormatBitrate['bitrate'])."|%' OR Encodings = '') ";
 	$SQL .= "AND (NOT($FormatReq AND $BitrateReq)) ";
 }
- 
+
 $SQL .= "))";
 
 

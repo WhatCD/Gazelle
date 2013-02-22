@@ -6,7 +6,7 @@
  ** This function is used to create both the class permissions form, and the   **
  ** user custom permissions form.											  **
  ********************************************************************************/
- 
+
  $PermissionsArray = array(
 	'site_leech' => 'Can leech (Does this work?).',
 	'site_upload' => 'Upload torrent access.',
@@ -31,7 +31,7 @@
 	'site_moderate_requests' => 'Request moderation access.',
 	'site_delete_artist' => 'Can delete artists (must be able to delete torrents+requests).',
 	'site_moderate_forums' => 'Forum moderation access.',
-	
+
 	'site_admin_forums' => 'Forum administrator access.',
 	'site_forums_double_post' => 'Can double post in the forums.',
 	'site_view_flow' => 'Can view stats and data pools.',
@@ -113,7 +113,7 @@
 	'artist_edit_vanityhouse' => 'Can mark artists as part of Vanity House.'
 
  );
- 
+
 function permissions_form(){ ?>
 <div class="permissions">
 	<div class="permission_container">
@@ -216,9 +216,9 @@ function permissions_form(){ ?>
 			</tr>
 			<tr>
 				<td>
-			
+
 					<? display_perm('torrents_edit', 'Can edit any torrent'); ?>
-					
+
 					<? display_perm('torrents_delete', 'Can delete torrents'); ?>
 					<? display_perm('torrents_delete_fast', 'Can delete more than 3 torrents at a time.'); ?>
 					<? display_perm('torrents_freeleech', 'Can make torrents freeleech'); ?>

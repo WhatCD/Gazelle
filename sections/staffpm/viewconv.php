@@ -215,9 +215,9 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="submit" value="Send message" />
 <?	} else { ?>
 					<input type="button" value="Unresolve" onclick="location.href='staffpm.php?action=unresolve&amp;id=<?=$ConvID?>';" />
-<?	} 
+<?	}
 	if (check_perms('users_give_donor')) { ?>
-					<br />	
+					<br />
 					<input type="button" value="Make Donor" onclick="location.href='staffpm.php?action=make_donor&amp;id=<?=$ConvID?>';" />
 <?	} ?>
 				</form>

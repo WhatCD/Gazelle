@@ -26,7 +26,7 @@ while (!feof($Socket)) {
 	if (preg_match('/PING :(.+)$/', $Line, $Ping)) {
 		fwrite($Socket, "PONG :$Ping[1]\n");
 	}
-	
+
 	// Example command
 	if(stripos('!mode', $Line)) {
 	fwrite($Socket, "PRIVMSG ".RELAY." :Mode command used\n");
@@ -34,6 +34,6 @@ while (!feof($Socket)) {
 		fwrite($Socket, "WHOIS WhatMan\n");
 		fwrite($Socket, "MODE Orbulon\n");
 	}
-	
+
 	fwrite($Socket, "PRIVMSG ".RELAY." : -----".$Line."\n");
 }

@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
 		$Val->SetFields('notes', '1','string','You must include the reason for the ban.');
 		$Err=$Val->ValidateForm($_POST); // Validate the form
 		if($Err){ error($Err); }
-	
+
 		$Notes = db_string($_POST['notes']);
 		$Start = Tools::ip_to_unsigned($_POST['start']); //Sanitized by Validation regex
 		$End = Tools::ip_to_unsigned($_POST['end']); //See above
@@ -89,7 +89,7 @@ $DB->set_query_id($Bans);
 					<input type="submit" value="Search" />
 				</td>
 			</tr>
-		</table>	
+		</table>
 	</form>
 </div>
 <br />

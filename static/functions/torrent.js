@@ -215,7 +215,7 @@ function Vote(amount, requestid) {
 	if(amount == 0) {
 		 amount = 20 * 1024 * 1024;
 	}
-	
+
 	var index;
 	var votecount;
 	if(!requestid) {
@@ -227,7 +227,7 @@ function Vote(amount, requestid) {
 		bounty = $('#bounty_' + requestid).raw();
 		index = true;
 	}
-	
+
 	ajax.get('requests.php?action=takevote&id=' + requestid + '&auth=' + authkey + '&amount=' + amount, function (response) {
 			if(response == 'bankrupt') {
 				error_message("You do not have sufficient upload credit to add " + get_size(amount) + " to this request");
@@ -309,7 +309,7 @@ function UnvoteGroup(groupid, authkey) {
 			} else if (response == 'success-up') {
 				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) - 1;
 				$('#upvotes').raw().innerHTML = (parseInt($('#upvotes').raw().innerHTML)) - 1;
-			} 
+			}
 		}
 	);
 	$('#vote_message').show();

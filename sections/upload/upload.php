@@ -13,7 +13,7 @@ ini_set('max_file_uploads','100');
 View::show_header('Upload','upload,jquery,valid_tags,musicbrainz,multiformat_uploader');
 
 if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
-	$DB->query("SELECT 
+	$DB->query("SELECT
 		tg.ID as GroupID,
 		tg.CategoryID,
 		tg.Name AS Title,
@@ -28,26 +28,26 @@ if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])
 		LEFT JOIN torrents AS t ON t.GroupID = tg.ID
 		WHERE tg.ID=".$_GET['groupid']."
 		GROUP BY tg.ID");
-	if ($DB->record_count()) {	
+	if ($DB->record_count()) {
 		list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
 		$UploadForm = $Categories[$Properties['CategoryID']-1];
 		$Properties['CategoryName'] = $Categories[$Properties['CategoryID']-1];
 		$Properties['Artists'] = Artists::get_artist($_GET['groupid']);
-		
-		$DB->query("SELECT 
-			GROUP_CONCAT(tags.Name SEPARATOR ', ') AS TagList 
+
+		$DB->query("SELECT
+			GROUP_CONCAT(tags.Name SEPARATOR ', ') AS TagList
 			FROM torrents_tags AS tt JOIN tags ON tags.ID=tt.TagID
 			WHERE tt.GroupID='$_GET[groupid]'");
-		
+
 		list($Properties['TagList']) = $DB->next_record();
 	} else {
 		unset($_GET['groupid']);
 	}
 	if (!empty($_GET['requestid']) && is_number($_GET['requestid'])) {
 		$Properties['RequestID'] = $_GET['requestid'];
-	}	
+	}
 } elseif (empty($Properties) && !empty($_GET['requestid']) && is_number($_GET['requestid'])) {
-	include(SERVER_ROOT.'/sections/requests/functions.php');	
+	include(SERVER_ROOT.'/sections/requests/functions.php');
 	$DB->query("SELECT
 		r.ID AS RequestID,
 		r.CategoryID,
@@ -59,7 +59,7 @@ if(empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])
 		r.Image
 		FROM requests AS r
 		WHERE r.ID=".$_GET['requestid']);
-	
+
 	list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
 	$UploadForm = $Categories[$Properties['CategoryID']-1];
 	$Properties['CategoryName'] = $Categories[$Properties['CategoryID']-1];
@@ -86,8 +86,8 @@ if(!$GenreTags) {
 	$Cache->cache_value('genre_tags', $GenreTags, 3600*6);
 }
 
-$DB->query("SELECT 
-	d.Name, 
+$DB->query("SELECT
+	d.Name,
 	d.Comment,
 	d.Time
 	FROM do_not_upload as d
@@ -114,14 +114,14 @@ $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
 			<td><strong>Comment</strong></td>
 		</tr>
 <? 	$TimeDiff = strtotime('-1 month', strtotime('now'));
-	foreach($DNU as $BadUpload) { 
+	foreach($DNU as $BadUpload) {
 		list($Name, $Comment, $Updated) = $BadUpload;
-?>		
+?>
 		<tr>
 			<td><?=$Text->full_format($Name)?>
 <?		if($TimeDiff < strtotime($Updated)) { ?>
 				 <strong class="important_text">(New!)</strong>
-		<? } ?>		
+		<? } ?>
 			</td>
 			<td><?=$Text->full_format($Comment)?></td>
 		</tr>
@@ -134,12 +134,12 @@ switch ($UploadForm) {
 	case 'Music':
 		$TorrentForm->music_form($GenreTags);
 		break;
-		
+
 	case 'Audiobooks':
 	case 'Comedy':
 		$TorrentForm->audiobook_form();
 		break;
-	
+
 	case 'Applications':
 	case 'Comics':
 	case 'E-Books':

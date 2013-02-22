@@ -4,7 +4,7 @@ if (!check_perms('users_mod')) { error(403); }
 if (isset($_REQUEST['addtokens'])) {
 	authorize();
 	$Tokens = $_REQUEST['numtokens'];
-	
+
 	if (!is_number($Tokens) || ($Tokens < 0)) {	error("Please enter a valid number of tokens."); }
 	$sql = "UPDATE users_main SET FLTokens = FLTokens + $Tokens WHERE Enabled = '1'";
 	if (!isset($_REQUEST['leechdisabled'])) {
@@ -23,9 +23,9 @@ if (isset($_REQUEST['addtokens'])) {
 } elseif (isset($_REQUEST['cleartokens'])) {
 	authorize();
 	$Tokens = $_REQUEST['numtokens'];
-	
+
 	if (!is_number($Tokens) || ($Tokens < 0)) {	error("Please enter a valid number of tokens."); }
-	
+
 	if (isset($_REQUEST['onlydrop'])) {
 		$Where = "WHERE FLTokens > $Tokens";
 	} elseif (!isset($_REQUEST['leechdisabled'])) {
@@ -36,12 +36,12 @@ if (isset($_REQUEST['addtokens'])) {
 	$DB->query("SELECT ID FROM users_main $Where");
 	$Users = $DB->to_array();
 	$DB->query("UPDATE users_main SET FLTokens = $Tokens $Where");
-	
+
 	foreach ($Users as $UserID) {
 		list($UserID) = $UserID;
 		$Cache->delete_value('user_info_heavy_'.$UserID);
 	}
-	
+
 	$where = "";
 }
 

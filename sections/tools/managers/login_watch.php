@@ -8,7 +8,7 @@ if(isset($_POST['submit']) && isset($_POST['id']) && $_POST['submit'] == 'Unban'
 
 View::show_header('Login Watch');
 
-$DB->query('SELECT 
+$DB->query('SELECT
 	l.ID,
 	l.IP,
 	l.UserID,
@@ -50,7 +50,7 @@ while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $D
 			</td>
 			<td>
 				<?=time_diff($BannedUntil)?>
-			</td>	
+			</td>
 			<td>
 				<form class="manage_form" name="bans" action="" method="post">
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

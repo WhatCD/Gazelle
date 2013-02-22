@@ -81,7 +81,7 @@ if(!$TargetAliasID || $TargetAliasID==$OldAliasID) {
 	} else {
 		$DB->query("UPDATE artists_group SET Name='".db_string($NewName)."' WHERE ArtistID='$ArtistID'");
 	}
-	
+
 	$DB->query("SELECT GroupID FROM torrents_artists WHERE AliasID='$OldAliasID'");
 	$Groups = $DB->collect('GroupID');
 	$DB->query("UPDATE IGNORE torrents_artists SET AliasID='$TargetAliasID',ArtistID='$TargetArtistID' WHERE AliasID='$OldAliasID'");

@@ -1,7 +1,7 @@
 <?
 include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 
-// Number of users per page 
+// Number of users per page
 define('BOOKMARKS_PER_PAGE', '20');
 
 if (empty($_REQUEST['type'])) { $_REQUEST['type'] = 'torrents'; }
@@ -22,7 +22,7 @@ switch ($_REQUEST['type']) {
 		require(SERVER_ROOT.'/sections/ajax/requests/requests.php');
 		break;
 	default:
-		print 
+		print
 			json_encode(
 				array(
 					'status' => 'failure'

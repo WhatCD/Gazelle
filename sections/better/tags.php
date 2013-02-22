@@ -62,7 +62,7 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;
 	}
-	
+
 	$TagList=array();
 	if($TorrentTags!='') {
 		$TorrentTags=explode(' ',$TorrentTags);

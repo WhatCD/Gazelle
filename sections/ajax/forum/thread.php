@@ -141,13 +141,13 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		$Answers = unserialize($Answers);
 		$DB->query("SELECT Vote, COUNT(UserID) FROM forums_polls_votes WHERE TopicID='$ThreadID' GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
-		
+
 		$Votes = array();
 		foreach ($VoteArray as $VoteSet) {
-			list($Key,$Value) = $VoteSet; 
+			list($Key,$Value) = $VoteSet;
 			$Votes[$Key] = $Value;
 		}
-		
+
 		foreach(array_keys($Answers) as $i) {
 			if (!isset($Votes[$i])) {
 				$Votes[$i] = 0;
@@ -155,7 +155,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		}
 		$Cache->cache_value('polls_'.$ThreadID, array($Question,$Answers,$Votes,$Featured,$Closed), 0);
 	}
-	
+
 	if (!empty($Votes)) {
 		$TotalVotes = array_sum($Votes);
 		$MaxVotes = max($Votes);
@@ -163,7 +163,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		$TotalVotes = 0;
 		$MaxVotes = 0;
 	}
-	
+
 	$RevealVoters = in_array($ForumID, $ForumsRevealVoters);
 	//Polls lose the you voted arrow thingy
 	$DB->query("SELECT Vote FROM forums_polls_votes WHERE UserID='".$LoggedUser['ID']."' AND TopicID='$ThreadID'");
@@ -175,14 +175,14 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
 		}
 	}
-	
+
 	$JsonPoll['closed'] = $Closed == 1;
 	$JsonPoll['featured'] = $Featured;
 	$JsonPoll['question'] = $Question;
 	$JsonPoll['maxVotes'] = (int) $MaxVotes;
 	$JsonPoll['totalVotes'] = $TotalVotes;
 	$JsonPollAnswers = array();
-	
+
 	foreach($Answers as $i => $Answer) {
 		if (!empty($Votes[$i]) && $TotalVotes > 0) {
 			$Ratio = $Votes[$i]/$MaxVotes;
@@ -197,13 +197,13 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			'percent' => $Percent
 		);
 	}
-	
+
 	if ($UserResponse !== null || $Closed || $ThreadInfo['IsLocked'] || $LoggedUser['Class'] < $Forums[$ForumID]['MinClassWrite']) {
-		$JsonPoll['voted'] = True;	
+		$JsonPoll['voted'] = True;
 	} else {
 		$JsonPoll['voted'] = False;
 	}
-	
+
 	$JsonPoll['answers'] = $JsonPollAnswers;
 }
 
@@ -241,7 +241,7 @@ foreach ($Thread as $Key => $Post) {
 			'enabled' => $Enabled == 2 ? false : true,
 			'userTitle' => $UserTitle
 		),
-		
+
 	);
 }
 

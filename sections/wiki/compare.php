@@ -5,7 +5,7 @@ function diff($OldText, $NewText) {
 	$LineArrayNew = explode("\n",$NewText);
 	$LineOffset = 0;
 	$Result = array();
-	
+
 	foreach($LineArrayOld as $OldLine => $OldString) {
 		$Key = $OldLine + $LineOffset;
 		if($Key<0) { $Key = 0; }
@@ -19,28 +19,28 @@ function diff($OldText, $NewText) {
 				break;
 			}
 		}
-		
+
 		if($Found=='-1') { //we never found the old line in the new array
 			$Result[] = '<span class="line_deleted">&larr; '.$OldString.'</span><br />';
 			$LineOffset = $LineOffset - 1;
-		} elseif ($Found ==$OldLine+$LineOffset) { 
+		} elseif ($Found ==$OldLine+$LineOffset) {
 			$Result[] = '<span class="line_unchanged">&#8597; '.$OldString.'</span><br />';
 		} elseif ($Found != $OldLine+$LineOffset) {
 			if ($Found < $OldLine+$LineOffset) {
-				$Result[] = '<span class="line_moved">&#8676; '.$OldString.'</span><br />'; 
-			} else { 
+				$Result[] = '<span class="line_moved">&#8676; '.$OldString.'</span><br />';
+			} else {
 				$Result[] = '<span class="line_moved">&larr; '.$OldString.'</span><br />';
 				$Key = $OldLine + $LineOffset;
 				while ($Key<$Found) {
 					$Result[] = '<span class="line_new">&rarr; '.$LineArrayNew[$Key].'</span><br />';
 					$Key++;
 				}
-				$Result[] = '<span class="line_moved">&rarr; '.$OldString.'</span><br />'; 
+				$Result[] = '<span class="line_moved">&rarr; '.$OldString.'</span><br />';
 			}
-				$LineOffset = $Found-$OldLine; 
+				$LineOffset = $Found-$OldLine;
 		}
 	}
-	if(count($LineArrayNew)>count($LineArrayOld) + $LineOffset) { 
+	if(count($LineArrayNew)>count($LineArrayOld) + $LineOffset) {
 		$Key = count($LineArrayOld) + $LineOffset;
 		while($Key<count($LineArrayNew)) {
 			$Result[] = '<span class="line_new">&rarr; '.$LineArrayNew[$Key].'</span><br />';
@@ -64,12 +64,12 @@ function get_body($ID, $Rev) {
 }
 
 if (
-	!isset($_GET['old']) || 
-	!isset($_GET['new']) || 
-	!isset($_GET['id']) || 
-	!is_number($_GET['old']) || 
-	!is_number($_GET['new']) || 
-	!is_number($_GET['id']) || 
+	!isset($_GET['old']) ||
+	!isset($_GET['new']) ||
+	!isset($_GET['id']) ||
+	!is_number($_GET['old']) ||
+	!is_number($_GET['new']) ||
+	!is_number($_GET['id']) ||
 	$_GET['old'] > $_GET['new']
 ) { error(0); }
 

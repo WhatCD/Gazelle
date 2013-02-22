@@ -48,7 +48,7 @@ if ($UsersOnly == 1) {
 							WHERE h.UserID='$UserID' AND h2.UserID>0"/*AND Time<>'0000-00-00 00:00:00'*/."
 				ORDER BY Time DESC");
 } else {
-	$DB->query("SELECT 
+	$DB->query("SELECT
 					u.Email,
 					'".sqltime()."' AS Time,
 					u.IP,
@@ -56,8 +56,8 @@ if ($UsersOnly == 1) {
 				FROM users_main AS u
 				LEFT JOIN geoip_country AS c ON INET_ATON(u.IP) BETWEEN c.StartIP AND c.EndIP
 				WHERE u.ID='$UserID'
-				UNION SELECT 
-					h.Email, 
+				UNION SELECT
+					h.Email,
 					h.Time,
 					h.IP,
 					c.Code
@@ -110,7 +110,7 @@ foreach($History as $Key => $Values){
 			$DB->set_query_id($ueQuery);
 ?>
 		<td><a href="<?=display_str($UserURL)?>"><?=Users::format_username($UserID2, false, false, true)?></a></td>
-	</tr>	
+	</tr>
 <?
 		}
 	}

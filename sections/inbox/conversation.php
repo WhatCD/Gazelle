@@ -95,7 +95,7 @@ if(!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect($
 			<textarea id="quickpost" name="body" cols="90" rows="10"></textarea> <br />
 			<div id="preview" class="box vertical_space body hidden"></div>
 			<div id="buttons" class="center">
-				<input type="button" value="Preview" onclick="Quick_Preview();" /> 
+				<input type="button" value="Preview" onclick="Quick_Preview();" />
 				<input type="submit" value="Send message" />
 			</div>
 		</div>

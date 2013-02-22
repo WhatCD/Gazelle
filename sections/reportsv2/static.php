@@ -3,9 +3,9 @@
  * This page is used for viewing reports in every viewpoint except auto.
  * It doesn't AJAX grab a new report when you resolve each one, use auto
  * for that (reports.php). If you wanted to add a new view, you'd simply
- * add to the case statement(s) below and add an entry to views.php to 
+ * add to the case statement(s) below and add an entry to views.php to
  * explain it.
- * Any changes made to this page within the foreach() should probably be 
+ * Any changes made to this page within the foreach() should probably be
  * replicated on the auto page (reports.php).
  */
 
@@ -35,7 +35,7 @@ if(isset($_GET['id'])) {
 } else {
 	$ID = '';
 }
-	
+
 $Order = "ORDER BY r.ReportedTime ASC";
 
 if(!$ID) {
@@ -90,7 +90,7 @@ if(!$ID) {
 			break;
 		case "reporter" :
 			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
-			list($Username) = $DB->next_record();			
+			list($Username) = $DB->next_record();
 			if($Username) {
 				$Title = "All torrents reported by ".$Username;
 			} else {
@@ -101,7 +101,7 @@ if(!$ID) {
 			break;
 		case "uploader" :
 			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
-			list($Username) = $DB->next_record();			
+			list($Username) = $DB->next_record();
 			if($Username) {
 				$Title = "All reports for torrents uploaded by ".$Username;
 			} else {
@@ -176,7 +176,7 @@ $DB->query("SELECT SQL_CALC_FOUND_ROWS
 			LEFT JOIN users_main AS reporter ON reporter.ID=r.ReporterID
 			LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID "
 			.$Where."
-			GROUP BY r.ID " 
+			GROUP BY r.ID "
 			.$Order."
 			LIMIT ".$Limit);
 
@@ -223,8 +223,8 @@ if(count($Reports) == 0) {
 	foreach($Reports as $Report) {
 		
 		
-		list($ReportID, $ReporterID, $ReporterName, $TorrentID, $Type, $UserComment, $ResolverID, $ResolverName, $Status, $ReportedTime, $LastChangeTime, 
-			$ModComment, $Tracks, $Images, $ExtraIDs, $Links, $LogMessage, $GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle, 
+		list($ReportID, $ReporterID, $ReporterName, $TorrentID, $Type, $UserComment, $ResolverID, $ResolverName, $Status, $ReportedTime, $LastChangeTime,
+			$ModComment, $Tracks, $Images, $ExtraIDs, $Links, $LogMessage, $GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
 			$RemasterYear, $Media, $Format, $Encoding, $Size, $HasCue, $HasLog, $LogScore, $UploaderID, $UploaderName) = Misc::display_array($Report, array("ModComment"));
 		
 		if(!$GroupID && $Status != "Resolved") {
@@ -272,11 +272,11 @@ if(count($Reports) == 0) {
 				$RawName = "$ArtistName - $GroupName".($Year ? " ($Year)" : "")." [$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "").($HasCue ? " (Cue)" : '').($HasLog ? " (Log: $LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 				$LinkName = "<a href='artist.php?id=$ArtistID'>$ArtistName</a> - <a href='torrents.php?id=$GroupID'>$GroupName".($Year ? " ($Year)" : "")."</a> <a href='torrents.php?torrentid=$TorrentID'> [$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."</a> ".($HasCue ? " (Cue)" : '').($HasLog ? " <a href='torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'>(Log: $LogScore %)</a>" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 				$BBName = "[url=artist.php?id=$ArtistID]".$ArtistName."[/url] - [url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."[/url] ".($HasCue ? " (Cue)" : '').($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
-			}	
-		?>	
+			}
+		?>
 			<div id="report<?=$ReportID?>">
 				<form class="manage_form" name="report" id="reportform_<?=$ReportID?>" action="reports.php" method="post">
-					<? 
+					<?
 						/*
 						* Some of these are for takeresolve, namely the ones that aren't inputs, some for the JavaScript.
 						*/
@@ -308,38 +308,38 @@ if(count($Reports) == 0) {
 								<? if ($ReporterName == "") { $ReporterName = "System"; } ?>
 								<div style="text-align: right;">was reported by <a href="user.php?id=<?=$ReporterID?>"><?=$ReporterName?></a> <?=time_diff($ReportedTime)?> for the reason: <strong><?=$ReportType['title']?></strong></div>
 			<?	if($Status != 'Resolved') {
-				
-					$DB->query("SELECT r.ID 
-								FROM reportsv2 AS r 
-								LEFT JOIN torrents AS t ON t.ID=r.TorrentID 
+
+					$DB->query("SELECT r.ID
+								FROM reportsv2 AS r
+								LEFT JOIN torrents AS t ON t.ID=r.TorrentID
 								WHERE r.Status != 'Resolved'
 								AND t.GroupID=$GroupID");
 					$GroupOthers = ($DB->record_count() - 1);
-					
+
 					if($GroupOthers > 0) { ?>
 								<div style="text-align: right;">
 									<a href="reportsv2.php?view=group&amp;id=<?=$GroupID?>">There <?=(($GroupOthers > 1) ? "are $GroupOthers other reports" : "is 1 other report")?> for torrent(s) in this group</a>
 								</div>
 			<? 		}
-					
-					$DB->query("SELECT t.UserID 
-								FROM reportsv2 AS r 
-								JOIN torrents AS t ON t.ID=r.TorrentID 
+
+					$DB->query("SELECT t.UserID
+								FROM reportsv2 AS r
+								JOIN torrents AS t ON t.ID=r.TorrentID
 								WHERE r.Status != 'Resolved'
 								AND t.UserID=$UploaderID");
 					$UploaderOthers = ($DB->record_count() - 1);
-	
+
 					if($UploaderOthers > 0) { ?>
 								<div style="text-align: right;">
 									<a href="reportsv2.php?view=uploader&amp;id=<?=$UploaderID?>">There <?=(($UploaderOthers > 1) ? "are $UploaderOthers other reports" : "is 1 other report")?> for torrent(s) uploaded by this user</a>
 								</div>
 			<? 		}
-				
+
 					$DB->query("SELECT DISTINCT req.ID,
 								req.FillerID,
 								um.Username,
 								req.TimeFilled
-								FROM requests AS req 
+								FROM requests AS req
 								LEFT JOIN torrents AS t ON t.ID=req.TorrentID
 								LEFT JOIN reportsv2 AS rep ON rep.TorrentID=t.ID
 								JOIN users_main AS um ON um.ID=req.FillerID
@@ -347,7 +347,7 @@ if(count($Reports) == 0) {
 								AND req.TimeFilled > '2010-03-04 02:31:49'
 								AND req.TorrentID = $TorrentID");
 					$Requests = ($DB->record_count());
-					if($Requests > 0) { 
+					if($Requests > 0) {
 						while(list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 				?>
 									<div style="text-align: right;">
@@ -368,7 +368,7 @@ if(count($Reports) == 0) {
 							</td>
 						</tr>
 			<? }
-			
+
 				if($Links) {
 			?>
 						<tr>
@@ -377,7 +377,7 @@ if(count($Reports) == 0) {
 			<?
 					$Links = explode(" ", $Links);
 					foreach($Links as $Link) {
-					
+
 						if ($local_url = $Text->local_url($Link)) {
 							$Link = $local_url;
 						}
@@ -390,7 +390,7 @@ if(count($Reports) == 0) {
 						</tr>
 			<?
 				}
-			
+
 				if($ExtraIDs) {
 			?>
 						<tr>
@@ -402,7 +402,7 @@ if(count($Reports) == 0) {
 					foreach($Extras as $ExtraID) {
 
 
-						$DB->query("SELECT 
+						$DB->query("SELECT
 									tg.Name,
 									tg.ID,
 									CASE COUNT(ta.GroupID)
@@ -436,10 +436,10 @@ if(count($Reports) == 0) {
 									LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
 									WHERE t.ID='$ExtraID'
 									GROUP BY tg.ID");
-						
-						list($ExtraGroupName, $ExtraGroupID, $ExtraArtistID, $ExtraArtistName, $ExtraYear, $ExtraTime, $ExtraRemastered, $ExtraRemasterTitle, 
+
+						list($ExtraGroupName, $ExtraGroupID, $ExtraArtistID, $ExtraArtistName, $ExtraYear, $ExtraTime, $ExtraRemastered, $ExtraRemasterTitle,
 							$ExtraRemasterYear, $ExtraMedia, $ExtraFormat, $ExtraEncoding, $ExtraSize, $ExtraHasCue, $ExtraHasLog, $ExtraLogScore, $ExtraUploaderID, $ExtraUploaderName) = Misc::display_array($DB->next_record());
-						
+
 						if($ExtraGroupName) {
 			if ($ArtistID == 0 && empty($ArtistName)) {
 				$ExtraLinkName = "<a href='torrents.php?id=$ExtraGroupID'>$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : "")."</a> <a href='torrents.php?torrentid=$ExtraID'> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : "")."</a> ".($ExtraHasCue == '1' ? " (Cue)" : '').($ExtraHasLog == '1' ? " <a href='torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID'>(Log: $ExtraLogScore %)</a>" : "")." (".number_format($ExtraSize/(1024*1024), 2)." MB)";
@@ -447,7 +447,7 @@ if(count($Reports) == 0) {
 				$ExtraLinkName = "Various Artists - <a href='torrents.php?id=$ExtraGroupID'>$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : "")."</a> <a href='torrents.php?torrentid=$ExtraID'> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : "")."</a> ".($ExtraHasCue == '1' ? " (Cue)" : '').($ExtraHasLog == '1' ? " <a href='torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID'>(Log: $ExtraLogScore %)</a>" : "")." (".number_format($ExtraSize/(1024*1024), 2)." MB)";
 			} else {
 				$ExtraLinkName = "<a href='artist.php?id=$ExtraArtistID'>$ExtraArtistName</a> - <a href='torrents.php?id=$ExtraGroupID'>$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : "")."</a> <a href='torrents.php?torrentid=$ExtraID'> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : "")."</a> ".($ExtraHasCue == '1' ? " (Cue)" : '').($ExtraHasLog == '1' ? " <a href='torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID'>(Log: $ExtraLogScore %)</a>" : "")." (".number_format($ExtraSize/(1024*1024), 2)." MB)";
-			}	
+			}
 ?>
 									<?=($First ? "" : "<br />")?>
 									<?=$ExtraLinkName?>
@@ -462,7 +462,7 @@ if(count($Reports) == 0) {
 						</tr>
 			<?
 				}
-				
+
 				if($Images) {
 			?>
 						<tr>
@@ -474,12 +474,12 @@ if(count($Reports) == 0) {
 						$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Image);
 			?>
 								<img style="max-width: 200px;" onclick="lightbox.init(this,200);" src="<?=$Image?>" alt="Relevant image" />
-			<? 
+			<?
 					}
 			?>
 							</td>
 						</tr>
-			<? 
+			<?
 				}
 			?>
 						<tr>
@@ -487,7 +487,7 @@ if(count($Reports) == 0) {
 							<td colspan="3"><?=$Text->full_format($UserComment)?></td>
 						</tr>
 						<? // END REPORTED STUFF :|: BEGIN MOD STUFF ?>
-			<?	
+			<?
 				if($Status == "InProgress") {
 			?>
 						<tr>
@@ -497,7 +497,7 @@ if(count($Reports) == 0) {
 							</td>
 						</tr>
 			<?	}
-				if($Status != "Resolved") { 
+				if($Status != "Resolved") {
 			?>
 						<tr>
 							<td class="label">Report Comment:</td>
@@ -519,7 +519,7 @@ if(count($Reports) == 0) {
 			$Priorities[$Key] = $Value['priority'];
 		}
 		array_multisort($Priorities, SORT_ASC, $TypeList);
-	
+
 		foreach($TypeList as $Type => $Data) {
 	?>
 							<option value="<?=$Type?>"><?=$Data['title']?></option>
@@ -562,7 +562,7 @@ if(count($Reports) == 0) {
 									<option value="Uploader">Uploader</option>
 									<option value="Reporter">Reporter</option>
 								</select>:
-							</td> 
+							</td>
 							<td colspan="3">
 								<span title="Uploader: Appended to the regular message unless using &quot;Send Now&quot;. Reporter: Must be used with &quot;Send Now&quot;.">
 									<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
@@ -571,7 +571,7 @@ if(count($Reports) == 0) {
 							</td>
 						</tr>
 						<tr>
-							<td class="label"><strong>Extra</strong> Log Message:</td> 
+							<td class="label"><strong>Extra</strong> Log Message:</td>
 							<td>
 								<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40" <? if($ExtraIDs) {
 											$Extras = explode(" ", $ExtraIDs);
@@ -582,7 +582,7 @@ if(count($Reports) == 0) {
 											echo 'value="'.trim($Value).'"';
 										} ?>/>
 							</td>
-							<td class="label"><strong>Extra</strong> Staff Notes:</td> 
+							<td class="label"><strong>Extra</strong> Staff Notes:</td>
 							<td>
 								<input type="text" name="admin_message" id="admin_message<?=$ReportID?>" size="40" />
 							</td>
@@ -604,25 +604,25 @@ if(count($Reports) == 0) {
 				} else {
 			?>
 						<tr>
-							<td class="label">Resolver</td> 
+							<td class="label">Resolver</td>
 							<td colspan="3">
 								<a href="user.php?id=<?=$ResolverID?>"><?=$ResolverName?></a>
 							</td>
 						</tr>
 						<tr>
-							<td class="label">Resolve Time</td> 
+							<td class="label">Resolve Time</td>
 							<td colspan="3">
 								<?=time_diff($LastChangeTime)?>
 							</td>
 						</tr>
 						<tr>
-							<td class="label">Report Comments</td> 
+							<td class="label">Report Comments</td>
 							<td colspan="3">
 								<?=$ModComment?>
 							</td>
 						</tr>
 						<tr>
-							<td class="label">Log Message</td> 
+							<td class="label">Log Message</td>
 							<td colspan="3">
 								<?=$LogMessage?>
 							</td>

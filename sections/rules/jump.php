@@ -4,14 +4,14 @@
 	<table width="100%">
 		<tr class="colhead">
 			<td style="width:150px;">Category</td>
-			<td style="width:400px;">Additional Info</td>
+			<td style="width:400px;">Additional information</td>
 		</tr>
 		<tr class="rowb">
 			<td class="nobr">
 				<a href="rules.php">Golden Rules</a>
 			</td>
 			<td class="nobr">
-				These are the most important rules, breaking these will result in the most serious consequences.
+				These are the most important rules. Breaking these rules will result in the most serious consequences.
 			</td>
 		</tr>
 		<tr class="rowa">
@@ -51,7 +51,7 @@
 				<a href="rules.php?p=upload">Upload</a>
 			</td>
 			<td class="nobr">
-				This is the section of the rules regarding any and all content which is allowed on this site.	
+				This is the section of the rules regarding any and all content which is allowed on this site.
 			</td>
 		</tr>
 		<tr class="rowb">
@@ -59,7 +59,7 @@
 				<a href="rules.php?p=chat">Chat</a>
 			</td>
 			<td class="nobr">
-				Read this before posting in our forums or talking on the IRC.
+				Read this before posting in our forums or talking on our IRC network.
 			</td>
 		</tr>
 		<tr class="rowa">
@@ -67,11 +67,11 @@
 				<a href="rules.php?p=tag">Tagging</a>
 			</td>
 			<td class="nobr">
-				These rules govern what tags can and can not be added. 
+				These rules govern what tags can and cannot be added.
 			</td>
 		</tr>
 		<tr class="colhead">
-			<td colspan="2">Other Languages (Please note, these are community maintained and subject to error.)</td>
+			<td colspan="2">Other languages (Please note, these are community-maintained and are subject to error.)</td>
 		</tr>
 		<tr class="rowb">
 			<td class="nobr">

@@ -43,7 +43,7 @@ if(check_perms('admin_manage_blog')) {
 				}
 				header('Location: staffblog.php');
 				break;
-		
+
 			case 'takenewblog':
 				authorize();
 				if (empty($_POST['title'])) {
@@ -55,9 +55,9 @@ if(check_perms('admin_manage_blog')) {
 				$DB->query("INSERT INTO staff_blog (UserID, Title, Body, Time) VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', NOW())");
 				$Cache->delete_value('staff_blog');
 				$Cache->delete_value('staff_blog_latest_time');
-				
+
 				send_irc("PRIVMSG ".ADMIN_CHAN." :!blog " . $_POST['title']);
-		
+
 				header('Location: staffblog.php');
 				break;
 		}
@@ -72,12 +72,12 @@ if(check_perms('admin_manage_blog')) {
 				</span>
 			</div>
 			<form class="<?=((empty($_GET['action'])) ? 'create_form' : 'edit_form')?>" name="blog_post" action="staffblog.php" method="post">
-				<div id="postform" class="pad<?=($_REQUEST['action']!='editblog')?' hidden':''?>">	
+				<div id="postform" class="pad<?=($_REQUEST['action']!='editblog')?' hidden':''?>">
 					<input type="hidden" name="action" value="<?=((empty($_GET['action'])) ? 'takenewblog' : 'takeeditblog')?>" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-	<? if(!empty($_GET['action']) && $_GET['action'] == 'editblog'){?> 
+	<? if(!empty($_GET['action']) && $_GET['action'] == 'editblog'){?>
 					<input type="hidden" name="blogid" value="<?=$BlogID; ?>" />
-	<? }?> 
+	<? }?>
 					<h3>Title</h3>
 					<input type="text" name="title" size="95" <? if(!empty($Title)) { echo 'value="'.display_str($Title).'"'; } ?> /><br />
 					<h3>Body</h3>
@@ -90,7 +90,7 @@ if(check_perms('admin_manage_blog')) {
 			</form>
 		</div>
 		<br />
-<? 
+<?
 } else {
 	View::show_header('Staff Blog','bbcode');
 }
@@ -117,7 +117,7 @@ foreach ($Blog as $BlogItem) {
 			<div id="blog<?=$BlogID?>" class="box">
 				<div class="head">
 					<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <?=$Author?>
-		<? if(check_perms('admin_manage_blog')) { ?> 
+		<? if(check_perms('admin_manage_blog')) { ?>
 					- <a href="staffblog.php?action=editblog&amp;id=<?=$BlogID?>" class="brackets">Edit</a>
 					<a href="staffblog.php?action=deleteblog&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Do you want to delete this?')" class="brackets">Delete</a>
 		 <? } ?>
@@ -127,7 +127,7 @@ foreach ($Blog as $BlogItem) {
 				</div>
 			</div>
 		<br />
-<? 
+<?
 }
 ?>
 </div>

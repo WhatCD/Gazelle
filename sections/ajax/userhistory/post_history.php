@@ -45,7 +45,7 @@ if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
 		FROM users_main AS m
 		JOIN users_info AS i ON i.UserID = m.ID
 		WHERE m.ID = $UserID");
-	
+
 	if($DB->record_count() == 0){ // If user doesn't exist
             error_out("User does not exist!");
 	}
@@ -170,22 +170,22 @@ if($ShowGrouped) {
 		$sql.='
 		AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\') AND (l.PostID<t.LastPostID OR l.PostID IS NULL)) ';
 	}
-	
+
 	$sql .= '
 		ORDER BY p.ID DESC';
-	
+
 	if($ShowGrouped) {
 		$sql.='
 		) AS sub
 		GROUP BY TopicID ORDER BY ID DESC';
 	}
-	
+
 	$sql.=' LIMIT '.$Limit;
 	$Posts = $DB->query($sql);
-	
+
 	$DB->query("SELECT FOUND_ROWS()");
 	list($Results) = $DB->next_record();
-	
+
 	$DB->set_query_id($Posts);
 }
 

@@ -1,5 +1,5 @@
 <?
-//global $Cache, $DB; 
+//global $Cache, $DB;
 include(SERVER_ROOT.'/sections/torrents/ranking_funcs.php');
 
 $Top10 = $Cache->get_value('similar_albums_'.$GroupID);
@@ -36,7 +36,7 @@ if (count($Top10) > 0) {
 			<tr class="colhead">
 				<td><a href="#">&uarr;</a>&nbsp;People who like this album also liked... <a href="#" onclick="$('.votes_rows').toggle(); return false;">(Show)</a></td>
 			</tr>
-<?	
+<?
 	$Top10Groups = array_keys($Top10);
 
 	$Groups = Torrents::get_groups($Top10Groups, true, true, false);

@@ -7,15 +7,15 @@ $Queries = array();
 $OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
 list($Page,$Limit) = Format::page_limit(REQUESTS_PER_PAGE);
 $Submitted = !empty($_GET['submit']);
-					
-//Paranoia					
+
+//Paranoia
 $UserInfo = Users::user_info((int)$_GET['userid']);
 $Perms = Permissions::get_permissions($UserInfo['PermissionID']);
 $UserClass = $Perms['Class'];
 
 $BookmarkView = false;
 
-if(empty($_GET['type'])) { 
+if(empty($_GET['type'])) {
 	$Title = 'Requests';
 	if(!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
 		$SS->set_filter('visible', array(1));
@@ -137,7 +137,7 @@ if(!empty($_GET['releases'])) {
 				unset($ReleaseArray[$Index]);
 			}
 		}
-		
+
 		if(count($ReleaseArray) >= 1) {
 			$SS->set_filter('releasetype', $ReleaseArray);
 		}
@@ -153,7 +153,7 @@ if(!empty($_GET['formats'])) {
 				$FormatNameArray[$Index] = '"'.strtr($Formats[$MasterIndex], '-.', '  ').'"';
 			}
 		}
-		
+
 		if(count($FormatNameArray) >= 1) {
 			$Queries[]='@formatlist (any | '.implode(' | ', $FormatNameArray).')';
 		}
@@ -287,11 +287,11 @@ if(!empty($SphinxResults['notfound'])) {
 			unset($SphinxResults['matches'][$ID]);
 		}
 	}
-	
+
 	// Merge SQL results with memcached results
 	foreach($SQLResults['matches'] as $ID => $SQLResult) {
 		$SphinxResults['matches'][$ID] = $SQLResult;
-		
+
 		//$Requests['matches'][$ID] = array_merge($Requests['matches'][$ID], $SQLResult);
 		//We ksort because depending on the filter modes, we're given our data in an unpredictable order
 		//ksort($Requests['matches'][$ID]);
@@ -316,24 +316,24 @@ if ($NumResults == 0) {
 	$JsonResults = array();
 	$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
 	foreach ($Requests as $RequestID => $Request) {
-		
-		//list($BitrateList, $CatalogueNumber, $CategoryID, $Description, $FillerID, $FormatList, $RequestID, $Image, $LogCue, $MediaList, $ReleaseType, 
-		//	$Tags, $TimeAdded, $TimeFilled, $Title, $TorrentID, $RequestorID, $RequestorName, $Year, $RequestID, $Categoryid, $FillerID, $LastVote, 
+
+		//list($BitrateList, $CatalogueNumber, $CategoryID, $Description, $FillerID, $FormatList, $RequestID, $Image, $LogCue, $MediaList, $ReleaseType,
+		//	$Tags, $TimeAdded, $TimeFilled, $Title, $TorrentID, $RequestorID, $RequestorName, $Year, $RequestID, $Categoryid, $FillerID, $LastVote,
 		//	$ReleaseType, $TagIDs, $TimeAdded, $TimeFilled, $TorrentID, $RequestorID, $Voters) = array_values($Request);
-		
-		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, 
+
+		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber,
 			$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
-			
+
 		$RequestVotes = get_votes_array($RequestID);
-		
+
 		$VoteCount = count($RequestVotes['Voters']);
-		
+
 		if($CategoryID == 0) {
 			$CategoryName = "Unknown";
 		} else {
 			$CategoryName = $Categories[$CategoryID - 1];
 		}
-		
+
 		$JsonArtists = array();
 		if($CategoryName == "Music") {
 			$ArtistForm = get_request_artists($RequestID);
@@ -341,7 +341,7 @@ if ($NumResults == 0) {
 		}
 
 		$Tags = $Request['Tags'];
-		
+
 		$JsonResults[] = array(
 			'requestId' => (int) $RequestID,
 			'requestorId' => (int) $RequestorID,

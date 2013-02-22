@@ -16,11 +16,11 @@ if(!empty($_REQUEST['action']))
  */
 if(isset($_GET['id'])) {
 	$UserID = $_GET['id'];
-	if(!is_number($UserID)) 
+	if(!is_number($UserID))
 		error(404);
 
 	$UserInfo = Users::user_info($UserID);
-	
+
 	$Username = $UserInfo['Username'];
 	if($LoggedUser['ID'] == $UserID) {
 		$Self = true;
@@ -29,8 +29,8 @@ if(isset($_GET['id'])) {
 	}
 	$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
 	$UserClass = $Perms['Class'];
-	if (!check_paranoia('torrentcomments', $UserInfo['Paranoia'], $UserClass, $UserID)) 
-		error(403); 
+	if (!check_paranoia('torrentcomments', $UserInfo['Paranoia'], $UserClass, $UserID))
+		error(403);
 }  else {
 	$UserID = $LoggedUser['ID'];
 	$Username = $LoggedUser['Username'];

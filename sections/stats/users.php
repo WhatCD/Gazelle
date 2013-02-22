@@ -4,13 +4,13 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 	$DB->query('SELECT Code, Users FROM users_geodistribution');
 	$Data = $DB->to_array();
 	$Count = $DB->record_count()-1;
-	
+
 	if($Count<30) {
 		$CountryMinThreshold = $Count;
 	} else {
 		$CountryMinThreshold = 30;
 	}
-	
+
 	$CountryMax = ceil(log(Max(1,$Data[0][1]))/log(2))+1;
 	$CountryMin = floor(log(Max(1,$Data[$CountryMinThreshold][1]))/log(2));
 
@@ -29,7 +29,7 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 		}
 	}
 	reset($Rank);
-	
+
 	for ($i=$CountryMin;$i<=$CountryMax;$i++) {
 		$LogIncrements[] = Format::human_format(pow(2,$i));
 	}

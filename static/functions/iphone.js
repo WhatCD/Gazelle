@@ -37,7 +37,7 @@ function main () {
 		titles:[$('#first_title'),$('#second_title')],
 		pages:[$('#first_page'),$('#second_page')]
 	};
-	
+
 	// Transform on load
 	elements.pages[1].style.webkitTransform = 'translateX(100%)';
 
@@ -47,7 +47,7 @@ function main () {
 
 	elements.buttons[0].addEventListener(method, go_back, false);
 	elements.buttons[1].addEventListener(method, go_back, false);
-	
+
 	elements.pages[0].addEventListener('webkitTransitionEnd', transition_ended, false);
 	Transitions.DEFAULTS.duration = 0.35;
 
@@ -113,10 +113,10 @@ var transitions_in_progress = false;
 function transition_ended () { transitions_in_progress = false; };
 function transition_to_new_element (data, going_forward) {
 	transitions_in_progress = true;
-	
+
 	var from_index = active_index;
 	var to_index = (active_index == 1) ? 0 : 1;
-	
+
 	//Make other page visible
 	//elements.pages[to_index].style.height = '';
 
@@ -130,7 +130,7 @@ function transition_to_new_element (data, going_forward) {
 		from: [1],
 		to: [0]
 	});
-	
+
 	transitions.add({
 		element : elements.titles[to_index],
 		duration: [0.5],
@@ -138,7 +138,7 @@ function transition_to_new_element (data, going_forward) {
 		from : [0],
 		to : [1]
 	});
-	
+
 	transitions.add({
 		element: elements.buttons[from_index],
 		duration: [0.5],
@@ -146,7 +146,7 @@ function transition_to_new_element (data, going_forward) {
 		from: [1],
 		to: [0]
 	});
-	
+
 	transitions.add({
 		element : elements.buttons[to_index],
 		duration: [0.5],
@@ -163,7 +163,7 @@ function transition_to_new_element (data, going_forward) {
 		from : ['translateX(0%)'],
 		to : ['translateX(' + ((going_forward) ? -150 : 150) + '%)']
 	});
-	
+
 	transitions.add({
 		element : elements.pages[to_index],
 		from : ['translateX(' + ((going_forward) ? 150 : -150) + '%)'],
@@ -174,10 +174,10 @@ function transition_to_new_element (data, going_forward) {
 	elements.pages[to_index].innerHTML = data;
 	elements.titles[to_index].textContent = title;
 	elements.buttons[to_index].textContent = back_name;
-	
+
 	//Hide other page to avoid excess scroll at the bottom
 	//elements.pages[from_index].style.height = '0px';
-	
+
 	active_index = to_index;
 
 	transitions.apply();

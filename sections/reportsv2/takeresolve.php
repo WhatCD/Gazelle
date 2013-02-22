@@ -1,6 +1,6 @@
 <?
 /*
- * This is the backend of the AJAXy reports resolve (When you press the shiny submit button). 
+ * This is the backend of the AJAXy reports resolve (When you press the shiny submit button).
  * This page shouldn't output anything except in error, if you do want output, it will be put
  * straight into the table where the report used to be. Currently output is only given when
  * a collision occurs or a POST attack is detected.
@@ -68,7 +68,7 @@ if(($Escaped['resolve_type'] == "manual" || $Escaped['resolve_type'] == "dismiss
 			 $Comment = "Report was dismissed as invalid";
 		}
 	}
-	
+
 	$DB->query("UPDATE reportsv2 SET
 	Status='Resolved',
 	LastChangeTime='".sqltime()."',
@@ -76,7 +76,7 @@ if(($Escaped['resolve_type'] == "manual" || $Escaped['resolve_type'] == "dismiss
 	ResolverID='".$LoggedUser['ID']."'
 	WHERE ID='".$ReportID."'
 	AND Status <> 'Resolved'");
-	
+
 	if($DB->affected_rows() > 0) {
 		$Cache->delete_value('num_torrent_reportsv2');
 		$Cache->delete_value('reports_torrent_'.$TorrentID);
@@ -113,7 +113,7 @@ if(!isset($Escaped['resolve_type'])) {
 $DB->query("SELECT ID FROM torrents WHERE ID = ".$TorrentID);
 $TorrentExists = ($DB->record_count() > 0);
 if(!$TorrentExists) {
-	$DB->query("UPDATE reportsv2 
+	$DB->query("UPDATE reportsv2
 		SET Status='Resolved',
 		LastChangeTime='".sqltime()."',
 		ResolverID='".$LoggedUser['ID']."',
@@ -125,7 +125,7 @@ if(!$TorrentExists) {
 
 if($Report) {
 	//Resolve with a parallel check
-	$DB->query("UPDATE reportsv2 
+	$DB->query("UPDATE reportsv2
 		SET Status='Resolved',
 			LastChangeTime='".sqltime()."',
 			ResolverID='".$LoggedUser['ID']."'
@@ -138,7 +138,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 	//We did, lets do all our shit
 	if($Report) { $Cache->decrement('num_torrent_reportsv2'); }
 
-	
+
 	if(isset($Escaped['upload'])) {
 		$Upload = true;
 	} else {
@@ -168,7 +168,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 		$Cache->delete_value('torrents_details_'.$GroupID);
 		$SendPM = true;
 	}
-	
+
 	//Log and delete
 	if(isset($Escaped['delete']) && check_perms('users_mod')) {
 		$DB->query("SELECT Username FROM users_main WHERE ID = ".$UploaderID);
@@ -181,7 +181,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 		$DB->query("SELECT GroupID, hex(info_hash) FROM torrents WHERE ID = ".$TorrentID);
 		list($GroupID, $InfoHash) = $DB->next_record();
 		Torrents::delete_torrent($TorrentID, 0, $ResolveType['reason']);
-		
+
 		//$InfoHash = unpack("H*", $InfoHash);
 		$Log .= " (".strtoupper($InfoHash).")";
 		Misc::write_log($Log);
@@ -190,20 +190,20 @@ if($DB->affected_rows() > 0 || !$Report) {
 	} else {
 		$Log = "No log message (Torrent wasn't deleted)";
 	}
-	
+
 	//Warnings / remove upload
 	if($Upload) {
 		$Cache->begin_transaction('user_info_heavy_'.$UploaderID);
 		$Cache->update_row(false, array('DisableUpload' => '1'));
 		$Cache->commit_transaction(0);
-	
+
 		$DB->query("UPDATE users_info SET
 			DisableUpload='1'
 			WHERE UserID=".$UploaderID);
 	}
-	
+
 	if($Warning > 0) {
-		$WarnLength = $Warning * (7*24*60*60); 
+		$WarnLength = $Warning * (7*24*60*60);
 		$Reason = "Uploader of torrent (".$TorrentID.") ".$RawName." which was resolved with the preset: ".$ResolveType['title'].".";
 		if($Escaped['admin_message']) {
 			$Reason .= " (".$Escaped['admin_message'].").";
@@ -227,13 +227,13 @@ if($DB->affected_rows() > 0 || !$Report) {
 		}
 		if($AdminComment) {
 			$AdminComment = date("Y-m-d").' - '.$AdminComment."\n\n";
-				
+
 			$DB->query("UPDATE users_info SET
 				AdminComment=CONCAT('".db_string($AdminComment)."',AdminComment)
 				WHERE UserID='".db_string($UploaderID)."'");
 		}
 	}
-	
+
 	//PM
 	if($Escaped['uploader_pm'] || $Warning > 0 || isset($Escaped['delete']) || $SendPM) {
 		if(isset($Escaped['delete'])) {
@@ -241,17 +241,17 @@ if($DB->affected_rows() > 0 || !$Report) {
 		} else {
 			$PM = "[url=http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]Your above torrent[/url] was reported but not deleted.\n\n";
 		}
-		
+
 		$Preset = $ResolveType['resolve_options']['pm'];
-		
+
 		if($Preset != "") {
 			 $PM .= "Reason: ".$Preset;
 		}
-		
+
 		if($Warning > 0) {
-			$PM .= "\nThis has resulted in a [url=http://".NONSSL_SITE_URL."/wiki.php?action=article&amp;id=218]".$Warning." week warning.[/url]\n";	
+			$PM .= "\nThis has resulted in a [url=http://".NONSSL_SITE_URL."/wiki.php?action=article&amp;id=218]".$Warning." week warning.[/url]\n";
 		}
-		
+
 		if($Upload) {
 			$PM .= "This has ".($Warning > 0 ? 'also ' : '')."resulted in you losing your upload privileges.";
 		}
@@ -259,20 +259,20 @@ if($DB->affected_rows() > 0 || !$Report) {
 		if($Log) {
 			$PM = $PM."\nLog Message: ".$Log."\n";
 		}
-		
+
 		if($Escaped['uploader_pm']) {
-			$PM .= "\nMessage from ".$LoggedUser['Username'].": ".$PMMessage;	
+			$PM .= "\nMessage from ".$LoggedUser['Username'].": ".$PMMessage;
 		}
-		
+
 		$PM .= "\n\nReport was handled by [user]".$LoggedUser['Username']."[/user].";
-		
+
 		Misc::send_pm($UploaderID, 0, db_string($Escaped['raw_name']), db_string($PM));
 	}
 
 	$Cache->delete_value('reports_torrent_'.$TorrentID);
-	
+
 	//Now we've done everything, update the DB with values
-	if($Report) { 
+	if($Report) {
 		$DB->query("UPDATE reportsv2 SET
 		Type = '".$Escaped['resolve_type']."',
 		LogMessage='".db_string($Log)."',

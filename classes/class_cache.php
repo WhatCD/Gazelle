@@ -155,7 +155,7 @@ class CACHE extends Memcache
 		}
 		$this->Time+=(microtime(true)-$StartTime)*1000;
 	}
-	
+
 	public function increment_value($Key,$Value=1) {
 		$StartTime=microtime(true);
 		$this->increment($Key,$Value);

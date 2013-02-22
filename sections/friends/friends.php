@@ -1,20 +1,20 @@
  <?
 /************************************************************************
 //------------// Main friends page //----------------------------------//
-This page lists a user's friends. 
+This page lists a user's friends.
 
-There's no real point in caching this page. I doubt users load it that 
+There's no real point in caching this page. I doubt users load it that
 much.
 ************************************************************************/
 
-// Number of users per page 
+// Number of users per page
 define('FRIENDS_PER_PAGE', '20');
 include_once(SERVER_ROOT.'/classes/class_paranoia.php');
 
 
 
 View::show_header('Friends');
- 
+
 
 $UserID = $LoggedUser['ID'];
 
@@ -22,7 +22,7 @@ $UserID = $LoggedUser['ID'];
 list($Page,$Limit) = Format::page_limit(FRIENDS_PER_PAGE);
 
 // Main query
-$DB->query("SELECT 
+$DB->query("SELECT
 	SQL_CALC_FOUND_ROWS
 	f.FriendID,
 	f.Comment,
@@ -95,12 +95,12 @@ foreach($Friends as $Friend) {
 			if(check_perms('site_proxy_images')) {
 				$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Avatar);
 			}
-	?> 
+	?>
 					<img src="<?=$Avatar?>" alt="<?=$Username?>'s avatar" width="50px" />
-	<?	} else { ?> 
+	<?	} else { ?>
 					<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="50px" alt="Default avatar" />
-	<?	} 
-	}?> 
+	<?	}
+	}?>
 			</td>
 			<td valign="top">
 					<input type="hidden" name="friendid" value="<?=$FriendID?>" />

@@ -14,21 +14,21 @@ if(!is_number($_GET['id']) || !$_GET['id']) { error(0); }
 
 $TorrentID = $_GET['id'];
 
-$DB->query("SELECT 
-	t.Media, 
-	t.Format, 
-	t.Encoding AS Bitrate, 
-	t.RemasterYear, 
-	t.Remastered, 
-	t.RemasterTitle, 
+$DB->query("SELECT
+	t.Media,
+	t.Format,
+	t.Encoding AS Bitrate,
+	t.RemasterYear,
+	t.Remastered,
+	t.RemasterTitle,
 	t.RemasterCatalogueNumber,
 	t.RemasterRecordLabel,
-	t.Scene, 
-	t.FreeTorrent, 
-	t.FreeLeechType, 
-	t.Dupable, 
-	t.DupeReason, 
-	t.Description AS TorrentDescription, 
+	t.Scene,
+	t.FreeTorrent,
+	t.FreeLeechType,
+	t.Dupable,
+	t.DupeReason,
+	t.Description AS TorrentDescription,
 	tg.CategoryID,
 	tg.Name AS Title,
 	tg.Year,
@@ -46,7 +46,7 @@ $DB->query("SELECT
 	ca.TorrentID AS CassetteApproved,
 	lma.TorrentID AS LossymasterApproved,
 	lwa.TorrentID AS LossywebApproved
-	FROM torrents AS t 
+	FROM torrents AS t
 	LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
 	LEFT JOIN artists_group AS ag ON ag.ArtistID=tg.ArtistID
 	LEFT JOIN torrents_bad_tags AS bt ON bt.TorrentID=t.ID
@@ -72,18 +72,18 @@ View::show_header('Edit torrent', 'upload');
 
 if(!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms('edit_unknowns')) {
 	$TorrentForm = new TORRENT_FORM($Properties, $Err, false);
-	
+
 	$TorrentForm->head();
 	switch ($UploadForm) {
 		case 'Music':
 			$TorrentForm->music_form('');
 			break;
-			
+
 		case 'Audiobooks':
 		case 'Comedy':
 			$TorrentForm->audiobook_form();
 			break;
-		
+
 		case 'Applications':
 		case 'Comics':
 		case 'E-Books':

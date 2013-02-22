@@ -84,7 +84,7 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 if(empty($RevisionID)) { // edit
 	$DB->query("INSERT INTO wiki_torrents (PageID, Body, Image, UserID, Summary, Time)
 				VALUES ('$GroupID', '".db_string($Body)."', '".db_string($Image)."', '$UserID', '$Summary', '".sqltime()."')");
-	
+
 	$DB->query("UPDATE torrents_group SET ReleaseType='$ReleaseType' WHERE ID='$GroupID'");
 	Torrents::update_hash($GroupID);
 }
@@ -92,9 +92,9 @@ else { // revert
 	$DB->query("SELECT PageID,Body,Image FROM wiki_torrents WHERE RevisionID='$RevisionID'");
 	list($PossibleGroupID, $Body, $Image) = $DB->next_record();
 	if($PossibleGroupID != $GroupID) { error(404); }
-	
-	$DB->query("INSERT INTO wiki_torrents (PageID, Body, Image, UserID, Summary, Time) 
-		SELECT '$GroupID', Body, Image, '$UserID', 'Reverted to revision $RevisionID', '".sqltime()."' 
+
+	$DB->query("INSERT INTO wiki_torrents (PageID, Body, Image, UserID, Summary, Time)
+		SELECT '$GroupID', Body, Image, '$UserID', 'Reverted to revision $RevisionID', '".sqltime()."'
 		FROM wiki_artists WHERE RevisionID='$RevisionID'");
 }
 
@@ -104,7 +104,7 @@ $Body = db_string($Body);
 $Image = db_string($Image);
 
 // Update torrents table (technically, we don't need the RevisionID column, but we can use it for a join which is nice and fast)
-$DB->query("UPDATE torrents_group SET 
+$DB->query("UPDATE torrents_group SET
 	RevisionID='$RevisionID',
 	".((isset($VanityHouse)) ? "VanityHouse='$VanityHouse'," : "")."
 	WikiBody='$Body',

@@ -9,7 +9,7 @@ View::show_header('Collages Rules');
 	<div class="box pad rule_summary" style="padding:10px 10px 10px 20px;">
 		<ul>
 			<li>Collages in the Discography, Staff Picks, Label, and Charts categories must be based on fact, and not opinion. If something is a published Best Of (for instance, "Pitchfork's Best Albums of the 1990's") then it should go in the Charts category.</li>
-			
+
 			<li>
 			Collages in the Personal, Theme, and Genre Introductions categories may be based on opinion. You must respect others' opinions whilst creating and populating Theme and Genre Introduction collages.
 			</li>
@@ -49,7 +49,7 @@ View::show_header('Collages Rules');
 			<li>
 			Please attempt to add album art to every torrent in your collage.
 			</li>
-			
+
 		</ul>
 	</div>
 <? include('jump.php'); ?>

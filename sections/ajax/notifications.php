@@ -69,7 +69,7 @@ foreach($FilterGroups as $FilterID => $FilterResults) {
 		$TorrentInfo = $GroupInfo['Torrents'][$TorrentID];
 
 		if ($Result['UnRead'] == 1) $NumNew++;
-		
+
 		$JsonNotifications[] = array(
 			'torrentId' => (int) $TorrentID,
 			'groupId' => (int) $GroupID,

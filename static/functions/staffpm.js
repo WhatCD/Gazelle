@@ -19,7 +19,7 @@ function UpdateMessage() {
 function SaveMessage(id) {
 	var ajax_message = 'ajax_message_' + id;
 	var ToPost = [];
-	
+
 	ToPost['id'] = id;
 	ToPost['name'] = document.getElementById('response_name_' + id).value;
 	ToPost['message'] = document.getElementById('response_message_' + id).value;
@@ -113,7 +113,7 @@ function Quote(post, user) {
 		if ($('#quickpost').raw().value !== '') {
 			$('#quickpost').raw().value = $('#quickpost').raw().value + "\n\n";
 		}
-		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote="+username+"]" + 
+		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote="+username+"]" +
 			//response.replace(/(img|aud)(\]|=)/ig,'url$2').replace(/\[url\=(https?:\/\/[^\s\[\]<>"\'()]+?)\]\[url\](.+?)\[\/url\]\[\/url\]/gi, "[url]$1[/url]")
 			html_entity_decode(response)
 		+ "[/quote]";

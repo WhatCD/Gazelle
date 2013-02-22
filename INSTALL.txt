@@ -5,16 +5,16 @@ INSTALLATION NOTES
 2. Run gazelle.sql (preferably as root) to create the database, the table, and the default data.
 3. Install sphinx - we recommend you use the included sphinx.conf
 	For documentation, read http://www.sphinxsearch.com/docs/current.html
-	
+
 	After you've installed sphinx, create the indices:
 	/usr/local/bin/indexer -c /etc/sphinx/sphinx.conf --all
-	
-4. Move classes/config.template to classes/config.php. Edit the config.php as needed. 
+
+4. Move classes/config.template to classes/config.php. Edit the config.php as needed.
 	We use http://grc.com/passwords.html for our passwords - you'll be generating a lot of these.
 5. Sign up. The first user is made a SysOp!
-6. Set up cron jobs. You need a cron job for the schedule, a cron job for 
-the peerupdate (all groups are cached, but the peer counts change often, 
-so peerupdate is a script to update them), and the two sphinx indices. 
+6. Set up cron jobs. You need a cron job for the schedule, a cron job for
+the peerupdate (all groups are cached, but the peer counts change often,
+so peerupdate is a script to update them), and the two sphinx indices.
 These are our cron jobs:
 
 0,15,30,45 *    *       *       *       /usr/local/bin/php /var/www/vhosts/what/schedule.php SCHEDULE_KEY >> /root/schedule.log

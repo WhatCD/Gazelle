@@ -19,12 +19,12 @@ if(isset($_GET['ip']) && isset($_GET['port'])){
 	) {
 		die('Invalid IP');
 	}
-	
+
 	if (empty($_GET['port']) || !is_number($_GET['port']) || $_GET['port']<1 || $_GET['port']>65535){
 		die('Invalid Port');
 	}
 
-	//Error suppression, ugh.	
+	//Error suppression, ugh.
 	if(@fsockopen($_GET['ip'], $_GET['port'], $Errno, $Errstr, 20)){
 		die('Port '.$_GET['port'].' on '.$_GET['ip'].' connected successfully.');
 	} else {

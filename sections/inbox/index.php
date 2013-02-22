@@ -33,7 +33,7 @@ switch($_REQUEST['action']) {
 		break;
 	case 'get_post':
 		require('get_post.php');
-		break;		
+		break;
 	case 'forward':
 		require('forward.php');
 		break;

@@ -2,15 +2,15 @@
 /************************************************************************
 *-------------------- Browse page ---------------------------------------
 * Welcome to one of the most complicated pages in all of gazelle - the
-* browse page. 
-* 
+* browse page.
+*
 * This is the page that is displayed when someone visits torrents.php, if
 * you're not using sphinx.
-* 
+*
 * It also handle snatch lists, and seeding/leeching/uploaded lists.
-* 
+*
 * It offers normal and advanced search, as well as enabled/disabled
-* grouping. 
+* grouping.
 *
 * For the Sphinx version, see sections/torrents/browse2.php
 *
@@ -47,7 +47,7 @@ function build_search($SearchStr,$Field,$Exact=false,$SQLWhere='',$FullText=0,&$
 			if(trim($SearchVal)!='') {
 				$SearchVal=trim($SearchVal);
 				$SearchVal=str_replace("{{SPACE}}"," ",$SearchVal);
-				
+
 				// Choose between fulltext or LIKE based off length of the string
 				if ($FullText && strlen($SearchVal)>2) {
 					if($SQLWhere!='') { $SQLWhere.=" AND "; }
@@ -91,7 +91,7 @@ function header_link($SortKey,$DefaultWay="DESC") {
 		if($OrderWay=="DESC") { $NewWay="ASC"; }
 		else { $NewWay="DESC"; }
 	} else { $NewWay=$DefaultWay; }
-	
+
 	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
 }
 
@@ -145,7 +145,7 @@ if (in_array(strtolower($_GET['order_way']),array('desc','asc'))) { $OrderWay=st
 // Uploaded, seeding, leeching, snatched lists
 if($_GET['userid'] && is_number($_GET['userid'])) {
 	$UserID=ceil($_GET['userid']);
-	
+
 	$DB->query("SELECT m.Paranoia, p.Level FROM users_main AS m JOIN permissions AS p ON p.ID=m.PermissionID WHERE ID='".$UserID."'");
 	list($Paranoia, $UserClass) = $DB->next_record();
 
@@ -155,28 +155,28 @@ if($_GET['userid'] && is_number($_GET['userid'])) {
 		if(!check_paranoia('uploads', $Paranoia, $UserClass, $UserID)) { error(403); }
 		$TorrentWhere="WHERE t.UserID='".$UserID."'";
 		$Title="Uploaded Torrents";
-		
+
 	} elseif($_GET['type']=="seeding") {
 		if(!check_paranoia('seeding', $Paranoia, $UserClass, $UserID)) { error(403); }
 		$TorrentJoin="JOIN xbt_files_users AS xfu ON xfu.fid=t.ID AND xfu.uid='$UserID' AND xfu.remaining=0";
 		$Title="Seeding Torrents";
 		$TimeField="xfu.mtime";
 		$TimeLabel="Seeding Time";
-		
+
 	} elseif($_GET['type']=="leeching") {
 		if(!check_paranoia('leeching', $Paranoia, $UserClass, $UserID)) { error(403); }
 		$TorrentJoin="JOIN xbt_files_users AS xfu ON xfu.fid=t.ID AND xfu.uid='$UserID' AND xfu.remaining>0";
 		$Title="Leeching Torrents";
 		$TimeField="xfu.mtime";
 		$TimeLabel="Leeching Time";
-		
+
 	} elseif($_GET['type']=="snatched") {
 		if(!check_paranoia('snatched', $Paranoia, $UserClass, $UserID)) { error(403); }
 		$TorrentJoin="JOIN xbt_snatched AS xs ON xs.fid=t.ID AND xs.uid='$UserID'";
 		$Title="Snatched Torrents";
 		$TimeField="xs.tstamp";
 		$TimeLabel="Snatched Time";
-		
+
 	} else {
 		// Something fishy in $_GET['type']
 		unset($UserID);
@@ -213,11 +213,11 @@ if((strtolower($_GET['action'])=="advanced" || ($LoggedUser['SearchType'] && str
 			}
 		}
 		reset($_GET);
-		
+
 	} else {
 		$TorrentSpecifics=1;
 	}
-	
+
 	// And now we start building the mega SQL query
 	if($_GET['artistname']!='') {
 			$TorrentJoin .= ' LEFT JOIN torrents_artists AS ta ON g.ID = ta.GroupID LEFT JOIN artists AS a ON ta.ArtistID = a.ID';
@@ -259,9 +259,9 @@ if((strtolower($_GET['action'])=="advanced" || ($LoggedUser['SearchType'] && str
 				if($_GET['other_bitrate']!='') {
 					$GroupWhere=build_search(db_string($_GET['other_bitrate']),'EncodingList',false,$GroupWhere);
 					if($TorrentSpecifics>0) {
-						if($TorrentWhere=='') { 
+						if($TorrentWhere=='') {
 							$TorrentWhere="WHERE ";
-						} else { 
+						} else {
 							$TorrentWhere.=" AND ";
 						}
 					}
@@ -270,9 +270,9 @@ if((strtolower($_GET['action'])=="advanced" || ($LoggedUser['SearchType'] && str
 			} else {
 				$GroupWhere=build_search(db_string($_GET['bitrate']),'EncodingList',false,$GroupWhere);
 				if($TorrentSpecifics>0) {
-					if($TorrentWhere=='') { 
+					if($TorrentWhere=='') {
 						$TorrentWhere="WHERE ";
-					} else { 
+					} else {
 						$TorrentWhere.=" AND ";
 					}
 					$TorrentWhere.="t.Encoding LIKE '".db_string($_GET['bitrate'])."'";
@@ -307,7 +307,7 @@ if((strtolower($_GET['action'])=="advanced" || ($LoggedUser['SearchType'] && str
 			$GroupWhere=build_search($_GET['haslog'],'LogScoreList',false,$GroupWhere);
 			$HasLog = 1;
 		}
-		
+
 		$GroupWhere=build_search("%".$HasLog."%",'LogList',true,$GroupWhere);
 		if($TorrentSpecifics>0) {
 			if($_GET['haslog'] == '100' || $_GET['haslog'] == '-100') {
@@ -372,7 +372,7 @@ if((strtolower($_GET['action'])=="advanced" || ($LoggedUser['SearchType'] && str
 // Searching tags is the same for basic and advanced search
 if(isset($_GET['searchtags']) && $_GET['searchtags']!='') {
 	if($DisableGrouping) { $TagField="g.TagList"; } else { $TagField="h.TagList"; }
-	
+
 	$Tags=explode(',',$_GET['searchtags']);
 	foreach($Tags as $Key => $Tag) {
 		if(trim($Tag)!='') {
@@ -511,7 +511,7 @@ if(!is_array($TorrentCache)) {
 					$TorrentWhere
 					ORDER BY $OrderBy $OrderWay
 					LIMIT $Limit");
-					
+
 		$TorrentList=$DB->to_array();
 		if(EXPLAIN_HACK){
 			$DB->query("EXPLAIN SELECT NULL FROM (SELECT NULL FROM torrent_hash AS h ".$TorrentJoin." ".$GroupWhere.") AS Count");
@@ -533,7 +533,7 @@ if(!is_array($TorrentCache)) {
 	$TorrentList=$TorrentCache[1];
 	if($UserID) { $TitleUser=$TorrentCache[2]; }
 }
- 
+
  // List of pages
 $Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 
@@ -600,15 +600,15 @@ View::show_header($Title,'browse');
 		} else {
 			$OtherBitrate = false;
 		}
-		
+
 foreach($Bitrates as $BitrateName) { ?>
 						<option value="<?=display_str($BitrateName); ?>" <? if($BitrateName==$_GET['bitrate']) { ?>selected="selected"<? } ?>><?=display_str($BitrateName); ?></option>
 <?	} ?>			</select>
-					
+
 					<span id="other_bitrate_span"<? if(!$OtherBitrate){ echo " style='display: none;'"; } ?> >
 						<input type="text" spellcheck="false" name="other_bitrate" size="5" id="other_bitrate"<? if($OtherBitrate){ echo " value='".display_str($_GET['other_bitrate'])."'";} ?> />
 					</span>
-					
+
 					<select name="format" style="width:auto;">
 						<option value="">Format</option>
 <?	foreach($Formats as $FormatName) { ?>
@@ -896,7 +896,7 @@ if ($LoggedUser['DefaultSearch']) {
 			$Row = 'a';
 			foreach($Torrents['id'] as $Key => $Val) {
 				// All of the individual torrents in the group
-				
+
 				// If they're using the advanced search and have chosen enabled grouping, we just skip the torrents that don't check out
 				if(!empty($_GET['bitrate']) && $Torrents['encoding'][$Key]!=$_GET['bitrate']) { continue; }
 				if(!empty($_GET['format']) && $Torrents['format'][$Key]!=$_GET['format']) { continue; }
@@ -909,7 +909,7 @@ if ($LoggedUser['DefaultSearch']) {
 						continue;
 					}
 					if(($_GET['haslog'] == '1' || $_GET['haslog'] == '0') && $Torrents['log'][$Key]!=$_GET['haslog']) {
-						continue; 
+						continue;
 					}
 				}
 				if(!empty($_GET['hascue']) && $Torrents['cue'][$Key]!=$_GET['hascue']) { continue; }
@@ -932,10 +932,10 @@ if ($LoggedUser['DefaultSearch']) {
 						continue;
 					}
 				}
-				
+
 				$ExtraInfo='';
 				$AddExtra='';
-				
+
 				if($Torrents['format'][$Key]) 		{ $ExtraInfo.=$Torrents['format'][$Key]; $AddExtra=" / "; }
 				if($Torrents['encoding'][$Key]) 	{ $ExtraInfo.=$AddExtra.$Torrents['encoding'][$Key]; $AddExtra=" / "; }
 				if($Torrents['log'][$Key]=="1") 	{
@@ -991,7 +991,7 @@ if ($LoggedUser['DefaultSearch']) {
 			if($Torrents['freetorrent'][0]=="1") 	{ $ExtraInfo.=$AddExtra. Format::torrent_label('Freeleech!'); $AddExtra=" / "; }
 			if($ExtraInfo!='') 			{ $ExtraInfo="[".$ExtraInfo."]"; }
 			if($GroupYear>0) 			{ $ExtraInfo.=" [".$GroupYear."]"; }
-			
+
 			if (!isset($TimeField) || $TimeField=="t.Time") { $GroupTime=strtotime($GroupTime); }
 ?>
 	<tr class="torrent">
@@ -1018,12 +1018,12 @@ if ($LoggedUser['DefaultSearch']) {
 ?>
 </table>
 <? } else {
-$DB->query("SELECT 
+$DB->query("SELECT
 	tags.Name,
 	((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
-	FROM xbt_snatched AS s 
-	INNER JOIN torrents AS t ON t.ID=s.fid 
-	INNER JOIN torrents_group AS g ON t.GroupID=g.ID 
+	FROM xbt_snatched AS s
+	INNER JOIN torrents AS t ON t.ID=s.fid
+	INNER JOIN torrents_group AS g ON t.GroupID=g.ID
 	INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
 	INNER JOIN tags ON tags.ID=tt.TagID
 	WHERE s.uid='$LoggedUser[ID]'

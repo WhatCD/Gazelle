@@ -1,7 +1,7 @@
 <?
 if(isset($_GET['userid']) && check_perms('users_view_invites')){
 	if(!is_number($_GET['userid'])){ error(403); }
-	
+
 	$UserID=$_GET['userid'];
 	$Sneaky = true;
 } else {
@@ -10,7 +10,7 @@ if(isset($_GET['userid']) && check_perms('users_view_invites')){
 		list($UserCount) = $DB->next_record();
 		$Cache->cache_value('stats_user_count', $UserCount, 0);
 	}
-	
+
 	$UserID = $LoggedUser['ID'];
 	$Sneaky = false;
 	
@@ -112,11 +112,11 @@ View::show_header('Invites');
 $DB->query("SELECT can_leech FROM users_main WHERE ID = ".$UserID);
 list($CanLeech) = $DB->next_record();
 
-if(!$Sneaky 
+if(!$Sneaky
 	&& !$LoggedUser['RatioWatch']
 	&& $CanLeech
 	&& empty($LoggedUser['DisableInvites'])
-	&& ($LoggedUser['Invites']>0 || check_perms('site_send_unlimited_invites')) 
+	&& ($LoggedUser['Invites']>0 || check_perms('site_send_unlimited_invites'))
 	&& ($UserCount <= USER_LIMIT || USER_LIMIT == 0 || check_perms('site_can_invite_always'))
 	){ ?>
 	<div class="box pad">
@@ -174,13 +174,13 @@ if (!empty($Pending)) {
 				<td><?=time_diff($Expires)?></td>
 				<td><a href="user.php?action=deleteinvite&amp;invite=<?=$InviteKey?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this invite?');">Delete invite</a></td>
 			</tr>
-<?	} ?> 
+<?	} ?>
 		</table>
 	</div>
 <?
 }
 
-?> 
+?>
 	<h3>Invitee list</h3>
 	<div class="box pad">
 		<table width="100%">
@@ -198,7 +198,7 @@ if (!empty($Pending)) {
 	foreach ($Invited as $User) {
 		list($ID, $Email, $Uploaded, $Downloaded, $JoinDate, $LastAccess) = $User;
 		$Row = ($Row == 'a') ? 'b' : 'a';
-?> 
+?>
 			<tr class="row<?=$Row?>">
 				<td><?=Users::format_username($ID, true, true, true, true)?></td>
 				<td><?=display_str($Email)?></td>

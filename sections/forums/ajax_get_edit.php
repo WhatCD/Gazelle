@@ -26,13 +26,13 @@ $Text = new TEXT;
 $Edits = $Cache->get_value($Type.'_edits_'.$PostID);
 if(!is_array($Edits)) {
 	$DB->query("SELECT ce.EditUser, ce.EditTime, ce.Body
-			FROM comments_edits AS ce 
+			FROM comments_edits AS ce
 			WHERE Page = '".$Type."' AND PostID = ".$PostID."
 			ORDER BY ce.EditTime DESC");
 	$Edits = $DB->to_array();
 	$Cache->cache_value($Type.'_edits_'.$PostID, $Edits, 0);
 }
-	
+
 list($UserID, $Time) = $Edits[$Depth];
 if($Depth != 0) {
 	list(,,$Body) = $Edits[$Depth - 1];

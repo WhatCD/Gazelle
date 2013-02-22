@@ -6,10 +6,10 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 	// Torrent
 	$DB->query("
 	INSERT INTO torrents
-		(GroupID, UserID, Media, Format, Encoding, 
-		Remastered, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber, 
+		(GroupID, UserID, Media, Format, Encoding,
+		Remastered, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
 		HasLog, HasCue, info_hash, FileCount, FileList, FilePath, Size, Time,
-		Description, LogScore, FreeTorrent, FreeLeechType) 
+		Description, LogScore, FreeTorrent, FreeLeechType)
 	VALUES
 		(" . $GroupID . ", " . $LoggedUser['ID'] . ", " . $T['Media'] . ", " . $ExtraTorrent['Format'] . ", " . $ExtraTorrent['Encoding'] . ",
 		" . $T['Remastered'] . ", " . $T['RemasterYear'] . ", " . $T['RemasterTitle'] . ", " . $T['RemasterRecordLabel'] . ", " . $T['RemasterCatalogueNumber'] . ", " . $ExtraHasLog . ", " . $ExtraHasCue . ", '" . db_string($ExtraTorrent['InfoHash']) . "', " . $ExtraTorrent['NumFiles'] . ", '" . $ExtraTorrent['FileString'] . "', '" . $ExtraTorrent['FilePath'] . "', " . $ExtraTorrent['TotalSize'] . ", '" . sqltime() . "',

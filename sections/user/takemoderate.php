@@ -34,7 +34,7 @@ $Invites = (int)$_POST['Invites'];
 $SupportFor = db_string($_POST['SupportFor']);
 $Pass = $_POST['ChangePassword'];
 $Warned = (isset($_POST['Warned']))? 1 : 0;
-$Logs095 = (int)$_POST['095logs']; 
+$Logs095 = (int)$_POST['095logs'];
 if(isset($_POST['Uploaded']) && isset($_POST['Downloaded'])) {
 	$Uploaded = ($_POST['Uploaded'] == "" ? 0 : $_POST['Uploaded']);
 	if($Arithmetic = strpbrk($Uploaded, '+-')) {
@@ -160,9 +160,9 @@ if ($_POST['UserStatus']=="delete" && check_perms('users_delete_users')) {
 	$DB->query("DELETE FROM users_main WHERE id=".$UserID);
 	$DB->query("DELETE FROM users_info WHERE UserID=".$UserID);
 	$Cache->delete_value('user_info_'.$UserID);
-	
+
 	Tracker::update_tracker('remove_user', array('passkey' => $Cur['torrent_pass']));
-	
+
 	header("Location: log.php?search=User+".$UserID);
 	die();
 }
@@ -212,7 +212,7 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 	$Cache->delete_value('user_info_heavy_'.$UserID);
 	$Cache->delete_value('user_stats_'.$UserID);
 	$Cache->delete_value('enabled_'.$UserID);
-	
+
 	if($_POST['LogOut']) {
 		$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
 		while(list($SessionID) = $DB->next_record()) {
@@ -338,14 +338,14 @@ if ($Visible!=$Cur['Visible'] && check_perms('users_make_invisible')) {
 	$LightUpdates['Visible']=$Visible;
 }
 
-if ($Uploaded!=$Cur['Uploaded'] && $Uploaded!=$_POST['OldUploaded'] && (check_perms('users_edit_ratio') 
+if ($Uploaded!=$Cur['Uploaded'] && $Uploaded!=$_POST['OldUploaded'] && (check_perms('users_edit_ratio')
  || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
 	$UpdateSet[]="Uploaded='".$Uploaded."'";
 	$EditSummary[]="uploaded changed from ".Format::get_size($Cur['Uploaded'])." to ".Format::get_size($Uploaded);
 	$Cache->delete_value('users_stats_'.$UserID);
 }
 
-if ($Downloaded!=$Cur['Downloaded'] && $Downloaded!=$_POST['OldDownloaded'] && (check_perms('users_edit_ratio') 
+if ($Downloaded!=$Cur['Downloaded'] && $Downloaded!=$_POST['OldDownloaded'] && (check_perms('users_edit_ratio')
  || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
 	$UpdateSet[]="Downloaded='".$Downloaded."'";
 	$EditSummary[]="downloaded changed from ".Format::get_size($Cur['Downloaded'])." to ".Format::get_size($Downloaded);
@@ -378,9 +378,9 @@ if ($Warned == 1 && $Cur['Warned']=='0000-00-00 00:00:00' && check_perms('users_
 	$LightUpdates['Warned']='0000-00-00 00:00:00';
 
 } elseif ($Warned == 1 && $ExtendWarning!='---' && check_perms('users_warn')) {
-	
+
 	Misc::send_pm($UserID,0,db_string('Your warning has been extended'),db_string("Your warning has been extended by $ExtendWarning week(s) by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason"));
-	
+
 	$UpdateSet[]="Warned=Warned + INTERVAL $ExtendWarning WEEK";
 	$DB->query("SELECT Warned + INTERVAL $ExtendWarning WEEK FROM users_info WHERE UserID='$UserID'");
 	list($WarnedUntil) = $DB->next_record();
@@ -389,9 +389,9 @@ if ($Warned == 1 && $Cur['Warned']=='0000-00-00 00:00:00' && check_perms('users_
 	$EditSummary[]= db_string($Msg);
 	$LightUpdates['Warned']=$WarnedUntil;
 } elseif ($Warned == 1 && $ExtendWarning=='---' && $ReduceWarning!='---' && check_perms('users_warn')) {
-	
+
 	Misc::send_pm($UserID,0,db_string('Your warning has been reduced'),db_string("Your warning has been reduced by $ReduceWarning week(s) by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason"));
-	
+
 	$UpdateSet[]="Warned=Warned - INTERVAL $ReduceWarning WEEK";
 	$DB->query("SELECT Warned - INTERVAL $ReduceWarning WEEK FROM users_info WHERE UserID='$UserID'");
 	list($WarnedUntil) = $DB->next_record();
@@ -448,8 +448,8 @@ if ($DisableLeech!=$Cur['can_leech'] && check_perms('users_disable_any')) {
 
 if ($DisableInvites!=$Cur['DisableInvites'] && check_perms('users_disable_any')) {
 	$UpdateSet[]="DisableInvites='$DisableInvites'";
-	if ($DisableInvites == 1) { 
-		//$UpdateSet[]="Invites='0'"; 
+	if ($DisableInvites == 1) {
+		//$UpdateSet[]="Invites='0'";
 		if (!empty($UserReason)) {
 			Misc::send_pm($UserID, 0, db_string('Your invite privileges have been disabled'),db_string("Your invite privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN." on our IRC network. Instructions can be found [url=https://".NONSSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]."));
 		}
@@ -496,13 +496,13 @@ if ($DisableUpload!=$Cur['DisableUpload'] && check_perms('users_disable_any')) {
 
 if ($DisableWiki!=$Cur['DisableWiki'] && check_perms('users_disable_any')) {
 	$UpdateSet[]="DisableWiki='$DisableWiki'";
-	$EditSummary[]="wiki status changed";	
+	$EditSummary[]="wiki status changed";
 	$HeavyUpdates['DisableWiki']=$DisableWiki;
 	$HeavyUpdates['site_edit_wiki']=0;
 	if (!empty($UserReason)) {
 		Misc::send_pm($UserID, 0, db_string('Your site editing privileges have been disabled'),db_string("Your site editing privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN." on our IRC network. Instructions can be found [url=https://".NONSSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]."));
 	}
-	
+
 }
 
 if ($DisablePM!=$Cur['DisablePM'] && check_perms('users_disable_any')) {
@@ -545,7 +545,7 @@ if ($EnableUser!=$Cur['Enabled'] && check_perms('users_disable_users')) {
 			$UpdateSet[]="i.RatioWatchEnds='0000-00-00 00:00:00'";
 			$CanLeech = 1;
 			$UpdateSet[]="m.can_leech='1'";
-			$UpdateSet[]="i.RatioWatchDownload='0'";	
+			$UpdateSet[]="i.RatioWatchDownload='0'";
 		} else {
 			$EnableStr .= ' (Ratio: '.Format::get_ratio_html($Cur['Uploaded'], $Cur['Downloaded'], false).', RR: '.number_format($Cur['RequiredRatio'],2).')';
 			if ($Cur['RatioWatchEnds'] != '0000-00-00 00:00:00') {
@@ -661,17 +661,17 @@ $Summary = '';
 if ($EditSummary) {
 	$Summary = implode(', ', $EditSummary)." by ".$LoggedUser['Username'];
 	$Summary = sqltime().' - '.ucfirst($Summary);
-	
+
 	if ($Reason){
 		$Summary .= "\nReason: ".$Reason;
 	}
+
 	
-	
-	
+
 	$Summary .= "\n\n".$AdminComment;
 } elseif (empty($UpdateSet) && empty($EditSummary) && $Cur['AdminComment']==$_POST['AdminComment']) {
 	$Summary = sqltime().' - '.'Comment added by '.$LoggedUser['Username'].': '.$Reason."\n\n";
-	
+
 	
 }
 

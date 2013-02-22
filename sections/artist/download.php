@@ -135,8 +135,6 @@ $DownloadsQ = $DB->query($SQL);
 $Collector = new TorrentsDL($DownloadsQ, $ArtistName);
 
 while (list($Downloads, $GroupIDs) = $Collector->get_downloads('GroupID')) {
-	$Debug->log_var($Downloads, '$Downloads');
-	$Debug->log_var($GroupIDs, '$GroupIDs');
 	$Artists = Artists::get_artists($GroupIDs);
 	$TorrentFilesQ = $DB->query("SELECT TorrentID, File FROM torrents_files WHERE TorrentID IN (".implode(',', array_keys($GroupIDs)).")", false);
 	if (is_int($TorrentFilesQ)) {

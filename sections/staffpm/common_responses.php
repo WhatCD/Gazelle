@@ -37,15 +37,15 @@ $Text = new TEXT;
 		<div id="response_new" class="box">
 			<form class="send_form" name="response" id="response_form_0" action="">
 				<div class="head">
-					<strong>Name:</strong> 
-					<input onfocus="if (this.value == 'New name') this.value='';" 
-						   onblur="if (this.value == '') this.value='New name';" 
-						   type="text" id="response_name_0" size="87" value="New name" 
+					<strong>Name:</strong>
+					<input onfocus="if (this.value == 'New name') this.value='';"
+						   onblur="if (this.value == '') this.value='New name';"
+						   type="text" id="response_name_0" size="87" value="New name"
 					/>
 				</div>
 				<div class="pad">
-					<textarea onfocus="if (this.value == 'New message') this.value='';" 
-							  onblur="if (this.value == '') this.value='New message';" 
+					<textarea onfocus="if (this.value == 'New message') this.value='';"
+							  onblur="if (this.value == '') this.value='New message';"
 							  rows="10" cols="87"
 							  id="response_message_0">New message</textarea>
 					<br />
@@ -63,7 +63,7 @@ $Text = new TEXT;
 // List common responses
 $DB->query("SELECT ID, Message, Name FROM staff_pm_responses ORDER BY ID DESC");
 while(list($ID, $Message, $Name) = $DB->next_record()) {
-	
+
 ?>
 		<br />
 		<div id="ajax_message_<?=$ID?>" class="hidden center alertbar"></div>
@@ -71,7 +71,7 @@ while(list($ID, $Message, $Name) = $DB->next_record()) {
 		<div id="response_<?=$ID?>" class="box">
 			<form class="send_form" name="response" id="response_form_<?=$ID?>" action="">
 				<div class="head">
-					<strong>Name:</strong> 
+					<strong>Name:</strong>
 					<input type="hidden" name="id" value="<?=$ID?>" />
 					<input type="text" name="name" id="response_name_<?=$ID?>" size="87" value="<?=display_str($Name)?>" />
 				</div>
@@ -88,7 +88,7 @@ while(list($ID, $Message, $Name) = $DB->next_record()) {
 			</form>
 		</div>
 <?
-	
+
 }
 
 ?>

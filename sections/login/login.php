@@ -1,6 +1,6 @@
 <? View::show_header('Login'); ?>
 	<span id="no-cookies" class="hidden warning">You appear to have cookies disabled.<br /><br /></span>
-	<noscript><span class="warning">You appear to have javascript disabled.</span><br /><br /></noscript> 
+	<noscript><span class="warning">You appear to have javascript disabled.</span><br /><br /></noscript>
 <?
 if(strtotime($BannedUntil)<time() && !$BanID) {
 ?>

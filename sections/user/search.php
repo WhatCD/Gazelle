@@ -7,7 +7,7 @@ if (!empty($_GET['search'])) {
 	
 	$_GET['username'] = $_GET['search'];
 }
- 
+
 define('USERS_PER_PAGE', 30);
 
 if (isset($_GET['username'])) {
@@ -16,7 +16,7 @@ if (isset($_GET['username'])) {
 	// form submitted
 	$Val->SetFields('username','1','username','Please enter a username.');
 	$Err = $Val->ValidateForm($_GET);
-	
+
 	if(!$Err){
 		// Passed validation. Let's rock.
 		list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);

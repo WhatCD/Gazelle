@@ -15,10 +15,10 @@ if(isset($_GET['method'])) {
 			break;
 		case 'artistless':
 			include(SERVER_ROOT.'/sections/better/artistless.php');
-			break;			
+			break;
 		case 'tags':
 			include(SERVER_ROOT.'/sections/better/tags.php');
-			break;			
+			break;
 		case 'folders':
 			include(SERVER_ROOT.'/sections/better/folders.php');
 			break;

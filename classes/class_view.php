@@ -104,7 +104,7 @@ class View
 	 * @example <pre><?php
 	 *  // box.phtml
 	 *  <p id="<?=$id?>">Data</p>
-	 * 
+	 *
 	 *  // The variable $id within box.phtml will be filled by $some_id
 	 *	View::parse('section/box.phtml', array('id' => $some_id));
 	 *

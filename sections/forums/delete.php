@@ -10,7 +10,7 @@ if(!check_perms('site_admin_forums')) {
 }
 
 // Get topicid, forumid, number of pages
-$DB->query("SELECT 
+$DB->query("SELECT
 	TopicID,
 	ForumID,
 	CEIL(COUNT(p.ID)/".POSTS_PER_PAGE.") AS Pages,

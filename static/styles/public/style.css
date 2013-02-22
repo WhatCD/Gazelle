@@ -100,7 +100,7 @@ input[type="text"]:invalid, input[type="password"]:invalid {
 }
 
 .poetry {
-	width: 320px; 
+	width: 320px;
 	text-align: justify;
 }
 

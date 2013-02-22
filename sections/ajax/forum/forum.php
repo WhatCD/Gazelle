@@ -107,7 +107,7 @@ else {
 	// This is done here so we get the benefit of the caching, and we
 	// don't have to make a database query for each topic on the page
 	$LastRead = $DB->to_array('TopicID');
-	
+
 	$JsonTopics = array();
 	foreach ($Forum as $Topic) {
 		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
@@ -122,7 +122,7 @@ else {
 		$AuthorName = $UserInfo['Username'];
 		$UserInfo = Users::user_info($LastAuthorID);
 		$LastAuthorName = $UserInfo['Username'];
-		
+
 		$JsonTopics[] = array(
 			'topicId' => (int) $TopicID,
 			'title' => display_str($Title),

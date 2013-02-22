@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
 	}
 	if (function_exists('eaccelerator_optimizer')) {
 		if($_POST['optimize'] == 1) {
-		
+
 			authorize();
 
 			eaccelerator_optimizer(true);
@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
 			eaccelerator_optimizer(false);
 		}
 	}
-	
+
 	if (isset($_POST['clear'])) {
 		authorize();
 		eaccelerator_clear();
@@ -85,7 +85,7 @@ View::show_header("Opcode Stats");
 						<input type="submit" name="submit" value="Update" />
 					</td>
 				</tr>
-			</table>	
+			</table>
 		</form>
 	</div>
 	<br /><br />

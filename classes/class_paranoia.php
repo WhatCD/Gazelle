@@ -44,7 +44,7 @@
 
 define("PARANOIA_ALLOWED", 1);
 define("PARANOIA_OVERRIDDEN", 2);
- 
+
 function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
 	global $LoggedUser, $Classes;
 	if ($Property == false) {
@@ -68,8 +68,8 @@ function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
 		$May = !in_array($Property, $Paranoia) && !in_array($Property . '+', $Paranoia);
 		if($May)
 			return PARANOIA_ALLOWED;
-			
-		if(check_perms('users_override_paranoia', $UserClass)) 
+
+		if(check_perms('users_override_paranoia', $UserClass))
 			return PARANOIA_OVERRIDDEN;
 		$Override=false;
 		switch ($Property) {
@@ -78,20 +78,20 @@ function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
 			case 'uploaded':
 			case 'lastseen':
 				if(check_perms('users_mod', $UserClass))
-					return PARANOIA_OVERRIDDEN;	
+					return PARANOIA_OVERRIDDEN;
 				break;
 			case 'snatched': case 'snatched+':
-				if(check_perms('users_view_torrents_snatchlist', $UserClass)) 
+				if(check_perms('users_view_torrents_snatchlist', $UserClass))
 					return PARANOIA_OVERRIDDEN;
 				break;
 			case 'uploads': case 'uploads+':
 			case 'seeding': case 'seeding+':
 			case 'leeching': case 'leeching+':
-				if(check_perms('users_view_seedleech', $UserClass)) 
+				if(check_perms('users_view_seedleech', $UserClass))
 					return PARANOIA_OVERRIDDEN;
 				break;
 			case 'invitedcount':
-				if(check_perms('users_view_invites', $UserClass)) 
+				if(check_perms('users_view_invites', $UserClass))
 					return PARANOIA_OVERRIDDEN;
 				break;
 		}

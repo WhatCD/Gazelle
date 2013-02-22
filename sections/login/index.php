@@ -30,15 +30,15 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 	// Recover password
 	if (!empty($_REQUEST['key'])) {
 		// User has entered a new password, use step 2
-		$DB->query("SELECT 
+		$DB->query("SELECT
 			m.ID,
 			m.Email,
 			m.ipcc,
-			i.ResetExpires 
-			FROM users_main AS m 
-			INNER JOIN users_info AS i ON i.UserID=m.ID 
-			WHERE i.ResetKey='".db_string($_REQUEST['key'])."' 
-			AND i.ResetKey<>'' 
+			i.ResetExpires
+			FROM users_main AS m
+			INNER JOIN users_info AS i ON i.UserID=m.ID
+			WHERE i.ResetKey='".db_string($_REQUEST['key'])."'
+			AND i.ResetKey<>''
 			AND m.Enabled='1'");
 		list($UserID,$Email,$Country,$Expires)=$DB->next_record();
 
@@ -48,38 +48,38 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 			$Validate->SetFields('verifypassword','1','compare','Your passwords did not match.',array('comparefield'=>'password'));
 
 			if (!empty($_REQUEST['password'])) {
-				// If the user has entered a password. 
+				// If the user has entered a password.
 				// If the user has not entered a password, $Reset is not set to 1, and the success message is not shown
 				$Err=$Validate->ValidateForm($_REQUEST);
 				if ($Err=='') {
-					// Form validates without error, set new secret and password. 
-					$DB->query("UPDATE 
+					// Form validates without error, set new secret and password.
+					$DB->query("UPDATE
 						users_main AS m,
-						users_info AS i 
+						users_info AS i
 						SET m.PassHash='".db_string(Users::make_crypt_hash($_REQUEST['password']))."',
 						i.ResetKey='',
-						i.ResetExpires='0000-00-00 00:00:00' 
-						WHERE m.ID='".db_string($UserID)."' 
+						i.ResetExpires='0000-00-00 00:00:00'
+						WHERE m.ID='".db_string($UserID)."'
 						AND i.UserID=m.ID");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
-					
+
 					
 				}
 			}
-			
+
 			// Either a form asking for them to enter the password
 			// Or a success message if $Reset is 1
 			require('recover_step2.php');
 
 		} else {
 			// Either his key has expired, or he hasn't requested a pass change at all
-			
+
 			if (strtotime($Expires)<time() && $UserID) {
 				// If his key has expired, clear all the reset information
-				$DB->query("UPDATE 
-					users_info 
+				$DB->query("UPDATE
+					users_info
 					SET ResetKey='',
-					ResetExpires='0000-00-00 00:00:00' 
+					ResetExpires='0000-00-00 00:00:00'
 					WHERE UserID='$UserID'");
 				$_SESSION['reseterr']="The link you were given has expired."; // Error message to display on form
 			}
@@ -88,7 +88,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 		}
 
 	} // End step 2
-	
+
 	// User has not clicked the link in his email, use step 1
 	else {
 		$Validate->SetFields('email','1','email','You entered an invalid email address.');
@@ -99,12 +99,12 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 
 			if (!$Err) {
 				// Form validates correctly
-				$DB->query("SELECT 
+				$DB->query("SELECT
 					ID,
 					Username,
-					Email 
-					FROM users_main 
-					WHERE Email='".db_string($_REQUEST['email'])."' 
+					Email
+					FROM users_main
+					WHERE Email='".db_string($_REQUEST['email'])."'
 					AND Enabled='1'");
 				list($UserID,$Username,$Email)=$DB->next_record();
 
@@ -112,15 +112,15 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 					// Email exists in the database
 					// Set ResetKey, send out email, and set $Sent to 1 to show success page
 					$ResetKey=Users::make_secret();
-					$DB->query("UPDATE users_info SET 
+					$DB->query("UPDATE users_info SET
 						ResetKey='".db_string($ResetKey)."',
-						ResetExpires='".time_plus(60*60)."' 
+						ResetExpires='".time_plus(60*60)."'
 						WHERE UserID='$UserID'");
-					
+
 					require(SERVER_ROOT.'/classes/class_templates.php');
 					$TPL=NEW TEMPLATE;
 					$TPL->open(SERVER_ROOT.'/templates/password_reset.tpl'); // Password reset template
-					
+
 					$TPL->set('Username',$Username);
 					$TPL->set('ResetKey',$ResetKey);
 					$TPL->set('IP',$_SERVER['REMOTE_ADDR']);
@@ -129,7 +129,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 
 					Misc::send_email($Email,'Password reset information for '.SITE_NAME,$TPL->get(),'noreply');
 					$Sent=1; // If $Sent is 1, recover_step1.php displays a success message
-					
+
 					//Log out all of the users current sessions
 					$Cache->delete_value('user_info_'.$UserID);
 					$Cache->delete_value('user_info_heavy_'.$UserID);
@@ -142,7 +142,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 					}
 					$DB->query("UPDATE users_sessions SET Active = 0 WHERE UserID='$UserID' AND Active = 1");
 
-					
+
 				} else {
 					$Err="There is no user with that email address.";
 				}
@@ -150,12 +150,12 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 
 		} elseif (!empty($_SESSION['reseterr'])) {
 			// User has not entered email address, and there is an error set in session data
-			// This is typically because their key has expired. 
+			// This is typically because their key has expired.
 			// Stick the error into $Err so recover_step1.php can take care of it
 			$Err=$_SESSION['reseterr'];
 			unset($_SESSION['reseterr']);
 		}
-		
+
 		// Either a form for the user's email address, or a success message
 		require('recover_step1.php');
 	} // End if (step 1)
@@ -184,7 +184,7 @@ else {
 					LastAttempt='".sqltime()."',
 					Attempts='".db_string($Attempts)."',
 					BannedUntil='".db_string($BannedUntil)."',
-					Bans=Bans+1 
+					Bans=Bans+1
 					WHERE ID='".db_string($AttemptID)."'");
 				
 				if ($Bans>9) { // Automated bruteforce prevention
@@ -210,17 +210,17 @@ else {
 				$DB->query("UPDATE login_attempts SET
 					LastAttempt='".sqltime()."',
 					Attempts='".db_string($Attempts)."',
-					BannedUntil='0000-00-00 00:00:00' 
+					BannedUntil='0000-00-00 00:00:00'
 					WHERE ID='".db_string($AttemptID)."'");
 			}
 		} else { // User has not attempted to log in recently
 			$Attempts=1;
-			$DB->query("INSERT INTO login_attempts 
-				(UserID,IP,LastAttempt,Attempts) VALUES 
+			$DB->query("INSERT INTO login_attempts
+				(UserID,IP,LastAttempt,Attempts) VALUES
 				('".db_string($UserID)."','".db_string($IPStr)."','".sqltime()."',1)");
 		}
 	} // end log_attempt function
-	
+
 	// If user has submitted form
 	if(isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password'])) {
 		if (strtotime($BannedUntil) > time()) {
@@ -238,7 +238,7 @@ else {
 				PassHash,
 				Secret,
 				Enabled
-				FROM users_main WHERE Username='".db_string($_POST['username'])."' 
+				FROM users_main WHERE Username='".db_string($_POST['username'])."'
 				AND Username<>''");
 			list($UserID,$PermissionID,$CustomPermissions,$PassHash,$Secret,$Enabled)=$DB->next_record(MYSQLI_NUM, array(2));
 			if (strtotime($BannedUntil)<time()) {
@@ -258,18 +258,18 @@ else {
 							$KeepLogged = 0;
 							setcookie('session', $Cookie, 0, '/', '', $SSL, true);
 						}
-						
+
 						//TODO: another tracker might enable this for donors, I think it's too stupid to bother adding that
 						// Because we <3 our staff
 						$Permissions = Permissions::get_permissions($PermissionID);
 						$CustomPermissions = unserialize($CustomPermissions);
 						if (
-							isset($Permissions['Permissions']['site_disable_ip_history']) || 
+							isset($Permissions['Permissions']['site_disable_ip_history']) ||
 							isset($CustomPermissions['site_disable_ip_history'])
 						) { $_SERVER['REMOTE_ADDR'] = '127.0.0.1'; }
+
 						
-						
-						
+
 						$DB->query("INSERT INTO users_sessions
 							(UserID, SessionID, KeepLogged, Browser, OperatingSystem, IP, LastUpdate)
 							VALUES ('$UserID', '".db_string($SessionID)."', '$KeepLogged', '$Browser','$OperatingSystem', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."')");
@@ -283,9 +283,9 @@ else {
 								'LastUpdate'=>sqltime()
 								));
 						$Cache->commit_transaction(0);
-						
-						$Sql = "UPDATE users_main 
-							SET 
+
+						$Sql = "UPDATE users_main
+							SET
 								LastLogin='".sqltime()."',
 								LastAccess='".sqltime()."'";
 						

@@ -6,7 +6,7 @@ if(!is_number($UserID)) {
 	error(404);
 }
 
-//For the entire of this page we should in general be using $UserID not $LoggedUser['ID'] and $U[] not $LoggedUser[]	
+//For the entire of this page we should in general be using $UserID not $LoggedUser['ID'] and $U[] not $LoggedUser[]
 $U = Users::user_info($UserID);
 
 if (!$U) {
@@ -135,22 +135,22 @@ if ($CurEmail != $_POST['email']) {
 		}
 	}
 	if(!$Err) {
-		$NewEmail = db_string($_POST['email']);		
+		$NewEmail = db_string($_POST['email']);
 
-	
+
 		//This piece of code will update the time of their last email change to the current time *not* the current change.
 		$ChangerIP = db_string($LoggedUser['IP']);
 		$DB->query("UPDATE users_history_emails SET Time='".sqltime()."' WHERE UserID='$UserID' AND Time='0000-00-00 00:00:00'");
 		$DB->query("INSERT INTO users_history_emails
 				(UserID, Email, Time, IP) VALUES
 				('$UserID', '$NewEmail', '0000-00-00 00:00:00', '".db_string($_SERVER['REMOTE_ADDR'])."')");
-		
+
 	} else {
 		error($Err);
 		header('Location: user.php?action=edit&userid='.$UserID);
 		die();
 	}
-	
+
 	
 }
 //End Email change
@@ -160,10 +160,10 @@ if (!$Err && ($_POST['cur_pass'] || $_POST['new_pass_1'] || $_POST['new_pass_2']
 	list($PassHash,$Secret)=$DB->next_record();
 
 	if (Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
-		if ($_POST['new_pass_1'] && $_POST['new_pass_2']) { 
-			$ResetPassword = true; 
+		if ($_POST['new_pass_1'] && $_POST['new_pass_2']) {
+			$ResetPassword = true;
 		}
-	} else { 
+	} else {
 		$Err = "You did not enter the correct password.";
 	}
 }
@@ -297,9 +297,9 @@ if($ResetPassword) {
 }
 
 if (isset($_POST['resetpasskey'])) {
+
 	
-	
-	
+
 	$UserInfo = Users::user_heavy_info($UserID);
 	$OldPassKey = db_string($UserInfo['torrent_pass']);
 	$NewPassKey = db_string(Users::make_secret());
@@ -312,7 +312,7 @@ if (isset($_POST['resetpasskey'])) {
 	$Cache->update_row(false, array('torrent_pass'=>$NewPassKey));
 	$Cache->commit_transaction(0);
 	$Cache->delete_value('user_'.$OldPassKey);
-	
+
 	Tracker::update_tracker('change_passkey', array('oldpasskey' => $OldPassKey, 'newpasskey' => $NewPassKey));
 }
 

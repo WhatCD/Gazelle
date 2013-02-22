@@ -148,7 +148,7 @@ if($_POST['id'.$FormID] && is_number($_POST['id'.$FormID])){
 		ToYear='$ToYear'
 		WHERE ID='".$_POST['id'.$FormID]."' AND UserID='$LoggedUser[ID]'");
 } else {
-	$DB->query("INSERT INTO users_notify_filters 
+	$DB->query("INSERT INTO users_notify_filters
 		(UserID, Label, Artists, ExcludeVA, NewGroupsOnly, Tags, NotTags, ReleaseTypes, Categories, Formats, Encodings, Media, FromYear, ToYear)
 		VALUES
 		('$LoggedUser[ID]','".db_string($_POST['label'.$FormID])."','$ArtistList','$ExcludeVA','$NewGroupsOnly','$TagList', '$NotTagList', '$ReleaseTypeList','$CategoryList','$FormatList','$EncodingList','$MediaList', '$FromYear', '$ToYear')");

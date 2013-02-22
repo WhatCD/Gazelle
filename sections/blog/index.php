@@ -42,7 +42,7 @@ if(check_perms('admin_manage_blog')) {
 				}
 				header('Location: blog.php');
 				break;
-		
+
 			case 'takenewblog':
 				authorize();
 				$Title = db_string($_POST['title']);
@@ -53,20 +53,20 @@ if(check_perms('admin_manage_blog')) {
 					if($DB->record_count() < 1) {
 						error("No such thread exists!");
 						header('Location: blog.php');
-					} 
+					}
 				} else {
 					$ThreadID = Misc::create_thread(ANNOUNCEMENT_FORUM_ID, $LoggedUser[ID], $Title, $Body);
 					if($ThreadID < 1) {
 						error(0);
 					}
 				}
-				
-				$DB->query("INSERT INTO blog (UserID, Title, Body, Time, ThreadID, Important) 
-				                      VALUES ('".$LoggedUser['ID']."', 
-									          '".db_string($_POST['title'])."', 
-											  '".db_string($_POST['body'])."', 
-											  '".sqltime()."', 
-											  ".$ThreadID.", 
+
+				$DB->query("INSERT INTO blog (UserID, Title, Body, Time, ThreadID, Important)
+				                      VALUES ('".$LoggedUser['ID']."',
+									          '".db_string($_POST['title'])."',
+											  '".db_string($_POST['body'])."',
+											  '".sqltime()."',
+											  ".$ThreadID.",
 											  '".(($_POST['important']=='1')?'1':'0')."')");
 				$Cache->delete_value('blog');
 				if ($_POST['important']=='1') {
@@ -81,7 +81,7 @@ if(check_perms('admin_manage_blog')) {
 				break;
 		}
 	}
-		
+
 	?>
 		<div class="box thin">
 			<div class="head">
@@ -91,9 +91,9 @@ if(check_perms('admin_manage_blog')) {
 				<div class="pad">
 					<input type="hidden" name="action" value="<?=((empty($_GET['action'])) ? 'takenewblog' : 'takeeditblog')?>" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-	<? if(!empty($_GET['action']) && $_GET['action'] == 'editblog'){?> 
+	<? if(!empty($_GET['action']) && $_GET['action'] == 'editblog'){?>
 					<input type="hidden" name="blogid" value="<?=$BlogID; ?>" />
-	<? }?> 
+	<? }?>
 					<h3>Title</h3>
 					<input type="text" name="title" size="95" <? if(!empty($Title)) { echo 'value="'.display_str($Title).'"'; } ?> /><br />
 					<h3>Body</h3>
@@ -113,7 +113,7 @@ if(check_perms('admin_manage_blog')) {
 			</form>
 		</div>
 		<br />
-<? 
+<?
 }
 ?>
 <div class="thin">
@@ -147,7 +147,7 @@ foreach ($Blog as $BlogItem) {
 			<div id="blog<?=$BlogID?>" class="box">
 				<div class="head">
 					<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <?=$Author?>
-		<? if(check_perms('admin_manage_blog')) { ?> 
+		<? if(check_perms('admin_manage_blog')) { ?>
 					- <a href="blog.php?action=editblog&amp;id=<?=$BlogID?>" class="brackets">Edit</a>
 					<a href="blog.php?action=deleteblog&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Delete</a>
 		 <? } ?>
@@ -157,14 +157,14 @@ foreach ($Blog as $BlogItem) {
 		<? if($ThreadID) { ?>
 					<br /><br />
 					<em><a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>">Discuss this post here</a></em>
-		<? 		if(check_perms('admin_manage_blog')) { ?> 
+		<? 		if(check_perms('admin_manage_blog')) { ?>
 					<a href="blog.php?action=deadthread&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Remove link</a>
 		<? 		}
 			} ?>
 				</div>
 			</div>
 		<br />
-<? 
+<?
 }
 ?>
 </div>

@@ -84,7 +84,7 @@ function NewReport(q, view, id) {
 		if(id) {
 			url += "&id=" + id;
 		}
-		
+
 		ajax.get(url, function (response) {
 			if(response) {
 				var div = document.createElement("div");
@@ -119,10 +119,10 @@ function AddMore(view, id) {
 			x = a;
 		}
 	}
-	
+
 	if(document.getElementsByName("reportid").length + x <= 50) {
 		NewReport(x, view, id);
-	} else { 
+	} else {
 		NewReport(50 - document.getElementsByName("reportid").length, view, id);
 	}
 }

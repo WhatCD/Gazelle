@@ -42,7 +42,7 @@ switch ($_REQUEST['action']) {
 	case 'edit':
 		include('edit.php');
 		break;
-	
+
 	case 'takeedit':
 		include('takeedit.php');
 		break;
@@ -54,7 +54,7 @@ switch ($_REQUEST['action']) {
 		break;
 	case 'takeinvite':
 		include('takeinvite.php');
-		break;		
+		break;
 	case 'deleteinvite':
 		include('deleteinvite.php');
 		break;
@@ -70,7 +70,7 @@ switch ($_REQUEST['action']) {
 		break;
 	case 'similar':
 		include('similar.php');
-		break;	
+		break;
 	case 'moderate':
 		include('takemoderate.php');
 		break;

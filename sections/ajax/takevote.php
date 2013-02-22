@@ -24,37 +24,37 @@ if ($_REQUEST['do'] == 'vote') {
 		die();
 	}
 	$Type = ($_REQUEST['vote'] == 'up')?"Up":"Down";
-	
+
 	// Update the two votes tables if needed
 	$DB->query("INSERT IGNORE INTO users_votes (UserID, GroupID, Type) VALUES ($UserID, $GroupID, '$Type')");
 	if ($DB->affected_rows() == 0) {
 		echo 'noaction';
 		die();
 	}
-	
+
 	// Update the group's cache key
 	$GroupVotes['Total'] += 1;
 	if ($Type == "Up") {
 		$GroupVotes['Ups'] += 1;
 	}
 	$Cache->cache_value('votes_'.$GroupID, $GroupVotes);
-	
+
 	// If the group has no votes yet, we need an insert, otherwise an update
 	// so we can cut corners and use the magic of INSERT...ON DUPLICATE KEY UPDATE...
 	// to accomplish both in one query
 	$DB->query("INSERT INTO torrents_votes (GroupID, Total, Ups, Score)
 				VALUES ($GroupID, 1, ".($Type=='Up'?1:0).", 0)
-				ON DUPLICATE KEY UPDATE Total = Total + 1, 
+				ON DUPLICATE KEY UPDATE Total = Total + 1,
 				Score = IFNULL(binomial_ci(Ups".($Type=='Up'?'+1':'').",Total),0)".
 				($Type=='Up'?', Ups = Ups+1':''));
-	
+
 	$UserVotes[$GroupID] = array('GroupID' => $GroupID, 'Type' => $Type);
-	
+
 	// Update this guy's cache key
 	$Cache->cache_value('voted_albums_'.$LoggedUser['ID'], $UserVotes);
-		
+
 	// Update the paired cache keys for "people who liked"
-	// First update this album's paired votes.  If this keys is magically not set, 
+	// First update this album's paired votes.  If this keys is magically not set,
 	// our life just got a bit easier.  We're only tracking paired votes on upvotes.
 	if ($Type == 'Up') {
 		$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
@@ -108,7 +108,7 @@ if ($_REQUEST['do'] == 'vote') {
 		}
 	}
 
-	
+
 	echo 'success';
 } elseif ($_REQUEST['do'] == 'unvote') {
 	if (!isset($UserVotes[$GroupID])) {
@@ -116,13 +116,13 @@ if ($_REQUEST['do'] == 'vote') {
 		die();
 	}
 	$Type = $UserVotes[$GroupID]['Type'];
-	
+
 	$DB->query("DELETE FROM users_votes WHERE UserID=$UserID AND GroupID=$GroupID");
-	
+
 	// Update personal cache key
 	unset($UserVotes[$GroupID]);
 	$Cache->cache_value('voted_albums_'.$LoggedUser['ID'], $UserVotes);
-	
+
 	// Update the group's cache key
 	$GroupVotes['Total'] -= 1;
 	if ($Type == "Up") {
@@ -135,7 +135,7 @@ if ($_REQUEST['do'] == 'vote') {
 			    ($Type=='Up'?', Ups = GREATEST(0, Ups - 1)':'')."
 				WHERE GroupID=$GroupID");
 	// Update paired cache keys
-	// First update this album's paired votes.  If this keys is magically not set, 
+	// First update this album's paired votes.  If this keys is magically not set,
 	// our life just got a bit easier.  We're only tracking paired votes on upvotes.
 	if ($Type == 'Up') {
 		$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
@@ -160,7 +160,7 @@ if ($_REQUEST['do'] == 'vote') {
 		}
 		$Cache->cache_value('vote_pairs_'.$GroupID, $VotePairs);
 	}
-	
+
 	// Now do the paired votes keys for all of this guy's other votes
 	foreach ($UserVotes as $VGID => $Vote) {
 		if ($Vote['Type'] != 'Up') {
@@ -190,7 +190,7 @@ if ($_REQUEST['do'] == 'vote') {
 			}
 		}
 	}
-	
+
 	// Let the script know what happened
 	if ($Type == 'Up') {
 		echo 'success-up';

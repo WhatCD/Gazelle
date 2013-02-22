@@ -46,8 +46,8 @@ while(list($ID, $Client, $Peer_ID) = $DB->next_record()){
 		<tr class="colhead">
 			<td colspan="4">Add Client</td>
 		</tr>
-		<tr class="rowa">		
-			
+		<tr class="rowa">
+
 			<td>
 				<input type="text" size="100" name="client" />
 			</td>

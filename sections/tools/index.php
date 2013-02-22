@@ -89,7 +89,7 @@ switch ($_REQUEST['action']){
 	case 'recommend_alter':
 		include('managers/recommend_alter.php');
 		break;
-		
+
 	case 'recommend_restore':
 		include('managers/recommend_restore.php');
 		break;
@@ -101,7 +101,7 @@ switch ($_REQUEST['action']){
 	case 'eb_alter':
 		include('managers/eb_alter.php');
 		break;
-	
+
 	case 'eb_search':
 		include('managers/eb_search.php');
 		break;
@@ -150,15 +150,15 @@ switch ($_REQUEST['action']){
 		if(!check_perms('admin_manage_news')){ error(403); }
 
 		$DB->query("INSERT INTO news (UserID, Title, Body, Time) VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."')");
+
 		
-		
-		
+
 		$Cache->cache_value('news_latest_id', $DB->inserted_id(), 0);
 		$Cache->delete_value('news');
-		
+
 		header('Location: index.php');
 		break;
-		
+
 	case 'tokens':
 		include('managers/tokens.php');
 		break;
@@ -189,7 +189,7 @@ switch ($_REQUEST['action']){
 					error(403);
 				}
 				$Values = unserialize($Values);
-			}		
+			}
 
 			if (!empty($_POST['submit'])) {
 				$Err = $Val->ValidateForm($_POST);
@@ -365,31 +365,31 @@ switch ($_REQUEST['action']){
 	case 'sandbox2':
 		include('misc/sandbox2.php');
 		break;
-		
+
 	case 'sandbox3':
 		include('misc/sandbox3.php');
 		break;
-		
+
 	case 'sandbox4':
 		include('misc/sandbox4.php');
 		break;
-		
+
 	case 'sandbox5':
 		include('misc/sandbox5.php');
 		break;
-		
+
 	case 'sandbox6':
 		include('misc/sandbox6.php');
 		break;
-		
+
 	case 'sandbox7':
 		include('misc/sandbox7.php');
 		break;
-		
+
 	case 'sandbox8':
 		include('misc/sandbox8.php');
 		break;
-		
+
 	case 'public_sandbox':
 		include('misc/public_sandbox.php');
 		break;

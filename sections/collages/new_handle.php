@@ -70,8 +70,8 @@ foreach($TagList as $ID=>$Tag) {
 }
 $TagList = implode(' ',$TagList);
 
-$DB->query("INSERT INTO collages 
-	(Name, Description, UserID, TagList, CategoryID) 
+$DB->query("INSERT INTO collages
+	(Name, Description, UserID, TagList, CategoryID)
 	VALUES
 	('$P[name]', '$P[description]', $LoggedUser[ID], '$TagList', '$P[category]')");
 

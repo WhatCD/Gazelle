@@ -102,7 +102,7 @@ foreach ($Registries as $Registry) {
 
 			$Start = Tools::ip_to_unsigned($Matches[2]);
 			if($Start == 2147483647) { continue; }
-			
+
 			if (!isset($Current)) {
 				$Current = array('StartIP' => $Start, 'EndIP' => $Start + $Matches[3],'Code' => $Matches[1]);
 			} elseif ($Current['Code'] == $Matches[1] && $Current['EndIP'] == $Start) {

@@ -61,7 +61,7 @@ if(isset($_GET['forums']) && is_array($_GET['forums'])) {
 if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
 	$ThreadID = $_GET['threadid'];
 	$Type = 'body';
-	$SQL = "SELECT Title FROM forums_topics AS t 
+	$SQL = "SELECT Title FROM forums_topics AS t
 				JOIN forums AS f ON f.ID=t.ForumID
 				WHERE t.ID=$ThreadID
 				AND ((f.MinClassRead <= '$LoggedUser[Class]'";
@@ -98,13 +98,13 @@ View::show_header('Forums'.' > '.'Search', 'bbcode');
 				</td>
 			</tr>
 <?
-if (empty($ThreadID)) { ?>			
+if (empty($ThreadID)) { ?>
 			<tr>
 				<td><strong>Search in:</strong></td>
 				<td>
-					<input type="radio" name="type" id="type_title" value="title" <? if($Type == 'title') { echo 'checked="checked" '; }?>/> 
+					<input type="radio" name="type" id="type_title" value="title" <? if($Type == 'title') { echo 'checked="checked" '; }?>/>
 					<label for="type_title">Titles</label>
-					<input type="radio" name="type" id="type_body" value="body" <? if($Type == 'body') { echo 'checked="checked" '; }?>/> 
+					<input type="radio" name="type" id="type_body" value="body" <? if($Type == 'body') { echo 'checked="checked" '; }?>/>
 					<label for="type_body">Post bodies</label>
 				</td>
 			</tr>
@@ -112,8 +112,8 @@ if (empty($ThreadID)) { ?>
 				<td><strong>Forums:</strong></td>
 				<td>
 		<table class="cat_list layout">
-	
-							
+
+
 	<?// List of forums
 	$Open = false;
 	$LastCategoryID = -1;
@@ -123,20 +123,20 @@ if (empty($ThreadID)) { ?>
 		if (!check_forumperm($Forum['ID'])) {
 			continue;
 		}
-		
+
 		$Columns++;
-		
+
 		if ($Forum['CategoryID'] != $LastCategoryID) {
 			$LastCategoryID = $Forum['CategoryID'];
 			if($Open) {
 				if ($Columns%5) { ?>
 				<td colspan="<?=(5-($Columns%5))?>"></td>
-<? 			
+<?
 				}
 
 ?>
 			</tr>
-<?		
+<?
 			}
 			$Columns = 0;
 			$Open = true;
@@ -175,7 +175,7 @@ if (empty($ThreadID)) { ?>
 						<input type="submit" value="Search" />
 					</td>
 				</tr>
-			</table>	
+			</table>
 		</form>
 	<div class="linkbox">
 <?
@@ -184,7 +184,7 @@ if (empty($ThreadID)) { ?>
 $Words = explode(' ',  db_string($Search));
 
 if($Type == 'body') {
-	
+
 	$sql = "SELECT SQL_CALC_FOUND_ROWS
 		t.ID,
 		".(!empty($ThreadID) ? "SUBSTRING_INDEX(p.Body, ' ', 40)":"t.Title").",
@@ -196,7 +196,7 @@ if($Type == 'body') {
 		FROM forums_posts AS p
 		JOIN forums_topics AS t ON t.ID=p.TopicID
 		JOIN forums AS f ON f.ID=t.ForumID
-		WHERE 
+		WHERE
 		((f.MinClassRead<='$LoggedUser[Class]'";
 	if(!empty($RestrictedForums)) {
 		$sql.=" AND f.ID NOT IN ('".$RestrictedForums."')";
@@ -225,11 +225,11 @@ if($Type == 'body') {
 	if(!empty($ThreadID)) {
 		$sql.=" AND t.ID='$ThreadID' ";
 	}
-	
+
 	$sql .= "ORDER BY p.AddedTime DESC LIMIT $Limit";
-	
+
 } else {
-	$sql = "SELECT SQL_CALC_FOUND_ROWS 
+	$sql = "SELECT SQL_CALC_FOUND_ROWS
 		t.ID,
 		t.Title,
 		t.ForumID,
@@ -237,9 +237,9 @@ if($Type == 'body') {
 		t.LastPostTime,
 		'',
 		''
-		FROM forums_topics AS t 
+		FROM forums_topics AS t
 		JOIN forums AS f ON f.ID=t.ForumID
-		WHERE 
+		WHERE
 		((f.MinClassRead<='$LoggedUser[Class]'";
 	if(!empty($RestrictedForums)) {
 		$sql.=" AND f.ID NOT IN ('".$RestrictedForums."')";

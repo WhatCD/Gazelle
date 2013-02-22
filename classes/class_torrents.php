@@ -103,7 +103,7 @@ class Torrents {
 				while($Torrent = $DB->next_record(MYSQLI_ASSOC, true)) {
 					$Found[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;
 				}
-				
+
 				// Cache it all
 				foreach ($Found as $GroupID=>$GroupInfo) {
 					$Cache->cache_value('torrent_group_'.$GroupID,
@@ -639,7 +639,7 @@ class Torrents {
 			&& $LoggedUser['CanLeech'] == '1');
 	}
 
-	
+
 	public static function has_snatched($TorrentID) {
 		global $DB, $Cache, $LoggedUser;
 		if (empty($LoggedUser) || !$LoggedUser['ShowSnatched']) {

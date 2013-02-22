@@ -51,10 +51,10 @@ function addArtist(id, name, score) {
 
 function addArtistMain(name) {
         var item = $('<li><a style="color:#007DC6;" data-weight="350">' + name + '</a></li>');
-		
+
 	$("#currentArtist").attr('href', 'artist.php?id=' + artistId);
 	$("#currentArtist").text(artistName);
-	
+
 
 	$(item).click(function(e) {
                 e.preventDefault();
@@ -62,7 +62,7 @@ function addArtistMain(name) {
         });
 
         artistTags.append(item);
-}	
+}
 
 function reinit(id, name) {
 	artistId = id;
@@ -76,7 +76,7 @@ function createCloud() {
 	  if(!$('#similarArtistsCanvas').tagcanvas({
 
 	// textFont: 'Impact,"Arial Black",sans-serif',
-	wheelZoom: false, 
+	wheelZoom: false,
 	freezeActive: true,
 	weightSize:0.15,
 	interval:20,

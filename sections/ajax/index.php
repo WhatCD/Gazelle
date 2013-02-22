@@ -2,9 +2,9 @@
 /*
 AJAX Switch Center
 
-This page acts as an AJAX "switch" - it's called by scripts, and it includes the required pages. 
+This page acts as an AJAX "switch" - it's called by scripts, and it includes the required pages.
 
-The required page is determined by $_GET['action']. 
+The required page is determined by $_GET['action'].
 
 */
 

@@ -2,8 +2,8 @@
 /************************************************************************
 ||------------|| Artist wiki history page ||---------------------------||
 
-This page lists previous revisions of the artists page. It gets called 
-if $_GET['action'] == 'history'. 
+This page lists previous revisions of the artists page. It gets called
+if $_GET['action'] == 'history'.
 
 It also requires $_GET['artistid'].
 

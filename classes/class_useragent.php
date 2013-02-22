@@ -42,7 +42,7 @@ class USER_AGENT {
 		'RSS'				=> 'RSS Downloader'
 		*/
 	);
-	
+
 	var $OperatingSystems = array(
 		//Mobile
 		'SymbianOS'			=> 'Symbian',
@@ -105,7 +105,7 @@ class USER_AGENT {
 		'win'				=> 'Windows',
 		'mac'				=> 'Mac OS X'
 	);
-	
+
 	public function operating_system(&$UserAgentString) {
 		if (empty($UserAgentString)) {
 			return 'Hidden';
@@ -119,19 +119,19 @@ class USER_AGENT {
 		}
 		return $Return;
 	}
-	
+
 	public function mobile(&$UserAgentString) {
 		if (strpos($UserAgentString, 'iPad')) {
 			return false;
 		}
-		
+
 		//Mobi catches Mobile
 		if (/*strpos($UserAgentString, 'Mobile') || */strpos($UserAgentString, 'Device') || strpos($UserAgentString, 'Mobi') || strpos($UserAgentString, 'Mini') || strpos($UserAgentString, 'webOS')) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public function browser(&$UserAgentString) {
 		if (empty($UserAgentString)) {
 			return 'Hidden';

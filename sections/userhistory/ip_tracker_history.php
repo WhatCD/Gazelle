@@ -20,7 +20,7 @@ if (!is_number($UserID)) { error(404); }
 $DB->query("SELECT um.Username, p.Level AS Class FROM users_main AS um LEFT JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = ".$UserID);
 list($Username, $Class) = $DB->next_record();
 
-if(!check_perms('users_view_ips', $Class)) { 
+if(!check_perms('users_view_ips', $Class)) {
 	error(403);
 }
 

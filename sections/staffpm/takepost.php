@@ -4,12 +4,12 @@ if ($Message = db_string($_POST['message'])) {
 		// New staff pm conversation
 		$Level = db_string($_POST['level']);
 		$DB->query("
-			INSERT INTO staff_pm_conversations 
+			INSERT INTO staff_pm_conversations
 				(Subject, Status, Level, UserID, Date)
 			VALUES
 				('$Subject', 'Unanswered', $Level, ".$LoggedUser['ID'].", '".sqltime()."')"
 		);
-		
+
 		// New message
 		$ConvID = $DB->inserted_id();
 		$DB->query("
@@ -18,16 +18,16 @@ if ($Message = db_string($_POST['message'])) {
 			VALUES
 				(".$LoggedUser['ID'].", '".sqltime()."', '$Message', $ConvID)"
 		);
-		
+
 		header('Location: staffpm.php');
-		
+
 	} elseif ($ConvID = (int)$_POST['convid']) {
 		// Check if conversation belongs to user
 		$DB->query("SELECT UserID, AssignedToUser FROM staff_pm_conversations WHERE ID=$ConvID");
 		list($UserID, $AssignedToUser) = $DB->next_record();
 		
-		
-		
+
+
 		if ($UserID == $LoggedUser['ID'] || $IsFLS || $UserID == $AssignedToUser) {
 			// Response to existing conversation
 			$DB->query("
@@ -36,7 +36,7 @@ if ($Message = db_string($_POST['message'])) {
 				VALUES
 					(".$LoggedUser['ID'].", '".sqltime()."', '$Message', $ConvID)"
 			);
-			
+
 			// Update conversation
 			if ($IsFLS) {
 				// FLS/Staff
@@ -50,22 +50,22 @@ if ($Message = db_string($_POST['message'])) {
 			// Clear cache for user
 			$Cache->delete_value('staff_pm_new_'.$UserID);
 			$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
-						
+
 			header("Location: staffpm.php?action=viewconv&id=$ConvID");
 		} else {
 			// User is trying to respond to conversation that does no belong to them
 			error(403);
 		}
-		
+
 	} else {
 		// Message but no subject or conversation id
 		header("Location: staffpm.php?action=viewconv&id=$ConvID");
-		
+
 	}
 } elseif ($ConvID = (int)$_POST['convid']) {
 	// No message, but conversation id
 	header("Location: staffpm.php?action=viewconv&id=$ConvID");
-	
+
 } else {
 	// No message or conversation id
 	header('Location: staffpm.php');

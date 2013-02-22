@@ -106,11 +106,11 @@ if(check_perms('admin_reports')) {
 	if($DB->record_count() < 1) {
 		die();
 	}
-	list($GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle, 
+	list($GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
 		$RemasterYear, $Media, $Format, $Encoding, $Size, $HasLog, $LogScore, $UploaderID, $UploaderName) = $DB->next_record();
-	
+
 	$Type = 'dupe'; //hardcoded default
-	
+
 	if (array_key_exists($Type, $Types[$CategoryID])) {
 		$ReportType = $Types[$CategoryID][$Type];
 	} else if(array_key_exists($Type,$Types['master'])) {
@@ -132,13 +132,13 @@ if(check_perms('admin_reports')) {
 		$RawName = "$ArtistName - $GroupName".($Year ? " ($Year)" : "")." [$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "").($HasLog ? " ($LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 		$LinkName = "<a href='artist.php?id=$ArtistID'>$ArtistName</a> - <a href='torrents.php?id=$GroupID'>$GroupName".($Year ? " ($Year)" : "")."</a> <a href='torrents.php?torrentid=$TorrentID'> [$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."</a> ".($HasLog ? " <a href='torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'>(Log: $LogScore %)</a>" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 		$BBName = "[url=artist.php?id=$ArtistID]".$ArtistName."[/url] - [url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."[/url] ".($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
-	}	
-?>	
+	}
+?>
 	<div id="report<?=$ReportID?>">
 		<form class="create_form" name="report" id="reportform_<?=$ReportID?>" action="reports.php" method="post">
-			<? 
+			<?
 				/*
-				* Some of these are for takeresolve, some for the javascript.			
+				* Some of these are for takeresolve, some for the javascript.
 				*/
 			?>
 			<div>
@@ -166,22 +166,22 @@ if(check_perms('admin_reports')) {
 						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets" title="Download">DL</a>
 						uploaded by <a href="user.php?id=<?=$UploaderID?>"><?=$UploaderName?></a> <?=time_diff($Time)?>
 						<br />
-	<?		$DB->query("SELECT r.ID 
-						FROM reportsv2 AS r 
-						LEFT JOIN torrents AS t ON t.ID=r.TorrentID 
+	<?		$DB->query("SELECT r.ID
+						FROM reportsv2 AS r
+						LEFT JOIN torrents AS t ON t.ID=r.TorrentID
 						WHERE r.Status != 'Resolved'
 						AND t.GroupID=$GroupID");
 			$GroupOthers = ($DB->record_count());
-			
+
 			if($GroupOthers > 0) { ?>
 						<div style="text-align: right;">
 							<a href="reportsv2.php?view=group&amp;id=<?=$GroupID?>">There <?=(($GroupOthers > 1) ? "are $GroupOthers reports" : "is 1 other report")?> for torrent(s) in this group</a>
 						</div>
 	<? 		}
-	
-			$DB->query("SELECT t.UserID 
-						FROM reportsv2 AS r 
-						JOIN torrents AS t ON t.ID=r.TorrentID 
+
+			$DB->query("SELECT t.UserID
+						FROM reportsv2 AS r
+						JOIN torrents AS t ON t.ID=r.TorrentID
 						WHERE r.Status != 'Resolved'
 						AND t.UserID=$UploaderID");
 			$UploaderOthers = ($DB->record_count());
@@ -191,7 +191,7 @@ if(check_perms('admin_reports')) {
 							<a href="reportsv2.php?view=uploader&amp;id=<?=$UploaderID?>">There <?=(($UploaderOthers > 1) ? "are $UploaderOthers reports" : "is 1 other report")?> for torrent(s) uploaded by this user</a>
 						</div>
 	<? 		}
-		
+
 			$DB->query("SELECT DISTINCT req.ID,
 						req.FillerID,
 						um.Username,
@@ -262,11 +262,11 @@ foreach($TypeList as $IType => $Data) {
 					</td>
 				</tr>
 				<tr>
-					<td class="label"><strong>Extra</strong> Log Message:</td> 
+					<td class="label"><strong>Extra</strong> Log Message:</td>
 					<td>
 						<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40" />
 					</td>
-					<td class="label"><strong>Extra</strong> Staff Notes:</td> 
+					<td class="label"><strong>Extra</strong> Staff Notes:</td>
 					<td>
 						<input type="text" name="admin_message" id="admin_message<?=$ReportID?>" size="40" />
 					</td>

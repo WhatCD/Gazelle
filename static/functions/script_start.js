@@ -1,10 +1,10 @@
 "use strict";
 
 /* Prototypes */
-if(!String.prototype.trim) {  
-  String.prototype.trim = function () {  
-    return this.replace(/^\s+|\s+$/g,'');  
-  };  
+if(!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g,'');
+  };
 }
 
 var listener = {
@@ -254,7 +254,7 @@ util.fn = util.prototype = {
 					object.className = class_name;
 				} else {
 					object.className = object.className + ' ' + class_name;
-				}				
+				}
 			}
 		}
 		return this;
@@ -279,7 +279,7 @@ util.fn = util.prototype = {
 	},
 	nextElementSibling: function () {
 		var here = this.objects[0];
-		if (here.nextElementSibling) { 
+		if (here.nextElementSibling) {
 			return $(here.nextElementSibling);
 		}
 		do {
@@ -289,7 +289,7 @@ util.fn = util.prototype = {
 	},
 	previousElementSibling: function () {
 		var here = this.objects[0];
-		if (here.previousElementSibling) { 
+		if (here.previousElementSibling) {
 			return $(here.previousElementSibling);
 		}
 		do {

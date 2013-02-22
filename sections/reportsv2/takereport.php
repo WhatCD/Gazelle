@@ -2,12 +2,12 @@
 /*
  * This page handles the backend from when a user submits a report.
  * It checks for (in order):
- * 1. The usual POST injections, then checks that things. 
- * 2. Things that are required by the report type are filled 
+ * 1. The usual POST injections, then checks that things.
+ * 2. Things that are required by the report type are filled
  * 	('1' in the report_fields array).
  * 3. Things that are filled are filled with correct things.
  * 4. That the torrent you're reporting still exists.
- * 
+ *
  * Then it just inserts the report to the DB and increments the counter.
  */
 

@@ -27,7 +27,7 @@ preg_match($URLRegex, $URL, $Matches);
 $GroupID=$Matches[1];
 
 if(empty($GroupID) || !is_number($GroupID)) {
-	 error(404); 
+	 error(404);
 }
 
 $DB->query("INSERT INTO torrents_recommended (GroupID, UserID, Time) VALUES ('".db_string($GroupID)."', $LoggedUser[ID], '".sqltime()."')");

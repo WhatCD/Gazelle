@@ -31,7 +31,7 @@ $sql = 'SELECT
 	SQL_CALC_FOUND_ROWS
 	MAX(p.ID) AS ID
 	FROM (SELECT TopicID
-	FROM users_subscriptions 
+	FROM users_subscriptions
 	WHERE UserID = '.$LoggedUser['ID'].') AS s
 	LEFT JOIN forums_last_read_topics AS l ON s.TopicID = l.TopicID AND l.UserID = '.$LoggedUser['ID'].'
 	JOIN forums_topics AS t ON t.ID = s.TopicID
@@ -52,7 +52,7 @@ if($ShowUnread) {
 
 	$sql .= '
 	AND IF(l.PostID IS NULL OR (t.IsLocked = \'1\' && t.IsSticky = \'0\'), t.LastPostID, l.PostID) < t.LastPostID';
-	$sql .= ' OR (t.AuthorID != '.$LoggedUser['ID'].' AND l.PostID IS NULL)'; 
+	$sql .= ' OR (t.AuthorID != '.$LoggedUser['ID'].' AND l.PostID IS NULL)';
 
 }
 $sql .= '

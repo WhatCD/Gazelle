@@ -2,18 +2,18 @@
 $Available = array(
 	'access_request',
 	'access_state',
-	
+
 	'user_stats_ratio',
 	'user_stats_torrent',
 	'user_stats_comumnity',
 );
 
 if (
-	empty($_GET['req']) || 
-	empty($_GET['uid']) || 
-	empty($_GET['aid']) || 
-	empty($_GET['key']) || 
-	!is_number($_GET['uid']) || 
+	empty($_GET['req']) ||
+	empty($_GET['uid']) ||
+	empty($_GET['aid']) ||
+	empty($_GET['key']) ||
+	!is_number($_GET['uid']) ||
 	!is_number($_GET['aid']) ||
 	!in_array($_GET['req'],$Available,true)
 ) {

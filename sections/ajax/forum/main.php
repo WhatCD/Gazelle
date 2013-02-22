@@ -56,14 +56,14 @@ foreach ($Forums as $Forum) {
 		);
 		$JsonForums = array();
 	}
-	
+
 	if((!$Locked || $Sticky) && $LastPostID != 0 && ((empty($LastRead[$LastTopicID]) || $LastRead[$LastTopicID]['PostID'] < $LastPostID) && strtotime($LastTime)>$LoggedUser['CatchupTime'])) {
 		$Read = 'unread';
 	} else {
 		$Read = 'read';
 	}
 	$UserInfo = Users::user_info($LastAuthorID);
-	
+
 	$JsonForums[] = array(
 		'forumId' => (int) $ForumID,
 		'forumName' => $ForumName,

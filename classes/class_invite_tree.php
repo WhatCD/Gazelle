@@ -9,7 +9,7 @@
 class INVITE_TREE {
 	var $UserID = 0;
 	var $Visible = true;
-	
+
 	// Set things up
 	function INVITE_TREE($UserID, $Options = array()){
 		$this->UserID = $UserID;
@@ -17,7 +17,7 @@ class INVITE_TREE {
 			$this->Visible = false;
 		}
 	}
-	
+
 	function make_tree() {
 		$UserID = $this->UserID;
 		global $DB;
@@ -39,7 +39,7 @@ class INVITE_TREE {
 		} else {
 			$MaxPosition = false;
 		}
-		$TreeQuery = $DB->query("SELECT 
+		$TreeQuery = $DB->query("SELECT
 			it.UserID,
 			Enabled,
 			PermissionID,
@@ -57,9 +57,9 @@ class INVITE_TREE {
 			($MaxPosition ? " AND TreePosition<$MaxPosition" : "")."
 			AND TreeLevel>$TreeLevel
 			ORDER BY TreePosition");
-		
+
 		$PreviousTreeLevel = $TreeLevel;
-		
+
 		// Stats for the summary
 		$MaxTreeLevel = $TreeLevel; // The deepest level (this changes)
 		$OriginalTreeLevel = $TreeLevel; // The level of the user we're viewing
@@ -73,30 +73,30 @@ class INVITE_TREE {
 		$TotalDownload = 0;
 		$TopLevelUpload = 0;
 		$TopLevelDownload = 0;
-		
+
 		$ClassSummary = array();
 		global $Classes;
 		foreach ($Classes as $ClassID => $Val) {
 			$ClassSummary[$ClassID] = 0;
 		}
-		
+
 		// We store this in an output buffer, so we can show the summary at the top without having to loop through twice
 		ob_start();
-		while(list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = $DB->next_record()){ 
-			
+		while(list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = $DB->next_record()){
+
 			// Do stats
 			$Count++;
-			
+
 			if($TreeLevel > $MaxTreeLevel){
 				$MaxTreeLevel = $TreeLevel;
 			}
-			
+
 			if($TreeLevel == $BaseTreeLevel){
 				$Branches++;
 				$TopLevelUpload += $Uploaded;
 				$TopLevelDownload += $Downloaded;
 			}
-			
+
 			$ClassSummary[$Class]++;
 			if($Enabled == 2){
 				$DisabledCount++;
@@ -104,7 +104,7 @@ class INVITE_TREE {
 			if($Donor){
 				$DonorCount++;
 			}
-			
+
 			// Manage tree depth
 			if($TreeLevel > $PreviousTreeLevel){
 				for($i = 0; $i<$TreeLevel-$PreviousTreeLevel; $i++){ echo "<ul class=\"invitetree\"><li>"; }
@@ -133,7 +133,7 @@ class INVITE_TREE {
 				&nbsp;Paranoia: <strong><?=number_format($Paranoia) ?></strong>
 <?
 			}
-?>			
+?>
 
 <?			$PreviousTreeLevel = $TreeLevel;
 			$DB->set_query_id($TreeQuery);
@@ -143,7 +143,7 @@ class INVITE_TREE {
 		for($i = 0; $i<$PreviousTreeLevel-$OriginalTreeLevel; $i++){ $Tree .= "</li></ul>\n"; }
 
 		if($Count){
-		
+
 ?> 		<p style="font-weight: bold;">
 			This tree has <?=$Count?> entries, <?=$Branches?> branches, and a depth of <?=$MaxTreeLevel - $OriginalTreeLevel?>.
 			It has
@@ -152,15 +152,15 @@ class INVITE_TREE {
 			foreach ($ClassSummary as $ClassID => $ClassCount) {
 				if($ClassCount == 0) { continue; }
 				$LastClass = Users::make_class_string($ClassID);
-				if($ClassCount>1) { 
+				if($ClassCount>1) {
 					if($LastClass == "Torrent Celebrity") {
 						 $LastClass = 'Torrent Celebrities';
 					} else {
-						$LastClass.='s'; 
+						$LastClass.='s';
 					}
 				}
 				$LastClass= $ClassCount.' '.$LastClass.' (' . number_format(($ClassCount/$Count)*100) . '%)';
-				
+
 				$ClassStrings []= $LastClass;
 			}
 			if(count($ClassStrings)>1){
@@ -183,13 +183,13 @@ class INVITE_TREE {
 			if($DonorCount == 0) { echo '0%)'; }
 			else { echo number_format(($DonorCount/$Count)*100) . '%)';}
 			echo '. </p>';
-			
+
 			echo '<p style="font-weight: bold;">';
 			echo 'The total amount uploaded by the entire tree was '.Format::get_size($TotalUpload);
 			echo '; the total amount downloaded was '.Format::get_size($TotalDownload);
 			echo '; and the total ratio is '.Format::get_ratio_html($TotalUpload, $TotalDownload).'. ';
 			echo '</p>';
-			
+
 			echo '<p style="font-weight: bold;">';
 			echo 'The total amount uploaded by direct invitees (the top level) was '.Format::get_size($TopLevelUpload);
 			echo '; the total amount downloaded was '.Format::get_size($TopLevelDownload);
@@ -211,7 +211,7 @@ class INVITE_TREE {
 				echo '</p>';
 			}
 		}
-		
+
 ?>
 		<br />
 		<?=$Tree?>

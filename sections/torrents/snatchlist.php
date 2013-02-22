@@ -33,7 +33,7 @@ list($NumResults) = $DB->next_record();
 	<tr class="colhead_dark" style="font-weight: bold;">
 		<td>User</td>
 		<td>Time</td>
-		
+
 		<td>User</td>
 		<td>Time</td>
 	</tr>
@@ -43,14 +43,14 @@ $i = 0;
 
 foreach($Results as $ID=>$Data) {
 	list($SnatcherID, $Timestamp) = array_values($Data);
-	
+
 	if($i % 2 == 0 && $i>0) {
-?> 
+?>
 	</tr>
-	<tr>	
+	<tr>
 <?
 	}
-?> 
+?>
 		<td><?=Users::format_username($SnatcherID, true, true, true, true)?></td>
 		<td><?=time_diff($Timestamp)?></td>
 <?

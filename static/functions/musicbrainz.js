@@ -26,7 +26,7 @@ $(document).ready(function() {
   loadCSS();
   enableMusicBrainzButton();
   controlPopup();
-  
+
   $("#musicbrainz_button").click(function() {
     var $album = $("#title").val();
     var $artist = $("#artist").val();
@@ -61,11 +61,11 @@ $(document).ready(function() {
     url: "https://musicbrainz.org/ws/2/release-group/" + $id + "?inc=artist-credits%2Breleases+tags+media",
     dataType: "xml",
     success: showReleases
- }); 
+ });
 }
 });
    $("#results2").click(function(event) {
-    var $id = event.target.id; 
+    var $id = event.target.id;
     if($id != "mb" && $id != "results2") {
     jQuery('#results2').empty();
     jQuery('#results2').show();
@@ -108,13 +108,13 @@ function showReleaseGroups(xml)
 {
     var $count = $(xml).find("release-group-list").attr("count");
     if($count == 0 ) {
-        alert("Could not find on MusicBrainz");        
+        alert("Could not find on MusicBrainz");
     }
     else {
     	jQuery('#popup_title').text("Choose Release Group");
     	openPopup();
     }
-  
+
   $(xml).find("release-group").each(function()
   {
     var $title = $(this).find("title:first").text();
@@ -136,10 +136,10 @@ function showReleases(xml) {
     $year_original = $date_release_group.substring(0,4);
     $release_type = $(xml).find("release-group").attr("type");
     $release_group_id = $(xml).find("release-group").attr("id");
-    jQuery('#popup_title').html("Choose Release " + "<a href='https://musicbrainz.org/release-group/" 
+    jQuery('#popup_title').html("Choose Release " + "<a href='https://musicbrainz.org/release-group/"
     		+ $release_group_id + "'target=_new>(View on MusicBrainz)</a>");
       jQuery('#popup_back').html("<a href='#null' id='back'>[Go Back]</a>");
-    
+
 	$(xml).find("release").each(function()
 	{
     var $release_id = $(this).attr("id");
@@ -157,10 +157,10 @@ function showReleases(xml) {
 	}); }); });
 	var $result =  $title + " [Year: " + $year + ", Format: " + $format + ", Tracks: " + $tracks + ", Country: " + $country + "]";
 	$("<a href='#null'>" + $result +  "</a>").attr("id", $release_id).appendTo("#results2");
-	
+
 	$("<a href='https://musicbrainz.org/release/" + $release_id +"' target=_new> (View on MB)</a>" + "<p/>").attr("id", "mb").appendTo("#results2");
 	});
-	
+
 	parseTags(xml);
 }
     /**
@@ -171,11 +171,11 @@ function showReleases(xml) {
 	  $tags = "";
 	  $(xml).find("tag").each(function() {
 		$tag =  cleanTag($(this).find("name").text());
-	        if(isValidTag($tag)) {        
+	        if(isValidTag($tag)) {
             		$tags += "," + $tag;
            	}
 	});
-	if($tags.charAt(0) == ',') { 
+	if($tags.charAt(0) == ',') {
                 $tags = $tags.substring(1);
         }
     }
@@ -192,7 +192,7 @@ function showReleases(xml) {
      */
 	function populateForm(xml) {
 		closePopup();
-		
+
 	    var $release_id = $(xml).find("release").attr("id");
 	    var $release_title = $(xml).find("release").find("title:first").text();
 	    var $artist = $(xml).find("artist-credit:first").find("name:first").text();
@@ -203,13 +203,13 @@ function showReleases(xml) {
 	    var $barcode = $(xml).find("barcode").text();
         $catalog_number = $(xml).find("catalog-number").text();
         $record_label = $(xml).find("label").find("sort-name").text();
-        var $track_count = $(xml).find("track-list").attr("count");    
+        var $track_count = $(xml).find("track-list").attr("count");
         var $track_titles = new Array();
         $(xml).find("track-list").find("title").each(function() {
             var $title = $(this).text();
             $track_titles.push($title);
         });
-        
+
             clear();
 	    $("#artist").val($artist);
 	    $("#title").val($release_title);
@@ -230,11 +230,11 @@ function showReleases(xml) {
             if($barcode.length > 0) {
                 $barcode_text =  "Barcode: " + $barcode + "\n";
             }
-	    var $description = $amazon_link + 
-	                       "[url=https://musicbrainz.org/release-group/" + $release_group_id + "]MusicBrainz[/url]" + "\n" + "\n" + 
+	    var $description = $amazon_link +
+	                       "[url=https://musicbrainz.org/release-group/" + $release_group_id + "]MusicBrainz[/url]" + "\n" + "\n" +
 			       $country_text +
 			       $barcode_text +
-	                       "Tracks: " + $track_count + "\n" + "\n" + 
+	                       "Tracks: " + $track_count + "\n" + "\n" +
 	                       "Track List:" + "\n";
 	                       for (var i=0; i < $track_titles.length; i++) {
 						      $description = $description + "[#]" + $track_titles[i] + "\n";
@@ -263,12 +263,12 @@ function showReleases(xml) {
 	 if($("#remaster").attr("checked")) {
                 $('#remaster_true').hide();
         }
-	
+
          $("#remaster").attr("checked", false);
 	 $("#remaster_year").val("");
          $("#remaster_record_label").val("");
          $("#remaster_catalogue_number").val("");
-	
+
 
     }
     /**
@@ -283,25 +283,25 @@ function showReleases(xml) {
                break;
             case "Soundtrack":
                $value = 3;
-               break;   
+               break;
             case "EP":
                $value = 5;
-               break; 
+               break;
             case "Compilation":
                $value = 7;
-               break; 
+               break;
             case "Single":
                $value = 9;
-               break; 
+               break;
             case "Live":
                $value = 11;
-               break;     
+               break;
             case "Remix":
                $value = 13;
-               break;    
+               break;
             case "Interview":
                $value = 15;
-               break;    
+               break;
             default:
                $value = "---";
                break;
@@ -312,13 +312,13 @@ function showReleases(xml) {
 	 * Enables the musicbrainz button only when the "Music" type is selected and a format isn't being uploaded
 	 */
     function enableMusicBrainzButton() {
-     if ($('#categories').is(':disabled') == false) { 
+     if ($('#categories').is(':disabled') == false) {
       $("#categories").click(function() {
         if($("#categories").val() != 0 ) {
              $("#musicbrainz_button").attr("disabled", "disabled");
           }
         else {
-             $("#musicbrainz_button").removeAttr("disabled");      
+             $("#musicbrainz_button").removeAttr("disabled");
         }
         });
      }
@@ -330,7 +330,7 @@ function showReleases(xml) {
 	 *Clears fields in the upload form
 	 */
     function clear() {
-	    closeEditionsForm();	  
+	    closeEditionsForm();
   	    $("#artist").val("");
 	    $("#title").val("");
 	    $("#year").val("");
@@ -343,7 +343,7 @@ function showReleases(xml) {
 	    $("#remaster_record_label").val("");
 	    $("#remaster_catalogue_number").val("");
 }
-    
+
  /**
   * Loads the popup
   * @returns
@@ -419,7 +419,7 @@ function showReleases(xml) {
    $link.rel = 'stylesheet';
    $link.type = 'text/css';
    document.body.appendChild($link);
-   $link = null; 
+   $link = null;
   }
 
 } ) ( jQuery );

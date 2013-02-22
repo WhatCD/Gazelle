@@ -10,7 +10,7 @@ jQuery(document).ready(function ($) {
 			}
 		}
 	};
-	
+
 	TextareaPreview.factory = function (arrays) {
 		var i = 0, j = arrays.length, t;
 		for (i; i < j; i++) {
@@ -30,7 +30,7 @@ jQuery(document).ready(function ($) {
 				.on('dblclick.preview', $.proxy(this.toggle, this))
 				.addClass('text_preview')
 				.attr('title', 'Double click to edit.');
-				
+
 			this.buttons.preview
 				.on('click.preview', $.proxy(this.get, this))
 				.toggleClass('hidden');

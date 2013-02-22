@@ -119,7 +119,7 @@ echo $Pages;
 			<td>(+) Joined</td>
 			<td>(-) Manual</td>
 			<td>(-) Ratio</td>
-			<td>(-) Inactivity</td>			
+			<td>(-) Inactivity</td>
 			<td>(-) Total</td>
 			<td>Net Growth</td>
 		</tr>

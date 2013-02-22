@@ -29,7 +29,7 @@ if (isset($_GET['expire'])) {
 	if (!check_perms('users_mod')) { error(403); }
 	$UserID = $_GET['userid'];
 	$TorrentID = $_GET['torrentid'];
-	
+
 	if (!is_number($UserID) || !is_number($TorrentID)) { error(403); }
 	$DB->query("SELECT info_hash FROM torrents where ID = $TorrentID");
 	if (list($InfoHash) = $DB->next_record(MYSQLI_NUM, FALSE)) {
@@ -90,7 +90,7 @@ $Artists = Artists::get_artists($GroupIDs);
 $i = true;
 foreach ($Tokens as $Token) {
 	$i = !$i;
-	list($TorrentID, $GroupID, $Time, $Expired, $Downloaded, $Uses, $Name, $Format, $Encoding) = $Token; 
+	list($TorrentID, $GroupID, $Time, $Expired, $Downloaded, $Uses, $Name, $Format, $Encoding) = $Token;
 	$Name = "<a href=\"torrents.php?torrentid=$TorrentID\">$Name</a>";
 	$ArtistName = Artists::display_artists($Artists[$GroupID]);
 	if($ArtistName) {

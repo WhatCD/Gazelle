@@ -2,11 +2,11 @@
 
 function Transitions () {
   // callback for the first batch of operation, where we set the default properties
-  // for the transition (transition-property and transition-duration) as well as 
+  // for the transition (transition-property and transition-duration) as well as
   // the "from" property value if explicitely passed as a param to .add()
-  this.instantOperations = new Function (); 
+  this.instantOperations = new Function ();
   // callback for the second batch of operation, where we set the "to" property value
-  this.deferredOperations = new Function (); 
+  this.deferredOperations = new Function ();
 };
 
 // Core defaults for the transitions, you can update these members so that all
@@ -19,18 +19,18 @@ Transitions.DEFAULTS = {
 
 /*
  Adds a CSS transition, parameters are :
- 
+
  element:	 target element for transition
  duration:	duration for all transitions in seconds
  properties:  the properties that are transitioned (will be fed to '-webkit-transition-property')
  from:		optional list of initial property values to match properties passed as .properties
  to:		  list of final property values to match properties passed as .properties
- 
+
  The .duration and .properties parameters are optional and can be defined once for
  all upcoming transitions by over-riding the Transition.DEFAULTS properties
 
  Some operations need to be deferred so that the styles are currently set for the from state
- of from / to operations 
+ of from / to operations
 
  */
 

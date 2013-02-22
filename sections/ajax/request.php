@@ -17,7 +17,7 @@ include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
-if(empty($_GET['id']) || !is_number($_GET['id'])) { 
+if(empty($_GET['id']) || !is_number($_GET['id'])) {
 	print
 		json_encode(
 			array(
@@ -31,7 +31,7 @@ $RequestID = $_GET['id'];
 
 //First things first, lets get the data for the request.
 
-$Request = Requests::get_requests(array($RequestID));	
+$Request = Requests::get_requests(array($RequestID));
 $Request = $Request['matches'][$RequestID];
 if(empty($Request)) {
 	print
@@ -61,14 +61,14 @@ if($CategoryName == "Music") {
 	$ArtistForm = get_request_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-	
+
 	if($IsFilled) {
 		$DisplayLink = $ArtistLink."<a href='torrents.php?torrentid=".$TorrentID."'>".$Title."</a> [".$Year."]";
 	} else {
 		$DisplayLink = $ArtistLink.$Title." [".$Year."]";
 	}
 	$FullName = $ArtistName.$Title." [".$Year."]";
-	
+
 	if($BitrateList != "") {
 		$BitrateString = implode(", ", explode("|", $BitrateList));
 		$FormatString = implode(", ", explode("|", $FormatList));
@@ -78,13 +78,13 @@ if($CategoryName == "Music") {
 		$FormatString = "Unknown, please read the description.";
 		$MediaString = "Unknown, please read the description.";
 	}
-	
+
 	if(empty($ReleaseType)) {
 		$ReleaseName = "Unknown";
 	} else {
 		$ReleaseName = $ReleaseTypes[$ReleaseType];
 	}
-	
+
 } else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
 	$FullName = $Title." [".$Year."]";
 	$DisplayLink = $Title." [".$Year."]";
@@ -121,7 +121,7 @@ if ($CategoryName == "Music") {
 
 $JsonTopContributors = array();
 $VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
-for($i = 0; $i < $VoteMax; $i++) { 
+for($i = 0; $i < $VoteMax; $i++) {
 	$User = array_shift($RequestVotes['Voters']);
 	$JsonTopContributors[] = array(
 		'userId' => (int) $User['UserID'],

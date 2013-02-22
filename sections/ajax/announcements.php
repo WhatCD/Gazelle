@@ -60,14 +60,14 @@ foreach ($News as $NewsItem) {
 	if (strtotime($NewsTime) > time()) {
 		continue;
 	}
-	
+
 	$JsonAnnouncements[] = array(
 		'newsId' => (int) $NewsID,
 		'title' => $Title,
 		'body' => $Text->full_format($Body),
 		'newsTime' => $NewsTime
 	);
-	
+
 	if (++$Count > 4) {
 		break;
 	}

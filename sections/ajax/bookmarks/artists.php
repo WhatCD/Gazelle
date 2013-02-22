@@ -2,7 +2,7 @@
 
 if(!empty($_GET['userid'])) {
 	if(!check_perms('users_override_paranoia')) {
-		print 
+		print
 			json_encode(
 				array(
 					'status' => 'failure'
@@ -13,7 +13,7 @@ if(!empty($_GET['userid'])) {
 	$UserID = $_GET['userid'];
 	$Sneaky = ($UserID != $LoggedUser['ID']);
 	if(!is_number($UserID)) {
-		print 
+		print
 			json_encode(
 				array(
 					'status' => 'failure'

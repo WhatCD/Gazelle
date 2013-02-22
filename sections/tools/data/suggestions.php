@@ -34,9 +34,9 @@ $Categories = array(
 		<td>Count</td>
 	</tr>
 	<?
-	$DB->query("SELECT 
-				s.UserID, count(s.ThreadID) AS C 
-				FROM marked_suggestions AS s 
+	$DB->query("SELECT
+				s.UserID, count(s.ThreadID) AS C
+				FROM marked_suggestions AS s
 				GROUP BY s.UserID ORDER BY c DESC LIMIT 15");
 	$Row = 'b';
 	while ( list ($UserID, $Count) = $DB->next_record() ) {
@@ -57,9 +57,9 @@ $Categories = array(
 		<td>Count</td>
 	</tr>
 	<?
-	$DB->query("SELECT 
-				LastPostAuthorID, count(LastPostAuthorID) AS C 
-				FROM forums_topics AS f 
+	$DB->query("SELECT
+				LastPostAuthorID, count(LastPostAuthorID) AS C
+				FROM forums_topics AS f
 				WHERE ForumID = 63 AND f.Title LIKE '[implemented]%'
 				GROUP BY LastPostAuthorID ORDER BY c DESC LIMIT 15");
 	$Row = 'b';
@@ -82,8 +82,8 @@ $Categories = array(
 	</tr>
 	<?
 	$DB->query("SELECT
-				LastPostAuthorID, count(LastPostAuthorID) AS C 
-				FROM forums_topics AS f 
+				LastPostAuthorID, count(LastPostAuthorID) AS C
+				FROM forums_topics AS f
 				WHERE ForumID = 63 AND f.Title LIKE '[rejected]%'
 				GROUP BY LastPostAuthorID ORDER BY c DESC LIMIT 15");
 	$Row = 'b';

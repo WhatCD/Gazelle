@@ -19,14 +19,14 @@ list($GroupName) = $DB->next_record(MYSQLI_NUM, false);
 
 //Get a count of how many groups or requests use this artist ID
 $DB->query("SELECT ag.ArtistID
-			FROM artists_group as ag 
-				LEFT JOIN requests_artists AS ra ON ag.ArtistID=ra.ArtistID 
+			FROM artists_group as ag
+				LEFT JOIN requests_artists AS ra ON ag.ArtistID=ra.ArtistID
 			WHERE ra.ArtistID IS NOT NULL
 				AND ag.ArtistID = ".$ArtistID);
 $ReqCount = $DB->record_count();
 $DB->query("SELECT ag.ArtistID
-			FROM artists_group as ag 
-				LEFT JOIN torrents_artists AS ta ON ag.ArtistID=ta.ArtistID 
+			FROM artists_group as ag
+				LEFT JOIN torrents_artists AS ta ON ag.ArtistID=ta.ArtistID
 			WHERE ta.ArtistID IS NOT NULL
 				AND ag.ArtistID = ".$ArtistID);
 $GroupCount = $DB->record_count();
@@ -35,13 +35,13 @@ if(($ReqCount + $GroupCount) == 0) {
 	Artists::delete_artist($ArtistID);
 }
 
-$DB->query("INSERT INTO torrents_group (ID, NumArtists) 
-		SELECT ta.GroupID, COUNT(ta.ArtistID) 
-		FROM torrents_artists AS ta 
-		WHERE ta.GroupID='$GroupID' 
+$DB->query("INSERT INTO torrents_group (ID, NumArtists)
+		SELECT ta.GroupID, COUNT(ta.ArtistID)
+		FROM torrents_artists AS ta
+		WHERE ta.GroupID='$GroupID'
 		AND ta.Importance='1'
-		GROUP BY ta.GroupID 
-	ON DUPLICATE KEY UPDATE 
+		GROUP BY ta.GroupID
+	ON DUPLICATE KEY UPDATE
 	NumArtists=VALUES(NumArtists);");
 
 $Cache->delete_value('torrents_details_'.$GroupID); // Delete torrent group cache

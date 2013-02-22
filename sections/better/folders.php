@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 if(check_perms('admin_reports') && !empty($_GET['remove']) && is_number($_GET['remove'])) {
 	$DB->query("DELETE FROM torrents_bad_folders WHERE TorrentID = ".$_GET['remove']);
@@ -61,7 +61,7 @@ foreach ($TorrentsInfo as $TorrentID => $Info) {
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;
 	}
-	
+
 	$TagList=array();
 	if($TorrentTags!='') {
 		$TorrentTags=explode(' ',$TorrentTags);

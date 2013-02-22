@@ -28,8 +28,8 @@ if($Data) {
 	list($K, list($TorrentList, $CollageDataList)) = each($Data);
 } else {
 	// Build the data for the collage and the torrent list
-	$DB->query("SELECT 
-		bt.GroupID, 
+	$DB->query("SELECT
+		bt.GroupID,
 		tg.WikiImage,
 		tg.CategoryID,
 		bt.Time
@@ -37,7 +37,7 @@ if($Data) {
 		JOIN torrents_group AS tg ON tg.ID=bt.GroupID
 		WHERE bt.UserID='$UserID'
 		ORDER BY bt.Time");
-	
+
 	$GroupIDs = $DB->collect('GroupID');
 	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
 	if(count($GroupIDs)>0) {

@@ -24,13 +24,13 @@ if(!(list($ArtistName) = $DB->next_record(MYSQLI_NUM, false))) {
 
 if ($NewArtistID > 0) {
 	// Make sure that's a real artist ID number, and grab the name
-	$DB->query("SELECT Name FROM artists_group WHERE ArtistID = $NewArtistID LIMIT 1");	
+	$DB->query("SELECT Name FROM artists_group WHERE ArtistID = $NewArtistID LIMIT 1");
 	if(!(list($NewArtistName) = $DB->next_record())) {
 		error('Please enter a valid artist ID number.');
 	}
 } else {
 	// Didn't give an ID, so try to grab based on the name
-	$DB->query("SELECT ArtistID FROM artists_alias WHERE Name = '".db_string($NewArtistName)."' LIMIT 1");	
+	$DB->query("SELECT ArtistID FROM artists_alias WHERE Name = '".db_string($NewArtistName)."' LIMIT 1");
 	if(!(list($NewArtistID) = $DB->next_record())) {
 		error('No artist by that name was found.');
 	}
@@ -58,23 +58,23 @@ if (isset($_POST['confirm'])) {
 	$NewArtistGroups = $DB->collect('GroupID');
 	$NewArtistGroups[] = '0';
 	$NewArtistGroups = implode(',',$NewArtistGroups);
-	
+
 	$DB->query("SELECT DISTINCT RequestID FROM requests_artists WHERE ArtistID = $NewArtistID");
 	$NewArtistRequests = $DB->collect('RequestID');
 	$NewArtistRequests[] = '0';
 	$NewArtistRequests = implode(',',$NewArtistRequests);
-	
+
 	$DB->query("SELECT DISTINCT UserID from bookmarks_artists WHERE ArtistID = $NewArtistID");
 	$NewArtistBookmarks = $DB->collect('UserID');
 	$NewArtistBookmarks[] = '0';
-	$NewArtistBookmarks = implode(',',$NewArtistBookmarks);				
-	
+	$NewArtistBookmarks = implode(',',$NewArtistBookmarks);
+
 	// Merge all of this artist's aliases onto the new artist
 	$DB->query("UPDATE artists_alias SET ArtistID = $NewArtistID WHERE ArtistID = $ArtistID");
-	
+
 	// Update the torrent groups, requests, and bookmarks
 	$DB->query("UPDATE IGNORE torrents_artists SET ArtistID = $NewArtistID
-				WHERE ArtistID = $ArtistID 
+				WHERE ArtistID = $ArtistID
 				  AND GroupID NOT IN ($NewArtistGroups)");
 	$DB->query("DELETE FROM torrents_artists WHERE ArtistID = $ArtistID");
 	$DB->query("UPDATE IGNORE requests_artists SET ArtistID = $NewArtistID
@@ -85,7 +85,7 @@ if (isset($_POST['confirm'])) {
 				WHERE ArtistID = $ArtistID
 				  AND UserID NOT IN ($NewArtistBookmarks)");
 	$DB->query("DELETE FROM bookmarks_artists WHERE ArtistID = $ArtistID");
-	
+
 	// Cache clearing
 	if(!empty($Groups)) {
 		foreach($Groups as $GroupID) {

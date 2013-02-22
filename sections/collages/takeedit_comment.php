@@ -15,7 +15,7 @@ $UserID = $LoggedUser['ID'];
 $Body = db_string(urldecode($_POST['body']));
 $PostID = $_POST['post'];
 
-// Mainly 
+// Mainly
 $DB->query("SELECT cc.Body, cc.UserID, cc.CollageID, (SELECT COUNT(ID) FROM collages_comments WHERE ID <= ".$PostID." AND collages_comments.CollageID = cc.CollageID) FROM collages_comments AS cc WHERE cc.ID='$PostID'");
 list($OldBody, $AuthorID, $CollageID, $PostNum) = $DB->next_record();
 

@@ -1,8 +1,8 @@
 <?
 /***************************************************************
 * This page handles the backend of the "edit group ID" function
-* (found on edit.php). It simply changes the group ID of a 
-* torrent. 
+* (found on edit.php). It simply changes the group ID of a
+* torrent.
 ****************************************************************/
 
 if(!check_perms('torrents_edit')) { error(403); }
@@ -36,7 +36,7 @@ if(empty($_POST['confirm'])) {
 	}
 
 	$Artists = Artists::get_artists(array($OldGroupID, $GroupID));
-	
+
 	View::show_header();
 ?>
 	<div class="thin">
@@ -67,7 +67,7 @@ if(empty($_POST['confirm'])) {
 	$DB->query("UPDATE torrents
 				SET	GroupID='$GroupID'
 				WHERE ID=$TorrentID");
-	
+
 	// Delete old torrent group if it's empty now
 	$DB->query("SELECT COUNT(ID) FROM torrents WHERE GroupID='$OldGroupID'");
 	list($TorrentsInGroup) = $DB->next_record();
@@ -80,14 +80,14 @@ if(empty($_POST['confirm'])) {
 		Torrents::update_hash($OldGroupID);
 	}
 	Torrents::update_hash($GroupID);
-	
+
 	Misc::write_log("Torrent $TorrentID was edited by " . $LoggedUser['Username']); // TODO: this is probably broken
 	Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "merged group ".$OldGroupID, 0);
 	$DB->query("UPDATE group_log SET GroupID = ".$GroupID." WHERE GroupID = ".$OldGroupID);
-	
-	$Cache->delete_value('torrents_details_'.$GroupID);	
+
+	$Cache->delete_value('torrents_details_'.$GroupID);
 	$Cache->delete_value('torrent_download_'.$TorrentID);
-	
+
 	header("Location: torrents.php?id=$GroupID");
 	}
 ?>

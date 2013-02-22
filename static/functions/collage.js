@@ -54,23 +54,23 @@ var collageShow = {
 	page:function(num,el){
 		var ul = $('#collage_page'+num).raw(), s = this.selected(), covers, lists, i;
 		this.pg = num;
-		
+
 		if(!ul){
 			covers = this.pages[num];
 			if(covers){
 				ul = this.createUL(covers);
 			}
 		}
-		
+
 		lists = $('.collage_images').objects;
 		i = lists.length;
 		while(i--){ $(lists[i]).hide(); }
-		
+
 		$(ul).show();
 		if(s){ $(s).remove_class('selected'); }
 		if(el){ $(el.parentNode).add_class('selected'); }
-		
-				
+
+
 		// Toggle the page number links
 		first = Math.max(0, this.pg - 2);
 		if (this.max - this.pg < 2) {
@@ -86,7 +86,7 @@ var collageShow = {
 		for (i = last + 1; i <= this.max; i++) {
 			$('#pagelink' + i).hide();
 		}
-		
+
 		// Toggle the first, prev, next, and last links
 		if (this.pg > 0) {
 			$('#prevpage').remove_class('invisible');
@@ -108,7 +108,7 @@ var collageShow = {
 		} else {
 			$('#lastpage').add_class('invisible');
 		}
-		
+
 		// Toggle the bar
 		if ((last == this.max) && (this.pg != this.max)) {
 			$('#nextbar').show();

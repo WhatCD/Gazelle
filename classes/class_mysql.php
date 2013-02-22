@@ -145,17 +145,17 @@ class DB_MYSQL {
 	protected $Row;
 	protected $Errno = 0;
 	protected $Error = '';
-	
+
 	public $Queries = array();
 	public $Time = 0.0;
-	
+
 	protected $Database = '';
 	protected $Server = '';
 	protected $User = '';
 	protected $Pass = '';
 	protected $Port = 0;
 	protected $Socket = '';
-	
+
 	function __construct($Database = SQLDB, $User = SQLLOGIN, $Pass = SQLPASS, $Server = SQLHOST, $Port = SQLPORT, $Socket = SQLSOCK) {
 		$this->Database = $Database;
 		$this->Server = $Server;
@@ -169,7 +169,7 @@ class DB_MYSQL {
 		global $LoggedUser, $Cache, $Debug, $argv;
 		$DBError='MySQL: '.strval($Msg).' SQL error: '.strval($this->Errno).' ('.strval($this->Error).')';
 		if ($this->Errno == 1194) { send_irc('PRIVMSG '.ADMIN_CHAN.' :'.$this->Error); }
-		/*if ($this->Errno == 1194) { 
+		/*if ($this->Errno == 1194) {
 			preg_match("Table '(\S+)' is marked as crashed and should be repaired", $this->Error, $Matches);
 		} */
 		$Debug->analysis('!dev DB Error',$DBError,3600*24);
@@ -207,7 +207,7 @@ class DB_MYSQL {
 			}
 			$Debug->analysis('Non-Fatal Deadlock:',$Query,3600*24);
 			trigger_error("Database deadlock, attempt $i");
-			
+
 			sleep($i*rand(2, 5)); // Wait longer as attempts increase
 		}
 		$QueryEndTime=microtime(true);
@@ -319,10 +319,14 @@ class DB_MYSQL {
 	function to_pair($KeyField, $ValField, $Escape = true) {
 		$Return = array();
 		while ($Row = mysqli_fetch_array($this->QueryID)) {
-			if ($Escape !== false) {
-				$Row = Misc::display_array($Row[$ValField], $Escape);
+			if ($Escape) {
+				$Key = display_str($Row[$KeyField]);
+				$Val = display_str($Row[$ValField]);
+			} else {
+				$Key = $Row[$KeyField];
+				$Val = $Row[$ValField];
 			}
-			$Return[$Row[$KeyField]] = $Row[$ValField];
+			$Return[$Key] = $Val;
 		}
 		mysqli_data_seek($this->QueryID, 0);
 		return $Return;
@@ -342,7 +346,7 @@ class DB_MYSQL {
 		$this->QueryID = $ResultSet;
 		$this->Row = 0;
 	}
-	
+
 	function get_query_id() {
 		return $this->QueryID;
 	}

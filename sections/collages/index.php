@@ -66,11 +66,11 @@ switch($_REQUEST['action']) {
 		if(!check_perms('site_collages_personal')) {
 			error(403);
 		}
-		
+
 		$DB->query("SELECT COUNT(ID) FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
 		list($CollageCount) = $DB->next_record();
-				
-		if($CollageCount >= $LoggedUser['Permissions']['MaxCollages']) { 
+
+		if($CollageCount >= $LoggedUser['Permissions']['MaxCollages']) {
 			list($CollageID) = $DB->next_record();
 			header('Location: collage.php?id='.$CollageID);
 			die();

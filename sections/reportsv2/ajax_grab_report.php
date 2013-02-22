@@ -1,8 +1,8 @@
 <?
 /*
- * This page simply assings a report to the person clicking on 
+ * This page simply assings a report to the person clicking on
  * the Grab / Grab All button.
- */ 
+ */
 if(!check_perms('admin_reports')){
 		//error(403);
 		echo '403';

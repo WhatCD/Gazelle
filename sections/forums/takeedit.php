@@ -4,7 +4,7 @@ authorize();
 /*********************************************************************\
 //--------------Take Post--------------------------------------------//
 
-The page that handles the backend of the 'edit post' function. 
+The page that handles the backend of the 'edit post' function.
 
 $_GET['action'] must be "takeedit" for this page to work.
 
@@ -32,7 +32,7 @@ $Key = $_POST['key'];
 $SQLTime = sqltime();
 $DoPM = isset($_POST['pm']) ? $_POST['pm'] : 0;
 
-// Mainly 
+// Mainly
 $DB->query("SELECT
 		p.Body,
 		p.AuthorID,
@@ -40,20 +40,20 @@ $DB->query("SELECT
 		t.IsLocked,
 		t.ForumID,
 		f.MinClassWrite,
-		CEIL((SELECT COUNT(ID) 
-			FROM forums_posts 
-			WHERE forums_posts.TopicID = p.TopicID 
-			AND forums_posts.ID <= '$PostID')/".POSTS_PER_PAGE.") 
+		CEIL((SELECT COUNT(ID)
+			FROM forums_posts
+			WHERE forums_posts.TopicID = p.TopicID
+			AND forums_posts.ID <= '$PostID')/".POSTS_PER_PAGE.")
 			AS Page
 		FROM forums_posts as p
 		JOIN forums_topics as t on p.TopicID = t.ID
-		JOIN forums as f ON t.ForumID=f.ID 
+		JOIN forums as f ON t.ForumID=f.ID
 		WHERE p.ID='$PostID'");
 list($OldBody, $AuthorID, $TopicID, $IsLocked, $ForumID, $MinClassWrite, $Page) = $DB->next_record();
 
 // Make sure they aren't trying to edit posts they shouldn't
 // We use die() here instead of error() because whatever we spit out is displayed to the user in the box where his forum post is
-if(!check_forumperm($ForumID, 'Write') || ($IsLocked && !check_perms('site_moderate_forums'))) { 
+if(!check_forumperm($ForumID, 'Write') || ($IsLocked && !check_perms('site_moderate_forums'))) {
 	error('Either the thread is locked, or you lack the permission to edit this post.',true);
 }
 if($UserID != $AuthorID && !check_perms('site_moderate_forums')) {

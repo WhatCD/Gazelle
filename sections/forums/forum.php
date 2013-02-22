@@ -53,7 +53,7 @@ if(!isset($Forum) || !is_array($Forum)) {
 		list($Stickies) = $DB->next_record();
 		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
 	}
-} 
+}
 
 
 if(!isset($Forums[$ForumID])) { error(404); }
@@ -79,7 +79,7 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 			<div style="display: inline-block;">
 				<h3>Search this forum:</h3>
 				<form class="search_form" name="forum" action="forums.php" method="get">
-					<table cellpadding="6" cellspacing="1" border="0" class="layout border">	
+					<table cellpadding="6" cellspacing="1" border="0" class="layout border">
 						<tr>
 							<td>
 								<input type="hidden" name="action" value="search" />
@@ -93,9 +93,9 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 						<tr>
 							<td><strong>Search in:</strong></td>
 							<td>
-								<input type="radio" name="type" id="type_title" value="title" checked="checked" /> 
+								<input type="radio" name="type" id="type_title" value="title" checked="checked" />
 								<label for="type_title">Titles</label>
-								<input type="radio" name="type" id="type_body" value="body" /> 
+								<input type="radio" name="type" id="type_body" value="body" />
 								<label for="type_body">Post bodies</label>
 							</td>
 						</tr>
@@ -111,17 +111,17 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 				<br />
 			</div>
 		</div>
-		
 
-<?     
+
+<?
 /*
 	if(check_perms('users_mod')) {
 	$DB->query("SELECT ForumID from subscribed_forums WHERE ForumID='$ForumID' AND SubscriberID='$LoggedUser[ID]'");
         if($DB->record_count() == 0) { ?>
 		<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Subscribe to forum</a>
-<?      } else { ?> 
+<?      } else { ?>
 		<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Unsubscribe from forum</a>
-<?      } 
+<?      }
 	}
  */
 ?>

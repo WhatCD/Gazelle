@@ -145,7 +145,7 @@ function checkMatching(password1, password2) {
 	else if(getStrong() == true) {
 		 $("#pass_match").text("Passwords do not match").css("color", "red");
 		 disableSubmit();
-	} 
+	}
 	else{
 		 $("#pass_match").text("Password isn't strong").css("color", "red");
                  disableSubmit();

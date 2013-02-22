@@ -23,7 +23,7 @@ if ($Length != 'verbal') {
 	$Subject = "You have received a warning";
 	$PrivateMessage = "You have received a $Length week warning for [url=$URL]this artist comment.[/url]\n\n" . $PrivateMessage;
 	$WarnTime = time_plus($Time);
-	$AdminComment = date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $URL - $Reason\n\n";   
+	$AdminComment = date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $URL - $Reason\n\n";
 } else {
 	$Subject = "You have received a verbal warning";
 	$PrivateMessage = "You have received a verbal warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;

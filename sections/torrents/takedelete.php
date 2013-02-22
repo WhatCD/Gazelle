@@ -11,8 +11,8 @@ $DB->query("SELECT
 	t.info_hash,
 	tg.Name,
 	ag.Name,
-	t.Time, 
-	COUNT(x.uid) 
+	t.Time,
+	COUNT(x.uid)
 	FROM torrents AS t
 	LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
 	LEFT JOIN artists_group AS ag ON ag.ArtistID=tg.ArtistID

@@ -6,7 +6,7 @@ authorize();
 //--------------Take Post--------------------------------------------//
 
 This page takes a forum post submission, validates it (TODO), and
-enters it into the database. The user is then redirected to their 
+enters it into the database. The user is then redirected to their
 post.
 
 $_POST['action'] is what the user is trying to do. It can be:
@@ -64,7 +64,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	//Get the id for this post in the database to append
 	$DB->query("SELECT ID, Body FROM forums_posts WHERE TopicID='$TopicID' AND AuthorID='".$LoggedUser['ID']."' ORDER BY ID DESC LIMIT 1");
 	list($PostID, $OldBody) = $DB->next_record(MYSQLI_NUM, false);
-	
+
 	//Edit the post
 	$DB->query("UPDATE forums_posts SET Body = CONCAT(Body,'"."\n\n".db_string($Body)."'), EditedUserID = '".$LoggedUser['ID']."', EditedTime = '".$SQLTime."' WHERE ID='$PostID'");
 
@@ -72,7 +72,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$DB->query("INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
 				VALUES ('forums', ".$PostID.", ".$LoggedUser['ID'].", '".$SQLTime."', '".db_string($OldBody)."')");
 	$Cache->delete_value("forums_edits_$PostID");
-	
+
 	//Get the catalogue it is in
 	$CatalogueID = floor((POSTS_PER_PAGE*ceil($ThreadInfo['Posts']/POSTS_PER_PAGE)-POSTS_PER_PAGE)/THREAD_CATALOGUE);
 
@@ -98,27 +98,27 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			'Username'=>$LoggedUser['Username']
 			));
 	$Cache->commit_transaction(0);
-	
+
 //Now we're dealing with a normal post
 } else {
 	//Insert the post into the posts database
 	$DB->query("INSERT INTO forums_posts (TopicID, AuthorID, AddedTime, Body)
 			VALUES ('$TopicID', '".$LoggedUser['ID']."', '".$SQLTime."', '".db_string($Body)."')");
-	
+
 	$PostID = $DB->inserted_id();
 
 	//This updates the root index
 	$DB->query("UPDATE forums SET
-			NumPosts		  = NumPosts+1, 
+			NumPosts		  = NumPosts+1,
 			LastPostID		= '$PostID',
 			LastPostAuthorID  = '".$LoggedUser['ID']."',
 			LastPostTopicID   = '$TopicID',
 			LastPostTime	  = '".$SQLTime."'
 			WHERE ID = '$ForumID'");
-			
+
 	//Update the topic
 	$DB->query("UPDATE forums_topics SET
-			NumPosts		  = NumPosts+1, 
+			NumPosts		  = NumPosts+1,
 			LastPostID		= '$PostID',
 			LastPostAuthorID  = '".$LoggedUser['ID']."',
 			LastPostTime	  = '".$SQLTime."'
@@ -127,7 +127,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	//if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
 	if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 		list($Forum,,,$Stickies) = $Forum;
-		
+
 		//if the topic is already on this page
 		if (array_key_exists($TopicID,$Forum)) {
 			$Thread = $Forum[$TopicID];
@@ -137,7 +137,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			$Thread['LastPostTime'] = $SQLTime; //Time of last post
 			$Thread['LastPostAuthorID'] = $LoggedUser['ID']; //Last poster id
 			$Part2 = array($TopicID=>$Thread); //Bumped thread
-			
+
 		//if we're bumping from an older page
 		} else {
 			//Remove the last thread from the index
@@ -180,14 +180,14 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			$Forum = $Part1 + $Part2 + $Part3; //Merge it
 		}
 		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
-		
+
 		//Update the forum root
 		$Cache->begin_transaction('forums_list');
 		$Cache->update_row($ForumID, array(
-			'NumPosts'=>'+1', 
-			'LastPostID'=>$PostID, 
-			'LastPostAuthorID'=>$LoggedUser['ID'], 
-			'LastPostTopicID'=>$TopicID, 
+			'NumPosts'=>'+1',
+			'LastPostID'=>$PostID,
+			'LastPostAuthorID'=>$LoggedUser['ID'],
+			'LastPostTopicID'=>$TopicID,
 			'LastPostTime'=>$SQLTime,
 			'Title'=>$ThreadInfo['Title'],
 			'IsLocked'=>$ThreadInfo['IsLocked'],
@@ -202,7 +202,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 
 	//This calculates the block of 500 posts that this one will fall under
 	$CatalogueID = floor((POSTS_PER_PAGE*ceil($ThreadInfo['Posts']/POSTS_PER_PAGE)-POSTS_PER_PAGE)/THREAD_CATALOGUE);
-	
+
 	//Insert the post into the thread catalogue (block of 500 posts)
 	$Cache->begin_transaction('thread_'.$TopicID.'_catalogue_'.$CatalogueID);
 	$Cache->insert('', array(
@@ -220,7 +220,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$Cache->begin_transaction('thread_'.$TopicID.'_info');
 	$Cache->update_row(false, array('Posts'=>'+1', 'LastPostAuthorID'=>$LoggedUser['ID']));
 	$Cache->commit_transaction(0);
-	
+
 	//Increment this now to make sure we redirect to the correct page
 	$ThreadInfo['Posts']++;
 }

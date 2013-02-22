@@ -3,11 +3,11 @@ if ($IDs = $_POST['id']) {
 	$Queries = array();
 	foreach ($IDs as &$ID) {
 		$ID = (int)$ID;
-		
+
 		// Check if conversation belongs to user
 		$DB->query("SELECT UserID, AssignedToUser FROM staff_pm_conversations WHERE ID=$ID");
 		list($UserID, $AssignedToUser) = $DB->next_record();
-		
+
 		if ($UserID == $LoggedUser['ID'] || $DisplayStaff == '1' || $UserID == $AssignedToUser) {
 			// Conversation belongs to user or user is staff, queue query
 			$Queries[] = "UPDATE staff_pm_conversations SET Status='Resolved', ResolverID=".$LoggedUser['ID']." WHERE ID=$ID";
@@ -16,7 +16,7 @@ if ($IDs = $_POST['id']) {
 			error(403);
 		}
 	}
-	
+
 	// Run queries
 	foreach ($Queries as $Query) {
 		$DB->query($Query);
@@ -27,7 +27,7 @@ if ($IDs = $_POST['id']) {
 
 	// Done! Return to inbox
 	header("Location: staffpm.php");
-	
+
 } else {
 	// No id
 	header("Location: staffpm.php");

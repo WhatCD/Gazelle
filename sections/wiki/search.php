@@ -32,9 +32,9 @@ if(!$Order) { $Order = 'ID'; }
 $Way = $WayTable[$_GET['way']];
 if(!$Way) { $Way = 'DESC'; }
 
-$SQL = "SELECT SQL_CALC_FOUND_ROWS 
-	w.ID, 
-	w.Title, 
+$SQL = "SELECT SQL_CALC_FOUND_ROWS
+	w.ID,
+	w.Title,
 	w.Date,
 	w.Author
 	FROM wiki_articles AS w
@@ -99,7 +99,7 @@ $DB->set_query_id($RS);
 						<input type="submit" value="Search" />
 					</td>
 				</tr>
-			</table>	
+			</table>
 		</form>
 	</div>
 	<br />

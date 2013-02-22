@@ -60,17 +60,17 @@ function AlterParanoia() {
 	UncheckIfDisabled($('input[name=p_seeding_l]').raw());
 	UncheckIfDisabled($('input[name=p_leeching_l]').raw());
 	UncheckIfDisabled($('input[name=p_snatched_l]').raw());
-	
+
 	// unique groups, "Perfect" FLACs and artists added are deducible from the list of uploads
 	if ($('input[name=p_uploads_l]').raw().checked) {
 		$('input[name=p_uniquegroups_c]').raw().checked = true;
 		$('input[name=p_uniquegroups_l]').raw().checked = true;
 		$('input[name=p_uniquegroups_c]').raw().disabled = true;
-		$('input[name=p_uniquegroups_l]').raw().disabled = true;			
+		$('input[name=p_uniquegroups_l]').raw().disabled = true;
 		$('input[name=p_perfectflacs_c]').raw().checked = true;
 		$('input[name=p_perfectflacs_l]').raw().checked = true;
 		$('input[name=p_perfectflacs_c]').raw().disabled = true;
-		$('input[name=p_perfectflacs_l]').raw().disabled = true;			
+		$('input[name=p_perfectflacs_l]').raw().disabled = true;
 		$('input[type=checkbox][name=p_artistsadded]').raw().checked = true;
 		$('input[type=checkbox][name=p_artistsadded]').raw().disabled = true;
 	} else {
@@ -114,7 +114,7 @@ function ParanoiaReset(checkbox, drops) {
 			} else {
 				checkboxes.raw(i).checked = checkbox;
 			}
-			AlterParanoia();			
+			AlterParanoia();
 		}
 	}
 }
@@ -153,6 +153,6 @@ function ToggleIdenticons() {
                $('#identicons').show();
        }
        else {
-               $('#identicons').hide();                
+               $('#identicons').hide();
        }
 }

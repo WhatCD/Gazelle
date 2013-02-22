@@ -6,7 +6,7 @@ function Vote(amount, requestid) {
 	if(amount == 0) {
 		 amount = 20 * 1024 * 1024;
 	}
-	
+
 	var index;
 	var votecount;
 	if(!requestid) {
@@ -18,7 +18,7 @@ function Vote(amount, requestid) {
 		bounty = $('#bounty_' + requestid).raw();
 		index = true;
 	}
-	
+
 	if (amount > 20*1024*1024) {
 		upload   = $('#current_uploaded').raw().value;
 		download = $('#current_downloaded').raw().value;
@@ -29,7 +29,7 @@ function Vote(amount, requestid) {
 			}
 		}
 	}
-	
+
 	ajax.get('requests.php?action=takevote&id=' + requestid + '&auth=' + authkey + '&amount=' + amount, function (response) {
 			if(response == 'bankrupt') {
 				error_message("You do not have sufficient upload credit to add " + get_size(amount) + " to this request");
@@ -85,7 +85,7 @@ function AddArtistField() {
 		ArtistField.id = "artist";
 		ArtistField.name = "artists[]";
 		ArtistField.size = 45;
-		
+
 		var ImportanceField = document.createElement("select");
 		ImportanceField.id = "importance";
 		ImportanceField.name = "importance[]";
@@ -96,7 +96,7 @@ function AddArtistField() {
 		ImportanceField.options[4] = new Option("DJ / Compiler", "6");
 		ImportanceField.options[5] = new Option("Remixer", "3");
 		ImportanceField.options[6] = new Option("Producer", "7");
-		
+
 		var x = $('#artistfields').raw();
 		x.appendChild(document.createElement("br"));
 		x.appendChild(ArtistField);
@@ -108,11 +108,11 @@ function RemoveArtistField() {
 		var ArtistCount = document.getElementsByName("artists[]").length;
 		if (ArtistCount == 1) { return; }
 		var x = $('#artistfields').raw();
-		
-		while(x.lastChild.tagName != "INPUT") { 
-			x.removeChild(x.lastChild); 
+
+		while(x.lastChild.tagName != "INPUT") {
+			x.removeChild(x.lastChild);
 		}
-		x.removeChild(x.lastChild); 
+		x.removeChild(x.lastChild);
 		ArtistCount--;
 }
 
@@ -166,7 +166,7 @@ function Toggle(id, disable) {
 			arr[x].disabled = master;
 		}
 	}
-	
+
 	if(id == "formats") {
 		ToggleLogCue();
 	}
@@ -175,11 +175,11 @@ function Toggle(id, disable) {
 function ToggleLogCue() {
 	var formats = document.getElementsByName('formats[]');
 	var flac = false;
-	
+
 	if(formats[1].checked) {
 		flac = true;
 	}
-	
+
 	if(flac) {
 		$('#logcue_tr').show();
 	} else {

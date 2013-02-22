@@ -52,7 +52,7 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 						//Repeat donor
 						Misc::send_pm($_POST['custom'],0,db_string('Thank you for your donation'),db_string('Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Your continued support is highly appreciated and helps to make this place possible.'),'');
 					}
-					
+
 					
 				}
 			}
@@ -84,14 +84,14 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 				$Cache->update_row(false, array('Invites' => $Invites));
 				$Cache->commit_transaction(0);
 				Misc::send_pm($_POST['custom'],0,db_string('Notice of donation failure'),db_string('PapPal has just notified us that the donation you sent from '.$_POST['payer_email'].' of '.$TotalDonated.' '.PAYPAL_CURRENCY.' at '.$DonationTime.' UTC has been revoked. Because of this your special privileges have been revoked, and your invites removed.'),'');
-				
-				
+
+
 				send_irc("PRIVMSG ".BOT_REPORT_CHAN." :".$Message);
 			}
 		}
 	}
-	$DB->query("UPDATE users_info 
-		SET 
+	$DB->query("UPDATE users_info
+		SET
 		AdminComment=CONCAT('".sqltime()." - User donated ".db_string($_POST['mc_gross'])." ".db_string(PAYPAL_CURRENCY)." from ".db_string($_POST['payer_email']).".\n',AdminComment)
 		WHERE UserID='".$_POST['custom']."'");
 	$DB->query("INSERT INTO donations

@@ -24,7 +24,7 @@ if($_POST['submit'] == 'Delete'){ //Delete
 			Time='".sqltime()."'
 			WHERE ID='$P[id]'");
 	} else { //Create
-		$DB->query("INSERT INTO email_blacklist 
+		$DB->query("INSERT INTO email_blacklist
 			(Email, Comment, UserID, Time) VALUES
 			('$P[email]','$P[comment]','$LoggedUser[ID]','".sqltime()."')");
 	}

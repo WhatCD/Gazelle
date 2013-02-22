@@ -8,9 +8,9 @@ jQuery(document).ready(function ($) {
 		});
 		$('#sorthide').val(JSON.stringify(a));
     };
-	
+
 	serialize();
-	
+
 	$('#sortable')
 		.on('click', 'input', function () {
 			// the + converts the boolean to either 1 or 0
@@ -24,14 +24,14 @@ jQuery(document).ready(function ($) {
 			placeholder: 'ui-state-highlight',
 			update: serialize
 		});
-	
+
 	$('#toggle_sortable').click(function (e) {
 		e.preventDefault();
 	    $('#sortable_container').slideToggle(function () {
 			$('#toggle_sortable').text($(this).is(':visible') ? 'Collapse' : 'Expand');
-	    }); 
+	    });
 	});
-	
+
 	$('#reset_sortable').click(function (e) {
 		e.preventDefault();
 	    $('#sortable').html(sortable_list_default); // var sortable_list_default is found on edit.php

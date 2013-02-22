@@ -2,14 +2,14 @@
 /************************************************************************
 ||------------|| Edit artist wiki page ||------------------------------||
 
-This page is the page that is displayed when someone feels like editing 
+This page is the page that is displayed when someone feels like editing
 an artist's wiki page.
 
-It is called when $_GET['action'] == 'edit'. $_GET['artistid'] is the 
+It is called when $_GET['action'] == 'edit'. $_GET['artistid'] is the
 ID of the artist, and must be set.
 
-The page inserts a new revision into the wiki_artists table, and clears 
-the cache for the artist page. 
+The page inserts a new revision into the wiki_artists table, and clears
+the cache for the artist page.
 
 ************************************************************************/
 
@@ -78,7 +78,7 @@ View::show_header('Edit torrent group');
 	</div>
 <?	$DB->query("SELECT UserID FROM torrents WHERE GroupID = ".$GroupID);
 	//Users can edit the group info if they've uploaded a torrent to the group or have torrents_edit
-	if(in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?> 
+	if(in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?>
 	<h3>Non-wiki group editing</h3>
 	<div class="box pad">
 		<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
@@ -106,7 +106,7 @@ View::show_header('Edit torrent group');
 					<td>
 						<input type="text" name="catalogue_number" size="40" value="<?=$CatalogueNumber?>" />
 					</td>
-				</tr>								
+				</tr>
 <? if(check_perms('torrents_freeleech')) { ?>
 				<tr>
 					<td class="label">Freeleech <strong>Group</strong></td>
@@ -114,24 +114,24 @@ View::show_header('Edit torrent group');
 						<input type="checkbox" name="unfreeleech" /> Reset
 						<input type="checkbox" name="freeleech" /> Freeleech
 						<input type="checkbox" name="neutralleech" /> Neutral Leech
-						 because 
+						 because
 						<select name="freeleechtype">
 	<?	$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
-		foreach($FL as $Key => $FLType) { ?>	
+		foreach($FL as $Key => $FLType) { ?>
 							<option value="<?=$Key?>" <?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$FLType?></option>
 	<?	} ?>
 						</select>
 					</td>
-				</tr>	
+				</tr>
 <? } ?>
 			</table>
 			<input type="submit" value="Edit" />
 		</form>
 	</div>
-<? 
+<?
 	}
-	if(check_perms('torrents_edit')) { 
-?> 
+	if(check_perms('torrents_edit')) {
+?>
 	<h3>Rename (won't merge)</h3>
 	<div class="box pad">
 		<form class="rename_form" name="torrent_group" action="torrents.php" method="post">
@@ -143,7 +143,7 @@ View::show_header('Edit torrent group');
 				<div style="text-align: center;">
 					<input type="submit" value="Rename" />
 				</div>
-				
+
 			</div>
 		</form>
 	</div>
@@ -159,10 +159,10 @@ View::show_header('Edit torrent group');
 				<div style="text-align: center;">
 					<input type="submit" value="Merge" />
 				</div>
-				
+
 			</div>
 		</form>
 	</div>
-<?	} ?> 
+<?	} ?>
 </div>
 <? View::show_footer(); ?>

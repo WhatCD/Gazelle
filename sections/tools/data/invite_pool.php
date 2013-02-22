@@ -16,7 +16,7 @@ if(!empty($_GET['search'])) {
 	$Search = "";
 }
 
-$sql = "SELECT 
+$sql = "SELECT
 	SQL_CALC_FOUND_ROWS
 	um.ID,
 	i.InviteKey,
@@ -51,7 +51,7 @@ $DB->set_query_id($RS);
 						<input type="submit" value="Search log" />
 					</td>
 				</tr>
-			</table>	
+			</table>
 		</form>
 	</div>
 	<div class="linkbox">

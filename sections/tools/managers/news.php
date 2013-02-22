@@ -43,7 +43,7 @@ switch($_GET['action']) {
 			<br />
 			<h3>Body</h3>
 			<textarea name="body" cols="95" rows="15"><? if(!empty($Body)) { echo display_str($Body); } ?></textarea> <br /><br />
-						
+
 
 			<div class="center">
 				<input type="submit" value="<?= ($_GET['action'] == 'news')? 'Create news post' : 'Edit news post';?>" />

@@ -27,7 +27,7 @@ if(isset($_REQUEST['action'])) {
 			break;
 		case 'new':
 			include(SERVER_ROOT.'/sections/reportsv2/reports.php');
-			break;	
+			break;
 		case 'ajax_new_report':
 			include('ajax_new_report.php');
 			break;

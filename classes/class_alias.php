@@ -11,7 +11,7 @@ class ALIAS {
 		$Aliases = $DB->to_array('Alias');
 		$Cache->cache_value('wiki_aliases', $Aliases, 3600*24*14);
 	}
-	
+
 	function to_id($Alias) {
 		global $Cache, $DB;
 		$Aliases = $Cache->get_value('wiki_aliases');
@@ -26,7 +26,7 @@ class ALIAS {
 	function flush() {
 
 	}
-	
+
 	function to_id($Alias) {
 		global $DB;
 		$Alias = $this->convert($Alias);

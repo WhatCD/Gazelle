@@ -18,7 +18,7 @@ if (!is_number($UserID)) { error(404); }
 $DB->query("SELECT um.Username, p.Level AS Class FROM users_main AS um LEFT JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = ".$UserID);
 list($Username, $Class) = $DB->next_record();
 
-if(!check_perms('users_view_ips', $Class)) { 
+if(!check_perms('users_view_ips', $Class)) {
 	error(403);
 }
 
@@ -37,7 +37,7 @@ function ShowIPs(rowname) {
 
 }
 function Ban(ip, id, elemID) {
-	var notes = prompt("Enter notes for this ban"); 
+	var notes = prompt("Enter notes for this ban");
 	if(notes != null && notes.length > 0) {
 		var xmlhttp;
 		if (window.XMLHttpRequest) {
@@ -142,13 +142,13 @@ $Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 		<tr class="colhead">
 			<td>IP address search</td>
 		</tr>
-		
+
 		<tr><td>
 			<form class="search_form" name="ip_log" method="post" action="">
 				<input type="text" name="ip" />
 				<input type="submit" value="Search" />
 			</form>
-		</td></tr>	
+		</td></tr>
 	</table>
 
 <table>
@@ -188,7 +188,7 @@ foreach($Results as $Index => $Result) {
 			if(!isset($IPs[$IP])) {
 					$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".Tools::ip_to_unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
 			$DB->query($sql);
-			
+
 			if($DB->record_count() > 0) {
 							$IPs[$IP] = true;
 			?>
@@ -199,15 +199,15 @@ foreach($Results as $Index => $Result) {
 				<a id="<?=$counter?>" href="#" onclick="Ban('<?=$IP?>', '<?=$ID?>', '<?=$counter?>'); this.onclick=null;return false;" class="brackets">Ban</a>
 <?			}
 			$counter++;
-		} 
-	}	
+		}
+	}
 ?>
 
 
 			<br />
 			<?=Tools::get_host_by_ajax($IP)?>
-			<?=($HasDupe ? 
-			'<a href="#" onclick="ShowIPs('.$Index.'); return false;">('.count($UserIDs).')</a>' 
+			<?=($HasDupe ?
+			'<a href="#" onclick="ShowIPs('.$Index.'); return false;">('.count($UserIDs).')</a>'
 			: '(0)')?></td>
 			<td><?=time_diff($StartTime)?></td>
 			<td><?=time_diff($EndTime)?></td>
@@ -226,7 +226,7 @@ foreach($Results as $Index => $Result) {
 			<td><?//time_diff(strtotime($UserStartTimes[$Key]), strtotime($UserEndTimes[$Key])); ?></td>
 		</tr>
 <?
-			
+
 		}
 	}
 ?>

@@ -1,24 +1,24 @@
 /*
 	TODO: Further optimize serialize function
-	
-	UPDATE: We were forced to create an individual XHR for each request 
-	to avoid race conditions on slower browsers where the request would 
-	be overwritten before the callback triggered, and leave it hanging. 
+
+	UPDATE: We were forced to create an individual XHR for each request
+	to avoid race conditions on slower browsers where the request would
+	be overwritten before the callback triggered, and leave it hanging.
 	This only happened in FF3.0 that we tested.
 
 	Example usage 1:
 	ajax.handle = function () {
 		$('#preview' + postid).raw().innerHTML = ajax.response;
-		$('#editbox' + postid).hide();	
+		$('#editbox' + postid).hide();
 	}
 	ajax.post("ajax.php?action=preview","#form-id" + postid);
-	
+
 	Example usage 2:
 	ajax.handle = function() {
 		$('#quickpost').raw().value = "[quote="+username+"]" + ajax.response + "[/quote]";
 	}
 	ajax.get("?action=get_post&post=" + postid);
-	
+
 */
 "use strict";
 var json = {

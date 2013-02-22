@@ -3,10 +3,10 @@
 User history switch center
 
 
-This page acts as a switch that includes the real user history pages (to keep 
+This page acts as a switch that includes the real user history pages (to keep
 the root less cluttered).
 
-enforce_login() is run here - the entire user history pages are off limits for 
+enforce_login() is run here - the entire user history pages are off limits for
 non members.
 *****************************************************************/
 
@@ -81,7 +81,7 @@ users_history_ips:
 	userid (index)
 	ip (stored using ip2long())
 	timestamp
-	
+
 users_history_passwd:
 	id (auto_increment, index)
 	userid (index)
@@ -105,7 +105,7 @@ users_history_passkey:
 	old_passkey
 	new_passkey
 	timestamp
-	
+
 users_history_stats:
 	id (auto_increment, index)
 	userid (index)

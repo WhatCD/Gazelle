@@ -41,7 +41,7 @@ View::show_header($Title." Aliases");
 				<td><?=$Title?></td>
 
 			</tr>
-<? 	
+<?
 $DB->query("SELECT Alias FROM wiki_aliases WHERE ArticleID='$ArticleID'");
 while(list($Revision, $Title, $AuthorID, $AuthorName, $Date) = $DB->next_record()) { ?>
 			<tr>

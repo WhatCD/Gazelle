@@ -17,7 +17,7 @@ function QuoteJump(event, post) {
 }
 
 function Quote(post, user) {
-	Quote(post, user, false) 
+	Quote(post, user, false)
 }
 
 function Quote(post, user, link) {
@@ -27,7 +27,7 @@ function Quote(post, user, link) {
 		if ($('#quickpost').raw().value !== '') {
 			$('#quickpost').raw().value = $('#quickpost').raw().value + "\n\n";
 		}
-		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote="+username + (link == true ? "|" + post : "") + "]" + 
+		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote="+username + (link == true ? "|" + post : "") + "]" +
 			//response.replace(/(img|aud)(\]|=)/ig,'url$2').replace(/\[url\=(https?:\/\/[^\s\[\]<>"\'()]+?)\]\[url\](.+?)\[\/url\]\[\/url\]/gi, "[url]$1[/url]")
 			html_entity_decode(response)
 		+ "[/quote]";
@@ -75,7 +75,7 @@ function Preview_Edit(postid) {
 	$('#bar' + postid).raw().innerHTML = "<input type=\"button\" value=\"Editor\" onclick=\"Cancel_Preview(" + postid + ");\" /><input type=\"button\" value=\"Post\" onclick=\"Save_Edit(" + postid + ")\" /><input type=\"button\" value=\"Cancel\" onclick=\"Cancel_Edit(" + postid + ");\" />";
 	ajax.post("ajax.php?action=preview","form" + postid, function(response){
 		$('#preview' + postid).raw().innerHTML = response;
-		$('#editbox' + postid).hide();	
+		$('#editbox' + postid).hide();
 	});
 }
 
@@ -229,7 +229,7 @@ function AddPollOption(id) {
 			auth.name = "auth";
 			auth.value = authkey;
 			form.appendChild(auth);
-		
+
 			var action = document.createElement("input");
 			action.type = "hidden";
 			action.name = "action";
@@ -247,7 +247,7 @@ function AddPollOption(id) {
 			input.name = "new_option";
 			input.size = "50";
 			form.appendChild(input);
-		
+
 			var submit = document.createElement("input");
 			submit.type = "submit";
 			submit.id = "new_submit";
