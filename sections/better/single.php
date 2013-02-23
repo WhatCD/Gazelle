@@ -17,6 +17,9 @@ $Results = Torrents::get_groups(array_keys($GroupIDs));
 
 View::show_header('Single seeder FLACs');
 ?>
+<div class="linkbox">
+	<a href="better.php" class="brackets">Back to better.php list</a>
+</div>
 <div class="thin">
 	<table width="100%" class="torrent_table">
 		<tr class="colhead">

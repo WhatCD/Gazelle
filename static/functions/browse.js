@@ -152,6 +152,33 @@ function toggle_edition(groupid, editionid, lnk, event) {
 	if (event.preventDefault) { event.preventDefault(); } else { event.returnValue = false; }
 }
 
+function toggleTorrentSearch(mode) {
+	if (mode == 0) {
+		var link = $('#ft_toggle').raw();
+		$('#ft_container').toggle();
+		link.innerHTML = link.textContent == 'Hide' ? 'Show' : 'Hide';
+	} if (mode == 'basic') {
+		$('.fti_advanced').disable();
+		$('.fti_basic').enable();
+		$('.ftr_advanced').hide();
+		$('.ftr_basic').show();
+		$('#ft_advanced_link').show();
+		$('#ft_advanced_text').hide();
+		$('#ft_basic_link').hide();
+		$('#ft_basic_text').show();
+	} else if (mode == 'advanced') {
+		$('.fti_advanced').enable();
+		$('.fti_basic').disable();
+		$('.ftr_advanced').show();
+		$('.ftr_basic').hide();
+		$('#ft_advanced_link').hide();
+		$('#ft_advanced_text').show();
+		$('#ft_basic_link').show();
+		$('#ft_basic_text').hide();
+	}
+	return false;
+}
+
 // For /sections/torrents/browse.php (not browse2.php)
 function Bitrate() {
 	$('#other_bitrate').raw().value = '';

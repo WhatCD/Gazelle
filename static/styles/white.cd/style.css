@@ -698,6 +698,17 @@ table tr td.unread_locked_sticky {
 .hide_torrents a.show_torrents_link {
 	background-position:-23px -50px;
 	}
+.filter_torrents .head,.filter_torrents .head strong {
+	color:#aaa;
+	font-family:Georgia, Palatino, Palatino Linotype, Times, Times New Roman, serif;
+	font-size:14px;
+	font-weight:normal;
+	margin-top:10px;
+	margin-bottom:0;
+	letter-spacing:2px;
+	padding-top:20px;
+	text-transform:uppercase;
+	}
 #site_debug {
 	width:950px;
 	margin:0 auto;

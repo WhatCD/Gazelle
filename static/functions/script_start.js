@@ -265,6 +265,14 @@ util.fn = util.prototype = {
 		}
 		return this;
 	},
+	enable : function () {
+		for (var i=0,il=this.objects.length;i<il;i++) {
+			if (this.objects[i].disabled == true) {
+				this.objects[i].disabled = false;
+			}
+		}
+		return this;
+	},
 	html : function (html) {
 		for (var i=0,il=this.objects.length;i<il;i++) {
 			this.objects[i].innerHTML = html;

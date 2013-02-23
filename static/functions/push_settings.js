@@ -1,23 +1,28 @@
 (function ($) {
+	var PUSHOVER = 5;
+	var TOASTY = 4;
  $(document).ready(function() {
 	 if($("#pushservice").val() > 0) {
 		 $('#pushsettings').show();
-		 if($("#pushservice").val() == 3) {
+		 if($("#pushservice").val() == PUSHOVER) {
 			 $('#pushsettings_username').show();
 		 }
 	 }
 	 $("#pushservice").change(function() {
 	     if($(this).val() > 0) {
 	    	 $('#pushsettings').show(500);
-	    	 if($(this).val() == 3) {
+	    	 if($(this).val() == PUSHOVER) {
 				 $('#pushsettings_username').show();
 	    	 }
 	    	 else {
 	    		 $('#pushsettings_username').hide();
 	    	 }
 
-			 if($(this).val() == 4) {
+			 if($(this).val() == TOASTY) {
 				 $('#pushservice_title').text("Device ID");
+			 }
+			 else if($(this).val() == PUSHOVER) {
+				 $('#pushservice_title').text("Token");
 			 }
 			 else {
 				 $('#pushservice_title').text("API Key");

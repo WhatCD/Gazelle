@@ -821,7 +821,6 @@ strong.quoteheader {
 #torrents .filter_torrents,
 #inbox #searchbox {
 	width: 70%;
-	margin: 0 auto;
 	border: 1px solid #dcdcdc;
 	-moz-border-radius: 7px;
 	-webkit-border-radius: 7px;
@@ -830,9 +829,8 @@ strong.quoteheader {
 	background: #f3f3f3 url('images/filter.png') -30px -30px no-repeat;
 }
 
-#torrents .filter_torrents h3 {
-	margin: 0 0 10px 0;
-	font-size: 14px;
+#torrents .filter_torrents {
+	margin: 20px auto 0 auto;
 }
 
 #torrents .filter_torrents table {
@@ -936,6 +934,10 @@ strong.quoteheader {
 
 #content form.search_form + .torrent_table {
 	margin-top: 20px;
+}
+
+.search_form .box .head {
+	border-bottom: 1px solid #e6e6e6;
 }
 
 #torrent_table {

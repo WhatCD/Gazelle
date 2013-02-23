@@ -385,11 +385,11 @@ class Format
 
 
 	/**
-	 * Convenience function to echo out selected='selected' and checked='checked' so you don't have to.
+	 * Convenience function to echo out selected="selected" and checked="checked" so you don't have to.
 	 *
 	 * @param $Name the name of the option in the select (or field in $Array)
 	 * @param $Value the value that the option must be for the option to be marked as selected or checked
-	 * @param $Attribute The value returned/echoed is $Attribute="$Attribute"
+	 * @param $Attribute The value returned/echoed is $Attribute="$Attribute" with a leading space
 	 * @param $Array The array the option is in, defaults to GET.
 	 * @return
 	 */
@@ -405,7 +405,7 @@ class Format
 	}
 
 	/**
-	 * Return a css class name if certain conditions are met. Mainly useful to mark links as 'active'
+	 * Return a CSS class name if certain conditions are met. Mainly useful to mark links as 'active'
 	 *
 	 * @param mixed $Target The variable to compare all values against
 	 * @param mixed $Tests The condition values. Type and dimension determines test type

@@ -2,7 +2,7 @@
 View::show_header('Create a collage');
 
 if (!check_perms('site_collages_renamepersonal')) {
-	$ChangeJS = "OnChange=\"if ( this.options[this.selectedIndex].value == '0') { $('#namebox').hide(); $('#personal').show(); } else { $('#namebox').show(); $('#personal').hide(); }\"";
+	$ChangeJS = " onchange=\"if ( this.options[this.selectedIndex].value == '0') { $('#namebox').hide(); $('#personal').show(); } else { $('#namebox').show(); $('#personal').hide(); }\"";
 }
 
 $Name        = $_REQUEST['name'];
@@ -18,7 +18,7 @@ if (!check_perms('site_collages_renamepersonal') && $Category === '0') {
 <div class="thin">
 <?
 if (!empty($Error)) { ?>
-	<div class="save_message error"><?=display_str($Error)?></div>
+	<div class="save_message error"><?=$Error?></div>
 	<br />
 <? } ?>
 	<form class="create_form" name="collage" action="collages.php" method="post">
@@ -35,17 +35,17 @@ if (!empty($Error)) { ?>
 			<tr>
 				<td class="label"><strong>Category</strong></td>
 				<td>
-					<select name="category" <?=$ChangeJS?>>
+					<select name="category"<?=$ChangeJS?>>
 <?
 array_shift($CollageCats);
 
 foreach($CollageCats as $CatID=>$CatName) { ?>
-						<option value="<?=$CatID+1?>"<?=(($CatID+1 == $Category)?' selected':'')?>><?=$CatName?></option>
+						<option value="<?=$CatID+1?>"<?=(($CatID+1 == $Category) ? ' selected="selected"' : '')?>><?=$CatName?></option>
 <? }
 $DB->query("SELECT COUNT(ID) FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
 list($CollageCount) = $DB->next_record();
 if(($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
-						<option value="0"<?=(($Category === '0')?' selected':'')?>>Personal</option>
+						<option value="0"<?=(($Category === '0') ? ' selected="selected"' : '')?>>Personal</option>
 <? } ?>
 					</select>
 					<br />

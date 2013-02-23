@@ -535,122 +535,136 @@ if ($TorrentCount) {
 }
 /** End run search query and collect results **/
 
-$AdvancedSearch = false;
-$Action = 'action=basic';
-if (((!empty($_GET['action']) && strtolower($_GET['action'])=="advanced") || (!empty($LoggedUser['SearchType']) && ((!empty($_GET['action']) && strtolower($_GET['action'])!="basic") || empty($_GET['action'])))) && check_perms('site_advanced_search')) {
-	$AdvancedSearch = true;
-	$Action = 'action=advanced';
-}
+// This is kinda ugly, but the enormous if paragraph was really hard to read
+$AdvancedSearch =  !empty($_GET['action']) && $_GET['action'] == "advanced";
+$AdvancedSearch |= !empty($LoggedUser['SearchType']) && (empty($_GET['action']) || $_GET['action'] == "advanced");
+$AdvancedSearch &= check_perms('site_advanced_search');
 
+if ($AdvancedSearch) {
+	$Debug->log_var(1, 'Advanced search');
+	$Action = 'action=advanced';
+	$HideBasic = ' hidden';
+	$HideAdvanced = '';
+} else {
+	$Debug->log_var(1, 'Basic search');
+	$Action = 'action=basic';
+	$HideBasic = '';
+	$HideAdvanced = ' hidden';
+}
 
 
 View::show_header('Browse Torrents','browse');
 
-
 ?>
 <div class="thin widethin">
+<div class="header">
+	<h2>Torrents</h2>
+</div>
 <form class="search_form" name="torrents" method="get" action="">
-<div class="filter_torrents <?=$AdvancedSearch ? 'ft_advanced' : 'ft_basic'?>">
-	<h3>
-		Filter
-<? if ($AdvancedSearch) { ?>
-			(<a href="torrents.php?<? if (!empty($LoggedUser['SearchType'])) { ?>action=basic&amp;<? } echo Format::get_url(array('action')); ?>">Basic Search</a>)
-<? } else { ?>
-			(<a href="torrents.php?action=advanced&amp;<?=Format::get_url(array('action'))?>">Advanced Search</a>)
-<? } ?>
-	</h3>
-	<div class="box pad">
+<div class="box filter_torrents <?=$AdvancedSearch ? 'ft_advanced' : 'ft_basic'?>">
+	<div class="head">
+		<strong>
+			<span id="ft_basic_text" class="<?=$HideBasic?>">Basic /</span>
+			<span id="ft_basic_link" class="<?=$HideAdvanced?>"><a href="#" onclick="return toggleTorrentSearch('basic');">Basic</a> /</span>
+			<span id="ft_advanced_text" class="<?=$HideAdvanced?>">Advanced</span>
+			<span id="ft_advanced_link" class="<?=$HideBasic?>"><a href="#" onclick="return toggleTorrentSearch('advanced');">Advanced</a></span>
+			search
+		</strong>
+		<span style="float: right;">
+			<a href="#" onclick="return toggleTorrentSearch(0);" id="ft_toggle" class="brackets">Hide</a>
+		</span>
+	</div>
+	<div class="pad" id="ft_container">
 		<table class="layout">
-<? if ($AdvancedSearch) { ?>
-			<tr id="artist_name">
+			<tr id="artist_name" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Artist name:</td>
 				<td colspan="3" class="ft_artistname">
-					<input type="text" spellcheck="false" size="40" name="artistname" class="inputtext smaller" value="<?Format::form('artistname')?>" />
-					<input type="hidden" name="action" value="advanced" />
+					<input type="text" spellcheck="false" size="40" name="artistname" class="inputtext smaller fti_advanced" value="<?Format::form('artistname')?>" />
+					<input type="hidden" name="action" value="advanced" class="fti_advanced" />
 				</td>
 			</tr>
-			<tr id="album_torrent_name">
+			<tr id="album_torrent_name" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Album/Torrent name:</td>
 				<td colspan="3" class="ft_groupname">
-					<input type="text" spellcheck="false" size="40" name="groupname" class="inputtext smaller" value="<?Format::form('groupname')?>" />
+					<input type="text" spellcheck="false" size="40" name="groupname" class="inputtext smaller fti_advanced" value="<?Format::form('groupname')?>" />
 				</td>
 			</tr>
-			<tr id="record_label">
+			<tr id="record_label" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Record label:</td>
 				<td colspan="3" class="ft_recordlabel">
-					<input type="text" spellcheck="false" size="40" name="recordlabel" class="inputtext smaller" value="<?Format::form('recordlabel')?>" />
+					<input type="text" spellcheck="false" size="40" name="recordlabel" class="inputtext smaller fti_advanced" value="<?Format::form('recordlabel')?>" />
 				</td>
 			</tr>
-			<tr id="catalogue_number_year">
+			<tr id="catalogue_number_year" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Catalogue number:</td>
 				<td class="ft_cataloguenumber">
-					<input type="text" size="40" name="cataloguenumber" class="inputtext smallest" value="<?Format::form('cataloguenumber')?>"  />
+					<input type="text" size="40" name="cataloguenumber" class="inputtext smallest fti_advanced" value="<?Format::form('cataloguenumber')?>"  />
 				</td>
 				<td class="label">Year:</td>
 				<td class="ft_year">
-					<input type="text" name="year" class="inputtext smallest" value="<?Format::form('year')?>" size="4" />
+					<input type="text" name="year" class="inputtext smallest fti_advanced" value="<?Format::form('year')?>" size="4" />
 				</td>
 			</tr>
-			<tr id="edition_expand">
+			<tr id="edition_expand" class="ftr_advanced<?=$HideAdvanced?>">
 				<td colspan="4" class="center ft_edition_expand"><a href="#" class="brackets" onclick="ToggleEditionRows();return false;">Click here to toggle searching for specific remaster information</a></td>
 			</tr>
 <?
 if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', true) == "" &&
 	Format::form('remasterrecordlabel', true) == "" && Format::form('remastercataloguenumber', true) == "") {
-		$Hidden = 'hidden';
+		$Hidden = ' hidden';
 } else {
 	$Hidden = '';
 }
 ?>
-			<tr id="edition_title" class="<?=$Hidden?>">
+			<tr id="edition_title" class="ftr_advanced<?=$HideAdvanced . $Hidden?>">
 				<td class="label">Edition title:</td>
 				<td class="ft_remastertitle">
-					<input type="text" spellcheck="false" size="40" name="remastertitle" class="inputtext smaller" value="<?Format::form('remastertitle')?>" />
+					<input type="text" spellcheck="false" size="40" name="remastertitle" class="inputtext smaller fti_advanced" value="<?Format::form('remastertitle')?>" />
 				</td>
 				<td class="label">Edition year:</td>
 				<td class="ft_remasteryear">
-					<input type="text" name="remasteryear" class="inputtext smallest" value="<?Format::form('remasteryear')?>" size="4" />
+					<input type="text" name="remasteryear" class="inputtext smallest fti_advanced" value="<?Format::form('remasteryear')?>" size="4" />
 				</td>
 			</tr>
-			<tr id="edition_label" class="<?=$Hidden?>">
+			<tr id="edition_label" class="ftr_advanced<?=$HideAdvanced . $Hidden?>">
 				<td class="label">Edition release label:</td>
 				<td colspan="3" class="ft_remasterrecordlabel">
-					<input type="text" spellcheck="false" size="40" name="remasterrecordlabel" class="inputtext smaller" value="<?Format::form('remasterrecordlabel')?>" />
+					<input type="text" spellcheck="false" size="40" name="remasterrecordlabel" class="inputtext smaller fti_advanced" value="<?Format::form('remasterrecordlabel')?>" />
 				</td>
 			</tr>
-			<tr id="edition_catalogue" class="<?=$Hidden?>">
+			<tr id="edition_catalogue" class="ftr_advanced<?=$HideAdvanced . $Hidden?>">
 				<td class="label">Edition catalogue number:</td>
 				<td colspan="3" class="ft_remastercataloguenumber">
-					<input type="text" size="40" name="remastercataloguenumber" class="inputtext smallest" value="<?Format::form('remastercataloguenumber')?>" />
+					<input type="text" size="40" name="remastercataloguenumber" class="inputtext smallest fti_advanced" value="<?Format::form('remastercataloguenumber')?>" />
 				</td>
 			</tr>
-			<tr id="file_list">
+			<tr id="file_list" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">File list:</td>
 				<td colspan="3" class="ft_filelist">
-					<input type="text" spellcheck="false" size="40" name="filelist" class="inputtext" value="<?Format::form('filelist')?>" />
+					<input type="text" spellcheck="false" size="40" name="filelist" class="inputtext fti_advanced" value="<?Format::form('filelist')?>" />
 				</td>
 			</tr>
-			<tr id="rip_specifics">
+			<tr id="rip_specifics" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Rip specifics:</td>
 				<td class="nobr ft_ripspecifics" colspan="3">
-					<select id="bitrate" name="encoding" class="ft_bitrate">
+					<select id="bitrate" name="encoding" class="ft_bitrate fti_advanced">
 						<option value="">Bitrate</option>
 <?	foreach ($Bitrates as $BitrateName) { ?>
 						<option value="<?=display_str($BitrateName); ?>" <?Format::selected('encoding', $BitrateName)?>><?=display_str($BitrateName); ?></option>
 <?	} ?>			</select>
 
-					<select name="format" class="ft_format">
+					<select name="format" class="ft_format fti_advanced">
 						<option value="">Format</option>
 <?	foreach ($Formats as $FormatName) { ?>
 						<option value="<?=display_str($FormatName); ?>" <?Format::selected('format', $FormatName)?>><?=display_str($FormatName); ?></option>
 <?	} ?>			</select>
-					<select name="media" class="ft_media">
+					<select name="media" class="ft_media fti_advanced">
 						<option value="">Media</option>
 <?	foreach ($Media as $MediaName) { ?>
 						<option value="<?=display_str($MediaName); ?>" <?Format::selected('media',$MediaName)?>><?=display_str($MediaName); ?></option>
 <?	} ?>
 					</select>
-					<select name="releasetype" class="ft_releasetype">
+					<select name="releasetype" class="ft_releasetype fti_advanced">
 						<option value="">Release type</option>
 <?	foreach ($ReleaseTypes as $ID=>$Type) { ?>
 						<option value="<?=display_str($ID); ?>" <?Format::selected('releasetype',$ID)?>><?=display_str($Type); ?></option>
@@ -658,32 +672,32 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 					</select>
 				</td>
 			</tr>
-			<tr id="misc">
+			<tr id="misc" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Misc:</td>
 				<td class="nobr ft_misc" colspan="3">
-					<select name="haslog" class="ft_haslog">
+					<select name="haslog" class="ft_haslog fti_advanced">
 						<option value="">Has Log</option>
 						<option value="1" <?Format::selected('haslog','1')?>>Yes</option>
 						<option value="0" <?Format::selected('haslog','0')?>>No</option>
 						<option value="100" <?Format::selected('haslog','100')?>>100% only</option>
 						<option value="-1" <?Format::selected('haslog','-1')?>>&lt;100%/Unscored</option>
 					</select>
-					<select name="hascue" class="ft_hascue">
+					<select name="hascue" class="ft_hascue fti_advanced">
 						<option value="">Has Cue</option>
 						<option value="1" <?Format::selected('hascue',1)?>>Yes</option>
 						<option value="0" <?Format::selected('hascue',0)?>>No</option>
 					</select>
-					<select name="scene" class="ft_scene">
+					<select name="scene" class="ft_scene fti_advanced">
 						<option value="">Scene</option>
 						<option value="1" <?Format::selected('scene',1)?>>Yes</option>
 						<option value="0" <?Format::selected('scene',0)?>>No</option>
 					</select>
-					<select name="vanityhouse" class="ft_vanityhouse">
+					<select name="vanityhouse" class="ft_vanityhouse fti_advanced">
 						<option value="">Vanity House</option>
 						<option value="1" <?Format::selected('vanityhouse',1)?>>Yes</option>
 						<option value="0" <?Format::selected('vanityhouse',0)?>>No</option>
 					</select>
-					<select name="freetorrent" class="ft_freetorrent">
+					<select name="freetorrent" class="ft_freetorrent fti_advanced">
 						<option value="">Leech Status</option>
 						<option value="1" <?Format::selected('freetorrent',1)?>>Freeleech</option>
 						<option value="2" <?Format::selected('freetorrent',2)?>>Neutral Leech</option>
@@ -692,17 +706,15 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 					</select>
 				</td>
 			</tr>
-<? } else { // BASIC SEARCH ?>
-			<tr id="search_terms">
+			<tr id="search_terms" class="ftr_basic<?=$HideBasic?>">
 				<td class="label">Search terms:</td>
 				<td colspan="3" class="ftb_searchstr">
-					<input type="text" spellcheck="false" size="40" name="searchstr" class="inputtext" value="<?Format::form('searchstr')?>" />
+					<input type="text" spellcheck="false" size="40" name="searchstr" class="inputtext fti_basic" value="<?Format::form('searchstr')?>" />
 <?	if (!empty($LoggedUser['SearchType'])) { ?>
-					<input type="hidden" name="action" value="basic" />
+					<input type="hidden" name="action" value="basic" class="fti_basic" />
 <?	} ?>
 				</td>
 			</tr>
-<? } ?>
 			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td colspan="3" class="ft_taglist">
@@ -713,7 +725,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 			</tr>
 			<tr id="order">
 				<td class="label">Order by:</td>
-				<td colspan="<?=($AdvancedSearch)?'3':'1'?>" class="ft_order">
+				<td colspan="3" colspan="3" class="ft_order">
 					<select name="order_by" style="width:auto;" class="ft_order_by">
 						<option value="time"<?Format::selected('order_by','time')?>>Time added</option>
 						<option value="year"<?Format::selected('order_by','year')?>>Year</option>
@@ -733,7 +745,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 				<td class="label">
 					<label for="group_results">Group by release:</label>
 				</td>
-				<td colspan="<?=($AdvancedSearch)?'3':'1'?>" class="ft_group_results">
+				<td colspan="3" class="ft_group_results">
 					<input type="checkbox" value="1" name="group_results" id="group_results" <?Format::selected('group_results',1,'checked')?> />
 				</td>
 			</tr>
@@ -818,7 +830,6 @@ if (!empty($LoggedUser['DefaultSearch'])) {
 </div>
 </form>
 
-<div class="linkbox"><?=$Pages?></div>
 <?
 
 

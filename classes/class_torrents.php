@@ -393,13 +393,7 @@ class Torrents {
 				Leechers, LogScore, CAST(Scene AS CHAR), CAST(HasLog AS CHAR), CAST(HasCue AS CHAR),
 				CAST(FreeTorrent AS CHAR), Media, Format, Encoding,
 				RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
-				REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(FileList,
-						'.flac{', ' .flac{'),
-						'.mp3{', ' .mp3{'),
-						'\n', ' \n'),
-						'|||', '\n '),
-						'_', ' ')
-					AS FileList, $VoteScore, '".db_string($ArtistName)."'
+				REPLACE(FileList, '_', ' ') AS FileList, $VoteScore, '".db_string($ArtistName)."'
 			FROM torrents AS t
 			JOIN torrents_group AS g ON g.ID=t.GroupID
 			WHERE g.ID=$GroupID");
@@ -482,6 +476,7 @@ class Torrents {
 		list($Size, $Name) = $File;
 		$Name = Format::make_utf8(strtr($Name, "\n\r\t", "   "));
 		$ExtPos = strrpos($Name, '.');
+		// Should not be $ExtPos !== false. Extensionless files that start with a . should not get extensions
 		$Ext = $ExtPos ? trim(substr($Name, $ExtPos+1)) : '';
 		return sprintf("%s s%ds %s %s", ".$Ext", $Size, $Name, self::filelist_delim());
 	}

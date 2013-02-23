@@ -33,6 +33,7 @@ $Results = $Results['matches'];
 <? } ?>
 
 	<div class="linkbox">
+		<a href="better.php" class="brackets">Back to better.php list</a>
 <? if($All) { ?>
 		<a href="better.php?method=tags" class="brackets">Show only those you have snatched</a>
 <? } else { ?>
@@ -42,7 +43,7 @@ $Results = $Results['matches'];
 </div>
 
 <div class="thin box pad">
-	<h3>There are <?=count($TorrentsInfo)?> torrents remaining</h3>
+	<h3>There are <?=number_format(count($TorrentsInfo))?> torrents remaining</h3>
 	<table class="torrent_table">
 <?
 foreach($TorrentsInfo as $TorrentID => $Info) {

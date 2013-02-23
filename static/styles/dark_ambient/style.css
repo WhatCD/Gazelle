@@ -747,9 +747,8 @@ strong.quoteheader{color: #878787;}
 	background: #2f2f2f url('images/filter.png') no-repeat;
 }
 
-#torrents .filter_torrents h3 {
-	margin: 0 0 10px 0;
-	font-size: 14px;
+#torrents .filter_torrents {
+	margin: 20px auto 0 auto;
 }
 
 #torrents .filter_torrents table {
@@ -1132,7 +1131,9 @@ strong.quoteheader{color: #878787;}
 	padding: 5px;
 }
 
-
+.search_form .box .head {
+	border-bottom: 1px solid #3f3f3f;
+}
 
 /* POLLS */
 

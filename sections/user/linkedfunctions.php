@@ -167,7 +167,7 @@ function user_dupes_table($UserID) {
 			<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" id="form_comment_hash" name="form_comment_hash" value="<?=$CommentHash?>" />
 			<div class="box">
-				<div class="head"><?=max($DupeCount - 1, 0)?> linked account<?=(($DupeCount == 2)?'':'s')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;">(View)</a></div>
+				<div class="head"><?=max($DupeCount - 1, 0)?> linked account<?=(($DupeCount == 2)?'':'s')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;" class="brackets">View</a></div>
 				<table width="100%" class="layout hidden linkedaccounts">
 					<?=$DupeCount?'<tr>':''?>
 <?
@@ -178,7 +178,7 @@ function user_dupes_table($UserID) {
 		$DupeInfo = Users::user_info($DupeID);
 ?>
 					<td align="left"><?=Users::format_username($DupeID, true, true, true, true)?>
-						(<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');">x</a>)</td>
+						<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');" class="brackets">x</a></td>
 <?
 		if ($i == 5) {
 			$i = 0;
@@ -201,7 +201,7 @@ function user_dupes_table($UserID) {
 							<div id="editdupecomments" class="<?=$DupeCount?'hidden':''?>">
 								<textarea name="dupecomments" onkeyup="resize('dupecommentsbox');" id="dupecommentsbox" cols="65" rows="5" style="width:98%;"><?=display_str($Comments)?></textarea>
 							</div>
-							<span style="float:right; font-style: italic;"><a href="#" onclick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;">(Edit linked account comments)</a></span>
+							<span style="float:right; font-style: italic;"><a href="#" onclick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;" class="brackets">Edit linked account comments</a></span>
 						</td>
 					</tr>
 				</table>

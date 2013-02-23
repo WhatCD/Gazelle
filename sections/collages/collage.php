@@ -612,7 +612,7 @@ if(!$LoggedUser['DisablePosting']) {
 <?
 if($CollageCovers != 0) { ?>
 		<div id="coverart" class="box">
-			<div class="head" id="coverhead"><strong>Cover Art</strong></div>
+			<div class="head" id="coverhead"><strong>Cover art</strong></div>
 			<ul class="collage_images" id="collage_page0">
 <?
 	$Page1 = array_slice($Collage, 0, $CollageCovers);

@@ -150,9 +150,9 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Sort/Hide release types</strong></td>
 				<td>
 					<noscript>Please enable JavaScript to use these options.</noscript>
-					<a href="#" id="toggle_sortable">Expand</a>
+					<a href="#" id="toggle_sortable" class="brackets">Expand</a>
 					<div id="sortable_container" style="display: none;">
-						<a href="#" id="reset_sortable">Reset to default</a>
+						<a href="#" id="reset_sortable" class="brackets">Reset to default</a>
 						<ul class="sortable_list" id="sortable">
 <?Users::release_order()?>
 						</ul>
@@ -227,19 +227,19 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Avatars</strong></td>
 				<td>
 					<select name="disableavatars" id="disableavatars" onclick="ToggleIdenticons();">
-						<option value="1" <? if($SiteOptions['DisableAvatars'] == 1) { ?>selected="selected" <? } ?>/>Disable avatars</option>
-						<option value="0" <? if($SiteOptions['DisableAvatars'] == 0) { ?>selected="selected" <? } ?>/>Show avatars</option>
-						<option value="2" <? if($SiteOptions['DisableAvatars'] == 2) { ?>selected="selected" <? } ?>/>Show avatars or:</option>
-						<option value="3" <? if($SiteOptions['DisableAvatars'] == 3) { ?>selected="selected" <? } ?>/>Replace all avatars with:</option>
+						<option value="1"<? if($SiteOptions['DisableAvatars'] == 1) { ?> selected="selected"<? } ?>>Disable avatars</option>
+						<option value="0"<? if($SiteOptions['DisableAvatars'] == 0) { ?> selected="selected"<? } ?>>Show avatars</option>
+						<option value="2"<? if($SiteOptions['DisableAvatars'] == 2) { ?> selected="selected"<? } ?>>Show avatars or:</option>
+						<option value="3"<? if($SiteOptions['DisableAvatars'] == 3) { ?> selected="selected"<? } ?>>Replace all avatars with:</option>
 					</select>
 					<select name="identicons" id="identicons">
-						<option value="0" <? if($SiteOptions['Identicons'] == 0) { ?>selected="selected" <? } ?>/>Identicon</option>
-						<option value="1" <? if($SiteOptions['Identicons'] == 1) { ?>selected="selected" <? } ?>/>MonsterID</option>
-						<option value="2" <? if($SiteOptions['Identicons'] == 2) { ?>selected="selected" <? } ?>/>Wavatar</option>
-						<option value="3" <? if($SiteOptions['Identicons'] == 3) { ?>selected="selected" <? } ?>/>Retro</option>
-						<option value="4" <? if($SiteOptions['Identicons'] == 4) { ?>selected="selected" <? } ?>/>Robots 1</option>
-						<option value="5" <? if($SiteOptions['Identicons'] == 5) { ?>selected="selected" <? } ?>/>Robots 2</option>
-						<option value="6" <? if($SiteOptions['Identicons'] == 6) { ?>selected="selected" <? } ?>/>Robots 3</option>
+						<option value="0"<? if($SiteOptions['Identicons'] == 0) { ?> selected="selected"<? } ?>>Identicon</option>
+						<option value="1"<? if($SiteOptions['Identicons'] == 1) { ?> selected="selected"<? } ?>>MonsterID</option>
+						<option value="2"<? if($SiteOptions['Identicons'] == 2) { ?> selected="selected"<? } ?>>Wavatar</option>
+						<option value="3"<? if($SiteOptions['Identicons'] == 3) { ?> selected="selected"<? } ?>>Retro</option>
+						<option value="4"<? if($SiteOptions['Identicons'] == 4) { ?> selected="selected"<? } ?>>Robots 1</option>
+						<option value="5"<? if($SiteOptions['Identicons'] == 5) { ?> selected="selected"<? } ?>>Robots 2</option>
+						<option value="6"<? if($SiteOptions['Identicons'] == 6) { ?> selected="selected"<? } ?>>Robots 3</option>
 					</select>
 				</td>
 			</tr>

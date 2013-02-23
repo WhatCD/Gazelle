@@ -100,7 +100,7 @@ if(!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms('
 if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 ?>
 <div class="thin">
-	<h2>Change Group</h2>
+	<h2>Change group</h2>
 	<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
 		<input type="hidden" name="action" value="editgroupid" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -110,12 +110,12 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 			<tr>
 				<td class="label">Group ID</td>
 				<td>
-						<input type="text" name="groupid" value="<?=$Properties['GroupID']?>" size="10" />
+					<input type="text" name="groupid" value="<?=$Properties['GroupID']?>" size="10" />
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2" class="center">
-						<input type="submit" value="Change group ID" />
+					<input type="submit" value="Change group ID" />
 				</td>
 			</tr>
 		</table>
@@ -130,24 +130,24 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 			<tr>
 				<td class="label">Artist</td>
 				<td>
-						<input type="text" name="artist" value="<?=$Properties['ArtistName']?>" size="50" />
+					<input type="text" name="artist" value="<?=$Properties['ArtistName']?>" size="50" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">Title</td>
 				<td>
-						<input type="text" name="title" value="<?=$Properties['Title']?>" size="50" />
+					<input type="text" name="title" value="<?=$Properties['Title']?>" size="50" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">Year</td>
 				<td>
-						<input type="text" name="year" value="<?=$Properties['Year']?>" size="10" />
+					<input type="text" name="year" value="<?=$Properties['Year']?>" size="10" />
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2" class="center">
-						<input type="submit" value="Split into new group" />
+					<input type="submit" value="Split into new group" />
 				</td>
 			</tr>
 		</table>

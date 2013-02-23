@@ -636,7 +636,7 @@ if (count($Requests) > 0) {
 	$i = 0;
 ?>
 		<div class="box">
-			<div class="head"><span style="font-weight: bold;">Requests (<?=count($Requests)?>)</span> <a href="#" style="float:right;" onclick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a></div>
+			<div class="head"><span style="font-weight: bold;">Requests (<?=number_format(count($Requests))?>)</span> <a href="#" style="float:right;" onclick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Show</a></div>
 			<table id="requests" class="request_table hidden">
 				<tr class="colhead">
 					<td>Format / Bitrate / Media</td>

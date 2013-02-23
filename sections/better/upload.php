@@ -119,14 +119,17 @@ foreach($TorrentGroups as $Editions) {
 
 View::show_header('Transcode Uploads');
 ?>
+<div class="linkbox">
+	<a href="better.php" class="brackets">Back to better.php list</a>
+</div>
 <div class="thin">
 	<h2>Transcode uploaded torrents</h2>
 	<h3>Stats</h3>
 	<div class="box pad">
 		<p>
-			Number of perfect FLACs you can transcode: <?=$Counter['total']?><br />
-			Number of missing transcodes: <?=$Counter['miss_total']?><br />
-			Number of missing V2 / V0 / 320 transcodes: <?=$Counter['miss_V2 (VBR)']?> / <?=$Counter['miss_V0 (VBR)']?> / <?=$Counter['miss_320']?>
+			Number of perfect FLACs you can transcode: <?=number_format($Counter['total'])?><br />
+			Number of missing transcodes: <?=number_format($Counter['miss_total'])?><br />
+			Number of missing V2 / V0 / 320 transcodes: <?=number_format($Counter['miss_V2 (VBR)'])?> / <?=number_format($Counter['miss_V0 (VBR)'])?> / <?=number_format($Counter['miss_320'])?>
 		</p>
 	</div>
 	<h3>List</h3>
@@ -204,9 +207,9 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				<div class="torrent_info"><?=$ExtraInfo?></div>
 				<div class="tags"><?=$TorrentTags?></div>
 			</td>
-			<td><?=isset($Edition['Formats']['V2 (VBR)'])?'<strong class="important_text_alt">YES</strong>':'<strong class="important_text">NO</strong>'?></td>
-			<td><?=isset($Edition['Formats']['V0 (VBR)'])?'<strong class="important_text_alt">YES</strong>':'<strong class="important_text">NO</strong>'?></td>
-			<td><?=isset($Edition['Formats']['320'])?'<strong class="important_text_alt">YES</strong>':'<strong class="important_text">NO</strong>'?></td>
+			<td><strong <?=isset($Edition['Formats']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
+			<td><strong <?=isset($Edition['Formats']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
+			<td><strong <?=isset($Edition['Formats']['320']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
 		</tr>
 <?
 	}

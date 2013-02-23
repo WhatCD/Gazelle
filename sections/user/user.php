@@ -487,7 +487,7 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 		<div class="box">
 			<div class="head">
 				<span style="float:left;">Profile<? if ($CustomTitle) { echo " - ".html_entity_decode($DisplayCustomTitle); } ?></span>
-				<span style="float:right;"><?=!empty($Badges)?"$Badges&nbsp;&nbsp;":''?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Hide)</a></span>&nbsp;
+				<span style="float:right;"><?=!empty($Badges)?"$Badges&nbsp;&nbsp;":''?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
 			</div>
 			<div class="pad" id="profilediv">
 <? if (!$Info) { ?>
@@ -602,11 +602,11 @@ foreach ($Collages as $CollageInfo) {
 					<?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
 				</span>
 				<span style="float:right;">
-					<a href="#" onclick="$('#collage<?=$CollageID?> .images').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;"><?=$FirstCol?'(Hide)':'(Show)'?></a>
+					<a href="#" onclick="$('#collage<?=$CollageID?> .images').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$FirstCol?'Hide':'Show'?></a>
 				</span>
 			</td>
 		</tr>
-		<tr class="images <?=$FirstCol?'':' hidden'?>">
+		<tr class="images<?=$FirstCol ? '' : ' hidden'?>">
 <?	foreach($Collage as $C) {
 			$Group = Torrents::get_groups(array($C['GroupID']));
 			$Group = array_pop($Group['matches']);
@@ -640,7 +640,7 @@ if ((check_perms('users_view_invites')) && $Invited > 0) {
 	$Tree = new INVITE_TREE($UserID, array('visible'=>false));
 ?>
 		<div class="box">
-			<div class="head">Invite tree <a href="#" onclick="$('#invitetree').toggle();return false;">(View)</a></div>
+			<div class="head">Invite tree <a href="#" onclick="$('#invitetree').toggle();return false;" class="brackets">View</a></div>
 			<div id="invitetree" class="hidden">
 				<? $Tree->make_tree(); ?>
 			</div>
@@ -670,7 +670,7 @@ if (check_paranoia_here('requestsvoted_list')) {
 		$Requests = $DB->to_array();
 ?>
 		<div class="box">
-			<div class="head">Requests <a href="#" onclick="$('#requests').toggle();return false;">(View)</a></div>
+			<div class="head">Requests <a href="#" onclick="$('#requests').toggle();return false;" class="brackets">View</a></div>
 			<div id="requests" class="request_table hidden">
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 					<tr class="colhead_dark">
@@ -769,7 +769,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 		$StaffPMs = $DB->to_array();
 ?>
 		<div class="box">
-			<div class="head">Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;">(View)</a></div>
+			<div class="head">Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;" class="brackets">View</a></div>
 			<table width="100%" class="message_table hidden" id="staffpms">
 				<tr class="colhead">
 					<td>Subject</td>
@@ -837,8 +837,8 @@ if (check_perms('users_mod', $Class)) { ?>
 
 		<div class="box">
 			<div class="head">Staff notes
-				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;">(Edit)</a>
-				<a href="#" onclick="$('#staffnotes').toggle(); return false;">(Toggle)</a>
+				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;" class="brackets">Edit</a>
+				<a href="#" onclick="$('#staffnotes').toggle(); return false;" class="brackets">Toggle</a>
 			</div>
 			<div id="staffnotes" class="pad">
 				<input type="hidden" name="comment_hash" value="<?=$CommentHash?>" />
@@ -1038,10 +1038,10 @@ if (check_perms('users_mod', $Class)) { ?>
 				<td>
 					<select name="WarnLength">
 						<option value="">---</option>
-						<option value="1"> 1 Week</option>
-						<option value="2"> 2 Weeks</option>
-						<option value="4"> 4 Weeks</option>
-						<option value="8"> 8 Weeks</option>
+						<option value="1">1 week</option>
+						<option value="2">2 weeks</option>
+						<option value="4">4 weeks</option>
+						<option value="8">8 weeks</option>
 					</select>
 				</td>
 			</tr>
@@ -1051,10 +1051,10 @@ if (check_perms('users_mod', $Class)) { ?>
 				<td>
 					<select name="ExtendWarning" onchange="ToggleWarningAdjust(this)">
 						<option>---</option>
-						<option value="1"> 1 Week</option>
-						<option value="2"> 2 Weeks</option>
-						<option value="4"> 4 Weeks</option>
-						<option value="8"> 8 Weeks</option>
+						<option value="1">1 week</option>
+						<option value="2">2 weeks</option>
+						<option value="4">4 weeks</option>
+						<option value="8">8 weeks</option>
 					</select>
 				</td>
 			</tr>
@@ -1063,10 +1063,10 @@ if (check_perms('users_mod', $Class)) { ?>
 				<td>
 					<select name="ReduceWarning">
 						<option>---</option>
-						<option value="1"> 1 Week</option>
-						<option value="2"> 2 Weeks</option>
-						<option value="4"> 4 Weeks</option>
-						<option value="8"> 8 Weeks</option>
+						<option value="1">1 week</option>
+						<option value="2">2 weeks</option>
+						<option value="4">4 weeks</option>
+						<option value="8">8 weeks</option>
 					</select>
 				</td>
 			</tr>

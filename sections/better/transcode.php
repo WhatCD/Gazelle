@@ -85,6 +85,9 @@ $Debug->log_var($TorrentGroups, 'Torrent groups');
 View::show_header('Transcode Search');
 ?>
 <br />
+<div class="linkbox">
+	<a href="better.php" class="brackets">Back to better.php list</a>
+</div>
 <div class="thin">
 	<form class="search_form" name="transcodes" action="" method="get">
 		<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
@@ -100,6 +103,7 @@ View::show_header('Transcode Search');
 			</tr>
 		</table>
 	</form>
+	<br />
 	<table width="100%" class="torrent_table">
 		<tr class="colhead">
 			<td>Torrent</td>
@@ -181,9 +185,9 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				<div class="torrent_info"><?=$ExtraInfo?></div>
 				<div class="tags"><?=$TorrentTags?></div>
 			</td>
-			<td><?=isset($Edition['Formats']['V2 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
-			<td><?=isset($Edition['Formats']['V0 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
-			<td><?=isset($Edition['Formats']['320']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><strong <?=isset($Edition['Formats']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
+			<td><strong <?=isset($Edition['Formats']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
+			<td><strong <?=isset($Edition['Formats']['320']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
 		</tr>
 <?
 		}

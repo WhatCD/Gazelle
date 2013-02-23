@@ -2,7 +2,7 @@
 function display_perm($Key,$Title) {
 	global $Values;
 	$Perm='<input type="checkbox" name="perm_'.$Key.'" id="'.$Key.'" value="1"';
-	if (!empty($Values[$Key])) { $Perm.=" checked"; }
+	if (!empty($Values[$Key])) { $Perm.=' checked="checked"'; }
 	$Perm.=' /> <label for="'.$Key.'">'.$Title.'</label><br />';
 	echo $Perm;
 }

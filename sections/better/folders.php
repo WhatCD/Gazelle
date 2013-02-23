@@ -33,6 +33,7 @@ $Results = $Results['matches'];
 <? } ?>
 
 	<div class="linkbox">
+		<a href="better.php" class="brackets">Back to better.php list</a>
 <? if($All) { ?>
 		<a href="better.php?method=folders" class="brackets">Show only those you have snatched</a>
 <? } else { ?>
@@ -41,7 +42,7 @@ $Results = $Results['matches'];
 	</div>
 </div>
 <div class="thin box pad">
-	<h3>There are <?=count($TorrentsInfo)?> torrents remaining</h3>
+	<h3>There are <?=number_format(count($TorrentsInfo))?> torrents remaining</h3>
 	<table class="torrent_table">
 <?
 foreach ($TorrentsInfo as $TorrentID => $Info) {
@@ -74,7 +75,7 @@ foreach ($TorrentsInfo as $TorrentID => $Info) {
 		$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
 	}
 ?>
-		<tr class="torrent torrent_row<?=$Torrents[$TorrentID]['IsSnatched'] ? ' snatched_torrent"' : ''?>">
+		<tr class="torrent torrent_row<?=$Torrents[$TorrentID]['IsSnatched'] ? ' snatched_torrent' : ''?>">
 			<td>
 				<span class="torrent_links_block">
 					<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets" title="Download torrent">DL</a>
