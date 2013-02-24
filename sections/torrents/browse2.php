@@ -535,18 +535,17 @@ if ($TorrentCount) {
 }
 /** End run search query and collect results **/
 
+$HideFilter = isset($LoggedUser['ShowTorFilter']) && $LoggedUser['ShowTorFilter'] == 0;
 // This is kinda ugly, but the enormous if paragraph was really hard to read
 $AdvancedSearch =  !empty($_GET['action']) && $_GET['action'] == "advanced";
 $AdvancedSearch |= !empty($LoggedUser['SearchType']) && (empty($_GET['action']) || $_GET['action'] == "advanced");
 $AdvancedSearch &= check_perms('site_advanced_search');
 
 if ($AdvancedSearch) {
-	$Debug->log_var(1, 'Advanced search');
 	$Action = 'action=advanced';
 	$HideBasic = ' hidden';
 	$HideAdvanced = '';
 } else {
-	$Debug->log_var(1, 'Basic search');
 	$Action = 'action=basic';
 	$HideBasic = '';
 	$HideAdvanced = ' hidden';
@@ -561,7 +560,7 @@ View::show_header('Browse Torrents','browse');
 	<h2>Torrents</h2>
 </div>
 <form class="search_form" name="torrents" method="get" action="">
-<div class="box filter_torrents <?=$AdvancedSearch ? 'ft_advanced' : 'ft_basic'?>">
+<div class="box filter_torrents">
 	<div class="head">
 		<strong>
 			<span id="ft_basic_text" class="<?=$HideBasic?>">Basic /</span>
@@ -571,16 +570,16 @@ View::show_header('Browse Torrents','browse');
 			search
 		</strong>
 		<span style="float: right;">
-			<a href="#" onclick="return toggleTorrentSearch(0);" id="ft_toggle" class="brackets">Hide</a>
+			<a href="#" onclick="return toggleTorrentSearch(0);" id="ft_toggle" class="brackets"><?=$HideFilter ? 'Show' : 'Hide'?></a>
 		</span>
 	</div>
-	<div class="pad" id="ft_container">
+	<div id="ft_container" class="pad<?=$HideFilter ? ' hidden' : ''?>">
 		<table class="layout">
 			<tr id="artist_name" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Artist name:</td>
 				<td colspan="3" class="ft_artistname">
 					<input type="text" spellcheck="false" size="40" name="artistname" class="inputtext smaller fti_advanced" value="<?Format::form('artistname')?>" />
-					<input type="hidden" name="action" value="advanced" class="fti_advanced" />
+					<input type="hidden" name="action" value="advanced" class="fti_advanced"<?=$AdvancedSearch ? '' : ' disabled="disabled"'?> />
 				</td>
 			</tr>
 			<tr id="album_torrent_name" class="ftr_advanced<?=$HideAdvanced?>">
@@ -829,10 +828,7 @@ if (!empty($LoggedUser['DefaultSearch'])) {
 	</div>
 </div>
 </form>
-
 <?
-
-
 if ($TorrentCount == 0) {
 	$DB->query("SELECT
 	tags.Name,

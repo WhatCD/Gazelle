@@ -891,6 +891,12 @@ ul .invitetree {
 	background: transparent !important; outline: 0
 }
 
+/* Layout (User options) */
+
+.user_options .options_list li {
+	margin: 0;
+}
+
 /* Layout (MISC) */
 
 .poll{list-style:none; padding:10px; margin:5px}

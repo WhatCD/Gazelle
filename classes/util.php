@@ -8,12 +8,17 @@
  * @param string $Str
  * @return true if $Str numeric
  */
-function is_number($Str) {
-	$Return = true;
-	if ($Str < 0) { $Return = false; }
-	// We're converting input to a int, then string and comparing to original
-	$Return = ($Str == strval(intval($Str)) ? true : false);
-	return $Return;
+if (PHP_INT_SIZE === 4) {
+	function is_number($Str) {
+		if ($Str[0] == '-' || $Str[0] == '+') { // Leading plus/minus signs are ok
+			$Str[0] = 0;
+		}
+		return ltrim($Str, "0..9") === '';
+	}
+} else {
+	function is_number($Str) {
+		return $Str == strval(intval($Str));
+	}
 }
 
 

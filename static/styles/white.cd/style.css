@@ -709,6 +709,9 @@ table tr td.unread_locked_sticky {
 	padding-top:20px;
 	text-transform:uppercase;
 	}
+.user_options .options_list {
+	padding:0;
+	}
 #site_debug {
 	width:950px;
 	margin:0 auto;

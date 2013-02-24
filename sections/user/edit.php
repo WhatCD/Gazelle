@@ -78,7 +78,7 @@ echo $Val->GenerateJS('userform');
 			<input type="hidden" name="userid" value="<?=$UserID?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		</div>
-		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border">
+		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border user_options">
 			<tr class="colhead_dark">
 				<td colspan="2">
 					<strong>Site preferences</strong>
@@ -187,12 +187,18 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Browse page tag list</strong></td>
+				<td class="label"><strong>Torrent search</strong></td>
 				<td>
-					<select name="showtags" id="showtags">
-						<option value="1"<? if ($SiteOptions['ShowTags'] == 1) { ?> selected="selected"<? } ?>>Open by default.</option>
-						<option value="0"<? if ($SiteOptions['ShowTags'] == 0) { ?> selected="selected"<? } ?>>Closed by default.</option>
-					</select>
+					<ul class="options_list nobullet">
+						<li>
+							<input type="checkbox" name="showtfilter" id="showtfilter"<?=!isset($SiteOptions['ShowTorFilter']) || $SiteOptions['ShowTorFilter'] ? ' checked="checked"' : ''?>/>
+							<label for="showtfilter">Show filter</label>
+						</li>
+						<li>
+							<input type="checkbox" name="showtags" id="showtags"<?Format::selected("ShowTags", 1, "checked", $SiteOptions);?>/>
+							<label for="showtags">Show tag list</label>
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>

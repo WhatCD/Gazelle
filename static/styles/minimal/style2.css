@@ -209,6 +209,7 @@ table tr.colhead_dark td{background:#555; border:0}
 #user #styleurl{width:40% !important}
 #user table textarea{width:98% !important}
 #user table tr td.center strong{display:block}
+.user_options .options_list{padding: 0;}
 
 /* FORUMS */
 #forums h3{margin:15px 0}

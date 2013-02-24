@@ -66,9 +66,12 @@ function Edit_Form(post,key) {
 }
 
 function Cancel_Edit(postid) {
-	$('#reply_box').toggle();
-	$('#bar' + postid).raw().innerHTML = $('#bar' + postid).raw().oldbar;
-	$('#content' + postid).raw().innerHTML = $('#bar' + postid).raw().cancel;
+	var answer = confirm("Are you sure you want to cancel?");
+	if (answer) {
+		$('#reply_box').toggle();
+		$('#bar' + postid).raw().innerHTML = $('#bar' + postid).raw().oldbar;
+		$('#content' + postid).raw().innerHTML = $('#bar' + postid).raw().cancel;
+	}
 }
 
 function Preview_Edit(postid) {

@@ -1498,16 +1498,19 @@ h3 {
 	margin: 10px 0;
 }
 
-#user #userform {
+#userform {
 	padding: 20px 0 0 0;
 }
 
-#userform select#stylesheet,
-#userform select#searchtype,
-#userform select#discogview,
-#userform select#hidecollage,
-#userform select#showtags {
+.user_options select#stylesheet,
+.user_options select#searchtype,
+.user_options select#discogview,
+.user_options select#hidecollage{
 	width: 130px;
+}
+
+.user_options .options_list {
+	padding: 0;
 }
 
 #user .linkbox,

@@ -709,6 +709,12 @@ ul .invitetree {
 	margin: 10px 2px;
 }
 
+/* Layout (User options) */
+
+.user_options .options_list li {
+	margin: 0;
+}
+
 /* Layout (MISC) */
 
 .left_poll {

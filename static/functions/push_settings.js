@@ -20,12 +20,15 @@
 
 			 if($(this).val() == TOASTY) {
 				 $('#pushservice_title').text("Device ID");
+				 $('#pushusername_title').text("Username");
 			 }
 			 else if($(this).val() == PUSHOVER) {
 				 $('#pushservice_title').text("Token");
+				 $('#pushusername_title').text("User Key");
 			 }
 			 else {
 				 $('#pushservice_title').text("API Key");
+				 $('#pushusername_title').text("Username");
 			 }
 	     }
 	     else {

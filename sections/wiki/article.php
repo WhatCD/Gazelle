@@ -55,12 +55,8 @@ View::show_header($Title,'wiki,bbcode');
 	</div>
 	<div class="sidebar">
 		<div class="box">
-			<div class="head">Table of Contents</div>
-			<div class="body">
-				<?=$TOC?>
-			</div>
-		</div>
-		<div class="box pad center">
+			<div class="head">Search</div>
+			<div class="pad">
 			<form class="search_form" name="articles" action="wiki.php" method="get">
 				<input type="hidden" name="action" value="search" />
 				<input
@@ -72,6 +68,13 @@ View::show_header($Title,'wiki,bbcode');
 			</form>
 			<br style="line-height:10px;" />
 			<strong><a href="wiki.php?action=browse" class="brackets">Browse articles</a></strong>
+		</div>
+		</div>
+		<div class="box">
+			<div class="head">Table of Contents</div>
+			<div class="body">
+				<?=$TOC?>
+			</div>
 		</div>
 		<div class="box box_info pad">
 			<ul>
