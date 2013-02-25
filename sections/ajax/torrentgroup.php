@@ -57,6 +57,13 @@ $JsonTorrentDetails = array(
 
 $JsonTorrentList = array();
 foreach ($TorrentList as $Torrent) {
+	// Convert file list back to the old format
+	$FileList = explode("\n", $Torrent['FileList']);
+	foreach ($FileList as &$File) {
+		$File = Torrents::filelist_old_format($File);
+	}
+	unset($File);
+	$FileList = implode('|||', $FileList);
 	$Userinfo = Users::user_info($Torrent['UserID']);
 	$JsonTorrentList[] = array(
 		'id' => (int) $Torrent['ID'],
@@ -80,7 +87,7 @@ foreach ($TorrentList as $Torrent) {
 		'freeTorrent' => $Torrent['FreeTorrent'] == 1,
 		'time' => $Torrent['Time'],
         'description' => $Torrent['Description'],
-		'fileList' => $Torrent['FileList'],
+		'fileList' => $FileList,
 		'filePath' => $Torrent['FilePath'],
 		'userId' => (int) $Torrent['UserID'],
 		'username' => $Userinfo['Username']

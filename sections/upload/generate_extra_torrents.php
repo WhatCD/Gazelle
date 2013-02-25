@@ -25,7 +25,7 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 	// File list and size
 	list($ExtraTotalSize, $ExtraFileList) = $ExtraTor->file_list();
 	$ExtraTorrentsInsert[$Name]['TotalSize'] = $ExtraTotalSize;
-	$ExtraDirName = $ExtraTor->get_name();
+	$ExtraDirName = isset($ExtraTor->Val['info']->Val['files']) ? Format::make_utf8($ExtraTor->get_name()) : "";
 
 	$ExtraTmpFileList = array();
 
@@ -44,7 +44,7 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 	}
 
 	// To be stored in the database
-	$ExtraFilePath = isset($ExtraTor->Val['info']->Val['files']) ? db_string(Format::make_utf8($ExtraDirName)) : "";
+	$ExtraFilePath = db_string($ExtraDirName);
 	$ExtraTorrentsInsert[$Name]['FilePath'] = $ExtraFilePath;
 	$ExtraFileString = db_string(implode("\n", $ExtraTmpFileList));
 	$ExtraTorrentsInsert[$Name]['FileString'] = $ExtraFileString;

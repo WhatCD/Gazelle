@@ -470,7 +470,7 @@ class Torrents {
 	 * Create a string that contains file info in a format that's easy to use for Sphinx
 	 *
 	 * @param array $File (File size, File name)
-	 * @return formatted string with the format .EXT sSIZEs NAME DELIMITER
+	 * @return string with the format .EXT sSIZEs NAME DELIMITER
 	 */
 	public static function filelist_format_file($File) {
 		list($Size, $Name) = $File;
@@ -479,6 +479,17 @@ class Torrents {
 		// Should not be $ExtPos !== false. Extensionless files that start with a . should not get extensions
 		$Ext = $ExtPos ? trim(substr($Name, $ExtPos+1)) : '';
 		return sprintf("%s s%ds %s %s", ".$Ext", $Size, $Name, self::filelist_delim());
+	}
+
+	/**
+	 * Create a string that contains file info in the old format for the API
+	 *
+	 * @param string $File string with the format .EXT sSIZEs NAME DELIMITER
+	 * @return string with the format NAME{{{SIZE}}}
+	 */
+	public static function filelist_old_format($File) {
+		$File = self::filelist_get_file($File);
+		return $File['name'] . '{{{' . $File['size'] . '}}}';
 	}
 
 	/**

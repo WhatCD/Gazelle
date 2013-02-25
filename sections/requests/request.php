@@ -540,7 +540,21 @@ foreach($Thread as $Key => $Post) {
 			</div>
 			<div id="bar<?=$PostID?>" style="float:right;">
 				<a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
-				&nbsp;
+				<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
+			$AuthorInfo = Users::user_info($AuthorID);
+			if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
+				?>
+                <form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
+                    <input type="hidden" name="action" value="warn" />
+                    <input type="hidden" name="groupid" value="<?=$RequestID?>" />
+                    <input type="hidden" name="postid" value="<?=$PostID?>" />
+                    <input type="hidden" name="userid" value="<?=$AuthorID?>" />
+                    <input type="hidden" name="key" value="<?=$Key?>" />
+                </form>
+                - <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
+				<?		}
+		}
+			?>
 				<a href="#">&uarr;</a>
 			</div>
 		</td>

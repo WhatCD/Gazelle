@@ -182,7 +182,12 @@ if(!isset($_REQUEST['action'])) {
 			// Delete thread info cache (eg. number of pages)
 			$Cache->delete('request_comments_'.$GroupID);
 		break;
-
+		case 'warn' :
+			include(SERVER_ROOT.'/sections/requests/warn.php');
+			break;
+		case 'take_warn' :
+			include(SERVER_ROOT.'/sections/requests/take_warn.php');
+			break;
 		default:
 			error(0);
 	}

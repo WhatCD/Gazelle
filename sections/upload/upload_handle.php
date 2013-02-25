@@ -365,7 +365,7 @@ $Private = $Tor->make_private();
 
 // File list and size
 list($TotalSize, $FileList) = $Tor->file_list();
-$DirName = $Tor->get_name();
+$DirName = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : "";
 
 $TmpFileList = array();
 $HasLog = "'0'";
@@ -403,7 +403,7 @@ if(count($TooLongPaths)!=0) {
 }
 
 // To be stored in the database
-$FilePath = isset($Tor->Val['info']->Val['files']) ? db_string(Format::make_utf8($DirName)) : "";
+$FilePath = db_string($DirName);
 
 $FileString = db_string(implode("\n", $TmpFileList));
 
