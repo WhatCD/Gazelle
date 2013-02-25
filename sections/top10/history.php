@@ -139,38 +139,20 @@ if(!empty($_GET['date'])) {
 			}
 
 			$DisplayName .= $ExtraInfo;
-			$TorrentTags = explode(' ',$TorrentTags);
+			$TorrentTags = new Tags($TorrentTags);
 		} else {
 			$DisplayName = $TitleString." (Deleted)";
-			$TorrentTags = $TagString;
+			$TorrentTags = new Tags($TagString);
 		}
-		$TagList=array();
 
-		$PrimaryTag = '';
-		if($TorrentTags!='') {
-			foreach ($TorrentTags as $TagKey => $TagName) {
-				$TagName = str_replace('_','.',$TagName);
-				$TagList[]='<a href="torrents.php?taglist='.$TagName.'">'.$TagName.'</a>';
-			}
-			$PrimaryTag = $TorrentTags[0];
-			$TagList = implode(', ', $TagList);
-			$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
-		}
-		$TorrentTags = '<br /><div class="tags">'.$TagList.'</div>';
 ?>
 	<tr class="group_torrent row<?=$Highlight?>">
 		<td style="padding:8px;text-align:center;"><strong><?=$Rank?></strong></td>
-<?
-		//fix array offset php error
-		if ($GroupCategoryID > 0) {
-			$GroupCatOffset = $GroupCategoryID - 1;
-		}
-?>
-		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCatOffset]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div></td>
+		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td>
 		<span><?=($GroupID ? '<a href="torrents.php?action=download&amp;id='.$TorrentID.'&amp;authkey='.$LoggedUser['AuthKey'].'&amp;torrent_pass='.$LoggedUser['torrent_pass'].' title="Download" class="brackets">DL</a>' : '(Deleted)')?></span>
 			<?=$DisplayName?>
-			<?=$TorrentTags?>
+			<div class="tags"><?=$TorrentTags->format()?></div>
 		</td>
 	</tr>
 <?

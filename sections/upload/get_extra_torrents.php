@@ -23,17 +23,17 @@ if (isset($_POST['extra_format']) && isset($_POST['extra_bitrate'])) {
 					$Err = "Missing format for extra torrent.";
 					break;
 				} else {
-					$ExtraTorrents[$ExtraTorrentName]['Format'] = "'" . db_string(trim($ExtraFormat)) . "'";
+					$ExtraTorrents[$ExtraTorrentName]['Format'] = db_string(trim($ExtraFormat));
 				}
 				$ExtraBitrate = $_POST['extra_bitrate'][$j];
 				if (empty($ExtraBitrate)) {
 					$Err = "Missing bitrate for extra torrent.";
 					break;
 				} else {
-					$ExtraTorrents[$ExtraTorrentName]['Encoding'] = "'" . db_string(trim($ExtraBitrate)) . "'";
+					$ExtraTorrents[$ExtraTorrentName]['Encoding'] = db_string(trim($ExtraBitrate));
 				}
 				$ExtraReleaseDescription = $_POST['extra_release_desc'][$j];
-				$ExtraTorrents[$ExtraTorrentName]['TorrentDescription'] = "'" . db_string(trim($ExtraReleaseDescription)) . "'";
+				$ExtraTorrents[$ExtraTorrentName]['TorrentDescription'] = db_string(trim($ExtraReleaseDescription));
 				$DupeNames[] = $ExtraFile['name'];
 			}
 		}

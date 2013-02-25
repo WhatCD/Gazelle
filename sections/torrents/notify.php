@@ -108,10 +108,6 @@ if (!empty($GroupIDs)) {
 	$TorrentGroups = Torrents::get_groups($GroupIDs);
 	$TorrentGroups = $TorrentGroups['matches'];
 
-	// Need some extra info that Torrents::get_groups() doesn't return
-	$DB->query("SELECT ID, CategoryID FROM torrents_group WHERE ID IN (".implode(',', $GroupIDs).")");
-	$GroupCategoryIDs = $DB->to_array('ID', MYSQLI_ASSOC, false);
-
 	// Get the relevant filter labels
 	$DB->query("SELECT ID, Label, Artists FROM users_notify_filters WHERE ID IN (".implode(',', $FilterIDs).")");
 	$Filters = $DB->to_array('ID', MYSQLI_ASSOC, array('Artists'));
@@ -234,7 +230,7 @@ if (empty($Results)) {
 			}
 			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID' title='View Torrent'>".$GroupInfo['Name']."</a>";
 
-			$GroupCategoryID = $GroupCategoryIDs[$GroupID]['CategoryID'];
+			$GroupCategoryID = $GroupInfo['CategoryID'];
 			if ($GroupCategoryID == 1) {
 				if ($GroupInfo['Year'] > 0) {
 					$DisplayName .= " [$GroupInfo[Year]]";
@@ -247,42 +243,39 @@ if (empty($Results)) {
 			// append extra info to torrent title
 			$ExtraInfo = Torrents::torrent_info($TorrentInfo, true, true);
 
-			$TagLinks = array();
-			if ($GroupInfo['TagList'] != '') {
-				$TorrentTags = array();
-				$TagList = explode(' ', $GroupInfo['TagList']);
-				$MainTag = $TagList[0];
-				foreach ($TagList as $Tag) {
-					$Tag = str_replace('_', '.', $Tag);
-					$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-				}
-				$TorrentTags = implode(', ', $TorrentTags);
-			} else {
-				$TorrentTags = '';
-				$MainTag = $Categories[$GroupCategoryID-1];
-			}
+			$TorrentTags = new Tags($GroupInfo['TagList']);
+
+			if ($GroupInfo['TagList'] == '')
+				$TorrentTags->set_primary($Categories[$GroupCategoryID-1]);
 
 		// print row
 ?>
 	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '')?>" id="torrent<?=$TorrentID?>"<?=$MatchingArtistsText ? 'title="'.display_str($MatchingArtistsText).'"' : ''?>>
 		<td style="text-align: center"><input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
-		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$MainTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1])).' tags_'.str_replace('.','_',$MainTag)?>"></div></td>
-		<td>
-			<span>
-				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-<?			if (Torrents::can_use_token($TorrentInfo)) { ?>
-				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
-<?			} ?>
-				| <a href="#" onclick="Clear(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a> ]
-			</span>
-			<strong><?=$DisplayName?></strong>
-			<div class="torrent_info">
-				<?=$ExtraInfo?>
-			<? if ($Result['UnRead']) {
-				echo '<strong class="new">New!</strong>';
-			} ?>
+		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>"class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
+		<td class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+			<div class="group_image float_left clear">
+				<? ImageTools::cover_thumb($GroupInfo['WikiImage'], $GroupCategoryID - 1) ?>
 			</div>
-			<div class="tags"><?=$TorrentTags?></div>
+<? endif; ?>
+			<div class="group_info clear">
+				<span>
+					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+<?			if (Torrents::can_use_token($TorrentInfo)) { ?>
+					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+<?			} ?>
+					| <a href="#" onclick="clearItem(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a>
+				</span>
+				<strong><?=$DisplayName?></strong>
+				<div class="torrent_info">
+					<?=$ExtraInfo?>
+					<? if ($Result['UnRead']) {
+					echo '<strong class="new">New!</strong>';
+					} ?>
+				</div>
+				<div class="tags"><?=$TorrentTags->format()?></div>
+			</div>
 		</td>
 		<td><?=$TorrentInfo['FileCount']?></td>
 		<td style="text-align:right" class="nobr"><?=time_diff($TorrentInfo['Time'])?></td>

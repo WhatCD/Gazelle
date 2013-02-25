@@ -14,6 +14,7 @@ class Torrents {
 	 *
 	 * @return array each row of the following format:
 	 * GroupID => (
+	 *	ID
 	 *	Name
 	 *	Year
 	 *	RecordLabel
@@ -21,6 +22,8 @@ class Torrents {
 	 *	TagList
 	 *	ReleaseType
 	 *	VanityHouse
+	 *	WikiImage
+	 *	CategoryID
 	 *	Torrents => {
 	 *		ID => {
 	 *			GroupID, Media, Format, Encoding, RemasterYear, Remastered,
@@ -70,11 +73,12 @@ class Torrents {
 		Do not change what is returned or the order thereof without updating:
 			torrents, artists, collages, bookmarks, better, the front page,
 		and anywhere else the get_groups function is used.
+		Update self::array_group(), too
 		*/
 
 		if (count($NotFound) > 0) {
 			$DB->query("SELECT
-				g.ID, g.Name, g.Year, g.RecordLabel, g.CatalogueNumber, g.TagList, g.ReleaseType, g.VanityHouse
+				g.ID, g.Name, g.Year, g.RecordLabel, g.CatalogueNumber, g.TagList, g.ReleaseType, g.VanityHouse, g.WikiImage, g.CategoryID
 				FROM torrents_group AS g WHERE g.ID IN ($IDs)");
 
 			while($Group = $DB->next_record(MYSQLI_ASSOC, true)) {
@@ -105,16 +109,16 @@ class Torrents {
 				}
 
 				// Cache it all
-				foreach ($Found as $GroupID=>$GroupInfo) {
+				foreach ($Found as $GroupID => $GroupInfo) {
 					$Cache->cache_value('torrent_group_'.$GroupID,
-							array('ver'=>4, 'd'=>$GroupInfo), 0);
+							array('ver' => CACHE::GROUP_VERSION, 'd' => $GroupInfo), 0);
 					$Cache->cache_value('torrent_group_light_'.$GroupID,
-							array('ver'=>4, 'd'=>$GroupInfo), 0);
+							array('ver' => CACHE::GROUP_VERSION, 'd' => $GroupInfo), 0);
 				}
 
 			} else {
 				foreach ($Found as $Group) {
-					$Cache->cache_value('torrent_group_light_'.$Group['ID'], array('ver'=>4, 'd'=>$Found[$Group['ID']]), 0);
+					$Cache->cache_value('torrent_group_light_'.$Group['ID'], array('ver' => CACHE::GROUP_VERSION, 'd' => $Found[$Group['ID']]), 0);
 				}
 			}
 		}
@@ -152,6 +156,35 @@ class Torrents {
 		}
 	}
 
+	/**
+	 * Returns a reconfigured array from a Torrent Group
+	 *
+	 * Use this with extract() instead of the volatile list($GroupID, ...)
+	 * Then use the variables $GroupID, $GroupName, etc
+	 *
+	 * @example  extract(Torrents::array_group($SomeGroup));
+	 * @param array $Group torrent group
+	 * @return array Re-key'd array
+	 */
+	public static function array_group (array &$Group)
+	{
+		return array(
+			'GroupID' => $Group['ID'],
+			'GroupName' => $Group['Name'],
+			'GroupYear' => $Group['Year'],
+			'GroupCategoryID' => $Group['CategoryID'],
+			'GroupRecordLabel' => $Group['RecordLabel'],
+			'GroupCatalogueNumber' => $Group['CatalogueNumber'],
+			'GroupVanityHouse' => $Group['VanityHouse'],
+			'GroupFlags' => $Group['Flags'],
+			'TagList' => $Group['TagList'],
+			'ReleaseType' => $Group['ReleaseType'],
+			'WikiImage' => $Group['WikiImage'],
+			'Torrents' => $Group['Torrents'],
+			'Artists' => $Group['Artists'],
+			'ExtendedArtists' => $Group['ExtendedArtists']
+		);
+	}
 
 	/**
 	 * Supplements a torrent array with information that only concerns certain users and therefore cannot be cached
@@ -440,15 +473,18 @@ class Torrents {
 				JOIN torrents_group AS tg ON tg.ID=t.GroupID
 				WHERE tf.TorrentID = ".$TorrentID);
 		if($DB->record_count() > 0) {
-			require(SERVER_ROOT.'/classes/class_torrent.php');
 			list($GroupID, $Contents) = $DB->next_record(MYSQLI_NUM, false);
-			$Contents = unserialize(base64_decode($Contents));
-			$Tor = new TORRENT($Contents, true);
+			if (Misc::is_new_torrent($Contents)) {
+				$Tor = new BEncTorrent($Contents);
+				$FilePath = isset($Tor->Dec['info']['files']) ? Format::make_utf8($Tor->get_name()) : "";
+			} else {
+				$Tor = new TORRENT(unserialize(base64_decode($Contents)), true);
+				$FilePath = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : "";
+			}
 			list($TotalSize, $FileList) = $Tor->file_list();
 			foreach($FileList as $File) {
 				$TmpFileList[] = self::filelist_format_file($File);
 			}
-			$FilePath = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : "";
 			$FileString = implode("\n", $TmpFileList);
 			$DB->query("UPDATE torrents SET Size = ".$TotalSize.", FilePath = '".db_string($FilePath)."', FileList = '".db_string($FileString)."' WHERE ID = ".$TorrentID);
 			$Cache->delete_value('torrents_details_'.$GroupID);
@@ -631,7 +667,7 @@ class Torrents {
 	 * Check if the logged in user can use a freeleech token on this torrent
 	 *
 	 * @param int $Torrent
-	 * @return true if user is allowed to use a token
+	 * @return boolen True if user is allowed to use a token
 	 */
 	public static function can_use_token($Torrent) {
 		global $LoggedUser;

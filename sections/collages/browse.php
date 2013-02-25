@@ -289,13 +289,7 @@ $Row = 'a'; // For the pretty colours
 foreach ($Collages as $Collage) {
 	list($ID, $Name, $NumTorrents, $TagList, $CategoryID, $UserID) = $Collage;
 	$Row = ($Row == 'a') ? 'b' : 'a';
-	$TagList = explode(' ', $TagList);
-	$Tags = array();
-	foreach($TagList as $Tag) {
-		if(!empty($Tag))
-			$Tags[]='<a href="collages.php?action=search&amp;tags='.$Tag.'">'.$Tag.'</a>';
-	}
-	$Tags = implode(', ', $Tags);
+	$TorrentTags = new Tags($TagList);
 
 	//Print results
 ?>
@@ -309,13 +303,8 @@ foreach ($Collages as $Collage) {
 			<span style="float:right">
 				<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;" class="brackets">Remove bookmark</a>
 			</span>
-<?	}
-		if(!empty($Tags)) {
-?>
-			<div class="tags">
-				<?=$Tags?>
-			</div>
-<? } ?>
+<?	} ?>
+			<div class="tags"><?=$TorrentTags->format('collages.php?action=search&amp;tags=')?></div>
 		</td>
 		<td><?=(int)$NumTorrents?></td>
 		<td><?=Users::format_username($UserID, false, false, false)?></td>

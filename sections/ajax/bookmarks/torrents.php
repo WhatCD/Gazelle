@@ -1,4 +1,5 @@
 <?
+
 ini_set('memory_limit', -1);
 //~~~~~~~~~~~ Main bookmarks page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
@@ -21,34 +22,9 @@ if(!empty($_GET['userid'])) {
 
 $Sneaky = ($UserID != $LoggedUser['ID']);
 
-$Data = $Cache->get_value('bookmarks_torrent_'.$UserID.'_full');
-
-if($Data) {
-	$Data = unserialize($Data);
-	list($K, list($TorrentList, $CollageDataList)) = each($Data);
-} else {
-	// Build the data for the collage and the torrent list
-	$DB->query("SELECT
-		bt.GroupID,
-		tg.WikiImage,
-		tg.CategoryID,
-		bt.Time
-		FROM bookmarks_torrents AS bt
-		JOIN torrents_group AS tg ON tg.ID=bt.GroupID
-		WHERE bt.UserID='$UserID'
-		ORDER BY bt.Time");
-
-	$GroupIDs = $DB->collect('GroupID');
-	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
-	if(count($GroupIDs)>0) {
-		$TorrentList = Torrents::get_groups($GroupIDs);
-		$TorrentList = $TorrentList['matches'];
-	} else {
-		$TorrentList = array();
-	}
-}
-
 $JsonBookmarks = array();
+
+list(, $CollageDataList, $TorrentList) = Users::get_bookmarks($UserID);
 foreach ($TorrentList as $Torrent) {
 	$JsonTorrents = array();
 	foreach ($Torrent['Torrents'] as $GroupTorrents) {
@@ -100,4 +76,3 @@ print
 			)
 		)
 	);
-?>

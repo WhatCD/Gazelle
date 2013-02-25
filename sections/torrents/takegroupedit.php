@@ -3,7 +3,6 @@
 authorize();
 
 include(SERVER_ROOT.'/classes/class_text.php');
-include(SERVER_ROOT.'/classes/class_image_tools.php');
 $Text = new TEXT;
 
 // Quick SQL injection check
@@ -76,7 +75,7 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 	if(!preg_match("/^".IMAGE_REGEX."$/i", $Image)) {
 		$Image = '';
 	}
-	check_imagehost($Image);
+	ImageTools::blacklisted($Image);
 	$Summary = db_string($_POST['summary']);
 }
 

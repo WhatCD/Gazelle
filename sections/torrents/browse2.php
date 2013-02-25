@@ -540,7 +540,6 @@ $HideFilter = isset($LoggedUser['ShowTorFilter']) && $LoggedUser['ShowTorFilter'
 $AdvancedSearch =  !empty($_GET['action']) && $_GET['action'] == "advanced";
 $AdvancedSearch |= !empty($LoggedUser['SearchType']) && (empty($_GET['action']) || $_GET['action'] == "advanced");
 $AdvancedSearch &= check_perms('site_advanced_search');
-
 if ($AdvancedSearch) {
 	$Action = 'action=advanced';
 	$HideBasic = ' hidden';
@@ -579,7 +578,6 @@ View::show_header('Browse Torrents','browse');
 				<td class="label">Artist name:</td>
 				<td colspan="3" class="ft_artistname">
 					<input type="text" spellcheck="false" size="40" name="artistname" class="inputtext smaller fti_advanced" value="<?Format::form('artistname')?>" />
-					<input type="hidden" name="action" value="advanced" class="fti_advanced"<?=$AdvancedSearch ? '' : ' disabled="disabled"'?> />
 				</td>
 			</tr>
 			<tr id="album_torrent_name" class="ftr_advanced<?=$HideAdvanced?>">
@@ -709,9 +707,6 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 				<td class="label">Search terms:</td>
 				<td colspan="3" class="ftb_searchstr">
 					<input type="text" spellcheck="false" size="40" name="searchstr" class="inputtext fti_basic" value="<?Format::form('searchstr')?>" />
-<?	if (!empty($LoggedUser['SearchType'])) { ?>
-					<input type="hidden" name="action" value="basic" class="fti_basic" />
-<?	} ?>
 				</td>
 			</tr>
 			<tr id="tagfilter">
@@ -812,6 +807,7 @@ if ($x%7!=0) { // Padding
 		<div class="submit ft_submit">
 			<span style="float:left;"><?=number_format($TorrentCount)?> Results</span>
 			<input type="submit" value="Filter Torrents" />
+			<input type="hidden" name="action" id="ft_type" value="<?=$AdvancedSearch ? 'advanced' : 'basic'?>" />
 			<input type="hidden" name="searchsubmit" value="1" />
 			<input type="button" value="Reset" onclick="location.href='torrents.php<? if (isset($_GET['action']) && $_GET['action']=="advanced") { ?>?action=advanced<? } ?>'" />
 			&nbsp;&nbsp;
@@ -925,13 +921,8 @@ foreach ($Results as $Result) {
 	} else {
 		$Torrents = array($Result['id'] => $GroupInfo['Torrents'][$Result['id']]);
 	}
-	$TagList = explode(' ',str_replace('_','.',$GroupInfo['TagList']));
 
-	$TorrentTags = array();
-	foreach ($TagList as $Tag) {
-		$TorrentTags[]='<a href="torrents.php?'.$Action.'&amp;taglist='.$Tag.'">'.$Tag.'</a>';
-	}
-	$TorrentTags = implode(', ', $TorrentTags);
+	$TorrentTags = new Tags($GroupInfo['TagList']);
 
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 		unset($ExtendedArtists[2]);
@@ -963,19 +954,24 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			</div>
 		</td>
 		<td class="center cats_col">
-			<div title="<?=ucfirst(str_replace('_',' ',$TagList[0]))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$CategoryID-1]))?> tags_<?=str_replace('.','_',$TagList[0])?>">
+			<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($CategoryID)?> <?=$TorrentTags->css_name()?>">
 			</div>
 		</td>
-		<td colspan="2">
-			<?=$DisplayName?>
+		<td colspan="2" class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+			<div class="group_image float_left clear">
+				<? ImageTools::cover_thumb($GroupInfo['WikiImage'], $GroupInfo['CategoryID'] - 1) ?>
+			</div>
+<? endif; ?>
+			<div class="group_info clear">
+				<?=$DisplayName?>
 <?	if (in_array($GroupID, $Bookmarks)) { ?>
-			<span class="remove_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
+				<span class="remove_bookmark float_right"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
 <?	} else { ?>
-			<span class="add_bookmark" style="float:right;"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
+				<span class="add_bookmark float_right"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
 <?	} ?>
-			<br />
-			<div class="tags">
-				<?=$TorrentTags?>
+				<br />
+				<div class="tags"><?=$TorrentTags->format('torrents.php?'.$Action.'&amp;taglist=')?></div>
 			</div>
 		</td>
 		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
@@ -1098,19 +1094,26 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		<td></td>
 <?		} ?>
 		<td class="center cats_col">
-			<div title="<?=ucfirst(str_replace('.',' ',$TagList[0]))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$CategoryID-1]))?> tags_<?=str_replace('.','_',$TagList[0])?>"></div>
+			<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($CategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 		</td>
-		<td>
-			<span>
-				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+		<td class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+			<div class="group_image float_left clear">
+				<? ImageTools::cover_thumb($GroupInfo['WikiImage'], $CategoryID - 1) ?>
+			</div>
+<? endif; ?>
+			<div class="group_info clear">
+				<span>
+					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Data)) { ?>
-				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?>
-				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
-			</span>
-			<?=$DisplayName?>
-			<div class="torrent_info"><?=$ExtraInfo?></div>
-			<div class="tags"><?=$TorrentTags?></div>
+					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
+				</span>
+				<?=$DisplayName?>
+				<div class="torrent_info"><?=$ExtraInfo?></div>
+				<div class="tags"><?=$TorrentTags->format('torrents.php?'.$Action.'&amp;taglist=')?></div>
+			</div>
 		</td>
 		<td><?=$Data['FileCount']?></td>
 		<td class="nobr"><?=time_diff($Data['Time'],1)?></td>

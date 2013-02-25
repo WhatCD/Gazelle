@@ -33,7 +33,7 @@ class CACHE extends Memcache
 	/**
 	 * Torrent Group cache version
 	 */
-	const GROUP_VERSION = 4;
+	const GROUP_VERSION = 5;
 
 	public $CacheHits = array();
 	public $MemcacheDBArray = array();

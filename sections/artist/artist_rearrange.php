@@ -153,7 +153,7 @@ foreach($TorrentList as $GroupID=>$Group) {
 
 reset($TorrentList);
 if(!empty($UsedReleases)) { ?>
-	<div id="releasetypes"class="box center">
+	<div id="releasetypes" class="box center">
 	<span id="releasetype_links">
 <?
 	foreach($ReleaseTypesOrder as $ReleaseID => $Torrents) {
@@ -261,26 +261,13 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 		$OpenTable = true;
 
 	foreach($TorrentListForReleaseType as $GroupID => $Group) {
-		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $NewReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
+		extract(Torrents::array_group($Group));
 		$GroupVanityHouse = $GroupMeta[$GroupID]['VanityHouse'];
-		$TagList = explode(' ',str_replace('_','.',$TagList));
 
-		$TorrentTags = array();
-
-		// $Tags array is for the sidebar on the right
-		foreach($TagList as $Tag) {
-			if(!isset($Tags[$Tag])) {
-				$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
-			} else {
-				$Tags[$Tag]['count']++;
-			}
-			$TorrentTags[]='<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-		}
-		$TorrentTags = implode(', ', $TorrentTags);
-		$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
+		$TorrentTags = new Tags($TagList);
 
 		if (($ReleaseType == 1023) || ($ReleaseType == 1024)) {
-			$ArtistPrefix = Artists::display_artists(array(1 => $GroupArtists));
+			$ArtistPrefix = Artists::display_artists(array(1 => $Artists));
 		} else {
 			$ArtistPrefix = '';
 		}
@@ -297,7 +284,7 @@ foreach ($TorrentListByReleaseType as $ReleaseType => $TorrentListForReleaseType
 				</td>
 				<td class="artist_normalcol" colspan="6">
 					<strong><?=$DisplayName?></strong>
-					<?=$TorrentTags?>
+					<div class="tags"><?=$TorrentTags->format()?></div>
 				</td>
 			</tr>
 <?
@@ -463,12 +450,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 			<div class="head"><strong>Tags</strong></div>
 			<ul class="stats nobullet">
 <?
-uasort($Tags, 'compare');
-foreach ($Tags as $TagName => $Tag) {
-?>
-					<li><a href="torrents.php?taglist=<?=$TagName?>"><?=$TagName?></a> (<?=$Tag['count']?>)</li>
-<?
-}
+			$TorrentTags->format_top(50);
 ?>
 			</ul>
 		</div>

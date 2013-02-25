@@ -147,32 +147,15 @@ $DB->query("INSERT IGNORE INTO users_downloads (UserID, TorrentID, Time) VALUES 
 $DB->query("SELECT File FROM torrents_files WHERE TorrentID='$TorrentID'");
 
 list($Contents) = $DB->next_record(MYSQLI_NUM, false);
-if (Misc::is_new_torrent($Contents)) {
-	require(SERVER_ROOT.'/classes/class_bencode.php');
-	$TorEnc = BEncTorrent::add_announce_url($Contents, ANNOUNCE_URL."/$TorrentPass/announce");
-} else {
-	require(SERVER_ROOT.'/classes/class_torrent.php');
-	$Contents = unserialize(base64_decode($Contents));
-	$Tor = new TORRENT($Contents, true); // New TORRENT object
-	// Set torrent announce URL
-	$Tor->set_announce_url(ANNOUNCE_URL."/$TorrentPass/announce");
-	// Remove multiple trackers from torrent
-	unset($Tor->Val['announce-list']);
-	// Remove web seeds (put here for old torrents not caught by previous commit
-	unset($Tor->Val['url-list']);
-	// Remove libtorrent resume info
-	unset($Tor->Val['libtorrent_resume']);
-	$TorEnc = $Tor->enc();
-}
 $FileName = TorrentsDL::construct_file_name($Info['PlainArtists'], $Name, $Year, $Media, $Format, $Encoding, false, $DownloadAlt);
 
-if($DownloadAlt) {
+if ($DownloadAlt) {
 	header('Content-Type: text/plain; charset=utf-8');
-} elseif(!$DownloadAlt || $Failed) {
+} else if (!$DownloadAlt || $Failed) {
 	header('Content-Type: application/x-bittorrent; charset=utf-8');
 }
 header('Content-disposition: attachment; filename="'.$FileName.'"');
 
-echo $TorEnc;
+echo TorrentsDL::get_file($Contents, ANNOUNCE_URL."/$TorrentPass/announce");
 
 define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);

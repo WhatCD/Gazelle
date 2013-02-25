@@ -405,3 +405,22 @@ tr.torrent .bookmark>a:after {
 #userinfo .brackets:before, #userinfo .brackets:after {
 	content: "";
 }
+.group_image {
+	overflow:hidden;
+}
+.float_left {
+	float:left;
+}
+.float_right {
+	float:right;
+}
+.float_clear {
+	clear:both;
+}
+.group_image + .group_info {
+    margin-left: 100px;
+}
+
+.group_image img {
+	cursor: pointer;
+}

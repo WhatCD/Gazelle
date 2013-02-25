@@ -1,77 +1,66 @@
 <?php
+$ComicsExtensions = array_fill_keys(array('cbr', 'cbz', 'gif', 'jpeg', 'jpg', 'pdf', 'png'), true);
+$MusicExtensions = array_fill_keys(
+	array(
+		'ac3', 'accurip', 'azw3', 'chm', 'cue', 'djv', 'djvu', 'doc', 'dts', 'epub', 'ffp',
+		'flac', 'gif', 'htm', 'html', 'jpeg', 'jpg', 'lit', 'log', 'm3u', 'm3u8', 'm4a', 'm4b',
+		'md5', 'mobi', 'mp3', 'mp4', 'nfo', 'pdf', 'pls', 'png', 'rtf', 'sfv', 'txt'),
+	true);
+$Keywords = array(
+	'ahashare.com', 'demonoid.com', 'demonoid.me', 'djtunes.com', 'h33t', 'housexclusive.net',
+	'limetorrents.com', 'mixesdb.com', 'mixfiend.blogstop', 'mixtapetorrent.blogspot',
+	'plixid.com', 'reggaeme.com' , 'scc.nfo', 'thepiratebay.org', 'torrentday');
 
-$music_extensions = array("mp3","flac","mp4","m4a","m3u","m4b","pls","m3u8","log","txt",
-			  "cue","jpg","jpeg","png","gif","dts","ac3","nfo",
-		          "sfv","md5","accurip","ffp","pdf", "mobi", "epub", "htm", "html", "lit",
-			   "chm", "rtf", "doc", "djv", "djvu", "azw3");
-
-$comics_extensions = array("cbr", "cbz", "pdf", "jpg","jpeg","png","gif");
-
-$keywords = array("scc.nfo", "torrentday", "demonoid.com", "demonoid.me", "djtunes.com", "mixesdb.com",
-		  "housexclusive.net", "plixid.com", "h33t", "reggaeme.com" ,"ThePirateBay.org",
-		  "Limetorrents.com", "AhaShare.com", "MixFiend.blogstop", "MixtapeTorrent.blogspot");
 function check_file($Type, $Name) {
-	check_name(strtolower($Name));
-	check_extensions($Type, strtolower($Name));
+	check_name($Name);
+	check_extensions($Type, $Name);
 }
 
 function check_name($Name) {
-	global $keywords;
-	foreach ($keywords as &$value) {
-		if(preg_match('/'.$value.'/i', $Name)) {
+	global $Keywords;
+	$NameLC = strtolower($Name);
+	foreach ($Keywords as &$Value) {
+		if (strpos($NameLC, $Value) !== false) {
 			forbidden_error($Name);
-       		}
+		}
 	}
-        if(preg_match('/INCOMPLETE~\*/i', $Name)) {
+	if (preg_match('/INCOMPLETE~\*/i', $Name)) {
 		forbidden_error($Name);
-        }
-        if(preg_match('/\?/i', $Name)) {
-        	character_error();
 	}
-        if(preg_match('/\:/i', $Name)) {
-        	character_error();
+	if (preg_match('/[:?]/', $Name, $Matches)) {
+		character_error($Matches[0]);
 	}
-
 }
 
 function check_extensions($Type, $Name) {
-
-global $music_extensions, $comics_extensions;
-
-if($Type == 'Music' || $Type == 'Audiobooks' || $Type == 'Comedy' || $Type == 'E-Books') {
-                if(!in_array(get_file_extension($Name), $music_extensions)) {
+	global $MusicExtensions, $ComicsExtensions;
+	if ($Type == 'Music' || $Type == 'Audiobooks' || $Type == 'Comedy' || $Type == 'E-Books') {
+		if (!isset($MusicExtensions[get_file_extension($Name)])) {
 			invalid_error($Name);
-                }
-        }
-
-if($Type == 'Comics') {
-                if(!in_array(get_file_extension($Name), $comics_extensions)) {
+		}
+	}
+	elseif ($Type == 'Comics') {
+		if (!isset($ComicsExtensions[get_file_extension($Name)])) {
 			invalid_error($Name);
-                }
-        }
-
+		}
+	}
 }
 
-function get_file_extension($file_name) {
-	return substr(strrchr($file_name,'.'),1);
+function get_file_extension($FileName) {
+	return strtolower(substr(strrchr($FileName, '.'), 1));
 }
 
 function invalid_error($Name) {
 	global $Err;
-	$Err = 'The torrent contained one or more invalid files ('.display_str($Name).')';
-
+	$Err = 'The torrent contained one or more invalid files (' . display_str($Name) . ')';
 }
 
 function forbidden_error($Name) {
 	global $Err;
-	$Err = 'The torrent contained one or more forbidden files ('.display_str($Name).')';
+	$Err = 'The torrent contained one or more forbidden files (' . display_str($Name) . ')';
 }
 
-function character_error() {
-        global $Err;
-	$Err = 'The torrent contains one or more files with a ?, which is a forbidden character. Please rename the files as necessary and recreate the torrent';
+function character_error($Character) {
+	global $Err;
+	$Err = "One or more of the files in the torrent has a name that contains the forbidden character '$Character'. Please rename the files as necessary and recreate the torrent.";
 }
-
-
-
-?>

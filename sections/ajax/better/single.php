@@ -19,7 +19,7 @@ $Results = $Results['matches'];
 
 $JsonResults = array();
 foreach ($Results as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists) = array_values($Group);
+	extract(Torrents::array_group($Group));
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 
 	$JsonArtists = array();

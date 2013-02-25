@@ -17,7 +17,7 @@ class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR
 	}
 
 	/**
-	 * Runs a SQL query and clears the bookmarks_torrent_{$UserID}_full Cache key
+	 * Runs a SQL query and clears the Cache key
 	 *
 	 * $Cache->delete_value didn't always work, but setting the key to null, did. (?)
 	 *
@@ -25,10 +25,8 @@ class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR
 	 */
 	protected function query_and_clear_cache ($sql)
 	{
-		if (is_string($sql) && $this->DB->query($sql)) {
-			$this->Cache->cache_value('bookmarks_torrent_' . $this->UserID, null, 0);
-			$this->Cache->cache_value('bookmarks_torrent_' . $this->UserID . '_full', null, 0);
-		}
+		if (is_string($sql) && $this->DB->query($sql))
+			$this->Cache->delete_value('bookmarks_group_ids_' . $this->UserID);
 	}
 
 	/**

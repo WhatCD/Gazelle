@@ -9,14 +9,12 @@
 ini_set('upload_max_filesize',2097152);
 ini_set('max_file_uploads',100);
 define(MAX_FILENAME_LENGTH, 180);
-require(SERVER_ROOT.'/classes/class_torrent.php');
 include(SERVER_ROOT.'/classes/class_validate.php');
 include(SERVER_ROOT.'/classes/class_feed.php');
 include(SERVER_ROOT.'/classes/class_text.php');
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 include(SERVER_ROOT.'/classes/class_file_checker.php');
-include(SERVER_ROOT.'/classes/class_image_tools.php');
 enforce_login();
 authorize();
 
@@ -326,7 +324,7 @@ $Matches = array();
 if (preg_match($RegX, $Properties['Image'], $Matches)) {
 	$Properties['Image'] = $Matches[1].'.jpg';
 }
-check_imagehost($Properties['Image']);
+ImageTools::blacklisted($Properties['Image']);
 
 //******************************************************************************//
 //--------------- Make variables ready for database input ----------------------//
@@ -346,94 +344,72 @@ $SearchText = db_string(trim($Properties['Artist']).' '.trim($Properties['Title'
 //******************************************************************************//
 //--------------- Generate torrent file ----------------------------------------//
 
+$Tor = new BEncTorrent($TorrentName, true);
+$PublicTorrent = $Tor->make_private(); // The torrent is now private.
+$TorEnc = db_string($Tor->encode());
+$InfoHash = pack('H*', $Tor->info_hash());
 
-$File = fopen($TorrentName, 'rb'); // open file for reading
-$Contents = fread($File, 10000000);
-$Tor = new TORRENT($Contents); // New TORRENT object
+$DB->query("SELECT ID FROM torrents WHERE info_hash='".db_string($InfoHash)."'");
+if ($DB->record_count() > 0) {
+	list($ID) = $DB->next_record();
+	$DB->query("SELECT TorrentID FROM torrents_files WHERE TorrentID = ".$ID);
+	if ($DB->record_count() > 0) {
+		$Err = '<a href="torrents.php?torrentid='.$ID.'">The exact same torrent file already exists on the site!</a>';
+	} else {
+		// A lost torrent
+		$DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($ID, '$TorEnc')");
+		$Err = '<a href="torrents.php?torrentid='.$ID.'">Thank you for fixing this torrent</a>';
+	}
+}
 
-if (isset($Tor->Val['info']->Val['encrypted_files'])) {
+if (isset($Tor->Dec['encrypted_files'])) {
 	$Err = "This torrent contains an encrypted file list which is not supported here";
 }
-// Remove uploader's passkey from the torrent.
-// We put the downloader's passkey in on download, so it doesn't matter what's in there now,
-// so long as it's not useful to any leet hax0rs looking in an unprotected /torrents/ directory
-$Tor->set_announce_url('ANNOUNCE_URL'); // We just use the string "ANNOUNCE_URL"
-
-// $Private is true or false. true means that the uploaded torrent was private, false means that it wasn't.
-$Private = $Tor->make_private();
-// The torrent is now private.
 
 // File list and size
 list($TotalSize, $FileList) = $Tor->file_list();
-$DirName = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : "";
-
+$NumFiles = count($FileList);
+$HasLog = 0;
+$HasCue = 0;
 $TmpFileList = array();
-$HasLog = "'0'";
-$HasCue = "'0'";
-
 $TooLongPaths = array();
-
-foreach($FileList as $File) {
+$DirName = isset($Tor->Dec['info']['files']) ? Format::make_utf8($Tor->get_name()) : "";
+foreach ($FileList as $File) {
 	list($Size, $Name) = $File;
 	// add +log to encoding
-	if($T['Encoding'] == "'Lossless'" && preg_match('/(?<!audiochecker)\.log$/i', $Name)) {
-		$HasLog = "'1'";
+	if ($T['Encoding'] == "'Lossless'" && preg_match('/(?<!audiochecker)\.log$/i', $Name)) {
+		$HasLog = 1;
 	}
 	// add +cue to encoding
-	if($T['Encoding'] == "'Lossless'" && preg_match('/\.cue$/i', $Name)) {
-		$HasCue = "'1'";
+	if ($T['Encoding'] == "'Lossless'" && preg_match('/\.cue$/i', $Name)) {
+		$HasCue = 1;
 	}
-
+	// Check file name and extension against blacklist/whitelist
 	check_file($Type, $Name);
-
 	// Make sure the filename is not too long
-	if(mb_strlen($Name, 'UTF-8') + mb_strlen($DirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
+	if (mb_strlen($Name, 'UTF-8') + mb_strlen($DirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
 		$TooLongPaths[] = $Name;
 	}
 	// Add file info to array
 	$TmpFileList[] = Torrents::filelist_format_file($File);
 }
-
-if(count($TooLongPaths)!=0) {
+if (count($TooLongPaths) > 0) {
 	$Names = '';
-	foreach($TooLongPaths as $Name) {
+	foreach ($TooLongPaths as $Name) {
 		$Names .= '<br>'.$Name;
 	}
 	$Err = 'The torrent contained one or more files with too long a name:'.$Names;
 }
-
-// To be stored in the database
 $FilePath = db_string($DirName);
-
 $FileString = db_string(implode("\n", $TmpFileList));
-
-// Number of files described in torrent
-$NumFiles = count($FileList);
-
-// The string that will make up the final torrent file
-$TorrentText = $Tor->enc();
 $Debug->set_flag('upload: torrent decoded');
 
-// Infohash
-$InfoHash = pack("H*", sha1($Tor->Val['info']->enc()));
-$DB->query("SELECT ID FROM torrents WHERE info_hash='".db_string($InfoHash)."'");
-if($DB->record_count()>0) {
-	list($ID) = $DB->next_record();
-	$DB->query("SELECT TorrentID FROM torrents_files WHERE TorrentID = ".$ID);
-	if($DB->record_count() > 0) {
-		$Err = '<a href="torrents.php?torrentid='.$ID.'">The exact same torrent file already exists on the site!</a>';
-	} else {
-		//One of the lost torrents.
-		$DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($ID, '".db_string($Tor->dump_data())."')");
-		$Err = '<a href="torrents.php?torrentid='.$ID.'">Thankyou for fixing this torrent</a>';
-	}
-}
-if($Type == 'Music') {
+if ($Type == 'Music') {
 	include(SERVER_ROOT.'/sections/upload/generate_extra_torrents.php');
 }
 
-if(!empty($Err)) { // Show the upload form, with the data the user entered
-	$UploadForm=$Type;
+if (!empty($Err)) { // Show the upload form, with the data the user entered
+	$UploadForm = $Type;
 	include(SERVER_ROOT.'/sections/upload/upload.php');
 	die();
 }
@@ -633,7 +609,7 @@ if(!$Properties['GroupID']) {
 // Use this section to control freeleeches
 $T['FreeLeech'] = 0;
 $T['FreeLeechType'] = 0;
-
+$LogScore = ($HasLog == 1 ? $LogScoreAverage : 0);
 // Torrent
 $DB->query("
 	INSERT INTO torrents
@@ -642,10 +618,10 @@ $DB->query("
 		Scene, HasLog, HasCue, info_hash, FileCount, FileList, FilePath, Size, Time,
 		Description, LogScore, FreeTorrent, FreeLeechType)
 	VALUES
-		(".$GroupID.", ".$LoggedUser['ID'].", ".$T['Media'].", ".$T['Format'].", ".$T['Encoding'].",
-		".$T['Remastered'].", ".$T['RemasterYear'].", ".$T['RemasterTitle'].", ".$T['RemasterRecordLabel'].", ".$T['RemasterCatalogueNumber'].",
-		".$T['Scene'].", ".$HasLog.", ".$HasCue.", '".db_string($InfoHash)."', ".$NumFiles.", '".$FileString."', '".$FilePath."', ".$TotalSize.", '".sqltime()."',
-		".$T['TorrentDescription'].", '".(($HasLog == "'1'") ? $LogScoreAverage : 0)."', '".$T['FreeLeech']."', '".$T['FreeLeechType']."')");
+		($GroupID, $LoggedUser[ID], $T[Media], $T[Format], $T[Encoding], " .
+		"$T[Remastered], $T[RemasterYear], $T[RemasterTitle], $T[RemasterRecordLabel], $T[RemasterCatalogueNumber], " .
+		"$T[Scene], '$HasLog', '$HasCue', '".db_string($InfoHash)."', $NumFiles, '$FileString', '$FilePath', " .
+		"$TotalSize, '".sqltime()."', $T[TorrentDescription], $LogScore, $T[FreeLeech], $T[FreeLeechType])");
 
 $Cache->increment('stats_torrent_count');
 $TorrentID = $DB->inserted_id();
@@ -656,12 +632,12 @@ $Debug->set_flag('upload: ocelot updated');
 //******************************************************************************//
 //--------------- Write torrent file -------------------------------------------//
 
-$DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($TorrentID, '".db_string($Tor->dump_data())."')");
-
+$DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($TorrentID, '$TorEnc')");
 Misc::write_log("Torrent $TorrentID ($LogName) (".number_format($TotalSize/(1024*1024), 2)." MB) was uploaded by " . $LoggedUser['Username']);
 Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "uploaded (".number_format($TotalSize/(1024*1024), 2)." MB)", 0);
 
 Torrents::update_hash($GroupID);
+$Debug->set_flag('upload: sphinx updated');
 
 if($Type == 'Music') {
 	include(SERVER_ROOT.'/sections/upload/insert_extra_torrents.php');
@@ -713,6 +689,34 @@ if ($Properties['LibraryImage'] != "") {
 }
 
 //******************************************************************************//
+//--------------- Post-processing ----------------------------------------------//
+/* Because tracker updates and notifications can be slow, we're
+ * redirecting the user to the destination page and flushing the buffers
+ * to make it seem like the PHP process is working in the background.
+ */
+
+if ($PublicTorrent) {
+	View::show_header("Warning");
+?>
+	<h1>Warning</h1>
+	<p><strong>Your torrent has been uploaded; however, you must download your torrent from <a href="torrents.php?id=<?=$GroupID?>">here</a> because you didn't make your torrent using the "private" option.</strong></p>
+<?
+	View::show_footer();
+} else if ($RequestID) {
+	header("Location: requests.php?action=takefill&requestid=".$RequestID."&torrentid=".$TorrentID."&auth=".$LoggedUser['AuthKey']);
+} else {
+	header("Location: torrents.php?id=$GroupID");
+}
+if (function_exists('fastcgi_finish_request')) {
+	fastcgi_finish_request();
+} else {
+	ignore_user_abort(true);
+	ob_flush();
+	flush();
+	ob_start(); // So we don't keep sending data to the client
+}
+
+//******************************************************************************//
 //--------------- IRC announce and feeds ---------------------------------------//
 $Announce = "";
 
@@ -723,9 +727,9 @@ if($Type == 'Music'){
 	if (($Type == 'Music') && ($Properties['ReleaseType'] > 0)) { $Announce .= ' ['.$ReleaseTypes[$Properties['ReleaseType']].']'; }
 	$Announce .= " - ";
 	$Announce .= trim($Properties['Format'])." / ".trim($Properties['Bitrate']);
-	if ($HasLog == "'1'") { $Announce .= " / Log"; }
+	if ($HasLog == 1) { $Announce .= " / Log"; }
 	if ($LogInDB) { $Announce .= " / ".$LogScoreAverage.'%'; }
-	if ($HasCue == "'1'") { $Announce .= " / Cue"; }
+	if ($HasCue == 1) { $Announce .= " / Cue"; }
 	$Announce .= " / ".trim($Properties['Media']);
 	if ($Properties['Scene'] == "1") { $Announce .= " / Scene"; }
 	if ($T['FreeLeech'] == "1") { $Announce .= " / Freeleech!"; }
@@ -940,18 +944,3 @@ if($Type == 'Comics')		{ $Feed->populate('torrents_comics',$Item); }
 
 // Clear Cache
 $Cache->delete('torrents_details_'.$GroupID);
-
-if (!$Private) {
-	View::show_header("Warning");
-?>
-	<h1>Warning</h1>
-	<p><strong>Your torrent has been uploaded; however, you must download your torrent from <a href="torrents.php?id=<?=$GroupID?>">here</a> because you didn't make your torrent using the "private" option.</strong></p>
-<?
-	View::show_footer();
-	die();
-} elseif($RequestID) {
-	header("Location: requests.php?action=takefill&requestid=".$RequestID."&torrentid=".$TorrentID."&auth=".$LoggedUser['AuthKey']);
-} else {
-	header("Location: torrents.php?id=$GroupID");
-}
-?>

@@ -1988,3 +1988,7 @@ tr.torrent .bookmark > a:after { content:""; }
 .top10_quantity_links .brackets:after {
 	color: #878787;
 }
+
+.group_image + .group_info { margin: 0; padding: 0 5px; display: table-cell; vertical-align: middle; height: 90px; }
+#torrents .group_image + .group_info { width: 450px; }
+#top10 .group_image + .group_info { width: 585px; }

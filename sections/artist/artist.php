@@ -15,8 +15,6 @@ include(SERVER_ROOT.'/sections/requests/functions.php');
 // Similar artist map
 include(SERVER_ROOT.'/classes/class_artists_similar.php');
 
-include(SERVER_ROOT.'/classes/class_image_tools.php');
-
 $UserVotes = Votes::get_user_votes($LoggedUser['ID']);
 
 $ArtistID = $_GET['id'];
@@ -118,7 +116,7 @@ if (($Importances = $Cache->get_value('artist_groups_'.$ArtistID)) === false) {
 	}
 }
 if (count($GroupIDs) > 0) {
-	$TorrentList = Torrents::get_groups($GroupIDs, true,true);
+	$TorrentList = Torrents::get_groups($GroupIDs, true, true);
 	$TorrentList = $TorrentList['matches'];
 } else {
 	$TorrentList = array();
@@ -246,22 +244,11 @@ $NumLeechers = 0;
 $NumSnatches = 0;
 
 foreach ($TorrentList as $GroupID => $Group) {
-	$TagList = explode(' ',str_replace('_','.',$Group['TagList']));
+	// $Tags array is for the sidebar on the right.
+	// Skip compilations and soundtracks.
+	$Skip = $Group['ReleaseType'] != 7 && $Group['ReleaseType'] != 3;
 
-	$TorrentTags = array();
-
-	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
-	if ($Group['ReleaseType'] != 7 && $Group['ReleaseType'] != 3) {
-		foreach($TagList as $Tag) {
-			if(!isset($Tags[$Tag])) {
-				$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
-			} else {
-				$Tags[$Tag]['count']++;
-			}
-		}
-	}
-	$TorrentTags = implode(', ', $TorrentTags);
-	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
+	$TorrentTags = new Tags($Group['TagList'], !$Skip);
 
 	foreach ($Group['Torrents'] as $TorrentID => $Torrent) {
 		$NumTorrents++;
@@ -286,9 +273,7 @@ $ReleaseType = 0;
 $LastReleaseType = 0;
 
 foreach ($Importances as $Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($TorrentList[$Group['GroupID']]);
-	$ReleaseType = $Group['ReleaseType'];
-	$GroupVanityHouse = $Group['VanityHouse'];
+	extract(Torrents::array_group($TorrentList[$Group['GroupID']]));
 
 	if ($GroupID == $OldGroupID && $ReleaseType == $OldReleaseType) {
 		continue;
@@ -308,16 +293,7 @@ foreach ($Importances as $Group) {
 		$HideDiscog = '';
 	}
 
-	$TagList = explode(' ',str_replace('_','.',$TagList));
-
-	$TorrentTags = array();
-
-	// $Tags array is for the sidebar on the right.  Skip compilations and soundtracks.
-	foreach($TagList as $Tag) {
-		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-	}
-	$TorrentTags = implode(', ', $TorrentTags);
-	$TorrentTags = '<br /><div class="tags">'.$TorrentTags.'</div>';
+	$TorrentTags = new Tags($TagList);
 
 	if($ReleaseType!=$LastReleaseType) {
 		switch($ReleaseTypes[$ReleaseType]) {
@@ -400,9 +376,16 @@ foreach ($Importances as $Group) {
 						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups in this release type."></a>
 					</div>
 				</td>
-				<td colspan="5">
-					<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
-					<?=$TorrentTags?>
+				<td colspan="5" class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+					<div class="group_image float_left clear">
+						<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+					</div>
+<? endif; ?>
+					<div class="group_info clear">
+						<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
+						<div class="tags"><?=$TorrentTags->format()?></div>
+					</div>
 				</td>
 			</tr>
 <?
@@ -554,7 +537,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 		<div class="box box_image">
 			<div class="head"><strong><?=$Name?></strong></div>
 			<div style="text-align:center;padding:10px 0px;">
-				<img style="max-width: 220px;" src="<?=to_thumbnail($Image)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=$Image?>',220);" />
+				<img style="max-width: 220px;" src="<?=ImageTools::thumbnail($Image)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=$Image?>',220);" />
 			</div>
 		</div>
 <?	} ?>
@@ -638,12 +621,7 @@ foreach ($ZIPOptions as $Option) {
 			<div class="head"><strong>Tags</strong></div>
 			<ul class="stats nobullet">
 <?
-uasort($Tags, 'compare');
-foreach ($Tags as $TagName => $Tag) {
-?>
-				<li><a href="torrents.php?taglist=<?=$TagName?>"><?=$TagName?></a> (<?=$Tag['count']?>)</li>
-<?
-}
+			$TorrentTags->format_top(50);
 ?>
 			</ul>
 		</div>
@@ -778,16 +756,7 @@ if($NumRequests > 0) {
 		<tr class="row<?=$Row?>">
 			<td>
 				<?=$FullName?>
-				<div class="tags">
-<?
-		$TagList = array();
-		foreach($Tags as $TagID => $TagName) {
-			$TagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
-		}
-		$TagList = implode(', ', $TagList);
-?>
-					<?=$TagList?>
-				</div>
+				<div class="tags"><?=$TorrentTags->format('requests.php?tags=')?></div>
 			</td>
 			<td>
 				<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>

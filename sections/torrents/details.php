@@ -9,7 +9,6 @@ define('MAX_COLLAGES', 5);      // How many normal collages should be shown by d
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
-include(SERVER_ROOT.'/classes/class_image_tools.php');
 
 $Text = NEW TEXT;
 
@@ -114,11 +113,12 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode');
 			<div class="head"><strong>Cover</strong></div>
 <?
 if ($WikiImage!="") {
+	$WikiImageThumb = ImageTools::wiki_image($WikiImage);
 	if(check_perms('site_proxy_images')) {
-		$WikiImage = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($WikiImage);
+		$WikiImage = ImageTools::proxy_url($WikiImage);
 	}
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=to_thumbnail($WikiImage)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=$WikiImage?>',220);" /></p>
+			<p align="center"><img style="max-width: 220px;" src="<?=$WikiImageThumb?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=$WikiImage?>',220);" /></p>
 <?
 } else {
 ?>

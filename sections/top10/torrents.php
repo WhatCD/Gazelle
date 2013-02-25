@@ -140,6 +140,7 @@ $BaseQuery = "SELECT
 	g.ID,
 	g.Name,
 	g.CategoryID,
+	g.wikiImage,
 	g.TagList,
 	t.Format,
 	t.Encoding,
@@ -413,7 +414,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 	$Artists = Artists::get_artists($GroupIDs);
 
 	foreach ($Details as $Detail) {
-		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$TorrentTags,
+		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$WikiImage,$TagsList,
 			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
 			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType) = $Detail;
 
@@ -458,46 +459,36 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			$ExtraInfo = "- [$ExtraInfo]";
 		}
 
-		$TagList=array();
-
-		$PrimaryTag = '';
-		if($TorrentTags!='') {
-			$TorrentTags=explode(' ',$TorrentTags);
-			foreach ($TorrentTags as $TagKey => $TagName) {
-				$TagName = str_replace('_','.',$TagName);
-				$TagList[]='<a href="torrents.php?taglist='.$TagName.'">'.$TagName.'</a>';
-			}
-			$PrimaryTag = $TorrentTags[0];
-			$TagList = implode(', ', $TagList);
-			$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
-		}
+		$TorrentTags = new Tags($TagsList);
 
 		// print row
 ?>
 	<tr class="torrent row<?=$Highlight . ($IsBookmarked ? ' bookmarked' : '') . ($IsSnatched ? ' snatched_torrent' : '')?>">
 		<td style="padding:8px;text-align:center;"><strong><?=$Rank?></strong></td>
-<?
-		//fix array offset php error
-		if ($GroupCategoryID > 0) {
-			$GroupCatOffset = $GroupCategoryID - 1;
-		}
-?>
-		<td class="center cats_col"><div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCatOffset]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div></td>
-		<td>
-		<span><a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a></span>
+		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
+		<td class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+			<div class="group_image float_left clear">
+				<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+			</div>
+<? endif; ?>
+			<div class="group_info clear">
 
-			<strong><?=$DisplayName?></strong> <?=$ExtraInfo?>
-			<span class="bookmark" style="float:right;">
+				<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> ]</span>
+
+				<strong><?=$DisplayName?></strong> <?=$ExtraInfo?>
+				<span class="bookmark" style="float:right;">
 <?
 		if($IsBookmarked) {
 ?>
-				<a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
 <?	} else {  ?>
-				<a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?  }  ?>
-			</span>
+				</span>
+				<div class="tags"><?=$TorrentTags->format()?></div>
 
-			<?=$TorrentTags?>
+			</div>
 		</td>
 		<td style="text-align:right" class="nobr"><?=Format::get_size($Data)?></td>
 		<td style="text-align:right"><?=number_format((double) $Snatched)?></td>

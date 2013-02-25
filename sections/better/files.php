@@ -46,7 +46,9 @@ $Results = $Results['matches'];
 	<table class="torrent_table">
 <?
 foreach ($TorrentsInfo as $TorrentID => $Info) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TorrentTags, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($Results[$Info['GroupID']]);
+	extract(Torrents::array_group($Results[$Info['GroupID']]));
+	$TorrentTags = new Tags($TagList);
+
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 		unset($ExtendedArtists[2]);
 		unset($ExtendedArtists[3]);
@@ -62,18 +64,6 @@ foreach ($TorrentsInfo as $TorrentID => $Info) {
 	if($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;
 	}
-
-	$TagList=array();
-	if($TorrentTags!='') {
-		$TorrentTags=explode(' ',$TorrentTags);
-		foreach ($TorrentTags as $TagKey => $TagName) {
-			$TagName = str_replace('_','.',$TagName);
-			$TagList[]='<a href="torrents.php?taglist='.$TagName.'">'.$TagName.'</a>';
-		}
-		$PrimaryTag = $TorrentTags[0];
-		$TagList = implode(', ', $TagList);
-		$TorrentTags='<br /><div class="tags">'.$TagList.'</div>';
-	}
 ?>
 		<tr class="torrent torrent_row<?=$GroupFlags['IsSnatched'] ? ' snatched_torrent"' : ''?>">
 			<td>
@@ -84,7 +74,7 @@ foreach ($TorrentsInfo as $TorrentID => $Info) {
 <?	if (check_perms('admin_reports')) { ?>
 				<a href="better.php?method=files&amp;remove=<?=$TorrentID?>" class="brackets">X</a>
 <? 	} ?>
-				<?=$TorrentTags?>
+				<div class="tags"><?=$TorrentTags->format()?></div>
 			</td>
 		</tr>
 <? } ?>

@@ -299,14 +299,13 @@ class BEncTorrent extends BEncDec {
 		$InfoDict =& $this->Dec['info'];
 		if (!isset($InfoDict['files'])) {
 			// Single-file torrent
-			$this->Files = array(
-				$this->Size = (Int64::is_int($InfoDict['length'])
-					? Int64::get($InfoDict['length'])
-					: $InfoDict['length']),
-				$this->Files = (isset($InfoDict['name.utf-8'])
-					? $InfoDict['name.utf-8']
-					: $InfoDict['name'])
-			);
+			$this->Size = (Int64::is_int($InfoDict['length'])
+				? Int64::get($InfoDict['length'])
+				: $InfoDict['length']);
+			$Name = (isset($InfoDict['name.utf-8'])
+				? $InfoDict['name.utf-8']
+				: $InfoDict['name']);
+			$this->Files[] = array($this->Size, $Name);
 		} else {
 			if (isset($InfoDict['path.utf-8']['files'][0])) {
 				$this->PathKey = 'path.utf-8';
@@ -322,10 +321,10 @@ class BEncTorrent extends BEncDec {
 				$this->Files[] = array($CurSize, implode('/', $TmpPath));
 				$this->Size += $CurSize;
 			}
+			uasort($this->Files, function($a, $b) {
+					return strnatcasecmp($a[1], $b[1]);
+				});
 		}
-		uasort($this->Files, function($a, $b) {
-				return strnatcasecmp($a[1], $b[1]);
-			});
 		return array($this->Size, $this->Files);
 	}
 

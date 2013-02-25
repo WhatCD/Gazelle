@@ -174,6 +174,14 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>-->
 			<tr>
+				<td class="label"><strong>Cover Art</strong></td>
+				<td>
+					<input type="hidden" name="coverart" value="" />
+					<input type="checkbox" name="coverart" id="coverart" <?=$SiteOptions['CoverArt']?'checked="checked"':''?> />
+					<label for="coverart">Show covers next to torrent information</label>
+				</td>
+			</tr>
+			<tr>
 				<td class="label"><strong>Collage album covers to show per page</strong></td>
 				<td>
 					<select name="collagecovers" id="collagecovers">

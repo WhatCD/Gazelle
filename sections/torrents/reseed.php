@@ -14,10 +14,10 @@ $DB->query("UPDATE torrents SET LastReseedRequest=NOW() WHERE ID='$TorrentID'");
 
 $Group = Torrents::get_groups(array($GroupID));
 $Group = array_pop($Group['matches']);
-list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
+extract(Torrents::array_group($Group));
 
 $Name = '';
-$Name .= Artists::display_artists(array('1'=>$GroupArtists), false, true);
+$Name .= Artists::display_artists(array('1'=>$Artists), false, true);
 $Name .= $GroupName;
 
 $DB->query("SELECT uid, tstamp FROM xbt_snatched WHERE fid='$TorrentID' ORDER BY tstamp DESC LIMIT 10");

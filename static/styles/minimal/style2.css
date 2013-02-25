@@ -473,3 +473,7 @@ h3{margin:10px 0}
 .top10_quantity_links .brackets:after {
 	color: #757575;
 }
+
+.group_image + .group_info { margin: 0; padding: 0 5px; display: table-cell; vertical-align: middle; height: 90px; }
+#torrents .group_image + .group_info { width: 520px; }
+#top10 .group_image + .group_info { width: 585px; }

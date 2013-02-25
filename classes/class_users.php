@@ -505,48 +505,32 @@ class Users {
 	}
 
 	/**
-	 * Returns an array with User Bookmark data: group ids, collage data list, etc
+	 * Returns an array with User Bookmark data: group ids, collage data, torrent data
 	 * @global CACHE $Cache
 	 * @global DB_MYSQL $DB
 	 * @param string|int $UserID
-	 * @return array
+	 * @return array Group IDs, Bookmark Data, Torrent List
 	 */
-	function bookmark_data ($UserID)
+	public static function get_bookmarks ($UserID)
 	{
 		global $Cache, $DB;
 
 		$UserID = (int) $UserID;
 
-		$Data = $Cache->get_value('bookmarks_torrent_'.$UserID.'_full');
-
-		if($Data) {
-			$Data = unserialize($Data);
-			list($K, list($TorrentList, $CollageDataList)) = each($Data);
+		if (($Data = $Cache->get_value('bookmarks_group_ids_' . $UserID))) {
+			list($GroupIDs, $BookmarkData) = $Data;
 		} else {
-			// Build the data for the collage and the torrent list
-			$DB->query("SELECT
-				bt.GroupID,
-				bt.Sort,
-				tg.WikiImage,
-				tg.CategoryID,
-				bt.Time
-				FROM bookmarks_torrents AS bt
-				JOIN torrents_group AS tg ON tg.ID=bt.GroupID
-				WHERE bt.UserID='$UserID'
-				ORDER BY bt.Sort ASC");
-
+			$DB->query("SELECT GroupID, Sort, `Time` FROM bookmarks_torrents WHERE UserID=$UserID ORDER BY Sort, `Time` ASC");
 			$GroupIDs = $DB->collect('GroupID');
-			$CollageDataList = $DB->to_array('GroupID', MYSQLI_ASSOC);
-
-			if(count($GroupIDs) > 0) {
-				$TorrentList = Torrents::get_groups($GroupIDs);
-				$TorrentList = $TorrentList['matches'];
-			} else {
-				$TorrentList = array();
-			}
+			$BookmarkData = $DB->to_array('GroupID', MYSQLI_ASSOC);
+			$Cache->cache_value('bookmarks_group_ids_' . $UserID,
+				array($GroupIDs, $BookmarkData), 3600);
 		}
 
-		return array($K, $GroupIDs, $CollageDataList, $TorrentList);
+		$TorrentList = Torrents::get_groups($GroupIDs);
+		$TorrentList = isset($TorrentList['matches']) ? $TorrentList['matches'] : array();
+
+		return array($GroupIDs, $BookmarkData, $TorrentList);
 	}
 
 	/**

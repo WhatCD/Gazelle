@@ -4,7 +4,6 @@ include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
 include(SERVER_ROOT.'/sections/requests/functions.php');
-include(SERVER_ROOT.'/classes/class_image_tools.php');
 
 if (empty($_GET['id']) || !is_numeric($_GET['id']))
 	error(404);
@@ -534,7 +533,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 <?
 		foreach($RecentSnatches as $RS) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=to_thumbnail($RS['WikiImage'])?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=ImageTools::thumbnail($RS['WikiImage'])?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
 			</td>
 <?		} ?>
 		</tr>
@@ -573,7 +572,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 		<tr>
 <?		foreach($RecentUploads as $RU) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=to_thumbnail($RU['WikiImage'])?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=ImageTools::thumbnail($RU['WikiImage'])?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
 			</td>
 <?		} ?>
 		</tr>
@@ -610,14 +609,14 @@ foreach ($Collages as $CollageInfo) {
 <?	foreach($Collage as $C) {
 			$Group = Torrents::get_groups(array($C['GroupID']));
 			$Group = array_pop($Group['matches']);
-			list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists) = array_values($Group);
+			extract(Torrents::array_group($Group));
 
 			$Name = '';
-			$Name .= Artists::display_artists(array('1'=>$GroupArtists), false, true);
+			$Name .= Artists::display_artists(array('1'=>$Artists), false, true);
 			$Name .= $GroupName;
 ?>
 			<td>
-				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=to_thumbnail($C['WikiImage'])?>" alt="<?=$Name?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=ImageTools::thumbnail($C['WikiImage'])?>" alt="<?=$Name?>" width="107" /></a>
 			</td>
 <?	} ?>
 		</tr>

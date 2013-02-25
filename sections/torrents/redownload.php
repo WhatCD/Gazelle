@@ -14,9 +14,6 @@ $Perms = Permissions::get_permissions($User['PermissionID']);
 $UserClass = $Perms['Class'];
 list($UserID, $Username) = array_values($User);
 
-require(SERVER_ROOT.'/classes/class_bencode.php');
-require(SERVER_ROOT.'/classes/class_torrent.php');
-
 if (empty($_GET['type'])) {
 	error(0);
 } else {
@@ -81,16 +78,7 @@ while (list($Downloads, $GroupIDs) = $Collector->get_downloads('TorrentID')) {
 	while (list($TorrentID, $TorrentFile) = $DB->next_record(MYSQLI_NUM, false)) {
 		$Download =& $Downloads[$TorrentID];
 		$Download['Artist'] = Artists::display_artists($Artists[$Download['GroupID']], false, true, false);
-		if (Misc::is_new_torrent($TorrentFile)) {
-			$TorEnc = BEncTorrent::add_announce_url($TorrentFile, ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
-		} else {
-			$Contents = unserialize(base64_decode($TorrentFile));
-			$Tor = new TORRENT($Contents, true);
-			$Tor->set_announce_url(ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
-			unset($Tor->Val['announce-list']);
-			$TorEnc = $Tor->enc();
-		}
-		$Collector->add_file($TorEnc, $Download, $Download['Month']);
+		$Collector->add_file($TorrentFile, $Download, $Download['Month']);
 		unset($Download);
 	}
 }

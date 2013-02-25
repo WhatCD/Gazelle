@@ -143,12 +143,7 @@ View::show_header('Transcode Uploads');
 <?
 foreach ($TorrentGroups as $GroupID => $Editions) {
 	$GroupInfo = $Groups[$GroupID];
-	$GroupYear = $GroupInfo['Year'];
-	$ExtendedArtists = $GroupInfo['ExtendedArtists'];
-	$GroupCatalogueNumber = $GroupInfo['CatalogueNumber'];
-	$GroupName = $GroupInfo['Name'];
-	$GroupRecordLabel = $GroupInfo['RecordLabel'];
-	$ReleaseType = $GroupInfo['ReleaseType'];
+	extract(Torrents::array_group($GroupInfo));
 
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 		unset($ExtendedArtists[2]);
@@ -158,13 +153,6 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		$ArtistNames = '';
 	}
 
-	$TagList = array();
-	$TagList = explode(' ', str_replace('_', '.', $GroupInfo['TagList']));
-	$TorrentTags = array();
-	foreach ($TagList as $Tag) {
-		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-	}
-	$TorrentTags = implode(', ', $TorrentTags);
 	foreach ($Editions as $RemIdent => $Edition) {
 		if (!$Edition['FlacID'] || count($Edition['Formats']) == 3) {
 			continue;
@@ -196,6 +184,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		if (!empty($Edition['RemasterYear'])) {
 			$ExtraInfo .= ' - ';
 		}
+		$TorrentTags = new Tags($TagList);
 		$ExtraInfo .= implode(' / ', $EditionInfo);
 ?>
 		<tr class="torrent torrent_row<?=$Edition['IsSnatched'] ? ' snatched_torrent' : ''?>">
@@ -205,7 +194,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				</span>
 				<?=$DisplayName?>
 				<div class="torrent_info"><?=$ExtraInfo?></div>
-				<div class="tags"><?=$TorrentTags?></div>
+				<div class="tags"><?=$TorrentTags->format()?></div>
 			</td>
 			<td><strong <?=isset($Edition['Formats']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
 			<td><strong <?=isset($Edition['Formats']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>

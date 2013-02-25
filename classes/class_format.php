@@ -528,4 +528,17 @@ class Format
 		return sprintf('<strong class="torrent_label %1$s" title="%2$s">%2$s</strong>',
 				display_str($class), display_str($text));
 	}
+
+	/**
+	 * Formats a CSS class name from a Category ID
+	 * @global array $Categories
+	 * @param int|string $CategoryID This number will be subtracted by one
+	 * @return string
+	 */
+	public static function css_category ($CategoryID = 1)
+	{
+		global $Categories;
+		return 'cats_' . strtolower(str_replace(array('-', ' '), '',
+				$Categories[$CategoryID - 1]));
+	}
 }

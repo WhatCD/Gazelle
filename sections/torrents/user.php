@@ -1,5 +1,4 @@
 <?
-
 $Orders = array('Time', 'Name', 'Seeders', 'Leechers', 'Snatched', 'Size');
 $Ways = array('ASC'=>'Ascending', 'DESC'=>'Descending');
 $UserVotes = Votes::get_user_votes($LoggedUser['ID']);
@@ -421,19 +420,14 @@ foreach($Categories as $CatKey => $CatName) {
 		</tr>
 <?
 	$Results = $Results['matches'];
-	foreach($TorrentsInfo as $TorrentID=>$Info) {
-		list($GroupID,, $Time, $CategoryID) = array_values($Info);
+	foreach($TorrentsInfo as $TorrentID => $Info) {
+		list($GroupID, , $Time) = array_values($Info);
 
-		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists, $GroupFlags) = array_values($Results[$GroupID]);
+		extract(Torrents::array_group($Results[$GroupID]));
 		$Torrent = $Torrents[$TorrentID];
-
-		$TagList = explode(' ',str_replace('_','.',$TagList));
 		
-		$TorrentTags = array();
-		foreach($TagList as $Tag) {
-			$TorrentTags[]='<a href="torrents.php?type='.$Action.'&amp;userid='.$UserID.'&amp;tags='.$Tag.'">'.$Tag.'</a>';
-		}
-		$TorrentTags = implode(', ', $TorrentTags);
+
+		$TorrentTags = new Tags($TagList);
 
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])) {
 			unset($ExtendedArtists[2]);
@@ -455,17 +449,21 @@ foreach($Categories as $CatKey => $CatName) {
 ?>
 		<tr class="torrent torrent_row<?=($Torrent['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupFlags['IsSnatched'] ? ' snatched_group' : '')?>">
 			<td class="center cats_col">
-				<div title="<?=ucfirst(str_replace('.',' ',$TagList[0]))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$CategoryID-1]))?> tags_<?=str_replace('.','_',$TagList[0])?>"></div>
+				<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 			</td>
-			<td>
-				<span class="torrent_links_block">
-					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
-				</span>
-				<?=$DisplayName?> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
-				<br />
-				<div class="tags">
-					<?=$TorrentTags?>
+			<td class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+				<div class="group_image float_left clear">
+					<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+				</div>
+<? endif; ?>
+				<div class="group_info clear">
+					<span class="torrent_links_block">
+						[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
+					</span>
+					<?=$DisplayName?> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
+					<div class="tags"><?=$TorrentTags->format('torrents.php?type='.$Action.'&amp;userid='.$UserID.'&amp;tags=')?></div>
 				</div>
 			</td>
 			<td class="nobr"><?=time_diff($Time,1)?></td>

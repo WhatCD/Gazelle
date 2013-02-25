@@ -77,9 +77,9 @@
 <?
 
 	$Number = 0;
-	foreach ($TorrentList as $GroupID=>$Group) {
-		list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists) = array_values($Group);
-		list($GroupID2, $UserID, $Username, $Sort, $CatNum) = array_values($CollageDataList[$GroupID]);
+	foreach ($TorrentList as $GroupID => $Group) {
+		extract(Torrents::array_group($Group));
+		list(, $UserID, $Username, $Sort, $CatNum) = array_values($CollageDataList[$GroupID]);
 
 		$Number++;
 
@@ -88,8 +88,8 @@
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
 			$DisplayName .= Artists::display_artists($ExtendedArtists, true, false);
-		} elseif(count($GroupArtists)>0) {
-			$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists), true, false);
+		} elseif(count($Artists)>0) {
+			$DisplayName .= Artists::display_artists(array('1'=>$Artists), true, false);
 		}
 		$TorrentLink = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 		$GroupYear = $GroupYear > 0 ? $GroupYear : '';

@@ -61,9 +61,6 @@ if (!check_perms('zip_downloader')) {
 	error(403);
 }
 
-require(SERVER_ROOT.'/classes/class_bencode.php');
-require(SERVER_ROOT.'/classes/class_torrent.php');
-
 $Preferences = array('RemasterTitle DESC', 'Seeders ASC', 'Size ASC');
 
 $ArtistID = $_REQUEST['artistid'];
@@ -133,7 +130,6 @@ ORDER BY t.GroupID ASC, Rank DESC, t.$Preference";
 
 $DownloadsQ = $DB->query($SQL);
 $Collector = new TorrentsDL($DownloadsQ, $ArtistName);
-
 while (list($Downloads, $GroupIDs) = $Collector->get_downloads('GroupID')) {
 	$Artists = Artists::get_artists($GroupIDs);
 	$TorrentFilesQ = $DB->query("SELECT TorrentID, File FROM torrents_files WHERE TorrentID IN (".implode(',', array_keys($GroupIDs)).")", false);
@@ -161,16 +157,7 @@ while (list($Downloads, $GroupIDs) = $Collector->get_downloads('GroupID')) {
 		} else if ($Releases[$GroupID]['Importance'] == 3) {
 			$ReleaseTypeName = "Remixed By";
 		}
-		if (Misc::is_new_torrent($TorrentFile)) {
-			$TorEnc = BEncTorrent::add_announce_url($TorrentFile, ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
-		} else {
-			$Contents = unserialize(base64_decode($TorrentFile));
-			$Tor = new TORRENT($Contents, true);
-			$Tor->set_announce_url(ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
-			unset($Tor->Val['announce-list']);
-			$TorEnc = $Tor->enc();
-		}
-		$Collector->add_file($TorEnc, $Download, $ReleaseTypeName);
+		$Collector->add_file($TorrentFile, $Download, $ReleaseTypeName);
 		unset($Download);
 	}
 }

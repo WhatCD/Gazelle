@@ -160,12 +160,13 @@ function toggleTorrentSearch(mode) {
 	} if (mode == 'basic') {
 		$('.fti_advanced').disable();
 		$('.fti_basic').enable();
-		$('.ftr_advanced').hide();
+		$('.ftr_advanced').hide(true);
 		$('.ftr_basic').show();
 		$('#ft_advanced_link').show();
 		$('#ft_advanced_text').hide();
 		$('#ft_basic_link').hide();
 		$('#ft_basic_text').show();
+		$('#ft_type').raw().value = 'basic';
 	} else if (mode == 'advanced') {
 		$('.fti_advanced').enable();
 		$('.fti_basic').disable();
@@ -175,6 +176,7 @@ function toggleTorrentSearch(mode) {
 		$('#ft_advanced_text').show();
 		$('#ft_basic_link').show();
 		$('#ft_basic_text').hide();
+		$('#ft_type').raw().value = 'advanced';
 	}
 	return false;
 }

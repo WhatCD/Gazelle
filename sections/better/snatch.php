@@ -174,13 +174,6 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		$ArtistNames = '';
 	}
 
-	$TagList = array();
-	$TagList = explode(' ', str_replace('_', '.', $GroupInfo['TagList']));
-	$TorrentTags = array();
-	foreach ($TagList as $Tag) {
-		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-	}
-	$TorrentTags = implode(', ', $TorrentTags);
 	foreach ($Editions as $RemIdent => $Edition) {
 		if (!$Edition['FlacID'] || count($Edition['Formats']) == 3) {
 			continue;
@@ -212,6 +205,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		if (!empty($Edition['RemasterYear'])) {
 			$ExtraInfo .= ' - ';
 		}
+		$TorrentTags = new Tags($GroupInfo['TagList']);
 		$ExtraInfo .= implode(' / ', $EditionInfo);
 ?>
 		<tr class="torrent torrent_row<?=$Edition['IsSnatched'] ? ' snatched_torrent' : ''?>">
@@ -221,7 +215,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				</span>
 				<?=$DisplayName?>
 				<div class="torrent_info"><?=$ExtraInfo?></div>
-				<div class="tags"><?=$TorrentTags?></div>
+				<div class="tags"><?=$TorrentTags->format()?></div>
 			</td>
 			<td><strong <?=isset($Edition['Formats']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
 			<td><strong <?=isset($Edition['Formats']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>

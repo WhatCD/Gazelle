@@ -4,6 +4,7 @@
  */
 class TorrentsDL {
 	const ChunkSize = 100;
+	const MaxPathLength = 200;
 	private $QueryResult;
 	private $QueryRowNum = 0;
 	private $Zip;
@@ -13,19 +14,24 @@ class TorrentsDL {
 	private $NumFound = 0;
 	private $Size = 0;
 	private $Title;
+	private $Username;
+	private $AnnounceURL;
 
 	/**
 	 * Create a Zip object and store the query results
 	 *
 	 * @param mysqli_result $QueryResult results from a query on the collector pages
 	 * @param string $Title name of the collection that will be created
+	 * @param string $AnnounceURL URL to add to the created torrents
 	 */
 	public function __construct(&$QueryResult, $Title) {
-		global $Cache;
+		global $Cache, $LoggedUser;
 		$Cache->InternalCache = false; // The internal cache is almost completely useless for this
 		Zip::unlimit(); // Need more memory and longer timeout
 		$this->QueryResult = $QueryResult;
 		$this->Title = $Title;
+		$this->User = $LoggedUser;
+		$this->AnnounceURL = ANNOUNCE_URL . "/$LoggedUser[torrent_pass]/announce";
 		$this->Zip = new Zip(Misc::file_string($Title));
 	}
 
@@ -69,42 +75,43 @@ class TorrentsDL {
 	/**
 	 * Add a file to the zip archive
 	 *
-	 * @param string $Content file content
-	 * @param array $FileInfo file info stored as an array with at least the keys
+	 * @param string $TorrentData bencoded torrent without announce url (new format) or TORRENT object (old format)
+	 * @param array $Info file info stored as an array with at least the keys
 	 *  Artist, Name, Year, Media, Format, Encoding and TorrentID
 	 * @param string $FolderName folder name
 	 */
-	public function add_file($Content, $FileInfo, $FolderName = '') {
-		$FileName = self::construct_file_name($FileInfo['Artist'], $FileInfo['Name'], $FileInfo['Year'], $FileInfo['Media'], $FileInfo['Format'], $FileInfo['Encoding'], $FileInfo['TorrentID']);
-		$this->Size += $FileInfo['Size'];
+	public function add_file(&$TorrentData, $Info, $FolderName = '') {
+		$FolderName = Misc::file_string($FolderName);
+		$MaxPathLength = $FolderName ? (self::MaxPathLength - strlen($FolderName) - 1) : self::MaxPathLength;
+		$FileName = self::construct_file_name($Info['Artist'], $Info['Name'], $Info['Year'], $Info['Media'], $Info['Format'], $Info['Encoding'], $Info['TorrentID'], false, $MaxPathLength);
+		$this->Size += $Info['Size'];
 		$this->NumAdded++;
-		$this->Zip->add_file($Content, ($FolderName ? "$FolderName/" : "") . $FileName);
+		$this->Zip->add_file(self::get_file($TorrentData, $this->AnnounceURL), ($FolderName ? "$FolderName/" : "") . $FileName);
 		usleep(25000); // We don't want to send much faster than the client can receive
 	}
 
 	/**
 	 * Add a file to the list of files that could not be downloaded
 	 *
-	 * @param array $FileInfo file info stored as an array with at least the keys Artist, Name and Year
+	 * @param array $Info file info stored as an array with at least the keys Artist, Name and Year
 	 */
-	public function fail_file($FileInfo) {
-		$this->FailedFiles[] = $FileInfo['Artist'] . $FileInfo['Name'] . " $FileInfo[Year]";
+	public function fail_file($Info) {
+		$this->FailedFiles[] = $Info['Artist'] . $Info['Name'] . " $Info[Year]";
 	}
 
 	/**
 	 * Add a file to the list of files that did not match the user's format or quality requirements
 	 *
-	 * @param array $FileInfo file info stored as an array with at least the keys Artist, Name and Year
+	 * @param array $Info file info stored as an array with at least the keys Artist, Name and Year
 	 */
-	public function skip_file($FileInfo) {
-		$this->SkippedFiles[] = $FileInfo['Artist'] . $FileInfo['Name'] . " $FileInfo[Year]";
+	public function skip_file($Info) {
+		$this->SkippedFiles[] = $Info['Artist'] . $Info['Name'] . " $Info[Year]";
 	}
 
 	/**
 	 * Add a summary to the archive and include a list of files that could not be added. Close the zip archive
 	 *
-	 * @param int $Analyzed number of files that were analyzed (e.g. number of groups in a collage)
-	 * @param int $Skips number of files that did not match any of the user's criteria
+	 * @param bool $FilterStats whether to include filter stats in the report
 	 */
 	public function finalize($FilterStats = true) {
 		$this->Zip->add_file($this->summary($FilterStats), "Summary.txt");
@@ -121,15 +128,15 @@ class TorrentsDL {
 	 * @return summary text
 	 */
 	public function summary($FilterStats) {
-		global $LoggedUser, $ScriptStartTime;
+		global $ScriptStartTime;
 		$Time = number_format(1000 * (microtime(true) - $ScriptStartTime), 2)." ms";
 		$Used = Format::get_size(memory_get_usage(true));
 		$Date = date("M d Y, H:i");
 		$NumSkipped = count($this->SkippedFiles);
-		return "Collector Download Summary for $this->Title - ".SITE_NAME."\r\n"
+		return "Collector Download Summary for $this->Title - " . SITE_NAME . "\r\n"
 			. "\r\n"
-			. "User:		$LoggedUser[Username]\r\n"
-			. "Passkey:	$LoggedUser[torrent_pass]\r\n"
+			. "User:		{$this->User[Username]}\r\n"
+			. "Passkey:	{$this->User[torrent_pass]}\r\n"
 			. "\r\n"
 			. "Time:		$Time\r\n"
 			. "Used:		$Used\r\n"
@@ -164,12 +171,17 @@ class TorrentsDL {
 	/**
 	 * Combine a bunch of torrent info into a standardized file name
 	 *
-	 * @params most input variables are mostly self-explanatory
+	 * @params most input variables are self-explanatory
 	 * @param int $TorrentID if given, append "-TorrentID" to torrent name
-	 * @param bool $TxtExtension whether to use .txt or .torrent as file extension
-	 * @return file name with at most 180 characters that is valid on most systems
+	 * @param bool $Txt whether to use .txt or .torrent as file extension
+	 * @param int $MaxLength maximum file name length
+	 * @return file name with at most $MaxLength characters
 	 */
-	public static function construct_file_name($Artist, $Album, $Year, $Media, $Format, $Encoding, $TorrentID = false, $TxtExtension = false) {
+	public static function construct_file_name($Artist, $Album, $Year, $Media, $Format, $Encoding, $TorrentID = false, $Txt = false, $MaxLength = self::MaxPathLength) {
+		$MaxLength -= ($Txt ? 4 : 8);
+		if ($TorrentID !== false) {
+			$MaxLength -= (strlen($TorrentID) + 1);
+		}
 		$TorrentArtist = Misc::file_string($Artist);
 		$TorrentName = Misc::file_string($Album);
 		if ($Year > 0) {
@@ -193,22 +205,35 @@ class TorrentsDL {
 
 		if (!$TorrentName) {
 			$TorrentName = "No Name";
-		} else if (strlen($Artist . $TorrentName . $TorrentInfo) <= 196) {
-			$TorrentName = $Artist . $TorrentName;
+		} else if (mb_strlen($TorrentArtist . $TorrentName . $TorrentInfo, 'UTF-8') <= $MaxLength) {
+			$TorrentName = $TorrentArtist . $TorrentName;
 		}
 
-		// Leave some room to the user in case the file system limits the path length
-		$MaxLength = $TxtExtension ? 196 : 192;
-		if ($TorrentID) {
-			$MaxLength -= 8;
-		}
 		$TorrentName = Format::cut_string($TorrentName . $TorrentInfo, $MaxLength, true, false);
-		if ($TorrentID) {
+		if ($TorrentID !== false) {
 			$TorrentName .= "-$TorrentID";
 		}
-		if ($TxtExtension) {
+		if ($Txt) {
 			return "$TorrentName.txt";
 		}
 		return "$TorrentName.torrent";
+	}
+
+	/**
+	 * Convert a stored torrent into a binary file that can be loaded in a torrent client
+	 *
+	 * @param mixed $TorrentData bencoded torrent without announce url (new format) or TORRENT object (old format)
+	 * @return bencoded string
+	 */
+	public static function get_file(&$TorrentData, $AnnounceURL) {
+		if (Misc::is_new_torrent($TorrentData)) {
+			return BEncTorrent::add_announce_url($TorrentData, $AnnounceURL);
+		}
+		$Tor = new TORRENT(unserialize(base64_decode($TorrentData)), true);
+		$Tor->set_announce_url($AnnounceURL);
+		unset($Tor->Val['announce-list']);
+		unset($Tor->Val['url-list']);
+		unset($Tor->Val['libtorrent_resume']);
+		return $Tor->enc();
 	}
 }

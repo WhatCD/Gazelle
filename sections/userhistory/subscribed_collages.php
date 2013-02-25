@@ -19,8 +19,8 @@ if (!$ShowAll) {
 		FROM collages AS c
 		JOIN users_collage_subs AS s ON s.CollageID = c.ID
 		JOIN collages_torrents AS ct ON ct.CollageID = c.ID
-		WHERE s.UserID = ".$LoggedUser['ID']." AND c.Deleted='0'
-			AND ct.AddedOn > s.LastVisit
+		WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
+			AND ct.AddedOn>s.LastVisit
 		GROUP BY c.ID";
 } else {
 	$sql = "SELECT c.ID,
@@ -30,7 +30,7 @@ if (!$ShowAll) {
 		FROM collages AS c
 		JOIN users_collage_subs AS s ON s.CollageID = c.ID
 		LEFT JOIN collages_torrents AS ct ON ct.CollageID = c.ID
-		WHERE s.UserID = ".$LoggedUser['ID']." AND c.Deleted='0'
+		WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
 		GROUP BY c.ID";
 }
 
@@ -63,7 +63,7 @@ if($ShowAll) {
 if(!$NumResults) {
 ?>
 	<div class="center">
-		No subscribed collages<?=($ShowAll?'':' with new additions')?>
+		No subscribed collages<?=($ShowAll ? '' : ' with new additions')?>
 	</div>
 <?
 } else {
@@ -76,20 +76,15 @@ if(!$NumResults) {
 		unset($TorrentTable);
 
 		list($CollageID, $CollageName, $CollageSize, $LastVisit) = $Collage;
-		$RS = $DB->query("SELECT ct.GroupID,
-								tg.WikiImage,
-								tg.CategoryID
-					FROM collages_torrents AS ct
-					JOIN torrents_group AS tg ON ct.GroupID = tg.ID
-					WHERE ct.CollageID = $CollageID
-						AND ct.AddedOn > '$LastVisit'
-					ORDER BY ct.AddedOn");
+		$RS = $DB->query("SELECT GroupID FROM collages_torrents
+				WHERE CollageID=$CollageID
+					AND AddedOn>'" . db_string($LastVisit) . "'
+				ORDER BY AddedOn");
 		$NewTorrentCount = $DB->record_count();
 		//$NewTorrents = $DB->to_array();
 		//$Artists = Artists::get_artists($GroupID);
 
 		$GroupIDs = $DB->collect('GroupID');
-		$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
 		if(count($GroupIDs)>0) {
 			$TorrentList = Torrents::get_groups($GroupIDs);
 			$TorrentList = $TorrentList['matches'];
@@ -105,32 +100,18 @@ if(!$NumResults) {
 	//		$DisplayName = Artists::display_artists($Artists[$GroupID]);
 	//		$AltName=$GroupName;
 		foreach ($TorrentList as $GroupID => $Group) {
-			list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists, $GroupFlags) = array_values($Group);
-			list($GroupID2, $Image, $GroupCategoryID) = array_values($CollageDataList[$GroupID]);
+			extract(Torrents::array_group($Group));
 
-			unset($DisplayName);
+			$DisplayName = '';
 
-			$TagList = explode(' ',str_replace('_','.',$TagList));
-
-			$TorrentTags = array();
-			foreach($TagList as $Tag) {
-				if(!isset($Tags[$Tag])) {
-					$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
-				} else {
-					$Tags[$Tag]['count']++;
-				}
-				$TorrentTags[]='<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-			}
-			$PrimaryTag = $TagList[0];
-			$TorrentTags = implode(', ', $TorrentTags);
-			$TorrentTags='<br /><div class="tags">'.$TorrentTags.'</div>';
+			$TorrentTags = new Tags($TagList);
 
 			if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 				unset($ExtendedArtists[2]);
 				unset($ExtendedArtists[3]);
 				$DisplayName .= Artists::display_artists($ExtendedArtists);
-			} elseif(count($GroupArtists)>0) {
-				$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists));
+			} elseif(count($Artists)>0) {
+				$DisplayName .= Artists::display_artists(array('1'=>$Artists));
 			}
 			$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 			if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
@@ -148,22 +129,16 @@ if(!$NumResults) {
 						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$CollageID?><?=$GroupID?>, this, event)" title="Collapse this group"></a>
 					</div>
 				</td>
-<?			if (!$LoggedUser['HideCollage']) {?>
-				<td style="width: 60px; padding: 0;">
-<?				if ($Image) {
-					if(check_perms('site_proxy_images')) {
-						$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
-					}
-?>
-					<img style="max-width: 60px; max-height: 60px" src="<?=$Image?>" alt="<?=$AltName?>" onclick="lightbox.init(this,60);" />
-<?				} else { ?>
-					<img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID-1]?>" alt="<?=$Categories[$GroupCategoryID-1]?>" title="<?=$Categories[$GroupCategoryID-1]?>" width="60" height="60" border="0" />
-<?				} ?>
-				</td>
-<?			} ?>
-				<td colspan="5" style="vertical-align: middle;">
-					<strong><?=$DisplayName?></strong>
-					<?=$TorrentTags?>
+				<td colspan="5" class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+					<div class="group_image float_left clear">
+						<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+					</div>
+<? endif; ?>
+					<div class="group_info clear">
+						<strong><?=$DisplayName?></strong>
+						<div class="tags"><?=$TorrentTags->format()?></tags>
+					</div>
 				</td>
 			</tr>
 <?
@@ -198,7 +173,7 @@ if(!$NumResults) {
 
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition<?=$SnatchedGroupClass?> hidden">
-		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
 	</tr>
 <?
 						} else {
@@ -213,7 +188,7 @@ if(!$NumResults) {
 							$MasterName .= $AddExtra.display_str($Torrent['Media']);
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition<?=$SnatchedGroupClass?> hidden">
-		<td colspan="<?=($LoggedUser['HideCollage']?'6':'7')?>" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
 	</tr>
 <?
 						}
@@ -225,7 +200,7 @@ if(!$NumResults) {
 					$LastMedia = $Torrent['Media'];
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition_<?=$EditionID?> hidden<?=$SnatchedTorrentClass . $SnatchedGroupClass?>">
-		<td colspan="<?=($LoggedUser['HideCollage']?'2':'3')?>">
+		<td colspan="2">
 			<span>
 				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
 			</span>
@@ -256,16 +231,23 @@ if(!$NumResults) {
 	<tr class="torrent<?=$SnatchedTorrentClass?>" id="group_<?=$CollageID . $GroupID?>">
 		<td></td>
 		<td class="center">
-			<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>">
+			<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
 			</div>
 		</td>
-		<td>
-			<span>
-				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
-			</span>
-			<strong><?=$DisplayName?></strong>
-			<?=$TorrentTags?>
+		<td class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+			<div class="group_image float_left clear">
+				<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+			</div>
+<? endif; ?>
+			<div class="group_info clear">
+				<span>
+					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
+				</span>
+				<strong><?=$DisplayName?></strong>
+				<div class="tags"><?=$TorrentTags->format()?></div>
+			</div>
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
@@ -291,12 +273,9 @@ if(!$NumResults) {
 		</tr>
 	</table>
 	<!--</div>-->
-	<table class="torrent_table grouped<?=!$LoggedUser['HideCollage']?' artwork':''?><?=$ShowAll?' hidden':''?>" id="discog_table_<?=$CollageID?>">
+	<table class="torrent_table<?=$ShowAll?' hidden':''?>" id="discog_table_<?=$CollageID?>">
 			<tr class="colhead">
-				<td><!-- expand/collapse --></td>
-<? 		if(!$LoggedUser['HideCollage']) {?>
-				<td style="padding: 0"><!-- image --></td>
-<?		} ?>
+				<td width="1%"><!-- expand/collapse --></td>
 				<td width="70%"><strong>Torrents</strong></td>
 				<td>Size</td>
 				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>

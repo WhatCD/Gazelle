@@ -61,9 +61,6 @@ if (!check_perms('zip_downloader')) {
 	error(403);
 }
 
-require(SERVER_ROOT.'/classes/class_bencode.php');
-require(SERVER_ROOT.'/classes/class_torrent.php');
-
 $Preferences = array('RemasterTitle DESC', 'Seeders ASC', 'Size ASC');
 
 $CollageID = $_REQUEST['collageid'];
@@ -147,16 +144,7 @@ while (list($Downloads, $GroupIDs) = $Collector->get_downloads('GroupID')) {
 			$Collector->skip_file($Download);
 			continue;
 		}
-		if (Misc::is_new_torrent($TorrentFile)) {
-			$TorEnc = BEncTorrent::add_announce_url($TorrentFile, ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
-		} else {
-			$Contents = unserialize(base64_decode($TorrentFile));
-			$Tor = new TORRENT($Contents, true);
-			$Tor->set_announce_url(ANNOUNCE_URL."/$LoggedUser[torrent_pass]/announce");
-			unset($Tor->Val['announce-list']);
-			$TorEnc = $Tor->enc();
-		}
-		$Collector->add_file($TorEnc, $Download);
+		$Collector->add_file($TorrentFile, $Download);
 		unset($Download);
 	}
 }

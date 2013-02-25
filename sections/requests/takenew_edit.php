@@ -2,7 +2,6 @@
 
 //******************************************************************************//
 //----------------- Take request -----------------------------------------------//
-include(SERVER_ROOT.'/classes/class_image_tools.php');
 authorize();
 
 
@@ -90,7 +89,7 @@ if($NewRequest) {
 if(empty($_POST['image'])) {
 	$Image = "";
 } else {
-    check_imagehost($_POST['image']);
+    ImageTools::blacklisted($_POST['image']);
 	if(preg_match("/".IMAGE_REGEX."/", trim($_POST['image'])) > 0) {
 			$Image = trim($_POST['image']);
 	} else {

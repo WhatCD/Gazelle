@@ -87,8 +87,14 @@ spl_autoload_register(function ($ClassName) {
 		case 'Artists':
 			$FileName = 'class_artists';
 			break;
+		case 'BEncTorrent':
+			$FileName = 'class_bencode';
+			break;
 		case 'Format':
 			$FileName = 'class_format';
+			break;
+		case 'ImageTools':
+			$FileName = 'class_image_tools';
 			break;
 		case 'LastFM':
 			$FileName = 'class_lastfm';
@@ -116,11 +122,19 @@ spl_autoload_register(function ($ClassName) {
 		case 'SphinxQL_Result':
 			$FileName = 'class_sphinxql';
 			break;
+		case 'Tags':
+			$FileName = 'class_tags';
+			break;
 		case 'TEXTAREA_PREVIEW':
 			$FileName = 'class_textarea_preview';
 			break;
 		case 'Tools':
 			$FileName = 'class_tools';
+			break;
+		case 'TORRENT':
+		case 'BENCODE_DICT':
+		case 'BENCODE_LIST':
+			$FileName = 'class_torrent';
 			break;
 		case 'Torrents':
 			$FileName = 'class_torrents';

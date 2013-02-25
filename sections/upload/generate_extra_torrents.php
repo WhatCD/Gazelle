@@ -2,33 +2,23 @@
 $ExtraTorrentsInsert = array();
 foreach ($ExtraTorrents as $ExtraTorrent) {
 	$Name = $ExtraTorrent['Name'];
-	$ExtraTorrentsInsert[$Name] = array();
 	$ExtraTorrentsInsert[$Name] = $ExtraTorrent;
-
-	$ExtraFile = fopen($Name, 'rb'); // open file for reading
-	$ExtraContents = fread($ExtraFile, 10000000);
-	$ExtraTor = new TORRENT($ExtraContents); // New TORRENT object
-	if (isset($ExtraTor->Val['info']->Val['encrypted_files'])) {
+	$ThisInsert =& $ExtraTorrentsInsert[$Name];
+	$ExtraTor = new BEncTorrent($Name, true);
+	if (isset($ExtraTor->Dec['encrypted_files'])) {
 		$Err = "At least one of the torrents contain an encrypted file list which is not supported here";
 		break;
 	}
-
-	// Remove uploader's passkey from the torrent.
-	// We put the downloader's passkey in on download, so it doesn't matter what's in there now,
-	// so long as it's not useful to any leet hax0rs looking in an unprotected /torrents/ directory
-	$ExtraTor->set_announce_url('ANNOUNCE_URL'); // We just use the string "ANNOUNCE_URL"
-
-	// $ExtraPrivate is true or false. true means that the uploaded torrent was private, false means that it wasn't.
-	$ExtraPrivate = $ExtraTor->make_private();
-	// The torrent is now private.
+	if (!$ExtraTor->is_private()) {
+		$ExtraTor->make_private(); // The torrent is now private.
+		$PublicTorrent = true;
+	}
 
 	// File list and size
 	list($ExtraTotalSize, $ExtraFileList) = $ExtraTor->file_list();
-	$ExtraTorrentsInsert[$Name]['TotalSize'] = $ExtraTotalSize;
 	$ExtraDirName = isset($ExtraTor->Val['info']->Val['files']) ? Format::make_utf8($ExtraTor->get_name()) : "";
 
 	$ExtraTmpFileList = array();
-
 	foreach ($ExtraFileList as $ExtraFile) {
 		list($ExtraSize, $ExtraName) = $ExtraFile;
 
@@ -37,29 +27,22 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 		// Make sure the filename is not too long
 		if (mb_strlen($ExtraName, 'UTF-8') + mb_strlen($ExtraDirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
 			$Err = 'The torrent contained one or more files with too long a name (' . $ExtraName . ')';
+			break;
 		}
-
 		// Add file and size to array
 		$ExtraTmpFileList[] = Torrents::filelist_format_file($ExtraFile);
 	}
 
 	// To be stored in the database
-	$ExtraFilePath = db_string($ExtraDirName);
-	$ExtraTorrentsInsert[$Name]['FilePath'] = $ExtraFilePath;
-	$ExtraFileString = db_string(implode("\n", $ExtraTmpFileList));
-	$ExtraTorrentsInsert[$Name]['FileString'] = $ExtraFileString;
-	// Number of files described in torrent
-	$ExtraNumFiles = count($ExtraFileList);
-	$ExtraTorrentsInsert[$Name]['NumFiles'] = $ExtraNumFiles;
-	// The string that will make up the final torrent file
-	$ExtraTorrentText = $ExtraTor->enc();
-	
+	$ThisInsert['FilePath'] = db_string($ExtraDirName);
+	$ThisInsert['FileString'] = db_string(implode("\n", $ExtraTmpFileList));
+	$ThisInsert['InfoHash'] = pack('H*', $ExtraTor->info_hash());
+	$ThisInsert['NumFiles'] = count($ExtraFileList);
+	$ThisInsert['TorEnc'] = db_string($ExtraTor->encode());
+	$ThisInsert['TotalSize'] = $ExtraTotalSize;
 
-	// Infohash
-
-	$ExtraInfoHash = pack("H*", sha1($ExtraTor->Val['info']->enc()));
-	$ExtraTorrentsInsert[$Name]['InfoHash'] = $ExtraInfoHash;
-	$DB->query("SELECT ID FROM torrents WHERE info_hash='" . db_string($ExtraInfoHash) . "'");
+	$Debug->set_flag('upload: torrent decoded');
+	$DB->query("SELECT ID FROM torrents WHERE info_hash='" . db_string($ThisInsert['InfoHash']) . "'");
 	if ($DB->record_count() > 0) {
 		list($ExtraID) = $DB->next_record();
 		$DB->query("SELECT TorrentID FROM torrents_files WHERE TorrentID = " . $ExtraID);
@@ -67,11 +50,10 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 			$Err = '<a href="torrents.php?torrentid=' . $ExtraID . '">The exact same torrent file already exists on the site!</a>';
 		} else {
 			//One of the lost torrents.
-			$DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($ExtraID, '" . db_string($ExtraTor->dump_data()) . "')");
-			$Err = '<a href="torrents.php?torrentid=' . $ExtraID . '">Thankyou for fixing this torrent</a>';
+			$DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($ExtraID, '$ThisInsert[TorEnc]')");
+			$Err = "<a href=\"torrents.php?torrentid=$ExtraID\">Thank you for fixing this torrent</a>";
 		}
 	}
-	$ExtraTorrentsInsert[$Name]['Tor'] = $ExtraTor;
 }
-
+unset($ThisInsert);
 ?>

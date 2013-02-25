@@ -32,10 +32,6 @@ if(count($GroupIDs)) {
 	$TorrentGroups = Torrents::get_groups($GroupIDs);
 	$TorrentGroups = $TorrentGroups['matches'];
 
-	// Need some extra info that Torrents::get_groups() doesn't return
-	$DB->query("SELECT ID, CategoryID FROM torrents_group WHERE ID IN (".implode(',', $GroupIDs).")");
-	$GroupCategoryIDs = $DB->to_array('ID', MYSQLI_ASSOC, false);
-
 	$DB->query("UPDATE users_notify_torrents SET UnRead='0' WHERE UserID=".$LoggedUser['ID']);
 	$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
 }
@@ -62,10 +58,10 @@ foreach($FilterGroups as $FilterID => $FilterResults) {
 	unset($FilterResults['FilterLabel']);
 	foreach($FilterResults as $Result) {
 		$TorrentID = $Result['TorrentID'];
-		$GroupID = $Result['GroupID'];
-		$GroupCategoryID = $GroupCategoryIDs[$GroupID]['CategoryID'];
+//		$GroupID = $Result['GroupID'];
 
 		$GroupInfo = $TorrentGroups[$Result['GroupID']];
+		extract(Torrents::array_group($GroupInfo)); // all group data
 		$TorrentInfo = $GroupInfo['Torrents'][$TorrentID];
 
 		if ($Result['UnRead'] == 1) $NumNew++;
@@ -73,16 +69,17 @@ foreach($FilterGroups as $FilterID => $FilterResults) {
 		$JsonNotifications[] = array(
 			'torrentId' => (int) $TorrentID,
 			'groupId' => (int) $GroupID,
-			'groupName' => $GroupInfo['Name'],
+			'groupName' => $GroupName,
 			'groupCategoryId' => (int) $GroupCategoryID,
-			'torrentTags' => $GroupInfo['TagList'],
+			'wikiImage' => $WikiImage,
+			'torrentTags' => $TagList,
 			'size' => (float) $TorrentInfo['Size'],
 			'fileCount' => (int) $TorrentInfo['FileCount'],
 			'format' => $TorrentInfo['Format'],
 			'encoding' => $TorrentInfo['Encoding'],
 			'media' => $TorrentInfo['Media'],
 			'scene' => $TorrentInfo['Scene'] == 1,
-			'groupYear' => (int) $GroupInfo['Year'],
+			'groupYear' => (int) $GroupYear,
 			'remasterYear' => (int) $TorrentInfo['RemasterYear'],
 			'remasterTitle' => $TorrentInfo['RemasterTitle'],
 			'snatched' => (int) $TorrentInfo['Snatched'],
@@ -111,5 +108,3 @@ print
 			)
 		)
 	);
-
-?>

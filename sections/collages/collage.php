@@ -9,7 +9,6 @@ function compare($X, $Y){
 
 include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
-include(SERVER_ROOT.'/classes/class_image_tools.php');
 
 $Text = new TEXT;
 
@@ -96,13 +95,14 @@ $TorrentTable = '';
 $NumGroups = 0;
 $NumGroupsByUser = 0;
 $Artists = array();
-$Tags = array();
 $Users = array();
 $Number = 0;
 
-foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists, $GroupFlags) = array_values($Group);
-	list($GroupID2, $Image, $GroupCategoryID, $UserID, $Username) = array_values($CollageDataList[$GroupID]);
+foreach ($TorrentList as $GroupID => $Group) {
+	extract(Torrents::array_group($Group));
+
+	list( , , , $UserID, $Username) = array_values($CollageDataList[$GroupID]);
+	$TorrentTags = new Tags($TagList);
 
 	// Handle stats and stuff
 	$Number++;
@@ -135,21 +135,6 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		}
 	}
 
-	$TagList = explode(' ',str_replace('_','.',$TagList));
-
-	$TorrentTags = array();
-	foreach($TagList as $Tag) {
-		if(!isset($Tags[$Tag])) {
-			$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
-		} else {
-			$Tags[$Tag]['count']++;
-		}
-		$TorrentTags[]='<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-	}
-	$PrimaryTag = $TagList[0];
-	$TorrentTags = implode(', ', $TorrentTags);
-	$TorrentTags='<br /><div class="tags">'.$TorrentTags.'</div>';
-
 	$DisplayName = $Number.' - ';
 
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
@@ -178,11 +163,11 @@ foreach ($TorrentList as $GroupID=>$Group) {
 					</div>
 				</td>
 				<td class="center">
-					<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div>
+					<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 				</td>
 				<td colspan="5">
 					<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
-					<?=$TorrentTags?>
+					<div class="tags"><?=$TorrentTags->format()?></div>
 				</td>
 			</tr>
 <?
@@ -281,7 +266,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	<tr class="torrent torrent_row<?=$SnatchedTorrentClass . $SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 		<td></td>
 		<td class="center">
-			<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>">
+			<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
 			</div>
 		</td>
 		<td>
@@ -293,7 +278,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
 			<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
-			<?=$TorrentTags?>
+			<div class="tags"><?=$TorrentTags->format()?></div>
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
@@ -321,12 +306,12 @@ foreach ($TorrentList as $GroupID=>$Group) {
 ?>
 		<li class="image_group_<?=$GroupID?>">
 			<a href="torrents.php?id=<?=$GroupID?>">
-<?	if($Image) {
+<?	if($WikiImage) {
 		if(check_perms('site_proxy_images')) {
-			$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
+			$WikiImage = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($WikiImage);
 		}
 ?>
-				<img src="<?=to_thumbnail($Image)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="118" />
+				<img src="<?=ImageTools::thumbnail($WikiImage)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="118" />
 <?	} else { ?>
 				<span style="width:107px;padding:5px"><?=$DisplayName?></span>
 <?	} ?>
@@ -425,9 +410,9 @@ if(check_perms('zip_downloader')){
 				<ul id="list" class="nobullet">
 <? foreach ($ZIPList as $ListItem) { ?>
 					<li id="list<?=$ListItem?>">
-						<input type="hidden" name="list[]" value="<?=$ListItem?>" />
-						<span style="float:left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float:right;" class="brackets">X</a></span>
+						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
+						<span class="float_left"><?=$ZIPOptions[$ListItem]['2']?></span>
+						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" class="float_right brackets">X</a></span>
 						<br style="clear:all;" />
 					</li>
 <? } ?>
@@ -481,15 +466,9 @@ foreach ($ZIPOptions as $Option) {
 			<div class="pad">
 				<ol style="padding-left:5px;">
 <?
-uasort($Tags, 'compare');
-$i = 0;
-foreach ($Tags as $TagName => $Tag) {
-	$i++;
-	if($i>5) { break; }
-?>
-					<li><a href="collages.php?action=search&amp;tags=<?=$TagName?>"><?=$TagName?></a> (<?=$Tag['count']?>)</li>
-<?
-}
+	if (isset($TorrentTags)) {
+				$TorrentTags->format_top(5, 'collages.php?action=search&amp;tags=');
+	}
 ?>
 				</ol>
 			</div>
@@ -535,7 +514,7 @@ foreach ($Users as $ID => $User) {
 		</div>
 <? if(check_perms('site_collages_manage') && !$PreventAdditions) { ?>
 		<div class="box box_addtorrent">
-			<div class="head"><strong>Add torrent</strong><span style="float: right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add'?'Individual add':'Batch add'); return false;" class="brackets">Batch add</a></span></div>
+			<div class="head"><strong>Add torrent</strong><span class="float_right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add'?'Individual add':'Batch add'); return false;" class="brackets">Batch add</a></span></div>
 			<div class="pad add_torrent_container">
 				<form class="add_form" name="torrent" action="collages.php" method="post">
 					<input type="hidden" name="action" value="add_torrent" />

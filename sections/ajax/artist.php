@@ -168,8 +168,9 @@ reset($TorrentList);
 
 $JsonTorrents = array();
 $Tags = array();
-foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $Artists, $ExtendedArtists) = array_values($Group);
+foreach ($TorrentList as $GroupID => $Group) {
+	extract(Torrents::array_group($Group));
+
 	$GroupVanityHouse = $Importances[$GroupID]['VanityHouse'];
 
 	$TagList = explode(' ',str_replace('_','.',$TagList));
@@ -219,8 +220,10 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		'groupYear' => (int) $GroupYear,
 		'groupRecordLabel' => $GroupRecordLabel,
 		'groupCatalogueNumber' => $GroupCatalogueNumber,
+		'groupCategoryID' => $GroupCategoryID,
 		'tags' => $TagList,
 		'releaseType' => (int) $ReleaseType,
+		'wikiImage' => $WikiImage,
 		'groupVanityHouse' => $GroupVanityHouse == 1,
 		'hasBookmarked' => $hasBookmarked = has_bookmarked('torrent', $GroupID),
 		'torrent' => $InnerTorrents

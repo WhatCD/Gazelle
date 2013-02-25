@@ -64,16 +64,10 @@ if ($TopVotes === false) {
 		$Data    = $DB->to_array('GroupID');
 
 		$Groups = Torrents::get_groups($Results);
-		if (count($Results) > 0) {
-			$DB->query('SELECT ID, CategoryID FROM torrents_group
-						WHERE ID IN ('.implode(',', $Results).')');
-			$Cats = $DB->to_array('ID');
-		}
-		// Make sure it's still in order.
+
 		$TopVotes = array();
 		foreach ($Results as $GroupID) {
 			$TopVotes[$GroupID] = $Groups['matches'][$GroupID];
-			$TopVotes[$GroupID]['CategoryID'] = $Cats[$GroupID]['CategoryID'];
 			$TopVotes[$GroupID]['Ups']   = $Data[$GroupID]['Ups'];
 			$TopVotes[$GroupID]['Total'] = $Data[$GroupID]['Total'];
 			$TopVotes[$GroupID]['Score'] = $Data[$GroupID]['Score'];
@@ -163,10 +157,11 @@ if(empty($_GET['advanced'])){ ?>
 // This code was copy-pasted from collages and should die in a fire
 $Number = 0;
 $NumGroups = 0;
-foreach ($TopVotes as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel,
-		 $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse,
-		 $Torrents, $GroupArtists, $ExtendedArtists, $GroupFlags, $GroupCategoryID,$Ups,$Total,$Score) = array_values($Group);
+foreach ($TopVotes as $GroupID => $Group) {
+	extract(Torrents::array_group($Group));
+	$Ups   = $Group['Ups'];
+	$Total = $Group['Total'];
+	$Score = $Group['Score'];
 
 	$IsBookmarked = in_array($GroupID, $Bookmarks);
 
@@ -174,14 +169,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 	$Number++;
 	$NumGroups++;
 
-	$TagList = explode(' ',str_replace('_','.',$TagList));
-	$TorrentTags = array();
-	foreach($TagList as $Tag) {
-		$TorrentTags[]='<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-	}
-	$PrimaryTag = $TagList[0];
-	$TorrentTags = implode(', ', $TorrentTags);
-	$TorrentTags='<br /><div class="tags">'.$TorrentTags.'</div>';
+	$TorrentTags = new Tags($TagList);
 
 	$DisplayName = $Number.' - ';
 
@@ -199,7 +187,7 @@ foreach ($TopVotes as $GroupID=>$Group) {
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start();
 
-	if(count($Torrents)>1 || $GroupCategoryID==1) {
+	if(count($Torrents) > 1 || $GroupCategoryID == 1) {
 		// Grouped torrents
 		$GroupSnatched = false;
 		foreach ($Torrents as &$Torrent) {
@@ -217,16 +205,25 @@ foreach ($TopVotes as $GroupID=>$Group) {
 						</div>
 					</td>
 					<td class="center">
-						<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div>
+						<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 					</td>
-					<td>
-						<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
+					<td class="big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+						<div class="group_image float_left clear">
+							<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+						</div>
+<? endif; ?>
+						<div class="group_info clear">
+
+							<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
 		<?	if($IsBookmarked) { ?>
-						<span class="bookmark" style="float:right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
+							<span class="bookmark" style="float:right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
 		<?	} else { ?>
-						<span class="bookmark" style="float:right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
+							<span class="bookmark" style="float:right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
 		<?	} ?>
-					<?=$TorrentTags?>
+							<div class="tags"><?=$TorrentTags->format()?></div>
+
+						</div>
 					</td>
 					<td colspan="4" class="votes_info_td"><strong><?=number_format($Ups)?></strong> upvotes out of <strong><?=number_format($Total)?></strong> total (<span title="Score: <?=number_format($Score*100,4)?>">Score: <?=number_format($Score*100)?></span>).</td>
 				</tr>
@@ -325,25 +322,32 @@ foreach ($TopVotes as $GroupID=>$Group) {
 		<tr class="torrent torrent_row<?=$SnatchedTorrentClass . $SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 			<td></td>
 			<td class="center">
-				<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>">
+				<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
 				</div>
 			</td>
-			<td class="nobr">
-				<span>
-					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+			<td class="nobr big_info">
+<? if ($LoggedUser['CoverArt']) : ?>
+				<div class="group_image float_left clear">
+					<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+				</div>
+<? endif; ?>
+				<div class="group_info clear">
+					<span>
+						[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Torrent)) { ?>
-					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?>
-					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
+						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
 <?		if($IsBookmarked) { ?>
-					| <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+						| <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
 <?		} else { ?>
-					| <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+						| <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?		} ?>
-					]
-				</span>
-				<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
-				<?=$TorrentTags?>
+						]
+					</span>
+					<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
+					<div class="tags"><?=$TorrentTags->format()?></div>
+				</div>
 			</td>
 			<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 			<td><?=number_format($Torrent['Snatched'])?></td>

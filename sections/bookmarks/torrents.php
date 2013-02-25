@@ -1,5 +1,4 @@
 <?
-include(SERVER_ROOT.'/classes/class_image_tools.php');
 ini_set('max_execution_time',600);
 set_time_limit(0);
 
@@ -21,11 +20,8 @@ if(!empty($_GET['userid'])) {
 	$UserID = $LoggedUser['ID'];
 }
 
-$Sneaky = ($UserID != $LoggedUser['ID']);
-
-list($K, $GroupIDs, $CollageDataList, $TorrentList) = Users::bookmark_data($UserID);
-
-$Title = ($Sneaky)?"$Username's bookmarked torrents":'Your bookmarked torrents';
+$Sneaky = $UserID != $LoggedUser['ID'];
+$Title = $Sneaky ? "$Username's bookmarked torrents" : 'Your bookmarked torrents';
 
 // Loop through the result set, building up $Collage and $TorrentTable
 // Then we print them.
@@ -33,47 +29,34 @@ $Collage = array();
 $TorrentTable = '';
 
 $NumGroups = 0;
-$Artists = array();
-$Tags = array();
+$ArtistCount = array();
 
-foreach ($TorrentList as $GroupID=>$Group) {
-	list($GroupID, $GroupName, $GroupYear, $GroupRecordLabel, $GroupCatalogueNumber, $TagList, $ReleaseType, $GroupVanityHouse, $Torrents, $GroupArtists, $ExtendedArtists, $GroupFlags) = array_values($Group);
-	list($GroupID2, $Sort, $Image, $GroupCategoryID, $AddedTime) = array_values($CollageDataList[$GroupID]);
+list(, $CollageDataList, $TorrentList) = Users::get_bookmarks($UserID);
+foreach ($TorrentList as $GroupID => $Group) {
+	extract(Torrents::array_group($Group));
+	list(, $Sort, $AddedTime) = array_values($CollageDataList[$GroupID]);
 
 	// Handle stats and stuff
 	$NumGroups++;
 
-	if($GroupArtists) {
-		foreach($GroupArtists as $Artist) {
-			if(!isset($Artists[$Artist['id']])) {
-				$Artists[$Artist['id']] = array('name'=>$Artist['name'], 'count'=>1);
+	if($Artists) {
+		foreach($Artists as $Artist) {
+			if(!isset($ArtistCount[$Artist['id']])) {
+				$ArtistCount[$Artist['id']] = array('name'=>$Artist['name'], 'count'=>1);
 			} else {
-				$Artists[$Artist['id']]['count']++;
+				$ArtistCount[$Artist['id']]['count']++;
 			}
 		}
 	}
 
-	$TagList = explode(' ',str_replace('_','.',$TagList));
-
-	$TorrentTags = array();
-	foreach($TagList as $Tag) {
-		if(!isset($Tags[$Tag])) {
-			$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
-		} else {
-			$Tags[$Tag]['count']++;
-		}
-		$TorrentTags[]='<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
-	}
-	$PrimaryTag = $TagList[0];
-	$TorrentTags = implode(', ', $TorrentTags);
-	$TorrentTags='<br /><div class="tags">'.$TorrentTags.'</div>';
+	$TorrentTags = new Tags($TagList);
 
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
 			$DisplayName = Artists::display_artists($ExtendedArtists);
-	} elseif(count($GroupArtists)>0) {
-			$DisplayName = Artists::display_artists(array('1'=>$GroupArtists));
+	} elseif(count($Artists)>0) {
+			$DisplayName = Artists::display_artists(array('1'=>$Artists));
 	} else {
 		$DisplayName = '';
 	}
@@ -95,18 +78,18 @@ foreach ($TorrentList as $GroupID=>$Group) {
 					</div>
 				</td>
 				<td class="center">
-					<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>"></div>
+					<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 				</td>
 				<td colspan="5">
-					<span style="float:left;"><strong><?=$DisplayName?></strong></span>
-					<span style="float:right;text-align:right">
+					<strong><?=$DisplayName?></strong>
+					<span style="text-align:right" class="float_right">
 <? if(!$Sneaky){ ?>
 						<a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a>
 						<br />
 <? } ?>
 						<?=time_diff($AddedTime);?>
 					</span>
-					<br /><span style="float:left;"><?=$TorrentTags?></span>
+					<div class="tags"><?=$TorrentTags->format()?></div>
 				</td>
 			</tr>
 <?
@@ -206,7 +189,7 @@ foreach ($TorrentList as $GroupID=>$Group) {
 	<tr class="torrent torrent_row<?=$SnatchedTorrentClass . $SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 		<td></td>
 		<td class="center">
-			<div title="<?=ucfirst(str_replace('_',' ',$PrimaryTag))?>" class="cats_<?=strtolower(str_replace(array('-',' '),array('',''),$Categories[$GroupCategoryID-1]))?> tags_<?=str_replace('.','_',$PrimaryTag)?>">
+			<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
 			</div>
 		</td>
 		<td>
@@ -218,11 +201,11 @@ foreach ($TorrentList as $GroupID=>$Group) {
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
 			<strong><?=$DisplayName?></strong>
-			<?=$TorrentTags?>
+			<div class="tags"><?=$TorrentTags->format()?></div>
 <? if(!$Sneaky){ ?>
-			<span style="float:left;"><a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a></span>
+			<span class="float_right float_clear"><a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a></span>
 <? } ?>
-			<span style="float:right;"><?=time_diff($AddedTime);?></span>
+			<span class="float_right float_clear"><?=time_diff($AddedTime);?></span>
 
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
@@ -243,20 +226,20 @@ foreach ($TorrentList as $GroupID=>$Group) {
 		unset($ExtendedArtists[2]);
 		unset($ExtendedArtists[3]);
 		$DisplayName .= Artists::display_artists($ExtendedArtists, false);
-	} elseif(count($GroupArtists)>0) {
-		$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists), false);
+	} elseif(count($Artists)>0) {
+		$DisplayName .= Artists::display_artists(array('1'=>$Artists), false);
 	}
 	$DisplayName .= $GroupName;
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
 ?>
 		<li class="image_group_<?=$GroupID?>">
 			<a href="torrents.php?id=<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
-<?	if($Image) {
+<?	if($WikiImage) {
 		if(check_perms('site_proxy_images')) {
-			$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
+			$WikiImage = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($WikiImage);
 		}
 ?>
-				<img src="<?=to_thumbnail($Image)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
+				<img src="<?=ImageTools::thumbnail($WikiImage)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
 <?	} else { ?>
 				<div style="width:107px;padding:5px"><?=$DisplayName?></div>
 <?	} ?>
@@ -309,24 +292,14 @@ View::show_header($Title, 'browse,collage');
 			<div class="head"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
 				<li>Torrents: <?=$NumGroups?></li>
-<? if(count($Artists) >0) { ?>	<li>Artists: <?=count($Artists)?></li> <? } ?>
+<? if(count($ArtistCount) >0) { ?>	<li>Artists: <?=count($ArtistCount)?></li> <? } ?>
 			</ul>
 		</div>
 		<div class="box box_tags">
 			<div class="head"><strong>Top tags</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">
-<?
-uasort($Tags, 'compare');
-$i = 0;
-foreach ($Tags as $TagName => $Tag) {
-	$i++;
-	if($i>5) { break; }
-?>
-					<li><a href="torrents.php?taglist=<?=display_str($TagName)?>"><?=display_str($TagName)?></a> (<?=$Tag['count']?>)</li>
-<?
-}
-?>
+<? $TorrentTags->format_top(5) ?>
 				</ol>
 			</div>
 		</div>
@@ -335,9 +308,9 @@ foreach ($Tags as $TagName => $Tag) {
 			<div class="pad">
 				<ol style="padding-left:5px;">
 <?
-uasort($Artists, 'compare');
+uasort($ArtistCount, 'compare');
 $i = 0;
-foreach ($Artists as $ID => $Artist) {
+foreach ($ArtistCount as $ID => $Artist) {
 	$i++;
 	if($i>10) { break; }
 ?>
@@ -394,4 +367,3 @@ if($CollageCovers != 0) { ?>
 </div>
 <?
 View::show_footer();
-$Cache->cache_value('bookmarks_torrent_'.$UserID.'_full', serialize(array(array($TorrentList, $CollageDataList))), 3600);
