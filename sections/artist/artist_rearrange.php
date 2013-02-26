@@ -450,7 +450,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 			<div class="head"><strong>Tags</strong></div>
 			<ul class="stats nobullet">
 <?
-			$TorrentTags->format_top(50);
+			Tags::format_top(50);
 ?>
 			</ul>
 		</div>

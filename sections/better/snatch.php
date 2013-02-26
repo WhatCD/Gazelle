@@ -173,7 +173,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 	} else {
 		$ArtistNames = '';
 	}
-
+	$TorrentTags = new Tags($GroupInfo['TagList']);
 	foreach ($Editions as $RemIdent => $Edition) {
 		if (!$Edition['FlacID'] || count($Edition['Formats']) == 3) {
 			continue;
@@ -205,7 +205,6 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		if (!empty($Edition['RemasterYear'])) {
 			$ExtraInfo .= ' - ';
 		}
-		$TorrentTags = new Tags($GroupInfo['TagList']);
 		$ExtraInfo .= implode(' / ', $EditionInfo);
 ?>
 		<tr class="torrent torrent_row<?=$Edition['IsSnatched'] ? ' snatched_torrent' : ''?>">

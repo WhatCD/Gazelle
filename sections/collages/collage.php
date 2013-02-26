@@ -466,9 +466,7 @@ foreach ($ZIPOptions as $Option) {
 			<div class="pad">
 				<ol style="padding-left:5px;">
 <?
-	if (isset($TorrentTags)) {
-				$TorrentTags->format_top(5, 'collages.php?action=search&amp;tags=');
-	}
+				Tags::format_top(5, 'collages.php?action=search&amp;tags=');
 ?>
 				</ol>
 			</div>

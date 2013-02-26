@@ -299,7 +299,7 @@ View::show_header($Title, 'browse,collage');
 			<div class="head"><strong>Top tags</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">
-<? $TorrentTags->format_top(5) ?>
+<? Tags::format_top(5) ?>
 				</ol>
 			</div>
 		</div>

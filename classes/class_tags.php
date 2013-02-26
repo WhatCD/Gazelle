@@ -128,7 +128,9 @@ class Tags
 	 */
 	public function format($Link = 'torrents.php?taglist=') {
 		foreach ($this->Tags as $Tag) {
-			$this->TagLink[] = '<a href="' . $Link . $Tag . '">' . $Tag . '</a>';
+			if (empty($this->TagLink[$Tag])) {
+				$this->TagLink[$Tag] = '<a href="' . $Link . $Tag . '">' . $Tag . '</a>';
+			}
 		}
 		return implode(', ', $this->TagLink);
 	}
@@ -138,8 +140,12 @@ class Tags
 	 * @param int $Max Max number of items to get
 	 */
 	public static function format_top($Max = 5, $Link = 'torrents.php?taglist=') {
+		if (empty(self::$All)) { ?>
+			<li>No torrent tags</li>
+<?			return;
+		}
 		foreach (array_slice(self::sorted(), 0, $Max) as $TagName => $Total) { ?>
-					<li><a href="<?=$Link . display_str($TagName)?>"><?=display_str($TagName)?></a> (<?=$Total?>)</li>
+				<li><a href="<?=$Link . display_str($TagName)?>"><?=display_str($TagName)?></a> (<?=$Total?>)</li>
 <?		}
 	}
 }

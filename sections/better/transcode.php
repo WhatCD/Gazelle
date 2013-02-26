@@ -128,6 +128,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 	} else {
 		$ArtistNames = '';
 	}
+	$TorrentTags = new Tags($GroupInfo['TagList']);
 	foreach ($Editions as $RemIdent => $Edition) {
 		if (!$Edition['FlacID'] //no FLAC in this group
 				|| !empty($Edition['Formats']) && $_GET['type'] == 3 //at least one transcode present when we only wanted groups containing no transcodes at all (type 3)
@@ -166,7 +167,6 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		if (!empty($Edition['RemasterYear'])) {
 			$ExtraInfo .= ' - ';
 		}
-		$TorrentTags = new Tags($GroupInfo['TagList']);
 		$ExtraInfo .= implode(' / ', $EditionInfo);
 ?>
 		<tr<?=$Edition['IsSnatched'] ? ' class="snatched_torrent"' : ''?>>

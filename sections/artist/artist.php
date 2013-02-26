@@ -621,7 +621,7 @@ foreach ($ZIPOptions as $Option) {
 			<div class="head"><strong>Tags</strong></div>
 			<ul class="stats nobullet">
 <?
-			$TorrentTags->format_top(50);
+			Tags::format_top(50);
 ?>
 			</ul>
 		</div>
@@ -752,11 +752,16 @@ if($NumRequests > 0) {
 			$Row = ($Row == 'a') ? 'b' : 'a';
 
 			$Tags = get_request_tags($RequestID);
+			$ReqTagList = array();
+			foreach($Tags as $TagID => $TagName) {
+				   $ReqTagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
+			}
+			$ReqTagList = implode(', ', $ReqTagList);
 ?>
 		<tr class="row<?=$Row?>">
 			<td>
 				<?=$FullName?>
-				<div class="tags"><?=$TorrentTags->format('requests.php?tags=')?></div>
+				<div class="tags"><?=$ReqTagList?></div>
 			</td>
 			<td>
 				<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
