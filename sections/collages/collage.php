@@ -94,7 +94,7 @@ $TorrentTable = '';
 
 $NumGroups = 0;
 $NumGroupsByUser = 0;
-$Artists = array();
+$TopArtists = array();
 $Users = array();
 $Number = 0;
 
@@ -117,13 +117,12 @@ foreach ($TorrentList as $GroupID => $Group) {
 		$CountArtists = $GroupArtists;
 	}
 
-	if($CountArtists) {
+	if ($CountArtists) {
 		foreach($CountArtists as $Artist) {
-			if(!isset($Artists[$Artist['id']])) {
-				$Artists[$Artist['id']] = array('name'=>$Artist['name'], 'count'=>1);
-			} else {
-				$Artists[$Artist['id']]['count']++;
-			}
+			if (!isset($TopArtists[$Artist['id']]))
+				$TopArtists[$Artist['id']] = array('name'=>$Artist['name'], 'count'=>1);
+			else
+				$TopArtists[$Artist['id']]['count']++;
 		}
 	}
 
@@ -455,8 +454,8 @@ foreach ($ZIPOptions as $Option) {
 			<div class="head"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
 				<li>Torrents: <?=$NumGroups?></li>
-<? if(count($Artists) >0) { ?>
-				<li>Artists: <?=count($Artists)?></li>
+<? if(!empty($TopArtists)) { ?>
+				<li>Artists: <?=count($TopArtists)?></li>
 <? } ?>
 				<li>Built by <?=count($Users)?> user<?=(count($Users)>1) ? 's' : ''?></li>
 			</ul>
@@ -471,15 +470,15 @@ foreach ($ZIPOptions as $Option) {
 				</ol>
 			</div>
 		</div>
-<? if(!empty($Artists)) { ?>
+<? if(!empty($TopArtists)) { ?>
 		<div class="box box_artists">
 			<div class="head"><strong>Top artists</strong></div>
 			<div class="pad">
 				<ol style="padding-left:5px;">
 <?
-uasort($Artists, 'compare');
+uasort($TopArtists, 'compare');
 $i = 0;
-foreach ($Artists as $ID => $Artist) {
+foreach ($TopArtists as $ID => $Artist) {
 	$i++;
 	if($i>10) { break; }
 ?>
