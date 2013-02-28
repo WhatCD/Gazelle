@@ -269,11 +269,11 @@ $OpenTable = false;
 $ShowGroups = !isset($LoggedUser['TorrentGrouping']) || $LoggedUser['TorrentGrouping'] == 0;
 $HideTorrents = ($ShowGroups ? '' : ' hidden');
 $OldGroupID = 0;
-$ReleaseType = 0;
 $LastReleaseType = 0;
 
 foreach ($Importances as $Group) {
-	extract(Torrents::array_group($TorrentList[$Group['GroupID']]));
+	extract(Torrents::array_group($TorrentList[$Group['GroupID']]), EXTR_OVERWRITE);
+	$ReleaseType = $Group['ReleaseType'];
 
 	if ($GroupID == $OldGroupID && $ReleaseType == $OldReleaseType) {
 		continue;

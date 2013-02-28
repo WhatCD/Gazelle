@@ -682,9 +682,9 @@ class Torrents {
 	}
 
 
-	public static function has_snatched($TorrentID) {
+	public static function has_snatched($TorrentID, $AllUsers = false) {
 		global $DB, $Cache, $LoggedUser;
-		if (empty($LoggedUser) || !$LoggedUser['ShowSnatched']) {
+		if (!$AllUsers && (empty($LoggedUser) || !$LoggedUser['ShowSnatched'])) {
 			return false;
 		}
 

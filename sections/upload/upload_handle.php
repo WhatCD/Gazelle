@@ -621,7 +621,7 @@ $DB->query("
 		($GroupID, $LoggedUser[ID], $T[Media], $T[Format], $T[Encoding], " .
 		"$T[Remastered], $T[RemasterYear], $T[RemasterTitle], $T[RemasterRecordLabel], $T[RemasterCatalogueNumber], " .
 		"$T[Scene], '$HasLog', '$HasCue', '".db_string($InfoHash)."', $NumFiles, '$FileString', '$FilePath', " .
-		"$TotalSize, '".sqltime()."', $T[TorrentDescription], $LogScore, $T[FreeLeech], $T[FreeLeechType])");
+		"$TotalSize, '".sqltime()."', $T[TorrentDescription], $LogScore, '$T[FreeLeech]', '$T[FreeLeechType]')");
 
 $Cache->increment('stats_torrent_count');
 $TorrentID = $DB->inserted_id();

@@ -472,11 +472,9 @@ foreach($Categories as $CatKey => $CatName) {
 			<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
 			<td><?=number_format($Torrent['Leechers'])?></td>
 		</tr>
-<?
-		}
-
-	}
-?>
+<?		} ?>
+	</table>
+<?	} ?>
 	<div class="linkbox"><?=$Pages?></div>
 </div>
 <? View::show_footer(); ?>

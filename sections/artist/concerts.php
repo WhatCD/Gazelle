@@ -4,7 +4,6 @@ ob_start();
 
 $ArtistEvents = LastFM::get_artist_events($ArtistID, $Name);
 $Hidden = false;
-$Debug->log_var($ArtistEvents);
 if ($ArtistEvents === false) { // Something went wrong
 	echo '<br />An error occurred when retrieving concert info.<br />';
 } elseif (!isset($ArtistEvents['events']['event'])) { // No upcoming events

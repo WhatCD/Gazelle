@@ -114,7 +114,7 @@ class View
 	 *  echo $SavedTemplate; // Output the buffer
 	 * </pre>
 	 */
-	static public function parse ($TemplateFile, array $Variables = null, $Buffer = false)
+	public static function parse ($TemplateFile, array $Variables = null, $Buffer = false)
 	{
 		$Template = self::IncludePath . $TemplateFile;
 		if (file_exists($Template)) {
