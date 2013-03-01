@@ -424,3 +424,7 @@ tr.torrent .bookmark>a:after {
 .group_image img {
 	cursor: pointer;
 }
+
+.user_title {
+	font-weight: normal;
+}

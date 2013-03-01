@@ -1,4 +1,6 @@
 <?
+
+
 $Orders = array('Time', 'Name', 'Seeders', 'Leechers', 'Snatched', 'Size');
 $Ways = array('ASC'=>'Ascending', 'DESC'=>'Descending');
 $UserVotes = Votes::get_user_votes($LoggedUser['ID']);

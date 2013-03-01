@@ -522,22 +522,30 @@ $IsNewGroup = !$GroupID;
 
 //----- Start inserts
 if(!$GroupID && $Type == 'Music') {
+	//array to store which artists we have added already, to prevent adding an artist twice
+	$ArtistsAdded = array();
 	foreach($ArtistForm as $Importance => $Artists) {
 		foreach($Artists as $Num => $Artist) {
 			if(!$Artist['id']) {
-				// Create artist
-				$DB->query("INSERT INTO artists_group (Name) VALUES ('".db_string($Artist['name'])."')");
-				$ArtistID = $DB->inserted_id();
+				if(isset($ArtistsAdded[strtolower($Artist['name'])])) {
+					$ArtistForm[$Importance][$Num] = $ArtistsAdded[strtolower($Artist['name'])];
+				} else {
+					// Create artist
+					$DB->query("INSERT INTO artists_group (Name) VALUES ('".db_string($Artist['name'])."')");
+					$ArtistID = $DB->inserted_id();
 
-				$Cache->increment('stats_artist_count');
+					$Cache->increment('stats_artist_count');
 
-				$DB->query("INSERT INTO artists_alias (ArtistID, Name) VALUES (".$ArtistID.", '".db_string($Artist['name'])."')");
-				$AliasID = $DB->inserted_id();
+					$DB->query("INSERT INTO artists_alias (ArtistID, Name) VALUES (".$ArtistID.", '".db_string($Artist['name'])."')");
+					$AliasID = $DB->inserted_id();
 
-				$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $Artist['name']);
+					$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $Artist['name']);
+					$ArtistsAdded[strtolower($Artist['name'])] = $ArtistForm[$Importance][$Num];
+				}
 			}
 		}
 	}
+	unset($ArtistsAdded);
 }
 
 if(!$GroupID) {
