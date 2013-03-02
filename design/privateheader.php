@@ -223,7 +223,7 @@ if ($CurrentNews === false) {
 	$Cache->cache_value('news_latest_id', $CurrentNews, 0);
 }
 if ($MyNews < $CurrentNews) {
-	$Alerts[] = '<a href="index.php">'.'New Announcement!'.'</a>';
+	$Alerts[] = '<a href="index.php">'.'New announcement!'.'</a>';
 }
 
 // Blog
@@ -239,7 +239,7 @@ if ($CurrentBlog === false) {
 	$Cache->cache_value('blog_latest_id', $CurrentBlog, 0);
 }
 if ($MyBlog < $CurrentBlog) {
-	$Alerts[] = '<a href="blog.php">'.'New Blog Post!'.'</a>';
+	$Alerts[] = '<a href="blog.php">'.'New blog post!'.'</a>';
 }
 
 // Staff blog
@@ -264,7 +264,7 @@ if(check_perms('users_mod')) {
 		$Cache->cache_value('staff_blog_latest_time', $LatestSBlogTime, 1209600);
 	}
 	if ($SBlogReadTime < $LatestSBlogTime) {
-		$Alerts[] = '<a href="staffblog.php">'.'New Staff Blog Post!'.'</a>';
+		$Alerts[] = '<a href="staffblog.php">'.'New staff blog post!'.'</a>';
 	}
 }
 
@@ -370,7 +370,7 @@ if(check_perms('admin_reports')) {
 	}
 
 	if ($NumOtherReports > 0) {
-		$ModBar[] = '<a href="reports.php">'.$NumOtherReports.(($NumTorrentReports == 1) ? ' Other Report' : ' Other Reports').'</a>';
+		$ModBar[] = '<a href="reports.php">'.$NumOtherReports.(($NumTorrentReports == 1) ? ' Other report' : ' Other reports').'</a>';
 	}
 } else if(check_perms('project_team')) {
 	$NumUpdateReports = $Cache->get_value('num_update_reports');

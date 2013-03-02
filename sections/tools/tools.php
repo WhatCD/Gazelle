@@ -13,10 +13,10 @@ View::show_header('Staff Tools');
 <? } if (check_perms('admin_whitelist')) { ?>
 			<tr><td><a href="tools.php?action=whitelist">Whitelist</a></td></tr>
 <? } if (check_perms('admin_manage_ipbans')) { ?>
-			<tr><td><a href="tools.php?action=ip_ban">IP Bans</a></td></tr>
+			<tr><td><a href="tools.php?action=ip_ban">IP address bans</a></td></tr>
 
 <? } if (check_perms('users_view_ips')) { ?>
-			<tr><td><a href="tools.php?action=login_watch">Login Watch</a></td></tr>
+			<tr><td><a href="tools.php?action=login_watch">Login watch</a></td></tr>
 <? } if (check_perms('admin_manage_forums')) { ?>
 			<tr><td><a href="tools.php?action=forum">Forums</a></td></tr>
 <? } if (check_perms('admin_manage_news')) { ?>
@@ -27,11 +27,11 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=recommend">Vanity House additions</a></td></tr>
 
 <? } if (check_perms('users_view_email')) { ?>
-			<tr><td><a href="tools.php?action=email_blacklist">Email Blacklist</a></td></tr>
+			<tr><td><a href="tools.php?action=email_blacklist">Email blacklist</a></td></tr>
 <? } if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=tokens">Manage freeleech tokens</a></td></tr>
-			<tr><td><a href="tools.php?action=official_tags">Official Tags Manager</a></td></tr>
-			<tr><td><a href="tools.php?action=tag_aliases">Tag Aliases</a></td></tr>
+			<tr><td><a href="tools.php?action=official_tags">Official tags manager</a></td></tr>
+			<tr><td><a href="tools.php?action=tag_aliases">Tag aliases</a></td></tr>
 
 
 <? } ?>
@@ -43,23 +43,23 @@ View::show_header('Staff Tools');
 
 <?
 if (check_perms('admin_donor_log')) { ?>
-			<tr><td><a href="tools.php?action=donation_log">Donation Log</a></td></tr>
+			<tr><td><a href="tools.php?action=donation_log">Donation log</a></td></tr>
 			<tr><td><a href="tools.php?action=bitcoin_balance">Bitcoin donation balance</a></td></tr>
 <? } if (check_perms('users_view_ips') && check_perms('users_view_email')) { ?>
-			<tr><td><a href="tools.php?action=registration_log">Registration Log</a></td></tr>
+			<tr><td><a href="tools.php?action=registration_log">Registration log</a></td></tr>
 <? } if (check_perms('users_view_invites')) { ?>
-			<tr><td><a href="tools.php?action=invite_pool">Invite Pool</a></td></tr>
+			<tr><td><a href="tools.php?action=invite_pool">Invite pool</a></td></tr>
 			
 <? } if (check_perms('site_view_flow')) { ?>
-			<tr><td><a href="tools.php?action=upscale_pool">Upscale Pool</a></td></tr>
-			<tr><td><a href="tools.php?action=user_flow">User Flow</a></td></tr>
-			<tr><td><a href="tools.php?action=torrent_stats">Torrent Stats</a></td></tr>
-			<tr><td><a href="tools.php?action=economic_stats">Economic Stats</a></td></tr>
+			<tr><td><a href="tools.php?action=upscale_pool">Upscale pool</a></td></tr>
+			<tr><td><a href="tools.php?action=user_flow">User flow</a></td></tr>
+			<tr><td><a href="tools.php?action=torrent_stats">Torrent stats</a></td></tr>
+			<tr><td><a href="tools.php?action=economic_stats">Economic stats</a></td></tr>
 <? } if (check_perms('site_debug')) { ?>
-			<tr><td><a href="tools.php?action=opcode_stats">Opcode Stats</a></td></tr>
-			<tr><td><a href="tools.php?action=service_stats">Service Stats</a></td></tr>
+			<tr><td><a href="tools.php?action=opcode_stats">Opcode stats</a></td></tr>
+			<tr><td><a href="tools.php?action=service_stats">Service stats</a></td></tr>
 <? } if (check_perms('admin_manage_permissions')) { ?>
-			<tr><td><a href="tools.php?action=special_users">Special Users</a></td></tr>
+			<tr><td><a href="tools.php?action=special_users">Special users</a></td></tr>
 
 <? } ?>
 		</table>
@@ -69,16 +69,16 @@ if (check_perms('admin_donor_log')) { ?>
 			<tr class="colhead"><td>Misc</td></tr>
 
 <? if (check_perms('users_mod')) { ?>
-			<tr><td><a href="tools.php?action=manipulate_tree">Manipulate Tree</a></td></tr>
+			<tr><td><a href="tools.php?action=manipulate_tree">Manipulate tree</a></td></tr>
 <? } 
 if (check_perms('admin_update_geoip')) { ?>
 			<tr><td><a href="tools.php?action=update_geoip">Update GeoIP </a></td></tr>
 <? } if (check_perms('admin_create_users')) { ?>
-			<tr><td><a href="tools.php?action=create_user">Create User</a></td></tr>
+			<tr><td><a href="tools.php?action=create_user">Create user</a></td></tr>
 <? } if (check_perms('admin_clear_cache')) { ?>
 			<tr><td><a href="tools.php?action=clear_cache">Clear/view a cache key</a></td></tr>
 <? } if (check_perms('users_view_ips')) { ?>
-			<tr><td><a href="tools.php?action=dupe_ips">Duplicate IPs</a></td></tr>
+			<tr><td><a href="tools.php?action=dupe_ips">Duplicate IP addresses</a></td></tr>
 
 <? } if (check_perms('site_debug')) { ?>
 			<tr><td><a href="tools.php?action=sandbox1">Sandbox (1)</a></td></tr>
@@ -92,9 +92,9 @@ if (check_perms('admin_update_geoip')) { ?>
 
 			<tr><td><a href="schedule.php?auth=<?=$LoggedUser['AuthKey']?>">Schedule</a></td></tr>
 <? }?>
-			<tr><td><strong><a href="tools.php?action=public_sandbox">Public Sandbox</a></strong></td></tr>
+			<tr><td><strong><a href="tools.php?action=public_sandbox">Public sandbox</a></strong></td></tr>
 <? if (check_perms('users_mod')) { ?>
-			<tr><td><strong><a href="tools.php?action=mod_sandbox">Mod level Sandbox</a></strong></td></tr>
+			<tr><td><strong><a href="tools.php?action=mod_sandbox">Mod-level sandbox</a></strong></td></tr>
 <? } ?>
 		</table>
 	</div>

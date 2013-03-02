@@ -158,7 +158,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 				<td class="center">
 					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group"></a>
+						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
 					</div>
 				</td>
 				<td class="center">
@@ -312,7 +312,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 ?>
 				<img src="<?=ImageTools::thumbnail($WikiImage)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="118" />
 <?	} else { ?>
-				<span style="width:107px;padding:5px"><?=$DisplayName?></span>
+				<span style="width: 107px; padding: 5px;"><?=$DisplayName?></span>
 <?	} ?>
 			</a>
 		</li>
@@ -409,7 +409,7 @@ if(check_perms('zip_downloader')){
 				<ul id="list" class="nobullet">
 <? foreach ($ZIPList as $ListItem) { ?>
 					<li id="list<?=$ListItem?>">
-						<input type="hidden" name="list[]" value="<?=$ListItem?>" /> 
+						<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 						<span class="float_left"><?=$ZIPOptions[$ListItem]['2']?></span>
 						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" class="float_right brackets">X</a></span>
 						<br style="clear:all;" />
@@ -453,11 +453,11 @@ foreach ($ZIPOptions as $Option) {
 		<div class="box box_info box_statistics_collage_torrents">
 			<div class="head"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
-				<li>Torrents: <?=$NumGroups?></li>
+				<li>Torrents: <?=number_format($NumGroups)?></li>
 <? if(!empty($TopArtists)) { ?>
-				<li>Artists: <?=count($TopArtists)?></li>
+				<li>Artists: <?=number_format(count($TopArtists))?></li>
 <? } ?>
-				<li>Built by <?=count($Users)?> user<?=(count($Users)>1) ? 's' : ''?></li>
+				<li>Built by <?=number_format(count($Users))?> user<?=(count($Users) > 1 ? 's' : '')?></li>
 			</ul>
 		</div>
 		<div class="box box_tags">
@@ -482,7 +482,7 @@ foreach ($TopArtists as $ID => $Artist) {
 	$i++;
 	if($i>10) { break; }
 ?>
-					<li><a href="artist.php?id=<?=$ID?>"><?=$Artist['name']?></a> (<?=$Artist['count']?>)</li>
+					<li><a href="artist.php?id=<?=$ID?>"><?=$Artist['name']?></a> (<?=number_format($Artist['count'])?>)</li>
 <?
 }
 ?>
@@ -501,7 +501,7 @@ foreach ($Users as $ID => $User) {
 	$i++;
 	if($i>5) { break; }
 ?>
-					<li><?=Users::format_username($ID, false, false, false)?> (<?=$User['count']?>)</li>
+					<li><?=Users::format_username($ID, false, false, false)?> (<?=number_format($User['count'])?>)</li>
 <?
 }
 ?>
@@ -555,7 +555,7 @@ foreach ($CommentList as $Comment) {
 	list($CommentID, $Body, $UserID, $Username, $CommentTime) = $Comment;
 ?>
 		<div class="box comment">
-			<div class="head">By <?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>" class="brackets">Report Comment</a></div>
+			<div class="head">By <?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>" class="brackets">Report comment</a></div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
 <?

@@ -361,8 +361,8 @@ $Cache->increment('usage_index');
 ?>
 	<div class="box" id="recommended">
 		<div class="head colhead_dark">
-			<strong>Latest vanity house additions</strong>
-            <a href="#" onclick="$('#vanityhouse').toggle(); this.innerHTML=(this.innerHTML=='(Hide)'?'(Show)':'(Hide)'); return false;">(Show)</a>
+			<strong>Latest Vanity House additions</strong>
+            <a href="#" onclick="$('#vanityhouse').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Show</a>
 		</div>
 
 		<table class="torrent_table hidden" id="vanityhouse">
@@ -420,7 +420,7 @@ foreach ($News as $NewsItem) {
 ?>
 		<div id="more_news" class="box">
 			<div class="head">
-				<em>For older news posts, <a href="forums.php?action=viewforum&amp;forumid=19">click here</a></em>
+				<em>For older news posts, <a href="forums.php?action=viewforum&amp;forumid=19">click here</a>.</em>
 			</div>
 		</div>
 	</div>

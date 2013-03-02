@@ -13,8 +13,9 @@ View::show_header('Reports V2!', 'reportsv2');
 	<h2>Search</h2>
 <? include('header.php'); ?>
 </div>
-<br />
-On hold until FZeroX fixes the main torrents search; then I will steal all his work and claim it as my own.
+<div class="thin box pad">
+	On hold until someone fixes the main torrents search.
+</div>
 <?
 View::show_footer();
 ?>

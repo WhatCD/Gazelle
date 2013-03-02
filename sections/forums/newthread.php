@@ -27,17 +27,17 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 	<div class="hidden" id="newthreadpreview">
 		<div class="linkbox">
 			<div class="center">
-				<a href="#" onclick="return false;" class="brackets">Report Thread</a>
+				<a href="#" onclick="return false;" class="brackets">Report thread</a>
 				<a href="#" onclick="return false;" class="brackets"><?=!empty($HeavyInfo['AutoSubscribe']) ? 'Unsubscribe' : 'Subscribe'?></a>
 			</div>
 		</div>
 <? if (check_perms('forums_polls_create')) { ?>
 		<div class="box thin clear hidden" id="pollpreview">
-			<div class="head colhead_dark"><strong>Poll</strong> <a href="#" onclick="$('#threadpoll').toggle();return false;">(View)</a></div>
+			<div class="head colhead_dark"><strong>Poll</strong> <a href="#" onclick="$('#threadpoll').toggle();return false;" class="brackets">View</a></div>
 			<div class="pad" id="threadpoll">
 				<p><strong id="pollquestion"></strong></p>
 				<div id="pollanswers"></div>
-				<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank - Show the results!</label><br /><br />
+				<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; show the results!</label><br /><br />
 				<input type="button" style="float: left;" value="Vote" />
 			</div>
 		</div>
@@ -55,7 +55,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 						by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?></strong>
 					Just now
 					</span>
-					<span id="barpreview" style="float:right;">
+					<span id="barpreview" style="float: right;">
 						<a href="#newthreadpreview" class="brackets">Report</a>
 						&nbsp;
 						<a href="#">&uarr;</a>
@@ -71,7 +71,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 			<? } ?>
 				</td>
 				<td class="body" valign="top">
-					<div id="contentpreview" style="text-align:left;"></div>
+					<div id="contentpreview" style="text-align: left;"></div>
 				</td>
 			</tr>
 		</table>
@@ -93,7 +93,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 				<tr>
 					<td></td>
 					<td>
-						<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> onchange="$('#subscribeboxpreview').raw().checked=this.checked;" />
+						<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe']) ? ' checked="checked"' : ''?> onchange="$('#subscribeboxpreview').raw().checked=this.checked;" />
 						<label for="subscribebox">Subscribe to topic</label>
 					</td>
 				</tr>
@@ -129,7 +129,7 @@ if (check_perms('forums_polls_create')) {
 				<tr>
 					<td colspan="2" class="center">
 						<strong>Poll Settings</strong>
-						<a href="#" onclick="$('#poll_question, #poll_answers').toggle();return false;">(View)</a>
+						<a href="#" onclick="$('#poll_question, #poll_answers').toggle();return false;" class="brackets">View</a>
 					</td>
 				</tr>
 				<tr id="poll_question" class="hidden">

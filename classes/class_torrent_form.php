@@ -206,6 +206,7 @@ class TORRENT_FORM {
 						<option value="5"<?=($Importance == '5' ? ' selected="selected"' : '')?>>Conductor</option>
 						<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
 						<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
+						<option value="7"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
 					</select>
 <?				if ($FirstArtist) {
 					if (!$this->DisabledFlag) { ?>

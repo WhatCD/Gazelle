@@ -10,7 +10,9 @@
 
 require(SERVER_ROOT.'/classes/class_torrent_form.php');
 
-if(!is_number($_GET['id']) || !$_GET['id']) { error(0); }
+if (!is_number($_GET['id']) || !$_GET['id']) {
+	error(0);
+}
 
 $TorrentID = $_GET['id'];
 
@@ -58,11 +60,13 @@ $DB->query("SELECT
 	WHERE t.ID='$TorrentID'");
 
 list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
-if(!$Properties) { error(404); }
+if (!$Properties) {
+	error(404);
+}
 
 $UploadForm = $Categories[$Properties['CategoryID']-1];
 
-if(($LoggedUser['ID']!=$Properties['UserID'] && !check_perms('torrents_edit')) || $LoggedUser['DisableWiki']) {
+if (($LoggedUser['ID'] != $Properties['UserID'] && !check_perms('torrents_edit')) || $LoggedUser['DisableWiki']) {
 	error(403);
 }
 
@@ -70,7 +74,7 @@ if(($LoggedUser['ID']!=$Properties['UserID'] && !check_perms('torrents_edit')) |
 View::show_header('Edit torrent', 'upload');
 
 
-if(!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms('edit_unknowns')) {
+if (!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms('edit_unknowns')) {
 	$TorrentForm = new TORRENT_FORM($Properties, $Err, false);
 
 	$TorrentForm->head();
@@ -97,7 +101,7 @@ if(!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms('
 }
 
 
-if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
+if (check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 ?>
 <div class="thin">
 	<h2>Change group</h2>
@@ -153,6 +157,66 @@ if(check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
 		</table>
 	</form>
 	<br />
+<?
+	}
+	if (check_perms('users_mod')) { ?>
+	<h2>Change category</h2>
+	<form action="torrents.php" method="post">
+		<input type="hidden" name="action" value="changecategory" />
+		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+		<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
+		<input type="hidden" name="oldgroupid" value="<?=$Properties['GroupID']?>" />
+		<input type="hidden" name="oldartistid" value="<?=$Properties['ArtistID']?>" />
+		<input type="hidden" name="oldcategoryid" value="<?=$Properties['CategoryID']?>" />
+		<table>
+			<tr>
+				<td class="label">Change category</td>
+				<td>
+					<select id="newcategoryid" name="newcategoryid" onchange="ChangeCategory(this.value);">
+<?		foreach ($Categories as $CatID => $CatName) { ?>
+						<option value="<?=$CatID+1?>"<?Format::selected('CategoryID',$CatID+1,'selected',$Properties)?>><?=$CatName?></option>
+<?		} ?>
+					</select>
+				</td>
+			<tr id="split_releasetype">
+				<td class="label">Release type</td>
+				<td>
+					<select name="releasetype">
+<?		foreach ($ReleaseTypes as $RTID => $ReleaseType) { ?>
+						<option value="<?=$RTID?>"><?=$ReleaseType?></option>
+<?		} ?>
+					</select>
+				</td>
+			</tr>
+			<tr id="split_artist">
+				<td class="label">Artist</td>
+				<td>
+					<input type="text" name="artist" value="<?=$Properties['ArtistName']?>" size="50" />
+				</td>
+			</tr>
+			<tr id="split_title">
+				<td class="label">Title</td>
+				<td>
+					<input type="text" name="title" value="<?=$Properties['Title']?>" size="50" />
+				</td>
+			</tr>
+			<tr id="split_year">
+				<td class="label">Year</td>
+				<td>
+					<input type="text" name="year" value="<?=$Properties['Year']?>" size="10" />
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" class="center">
+					<input type="submit" value="Change category" />
+				</td>
+			</tr>
+		</table>
+		<script type="text/javascript">ChangeCategory($('#newcategoryid').raw().value);</script>
+	</form>
+<?
+	}
+?>
 </div>
 <?
 } // if check_perms('torrents_edit')

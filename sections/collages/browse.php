@@ -173,15 +173,15 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 					<td class="label">Tags (comma-separated):</td>
 					<td>
 						<input type="text" name="tags" size="70" value="<?=(!empty($_GET['tags']) ? display_str($_GET['tags']) : '')?>" />&nbsp;
-						<input type="radio" name="tags_type" id="tags_type0" value="0" <?Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
-						<input type="radio" name="tags_type" id="tags_type1" value="1"  <?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
+						<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+						<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 					</td>
 				</tr>
 				<tr id="categories">
 					<td class="label">Categories:</td>
 					<td>
 <? foreach($CollageCats as $ID=>$Cat) { ?>
-						<input type="checkbox" value="1" name="cats[<?=$ID?>]" id="cats_<?=$ID?>" <?if(in_array($ID, $Categories)) { echo ' checked="checked"'; }?>>
+						<input type="checkbox" value="1" name="cats[<?=$ID?>]" id="cats_<?=$ID?>"<?if(in_array($ID, $Categories)) { echo ' checked="checked"'; }?> />
 						<label for="cats_<?=$ID?>"><?=$Cat?></label>&nbsp;&nbsp;
 <? } ?>
 					</td>
@@ -197,15 +197,14 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 					<td class="label">Order by:</td>
 					<td>
 						<select name="order_by" class="ft_order_by">
-						<?
-							foreach($OrderVals as $Cur){ ?>
+<? foreach($OrderVals as $Cur){ ?>
 							<option value="<?=$Cur?>"<? if(isset($_GET['order_by']) && $_GET['order_by'] == $Cur || (!isset($_GET['order_by']) && $Cur == 'Time')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
-						<?	}?>
+<? } ?>
 						</select>
 						<select name="order_way" class="ft_order_way">
-						<?	foreach($WayVals as $Cur){ ?>
+<? foreach($WayVals as $Cur){ ?>
 							<option value="<?=$Cur?>"<? if(isset($_GET['order_way']) && $_GET['order_way'] == $Cur || (!isset($_GET['order_way']) && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
-						<?	}?>
+<? } ?>
 						</select>
 					</td>
 				</tr>
@@ -293,7 +292,7 @@ foreach ($Collages as $Collage) {
 
 	//Print results
 ?>
-	<tr class="row<?=$Row?> <?=($BookmarkView)?'bookmark_'.$ID:''?>">
+	<tr class="row<?=$Row?><?=($BookmarkView) ? ' bookmark_'.$ID : ''?>">
 		<td>
 			<a href="collages.php?action=search&amp;cats[<?=(int)$CategoryID?>]=1"><?=$CollageCats[(int)$CategoryID]?></a>
 		</td>
@@ -306,7 +305,7 @@ foreach ($Collages as $Collage) {
 <?	} ?>
 			<div class="tags"><?=$TorrentTags->format('collages.php?action=search&amp;tags=')?></div>
 		</td>
-		<td><?=(int)$NumTorrents?></td>
+		<td><?=number_format((int)$NumTorrents)?></td>
 		<td><?=Users::format_username($UserID, false, false, false)?></td>
 	</tr>
 <? } ?>
