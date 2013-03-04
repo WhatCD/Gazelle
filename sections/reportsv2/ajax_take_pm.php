@@ -46,13 +46,13 @@ if(!isset($_POST['from_delete'])) {
 if($Recipient == 'Uploader') {
 	$ToID = $_POST['uploaderid'];
 	if($Report) {
-		$Message = "You uploaded [url=http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]the above torrent[/url], it has been reported for the reason: ".$ReportType['title']."\n\n".$Message;
+		$Message = "You uploaded [url=https://".SSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]the above torrent[/url]. It has been reported for the reason: ".$ReportType['title']."\n\n".$Message;
 	} else {
-		$Message = "I am PMing you as you are the uploader of [url=http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]the above torrent[/url].\n\n".$Message;
+		$Message = "I am PMing you as you are the uploader of [url=https://".SSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]the above torrent[/url].\n\n".$Message;
 	}
 } else if($Recipient == 'Reporter') {
 	$ToID = $_POST['reporterid'];
-	$Message = "You reported [url=http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]the above torrent[/url] for the reason ".$ReportType['title'].":\n\"".$_POST['report_reason']."\"\n\n".$Message;
+	$Message = "You reported [url=https://".SSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]the above torrent[/url] for the reason ".$ReportType['title'].":\n[quote]".$_POST['report_reason']."[/quote]\n".$Message;
 } else {
 	$Err = "Something went horribly wrong";
 }

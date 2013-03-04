@@ -195,10 +195,10 @@ View::show_header('Reports V2!', 'reportsv2,bbcode');
 </div>
 <div class="buttonbox thin center">
 	<? if($View != "resolved") { ?>
-		<span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-Resolve" /></span>
-		<span title="Assigns all of the reports on the page to you!"><input type="button" onclick="Grab();" value="Grab All" /></span>
+		<span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-resolve" /></span>
+		<span title="Assigns all of the reports on the page to you!"><input type="button" onclick="Grab();" value="Grab all" /></span>
 	<? } ?>
-	<? if($View == "staff" && $LoggedUser['ID'] == $ID) { ?>| <span title="Un-In Progress all the reports currently displayed"><input type="button" onclick="GiveBack();" value="Give back all" /></span><? } ?>
+	<? if($View == "staff" && $LoggedUser['ID'] == $ID) { ?>| <span title="Un-'in progress' all the reports currently displayed"><input type="button" onclick="GiveBack();" value="Give back all" /></span><? } ?>
 </div>
 <br />
 <div class="linkbox">
@@ -296,7 +296,7 @@ if(count($Reports) == 0) {
 					</div>
 					<table class="layout" cellpadding="5">
 						<tr>
-							<td class="label"><a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Reported </a>Torrent:</td>
+							<td class="label"><a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Reported</a> torrent:</td>
 							<td colspan="3">
 			<?	if(!$GroupID) { ?>
 								<a href="log.php?search=Torrent+<?=$TorrentID?>"><?=$TorrentID?></a> (Deleted)
@@ -362,7 +362,7 @@ if(count($Reports) == 0) {
 						</tr>
 			<? if($Tracks) { ?>
 						<tr>
-							<td class="label">Relevant Tracks:</td>
+							<td class="label">Relevant tracks:</td>
 							<td colspan="3">
 								<?=str_replace(" ", ", ", $Tracks)?>
 							</td>
@@ -372,7 +372,7 @@ if(count($Reports) == 0) {
 				if($Links) {
 			?>
 						<tr>
-							<td class="label">Relevant Links:</td>
+							<td class="label">Relevant links:</td>
 							<td colspan="3">
 			<?
 					$Links = explode(" ", $Links);
@@ -394,7 +394,7 @@ if(count($Reports) == 0) {
 				if($ExtraIDs) {
 			?>
 						<tr>
-							<td class="label">Relevant Other Torrents:</td>
+							<td class="label">Relevant other torrents:</td>
 							<td colspan="3">
 			<?
 					$First = true;
@@ -466,7 +466,7 @@ if(count($Reports) == 0) {
 				if($Images) {
 			?>
 						<tr>
-							<td class="label">Relevant Images:</td>
+							<td class="label">Relevant images:</td>
 							<td colspan="3">
 			<?
 					$Images = explode(" ", $Images);
@@ -483,7 +483,7 @@ if(count($Reports) == 0) {
 				}
 			?>
 						<tr>
-							<td class="label">User Comment:</td>
+							<td class="label">User comment:</td>
 							<td colspan="3"><?=$Text->full_format($UserComment)?></td>
 						</tr>
 						<? // END REPORTED STUFF :|: BEGIN MOD STUFF ?>
@@ -491,7 +491,7 @@ if(count($Reports) == 0) {
 				if($Status == "InProgress") {
 			?>
 						<tr>
-							<td class="label">In Progress by:</td>
+							<td class="label">In progress by:</td>
 							<td colspan="3">
 								<a href="user.php?id=<?=$ResolverID?>"><?=$ResolverName?></a>
 							</td>
@@ -500,7 +500,7 @@ if(count($Reports) == 0) {
 				if($Status != "Resolved") {
 			?>
 						<tr>
-							<td class="label">Report Comment:</td>
+							<td class="label">Report comment:</td>
 							<td colspan="3">
 								<input type="text" name="comment" id="comment<?=$ReportID?>" size="45" value="<?=$ModComment?>" />
 								<input type="button" value="Update now" onclick="UpdateComment(<?=$ReportID?>)" />
@@ -564,14 +564,14 @@ if(count($Reports) == 0) {
 								</select>:
 							</td>
 							<td colspan="3">
-								<span title="Uploader: Appended to the regular message unless using &quot;Send Now&quot;. Reporter: Must be used with &quot;Send Now&quot;.">
+								<span title="Uploader: Appended to the regular message unless using &quot;Send now&quot;. Reporter: Must be used with &quot;Send now&quot;.">
 									<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 								</span>
-								<input type="button" value="Send Now" onclick="SendPM(<?=$ReportID?>)" />
+								<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>)" />
 							</td>
 						</tr>
 						<tr>
-							<td class="label"><strong>Extra</strong> Log Message:</td>
+							<td class="label"><strong>Extra</strong> log message:</td>
 							<td>
 								<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40" <? if($ExtraIDs) {
 											$Extras = explode(" ", $ExtraIDs);
@@ -582,21 +582,21 @@ if(count($Reports) == 0) {
 											echo 'value="'.trim($Value).'"';
 										} ?>/>
 							</td>
-							<td class="label"><strong>Extra</strong> Staff Notes:</td>
+							<td class="label"><strong>Extra</strong> staff notes:</td>
 							<td>
 								<input type="text" name="admin_message" id="admin_message<?=$ReportID?>" size="40" />
 							</td>
 						</tr>
 						<tr>
 							<td colspan="4" style="text-align: center;">
-								<input type="button" value="Invalid Report" onclick="Dismiss(<?=$ReportID?>);" />
+								<input type="button" value="Invalidate report" onclick="Dismiss(<?=$ReportID?>);" />
 								<input type="button" value="Report resolved manually" onclick="ManualResolve(<?=$ReportID?>);" />
 			<?		if($Status == "InProgress" && $LoggedUser['ID'] == $ResolverID) { ?>
 								| <input type="button" value="Give back" onclick="GiveBack(<?=$ReportID?>);" />
 			<? 		} else { ?>
 								| <input id="grab<?=$ReportID?>" type="button" value="Grab!" onclick="Grab(<?=$ReportID?>);" />
 			<?		}	?>
-								| Multi-Resolve <input type="checkbox" name="multi" id="multi<?=$ReportID?>" checked="checked" />
+								| Multi-resolve <input type="checkbox" name="multi" id="multi<?=$ReportID?>" checked="checked" />
 								| <input type="button" id="submit_<?=$ReportID?>" value="Submit" onclick="TakeResolve(<?=$ReportID?>);" />
 							</td>
 						</tr>
@@ -610,19 +610,19 @@ if(count($Reports) == 0) {
 							</td>
 						</tr>
 						<tr>
-							<td class="label">Resolve Time</td>
+							<td class="label">Resolve time</td>
 							<td colspan="3">
 								<?=time_diff($LastChangeTime)?>
 							</td>
 						</tr>
 						<tr>
-							<td class="label">Report Comments</td>
+							<td class="label">Report comments</td>
 							<td colspan="3">
 								<?=$ModComment?>
 							</td>
 						</tr>
 						<tr>
-							<td class="label">Log Message</td>
+							<td class="label">Log message</td>
 							<td colspan="3">
 								<?=$LogMessage?>
 							</td>

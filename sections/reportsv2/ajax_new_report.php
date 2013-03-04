@@ -1,6 +1,6 @@
 <?
 /*
- * This is the AJAX page that gets called from the javascript
+ * This is the AJAX page that gets called from the JavaScript
  * function NewReport(), any changes here should probably be
  * replicated on static.php.
  */
@@ -152,7 +152,7 @@ $DB->query("SELECT
 				</div>
 				<table class="layout" cellpadding="5">
 					<tr>
-						<td class="label"><a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Reported </a>Torrent:</td>
+						<td class="label"><a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Reported</a> torrent:</td>
 						<td colspan="3">
 <?		if(!$GroupID) { ?>
 							<a href="log.php?search=Torrent+<?=$TorrentID?>"><?=$TorrentID?></a> (Deleted)
@@ -213,7 +213,7 @@ $DB->query("SELECT
 					</tr>
 		<? if($Tracks) { ?>
 					<tr>
-						<td class="label">Relevant Tracks:</td>
+						<td class="label">Relevant tracks:</td>
 						<td colspan="3">
 							<?=str_replace(" ", ", ", $Tracks)?>
 						</td>
@@ -223,7 +223,7 @@ $DB->query("SELECT
 			if($Links) {
 		?>
 					<tr>
-						<td class="label">Relevant Links:</td>
+						<td class="label">Relevant links:</td>
 						<td colspan="3">
 		<?
 				$Links = explode(" ", $Links);
@@ -245,7 +245,7 @@ $DB->query("SELECT
 			if($ExtraIDs) {
 		?>
 					<tr>
-						<td class="label">Relevant Other Torrents:</td>
+						<td class="label">Relevant other torrents:</td>
 						<td colspan="3">
 		<?
 				$First = true;
@@ -319,7 +319,7 @@ $DB->query("SELECT
 			if($Images) {
 		?>
 					<tr>
-						<td class="label">Relevant Images:</td>
+						<td class="label">Relevant images:</td>
 						<td colspan="3">
 		<?
 				$Images = explode(" ", $Images);
@@ -336,12 +336,12 @@ $DB->query("SELECT
 			}
 		?>
 					<tr>
-						<td class="label">User Comment:</td>
+						<td class="label">User comment:</td>
 						<td colspan="3"><?=$Text->full_format($UserComment)?></td>
 					</tr>
 					<? // END REPORTED STUFF :|: BEGIN MOD STUFF ?>
 					<tr>
-						<td class="label">Report Comment:</td>
+						<td class="label">Report comment:</td>
 						<td colspan="3">
 							<input type="text" name="comment" id="comment<?=$ReportID?>" size="45" value="<?=$ModComment?>" />
 							<input type="button" value="Update now" onclick="UpdateComment(<?=$ReportID?>)" />
@@ -405,14 +405,14 @@ $DB->query("SELECT
 							</select>:
 						</td>
 						<td colspan="3">
-							<span title="Uploader: Appended to the regular message unless using &quot;Send Now&quot;. Reporter: Must be used with &quot;Send Now&quot;.">
+							<span title="Uploader: Appended to the regular message unless using &quot;Send now&quot;. Reporter: Must be used with &quot;Send now&quot;.">
 								<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 							</span>
-							<input type="button" value="Send Now" onclick="SendPM(<?=$ReportID?>)" />
+							<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>)" />
 						</td>
 					</tr>
 					<tr>
-						<td class="label"><strong>Extra</strong> Log Message:</td>
+						<td class="label"><strong>Extra</strong> log message:</td>
 						<td>
 							<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40" <? if($ExtraIDs) {
 										$Extras = explode(" ", $ExtraIDs);
@@ -423,18 +423,18 @@ $DB->query("SELECT
 										echo 'value="'.trim($Value).'"';
 									} ?>/>
 						</td>
-						<td class="label"><strong>Extra</strong> Staff Notes:</td>
+						<td class="label"><strong>Extra</strong> staff notes:</td>
 						<td>
 							<input type="text" name="admin_message" id="admin_message<?=$ReportID?>" size="40" />
 						</td>
 					</tr>
 					<tr>
 						<td colspan="4" style="text-align: center;">
-							<input type="button" value="Invalid Report" onclick="Dismiss(<?=$ReportID?>);" />
+							<input type="button" value="Invalidate report" onclick="Dismiss(<?=$ReportID?>);" />
 							<input type="button" value="Report resolved manually" onclick="ManualResolve(<?=$ReportID?>);" />
 							| <input type="button" value="Give back" onclick="GiveBack(<?=$ReportID?>);" />
 							| <input id="grab<?=$ReportID?>" type="button" value="Grab!" onclick="Grab(<?=$ReportID?>);" />
-							| Multi-Resolve <input type="checkbox" name="multi" id="multi<?=$ReportID?>" checked="checked" />
+							| Multi-resolve <input type="checkbox" name="multi" id="multi<?=$ReportID?>" checked="checked" />
 							| <input type="button" value="Submit" onclick="TakeResolve(<?=$ReportID?>);" />
 						</td>
 					</tr>

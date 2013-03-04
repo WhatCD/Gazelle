@@ -555,7 +555,11 @@ foreach ($CommentList as $Comment) {
 	list($CommentID, $Body, $UserID, $Username, $CommentTime) = $Comment;
 ?>
 		<div class="box comment">
-			<div class="head">By <?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?> <a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>" class="brackets">Report comment</a></div>
+			<div class="head">
+				<?=Users::format_username($UserID, false, false, false) ?> <?=time_diff($CommentTime) ?>
+				<br />
+				<a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>" class="brackets">Report</a>
+			</div>
 			<div class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
 <?

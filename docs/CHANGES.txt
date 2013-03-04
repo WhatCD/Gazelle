@@ -1,4 +1,9 @@
 CHANGELOG
+
+2013-03-01
+-This log is extremely out-of-date, and the log is unlikely to be maintained in the future; however, the Gazelle project is still alive and well.
+-This log is being kept for historical purposes only.
+
 2010-08-28
 -Upgrade Sphinx to 1.10b
 
