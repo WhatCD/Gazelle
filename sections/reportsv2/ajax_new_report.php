@@ -349,7 +349,7 @@ $DB->query("SELECT
 					</tr>
 					<tr>
 						<td class="label">
-							<a href="javascript:Load('<?=$ReportID?>')">Resolve</a>
+							<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve</a>
 						</td>
 						<td colspan="3">
 							<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>)">
@@ -369,7 +369,7 @@ $DB->query("SELECT
 							<span id="options<?=$ReportID?>">
 <? if(check_perms('users_mod')) { ?>
 								<span title="Delete torrent?">
-									<strong>Delete</strong>
+									<label for="delete<?=$ReportID?>"><strong>Delete</strong></label>
 									<input type="checkbox" name="delete" id="delete<?=$ReportID?>" />
 								</span>
 <? } ?>
@@ -386,7 +386,7 @@ $DB->query("SELECT
 									</select>
 								</span>
 								<span title="Remove upload privileges?">
-									<strong>Upload</strong>
+									<label for="upload<?=$ReportID?>"><strong>Remove upload privileges</strong></label>
 									<input type="checkbox" name="upload" id="upload<?=$ReportID?>" />
 								</span>
 								&nbsp;&nbsp;
@@ -431,9 +431,9 @@ $DB->query("SELECT
 					<tr>
 						<td colspan="4" style="text-align: center;">
 							<input type="button" value="Invalidate report" onclick="Dismiss(<?=$ReportID?>);" />
-							<input type="button" value="Report resolved manually" onclick="ManualResolve(<?=$ReportID?>);" />
+							<input type="button" value="Resolve report manually" onclick="ManualResolve(<?=$ReportID?>);" />
 							| <input type="button" value="Give back" onclick="GiveBack(<?=$ReportID?>);" />
-							| <input id="grab<?=$ReportID?>" type="button" value="Grab!" onclick="Grab(<?=$ReportID?>);" />
+							| <input id="grab<?=$ReportID?>" type="button" value="Claim" onclick="Grab(<?=$ReportID?>);" />
 							| Multi-resolve <input type="checkbox" name="multi" id="multi<?=$ReportID?>" checked="checked" />
 							| <input type="button" value="Submit" onclick="TakeResolve(<?=$ReportID?>);" />
 						</td>

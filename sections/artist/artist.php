@@ -472,7 +472,7 @@ $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
-View::show_header($Name, 'browse,requests,bbcode,comments,voting,jquery');
+View::show_header($Name, 'browse,requests,bbcode,comments,voting,jquery,recommend');
 ?>
 <div class="thin">
 	<div class="header">
@@ -509,7 +509,9 @@ if (has_bookmarked('artist', $ArtistID)) {
 			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'Remove bookmark');return false;" class="brackets">Bookmark</a>
 <?
 }
-
+?>
+    <a href="#" id="recommend" class="brackets">Recommend</a>
+<?
 if (check_perms('site_edit_wiki')) {
 ?>
 			<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>" class="brackets">Edit</a>
@@ -531,8 +533,9 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 			</a>
 <? } ?>
 		</div>
-	</div>
-	<div class="sidebar">
+    </div>
+<? Misc::display_recommend($ArtistID, "artist"); ?>
+    <div class="sidebar">
 <? if($Image) { ?>
 		<div class="box box_image">
 			<div class="head"><strong><?=$Name?></strong></div>

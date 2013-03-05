@@ -12,7 +12,7 @@ if(!check_perms('admin_reports')){
 View::show_header('Reports V2!', 'reportsv2');
 
 
-//Grab owners ID, just for examples
+//Grab owner's ID, just for examples
 $DB->query("SELECT ID, Username FROM users_main ORDER BY ID ASC LIMIT 1");
 list($OwnerID, $Owner) = $DB->next_record();
 $Owner = display_str($Owner);

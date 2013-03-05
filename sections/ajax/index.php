@@ -135,6 +135,12 @@ switch ($_GET['action']) {
 	case 'wiki':
 		require(SERVER_ROOT . '/sections/ajax/wiki.php');
 		break;
+	case 'send_recommendation':
+		require(SERVER_ROOT . '/sections/ajax/send_recommendation.php');
+		break;
+	case 'get_friends':
+		require(SERVER_ROOT . '/sections/ajax/get_friends.php');
+		break;
 	default:
 		// If they're screwing around with the query string
 		print json_encode(array('status' => 'failure'));

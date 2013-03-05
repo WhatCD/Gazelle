@@ -1,7 +1,7 @@
 <?
 /*
  * This page simply assings a report to the person clicking on
- * the Grab / Grab All button.
+ * the Claim / Claim all button.
  */
 if(!check_perms('admin_reports')){
 		//error(403);

@@ -1214,6 +1214,13 @@ CREATE TABLE `users_dupes` (
   CONSTRAINT `users_dupes_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `dupe_groups` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `users_enable_recommendations` (
+  `ID` int(10) NOT NULL,
+  `Enable` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `Enable` (`Enable`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `users_freeleeches` (
   `UserID` int(10) NOT NULL,
   `TorrentID` int(10) NOT NULL,

@@ -345,7 +345,7 @@ for ($i=0; $i < $NumGroups/$CollageCovers; $i++) {
 	$CollagePages[] = $CollagePage;
 }
 
-View::show_header($Name,'browse,collage,bbcode,voting');
+View::show_header($Name,'browse,collage,bbcode,voting,jquery,recommend');
 ?>
 <div class="thin">
 	<div class="header">
@@ -370,7 +370,9 @@ View::show_header($Name,'browse,collage,bbcode,voting');
 <?	} else { ?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>,'Remove bookmark');return false;">Bookmark</a>
 <?	}
-
+?>
+<a href="#" id="recommend" class="brackets">Recommend</a>
+<?
 if (check_perms('site_collages_manage') && !$Locked) { ?>
 			<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>" class="brackets">Manage torrents</a>
 <? } ?>
@@ -379,8 +381,9 @@ if (check_perms('site_collages_manage') && !$Locked) { ?>
 			<a href="collages.php?action=delete&amp;collageid=<?=$CollageID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets" onclick="return confirm('Are you sure you want to delete this collage?');">Delete</a>
 <? } ?>
 		</div>
-	</div>
-	<div class="sidebar">
+    </div>
+<? Misc::display_recommend($CollageID, "collage"); ?>
+    <div class="sidebar">
 		<div class="box box_category">
 			<div class="head"><strong>Category</strong></div>
 			<div class="pad"><a href="collages.php?action=search&amp;cats[<?=(int)$CollageCategoryID?>]=1"><?=$CollageCats[(int)$CollageCategoryID]?></a></div>

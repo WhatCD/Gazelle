@@ -80,7 +80,7 @@ if ($TorrentTags != '') {
 }*/
 
 // Start output
-View::show_header($Title,'jquery,browse,comments,torrent,bbcode');
+View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 ?>
 <div class="thin">
 	<div class="header">
@@ -99,6 +99,9 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode');
 <?	} else {  ?>
 			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?	}
+?>
+<a href="#" id="recommend" class="brackets">Recommend</a>
+<?
 	if($Categories[$GroupCategoryID-1] == 'Music') { ?>
 			<a href="upload.php?groupid=<?=$GroupID?>" class="brackets">Add format</a>
 <?	}
@@ -108,6 +111,7 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode');
 			<a href="torrents.php?action=grouplog&amp;groupid=<?=$GroupID?>" class="brackets">View log</a>
 		</div>
 	</div>
+<? Misc::display_recommend($GroupID, "torrent"); ?>
 	<div class="sidebar">
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>

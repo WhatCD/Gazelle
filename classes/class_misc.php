@@ -411,5 +411,24 @@ class Misc {
 	public static function is_new_torrent(&$Data) {
 		return strpos(substr($Data, 0, 10), ':') !== false;
 	}
+
+	public static function display_recommend($ID, $Type, $Hide = true) {
+		global $DB, $LoggedUser;
+		if($Hide) {
+			$Hide = 'style="display: none;"';
+		}
+		?>
+		<div id="recommendation_div" data-id="<?=$ID?>" data-type="<?=$Type?>" <?=$Hide?> class="center">
+			<div style="display: inline-block;" >
+				<strong>Recommend to: </strong><select id="friend" name="friend">
+				<option value="0" selected="selected">Choose Friend</option>
+				</select>
+				<input type="text" id="recommendation_note" placeholder="Add note..."/>
+				<button id="send_recommendation" disabled>Send</button>
+			</div>
+			<div class="new" id="recommendation_status"><br/></div>
+		</div>
+		<?
+	}
 }
 ?>

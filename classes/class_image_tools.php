@@ -115,7 +115,7 @@ class ImageTools {
 	}
 
 	/**
-	 * Turns link into thumbnail (if posible) or default group image (if missing)
+	 * Turns link into thumbnail (if possible) or default group image (if missing)
 	 * Automatically applies proxy when appropriate
 	 *
 	 * @global array $CategoryIcons
@@ -192,8 +192,8 @@ class ImageTools {
 
 	/**
 	 * Create image proxy URL
-	 * @param string $Url Image url
-	 * @return image peoxy URL
+	 * @param string $Url image URL
+	 * @return image proxy URL
 	 */
 	public static function proxy_url($Url) {
 		global $SSL;
@@ -203,7 +203,7 @@ class ImageTools {
 }
 
 /**
- * This non-class determines the thumbnail equivalent of an image's url after being passed the original
+ * This non-class determines the thumbnail equivalent of an image's URL after being passed the original
  *
  **/
 
@@ -220,14 +220,14 @@ function contains($Substring, $String) {
 }
 
 /**
- * Checks if url points to a whatimg thumbnail.
+ * Checks if URL points to a whatimg thumbnail.
  */
 function has_whatimg_thumb($Url){
 	return contains("_thumb", $Url);
 }
 
 /**
- * Cleans up imgur url if it already has a modifier attached to the end of it.
+ * Cleans up imgur URL if it already has a modifier attached to the end of it.
  */
 function clean_imgur_url($Url){
     $Extension = pathinfo($Url, PATHINFO_EXTENSION);

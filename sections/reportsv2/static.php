@@ -196,7 +196,7 @@ View::show_header('Reports V2!', 'reportsv2,bbcode');
 <div class="buttonbox thin center">
 	<? if($View != "resolved") { ?>
 		<span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-resolve" /></span>
-		<span title="Assigns all of the reports on the page to you!"><input type="button" onclick="Grab();" value="Grab all" /></span>
+		<span title="Assigns all of the reports on the page to you!"><input type="button" onclick="Grab();" value="Claim all" /></span>
 	<? } ?>
 	<? if($View == "staff" && $LoggedUser['ID'] == $ID) { ?>| <span title="Un-'in progress' all the reports currently displayed"><input type="button" onclick="GiveBack();" value="Give back all" /></span><? } ?>
 </div>
@@ -508,7 +508,7 @@ if(count($Reports) == 0) {
 						</tr>
 						<tr>
 							<td class="label">
-								<a href="javascript:Load('<?=$ReportID?>')">Resolve</a>
+								<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve</a>
 							</td>
 							<td colspan="3">
 								<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>)">
@@ -528,7 +528,7 @@ if(count($Reports) == 0) {
 								<span id="options<?=$ReportID?>">
 <? if(check_perms('users_mod')) { ?>
 									<span title="Delete torrent?">
-										<strong>Delete</strong>
+										<label for="delete<?=$ReportID?>"><strong>Delete</strong></label>
 										<input type="checkbox" name="delete" id="delete<?=$ReportID?>" />
 									</span>
 <? } ?>
@@ -545,7 +545,7 @@ if(count($Reports) == 0) {
 										</select>
 									</span>
 									<span title="Remove upload privileges?">
-										<strong>Upload</strong>
+										<label for="upload<?=$ReportID?>"><strong>Remove upload privileges</strong></label>
 										<input type="checkbox" name="upload" id="upload<?=$ReportID?>" />
 									</span>
 									&nbsp;&nbsp;
@@ -590,11 +590,11 @@ if(count($Reports) == 0) {
 						<tr>
 							<td colspan="4" style="text-align: center;">
 								<input type="button" value="Invalidate report" onclick="Dismiss(<?=$ReportID?>);" />
-								<input type="button" value="Report resolved manually" onclick="ManualResolve(<?=$ReportID?>);" />
+								<input type="button" value="Resolve report manually" onclick="ManualResolve(<?=$ReportID?>);" />
 			<?		if($Status == "InProgress" && $LoggedUser['ID'] == $ResolverID) { ?>
 								| <input type="button" value="Give back" onclick="GiveBack(<?=$ReportID?>);" />
 			<? 		} else { ?>
-								| <input id="grab<?=$ReportID?>" type="button" value="Grab!" onclick="Grab(<?=$ReportID?>);" />
+								| <input id="grab<?=$ReportID?>" type="button" value="Claim" onclick="Grab(<?=$ReportID?>);" />
 			<?		}	?>
 								| Multi-resolve <input type="checkbox" name="multi" id="multi<?=$ReportID?>" checked="checked" />
 								| <input type="button" id="submit_<?=$ReportID?>" value="Submit" onclick="TakeResolve(<?=$ReportID?>);" />
@@ -630,7 +630,7 @@ if(count($Reports) == 0) {
 			<? if($GroupID) { ?>
 						<tr>
 							<td	colspan="4" style="text-align: center;">
-								<input id="grab<?=$ReportID?>" type="button" value="Grab!" onclick="Grab(<?=$ReportID?>);" />
+								<input id="grab<?=$ReportID?>" type="button" value="Claim" onclick="Grab(<?=$ReportID?>);" />
 							</td>
 						</tr>
 			<?	}
