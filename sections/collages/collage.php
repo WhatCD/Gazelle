@@ -371,7 +371,8 @@ View::show_header($Name,'browse,collage,bbcode,voting,jquery,recommend');
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>,'Remove bookmark');return false;">Bookmark</a>
 <?	}
 ?>
-<a href="#" id="recommend" class="brackets">Recommend</a>
+<!-- <a href="#" id="recommend" class="brackets">Recommend</a>
+ -->
 <?
 if (check_perms('site_collages_manage') && !$Locked) { ?>
 			<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>" class="brackets">Manage torrents</a>
@@ -382,7 +383,7 @@ if (check_perms('site_collages_manage') && !$Locked) { ?>
 <? } ?>
 		</div>
     </div>
-<? Misc::display_recommend($CollageID, "collage"); ?>
+<? /* Misc::display_recommend($CollageID, "collage"); */ ?>
     <div class="sidebar">
 		<div class="box box_category">
 			<div class="head"><strong>Category</strong></div>

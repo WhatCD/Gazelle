@@ -241,7 +241,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <? }
 	if (($OwnProfile || check_perms('users_mod')) && $Warned!='0000-00-00 00:00:00') { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Warning expires: <?= date('Y-m-d h:i', strtotime($Warned)) ?></li>
+				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Warning expires: <?= date('Y-m-d H:i', strtotime($Warned)) ?></li>
 <? } ?>
 			</ul>
 		</div>

@@ -10,13 +10,13 @@ if(empty($FriendID) || empty($Type) || empty($ID)) {
 }
 // Make sure the recipient is on your friends list and not some random dude.
 $DB->query("SELECT
-		f.FriendID, u.Username
-		FROM friends AS f
-		JOIN users_enable_recommendations AS r
-		ON r.ID = f.FriendID AND r.Enable = 1
-		LEFT JOIN users_main AS u
-		ON u.ID = f.FriendID
-		WHERE f.UserID = '$LoggedUser[ID]' AND f.FriendID = '$FriendID'");
+    f.FriendID, u.Username
+    FROM friends AS f
+    RIGHT JOIN users_enable_recommendations AS r
+    ON r.ID = f.FriendID AND r.Enable = 1
+    RIGHT JOIN users_main AS u
+    ON u.ID = f.FriendID
+    WHERE f.UserID = '$LoggedUser[ID]' AND f.FriendID = '$FriendID'");
 
 if($DB->record_count() == 0) {
 	echo json_encode(array("status" => "error", "response" => "Not on friend list."));
@@ -50,7 +50,7 @@ if(!empty($Note)) {
     $Body = $Body . "\n\n". $Note;
 }
 
-Misc::send_pm($FriendID, $LoggedUser['ID'], $Subject, $Body);
+Misc::send_pm($FriendID, $LoggedUser['ID'], db_string($Subject), db_string($Body));
 echo json_encode(array("status" => "success", "response" => "Sent!"));
 die();
 

@@ -510,7 +510,8 @@ if (has_bookmarked('artist', $ArtistID)) {
 <?
 }
 ?>
-    <a href="#" id="recommend" class="brackets">Recommend</a>
+<!--     <a href="#" id="recommend" class="brackets">Recommend</a>
+ -->
 <?
 if (check_perms('site_edit_wiki')) {
 ?>
@@ -534,7 +535,7 @@ if ($RevisionID && check_perms('site_edit_wiki')) {
 <? } ?>
 		</div>
     </div>
-<? Misc::display_recommend($ArtistID, "artist"); ?>
+<? /* Misc::display_recommend($ArtistID, "artist"); */ ?>
     <div class="sidebar">
 <? if($Image) { ?>
 		<div class="box box_image">
