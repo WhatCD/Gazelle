@@ -58,7 +58,7 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 	if ( $_POST['vanity_house'] && check_perms('torrents_edit_vanityhouse') ) {
 		$VanityHouse = ( isset($_POST['vanity_house']) ? 1 : 0 );
 	} else {
-		$VanityHouse = 0;
+		$VanityHouse = $OldVH;
 	}
 
 	if(($GroupInfo = $Cache->get_value('torrents_details_'.$GroupID)) && !isset($GroupInfo[0][0])) {

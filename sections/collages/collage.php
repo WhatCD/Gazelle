@@ -144,7 +144,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 			$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists));
 	}
 
-	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 	if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
 	if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 	$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
@@ -248,7 +248,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 
 		list($TorrentID, $Torrent) = each($Torrents);
 
-		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 
 		if ($Torrent['IsSnatched']) {
 			$DisplayName .= ' ' . Format::torrent_label('Snatched!');

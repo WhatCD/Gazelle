@@ -440,7 +440,7 @@ foreach($Categories as $CatKey => $CatName) {
 		} else {
 			$DisplayName='';
 		}
-		$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'" title="View Torrent">'.$GroupName.'</a>';
+		$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 		if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
 		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
 

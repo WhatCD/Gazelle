@@ -433,7 +433,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			$DisplayName = Artists::display_artists($Artists[$GroupID], true, true);
 		}
 
-		$DisplayName.= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\">$GroupName</a>";
+		$DisplayName.= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 
 		if($GroupCategoryID==1 && $GroupYear>0) {
 			$DisplayName.= " [$GroupYear]";

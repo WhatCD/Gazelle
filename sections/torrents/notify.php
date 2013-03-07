@@ -228,7 +228,7 @@ if (empty($Results)) {
 					: '';
 				$DisplayName = Artists::display_artists($GroupInfo['ExtendedArtists'], true, true);
 			}
-			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID' title='View Torrent'>".$GroupInfo['Name']."</a>";
+			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID' title='View Torrent' dir='ltr'>".$GroupInfo['Name']."</a>";
 
 			$GroupCategoryID = $GroupInfo['CategoryID'];
 			if ($GroupCategoryID == 1) {

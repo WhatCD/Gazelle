@@ -883,6 +883,12 @@ CREATE TABLE `tags` (
   KEY `UserID` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `temp_torrents_files` (
+  `TorrentID` int(10) NOT NULL,
+  `File` mediumblob NOT NULL,
+  PRIMARY KEY (`TorrentID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `top10_history` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
