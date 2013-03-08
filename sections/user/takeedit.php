@@ -248,24 +248,6 @@ elseif(!empty($LastFMUsername)) {
 	$DB->query("INSERT INTO lastfm_users (ID, Username) VALUES ('$UserID', '$LastFMUsername')");
 }
 
-$RecommendationsEnabled = $_POST['torrent_recommendations'];
-
-// Make sure user has recommentations enabled before removing them.
-if($RecommendationsEnabled == 'on') {
-	$DB->query("INSERT INTO
-				users_enable_recommendations
-					(ID, Enable) VALUES ('$UserID', '1')
-					ON DUPLICATE KEY UPDATE Enable = '1'");
-} else {
-	$DB->query("SELECT Enable FROM users_enable_recommendations WHERE ID = '$UserID' AND Enable = 1");
-	if($DB->record_count() > 0) {
-	$DB->query("INSERT INTO
-				users_enable_recommendations
-					(ID, Enable) VALUES ('$UserID', '0')
-					ON DUPLICATE KEY UPDATE Enable = '0'");
-	}
-}
-
 // Information on how the user likes to download torrents is stored in cache
 if($DownloadAlt != $LoggedUser['DownloadAlt']) {
 	$Cache->delete_value('user_'.$LoggedUser['torrent_pass']);

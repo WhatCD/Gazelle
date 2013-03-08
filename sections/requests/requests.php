@@ -132,6 +132,10 @@ if(!empty($_GET['search'])) {
 		$Words = explode(' ', $SearchString);
 		foreach($Words as $Word) {
 			$Word = trim($Word);
+			// Skip isolated hyphens to enable "Artist - Title" searches
+			if ($Word == '-') {
+				continue;
+			}
 			if($Word[0] == '!' && strlen($Word) >= 2) {
 				if(strpos($Word,'!',1) === false) {
 					$SearchWords['exclude'][] = $Word;

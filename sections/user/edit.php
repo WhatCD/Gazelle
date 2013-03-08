@@ -66,12 +66,6 @@ $DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
 $LastFMUsername = "";
 list($LastFMUsername) = $DB->next_record();
 
-$DB->query("SELECT Enable FROM users_enable_recommendations WHERE ID = '$UserID' AND Enable = 1");
-if($DB->record_count() > 0) {
-	$RecommendationsEnabled = "value='1' checked='checked'";
-}
-
-
 echo $Val->GenerateJS('userform');
 ?>
 <div class="thin">
@@ -264,13 +258,6 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 		<!--						-->
-		<tr>
-				<td class="label"><strong>Torrent Recommendations</strong></td>
-				<td>
-					<input type="checkbox" name="torrent_recommendations" id="torrent_recommendations" <?=$RecommendationsEnabled?> />
-					<label for="torrent_recommendations">Allow people to send you torrent recommendations.</label>
-				</td>
-		</tr>
 			<tr>
 				<td class="label"><strong>Auto-save text</strong></td>
 				<td>
