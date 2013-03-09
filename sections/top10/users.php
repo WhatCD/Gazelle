@@ -125,13 +125,13 @@ function generate_user_table($Caption, $Tag, $Details, $Limit) {
 	<tr class="colhead">
 		<td class="center">Rank</td>
 		<td>User</td>
-		<td style='text-align:right'>Uploaded</td>
-		<td style='text-align:right'>UL speed</td>
-		<td style='text-align:right'>Downloaded</td>
-		<td style='text-align:right'>DL speed</td>
-		<td style='text-align:right'>Uploads</td>
-		<td style='text-align:right'>Ratio</td>
-		<td style='text-align:right'>Joined</td>
+		<td style="text-align: right;">Uploaded</td>
+		<td style="text-align: right;">UL speed</td>
+		<td style="text-align: right;">Downloaded</td>
+		<td style="text-align: right;">DL speed</td>
+		<td style="text-align: right;">Uploads</td>
+		<td style="text-align: right;">Ratio</td>
+		<td style="text-align: right;">Joined</td>
 	</tr>
 <?
 	// in the unlikely event that query finds 0 rows...
@@ -153,13 +153,13 @@ function generate_user_table($Caption, $Tag, $Details, $Limit) {
 	<tr class="row<?=$Highlight?>">
 		<td class="center"><?=$Rank?></td>
 		<td><?=Users::format_username($Detail['ID'], false, false, false)?></td>
-		<td style="text-align:right"><?=Format::get_size($Detail['Uploaded'])?></td>
-		<td style="text-align:right"><?=Format::get_size($Detail['UpSpeed'])?>/s</td>
-		<td style="text-align:right"><?=Format::get_size($Detail['Downloaded'])?></td>
-		<td style="text-align:right"><?=Format::get_size($Detail['DownSpeed'])?>/s</td>
-		<td style="text-align:right"><?=number_format($Detail['NumUploads'])?></td>
-		<td style="text-align:right"><?=Format::get_ratio_html($Detail['Uploaded'], $Detail['Downloaded'])?></td>
-		<td style="text-align:right"><?=time_diff($Detail['JoinDate'])?></td>
+		<td style="text-align: right;"><?=Format::get_size($Detail['Uploaded'])?></td>
+		<td style="text-align: right;" title="Upload speed is reported in base 2 in bytes per second, not bits per second."><?=Format::get_size($Detail['UpSpeed'])?>/s</td>
+		<td style="text-align: right;"><?=Format::get_size($Detail['Downloaded'])?></td>
+		<td style="text-align: right;" title="Download speed is reported in base 2 in bytes per second, not bits per second."><?=Format::get_size($Detail['DownSpeed'])?>/s</td>
+		<td style="text-align: right;"><?=number_format($Detail['NumUploads'])?></td>
+		<td style="text-align: right;"><?=Format::get_ratio_html($Detail['Uploaded'], $Detail['Downloaded'])?></td>
+		<td style="text-align: right;"><?=time_diff($Detail['JoinDate'])?></td>
 	</tr>
 <?
 	}

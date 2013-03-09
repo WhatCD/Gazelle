@@ -540,7 +540,7 @@ class TEXT {
 	 *
 	 * @param int $ItemLevel Current item level
 	 * @param int $Level Current list level
-	 * @param str $List reference to an xHTML string
+	 * @param str $List reference to an XHTML string
 	 * @param int $i Iterator digit
 	 * @param int $Offset If the list doesn't start at level 1
 	 */
@@ -581,7 +581,7 @@ class TEXT {
 					$Str.='<span style="text-decoration: underline;">'.$this->to_html($Block['Val']).'</span>';
 					break;
 				case 'i':
-					$Str.='<em>'.$this->to_html($Block['Val'])."</em>";
+					$Str.='<span style="font-style: italic;">'.$this->to_html($Block['Val'])."</span>";
 					break;
 				case 's':
 					$Str.='<span style="text-decoration: line-through;">'.$this->to_html($Block['Val']).'</span>';
@@ -623,7 +623,7 @@ class TEXT {
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'tex':
-					$Str.='<img style="vertical-align: middle" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="TeX" />';
+					$Str.='<img style="vertical-align: middle" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="'.$Block['Val'].'" />';
 					break;
 				case 'plain':
 					$Str.=$Block['Val'];

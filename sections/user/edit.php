@@ -157,8 +157,9 @@ echo $Val->GenerateJS('userform');
 <?Users::release_order()?>
 						</ul>
 						<p><small>Note: Checked items will be hidden.</small></p>
-						<script type="text/javascript" id="sortable_default">
+						<script type="text/javascript" id="sortable_default">//<![CDATA[
 							var sortable_list_default = <?=Users::release_order_default_js()?>;
+							//]]>
 						</script>
 					</div>
 					<input type="hidden" id="sorthide" name="sorthide" value="" />
@@ -174,11 +175,11 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>-->
 			<tr>
-				<td class="label"><strong>Cover Art</strong></td>
+				<td class="label"><strong>Cover art</strong></td>
 				<td>
 					<input type="hidden" name="coverart" value="" />
-					<input type="checkbox" name="coverart" id="coverart" <?=$SiteOptions['CoverArt']?'checked="checked"':''?> />
-					<label for="coverart">Show covers next to torrent information</label>
+					<input type="checkbox" name="coverart" id="coverart"<?=$SiteOptions['CoverArt'] ? ' checked="checked"' : ''?> />
+					<label for="coverart">Show cover artwork next to torrent information</label>
 				</td>
 			</tr>
 			<tr>
@@ -299,18 +300,17 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Email</strong></td>
+				<td class="label"><strong>Email address</strong></td>
 				<td><input type="text" size="50" name="email" id="email" value="<?=display_str($Email)?>" />
 					<p class="min_padding">If changing this field, you must enter your current password in the "Current password" field before saving your changes.</p>
 				</td>
 			</tr>
-		<tr>
-			<td class="label"><strong>Last.fm username</strong></td>
-			<td><input type="text" size="50" name="lastfm_username" id="lastfm_username" value="<?=display_str($LastFMUsername)?>" />
-				<p class="min_padding">Your Last.fm username. Will be used to display Last.fm information on your profile which can be seen by other users.</p>
-			</td>
-		</tr>
-
+			<tr>
+				<td class="label"><strong>Last.fm username</strong></td>
+				<td><input type="text" size="50" name="lastfm_username" id="lastfm_username" value="<?=display_str($LastFMUsername)?>" />
+					<p class="min_padding">Your Last.fm username. Will be used to display Last.fm information on your profile which can be seen by other users.</p>
+				</td>
+			</tr>
 			<tr>
 				<td class="label"><strong>Info</strong></td>
 				<td><?php $textarea = new TEXTAREA_PREVIEW('info', 'info', display_str($Info), 50, 8); ?></td>

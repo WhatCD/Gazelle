@@ -130,7 +130,7 @@ $ViewBounty = check_paranoia_here('requestsvoted_bounty');
 						? '<span'.($Override===2 ? ' class="paranoia_override"' : '').'>(' . 100*min(1,round($Seeding/$UniqueSnatched,2)).'%)</span>' : ''); ?>
 					<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" class="brackets<?= $AOverride===2 ? ' paranoia_override' :'' ?>" title="View">View</a>
 						<? if (check_perms('zip_downloader')) { ?>
-						<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected; be sure to check the size of all albums before redownloading.');" class="brackets" title="Download">Download</a>
+						<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected; be sure to check the size of all torrents before redownloading.');" class="brackets" title="Download">Download</a>
 						<? } ?>
 					<? } ?>
 				</li>
@@ -152,7 +152,7 @@ $ViewBounty = check_paranoia_here('requestsvoted_bounty');
 <? if (($Override=check_paranoia_here('snatched'))) { ?>
 					<a href="torrents.php?type=snatched&amp;userid=<?=$UserID?>" class="brackets<?= $Override===2 ? ' paranoia_override' : '' ?>" title="View">View</a>
 					<? if(check_perms('zip_downloader')) { ?>
-					<a href="torrents.php?action=redownload&amp;type=snatches&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all albums before redownloading.');" class="brackets" title="Download">Download</a>
+					<a href="torrents.php?action=redownload&amp;type=snatches&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected, be sure to check the size of all torrents before redownloading.');" class="brackets" title="Download">Download</a>
 					<? } ?>
 				</li>
 <? } ?>

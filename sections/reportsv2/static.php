@@ -198,7 +198,7 @@ View::show_header('Reports V2!', 'reportsv2,bbcode');
 		<span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-resolve" /></span>
 		<span title="Assigns all of the reports on the page to you!"><input type="button" onclick="Grab();" value="Claim all" /></span>
 	<? } ?>
-	<? if($View == "staff" && $LoggedUser['ID'] == $ID) { ?>| <span title="Un-'in progress' all the reports currently displayed"><input type="button" onclick="GiveBack();" value="Give back all" /></span><? } ?>
+	<? if($View == "staff" && $LoggedUser['ID'] == $ID) { ?>| <span title="Unclaim all of the reports currently displayed"><input type="button" onclick="GiveBack();" value="Unclaim all" /></span><? } ?>
 </div>
 <br />
 <div class="linkbox">
@@ -592,7 +592,7 @@ if(count($Reports) == 0) {
 								<input type="button" value="Invalidate report" onclick="Dismiss(<?=$ReportID?>);" />
 								<input type="button" value="Resolve report manually" onclick="ManualResolve(<?=$ReportID?>);" />
 			<?		if($Status == "InProgress" && $LoggedUser['ID'] == $ResolverID) { ?>
-								| <input type="button" value="Give back" onclick="GiveBack(<?=$ReportID?>);" />
+								| <input type="button" value="Unclaim" onclick="GiveBack(<?=$ReportID?>);" />
 			<? 		} else { ?>
 								| <input id="grab<?=$ReportID?>" type="button" value="Claim" onclick="Grab(<?=$ReportID?>);" />
 			<?		}	?>

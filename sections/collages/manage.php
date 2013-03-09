@@ -49,8 +49,8 @@
 				<li>Click on the headings to organize columns automatically.</li>
 				<li>Sort multiple columns simultaneously by holding down the shift key and clicking other column headers.</li>
 				<li>Click and drag any row to change its order.</li>
-				<li>Press <em>Save All Changes</em> when you are finished sorting.</li>
-				<li>Press <em>Edit</em> or <em>Remove</em> to simply modify one entry.</li>
+				<li>Press "Save All Changes" when you are finished sorting.</li>
+				<li>Press "Edit" or "Remove" to simply modify one entry.</li>
 			</ul>
 			<noscript><ul><li><strong class="important_text">Note: Enable JavaScript!</strong></li></ul></noscript>
 			</td>
@@ -97,27 +97,27 @@
 
 		$AltCSS = $Number % 2 === 0 ? 'rowa' : 'rowb';
 ?>
-					<tr class="drag <?=$AltCSS?>" id="li_<?=$GroupID?>">
-						<form class="manage_form" name="collage" action="collages.php" method="post">
-							<td>
-								<input class="sort_numbers" type="text" name="sort" value="<?=$Sort?>" id="sort_<?=$GroupID?>" size="4" />
-							</td>
-							<td><?=$Number?></td>
-							<td><?=trim($CatNum) ?: '&nbsp;'?></td>
-							<td><?=trim($GroupYear) ?: '&nbsp;'?></td>
-							<td><?=trim($DisplayName) ?: '&nbsp;'?></td>
-							<td><?=trim($TorrentLink)?></td>
-							<td class="nobr"><?=Users::format_username($UserID, $Username, false, false, false)?></td>
-							<td class="nobr">
-								<input type="hidden" name="action" value="manage_handle" />
-								<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-								<input type="hidden" name="collageid" value="<?=$CollageID?>" />
-								<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-								<input type="submit" name="submit" value="Edit" />
-								<input type="submit" name="submit" value="Remove" />
-							</td>
-						</form>
-					</tr>
+			<tr class="drag <?=$AltCSS?>" id="li_<?=$GroupID?>">
+				<form class="manage_form" name="collage" action="collages.php" method="post">
+					<td>
+						<input class="sort_numbers" type="text" name="sort" value="<?=$Sort?>" id="sort_<?=$GroupID?>" size="4" />
+					</td>
+					<td><?=$Number?></td>
+					<td><?=trim($CatNum) ?: '&nbsp;'?></td>
+					<td><?=trim($GroupYear) ?: '&nbsp;'?></td>
+					<td><?=trim($DisplayName) ?: '&nbsp;'?></td>
+					<td><?=trim($TorrentLink)?></td>
+					<td class="nobr"><?=Users::format_username($UserID, $Username, false, false, false)?></td>
+					<td class="nobr">
+						<input type="hidden" name="action" value="manage_handle" />
+						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+						<input type="hidden" name="collageid" value="<?=$CollageID?>" />
+						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+						<input type="submit" name="submit" value="Edit" />
+						<input type="submit" name="submit" value="Remove" />
+					</td>
+				</form>
+			</tr>
 <? } ?>
 		</tbody>
 	</table>

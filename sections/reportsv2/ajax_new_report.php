@@ -432,7 +432,7 @@ $DB->query("SELECT
 						<td colspan="4" style="text-align: center;">
 							<input type="button" value="Invalidate report" onclick="Dismiss(<?=$ReportID?>);" />
 							<input type="button" value="Resolve report manually" onclick="ManualResolve(<?=$ReportID?>);" />
-							| <input type="button" value="Give back" onclick="GiveBack(<?=$ReportID?>);" />
+							| <input type="button" value="Unclaim" onclick="GiveBack(<?=$ReportID?>);" />
 							| <input id="grab<?=$ReportID?>" type="button" value="Claim" onclick="Grab(<?=$ReportID?>);" />
 							| Multi-resolve <input type="checkbox" name="multi" id="multi<?=$ReportID?>" checked="checked" />
 							| <input type="button" value="Submit" onclick="TakeResolve(<?=$ReportID?>);" />

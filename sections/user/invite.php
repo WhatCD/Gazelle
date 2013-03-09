@@ -121,8 +121,8 @@ if(!$Sneaky
 	){ ?>
 	<div class="box pad">
 		<p>Please note that the selling, trading or public giving away of our invitations, or responding to public requests, is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
-		<p>Remember that you are responsible for ALL invitees, and your account and/or privileges may be lost due to their actions. You should know the person you're inviting. If you aren't familiar enough with the user to trust them, we suggest not inviting them.</p>
-		<p><em>Do not send an invite if you haven't read and understood the information above.</em></p>
+		<p>Remember that you are responsible for ALL invitees, and your account and/or privileges may be disabled due to your invitees' actions. You should know the person you're inviting. If you aren't familiar enough with the user to trust them, we suggest not inviting them.</p>
+		<p><em>Do not send an invite if you haven't read or don't understood the information above.</em></p>
 	</div>
 	<div class="box pad">
 		<form class="send_form" name="invite" action="user.php" method="post">

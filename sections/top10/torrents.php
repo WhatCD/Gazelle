@@ -125,7 +125,7 @@ $FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
 
 ?>
 	<div style="text-align: right;" class="linkbox">
-		<a href="top10.php?<?=$FreeleechToggleQuery?>" class="brackets"><?=ucfirst($FreeleechToggleName)?> Freeleech in Top 10</a>
+		<a href="top10.php?<?=$FreeleechToggleQuery?>" class="brackets"><?=ucfirst($FreeleechToggleName)?> freeleech in Top 10</a>
 	</div>
 <?
 

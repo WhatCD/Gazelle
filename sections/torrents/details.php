@@ -364,7 +364,7 @@ if (empty($LoggedUser['DisableTagging'])) {
 					<input type="submit" value="+" />
 				</form>
 				<br /><br />
-				<strong><a href="rules.php?p=tag">Tagging rules</a></strong>
+				<strong><a href="rules.php?p=tag" class="brackets">View tagging rules</a></strong>
 			</div>
 		</div>
 <?
@@ -698,7 +698,7 @@ if(count($Collages)>0) {
 ?>
 		<table class="collage_table" id="collages">
 			<tr class="colhead">
-				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=count($Collages)?> collage<?=((count($Collages)>1)?'s':'')?><?=$SeeAll?></td>
+				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=number_format(count($Collages))?> collage<?=((count($Collages)>1) ? 's' : '')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
 <?	foreach ($Indices as $i) {
@@ -707,7 +707,7 @@ if(count($Collages)>0) {
 ?>
 			<tr>
 				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
-				<td><?=$CollageTorrents?></td>
+				<td><?=number_format($CollageTorrents)?></td>
 			</tr>
 <?	}
 	foreach ($Collages as $Collage) {
@@ -715,7 +715,7 @@ if(count($Collages)>0) {
 ?>
 			<tr class="collage_rows hidden">
 				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
-				<td><?=$CollageTorrents?></td>
+				<td><?=number_format($CollageTorrents)?></td>
 			</tr>
 <?	} ?>
 		</table>
@@ -743,7 +743,7 @@ if(count($PersonalCollages)>0) {
 ?>
 		<table class="collage_table" id="personal_collages">
 			<tr class="colhead">
-				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=count($PersonalCollages)?> personal collage<?=((count($PersonalCollages)>1)?'s':'')?><?=$SeeAll?></td>
+				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=number_format(count($PersonalCollages))?> personal collage<?=((count($PersonalCollages)>1) ? 's' : '')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
 <?	foreach ($Indices as $i) {
@@ -752,7 +752,7 @@ if(count($PersonalCollages)>0) {
 ?>
 			<tr>
 				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
-				<td><?=$CollageTorrents?></td>
+				<td><?=number_format($CollageTorrents)?></td>
 			</tr>
 <?	}
 	foreach ($PersonalCollages as $Collage) {
@@ -760,7 +760,7 @@ if(count($PersonalCollages)>0) {
 ?>
 			<tr class="personal_rows hidden">
 				<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
-				<td><?=$CollageTorrents?></td>
+				<td><?=number_format($CollageTorrents)?></td>
 			</tr>
 <?	} ?>
 		</table>

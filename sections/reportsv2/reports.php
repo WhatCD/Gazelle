@@ -9,29 +9,17 @@ if(!check_perms('admin_reports')){
 }
 
 View::show_header('Reports V2!', 'reportsv2');
-?>
-<script type="text/javascript">//<![CDATA[
-function Taste(torrent_id, report_id, taste) {
-	ajax.get('reportsv2.php?action=ajax_taste&torrent_id='+torrent_id+'&report_id='+report_id+'&taste='+taste, function(data) {
-		if (data == '1') {
-			$('#taste' + torrent_id).raw().innerHTML = '[Omnomnom]';
-			Grab(report_id);
-		} else {
-			alert(data);
-		}
-	});
-}
-//]]></script>
 
+?>
 <div class="header">
 	<h2>New reports, auto assigned!</h2>
 	<? include('header.php'); ?>
 </div>
 <div class="buttonbox thin center">
-	<input type="button" onclick="AddMore();" value="Add More" /><input type="text" name="repop_amount" id="repop_amount" size="2" value="10" />
+	<input type="button" onclick="AddMore();" value="Add more" /> <input type="text" name="repop_amount" id="repop_amount" size="2" value="10" />
 	| <span title="Changes whether to automatically replace resolved ones with new ones"><input type="checkbox" checked="checked" id="dynamic" /> <label for="dynamic">Dynamic</label></span>
-	| <span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-Resolve" /></span>
-	| <span title="Un-In Progress all the reports currently displayed"><input type="button" onclick="GiveBack();" value="Give back all" /></span>
+	| <span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-resolve" /></span>
+	| <span title="Unclaim all of the reports currently displayed"><input type="button" onclick="GiveBack();" value="Unclaim all" /></span>
 </div>
 <br />
 <div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto">

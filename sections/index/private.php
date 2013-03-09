@@ -123,7 +123,7 @@ for($i = 0; $i < $Limit; $i++) {
 			<div class="head colhead_dark"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
 <? if (USER_LIMIT>0) { ?>
-				<li>Maximum Users: <?=number_format(USER_LIMIT) ?></li>
+				<li>Maximum users: <?=number_format(USER_LIMIT) ?></li>
 
 <?
 }
@@ -135,7 +135,7 @@ if(($UserCount = $Cache->get_value('stats_user_count')) === false){
 }
 $UserCount = (int)$UserCount;
 ?>
-				<li>Enabled Users: <?=number_format($UserCount)?> <a href="stats.php?action=users" class="brackets">Details</a></li>
+				<li>Enabled users: <?=number_format($UserCount)?> <a href="stats.php?action=users" class="brackets">Details</a></li>
 <?
 
 if (($UserStats = $Cache->get_value('stats_users')) === false) {
@@ -236,7 +236,7 @@ if(!$PeerStatsLocked) {
 				<li>Peers: <?=$PeerCount?></li>
 				<li>Seeders: <?=$SeederCount?></li>
 				<li>Leechers: <?=$LeecherCount?></li>
-				<li>Seeder/Leecher Ratio: <?=$Ratio?></li>
+				<li>Seeder/Leecher ratio: <?=$Ratio?></li>
 			</ul>
 		</div>
 <?

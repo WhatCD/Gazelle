@@ -28,7 +28,7 @@ $Concerts .= ob_get_clean();
 		<a href="#">&uarr;</a>&nbsp;<strong>Upcoming concerts</strong>
 		<a href="#" class="brackets" onclick="$('#concertsbody').toggle(); return false;">Toggle</a>
 	</div>
-    <div id="concertsbody" <?=$Hidden ? "class='hidden'" : ""?>>
+    <div id="concertsbody"<?=$Hidden ? ' class="hidden"' : ''?>>
 	<?=$Concerts?>
 	</div>
 </div>

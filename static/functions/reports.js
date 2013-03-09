@@ -39,7 +39,7 @@ function unClaim(id) {
 	ajax.get('reports.php?action=unclaim&remove=1&id=' + id, function (response) {
 		var json = JSON.parse(response);
 		if (json['status'] == 'success') {
-			$('#claimed_' + id).raw().innerHTML = '<a href="#" id="claim_' + id + '" onclick="claim(' + id + '); return false;"; return false;">Claim</a>';
+			$('#claimed_' + id).raw().innerHTML = '<a href="#" id="claim_' + id + '" onclick="claim(' + id + '); return false;" class="brackets">Claim</a>';
 		}
 	});
 }
@@ -48,7 +48,7 @@ function resolve(id, claimer) {
 	var answer = true;
 	if (!claimer) {
 		if ($('#claimed_' + id).raw()) {
-			var answer = confirm("This is a claimed report, are you sure you want to resolve it?");
+			var answer = confirm("This is a claimed report. Are you sure you want to resolve it?");
 			if (answer)
 				answer = true;
 			else

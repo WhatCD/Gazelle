@@ -1,6 +1,4 @@
 <?
-
-
 define('FOOTER_FILE', SERVER_ROOT.'/design/privatefooter.php');
 $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
 ?>
@@ -87,7 +85,7 @@ if ($Mobile) { ?>
 
 ?>
 </head>
-<body id="<?=$Document == 'collages' ? 'collage' : $Document?>" <?= ((!$Mobile && $LoggedUser['Rippy'] == 'On') ? 'onload="say()"' : '') ?>>
+<body id="<?=$Document == 'collages' ? 'collage' : $Document?>" <?= ((!$Mobile && Rippy::is_enabled()) ? 'onload="say()"' : '') ?>>
 <div id="wrapper">
 <h1 class="hidden"><?=SITE_NAME?></h1>
 
@@ -411,44 +409,8 @@ if (!empty($Alerts) || !empty($ModBar)) {
 <?
 }
 //Done handling alertbars
-
-if(!$Mobile && $LoggedUser['Rippy'] != 'Off') {
-	switch($LoggedUser['Rippy']) {
-		case 'PM' :
-			$Says = $Cache->get_value('rippy_message_'.$LoggedUser['ID']);
-			if($Says === false) {
-				$Says = $Cache->get_value('global_rippy_message');
-			}
-			$Show = ($Says !== false);
-			$Cache->delete_value('rippy_message_'.$LoggedUser['ID']);
-			break;
-		case 'On' :
-			$Show = true;
-			$Says = '';
-			break;
-		/* Uncomment to always show globals
-		case 'Off' :
-			$Says = $Cache->get_value('global_rippy_message');
-			$Show = ($Says !== false);
-			break;
-		*/
-	}
-
-	if($Show) {
 ?>
-	<div id="rippywrap" class="rippywrap">
-		<div id="bubble" style="display: <?=($Says ? 'block' : 'none')?>">
-			<span class="rbt"></span>
-			<span id="rippy-says" class="rbm"><?=$Says?></span>
-			<span class="rbb"></span>
-		</div>
-		<div class="rippy" onclick="rippyclick();"></div>
-	</div>
 
-<?
-	}
-}
-?>
 
 	<div id="searchbars">
 		<ul>

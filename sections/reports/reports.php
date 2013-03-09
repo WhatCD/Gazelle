@@ -55,8 +55,8 @@ $Reports = $DB->query("SELECT SQL_CALC_FOUND_ROWS
 		r.Reason,
 		r.Status,
 		r.ClaimerID,
-        r.Notes,
-        r.ResolverID
+		r.Notes,
+		r.ResolverID
 	FROM reports AS r
 	JOIN users_main AS um ON r.UserID=um.ID
 	WHERE " . $Where . "
@@ -231,22 +231,22 @@ $DB->set_query_id($Reports);
 				<? if ($Status != "Resolved") { ?>
 				<tr>
 					<td class="center" colspan="2">
-						<form id="report_form_<?=$ReportID?>">
+						<form id="report_form_<?=$ReportID?>" action="">
 							<input type="hidden" name="reportid" value="<?=$ReportID?>" />
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 							<input type="submit" onclick="return resolve(<?=$ReportID?>, <?=($ClaimerID == $LoggedUser['ID'] || !$ClaimerID) ? "true" : "false"?>)" name="submit" value="Resolve" />
 						</form>
 					</td>
 				</tr>
-                <? } else {
-                        $ResolverInfo = Users::user_info($ResolverID);
-                    ?>
-                    <tr>
-                        <td colspan="2">
-                            Resolved By <a href="users.php?id=<?=$ResolverID?>"><?=$ResolverInfo['Username']?></a>
-                        </td>
-                    </tr>
-                <? } ?>
+				<? } else {
+					$ResolverInfo = Users::user_info($ResolverID);
+				?>
+				<tr>
+					<td colspan="2">
+						Resolved by <a href="users.php?id=<?=$ResolverID?>"><?=$ResolverInfo['Username']?></a>
+					</td>
+				</tr>
+				<? } ?>
 			</table>
 		</div>
 		<br />

@@ -85,7 +85,7 @@ View::show_header('Edit artist');
 					<strong>OR</strong><br />
 					<label for="newartistid">Artist name:</label>&nbsp;<input type="text" id="newartistname" name="newartistname" size="40" value="" />
 					<br /><br />
-					<input type="submit" value="Change ArtistID" />
+					<input type="submit" value="Change artist ID" />
 				</div>
 			</div>
 		</form>
@@ -100,10 +100,10 @@ View::show_header('Edit artist');
 	while(list($AliasID, $AliasName, $User, $Redirect) = $DB->next_record(MYSQLI_NUM, true)) {
 		if($AliasName == $Name) { $DefaultRedirectID = $AliasID; }
 ?>
-			<li><?=$AliasID?>. <?=$AliasName?>
-<?		if($User) { ?> <a href="user.php?id=<?=$User?>" class="brackets">User</a> <?}
-		if($Redirect) { ?> (writes redirect to <?=$Redirect?>)<? } ?>
-			<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">X</a>
+			<li><span title="Alias ID"><?=$AliasID?></span>. <span title="Alias name"><?=$AliasName?></span>
+<?		if($User) { ?> <a href="user.php?id=<?=$User?>" title="Alias creator" class="brackets">User</a> <?}
+		if($Redirect) { ?> (writes redirect to <span title="Target alias ID"><?=$Redirect?></span>)<? } ?>
+			<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Delete this alias" class="brackets">X</a>
 			</li>
 <?	}
 ?>
