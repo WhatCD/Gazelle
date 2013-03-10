@@ -70,5 +70,5 @@ if($ToID == $LoggedUser['ID']) {
 if(isset($Err)) {
 	echo $Err;
 } else {
-	Misc::send_pm($ToID, $LoggedUser['ID'], db_string($Subject), db_string($Message));
+	Misc::send_pm($ToID, $LoggedUser['ID'], $Subject, $Message);
 }

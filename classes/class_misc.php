@@ -44,6 +44,8 @@ class Misc {
 	 */
 	public static function send_pm($ToID,$FromID,$Subject,$Body,$ConvID='') {
 		global $DB, $Cache, $Time;
+		$Subject = db_string($Subject);
+		$Body = db_string($Body);
 		if ($ToID == 0 || $ToID == $FromID) {
 			// Don't allow users to send messages to the system or themselves
 			return;

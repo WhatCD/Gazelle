@@ -313,8 +313,8 @@ if($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])){
         $Subject = 'Leeching Disabled';
         $Message = 'You have downloaded more then 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://what.cd/wiki.php?action=article&amp;id=110';
         foreach($UserIDs as $UserID) {
-			Misc::send_pm($UserID,0,db_string($Subject),db_string($Message));
-			send_irc("PRIVMSG #reports : !leechdisabled Downloaded 10 GB+ on Ratio Watch. https://".NONSSL_SITE_URL."/user.php?id=$UserID");
+			Misc::send_pm($UserID, 0, $Subject, $Message);
+			send_irc("PRIVMSG #reports :!leechdisabled Downloaded 10 GB+ on Ratio Watch. https://".NONSSL_SITE_URL."/user.php?id=$UserID");
         }
 
             $DB->query("UPDATE users_info AS i JOIN users_main AS m ON m.ID=i.UserID
@@ -432,7 +432,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 		$Cache->begin_transaction('user_info_heavy_'.$UserID);
 		$Cache->update_row(false, array('RatioWatchEnds'=>'0000-00-00 00:00:00','RatioWatchDownload'=>'0','CanLeech'=>1));
 		$Cache->commit_transaction(0);
-		Misc::send_pm($UserID, 0, db_string("You have been taken off Ratio Watch"), db_string("Congratulations! Feel free to begin downloading again.\n To ensure that you do not get put on ratio watch again, please read the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n"), '');
+		Misc::send_pm($UserID, 0, "You have been taken off Ratio Watch", "Congratulations! Feel free to begin downloading again.\n To ensure that you do not get put on ratio watch again, please read the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n");
 		echo "Ratio watch off: $UserID\n";
 	}
 	$DB->set_query_id($UserQuery);
@@ -460,7 +460,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
                 $Cache->begin_transaction('user_info_heavy_'.$UserID);
                 $Cache->update_row(false, array('RatioWatchEnds'=>'0000-00-00 00:00:00','RatioWatchDownload'=>'0','CanLeech'=>1));
                 $Cache->commit_transaction(0);
-                Misc::send_pm($UserID, 0, db_string("You have been taken off Ratio Watch"), db_string("Congratulations! Feel free to begin downloading again.\n To ensure that you do not get put on ratio watch again, please read the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n"), '');
+                Misc::send_pm($UserID, 0, "You have been taken off Ratio Watch", "Congratulations! Feel free to begin downloading again.\n To ensure that you do not get put on ratio watch again, please read the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n");
                 echo "Ratio watch off: $UserID\n";
         }
         $DB->set_query_id($UserQuery);
@@ -491,7 +491,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 		$Cache->begin_transaction('user_info_heavy_'.$UserID);
 		$Cache->update_row(false, array('RatioWatchEnds'=>time_plus(60*60*24*14),'RatioWatchDownload'=>0));
 		$Cache->commit_transaction(0);
-		Misc::send_pm($UserID, 0, db_string("You have been put on Ratio Watch"), db_string("This happens when your ratio falls below the requirements we have outlined in the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n For information about ratio watch, click the link above."), '');
+		Misc::send_pm($UserID, 0, "You have been put on Ratio Watch", "This happens when your ratio falls below the requirements we have outlined in the rules located [url=http://".NONSSL_SITE_URL."/rules.php?p=ratio]here[/url].\n For information about ratio watch, click the link above.");
 		echo "Ratio watch on: $UserID\n";
 	}
 
@@ -537,7 +537,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 		$Cache->begin_transaction('user_info_heavy_'.$UserID);
 		$Cache->update_row(false, array('RatioWatchDownload'=>0, 'CanLeech'=>0));
 		$Cache->commit_transaction(0);
-		Misc::send_pm($UserID, 0, db_string("Your downloading rights have been disabled"), db_string("As you did not raise your ratio in time, your downloading rights have been revoked. You will not be able to download any torrents until your ratio is above your new required ratio."), '');
+		Misc::send_pm($UserID, 0, "Your downloading rights have been disabled", "As you did not raise your ratio in time, your downloading rights have been revoked. You will not be able to download any torrents until your ratio is above your new required ratio.");
 		echo "Ratio watch disabled: $UserID\n";
 	}
 
@@ -713,7 +713,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 
 	foreach($DeleteNotes as $UserID => $MessageInfo){
 		$Singular = ($MessageInfo['Count'] == 1) ? true : false;
-		Misc::send_pm($UserID,0,db_string($MessageInfo['Count'].' of your torrents '.($Singular?'has':'have').' been deleted for inactivity'), db_string(($Singular?'One':'Some').' of your uploads '.($Singular?'has':'have').' been deleted for being unseeded.  Since '.($Singular?'it':'they').' didn\'t break any rules (we hope), please feel free to re-upload '.($Singular?'it':'them').".\n\nThe following torrent".($Singular?' was':'s were').' deleted:'.$MessageInfo['Msg']));
+		Misc::send_pm($UserID, 0, $MessageInfo['Count'].' of your torrents '.($Singular?'has':'have').' been deleted for inactivity', ($Singular?'One':'Some').' of your uploads '.($Singular?'has':'have').' been deleted for being unseeded.  Since '.($Singular?'it':'they').' didn\'t break any rules (we hope), please feel free to re-upload '.($Singular?'it':'them').".\n\nThe following torrent".($Singular?' was':'s were').' deleted:'.$MessageInfo['Msg']);
 	}
 	unset($DeleteNotes);
 
@@ -941,7 +941,7 @@ if(!$NoDaily && $Day != next_day() || $_GET['runday']){
 			$TorrentAlerts[$UserID]['Count']++;
 		}
 		foreach($TorrentAlerts as $UserID => $MessageInfo){
-			Misc::send_pm($UserID, 0, db_string('Unseeded torrent notification'), db_string($MessageInfo['Count']." of your uploads will be deleted for inactivity soon.  Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=https://what.cd/wiki.php?action=article&amp;id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count']>1?'s':'')." will be removed for inactivity:".$MessageInfo['Msg']."\n\nIf you no longer wish to receive these notifications, please disable them in your profile settings."));
+			Misc::send_pm($UserID, 0, 'Unseeded torrent notification', $MessageInfo['Count']." of your uploads will be deleted for inactivity soon.  Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=https://what.cd/wiki.php?action=article&amp;id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count']>1?'s':'')." will be removed for inactivity:".$MessageInfo['Msg']."\n\nIf you no longer wish to receive these notifications, please disable them in your profile settings.");
 		}
 	}
 

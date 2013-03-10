@@ -11,6 +11,9 @@ list($NumComments) = $DB->next_record();
 $DB->query("SELECT COUNT(ID) FROM artist_comments WHERE AuthorID='$UserID'");
 list($NumArtistComments) = $DB->next_record();
 
+$DB->query("SELECT COUNT(ID) FROM requests_comments WHERE AuthorID='$UserID'");
+list($NumRequestComments) = $DB->next_record();
+
 $DB->query("SELECT COUNT(ID) FROM collages WHERE Deleted='0' AND UserID='$UserID'");
 list($NumCollages) = $DB->next_record();
 
@@ -33,11 +36,14 @@ list($PerfectFLACs) = $DB->next_record();
 					<a href="comments.php?id=<?=$UserID?>" class="brackets<?= $Override===2 ? ' paranoia_override' : '' ?>" title="View">View</a>
 				<? } ?>
 				</li>
-<? } ?>
-<? if (($Override=check_paranoia_here('torrentcomments+'))) { ?>
 				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Artist comments: <?=number_format($NumArtistComments)?>
 				<? if($Override=check_paranoia_here('torrentcomments')) { ?>
 					<a href="comments.php?id=<?=$UserID?>&amp;action=artists" class="brackets<?= $Override===2 ? ' paranoia_override' : '' ?>" title="View">View</a>
+				<? } ?>
+				</li>
+				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Request comments: <?=number_format($NumRequestComments)?>
+				<? if($Override=check_paranoia_here('torrentcomments')) { ?>
+					<a href="comments.php?id=<?=$UserID?>&amp;action=requests" class="brackets<?= $Override===2 ? ' paranoia_override' : '' ?>" title="View">View</a>
 				<? } ?>
 				</li>
 <? } ?>

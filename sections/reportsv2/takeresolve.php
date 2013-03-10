@@ -266,7 +266,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 
 		$PM .= "\n\nReport was handled by [user]".$LoggedUser['Username']."[/user].";
 
-		Misc::send_pm($UploaderID, 0, db_string($Escaped['raw_name']), db_string($PM));
+		Misc::send_pm($UploaderID, 0, $Escaped['raw_name'], $PM);
 	}
 
 	$Cache->delete_value('reports_torrent_'.$TorrentID);

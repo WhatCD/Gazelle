@@ -40,7 +40,7 @@ The exact process for re-seeding a torrent is slightly different for each client
 
 Thanks!";
 
-		Misc::send_pm($UserID, 0, 'Re-seed request for torrent '.db_string($Name), db_string($Request));
+		Misc::send_pm($UserID, 0, 'Re-seed request for torrent ' . $Name, $Request);
 	}
 	$NumUsers = count($Users);
 } else {
@@ -54,7 +54,7 @@ The user [url=http://".SITE_URL."/user.php?id=$LoggedUser[ID]]$LoggedUser[Userna
 The exact process for re-seeding a torrent is slightly different for each client, but the concept is the same. The idea is to download the .torrent file and open it in your client, and point your client to the location where the data files are, then initiate a hash check.
 
 Thanks!";
-	Misc::send_pm($UploaderID, 0, 'Re-seed request for torrent '.db_string($Name), db_string($Request));
+	Misc::send_pm($UploaderID, 0, 'Re-seed request for torrent ' . $Name, $Request);
 
 	$NumUsers = 1;
 

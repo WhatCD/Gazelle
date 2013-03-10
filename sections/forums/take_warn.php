@@ -4,9 +4,9 @@ if (!check_perms('users_warn')) {
 }
 Misc::assert_isset_request($_POST, array('reason', 'privatemessage', 'body', 'length', 'postid', 'userid'));
 
-$Reason = db_string($_POST['reason']);
-$PrivateMessage = db_string($_POST['privatemessage']);
-$Body = db_string($_POST['body']);
+$Reason = $_POST['reason'];
+$PrivateMessage = $_POST['privatemessage'];
+$Body = $_POST['body'];
 $Length = $_POST['length'];
 $PostID = (int) $_POST['postid'];
 $UserID = (int) $_POST['userid'];
@@ -23,14 +23,14 @@ if ($Length != 'verbal') {
 	$Time = ((int) $Length) * (7 * 24 * 60 * 60);
 	Tools::warn_user($UserID, $Time, "$URL - " . $Reason);
 	$Subject = "You have received a warning";
-	$PrivateMessage = "You have received a $Length week warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;
+	$PrivateMessage = "You have received a $Length week warning for [url=$URL]this post[/url].\n\n" . $PrivateMessage;
 
 	$WarnTime = time_plus($Time);
 	$AdminComment = date("Y-m-d") . ' - Warned until ' . $WarnTime . ' by ' . $LoggedUser['Username'] . " for $URL \nReason: $Reason\n\n";
 
 } else {
 	$Subject = "You have received a verbal warning";
-	$PrivateMessage = "You have received a verbal warning for [url=$URL]this post.[/url]\n\n" . $PrivateMessage;
+	$PrivateMessage = "You have received a verbal warning for [url=$URL]this post[/url].\n\n" . $PrivateMessage;
 	$AdminComment = date("Y-m-d") . ' - Verbally warned by ' . $LoggedUser['Username'] . " for $URL \nReason: $Reason\n\n";
     Tools::update_user_notes($UserID, $AdminComment);
 }
@@ -59,7 +59,7 @@ list($OldBody, $AuthorID, $TopicID, $ForumID, $Page) = $DB->next_record();
 
 // Perform the update
 $DB->query("UPDATE forums_posts SET
-    Body = '$Body',
+    Body = '" . db_string($Body) . "',
     EditedUserID = '$UserID',
     EditedTime = '" . $SQLTime . "'
     WHERE ID='$PostID'");
@@ -72,13 +72,13 @@ if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 	//just clear the cache for would be cache-screwer-uppers
 } else {
 	$Cache->update_row($Key, array('ID' => $Cache->MemcacheDBArray[$Key]['ID'], 'AuthorID' => $Cache->MemcacheDBArray[$Key]['AuthorID'], 'AddedTime' => $Cache->MemcacheDBArray[$Key]['AddedTime'],
-					'Body' => $_POST['body'], //Don't url decode.
+					'Body' => $Body, //Don't url decode.
 					'EditedUserID' => $LoggedUser['ID'], 'EditedTime' => $SQLTime, 'Username' => $LoggedUser['Username']));
 	$Cache->commit_transaction(3600 * 24 * 5);
 }
 $ThreadInfo = get_thread_info($TopicID);
 if ($ThreadInfo['StickyPostID'] == $PostID) {
-	$ThreadInfo['StickyPost']['Body'] = $_POST['body'];
+	$ThreadInfo['StickyPost']['Body'] = $Body;
 	$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];
 	$ThreadInfo['StickyPost']['EditedTime'] = $SQLTime;
 	$Cache->cache_value('thread_' . $TopicID . '_info', $ThreadInfo, 0);

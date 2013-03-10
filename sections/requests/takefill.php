@@ -181,7 +181,7 @@ $DB->query("SELECT UserID FROM requests_votes WHERE RequestID = ".$RequestID);
 $UserIDs = $DB->to_array();
 foreach ($UserIDs as $User) {
 	list($VoterID) = $User;
-	Misc::send_pm($VoterID, 0, db_string("The request '".$FullName."' has been filled"), db_string("One of your requests - [url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]https://".SSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."[/url]"), '');
+	Misc::send_pm($VoterID, 0, "The request '".$FullName."' has been filled", "One of your requests - [url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=".$RequestID."]".$FullName."[/url] - has been filled. You can view it at [url]https://".SSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."[/url]");
 }
 
 $RequestVotes = get_votes_array($RequestID);

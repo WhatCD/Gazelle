@@ -215,8 +215,8 @@ class Tools {
 			$NewExpDate = date('Y-m-d H:i:s', strtotime($OldDate) + $Duration);
 
 			Misc::send_pm($UserID, 0,
-				db_string("You have received multiple warnings."),
-				db_string("When you received your latest warning (Set to expire on ".date("Y-m-d", (time() + $Duration))."), you already had a different warning (Set to expire on ".date("Y-m-d", strtotime($OldDate)).").\n\n Due to this collision, your warning status will now expire at ".$NewExpDate."."));
+				"You have received multiple warnings.",
+				"When you received your latest warning (Set to expire on ".date("Y-m-d", (time() + $Duration))."), you already had a different warning (Set to expire on ".date("Y-m-d", strtotime($OldDate)).").\n\n Due to this collision, your warning status will now expire at ".$NewExpDate.".");
 
 			$AdminComment = date("Y-m-d").' - Warning (Clash) extended to expire at '.$NewExpDate.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
 

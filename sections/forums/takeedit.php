@@ -26,7 +26,7 @@ if(!$_POST['post'] || !is_number($_POST['post']) || !is_number($_POST['key'])) {
 
 // Variables for database input
 $UserID = $LoggedUser['ID'];
-$Body = db_string($_POST['body']); //Don't URL Decode
+$Body = $_POST['body']; //Don't URL Decode
 $PostID = $_POST['post'];
 $Key = $_POST['key'];
 $SQLTime = sqltime();
@@ -72,12 +72,12 @@ if($UserID != $AuthorID && $DoPM) {
 	$PMurl = 'https://'.NONSSL_SITE_URL.'/forums.php?action=viewthread&postid='.$PostID.'#post'.$PostID;
 	$ProfLink = '[url=https://'.NONSSL_SITE_URL.'/user.php?id='.$UserID.']'.$LoggedUser['Username'].'[/url]';
 	$PMBody = 'One of your posts has been edited by '.$ProfLink.': [url]'.$PMurl.'[/url]';
-	Misc::send_pm($AuthorID,0,$PMSubject,$PMBody,$ConvID='');
+	Misc::send_pm($AuthorID, 0, $PMSubject, $PMBody);
 }
 
 // Perform the update
 $DB->query("UPDATE forums_posts SET
-	Body = '$Body',
+	Body = '" . db_string($Body) . "',
 	EditedUserID = '$UserID',
 	EditedTime = '".$SQLTime."'
 	WHERE ID='$PostID'");
@@ -92,7 +92,7 @@ if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 			'ID'=>$Cache->MemcacheDBArray[$Key]['ID'],
 			'AuthorID'=>$Cache->MemcacheDBArray[$Key]['AuthorID'],
 			'AddedTime'=>$Cache->MemcacheDBArray[$Key]['AddedTime'],
-			'Body'=>$_POST['body'], //Don't url decode.
+			'Body'=>$Body, //Don't url decode.
 			'EditedUserID'=>$LoggedUser['ID'],
 			'EditedTime'=>$SQLTime,
 			'Username'=>$LoggedUser['Username']
@@ -101,7 +101,7 @@ if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 }
 $ThreadInfo = get_thread_info($TopicID);
 if($ThreadInfo['StickyPostID'] == $PostID) {
-	$ThreadInfo['StickyPost']['Body'] = $_POST['body'];
+	$ThreadInfo['StickyPost']['Body'] = $Body;
 	$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];
 	$ThreadInfo['StickyPost']['EditedTime'] = $SQLTime;
 	$Cache->cache_value('thread_'.$TopicID.'_info', $ThreadInfo, 0);
@@ -111,6 +111,6 @@ $DB->query("INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
 								VALUES ('forums', ".$PostID.", ".$UserID.", '".$SQLTime."', '".db_string($OldBody)."')");
 $Cache->delete_value("forums_edits_$PostID");
 // This gets sent to the browser, which echoes it in place of the old body
-echo $Text->full_format($_POST['body']);
+echo $Text->full_format($Body);
 ?>
 <br /><br />Last edited by <a href="user.php?id=<?=$LoggedUser['ID']?>"><?=$LoggedUser['Username']?></a> just now

@@ -48,7 +48,7 @@ if(!empty($Err)) {
 	die();
 }
 
-$ConvID = Misc::send_pm($ToID,$LoggedUser['ID'],db_string($Subject),db_string($Body),$ConvID);
+$ConvID = Misc::send_pm($ToID, $LoggedUser['ID'], $Subject, $Body, $ConvID);
 
 header('Location: inbox.php');
 ?>

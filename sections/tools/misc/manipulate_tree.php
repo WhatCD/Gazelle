@@ -1,19 +1,23 @@
 <?
-//Props to Leto of StC.
-if (
-	!check_perms('users_view_invites') &&
-	!check_perms('users_disable_users') &&
-	!check_perms('users_edit_invites') &&
-	!check_perms('users_disable_any')
-) { error(404); }
+// Props to Leto of StC.
+if (!check_perms('users_view_invites') && !check_perms('users_disable_users') && !check_perms('users_edit_invites') && !check_perms('users_disable_any')) {
+	error(404);
+}
 View::show_header("Manipulate Invite Tree");
 
-if($_POST['id']) {
+if ($_POST['id']) {
 	authorize();
 
-	if(!is_number($_POST['id'])) { error(403); }
-	if(!$_POST['comment']) { error('Please enter a comment to add to the users affected.');
-	} else { $Comment = db_string($_POST['comment']); }
+	if (!is_number($_POST['id'])) {
+		error(403);
+	}
+	if (!$_POST['comment']) {
+		error('Please enter a comment to add to the users affected.');
+	}
+	else {
+		$Comment = db_string($_POST['comment']);
+		$Comment .= "\n" . "Manipulate Tree used by " . $LoggedUser['Username'];
+	}
 	$UserID = $_POST['id'];
 	$DB->query("SELECT
 		t1.TreePosition,
@@ -26,10 +30,14 @@ if($_POST['id']) {
 		) AS MaxPosition
 		FROM invite_tree AS t1
 		WHERE t1.UserID=$UserID");
-	list($TreePosition, $TreeID, $TreeLevel, $MaxPosition) = $DB->next_record();
-	if(!$MaxPosition){ $MaxPosition = 1000000; } // $MaxPermission is null if the user is the last one in that tree on that level
-	if(!$TreeID){ return; }
-		$DB->query("
+	list ($TreePosition, $TreeID, $TreeLevel, $MaxPosition) = $DB->next_record();
+	if (!$MaxPosition) {
+		$MaxPosition = 1000000;
+	} // $MaxPermission is null if the user is the last one in that tree on that level
+	if (!$TreeID) {
+		return;
+	}
+	$DB->query("
 			SELECT
 			UserID
 			FROM invite_tree
@@ -40,56 +48,28 @@ if($_POST['id']) {
 			ORDER BY TreePosition");
 	$BanList = array();
 
-	while(list($Invitee) = $DB->next_record()) {
-		$BanList[]=$Invitee;
+	while (list ($Invitee) = $DB->next_record()) {
+		$BanList[] = $Invitee;
 	}
 
 	foreach ($BanList as $Key => $InviteeID) {
-		if ($_POST['perform']=='nothing') {
-			$DB->query("SELECT
-					AdminComment
-					FROM users_info
-					WHERE UserID='".$InviteeID."'");
-			list($AdminComment)=$DB->next_record();
-			$DBComment = $Comment."\n\n".$AdminComment;
-			$DB->query("UPDATE
-					users_info
-					SET AdminComment='".$DBComment."'
-					WHERE UserID='".$InviteeID."'");
+		if ($_POST['perform'] == 'nothing') {
+			Tools::update_user_notes($InviteeID, $Comment . "\n\n");
 			$Msg = "Successfully commented on entire invite tree!";
-		} elseif ($_POST['perform']=='disable') {
-			$DB->query("SELECT
-					AdminComment
-					FROM users_info
-					WHERE UserID='".$InviteeID."'");
-			list($AdminComment)=$DB->next_record();
-			$DBComment = $Comment."\n\n".$AdminComment;
-			$DB->query("UPDATE
-					users_info
-					SET AdminComment='".$DBComment."'
-					WHERE UserID='".$InviteeID."'");
-			$DB->query("UPDATE
-					users_main
-					SET Enabled='2'
-					WHERE ID='".$InviteeID."'");
+		}
+		elseif ($_POST['perform'] == 'disable') {
+			Tools::disable_users($InviteeID, $Comment);
 			$Msg = "Successfully banned entire invite tree!";
-		} elseif ($_POST['perform']=='inviteprivs') { //DisableInvites =1
+		}
+		elseif ($_POST['perform'] == 'inviteprivs') { // DisableInvites =1
+			Tools::update_user_notes($InviteeID, $Comment . "\n\n");
 			$DB->query("UPDATE
 					users_info
 					SET DisableInvites='1'
-					WHERE UserID='".$InviteeID."'");
-			$DB->query("SELECT
-					AdminComment
-					FROM users_info
-					WHERE UserID='".$InviteeID."'");
-			list($AdminComment)=$DB->next_record();
-			$DBComment = $Comment."\n\n".$AdminComment;
-			$DB->query("UPDATE
-					users_info
-					SET AdminComment='".$DBComment."'
-					WHERE UserID='".$InviteeID."'");
+					WHERE UserID='" . $InviteeID . "'");
 			$Msg = "Successfully removed invite privileges from entire tree!";
-		} else {
+		}
+		else {
 			error(403);
 		}
 	}
@@ -99,7 +79,7 @@ if($_POST['id']) {
 <div class="thin">
 	<? if($Msg) { ?>
 	<div class="center">
-		<p style="color: red;text-align:center;"><?=$Msg?></p>
+		<p style="color: red; text-align: center;"><?=$Msg?></p>
 	</div>
 	<? } ?>
 	<form class="manage_form" name="user" action="" method="post">
@@ -108,25 +88,24 @@ if($_POST['id']) {
 		<table class="layout">
 			<tr>
 				<td class="label"><strong>UserID</strong></td>
-				<td>
-					<input type="text" size="10" name="id" id="id" />
-				</td>
+				<td><input type="text" size="10" name="id" id="id" /></td>
 				<td class="label"><strong>Mandatory comment!</strong></td>
-				<td>
-					<input type="text" size="40" name="comment" id="comment" />
-				</td>
+				<td><input type="text" size="40" name="comment" id="comment" /></td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Action: </strong></td>
-				<td colspan="2">
-					<select name="perform">
-						<option value="nothing"<? if($_POST['perform']==='nothing'){echo ' selected="selected"';}?>>Do nothing</option>
-						<option value="disable"<? if($_POST['perform']==='disable'){echo ' selected="selected"';}?>>Disable entire tree</option>
-						<option value="inviteprivs"<? if($_POST['perform']==='inviteprivs'){echo ' selected="selected"';}?>>Disable invites privileges</option>
-					</select>
-				</td><td align="left">
-					<input type="submit" value="Go" />
-				</td>
+				<td colspan="2"><select name="perform">
+						<option value="nothing"
+							<? if($_POST['perform']==='nothing'){echo ' selected="selected"';}?>>Do
+							nothing</option>
+						<option value="disable"
+							<? if($_POST['perform']==='disable'){echo ' selected="selected"';}?>>Disable
+							entire tree</option>
+						<option value="inviteprivs"
+							<? if($_POST['perform']==='inviteprivs'){echo ' selected="selected"';}?>>Disable
+							invites privileges</option>
+				</select></td>
+				<td align="left"><input type="submit" value="Go" /></td>
 			</tr>
 		</table>
 	</form>

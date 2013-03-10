@@ -474,7 +474,13 @@ if($Results === false) {
 	$Cache->cache_value('request_comments_'.$RequestID, $Results, 0);
 }
 
-list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+if(isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
+	$DB->query("SELECT COUNT(ID) FROM requests_comments WHERE RequestID = $RequestID AND ID <= $_GET[postid]");
+	list($PostNum) = $DB->next_record();
+	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+} else {
+	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+}
 
 //Get the cache catalogue
 $CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);

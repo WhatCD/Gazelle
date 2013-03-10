@@ -20,7 +20,9 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 	}
 	$UserInfo = array($UserInfo);
 	list($UserID,$DownloadAlt)=array_shift($UserInfo);
-	if(!$UserID) { error(403); }
+	if (!$UserID) {
+		error(0);
+	}
 	$TorrentPass = $_REQUEST['torrent_pass'];
 	$AuthKey = $_REQUEST['authkey'];
 }
@@ -29,7 +31,9 @@ $TorrentID = $_REQUEST['id'];
 
 
 
-if (!is_number($TorrentID)){ error(0); }
+if (!is_number($TorrentID)) {
+	error(0);
+}
 
 /* uTorrent remote redownloads .torrent files every fifteen minutes
 	to prevent this retardation from blowing bandwidth etc., let's block it

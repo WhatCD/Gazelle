@@ -4,9 +4,9 @@ if (!check_perms('users_warn')) {
 }
 Misc::assert_isset_request($_POST, array('reason', 'privatemessage', 'body', 'length', 'groupid', 'postid', 'userid'));
 
-$Reason = db_string($_POST['reason']);
-$PrivateMessage = db_string($_POST['privatemessage']);
-$Body = db_string($_POST['body']);
+$Reason = $_POST['reason'];
+$PrivateMessage = $_POST['privatemessage'];
+$Body = $_POST['body'];
 $Length = $_POST['length'];
 $GroupID = (int) $_POST['groupid'];
 $PostID = (int) $_POST['postid'];
@@ -53,7 +53,7 @@ if ($DB->record_count()==0) { error(404); }
 
 // Perform the update
 $DB->query("UPDATE requests_comments SET
-				Body = '".$Body."',
+				Body = '" . db_string($Body) . "',
 				EditedUserID = '".$LoggedUser['ID']."',
 				EditedTime = '".sqltime()."'
 				WHERE ID='".$PostID."'");
@@ -66,7 +66,7 @@ $Cache->update_row($Key, array(
 	'ID'=>$PostID,
 	'AuthorID'=>$AuthorID,
 	'AddedTime'=>$AddedTime,
-	'Body'=>$_POST['body'],
+	'Body'=>$Body,
 	'EditedUserID'=>db_string($LoggedUser['ID']),
 	'EditedTime'=>sqltime(),
 	'Username'=>$LoggedUser['Username']

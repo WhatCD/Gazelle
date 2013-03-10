@@ -50,7 +50,7 @@ if(!empty($Note)) {
     $Body = $Body . "\n\n". $Note;
 }
 
-Misc::send_pm($FriendID, $LoggedUser['ID'], db_string($Subject), db_string($Body));
+Misc::send_pm($FriendID, $LoggedUser['ID'], $Subject, $Body);
 echo json_encode(array("status" => "success", "response" => "Sent!"));
 die();
 

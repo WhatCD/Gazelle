@@ -4,9 +4,9 @@ if (!check_perms('users_warn')) {
 }
 Misc::assert_isset_request($_POST, array('reason', 'privatemessage', 'body', 'length', 'groupid', 'postid', 'userid'));
 
-$Reason = db_string($_POST['reason']);
-$PrivateMessage = db_string($_POST['privatemessage']);
-$Body = db_string($_POST['body']);
+$Reason = $_POST['reason'];
+$PrivateMessage = $_POST['privatemessage'];
+$Body = $_POST['body'];
 $Length = $_POST['length'];
 $GroupID = (int) $_POST['groupid'];
 $PostID = (int) $_POST['postid'];
@@ -51,7 +51,7 @@ list($Page) = $DB->next_record();
 
 // Perform the update
 $DB->query("UPDATE torrents_comments SET
-    Body = '$Body',
+    Body = '" . db_string($Body) . "',
     EditedUserID = '" . db_string($LoggedUser['ID']) . "',
     EditedTime = '" . sqltime() . "'
     WHERE ID='$PostID'");
@@ -60,7 +60,7 @@ $DB->query("UPDATE torrents_comments SET
 $CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 $Cache->begin_transaction('torrent_comments_' . $GroupID . '_catalogue_' . $CatalogueID);
 
-$Cache->update_row($_POST['key'], array('ID' => $_POST['postid'], 'AuthorID' => $AuthorID, 'AddedTime' => $AddedTime, 'Body' => $_POST['body'],
+$Cache->update_row($_POST['key'], array('ID' => $_POST['postid'], 'AuthorID' => $AuthorID, 'AddedTime' => $AddedTime, 'Body' => $Body,
 				'EditedUserID' => db_string($LoggedUser['ID']), 'EditedTime' => sqltime(), 'Username' => $LoggedUser['Username']));
 $Cache->commit_transaction(0);
 

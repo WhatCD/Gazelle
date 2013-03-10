@@ -439,6 +439,5 @@ ob_end_flush();
 
 $Debug->set_flag('set headers and send to user');
 
-
 //Attribute profiling
 $Debug->profile();

@@ -48,12 +48,15 @@ if (isset($LoggedUser['PostsPerPage'])) {
 list($Page,$Limit) = Format::page_limit($PerPage);
 
 switch($action) {
-case 'artists':
-	require (SERVER_ROOT.'/sections/comments/artistcomments.php');
-	break;
-case 'torrents':
-case 'my_torrents':
-default:
-	require(SERVER_ROOT.'/sections/comments/torrentcomments.php');
-	break;
+	case 'requests':
+		require (SERVER_ROOT.'/sections/comments/requestcomments.php');
+		break;
+	case 'artists':
+		require (SERVER_ROOT.'/sections/comments/artistcomments.php');
+		break;
+	case 'torrents':
+	case 'my_torrents':
+	default:
+		require(SERVER_ROOT.'/sections/comments/torrentcomments.php');
+		break;
 }
