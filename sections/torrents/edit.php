@@ -99,11 +99,12 @@ if (!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms(
 	}
 	$TorrentForm->foot();
 }
-
-
-if (check_perms('torrents_edit') && $Properties['CategoryID'] == 1) {
+if (check_perms('torrents_edit') && (check_perms('users_mod') || $Properties['CategoryID'] == 1)) {
 ?>
 <div class="thin">
+<?
+	if ($Properties['CategoryID'] == 1) {
+?>
 	<h2>Change group</h2>
 	<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
 		<input type="hidden" name="action" value="editgroupid" />

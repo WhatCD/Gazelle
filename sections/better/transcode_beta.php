@@ -137,7 +137,9 @@ if(in_array($_GET['filter'], array('all', 'uploaded'))) {
 			AND tg.CategoryID = 1
 			AND x.uid='$UserID'
 			".($_GET['filter'] == 'seeding' ? "AND x.active=1 AND x.Remaining=0" : ""));
+	$Debug->set_flag('SELECTed ' . $_GET['filter'] . ' torrents');
 	$Snatched = $DB->to_array();
+	$Debug->set_flag('Received data from DB');
 	shuffle($Snatched); // randomize results
 	while($ResultCount < TORRENTS_PER_PAGE && count($Snatched) > 0) {
 		// we throw TORRENTS_PER_PAGE results into Sphinx until we have at least TORRENTS_PER_PAGE results (or no snatches left)
