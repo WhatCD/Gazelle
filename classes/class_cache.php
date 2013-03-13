@@ -25,7 +25,7 @@ memcached -d -m 8192 -l 10.10.0.1 -t8 -C
 |*************************************************************************/
 
 if (!extension_loaded('memcache')) {
-	error('Memcache Extension not loaded.');
+	die('Memcache Extension not loaded.');
 }
 
 class CACHE extends Memcache

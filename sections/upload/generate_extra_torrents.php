@@ -26,7 +26,7 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 
 		// Make sure the filename is not too long
 		if (mb_strlen($ExtraName, 'UTF-8') + mb_strlen($ExtraDirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
-			$Err = 'The torrent contained one or more files with too long a name (' . $ExtraName . ')';
+			$Err = "The torrent contained one or more files with too long a name: <br />$ExtraDirName/$ExtraName";
 			break;
 		}
 		// Add file and size to array

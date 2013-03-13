@@ -6,8 +6,8 @@
 // the data to the database and the torrent to the disk.						//
 //******************************************************************************//
 
-ini_set('upload_max_filesize',2097152);
-ini_set('max_file_uploads',100);
+ini_set('upload_max_filesize', 2097152);
+ini_set('max_file_uploads', 100);
 define(MAX_FILENAME_LENGTH, 180);
 include(SERVER_ROOT.'/classes/class_validate.php');
 include(SERVER_ROOT.'/classes/class_feed.php');
@@ -388,17 +388,14 @@ foreach ($FileList as $File) {
 	check_file($Type, $Name);
 	// Make sure the filename is not too long
 	if (mb_strlen($Name, 'UTF-8') + mb_strlen($DirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
-		$TooLongPaths[] = $Name;
+		$TooLongPaths[] = "$DirName/$Name";
 	}
 	// Add file info to array
 	$TmpFileList[] = Torrents::filelist_format_file($File);
 }
 if (count($TooLongPaths) > 0) {
-	$Names = '';
-	foreach ($TooLongPaths as $Name) {
-		$Names .= '<br>'.$Name;
-	}
-	$Err = 'The torrent contained one or more files with too long a name:'.$Names;
+	$Names = implode(' <br />', $TooLongPaths);
+	$Err = "The torrent contained one or more files with too long a name:<br /> $Names";
 }
 $FilePath = db_string($DirName);
 $FileString = db_string(implode("\n", $TmpFileList));

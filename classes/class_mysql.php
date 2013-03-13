@@ -109,7 +109,7 @@ set_query_id($ResultSet)
 *///---------------------------------------------------------------------------------
 
 if (!extension_loaded('mysqli')) {
-	error('Mysqli Extension not loaded.');
+	die('Mysqli Extension not loaded.');
 }
 
 //Handles escaping
