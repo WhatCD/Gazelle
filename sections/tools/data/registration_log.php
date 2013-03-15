@@ -4,8 +4,24 @@ View::show_header('Registration log');
 define('USERS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 
+$AfterDate = $_POST['after_date'];
+$BeforeDate = $_POST['before_date'];
+$DateSearch = false;
+if(!empty($AfterDate) && !empty($BeforeDate)) {
+	list($Y, $M, $D) = explode("-", $AfterDate);
+	if(!checkdate($M, $D, $Y)) {
+		error("Incorrect 'after' date format");
+	}
+	list($Y, $M, $D) = explode("-", $BeforeDate);
+	if(!checkdate($M, $D, $Y)) {
+		error("Incorrect 'before' date format");
+	}
+	$AfterDate = db_string($AfterDate);
+	$BeforeDate = db_string($BeforeDate);
+	$DateSearch = true;
+}
 
-$RS = $DB->query("SELECT
+$RS = "SELECT
 	SQL_CALC_FOUND_ROWS
 	m.ID,
 	m.IP,
@@ -37,12 +53,27 @@ $RS = $DB->query("SELECT
 	LEFT JOIN users_info AS i ON i.UserID=m.ID
 	LEFT JOIN users_main AS im ON i.Inviter = im.ID
 	LEFT JOIN users_info AS ii ON i.Inviter = ii.UserID
-	WHERE i.JoinDate > '".time_minus(3600*24*3)."'
-	ORDER BY i.Joindate DESC LIMIT $Limit");
+	WHERE";
+if($DateSearch) {
+	$RS .= " i.JoinDate BETWEEN '$AfterDate' AND '$BeforeDate' ";
+} else {
+	$RS .= " i.JoinDate > '".time_minus(3600*24*3)."'";
+}
+$RS .= " ORDER BY i.Joindate DESC";
+$QueryID = $DB->query($RS);
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
-$DB->set_query_id($RS);
+$DB->set_query_id($QueryID);
+?>
 
+<form action="" method="post" acclass="thin box pad">
+	<input type="hidden" name="action" value="registration_log"/>
+	Joined After: <input type="date" name="after_date"/>
+	Joined Before: <input type="date" name="before_date"/>
+  <input type="submit"/>
+</form>
+
+<?
 if($DB->record_count()) {
 ?>
 	<div class="linkbox">
@@ -51,6 +82,7 @@ if($DB->record_count()) {
 	echo $Pages;
 ?>
 	</div>
+
 	<table width="100%">
 		<tr class="colhead">
 			<td>User</td>
