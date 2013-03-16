@@ -44,7 +44,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 
 		if ($UserID && strtotime($Expires)>time()) {
 			// If the user has requested a password change, and his key has not expired
-			$Validate->SetFields('password','1','regex','You entered an invalid password. A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, contains at least a number or symbol',array('regex' => '/(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/'));
+			$Validate->SetFields('password','1','regex','You entered an invalid password. A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, contains at least a number or symbol',array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
 			$Validate->SetFields('verifypassword','1','compare','Your passwords did not match.',array('comparefield'=>'password'));
 
 			if (!empty($_REQUEST['password'])) {

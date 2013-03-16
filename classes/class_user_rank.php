@@ -48,8 +48,10 @@ class USER_RANK {
 				$Query = "SELECT COUNT(p.ID) AS Posts FROM users_main AS um JOIN forums_posts AS p ON p.AuthorID=um.ID WHERE um.Enabled='1' GROUP BY um.ID ORDER BY Posts;";
 				break;
 			case 'bounty':
-				//Request bunny exception
-				$Query = "SELECT SUM(rv.Bounty) AS Bounty FROM users_main AS um JOIN requests_votes AS rv ON rv.UserID=um.ID WHERE um.Enabled='1' AND um.ID <> 260542 GROUP BY um.ID ORDER BY Bounty;";
+				
+				
+				$Query = "SELECT SUM(rv.Bounty) AS Bounty FROM users_main AS um JOIN requests_votes AS rv ON rv.UserID=um.ID WHERE um.Enabled='1' GROUP BY um.ID ORDER BY Bounty;";
+				
 				break;
 			case 'artists':
 				$Query = "SELECT COUNT(ta.ArtistID) AS Artists FROM torrents_artists AS ta JOIN torrents_group AS tg ON tg.ID=ta.GroupID JOIN torrents AS t ON t.GroupID = tg.ID WHERE t.UserID != ta.UserID GROUP BY tg.ID ORDER BY Artists ASC";

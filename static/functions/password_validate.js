@@ -127,13 +127,7 @@ function calculateComplexity(password) {
 }
 
 function isStrongPassword(password) {
-	var toReturn = false;
-	//var regex = /^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/;
-	var regex = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
-	if(regex.test(password)) {
-		toReturn = true;
-	}
-	return toReturn;
+	return /(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/.test(password);
 }
 
 function checkMatching(password1, password2) {
