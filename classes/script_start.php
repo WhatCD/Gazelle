@@ -87,8 +87,14 @@ spl_autoload_register(function ($ClassName) {
 		case 'Artists':
 			$FileName = 'class_artists';
 			break;
-		case 'BEncTorrent':
+		case 'Bencode':
 			$FileName = 'class_bencode';
+			break;
+		case 'BencodeDecode':
+			$FileName = 'class_bencodedecode';
+			break;
+		case 'BencodeTorrent':
+			$FileName = 'class_bencodetorrent';
 			break;
 		case 'Format':
 			$FileName = 'class_format';
@@ -120,10 +126,14 @@ spl_autoload_register(function ($ClassName) {
 		case 'Rippy':
 			$FileName = 'rippy.class';
 			break;
-		case 'SphinxQL':
-		case 'SphinxQL_Query':
-		case 'SphinxQL_Result':
+		case 'Sphinxql':
 			$FileName = 'class_sphinxql';
+			break;
+		case 'SphinxqlQuery':
+			$FileName = 'class_sphinxqlquery';
+			break;
+		case 'SphinxqlResult':
+			$FileName = 'class_sphinxqlresult';
 			break;
 		case 'Tags':
 			$FileName = 'class_tags';

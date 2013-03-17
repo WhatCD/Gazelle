@@ -72,7 +72,7 @@ coded up in around 4 minutes for STC when we discovered this problem, then
 discovered that floats aren't accurate enough to use. :(
 
 *******************************************************************************/
-class BENCODE {
+class BENCODE2 {
 	var $Val; // Decoded array
 	var $Pos = 1; // Pointer that indicates our position in the string
 	var $Str = ''; // Torrent string
@@ -140,7 +140,7 @@ class BENCODE {
 	}
 }
 
-class BENCODE_LIST extends BENCODE {
+class BENCODE_LIST extends BENCODE2 {
 	function enc(){
 		$Str = 'l';
 		reset($this->Val);
@@ -174,7 +174,7 @@ class BENCODE_LIST extends BENCODE {
 	}
 }
 
-class BENCODE_DICT extends BENCODE {
+class BENCODE_DICT extends BENCODE2 {
 	function enc(){
 		$Str = 'd';
 		reset($this->Val);

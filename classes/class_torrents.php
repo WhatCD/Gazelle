@@ -475,7 +475,7 @@ class Torrents {
 		if($DB->record_count() > 0) {
 			list($GroupID, $Contents) = $DB->next_record(MYSQLI_NUM, false);
 			if (Misc::is_new_torrent($Contents)) {
-				$Tor = new BEncTorrent($Contents);
+				$Tor = new BencodeTorrent($Contents);
 				$FilePath = isset($Tor->Dec['info']['files']) ? Format::make_utf8($Tor->get_name()) : "";
 			} else {
 				$Tor = new TORRENT(unserialize(base64_decode($Contents)), true);
@@ -747,6 +747,29 @@ class Torrents {
 			}
 		}
 		return isset($CurSnatchedTorrents[$TorrentID]);
+	}
+	
+	
+	public static function edition_string(array $Torrent, array $Group) {
+		if ($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
+			$EditionName = $Torrent['RemasterYear'];
+			$AddExtra = " - ";
+			if ($Torrent['RemasterRecordLabel']) { $EditionName .= $AddExtra . display_str($Torrent['RemasterRecordLabel']); $AddExtra = ' / '; }
+			if ($Torrent['RemasterCatalogueNumber']) { $EditionName .= $AddExtra . display_str($Torrent['RemasterCatalogueNumber']); $AddExtra = ' / '; }
+			if ($Torrent['RemasterTitle']) { $EditionName .= $AddExtra . display_str($Torrent['RemasterTitle']); $AddExtra = ' / '; }
+			$EditionName .= $AddExtra . display_str($Torrent['Media']);
+		} else {
+			$AddExtra = " / ";
+			if(!$Torrent['Remastered']) {
+				$EditionName = "Original Release";
+				if ($Group['RecordLabel']) { $EditionName .= $AddExtra . $Group['RecordLabel']; $AddExtra = ' / '; }
+				if ($Group['CatalogueNumber']) { $EditionName .= $AddExtra . $Group['CatalogueNumber']; $AddExtra = ' / '; }
+			} else {
+				$EditionName = "Unknown Release(s)";
+			}
+			$EditionName .= $AddExtra . display_str($Torrent['Media']);
+		}
+		return $EditionName;
 	}
 }
 ?>

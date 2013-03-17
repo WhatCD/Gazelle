@@ -157,8 +157,8 @@ foreach ($Formats as $ID => $Val) {
 /** End preparation of property arrays **/
 
 /** Start query preparation **/
-$SphQL = new SphinxQL_Query();
-$SphQLTor = new SphinxQL_Query();
+$SphQL = new SphinxqlQuery();
+$SphQLTor = new SphinxqlQuery();
 
 if ($OrderBy == 'random') {
 	$SphQL->select('id, groupid, categoryid')
@@ -187,7 +187,7 @@ $EnableNegation = false; // Sphinx needs at least one positive search condition 
 if (!empty($_GET['filelist'])) {
 	$SearchString = trim($_GET['filelist']);
 	if ($SearchString != '') {
-		$SearchString = '"'.SphinxQL::escape_string($_GET['filelist']).'"~20';
+		$SearchString = '"'.Sphinxql::escape_string($_GET['filelist']).'"~20';
 		$SphQL->where_match($SearchString, 'filelist', false);
 		$SphQLTor->where_match($SearchString, 'filelist', false);
 		$EnableNegation = true;
@@ -275,11 +275,11 @@ if (!empty($_GET['searchstr'])) {
 		}
 		$QueryParts = array();
 		foreach ($BasicSearch['include'] as $Word) {
-			$QueryParts[] = SphinxQL::escape_string($Word);
+			$QueryParts[] = Sphinxql::escape_string($Word);
 		}
 		if (!empty($BasicSearch['exclude'])) {
 			foreach ($BasicSearch['exclude'] as $Word) {
-				$QueryParts[] = '!'.SphinxQL::escape_string(substr($Word,1));
+				$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word,1));
 			}
 		}
 		if (!empty($FilterBitrates)) {
@@ -311,11 +311,11 @@ if (!empty($SearchWords['taglist'])) {
 		unset($Tags['exclude']);
 	}
 	foreach ($Tags['include'] as &$Tag) {
-		$Tag = SphinxQL::escape_string($Tag);
+		$Tag = Sphinxql::escape_string($Tag);
 	}
 	if (!empty($Tags['exclude'])) {
 		foreach ($Tags['exclude'] as &$Tag) {
-			$Tag = '!'.SphinxQL::escape_string(substr($Tag,1));
+			$Tag = '!'.Sphinxql::escape_string(substr($Tag,1));
 		}
 	}
 
@@ -355,11 +355,11 @@ foreach ($SearchWords as $Search => $Words) {
 		unset($Words['exclude']);
 	}
 	foreach ($Words['include'] as $Word) {
-		$QueryParts[] = SphinxQL::escape_string($Word);
+		$QueryParts[] = Sphinxql::escape_string($Word);
 	}
 	if (!empty($Words['exclude'])) {
 		foreach ($Words['exclude'] as $Word) {
-			$QueryParts[] = '!'.SphinxQL::escape_string(substr($Word,1));
+			$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word,1));
 		}
 	}
 	if (!empty($QueryParts)) {
@@ -1012,36 +1012,11 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 					|| $Data['Media'] != $LastMedia) {
 				$EditionID++;
 
-				if ($Data['Remastered'] && $Data['RemasterYear'] != 0) {
-
-					$RemasterName = $Data['RemasterYear'];
-					$AddExtra = " - ";
-					if ($Data['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Data['RemasterRecordLabel']); $AddExtra=' / '; }
-					if ($Data['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Data['RemasterCatalogueNumber']); $AddExtra=' / '; }
-					if ($Data['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Data['RemasterTitle']); $AddExtra=' / '; }
-					$RemasterName .= $AddExtra.display_str($Data['Media']);
-
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
-		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
+		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Data, $GroupInfo)?></strong></td>
 	</tr>
 <?
-				} else {
-					$AddExtra = " / ";
-					if (!$Data['Remastered']) {
-						$MasterName = "Original Release";
-						if ($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
-						if ($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
-					} else {
-						$MasterName = "Unknown Release(s)";
-					}
-					$MasterName .= $AddExtra.display_str($Data['Media']);
-?>
-	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
-		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
-	</tr>
-<?
-				}
 			}
 			$LastRemasterTitle = $Data['RemasterTitle'];
 			$LastRemasterYear = $Data['RemasterYear'];

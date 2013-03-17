@@ -4,7 +4,7 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 	$Name = $ExtraTorrent['Name'];
 	$ExtraTorrentsInsert[$Name] = $ExtraTorrent;
 	$ThisInsert =& $ExtraTorrentsInsert[$Name];
-	$ExtraTor = new BEncTorrent($Name, true);
+	$ExtraTor = new BencodeTorrent($Name, true);
 	if (isset($ExtraTor->Dec['encrypted_files'])) {
 		$Err = "At least one of the torrents contain an encrypted file list which is not supported here";
 		break;

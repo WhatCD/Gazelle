@@ -344,7 +344,7 @@ $SearchText = db_string(trim($Properties['Artist']).' '.trim($Properties['Title'
 //******************************************************************************//
 //--------------- Generate torrent file ----------------------------------------//
 
-$Tor = new BEncTorrent($TorrentName, true);
+$Tor = new BencodeTorrent($TorrentName, true);
 $PublicTorrent = $Tor->make_private(); // The torrent is now private.
 $TorEnc = db_string($Tor->encode());
 $InfoHash = pack('H*', $Tor->info_hash());

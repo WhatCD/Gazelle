@@ -277,14 +277,14 @@ class DEBUG {
 	}
 
 	public function get_sphinxql_queries() {
-		if(class_exists(SphinxQL)) {
-			return SphinxQL::$Queries;
+		if(class_exists('Sphinxql')) {
+			return Sphinxql::$Queries;
 		}
 	}
 
 	public function get_sphinxql_time() {
-		if(class_exists(SphinxQL)) {
-			return SphinxQL::$Time;
+		if(class_exists('Sphinxql')) {
+			return Sphinxql::$Time;
 		}
 	}
 

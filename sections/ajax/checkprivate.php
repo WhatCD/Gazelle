@@ -12,7 +12,7 @@ if($DB->record_count() == 0) {
 }
 list($Contents) = $DB->next_record(MYSQLI_NUM, array(0));
 if (Misc::is_new_torrent($Contents)) {
-	$Tor = new BEncTorrent($Contents);
+	$Tor = new BencodeTorrent($Contents);
 	$Private = $Tor->is_private();
 } else {
 	$Tor = new TORRENT(unserialize(base64_decode($Contents)), true); // New TORRENT object

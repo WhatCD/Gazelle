@@ -17,7 +17,7 @@ if ($_GET['type'] == 3) {
 		$_GET['type'] = display_str($_GET['type']);
 	}
 }
-$SphQL = new SphinxQL_Query();
+$SphQL = new SphinxqlQuery();
 $SphQL->select('id, groupid')
 	->from('better_transcode')
 	->where('logscore', 100)

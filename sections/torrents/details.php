@@ -525,35 +525,11 @@ foreach ($TorrentList as $Torrent) {
 
 		$EditionID++;
 
-		if($Remastered && $RemasterYear != 0){
-
-			$RemasterName = $RemasterYear;
-			$AddExtra = " - ";
-			if($RemasterRecordLabel) { $RemasterName .= $AddExtra.display_str($RemasterRecordLabel); $AddExtra=' / '; }
-			if($RemasterCatalogueNumber) { $RemasterName .= $AddExtra.display_str($RemasterCatalogueNumber); $AddExtra=' / '; }
-			if($RemasterTitle) { $RemasterName .= $AddExtra.display_str($RemasterTitle); $AddExtra=' / '; }
-			$RemasterName .= $AddExtra.display_str($Media);
-?>
-			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
-				<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
-			</tr>
-<?
-		} else {
-			$AddExtra = " / ";
-			if(!$Remastered) {
-				$MasterName = "Original Release";
-				if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
-				if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
-			} else {
-				$MasterName = "Unknown Release(s)";
-			}
-			$MasterName .= $AddExtra.display_str($Media);
 ?>
 		<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
-			<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
+			<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $TorrentDetails)?></strong></td>
 		</tr>
 <?
-		}
 	}
 	$LastRemasterTitle = $RemasterTitle;
 	$LastRemasterYear = $RemasterYear;

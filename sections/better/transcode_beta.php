@@ -28,8 +28,8 @@ if(empty($_GET['target']) || !in_array($_GET['target'], array('v0', 'v2', '320',
 $Encodings = array('v0' => 'V0 (VBR)', 'v2' => 'V2 (VBR)', '320' => '320');
 
 function transcode_init_sphql() {
-	// Initializes a basic SphinxQL_Query object
-	$SphQL = new SphinxQL_Query();
+	// Initializes a basic SphinxqlQuery object
+	$SphQL = new SphinxqlQuery();
 	$SphQL->select('groupid')
 		->from('better_transcode')
 		->where('logscore', 100)
@@ -153,7 +153,7 @@ if(in_array($_GET['filter'], array('all', 'uploaded'))) {
 		$ResultsTmp = $SphQLResult->collect('groupid');
 		$GroupsTmp = Torrents::get_groups(array_values($ResultsTmp));
 		$GroupsTmp = transcode_parse_groups($GroupsTmp['matches']);
-		// Since we're asking SphinxQL about groups and remidents, the result can/will contain different editions that are transcodable but weren't snatched, so let's filter them out
+		// Since we're asking Sphinxql about groups and remidents, the result can/will contain different editions that are transcodable but weren't snatched, so let's filter them out
 		foreach($GroupsTmp as $GroupID => $Group) {
 			foreach($Group['Editions'] as $RemIdent => $Edition) {
 				$EditionSnatched = false;

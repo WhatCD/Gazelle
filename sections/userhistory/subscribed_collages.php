@@ -160,38 +160,12 @@ if(!$NumResults) {
 
 					if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 					$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
-						if($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
-
-							$EditionID++;
-
-							$RemasterName = $Torrent['RemasterYear'];
-							$AddExtra = " - ";
-							if($Torrent['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']); $AddExtra=' / '; }
-							if($Torrent['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']); $AddExtra=' / '; }
-							if($Torrent['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Torrent['RemasterTitle']); $AddExtra=' / '; }
-							$RemasterName .= $AddExtra.display_str($Torrent['Media']);
-
+						$EditionID++;
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition<?=$SnatchedGroupClass?> hidden">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$RemasterName?></strong></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
 	</tr>
 <?
-						} else {
-							$AddExtra = " / ";
-							if (!$Torrent['Remastered']) {
-								$MasterName = "Original Release";
-								if($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
-								if($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
-							} else {
-								$MasterName = "Unknown Release(s)";
-							}
-							$MasterName .= $AddExtra.display_str($Torrent['Media']);
-?>
-	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition<?=$SnatchedGroupClass?> hidden">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=$MasterName?></strong></td>
-	</tr>
-<?
-						}
 					}
 					$LastRemasterTitle = $Torrent['RemasterTitle'];
 					$LastRemasterYear = $Torrent['RemasterYear'];

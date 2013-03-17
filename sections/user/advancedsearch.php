@@ -290,6 +290,12 @@ if(count($_GET)){
 		if(!empty($_GET['comment'])){
 			$Where[]='ui1.AdminComment'.$Match.wrap($_GET['comment']);
 		}
+		
+		if (!empty($_GET['lastfm'])) {
+			$Distinct = 'DISTINCT ';
+			$Join['lastfm'] = ' JOIN lastfm_users AS lfm ON lfm.ID = um1.ID ';
+			$Where[] = ' lfm.Username'.$Match.wrap($_GET['lastfm']);
+		}
 
 
 		if(strlen($_GET['invites1'])){
@@ -636,8 +642,9 @@ View::show_header('User search');
 				<td>
 					<input type="text" name="tracker_ip" size="20" value="<?=display_str($_GET['tracker_ip'])?>" />
 				</td>
-				<td class="label nobr"></td>
+				<td class="label nobr">Last.fm Username:</td>
 				<td>
+					<input type="text" name="lastfm" size="20" value="<?=display_str($_GET['lastfm'])?>" />
 				</td>
 			</tr>
 

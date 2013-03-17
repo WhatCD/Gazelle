@@ -63,7 +63,7 @@ the BENCODE_DICT class.
 
 
 *******************************************************************************/
-class BENCODE {
+class BENCODE2 {
 	var $Val; // Decoded array
 	var $Pos = 1; // Pointer that indicates our position in the string
 	var $Str = ''; // Torrent string
@@ -131,7 +131,7 @@ class BENCODE {
 	}
 }
 
-class BENCODE_LIST extends BENCODE {
+class BENCODE_LIST extends BENCODE2 {
 	function enc(){
 		if (empty($this->Val)) {
 			return 'le';
@@ -168,7 +168,7 @@ class BENCODE_LIST extends BENCODE {
 	}
 }
 
-class BENCODE_DICT extends BENCODE {
+class BENCODE_DICT extends BENCODE2 {
 	function enc(){
 		if (empty($this->Val)) {
 			return 'de';
