@@ -59,7 +59,7 @@ if($DateSearch) {
 } else {
 	$RS .= " i.JoinDate > '".time_minus(3600*24*3)."'";
 }
-$RS .= " ORDER BY i.Joindate DESC";
+$RS .= " ORDER BY i.Joindate DESC LIMIT $Limit";
 $QueryID = $DB->query($RS);
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
