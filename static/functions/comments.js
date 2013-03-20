@@ -36,8 +36,10 @@ function Quote(post, user, link) {
 }
 
 function Edit_Form(post,key) {
-	$('#reply_box').toggle();
-	postid = post;
+    postid = post;
+    //If no edit is already going underway or a previous edit was finished, make the necessary dom changes.
+    if(!$('#editbox' + postid).objects[0] || $('#editbox' + postid + '.hidden').objects[0]) {
+        $('#reply_box').hide();
 	if (location.href.match(/torrents\.php/) ||
 			location.href.match(/artist\.php/)) {
 		boxWidth="50";
@@ -59,7 +61,12 @@ function Edit_Form(post,key) {
 	$('#bar' + postid).raw().oldbar = $('#bar' + postid).raw().innerHTML;
 	$('#content' + postid).raw().innerHTML = "<div id=\"preview" + postid + "\"></div><form id=\"form" + postid + "\" method=\"post\" action=\"\">"+pmbox+"<input type=\"hidden\" name=\"auth\" value=\"" + authkey + "\" /><input type=\"hidden\" name=\"key\" value=\"" + key + "\" /><input type=\"hidden\" name=\"post\" value=\"" + postid + "\" /><textarea id=\"editbox" + postid + "\" onkeyup=\"resize('editbox" + postid + "');\" name=\"body\" cols=\""+boxWidth+"\" rows=\"10\"></textarea></form>";
 	$('#bar' + postid).raw().innerHTML = '<input type="button" value="Preview" onclick="Preview_Edit(' + postid + ');" /><input type="button" value="Post" onclick="Save_Edit(' + postid + ')" /><input type="button" value="Cancel" onclick="Cancel_Edit(' + postid + ');" />';
-	ajax.get("?action=get_post&post=" + postid, function(response){
+    }
+    /* If it's the initial edit, fetch the post content to be edited.
+     * If editing is already underway and edit is pressed again, reset the post
+     * (keeps current functionality, move into brackets to stop from happening).
+     */
+    ajax.get("?action=get_post&post=" + postid, function(response){
 		$('#editbox' + postid).raw().value = html_entity_decode(response);
 		resize('editbox' + postid);
 	});
@@ -68,7 +75,7 @@ function Edit_Form(post,key) {
 function Cancel_Edit(postid) {
 	var answer = confirm("Are you sure you want to cancel?");
 	if (answer) {
-		$('#reply_box').toggle();
+		$('#reply_box').show();
 		$('#bar' + postid).raw().innerHTML = $('#bar' + postid).raw().oldbar;
 		$('#content' + postid).raw().innerHTML = $('#bar' + postid).raw().cancel;
 	}
@@ -89,7 +96,7 @@ function Cancel_Preview(postid) {
 }
 
 function Save_Edit(postid) {
-	$('#reply_box').toggle();
+	$('#reply_box').show();
 	if (location.href.match(/forums\.php/)) {
 		ajax.post("forums.php?action=takeedit","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "<a href=\"reports.php?action=report&amp;type=post&amp;id="+postid+"\" class=\"brackets\">Report</a>&nbsp;<a href=\"#\">&uarr;</a>";

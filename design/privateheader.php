@@ -85,7 +85,7 @@ if ($Mobile) { ?>
 
 ?>
 </head>
-<body id="<?=$Document == 'collages' ? 'collage' : $Document?>" <?= ((!$Mobile && Rippy::is_enabled()) ? 'onload="say()"' : '') ?>>
+<body id="<?=$Document == 'collages' ? 'collage' : $Document?>">
 <div id="wrapper">
 <h1 class="hidden"><?=SITE_NAME?></h1>
 

@@ -100,6 +100,7 @@ function AddArtistField() {
 		var x = $('#artistfields').raw();
 		x.appendChild(document.createElement("br"));
 		x.appendChild(ArtistField);
+                x.appendChild(document.createTextNode('\n'));
 		x.appendChild(ImportanceField);
 		ArtistCount++;
 }
@@ -113,6 +114,7 @@ function RemoveArtistField() {
 			x.removeChild(x.lastChild);
 		}
 		x.removeChild(x.lastChild);
+                x.removeChild(x.lastChild); //Remove trailing new line.
 		ArtistCount--;
 }
 

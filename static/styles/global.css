@@ -386,6 +386,10 @@ tr.torrent .bookmark>a:after {
 	height: 100%;
 }
 
+.brackets {
+    text-indent: 0px;
+}
+
 .votespan.brackets:before {
 	content: "( ";
 }
