@@ -180,17 +180,18 @@ $ModBar = array();
 
 //Quotes
 if($LoggedUser['NotifyOnQuote']) {
-	$QuoteNotificationsCount = $Cache->get_value('forums_quotes_'.$LoggedUser['ID']);
+	$QuoteNotificationsCount = $Cache->get_value('notify_quoted_'.$LoggedUser['ID']);
 	if($QuoteNotificationsCount === FALSE) {
 		if ($LoggedUser['CustomForums']) {
 			unset($LoggedUser['CustomForums']['']);
 			$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 			$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 		}
-		$sql = "SELECT COUNT(UnRead) FROM users_notify_quoted AS q
-            LEFT JOIN forums AS f ON f.ID = q.ForumID
-            WHERE UserID='".$LoggedUser['ID']."'
-            AND UnRead = '1' AND ((f.MinClassRead <= '$LoggedUser[Class]'";
+		$sql = "SELECT COUNT(q.UnRead)
+			FROM users_notify_quoted AS q
+				LEFT JOIN forums_topics AS t ON t.ID = q.PageID
+				LEFT JOIN forums AS f ON f.ID = t.ForumID
+			WHERE q.UserID='".$LoggedUser['ID']."' AND q.UnRead AND q.Page = 'forums' AND ((f.MinClassRead <= '$LoggedUser[Class]'";
 		if(!empty($RestrictedForums)) {
 			$sql.=' AND f.ID NOT IN (\''.$RestrictedForums.'\')';
 		}
@@ -201,7 +202,7 @@ if($LoggedUser['NotifyOnQuote']) {
 		$sql .= ')';
 		$DB->query($sql);
 		list($QuoteNotificationsCount) = $DB->next_record();
-		$Cache->cache_value('forums_quotes_'.$LoggedUser['ID'], $QuoteNotificationsCount, 0);
+		$Cache->cache_value('notify_quoted_'.$LoggedUser['ID'], $QuoteNotificationsCount, 0);
         }
 		if($QuoteNotificationsCount > 0) {
 			$Alerts[] = '<a href="userhistory.php?action=quote_notifications">'. 'New quote'. ($QuoteNotificationsCount > 1 ? 's' : '') . '</a>';

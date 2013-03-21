@@ -301,9 +301,7 @@ CREATE TABLE `forums_last_read_topics` (
   `TopicID` int(10) NOT NULL,
   `PostID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`TopicID`),
-  KEY `TopicID` (`TopicID`),
-  KEY `UserID` (`UserID`),
-  KEY `TopicID_2` (`TopicID`)
+  KEY `TopicID` (`TopicID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `forums_polls` (
@@ -456,6 +454,13 @@ CREATE TABLE `login_attempts` (
   KEY `UserID` (`UserID`),
   KEY `IP` (`IP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `new_info_hashes` (
+  `TorrentID` int(11) NOT NULL,
+  `InfoHash` binary(20) DEFAULT NULL,
+  PRIMARY KEY (`TorrentID`),
+  KEY `InfoHash` (`InfoHash`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `news` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1195,6 +1200,15 @@ CREATE TABLE `users_collage_subs` (
   KEY `CollageID` (`CollageID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `users_comments_last_read` (
+  `UserID` int(10) NOT NULL,
+  `Page` enum('artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `PageID` int(10) NOT NULL,
+  `PostID` int(10) NOT NULL,
+  PRIMARY KEY (`UserID`,`Page`,`PageID`),
+  KEY `Page` (`Page`,`PageID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+
 CREATE TABLE `users_comments_subscriptions` (
   `UserID` int(10) NOT NULL,
   `GroupID` int(10) NOT NULL,
@@ -1434,13 +1448,13 @@ CREATE TABLE `users_notify_filters` (
 CREATE TABLE `users_notify_quoted` (
   `UserID` int(10) NOT NULL,
   `QuoterID` int(10) NOT NULL,
-  `ForumID` int(6) unsigned DEFAULT NULL,
-  `TopicID` int(10) NOT NULL,
+  `Page` enum('forums','artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `PageID` int(10) NOT NULL,
   `PostID` int(10) NOT NULL,
-  `UnRead` enum('0','1') NOT NULL DEFAULT '1',
+  `UnRead` tinyint(1) NOT NULL DEFAULT '1',
   `Date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`UserID`,`PostID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`UserID`,`Page`,`PostID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `users_notify_torrents` (
   `UserID` int(10) NOT NULL,
@@ -1499,6 +1513,13 @@ CREATE TABLE `users_subscriptions` (
   `TopicID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`TopicID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `users_subscriptions_comments` (
+  `UserID` int(10) NOT NULL,
+  `Page` enum('artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `PageID` int(10) NOT NULL,
+  PRIMARY KEY (`UserID`,`Page`,`PageID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `users_torrent_history` (
   `UserID` int(10) unsigned NOT NULL,

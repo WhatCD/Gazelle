@@ -3,7 +3,7 @@ if (!empty($LoggedUser['DisableForums'])) {
 	error(403);
 }
 
-$UnreadSQL = "AND q.UnRead = '1'";
+$UnreadSQL = "AND q.UnRead";
 if ($_GET['showall']) {
 	$UnreadSQL = "";
 }
@@ -19,9 +19,11 @@ if ($LoggedUser['CustomForums']) {
 	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 }
-$sql = "SELECT SQL_CALC_FOUND_ROWS f.ID as ForumID, f.Name as ForumName, t.Title, q.TopicID, q.PostID, q.QuoterID
-		FROM users_notify_quoted AS q LEFT JOIN forums_topics AS t ON t.ID = q.TopicID LEFT JOIN forums AS f ON f.ID = q.ForumID
-		WHERE q.UserID = $LoggedUser[ID] AND ((f.MinClassRead <= '$LoggedUser[Class]'";
+$sql = "SELECT SQL_CALC_FOUND_ROWS f.ID as ForumID, f.Name as ForumName, t.Title, q.PageID, q.PostID, q.QuoterID
+		FROM users_notify_quoted AS q
+			LEFT JOIN forums_topics AS t ON t.ID = q.PageID
+			LEFT JOIN forums AS f ON f.ID = t.ForumID
+		WHERE q.UserID = $LoggedUser[ID] AND q.Page = 'forums' AND ((f.MinClassRead <= '$LoggedUser[Class]'";
 
 if (!empty($RestrictedForums)) {
 	$sql .= ' AND f.ID NOT IN (\'' . $RestrictedForums . '\')';
@@ -65,7 +67,7 @@ View::show_header('Quote Notifications');
 	<?
 	if (!$NumResults) {
 	?>
-	<div class="center">No new quotes.</div>
+	<div class="center">No<?=($UnreadSQL ? ' new' : '')?> quotes.</div>
 	<? } ?>
 	<br />
 	<?
@@ -77,11 +79,11 @@ View::show_header('Quote Notifications');
 				<span style="float: left;">
 					<a href="forums.php?action=viewforum&amp;forumid=<?=$Result['ForumID'] ?>"><?=$Result['ForumName'] ?></a>
 					&gt;
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$Result['TopicID'] ?>" title="<?=display_str($Result['Title']) ?>"><?=Format::cut_string($Result['Title'], 75) ?></a>
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$Result['PageID'] ?>" title="<?=display_str($Result['Title']) ?>"><?=Format::cut_string($Result['Title'], 75) ?></a>
 					&gt; Quoted by <?=Users::format_username($Result['QuoterID'], false, false, false, false) ?>
 				</span>
-				<span style="float: left;" class="last_read" title="Jump to last read">
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$Result['TopicID'].($Result['PostID'] ? '&amp;postid=' . $Result['PostID'].'#post'.$Result['PostID'] : '') ?>"></a>
+				<span style="float: left;" class="last_read" title="Jump to quote">
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$Result['PageID'].($Result['PostID'] ? '&amp;postid=' . $Result['PostID'].'#post'.$Result['PostID'] : '') ?>"></a>
 				</span>
 				<span id="bar<?=$Result['PostID'] ?>" style="float: right;">
 					<a href="#">&uarr;</a>

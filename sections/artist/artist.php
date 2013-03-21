@@ -246,9 +246,9 @@ $NumSnatches = 0;
 foreach ($TorrentList as $GroupID => $Group) {
 	// $Tags array is for the sidebar on the right.
 	// Skip compilations and soundtracks.
-	$Skip = $Group['ReleaseType'] != 7 && $Group['ReleaseType'] != 3;
+	$Merge = $Group['ReleaseType'] != 7 && $Group['ReleaseType'] != 3;
 
-	$TorrentTags = new Tags($Group['TagList'], !$Skip);
+	$TorrentTags = new Tags($Group['TagList'], $Merge);
 
 	foreach ($Group['Torrents'] as $TorrentID => $Torrent) {
 		$NumTorrents++;
@@ -293,7 +293,7 @@ foreach ($Importances as $Group) {
 		$HideDiscog = '';
 	}
 
-	$TorrentTags = new Tags($TagList);
+	$TorrentTags = new Tags($TagList, false);
 
 	if($ReleaseType!=$LastReleaseType) {
 		switch($ReleaseTypes[$ReleaseType]) {

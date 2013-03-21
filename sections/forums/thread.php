@@ -139,14 +139,14 @@ if(in_array($ThreadID, $UserSubscriptions)) {
 }
 
 
-$DB->query("UPDATE users_notify_quoted SET UnRead = '0' WHERE UserID = '$LoggedUser[ID]' AND TopicID = '$ThreadID'");
-$Cache->delete_value('forums_quotes_' . $LoggedUser['ID']);
+$DB->query("UPDATE users_notify_quoted SET UnRead = false WHERE UserID = '$LoggedUser[ID]' AND Page = 'forums' AND PageID = '$ThreadID'");
+$Cache->delete_value('notify_quoted_' . $LoggedUser['ID']);
 /*
-$QuoteNotificationsCount = $Cache->get_value('forums_quotes_' . $LoggedUser['ID']);
+$QuoteNotificationsCount = $Cache->get_value('notify_quoted_' . $LoggedUser['ID']);
 if ($QuoteNotificationsCount > 0) {
-	$Cache->cache_value('forums_quotes_' . $LoggedUser['ID'], $QuoteNotificationsCount - 1, 0);
+	$Cache->cache_value('notify_quoted_' . $LoggedUser['ID'], $QuoteNotificationsCount - 1, 0);
 } else {
-	$Cache->delete_value('forums_quotes_' . $LoggedUser['ID']);
+	$Cache->delete_value('notify_quoted_' . $LoggedUser['ID']);
 }
 */
 

@@ -37,9 +37,9 @@ foreach($Results as $Result) {
 	$TopicID = db_string($TopicID);
 	$PostID = db_string($PostID);
 
-	$DB->query("INSERT IGNORE INTO users_notify_quoted (UserID, QuoterID, ForumID, TopicID, PostID, Date)
-		VALUES ('$UserID', '$QuoterID', '$ForumID', '$TopicID', '$PostID', '" . sqltime() . "')");
-	$Cache->delete_value('forums_quotes_' . $UserID);
+	$DB->query("INSERT IGNORE INTO users_notify_quoted (UserID, QuoterID, Page, PageID, PostID, Date)
+		VALUES ('$UserID', '$QuoterID', 'forums', '$TopicID', '$PostID', '" . sqltime() . "')");
+	$Cache->delete_value('notify_quoted_' . $UserID);
 
 	
 }

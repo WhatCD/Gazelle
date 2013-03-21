@@ -432,3 +432,12 @@ tr.torrent .bookmark>a:after {
 .user_title {
 	font-weight: normal;
 }
+
+/* Fix Chrome overflowing long filename tables */
+.filelist_table td {
+    word-break: normal;
+}
+
+.filelist_table td:first-child {
+    word-break: break-all;
+}
