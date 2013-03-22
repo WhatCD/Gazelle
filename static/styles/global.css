@@ -433,11 +433,15 @@ tr.torrent .bookmark>a:after {
 	font-weight: normal;
 }
 
-/* Fix Chrome overflowing long filename tables */
+/* 
+ * Fix long filename tables overflowing (Chrome only).
+ * Fix report information tables overflowing long reports (all browsers).
+ * Fix long release descriptions overflowing containers (all browsers).
+ */
 .filelist_table td {
     word-break: normal;
 }
 
-.filelist_table td:first-child {
+.filelist_table td:first-child, .reportinfo_table, .torrentdetails blockquote {
     word-break: break-all;
 }

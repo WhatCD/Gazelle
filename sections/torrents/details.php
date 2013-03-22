@@ -432,7 +432,7 @@ foreach ($TorrentList as $Torrent) {
 	if(count($Reports) > 0) {
 		$Reported = true;
 		include(SERVER_ROOT.'/sections/reportsv2/array.php');
-		$ReportInfo = '<table><tr class="colhead_dark" style="font-weight: bold;"><td>This torrent has '.count($Reports).' active '.(count($Reports) > 1 ? "reports" : "report").':</td></tr>';
+		$ReportInfo = '<table class="reportinfo_table"><tr class="colhead_dark" style="font-weight: bold;"><td>This torrent has '.count($Reports).' active '.(count($Reports) > 1 ? "reports" : "report").':</td></tr>';
 
 		foreach($Reports as $Report) {
 			list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
