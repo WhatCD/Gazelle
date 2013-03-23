@@ -64,18 +64,18 @@ list($Results) = $DB->next_record();
 
 $PageLinks=Format::get_pages($Page,$Results,BANS_PER_PAGE,11);
 
-View::show_header('IP Bans');
+View::show_header('IP Address Bans');
 $DB->set_query_id($Bans);
 ?>
 
 <div class="header">
-	<h2>IP Bans</h2>
+	<h2>IP Address Bans</h2>
 </div>
 <div>
 	<form class="search_form" name="bans" action="" method="get">
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
-				<td class="label"><label for="ip">IP:</label></td>
+				<td class="label"><label for="ip">IP address:</label></td>
 				<td>
 					<input type="hidden" name="action" value="ip_ban" />
 					<input type="text" id="ip" name="ip" size="20" value="<?=(!empty($_GET['ip']) ? display_str($_GET['ip']) : '')?>" />
@@ -95,11 +95,13 @@ $DB->set_query_id($Bans);
 <br />
 
 <h3>Manage</h3>
+<div class="linkbox">
 <?=$PageLinks?>
+</div>
 <table width="100%">
 	<tr class="colhead">
 		<td colspan="2">
-			<span title="The IP addresses specified are &#42;inclusive&#42;. The left box is the beginning of the IP range, and the right box is the end of the IP range.">Range</span>
+			<span title="The IP addresses specified are &#42;inclusive&#42;. The left box is the beginning of the IP address range, and the right box is the end of the IP address range.">Range</span>
 		</td>
 		<td>Notes</td>
 		<td>Submit</td>
@@ -122,7 +124,7 @@ $DB->set_query_id($Bans);
 	</tr>
 <?
 $Row = 'a';
-while(list($ID, $Start, $End, $Reason) = $DB->next_record()){
+while(list($ID, $Start, $End, $Reason) = $DB->next_record()) {
 	$Row = ($Row === 'a' ? 'b' : 'a');
 	$Start=long2ip($Start);
 	$End=long2ip($End);
@@ -149,5 +151,7 @@ while(list($ID, $Start, $End, $Reason) = $DB->next_record()){
 }
 ?>
 </table>
+<div class="linkbox">
 <?=$PageLinks?>
+</div>
 <? View::show_footer(); ?>

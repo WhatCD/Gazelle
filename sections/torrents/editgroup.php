@@ -58,9 +58,7 @@ View::show_header('Edit torrent group');
 <?	if($CategoryID == 1) { ?>
 				<select id="releasetype" name="releasetype">
 <?		foreach ($ReleaseTypes as $Key => $Val) { ?>
-					<option value='<?=$Key?>' <?=($Key == $ReleaseType ? " selected='selected'" : '')?>>
-						<?=$Val?>
-					</option>
+					<option value="<?=$Key?>"<?=($Key == $ReleaseType ? ' selected="selected"' : '')?>><?=$Val?></option>
 <?		} ?>
 				</select>
 <?		if (check_perms('torrents_edit_vanityhouse')) { ?>
@@ -102,24 +100,24 @@ View::show_header('Edit torrent group');
 					</td>
 				</tr>
 				<tr>
-					<td class="label">Catalogue Number</td>
+					<td class="label">Catalogue number</td>
 					<td>
 						<input type="text" name="catalogue_number" size="40" value="<?=$CatalogueNumber?>" />
 					</td>
 				</tr>
 <? if(check_perms('torrents_freeleech')) { ?>
 				<tr>
-					<td class="label">Freeleech <strong>Group</strong></td>
+					<td class="label">Torrent <strong>group</strong> leech status</td>
 					<td>
-						<input type="checkbox" name="unfreeleech" /> Reset
-						<input type="checkbox" name="freeleech" /> Freeleech
-						<input type="checkbox" name="neutralleech" /> Neutral Leech
+						<input type="checkbox" id="unfreeleech" name="unfreeleech" /><label for="unfreeleech"> Reset</label>
+						<input type="checkbox" id="freeleech" name="freeleech" /><label for="freeleech"> Freeleech</label>
+						<input type="checkbox" id="neutralleech" name="neutralleech" /><label for="neutralleech"> Neutral Leech</label>
 						 because
 						<select name="freeleechtype">
-	<?	$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
+<?		$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
 		foreach($FL as $Key => $FLType) { ?>
-							<option value="<?=$Key?>" <?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$FLType?></option>
-	<?	} ?>
+							<option value="<?=$Key?>"<?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$FLType?></option>
+<?		} ?>
 						</select>
 					</td>
 				</tr>

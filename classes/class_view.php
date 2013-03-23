@@ -10,9 +10,9 @@ class View
 	 * This function is to include the header file on a page.
 	 *
 	 * @param $PageTitle the title of the page
-	 * @param $JSIncludes is a comma separated list of js files to be inclides on
-	 *                    the page, ONLY PUT THE RELATIVE LOCATION WITHOUT .js
-	 *                    ex: 'somefile,somdire/somefile'
+	 * @param $JSIncludes is a comma-separated list of JS files to be included on
+	 *                    the page. ONLY PUT THE RELATIVE LOCATION WITHOUT '.js'
+	 *                    example: 'somefile,somedir/somefile'
 	 */
 	public static function show_header($PageTitle='',$JSIncludes='')
 	{
@@ -93,7 +93,7 @@ class View
 	 * variables.
 	 *
 	 * All files must be placed within {self::IncludePath}. Create and organize
-	 * new paths and files. (eg: /design/views/artist/, design/view/forums/, etc.)
+	 * new paths and files. (e.g.: /design/views/artist/, design/view/forums/, etc.)
 	 *
 	 * @static
 	 * @param string  $TemplateFile A relative path to a PHTML file

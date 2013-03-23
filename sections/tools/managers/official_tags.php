@@ -31,10 +31,10 @@ if (isset($_POST['doit'])) {
 	$Cache->delete_value('genre_tags');
 }
 
-View::show_header('Official Tags');
+View::show_header('Official Tags Manager');
 ?>
 <div class="header">
-	<h2>Official Tags</h2>
+	<h2>Official Tags Manager</h2>
 </div>
 <div style="text-align: center">
 	<div style="display: inline-block;">
@@ -69,7 +69,7 @@ for ($i = 0; $i < $TagCount / 3; $i++) {
 				<tr class="<?=(($i % 2)?'rowa':'rowb')?>">
 					<td style="text-align: center"><input type="checkbox" name="oldtags[]" value="<?=$TagID1?>" /></td>
 					<td><?=$TagName1?></td>
-					<td style="text-align: center"><?=$TagUses1?></td>
+					<td style="text-align: center"><?=number_format($TagUses1)?></td>
 					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					<td style="text-align: center">
 <?		if ($TagID2) { ?>
@@ -77,7 +77,7 @@ for ($i = 0; $i < $TagCount / 3; $i++) {
 <?		} ?>
 					</td>
 					<td><?=$TagName2?></td>
-					<td style="text-align: center"><?=$TagUses2?></td>
+					<td style="text-align: center"><?=number_format($TagUses2)?></td>
 					<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					<td style="text-align: center">
 <?		if ($TagID3) { ?>
@@ -85,7 +85,7 @@ for ($i = 0; $i < $TagCount / 3; $i++) {
 <?		} ?>
 					</td>
 					<td><?=$TagName3?></td>
-					<td style="text-align: center"><?=$TagUses3?></td>
+					<td style="text-align: center"><?=number_format($TagUses3)?></td>
 				</tr>
 <?
 }
@@ -94,7 +94,7 @@ for ($i = 0; $i < $TagCount / 3; $i++) {
 					<td colspan="11"><label for="newtag">New official tag: </label><input type="text" name="newtag" /></td>
 				</tr>
 				<tr style="border-top: thin solid">
-					<td colspan="11" style="text-align: center"><input type="submit" value="Submit Changes" /></td>
+					<td colspan="11" style="text-align: center"><input type="submit" value="Submit changes" /></td>
 				</tr>
 
 			</table>

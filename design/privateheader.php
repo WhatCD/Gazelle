@@ -20,13 +20,16 @@ $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
 	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=feed_news&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - News" />
 	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=feed_blog&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Blog" />
 	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_notify_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - P.T.N." />
-<? if(isset($LoggedUser['Notify'])) {
-	foreach($LoggedUser['Notify'] as $Filter) {
+<?
+if (isset($LoggedUser['Notify'])) {
+	foreach ($LoggedUser['Notify'] as $Filter) {
 		list($FilterID, $FilterName) = $Filter;
 ?>
 	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_notify_<?=$FilterID?>_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode($FilterName)?>" title="<?=SITE_NAME?> - <?=display_str($FilterName)?>" />
-<? 	}
-}?>
+<?
+	}
+}
+?>
 	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_all&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - All Torrents" />
 	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_music&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Music Torrents" />
 	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_apps&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Application Torrents" />
@@ -45,13 +48,17 @@ $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
 <? if ($Mobile) { ?>
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0, user-scalable=no;" />
 	<link href="<?=STATIC_SERVER ?>styles/mobile/style.css" rel="stylesheet" type="text/css" />
-<? } else { ?>
-	<? if (empty($LoggedUser['StyleURL'])) { ?>
+<?
+} else {
+	if (empty($LoggedUser['StyleURL'])) {
+?>
 	<link href="<?=STATIC_SERVER?>styles/<?=$LoggedUser['StyleName']?>/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/'.$LoggedUser['StyleName'].'/style.css')?>" title="<?=$LoggedUser['StyleName']?>" rel="stylesheet" type="text/css" media="screen" />
-	<? } else { ?>
+<?	} else { ?>
 	<link href="<?=$LoggedUser['StyleURL']?>" title="External CSS" rel="stylesheet" type="text/css" media="screen" />
-	<? } ?>
-<? } ?>
+<?
+	}
+}
+?>
 
 	<script src="<?=STATIC_SERVER?>functions/sizzle.js" type="text/javascript"></script>
 	<script src="<?=STATIC_SERVER?>functions/script_start.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/script_start.js')?>" type="text/javascript"></script>
@@ -61,22 +68,23 @@ $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
 		var userid = <?=$LoggedUser['ID']?>;
 	//]]></script>
 	<script src="<?=STATIC_SERVER?>functions/global.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/global.js')?>" type="text/javascript"></script>
-	<?
+<?
 
 $Scripts=explode(',',$JSIncludes);
 
 foreach ($Scripts as $Script) {
-	if (empty($Script)) { continue; }
+	if (empty($Script)) {
+		continue;
+	}
 ?>
 	<script src="<?=STATIC_SERVER?>functions/<?=$Script?>.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/'.$Script.'.js')?>" type="text/javascript"></script>
 <?
  	if ($Script == 'jquery') { ?>
 <script type="text/javascript">
-  $.noConflict();
+	$.noConflict();
 </script>
 <?
-	} ?>
-<?
+	}
 }
 if ($Mobile) { ?>
 	<script src="<?=STATIC_SERVER?>styles/mobile/style.js" type="text/javascript"></script>
@@ -100,7 +108,7 @@ if ($Mobile) { ?>
 		<ul id="userinfo_major">
 			<li id="nav_upload" class="brackets<?=Format::add_class($PageID, array('upload'), 'active', false)?>"><a href="upload.php">Upload</a></li>
 <?
-if(check_perms('site_send_unlimited_invites')) {
+if (check_perms('site_send_unlimited_invites')) {
 	$Invites = ' (∞)';
 } elseif ($LoggedUser['Invites']>0) {
 	$Invites = ' ('.$LoggedUser['Invites'].')';
@@ -111,22 +119,22 @@ if(check_perms('site_send_unlimited_invites')) {
 			<li id="nav_invite" class="brackets<?=Format::add_class($PageID, array('user','invite'), 'active', false)?>"><a href="user.php?action=invite">Invite<?=$Invites?></a></li>
 			<li id="nav_donate" class="brackets<?=Format::add_class($PageID, array('donate'), 'active', false)?>"><a href="donate.php">Donate</a></li>
 			
-</ul>
+		</ul>
 		<ul id="userinfo_stats">
 			<li id="stats_seeding"><a href="torrents.php?type=seeding&amp;userid=<?=$LoggedUser['ID']?>">Up</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesUploaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span></li>
 			<li id="stats_leeching"><a href="torrents.php?type=leeching&amp;userid=<?=$LoggedUser['ID']?>">Down</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesDownloaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesDownloaded'])?></span></li>
 			<li id="stats_ratio">Ratio: <span class="stat"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'], $LoggedUser['BytesDownloaded'])?></span></li>
-<?	if(!empty($LoggedUser['RequiredRatio'])) {?>
+<?	if (!empty($LoggedUser['RequiredRatio'])) {?>
 			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat" title="<?=number_format($LoggedUser['RequiredRatio'], 5)?>"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
 <?	}
-    if($LoggedUser['FLTokens'] > 0) { ?>
+    if ($LoggedUser['FLTokens'] > 0) { ?>
 			<li id="fl_tokens"><a href="wiki.php?action=article&amp;id=754">Tokens</a>: <span class="stat"><a href="userhistory.php?action=token_history&amp;userid=<?=$LoggedUser['ID']?>"><?=$LoggedUser['FLTokens']?></a></span></li>
 <?	} ?>
 		</ul>
 <?
 $NewSubscriptions = $Cache->get_value('subscriptions_user_new_'.$LoggedUser['ID']);
-if($NewSubscriptions === FALSE) {
-        if($LoggedUser['CustomForums']) {
+if ($NewSubscriptions === false) {
+        if ($LoggedUser['CustomForums']) {
 			unset($LoggedUser['CustomForums']['']);
 			$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 			$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
@@ -179,9 +187,9 @@ $Alerts = array();
 $ModBar = array();
 
 //Quotes
-if($LoggedUser['NotifyOnQuote']) {
+if ($LoggedUser['NotifyOnQuote']) {
 	$QuoteNotificationsCount = $Cache->get_value('notify_quoted_'.$LoggedUser['ID']);
-	if($QuoteNotificationsCount === FALSE) {
+	if ($QuoteNotificationsCount === false) {
 		if ($LoggedUser['CustomForums']) {
 			unset($LoggedUser['CustomForums']['']);
 			$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
@@ -191,22 +199,22 @@ if($LoggedUser['NotifyOnQuote']) {
 			FROM users_notify_quoted AS q
 				LEFT JOIN forums_topics AS t ON t.ID = q.PageID
 				LEFT JOIN forums AS f ON f.ID = t.ForumID
-			WHERE q.UserID='".$LoggedUser['ID']."' AND q.UnRead AND q.Page = 'forums' AND ((f.MinClassRead <= '$LoggedUser[Class]'";
-		if(!empty($RestrictedForums)) {
-			$sql.=' AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+			WHERE q.UserID=$LoggedUser[ID] AND q.UnRead=1 AND q.Page = 'forums' AND ((f.MinClassRead<='$LoggedUser[Class]'";
+		if (!empty($RestrictedForums)) {
+			$sql .= " AND f.ID NOT IN ('$RestrictedForums')";
 		}
 		$sql .= ')';
-		if(!empty($PermittedForums)) {
-			$sql.=' OR f.ID IN (\''.$PermittedForums.'\')';
+		if (!empty($PermittedForums)) {
+			$sql .= " OR f.ID IN ('$PermittedForums')";
 		}
 		$sql .= ')';
 		$DB->query($sql);
 		list($QuoteNotificationsCount) = $DB->next_record();
 		$Cache->cache_value('notify_quoted_'.$LoggedUser['ID'], $QuoteNotificationsCount, 0);
-        }
-		if($QuoteNotificationsCount > 0) {
-			$Alerts[] = '<a href="userhistory.php?action=quote_notifications">'. 'New quote'. ($QuoteNotificationsCount > 1 ? 's' : '') . '</a>';
-		}
+	}
+	if ($QuoteNotificationsCount > 0) {
+		$Alerts[] = '<a href="userhistory.php?action=quote_notifications">'. 'New quote'. ($QuoteNotificationsCount > 1 ? 's' : '') . '</a>';
+	}
 }
 
 // News
@@ -242,7 +250,7 @@ if ($MyBlog < $CurrentBlog) {
 }
 
 // Staff blog
-if(check_perms('users_mod')) {
+if (check_perms('users_mod')) {
 	global $SBlogReadTime, $LatestSBlogTime;
 	if (!$SBlogReadTime && ($SBlogReadTime = $Cache->get_value('staff_blog_read_'.$LoggedUser['ID'])) === false) {
 		$DB->query("SELECT Time FROM staff_blog_visits WHERE UserID = ".$LoggedUser['ID']);
@@ -291,9 +299,9 @@ if ($NewMessages > 0) {
 	$Alerts[] = '<a href="inbox.php">'.'You have '.$NewMessages.(($NewMessages > 1) ? ' new messages' : ' new message').'</a>';
 }
 
-if($LoggedUser['RatioWatch']) {
+if ($LoggedUser['RatioWatch']) {
 	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'You have '.time_diff($LoggedUser['RatioWatchEnds'], 3).' to get your ratio over your required ratio or your leeching abilities will be disabled.';
-} else if($LoggedUser['CanLeech'] != 1) {
+} elseif ($LoggedUser['CanLeech'] != 1) {
 	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'Your downloading privileges are disabled until you meet your required ratio.';
 }
 
@@ -314,14 +322,14 @@ if (check_perms('site_torrents_notify')) {
 }
 
 // Collage subscriptions
-if(check_perms('site_collages_subscribe')) {
+if (check_perms('site_collages_subscribe')) {
 	$NewCollages = $Cache->get_value('collage_subs_user_new_'.$LoggedUser['ID']);
-	if($NewCollages === FALSE) {
+	if ($NewCollages === false) {
 			$DB->query("SELECT COUNT(DISTINCT s.CollageID)
 					FROM users_collage_subs as s
 					JOIN collages as c ON s.CollageID = c.ID
 					JOIN collages_torrents as ct on ct.CollageID = c.ID
-					WHERE s.UserID = ".$LoggedUser['ID']." AND ct.AddedOn > s.LastVisit AND c.Deleted = '0'");
+					WHERE s.UserID = $LoggedUser[ID] AND ct.AddedOn > s.LastVisit AND c.Deleted = '0'");
 			list($NewCollages) = $DB->next_record();
 			$Cache->cache_value('collage_subs_user_new_'.$LoggedUser['ID'], $NewCollages, 0);
 	}
@@ -329,16 +337,16 @@ if(check_perms('site_collages_subscribe')) {
 		$Alerts[] = '<a href="userhistory.php?action=subscribed_collages">'.'You have '.$NewCollages.(($NewCollages > 1) ? ' new collage updates' : ' new collage update').'</a>';
 	}
 }
-if(check_perms('users_mod')) {
+if (check_perms('users_mod')) {
 	$ModBar[] = '<a href="tools.php">'.'Toolbox'.'</a>';
 }
 if (check_perms('users_mod') || $LoggedUser['PermissionID'] == FORUM_MOD) {
 	$NumStaffPMs = $Cache->get_value('num_staff_pms_'.$LoggedUser['ID']);
 	if ($NumStaffPMs === false) {
-		if(check_perms('users_mod')) {
+		if (check_perms('users_mod')) {
 			$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR (Level >= ".max(700,$Classes[MOD]['Level'])." AND Level <=".$LoggedUser['Class']."))");
 		}
-		if($LoggedUser['PermissionID'] == FORUM_MOD) {
+		if ($LoggedUser['PermissionID'] == FORUM_MOD) {
 			$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR Level = '". $Classes[FORUM_MOD]['Level'] . "')");
 		}
 		list($NumStaffPMs) = $DB->next_record();
@@ -349,7 +357,7 @@ if (check_perms('users_mod') || $LoggedUser['PermissionID'] == FORUM_MOD) {
 		$ModBar[] = '<a href="staffpm.php">'.$NumStaffPMs.' Staff PMs</a>';
 	}
 }
-if(check_perms('admin_reports')) {
+if (check_perms('admin_reports')) {
 	$NumTorrentReports = $Cache->get_value('num_torrent_reportsv2');
 	if ($NumTorrentReports === false) {
 		$DB->query("SELECT COUNT(ID) FROM reportsv2 WHERE Status='New'");
@@ -360,7 +368,7 @@ if(check_perms('admin_reports')) {
 	$ModBar[] = '<a href="reportsv2.php">'.$NumTorrentReports.(($NumTorrentReports == 1) ? ' Report' : ' Reports').'</a>';
 }
 
-if(check_perms('admin_reports')) {
+if (check_perms('admin_reports')) {
 	$NumOtherReports = $Cache->get_value('num_other_reports');
 	if ($NumOtherReports === false) {
 		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New'");
@@ -371,7 +379,7 @@ if(check_perms('admin_reports')) {
 	if ($NumOtherReports > 0) {
 		$ModBar[] = '<a href="reports.php">'.$NumOtherReports.(($NumTorrentReports == 1) ? ' Other report' : ' Other reports').'</a>';
 	}
-} else if(check_perms('project_team')) {
+} elseif (check_perms('project_team')) {
 	$NumUpdateReports = $Cache->get_value('num_update_reports');
 	if ($NumUpdateReports === false) {
 		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New' AND Type = 'request_update'");
@@ -382,7 +390,7 @@ if(check_perms('admin_reports')) {
 	if ($NumUpdateReports > 0) {
 		$ModBar[] = '<a href="reports.php">'.'Request update reports'.'</a>';
 	}
-} else if(check_perms('site_moderate_forums')) {
+} elseif (check_perms('site_moderate_forums')) {
 	$NumForumReports = $Cache->get_value('num_forum_reports');
 	if ($NumForumReports === false) {
 		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New' AND Type IN('collages_comment', 'Post', 'requests_comment', 'thread', 'torrents_comment')");
@@ -400,19 +408,17 @@ if(check_perms('admin_reports')) {
 if (!empty($Alerts) || !empty($ModBar)) {
 ?>
 	<div id="alerts">
-	<? foreach ($Alerts as $Alert) { ?>
+<?		foreach ($Alerts as $Alert) { ?>
 		<div class="alertbar"><?=$Alert?></div>
-	<? }
-	if (!empty($ModBar)) { ?>
+<?		}
+		if (!empty($ModBar)) { ?>
 		<div class="alertbar blend"><?=implode(' | ',$ModBar)?></div>
-	<? } ?>
+<?		} ?>
 	</div>
 <?
 }
 //Done handling alertbars
 ?>
-
-
 	<div id="searchbars">
 		<ul>
 			<li id="searchbar_torrents">
@@ -427,7 +433,7 @@ if (!empty($Alerts) || !empty($ModBar)) {
 						spellcheck="false"
 						onfocus="if (this.value == 'Torrents') this.value='';"
 						onblur="if (this.value == '') this.value='Torrents';"
-<? if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
+<? if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
 						value="Torrents" type="text" name="groupname" size="17"
 <? } else { ?>
 						value="Torrents" type="text" name="searchstr" size="17"
@@ -512,6 +518,5 @@ if (!empty($Alerts) || !empty($ModBar)) {
 			</li>
 		</ul>
 	</div>
-
 </div>
 <div id="content">
