@@ -1,5 +1,7 @@
 <?
-if (!check_perms('users_mod')) {
+if (!check_perms('users_mod')
+
+) {
 	error(403);
 }
 View::show_header('Staff Tools');
@@ -15,7 +17,7 @@ View::show_header('Staff Tools');
 <? } if (check_perms('admin_manage_ipbans')) { ?>
 			<tr><td><a href="tools.php?action=ip_ban">IP address bans</a></td></tr>
 
-<? } if (check_perms('users_view_ips')) { ?>
+<? } if (check_perms('admin_login_watch')) { ?>
 			<tr><td><a href="tools.php?action=login_watch">Login watch</a></td></tr>
 <? } if (check_perms('admin_manage_forums')) { ?>
 			<tr><td><a href="tools.php?action=forum">Forums</a></td></tr>
@@ -75,7 +77,7 @@ if (check_perms('admin_update_geoip')) { ?>
 			<tr><td><a href="tools.php?action=update_geoip">Update GeoIP </a></td></tr>
 <? } if (check_perms('admin_create_users')) { ?>
 			<tr><td><a href="tools.php?action=create_user">Create user</a></td></tr>
-<? } if (check_perms('admin_clear_cache')) { ?>
+<? } if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=clear_cache">Clear/view a cache key</a></td></tr>
 <? } if (check_perms('users_view_ips')) { ?>
 			<tr><td><a href="tools.php?action=dupe_ips">Duplicate IP addresses</a></td></tr>
@@ -92,7 +94,9 @@ if (check_perms('admin_update_geoip')) { ?>
 
 			<tr><td><a href="schedule.php?auth=<?=$LoggedUser['AuthKey']?>">Schedule</a></td></tr>
 <? }?>
+<? if (check_perms('users_mod')) { ?>
 			<tr><td><strong><a href="tools.php?action=public_sandbox">Public sandbox</a></strong></td></tr>
+<? } ?>
 <? if (check_perms('users_mod')) { ?>
 			<tr><td><strong><a href="tools.php?action=mod_sandbox">Mod-level sandbox</a></strong></td></tr>
 <? } ?>
