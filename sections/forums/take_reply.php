@@ -232,6 +232,6 @@ if($DB->record_count() > 0) {
 		$Cache->delete_value('subscriptions_user_new_'.$Subscriber);
 	}
 }
-include('quote_notify.php');
+Forums::quote_notify($Body, $PostID, 'forums', $TopicID);
 header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.ceil($ThreadInfo['Posts']/$PerPage));
 die();

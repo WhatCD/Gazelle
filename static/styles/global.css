@@ -433,7 +433,7 @@ tr.torrent .bookmark>a:after {
 	font-weight: normal;
 }
 
-/* 
+/*
  * Fix long filename tables overflowing (Chrome only).
  * Fix report information tables overflowing long reports (all browsers).
  * Fix long release descriptions overflowing containers (all browsers).

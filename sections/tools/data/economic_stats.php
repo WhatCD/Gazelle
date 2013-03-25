@@ -3,7 +3,7 @@
 Tools necessary for economic management
 1. Current overall stats (!economy)
 2. Statistical traffic trends in a graph
-	a. All time  / 1 year (whichever is smaller)
+	a. All time / 1 year (whichever is smaller)
 	b. 1 month
 	c. 1 week
 	d. 1 day

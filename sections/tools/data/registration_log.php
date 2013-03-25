@@ -67,14 +67,14 @@ $DB->set_query_id($QueryID);
 ?>
 
 <form action="" method="post" acclass="thin box pad">
-	<input type="hidden" name="action" value="registration_log"/>
-	Joined After: <input type="date" name="after_date"/>
-	Joined Before: <input type="date" name="before_date"/>
-  <input type="submit"/>
+	<input type="hidden" name="action" value="registration_log" />
+	Joined after: <input type="date" name="after_date" />
+	Joined before: <input type="date" name="before_date" />
+	<input type="submit" />
 </form>
 
 <?
-if($DB->record_count()) {
+if ($DB->record_count()) {
 ?>
 	<div class="linkbox">
 <?
@@ -94,23 +94,23 @@ if($DB->record_count()) {
 			<td>Registered</td>
 		</tr>
 <?
-	while(list($UserID, $IP, $IPCC, $Email, $Username, $PermissionID, $Uploaded, $Downloaded, $Enabled, $Donor, $Warned, $Joined, $Uses, $InviterID, $InviterIP, $InviterIPCC, $InviterEmail, $InviterUsername, $InviterPermissionID, $InviterUploaded, $InviterDownloaded, $InviterEnabled, $InviterDonor, $InviterWarned, $InviterJoined, $InviterUses)=$DB->next_record()) {
+	while (list($UserID, $IP, $IPCC, $Email, $Username, $PermissionID, $Uploaded, $Downloaded, $Enabled, $Donor, $Warned, $Joined, $Uses, $InviterID, $InviterIP, $InviterIPCC, $InviterEmail, $InviterUsername, $InviterPermissionID, $InviterUploaded, $InviterDownloaded, $InviterEnabled, $InviterDonor, $InviterWarned, $InviterJoined, $InviterUses)=$DB->next_record()) {
 	$Row = ($IP == $InviterIP) ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?><br /><?=Users::format_username($InviterID, true, true, true, true)?></td>
 			<td><?=Format::get_ratio_html($Uploaded,$Downloaded)?><br /><?=Format::get_ratio_html($InviterUploaded,$InviterDownloaded)?></td>
 			<td>
-				<span style="float:left;"><?=display_str($Email)?></span>
-				<span style="float:right;"><a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a></span><br />
-				<span style="float:left;"><?=display_str($InviterEmail)?></span>
-				<span style="float:right;"><a href="userhistory.php?action=email&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($InviterEmail)?>" title="Search" class="brackets">S</a></span><br />
+				<span style="float: left;"><?=display_str($Email)?></span>
+				<span style="float: right;"><a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a></span><br />
+				<span style="float: left;"><?=display_str($InviterEmail)?></span>
+				<span style="float: right;"><a href="userhistory.php?action=email&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($InviterEmail)?>" title="Search" class="brackets">S</a></span><br />
 			</td>
 			<td>
-				<span style="float:left;"><?=display_str($IP)?></span>
-				<span style="float:right;"><?=display_str($Uses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets">S</a></span><br />
-				<span style="float:left;"><?=display_str($InviterIP)?></span>
-				<span style="float:right;"><?=display_str($InviterUses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search" class="brackets">S</a></span><br />
+				<span style="float: left;"><?=display_str($IP)?></span>
+				<span style="float: right;"><?=display_str($Uses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets">S</a></span><br />
+				<span style="float: left;"><?=display_str($InviterIP)?></span>
+				<span style="float: right;"><?=display_str($InviterUses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search" class="brackets">S</a></span><br />
 			</td>
 			<td>
 				<?=$IPCC?> <br />

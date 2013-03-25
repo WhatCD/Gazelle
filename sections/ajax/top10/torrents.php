@@ -38,7 +38,8 @@ $BaseQuery = "SELECT
 	t.Seeders,
 	t.Leechers,
 	((t.Size * t.Snatched) + (t.Size * 0.5 * t.Leechers)) AS Data,
-	g.ReleaseType
+	g.ReleaseType,
+	t.Size
 	FROM torrents AS t
 	LEFT JOIN torrents_group AS g ON g.ID = t.GroupID ";
 
@@ -185,7 +186,7 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 	foreach ($Details as $Detail) {
 		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$WikiImage,$TorrentTags,
 			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
-			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType) = $Detail;
+			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType,$Size) = $Detail;
 
 		$Artist = Artists::display_artists(Artists::get_artist($GroupID), false, true);
 		$TruncArtist = substr($Artist, 0, strlen($Artist)-3);
@@ -220,7 +221,8 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 			'snatched' => (int) $Snatched,
 			'seeders' => (int) $Seeders,
 			'leechers' => (int) $Leechers,
-			'data' => (int) $Data
+			'data' => (int) $Data,
+			'size' => (int) $Size,
 		);
 	}
 

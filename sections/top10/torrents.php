@@ -156,7 +156,8 @@ $BaseQuery = "SELECT
 	t.Seeders,
 	t.Leechers,
 	((t.Size * t.Snatched) + (t.Size * 0.5 * t.Leechers)) AS Data,
-	g.ReleaseType
+	g.ReleaseType,
+	t.Size
 	FROM torrents AS t
 	LEFT JOIN torrents_group AS g ON g.ID = t.GroupID ";
 
@@ -376,6 +377,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		<td class="center" style="width:15px;"></td>
 		<td class="cats_col"></td>
 		<td><strong>Name</strong></td>
+		<td style="text-align:right"><strong>Size</strong></td>
 		<td style="text-align:right"><strong>Data</strong></td>
 		<td style="text-align:right"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
 		<td style="text-align:right"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
@@ -416,7 +418,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 	foreach ($Details as $Detail) {
 		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$WikiImage,$TagsList,
 			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
-			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType) = $Detail;
+			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType,$Size) = $Detail;
 
 		$IsBookmarked = has_bookmarked('torrent', $GroupID);
 		$IsSnatched = Torrents::has_snatched($TorrentID);
@@ -490,6 +492,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 
 			</div>
 		</td>
+		<td style="text-align:right" class="nobr"><?=Format::get_size($Size)?></td>
 		<td style="text-align:right" class="nobr"><?=Format::get_size($Data)?></td>
 		<td style="text-align:right"><?=number_format((double) $Snatched)?></td>
 		<td style="text-align:right"><?=number_format((double) $Seeders)?></td>

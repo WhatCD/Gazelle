@@ -99,6 +99,9 @@ spl_autoload_register(function ($ClassName) {
 		case 'Format':
 			$FileName = 'class_format';
 			break;
+		case 'Forums':
+			$FileName = 'class_forums';
+			break;
 		case 'ImageTools':
 			$FileName = 'class_image_tools';
 			break;
