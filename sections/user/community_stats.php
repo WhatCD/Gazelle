@@ -70,7 +70,7 @@ $ViewBounty	= check_paranoia_here('requestsfilled_bounty');
 	if ($ViewCount && !$ViewBounty && !$ViewAll) { ?>
 				<li>Requests filled: <?=number_format($RequestsFilled)?></li>
 <? } elseif(!$ViewCount && $ViewBounty && !$ViewAll) { ?>
-				<li>Requests voted: <?=Format::get_size($TotalSpent)?> collected</li>
+				<li>Requests filled: <?=Format::get_size($TotalBounty)?> collected</li>
 <? } elseif($ViewCount && $ViewBounty && !$ViewAll) { ?>
 				<li>Requests filled: <?=number_format($RequestsFilled)?> for <?=Format::get_size($TotalBounty)?></li>
 <? } elseif($ViewAll) { ?>
