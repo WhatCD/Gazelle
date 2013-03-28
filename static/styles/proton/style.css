@@ -1533,11 +1533,11 @@ h3 {
 }
 
 #userinfo_username .brackets {
-	padding: 0 0 0 9px;
+	padding: 0;
 }
 
 #userinfo_major .brackets {
-	padding: 0 9px 0 0;
+	padding: 0;
 }
 
 #forums table.border .cat_list {
