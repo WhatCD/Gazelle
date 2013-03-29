@@ -7,7 +7,7 @@ function compare($X, $Y){
 	return($Y['count'] - $X['count']);
 }
 
-include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
+ // Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 
 $Text = new TEXT;
@@ -340,7 +340,7 @@ View::show_header($Name,'browse,collage,bbcode,voting,jquery,recommend');
 <? } else { ?>
 			<span class="brackets">Locked</span>
 <? }
-	if(has_bookmarked('collage', $CollageID)) {
+	if(Bookmarks::has_bookmarked('collage', $CollageID)) {
 ?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>,'Bookmark');return false;">Remove bookmark</a>
 <?	} else { ?>

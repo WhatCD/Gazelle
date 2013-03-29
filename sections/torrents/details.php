@@ -7,7 +7,7 @@ header('Access-Control-Allow-Origin: *');
 define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by default
 define('MAX_COLLAGES', 5);      // How many normal collages should be shown by default
 
-include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
+ // Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 
 $Text = NEW TEXT;
@@ -93,7 +93,7 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 <?	if($RevisionID && check_perms('site_edit_wiki')) { ?>
 			<a href="/torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Revert to this revision</a>
 <?	}
-	if(has_bookmarked('torrent', $GroupID)) {
+	if(Bookmarks::has_bookmarked('torrent', $GroupID)) {
 ?>
 			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
 <?	} else {  ?>

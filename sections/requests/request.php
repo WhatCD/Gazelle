@@ -4,7 +4,7 @@
  * This is the page that displays the request to the end user after being created.
  */
 
-include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
+ // Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 
 $Text = new TEXT;
@@ -93,7 +93,7 @@ View::show_header('View request: '.$FullName, 'comments,requests,bbcode,jquery')
 if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requests')) { ?>
 			<a href="requests.php?action=delete&amp;id=<?=$RequestID?>" class="brackets">Delete</a>
 <? } ?>
-<?	if(has_bookmarked('request', $RequestID)) { ?>
+<?	if(Bookmarks::has_bookmarked('request', $RequestID)) { ?>
 			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
 <?	} else { ?>
 			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'Remove bookmark');return false;" class="brackets">Bookmark</a>

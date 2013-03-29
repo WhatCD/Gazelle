@@ -6,7 +6,7 @@ function compare($X, $Y){
 	return($Y['count'] - $X['count']);
 }
 
-include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
+ // Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
@@ -383,7 +383,13 @@ foreach ($Importances as $Group) {
 					</div>
 <? endif; ?>
 					<div class="group_info clear">
-						<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
+						<strong><?=$DisplayName?></strong>
+						<? if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
+							echo " <a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent',$GroupID,'Bookmark');return false;\">Unbookmark</a>";
+						} else {
+							echo " <a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent',$GroupID,'Unbookmark');return false;\">Bookmark</a>";
+						} ?>
+						<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
 						<div class="tags"><?=$TorrentTags->format()?></div>
 					</div>
 				</td>
@@ -475,7 +481,7 @@ if (check_perms('site_torrents_notify')) {
 	}
 }
 
-if (has_bookmarked('artist', $ArtistID)) {
+if (Bookmarks::has_bookmarked('artist', $ArtistID)) {
 ?>
 			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
 

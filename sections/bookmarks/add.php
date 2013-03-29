@@ -4,13 +4,13 @@ include(SERVER_ROOT.'/classes/class_text.php'); // strip_bbcode
 
 authorize();
 
-if (!can_bookmark($_GET['type'])) { error(404); }
+if (!Bookmarks::can_bookmark($_GET['type'])) { error(404); }
 $Feed = new FEED;
 $Text = new TEXT;
 
 $Type = $_GET['type'];
 
-list($Table, $Col) = bookmark_schema($Type);
+list($Table, $Col) = Bookmarks::bookmark_schema($Type);
 
 if(!is_number($_GET['id'])) {
 	error(0);

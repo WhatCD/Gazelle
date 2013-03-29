@@ -1,7 +1,7 @@
 <?
 // We need these to do our rankification
 include(SERVER_ROOT.'/sections/torrents/ranking_funcs.php');
-include(SERVER_ROOT.'/sections/bookmarks/functions.php');
+
 
 $UserVotes = Votes::get_user_votes($LoggedUser['ID']);
 
@@ -125,7 +125,7 @@ if(check_perms('site_advanced_top10')) { ?>
 <?
 }
 
-$Bookmarks = all_bookmarks('torrent');
+$Bookmarks = Bookmarks::all_bookmarks('torrent');
 ?>
 	<h3>Top <?=$Limit.' '.$Caption?>
 <?

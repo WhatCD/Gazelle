@@ -29,7 +29,7 @@ if(!empty($_GET['userid'])) {
 
 $Sneaky = ($UserID != $LoggedUser['ID']);
 
-//$ArtistList = all_bookmarks('artist', $UserID);
+//$ArtistList = Bookmarks::all_bookmarks('artist', $UserID);
 
 $DB->query('SELECT ag.ArtistID, ag.Name
 	FROM bookmarks_artists AS ba

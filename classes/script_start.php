@@ -96,6 +96,9 @@ spl_autoload_register(function ($ClassName) {
 		case 'BencodeTorrent':
 			$FileName = 'class_bencodetorrent';
 			break;
+		case 'Bookmarks':
+			$FileName = 'bookmarks.class';
+			break;
 		case 'Format':
 			$FileName = 'class_format';
 			break;

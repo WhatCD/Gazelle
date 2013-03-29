@@ -4,7 +4,7 @@ function compare($X, $Y){
 	return($Y['count'] - $X['count']);
 }
 
-include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
+ // Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/sections/requests/functions.php');
 
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
@@ -225,7 +225,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 		'releaseType' => (int) $ReleaseType,
 		'wikiImage' => $WikiImage,
 		'groupVanityHouse' => $GroupVanityHouse == 1,
-		'hasBookmarked' => $hasBookmarked = has_bookmarked('torrent', $GroupID),
+		'hasBookmarked' => $hasBookmarked = Bookmarks::has_bookmarked('torrent', $GroupID),
 		'torrent' => $InnerTorrents
 	);
 }
@@ -295,7 +295,7 @@ print
 				'id' => (int) $ArtistID,
 				'name' => $Name,
 				'notificationsEnabled' => $notificationsEnabled,
-				'hasBookmarked' => has_bookmarked('artist', $ArtistID),
+				'hasBookmarked' => Bookmarks::has_bookmarked('artist', $ArtistID),
 				'image' => $Image,
 				'body' => $Text->full_format($Body),
 				'vanityHouse' => $VanityHouseArtist == 1,

@@ -20,7 +20,7 @@
 *
 *************************************************************************/
 
-include(SERVER_ROOT.'/sections/bookmarks/functions.php');
+
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 
@@ -871,7 +871,7 @@ View::show_footer();die();
 // List of pages
 $Pages = Format::get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
 
-$Bookmarks = all_bookmarks('torrent');
+$Bookmarks = Bookmarks::all_bookmarks('torrent');
 ?>
 
 <div class="linkbox"><?=$Pages?></div>

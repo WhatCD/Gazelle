@@ -1,5 +1,5 @@
 <?
-include(SERVER_ROOT.'/sections/bookmarks/functions.php');
+
 
 // Number of users per page
 define('BOOKMARKS_PER_PAGE', '20');

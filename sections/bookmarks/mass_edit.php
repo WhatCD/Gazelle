@@ -2,7 +2,7 @@
 
 authorize();
 
-if ($UserID != $LoggedUser['ID'] || !can_bookmark('torrent')) error(403);
+if ($UserID != $LoggedUser['ID'] || !Bookmarks::can_bookmark('torrent')) error(403);
 
 if ($_POST['type'] === 'torrents') {
 	// require_once SERVER_ROOT.'/classes/class_mass_user_bookmarks_editor.php'; //Bookmark Updater Class

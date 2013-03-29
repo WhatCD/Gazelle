@@ -13,7 +13,7 @@ $MinimumVote = 20*1024*1024;
 
 include(SERVER_ROOT.'/sections/requests/functions.php');
 
-include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
+ // Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 

@@ -2,7 +2,7 @@
 
 
 require(SERVER_ROOT.'/sections/torrents/functions.php');
-include(SERVER_ROOT.'/sections/bookmarks/functions.php');
+
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
@@ -51,7 +51,7 @@ $JsonTorrentDetails = array(
 	'categoryName' => $CategoryName,
 	'time' => $TorrentDetails['Time'],
 	'vanityHouse' => $TorrentDetails['VanityHouse'] == 1,
-    'isBookmarked' => has_bookmarked('torrent', $GroupID),
+    'isBookmarked' => Bookmarks::has_bookmarked('torrent', $GroupID),
 	'musicInfo' => $JsonMusicInfo
 );
 

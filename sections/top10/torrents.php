@@ -1,5 +1,5 @@
 <?
-include(SERVER_ROOT.'/sections/bookmarks/functions.php'); // has_bookmarked()
+ // Bookmarks::has_bookmarked()
 
 $Where = array();
 
@@ -420,7 +420,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
 			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType,$Size) = $Detail;
 
-		$IsBookmarked = has_bookmarked('torrent', $GroupID);
+		$IsBookmarked = Bookmarks::has_bookmarked('torrent', $GroupID);
 		$IsSnatched = Torrents::has_snatched($TorrentID);
 
 		// highlight every other row

@@ -1,7 +1,7 @@
 <?
 
 
-include(SERVER_ROOT.'/sections/bookmarks/functions.php');
+
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 // The "order by x" links on columns headers
@@ -525,7 +525,7 @@ $DB->query("SELECT
 	die();
 }
 
-$Bookmarks = all_bookmarks('torrent');
+$Bookmarks = Bookmarks::all_bookmarks('torrent');
 
 $JsonGroups = array();
 foreach ($Results as $Result) {
