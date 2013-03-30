@@ -435,13 +435,38 @@ tr.torrent .bookmark>a:after {
 
 /*
  * Fix long filename tables overflowing (Chrome only).
+ * Stop various release page containers from overflowing with long input.
+ * !! Be sure to test all major browsers before changing this section. !!
  * Fix report information tables overflowing long reports (all browsers).
  * Fix long release descriptions overflowing containers (all browsers).
+ * Fix flowing issues in the report resolving pages.
  */
-.filelist_table td {
+.wrap_overflow, .filelist_table td, .reportinfo_table, .torrentdetails blockquote {
     word-break: normal;
+    -ms-word-wrap: break-word;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    /* Note that IE will have different behavior on word-break,
+     * but this is required to keep the layout from breaking. */
+    -ms-word-break: break-all;
 }
-
-.filelist_table td:first-child, .reportinfo_table, .torrentdetails blockquote {
+/* Non-web-standard for webkit */
+.torrentdetails blockquote {
+    word-break: break-word;
+}
+/* Fix long filename tables overflowing (Chrome only). */
+.filelist_table td:first-child {
     word-break: break-all;
+}
+/* Fix long overflow for Opera (doesn't support word-break). */
+.reportinfo_table {
+    table-layout:fixed;
+}
+/* Wrap release info for consistent DOM and to limit table expansion. */
+.no_overflow {
+    width: 100%;
+    overflow: hidden;
 }

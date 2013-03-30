@@ -563,23 +563,25 @@ foreach ($TorrentList as $Torrent) {
 			</tr>
 			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> torrentdetails pad <? if(!isset($_GET['torrentid']) || $_GET['torrentid']!=$TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
 				<td colspan="5">
-					<blockquote>
-						Uploaded by <?=Users::format_username($UserID, false, false, false)?> <?=time_diff($TorrentTime);?>
+                                        <div id="release_<?=$TorrentID?>" class="no_overflow">
+        					<blockquote>
+        						Uploaded by <?=Users::format_username($UserID, false, false, false)?> <?=time_diff($TorrentTime);?>
 <? if($Seeders == 0){ ?>
-						<?
-						if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
-							<br /><strong>Last active: <?=time_diff($LastActive);?></strong>
-						<?} else { ?>
-						<br />Last active: <?=time_diff($LastActive);?>
-						<?} ?>
-						<?
-						if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time()-strtotime($LastReseedRequest)>=864000) { ?>
-						<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
-						<?} ?>
+        						<?
+        						if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
+       							<br /><strong>Last active: <?=time_diff($LastActive);?></strong>
+                                                        <?} else { ?>
+                                                        <br />Last active: <?=time_diff($LastActive);?>
+                                                        <?} ?>
+                                                        <?
+                                                        if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time()-strtotime($LastReseedRequest)>=864000) { ?>
+                                                        <br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
+                                                        <?} ?>
 
 <? } ?>
 
 					</blockquote>
+                                        </div>
 <? if(check_perms('site_moderate_requests')) { ?>
 					<div class="linkbox">
 						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>" class="brackets">Mass PM snatchers</a>

@@ -30,13 +30,10 @@ function Format() {
 	}
 
  	if($('#format').raw().options[$('#format').raw().selectedIndex].value == 'AAC') {
-                $('#format_warning').raw().innerHTML = 'Lossy AAC torrents may only be uploaded when they represent exclusive content not currently available in any other format. <a href="rules.php?p=upload#r2.1.24">(2.1.24)</a>';
-        }
-        else {
-                $('#format_warning').raw().innerHTML = '';
-        }
-
-
+		$('#format_warning').raw().innerHTML = 'Lossy AAC torrents may only be uploaded when they represent exclusive content not currently available in any other format. <a href="rules.php?p=upload#r2.1.24">(2.1.24)</a>';
+	} else {
+		$('#format_warning').raw().innerHTML = '';
+	}
 }
 
 function Bitrate() {
@@ -69,51 +66,65 @@ function add_tag() {
 var LogCount = 1;
 
 function AddLogField() {
-		if(LogCount >= 200) { return; }
-		var LogField = document.createElement("input");
-		LogField.type = "file";
-		LogField.id = "file";
-		LogField.name = "logfiles[]";
-		LogField.size = 50;
-		var x = $('#logfields').raw();
-		x.appendChild(document.createElement("br"));
-		x.appendChild(LogField);
-		LogCount++;
+	if(LogCount >= 200) {
+		return;
+	}
+	var LogField = document.createElement("input");
+	LogField.type = "file";
+	LogField.id = "file";
+	LogField.name = "logfiles[]";
+	LogField.size = 50;
+	var x = $('#logfields').raw();
+	x.appendChild(document.createElement("br"));
+	x.appendChild(LogField);
+	LogCount++;
 }
 
 function RemoveLogField() {
-		if(LogCount == 1) { return; }
-		var x = $('#logfields').raw();
-		for (i=0; i<2; i++) { x.removeChild(x.lastChild); }
-		LogCount--;
+	if(LogCount == 1) {
+		return;
+	}
+	var x = $('#logfields').raw();
+	for (i = 0; i < 2; i++) {
+		x.removeChild(x.lastChild);
+	}
+	LogCount--;
 }
 
 var ExtraLogCount = 1;
 
 function AddExtraLogField(id) {
-		if(LogCount >= 200) { return; }
-		var LogField = document.createElement("input");
-		LogField.type = "file";
-		LogField.id = "file_" + id;
-		LogField.name = "logfiles_" + id + "[]";
-		LogField.size = 50;
-		var x = $('#logfields_' + id).raw();
-		x.appendChild(document.createElement("br"));
-		x.appendChild(LogField);
-		LogCount++;
+	if(LogCount >= 200) {
+		return;
+	}
+	var LogField = document.createElement("input");
+	LogField.type = "file";
+	LogField.id = "file_" + id;
+	LogField.name = "logfiles_" + id + "[]";
+	LogField.size = 50;
+	var x = $('#logfields_' + id).raw();
+	x.appendChild(document.createElement("br"));
+	x.appendChild(LogField);
+	LogCount++;
 }
 
 function RemoveLogField() {
-		if(LogCount == 1) { return; }
-		var x = $('#logfields').raw();
-		for (i=0; i<2; i++) { x.removeChild(x.lastChild); }
-		LogCount--;
+	if(LogCount == 1) {
+		return;
+	}
+	var x = $('#logfields').raw();
+	for (i = 0; i < 2; i++) {
+		x.removeChild(x.lastChild);
+	}
+	LogCount--;
 }
 
 var FormatCount = 0;
 
 function AddFormat() {
-	if(FormatCount >= 10) { return; }
+	if(FormatCount >= 10) {
+		return;
+	}
 	FormatCount++;
 	$('#extras').raw().value = FormatCount;
 
@@ -177,7 +188,9 @@ function AddFormat() {
 }
 
 function RemoveFormat() {
-	if(FormatCount == 0) { return; }
+	if(FormatCount == 0) {
+		return;
+	}
 	$('#extras').raw().value = FormatCount;
 
 	var x = $('#new_torrent_row'+FormatCount).raw();
@@ -190,22 +203,15 @@ function RemoveFormat() {
 	x.parentNode.removeChild(x);
 
 	FormatCount--;
-
-}
-
-function Media() {
-	if($('#media').raw().options[$('#media').raw().selectedIndex].text == 'Cassette') {
-		$('#cassette_true').show();
-	} else {
-		$('#cassette_true').hide();
-	}
 }
 
 
 var ArtistCount = 1;
 
 function AddArtistField() {
-	if(ArtistCount >= 200) { return; }
+	if(ArtistCount >= 200) {
+		return;
+	}
 	var ArtistField = document.createElement("input");
 	ArtistField.type = "text";
 	ArtistField.id = "artist";
@@ -232,9 +238,13 @@ function AddArtistField() {
 }
 
 function RemoveArtistField() {
-	if(ArtistCount == 1) { return; }
+	if(ArtistCount == 1) {
+		return;
+	}
 	var x = $('#artistfields').raw();
-	for (i=0; i<4; i++) { x.removeChild(x.lastChild); }
+	for (i = 0; i < 4; i++) {
+		x.removeChild(x.lastChild);
+	}
 	ArtistCount--;
 }
 
@@ -304,4 +314,3 @@ function GroupRemaster() {
 		$('#remaster_catalogue_number').raw().value = remasters[index][4];
 	}
 }
-

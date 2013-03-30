@@ -488,7 +488,7 @@ function show() {
 			<tr>
 				<td class="label">Media:</td>
 				<td>
-					<select name="media" onchange="Media(); CheckYear();" id="media">
+					<select name="media" onchange="CheckYear();" id="media">
 						<option>---</option>
 <?		foreach($this->Media as $Media) {
 			echo '<option value="'.$Media.'"';
@@ -499,7 +499,6 @@ function show() {
 		}
 ?>
 					</select>
-					<span id="cassette_true" class="hidden"><span class="important_text">Do NOT upload a cassette rip without first getting approval from a moderator!</span></span>
 				</td>
 			</tr>
 <?		if(!$this->NewTorrent && check_perms('users_mod')) { ?>

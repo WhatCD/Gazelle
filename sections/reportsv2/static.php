@@ -484,7 +484,7 @@ if(count($Reports) == 0) {
 			?>
 						<tr>
 							<td class="label">User comment:</td>
-							<td colspan="3"><?=$Text->full_format($UserComment)?></td>
+							<td colspan="3" class="wrap_overflow"><?=$Text->full_format($UserComment)?></td>
 						</tr>
 						<? // END REPORTED STUFF :|: BEGIN MOD STUFF ?>
 			<?
