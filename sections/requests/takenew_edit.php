@@ -189,6 +189,8 @@ if($CategoryName == "Music") {
 		} else {
 			$Err = "Torrent Group, if entered, must correspond to a music group on the site.";
 		}
+	} elseif ($_POST['groupid'] == '0') {
+		$GroupID = 0;
 	}
 
 	//Not required

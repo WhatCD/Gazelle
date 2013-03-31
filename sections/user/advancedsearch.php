@@ -719,6 +719,7 @@ if($RunQuery){
 	$DB->set_query_id($Results);
 } else {
 	$DB->query('SET @nothing = 0');
+	$NumResults = 0;
 }
 ?>
 <div class="linkbox">
@@ -728,6 +729,7 @@ echo $Pages;
 ?>
 </div>
 <div class="box pad center">
+	<h2><?=$NumResults?> results</h2>
 	<table width="100%">
 		<tr class="colhead">
 			<td>Username</td>
