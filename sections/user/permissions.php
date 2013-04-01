@@ -1,7 +1,11 @@
 <?
 //TODO: Redo html
-if (!check_perms('admin_manage_permissions')) { error(403); }
-if(!isset($_REQUEST['userid']) || !is_number($_REQUEST['userid'])){ error(404); }
+if (!check_perms('admin_manage_permissions')) {
+	error(403);
+}
+if (!isset($_REQUEST['userid']) || !is_number($_REQUEST['userid'])) {
+	error(404);
+}
 
 include(SERVER_ROOT."/classes/permissions_form.php");
 
@@ -22,13 +26,15 @@ if (isset($_POST['action'])) {
 	authorize();
 
 	foreach ($PermissionsArray as $Perm => $Explaination) {
-		$Setting = (isset($_POST['perm_'.$Perm]))?1:0;
-		$Default = (isset($Defaults[$Perm]))?1:0;
+		$Setting = (isset($_POST['perm_'.$Perm])) ? 1 : 0;
+		$Default = (isset($Defaults[$Perm])) ? 1 : 0;
 		if ($Setting != $Default) {
 			$Delta[$Perm] = $Setting;
 		}
 	}
-	if (!is_number($_POST['maxcollages']) && !empty($_POST['maxcollages'])) { error("Please enter a valid number of extra personal collages"); }
+	if (!is_number($_POST['maxcollages']) && !empty($_POST['maxcollages'])) {
+		error("Please enter a valid number of extra personal collages");
+	}
 	$Delta['MaxCollages'] = $_POST['maxcollages'];
 
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
@@ -44,10 +50,14 @@ $MaxCollages = $Customs['MaxCollages'] + $Delta['MaxCollages'];
 
 function display_perm($Key,$Title) {
 	global $Defaults, $Permissions;
-	$Perm='<input id="default_'.$Key.'" type="checkbox" disabled';
-	if (isset($Defaults[$Key]) && $Defaults[$Key]) { $Perm.=' checked'; }
+	$Perm='<input id="default_'.$Key.'" type="checkbox" disabled="disabled"';
+	if (isset($Defaults[$Key]) && $Defaults[$Key]) {
+		$Perm.=' checked="checked"';
+	}
 	$Perm.=' /><input type="checkbox" name="perm_'.$Key.'" id="'.$Key.'" value="1"';
-	if (isset($Permissions[$Key]) && $Permissions[$Key]) { $Perm.=' checked'; }
+	if (isset($Permissions[$Key]) && $Permissions[$Key]) {
+		$Perm.=' checked="checked"';
+	}
 	$Perm.=' /> <label for="'.$Key.'">'.$Title.'</label><br />';
 	echo $Perm;
 }
@@ -66,7 +76,7 @@ function reset() {
 //]]>
 </script>
 <div class="header">
-	<h2><?=Users::format_username($UserID, false, false, false)?> > Permissions</h2>
+	<h2><?=Users::format_username($UserID, false, false, false)?> &gt; Permissions</h2>
 	<div class="linkbox">
 		<a href="#" onclick="reset();return false;" class="brackets">Defaults</a>
 	</div>
@@ -80,7 +90,7 @@ function reset() {
 	<table class="layout permission_head">
 		<tr>
 			<td class="label">Extra personal collages</td>
-			<td><input type="text" name="maxcollages" size="5" value="<?=($MaxCollages?$MaxCollages:'0')?>" /></td>
+			<td><input type="text" name="maxcollages" size="5" value="<?=($MaxCollages ? $MaxCollages : '0') ?>" /></td>
 		</tr>
 	</table>
 	<input type="hidden" name="action" value="permissions" />

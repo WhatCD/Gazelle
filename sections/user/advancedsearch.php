@@ -1,7 +1,7 @@
 <?
 /**********************************************************************
  *>>>>>>>>>>>>>>>>>>>>>>>>>>> User search <<<<<<<<<<<<<<<<<<<<<<<<<<<<*
- * Best viewed with a wide screen monitor							 *
+ * Best viewed with a wide screen monitor							  *
  **********************************************************************/
 if (!empty($_GET['search'])) {
 	if (preg_match("/^".IP_REGEX."$/", $_GET['search'])) {
@@ -22,20 +22,20 @@ if (!empty($_GET['search'])) {
 
 define('USERS_PER_PAGE', 30);
 
-function wrap($String, $ForceMatch = '', $IPSearch = false){
-	if(!$ForceMatch){
+function wrap($String, $ForceMatch = '', $IPSearch = false) {
+	if (!$ForceMatch) {
 		global $Match;
 	} else {
 		$Match = $ForceMatch;
 	}
-	if($Match == ' REGEXP '){
-		if(strpos($String, '\'') !== false || preg_match('/^.*\\\\$/i', $String)){
+	if ($Match == ' REGEXP ') {
+		if (strpos($String, '\'') !== false || preg_match('/^.*\\\\$/i', $String)) {
 			error('Regex contains illegal characters.');
 		}
 	} else {
 		$String = db_string($String);
 	}
-	if($Match == ' LIKE '){
+	if ($Match == ' LIKE ') {
 		// Fuzzy search
 		// Stick in wildcards at beginning and end of string unless string starts or ends with |
 		if (($String[0] != '|') && !$IPSearch) {
@@ -44,23 +44,22 @@ function wrap($String, $ForceMatch = '', $IPSearch = false){
 			$String = substr($String, 1, strlen($String));
 		}
 
-		if(substr($String, -1, 1) != '|'){
+		if (substr($String, -1, 1) != '|') {
 			$String = $String.'%';
 		} else {
 			$String = substr($String, 0, -1);
 		}
-
 	}
 	$String="'$String'";
 	return $String;
 }
 
-function date_compare($Field, $Operand, $Date1, $Date2 = ''){
+function date_compare($Field, $Operand, $Date1, $Date2 = '') {
 	$Date1 = db_string($Date1);
 	$Date2 = db_string($Date2);
 	$Return = array();
 
-	switch($Operand){
+	switch($Operand) {
 		case 'on':
 			$Return []= " $Field>='$Date1 00:00:00' ";
 			$Return []= " $Field<='$Date1 23:59:59' ";
@@ -81,18 +80,18 @@ function date_compare($Field, $Operand, $Date1, $Date2 = ''){
 }
 
 
-function num_compare($Field, $Operand, $Num1, $Num2 = ''){
+function num_compare($Field, $Operand, $Num1, $Num2 = '') {
 
-	if($Num1!=0){
+	if ($Num1 != 0) {
 		$Num1 = db_string($Num1);
 	}
-	if($Num2!=0){
+	if ($Num2 != 0) {
 		$Num2 = db_string($Num2);
 	}
 
 	$Return = array();
 
-	switch($Operand){
+	switch($Operand) {
 		case 'equal':
 			$Return []= " $Field='$Num1' ";
 			break;
@@ -122,7 +121,7 @@ $YesNo = array('inarray'=>array('any', 'yes', 'no'));
 $OrderVals = array('inarray'=>array('Username', 'Ratio', 'IP', 'Email', 'Joined', 'Last Seen', 'Uploaded', 'Downloaded', 'Invites', 'Snatches'));
 $WayVals = array('inarray'=>array('Ascending', 'Descending'));
 
-if(count($_GET)){
+if (count($_GET)) {
 	$DateRegex = array('regex'=>'/\d{4}-\d{2}-\d{2}/');
 
 	$ClassIDs = array();
@@ -172,13 +171,13 @@ if(count($_GET)){
 
 	$Err = $Val->ValidateForm($_GET);
 
-	if(!$Err){
+	if (!$Err) {
 		// Passed validation. Let's rock.
 		$RunQuery = false; // if we should run the search
 
-		if(isset($_GET['matchtype']) && $_GET['matchtype'] == 'strict'){
+		if (isset($_GET['matchtype']) && $_GET['matchtype'] == 'strict') {
 			$Match = ' = ';
-		} elseif(isset($_GET['matchtype']) && $_GET['matchtype'] == 'regex') {
+		} elseif (isset($_GET['matchtype']) && $_GET['matchtype'] == 'regex') {
 			$Match = ' REGEXP ';
 		} else {
 			$Match = ' LIKE ';
@@ -219,12 +218,12 @@ if(count($_GET)){
 			FROM users_main AS um1 JOIN users_info AS ui1 ON ui1.UserID=um1.ID ';
 
 
-		if(!empty($_GET['username'])){
+		if (!empty($_GET['username'])) {
 			$Where[]='um1.Username'.$Match.wrap($_GET['username']);
 		}
 
-		if(!empty($_GET['email'])){
-			if(isset($_GET['email_history'])){
+		if (!empty($_GET['email'])) {
+			if (isset($_GET['email_history'])) {
 				$Distinct = 'DISTINCT ';
 				$Join['he']=' JOIN users_history_emails AS he ON he.UserID=um1.ID ';
 				$Where[]= ' he.Email '.$Match.wrap($_GET['email']);
@@ -255,8 +254,8 @@ if(count($_GET)){
 		}
 
 
-		if(!empty($_GET['ip'])){
-			if(isset($_GET['ip_history'])){
+		if (!empty($_GET['ip'])) {
+			if (isset($_GET['ip_history'])) {
 				$Distinct = 'DISTINCT ';
 				$Join['hi']=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
 				$Where[]= ' hi.IP '.$Match.wrap($_GET['ip'], '', true);
@@ -275,22 +274,22 @@ if(count($_GET)){
 			}
 		}
 
-		if(!empty($_GET['tracker_ip'])){
+		if (!empty($_GET['tracker_ip'])) {
 				$Distinct = 'DISTINCT ';
 				$Join['xfu']=' JOIN xbt_files_users AS xfu ON um1.ID=xfu.uid ';
 				$Where[]= ' xfu.ip '.$Match.wrap($_GET['tracker_ip'], '', true);
 		}
 
-//		if(!empty($_GET['tracker_ip'])){
+//		if (!empty($_GET['tracker_ip'])) {
 //				$Distinct = 'DISTINCT ';
 //				$Join['xs']=' JOIN xbt_snatched AS xs ON um1.ID=xs.uid ';
 //				$Where[]= ' xs.IP '.$Match.wrap($_GET['ip']);
 //		}
 
-		if(!empty($_GET['comment'])){
+		if (!empty($_GET['comment'])) {
 			$Where[]='ui1.AdminComment'.$Match.wrap($_GET['comment']);
 		}
-		
+
 		if (!empty($_GET['lastfm'])) {
 			$Distinct = 'DISTINCT ';
 			$Join['lastfm'] = ' JOIN lastfm_users AS lfm ON lfm.ID = um1.ID ';
@@ -298,91 +297,92 @@ if(count($_GET)){
 		}
 
 
-		if(strlen($_GET['invites1'])){
+		if (strlen($_GET['invites1'])) {
 			$Invites1 = round($_GET['invites1']);
 			$Invites2 = round($_GET['invites2']);
 			$Where[]=implode(' AND ', num_compare('Invites', $_GET['invites'], $Invites1, $Invites2));
 		}
 
-		if($_GET['disabled_invites'] == 'yes'){
+		if ($_GET['disabled_invites'] == 'yes') {
 			$Where[]='ui1.DisableInvites=\'1\'';
-		} elseif($_GET['disabled_invites'] == 'no'){
+		} elseif ($_GET['disabled_invites'] == 'no') {
 			$Where[]='ui1.DisableInvites=\'0\'';
 		}
 
-		if($_GET['disabled_uploads'] == 'yes'){
+		if ($_GET['disabled_uploads'] == 'yes') {
 			$Where[]='ui1.DisableUpload=\'1\'';
-		} elseif($_GET['disabled_uploads'] == 'no'){
+		} elseif ($_GET['disabled_uploads'] == 'no') {
 			$Where[]='ui1.DisableUpload=\'0\'';
 		}
 
-		if($_GET['join1']){
+		if ($_GET['join1']) {
 			$Where[]=implode(' AND ', date_compare('ui1.JoinDate', $_GET['joined'], $_GET['join1'], $_GET['join2']));
 		}
 
-		if($_GET['lastactive1']){
+		if ($_GET['lastactive1']) {
 			$Where[]=implode(' AND ', date_compare('um1.LastAccess', $_GET['lastactive'], $_GET['lastactive1'], $_GET['lastactive2']));
 		}
 
-		if($_GET['ratio1']){
+		if ($_GET['ratio1']) {
 			$Decimals = strlen(array_pop(explode('.', $_GET['ratio1'])));
-			if(!$Decimals){ $Decimals = 0; }
-
+			if (!$Decimals) {
+				$Decimals = 0;
+			}
 			$Where[]=implode(' AND ', num_compare("ROUND(Uploaded/Downloaded,$Decimals)", $_GET['ratio'], $_GET['ratio1'], $_GET['ratio2']));
 		}
 
-		if(strlen($_GET['uploaded1'])){
+		if (strlen($_GET['uploaded1'])) {
 			$Upload1 = round($_GET['uploaded1']);
 			$Upload2 = round($_GET['uploaded2']);
-			if($_GET['uploaded']!='buffer'){
+			if ($_GET['uploaded']!='buffer') {
 				$Where[]=implode(' AND ', num_compare('ROUND(Uploaded/1024/1024/1024)', $_GET['uploaded'], $Upload1, $Upload2));
 			} else {
 				$Where[]=implode(' AND ', num_compare('ROUND((Uploaded/1024/1024/1024)-(Downloaded/1024/1024/1023))', 'between', $Upload1*0.9, $Upload1*1.1));
 			}
 		}
 
-		if(strlen($_GET['downloaded1'])){
+		if (strlen($_GET['downloaded1'])) {
 			$Download1 = round($_GET['downloaded1']);
 			$Download2 = round($_GET['downloaded2']);
 			$Where[]=implode(' AND ', num_compare('ROUND(Downloaded/1024/1024/1024)', $_GET['downloaded'], $Download1, $Download2));
 		}
 
-		if(strlen($_GET['snatched1'])){
+		if (strlen($_GET['snatched1'])) {
 			$Snatched1 = round($_GET['snatched1']);
 			$Snatched2 = round($_GET['snatched2']);
 			$Having[]=implode(' AND ', num_compare('Snatches', $_GET['snatched'], $Snatched1, $Snatched2));
 		}
 
-		if($_GET['enabled']!=''){
+		if ($_GET['enabled'] != '') {
 			$Where[]='um1.Enabled='.wrap($_GET['enabled'], '=');
 		}
 
-		if($_GET['class']!=''){
+		if ($_GET['class'] != '') {
 			$Where[]='um1.PermissionID='.wrap($_GET['class'], '=');
 		}
 		
 
-		if($_GET['secclass']!=''){
+		if ($_GET['secclass'] != '') {
 			$Join['ul']=' JOIN users_levels AS ul ON um1.ID=ul.UserID ';
 			$Where[]='ul.PermissionID='.wrap($_GET['secclass'], '=');
 		}
 
-		if($_GET['donor'] == 'yes'){
+		if ($_GET['donor'] == 'yes') {
 			$Where[]='ui1.Donor=\'1\'';
-		} elseif($_GET['donor'] == 'no'){
+		} elseif ($_GET['donor'] == 'no') {
 			$Where[]='ui1.Donor=\'0\'';
 		}
 
-		if($_GET['warned'] == 'yes'){
+		if ($_GET['warned'] == 'yes') {
 			$Where[]='ui1.Warned!=\'0000-00-00 00:00:00\'';
-		} elseif($_GET['warned'] == 'no'){
+		} elseif ($_GET['warned'] == 'no') {
 			$Where[]='ui1.Warned=\'0000-00-00 00:00:00\'';
 		}
 
-		if($_GET['disabled_ip']){
+		if ($_GET['disabled_ip']) {
 			$Distinct = 'DISTINCT ';
-			if($_GET['ip_history']){
-				if(!isset($Join['hi'])){
+			if ($_GET['ip_history']) {
+				if (!isset($Join['hi'])) {
 					$Join['hi']=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
 				}
 				$Join['hi2']=' JOIN users_history_ips AS hi2 ON hi2.IP=hi.IP ';
@@ -392,19 +392,19 @@ if(count($_GET)){
 			}
 		}
 
-		if(!empty($_GET['passkey'])){
+		if (!empty($_GET['passkey'])) {
 			$Where[]='um1.torrent_pass'.$Match.wrap($_GET['passkey']);
 		}
 
-		if(!empty($_GET['avatar'])){
+		if (!empty($_GET['avatar'])) {
 			$Where[]='ui1.Avatar'.$Match.wrap($_GET['avatar']);
 		}
 
-		if($_GET['stylesheet']!=''){
+		if ($_GET['stylesheet']!='') {
 			$Where[]='ui1.StyleID='.wrap($_GET['stylesheet'], '=');
 		}
 
-		if($OrderTable[$_GET['order']] && $WayTable[$_GET['way']]){
+		if ($OrderTable[$_GET['order']] && $WayTable[$_GET['way']]) {
 			$Order = ' ORDER BY '.$OrderTable[$_GET['order']].' '.$WayTable[$_GET['way']].' ';
 		}
 
@@ -413,16 +413,16 @@ if(count($_GET)){
 		$SQL = 'SELECT '.$Distinct.$SQL;
 		$SQL .= implode(' ', $Join);
 
-		if(count($Where)){
+		if (count($Where)) {
 			$SQL .= ' WHERE '.implode(' AND ', $Where);
 		}
 
-		if(count($Having)){
+		if (count($Having)) {
 			$SQL .= ' HAVING '.implode(' AND ', $Having);
 		}
 		$SQL .= $Order;
 
-		if(count($Where)>0 || count($Join)>0 || count($Having)>0){
+		if (count($Where) > 0 || count($Join) > 0 || count($Having) > 0) {
 			$RunQuery = true;
 		}
 
@@ -445,10 +445,10 @@ View::show_header('User search');
 				<td class="label nobr"><span title="Date format is YYYY-MM-DD">Joined:</span></td>
 				<td width="24%">
 					<select name="joined">
-						<option value="on"<? if($_GET['joined']==='on'){echo ' selected="selected"';}?>>On</option>
-						<option value="before"<? if($_GET['joined']==='before'){echo ' selected="selected"';}?>>Before</option>
-						<option value="after"<? if($_GET['joined']==='after'){echo ' selected="selected"';}?>>After</option>
-						<option value="between"<? if($_GET['joined']==='between'){echo ' selected="selected"';}?>>Between</option>
+						<option value="on"<? if ($_GET['joined']==='on') {echo ' selected="selected"';}?>>On</option>
+						<option value="before"<? if ($_GET['joined']==='before') {echo ' selected="selected"';}?>>Before</option>
+						<option value="after"<? if ($_GET['joined']==='after') {echo ' selected="selected"';}?>>After</option>
+						<option value="between"<? if ($_GET['joined']==='between') {echo ' selected="selected"';}?>>Between</option>
 					</select>
 					<input type="text" name="join1" size="6" value="<?=display_str($_GET['join1'])?>" />
 					<input type="text" name="join2" size="6" value="<?=display_str($_GET['join2'])?>" />
@@ -456,10 +456,10 @@ View::show_header('User search');
 				<td class="label nobr">Enabled:</td>
 				<td>
 					<select name="enabled">
-						<option value="" <? if($_GET['enabled']==='') {echo ' selected="selected"';}?>>Any</option>
-						<option value="0"<? if($_GET['enabled']==='0'){echo ' selected="selected"';}?>>Unconfirmed</option>
-						<option value="1"<? if($_GET['enabled']==='1'){echo ' selected="selected"';}?>>Enabled</option>
-						<option value="2"<? if($_GET['enabled']==='2'){echo ' selected="selected"';}?>>Disabled</option>
+						<option value=""<?  if ($_GET['enabled']==='')  {echo ' selected="selected"';}?>>Any</option>
+						<option value="0"<? if ($_GET['enabled']==='0') {echo ' selected="selected"';}?>>Unconfirmed</option>
+						<option value="1"<? if ($_GET['enabled']==='1') {echo ' selected="selected"';}?>>Enabled</option>
+						<option value="2"<? if ($_GET['enabled']==='2') {echo ' selected="selected"';}?>>Disabled</option>
 					</select>
 				</td>
 			</tr>
@@ -471,22 +471,24 @@ View::show_header('User search');
 				<td class="label nobr"><span title="Date format is YYYY-MM-DD">Last active:</span></td>
 				<td width="30%">
 					<select name="lastactive">
-						<option value="on"<? if($_GET['lastactive']==='on'){echo ' selected="selected"';}?>>On</option>
-						<option value="before"<? if($_GET['lastactive']==='before'){echo ' selected="selected"';}?>>Before</option>
-						<option value="after"<? if($_GET['lastactive']==='after'){echo ' selected="selected"';}?>>After</option>
-						<option value="between"<? if($_GET['lastactive']==='between'){echo ' selected="selected"';}?>>Between</option>
+						<option value="on"<? if ($_GET['lastactive']==='on') {echo ' selected="selected"';}?>>On</option>
+						<option value="before"<? if ($_GET['lastactive']==='before') {echo ' selected="selected"';}?>>Before</option>
+						<option value="after"<? if ($_GET['lastactive']==='after') {echo ' selected="selected"';}?>>After</option>
+						<option value="between"<? if ($_GET['lastactive']==='between') {echo ' selected="selected"';}?>>Between</option>
 					</select>
 					<input type="text" name="lastactive1" size="6" value="<?=display_str($_GET['lastactive1'])?>" />
 					<input type="text" name="lastactive2" size="6" value="<?=display_str($_GET['lastactive2'])?>" />
 				</td>
-				<td class="label nobr">Primary Class:</td>
+				<td class="label nobr">Primary class:</td>
 				<td>
 					<select name="class">
-						<option value="" <? if($_GET['class']==='') {echo ' selected="selected"';}?>>Any</option>
-<?	foreach($ClassLevels as $Class){
-		if ($Class['Secondary']) { continue; }
+						<option value=""<? if ($_GET['class']==='') {echo ' selected="selected"';}?>>Any</option>
+<?	foreach ($ClassLevels as $Class) {
+		if ($Class['Secondary']) {
+			continue;
+		}
 ?>
-					<option value="<?=$Class['ID'] ?>" <? if($_GET['class']===$Class['ID']) {echo ' selected="selected"';}?>><?=Format::cut_string($Class['Name'], 10, 1, 1).' ('.$Class['Level'].')'?></option>
+						<option value="<?=$Class['ID'] ?>"<? if ($_GET['class']===$Class['ID']) {echo ' selected="selected"';}?>><?=Format::cut_string($Class['Name'], 10, 1, 1).' ('.$Class['Level'].')'?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -498,22 +500,24 @@ View::show_header('User search');
 				</td>
 				<td class="label nobr"></td>
 				<td></td>
-				<td class="label nobr">Secondary Class:</td>
+				<td class="label nobr">Secondary class:</td>
 				<td>
 					<select name="secclass">
-						<option value="" <? if($_GET['secclass']==='') {echo ' selected="selected"';}?>>Any</option>
+						<option value=""<? if ($_GET['secclass']==='') {echo ' selected="selected"';}?>>Any</option>
 <?	$Secondaries = array();
 	// Neither level nor ID is particularly useful when searching secondary classes, so let's do some
 	// kung-fu to sort them alphabetically.
 	$fnc = function($Class1, $Class2) { return strcmp($Class1['Name'], $Class2['Name']);};
-	foreach($ClassLevels as $Class) {
-		if (!$Class['Secondary']) { continue; }
+	foreach ($ClassLevels as $Class) {
+		if (!$Class['Secondary']) {
+			continue;
+		}
 		$Secondaries[] = $Class;
 	}
 	usort($Secondaries, $fnc);
-	foreach($Secondaries as $Class) {
+	foreach ($Secondaries as $Class) {
 ?>
-					<option value="<?=$Class['ID'] ?>" <? if($_GET['secclass']===$Class['ID']) {echo ' selected="selected"';}?>><?=Format::cut_string($Class['Name'], 20, 1, 1)?></option>
+						<option value="<?=$Class['ID'] ?>"<? if ($_GET['secclass']===$Class['ID']) {echo ' selected="selected"';}?>><?=Format::cut_string($Class['Name'], 20, 1, 1)?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -521,19 +525,19 @@ View::show_header('User search');
 			<tr>
 				<td class="label nobr">Extra:</td>
 				<td>
-					<input type="checkbox" name="ip_history" id="ip_history"<? if($_GET['ip_history']){ echo ' checked="checked"'; }?> />
-					<label for="ip_history">IP History</label>
+					<input type="checkbox" name="ip_history" id="ip_history"<? if ($_GET['ip_history']) { echo ' checked="checked"'; }?> />
+					<label for="ip_history">IP history</label>
 
-					<input type="checkbox" name="email_history" id="email_history"<? if($_GET['email_history']){ echo ' checked="checked"'; }?> />
-					<label for="email_history">Email History</label>
+					<input type="checkbox" name="email_history" id="email_history"<? if ($_GET['email_history']) { echo ' checked="checked"'; }?> />
+					<label for="email_history">Email history</label>
 				</td>
 				<td class="label nobr">Ratio:</td>
 				<td width="30%">
 					<select name="ratio">
-						<option value="equal"<? if($_GET['ratio']==='equal'){echo ' selected="selected"';}?>>Equal</option>
-						<option value="above"<? if($_GET['ratio']==='above'){echo ' selected="selected"';}?>>Above</option>
-						<option value="below"<? if($_GET['ratio']==='below'){echo ' selected="selected"';}?>>Below</option>
-						<option value="between"<? if($_GET['ratio']==='between'){echo ' selected="selected"';}?>>Between</option>
+						<option value="equal"<? if ($_GET['ratio']==='equal') {echo ' selected="selected"';}?>>Equal</option>
+						<option value="above"<? if ($_GET['ratio']==='above') {echo ' selected="selected"';}?>>Above</option>
+						<option value="below"<? if ($_GET['ratio']==='below') {echo ' selected="selected"';}?>>Below</option>
+						<option value="between"<? if ($_GET['ratio']==='between') {echo ' selected="selected"';}?>>Between</option>
 					</select>
 					<input type="text" name="ratio1" size="6" value="<?=display_str($_GET['ratio1'])?>" />
 					<input type="text" name="ratio2" size="6" value="<?=display_str($_GET['ratio2'])?>" />
@@ -541,25 +545,31 @@ View::show_header('User search');
 				<td class="label nobr">Donor:</td>
 				<td>
 					<select name="donor">
-						<option value="" <? if($_GET['donor']==='') {echo ' selected="selected"';}?>>Any</option>
-						<option value="yes" <? if($_GET['donor']==='yes') {echo ' selected="selected"';}?>>Yes</option>
-						<option value="no" <? if($_GET['donor']==='no') {echo ' selected="selected"';}?>>No</option>
+						<option value=""<? if ($_GET['donor']==='') {echo ' selected="selected"';}?>>Any</option>
+						<option value="yes"<? if ($_GET['donor']==='yes') {echo ' selected="selected"';}?>>Yes</option>
+						<option value="no"<? if ($_GET['donor']==='no') {echo ' selected="selected"';}?>>No</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
-				<td class="label nobr">Comment:</td>
+<?	if (check_perms('users_mod')) { ?>
+				<td class="label nobr">Staff notes:</td>
 				<td>
 					<input type="text" name="comment" size="20" value="<?=display_str($_GET['comment'])?>" />
 				</td>
+<?	} else { ?>
+				<td class="label nobr"></td>
+				<td>
+				</td>
+<?	} ?>
 				<td class="label nobr"><span title="Units are in bytes">Uploaded:</span></td>
 				<td width="30%">
 					<select name="uploaded">
-						<option value="equal"<? if($_GET['uploaded']==='equal'){echo ' selected="selected"';}?>>Equal</option>
-						<option value="above"<? if($_GET['uploaded']==='above'){echo ' selected="selected"';}?>>Above</option>
-						<option value="below"<? if($_GET['uploaded']==='below'){echo ' selected="selected"';}?>>Below</option>
-						<option value="between"<? if($_GET['uploaded']==='between'){echo ' selected="selected"';}?>>Between</option>
-						<option value="buffer"<? if($_GET['uploaded']==='buffer'){echo ' selected="selected"';}?>>Buffer</option>
+						<option value="equal"<? if ($_GET['uploaded']==='equal') {echo ' selected="selected"';}?>>Equal</option>
+						<option value="above"<? if ($_GET['uploaded']==='above') {echo ' selected="selected"';}?>>Above</option>
+						<option value="below"<? if ($_GET['uploaded']==='below') {echo ' selected="selected"';}?>>Below</option>
+						<option value="between"<? if ($_GET['uploaded']==='between') {echo ' selected="selected"';}?>>Between</option>
+						<option value="buffer"<? if ($_GET['uploaded']==='buffer') {echo ' selected="selected"';}?>>Buffer</option>
 					</select>
 					<input type="text" name="uploaded1" size="6" value="<?=display_str($_GET['uploaded1'])?>" />
 					<input type="text" name="uploaded2" size="6" value="<?=display_str($_GET['uploaded2'])?>" />
@@ -567,21 +577,21 @@ View::show_header('User search');
 				<td class="label nobr">Warned:</td>
 				<td>
 					<select name="warned">
-						<option value="" <? if($_GET['warned']==='') {echo ' selected="selected"';}?>>Any</option>
-						<option value="yes" <? if($_GET['warned']==='yes') {echo ' selected="selected"';}?>>Yes</option>
-						<option value="no" <? if($_GET['warned']==='no') {echo ' selected="selected"';}?>>No</option>
+						<option value=""<? if ($_GET['warned']==='') {echo ' selected="selected"';}?>>Any</option>
+						<option value="yes"<? if ($_GET['warned']==='yes') {echo ' selected="selected"';}?>>Yes</option>
+						<option value="no"<? if ($_GET['warned']==='no') {echo ' selected="selected"';}?>>No</option>
 					</select>
 				</td>
 			</tr>
 
 			<tr>
-				<td class="label nobr"># of Invites:</td>
+				<td class="label nobr"># of invites:</td>
 				<td>
 					<select name="invites">
-						<option value="equal"<? if($_GET['invites']==='equal'){echo ' selected="selected"';}?>>Equal</option>
-						<option value="above"<? if($_GET['invites']==='above'){echo ' selected="selected"';}?>>Above</option>
-						<option value="below"<? if($_GET['invites']==='below'){echo ' selected="selected"';}?>>Below</option>
-						<option value="between"<? if($_GET['invites']==='between'){echo ' selected="selected"';}?>>Between</option>
+						<option value="equal"<? if ($_GET['invites']==='equal') {echo ' selected="selected"';}?>>Equal</option>
+						<option value="above"<? if ($_GET['invites']==='above') {echo ' selected="selected"';}?>>Above</option>
+						<option value="below"<? if ($_GET['invites']==='below') {echo ' selected="selected"';}?>>Below</option>
+						<option value="between"<? if ($_GET['invites']==='between') {echo ' selected="selected"';}?>>Between</option>
 					</select>
 					<input type="text" name="invites1" size="6" value="<?=display_str($_GET['invites1'])?>" />
 					<input type="text" name="invites2" size="6" value="<?=display_str($_GET['invites2'])?>" />
@@ -589,47 +599,49 @@ View::show_header('User search');
 				<td class="label nobr"><span title="Units are in bytes">Downloaded:</span></td>
 				<td width="30%">
 					<select name="downloaded">
-						<option value="equal"<? if($_GET['downloaded']==='equal'){echo ' selected="selected"';}?>>Equal</option>
-						<option value="above"<? if($_GET['downloaded']==='above'){echo ' selected="selected"';}?>>Above</option>
-						<option value="below"<? if($_GET['downloaded']==='below'){echo ' selected="selected"';}?>>Below</option>
-						<option value="between"<? if($_GET['downloaded']==='between'){echo ' selected="selected"';}?>>Between</option>
+						<option value="equal"<? if ($_GET['downloaded']==='equal') {echo ' selected="selected"';}?>>Equal</option>
+						<option value="above"<? if ($_GET['downloaded']==='above') {echo ' selected="selected"';}?>>Above</option>
+						<option value="below"<? if ($_GET['downloaded']==='below') {echo ' selected="selected"';}?>>Below</option>
+						<option value="between"<? if ($_GET['downloaded']==='between') {echo ' selected="selected"';}?>>Between</option>
 					</select>
 					<input type="text" name="downloaded1" size="6" value="<?=display_str($_GET['downloaded1'])?>" />
 					<input type="text" name="downloaded2" size="6" value="<?=display_str($_GET['downloaded2'])?>" />
 				</td>
-				<td class="label nobr">Disabled IP:</td>
+				<td class="label nobr">
+					<label for="disabled_ip" title="Only display users that have a disabled account linked by IP address">Disabled accounts<br />linked by IP:</label>
+				</td>
 				<td>
-					<input type="checkbox" name="disabled_ip" <? if($_GET['disabled_ip']){ echo ' checked="checked"'; }?> />
+					<input type="checkbox" name="disabled_ip" id="disabled_ip"<? if ($_GET['disabled_ip']) { echo ' checked="checked"'; }?> />
 				</td>
 			</tr>
 
 			<tr>
-				<td class="label nobr">Disabled invites</td>
+				<td class="label nobr">Disabled invites:</td>
 				<td>
 					<select name="disabled_invites">
-						<option value="" <? if($_GET['disabled_invites']==='') {echo ' selected="selected"';}?>>Any</option>
-						<option value="yes" <? if($_GET['disabled_invites']==='yes') {echo ' selected="selected"';}?>>Yes</option>
-						<option value="no" <? if($_GET['disabled_invites']==='no') {echo ' selected="selected"';}?>>No</option>
+						<option value=""<? if ($_GET['disabled_invites']==='') {echo ' selected="selected"';}?>>Any</option>
+						<option value="yes"<? if ($_GET['disabled_invites']==='yes') {echo ' selected="selected"';}?>>Yes</option>
+						<option value="no"<? if ($_GET['disabled_invites']==='no') {echo ' selected="selected"';}?>>No</option>
 					</select>
 				</td>
 				<td class="label nobr">Snatched:</td>
 				<td width="30%">
 					<select name="snatched">
-						<option value="equal"<? if(isset($_GET['snatched']) && $_GET['snatched']==='equal'){echo ' selected="selected"';}?>>Equal</option>
-						<option value="above"<? if(isset($_GET['snatched']) && $_GET['snatched']==='above'){echo ' selected="selected"';}?>>Above</option>
-						<option value="below"<? if(isset($_GET['snatched']) && $_GET['snatched']==='below'){echo ' selected="selected"';}?>>Below</option>
-						<option value="between"<? if(isset($_GET['snatched']) && $_GET['snatched']==='between'){echo ' selected="selected"';}?>>Between</option>
-						<option value="off"<? if(isset($_GET['snatched']) && $_GET['snatched']==='off'){echo ' selected="selected"';}?>>Off</option>
+						<option value="equal"<? if (isset($_GET['snatched']) && $_GET['snatched']==='equal') {echo ' selected="selected"';}?>>Equal</option>
+						<option value="above"<? if (isset($_GET['snatched']) && $_GET['snatched']==='above') {echo ' selected="selected"';}?>>Above</option>
+						<option value="below"<? if (isset($_GET['snatched']) && $_GET['snatched']==='below') {echo ' selected="selected"';}?>>Below</option>
+						<option value="between"<? if (isset($_GET['snatched']) && $_GET['snatched']==='between') {echo ' selected="selected"';}?>>Between</option>
+						<option value="off"<? if (isset($_GET['snatched']) && $_GET['snatched']==='off') {echo ' selected="selected"';}?>>Off</option>
 					</select>
 					<input type="text" name="snatched1" size="6" value="<?=display_str($_GET['snatched1'])?>" />
 					<input type="text" name="snatched2" size="6" value="<?=display_str($_GET['snatched2'])?>" />
 				</td>
-				<td class="label nobr">Disabled uploads</td>
+				<td class="label nobr">Disabled uploads:</td>
 				<td>
 					<select name="disabled_uploads">
-						<option value="" <? if(isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='') {echo ' selected="selected"';}?>>Any</option>
-						<option value="yes" <? if(isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='yes') {echo ' selected="selected"';}?>>Yes</option>
-						<option value="no" <? if(isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='no') {echo ' selected="selected"';}?>>No</option>
+						<option value=""<? if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='') {echo ' selected="selected"';}?>>Any</option>
+						<option value="yes"<? if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='yes') {echo ' selected="selected"';}?>>Yes</option>
+						<option value="no"<? if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='no') {echo ' selected="selected"';}?>>No</option>
 					</select>
 				</td>
 			</tr>
@@ -642,7 +654,7 @@ View::show_header('User search');
 				<td>
 					<input type="text" name="tracker_ip" size="20" value="<?=display_str($_GET['tracker_ip'])?>" />
 				</td>
-				<td class="label nobr">Last.fm Username:</td>
+				<td class="label nobr">Last.fm username:</td>
 				<td>
 					<input type="text" name="lastfm" size="20" value="<?=display_str($_GET['lastfm'])?>" />
 				</td>
@@ -657,48 +669,48 @@ View::show_header('User search');
 				<td>
 					<select name="stylesheet" id="stylesheet">
 						<option value="">Any</option>
-<? foreach($Stylesheets as $Style) { ?>
+<?					foreach ($Stylesheets as $Style) { ?>
 						<option value="<?=$Style['ID']?>"<?Format::selected('stylesheet',$Style['ID'])?>><?=$Style['ProperName']?></option>
-<? } ?>
+<?					} ?>
 					</select>
 				</td>
-				<td class="label nobr"><span title="Two-letter codes as defined in ISO 3166-1 alpha-2">Country Code:</span></td>
+				<td class="label nobr"><span title="Two-letter codes as defined in ISO 3166-1 alpha-2">Country code:</span></td>
 				<td width="30%">
 					<select name="cc_op">
-						<option value="equal"<? if ($_GET['cc_op']==='equal'){ echo ' selected="selected"';}?>>Equals</option>
-						<option value="not_equal"<? if ($_GET['cc_op']==='not_equal'){ echo ' selected="selected"';}?>>Not Equal</option>
+						<option value="equal"<? if ($_GET['cc_op']==='equal') { echo ' selected="selected"';}?>>Equals</option>
+						<option value="not_equal"<? if ($_GET['cc_op']==='not_equal') { echo ' selected="selected"';}?>>Not equal</option>
 					</select>
 					<input type="text" name="cc" size="2" value="<?=display_str($_GET['cc'])?>" />
 				</td>
 			</tr>
 
 			<tr>
-				<td class="label nobr">Type</td>
+				<td class="label nobr">Search type:</td>
 				<td>
-					<label title="A &quot;strict&quot; search uses no wildcards in search fields, and it is analogous to &#96;grep -E &quot;&circ;SEARCHTERM&#36;&quot;&#96;">Strict <input type="radio" name="matchtype" value="strict"<? if($_GET['matchtype'] == 'strict' || !$_GET['matchtype']){ echo ' checked="checked"'; } ?> /></label> |
-					<label title="A &quot;fuzzy&quot; search automatically prepends and appends wildcards to search strings, except for IP address searches, unless the search string begins or ends with a &quot;&#124;&quot; (pipe). It is analogous to a vanilla grep search (except for the pipe stuff).">Fuzzy <input type="radio" name="matchtype" value="fuzzy"<? if($_GET['matchtype'] == 'fuzzy' || !$_GET['matchtype']){ echo ' checked="checked"'; } ?> /></label> |
-					<label title="A &quot;regex&quot; search uses MySQL's regular expression syntax.">Regex <input type="radio" name="matchtype" value="regex"<? if($_GET['matchtype'] == 'regex'){ echo ' checked="checked"'; } ?> /></label>
+					<label title="A &quot;strict&quot; search uses no wildcards in search fields, and it is analogous to &#96;grep -E &quot;&circ;SEARCHTERM&#36;&quot;&#96;">Strict <input type="radio" name="matchtype" value="strict"<? if ($_GET['matchtype'] == 'strict' || !$_GET['matchtype']) { echo ' checked="checked"'; } ?> /></label> |
+					<label title="A &quot;fuzzy&quot; search automatically prepends and appends wildcards to search strings, except for IP address searches, unless the search string begins or ends with a &quot;&#124;&quot; (pipe). It is analogous to a vanilla grep search (except for the pipe stuff).">Fuzzy <input type="radio" name="matchtype" value="fuzzy"<? if ($_GET['matchtype'] == 'fuzzy' || !$_GET['matchtype']) { echo ' checked="checked"'; } ?> /></label> |
+					<label title="A &quot;regex&quot; search uses MySQL's regular expression syntax.">Regex <input type="radio" name="matchtype" value="regex"<? if ($_GET['matchtype'] == 'regex') { echo ' checked="checked"'; } ?> /></label>
 				</td>
 				<td class="label nobr">Order:</td>
 				<td class="nobr">
 					<select name="order">
-					<?
-						foreach(array_shift($OrderVals) as $Cur){ ?>
-						<option value="<?=$Cur?>"<? if(isset($_GET['order']) && $_GET['order'] == $Cur || (!isset($_GET['order']) && $Cur == 'Joined')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
-					<?	}?>
+<?
+						foreach (array_shift($OrderVals) as $Cur) { ?>
+						<option value="<?=$Cur?>"<? if (isset($_GET['order']) && $_GET['order'] == $Cur || (!isset($_GET['order']) && $Cur == 'Joined')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
+<?						} ?>
 					</select>
 					<select name="way">
-					<?	foreach(array_shift($WayVals) as $Cur){ ?>
-						<option value="<?=$Cur?>"<? if(isset($_GET['way']) && $_GET['way'] == $Cur || (!isset($_GET['way']) && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
-					<?	}?>
+<?						foreach (array_shift($WayVals) as $Cur) { ?>
+						<option value="<?=$Cur?>"<? if (isset($_GET['way']) && $_GET['way'] == $Cur || (!isset($_GET['way']) && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
+<?						} ?>
 					</select>
 				</td>
-				<td class="label nobr"># of Emails:</td>
+				<td class="label nobr"># of emails:</td>
 				<td>
 					<select name="emails_opt">
-						<option value="equal"<? if($_GET['emails_opt']==='equal'){echo ' selected="selected"';}?>>Equal</option>
-						<option value="above"<? if($_GET['emails_opt']==='above'){echo ' selected="selected"';}?>>Above</option>
-						<option value="below"<? if($_GET['emails_opt']==='below'){echo ' selected="selected"';}?>>Below</option>
+						<option value="equal"<? if ($_GET['emails_opt']==='equal') {echo ' selected="selected"';}?>>Equal</option>
+						<option value="above"<? if ($_GET['emails_opt']==='above') {echo ' selected="selected"';}?>>Above</option>
+						<option value="below"<? if ($_GET['emails_opt']==='below') {echo ' selected="selected"';}?>>Below</option>
 					</select>
 					<input type="text" name="email_cnt" size="6" value="<?=display_str($_GET['email_cnt'])?>" />
 				</td>
@@ -712,7 +724,7 @@ View::show_header('User search');
 	</form>
 </div>
 <?
-if($RunQuery){
+if ($RunQuery) {
 	$Results = $DB->query($SQL);
 	$DB->query('SELECT FOUND_ROWS()');
 	list($NumResults) = $DB->next_record();
@@ -729,12 +741,12 @@ echo $Pages;
 ?>
 </div>
 <div class="box pad center">
-	<h2><?=$NumResults?> results</h2>
+	<h2><?=number_format($NumResults)?> results</h2>
 	<table width="100%">
 		<tr class="colhead">
 			<td>Username</td>
 			<td>Ratio</td>
-			<td>IP</td>
+			<td>IP address</td>
 			<td>Email</td>
 			<td>Joined</td>
 			<td>Last seen</td>
@@ -745,7 +757,7 @@ echo $Pages;
 			<td>Invites</td>
 		</tr>
 <?
-while(list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email, $Enabled, $IP, $Invites, $DisableInvites, $Warned, $Donor, $JoinDate, $LastAccess) = $DB->next_record()){ ?>
+while (list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email, $Enabled, $IP, $Invites, $DisableInvites, $Warned, $Donor, $JoinDate, $LastAccess) = $DB->next_record()) { ?>
 		<tr>
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
 			<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
@@ -761,7 +773,7 @@ while(list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Email
 ?>
 			<td><?=number_format((int)$Downloads)?></td>
 			<td><?=is_numeric($Snatched) ? number_format($Snatched) : display_str($Snatched)?></td>
-			<td><? if($DisableInvites) { echo 'X'; } else { echo number_format($Invites); } ?></td>
+			<td><? if ($DisableInvites) { echo 'X'; } else { echo number_format($Invites); } ?></td>
 		</tr>
 <?
 }

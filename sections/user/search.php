@@ -58,7 +58,7 @@ echo $Pages;
 ?>
 	</div>
 	<form class="search_form" name="users" action="user.php" method="get">
-	<input type="hidden" name="action" value="search" />
+		<input type="hidden" name="action" value="search" />
 		<table class="layout" width="100%">
 			<tr>
 				<td class="label nobr">Username:</td>
@@ -72,20 +72,20 @@ echo $Pages;
 	</form>
 	<br />
 	<div class="box pad center">
-		<table style="width:400px;margin:0px auto;">
+		<table style="width: 400px; margin: 0px auto;">
 			<tr class="colhead">
 				<td width="50%">Username</td>
-				<td>Class</td>
+				<td>Primary class</td>
 			</tr>
 <?
-foreach($Results as $Result) {
-	list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned) = $Result;
+	foreach ($Results as $Result) {
+		list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned) = $Result;
 ?>
 			<tr>
 				<td><?=Users::format_username($UserID, true, true, true, true);?></td>
 				<td><?=Users::make_class_string($PermissionID);?></td>
 			</tr>
-<? } ?>
+<?	} ?>
 		</table>
 	</div>
 	<div class="linkbox">

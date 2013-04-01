@@ -470,3 +470,11 @@ tr.torrent .bookmark>a:after {
     width: 100%;
     overflow: hidden;
 }
+
+body {
+	-webkit-transform: rotate(0.15deg);
+	-o-transform: rotate(0.15deg);
+	transform: rotate(0.15deg);
+	font-smooth: always;
+	-webkit-font-smoothing: subpixel-antialiased;
+}

@@ -485,8 +485,8 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 <? } ?>
 		<div class="box">
 			<div class="head">
-				<span style="float:left;">Profile&nbsp;-&nbsp;</span>
-				<span class="user_title"><? if ($CustomTitle) { echo html_entity_decode($DisplayCustomTitle); } ?></span>
+				<span style="float:left;">Profile<? if ($CustomTitle) {?>&nbsp;-&nbsp;</span>
+				<span class="user_title"><? echo html_entity_decode($DisplayCustomTitle); } ?></span>
 				<span style="float:right;"><?=!empty($Badges)?"$Badges&nbsp;&nbsp;":''?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
 			</div>
 			<div class="pad" id="profilediv">

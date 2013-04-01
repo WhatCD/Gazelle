@@ -1,5 +1,5 @@
 <?
-function compare($X, $Y){
+function compare($X, $Y) {
 	return($Y['score'] - $X['score']);
 }
 header('Access-Control-Allow-Origin: *');
@@ -13,9 +13,11 @@ include(SERVER_ROOT.'/classes/class_text.php');
 $Text = NEW TEXT;
 
 $GroupID=ceil($_GET['id']);
-if(!empty($_GET['revisionid']) && is_number($_GET['revisionid'])) {
+if (!empty($_GET['revisionid']) && is_number($_GET['revisionid'])) {
 	$RevisionID = $_GET['revisionid'];
-} else { $RevisionID = 0; }
+} else {
+	$RevisionID = 0;
+}
 
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 $TorrentCache = get_group_info($GroupID, true, $RevisionID);
@@ -35,22 +37,22 @@ $WikiBody = $Text->full_format($WikiBody);
 
 $Artists = Artists::get_artist($GroupID);
 
-if($Artists) {
+if ($Artists) {
 	$DisplayName = '<span dir="ltr">'.Artists::display_artists($Artists, true).$DisplayName.'</span>';
 	$AltName = display_str(Artists::display_artists($Artists, false)).$AltName;
 	$Title = $AltName;
 }
 
-if($GroupYear>0) {
+if ($GroupYear > 0) {
 	$DisplayName.=' ['.$GroupYear.']';
 	$AltName.=' ['.$GroupYear.']';
 	$Title.= ' ['.$GroupYear.']';
 }
-if($GroupVanityHouse){
+if ($GroupVanityHouse){
 	$DisplayName.=' [Vanity House]';
 	$AltName.=' [Vanity House]';
 }
-if($GroupCategoryID == 1) {
+if ($GroupCategoryID == 1) {
 	$DisplayName.=' ['.$ReleaseTypes[$ReleaseType].']';
 	$AltName.=' ['.$ReleaseTypes[$ReleaseType].']';
 }
@@ -86,28 +88,28 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 	<div class="header">
 		<h2><?=$DisplayName?></h2>
 		<div class="linkbox">
-<?	if(check_perms('site_edit_wiki')) { ?>
+<?	if (check_perms('site_edit_wiki')) { ?>
 			<a href="torrents.php?action=editgroup&amp;groupid=<?=$GroupID?>" class="brackets">Edit description</a>
 <?	} ?>
 			<a href="torrents.php?action=history&amp;groupid=<?=$GroupID?>" class="brackets">View history</a>
-<?	if($RevisionID && check_perms('site_edit_wiki')) { ?>
+<?	if ($RevisionID && check_perms('site_edit_wiki')) { ?>
 			<a href="/torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Revert to this revision</a>
 <?	}
-	if(Bookmarks::has_bookmarked('torrent', $GroupID)) {
+	if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
 ?>
 			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
-<?	} else {  ?>
+<?	} else { ?>
 			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?	}
 ?>
 <!-- <a href="#" id="recommend" class="brackets">Recommend</a> -->
 <?
-	if($Categories[$GroupCategoryID-1] == 'Music') { ?>
+	if ($Categories[$GroupCategoryID-1] == 'Music') { ?>
 			<a href="upload.php?groupid=<?=$GroupID?>" class="brackets">Add format</a>
 <?	}
-	if(check_perms('site_submit_requests')) { ?>
+	if (check_perms('site_submit_requests')) { ?>
 			<a href="requests.php?action=new&amp;groupid=<?=$GroupID?>" class="brackets">Request format</a>
-<?	}?>
+<?	} ?>
 			<a href="torrents.php?action=grouplog&amp;groupid=<?=$GroupID?>" class="brackets">View log</a>
 		</div>
 	</div>
@@ -116,9 +118,9 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
 <?
-if ($WikiImage!="") {
+if ($WikiImage != "") {
 	$WikiImageThumb = ImageTools::wiki_image($WikiImage);
-	if(check_perms('site_proxy_images')) {
+	if (check_perms('site_proxy_images')) {
 		$WikiImage = ImageTools::proxy_url($WikiImage);
 	}
 ?>
@@ -132,7 +134,7 @@ if ($WikiImage!="") {
 ?>
 		</div>
 <?
-if($Categories[$GroupCategoryID-1] == 'Music') {
+if ($Categories[$GroupCategoryID-1] == 'Music') {
 	$ShownWith = false;
 ?>
 		<div class="box box_artists">
@@ -140,13 +142,13 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 			<?=(check_perms('torrents_edit')) ? '<span style="float:right;" class="edit_artists"><a onclick="ArtistManager(); return false;" href="#" class="brackets">Edit</a></span>' : ''?>
 			</div>
 			<ul class="stats nobullet" id="artist_list">
-<?	if(!empty($Artists[4]) && count($Artists[4]) > 0) {
+<?	if (!empty($Artists[4]) && count($Artists[4]) > 0) {
 		print '				<li class="artists_composers"><strong class="artists_label">Composers:</strong></li>';
-		foreach($Artists[4] as $Artist) {
+		foreach ($Artists[4] as $Artist) {
 ?>
 				<li class="artists_composers">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if(check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
@@ -161,11 +163,11 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 	}
 	if (!empty($Artists[6]) && count($Artists[6]) > 0) {
 		print '				<li class="artists_dj"><strong class="artists_label">DJ / Compiler:</strong></li>';
-		foreach($Artists[6] as $Artist) {
+		foreach ($Artists[6] as $Artist) {
 ?>
 				<li class="artists_dj">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if(check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 					list($AliasID) = $DB->next_record();
 					if (empty($AliasID)) {
@@ -184,11 +186,11 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 	} elseif ((count($Artists[4]) > 0) && (count($Artists[1]) > 0)) {
 		print '				<li class="artists_main"><strong class="artists_label">Performers:</strong></li>';
 	}
-	foreach($Artists[1] as $Artist) {
+	foreach ($Artists[1] as $Artist) {
 ?>
 				<li class="artist_main">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?		if(check_perms('torrents_edit')){
+<?		if (check_perms('torrents_edit')){
 			$AliasID = $Artist['aliasid'];
 			if (empty($AliasID)) {
 				$AliasID = $Artist['id'];
@@ -200,13 +202,13 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 				</li>
 <?
 	}
-	if(!empty($Artists[2]) && count($Artists[2]) > 0) {
+	if (!empty($Artists[2]) && count($Artists[2]) > 0) {
 		print '				<li class="artists_with"><strong class="artists_label">With:</strong></li>';
-		foreach($Artists[2] as $Artist) {
+		foreach ($Artists[2] as $Artist) {
 ?>
 				<li class="artist_guest">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if(check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
@@ -220,13 +222,13 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 <?
 		}
 	}
-	if(!empty($Artists[5]) && count($Artists[5]) > 0) {
+	if (!empty($Artists[5]) && count($Artists[5]) > 0) {
 		print '				<li class="artists_conductors"><strong class="artists_label">Conducted by:</strong></li>';
-		foreach($Artists[5] as $Artist) {
+		foreach ($Artists[5] as $Artist) {
 ?>
 				<li class="artists_conductors">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if(check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')){
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
@@ -242,40 +244,40 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 	}
 	if (!empty($Artists[3]) && count($Artists[3]) > 0) {
 		print '				<li class="artists_remix"><strong class="artists_label">Remixed by:</strong></li>';
-		foreach($Artists[3] as $Artist) {
+		foreach ($Artists[3] as $Artist) {
 ?>
 				<li class="artists_remix">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?		      if(check_perms('torrents_edit')){
-			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
-                                list($AliasID) = $DB->next_record();
-                                if (empty($AliasID)) {
-                                        $AliasID = $Artist['id'];
-                                }
+<?			if (check_perms('torrents_edit')){
+				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+				list($AliasID) = $DB->next_record();
+				if (empty($AliasID)) {
+					$AliasID = $Artist['id'];
+				}
 ?>
 				(<?=$AliasID?>)&nbsp;
 					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=3');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
-<?		      } ?>
+<?			} ?>
 				</li>
 <?
 		}
 	}
 	if (!empty($Artists[7]) && count($Artists[7]) > 0) {
 		print '				<li class="artists_producer"><strong class="artists_label">Produced by:</strong></li>';
-		foreach($Artists[7] as $Artist) {
+		foreach ($Artists[7] as $Artist) {
 ?>
 				<li class="artists_producer">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?		      if(check_perms('torrents_edit')){
-			        $DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
-                                list($AliasID) = $DB->next_record();
-                                if (empty($AliasID)) {
-                                        $AliasID = $Artist['id'];
-                                }
+<?			if (check_perms('torrents_edit')) {
+					$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+					list($AliasID) = $DB->next_record();
+					if (empty($AliasID)) {
+						$AliasID = $Artist['id'];
+					}
 ?>
 				(<?=$AliasID?>)&nbsp;
 					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=7');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove producer">X</a></span>
-<?		      } ?>
+<?			} ?>
 				</li>
 <?
 		}
@@ -284,7 +286,7 @@ if($Categories[$GroupCategoryID-1] == 'Music') {
 			</ul>
 		</div>
 <?
-		if(check_perms('torrents_add_artist')) { ?>
+		if (check_perms('torrents_add_artist')) { ?>
 		<div class="box box_addartists">
 			<div class="head"><strong>Add artist</strong><span style="float:right;" class="additional_add_artist"><a onclick="AddArtistField(); return false;" href="#" class="brackets">+</a></span></div>
 			<div class="body">
@@ -316,12 +318,11 @@ include(SERVER_ROOT.'/sections/torrents/vote.php');
 		<div class="box box_tags">
 			<div class="head"><strong>Tags</strong></div>
 <?
-if(count($Tags) > 0) {
+if (count($Tags) > 0) {
 ?>
 			<ul class="stats nobullet">
 <?
-	foreach($Tags as $TagKey=>$Tag) {
-
+	foreach ($Tags as $TagKey=>$Tag) {
 ?>
 				<li>
 					<a href="torrents.php?taglist=<?=$Tag['name']?>" style="float:left; display:block;"><?=display_str($Tag['name'])?></a>
@@ -329,10 +330,10 @@ if(count($Tags) > 0) {
 					<a href="torrents.php?action=vote_tag&amp;way=down&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag down" class="brackets vote_tag_down">&minus;</a>
 					<?=$Tag['score']?>
 					<a href="torrents.php?action=vote_tag&amp;way=up&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag up" class="brackets vote_tag_up">+</a>
-<?		if(check_perms('users_warn')){ ?>
+<?		if (check_perms('users_warn')) { ?>
 					<a href="user.php?id=<?=$Tag['userid']?>" title="View the profile of the user that added this tag" class="brackets view_tag_user">U</a>
 <?		} ?>
-<?		if(empty($LoggedUser['DisableTagging']) && check_perms('site_delete_tag')){ ?>
+<?		if (empty($LoggedUser['DisableTagging']) && check_perms('site_delete_tag')) { ?>
 					<span class="remove remove_tag"><a href="torrents.php?action=delete_tag&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets" title="Remove tag">X</a></span>
 <?		} ?>
 					</div>
@@ -381,7 +382,6 @@ if (empty($LoggedUser['DisableTagging'])) {
 				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
 			</tr>
 <?
-
 function filelist($Str) {
 	return "</td><td>".Format::get_size($Str[1])."</td></tr>";
 }
@@ -409,14 +409,14 @@ foreach ($TorrentList as $Torrent) {
 		$CassetteApproved, $LossymasterApproved, $LossywebApproved, $LastReseedRequest,
 		$LogInDB, $HasFile, $PersonalFL, $IsSnatched) = array_values($Torrent);
 
-	if($Remastered && !$RemasterYear) {
+	if ($Remastered && !$RemasterYear) {
 		$FirstUnknown = !isset($FirstUnknown);
 	}
 
 	$Reported = false;
 	unset($ReportedTimes);
 	$Reports = $Cache->get_value('reports_torrent_'.$TorrentID);
-	if($Reports === false) {
+	if ($Reports === false) {
 		$DB->query("SELECT r.ID,
 				r.ReporterID,
 				r.Type,
@@ -429,12 +429,12 @@ foreach ($TorrentList as $Torrent) {
 		$Reports = $DB->to_array();
 		$Cache->cache_value('reports_torrent_'.$TorrentID, $Reports, 0);
 	}
-	if(count($Reports) > 0) {
+	if (count($Reports) > 0) {
 		$Reported = true;
 		include(SERVER_ROOT.'/sections/reportsv2/array.php');
 		$ReportInfo = '<table class="reportinfo_table"><tr class="colhead_dark" style="font-weight: bold;"><td>This torrent has '.count($Reports).' active '.(count($Reports) > 1 ? "reports" : "report").':</td></tr>';
 
-		foreach($Reports as $Report) {
+		foreach ($Reports as $Report) {
 			list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
 
 			$Reporter = Users::user_info($ReporterID);
@@ -442,7 +442,7 @@ foreach ($TorrentList as $Torrent) {
 
 			if (array_key_exists($ReportType, $Types[$GroupCategoryID])) {
 				$ReportType = $Types[$GroupCategoryID][$ReportType];
-			} else if(array_key_exists($ReportType,$Types['master'])) {
+			} elseif (array_key_exists($ReportType,$Types['master'])) {
 				$ReportType = $Types['master'][$ReportType];
 			} else {
 				//There was a type but it wasn't an option!
@@ -494,28 +494,28 @@ foreach ($TorrentList as $Torrent) {
 	$TorrentUploader = $Username; // Save this for "Uploaded by:" below
 
 	// similar to Torrents::torrent_info()
-	if($Format) { $ExtraInfo.=display_str($Format); $AddExtra=' / '; }
-	if($Encoding) { $ExtraInfo.=$AddExtra.display_str($Encoding); $AddExtra=' / '; }
-	if($HasLog) { $ExtraInfo.=$AddExtra.'Log'; $AddExtra=' / '; }
-	if($HasLog && $LogInDB) { $ExtraInfo.=' ('.(int) $LogScore.'%)'; }
-	if($HasCue) { $ExtraInfo.=$AddExtra.'Cue'; $AddExtra=' / '; }
-	if($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
-	if(!$ExtraInfo) {
+	if ($Format) { $ExtraInfo.=display_str($Format); $AddExtra=' / '; }
+	if ($Encoding) { $ExtraInfo.=$AddExtra.display_str($Encoding); $AddExtra=' / '; }
+	if ($HasLog) { $ExtraInfo.=$AddExtra.'Log'; $AddExtra=' / '; }
+	if ($HasLog && $LogInDB) { $ExtraInfo.=' ('.(int) $LogScore.'%)'; }
+	if ($HasCue) { $ExtraInfo.=$AddExtra.'Cue'; $AddExtra=' / '; }
+	if ($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
+	if (!$ExtraInfo) {
 		$ExtraInfo = $GroupName ; $AddExtra=' / ';
 	}
-	if($IsSnatched) { $ExtraInfo.=$AddExtra. Format::torrent_label('Snatched!'); $AddExtra=' / '; }
-	if($FreeTorrent == '1') { $ExtraInfo.=$AddExtra. Format::torrent_label('Freeleech!'); $AddExtra=' / '; }
-	if($FreeTorrent == '2') { $ExtraInfo.=$AddExtra. Format::torrent_label('Neutral Leech!'); $AddExtra=' / '; }
-	if($PersonalFL) { $ExtraInfo.=$AddExtra. Format::torrent_label('Personal Freeleech!'); $AddExtra=' / '; }
-	if($Reported) { $ExtraInfo.=$AddExtra. Format::torrent_label('Reported'); $AddExtra=' / '; }
-	if(!empty($BadTags)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad Tags'); $AddExtra=' / '; }
-	if(!empty($BadFolders)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad Folders'); $AddExtra=' / '; }
-	if(!empty($CassetteApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Cassette Approved'); $AddExtra=' / '; }
-	if(!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Lossy Master Approved'); $AddExtra=' / '; }
-	if(!empty($LossywebApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Lossy WEB Approved'); $AddExtra = ' / '; }
-	if(!empty($BadFiles)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad File Names'); $AddExtra=' / '; }
+	if ($IsSnatched) { $ExtraInfo.=$AddExtra. Format::torrent_label('Snatched!'); $AddExtra=' / '; }
+	if ($FreeTorrent == '1') { $ExtraInfo.=$AddExtra. Format::torrent_label('Freeleech!'); $AddExtra=' / '; }
+	if ($FreeTorrent == '2') { $ExtraInfo.=$AddExtra. Format::torrent_label('Neutral Leech!'); $AddExtra=' / '; }
+	if ($PersonalFL) { $ExtraInfo.=$AddExtra. Format::torrent_label('Personal Freeleech!'); $AddExtra=' / '; }
+	if ($Reported) { $ExtraInfo.=$AddExtra. Format::torrent_label('Reported'); $AddExtra=' / '; }
+	if (!empty($BadTags)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad Tags'); $AddExtra=' / '; }
+	if (!empty($BadFolders)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad Folders'); $AddExtra=' / '; }
+	if (!empty($CassetteApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Cassette Approved'); $AddExtra=' / '; }
+	if (!empty($LossymasterApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Lossy Master Approved'); $AddExtra=' / '; }
+	if (!empty($LossywebApproved)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Lossy WEB Approved'); $AddExtra = ' / '; }
+	if (!empty($BadFiles)) { $ExtraInfo.=$AddExtra. Format::torrent_label('Bad File Names'); $AddExtra=' / '; }
 
-	if($GroupCategoryID == 1
+	if ($GroupCategoryID == 1
 		&& ($RemasterTitle != $LastRemasterTitle
 		|| $RemasterYear != $LastRemasterYear
 		|| $RemasterRecordLabel != $LastRemasterRecordLabel
@@ -545,10 +545,10 @@ foreach ($TorrentList as $Torrent) {
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?	} ?>
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
-<?	if($CanEdit) { ?>
+<?	if ($CanEdit) { ?>
 						| <a href="torrents.php?action=edit&amp;id=<?=$TorrentID ?>" title="Edit">ED</a>
 <?	} ?>
-<?	if(check_perms('torrents_delete') || $UserID == $LoggedUser['ID']) { ?>
+<?	if (check_perms('torrents_delete') || $UserID == $LoggedUser['ID']) { ?>
 						| <a href="torrents.php?action=delete&amp;torrentid=<?=$TorrentID ?>" title="Remove">RM</a>
 <?	} ?>
 
@@ -561,56 +561,54 @@ foreach ($TorrentList as $Torrent) {
 				<td><?=number_format($Seeders)?></td>
 				<td><?=number_format($Leechers)?></td>
 			</tr>
-			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> torrentdetails pad <? if(!isset($_GET['torrentid']) || $_GET['torrentid']!=$TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
+			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> torrentdetails pad <? if (!isset($_GET['torrentid']) || $_GET['torrentid']!=$TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
 				<td colspan="5">
-                                        <div id="release_<?=$TorrentID?>" class="no_overflow">
-        					<blockquote>
-        						Uploaded by <?=Users::format_username($UserID, false, false, false)?> <?=time_diff($TorrentTime);?>
-<? if($Seeders == 0){ ?>
-        						<?
-        						if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
-       							<br /><strong>Last active: <?=time_diff($LastActive);?></strong>
-                                                        <?} else { ?>
-                                                        <br />Last active: <?=time_diff($LastActive);?>
-                                                        <?} ?>
-                                                        <?
-                                                        if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time()-strtotime($LastReseedRequest)>=864000) { ?>
-                                                        <br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
-                                                        <?} ?>
+					<div id="release_<?=$TorrentID?>" class="no_overflow">
+						<blockquote>
+							Uploaded by <?=Users::format_username($UserID, false, false, false)?> <?=time_diff($TorrentTime);?>
+<?	if ($Seeders == 0) { ?>
+<?
+					if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
+						<br /><strong>Last active: <?=time_diff($LastActive); ?></strong>
+<?					} else { ?>
+						<br />Last active: <?=time_diff($LastActive); ?>
+<?					}
+					if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) { ?>
+						<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
+<?					} ?>
 
-<? } ?>
-
-					</blockquote>
-                                        </div>
-<? if(check_perms('site_moderate_requests')) { ?>
+<?	} ?>
+						</blockquote>
+					</div>
+<?	if (check_perms('site_moderate_requests')) { ?>
 					<div class="linkbox">
 						<a href="torrents.php?action=masspm&amp;id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>" class="brackets">Mass PM snatchers</a>
 					</div>
-<? } ?>
+<?	} ?>
 					<div class="linkbox">
 						<a href="#" class="brackets" onclick="show_peers('<?=$TorrentID?>', 0);return false;">View peer list</a>
-<? if(check_perms('site_view_torrent_snatchlist')) { ?>
+<?	if (check_perms('site_view_torrent_snatchlist')) { ?>
 						<a href="#" class="brackets" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
 						<a href="#" class="brackets" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
-<? } ?>
+<?	} ?>
 						<a href="#" class="brackets" onclick="show_files('<?=$TorrentID?>');return false;">View file list</a>
-<? if($Reported) { ?>
+<?	if ($Reported) { ?>
 						<a href="#" class="brackets" onclick="show_reported('<?=$TorrentID?>');return false;">View report information</a>
-<? } ?>
+<?	} ?>
 					</div>
 					<div id="peers_<?=$TorrentID?>" class="hidden"></div>
 					<div id="downloads_<?=$TorrentID?>" class="hidden"></div>
 					<div id="snatches_<?=$TorrentID?>" class="hidden"></div>
 					<div id="files_<?=$TorrentID?>" class="hidden"><?=$FileTable?></div>
-<?  if($Reported) { ?>
+<?	if ($Reported) { ?>
 					<div id="reported_<?=$TorrentID?>" class="hidden"><?=$ReportInfo?></div>
-<? } ?>
-					<? if(!empty($Description)) {
-						echo '<blockquote>'.$Text->full_format($Description).'</blockquote>';}
-					?>
+<?	}
+	if (!empty($Description)) {
+			echo '<blockquote>'.$Text->full_format($Description).'</blockquote>';}
+?>
 				</td>
 			</tr>
-<? } ?>
+<?	} ?>
 		</table>
 <?
 $Requests = get_group_requests($GroupID);
@@ -625,10 +623,10 @@ if (count($Requests) > 0) {
 					<td>Votes</td>
 					<td>Bounty</td>
 				</tr>
-<?	foreach($Requests as $Request) {
+<?	foreach ($Requests as $Request) {
 		$RequestVotes = get_votes_array($Request['ID']);
 
-		if($Request['BitrateList'] != "") {
+		if ($Request['BitrateList'] != "") {
 			$BitrateString = implode(", ", explode("|", $Request['BitrateList']));
 			$FormatString = implode(", ", explode("|", $Request['FormatList']));
 			$MediaString = implode(", ", explode("|", $Request['MediaList']));
@@ -645,7 +643,7 @@ if (count($Requests) > 0) {
 					<td><a href="requests.php?action=view&amp;id=<?=$Request['ID']?>"><?=$FormatString?> / <?=$BitrateString?> / <?=$MediaString?></a></td>
 					<td>
 						<span id="vote_count_<?=$Request['ID']?>"><?=count($RequestVotes['Voters'])?></span>
-<?			if(check_perms('site_vote')){ ?>
+<?			if (check_perms('site_vote')) { ?>
 						&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$Request['ID']?>)" class="brackets">+</a>
 <?			} ?>
 					</td>
@@ -657,12 +655,12 @@ if (count($Requests) > 0) {
 <?
 }
 $Collages = $Cache->get_value('torrent_collages_'.$GroupID);
-if(!is_array($Collages)) {
+if (!is_array($Collages)) {
 	$DB->query("SELECT c.Name, c.NumTorrents, c.ID FROM collages AS c JOIN collages_torrents AS ct ON ct.CollageID=c.ID WHERE ct.GroupID='$GroupID' AND Deleted='0' AND CategoryID!='0'");
 	$Collages = $DB->to_array();
 	$Cache->cache_value('torrent_collages_'.$GroupID, $Collages, 3600*6);
 }
-if(count($Collages)>0) {
+if (count($Collages) > 0) {
 	if (count($Collages) > MAX_COLLAGES) {
 		// Pick some at random
 		$Range = range(0,count($Collages) - 1);
@@ -701,13 +699,13 @@ if(count($Collages)>0) {
 }
 
 $PersonalCollages = $Cache->get_value('torrent_collages_personal_'.$GroupID);
-if(!is_array($PersonalCollages)) {
+if (!is_array($PersonalCollages)) {
 	$DB->query("SELECT c.Name, c.NumTorrents, c.ID FROM collages AS c JOIN collages_torrents AS ct ON ct.CollageID=c.ID WHERE ct.GroupID='$GroupID' AND Deleted='0' AND CategoryID='0'");
 	$PersonalCollages = $DB->to_array(false, MYSQLI_NUM);
 	$Cache->cache_value('torrent_collages_personal_'.$GroupID, $PersonalCollages, 3600*6);
 }
 
-if(count($PersonalCollages)>0) {
+if (count($PersonalCollages) > 0) {
 	if (count($PersonalCollages) > MAX_PERS_COLLAGES) {
 		// Pick some at random
 		$Range = range(0,count($PersonalCollages) - 1);
@@ -756,7 +754,7 @@ include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 
 // gets the amount of comments for this group
 $Results = $Cache->get_value('torrent_comments_'.$GroupID);
-if($Results === false) {
+if ($Results === false) {
 	$DB->query("SELECT
 			COUNT(c.ID)
 			FROM torrents_comments as c
@@ -765,7 +763,7 @@ if($Results === false) {
 	$Cache->cache_value('torrent_comments_'.$GroupID, $Results, 0);
 }
 
-if(isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
+if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
 	$DB->query("SELECT COUNT(ID) FROM torrents_comments WHERE GroupID = $GroupID AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
 	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
@@ -781,7 +779,7 @@ $CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
 $Catalogue = $Cache->get_value('torrent_comments_'.$GroupID.'_catalogue_'.$CatalogueID);
-if($Catalogue === false) {
+if ($Catalogue === false) {
 	$DB->query("SELECT
 			c.ID,
 			c.AuthorID,
@@ -809,9 +807,8 @@ echo $Pages;
 ?>
 	</div>
 <?
-
 //---------- Begin printing
-foreach($Thread as $Key => $Post) {
+foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
