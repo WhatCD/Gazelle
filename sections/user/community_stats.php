@@ -134,7 +134,7 @@ $ViewBounty = check_paranoia_here('requestsvoted_bounty');
 				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Seeding: <?=number_format($Seeding)?>
 <?					if (($AOverride=check_paranoia_here('seeding'))) {
 						echo ((($Override=check_paranoia_here('snatched')) && $UniqueSnatched > 0 )
-						? '<span'.($Override===2 ? ' class="paranoia_override"' : '').'>(' . 100*min(1,round($Seeding/$UniqueSnatched,2)).'%)</span>' : ''); ?>
+						? '<span'.($Override===2 ? ' class="paranoia_override"' : '').'> (' . 100*min(1,round($Seeding/$UniqueSnatched,2)).'%)</span>' : ''); ?>
 					<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" class="brackets<?= $AOverride===2 ? ' paranoia_override' :'' ?>" title="View">View</a>
 <?						if (check_perms('zip_downloader')) { ?>
 					<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected; be sure to check the size of all torrents before redownloading.');" class="brackets" title="Download">Download</a>

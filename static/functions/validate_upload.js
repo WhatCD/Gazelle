@@ -7,7 +7,7 @@
 					checkHasMainArtist(e);
 			}
 		});
-		
+
 		/**
 		 * Make sure a main artist is selected.
 		 */
@@ -25,5 +25,5 @@
 			}
 		}
 	});
-	
+
 })(jQuery);

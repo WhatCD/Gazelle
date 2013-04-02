@@ -5,7 +5,7 @@
  * $_GET['target'] further filters which transcodes one would like to do and can be empty/any (default), v0, v2, 320 or all
  *	Here, 'any' means that at least one of the formats V0, V2 and 320 is missing and 'all' means that all of them are missing.
  *  'v0' etc mean that this specific format is missing (but others might be present).
- * 
+ *
  * Furthermore, there's $_GET['userid'] which allows to see the page as a different user would see it (specifically relevant for uploaded/snatched/seeding).
  */
 
@@ -97,7 +97,7 @@ function transcode_parse_groups($Groups) {
 					'FLACIsSnatched' => false
 				);
 			}
-			
+
 			if ($Torrent['Format'] == 'MP3') {
 				$TorrentGroups[$GroupID]['Editions'][$RemIdent]['MP3s'][$Torrent['Encoding']] = true;
 			} elseif ($Torrent['Format'] == 'FLAC' && ($Torrent['LogScore'] == 100 || $Torrent['Media'] != 'CD')
@@ -117,7 +117,7 @@ if(in_array($_GET['filter'], array('all', 'uploaded'))) {
 	if($_GET['filter'] == 'uploaded') {
 		$SphQL->where('uploader', $UserID);
 	}
-	
+
 	$SphQLResult = $SphQL->query();
 	$ResultCount = $SphQLResult->get_meta('total');
 	if ($ResultCount != 0) {
@@ -249,7 +249,7 @@ View::show_header('Transcode Search');
 	<div class="box pad" style="padding:10px 10px 10px 20px;">
 		<p>
 			This page aims at listing <?=TORRENTS_PER_PAGE?> random transcodable perfect FLACs matching the options you selected above, but there can be more or less matches on this page. The following numbers tell you something about the torrents currently listed below and can change if you reload.<br /><br />
-			
+
 			Number of perfect FLACs you can transcode: <?=number_format($Counter['total'])?><br />
 			Number of missing transcodes: <?=number_format($Counter['miss_total'])?><br />
 			Number of missing V2 / V0 / 320 transcodes: <?=number_format($Counter['miss_V2 (VBR)'])?> / <?=number_format($Counter['miss_V0 (VBR)'])?> / <?=number_format($Counter['miss_320'])?>

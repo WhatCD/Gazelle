@@ -1,7 +1,7 @@
 <?
 
 /*
-if(isset($LoggedUser)) {
+if (isset($LoggedUser)) {
 	
 	//Silly user, what are you doing here!
 	header('Location: index.php');
@@ -13,18 +13,18 @@ include(SERVER_ROOT.'/classes/class_validate.php');
 
 $Val=NEW VALIDATE;
 
-if(!empty($_REQUEST['confirm'])) {
+if (!empty($_REQUEST['confirm'])) {
 	// Confirm registration
 	$DB->query("SELECT ID FROM users_main WHERE torrent_pass='".db_string($_REQUEST['confirm'])."' AND Enabled='0'");
 	list($UserID)=$DB->next_record();
 
-	if($UserID) {
+	if ($UserID) {
 		$DB->query("UPDATE users_main SET Enabled='1' WHERE ID='$UserID'");
 		$Cache->increment('stats_user_count');
 		include('step2.php');
 	}
 
-} elseif(OPEN_REGISTRATION || !empty($_REQUEST['invite'])) {
+} elseif (OPEN_REGISTRATION || !empty($_REQUEST['invite'])) {
 	$Val->SetFields('username',true,'regex', 'You did not enter a valid username.',array('regex'=>'/^[a-z0-9_?]{1,20}$/iD'));
 	$Val->SetFields('email',true,'email', 'You did not enter a valid email address.');
 	$Val->SetFields('password',true,'regex','A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol',array('regex'=>'/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
@@ -34,27 +34,27 @@ if(!empty($_REQUEST['confirm'])) {
 	$Val->SetFields('agereq',true,'checkbox', 'You did not check the box that says you are 13 years of age or older.');
 	//$Val->SetFields('captcha',true,'string', 'You did not enter a captcha code.',array('minlength'=>6,'maxlength'=>6));
 
-	if(!empty($_POST['submit'])) {
+	if (!empty($_POST['submit'])) {
 		// User has submitted registration form
 		$Err=$Val->ValidateForm($_REQUEST);
 		/*
-		if(!$Err && strtolower($_SESSION['captcha'])!=strtolower($_REQUEST['captcha'])) {
+		if (!$Err && strtolower($_SESSION['captcha'])!=strtolower($_REQUEST['captcha'])) {
 			$Err="You did not enter the correct captcha code.";
 		}
 		*/
-		if(!$Err) {
+		if (!$Err) {
 
 			$DB->query("SELECT COUNT(ID) FROM users_main WHERE Username LIKE '".db_string(trim($_POST['username']))."'");
 			list($UserCount)=$DB->next_record();
 
-			if($UserCount) {
+			if ($UserCount) {
 				$Err = "There is already someone registered with that username.";
 				$_REQUEST['username']='';
 			}
 
-			if($_POST['invite']) {
+			if ($_POST['invite']) {
 				$DB->query("SELECT InviterID, Email FROM invites WHERE InviteKey='".db_string($_REQUEST['invite'])."'");
-				if($DB->record_count() == 0) {
+				if ($DB->record_count() == 0) {
 					$Err = 'Invite does not exist.';
 					$InviterID=0;
 				} else {
@@ -65,13 +65,13 @@ if(!empty($_REQUEST['confirm'])) {
 			}
 		}
 
-		if(!$Err) {
+		if (!$Err) {
 			$torrent_pass=Users::make_secret();
 
 			// Previously SELECT COUNT(ID) FROM users_main, which is a lot slower.
 			$DB->query("SELECT ID FROM users_main LIMIT 1");
 			$UserCount = $DB->record_count();
-			if($UserCount == 0) {
+			if ($UserCount == 0) {
 				$NewInstall = true;
 				$Class = SYSOP;
 				$Enabled = '1';
@@ -121,7 +121,7 @@ if(!empty($_REQUEST['confirm'])) {
 
 			// Manage invite trees, delete invite
 
-			if($InviterID !== NULL) {
+			if ($InviterID !== NULL) {
 				$DB->query("SELECT
 					TreePosition, TreeID, TreeLevel
 					FROM invite_tree WHERE UserID='$InviterID'");
@@ -129,7 +129,7 @@ if(!empty($_REQUEST['confirm'])) {
 
 				// If the inviter doesn't have an invite tree
 				// Note: This should never happen unless you've transferred from another database, like What.CD did
-				if($DB->record_count() == 0) {
+				if ($DB->record_count() == 0) {
 					$DB->query("SELECT MAX(TreeID)+1 FROM invite_tree");
 					list($TreeID) = $DB->next_record();
 
@@ -150,7 +150,7 @@ if(!empty($_REQUEST['confirm'])) {
 						LIMIT 1");
 					list($TreePosition) = $DB->next_record();
 
-					if($TreePosition) {
+					if ($TreePosition) {
 						$DB->query("UPDATE invite_tree SET TreePosition=TreePosition+1 WHERE TreeID='$TreeID' AND TreePosition>='$TreePosition'");
 					} else {
 						$DB->query("SELECT
@@ -194,17 +194,17 @@ if(!empty($_REQUEST['confirm'])) {
 			
 		}
 
-	} elseif($_GET['invite']) {
+	} elseif ($_GET['invite']) {
 		// If they haven't submitted the form, check to see if their invite is good
 		$DB->query("SELECT InviteKey FROM invites WHERE InviteKey='".db_string($_GET['invite'])."'");
-		if($DB->record_count() == 0){
+		if ($DB->record_count() == 0) {
 			error('Invite not found!');
 		}
 	}
 
 	include('step1.php');
 
-} elseif(!OPEN_REGISTRATION) {
+} elseif (!OPEN_REGISTRATION) {
 	if (isset($_GET['welcome'])) {
 		include('code.php');
 	} else {

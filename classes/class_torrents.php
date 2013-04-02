@@ -748,8 +748,8 @@ class Torrents {
 		}
 		return isset($CurSnatchedTorrents[$TorrentID]);
 	}
-	
-	
+
+
 	public static function edition_string(array $Torrent, array $Group) {
 		if ($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
 			$EditionName = $Torrent['RemasterYear'];
