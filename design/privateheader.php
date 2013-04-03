@@ -58,7 +58,6 @@ if (isset($LoggedUser['Notify'])) {
 <?
 	}
 }
-
 ?>
 
 	<script src="<?=STATIC_SERVER?>functions/sizzle.js" type="text/javascript"></script>
