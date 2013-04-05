@@ -214,6 +214,16 @@ CREATE TABLE `concerts` (
   KEY `TopicID` (`TopicID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `disable_list` (
+  `Nick` varchar(255) COLLATE utf8_bin NOT NULL,
+  `Username` varchar(255) COLLATE utf8_bin NOT NULL,
+  `UserID` int(10) unsigned NOT NULL,
+  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Moderator` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`Nick`),
+  KEY `UserID` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE `do_not_upload` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) COLLATE utf8_bin NOT NULL,

@@ -2,6 +2,7 @@
 class IRC_DB extends DB_MYSQL {
 	function halt($Msg) {
 		global $Bot;
+		global $DB;
 		$Bot->send_to($Bot->get_channel(),'The database is currently unavailable try again later');
 	}
 }
@@ -176,6 +177,25 @@ abstract class IRC_BOT {
 				if(preg_match("/:([^!]+)![^\s]* QUIT.* /", $this->Data, $Nick)) {
 					if(isset($this->Identified[$Nick[1]])) {
 						unset($this->Identified[$Nick[1]]);
+					}
+					if (isset($this->DisabledUsers[$Nick[1]])) {
+						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[1] . "'");
+						unset($this->DisabledUsers[$Nick[1]]);
+					}
+				}
+
+				if (preg_match("/:([^!]+)![^\s]* PART #what.cd-disabled/", $this->Data, $Nick)) {
+					if (isset($this->DisabledUsers[$Nick[1]])) {
+						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[1] . "'");
+						unset($this->DisabledUsers[$Nick[1]]);
+					}
+				}
+
+				if (preg_match("/:([^!]+)![^\s]* KICK #what.cd-disabled.* /", $this->Data, $Nick)) {
+					if (isset($this->DisabledUsers[$Nick[1]])) {
+						$Nick = explode(" ", $Nick[0]);
+						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[3] . "'");
+						unset($this->DisabledUsers[$Nick[1]]);
 					}
 				}
 

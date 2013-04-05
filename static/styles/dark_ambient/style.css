@@ -375,6 +375,7 @@ ul#userinfo_minor a:hover {
 ul#userinfo_major {
 	z-index: 3;
 	padding-left: 530px;
+	width: 365px;
 }
 
 ul#userinfo_minor {
@@ -393,6 +394,7 @@ ul#userinfo_stats {
 ul#userinfo_username {
 	z-index: 6;
 	padding-left: 320px;
+	width: 175px;
 }
 
 #alerts {

@@ -1,13 +1,16 @@
 <?
-if(!check_perms('admin_manage_permissions')) { error(403); }
+if (!check_perms('admin_manage_permissions')) {
+	error(403);
+}
 View::show_header('Special Users List');
 ?>
 <div class="thin">
 <?
-$DB->query("SELECT m.ID FROM users_main AS m
-	WHERE m.CustomPermissions != ''
-	AND m.CustomPermissions != 'a:0:{}'");
-if($DB->record_count()) {
+$DB->query("SELECT m.ID
+			FROM users_main AS m
+			WHERE m.CustomPermissions != ''
+			AND m.CustomPermissions != 'a:0:{}'");
+if ($DB->record_count()) {
 ?>
 	<table width="100%">
 		<tr class="colhead">
@@ -15,7 +18,7 @@ if($DB->record_count()) {
 			<td>Access</td>
 		</tr>
 <?
-	while(list($UserID)=$DB->next_record()) {
+	while (list($UserID)=$DB->next_record()) {
 ?>
 		<tr>
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
@@ -23,8 +26,10 @@ if($DB->record_count()) {
 		</tr>
 <?	} ?>
 	</table>
-<? } else { ?>
+<?
+} else { ?>
 	<h2 align="center">There are no special users.</h2>
-<? } ?>
+<?
+} ?>
 </div>
 <? View::show_footer(); ?>

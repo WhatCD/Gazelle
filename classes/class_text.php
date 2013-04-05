@@ -92,7 +92,7 @@ class TEXT {
 	 */
 	public function __construct ($TOC = false) {
 		$this->TOC = (bool) $TOC;
-		foreach($this->Smileys as $Key=>$Val) {
+		foreach ($this->Smileys as $Key=>$Val) {
 			$this->Smileys[$Key] = '<img border="0" src="'.STATIC_SERVER.'common/smileys/'.$Val.'" alt="" />';
 		}
 		reset($this->Smileys);
@@ -166,7 +166,7 @@ class TEXT {
 		$Regex .= '(:[0-9]{1,5})?'; // port
 		$Regex .= '\/?'; // slash?
 		$Regex .= '(\/?[0-9a-z\-_.,&=@~%\/:;()+|!#]+)*'; // /file
-		if(!empty($Extension)) {
+		if (!empty($Extension)) {
 			$Regex.=$Extension;
 		}
 
@@ -185,16 +185,16 @@ class TEXT {
 
 	public function local_url ($Str) {
 		$URLInfo = parse_url($Str);
-		if(!$URLInfo) { return false; }
+		if (!$URLInfo) { return false; }
 		$Host = $URLInfo['host'];
 		// If for some reason your site does not require subdomains or contains a directory in the SITE_URL, revert to the line below.
-		//if($Host == NONSSL_SITE_URL || $Host == SSL_SITE_URL || $Host == 'www.'.NONSSL_SITE_URL) {
-		if(empty($URLInfo['port']) && preg_match('/(\S+\.)*'.NONSSL_SITE_URL.'/', $Host)) {
+		//if ($Host == NONSSL_SITE_URL || $Host == SSL_SITE_URL || $Host == 'www.'.NONSSL_SITE_URL) {
+		if (empty($URLInfo['port']) && preg_match('/(\S+\.)*'.NONSSL_SITE_URL.'/', $Host)) {
 			$URL = $URLInfo['path'];
-			if(!empty($URLInfo['query'])) {
+			if (!empty($URLInfo['query'])) {
 				$URL.='?'.$URLInfo['query'];
 			}
-			if(!empty($URLInfo['fragment'])) {
+			if (!empty($URLInfo['fragment'])) {
 				$URL.='#'.$URLInfo['fragment'];
 			}
 			return $URL;
@@ -249,7 +249,7 @@ class TEXT {
 		$Array = array();
 		$ArrayPos = 0;
 
-		while($i<$Len) {
+		while ($i < $Len) {
 			$Block = '';
 
 			// 1) Find the next tag (regex)
@@ -257,7 +257,7 @@ class TEXT {
 			$IsTag = preg_match("/((\[[a-zA-Z*#]+)(=(?:[^\n'\"\[\]]|\[\d*\])+)?\])|(\[\[[^\n\"'\[\]]+\]\])/", $Str, $Tag, PREG_OFFSET_CAPTURE, $i);
 
 			// 1a) If there aren't any tags left, write everything remaining to a block
-			if(!$IsTag) {
+			if (!$IsTag) {
 				// No more tags
 				$Array[$ArrayPos] = substr($Str, $i);
 				break;
@@ -265,14 +265,14 @@ class TEXT {
 
 			// 1b) If the next tag isn't where the pointer is, write everything up to there to a text block.
 			$TagPos = $Tag[0][1];
-			if($TagPos>$i) {
-				$Array[$ArrayPos] = substr($Str, $i, $TagPos-$i);
+			if ($TagPos > $i) {
+				$Array[$ArrayPos] = substr($Str, $i, $TagPos - $i);
 				++$ArrayPos;
-				$i=$TagPos;
+				$i = $TagPos;
 			}
 
 			// 2) See if it's a [[wiki-link]] or an ordinary tag, and get the tag name
-			if(!empty($Tag[4][0])) { // Wiki-link
+			if (!empty($Tag[4][0])) { // Wiki-link
 				$WikiLink = true;
 				$TagName = substr($Tag[4][0], 2, -2);
 				$Attrib = '';
@@ -281,9 +281,9 @@ class TEXT {
 				$TagName = strtolower(substr($Tag[2][0], 1));
 
 				//3a) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
-				if(!isset($this->ValidTags[$TagName])) {
-					$Array[$ArrayPos] = substr($Str, $i, ($TagPos-$i)+strlen($Tag[0][0]));
-					$i=$TagPos+strlen($Tag[0][0]);
+				if (!isset($this->ValidTags[$TagName])) {
+					$Array[$ArrayPos] = substr($Str, $i, ($TagPos - $i)+strlen($Tag[0][0]));
+					$i = $TagPos + strlen($Tag[0][0]);
 					++$ArrayPos;
 					continue;
 				}
@@ -291,7 +291,7 @@ class TEXT {
 				$MaxAttribs = $this->ValidTags[$TagName];
 
 				// 3b) Get the attribute, if it exists [name=attribute]
-				if(!empty($Tag[3][0])) {
+				if (!empty($Tag[3][0])) {
 					$Attrib = substr($Tag[3][0], 1);
 				} else {
 					$Attrib='';
@@ -309,21 +309,21 @@ class TEXT {
 
 
 			//5a) Different for different types of tag. Some tags don't close, others are weird like [*]
-			if($TagName == 'img' && !empty($Tag[3][0])) { //[img=...]
+			if ($TagName == 'img' && !empty($Tag[3][0])) { //[img=...]
 				$Block = ''; // Nothing inside this tag
 				// Don't need to touch $i
-			} elseif($TagName == 'inlineurl') { // We did a big replace early on to turn http:// into [inlineurl]http://
+			} elseif ($TagName == 'inlineurl') { // We did a big replace early on to turn http:// into [inlineurl]http://
 
 				// Let's say the block can stop at a newline or a space
 				$CloseTag = strcspn($Str, " \n\r", $i);
-				if($CloseTag === false) { // block finishes with URL
+				if ($CloseTag === false) { // block finishes with URL
 					$CloseTag = $Len;
 				}
-				if(preg_match('/[!,.?:]+$/',substr($Str, $i, $CloseTag), $Match)) {
+				if (preg_match('/[!,.?:]+$/',substr($Str, $i, $CloseTag), $Match)) {
 					$CloseTag -= strlen($Match[0]);
 				}
 				$URL = substr($Str, $i, $CloseTag);
-				if(substr($URL, -1) == ')' && substr_count($URL, '(') < substr_count($URL, ')')) {
+				if (substr($URL, -1) == ')' && substr_count($URL, '(') < substr_count($URL, ')')) {
 					$CloseTag--;
 					$URL = substr($URL, 0, -1);
 				}
@@ -332,17 +332,17 @@ class TEXT {
 				// strcspn returns the number of characters after the offset $i, not after the beginning of the string
 				// Therefore, we use += instead of the = everywhere else
 				$i += $CloseTag; // 5d) Move the pointer past the end of the [/close] tag.
-			} elseif($WikiLink == true || $TagName == 'n') {
+			} elseif ($WikiLink == true || $TagName == 'n') {
 				// Don't need to do anything - empty tag with no closing
-			} elseif($TagName === '*' || $TagName === '#') {
+			} elseif ($TagName === '*' || $TagName === '#') {
 				// We're in a list. Find where it ends
 				$NewLine = $i;
 				do { // Look for \n[*]
 					$NewLine = strpos($Str, "\n", $NewLine+1);
-				} while($NewLine!== false && substr($Str, $NewLine+1, 3) == '['.$TagName.']');
+				} while ($NewLine!== false && substr($Str, $NewLine+1, 3) == '['.$TagName.']');
 
 				$CloseTag = $NewLine;
-				if($CloseTag === false) { // block finishes with list
+				if ($CloseTag === false) { // block finishes with list
 					$CloseTag = $Len;
 				}
 				$Block = substr($Str, $i, $CloseTag-$i); // Get the list
@@ -355,7 +355,7 @@ class TEXT {
 				$NumInCloses = -1;
 
 				$InOpenRegex = '/\[('.$TagName.')';
-				if($MaxAttribs>0) {
+				if ($MaxAttribs > 0) {
 					$InOpenRegex.="(=[^\n'\"\[\]]+)?";
 				}
 				$InOpenRegex.='\]/i';
@@ -365,7 +365,7 @@ class TEXT {
 				// (as the first close tag won't do - it's been opened again)
 				do {
 					$CloseTag = stripos($Str, '[/'.$TagName.']', $CloseTag+1);
-					if($CloseTag === false) {
+					if ($CloseTag === false) {
 						$CloseTag = $Len;
 						break;
 					} else {
@@ -374,14 +374,14 @@ class TEXT {
 
 					// Is there another open tag inside this one?
 					$OpenTag = preg_match($InOpenRegex, $Str, $InTag, PREG_OFFSET_CAPTURE, $InTagPos+1);
-					if(!$OpenTag || $InTag[0][1]>$CloseTag) {
+					if (!$OpenTag || $InTag[0][1] > $CloseTag) {
 						break;
 					} else {
 						$InTagPos = $InTag[0][1];
 						$NumInOpens++;
 					}
 
-				} while($NumInOpens>$NumInCloses);
+				} while ($NumInOpens > $NumInCloses);
 
 
 				// Find the internal block inside the tag
@@ -398,7 +398,7 @@ class TEXT {
 					break;
 				case 'url':
 					$Array[$ArrayPos] = array('Type'=>'img', 'Attr'=>$Attrib, 'Val'=>$Block);
-					if(empty($Attrib)) { // [url]http://...[/url] - always set URL to attribute
+					if (empty($Attrib)) { // [url]http://...[/url] - always set URL to attribute
 						$Array[$ArrayPos] = array('Type'=>'url', 'Attr'=>$Block, 'Val'=>'');
 					} else {
 						$Array[$ArrayPos] = array('Type'=>'url', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
@@ -409,7 +409,7 @@ class TEXT {
 					break;
 				case 'img':
 				case 'image':
-					if(empty($Block)) {
+					if (empty($Block)) {
 						$Block = $Attrib;
 					}
 					$Array[$ArrayPos] = array('Type'=>'img', 'Val'=>$Block);
@@ -417,7 +417,7 @@ class TEXT {
 				case 'aud':
 				case 'mp3':
 				case 'audio':
-					if(empty($Block)) {
+					if (empty($Block)) {
 						$Block = $Attrib;
 					}
 					$Array[$ArrayPos] = array('Type'=>'aud', 'Val'=>$Block);
@@ -472,7 +472,7 @@ class TEXT {
 						$Array[$ArrayPos]['Val'] = explode('['.$TagName.']', $Block);
 						$Array[$ArrayPos]['ListType'] = $TagName === '*' ? 'ul' : 'ol';
 						$Array[$ArrayPos]['Tag'] = $TagName;
-						foreach($Array[$ArrayPos]['Val'] as $Key=>$Val) {
+						foreach ($Array[$ArrayPos]['Val'] as $Key=>$Val) {
 							$Array[$ArrayPos]['Val'][$Key] = $this->parse(trim($Val));
 						}
 					break;
@@ -480,14 +480,14 @@ class TEXT {
 					$ArrayPos--;
 					break; // n serves only to disrupt bbcode (backwards compatibility - use [pre])
 				default:
-					if($WikiLink == true) {
+					if ($WikiLink == true) {
 						$Array[$ArrayPos] = array('Type'=>'wiki','Val'=>$TagName);
 					} else {
 
 						// Basic tags, like [b] or [size=5]
 
 						$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>$this->parse($Block));
-						if(!empty($Attrib) && $MaxAttribs>0) {
+						if (!empty($Attrib) && $MaxAttribs>0) {
 							$Array[$ArrayPos]['Attr'] = strtolower($Attrib);
 						}
 					}
@@ -512,7 +512,7 @@ class TEXT {
 
 			foreach ($this->Headlines as $t) {
 				$n = (int) $t[0];
-				if($i === 0 && $n > 1) $off = $n - $level;
+				if ($i === 0 && $n > 1) $off = $n - $level;
 				$this->headline_level($n, $level, $list, $i, $off);
 				$list .= sprintf('<li><a href="#%2$s">%1$s</a>', $t[1], $t[2]);
 				$level = $t[0];
@@ -565,11 +565,11 @@ class TEXT {
 	private function to_html ($Array) {
 		global $SSL;
 		$this->Levels++;
-		if($this->Levels>10) { return $Block['Val']; } // Hax prevention
+		if ($this->Levels>10) { return $Block['Val']; } // Hax prevention
 		$Str = '';
 
-		foreach($Array as $Block) {
-			if(is_string($Block)) {
+		foreach ($Array as $Block) {
+			if (is_string($Block)) {
 				$Str.=$this->smileys($Block);
 				continue;
 			}
@@ -597,7 +597,7 @@ class TEXT {
 					break;
 				case 'rule':
 					$Rule = trim(strtolower($Block['Val']));
-					if($Rule[0] != 'r' && $Rule[0] != 'h') {
+					if ($Rule[0] != 'r' && $Rule[0] != 'h') {
 						$Rule = 'r'.$Rule;
 					}
 					$Str.='<a href="rules.php?p=upload#'.urlencode(Format::undisplay_str($Rule)).'">'.preg_replace('/[aA-zZ]/', '', $Block['Val']).'</a>';
@@ -636,7 +636,7 @@ class TEXT {
 					break;
 				case 'list':
 					$Str.='<'.$Block['ListType'].'>';
-					foreach($Block['Val'] as $Line) {
+					foreach ($Block['Val'] as $Line) {
 
 						$Str.='<li>'.$this->to_html($Line).'</li>';
 					}
@@ -644,7 +644,7 @@ class TEXT {
 					break;
 				case 'align':
 					$ValidAttribs = array('left', 'center', 'right');
-					if(!in_array($Block['Attr'], $ValidAttribs)) {
+					if (!in_array($Block['Attr'], $ValidAttribs)) {
 						$Str.='[align='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/align]';
 					} else {
 						$Str.='<div style="text-align:'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</div>';
@@ -653,7 +653,7 @@ class TEXT {
 				case 'color':
 				case 'colour':
 					$ValidAttribs = array('aqua', 'black', 'blue', 'fuchsia', 'green', 'grey', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow');
-					if(!in_array($Block['Attr'], $ValidAttribs) && !preg_match('/^#[0-9a-f]{6}$/', $Block['Attr'])) {
+					if (!in_array($Block['Attr'], $ValidAttribs) && !preg_match('/^#[0-9a-f]{6}$/', $Block['Attr'])) {
 						$Str.='[color='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/color]';
 					} else {
 						$Str.='<span style="color:'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
@@ -662,7 +662,7 @@ class TEXT {
 				case 'headline':
 					$text = $this->to_html($Block['Val']);
 					$raw = $this->raw_text($Block['Val']);
-					if(!in_array($Block['Attr'], $this->HeadlineLevels)) {
+					if (!in_array($Block['Attr'], $this->HeadlineLevels)) {
 						$Str .= sprintf('%1$s%2$s%1$s', str_repeat('=', $Block['Attr'] + 1), $text);
 					} else {
 						$id = '_' . crc32($raw . $this->HeadlineID);
@@ -675,7 +675,7 @@ class TEXT {
 				case 'inlinesize':
 				case 'size':
 					$ValidAttribs = array('1','2','3','4','5','6','7','8','9','10');
-					if(!in_array($Block['Attr'], $ValidAttribs)) {
+					if (!in_array($Block['Attr'], $ValidAttribs)) {
 						$Str.='[size='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/size]';
 					} else {
 						$Str.='<span class="size'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
@@ -684,9 +684,9 @@ class TEXT {
 				case 'quote':
 					$this->NoImg++; // No images inside quote tags
 					$this->InQuotes++;
-					if(!empty($Block['Attr'])) {
+					if (!empty($Block['Attr'])) {
 						$Exploded = explode("|", $this->to_html($Block['Attr']));
-						if(isset($Exploded[1]) && is_numeric($Exploded[1])) {
+						if (isset($Exploded[1]) && is_numeric($Exploded[1])) {
 							$PostID = trim($Exploded[1]);
 							$Str.='<a href="#" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
@@ -704,8 +704,8 @@ class TEXT {
 					break;
 				case 'mature':
 					global $LoggedUser;
-					if($LoggedUser['EnableMatureContent']) {
-						if(!empty($Block['Attr'])) {
+					if ($LoggedUser['EnableMatureContent']) {
+						if (!empty($Block['Attr'])) {
 							$Str.='<strong class="mature" style="font-size: 1.2em;">Mature content:</strong><strong> ' . $Block['Attr'] . '</strong><br \> <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
 							$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
 						}
@@ -714,21 +714,21 @@ class TEXT {
 						}
 					}
 					else {
-						$Str.='<span class="mature_blocked" style="font-style:italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content </a>has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
+						$Str.='<span class="mature_blocked" style="font-style: italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content</a> has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
 					}
 					break;
 				case 'img':
-					if($this->NoImg>0 && $this->valid_url($Block['Val'])) {
+					if ($this->NoImg>0 && $this->valid_url($Block['Val'])) {
 						$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (image)';
 						break;
 					}
-					if(!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
+					if (!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
 						$Str.='[img]'.$Block['Val'].'[/img]';
 					} else {
 						$LocalURL = $this->local_url($Block['Val']);
-						if($LocalURL) {
+						if ($LocalURL) {
 							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$LocalURL.'" />';
-						} elseif(check_perms('site_proxy_images')) {
+						} elseif (check_perms('site_proxy_images')) {
 							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
 						} else {
 							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';
@@ -737,11 +737,11 @@ class TEXT {
 					break;
 
 				case 'aud':
-					if($this->NoImg>0 && $this->valid_url($Block['Val'])) {
+					if ($this->NoImg>0 && $this->valid_url($Block['Val'])) {
 						$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (audio)';
 						break;
 					}
-					if(!$this->valid_url($Block['Val'], '\.(mp3|ogg|wav)')) {
+					if (!$this->valid_url($Block['Val'], '\.(mp3|ogg|wav)')) {
 						$Str.='[aud]'.$Block['Val'].'[/aud]';
 					} else {
 						//TODO: Proxy this for staff?
@@ -751,7 +751,7 @@ class TEXT {
 
 				case 'url':
 					// Make sure the URL has a label
-					if(empty($Block['Val'])) {
+					if (empty($Block['Val'])) {
 						$Block['Val'] = $Block['Attr'];
 						$NoName = true; // If there isn't a Val for this
 					} else {
@@ -759,12 +759,12 @@ class TEXT {
 						$NoName = false;
 					}
 
-					if(!$this->valid_url($Block['Attr'])) {
+					if (!$this->valid_url($Block['Attr'])) {
 						$Str.='[url='.$Block['Attr'].']'.$Block['Val'].'[/url]';
 					} else {
 						$LocalURL = $this->local_url($Block['Attr']);
-						if($LocalURL) {
-							if($NoName) { $Block['Val'] = substr($LocalURL,1); }
+						if ($LocalURL) {
+							if ($NoName) { $Block['Val'] = substr($LocalURL,1); }
 							$Str.='<a href="'.$LocalURL.'">'.$Block['Val'].'</a>';
 						} else {
 							$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Val'].'</a>';
@@ -773,7 +773,7 @@ class TEXT {
 					break;
 
 				case 'inlineurl':
-					if(!$this->valid_url($Block['Attr'], '', true)) {
+					if (!$this->valid_url($Block['Attr'], '', true)) {
 						$Array = $this->parse($Block['Attr']);
 						$Block['Attr'] = $Array;
 						$Str.=$this->to_html($Block['Attr']);
@@ -781,7 +781,7 @@ class TEXT {
 
 					else {
 						$LocalURL = $this->local_url($Block['Attr']);
-						if($LocalURL) {
+						if ($LocalURL) {
 							$Str.='<a href="'.$LocalURL.'">'.substr($LocalURL,1).'</a>';
 						} else {
 							$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Attr'].'</a>';
@@ -798,8 +798,8 @@ class TEXT {
 
 	private function raw_text ($Array) {
 		$Str = '';
-		foreach($Array as $Block) {
-			if(is_string($Block)) {
+		foreach ($Array as $Block) {
+			if (is_string($Block)) {
 				$Str.=$Block;
 				continue;
 			}
@@ -829,14 +829,14 @@ class TEXT {
 					$Str.=$Block['Val'];
 					break;
 				case 'list':
-					foreach($Block['Val'] as $Line) {
+					foreach ($Block['Val'] as $Line) {
 						$Str.=$Block['Tag'].$this->raw_text($Line);
 					}
 					break;
 
 				case 'url':
 					// Make sure the URL has a label
-					if(empty($Block['Val'])) {
+					if (empty($Block['Val'])) {
 						$Block['Val'] = $Block['Attr'];
 					} else {
 						$Block['Val'] = $this->raw_text($Block['Val']);
@@ -846,7 +846,7 @@ class TEXT {
 					break;
 
 				case 'inlineurl':
-					if(!$this->valid_url($Block['Attr'], '', true)) {
+					if (!$this->valid_url($Block['Attr'], '', true)) {
 						$Array = $this->parse($Block['Attr']);
 						$Block['Attr'] = $Array;
 						$Str.=$this->raw_text($Block['Attr']);
@@ -863,7 +863,7 @@ class TEXT {
 
 	private function smileys ($Str) {
 		global $LoggedUser;
-		if(!empty($LoggedUser['DisableSmileys'])) {
+		if (!empty($LoggedUser['DisableSmileys'])) {
 			return $Str;
 		}
 		$Str = strtr($Str, $this->Smileys);

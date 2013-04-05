@@ -1,5 +1,7 @@
 <?
-if(!check_perms('site_view_flow')) { error(403); }
+if (!check_perms('site_view_flow')) {
+	error(403);
+}
 View::show_header('Upscale Pool');
 define('USERS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
@@ -29,9 +31,9 @@ $DB->query("SELECT COUNT(UserID) FROM users_info WHERE BanDate != '0000-00-00 00
 list($TotalDisabled) = $DB->next_record();
 $DB->set_query_id($RS);
 
-if($DB->record_count()) {
+if ($DB->record_count()) {
 ?>
-		<div class="box pad">
+	<div class="box pad">
 		<p>There are currently <?=number_format($Results)?> users queued by the system and <?=number_format($TotalDisabled)?> already disabled.</p>
 	</div>
 	<div class="linkbox">
@@ -54,7 +56,7 @@ if($DB->record_count()) {
 			<td>Lifespan</td>
 		</tr>
 <?
-	while(list($UserID, $Username, $Uploaded, $Downloaded, $PermissionID, $Enabled, $Donor, $Warned, $Joined, $RatioWatchEnds, $RatioWatchDownload, $RequiredRatio)=$DB->next_record()) {
+	while (list($UserID, $Username, $Uploaded, $Downloaded, $PermissionID, $Enabled, $Donor, $Warned, $Joined, $RatioWatchEnds, $RatioWatchDownload, $RequiredRatio)=$DB->next_record()) {
 	$Row = ($Row == 'b') ? 'a' : 'b';
 
 ?>
@@ -64,8 +66,8 @@ if($DB->record_count()) {
 			<td><?=Format::get_size($Downloaded)?></td>
 			<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
 			<td><?=number_format($RequiredRatio, 2)?></td>
-			<td><? if(($Downloaded*$RequiredRatio)>$Uploaded) { echo Format::get_size(($Downloaded*$RequiredRatio)-$Uploaded);}?></td>
-			<td><?=Format::get_size($Downloaded-$RatioWatchDownload)?></td>
+			<td><? if (($Downloaded * $RequiredRatio) > $Uploaded) { echo Format::get_size(($Downloaded * $RequiredRatio) - $Uploaded);}?></td>
+			<td><?=Format::get_size($Downloaded - $RatioWatchDownload)?></td>
 			<td><?=time_diff($Joined,2)?></td>
 			<td><?=time_diff($RatioWatchEnds)?></td>
 			<td><?//time_diff(strtotime($Joined), strtotime($RatioWatchEnds))?></td>
@@ -73,10 +75,10 @@ if($DB->record_count()) {
 <?	} ?>
 	</table>
 	<div class="linkbox">
-<? echo $Pages; ?>
+<?	echo $Pages; ?>
 	</div>
-<? } else { ?>
+<?	} else { ?>
 	<h2 align="center">There are currently no users on ratio watch.</h2>
-<? }
+<?	}
 View::show_footer();
 ?>
