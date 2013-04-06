@@ -255,6 +255,7 @@ ul#userinfo_username li, ul#userinfo_major li, ul#userinfo_stats li {
 
 ul#userinfo_username li a {
 	color: #bebebe;
+	overflow: hidden;
 }
 
 ul#userinfo_username li a:hover {
@@ -264,6 +265,8 @@ ul#userinfo_username li a:hover {
 
 ul#userinfo_username li a.username {
 	color: #575757;
+	max-width: 70px;
+	text-overflow: ellipsis;
 }
 
 ul#userinfo_username li a.username:hover {
@@ -380,6 +383,7 @@ ul#userinfo_minor a:hover {
 ul#userinfo_major {
 	z-index: 2;
 	padding-left: 510px;
+	width: 300px;
 }
 
 ul#userinfo_minor {
@@ -397,6 +401,7 @@ ul#userinfo_stats {
 ul#userinfo_username {
 	z-index: 5;
 	padding-left: 290px;
+	width: 200px;
 }
 
 #alerts {
@@ -1533,11 +1538,11 @@ h3 {
 }
 
 #userinfo_username .brackets {
-	padding: 0;
+	padding: 0 8px;
 }
 
 #userinfo_major .brackets {
-	padding: 0;
+	padding: 0 8px 0 0;
 }
 
 #forums table.border .cat_list {

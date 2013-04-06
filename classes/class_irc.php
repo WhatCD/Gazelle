@@ -192,10 +192,10 @@ abstract class IRC_BOT {
 				}
 
 				if (preg_match("/:([^!]+)![^\s]* KICK #what.cd-disabled.* /", $this->Data, $Nick)) {
-					if (isset($this->DisabledUsers[$Nick[1]])) {
-						$Nick = explode(" ", $Nick[0]);
+					$Nick = explode(" ", $Nick[0]);
+					if (isset($this->DisabledUsers[$Nick[3]])) {
 						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[3] . "'");
-						unset($this->DisabledUsers[$Nick[1]]);
+						unset($this->DisabledUsers[$Nick[3]]);
 					}
 				}
 

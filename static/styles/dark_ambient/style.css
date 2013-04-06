@@ -247,6 +247,7 @@ ul#userinfo_username li, ul#userinfo_major li, ul#userinfo_stats li {
 }
 
 ul#userinfo_username li a {
+	overflow: hidden;
 	color: #d5efff;
 }
 
@@ -394,7 +395,12 @@ ul#userinfo_stats {
 ul#userinfo_username {
 	z-index: 6;
 	padding-left: 320px;
-	width: 175px;
+	width: 185px;
+}
+
+.username {
+	text-overflow: ellipsis;
+	max-width: 70px;
 }
 
 #alerts {
