@@ -458,7 +458,7 @@ class Users {
 
 		if ($Badges) {
 			$ClassesDisplay = array();
-			foreach($SecondaryClasses as $PermID => $PermHTML) {
+			foreach ($SecondaryClasses as $PermID => $PermHTML) {
 				if ($UserInfo['ExtraClasses'][$PermID]) {
 					$ClassesDisplay[] = '<span class="secondary_class" title="'.$Classes[$PermID]['Name'].'">'.$PermHTML.'</span>';
 				}
@@ -547,10 +547,9 @@ class Users {
 		//case 1 is avatars disabled
 		switch($Setting) {
 			case 0:
-				if(!empty($Avatar)) {
+				if (!empty($Avatar)) {
 					$ToReturn = $ReturnHTML ? "<img src='$Avatar' width='$Size' style='max-height:400px;' alt='$Username avatar' />" : $Avatar;
-				}
-				else {
+				} else {
 					$URL = STATIC_SERVER."common/avatars/default.png";
 					$ToReturn = $ReturnHTML ? "<img src='$URL' width='$Size' style='max-height:400px;' alt='Default Avatar'/>" : $URL;
 				}
@@ -587,16 +586,14 @@ class Users {
 						$Type = "identicon";
 				}
 				$Rating = "pg";
-				if(!$Robot) {
-					$URL = "https://www.gravatar.com/avatar/".md5(strtolower(trim($Username)))."?s=$Size&d=$Type&r=$Rating";
-				}
-				else {
+				if (!$Robot) {
+					$URL = "https://secure.gravatar.com/avatar/".md5(strtolower(trim($Username)))."?s=$Size&d=$Type&r=$Rating";
+				} else {
 					$URL = "https://static1.robohash.org/".md5($Username)."?set=set".$Type."&size=".$Size."x".$Size;
 				}
-				if($ShowAvatar == True && !empty($Avatar)) {
+				if ($ShowAvatar == True && !empty($Avatar)) {
 					$ToReturn = $ReturnHTML ? "<img src='$Avatar' width='$Size' style='max-height:400px;' alt='$Username avatar' />" : $Avatar;
-				}
-				else {
+				} else {
 					$ToReturn = $ReturnHTML ? "<img src='$URL' width='$Size' style='max-height:400px;' alt='Default Avatar'/>" : $URL;
 				}
 				break;

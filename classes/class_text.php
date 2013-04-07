@@ -706,7 +706,7 @@ class TEXT {
 					global $LoggedUser;
 					if ($LoggedUser['EnableMatureContent']) {
 						if (!empty($Block['Attr'])) {
-							$Str.='<strong class="mature" style="font-size: 1.2em;">Mature content:</strong><strong> ' . $Block['Attr'] . '</strong><br \> <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
+							$Str.='<strong class="mature" style="font-size: 1.2em;">Mature content:</strong><strong> ' . $Block['Attr'] . '</strong><br /> <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
 							$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
 						}
 						else {

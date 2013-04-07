@@ -562,7 +562,7 @@ View::show_header('User search');
 				<td>
 				</td>
 <?	} ?>
-				<td class="label nobr"><span title="Units are in bytes">Uploaded:</span></td>
+				<td class="label nobr"><span title="Units are in gibibytes (the base 2 sibling of gigabytes)">Uploaded:</span></td>
 				<td width="30%">
 					<select name="uploaded">
 						<option value="equal"<? if ($_GET['uploaded']==='equal') {echo ' selected="selected"';}?>>Equal</option>
@@ -596,7 +596,7 @@ View::show_header('User search');
 					<input type="text" name="invites1" size="6" value="<?=display_str($_GET['invites1'])?>" />
 					<input type="text" name="invites2" size="6" value="<?=display_str($_GET['invites2'])?>" />
 				</td>
-				<td class="label nobr"><span title="Units are in bytes">Downloaded:</span></td>
+				<td class="label nobr"><span title="Units are in gibibytes (the base 2 sibling of gigabytes)">Downloaded:</span></td>
 				<td width="30%">
 					<select name="downloaded">
 						<option value="equal"<? if ($_GET['downloaded']==='equal') {echo ' selected="selected"';}?>>Equal</option>

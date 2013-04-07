@@ -11,7 +11,7 @@ shell_exec('wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity_
 shell_exec('unzip GeoLiteCity-latest.zip');
 shell_exec('rm GeoLiteCity-latest.zip');
 
-if(($Locations = file("GeoLiteCity_".date('Ym')."02/GeoLiteCity-Location.csv", FILE_IGNORE_NEW_LINES)) === false) {
+if (($Locations = file("GeoLiteCity_".date('Ym')."02/GeoLiteCity-Location.csv", FILE_IGNORE_NEW_LINES)) === false) {
 	error("Download or extraction of maxmind database failed");
 }
 array_shift($Locations);
@@ -21,7 +21,7 @@ echo "There are ".count($Locations)." locations";
 echo "<br />";
 
 $CountryIDs = array();
-foreach($Locations as $Location) {
+foreach ($Locations as $Location) {
 	$Parts = explode(",", $Location);
 	//CountryIDs[1] = "AP";
 	$CountryIDs[trim($Parts[0], '"')] = trim($Parts[1], '"');
@@ -30,7 +30,7 @@ foreach($Locations as $Location) {
 echo "There are ".count($CountryIDs)." CountryIDs";
 echo "<br />";
 
-if(($Blocks = file("GeoLiteCity_".date('Ym')."02/GeoLiteCity-Blocks.csv", FILE_IGNORE_NEW_LINES)) === false) {
+if (($Blocks = file("GeoLiteCity_".date('Ym')."02/GeoLiteCity-Blocks.csv", FILE_IGNORE_NEW_LINES)) === false) {
 	echo "Error";
 }
 array_shift($Blocks);
@@ -44,19 +44,19 @@ $SplitOn = 10000;
 $DB->query("TRUNCATE TABLE geoip_country");
 
 $Values = array();
-foreach($Blocks as $Index => $Block) {
+foreach ($Blocks as $Index => $Block) {
 	list($StartIP, $EndIP, $CountryID) = explode(",", $Block);
 	$StartIP = trim($StartIP, '"');
 	$EndIP = trim($EndIP, '"');
 	$CountryID = trim($CountryID, '"');
 	$Values[] = "('".$StartIP."', '".$EndIP."', '".$CountryIDs[$CountryID]."')";
-	if($Index % $SplitOn == 0) {
+	if ($Index % $SplitOn == 0) {
 		$DB->query("INSERT INTO geoip_country (StartIP, EndIP, Code) VALUES ".implode(", ", $Values));
 		$Values = array();
 	}
 }
 
-if(count($Values) > 0) {
+if (count($Values) > 0) {
 	$DB->query("INSERT INTO geoip_country (StartIP, EndIP, Code) VALUES ".implode(", ", $Values));
 }
 
@@ -68,7 +68,9 @@ View::show_footer();
 */
 
 /*
-if (!check_perms('admin_update_geoip')) { die(); }
+if (!check_perms('admin_update_geoip')) {
+	die();
+}
 enforce_login();
 
 ini_set('memory_limit',1024*1024*1024);
@@ -100,7 +102,7 @@ foreach ($Registries as $Registry) {
 		if (preg_match('/\|([A-Z]{2})\|ipv4\|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\|(\d+)\|/', $Country, $Matches)) {
 
 			$Start = Tools::ip_to_unsigned($Matches[2]);
-			if($Start == 2147483647) { continue; }
+			if ($Start == 2147483647) { continue; }
 
 			if (!isset($Current)) {
 				$Current = array('StartIP' => $Start, 'EndIP' => $Start + $Matches[3],'Code' => $Matches[1]);
