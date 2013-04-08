@@ -80,9 +80,9 @@ foreach ($Scripts as $Script) {
 	<script src="<?=STATIC_SERVER?>functions/<?=$Script?>.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/'.$Script.'.js')?>" type="text/javascript"></script>
 <?
  	if ($Script == 'jquery') { ?>
-<script type="text/javascript">
-	$.noConflict();
-</script>
+	<script type="text/javascript">
+		$.noConflict();
+	</script>
 <?
 	}
 }
@@ -124,35 +124,34 @@ if (check_perms('site_send_unlimited_invites')) {
 			<li id="stats_seeding"><a href="torrents.php?type=seeding&amp;userid=<?=$LoggedUser['ID']?>">Up</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesUploaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span></li>
 			<li id="stats_leeching"><a href="torrents.php?type=leeching&amp;userid=<?=$LoggedUser['ID']?>">Down</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesDownloaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesDownloaded'])?></span></li>
 			<li id="stats_ratio">Ratio: <span class="stat"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'], $LoggedUser['BytesDownloaded'])?></span></li>
-<?	if (!empty($LoggedUser['RequiredRatio'])) {?>
+<?	if (!empty($LoggedUser['RequiredRatio'])) { ?>
 			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat" title="<?=number_format($LoggedUser['RequiredRatio'], 5)?>"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
 <?	}
-    if ($LoggedUser['FLTokens'] > 0) { ?>
+	if ($LoggedUser['FLTokens'] > 0) { ?>
 			<li id="fl_tokens"><a href="wiki.php?action=article&amp;id=754">Tokens</a>: <span class="stat"><a href="userhistory.php?action=token_history&amp;userid=<?=$LoggedUser['ID']?>"><?=$LoggedUser['FLTokens']?></a></span></li>
 <?	} ?>
 		</ul>
 <?
 $NewSubscriptions = $Cache->get_value('subscriptions_user_new_'.$LoggedUser['ID']);
 if ($NewSubscriptions === false) {
-        if ($LoggedUser['CustomForums']) {
-			unset($LoggedUser['CustomForums']['']);
-			$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-			$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
-        }
-        $DB->query("SELECT COUNT(s.TopicID)
-                FROM users_subscriptions AS s
-                        JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
-                        JOIN forums_topics AS t ON l.TopicID = t.ID
-                        JOIN forums AS f ON t.ForumID = f.ID
-                WHERE (f.MinClassRead <= ".$LoggedUser['Class']." OR f.ID IN ('$PermittedForums'))
-                        AND l.PostID < t.LastPostID
-                        AND s.UserID = ".$LoggedUser['ID'].
-                (!empty($RestrictedForums) ? "
-                        AND f.ID NOT IN ('".$RestrictedForums."')" : ""));
-        list($NewSubscriptions) = $DB->next_record();
-        $Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
+	if ($LoggedUser['CustomForums']) {
+		unset($LoggedUser['CustomForums']['']);
+		$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+		$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
+	}
+	$DB->query("SELECT COUNT(s.TopicID)
+				FROM users_subscriptions AS s
+					JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
+					JOIN forums_topics AS t ON l.TopicID = t.ID
+					JOIN forums AS f ON t.ForumID = f.ID
+				WHERE (f.MinClassRead <= ".$LoggedUser['Class']." OR f.ID IN ('$PermittedForums'))
+					AND l.PostID < t.LastPostID
+					AND s.UserID = ".$LoggedUser['ID'].
+				(!empty($RestrictedForums) ? "
+					AND f.ID NOT IN ('".$RestrictedForums."')" : ""));
+	list($NewSubscriptions) = $DB->next_record();
+	$Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
 } ?>
-
 		<ul id="userinfo_minor"<?=$NewSubscriptions ? ' class="highlite"' : ''?>>
 			<li id="nav_inbox"<?=Format::add_class($PageID, array('inbox'), 'active', true)?>><a onmousedown="Stats('inbox');" href="inbox.php">Inbox</a></li>
 			<li id="nav_staffinbox"<?=Format::add_class($PageID, array('staffpm'), 'active', true)?>><a onmousedown="Stats('staffpm');" href="staffpm.php">Staff Inbox</a></li>
@@ -196,10 +195,10 @@ if ($LoggedUser['NotifyOnQuote']) {
 			$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 		}
 		$sql = "SELECT COUNT(q.UnRead)
-			FROM users_notify_quoted AS q
-				LEFT JOIN forums_topics AS t ON t.ID = q.PageID
-				LEFT JOIN forums AS f ON f.ID = t.ForumID
-			WHERE q.UserID=$LoggedUser[ID] AND q.UnRead=1 AND q.Page = 'forums' AND ((f.MinClassRead<='$LoggedUser[Class]'";
+				FROM users_notify_quoted AS q
+					LEFT JOIN forums_topics AS t ON t.ID = q.PageID
+					LEFT JOIN forums AS f ON f.ID = t.ForumID
+				WHERE q.UserID=$LoggedUser[ID] AND q.UnRead=1 AND q.Page = 'forums' AND ((f.MinClassRead<='$LoggedUser[Class]'";
 		if (!empty($RestrictedForums)) {
 			$sql .= " AND f.ID NOT IN ('$RestrictedForums')";
 		}
@@ -310,7 +309,7 @@ if (check_perms('site_torrents_notify')) {
 	if ($NewNotifications === false) {
 		$DB->query("SELECT COUNT(UserID) FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]' AND UnRead='1'");
 		list($NewNotifications) = $DB->next_record();
-		/* if($NewNotifications && !check_perms('site_torrents_notify')) {
+		/* if ($NewNotifications && !check_perms('site_torrents_notify')) {
 			$DB->query("DELETE FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]'");
 			$DB->query("DELETE FROM users_notify_filters WHERE UserID='$LoggedUser[ID]'");
 		} */
@@ -326,10 +325,10 @@ if (check_perms('site_collages_subscribe')) {
 	$NewCollages = $Cache->get_value('collage_subs_user_new_'.$LoggedUser['ID']);
 	if ($NewCollages === false) {
 			$DB->query("SELECT COUNT(DISTINCT s.CollageID)
-					FROM users_collage_subs as s
-					JOIN collages as c ON s.CollageID = c.ID
-					JOIN collages_torrents as ct on ct.CollageID = c.ID
-					WHERE s.UserID = $LoggedUser[ID] AND ct.AddedOn > s.LastVisit AND c.Deleted = '0'");
+						FROM users_collage_subs as s
+							JOIN collages as c ON s.CollageID = c.ID
+							JOIN collages_torrents as ct on ct.CollageID = c.ID
+						WHERE s.UserID = $LoggedUser[ID] AND ct.AddedOn > s.LastVisit AND c.Deleted = '0'");
 			list($NewCollages) = $DB->next_record();
 			$Cache->cache_value('collage_subs_user_new_'.$LoggedUser['ID'], $NewCollages, 0);
 	}
@@ -358,6 +357,7 @@ if (check_perms('users_mod') || $LoggedUser['PermissionID'] == FORUM_MOD) {
 	}
 }
 if (check_perms('admin_reports')) {
+// Torrent reports code
 	$NumTorrentReports = $Cache->get_value('num_torrent_reportsv2');
 	if ($NumTorrentReports === false) {
 		$DB->query("SELECT COUNT(ID) FROM reportsv2 WHERE Status='New'");
@@ -366,9 +366,8 @@ if (check_perms('admin_reports')) {
 	}
 
 	$ModBar[] = '<a href="reportsv2.php">'.$NumTorrentReports.(($NumTorrentReports == 1) ? ' Report' : ' Reports').'</a>';
-}
 
-if (check_perms('admin_reports')) {
+// Other reports code
 	$NumOtherReports = $Cache->get_value('num_other_reports');
 	if ($NumOtherReports === false) {
 		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New'");
@@ -393,13 +392,13 @@ if (check_perms('admin_reports')) {
 } elseif (check_perms('site_moderate_forums')) {
 	$NumForumReports = $Cache->get_value('num_forum_reports');
 	if ($NumForumReports === false) {
-		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New' AND Type IN('collages_comment', 'Post', 'requests_comment', 'thread', 'torrents_comment')");
+		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New' AND Type IN('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment')");
 		list($NumForumReports) = $DB->next_record();
 		$Cache->cache_value('num_forum_reports', $NumForumReports, 0);
 	}
 
 	if ($NumForumReports > 0) {
-		$ModBar[] = '<a href="reports.php">'.'Forum reports'.'</a>';
+		$ModBar[] = '<a href="reports.php">'.$NumForumReports.(($NumForumReports == 1) ? ' Forum report' : ' Forum reports').'</a>';
 	}
 }
 
@@ -418,13 +417,15 @@ if (!empty($Alerts) || !empty($ModBar)) {
 <?
 }
 //Done handling alertbars
+
+
 ?>
 	<div id="searchbars">
 		<ul>
 			<li id="searchbar_torrents">
 				<span class="hidden">Torrents: </span>
 				<form class="search_form" name="torrents" action="torrents.php" method="get">
-<? if(isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
+<? if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
 					<input type="hidden" name="action" value="advanced" />
 <? } ?>
 					<input
