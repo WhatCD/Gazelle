@@ -27,7 +27,7 @@ View::show_header('Warn User');
 				<tr>
 					<td class="label">Reason:</td>
 					<td>
-					<input type="text" name="reason" size="30" />
+					<input type="text" name="reason" size="60" />
 					</td>
 				</tr>
 				<tr>
