@@ -153,18 +153,23 @@
                         tasteometerHtml += '<li class="lastfm_essential">Compatibility: ';
                         var compatibility = Math.round(j['score'] * 100);
                         var background;
-                        if  (compatibility < 50){
-                            background = 'rgb(255, '+Math.floor(255*compatibility/50)+', 0)'
-                        } else {
-                            background = 'rgb('+Math.floor((1-(compatibility-50)/50)*255)+', 255, 0)'
-                        }
-                        tasteometerHtml += compatibility + '%\r\
+						if (compatibility < 0 || compatibility > 100) {
+							compatibility = "Unknown";
+							tasteometerHtml += compatibility;
+						} else {
+							if  (compatibility < 50){
+								background = 'rgb(255, '+Math.floor(255*compatibility/50)+', 0)'
+							} else {
+								background = 'rgb('+Math.floor((1-(compatibility-50)/50)*255)+', 255, 0)'
+							}
+							tasteometerHtml += compatibility + '%\r\
                         <li class="lastfm_essential">\r\
                             <div id="lastfm_compatibilitybar_container">\n\
                                 <div id="lastfm_compatibilitybar" style="width: '+compatibility+'%; background: '+background+';">\n\
                                 </div>\r\
                             </div>\r\
                         </li>';
+						}
                         // Only print shared artists if there are any
                         if (j['artists']['matches'] != 0){
                             sharedArtistsHtml += '<li>Shared artists:</li><li><ul class="nobullet">';
