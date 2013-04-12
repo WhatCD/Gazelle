@@ -110,7 +110,8 @@
  	'forums_polls_moderate' => 'Can feature and close polls.',
 	'project_team' => 'Is part of the project team.',
 	'torrents_edit_vanityhouse' => 'Can mark groups as part of Vanity House.',
-	'artist_edit_vanityhouse' => 'Can mark artists as part of Vanity House.'
+	'artist_edit_vanityhouse' => 'Can mark artists as part of Vanity House.',
+	'site_tag_aliases_read' => 'Can view the list of tag aliases.'
 
  );
 
@@ -163,6 +164,7 @@ function permissions_form(){ ?>
 					<? display_perm('site_collages_recover', 'Can recover \'deleted\' collages.'); ?>
 					<? display_perm('site_forums_double_post', 'Can double post in the forums.'); ?>
 					<? display_perm('project_team', 'Part of the project team.'); ?>
+					<? display_perm('site_tag_aliases_read', 'Can view the list of tag aliases.'); ?>
 				</td>
 			</tr>
 		</table>

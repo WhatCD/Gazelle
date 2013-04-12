@@ -1,29 +1,31 @@
 <?php
-if (!check_perms('users_mod')) { error(403);
+if (!(check_perms('users_mod') || check_perms('site_tag_aliases_read'))) {
+	error(403);
 }
 
 View::show_header('Tag Aliases');
 
 $orderby = ($_GET['order']) == "badtags" ? "BadTag" : "AliasTag";
 
-if (isset($_POST['newalias'])) {
-	$badtag = mysql_escape_string($_POST['badtag']);
-	$aliastag = mysql_escape_string($_POST['aliastag']);
+if (check_perms('users_mod')) {
+	if (isset($_POST['newalias'])) {
+		$badtag = mysql_escape_string($_POST['badtag']);
+		$aliastag = mysql_escape_string($_POST['aliastag']);
 
-	$DB -> query("INSERT INTO tag_aliases (BadTag, AliasTag) VALUES ('$badtag', '$aliastag')");
-
-}
-
-if (isset($_POST['changealias'])) {
-	$aliasid = $_POST['aliasid'];
-	$badtag = mysql_escape_string($_POST['badtag']);
-	$aliastag = mysql_escape_string($_POST['aliastag']);
-
-	if ($_POST['save']) {
-		$DB -> query("UPDATE tag_aliases SET BadTag = '$badtag', AliasTag = '$aliastag' WHERE ID = '$aliasid' ");
+		$DB -> query("INSERT INTO tag_aliases (BadTag, AliasTag) VALUES ('$badtag', '$aliastag')");
 	}
-	if ($_POST['delete']) {
-		$DB -> query("DELETE FROM tag_aliases WHERE ID = '$aliasid'");
+
+	if (isset($_POST['changealias']) && is_number($_POST['aliasid'])) {
+		$aliasid = $_POST['aliasid'];
+		$badtag = mysql_escape_string($_POST['badtag']);
+		$aliastag = mysql_escape_string($_POST['aliastag']);
+
+		if ($_POST['save']) {
+			$DB -> query("UPDATE tag_aliases SET BadTag = '$badtag', AliasTag = '$aliastag' WHERE ID = '$aliasid' ");
+		}
+		if ($_POST['delete']) {
+			$DB -> query("DELETE FROM tag_aliases WHERE ID = '$aliasid'");
+		}
 	}
 }
 ?>
@@ -38,7 +40,9 @@ if (isset($_POST['changealias'])) {
 	<tr class="colhead">
 		<td>Proper tag</td>
 		<td>Renamed from</td>
+<?	if (check_perms('users_mod')) { ?>
 		<td>Submit</td>
+<?	} ?>
 	</tr>
 	<tr/>
 	<tr>
@@ -50,12 +54,14 @@ if (isset($_POST['changealias'])) {
 			<td>
 				<input type="text" name="badtag" />
 			</td>
+<?	if (check_perms('users_mod')) { ?>
 			<td>
 				<input type="submit" value="Add Alias" />
 			</td>
+<?	} ?>
 		</form>
 	</tr>
-	<?
+<?
 $DB->query("SELECT ID,BadTag,AliasTag FROM tag_aliases ORDER BY " . $orderby);
 while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 	?>
@@ -69,12 +75,15 @@ while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 			<td>
 				<input type="text" name="badtag" value="<?=$BadTag?>" />
 			</td>
+<?	if (check_perms('users_mod')) { ?>
 			<td>
 				<input type="submit" name="save" value="Save Alias" />
 				<input type="submit" name="delete" value="Delete Alias" />
 			</td>
+<?	} ?>
 		</form>
 	</tr>
-	<? }?>
+<?
+} ?>
 </table>
 <? View::show_footer(); ?>
