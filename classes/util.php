@@ -30,10 +30,10 @@ if (PHP_INT_SIZE === 4) {
  * @return string escaped string.
  */
 function display_str($Str) {
-	if ($Str === NULL || $Str === FALSE || is_array($Str)) {
+	if ($Str === NULL || $Str === false || is_array($Str)) {
 		return '';
 	}
-	if ($Str!='' && !is_number($Str)) {
+	if ($Str != '' && !is_number($Str)) {
 		$Str = Format::make_utf8($Str);
 		$Str = mb_convert_encoding($Str,"HTML-ENTITIES","UTF-8");
 		$Str = preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m","&amp;",$Str);

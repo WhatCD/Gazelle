@@ -2,17 +2,17 @@
 // perform the back end of subscribing to collages
 authorize();
 
-if(!is_number($_GET['collageid'])) {
+if (!is_number($_GET['collageid'])) {
 	error(0);
 }
 
-if(!$UserSubscriptions = $Cache->get_value('collage_subs_user_'.$LoggedUser['ID'])) {
+if (!$UserSubscriptions = $Cache->get_value('collage_subs_user_'.$LoggedUser['ID'])) {
 	$DB->query('SELECT CollageID FROM users_collage_subs WHERE UserID = '.db_string($LoggedUser['ID']));
 	$UserSubscriptions = $DB->collect(0);
 	$Cache->cache_value('collage_subs_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
 }
 
-if(($Key = array_search($_GET['collageid'],$UserSubscriptions)) !== FALSE) {
+if (($Key = array_search($_GET['collageid'],$UserSubscriptions)) !== false) {
 	$DB->query('DELETE FROM users_collage_subs WHERE UserID = '.db_string($LoggedUser['ID']).' AND CollageID = '.db_string($_GET['collageid']));
 	unset($UserSubscriptions[$Key]);
 } else {

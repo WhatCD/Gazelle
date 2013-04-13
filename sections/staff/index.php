@@ -13,7 +13,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 	<div class="header">
 		<h2><?=SITE_NAME?> Staff</h2>
 	</div>
-	<div class="box pad" style="padding:0px 10px 10px 10px;">
+	<div class="box pad" style="padding: 0px 10px 10px 10px;">
 		<br />
 		<h3>Contact Staff</h3>
 		<div id="below_box">
@@ -26,22 +26,27 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 		<p><strong>These users are not official staff members</strong> - they're users who have volunteered their time to help people in need. Please treat them with respect and read <a href="wiki.php?action=article&amp;id=260">this</a> before contacting them.</p>
 		<table class="staff" width="100%">
 			<tr class="colhead">
-				<td style="width:130px;">Username</td>
-				<td style="width:130px;">Last seen</td>
+				<td style="width: 130px;">Username</td>
+				<td style="width: 130px;">Last seen</td>
 				<td><strong>Support for</strong></td>
 			</tr>
 <?
 	$Row = 'a';
-	foreach($FrontLineSupport as $Support) {
+	foreach ($FrontLineSupport as $Support) {
 		list($ID, $Class, $Username, $Paranoia, $LastAccess, $SupportFor) = $Support;
 		$Row = ($Row == 'a') ? 'b' : 'a';
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=Users::format_username($ID, false, false, false)?>
+					<?=Users::format_username($ID, false, false, false) ?>
 				</td>
 				<td class="nobr">
-					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by user'; }?>
+<?					if (check_paranoia('lastseen', $Paranoia, $Class)) {
+						echo time_diff($LastAccess);
+					} else {
+						echo 'Hidden by user';
+					}
+?>
 				</td>
 				<td class="nobr">
 					<?=$SupportFor?>
@@ -50,28 +55,33 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 <?	} ?>
 		</table>
 	</div>
-	<div class="box pad" style="padding:0px 10px 10px 10px;">
+	<div class="box pad" style="padding: 0px 10px 10px 10px;">
 		<br />
 		<h3>Forum Moderators</h3>
 		<p>Forum Moderators are users who have been promoted to help moderate the forums. They can only help with forum-oriented questions.</p>
 		<table class="staff" width="100%">
 			<tr class="colhead">
-				<td style="width:130px;">Username</td>
-				<td style="width:130px;">Last seen</td>
+				<td style="width: 130px;">Username</td>
+				<td style="width: 130px;">Last seen</td>
 				<td><strong>Remark</strong></td>
 			</tr>
 <?
 	$Row = 'a';
-	foreach($ForumStaff as $Support) {
+	foreach ($ForumStaff as $Support) {
 		list($ID, $Class, $Username, $Paranoia, $LastAccess, $SupportFor) = $Support;
 		$Row = ($Row == 'a') ? 'b' : 'a';
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=Users::format_username($ID, false, false, false)?>
+					<?=Users::format_username($ID, false, false, false) ?>
 				</td>
 				<td class="nobr">
-					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by user'; }?>
+<?					if (check_paranoia('lastseen', $Paranoia, $Class)) {
+						echo time_diff($LastAccess);
+					} else {
+						echo 'Hidden by user';
+					}
+?>
 				</td>
 				<td class="nobr">
 					<?=$SupportFor?>
@@ -81,15 +91,15 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 		</table>
 	</div>
 	<br />
-	<div class="box pad" style="padding:0px 10px 10px 10px;">
+	<div class="box pad" style="padding: 0px 10px 10px 10px;">
 <?
 	$CurClass = 0;
 	$CloseTable = false;
 	foreach ($Staff as $StaffMember) {
 		list($ID, $Class, $ClassName, $Username, $Paranoia, $LastAccess, $Remark) = $StaffMember;
-		if($Class!=$CurClass) { // Start new class of staff members
+		if ($Class != $CurClass) { // Start new class of staff members
 			$Row = 'a';
-			if($CloseTable) {
+			if ($CloseTable) {
 				$CloseTable = false;
 				echo "\t</table><br />";
 			}
@@ -99,8 +109,8 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 ?>
 		<table class="staff" width="100%">
 			<tr class="colhead">
-				<td style="width:130px;">Username</td>
-				<td style="width:130px;">Last seen</td>
+				<td style="width: 130px;">Username</td>
+				<td style="width: 130px;">Last seen</td>
 				<td><strong>Remark</strong></td>
 			</tr>
 <?
@@ -111,10 +121,15 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 ?>
 			<tr class="row<?=$Row?>">
 				<td class="nobr">
-					<?=Users::format_username($ID, false, false, false)?>
+					<?=Users::format_username($ID, false, false, false) ?>
 				</td>
 				<td class="nobr">
-					<? if (check_paranoia('lastseen', $Paranoia, $Class)) { echo time_diff($LastAccess); } else { echo 'Hidden by staff member'; }?>
+<?					if (check_paranoia('lastseen', $Paranoia, $Class)) {
+						echo time_diff($LastAccess);
+					} else {
+						echo 'Hidden by staff member';
+					}
+?>
 				</td>
 				<td class="nobr">
 					<?=$Remark?>

@@ -15,7 +15,7 @@ View::show_header('Chat Rules');
 				Many forums (Tutorials, The Library, etc.) have their own set of rules. Make sure you read and take note of these rules before you attempt to post in one of these forums.
 			</li>
 			<li>
-				Don't use all capital letters, excessive !!! (exclamation marks) or ??? (question marks), it seems like you're shouting!
+				Don't use all capital letters, excessive !!! (exclamation marks) or ??? (question marks). It seems like you're shouting!
 			</li>
 			<li>
 				No lame referral schemes. This includes freeipods.com, freepsps.com, or any other similar scheme in which the poster gets personal gain from users clicking a link.
@@ -24,22 +24,22 @@ View::show_header('Chat Rules');
 				No asking for money for any reason whatsoever. We don't know or care about your friend who lost everything, or dying relative who wants to enjoy their last few moments alive by being given lots of money.
 			</li>
 			<li>
-				No advertising your uploads.
+				Do not inappropriately advertise your uploads. In special cases, it is acceptable to mention new uploads in an approved thread (e.g. <a href="forums.php?action=viewthread&amp;threadid=133982">New Users — We'll Snatch Your First 100% FLAC</a>), but be sure to carefully read the thread's rules before posting. It is also acceptable to discuss releases you have uploaded when conversing about the music itself. Blatant attempts to advertise your uploads outside of the appropriate forums or threads may result in a warning or the loss of forum privileges.
 			</li>
 			<li>
-				No posting music requests in forums, there's a request link on the top bar, please use that instead.
+				No posting music requests in forums. There's a request link at the top of the page; please use that instead.
 			</li>
 			<li>
-				No flaming, be pleasant and polite. Don't use offensive language, and don't be confrontational for the sake of confrontation.
+				No flaming; be pleasant and polite. Don't use offensive language, and don't be confrontational for the sake of confrontation.
 			</li>
 			<li>
 				Don't point out or attack other members' share ratios. A higher ratio does not make you better than someone else.
 			</li>
 			<li>
-				Try not to ask stupid questions. A stupid question is one that you could have found the answer to yourself with a little research, or one that you're asking in the wrong place. If you do the basic research suggested (i.e., read the rules/wiki) or search the forums and don't find the answer to your question, then go ahead and ask. Staff/FLS are not here to hand-feed you the answers you could have found on your own with a little bit of effort.
+				Try not to ask stupid questions. A stupid question is one that you could have found the answer to yourself with a little research, or one that you're asking in the wrong place. If you do the basic research suggested (i.e., read the rules/wiki) or search the forums and don't find the answer to your question, then go ahead and ask. Staff and First Line Support (FLS) are not here to hand-feed you the answers you could have found on your own with a little bit of effort.
 			</li>
 			<li>
-				Be sure you read all the stickies.
+				Be sure you read all the sticky threads in a forum before you post.
 			</li>
 			<li>
 				Use descriptive and specific subject lines. This helps others decide whether your particular words of wisdom relate to a topic they care about.
@@ -75,10 +75,10 @@ View::show_header('Chat Rules');
 				Be cautious when posting mature content on the forums. All mature imagery must abide by <a href="wiki.php?action=article&amp;id=1063">the rules found here</a>. Gratuitously sexual or violent content which falls outside of the allowable categories will result in a warning or worse.
 			</li>
 			<li>
-				Mature content in posts must be properly tagged. The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where “description” is a mandatory description of the post contents. Misleading or inadequate descriptions will be penalized.
+				Mature content in posts must be properly tagged. The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post contents. Misleading or inadequate descriptions will be penalized.
 			</li>
 			<li>
-				Threads created for the exclusive purpose of posting mature imagery will be trashed. Mature content (including graphic album art) should be contextually relevant to the thread and/or forum you’re posting in. Mature content is only allowed in: The Lounge, The Lounge +1, The Library, Music, Power Users, Elite, Torrent Masters, VIPs, Comics, Contests &amp; Designs, The Laboratory. If you are in doubt about a post’s appropriateness, send a <a href="staffpm.php">Staff PM to the Forum Moderators</a> and wait for a reply before proceeding.
+				Threads created for the exclusive purpose of posting mature imagery will be trashed. Mature content (including graphic album art) should be contextually relevant to the thread and/or forum you're posting in. Mature content is only allowed in: The Lounge, The Lounge +1, The Library, Music, Power Users, Elite, Torrent Masters, VIPs, Comics, Contests &amp; Designs, The Laboratory. If you are in doubt about a post's appropriateness, send a <a href="staffpm.php">Staff PM to the Forum Moderators</a> and wait for a reply before proceeding.
 			</li>
 		</ul>
 	</div>

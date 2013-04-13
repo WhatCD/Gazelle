@@ -99,7 +99,7 @@ if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueI
 	}
 }
 $Thread = Format::catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
-if($_GET['updatelastread'] != '0') {
+if ($_GET['updatelastread'] != '0') {
 	$LastPost = end($Thread);
 	$LastPost = $LastPost['ID'];
 	reset($Thread);
@@ -124,17 +124,17 @@ if($_GET['updatelastread'] != '0') {
 }
 
 //Handle subscriptions
-if(($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === FALSE) {
+if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
 	$DB->query("SELECT TopicID FROM users_subscriptions WHERE UserID = '$LoggedUser[ID]'");
 	$UserSubscriptions = $DB->collect(0);
 	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
 }
 
-if(empty($UserSubscriptions)) {
+if (empty($UserSubscriptions)) {
 	$UserSubscriptions = array();
 }
 
-if(in_array($ThreadID, $UserSubscriptions)) {
+if (in_array($ThreadID, $UserSubscriptions)) {
 	$Cache->delete_value('subscriptions_user_new_'.$LoggedUser['ID']);
 }
 

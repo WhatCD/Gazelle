@@ -85,7 +85,7 @@ if(empty($_POST['confirm'])) {
 		$Cache->delete_value('vote_pairs_'.$CacheGroupID);
 	}
 	// 4. Clear the new groups vote keys
-
+	$Cache->delete_value('votes_'.$NewGroupID);
 
 	$DB->query("UPDATE torrents SET GroupID='$NewGroupID' WHERE GroupID='$GroupID'");
 	$DB->query("UPDATE wiki_torrents SET PageID='$NewGroupID' WHERE PageID='$GroupID'");

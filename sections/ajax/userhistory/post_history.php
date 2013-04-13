@@ -4,15 +4,15 @@
 User post history page
 */
 
-function error_out($reason = "") {
+function error_out($reason = '') {
     $error = array('status' => 'failure');
-    if ($reason != "")
+    if ($reason != '')
         $error['reason'] = $reason;
     print $error;
     die();
 }
 
-if(!empty($LoggedUser['DisableForums'])) {
+if (!empty($LoggedUser['DisableForums'])) {
     error_out("You do not have access to the forums!");
 }
 
@@ -22,7 +22,7 @@ $Text = new TEXT;
 
 
 $UserID = empty($_GET['userid']) ? $LoggedUser['ID'] : $_GET['userid'];
-if(!is_number($UserID)){
+if (!is_number($UserID)) {
     error_out("User does not exist!");
 }
 
@@ -34,7 +34,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 
 list($Page,$Limit) = Format::page_limit($PerPage);
 
-if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
+if (($UserInfo = $Cache->get_value('user_info_'.$UserID)) === false) {
 	$DB->query("SELECT
 		m.Username,
 		m.Enabled,
@@ -46,7 +46,7 @@ if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
 		JOIN users_info AS i ON i.UserID = m.ID
 		WHERE m.ID = $UserID");
 
-	if($DB->record_count() == 0){ // If user doesn't exist
+	if ($DB->record_count() == 0){ // If user doesn't exist
             error_out("User does not exist!");
 	}
 	list($Username, $Enabled, $Title, $Avatar, $Donor, $Warned) = $DB->next_record();
@@ -54,24 +54,24 @@ if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
 	extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', 'Title', 'Avatar', 'Donor', 'Warned'))));
 }
 
-if(check_perms('site_proxy_images') && !empty($Avatar)) {
+if (check_perms('site_proxy_images') && !empty($Avatar)) {
 	$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Avatar);
 }
 
-if($LoggedUser['CustomForums']) {
+if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
 	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 }
 $ViewingOwn = ($UserID == $LoggedUser['ID']);
 $ShowUnread = ($ViewingOwn && (!isset($_GET['showunread']) || !!$_GET['showunread']));
 $ShowGrouped = ($ViewingOwn && (!isset($_GET['group']) || !!$_GET['group']));
-if($ShowGrouped) {
+if ($ShowGrouped) {
 	$sql = 'SELECT
 		SQL_CALC_FOUND_ROWS
 		MAX(p.ID) AS ID
 		FROM forums_posts AS p
 		LEFT JOIN forums_topics AS t ON t.ID = p.TopicID';
-	if($ShowUnread) {
+	if ($ShowUnread) {
 		$sql.='
 		LEFT JOIN forums_last_read_topics AS l ON l.TopicID = t.ID AND l.UserID = '.$LoggedUser['ID'];
 	}
@@ -79,17 +79,17 @@ if($ShowGrouped) {
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = '.$UserID.'
 		AND ((f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
-	if(!empty($RestrictedForums)) {
+	if (!empty($RestrictedForums)) {
 		$sql.='
 		AND f.ID NOT IN (\''.$RestrictedForums.'\')';
 	}
 	$sql .= ')';
-	if(!empty($PermittedForums)) {
+	if (!empty($PermittedForums)) {
 		$sql.='
 		OR f.ID IN (\''.$PermittedForums.'\')';
 	}
 	$sql .= ')';
-	if($ShowUnread) {
+	if ($ShowUnread) {
 		$sql .= '
 		AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\')
 		AND (l.PostID<t.LastPostID OR l.PostID IS NULL))';
@@ -101,7 +101,7 @@ if($ShowGrouped) {
 	$DB->query("SELECT FOUND_ROWS()");
 	list($Results) = $DB->next_record();
 
-	if($Results > $PerPage*($Page-1)) {
+	if ($Results > $PerPage * ($Page - 1)) {
 		$DB->set_query_id($PostIDs);
 		$PostIDs = $DB->collect('ID');
 		$sql = 'SELECT
@@ -131,7 +131,7 @@ if($ShowGrouped) {
 } else {
 	$sql = 'SELECT
 		SQL_CALC_FOUND_ROWS';
-	if($ShowGrouped) {
+	if ($ShowGrouped) {
 		$sql.=' * FROM (SELECT';
 	}
 	$sql .= '
@@ -144,7 +144,7 @@ if($ShowGrouped) {
 		p.TopicID,
 		t.Title,
 		t.LastPostID,';
-	if($UserID == $LoggedUser['ID']) {
+	if ($UserID == $LoggedUser['ID']) {
 		$sql .= '
 		l.PostID AS LastRead,';
 	}
@@ -161,12 +161,12 @@ if($ShowGrouped) {
 		WHERE p.AuthorID = '.$UserID.'
 		AND f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
 
-	if(!empty($RestrictedForums)) {
+	if (!empty($RestrictedForums)) {
 		$sql.='
 		AND f.ID NOT IN (\''.$RestrictedForums.'\')';
 	}
 
-	if($ShowUnread) {
+	if ($ShowUnread) {
 		$sql.='
 		AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\') AND (l.PostID<t.LastPostID OR l.PostID IS NULL)) ';
 	}
@@ -174,7 +174,7 @@ if($ShowGrouped) {
 	$sql .= '
 		ORDER BY p.ID DESC';
 
-	if($ShowGrouped) {
+	if ($ShowGrouped) {
 		$sql.='
 		) AS sub
 		GROUP BY TopicID ORDER BY ID DESC';
@@ -190,7 +190,7 @@ if($ShowGrouped) {
 }
 
 $JsonResults = array();
-while(list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername, $TopicID, $ThreadTitle, $LastPostID, $LastRead, $Locked, $Sticky) = $DB->next_record()){
+while (list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername, $TopicID, $ThreadTitle, $LastPostID, $LastRead, $Locked, $Sticky) = $DB->next_record()) {
     $JsonResults[] = array(
         'postId' => (int) $PostID,
         'topicId' => (int) $TopicID,

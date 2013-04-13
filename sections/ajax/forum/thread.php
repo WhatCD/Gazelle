@@ -17,14 +17,13 @@ include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
 // Check for lame SQL injection attempts
-if(!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
-	if(isset($_GET['topicid']) && is_number($_GET['topicid'])) {
+if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
+	if (isset($_GET['topicid']) && is_number($_GET['topicid'])) {
 		$ThreadID = $_GET['topicid'];
-	}
-	elseif(isset($_GET['postid']) && is_number($_GET['postid'])) {
+	} elseif (isset($_GET['postid']) && is_number($_GET['postid'])) {
 		$DB->query("SELECT TopicID FROM forums_posts WHERE ID = $_GET[postid]");
 		list($ThreadID) = $DB->next_record();
-		if($ThreadID) {
+		if ($ThreadID) {
 			header("Location: ajax.php?action=forum&type=viewthread&threadid=$ThreadID&postid=$_GET[postid]");
 			die();
 		} else {
@@ -41,8 +40,7 @@ if(!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 
 if (isset($_GET['pp'])) {
 	$PerPage = $_GET['pp'];
-}
-else if (isset($LoggedUser['PostsPerPage'])) {
+} elseif (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {
 	$PerPage = POSTS_PER_PAGE;
@@ -55,16 +53,16 @@ $ThreadInfo = get_thread_info($ThreadID, true, true);
 $ForumID = $ThreadInfo['ForumID'];
 
 // Make sure they're allowed to look at the page
-if(!check_forumperm($ForumID)) {
+if (!check_forumperm($ForumID)) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }
 
 //Post links utilize the catalogue & key params to prevent issues with custom posts per page
-if($ThreadInfo['Posts'] > $PerPage) {
-	if(isset($_GET['post']) && is_number($_GET['post'])) {
+if ($ThreadInfo['Posts'] > $PerPage) {
+	if (isset($_GET['post']) && is_number($_GET['post'])) {
 		$PostNum = $_GET['post'];
-	} elseif(isset($_GET['postid']) && is_number($_GET['postid'])) {
+	} elseif (isset($_GET['postid']) && is_number($_GET['postid'])) {
 		$DB->query("SELECT COUNT(ID) FROM forums_posts WHERE TopicID = $ThreadID AND ID <= $_GET[postid]");
 		list($PostNum) = $DB->next_record();
 	} else {
@@ -74,13 +72,13 @@ if($ThreadInfo['Posts'] > $PerPage) {
 	$PostNum = 1;
 }
 list($Page,$Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
-if(($Page-1)*$PerPage > $ThreadInfo['Posts']) {
+if (($Page - 1) * $PerPage > $ThreadInfo['Posts']) {
 	$Page = ceil($ThreadInfo['Posts']/$PerPage);
 }
 list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
+if (!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
 	$DB->query("SELECT
 		p.ID,
 		p.AuthorID,
@@ -102,14 +100,14 @@ if ($_GET['updatelastread'] != '0') {
 	$LastPost = end($Thread);
 	$LastPost = $LastPost['ID'];
 	reset($Thread);
-	if($ThreadInfo['Posts'] <= $PerPage*$Page && $ThreadInfo['StickyPostID'] > $LastPost) {
+	if ($ThreadInfo['Posts'] <= $PerPage * $Page && $ThreadInfo['StickyPostID'] > $LastPost) {
 		$LastPost = $ThreadInfo['StickyPostID'];
 	}
 	//Handle last read
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
 		$DB->query("SELECT PostID From forums_last_read_topics WHERE UserID='$LoggedUser[ID]' AND TopicID='$ThreadID'");
 		list($LastRead) = $DB->next_record();
-		if($LastRead < $LastPost) {
+		if ($LastRead < $LastPost) {
 			$DB->query("INSERT INTO forums_last_read_topics
 				(UserID, TopicID, PostID) VALUES
 				('$LoggedUser[ID]', '".$ThreadID ."', '".db_string($LastPost)."')
@@ -119,17 +117,17 @@ if ($_GET['updatelastread'] != '0') {
 }
 
 //Handle subscriptions
-if(($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === FALSE) {
+if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
 	$DB->query("SELECT TopicID FROM users_subscriptions WHERE UserID = '$LoggedUser[ID]'");
 	$UserSubscriptions = $DB->collect(0);
 	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
 }
 
-if(empty($UserSubscriptions)) {
+if (empty($UserSubscriptions)) {
 	$UserSubscriptions = array();
 }
 
-if(in_array($ThreadID, $UserSubscriptions)) {
+if (in_array($ThreadID, $UserSubscriptions)) {
 	$Cache->delete_value('subscriptions_user_new_'.$LoggedUser['ID']);
 }
 
@@ -148,7 +146,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			$Votes[$Key] = $Value;
 		}
 
-		foreach(array_keys($Answers) as $i) {
+		foreach (array_keys($Answers) as $i) {
 			if (!isset($Votes[$i])) {
 				$Votes[$i] = 0;
 			}
@@ -171,7 +169,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 	if (!empty($UserResponse) && $UserResponse != 0) {
 		$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
 	} else {
-		if(!empty($UserResponse) && $RevealVoters) {
+		if (!empty($UserResponse) && $RevealVoters) {
 			$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
 		}
 	}
@@ -208,11 +206,11 @@ if ($ThreadInfo['NoPoll'] == 0) {
 }
 
 //Sqeeze in stickypost
-if($ThreadInfo['StickyPostID']) {
-	if($ThreadInfo['StickyPostID'] != $Thread[0]['ID']) {
+if ($ThreadInfo['StickyPostID']) {
+	if ($ThreadInfo['StickyPostID'] != $Thread[0]['ID']) {
 		array_unshift($Thread, $ThreadInfo['StickyPost']);
 	}
-	if($ThreadInfo['StickyPostID'] != $Thread[count($Thread)-1]['ID']) {
+	if ($ThreadInfo['StickyPostID'] != $Thread[count($Thread)-1]['ID']) {
 		$Thread[] = $ThreadInfo['StickyPost'];
 	}
 }

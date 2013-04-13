@@ -43,16 +43,16 @@ $RestrictedForums = explode(',', $RestrictedForums);
 $PermittedForums = array_keys($LoggedUser['PermittedForums']);
 foreach ($Forums as $Forum) {
 	list($ForumID, $CategoryID, $ForumName, $ForumDescription, $MinRead, $MinWrite, $MinCreate, $NumTopics, $NumPosts, $LastPostID, $LastAuthorID, $LastTopicID, $LastTime, $SpecificRules, $LastTopic, $Locked, $Sticky) = array_values($Forum);
-	if ($LoggedUser['CustomForums'][$ForumID] != 1 && ($MinRead>$LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== FALSE)) {
+	if ($LoggedUser['CustomForums'][$ForumID] != 1 && ($MinRead > $LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== false)) {
 		continue;
 	}
 	$Row = ($Row == 'a') ? 'b' : 'a';
 	$ForumDescription = display_str($ForumDescription);
 
-	if($CategoryID!=$LastCategoryID) {
+	if ($CategoryID != $LastCategoryID) {
 		$Row = 'b';
-		$LastCategoryID=$CategoryID;
-		if($OpenTable) { ?>
+		$LastCategoryID = $CategoryID;
+		if ($OpenTable) { ?>
 	</table>
 <? 		} ?>
 <h3><?=$ForumCats[$CategoryID]?></h3>
@@ -68,7 +68,7 @@ foreach ($Forums as $Forum) {
 		$OpenTable = true;
 	}
 
-	if((!$Locked || $Sticky) && $LastPostID != 0 && ((empty($LastRead[$LastTopicID]) || $LastRead[$LastTopicID]['PostID'] < $LastPostID) && strtotime($LastTime)>$LoggedUser['CatchupTime'])) {
+	if ((!$Locked || $Sticky) && $LastPostID != 0 && ((empty($LastRead[$LastTopicID]) || $LastRead[$LastTopicID]['PostID'] < $LastPostID) && strtotime($LastTime) > $LoggedUser['CatchupTime'])) {
 		$Read = 'unread';
 	} else {
 		$Read = 'read';
@@ -87,11 +87,11 @@ foreach ($Forums as $Forum) {
 		</td>
 <? if ($NumPosts == 0) { ?>
 		<td colspan="3">
-			There are no topics here<?=($MinCreate<=$LoggedUser['Class']) ? ', <a href="forums.php?action=new&amp;forumid='.$ForumID.'">'.'create one'.'</a>' : ''?>.
+			There are no topics here<?=($MinCreate <= $LoggedUser['Class']) ? ', <a href="forums.php?action=new&amp;forumid='.$ForumID.'">'.'create one'.'</a>' : ''?>.
 		</td>
 <? } else { ?>
 		<td>
-			<span style="float:left;" class="last_topic">
+			<span style="float: left;" class="last_topic">
 				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>" title="<?=display_str($LastTopic)?>"><?=display_str(Format::cut_string($LastTopic, 50, 1))?></a>
 			</span>
 <? if (!empty($LastRead[$LastTopicID])) { ?>
@@ -99,7 +99,7 @@ foreach ($Forums as $Forum) {
 				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>&amp;page=<?=$LastRead[$LastTopicID]['Page']?>#post<?=$LastRead[$LastTopicID]['PostID']?>"></a>
 			</span>
 <? } ?>
-			<span style="float:right;" class="last_poster">by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?></span>
+			<span style="float: right;" class="last_poster">by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?></span>
 		</td>
 		<td><?=number_format($NumTopics)?></td>
 		<td><?=number_format($NumPosts)?></td>

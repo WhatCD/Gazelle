@@ -65,12 +65,12 @@ foreach ($ArtistList as $Artist) {
 				<span style="float: right">
 <?
 	if (check_perms('site_torrents_notify')) {
-		if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === FALSE) {
+		if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === false) {
 			$DB->query("SELECT ID, Artists FROM users_notify_filters WHERE UserID='$LoggedUser[ID]' AND Label='Artist notifications' LIMIT 1");
 			$Notify = $DB->next_record(MYSQLI_ASSOC);
 			$Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
 		}
-		if (stripos($Notify['Artists'], '|'.$Name.'|') === FALSE) {
+		if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
 ?>
 		<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
 <?

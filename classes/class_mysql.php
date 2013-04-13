@@ -126,8 +126,8 @@ function db_string($String,$DisableWildcards=false) {
 
 function db_array($Array, $DontEscape = array(), $Quote = false) {
 	foreach ($Array as $Key => $Val) {
-		if(!in_array($Key, $DontEscape)) {
-			if($Quote) {
+		if (!in_array($Key, $DontEscape)) {
+			if ($Quote) {
 				$Array[$Key] = '\''.db_string(trim($Val)).'\'';
 			} else {
 				$Array[$Key] = db_string(trim($Val));
@@ -175,7 +175,7 @@ class DB_MYSQL {
 		$Debug->analysis('!dev DB Error',$DBError,3600*24);
 		if (DEBUG_MODE || check_perms('site_debug') || isset($argv[1])) {
 			echo '<pre>'.display_str($DBError).'</pre>';
-			if(DEBUG_MODE || check_perms('site_debug')) {
+			if (DEBUG_MODE || check_perms('site_debug')) {
 				print_r($this->Queries);
 			}
 			die();
@@ -185,7 +185,7 @@ class DB_MYSQL {
 	}
 
 	function connect() {
-		if(!$this->LinkID) {
+		if (!$this->LinkID) {
 			$this->LinkID = mysqli_connect($this->Server, $this->User, $this->Pass, $this->Database, $this->Port, $this->Socket); // defined in config.php
 			if (!$this->LinkID) {
 				$this->Errno = mysqli_connect_errno();
@@ -200,9 +200,9 @@ class DB_MYSQL {
 		$QueryStartTime=microtime(true);
 		$this->connect();
 		//In the event of a mysql deadlock, we sleep allowing mysql time to unlock then attempt again for a maximum of 5 tries
-		for($i=1; $i<6; $i++) {
+		for($i = 1; $i < 6; $i++) {
 			$this->QueryID = mysqli_query($this->LinkID,$Query);
-			if(!in_array(mysqli_errno($this->LinkID), array(1213, 1205))) {
+			if (!in_array(mysqli_errno($this->LinkID), array(1213, 1205))) {
 				break;
 			}
 			$Debug->analysis('Non-Fatal Deadlock:',$Query,3600*24);
@@ -243,18 +243,18 @@ class DB_MYSQL {
 	}
 
 	function inserted_id() {
-		if($this->LinkID) {
+		if ($this->LinkID) {
 			return mysqli_insert_id($this->LinkID);
 		}
 	}
 
 	function next_record($Type=MYSQLI_BOTH, $Escape = true) { // $Escape can be true, false, or an array of keys to not escape
-		if($this->LinkID) {
+		if ($this->LinkID) {
 			$this->Record = mysqli_fetch_array($this->QueryID,$Type);
 			$this->Row++;
 			if (!is_array($this->Record)) {
-				$this->QueryID = FALSE;
-			} elseif($Escape !== FALSE){
+				$this->QueryID = false;
+			} elseif ($Escape !== false) {
 				$this->Record = Misc::display_array($this->Record, $Escape);
 			}
 			return $this->Record;
@@ -262,11 +262,11 @@ class DB_MYSQL {
 	}
 
 	function close() {
-		if($this->LinkID) {
-			if(!mysqli_close($this->LinkID)) {
+		if ($this->LinkID) {
+			if (!mysqli_close($this->LinkID)) {
 				$this->halt('Cannot close connection or connection did not open.');
 			}
-			$this->LinkID = FALSE;
+			$this->LinkID = false;
 		}
 	}
 
@@ -277,7 +277,7 @@ class DB_MYSQL {
 	}
 
 	function affected_rows() {
-		if($this->LinkID) {
+		if ($this->LinkID) {
 			return mysqli_affected_rows($this->LinkID);
 		}
 	}
@@ -301,11 +301,11 @@ class DB_MYSQL {
 	// Otherwise, use an integer
 	function to_array($Key = false, $Type = MYSQLI_BOTH, $Escape = true) {
 		$Return = array();
-		while($Row = mysqli_fetch_array($this->QueryID,$Type)){
-			if($Escape!==FALSE) {
+		while ($Row = mysqli_fetch_array($this->QueryID,$Type)) {
+			if ($Escape !== false) {
 				$Row = Misc::display_array($Row, $Escape);
 			}
-			if($Key !== false) {
+			if ($Key !== false) {
 				$Return[$Row[$Key]] = $Row;
 			} else {
 				$Return[]=$Row;

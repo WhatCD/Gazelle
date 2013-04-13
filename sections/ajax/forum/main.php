@@ -9,14 +9,14 @@ if (isset($LoggedUser['PostsPerPage'])) {
 
 //We have to iterate here because if one is empty it breaks the query
 $TopicIDs = array();
-foreach($Forums as $Forum) {
+foreach ($Forums as $Forum) {
 	if (!empty($Forum['LastPostTopicID'])) {
-		$TopicIDs[]=$Forum['LastPostTopicID'];
+		$TopicIDs[] = $Forum['LastPostTopicID'];
 	}
 }
 
 //Now if we have IDs' we run the query
-if(!empty($TopicIDs)) {
+if (!empty($TopicIDs)) {
 	$DB->query("SELECT
 		l.TopicID,
 		l.PostID,
@@ -39,12 +39,12 @@ $JsonCategory = array();
 $JsonForums = array();
 foreach ($Forums as $Forum) {
 	list($ForumID, $CategoryID, $ForumName, $ForumDescription, $MinRead, $MinWrite, $MinCreate, $NumTopics, $NumPosts, $LastPostID, $LastAuthorID, $LastTopicID, $LastTime, $SpecificRules, $LastTopic, $Locked, $Sticky) = array_values($Forum);
-	if ($LoggedUser['CustomForums'][$ForumID] != 1 && ($MinRead>$LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== FALSE)) {
+	if ($LoggedUser['CustomForums'][$ForumID] != 1 && ($MinRead>$LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== false)) {
 		continue;
 	}
 	$ForumDescription = display_str($ForumDescription);
 
-	if($CategoryID!=$LastCategoryID) {
+	if ($CategoryID != $LastCategoryID) {
 		if (!empty($JsonForums) && !empty($JsonCategory)) {
 			$JsonCategory['forums'] = $JsonForums;
 			$JsonCategories[] = $JsonCategory;
@@ -57,7 +57,7 @@ foreach ($Forums as $Forum) {
 		$JsonForums = array();
 	}
 
-	if((!$Locked || $Sticky) && $LastPostID != 0 && ((empty($LastRead[$LastTopicID]) || $LastRead[$LastTopicID]['PostID'] < $LastPostID) && strtotime($LastTime)>$LoggedUser['CatchupTime'])) {
+	if ((!$Locked || $Sticky) && $LastPostID != 0 && ((empty($LastRead[$LastTopicID]) || $LastRead[$LastTopicID]['PostID'] < $LastPostID) && strtotime($LastTime) > $LoggedUser['CatchupTime'])) {
 		$Read = 'unread';
 	} else {
 		$Read = 'read';

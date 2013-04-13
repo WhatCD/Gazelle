@@ -72,8 +72,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 * @param string $EditType
 	 * @param string $Heading
 	 */
-	public function __construct (array &$TorrentList, array &$CollageDataList, $EditType, $Heading = null)
-	{
+	public function __construct (array &$TorrentList, array &$CollageDataList, $EditType, $Heading = null) {
 		global $UserID, $LoggedUser;
 
 		$this->set_heading($Heading);
@@ -86,11 +85,12 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 		$this->CollageDataList = $CollageDataList;
 
 		$this->HasTorrents = !empty($TorrentList);
-		if(!$this->HasTorrents) $this->no_torrents();
+		if (!$this->HasTorrents) {
+			$this->no_torrents();
+		}
 	}
 
-	private function no_torrents ()
-	{
+	private function no_torrents () {
 ?>
 		<div class="thin">
 			<div class="header">
@@ -106,8 +106,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	/**
 	 * Renders a complete page and table
 	 */
-	public function render_all ()
-	{
+	public function render_all () {
 		$this->header();
 		$this->body();
 		$this->footer();
@@ -117,8 +116,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 * Renders a comptele page/table header: div#thin, h2, scripts, notes,
 	 * form, table, etc.
 	 */
-	public function header ()
-	{
+	public function header () {
 		if ($this->HasTorrents) :
 ?>
 
@@ -149,13 +147,13 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 		<table id="manage_collage_table">
 			<thead>
 				<tr class="colhead">
-					<th style="width:7%">Order</th>
-					<th style="width:1%"><span><abbr title="Current order">#</abbr></span></th>
-					<th style="width:1%"><span>Year</span></th>
-					<th style="width:15%"><span>Artist</span></th>
+					<th style="width: 7%">Order</th>
+					<th style="width: 1%"><span><abbr title="Current order">#</abbr></span></th>
+					<th style="width: 1%"><span>Year</span></th>
+					<th style="width: 15%"><span>Artist</span></th>
 					<th><span>Torrent</span></th>
-					<th style="width:5%"><span>Bookmarked</span></th>
-					<th style="width:1%" id="check_all"><span>Remove</span></th>
+					<th style="width: 5%"><span>Bookmarked</span></th>
+					<th style="width: 1%" id="check_all"><span>Remove</span></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -166,8 +164,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	/**
 	 * Closes header code
 	 */
-	public function footer ()
-	{
+	public function footer () {
 		if ($this->HasTorrents) :
 ?>
 
@@ -192,8 +189,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 * Formats data for use in row
 	 *
 	 */
-	public function body ()
-	{
+	public function body () {
 		if ($this->HasTorrents)
 			foreach ($this->TorrentList as $GroupID => $Group) {
 				$Artists = array();
@@ -221,8 +217,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 * @param string $DisplayName
 	 * @param string $TorrentLink
 	 */
-	public function row ($Sort, $GroupID, $GroupYear, $DisplayName, $TorrentLink, $DateAdded)
-	{
+	public function row ($Sort, $GroupID, $GroupYear, $DisplayName, $TorrentLink, $DateAdded) {
 		$CSS = $this->NumGroups % 2 === 0 ? 'rowa' : 'rowb';
 ?>
 
@@ -248,8 +243,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 * @param string $VanityHouse
 	 * @return string $DisplayName
 	 */
-	static public function display_name (array &$ExtendedArtists, array &$Artists, $VanityHouse)
-	{
+	static public function display_name (array &$ExtendedArtists, array &$Artists, $VanityHouse) {
 		$DisplayName = '';
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4])
 			|| !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
@@ -265,8 +259,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	/**
 	 * Renders buttons used at the top and bottom of the table
 	 */
-	public function buttons ()
-	{
+	public function buttons () {
 ?>
 		<div class="drag_drop_save">
 			<input type="submit" name="update" value="Update Ranking" title="Save your rank." class="save_sortable_collage" />
@@ -279,8 +272,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	/**
 	 * @param string $EditType
 	 */
-	public function set_edit_type ($EditType)
-	{
+	public function set_edit_type ($EditType) {
 		$this->EditType = $EditType;
 	}
 
@@ -288,8 +280,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	 * Set's the current page's heading
 	 * @param string $Heading
 	 */
-	public function set_heading ($Heading)
-	{
+	public function set_heading ($Heading) {
 		$this->Heading = $Heading;
 	}
 }

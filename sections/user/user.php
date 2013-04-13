@@ -9,7 +9,7 @@ if (empty($_GET['id']) || !is_numeric($_GET['id']))
 	error(404);
 
 $UserID = $_GET['id'];
-if($UserID == $LoggedUser['ID']) {
+if ($UserID == $LoggedUser['ID']) {
 	$OwnProfile = true;
 } else {
 	$OwnProfile = false;
@@ -17,7 +17,7 @@ if($UserID == $LoggedUser['ID']) {
 
 
 
-if(check_perms('users_mod')) { // Person viewing is a staff member
+if (check_perms('users_mod')) { // Person viewing is a staff member
 	$DB->query("SELECT
 		m.Username,
 		m.Email,
@@ -118,20 +118,20 @@ if(check_perms('users_mod')) { // Person viewing is a staff member
 
 // Image proxy CTs
 $DisplayCustomTitle = $CustomTitle;
-if(check_perms('site_proxy_images') && !empty($CustomTitle)) {
+if (check_perms('site_proxy_images') && !empty($CustomTitle)) {
 	$DisplayCustomTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
 																		return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
 																	}, $CustomTitle);
 }
 
 $Paranoia = unserialize($Paranoia);
-if(!is_array($Paranoia)) {
+if (!is_array($Paranoia)) {
 	$Paranoia = array();
 }
 $ParanoiaLevel = 0;
-foreach($Paranoia as $P) {
+foreach ($Paranoia as $P) {
 	$ParanoiaLevel++;
-	if(strpos($P, '+')) {
+	if (strpos($P, '+')) {
 		$ParanoiaLevel++;
 	}
 }
@@ -159,16 +159,16 @@ View::show_header($Username,'user,bbcode,requests,jquery,lastfm');
 <? if (!$OwnProfile) { ?>
 		<a href="inbox.php?action=compose&amp;to=<?=$UserID?>" class="brackets">Send message</a>
 
-<? 	if(check_perms("users_mod")) {
+<? 	if (check_perms("users_mod")) {
 	$DB->query("SELECT PushService FROM users_push_notifications WHERE UserID = '$UserID'");
-	if($DB->record_count() > 0) { ?>
+	if ($DB->record_count() > 0) { ?>
 		<a
 			href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets"
 			>Push user</a>
 		<?	}
 }
 	$DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
-	if($DB->record_count() == 0) { ?>
+	if ($DB->record_count() == 0) { ?>
 		<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Add to friends</a>
 <?	}?>
 		<a href="reports.php?action=report&amp;type=user&amp;id=<?=$UserID?>" class="brackets">Report user</a>
@@ -209,7 +209,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 	<div class="sidebar">
 <?
 	if ($Avatar && Users::has_avatars_enabled()) {
-		if(check_perms('site_proxy_images') && !empty($Avatar)) {
+		if (check_perms('site_proxy_images') && !empty($Avatar)) {
 			$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($Avatar);
 		}
 ?>
@@ -265,7 +265,7 @@ if (check_paranoia_here('requestsvoted_count') || check_paranoia_here('requestsv
 	$RequestsVoted = $TotalSpent = 0;
 }
 
-if(check_paranoia_here('uploads+')) {
+if (check_paranoia_here('uploads+')) {
 	$DB->query("SELECT COUNT(ID) FROM torrents WHERE UserID='$UserID'");
 	list($Uploads) = $DB->next_record();
 } else {
@@ -290,9 +290,9 @@ $PostRank = $Rank->get_rank('posts', $ForumPosts);
 $BountyRank = $Rank->get_rank('bounty', $TotalSpent);
 $ArtistsRank = $Rank->get_rank('artists', $ArtistsAdded);
 
-if($Downloaded == 0) {
+if ($Downloaded == 0) {
 	$Ratio = 1;
-} elseif($Uploaded == 0) {
+} elseif ($Uploaded == 0) {
 	$Ratio = 0.5;
 } else {
 	$Ratio = round($Uploaded/$Downloaded, 2);
@@ -388,7 +388,7 @@ if (!empty($UserInfo['ExtraClasses'])) {
 				<li>
 					<ul class="stats">
 <?
-	foreach($UserInfo['ExtraClasses'] as $PermID => $Val) { ?>
+	foreach ($UserInfo['ExtraClasses'] as $PermID => $Val) { ?>
 						<li><?=$Classes[$PermID]['Name']?></li>
 <?	}
 ?>
@@ -397,13 +397,13 @@ if (!empty($UserInfo['ExtraClasses'])) {
 <?
 }
 // An easy way for people to measure the paranoia of a user, for e.g. contest eligibility
-if($ParanoiaLevel == 0) {
+if ($ParanoiaLevel == 0) {
 	$ParanoiaLevelText = 'Off';
-} elseif($ParanoiaLevel == 1) {
+} elseif ($ParanoiaLevel == 1) {
 	$ParanoiaLevelText = 'Very Low';
-} elseif($ParanoiaLevel <= 5) {
+} elseif ($ParanoiaLevel <= 5) {
 	$ParanoiaLevelText = 'Low';
-} elseif($ParanoiaLevel <= 20) {
+} elseif ($ParanoiaLevel <= 20) {
 	$ParanoiaLevelText = 'High';
 } else {
 	$ParanoiaLevelText = 'Very high';
@@ -441,7 +441,7 @@ if (check_perms('users_view_invites')) {
 				<li>Invites: <?
 				$DB->query("SELECT count(InviterID) FROM invites WHERE InviterID = '$UserID'");
 				list($Pending) = $DB->next_record();
-				if($DisableInvites) {
+				if ($DisableInvites) {
 					echo 'X';
 				} else {
 					echo number_format($Invites);
@@ -503,7 +503,7 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 <?
 if ($Snatched > 4 && check_paranoia_here('snatched')) {
 	$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
-	if(!is_array($RecentSnatches)){
+	if (!is_array($RecentSnatches)) {
 		$DB->query("SELECT
 		g.ID,
 		g.Name,
@@ -520,7 +520,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 		$RecentSnatches = $DB->to_array();
 
 		$Artists = Artists::get_artists($DB->collect('ID'));
-		foreach($RecentSnatches as $Key => $SnatchInfo) {
+		foreach ($RecentSnatches as $Key => $SnatchInfo) {
 			$RecentSnatches[$Key]['Artist'] = Artists::display_artists($Artists[$SnatchInfo['ID']], false, true);
 		}
 		$Cache->cache_value('recent_snatches_'.$UserID, $RecentSnatches, 0); //inf cache
@@ -532,7 +532,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 		</tr>
 		<tr>
 <?
-		foreach($RecentSnatches as $RS) { ?>
+		foreach ($RecentSnatches as $RS) { ?>
 			<td>
 				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=ImageTools::thumbnail($RS['WikiImage'])?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
 			</td>
@@ -542,10 +542,12 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 <?
 }
 
-if(!isset($Uploads)) { $Uploads = 0; }
+if (!isset($Uploads)) {
+	$Uploads = 0;
+}
 if ($Uploads > 4 && check_paranoia_here('uploads')) {
 	$RecentUploads = $Cache->get_value('recent_uploads_'.$UserID);
-	if(!is_array($RecentUploads)){
+	if (!is_array($RecentUploads)) {
 		$DB->query("SELECT
 		g.ID,
 		g.Name,
@@ -560,7 +562,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 		LIMIT 5");
 		$RecentUploads = $DB->to_array();
 		$Artists = Artists::get_artists($DB->collect('ID'));
-		foreach($RecentUploads as $Key => $UploadInfo) {
+		foreach ($RecentUploads as $Key => $UploadInfo) {
 			$RecentUploads[$Key]['Artist'] = Artists::display_artists($Artists[$UploadInfo['ID']], false, true);
 		}
 		$Cache->cache_value('recent_uploads_'.$UserID, $RecentUploads, 0); //inf cache
@@ -571,7 +573,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 			<td colspan="5">Recent uploads</td>
 		</tr>
 		<tr>
-<?		foreach($RecentUploads as $RU) { ?>
+<?		foreach ($RecentUploads as $RU) { ?>
 			<td>
 				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=ImageTools::thumbnail($RU['WikiImage'])?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
 			</td>
@@ -607,7 +609,7 @@ foreach ($Collages as $CollageInfo) {
 			</td>
 		</tr>
 		<tr class="images<?=$FirstCol ? '' : ' hidden'?>">
-<?	foreach($Collage as $C) {
+<?	foreach ($Collage as $C) {
 			$Group = Torrents::get_groups(array($C['GroupID']));
 			$Group = array_pop($Group['matches']);
 			extract(Torrents::array_group($Group));
@@ -630,7 +632,7 @@ foreach ($Collages as $CollageInfo) {
 
 
 // Linked accounts
-if(check_perms('users_mod')) {
+if (check_perms('users_mod')) {
 	include(SERVER_ROOT.'/sections/user/linkedfunctions.php');
 	user_dupes_table($UserID);
 }
@@ -666,7 +668,7 @@ if (check_paranoia_here('requestsvoted_list')) {
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
 
-	if($DB->record_count() > 0) {
+	if ($DB->record_count() > 0) {
 		$Requests = $DB->to_array();
 ?>
 		<div class="box">
@@ -688,12 +690,12 @@ if (check_paranoia_here('requestsvoted_list')) {
 						</td>
 					</tr>
 <?
-		foreach($Requests as $Request) {
+		foreach ($Requests as $Request) {
 			list($RequestID, $CategoryID, $Title, $Year, $TimeAdded, $Votes, $Bounty) = $Request;
 
 			$Request = Requests::get_requests(array($RequestID));
 			$Request = $Request['matches'][$RequestID];
-			if(empty($Request)) {
+			if (empty($Request)) {
 				continue;
 			}
 
@@ -702,11 +704,11 @@ if (check_paranoia_here('requestsvoted_list')) {
 
 			$CategoryName = $Categories[$CategoryID - 1];
 
-			if($CategoryName == "Music") {
+			if ($CategoryName == "Music") {
 				$ArtistForm = get_request_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 				$FullName = $ArtistLink."<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
-			} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
+			} else if ($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
 				$FullName = "<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
 			} else {
 				$FullName ="<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title."</a>";
@@ -716,22 +718,22 @@ if (check_paranoia_here('requestsvoted_list')) {
 ?>
 					<tr class="row<?=$Row?>">
 						<td>
-							<?=$FullName?>
+							<?=$FullName ?>
 							<div class="tags">
 <?
 			$Tags = $Request['Tags'];
 			$TagList = array();
-			foreach($Tags as $TagID => $TagName) {
+			foreach ($Tags as $TagID => $TagName) {
 				$TagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
 			}
 			$TagList = implode(', ', $TagList);
 ?>
-								<?=$TagList?>
+								<?=$TagList ?>
 							</div>
 						</td>
 						<td>
 							<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
-<?			if(check_perms('site_vote')){ ?>
+<?			if (check_perms('site_vote')) { ?>
 							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets">+</a>
 <?			} ?>
 						</td>
@@ -739,7 +741,7 @@ if (check_paranoia_here('requestsvoted_list')) {
 							<span id="bounty_<?=$RequestID?>"><?=Format::get_size($Bounty)?></span>
 						</td>
 						<td>
-							<?=time_diff($TimeAdded)?>
+							<?=time_diff($TimeAdded) ?>
 						</td>
 					</tr>
 <?		} ?>
@@ -777,14 +779,16 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 					<td>Assigned to</td>
 					<td>Resolved by</td>
 				</tr>
-<?		foreach($StaffPMs as $StaffPM) {
+<?		foreach ($StaffPMs as $StaffPM) {
 			list($ID, $Subject, $Status, $Level, $AssignedTo, $Date, $ResolverID) = $StaffPM;
 			// Get assigned
 			if ($AssignedToUser == '') {
 				// Assigned to class
 				$Assigned = ($Level == 0) ? "First Line Support" : $ClassLevels[$Level]['Name'];
 				// No + on Sysops
-				if ($Assigned != 'Sysop') { $Assigned .= "+"; }
+				if ($Assigned != 'Sysop') {
+					$Assigned .= "+";
+				}
 
 			} else {
 				// Assigned to user
@@ -814,10 +818,10 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 <?
 
 // Displays a table of forum warnings viewable only to Forum Moderators
-if($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
+if ($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
 	$DB->query("SELECT Comment FROM users_warnings_forums WHERE UserID = '$UserID'");
 	list($ForumWarnings) = $DB->next_record();
-	if($DB->record_count() > 0) {
+	if ($DB->record_count() > 0) {
 ?>
 <div class="box">
 	<div class="head">Forum warnings</div>
@@ -879,10 +883,20 @@ if (check_perms('users_mod', $Class)) { ?>
 					<select name="Class">
 <?
 		foreach ($ClassLevels as $CurClass) {
-			if (check_perms('users_promote_below', $Class) && $CurClass['ID']>=$LoggedUser['EffectiveClass']) { break; }
-			if ($CurClass['ID']>$LoggedUser['EffectiveClass']) { break; }
-			if ($CurClass['Secondary']) { continue; }
-			if ($Class===$CurClass['Level']) { $Selected=' selected="selected"'; } else { $Selected=""; }
+			if (check_perms('users_promote_below', $Class) && $CurClass['ID'] >= $LoggedUser['EffectiveClass']) {
+				break;
+			}
+			if ($CurClass['ID'] > $LoggedUser['EffectiveClass']) {
+				break;
+			}
+			if ($CurClass['Secondary']) {
+				continue;
+			}
+			if ($Class === $CurClass['Level']) {
+				$Selected = ' selected="selected"';
+			} else {
+				$Selected = '';
+			}
 ?>
 						<option value="<?=$CurClass['ID']?>"<?=$Selected?>><?=$CurClass['Name'].' ('.$CurClass['Level'].')'?></option>
 <?		} ?>
@@ -915,7 +929,9 @@ if (check_perms('users_mod', $Class)) { ?>
 			$i++;
 ?>
 				<input type="checkbox" id="perm_<?=$PermID?>" name="secondary_classes[]" value="<?=$PermID?>"<? if ($IsSet) { ?> checked="checked"<? } ?> />&nbsp;<label for="perm_<?=$PermID?>" style="margin-right: 10px;"><?=$PermName?></label>
-<?			if ($i % 5 == 0) { echo '<br />'; }
+<?			if ($i % 5 == 0) {
+				echo '<br />';
+			}
 		} ?>
 			</td>
 		</tr>
@@ -1109,7 +1125,7 @@ if (check_perms('users_mod', $Class)) { ?>
 					<input type="checkbox" name="SendHackedMail" id="SendHackedMail" /> <label for="SendHackedMail">Send hacked account email</label> to
 					<select name="HackedEmail">
 <?
-			foreach($Emails as $Email) {
+			foreach ($Emails as $Email) {
 				list($Address, $IP) = $Email;
 ?>
 						<option value="<?=display_str($Address)?>"><?=display_str($Address)?> - <?=display_str($IP)?></option>
@@ -1159,7 +1175,7 @@ if (check_perms('users_mod', $Class)) { ?>
 
 <?	} ?>
 		</table><br />
-<?	if(check_perms('users_logout')) { ?>
+<?	if (check_perms('users_logout')) { ?>
 		<table class="layout">
 			<tr class="colhead"><td colspan="2">Session</td></tr>
 			<tr>

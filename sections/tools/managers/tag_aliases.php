@@ -77,8 +77,8 @@ while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 			</td>
 <?	if (check_perms('users_mod')) { ?>
 			<td>
-				<input type="submit" name="save" value="Save Alias" />
-				<input type="submit" name="delete" value="Delete Alias" />
+				<input type="submit" name="save" value="Save alias" />
+				<input type="submit" name="delete" value="Delete alias" />
 			</td>
 <?	} ?>
 		</form>

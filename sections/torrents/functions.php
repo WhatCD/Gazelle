@@ -149,7 +149,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 function is_valid_torrenthash($Str) {
 	//6C19FF4C 6C1DD265 3B25832C 0F6228B2 52D743D5
 	$Str = str_replace(' ', '', $Str);
-	if(preg_match('/^[0-9a-fA-F]{40}$/', $Str))
+	if (preg_match('/^[0-9a-fA-F]{40}$/', $Str))
 		return $Str;
 	return false;
 }
@@ -168,7 +168,7 @@ function get_group_requests($GroupID) {
 	global $DB, $Cache;
 
 	$Requests = $Cache->get_value('requests_group_'.$GroupID);
-	if ($Requests === FALSE) {
+	if ($Requests === false) {
 		$DB->query("SELECT ID FROM requests WHERE GroupID = $GroupID AND TimeFilled = '0000-00-00 00:00:00'");
 		$Requests = $DB->collect('ID');
 		$Cache->cache_value('requests_group_'.$GroupID, $Requests, 0);

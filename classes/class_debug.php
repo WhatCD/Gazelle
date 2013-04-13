@@ -91,10 +91,10 @@ class DEBUG {
 		return false;
 	}
 
-	public function log_var($Var, $VarName = FALSE) {
+	public function log_var($Var, $VarName = false) {
 		$BackTrace = debug_backtrace();
 		$ID = uniqid();
-		if(!$VarName) {
+		if (!$VarName) {
 			$VarName = $ID;
 		}
 		$File = array('path' => substr($BackTrace[0]['file'], strlen(SERVER_ROOT)), 'line' => $BackTrace[0]['line']);
@@ -103,7 +103,7 @@ class DEBUG {
 
 	public function set_flag($Event) {
 		global $ScriptStartTime;
-		$this->Flags[] = array($Event, (microtime(true)-$ScriptStartTime)*1000, memory_get_usage(true), $this->get_cpu_time());
+		$this->Flags[] = array($Event, (microtime(true) - $ScriptStartTime) * 1000, memory_get_usage(true), $this->get_cpu_time());
 	}
 
 	//This isn't in the constructor because $this is not available, and the function cannot be made static
@@ -118,7 +118,7 @@ class DEBUG {
 		$Return = array();
 		foreach ($Array as $Key => $Val) {
 			$Return[$Key] = '';
-			if (!is_int($Key) || $Key != $LastKey+1) {
+			if (!is_int($Key) || $Key != $LastKey + 1) {
 				$Return[$Key] .= "'$Key' => ";
 			}
 				if ($Val === true) {
@@ -194,7 +194,7 @@ class DEBUG {
 
 		/*
 		//Hiding "session_start(): Server 10.10.0.1 (tcp 11211) failed with: No route to host (113)" errors
-		if($Call != "session_start") {
+		if ($Call != "session_start") {
 			$this->Errors[] = array($Error, $File.':'.$Line, $Call, $Args);
 		}
 		*/
@@ -277,13 +277,13 @@ class DEBUG {
 	}
 
 	public function get_sphinxql_queries() {
-		if(class_exists('Sphinxql')) {
+		if (class_exists('Sphinxql')) {
 			return Sphinxql::$Queries;
 		}
 	}
 
 	public function get_sphinxql_time() {
-		if(class_exists('Sphinxql')) {
+		if (class_exists('Sphinxql')) {
 			return Sphinxql::$Time;
 		}
 	}
@@ -314,7 +314,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_perf').toggle();return false;">(View)</a> Performance stats:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_perf').toggle();return false;" class="brackets">View</a> Performance stats:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_perf" class="debug_table hidden" width="100%">
@@ -339,7 +339,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_include').toggle();return false;">(View)</a> <?=number_format(count($Includes))?> Includes:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_include').toggle();return false;" class="brackets">View</a> <?=number_format(count($Includes))?> Includes:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_include" class="debug_table hidden" width="100%">
@@ -363,7 +363,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_classes').toggle();return false;">(View)</a> Classes:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_classes').toggle();return false;" class="brackets">View</a> Classes:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_classes" class="debug_table hidden" width="100%">
@@ -380,7 +380,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_extensions').toggle();return false;">(View)</a> Extensions:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_extensions').toggle();return false;" class="brackets">View</a> Extensions:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_extensions" class="debug_table hidden" width="100%">
@@ -403,7 +403,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_flags').toggle();return false;">(View)</a> Flags:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_flags').toggle();return false;" class="brackets">View</a> Flags:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_flags" class="debug_table hidden" width="100%">
@@ -441,7 +441,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_constants').toggle();return false;">(View)</a> Constants:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_constants').toggle();return false;" class="brackets">View</a> Constants:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_constants" class="debug_table hidden" width="100%">
@@ -469,11 +469,11 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_cache').toggle();return false;">(View)</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_cache').toggle();return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_cache" class="debug_table hidden" width="100%">
-<? 		foreach($CacheKeys as $Key) { ?>
+<? 		foreach ($CacheKeys as $Key) { ?>
 		<tr>
 			<td align="left" class="debug_info debug_cache_key">
 				<a href="#" onclick="$('#debug_cache_<?=$Key?>').toggle(); return false;"><?=display_str($Key)?></a>
@@ -497,7 +497,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_error').toggle();return false;">(View)</a> <?=number_format(count($Errors))?> Errors:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_error').toggle();return false;" class="brackets">View</a> <?=number_format(count($Errors))?> Errors:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_error" class="debug_table hidden" width="100%">
@@ -536,7 +536,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_database').toggle();return false;">(View)</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_database').toggle();return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_database" class="debug_table hidden" width="100%">
@@ -546,7 +546,7 @@ class DEBUG {
 ?>
 		<tr valign="top">
 			<td class="debug_data debug_query_data"><div><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str($SQL)))?></div></td>
-			<td class="rowa debug_info debug_query_time" style="width:130px;" align="left"><?=number_format($Time, 5)?> ms</td>
+			<td class="rowa debug_info debug_query_time" style="width: 130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 		</tr>
 <?
 		}
@@ -559,10 +559,10 @@ class DEBUG {
 		$Header = 'Searches';
 		if (!is_array($Queries)) {
 			$Queries = $this->get_sphinx_queries();
-			if($QueriesQL = $this->get_sphinxql_queries()) {
+			if ($QueriesQL = $this->get_sphinxql_queries()) {
 				$Queries = array_merge($Queries, $QueriesQL);
 			}
-			$Header .= ' ('.number_format($this->get_sphinx_time()+$this->get_sphinxql_time(), 5).' ms)';
+			$Header .= ' ('.number_format($this->get_sphinx_time() + $this->get_sphinxql_time(), 5).' ms)';
 		}
 		if (empty($Queries)) {
 			return;
@@ -571,7 +571,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_sphinx').toggle();return false;">(View)</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_sphinx').toggle();return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_sphinx" class="debug_table hidden" width="100%">
@@ -581,7 +581,7 @@ class DEBUG {
 ?>
 		<tr valign="top">
 			<td class="debug_data debug_sphinx_data"><pre><?=str_replace("\t", '	', $Params)?></pre></td>
-			<td class="rowa debug_info debug_sphinx_time" style="width:130px;" align="left"><?=number_format($Time, 5)?> ms</td>
+			<td class="rowa debug_info debug_sphinx_time" style="width: 130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 		</tr>
 <?
 		}
@@ -593,7 +593,7 @@ class DEBUG {
 	public function vars_table($Vars=false) {
 		$Header = 'Logged Variables';
 		if (empty($Vars)) {
-			if(empty($this->LoggedVars)) {
+			if (empty($this->LoggedVars)) {
 				return;
 			}
 			$Vars = $this->LoggedVars;
@@ -603,12 +603,12 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_loggedvars').toggle();return false;">(View)</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_loggedvars').toggle();return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_loggedvars" class="debug_table hidden" width="100%">
 <?
-		foreach($Vars as $ID => $Var) {
+		foreach ($Vars as $ID => $Var) {
 			list($Key, $Data) = each($Var);
 			$Size = count($Data['data']);
 ?>

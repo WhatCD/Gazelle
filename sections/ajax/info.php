@@ -72,7 +72,7 @@ if ($CurrentBlog === false) {
 
 // Subscriptions
 $NewSubscriptions = $Cache->get_value('subscriptions_user_new_' . $LoggedUser['ID']);
-if ($NewSubscriptions === FALSE) {
+if ($NewSubscriptions === false) {
 	if ($LoggedUser['CustomForums']) {
 		unset($LoggedUser['CustomForums']['']);
 		$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));

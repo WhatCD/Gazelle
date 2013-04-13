@@ -26,7 +26,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 
 list($Page,$Limit) = Format::page_limit($PerPage);
 
-if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === FALSE) {
+if(($UserInfo = $Cache->get_value('user_info_'.$UserID)) === false) {
 	$DB->query("SELECT
 		m.Username,
 		m.Enabled,
@@ -202,7 +202,7 @@ if($ShowGrouped) {
 		<div class="linkbox">
 <?
 if($ViewingOwn) {
-	if(($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === FALSE) {
+	if(($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
 		$DB->query("SELECT TopicID FROM users_subscriptions WHERE UserID = '$LoggedUser[ID]'");
 		$UserSubscriptions = $DB->collect(0);
 		$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);

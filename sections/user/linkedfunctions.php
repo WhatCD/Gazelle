@@ -76,7 +76,7 @@ function unlink_user($UserID) {
 		error(403);
 	}
 	$UserInfo = Users::user_info($UserID);
-	if ($UserInfo === FALSE) {
+	if ($UserInfo === false) {
 		return;
 	}
 	$AdminComment = sqltime()." - Linked accounts updated: [user]".$UserInfo['Username']."[/user] unlinked by ".$LoggedUser['Username'];
@@ -167,7 +167,7 @@ function user_dupes_table($UserID) {
 			<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" id="form_comment_hash" name="form_comment_hash" value="<?=$CommentHash?>" />
 			<div class="box">
-				<div class="head"><?=max($DupeCount - 1, 0)?> linked account<?=(($DupeCount == 2)?'':'s')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;" class="brackets">View</a></div>
+				<div class="head"><?=max($DupeCount - 1, 0)?> Linked account<?=(($DupeCount == 2)?'':'s')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;" class="brackets">View</a></div>
 				<table width="100%" class="layout hidden linkedaccounts">
 					<?=$DupeCount?'<tr>':''?>
 <?

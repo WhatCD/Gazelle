@@ -472,14 +472,14 @@ class Torrents {
 				JOIN torrents AS t ON t.ID=tf.TorrentID
 				JOIN torrents_group AS tg ON tg.ID=t.GroupID
 				WHERE tf.TorrentID = ".$TorrentID);
-		if($DB->record_count() > 0) {
+		if ($DB->record_count() > 0) {
 			list($GroupID, $Contents) = $DB->next_record(MYSQLI_NUM, false);
 			if (Misc::is_new_torrent($Contents)) {
 				$Tor = new BencodeTorrent($Contents);
-				$FilePath = isset($Tor->Dec['info']['files']) ? Format::make_utf8($Tor->get_name()) : "";
+				$FilePath = isset($Tor->Dec['info']['files']) ? Format::make_utf8($Tor->get_name()) : '';
 			} else {
 				$Tor = new TORRENT(unserialize(base64_decode($Contents)), true);
-				$FilePath = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : "";
+				$FilePath = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : '';
 			}
 			list($TotalSize, $FileList) = $Tor->file_list();
 			foreach($FileList as $File) {
@@ -753,17 +753,32 @@ class Torrents {
 	public static function edition_string(array $Torrent, array $Group) {
 		if ($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
 			$EditionName = $Torrent['RemasterYear'];
-			$AddExtra = " - ";
-			if ($Torrent['RemasterRecordLabel']) { $EditionName .= $AddExtra . display_str($Torrent['RemasterRecordLabel']); $AddExtra = ' / '; }
-			if ($Torrent['RemasterCatalogueNumber']) { $EditionName .= $AddExtra . display_str($Torrent['RemasterCatalogueNumber']); $AddExtra = ' / '; }
-			if ($Torrent['RemasterTitle']) { $EditionName .= $AddExtra . display_str($Torrent['RemasterTitle']); $AddExtra = ' / '; }
+			$AddExtra = ' - ';
+			if ($Torrent['RemasterRecordLabel']) {
+				$EditionName .= $AddExtra . display_str($Torrent['RemasterRecordLabel']);
+				$AddExtra = ' / ';
+			}
+			if ($Torrent['RemasterCatalogueNumber']) {
+				$EditionName .= $AddExtra . display_str($Torrent['RemasterCatalogueNumber']);
+				$AddExtra = ' / ';
+			}
+			if ($Torrent['RemasterTitle']) {
+				$EditionName .= $AddExtra . display_str($Torrent['RemasterTitle']);
+				$AddExtra = ' / ';
+			}
 			$EditionName .= $AddExtra . display_str($Torrent['Media']);
 		} else {
 			$AddExtra = " / ";
-			if(!$Torrent['Remastered']) {
+			if (!$Torrent['Remastered']) {
 				$EditionName = "Original Release";
-				if ($Group['RecordLabel']) { $EditionName .= $AddExtra . $Group['RecordLabel']; $AddExtra = ' / '; }
-				if ($Group['CatalogueNumber']) { $EditionName .= $AddExtra . $Group['CatalogueNumber']; $AddExtra = ' / '; }
+				if ($Group['RecordLabel']) {
+					$EditionName .= $AddExtra . $Group['RecordLabel'];
+					$AddExtra = ' / ';
+				}
+				if ($Group['CatalogueNumber']) {
+					$EditionName .= $AddExtra . $Group['CatalogueNumber'];
+					$AddExtra = ' / ';
+				}
 			} else {
 				$EditionName = "Unknown Release(s)";
 			}

@@ -7,7 +7,7 @@ if (!isset($_REQUEST['authkey']) || !isset($_REQUEST['torrent_pass'])) {
 	$AuthKey	 = $LoggedUser['AuthKey'];
 } else {
 	$UserInfo = $Cache->get_value('user_'.$_REQUEST['torrent_pass']);
-	if(!is_array($UserInfo)) {
+	if (!is_array($UserInfo)) {
 		$DB->query("SELECT
 			ID,
 			DownloadAlt
@@ -38,7 +38,7 @@ if (!is_number($TorrentID)) {
 /* uTorrent remote redownloads .torrent files every fifteen minutes
 	to prevent this retardation from blowing bandwidth etc., let's block it
 	if he's downloaded the .torrent file twice before */
-if (strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== FALSE) {
+if (strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== false) {
 	$DB->query("SELECT 1 FROM users_downloads WHERE UserID=$UserID AND TorrentID=$TorrentID LIMIT 3");
 	if ($DB->record_count() > 2) {
 		error('You have already downloaded this .torrent three times. If you need to download it again, please do so from your browser, not through uTorrent remote.');
@@ -47,7 +47,7 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== FALSE) {
 }
 
 $Info = $Cache->get_value('torrent_download_'.$TorrentID);
-if(!is_array($Info) || !array_key_exists('PlainArtists', $Info) || empty($Info[10])) {
+if (!is_array($Info) || !array_key_exists('PlainArtists', $Info) || empty($Info[10])) {
 	$DB->query("SELECT
 		t.Media,
 		t.Format,
@@ -63,7 +63,7 @@ if(!is_array($Info) || !array_key_exists('PlainArtists', $Info) || empty($Info[1
 		FROM torrents AS t
 		INNER JOIN torrents_group AS tg ON tg.ID=t.GroupID
 		WHERE t.ID='".db_string($TorrentID)."'");
-	if($DB->record_count() < 1) {
+	if ($DB->record_count() < 1) {
 		error(404);
 	}
 	$Info = array($DB->next_record(MYSQLI_NUM, array(4,5,6,10)));
@@ -72,7 +72,7 @@ if(!is_array($Info) || !array_key_exists('PlainArtists', $Info) || empty($Info[1
 	$Info['PlainArtists'] = Artists::display_artists($Artists, false, true, false);
 	$Cache->cache_value('torrent_download_'.$TorrentID, $Info, 0);
 }
-if(!is_array($Info[0])) {
+if (!is_array($Info[0])) {
 	error(404);
 }
 list($Media,$Format,$Encoding,$Year,$GroupID,$Name,$Image, $CategoryID, $Size, $FreeTorrent, $InfoHash) = array_shift($Info); // used for generating the filename
@@ -129,16 +129,16 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 }
 
 //Stupid Recent Snatches On User Page
-if($CategoryID == '1' && $Image != "") {
+if ($CategoryID == '1' && $Image != "") {
 	$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
-	if(!empty($RecentSnatches)) {
+	if (!empty($RecentSnatches)) {
 		$Snatch = array('ID'=>$GroupID,'Name'=>$Name,'Artist'=>$Artists,'WikiImage'=>$Image);
-		if(!in_array($Snatch, $RecentSnatches)) {
-			if(count($RecentSnatches) == 5) {
+		if (!in_array($Snatch, $RecentSnatches)) {
+			if (count($RecentSnatches) == 5) {
 				array_pop($RecentSnatches);
 			}
 			array_unshift($RecentSnatches, $Snatch);
-		} elseif(!is_array($RecentSnatches)) {
+		} elseif (!is_array($RecentSnatches)) {
 			$RecentSnatches = array($Snatch);
 		}
 		$Cache->cache_value('recent_snatches_'.$UserID, $RecentSnatches, 0);
@@ -155,7 +155,7 @@ $FileName = TorrentsDL::construct_file_name($Info['PlainArtists'], $Name, $Year,
 
 if ($DownloadAlt) {
 	header('Content-Type: text/plain; charset=utf-8');
-} else if (!$DownloadAlt || $Failed) {
+} elseif (!$DownloadAlt || $Failed) {
 	header('Content-Type: application/x-bittorrent; charset=utf-8');
 }
 header('Content-disposition: attachment; filename="'.$FileName.'"');

@@ -58,7 +58,7 @@ if ($_REQUEST['do'] == 'vote') {
 	// our life just got a bit easier.  We're only tracking paired votes on upvotes.
 	if ($Type == 'Up') {
 		$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
-		if ($VotePairs !== FALSE) {
+		if ($VotePairs !== false) {
 			foreach ($UserVotes as $Vote) {
 				if ($Vote['GroupID'] == $GroupID) {
 					continue;
@@ -91,7 +91,7 @@ if ($_REQUEST['do'] == 'vote') {
 		}
 		// Again, if the cache key is not set, move along
 		$VotePairs = $Cache->get_value('vote_pairs_'.$VGID, true);
-		if ($VotePairs !== FALSE) {
+		if ($VotePairs !== false) {
 			// Go through all of the other albums paired to this one, and update
 			// this group's entry in their vote_pairs keys
 			if (isset($VotePairs[$GroupID])) {
@@ -131,15 +131,15 @@ if ($_REQUEST['do'] == 'vote') {
 	$Cache->cache_value('votes_'.$GroupID, $GroupVotes);
 
 	$DB->query("UPDATE torrents_votes SET Total = GREATEST(0, Total - 1),
-				Score = IFNULL(binomial_ci(GREATEST(0,Ups".($Type=='Up'?'-1':'')."),GREATEST(0, Total)),0)".
-			    ($Type=='Up'?', Ups = GREATEST(0, Ups - 1)':'')."
+				Score = IFNULL(binomial_ci(GREATEST(0,Ups".($Type == 'Up' ? '-1' : '')."),GREATEST(0, Total)),0)".
+			    ($Type == 'Up' ? ', Ups = GREATEST(0, Ups - 1)' : '')."
 				WHERE GroupID=$GroupID");
 	// Update paired cache keys
 	// First update this album's paired votes.  If this keys is magically not set,
 	// our life just got a bit easier.  We're only tracking paired votes on upvotes.
 	if ($Type == 'Up') {
 		$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
-		if ($VotePairs !== FALSE) {
+		if ($VotePairs !== false) {
 			foreach ($UserVotes as $Vote) {
 				if (isset($VotePairs[$Vote['GroupID']])) {
 					if ($VotePairs[$Vote['GroupID']]['Total'] == 0) {
@@ -172,7 +172,7 @@ if ($_REQUEST['do'] == 'vote') {
 		}
 		// Again, if the cache key is not set, move along
 		$VotePairs = $Cache->get_value('vote_pairs_'.$VGID, true);
-		if ($VotePairs !== FALSE) {
+		if ($VotePairs !== false) {
 			if (isset($VotePairs[$GroupID])) {
 				if ($VotePairs[$GroupID]['Total'] == 0) {
 					// Something is screwy

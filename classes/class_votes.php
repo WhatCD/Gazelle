@@ -35,7 +35,7 @@ class Votes {
 		}
 
 		$UserVotes = $Cache->get_value('voted_albums_'.$UserID);
-		if ($UserVotes === FALSE) {
+		if ($UserVotes === false) {
 			$DB->query('SELECT GroupID, Type FROM users_votes WHERE UserID='.$UserID);
 			$UserVotes = $DB->to_array('GroupID', MYSQL_ASSOC, false);
 			$Cache->cache_value('voted_albums_'.$UserID, $UserVotes);
@@ -54,7 +54,7 @@ class Votes {
 		global $DB, $Cache;
 
 		$GroupVotes = $Cache->get_value('votes_'.$GroupID);
-		if ($GroupVotes === FALSE) {
+		if ($GroupVotes === false) {
 			$DB->query("SELECT Ups AS Ups, Total AS Total FROM torrents_votes WHERE GroupID=$GroupID");
 			if ($DB->record_count() == 0) {
 				$GroupVotes = array('Ups'=>0, 'Total'=>0);
@@ -204,7 +204,7 @@ class Votes {
 		}
 
 		$Rankings = $Cache->get_value('voting_ranks_overall');
-		if ($Rankings === FALSE) {
+		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
 			$DB->query("SELECT GroupID FROM torrents_votes ORDER BY Score DESC LIMIT 100");
@@ -235,7 +235,7 @@ class Votes {
 		}
 
 		$Rankings = $Cache->get_value('voting_ranks_year_'.$Year);
-		if ($Rankings === FALSE) {
+		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
 			$DB->query("SELECT GroupID
@@ -274,7 +274,7 @@ class Votes {
 		$Year = $Year - ($Year % 10);
 
 		$Rankings = $Cache->get_value('voting_ranks_decade_'.$Year);
-		if ($Rankings === FALSE) {
+		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
 			$DB->query("SELECT GroupID

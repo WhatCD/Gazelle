@@ -26,11 +26,21 @@
 	global $LoggedUser, $HeavyInfo, $UserSubscriptions, $ThreadInfo,
 			$ForumsDoublePost;
 
-	if ($LoggedUser['DisablePosting']) return;
-	if (!isset($TextareaCols)) $TextareaCols = 70;
-	if (!isset($TextareaRows)) $TextareaRows = 8;
-	if (!isset($InputAction))  $InputAction  = 'reply';
-	if (!isset($InputTitle))   $InputTitle   = 'Post comment';
+	if ($LoggedUser['DisablePosting']) {
+		return;
+	}
+	if (!isset($TextareaCols)) {
+		$TextareaCols = 70;
+	}
+	if (!isset($TextareaRows)) {
+		$TextareaRows = 8;
+	}
+	if (!isset($InputAction)) {
+		$InputAction = 'reply';
+	}
+	if (!isset($InputTitle)) {
+		$InputTitle = 'Post comment';
+	}
 
 	// TODO: Remove inline styles
 
@@ -52,18 +62,18 @@
 				<div class="box pad">
 					<table class="forum_post box vertical_margin hidden preview_wrap" id="preview_wrap_<?=$ReplyText->getID()?>">
 						<colgroup>
-<?	if(Users::has_avatars_enabled()) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 							<col class="col_avatar" />
 <?	} ?>
 							<col class="col_post_body" />
 						</colgroup>
 						<tr class="colhead_dark">
 							<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
-								<div style="float:left;"><a href='#quickreplypreview'>#XXXXXX</a>
+								<div style="float: left;"><a href='#quickreplypreview'>#XXXXXX</a>
 									by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong> Just now
 								</div>
-								<div style="float:right;">
-									[<a href="#quickreplypreview">Report</a>]
+								<div style="float: right;">
+									<a href="#quickreplypreview" class="brackets">Report</a>
 									&nbsp;
 									<a href="#">&uarr;</a>
 								</div>
@@ -76,13 +86,13 @@
 							</td>
 					<?	} ?>
 							<td class="body" valign="top">
-								<div id="contentpreview" style="text-align:left;">
+								<div id="contentpreview" style="text-align: left;">
 									<div id="preview_<?=$ReplyText->getID()?>"></div>
 								</div>
 							</td>
 						</tr>
 					</table>
-					<form class="send_form center" name="reply" id="quickpostform" action="" method="post"<? if(!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?>>
+					<form class="send_form center" name="reply" id="quickpostform" action="" method="post"<? if (!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?>>
 						<input type="hidden" name="action" value="<?=$InputAction?>" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="<?=$InputName?>" value="<?=$InputID?>" />
@@ -98,7 +108,7 @@
 	// This might use some more abstraction
 	if ($ForumID) { ?>
 <?		if (!in_array($InputID, $UserSubscriptions)) { ?>
-							<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> tabindex="2" />
+							<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe']) ? ' checked="checked"' : ''?> tabindex="2" />
 							<label for="subscribebox">Subscribe</label>
 <?
 		}
@@ -109,11 +119,12 @@
 ?>
 							<input id="mergebox" type="checkbox" name="merge" tabindex="2" />
 							<label for="mergebox">Merge</label>
-<?		} ?>
-<?		if (!$LoggedUser['DisableAutoSave']) { ?>
+<?		}
+		if (!$LoggedUser['DisableAutoSave']) { ?>
 							<script type="application/javascript">var storedTempTextarea = new StoreText('quickpost', 'quickpostform', <?=$InputID?>);</script>
-<? 		} ?>
-<? } ?>
+<? 		}
+	}
+?>
 							<input type="button" value="Preview" class="hidden button_preview_<?=$ReplyText->getID()?>" title="Preview text" tabindex="1" />
 							<input type="submit" value="Post reply" id="submit_button" tabindex="1" />
 						</div>

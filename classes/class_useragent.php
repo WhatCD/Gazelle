@@ -143,7 +143,7 @@ class USER_AGENT {
 				break;
 			}
 		}
-		if($this->mobile($UserAgentString)) {
+		if ($this->mobile($UserAgentString)) {
 			$Return .= ' Mobile';
 		}
 		return $Return;

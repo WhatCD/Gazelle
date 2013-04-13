@@ -1,5 +1,7 @@
 <?
-if(!check_perms('site_torrents_notify')){ error(403); }
+if (!check_perms('site_torrents_notify')) {
+	error(403);
+}
 View::show_header('Manage notifications');
 ?>
 <div class="thin">
@@ -16,7 +18,7 @@ $NumFilters = $DB->record_count()-1;
 
 $Notifications = $DB->to_array();
 
-foreach($Notifications as $N) { //$N stands for Notifications
+foreach ($Notifications as $N) { //$N stands for Notifications
 	$N['Artists']		= implode(', ', explode('|', substr($N['Artists'],1,-1)));
 	$N['Tags']			= implode(', ', explode('|', substr($N['Tags'],1,-1)));
 	$N['NotTags']		= implode(', ', explode('|', substr($N['NotTags'],1,-1)));
@@ -25,13 +27,13 @@ foreach($Notifications as $N) { //$N stands for Notifications
 	$N['Formats'] 		= explode('|', substr($N['Formats'],1,-1));
 	$N['Encodings'] 	= explode('|', substr($N['Encodings'],1,-1));
 	$N['Media'] 		= explode('|', substr($N['Media'],1,-1));
-	if($N['FromYear'] ==0) { $N['FromYear'] = ''; }
-	if($N['ToYear'] ==0) { $N['ToYear'] = ''; }
+	if ($N['FromYear'] == 0) { $N['FromYear'] = ''; }
+	if ($N['ToYear'] == 0) { $N['ToYear'] = ''; }
 	$i++;
 
-	if($i>$NumFilters && $NumFilters>0){ ?>
+	if ($i > $NumFilters && $NumFilters > 0) { ?>
 			<h3>Create a new notification filter</h3>
-<?	} elseif($NumFilters>0) { ?>
+<?	} elseif ($NumFilters>0) { ?>
 			<h3>
 				<a href="feeds.php?feed=torrents_notify_<?=$N['ID']?>_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode($N['Label'])?>"><img src="<?=STATIC_SERVER?>/common/symbols/rss.png" alt="RSS feed" /></a>
 				<?=display_str($N['Label'])?>
@@ -39,12 +41,12 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<a href="#" onclick="$('#filter_<?=$N['ID']?>').toggle(); return false;" class="brackets">Show</a>
 			</h3>
 <?	} ?>
-	<form class="<?=($i>$NumFilters)?'create_form':'edit_form'?>" name="notification" action="user.php" method="post">
+	<form class="<?=($i > $NumFilters) ? 'create_form' : 'edit_form'?>" name="notification" action="user.php" method="post">
 		<input type="hidden" name="formid" value="<?=$i?>" />
 		<input type="hidden" name="action" value="notify_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table <?=($i<=$NumFilters)?'id="filter_'.$N['ID'].'" class="layout hidden"':'class="layout"'?>>
-<?	if($i>$NumFilters){ ?>
+		<table <?=($i <= $NumFilters) ? 'id="filter_'.$N['ID'].'" class="layout hidden"' : 'class="layout"'?>>
+<?	if ($i > $NumFilters) { ?>
 			<tr>
 				<td class="label"><strong>Label</strong></td>
 				<td>
@@ -65,7 +67,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 				<td>
 					<textarea name="artists<?=$i?>" style="width:100%" rows="5"><?=display_str($N['Artists'])?></textarea>
 					<p class="min_padding">Comma-separated list &mdash; e.g. <em>Pink Floyd, Led Zeppelin, Neil Young</em></p>
-					<input type="checkbox" name="excludeva<?=$i?>" id="excludeva_<?=$N['ID']?>"<? if($N['ExcludeVA']=="1") { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="excludeva<?=$i?>" id="excludeva_<?=$N['ID']?>"<? if ($N['ExcludeVA'] == '1') { echo ' checked="checked"';} ?> />
 					<label for="excludeva_<?=$N['ID']?>">Exclude Various Artists releases</label>
 				</td>
 			</tr>
@@ -86,8 +88,8 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			<tr>
 				<td class="label"><strong>Only these categories</strong></td>
 				<td>
-<?	foreach($Categories as $Category){ ?>
-					<input type="checkbox" name="categories<?=$i?>[]" id="<?=$Category?>_<?=$N['ID']?>" value="<?=$Category?>"<? if(in_array($Category, $N['Categories'])) { echo ' checked="checked"';} ?> />
+<?	foreach ($Categories as $Category) { ?>
+					<input type="checkbox" name="categories<?=$i?>[]" id="<?=$Category?>_<?=$N['ID']?>" value="<?=$Category?>"<? if (in_array($Category, $N['Categories'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$Category?>_<?=$N['ID']?>"><?=$Category?></label>
 <?	} ?>
 				</td>
@@ -95,8 +97,8 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			<tr>
 				<td class="label"><strong>Only these types</strong></td>
 				<td>
-<?	foreach($ReleaseTypes as $ReleaseType){ ?>
-					<input type="checkbox" name="releasetypes<?=$i?>[]" id="<?=$ReleaseType?>_<?=$N['ID']?>" value="<?=$ReleaseType?>"<? if(in_array($ReleaseType, $N['ReleaseTypes'])) { echo ' checked="checked"';} ?> />
+<?	foreach ($ReleaseTypes as $ReleaseType) { ?>
+					<input type="checkbox" name="releasetypes<?=$i?>[]" id="<?=$ReleaseType?>_<?=$N['ID']?>" value="<?=$ReleaseType?>"<? if (in_array($ReleaseType, $N['ReleaseTypes'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$ReleaseType?>_<?=$N['ID']?>"><?=$ReleaseType?></label>
 <?	} ?>
 				</td>
@@ -104,8 +106,8 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			<tr>
 				<td class="label"><strong>Only these formats</strong></td>
 				<td>
-<?	foreach($Formats as $Format){ ?>
-					<input type="checkbox" name="formats<?=$i?>[]" id="<?=$Format?>_<?=$N['ID']?>" value="<?=$Format?>"<? if(in_array($Format, $N['Formats'])) { echo ' checked="checked"';} ?> />
+<?	foreach ($Formats as $Format) { ?>
+					<input type="checkbox" name="formats<?=$i?>[]" id="<?=$Format?>_<?=$N['ID']?>" value="<?=$Format?>"<? if (in_array($Format, $N['Formats'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$Format?>_<?=$N['ID']?>"><?=$Format?></label>
 <?	} ?>
 				</td>
@@ -113,8 +115,8 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			<tr>
 				<td class="label"><strong>Only these bitrates</strong></td>
 				<td>
-<?	foreach($Bitrates as $Bitrate){ ?>
-					<input type="checkbox" name="bitrates<?=$i?>[]" id="<?=$Bitrate?>_<?=$N['ID']?>" value="<?=$Bitrate?>"<? if(in_array($Bitrate, $N['Encodings'])) { echo ' checked="checked"';} ?> />
+<?	foreach ($Bitrates as $Bitrate) { ?>
+					<input type="checkbox" name="bitrates<?=$i?>[]" id="<?=$Bitrate?>_<?=$N['ID']?>" value="<?=$Bitrate?>"<? if (in_array($Bitrate, $N['Encodings'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$Bitrate?>_<?=$N['ID']?>"><?=$Bitrate?></label>
 <?	} ?>
 				</td>
@@ -122,8 +124,8 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			<tr>
 				<td class="label"><strong>Only these media</strong></td>
 				<td>
-<?	foreach($Media as $Medium){ ?>
-					<input type="checkbox" name="media<?=$i?>[]" id="<?=$Medium?>_<?=$N['ID']?>" value="<?=$Medium?>"<? if(in_array($Medium, $N['Media'])) { echo ' checked="checked"';} ?> />
+<?	foreach ($Media as $Medium) { ?>
+					<input type="checkbox" name="media<?=$i?>[]" id="<?=$Medium?>_<?=$N['ID']?>" value="<?=$Medium?>"<? if (in_array($Medium, $N['Media'])) { echo ' checked="checked"';} ?> />
 					<label for="<?=$Medium?>_<?=$N['ID']?>"><?=$Medium?></label>
 <?	} ?>
 				</td>
@@ -139,7 +141,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			<tr>
 				<td class="label"><strong>Only new releases</strong></td>
 				<td>
-					<input type="checkbox" name="newgroupsonly<?=$i?>" id="newgroupsonly_<?=$N['ID']?>"<? if($N['NewGroupsOnly']=="1") { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="newgroupsonly<?=$i?>" id="newgroupsonly_<?=$N['ID']?>"<? if ($N['NewGroupsOnly'] == '1') { echo ' checked="checked"';} ?> />
 <label for="newgroupsonly_<?=$N['ID']?>">Only notify for new releases, not new formats</label>
 				</td>
 			</tr>
@@ -150,7 +152,7 @@ foreach($Notifications as $N) { //$N stands for Notifications
 			</tr>
 		</table>
 	</form>
-<?	if($i==$NumFilters){ ?>
+<?	if ($i == $NumFilters) { ?>
 	<br /><br />
 <?	}
 } ?>

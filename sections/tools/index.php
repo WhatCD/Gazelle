@@ -9,20 +9,20 @@
 
  *****************************************************************/
 
-if(isset($argv[1])) {
-	if($argv[1] == "cli_sandbox") {
+if (isset($argv[1])) {
+	if ($argv[1] == "cli_sandbox") {
 		include("misc/cli_sandbox.php");
 		die();
 	}
 
 	$_REQUEST['action'] = $argv[1];
 } else {
-	if(empty($_REQUEST['action']) || ($_REQUEST['action'] != "public_sandbox" && $_REQUEST['action'] != "ocelot")) {
+	if (empty($_REQUEST['action']) || ($_REQUEST['action'] != "public_sandbox" && $_REQUEST['action'] != "ocelot")) {
 		enforce_login();
 	}
 }
 
-if(!isset($_REQUEST['action'])) {
+if (!isset($_REQUEST['action'])) {
 	include(SERVER_ROOT.'/sections/tools/tools.php');
 	die();
 }
@@ -120,8 +120,10 @@ switch ($_REQUEST['action']){
 		break;
 
 	case 'takeeditnews':
-		if(!check_perms('admin_manage_news')){ error(403); }
-		if(is_number($_POST['newsid'])){
+		if (!check_perms('admin_manage_news')) {
+			error(403);
+		}
+		if (is_number($_POST['newsid'])){
 			$DB->query("UPDATE news SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."' WHERE ID='".db_string($_POST['newsid'])."'");
 			$Cache->delete_value('news');
 			$Cache->delete_value('feed_news');
@@ -130,8 +132,10 @@ switch ($_REQUEST['action']){
 		break;
 
 	case 'deletenews':
-		if(!check_perms('admin_manage_news')){ error(403); }
-		if(is_number($_GET['id'])){
+		if (!check_perms('admin_manage_news')) {
+			error(403);
+		}
+		if (is_number($_GET['id'])){
 			authorize();
 			$DB->query("DELETE FROM news WHERE ID='".db_string($_GET['id'])."'");
 			$Cache->delete_value('news');
@@ -139,7 +143,7 @@ switch ($_REQUEST['action']){
 
 			// Deleting latest news
 			$LatestNews = $Cache->get_value('news_latest_id');
-			if ($LatestNews !== FALSE && $LatestNews == $_GET['id']) {
+			if ($LatestNews !== false && $LatestNews == $_GET['id']) {
 				$Cache->delete_value('news_latest_id');
 			}
 		}
@@ -147,7 +151,9 @@ switch ($_REQUEST['action']){
 		break;
 
 	case 'takenewnews':
-		if(!check_perms('admin_manage_news')){ error(403); }
+		if (!check_perms('admin_manage_news')) {
+			error(403);
+		}
 
 		$DB->query("INSERT INTO news (UserID, Title, Body, Time) VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."')");
 
@@ -173,7 +179,9 @@ switch ($_REQUEST['action']){
 		include('managers/tag_aliases.php');
 		break;
 	case 'permissions':
-		if (!check_perms('admin_manage_permissions')) { error(403); }
+		if (!check_perms('admin_manage_permissions')) {
+			error(403);
+		}
 
 		if (!empty($_REQUEST['id'])) {
 			$Val->SetFields('name',true,'string','You did not enter a valid name for this permission set.');
@@ -185,7 +193,7 @@ switch ($_REQUEST['action']){
 				$DB->query("SELECT p.ID,p.Name,p.Level,p.Secondary,p.PermittedForums,p.Values,p.DisplayStaff,COUNT(u.ID) FROM permissions AS p LEFT JOIN users_main AS u ON u.PermissionID=p.ID WHERE p.ID='".db_string($_REQUEST['id'])."' GROUP BY p.ID");
 				list($ID,$Name,$Level,$Secondary,$Forums,$Values,$DisplayStaff,$UserCount)=$DB->next_record(MYSQLI_NUM, array(5));
 
-				if($Level > $LoggedUser['EffectiveClass']  || $_REQUEST['level'] > $LoggedUser['EffectiveClass']) {
+				if ($Level > $LoggedUser['EffectiveClass'] || $_REQUEST['level'] > $LoggedUser['EffectiveClass']) {
 					error(403);
 				}
 				$Values = unserialize($Values);
@@ -205,15 +213,17 @@ switch ($_REQUEST['action']){
 
 				$Values=array();
 				foreach ($_REQUEST as $Key => $Perms) {
-					if (substr($Key,0,5)=="perm_") { $Values[substr($Key,5)]= (int)$Perms; }
+					if (substr($Key,0,5) == 'perm_') {
+						$Values[substr($Key,5)] = (int)$Perms;
+					}
 				}
 
-				$Name=$_REQUEST['name'];
-				$Level=$_REQUEST['level'];
-				$Secondary=empty($_REQUEST['secondary'])?0:1;
+				$Name = $_REQUEST['name'];
+				$Level = $_REQUEST['level'];
+				$Secondary = empty($_REQUEST['secondary']) ? 0 : 1;
 				$Forums = $_REQUEST['forums'];
-				$DisplayStaff=$_REQUEST['displaystaff'];
-				$Values['MaxCollages']=$_REQUEST['maxcollages'];
+				$DisplayStaff = $_REQUEST['displaystaff'];
+				$Values['MaxCollages'] = $_REQUEST['maxcollages'];
 
 				if (!$Err) {
 					if (!is_numeric($_REQUEST['id'])) {
@@ -395,7 +405,7 @@ switch ($_REQUEST['action']){
 		break;
 
 	case 'mod_sandbox':
-		if(check_perms('users_mod')) {
+		if (check_perms('users_mod')) {
 			include('misc/mod_sandbox.php');
 		} else {
 			error(403);
