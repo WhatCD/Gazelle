@@ -38,7 +38,7 @@ class TORRENT_FORM {
 		$this->Media = $Media;
 		$this->TorrentID = $TorrentID;
 
-		if($this->Torrent && $this->Torrent['GroupID']) {
+		if ($this->Torrent && $this->Torrent['GroupID']) {
 			$this->Disabled = ' disabled="disabled"';
 			$this->DisabledFlag = true;
 		}
@@ -49,13 +49,13 @@ class TORRENT_FORM {
 		global $LoggedUser;
 ?>
 <div class="thin">
-<?		if($this->NewTorrent) { ?>
+<?		if ($this->NewTorrent) { ?>
 	<p style="text-align: center;">
 		Your personal announce URL is:<br />
 		<input type="text" value="<?= ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce'?>" size="71" onclick="this.select()" readonly="readonly" />
 	</p>
 <?		}
-		if($this->Error) {
+		if ($this->Error) {
 			echo '<p style="color: red; text-align: center;">'.$this->Error.'</p>';
 		}
 ?>
@@ -63,21 +63,21 @@ class TORRENT_FORM {
 		<div>
 			<input type="hidden" name="submit" value="true" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-<?		if(!$this->NewTorrent) { ?>
+<?		if (!$this->NewTorrent) { ?>
 			<input type="hidden" name="action" value="takeedit" />
 			<input type="hidden" name="torrentid" value="<?=display_str($this->TorrentID)?>" />
 			<input type="hidden" name="type" value="<?=display_str($this->Torrent['CategoryID'])?>" />
 <?		} else {
-			if($this->Torrent && $this->Torrent['GroupID']) { ?>
+			if ($this->Torrent && $this->Torrent['GroupID']) { ?>
 			<input type="hidden" name="groupid" value="<?=display_str($this->Torrent['GroupID'])?>" />
 			<input type="hidden" name="type" value="Music" />
 <?			}
-			if($this->Torrent && $this->Torrent['RequestID']) { ?>
+			if ($this->Torrent && $this->Torrent['RequestID']) { ?>
 			<input type="hidden" name="requestid" value="<?=display_str($this->Torrent['RequestID'])?>" />
 <?			}
 		} ?>
 		</div>
-<?		if($this->NewTorrent) { ?>
+<?		if ($this->NewTorrent) { ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr>
 				<td class="label">Torrent file:</td>
@@ -87,9 +87,9 @@ class TORRENT_FORM {
 				<td class="label">Type:</td>
 				<td>
 				<select id="categories" name="type" onchange="Categories()"<?=$this->Disabled?>>
-<?			foreach(Misc::display_array($this->Categories) as $Index => $Cat) {
+<?			foreach (Misc::display_array($this->Categories) as $Index => $Cat) {
 				echo '<option value="'.$Index.'"';
-				if($Cat == $this->Torrent['CategoryName']) { echo ' selected="selected"'; }
+				if ($Cat == $this->Torrent['CategoryName']) { echo ' selected="selected"'; }
 				echo '>';
 				echo $Cat;
 				echo "</option>\n";
@@ -110,22 +110,22 @@ class TORRENT_FORM {
 		</div>
 
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
-<?		if(!$this->NewTorrent) {
-			if(check_perms('torrents_freeleech')) {
+<?		if (!$this->NewTorrent) {
+			if (check_perms('torrents_freeleech')) {
 ?>
 			<tr id="freetorrent">
 				<td class="label">Freeleech</td>
 				<td>
 					<select name="freeleech">
 <?	$FL = array("Normal", "Free", "Neutral");
-	foreach($FL as $Key => $Name) { ?>
+	foreach ($FL as $Key => $Name) { ?>
 						<option value="<?=$Key?>"<?=($Key == $Torrent['FreeTorrent'] ? ' selected="selected"' : '')?>><?=$Name?></option>
 <?	} ?>
 					</select>
 					 because
 					<select name="freeleechtype">
 <?	$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
-	foreach($FL as $Key => $Name) { ?>
+	foreach ($FL as $Key => $Name) { ?>
 						<option value="<?=$Key?>"<?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$Name?></option>
 <?	} ?>
 					</select>
@@ -138,10 +138,10 @@ class TORRENT_FORM {
 			<tr>
 				<td colspan="2" style="text-align: center;">
 					<p>Be sure that your torrent is approved by the <a href="rules.php?p=upload" target="_blank">rules</a>. Not doing this will result in a <strong class="important_text">warning</strong> or <strong class="important_text">worse</strong>.</p>
-<?		if($this->NewTorrent) { ?>
+<?		if ($this->NewTorrent) { ?>
 					<p>After uploading the torrent, you will have a one hour grace period during which no one other than you can fill requests with this torrent. Make use of this time wisely, and <a href="requests.php">search the list of requests</a>.</p>
 <?		} ?>
-					<input id="post" type="submit" <? if($this->NewTorrent) { echo 'value="Upload torrent"'; } else { echo 'value="Edit torrent"';} ?> />
+					<input id="post" type="submit"<? if ($this->NewTorrent) { echo ' value="Upload torrent"'; } else { echo ' value="Edit torrent"';} ?> />
 				</td>
 			</tr>
 		</table>
@@ -155,7 +155,7 @@ class TORRENT_FORM {
 		$IsRemaster = !empty($Torrent['Remastered']);
 		$UnknownRelease = !$this->NewTorrent && $IsRemaster && !$Torrent['RemasterYear'];
 
-		if($Torrent['GroupID']) {
+		if ($Torrent['GroupID']) {
 			global $DB;
 			$DB->query("SELECT ID,
 							RemasterYear,
@@ -171,7 +171,7 @@ class TORRENT_FORM {
 							RemasterRecordLabel DESC,
 							RemasterCatalogueNumber DESC");
 
-			if($DB->record_count() > 0) {
+			if ($DB->record_count() > 0) {
 				$GroupRemasters = $DB->to_array(false, MYSQLI_BOTH, false);
 			}
 		}
@@ -187,16 +187,16 @@ class TORRENT_FORM {
 		$LossywebApproved = $Torrent['LossywebApproved'];
 		global $ReleaseTypes;
 ?>
-		<table cellpadding="3" cellspacing="1" border="0" class="layout border<? if($this->NewTorrent) { echo ' slice'; }?>" width="100%">
-<?		if($this->NewTorrent) { ?>
+		<table cellpadding="3" cellspacing="1" border="0" class="layout border<? if ($this->NewTorrent) { echo ' slice'; }?>" width="100%">
+<?		if ($this->NewTorrent) { ?>
 			<tr id="artist_tr">
 			<td class="label">Artist(s):</td>
 			<td id="artistfields">
 				<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding "Various Artists" as an artist; read <a href="wiki.php?action=article&amp;id=369" target="_blank">this</a> for more information.</p>
-<?			if(!empty($Torrent['Artists'])) {
+<?			if (!empty($Torrent['Artists'])) {
 				$FirstArtist = true;
-				foreach($Torrent['Artists'] as $Importance => $Artists) {
-					foreach($Artists as $Artist) {
+				foreach ($Torrent['Artists'] as $Importance => $Artists) {
+					foreach ($Artists as $Artist) {
 ?>
 					<input type="text" id="artist" name="artists[]" size="45" value="<?=display_str($Artist['name']) ?>" onblur="CheckVA();"<?=$this->Disabled?> />
 					<select id="importance" name="importance[]"<?=$this->Disabled?>>
@@ -258,12 +258,12 @@ class TORRENT_FORM {
 <script type="text/javascript">
 //<![CDATA[
 hide();
-if(document.getElementById("categories").disabled == false){
-	if(navigator.appName == 'Opera') {
+if (document.getElementById("categories").disabled == false){
+	if (navigator.appName == 'Opera') {
 		var useragent = navigator.userAgent;
 		var match = useragent.split('Version/');
 		var version = parseFloat(match[1]);
-			if(version >= 12.00) {
+			if (version >= 12.00) {
 				show();
 			}
 	}
@@ -289,8 +289,8 @@ function show() {
 
 			<tr id="year_tr">
 				<td class="label">
-					<span id="year_label_not_remaster"<? if($IsRemaster) { echo ' class="hidden"';}?>>Year:</span>
-					<span id="year_label_remaster"<? if(!$IsRemaster) { echo ' class="hidden"';}?>>Year of original release</span>
+					<span id="year_label_not_remaster"<? if ($IsRemaster) { echo ' class="hidden"';} ?>>Year:</span>
+					<span id="year_label_remaster"<? if (!$IsRemaster) { echo ' class="hidden"';} ?>>Year of original release</span>
 				</td>
 				<td>
 					<p id="yearwarning" class="hidden">You have entered a year for a release which predates the medium's availability. You will need to change the year and enter additional edition information. If this information cannot be provided, check the &quot;Unknown Release&quot; checkbox below</p>
@@ -318,7 +318,7 @@ function show() {
 <?
 			foreach ($ReleaseTypes as $Key => $Val) {
 				echo '<option value="'.$Key.'"';
-				if($Key == $Torrent['ReleaseType']) { echo ' selected="selected"'; }
+				if ($Key == $Torrent['ReleaseType']) { echo ' selected="selected"'; }
 				echo '>';
 				echo $Val;
 				echo "</option>\n";
@@ -331,28 +331,28 @@ function show() {
 			<tr>
 				<td class="label">Edition information:</td>
 				<td>
-					<input type="checkbox" id="remaster" name="remaster"<? if($IsRemaster) { echo ' checked="checked"';}?> onclick="Remaster();<?if($this->NewTorrent) {?> CheckYear();<? } ?>" />
+					<input type="checkbox" id="remaster" name="remaster"<? if ($IsRemaster) { echo ' checked="checked"';} ?> onclick="Remaster();<? if ($this->NewTorrent) { ?> CheckYear();<? } ?>" />
 					<label for="remaster">Check this box if this torrent is a different release to the original, for example a limited or country specific edition or a release that includes additional bonus tracks or is a bonus disc.</label>
-					<div id="remaster_true"<? if(!$IsRemaster) { echo ' class="hidden"';}?>>
-<? if(check_perms('edit_unknowns') || $LoggedUser['ID'] == $Torrent['UserID']) { ?>
+					<div id="remaster_true"<? if (!$IsRemaster) { echo ' class="hidden"';} ?>>
+<?	if (check_perms('edit_unknowns') || $LoggedUser['ID'] == $Torrent['UserID']) { ?>
 						<br />
-						<input type="checkbox" id="unknown" name="unknown"<? if($UnknownRelease) { echo ' checked="checked"';}?> onclick="<?if($this->NewTorrent) {?> CheckYear();<? } ?>ToggleUnknown();" /> <label for="unknown">Unknown Release</label>
-<? } ?>
+						<input type="checkbox" id="unknown" name="unknown"<? if ($UnknownRelease) { echo ' checked="checked"';} ?> onclick="<? if ($this->NewTorrent) { ?> CheckYear();<? } ?>ToggleUnknown();" /> <label for="unknown">Unknown Release</label>
+<?	} ?>
 						<br /><br />
-<? if(!empty($GroupRemasters)) { ?>
+<?	if (!empty($GroupRemasters)) { ?>
 						<input type="hidden" id="json_remasters" value="<?=display_str(json_encode($GroupRemasters))?>" />
-						<select id="groupremasters" name="groupremasters" onchange="GroupRemaster()"<? if($UnknownRelease) { echo ' disabled="disabled"';}?>>
+						<select id="groupremasters" name="groupremasters" onchange="GroupRemaster()"<? if ($UnknownRelease) { echo ' disabled="disabled"';} ?>>
 							<option value="">-------</option>
 <?
-	$LastLine = "";
+	$LastLine = '';
 
-	foreach($GroupRemasters as $Index => $Remaster) {
+	foreach ($GroupRemasters as $Index => $Remaster) {
 		$Line = $Remaster['RemasterYear']." / ".$Remaster['RemasterTitle']." / ".$Remaster['RemasterRecordLabel']." / ".$Remaster['RemasterCatalogueNumber'];
-		if($Line != $LastLine) {
+		if ($Line != $LastLine) {
 			$LastLine = $Line;
 
 ?>
-							<option value="<?=$Index?>"<?=($Remaster['ID'] == $this->TorrentID) ? ' selected="selected"' : ''?>><?=$Line?></option>
+							<option value="<?=$Index?>"<?=($Remaster['ID'] == $this->TorrentID) ? ' selected="selected"' : '' ?>><?=$Line?></option>
 <?
 		}
 	}
@@ -365,26 +365,26 @@ function show() {
 								<tr id="edition_year">
 									<td class="label">Year (required):</td>
 									<td>
-										<input type="text" id="remaster_year" name="remaster_year" size="5" value="<? if($Torrent['RemasterYear']) { echo display_str($Torrent['RemasterYear']);} ?>"<? if($UnknownRelease) { echo ' disabled="disabled"';}?> />
+										<input type="text" id="remaster_year" name="remaster_year" size="5" value="<? if ($Torrent['RemasterYear']) { echo display_str($Torrent['RemasterYear']); } ?>"<? if ($UnknownRelease) { echo ' disabled="disabled"';} ?> />
 									</td>
 								</tr>
 								<tr id="edition_title">
 									<td class="label">Title:</td>
 									<td>
-										<input type="text" id="remaster_title" name="remaster_title" size="50" value="<?=display_str($Torrent['RemasterTitle']) ?>"<? if($UnknownRelease) { echo ' disabled="disabled"';}?> />
+										<input type="text" id="remaster_title" name="remaster_title" size="50" value="<?=display_str($Torrent['RemasterTitle']) ?>"<? if ($UnknownRelease) { echo ' disabled="disabled"';} ?> />
 										<p class="min_padding">Title of the release (e.g. <span style="font-style: italic;">'Deluxe Edition' or 'Remastered'</span>).</p>
 									</td>
 								</tr>
 								<tr id="edition_record_label">
 									<td class="label">Record label:</td>
 									<td>
-										<input type="text" id="remaster_record_label" name="remaster_record_label" size="50" value="<?=display_str($Torrent['RemasterRecordLabel']) ?>"<? if($UnknownRelease) { echo ' disabled="disabled"';}?> />
+										<input type="text" id="remaster_record_label" name="remaster_record_label" size="50" value="<?=display_str($Torrent['RemasterRecordLabel']) ?>"<? if ($UnknownRelease) { echo ' disabled="disabled"';} ?> />
 										<p class="min_padding">This is for the record label of the <strong>release</strong> (It may differ from the original).</p>
 									</td>
 								</tr>
 								<tr id="edition_catalogue_number">
 									<td class="label">Catalogue number:</td>
-									<td><input type="text" id="remaster_catalogue_number" name="remaster_catalogue_number" size="50" value="<?=display_str($Torrent['RemasterCatalogueNumber']) ?>"<? if($UnknownRelease) { echo ' disabled="disabled"';}?> />
+									<td><input type="text" id="remaster_catalogue_number" name="remaster_catalogue_number" size="50" value="<?=display_str($Torrent['RemasterCatalogueNumber']) ?>"<? if ($UnknownRelease) { echo ' disabled="disabled"';}?> />
 										<p class="min_padding">This is for the catalogue number of the <strong>release</strong>.</p>
 									</td>
 								</tr>
@@ -396,7 +396,7 @@ function show() {
 			<tr>
 				<td class="label">Scene:</td>
 				<td>
-					<input type="checkbox" id="scene" name="scene" <? if($Torrent['Scene']) { echo 'checked="checked" ';}?>/>
+					<input type="checkbox" id="scene" name="scene" <? if ($Torrent['Scene']) { echo 'checked="checked" ';}?>/>
 					<label for="scene">Check this only if this is a 'scene release'.<br />If you ripped it yourself, it is <strong>not</strong> a scene release. If you are not sure, <strong class="important_text">do not</strong> check it; you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29" target="_blank">Wikipedia</a>.</label>
 				</td>
 			</tr>
@@ -405,9 +405,9 @@ function show() {
 				<td>
 					<select id="format" name="format" onchange="Format()">
 						<option>---</option>
-<?		foreach(Misc::display_array($this->Formats) as $Format) {
+<?		foreach (Misc::display_array($this->Formats) as $Format) {
 			echo '<option value="'.$Format.'"';
-			if($Format == $Torrent['Format']) { echo ' selected="selected"'; }
+			if ($Format == $Torrent['Format']) { echo ' selected="selected"'; }
 			echo '>';
 			echo $Format;
 			echo "</option>\n";
@@ -423,9 +423,9 @@ function show() {
 				<td>
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
-<?		if($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates)) {
+<?		if ($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates)) {
 			$OtherBitrate = true;
-			if(substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(" (VBR)")) == " (VBR)") {
+			if (substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(" (VBR)")) == " (VBR)") {
 				$Torrent['Bitrate'] = substr($Torrent['Bitrate'], 0, strlen($Torrent['Bitrate'])-6);
 				$VBR = true;
 			}
@@ -439,9 +439,9 @@ function show() {
 		$SimpleBitrate = $SimpleBitrate[0];
 
 
-		foreach(Misc::display_array($this->Bitrates) as $Bitrate) {
+		foreach (Misc::display_array($this->Bitrates) as $Bitrate) {
 			echo '<option value="'.$Bitrate.'"';
-			if(($SimpleBitrate && preg_match('/^'.$SimpleBitrate.'.*/', $Bitrate)) || ($OtherBitrate && $Bitrate == "Other")) {
+			if (($SimpleBitrate && preg_match('/^'.$SimpleBitrate.'.*/', $Bitrate)) || ($OtherBitrate && $Bitrate == "Other")) {
 				echo ' selected="selected"';
 			}
 			echo '>';
@@ -449,14 +449,14 @@ function show() {
 			echo "</option>\n";
 		} ?>
 					</select>
-					<span id="other_bitrate_span"<? if(!$OtherBitrate) { echo ' class="hidden"'; } ?>>
-						<input type="text" name="other_bitrate" size="5" id="other_bitrate"<? if($OtherBitrate) { echo ' value="'.display_str($Torrent['Bitrate']).'"';} ?> onchange="AltBitrate()" />
-						<input type="checkbox" id="vbr" name="vbr"<? if(isset($VBR)) { echo ' checked="checked"'; } ?> /><label for="vbr"> (VBR)</label>
+					<span id="other_bitrate_span"<? if (!$OtherBitrate) { echo ' class="hidden"'; } ?>>
+						<input type="text" name="other_bitrate" size="5" id="other_bitrate"<? if ($OtherBitrate) { echo ' value="'.display_str($Torrent['Bitrate']).'"';} ?> onchange="AltBitrate()" />
+						<input type="checkbox" id="vbr" name="vbr"<? if (isset($VBR)) { echo ' checked="checked"'; } ?> /><label for="vbr"> (VBR)</label>
 					</span>
 				</td>
 			</tr>
 			<?
-		if($this->NewTorrent) { ?>
+		if ($this->NewTorrent) { ?>
 			<tr id="upload_logs" class="hidden">
 				<td class="label">
 					Log files:
@@ -468,7 +468,7 @@ function show() {
 			</tr>
 <?
 		} ?>
-<? if($this->NewTorrent) { ?>
+<? if ($this->NewTorrent) { ?>
 		<tr>
 		   <td class="label">Multi-format uploader:</td>
 		   <td><input type="button" value="+" id="add_format" /><input type="button" style="display: none" value="-" id="remove_format" /></td>
@@ -479,7 +479,7 @@ function show() {
 			<tr>
 				<td class="label">Vanity House:</td>
 				<td>
-					<label><input type="checkbox" id="vanity_house" name="vanity_house"<? if($Torrent['GroupID']) { echo ' disabled="disabled"'; }?><? if($Torrent['VanityHouse']){ echo ' checked="checked"';} ?> />
+					<label><input type="checkbox" id="vanity_house" name="vanity_house"<? if ($Torrent['GroupID']) { echo ' disabled="disabled"'; } ?><? if ($Torrent['VanityHouse']){ echo ' checked="checked"';} ?> />
 					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.
 					</label>
 				</td>
@@ -490,9 +490,9 @@ function show() {
 				<td>
 					<select name="media" onchange="CheckYear();" id="media">
 						<option>---</option>
-<?		foreach($this->Media as $Media) {
+<?		foreach ($this->Media as $Media) {
 			echo '<option value="'.$Media.'"';
-			if(isset($Torrent['Media']) && $Media == $Torrent['Media']) { echo ' selected="selected"'; }
+			if (isset($Torrent['Media']) && $Media == $Torrent['Media']) { echo ' selected="selected"'; }
 			echo '>';
 			echo $Media;
 			echo "</option>\n";
@@ -501,12 +501,12 @@ function show() {
 					</select>
 				</td>
 			</tr>
-<?		if(!$this->NewTorrent && check_perms('users_mod')) { ?>
+<?		if (!$this->NewTorrent && check_perms('users_mod')) { ?>
 			<tr>
 				<td class="label">Log/Cue:</td>
 				<td>
-					<input type="checkbox" id="flac_log" name="flac_log"<? if($HasLog) { echo ' checked="checked"';}?> /> <label for="flac_log">Check this box if the torrent has, or should have, a log file.</label><br />
-					<input type="checkbox" id="flac_cue" name="flac_cue"<? if($HasCue) { echo ' checked="checked"';}?> /> <label for="flac_cue">Check this box if the torrent has, or should have, a cue file.</label><br />
+					<input type="checkbox" id="flac_log" name="flac_log"<? if ($HasLog) { echo ' checked="checked"';} ?> /> <label for="flac_log">Check this box if the torrent has, or should have, a log file.</label><br />
+					<input type="checkbox" id="flac_cue" name="flac_cue"<? if ($HasCue) { echo ' checked="checked"';} ?> /> <label for="flac_cue">Check this box if the torrent has, or should have, a cue file.</label><br />
 <?
 		}
 		global $LoggedUser;
@@ -532,10 +532,10 @@ function show() {
 				}
 			}
 		}
-		if(!$this->NewTorrent && check_perms('users_mod')) {?>
+		if (!$this->NewTorrent && check_perms('users_mod')) { ?>
 				</td>
 			</tr>
-<?/*			if($HasLog) { ?>
+<?/*			if ($HasLog) { ?>
 			<tr>
 				<td class="label">Log score</td>
 				<td><input type="text" name="log_score" size="5" id="log_score" value="<?=display_str($Torrent['LogScore']) ?>" /></td>
@@ -550,37 +550,37 @@ function show() {
 <?			}*/?>
 			<tr>
 				<td class="label">Bad tags:</td>
-				<td><input type="checkbox" id="bad_tags" name="bad_tags"<? if($BadTags) { echo ' checked="checked"';}?> /> <label for="bad_tags">Check this box if the torrent has bad tags.</label></td>
+				<td><input type="checkbox" id="bad_tags" name="bad_tags"<? if ($BadTags) { echo ' checked="checked"';} ?> /> <label for="bad_tags">Check this box if the torrent has bad tags.</label></td>
 			</tr>
 			<tr>
 				<td class="label">Bad folder names:</td>
-				<td><input type="checkbox" id="bad_folders" name="bad_folders"<? if($BadFolders) { echo ' checked="checked"';}?> /> <label for="bad_folders">Check this box if the torrent has bad folder names.</label></td>
+				<td><input type="checkbox" id="bad_folders" name="bad_folders"<? if ($BadFolders) { echo ' checked="checked"';} ?> /> <label for="bad_folders">Check this box if the torrent has bad folder names.</label></td>
 			</tr>
 			<tr>
 				<td class="label">Bad file names:</td>
-				<td><input type="checkbox" id="bad_files" name="bad_files"<? if ($BadFiles) {echo ' checked="checked"';}?> /> <label for="bad_files">Check this box if the torrent has bad file names.</label></td>
+				<td><input type="checkbox" id="bad_files" name="bad_files"<? if ($BadFiles) {echo ' checked="checked"';} ?> /> <label for="bad_files">Check this box if the torrent has bad file names.</label></td>
 			</tr>
 			<tr>
 				<td class="label">Cassette approved:</td>
-				<td><input type="checkbox" id="cassette_approved" name="cassette_approved"<? if ($CassetteApproved) {echo ' checked="checked"';}?> /> <label for="cassette_approved">Check this box if the torrent is an approved cassette rip.</label></td>
+				<td><input type="checkbox" id="cassette_approved" name="cassette_approved"<? if ($CassetteApproved) {echo ' checked="checked"';} ?> /> <label for="cassette_approved">Check this box if the torrent is an approved cassette rip.</label></td>
 			</tr>
 			<tr>
 				<td class="label">Lossy master approved:</td>
-				<td><input type="checkbox" id="lossymaster_approved" name="lossymaster_approved"<? if ($LossymasterApproved) {echo ' checked="checked"';}?> /> <label for="lossymaster_approved">Check this box if the torrent is an approved lossy master.</label></td>
+				<td><input type="checkbox" id="lossymaster_approved" name="lossymaster_approved"<? if ($LossymasterApproved) {echo ' checked="checked"';} ?> /> <label for="lossymaster_approved">Check this box if the torrent is an approved lossy master.</label></td>
 			</tr>
 			<tr>
 				<td class="label">Lossy web approved:</td>
-				<td><input type="checkbox" id="lossyweb_approved" name="lossyweb_approved"<? if ($LossywebApproved) { echo ' checked="checked"';}?> /> <label for="lossyweb_approved">Check this box if the torrent is an approved lossy WEB release.</label></td>
+				<td><input type="checkbox" id="lossyweb_approved" name="lossyweb_approved"<? if ($LossywebApproved) { echo ' checked="checked"';} ?> /> <label for="lossyweb_approved">Check this box if the torrent is an approved lossy WEB release.</label></td>
 			</tr>
-<?		 }?>
-<?		 if($this->NewTorrent) { ?>
+<?		 } ?>
+<?		 if ($this->NewTorrent) { ?>
 			<tr>
 				<td class="label">Tags:</td>
 				<td>
-<?			if($GenreTags) { ?>
+<?			if ($GenreTags) { ?>
 					<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;"<?=$this->Disabled?>>
 						<option>---</option>
-<?				foreach(Misc::display_array($GenreTags) as $Genre) { ?>
+<?				foreach (Misc::display_array($GenreTags) as $Genre) { ?>
 						<option value="<?=$Genre ?>"><?=$Genre ?></option>
 <?				} ?>
 					</select>
@@ -637,7 +637,7 @@ function show() {
 		$Torrent = $this->Torrent;
 ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
-<?		if($this->NewTorrent){ ?>
+<?		if ($this->NewTorrent){ ?>
 			<tr id="title_tr">
 				<td class="label">Author - Title:</td>
 				<td>
@@ -656,9 +656,9 @@ function show() {
 					<select name="format" onchange="Format()">
 						<option value="">---</option>
 <?
-		foreach(Misc::display_array($this->Formats) as $Format) {
+		foreach (Misc::display_array($this->Formats) as $Format) {
 			echo '<option value="'.$Format.'"';
-			if($Format == $Torrent['Format']) { echo ' selected="selected"'; }
+			if ($Format == $Torrent['Format']) { echo ' selected="selected"'; }
 			echo '>';
 			echo $Format;
 			echo "</option>\n";
@@ -673,18 +673,18 @@ function show() {
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
 <?
-		if(!$Torrent['Bitrate'] || ($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates))) {
+		if (!$Torrent['Bitrate'] || ($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates))) {
 			$OtherBitrate = true;
-			if(substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(" (VBR)")) == " (VBR)") {
+			if (substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(" (VBR)")) == " (VBR)") {
 				$Torrent['Bitrate'] = substr($Torrent['Bitrate'], 0, strlen($Torrent['Bitrate'])-6);
 				$VBR = true;
 			}
 		} else {
 			$OtherBitrate = false;
 		}
-		foreach(Misc::display_array($this->Bitrates) as $Bitrate) {
+		foreach (Misc::display_array($this->Bitrates) as $Bitrate) {
 			echo '<option value="'.$Bitrate.'"';
-			if($Bitrate == $Torrent['Bitrate'] || ($OtherBitrate && $Bitrate == "Other")) {
+			if ($Bitrate == $Torrent['Bitrate'] || ($OtherBitrate && $Bitrate == "Other")) {
 				echo ' selected="selected"';
 			}
 			echo '>';
@@ -693,13 +693,13 @@ function show() {
 		}
 ?>
 					</select>
-					<span id="other_bitrate_span"<? if(!$OtherBitrate) { echo ' class="hidden"'; } ?>>
-						<input type="text" name="other_bitrate" size="5" id="other_bitrate"<? if($OtherBitrate) { echo ' value="'.display_str($Torrent['Bitrate']).'"';} ?> onchange="AltBitrate()" />
-						<input type="checkbox" id="vbr" name="vbr"<? if(isset($VBR)) { echo ' checked="checked"'; } ?> /><label for="vbr"> (VBR)</label>
+					<span id="other_bitrate_span"<? if (!$OtherBitrate) { echo ' class="hidden"'; } ?>>
+						<input type="text" name="other_bitrate" size="5" id="other_bitrate"<? if ($OtherBitrate) { echo ' value="'.display_str($Torrent['Bitrate']).'"';} ?> onchange="AltBitrate()" />
+						<input type="checkbox" id="vbr" name="vbr"<? if (isset($VBR)) { echo ' checked="checked"'; } ?> /><label for="vbr"> (VBR)</label>
 					</span>
 				</td>
 			</tr>
-<?		if($this->NewTorrent) { ?>
+<?		if ($this->NewTorrent) { ?>
 			<tr>
 				<td class="label">Tags:</td>
 				<td>

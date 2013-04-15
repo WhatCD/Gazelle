@@ -9,7 +9,7 @@ include(SERVER_ROOT.'/classes/class_text.php');
 
 $Text = new TEXT;
 
-if(empty($_GET['id']) || !is_number($_GET['id'])) {
+if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	error(0);
 }
 
@@ -19,7 +19,7 @@ $RequestID = $_GET['id'];
 
 $Request = Requests::get_requests(array($RequestID));
 $Request = $Request['matches'][$RequestID];
-if(empty($Request)) {
+if (empty($Request)) {
 	error(404);
 }
 
@@ -30,44 +30,44 @@ list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryI
 $IsFilled = !empty($TorrentID);
 $CanVote = (empty($TorrentID) && check_perms('site_vote'));
 
-if($CategoryID == 0) {
-	$CategoryName = "Unknown";
+if ($CategoryID == 0) {
+	$CategoryName = 'Unknown';
 } else {
 	$CategoryName = $Categories[$CategoryID - 1];
 }
 
 //Do we need to get artists?
-if($CategoryName == "Music") {
+if ($CategoryName == 'Music') {
 	$ArtistForm = get_request_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
-	if($IsFilled) {
-		$DisplayLink = $ArtistLink."<a href='torrents.php?torrentid=".$TorrentID."'>".$Title."</a> [".$Year."]";
+	if ($IsFilled) {
+		$DisplayLink = $ArtistLink."<a href='torrents.php?torrentid=".$TorrentID."'>$Title</a> [$Year]";
 	} else {
-		$DisplayLink = $ArtistLink.$Title." [".$Year."]";
+		$DisplayLink = $ArtistLink.$Title." [$Year]";
 	}
-	$FullName = $ArtistName.$Title." [".$Year."]";
+	$FullName = $ArtistName.$Title." [$Year]";
 
-	if($BitrateList != "") {
-		$BitrateString = implode(", ", explode("|", $BitrateList));
-		$FormatString = implode(", ", explode("|", $FormatList));
-		$MediaString = implode(", ", explode("|", $MediaList));
+	if ($BitrateList != '') {
+		$BitrateString = implode(', ', explode('|', $BitrateList));
+		$FormatString = implode(', ', explode('|', $FormatList));
+		$MediaString = implode(', ', explode('|', $MediaList));
 	} else {
-		$BitrateString = "Unknown, please read the description.";
-		$FormatString = "Unknown, please read the description.";
-		$MediaString = "Unknown, please read the description.";
+		$BitrateString = 'Unknown, please read the description.';
+		$FormatString = 'Unknown, please read the description.';
+		$MediaString = 'Unknown, please read the description.';
 	}
 
-	if(empty($ReleaseType)) {
-		$ReleaseName = "Unknown";
+	if (empty($ReleaseType)) {
+		$ReleaseName = 'Unknown';
 	} else {
 		$ReleaseName = $ReleaseTypes[$ReleaseType];
 	}
 
-} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
-	$FullName = $Title." [".$Year."]";
-	$DisplayLink = $Title." [".$Year."]";
+} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
+	$FullName = "$Title [$Year]";
+	$DisplayLink = "$Title [$Year]";
 } else {
 	$FullName = $Title;
 	$DisplayLink = $Title;
@@ -76,7 +76,7 @@ if($CategoryName == "Music") {
 //Votes time
 $RequestVotes = get_votes_array($RequestID);
 $VoteCount = count($RequestVotes['Voters']);
-$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0)));
+$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0)));
 $UserCanEdit = (!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2);
 $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
@@ -87,22 +87,22 @@ View::show_header('View request: '.$FullName, 'comments,requests,bbcode,jquery')
 	<div class="header">
 		<h2><a href="requests.php">Requests</a> &gt; <?=$CategoryName?> &gt; <?=$DisplayLink?></h2>
 		<div class="linkbox">
-<? if($CanEdit) { ?>
+<?	if ($CanEdit) { ?>
 			<a href="requests.php?action=edit&amp;id=<?=$RequestID?>" class="brackets">Edit</a>
-<? }
-if($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requests')) { ?>
+<?	}
+	if ($UserCanEdit || check_perms('users_mod')) { //check_perms('site_moderate_requests')) { ?>
 			<a href="requests.php?action=delete&amp;id=<?=$RequestID?>" class="brackets">Delete</a>
-<? } ?>
-<?	if(Bookmarks::has_bookmarked('request', $RequestID)) { ?>
+<?	}
+	if (Bookmarks::has_bookmarked('request', $RequestID)) { ?>
 			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
 <?	} else { ?>
 			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'Remove bookmark');return false;" class="brackets">Bookmark</a>
 <?	} ?>
 			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>" class="brackets">Report request</a>
-<?	if(!$IsFilled) { ?>
+<?	if (!$IsFilled) { ?>
 			<a href="upload.php?requestid=<?=$RequestID?><?= ($GroupID ? "&amp;groupid=$GroupID" : '') ?>" class="brackets">Upload request</a>
 <?	}
-	if(!$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0))) { ?>
+	if (!$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0))) { ?>
 			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>" class="brackets">Request update</a>
 <? } ?>
 
@@ -123,12 +123,12 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 		</div>
 	</div>
 	<div class="sidebar">
-<? if($CategoryID != 0) { ?>
+<? if ($CategoryID != 0) { ?>
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
 <?
 if (!empty($Image)) {
-	if(check_perms('site_proxy_images')) {
+	if (check_perms('site_proxy_images')) {
 		$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
 	}
 ?>
@@ -138,25 +138,25 @@ if (!empty($Image)) {
 <?	} ?>
 		</div>
 <? }
-	if($CategoryName == "Music") { ?>
+	if ($CategoryName == 'Music') { ?>
 		<div class="box box_artists">
 			<div class="head"><strong>Artists</strong></div>
 			<ul class="stats nobullet">
 <?
-		if(!empty($ArtistForm[4]) && count($ArtistForm[4]) > 0) {
+		if (!empty($ArtistForm[4]) && count($ArtistForm[4]) > 0) {
 ?>
 				<li class="artists_composer"><strong>Composers:</strong></li>
-<?			foreach($ArtistForm[4] as $Artist) {
+<?			foreach ($ArtistForm[4] as $Artist) {
 ?>
 				<li class="artists_composer">
 					<?=Artists::display_artist($Artist)?>
 				</li>
 <?			}
 		}
-		if(!empty($ArtistForm[6]) && count($ArtistForm[6]) > 0) {
+		if (!empty($ArtistForm[6]) && count($ArtistForm[6]) > 0) {
 ?>
 				<li class="artists_dj"><strong>DJ / Compiler:</strong></li>
-<?			foreach($ArtistForm[6] as $Artist) {
+<?			foreach ($ArtistForm[6] as $Artist) {
 ?>
 				<li class="artists_dj">
 					<?=Artists::display_artist($Artist)?>
@@ -169,36 +169,36 @@ if (!empty($Image)) {
 		} elseif ((count($ArtistForm[4]) > 0) && (count($ArtistForm[1]) > 0)) {
 			print '				<li class="artists_main"><strong>Performers:</strong></li>';
 		}
-		foreach($ArtistForm[1] as $Artist) {
+		foreach ($ArtistForm[1] as $Artist) {
 ?>
 				<li class="artists_main">
 					<?=Artists::display_artist($Artist)?>
 				</li>
 <?		}
-		if(!empty($ArtistForm[2]) && count($ArtistForm[2]) > 0) {
+		if (!empty($ArtistForm[2]) && count($ArtistForm[2]) > 0) {
 ?>
 				<li class="artists_with"><strong>With:</strong></li>
-<?			foreach($ArtistForm[2] as $Artist) {
+<?			foreach ($ArtistForm[2] as $Artist) {
 ?>
 				<li class="artists_with">
 					<?=Artists::display_artist($Artist)?>
 				</li>
 <?			}
 		}
-		if(!empty($ArtistForm[5]) && count($ArtistForm[5]) > 0) {
+		if (!empty($ArtistForm[5]) && count($ArtistForm[5]) > 0) {
 ?>
 				<li class="artists_conductor"><strong>Conducted by:</strong></li>
-<?			foreach($ArtistForm[5] as $Artist) {
+<?			foreach ($ArtistForm[5] as $Artist) {
 ?>
 				<li class="artist_guest">
 					<?=Artists::display_artist($Artist)?>
 				</li>
 <?			}
 		}
-		if(!empty($ArtistForm[3]) && count($ArtistForm[3]) > 0) {
+		if (!empty($ArtistForm[3]) && count($ArtistForm[3]) > 0) {
 ?>
 				<li class="artists_remix"><strong>Remixed by:</strong></li>
-<?			foreach($ArtistForm[3] as $Artist) {
+<?			foreach ($ArtistForm[3] as $Artist) {
 ?>
 				<li class="artists_remix">
 					<?=Artists::display_artist($Artist)?>
@@ -206,10 +206,10 @@ if (!empty($Image)) {
 <?
 			}
 		}
-		if(!empty($ArtistForm[7]) && count($ArtistForm[7]) > 0) {
+		if (!empty($ArtistForm[7]) && count($ArtistForm[7]) > 0) {
 ?>
 				<li class="artists_producer"><strong>Produced by:</strong></li>
-<?			foreach($ArtistForm[7] as $Artist) {
+<?			foreach ($ArtistForm[7] as $Artist) {
 ?>
 				<li class="artists_remix">
 					<?=Artists::display_artist($Artist)?>
@@ -224,7 +224,7 @@ if (!empty($Image)) {
 		<div class="box box_tags">
 			<div class="head"><strong>Tags</strong></div>
 			<ul class="stats nobullet">
-<?	foreach($Request['Tags'] as $TagID => $TagName) { ?>
+<?	foreach ($Request['Tags'] as $TagID => $TagName) { ?>
 				<li>
 					<a href="torrents.php?taglist=<?=$TagName?>"><?=display_str($TagName)?></a>
 					<br style="clear:both" />
@@ -281,8 +281,8 @@ if (!empty($Image)) {
 					<?=time_diff($TimeAdded)?>	by  <strong><?=Users::format_username($RequestorID, false, false, false)?></strong>
 				</td>
 			</tr>
-<?	if($CategoryName == "Music") {
-		if(!empty($RecordLabel)) { ?>
+<?	if ($CategoryName == "Music") {
+		if (!empty($RecordLabel)) { ?>
 			<tr>
 				<td class="label">Record label</td>
 				<td>
@@ -290,7 +290,7 @@ if (!empty($Image)) {
 				</td>
 			</tr>
 <?		}
-		if(!empty($CatalogueNumber)) { ?>
+		if (!empty($CatalogueNumber)) { ?>
 			<tr>
 				<td class="label">Catalogue number</td>
 				<td>
@@ -322,7 +322,7 @@ if (!empty($Image)) {
 					<?=$MediaString?>
 				</td>
 			</tr>
-<?		if(!empty($LogCue)) { ?>
+<?		if (!empty($LogCue)) { ?>
 			<tr>
 				<td class="label">Required CD FLAC only extras</td>
 				<td>
@@ -365,7 +365,7 @@ if (!empty($Image)) {
 				<td class="label">Votes</td>
 				<td>
 					<span id="votecount"><?=number_format($VoteCount)?></span>
-<?	if($CanVote) { ?>
+<?	if ($CanVote) { ?>
 					&nbsp;&nbsp;<a href="javascript:Vote(0)" class="brackets"><strong>+</strong></a>
 					<strong>Costs <?=Format::get_size($MinimumVote, 0)?></strong>
 <?	} ?>
@@ -378,8 +378,8 @@ if (!empty($Image)) {
 					<?=time_diff($LastVote)?>
 				</td>
 			</tr>
-<?	} ?>
-<?	if($CanVote) { ?>
+<?	}
+	if ($CanVote) { ?>
 			<tr id="voting">
 				<td class="label" title="These units are in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Custom vote (MB)</td>
 				<td>
@@ -419,7 +419,7 @@ if (!empty($Image)) {
 				<td id="formatted_bounty"><?=Format::get_size($RequestVotes['TotalBounty'])?></td>
 			</tr>
 <?
-	if($IsFilled) {
+	if ($IsFilled) {
 		$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
 ?>
 			<tr>
@@ -427,7 +427,7 @@ if (!empty($Image)) {
 				<td>
 					<strong><a href="torrents.php?<?=(strtotime($TimeFilled)<$TimeCompare?'id=':'torrentid=').$TorrentID?>">Yes</a></strong>,
 					by user <?=Users::format_username($FillerID, false, false, false)?>
-<?		if($LoggedUser['ID'] == $RequestorID || $LoggedUser['ID'] == $FillerID || check_perms('site_moderate_requests')) { ?>
+<?		if ($LoggedUser['ID'] == $RequestorID || $LoggedUser['ID'] == $FillerID || check_perms('site_moderate_requests')) { ?>
 						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>" class="brackets">Unfill</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning.
 <?		} ?>
 				</td>
@@ -445,9 +445,10 @@ if (!empty($Image)) {
 							<strong>Should be the permalink (PL) to the torrent (e.g. https://<?=SSL_SITE_URL?>/torrents.php?torrentid=xxxx).</strong>
 							<br />
 							<br />
-							<? if(check_perms('site_moderate_requests')) { ?> For user: <input type="text" size="25" name="user" <?=(!empty($FillerUsername) ? "value='$FillerUsername' " : '')?>/>
+<?						if (check_perms('site_moderate_requests')) { ?>
+							For user: <input type="text" size="25" name="user"<?=(!empty($FillerUsername) ? " value=\"$FillerUsername\"" : '')?> />
 							<br />
-							<? } ?>
+<?						} ?>
 							<input type="submit" value="Fill request" />
 							<br />
 						</div>
@@ -465,7 +466,7 @@ if (!empty($Image)) {
 <?
 
 $Results = $Cache->get_value('request_comments_'.$RequestID);
-if($Results === false) {
+if ($Results === false) {
 	$DB->query("SELECT
 			COUNT(c.ID)
 			FROM requests_comments as c
@@ -474,7 +475,7 @@ if($Results === false) {
 	$Cache->cache_value('request_comments_'.$RequestID, $Results, 0);
 }
 
-if(isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
+if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
 	$DB->query("SELECT COUNT(ID) FROM requests_comments WHERE RequestID = $RequestID AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
 	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
@@ -490,7 +491,7 @@ $CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
 $Catalogue = $Cache->get_value('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID);
-if($Catalogue === false) {
+if ($Catalogue === false) {
 	$DB->query("SELECT
 			c.ID,
 			c.AuthorID,
@@ -520,20 +521,20 @@ echo $Pages;
 <?
 
 //---------- Begin printing
-foreach($Thread as $Key => $Post) {
+foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post box vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : ''?>" id="post<?=$PostID?>">
 	<colgroup>
-<?	if(Users::has_avatars_enabled()) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 		<col class="col_avatar" />
 <? 	} ?>
 		<col class="col_post_body" />
 	</colgroup>
 	<tr class="colhead_dark">
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
-			<div style="float:left;"><a href='#post<?=$PostID?>'>#<?=$PostID?></a>
+			<div style="float: left;"><a href="#post<?=$PostID?>">#<?=$PostID?></a>
 				by <strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
 <?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
@@ -545,10 +546,10 @@ foreach($Thread as $Key => $Post) {
 			</div>
 			<div id="bar<?=$PostID?>" style="float:right;">
 				<a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
-				<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
-			$AuthorInfo = Users::user_info($AuthorID);
-			if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
-				?>
+<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
+		$AuthorInfo = Users::user_info($AuthorID);
+		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
+?>
                 <form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
                     <input type="hidden" name="action" value="warn" />
                     <input type="hidden" name="groupid" value="<?=$RequestID?>" />
@@ -556,10 +557,10 @@ foreach($Thread as $Key => $Post) {
                     <input type="hidden" name="userid" value="<?=$AuthorID?>" />
                     <input type="hidden" name="key" value="<?=$Key?>" />
                 </form>
-                - <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;">[Warn]</a>
-				<?		}
-		}
-			?>
+                - <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
+<?		}
+	}
+?>
 				<a href="#">&uarr;</a>
 			</div>
 		</td>
@@ -576,7 +577,7 @@ foreach($Thread as $Key => $Post) {
 <?	if ($EditedUserID) { ?>
 				<br />
 				<br />
-<?		if(check_perms('site_moderate_forums')) { ?>
+<?		if (check_perms('site_moderate_forums')) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('requests', <?=$PostID?>, 1); return false;">&laquo;</a>
 <? 		} ?>
 				Last edited by
@@ -586,7 +587,7 @@ foreach($Thread as $Key => $Post) {
 		</td>
 	</tr>
 </table>
-<? } ?>
+<?	} ?>
 		<div class="linkbox">
 		<?=$Pages?>
 		</div>

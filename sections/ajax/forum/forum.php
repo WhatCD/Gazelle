@@ -14,15 +14,14 @@ Things to expect in $_GET:
 
 // Check for lame SQL injection attempts
 $ForumID = $_GET['forumid'];
-if(!is_number($ForumID)) {
+if (!is_number($ForumID)) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }
 
 if (isset($_GET['pp'])) {
 	$PerPage = $_GET['pp'];
-}
-else if (isset($LoggedUser['PostsPerPage'])) {
+} elseif (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {
 	$PerPage = POSTS_PER_PAGE;
@@ -34,10 +33,10 @@ list($Page,$Limit) = Format::page_limit(TOPICS_PER_PAGE);
 
 // Caching anything beyond the first page of any given forum is just wasting ram
 // users are more likely to search then to browse to page 2
-if($Page==1) {
+if ($Page == 1) {
 	list($Forum,,,$Stickies) = $Cache->get_value('forums_'.$ForumID);
 }
-if(!isset($Forum) || !is_array($Forum)) {
+if (!isset($Forum) || !is_array($Forum)) {
 	$DB->query("SELECT
 		t.ID,
 		t.Title,
@@ -53,22 +52,26 @@ if(!isset($Forum) || !is_array($Forum)) {
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
 	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
-	if($Page==1) {
+	if ($Page == 1) {
 		$DB->query("SELECT COUNT(ID) FROM forums_topics WHERE ForumID='$ForumID' AND IsSticky='1'");
 		list($Stickies) = $DB->next_record();
 		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
 	}
 }
 
-if(!isset($Forums[$ForumID])) {
+if (!isset($Forums[$ForumID])) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }
 // Make sure they're allowed to look at the page
 if (!check_perms('site_moderate_forums')) {
-	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) { error(403); }
+	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) {
+		error(403);
+	}
 }
-if($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
+if ($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) {
+	error(403);
+}
 
 $ForumName = display_str($Forums[$ForumID]['Name']);
 $JsonSpecificRules = array();
@@ -91,8 +94,7 @@ if (count($Forum) == 0) {
 				'threads' => array()
 			)
 		);
-}
-else {
+} else {
 	// forums_last_read_topics is a record of the last post a user read in a topic, and what page that was on
 	$DB->query('SELECT
 		l.TopicID,
@@ -113,7 +115,7 @@ else {
 		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
 
 		// handle read/unread posts - the reason we can't cache the whole page
-		if((!$Locked || $Sticky) && ((empty($LastRead[$TopicID]) || $LastRead[$TopicID]['PostID']<$LastID) && strtotime($LastTime)>$LoggedUser['CatchupTime'])) {
+		if ((!$Locked || $Sticky) && ((empty($LastRead[$TopicID]) || $LastRead[$TopicID]['PostID'] < $LastID) && strtotime($LastTime) > $LoggedUser['CatchupTime'])) {
 			$Read = 'unread';
 		} else {
 			$Read = 'read';
@@ -134,7 +136,7 @@ else {
 			'lastID' => $LastID == null ? 0 : (int) $LastID,
 			'lastTime' => $LastTime,
 			'lastAuthorId' => $LastAuthorID == null ? 0 : (int) $LastAuthorID,
-			'lastAuthorName' => $LastAuthorName == null ? "" : $LastAuthorName,
+			'lastAuthorName' => $LastAuthorName == null ? '' : $LastAuthorName,
 			'lastReadPage' => $LastRead[$TopicID]['Page'] == null ? 0 : (int) $LastRead[$TopicID]['Page'],
 			'lastReadPostId' => $LastRead[$TopicID]['PostID'] == null ? 0 : (int) $LastRead[$TopicID]['PostID'],
 			'read' => $Read == "read"

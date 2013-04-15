@@ -1,21 +1,21 @@
 <?
 authorize();
 
-if((!check_perms('admin_reports') && !check_perms('project_team') && !check_perms('site_moderate_forums')) || (empty($_POST['reportid']) && !is_number($_POST['reportid']))) {
+if ((!check_perms('admin_reports') && !check_perms('project_team') && !check_perms('site_moderate_forums')) || (empty($_POST['reportid']) && !is_number($_POST['reportid']))) {
 	ajax_error();
 }
 
 $ReportID = $_POST['reportid'];
 
-$DB->query("SELECT Type FROM reports WHERE ID = ".$ReportID);
+$DB->query('SELECT Type FROM reports WHERE ID = '.$ReportID);
 list($Type) = $DB->next_record();
-if(!check_perms('admin_reports')) {
-	if(check_perms('site_moderate_forums')) {
-		if(!in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
+if (!check_perms('admin_reports')) {
+	if (check_perms('site_moderate_forums')) {
+		if (!in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
 			ajax_error();
 		}
-	} else if(check_perms('project_team')) {
-		if($Type != "request_update") {
+	} elseif (check_perms('project_team')) {
+		if ($Type != 'request_update') {
 			ajax_error();
 		}
 	}
@@ -30,13 +30,13 @@ $DB->query("UPDATE reports
 
 $Channels = array();
 
-if($Type == "request_update") {
-	$Channels[] = "#requestedits";
+if ($Type == 'request_update') {
+	$Channels[] = '#requestedits';
 	$Cache->decrement('num_update_reports');
 }
 
-if(in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
-	$Channels[] = "#forumreports";
+if (in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
+	$Channels[] = '#forumreports';
 	$Cache->decrement('num_forum_reports');
 }
 
@@ -44,16 +44,16 @@ if(in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread
 $DB->query("SELECT COUNT(ID) FROM reports WHERE Status = 'New'");
 list($Remaining) = $DB->next_record();
 
-foreach($Channels as $Channel) {
-	send_irc("PRIVMSG ".$Channel." :Report ".$ReportID." resolved by ".preg_replace("/^(.{2})/", "$1·", $LoggedUser['Username'])." on site (".(int)$Remaining." remaining).");
+foreach ($Channels as $Channel) {
+	send_irc("PRIVMSG $Channel :Report $ReportID resolved by ".preg_replace("/^(.{2})/", "$1·", $LoggedUser['Username'])." on site (".(int)$Remaining." remaining).");
 }
 
 $Cache->delete_value('num_other_reports');
 
 ajax_success();
 
-function ajax_error($Error = "error") {
-	echo json_encode(array("status"=>$Error));
+function ajax_error($Error = 'error') {
+	echo json_encode(array('status'=>$Error));
 	die();
 }
 

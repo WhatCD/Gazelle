@@ -21,11 +21,11 @@ if (isset($LoggedUser['PostsPerPage'])) {
 }
 
 
-if(isset($_POST['thread']) && !is_number($_POST['thread'])) {
+if (isset($_POST['thread']) && !is_number($_POST['thread'])) {
 	error(0);
 }
 
-if(isset($_POST['forum']) && !is_number($_POST['forum'])) {
+if (isset($_POST['forum']) && !is_number($_POST['forum'])) {
 	error(0);
 }
 
@@ -37,7 +37,7 @@ if (empty($_POST['body']) || empty($_POST['title'])) {
 
 $Body = $_POST['body'];
 
-if($LoggedUser['DisablePosting']) {
+if ($LoggedUser['DisablePosting']) {
 	error('Your posting rights have been removed');
 }
 
@@ -48,7 +48,7 @@ $ForumID = $_POST['forum'];
 
 if (!isset($Forums[$ForumID])) { error(404); }
 
-if(!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) {
+if (!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) {
 	error(403);
 }
 
@@ -82,23 +82,23 @@ $DB->query("UPDATE forums_topics SET
 		LastPostTime	  = '".sqltime()."'
 		WHERE ID = '$TopicID'");
 
-if(isset($_POST['subscribe'])) {
+if (isset($_POST['subscribe'])) {
 	$DB->query("INSERT INTO users_subscriptions VALUES ($LoggedUser[ID], $TopicID)");
 	$Cache->delete_value('subscriptions_user_'.$LoggedUser['ID']);
 }
 
 //auto subscribe
 /*
-if(check_perms('users_mod')) {
-$DB->query("SELECT SubscriberID FROM subscribed_forums WHERE ForumID = '$ForumID' AND SubscriberID <> '$LoggedUser[ID]'");
-while(list($SubscriberID) = $DB->next_record()) {
-	 $DB->query("INSERT INTO users_subscriptions VALUES ($SubscriberID, $TopicID)");
+if (check_perms('users_mod')) {
+	$DB->query("SELECT SubscriberID FROM subscribed_forums WHERE ForumID = '$ForumID' AND SubscriberID <> '$LoggedUser[ID]'");
+	while (list($SubscriberID) = $DB->next_record()) {
+		$DB->query("INSERT INTO users_subscriptions VALUES ($SubscriberID, $TopicID)");
       //   $DB->query("INSERT INTO forums_last_read_topics
         //                        (UserID, TopicID, PostID) VALUES
           //                      ('$SubscriberID', '".$TopicID ."', '".db_string($PostID)."')
             //                    ON DUPLICATE KEY UPDATE PostID='$LastPost'");
 	 $Cache->delete_value('subscriptions_user_'.$SubscriberID);
-}
+	}
 }
  */
 
@@ -113,20 +113,20 @@ if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forum
 	//This can cause polls to have answer ids of 1 3 4 if the second box is empty
 	foreach ($_POST['answers'] as $i => $Answer) {
 		if ($Answer == '') { continue; }
-		$Answers[$i+1] = $Answer;
-		$Votes[$i+1] = 0;
+		$Answers[$i + 1] = $Answer;
+		$Votes[$i + 1] = 0;
 	}
 
 	if (count($Answers) < 2) {
 		error('You cannot create a poll with only one answer.');
-	} else if(count($Answers) > 25) {
-		error('You cannot create a poll with greater than 25 answers');
+	} elseif (count($Answers) > 25) {
+		error('You cannot create a poll with greater than 25 answers.');
 	}
 
 	$DB->query('INSERT INTO forums_polls (TopicID, Question, Answers) VALUES (\''.$TopicID.'\',\''.db_string($Question).'\',\''.db_string(serialize($Answers)).'\')');
 	$Cache->cache_value('polls_'.$TopicID, array($Question,$Answers,$Votes,'0000-00-00 00:00:00','0'), 0);
 
-	if($ForumID == STAFF_FORUM) {
+	if ($ForumID == STAFF_FORUM) {
 		send_irc("PRIVMSG ".ADMIN_CHAN." :!mod Poll created by ".$LoggedUser['Username'].": '".$Question."' https://".SSL_SITE_URL."/forums.php?action=viewthread&threadid=".$TopicID);
 	}
 }
@@ -141,7 +141,7 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 	}
 
 	if ($Stickies > 0) {
-		$Part1 = array_slice($Forum,0,$Stickies,true); //Stikys
+		$Part1 = array_slice($Forum,0,$Stickies,true); //Stickies
 		$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE-$Stickies-1,true); //Rest of page
 	} else {
 		$Part1 = array();

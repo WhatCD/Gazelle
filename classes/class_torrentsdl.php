@@ -198,14 +198,14 @@ class TorrentsDL {
 			$TorrentInfo[] = $Encoding;
 		}
 		if (!empty($TorrentInfo)) {
-			$TorrentInfo = " (" . Misc::file_string(implode(" - ", $TorrentInfo)) . ")";
+			$TorrentInfo = ' (' . Misc::file_string(implode(' - ', $TorrentInfo)) . ')';
 		} else {
-			$TorrentInfo = "";
+			$TorrentInfo = '';
 		}
 
 		if (!$TorrentName) {
-			$TorrentName = "No Name";
-		} else if (mb_strlen($TorrentArtist . $TorrentName . $TorrentInfo, 'UTF-8') <= $MaxLength) {
+			$TorrentName = 'No Name';
+		} elseif (mb_strlen($TorrentArtist . $TorrentName . $TorrentInfo, 'UTF-8') <= $MaxLength) {
 			$TorrentName = $TorrentArtist . $TorrentName;
 		}
 
@@ -222,7 +222,7 @@ class TorrentsDL {
 	/**
 	 * Convert a stored torrent into a binary file that can be loaded in a torrent client
 	 *
-	 * @param mixed $TorrentData bencoded torrent without announce url (new format) or TORRENT object (old format)
+	 * @param mixed $TorrentData bencoded torrent without announce URL (new format) or TORRENT object (old format)
 	 * @return bencoded string
 	 */
 	public static function get_file(&$TorrentData, $AnnounceURL) {

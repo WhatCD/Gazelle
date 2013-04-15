@@ -17,7 +17,7 @@ include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
-if(empty($_GET['id']) || !is_number($_GET['id'])) {
+if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	print
 		json_encode(
 			array(
@@ -33,7 +33,7 @@ $RequestID = $_GET['id'];
 
 $Request = Requests::get_requests(array($RequestID));
 $Request = $Request['matches'][$RequestID];
-if(empty($Request)) {
+if (empty($Request)) {
 	print
 		json_encode(
 			array(
@@ -50,44 +50,44 @@ list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryI
 $IsFilled = !empty($TorrentID);
 $CanVote = (empty($TorrentID) && check_perms('site_vote'));
 
-if($CategoryID == 0) {
-	$CategoryName = "Unknown";
+if ($CategoryID == 0) {
+	$CategoryName = 'Unknown';
 } else {
 	$CategoryName = $Categories[$CategoryID - 1];
 }
 
 //Do we need to get artists?
-if($CategoryName == "Music") {
+if ($CategoryName == 'Music') {
 	$ArtistForm = get_request_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
-	if($IsFilled) {
-		$DisplayLink = $ArtistLink."<a href='torrents.php?torrentid=".$TorrentID."'>".$Title."</a> [".$Year."]";
+	if ($IsFilled) {
+		$DisplayLink = $ArtistLink."<a href=\"torrents.php?torrentid=".$TorrentID."\">".$Title."</a> [$Year]";
 	} else {
-		$DisplayLink = $ArtistLink.$Title." [".$Year."]";
+		$DisplayLink = $ArtistLink.$Title." [$Year]";
 	}
-	$FullName = $ArtistName.$Title." [".$Year."]";
+	$FullName = $ArtistName.$Title." [$Year]";
 
-	if($BitrateList != "") {
-		$BitrateString = implode(", ", explode("|", $BitrateList));
-		$FormatString = implode(", ", explode("|", $FormatList));
-		$MediaString = implode(", ", explode("|", $MediaList));
+	if ($BitrateList != '') {
+		$BitrateString = implode(', ', explode('|', $BitrateList));
+		$FormatString = implode(', ', explode('|', $FormatList));
+		$MediaString = implode(', ', explode('|', $MediaList));
 	} else {
-		$BitrateString = "Unknown, please read the description.";
-		$FormatString = "Unknown, please read the description.";
-		$MediaString = "Unknown, please read the description.";
+		$BitrateString = 'Unknown, please read the description.';
+		$FormatString = 'Unknown, please read the description.';
+		$MediaString = 'Unknown, please read the description.';
 	}
 
-	if(empty($ReleaseType)) {
-		$ReleaseName = "Unknown";
+	if (empty($ReleaseType)) {
+		$ReleaseName = 'Unknown';
 	} else {
 		$ReleaseName = $ReleaseTypes[$ReleaseType];
 	}
 
-} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
-	$FullName = $Title." [".$Year."]";
-	$DisplayLink = $Title." [".$Year."]";
+} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
+	$FullName = $Title." [$Year]";
+	$DisplayLink = $Title." [$Year]";
 } else {
 	$FullName = $Title;
 	$DisplayLink = $Title;
@@ -132,7 +132,7 @@ for($i = 0; $i < $VoteMax; $i++) {
 reset($RequestVotes['Voters']);
 
 $Results = $Cache->get_value('request_comments_'.$RequestID);
-if($Results === false) {
+if ($Results === false) {
 	$DB->query("SELECT
 			COUNT(c.ID)
 			FROM requests_comments as c
@@ -144,24 +144,25 @@ if($Results === false) {
 list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
 
 //Get the cache catalogue
-$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
+$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 $CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 
 //---------- Get some data to start processing
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
 $Catalogue = $Cache->get_value('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID);
-if($Catalogue === false) {
-	$DB->query("SELECT
-			c.ID,
-			c.AuthorID,
-			c.AddedTime,
-			c.Body,
-			c.EditedUserID,
-			c.EditedTime,
-			u.Username
+if ($Catalogue === false) {
+	$DB->query("
+			SELECT
+				c.ID,
+				c.AuthorID,
+				c.AddedTime,
+				c.Body,
+				c.EditedUserID,
+				c.EditedTime,
+				u.Username
 			FROM requests_comments as c
-			LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
+				LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
 			WHERE c.RequestID = '$RequestID'
 			ORDER BY c.ID
 			LIMIT $CatalogueLimit");
@@ -170,10 +171,10 @@ if($Catalogue === false) {
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)%THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
+$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
 
 $JsonRequestComments = array();
-foreach($Thread as $Key => $Post){
+foreach ($Thread as $Key => $Post){
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 	$JsonRequestComments[] = array(
@@ -194,7 +195,7 @@ foreach($Thread as $Key => $Post){
 }
 
 $JsonTags = array();
-foreach($Request['Tags'] as $Tag) {
+foreach ($Request['Tags'] as $Tag) {
 	$JsonTags[] = $Tag;
 }
 

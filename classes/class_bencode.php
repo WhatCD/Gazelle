@@ -48,9 +48,9 @@ class Bencode {
 		}
 		if ($Keys === true) {
 			$this->Data = $Data;
-		} else if ($Keys === false) {
+		} elseif ($Keys === false) {
 			$this->Data = array_intersect_key($Data, array_flip($this->DefaultKeys));
-		} else if (is_array($Keys)) {
+		} elseif (is_array($Keys)) {
 			$this->Data = array_intersect_key($Data, array_flip($Keys));
 		} else {
 			$this->Data = isset($Data[$Keys]) ? $Data[$Keys] : false;

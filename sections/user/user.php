@@ -704,14 +704,14 @@ if (check_paranoia_here('requestsvoted_list')) {
 
 			$CategoryName = $Categories[$CategoryID - 1];
 
-			if ($CategoryName == "Music") {
+			if ($CategoryName == 'Music') {
 				$ArtistForm = get_request_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
-			} else if ($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
-				$FullName = "<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
+				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
+			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
+				$FullName = "<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
 			} else {
-				$FullName ="<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title."</a>";
+				$FullName ="<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title</a>";
 			}
 
 			$Row = (empty($Row) || $Row == 'a') ? 'b' : 'a';

@@ -135,7 +135,7 @@ if (empty($_GET['order_by']) || !isset($SortOrders[$_GET['order_by']])) {
 	$OrderBy = $_GET['order_by'];
 }
 
-if(!empty($_GET['order_way']) && $_GET['order_way'] == 'asc') {
+if (!empty($_GET['order_way']) && $_GET['order_way'] == 'asc') {
 	$OrderWay = 'asc';
 } else {
 	$_GET['order_way'] = 'desc';
@@ -164,7 +164,7 @@ if ($OrderBy == 'random') {
 	$SphQL->select('id, groupid, categoryid')
 		->order_by('RAND()', '');
 	$Random = true;
-} else if ($GroupResults) {
+} elseif ($GroupResults) {
 	$OrderProperties = $SortOrders[$OrderBy];
 	$SphQL->select('groupid, categoryid' . (isset($AggregateExp[$OrderProperties[0]]) ? ', '.$AggregateExp[$OrderProperties[0]] : ''))
 		->group_by('groupid')
@@ -1053,7 +1053,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			if ($GroupYear) {
 				$DisplayName .= " [".$GroupYear."]";
 			}
-			if($CategoryID == 1 && $ReleaseType > 0) {
+			if ($CategoryID == 1 && $ReleaseType > 0) {
 				$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 			}
 			$ExtraInfo = Torrents::torrent_info($Data, true, true);

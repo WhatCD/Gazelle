@@ -1,16 +1,18 @@
 <?
-if(!check_perms('users_view_invites')) { error(403); }
+if (!check_perms('users_view_invites')) {
+	error(403);
+}
 View::show_header('Invite Pool');
 define('INVITES_PER_PAGE', 50);
-list($Page,$Limit) = Format::page_limit(INVITES_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(INVITES_PER_PAGE);
 
-if(!empty($_POST['invitekey']) && check_perms('users_edit_invites')) {
+if (!empty($_POST['invitekey']) && check_perms('users_edit_invites')) {
 	authorize();
 
 	$DB->query("DELETE FROM invites WHERE InviteKey='".db_string($_POST['invitekey'])."'");
 }
 
-if(!empty($_GET['search'])) {
+if (!empty($_GET['search'])) {
 	$Search = db_string($_GET['search']);
 } else {
 	$Search = "";
@@ -19,12 +21,13 @@ if(!empty($_GET['search'])) {
 $sql = "SELECT
 	SQL_CALC_FOUND_ROWS
 	um.ID,
+	um.IP,
 	i.InviteKey,
 	i.Expires,
 	i.Email
 	FROM invites as i
-	JOIN users_main AS um ON um.ID=i.InviterID ";
-if($Search) {
+	JOIN users_main AS um ON um.ID = i.InviterID ";
+if ($Search) {
 	$sql .= "WHERE i.Email LIKE '%$Search%' ";
 }
 $sql .= "ORDER BY i.Expires DESC LIMIT $Limit";
@@ -36,7 +39,7 @@ list($Results) = $DB->next_record();
 $DB->set_query_id($RS);
 ?>
 	<div class="box pad">
-		<p><?=number_format($Results)?> unused invites have been sent. </p>
+		<p><?=number_format($Results)?> unused invites have been sent.</p>
 	</div>
 	<br />
 	<div>
@@ -56,7 +59,7 @@ $DB->set_query_id($RS);
 	</div>
 	<div class="linkbox">
 <?
-	$Pages=Format::get_pages($Page,$Results,INVITES_PER_PAGE,11) ;
+	$Pages = Format::get_pages($Page, $Results, INVITES_PER_PAGE, 11) ;
 	echo $Pages;
 ?>
 	</div>
@@ -64,6 +67,7 @@ $DB->set_query_id($RS);
 		<tr class="colhead">
 			<td>Inviter</td>
 			<td>Email</td>
+			<td>IP</td>
 			<td>InviteCode</td>
 			<td>Expires</td>
 <? if(check_perms('users_edit_invites')){ ?>
@@ -72,15 +76,16 @@ $DB->set_query_id($RS);
 		</tr>
 <?
 	$Row = 'b';
-	while(list($UserID, $InviteKey, $Expires, $Email)=$DB->next_record()) {
-	$Row = ($Row == 'b') ? 'a' : 'b';
+	while (list($UserID, $IP, $InviteKey, $Expires, $Email) = $DB->next_record()) {
+		$Row = ($Row == 'b') ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
 			<td><?=display_str($Email)?></td>
+			<td><?=Tools::display_ip($IP)?></td>
 			<td><?=display_str($InviteKey)?></td>
 			<td><?=time_diff($Expires)?></td>
-<? if(check_perms('users_edit_invites')){ ?>
+<?		if (check_perms('users_edit_invites')) { ?>
 			<td>
 				<form class="delete_form" name="invite" action="" method="post">
 					<input type="hidden" name="action" value="invite_pool" />
@@ -89,7 +94,7 @@ $DB->set_query_id($RS);
 					<input type="submit" value="Delete" />
 				</form>
 			</td>
-<? } ?>
+<?		} ?>
 		</tr>
 <?	} ?>
 	</table>

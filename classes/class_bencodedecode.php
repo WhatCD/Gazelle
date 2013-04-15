@@ -57,7 +57,7 @@ class BencodeDecode extends Bencode {
 	public function decode($Arg = false) {
 		if ($Arg !== false) {
 			$this->Data = $Arg;
-		} else if (!$this->Data) {
+		} elseif (!$this->Data) {
 			$this->Data = $this->Enc;
 		}
 		if (!$this->Data) {

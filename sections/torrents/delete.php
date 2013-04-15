@@ -1,12 +1,14 @@
 <?
 $TorrentID = $_GET['torrentid'];
-if (!$TorrentID || !is_number($TorrentID)) { error(404); }
+if (!$TorrentID || !is_number($TorrentID)) {
+	error(404);
+}
 
 
 
 $DB->query("SELECT t.UserID, t.Time, COUNT(x.uid) FROM torrents AS t LEFT JOIN xbt_snatched AS x ON x.fid=t.ID WHERE t.ID=".$TorrentID." GROUP BY t.UserID");
 
-if($DB->record_count() < 1) {
+if ($DB->record_count() < 1) {
 	error('Torrent already deleted.');
 }
 
@@ -15,19 +17,19 @@ if($DB->record_count() < 1) {
 list($UserID, $Time, $Snatches) = $DB->next_record();
 
 
-if ($LoggedUser['ID']!=$UserID && !check_perms('torrents_delete')) {
+if ($LoggedUser['ID'] != $UserID && !check_perms('torrents_delete')) {
 	error(403);
 }
 
-if(isset($_SESSION['logged_user']['multi_delete']) && $_SESSION['logged_user']['multi_delete']>=3 && !check_perms('torrents_delete_fast')) {
+if (isset($_SESSION['logged_user']['multi_delete']) && $_SESSION['logged_user']['multi_delete'] >= 3 && !check_perms('torrents_delete_fast')) {
 	error('You have recently deleted 3 torrents, please contact a staff member if you need to delete more.');
 }
 
-if(time_ago($Time) > 3600*24*7 && !check_perms('torrents_delete')) { // Should this be torrents_delete or torrents_delete_fast?
+if (time_ago($Time) > 3600 * 24 * 7 && !check_perms('torrents_delete')) { // Should this be torrents_delete or torrents_delete_fast?
 	error('You can no longer delete this torrent as it has been uploaded for over a week with no problems. If you now think there is a problem, please report it instead.');
 }
 
-if($Snatches > 4 && !check_perms('torrents_delete')) { // Should this be torrents_delete or torrents_delete_fast?
+if ($Snatches > 4 && !check_perms('torrents_delete')) { // Should this be torrents_delete or torrents_delete_fast?
 	error('You can no longer delete this torrent as it has been snatched by 5 or more users. If you believe there is a problem with the torrent please report it instead.');
 }
 
@@ -61,7 +63,7 @@ View::show_header('Delete torrent', 'reportsv2');
 	</div>
 </div>
 <?
-if(check_perms('admin_reports')) {
+if (check_perms('admin_reports')) {
 ?>
 <div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto">
 <?
@@ -103,7 +105,7 @@ if(check_perms('admin_reports')) {
 			LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
 			WHERE t.ID=".$TorrentID);
 
-	if($DB->record_count() < 1) {
+	if ($DB->record_count() < 1) {
 		die();
 	}
 	list($GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
@@ -113,7 +115,7 @@ if(check_perms('admin_reports')) {
 
 	if (array_key_exists($Type, $Types[$CategoryID])) {
 		$ReportType = $Types[$CategoryID][$Type];
-	} else if(array_key_exists($Type,$Types['master'])) {
+	} elseif (array_key_exists($Type,$Types['master'])) {
 		$ReportType = $Types['master'][$Type];
 	} else {
 		//There was a type but it wasn't an option!
@@ -159,60 +161,60 @@ if(check_perms('admin_reports')) {
 				<tr>
 					<td class="label">Torrent:</td>
 					<td colspan="3">
-	<?	if(!$GroupID) { ?>
+<?		if (!$GroupID) { ?>
 						<a href="log.php?search=Torrent+<?=$TorrentID?>"><?=$TorrentID?></a> (Deleted)
-	<? } else {?>
+<?		} else { ?>
 						<?=$LinkName?>
 						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets" title="Download">DL</a>
 						uploaded by <a href="user.php?id=<?=$UploaderID?>"><?=$UploaderName?></a> <?=time_diff($Time)?>
 						<br />
-	<?		$DB->query("SELECT r.ID
+<?			$DB->query("SELECT r.ID
 						FROM reportsv2 AS r
-						LEFT JOIN torrents AS t ON t.ID=r.TorrentID
+							LEFT JOIN torrents AS t ON t.ID=r.TorrentID
 						WHERE r.Status != 'Resolved'
-						AND t.GroupID=$GroupID");
+							AND t.GroupID=$GroupID");
 			$GroupOthers = ($DB->record_count());
 
-			if($GroupOthers > 0) { ?>
+			if ($GroupOthers > 0) { ?>
 						<div style="text-align: right;">
 							<a href="reportsv2.php?view=group&amp;id=<?=$GroupID?>">There <?=(($GroupOthers > 1) ? "are $GroupOthers reports" : "is 1 other report")?> for torrent(s) in this group</a>
 						</div>
-	<? 		}
+<?			}
 
 			$DB->query("SELECT t.UserID
 						FROM reportsv2 AS r
-						JOIN torrents AS t ON t.ID=r.TorrentID
+							JOIN torrents AS t ON t.ID=r.TorrentID
 						WHERE r.Status != 'Resolved'
-						AND t.UserID=$UploaderID");
+							AND t.UserID=$UploaderID");
 			$UploaderOthers = ($DB->record_count());
 
-			if($UploaderOthers > 0) { ?>
+			if ($UploaderOthers > 0) { ?>
 						<div style="text-align: right;">
 							<a href="reportsv2.php?view=uploader&amp;id=<?=$UploaderID?>">There <?=(($UploaderOthers > 1) ? "are $UploaderOthers reports" : "is 1 other report")?> for torrent(s) uploaded by this user</a>
 						</div>
-	<? 		}
+<?			}
 
 			$DB->query("SELECT DISTINCT req.ID,
-						req.FillerID,
-						um.Username,
-						req.TimeFilled
+							req.FillerID,
+							um.Username,
+							req.TimeFilled
 						FROM requests AS req
-						JOIN users_main AS um ON um.ID=req.FillerID
+							JOIN users_main AS um ON um.ID=req.FillerID
 						AND req.TorrentID=$TorrentID");
 			$Requests = ($DB->record_count());
-			if($Requests > 0) {
+			if ($Requests > 0) {
 				while(list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 		?>
 							<div style="text-align: right;">
 								<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=viewrequest&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?>
 							</div>
-		<?		}
+<?				}
 			}
 		}
 		?>
 					</td>
 				</tr>
-				<? // END REPORTED STUFF :|: BEGIN MOD STUFF ?>
+<?				// END REPORTED STUFF :|: BEGIN MOD STUFF ?>
 				<tr>
 					<td class="label">
 						<a href="javascript:Load('<?=$ReportID?>')">Resolve</a>
@@ -227,27 +229,29 @@ foreach ($TypeList as $Key => $Value) {
 }
 array_multisort($Priorities, SORT_ASC, $TypeList);
 
-foreach($TypeList as $IType => $Data) {
+foreach ($TypeList as $IType => $Data) {
 ?>
-					<option value="<?=$IType?>"<?=(($Type == $IType)?' selected="selected"':'')?>><?=$Data['title']?></option>
-<? } ?>
+					<option value="<?=$IType?>"<?=(($Type == $IType) ? ' selected="selected"' : '') ?>><?=$Data['title']?></option>
+<?
+}
+?>
 						</select>
 						<span id="options<?=$ReportID?>">
 							<span title="Delete torrent?">
 								<strong>Delete</strong>
-								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete']?' checked="checked"':'')?> />
+								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete'] ? ' checked="checked"' : '')?> />
 							</span>
 							<span title="Warning length in weeks">
 								<strong>Warning</strong>
 								<select name="warning" id="warning<?=$ReportID?>">
-<? for($i = 0; $i < 9; $i++) { ?>
-								<option value="<?=$i?>"<?=(($ReportType['resolve_options']['warn'] == $i)?' selected="selected"':'')?>><?=$i?></option>
-<? } ?>
+<?	for($i = 0; $i < 9; $i++) { ?>
+								<option value="<?=$i?>"<?=(($ReportType['resolve_options']['warn'] == $i) ? ' selected="selected"' : '')?>><?=$i?></option>
+<?	} ?>
 								</select>
 							</span>
 							<span title="Remove upload privileges?">
 								<strong>Upload</strong>
-								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload']?' checked="checked"':'')?> />
+								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload'] ? ' checked="checked"' : '')?> />
 							</span>
 						</span>
 						</td>

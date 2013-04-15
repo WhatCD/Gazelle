@@ -697,7 +697,7 @@ class Torrents {
 		if (empty($SnatchedTorrents)) {
 			$SnatchedTorrents = array_fill(0, $Buckets, false);
 			$LastUpdate = $Cache->get_value('users_snatched_'.$UserID.'_lastupdate') ?: 0;
-		} else if (isset($SnatchedTorrents[$BucketID][$TorrentID])) {
+		} elseif (isset($SnatchedTorrents[$BucketID][$TorrentID])) {
 			return true;
 		}
 

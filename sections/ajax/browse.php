@@ -5,14 +5,19 @@
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 // The "order by x" links on columns headers
-function header_link($SortKey,$DefaultWay="desc") {
+function header_link($SortKey,$DefaultWay = 'desc') {
 	global $OrderBy,$OrderWay;
-	if($SortKey==$OrderBy) {
-		if($OrderWay=="desc") { $NewWay="asc"; }
-		else { $NewWay="desc"; }
-	} else { $NewWay=$DefaultWay; }
+	if ($SortKey == $OrderBy) {
+		if ($OrderWay == 'desc') {
+			$NewWay = 'asc';
+		} else {
+			$NewWay = 'desc';
+		}
+	} else {
+		$NewWay = $DefaultWay;
+	}
 
-	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
+	return 'torrents.php?order_way='.$NewWay.'&amp;order_by='.$SortKey.'&amp;'.Format::get_url(array('order_way','order_by'));
 }
 
 /** Start default parameters and validation **/
@@ -97,7 +102,7 @@ if (empty($_GET['order_by']) || !isset($SortOrders[$_GET['order_by']])) {
 	$OrderBy = $_GET['order_by'];
 }
 
-if(!empty($_GET['order_way']) && $_GET['order_way'] == 'asc') {
+if (!empty($_GET['order_way']) && $_GET['order_way'] == 'asc') {
 	$OrderWay = 'asc';
 } else {
 	$_GET['order_way'] = 'desc';
@@ -126,7 +131,7 @@ if ($OrderBy == 'random') {
 	$SphQL->select('id, groupid, categoryid')
 		->order_by('RAND()', '');
 	$Random = true;
-} else if ($GroupResults) {
+} elseif ($GroupResults) {
 	$OrderProperties = $SortOrders[$OrderBy];
 	$SphQL->select('groupid, categoryid' . (isset($AggregateExp[$OrderProperties[0]]) ? ', '.$AggregateExp[$OrderProperties[0]] : ''))
 		->group_by('groupid')
@@ -281,9 +286,7 @@ if (!empty($SearchWords['taglist'])) {
 		if (!empty($Tags)) {
 			$QueryParts[] = implode(' ', $Tags);
 		}
-	}
-	// 'Any' tags
-	else {
+	} else { // 'Any' tags
 		$_GET['tags_type'] = '0';
 		if (!empty($Tags['include'])) {
 			$QueryParts[] = '( '.implode(' | ', $Tags['include']).' )';
@@ -487,27 +490,27 @@ if ($TorrentCount) {
 }
 /** End run search query and collect results **/
 
-if($TorrentCount == 0) {
+if ($TorrentCount == 0) {
 
 $DB->query("SELECT
 	tags.Name,
 	((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
 	FROM xbt_snatched AS s
-	INNER JOIN torrents AS t ON t.ID=s.fid
-	INNER JOIN torrents_group AS g ON t.GroupID=g.ID
-	INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
-	INNER JOIN tags ON tags.ID=tt.TagID
+		INNER JOIN torrents AS t ON t.ID=s.fid
+		INNER JOIN torrents_group AS g ON t.GroupID=g.ID
+		INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
+		INNER JOIN tags ON tags.ID=tt.TagID
 	WHERE s.uid='$LoggedUser[ID]'
-	AND tt.TagID<>'13679'
-	AND tt.TagID<>'4820'
-	AND tt.TagID<>'2838'
-	AND g.CategoryID='1'
-	AND tags.Uses > '10'
+		AND tt.TagID<>'13679'
+		AND tt.TagID<>'4820'
+		AND tt.TagID<>'2838'
+		AND g.CategoryID='1'
+		AND tags.Uses > '10'
 	GROUP BY tt.TagID
 	ORDER BY Score DESC
 	LIMIT 8");
 	$JsonYouMightLike = array();
-	while(list($Tag)=$DB->next_record()) {
+	while (list($Tag) = $DB->next_record()) {
 		$JsonYouMightLike[] = $Tag;
 	}
 
@@ -570,7 +573,7 @@ foreach ($Results as $Result) {
                             'aliasid' => (int) $Artist['id']
                             );
                     }
-	} elseif(!empty($Artists)) {
+	} elseif (!empty($Artists)) {
 		$DisplayName = Artists::display_artists(array(1=>$Artists), false, false, true);
                     foreach ($Artists as $Artist) {
                         $JsonArtists[] = array(
@@ -594,7 +597,7 @@ foreach ($Results as $Result) {
 		unset($FirstUnknown);
 
 		$JsonTorrents = array();
-		foreach($Torrents as $TorrentID => $Data) {
+		foreach ($Torrents as $TorrentID => $Data) {
 			// All of the individual torrents in the group
 
 			// If they're using the advanced search and have chosen enabled grouping, we just skip the torrents that don't check out
@@ -667,8 +670,7 @@ foreach ($Results as $Result) {
 			'totalLeechers' => (int) $TotalLeechers,
 			'torrents' => $JsonTorrents
 		);
-	}
-	else {
+	} else {
 		// Viewing a type that does not require grouping
 
 		list($TorrentID, $Data) = each($Torrents);
