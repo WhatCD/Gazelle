@@ -1511,6 +1511,7 @@ CREATE TABLE `users_sessions` (
   `IP` varchar(15) NOT NULL,
   `LastUpdate` datetime NOT NULL,
   `Active` tinyint(4) NOT NULL DEFAULT '1',
+  `FullUA` text,
   PRIMARY KEY (`UserID`,`SessionID`),
   KEY `UserID` (`UserID`),
   KEY `LastUpdate` (`LastUpdate`),

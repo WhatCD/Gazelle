@@ -271,8 +271,8 @@ else {
 						
 
 						$DB->query("INSERT INTO users_sessions
-							(UserID, SessionID, KeepLogged, Browser, OperatingSystem, IP, LastUpdate)
-							VALUES ('$UserID', '".db_string($SessionID)."', '$KeepLogged', '$Browser','$OperatingSystem', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."')");
+							(UserID, SessionID, KeepLogged, Browser, OperatingSystem, IP, LastUpdate, FullUA)
+							VALUES ('$UserID', '".db_string($SessionID)."', '$KeepLogged', '$Browser','$OperatingSystem', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."', '".db_string($_SERVER['HTTP_USER_AGENT'])."')");
 
 						$Cache->begin_transaction('users_sessions_'.$UserID);
 						$Cache->insert_front($SessionID,array(
