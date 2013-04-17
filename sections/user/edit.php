@@ -1,7 +1,6 @@
 <?
-
 $UserID = $_REQUEST['userid'];
-if(!is_number($UserID)){
+if (!is_number($UserID)) {
 	error(404);
 }
 
@@ -21,18 +20,18 @@ $DB->query("SELECT
 			i.UnseededAlerts,
 			p.Level AS Class
 			FROM users_main AS m
-			JOIN users_info AS i ON i.UserID = m.ID
-			LEFT JOIN permissions AS p ON p.ID=m.PermissionID
+				JOIN users_info AS i ON i.UserID = m.ID
+				LEFT JOIN permissions AS p ON p.ID=m.PermissionID
 			WHERE m.ID = '".db_string($UserID)."'");
 list($Username,$Email,$IRCKey,$Paranoia,$Info,$Avatar,$Country,$StyleID,$StyleURL,$SiteOptions,$UnseededAlerts,$Class)=$DB->next_record(MYSQLI_NUM, array(3,9));
 
 
-if($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Class)) {
+if ($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Class)) {
 	error(403);
 }
 
 $Paranoia = unserialize($Paranoia);
-if(!is_array($Paranoia)) {
+if (!is_array($Paranoia)) {
 	$Paranoia = array();
 }
 
@@ -63,7 +62,7 @@ View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,pa
 
 
 $DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
-$LastFMUsername = "";
+$LastFMUsername = '';
 list($LastFMUsername) = $DB->next_record();
 
 echo $Val->GenerateJS('userform');
@@ -88,7 +87,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Stylesheet</strong></td>
 				<td>
 					<select name="stylesheet" id="stylesheet">
-<? foreach($Stylesheets as $Style) { ?>
+<? foreach ($Stylesheets as $Style) { ?>
 						<option value="<?=$Style['ID']?>"<? if ($Style['ID'] == $StyleID) { ?> selected="selected"<? } ?>><?=$Style['ProperName']?></option>
 <? } ?>
 					</select>
@@ -242,19 +241,19 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Avatars</strong></td>
 				<td>
 					<select name="disableavatars" id="disableavatars" onclick="ToggleIdenticons();">
-						<option value="1"<? if($SiteOptions['DisableAvatars'] == 1) { ?> selected="selected"<? } ?>>Disable avatars</option>
-						<option value="0"<? if($SiteOptions['DisableAvatars'] == 0) { ?> selected="selected"<? } ?>>Show avatars</option>
-						<option value="2"<? if($SiteOptions['DisableAvatars'] == 2) { ?> selected="selected"<? } ?>>Show avatars or:</option>
-						<option value="3"<? if($SiteOptions['DisableAvatars'] == 3) { ?> selected="selected"<? } ?>>Replace all avatars with:</option>
+						<option value="1"<? if ($SiteOptions['DisableAvatars'] == 1) { ?> selected="selected"<? } ?>>Disable avatars</option>
+						<option value="0"<? if ($SiteOptions['DisableAvatars'] == 0) { ?> selected="selected"<? } ?>>Show avatars</option>
+						<option value="2"<? if ($SiteOptions['DisableAvatars'] == 2) { ?> selected="selected"<? } ?>>Show avatars or:</option>
+						<option value="3"<? if ($SiteOptions['DisableAvatars'] == 3) { ?> selected="selected"<? } ?>>Replace all avatars with:</option>
 					</select>
 					<select name="identicons" id="identicons">
-						<option value="0"<? if($SiteOptions['Identicons'] == 0) { ?> selected="selected"<? } ?>>Identicon</option>
-						<option value="1"<? if($SiteOptions['Identicons'] == 1) { ?> selected="selected"<? } ?>>MonsterID</option>
-						<option value="2"<? if($SiteOptions['Identicons'] == 2) { ?> selected="selected"<? } ?>>Wavatar</option>
-						<option value="3"<? if($SiteOptions['Identicons'] == 3) { ?> selected="selected"<? } ?>>Retro</option>
-						<option value="4"<? if($SiteOptions['Identicons'] == 4) { ?> selected="selected"<? } ?>>Robots 1</option>
-						<option value="5"<? if($SiteOptions['Identicons'] == 5) { ?> selected="selected"<? } ?>>Robots 2</option>
-						<option value="6"<? if($SiteOptions['Identicons'] == 6) { ?> selected="selected"<? } ?>>Robots 3</option>
+						<option value="0"<? if ($SiteOptions['Identicons'] == 0) { ?> selected="selected"<? } ?>>Identicon</option>
+						<option value="1"<? if ($SiteOptions['Identicons'] == 1) { ?> selected="selected"<? } ?>>MonsterID</option>
+						<option value="2"<? if ($SiteOptions['Identicons'] == 2) { ?> selected="selected"<? } ?>>Wavatar</option>
+						<option value="3"<? if ($SiteOptions['Identicons'] == 3) { ?> selected="selected"<? } ?>>Retro</option>
+						<option value="4"<? if ($SiteOptions['Identicons'] == 4) { ?> selected="selected"<? } ?>>Robots 1</option>
+						<option value="5"<? if ($SiteOptions['Identicons'] == 5) { ?> selected="selected"<? } ?>>Robots 2</option>
+						<option value="6"<? if ($SiteOptions['Identicons'] == 6) { ?> selected="selected"<? } ?>>Robots 3</option>
 					</select>
 				</td>
 			</tr>

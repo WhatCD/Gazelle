@@ -2,11 +2,11 @@
 
 include(SERVER_ROOT.'/sections/reports/array.php');
 
-if(empty($_GET['type']) || empty($_GET['id']) || !is_number($_GET['id'])) {
+if (empty($_GET['type']) || empty($_GET['id']) || !is_number($_GET['id'])) {
 	error(404);
 }
 
-if(!array_key_exists($_GET['type'], $Types)) {
+if (!array_key_exists($_GET['type'], $Types)) {
 	error(403);
 }
 $Short = $_GET['type'];
@@ -14,10 +14,10 @@ $Type = $Types[$Short];
 
 $ID = $_GET['id'];
 
-switch($Short) {
+switch ($Short) {
 	case "user" :
 		$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Username) = $DB->next_record();
@@ -26,18 +26,18 @@ switch($Short) {
 	case "request_update" :
 		$NoReason = true;
 		$DB->query("SELECT Title, Description, TorrentID, CategoryID, Year FROM requests WHERE ID=".$ID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Name, $Desc, $Filled, $CategoryID, $Year) = $DB->next_record();
-		if($Filled || ($CategoryID != 0 && ($Categories[$CategoryID-1] != "Music" || $Year != 0))) {
+		if ($Filled || ($CategoryID != 0 && ($Categories[$CategoryID-1] != "Music" || $Year != 0))) {
 			error(403);
 		}
 		break;
 
 	case "request" :
 		$DB->query("SELECT Title, Description, TorrentID FROM requests WHERE ID=".$ID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Name, $Desc, $Filled) = $DB->next_record();
@@ -45,7 +45,7 @@ switch($Short) {
 
 	case "collage" :
 		$DB->query("SELECT Name, Description FROM collages WHERE ID=".$ID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Name, $Desc) = $DB->next_record();
@@ -53,13 +53,13 @@ switch($Short) {
 
 	case "thread" :
 		$DB->query("SELECT ft.Title, ft.ForumID, um.Username FROM forums_topics AS ft JOIN users_main AS um ON um.ID=ft.AuthorID WHERE ft.ID=".$ID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Title, $ForumID, $Username) = $DB->next_record();
 		$DB->query("SELECT MinClassRead FROM forums WHERE ID = ".$ForumID);
 		list($MinClassRead) = $DB->next_record();
-		if(!empty($LoggedUser['DisableForums']) ||
+		if (!empty($LoggedUser['DisableForums']) ||
 				($MinClassRead > $LoggedUser['EffectiveClass'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) ||
 				(isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] == 0)) {
 			error(403);
@@ -68,7 +68,7 @@ switch($Short) {
 
 	case "post" :
 		$DB->query("SELECT fp.Body, fp.TopicID, um.Username FROM forums_posts AS fp JOIN users_main AS um ON um.ID=fp.AuthorID WHERE fp.ID=".$ID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Body, $TopicID, $Username) = $DB->next_record();
@@ -76,7 +76,7 @@ switch($Short) {
 		list($ForumID) = $DB->next_record();
 		$DB->query("SELECT MinClassRead FROM forums WHERE ID = ".$ForumID);
 		list($MinClassRead) = $DB->next_record();
-		if(!empty($LoggedUser['DisableForums']) ||
+		if (!empty($LoggedUser['DisableForums']) ||
 				($MinClassRead > $LoggedUser['EffectiveClass'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) ||
 				(isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] == 0)) {
 			error(403);
@@ -88,13 +88,13 @@ switch($Short) {
     case "artist_comment":
 	case "collages_comment" :
 		$Table = $Short.'s';
-		if($Short == "collages_comment") {
+		if ($Short == "collages_comment") {
 			$Column = "UserID";
 		} else {
 			$Column = "AuthorID";
 		}
 		$DB->query("SELECT ".$Short.".Body, um.Username FROM ".$Table." AS ".$Short." JOIN users_main AS um ON um.ID=".$Short.".".$Column." WHERE ".$Short.".ID=".$ID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Body, $Username) = $DB->next_record();
@@ -112,7 +112,7 @@ View::show_header('Report a '.$Type['title'],'bbcode');
 		<p>Following these guidelines will help the moderators deal with your report in a timely fashion. </p>
 		<ul>
 <?
-foreach($Type['guidelines'] as $Guideline) {
+foreach ($Type['guidelines'] as $Guideline) {
 ?>
 			<li><?=$Guideline?></li>
 <? } ?>
@@ -125,7 +125,7 @@ include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
 
-switch($Short) {
+switch ($Short) {
 	case "user" :
 ?>
 	<p>You are reporting the user <strong><?=display_str($Username)?></strong></p>
@@ -271,7 +271,7 @@ switch($Short) {
 <?
 	break;
 }
-if(empty($NoReason)) {
+if (empty($NoReason)) {
 ?>
 	<h3>Reason</h3>
 	<div class="box pad center">

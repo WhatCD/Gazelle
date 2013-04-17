@@ -9,7 +9,9 @@ enforce_login();
 include(SERVER_ROOT."/classes/class_validate.php");
 $Val=NEW VALIDATE;
 
-if(empty($_REQUEST['action'])) { $_REQUEST['action']=''; }
+if (empty($_REQUEST['action'])) {
+	$_REQUEST['action'] = '';
+}
 
 switch ($_REQUEST['action']) {
 	case 'notify':

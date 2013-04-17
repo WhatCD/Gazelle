@@ -311,20 +311,20 @@ ul.thin li {
 }
 
 #searchbars ul li ul {
-		display: block;
-        position: absolute;
-        z-index: 1000;
-        width: 12em;
-        top: 1em;
-        left: 0;
-        margin-top: 12px;
+	display: block;
+	position: absolute;
+	z-index: 1000;
+	width: 12em;
+	top: 1em;
+	left: 0;
+	margin-top: 12px;
 }
 
 #searchbars ul li ul li {
-        margin: 0
-        padding: 0;
-        display: block;
-        width: 100%;
+	margin: 0;
+	padding: 0;
+	display: block;
+	width: 100%;
 	background: #eee;
 }
 

@@ -1,11 +1,13 @@
 <?
-if(isset($_GET['userid']) && check_perms('users_view_invites')){
-	if(!is_number($_GET['userid'])){ error(403); }
+if (isset($_GET['userid']) && check_perms('users_view_invites')) {
+	if (!is_number($_GET['userid'])) {
+		error(403);
+	}
 
 	$UserID=$_GET['userid'];
 	$Sneaky = true;
 } else {
-	if(!$UserCount = $Cache->get_value('stats_user_count')){
+	if (!$UserCount = $Cache->get_value('stats_user_count')) {
 		$DB->query("SELECT COUNT(ID) FROM users_main WHERE Enabled='1'");
 		list($UserCount) = $DB->next_record();
 		$Cache->cache_value('stats_user_count', $UserCount, 0);
@@ -22,16 +24,16 @@ list($UserID, $Username, $PermissionID) = array_values(Users::user_info($UserID)
 $DB->query("SELECT InviteKey, Email, Expires FROM invites WHERE InviterID='$UserID' ORDER BY Expires");
 $Pending = 	$DB->to_array();
 
-$OrderWays = array("username", "email",	"joined", "lastseen", "uploaded", "downloaded", "ratio");
+$OrderWays = array('username', 'email',	'joined', 'lastseen', 'uploaded', 'downloaded', 'ratio');
 
-if(empty($_GET['order'])) {
-	$CurrentOrder = "id";
-	$CurrentSort = "asc";
-	$NewSort = "desc";
+if (empty($_GET['order'])) {
+	$CurrentOrder = 'id';
+	$CurrentSort = 'asc';
+	$NewSort = 'desc';
 } else {
-	if(in_array($_GET['order'], $OrderWays)) {
+	if (in_array($_GET['order'], $OrderWays)) {
 		$CurrentOrder = $_GET['order'];
-		if($_GET['sort'] == 'asc' || $_GET['sort'] == 'desc') {
+		if ($_GET['sort'] == 'asc' || $_GET['sort'] == 'desc') {
 			$CurrentSort = $_GET['sort'];
 			$NewSort = ($_GET['sort'] == 'asc' ? 'desc' : 'asc');
 		} else {
@@ -91,7 +93,7 @@ View::show_header('Invites');
 	<div class="header">
 		<h2><?=Users::format_username($UserID, false, false, false)?> &gt; Invites</h2>
 		<div class="linkbox">
-			<a href="user.php?action=invitetree<? if($Sneaky){ echo '&amp;userid='.$UserID; }?>" class="brackets">Invite tree</a>
+			<a href="user.php?action=invitetree<? if ($Sneaky) { echo '&amp;userid='.$UserID; } ?>" class="brackets">Invite tree</a>
 		</div>
 	</div>
 <? if ($UserCount >= USER_LIMIT && !check_perms('site_can_invite_always')) { ?>
@@ -112,13 +114,13 @@ View::show_header('Invites');
 $DB->query("SELECT can_leech FROM users_main WHERE ID = ".$UserID);
 list($CanLeech) = $DB->next_record();
 
-if(!$Sneaky
+if (!$Sneaky
 	&& !$LoggedUser['RatioWatch']
 	&& $CanLeech
 	&& empty($LoggedUser['DisableInvites'])
-	&& ($LoggedUser['Invites']>0 || check_perms('site_send_unlimited_invites'))
+	&& ($LoggedUser['Invites'] > 0 || check_perms('site_send_unlimited_invites'))
 	&& ($UserCount <= USER_LIMIT || USER_LIMIT == 0 || check_perms('site_can_invite_always'))
-	){ ?>
+	) { ?>
 	<div class="box pad">
 		<p>Please note that the selling, trading or public giving away of our invitations, or responding to public requests, is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
 		<p>Remember that you are responsible for ALL invitees, and your account and/or privileges may be disabled due to your invitees' actions. You should know the person you're inviting. If you aren't familiar enough with the user to trust them, we suggest not inviting them.</p>
@@ -141,7 +143,7 @@ if(!$Sneaky
 		</form>
 	</div>
 <?
-} elseif (!empty($LoggedUser['DisableInvites'])) {?>
+} elseif (!empty($LoggedUser['DisableInvites'])) { ?>
 	<div class="box pad" style="text-align: center">
 		<strong class="important_text">Your invites have been disabled. Please read <a href="wiki.php?action=article&amp;id=310">this article</a> for more information.</strong>
 	</div>
@@ -208,7 +210,7 @@ if (!empty($Pending)) {
 				<td><?=Format::get_size($Downloaded)?></td>
 				<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
 			</tr>
-<? } ?>
+<?	} ?>
 		</table>
 	</div>
 </div>

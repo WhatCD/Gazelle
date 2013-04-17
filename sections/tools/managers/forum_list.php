@@ -1,14 +1,16 @@
 <?
-function class_list($Selected=0){
+function class_list($Selected = 0) {
 	global $Classes;
 	$Return = '';
 	foreach ($Classes as $ID => $Class) {
-		if ($Class['Secondary']) { continue; }
+		if ($Class['Secondary']) {
+			continue;
+		}
 
 		$Name = $Class['Name'];
 		$Level = $Class['Level'];
 		$Return.='<option value="'.$Level.'"';
-		if($Selected == $Level){
+		if ($Selected == $Level) {
 			$Return.=' selected="selected"';
 		}
 		$Return.='>'.Format::cut_string($Name, 20, 1).'</option>'."\n";
@@ -17,7 +19,9 @@ function class_list($Selected=0){
 	return $Return;
 }
 
-if(!check_perms('admin_manage_forums')) { error(403); }
+if (!check_perms('admin_manage_forums')) {
+	error(403);
+}
 
 View::show_header('Forum Management');
 $DB->query('SELECT ID, Name FROM forums ORDER BY Sort');
@@ -27,25 +31,26 @@ $ForumArray = $DB->to_array(); // used for generating the 'parent' drop down lis
 unset($ForumCats);
 $ForumCats = $Cache->get_value('forums_categories');
 if ($ForumCats === false) {
-	$DB->query("SELECT ID, Name FROM forums_categories");
+	$DB->query('SELECT ID, Name FROM forums_categories');
 	$ForumCats = array();
-	while (list($ID, $Name) =  $DB->next_record()) {
+	while (list($ID, $Name) = $DB->next_record()) {
 		$ForumCats[$ID] = $Name;
 	}
 	$Cache->cache_value('forums_categories', $ForumCats, 0); //Inf cache.
 }
 
-$DB->query('SELECT
-	ID,
-	CategoryID,
-	Sort,
-	Name,
-	Description,
-	MinClassRead,
-	MinClassWrite,
-	MinClassCreate,
-	AutoLock,
-	AutoLockWeeks
+$DB->query('
+	SELECT
+		ID,
+		CategoryID,
+		Sort,
+		Name,
+		Description,
+		MinClassRead,
+		MinClassWrite,
+		MinClassCreate,
+		AutoLock,
+		AutoLockWeeks
 	FROM forums
 	ORDER BY CategoryID, Sort ASC');
 ?>
@@ -68,7 +73,7 @@ $DB->query('SELECT
 	</tr>
 <?
 $Row = 'b';
-while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClassWrite, $MinClassCreate, $AutoLock, $AutoLockWeeks) = $DB->next_record()){
+while (list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClassWrite, $MinClassCreate, $AutoLock, $AutoLockWeeks) = $DB->next_record()) {
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
 	<tr class="row<?=$Row?>">
@@ -81,7 +86,7 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 <?	reset($ForumCats);
 	foreach ($ForumCats as $CurCat => $CatName) {
 ?>
-					<option value="<?=$CurCat?>" <? if($CurCat == $CategoryID) { echo ' selected="selected"'; } ?>><?=$CatName?></option>
+					<option value="<?=$CurCat?>" <? if ($CurCat == $CategoryID) { echo ' selected="selected"'; } ?>><?=$CatName?></option>
 <?	} ?>
 				</select>
 			</td>
@@ -110,7 +115,7 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 				</select>
 			</td>
 			<td>
-				<input type="checkbox" name="autolock" <?=($AutoLock == '1')?'checked ':''?>/>
+				<input type="checkbox" name="autolock"<?=($AutoLock == '1') ? ' checked="checked"' : ''?> />
 			</td>
 			<td>
 				<input type="text" name="autolockweeks" value="<?=$AutoLockWeeks?>" />
@@ -135,8 +140,8 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 			<td>
 				<select name="categoryid">
 <?	reset($ForumCats);
-	while(list($CurCat, $CatName) = each($ForumCats)) { ?>
-					<option value="<?=$CurCat?>" <? if($CurCat == $CategoryID) { echo ' selected="selected"'; } ?>><?=$CatName?></option>
+	while (list($CurCat, $CatName) = each($ForumCats)) { ?>
+					<option value="<?=$CurCat?>"<? if ($CurCat == $CategoryID) { echo ' selected="selected"'; } ?>><?=$CatName?></option>
 <?	} ?>
 				</select>
 			</td>
@@ -165,7 +170,7 @@ while(list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClas
 				</select>
 			</td>
 			<td>
-				<input type="checkbox" name="autolock" checked />
+				<input type="checkbox" name="autolock" checked="checked" />
 			</td>
 			<td>
 				<input type="text" name="autolockweeks" value="4" />

@@ -17,7 +17,7 @@ if (isset($argv[1])) {
 
 	$_REQUEST['action'] = $argv[1];
 } else {
-	if (empty($_REQUEST['action']) || ($_REQUEST['action'] != "public_sandbox" && $_REQUEST['action'] != "ocelot")) {
+	if (empty($_REQUEST['action']) || ($_REQUEST['action'] != 'public_sandbox' && $_REQUEST['action'] != 'ocelot')) {
 		enforce_login();
 	}
 }
@@ -40,14 +40,16 @@ if (substr($_REQUEST['action'],0,12) == 'update_geoip' && !isset($argv[1])) {
 }
 
 include(SERVER_ROOT."/classes/class_validate.php");
-$Val=NEW VALIDATE;
+$Val = new VALIDATE;
 
 include(SERVER_ROOT.'/classes/class_feed.php');
 $Feed = new FEED;
 
 switch ($_REQUEST['action']){
 	case 'phpinfo':
-		if (!check_perms('site_debug')) error(403);
+		if (!check_perms('site_debug')) {
+			error(403);
+		}
 		phpinfo();
 		break;
 	//Services
@@ -124,7 +126,10 @@ switch ($_REQUEST['action']){
 			error(403);
 		}
 		if (is_number($_POST['newsid'])){
-			$DB->query("UPDATE news SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."' WHERE ID='".db_string($_POST['newsid'])."'");
+			$DB->query("UPDATE news
+						SET Title='".db_string($_POST['title'])."',
+							Body='".db_string($_POST['body'])."'
+						WHERE ID='".db_string($_POST['newsid'])."'");
 			$Cache->delete_value('news');
 			$Cache->delete_value('feed_news');
 		}
@@ -155,7 +160,8 @@ switch ($_REQUEST['action']){
 			error(403);
 		}
 
-		$DB->query("INSERT INTO news (UserID, Title, Body, Time) VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."')");
+		$DB->query("INSERT INTO news (UserID, Title, Body, Time)
+					VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."')");
 
 		
 
@@ -190,7 +196,11 @@ switch ($_REQUEST['action']){
 			//$Val->SetFields('test',true,'number','You did not enter a valid level for this permission set.');
 
 			if (is_numeric($_REQUEST['id'])) {
-				$DB->query("SELECT p.ID,p.Name,p.Level,p.Secondary,p.PermittedForums,p.Values,p.DisplayStaff,COUNT(u.ID) FROM permissions AS p LEFT JOIN users_main AS u ON u.PermissionID=p.ID WHERE p.ID='".db_string($_REQUEST['id'])."' GROUP BY p.ID");
+				$DB->query("SELECT p.ID, p.Name, p.Level, p.Secondary, p.PermittedForums, p.Values, p.DisplayStaff, COUNT(u.ID)
+							FROM permissions AS p
+								LEFT JOIN users_main AS u ON u.PermissionID=p.ID
+							WHERE p.ID='".db_string($_REQUEST['id'])."'
+							GROUP BY p.ID");
 				list($ID,$Name,$Level,$Secondary,$Forums,$Values,$DisplayStaff,$UserCount)=$DB->next_record(MYSQLI_NUM, array(5));
 
 				if ($Level > $LoggedUser['EffectiveClass'] || $_REQUEST['level'] > $LoggedUser['EffectiveClass']) {
@@ -207,7 +217,7 @@ switch ($_REQUEST['action']){
 					list($DupeCheck)=$DB->next_record();
 
 					if ($DupeCheck) {
-						$Err = "There is already a permission class with that level.";
+						$Err = 'There is already a permission class with that level.';
 					}
 				}
 
@@ -235,12 +245,13 @@ switch ($_REQUEST['action']){
 											'".db_string(serialize($Values))."',
 											'".db_string($DisplayStaff)."')");
 					} else {
-						$DB->query("UPDATE permissions SET Level='".db_string($Level)."',
-														   Name='".db_string($Name)."',
-														   Secondary=".$Secondary.",
-														   PermittedForums='".db_string($Forums)."',
-														   `Values`='".db_string(serialize($Values))."',
-														   DisplayStaff='".db_string($DisplayStaff)."'
+						$DB->query("UPDATE permissions
+									SET Level='".db_string($Level)."',
+										Name='".db_string($Name)."',
+										Secondary=".$Secondary.",
+										PermittedForums='".db_string($Forums)."',
+										`Values`='".db_string(serialize($Values))."',
+										DisplayStaff='".db_string($DisplayStaff)."'
 									WHERE ID='".db_string($_REQUEST['id'])."'");
 						$Cache->delete_value('perm_'.$_REQUEST['id']);
 						if ($Secondary) {

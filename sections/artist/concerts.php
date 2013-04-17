@@ -28,16 +28,15 @@ $Concerts .= ob_get_clean();
 		<a href="#">&uarr;</a>&nbsp;<strong>Upcoming concerts</strong>
 		<a href="#" class="brackets" onclick="$('#concertsbody').toggle(); return false;">Toggle</a>
 	</div>
-    <div id="concertsbody"<?=$Hidden ? ' class="hidden"' : ''?>>
+	<div id="concertsbody"<?=$Hidden ? ' class="hidden"' : '' ?>>
 	<?=$Concerts?>
 	</div>
 </div>
 
 <?
-function make_concert_link($Event)
-{
+function make_concert_link($Event) {
 	// The event doesn't have a start date (this should never happen)
-	if ($Event['startDate'] == "") {
+	if ($Event['startDate'] == '') {
 		return;
 	}
 	$Date = get_date_title($Event['startDate']);
@@ -46,24 +45,23 @@ function make_concert_link($Event)
 	$Concert = "<a href='" . $Event['url'] . "'>" . $ConcertTitle . "</a>";
 ?>
 	<form class="hidden" action="" id="concert<?=$Event['id']?>" method="post">
-		<input type="hidden" name="action" value="concert_thread"/>
-		<input type="hidden" name="concert_title" value="<?="[Concert] " . display_str($Name) . " - " . $ConcertTitle?>"/>
-		<input type="hidden" name="concert_id" value="<?=$Event['id']?>"/>
-		<input type="hidden" name="concert_template" value="<?=get_concert_post_template($Name, $Event)?>"/>
+		<input type="hidden" name="action" value="concert_thread" />
+		<input type="hidden" name="concert_title" value="<?="[Concert] " . display_str($Name) . " - " . $ConcertTitle?>" />
+		<input type="hidden" name="concert_id" value="<?=$Event['id']?>" />
+		<input type="hidden" name="concert_template" value="<?=get_concert_post_template($Name, $Event)?>" />
 	</form>
 	<li><?=$Concert?> - <a href="#" class="brackets" onclick="$('#concert<?=$Event['id']?>').raw().submit(); return false;">Go to thread</a></li>
 <?
 }
 
-function get_concert_post_template($Artist, $Event)
-{
-	$With = "";
-	$EventTitle = "";
-	$Location = "";
-	$Directions = "";
-	$Website = "";
+function get_concert_post_template($Artist, $Event) {
+	$With = '';
+	$EventTitle = '';
+	$Location = '';
+	$Directions = '';
+	$Website = '';
 	if (!empty($Event['venue']['website'])) {
-		$Url =  $Event['venue']['website'];
+		$Url = $Event['venue']['website'];
 		if (strpos ($Url, '://') === false) {
 			$Url = 'http://' . $Url;
 		}
@@ -78,11 +76,11 @@ function get_concert_post_template($Artist, $Event)
 		$Directions = "[b]Directions:[/b] [url=https://maps.google.com/maps?f=q&q=" . urlencode($Event['venue']['name'] . "," . $Event['venue']['location']['city']) . "&ie=UTF8&om=1&iwloc=addr]Show on Map[/url]";
 	}
 	if (!empty($Event['venue']['website'])) {
-		$Url =  $Event['venue']['website'];
+		$Url = $Event['venue']['website'];
 		if (strpos ($Url, '://') === false) {
 			$Url = 'http://' . $Url;
 		}
-		$Website = "[b]Web site:[/b] " . $Url;
+		$Website = '[b]Web site:[/b] ' . $Url;
 	}
 	if (isset($Event['artists']['artist']) && (count($Event['artists']['artist']) == 1 && strtolower($Event['artists']['artist'][1]) == strtolower($Artist))) {
 		$i = 0;
@@ -111,17 +109,15 @@ function get_concert_post_template($Artist, $Event)
 [align=center]. . . . . . . . . .[/align]";
 }
 
-function get_date_title($Str)
-{
+function get_date_title($Str) {
 	$Exploded = explode(' ', $Str);
-	$Date = $Exploded[2] . " " . $Exploded[1] . ", " . $Exploded[3];
+	$Date = $Exploded[2] . ' ' . $Exploded[1] . ', ' . $Exploded[3];
 	return $Date;
 }
 
-function get_date_post($Str)
-{
+function get_date_post($Str) {
 	$Exploded = explode(' ', $Str);
-	$Date = $Exploded[2] . " " . $Exploded[1] . ", " . $Exploded[3] . " (" . rtrim($Exploded[0], ',') . ")";
+	$Date = $Exploded[2] . ' ' . $Exploded[1] . ', ' . $Exploded[3] . ' (' . rtrim($Exploded[0], ',') . ')';
 	return $Date;
 }
 

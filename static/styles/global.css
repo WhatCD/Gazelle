@@ -387,7 +387,7 @@ tr.torrent .bookmark>a:after {
 }
 
 .brackets {
-    text-indent: 0px;
+	text-indent: 0px;
 }
 
 .votespan.brackets:before {
@@ -422,7 +422,7 @@ tr.torrent .bookmark>a:after {
 	clear:both;
 }
 .group_image + .group_info {
-    margin-left: 100px;
+	margin-left: 100px;
 }
 
 .group_image img {
@@ -442,31 +442,31 @@ tr.torrent .bookmark>a:after {
  * Fix flowing issues in the report resolving pages.
  */
 .wrap_overflow, .filelist_table td, .reportinfo_table, .torrentdetails blockquote {
-    word-break: normal;
-    -ms-word-wrap: break-word;
-    word-wrap: break-word;
-    -webkit-hyphens: auto;
-    -moz-hyphens: auto;
-    -ms-hyphens: auto;
-    hyphens: auto;
-    /* Note that IE will have different behavior on word-break,
-     * but this is required to keep the layout from breaking. */
-    -ms-word-break: break-all;
+	word-break: normal;
+	-ms-word-wrap: break-word;
+	word-wrap: break-word;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+	/* Note that IE will have different behavior on word-break,
+	 * but this is required to keep the layout from breaking. */
+	-ms-word-break: break-all;
 }
 /* Non-web-standard for webkit */
 .torrentdetails blockquote {
-    word-break: break-word;
+	word-break: break-word;
 }
 /* Fix long filename tables overflowing (Chrome only). */
 .filelist_table td:first-child {
-    word-break: break-all;
+	word-break: break-all;
 }
 /* Fix long overflow for Opera (doesn't support word-break). */
 .reportinfo_table {
-    table-layout:fixed;
+	table-layout:fixed;
 }
 /* Wrap release info for consistent DOM and to limit table expansion. */
 .no_overflow {
-    width: 100%;
-    overflow: hidden;
+	width: 100%;
+	overflow: hidden;
 }

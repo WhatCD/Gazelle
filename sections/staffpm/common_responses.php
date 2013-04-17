@@ -39,15 +39,15 @@ $Text = new TEXT;
 				<div class="head">
 					<strong>Name:</strong>
 					<input onfocus="if (this.value == 'New name') this.value='';"
-						   onblur="if (this.value == '') this.value='New name';"
-						   type="text" id="response_name_0" size="87" value="New name"
+						onblur="if (this.value == '') this.value='New name';"
+						type="text" id="response_name_0" size="87" value="New name"
 					/>
 				</div>
 				<div class="pad">
 					<textarea onfocus="if (this.value == 'New message') this.value='';"
-							  onblur="if (this.value == '') this.value='New message';"
-							  rows="10" cols="87"
-							  id="response_message_0">New message</textarea>
+						onblur="if (this.value == '') this.value='New message';"
+						rows="10" cols="87"
+						id="response_message_0">New message</textarea>
 					<br />
 					<input type="button" value="Save" id="save_0" onclick="SaveMessage(0);" />
 				</div>
@@ -62,7 +62,7 @@ $Text = new TEXT;
 
 // List common responses
 $DB->query("SELECT ID, Message, Name FROM staff_pm_responses ORDER BY ID DESC");
-while(list($ID, $Message, $Name) = $DB->next_record()) {
+while (list($ID, $Message, $Name) = $DB->next_record()) {
 
 ?>
 		<br />

@@ -64,10 +64,10 @@ if (check_perms('users_mod')) { // Person viewing is a staff member
 		m.FLTokens,
 		SHA1(i.AdminComment)
 		FROM users_main AS m
-		JOIN users_info AS i ON i.UserID = m.ID
-		LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
-		LEFT JOIN permissions AS p ON p.ID=m.PermissionID
-		LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
+			JOIN users_info AS i ON i.UserID = m.ID
+			LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
+			LEFT JOIN permissions AS p ON p.ID=m.PermissionID
+			LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
 		WHERE m.ID = '".$UserID."' GROUP BY AuthorID");
 
 	if ($DB->record_count() == 0) { // If user doesn't exist
@@ -103,10 +103,10 @@ if (check_perms('users_mod')) { // Person viewing is a staff member
 		i.DisableInvites,
 		inviter.username
 		FROM users_main AS m
-		JOIN users_info AS i ON i.UserID = m.ID
-		LEFT JOIN permissions AS p ON p.ID=m.PermissionID
-		LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
-		LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
+			JOIN users_info AS i ON i.UserID = m.ID
+			LEFT JOIN permissions AS p ON p.ID=m.PermissionID
+			LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
+			LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
 		WHERE m.ID = $UserID GROUP BY AuthorID");
 
 	if ($DB->record_count() == 0) { // If user doesn't exist
@@ -222,27 +222,27 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 			<div class="head colhead_dark">Stats</div>
 			<ul class="stats nobullet">
 				<li>Joined: <?=$JoinedDate?></li>
-<? if (($Override = check_paranoia_here('lastseen'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Last seen: <?=$LastAccess?></li>
-<? } ?>
-<? if (($Override=check_paranoia_here('uploaded'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
-<? } ?>
-<? if (($Override=check_paranoia_here('downloaded'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
-<? } ?>
-<? if (($Override=check_paranoia_here('ratio'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
-<? } ?>
-<? if (($Override=check_paranoia_here('requiredratio')) && isset($RequiredRatio)) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
-<? } ?>
-<? if ($OwnProfile || ($Override=check_paranoia_here(false)) || check_perms('users_mod')) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
-<? }
+<?	if (($Override = check_paranoia_here('lastseen'))) { ?>
+				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>>Last seen: <?=$LastAccess?></li>
+<?	}
+	if (($Override=check_paranoia_here('uploaded'))) { ?>
+				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
+<?	}
+	if (($Override=check_paranoia_here('downloaded'))) { ?>
+				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
+<?	}
+	if (($Override=check_paranoia_here('ratio'))) { ?>
+				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
+<?	}
+	if (($Override=check_paranoia_here('requiredratio')) && isset($RequiredRatio)) { ?>
+				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
+<?	}
+	if ($OwnProfile || ($Override=check_paranoia_here(false)) || check_perms('users_mod')) { ?>
+				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
+<?	}
 	if (($OwnProfile || check_perms('users_mod')) && $Warned!='0000-00-00 00:00:00') { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?>>Warning expires: <?= date('Y-m-d H:i', strtotime($Warned)) ?></li>
-<? } ?>
+				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>>Warning expires: <?= date('Y-m-d H:i', strtotime($Warned)) ?></li>
+<?	} ?>
 			</ul>
 		</div>
 
@@ -252,7 +252,12 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 include(SERVER_ROOT.'/sections/user/lastfm.php');
 
 if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requestsfilled_bounty')) {
-	$DB->query("SELECT COUNT(DISTINCT r.ID), SUM(rv.Bounty) FROM requests AS r LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID WHERE r.FillerID = ".$UserID);
+	$DB->query("SELECT
+					COUNT(DISTINCT r.ID),
+					SUM(rv.Bounty)
+				FROM requests AS r
+					LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID
+				WHERE r.FillerID = ".$UserID);
 	list($RequestsFilled, $TotalBounty) = $DB->next_record();
 } else {
 	$RequestsFilled = $TotalBounty = 0;
@@ -485,17 +490,17 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 <? } ?>
 		<div class="box">
 			<div class="head">
-				<span style="float:left;">Profile<? if ($CustomTitle) {?>&nbsp;-&nbsp;</span>
+				<span style="float: left;">Profile<? if ($CustomTitle) {?>&nbsp;-&nbsp;</span>
 				<span class="user_title"><? echo html_entity_decode($DisplayCustomTitle); } ?></span>
-				<span style="float:right;"><?=!empty($Badges)?"$Badges&nbsp;&nbsp;":''?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
+				<span style="float: right;"><?=!empty($Badges)?"$Badges&nbsp;&nbsp;":''?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
 			</div>
 			<div class="pad" id="profilediv">
-<? if (!$Info) { ?>
+<?	if (!$Info) { ?>
 				This profile is currently empty.
 <?
-} else {
-	echo $Text->full_format($Info);
-}
+	} else {
+		echo $Text->full_format($Info);
+	}
 
 ?>
 			</div>
@@ -509,11 +514,11 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 		g.Name,
 		g.WikiImage
 		FROM xbt_snatched AS s
-		INNER JOIN torrents AS t ON t.ID=s.fid
-		INNER JOIN torrents_group AS g ON t.GroupID=g.ID
+			INNER JOIN torrents AS t ON t.ID=s.fid
+			INNER JOIN torrents_group AS g ON t.GroupID=g.ID
 		WHERE s.uid='$UserID'
-		AND g.CategoryID='1'
-		AND g.WikiImage <> ''
+			AND g.CategoryID='1'
+			AND g.WikiImage <> ''
 		GROUP BY g.ID
 		ORDER BY s.tstamp DESC
 		LIMIT 5");
@@ -553,10 +558,10 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 		g.Name,
 		g.WikiImage
 		FROM torrents_group AS g
-		INNER JOIN torrents AS t ON t.GroupID=g.ID
+			INNER JOIN torrents AS t ON t.GroupID=g.ID
 		WHERE t.UserID='$UserID'
-		AND g.CategoryID='1'
-		AND g.WikiImage <> ''
+			AND g.CategoryID='1'
+			AND g.WikiImage <> ''
 		GROUP BY g.ID
 		ORDER BY t.Time DESC
 		LIMIT 5");
@@ -592,7 +597,7 @@ foreach ($Collages as $CollageInfo) {
 		tg.WikiImage,
 		tg.CategoryID
 		FROM collages_torrents AS ct
-		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
+			JOIN torrents_group AS tg ON tg.ID=ct.GroupID
 		WHERE ct.CollageID='$CollageID'
 		ORDER BY ct.Sort LIMIT 5");
 	$Collage = $DB->to_array();
@@ -921,7 +926,7 @@ if (check_perms('users_mod', $Class)) { ?>
 <?
 		$DB->query("SELECT p.ID, p.Name, l.UserID
 					FROM permissions AS p
-					LEFT JOIN users_levels AS l ON l.PermissionID = p.ID AND l.UserID = '$UserID'
+						LEFT JOIN users_levels AS l ON l.PermissionID = p.ID AND l.UserID = '$UserID'
 					WHERE p.Secondary = 1
 					ORDER BY p.Name");
 		$i = 0;
@@ -1104,19 +1109,19 @@ if (check_perms('users_mod', $Class)) { ?>
 			<tr>
 				<td class="label">Disable:</td>
 				<td>
-					<input type="checkbox" name="DisablePosting" id="DisablePosting"<? if ($DisablePosting==1) { ?> checked="checked"<? } ?> /> <label for="DisablePosting">Posting</label>
+					<input type="checkbox" name="DisablePosting" id="DisablePosting"<? if ($DisablePosting == 1) { ?> checked="checked"<? } ?> /> <label for="DisablePosting">Posting</label>
 <?		if (check_perms('users_disable_any')) { ?> |
-					<input type="checkbox" name="DisableAvatar" id="DisableAvatar"<? if ($DisableAvatar==1) { ?> checked="checked"<? } ?> /> <label for="DisableAvatar">Avatar</label> |
-					<input type="checkbox" name="DisableInvites" id="DisableInvites"<? if ($DisableInvites==1) { ?> checked="checked"<? } ?> /> <label for="DisableInvites">Invites</label> |
-					<input type="checkbox" name="DisableForums" id="DisableForums"<? if ($DisableForums==1) { ?> checked="checked"<? } ?> /> <label for="DisableForums">Forums</label> |
-					<input type="checkbox" name="DisableTagging" id="DisableTagging"<? if ($DisableTagging==1) { ?> checked="checked"<? } ?> /> <label for="DisableTagging" title="This only disables a user's ability to delete tags.">Tagging</label> |
-					<input type="checkbox" name="DisableRequests" id="DisableRequests"<? if ($DisableRequests==1) { ?> checked="checked"<? } ?> /> <label for="DisableRequests">Requests</label>
+					<input type="checkbox" name="DisableAvatar" id="DisableAvatar"<? if ($DisableAvatar == 1) { ?> checked="checked"<? } ?> /> <label for="DisableAvatar">Avatar</label> |
+					<input type="checkbox" name="DisableInvites" id="DisableInvites"<? if ($DisableInvites == 1) { ?> checked="checked"<? } ?> /> <label for="DisableInvites">Invites</label> |
+					<input type="checkbox" name="DisableForums" id="DisableForums"<? if ($DisableForums == 1) { ?> checked="checked"<? } ?> /> <label for="DisableForums">Forums</label> |
+					<input type="checkbox" name="DisableTagging" id="DisableTagging"<? if ($DisableTagging == 1) { ?> checked="checked"<? } ?> /> <label for="DisableTagging" title="This only disables a user's ability to delete tags.">Tagging</label> |
+					<input type="checkbox" name="DisableRequests" id="DisableRequests"<? if ($DisableRequests == 1) { ?> checked="checked"<? } ?> /> <label for="DisableRequests">Requests</label>
 					<br />
-					<input type="checkbox" name="DisableUpload" id="DisableUpload"<? if ($DisableUpload==1) { ?> checked="checked"<? } ?> /> <label for="DisableUpload">Upload</label> |
-					<input type="checkbox" name="DisableWiki" id="DisableWiki"<? if ($DisableWiki==1) { ?> checked="checked"<? } ?> /> <label for="DisableWiki">Wiki</label> |
-					<input type="checkbox" name="DisableLeech" id="DisableLeech"<? if ($DisableLeech==0) { ?> checked="checked"<? } ?> /> <label for="DisableLeech">Leech</label> |
-					<input type="checkbox" name="DisablePM" id="DisablePM"<? if ($DisablePM==1) { ?> checked="checked"<? } ?> /> <label for="DisablePM">PM</label> |
-					<input type="checkbox" name="DisableIRC" id="DisableIRC"<? if ($DisableIRC==1) { ?> checked="checked"<? } ?> /> <label for="DisableIRC">IRC</label>
+					<input type="checkbox" name="DisableUpload" id="DisableUpload"<? if ($DisableUpload == 1) { ?> checked="checked"<? } ?> /> <label for="DisableUpload">Upload</label> |
+					<input type="checkbox" name="DisableWiki" id="DisableWiki"<? if ($DisableWiki == 1) { ?> checked="checked"<? } ?> /> <label for="DisableWiki">Wiki</label> |
+					<input type="checkbox" name="DisableLeech" id="DisableLeech"<? if ($DisableLeech == 0) { ?> checked="checked"<? } ?> /> <label for="DisableLeech">Leech</label> |
+					<input type="checkbox" name="DisablePM" id="DisablePM"<? if ($DisablePM == 1) { ?> checked="checked"<? } ?> /> <label for="DisablePM">PM</label> |
+					<input type="checkbox" name="DisableIRC" id="DisableIRC"<? if ($DisableIRC == 1) { ?> checked="checked"<? } ?> /> <label for="DisableIRC">IRC</label>
 				</td>
 			</tr>
 			<tr>

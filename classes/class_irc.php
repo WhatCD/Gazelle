@@ -180,6 +180,7 @@ abstract class IRC_BOT {
 					}
 					if (isset($this->DisabledUsers[$Nick[1]])) {
 						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[1] . "'");
+						$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[1]]);
 					}
 				}
@@ -187,6 +188,7 @@ abstract class IRC_BOT {
 				if (preg_match("/:([^!]+)![^\s]* PART #what.cd-disabled/", $this->Data, $Nick)) {
 					if (isset($this->DisabledUsers[$Nick[1]])) {
 						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[1] . "'");
+						$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[1]]);
 					}
 				}
@@ -195,6 +197,7 @@ abstract class IRC_BOT {
 					$Nick = explode(" ", $Nick[0]);
 					if (isset($this->DisabledUsers[$Nick[3]])) {
 						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[3] . "'");
+						$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[3]]);
 					}
 				}

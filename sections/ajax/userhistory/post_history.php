@@ -5,15 +5,15 @@ User post history page
 */
 
 function error_out($reason = '') {
-    $error = array('status' => 'failure');
-    if ($reason != '')
-        $error['reason'] = $reason;
-    print $error;
-    die();
+	$error = array('status' => 'failure');
+	if ($reason != '')
+		$error['reason'] = $reason;
+	print $error;
+	die();
 }
 
 if (!empty($LoggedUser['DisableForums'])) {
-    error_out("You do not have access to the forums!");
+	error_out('You do not have access to the forums!');
 }
 
 
@@ -23,7 +23,7 @@ $Text = new TEXT;
 
 $UserID = empty($_GET['userid']) ? $LoggedUser['ID'] : $_GET['userid'];
 if (!is_number($UserID)) {
-    error_out("User does not exist!");
+	error_out('User does not exist!');
 }
 
 if (isset($LoggedUser['PostsPerPage'])) {
@@ -43,11 +43,11 @@ if (($UserInfo = $Cache->get_value('user_info_'.$UserID)) === false) {
 		i.Donor,
 		i.Warned
 		FROM users_main AS m
-		JOIN users_info AS i ON i.UserID = m.ID
+			JOIN users_info AS i ON i.UserID = m.ID
 		WHERE m.ID = $UserID");
 
 	if ($DB->record_count() == 0){ // If user doesn't exist
-            error_out("User does not exist!");
+			error_out('User does not exist!');
 	}
 	list($Username, $Enabled, $Title, $Avatar, $Donor, $Warned) = $DB->next_record();
 } else {
@@ -67,32 +67,32 @@ $ShowUnread = ($ViewingOwn && (!isset($_GET['showunread']) || !!$_GET['showunrea
 $ShowGrouped = ($ViewingOwn && (!isset($_GET['group']) || !!$_GET['group']));
 if ($ShowGrouped) {
 	$sql = 'SELECT
-		SQL_CALC_FOUND_ROWS
-		MAX(p.ID) AS ID
+				SQL_CALC_FOUND_ROWS
+				MAX(p.ID) AS ID
 		FROM forums_posts AS p
-		LEFT JOIN forums_topics AS t ON t.ID = p.TopicID';
+			LEFT JOIN forums_topics AS t ON t.ID = p.TopicID';
 	if ($ShowUnread) {
 		$sql.='
-		LEFT JOIN forums_last_read_topics AS l ON l.TopicID = t.ID AND l.UserID = '.$LoggedUser['ID'];
+			LEFT JOIN forums_last_read_topics AS l ON l.TopicID = t.ID AND l.UserID = '.$LoggedUser['ID'];
 	}
 	$sql .= '
-		LEFT JOIN forums AS f ON f.ID = t.ForumID
+			LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = '.$UserID.'
-		AND ((f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
+			AND ((f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
 	if (!empty($RestrictedForums)) {
 		$sql.='
-		AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+			AND f.ID NOT IN (\''.$RestrictedForums.'\')';
 	}
 	$sql .= ')';
 	if (!empty($PermittedForums)) {
 		$sql.='
-		OR f.ID IN (\''.$PermittedForums.'\')';
+			OR f.ID IN (\''.$PermittedForums.'\')';
 	}
 	$sql .= ')';
 	if ($ShowUnread) {
 		$sql .= '
-		AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\')
-		AND (l.PostID<t.LastPostID OR l.PostID IS NULL))';
+			AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\')
+			AND (l.PostID<t.LastPostID OR l.PostID IS NULL))';
 	}
 	$sql .= '
 		GROUP BY t.ID
@@ -118,12 +118,12 @@ if ($ShowGrouped) {
 			t.IsLocked,
 			t.IsSticky
 			FROM forums_posts as p
-			LEFT JOIN users_main AS um ON um.ID = p.AuthorID
-			LEFT JOIN users_info AS ui ON ui.UserID = p.AuthorID
-			LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
-			JOIN forums_topics AS t ON t.ID = p.TopicID
-			JOIN forums AS f ON f.ID = t.ForumID
-			LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
+				LEFT JOIN users_main AS um ON um.ID = p.AuthorID
+				LEFT JOIN users_info AS ui ON ui.UserID = p.AuthorID
+				LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
+				JOIN forums_topics AS t ON t.ID = p.TopicID
+				JOIN forums AS f ON f.ID = t.ForumID
+				LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
 			WHERE p.ID IN ('.implode(',',$PostIDs).')
 			ORDER BY p.ID DESC';
 		$Posts = $DB->query($sql);
@@ -152,23 +152,23 @@ if ($ShowGrouped) {
 		t.IsLocked,
 		t.IsSticky
 		FROM forums_posts as p
-		LEFT JOIN users_main AS um ON um.ID = p.AuthorID
-		LEFT JOIN users_info AS ui ON ui.UserID = p.AuthorID
-		LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
-		JOIN forums_topics AS t ON t.ID = p.TopicID
-		JOIN forums AS f ON f.ID = t.ForumID
-		LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
+			LEFT JOIN users_main AS um ON um.ID = p.AuthorID
+			LEFT JOIN users_info AS ui ON ui.UserID = p.AuthorID
+			LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
+			JOIN forums_topics AS t ON t.ID = p.TopicID
+			JOIN forums AS f ON f.ID = t.ForumID
+			LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
 		WHERE p.AuthorID = '.$UserID.'
-		AND f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
+			AND f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
 
 	if (!empty($RestrictedForums)) {
 		$sql.='
-		AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+			AND f.ID NOT IN (\''.$RestrictedForums.'\')';
 	}
 
 	if ($ShowUnread) {
 		$sql.='
-		AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\') AND (l.PostID<t.LastPostID OR l.PostID IS NULL)) ';
+			AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\') AND (l.PostID<t.LastPostID OR l.PostID IS NULL)) ';
 	}
 
 	$sql .= '
@@ -191,30 +191,30 @@ if ($ShowGrouped) {
 
 $JsonResults = array();
 while (list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername, $TopicID, $ThreadTitle, $LastPostID, $LastRead, $Locked, $Sticky) = $DB->next_record()) {
-    $JsonResults[] = array(
-        'postId' => (int) $PostID,
-        'topicId' => (int) $TopicID,
-        'threadTitle' => $ThreadTitle,
-        'lastPostId' => (int) $LastPostID,
-        'lastRead' => (int) $LastRead,
-        'locked' => $Locked == 1,
-        'sticky' => $Sticky == 1,
-        'addedTime' => $AddedTime,
-        'body' => $Text->full_format($Body),
-        'bbbody' => $Body,
-        'editedUserId' => (int) $EditedUserID,
-        'editedTime' => $EditedTime,
-        'editedUsername' => $EditedUsername
-        );
+	$JsonResults[] = array(
+		'postId' => (int) $PostID,
+		'topicId' => (int) $TopicID,
+		'threadTitle' => $ThreadTitle,
+		'lastPostId' => (int) $LastPostID,
+		'lastRead' => (int) $LastRead,
+		'locked' => $Locked == 1,
+		'sticky' => $Sticky == 1,
+		'addedTime' => $AddedTime,
+		'body' => $Text->full_format($Body),
+		'bbbody' => $Body,
+		'editedUserId' => (int) $EditedUserID,
+		'editedTime' => $EditedTime,
+		'editedUsername' => $EditedUsername
+		);
 }
 
 print json_encode(
-    array(
-        'status' => 'success',
-        'response' => array(
-            'currentPage' => (int) $Page,
-            'pages' => ceil($Results/$PerPage),
-            'threads' => $JsonResults
-            )
-        )
-    );
+	array(
+		'status' => 'success',
+		'response' => array(
+			'currentPage' => (int) $Page,
+			'pages' => ceil($Results/$PerPage),
+			'threads' => $JsonResults
+			)
+		)
+	);

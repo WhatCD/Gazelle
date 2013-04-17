@@ -12,7 +12,7 @@ $_GET['post'], which is the ID of the post.
 \*********************************************************************/
 
 // Quick SQL injection check
-if(!$_GET['post'] || !is_number($_GET['post'])){
+if (!$_GET['post'] || !is_number($_GET['post'])) {
 	error(0);
 }
 
@@ -23,11 +23,11 @@ $PostID = $_GET['post'];
 // the right level
 $DB->query("SELECT m.Message, c.Level, c.UserID
 			FROM staff_pm_messages as m
-			JOIN staff_pm_conversations AS c ON m.ConvID=c.ID
+				JOIN staff_pm_conversations AS c ON m.ConvID=c.ID
 			WHERE m.ID='$PostID'");
 list($Message, $Level, $UserID) = $DB->next_record(MYSQLI_NUM);
 
-if (($LoggedUser['ID'] == $UserID) || ($IsFLS && $LoggedUser['Class'] >= $Level))  {
+if (($LoggedUser['ID'] == $UserID) || ($IsFLS && $LoggedUser['Class'] >= $Level)) {
 	// This gets sent to the browser, which echoes it wherever
 	echo trim($Message);
 } else {

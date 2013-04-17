@@ -25,7 +25,7 @@ if ($ConvID = (int)$_GET['id']) {
 	$UserInfo = Users::user_info($UserID);
 	$UserStr = Users::format_username($UserID, true, true, true, true);
 
-	$OwnerID   = $UserID;
+	$OwnerID = $UserID;
 	$OwnerName = $UserInfo['Username'];
 
 ?>
@@ -64,12 +64,12 @@ if ($ConvID = (int)$_GET['id']) {
 	// Get messages
 	$StaffPMs = $DB->query("SELECT UserID, SentDate, Message, ID FROM staff_pm_messages WHERE ConvID=$ConvID");
 
-	while(list($UserID, $SentDate, $Message, $MessageID) = $DB->next_record()) {
+	while (list($UserID, $SentDate, $Message, $MessageID) = $DB->next_record()) {
 		// Set user string
 		if ($UserID == $OwnerID) {
 			// User, use prepared string
 			$UserString = $UserStr;
-			$Username   = $OwnerName;
+			$Username = $OwnerName;
 		} else {
 			// Staff/FLS
 			$UserInfo = Users::user_info($UserID);
@@ -112,7 +112,7 @@ if ($ConvID = (int)$_GET['id']) {
 <?
 		// List common responses
 		$DB->query("SELECT ID, Name FROM staff_pm_responses");
-		while(list($ID, $Name) = $DB->next_record()) {
+		while (list($ID, $Name) = $DB->next_record()) {
 ?>
 					<option value="<?=$ID?>"><?=$Name?></option>
 <?		} ?>
@@ -168,11 +168,11 @@ if ($ConvID = (int)$_GET['id']) {
 				m.ID,
 				m.Username
 			FROM permissions as p
-			JOIN users_main as m ON m.PermissionID=p.ID
+				JOIN users_main as m ON m.PermissionID=p.ID
 			WHERE p.DisplayStaff='1'
 			ORDER BY p.Level DESC, m.Username ASC"
 		);
-		while(list($ID, $Name) = $DB->next_record()) {
+		while (list($ID, $Name) = $DB->next_record()) {
 			// Create one <option> for each staff member
 			$Selected = ($AssignedToUser == $ID) ? ' selected="selected"' : '';
 ?>
@@ -187,12 +187,12 @@ if ($ConvID = (int)$_GET['id']) {
 				m.ID,
 				m.Username
 			FROM users_info as i
-			JOIN users_main as m ON m.ID=i.UserID
-			JOIN permissions as p ON p.ID=m.PermissionID
+				JOIN users_main as m ON m.ID=i.UserID
+				JOIN permissions as p ON p.ID=m.PermissionID
 			WHERE p.DisplayStaff!='1' AND i.SupportFor!=''
 			ORDER BY m.Username ASC
 		");
-		while(list($ID, $Name) = $DB->next_record()) {
+		while (list($ID, $Name) = $DB->next_record()) {
 			// Create one <option> for each FLS user
 			$Selected = ($AssignedToUser == $ID) ? ' selected="selected"' : '';
 ?>
@@ -208,7 +208,7 @@ if ($ConvID = (int)$_GET['id']) {
 
 	if ($Status != 'Resolved') { ?>
 					<input type="button" value="Resolve" onclick="location.href='staffpm.php?action=resolve&amp;id=<?=$ConvID?>';" />
-<?			if ($IsFLS) {  //Moved by request ?>
+<?			if ($IsFLS) { //Moved by request ?>
 					<input type="button" value="Common answers" onclick="$('#common_answers').toggle();" />
 <?			} ?>
 					<input type="button" id="previewbtn" value="Preview" class="hidden button_preview_<?=$TextPrev->getID()?>" title="Preview text" />
@@ -229,6 +229,6 @@ if ($ConvID = (int)$_GET['id']) {
 
 	View::show_footer();
 } else {
-	// No id
+	// No ID
 	header('Location: staffpm.php');
 }

@@ -40,7 +40,7 @@ if (!check_perms('admin_reports')) {
 		$Where .= " AND Type = 'request_update'";
 	}
 	if (check_perms('site_moderate_forums')) {
-		$Where .= " AND Type IN('collages_comment', 'Post', 'requests_comment', 'thread', 'torrents_comment', 'torrent_comments')";
+		$Where .= " AND Type IN('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment', 'torrent_comments', 'artist_comment')";
 	}
 
 }
@@ -83,13 +83,13 @@ $DB->set_query_id($Reports);
 		</div>
 	</div>
 	<div class="linkbox">
-		<?
+<?
 // pagination
 		$Pages = Format::get_pages($Page, $Results, REPORTS_PER_PAGE, 11);
 		echo $Pages;
 		?>
 	</div>
-	<?
+<?
 	while (list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $Reason, $Status, $ClaimerID, $Notes, $ResolverID) = $DB->next_record()) {
 		$Type = $Types[$Short];
 		$Reference = "reports.php?id=" . $ReportID . "#report" . $ReportID;
@@ -106,8 +106,7 @@ $DB->set_query_id($Reports);
 				<tr>
 					<td class="center" colspan="2">
 						<strong>
-							<?
-							switch ($Short) {
+<?							switch ($Short) {
 								case "user" :
 									$DB->query("SELECT Username FROM users_main WHERE ID=" . $ThingID);
 									if ($DB->record_count() < 1) {
@@ -211,13 +210,13 @@ $DB->set_query_id($Reports);
 				</tr>
 				<tr>
 					<td colspan="2">
-						<?    if ($ClaimerID == $LoggedUser['ID']) { ?>
+<?					if ($ClaimerID == $LoggedUser['ID']) { ?>
 						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?> <a href="#" onclick="unClaim(<?=$ReportID?>); return false;" class="brackets">Unclaim</a></span>
-						<? } else if ($ClaimerID) { ?>
+<?					} else if ($ClaimerID) { ?>
 						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?></span>
-						<? } else { ?>
+<?					} else { ?>
 						<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;" class="brackets">Claim</a>
-						<? } ?>
+<?					} ?>
 						&nbsp;&nbsp;
 						<a href="#" onclick="toggleNotes(<?=$ReportID?>); return false;" class="brackets">Toggle notes</a>
 
@@ -228,34 +227,34 @@ $DB->set_query_id($Reports);
 						</div>
 					</td>
 				</tr>
-				<? if ($Status != "Resolved") { ?>
+<?			if ($Status != "Resolved") { ?>
 				<tr>
 					<td class="center" colspan="2">
 						<form id="report_form_<?=$ReportID?>" action="">
 							<input type="hidden" name="reportid" value="<?=$ReportID?>" />
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-							<input type="submit" onclick="return resolve(<?=$ReportID?>, <?=($ClaimerID == $LoggedUser['ID'] || !$ClaimerID) ? "true" : "false"?>)" name="submit" value="Resolve" />
+							<input type="submit" onclick="return resolve(<?=$ReportID?>, <?=($ClaimerID == $LoggedUser['ID'] || !$ClaimerID) ? 'true' : 'false' ?>)" name="submit" value="Resolve" />
 						</form>
 					</td>
 				</tr>
-				<? } else {
-					$ResolverInfo = Users::user_info($ResolverID);
-				?>
+<?			} else {
+				$ResolverInfo = Users::user_info($ResolverID);
+			?>
 				<tr>
 					<td colspan="2">
 						Resolved by <a href="users.php?id=<?=$ResolverID?>"><?=$ResolverInfo['Username']?></a>
 					</td>
 				</tr>
-				<? } ?>
+<?			} ?>
 			</table>
 		</div>
 		<br />
-		<?
+<?
 		$DB->set_query_id($Reports);
 	}
 	?>
 	<div class="linkbox">
-		<?
+<?
 		echo $Pages;
 		?>
 	</div>

@@ -5,7 +5,7 @@
  * replicated on static.php.
  */
 
-if(!check_perms('admin_reports')){
+if (!check_perms('admin_reports')) {
 	error(403);
 }
 
@@ -15,66 +15,66 @@ $Text = NEW TEXT;
 
 
 $DB->query("SELECT
-			r.ID,
-			r.ReporterID,
-			reporter.Username,
-			r.TorrentID,
-			r.Type,
-			r.UserComment,
-			r.ResolverID,
-			resolver.Username,
-			r.Status,
-			r.ReportedTime,
-			r.LastChangeTime,
-			r.ModComment,
-			r.Track,
-			r.Image,
-			r.ExtraID,
-			r.Link,
-			r.LogMessage,
-			tg.Name,
-			tg.ID,
-			CASE COUNT(ta.GroupID)
-				WHEN 1 THEN aa.ArtistID
-				WHEN 0 THEN '0'
-				ELSE '0'
-			END AS ArtistID,
-			CASE COUNT(ta.GroupID)
-				WHEN 1 THEN aa.Name
-				WHEN 0 THEN ''
-				ELSE 'Various Artists'
-			END AS ArtistName,
-			tg.Year,
-			tg.CategoryID,
-			t.Time,
-			t.Remastered,
-			t.RemasterTitle,
-			t.RemasterYear,
-			t.Media,
-			t.Format,
-			t.Encoding,
-			t.Size,
-			t.HasCue,
-			t.HasLog,
-			t.LogScore,
-			t.UserID AS UploaderID,
-			t.Tasted,
-			uploader.Username
+				r.ID,
+				r.ReporterID,
+				reporter.Username,
+				r.TorrentID,
+				r.Type,
+				r.UserComment,
+				r.ResolverID,
+				resolver.Username,
+				r.Status,
+				r.ReportedTime,
+				r.LastChangeTime,
+				r.ModComment,
+				r.Track,
+				r.Image,
+				r.ExtraID,
+				r.Link,
+				r.LogMessage,
+				tg.Name,
+				tg.ID,
+				CASE COUNT(ta.GroupID)
+					WHEN 1 THEN aa.ArtistID
+					WHEN 0 THEN '0'
+					ELSE '0'
+				END AS ArtistID,
+				CASE COUNT(ta.GroupID)
+					WHEN 1 THEN aa.Name
+					WHEN 0 THEN ''
+					ELSE 'Various Artists'
+				END AS ArtistName,
+				tg.Year,
+				tg.CategoryID,
+				t.Time,
+				t.Remastered,
+				t.RemasterTitle,
+				t.RemasterYear,
+				t.Media,
+				t.Format,
+				t.Encoding,
+				t.Size,
+				t.HasCue,
+				t.HasLog,
+				t.LogScore,
+				t.UserID AS UploaderID,
+				t.Tasted,
+				uploader.Username
 			FROM reportsv2 AS r
-			LEFT JOIN torrents AS t ON t.ID=r.TorrentID
-			LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-			LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-			LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-			LEFT JOIN users_main AS resolver ON resolver.ID=r.ResolverID
-			LEFT JOIN users_main AS reporter ON reporter.ID=r.ReporterID
-			LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
+				LEFT JOIN torrents AS t ON t.ID=r.TorrentID
+				LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
+				LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
+				LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
+				LEFT JOIN users_main AS resolver ON resolver.ID=r.ResolverID
+				LEFT JOIN users_main AS reporter ON reporter.ID=r.ReporterID
+				LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
 			WHERE r.Status = 'New'
 			GROUP BY r.ID
 			ORDER BY ReportedTime ASC
 			LIMIT 1");
 
 
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			die();
 		}
 		
@@ -83,13 +83,13 @@ $DB->query("SELECT
 			$ModComment, $Tracks, $Images, $ExtraIDs, $Links, $LogMessage, $GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
 			$RemasterYear, $Media, $Format, $Encoding, $Size, $HasCue, $HasLog, $LogScore, $UploaderID, $UploaderName) = $DB->next_record(MYSQLI_BOTH, array("ModComment"));
 		
-		if(!$GroupID) {
+		if (!$GroupID) {
 			//Torrent already deleted
-			$DB->query("UPDATE reportsv2 SET
-			Status='Resolved',
-			LastChangeTime='".sqltime()."',
-			ModComment='Report already dealt with (torrent deleted)'
-			WHERE ID=".$ReportID);
+			$DB->query("UPDATE reportsv2
+						SET Status='Resolved',
+							LastChangeTime='".sqltime()."',
+							ModComment='Report already dealt with (torrent deleted)'
+						WHERE ID=".$ReportID);
 ?>
 	<div>
 		<table class="layout">
@@ -103,14 +103,14 @@ $DB->query("SELECT
 <?
 			die();
 		}
-		$DB->query("UPDATE reportsv2 SET Status='InProgress',
-										ResolverID=".$LoggedUser['ID']."
-										WHERE ID=".$ReportID);
-
+		$DB->query("UPDATE reportsv2
+					SET Status='InProgress',
+						ResolverID=".$LoggedUser['ID']."
+					WHERE ID=".$ReportID);
 
 		if (array_key_exists($Type, $Types[$CategoryID])) {
 			$ReportType = $Types[$CategoryID][$Type];
-		} else if(array_key_exists($Type,$Types['master'])) {
+		} elseif (array_key_exists($Type,$Types['master'])) {
 			$ReportType = $Types['master'][$Type];
 		} else {
 			//There was a type but it wasn't an option!
@@ -154,7 +154,7 @@ $DB->query("SELECT
 					<tr>
 						<td class="label"><a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Reported</a> torrent:</td>
 						<td colspan="3">
-<?		if(!$GroupID) { ?>
+<?		if (!$GroupID) { ?>
 							<a href="log.php?search=Torrent+<?=$TorrentID?>"><?=$TorrentID?></a> (Deleted)
 <?		} else { ?>
 							<?=$LinkName?>
@@ -162,129 +162,124 @@ $DB->query("SELECT
 							uploaded by <a href="user.php?id=<?=$UploaderID?>"><?=$UploaderName?></a> <?=time_diff($Time)?>
 							<br />
 							<div style="text-align: right;">was reported by <a href="user.php?id=<?=$ReporterID?>"><?=$ReporterName?></a> <?=time_diff($ReportedTime)?> for the reason: <strong><?=$ReportType['title']?></strong></div>
-		<?		$DB->query("SELECT r.ID
+<?				$DB->query("SELECT r.ID
 							FROM reportsv2 AS r
-							LEFT JOIN torrents AS t ON t.ID=r.TorrentID
+								LEFT JOIN torrents AS t ON t.ID=r.TorrentID
 							WHERE r.Status != 'Resolved'
-							AND t.GroupID=$GroupID");
+								AND t.GroupID=$GroupID");
 				$GroupOthers = ($DB->record_count() - 1);
 
-				if($GroupOthers > 0) { ?>
+				if ($GroupOthers > 0) { ?>
 							<div style="text-align: right;">
 								<a href="reportsv2.php?view=group&amp;id=<?=$GroupID?>">There <?=(($GroupOthers > 1) ? "are $GroupOthers other reports" : "is 1 other report")?> for torrents in this group</a>
 							</div>
-		<? 		$DB->query("SELECT t.UserID
+<?				$DB->query("SELECT t.UserID
 							FROM reportsv2 AS r
-							JOIN torrents AS t ON t.ID=r.TorrentID
+								JOIN torrents AS t ON t.ID=r.TorrentID
 							WHERE r.Status != 'Resolved'
-							AND t.UserID=$UploaderID");
+								AND t.UserID=$UploaderID");
 				$UploaderOthers = ($DB->record_count() - 1);
 
-				if($UploaderOthers > 0) { ?>
+				if ($UploaderOthers > 0) { ?>
 							<div style="text-align: right;">
 								<a href="reportsv2.php?view=uploader&amp;id=<?=$UploaderID?>">There <?=(($UploaderOthers > 1) ? "are $UploaderOthers other reports" : "is 1 other report")?> for torrents uploaded by this user</a>
 							</div>
-		<? 		}
+<?				}
 
 				$DB->query("SELECT DISTINCT req.ID,
-							req.FillerID,
-							um.Username,
-							req.TimeFilled
+								req.FillerID,
+								um.Username,
+								req.TimeFilled
 							FROM requests AS req
-							LEFT JOIN torrents AS t ON t.ID=req.TorrentID
-							LEFT JOIN reportsv2 AS rep ON rep.TorrentID=t.ID
-							JOIN users_main AS um ON um.ID=req.FillerID
+								LEFT JOIN torrents AS t ON t.ID=req.TorrentID
+								LEFT JOIN reportsv2 AS rep ON rep.TorrentID=t.ID
+								JOIN users_main AS um ON um.ID=req.FillerID
 							WHERE rep.Status != 'Resolved'
-							AND req.TimeFilled > '2010-03-04 02:31:49'
-							AND req.TorrentID=$TorrentID");
+								AND req.TimeFilled > '2010-03-04 02:31:49'
+								AND req.TorrentID=$TorrentID");
 				$Requests = ($DB->record_count());
-				if($Requests > 0) {
+				if ($Requests > 0) {
 					while(list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 			?>
 								<div style="text-align: right;">
 									<strong class="important_text"><a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=view&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?></strong>
 								</div>
-			<?		}
+<?					}
 				}
 			}
 		}
 			?>
 						</td>
 					</tr>
-		<? if($Tracks) { ?>
+<?			if ($Tracks) { ?>
 					<tr>
 						<td class="label">Relevant tracks:</td>
 						<td colspan="3">
 							<?=str_replace(" ", ", ", $Tracks)?>
 						</td>
 					</tr>
-		<? }
+<?			}
 
-			if($Links) {
-		?>
+			if ($Links) { ?>
 					<tr>
 						<td class="label">Relevant links:</td>
 						<td colspan="3">
-		<?
+<?
 				$Links = explode(" ", $Links);
-				foreach($Links as $Link) {
+				foreach ($Links as $Link) {
 
 					if ($local_url = $Text->local_url($Link)) {
 						$Link = $local_url;
-					}
-		?>
+					} ?>
 							<a href="<?=$Link?>"><?=$Link?></a>
-		<?
-				}
-		?>
+<?
+				} ?>
 						</td>
 					</tr>
-		<?
+<?
 			}
-
-			if($ExtraIDs) {
-		?>
+			if ($ExtraIDs) { ?>
 					<tr>
 						<td class="label">Relevant other torrents:</td>
 						<td colspan="3">
-		<?
+<?
 				$First = true;
 				$Extras = explode(" ", $ExtraIDs);
-				foreach($Extras as $ExtraID) {
+				foreach ($Extras as $ExtraID) {
 
 
 						$DB->query("SELECT
-									tg.Name,
-									tg.ID,
-									CASE COUNT(ta.GroupID)
-										WHEN 1 THEN aa.ArtistID
-										WHEN 0 THEN '0'
-										ELSE '0'
-									END AS ArtistID,
-									CASE COUNT(ta.GroupID)
-										WHEN 1 THEN aa.Name
-										WHEN 0 THEN ''
-										ELSE 'Various Artists'
-									END AS ArtistName,
-									tg.Year,
-									t.Time,
-									t.Remastered,
-									t.RemasterTitle,
-									t.RemasterYear,
-									t.Media,
-									t.Format,
-									t.Encoding,
-									t.Size,
-									t.HasCue,
-									t.HasLog,
-									t.LogScore,
-									t.UserID AS UploaderID,
-									uploader.Username
+										tg.Name,
+										tg.ID,
+										CASE COUNT(ta.GroupID)
+											WHEN 1 THEN aa.ArtistID
+											WHEN 0 THEN '0'
+											ELSE '0'
+										END AS ArtistID,
+										CASE COUNT(ta.GroupID)
+											WHEN 1 THEN aa.Name
+											WHEN 0 THEN ''
+											ELSE 'Various Artists'
+										END AS ArtistName,
+										tg.Year,
+										t.Time,
+										t.Remastered,
+										t.RemasterTitle,
+										t.RemasterYear,
+										t.Media,
+										t.Format,
+										t.Encoding,
+										t.Size,
+										t.HasCue,
+										t.HasLog,
+										t.LogScore,
+										t.UserID AS UploaderID,
+										uploader.Username
 									FROM torrents AS t
-									LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-									LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-									LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-									LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
+										LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
+										LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
+										LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
+										LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
 									WHERE t.ID='$ExtraID'
 									GROUP BY tg.ID");
 
@@ -292,7 +287,7 @@ $DB->query("SELECT
 							$ExtraRemasterYear, $ExtraMedia, $ExtraFormat, $ExtraEncoding, $ExtraSize, $ExtraHasCue, $ExtraHasLog, $ExtraLogScore, $ExtraUploaderID, $ExtraUploaderName) = Misc::display_array($DB->next_record());
 
 
-					if($ExtraGroupName) {
+					if ($ExtraGroupName) {
 		if ($ArtistID == 0 && empty($ArtistName)) {
 			$ExtraLinkName = "<a href='torrents.php?id=$ExtraGroupID'>$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : "")."</a> <a href='torrents.php?torrentid=$ExtraID'> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : "")."</a> ".($ExtraHasLog == '1' ? " <a href='torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID'>(Log: $ExtraLogScore %)</a>" : "")." (".number_format($ExtraSize/(1024*1024), 2)." MB)";
 		} elseif ($ArtistID == 0 && $ArtistName == 'Various Artists') {
@@ -302,44 +297,39 @@ $DB->query("SELECT
 		}
 
 			?>
-								<?=($First ? "" : "<br />")?>
+								<?=($First ? '' : '<br />')?>
 								<?=$ExtraLinkName?>
 								<a href="torrents.php?action=download&amp;id=<?=$ExtraID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
 								uploaded by <a href="user.php?id=<?=$ExtraUploaderID?>"><?=$ExtraUploaderName?></a>  <?=time_diff($ExtraTime)?> <a href="#" onclick="Switch(<?=$ReportID?>, <?=$TorrentID?>, <?=$ExtraID?>); return false;" class="brackets">Switch</a>
-			<?
+<?
 						$First = false;
 					}
-				}
-		?>
+				} ?>
 						</td>
 					</tr>
-		<?
+<?
 			}
-
-			if($Images) {
-		?>
+			if ($Images) { ?>
 					<tr>
 						<td class="label">Relevant images:</td>
 						<td colspan="3">
-		<?
+<?
 				$Images = explode(" ", $Images);
-				foreach($Images as $Image) {
+				foreach ($Images as $Image) {
 					$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Image);
 		?>
 							<img style="max-width: 200px;" onclick="lightbox.init(this,200);" src="<?=$Image?>" alt="Relevant image" />
-		<?
-				}
-		?>
+<?
+				} ?>
 						</td>
 					</tr>
-		<?
-			}
-		?>
+<?
+			} ?>
 					<tr>
 						<td class="label">User comment:</td>
 						<td colspan="3"><?=$Text->full_format($UserComment)?></td>
 					</tr>
-					<? // END REPORTED STUFF :|: BEGIN MOD STUFF ?>
+<?					// END REPORTED STUFF :|: BEGIN MOD STUFF ?>
 					<tr>
 						<td class="label">Report comment:</td>
 						<td colspan="3">
@@ -361,25 +351,25 @@ $DB->query("SELECT
 	}
 	array_multisort($Priorities, SORT_ASC, $TypeList);
 
-	foreach($TypeList as $Type => $Data) {
+	foreach ($TypeList as $Type => $Data) {
 ?>
-						<option value="<?=$Type?>"><?=$Data['title']?></option>
-<? } ?>
+								<option value="<?=$Type?>"><?=$Data['title']?></option>
+<?	} ?>
 							</select>
 							<span id="options<?=$ReportID?>">
-<? if(check_perms('users_mod')) { ?>
+<?	if (check_perms('users_mod')) { ?>
 								<span title="Delete torrent?">
 									<label for="delete<?=$ReportID?>"><strong>Delete</strong></label>
 									<input type="checkbox" name="delete" id="delete<?=$ReportID?>" />
 								</span>
-<? } ?>
+<?	} ?>
 								<span title="Warning length in weeks">
 									<strong>Warning</strong>
 									<select name="warning" id="warning<?=$ReportID?>">
 <?
 	for($i = 0; $i < 9; $i++) {
 ?>
-									<option value="<?=$i?>"><?=$i?></option>
+										<option value="<?=$i?>"><?=$i?></option>
 <?
 	}
 ?>
@@ -394,7 +384,7 @@ $DB->query("SELECT
 									<input type="button" name="update_resolve" id="update_resolve<?=$ReportID?>" value="Update now" onclick="UpdateResolve(<?=$ReportID?>)" />
 								</span>
 							</span>
-							</td>
+						</td>
 					</tr>
 					<tr>
 						<td class="label">
@@ -414,14 +404,14 @@ $DB->query("SELECT
 					<tr>
 						<td class="label"><strong>Extra</strong> log message:</td>
 						<td>
-							<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40" <? if($ExtraIDs) {
-										$Extras = explode(" ", $ExtraIDs);
-										$Value = "";
-										foreach($Extras as $ExtraID) {
+							<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40"<? if ($ExtraIDs) {
+										$Extras = explode(' ', $ExtraIDs);
+										$Value = '';
+										foreach ($Extras as $ExtraID) {
 											$Value .= 'https://'.SSL_SITE_URL.'/torrents.php?torrentid='.$ExtraID.' ';
 										}
-										echo 'value="'.trim($Value).'"';
-									} ?>/>
+										echo ' value="'.trim($Value).'"';
+									} ?> />
 						</td>
 						<td class="label"><strong>Extra</strong> staff notes:</td>
 						<td>

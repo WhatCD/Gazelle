@@ -12,6 +12,7 @@ if(!check_perms('site_top10')){
 	die();
 }
 
+include(SERVER_ROOT.'/sections/torrents/functions.php'); //Has get_reports($TorrentID);
 if(empty($_GET['type']) || $_GET['type'] == 'torrents') {
 	include(SERVER_ROOT.'/sections/top10/torrents.php');
 } else {

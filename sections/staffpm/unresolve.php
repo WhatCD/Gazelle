@@ -5,8 +5,8 @@ if ($ID = (int)($_GET['id'])) {
 	list($UserID, $Level, $AssignedToUser) = $DB->next_record();
 
 	if ($UserID == $LoggedUser['ID'] || ($IsFLS && $Level == 0) ||
-	    $AssignedToUser == $LoggedUser['ID'] || ($IsStaff && $Level <= $LoggedUser['EffectiveClass'])) {
-		/*if($Level != 0 && $IsStaff == false)  {
+		$AssignedToUser == $LoggedUser['ID'] || ($IsStaff && $Level <= $LoggedUser['EffectiveClass'])) {
+		/*if ($Level != 0 && $IsStaff == false) {
 			error(403);
 		}*/
 
@@ -21,7 +21,7 @@ if ($ID = (int)($_GET['id'])) {
 		error(403);
 	}
 } else {
-	// No id
+	// No ID
 	header('Location: staffpm.php');
 }
 ?>

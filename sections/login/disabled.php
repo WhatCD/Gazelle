@@ -1,6 +1,6 @@
 <?
 View::show_header('Disabled');
-if(empty($_POST['submit']) || empty($_POST['username'])) {
+if (empty($_POST['submit']) || empty($_POST['username'])) {
 ?>
 <p class="warning">
 Your account has been disabled.<br />
@@ -10,16 +10,16 @@ And join <?=BOT_DISABLED_CHAN?><br /><br />
 <strong>Be honest.</strong> At this point, lying will get you nowhere.<br /><br /><br />
 </p>
 
-<strong>Before joining the disabled channel, please read our <br /> <span style="color:gold;">Golden Rules</span> which can be found <a style="color:#1464F4;" href="#" onclick="toggle_visibility('golden_rules')">here.</a></strong> <br /><br />
+<strong>Before joining the disabled channel, please read our <br /> <span style="color: gold;">Golden Rules</span> which can be found <a style="color: #1464F4;" href="#" onclick="toggle_visibility('golden_rules')">here</a>.</strong> <br /><br />
 
 <script type="text/javascript">
-    function toggle_visibility(id) {
-       var e = document.getElementById(id);
-       if(e.style.display == 'block')
-          e.style.display = 'none';
-       else
-          e.style.display = 'block';
-    }
+	function toggle_visibility(id) {
+		var e = document.getElementById(id);
+		if (e.style.display == 'block')
+			e.style.display = 'none';
+		else
+			e.style.display = 'block';
+	}
 </script>
 
 <div id="golden_rules" style="width:35%;font-weight:bold;display:none;" >
@@ -56,11 +56,11 @@ Please use your What.CD username.
 } else {
 	$nick = $_POST['username'];
 	$nick = preg_replace('/[^a-zA-Z0-9\[\]\\`\^\{\}\|_]/', '', $nick);
-	if(strlen($nick) == 0) {
-		$nick = "WhatGuest????";
+	if (strlen($nick) == 0) {
+		$nick = 'WhatGuest????';
 	} else {
-		if(is_numeric(substr($nick, 0, 1))) {
-			$nick = "_" . $nick;
+		if (is_numeric(substr($nick, 0, 1))) {
+			$nick = '_' . $nick;
 		}
 	}
 ?>
@@ -68,8 +68,8 @@ Please use your What.CD username.
 	<div class="header">
 		<h3 id="general">Disabled IRC</h3>
 	</div>
-	<div class="box pad" style="padding:10px 0px 10px 0px;">
-		<div style="padding:0px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 0px 10px 0px;">
+		<div style="padding: 0px 10px 10px 20px;">
 			<p>Please read the topic carefully.</p>
 		</div>
 		<applet codebase="static/irc/" code="IRCApplet.class" archive="irc.jar,sbox.jar" width="800" height="600" align="center">

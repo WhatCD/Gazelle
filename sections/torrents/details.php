@@ -30,9 +30,9 @@ list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear,
 	$GroupTime, $GroupVanityHouse, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs,
 	$TagPositiveVotes, $TagNegativeVotes, $GroupFlags) = array_values($TorrentDetails);
 
-$DisplayName=$GroupName;
-$AltName=$GroupName; // Goes in the alt text of the image
-$Title=$GroupName; // goes in <title>
+$DisplayName = $GroupName;
+$AltName = $GroupName; // Goes in the alt text of the image
+$Title = $GroupName; // goes in <title>
 $WikiBody = $Text->full_format($WikiBody);
 
 $Artists = Artists::get_artist($GroupID);
@@ -44,11 +44,11 @@ if ($Artists) {
 }
 
 if ($GroupYear > 0) {
-	$DisplayName.=' ['.$GroupYear.']';
-	$AltName.=' ['.$GroupYear.']';
-	$Title.= ' ['.$GroupYear.']';
+	$DisplayName.= " [$GroupYear]";
+	$AltName.= " [$GroupYear]";
+	$Title.= " [$GroupYear]";
 }
-if ($GroupVanityHouse){
+if ($GroupVanityHouse) {
 	$DisplayName.=' [Vanity House]';
 	$AltName.=' [Vanity House]';
 }
@@ -59,17 +59,17 @@ if ($GroupCategoryID == 1) {
 
 $Tags = array();
 if ($TorrentTags != '') {
-	$TorrentTags=explode('|',$TorrentTags);
-	$TorrentTagIDs=explode('|',$TorrentTagIDs);
-	$TorrentTagUserIDs=explode('|',$TorrentTagUserIDs);
-	$TagPositiveVotes=explode('|',$TagPositiveVotes);
-	$TagNegativeVotes=explode('|',$TagNegativeVotes);
+	$TorrentTags = explode('|',$TorrentTags);
+	$TorrentTagIDs = explode('|',$TorrentTagIDs);
+	$TorrentTagUserIDs = explode('|',$TorrentTagUserIDs);
+	$TagPositiveVotes = explode('|',$TagPositiveVotes);
+	$TagNegativeVotes = explode('|',$TagNegativeVotes);
 
 	foreach ($TorrentTags as $TagKey => $TagName) {
 		$Tags[$TagKey]['name'] = $TagName;
 		$Tags[$TagKey]['score'] = ($TagPositiveVotes[$TagKey] - $TagNegativeVotes[$TagKey]);
-		$Tags[$TagKey]['id']=$TorrentTagIDs[$TagKey];
-		$Tags[$TagKey]['userid']=$TorrentTagUserIDs[$TagKey];
+		$Tags[$TagKey]['id'] = $TorrentTagIDs[$TagKey];
+		$Tags[$TagKey]['userid'] = $TorrentTagUserIDs[$TagKey];
 	}
 	uasort($Tags, 'compare');
 }
@@ -93,7 +93,7 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 <?	} ?>
 			<a href="torrents.php?action=history&amp;groupid=<?=$GroupID?>" class="brackets">View history</a>
 <?	if ($RevisionID && check_perms('site_edit_wiki')) { ?>
-			<a href="/torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Revert to this revision</a>
+			<a href="torrents.php?action=revert&amp;groupid=<?=$GroupID ?>&amp;revisionid=<?=$RevisionID ?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Revert to this revision</a>
 <?	}
 	if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
 ?>
@@ -118,7 +118,7 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
 <?
-if ($WikiImage != "") {
+if ($WikiImage != '') {
 	$WikiImageThumb = ImageTools::wiki_image($WikiImage);
 	if (check_perms('site_proxy_images')) {
 		$WikiImage = ImageTools::proxy_url($WikiImage);
@@ -128,18 +128,18 @@ if ($WikiImage != "") {
 <?
 } else {
 ?>
-			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID-1]?>" alt="<?=$Categories[$GroupCategoryID-1]?>" title="<?=$Categories[$GroupCategoryID-1]?>" width="220" height="220" border="0" /></p>
+			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID - 1]?>" alt="<?=$Categories[$GroupCategoryID - 1]?>" title="<?=$Categories[$GroupCategoryID - 1]?>" width="220" height="220" border="0" /></p>
 <?
 }
 ?>
 		</div>
 <?
-if ($Categories[$GroupCategoryID-1] == 'Music') {
+if ($Categories[$GroupCategoryID - 1] == 'Music') {
 	$ShownWith = false;
 ?>
 		<div class="box box_artists">
 			<div class="head"><strong>Artists</strong>
-			<?=(check_perms('torrents_edit')) ? '<span style="float:right;" class="edit_artists"><a onclick="ArtistManager(); return false;" href="#" class="brackets">Edit</a></span>' : ''?>
+			<?=(check_perms('torrents_edit')) ? '<span style="float: right;" class="edit_artists"><a onclick="ArtistManager(); return false;" href="#" class="brackets">Edit</a></span>' : ''?>
 			</div>
 			<ul class="stats nobullet" id="artist_list">
 <?	if (!empty($Artists[4]) && count($Artists[4]) > 0) {

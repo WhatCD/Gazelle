@@ -278,7 +278,7 @@ if (!empty($Image)) {
 			<tr>
 				<td class="label">Created</td>
 				<td>
-					<?=time_diff($TimeAdded)?>	by  <strong><?=Users::format_username($RequestorID, false, false, false)?></strong>
+					<?=time_diff($TimeAdded)?> by <strong><?=Users::format_username($RequestorID, false, false, false)?></strong>
 				</td>
 			</tr>
 <?	if ($CategoryName == "Music") {
@@ -550,14 +550,14 @@ foreach ($Thread as $Key => $Post) {
 		$AuthorInfo = Users::user_info($AuthorID);
 		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
 ?>
-                <form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
-                    <input type="hidden" name="action" value="warn" />
-                    <input type="hidden" name="groupid" value="<?=$RequestID?>" />
-                    <input type="hidden" name="postid" value="<?=$PostID?>" />
-                    <input type="hidden" name="userid" value="<?=$AuthorID?>" />
-                    <input type="hidden" name="key" value="<?=$Key?>" />
-                </form>
-                - <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
+				<form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
+					<input type="hidden" name="action" value="warn" />
+					<input type="hidden" name="groupid" value="<?=$RequestID?>" />
+					<input type="hidden" name="postid" value="<?=$PostID?>" />
+					<input type="hidden" name="userid" value="<?=$AuthorID?>" />
+					<input type="hidden" name="key" value="<?=$Key?>" />
+				</form>
+				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
 <?		}
 	}
 ?>

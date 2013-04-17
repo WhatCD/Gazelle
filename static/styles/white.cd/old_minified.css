@@ -2,7 +2,7 @@
 .last_read {width: 15px; height: 15px; background: url(images/go_last_read.png) no-repeat center center; margin-left: 5px;}
 .last_read a { border: none; width: 100%; height: 100%; display: block; }
 .last_read a:hover { border: none; }
-strong.quoteheader {color: #666}
+strong.quoteheader {color: #666;}
 
 ul.collage_images {
 	width: 650px !important;
@@ -14,7 +14,7 @@ ul.collage_images li {
 }
 
 ul.collage_images li a {
-    height: 130px !important;
+	height: 130px !important;
 }
 
 ul.collage_images img {
@@ -23,15 +23,15 @@ ul.collage_images img {
 }
 
 #drag_drop_textnote ul {
-    padding-left: 25px;
+	padding-left: 25px;
 }
 
 
-tr.torrent .bookmark > a:before { content:""; }
-tr.torrent .bookmark > a:after { content:""; }
+tr.torrent .bookmark > a:before { content: ""; }
+tr.torrent .bookmark > a:after { content: ""; }
 
 .navigation_list li {
-    margin-left: 20px;
+	margin-left: 20px;
 }
 
 .linkbox .brackets:before, .linkbox .brackets:after {

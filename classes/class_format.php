@@ -1,6 +1,5 @@
 <?
-class Format
-{
+class Format {
 	/**
 	 * Torrent Labels
 	 * Map a common display string to a CSS class
@@ -53,10 +52,14 @@ class Format
 					array_pop($DescArr);
 					$CutDesc = implode(' ', $DescArr);
 				}
-				if ($ShowDots) { $CutDesc .= '...'; }
+				if ($ShowDots) {
+					$CutDesc .= '...';
+				}
 			} else {
 				$CutDesc = mb_substr($Str, 0, $Length, 'UTF-8');
-				if ($ShowDots) { $CutDesc .= '...'; }
+				if ($ShowDots) {
+					$CutDesc .= '...';
+				}
 			}
 			return $CutDesc;
 		} else {
@@ -96,19 +99,22 @@ class Format
 	 * @param boolean $Color if true, ratio will be coloured.
 	 * @return string formatted ratio HTML
 	 */
-	public static function get_ratio_html($Dividend, $Divisor, $Color = true)
-	{
+	public static function get_ratio_html($Dividend, $Divisor, $Color = true) {
 		$Ratio = self::get_ratio($Dividend, $Divisor);
 
-		if ($Ratio === false) return '--';
-		if ($Ratio === '∞') return '<span class="r99" title="Infinite">∞</span>';
-
-		if ($Color)
+		if ($Ratio === false) {
+			return '--';
+		}
+		if ($Ratio === '∞') {
+			return '<span class="r99" title="Infinite">∞</span>';
+		}
+		if ($Color) {
 			$Ratio = sprintf('<span class="%s" title="%s">%s</span>',
 				self::get_ratio_color($Ratio),
 				self::get_ratio($Dividend, $Divisor, 5),
 				$Ratio
 			);
+		}
 
 		return $Ratio;
 	}
@@ -120,11 +126,14 @@ class Format
 	 * @param int $Decimal floor to n decimals (eg Subtract .005 to floor to 2 decimals)
 	 * @return boolean|string
 	 */
-	public function get_ratio ($Dividend, $Divisor, $Decimal = 2)
-	{
-		if ($Divisor == 0 && $Dividend == 0) return false;
-		if ($Divisor == 0) return '∞';
-		return number_format(max($Dividend/$Divisor - (0.5/pow(10, $Decimal)), 0), $Decimal);
+	public function get_ratio ($Dividend, $Divisor, $Decimal = 2) {
+		if ($Divisor == 0 && $Dividend == 0) {
+			return false;
+		}
+		if ($Divisor == 0) {
+			return '∞';
+		}
+		return number_format(max($Dividend / $Divisor - (0.5 / pow(10, $Decimal)), 0), $Decimal);
 	}
 
 	/**
@@ -188,8 +197,8 @@ class Format
 		return array($CatalogueID, $CatalogueLimit);
 	}
 
-	public static function catalogue_select($Catalogue, $Page, $PerPage, $CatalogueSize=500) {
-		return array_slice($Catalogue,(($PerPage*$Page-$PerPage)%$CatalogueSize),$PerPage,true);
+	public static function catalogue_select($Catalogue, $Page, $PerPage, $CatalogueSize = 500) {
+		return array_slice($Catalogue,(($PerPage * $Page - $PerPage) % $CatalogueSize),$PerPage,true);
 	}
 
 
@@ -197,41 +206,41 @@ class Format
 	 * Returns a page list, given certain information about the pages.
 	 *
 	 * @param int $StartPage: The current record the page you're on starts with.
-	 *		eg. if you're on page 2 of a forum thread with 25 posts per page, $StartPage is 25.
+	 *		e.g. if you're on page 2 of a forum thread with 25 posts per page, $StartPage is 25.
 	 *		If you're on page 1, $StartPage is 0.
 	 * @param int $TotalRecords: The total number of records in the result set.
-	 *		eg. if you're on a forum thread with 152 posts, $TotalRecords is 152.
+	 *		e.g. if you're on a forum thread with 152 posts, $TotalRecords is 152.
 	 * @param int $ItemsPerPage: Self-explanatory. The number of records shown on each page
-	 *		eg. if there are 25 posts per forum page, $ItemsPerPage is 25.
+	 *		e.g. if there are 25 posts per forum page, $ItemsPerPage is 25.
 	 * @param int $ShowPages: The number of page links that are shown.
-	 *		eg. If there are 20 pages that exist, but $ShowPages is only 11, only 11 links will be shown.
+	 *		e.g. If there are 20 pages that exist, but $ShowPages is only 11, only 11 links will be shown.
 	 * @param string $Anchor A URL fragment to attach to the links.
-	 *		eg. '#comment12'
+	 *		e.g. '#comment12'
 	 * @return A sanitized HTML page listing.
 	 */
-	public static function get_pages($StartPage,$TotalRecords,$ItemsPerPage,$ShowPages=11,$Anchor='') {
+	public static function get_pages($StartPage, $TotalRecords, $ItemsPerPage, $ShowPages = 11, $Anchor = '') {
 		global $Document, $Method, $Mobile;
 		$Location = $Document.'.php';
 		$StartPage = ceil($StartPage);
 		$TotalPages = 0;
 		if ($TotalRecords > 0) {
-			$StartPage = min($StartPage, ceil($TotalRecords/$ItemsPerPage));
+			$StartPage = min($StartPage, ceil($TotalRecords / $ItemsPerPage));
 
 			$ShowPages--;
-			$TotalPages = ceil($TotalRecords/$ItemsPerPage);
+			$TotalPages = ceil($TotalRecords / $ItemsPerPage);
 
 			if ($TotalPages > $ShowPages) {
-				$StartPosition = $StartPage-round($ShowPages/2);
+				$StartPosition = $StartPage - round($ShowPages / 2);
 
 				if ($StartPosition <= 0) {
 					$StartPosition = 1;
 				} else {
-					if ($StartPosition >= ($TotalPages-$ShowPages)) {
-						$StartPosition = $TotalPages-$ShowPages;
+					if ($StartPosition >= ($TotalPages - $ShowPages)) {
+						$StartPosition = $TotalPages - $ShowPages;
 					}
 				}
 
-				$StopPage = $ShowPages+$StartPosition;
+				$StopPage = $ShowPages + $StartPosition;
 
 			} else {
 				$StopPage = $TotalPages;
@@ -259,18 +268,18 @@ class Format
 						$Pages .= '<a href="'.$Location.'?page='.$i.$QueryString.$Anchor.'">';
 					}
 					$Pages .= "<strong>";
-					if ($i*$ItemsPerPage > $TotalRecords) {
-						$Pages .= ((($i-1)*$ItemsPerPage)+1).'-'.($TotalRecords);
+					if ($i * $ItemsPerPage > $TotalRecords) {
+						$Pages .= ((($i - 1) * $ItemsPerPage) + 1).'-'.($TotalRecords);
 					} else {
-						$Pages .= ((($i-1)*$ItemsPerPage)+1).'-'.($i*$ItemsPerPage);
+						$Pages .= ((($i - 1) * $ItemsPerPage) + 1).'-'.($i * $ItemsPerPage);
 					}
 
-					$Pages .= "</strong>";
+					$Pages .= '</strong>';
 					if ($i != $StartPage) {
 						$Pages.='</a>';
 					}
 					if ($i < $StopPage) {
-						$Pages.=" | ";
+						$Pages.=' | ';
 					}
 				}
 			} else {
@@ -278,7 +287,7 @@ class Format
 			}
 
 			if ($StartPage && $StartPage < $TotalPages) {
-				$Pages .= ' | <a href="'.$Location.'?page='.($StartPage+1).$QueryString.$Anchor.'" class="pager_next"><strong>Next &gt;</strong></a> ';
+				$Pages .= ' | <a href="'.$Location.'?page='.($StartPage + 1).$QueryString.$Anchor.'" class="pager_next"><strong>Next &gt;</strong></a> ';
 				$Pages .= '<a href="'.$Location.'?page='.$TotalPages.$QueryString.$Anchor.'"><strong> Last &gt;&gt;</strong></a>';
 			}
 		}
@@ -314,9 +323,9 @@ class Format
 	 */
 	public static function human_format($Number) {
 		$Steps = 0;
-		while($Number>=1000) {
+		while ($Number >= 1000) {
 			$Steps++;
-			$Number=$Number/1000;
+			$Number = $Number / 1000;
 		}
 		switch ($Steps) {
 			case 0: return round($Number); break;
@@ -393,11 +402,11 @@ class Format
 	 * @param $Array The array the option is in, defaults to GET.
 	 * @return
 	 */
-	public static function selected($Name, $Value, $Attribute='selected', $Array = array()) {
+	public static function selected($Name, $Value, $Attribute = 'selected', $Array = array()) {
 		if (empty($Array)) {
 			$Array = $_GET;
 		}
-		if (isset($Array[$Name]) && $Array[$Name]!=='') {
+		if (isset($Array[$Name]) && $Array[$Name] !== '') {
 			if ($Array[$Name] == $Value) {
 				echo ' '.$Attribute.'="'.$Attribute.'"';
 			}
@@ -468,12 +477,21 @@ class Format
 	 * @return UTF-8 encoded version of $Str
 	 */
 	public static function make_utf8($Str) {
-		if ($Str!="") {
-			if (self::is_utf8($Str)) { $Encoding="UTF-8"; }
-			if (empty($Encoding)) { $Encoding=mb_detect_encoding($Str,'UTF-8, ISO-8859-1'); }
-			if (empty($Encoding)) { $Encoding="ISO-8859-1"; }
-			if ($Encoding=="UTF-8") { return $Str; }
-			else { return @mb_convert_encoding($Str,"UTF-8",$Encoding); }
+		if ($Str != '') {
+			if (self::is_utf8($Str)) {
+				$Encoding = 'UTF-8';
+			}
+			if (empty($Encoding)) {
+				$Encoding = mb_detect_encoding($Str,'UTF-8, ISO-8859-1');
+			}
+			if (empty($Encoding)) {
+				$Encoding = 'ISO-8859-1';
+			}
+			if ($Encoding == 'UTF-8') {
+				return $Str;
+			} else {
+				return @mb_convert_encoding($Str,'UTF-8',$Encoding);
+			}
 		}
 	}
 
@@ -508,8 +526,11 @@ class Format
 	public static function find_torrent_label_class ($text)
 	{
 		$index = mb_eregi_replace('(?:[^\w\d\s]+)', '', strtolower($text));
-		if (isset(self::$TorrentLabels[$index])) return self::$TorrentLabels[$index];
-		return self::$TorrentLabels['default'];
+		if (isset(self::$TorrentLabels[$index])) {
+			return self::$TorrentLabels[$index];
+		} else {
+			return self::$TorrentLabels['default'];
+		}
 	}
 
 	/**
@@ -522,9 +543,11 @@ class Format
 	 * @param string $class Custom CSS class
 	 * @return string Strong element
 	 */
-	public static function torrent_label ($text, $class='')
+	public static function torrent_label ($text, $class = '')
 	{
-		if (empty($class)) $class = self::find_torrent_label_class($text);
+		if (empty($class)) {
+			$class = self::find_torrent_label_class($text);
+		}
 		return sprintf('<strong class="torrent_label %1$s" title="%2$s">%2$s</strong>',
 				display_str($class), display_str($text));
 	}

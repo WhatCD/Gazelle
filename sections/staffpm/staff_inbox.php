@@ -6,37 +6,37 @@ $View = display_str($_GET['view']);
 $UserLevel = $LoggedUser['EffectiveClass'];
 
 // Setup for current view mode
-$SortStr = "IF(AssignedToUser = ".$LoggedUser['ID'].",0,1) ASC, ";
+$SortStr = 'IF(AssignedToUser = '.$LoggedUser['ID'].',0,1) ASC, ';
 switch ($View) {
 	case 'unanswered':
-		$ViewString = "Unanswered";
+		$ViewString = 'Unanswered';
 		$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		break;
 	case 'open':
-		$ViewString = "All open";
+		$ViewString = 'All open';
 		$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status IN ('Open', 'Unanswered')";
 		$SortStr = '';
 		break;
 	case 'resolved':
-		$ViewString = "Resolved";
+		$ViewString = 'Resolved';
 		$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Resolved'";
 		$SortStr = '';
 		break;
 	case 'my':
-		$ViewString = "My unanswered";
+		$ViewString = 'My unanswered';
 		$WhereCondition = "WHERE (Level = $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		break;
 	default:
 		if ($UserLevel >= 700) {
-			$ViewString = "My unanswered";
+			$ViewString = 'My unanswered';
 			$WhereCondition = "WHERE ((Level >= ".max($Classes[MOD]['Level'],700)." AND Level <= $UserLevel) OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		} elseif ($UserLevel == 650) {
 			// Forum Mods
-			$ViewString = "My Unanswered";
+			$ViewString = 'My unanswered';
 			$WhereCondition = "WHERE (Level = $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		} else {
 			// FLS
-			$ViewString = "Unanswered";
+			$ViewString = 'Unanswered';
 			$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
 		}
 		break;
@@ -67,10 +67,10 @@ list($NumResults) = $DB->next_record();
 $DB->set_query_id($StaffPMs);
 
 $CurURL = Format::get_url();
-if(empty($CurURL)) {
-	$CurURL = "staffpm.php?";
+if (empty($CurURL)) {
+	$CurURL = 'staffpm.php?';
 } else {
-	$CurURL = "staffpm.php?".$CurURL."&";
+	$CurURL = 'staffpm.php?'.$CurURL.'&';
 }
 $Pages=Format::get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
 
@@ -82,14 +82,14 @@ $Row = 'a';
 	<div class="header">
 		<h2><?=$ViewString?> Staff PMs</h2>
 		<div class="linkbox">
-<? 	if ($IsStaff) {
-?>			<a href="staffpm.php" class="brackets">My unanswered</a>
+<? 	if ($IsStaff) { ?>
+			<a href="staffpm.php" class="brackets">My unanswered</a>
 <? 	} ?>
 			<a href="staffpm.php?view=unanswered" class="brackets">All unanswered</a>
 			<a href="staffpm.php?view=open" class="brackets">Open</a>
 			<a href="staffpm.php?view=resolved" class="brackets">Resolved</a>
 <? 	if ($IsStaff) { ?>
-            <a href="staffpm.php?action=scoreboard" class="brackets">Scoreboard</a>
+			<a href="staffpm.php?action=scoreboard" class="brackets">Scoreboard</a>
 <?	} ?>
 		</div>
 	</div>
@@ -101,13 +101,13 @@ $Row = 'a';
 	<div class="box pad" id="inbox">
 <?
 
-if ($DB->record_count() == 0) {
+if ($DB->record_count() == 0) :
 	// No messages
 ?>
 		<h2>No messages</h2>
 <?
 
-} else {
+else:
 	// Messages, draw table
 	if ($ViewString != 'Resolved' && $IsStaff) {
 		// Open multiresolve form
@@ -120,7 +120,7 @@ if ($DB->record_count() == 0) {
 
 	// Table head
 ?>
-			<table class="message_table<?=($ViewString != 'Resolved' && $IsStaff)?' checkboxes':''?>">
+			<table class="message_table<?=($ViewString != 'Resolved' && $IsStaff) ? ' checkboxes' : '' ?>">
 				<tr class="colhead">
 <? 				if ($ViewString != 'Resolved' && $IsStaff) { ?>
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>
@@ -136,7 +136,7 @@ if ($DB->record_count() == 0) {
 <?
 
 	// List messages
-	while(list($ID, $Subject, $UserID, $Status, $Level, $AssignedToUser, $Date, $Unread, $ResolverID) = $DB->next_record()) {
+	while (list($ID, $Subject, $UserID, $Status, $Level, $AssignedToUser, $Date, $Unread, $ResolverID) = $DB->next_record()) :
 		$Row = ($Row === 'a') ? 'b' : 'a';
 		$RowClass = 'row'.$Row;
 
@@ -146,7 +146,7 @@ if ($DB->record_count() == 0) {
 		// Get assigned
 		if ($AssignedToUser == '') {
 			// Assigned to class
-			$Assigned = ($Level == 0) ? "First Line Support" : $ClassLevels[$Level]['Name'];
+			$Assigned = ($Level == 0) ? 'First Line Support' : $ClassLevels[$Level]['Name'];
 			// No + on Sysops
 			if ($Assigned != 'Sysop') { $Assigned .= "+"; }
 
@@ -180,7 +180,7 @@ if ($DB->record_count() == 0) {
 <?
 
 		$DB->set_query_id($StaffPMs);
-	}
+	endwhile;
 
 	// Close table and multiresolve form
 ?>
@@ -190,7 +190,7 @@ if ($DB->record_count() == 0) {
 		</form>
 <?
 	}
-}
+endif;
 ?>
 	</div>
 	<div class="linkbox">

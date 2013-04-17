@@ -2,7 +2,9 @@
 /*
 User collage subscription page
 */
-if(!check_perms('site_collages_subscribe')) { error(403); }
+if (!check_perms('site_collages_subscribe')) {
+	error(403);
+}
 
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
@@ -16,22 +18,22 @@ if (!$ShowAll) {
 				c.Name,
 				c.NumTorrents,
 				s.LastVisit
-		FROM collages AS c
-		JOIN users_collage_subs AS s ON s.CollageID = c.ID
-		JOIN collages_torrents AS ct ON ct.CollageID = c.ID
-		WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
-			AND ct.AddedOn>s.LastVisit
-		GROUP BY c.ID";
+			FROM collages AS c
+				JOIN users_collage_subs AS s ON s.CollageID = c.ID
+				JOIN collages_torrents AS ct ON ct.CollageID = c.ID
+			WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
+				AND ct.AddedOn>s.LastVisit
+			GROUP BY c.ID";
 } else {
 	$sql = "SELECT c.ID,
 				c.Name,
 				c.NumTorrents,
 				s.LastVisit
-		FROM collages AS c
-		JOIN users_collage_subs AS s ON s.CollageID = c.ID
-		LEFT JOIN collages_torrents AS ct ON ct.CollageID = c.ID
-		WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
-		GROUP BY c.ID";
+			FROM collages AS c
+				JOIN users_collage_subs AS s ON s.CollageID = c.ID
+				LEFT JOIN collages_torrents AS ct ON ct.CollageID = c.ID
+			WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
+			GROUP BY c.ID";
 }
 
 $DB->query($sql);
@@ -40,11 +42,11 @@ $CollageSubs = $DB->to_array();
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>Subscribed collages<?=($ShowAll?'':' with new additions')?></h2>
+		<h2>Subscribed collages<?=($ShowAll ? '' : ' with new additions')?></h2>
 
 		<div class="linkbox">
 <?
-if($ShowAll) {
+if ($ShowAll) {
 ?>
 			<br /><br />
 			<a href="userhistory.php?action=subscribed_collages&amp;showall=0" class="brackets">Only display collages with new additions</a>&nbsp;&nbsp;&nbsp;
@@ -60,7 +62,7 @@ if($ShowAll) {
 		</div>
 	</div>
 <?
-if(!$NumResults) {
+if (!$NumResults) {
 ?>
 	<div class="center">
 		No subscribed collages<?=($ShowAll ? '' : ' with new additions')?>
@@ -85,7 +87,7 @@ if(!$NumResults) {
 		//$Artists = Artists::get_artists($GroupID);
 
 		$GroupIDs = $DB->collect('GroupID');
-		if(count($GroupIDs)>0) {
+		if (count($GroupIDs) > 0) {
 			$TorrentList = Torrents::get_groups($GroupIDs);
 			$TorrentList = $TorrentList['matches'];
 		} else {
@@ -110,18 +112,22 @@ if(!$NumResults) {
 				unset($ExtendedArtists[2]);
 				unset($ExtendedArtists[3]);
 				$DisplayName .= Artists::display_artists($ExtendedArtists);
-			} elseif(count($Artists)>0) {
+			} elseif (count($Artists) > 0) {
 				$DisplayName .= Artists::display_artists(array('1'=>$Artists));
 			}
 			$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
-			if($GroupYear>0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
-			if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
+			if ($GroupYear > 0) {
+				$DisplayName = $DisplayName. " [$GroupYear]";
+			}
+			if ($GroupVanityHouse) {
+				$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+			}
 
 			$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
 
 			// Start an output buffer, so we can store this output in $TorrentTable
 			ob_start();
-			if(count($Torrents)>1 || $GroupCategoryID==1) {
+			if (count($Torrents) > 1 || $GroupCategoryID == 1) {
 ?>
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$CollageID?><?=$GroupID?>">
 				<td class="center">
@@ -158,7 +164,7 @@ if(!$NumResults) {
 					}
 					$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
 
-					if($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
+					if ($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 					$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
 						$EditionID++;
 ?>
@@ -194,10 +200,10 @@ if(!$NumResults) {
 
 				$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 
-				if($Torrent['IsSnatched']) {
+				if ($Torrent['IsSnatched']) {
 					$DisplayName .=' ' . Format::torrent_label('Snatched!');
 				}
-				if(!empty($Torrent['FreeTorrent'])) {
+				if (!empty($Torrent['FreeTorrent'])) {
 					$DisplayName .=' ' . Format::torrent_label('Freeleech!');
 				}
 				$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
@@ -260,7 +266,7 @@ if(!$NumResults) {
 		</table>
 <?	} // foreach() ?>
 <?
-} // else -- if(empty($NumResults)) ?>
+} // else -- if (empty($NumResults)) ?>
 </div>
 <?
 

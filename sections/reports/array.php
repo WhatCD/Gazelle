@@ -95,9 +95,9 @@ $Types = array(
 				"We encourage all users to use this feature when they see a rules violation of any form.",
 				"This will get quicker action than PMing a staff member will.",
 				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting comments, not replying to them."
-              )
-            ),
-        "artist_comment" => array(
+			)
+			),
+		"artist_comment" => array(
 			"title" => "Artist Comment",
 			"guidelines" => array(
 				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken, such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",

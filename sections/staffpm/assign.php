@@ -11,9 +11,9 @@ if ($ConvID = (int)$_GET['convid']) {
 
 	if ($Level == 0) {
 		// FLS conversation, assign to staff (moderator)
-		if(!empty($_GET['to'])) {
+		if (!empty($_GET['to'])) {
 			$Level = 0;
-			switch($_GET['to']) {
+			switch ($_GET['to']) {
 				case 'forum' :
 					$Level = 650;
 					break;
@@ -25,7 +25,10 @@ if ($ConvID = (int)$_GET['convid']) {
 					break;
 			}
 
-			$DB->query("UPDATE staff_pm_conversations SET Status='Unanswered', Level=".$Level." WHERE ID=$ConvID");
+			$DB->query("UPDATE staff_pm_conversations
+						SET Status='Unanswered',
+							Level=$Level
+						WHERE ID=$ConvID");
 			header('Location: staffpm.php');
 		} else {
 			error(404);
@@ -46,12 +49,16 @@ if ($ConvID = (int)$_GET['convid']) {
 
 		if ($LevelType == 'class') {
 			// Assign to class
-			$DB->query("UPDATE staff_pm_conversations SET Status='Unanswered', Level=$NewLevel, AssignedToUser=NULL WHERE ID=$ConvID");
+			$DB->query("UPDATE staff_pm_conversations
+						SET Status='Unanswered',
+							Level=$NewLevel,
+							AssignedToUser=NULL
+						WHERE ID=$ConvID");
 		} else {
 			$UserInfo = Users::user_info($NewLevel);
-			$Level    = $Classes[$UserInfo['PermissionID']]['Level'];
+			$Level = $Classes[$UserInfo['PermissionID']]['Level'];
 			if (!$Level) {
-				error("Assign to user not found.");
+				error('Assign to user not found.');
 			}
 
 			// Assign to user
@@ -66,7 +73,7 @@ if ($ConvID = (int)$_GET['convid']) {
 	}
 
 } else {
-	// No id
+	// No ID
 	header('Location: staffpm.php');
 }
 ?>
