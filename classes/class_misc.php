@@ -93,12 +93,12 @@ class Misc {
 
 		$DB->query("SELECT Username FROM users_main WHERE ID = '$FromID'");
 		list($SenderName) = $DB->next_record();
-		foreach($ToID as $ID) {
+		foreach ($ToID as $ID) {
 			$DB->query("SELECT COUNT(ConvID) FROM pm_conversations_users WHERE UnRead = '1' and UserID='$ID' AND InInbox = '1'");
 			list($UnRead) = $DB->next_record();
 			$Cache->cache_value('inbox_new_'.$ID, $UnRead);
-	        
-        }
+			
+		}
 
 		return $ConvID;
 	}
@@ -396,7 +396,7 @@ class Misc {
 	 */
 	public static function display_array($Array, $Escape = array()) {
 		foreach ($Array as $Key => $Val) {
-			if((!is_array($Escape) && $Escape == true) || !in_array($Key, $Escape)) {
+			if ((!is_array($Escape) && $Escape == true) || !in_array($Key, $Escape)) {
 				$Array[$Key] = display_str($Val);
 			}
 		}
@@ -416,19 +416,20 @@ class Misc {
 
 	public static function display_recommend($ID, $Type, $Hide = true) {
 		global $DB, $LoggedUser;
-		if($Hide) {
+		if ($Hide) {
 			$Hide = 'style="display: none;"';
 		}
 		?>
 		<div id="recommendation_div" data-id="<?=$ID?>" data-type="<?=$Type?>" <?=$Hide?> class="center">
-			<div style="display: inline-block;" >
-				<strong>Recommend to: </strong><select id="friend" name="friend">
-				<option value="0" selected="selected">Choose Friend</option>
+			<div style="display: inline-block;">
+				<strong>Recommend to:</strong>
+				<select id="friend" name="friend">
+					<option value="0" selected="selected">Choose friend</option>
 				</select>
-				<input type="text" id="recommendation_note" placeholder="Add note..."/>
-				<button id="send_recommendation" disabled>Send</button>
+				<input type="text" id="recommendation_note" placeholder="Add note..." />
+				<button id="send_recommendation" disabled="disabled">Send</button>
 			</div>
-			<div class="new" id="recommendation_status"><br/></div>
+			<div class="new" id="recommendation_status"><br /></div>
 		</div>
 		<?
 	}

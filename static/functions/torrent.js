@@ -284,7 +284,7 @@ function UpVoteGroup(groupid, authkey) {
 				//No increment
 			} else if (response == 'success') {
 				// Increment both the upvote count and the total votes count
-				$('#upvotes').raw().innerHTML    = (parseInt($('#upvotes').raw().innerHTML)) + 1;
+				$('#upvotes').raw().innerHTML = (parseInt($('#upvotes').raw().innerHTML)) + 1;
 				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) + 1;
 			}
 		}

@@ -178,7 +178,7 @@ class Votes {
 	 */
 	public static function get_ranking($GroupID, $Year) {
 		$GroupID = (int)$GroupID;
-		$Year    = (int)$Year;
+		$Year = (int)$Year;
 		if ($GroupID <= 0 || $Year <= 0) {
 			return false;
 		}
@@ -229,7 +229,7 @@ class Votes {
 		global $Cache, $DB;
 
 		$GroupID = (int)$GroupID;
-		$Year    = (int)$Year;
+		$Year = (int)$Year;
 		if ($GroupID <= 0 || $Year <= 0) {
 			return false;
 		}
@@ -264,8 +264,8 @@ class Votes {
 		global $Cache, $DB;
 
 		$GroupID = (int)$GroupID;
-		$Year    = (int)$Year;
-		$Year    = (int)$Year;
+		$Year = (int)$Year;
+		$Year = (int)$Year;
 		if ((int)$GroupID <= 0 || (int)$Year <= 0) {
 			return false;
 		}

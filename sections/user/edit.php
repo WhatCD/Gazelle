@@ -57,7 +57,7 @@ if ($SiteOptions) {
 	$SiteOptions = array();
 }
 
-View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings');
+View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery');
 
 
 
@@ -90,9 +90,19 @@ echo $Val->GenerateJS('userform');
 <? foreach ($Stylesheets as $Style) { ?>
 						<option value="<?=$Style['ID']?>"<? if ($Style['ID'] == $StyleID) { ?> selected="selected"<? } ?>><?=$Style['ProperName']?></option>
 <? } ?>
-					</select>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Or -&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</select>&nbsp;&nbsp;
+					<a href="#" id="toggle_css_gallery" class="brackets">Show gallery</a>
+					&nbsp;&nbsp;&nbsp;&nbsp;- Or -&nbsp;&nbsp;&nbsp;&nbsp;
 					External CSS: <input type="text" size="40" name="styleurl" id="styleurl" value="<?=display_str($StyleURL)?>" />
+					<div id="css_gallery">
+<?					foreach ($Stylesheets as $Style) { ?>
+						<div class="preview_wrapper">
+							<div class="preview_overlay"></div>
+							<div class="preview_frame_wrapper"><iframe class="preview_frame" src="user.php?action=stylesheetgallery&amp;name=<?= $Style['Name'] ?>" width="588%" height="588%"></iframe></div>
+							<p class="preview_name"><input type="radio" name="stylesheet_gallery" value="<?= $Style['ID'] ?>" /> <?= $Style["ProperName"] ?></p>
+						</div>
+<?					} ?>
+					</div>
 				</td>
 			</tr>
 <? if (check_perms('site_advanced_search')) { ?>

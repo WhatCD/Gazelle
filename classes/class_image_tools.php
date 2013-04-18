@@ -222,23 +222,23 @@ function contains($Substring, $String) {
 /**
  * Checks if URL points to a whatimg thumbnail.
  */
-function has_whatimg_thumb($Url){
+function has_whatimg_thumb($Url) {
 	return contains("_thumb", $Url);
 }
 
 /**
  * Cleans up imgur URL if it already has a modifier attached to the end of it.
  */
-function clean_imgur_url($Url){
-    $Extension = pathinfo($Url, PATHINFO_EXTENSION);
-    $Full = preg_replace('/\.[^.]*$/', '', $Url);
-    $Base = substr($Full, 0, strrpos($Full, '/'));
-    $Path = substr($Full, strrpos($Full, '/') + 1);
-    if (strlen($Path) == 6) {
-        $Last = $Path[strlen($Path) - 1];
-        if ($Last == 'm' || $Last == 'l' || $Last == 's' || $Last == 'h' || $Last == 'b') {
-            $Path = substr($Path, 0, -1);
-        }
-    }
-    return $Base . "/" . $Path . "." . $Extension;
+function clean_imgur_url($Url) {
+	$Extension = pathinfo($Url, PATHINFO_EXTENSION);
+	$Full = preg_replace('/\.[^.]*$/', '', $Url);
+	$Base = substr($Full, 0, strrpos($Full, '/'));
+	$Path = substr($Full, strrpos($Full, '/') + 1);
+	if (strlen($Path) == 6) {
+		$Last = $Path[strlen($Path) - 1];
+		if ($Last == 'm' || $Last == 'l' || $Last == 's' || $Last == 'h' || $Last == 'b') {
+			$Path = substr($Path, 0, -1);
+		}
+	}
+	return $Base . '/' . $Path . '.' . $Extension;
 }

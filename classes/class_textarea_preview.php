@@ -88,7 +88,7 @@ class TEXTAREA_PREVIEW_SUPER
  *  // no buttons or wrap preview divs.
  *  // Buttons and preview divs are generated manually
  *  $text = new TEXTAREA_PREVIEW('body_text', 'body_text', 'default text',
- *          50, 20, false, false, array('disabled="disabled"', 'class="text"'));
+ *					50, 20, false, false, array('disabled="disabled"', 'class="text"'));
  *
  *  $text->buttons(); // output buttons
  *
@@ -101,13 +101,13 @@ class TEXTAREA_PREVIEW_SUPER
  *
  * // some template
  * <div id="preview_wrap_<?=$id?>">
- *  <table>
- *   <tr>
- *    <td>
- *	   <div id="preview_<?=$id?>"></div>
- *    </td>
- *   </tr>
- *  </table>
+ *		<table>
+ *			<tr>
+ *				<td>
+ *					<div id="preview_<?=$id?>"></div>
+ *				</td>
+ *			</tr>
+ *		</table>
  * </div>
  * </pre>
  */
@@ -133,15 +133,15 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 	/**
 	 * This method creates a textarea
 	 *
-	 * @param string $Name  name attribute
-	 * @param string $ID    id attribute
-	 * @param string $Value default text attribute
-	 * @param string $Cols  cols attribute
-	 * @param string $Rows  rows attribute
-	 * @param bool   $Preview add the preview divs near the textarea
-	 * @param bool   $Buttons add the edit/preview buttons near the textarea
-	 * @param bool   $Buffer  doesn't output the textarea, use getBuffer()
-	 * @param array  $ExtraAttributes array of attribute="value"
+	 * @param string $Name		name attribute
+	 * @param string $ID		id attribute
+	 * @param string $Value		default text attribute
+	 * @param string $Cols		cols attribute
+	 * @param string $Rows		rows attribute
+	 * @param bool   $Preview	add the preview divs near the textarea
+	 * @param bool   $Buttons	add the edit/preview buttons near the textarea
+	 * @param bool   $Buffer	doesn't output the textarea, use getBuffer()
+	 * @param array  $ExtraAttributes	array of attribute="value"
 	 *
 	 * If false for $Preview, $Buttons, or $Buffer, use the appropriate
 	 * methods to add the those elements manually. Alternatively, use getID
@@ -149,7 +149,7 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 	 *
 	 * It's important to have the right IDs as they make the JS function properly.
 	 */
-	public function __construct ($Name, $ID = '', $Value='', $Cols=50, $Rows=10,
+	public function __construct ($Name, $ID = '', $Value = '', $Cols = 50, $Rows = 10,
 		$Preview = true, $Buttons = true, $Buffer = false,
 		array $ExtraAttributes = array()
 	) {

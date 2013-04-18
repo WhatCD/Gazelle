@@ -21,20 +21,20 @@ class Artists {
 		global $Cache, $DB;
 		$Results = array();
 		$DBs = array();
-		foreach($GroupIDs as $GroupID) {
-			if(!is_number($GroupID)) {
+		foreach ($GroupIDs as $GroupID) {
+			if (!is_number($GroupID)) {
 				continue;
 			}
 			$Artists = $Cache->get_value('groups_artists_'.$GroupID);
-			if(is_array($Artists)) {
+			if (is_array($Artists)) {
 				$Results[$GroupID] = $Artists;
 			} else {
 				$DBs[] = $GroupID;
 			}
 		}
-		if(count($DBs) > 0) {
+		if (count($DBs) > 0) {
 			$IDs = implode(',', $DBs);
-			if(empty($IDs)) {
+			if (empty($IDs)) {
 				$IDs = "null";
 			}
 			$DB->query("SELECT ta.GroupID,
@@ -48,12 +48,12 @@ class Artists {
 				ORDER BY ta.GroupID ASC,
 					ta.Importance ASC,
 					aa.Name ASC;");
-			while(list($GroupID,$ArtistID,$ArtistName,$ArtistImportance,$AliasID) = $DB->next_record(MYSQLI_BOTH, false)) {
+			while (list($GroupID,$ArtistID,$ArtistName,$ArtistImportance,$AliasID) = $DB->next_record(MYSQLI_BOTH, false)) {
 				$Results[$GroupID][$ArtistImportance][] = array('id' => $ArtistID, 'name' => $ArtistName, 'aliasid' => $AliasID);
 				$New[$GroupID][$ArtistImportance][] = array('id' => $ArtistID, 'name' => $ArtistName, 'aliasid' => $AliasID);
 			}
-			foreach($DBs as $GroupID) {
-				if(isset($New[$GroupID])) {
+			foreach ($DBs as $GroupID) {
+				if (isset($New[$GroupID])) {
 					$Cache->cache_value('groups_artists_'.$GroupID, $New[$GroupID]);
 				}
 				else {
@@ -61,7 +61,7 @@ class Artists {
 				}
 			}
 			$Missing = array_diff($GroupIDs, array_keys($Results));
-			if(!empty($Missing)) {
+			if (!empty($Missing)) {
 				$Results += array_fill_keys($Missing, array());
 			}
 		}
@@ -91,21 +91,21 @@ class Artists {
 	 * @param $Escape if true, output will be escaped. Think carefully before setting it false.
 	 */
 	public static function display_artists($Artists, $MakeLink = true, $IncludeHyphen = true, $Escape = true) {
-		if(!empty($Artists)) {
+		if (!empty($Artists)) {
 			$ampersand = ($Escape) ? ' &amp; ' : ' & ';
 			$link = '';
 
-			$MainArtists = isset($Artists[1]) ? $Artists[1] : null;
-			$Guests      = isset($Artists[2]) ? $Artists[2] : null;
-			$Composers   = isset($Artists[4]) ? $Artists[4] : null;
-			$Conductors  = isset($Artists[5]) ? $Artists[5] : null;
-			$DJs         = isset($Artists[6]) ? $Artists[6] : null;
+			$MainArtists	= isset($Artists[1]) ? $Artists[1] : null;
+			$Guests			= isset($Artists[2]) ? $Artists[2] : null;
+			$Composers		= isset($Artists[4]) ? $Artists[4] : null;
+			$Conductors		= isset($Artists[5]) ? $Artists[5] : null;
+			$DJs			= isset($Artists[6]) ? $Artists[6] : null;
 
 			if ((count($MainArtists) + count($Conductors) + count($DJs) == 0) && (count($Composers) == 0)) {
 				return '';
 			}
 			// Various Composers is not needed and is ugly and should die
-			switch(count($Composers)) {
+			switch (count($Composers)) {
 				case 0:
 					break;
 				case 1:
@@ -122,7 +122,7 @@ class Artists {
 
 			$ComposerStr = $link;
 
-			switch(count($MainArtists)) {
+			switch (count($MainArtists)) {
 				case 0:
 					break;
 				case 1:
@@ -135,8 +135,8 @@ class Artists {
 					$link .= 'Various Artists';
 			}
 
-			/*if(!empty($Guests) &&  (count($MainArtists) + count($Composers) > 0) && (count($MainArtists) + count($Composers) + count($Conductors) < 3)) {
-				switch(count($Guests)) {
+			/*if (!empty($Guests) &&  (count($MainArtists) + count($Composers) > 0) && (count($MainArtists) + count($Composers) + count($Conductors) < 3)) {
+				switch (count($Guests)) {
 					case 1:
 						$link .= ' with '.Artists::display_artist($Guests[0], $MakeLink, $Escape);
 						break;
@@ -149,7 +149,7 @@ class Artists {
 			if ((count($Conductors) > 0) && (count($MainArtists) + count($Composers) > 0) && (count($Composers) < 3 || count($MainArtists) > 0)) {
 				$link .= ' under ';
 			}
-			switch(count($Conductors)) {
+			switch (count($Conductors)) {
 				case 0:
 					break;
 				case 1:
@@ -169,7 +169,7 @@ class Artists {
 			}
 
 			// DJs override everything else
-			switch(count($DJs)) {
+			switch (count($DJs)) {
 				case 0:
 					break;
 				case 1:
@@ -246,7 +246,7 @@ class Artists {
 		$Cache->delete_value('artist_groups_'.$ArtistID);
 		// Record in log
 
-		if(!empty($LoggedUser['Username'])) {
+		if (!empty($LoggedUser['Username'])) {
 			$Username = $LoggedUser['Username'];
 		} else {
 			$Username = 'System';

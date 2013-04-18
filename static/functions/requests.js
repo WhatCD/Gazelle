@@ -1,15 +1,14 @@
-
 function Vote(amount, requestid) {
-	if(typeof amount == 'undefined') {
+	if (typeof amount == 'undefined') {
 		amount = parseInt($('#amount').raw().value);
 	}
-	if(amount == 0) {
+	if (amount == 0) {
 		 amount = 20 * 1024 * 1024;
 	}
 
 	var index;
 	var votecount;
-	if(!requestid) {
+	if (!requestid) {
 		requestid = $('#requestid').raw().value;
 		votecount = $('#votecount').raw();
 		index = false;
@@ -22,16 +21,16 @@ function Vote(amount, requestid) {
 	if (amount > 20*1024*1024) {
 		upload   = $('#current_uploaded').raw().value;
 		download = $('#current_downloaded').raw().value;
-		rr       = $('#current_rr').raw().value;
+		rr = $('#current_rr').raw().value;
 		if (amount > .3*(upload - rr * download)) {
-			if(!confirm('This vote is more than 30% of your buffer.  Please confirm that you wish to place this large a vote.')) {
+			if (!confirm('This vote is more than 30% of your buffer.  Please confirm that you wish to place this large a vote.')) {
 				return false;
 			}
 		}
 	}
 
 	ajax.get('requests.php?action=takevote&id=' + requestid + '&auth=' + authkey + '&amount=' + amount, function (response) {
-			if(response == 'bankrupt') {
+			if (response == 'bankrupt') {
 				error_message("You do not have sufficient upload credit to add " + get_size(amount) + " to this request");
 				return;
 			} else if (response == 'dupesuccess') {
@@ -40,7 +39,7 @@ function Vote(amount, requestid) {
 				votecount.innerHTML = (parseInt(votecount.innerHTML)) + 1;
 			}
 
-			if($('#total_bounty').results() > 0) {
+			if ($('#total_bounty').results() > 0) {
 				totalBounty = parseInt($('#total_bounty').raw().value);
 				totalBounty += (amount * (1 - $('#request_tax').raw().value));
 				$('#total_bounty').raw().value = totalBounty;
@@ -58,11 +57,11 @@ function Vote(amount, requestid) {
 function Calculate() {
 	var mul = (($('#unit').raw().options[$('#unit').raw().selectedIndex].value == 'mb') ? (1024*1024) : (1024*1024*1024));
 	var amt = Math.floor($('#amount_box').raw().value * mul);
-	if(amt > $('#current_uploaded').raw().value) {
+	if (amt > $('#current_uploaded').raw().value) {
 		$('#new_uploaded').raw().innerHTML = "You can't afford that request!";
 		$('#new_bounty').raw().innerHTML = "0.00 MB";
 		$('#button').raw().disabled = true;
-	} else if(isNaN($('#amount_box').raw().value)
+	} else if (isNaN($('#amount_box').raw().value)
 			|| (window.location.search.indexOf('action=new') != -1 && $('#amount_box').raw().value*mul < 100*1024*1024)
 			|| (window.location.search.indexOf('action=view') != -1 && $('#amount_box').raw().value*mul < 20*1024*1024)) {
 		$('#new_uploaded').raw().innerHTML = get_size(($('#current_uploaded').raw().value));
@@ -79,7 +78,9 @@ function Calculate() {
 
 function AddArtistField() {
 		var ArtistCount = document.getElementsByName("artists[]").length;
-		if (ArtistCount >= 200) { return; }
+		if (ArtistCount >= 200) {
+			return;
+		}
 		var ArtistField = document.createElement("input");
 		ArtistField.type = "text";
 		ArtistField.id = "artist";
@@ -100,7 +101,7 @@ function AddArtistField() {
 		var x = $('#artistfields').raw();
 		x.appendChild(document.createElement("br"));
 		x.appendChild(ArtistField);
-                x.appendChild(document.createTextNode('\n'));
+		x.appendChild(document.createTextNode('\n'));
 		x.appendChild(ImportanceField);
 		ArtistCount++;
 }
@@ -110,17 +111,17 @@ function RemoveArtistField() {
 		if (ArtistCount == 1) { return; }
 		var x = $('#artistfields').raw();
 
-		while(x.lastChild.tagName != "INPUT") {
+		while (x.lastChild.tagName != "INPUT") {
 			x.removeChild(x.lastChild);
 		}
 		x.removeChild(x.lastChild);
-                x.removeChild(x.lastChild); //Remove trailing new line.
+		x.removeChild(x.lastChild); //Remove trailing new line.
 		ArtistCount--;
 }
 
 function Categories() {
 	var cat = $('#categories').raw().options[$('#categories').raw().selectedIndex].value;
-	if(cat == "Music") {
+	if (cat == "Music") {
 		$('#artist_tr').show();
 		$('#releasetypes_tr').show();
 		$('#formats_tr').show();
@@ -129,7 +130,7 @@ function Categories() {
 		ToggleLogCue();
 		$('#year_tr').show();
 		$('#cataloguenumber_tr').show();
-	} else if(cat == "Audiobooks" || cat == "Comedy") {
+	} else if (cat == "Audiobooks" || cat == "Comedy") {
 		$('#year_tr').show();
 		$('#artist_tr').hide();
 		$('#releasetypes_tr').hide();
@@ -164,12 +165,12 @@ function Toggle(id, disable) {
 	var master = $('#toggle_' + id).raw().checked;
 	for (var x in arr) {
 		arr[x].checked = master;
-		if(disable == 1) {
+		if (disable == 1) {
 			arr[x].disabled = master;
 		}
 	}
 
-	if(id == "formats") {
+	if (id == "formats") {
 		ToggleLogCue();
 	}
 }
@@ -178,11 +179,11 @@ function ToggleLogCue() {
 	var formats = document.getElementsByName('formats[]');
 	var flac = false;
 
-	if(formats[1].checked) {
+	if (formats[1].checked) {
 		flac = true;
 	}
 
-	if(flac) {
+	if (flac) {
 		$('#logcue_tr').show();
 	} else {
 		$('#logcue_tr').hide();
@@ -191,7 +192,7 @@ function ToggleLogCue() {
 }
 
 function ToggleLogScore() {
-	if($('#needlog').raw().checked) {
+	if ($('#needlog').raw().checked) {
 		$('#minlogscore_span').show();
 	} else {
 		$('#minlogscore_span').hide();

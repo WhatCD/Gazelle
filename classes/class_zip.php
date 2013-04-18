@@ -135,11 +135,11 @@ class Zip {
 		$this->Data .= $ZipData; // File data
 		/* END file data */
 
-        /* Data descriptor
-        Not needed (only needed when 3rd bitflag is set), causes problems with OS X archive utility
+		/* Data descriptor
+		Not needed (only needed when 3rd bitflag is set), causes problems with OS X archive utility
 		$this->Data .= pack("V",$CRC32); // CRC-32
-        $this->Data .= pack("V",$ZipLength); // Compressed filesize
-        $this->Data .= pack("V",$DataLength); // Uncompressed filesize
+		$this->Data .= pack("V",$ZipLength); // Compressed filesize
+		$this->Data .= pack("V",$DataLength); // Uncompressed filesize
 		END data descriptor */
 
 		$FileDataLength = strlen($this->Data);

@@ -7,7 +7,7 @@ jQuery(document).ready(function ($) {
 			a.push($(this).attr('id'));
 		});
 		$('#sorthide').val(JSON.stringify(a));
-    };
+	};
 
 	serialize();
 
@@ -27,14 +27,14 @@ jQuery(document).ready(function ($) {
 
 	$('#toggle_sortable').click(function (e) {
 		e.preventDefault();
-	    $('#sortable_container').slideToggle(function () {
+		$('#sortable_container').slideToggle(function () {
 			$('#toggle_sortable').text($(this).is(':visible') ? 'Collapse' : 'Expand');
-	    });
+		});
 	});
 
 	$('#reset_sortable').click(function (e) {
 		e.preventDefault();
-	    $('#sortable').html(sortable_list_default); // var sortable_list_default is found on edit.php
-	    serialize();
+		$('#sortable').html(sortable_list_default); // var sortable_list_default is found on edit.php
+		serialize();
 	});
 });

@@ -1,10 +1,10 @@
 "use strict";
 
 /* Prototypes */
-if(!String.prototype.trim) {
-  String.prototype.trim = function () {
-    return this.replace(/^\s+|\s+$/g,'');
-  };
+if (!String.prototype.trim) {
+	String.prototype.trim = function () {
+		return this.replace(/^\s+|\s+$/g,'');
+	};
 }
 
 var listener = {
@@ -41,17 +41,17 @@ function function_exists(function_name) {
 }
 
 function html_entity_decode(str) {
-    var el = document.createElement("div");
-    el.innerHTML = str;
-    for(var i = 0, ret = ''; i < el.childNodes.length; i++) {
-    	ret += el.childNodes[i].nodeValue;
-    }
-    return ret;
+	var el = document.createElement("div");
+	el.innerHTML = str;
+	for (var i = 0, ret = ''; i < el.childNodes.length; i++) {
+		ret += el.childNodes[i].nodeValue;
+	}
+	return ret;
 }
 
 function get_size(size) {
 	var steps = 0;
-	while(size>=1024) {
+	while (size>=1024) {
 		steps++;
 		size=size/1024;
 	}
@@ -97,20 +97,20 @@ function get_ratio_color(ratio) {
 }
 
 function ratio(dividend, divisor, color) {
-	if(!color) {
+	if (!color) {
 		color = true;
 	}
-	if(divisor == 0 && dividend == 0) {
+	if (divisor == 0 && dividend == 0) {
 		return '--';
-	} else if(divisor == 0) {
+	} else if (divisor == 0) {
 		return '<span class="r99">∞</span>';
-	} else if(dividend == 0 && divisor > 0) {
+	} else if (dividend == 0 && divisor > 0) {
 		return '<span class="r00">-∞</span>';
 	}
 	var rat = ((dividend/divisor)-0.005).toFixed(2); //Subtract .005 to floor to 2 decimals
-	if(color) {
+	if (color) {
 		var col = get_ratio_color(rat);
-		if(col) {
+		if (col) {
 			rat = '<span class="'+col+'">'+rat+'</span>';
 		}
 	}
@@ -165,7 +165,7 @@ var util = function (selector, context) {
 util.fn = util.prototype = {
 	objects: new Array(),
 	init: function (selector, context) {
-		if(typeof(selector) == 'object') {
+		if (typeof(selector) == 'object') {
 			this.objects[0] = selector;
 		} else {
 			this.objects = Sizzle(selector, context);

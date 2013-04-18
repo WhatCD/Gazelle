@@ -347,7 +347,7 @@ class Users {
 	 * @param $Password password
 	 * @param $Hash password hash
 	 * @param $Secret salt - Only used if the hash was created
-	 *		       with the deprecated Users::make_hash() method
+	 *			   with the deprecated Users::make_hash() method
 	 * @return true on correct password
 	 */
 	public static function check_password($Password, $Hash, $Secret='') {
@@ -448,9 +448,9 @@ class Users {
 
 		if ($Badges) {
 			$Str .= ($UserInfo['Donor'] == 1) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>' : '';
-        }
+		}
 
-        $Str .= ($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"'
+		$Str .= ($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"'
 					. '><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned'
 					. ($LoggedUser['ID'] === $UserID ? ' - Expires ' . date('Y-m-d H:i', strtotime($UserInfo['Warned'])) : '')
 					. '" /></a>' : '';

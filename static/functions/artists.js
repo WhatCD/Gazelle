@@ -18,13 +18,15 @@ function editOrdering() {
 	var elems = $('#torrents_tables table').objects;
 	for(i in elems) {
 		var elemID = elems[i].id;
-		if(elemID == undefined) { continue; }
-		if(elemID.indexOf('torrents_') == 0) {
+		if (elemID == undefined) {
+			continue;
+		}
+		if (elemID.indexOf('torrents_') == 0) {
 			$('#'+elemID).show();
 			dragObjects[elemID] = new dragObject(elemID, elemID+'_handle', startDrag, moveDrag, endDrag);
 			var classes = elems[i].className.split(' ');
 			for(var j=0; classes.length; j++) {
-				if(classes[j].indexOf('releases_') == 0) {
+				if (classes[j].indexOf('releases_') == 0) {
 					$('.'+classes[j].replace('_table', '')).hide();
 					$('.artist_editcol').show();
 					$('.artist_normalcol').hide();
@@ -46,17 +48,23 @@ function saveOrdering() {
 	for(i in elems) {
 		var elemID = elems[i].id;
 		var releaseType = null;
-		if(elemID == undefined) { continue; }
-		if(elemID.indexOf('torrents_') == 0) {
+		if (elemID == undefined) {
+			continue;
+		}
+		if (elemID.indexOf('torrents_') == 0) {
 			var classes = elems[i].className.split(' ');
 			for(var j=0; classes.length; j++) {
-				if(classes[j] == null) { break; }
-				if(classes[j].indexOf('releases_') == 0) {
+				if (classes[j] == null) {
+					break;
+				}
+				if (classes[j].indexOf('releases_') == 0) {
 					releaseType = classes[j].split('_')[1];
 				}
 			}
 		}
-		if(releaseType != null) { releaseTypes += '"' + releaseType + '":' + ($('#releases_' + releaseType + '_defaultopen').raw().checked ? 1 : 0) + ","; }
+		if (releaseType != null) {
+			releaseTypes += '"' + releaseType + '":' + ($('#releases_' + releaseType + '_defaultopen').raw().checked ? 1 : 0) + ",";
+		}
 	}
 	releaseTypes = releaseTypes.substring(0, releaseTypes.length-1) + '}';
 	var postData = new Array();
@@ -70,17 +78,23 @@ function saveOrderingCallback(response) {
 	//Show/hide
 	var releaseTypes = json.decode(response);
 	for(releaseType in releaseTypes) {
-		if(releaseTypes[releaseType] == 1) { setShow(releaseType, true); }
-		else { setShow(releaseType, false); }
+		if (releaseTypes[releaseType] == 1) {
+			setShow(releaseType, true);
+		} else {
+			setShow(releaseType, false);
+		}
 	}
 
 	//Ordering in linkbox
 	var prevOrderedLink = null;
 	for(releaseType in releaseTypes) {
 		var elem = $('#torrents_' + releaseType + '_anchorlink').raw();
-		if(elem == undefined) { continue; }
-		if(prevOrderedLink == null) { prevOrderedLink = elem; }
-		else {
+		if (elem == undefined) {
+			continue;
+		}
+		if (prevOrderedLink == null) {
+			prevOrderedLink = elem;
+		} else {
 			prevOrderedLink.parentNode.insertBefore(elem, prevOrderedLink.nextSibling);
 			prevOrderedLink = elem;
 		}
@@ -90,23 +104,33 @@ function saveOrderingCallback(response) {
 	var elems = $('#torrents_tables table').objects;
 	for(i in elems) {
 		var elemID = elems[i].id;
-		if(elemID == undefined) { continue; }
-		if(elemID.indexOf('torrents_') == 0) {
+		if (elemID == undefined) {
+			continue;
+		}
+		if (elemID.indexOf('torrents_') == 0) {
 			var classes = elems[i].className.split(' ');
 			var empty = false;
 			for(var j=0; classes.length; j++) {
-				if(classes[j] == null) { break; }
-				if(classes[j].indexOf('releases_') == 0) {
+				if (classes[j] == null) {
+					break;
+				}
+				if (classes[j].indexOf('releases_') == 0) {
 					$('.artist_editcol').hide();
 					$('.artist_normalcol').show();
 				}
-				if(classes[j].indexOf('empty') == 0) { empty = true; }
+				if (classes[j].indexOf('empty') == 0) {
+					empty = true;
+				}
 			}
-			if(empty) { $('#'+elemID).hide(); }
+			if (empty) {
+				$('#'+elemID).hide();
+			}
 		}
 	}
 
-	for(i in dragObjects) { dragObjects[i].StopListening(); }
+	for(i in dragObjects) {
+		dragObjects[i].StopListening();
+	}
 	dragObjects	= null;
 
 	$('#savinglayout').hide();
@@ -122,30 +146,32 @@ function saveOrderingCallback(response) {
 }
 
 function setDefaultShow(id, show) {
-	if(id == 'all') {
+	if (id == 'all') {
 		var elems = $('#torrents_tables table').objects;
 		for(i in elems) {
 			var elemID = elems[i].id;
 			var releaseType = null;
-			if(elemID == undefined) { continue; }
-			if(elemID.indexOf('torrents_') == 0) {
+			if (elemID == undefined) {
+				continue;
+			}
+			if (elemID.indexOf('torrents_') == 0) {
 				var classes = elems[i].className.split(' ');
 				for(var j=0; classes.length; j++) {
-					if(classes[j] == null) { break; }
-					if(classes[j].indexOf('releases_') == 0) {
+					if (classes[j] == null) {
+						break;
+					}
+					if (classes[j].indexOf('releases_') == 0) {
 						releaseType = classes[j].split('_')[1];
 					}
 				}
 			}
 			setDefaultShow(releaseType, show);
 		}
-	}
-	else if(show) {
+	} else if (show) {
 		$('#releases_'+id+'_openlink').hide();
 		$('#releases_'+id+'_closedlink').show();
 		$('#releases_'+id+'_defaultopen').raw().checked = 'checked';
-	}
-	else {
+	} else {
 		$('#releases_'+id+'_openlink').show();
 		$('#releases_'+id+'_closedlink').hide();
 		$('#releases_'+id+'_defaultopen').raw().checked = '';
@@ -153,12 +179,11 @@ function setDefaultShow(id, show) {
 }
 
 function setShow(id, show) {
-	if(show) {
+	if (show) {
 		$('#releases_'+id+'_viewlink').hide();
 		$('#releases_'+id+'_hidelink').show();
 		$('.releases_'+id).show();
-	}
-	else {
+	} else {
 		$('#releases_'+id+'_viewlink').show();
 		$('#releases_'+id+'_hidelink').hide();
 		$('.releases_'+id).hide();
@@ -183,7 +208,7 @@ function startDrag(element) {
 }
 
 function moveDrag(element) {
-	if(
+	if (
 	  (element.offsetTop > (dragObjectPlaceholder.offsetTop + parseInt(dragObjectPlaceholder.style.height))) ||
 	  ((element.offsetTop + parseInt(dragObjectPlaceholder.style.height)) < dragObjectPlaceholder.offsetTop)
 	) {
@@ -192,21 +217,27 @@ function moveDrag(element) {
 
 		for(var i=0; i < elems.length; i++) {
 			elem = elems[i];
-			if(elem == element || elem.nodeName != 'TABLE') { continue; }
+			if (elem == element || elem.nodeName != 'TABLE') {
+				continue;
+			}
 
-			if((element.offsetTop > dragObjectPlaceholder.offsetTop) && (elem.offsetTop - element.offsetTop) > parseInt(element.style.height)) {
+			if ((element.offsetTop > dragObjectPlaceholder.offsetTop) && (elem.offsetTop - element.offsetTop) > parseInt(element.style.height)) {
 				bestItem = elem;
 				break;
-			}
-			else if((element.offsetTop < dragObjectPlaceholder.offsetTop) && (elem.offsetTop + parseInt(element.style.height)) > element.offsetTop) {
+			} else if ((element.offsetTop < dragObjectPlaceholder.offsetTop) && (elem.offsetTop + parseInt(element.style.height)) > element.offsetTop) {
 				bestItem = elem;
 				break;
 			}
 		}
-		if(bestItem == dragObjectPlaceholder) { return; }
+		if (bestItem == dragObjectPlaceholder) {
+			return;
+		}
 
-		if(bestItem != 'END') { element.parentNode.insertBefore(dragObjectPlaceholder, element.parentNode.childNodes[i]); }
-		else { element.parentNode.appendChild(dragObjectPlaceholder); }
+		if (bestItem != 'END') {
+			element.parentNode.insertBefore(dragObjectPlaceholder, element.parentNode.childNodes[i]);
+		} else {
+			element.parentNode.appendChild(dragObjectPlaceholder);
+		}
 	}
 }
 
@@ -223,19 +254,29 @@ function endDrag(element) {
 
 //Slightly modified from: http://www.switchonthecode.com/tutorials/javascript-draggable-elements
 function addEvent(element, eventName, callback) {
-	if(element.addEventListener) { element.addEventListener(eventName, callback, false); }
-	else if(element.attachEvent) { element.attachEvent("on" + eventName, callback); }
+	if (element.addEventListener) {
+		element.addEventListener(eventName, callback, false);
+	} else if (element.attachEvent) {
+		element.attachEvent("on" + eventName, callback);
+	}
 }
 
 function removeEvent(element, eventName, callback) {
-	if(element.removeEventListener) { element.removeEventListener(eventName, callback, false); }
-	else if(element.detachEvent) { element.detachEvent("on" + eventName, callback); }
+	if (element.removeEventListener) {
+		element.removeEventListener(eventName, callback, false);
+	} else if (element.detachEvent) {
+		element.detachEvent("on" + eventName, callback);
+	}
 }
 
 function cancelEvent(e) {
 	e = e ? e : window.event;
-	if(e.stopPropagation) { e.stopPropagation(); }
-	if(e.preventDefault) { e.preventDefault(); }
+	if (e.stopPropagation) {
+		e.stopPropagation();
+	}
+	if (e.preventDefault) {
+		e.preventDefault();
+	}
 	e.cancelBubble = true;
 	e.cancel = true;
 	e.returnValue = false;
@@ -248,50 +289,75 @@ function Position(x, y) {
 
 	this.Add = function(val) {
 		var newPos = new Position(this.X, this.Y);
-		if(val != null) {
-			if(!isNaN(val.X)) { newPos.X += val.X; }
-			if(!isNaN(val.Y)) { newPos.Y += val.Y; }
+		if (val != null) {
+			if (!isNaN(val.X)) {
+				newPos.X += val.X;
+			}
+			if (!isNaN(val.Y)) {
+				newPos.Y += val.Y;
+			}
 		}
 		return newPos;
 	}
 
 	this.Subtract = function(val) {
 		var newPos = new Position(this.X, this.Y);
-		if(val != null) {
-			if(!isNaN(val.X)) { newPos.X -= val.X; }
-			if(!isNaN(val.Y)) { newPos.Y -= val.Y; }
+		if (val != null) {
+			if (!isNaN(val.X)) {
+				newPos.X -= val.X;
+			}
+			if (!isNaN(val.Y)) {
+				newPos.Y -= val.Y;
+			}
 		}
 		return newPos;
 	}
 
 	this.Check = function() {
 		var newPos = new Position(this.X, this.Y);
-		if(isNaN(newPos.X)) { newPos.X = 0; }
-		if(isNaN(newPos.Y)) { newPos.Y = 0; }
+		if (isNaN(newPos.X)) {
+			newPos.X = 0;
+		}
+		if (isNaN(newPos.Y)) {
+			newPos.Y = 0;
+		}
 		return newPos;
 	}
 
 	this.Apply = function(element, horizontal, vertical) {
-		if(!isNaN(this.X) && horizontal) { element.style.left = this.X + 'px'; }
-		if(!isNaN(this.Y) && vertical) { element.style.top = this.Y + 'px'; }
+		if (!isNaN(this.X) && horizontal) {
+			element.style.left = this.X + 'px';
+		}
+		if (!isNaN(this.Y) && vertical) {
+			element.style.top = this.Y + 'px';
+		}
 	}
 }
 
 function absoluteCursorPostion(eventObj) {
 	eventObj = eventObj ? eventObj : window.event;
 
-	if(isNaN(window.scrollX)) {
+	if (isNaN(window.scrollX)) {
 		return new Position(eventObj.clientX + document.documentElement.scrollLeft + document.body.scrollLeft, eventObj.clientY + document.documentElement.scrollTop + document.body.scrollTop);
+	} else {
+		return new Position(eventObj.clientX + window.scrollX, eventObj.clientY + window.scrollY);
 	}
-	else { return new Position(eventObj.clientX + window.scrollX, eventObj.clientY + window.scrollY); }
 }
 
 function dragObject(element, handlerElement, startCallback, moveCallback, endCallback) {
-	if(typeof(element) == "string") { element = $('#' + element).raw(); }
-	if(element == null) { return; }
+	if (typeof(element) == "string") {
+		element = $('#' + element).raw();
+	}
+	if (element == null) {
+		return;
+	}
 
-	if(typeof(handlerElement) == "string") { handlerElement = $('#' + handlerElement).raw(); }
-	if(handlerElement == null) { handlerElement = element; }
+	if (typeof(handlerElement) == "string") {
+		handlerElement = $('#' + handlerElement).raw();
+	}
+	if (handlerElement == null) {
+		handlerElement = element;
+	}
 
 	var cursorStartPos = null;
 	var elementStartPos = null;
@@ -300,14 +366,18 @@ function dragObject(element, handlerElement, startCallback, moveCallback, endCal
 	var disposed = false;
 
 	function dragStart(eventObj) {
-		if(dragging || !listening || disposed) { return; }
+		if (dragging || !listening || disposed) {
+			return;
+		}
 		dragging = true;
 
 		cursorStartPos = absoluteCursorPostion(eventObj);
 		elementStartPos = new Position(parseInt(element.offsetLeft), parseInt(element.offsetTop));
 		elementStartPos = elementStartPos.Check();
 
-		if(startCallback != null) { startCallback(element); }
+		if (startCallback != null) {
+			startCallback(element);
+		}
 
 		addEvent(document, "mousemove", dragGo);
 		addEvent(document, "mouseup", dragStopHook);
@@ -316,24 +386,32 @@ function dragObject(element, handlerElement, startCallback, moveCallback, endCal
 	}
 
 	function dragGo(eventObj) {
-		if(!dragging || disposed) { return; }
+		if (!dragging || disposed) {
+			return;
+		}
 
 		var newPos = absoluteCursorPostion(eventObj);
 		newPos = newPos.Add(elementStartPos).Subtract(cursorStartPos);
 		newPos.Apply(element, false, true);
-        if(moveCallback != null) { moveCallback(element); }
+		if (moveCallback != null) {
+			moveCallback(element);
+		}
 
 		return cancelEvent(eventObj);
 	}
 
 	function dragStop() {
-		if(!dragging || disposed) { return; }
+		if (!dragging || disposed) {
+			return;
+		}
 		removeEvent(document, "mousemove", dragGo);
 		removeEvent(document, "mouseup", dragStopHook);
 		cursorStartPos = null;
 		elementStartPos = null;
 
-        if(endCallback != null) { endCallback(element); }
+		if (endCallback != null) {
+			endCallback(element);
+		}
 		dragging = false;
 	}
 
@@ -343,7 +421,9 @@ function dragObject(element, handlerElement, startCallback, moveCallback, endCal
 	}
 
 	this.Dispose = function() {
-		if(disposed) { return; }
+		if (disposed) {
+			return;
+		}
 		this.StopListening(true);
 		element = null;
 		handlerElement = null
@@ -354,16 +434,22 @@ function dragObject(element, handlerElement, startCallback, moveCallback, endCal
 	}
 
 	this.StartListening = function() {
-		if(listening || disposed) { return; }
+		if (listening || disposed) {
+			return;
+		}
 		listening = true;
 		addEvent(handlerElement, "mousedown", dragStart);
 	}
 
 	this.StopListening = function(stopCurrentDragging) {
-		if(!listening || disposed) { return; }
+		if (!listening || disposed) {
+			return;
+		}
 		removeEvent(handlerElement, "mousedown", dragStart);
 		listening = false;
 
-		if(stopCurrentDragging && dragging) { dragStop(); }
+		if (stopCurrentDragging && dragging) {
+			dragStop();
+		}
 	}
 }

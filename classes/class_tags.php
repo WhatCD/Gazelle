@@ -54,7 +54,7 @@ class Tags
 	 *
 	 * @param string $TagList A string of tags separated by a space
 	 * @param boolean $Merge Merge the tag list with the Class' tags
-	 *                Eg, compilations and soundtracks are skipped, so false
+	 *				E.g., compilations and soundtracks are skipped, so false
 	 */
 	public function __construct($TagList, $Merge = true) {
 		$this->Tags = array_filter(explode(' ', str_replace('_', '.', $TagList)));

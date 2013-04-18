@@ -1,5 +1,5 @@
 function ChangeTo(to) {
-	if(to == "text") {
+	if (to == "text") {
 		$('#admincommentlinks').hide();
 		$('#admincomment').show();
 		resize('admincomment');
@@ -7,7 +7,7 @@ function ChangeTo(to) {
 		for(var i = 0; i < buttons.length; i++) {
 			buttons[i].setAttribute('onclick',"ChangeTo('links'); return false;");
 		}
-	} else if(to == "links") {
+	} else if (to == "links") {
 		ajax.post("ajax.php?action=preview","form", function(response){
 			$('#admincommentlinks').raw().innerHTML = response;
 			$('#admincomment').hide();
@@ -30,7 +30,7 @@ function AlterParanoia() {
 	// Required Ratio is almost deducible from downloaded, the count of seeding and the count of snatched
 	// we will "warn" the user by automatically checking the required ratio box when they are
 	// revealing that information elsewhere
-	if(!$('input[name=p_ratio]').raw()) {
+	if (!$('input[name=p_ratio]').raw()) {
 		return;
 	}
 	var showDownload = $('input[name=p_downloaded]').raw().checked || ($('input[name=p_uploaded]').raw().checked && $('input[name=p_ratio]').raw().checked);
@@ -96,11 +96,11 @@ function ParanoiaReset(checkbox, drops) {
 	var selects = $('select');
 	for (var i = 0; i < selects.results(); i++) {
 		if (selects.raw(i).name.match(/^p_/)) {
-			if(drops == 0) {
+			if (drops == 0) {
 				selects.raw(i).selectedIndex = 0;
-			} else if(drops == 1) {
+			} else if (drops == 1) {
 				selects.raw(i).selectedIndex = selects.raw(i).options.length - 2;
-			} else if(drops == 2) {
+			} else if (drops == 2) {
 				selects.raw(i).selectedIndex = selects.raw(i).options.length - 1;
 			}
 			AlterParanoia();
@@ -148,11 +148,10 @@ function ToggleWarningAdjust(selector) {
 
 addDOMLoadEvent(ToggleIdenticons);
 function ToggleIdenticons() {
-       var selected = $('#disableavatars').raw().selectedIndex;
-       if(selected == 2 || selected == 3) {
-               $('#identicons').show();
-       }
-       else {
-               $('#identicons').hide();
-       }
+	var selected = $('#disableavatars').raw().selectedIndex;
+	if (selected == 2 || selected == 3) {
+		$('#identicons').show();
+	} else {
+		$('#identicons').hide();
+	}
 }

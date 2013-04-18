@@ -4,14 +4,13 @@ var postid;
 function QuoteJump(event, post) {
 	var button = event.button;
 	var hash = "#post" + post;
-	if(button == 0) {
-		if($(hash).raw() != null) {
+	if (button == 0) {
+		if ($(hash).raw() != null) {
 			window.location.hash = hash;
-		}
-		else {
+		} else {
 			window.open("forums.php?action=viewthread&postid="+post, '_self');
 		}
-	} else if(button == 1) {
+	} else if (button == 1) {
 		window.open("forums.php?action=viewthread&postid="+post, '_window');
 	}
 }
@@ -36,37 +35,37 @@ function Quote(post, user, link) {
 }
 
 function Edit_Form(post,key) {
-    postid = post;
-    //If no edit is already going underway or a previous edit was finished, make the necessary dom changes.
-    if(!$('#editbox' + postid).objects[0] || $('#editbox' + postid + '.hidden').objects[0]) {
-        $('#reply_box').hide();
-	if (location.href.match(/torrents\.php/) ||
-			location.href.match(/artist\.php/)) {
-		boxWidth="50";
-	} else {
-		boxWidth="80";
+	postid = post;
+	//If no edit is already going underway or a previous edit was finished, make the necessary dom changes.
+	if (!$('#editbox' + postid).objects[0] || $('#editbox' + postid + '.hidden').objects[0]) {
+		$('#reply_box').hide();
+		if (location.href.match(/torrents\.php/) ||
+				location.href.match(/artist\.php/)) {
+			boxWidth="50";
+		} else {
+			boxWidth="80";
+		}
+		postuserid = $('#post' + postid + ' strong a').raw().getAttribute('href').split('=')[1]
+		/*	jQuery isnt enabled on comments, artist comments, or basically anywhere but thread.php
+			Re-enable this clause as soon as hateradio's "bye sizzle" changes go into effect, changing
+			the jQuery object to $ (which will, then, be jQuery rather than sizzle)
+		postuserid = jQuery('#post' + postid + ' strong a').attr('href').split('=')[1];
+		*/
+		if (postuserid != userid) {
+			pmbox = '<span id="pmbox'+postid+'">PM user on edit? <input type="checkbox" name="pm" value="1" /></span>';
+		} else {
+			pmbox = '';
+		};
+		$('#bar' + postid).raw().cancel = $('#content' + postid).raw().innerHTML;
+		$('#bar' + postid).raw().oldbar = $('#bar' + postid).raw().innerHTML;
+		$('#content' + postid).raw().innerHTML = "<div id=\"preview" + postid + "\"></div><form id=\"form" + postid + "\" method=\"post\" action=\"\">"+pmbox+"<input type=\"hidden\" name=\"auth\" value=\"" + authkey + "\" /><input type=\"hidden\" name=\"key\" value=\"" + key + "\" /><input type=\"hidden\" name=\"post\" value=\"" + postid + "\" /><textarea id=\"editbox" + postid + "\" onkeyup=\"resize('editbox" + postid + "');\" name=\"body\" cols=\""+boxWidth+"\" rows=\"10\"></textarea></form>";
+		$('#bar' + postid).raw().innerHTML = '<input type="button" value="Preview" onclick="Preview_Edit(' + postid + ');" /><input type="button" value="Post" onclick="Save_Edit(' + postid + ')" /><input type="button" value="Cancel" onclick="Cancel_Edit(' + postid + ');" />';
 	}
-	postuserid = $('#post' + postid + ' strong a').raw().getAttribute('href').split('=')[1]
-	/*	jQuery isnt enabled on comments, artist comments, or basically anywhere but thread.php
-		Re-enable this clause as soon as hateradio's "bye sizzle" changes go into effect, changing
-		the jQuery object to $ (which will, then, be jQuery rather than sizzle)
-	postuserid = jQuery('#post' + postid + ' strong a').attr('href').split('=')[1];
-	*/
-	if (postuserid != userid) {
-		pmbox = '<span id="pmbox'+postid+'">PM user on edit? <input type="checkbox" name="pm" value="1" /></span>';
-	} else {
-		pmbox = '';
-	};
-	$('#bar' + postid).raw().cancel = $('#content' + postid).raw().innerHTML;
-	$('#bar' + postid).raw().oldbar = $('#bar' + postid).raw().innerHTML;
-	$('#content' + postid).raw().innerHTML = "<div id=\"preview" + postid + "\"></div><form id=\"form" + postid + "\" method=\"post\" action=\"\">"+pmbox+"<input type=\"hidden\" name=\"auth\" value=\"" + authkey + "\" /><input type=\"hidden\" name=\"key\" value=\"" + key + "\" /><input type=\"hidden\" name=\"post\" value=\"" + postid + "\" /><textarea id=\"editbox" + postid + "\" onkeyup=\"resize('editbox" + postid + "');\" name=\"body\" cols=\""+boxWidth+"\" rows=\"10\"></textarea></form>";
-	$('#bar' + postid).raw().innerHTML = '<input type="button" value="Preview" onclick="Preview_Edit(' + postid + ');" /><input type="button" value="Post" onclick="Save_Edit(' + postid + ')" /><input type="button" value="Cancel" onclick="Cancel_Edit(' + postid + ');" />';
-    }
-    /* If it's the initial edit, fetch the post content to be edited.
-     * If editing is already underway and edit is pressed again, reset the post
-     * (keeps current functionality, move into brackets to stop from happening).
-     */
-    ajax.get("?action=get_post&post=" + postid, function(response){
+	/* If it's the initial edit, fetch the post content to be edited.
+	 * If editing is already underway and edit is pressed again, reset the post
+	 * (keeps current functionality, move into brackets to stop from happening).
+	 */
+	ajax.get("?action=get_post&post=" + postid, function(response){
 		$('#editbox' + postid).raw().value = html_entity_decode(response);
 		resize('editbox' + postid);
 	});
@@ -146,10 +145,10 @@ function Delete(post) {
 			ajax.get("requests.php?action=delete_comment&auth=" + authkey + "&postid=" + postid, function () {
 				$('#post' + postid).hide();
 			});
-        } else if (location.href.match(/artist\.php/)) {
-            ajax.get("artist.php?action=delete_comment&auth="+authkey+ "&postid=" + postid, function (){
-                $('#post' + postid).hide();
-            });
+		} else if (location.href.match(/artist\.php/)) {
+			ajax.get("artist.php?action=delete_comment&auth="+authkey+ "&postid=" + postid, function (){
+				$('#post' + postid).hide();
+			});
 		} else {
 			ajax.get("torrents.php?action=delete_post&auth=" + authkey + "&postid=" + postid, function () {
 				$('#post' + postid).hide();
@@ -180,17 +179,19 @@ function Quick_Edit() {
 function Newthread_Preview(mode) {
 	$('#newthreadpreviewbutton').toggle();
 	$('#newthreadeditbutton').toggle();
-	if(mode) { // Preview
+	if (mode) { // Preview
 		ajax.post("ajax.php?action=preview","newthreadform", function(response){
 			$('#contentpreview').raw().innerHTML = response;
 		});
 		$('#newthreadtitle').raw().innerHTML = $('#title').raw().value;
 		var pollanswers = $('#answer_block').raw();
-		if(pollanswers && pollanswers.children.length > 4) {
+		if (pollanswers && pollanswers.children.length > 4) {
 			pollanswers = pollanswers.children;
 			$('#pollquestion').raw().innerHTML = $('#pollquestionfield').raw().value;
 			for(var i=0; i<pollanswers.length; i+=2) {
-				if(!pollanswers[i].value) { continue; }
+				if (!pollanswers[i].value) {
+					continue;
+				}
 				var el = document.createElement('input');
 				el.id = 'answer_'+(i+1);
 				el.type = 'radio';
@@ -203,7 +204,7 @@ function Newthread_Preview(mode) {
 				$('#pollanswers').raw().appendChild(el);
 				$('#pollanswers').raw().appendChild(document.createElement('br'));
 			}
-			if($('#pollanswers').raw().children.length > 4) {
+			if ($('#pollanswers').raw().children.length > 4) {
 				$('#pollpreview').show();
 			}
 		}
@@ -211,7 +212,7 @@ function Newthread_Preview(mode) {
 		$('#pollpreview').hide();
 		$('#newthreadtitle').raw().innerHTML = 'New Topic';
 		var pollanswers = $('#pollanswers').raw();
-		if(pollanswers) {
+		if (pollanswers) {
 			var el = document.createElement('div');
 			el.id = 'pollanswers';
 			pollanswers.parentNode.replaceChild(el, pollanswers);

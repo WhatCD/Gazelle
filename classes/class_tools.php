@@ -53,12 +53,12 @@ class Tools {
 		} else {
 			$Long = Tools::ip_to_unsigned($IP);
 		}
-		if(!$Long || $Long == 2130706433) { // No need to check cc for 127.0.0.1
+		if (!$Long || $Long == 2130706433) { // No need to check cc for 127.0.0.1
 			return false;
 		}
 		global $DB;
 		$DB->query("SELECT EndIP,Code FROM geoip_country WHERE $Long >= StartIP ORDER BY StartIP DESC LIMIT 1");
-		if((!list($EndIP,$Country) = $DB->next_record()) || $EndIP < $Long) {
+		if ((!list($EndIP,$Country) = $DB->next_record()) || $EndIP < $Long) {
 			$Country = '?';
 		}
 		$IPs[$IP] = $Country;
@@ -110,12 +110,12 @@ class Tools {
 	public static function lookup_ip($IP) {
 		//TODO: use the $Cache
 		$Output = explode(' ',shell_exec('host -W 1 '.escapeshellarg($IP)));
-		if(count($Output) == 1 && empty($Output[0])) {
+		if (count($Output) == 1 && empty($Output[0])) {
 			//No output at all implies the command failed
 			return '';
 		}
 
-		if(count($Output) != 5) {
+		if (count($Output) != 5) {
 			return false;
 		} else {
 			return trim($Output[4]);
@@ -152,7 +152,7 @@ class Tools {
 	 */
 	public static function disable_users($UserIDs, $AdminComment, $BanReason = 1) {
 		global $Cache, $DB;
-		if(!is_array($UserIDs)) {
+		if (!is_array($UserIDs)) {
 			$UserIDs = array($UserIDs);
 		}
 		$DB->query("UPDATE users_info AS i JOIN users_main AS m ON m.ID=i.UserID
@@ -184,9 +184,9 @@ class Tools {
 		// Remove the users from the tracker.
 		$DB->query("SELECT torrent_pass FROM users_main WHERE ID in (".implode(", ",$UserIDs).")");
 		$PassKeys = $DB->collect('torrent_pass');
-		$Concat = "";
-		foreach($PassKeys as $PassKey) {
-			if(strlen($Concat) > 3950) { // Ocelot's read buffer is 4 KiB and anything exceeding it is truncated
+		$Concat = '';
+		foreach ($PassKeys as $PassKey) {
+			if (strlen($Concat) > 3950) { // Ocelot's read buffer is 4 KiB and anything exceeding it is truncated
 				Tracker::update_tracker('remove_users', array('passkeys' => $Concat));
 				$Concat = $PassKey;
 			} else {
@@ -209,7 +209,7 @@ class Tools {
 		$DB->query("SELECT Warned FROM users_info
 								WHERE UserID=".$UserID."
 								AND Warned <> '0000-00-00 00:00:00'");
-		if($DB->record_count() > 0) {
+		if ($DB->record_count() > 0) {
 			//User was already warned, appending new warning to old.
 			list($OldDate) = $DB->next_record();
 			$NewExpDate = date('Y-m-d H:i:s', strtotime($OldDate) + $Duration);
