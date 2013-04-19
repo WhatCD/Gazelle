@@ -13,33 +13,35 @@ $OrderTable = array('Time'=>'ID', 'Name'=>'c.Name', 'Torrents'=>'NumTorrents');
 $WayTable = array('Ascending'=>'ASC', 'Descending'=>'DESC');
 
 // Are we searching in bodies, or just names?
-if(!empty($_GET['type'])) {
+if (!empty($_GET['type'])) {
 	$Type = $_GET['type'];
-	if(!in_array($Type, array('c.name', 'description'))) {
+	if (!in_array($Type, array('c.name', 'description'))) {
 		$Type = 'c.name';
 	}
 } else {
 	$Type = 'c.name';
 }
 
-if(!empty($_GET['search'])) {
+if (!empty($_GET['search'])) {
 	// What are we looking for? Let's make sure it isn't dangerous.
 	$Search = db_string(trim($_GET['search']));
 	// Break search string down into individual words
 	$Words = explode(' ', $Search);
 }
 
-if(!empty($_GET['tags'])) {
+if (!empty($_GET['tags'])) {
 	$Tags = explode(',',db_string(trim($_GET['tags'])));
-	foreach($Tags as $ID=>$Tag) {
+	foreach ($Tags as $ID=>$Tag) {
 		$Tags[$ID] = Misc::sanitize_tag($Tag);
 	}
 }
 
-if(!empty($_GET['cats'])) {
+if (!empty($_GET['cats'])) {
 	$Categories = $_GET['cats'];
-	foreach($Categories as $Cat=>$Accept) {
-		if(empty($CollageCats[$Cat]) || !$Accept) { unset($Categories[$Cat]); }
+	foreach ($Categories as $Cat=>$Accept) {
+		if (empty($CollageCats[$Cat]) || !$Accept) {
+			unset($Categories[$Cat]);
+		}
 	}
 	$Categories = array_keys($Categories);
 } else {
@@ -47,13 +49,13 @@ if(!empty($_GET['cats'])) {
 }
 
 // Ordering
-if(!empty($_GET['order_by']) && !empty($OrderTable[$_GET['order_by']])) {
+if (!empty($_GET['order_by']) && !empty($OrderTable[$_GET['order_by']])) {
 	$Order = $OrderTable[$_GET['order_by']];
 } else {
 	$Order = 'ID';
 }
 
-if(!empty($_GET['order_way']) && !empty($WayTable[$_GET['order_way']])) {
+if (!empty($_GET['order_way']) && !empty($WayTable[$_GET['order_way']])) {
 	$Way = $WayTable[$_GET['order_way']];
 } else {
 	$Way = 'DESC';
@@ -85,7 +87,7 @@ if ($BookmarkView) {
 
 
 
-if(!empty($Search)) {
+if (!empty($Search)) {
 	$SQL .= " AND $Type LIKE '%";
 	$SQL .= implode("%' AND $Type LIKE '%", $Words);
 	$SQL .= "%'";
@@ -97,7 +99,7 @@ if (isset($_GET['tags_type']) && $_GET['tags_type'] == 0) { // Any
 	$_GET['tags_type'] = 1;
 }
 
-if(!empty($Tags)) {
+if (!empty($Tags)) {
 	$SQL.= " AND (TagList LIKE '%";
 	if ($_GET['tags_type'] == 0) {
 		$SQL .= implode("%' OR TagList LIKE '%", $Tags);
@@ -107,9 +109,9 @@ if(!empty($Tags)) {
 	$SQL .= "%')";
 }
 
-if(!empty($_GET['userid'])) {
+if (!empty($_GET['userid'])) {
 	$UserID = $_GET['userid'];
-	if(!is_number($UserID)) {
+	if (!is_number($UserID)) {
 		error(404);
 	}
 	$User = Users::user_info($UserID);
@@ -117,11 +119,13 @@ if(!empty($_GET['userid'])) {
 	$UserClass = $Perms['Class'];
 
 	$UserLink = '<a href="user.php?id='.$UserID.'">'.$User['Username'].'</a>';
-	if(!empty($_GET['contrib'])) {
-		if (!check_paranoia('collagecontribs', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
+	if (!empty($_GET['contrib'])) {
+		if (!check_paranoia('collagecontribs', $User['Paranoia'], $UserClass, $UserID)) {
+			error(403);
+		}
 		$DB->query("SELECT DISTINCT CollageID FROM collages_torrents WHERE UserID = $UserID");
 		$CollageIDs = $DB->collect('CollageID');
-		if(empty($CollageIDs)) {
+		if (empty($CollageIDs)) {
 			$SQL .= " AND 0";
 		} else {
 			$SQL .= " AND c.ID IN(".db_string(implode(',', $CollageIDs)).")";
@@ -133,7 +137,7 @@ if(!empty($_GET['userid'])) {
 	$Categories[] = 0;
 }
 
-if(!empty($Categories)) {
+if (!empty($Categories)) {
 	$SQL.=" AND CategoryID IN(".db_string(implode(',',$Categories)).")";
 }
 
@@ -180,8 +184,8 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 				<tr id="categories">
 					<td class="label">Categories:</td>
 					<td>
-<? foreach($CollageCats as $ID=>$Cat) { ?>
-						<input type="checkbox" value="1" name="cats[<?=$ID?>]" id="cats_<?=$ID?>"<?if(in_array($ID, $Categories)) { echo ' checked="checked"'; }?> />
+<? foreach ($CollageCats as $ID=>$Cat) { ?>
+						<input type="checkbox" value="1" name="cats[<?=$ID?>]" id="cats_<?=$ID?>"<? if (in_array($ID, $Categories)) { echo ' checked="checked"'; }?> />
 						<label for="cats_<?=$ID?>"><?=$Cat?></label>&nbsp;&nbsp;
 <? } ?>
 					</td>
@@ -189,21 +193,21 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 				<tr id="search_name_description">
 					<td class="label">Search in:</td>
 					<td>
-						<input type="radio" name="type" value="c.name" <? if($Type == 'c.name') { echo 'checked="checked" '; }?>/> Names&nbsp;&nbsp;
-						<input type="radio" name="type" value="description" <? if($Type == 'description') { echo 'checked="checked" '; }?>/> Descriptions
+						<input type="radio" name="type" value="c.name" <? if ($Type == 'c.name') { echo 'checked="checked" '; }?>/> Names&nbsp;&nbsp;
+						<input type="radio" name="type" value="description" <? if ($Type == 'description') { echo 'checked="checked" '; }?>/> Descriptions
 					</td>
 				</tr>
 				<tr id="order_by">
 					<td class="label">Order by:</td>
 					<td>
 						<select name="order_by" class="ft_order_by">
-<? foreach($OrderVals as $Cur){ ?>
-							<option value="<?=$Cur?>"<? if(isset($_GET['order_by']) && $_GET['order_by'] == $Cur || (!isset($_GET['order_by']) && $Cur == 'Time')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
+<? foreach ($OrderVals as $Cur) { ?>
+							<option value="<?=$Cur?>"<? if (isset($_GET['order_by']) && $_GET['order_by'] == $Cur || (!isset($_GET['order_by']) && $Cur == 'Time')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
 <? } ?>
 						</select>
 						<select name="order_way" class="ft_order_way">
-<? foreach($WayVals as $Cur){ ?>
-							<option value="<?=$Cur?>"<? if(isset($_GET['order_way']) && $_GET['order_way'] == $Cur || (!isset($_GET['order_way']) && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
+<? foreach ($WayVals as $Cur) { ?>
+							<option value="<?=$Cur?>"<? if (isset($_GET['order_way']) && $_GET['order_way'] == $Cur || (!isset($_GET['order_way']) && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
 <? } ?>
 						</select>
 					</td>
@@ -218,64 +222,62 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 	</div>
 <? } // if (!$BookmarkView) ?>
 	<div class="linkbox">
-<? if (!$BookmarkView) {
-if (check_perms('site_collages_create')) { ?>
+<?	if (!$BookmarkView) {
+		if (check_perms('site_collages_create')) { ?>
 		<a href="collages.php?action=new" class="brackets">New collage</a>
-<? }
-if (check_perms('site_collages_personal')) {
+<?		}
+		if (check_perms('site_collages_personal')) {
 
- 	$DB->query("SELECT ID FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
-	$CollageCount = $DB->record_count();
+			$DB->query("SELECT ID FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
+			$CollageCount = $DB->record_count();
 
-	if ($CollageCount == 1) {
-		list($CollageID) = $DB->next_record();
+			if ($CollageCount == 1) {
+				list($CollageID) = $DB->next_record();
 ?>
 		<a href="collages.php?id=<?=$CollageID?>" class="brackets">Personal collage</a>
-<?	} elseif ($CollageCount > 1) { ?>
+<?			} elseif ($CollageCount > 1) { ?>
 		<a href="collages.php?action=mine" class="brackets">Personal collages</a>
-<?	}
-}
-if (check_perms('site_collages_subscribe')) { ?>
+<?			}
+		}
+		if (check_perms('site_collages_subscribe')) { ?>
 		<a href="userhistory.php?action=subscribed_collages" class="brackets">Subscribed collages</a>
-<? } ?>
+<?		} ?>
 		<a href="bookmarks.php?type=collages" class="brackets">Bookmarked collages</a>
 <?
-if (check_perms('site_collages_recover')) { ?>
+		if (check_perms('site_collages_recover')) { ?>
 		<a href="collages.php?action=recover" class="brackets">Recover collage</a>
-<?
-}
-if (check_perms('site_collages_create') || check_perms('site_collages_personal') || check_perms('site_collages_recover')) {
+<?		}
+		if (check_perms('site_collages_create') || check_perms('site_collages_personal') || check_perms('site_collages_recover')) {
 ?>
 		<br />
-<?
-}
-?>
+<?		} ?>
 		<a href="collages.php?userid=<?=$LoggedUser['ID']?>" class="brackets">Collages you started</a>
 		<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1" class="brackets">Collages you contributed to</a>
-<? } else { ?>
+<?	} else { ?>
 		<a href="bookmarks.php?type=torrents" class="brackets">Torrents</a>
 		<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
 		<a href="bookmarks.php?type=collages" class="brackets">Collages</a>
 		<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
-<? } ?>
+<?	} ?>
 <br /><br />
 <?
-$Pages=Format::get_pages($Page,$NumResults,COLLAGES_PER_PAGE,9);
+$Pages = Format::get_pages($Page,$NumResults,COLLAGES_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
-<? if (count($Collages) == 0) { ?>
+<?	if (count($Collages) == 0) { ?>
 <div class="box pad" align="center">
-<?	if ($BookmarkView) { ?>
+<?		if ($BookmarkView) { ?>
 	<h2>You have not bookmarked any collages.</h2>
-<?	} else { ?>
+<?		} else { ?>
 	<h2>Your search did not match anything.</h2>
 	<p>Make sure all names are spelled correctly, or try making your search less specific.</p>
-<?	} ?>
+<?		} ?>
 </div><!--box-->
 </div><!--content-->
-<? View::show_footer(); die();
-} ?>
+<?		View::show_footer();
+		die();
+	} ?>
 <table width="100%" class="collage_table">
 	<tr class="colhead">
 		<td>Category</td>
@@ -299,7 +301,7 @@ foreach ($Collages as $Collage) {
 		<td>
 			<a href="collages.php?id=<?=$ID?>"><?=$Name?></a>
 <?	if ($BookmarkView) { ?>
-			<span style="float:right">
+			<span style="float: right;">
 				<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;" class="brackets">Remove bookmark</a>
 			</span>
 <?	} ?>
@@ -308,7 +310,8 @@ foreach ($Collages as $Collage) {
 		<td><?=number_format((int)$NumTorrents)?></td>
 		<td><?=Users::format_username($UserID, false, false, false)?></td>
 	</tr>
-<? } ?>
+<?
+} ?>
 </table>
 	<div class="linkbox"><?=$Pages?></div>
 </div>

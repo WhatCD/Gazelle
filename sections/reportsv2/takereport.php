@@ -13,24 +13,24 @@
 
 authorize();
 
-if(!is_number($_POST['torrentid'])) {
+if (!is_number($_POST['torrentid'])) {
 	error(404);
 } else {
 	$TorrentID = $_POST['torrentid'];
 }
 
-if(!is_number($_POST['categoryid'])) {
+if (!is_number($_POST['categoryid'])) {
 	error(404);
 } else {
 	$CategoryID = $_POST['categoryid'];
 }
 
-if(!isset($_POST['type'])) {
+if (!isset($_POST['type'])) {
 	error(404);
 } else if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	$Type = $_POST['type'];
 	$ReportType = $Types[$CategoryID][$Type];
-} else if(array_key_exists($_POST['type'],$Types['master'])) {
+} else if (array_key_exists($_POST['type'],$Types['master'])) {
 	$Type = $_POST['type'];
 	$ReportType = $Types['master'][$Type];
 } else {
@@ -39,78 +39,78 @@ if(!isset($_POST['type'])) {
 }
 
 
-foreach($ReportType['report_fields'] as $Field => $Value) {
-	if($Value == '1') {
-		if(empty($_POST[$Field])) {
+foreach ($ReportType['report_fields'] as $Field => $Value) {
+	if ($Value == '1') {
+		if (empty($_POST[$Field])) {
 			$Err = "You are missing a required field (".$Field.") for a ".$ReportType['title']." report.";
 		}
 	}
 }
 
-if(!empty($_POST['sitelink'])) {
-	if(preg_match_all('/((https?:\/\/)?([a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)*\.)?'.NONSSL_SITE_URL.'\/torrents.php\?(id=[0-9]+\&)?torrentid=([0-9]+))/is', $_POST['sitelink'], $Matches)) {
+if (!empty($_POST['sitelink'])) {
+	if (preg_match_all('/((https?:\/\/)?([a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)*\.)?'.SSL_SITE_URL.'\/torrents.php\?(id=[0-9]+\&)?torrentid=([0-9]+))/is', $_POST['sitelink'], $Matches)) {
 		$ExtraIDs = implode(' ', $Matches[6]);
-		if(in_array($TorrentID, $Matches[6])) {
+		if (in_array($TorrentID, $Matches[6])) {
 			$Err = "The extra permalinks you gave included the link to the torrent you're reporting!";
 		}
 	} else {
-		$Err = "Permalink was incorrect, should look like http://".NONSSL_SITE_URL."/torrents.php?torrentid=12345";
+		$Err = "The permalink was incorrect. It should look like https://".SSL_SITE_URL."/torrents.php?torrentid=12345";
 	}
 } else {
-	$ExtraIDs = "";
+	$ExtraIDs = '';
 }
 
-if(!empty($_POST['link'])) {
+if (!empty($_POST['link'])) {
 	//resource_type://domain:port/filepathname?query_string#anchor
 	//					http://		www			.foo.com								/bar
-	if(preg_match_all('/(https?:\/\/)?[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)*(:[0-9]{2,5})?(\/(\S)+)?/is', $_POST['link'], $Matches)) {
+	if (preg_match_all('/(https?:\/\/)?[a-zA-Z0-9\-]+(\.[a-zA-Z0-9\-]+)*(:[0-9]{2,5})?(\/(\S)+)?/is', $_POST['link'], $Matches)) {
 		$Links = implode(' ', $Matches[0]);
 	} else {
 		$Err = "The extra links you provided weren't links...";
 	}
 } else {
-	$Links = "";
+	$Links = '';
 }
 
-if(!empty($_POST['image'])) {
-	if(preg_match("/^(".IMAGE_REGEX.")( ".IMAGE_REGEX.")*$/is", trim($_POST['image']), $Matches)) {
+if (!empty($_POST['image'])) {
+	if (preg_match("/^(".IMAGE_REGEX.")( ".IMAGE_REGEX.")*$/is", trim($_POST['image']), $Matches)) {
 		$Images = $Matches[0];
 	} else {
 		$Err = "The extra image links you provided weren't links to images...";
 	}
 } else {
-	$Images = "";
+	$Images = '';
 }
 
-if(!empty($_POST['track'])) {
-	if(preg_match('/([0-9]+( [0-9]+)*)|All/is', $_POST['track'], $Matches)) {
+if (!empty($_POST['track'])) {
+	if (preg_match('/([0-9]+( [0-9]+)*)|All/is', $_POST['track'], $Matches)) {
 		$Tracks = $Matches[0];
 	} else {
-		$Err = "Tracks should be given in a space separated list of numbers (no other characters)";
+		$Err = 'Tracks should be given in a space separated list of numbers (no other characters)';
 	}
 } else {
-	$Tracks = "";
+	$Tracks = '';
 }
 
-if(!empty($_POST['extra'])) {
+if (!empty($_POST['extra'])) {
 	$Extra = db_string($_POST['extra']);
 } else {
-	$Err = "As useful as blank reports are, could you be a tiny bit more helpful? (Leave a comment)";
+	$Err = 'As useful as blank reports are, could you be a tiny bit more helpful? (Leave a comment)';
 }
 
 $DB->query("SELECT ID FROM torrents WHERE ID=".$TorrentID);
-if($DB->record_count() < 1) {
+if ($DB->record_count() < 1) {
 	$Err = "A torrent with that ID doesn't exist!";
 }
 
-if(!empty($Err)) {
+if (!empty($Err)) {
 	error($Err);
 	include(SERVER_ROOT.'/sections/reportsv2/report.php');
 	die();
 }
 
 $DB->query("SELECT ID FROM reportsv2 WHERE TorrentID=".$TorrentID." AND ReporterID=".db_string($LoggedUser['ID'])." AND ReportedTime > '".time_minus(3)."'");
-if($DB->record_count() > 0) {
+if ($DB->record_count() > 0) {
 	header('Location: torrents.php?torrentid='.$TorrentID);
 	die();
 }

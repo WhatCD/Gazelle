@@ -10,16 +10,18 @@ Information to be expected in $_GET:
 */
 
 $ForumID = $_GET['forumid'];
-if(!is_number($ForumID)) {
+if (!is_number($ForumID)) {
 	error(404);
 }
 $Forum = get_forum_info($ForumID);
-if($Forum === false) {
+if ($Forum === false) {
 	error(404);
 }
 
 
-if(!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) { error(403); }
+if (!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) {
+	error(403);
+}
 View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 ?>
 <div class="thin">
@@ -31,7 +33,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 				<a href="#" onclick="return false;" class="brackets"><?=!empty($HeavyInfo['AutoSubscribe']) ? 'Unsubscribe' : 'Subscribe'?></a>
 			</div>
 		</div>
-<? if (check_perms('forums_polls_create')) { ?>
+<?	if (check_perms('forums_polls_create')) { ?>
 		<div class="box thin clear hidden" id="pollpreview">
 			<div class="head colhead_dark"><strong>Poll</strong> <a href="#" onclick="$('#threadpoll').toggle();return false;" class="brackets">View</a></div>
 			<div class="pad" id="threadpoll">
@@ -41,17 +43,17 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 				<input type="button" style="float: left;" value="Vote" />
 			</div>
 		</div>
-<? } ?>
-		<table class="forum_post box vertical_margin" style="text-align:left;">
+<?	} ?>
+		<table class="forum_post box vertical_margin" style="text-align: left;">
 			<colgroup>
-<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
 				<col class="col_avatar" />
-<? } ?>
+<?	} ?>
 				<col class="col_post_body" />
 			</colgroup>
 			<tr class="colhead_dark">
-				<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
-					<span style="float:left;"><a href='#newthreadpreview'>#XXXXXX</a>
+				<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1 ?>">
+					<span style="float: left;"><a href="#newthreadpreview">#XXXXXX</a>
 						by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?></strong>
 					Just now
 					</span>
@@ -64,11 +66,11 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 			</tr>
 			<tr>
 				<td class="avatar" valign="top">
-			<? if (!empty($LoggedUser['Avatar'])) { ?>
+<?				if (!empty($LoggedUser['Avatar'])) { ?>
 					<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-			<? } else { ?>
+<?				} else { ?>
 					<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-			<? } ?>
+<?				} ?>
 				</td>
 				<td class="body" valign="top">
 					<div id="contentpreview" style="text-align: left;"></div>
@@ -83,7 +85,7 @@ View::show_header('Forums > '.$Forum['Name'].' > New Topic','comments,bbcode');
 			<input type="hidden" name="forum" value="<?=$ForumID?>" />
 			<table id="newthreadtext" class="layout">
 				<tr>
-                    <td class="label">Title:</td>
+					<td class="label">Title:</td>
 					<td><input id="title" type="text" name="title" style="width: 98%;" /></td>
 				</tr>
 				<tr>
@@ -105,7 +107,9 @@ if (check_perms('forums_polls_create')) {
 				var AnswerCount = 1;
 
 				function AddAnswerField() {
-						if (AnswerCount >= 25) { return; }
+						if (AnswerCount >= 25) {
+							return;
+						}
 						var AnswerField = document.createElement("input");
 						AnswerField.type = "text";
 						AnswerField.id = "answer_"+AnswerCount;
@@ -119,9 +123,13 @@ if (check_perms('forums_polls_create')) {
 				}
 
 				function RemoveAnswerField() {
-						if (AnswerCount == 1) { return; }
+						if (AnswerCount == 1) {
+							return;
+						}
 						var x = $('#answer_block').raw();
-						for (i=0; i<2; i++) { x.removeChild(x.lastChild); }
+						for (i = 0; i < 2; i++) {
+							x.removeChild(x.lastChild);
+						}
 						AnswerCount--;
 				}
 				//]]>
@@ -147,7 +155,7 @@ if (check_perms('forums_polls_create')) {
 <? } ?>
 			</table>
 			<div id="subscribediv" class="hidden">
-				<input id="subscribeboxpreview" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe'])?' checked="checked"':''?> />
+				<input id="subscribeboxpreview" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe']) ? ' checked="checked"' : '' ?> />
 				<label for="subscribebox">Subscribe to topic</label>
 			</div>
 			<div id="buttons" class="center">

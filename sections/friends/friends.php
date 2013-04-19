@@ -1,4 +1,4 @@
- <?
+<?
 /************************************************************************
 //------------// Main friends page //----------------------------------//
 This page lists a user's friends.
@@ -22,23 +22,24 @@ $UserID = $LoggedUser['ID'];
 list($Page,$Limit) = Format::page_limit(FRIENDS_PER_PAGE);
 
 // Main query
-$DB->query("SELECT
-				SQL_CALC_FOUND_ROWS
-				f.FriendID,
-				f.Comment,
-				m.Username,
-				m.Uploaded,
-				m.Downloaded,
-				m.PermissionID,
-				m.Paranoia,
-				m.LastAccess,
-				i.Avatar
-			FROM friends AS f
-				JOIN users_main AS m ON f.FriendID=m.ID
-				JOIN users_info AS i ON f.FriendID=i.UserID
-			WHERE f.UserID='$UserID'
-			ORDER BY Username
-			LIMIT $Limit");
+$DB->query("
+	SELECT
+		SQL_CALC_FOUND_ROWS
+		f.FriendID,
+		f.Comment,
+		m.Username,
+		m.Uploaded,
+		m.Downloaded,
+		m.PermissionID,
+		m.Paranoia,
+		m.LastAccess,
+		i.Avatar
+	FROM friends AS f
+		JOIN users_main AS m ON f.FriendID=m.ID
+		JOIN users_info AS i ON f.FriendID=i.UserID
+	WHERE f.UserID='$UserID'
+	ORDER BY Username
+	LIMIT $Limit");
 $Friends = $DB->to_array(false, MYSQLI_BOTH, array(6, 'Paranoia'));
 
 // Number of results (for pagination)
@@ -72,7 +73,7 @@ foreach ($Friends as $Friend) {
 	<table class="friends_table vertical_margin">
 		<tr class="colhead">
 			<td colspan="3">
-				<span style="float:left;"><?=Users::format_username($FriendID, true, true, true, true)?>
+				<span style="float: left;"><?=Users::format_username($FriendID, true, true, true, true)?>
 <?	if (check_paranoia('ratio', $Paranoia, $Class, $FriendID)) { ?>
 				&nbsp;Ratio: <strong><?=Format::get_ratio_html($Uploaded, $Downloaded)?></strong>
 <?	}
@@ -84,7 +85,7 @@ foreach ($Friends as $Friend) {
 <?	} ?>
 				</span>
 <?	if (check_paranoia('lastseen', $Paranoia, $Class, $FriendID)) { ?>
-				<span style="float:right;"><?=time_diff($LastAccess)?></span>
+				<span style="float: right;"><?=time_diff($LastAccess)?></span>
 <?	} ?>
 			</td>
 		</tr>

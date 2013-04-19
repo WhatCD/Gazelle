@@ -5,27 +5,27 @@ class Tools {
 	 *
 	 * @param string $IP
 	 */
-  public static function site_ban_ip($IP) {
-	global $DB, $Cache, $Debug;
-	$A = substr($IP, 0, strcspn($IP, '.'));
-	$IPNum = Tools::ip_to_unsigned($IP);
-	$IPBans = $Cache->get_value('ip_bans_'.$A);
-	if (!is_array($IPBans)) {
-		$SQL = sprintf("SELECT ID, FromIP, ToIP FROM ip_bans WHERE FromIP BETWEEN %d << 24 AND (%d << 24) - 1", $A, $A+1);
-		$DB->query($SQL);
-		$IPBans = $DB->to_array(0, MYSQLI_NUM);
-		$Cache->cache_value('ip_bans_'.$A, $IPBans, 0);
-	}
-	$Debug->log_var($IPBans, 'IP bans for class '.$A);
-	foreach ($IPBans as $Index => $IPBan) {
-		list ($ID, $FromIP, $ToIP) = $IPBan;
-		if ($IPNum >= $FromIP && $IPNum <= $ToIP) {
-			return true;
+	public static function site_ban_ip($IP) {
+		global $DB, $Cache, $Debug;
+		$A = substr($IP, 0, strcspn($IP, '.'));
+		$IPNum = Tools::ip_to_unsigned($IP);
+		$IPBans = $Cache->get_value('ip_bans_'.$A);
+		if (!is_array($IPBans)) {
+			$SQL = sprintf("SELECT ID, FromIP, ToIP FROM ip_bans WHERE FromIP BETWEEN %d << 24 AND (%d << 24) - 1", $A, $A+1);
+			$DB->query($SQL);
+			$IPBans = $DB->to_array(0, MYSQLI_NUM);
+			$Cache->cache_value('ip_bans_'.$A, $IPBans, 0);
 		}
+		$Debug->log_var($IPBans, 'IP bans for class '.$A);
+		foreach ($IPBans as $Index => $IPBan) {
+			list ($ID, $FromIP, $ToIP) = $IPBan;
+			if ($IPNum >= $FromIP && $IPNum <= $ToIP) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
-  
-	return false;
-  }
 
 	/**
 	 * Returns the unsigned form of an IP address.
@@ -34,7 +34,7 @@ class Tools {
 	 * @return string the long it represents.
 	 */
 	public static function ip_to_unsigned($IP) {
-		return sprintf("%u", ip2long($IP));
+		return sprintf('%u', ip2long($IP));
 	}
 
 	/**
@@ -71,13 +71,12 @@ class Tools {
 	 * @param $IP the IP to get the hostname for
 	 * @return hostname fetched
 	 */
-	public static function get_host_by_ip($IP)
-	{
+	public static function get_host_by_ip($IP) {
 		$testar = explode('.',$IP);
-		if (count($testar)!=4) {
+		if (count($testar) != 4) {
 			return $IP;
 		}
-		for ($i=0;$i<4;++$i) {
+		for ($i = 0; $i < 4; ++$i) {
 			if (!is_numeric($testar[$i])) {
 				return $IP;
 			}
@@ -206,19 +205,21 @@ class Tools {
 	public static function warn_user($UserID, $Duration, $Reason) {
 		global $LoggedUser, $DB, $Cache, $Time;
 
-		$DB->query("SELECT Warned FROM users_info
-								WHERE UserID=".$UserID."
-								AND Warned <> '0000-00-00 00:00:00'");
+		$DB->query("
+			SELECT Warned
+			FROM users_info
+			WHERE UserID=".$UserID."
+				AND Warned <> '0000-00-00 00:00:00'");
 		if ($DB->record_count() > 0) {
 			//User was already warned, appending new warning to old.
 			list($OldDate) = $DB->next_record();
 			$NewExpDate = date('Y-m-d H:i:s', strtotime($OldDate) + $Duration);
 
 			Misc::send_pm($UserID, 0,
-				"You have received multiple warnings.",
-				"When you received your latest warning (Set to expire on ".date("Y-m-d", (time() + $Duration))."), you already had a different warning (Set to expire on ".date("Y-m-d", strtotime($OldDate)).").\n\n Due to this collision, your warning status will now expire at ".$NewExpDate.".");
+				'You have received multiple warnings.',
+				"When you received your latest warning (set to expire on ".date('Y-m-d', (time() + $Duration)).'), you already had a different warning (set to expire on '.date('Y-m-d', strtotime($OldDate)).").\n\n Due to this collision, your warning status will now expire at ".$NewExpDate.'.');
 
-			$AdminComment = date("Y-m-d").' - Warning (Clash) extended to expire at '.$NewExpDate.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
+			$AdminComment = date('Y-m-d').' - Warning (Clash) extended to expire at '.$NewExpDate.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
 
 			$DB->query('UPDATE users_info SET
 				Warned=\''.db_string($NewExpDate).'\',
@@ -233,7 +234,7 @@ class Tools {
 			$Cache->update_row(false, array('Warned' => $WarnTime));
 			$Cache->commit_transaction(0);
 
-			$AdminComment = date("Y-m-d").' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
+			$AdminComment = date('Y-m-d').' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
 
 			$DB->query('UPDATE users_info SET
 				Warned=\''.db_string($WarnTime).'\',
@@ -254,6 +255,5 @@ class Tools {
 					AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
 					WHERE UserID=\''.db_string($UserID).'\'');
 	}
-
 }
 ?>

@@ -7,39 +7,39 @@
  */
 
 
-$NewRequest = ($_GET['action'] == "new" ? true : false);
+$NewRequest = ($_GET['action'] == 'new' ? true : false);
 
-if(!$NewRequest) {
+if (!$NewRequest) {
 	$RequestID = $_GET['id'];
-	if(!is_number($RequestID)) {
+	if (!is_number($RequestID)) {
 		error(404);
 	}
 }
 
 
-if($NewRequest && ($LoggedUser['BytesUploaded'] < 250*1024*1024 || !check_perms('site_submit_requests'))) {
+if ($NewRequest && ($LoggedUser['BytesUploaded'] < 250 * 1024 * 1024 || !check_perms('site_submit_requests'))) {
 	error('You do not have enough uploaded to make a request.');
 }
 
-if(!$NewRequest) {
-	if(empty($ReturnEdit)) {
+if (!$NewRequest) {
+	if (empty($ReturnEdit)) {
 
 		$Request = Requests::get_requests(array($RequestID));
 		$Request = $Request['matches'][$RequestID];
-		if(empty($Request)) {
+		if (empty($Request)) {
 			error(404);
 		}
 
 		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
-		     $ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
+			$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 		$VoteArray = get_votes_array($RequestID);
 		$VoteCount = count($VoteArray['Voters']);
 
-		$NeedCue = (strpos($LogCue, "Cue") !== false);
-		$NeedLog = (strpos($LogCue, "Log") !== false);
-		if($NeedLog) {
-			if(strpos($LogCue, "%")) {
-				preg_match("/\d+/", $LogCue, $Matches);
+		$NeedCue = (strpos($LogCue, 'Cue') !== false);
+		$NeedLog = (strpos($LogCue, 'Log') !== false);
+		if ($NeedLog) {
+			if (strpos($LogCue, '%')) {
+				preg_match('/\d+/', $LogCue, $Matches);
 				$MinLogScore = (int) $Matches[0];
 			}
 		}
@@ -47,29 +47,29 @@ if(!$NewRequest) {
 		$IsFilled = !empty($TorrentID);
 		$CategoryName = $Categories[$CategoryID - 1];
 
-		$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0)));
+		$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0)));
 		$CanEdit = ((!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
-		if(!$CanEdit) {
+		if (!$CanEdit) {
 			error(403);
 		}
 
-		if($CategoryName == "Music") {
+		if ($CategoryName == 'Music') {
 			$ArtistForm = get_request_artists($RequestID);
 
 			$BitrateArray = array();
-			if($BitrateList == "Any") {
+			if ($BitrateList == 'Any') {
 				$BitrateArray = array_keys($Bitrates);
 			} else {
 				$BitrateArray = array_keys(array_intersect($Bitrates,explode('|', $BitrateList)));
 			}
 
 			$FormatArray = array();
-			if($FormatList == "Any") {
+			if ($FormatList == 'Any') {
 				$FormatArray = array_keys($Formats);
 			} else {
 				foreach ($Formats as $Key => $Val) {
-					if(strpos($FormatList, $Val) !== false) {
+					if (strpos($FormatList, $Val) !== false) {
 						$FormatArray[] = $Key;
 					}
 				}
@@ -77,12 +77,12 @@ if(!$NewRequest) {
 
 
 			$MediaArray = array();
-			if($MediaList == "Any") {
+			if ($MediaList == 'Any') {
 				$MediaArray = array_keys($Media);
 			} else {
 				$MediaTemp = explode('|', $MediaList);
 				foreach ($Media as $Key => $Val) {
-					if(in_array($Val, $MediaTemp)) {
+					if (in_array($Val, $MediaTemp)) {
 						$MediaArray[] = $Key;
 					}
 				}
@@ -93,7 +93,7 @@ if(!$NewRequest) {
 	}
 }
 
-if($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
+if ($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 	$DB->query("SELECT Name FROM artists_group WHERE artistid = ".$_GET['artistid']." LIMIT 1");
 	list($ArtistName) = $DB->next_record();
 	$ArtistForm = array(
@@ -101,7 +101,7 @@ if($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 		2 => array(),
 		3 => array()
 	);
-} elseif($NewRequest && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
+} elseif ($NewRequest && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	$ArtistForm = Artists::get_artist($_GET['groupid']);
 	$DB->query("SELECT tg.Name,
 					tg.Year,
@@ -113,7 +113,7 @@ if($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 					JOIN torrents_tags AS tt ON tt.GroupID=tg.ID
 					JOIN tags AS t ON t.ID=tt.TagID
 				WHERE tg.ID = ".$_GET['groupid']);
-	if(list($Title, $Year, $ReleaseType, $Image, $Tags, $CategoryID) = $DB->next_record()) {
+	if (list($Title, $Year, $ReleaseType, $Image, $Tags, $CategoryID) = $DB->next_record()) {
 		$GroupID = trim($_REQUEST['groupid']);
 	}
 }
@@ -128,7 +128,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 	<div class="box pad">
 		<form action="" method="post" id="request_form" onsubmit="Calculate();">
 			<div>
-<? if(!$NewRequest) { ?>
+<? if (!$NewRequest) { ?>
 				<input type="hidden" name="requestid" value="<?=$RequestID?>" />
 <? } ?>
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -139,7 +139,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 				<tr>
 					<td colspan="2" class="center">Please make sure your request follows <a href="rules.php?p=requests">the request rules!</a></td>
 				</tr>
-<?	if($NewRequest || $CanEdit) { ?>
+<?	if ($NewRequest || $CanEdit) { ?>
 				<tr>
 					<td class="label">
 						Type
@@ -158,7 +158,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 						<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding "Various Artists" as an artist; read <a href="wiki.php?action=article&amp;id=369">this</a> for more information.</p>
 <?
 
-		if(!empty($ArtistForm)) {
+		if (!empty($ArtistForm)) {
 			$First = true;
 			foreach($ArtistForm as $Importance => $ArtistNames) {
 				foreach($ArtistNames as $Artist) {
@@ -173,7 +173,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 							<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 							<option value="3"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
 						</select>
-						<?if($First) { ?><a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a> <? } $First = false;?>
+						<? if ($First) { ?><a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a><? } $First = false; ?>
 						<br />
 <?				}
 			}
@@ -193,7 +193,6 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 ?>
 					</td>
 				</tr>
-
 				<tr>
 					<td class="label">Title</td>
 					<td>
@@ -225,7 +224,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 						<input type="text" name="year" size="5" value="<?=(!empty($Year) ? display_str($Year) : '')?>" />
 					</td>
 				</tr>
-<?	if($NewRequest || $CanEdit) { ?>
+<?	if ($NewRequest || $CanEdit) { ?>
 				<tr id="image_tr">
 					<td class="label">Image</td>
 					<td>
@@ -238,7 +237,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					<td>
 <?
 	$GenreTags = $Cache->get_value('genre_tags');
-	if(!$GenreTags) {
+	if (!$GenreTags) {
 		$DB->query('SELECT Name FROM tags WHERE TagType=\'genre\' ORDER BY Name');
 		$GenreTags =  $DB->collect('Name');
 		$Cache->cache_value('genre_tags', $GenreTags, 3600*6);
@@ -246,7 +245,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 ?>
 						<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;" >
 							<option>---</option>
-<?	foreach(Misc::display_array($GenreTags) as $Genre){ ?>
+<?	foreach (Misc::display_array($GenreTags) as $Genre){ ?>
 							<option value="<?=$Genre ?>"><?=$Genre ?></option>
 <?	} ?>
 						</select>
@@ -257,12 +256,12 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 						There is a list of official tags to the left of the text box. Please use these tags instead of "unofficial" tags (e.g. use the official "<strong class="important_text_alt">drum.and.bass</strong>" tag, instead of an unofficial "<strong class="important_text">dnb</strong>" tag.).
 					</td>
 				</tr>
-<?	if($NewRequest || $CanEdit) { ?>
+<?	if ($NewRequest || $CanEdit) { ?>
 				<tr id="releasetypes_tr">
 					<td class="label">Release type</td>
 					<td>
 						<select id="releasetype" name="releasetype">
-							<option value='0'>---</option>
+							<option value="0">---</option>
 <?
 		foreach ($ReleaseTypes as $Key => $Val) {
 							//echo '<h1>'.$ReleaseType.'</h1>'; die();
@@ -279,10 +278,12 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 						<input type="checkbox" name="all_formats" id="toggle_formats" onchange="Toggle('formats', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($FormatArray) && (count($FormatArray) == count($Formats)) ? ' checked="checked"' : '')?> /><label for="toggle_formats"> All</label>
 						<span style="float: right;"><strong>NB: You cannot require a log or cue unless FLAC is an allowed format</strong></span>
 <?		foreach ($Formats as $Key => $Val) {
-			if($Key % 8 == 0) echo "<br />";?>
-						<input type="checkbox" name="formats[]" value="<?=$Key?>" onchange="ToggleLogCue(); if(!this.checked) { $('#toggle_formats').raw().checked = false; }" id="format_<?=$Key?>"
+			if ($Key % 8 == 0) {
+				echo '<br />';
+			} ?>
+						<input type="checkbox" name="formats[]" value="<?=$Key?>" onchange="ToggleLogCue(); if (!this.checked) { $('#toggle_formats').raw().checked = false; }" id="format_<?=$Key?>"
 							<?=(!empty($FormatArray) && in_array($Key, $FormatArray) ? ' checked="checked"' : '')?> /><label for="format_<?=$Key?>"> <?=$Val?></label>
-<?		}?>
+<?		} ?>
 					</td>
 				</tr>
 				<tr id="bitrates_tr">
@@ -290,11 +291,13 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					<td>
 						<input type="checkbox" name="all_bitrates" id="toggle_bitrates" onchange="Toggle('bitrates', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($BitrateArray) && (count($BitrateArray) == count($Bitrates)) ? ' checked="checked"' : '')?> /><label for="toggle_bitrates"> All</label>
 <?		foreach ($Bitrates as $Key => $Val) {
-			if($Key % 8 == 0) echo "<br />";?>
+			if ($Key % 8 == 0) {
+				echo '<br />';
+			} ?>
 						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
 							<?=(!empty($BitrateArray) && in_array($Key, $BitrateArray) ? ' checked="checked" ' : '')?>
-						onchange="if(!this.checked) { $('#toggle_bitrates').raw().checked = false; }" /><label for="bitrate_<?=$Key?>"> <?=$Val?></label>
-<?		}?>
+						onchange="if (!this.checked) { $('#toggle_bitrates').raw().checked = false; }" /><label for="bitrate_<?=$Key?>"> <?=$Val?></label>
+<?		} ?>
 					</td>
 				</tr>
 				<tr id="media_tr">
@@ -302,11 +305,13 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					<td>
 						<input type="checkbox" name="all_media" id="toggle_media" onchange="Toggle('media', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($MediaArray) && (count($MediaArray) == count($Media)) ? ' checked="checked"' : '')?> /><label for="toggle_media"> All</label>
 <?		foreach ($Media as $Key => $Val) {
-			if($Key % 8 == 0) echo "<br />";?>
+			if ($Key % 8 == 0) {
+				echo '<br />';
+			} ?>
 						<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"
 							<?=(!empty($MediaArray) && in_array($Key, $MediaArray) ? ' checked="checked" ' : '')?>
-						onchange="if(!this.checked) { $('#toggle_media').raw().checked = false; }" /><label for="media_<?=$Key?>"> <?=$Val?></label>
-<?		}?>
+						onchange="if (!this.checked) { $('#toggle_media').raw().checked = false; }" /><label for="media_<?=$Key?>"> <?=$Val?></label>
+<?		} ?>
 					</td>
 				</tr>
 				<tr id="logcue_tr" class="hidden">
@@ -326,11 +331,11 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 						<textarea name="description" cols="70" rows="7"><?=(!empty($Description) ? $Description : '')?></textarea> <br />
 					</td>
 				</tr>
-<?	if(check_perms('site_moderate_requests')) { ?>
+<?	if (check_perms('site_moderate_requests')) { ?>
 				<tr>
 					<td class="label">Torrent group</td>
 					<td>
-						https://what.cd/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15" /><br />
+						https://<?=SSL_SITE_URL?>/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15" /><br />
 						If this request matches a torrent group <span style="font-weight: bold;">already existing</span> on the site, please indicate that here.
 					</td>
 				</tr>
@@ -339,7 +344,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 				<tr>
 					<td class="label">Torrent group</td>
 					<td>
-						<a href="torrents.php?id=<?=$GroupID?>">https://what.cd/torrents.php?id=<?=$GroupID?></a><br />
+						<a href="torrents.php?id=<?=$GroupID?>">https://<?=SSL_SITE_URL?>/torrents.php?id=<?=$GroupID?></a><br />
 						This request <?=($NewRequest?'will be':'is')?> associated with the above torrent group.
 <?		if (!$NewRequest) { 	?>
 						If this is incorrect, please <a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">report this request</a> so that staff can fix it.
@@ -348,7 +353,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					</td>
 				</tr>
 <?	}
-	if($NewRequest) { ?>
+	if ($NewRequest) { ?>
 				<tr id="voting">
 					<td class="label">Bounty (MB)</td>
 					<td>

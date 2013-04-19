@@ -46,7 +46,7 @@ View::show_header('Donate');
 	<div class="header">
 		<h2>Donate</h2>
 	</div>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<p>We accept donations to cover the costs associated with running the site and tracker. These costs come from the rental and purchase of the hardware the site runs on (servers, components, etc.), in addition to operating expenses (bandwidth, power, etc.).</p>
 		<p>Because we do not have any advertisements or sponsorships and this service is provided free of charge, we are entirely reliant upon user donations. If you are financially able, please consider making a donation to help us pay the bills!</p>
 		<p>We currently only accept one payment method: PayPal. Because of the fees they charge, there is a <strong>minimum donation amount of <?=PAYPAL_SYMBOL?> <?=PAYPAL_MINIMUM?></strong> (Please note, this is only a minimum amount and we greatly appreciate any extra you can afford.).</p>
@@ -55,9 +55,9 @@ View::show_header('Donate');
 			<input type="hidden" name="rm" value="2" />
 			<input type="hidden" name="cmd" value="_donations" />
 			<input type="hidden" name="business" value="<?=PAYPAL_ADDRESS?>" />
-			<input type="hidden" name="return" value="http://<?=SITE_URL?>/donate.php?action=complete" />
-			<input type="hidden" name="cancel_return" value="http://<?=SITE_URL?>/donate.php?action=cancel" />
-			<input type="hidden" name="notify_url" value="http://<?=NONSSL_SITE_URL?>/donate.php?action=ipn" />
+			<input type="hidden" name="return" value="https://<?=SSL_SITE_URL?>/donate.php?action=complete" />
+			<input type="hidden" name="cancel_return" value="https://<?=SSL_SITE_URL?>/donate.php?action=cancel" />
+			<input type="hidden" name="notify_url" value="https://<?=SSL_SITE_URL?>/donate.php?action=ipn" />
 			<input type="hidden" name="item_name" value="Donation" />
 			<input type="hidden" name="amount" value="" />
 			<input type="hidden" name="custom" value="<?=$LoggedUser['ID']?>" />
@@ -71,7 +71,7 @@ View::show_header('Donate');
 	</div>
 
 	<h3>What you will receive for a 5&euro; or 0.5 BTC minimum donation</h3>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<ul>
 <?
 if ($LoggedUser['Donor']) { ?>
@@ -92,7 +92,7 @@ if ($LoggedUser['Donor']) { ?>
 		<p>Please be aware that by making a donation you aren't purchasing donor status or invites. You are helping us pay the bills and cover the costs of running the site. We are doing our best to give our love back to donors, but sometimes it might take more than 48 hours. Feel free to contact us by sending us a <a href="staffpm.php">Staff PM</a> regarding any matter. We will answer as quickly as possible.</p>
 	</div>
 	<h3>What you will <strong>not</strong> receive</h3>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<ul>
 <?	if ($LoggedUser['Donor']) { ?>
 			<li>2 more invitations; these are one time only.</li>

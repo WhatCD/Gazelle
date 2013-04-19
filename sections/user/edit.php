@@ -156,7 +156,7 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Sort/Hide release types</strong></td>
+				<td class="label"><strong>Sort/hide release types</strong></td>
 				<td>
 					<noscript>Please enable JavaScript to use these options.</noscript>
 					<a href="#" id="toggle_sortable" class="brackets">Expand</a>

@@ -12,7 +12,7 @@ Things to expect in $_GET:
 
 // Check for lame SQL injection attempts
 $ForumID = $_GET['forumid'];
-if(!is_number($ForumID)) {
+if (!is_number($ForumID)) {
 	error(0);
 }
 
@@ -28,27 +28,28 @@ list($Page,$Limit) = Format::page_limit(TOPICS_PER_PAGE);
 
 // Caching anything beyond the first page of any given forum is just wasting ram
 // users are more likely to search then to browse to page 2
-if($Page==1) {
+if ($Page == 1) {
 	list($Forum,,,$Stickies) = $Cache->get_value('forums_'.$ForumID);
 }
-if(!isset($Forum) || !is_array($Forum)) {
-	$DB->query("SELECT
-		t.ID,
-		t.Title,
-		t.AuthorID,
-		t.IsLocked,
-		t.IsSticky,
-		t.NumPosts,
-		t.LastPostID,
-		t.LastPostTime,
-		t.LastPostAuthorID
+if (!isset($Forum) || !is_array($Forum)) {
+	$DB->query("
+		SELECT
+			t.ID,
+			t.Title,
+			t.AuthorID,
+			t.IsLocked,
+			t.IsSticky,
+			t.NumPosts,
+			t.LastPostID,
+			t.LastPostTime,
+			t.LastPostAuthorID
 		FROM forums_topics AS t
 		WHERE t.ForumID = '$ForumID'
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
 	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
 	
-	if($Page==1) {
+	if ($Page == 1) {
 		$DB->query("SELECT COUNT(ID) FROM forums_topics WHERE ForumID='$ForumID' AND IsSticky='1'");
 		list($Stickies) = $DB->next_record();
 		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
@@ -56,16 +57,22 @@ if(!isset($Forum) || !is_array($Forum)) {
 }
 
 
-if(!isset($Forums[$ForumID])) { error(404); }
+if (!isset($Forums[$ForumID])) {
+	error(404);
+}
 // Make sure they're allowed to look at the page
 if (!check_perms('site_moderate_forums')) {
-	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) { error(403); }
+	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) {
+		error(403);
+	}
 }
 
 
 
 $ForumName = display_str($Forums[$ForumID]['Name']);
-if($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) { error(403); }
+if ($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) {
+	error(403);
+}
 
 // Start printing
 View::show_header('Forums > '. $Forums[$ForumID]['Name']);
@@ -73,10 +80,10 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <?=$ForumName?></h2>
 	<div class="linkbox">
-<? if(check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')){ ?>
+<? if (check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')) { ?>
 		<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>" class="brackets">New thread</a>
 <? } ?>
-		<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this forum'?'Hide search':'Search this forum'); return false;" class="brackets">Search this forum</a>
+		<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this forum' ? 'Hide search' : 'Search this forum'); return false;" class="brackets">Search this forum</a>
 		<div id="searchforum" class="hidden center">
 			<div style="display: inline-block;">
 				<h3>Search this forum:</h3>
@@ -106,7 +113,7 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 							<td><input type="text" id="username" name="user" size="70" /></td>
 						</tr>
 						<tr>
-							<td colspan="2" style="text-align: center"><input type="submit" name="submit" value="Search" /></td>
+							<td colspan="2" style="text-align: center;"><input type="submit" name="submit" value="Search" /></td>
 						</tr>
 					</table>
 				</form>
@@ -117,46 +124,46 @@ View::show_header('Forums > '. $Forums[$ForumID]['Name']);
 
 <?
 /*
-	if(check_perms('users_mod')) {
-	$DB->query("SELECT ForumID from subscribed_forums WHERE ForumID='$ForumID' AND SubscriberID='$LoggedUser[ID]'");
-        if($DB->record_count() == 0) { ?>
-		<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Subscribe to forum</a>
-<?      } else { ?>
-		<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Unsubscribe from forum</a>
-<?      }
+	if (check_perms('users_mod')) {
+		$DB->query("SELECT ForumID from subscribed_forums WHERE ForumID='$ForumID' AND SubscriberID='$LoggedUser[ID]'");
+		if ($DB->record_count() == 0) { ?>
+			<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Subscribe to forum</a>
+<?		} else { ?>
+			<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Unsubscribe from forum</a>
+<?		}
 	}
  */
 ?>
 
 	</div>
-<? if(check_perms('site_moderate_forums')) { ?>
+<?	if (check_perms('site_moderate_forums')) { ?>
 	<div class="linkbox">
 		<a href="forums.php?action=edit_rules&amp;forumid=<?=$ForumID?>" class="brackets">Change specific rules</a>
 	</div>
-<? } ?>
-<? if(!empty($Forums[$ForumID]['SpecificRules'])) { ?>
+<?	} ?>
+<?	if (!empty($Forums[$ForumID]['SpecificRules'])) { ?>
 	<div class="linkbox">
 			<strong>Forum Specific Rules</strong>
-<? foreach($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
-	$Thread = get_thread_info($ThreadIDs);
+<?		foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
+			$Thread = get_thread_info($ThreadIDs);
 ?>
 		<br />
 		<a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadIDs?>" class="brackets"><?=display_str($Thread['Title'])?></a>
-<? } ?>
+<?		} ?>
 	</div>
-<? } ?>
+<?	} ?>
 	<div class="linkbox pager">
 <?
-$Pages=Format::get_pages($Page,$Forums[$ForumID]['NumTopics'],TOPICS_PER_PAGE,9);
+$Pages = Format::get_pages($Page,$Forums[$ForumID]['NumTopics'],TOPICS_PER_PAGE,9);
 echo $Pages;
 ?>
 	</div>
 	<table class="forum_index" width="100%">
 		<tr class="colhead">
-			<td style="width:2%;"></td>
+			<td style="width: 2%;"></td>
 			<td>Latest</td>
-			<td style="width:7%;">Replies</td>
-			<td style="width:14%;">Author</td>
+			<td style="width: 7%;">Replies</td>
+			<td style="width: 14%;">Author</td>
 		</tr>
 <?
 // Check that we have content to process
@@ -170,13 +177,18 @@ if (count($Forum) == 0) {
 <?
 } else {
 	// forums_last_read_topics is a record of the last post a user read in a topic, and what page that was on
-	$DB->query('SELECT
-		l.TopicID,
-		l.PostID,
-		CEIL((SELECT COUNT(ID) FROM forums_posts WHERE forums_posts.TopicID = l.TopicID AND forums_posts.ID<=l.PostID)/'.$PerPage.') AS Page
+	$DB->query('
+		SELECT
+			l.TopicID,
+			l.PostID,
+			CEIL((	SELECT COUNT(ID)
+					FROM forums_posts
+					WHERE forums_posts.TopicID = l.TopicID
+						AND forums_posts.ID<=l.PostID)/'.$PerPage.'
+				) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN('.implode(', ', array_keys($Forum)).') AND
-		UserID=\''.$LoggedUser['ID'].'\'');
+		WHERE TopicID IN('.implode(', ', array_keys($Forum)).')
+			AND UserID=\''.$LoggedUser['ID'].'\'');
 
 	// Turns the result set into a multi-dimensional array, with
 	// forums_last_read_topics.TopicID as the key.
@@ -186,8 +198,8 @@ if (count($Forum) == 0) {
 
 	//---------- Begin printing
 
-	$Row='a';
-	foreach($Forum as $Topic){
+	$Row = 'a';
+	foreach ($Forum as $Topic) {
 		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
 		$Row = ($Row == 'a') ? 'b' : 'a';
 			// Build list of page links
@@ -197,37 +209,41 @@ if (count($Forum) == 0) {
 		$PagesText = '';
 		$TopicPages = ceil($PostCount/$PerPage);
 
-		if($TopicPages > 1){
-			$PagesText=' (';
-			for($i = 1; $i <= $TopicPages; $i++){
-				if($TopicPages>4 && ($i > 2 && $i <= $TopicPages-2)) {
-					if(!$ShownEllipses) {
-						$PageLinks[]='-';
+		if ($TopicPages > 1) {
+			$PagesText = ' (';
+			for ($i = 1; $i <= $TopicPages; $i++) {
+				if ($TopicPages > 4 && ($i > 2 && $i <= $TopicPages - 2)) {
+					if (!$ShownEllipses) {
+						$PageLinks[] = '-';
 						$ShownEllipses = true;
 					}
 					continue;
 				}
-				$PageLinks[]='<a href="forums.php?action=viewthread&amp;threadid='.$TopicID.'&amp;page='.$i.'">'.$i.'</a>';
+				$PageLinks[] = '<a href="forums.php?action=viewthread&amp;threadid='.$TopicID.'&amp;page='.$i.'">'.$i.'</a>';
 			}
 			$PagesText.=implode(' ', $PageLinks);
 			$PagesText.=')';
 		}
 
 		// handle read/unread posts - the reason we can't cache the whole page
-		if((!$Locked || $Sticky) && ((empty($LastRead[$TopicID]) || $LastRead[$TopicID]['PostID']<$LastID) && strtotime($LastTime)>$LoggedUser['CatchupTime'])) {
+		if ((!$Locked || $Sticky) && ((empty($LastRead[$TopicID]) || $LastRead[$TopicID]['PostID'] < $LastID) && strtotime($LastTime) > $LoggedUser['CatchupTime'])) {
 			$Read = 'unread';
 		} else {
 			$Read = 'read';
 		}
-		if($Locked) { $Read .= "_locked"; }
-		if($Sticky) { $Read .= "_sticky"; }
+		if ($Locked) {
+			$Read .= '_locked';
+		}
+		if ($Sticky) {
+			$Read .= '_sticky';
+		}
 ?>
 	<tr class="row<?=$Row?>">
 		<td class="<?=$Read?>" title="<?=ucwords(str_replace('_',' ',$Read))?>"></td>
 		<td>
-			<span style="float:left;" class="last_topic">
+			<span style="float: left;" class="last_topic">
 <?
-		$TopicLength=75-(2*count($PageLinks));
+		$TopicLength = 75 - (2 * count($PageLinks));
 		unset($PageLinks);
 		$Title = display_str($Title);
 		$DisplayTitle = $Title;
@@ -238,16 +254,16 @@ if (count($Forum) == 0) {
 				</strong>
 				<?=$PagesText?>
 			</span>
-<?		if(!empty($LastRead[$TopicID])) { ?>
+<?		if (!empty($LastRead[$TopicID])) { ?>
 			<span style="float: left;" class="last_read" title="Jump to last read">
 				<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>&amp;page=<?=$LastRead[$TopicID]['Page']?>#post<?=$LastRead[$TopicID]['PostID']?>"></a>
 			</span>
 <?		} ?>
-			<span style="float:right;" class="last_poster">
+			<span style="float: right;" class="last_poster">
 				by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?>
 			</span>
 		</td>
-		<td><?=number_format($PostCount-1)?></td>
+		<td><?=number_format($PostCount - 1)?></td>
 		<td><?=Users::format_username($AuthorID, false, false, false)?></td>
 	</tr>
 <?	}

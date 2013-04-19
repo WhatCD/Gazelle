@@ -2,7 +2,7 @@
 
 enforce_login();
 
-if(!empty($LoggedUser['DisableForums'])) {
+if (!empty($LoggedUser['DisableForums'])) {
 	error(403);
 }
 
@@ -12,44 +12,45 @@ include(SERVER_ROOT.'/sections/forums/functions.php');
 unset($ForumCats);
 $ForumCats = $Cache->get_value('forums_categories');
 if ($ForumCats === false) {
-	$DB->query("SELECT ID, Name FROM forums_categories");
+	$DB->query('SELECT ID, Name FROM forums_categories');
 	$ForumCats = array();
-	while (list($ID, $Name) =  $DB->next_record()) {
+	while (list($ID, $Name) = $DB->next_record()) {
 		$ForumCats[$ID] = $Name;
 	}
 	$Cache->cache_value('forums_categories', $ForumCats, 0); //Inf cache.
 }
 
 //This variable contains all our lovely forum data
-if(!$Forums = $Cache->get_value('forums_list')) {
-	$DB->query("SELECT
-		f.ID,
-		f.CategoryID,
-		f.Name,
-		f.Description,
-		f.MinClassRead,
-		f.MinClassWrite,
-		f.MinClassCreate,
-		f.NumTopics,
-		f.NumPosts,
-		f.LastPostID,
-		f.LastPostAuthorID,
-		f.LastPostTopicID,
-		f.LastPostTime,
-		COUNT(sr.ThreadID) AS SpecificRules,
-		t.Title,
-		t.IsLocked,
-		t.IsSticky
+if (!$Forums = $Cache->get_value('forums_list')) {
+	$DB->query('
+		SELECT
+			f.ID,
+			f.CategoryID,
+			f.Name,
+			f.Description,
+			f.MinClassRead,
+			f.MinClassWrite,
+			f.MinClassCreate,
+			f.NumTopics,
+			f.NumPosts,
+			f.LastPostID,
+			f.LastPostAuthorID,
+			f.LastPostTopicID,
+			f.LastPostTime,
+			COUNT(sr.ThreadID) AS SpecificRules,
+			t.Title,
+			t.IsLocked,
+			t.IsSticky
 		FROM forums AS f
-		JOIN forums_categories AS fc ON fc.ID = f.CategoryID
-		LEFT JOIN forums_topics as t ON t.ID = f.LastPostTopicID
-		LEFT JOIN forums_specific_rules AS sr ON sr.ForumID = f.ID
+			JOIN forums_categories AS fc ON fc.ID = f.CategoryID
+			LEFT JOIN forums_topics as t ON t.ID = f.LastPostTopicID
+			LEFT JOIN forums_specific_rules AS sr ON sr.ForumID = f.ID
 		GROUP BY f.ID
-		ORDER BY fc.Sort, fc.Name, f.CategoryID, f.Sort");
+		ORDER BY fc.Sort, fc.Name, f.CategoryID, f.Sort');
 	$Forums = $DB->to_array('ID', MYSQLI_ASSOC, false);
-	foreach($Forums as $ForumID => $Forum) {
-		if(count($Forum['SpecificRules'])) {
-			$DB->query("SELECT ThreadID FROM forums_specific_rules WHERE ForumID = ".$ForumID);
+	foreach ($Forums as $ForumID => $Forum) {
+		if (count($Forum['SpecificRules'])) {
+			$DB->query('SELECT ThreadID FROM forums_specific_rules WHERE ForumID = '.$ForumID);
 			$ThreadIDs = $DB->collect('ThreadID');
 			$Forums[$ForumID]['SpecificRules'] = $ThreadIDs;
 		}
@@ -58,7 +59,7 @@ if(!$Forums = $Cache->get_value('forums_list')) {
 	$Cache->cache_value('forums_list', $Forums, 0); //Inf cache.
 }
 
-if(!empty($_POST['action'])){
+if (!empty($_POST['action'])) {
 	switch ($_POST['action']) {
 		case 'reply':
 			require(SERVER_ROOT.'/sections/forums/take_reply.php');
@@ -74,18 +75,18 @@ if(!empty($_POST['action'])){
 			break;
 		case 'add_poll_option':
 			require(SERVER_ROOT.'/sections/forums/add_poll_option.php');
-            break;
-        case 'warn':
-            require(SERVER_ROOT.'/sections/forums/warn.php');
-            break;
+			break;
+		case 'warn':
+			require(SERVER_ROOT.'/sections/forums/warn.php');
+			break;
 		case 'take_warn':
-            require(SERVER_ROOT.'/sections/forums/take_warn.php');
-            break;
-        
+			require(SERVER_ROOT.'/sections/forums/take_warn.php');
+			break;
+		
 		default:
 			error(0);
 	}
-} elseif(!empty($_GET['action'])) {
+} elseif (!empty($_GET['action'])) {
 	switch ($_GET['action']) {
 		case 'viewforum':
 			// Page that lists all the topics in a forum

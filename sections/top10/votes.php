@@ -61,14 +61,14 @@ if ($TopVotes === false) {
 		$DB->query($Query);
 
 		$Results = $DB->collect('GroupID');
-		$Data    = $DB->to_array('GroupID');
+		$Data = $DB->to_array('GroupID');
 
 		$Groups = Torrents::get_groups($Results);
 
 		$TopVotes = array();
 		foreach ($Results as $GroupID) {
 			$TopVotes[$GroupID] = $Groups['matches'][$GroupID];
-			$TopVotes[$GroupID]['Ups']   = $Data[$GroupID]['Ups'];
+			$TopVotes[$GroupID]['Ups'] = $Data[$GroupID]['Ups'];
 			$TopVotes[$GroupID]['Total'] = $Data[$GroupID]['Total'];
 			$TopVotes[$GroupID]['Score'] = $Data[$GroupID]['Score'];
 		}
@@ -159,7 +159,7 @@ $Number = 0;
 $NumGroups = 0;
 foreach ($TopVotes as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));
-	$Ups   = $Group['Ups'];
+	$Ups = $Group['Ups'];
 	$Total = $Group['Total'];
 	$Score = $Group['Score'];
 
@@ -186,7 +186,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 		$DisplayName = $DisplayName. " [$GroupYear]";
 	}
 	if ($GroupVanityHouse) {
-		$DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]';
+		$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
 	}
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start();

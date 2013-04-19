@@ -534,7 +534,7 @@ class Users {
 	}
 
 	/**
-	 * Generate HTML for a user's avatar or just return the avatar url
+	 * Generate HTML for a user's avatar or just return the avatar URL
 	 * @param unknown $Avatar
 	 * @param unknown $Username
 	 * @param unknown $Setting
@@ -544,62 +544,62 @@ class Users {
 	 */
 	public static function show_avatar($Avatar, $Username, $Setting, $Size=150, $ReturnHTML = True) {
 		global $LoggedUser;
-		//case 1 is avatars disabled
-		switch($Setting) {
+		// case 1 is avatars disabled
+		switch ($Setting) {
 			case 0:
 				if (!empty($Avatar)) {
-					$ToReturn = $ReturnHTML ? "<img src='$Avatar' width='$Size' style='max-height:400px;' alt='$Username avatar' />" : $Avatar;
+					$ToReturn = $ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"$Username avatar\" />" : $Avatar;
 				} else {
-					$URL = STATIC_SERVER."common/avatars/default.png";
-					$ToReturn = $ReturnHTML ? "<img src='$URL' width='$Size' style='max-height:400px;' alt='Default Avatar'/>" : $URL;
+					$URL = STATIC_SERVER.'common/avatars/default.png';
+					$ToReturn = $ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL;
 				}
 				break;
 			case 2:
 				$ShowAvatar = True;
 			case 3:
-				switch($LoggedUser['Identicons']) {
+				switch ($LoggedUser['Identicons']) {
 					case 0:
-						$Type = "identicon";
+						$Type = 'identicon';
 						break;
 					case 1:
-						$Type = "monsterid";
+						$Type = 'monsterid';
 						break;
 					case 2:
-						$Type = "wavatar";
+						$Type = 'wavatar';
 						break;
 					case 3:
-						$Type = "retro";
+						$Type = 'retro';
 						break;
 					case 4:
-						$Type = "1";
+						$Type = '1';
 						$Robot = True;
 						break;
 					case 5:
-						$Type = "2";
+						$Type = '2';
 						$Robot = True;
 						break;
 					case 6:
-						$Type = "3";
+						$Type = '3';
 						$Robot = True;
 						break;
 					default:
-						$Type = "identicon";
+						$Type = 'identicon';
 				}
-				$Rating = "pg";
+				$Rating = 'pg';
 				if (!$Robot) {
-					$URL = "https://secure.gravatar.com/avatar/".md5(strtolower(trim($Username)))."?s=$Size&d=$Type&r=$Rating";
+					$URL = 'https://secure.gravatar.com/avatar/'.md5(strtolower(trim($Username)))."?s=$Size&amp;d=$Type&amp;r=$Rating";
 				} else {
-					$URL = "https://static1.robohash.org/".md5($Username)."?set=set".$Type."&size=".$Size."x".$Size;
+					$URL = 'https://robohash.org/'.md5($Username).'?set=set'.$Type.'&amp;size='.$Size.'x'.$Size;
 				}
 				if ($ShowAvatar == True && !empty($Avatar)) {
-					$ToReturn = $ReturnHTML ? "<img src='$Avatar' width='$Size' style='max-height:400px;' alt='$Username avatar' />" : $Avatar;
+					$ToReturn = $ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"$Username avatar\" />" : $Avatar;
 				} else {
-					$ToReturn = $ReturnHTML ? "<img src='$URL' width='$Size' style='max-height:400px;' alt='Default Avatar'/>" : $URL;
+					$ToReturn = $ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL;
 				}
 				break;
 			default:
-				$URL = STATIC_SERVER."common/avatars/default.png";
-				$ToReturn = $ReturnHTML ? "<img src='$URL' width='$Size' style='max-height:400px;' alt='Default Avatar'/>" : $URL;
+				$URL = STATIC_SERVER.'common/avatars/default.png';
+				$ToReturn = $ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL;
 		}
 		return $ToReturn;
 	}

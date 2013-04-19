@@ -4,7 +4,7 @@
  * This is the page that displays the request to the end user after being created.
  */
 
- // Bookmarks::has_bookmarked()
+// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 
 $Text = new TEXT;
@@ -237,7 +237,7 @@ if (!empty($Image)) {
 			<table class="layout">
 <?	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 	$ViewerVote = false;
-	for($i = 0; $i < $VoteMax; $i++) {
+	for ($i = 0; $i < $VoteMax; $i++) {
 		$User = array_shift($RequestVotes['Voters']);
 		$Boldify = false;
 		if ($User['UserID'] == $LoggedUser['ID']) {

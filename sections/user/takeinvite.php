@@ -26,7 +26,7 @@ if($LoggedUser['RatioWatch'] ||
 $Email = $_POST['email'];
 $Username = $LoggedUser['Username'];
 $SiteName = SITE_NAME;
-$SiteURL = NONSSL_SITE_URL;
+$SiteURL = SSL_SITE_URL;
 $InviteExpires = time_plus(60*60*24*3); // 3 days
 
 //MultiInvite
@@ -61,7 +61,7 @@ Please note that selling invites, trading invites, and giving invites away publi
 
 To confirm your invite, click on the following link:
 
-http://$SiteURL/register.php?invite=$InviteKey
+https://$SiteURL/register.php?invite=$InviteKey
 
 After you register, you will be able to use your account. Please take note that if you do not use this invite in the next 3 days, it will expire. We urge you to read the RULES and the wiki immediately after you join.
 

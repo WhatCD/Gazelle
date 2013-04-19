@@ -15,7 +15,7 @@ $Type = $Types[$Short];
 $ID = $_GET['id'];
 
 switch ($Short) {
-	case "user" :
+	case 'user' :
 		$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
@@ -23,19 +23,19 @@ switch ($Short) {
 		list($Username) = $DB->next_record();
 		break;
 
-	case "request_update" :
+	case 'request_update' :
 		$NoReason = true;
 		$DB->query("SELECT Title, Description, TorrentID, CategoryID, Year FROM requests WHERE ID=".$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Name, $Desc, $Filled, $CategoryID, $Year) = $DB->next_record();
-		if ($Filled || ($CategoryID != 0 && ($Categories[$CategoryID-1] != "Music" || $Year != 0))) {
+		if ($Filled || ($CategoryID != 0 && ($Categories[$CategoryID-1] != 'Music' || $Year != 0))) {
 			error(403);
 		}
 		break;
 
-	case "request" :
+	case 'request' :
 		$DB->query("SELECT Title, Description, TorrentID FROM requests WHERE ID=".$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
@@ -43,7 +43,7 @@ switch ($Short) {
 		list($Name, $Desc, $Filled) = $DB->next_record();
 		break;
 
-	case "collage" :
+	case 'collage' :
 		$DB->query("SELECT Name, Description FROM collages WHERE ID=".$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
@@ -51,7 +51,7 @@ switch ($Short) {
 		list($Name, $Desc) = $DB->next_record();
 		break;
 
-	case "thread" :
+	case 'thread' :
 		$DB->query("SELECT ft.Title, ft.ForumID, um.Username FROM forums_topics AS ft JOIN users_main AS um ON um.ID=ft.AuthorID WHERE ft.ID=".$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
@@ -66,15 +66,15 @@ switch ($Short) {
 		}
 		break;
 
-	case "post" :
-		$DB->query("SELECT fp.Body, fp.TopicID, um.Username FROM forums_posts AS fp JOIN users_main AS um ON um.ID=fp.AuthorID WHERE fp.ID=".$ID);
+	case 'post' :
+		$DB->query('SELECT fp.Body, fp.TopicID, um.Username FROM forums_posts AS fp JOIN users_main AS um ON um.ID=fp.AuthorID WHERE fp.ID='.$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
 		}
 		list($Body, $TopicID, $Username) = $DB->next_record();
-		$DB->query("SELECT ForumID FROM forums_topics WHERE ID = ".$TopicID);
+		$DB->query('SELECT ForumID FROM forums_topics WHERE ID = '.$TopicID);
 		list($ForumID) = $DB->next_record();
-		$DB->query("SELECT MinClassRead FROM forums WHERE ID = ".$ForumID);
+		$DB->query('SELECT MinClassRead FROM forums WHERE ID = '.$ForumID);
 		list($MinClassRead) = $DB->next_record();
 		if (!empty($LoggedUser['DisableForums']) ||
 				($MinClassRead > $LoggedUser['EffectiveClass'] && (!isset($LoggedUser['CustomForums'][$ForumID]) || $LoggedUser['CustomForums'][$ForumID] == 0)) ||
@@ -83,17 +83,17 @@ switch ($Short) {
 		}
 		break;
 
-	case "requests_comment" :
-    case "torrents_comment" :
-    case "artist_comment":
-	case "collages_comment" :
+	case 'requests_comment' :
+	case 'torrents_comment' :
+	case 'artist_comment':
+	case 'collages_comment' :
 		$Table = $Short.'s';
-		if ($Short == "collages_comment") {
-			$Column = "UserID";
+		if ($Short == 'collages_comment') {
+			$Column = 'UserID';
 		} else {
-			$Column = "AuthorID";
+			$Column = 'AuthorID';
 		}
-		$DB->query("SELECT ".$Short.".Body, um.Username FROM ".$Table." AS ".$Short." JOIN users_main AS um ON um.ID=".$Short.".".$Column." WHERE ".$Short.".ID=".$ID);
+		$DB->query('SELECT '.$Short.".Body, um.Username FROM ".$Table." AS ".$Short." JOIN users_main AS um ON um.ID=".$Short.".".$Column." WHERE ".$Short.".ID=".$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
 		}
@@ -126,12 +126,12 @@ $Text = new TEXT;
 
 
 switch ($Short) {
-	case "user" :
+	case 'user' :
 ?>
 	<p>You are reporting the user <strong><?=display_str($Username)?></strong></p>
 <?
 		break;
-	case "request_update" :
+	case 'request_update' :
 ?>
 	<p>You are reporting the request:</p>
 	<table>
@@ -163,13 +163,13 @@ switch ($Short) {
 					</td>
 				</tr>
 				<tr>
-					<td class="label">Release Type</td>
+					<td class="label">Release type</td>
 					<td>
 						<select id="releasetype" name="releasetype">
-							<option value='0'>---</option>
+							<option value="0">---</option>
 <?
 		foreach ($ReleaseTypes as $Key => $Val) {
-?>							<option value='<?=$Key?>' <?=(!empty($ReleaseType) ? ($Key == $ReleaseType ?" selected='selected'" : "") : '') ?>><?=$Val?></option>
+?>							<option value="<?=$Key?>"<?=(!empty($ReleaseType) ? ($Key == $ReleaseType ? ' selected="selected"' : '') : '') ?>><?=$Val?></option>
 <?
 		}
 ?>
@@ -190,7 +190,7 @@ switch ($Short) {
 	</div>
 <?
 		break;
-	case "request" :
+	case 'request' :
 ?>
 	<p>You are reporting the request:</p>
 	<table>
@@ -207,7 +207,7 @@ switch ($Short) {
 	</table>
 <?
 		break;
-	case "collage" :
+	case 'collage' :
 ?>
 		<p>You are reporting the collage:</p>
 		<table>
@@ -222,7 +222,7 @@ switch ($Short) {
 	</table>
 <?
 		break;
-	case "thread" :
+	case 'thread' :
 ?>
 		<p>You are reporting the thread:</p>
 		<table>
@@ -237,7 +237,7 @@ switch ($Short) {
 	</table>
 <?
 		break;
-	case "post" :
+	case 'post' :
 ?>
 		<p>You are reporting the post:</p>
 		<table>
@@ -252,10 +252,10 @@ switch ($Short) {
 	</table>
 <?
 		break;
-	case "requests_comment" :
-    case "torrents_comment" :
-    case "artist_comment":
-	case "collages_comment" :
+	case 'requests_comment' :
+	case 'torrents_comment' :
+	case 'artist_comment':
+	case 'collages_comment' :
 ?>
 		<p>You are reporting the <?=$Types[$Short]['title']?>:</p>
 		<table>

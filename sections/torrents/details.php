@@ -5,9 +5,9 @@ function compare($X, $Y) {
 header('Access-Control-Allow-Origin: *');
 
 define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by default
-define('MAX_COLLAGES', 5);      // How many normal collages should be shown by default
+define('MAX_COLLAGES', 5); // How many normal collages should be shown by default
 
- // Bookmarks::has_bookmarked()
+// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 
 $Text = NEW TEXT;

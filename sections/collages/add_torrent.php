@@ -117,7 +117,7 @@ if ($_REQUEST['action'] == 'add_torrent') {
 		$Matches = array();
 		if (preg_match($URLRegex, $URL, $Matches)) {
 			$GroupIDs[] = $Matches[3];
-			$GroupID    = $Matches[3];
+			$GroupID = $Matches[3];
 		} else {
 			$Err = "One of the entered URLs ($URL) does not correspond to a torrent on the site.";
 			break;

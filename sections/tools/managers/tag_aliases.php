@@ -5,7 +5,7 @@ if (!(check_perms('users_mod') || check_perms('site_tag_aliases_read'))) {
 
 View::show_header('Tag Aliases');
 
-$orderby = ($_GET['order']) == "badtags" ? "BadTag" : "AliasTag";
+$orderby = ($_GET['order']) == 'badtags' ? 'BadTag' : 'AliasTag';
 
 if (check_perms('users_mod')) {
 	if (isset($_POST['newalias'])) {
@@ -56,7 +56,7 @@ if (check_perms('users_mod')) {
 			</td>
 <?	if (check_perms('users_mod')) { ?>
 			<td>
-				<input type="submit" value="Add Alias" />
+				<input type="submit" value="Add alias" />
 			</td>
 <?	} ?>
 		</form>

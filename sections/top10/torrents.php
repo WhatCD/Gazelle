@@ -1,5 +1,5 @@
 <?
- // Bookmarks::has_bookmarked()
+// Bookmarks::has_bookmarked()
 
 $Where = array();
 
@@ -445,24 +445,52 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		}
 
 		// append extra info to torrent title
-		$ExtraInfo='';
-		$AddExtra='';
-		if ($Format) { $ExtraInfo.=$Format; $AddExtra=' / '; }
-		if ($Encoding) { $ExtraInfo.=$AddExtra.$Encoding; $AddExtra=' / '; }
+		$ExtraInfo = '';
+		$AddExtra = '';
+		if ($Format) {
+			$ExtraInfo.=$Format;
+			$AddExtra=' / ';
+		}
+		if ($Encoding) {
+			$ExtraInfo.=$AddExtra.$Encoding;
+			$AddExtra=' / ';
+		}
 		// "FLAC / Lossless / Log (100%) / Cue / CD";
-		if ($HasLog) { $ExtraInfo.=$AddExtra."Log (".$LogScore."%)"; $AddExtra=' / '; }
-		if ($HasCue) { $ExtraInfo.=$AddExtra."Cue"; $AddExtra=' / '; }
-		if ($Media) { $ExtraInfo.=$AddExtra.$Media; $AddExtra=' / '; }
-		if ($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
-		if ($Year>0) { $ExtraInfo.=$AddExtra.$Year; $AddExtra=' '; }
-		if ($RemasterTitle) { $ExtraInfo.=$AddExtra.$RemasterTitle; }
-		if ($IsSnatched) { if ($GroupCategoryID == 1) { $ExtraInfo .= ' / '; } $ExtraInfo.= Format::torrent_label('Snatched!'); }
-		if ($ExtraInfo!='') {
+		if ($HasLog) {
+			$ExtraInfo.=$AddExtra.'Log ('.$LogScore.'%)';
+			$AddExtra = ' / ';
+		}
+		if ($HasCue) {
+			$ExtraInfo.=$AddExtra.'Cue';
+			$AddExtra = ' / ';
+		}
+		if ($Media) {
+			$ExtraInfo.=$AddExtra.$Media;
+			$AddExtra = ' / ';
+		}
+		if ($Scene) {
+			$ExtraInfo.=$AddExtra.'Scene';
+			$AddExtra = ' / ';
+		}
+		if ($Year > 0) {
+			$ExtraInfo.=$AddExtra.$Year;
+			$AddExtra = ' ';
+		}
+		if ($RemasterTitle) {
+			$ExtraInfo.=$AddExtra.$RemasterTitle;
+		}
+		if ($IsSnatched) {
+			if ($GroupCategoryID == 1) {
+				$ExtraInfo .= ' / ';
+			}
+			$ExtraInfo.= Format::torrent_label('Snatched!');
+		}
+		if ($ExtraInfo != '') {
 			$ExtraInfo = "- [$ExtraInfo]";
 		}
 
 		$TorrentTags = new Tags($TagsList);
-		
+
 		//Get report info, use the cache if available, if not, add to it.
 		$Reported = false;
 		$Reports = get_reports($TorrentID);
@@ -473,7 +501,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		// print row
 ?>
 	<tr class="torrent row<?=$Highlight . ($IsBookmarked ? ' bookmarked' : '') . ($IsSnatched ? ' snatched_torrent' : '')?>">
-		<td style="padding:8px;text-align:center;"><strong><?=$Rank?></strong></td>
+		<td style="padding: 8px; text-align: center;"><strong><?=$Rank?></strong></td>
 		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td class="big_info">
 <?		if ($LoggedUser['CoverArt']) : ?>
@@ -485,7 +513,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 
 				<span><a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a></span>
 
-				<strong><?=$DisplayName?></strong> <?=$ExtraInfo?><?if($Reported){?> - <strong class="torrent_label tl_reported" title="Reported">Reported</strong><?}?>
+				<strong><?=$DisplayName?></strong> <?=$ExtraInfo?><? if ($Reported) { ?> - <strong class="torrent_label tl_reported" title="Reported">Reported</strong><? } ?>
 				<span class="bookmark" style="float: right;">
 <?
 		if ($IsBookmarked) {
@@ -496,7 +524,6 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 <?		} ?>
 				</span>
 				<div class="tags"><?=$TorrentTags->format()?></div>
-
 			</div>
 		</td>
 		<td style="text-align: right;" class="nobr"><?=Format::get_size($Size)?></td>

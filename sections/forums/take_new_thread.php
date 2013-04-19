@@ -29,7 +29,7 @@ if (isset($_POST['forum']) && !is_number($_POST['forum'])) {
 	error(0);
 }
 
-//If you're not sending anything, go back
+// If you're not sending anything, go back
 if (empty($_POST['body']) || empty($_POST['title'])) {
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	die();
@@ -38,7 +38,7 @@ if (empty($_POST['body']) || empty($_POST['title'])) {
 $Body = $_POST['body'];
 
 if ($LoggedUser['DisablePosting']) {
-	error('Your posting rights have been removed');
+	error('Your posting privileges have been removed');
 }
 
 $Title = Format::cut_string(trim($_POST['title']), 150, 1, 0);
@@ -46,41 +46,49 @@ $Title = Format::cut_string(trim($_POST['title']), 150, 1, 0);
 
 $ForumID = $_POST['forum'];
 
-if (!isset($Forums[$ForumID])) { error(404); }
+if (!isset($Forums[$ForumID])) {
+	error(404);
+}
 
 if (!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) {
 	error(403);
 }
 
 
-$DB->query("INSERT INTO forums_topics
-	(Title, AuthorID, ForumID, LastPostTime, LastPostAuthorID)
+$DB->query("
+	INSERT INTO forums_topics
+		(Title, AuthorID, ForumID, LastPostTime, LastPostAuthorID)
 	Values
-	('".db_string($Title)."', '".$LoggedUser['ID']."', '$ForumID', '".sqltime()."', '".$LoggedUser['ID']."')");
+		('".db_string($Title)."', '".$LoggedUser['ID']."', '$ForumID', '".sqltime()."', '".$LoggedUser['ID']."')");
 $TopicID = $DB->inserted_id();
 
-$DB->query("INSERT INTO forums_posts
+$DB->query("
+	INSERT INTO forums_posts
 		(TopicID, AuthorID, AddedTime, Body)
-		VALUES
+	VALUES
 		('$TopicID', '".$LoggedUser['ID']."', '".sqltime()."', '".db_string($Body)."')");
 
 $PostID = $DB->inserted_id();
 
-$DB->query("UPDATE forums SET
+$DB->query("
+	UPDATE forums
+	SET
 		NumPosts		  = NumPosts+1,
 		NumTopics		 = NumTopics+1,
 		LastPostID		= '$PostID',
 		LastPostAuthorID  = '".$LoggedUser['ID']."',
 		LastPostTopicID   = '$TopicID',
 		LastPostTime	  = '".sqltime()."'
-		WHERE ID = '$ForumID'");
+	WHERE ID = '$ForumID'");
 
-$DB->query("UPDATE forums_topics SET
+$DB->query("
+	UPDATE forums_topics
+	SET
 		NumPosts		  = NumPosts+1,
 		LastPostID		= '$PostID',
 		LastPostAuthorID  = '".$LoggedUser['ID']."',
 		LastPostTime	  = '".sqltime()."'
-		WHERE ID = '$TopicID'");
+	WHERE ID = '$TopicID'");
 
 if (isset($_POST['subscribe'])) {
 	$DB->query("INSERT INTO users_subscriptions VALUES ($LoggedUser[ID], $TopicID)");
@@ -93,14 +101,14 @@ if (check_perms('users_mod')) {
 	$DB->query("SELECT SubscriberID FROM subscribed_forums WHERE ForumID = '$ForumID' AND SubscriberID <> '$LoggedUser[ID]'");
 	while (list($SubscriberID) = $DB->next_record()) {
 		$DB->query("INSERT INTO users_subscriptions VALUES ($SubscriberID, $TopicID)");
-      //   $DB->query("INSERT INTO forums_last_read_topics
-        //                        (UserID, TopicID, PostID) VALUES
-          //                      ('$SubscriberID', '".$TopicID ."', '".db_string($PostID)."')
-            //                    ON DUPLICATE KEY UPDATE PostID='$LastPost'");
-	 $Cache->delete_value('subscriptions_user_'.$SubscriberID);
+		//	$DB->query("INSERT INTO forums_last_read_topics
+			//						(UserID, TopicID, PostID) VALUES
+				//							('$SubscriberID', '".$TopicID ."', '".db_string($PostID)."')
+					//							ON DUPLICATE KEY UPDATE PostID='$LastPost'");
+		$Cache->delete_value('subscriptions_user_'.$SubscriberID);
 	}
 }
- */
+*/
 
 if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forums_polls_create')) {
 	$NoPoll = 1;
@@ -127,7 +135,7 @@ if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forum
 	$Cache->cache_value('polls_'.$TopicID, array($Question,$Answers,$Votes,'0000-00-00 00:00:00','0'), 0);
 
 	if ($ForumID == STAFF_FORUM) {
-		send_irc("PRIVMSG ".ADMIN_CHAN." :!mod Poll created by ".$LoggedUser['Username'].": '".$Question."' https://".SSL_SITE_URL."/forums.php?action=viewthread&threadid=".$TopicID);
+		send_irc("PRIVMSG ".ADMIN_CHAN." :!mod Poll created by ".$LoggedUser['Username'].': "'.$Question.'" https://'.SSL_SITE_URL.'/forums.php?action=viewthread&threadid='.$TopicID);
 	}
 }
 
@@ -141,8 +149,8 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 	}
 
 	if ($Stickies > 0) {
-		$Part1 = array_slice($Forum,0,$Stickies,true); //Stickies
-		$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE-$Stickies-1,true); //Rest of page
+		$Part1 = array_slice($Forum, 0, $Stickies, true); //Stickies
+		$Part3 = array_slice($Forum, $Stickies, TOPICS_PER_PAGE - $Stickies - 1, true); //Rest of page
 	} else {
 		$Part1 = array();
 		$Part3 = $Forum;
@@ -158,44 +166,44 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 		'LastPostTime' => sqltime(),
 		'LastPostAuthorID' => $LoggedUser['ID'],
 		'NoPoll' => $NoPoll
-	)); //Bumped
+	)); // Bumped
 	$Forum = $Part1 + $Part2 + $Part3;
 
-	$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
+	$Cache->cache_value('forums_'.$ForumID, array($Forum, '', 0, $Stickies), 0);
 
-	//Update the forum root
+	// Update the forum root
 	$Cache->begin_transaction('forums_list');
 	$Cache->update_row($ForumID, array(
-		'NumPosts'=>'+1',
-		'NumTopics'=>'+1',
-		'LastPostID'=>$PostID,
-		'LastPostAuthorID'=>$LoggedUser['ID'],
-		'LastPostTopicID'=>$TopicID,
-		'LastPostTime'=>sqltime(),
-		'Title'=>$Title,
-		'IsLocked'=>0,
-		'IsSticky'=>0
+		'NumPosts' => '+1',
+		'NumTopics' => '+1',
+		'LastPostID' => $PostID,
+		'LastPostAuthorID' => $LoggedUser['ID'],
+		'LastPostTopicID' => $TopicID,
+		'LastPostTime' => sqltime(),
+		'Title' => $Title,
+		'IsLocked' => 0,
+		'IsSticky' => 0
 		));
 	$Cache->commit_transaction(0);
 } else {
-	//If there's no cache, we have no data, and if there's no data
+	// If there's no cache, we have no data, and if there's no data
 	$Cache->delete_value('forums_list');
 }
 
 $Cache->begin_transaction('thread_'.$TopicID.'_catalogue_0');
 $Post = array(
-	'ID'=>$PostID,
-	'AuthorID'=>$LoggedUser['ID'],
-	'AddedTime'=>sqltime(),
-	'Body'=>$Body,
-	'EditedUserID'=>0,
-	'EditedTime'=>'0000-00-00 00:00:00',
+	'ID' => $PostID,
+	'AuthorID' => $LoggedUser['ID'],
+	'AddedTime' => sqltime(),
+	'Body' => $Body,
+	'EditedUserID' => 0,
+	'EditedTime' => '0000-00-00 00:00:00'
 	);
 $Cache->insert('', $Post);
 $Cache->commit_transaction(0);
 
 $Cache->begin_transaction('thread_'.$TopicID.'_info');
-$Cache->update_row(false, array('Posts'=>'+1', 'LastPostAuthorID'=>$LoggedUser['ID']));
+$Cache->update_row(false, array('Posts' => '+1', 'LastPostAuthorID' => $LoggedUser['ID']));
 $Cache->commit_transaction(0);
 
 header('Location: forums.php?action=viewthread&threadid='.$TopicID);

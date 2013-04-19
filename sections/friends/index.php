@@ -1,16 +1,16 @@
 <?
 $P = db_array($_POST);
 enforce_login();
-if(!empty($_REQUEST['friendid']) && !is_number($_REQUEST['friendid'])) {
+if (!empty($_REQUEST['friendid']) && !is_number($_REQUEST['friendid'])) {
 	error(404);
 }
 
-if(!empty($_REQUEST['action'])) {
-	switch($_REQUEST['action']) {
+if (!empty($_REQUEST['action'])) {
+	switch ($_REQUEST['action']) {
 		case 'add':
 			include(SERVER_ROOT.'/sections/friends/add.php');
 			break;
-		case 'Defriend':
+		case 'Remove friend':
 			authorize();
 			include(SERVER_ROOT.'/sections/friends/remove.php');
 			break;

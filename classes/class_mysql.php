@@ -113,7 +113,7 @@ if (!extension_loaded('mysqli')) {
 }
 
 //Handles escaping
-function db_string($String,$DisableWildcards=false) {
+function db_string($String, $DisableWildcards = false) {
 	global $DB;
 	//Escape
 	$String = $DB->escape_str($String);
@@ -167,12 +167,12 @@ class DB_MYSQL {
 
 	function halt($Msg) {
 		global $LoggedUser, $Cache, $Debug, $argv;
-		$DBError='MySQL: '.strval($Msg).' SQL error: '.strval($this->Errno).' ('.strval($this->Error).')';
+		$DBError = 'MySQL: '.strval($Msg).' SQL error: '.strval($this->Errno).' ('.strval($this->Error).')';
 		if ($this->Errno == 1194) { send_irc('PRIVMSG '.ADMIN_CHAN.' :'.$this->Error); }
 		/*if ($this->Errno == 1194) {
 			preg_match("Table '(\S+)' is marked as crashed and should be repaired", $this->Error, $Matches);
 		} */
-		$Debug->analysis('!dev DB Error',$DBError,3600*24);
+		$Debug->analysis('!dev DB Error', $DBError, 3600 * 24);
 		if (DEBUG_MODE || check_perms('site_debug') || isset($argv[1])) {
 			echo '<pre>'.display_str($DBError).'</pre>';
 			if (DEBUG_MODE || check_perms('site_debug')) {
@@ -195,24 +195,24 @@ class DB_MYSQL {
 		}
 	}
 
-   	function query($Query,$AutoHandle=1) {
-   		global $LoggedUser, $Debug;
-		$QueryStartTime=microtime(true);
+	function query($Query, $AutoHandle = 1) {
+		global $LoggedUser, $Debug;
+		$QueryStartTime = microtime(true);
 		$this->connect();
-		//In the event of a mysql deadlock, we sleep allowing mysql time to unlock then attempt again for a maximum of 5 tries
-		for($i = 1; $i < 6; $i++) {
-			$this->QueryID = mysqli_query($this->LinkID,$Query);
+		// In the event of a MySQL deadlock, we sleep allowing MySQL time to unlock, then attempt again for a maximum of 5 tries
+		for ($i = 1; $i < 6; $i++) {
+			$this->QueryID = mysqli_query($this->LinkID, $Query);
 			if (!in_array(mysqli_errno($this->LinkID), array(1213, 1205))) {
 				break;
 			}
-			$Debug->analysis('Non-Fatal Deadlock:',$Query,3600*24);
+			$Debug->analysis('Non-Fatal Deadlock:', $Query, 3600 * 24);
 			trigger_error("Database deadlock, attempt $i");
 
-			sleep($i*rand(2, 5)); // Wait longer as attempts increase
+			sleep($i * rand(2, 5)); // Wait longer as attempts increase
 		}
-		$QueryEndTime=microtime(true);
-		$this->Queries[]=array(display_str($Query),($QueryEndTime-$QueryStartTime)*1000);
-		$this->Time+=($QueryEndTime-$QueryStartTime)*1000;
+		$QueryEndTime = microtime(true);
+		$this->Queries[] = array(display_str($Query), ($QueryEndTime - $QueryStartTime) * 1000);
+		$this->Time += ($QueryEndTime-$QueryStartTime) * 1000;
 
 		if (!$this->QueryID) {
 			$this->Errno = mysqli_errno($this->LinkID);
@@ -229,12 +229,14 @@ class DB_MYSQL {
 		/*
 		if ($QueryType == 'DELETE' || $QueryType == 'UPDATE') {
 			if ($this->affected_rows() > 50) {
-				$Debug->analysis($this->affected_rows().' rows altered:',$Query,3600*24);
+				$Debug->analysis($this->affected_rows().' rows altered:', $Query, 3600 * 24);
 			}
 		}
 		*/
 		$this->Row = 0;
-		if ($AutoHandle) { return $this->QueryID; }
+		if ($AutoHandle) {
+			return $this->QueryID;
+		}
 	}
 
 	function query_unb($Query) {

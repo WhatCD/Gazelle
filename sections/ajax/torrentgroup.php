@@ -1,6 +1,5 @@
 <?php
 
-
 require(SERVER_ROOT.'/sections/torrents/functions.php');
 
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
@@ -11,19 +10,21 @@ $TorrentAllowed = array('ID', 'Media', 'Format', 'Encoding', 'Remastered', 'Rema
 
 $GroupID = (int)$_GET['id'];
 
-if ($GroupID == 0) { error('bad id parameter', true); }
+if ($GroupID == 0) {
+	error('bad id parameter', true);
+}
 
 $TorrentCache = get_group_info($GroupID, true, 0);
 list($TorrentDetails, $TorrentList) = $TorrentCache;
 
 $ArtistForm = Artists::get_artist($GroupID);
-if($TorrentDetails['CategoryID'] == 0) {
-	$CategoryName = "Unknown";
+if ($TorrentDetails['CategoryID'] == 0) {
+	$CategoryName = 'Unknown';
 } else {
 	$CategoryName = $Categories[$TorrentDetails['CategoryID'] - 1];
 }
 $JsonMusicInfo = array();
-if ($CategoryName == "Music") {
+if ($CategoryName == 'Music') {
 	$JsonMusicInfo = array(
 		'composers' => $ArtistForm[4] == null ? array() : pullmediainfo($ArtistForm[4]),
 		'dj' => $ArtistForm[6] == null ? array() : pullmediainfo($ArtistForm[6]),
@@ -33,8 +34,7 @@ if ($CategoryName == "Music") {
 		'remixedBy' => $ArtistForm[3] == null ? array() : pullmediainfo($ArtistForm[3]),
 		'producer' => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
 	);
-}
-else {
+} else {
 	$JsonMusicInfo = NULL;
 }
 
@@ -51,7 +51,7 @@ $JsonTorrentDetails = array(
 	'categoryName' => $CategoryName,
 	'time' => $TorrentDetails['Time'],
 	'vanityHouse' => $TorrentDetails['VanityHouse'] == 1,
-    'isBookmarked' => Bookmarks::has_bookmarked('torrent', $GroupID),
+	'isBookmarked' => Bookmarks::has_bookmarked('torrent', $GroupID),
 	'musicInfo' => $JsonMusicInfo
 );
 
@@ -86,7 +86,7 @@ foreach ($TorrentList as $Torrent) {
 		'snatched' => (int) $Torrent['Snatched'],
 		'freeTorrent' => $Torrent['FreeTorrent'] == 1,
 		'time' => $Torrent['Time'],
-        'description' => $Torrent['Description'],
+		'description' => $Torrent['Description'],
 		'fileList' => $FileList,
 		'filePath' => $Torrent['FilePath'],
 		'userId' => (int) $Torrent['UserID'],

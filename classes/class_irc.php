@@ -3,7 +3,7 @@ class IRC_DB extends DB_MYSQL {
 	function halt($Msg) {
 		global $Bot;
 		global $DB;
-		$Bot->send_to($Bot->get_channel(),'The database is currently unavailable try again later');
+		$Bot->send_to($Bot->get_channel(),'The database is currently unavailable; try again later.');
 	}
 }
 
@@ -69,7 +69,7 @@ abstract class IRC_BOT {
 		$this->listen();
 	}
 
- 	public function disconnect() {
+	public function disconnect() {
 		socket_close($this->ListenSocket);
 		$this->State = 0; //Drones dead
 	}

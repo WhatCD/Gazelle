@@ -23,7 +23,7 @@ $ErrorPage = true;
 
 define('EXPLAIN_HACK',false);
 
-if (EXPLAIN_HACK){
+if (EXPLAIN_HACK) {
 	$SCFR = '';
 } else {
 	$SCFR = 'SQL_CALC_FOUND_ROWS';
@@ -31,7 +31,7 @@ if (EXPLAIN_HACK){
 
 // Function to build a SQL WHERE to search for a string
 // Offers exact searching, fulltext searching, and negative searching
-function build_search($SearchStr,$Field,$Exact=false,$SQLWhere='',$FullText=0,&$FilterString='') {
+function build_search($SearchStr, $Field, $Exact=false, $SQLWhere='', $FullText=0, &$FilterString='') {
 	if ($SQLWhere != '') {
 		$AddWhere = false;
 	} else {
@@ -645,7 +645,7 @@ if (!is_array($TorrentCache)) {
 	}
 }
 
- // List of pages
+// List of pages
 $Pages = Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
 
 // Gets tacked onto torrent download URLs

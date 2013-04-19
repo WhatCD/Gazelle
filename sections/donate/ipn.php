@@ -63,7 +63,7 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 			Misc::send_pm($_POST['custom'], 0, 'Thank you for your donation', 'Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Unfortunately however this donation was less than the specified minimum donation of '.PAYPAL_MINIMUM.' '.PAYPAL_CURRENCY.' and while we are grateful, no special privileges have been awarded to you.');
 		} else {
 			//Failed pending donation
-			$Message = "User http://".NONSSL_SITE_URL."/user.php?id=".$_POST['custom']." had donation of ".$TotalDonated." ".PAYPAL_CURRENCY." at ".$DonationTime." UTC from ".$_POST['payer_email']." returned.";
+			$Message = "User https://".SSL_SITE_URL."/user.php?id=".$_POST['custom']." had donation of ".$TotalDonated." ".PAYPAL_CURRENCY." at ".$DonationTime." UTC from ".$_POST['payer_email']." returned.";
 			$DB->query('SELECT SUM(Amount), MIN(Time) FROM donations WHERE UserID=\''.$_POST['custom'].'\';');
 			list($TotalDonated,$DonationTime) = $DB->next_record();
 			if ($TotalDonated+$_POST['mc_gross'] == 0) {

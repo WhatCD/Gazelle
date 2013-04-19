@@ -1,8 +1,8 @@
 <?
 
 
-if(isset($_GET['details'])) {
-	if(in_array($_GET['details'], array('day','week','overall','snatched','data','seeded'))) {
+if (isset($_GET['details'])) {
+	if (in_array($_GET['details'], array('day','week','overall','snatched','data','seeded'))) {
 		$Details = $_GET['details'];
 	} else {
 		print json_encode(array('status' => 'failure'));
@@ -45,7 +45,7 @@ $BaseQuery = "SELECT
 
 $OuterResults = array();
 
-if($Details == 'all' || $Details == 'day') {
+if ($Details == 'all' || $Details == 'day') {
 	if (!$TopTorrentsActiveLastDay = $Cache->get_value('top10tor_day_'.$Limit.$WhereSum)) {
 		if ($Cache->get_query_lock('top10')) {
 			$DayAgo = time_minus(86400);
@@ -65,7 +65,7 @@ if($Details == 'all' || $Details == 'day') {
 	}
 	$OuterResults[] = generate_torrent_json('Most Active Torrents Uploaded in the Past Day', 'day', $TopTorrentsActiveLastDay, $Limit);
 }
-if($Details == 'all' || $Details == 'week') {
+if ($Details == 'all' || $Details == 'week') {
 	if (!$TopTorrentsActiveLastWeek = $Cache->get_value('top10tor_week_'.$Limit.$WhereSum)) {
 		if ($Cache->get_query_lock('top10')) {
 			$WeekAgo = time_minus(604800);
@@ -86,7 +86,7 @@ if($Details == 'all' || $Details == 'week') {
 	$OuterResults[] = generate_torrent_json('Most Active Torrents Uploaded in the Past Week', 'week', $TopTorrentsActiveLastWeek, $Limit);
 }
 
-if($Details == 'all' || $Details == 'overall') {
+if ($Details == 'all' || $Details == 'overall') {
 	if (!$TopTorrentsActiveAllTime = $Cache->get_value('top10tor_overall_'.$Limit.$WhereSum)) {
 		if ($Cache->get_query_lock('top10')) {
 			// IMPORTANT NOTE - we use WHERE t.Seeders>500 in order to speed up this query. You should remove it!
@@ -107,7 +107,7 @@ if($Details == 'all' || $Details == 'overall') {
 	$OuterResults[] = generate_torrent_json('Most Active Torrents of All Time', 'overall', $TopTorrentsActiveAllTime, $Limit);
 }
 
-if(($Details == 'all' || $Details == 'snatched') && empty($Where)) {
+if (($Details == 'all' || $Details == 'snatched') && empty($Where)) {
 	if (!$TopTorrentsSnatched = $Cache->get_value('top10tor_snatched_'.$Limit.$WhereSum)) {
 		if ($Cache->get_query_lock('top10')) {
 			$Query = $BaseQuery;
@@ -125,7 +125,7 @@ if(($Details == 'all' || $Details == 'snatched') && empty($Where)) {
 	$OuterResults[] = generate_torrent_json('Most Snatched Torrents', 'snatched', $TopTorrentsSnatched, $Limit);
 }
 
-if(($Details == 'all' || $Details == 'data') && empty($Where)) {
+if (($Details == 'all' || $Details == 'data') && empty($Where)) {
 	if (!$TopTorrentsTransferred = $Cache->get_value('top10tor_data_'.$Limit.$WhereSum)) {
 		if ($Cache->get_query_lock('top10')) {
 			// IMPORTANT NOTE - we use WHERE t.Snatched>100 in order to speed up this query. You should remove it!
@@ -145,7 +145,7 @@ if(($Details == 'all' || $Details == 'data') && empty($Where)) {
 	$OuterResults[] = generate_torrent_json('Most Data Transferred Torrents', 'data', $TopTorrentsTransferred, $Limit);
 }
 
-if(($Details == 'all' || $Details == 'seeded') && empty($Where)) {
+if (($Details == 'all' || $Details == 'seeded') && empty($Where)) {
 	if (!$TopTorrentsSeeded = $Cache->get_value('top10tor_seeded_'.$Limit.$WhereSum)) {
 		if ($Cache->get_query_lock('top10')) {
 			$Query = $BaseQuery."
@@ -166,9 +166,9 @@ print
 	json_encode(
 		array(
 			'status' => 'success',
-                        'response' => $OuterResults
-                )
-        );
+			'response' => $OuterResults
+		)
+	);
 
 
 function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
@@ -191,13 +191,13 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 		$Artist = Artists::display_artists(Artists::get_artist($GroupID), false, true);
 		$TruncArtist = substr($Artist, 0, strlen($Artist)-3);
 
-		$TagList=array();
+		$TagList = array();
 
-		if($TorrentTags!='') {
-			$TorrentTags=explode(' ',$TorrentTags);
+		if ($TorrentTags != '') {
+			$TorrentTags = explode(' ',$TorrentTags);
 			foreach ($TorrentTags as $TagKey => $TagName) {
 				$TagName = str_replace('_','.',$TagName);
-				$TagList[]=$TagName;
+				$TagList[] = $TagName;
 			}
 		}
 

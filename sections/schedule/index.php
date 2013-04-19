@@ -618,7 +618,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 					AND ul.UserID IS NULL
 				GROUP BY um.ID");
 	while (list($Username, $Email) = $DB->next_record()) {
-		$Body = "Hi $Username, \n\nIt has been almost 4 months since you used your account at http://".NONSSL_SITE_URL.". This is an automated email to inform you that your account will be disabled in 10 days if you do not sign in. ";
+		$Body = "Hi $Username, \n\nIt has been almost 4 months since you used your account at https://".SSL_SITE_URL.". This is an automated email to inform you that your account will be disabled in 10 days if you do not sign in. ";
 		Misc::send_email($Email, 'Your '.SITE_NAME.' account is about to be disabled', $Body);
 	}
 	$DB->query("SELECT um.ID

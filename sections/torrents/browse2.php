@@ -305,7 +305,48 @@ if (!empty($_GET['searchstr'])) {
 
 // Tag list
 if (!empty($SearchWords['taglist'])) {
+	global $Cache, $DB;
+	//Get tag aliases.
+	$TagAliases = $Cache->get_value('tag_aliases_search');
+	if (!$TagAliases) {
+		$DB->query("SELECT ID,BadTag,AliasTag FROM tag_aliases ORDER BY BadTag");
+		$TagAliases = $DB->to_array();
+		//Unify tag aliases to be in_this_format as tags not in.this.format
+		array_walk_recursive($TagAliases, create_function('&$val', '$val = preg_replace("/\./","_", $val);'));
+		//Clean up the array for smaller cache size
+		foreach ($TagAliases as &$TagAlias) {
+			foreach (array_keys($TagAlias) as $Key) {
+				if (is_numeric($Key)) {
+					unset($TagAlias[$Key]);
+				}
+			}
+		}
+		$Cache->cache_value('tag_aliases_search', $TagAliases, 3600 * 24 * 7); // cache for 7 days
+	}
+	//Get tags
 	$Tags = $SearchWords['taglist'];
+	//Replace bad tags with tag aliases
+	//In other news oh God I'm going to hell for all this preg_replace, but they're kept in two separate formats
+	for ($i = 0; $i < sizeof($Tags['include']) ; $i++) {
+		foreach ($TagAliases as $TagAlias) {
+			if ($Tags['include'][$i] === $TagAlias['BadTag']) {
+				$Tags['include'][$i] = $TagAlias['AliasTag'];
+				break;
+			}
+		}
+	}
+	for ($i = 0; $i < sizeof($Tags['exclude']) ; $i++) {
+		foreach ($TagAliases as $TagAlias) {
+			if (preg_replace('/^!/', '', $Tags['exclude'][$i]) === $TagAlias['BadTag']) {
+				$Tags['exclude'][$i] = '!'.$TagAlias['AliasTag'];
+				break;
+			}
+		}
+	}
+	//Only keep unique entries after unifying tag standard
+	$Tags['include'] = array_unique($Tags['include']);
+	$Tags['exclude'] = array_unique($Tags['exclude']);
+	$TagListString = implode(", ", array_merge($Tags['include'], $Tags['exclude']));
 	if (!$EnableNegation && !empty($Tags['exclude'])) {
 		$Tags['include'] = array_merge($Tags['include'], $Tags['exclude']);
 		unset($Tags['exclude']);
@@ -389,12 +430,12 @@ if (!empty($_GET['year'])) {
 	}
 }
 
-if (isset($_GET['haslog']) && $_GET['haslog']!=='') {
+if (isset($_GET['haslog']) && $_GET['haslog'] !== '') {
 	if ($_GET['haslog'] == 100) {
 		$SphQL->where('logscore', 100);
 		$SphQLTor->where('logscore', 100);
 		$Filtered = true;
- 	} elseif ($_GET['haslog'] < 0) {
+	} elseif ($_GET['haslog'] < 0) {
 		// Exclude torrents with log score equal to 100
 		$SphQL->where('logscore', 100, true);
 		$SphQL->where('haslog', 1);
@@ -712,7 +753,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td colspan="3" class="ft_taglist">
-					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_','.',Format::form('taglist', true))?>" />&nbsp;
+					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_','.',display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
 					<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 					<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 				</td>
@@ -933,14 +974,14 @@ foreach ($Results as $Result) {
 	}
 	$SnatchedGroupClass = $GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '';
 
-	if ($GroupResults && (count($Torrents)>1 || isset($GroupedCategories[$CategoryID-1]))) {
+	if ($GroupResults && (count($Torrents) > 1 || isset($GroupedCategories[$CategoryID - 1]))) {
 		// These torrents are in a group
 		$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 		if ($GroupYear > 0) {
 			$DisplayName .= " [$GroupYear]";
 		}
 		if ($GroupVanityHouse) {
-			$DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]';
+			$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
 		}
 		$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 ?>
@@ -997,7 +1038,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			if (!isset($TorrentIDs[$TorrentID])) {
 				continue;
 			}
-			
+
 			//Get report info for each torrent, use the cache if available, if not, add to it.
 			$Reported = false;
 			$Reports = get_reports($TorrentID);
@@ -1040,7 +1081,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 <?			} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
-			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Data)?><?if($Reported){?> / <strong class="torrent_label tl_reported" title="Reported">Reported</strong><?}?></a>
+			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Data)?><? if ($Reported) { ?> / <strong class="torrent_label tl_reported" title="Reported">Reported</strong><? } ?></a>
 		</td>
 		<td><?=$Data['FileCount']?></td>
 		<td class="nobr"><?=time_diff($Data['Time'], 1)?></td>

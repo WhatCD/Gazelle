@@ -15,50 +15,50 @@ if(!isset($_GET['id']) || !is_number($_GET['id'])) {
 		error(404);
 	}
 } else {
-    $TorrentID = $_GET['id'];
-    $DB->query("SELECT tg.CategoryID, t.GroupID FROM torrents_group AS tg LEFT JOIN torrents AS t ON t.GroupID=tg.ID WHERE t.ID=" . $_GET['id']);
-    list($CategoryID, $GroupID) = $DB->next_record();
-    $Artists = Artists::get_artist($GroupID);
-    $TorrentCache = get_group_info($GroupID, true, $RevisionID);
-    $GroupDetails = $TorrentCache[0];
-    $TorrentList = $TorrentCache[1];
-    //Resolve the torrentlist to the one specific torrent being reported
-    foreach ($TorrentList as &$Torrent) {
-	//Remove unneeded entries
-	if ($Torrent["ID"] != $TorrentID)
-	    unset($TorrentList[$Torrent["ID"]]);
-    }
-    // Group details
-    list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear,
-	    $GroupRecordLabel, $GroupCatalogueNumber, $ReleaseType, $GroupCategoryID,
-	    $GroupTime, $GroupVanityHouse, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs,
-	    $TagPositiveVotes, $TagNegativeVotes, $GroupFlags) = array_values($GroupDetails);
+	$TorrentID = $_GET['id'];
+	$DB->query("SELECT tg.CategoryID, t.GroupID FROM torrents_group AS tg LEFT JOIN torrents AS t ON t.GroupID=tg.ID WHERE t.ID=" . $_GET['id']);
+	list($CategoryID, $GroupID) = $DB->next_record();
+	$Artists = Artists::get_artist($GroupID);
+	$TorrentCache = get_group_info($GroupID, true, $RevisionID);
+	$GroupDetails = $TorrentCache[0];
+	$TorrentList = $TorrentCache[1];
+	// Resolve the torrentlist to the one specific torrent being reported
+	foreach ($TorrentList as &$Torrent) {
+	// Remove unneeded entries
+	if ($Torrent['ID'] != $TorrentID)
+		unset($TorrentList[$Torrent['ID']]);
+	}
+	// Group details
+	list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear,
+		$GroupRecordLabel, $GroupCatalogueNumber, $ReleaseType, $GroupCategoryID,
+		$GroupTime, $GroupVanityHouse, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs,
+		$TagPositiveVotes, $TagNegativeVotes, $GroupFlags) = array_values($GroupDetails);
 
-    $DisplayName = $GroupName;
-    $AltName = $GroupName; // Goes in the alt text of the image
-    $Title = $GroupName; // goes in <title>
-    $WikiBody = $Text->full_format($WikiBody);
+	$DisplayName = $GroupName;
+	$AltName = $GroupName; // Goes in the alt text of the image
+	$Title = $GroupName; // goes in <title>
+	$WikiBody = $Text->full_format($WikiBody);
 
-    //Get the artist name, group name etc.
-    $Artists = Artists::get_artist($GroupID);
-    if ($Artists) {
-	$DisplayName = '<span dir="ltr">' . Artists::display_artists($Artists, true) . '<a href="torrents.php?torrentid=' . $TorrentID . '">' .$DisplayName . '</a></span>';
-	$AltName = display_str(Artists::display_artists($Artists, false)) . $AltName;
-	$Title = $AltName;
-    }
-    if ($GroupYear > 0) {
-	$DisplayName.=' [' . $GroupYear . ']';
-	$AltName.=' [' . $GroupYear . ']';
-	$Title.= ' [' . $GroupYear . ']';
-    }
-    if ($GroupVanityHouse) {
-	$DisplayName.=' [Vanity House]';
-	$AltName.=' [Vanity House]';
-    }
-    if ($GroupCategoryID == 1) {
-	$DisplayName.=' [' . $ReleaseTypes[$ReleaseType] . ']';
-	$AltName.=' [' . $ReleaseTypes[$ReleaseType] . ']';
-    }
+	//Get the artist name, group name etc.
+	$Artists = Artists::get_artist($GroupID);
+	if ($Artists) {
+		$DisplayName = '<span dir="ltr">' . Artists::display_artists($Artists, true) . '<a href="torrents.php?torrentid=' . $TorrentID . '">' .$DisplayName . '</a></span>';
+		$AltName = display_str(Artists::display_artists($Artists, false)) . $AltName;
+		$Title = $AltName;
+	}
+	if ($GroupYear > 0) {
+		$DisplayName.= " [$GroupYear]";
+		$AltName.= " [$GroupYear]";
+		$Title.= " [$GroupYear]";
+	}
+	if ($GroupVanityHouse) {
+		$DisplayName.=' [Vanity House]';
+		$AltName.=' [Vanity House]';
+	}
+	if ($GroupCategoryID == 1) {
+		$DisplayName.=' [' . $ReleaseTypes[$ReleaseType] . ']';
+		$AltName.=' [' . $ReleaseTypes[$ReleaseType] . ']';
+	}
 }
 
 View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
@@ -68,12 +68,11 @@ View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
 	<div class="header">
 		<h2>Report a torrent</h2>
 	</div>
-    
 	<div class="header">
 		<h3><?=$DisplayName?></h3>
 	</div>
 	<div class="thin">
-		<table class="torrent_table details<?=$GroupFlags['IsSnatched'] ? ' snatched' : ''?>" id="torrent_details">
+		<table class="torrent_table details<?=$GroupFlags['IsSnatched'] ? ' snatched' : '' ?>" id="torrent_details">
 			<tr class="colhead_dark">
 				<td width="80%"><strong>Reported torrent</strong></td>
 				<td><strong>Size</strong></td>
@@ -97,30 +96,30 @@ View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
 
 		<h3>Report information</h3>
 		<div class="box pad">
-		    <table class="layout">
-		    <tr>
-			<td class="label">Reason:</td>
-			<td>
-			    <select id="type" name="type" onchange="ChangeReportType()">
-				<?
+			<table class="layout">
+				<tr>
+					<td class="label">Reason:</td>
+					<td>
+						<select id="type" name="type" onchange="ChangeReportType()">
+<?
 				if (!empty($Types[$CategoryID])) {
-				    $TypeList = $Types['master'] + $Types[$CategoryID];
-				    $Priorities = array();
-				    foreach ($TypeList as $Key => $Value) {
-					$Priorities[$Key] = $Value['priority'];
-				    }
-				    array_multisort($Priorities, SORT_ASC, $TypeList);
+					$TypeList = $Types['master'] + $Types[$CategoryID];
+					$Priorities = array();
+					foreach ($TypeList as $Key => $Value) {
+						$Priorities[$Key] = $Value['priority'];
+					}
+					array_multisort($Priorities, SORT_ASC, $TypeList);
 				} else {
-				    $TypeList = $Types['master'];
+					$TypeList = $Types['master'];
 				}
 				foreach ($TypeList as $Type => $Data) {
-				    ?>
-    				<option value="<?= $Type ?>"><?= $Data['title'] ?></option>
-				<? } ?>
-			    </select>
-			</td>
-		    </tr>
-		</table>
+					?>
+							<option value="<?= $Type ?>"><?= $Data['title'] ?></option>
+<?				} ?>
+						</select>
+					</td>
+				</tr>
+			</table>
 			<p>Fields that contain lists of values (for example, listing more than one track number) should be separated by a space.</p>
 			<br />
 			<p><strong>Following the below report type specific guidelines will help the moderators deal with your report in a timely fashion. </strong></p>
@@ -141,7 +140,6 @@ View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
 
 				<script type="text/javascript">ChangeReportType();</script>
 			</div>
-
 		</div>
 	<input type="submit" value="Submit report" />
 	</form>

@@ -33,8 +33,8 @@ if(!isset($Data) || !$Data) {
 		}
 	}
 
-	if(isset($_GET['c']) && strlen($Data) < 262144) {
-		$Cache->cache_value('image_cache_'.md5($URL), array($Data,$Type), 3600*24*7);
+	if (isset($_GET['c']) && strlen($Data) < 262144) {
+		$Cache->cache_value('image_cache_'.md5($URL), array($Data,$Type), 3600 * 24 * 7);
 	}
 }
 
@@ -63,13 +63,13 @@ if(isset($_GET['avatar'])) {
 			$UserInfo['Avatar'] = '';
 			$Cache->cache_value('user_info_'.$UserID, $UserInfo, 2592000);
 
-			$DB->query("UPDATE users_info SET Avatar='', AdminComment=CONCAT('".sqltime()." - Avatar reset automatically (Size: ".number_format((strlen($Data))/1024)."kb, Height: ".$Height."px). Used to be $DBURL\n\n', AdminComment) WHERE UserID='$UserID'");
+			$DB->query("UPDATE users_info SET Avatar='', AdminComment=CONCAT('".sqltime()." - Avatar reset automatically (Size: ".number_format((strlen($Data)) / 1024)." kB, Height: ".$Height."px). Used to be $DBURL\n\n', AdminComment) WHERE UserID='$UserID'");
 
 			// Send PM
 
 			send_pm($UserID,0,"Your avatar has been automatically reset","The following avatar rules have been in effect for months now:
 
-[b]Avatars must not exceed 256kB or be vertically longer than 400px. [/b]
+[b]Avatars must not exceed 256 kB or be vertically longer than 400px. [/b]
 
 Your avatar at $DBURL has been found to exceed these rules. As such, it has been automatically reset. You are welcome to reinstate your avatar once it has been resized down to an acceptable size.");
 

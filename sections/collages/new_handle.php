@@ -35,11 +35,11 @@ if ($P['category'] == '0') {
 	}
 }
 
-if(!$Err) {
+if (!$Err) {
 	$DB->query("SELECT ID,Deleted FROM collages WHERE Name='$P[name]'");
-	if($DB->record_count()) {
+	if ($DB->record_count()) {
 		list($ID, $Deleted) = $DB->next_record();
-		if($Deleted) {
+		if ($Deleted) {
 			$Err = "That collection already exists but needs to be recovered; please <a href=\"staffpm.php\">contact</a> the staff team!";
 		} else {
 			$Err = "That collection already exists: <a href=\"/collages.php?id=$ID\">$ID</a>.";
@@ -47,25 +47,25 @@ if(!$Err) {
 	}
 }
 
-if(!$Err) {
-	if(empty($CollageCats[$P['category']])) {
+if (!$Err) {
+	if (empty($CollageCats[$P['category']])) {
 		$Err = 'Please select a category';
 	}
 }
 
-if($Err) {
+if ($Err) {
 	//error($Err);
-	$Err         = urlencode($Err);
-	$Name        = urlencode($_POST['name']);
-	$Category    = urlencode($_POST['category']);
-	$Tags        = urlencode($_POST['tags']);
+	$Err = urlencode($Err);
+	$Name = urlencode($_POST['name']);
+	$Category = urlencode($_POST['category']);
+	$Tags = urlencode($_POST['tags']);
 	$Description = urlencode($_POST['description']);
 	header("Location: collages.php?action=new&err=$Err&name=$Name&cat=$Category&tags=$Tags&descr=$Description");
 	die();
 }
 
 $TagList = explode(',',$_POST['tags']);
-foreach($TagList as $ID=>$Tag) {
+foreach ($TagList as $ID=>$Tag) {
 	$TagList[$ID] = Misc::sanitize_tag($Tag);
 }
 $TagList = implode(' ',$TagList);

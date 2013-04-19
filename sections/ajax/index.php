@@ -29,8 +29,8 @@ if (isset($_GET['action']) && in_array($_GET['action'],$Limited_Pages)) {
 				'status' => 'failure',
 				'response' => 'Rate limit exceeded.'
 				)
-            );
-        
+			);
+		
 		die();
 	} else {
 		$Cache->increment_value('ajax_requests_'.$UserID);
@@ -146,8 +146,7 @@ switch ($_GET['action']) {
 		print json_encode(array('status' => 'failure'));
 }
 
-function pullmediainfo($Array)
-{
+function pullmediainfo($Array) {
 	$NewArray = array();
 	foreach ($Array as $Item) {
 		$NewArray[] = array(

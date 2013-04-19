@@ -4,14 +4,14 @@ function compare($X, $Y){
 	return($Y['count'] - $X['count']);
 }
 
- // Bookmarks::has_bookmarked()
+// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/sections/requests/functions.php');
 
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
 $ArtistID = $_GET['id'];
-if(!is_number($ArtistID)) {
+if (!is_number($ArtistID)) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }
@@ -29,7 +29,7 @@ if (empty($ArtistID)) {
 	}
 }
 
-if(!empty($_GET['revisionid'])) { // if they're viewing an old revision
+if (!empty($_GET['revisionid'])) { // if they're viewing an old revision
 	$RevisionID=$_GET['revisionid'];
 	if (!is_number($RevisionID)) {
 		error(0);
@@ -39,7 +39,7 @@ if(!empty($_GET['revisionid'])) { // if they're viewing an old revision
 	$Data = $Cache->get_value('artist_'.$ArtistID);
 	$RevisionID = false;
 }
-if($Data) {
+if ($Data) {
 	if (!is_array($Data)) {
 		$Data = unserialize($Data);
 	}
@@ -47,28 +47,30 @@ if($Data) {
 
 } else {
 	if ($RevisionID) {
-		$sql = "SELECT
-			a.Name,
-			wiki.Image,
-			wiki.body,
-			a.VanityHouse
+		$sql = "
+			SELECT
+				a.Name,
+				wiki.Image,
+				wiki.body,
+				a.VanityHouse
 			FROM wiki_artists AS wiki
-			LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
+				LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
 			WHERE wiki.RevisionID='$RevisionID' ";
 	} else {
-		$sql = "SELECT
-			a.Name,
-			wiki.Image,
-			wiki.body,
-			a.VanityHouse
+		$sql = "
+			SELECT
+				a.Name,
+				wiki.Image,
+				wiki.body,
+				a.VanityHouse
 			FROM artists_group AS a
-			LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID=a.RevisionID
+				LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID=a.RevisionID
 			WHERE a.ArtistID='$ArtistID' ";
 	}
 	$sql .= " GROUP BY a.ArtistID";
 	$DB->query($sql);
 
-	if($DB->record_count() == 0) {
+	if ($DB->record_count() == 0) {
 		print json_encode(array('status' => 'failure'));
 	}
 
@@ -78,7 +80,8 @@ if($Data) {
 // Requests
 $Requests = $Cache->get_value('artists_requests_'.$ArtistID);
 if (!is_array($Requests)) {
-	$DB->query("SELECT
+	$DB->query("
+		SELECT
 			r.ID,
 			r.CategoryID,
 			r.Title,
@@ -94,7 +97,7 @@ if (!is_array($Requests)) {
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
 
-	if($DB->record_count() > 0) {
+	if ($DB->record_count() > 0) {
 		$Requests = $DB->to_array();
 	} else {
 		$Requests = array();
@@ -104,12 +107,13 @@ if (!is_array($Requests)) {
 $NumRequests = count($Requests);
 
 if (($Importances = $Cache->get_value('artist_groups_'.$ArtistID)) === false) {
-	$DB->query("SELECT
+	$DB->query("
+		SELECT
 			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
-			FROM torrents_artists AS ta
+		FROM torrents_artists AS ta
 			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-			WHERE ta.ArtistID='$ArtistID'
-			ORDER BY tg.Year DESC, tg.Name DESC");
+		WHERE ta.ArtistID='$ArtistID'
+		ORDER BY tg.Year DESC, tg.Name DESC");
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
 	$Cache->cache_value('artist_groups_'.$ArtistID, $Importances, 0);
@@ -129,38 +133,38 @@ $NumGroups = count($TorrentList);
 
 //Get list of used release types
 $UsedReleases = array();
-foreach($TorrentList as $GroupID=>$Group) {
-	if($Importances[$GroupID]['Importance'] == '2') {
+foreach ($TorrentList as $GroupID=>$Group) {
+	if ($Importances[$GroupID]['Importance'] == '2') {
 		$TorrentList[$GroupID]['ReleaseType'] = 1024;
 		$GuestAlbums = true;
 	}
-	if($Importances[$GroupID]['Importance'] == '3') {
+	if ($Importances[$GroupID]['Importance'] == '3') {
 		$TorrentList[$GroupID]['ReleaseType'] = 1023;
 		$RemixerAlbums = true;
 	}
-	if($Importances[$GroupID]['Importance'] == '4') {
+	if ($Importances[$GroupID]['Importance'] == '4') {
 		$TorrentList[$GroupID]['ReleaseType'] = 1022;
 		$ComposerAlbums = true;
 	}
-	if($Importances[$GroupID]['Importance'] == '7') {
+	if ($Importances[$GroupID]['Importance'] == '7') {
 		$TorrentList[$GroupID]['ReleaseType'] = 1021;
 		$ProducerAlbums = true;
 	}
-	if(!in_array($TorrentList[$GroupID]['ReleaseType'], $UsedReleases)) {
+	if (!in_array($TorrentList[$GroupID]['ReleaseType'], $UsedReleases)) {
 		$UsedReleases[] = $TorrentList[$GroupID]['ReleaseType'];
 	}
 }
 
-if(!empty($GuestAlbums)) {
+if (!empty($GuestAlbums)) {
 	$ReleaseTypes[1024] = "Guest Appearance";
 }
-if(!empty($RemixerAlbums)) {
+if (!empty($RemixerAlbums)) {
 	$ReleaseTypes[1023] = "Remixed By";
 }
-if(!empty($ComposerAlbums)) {
+if (!empty($ComposerAlbums)) {
 	$ReleaseTypes[1022] = "Composition";
 }
-if(!empty($ProducerAlbums)) {
+if (!empty($ProducerAlbums)) {
 	$ReleaseTypes[1021] = "Produced By";
 }
 
@@ -176,8 +180,8 @@ foreach ($TorrentList as $GroupID => $Group) {
 	$TagList = explode(' ',str_replace('_','.',$TagList));
 
 	// $Tags array is for the sidebar on the right
-	foreach($TagList as $Tag) {
-		if(!isset($Tags[$Tag])) {
+	foreach ($TagList as $Tag) {
+		if (!isset($Tags[$Tag])) {
 			$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
 		} else {
 			$Tags[$Tag]['count']++;
@@ -231,17 +235,17 @@ foreach ($TorrentList as $GroupID => $Group) {
 }
 
 $JsonSimilar = array();
-if(empty($SimilarArray)) {
+if (empty($SimilarArray)) {
 	$DB->query("
 		SELECT
-		s2.ArtistID,
-		a.Name,
-		ass.Score,
-		ass.SimilarID
+			s2.ArtistID,
+			a.Name,
+			ass.Score,
+			ass.SimilarID
 		FROM artists_similar AS s1
-		JOIN artists_similar AS s2 ON s1.SimilarID=s2.SimilarID AND s1.ArtistID!=s2.ArtistID
-		JOIN artists_similar_scores AS ass ON ass.SimilarID=s1.SimilarID
-		JOIN artists_group AS a ON a.ArtistID=s2.ArtistID
+			JOIN artists_similar AS s2 ON s1.SimilarID=s2.SimilarID AND s1.ArtistID!=s2.ArtistID
+			JOIN artists_similar_scores AS ass ON ass.SimilarID=s1.SimilarID
+			JOIN artists_group AS a ON a.ArtistID=s2.ArtistID
 		WHERE s1.ArtistID='$ArtistID'
 		ORDER BY ass.Score DESC
 		LIMIT 30

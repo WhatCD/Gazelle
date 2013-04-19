@@ -74,7 +74,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 		} else {
 			// Either his key has expired, or he hasn't requested a pass change at all
 
-			if (strtotime($Expires)<time() && $UserID) {
+			if (strtotime($Expires) < time() && $UserID) {
 				// If his key has expired, clear all the reset information
 				$DB->query("UPDATE
 					users_info

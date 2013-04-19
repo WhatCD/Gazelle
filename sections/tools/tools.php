@@ -69,8 +69,10 @@ View::show_header('Staff Tools');
 	<div class="permission_container">
 		<table class="layout">
 			<tr class="colhead"><td>Misc</td></tr>
-
 <?	if (check_perms('users_mod')) { ?>
+			<tr><td><a href="tools.php?action=edit_tags">Batch tag editor</a></td></tr>
+<?	}
+	if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=manipulate_tree">Manipulate tree</a></td></tr>
 <?	} 
 	if (check_perms('admin_update_geoip')) { ?>

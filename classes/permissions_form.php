@@ -7,7 +7,7 @@
  ** user custom permissions form.											  **
  ********************************************************************************/
 
- $PermissionsArray = array(
+$PermissionsArray = array(
 	'site_leech' => 'Can leech (Does this work?).',
 	'site_upload' => 'Upload torrent access.',
 	'site_vote' => 'Request vote access.',
@@ -55,7 +55,7 @@
 	'users_edit_watch_hours' => 'Can edit contrib watch hours.',
 	'users_edit_reset_keys' => 'Can reset passkey/authkey.',
 	'users_edit_profiles' => 'Can edit anyone\'s profile.',
- 	'users_view_friends' => 'Can view anyone\'s friends.',
+	'users_view_friends' => 'Can view anyone\'s friends.',
 	'users_reset_own_keys' => 'Can reset own passkey/authkey.',
 	'users_edit_password' => 'Can change passwords.',
 	'users_promote_below' => 'Can promote users to below current level.',
@@ -103,17 +103,17 @@
 	'admin_login_watch' => 'Can manage login watch.',
 	'admin_manage_wiki' => 'Can manage wiki access.',
 	'admin_update_geoip' => 'Can update geoIP data.',
- 	'site_collages_recover' => 'Can recover \'deleted\' collages.',
- 	'torrents_add_artist' => 'Can add artists to any group.',
- 	'edit_unknowns' => 'Can edit unknown release information.',
- 	'forums_polls_create' => 'Can create polls in the forums.',
- 	'forums_polls_moderate' => 'Can feature and close polls.',
+	'site_collages_recover' => 'Can recover \'deleted\' collages.',
+	'torrents_add_artist' => 'Can add artists to any group.',
+	'edit_unknowns' => 'Can edit unknown release information.',
+	'forums_polls_create' => 'Can create polls in the forums.',
+	'forums_polls_moderate' => 'Can feature and close polls.',
 	'project_team' => 'Is part of the project team.',
 	'torrents_edit_vanityhouse' => 'Can mark groups as part of Vanity House.',
 	'artist_edit_vanityhouse' => 'Can mark artists as part of Vanity House.',
 	'site_tag_aliases_read' => 'Can view the list of tag aliases.'
 
- );
+);
 
 function permissions_form(){ ?>
 <div class="permissions">

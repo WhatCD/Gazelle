@@ -1,7 +1,6 @@
 <?
-
 //calculate ratio
-//returns 0 for DNE and -1 for infiinity, because we dont want strings being returned for a numeric value in our java
+//returns 0 for DNE and -1 for infinity, because we don't want strings being returned for a numeric value in our java
 $Ratio = 0;
 if ($LoggedUser['BytesUploaded'] == 0 && $LoggedUser['BytesDownloaded'] == 0) {
 	$Ratio = 0;
@@ -23,7 +22,6 @@ if ($CurrentNews === false) {
 	$Cache->cache_value('news_latest_id', $CurrentNews, 0);
 }
 
-
 $NewMessages = $Cache->get_value('inbox_new_' . $LoggedUser['ID']);
 if ($NewMessages === false) {
 	$DB->query("SELECT COUNT(UnRead) FROM pm_conversations_users WHERE UserID='" . $LoggedUser['ID'] . "' AND UnRead = '1' AND InInbox = '1'");
@@ -36,7 +34,7 @@ if (check_perms('site_torrents_notify')) {
 	if ($NewNotifications === false) {
 		$DB->query("SELECT COUNT(UserID) FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]' AND UnRead='1'");
 		list($NewNotifications) = $DB->next_record();
-		/* if($NewNotifications && !check_perms('site_torrents_notify')) {
+		/* if ($NewNotifications && !check_perms('site_torrents_notify')) {
 				$DB->query("DELETE FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]'");
 				$DB->query("DELETE FROM users_notify_filters WHERE UserID='$LoggedUser[ID]'");
 		} */
@@ -78,16 +76,17 @@ if ($NewSubscriptions === false) {
 		$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 		$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 	}
-	$DB->query("SELECT COUNT(s.TopicID)
-                FROM users_subscriptions AS s
-                        JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
-                        JOIN forums_topics AS t ON l.TopicID = t.ID
-                        JOIN forums AS f ON t.ForumID = f.ID
-                WHERE (f.MinClassRead <= " . $LoggedUser['Class'] . " OR f.ID IN ('$PermittedForums'))
-                        AND l.PostID < t.LastPostID
-                        AND s.UserID = " . $LoggedUser['ID'] .
+	$DB->query("
+		SELECT COUNT(s.TopicID)
+		FROM users_subscriptions AS s
+			JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
+			JOIN forums_topics AS t ON l.TopicID = t.ID
+			JOIN forums AS f ON t.ForumID = f.ID
+		WHERE (f.MinClassRead <= " . $LoggedUser['Class'] . " OR f.ID IN ('$PermittedForums'))
+			AND l.PostID < t.LastPostID
+			AND s.UserID = " . $LoggedUser['ID'] .
 		(!empty($RestrictedForums) ? "
-                        AND f.ID NOT IN ('" . $RestrictedForums . "')" : ""));
+			AND f.ID NOT IN ('" . $RestrictedForums . "')" : ''));
 	list($NewSubscriptions) = $DB->next_record();
 	$Cache->cache_value('subscriptions_user_new_' . $LoggedUser['ID'], $NewSubscriptions, 0);
 }

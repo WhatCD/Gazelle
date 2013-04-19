@@ -215,7 +215,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 		Tools::warn_user($UploaderID, $WarnLength, $Reason);
 	} else {
 		//This is a bitch for people that don't warn but do other things, it makes me sad.
-		$AdminComment = "";
+		$AdminComment = '';
 		if($Upload) {
 			//They removed upload
 			$AdminComment .= "Upload privileges removed by ".$LoggedUser['Username'];
@@ -237,9 +237,9 @@ if($DB->affected_rows() > 0 || !$Report) {
 	//PM
 	if($Escaped['uploader_pm'] || $Warning > 0 || isset($Escaped['delete']) || $SendPM) {
 		if(isset($Escaped['delete'])) {
-			$PM = "[url=http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]Your above torrent[/url] was reported and has been deleted.\n\n";
+			$PM = '[url=https://'.SSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]Your above torrent[/url] was reported and has been deleted.\n\n";
 		} else {
-			$PM = "[url=http://".NONSSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]Your above torrent[/url] was reported but not deleted.\n\n";
+			$PM = '[url=https://'.SSL_SITE_URL."/torrents.php?torrentid=".$TorrentID."]Your above torrent[/url] was reported but not deleted.\n\n";
 		}
 
 		$Preset = $ResolveType['resolve_options']['pm'];
@@ -249,7 +249,7 @@ if($DB->affected_rows() > 0 || !$Report) {
 		}
 
 		if($Warning > 0) {
-			$PM .= "\nThis has resulted in a [url=http://".NONSSL_SITE_URL."/wiki.php?action=article&amp;id=218]".$Warning." week warning.[/url]\n";
+			$PM .= "\nThis has resulted in a [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;id=218]".$Warning." week warning.[/url]\n";
 		}
 
 		if($Upload) {

@@ -22,7 +22,7 @@ if (
 
 $User = (int)$_GET['user'];
 
-if(!$Enabled = $Cache->get_value('enabled_'.$User)){
+if (!$Enabled = $Cache->get_value('enabled_'.$User)) {
 	require(SERVER_ROOT.'/classes/class_mysql.php');
 	$DB=NEW DB_MYSQL; //Load the database wrapper
 	$DB->query("SELECT Enabled FROM users_main WHERE ID='$User'");
@@ -40,7 +40,7 @@ if (md5($User.RSS_HASH.$_GET['passkey']) != $_GET['auth'] || $Enabled != 1) {
 }
 
 $Feed->open_feed();
-switch($_GET['feed']) {
+switch ($_GET['feed']) {
 	case 'feed_news':
 		include(SERVER_ROOT.'/classes/class_text.php');
 		$Text = new TEXT;

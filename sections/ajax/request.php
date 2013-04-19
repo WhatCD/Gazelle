@@ -1,11 +1,10 @@
 <?
 
-
 $RequestTax = 0.1;
 
 // Minimum and default amount of upload to remove from the user when they vote.
 // Also change in static/functions/requests.js
-$MinimumVote = 20*1024*1024;
+$MinimumVote = 20 * 1024 * 1024;
 
 /*
  * This is the page that displays the request to the end user after being created.
@@ -13,7 +12,7 @@ $MinimumVote = 20*1024*1024;
 
 include(SERVER_ROOT.'/sections/requests/functions.php');
 
- // Bookmarks::has_bookmarked()
+// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
@@ -96,7 +95,7 @@ if ($CategoryName == 'Music') {
 //Votes time
 $RequestVotes = get_votes_array($RequestID);
 $VoteCount = count($RequestVotes['Voters']);
-$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == "Music" && $Year == 0)));
+$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0)));
 $UserCanEdit = (!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2);
 $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
@@ -121,7 +120,7 @@ if ($CategoryName == "Music") {
 
 $JsonTopContributors = array();
 $VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
-for($i = 0; $i < $VoteMax; $i++) {
+for ($i = 0; $i < $VoteMax; $i++) {
 	$User = array_shift($RequestVotes['Voters']);
 	$JsonTopContributors[] = array(
 		'userId' => (int) $User['UserID'],

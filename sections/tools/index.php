@@ -1,17 +1,17 @@
 <?
 /*****************************************************************
- Tools switch center
+	Tools switch center
 
- This page acts as a switch for the tools pages.
+	This page acts as a switch for the tools pages.
 
- TODO!
- -Unify all the code standards and file names (tool_list.php,tool_add.php,tool_alter.php)
+	TODO!
+	-Unify all the code standards and file names (tool_list.php,tool_add.php,tool_alter.php)
 
  *****************************************************************/
 
 if (isset($argv[1])) {
-	if ($argv[1] == "cli_sandbox") {
-		include("misc/cli_sandbox.php");
+	if ($argv[1] == 'cli_sandbox') {
+		include('misc/cli_sandbox.php');
 		die();
 	}
 

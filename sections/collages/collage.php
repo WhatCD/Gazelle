@@ -7,7 +7,7 @@ function compare($X, $Y){
 	return($Y['count'] - $X['count']);
 }
 
- // Bookmarks::has_bookmarked()
+// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 
 $Text = new TEXT;
@@ -30,8 +30,8 @@ if ($Data) {
 	$DB->query("SELECT Name, Description, UserID, Deleted, CategoryID, Locked, MaxGroups, MaxGroupsPerUser FROM collages WHERE ID='$CollageID'");
 	if ($DB->record_count() > 0) {
 		list($Name, $Description, $CreatorID, $Deleted, $CollageCategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser) = $DB->next_record();
-		$TorrentList='';
-		$CollageList='';
+		$TorrentList = '';
+		$CollageList = '';
 	} else {
 		$Deleted = '1';
 	}
@@ -258,7 +258,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
+		<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : '' ?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
@@ -279,7 +279,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 	}
 	$DisplayName .= $GroupName;
 	if ($GroupYear > 0) {
-		$DisplayName = $DisplayName. ' ['. $GroupYear .']';
+		$DisplayName = $DisplayName. " [$GroupYear]";
 	}
 ?>
 		<li class="image_group_<?=$GroupID?>">
@@ -296,7 +296,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 			</a>
 		</li>
 <?
-	$Collage[]=ob_get_clean();
+	$Collage[] = ob_get_clean();
 }
 
 if (!check_perms('site_collages_delete') && ($Locked || ($MaxGroups > 0 && $NumGroups >= $MaxGroups) || ($MaxGroupsPerUser > 0 && $NumGroupsByUser >= $MaxGroupsPerUser))) {
@@ -331,18 +331,18 @@ View::show_header($Name,'browse,collage,bbcode,voting,jquery,recommend');
 		<h2><?=$Name?></h2>
 		<div class="linkbox">
 			<a href="collages.php" class="brackets">List of collages</a>
-<? if (check_perms('site_collages_create')) { ?>
+<?	if (check_perms('site_collages_create')) { ?>
 			<a href="collages.php?action=new" class="brackets">New collage</a>
-<? } ?>
+<?	} ?>
 			<br /><br />
-<? if (check_perms('site_collages_subscribe')) { ?>
+<?	if (check_perms('site_collages_subscribe')) { ?>
 			<a href="#" id="subscribelink<?=$CollageID?>" class="brackets" onclick="CollageSubscribe(<?=$CollageID?>);return false;"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
-<? }
-   if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
+<?	}
+	if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
 			<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>" class="brackets">Edit description</a>
-<? } else { ?>
+<?	} else { ?>
 			<span class="brackets">Locked</span>
-<? }
+<?	}
 	if (Bookmarks::has_bookmarked('collage', $CollageID)) {
 ?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>,'Bookmark');return false;">Remove bookmark</a>
@@ -350,20 +350,19 @@ View::show_header($Name,'browse,collage,bbcode,voting,jquery,recommend');
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>,'Remove bookmark');return false;">Bookmark</a>
 <?	}
 ?>
-<!-- <a href="#" id="recommend" class="brackets">Recommend</a>
- -->
+<!-- <a href="#" id="recommend" class="brackets">Recommend</a> -->
 <?
-if (check_perms('site_collages_manage') && !$Locked) { ?>
+	if (check_perms('site_collages_manage') && !$Locked) { ?>
 			<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>" class="brackets">Manage torrents</a>
-<? } ?>
+<?	} ?>
 			<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>" class="brackets">Report collage</a>
-<? if (check_perms('site_collages_delete') || $CreatorID == $LoggedUser['ID']) { ?>
+<?	if (check_perms('site_collages_delete') || $CreatorID == $LoggedUser['ID']) { ?>
 			<a href="collages.php?action=delete&amp;collageid=<?=$CollageID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets" onclick="return confirm('Are you sure you want to delete this collage?');">Delete</a>
-<? } ?>
+<?	} ?>
 		</div>
-    </div>
+	</div>
 <? /* Misc::display_recommend($CollageID, "collage"); */ ?>
-    <div class="sidebar">
+	<div class="sidebar">
 		<div class="box box_category">
 			<div class="head"><strong>Category</strong></div>
 			<div class="pad"><a href="collages.php?action=search&amp;cats[<?=(int)$CollageCategoryID?>]=1"><?=$CollageCats[(int)$CollageCategoryID]?></a></div>
@@ -395,20 +394,20 @@ if (check_perms('zip_downloader')){
 						<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 						<span class="float_left"><?=$ZIPOptions[$ListItem]['2']?></span>
 						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" class="float_right brackets">X</a></span>
-						<br style="clear:all;" />
+						<br style="clear: all;" />
 					</li>
 <? } ?>
 				</ul>
 				<select id="formats" style="width:180px">
 <?
 $OpenGroup = false;
-$LastGroupID=-1;
+$LastGroupID = -1;
 
 foreach ($ZIPOptions as $Option) {
 	list($GroupID,$OptionID,$OptName) = $Option;
 
-	if ($GroupID!=$LastGroupID) {
-		$LastGroupID=$GroupID;
+	if ($GroupID != $LastGroupID) {
+		$LastGroupID = $GroupID;
 		if ($OpenGroup) { ?>
 					</optgroup>
 <?		} ?>
@@ -446,7 +445,7 @@ foreach ($ZIPOptions as $Option) {
 		<div class="box box_tags">
 			<div class="head"><strong>Top tags</strong></div>
 			<div class="pad">
-				<ol style="padding-left:5px;">
+				<ol style="padding-left: 5px;">
 <?
 				Tags::format_top(5, 'collages.php?action=search&amp;tags=');
 ?>
@@ -457,7 +456,7 @@ foreach ($ZIPOptions as $Option) {
 		<div class="box box_artists">
 			<div class="head"><strong>Top artists</strong></div>
 			<div class="pad">
-				<ol style="padding-left:5px;">
+				<ol style="padding-left: 5px;">
 <?
 uasort($TopArtists, 'compare');
 $i = 0;
@@ -532,7 +531,7 @@ if (empty($CommentList)) {
 		um.Username,
 		cc.Time
 		FROM collages_comments AS cc
-		LEFT JOIN users_main AS um ON um.ID=cc.UserID
+			LEFT JOIN users_main AS um ON um.ID=cc.UserID
 		WHERE CollageID='$CollageID'
 		ORDER BY ID DESC LIMIT 15");
 	$CommentList = $DB->to_array(false, MYSQLI_NUM);

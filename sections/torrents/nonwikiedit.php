@@ -58,7 +58,7 @@ if ($OldYear != $Year) {
 }
 
 $DB->query("SELECT ID FROM torrents WHERE GroupID='$GroupID'");
-while(list($TorrentID) = $DB->next_record()) {
+while (list($TorrentID) = $DB->next_record()) {
 	$Cache->delete_value('torrent_download_'.$TorrentID);
 }
 Torrents::update_hash($GroupID);

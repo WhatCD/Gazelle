@@ -6,7 +6,7 @@ function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 
- // Bookmarks::has_bookmarked()
+// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
@@ -501,8 +501,7 @@ if (check_perms('site_torrents_notify')) {
 <?
 	}
 ?>
-<!--	<a href="#" id="recommend" class="brackets">Recommend</a>
- -->
+<!--	<a href="#" id="recommend" class="brackets">Recommend</a> -->
 <?
 	if (check_perms('site_edit_wiki')) {
 ?>

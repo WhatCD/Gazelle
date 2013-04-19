@@ -2,13 +2,19 @@
 $GroupID = $_GET['groupid'];
 $TorrentID = $_GET['torrentid'];
 
-if(!is_number($GroupID) || !is_number($TorrentID)) { error(0); }
+if (!is_number($GroupID) || !is_number($TorrentID)) {
+	error(0);
+}
 
 $DB->query("SELECT last_action, LastReseedRequest, UserID, Time FROM torrents WHERE ID='$TorrentID'");
 list($LastActive, $LastReseedRequest, $UploaderID, $UploadedTime) = $DB->next_record();
 
-if(time()-strtotime($LastReseedRequest)<864000) { error("There was already a re-seed request for this torrent within the past 10 days."); }
-if ($LastActive == '0000-00-00 00:00:00' || time() - strtotime($LastActive) < 345678) { error(403); }
+if (time() - strtotime($LastReseedRequest) < 864000) {
+	error('There was already a re-seed request for this torrent within the past 10 days.');
+}
+if ($LastActive == '0000-00-00 00:00:00' || time() - strtotime($LastActive) < 345678) {
+	error(403);
+}
 
 $DB->query("UPDATE torrents SET LastReseedRequest=NOW() WHERE ID='$TorrentID'");
 
@@ -27,14 +33,16 @@ if($DB->record_count()>0) {
 		$UserID = $User['uid'];
 
 		$DB->query("SELECT UserID FROM top_snatchers WHERE UserID='$UserID'");
-		if($DB->record_count()>0) { continue; }
+		if ($DB->record_count() > 0) {
+			continue;
+		}
 
 		$UserInfo = Users::user_info($UserID);
 		$Username = $UserInfo['Username'];
 		$TimeStamp = $User['tstamp'];
 		$Request = "Hi $Username,
 
-The user [url=http://".SITE_URL."/user.php?id=$LoggedUser[ID]]$LoggedUser[Username][/url] has requested a re-seed for the torrent [url=http://".SITE_URL."/torrents.php?id=$GroupID&torrentid=$TorrentID]".$Name."[/url], which you snatched on ".date('M d Y', $TimeStamp).". The torrent is now un-seeded, and we need your help to resurrect it!
+The user [url=https://".SSL_SITE_URL."/user.php?id=$LoggedUser[ID]]$LoggedUser[Username][/url] has requested a re-seed for the torrent [url=https://".SSL_SITE_URL."/torrents.php?id=$GroupID&torrentid=$TorrentID]".$Name."[/url], which you snatched on ".date('M d Y', $TimeStamp).". The torrent is now un-seeded, and we need your help to resurrect it!
 
 The exact process for re-seeding a torrent is slightly different for each client, but the concept is the same. The idea is to download the .torrent file and open it in your client, and point your client to the location where the data files are, then initiate a hash check.
 
@@ -49,7 +57,7 @@ Thanks!";
 
 	$Request = "Hi $Username,
 
-The user [url=http://".SITE_URL."/user.php?id=$LoggedUser[ID]]$LoggedUser[Username][/url] has requested a re-seed for the torrent [url=http://".SITE_URL."/torrents.php?id=$GroupID&torrentid=$TorrentID]".$Name."[/url], which you uploaded on ".date('M d Y', strtotime($UploadedTime)).". The torrent is now un-seeded, and we need your help to resurrect it!
+The user [url=https://".SSL_SITE_URL."/user.php?id=$LoggedUser[ID]]$LoggedUser[Username][/url] has requested a re-seed for the torrent [url=https://".SSL_SITE_URL."/torrents.php?id=$GroupID&torrentid=$TorrentID]".$Name."[/url], which you uploaded on ".date('M d Y', strtotime($UploadedTime)).". The torrent is now un-seeded, and we need your help to resurrect it!
 
 The exact process for re-seeding a torrent is slightly different for each client, but the concept is the same. The idea is to download the .torrent file and open it in your client, and point your client to the location where the data files are, then initiate a hash check.
 

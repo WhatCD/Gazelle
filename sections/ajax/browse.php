@@ -351,7 +351,7 @@ if (isset($_GET['haslog']) && $_GET['haslog']!=='') {
 		$SphQL->where('logscore', 100);
 		$SphQLTor->where('logscore', 100);
 		$Filtered = true;
- 	} elseif ($_GET['haslog'] < 0) {
+	} elseif ($_GET['haslog'] < 0) {
 		// Exclude torrents with log score equal to 100
 		$SphQL->where('logscore', 100, true);
 		$SphQL->where('haslog', 1);
@@ -561,31 +561,31 @@ foreach ($Results as $Result) {
 	}
 
 	$TagList = explode(' ',str_replace('_','.',$GroupInfo['TagList']));
-    $JsonArtists = array();
+	$JsonArtists = array();
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 		unset($ExtendedArtists[2]);
 		unset($ExtendedArtists[3]);
 		$DisplayName = Artists::display_artists($ExtendedArtists, false, false, true);
-                    foreach ($ExtendedArtists[1] as $Artist) {
-                        $JsonArtists[] = array(
-                            'id' => (int) $Artist['id'],
-                            'name' => $Artist['name'],
-                            'aliasid' => (int) $Artist['id']
-                            );
-                    }
+		foreach ($ExtendedArtists[1] as $Artist) {
+			$JsonArtists[] = array(
+							'id' => (int) $Artist['id'],
+							'name' => $Artist['name'],
+							'aliasid' => (int) $Artist['id']
+							);
+		}
 	} elseif (!empty($Artists)) {
 		$DisplayName = Artists::display_artists(array(1=>$Artists), false, false, true);
-                    foreach ($Artists as $Artist) {
-                        $JsonArtists[] = array(
-                            'id' => (int) $Artist['id'],
-                            'name' => $Artist['name'],
-                            'aliasid' => (int) $Artist['id']
-                            );
-                    }
+		foreach ($Artists as $Artist) {
+			$JsonArtists[] = array(
+							'id' => (int) $Artist['id'],
+							'name' => $Artist['name'],
+							'aliasid' => (int) $Artist['id']
+							);
+		}
 	} else {
-		$DisplayName='';
+		$DisplayName = '';
 	}
-	if ($GroupResults && (count($Torrents)>1 || isset($GroupedCategories[$CategoryID-1]))) {
+	if ($GroupResults && (count($Torrents) > 1 || isset($GroupedCategories[$CategoryID-1]))) {
 		// These torrents are in a group
 		$LastRemasterYear = '-';
 		$LastRemasterTitle = '';
@@ -702,7 +702,7 @@ print
 			'status' => 'success',
 			'response' => array(
 				'currentPage' => intval($Page),
-				'pages' => ceil($TorrentCount/TORRENTS_PER_PAGE),
+				'pages' => ceil($TorrentCount / TORRENTS_PER_PAGE),
 				'results' => $JsonGroups
 			)
 		)

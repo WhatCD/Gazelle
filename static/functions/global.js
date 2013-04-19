@@ -1,7 +1,11 @@
 function toggleChecks(formElem,masterElem) {
-	if (masterElem.checked) { checked=true; } else { checked=false; }
-	for(s=0; s<$('#'+formElem).raw().elements.length; s++) {
-		if ($('#'+formElem).raw().elements[s].type=="checkbox") {
+	if (masterElem.checked) {
+		checked = true;
+	} else {
+		checked = false;
+	}
+	for (s = 0; s < $('#'+formElem).raw().elements.length; s++) {
+		if ($('#'+formElem).raw().elements[s].type == "checkbox") {
 			$('#'+formElem).raw().elements[s].checked=checked;
 		}
 	}
@@ -10,23 +14,23 @@ function toggleChecks(formElem,masterElem) {
 //Lightbox stuff
 
 /*
- *  If loading from a thumbnail the lightbox is shown first with a "loading" screen
- *  while the full size image loads, then the html of the lightbox is replaced with the image.
+ *  If loading from a thumbnail, the lightbox is shown first with a "loading" screen
+ *  while the full size image loads, then the HTML of the lightbox is replaced with the image.
  */
 
 var lightbox = {
 	init: function (image, size) {
-		if(typeof(image)=='string') {
+		if (typeof(image) == 'string') {
 			$('#lightbox').show().listen('click',lightbox.unbox).raw().innerHTML =
-				'<p size="7" style="color:gray;font-size:50px">Loading...<p>';
-                        $('#curtain').show().listen('click',lightbox.unbox);
-                        var src = image;
-                        image = new Image();
+				'<p size="7" style="color: gray; font-size: 50px;">Loading...<p>';
+			$('#curtain').show().listen('click',lightbox.unbox);
+			var src = image;
+			image = new Image();
 			image.onload = function() {
 				lightbox.box_async(image);
 			}
-                        image.src = src;
-                }
+			image.src = src;
+		}
 		if (image.naturalWidth === undefined) {
 			var tmp = document.createElement('img');
 			tmp.style.visibility = 'hidden';
@@ -40,23 +44,23 @@ var lightbox = {
 	},
 	box: function (image) {
 		var hasA = false;
-		if(image.parentNode != null && image.parentNode.tagName.toUpperCase() == 'A') {
+		if (image.parentNode != null && image.parentNode.tagName.toUpperCase() == 'A') {
 			hasA = true;
 		}
-		if(!hasA) {
+		if (!hasA) {
 			$('#lightbox').show().listen('click',lightbox.unbox).raw().innerHTML = '<img src="' + image.src + '" />';
 			$('#curtain').show().listen('click',lightbox.unbox);
 		}
 	},
 	box_async: function (image) {
-                var hasA = false;
-                if(image.parentNode != null && image.parentNode.tagName.toUpperCase() == 'A') {
-                        hasA = true;
-                }
-                if(!hasA) {
-                         $('#lightbox').raw().innerHTML = '<img src="' + image.src + '" />';
-                }
-        },
+		var hasA = false;
+		if (image.parentNode != null && image.parentNode.tagName.toUpperCase() == 'A') {
+			hasA = true;
+		}
+		if (!hasA) {
+			$('#lightbox').raw().innerHTML = '<img src="' + image.src + '" />';
+		}
+	},
 	unbox: function (data) {
 		$('#curtain').hide();
 		$('#lightbox').hide().raw().innerHTML = '';
@@ -81,14 +85,14 @@ function caps_check(e) {
 */
 
 function hexify(str) {
-   str = str.replace(/rgb\(|\)/g, "").split(",");
-   str[0] = parseInt(str[0], 10).toString(16).toLowerCase();
-   str[1] = parseInt(str[1], 10).toString(16).toLowerCase();
-   str[2] = parseInt(str[2], 10).toString(16).toLowerCase();
-   str[0] = (str[0].length == 1) ? '0' + str[0] : str[0];
-   str[1] = (str[1].length == 1) ? '0' + str[1] : str[1];
-   str[2] = (str[2].length == 1) ? '0' + str[2] : str[2];
-   return (str.join(""));
+	str = str.replace(/rgb\(|\)/g, "").split(",");
+	str[0] = parseInt(str[0], 10).toString(16).toLowerCase();
+	str[1] = parseInt(str[1], 10).toString(16).toLowerCase();
+	str[2] = parseInt(str[2], 10).toString(16).toLowerCase();
+	str[0] = (str[0].length == 1) ? '0' + str[0] : str[0];
+	str[1] = (str[1].length == 1) ? '0' + str[1] : str[1];
+	str[2] = (str[2].length == 1) ? '0' + str[2] : str[2];
+	return (str.join(""));
 }
 
 function resize(id) {
@@ -106,9 +110,9 @@ function add_selection() {
 		var listitem = document.createElement("li");
 		listitem.id = 'list' + selected.value;
 		listitem.innerHTML = '						<input type="hidden" name="list[]" value="'+selected.value+'" /> ' +
-'						<span style="float:left;">'+selected.innerHTML+'</span>' +
-'						<a href="#" onclick="remove_selection(\''+selected.value+'\');return false;" style="float:right;" class="brackets">X</a>' +
-'						<br style="clear:all;" />';
+'						<span style="float: left;">'+selected.innerHTML+'</span>' +
+'						<a href="#" onclick="remove_selection(\''+selected.value+'\');return false;" style="float: right;" class="brackets">X</a>' +
+'						<br style="clear: all;" />';
 		$('#list').raw().appendChild(listitem);
 		$('#opt' + selected.value).raw().disabled = true;
 	}

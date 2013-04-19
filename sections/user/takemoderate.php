@@ -351,17 +351,17 @@ if ($Visible != $Cur['Visible'] && check_perms('users_make_invisible')) {
 }
 
 if ($Uploaded != $Cur['Uploaded'] && $Uploaded != $_POST['OldUploaded'] && (check_perms('users_edit_ratio')
- || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
-	$UpdateSet[] = "Uploaded='".$Uploaded."'";
-	$EditSummary[] = "uploaded changed from ".Format::get_size($Cur['Uploaded'])." to ".Format::get_size($Uploaded);
-	$Cache->delete_value('users_stats_'.$UserID);
+	|| (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
+		$UpdateSet[] = "Uploaded='".$Uploaded."'";
+		$EditSummary[] = "uploaded changed from ".Format::get_size($Cur['Uploaded'])." to ".Format::get_size($Uploaded);
+		$Cache->delete_value('users_stats_'.$UserID);
 }
 
 if ($Downloaded != $Cur['Downloaded'] && $Downloaded != $_POST['OldDownloaded'] && (check_perms('users_edit_ratio')
- || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
-	$UpdateSet[] = "Downloaded='".$Downloaded."'";
-	$EditSummary[] = "downloaded changed from ".Format::get_size($Cur['Downloaded'])." to ".Format::get_size($Downloaded);
-	$Cache->delete_value('users_stats_'.$UserID);
+	|| (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
+		$UpdateSet[] = "Downloaded='".$Downloaded."'";
+		$EditSummary[] = "downloaded changed from ".Format::get_size($Cur['Downloaded'])." to ".Format::get_size($Downloaded);
+		$Cache->delete_value('users_stats_'.$UserID);
 }
 
 if ($FLTokens != $Cur['FLTokens'] && (check_perms('users_edit_ratio') || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {

@@ -539,13 +539,13 @@ class SphinxClient
 	/// enter mbstring workaround mode
 	function _MBPush ()
 	{
-		$this->_mbenc = "";
+		$this->_mbenc = '';
 		if ( ini_get ( "mbstring.func_overload" ) & 2 )
 		{
 			$this->_mbenc = mb_internal_encoding();
 			mb_internal_encoding ( "latin1" );
 		}
-    }
+	}
 
 	/// leave mbstring workaround mode
 	function _MBPop ()
@@ -931,17 +931,17 @@ class SphinxClient
 	/// clear groupby settings (for multi-queries)
 	function ResetGroupBy ()
 	{
-		$this->_groupby		= "";
+		$this->_groupby		= '';
 		$this->_groupfunc	= SPH_GROUPBY_DAY;
 		$this->_groupsort	= "@group desc";
-		$this->_groupdistinct= "";
+		$this->_groupdistinct= '';
 	}
 
 	/// clear all attribute value overrides (for multi-queries)
 	function ResetOverrides ()
-    {
-    	$this->_overrides = array ();
-    }
+	{
+		$this->_overrides = array ();
+	}
 
 	//////////////////////////////////////////////////////////////////////////////
 

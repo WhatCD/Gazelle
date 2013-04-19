@@ -5,11 +5,11 @@ if (!check_perms('site_collages_renamepersonal')) {
 	$ChangeJS = " onchange=\"if ( this.options[this.selectedIndex].value == '0') { $('#namebox').hide(); $('#personal').show(); } else { $('#namebox').show(); $('#personal').hide(); }\"";
 }
 
-$Name        = $_REQUEST['name'];
-$Category    = $_REQUEST['cat'];
+$Name = $_REQUEST['name'];
+$Category = $_REQUEST['cat'];
 $Description = $_REQUEST['descr'];
-$Tags        = $_REQUEST['tags'];
-$Error       = $_REQUEST['err'];
+$Tags = $_REQUEST['tags'];
+$Error = $_REQUEST['err'];
 
 if (!check_perms('site_collages_renamepersonal') && $Category === '0') {
 	$NoName = true;
@@ -20,7 +20,8 @@ if (!check_perms('site_collages_renamepersonal') && $Category === '0') {
 if (!empty($Error)) { ?>
 	<div class="save_message error"><?=$Error?></div>
 	<br />
-<? } ?>
+<?
+} ?>
 	<form class="create_form" name="collage" action="collages.php" method="post">
 		<input type="hidden" name="action" value="new_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -28,8 +29,8 @@ if (!empty($Error)) { ?>
 			<tr id="collagename">
 				<td class="label"><strong>Name</strong></td>
 				<td>
-					<input type="text" class="<?=$NoName?'hidden':''?>" name="name" size="60" id="namebox" value="<?=display_str($Name)?>" />
-					<span id="personal" class="<?=$NoName?'':'hidden'?>" style="font-style: oblique"><strong><?=$LoggedUser['Username']?>'s personal collage</strong></span>
+					<input type="text"<?=$NoName ? ' class="hidden"' : '' ?> name="name" size="60" id="namebox" value="<?=display_str($Name)?>" />
+					<span id="personal"<?=$NoName ? '' : ' class="hidden"' ?> style="font-style: oblique;"><strong><?=$LoggedUser['Username']?>'s personal collage</strong></span>
 				</td>
 			</tr>
 			<tr>
@@ -39,27 +40,30 @@ if (!empty($Error)) { ?>
 <?
 array_shift($CollageCats);
 
-foreach($CollageCats as $CatID=>$CatName) { ?>
-						<option value="<?=$CatID+1?>"<?=(($CatID+1 == $Category) ? ' selected="selected"' : '')?>><?=$CatName?></option>
-<? }
+foreach ($CollageCats as $CatID=>$CatName) : ?>
+						<option value="<?=$CatID + 1 ?>"<?=(($CatID + 1 == $Category) ? ' selected="selected"' : '')?>><?=$CatName?></option>
+<?
+endforeach;
+
 $DB->query("SELECT COUNT(ID) FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
 list($CollageCount) = $DB->next_record();
-if(($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
+if (($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
 						<option value="0"<?=(($Category === '0') ? ' selected="selected"' : '')?>>Personal</option>
-<? } ?>
+<?
+} ?>
 					</select>
 					<br />
 					<ul>
 						<li><strong>Theme</strong> - A collage containing releases that all relate to a certain theme (e.g. "Searching for the Perfect Beat", "Concept Albums", "Funky Groove", etc.).</li>
 						<li><strong>Genre introduction</strong> - A subjective introduction to a genre composed by our own users.</li>
-						<li><strong>Discography</strong> - A collage containing all the releases of an artist. Useful for keeping track of side-projects.</li>
+						<li><strong>Discography</strong> - A collage containing all the releases of an artist, which can be useful for keeping track of side projects.</li>
 						<li><strong>Label</strong> - A collage containing all the releases of a particular record label.</li>
 						<li><strong>Staff picks</strong> - A listing of recommendations picked by the staff on special occasions.</li>
-						<li><strong>Charts</strong> - Contains all the releases that comprise a certain type of chart (e.g. Billboard Top 100, Pitchfork Top 100, What.cd Top 10, etc.).</li>
+						<li><strong>Charts</strong> - Contains all the releases that comprise a certain type of chart (e.g. Billboard Top 100, Pitchfork Top 100, What.CD Top 10, etc.).</li>
 <?
-   if(($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
-						<li><strong>Personal</strong> - You can put whatever you want here.  It's your own personal collage.</li>
-<? } ?>
+	if (($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
+						<li><strong>Personal</strong> - You can put whatever you want here. It is your own personal collage.</li>
+<?	} ?>
 					</ul>
 				</td>
 			</tr>

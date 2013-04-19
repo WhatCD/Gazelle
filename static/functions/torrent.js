@@ -1,9 +1,9 @@
 function ChangeCategory(catid) {
-	if(catid == 1) {
+	if (catid == 1) {
 		$('#split_releasetype').show();
 		$('#split_artist').show();
 		$('#split_year').show();
-	} else if(catid == 4 || catid == 6) {
+	} else if (catid == 4 || catid == 6) {
 		$('#split_releasetype').hide();
 		$('#split_year').show();
 		$('#split_artist').hide();
@@ -16,15 +16,15 @@ function ChangeCategory(catid) {
 
 function ArtistManager() {
 	var GroupID = window.location.search.match(/[?&]id=(\d+)/);
-	if(typeof GroupID == 'undefined') {
+	if (typeof GroupID == 'undefined') {
 		return;
 	} else {
 		GroupID = GroupID[1];
 	}
 	var ArtistList;
-	if(!(ArtistList = $('#artist_list').raw())) {
+	if (!(ArtistList = $('#artist_list').raw())) {
 		return false;
-	} else if($('#artistmanager').raw()) {
+	} else if ($('#artistmanager').raw()) {
 		$('#artistmanager').toggle();
 		$('#artist_list').toggle();
 	} else {
@@ -58,7 +58,7 @@ function ArtistManager() {
 					importance = 7;
 					break;
 			}
-			if(elArtistList.children[i].children[0].tagName.toUpperCase() == 'A') {
+			if (elArtistList.children[i].children[0].tagName.toUpperCase() == 'A') {
 				var ArtistID = elArtistList.children[i].children[0].href.match(/[?&]id=(\d+)/)[1];
 				var elBox = document.createElement('input');
 				elBox.type = 'checkbox';
@@ -67,7 +67,7 @@ function ArtistManager() {
 				elBox.value = importance+';'+ArtistID;
 				elBox.onclick = function(e) { SelectArtist(e,this); };
 				elArtistList.children[i].insertBefore(elBox, elArtistList.children[i].children[0]);
-				if(importance == 1 || importance == 4 || importance == 6) {
+				if (importance == 1 || importance == 4 || importance == 6) {
 					MainArtistCount++;
 				}
 			}
@@ -161,11 +161,11 @@ function ArtistManager() {
 }
 
 function SelectArtist(e,obj) {
-	if(window.event) {
+	if (window.event) {
 		e = window.event;
 	}
 	EndBox = Number(obj.id.substr(17));
-	if(!e.shiftKey || typeof StartBox == 'undefined') {
+	if (!e.shiftKey || typeof StartBox == 'undefined') {
 		StartBox = Number(obj.id.substr(17));
 	}
 	Dir = (EndBox > StartBox ? 1 : -1);
@@ -181,19 +181,19 @@ function ArtistManagerSubmit() {
 	var Selection = new Array();
 	var MainSelectionCount = 0;
 	for(var i = 0, boxes = $('[name="artistmanager_box"]'); boxes.raw(i); i++) {
-		if(boxes.raw(i).checked) {
+		if (boxes.raw(i).checked) {
 			Selection.push(boxes.raw(i).value);
-			if(boxes.raw(i).value.substr(0,1) == '1') {
+			if (boxes.raw(i).value.substr(0,1) == '1') {
 				MainSelectionCount++;
 			}
 		}
 	}
-	if(Selection.length == 0 || ($('#manager_action').raw().value == 'delete' && !confirm('Are you sure you want to delete '+Selection.length+' artists from this group?'))) {
+	if (Selection.length == 0 || ($('#manager_action').raw().value == 'delete' && !confirm('Are you sure you want to delete '+Selection.length+' artists from this group?'))) {
 		return;
 	}
 	$('#artists_selection').raw().value = Selection.join(',');
-	if((($('#artists_importance').raw().value != 1 && $('#artists_importance').raw().value != 4 && $('#artists_importance').raw().value != 6) || $('#manager_action').raw().value == 'delete') && MainSelectionCount == MainArtistCount) {
-		if(!$('.error_message').raw()) {
+	if ((($('#artists_importance').raw().value != 1 && $('#artists_importance').raw().value != 4 && $('#artists_importance').raw().value != 6) || $('#manager_action').raw().value == 'delete') && MainSelectionCount == MainArtistCount) {
+		if (!$('.error_message').raw()) {
 			error_message('All groups need to have at least one main artist, composer, or DJ.');
 		}
 		$('.error_message').raw().scrollIntoView();
@@ -209,16 +209,16 @@ function ArtistManagerDelete() {
 }
 
 function Vote(amount, requestid) {
-	if(typeof amount == 'undefined') {
+	if (typeof amount == 'undefined') {
 		amount = parseInt($('#amount').raw().value);
 	}
-	if(amount == 0) {
+	if (amount == 0) {
 		 amount = 20 * 1024 * 1024;
 	}
 
 	var index;
 	var votecount;
-	if(!requestid) {
+	if (!requestid) {
 		requestid = $('#requestid').raw().value;
 		votecount = $('#votecount').raw();
 		index = false;
@@ -229,7 +229,7 @@ function Vote(amount, requestid) {
 	}
 
 	ajax.get('requests.php?action=takevote&id=' + requestid + '&auth=' + authkey + '&amount=' + amount, function (response) {
-			if(response == 'bankrupt') {
+			if (response == 'bankrupt') {
 				error_message("You do not have sufficient upload credit to add " + get_size(amount) + " to this request");
 				return;
 			} else if (response == 'dupesuccess') {
@@ -238,7 +238,7 @@ function Vote(amount, requestid) {
 				votecount.innerHTML = (parseInt(votecount.innerHTML)) + 1;
 			}
 
-			if($('#total_bounty').results() > 0) {
+			if ($('#total_bounty').results() > 0) {
 				totalBounty = parseInt($('#total_bounty').raw().value);
 				totalBounty += (amount * (1 - $('#request_tax').raw().value));
 				$('#total_bounty').raw().value = totalBounty;
