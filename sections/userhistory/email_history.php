@@ -86,9 +86,9 @@ $History = $DB->to_array();
 ?>
 	</tr>
 <?
-foreach ($History as $Key => $Values){
-	if (isset($History[$Key+1])) {
-		$Values['Time'] = $History[$Key+1]['Time'];
+foreach ($History as $Key => $Values) {
+	if (isset($History[$Key + 1])) {
+		$Values['Time'] = $History[$Key + 1]['Time'];
 	} else {
 		$Values['Time'] = $Joined;
 	}
@@ -99,7 +99,16 @@ foreach ($History as $Key => $Values){
 		<td><?=display_str($Values['IP'])?> (<?=display_str($Values['Code'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Values['IP'])?>" class="brackets" title="Search">S</a></td>
 <?
 	if ($UsersOnly == 1) {
-		$ueQuery = $DB->query("SELECT ue.UserID, Username, ue.Time, ue.IP FROM users_history_emails AS ue, users_main WHERE ue.Email = '".db_string($Values['Email'])."' AND UserID != ".$UserID." AND ID = UserID");
+		$ueQuery = $DB->query("
+						SELECT
+							ue.UserID,
+							Username,
+							ue.Time,
+							ue.IP
+						FROM users_history_emails AS ue, users_main
+						WHERE ue.Email = '".db_string($Values['Email'])."'
+							AND UserID != ".$UserID."
+							AND ID = UserID");
 		while (list($UserID2, $Time, $IP) = $DB->next_record()) { ?>
 	</tr>
 	<tr>
@@ -116,7 +125,6 @@ foreach ($History as $Key => $Values){
 <?
 		}
 	}
-?>
-<? } ?>
+} ?>
 </table>
 <? View::show_footer(); ?>

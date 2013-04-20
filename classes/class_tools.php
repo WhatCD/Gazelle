@@ -23,7 +23,7 @@ class Tools {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -95,7 +95,7 @@ class Tools {
 	public static function get_host_by_ajax($IP) {
 		static $ID = 0;
 		++$ID;
-		return '<span id="host_'.$ID.'">Resolving host...<script type="text/javascript">ajax.get(\'tools.php?action=get_host&ip='.$IP.'\',function(host){$(\'#host_'.$ID.'\').raw().innerHTML=host;});</script></span>';
+		return '<span id="host_'.$ID.'">Resolving host...<script type="text/javascript">ajax.get(\'tools.php?action=get_host&ip='.$IP.'\',function(host) {$(\'#host_'.$ID.'\').raw().innerHTML=host;});</script></span>';
 	}
 
 
@@ -137,7 +137,7 @@ class Tools {
 	public static function get_country_code_by_ajax($IP) {
 		static $ID = 0;
 		++$ID;
-		return '<span id="cc_'.$ID.'">Resolving CC...<script type="text/javascript">ajax.get(\'tools.php?action=get_cc&ip='.$IP.'\',function(cc){$(\'#cc_'.$ID.'\').raw().innerHTML=cc;});</script></span>';
+		return '<span id="cc_'.$ID.'">Resolving CC...<script type="text/javascript">ajax.get(\'tools.php?action=get_cc&ip='.$IP.'\',function(cc) {$(\'#cc_'.$ID.'\').raw().innerHTML=cc;});</script></span>';
 	}
 
 
@@ -154,16 +154,18 @@ class Tools {
 		if (!is_array($UserIDs)) {
 			$UserIDs = array($UserIDs);
 		}
-		$DB->query("UPDATE users_info AS i JOIN users_main AS m ON m.ID=i.UserID
+		$DB->query("
+			UPDATE users_info AS i
+				JOIN users_main AS m ON m.ID=i.UserID
 			SET m.Enabled='2',
-			m.can_leech='0',
-			i.AdminComment = CONCAT('".sqltime()." - ".($AdminComment ? $AdminComment : 'Disabled by system')."\n\n', i.AdminComment),
-			i.BanDate='".sqltime()."',
-			i.BanReason='".$BanReason."',
-			i.RatioWatchDownload=".($BanReason == 2?'m.Downloaded':"'0'")."
+				m.can_leech='0',
+				i.AdminComment = CONCAT('".sqltime()." - ".($AdminComment ? $AdminComment : 'Disabled by system')."\n\n', i.AdminComment),
+				i.BanDate='".sqltime()."',
+				i.BanReason='".$BanReason."',
+				i.RatioWatchDownload=".($BanReason == 2 ? 'm.Downloaded' : "'0'")."
 			WHERE m.ID IN(".implode(',',$UserIDs).") ");
 		$Cache->decrement('stats_user_count',$DB->affected_rows());
-		foreach($UserIDs as $UserID) {
+		foreach ($UserIDs as $UserID) {
 			$Cache->delete_value('enabled_'.$UserID);
 			$Cache->delete_value('user_info_'.$UserID);
 			$Cache->delete_value('user_info_heavy_'.$UserID);

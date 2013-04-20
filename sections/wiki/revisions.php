@@ -1,11 +1,17 @@
 <?
-if(!isset($_GET['id']) || !is_number($_GET['id'])) { error(404); }
+if (!isset($_GET['id']) || !is_number($_GET['id'])) {
+	error(404);
+}
 $ArticleID = $_GET['id'];
 
 $Latest = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Latest);
-if($Read > $LoggedUser['EffectiveClass']){ error(404); }
-if($Edit > $LoggedUser['EffectiveClass']){ error(403); }
+if ($Read > $LoggedUser['EffectiveClass']) {
+	error(404);
+}
+if ($Edit > $LoggedUser['EffectiveClass']) {
+	error(403);
+}
 
 View::show_header("Revisions of ".$Title);
 ?>
@@ -34,15 +40,16 @@ View::show_header("Revisions of ".$Title);
 				<td><input type="radio" name="new" value="<?=$Revision?>" checked="checked" /></td>
 			</tr>
 <?
-$DB->query("SELECT
-	w.Revision,
-	w.Title,
-	w.Author,
-	w.Date
+$DB->query("
+	SELECT
+		w.Revision,
+		w.Title,
+		w.Author,
+		w.Date
 	FROM wiki_revisions AS w
 	WHERE w.ID='$ArticleID'
 	ORDER BY Revision DESC");
-while(list($Revision, $Title, $AuthorID, $Date) = $DB->next_record()) { ?>
+while (list($Revision, $Title, $AuthorID, $Date) = $DB->next_record()) { ?>
 			<tr>
 				<td><?=$Revision?></td>
 				<td><?=$Title?></td>

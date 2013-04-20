@@ -17,22 +17,23 @@ if (isset($_GET['username'])) {
 	$Val->SetFields('username','1','username','Please enter a username.');
 	$Err = $Val->ValidateForm($_GET);
 
-	if(!$Err){
+	if (!$Err) {
 		// Passed validation. Let's rock.
 		list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 		if ($Page > 10) {
 			$Page = 10;
-			$Limit = sprintf("%d, %d", ($Page-1)*USERS_PER_PAGE, USERS_PER_PAGE);
+			$Limit = sprintf("%d, %d", ($Page - 1) * USERS_PER_PAGE, USERS_PER_PAGE);
 		}
-		$DB->query("SELECT SQL_CALC_FOUND_ROWS
-			ID,
-			Username,
-			Enabled,
-			PermissionID,
-			Donor,
-			Warned
+		$DB->query("
+			SELECT SQL_CALC_FOUND_ROWS
+				ID,
+				Username,
+				Enabled,
+				PermissionID,
+				Donor,
+				Warned
 			FROM users_main AS um
-			JOIN users_info AS ui ON ui.UserID=um.ID
+				JOIN users_info AS ui ON ui.UserID=um.ID
 			WHERE Username LIKE '%".db_string($_GET['username'], true)."%'
 			ORDER BY Username
 			LIMIT $Limit");
@@ -53,7 +54,7 @@ View::show_header('User search');
 	</div>
 	<div class="linkbox">
 <?
-$Pages=Format::get_pages($Page,$NumResults,USERS_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $NumResults, USERS_PER_PAGE, 9);
 echo $Pages;
 ?>
 	</div>

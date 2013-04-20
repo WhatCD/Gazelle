@@ -1,9 +1,9 @@
 <?
 //TODO: Move to somewhere more appropriate, doesn't really belong under users, tools maybe but we don't have that page publicly accessible.
 
-if(isset($_GET['ip']) && isset($_GET['port'])){
+if (isset($_GET['ip']) && isset($_GET['port'])) {
 	$Octets = explode(".", $_GET['ip']);
-	if(
+	if (
 		empty($_GET['ip']) ||
 		!preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $_GET['ip']) ||
 		$Octets[0] < 0 ||
@@ -20,12 +20,12 @@ if(isset($_GET['ip']) && isset($_GET['port'])){
 		die('Invalid IP');
 	}
 
-	if (empty($_GET['port']) || !is_number($_GET['port']) || $_GET['port']<1 || $_GET['port']>65535){
+	if (empty($_GET['port']) || !is_number($_GET['port']) || $_GET['port'] < 1 || $_GET['port'] > 65535) {
 		die('Invalid Port');
 	}
 
 	//Error suppression, ugh.
-	if(@fsockopen($_GET['ip'], $_GET['port'], $Errno, $Errstr, 20)){
+	if (@fsockopen($_GET['ip'], $_GET['port'], $Errno, $Errstr, 20)) {
 		die('Port '.$_GET['port'].' on '.$_GET['ip'].' connected successfully.');
 	} else {
 		die('Port '.$_GET['port'].' on '.$_GET['ip'].' failed to connect.');

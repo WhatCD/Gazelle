@@ -1,7 +1,7 @@
 <?
-if(empty($_GET['nojump'])) {
+if (empty($_GET['nojump'])) {
 	$ArticleID = $Alias->to_id($_GET['search']);
-	if($ArticleID) { //Found Article
+	if ($ArticleID) { //Found Article
 		header('Location: wiki.php?action=article&id='.$ArticleID);
 	}
 }
@@ -18,28 +18,37 @@ $WayTable = array('Ascending'=>'ASC', 'Descending'=>'DESC');
 // What are we looking for? Let's make sure it isn't dangerous.
 $Search = db_string(trim($_GET['search']));
 
-if(!in_array($Type, array('w.Title', 'w.Body'))) { $Type = 'w.Title'; }
+if (!in_array($Type, array('w.Title', 'w.Body'))) {
+	$Type = 'w.Title';
+}
 
 // Break search string down into individual words
 $Words = explode(' ', $Search);
 
 $Type = $TypeTable[$_GET['type']];
-if(!$Type) { $Type = 'w.Title'; }
+if (!$Type) {
+	$Type = 'w.Title';
+}
 
 $Order = $OrderTable[$_GET['order']];
-if(!$Order) { $Order = 'ID'; }
+if (!$Order) {
+	$Order = 'ID';
+}
 
 $Way = $WayTable[$_GET['way']];
-if(!$Way) { $Way = 'DESC'; }
+if (!$Way) {
+	$Way = 'DESC';
+}
 
-$SQL = "SELECT SQL_CALC_FOUND_ROWS
-	w.ID,
-	w.Title,
-	w.Date,
-	w.Author
+$SQL = "
+	SELECT SQL_CALC_FOUND_ROWS
+		w.ID,
+		w.Title,
+		w.Date,
+		w.Author
 	FROM wiki_articles AS w
 	WHERE w.MinClassRead <= '".$LoggedUser['EffectiveClass']."'";
-if($Search!='') {
+if ($Search != '') {
 	$SQL .= " AND $Type LIKE '%";
 	$SQL .= implode("%' AND $Type LIKE '%", $Words);
 	$SQL .= "%' ";
@@ -76,21 +85,20 @@ $DB->set_query_id($RS);
 				<tr>
 					<td class="label"><strong>Search in:</strong></td>
 					<td>
-						<input type="radio" name="type" value="Title" <? if($Type == 'w.Title') { echo 'checked="checked" '; }?>/> Title
-						<input type="radio" name="type" value="Body" <? if($Type == 'w.Body') { echo 'checked="checked" '; }?>/> Body
+						<input type="radio" name="type" value="Title" <? if ($Type == 'w.Title') { echo 'checked="checked" '; }?>/> Title
+						<input type="radio" name="type" value="Body" <? if ($Type == 'w.Body') { echo 'checked="checked" '; }?>/> Body
 					</td>
 					<td class="label"><strong>Order by:</strong></td>
 					<td>
 						<select name="order">
-						<?
-							foreach($OrderVals as $Cur){ ?>
-							<option value="<?=$Cur?>"<? if($_GET['order'] == $Cur || (!$_GET['order'] && $Cur == 'Time')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
-						<?	}?>
+<?					foreach ($OrderVals as $Cur) { ?>
+							<option value="<?=$Cur?>"<? if ($_GET['order'] == $Cur || (!$_GET['order'] && $Cur == 'Time')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
+<?					} ?>
 						</select>
 						<select name="way">
-						<?	foreach($WayVals as $Cur){ ?>
-							<option value="<?=$Cur?>"<? if($_GET['way'] == $Cur || (!$_GET['way'] && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
-						<?	}?>
+<?					foreach ($WayVals as $Cur) { ?>
+							<option value="<?=$Cur?>"<? if ($_GET['way'] == $Cur || (!$_GET['way'] && $Cur == 'Descending')) { echo ' selected="selected"'; } ?>><?=$Cur?></option>
+<?					} ?>
 						</select>
 					</td>
 				</tr>
@@ -105,7 +113,7 @@ $DB->set_query_id($RS);
 	<br />
 	<div class="linkbox">
 <?
-$Pages=Format::get_pages($Page,$NumResults,ARTICLES_PER_PAGE);
+$Pages = Format::get_pages($Page, $NumResults, ARTICLES_PER_PAGE);
 echo $Pages;
 ?>
 	</div>
@@ -115,7 +123,7 @@ echo $Pages;
 		<td>Last updated on</td>
 		<td>Last edited by</td>
 	</tr>
-<? while(list($ID, $Title, $Date, $UserID) = $DB->next_record()) {?>
+<? while (list($ID, $Title, $Date, $UserID) = $DB->next_record()) { ?>
 	<tr>
 		<td><a href="wiki.php?action=article&amp;id=<?=$ID?>"><?=$Title?></a></td>
 		<td><?=$Date?></td>

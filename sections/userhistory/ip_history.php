@@ -13,18 +13,26 @@ user.
 define('IPS_PER_PAGE', 25);
 
 $UserID = $_GET['userid'];
-if (!is_number($UserID)) { error(404); }
+if (!is_number($UserID)) {
+	error(404);
+}
 
-$DB->query("SELECT um.Username, p.Level AS Class FROM users_main AS um LEFT JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = ".$UserID);
+$DB->query("
+	SELECT
+		um.Username,
+		p.Level AS Class
+	FROM users_main AS um
+		LEFT JOIN permissions AS p ON p.ID=um.PermissionID
+	WHERE um.ID = ".$UserID);
 list($Username, $Class) = $DB->next_record();
 
-if(!check_perms('users_view_ips', $Class)) {
+if (!check_perms('users_view_ips', $Class)) {
 	error(403);
 }
 
 $UsersOnly = $_GET['usersonly'];
 
-if(isset($_POST['ip'])) {
+if (isset($_POST['ip'])) {
 	$SearchIP = db_string($_POST['ip']);
 	$SearchIPQuery = " AND h1.IP = '$SearchIP' ";
 }
@@ -38,7 +46,7 @@ function ShowIPs(rowname) {
 }
 function Ban(ip, id, elemID) {
 	var notes = prompt("Enter notes for this ban");
-	if(notes != null && notes.length > 0) {
+	if (notes != null && notes.length > 0) {
 		var xmlhttp;
 		if (window.XMLHttpRequest) {
 			xmlhttp=new XMLHttpRequest();
@@ -79,7 +87,8 @@ function UnBan(ip, id, elemID) {
 list($Page,$Limit) = Format::page_limit(IPS_PER_PAGE);
 
 if ($UsersOnly == 1) {
-	$RS = $DB->query("SELECT SQL_CALC_FOUND_ROWS
+	$RS = $DB->query("
+		SELECT SQL_CALC_FOUND_ROWS
 			h1.IP,
 			h1.StartTime,
 			h1.EndTime,
@@ -90,39 +99,42 @@ if ($UsersOnly == 1) {
 			GROUP_CONCAT(um2.Enabled SEPARATOR '|'),
 			GROUP_CONCAT(ui2.Donor SEPARATOR '|'),
 			GROUP_CONCAT(ui2.Warned SEPARATOR '|')
-			FROM users_history_ips AS h1
+		FROM users_history_ips AS h1
 			LEFT JOIN users_history_ips AS h2 ON h2.IP=h1.IP AND h2.UserID!=$UserID
 			LEFT JOIN users_main AS um2 ON um2.ID=h2.UserID
 			LEFT JOIN users_info AS ui2 ON ui2.UserID=h2.UserID
 		WHERE h1.UserID='$UserID'
-		AND h2.UserID>0 $SearchIPQuery
-			GROUP BY h1.IP, h1.StartTime
-		ORDER BY h1.StartTime DESC LIMIT $Limit");
+			AND h2.UserID>0 $SearchIPQuery
+		GROUP BY h1.IP, h1.StartTime
+		ORDER BY h1.StartTime DESC
+		LIMIT $Limit");
 } else {
-	$RS = $DB->query("SELECT SQL_CALC_FOUND_ROWS
-		h1.IP,
-		h1.StartTime,
-		h1.EndTime,
-		GROUP_CONCAT(h2.UserID SEPARATOR '|'),
-		GROUP_CONCAT(h2.StartTime SEPARATOR '|'),
-		GROUP_CONCAT(IFNULL(h2.EndTime,0) SEPARATOR '|'),
-		GROUP_CONCAT(um2.Username SEPARATOR '|'),
-		GROUP_CONCAT(um2.Enabled SEPARATOR '|'),
-		GROUP_CONCAT(ui2.Donor SEPARATOR '|'),
-		GROUP_CONCAT(ui2.Warned SEPARATOR '|')
+	$RS = $DB->query("
+		SELECT SQL_CALC_FOUND_ROWS
+			h1.IP,
+			h1.StartTime,
+			h1.EndTime,
+			GROUP_CONCAT(h2.UserID SEPARATOR '|'),
+			GROUP_CONCAT(h2.StartTime SEPARATOR '|'),
+			GROUP_CONCAT(IFNULL(h2.EndTime,0) SEPARATOR '|'),
+			GROUP_CONCAT(um2.Username SEPARATOR '|'),
+			GROUP_CONCAT(um2.Enabled SEPARATOR '|'),
+			GROUP_CONCAT(ui2.Donor SEPARATOR '|'),
+			GROUP_CONCAT(ui2.Warned SEPARATOR '|')
 		FROM users_history_ips AS h1
-		LEFT JOIN users_history_ips AS h2 ON h2.IP=h1.IP AND h2.UserID!=$UserID
-		LEFT JOIN users_main AS um2 ON um2.ID=h2.UserID
-		LEFT JOIN users_info AS ui2 ON ui2.UserID=h2.UserID
+			LEFT JOIN users_history_ips AS h2 ON h2.IP=h1.IP AND h2.UserID!=$UserID
+			LEFT JOIN users_main AS um2 ON um2.ID=h2.UserID
+			LEFT JOIN users_info AS ui2 ON ui2.UserID=h2.UserID
 		WHERE h1.UserID='$UserID' $SearchIPQuery
 		GROUP BY h1.IP, h1.StartTime
-		ORDER BY h1.StartTime DESC LIMIT $Limit");
+		ORDER BY h1.StartTime DESC
+		LIMIT $Limit");
 }
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($RS);
 
-$Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $NumResults, IPS_PER_PAGE, 9);
 
 ?>
 <div class="thin">
@@ -130,11 +142,11 @@ $Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
 		<h2>IP address history for <a href="/user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
 	</div>
 	<div class="linkbox">
-	<? if($UsersOnly) { ?>
+<?	if ($UsersOnly) { ?>
 	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View all IP addresses</a>
-	<? } else { ?>
+<?	} else { ?>
 	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View IP addresses with users</a>
-	<? } ?>
+<?	} ?>
 	<br />
 	<?=$Pages?>
 	</div>
@@ -164,13 +176,15 @@ $IPs = array();
 $Results = $DB->to_array();
 $CanManageIPBans = check_perms('admin_manage_ipbans');
 
-foreach($Results as $Index => $Result) {
+foreach ($Results as $Index => $Result) {
 	list($IP, $StartTime, $EndTime, $UserIDs, $UserStartTimes, $UserEndTimes, $Usernames, $UsersEnabled, $UsersDonor, $UsersWarned) = $Result;
 
 	$HasDupe = false;
 	$UserIDs = explode('|', $UserIDs);
-	if(!$EndTime) { $EndTime = sqltime(); }
-	if($UserIDs[0] != 0){
+	if (!$EndTime) {
+		$EndTime = sqltime();
+	}
+	if ($UserIDs[0] != 0) {
 		$HasDupe = true;
 		$UserStartTimes = explode('|', $UserStartTimes);
 		$UserEndTimes = explode('|', $UserEndTimes);
@@ -182,14 +196,13 @@ foreach($Results as $Index => $Result) {
 ?>
 		<tr class="rowa">
 			<td>
-				<?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)
-<?
-	if($CanManageIPBans) {
-			if(!isset($IPs[$IP])) {
+				<?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)<?
+	if ($CanManageIPBans) {
+			if (!isset($IPs[$IP])) {
 					$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".Tools::ip_to_unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
 			$DB->query($sql);
 
-			if($DB->record_count() > 0) {
+			if ($DB->record_count() > 0) {
 							$IPs[$IP] = true;
 			?>
 				<strong>[Banned]
@@ -214,10 +227,12 @@ foreach($Results as $Index => $Result) {
 			<td><?//time_diff(strtotime($StartTime), strtotime($EndTime)); ?></td>
 		</tr>
 <?
-	if($HasDupe){
+	if ($HasDupe) {
 		$HideMe = (count($UserIDs) > 10);
 		foreach ($UserIDs as $Key => $Val) {
-		if(!$UserEndTimes[$Key]){ $UserEndTimes[$Key] = sqltime(); }
+		if (!$UserEndTimes[$Key]) {
+			$UserEndTimes[$Key] = sqltime();
+		}
 ?>
 		<tr class="rowb<?=($HideMe ? ' hidden' : '')?>" name="<?=$Index?>">
 			<td>&nbsp;&nbsp;&#187;&nbsp;<?=Users::format_username($Val, true, true, true)?></td>

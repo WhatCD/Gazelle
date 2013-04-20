@@ -350,25 +350,25 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 	global $LoggedUser,$Categories,$ReleaseTypes;
 ?>
 		<h3>Top <?=$Limit.' '.$Caption?>
-<?	if (empty($_GET['advanced'])){ ?>
+<?	if (empty($_GET['advanced'])) { ?>
 		<small class="top10_quantity_links">
 <?
-	switch($Limit) {
-		case 100: ?>
-			- <a href="top10.php?details=<?=$Tag?>" class="brackets">Top 10</a>
-			- <span class="brackets">Top 100</span>
-			- <a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
-		<?	break;
-		case 250: ?>
-			- <a href="top10.php?details=<?=$Tag?>" class="brackets">Top 10</a>
-			- <a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
-			- <span class="brackets">Top 250</span>
-		<?	break;
-		default: ?>
-			- <span class="brackets">Top 10</span>
-			- <a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
-			- <a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
-<?	} ?>
+		switch ($Limit) {
+			case 100: ?>
+				- <a href="top10.php?details=<?=$Tag?>" class="brackets">Top 10</a>
+				- <span class="brackets">Top 100</span>
+				- <a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
+<?				break;
+			case 250: ?>
+				- <a href="top10.php?details=<?=$Tag?>" class="brackets">Top 10</a>
+				- <a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
+				- <span class="brackets">Top 250</span>
+<?				break;
+			default: ?>
+				- <span class="brackets">Top 10</span>
+				- <a href="top10.php?type=torrents&amp;limit=100&amp;details=<?=$Tag?>" class="brackets">Top 100</a>
+				- <a href="top10.php?type=torrents&amp;limit=250&amp;details=<?=$Tag?>" class="brackets">Top 250</a>
+<?		} ?>
 		</small>
 <?	} ?>
 		</h3>
@@ -402,7 +402,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 ?>
 		<tr class="rowb">
 			<td colspan="9" class="center">
-				Found no torrents matching the criteria
+				Found no torrents matching the criteria.
 			</td>
 		</tr>
 		</table><br />
@@ -449,11 +449,11 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		$AddExtra = '';
 		if ($Format) {
 			$ExtraInfo.=$Format;
-			$AddExtra=' / ';
+			$AddExtra = ' / ';
 		}
 		if ($Encoding) {
 			$ExtraInfo.=$AddExtra.$Encoding;
-			$AddExtra=' / ';
+			$AddExtra = ' / ';
 		}
 		// "FLAC / Lossless / Log (100%) / Cue / CD";
 		if ($HasLog) {

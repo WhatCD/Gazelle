@@ -11,9 +11,9 @@ class INVITE_TREE {
 	var $Visible = true;
 
 	// Set things up
-	function INVITE_TREE($UserID, $Options = array()){
+	function INVITE_TREE($UserID, $Options = array()) {
 		$this->UserID = $UserID;
-		if($Options['visible'] === false){
+		if ($Options['visible'] === false) {
 			$this->Visible = false;
 		}
 	}
@@ -54,7 +54,7 @@ class INVITE_TREE {
 			JOIN users_info AS ui ON ui.UserID=it.UserID
 			WHERE TreeID=$TreeID
 			AND TreePosition>$TreePosition".
-			($MaxPosition ? " AND TreePosition<$MaxPosition" : "")."
+			($MaxPosition ? " AND TreePosition<$MaxPosition" : '')."
 			AND TreeLevel>$TreeLevel
 			ORDER BY TreePosition");
 
@@ -82,44 +82,48 @@ class INVITE_TREE {
 
 		// We store this in an output buffer, so we can show the summary at the top without having to loop through twice
 		ob_start();
-		while(list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = $DB->next_record()){
+		while (list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = $DB->next_record()) {
 
 			// Do stats
 			$Count++;
 
-			if($TreeLevel > $MaxTreeLevel){
+			if ($TreeLevel > $MaxTreeLevel) {
 				$MaxTreeLevel = $TreeLevel;
 			}
 
-			if($TreeLevel == $BaseTreeLevel){
+			if ($TreeLevel == $BaseTreeLevel) {
 				$Branches++;
 				$TopLevelUpload += $Uploaded;
 				$TopLevelDownload += $Downloaded;
 			}
 
 			$ClassSummary[$Class]++;
-			if($Enabled == 2){
+			if ($Enabled == 2) {
 				$DisabledCount++;
 			}
-			if($Donor){
+			if ($Donor) {
 				$DonorCount++;
 			}
 
 			// Manage tree depth
-			if($TreeLevel > $PreviousTreeLevel){
-				for($i = 0; $i<$TreeLevel-$PreviousTreeLevel; $i++){ echo "<ul class=\"invitetree\"><li>"; }
-			} elseif($TreeLevel < $PreviousTreeLevel){
-				for($i = 0; $i<$PreviousTreeLevel-$TreeLevel; $i++){ echo "</li></ul>"; }
-				echo "</li>";
-				echo "<li>";
+			if ($TreeLevel > $PreviousTreeLevel) {
+				for ($i = 0; $i < $TreeLevel - $PreviousTreeLevel; $i++) {
+					echo '<ul class="invitetree"><li>';
+				}
+			} elseif ($TreeLevel < $PreviousTreeLevel) {
+				for ($i = 0; $i < $PreviousTreeLevel - $TreeLevel; $i++) {
+					echo '</li></ul>';
+				}
+				echo '</li>';
+				echo '<li>';
 			} else {
-				echo "</li>";
-				echo "<li>";
+				echo '</li>';
+				echo '<li>';
 			}
 ?>
 				<strong><?=Users::format_username($ID, true, true, $Enabled != 2 ? false : true, true)?></strong>
 <?
-			if(check_paranoia(array('uploaded', 'downloaded'), $Paranoia, $UserClass)) {
+			if (check_paranoia(array('uploaded', 'downloaded'), $Paranoia, $UserClass)) {
 				$TotalUpload += $Uploaded;
 				$TotalDownload += $Downloaded;
 ?>
@@ -140,9 +144,11 @@ class INVITE_TREE {
 		}
 
 		$Tree = ob_get_clean();
-		for($i = 0; $i<$PreviousTreeLevel-$OriginalTreeLevel; $i++){ $Tree .= "</li></ul>\n"; }
+		for ($i = 0; $i < $PreviousTreeLevel - $OriginalTreeLevel; $i++) {
+			$Tree .= "</li></ul>\n";
+		}
 
-		if($Count){
+		if ($Count) {
 
 ?> 		<p style="font-weight: bold;">
 			This tree has <?=$Count?> entries, <?=$Branches?> branches, and a depth of <?=$MaxTreeLevel - $OriginalTreeLevel?>.
@@ -150,20 +156,22 @@ class INVITE_TREE {
 <?
 			$ClassStrings = array();
 			foreach ($ClassSummary as $ClassID => $ClassCount) {
-				if($ClassCount == 0) { continue; }
+				if ($ClassCount == 0) {
+					continue;
+				}
 				$LastClass = Users::make_class_string($ClassID);
-				if($ClassCount>1) {
-					if($LastClass == "Torrent Celebrity") {
+				if ($ClassCount > 1) {
+					if ($LastClass == 'Torrent Celebrity') {
 						 $LastClass = 'Torrent Celebrities';
 					} else {
 						$LastClass.='s';
 					}
 				}
-				$LastClass= $ClassCount.' '.$LastClass.' (' . number_format(($ClassCount/$Count)*100) . '%)';
+				$LastClass = $ClassCount.' '.$LastClass.' (' . number_format(($ClassCount / $Count) * 100) . '%)';
 
-				$ClassStrings []= $LastClass;
+				$ClassStrings[] = $LastClass;
 			}
-			if(count($ClassStrings)>1){
+			if (count($ClassStrings) > 1) {
 				array_pop($ClassStrings);
 				echo implode(', ', $ClassStrings);
 				echo ' and '.$LastClass;
@@ -172,16 +180,22 @@ class INVITE_TREE {
 			}
 			echo '. ';
 			echo $DisabledCount;
-			echo ($DisabledCount==1)?' user is':' users are';
+			echo ($DisabledCount == 1) ? ' user is' : ' users are';
 			echo ' disabled (';
-			if($DisabledCount == 0) { echo '0%)'; }
-			else { echo number_format(($DisabledCount/$Count)*100) . '%)';}
+			if ($DisabledCount == 0) {
+				echo '0%)';
+			} else {
+				echo number_format(($DisabledCount / $Count) * 100) . '%)';
+			}
 			echo ', and ';
 			echo $DonorCount;
-			echo ($DonorCount==1)?' user has':' users have';
+			echo ($DonorCount == 1) ? ' user has' : ' users have';
 			echo ' donated (';
-			if($DonorCount == 0) { echo '0%)'; }
-			else { echo number_format(($DonorCount/$Count)*100) . '%)';}
+			if ($DonorCount == 0) {
+				echo '0%)';
+			} else {
+				echo number_format(($DonorCount / $Count) * 100) . '%)';
+			}
 			echo '. </p>';
 
 			echo '<p style="font-weight: bold;">';
@@ -196,22 +210,21 @@ class INVITE_TREE {
 			echo '; and the total ratio is '.Format::get_ratio_html($TopLevelUpload, $TopLevelDownload).'. ';
 			
 			
-			echo 'These numbers include the stats of paranoid users, and will be factored in to the invitation giving script.</p>';
+			echo 'These numbers include the stats of paranoid users and will be factored into the invitation giving script.</p>';
 			
-			if($ParanoidCount){
+			if ($ParanoidCount) {
 				echo '<p style="font-weight: bold;">';
 				echo $ParanoidCount;
-				echo ($ParanoidCount==1)?' user (':' users (';
-				echo number_format(($ParanoidCount/$Count)*100);
+				echo ($ParanoidCount == 1) ? ' user (' : ' users (';
+				echo number_format(($ParanoidCount / $Count) * 100);
 				echo '%) ';
-				echo ($ParanoidCount==1)?'  is':' are';
+				echo ($ParanoidCount == 1) ? ' is' : ' are';
 				echo ' too paranoid to have their stats shown here, and ';
-				echo ($ParanoidCount==1)?'  was':' were';
+				echo ($ParanoidCount == 1) ? ' was' : ' were';
 				echo ' not factored into the stats for the total tree.';
 				echo '</p>';
 			}
 		}
-
 ?>
 		<br />
 		<?=$Tree?>

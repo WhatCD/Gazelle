@@ -679,7 +679,7 @@ if ($EditSummary) {
 	$Summary = implode(', ', $EditSummary)." by ".$LoggedUser['Username'];
 	$Summary = sqltime().' - '.ucfirst($Summary);
 
-	if ($Reason){
+	if ($Reason) {
 		$Summary .= "\nReason: ".$Reason;
 	}
 

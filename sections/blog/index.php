@@ -10,7 +10,7 @@ if (check_perms('admin_manage_blog')) {
 	if (!empty($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
 			case 'deadthread' :
-				if (is_number($_GET['id'])){
+				if (is_number($_GET['id'])) {
 					$DB->query("UPDATE blog SET ThreadID=NULL WHERE ID=".$_GET['id']);
 					$Cache->delete_value('blog');
 					$Cache->delete_value('feed_blog');
@@ -19,7 +19,7 @@ if (check_perms('admin_manage_blog')) {
 				break;
 			case 'takeeditblog':
 				authorize();
-				if (is_number($_POST['blogid']) && is_number($_POST['thread'])){
+				if (is_number($_POST['blogid']) && is_number($_POST['thread'])) {
 					$DB->query("UPDATE blog SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."', ThreadID=".$_POST['thread']." WHERE ID='".db_string($_POST['blogid'])."'");
 					$Cache->delete_value('blog');
 					$Cache->delete_value('feed_blog');
@@ -27,14 +27,14 @@ if (check_perms('admin_manage_blog')) {
 				header('Location: blog.php');
 				break;
 			case 'editblog':
-				if (is_number($_GET['id'])){
+				if (is_number($_GET['id'])) {
 					$BlogID = $_GET['id'];
 					$DB->query("SELECT Title, Body, ThreadID FROM blog WHERE ID=$BlogID");
 					list($Title, $Body, $ThreadID) = $DB->next_record();
 				}
 				break;
 			case 'deleteblog':
-				if (is_number($_GET['id'])){
+				if (is_number($_GET['id'])) {
 					authorize();
 					$DB->query("DELETE FROM blog WHERE ID='".db_string($_GET['id'])."'");
 					$Cache->delete_value('blog');
@@ -91,7 +91,7 @@ if (check_perms('admin_manage_blog')) {
 				<div class="pad">
 					<input type="hidden" name="action" value="<?=((empty($_GET['action'])) ? 'takenewblog' : 'takeeditblog')?>" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-<?		if (!empty($_GET['action']) && $_GET['action'] == 'editblog'){?>
+<?		if (!empty($_GET['action']) && $_GET['action'] == 'editblog') { ?>
 					<input type="hidden" name="blogid" value="<?=$BlogID; ?>" />
 <?		} ?>
 					<h3>Title</h3>

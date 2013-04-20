@@ -9,13 +9,13 @@ $Alias = new ALIAS;
 define('INDEX_ARTICLE', '1');
 
 
-function class_list($Selected=0){
+function class_list($Selected = 0) {
 	global $Classes, $LoggedUser;
 	$Return = '';
 	foreach ($Classes as $ID => $Class) {
-		if($Class['Level'] <= $LoggedUser['EffectiveClass']){
+		if ($Class['Level'] <= $LoggedUser['EffectiveClass']) {
 			$Return.='<option value="'.$Class['Level'].'"';
-			if($Selected == $Class['Level']){
+			if ($Selected == $Class['Level']) {
 				$Return.=' selected="selected"';
 			}
 			$Return.='>'.Format::cut_string($Class['Name'], 20, 1).'</option>'."\n";
@@ -25,31 +25,31 @@ function class_list($Selected=0){
 	return $Return;
 }
 
-if(!empty($_REQUEST['action'])) {
-	switch($_REQUEST['action']) {
+if (!empty($_REQUEST['action'])) {
+	switch ($_REQUEST['action']) {
 		case 'create':
-			if($_POST['action']){
+			if ($_POST['action']) {
 				include('takecreate.php');
 			} else {
 				include('create.php');
 			}
 			break;
 		case 'edit':
-			if($_POST['action']){
+			if ($_POST['action']) {
 				include('takeedit.php');
 			} else {
 				include('edit.php');
 			}
 			break;
 		case 'link':
-			if($_POST['action']){
+			if ($_POST['action']) {
 				include('takelink.php');
 			} else {
 				include('link.php');
 			}
 			break;
 		case 'delete':
-			if($_POST['action']){
+			if ($_POST['action']) {
 				include('takedelete.php');
 			} else {
 				include('delete.php');

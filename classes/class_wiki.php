@@ -34,13 +34,13 @@ class WIKI {
 	var $Table = '';
 	var $PageID = 0;
 	var $BaseURL = '';
-	function WIKI($Table, $PageID, $BaseURL = ''){
+	function WIKI($Table, $PageID, $BaseURL = '') {
 		$this->Table = $Table;
 		$this->PageID = $PageID;
 		$this->BaseURL = $BaseURL;
 	}
 
-	function revision_history(){
+	function revision_history() {
 		global $DB;
 
 		$BaseURL = $this->BaseURL;
@@ -62,7 +62,7 @@ class WIKI {
 		</tr>
 <? //-----------------------------------------
 		$Row = 'a';
-		while(list($RevisionID, $Summary, $Time, $UserID, $Username) = $DB->next_record()){
+		while (list($RevisionID, $Summary, $Time, $UserID, $Username) = $DB->next_record()) {
 			$Row = ($Row == 'a') ? 'b' : 'a';
 //------------------------------------------------------ ?>
 		<tr class="row<?=$Row?>">

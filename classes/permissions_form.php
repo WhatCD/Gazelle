@@ -115,7 +115,7 @@ $PermissionsArray = array(
 
 );
 
-function permissions_form(){ ?>
+function permissions_form() { ?>
 <div class="permissions">
 	<div class="permission_container">
 		<table>

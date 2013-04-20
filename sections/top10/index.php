@@ -1,7 +1,7 @@
 <?
 enforce_login();
 
-if(!check_perms('site_top10')){
+if (!check_perms('site_top10')) {
 	View::show_header();
 ?>
 <div class="content_basiccontainer">
@@ -13,7 +13,7 @@ if(!check_perms('site_top10')){
 }
 
 include(SERVER_ROOT.'/sections/torrents/functions.php'); //Has get_reports($TorrentID);
-if(empty($_GET['type']) || $_GET['type'] == 'torrents') {
+if (empty($_GET['type']) || $_GET['type'] == 'torrents') {
 	include(SERVER_ROOT.'/sections/top10/torrents.php');
 } else {
 	switch($_GET['type']) {

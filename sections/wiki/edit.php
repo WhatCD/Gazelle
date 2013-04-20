@@ -1,10 +1,12 @@
 <?
-if(!is_number($_GET['id']) || $_GET['id'] == ''){ error(404); }
-$ArticleID=$_GET['id'];
+if (!is_number($_GET['id']) || $_GET['id'] == '') {
+	error(404);
+}
+$ArticleID = $_GET['id'];
 
 $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $Author) = array_shift($Article);
-if($Edit > $LoggedUser['EffectiveClass']){
+if ($Edit > $LoggedUser['EffectiveClass']) {
 	error('You do not have access to edit this article.');
 }
 
@@ -22,14 +24,14 @@ View::show_header('Edit '.$Title, 'jquery');
 				<input type="text" name="title" size="92" maxlength="100" value="<?=$Title?>" />
 				<h3>Body </h3>
 <?
-			$ReplyText = new TEXTAREA_PREVIEW('body', 'body', $Body, 91, 22, true, false);
-?>
-<? if(check_perms('admin_manage_wiki')){ ?>
+	$ReplyText = new TEXTAREA_PREVIEW('body', 'body', $Body, 91, 22, true, false);
+
+	if (check_perms('admin_manage_wiki')) { ?>
 				<h3>Access</h3>
 				<p>There are some situations in which the viewing or editing of an article should be restricted to a certain class.</p>
-				<strong>Restrict Read:</strong> <select name="minclassread"><?=class_list($Read)?></select>
-				<strong>Restrict Edit:</strong> <select name="minclassedit"><?=class_list($Edit)?></select>
-<? } ?>
+				<strong>Restrict read:</strong> <select name="minclassread"><?=class_list($Read)?></select>
+				<strong>Restrict edit:</strong> <select name="minclassedit"><?=class_list($Edit)?></select>
+<?	} ?>
 				<div style="text-align: center;">
 					<input type="button" value="Preview" class="hidden button_preview_<?=$ReplyText->getID()?>" title="Preview text" tabindex="1" />
 					<input type="submit" value="Submit" />

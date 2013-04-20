@@ -9,7 +9,7 @@ View::show_header('Create an article', 'jquery');
 			<div>
 				<h3>Title</h3>
 				<input type="text" name="title" size="92" maxlength="100" />
-<? /* if($_GET['alias']){ ?>
+<? /* if ($_GET['alias']) { ?>
 				<input type="hidden" name="alias" value="<?=display_str(alias($_GET['alias']))?>" />
 <? } else { ?>
 				<h3>Alias</h3>
@@ -18,14 +18,14 @@ View::show_header('Create an article', 'jquery');
 <? } */?>
 				<h3>Body </h3>
 <?
-			$ReplyText = new TEXTAREA_PREVIEW('body', 'body', '', 91, 22, true, false);
-?>
-<? if(check_perms('admin_manage_wiki')){ ?>
+	$ReplyText = new TEXTAREA_PREVIEW('body', 'body', '', 91, 22, true, false);
+
+	if (check_perms('admin_manage_wiki')) { ?>
 				<h3>Access</h3>
 				<p>There are some situations in which the viewing or editing of an article should be restricted to a certain class.</p>
-				<strong>Restrict Read:</strong> <select name="minclassread"><?=class_list()?></select>
-				<strong>Restrict Edit:</strong> <select name="minclassedit"><?=class_list()?></select>
-<? } ?>
+				<strong>Restrict read:</strong> <select name="minclassread"><?=class_list()?></select>
+				<strong>Restrict edit:</strong> <select name="minclassedit"><?=class_list()?></select>
+<?	} ?>
 				<div style="text-align: center;">
 					<input type="button" value="Preview" class="hidden button_preview_<?=$ReplyText->getID()?>" title="Preview text" tabindex="1" />
 					<input type="submit" value="Submit" />

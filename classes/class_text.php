@@ -185,7 +185,9 @@ class TEXT {
 
 	public function local_url ($Str) {
 		$URLInfo = parse_url($Str);
-		if (!$URLInfo) { return false; }
+		if (!$URLInfo) {
+			return false;
+		}
 		$Host = $URLInfo['host'];
 		// If for some reason your site does not require subdomains or contains a directory in the SITE_URL, revert to the line below.
 		//if ($Host == NONSSL_SITE_URL || $Host == SSL_SITE_URL || $Host == 'www.'.NONSSL_SITE_URL) {
@@ -282,7 +284,7 @@ class TEXT {
 
 				//3a) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
 				if (!isset($this->ValidTags[$TagName])) {
-					$Array[$ArrayPos] = substr($Str, $i, ($TagPos - $i)+strlen($Tag[0][0]));
+					$Array[$ArrayPos] = substr($Str, $i, ($TagPos - $i) + strlen($Tag[0][0]));
 					$i = $TagPos + strlen($Tag[0][0]);
 					++$ArrayPos;
 					continue;
@@ -299,7 +301,7 @@ class TEXT {
 			}
 
 			// 4) Move the pointer past the end of the tag
-			$i=$TagPos+strlen($Tag[0][0]);
+			$i = $TagPos + strlen($Tag[0][0]);
 
 			// 5) Find out where the tag closes (beginning of [/tag])
 
@@ -338,19 +340,19 @@ class TEXT {
 				// We're in a list. Find where it ends
 				$NewLine = $i;
 				do { // Look for \n[*]
-					$NewLine = strpos($Str, "\n", $NewLine+1);
-				} while ($NewLine!== false && substr($Str, $NewLine+1, 3) == '['.$TagName.']');
+					$NewLine = strpos($Str, "\n", $NewLine + 1);
+				} while ($NewLine !== false && substr($Str, $NewLine + 1, 3) == '['.$TagName.']');
 
 				$CloseTag = $NewLine;
 				if ($CloseTag === false) { // block finishes with list
 					$CloseTag = $Len;
 				}
-				$Block = substr($Str, $i, $CloseTag-$i); // Get the list
+				$Block = substr($Str, $i, $CloseTag - $i); // Get the list
 				$i = $CloseTag; // 5d) Move the pointer past the end of the [/close] tag.
 			} else {
 				//5b) If it's a normal tag, it may have versions of itself nested inside
-				$CloseTag = $i-1;
-				$InTagPos = $i-1;
+				$CloseTag = $i - 1;
+				$InTagPos = $i - 1;
 				$NumInOpens = 0;
 				$NumInCloses = -1;
 
@@ -364,7 +366,7 @@ class TEXT {
 				// Every time we find an internal open tag of the same type, search for the next close tag
 				// (as the first close tag won't do - it's been opened again)
 				do {
-					$CloseTag = stripos($Str, '[/'.$TagName.']', $CloseTag+1);
+					$CloseTag = stripos($Str, '[/'.$TagName.']', $CloseTag + 1);
 					if ($CloseTag === false) {
 						$CloseTag = $Len;
 						break;
@@ -373,7 +375,7 @@ class TEXT {
 					}
 
 					// Is there another open tag inside this one?
-					$OpenTag = preg_match($InOpenRegex, $Str, $InTag, PREG_OFFSET_CAPTURE, $InTagPos+1);
+					$OpenTag = preg_match($InOpenRegex, $Str, $InTag, PREG_OFFSET_CAPTURE, $InTagPos + 1);
 					if (!$OpenTag || $InTag[0][1] > $CloseTag) {
 						break;
 					} else {
@@ -385,9 +387,9 @@ class TEXT {
 
 
 				// Find the internal block inside the tag
-				$Block = substr($Str, $i, $CloseTag-$i); // 5c) Get the contents between [open] and [/close] and call it the block.
+				$Block = substr($Str, $i, $CloseTag - $i); // 5c) Get the contents between [open] and [/close] and call it the block.
 
-				$i = $CloseTag+strlen($TagName)+3; // 5d) Move the pointer past the end of the [/close] tag.
+				$i = $CloseTag + strlen($TagName) + 3; // 5d) Move the pointer past the end of the [/close] tag.
 
 			}
 
@@ -446,7 +448,7 @@ class TEXT {
 						$n = $matches[2];
 						$text = '';
 						if ($n < 5 && $n > 0) {
-							$e = str_repeat('=', $matches[2]+1);
+							$e = str_repeat('=', $matches[2] + 1);
 							$text = $e . $matches[3] . $e;
 						}
 						return $text;
@@ -512,7 +514,9 @@ class TEXT {
 
 			foreach ($this->Headlines as $t) {
 				$n = (int) $t[0];
-				if ($i === 0 && $n > 1) $off = $n - $level;
+				if ($i === 0 && $n > 1) {
+					$off = $n - $level;
+				}
 				$this->headline_level($n, $level, $list, $i, $off);
 				$list .= sprintf('<li><a href="#%2$s">%1$s</a>', $t[1], $t[2]);
 				$level = $t[0];
@@ -551,7 +555,7 @@ class TEXT {
 			$List .= '</li>' . str_repeat('</ol></li>', $diff);
 		} elseif ($ItemLevel > $Level) {
 			$diff = $ItemLevel - $Level;
-			if ($Offset > 0) $List .= str_repeat('<li><ol>', $Offset-2);
+			if ($Offset > 0) $List .= str_repeat('<li><ol>', $Offset - 2);
 
 			if ($ItemLevel > 1) {
 				$List .= $i === 0 ? '<li>' : '';
@@ -565,7 +569,9 @@ class TEXT {
 	private function to_html ($Array) {
 		global $SSL;
 		$this->Levels++;
-		if ($this->Levels>10) { return $Block['Val']; } // Hax prevention
+		if ($this->Levels > 10) {
+			return $Block['Val'];
+		} // Hax prevention
 		$Str = '';
 
 		foreach ($Array as $Block) {
@@ -666,9 +672,11 @@ class TEXT {
 						$Str .= sprintf('%1$s%2$s%1$s', str_repeat('=', $Block['Attr'] + 1), $text);
 					} else {
 						$id = '_' . crc32($raw . $this->HeadlineID);
-						if ($this->InQuotes === 0) $this->Headlines[] = array($Block['Attr'], $raw, $id);
+						if ($this->InQuotes === 0) {
+							$this->Headlines[] = array($Block['Attr'], $raw, $id);
+						}
 
-						$Str .= sprintf('<h%1$d id="%3$s">%2$s</h%1$d>', ($Block['Attr']+2), $text, $id);
+						$Str .= sprintf('<h%1$d id="%3$s">%2$s</h%1$d>', ($Block['Attr'] + 2), $text, $id);
 						$this->HeadlineID++;
 					}
 					break;
@@ -685,7 +693,7 @@ class TEXT {
 					$this->NoImg++; // No images inside quote tags
 					$this->InQuotes++;
 					if (!empty($Block['Attr'])) {
-						$Exploded = explode("|", $this->to_html($Block['Attr']));
+						$Exploded = explode('|', $this->to_html($Block['Attr']));
 						if (isset($Exploded[1]) && is_numeric($Exploded[1])) {
 							$PostID = trim($Exploded[1]);
 							$Str.='<a href="#" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
@@ -718,7 +726,7 @@ class TEXT {
 					}
 					break;
 				case 'img':
-					if ($this->NoImg>0 && $this->valid_url($Block['Val'])) {
+					if ($this->NoImg > 0 && $this->valid_url($Block['Val'])) {
 						$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (image)';
 						break;
 					}
@@ -737,7 +745,7 @@ class TEXT {
 					break;
 
 				case 'aud':
-					if ($this->NoImg>0 && $this->valid_url($Block['Val'])) {
+					if ($this->NoImg > 0 && $this->valid_url($Block['Val'])) {
 						$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (audio)';
 						break;
 					}

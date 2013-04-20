@@ -258,7 +258,7 @@ class TORRENT_FORM {
 <script type="text/javascript">
 //<![CDATA[
 hide();
-if (document.getElementById("categories").disabled == false){
+if (document.getElementById("categories").disabled == false) {
 	if (navigator.appName == 'Opera') {
 		var useragent = navigator.userAgent;
 		var match = useragent.split('Version/');
@@ -479,7 +479,7 @@ function show() {
 			<tr>
 				<td class="label">Vanity House:</td>
 				<td>
-					<label><input type="checkbox" id="vanity_house" name="vanity_house"<? if ($Torrent['GroupID']) { echo ' disabled="disabled"'; } ?><? if ($Torrent['VanityHouse']){ echo ' checked="checked"';} ?> />
+					<label><input type="checkbox" id="vanity_house" name="vanity_house"<? if ($Torrent['GroupID']) { echo ' disabled="disabled"'; } ?><? if ($Torrent['VanityHouse']) { echo ' checked="checked"';} ?> />
 					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.
 					</label>
 				</td>
@@ -637,7 +637,7 @@ function show() {
 		$Torrent = $this->Torrent;
 ?>
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
-<?		if ($this->NewTorrent){ ?>
+<?		if ($this->NewTorrent) { ?>
 			<tr id="title_tr">
 				<td class="label">Author - Title:</td>
 				<td>
@@ -658,7 +658,9 @@ function show() {
 <?
 		foreach (Misc::display_array($this->Formats) as $Format) {
 			echo '<option value="'.$Format.'"';
-			if ($Format == $Torrent['Format']) { echo ' selected="selected"'; }
+			if ($Format == $Torrent['Format']) {
+				echo ' selected="selected"';
+			}
 			echo '>';
 			echo $Format;
 			echo "</option>\n";
@@ -675,8 +677,8 @@ function show() {
 <?
 		if (!$Torrent['Bitrate'] || ($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates))) {
 			$OtherBitrate = true;
-			if (substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(" (VBR)")) == " (VBR)") {
-				$Torrent['Bitrate'] = substr($Torrent['Bitrate'], 0, strlen($Torrent['Bitrate'])-6);
+			if (substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(' (VBR)')) == ' (VBR)') {
+				$Torrent['Bitrate'] = substr($Torrent['Bitrate'], 0, strlen($Torrent['Bitrate']) - 6);
 				$VBR = true;
 			}
 		} else {
@@ -684,7 +686,7 @@ function show() {
 		}
 		foreach (Misc::display_array($this->Bitrates) as $Bitrate) {
 			echo '<option value="'.$Bitrate.'"';
-			if ($Bitrate == $Torrent['Bitrate'] || ($OtherBitrate && $Bitrate == "Other")) {
+			if ($Bitrate == $Torrent['Bitrate'] || ($OtherBitrate && $Bitrate == 'Other')) {
 				echo ' selected="selected"';
 			}
 			echo '>';

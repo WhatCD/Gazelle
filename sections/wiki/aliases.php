@@ -1,10 +1,14 @@
 <?
-if(!isset($_GET['id']) || !is_number($_GET['id'])) { error(404); }
+if (!isset($_GET['id']) || !is_number($_GET['id'])) {
+	error(404);
+}
 $ArticleID = $_GET['id'];
 
 $Latest = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Latest);
-if($Edit > $LoggedUser['EffectiveClass']){ error(404); }
+if ($Edit > $LoggedUser['EffectiveClass']) {
+	error(404);
+}
 
 View::show_header($Title." Aliases");
 ?>
@@ -43,7 +47,7 @@ View::show_header($Title." Aliases");
 			</tr>
 <?
 $DB->query("SELECT Alias FROM wiki_aliases WHERE ArticleID='$ArticleID'");
-while(list($Revision, $Title, $AuthorID, $AuthorName, $Date) = $DB->next_record()) { ?>
+while (list($Revision, $Title, $AuthorID, $AuthorName, $Date) = $DB->next_record()) { ?>
 			<tr>
 				<td><?=$Revision?></td>
 				<td><?=$Title?></td>

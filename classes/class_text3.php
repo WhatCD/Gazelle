@@ -51,7 +51,7 @@ class TEXT_3 {
 	private $Levels = 0; // If images should be turned into URLs
 
 	function __construct() {
-		foreach($this->Smileys as $Key=>$Val) {
+		foreach ($this->Smileys as $Key=>$Val) {
 			$this->Smileys[$Key] = '<img border="0" src="'.STATIC_SERVER.'common/smileys/'.$Val.'" alt="" />';
 		}
 		reset($this->Smileys);
@@ -102,7 +102,7 @@ class TEXT_3 {
 		$Regex .= '(:[0-9]{1,5})?'; // port
 		$Regex .= '\/?'; // slash?
 		$Regex .= '(\/?[0-9a-z\-_.,&=@~%\/:;()+!#]+)*'; // /file
-		if(!empty($Extension)) {
+		if (!empty($Extension)) {
 			$Regex.=$Extension;
 		}
 
@@ -121,16 +121,18 @@ class TEXT_3 {
 
 	function local_url($Str) {
 		$URLInfo = parse_url($Str);
-		if(!$URLInfo) { return false; }
+		if (!$URLInfo) {
+			return false;
+		}
 		$Host = $URLInfo['host'];
 		// If for some reason your site does not require subdomains or contains a directory in the SITE_URL, revert to the line below.
-		//if($Host == NONSSL_SITE_URL || $Host == SSL_SITE_URL || $Host == 'www.'.NONSSL_SITE_URL) {
-		if(preg_match('/(\S+\.)*'.NONSSL_SITE_URL.'/', $Host)) {
+		//if ($Host == NONSSL_SITE_URL || $Host == SSL_SITE_URL || $Host == 'www.'.NONSSL_SITE_URL) {
+		if (preg_match('/(\S+\.)*'.NONSSL_SITE_URL.'/', $Host)) {
 			$URL = $URLInfo['path'];
-			if(!empty($URLInfo['query'])) {
+			if (!empty($URLInfo['query'])) {
 				$URL.='?'.$URLInfo['query'];
 			}
-			if(!empty($URLInfo['fragment'])) {
+			if (!empty($URLInfo['fragment'])) {
 				$URL.='#'.$URLInfo['fragment'];
 			}
 			return $URL;
@@ -184,7 +186,7 @@ EXPLANATION OF PARSER LOGIC
 		$Array = array();
 		$ArrayPos = 0;
 
-		while($i<$Len) {
+		while ($i < $Len) {
 			$Block = '';
 
 			// 1) Find the next tag (regex)
@@ -192,7 +194,7 @@ EXPLANATION OF PARSER LOGIC
 			$IsTag = preg_match("/((\[[a-zA-Z*]+)(=(?:[^\n'\"\[\]]|\[\d*\])+)?\])|(\[\[[^\n\"'\[\]]+\]\])/", $Str, $Tag, PREG_OFFSET_CAPTURE, $i);
 
 			// 1a) If there aren't any tags left, write everything remaining to a block
-			if(!$IsTag) {
+			if (!$IsTag) {
 				// No more tags
 				$Array[$ArrayPos] = substr($Str, $i);
 				break;
@@ -200,14 +202,14 @@ EXPLANATION OF PARSER LOGIC
 
 			// 1b) If the next tag isn't where the pointer is, write everything up to there to a text block.
 			$TagPos = $Tag[0][1];
-			if($TagPos>$i) {
-				$Array[$ArrayPos] = substr($Str, $i, $TagPos-$i);
+			if ($TagPos > $i) {
+				$Array[$ArrayPos] = substr($Str, $i, $TagPos - $i);
 				++$ArrayPos;
-				$i=$TagPos;
+				$i = $TagPos;
 			}
 
 			// 2) See if it's a [[wiki-link]] or an ordinary tag, and get the tag name
-			if(!empty($Tag[4][0])) { // Wiki-link
+			if (!empty($Tag[4][0])) { // Wiki-link
 				$WikiLink = true;
 				$TagName = substr($Tag[4][0], 2, -2);
 				$Attrib = '';
@@ -216,9 +218,9 @@ EXPLANATION OF PARSER LOGIC
 				$TagName = strtolower(substr($Tag[2][0], 1));
 
 				//3a) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
-				if(!isset($this->ValidTags[$TagName])) {
-					$Array[$ArrayPos] = substr($Str, $i, ($TagPos-$i)+strlen($Tag[0][0]));
-					$i=$TagPos+strlen($Tag[0][0]);
+				if (!isset($this->ValidTags[$TagName])) {
+					$Array[$ArrayPos] = substr($Str, $i, ($TagPos - $i) + strlen($Tag[0][0]));
+					$i = $TagPos + strlen($Tag[0][0]);
 					++$ArrayPos;
 					continue;
 				}
@@ -226,15 +228,15 @@ EXPLANATION OF PARSER LOGIC
 				$MaxAttribs = $this->ValidTags[$TagName];
 
 				// 3b) Get the attribute, if it exists [name=attribute]
-				if(!empty($Tag[3][0])) {
+				if (!empty($Tag[3][0])) {
 					$Attrib = substr($Tag[3][0], 1);
 				} else {
-					$Attrib='';
+					$Attrib = '';
 				}
 			}
 
 			// 4) Move the pointer past the end of the tag
-			$i=$TagPos+strlen($Tag[0][0]);
+			$i = $TagPos + strlen($Tag[0][0]);
 
 			// 5) Find out where the tag closes (beginning of [/tag])
 
@@ -244,21 +246,21 @@ EXPLANATION OF PARSER LOGIC
 
 
 			//5a) Different for different types of tag. Some tags don't close, others are weird like [*]
-			if($TagName == 'img' && !empty($Tag[3][0])) { //[img=...]
+			if ($TagName == 'img' && !empty($Tag[3][0])) { //[img=...]
 				$Block = ''; // Nothing inside this tag
 				// Don't need to touch $i
-			} elseif($TagName == 'inlineurl') { // We did a big replace early on to turn http:// into [inlineurl]http://
+			} elseif ($TagName == 'inlineurl') { // We did a big replace early on to turn http:// into [inlineurl]http://
 
 				// Let's say the block can stop at a newline or a space
 				$CloseTag = strcspn($Str, " \n\r", $i);
-				if($CloseTag === false) { // block finishes with URL
+				if ($CloseTag === false) { // block finishes with URL
 					$CloseTag = $Len;
 				}
-				if(preg_match('/[!;,.?:]+$/',substr($Str, $i, $CloseTag), $Match)) {
+				if (preg_match('/[!;,.?:]+$/',substr($Str, $i, $CloseTag), $Match)) {
 					$CloseTag -= strlen($Match[0]);
 				}
 				$URL = substr($Str, $i, $CloseTag);
-				if(substr($URL, -1) == ')' && substr_count($URL, '(') < substr_count($URL, ')')) {
+				if (substr($URL, -1) == ')' && substr_count($URL, '(') < substr_count($URL, ')')) {
 					$CloseTag--;
 					$URL = substr($URL, 0, -1);
 				}
@@ -267,20 +269,20 @@ EXPLANATION OF PARSER LOGIC
 				// strcspn returns the number of characters after the offset $i, not after the beginning of the string
 				// Therefore, we use += instead of the = everywhere else
 				$i += $CloseTag; // 5d) Move the pointer past the end of the [/close] tag.
-			} elseif($WikiLink == true || $TagName == 'n') {
+			} elseif ($WikiLink == true || $TagName == 'n') {
 				// Don't need to do anything - empty tag with no closing
-			} elseif($TagName == '*') {
+			} elseif ($TagName == '*') {
 				// We're in a list. Find where it ends
 				$NewLine = $i;
 				do { // Look for \n[*]
-					$NewLine = strpos($Str, "\n", $NewLine+1);
-				} while($NewLine!== false && substr($Str, $NewLine+1, 3) == '[*]');
+					$NewLine = strpos($Str, "\n", $NewLine + 1);
+				} while ($NewLine !== false && substr($Str, $NewLine+1, 3) == '[*]');
 
 				$CloseTag = $NewLine;
-				if($CloseTag === false) { // block finishes with list
+				if ($CloseTag === false) { // block finishes with list
 					$CloseTag = $Len;
 				}
-				$Block = substr($Str, $i, $CloseTag-$i); // Get the list
+				$Block = substr($Str, $i, $CloseTag - $i); // Get the list
 				$i = $CloseTag; // 5d) Move the pointer past the end of the [/close] tag.
 			} else {
 				//5b) If it's a normal tag, it may have versions of itself nested inside
@@ -290,7 +292,7 @@ EXPLANATION OF PARSER LOGIC
 				$NumInCloses = -1;
 
 				$InOpenRegex = '/\[('.$TagName.')';
-				if($MaxAttribs>0) {
+				if ($MaxAttribs > 0) {
 					$InOpenRegex.="(=[^\n'\"\[\]]+)?";
 				}
 				$InOpenRegex.='\]/i';
@@ -300,7 +302,7 @@ EXPLANATION OF PARSER LOGIC
 				// (as the first close tag won't do - it's been opened again)
 				do {
 					$CloseTag = stripos($Str, '[/'.$TagName.']', $CloseTag+1);
-					if($CloseTag === false) {
+					if ($CloseTag === false) {
 						$CloseTag = $Len;
 						break;
 					} else {
@@ -308,8 +310,8 @@ EXPLANATION OF PARSER LOGIC
 					}
 
 					// Is there another open tag inside this one?
-					$OpenTag = preg_match($InOpenRegex, $Str, $InTag, PREG_OFFSET_CAPTURE, $InTagPos+1);
-					if(!$OpenTag || $InTag[0][1]>$CloseTag) {
+					$OpenTag = preg_match($InOpenRegex, $Str, $InTag, PREG_OFFSET_CAPTURE, $InTagPos + 1);
+					if (!$OpenTag || $InTag[0][1] > $CloseTag) {
 						break;
 					} else {
 						$InTagPos = $InTag[0][1];
@@ -333,7 +335,7 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'url':
 					$Array[$ArrayPos] = array('Type'=>'img', 'Attr'=>$Attrib, 'Val'=>$Block);
-					if(empty($Attrib)) { // [url]http://...[/url] - always set URL to attribute
+					if (empty($Attrib)) { // [url]http://...[/url] - always set URL to attribute
 						$Array[$ArrayPos] = array('Type'=>'url', 'Attr'=>$Block, 'Val'=>'');
 					} else {
 						$Array[$ArrayPos] = array('Type'=>'url', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
@@ -344,7 +346,7 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'img':
 				case 'image':
-					if(empty($Block)) {
+					if (empty($Block)) {
 						$Block = $Attrib;
 					}
 					$Array[$ArrayPos] = array('Type'=>'img', 'Val'=>$Block);
@@ -352,7 +354,7 @@ EXPLANATION OF PARSER LOGIC
 				case 'aud':
 				case 'mp3':
 				case 'audio':
-					if(empty($Block)) {
+					if (empty($Block)) {
 						$Block = $Attrib;
 					}
 					$Array[$ArrayPos] = array('Type'=>'aud', 'Val'=>$Block);
@@ -381,7 +383,7 @@ EXPLANATION OF PARSER LOGIC
 				case '*':
 						$Array[$ArrayPos] = array('Type'=>'list');
 						$Array[$ArrayPos]['Val'] = explode('[*]', $Block);
-						foreach($Array[$ArrayPos]['Val'] as $Key=>$Val) {
+						foreach ($Array[$ArrayPos]['Val'] as $Key=>$Val) {
 							$Array[$ArrayPos]['Val'][$Key] = $this->parse(trim($Val));
 						}
 					break;
@@ -389,14 +391,14 @@ EXPLANATION OF PARSER LOGIC
 					$ArrayPos--;
 					break; // n serves only to disrupt bbcode (backwards compatibility - use [pre])
 				default:
-					if($WikiLink == true) {
+					if ($WikiLink == true) {
 						$Array[$ArrayPos] = array('Type'=>'wiki','Val'=>$TagName);
 					} else {
 
 						// Basic tags, like [b] or [size=5]
 
 						$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>$this->parse($Block));
-						if(!empty($Attrib) && $MaxAttribs>0) {
+						if (!empty($Attrib) && $MaxAttribs>0) {
 							$Array[$ArrayPos]['Attr'] = strtolower($Attrib);
 						}
 					}
@@ -409,11 +411,11 @@ EXPLANATION OF PARSER LOGIC
 
 	function to_html($Array) {
 		$this->Levels++;
-		if($this->Levels>10) { return $Block['Val']; } // Hax prevention
+		if ($this->Levels>10) { return $Block['Val']; } // Hax prevention
 		$Str = '';
 
-		foreach($Array as $Block) {
-			if(is_string($Block)) {
+		foreach ($Array as $Block) {
+			if (is_string($Block)) {
 				$Str.=$this->smileys($Block);
 				continue;
 			}
@@ -450,7 +452,7 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'list':
 					$Str.='<ul>';
-					foreach($Block['Val'] as $Line) {
+					foreach ($Block['Val'] as $Line) {
 
 						$Str.='<li>'.$this->to_html($Line).'</li>';
 					}
@@ -458,7 +460,7 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'align':
 					$ValidAttribs = array('left', 'center', 'right');
-					if(!in_array($Block['Attr'], $ValidAttribs)) {
+					if (!in_array($Block['Attr'], $ValidAttribs)) {
 						$Str.='[align='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/align]';
 					} else {
 						$Str.='<div style="text-align:'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</div>';
@@ -467,7 +469,7 @@ EXPLANATION OF PARSER LOGIC
 				case 'color':
 				case 'colour':
 					$ValidAttribs = array('aqua', 'black', 'blue', 'fuchsia', 'green', 'grey', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow');
-					if(!in_array($Block['Attr'], $ValidAttribs) && !preg_match('/^#[0-9a-f]{6}$/', $Block['Attr'])) {
+					if (!in_array($Block['Attr'], $ValidAttribs) && !preg_match('/^#[0-9a-f]{6}$/', $Block['Attr'])) {
 						$Str.='[color='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/color]';
 					} else {
 						$Str.='<span style="color:'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
@@ -476,7 +478,7 @@ EXPLANATION OF PARSER LOGIC
 				case 'inlinesize':
 				case 'size':
 					$ValidAttribs = array('1','2','3','4','5','6','7','8','9','10');
-					if(!in_array($Block['Attr'], $ValidAttribs)) {
+					if (!in_array($Block['Attr'], $ValidAttribs)) {
 						$Str.='[size='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/size]';
 					} else {
 						$Str.='<span class="size'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
@@ -484,7 +486,7 @@ EXPLANATION OF PARSER LOGIC
 					break;
 				case 'quote':
 					$this->NoImg++; // No images inside quote tags
-					if(!empty($Block['Attr'])) {
+					if (!empty($Block['Attr'])) {
 						$Str.='<strong>'.$this->to_html($Block['Attr']).'</strong> wrote: ';
 					}
 					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
@@ -495,14 +497,14 @@ EXPLANATION OF PARSER LOGIC
 					$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
 					break;
 				case 'img':
-					if($this->NoImg>0 && $this->valid_url($Block['Val'])) {
+					if ($this->NoImg > 0 && $this->valid_url($Block['Val'])) {
 						$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (image)';
 						break;
 					}
-					if(!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
+					if (!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
 						$Str.='[img]'.$Block['Val'].'[/img]';
 					} else {
-						if(check_perms('site_proxy_images')) {
+						if (check_perms('site_proxy_images')) {
 							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
 						} else {
 							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';
@@ -511,11 +513,11 @@ EXPLANATION OF PARSER LOGIC
 					break;
 
 				case 'aud':
-					if($this->NoImg>0 && $this->valid_url($Block['Val'])) {
+					if ($this->NoImg > 0 && $this->valid_url($Block['Val'])) {
 						$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (audio)';
 						break;
 					}
-					if(!$this->valid_url($Block['Val'], '\.(mp3|ogg|wav)')) {
+					if (!$this->valid_url($Block['Val'], '\.(mp3|ogg|wav)')) {
 						$Str.='[aud]'.$Block['Val'].'[/aud]';
 					} else {
 						//TODO: Proxy this for staff?
@@ -525,7 +527,7 @@ EXPLANATION OF PARSER LOGIC
 
 				case 'url':
 					// Make sure the URL has a label
-					if(empty($Block['Val'])) {
+					if (empty($Block['Val'])) {
 						$Block['Val'] = $Block['Attr'];
 						$NoName = true; // If there isn't a Val for this
 					} else {
@@ -533,12 +535,14 @@ EXPLANATION OF PARSER LOGIC
 						$NoName = false;
 					}
 
-					if(!$this->valid_url($Block['Attr'])) {
+					if (!$this->valid_url($Block['Attr'])) {
 						$Str.='[url='.$Block['Attr'].']'.$Block['Val'].'[/url]';
 					} else {
 						$LocalURL = $this->local_url($Block['Attr']);
-						if($LocalURL) {
-							if($NoName) { $Block['Val'] = substr($LocalURL,1); }
+						if ($LocalURL) {
+							if ($NoName) {
+								$Block['Val'] = substr($LocalURL,1);
+							}
 							$Str.='<a href="'.$LocalURL.'">'.$Block['Val'].'</a>';
 						} else {
 							$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Val'].'</a>';
@@ -547,7 +551,7 @@ EXPLANATION OF PARSER LOGIC
 					break;
 
 				case 'inlineurl':
-					if(!$this->valid_url($Block['Attr'], '', true)) {
+					if (!$this->valid_url($Block['Attr'], '', true)) {
 						$Array = $this->parse($Block['Attr']);
 						$Block['Attr'] = $Array;
 						$Str.=$this->to_html($Block['Attr']);
@@ -555,7 +559,7 @@ EXPLANATION OF PARSER LOGIC
 
 					else {
 						$LocalURL = $this->local_url($Block['Attr']);
-						if($LocalURL) {
+						if ($LocalURL) {
 							$Str.='<a href="'.$LocalURL.'">'.substr($LocalURL,1).'</a>';
 						} else {
 							$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Attr'].'</a>';
@@ -572,8 +576,8 @@ EXPLANATION OF PARSER LOGIC
 
 	function raw_text($Array) {
 		$Str = '';
-		foreach($Array as $Block) {
-			if(is_string($Block)) {
+		foreach ($Array as $Block) {
+			if (is_string($Block)) {
 				$Str.=$Block;
 				continue;
 			}
@@ -601,14 +605,14 @@ EXPLANATION OF PARSER LOGIC
 					$Str.=$Block['Val'];
 					break;
 				case 'list':
-					foreach($Block['Val'] as $Line) {
+					foreach ($Block['Val'] as $Line) {
 						$Str.='*'.$this->raw_text($Line);
 					}
 					break;
 
 				case 'url':
 					// Make sure the URL has a label
-					if(empty($Block['Val'])) {
+					if (empty($Block['Val'])) {
 						$Block['Val'] = $Block['Attr'];
 					} else {
 						$Block['Val'] = $this->raw_text($Block['Val']);
@@ -618,7 +622,7 @@ EXPLANATION OF PARSER LOGIC
 					break;
 
 				case 'inlineurl':
-					if(!$this->valid_url($Block['Attr'], '', true)) {
+					if (!$this->valid_url($Block['Attr'], '', true)) {
 						$Array = $this->parse($Block['Attr']);
 						$Block['Attr'] = $Array;
 						$Str.=$this->raw_text($Block['Attr']);
@@ -635,7 +639,7 @@ EXPLANATION OF PARSER LOGIC
 
 	function smileys($Str) {
 		global $LoggedUser;
-		if(!empty($LoggedUser['DisableSmileys'])) {
+		if (!empty($LoggedUser['DisableSmileys'])) {
 			return $Str;
 		}
 		$Str = strtr($Str, $this->Smileys);

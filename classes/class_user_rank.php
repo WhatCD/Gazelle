@@ -61,14 +61,16 @@ class USER_RANK {
 	}
 
 	function get_rank($TableName, $Value) {
-		if($Value == 0) { return 0; }
+		if ($Value == 0) {
+			return 0;
+		}
 		global $Cache, $DB;
 
 		$Table = $Cache->get_value(PREFIX.$TableName);
-		if(!$Table) {
+		if (!$Table) {
 			//Cache lock!
 			$Lock = $Cache->get_value(PREFIX.$TableName."_lock");
-			if($Lock) {
+			if ($Lock) {
 				return false;
 			} else {
 				$Cache->cache_value(PREFIX.$TableName."_lock", '1', 300);
@@ -79,7 +81,7 @@ class USER_RANK {
 		$LastPercentile = 0;
 		foreach ($Table as $Row) {
 			list($CurValue) = $Row;
-			if($CurValue>=$Value) {
+			if ($CurValue >= $Value) {
 				return $LastPercentile;
 			}
 			$LastPercentile++;
@@ -87,11 +89,13 @@ class USER_RANK {
 		return 100; // 100th percentile
 	}
 
-	function overall_score($Uploaded, $Downloaded, $Uploads, $Requests, $Posts, $Bounty, $Artists, $Ratio){
+	function overall_score($Uploaded, $Downloaded, $Uploads, $Requests, $Posts, $Bounty, $Artists, $Ratio) {
 		// We can do this all in 1 line, but it's easier to read this way
-		if($Ratio>1) { $Ratio = 1; }
+		if ($Ratio > 1) {
+			$Ratio = 1;
+		}
 		$TotalScore = 0;
-		if(in_array(false, func_get_args(), true)) {
+		if (in_array(false, func_get_args(), true)) {
 			return false;
 		}
 		$TotalScore += $Uploaded*15;

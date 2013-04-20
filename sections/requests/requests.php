@@ -19,7 +19,7 @@ if (empty($_GET['type'])) {
 		$SS->set_filter('visible', array(1));
 	}
 } else {
-	switch($_GET['type']) {
+	switch ($_GET['type']) {
 		case 'created':
 			$Title = 'My requests';
 			$SS->set_filter('userid', array($LoggedUser['ID']));
@@ -27,7 +27,9 @@ if (empty($_GET['type'])) {
 		case 'voted':
 			if (!empty($_GET['userid'])) {
 				if (is_number($_GET['userid'])) {
-					if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) { error(403); }
+					if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
+						error(403);
+					}
 					$Title = "Requests voted for by ".$UserInfo['Username'];
 					$SS->set_filter('voter', array($_GET['userid']));
 				} else {
@@ -42,7 +44,9 @@ if (empty($_GET['type'])) {
 			if (empty($_GET['userid']) || !is_number($_GET['userid'])) {
 				error(404);
 			} else {
-				if (!check_paranoia('requestsfilled_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) { error(403); }
+				if (!check_paranoia('requestsfilled_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
+					error(403);
+				}
 				$Title = "Requests filled by ".$UserInfo['Username'];
 				$SS->set_filter('fillerid', array($_GET['userid']));
 			}
@@ -167,7 +171,7 @@ if (!empty($_GET['search'])) {
 	}
 }
 
-if (!empty($_GET['tags'])){
+if (!empty($_GET['tags'])) {
 	$Tags = explode(',', $_GET['tags']);
 	$TagNames = array();
 	if (!isset($_GET['tags_type']) || $_GET['tags_type'] == 1) {
@@ -384,7 +388,7 @@ View::show_header($Title, 'requests');
 					<input type="checkbox" name="show_filled"<? if (!$Submitted || !empty($_GET['show_filled']) || (!$Submitted && !empty($_GET['type']) && $_GET['type'] == 'filled')) { ?> checked="checked"<? } ?> />
 				</td>
 			</tr>
-<?	if (check_perms('site_see_old_requests')){ ?>
+<?	if (check_perms('site_see_old_requests')) { ?>
 			<tr id="include_old">
 				<td class="label">Include old:</td>
 				<td>

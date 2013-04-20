@@ -1,6 +1,6 @@
 <?
 
-if(!$UserCount = $Cache->get_value('stats_user_count')){
+if (!$UserCount = $Cache->get_value('stats_user_count')) {
 	$DB->query("SELECT COUNT(ID) FROM users_main WHERE Enabled='1'");
 	list($UserCount) = $DB->next_record();
 	$Cache->cache_value('stats_user_count', $UserCount, 0);
@@ -14,12 +14,11 @@ authorize();
 $DB->query("SELECT can_leech FROM users_main WHERE ID = ".$UserID);
 list($CanLeech) = $DB->next_record();
 
-if($LoggedUser['RatioWatch'] ||
+if ($LoggedUser['RatioWatch'] ||
 	!$CanLeech ||
 	$LoggedUser['DisableInvites'] == '1'||
-	$LoggedUser['Invites']==0 && !check_perms('site_send_unlimited_invites') ||
+	$LoggedUser['Invites'] == 0 && !check_perms('site_send_unlimited_invites') ||
 	($UserCount >= USER_LIMIT && USER_LIMIT != 0 && !check_perms('site_can_invite_always'))) {
-
 		error(403);
 }
 
@@ -30,15 +29,15 @@ $SiteURL = SSL_SITE_URL;
 $InviteExpires = time_plus(60*60*24*3); // 3 days
 
 //MultiInvite
-if(strpos($Email, '|') && check_perms('site_send_unlimited_invites')) {
+if (strpos($Email, '|') && check_perms('site_send_unlimited_invites')) {
 	$Emails = explode('|', $Email);
 } else {
 	$Emails = array($Email);
 }
 
-foreach($Emails as $CurEmail){
+foreach ($Emails as $CurEmail) {
 	if (!preg_match("/^".EMAIL_REGEX."$/i", $CurEmail)) {
-		if(count($Emails) > 1) {
+		if (count($Emails) > 1) {
 			continue;
 		} else {
 			error('Invalid email.');
@@ -47,7 +46,7 @@ foreach($Emails as $CurEmail){
 		}
 	}
 	$DB->query("SELECT Expires FROM invites WHERE InviterID = ".$LoggedUser['ID']." AND Email LIKE '".$CurEmail."'");
-	if($DB->record_count() > 0) {
+	if ($DB->record_count() > 0) {
 		error("You already have a pending invite to that address!");
 		header('Location: user.php?action=invite');
 		die();

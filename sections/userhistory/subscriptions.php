@@ -3,7 +3,7 @@
 User topic subscription page
 */
 
-if(!empty($LoggedUser['DisableForums'])) {
+if (!empty($LoggedUser['DisableForums'])) {
 	error(403);
 }
 
@@ -19,7 +19,7 @@ list($Page,$Limit) = Format::page_limit($PerPage);
 
 View::show_header('Subscribed topics','subscriptions,bbcode');
 
-if($LoggedUser['CustomForums']) {
+if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
 	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
@@ -39,15 +39,15 @@ $sql = 'SELECT
 	JOIN forums AS f ON f.ID = t.ForumID
 	WHERE p.ID <= IFNULL(l.PostID,t.LastPostID)
 	AND ((f.MinClassRead <= '.$LoggedUser['Class'];
-if(!empty($RestrictedForums)) {
+if (!empty($RestrictedForums)) {
 	$sql.=' AND f.ID NOT IN (\''.$RestrictedForums.'\')';
 }
 $sql .= ')';
-if(!empty($PermittedForums)) {
+if (!empty($PermittedForums)) {
 	$sql.=' OR f.ID IN (\''.$PermittedForums.'\')';
 }
 $sql .= ')';
-if($ShowUnread) {
+if ($ShowUnread) {
 
 
 	$sql .= '
@@ -63,7 +63,7 @@ $PostIDs = $DB->query($sql);
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 
-if($NumResults > $PerPage*($Page-1)) {
+if ($NumResults > $PerPage*($Page-1)) {
 	$DB->set_query_id($PostIDs);
 	$PostIDs = $DB->collect('ID');
 	$sql = 'SELECT
@@ -99,7 +99,7 @@ if($NumResults > $PerPage*($Page-1)) {
 
 		<div class="linkbox">
 <?
-if(!$ShowUnread) {
+if (!$ShowUnread) {
 ?>
 			<br /><br />
 			<a href="userhistory.php?action=subscriptions&amp;showunread=1" class="brackets">Only display topics with unread replies</a>&nbsp;&nbsp;&nbsp;
@@ -110,7 +110,7 @@ if(!$ShowUnread) {
 			<a href="userhistory.php?action=subscriptions&amp;showunread=0" class="brackets">Show all subscribed topics</a>&nbsp;&nbsp;&nbsp;
 <?
 }
-if($NumResults) {
+if ($NumResults) {
 ?>
 			<a href="#" onclick="Collapse();return false;" id="collapselink" class="brackets"><?=$ShowCollapsed?'Show':'Hide'?> post bodies</a>&nbsp;&nbsp;&nbsp;
 <?
@@ -122,10 +122,10 @@ if($NumResults) {
 		</div>
 	</div>
 <?
-if(!$NumResults) {
+if (!$NumResults) {
 ?>
 	<div class="center">
-		No subscribed topics<?=$ShowUnread?' with unread posts':''?>
+		No subscribed topics<?=$ShowUnread ? ' with unread posts' : '' ?>
 	</div>
 <?
 } else {
@@ -137,23 +137,23 @@ if(!$NumResults) {
 ?>
 	</div>
 <?
-	while(list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()){
+	while (list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()) {
 ?>
-	<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : ''?>">
+	<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : '' ?>">
 		<colgroup>
-<?		if(empty($HeavyInfo['DisableAvatars'])) { ?>
+<?		if (empty($HeavyInfo['DisableAvatars'])) { ?>
 			<col class="col_avatar" />
 <? 		} ?>
 			<col class="col_post_body" />
 		</colgroup>
 		<tr class="colhead_dark">
-			<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1?>">
+			<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1 ?>">
 				<span style="float:left;">
 					<a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$ForumName?></a> &gt;
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>
-		<? if($PostID<$LastPostID && !$Locked) { ?>
+<?			if ($PostID < $LastPostID && !$Locked) { ?>
 					<span class="new">(New!)</span>
-		<? } ?>
+<?			} ?>
 				</span>
 				<span style="float:left;" class="last_read" title="Jump to last read">
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID.($PostID?'&amp;postid='.$PostID.'#post'.$PostID:'')?>"></a>
@@ -165,36 +165,36 @@ if(!$NumResults) {
 				</span>
 			</td>
 		</tr>
-		<tr class="row<?=$ShowCollapsed?' hidden':''?>">
-		<? if(empty($HeavyInfo['DisableAvatars'])) { ?>
+		<tr class="row<?=$ShowCollapsed ? ' hidden' : '' ?>">
+<?		if (empty($HeavyInfo['DisableAvatars'])) { ?>
 			<td class="avatar" valign="top">
-			<? if(check_perms('site_proxy_images') && preg_match('/^https?:\/\/(localhost(:[0-9]{2,5})?|[0-9]{1,3}(\.[0-9]{1,3}){3}|([a-zA-Z0-9\-\_]+\.)+([a-zA-Z]{1,5}[^\.]))(:[0-9]{2,5})?(\/[^<>]+)+\.(jpg|jpeg|gif|png|tif|tiff|bmp)$/is',$AuthorAvatar)) {
+<?			if (check_perms('site_proxy_images') && preg_match('/^https?:\/\/(localhost(:[0-9]{2,5})?|[0-9]{1,3}(\.[0-9]{1,3}){3}|([a-zA-Z0-9\-\_]+\.)+([a-zA-Z]{1,5}[^\.]))(:[0-9]{2,5})?(\/[^<>]+)+\.(jpg|jpeg|gif|png|tif|tiff|bmp)$/is',$AuthorAvatar)) {
 				$AuthorAvatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($AuthorAvatar); ?>
-			<img src="<?=$AuthorAvatar?>" width="150" style="max-height:400px;" alt="<?=$AuthorName?>'s avatar" />
-			<? } elseif(!$AuthorAvatar) { ?>
-				<img src="<?=STATIC_SERVER.'common/avatars/default.png'?>" width="150" style="max-height:400px;" alt="Default avatar" />
-			<? } else { ?>
-				<img src="<?=$AuthorAvatar?>" width="150" style="max-height:400px;" alt="<?=$AuthorName?>'s avatar" />
-			<? } ?>
+			<img src="<?=$AuthorAvatar?>" width="150" style="max-height: 400px;" alt="<?=$AuthorName?>'s avatar" />
+<?			} elseif (!$AuthorAvatar) { ?>
+				<img src="<?=STATIC_SERVER.'common/avatars/default.png'?>" width="150" style="max-height: 400px;" alt="Default avatar" />
+<?			} else { ?>
+				<img src="<?=$AuthorAvatar?>" width="150" style="max-height: 400px;" alt="<?=$AuthorName?>'s avatar" />
+<?			} ?>
 			</td>
-		<? } ?>
+<?		} ?>
 			<td class="body" valign="top">
 				<div class="content3">
 					<?=$Text->full_format($Body) ?>
-		<? if($EditedUserID) { ?>
+<?		if ($EditedUserID) { ?>
 					<br /><br />
 					Last edited by
 					<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime)?>
-		<? } ?>
+<?		} ?>
 				</div>
 			</td>
 		</tr>
 	</table>
-	<? } // while(list(...)) ?>
+	<? } // while (list(...)) ?>
 	<div class="linkbox">
 <?=$Pages?>
 	</div>
-<? } // else -- if(empty($NumResults)) ?>
+<? } // else -- if (empty($NumResults)) ?>
 </div>
 <?
 

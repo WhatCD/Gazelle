@@ -76,7 +76,7 @@ abstract class IRC_BOT {
 
 	public function get_channel() {
 		preg_match('/.+ PRIVMSG ([^:]+) :.+/', $this->Data, $Channel);
-		if(preg_match('/#.+/',$Channel[1])) {
+		if (preg_match('/#.+/',$Channel[1])) {
 			return $Channel[1];
 		} else {
 			return false;
@@ -133,13 +133,13 @@ abstract class IRC_BOT {
 	You can probably find it in old RC1 code kicking aronud if you need it.
 	protected function ip_check($IP,$Gline=false,$Channel=BOT_REPORT_CHAN) {
 		global $Cache, $DB;
-		if(blacklisted_ip($IP)) {
+		if (blacklisted_ip($IP)) {
 			$this->send_to($Channel, 'TOR IP Detected: '.$IP);
 			if ($Gline) {
 				$this->send_raw('GLINE *@'.$IP.' 90d :DNSBL Proxy');
 			}
 		}
-		if(Tools::site_ban_ip($IP)) {
+		if (Tools::site_ban_ip($IP)) {
 			$this->send_to($Channel, 'Site IP Ban Detected: '.$IP);
 			if ($Gline) {
 				$this->send_raw('GLINE *@'.$IP.' 90d :IP Ban');
@@ -151,31 +151,31 @@ abstract class IRC_BOT {
 		global $Cache,$DB;
 		$Cache->InternalCache = false;
 		stream_set_timeout($this->Socket, 10000000000);
-		while($this->State == 1){
-			if($this->Data = fgets($this->Socket, 256)) {
+		while ($this->State == 1) {
+			if ($this->Data = fgets($this->Socket, 256)) {
 				//IP checks
-				//if(preg_match('/:\*\*\* (?:REMOTE)?CONNECT: Client connecting (?:.*) \[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\] \[(.+)\]/', $this->Data, $IP)) {
+				//if (preg_match('/:\*\*\* (?:REMOTE)?CONNECT: Client connecting (?:.*) \[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\] \[(.+)\]/', $this->Data, $IP)) {
 				//	$this->ip_check($IP[1],true);
 				//}
 
-				if($this->Debug === true) {
+				if ($this->Debug === true) {
 					$this->send_to(BOT_DEBUG_CHAN, $this->Data);
 				}
 
-				if($this->Whois !== false) {
+				if ($this->Whois !== false) {
 					$Exp = explode(' ',$this->Data);
-					if($Exp[1] == '307') {
+					if ($Exp[1] == '307') {
 						$this->Identified[$this->Whois] = 1;
 						$this->send_to($this->LastChan, "$this->Whois correctly identified as a real person!");
 						$this->Whois = false;
 						$this->LastChan = false;
-					} elseif($Exp[6] == '/WHOIS') {
+					} elseif ($Exp[6] == '/WHOIS') {
 						$this->Whois = false;
 					}
 				}
 
-				if(preg_match("/:([^!]+)![^\s]* QUIT.* /", $this->Data, $Nick)) {
-					if(isset($this->Identified[$Nick[1]])) {
+				if (preg_match("/:([^!]+)![^\s]* QUIT.* /", $this->Data, $Nick)) {
+					if (isset($this->Identified[$Nick[1]])) {
 						unset($this->Identified[$Nick[1]]);
 					}
 					if (isset($this->DisabledUsers[$Nick[1]])) {
@@ -202,24 +202,24 @@ abstract class IRC_BOT {
 					}
 				}
 
-				if(preg_match("/End of message of the day./", $this->Data)) {
+				if (preg_match('/End of message of the day./', $this->Data)) {
 					$this->connect_events();
 				}
 
-				if(preg_match('/PING :(.+)/', $this->Data, $Ping)) {
+				if (preg_match('/PING :(.+)/', $this->Data, $Ping)) {
 					$this->send_raw('PONG :'.$Ping[1]);
 				}
 
-				if(preg_match('/.*PRIVMSG #.*/',$this->Data)) {
+				if (preg_match('/.*PRIVMSG #.*/',$this->Data)) {
 					$this->channel_events();
 				}
 
-				if(preg_match("/.* PRIVMSG ".BOT_NICK." .*/",$this->Data)) {
+				if (preg_match("/.* PRIVMSG ".BOT_NICK." .*/",$this->Data)) {
 					$this->query_events();
 				}
 			}
 
-			if($this->Listened = @socket_accept($this->ListenSocket)) {
+			if ($this->Listened = @socket_accept($this->ListenSocket)) {
 				$this->listener_events();
 			}
 

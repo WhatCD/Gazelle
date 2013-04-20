@@ -72,7 +72,7 @@ if ($_POST['vanity_house'] && check_perms('torrents_edit_vanityhouse') ) {
 $Properties['TorrentDescription'] = $_POST['release_desc'];
 if ($_POST['album_desc']) {
 	$Properties['GroupDescription'] = trim($_POST['album_desc']);
-} elseif ($_POST['desc']){
+} elseif ($_POST['desc']) {
 	$Properties['GroupDescription'] = trim($_POST['desc']);
 }
 $Properties['GroupID'] = $_POST['groupid'];
@@ -116,7 +116,7 @@ switch ($Type) {
 			}
 		}
 
-		if ($Properties['Remastered'] && !$Properties['UnknownRelease']){
+		if ($Properties['Remastered'] && !$Properties['UnknownRelease']) {
 			$Validate->SetFields('remaster_year',
 				'1','number','Year of remaster/re-issue must be entered.');
 		} else {
@@ -439,11 +439,11 @@ if ($Type == 'Music') {
 			// Don't escape tg.Name. It's written directly to the log table
 			list($GroupID, $WikiImage, $WikiBody, $RevisionID, $Properties['Title'], $Properties['Year'], $Properties['ReleaseType'], $Properties['TagList']) = $DB->next_record(MYSQLI_NUM, array(4));
 			$Properties['TagList'] = str_replace(array(" ",".","_"), array(", ",".","."), $Properties['TagList']);
-			if (!$Properties['Image'] && $WikiImage){
+			if (!$Properties['Image'] && $WikiImage) {
 				$Properties['Image'] = $WikiImage;
 				$T['Image'] = "'".db_string($WikiImage)."'";
 			}
-			if (strlen($WikiBody) > strlen($Body)){
+			if (strlen($WikiBody) > strlen($Body)) {
 				$Body = $WikiBody;
 				if (!$Properties['Image'] || $Properties['Image'] == $WikiImage) {
 					$NoRevision = true;
@@ -475,7 +475,7 @@ if ($Type == 'Music') {
 						$Properties['Image'] = $WikiImage;
 						$T['Image'] = "'".db_string($WikiImage)."'";
 					}
-					if (strlen($WikiBody) > strlen($Body)){
+					if (strlen($WikiBody) > strlen($Body)) {
 						$Body = $WikiBody;
 						if (!$Properties['Image'] || $Properties['Image'] == $WikiImage) {
 							$NoRevision = true;
@@ -916,7 +916,7 @@ $SQL.=" AND UserID != '".$LoggedUser['ID']."' ";
 $DB->query($SQL);
 $Debug->set_flag('upload: notification query finished');
 
-if ($DB->record_count()>0){
+if ($DB->record_count() > 0) {
 	$UserArray = $DB->to_array('UserID');
 	$FilterArray = $DB->to_array('ID');
 
@@ -949,7 +949,7 @@ while (list($UserID, $Passkey) = $DB->next_record()) {
 
 $Feed->populate('torrents_all',$Item);
 $Debug->set_flag('upload: notifications handled');
-if ($Type == 'Music'){
+if ($Type == 'Music') {
 	$Feed->populate('torrents_music',$Item);
 	if ($Properties['Media'] == 'Vinyl') {
 		$Feed->populate('torrents_vinyl',$Item);

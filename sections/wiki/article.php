@@ -2,7 +2,7 @@
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT(true);
 
-if(!empty($_GET['id']) && is_number($_GET['id'])){ //Visiting article via ID
+if (!empty($_GET['id']) && is_number($_GET['id'])) { //Visiting article via ID
 	$ArticleID = $_GET['id'];
 } elseif ($_GET['name'] != '') { //Retrieve article ID via alias.
 	$ArticleID = $Alias->to_id($_GET['name']);
@@ -11,14 +11,14 @@ if(!empty($_GET['id']) && is_number($_GET['id'])){ //Visiting article via ID
 	error('Unknown article ['.display_str($_GET['id']).']');
 }
 
-if(!$ArticleID) { //No article found
+if (!$ArticleID) { //No article found
 	View::show_header('No article found');
 ?>
 <div class="thin">
 	<div class="header">
 		<h2>No article found</h2>
 	</div>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		There is no article matching the name you requested.
 		<ul>
 			<li><a href="wiki.php?action=search&amp;search=<?=display_str($_GET['name'])?>">Search</a> for an article similar to this.</li>
@@ -33,7 +33,9 @@ if(!$ArticleID) { //No article found
 }
 $Article = $Alias->article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName, $Aliases, $UserIDs) = array_shift($Article);
-if($Read > $LoggedUser['EffectiveClass']){ error('You must be a higher user class to view this wiki article'); }
+if ($Read > $LoggedUser['EffectiveClass']) {
+	error('You must be a higher user class to view this wiki article');
+}
 
 $TextBody = $Text->full_format($Body, false);
 $TOC = $Text->parse_toc(0);
@@ -47,7 +49,7 @@ View::show_header($Title,'wiki,bbcode');
 			<a href="wiki.php?action=create" class="brackets">Create</a>
 			<a href="wiki.php?action=edit&amp;id=<?=$ArticleID?>" class="brackets">Contribute</a>
 			<a href="wiki.php?action=revisions&amp;id=<?=$ArticleID?>" class="brackets">History</a>
-<? if(check_perms('admin_manage_wiki') && $_GET['id'] != '136'){ ?>
+<? if (check_perms('admin_manage_wiki') && $_GET['id'] != '136') { ?>
 			<a href="wiki.php?action=delete&amp;id=<?=$ArticleID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" class="brackets" onclick="return confirm('Are you sure you want to delete?\nYes, DELETE, not as in \'Oh hey, if this is wrong we can get someone to magically undelete it for us later\' it will be GONE.\nGiven this new information, do you still want to DELETE this article and all its revisions and all its alias\' and act like it never existed?')">Delete</a>
 <? } ?>
 			<!--<a href="reports.php?action=submit&amp;type=wiki&amp;article=<?=$ArticleID ?>" class="brackets">Report</a>-->
@@ -96,13 +98,13 @@ View::show_header($Title,'wiki,bbcode');
 				<li>
 					<strong>Aliases:</strong>
 					<ul>
-<?	if($Aliases!=$Title){
+<?	if ($Aliases != $Title) {
 		$AliasArray = explode(',', $Aliases);
 		$UserArray = explode(',', $UserIDs);
 		$i = 0;
-		foreach($AliasArray as $AliasItem){
+		foreach ($AliasArray as $AliasItem) {
 ?>
-						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem,20,1)?></a><? if(check_perms('admin_manage_wiki')){ ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>');return false;" class="brackets" title="Delete Alias">X</a> <a href="user.php?id=<?=$UserArray[$i]?>" class="brackets" title="View User">U</a><? } ?></li>
+						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem,20,1)?></a><? if (check_perms('admin_manage_wiki')) { ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>');return false;" class="brackets" title="Delete Alias">X</a> <a href="user.php?id=<?=$UserArray[$i]?>" class="brackets" title="View User">U</a><? } ?></li>
 <?			$i++;
 		}
 	}
@@ -111,9 +113,9 @@ View::show_header($Title,'wiki,bbcode');
 				</li>
 			</ul>
 		</div>
-<? if($Edit <= $LoggedUser['EffectiveClass']){ ?>
+<? if ($Edit <= $LoggedUser['EffectiveClass']) { ?>
 		<div class="box box_addalias">
-			<div style="padding:5px;">
+			<div style="padding: 5px;">
 				<form class="add_form" name="aliases" action="wiki.php" method="post">
 					<input type="hidden" name="action" value="add_alias" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

@@ -9,16 +9,16 @@ class ALIAS {
 		global $Cache, $DB;
 		$DB->query("SELECT Alias, ArticleID FROM wiki_aliases");
 		$Aliases = $DB->to_array('Alias');
-		$Cache->cache_value('wiki_aliases', $Aliases, 3600*24*14);
+		$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
 	}
 
 	function to_id($Alias) {
 		global $Cache, $DB;
 		$Aliases = $Cache->get_value('wiki_aliases');
-		if(!$Aliases){
+		if (!$Aliases) {
 			$DB->query("SELECT Alias, ArticleID FROM wiki_aliases");
 			$Aliases = $DB->to_array('Alias');
-			$Cache->cache_value('wiki_aliases', $Aliases, 3600*24*14);
+			$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
 		}
 		return $Aliases[$this->convert($Alias)]['ArticleID'];
 	}
@@ -38,8 +38,9 @@ class ALIAS {
 	function article($ArticleID, $Error = true) {
 		global $Cache, $DB;
 		$Contents = $Cache->get_value('wiki_article_'.$ArticleID);
-		if(!$Contents){
-			$DB->query("SELECT
+		if (!$Contents) {
+			$DB->query("
+				SELECT
 					w.Revision,
 					w.Title,
 					w.Body,
@@ -50,14 +51,16 @@ class ALIAS {
 					u.Username,
 					GROUP_CONCAT(a.Alias),
 					GROUP_CONCAT(a.UserID)
-					FROM wiki_articles AS w
+				FROM wiki_articles AS w
 					LEFT JOIN wiki_aliases AS a ON w.ID=a.ArticleID
 					LEFT JOIN users_main AS u ON u.ID=w.Author
-					WHERE w.ID='$ArticleID'
-					GROUP BY w.ID");
-			if(!$DB->record_count() && $Error) { error(404); }
+				WHERE w.ID='$ArticleID'
+				GROUP BY w.ID");
+			if (!$DB->record_count() && $Error) {
+				error(404);
+			}
 			$Contents = $DB->to_array();
-			$Cache->cache_value('wiki_article_'.$ArticleID, $Contents, 3600*24*14);
+			$Cache->cache_value('wiki_article_'.$ArticleID, $Contents, 3600 * 24 * 14); // 2 weeks
 		}
 		return $Contents;
 	}

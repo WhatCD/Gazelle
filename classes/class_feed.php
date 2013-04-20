@@ -23,9 +23,9 @@ class FEED {
 	}
 	function item($Title, $Description, $Page, $Creator, $Comments='', $Category='', $Date='') { //Escape with CDATA, otherwise the feed breaks.
 		if ($Date == '') {
-			$Date = date("r");
+			$Date = date('r');
 		} else {
-			$Date = date("r",strtotime($Date));
+			$Date = date('r',strtotime($Date));
 		}
 		$Site = $this->UseSSL ? 'https://'.SSL_SITE_URL : 'http://'.NONSSL_SITE_URL;
 		$Item = "\t\t<item>\n";
@@ -44,25 +44,25 @@ class FEED {
 		return $Item;
 	}
 
-	function retrieve($CacheKey,$AuthKey,$PassKey) {
+	function retrieve($CacheKey, $AuthKey, $PassKey) {
 		global $Cache;
 		$Entries = $Cache->get_value($CacheKey);
-		if(!$Entries){
+		if (!$Entries) {
 			$Entries = array();
 		} else {
-			foreach($Entries as $Item){
+			foreach ($Entries as $Item) {
 				echo str_replace(array('[[PASSKEY]]','[[AUTHKEY]]'),array(display_str($PassKey),display_str($AuthKey)),$Item);
 			}
 		}
 	}
 
-	function populate($CacheKey,$Item) {
+	function populate($CacheKey, $Item) {
 		global $Cache;
 		$Entries = $Cache->get_value($CacheKey,true);
-		if(!$Entries){
+		if (!$Entries) {
 			$Entries = array();
 		} else {
-			if(count($Entries)>=50) {
+			if (count($Entries) >= 50) {
 				array_pop($Entries);
 			}
 		}

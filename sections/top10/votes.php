@@ -277,11 +277,11 @@ foreach ($TopVotes as $GroupID => $Group) {
 <?			} ?>
 					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 				</span>
-				&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?><?if($Reported){?> / <strong class="torrent_label tl_reported" title="Reported">Reported</strong><?}?></a>
+				&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?><? if ($Reported) { ?> / <strong class="torrent_label tl_reported" title="Reported">Reported</strong><? } ?></a>
 			</td>
 			<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 			<td><?=number_format($Torrent['Snatched'])?></td>
-			<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
+			<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : '' ?>><?=number_format($Torrent['Seeders'])?></td>
 			<td><?=number_format($Torrent['Leechers'])?></td>
 		</tr>
 <?
@@ -337,7 +337,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 			</td>
 			<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 			<td><?=number_format($Torrent['Snatched'])?></td>
-			<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
+			<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : '' ?>><?=number_format($Torrent['Seeders'])?></td>
 			<td><?=number_format($Torrent['Leechers'])?></td>
 		</tr>
 <?

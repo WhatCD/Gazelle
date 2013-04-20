@@ -7,15 +7,15 @@ include(SERVER_ROOT.'/classes/class_torrent_form.php');
 $TorrentForm = new TORRENT_FORM();
 
 $GenreTags = $Cache->get_value('genre_tags');
-if(!$GenreTags){
+if (!$GenreTags) {
 	$DB->query('SELECT Name FROM tags WHERE TagType=\'genre\' ORDER BY Name');
 	$GenreTags =  $DB->collect('Name');
-	$Cache->cache_value('genre_tags', $GenreTags, 3600*24);
+	$Cache->cache_value('genre_tags', $GenreTags, 3600 * 24);
 }
 
 $UploadForm = $Categories[$_GET['categoryid']];
 
-switch($UploadForm) {
+switch ($UploadForm) {
 	case 'Music':
 		$TorrentForm->music_form($GenreTags);
 		break;
@@ -32,9 +32,7 @@ switch($UploadForm) {
 		$TorrentForm->simple_form($_GET['categoryid']);
 		break;
 	default:
-		echo "Invalid action!";
+		echo 'Invalid action!';
 }
-
-
 
 ?>

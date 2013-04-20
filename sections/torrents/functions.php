@@ -32,23 +32,23 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 		}
 
 		$SQL .= "
-			g.ID,
-			g.Name,
-			g.Year,
-			g.RecordLabel,
-			g.CatalogueNumber,
-			g.ReleaseType,
-			g.CategoryID,
-			g.Time,
-			g.VanityHouse,
-			GROUP_CONCAT(DISTINCT tags.Name SEPARATOR '|'),
-			GROUP_CONCAT(DISTINCT tags.ID SEPARATOR '|'),
-			GROUP_CONCAT(tt.UserID SEPARATOR '|'),
-			GROUP_CONCAT(tt.PositiveVotes SEPARATOR '|'),
-			GROUP_CONCAT(tt.NegativeVotes SEPARATOR '|')
+				g.ID,
+				g.Name,
+				g.Year,
+				g.RecordLabel,
+				g.CatalogueNumber,
+				g.ReleaseType,
+				g.CategoryID,
+				g.Time,
+				g.VanityHouse,
+				GROUP_CONCAT(DISTINCT tags.Name SEPARATOR '|'),
+				GROUP_CONCAT(DISTINCT tags.ID SEPARATOR '|'),
+				GROUP_CONCAT(tt.UserID SEPARATOR '|'),
+				GROUP_CONCAT(tt.PositiveVotes SEPARATOR '|'),
+				GROUP_CONCAT(tt.NegativeVotes SEPARATOR '|')
 			FROM torrents_group AS g
-			LEFT JOIN torrents_tags AS tt ON tt.GroupID=g.ID
-			LEFT JOIN tags ON tags.ID=tt.TagID";
+				LEFT JOIN torrents_tags AS tt ON tt.GroupID=g.ID
+				LEFT JOIN tags ON tags.ID=tt.TagID";
 
 		if ($RevisionID) {
 			$SQL .= "
@@ -66,52 +66,61 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 
 		$DB->query("
 			SELECT
-			t.ID,
-			t.Media,
-			t.Format,
-			t.Encoding,
-			t.Remastered,
-			t.RemasterYear,
-			t.RemasterTitle,
-			t.RemasterRecordLabel,
-			t.RemasterCatalogueNumber,
-			t.Scene,
-			t.HasLog,
-			t.HasCue,
-			t.LogScore,
-			t.FileCount,
-			t.Size,
-			t.Seeders,
-			t.Leechers,
-			t.Snatched,
-			t.FreeTorrent,
-			t.Time,
-			t.Description,
-			t.FileList,
-			t.FilePath,
-			t.UserID,
-			t.last_action,
-			HEX(t.info_hash) AS InfoHash,
-			tbt.TorrentID AS BadTags,
-			tbf.TorrentID AS BadFolders,
-			tfi.TorrentID AS BadFiles,
-			ca.TorrentID AS CassetteApproved,
-			lma.TorrentID AS LossymasterApproved,
-			lwa.TorrentID AS LossywebApproved,
-			t.LastReseedRequest,
-			tln.TorrentID AS LogInDB,
-			t.ID AS HasFile
+				t.ID,
+				t.Media,
+				t.Format,
+				t.Encoding,
+				t.Remastered,
+				t.RemasterYear,
+				t.RemasterTitle,
+				t.RemasterRecordLabel,
+				t.RemasterCatalogueNumber,
+				t.Scene,
+				t.HasLog,
+				t.HasCue,
+				t.LogScore,
+				t.FileCount,
+				t.Size,
+				t.Seeders,
+				t.Leechers,
+				t.Snatched,
+				t.FreeTorrent,
+				t.Time,
+				t.Description,
+				t.FileList,
+				t.FilePath,
+				t.UserID,
+				t.last_action,
+				HEX(t.info_hash) AS InfoHash,
+				tbt.TorrentID AS BadTags,
+				tbf.TorrentID AS BadFolders,
+				tfi.TorrentID AS BadFiles,
+				ca.TorrentID AS CassetteApproved,
+				lma.TorrentID AS LossymasterApproved,
+				lwa.TorrentID AS LossywebApproved,
+				t.LastReseedRequest,
+				tln.TorrentID AS LogInDB,
+				t.ID AS HasFile
 			FROM torrents AS t
-			LEFT JOIN torrents_bad_tags AS tbt ON tbt.TorrentID=t.ID
-			LEFT JOIN torrents_bad_folders AS tbf on tbf.TorrentID=t.ID
-			LEFT JOIN torrents_bad_files AS tfi on tfi.TorrentID=t.ID
-			LEFT JOIN torrents_cassette_approved AS ca on ca.TorrentID=t.ID
-			LEFT JOIN torrents_lossymaster_approved AS lma on lma.TorrentID=t.ID
-			LEFT JOIN torrents_lossyweb_approved AS lwa on lwa.TorrentID=t.ID
-			LEFT JOIN torrents_logs_new AS tln ON tln.TorrentID=t.ID
+				LEFT JOIN torrents_bad_tags AS tbt ON tbt.TorrentID=t.ID
+				LEFT JOIN torrents_bad_folders AS tbf on tbf.TorrentID=t.ID
+				LEFT JOIN torrents_bad_files AS tfi on tfi.TorrentID=t.ID
+				LEFT JOIN torrents_cassette_approved AS ca on ca.TorrentID=t.ID
+				LEFT JOIN torrents_lossymaster_approved AS lma on lma.TorrentID=t.ID
+				LEFT JOIN torrents_lossyweb_approved AS lwa on lwa.TorrentID=t.ID
+				LEFT JOIN torrents_logs_new AS tln ON tln.TorrentID=t.ID
 			WHERE t.GroupID='".db_string($GroupID)."'
 			GROUP BY t.ID
-			ORDER BY t.Remastered ASC, (t.RemasterYear <> 0) DESC, t.RemasterYear ASC, t.RemasterTitle ASC, t.RemasterRecordLabel ASC, t.RemasterCatalogueNumber ASC, t.Media ASC, t.Format, t.Encoding, t.ID");
+			ORDER BY t.Remastered ASC,
+				(t.RemasterYear <> 0) DESC,
+				t.RemasterYear ASC,
+				t.RemasterTitle ASC,
+				t.RemasterRecordLabel ASC,
+				t.RemasterCatalogueNumber ASC,
+				t.Media ASC,
+				t.Format,
+				t.Encoding,
+				t.ID");
 
 		$TorrentList = $DB->to_array('ID', MYSQLI_ASSOC);
 		if (count($TorrentList) == 0) {
@@ -182,15 +191,17 @@ function get_reports($TorrentID){
 	global $Cache, $DB;
 	$Reports = $Cache->get_value('reports_torrent_' . $TorrentID);
 	if ($Reports === false) {
-		$DB->query("SELECT r.ID,
+		$DB->query("
+			SELECT
+				r.ID,
 				r.ReporterID,
 				r.Type,
 				r.UserComment,
 				r.ReportedTime
-				FROM reportsv2 AS r
-				WHERE TorrentID = $TorrentID
-					AND Type != 'edited'
-					AND Status != 'Resolved'");
+			FROM reportsv2 AS r
+			WHERE TorrentID = $TorrentID
+				AND Type != 'edited'
+				AND Status != 'Resolved'");
 		$Reports = $DB->to_array();
 		$Cache->cache_value('reports_torrent_' . $TorrentID, $Reports, 0);
 	}
@@ -234,7 +245,9 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 	unset($ReportedTimes);
 	$Reports = $Cache->get_value('reports_torrent_' . $TorrentID);
 	if ($Reports === false) {
-		$DB->query("SELECT r.ID,
+		$DB->query("
+			SELECT
+				r.ID,
 				r.ReporterID,
 				r.Type,
 				r.UserComment,
@@ -249,7 +262,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 	if (count($Reports) > 0) {
 		$Reported = true;
 		include(SERVER_ROOT . '/sections/reportsv2/array.php');
-		$ReportInfo = '<table><tr class="colhead_dark" style="font-weight: bold;"><td>This torrent has ' . count($Reports) . ' active ' . (count($Reports) > 1 ? "reports" : "report") . ':</td></tr>';
+		$ReportInfo = '<table><tr class="colhead_dark" style="font-weight: bold;"><td>This torrent has ' . count($Reports) . ' active ' . (count($Reports) > 1 ? 'reports' : 'report') . ':</td></tr>';
 
 		foreach ($Reports as $Report) {
 		list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
@@ -466,8 +479,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 <?	}
 	if (!empty($Description)) {
 		echo '<blockquote>' . $Text->full_format($Description) . '</blockquote>';
-	}
-	?>
+	} ?>
 					</td>
 				</tr>
 <?

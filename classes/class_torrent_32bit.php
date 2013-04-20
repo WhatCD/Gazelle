@@ -77,8 +77,8 @@ class BENCODE2 {
 	var $Pos = 1; // Pointer that indicates our position in the string
 	var $Str = ''; // Torrent string
 
-	function __construct($Val, $IsParsed = false){
-		if(!$IsParsed) {
+	function __construct($Val, $IsParsed = false) {
+		if (!$IsParsed) {
 			$this->Str = $Val;
 			$this->dec();
 		} else {
@@ -87,20 +87,20 @@ class BENCODE2 {
 	}
 
 	// Decode an element based on the type
-	function decode($Type, $Key){
-		if(ctype_digit($Type)) { // Element is a string
+	function decode($Type, $Key) {
+		if (ctype_digit($Type)) { // Element is a string
 			// Get length of string
 			$StrLen = $Type;
-			while($this->Str[$this->Pos+1]!=':'){
+			while ($this->Str[$this->Pos + 1] != ':') {
 				$this->Pos++;
 				$StrLen.=$this->Str[$this->Pos];
 			}
-			$this->Val[$Key] = substr($this->Str, $this->Pos+2, $StrLen);
+			$this->Val[$Key] = substr($this->Str, $this->Pos + 2, $StrLen);
 
-			$this->Pos+=$StrLen;
-			$this->Pos+=2;
+			$this->Pos += $StrLen;
+			$this->Pos += 2;
 
-		} elseif($Type == 'i') { // Element is an int
+		} elseif ($Type == 'i') { // Element is an int
 			$this->Pos++;
 
 			// Find end of integer (first occurance of 'e' after position)
@@ -108,13 +108,13 @@ class BENCODE2 {
 
 			// Get the integer, and mark it as an int (on our version 64 bit box, we cast it to an int)
 			$this->Val[$Key] = '[*INT*]'.substr($this->Str, $this->Pos, $End-$this->Pos);
-			$this->Pos = $End+1;
+			$this->Pos = $End + 1;
 
-		} elseif($Type == 'l') { // Element is a list
+		} elseif ($Type == 'l') { // Element is a list
 			$this->Val[$Key] = new BENCODE_LIST(substr($this->Str, $this->Pos));
 			$this->Pos += $this->Val[$Key]->Pos;
 
-		} elseif($Type == 'd') { // Element is a dictionary
+		} elseif ($Type == 'd') { // Element is a dictionary
 			$this->Val[$Key] = new BENCODE_DICT(substr($this->Str, $this->Pos));
 			$this->Pos += $this->Val[$Key]->Pos;
 			// Sort by key to respect spec
@@ -125,14 +125,14 @@ class BENCODE2 {
 		}
 	}
 
-	function encode($Val){
-		if(is_string($Val)) {
-			if(substr($Val, 0, 7) == '[*INT*]') {
+	function encode($Val) {
+		if (is_string($Val)) {
+			if (substr($Val, 0, 7) == '[*INT*]') {
 				return 'i'.substr($Val,7).'e';
 			} else {
 				return strlen($Val).':'.$Val;
 			}
-		} elseif(is_object($Val)) {
+		} elseif (is_object($Val)) {
 			return $Val->enc();
 		} else {
 			return 'fail';
@@ -141,25 +141,25 @@ class BENCODE2 {
 }
 
 class BENCODE_LIST extends BENCODE2 {
-	function enc(){
+	function enc() {
 		$Str = 'l';
 		reset($this->Val);
-		while(list($Key, $Value) = each($this->Val)) {
+		while (list($Key, $Value) = each($this->Val)) {
 			$Str.=$this->encode($Value);
 		}
 		return $Str.'e';
 	}
 
 	// Decode a list
-	function dec(){
+	function dec() {
 		$Key = 0; // Array index
 		$Length = strlen($this->Str);
-		while($this->Pos<$Length){
+		while ($this->Pos<$Length) {
 			$Type = $this->Str[$this->Pos];
 			// $Type now indicates what type of element we're dealing with
 			// It's either an integer (string), 'i' (an integer), 'l' (a list), 'd' (a dictionary), or 'e' (end of dictionary/list)
 
-			if($Type == 'e') { // End of list
+			if ($Type == 'e') { // End of list
 				$this->Pos += 1;
 				unset($this->Str); // Since we're finished parsing the string, we don't need to store it anymore. Benchmarked - this makes the parser run way faster.
 				return;
@@ -175,21 +175,21 @@ class BENCODE_LIST extends BENCODE2 {
 }
 
 class BENCODE_DICT extends BENCODE2 {
-	function enc(){
+	function enc() {
 		$Str = 'd';
 		reset($this->Val);
-		while(list($Key, $Value) = each($this->Val)) {
+		while (list($Key, $Value) = each($this->Val)) {
 			$Str.=strlen($Key).':'.$Key.$this->encode($Value);
 		}
 		return $Str.'e';
 	}
 
 	// Decode a dictionary
-	function dec(){
+	function dec() {
 		$Length = strlen($this->Str);
-		while($this->Pos<$Length) {
+		while ($this->Pos < $Length) {
 
-			if($this->Str[$this->Pos] == 'e') { // End of dictionary
+			if ($this->Str[$this->Pos] == 'e') { // End of dictionary
 				$this->Pos += 1;
 				unset($this->Str); // Since we're finished parsing the string, we don't need to store it anymore. Benchmarked - this makes the parser run way faster.
 				return;
@@ -200,7 +200,7 @@ class BENCODE_DICT extends BENCODE2 {
 			$KeyLen = $this->Str[$this->Pos];
 
 			// Allow for multi-digit lengths
-			while($this->Str[$this->Pos+1]!=':' && $this->Pos+1<$Length) {
+			while ($this->Str[$this->Pos + 1] != ':' && $this->Pos + 1 < $Length) {
 				$this->Pos++;
 				$KeyLen.=$this->Str[$this->Pos];
 			}
@@ -212,7 +212,7 @@ class BENCODE_DICT extends BENCODE2 {
 			$Key = substr($this->Str, $this->Pos, $KeyLen);
 
 			// Move the position past the key to the beginning of the element
-			$this->Pos+=$KeyLen;
+			$this->Pos += $KeyLen;
 			$Type = $this->Str[$this->Pos];
 			// $Type now indicates what type of element we're dealing with
 			// It's either an integer (string), 'i' (an integer), 'l' (a list), 'd' (a dictionary), or 'e' (end of dictionary/list)

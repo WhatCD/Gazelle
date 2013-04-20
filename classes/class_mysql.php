@@ -53,7 +53,7 @@ list($All,$Columns,$That,$You,$Select)=$DB->next_record();
 
 * This is how you loop over the result set:
 
-while(list($All,$Columns,$That,$You,$Select)=$DB->next_record()){
+while (list($All,$Columns,$That,$You,$Select)=$DB->next_record()) {
 	echo "Do stuff with ".$All." of the ".$Columns.$That.$You.$Select;
 }
 -----
@@ -310,7 +310,7 @@ class DB_MYSQL {
 			if ($Key !== false) {
 				$Return[$Row[$Key]] = $Row;
 			} else {
-				$Return[]=$Row;
+				$Return[] = $Row;
 			}
 		}
 		mysqli_data_seek($this->QueryID, 0);
@@ -337,14 +337,14 @@ class DB_MYSQL {
 	//  Loops through the result set, collecting the $Key column into an array
 	function collect($Key, $Escape = true) {
 		$Return = array();
-		while($Row = mysqli_fetch_array($this->QueryID)){
+		while ($Row = mysqli_fetch_array($this->QueryID)) {
 			$Return[] = $Escape ? display_str($Row[$Key]) : $Row[$Key];
 		}
 		mysqli_data_seek($this->QueryID, 0);
 		return $Return;
 	}
 
-	function set_query_id(&$ResultSet){
+	function set_query_id(&$ResultSet) {
 		$this->QueryID = $ResultSet;
 		$this->Row = 0;
 	}

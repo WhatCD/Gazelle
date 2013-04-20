@@ -2,7 +2,7 @@
 authorize();
 
 $UserID = $_REQUEST['userid'];
-if(!is_number($UserID)) {
+if (!is_number($UserID)) {
 	error(404);
 }
 
@@ -39,7 +39,7 @@ if (check_perms('site_advanced_search')) {
 
 $Err = $Val->ValidateForm($_POST);
 
-if($Err) {
+if ($Err) {
 	error($Err);
 	header('Location: user.php?action=edit&userid='.$UserID);
 	die();
@@ -72,29 +72,29 @@ if (isset($_POST['p_snatched_c']) && isset($_POST['p_seeding_c']) && isset($_POS
 // if showing exactly 2 of stats, show all 3 of stats
 $StatsShown = 0;
 $Stats = array('downloaded', 'uploaded', 'ratio');
-foreach($Stats as $S) {
-	if(isset($_POST['p_'.$S])) {
+foreach ($Stats as $S) {
+	if (isset($_POST['p_'.$S])) {
 		$StatsShown++;
 	}
 }
 
-if($StatsShown == 2) {
-	foreach($Stats as $S) {
+if ($StatsShown == 2) {
+	foreach ($Stats as $S) {
 		$_POST['p_'.$S] = 'on';
 	}
 }
 
 $Paranoia = array();
 $Checkboxes = array('downloaded', 'uploaded', 'ratio', 'lastseen', 'requiredratio', 'invitedcount', 'artistsadded');
-foreach($Checkboxes as $C) {
-	if(!isset($_POST['p_'.$C])) {
+foreach ($Checkboxes as $C) {
+	if (!isset($_POST['p_'.$C])) {
 		$Paranoia[] = $C;
 	}
 }
 
 $SimpleSelects = array('torrentcomments', 'collages', 'collagecontribs', 'uploads', 'uniquegroups', 'perfectflacs', 'seeding', 'leeching', 'snatched');
 foreach ($SimpleSelects as $S) {
-	if(!isset($_POST['p_'.$S.'_c']) && !isset($_POST['p_'.$S.'_l'])) {
+	if (!isset($_POST['p_'.$S.'_c']) && !isset($_POST['p_'.$S.'_l'])) {
 		// Very paranoid - don't show count or list
 		$Paranoia[] = $S . '+';
 	} elseif (!isset($_POST['p_'.$S.'_l'])) {
@@ -126,14 +126,14 @@ foreach ($Bounties as $B) {
 $DB->query("SELECT Email FROM users_main WHERE ID=".$UserID);
 list($CurEmail) = $DB->next_record();
 if ($CurEmail != $_POST['email']) {
-	if(!check_perms('users_edit_profiles')) { // Non-admins have to authenticate to change email
+	if (!check_perms('users_edit_profiles')) { // Non-admins have to authenticate to change email
 		$DB->query("SELECT PassHash,Secret FROM users_main WHERE ID='".db_string($UserID)."'");
 		list($PassHash,$Secret)=$DB->next_record();
-		if(!Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
+		if (!Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
 			$Err = "You did not enter the correct password.";
 		}
 	}
-	if(!$Err) {
+	if (!$Err) {
 		$NewEmail = db_string($_POST['email']);
 
 
@@ -167,7 +167,7 @@ if (!$Err && ($_POST['cur_pass'] || $_POST['new_pass_1'] || $_POST['new_pass_2']
 	}
 }
 
-if($LoggedUser['DisableAvatar'] && $_POST['avatar'] != $U['Avatar']) {
+if ($LoggedUser['DisableAvatar'] && $_POST['avatar'] != $U['Avatar']) {
 	$Err = "Your avatar rights have been removed.";
 }
 
@@ -177,7 +177,7 @@ if ($Err) {
 	die();
 }
 
-if(!empty($LoggedUser['DefaultSearch'])) {
+if (!empty($LoggedUser['DefaultSearch'])) {
 	$Options['DefaultSearch'] = $LoggedUser['DefaultSearch'];
 }
 $Options['DisableGrouping2'] = (!empty($_POST['disablegrouping']) ? 1 : 0);
@@ -201,14 +201,14 @@ $Options['NoVoteLinks'] = (!empty($_POST['novotelinks']) ? 1 : 0);
 
 $Options['CoverArt'] = (int) !empty($_POST['coverart']);
 
-if(isset($LoggedUser['DisableFreeTorrentTop10'])) {
+if (isset($LoggedUser['DisableFreeTorrentTop10'])) {
 	$Options['DisableFreeTorrentTop10'] = $LoggedUser['DisableFreeTorrentTop10'];
 }
 
-if(!empty($_POST['sorthide'])) {
+if (!empty($_POST['sorthide'])) {
 	$JSON = json_decode($_POST['sorthide']);
-	foreach($JSON as $J) {
-		$E = explode("_", $J);
+	foreach ($JSON as $J) {
+		$E = explode('_', $J);
 		$Options['SortHide'][$E[0]] = $E[1];
 	}
 } else {
@@ -226,30 +226,29 @@ unset($Options['ArtistNoRedirect']);
 unset($Options['ShowQueryList']);
 unset($Options['ShowCacheList']);
 
-$DownloadAlt = (isset($_POST['downloadalt']))? 1:0;
-$UnseededAlerts = (isset($_POST['unseededalerts']))? 1:0;
+$DownloadAlt = (isset($_POST['downloadalt'])) ? 1 : 0;
+$UnseededAlerts = (isset($_POST['unseededalerts'])) ? 1 : 0;
 
 
 
 $LastFMUsername = db_string($_POST['lastfm_username']);
 $OldLastFMUsername = "";
 $DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
-if($DB->record_count() > 0) {
+if ($DB->record_count() > 0) {
 	list($OldLastFMUsername) = $DB->next_record();
-	if($OldLastFMUsername != $LastFMUsername) {
-		if(empty($LastFMUsername)) {
+	if ($OldLastFMUsername != $LastFMUsername) {
+		if (empty($LastFMUsername)) {
 			$DB->query("DELETE FROM lastfm_users WHERE ID = '$UserID'");
 		} else {
 			$DB->query("UPDATE lastfm_users SET Username = '$LastFMUsername' WHERE ID = '$UserID'");
 		}
 	}
-}
-elseif(!empty($LastFMUsername)) {
+} elseif (!empty($LastFMUsername)) {
 	$DB->query("INSERT INTO lastfm_users (ID, Username) VALUES ('$UserID', '$LastFMUsername')");
 }
 
 // Information on how the user likes to download torrents is stored in cache
-if($DownloadAlt != $LoggedUser['DownloadAlt']) {
+if ($DownloadAlt != $LoggedUser['DownloadAlt']) {
 	$Cache->delete_value('user_'.$LoggedUser['torrent_pass']);
 }
 
@@ -286,7 +285,7 @@ $SQL="UPDATE users_main AS m JOIN users_info AS i ON m.ID=i.UserID SET
 
 $SQL .= "m.Paranoia='".db_string(serialize($Paranoia))."'";
 
-if($ResetPassword) {
+if ($ResetPassword) {
 	$ChangerIP = db_string($LoggedUser['IP']);
 	$PassHash=Users::make_crypt_hash($_POST['new_pass_1']);
 	$SQL.=",m.PassHash='".db_string($PassHash)."'";
