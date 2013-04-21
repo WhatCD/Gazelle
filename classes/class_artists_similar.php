@@ -330,7 +330,7 @@ class ARTISTS_SIMILAR extends ARTIST{
 				$FontSize = 12;
 			}
 ?>
-		<div style="position: absolute; top: <?=$Artist->y - 5 ?>px; left: <?=$xPosition?> px; font-size: <?=$FontSize?>pt; white-space: nowrap;">
+		<div style="position: absolute; top: <?=$Artist->y - 5 ?>px; left: <?=$xPosition?>px; font-size: <?=$FontSize?>pt; white-space: nowrap;">
 			<a href="artist.php?id=<?=$Artist->ID?>" class="similar_artist"><?=$Artist->Name?></a>
 		</div>
 <?

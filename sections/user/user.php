@@ -537,7 +537,10 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 		</tr>
 		<tr>
 <?
-		foreach ($RecentSnatches as $RS) { ?>
+		foreach ($RecentSnatches as $RS) {
+			if (check_perms('site_proxy_images')) {
+				$RS['WikiImage'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($RS['WikiImage']);
+			} ?>
 			<td>
 				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=ImageTools::thumbnail($RS['WikiImage'])?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
 			</td>
@@ -578,7 +581,10 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 			<td colspan="5">Recent uploads</td>
 		</tr>
 		<tr>
-<?		foreach ($RecentUploads as $RU) { ?>
+<?		foreach ($RecentUploads as $RU) {
+			if (check_perms('site_proxy_images')) {
+				$RU['WikiImage'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($RU['WikiImage']);
+			} ?>
 			<td>
 				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=ImageTools::thumbnail($RU['WikiImage'])?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
 			</td>
@@ -622,6 +628,10 @@ foreach ($Collages as $CollageInfo) {
 			$Name = '';
 			$Name .= Artists::display_artists(array('1'=>$Artists), false, true);
 			$Name .= $GroupName;
+
+			if (check_perms('site_proxy_images')) {
+				$C['WikiImage'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($C['WikiImage']);
+			}
 ?>
 			<td>
 				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=ImageTools::thumbnail($C['WikiImage'])?>" alt="<?=$Name?>" width="107" /></a>

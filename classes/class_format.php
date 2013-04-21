@@ -123,7 +123,7 @@ class Format {
 	 * Returns ratio
 	 * @param int $Dividend
 	 * @param int $Divisor
-	 * @param int $Decimal floor to n decimals (eg Subtract .005 to floor to 2 decimals)
+	 * @param int $Decimal floor to n decimals (e.g. Subtract .005 to floor to 2 decimals)
 	 * @return boolean|string
 	 */
 	public function get_ratio ($Dividend, $Divisor, $Decimal = 2) {
@@ -148,7 +148,7 @@ class Format {
 			parse_str($_SERVER['QUERY_STRING'], $QueryItems);
 
 			foreach ($QueryItems AS $Key => $Val) {
-				if (!in_array(strtolower($Key),$Exclude)) {
+				if (!in_array(strtolower($Key), $Exclude)) {
 					$Query[$Key] = $Val;
 				}
 			}
@@ -171,34 +171,38 @@ class Format {
 	 * If this parameter is not specified, we will default to page 1
 	 *
 	 * @return array(int,string) What page we are on, and what to use in the LIMIT section of a query
-	 * i.e. "SELECT [...] LIMIT $Limit;"
+	 * e.g. "SELECT [...] LIMIT $Limit;"
 	 */
 	public static function page_limit($PerPage, $DefaultResult = 1) {
 		if (!isset($_GET['page'])) {
-			$Page = ceil($DefaultResult/$PerPage);
-			if ($Page == 0) $Page = 1;
-			$Limit=$PerPage;
+			$Page = ceil($DefaultResult / $PerPage);
+			if ($Page == 0) {
+				$Page = 1;
+			}
+			$Limit = $PerPage;
 		} else {
 			if (!is_number($_GET['page'])) {
 				error(0);
 			}
 			$Page = $_GET['page'];
-			if ($Page <= 0) { $Page = 1; }
-			$Limit=$PerPage*$Page-$PerPage . ', ' . $PerPage;
+			if ($Page <= 0) {
+				$Page = 1;
+			}
+			$Limit = $PerPage * $Page - $PerPage . ', ' . $PerPage;
 		}
-		return array($Page,$Limit);
+		return array($Page, $Limit);
 	}
 
 	// A9 magic. Some other poor soul can write the phpdoc.
-	// For data stored in memcached catalogues (giant arrays), eg. forum threads
-	public static function catalogue_limit($Page, $PerPage, $CatalogueSize=500) {
-		$CatalogueID = floor(($PerPage*$Page-$PerPage)/$CatalogueSize);;
-		$CatalogueLimit = ($CatalogueID*$CatalogueSize).', '.$CatalogueSize;
+	// For data stored in memcached catalogues (giant arrays), e.g. forum threads
+	public static function catalogue_limit($Page, $PerPage, $CatalogueSize = 500) {
+		$CatalogueID = floor(($PerPage * $Page - $PerPage) / $CatalogueSize);;
+		$CatalogueLimit = ($CatalogueID * $CatalogueSize).', '.$CatalogueSize;
 		return array($CatalogueID, $CatalogueLimit);
 	}
 
 	public static function catalogue_select($Catalogue, $Page, $PerPage, $CatalogueSize = 500) {
-		return array_slice($Catalogue,(($PerPage * $Page - $PerPage) % $CatalogueSize),$PerPage,true);
+		return array_slice($Catalogue, (($PerPage * $Page - $PerPage) % $CatalogueSize), $PerPage, true);
 	}
 
 
@@ -258,7 +262,7 @@ class Format {
 
 			if ($StartPage > 1) {
 				$Pages .= '<a href="'.$Location.'?page=1'.$QueryString.$Anchor.'"><strong>&lt;&lt; First</strong></a> ';
-				$Pages .= '<a href="'.$Location.'?page='.($StartPage-1).$QueryString.$Anchor.'" class="pager_prev"><strong>&lt; Prev</strong></a> | ';
+				$Pages .= '<a href="'.$Location.'?page='.($StartPage - 1).$QueryString.$Anchor.'" class="pager_prev"><strong>&lt; Prev</strong></a> | ';
 			}
 			//End change
 
@@ -307,7 +311,8 @@ class Format {
 	public static function get_size($Size, $Levels = 2) {
 		$Units = array(' B',' KB',' MB',' GB',' TB',' PB',' EB',' ZB',' YB');
 		$Size = (double) $Size;
-		for($Steps = 0; abs($Size) >= 1024; $Size /= 1024, $Steps++) {}
+		for ($Steps = 0; abs($Size) >= 1024; $Size /= 1024, $Steps++) {
+		}
 		if (func_num_args() == 1 && $Steps >= 4) {
 			$Levels++;
 		}
@@ -316,7 +321,7 @@ class Format {
 
 
 	/**
-	 * Format a number as a multiple of its highest power of 1000 (eg. 10035 -> '10.04k')
+	 * Format a number as a multiple of its highest power of 1000 (e.g. 10035 -> '10.04k')
 	 *
 	 * @param int $Number
 	 * @return string formatted number.
@@ -343,8 +348,8 @@ class Format {
 	/**
 	 * Given a formatted string of a size, get the number of bytes it represents.
 	 *
-	 * @param string $Size formatted size string, eg. 123.45k
-	 * @return Number of bytes it represents, eg. (123.45 * 1024)
+	 * @param string $Size formatted size string, e.g. 123.45k
+	 * @return Number of bytes it represents, e.g. (123.45 * 1024)
 	 */
 	public static function get_bytes($Size) {
 		list($Value,$Unit) = sscanf($Size, "%f%s");
@@ -352,7 +357,7 @@ class Format {
 		if (empty($Unit)) {
 			return $Value ? round($Value) : 0;
 		}
-		switch(strtolower($Unit[0])) {
+		switch (strtolower($Unit[0])) {
 			case 'k': return round($Value * 1024);
 			case 'm': return round($Value * 1048576);
 			case 'g': return round($Value * 1073741824);
@@ -523,8 +528,7 @@ class Format {
 	 * @param string $text Search string
 	 * @return string CSS class(es)
 	 */
-	public static function find_torrent_label_class ($text)
-	{
+	public static function find_torrent_label_class ($text) {
 		$index = mb_eregi_replace('(?:[^\w\d\s]+)', '', strtolower($text));
 		if (isset(self::$TorrentLabels[$index])) {
 			return self::$TorrentLabels[$index];
@@ -535,7 +539,7 @@ class Format {
 
 	/**
 	 * Creates a strong element that notes the torrent's state.
-	 * Eg: snatched/freeleech/neutral leech/reported
+	 * E.g.: snatched/freeleech/neutral leech/reported
 	 *
 	 * The CSS class is infered using find_torrent_label_class($text)
 	 *
@@ -543,8 +547,7 @@ class Format {
 	 * @param string $class Custom CSS class
 	 * @return string Strong element
 	 */
-	public static function torrent_label ($text, $class = '')
-	{
+	public static function torrent_label ($text, $class = '') {
 		if (empty($class)) {
 			$class = self::find_torrent_label_class($text);
 		}
@@ -558,8 +561,7 @@ class Format {
 	 * @param int|string $CategoryID This number will be subtracted by one
 	 * @return string
 	 */
-	public static function css_category ($CategoryID = 1)
-	{
+	public static function css_category ($CategoryID = 1) {
 		global $Categories;
 		return 'cats_' . strtolower(str_replace(array('-', ' '), '',
 				$Categories[$CategoryID - 1]));

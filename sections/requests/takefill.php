@@ -14,7 +14,7 @@ if (!empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {
 	$TorrentID = $_GET['torrentid'];
 } else {
 	if (empty($_POST['link'])) {
-		$Err = "You forgot to supply a link to the filling torrent";
+		$Err = 'You forgot to supply a link to the filling torrent';
 	} else {
 		$Link = $_POST['link'];
 		if (preg_match("/".TORRENT_REGEX."/i", $Link, $Matches) < 1) {
@@ -36,21 +36,22 @@ if (!empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {
 }
 
 //Torrent exists, check it's applicable
-$DB->query("SELECT t.UserID,
-				t.Time,
-				tg.ReleaseType,
-				t.Encoding,
-				t.Format,
-				t.Media,
-				t.HasLog,
-				t.HasCue,
-				t.LogScore,
-				tg.CategoryID,
-				IF(t.Remastered = '1', t.RemasterCatalogueNumber, tg.CatalogueNumber)
-			FROM torrents AS t
-				LEFT JOIN torrents_group AS tg ON t.GroupID=tg.ID
-			WHERE t.ID = ".$TorrentID."
-			LIMIT 1");
+$DB->query("
+	SELECT t.UserID,
+		t.Time,
+		tg.ReleaseType,
+		t.Encoding,
+		t.Format,
+		t.Media,
+		t.HasLog,
+		t.HasCue,
+		t.LogScore,
+		tg.CategoryID,
+		IF(t.Remastered = '1', t.RemasterCatalogueNumber, tg.CatalogueNumber)
+	FROM torrents AS t
+		LEFT JOIN torrents_group AS tg ON t.GroupID=tg.ID
+	WHERE t.ID = ".$TorrentID."
+	LIMIT 1");
 
 
 if ($DB->record_count() < 1) {
@@ -65,7 +66,7 @@ if (!empty($_POST['user']) && check_perms('site_moderate_requests')) {
 	$FillerUsername = $_POST['user'];
 	$DB->query("SELECT ID FROM users_main WHERE Username LIKE '".db_string($FillerUsername)."'");
 	if ($DB->record_count() < 1) {
-		$Err = "No such user to fill for!";
+		$Err = 'No such user to fill for!';
 	} else {
 		list($FillerID) = $DB->next_record();
 	}
@@ -77,7 +78,8 @@ if (time_ago($UploadTime) < 3600 && $UploaderID != $FillerID && !check_perms('si
 
 
 
-$DB->query("SELECT
+$DB->query("
+	SELECT
 		Title,
 		UserID,
 		TorrentID,
@@ -160,14 +162,13 @@ if (!empty($Err)) {
 	error($Err);
 }
 
-
-
 //We're all good! Fill!
-$DB->query("UPDATE requests SET
-				FillerID = $FillerID,
-				TorrentID = $TorrentID,
-				TimeFilled = '".sqltime()."'
-			WHERE ID = $RequestID");
+$DB->query("
+	UPDATE requests
+	SET FillerID = $FillerID,
+		TorrentID = $TorrentID,
+		TimeFilled = '".sqltime()."'
+	WHERE ID = $RequestID");
 
 if ($CategoryName == 'Music') {
 	$ArtistForm = get_request_artists($RequestID);

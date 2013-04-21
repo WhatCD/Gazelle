@@ -80,7 +80,7 @@ if ($NewRequest) {
 		if (!is_number($Bounty)) {
 			$Err = 'Your entered bounty is not a number';
 		} elseif ($Bounty < 100 * 1024 * 1024) {
-			$Err = 'Minumum bounty is 100 MB.';
+			$Err = 'Minimum bounty is 100 MB.';
 		}
 		$Bytes = $Bounty; //From MB to B
 	}
@@ -333,32 +333,34 @@ if ($CategoryName == 'Music') {
 //Query time!
 if ($CategoryName == 'Music') {
 	if ($NewRequest) {
-		$DB->query('INSERT INTO requests (
-						UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, RecordLabel,
-						CatalogueNumber, ReleaseType, BitrateList, FormatList, MediaList, LogCue, Visible, GroupID, OCLC)
-					VALUES
-						('.$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."','".db_string($RecordLabel)."',
-					 	'".db_string($CatalogueNumber)."', ".$ReleaseType.", '".$BitrateList."','".$FormatList."', '".$MediaList."', '".$LogCue."', '1', '$GroupID', '".db_string($OCLC)."')");
+		$DB->query('
+			INSERT INTO requests (
+				UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, RecordLabel,
+				CatalogueNumber, ReleaseType, BitrateList, FormatList, MediaList, LogCue, Visible, GroupID, OCLC)
+			VALUES
+				('.$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', $CategoryID, '".db_string($Title)."', $Year, '".db_string($Image)."', '".db_string($Description)."','".db_string($RecordLabel)."',
+						'".db_string($CatalogueNumber)."', $ReleaseType, '$BitrateList','$FormatList', '$MediaList', '$LogCue', '1', '$GroupID', '".db_string($OCLC)."')");
 
 		$RequestID = $DB->inserted_id();
-		
+
 	} else {
-		$DB->query("UPDATE requests
-					SET CategoryID = ".$CategoryID.",
-						Title = '".db_string($Title)."',
-						Year = ".$Year.",
-						Image = '".db_string($Image)."',
-						Description = '".db_string($Description)."',
-						CatalogueNumber = '".db_string($CatalogueNumber)."',
-						RecordLabel = '".db_string($RecordLabel)."',
-						ReleaseType = ".$ReleaseType.",
-						BitrateList = '".$BitrateList."',
-						FormatList = '".$FormatList."',
-						MediaList = '".$MediaList."',
-						LogCue = '".$LogCue."',
-						GroupID = '".$GroupID."',
-						OCLC = '".db_string($OCLC)."'
-					WHERE ID = ".$RequestID);
+		$DB->query("
+			UPDATE requests
+			SET CategoryID = $CategoryID,
+				Title = '".db_string($Title)."',
+				Year = $Year,
+				Image = '".db_string($Image)."',
+				Description = '".db_string($Description)."',
+				CatalogueNumber = '".db_string($CatalogueNumber)."',
+				RecordLabel = '".db_string($RecordLabel)."',
+				ReleaseType = $ReleaseType,
+				BitrateList = '$BitrateList',
+				FormatList = '$FormatList',
+				MediaList = '$MediaList',
+				LogCue = '$LogCue',
+				GroupID = '$GroupID',
+				OCLC = '".db_string($OCLC)."'
+			WHERE ID = ".$RequestID);
 
 		//I almost didn't think of this, we need to be able to delete artists / tags
 		$DB->query("SELECT ArtistID FROM requests_artists WHERE RequestID = ".$RequestID);
@@ -388,10 +390,10 @@ if ($CategoryName == 'Music') {
 			//1. See if each artist given already exists and if it does, grab the ID.
 			$DB->query("
 				SELECT
-				aa.ArtistID,
-				aa.AliasID,
-				aa.Name,
-				aa.Redirect
+					aa.ArtistID,
+					aa.AliasID,
+					aa.Name,
+					aa.Redirect
 				FROM artists_alias AS aa
 				WHERE aa.Name = '".db_string($Artist['name'])."'");
 
@@ -406,12 +408,16 @@ if ($CategoryName == 'Music') {
 			}
 			if (!$ArtistID) {
 				//2. For each artist that didn't exist, create an artist.
-				$DB->query("INSERT INTO artists_group (Name) VALUES ('".db_string($Artist['name'])."')");
+				$DB->query("
+					INSERT INTO artists_group (Name)
+					VALUES ('".db_string($Artist['name'])."')");
 				$ArtistID = $DB->inserted_id();
 
 				$Cache->increment('stats_artist_count');
 
-				$DB->query("INSERT INTO artists_alias (ArtistID, Name) VALUES (".$ArtistID.", '".db_string($Artist['name'])."')");
+				$DB->query("
+					INSERT INTO artists_alias (ArtistID, Name)
+					VALUES ($ArtistID, '".db_string($Artist['name'])."')");
 				$AliasID = $DB->inserted_id();
 
 				$ArtistForm[$Importance][$Num] = array('id' => $ArtistID, 'aliasid' => $AliasID, 'name' => $Artist['name']);
@@ -423,7 +429,9 @@ if ($CategoryName == 'Music') {
 	//3. Create a row in the requests_artists table for each artist, based on the ID.
 	foreach ($ArtistForm as $Importance => $Artists) {
 		foreach ($Artists as $Num => $Artist) {
-			$DB->query("INSERT IGNORE INTO requests_artists (RequestID, ArtistID, AliasID, Importance) VALUES (".$RequestID.", ".$Artist['id'].", ".$Artist['aliasid'].", '".$Importance."')");
+			$DB->query("
+				INSERT IGNORE INTO requests_artists (RequestID, ArtistID, AliasID, Importance)
+				VALUES ($RequestID, ".$Artist['id'].", ".$Artist['aliasid'].", '$Importance')");
 			$Cache->increment('stats_album_count');
 			$Cache->delete_value('artists_requests_'.$Artist['id']);
 		}
@@ -437,19 +445,23 @@ if ($CategoryName == 'Music') {
 		$DB->query("SELECT ArtistID FROM requests_artists WHERE RequestID = ".$RequestID);
 		$OldArtists = $DB->collect('ArtistID');
 		foreach ($OldArtists as $ArtistID) {
-			if (empty($ArtistID)) { continue; }
+			if (empty($ArtistID)) {
+				continue;
+			}
 			//Get a count of how many groups or requests use the artist ID
-			$DB->query("SELECT COUNT(ag.ArtistID)
-						FROM artists_group as ag
-							LEFT JOIN requests_artists AS ra ON ag.ArtistID=ra.ArtistID
-						WHERE ra.ArtistID IS NOT NULL
-							AND ag.ArtistID = '$ArtistID'");
+			$DB->query("
+				SELECT COUNT(ag.ArtistID)
+				FROM artists_group as ag
+					LEFT JOIN requests_artists AS ra ON ag.ArtistID=ra.ArtistID
+				WHERE ra.ArtistID IS NOT NULL
+					AND ag.ArtistID = '$ArtistID'");
 			list($ReqCount) = $DB->next_record();
-			$DB->query("SELECT COUNT(ag.ArtistID)
-						FROM artists_group as ag
-							LEFT JOIN torrents_artists AS ta ON ag.ArtistID=ta.ArtistID
-						WHERE ta.ArtistID IS NOT NULL
-							AND ag.ArtistID = '$ArtistID'");
+			$DB->query("
+				SELECT COUNT(ag.ArtistID)
+				FROM artists_group as ag
+					LEFT JOIN torrents_artists AS ta ON ag.ArtistID=ta.ArtistID
+				WHERE ta.ArtistID IS NOT NULL
+					AND ag.ArtistID = '$ArtistID'");
 			list($GroupCount) = $DB->next_record();
 			if (($ReqCount + $GroupCount) == 0) {
 				//The only group to use this artist
@@ -468,15 +480,16 @@ if ($CategoryName == 'Music') {
 			$DB->query("INSERT INTO requests (
 							UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, Visible, OCLC)
 						VALUES
-							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', ".$CategoryID.", '".db_string($Title)."', ".$Year.", '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
+							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', $CategoryID, '".db_string($Title)."', $Year, '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
 
 			$RequestID = $DB->inserted_id();
-			
+
 		} else {
-			$DB->query("UPDATE requests
-				SET CategoryID = ".$CategoryID.",
+			$DB->query("
+				UPDATE requests
+				SET CategoryID = $CategoryID,
 					Title = '".db_string($Title)."',
-					Year = ".$Year.",
+					Year = $Year,
 					Image = '".db_string($Image)."',
 					Description = '".db_string($Description)."',
 					OCLC = '".db_string($OCLC)."'
@@ -484,21 +497,23 @@ if ($CategoryName == 'Music') {
 		}
 	} else {
 		if ($NewRequest) {
-			$DB->query("INSERT INTO requests (
-							UserID, TimeAdded, LastVote, CategoryID, Title, Image, Description, Visible, OCLC)
-						VALUES
-							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."',  ".$CategoryID.", '".db_string($Title)."', '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
+			$DB->query("
+				INSERT INTO requests (
+					UserID, TimeAdded, LastVote, CategoryID, Title, Image, Description, Visible, OCLC)
+				VALUES
+					(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', $CategoryID, '".db_string($Title)."', '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
 
 			$RequestID = $DB->inserted_id();
-			
+
 		} else {
-				$DB->query("UPDATE requests
-				SET CategoryID = ".$CategoryID.",
-					Title = '".db_string($Title)."',
-					Image = '".db_string($Image)."',
-					Description = '".db_string($Description)."',
-					OCLC = '".db_string($OCLC)."'
-				WHERE ID = ".$RequestID);
+				$DB->query("
+					UPDATE requests
+					SET CategoryID = $CategoryID,
+						Title = '".db_string($Title)."',
+						Image = '".db_string($Image)."',
+						Description = '".db_string($Description)."',
+						OCLC = '".db_string($OCLC)."'
+					WHERE ID = ".$RequestID);
 		}
 	}
 }
@@ -516,7 +531,7 @@ foreach ($Tags as $Index => $Tag) {
 	$DB->query("INSERT INTO tags
 					(Name, UserID)
 				VALUES
-					('".$Tag."', ".$LoggedUser['ID'].")
+					('$Tag', ".$LoggedUser['ID'].")
 				ON DUPLICATE KEY UPDATE Uses=Uses+1");
 
 	$TagID = $DB->inserted_id();
@@ -524,7 +539,7 @@ foreach ($Tags as $Index => $Tag) {
 	$DB->query("INSERT IGNORE INTO requests_tags
 					(TagID, RequestID)
 				VALUES
-					(".$TagID.", ".$RequestID.")");
+					($TagID, $RequestID)");
 }
 
 if ($NewRequest) {
@@ -532,17 +547,17 @@ if ($NewRequest) {
 	$DB->query("INSERT INTO requests_votes
 					(RequestID, UserID, Bounty)
 				VALUES
-					(".$RequestID.", ".$LoggedUser['ID'].", ".($Bytes * (1 - $RequestTax)).")");
+					($RequestID, ".$LoggedUser['ID'].', '.($Bytes * (1 - $RequestTax)).')');
 
-	$DB->query("UPDATE users_main SET Uploaded = (Uploaded - ".$Bytes.") WHERE ID = ".$LoggedUser['ID']);
+	$DB->query("UPDATE users_main SET Uploaded = (Uploaded - $Bytes) WHERE ID = ".$LoggedUser['ID']);
 	$Cache->delete_value('user_stats_'.$LoggedUser['ID']);
 
-	
 
-	if ($CategoryName == "Music") {
-		$Announce = "'".$Title."' - ".Artists::display_artists($ArtistForm, false, false)." https://".SSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
+
+	if ($CategoryName == 'Music') {
+		$Announce = "\"$Title\" - ".Artists::display_artists($ArtistForm, false, false).' https://'.SSL_SITE_URL."/requests.php?action=view&id=$RequestID - ".implode(' ', $Tags);
 	} else {
-		$Announce = "'".$Title."' - https://".SSL_SITE_URL."/requests.php?action=view&id=".$RequestID." - ".implode(" ", $Tags);
+		$Announce = "\"$Title\" - https://".SSL_SITE_URL."/requests.php?action=view&id=$RequestID - ".implode(' ', $Tags);
 	}
 	send_irc('PRIVMSG #'.SSL_SITE_URL.'-requests :'.$Announce);
 

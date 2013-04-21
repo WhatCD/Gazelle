@@ -527,7 +527,10 @@ if (check_perms('site_torrents_notify')) {
 	</div>
 <? /* Misc::display_recommend($ArtistID, "artist"); */ ?>
 	<div class="sidebar">
-<?	if ($Image) { ?>
+<?	if ($Image) {
+		if (check_perms('site_proxy_images')) {
+			$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
+		} ?>
 		<div class="box box_image">
 			<div class="head"><strong><?=$Name?></strong></div>
 			<div style="text-align: center; padding: 10px 0px;">

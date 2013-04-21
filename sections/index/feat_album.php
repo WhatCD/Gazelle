@@ -7,6 +7,10 @@ if($FeaturedAlbum === false) {
 }
 if(is_number($FeaturedAlbum['GroupID'])) {
 	$Artists = Artists::get_artist($FeaturedAlbum['GroupID']);
+
+	if (check_perms('site_proxy_images')) {
+		$FeaturedAlbum['WikiImage'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($FeaturedAlbum['WikiImage']);
+	}
 ?>
 		<div class="box">
 			<div class="head colhead_dark"><strong>Featured Album</strong></div>
