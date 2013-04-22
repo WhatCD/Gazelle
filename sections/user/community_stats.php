@@ -104,12 +104,20 @@ $ViewCount	= check_paranoia_here('requestsvoted_count');
 $ViewBounty = check_paranoia_here('requestsvoted_bounty');
 
 	if ($ViewCount && !$ViewBounty && !$ViewAll) { ?>
+				<li>Requests created: <?=number_format($RequestsCreated)?></li>
 				<li>Requests voted: <?=number_format($RequestsVoted)?></li>
 <?	} elseif (!$ViewCount && $ViewBounty && !$ViewAll) { ?>
+				<li>Requests created: <?=Format::get_size($RequestsCreatedSpent)?> spent</li>
 				<li>Requests voted: <?=Format::get_size($TotalSpent)?> spent</li>
 <?	} elseif ($ViewCount && $ViewBounty && !$ViewAll) { ?>
+				<li>Requests created: <?=number_format($RequestsCreated)?> for <?=Format::get_size($RequestsCreatedSpent)?></li>
 				<li>Requests voted: <?=number_format($RequestsVoted)?> for <?=Format::get_size($TotalSpent)?></li>
 <?	} elseif ($ViewAll) { ?>
+				<li>
+					<span<?= ($ViewCount === 2) ? ' class="paranoia_override"' : ''?>>Requests created: <?=number_format($RequestsCreated)?></span>
+					<span<?= ($ViewBounty === 2) ? ' class="paranoia_override"' : ''?>> for <?=Format::get_size($RequestsCreatedSpent)?></span>
+					<a href="requests.php?type=created&amp;userid=<?=$UserID?>" class="brackets<?= ($ViewAll === 2) ? ' paranoia_override' : '' ?>" title="View">View</a>
+				</li>
 				<li>
 					<span<?= ($ViewCount === 2) ? ' class="paranoia_override"' : ''?>>Requests voted: <?=number_format($RequestsVoted)?></span>
 					<span<?= ($ViewBounty === 2) ? ' class="paranoia_override"' : ''?>> for <?=Format::get_size($TotalSpent)?></span>

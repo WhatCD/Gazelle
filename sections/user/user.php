@@ -266,8 +266,10 @@ if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requests
 if (check_paranoia_here('requestsvoted_count') || check_paranoia_here('requestsvoted_bounty')) {
 	$DB->query("SELECT COUNT(rv.RequestID), SUM(rv.Bounty) FROM requests_votes AS rv WHERE rv.UserID = ".$UserID);
 	list($RequestsVoted, $TotalSpent) = $DB->next_record();
+	$DB->query('SELECT COUNT(r.ID), SUM(rv.Bounty) FROM requests AS r LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID AND rv.UserID = r.UserID WHERE r.UserID = ' . $UserID);
+	list($RequestsCreated, $RequestsCreatedSpent) = $DB->next_record();
 } else {
-	$RequestsVoted = $TotalSpent = 0;
+	$RequestsVoted = $TotalSpent = $RequestsCreated = $RequestsCreatedSpent = 0;
 }
 
 if (check_paranoia_here('uploads+')) {

@@ -56,12 +56,30 @@ class TEXT {
 	private $NoImg = 0; // If images should be turned into URLs
 
 	private $Levels = 0;
+	
+	/**
+	 * The maximum amount of nesting allowed (exclusive)
+	 * In reality n-1 nests are shown.
+	 * @var int $MaximumNests
+	 */
+	private $MaximumNests = 10;
 
 	/**
 	 * Used to detect and disable parsing (e.g. TOC) within quotes
 	 * @var int $InQuotes
 	 */
 	private $InQuotes = 0;
+	
+	/**
+	 * Used to [hide] quote trains starting with the specified depth (inclusive)
+	 * @var int $NestsBeforeHide
+	 *
+	 * This defaulted to 5 but was raised to 10 to effectively "disable" it until 
+	 * an optimal number of nested [quote] tags is chosen. The variable $MaximumNests
+	 * effectively overrides this variable, if $MaximumNests is less than the value
+	 * of $NestsBeforeHide.
+	 */
+	private $NestsBeforeHide = 10;
 
 	/**
 	 * Array of headlines for Table Of Contents (TOC)
@@ -504,8 +522,7 @@ class TEXT {
 	 * Generates a navigation list for TOC
 	 * @param int $Min Minimum number of headlines required for a TOC list
 	 */
-	public function parse_toc ($Min = 3)
-	{
+	public function parse_toc ($Min = 3) {
 		if (count($this->Headlines) > $Min) {
 			$list = '<ol class="navigation_list">';
 			$i = 0;
@@ -548,8 +565,7 @@ class TEXT {
 	 * @param int $i Iterator digit
 	 * @param int $Offset If the list doesn't start at level 1
 	 */
-	private function headline_level (&$ItemLevel, &$Level, &$List, $i, &$Offset)
-	{
+	private function headline_level (&$ItemLevel, &$Level, &$List, $i, &$Offset) {
 		if ($ItemLevel < $Level) {
 			$diff = $Level - $ItemLevel;
 			$List .= '</li>' . str_repeat('</ol></li>', $diff);
@@ -569,17 +585,30 @@ class TEXT {
 	private function to_html ($Array) {
 		global $SSL;
 		$this->Levels++;
-		if ($this->Levels > 10) {
-			return $Block['Val'];
-		} // Hax prevention
+		/*
+		 * Hax prevention
+		 * That's the original comment on this.
+		 * Most likely this was implemented to avoid anyone nesting enough
+		 * elements to reach PHP's memory limit as nested elements are
+		 * solved recursively.
+		 * Original value of 10, it is now replaced in favor of
+		 * $MaximumNests.
+		 * If this line is ever executed then something is, infact
+		 * being haxed as the if before the block type switch for different
+		 * tags should always be limiting ahead of this line.
+		 * (Larger than vs. smaller than.)
+		 */
+		if ($this->Levels > $this->MaximumNests) { 
+			return $Block['Val']; // Hax prevention, breaks upon exceeding nests.
+		}
 		$Str = '';
-
 		foreach ($Array as $Block) {
 			if (is_string($Block)) {
 				$Str.=$this->smileys($Block);
 				continue;
 			}
-			switch($Block['Type']) {
+			if ($this->Levels < $this->MaximumNests) {
+			switch ($Block['Type']) {
 				case 'b':
 					$Str.='<strong>'.$this->to_html($Block['Val']).'</strong>';
 					break;
@@ -692,17 +721,24 @@ class TEXT {
 				case 'quote':
 					$this->NoImg++; // No images inside quote tags
 					$this->InQuotes++;
+					if ($this->InQuotes == $this->NestsBeforeHide) { //Put quotes that are nested beyond the specified limit in [hide] tags.
+					    $Str.='<strong>Older quotes</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
+					    $Str.='<blockquote class="hidden spoiler">';
+					}
 					if (!empty($Block['Attr'])) {
 						$Exploded = explode('|', $this->to_html($Block['Attr']));
-						if (isset($Exploded[1]) && is_numeric($Exploded[1])) {
+						if (isset($Exploded[1]) && is_numeric($Exploded[1]))  {
 							$PostID = trim($Exploded[1]);
-							$Str.='<a href="#" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
+							$Str.= '<a href="#" onclick="QuoteJump('.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
 						else {
 							$Str.='<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
 						}
 					}
 					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
+					if($this->InQuotes == $this->NestsBeforeHide) { //Close quote the deeply nested quote [hide].
+					    $Str.='</blockquote><br />'; // Ensure new line after quote train hiding
+					}
 					$this->NoImg--;
 					$this->InQuotes--;
 					break;
@@ -800,6 +836,7 @@ class TEXT {
 				
 			}
 		}
+		}
 		$this->Levels--;
 		return $Str;
 	}
@@ -811,7 +848,7 @@ class TEXT {
 				$Str.=$Block;
 				continue;
 			}
-			switch($Block['Type']) {
+			switch ($Block['Type']) {
 				case 'headline':
 					break;
 				case 'b':

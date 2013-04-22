@@ -21,8 +21,20 @@ if (empty($_GET['type'])) {
 } else {
 	switch ($_GET['type']) {
 		case 'created':
-			$Title = 'My requests';
-			$SS->set_filter('userid', array($LoggedUser['ID']));
+			if (!empty($_GET['userid'])) {
+				if (is_number($_GET['userid'])) {
+					if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
+						error(403);
+					}
+					$Title = 'Requests created by ' . $UserInfo['Username'];
+					$SS->set_filter('userid', array($_GET['userid']));
+				} else {
+					error(404);
+				}
+			} else {
+				$Title = 'My requests';
+				$SS->set_filter('userid', array($LoggedUser['ID']));
+			}
 			break;
 		case 'voted':
 			if (!empty($_GET['userid'])) {

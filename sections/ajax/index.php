@@ -13,7 +13,7 @@ enforce_login();
 /*	AJAX_LIMIT = array(x,y) = 'x' requests every 'y' seconds.
 	e.g. array(5,10) = 5 requests every 10 seconds	*/
 $AJAX_LIMIT = array(5,10);
-$Limited_Pages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki');
+$Limited_Pages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup');
 
 header('Content-Type: application/json; charset=utf-8');
 
