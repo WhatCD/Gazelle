@@ -13,7 +13,7 @@ View::show_header('Staff Tools');
 <?	if (check_perms('admin_manage_permissions')) { ?>
 			<tr><td><a href="tools.php?action=permissions">Permissions</a></td></tr>
 <?	} if (check_perms('admin_whitelist')) { ?>
-			<tr><td><a href="tools.php?action=whitelist">Whitelist</a></td></tr>
+			<tr><td><a href="tools.php?action=whitelist">Client whitelist</a></td></tr>
 <?	} if (check_perms('admin_manage_ipbans')) { ?>
 			<tr><td><a href="tools.php?action=ip_ban">IP address bans</a></td></tr>
 

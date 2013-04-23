@@ -56,7 +56,7 @@ class TEXT {
 	private $NoImg = 0; // If images should be turned into URLs
 
 	private $Levels = 0;
-	
+
 	/**
 	 * The maximum amount of nesting allowed (exclusive)
 	 * In reality n-1 nests are shown.
@@ -69,12 +69,12 @@ class TEXT {
 	 * @var int $InQuotes
 	 */
 	private $InQuotes = 0;
-	
+
 	/**
 	 * Used to [hide] quote trains starting with the specified depth (inclusive)
 	 * @var int $NestsBeforeHide
 	 *
-	 * This defaulted to 5 but was raised to 10 to effectively "disable" it until 
+	 * This defaulted to 5 but was raised to 10 to effectively "disable" it until
 	 * an optimal number of nested [quote] tags is chosen. The variable $MaximumNests
 	 * effectively overrides this variable, if $MaximumNests is less than the value
 	 * of $NestsBeforeHide.
@@ -598,7 +598,7 @@ class TEXT {
 		 * tags should always be limiting ahead of this line.
 		 * (Larger than vs. smaller than.)
 		 */
-		if ($this->Levels > $this->MaximumNests) { 
+		if ($this->Levels > $this->MaximumNests) {
 			return $Block['Val']; // Hax prevention, breaks upon exceeding nests.
 		}
 		$Str = '';

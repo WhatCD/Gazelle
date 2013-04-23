@@ -7,7 +7,7 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title><?=display_str($PageTitle)?></title>
-	<meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge" />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -38,7 +38,7 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 			<div id="logo">
 				<ul>
 					<li><a href="index.php">Home</a></li>
-					<li><a href="login.php">Login</a></li>
+					<li><a href="login.php">Log in</a></li>
 <? if (OPEN_REGISTRATION) { ?>
 					<li><a href="register.php">Register</a></li>
 <? } ?>
