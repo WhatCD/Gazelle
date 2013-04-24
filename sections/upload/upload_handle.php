@@ -250,9 +250,6 @@ if ($Type == 'Music') {
 }
 
 $LogScoreAverage = 0;
-$SendPM = 0;
-$LogMessage = '';
-$CheckStamp='';
 
 if (!$Err && $Properties['Format'] == 'FLAC') {
 	foreach ($_FILES['logfiles']['name'] as $FileName) {
@@ -287,7 +284,7 @@ if (empty($Properties['GroupID']) && empty($ArtistForm) && $Type == "Music") {
 	5 => array(),
 	6 => array()
 	);
-	for($i = 0, $il = count($Artists); $i < $il; $i++) {
+	for ($i = 0, $il = count($Artists); $i < $il; $i++) {
 		if (trim($Artists[$i]) != '') {
 			if (!in_array($Artists[$i], trim($ArtistNames))) {
 				$ArtistForm[$Importance[$i]][] = array('name' => Artists::normalise_artist_name($Artists[$i]));

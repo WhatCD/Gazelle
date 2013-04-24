@@ -515,17 +515,10 @@ $DB->query("SELECT
 	}
 
 
-	print
-		json_encode(
-			array(
-				'status' => 'success',
-				'response' => array(
-					'results' => array(),
-					'youMightLike' => $JsonYouMightLike
-				)
-			)
-		);
-	die();
+        json_die("success", array(
+            'results' => array(),
+            'youMightLike' => $JsonYouMightLike
+        ));
 }
 
 $Bookmarks = Bookmarks::all_bookmarks('torrent');
@@ -617,6 +610,26 @@ foreach ($Results as $Result) {
 					|| $FirstUnknown
 					|| $Data['Media'] != $LastMedia) {
 				$EditionID++;
+
+				if ($Data['Remastered'] && $Data['RemasterYear'] != 0) {
+
+					$RemasterName = $Data['RemasterYear'];
+					$AddExtra = " - ";
+					if ($Data['RemasterRecordLabel']) { $RemasterName .= $AddExtra.display_str($Data['RemasterRecordLabel']); $AddExtra=' / '; }
+					if ($Data['RemasterCatalogueNumber']) { $RemasterName .= $AddExtra.display_str($Data['RemasterCatalogueNumber']); $AddExtra=' / '; }
+					if ($Data['RemasterTitle']) { $RemasterName .= $AddExtra.display_str($Data['RemasterTitle']); $AddExtra=' / '; }
+					$RemasterName .= $AddExtra.display_str($Data['Media']);
+				} else {
+					$AddExtra = " / ";
+					if (!$Data['Remastered']) {
+						$MasterName = "Original Release";
+						if ($GroupRecordLabel) { $MasterName .= $AddExtra.$GroupRecordLabel; $AddExtra=' / '; }
+						if ($GroupCatalogueNumber) { $MasterName .= $AddExtra.$GroupCatalogueNumber; $AddExtra=' / '; }
+					} else {
+						$MasterName = "Unknown Release(s)";
+					}
+					$MasterName .= $AddExtra.display_str($Data['Media']);
+				}
 			}
 			$LastRemasterTitle = $Data['RemasterTitle'];
 			$LastRemasterYear = $Data['RemasterYear'];
@@ -696,14 +709,8 @@ foreach ($Results as $Result) {
 	}
 }
 
-print
-	json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'currentPage' => intval($Page),
-				'pages' => ceil($TorrentCount / TORRENTS_PER_PAGE),
-				'results' => $JsonGroups
-			)
-		)
-	);
+json_die("success", array(
+    'currentPage' => intval($Page),
+    'pages' => ceil($TorrentCount / TORRENTS_PER_PAGE),
+    'results' => $JsonGroups
+));

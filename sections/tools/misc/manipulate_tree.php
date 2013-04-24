@@ -3,7 +3,7 @@
 if (!check_perms('users_view_invites') && !check_perms('users_disable_users') && !check_perms('users_edit_invites') && !check_perms('users_disable_any')) {
 	error(404);
 }
-View::show_header("Manipulate Invite Tree");
+View::show_header('Manipulate Invite Tree');
 
 if ($_POST['id']) {
 	authorize();
@@ -19,17 +19,22 @@ if ($_POST['id']) {
 		$Comment .= "\n" . "Manipulate Tree used by " . $LoggedUser['Username'];
 	}
 	$UserID = $_POST['id'];
-	$DB->query("SELECT
-		t1.TreePosition,
-		t1.TreeID,
-		t1.TreeLevel,
-		(SELECT
-			t2.TreePosition FROM invite_tree AS t2
-			WHERE TreeID=t1.TreeID AND TreeLevel=t1.TreeLevel AND t2.TreePosition>t1.TreePosition
-			ORDER BY TreePosition LIMIT 1
-		) AS MaxPosition
-		FROM invite_tree AS t1
-		WHERE t1.UserID=$UserID");
+	$DB->query("
+			SELECT
+				t1.TreePosition,
+				t1.TreeID,
+				t1.TreeLevel,
+				(	SELECT
+					t2.TreePosition
+					FROM invite_tree AS t2
+					WHERE TreeID=t1.TreeID
+						AND TreeLevel=t1.TreeLevel
+						AND t2.TreePosition>t1.TreePosition
+					ORDER BY TreePosition
+					LIMIT 1
+				) AS MaxPosition
+			FROM invite_tree AS t1
+			WHERE t1.UserID=$UserID");
 	list ($TreePosition, $TreeID, $TreeLevel, $MaxPosition) = $DB->next_record();
 	if (!$MaxPosition) {
 		$MaxPosition = 1000000;
@@ -39,12 +44,12 @@ if ($_POST['id']) {
 	}
 	$DB->query("
 			SELECT
-			UserID
+				UserID
 			FROM invite_tree
 			WHERE TreeID=$TreeID
-			AND TreePosition>$TreePosition
-			AND TreePosition<$MaxPosition
-			AND TreeLevel>$TreeLevel
+				AND TreePosition>$TreePosition
+				AND TreePosition<$MaxPosition
+				AND TreeLevel>$TreeLevel
 			ORDER BY TreePosition");
 	$BanList = array();
 
@@ -77,11 +82,11 @@ if ($_POST['id']) {
 ?>
 
 <div class="thin">
-	<? if($Msg) { ?>
+<?	if ($Msg) { ?>
 	<div class="center">
 		<p style="color: red; text-align: center;"><?=$Msg?></p>
 	</div>
-	<? } ?>
+<?	} ?>
 	<form class="manage_form" name="user" action="" method="post">
 		<input type="hidden" id="action" name="action" value="manipulate_tree" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -94,17 +99,16 @@ if ($_POST['id']) {
 			</tr>
 			<tr>
 				<td class="label"><strong>Action: </strong></td>
-				<td colspan="2"><select name="perform">
-						<option value="nothing"
-							<? if($_POST['perform']==='nothing'){echo ' selected="selected"';}?>>Do
-							nothing</option>
-						<option value="disable"
-							<? if($_POST['perform']==='disable'){echo ' selected="selected"';}?>>Disable
-							entire tree</option>
-						<option value="inviteprivs"
-							<? if($_POST['perform']==='inviteprivs'){echo ' selected="selected"';}?>>Disable
-							invites privileges</option>
-				</select></td>
+				<td colspan="2">
+					<select name="perform">
+						<option value="nothing"<?
+					if ($_POST['perform'] === 'nothing') { echo ' selected="selected"'; } ?>>Do nothing</option>
+						<option value="disable"<?
+					if ($_POST['perform'] === 'disable') { echo ' selected="selected"'; } ?>>Disable entire tree</option>
+						<option value="inviteprivs"<?
+					if ($_POST['perform'] === 'inviteprivs') { echo ' selected="selected"'; } ?>>Disable invites privileges</option>
+					</select>
+				</td>
 				<td align="left"><input type="submit" value="Go" /></td>
 			</tr>
 		</table>

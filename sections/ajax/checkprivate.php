@@ -1,4 +1,7 @@
 <?
+
+include(SERVER_ROOT.'/classes/class_bencodetorrent.php');
+
 $TorrentID = $_GET['torrentid'];
 if (!is_number($TorrentID)) {
 	echo('Invalid TorrentID');

@@ -6,13 +6,7 @@ User topic subscription page
 */
 
 if(!empty($LoggedUser['DisableForums'])) {
-	print
-		json_encode(
-			array(
-				'status' => 'failure'
-			)
-		);
-	die();
+    json_die("failure");
 }
 
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
@@ -109,13 +103,7 @@ while(list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Lo
 	$JsonPosts[] = $JsonPost;
 }
 
-print
-	json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'threads' => $JsonPosts
-			)
-		)
-	);
+json_die("success", array(
+    'threads' => $JsonPosts
+));
 ?>

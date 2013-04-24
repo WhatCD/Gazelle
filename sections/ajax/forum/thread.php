@@ -24,6 +24,7 @@ if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 		$DB->query("SELECT TopicID FROM forums_posts WHERE ID = $_GET[postid]");
 		list($ThreadID) = $DB->next_record();
 		if ($ThreadID) {
+                        //Redirect postid to threadid when necessary.
 			header("Location: ajax.php?action=forum&type=viewthread&threadid=$ThreadID&postid=$_GET[postid]");
 			die();
 		} else {
@@ -49,7 +50,7 @@ if (isset($_GET['pp'])) {
 //---------- Get some data to start processing
 
 // Thread information, constant across all pages
-$ThreadInfo = get_thread_info($ThreadID, true, true);
+$ThreadInfo = get_thread_info($ThreadID, true, true, true);
 $ForumID = $ThreadInfo['ForumID'];
 
 // Make sure they're allowed to look at the page

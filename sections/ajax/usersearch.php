@@ -3,8 +3,9 @@
  *>>>>>>>>>>>>>>>>>>>>>>>>>>> User search <<<<<<<<<<<<<<<<<<<<<<<<<<<<*
  **********************************************************************/
 
-if (!empty($_GET['search'])) {
-
+if (empty($_GET['search'])) {
+    json_die("failure", "no search terms");
+} else {
 	$_GET['username'] = $_GET['search'];
 }
 
@@ -46,14 +47,8 @@ foreach($Results as $Result) {
 	);
 }
 
-print
-	json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'currentPage' => (int) $Page,
-				'pages' => ceil($NumResults/USERS_PER_PAGE),
-				'results' => $JsonUsers
-			)
-		)
-	);
+json_die("success", array(
+    'currentPage' => (int) $Page,
+    'pages' => ceil($NumResults / USERS_PER_PAGE),
+    'results' => $JsonUsers
+));

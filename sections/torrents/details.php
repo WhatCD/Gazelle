@@ -148,7 +148,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 				<li class="artists_composers">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if (check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')) {
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
@@ -167,7 +167,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 				<li class="artists_dj">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if (check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')) {
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 					list($AliasID) = $DB->next_record();
 					if (empty($AliasID)) {
@@ -190,7 +190,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 				<li class="artist_main">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?		if (check_perms('torrents_edit')){
+<?		if (check_perms('torrents_edit')) {
 			$AliasID = $Artist['aliasid'];
 			if (empty($AliasID)) {
 				$AliasID = $Artist['id'];
@@ -208,7 +208,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 				<li class="artist_guest">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if (check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')) {
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
@@ -228,7 +228,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 				<li class="artists_conductors">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if (check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')) {
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
@@ -248,7 +248,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 				<li class="artists_remix">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if (check_perms('torrents_edit')){
+<?			if (check_perms('torrents_edit')) {
 				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {

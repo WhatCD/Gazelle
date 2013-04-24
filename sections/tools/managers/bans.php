@@ -1,12 +1,16 @@
 <?
-if(!check_perms('admin_manage_ipbans')) { error(403); }
+if (!check_perms('admin_manage_ipbans')) {
+	error(403);
+}
 
 if (isset($_POST['submit'])) {
 	authorize();
 
 	$IPA = substr($_POST['start'], 0, strcspn($_POST['start'], '.'));
 	if ($_POST['submit'] == 'Delete') { //Delete
-		if(!is_number($_POST['id']) || $_POST['id'] == ''){ error(0); }
+		if (!is_number($_POST['id']) || $_POST['id'] == '') {
+			error(0);
+		}
 		$DB->query('DELETE FROM ip_bans WHERE ID='.$_POST['id']);
 		$Cache->delete_value('ip_bans_'.$IPA);
 	} else { //Edit & Create, Shared Validation
@@ -14,14 +18,16 @@ if (isset($_POST['submit'])) {
 		$Val->SetFields('end', '1','regex','You must include the ending IP address.',array('regex'=>'/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/i'));
 		$Val->SetFields('notes', '1','string','You must include the reason for the ban.');
 		$Err=$Val->ValidateForm($_POST); // Validate the form
-		if($Err){ error($Err); }
+		if ($Err) {
+			error($Err);
+		}
 
 		$Notes = db_string($_POST['notes']);
 		$Start = Tools::ip_to_unsigned($_POST['start']); //Sanitized by Validation regex
 		$End = Tools::ip_to_unsigned($_POST['end']); //See above
 
-		if($_POST['submit'] == 'Edit'){ //Edit
-			if(empty($_POST['id']) || !is_number($_POST['id'])) {
+		if ($_POST['submit'] == 'Edit') { //Edit
+			if (empty($_POST['id']) || !is_number($_POST['id'])) {
 				error(404);
 			}
 			$DB->query("UPDATE ip_bans SET
@@ -43,11 +49,11 @@ list($Page,$Limit) = Format::page_limit(BANS_PER_PAGE);
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS ID, FromIP, ToIP, Reason FROM ip_bans AS i ";
 
-if(!empty($_REQUEST['notes'])) {
+if (!empty($_REQUEST['notes'])) {
 	$sql .= "WHERE Reason LIKE '%".db_string($_REQUEST['notes'])."%' ";
 }
 
-if(!empty($_REQUEST['ip']) && preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $_REQUEST['ip'])) {
+if (!empty($_REQUEST['ip']) && preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $_REQUEST['ip'])) {
 	if (!empty($_REQUEST['notes'])) {
 		$sql .= "AND '".Tools::ip_to_unsigned($_REQUEST['ip'])."' BETWEEN FromIP AND ToIP ";
 	} else {

@@ -108,7 +108,6 @@ class TORRENT_FORM {
 		$Torrent = $this->Torrent;
 ?>
 		</div>
-
 		<table cellpadding="3" cellspacing="1" border="0" class="layout border slice" width="100%">
 <?		if (!$this->NewTorrent) {
 			if (check_perms('torrents_freeleech')) {
@@ -324,7 +323,7 @@ function show() {
 				echo "</option>\n";
 			}
 ?>
-					</select> Please take the time to fill this out properly (try searching <a href="http://musicbrainz.org/search.html" target="_blank">MusicBrainz</a>).
+					</select> Please take the time to fill this out properly. Need help? Try reading <a href="wiki.php?action=article&amp;id=202" target="_blank">this wiki article</a> or searching <a href="http://musicbrainz.org/search.html" target="_blank">MusicBrainz</a>.
 				</td>
 			</tr>
 <?		} ?>
@@ -347,7 +346,7 @@ function show() {
 	$LastLine = '';
 
 	foreach ($GroupRemasters as $Index => $Remaster) {
-		$Line = $Remaster['RemasterYear']." / ".$Remaster['RemasterTitle']." / ".$Remaster['RemasterRecordLabel']." / ".$Remaster['RemasterCatalogueNumber'];
+		$Line = $Remaster['RemasterYear'].' / '.$Remaster['RemasterTitle'].' / '.$Remaster['RemasterRecordLabel'].' / '.$Remaster['RemasterCatalogueNumber'];
 		if ($Line != $LastLine) {
 			$LastLine = $Line;
 
@@ -423,10 +422,12 @@ function show() {
 				<td>
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
-<?		if ($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates)) {
+<?
+
+		if ($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates)) {
 			$OtherBitrate = true;
-			if (substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(" (VBR)")) == " (VBR)") {
-				$Torrent['Bitrate'] = substr($Torrent['Bitrate'], 0, strlen($Torrent['Bitrate'])-6);
+			if (substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(' (VBR)')) == ' (VBR)') {
+				$Torrent['Bitrate'] = substr($Torrent['Bitrate'], 0, strlen($Torrent['Bitrate']) - 6);
 				$VBR = true;
 			}
 		} else {
@@ -441,7 +442,7 @@ function show() {
 
 		foreach (Misc::display_array($this->Bitrates) as $Bitrate) {
 			echo '<option value="'.$Bitrate.'"';
-			if (($SimpleBitrate && preg_match('/^'.$SimpleBitrate.'.*/', $Bitrate)) || ($OtherBitrate && $Bitrate == "Other")) {
+			if (($SimpleBitrate && preg_match('/^'.$SimpleBitrate.'.*/', $Bitrate)) || ($OtherBitrate && $Bitrate == 'Other')) {
 				echo ' selected="selected"';
 			}
 			echo '>';
@@ -455,7 +456,7 @@ function show() {
 					</span>
 				</td>
 			</tr>
-			<?
+<?
 		if ($this->NewTorrent) { ?>
 			<tr id="upload_logs" class="hidden">
 				<td class="label">
@@ -763,7 +764,6 @@ function show() {
 				</td>
 			</tr>
 <?		} ?>
-
 		</table>
 <?	}//function simple_form
 }//class

@@ -73,15 +73,9 @@ foreach ($News as $NewsItem) {
 	}
 }
 
-print
-	json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'announcements' => $JsonAnnouncements,
-				'blogPosts' => $JsonBlog
-			)
-		)
-	);
+json_die("success", array(
+    'announcements' => $JsonAnnouncements,
+    'blogPosts' => $JsonBlog
+));
 
 ?>

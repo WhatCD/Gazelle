@@ -27,13 +27,13 @@ if (!isset($_REQUEST['action'])) {
 	die();
 }
 
-if (substr($_REQUEST['action'],0,7) == 'sandbox' && !isset($argv[1])) {
+if (substr($_REQUEST['action'], 0, 7) == 'sandbox' && !isset($argv[1])) {
 	if (!check_perms('site_debug')) {
 		error(403);
 	}
 }
 
-if (substr($_REQUEST['action'],0,12) == 'update_geoip' && !isset($argv[1])) {
+if (substr($_REQUEST['action'], 0, 12) == 'update_geoip' && !isset($argv[1])) {
 	if (!check_perms('site_debug')) {
 		error(403);
 	}
@@ -45,7 +45,7 @@ $Val = new VALIDATE;
 include(SERVER_ROOT.'/classes/class_feed.php');
 $Feed = new FEED;
 
-switch ($_REQUEST['action']){
+switch ($_REQUEST['action']) {
 	case 'phpinfo':
 		if (!check_perms('site_debug')) {
 			error(403);
@@ -125,7 +125,7 @@ switch ($_REQUEST['action']){
 		if (!check_perms('admin_manage_news')) {
 			error(403);
 		}
-		if (is_number($_POST['newsid'])){
+		if (is_number($_POST['newsid'])) {
 			$DB->query("UPDATE news
 						SET Title='".db_string($_POST['title'])."',
 							Body='".db_string($_POST['body'])."'
@@ -140,7 +140,7 @@ switch ($_REQUEST['action']){
 		if (!check_perms('admin_manage_news')) {
 			error(403);
 		}
-		if (is_number($_GET['id'])){
+		if (is_number($_GET['id'])) {
 			authorize();
 			$DB->query("DELETE FROM news WHERE ID='".db_string($_GET['id'])."'");
 			$Cache->delete_value('news');

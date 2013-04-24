@@ -1,9 +1,9 @@
 <?
 //******************************************************************************//
-//--------------- Take mass pm -------------------------------------------------//
-// This pages handles the backend of the 'send mass pm' function. It checks	 //
-// the data, and if it all validates, it sends a pm to everyone who snatched	//
-// the torrent.																 //
+//--------------- Take mass PM -------------------------------------------------//
+// This pages handles the backend of the 'Send Mass PM' function. It checks	    //
+// the data, and if it all validates, it sends a PM to everyone who snatched	//
+// the torrent.																    //
 //******************************************************************************//
 
 authorize();
@@ -22,7 +22,7 @@ $Message = $_POST['message'];
 //--------------- Validate data in edit form -----------------------------------//
 
 // FIXME: Still need a better perm name
-if(!check_perms('site_moderate_requests')) {
+if (!check_perms('site_moderate_requests')) {
 	error(403);
 }
 
@@ -32,7 +32,7 @@ $Validate->SetFields('subject','0','string','Invalid subject.',array('maxlength'
 $Validate->SetFields('message','0','string','Invalid message.',array('maxlength'=>10000, 'minlength'=>1));
 $Err = $Validate->ValidateForm($_POST); // Validate the form
 
-if($Err){
+if ($Err) {
 	error($Err);
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	die();
@@ -43,7 +43,7 @@ if($Err){
 
 $DB->query('SELECT uid FROM xbt_snatched WHERE fid='.$TorrentID);
 
-if ($DB->record_count()>0) {
+if ($DB->record_count() > 0) {
 	// Save this because send_pm uses $DB to run its own query... Oops...
 	$Snatchers = $DB->to_array();
 	foreach ($Snatchers as $UserID) {
@@ -51,7 +51,7 @@ if ($DB->record_count()>0) {
 	}
 }
 
-Misc::write_log($LoggedUser['Username']." sent mass notice to snatches of torrent $TorrentID in group $GroupID");
+Misc::write_log($LoggedUser['Username']." sent mass notice to snatchers of torrent $TorrentID in group $GroupID");
 
 header("Location: torrents.php?id=$GroupID");
 

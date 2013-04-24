@@ -35,29 +35,29 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 	Torrents::update_hash($GroupID);
 
 	//IRC
-	$Announce = "";
+	$Announce = '';
 	$Announce .= Artists::display_artists($ArtistForm, false);
-	$Announce .= trim($Properties['Title']) . " ";
+	$Announce .= trim($Properties['Title']) . ' ';
 	$Announce .= '[' . trim($Properties['Year']) . ']';
 	if (($Properties['ReleaseType'] > 0)) {
 		$Announce .= ' [' . $ReleaseTypes[$Properties['ReleaseType']] . ']';
 	}
-	$Announce .= " - ";
-	$Announce .= trim(str_replace("'", "", $ExtraTorrent['Format'])) . " / " . trim(str_replace("'", "", $ExtraTorrent['Encoding']));
-	$Announce .= " / " . trim($Properties['Media']);
-	if ($T['FreeLeech'] == "1") {
-		$Announce .= " / Freeleech!";
+	$Announce .= ' - ';
+	$Announce .= trim(str_replace("'", '', $ExtraTorrent['Format'])) . ' / ' . trim(str_replace("'", '', $ExtraTorrent['Encoding']));
+	$Announce .= ' / ' . trim($Properties['Media']);
+	if ($T['FreeLeech'] == '1') {
+		$Announce .= ' / Freeleech!';
 	}
 	$Title = $Announce;
 
-	$AnnounceSSL = $Announce . " - https://" . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
-	$Announce .= " - https://" . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
+	$AnnounceSSL = $Announce . ' - https://' . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
+	$Announce .= ' - https://' . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
 
-	$AnnounceSSL .= " - " . trim($Properties['TagList']);
-	$Announce .= " - " . trim($Properties['TagList']);
+	$AnnounceSSL .= ' - ' . trim($Properties['TagList']);
+	$Announce .= ' - ' . trim($Properties['TagList']);
 
 	send_irc('PRIVMSG #' . NONSSL_SITE_URL . '-announce :' . html_entity_decode($Announce));
-	send_irc('PRIVMSG #' . NONSSL_SITE_URL . '-announce-ssl :' . $AnnounceSSL);
+	send_irc('PRIVMSG #' . SSL_SITE_URL . '-announce-ssl :' . $AnnounceSSL);
 //send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce :'.html_entity_decode($Announce));
 
 }

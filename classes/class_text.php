@@ -729,7 +729,7 @@ class TEXT {
 						$Exploded = explode('|', $this->to_html($Block['Attr']));
 						if (isset($Exploded[1]) && is_numeric($Exploded[1]))  {
 							$PostID = trim($Exploded[1]);
-							$Str.= '<a href="#" onclick="QuoteJump('.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
+							$Str.='<a href="forums.php?action=viewthread&postid='.$PostID.'" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
 						else {
 							$Str.='<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';

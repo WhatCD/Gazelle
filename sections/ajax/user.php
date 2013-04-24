@@ -5,7 +5,9 @@ $Text = new TEXT;
 
 require(SERVER_ROOT.'/sections/requests/functions.php');
 
-if (empty($_GET['id']) || !is_numeric($_GET['id'])) { error(0); }
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
+    json_die("failure", "bad id parameter");
+}
 $UserID = $_GET['id'];
 
 
@@ -48,10 +50,8 @@ $DB->query("SELECT
 	LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
 	WHERE m.ID = $UserID GROUP BY AuthorID");
 
-//TODO: Handle this more gracefully.
 if ($DB->record_count() == 0) { // If user doesn't exist
-	die();
-	//header("Location: log.php?search=User+".$UserID);
+        json_die("failure", "no such user");
 }
 
 list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9,11));
@@ -233,58 +233,60 @@ if($ParanoiaLevel == 0) {
 	$ParanoiaLevelText = 'Very high';
 }
 
+//Bugfix for no access time available
+if ($LastAccess == "0000-00-00 00:00:00"){
+    $LastAccess = "";
+}
+
 header('Content-Type: text/plain; charset=utf-8');
 
-print json_encode(array('status' => 'success',
-						'response' => array(
-							'username' => $Username,
-							'avatar' => $Avatar,
-							'isFriend' => $Friend,
-							'profileText' => $Text->full_format($Info),
-							'stats' => array(
-								'joinedDate' => $JoinDate,
-								'lastAccess' => $LastAccess,
-								'uploaded' =>  $Uploaded == null ? null : (int) $Uploaded,
-								'downloaded' => $Downloaded == null ? null: (int) $Downloaded,
-								'ratio' => $Ratio,
-								'requiredRatio' => $RequiredRatio == null ? null : (float) $RequiredRatio
-								),
-							'ranks' => array(
-								'uploaded' => $UploadedRank,
-								'downloaded' => $DownloadedRank,
-								'uploads' => $UploadsRank,
-								'requests' => $RequestRank,
-								'bounty' => $BountyRank,
-								'posts' => $PostRank,
-								'artists' => $ArtistsRank,
-								'overall' => $OverallRank == null ? 0 : $OverallRank
-								),
-							'personal' => array(
-								'class' => $ClassLevels[$Class]['Name'],
-								'paranoia' => $ParanoiaLevel,
-								'paranoiaText' => $ParanoiaLevelText,
-								'donor' => $Donor == 1,
-								'warned' => ($Warned != '0000-00-00 00:00:00'),
-								'enabled' => ($Enabled == '1' || $Enabled == '0' || !$Enabled),
-								'passkey' => $torrent_pass
-							),
-							'community' => array(
-								'posts' => (int) $ForumPosts,
-								'torrentComments' => (int)$NumComments,
-								'collagesStarted' => $NumCollages == null ? null : (int) $NumCollages,
-								'collagesContrib' => $NumCollageContribs == null ? null : (int) $NumCollageContribs,
-								'requestsFilled' =>  $RequestsFilled == null ? null : (int) $RequestsFilled,
-								'requestsVoted' => $RequestsVoted == null ? null : (int) $RequestsVoted,
-								'perfectFlacs' => $PerfectFLACs == null ? null : (int) $PerfectFLACs,
-								'uploaded' => $Uploads == null ? null : (int) $Uploads,
-								'groups' => $UniqueGroups == null ? null : (int) $UniqueGroups,
-								'seeding' =>  $Seeding == null ? null : (int) $Seeding,
-								'leeching' => $Leeching == null ? null : (int) $Leeching,
-								'snatched' => $Snatched == null ? null : (int) $Snatched,
-								'invited' => $Invited == null ? null : (int) $Invited
-								)
-						)
-					)
-				); // <- He's sad.
+json_die("success", array(
+    'username' => $Username,
+    'avatar' => $Avatar,
+    'isFriend' => $Friend,
+    'profileText' => $Text->full_format($Info),
+    'stats' => array(
+        'joinedDate' => $JoinDate,
+        'lastAccess' => $LastAccess,
+        'uploaded' => $Uploaded == null ? null : (int) $Uploaded,
+        'downloaded' => $Downloaded == null ? null : (int) $Downloaded,
+        'ratio' => $Ratio,
+        'requiredRatio' => $RequiredRatio == null ? null : (float) $RequiredRatio
+    ),
+    'ranks' => array(
+        'uploaded' => $UploadedRank,
+        'downloaded' => $DownloadedRank,
+        'uploads' => $UploadsRank,
+        'requests' => $RequestRank,
+        'bounty' => $BountyRank,
+        'posts' => $PostRank,
+        'artists' => $ArtistsRank,
+        'overall' => $OverallRank == null ? 0 : $OverallRank
+    ),
+    'personal' => array(
+        'class' => $ClassLevels[$Class]['Name'],
+        'paranoia' => $ParanoiaLevel,
+        'paranoiaText' => $ParanoiaLevelText,
+        'donor' => $Donor == 1,
+        'warned' => ($Warned != '0000-00-00 00:00:00'),
+        'enabled' => ($Enabled == '1' || $Enabled == '0' || !$Enabled),
+        'passkey' => $torrent_pass
+    ),
+    'community' => array(
+        'posts' => (int) $ForumPosts,
+        'torrentComments' => (int) $NumComments,
+        'collagesStarted' => $NumCollages == null ? null : (int) $NumCollages,
+        'collagesContrib' => $NumCollageContribs == null ? null : (int) $NumCollageContribs,
+        'requestsFilled' => $RequestsFilled == null ? null : (int) $RequestsFilled,
+        'requestsVoted' => $RequestsVoted == null ? null : (int) $RequestsVoted,
+        'perfectFlacs' => $PerfectFLACs == null ? null : (int) $PerfectFLACs,
+        'uploaded' => $Uploads == null ? null : (int) $Uploads,
+        'groups' => $UniqueGroups == null ? null : (int) $UniqueGroups,
+        'seeding' => $Seeding == null ? null : (int) $Seeding,
+        'leeching' => $Leeching == null ? null : (int) $Leeching,
+        'snatched' => $Snatched == null ? null : (int) $Snatched,
+        'invited' => $Invited == null ? null : (int) $Invited
+    )
+));
 ?>
 

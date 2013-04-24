@@ -10,56 +10,32 @@ if (!empty($_GET['id']) && is_number($_GET['id'])) { //Visiting article via ID
 } elseif ($_GET['name'] != '') { //Retrieve article ID via alias.
 	$ArticleID = $Alias->to_id($_GET['name']);
 } else {
-	print json_encode(
-		array(
-			'status' => 'error',
-		)
-	);
-	die();
+        json_die("failure");
 }
 
 if (!$ArticleID) { //No article found
-	print json_encode(
-		array(
-			'status' => 'not found',
-		)
-	);
-	die();
+	json_die("failure", "article not found");
 }
 $Article = $Alias->article($ArticleID, false);
 
 if (!$Article) {
-	print json_encode(
-		array(
-			'status' => 'not found',
-		)
-	);
-	die();
+	json_die("failure", "article not found");
 }
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName, $Aliases, $UserIDs) = array_shift($Article);
 if ($Read > $LoggedUser['EffectiveClass']) {
-	print json_encode(
-		array(
-			'status' => 'You must be a higher user class to view this wiki article',
-		)
-	);
-	die();
+	json_die("failure", "higher user class required to view article");
 }
 
 $TextBody = $Text->full_format($Body, false);
 
-print json_encode(
-	array(
-		'status' => 'success',
-		'response' => array(
-			'title' => $Title,
-			'bbBody' => $Body,
-			'body' => $TextBody,
-			'aliases' => $Aliases,
-			'authorID' => (int)$AuthorID,
-			'authorName' => $AuthorName,
-			'date' => $Date,
-			'revision' => (int)$Revision
-		)
-	));
+json_die("success", array(
+    'title' => $Title,
+    'bbBody' => $Body,
+    'body' => $TextBody,
+    'aliases' => $Aliases,
+    'authorID' => (int) $AuthorID,
+    'authorName' => $AuthorName,
+    'date' => $Date,
+    'revision' => (int) $Revision
+));
 ?>

@@ -11,11 +11,6 @@ if (!$Image) { // handle no artwork
 	$Image = STATIC_SERVER.'common/noartwork/'.$CategoryIcons[$TorrentDetails['CategoryID']-1];
 }
 
-print json_encode(
-	array(
-		'status' => 'success',
-		'response' => array(
-			'wikiImage' => $Image
-		)
-	)
-);
+json_die("success", array(
+    'wikiImage' => $Image
+));

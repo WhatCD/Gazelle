@@ -528,13 +528,14 @@ if (check_perms('site_torrents_notify')) {
 <? /* Misc::display_recommend($ArtistID, "artist"); */ ?>
 	<div class="sidebar">
 <?	if ($Image) {
+		$WikiImage = $Image;
 		if (check_perms('site_proxy_images')) {
-			$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
+			$WikiImage = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($WikiImage);
 		} ?>
 		<div class="box box_image">
 			<div class="head"><strong><?=$Name?></strong></div>
 			<div style="text-align: center; padding: 10px 0px;">
-				<img style="max-width: 220px;" src="<?=ImageTools::thumbnail($Image)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=$Image?>',220);" />
+				<img style="max-width: 220px;" src="<?=ImageTools::thumbnail($WikiImage)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=$WikiImage?>',220);" />
 			</div>
 		</div>
 <?	} ?>

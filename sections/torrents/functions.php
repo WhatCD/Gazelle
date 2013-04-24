@@ -1,7 +1,7 @@
 <?
 include(SERVER_ROOT.'/sections/requests/functions.php'); // get_request_tags()
 
-function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProperties = true) {
+function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProperties = true, $ApiCall = false) {
 	global $Cache, $DB;
 	if (!$RevisionID) {
 		$TorrentCache = $Cache->get_value('torrents_details_'.$GroupID);
@@ -123,9 +123,11 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 				t.ID");
 
 		$TorrentList = $DB->to_array('ID', MYSQLI_ASSOC);
-		if (count($TorrentList) == 0) {
+		if (count($TorrentList) == 0 && $ApiCall == false) {
 			header("Location: log.php?search=".(empty($_GET['torrentid']) ? "Group+$GroupID" : "Torrent+$_GET[torrentid]"));
 			die();
+		} else if (count($TorrentList) == 0 && $ApiCall == true) {
+			return NULL;
 		}
 		if (in_array(0, $DB->collect('Seeders'))) {
 			$CacheTime = 600;
@@ -154,6 +156,27 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 	}
 }
 
+function get_torrent_info($TorrentID, $Return = true, $RevisionID = 0, $PersonalProperties = true, $ApiCall = false) {
+	global $Cache, $DB;
+	$GroupID = (int)torrentid_to_groupid($TorrentID);
+	$GroupInfo = get_group_info($GroupID, $Return, $RevisionID, $PersonalProperties, $ApiCall);
+	if ($GroupInfo) {
+		foreach ($GroupInfo[1] as &$Torrent) {
+			//Remove unneeded entries
+			if ($Torrent['ID'] != $TorrentID) {
+				unset($GroupInfo[1][$Torrent['ID']]);
+			}
+			if ($Return) {
+				return $GroupInfo;
+			}
+		}
+	} else {
+		if ($Return) {
+			return NULL;
+		}
+	}
+}
+
 //Check if a givin string can be validated as a torrenthash
 function is_valid_torrenthash($Str) {
 	//6C19FF4C 6C1DD265 3B25832C 0F6228B2 52D743D5
@@ -163,6 +186,37 @@ function is_valid_torrenthash($Str) {
 	return false;
 }
 
+//Functionality for the API to resolve input into other data.
+
+function torrenthash_to_torrentid($Str) {
+	global $Cache, $DB;
+	$DB->query("SELECT t.ID FROM torrents AS t WHERE HEX(t.info_hash)='".db_string($Str)."'");
+	$TorrentID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
+	if ($TorrentID) {
+		return $TorrentID;
+	}
+	return NULL;
+}
+
+function torrenthash_to_groupid($Str) {
+	global $Cache, $DB;
+	$DB->query("SELECT t.GroupID FROM torrents AS t WHERE HEX(t.info_hash)='".db_string($Str)."'");
+	$GroupID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
+	if ($GroupID) {
+		return $GroupID;
+	}
+	return NULL;
+}
+
+function torrentid_to_groupid($TorrentID) {
+	global $Cache, $DB;
+	$DB->query("SELECT t.GroupID FROM torrents AS t WHERE t.ID='".db_string($TorrentID)."'");
+	$GroupID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
+	if ($GroupID) {
+		return $GroupID;
+	}
+	return NULL;
+}
 
 //After adjusting / deleting logs, recalculate the score for the torrent.
 function set_torrent_logscore($TorrentID) {
@@ -187,7 +241,7 @@ function get_group_requests($GroupID) {
 }
 
 //Used to get reports info on a unison cache in both browsing pages and torrent pages.
-function get_reports($TorrentID){
+function get_reports($TorrentID) {
 	global $Cache, $DB;
 	$Reports = $Cache->get_value('reports_torrent_' . $TorrentID);
 	if ($Reports === false) {

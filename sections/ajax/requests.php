@@ -30,14 +30,12 @@ if (empty($_GET['type'])) {
 			if (!empty($_GET['userid'])) {
 				if (is_number($_GET['userid'])) {
 					if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
-						print json_encode(array('status' => 'failure'));
-						die();
+                                                json_die("failure");
 					}
 					$Title = "Requests voted for by ".$UserInfo['Username'];
 					$SS->set_filter('voter', array($_GET['userid']));
 				} else {
-					print json_encode(array('status' => 'failure'));
-					die();
+					json_die("failure");
 				}
 			} else {
 				$Title = "Requests I've voted on";
@@ -45,13 +43,11 @@ if (empty($_GET['type'])) {
 			}
 			break;
 		case 'filled':
-			if (empty($_GET['userid']) || !is_number($_GET['userid'])) {
-				print json_encode(array('status' => 'failure'));
-				die();
+			if(empty($_GET['userid']) || !is_number($_GET['userid'])) {
+				json_die("failure");
 			} else {
 				if (!check_paranoia('requestsfilled_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
-					print json_encode(array('status' => 'failure'));
-					die();
+					json_die("failure");
 				}
 				$Title = "Requests filled by ".$UserInfo['Username'];
 				$SS->set_filter('fillerid', array($_GET['userid']));
@@ -63,8 +59,7 @@ if (empty($_GET['type'])) {
 			$SS->set_filter('bookmarker', array($LoggedUser['ID']));
 			break;
 		default:
-			print json_encode(array('status' => 'failure'));
-			die();
+			json_die("failure");
 	}
 }
 
@@ -196,8 +191,7 @@ if (!empty($_GET['requestor']) && check_perms('site_see_old_requests')) {
 	if (is_number($_GET['requestor'])) {
 		$SS->set_filter('userid', array($_GET['requestor']));
 	} else {
-		print json_encode(array('status' => 'failure'));
-		die();
+		json_die("failure");
 	}
 }
 
@@ -205,8 +199,7 @@ if (isset($_GET['year'])) {
 	if (is_number($_GET['year']) || $_GET['year'] == 0) {
 		$SS->set_filter('year', array($_GET['year']));
 	} else {
-		print json_encode(array('status' => 'failure'));
-		die();
+		json_die("failure");
 	}
 }
 
@@ -231,12 +224,10 @@ if (empty($_GET['order'])) {
 			$Way = ($CurrentSort == 'asc' ? SPH_SORT_ATTR_ASC : SPH_SORT_ATTR_DESC);
 			$NewSort = ($_GET['sort'] == 'asc' ? 'desc' : 'asc');
 		} else {
-			print json_encode(array('status' => 'failure'));
-			die();
+			json_die("failure");
 		}
 	} else {
-		print json_encode(array('status' => 'failure'));
-		die();
+		json_die("failure");
 	}
 }
 
@@ -301,17 +292,11 @@ if (!empty($SphinxResults['notfound'])) {
 $Requests = $SphinxResults['matches'];
 
 if ($NumResults == 0) {
-	print json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'currentPage' => 1,
-				'pages' => 1,
-				'results' => array()
-			)
-			)
-		);
-	die();
+        json_die("success", array(
+            'currentPage' => 1,
+            'pages' => 1,
+            'results' => array()
+        ));
 } else {
 	$JsonResults = array();
 	$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
@@ -370,17 +355,10 @@ if ($NumResults == 0) {
 			'timeFilled' => $TimeFilled == 0 ? "" : $TimeFilled
 		);
 	}
-
-	print
-		json_encode(
-			array(
-				'status' => 'success',
-				'response' => array(
-					'currentPage' => intval($Page),
-					'pages' => ceil($NumResults/REQUESTS_PER_PAGE),
-					'results' => $JsonResults
-				)
-			)
-		);
+        json_die("success", array(
+            'currentPage' => intval($Page),
+            'pages' => ceil($NumResults / REQUESTS_PER_PAGE),
+            'results' => $JsonResults
+        ));
 }
 ?>

@@ -1,10 +1,12 @@
 <?
-if(!isset($_GET['torrentid']) || !is_number($_GET['torrentid']) || !check_perms('site_view_torrent_snatchlist')) { error(404); }
+if (!isset($_GET['torrentid']) || !is_number($_GET['torrentid']) || !check_perms('site_view_torrent_snatchlist')) {
+	error(404);
+}
 $TorrentID = $_GET['torrentid'];
 
-if(!empty($_GET['page']) && is_number($_GET['page'])) {
+if (!empty($_GET['page']) && is_number($_GET['page'])) {
 	$Page = $_GET['page'];
-	$Limit = (string)(($Page-1)*100) .', 100';
+	$Limit = (string)(($Page - 1) * 100) .', 100';
 } else {
 	$Page = 1;
 	$Limit = 100;
@@ -12,20 +14,21 @@ if(!empty($_GET['page']) && is_number($_GET['page'])) {
 
 
 
-$DB->query("SELECT SQL_CALC_FOUND_ROWS
+$DB->query("
+	SELECT SQL_CALC_FOUND_ROWS
 		ud.UserID,
 		ud.Time
-		FROM users_downloads AS ud
-		WHERE ud.TorrentID='$TorrentID'
-		ORDER BY ud.Time DESC
-		LIMIT $Limit");
+	FROM users_downloads AS ud
+	WHERE ud.TorrentID='$TorrentID'
+	ORDER BY ud.Time DESC
+	LIMIT $Limit");
 $UserIDs = $DB->collect('UserID');
 $Results = $DB->to_array('UserID', MYSQLI_ASSOC);
 
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 
-if(count($UserIDs)>0) {
+if (count($UserIDs) > 0) {
 	$UserIDs = implode(',',$UserIDs);
 	$DB->query("SELECT uid FROM xbt_snatched WHERE fid='$TorrentID' AND uid IN($UserIDs)");
 	$Snatched = $DB->to_array('uid');
@@ -37,7 +40,7 @@ if(count($UserIDs)>0) {
 
 ?>
 <h4 title="List of users that have clicked the &quot;DL&quot; button">List of Downloaders</h4>
-<? if($NumResults>100) { ?>
+<? if ($NumResults > 100) { ?>
 <div class="linkbox"><?=js_pages('show_downloads', $_GET['torrentid'], $NumResults, $Page)?></div>
 <? } ?>
 <table>
@@ -53,18 +56,18 @@ if(count($UserIDs)>0) {
 
 $i = 0;
 
-foreach($Results as $ID=>$Data) {
+foreach ($Results as $ID=>$Data) {
 	list($SnatcherID, $Timestamp) = array_values($Data);
 
 	$User = Users::format_username($SnatcherID, true, true, true, true);
 
-	if(!array_key_exists($SnatcherID, $Snatched) && $SnatcherID!=$UserID) {
+	if (!array_key_exists($SnatcherID, $Snatched) && $SnatcherID != $UserID) {
 		$User = '<span style="font-style: italic;">'.$User.'</span>';
-		if(array_key_exists($SnatcherID, $Seeding)) {
+		if (array_key_exists($SnatcherID, $Seeding)) {
 			$User = '<strong>'.$User.'</strong>';
 		}
 	}
-	if($i % 2 == 0 && $i>0){ ?>
+	if ($i % 2 == 0 && $i > 0) { ?>
 	</tr>
 	<tr>
 <?
@@ -78,6 +81,6 @@ foreach($Results as $ID=>$Data) {
 ?>
 	</tr>
 </table>
-<? if($NumResults>100) { ?>
+<? if ($NumResults > 100) { ?>
 <div class="linkbox"><?=js_pages('show_downloads', $_GET['torrentid'], $NumResults, $Page)?></div>
 <? } ?>

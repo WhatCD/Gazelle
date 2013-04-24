@@ -6,7 +6,7 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 	$ThisInsert =& $ExtraTorrentsInsert[$Name];
 	$ExtraTor = new BencodeTorrent($Name, true);
 	if (isset($ExtraTor->Dec['encrypted_files'])) {
-		$Err = "At least one of the torrents contain an encrypted file list which is not supported here";
+		$Err = 'At least one of the torrents contain an encrypted file list which is not supported here';
 		break;
 	}
 	if (!$ExtraTor->is_private()) {
@@ -16,7 +16,7 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 
 	// File list and size
 	list($ExtraTotalSize, $ExtraFileList) = $ExtraTor->file_list();
-	$ExtraDirName = isset($ExtraTor->Dec['info']['files']) ? Format::make_utf8($ExtraTor->get_name()) : "";
+	$ExtraDirName = isset($ExtraTor->Dec['info']['files']) ? Format::make_utf8($ExtraTor->get_name()) : '';
 
 	$ExtraTmpFileList = array();
 	foreach ($ExtraFileList as $ExtraFile) {
@@ -24,9 +24,9 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 
 		check_file($ExtraType, $ExtraName);
 
-		// Make sure the filename is not too long
+		// Make sure the file name is not too long
 		if (mb_strlen($ExtraName, 'UTF-8') + mb_strlen($ExtraDirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {
-			$Err = "The torrent contained one or more files with too long a name: <br />$ExtraDirName/$ExtraName";
+			$Err = "The torrent contained one or more files with too long of a name: <br />$ExtraDirName/$ExtraName";
 			break;
 		}
 		// Add file and size to array
@@ -45,7 +45,7 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 	$DB->query("SELECT ID FROM torrents WHERE info_hash='" . db_string($ThisInsert['InfoHash']) . "'");
 	if ($DB->record_count() > 0) {
 		list($ExtraID) = $DB->next_record();
-		$DB->query("SELECT TorrentID FROM torrents_files WHERE TorrentID = " . $ExtraID);
+		$DB->query('SELECT TorrentID FROM torrents_files WHERE TorrentID = ' . $ExtraID);
 		if ($DB->record_count() > 0) {
 			$Err = '<a href="torrents.php?torrentid=' . $ExtraID . '">The exact same torrent file already exists on the site!</a>';
 		} else {

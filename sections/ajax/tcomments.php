@@ -79,14 +79,8 @@ foreach ($Thread as $Key => $Post) {
 	);
 }
 
-print
-	json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'page' => (int) $Page,
-				'pages' => ceil($Results/TORRENT_COMMENTS_PER_PAGE),
-				'comments' => $JsonComments
-			)
-		)
-	);
+json_die("success", array(
+    'page' => (int) $Page,
+    'pages' => ceil($Results / TORRENT_COMMENTS_PER_PAGE),
+    'comments' => $JsonComments
+));

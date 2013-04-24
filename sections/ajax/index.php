@@ -16,7 +16,7 @@ $AJAX_LIMIT = array(5,10);
 $Limited_Pages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup');
 
 header('Content-Type: application/json; charset=utf-8');
-
+            
 //	Enforce rate limiting everywhere except info.php
 if (isset($_GET['action']) && in_array($_GET['action'],$Limited_Pages)) {
 	if (!$userrequests = $Cache->get_value('ajax_requests_'.$UserID)) {
@@ -31,7 +31,7 @@ if (isset($_GET['action']) && in_array($_GET['action'],$Limited_Pages)) {
 				)
 			);
 		
-		die();
+		json_die("failure", "rate limit exceeded");
 	} else {
 		$Cache->increment_value('ajax_requests_'.$UserID);
 	}
@@ -63,6 +63,9 @@ switch ($_GET['action']) {
 		include('checkprivate.php');
 		break;
 	// things not yet used on the site
+	case 'torrent':
+		require('torrent.php');
+		break;
 	case 'torrentgroup':
 		require('torrentgroup.php');
 		break;
@@ -143,7 +146,7 @@ switch ($_GET['action']) {
 		break;
 	default:
 		// If they're screwing around with the query string
-		print json_encode(array('status' => 'failure'));
+		json_die("failure");
 }
 
 function pullmediainfo($Array) {

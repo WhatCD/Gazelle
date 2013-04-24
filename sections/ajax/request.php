@@ -16,14 +16,8 @@ include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
-if (empty($_GET['id']) || !is_number($_GET['id'])) {
-	print
-		json_encode(
-			array(
-				'status' => 'failure'
-			)
-		);
-	die();
+if(empty($_GET['id']) || !is_number($_GET['id'])) {
+        json_die("failure");
 }
 
 $RequestID = $_GET['id'];
@@ -32,14 +26,8 @@ $RequestID = $_GET['id'];
 
 $Request = Requests::get_requests(array($RequestID));
 $Request = $Request['matches'][$RequestID];
-if (empty($Request)) {
-	print
-		json_encode(
-			array(
-				'status' => 'failure'
-			)
-		);
-	die();
+if(empty($Request)) {
+	json_die("failure");
 }
 
 list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $ReleaseType,
@@ -99,7 +87,6 @@ $ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID ==
 $UserCanEdit = (!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2);
 $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
-$JsonMusicInfo = array();
 if ($CategoryName == "Music") {
 	$JsonMusicInfo = array(
 		/*'composers' => $ArtistForm[4] != null ? $ArtistForm[4] : array(),
@@ -116,6 +103,8 @@ if ($CategoryName == "Music") {
 		'remixedBy' => $ArtistForm[3] == null ? array() : pullmediainfo($ArtistForm[3]),
 		'producer' => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
 	);
+} else {
+        $JsonMusicInfo = new stdClass; //json_encodes into an empty object: {}
 }
 
 $JsonTopContributors = array();
@@ -198,48 +187,42 @@ foreach ($Request['Tags'] as $Tag) {
 	$JsonTags[] = $Tag;
 }
 
-print
-	json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'requestId' => (int) $RequestID,
-				'requestorId' => (int) $RequestorID,
-				'requestorName' => $RequestorName,
-				'requestTax' => $RequestTax,
-				'timeAdded' => $TimeAdded,
-				'canEdit' => $CanEdit,
-				'canVote' => $CanVote,
-				'minimumVote' => $MinimumVote,
-				'voteCount' => $VoteCount,
-				'lastVote' => $LastVote,
-				'topContributors' => $JsonTopContributors,
-				'totalBounty' => (int) $RequestVotes['TotalBounty'],
-				'categoryId' => (int) $CategoryID,
-				'categoryName' => $CategoryName,
-				'title' => $Title,
-				'year' => (int) $Year,
-				'image' => $Image,
-				'description' => $Text->full_format($Description),
-				'musicInfo' => $JsonMusicInfo,
-				'catalogueNumber' => $CatalogueNumber,
-				'releaseType' => (int) $ReleaseType,
-				'releaseName' => $ReleaseName,
-				'bitrateList' => $BitrateList,
-				'formatList' => $FormatList,
-				'mediaList' => $MediaList,
-				'logCue' => $LogCue,
-				'isFilled' => $IsFilled,
-				'fillerId' => (int) $FillerID,
-				'fillerName' => $FillerName,
-				'torrentId' => (int) $TorrentID,
-				'timeFilled' => $TimeFilled,
-				'tags' => $JsonTags,
-				'comments' => $JsonRequestComments,
-				'commentPage' => (int) $Page,
-				'commentPages' => (int) ceil($Results / TORRENT_COMMENTS_PER_PAGE)
-			)
-		)
-	);
+json_die("success", array(
+    'requestId' => (int) $RequestID,
+    'requestorId' => (int) $RequestorID,
+    'requestorName' => $RequestorName,
+    'requestTax' => $RequestTax,
+    'timeAdded' => $TimeAdded,
+    'canEdit' => $CanEdit,
+    'canVote' => $CanVote,
+    'minimumVote' => $MinimumVote,
+    'voteCount' => $VoteCount,
+    'lastVote' => $LastVote,
+    'topContributors' => $JsonTopContributors,
+    'totalBounty' => (int) $RequestVotes['TotalBounty'],
+    'categoryId' => (int) $CategoryID,
+    'categoryName' => $CategoryName,
+    'title' => $Title,
+    'year' => (int) $Year,
+    'image' => $Image,
+    'description' => $Text->full_format($Description),
+    'musicInfo' => $JsonMusicInfo,
+    'catalogueNumber' => $CatalogueNumber,
+    'releaseType' => (int) $ReleaseType,
+    'releaseName' => $ReleaseName,
+    'bitrateList' => $BitrateList,
+    'formatList' => $FormatList,
+    'mediaList' => $MediaList,
+    'logCue' => $LogCue,
+    'isFilled' => $IsFilled,
+    'fillerId' => (int) $FillerID,
+    'fillerName' => $FillerName,
+    'torrentId' => (int) $TorrentID,
+    'timeFilled' => $TimeFilled,
+    'tags' => $JsonTags,
+    'comments' => $JsonRequestComments,
+    'commentPage' => (int) $Page,
+    'commentPages' => (int) ceil($Results / TORRENT_COMMENTS_PER_PAGE)
+));
 
 ?>

@@ -91,30 +91,25 @@ if ($NewSubscriptions === false) {
 	$Cache->cache_value('subscriptions_user_new_' . $LoggedUser['ID'], $NewSubscriptions, 0);
 }
 
-print json_encode(
-	array(
-		'status' => 'success',
-		'response' => array(
-			'username' => $LoggedUser['Username'],
-			'id' => (int)$LoggedUser['ID'],
-			'authkey' => $LoggedUser['AuthKey'],
-			'passkey' => $LoggedUser['torrent_pass'],
-			'notifications' => array(
-				'messages' => (int) $NewMessages,
-				'notifications' => (int) $NewNotifications,
-				'newAnnouncement' => $MyNews < $CurrentNews,
-				'newBlog' => $MyBlog < $CurrentBlog,
-				'newSubscriptions' => $NewSubscriptions == 1
-			),
-			'userstats' => array(
-				'uploaded' => (int)$LoggedUser['BytesUploaded'],
-				'downloaded' => (int)$LoggedUser['BytesDownloaded'],
-				'ratio' => (float)$Ratio,
-				'requiredratio' => (float)$LoggedUser['RequiredRatio'],
-				'class' => $ClassLevels[$LoggedUser['Class']]['Name']
-			)
-		)
-	)
-);
+json_die("success", array(
+    'username' => $LoggedUser['Username'],
+    'id' => (int) $LoggedUser['ID'],
+    'authkey' => $LoggedUser['AuthKey'],
+    'passkey' => $LoggedUser['torrent_pass'],
+    'notifications' => array(
+        'messages' => (int) $NewMessages,
+        'notifications' => (int) $NewNotifications,
+        'newAnnouncement' => $MyNews < $CurrentNews,
+        'newBlog' => $MyBlog < $CurrentBlog,
+        'newSubscriptions' => $NewSubscriptions == 1
+    ),
+    'userstats' => array(
+        'uploaded' => (int) $LoggedUser['BytesUploaded'],
+        'downloaded' => (int) $LoggedUser['BytesDownloaded'],
+        'ratio' => (float) $Ratio,
+        'requiredratio' => (float) $LoggedUser['RequiredRatio'],
+        'class' => $ClassLevels[$LoggedUser['Class']]['Name']
+    )
+));
 
 ?>

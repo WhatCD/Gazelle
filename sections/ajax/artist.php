@@ -6,14 +6,17 @@ function compare($X, $Y){
 
 // Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/sections/requests/functions.php');
-
+include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
+if ($_GET['id'] && $_GET['artistname']) {
+        json_die("failure", "bad parameters");
+}
+
 $ArtistID = $_GET['id'];
-if (!is_number($ArtistID)) {
-	print json_encode(array('status' => 'failure'));
-	die();
+if ($ArtistID && !is_number($ArtistID)) {
+        json_die("failure");
 }
 
 if (empty($ArtistID)) {
@@ -22,8 +25,7 @@ if (empty($ArtistID)) {
 		$DB->query("SELECT ArtistID FROM artists_alias WHERE Name LIKE '$Name'");
 		if (!(list($ArtistID) = $DB->next_record(MYSQLI_NUM, false))) {
 		//if (list($ID) = $DB->next_record(MYSQLI_NUM, false)) {
-			print json_encode(array('status' => 'failure'));
-			die();
+                        json_die("failure");
 		}
 		// If we get here, we got the ID!
 	}
@@ -71,7 +73,7 @@ if ($Data) {
 	$DB->query($sql);
 
 	if ($DB->record_count() == 0) {
-		print json_encode(array('status' => 'failure'));
+                json_die("failure");
 	}
 
 	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record(MYSQLI_NUM, array(0));
@@ -260,6 +262,16 @@ if (empty($SimilarArray)) {
 		);
 	}
 	$NumSimilar = count($SimilarArray);
+} else {
+        //If data already exists, use it
+        foreach ($SimilarArray as $Similar) {
+		$JsonSimilar[] = array(
+			'artistId' => (int) $Similar['ArtistID'],
+			'name' => $Similar['Name'],
+			'score' => (int) $Similar['Score'],
+			'similarId' => (int) $Similar['SimilarID']
+		);
+	}
 }
 
 $JsonRequests = array();
@@ -291,33 +303,6 @@ if (check_perms('site_torrents_notify')) {
 	}
 }
 
-print
-	json_encode(
-		array(
-			'status' => 'success',
-			'response' => array(
-				'id' => (int) $ArtistID,
-				'name' => $Name,
-				'notificationsEnabled' => $notificationsEnabled,
-				'hasBookmarked' => Bookmarks::has_bookmarked('artist', $ArtistID),
-				'image' => $Image,
-				'body' => $Text->full_format($Body),
-				'vanityHouse' => $VanityHouseArtist == 1,
-				'tags' => array_values($Tags),
-				'similarArtists' => $JsonSimilar,
-				'statistics' => array(
-					'numGroups' => $NumGroups,
-					'numTorrents' => $NumTorrents,
-					'numSeeders' => $NumSeeders,
-					'numLeechers' => $NumLeechers,
-					'numSnatches' => $NumSnatches
-					),
-				'torrentgroup' => $JsonTorrents,
-				'requests' => $JsonRequests
-			)
-		)
-	);
-
 // Cache page for later use
 
 if ($RevisionID) {
@@ -329,4 +314,26 @@ if ($RevisionID) {
 $Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), array(), $VanityHouseArtist));
 
 $Cache->cache_value($Key, $Data, 3600);
+
+json_die("success", array(
+    'id' => (int) $ArtistID,
+    'name' => $Name,
+    'notificationsEnabled' => $notificationsEnabled,
+    'hasBookmarked' => has_bookmarked('artist', $ArtistID),
+    'image' => $Image,
+    'body' => $Text->full_format($Body),
+    'vanityHouse' => $VanityHouseArtist == 1,
+    'tags' => array_values($Tags),
+    'similarArtists' => $JsonSimilar,
+    'statistics' => array(
+        'numGroups' => $NumGroups,
+        'numTorrents' => $NumTorrents,
+        'numSeeders' => $NumSeeders,
+        'numLeechers' => $NumLeechers,
+        'numSnatches' => $NumSnatches
+    ),
+    'torrentgroup' => $JsonTorrents,
+    'requests' => $JsonRequests
+));
+
 ?>

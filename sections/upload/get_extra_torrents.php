@@ -11,23 +11,23 @@ if (isset($_POST['extra_format']) && isset($_POST['extra_bitrate'])) {
 			$ExtraTorrentName = $ExtraFile['tmp_name'];
 			if (!is_uploaded_file($ExtraTorrentName) || !filesize($ExtraTorrentName)) {
 				$Err = 'No extra torrent file uploaded, or file is empty.';
-			} else if (substr(strtolower($ExtraFile['name']), strlen($ExtraFile['name']) - strlen(".torrent")) !== ".torrent") {
-				$Err = "You seem to have put something other than an extra torrent file into the upload field. (" . $ExtraFile['name'] . ").";
-			} else if (in_array($ExtraFile['name'], $DupeNames)) {
-				$Err = "One or more torrents has been entered into the form twice.";
+			} elseif (substr(strtolower($ExtraFile['name']), strlen($ExtraFile['name']) - strlen('.torrent')) !== '.torrent') {
+				$Err = 'You seem to have put something other than an extra torrent file into the upload field. (' . $ExtraFile['name'] . ').';
+			} elseif (in_array($ExtraFile['name'], $DupeNames)) {
+				$Err = 'One or more torrents has been entered into the form twice.';
 			} else {
 				$j = $i - 1;
 				$ExtraTorrents[$ExtraTorrentName]['Name'] = $ExtraTorrentName;
 				$ExtraFormat = $_POST['extra_format'][$j];
 				if (empty($ExtraFormat)) {
-					$Err = "Missing format for extra torrent.";
+					$Err = 'Missing format for extra torrent.';
 					break;
 				} else {
 					$ExtraTorrents[$ExtraTorrentName]['Format'] = db_string(trim($ExtraFormat));
 				}
 				$ExtraBitrate = $_POST['extra_bitrate'][$j];
 				if (empty($ExtraBitrate)) {
-					$Err = "Missing bitrate for extra torrent.";
+					$Err = 'Missing bitrate for extra torrent.';
 					break;
 				} else {
 					$ExtraTorrents[$ExtraTorrentName]['Encoding'] = db_string(trim($ExtraBitrate));
