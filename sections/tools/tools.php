@@ -95,11 +95,11 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=sandbox8">Sandbox (8)</a></td></tr>
 
 			<tr><td><a href="schedule.php?auth=<?=$LoggedUser['AuthKey']?>">Schedule</a></td></tr>
-<?	} ?>
-<?	if (check_perms('users_mod')) { ?>
+<?	} if (check_perms('admin_clear_cache') || check_perms('users_mod')) { ?>
+			<tr><td><a href="tools.php?action=rerender_gallery">Rerender stylesheet gallery images</a></td></tr>
+<?	} if (check_perms('users_mod')) { ?>
 			<tr><td><strong><a href="tools.php?action=public_sandbox">Public sandbox</a></strong></td></tr>
-<?	} ?>
-<?	if (check_perms('users_mod')) { ?>
+<?	} if (check_perms('users_mod')) { ?>
 			<tr><td><strong><a href="tools.php?action=mod_sandbox">Mod-level sandbox</a></strong></td></tr>
 <?	} ?>
 		</table>

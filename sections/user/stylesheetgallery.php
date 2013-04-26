@@ -1,4 +1,5 @@
 <?
+
 if (!isset($_GET['name'])) {
 	if (!isset($Err)) {
 		error(404);
@@ -12,18 +13,32 @@ if (!isset($_GET['name'])) {
 	if (!$Name) {
 		error(404);
 	}
-}
+	if (isset($_GET['format']) && $_GET['format'] === "data"){
+		global $Cache;
+		$ImageData = $Cache->get_value("cssgallery_".$Name);
+		if(!empty($ImageData)){
+			echo json_encode(array('data' => $ImageData, 'status' => "0"));
+			die();
+		} else {
+			echo json_encode(array('status' => "-1"));
+			die();
+		}
+	} else {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="overflow:hidden !important; margin: 0 !important; padding: 0 !important;">
 	<head>
 		<title>Stylesheet Gallery</title>
 		<meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link href="static/styles/global.css" rel="stylesheet" type="text/css" />
-		<link href="static/styles/<?= $Name ?>/style.css" title="<?= $Name ?>" rel="stylesheet" type="text/css" media="screen" />
+		<link href="<? echo STATIC_SERVER; ?>styles/global.css?v=<?=filemtime(STATIC_SERVER.'styles/global.css')?>" rel="stylesheet" type="text/css" />
+		<link href="<? echo STATIC_SERVER; ?>styles/<?= $Name ?>/style.css?v=<?=filemtime(STATIC_SERVER.'styles/'.$Name.'/style.css')?>" title="<?= $Name ?>" rel="stylesheet" type="text/css" media="screen" />
+		<? if (isset($_GET['save']) && $_GET['save']==="true" && check_perms('admin_clear_cache')) { ?>
+		<script src="<? echo STATIC_SERVER; ?>functions/jquery.js?v=<?=filemtime(STATIC_SERVER.'functions/jquery.js')?>"></script>
+		<script src="<? echo STATIC_SERVER; ?>functions/stylesheetgallery.js?v=<?=filemtime(STATIC_SERVER.'functions/stylesheetgallery.js')?>"></script>
+		<? } ?>
 	</head>
-	<body id="user" style="overflow:hidden;">
+	<body id="user" style="overflow:hidden !important; margin: 0 !important; padding: 0 !important; position: absolute !important;" stylesheet="<?= $Name ?>">
 		<div id="wrapper">
 			<h1 class="hidden">Gazelle</h1>
 			<div id="header">
@@ -36,14 +51,14 @@ if (!isset($_GET['name'])) {
 					</ul>
 					<ul id="userinfo_major">
 						<li id="nav_upload" class="brackets"><a href="#">Upload</a></li>
-						<li id="nav_invite" class="brackets"><a href="#">Invite (∞)</a></li>
+						<li id="nav_invite" class="brackets"><a href="#">Invite (6)</a></li>
 						<li id="nav_donate" class="brackets"><a href="#">Donate</a></li>
 
 					</ul>
 					<ul id="userinfo_stats">
 						<li id="stats_seeding"><a href="#">Up</a>: <span class="stat" title="300.00000 MB">300.00 MB</span></li>
-						<li id="stats_leeching"><a href="#">Down</a>: <span class="stat" title="0.00000 B">0.00 B</span></li>
-						<li id="stats_ratio">Ratio: <span class="stat"><span class="r99" title="Infinite">∞</span></span></li>
+						<li id="stats_leeching"><a href="#">Down</a>: <span class="stat" title="10.00000 B">0.00 B</span></li>
+						<li id="stats_ratio">Ratio: <span class="stat"><span class="r99" title="30">30</span></span></li>
 						<li id="stats_required"><a href="#">Required</a>: <span class="stat" title="0.00000">0.00</span></li>
 					</ul>
 
@@ -329,3 +344,6 @@ if (!isset($_GET['name'])) {
 			</div>
 	</body>
 </html>
+<?		
+	}
+}

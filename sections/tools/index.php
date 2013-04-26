@@ -378,6 +378,10 @@ switch ($_REQUEST['action']) {
 	case 'analysis':
 		include('misc/analysis.php');
 		break;
+	
+	case 'rerender_gallery':
+	include('misc/rerender_gallery.php');
+	break;
 
 	case 'sandbox1':
 		include('misc/sandbox1.php');

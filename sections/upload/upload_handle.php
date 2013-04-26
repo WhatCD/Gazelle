@@ -761,9 +761,9 @@ $Announce .= " - https://".SSL_SITE_URL."/torrents.php?id=$GroupID / https://".S
 $AnnounceSSL .= " - ".trim($Properties['TagList']);
 $Announce .= " - ".trim($Properties['TagList']);
 
-send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce :'.html_entity_decode($Announce));
-send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce-ssl :'.$AnnounceSSL);
-//send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce :'.html_entity_decode($Announce));
+// ENT_QUOTES is needed to decode single quotes/apostrophes
+send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce :'.html_entity_decode($Announce, ENT_QUOTES));
+send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce-ssl :'.html_entity_decode($AnnounceSSL, ENT_QUOTES));
 $Debug->set_flag('upload: announced on irc');
 
 // Manage notifications

@@ -588,14 +588,14 @@ if ($CollageCovers != 0) { ?>
 		</div>
 <?		if ($NumGroups > $CollageCovers) { ?>
 		<div class="linkbox pager" style="clear: left;" id="pageslinksdiv">
-			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.page(0, this); return false;">&lt;&lt; First</a> | </span>
-			<span id="prevpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.prevPage(); return false;">&lt; Prev</a> | </span>
+			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.page(0, this); return false;"><strong>&lt;&lt; First</strong></a> | </span>
+			<span id="prevpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.prevPage(); return false;"><strong>&lt; Prev</strong></a> | </span>
 <?			for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
-			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? 'selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><?=$CollageCovers * $i + 1?>-<?=min($NumGroups,$CollageCovers * ($i + 1))?></a><?=($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : ''?></span>
+			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? 'selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><strong><?=$CollageCovers * $i + 1?>-<?=min($NumGroups,$CollageCovers * ($i + 1))?></strong></a><?=($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : ''?></span>
 <?			} ?>
 			<span id="nextbar" class="<?=($NumGroups / $CollageCovers > 5) ? 'hidden' : ''?>"> | </span>
-			<span id="nextpage"><a href="#" class="pageslink" onclick="collageShow.nextPage(); return false;">Next &gt;</a></span>
-			<span id="lastpage" class="<?=ceil($NumGroups / $CollageCovers) == 2 ? 'invisible' : ''?>"> | <a href="#" class="pageslink" onclick="collageShow.page(<?=ceil($NumGroups / $CollageCovers) - 1?>, this); return false;">Last &gt;&gt;</a></span>
+			<span id="nextpage"><a href="#" class="pageslink" onclick="collageShow.nextPage(); return false;"><strong>Next &gt;</strong></a></span>
+			<span id="lastpage" class="<?=ceil($NumGroups / $CollageCovers) == 2 ? 'invisible' : ''?>"> | <a href="#" class="pageslink" onclick="collageShow.page(<?=ceil($NumGroups / $CollageCovers) - 1?>, this); return false;"><strong>Last &gt;&gt;</strong></a></span>
 		</div>
 		<script type="text/javascript">//<![CDATA[
 			collageShow.init(<?=json_encode($CollagePages)?>);

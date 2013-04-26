@@ -4,6 +4,7 @@ if (!is_number($UserID)) {
 	error(404);
 }
 
+global $Cache;
 
 
 $DB->query("SELECT
@@ -95,13 +96,12 @@ echo $Val->GenerateJS('userform');
 					&nbsp;&nbsp;&nbsp;&nbsp;- Or -&nbsp;&nbsp;&nbsp;&nbsp;
 					External CSS: <input type="text" size="40" name="styleurl" id="styleurl" value="<?=display_str($StyleURL)?>" />
 					<div id="css_gallery">
-<?					foreach ($Stylesheets as $Style) { ?>
-						<div class="preview_wrapper">
-							<div class="preview_overlay"></div>
-							<div class="preview_frame_wrapper"><iframe class="preview_frame" src="user.php?action=stylesheetgallery&amp;name=<?= $Style['Name'] ?>" width="588%" height="588%"></iframe></div>
-							<p class="preview_name"><input type="radio" name="stylesheet_gallery" value="<?= $Style['ID'] ?>" /> <?= $Style["ProperName"] ?></p>
-						</div>
-<?					} ?>
+							 <? foreach ($Stylesheets as $Style) { ?>
+								<div class="preview_wrapper">
+									<div class="preview_image" name="<?=$Style['Name']?>" style="background: url('<?=STATIC_SERVER.'thumb_'.$Style['Name'].'.png'?>') no-repeat scroll center top #CCC"></div>
+									<p class="preview_name"><input type="radio" name="stylesheet_gallery" value="<?= $Style['ID'] ?>" /> <?= $Style["ProperName"] ?></p>
+								</div>
+							<? } ?>
 					</div>
 				</td>
 			</tr>

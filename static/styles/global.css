@@ -474,48 +474,22 @@ tr.torrent .bookmark>a:after {
 #css_gallery {
 	display: none;
 	overflow: hidden;
+	margin-top: 10px;
 }
 .preview_wrapper{
 	position: relative;
 	display: inline-block;
 	width: 29%;
 	height: 120px;
-	margin: 10px;
+	margin: 0 10px;
 	overflow: hidden;
 }
-.preview_overlay {
+.preview_image{
+	display: block;
 	width: 100%;
 	height: 80px;
-	position: absolute;
-	background: transparent;
-	z-index: 1;
-	right: 0;
-	left: 0;
+	background-size: 100% auto !important;
 	cursor: pointer;
-	/* IE 8 */
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	/* IE 5-7 */
-	filter: alpha(opacity=0);
-	/* Netscape */
-	-moz-opacity: 0;
-	/* Safari 1.x */
-	-khtml-opacity: 0;
-	/* Good browsers */
-	opacity: 0;
-}
-.preview_frame_wrapper {
-	width: 100%;
-	height: 80px;
-	overflow: hidden;
-}
-.preview_frame {
-    -ms-zoom: 0.17;
-    -moz-transform: scale(0.17);
-    -moz-transform-origin: 0 0;
-    -o-transform: scale(0.17);
-    -o-transform-origin: 0 0;
-    -webkit-transform: scale(0.17);
-    -webkit-transform-origin: 0 0;
 }
 .preview_name {
 	text-align: center;

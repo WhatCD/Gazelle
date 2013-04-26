@@ -117,7 +117,7 @@ if (!empty($_REQUEST['confirm'])) {
 					('$UserID', '$InviteEmail', '".sqltime()."', '".db_string($_SERVER['REMOTE_ADDR'])."')");
 			}
 
-			
+
 
 			// Manage invite trees, delete invite
 

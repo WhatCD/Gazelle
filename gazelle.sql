@@ -558,6 +558,19 @@ CREATE TABLE `reports` (
   KEY `ResolverID` (`ResolverID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `reports_email_blacklist` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `Type` tinyint(4) NOT NULL DEFAULT '0',
+  `UserID` int(10) NOT NULL,
+  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Checked` tinyint(4) NOT NULL DEFAULT '0',
+  `ResolverID` int(10) DEFAULT '0',
+  `Email` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`),
+  KEY `Time` (`Time`),
+  KEY `UserID` (`UserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 CREATE TABLE `reportsv2` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ReporterID` int(10) unsigned NOT NULL DEFAULT '0',

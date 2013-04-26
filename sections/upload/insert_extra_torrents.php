@@ -48,7 +48,6 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 	if ($T['FreeLeech'] == '1') {
 		$Announce .= ' / Freeleech!';
 	}
-	$Title = $Announce;
 
 	$AnnounceSSL = $Announce . ' - https://' . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
 	$Announce .= ' - https://' . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
@@ -56,9 +55,9 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 	$AnnounceSSL .= ' - ' . trim($Properties['TagList']);
 	$Announce .= ' - ' . trim($Properties['TagList']);
 
-	send_irc('PRIVMSG #' . NONSSL_SITE_URL . '-announce :' . html_entity_decode($Announce));
-	send_irc('PRIVMSG #' . SSL_SITE_URL . '-announce-ssl :' . $AnnounceSSL);
-//send_irc('PRIVMSG #'.NONSSL_SITE_URL.'-announce :'.html_entity_decode($Announce));
+	// ENT_QUOTES is needed to decode single quotes/apostrophes
+	send_irc('PRIVMSG #' . NONSSL_SITE_URL . '-announce :' . html_entity_decode($Announce, ENT_QUOTES));
+	send_irc('PRIVMSG #' . SSL_SITE_URL . '-announce-ssl :' . html_entity_decode($AnnounceSSL, ENT_QUOTES));
 
 }
 ?>

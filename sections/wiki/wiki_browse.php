@@ -1,22 +1,23 @@
-<? 
+<?
 $Title = 'Browse wiki articles';
-if(!empty($_GET['letter'])) {
+if (!empty($_GET['letter'])) {
 	$Letter = strtoupper(substr($_GET['letter'], 0, 1));
-	if($Letter !== '1') {
+	if ($Letter !== '1') {
 		$Title .= ' ('.$Letter.')';
 	}
 }
 
 View::show_header($Title);
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS
-	w.ID,
-	w.Title,
-	w.Date,
-	w.Author
+$sql = "
+	SELECT SQL_CALC_FOUND_ROWS
+		w.ID,
+		w.Title,
+		w.Date,
+		w.Author
 	FROM wiki_articles AS w
 	WHERE w.MinClassRead <= '".$LoggedUser['EffectiveClass']."'";
-if($Letter !== '1') {
+if ($Letter !== '1') {
 	$sql .= " AND LEFT(w.Title,1) = '".db_string($Letter)."'";
 } else {
 	$Letter = 'All';
@@ -27,17 +28,17 @@ $DB->query($sql);
 
 ?>
 <div class="thin">
-<? if($Letter) { ?>
+<? if ($Letter) { ?>
 	<div class="header">
 		<h2><?=$Title?></h2>
 	</div>
-	<table width="100%" style="margin-bottom:10px;">
+	<table width="100%" style="margin-bottom: 10px;">
 		<tr class="colhead">
 			<td>Article</td>
 			<td>Last updated on</td>
 			<td>Last edited by</td>
 		</tr>
-<? 	while(list($ID, $Title, $Date, $UserID) = $DB->next_record()) {?>
+<? 	while (list($ID, $Title, $Date, $UserID) = $DB->next_record()) { ?>
 		<tr>
 			<td><a href="wiki.php?action=article&amp;id=<?=$ID?>"><?=$Title?></a></td>
 			<td><?=$Date?></td>
