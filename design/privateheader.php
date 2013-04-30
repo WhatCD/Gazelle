@@ -229,7 +229,7 @@ if ($CurrentNews === false) {
 	$Cache->cache_value('news_latest_id', $CurrentNews, 0);
 }
 if ($MyNews < $CurrentNews) {
-	$Alerts[] = '<a href="index.php">'.'New announcement!'.'</a>';
+	$Alerts[] = '<a href="index.php">New announcement!</a>';
 }
 
 // Blog
@@ -245,7 +245,7 @@ if ($CurrentBlog === false) {
 	$Cache->cache_value('blog_latest_id', $CurrentBlog, 0);
 }
 if ($MyBlog < $CurrentBlog) {
-	$Alerts[] = '<a href="blog.php">'.'New blog post!'.'</a>';
+	$Alerts[] = '<a href="blog.php">New blog post!</a>';
 }
 
 // Staff blog
@@ -270,7 +270,7 @@ if (check_perms('users_mod')) {
 		$Cache->cache_value('staff_blog_latest_time', $LatestSBlogTime, 1209600);
 	}
 	if ($SBlogReadTime < $LatestSBlogTime) {
-		$Alerts[] = '<a href="staffblog.php">'.'New staff blog post!'.'</a>';
+		$Alerts[] = '<a href="staffblog.php">New staff blog post!</a>';
 	}
 }
 
@@ -283,7 +283,7 @@ if ($NewStaffPMs === false) {
 }
 
 if ($NewStaffPMs > 0) {
-	$Alerts[] = '<a href="staffpm.php">'.'You have '.$NewStaffPMs.(($NewStaffPMs > 1) ? ' new staff messages' : ' new staff message').'</a>';
+	$Alerts[] = '<a href="staffpm.php">You have '.$NewStaffPMs.(($NewStaffPMs > 1) ? ' new staff messages' : ' new staff message').'</a>';
 }
 
 //Inbox
@@ -295,13 +295,13 @@ if ($NewMessages === false) {
 }
 
 if ($NewMessages > 0) {
-	$Alerts[] = '<a href="inbox.php">'.'You have '.$NewMessages.(($NewMessages > 1) ? ' new messages' : ' new message').'</a>';
+	$Alerts[] = '<a href="inbox.php">You have '.$NewMessages.(($NewMessages > 1) ? ' new messages' : ' new message').'</a>';
 }
 
 if ($LoggedUser['RatioWatch']) {
-	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'You have '.time_diff($LoggedUser['RatioWatchEnds'], 3).' to get your ratio over your required ratio or your leeching abilities will be disabled.';
+	$Alerts[] = '<a href="rules.php?p=ratio">Ratio Watch</a>: You have '.time_diff($LoggedUser['RatioWatchEnds'], 3).' to get your ratio over your required ratio or your leeching abilities will be disabled.';
 } elseif ($LoggedUser['CanLeech'] != 1) {
-	$Alerts[] = '<a href="rules.php?p=ratio">'.'Ratio Watch'.'</a>: '.'Your downloading privileges are disabled until you meet your required ratio.';
+	$Alerts[] = '<a href="rules.php?p=ratio">Ratio Watch</a>: Your downloading privileges are disabled until you meet your required ratio.';
 }
 
 if (check_perms('site_torrents_notify')) {
@@ -316,7 +316,7 @@ if (check_perms('site_torrents_notify')) {
 		$Cache->cache_value('notifications_new_'.$LoggedUser['ID'], $NewNotifications, 0);
 	}
 	if ($NewNotifications > 0) {
-		$Alerts[] = '<a href="torrents.php?action=notify">'.'You have '.$NewNotifications.(($NewNotifications > 1) ? ' new torrent notifications' : ' new torrent notification').'</a>';
+		$Alerts[] = '<a href="torrents.php?action=notify">You have '.$NewNotifications.(($NewNotifications > 1) ? ' new torrent notifications' : ' new torrent notification').'</a>';
 	}
 }
 
@@ -333,11 +333,11 @@ if (check_perms('site_collages_subscribe')) {
 			$Cache->cache_value('collage_subs_user_new_'.$LoggedUser['ID'], $NewCollages, 0);
 	}
 	if ($NewCollages > 0) {
-		$Alerts[] = '<a href="userhistory.php?action=subscribed_collages">'.'You have '.$NewCollages.(($NewCollages > 1) ? ' new collage updates' : ' new collage update').'</a>';
+		$Alerts[] = '<a href="userhistory.php?action=subscribed_collages">You have '.$NewCollages.(($NewCollages > 1) ? ' new collage updates' : ' new collage update').'</a>';
 	}
 }
 if (check_perms('users_mod')) {
-	$ModBar[] = '<a href="tools.php">'.'Toolbox'.'</a>';
+	$ModBar[] = '<a href="tools.php">Toolbox</a>';
 }
 if (check_perms('users_mod') || $LoggedUser['PermissionID'] == FORUM_MOD) {
 	$NumStaffPMs = $Cache->get_value('num_staff_pms_'.$LoggedUser['ID']);
@@ -387,7 +387,7 @@ if (check_perms('admin_reports')) {
 	}
 
 	if ($NumUpdateReports > 0) {
-		$ModBar[] = '<a href="reports.php">'.'Request update reports'.'</a>';
+		$ModBar[] = '<a href="reports.php">Request update reports</a>';
 	}
 } elseif (check_perms('site_moderate_forums')) {
 	$NumForumReports = $Cache->get_value('num_forum_reports');

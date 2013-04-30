@@ -1,6 +1,5 @@
 <?
 include(SERVER_ROOT.'/classes/class_text.php');
-
 $Text = new TEXT(true);
 
 if (!$News = $Cache->get_value('news')) {
@@ -294,7 +293,7 @@ if ($TopicID) {
 
 ?>
 		<div class="box">
-			<div class="head colhead_dark"><strong>Poll<? if ($Closed) { echo ' ['.'Closed'.']'; } ?></strong></div>
+			<div class="head colhead_dark"><strong>Poll<? if ($Closed) { echo ' [Closed]'; } ?></strong></div>
 			<div class="pad">
 				<p><strong><?=display_str($Question)?></strong></p>
 <?	if ($UserResponse !== null || $Closed) { ?>
@@ -327,7 +326,7 @@ if ($TopicID) {
 					<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />
 					<label for="answer_<?=$i?>"><?=display_str($Answers[$i])?></label><br />
 <? 		} ?>
-					<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank - Show the results!</label><br /><br />
+					<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; Show the results!</label><br /><br />
 					<input type="button" onclick="ajax.post('index.php','poll',function(response) {$('#poll_container').raw().innerHTML = response});" value="Vote" />
 				</form>
 				</div>

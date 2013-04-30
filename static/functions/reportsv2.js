@@ -8,7 +8,7 @@ function ChangeResolve(reportid) {
 	ajax.get('reportsv2.php?action=ajax_change_resolve&id=' + reportid + '&type=' + $('#resolve_type' + reportid).raw().value + '&categoryid=' + $('#categoryid' + reportid).raw().value, function (response) {
 			var x = json.decode(response);
 			$('#delete' + reportid).raw().checked = (x[0] == '1' ? true : false);
-			if($('#uploaderid' + reportid).raw().value == $('#reporterid' + reportid).raw().value) {
+			if ($('#uploaderid' + reportid).raw().value == $('#reporterid' + reportid).raw().value) {
 				$('#warning' + reportid).raw().selectedIndex = 0;
 				$('#upload' + reportid).raw().checked = false;
 			} else {
@@ -23,7 +23,7 @@ function ChangeResolve(reportid) {
 function Load(reportid) {
 	var t = $('#type' + reportid).raw().value;
 	for (var i = 0; i<$('#resolve_type' + reportid).raw().options.length; i++) {
-		if($('#resolve_type' + reportid).raw().options[i].value == t) {
+		if ($('#resolve_type' + reportid).raw().options[i].value == t) {
 			$('#resolve_type' + reportid).raw().selectedIndex = i;
 			break;
 		}
@@ -32,7 +32,7 @@ function Load(reportid) {
 	ajax.get('reportsv2.php?action=ajax_change_resolve&id=' + reportid + '&type=' + $('#resolve_type' + reportid).raw().value + '&categoryid=' + $('#categoryid' + reportid).raw().value, function (response) {
 		var x = json.decode(response);
 			$('#delete' + reportid).raw().checked = (x[0] == '1' ? true : false);
-			if($('#uploaderid' + reportid).raw().value == $('#reporterid' + reportid).raw().value) {
+			if ($('#uploaderid' + reportid).raw().value == $('#reporterid' + reportid).raw().value) {
 				$('#warning' + reportid).raw().selectedIndex = 0;
 				$('#upload' + reportid).raw().checked = false;
 			} else {
@@ -52,7 +52,7 @@ function ErrorBox(reportid, message) {
 }
 
 function HideErrors() {
-	if($('#error_box')) {
+	if ($('#error_box')) {
 		$('#error_box').remove();
 	}
 }
@@ -60,14 +60,14 @@ function HideErrors() {
 function TakeResolve(reportid) {
 	$('#submit_' + reportid).disable();
 	ajax.post("reportsv2.php?action=takeresolve","reportform_" + reportid, function (response) {
-		if(response) {
+		if (response) {
 			ErrorBox(reportid, response);
 		} else {
-			if($('#from_delete' + reportid).results()) {
+			if ($('#from_delete' + reportid).results()) {
 				window.location = location.protocol + '//' + location.host + location.pathname + "?id=" + $('#from_delete' + reportid).raw().value;
 			} else {
 				$('#report' + reportid).remove();
-				if($('#dynamic').raw().checked) {
+				if ($('#dynamic').raw().checked) {
 					NewReport(1);
 				}
 			}
@@ -76,17 +76,17 @@ function TakeResolve(reportid) {
 }
 
 function NewReport(q, view, id) {
-	for(var i = 0; i < q; i++) {
+	for (var i = 0; i < q; i++) {
 		var url = "reportsv2.php?action=ajax_new_report";
-		if(view) {
+		if (view) {
 			url += "&view=" + view;
 		}
-		if(id) {
+		if (id) {
 			url += "&id=" + id;
 		}
 
 		ajax.get(url, function (response) {
-			if(response) {
+			if (response) {
 				var div = document.createElement("div");
 				div.id = "report";
 				div.innerHTML = response;
@@ -94,12 +94,12 @@ function NewReport(q, view, id) {
 				var id = $('#newreportid').raw().value;
 				Load(id);
 				$('#newreportid').remove();
-				if($('#no_reports').results()) {
+				if ($('#no_reports').results()) {
 					$('#all_reports').raw().removeChild($('#no_reports').raw());
 				}
 			} else {
 				//No new reports at this time
-				if(!$('#report').results() && !$('#no_reports').results()) {
+				if (!$('#report').results() && !$('#no_reports').results()) {
 					var div = document.createElement("div");
 					div.id = "no_reports";
 					div.innerHTML = "<table class='layout'><tr><td class='center'><strong>No new reports! \\o/</strong></td></tr></table>";
@@ -114,13 +114,13 @@ function AddMore(view, id) {
 	//Function will add the amount of reports in the input box unless that will take it over 50
 	var x = 10;
 	var a = $('#repop_amount').raw().value;
-	if(a) {
-		if(!isNaN(a) && a <= 50) {
+	if (a) {
+		if (!isNaN(a) && a <= 50) {
 			x = a;
 		}
 	}
 
-	if(document.getElementsByName("reportid").length + x <= 50) {
+	if (document.getElementsByName("reportid").length + x <= 50) {
 		NewReport(x, view, id);
 	} else {
 		NewReport(50 - document.getElementsByName("reportid").length, view, id);
@@ -129,7 +129,7 @@ function AddMore(view, id) {
 
 function SendPM(reportid) {
 	ajax.post("reportsv2.php?action=ajax_take_pm", "reportform_" + reportid, function (response) {
-		if(response) {
+		if (response) {
 			$('#uploader_pm' + reportid).raw().value = response;
 		} else {
 			$('#uploader_pm' + reportid).raw().value = "";
@@ -139,18 +139,18 @@ function SendPM(reportid) {
 
 function UpdateComment(reportid) {
 	ajax.post("reportsv2.php?action=ajax_update_comment", "reportform_" + reportid, function (response) {
-		if(response) {
+		if (response) {
 			alert(response);
 		}
 	});
 }
 
 function GiveBack(id) {
-	if(!id) {
+	if (!id) {
 		var x = document.getElementsByName("reportid");
-		for(i = 0; i < x.length; i++) {
+		for (i = 0; i < x.length; i++) {
 			/*ajax.get("ajax.php?action=giveback_report&id=" + x[i].value, function (response) {
-				if(response) {
+				if (response) {
 					alert(response);
 				}
 			});*/
@@ -158,7 +158,7 @@ function GiveBack(id) {
 		}
 	} else {
 		ajax.get("ajax.php?action=giveback_report&id=" + id, function (response) {
-			if(response) {
+			if (response) {
 				alert(response);
 			}
 		});
@@ -189,9 +189,9 @@ function ClearReport(reportid) {
 }
 
 function Grab(reportid) {
-	if(reportid) {
+	if (reportid) {
 		ajax.get("reportsv2.php?action=ajax_grab_report&id=" + reportid, function (response) {
-			if(response == '1') {
+			if (response == '1') {
 				$('#grab' + reportid).raw().disabled = true;
 			} else {
 				alert('Grab failed for some reason :/');
@@ -199,9 +199,9 @@ function Grab(reportid) {
 		});
 	} else {
 		var x = document.getElementsByName("reportid");
-		for(i = 0; i < x.length; i++) {
+		for (i = 0; i < x.length; i++) {
 			ajax.get("reportsv2.php?action=ajax_grab_report&id=" + x[i].value, function (response) {
-				if(response != '1') {
+				if (response != '1') {
 					alert("One of those grabs failed, sorry I can't be more useful :P");
 				}
 			});
@@ -241,7 +241,7 @@ function Switch(reportid, torrentid, otherid) {
 
 	ajax.post('reportsv2.php?action=ajax_create_report', report, function (response) {
 			//Returns new report ID.
-			if(isNaN(response)) {
+			if (isNaN(response)) {
 				alert(response);
 			} else {
 				window.location = 'reportsv2.php?view=report&id=' + response;

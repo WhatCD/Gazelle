@@ -120,7 +120,7 @@ if (check_perms('users_mod')) { // Person viewing is a staff member
 $DisplayCustomTitle = $CustomTitle;
 if (check_perms('site_proxy_images') && !empty($CustomTitle)) {
 	$DisplayCustomTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
-																		return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
+																		return 'src=' . $Matches[1] . ImageTools::process($Matches[2]) . $Matches[3];
 																	}, $CustomTitle);
 }
 
@@ -535,16 +535,14 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 ?>
 	<table class="layout recent" id="recent_snatches" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
-			<td colspan="5">Recent snatches</td>
+			<td colspan="5">
+				<a href="#recent_snatches"><strong>&uarr;</strong></a> Recent snatches
+			</td>
 		</tr>
 		<tr>
-<?
-		foreach ($RecentSnatches as $RS) {
-			if (check_perms('site_proxy_images')) {
-				$RS['WikiImage'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($RS['WikiImage']);
-			} ?>
+<?		foreach ($RecentSnatches as $RS) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=ImageTools::thumbnail($RS['WikiImage'])?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=ImageTools::process($RS['WikiImage'], true)?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
 			</td>
 <?		} ?>
 		</tr>
@@ -580,15 +578,14 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 ?>
 	<table class="layout recent" id="recent_uploads" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
-			<td colspan="5">Recent uploads</td>
+			<td colspan="5">
+				<a href="#recent_uploads"><strong>&uarr;</strong></a> Recent uploads
+			</td>
 		</tr>
 		<tr>
-<?		foreach ($RecentUploads as $RU) {
-			if (check_perms('site_proxy_images')) {
-				$RU['WikiImage'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($RU['WikiImage']);
-			} ?>
+<?		foreach ($RecentUploads as $RU) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=ImageTools::thumbnail($RU['WikiImage'])?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=ImageTools::process($RU['WikiImage'], true)?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
 			</td>
 <?		} ?>
 		</tr>
@@ -610,14 +607,14 @@ foreach ($Collages as $CollageInfo) {
 		ORDER BY ct.Sort LIMIT 5");
 	$Collage = $DB->to_array();
 ?>
-	<table class="layout recent" id="collage<?=$CollageID?>" cellpadding="0" cellspacing="0" border="0">
+	<table class="layout recent" id="collage<?=$CollageID?>_box" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">
 				<span style="float:left;">
-					<?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
+					<a href="#collage<?=$CollageID?>_box"><strong>&uarr;</strong></a> <?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
 				</span>
 				<span style="float:right;">
-					<a href="#" onclick="$('#collage<?=$CollageID?> .images').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$FirstCol?'Hide':'Show'?></a>
+					<a href="#" onclick="$('#collage<?=$CollageID?>_box .images').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$FirstCol?'Hide':'Show'?></a>
 				</span>
 			</td>
 		</tr>
@@ -630,13 +627,9 @@ foreach ($Collages as $CollageInfo) {
 			$Name = '';
 			$Name .= Artists::display_artists(array('1'=>$Artists), false, true);
 			$Name .= $GroupName;
-
-			if (check_perms('site_proxy_images')) {
-				$C['WikiImage'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($C['WikiImage']);
-			}
 ?>
 			<td>
-				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=ImageTools::thumbnail($C['WikiImage'])?>" alt="<?=$Name?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=ImageTools::process($C['WikiImage'], true)?>" alt="<?=$Name?>" width="107" /></a>
 			</td>
 <?	} ?>
 		</tr>
@@ -658,8 +651,10 @@ if ((check_perms('users_view_invites')) && $Invited > 0) {
 	include(SERVER_ROOT.'/classes/class_invite_tree.php');
 	$Tree = new INVITE_TREE($UserID, array('visible'=>false));
 ?>
-		<div class="box">
-			<div class="head">Invite tree <a href="#" onclick="$('#invitetree').toggle();return false;" class="brackets">View</a></div>
+		<div class="box" id="invitetree_box">
+			<div class="head">
+				<a href="#invitetree_box"><strong>&uarr;</strong></a> Invite tree <a href="#" onclick="$('#invitetree').toggle();return false;" class="brackets">View</a>
+			</div>
 			<div id="invitetree" class="hidden">
 				<? $Tree->make_tree(); ?>
 			</div>
@@ -688,8 +683,10 @@ if (check_paranoia_here('requestsvoted_list')) {
 	if ($DB->record_count() > 0) {
 		$Requests = $DB->to_array();
 ?>
-		<div class="box">
-			<div class="head">Requests <a href="#" onclick="$('#requests').toggle();return false;" class="brackets">View</a></div>
+		<div class="box" id="requests_box">
+			<div class="head">
+				<a href="#requests_box"><strong>&uarr;</strong></a> Requests <a href="#" onclick="$('#requests').toggle();return false;" class="brackets">View</a>
+			</div>
 			<div id="requests" class="request_table hidden">
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 					<tr class="colhead_dark">
@@ -787,8 +784,10 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 	if ($DB->record_count()) {
 		$StaffPMs = $DB->to_array();
 ?>
-		<div class="box">
-			<div class="head">Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;" class="brackets">View</a></div>
+		<div class="box" id="staffpms_box">
+			<div class="head">
+				<a href="#staffpms_box"><strong>&uarr;</strong></a> Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;" class="brackets">View</a>
+			</div>
 			<table width="100%" class="message_table hidden" id="staffpms">
 				<tr class="colhead">
 					<td>Subject</td>
@@ -856,8 +855,9 @@ if (check_perms('users_mod', $Class)) { ?>
 		<input type="hidden" name="userid" value="<?=$UserID?>" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 
-		<div class="box">
-			<div class="head">Staff notes
+		<div class="box" id="staff_notes_box">
+			<div class="head">
+				<a href="#staff_notes_box"><strong>&uarr;</strong></a> Staff notes
 				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;" class="brackets">Edit</a>
 				<a href="#" onclick="$('#staffnotes').toggle(); return false;" class="brackets">Toggle</a>
 			</div>
@@ -872,9 +872,11 @@ if (check_perms('users_mod', $Class)) { ?>
 			</div>
 		</div>
 
-		<table class="layout">
+		<table class="layout" id="user_info_box">
 			<tr class="colhead">
-				<td colspan="2">User information</td>
+				<td colspan="2">
+					<a href="#user_info_box"><strong>&uarr;</strong></a> User information
+				</td>
 			</tr>
 <?	if (check_perms('users_edit_usernames', $Class)) { ?>
 			<tr>
@@ -1055,9 +1057,11 @@ if (check_perms('users_mod', $Class)) { ?>
 		</table><br />
 
 <?	if (check_perms('users_warn')) { ?>
-		<table class="layout">
+		<table class="layout" id="warn_user_box">
 			<tr class="colhead">
-				<td colspan="2">Warn user</td>
+				<td colspan="2">
+					<a href="#warn_user_box"><strong>&uarr;</strong></a> Warn user
+				</td>
 			</tr>
 			<tr>
 				<td class="label">Warned:</td>
@@ -1112,8 +1116,12 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 <?	} ?>
 		</table><br />
-		<table class="layout">
-			<tr class="colhead"><td colspan="2">User privileges</td></tr>
+		<table class="layout" id="user_privs_box">
+			<tr class="colhead">
+				<td colspan="2">
+					<a href="#user_privs_box"><strong>&uarr;</strong></a> User privileges
+				</td>
+			</tr>
 <?	if (check_perms('users_disable_posts') || check_perms('users_disable_any')) {
 		$DB->query("SELECT DISTINCT Email, IP FROM users_history_emails WHERE UserID = ".$UserID." ORDER BY Time ASC");
 		$Emails = $DB->to_array();
@@ -1165,8 +1173,9 @@ if (check_perms('users_mod', $Class)) { ?>
 						<option value="1"<? if ($Enabled=='1') { ?> selected="selected"<? } ?>>Enabled</option>
 						<option value="2"<? if ($Enabled=='2') { ?> selected="selected"<? } ?>>Disabled</option>
 <?		if (check_perms('users_delete_users')) { ?>
-						<optgroup label="-- WARNING --"></optgroup>
-						<option value="delete">Delete account</option>
+						<optgroup label="-- WARNING --">
+							<option value="delete">Delete account</option>
+						</optgroup>
 <?		} ?>
 					</select>
 				</td>
@@ -1193,8 +1202,12 @@ if (check_perms('users_mod', $Class)) { ?>
 <?	} ?>
 		</table><br />
 <?	if (check_perms('users_logout')) { ?>
-		<table class="layout">
-			<tr class="colhead"><td colspan="2">Session</td></tr>
+		<table class="layout" id="session_box">
+			<tr class="colhead">
+				<td colspan="2">
+					<a href="#session_box"><strong>&uarr;</strong></a> Session
+				</td>
+			</tr>
 			<tr>
 				<td class="label">Reset session:</td>
 				<td><input type="checkbox" name="ResetSession" id="ResetSession" /></td>
@@ -1206,8 +1219,12 @@ if (check_perms('users_mod', $Class)) { ?>
 
 		</table>
 <?	} ?>
-		<table class="layout">
-			<tr class="colhead"><td colspan="2">Submit</td></tr>
+		<table class="layout" id="submit_box">
+			<tr class="colhead">
+				<td colspan="2">
+					<a href="#submit_box"><strong>&uarr;</strong></a> Submit
+				</td>
+			</tr>
 			<tr>
 				<td class="label"><span title="This message will be entered into staff notes only.">Reason:</span></td>
 				<td>

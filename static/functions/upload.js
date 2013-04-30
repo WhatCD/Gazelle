@@ -7,7 +7,7 @@ function Categories() {
 }
 
 function Remaster() {
-	if($('#remaster').raw().checked) {
+	if ($('#remaster').raw().checked) {
 		$('#remaster_true').show();
 	} else {
 		$('#remaster_true').hide();
@@ -16,9 +16,9 @@ function Remaster() {
 }
 
 function Format() {
-	if($('#format').raw().options[$('#format').raw().selectedIndex].value == 'FLAC') {
+	if ($('#format').raw().options[$('#format').raw().selectedIndex].value == 'FLAC') {
 		for (var i = 0; i<$('#bitrate').raw().options.length; i++) {
-			if($('#bitrate').raw().options[i].value == 'Lossless') {
+			if ($('#bitrate').raw().options[i].value == 'Lossless') {
 				$('#bitrate').raw()[i].selected = true;
 			}
 		}
@@ -29,7 +29,7 @@ function Format() {
 		$('#upload_logs').hide();
 	}
 
- 	if($('#format').raw().options[$('#format').raw().selectedIndex].value == 'AAC') {
+ 	if ($('#format').raw().options[$('#format').raw().selectedIndex].value == 'AAC') {
 		$('#format_warning').raw().innerHTML = 'Lossy AAC torrents may only be uploaded when they represent exclusive content not currently available in any other format. <a href="rules.php?p=upload#r2.1.24">(2.1.24)</a>';
 	} else {
 		$('#format_warning').raw().innerHTML = '';
@@ -38,7 +38,7 @@ function Format() {
 
 function Bitrate() {
 	$('#other_bitrate').raw().value = '';
-	if($('#bitrate').raw().options[$('#bitrate').raw().selectedIndex].value == 'Other') {
+	if ($('#bitrate').raw().options[$('#bitrate').raw().selectedIndex].value == 'Other') {
 		$('#other_bitrate_span').show();
 	} else {
 		$('#other_bitrate_span').hide();
@@ -46,7 +46,7 @@ function Bitrate() {
 }
 
 function AltBitrate() {
-	if($('#other_bitrate').raw().value >= 320) {
+	if ($('#other_bitrate').raw().value >= 320) {
 		$('#vbr').raw().disabled = true;
 		$('#vbr').raw().checked = false;
 	} else {
@@ -55,9 +55,9 @@ function AltBitrate() {
 }
 
 function add_tag() {
-	if($('#tags').raw().value == "") {
+	if ($('#tags').raw().value == "") {
 		$('#tags').raw().value = $('#genre_tags').raw().options[$('#genre_tags').raw().selectedIndex].value;
-	} else if($('#genre_tags').raw().options[$('#genre_tags').raw().selectedIndex].value == '---') {
+	} else if ($('#genre_tags').raw().options[$('#genre_tags').raw().selectedIndex].value == '---') {
 	} else {
 		$('#tags').raw().value = $('#tags').raw().value + ', ' + $('#genre_tags').raw().options[$('#genre_tags').raw().selectedIndex].value;
 	}
@@ -66,7 +66,7 @@ function add_tag() {
 var LogCount = 1;
 
 function AddLogField() {
-	if(LogCount >= 200) {
+	if (LogCount >= 200) {
 		return;
 	}
 	var LogField = document.createElement("input");
@@ -81,7 +81,7 @@ function AddLogField() {
 }
 
 function RemoveLogField() {
-	if(LogCount == 1) {
+	if (LogCount == 1) {
 		return;
 	}
 	var x = $('#logfields').raw();
@@ -94,7 +94,7 @@ function RemoveLogField() {
 var ExtraLogCount = 1;
 
 function AddExtraLogField(id) {
-	if(LogCount >= 200) {
+	if (LogCount >= 200) {
 		return;
 	}
 	var LogField = document.createElement("input");
@@ -109,7 +109,7 @@ function AddExtraLogField(id) {
 }
 
 function RemoveLogField() {
-	if(LogCount == 1) {
+	if (LogCount == 1) {
 		return;
 	}
 	var x = $('#logfields').raw();
@@ -122,7 +122,7 @@ function RemoveLogField() {
 var FormatCount = 0;
 
 function AddFormat() {
-	if(FormatCount >= 10) {
+	if (FormatCount >= 10) {
 		return;
 	}
 	FormatCount++;
@@ -157,14 +157,14 @@ function AddFormat() {
 	NewCell2 = document.createElement("td");
 	tmp = '<select id="releasetype" name="extra_formats[]"><option value="">---</option>';
 	var formats=["Saab","Volvo","BMW"];
-	for(var i in formats) {
-		tmp += "<option value='"+formats[i]+"'>"+formats[i]+"</option>\n";
+	for (var i in formats) {
+		tmp += '<option value="'+formats[i]+'">'+formats[i]+"</option>\n";
 	}
 	tmp += "</select>";
 	var bitrates=["1","2","3"];
 	tmp += '<select id="releasetype" name="extra_bitrates[]"><option value="">---</option>';
-	for(var i in bitrates) {
-		tmp += "<option value='"+bitrates[i]+"'>"+bitrates[i]+"</option>\n";
+	for (var i in bitrates) {
+		tmp += '<option value="'+bitrates[i]+'">'+bitrates[i]+"</option>\n";
 	}
 	tmp += "</select>";
 
@@ -188,7 +188,7 @@ function AddFormat() {
 }
 
 function RemoveFormat() {
-	if(FormatCount == 0) {
+	if (FormatCount == 0) {
 		return;
 	}
 	$('#extras').raw().value = FormatCount;
@@ -209,7 +209,7 @@ function RemoveFormat() {
 var ArtistCount = 1;
 
 function AddArtistField() {
-	if(ArtistCount >= 200) {
+	if (ArtistCount >= 200) {
 		return;
 	}
 	var ArtistField = document.createElement("input");
@@ -238,7 +238,7 @@ function AddArtistField() {
 }
 
 function RemoveArtistField() {
-	if(ArtistCount == 1) {
+	if (ArtistCount == 1) {
 		return;
 	}
 	var x = $('#artistfields').raw();
@@ -259,15 +259,15 @@ function CheckVA () {
 
 function CheckYear() {
 	var media = $('#media').raw().options[$('#media').raw().selectedIndex].text;
-	if(media == "---" || media == "Vinyl" || media == "Soundboard" || media == "Cassette") {
+	if (media == "---" || media == "Vinyl" || media == "Soundboard" || media == "Cassette") {
 		media = "old";
 	}
 	var x = $('#year').raw();
-	if(x.value < 1982 && x.value != '' && media != "old" && !$('#unknown').raw().checked) {
+	if (x.value < 1982 && x.value != '' && media != "old" && !$('#unknown').raw().checked) {
 		$('#yearwarning').show();
 		$('#remaster').raw().checked = true;
 		$('#remaster_true').show();
-	} else if($('#unknown').raw().checked) {
+	} else if ($('#unknown').raw().checked) {
 		$('#remaster').raw().checked = true;
 		$('#yearwarning').hide();
 		$('#remaster_true').show();
@@ -277,13 +277,13 @@ function CheckYear() {
 }
 
 function ToggleUnknown() {
-	if($('#unknown').raw().checked) {
+	if ($('#unknown').raw().checked) {
 		$('#remaster_year').raw().value = "";
 		$('#remaster_title').raw().value = "";
 		$('#remaster_record_label').raw().value = "";
 		$('#remaster_catalogue_number').raw().value = "";
 
-		if($('#groupremasters').raw()) {
+		if ($('#groupremasters').raw()) {
 			$('#groupremasters').raw().selectedIndex = 0;
 			$('#groupremasters').raw().disabled = true;
 		}
@@ -298,7 +298,7 @@ function ToggleUnknown() {
 		$('#remaster_record_label').raw().disabled = false;
 		$('#remaster_catalogue_number').raw().disabled = false;
 
-		if($('#groupremasters').raw()) {
+		if ($('#groupremasters').raw()) {
 			$('#groupremasters').raw().disabled = false;
 		}
 	}
@@ -307,7 +307,7 @@ function ToggleUnknown() {
 function GroupRemaster() {
 	var remasters = json.decode($('#json_remasters').raw().value);
 	var index = $('#groupremasters').raw().options[$('#groupremasters').raw().selectedIndex].value;
-	if(index != "") {
+	if (index != "") {
 		$('#remaster_year').raw().value = remasters[index][1];
 		$('#remaster_title').raw().value = remasters[index][2];
 		$('#remaster_record_label').raw().value = remasters[index][3];

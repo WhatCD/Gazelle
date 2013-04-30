@@ -210,11 +210,8 @@ foreach ($TorrentList as $GroupID => $Group) {
 		<li class="image_group_<?=$GroupID?>">
 			<a href="torrents.php?id=<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
 <?	if($WikiImage) {
-		if(check_perms('site_proxy_images')) {
-			$WikiImage = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($WikiImage);
-		}
 ?>
-				<img src="<?=ImageTools::thumbnail($WikiImage)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
+				<img src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
 <?	} else { ?>
 				<div style="width:107px;padding:5px"><?=$DisplayName?></div>
 <?	} ?>

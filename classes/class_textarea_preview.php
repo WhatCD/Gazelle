@@ -3,8 +3,7 @@
  * This super class is used to manage the ammount of textareas there are and to
  * generate the required JavaScript that enables the previews to work.
  */
-class TEXTAREA_PREVIEW_SUPER
-{
+class TEXTAREA_PREVIEW_SUPER {
 	/**
 	 * @static
 	 * @var int $Textareas Total number of textareas created
@@ -37,11 +36,13 @@ class TEXTAREA_PREVIEW_SUPER
 	 * @example <pre><?php TEXT_PREVIEW::JavaScript(); ?></pre>
 	 * @return void
 	 */
-	static public function JavaScript ($all = true)
-	{
-		if (self::$Textareas === 0) return;
-		if (self::$Exectuted === false && $all)
+	static public function JavaScript ($all = true) {
+		if (self::$Textareas === 0) {
+			return;
+		}
+		if (self::$Exectuted === false && $all) {
 			View::parse('generic/textarea/script.phtml');
+		}
 
 		self::$Exectuted = true;
 		self::iterator();
@@ -55,10 +56,9 @@ class TEXTAREA_PREVIEW_SUPER
 	 * @static
 	 * @return void
 	 */
-	static private function iterator ()
-	{
+	static private function iterator () {
 		$script = array();
-		for($i = 0; $i < self::$Textareas; $i++) {
+		for ($i = 0; $i < self::$Textareas; $i++) {
 			if (isset(self::$_ID[$i]) && is_string(self::$_ID[$i])) {
 				$a = sprintf('%d, "%s"', $i, self::$_ID[$i]);
 			} else {
@@ -66,9 +66,9 @@ class TEXTAREA_PREVIEW_SUPER
 			}
 			$script[] = sprintf('[%s]', $a);
 		}
-		if (!empty($script))
-			View::parse('generic/textarea/script_factory.phtml',
-				array('script' => join(', ', $script)));
+		if (!empty($script)) {
+			View::parse('generic/textarea/script_factory.phtml', array('script' => join(', ', $script)));
+		}
 	}
 }
 
@@ -111,8 +111,7 @@ class TEXTAREA_PREVIEW_SUPER
  * </div>
  * </pre>
  */
-class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
-{
+class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER {
 	/**
 	 * @var int Unique ID
 	 */
@@ -157,14 +156,19 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 		parent::$Textareas += 1;
 		array_push(parent::$_ID, $ID);
 
-		if (empty($ID)) $ID = 'quickpost_' . $this->id;
+		if (empty($ID)) {
+			$ID = 'quickpost_' . $this->id;
+		}
 
-		if (!empty($ExtraAttributes))
+		if (!empty($ExtraAttributes)) {
 			$Attributes = ' ' . implode(' ', $ExtraAttributes);
-		else
+		} else {
 			$Attributes = '';
+		}
 
-		if ($Preview === true) $this->preview();
+		if ($Preview === true) {
+			$this->preview();
+		}
 
 		$this->buffer = View::parse('generic/textarea/textarea.phtml', array(
 			'ID' => $ID,
@@ -176,17 +180,19 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 			'Attributes' => &$Attributes
 		), $Buffer);
 
-		if ($Buttons === true) $this->buttons();
+		if ($Buttons === true) {
+			$this->buttons();
+		}
 	}
 
 	/**
 	 * Outputs the divs required for previewing the AJAX content
 	 * Will only output once
 	 */
-	public function preview ()
-	{
-		if (!$this->preview)
+	public function preview () {
+		if (!$this->preview) {
 			View::parse('generic/textarea/preview.phtml', array('ID' => $this->id));
+		}
 		$this->preview = true;
 	}
 
@@ -194,16 +200,14 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 	 * Outputs the preview and edit buttons
 	 * Can be called many times to place buttons in different areas
 	 */
-	public function buttons ()
-	{
+	public function buttons () {
 		View::parse('generic/textarea/buttons.phtml', array('ID' => $this->id));
 	}
 
 	/**
 	 * Returns the textarea's numeric ID.
 	 */
-	public function getID ()
-	{
+	public function getID () {
 		return $this->id;
 	}
 
@@ -211,8 +215,7 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER
 	 * Returns textarea string when buffer is enabled in the constructor
 	 * @return string
 	 */
-	public function getBuffer ()
-	{
+	public function getBuffer () {
 		return $this->buffer;
 	}
 }

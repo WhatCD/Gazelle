@@ -38,7 +38,7 @@ class Sphinxql extends mysqli {
 	 * @return identification string
 	 */
 	private function get_ident($Server, $Port, $Socket) {
-		if($Socket) {
+		if ($Socket) {
 			return $Socket;
 		} else {
 			return "$Server:$Port";
@@ -55,7 +55,7 @@ class Sphinxql extends mysqli {
 	 */
 	public static function init_connection($Server, $Port, $Socket) {
 		$Ident = self::get_ident($Server, $Port, $Socket);
-		if(!isset(self::$Connections[$Ident])) {
+		if (!isset(self::$Connections[$Ident])) {
 			self::$Connections[$Ident] = new Sphinxql($Server, $Port, $Socket);
 		}
 		return self::$Connections[$Ident];
@@ -65,11 +65,11 @@ class Sphinxql extends mysqli {
 	 * Connect the Sphinxql object to the Sphinx server
 	 */
 	public function connect() {
-		if(!$this->Connected) {
+		if (!$this->Connected) {
 			global $Debug;
 			$Debug->set_flag('Connecting to Sphinx server '.$this->Ident);
 			parent::__construct($this->Server, '', '', '', $this->Port, $this->Socket);
-			if($this->connect_error) {
+			if ($this->connect_error) {
 				$Errno = $this->connect_errno;
 				$Error = $this->connect_error;
 				$this->error("Connection failed. ".strval($Errno)." (".strval($Error).")");
@@ -90,10 +90,10 @@ class Sphinxql extends mysqli {
 		global $Debug;
 		$ErrorMsg = 'SphinxQL ('.$this->Ident.'): '.strval($Msg);
 		$Debug->analysis('SphinxQL Error', $ErrorMsg, 3600*24);
-		if($Halt === true && (DEBUG_MODE || check_perms('site_debug'))) {
+		if ($Halt === true && (DEBUG_MODE || check_perms('site_debug'))) {
 			echo '<pre>'.display_str($ErrorMsg).'</pre>';
 			die();
-		} elseif($Halt === true) {
+		} elseif ($Halt === true) {
 			error('-1');
 		}
 	}

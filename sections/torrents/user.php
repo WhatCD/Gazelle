@@ -492,7 +492,7 @@ foreach ($Categories as $CatKey => $CatName) {
 			<td class="big_info">
 <? if ($LoggedUser['CoverArt']) : ?>
 				<div class="group_image float_left clear">
-					<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+					<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 				</div>
 <? endif; ?>
 				<div class="group_info clear">

@@ -811,9 +811,9 @@ if (!empty($ArtistsUnescaped)) {
 	foreach ($ArtistsUnescaped as $Importance => $Artists) {
 		foreach ($Artists as $Artist) {
 			if ($Importance == 1 || $Importance == 4 || $Importance == 5 || $Importance == 6) {
-				$ArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\','\\\\',$Artist['name']))."|%'";
+				$ArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\','\\\\',$Artist['name']), true)."|%'";
 			} else {
-				$GuestArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\','\\\\',$Artist['name']))."|%'";
+				$GuestArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\','\\\\',$Artist['name']), true)."|%'";
 			}
 		}
 	}

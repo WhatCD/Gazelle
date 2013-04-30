@@ -543,11 +543,7 @@ EXPLANATION OF PARSER LOGIC
 					if (!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
 						$Str.='[img]'.$Block['Val'].'[/img]';
 					} else {
-						if (check_perms('site_proxy_images')) {
-							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
-						} else {
-							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';
-						}
+						$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.ImageTools::process($Block['Val']).'" />';
 					}
 					break;
 

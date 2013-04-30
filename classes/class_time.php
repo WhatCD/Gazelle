@@ -121,7 +121,7 @@ function time_diff($TimeStamp, $Levels=2, $Span=true, $Lowercase=false) {
 		if ($Return != '') {
 			$Return.=' and ';
 		}
-		if ($Minutes>1) {
+		if ($Minutes > 1) {
 			$Return.=$Minutes.' mins';
 		} else {
 			$Return.=$Minutes.' min';

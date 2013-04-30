@@ -286,8 +286,8 @@ EXPLANATION OF PARSER LOGIC
 				$i = $CloseTag; // 5d) Move the pointer past the end of the [/close] tag.
 			} else {
 				//5b) If it's a normal tag, it may have versions of itself nested inside
-				$CloseTag = $i-1;
-				$InTagPos = $i-1;
+				$CloseTag = $i - 1;
+				$InTagPos = $i - 1;
 				$NumInOpens = 0;
 				$NumInCloses = -1;
 
@@ -318,7 +318,7 @@ EXPLANATION OF PARSER LOGIC
 						$NumInOpens++;
 					}
 
-				} while($NumInOpens>$NumInCloses);
+				} while ($NumInOpens > $NumInCloses);
 
 
 				// Find the internal block inside the tag
@@ -504,11 +504,7 @@ EXPLANATION OF PARSER LOGIC
 					if (!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
 						$Str.='[img]'.$Block['Val'].'[/img]';
 					} else {
-						if (check_perms('site_proxy_images')) {
-							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
-						} else {
-							$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';
-						}
+						$Str.='<img style="max-width: 500px;" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.ImageTools::process($Block['Val']).'" />';
 					}
 					break;
 

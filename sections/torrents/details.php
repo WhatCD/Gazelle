@@ -119,12 +119,8 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 			<div class="head"><strong>Cover</strong></div>
 <?
 if ($WikiImage != '') {
-	$WikiImageThumb = ImageTools::wiki_image($WikiImage);
-	if (check_perms('site_proxy_images')) {
-		$WikiImage = ImageTools::proxy_url($WikiImage);
-	}
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=$WikiImageThumb?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=$WikiImage?>',220);" /></p>
+			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=ImageTools::process($WikiImage)?>',220);" /></p>
 <?
 } else {
 ?>

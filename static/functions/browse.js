@@ -1,5 +1,5 @@
 function show_peers (TorrentID, Page) {
-	if(Page>0) {
+	if (Page > 0) {
 		ajax.get('torrents.php?action=peerlist&page='+Page+'&torrentid=' + TorrentID,function(response){
 			$('#peers_' + TorrentID).show().raw().innerHTML=response;
 		});
@@ -20,7 +20,7 @@ function show_peers (TorrentID, Page) {
 }
 
 function show_snatches (TorrentID, Page){
-	if(Page>0) {
+	if (Page > 0) {
 		ajax.get('torrents.php?action=snatchlist&page='+Page+'&torrentid=' + TorrentID,function(response){
 			$('#snatches_' + TorrentID).show().raw().innerHTML=response;
 		});
@@ -41,7 +41,7 @@ function show_snatches (TorrentID, Page){
 }
 
 function show_downloads (TorrentID, Page){
-	if(Page>0) {
+	if (Page > 0) {
 		ajax.get('torrents.php?action=downloadlist&page='+Page+'&torrentid=' + TorrentID,function(response){
 			$('#downloads_' + TorrentID).show().raw().innerHTML=response;
 		});

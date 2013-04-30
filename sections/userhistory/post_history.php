@@ -46,10 +46,6 @@ if (($UserInfo = $Cache->get_value('user_info_'.$UserID)) === false) {
 	extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', 'Title', 'Avatar', 'Donor', 'Warned'))));
 }
 
-if (check_perms('site_proxy_images') && !empty($Avatar)) {
-	$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Avatar);
-}
-
 View::show_header('Post history for '.$Username,'subscriptions,comments,bbcode');
 
 if ($LoggedUser['CustomForums']) {
@@ -305,7 +301,7 @@ if (empty($Results)) {
 <?
 				if ($Avatar) {
 ?>
-				<img src="<?=$Avatar?>" width="150" style="max-height:400px;" alt="<?=$Username?>'s avatar" />
+				<img src="<?=ImageTools::process($Avatar)?>" width="150" style="max-height:400px;" alt="<?=$Username?>'s avatar" />
 <?
 				}
 ?>

@@ -104,9 +104,7 @@ class Users {
 		}
 
 		// Image proxy
-		if (check_perms('site_proxy_images') && !empty($UserInfo['Avatar'])) {
-			$UserInfo['Avatar'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($UserInfo['Avatar']);
-		}
+		$UserInfo['Avatar'] = ImageTools::process($UserInfo['Avatar']);
 		return $UserInfo;
 	}
 
@@ -397,12 +395,12 @@ class Users {
 		$Numchars = strlen($Chars) - 1;
 		if ($Handle = @fopen('/dev/urandom', 'r')) {
 			$Bytes = fread($Handle, 22);
-			for($i = 0; $i < 21; $i++) {
+			for ($i = 0; $i < 21; $i++) {
 				$Salt .= $Chars[ord($Bytes[$i]) & $Numchars];
 			}
 			$Salt[$i] = $Chars[(ord($Bytes[$i]) & 3) << 4];
 		} else {
-			for($i = 0; $i < 21; $i++) {
+			for ($i = 0; $i < 21; $i++) {
 				$Salt .= $Chars[mt_rand(0, $Numchars)];
 			}
 			$Salt[$i] = $Chars[mt_rand(0, 3) << 4];
@@ -481,7 +479,7 @@ class Users {
 			if (check_perms('site_proxy_images') && !empty($UserInfo['Title'])) {
 				$UserInfo['Title'] = preg_replace_callback('~src=("?)(http.+?)(["\s>])~',
 					function($Matches) {
-						return 'src='.$Matches[1].'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Matches[2]).$Matches[3];
+						return 'src=' . $Matches[1] . ImageTools::process($Matches[2]) . $Matches[3];
 					},
 					$UserInfo['Title']);
 			}

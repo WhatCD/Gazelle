@@ -58,11 +58,11 @@ foreach ($Forums as $Forum) {
 <h3><?=$ForumCats[$CategoryID]?></h3>
 	<table class="forum_index">
 		<tr class="colhead">
-			<td style="width:2%;"></td>
-			<td style="width:25%;">Forum</td>
+			<td style="width: 2%;"></td>
+			<td style="width: 25%;">Forum</td>
 			<td>Last post</td>
-			<td style="width:7%;">Topics</td>
-			<td style="width:7%;">Posts</td>
+			<td style="width: 7%;">Topics</td>
+			<td style="width: 7%;">Posts</td>
 		</tr>
 <?
 		$OpenTable = true;
@@ -87,7 +87,7 @@ foreach ($Forums as $Forum) {
 		</td>
 <? if ($NumPosts == 0) { ?>
 		<td colspan="3">
-			There are no topics here<?=($MinCreate <= $LoggedUser['Class']) ? ', <a href="forums.php?action=new&amp;forumid='.$ForumID.'">'.'create one'.'</a>' : ''?>.
+			There are no topics here.<?=($MinCreate <= $LoggedUser['Class']) ? ', <a href="forums.php?action=new&amp;forumid='.$ForumID.'">Create one!</a>' : '' ?>.
 		</td>
 <? } else { ?>
 		<td>

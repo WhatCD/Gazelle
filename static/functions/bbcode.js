@@ -1,6 +1,6 @@
 var BBCode = {
 	spoiler: function(link) {
-		if($(link.nextSibling).has_class('hidden')) {
+		if ($(link.nextSibling).has_class('hidden')) {
 			$(link.nextSibling).show();
 			$(link).html('Hide');
 		} else {

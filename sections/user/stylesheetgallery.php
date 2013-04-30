@@ -13,7 +13,7 @@ if (!isset($_GET['name'])) {
 	if (!$Name) {
 		error(404);
 	}
-	if (isset($_GET['format']) && $_GET['format'] === "data"){
+	if (isset($_GET['format']) && $_GET['format'] === "data") {
 		global $Cache;
 		$ImageData = $Cache->get_value("cssgallery_".$Name);
 		if(!empty($ImageData)){
@@ -26,19 +26,19 @@ if (!isset($_GET['name'])) {
 	} else {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="overflow:hidden !important; margin: 0 !important; padding: 0 !important;">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="overflow: hidden !important; margin: 0 !important; padding: 0 !important;">
 	<head>
 		<title>Stylesheet Gallery</title>
-		<meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge" />
+		<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link href="<? echo STATIC_SERVER; ?>styles/global.css?v=<?=filemtime(STATIC_SERVER.'styles/global.css')?>" rel="stylesheet" type="text/css" />
 		<link href="<? echo STATIC_SERVER; ?>styles/<?= $Name ?>/style.css?v=<?=filemtime(STATIC_SERVER.'styles/'.$Name.'/style.css')?>" title="<?= $Name ?>" rel="stylesheet" type="text/css" media="screen" />
-		<? if (isset($_GET['save']) && $_GET['save']==="true" && check_perms('admin_clear_cache')) { ?>
+<?		if (isset($_GET['save']) && $_GET['save'] === 'true' && check_perms('admin_clear_cache')) { ?>
 		<script src="<? echo STATIC_SERVER; ?>functions/jquery.js?v=<?=filemtime(STATIC_SERVER.'functions/jquery.js')?>"></script>
 		<script src="<? echo STATIC_SERVER; ?>functions/stylesheetgallery.js?v=<?=filemtime(STATIC_SERVER.'functions/stylesheetgallery.js')?>"></script>
-		<? } ?>
+<?		} ?>
 	</head>
-	<body id="user" style="overflow:hidden !important; margin: 0 !important; padding: 0 !important; position: absolute !important;" stylesheet="<?= $Name ?>">
+	<body id="user" style="overflow: hidden !important; margin: 0 !important; padding: 0 !important; position: absolute !important;" stylesheet="<?= $Name ?>">
 		<div id="wrapper">
 			<h1 class="hidden">Gazelle</h1>
 			<div id="header">
@@ -110,39 +110,38 @@ if (!isset($_GET['name'])) {
 							<span class="hidden">Artist: </span>
 							<form class="search_form" name="artists" action="" method="get">
 								<script type="text/javascript" src="static/functions/autocomplete.js?v=1362029969"></script>
-								<input id="artistsearch" value="Artists" type="text" name="artistname" size="17"/>
+								<input id="artistsearch" value="Artists" type="text" name="artistname" size="17" />
 								<ul id="artistcomplete" style="visibility: hidden;"><li/></ul>
 							</form>
 						</li>
 						<li id="searchbar_requests">
 							<span class="hidden">Requests: </span>
 							<form class="search_form" name="requests" action="" method="get">
-								<input id="requestssearch" value="Requests" type="text" name="search" size="17"/>
+								<input id="requestssearch" value="Requests" type="text" name="search" size="17" />
 							</form>
 						</li>
 						<li id="searchbar_forums">
 							<span class="hidden">Forums: </span>
 							<form class="search_form" name="forums" action="" method="get">
 								<input value="search" type="hidden" name="action" />
-								<input id="forumssearch" value="Forums" type="text" name="search" size="17"/>
+								<input id="forumssearch" value="Forums" type="text" name="search" size="17" />
 							</form>
 						</li>
 						<li id="searchbar_log">
 							<span class="hidden">Log: </span>
 							<form class="search_form" name="log" action="" method="get">
-								<input id="logsearch" value="Log" type="text" name="search" size="17"/>
+								<input id="logsearch" value="Log" type="text" name="search" size="17" />
 							</form>
 						</li>
 						<li id="searchbar_users">
 							<span class="hidden">Users: </span>
 							<form class="search_form" name="users" action="" method="get">
 								<input type="hidden" name="action" value="search" />
-								<input id="userssearch" value="Users" type="text" name="search" size="20"/>
+								<input id="userssearch" value="Users" type="text" name="search" size="20" />
 							</form>
 						</li>
 					</ul>
 				</div>
-
 			</div>
 			<div id="content">
 				<div class="thin">
@@ -152,11 +151,11 @@ if (!isset($_GET['name'])) {
 						<table class="forum_index">
 							<tbody>
 								<tr class="colhead">
-									<td style="width:2%;"></td>
-									<td style="width:25%;">Forum</td>
+									<td style="width: 2%;"></td>
+									<td style="width: 25%;">Forum</td>
 									<td>Last post</td>
-									<td style="width:7%;">Topics</td>
-									<td style="width:7%;">Posts</td>
+									<td style="width: 7%;">Topics</td>
+									<td style="width: 7%;">Posts</td>
 								</tr>
 								<tr class="rowb">
 									<td title="Unread" class="unread"></td>
@@ -166,13 +165,13 @@ if (!isset($_GET['name'])) {
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="New Site Announcements" href="#">New Site Announcements</a>
 										</span>
 										<span title="Jump to last read" class="last_read" style="float: left;">
 											<a href="#"></a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Rippy</a> <span title="Aug 14 1992, 18:35" class="time">Just now</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Rippy</a> <span title="Aug 14 1992, 18:35" class="time">Just now</span></span>
 									</td>
 									<td>385</td>
 									<td>95,197</td>
@@ -181,14 +180,14 @@ if (!isset($_GET['name'])) {
 									<td title="Read" class="read"></td>
 									<td>
 										<h4 class="min_padding">
-											<a href="#">What.CD</a>
+											<a href="#"><?=SITE_NAME?></a>
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="Dear Mortals, you have violated the rule..." href="#">Dear Mortals, you have violated the rule...</a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Drone</a> <span title="Sep 9 1992, 10:55" class="time">3 mins ago</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Drone</a> <span title="Sep 9 1992, 10:55" class="time">3 mins ago</span></span>
 									</td>
 									<td>2,624</td>
 									<td>110,432</td>
@@ -198,11 +197,11 @@ if (!isset($_GET['name'])) {
 						<h3>Community</h3>
 						<table class="forum_index">
 							<tbody><tr class="colhead">
-									<td style="width:2%;"></td>
-									<td style="width:25%;">Forum</td>
+									<td style="width: 2%;"></td>
+									<td style="width: 25%;">Forum</td>
 									<td>Last post</td>
-									<td style="width:7%;">Topics</td>
-									<td style="width:7%;">Posts</td>
+									<td style="width: 7%;">Topics</td>
+									<td style="width: 7%;">Posts</td>
 								</tr>
 								<tr class="rowb">
 									<td title="Unread" class="unread"></td>
@@ -212,13 +211,13 @@ if (!isset($_GET['name'])) {
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="Last stand against Drone?" href="#">Last stand against Drone?</a>
 										</span>
 										<span title="Jump to last read" class="last_read" style="float: left;">
 											<a href="#"></a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Ajax</a> <span class="time">Just now</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Ajax</a> <span class="time">Just now</span></span>
 									</td>
 									<td>37,531</td>
 									<td>1,545,089</td>
@@ -231,10 +230,10 @@ if (!isset($_GET['name'])) {
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="No fun allowed" href="#">No fun allowed</a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Drone</a> <span class="time">10 mins ago</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Drone</a> <span class="time">10 mins ago</span></span>
 									</td>
 									<td>424</td>
 									<td>490,163</td>
@@ -247,10 +246,10 @@ if (!isset($_GET['name'])) {
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="List of forbidden literature" href="#">List of forbidden literature</a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Drone</a> <span class="time">7 hours ago</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Drone</a> <span class="time">7 hours ago</span></span>
 									</td>
 									<td>424</td>
 									<td>490,163</td>
@@ -263,10 +262,10 @@ if (!isset($_GET['name'])) {
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="[Region] The Void" href="#">[Region] The Void</a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Drone</a> <span class="time">25 mins ago</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Drone</a> <span class="time">25 mins ago</span></span>
 									</td>
 									<td>305</td>
 									<td>15,231</td>
@@ -279,13 +278,13 @@ if (!isset($_GET['name'])) {
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="How did Drone take over the site?" href="#">How did Drone take over the site?</a>
 										</span>
 										<span title="Jump to last read" class="last_read" style="float: left;">
 											<a href="#"></a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Etheryte</a> <span class="time">5 mins ago</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Etheryte</a> <span class="time">5 mins ago</span></span>
 									</td>
 									<td>25,031</td>
 									<td>386,278</td>
@@ -296,11 +295,11 @@ if (!isset($_GET['name'])) {
 						<table class="forum_index">
 							<tbody>
 								<tr class="colhead">
-									<td style="width:2%;"></td>
-									<td style="width:25%;">Forum</td>
+									<td style="width: 2%;"></td>
+									<td style="width: 25%;">Forum</td>
 									<td>Last post</td>
-									<td style="width:7%;">Topics</td>
-									<td style="width:7%;">Posts</td>
+									<td style="width: 7%;">Topics</td>
+									<td style="width: 7%;">Posts</td>
 								</tr>
 								<tr class="rowb">
 									<td title="Unread" class="unread"></td>
@@ -310,13 +309,13 @@ if (!isset($_GET['name'])) {
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="Where did all the non-drone threads go?" href="#">Where did all the non-drone threads go?</a>
 										</span>
 										<span title="Jump to last read" class="last_read" style="float: left;">
 											<a href="#"></a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Ananke</a> <span class="time">1 min ago</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Ananke</a> <span class="time">1 min ago</span></span>
 									</td>
 									<td>22,564</td>
 									<td>608,253</td>
@@ -329,10 +328,10 @@ if (!isset($_GET['name'])) {
 										</h4>
 									</td>
 									<td>
-										<span class="last_topic" style="float:left;">
+										<span class="last_topic" style="float: left;">
 											<a title="Drone - Drone [EP] (drone, noise)" href="#">Drone - Drone [EP] (drone, noise)</a>
 										</span>
-										<span class="last_poster" style="float:right;">by <a href="#">Drone</a> <span class="time">Just now</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Drone</a> <span class="time">Just now</span></span>
 									</td>
 									<td>3,948</td>
 									<td>24,269</td>
@@ -344,6 +343,6 @@ if (!isset($_GET['name'])) {
 			</div>
 	</body>
 </html>
-<?		
+<?
 	}
 }

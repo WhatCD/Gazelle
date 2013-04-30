@@ -3,26 +3,26 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
 	$DB->query('SELECT Code, Users FROM users_geodistribution');
 	$Data = $DB->to_array();
-	$Count = $DB->record_count()-1;
+	$Count = $DB->record_count() - 1;
 
-	if($Count<30) {
+	if ($Count < 30) {
 		$CountryMinThreshold = $Count;
 	} else {
 		$CountryMinThreshold = 30;
 	}
 
-	$CountryMax = ceil(log(Max(1,$Data[0][1]))/log(2))+1;
-	$CountryMin = floor(log(Max(1,$Data[$CountryMinThreshold][1]))/log(2));
+	$CountryMax = ceil(log(Max(1, $Data[0][1])) / log(2)) + 1;
+	$CountryMin = floor(log(Max(1, $Data[$CountryMinThreshold][1])) / log(2));
 
 	$CountryRegions = array('RS' => array('RS-KM')); // Count Kosovo as Serbia as it doesn't have a TLD
 	foreach ($Data as $Key => $Item) {
 		list($Country,$UserCount) = $Item;
 		$Countries[] = $Country;
-		$CountryUsers[] = number_format((((log($UserCount)/log(2))-$CountryMin)/($CountryMax-$CountryMin))*100,2);
-		$Rank[] = round((1-($Key/$Count))*100);
+		$CountryUsers[] = number_format((((log($UserCount) / log(2)) - $CountryMin) / ($CountryMax - $CountryMin)) * 100, 2);
+		$Rank[] = round((1 - ($Key / $Count)) * 100);
 
-		if(isset($CountryRegions[$Country])) {
-			foreach($CountryRegions[$Country] as $Region) {
+		if (isset($CountryRegions[$Country])) {
+			foreach ($CountryRegions[$Country] as $Region) {
 				$Countries[] = $Region;
 				$Rank[] = end($Rank);
 			}
@@ -30,20 +30,20 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 	}
 	reset($Rank);
 
-	for ($i=$CountryMin;$i<=$CountryMax;$i++) {
-		$LogIncrements[] = Format::human_format(pow(2,$i));
+	for ($i = $CountryMin; $i <= $CountryMax; $i++) {
+		$LogIncrements[] = Format::human_format(pow(2, $i));
 	}
-	$Cache->cache_value('geodistribution',array($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements),0);
+	$Cache->cache_value('geodistribution',array($Countries, $Rank, $CountryUsers, $CountryMax, $CountryMin, $LogIncrements), 0);
 }
 
-if(!$ClassDistribution = $Cache->get_value('class_distribution')) {
+if (!$ClassDistribution = $Cache->get_value('class_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
 	$DB->query("SELECT p.Name, COUNT(m.ID) AS Users FROM users_main AS m JOIN permissions AS p ON m.PermissionID=p.ID WHERE m.Enabled='1' GROUP BY p.Name ORDER BY Users DESC");
 	$ClassSizes = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
-	foreach($ClassSizes as $ClassSize) {
-		list($Label,$Users) = $ClassSize;
-		$Pie->add($Label,$Users);
+	foreach ($ClassSizes as $ClassSize) {
+		list($Label, $Users) = $ClassSize;
+		$Pie->add($Label, $Users);
 	}
 	$Pie->transparent();
 	$Pie->color('FF33CC');
@@ -51,7 +51,7 @@ if(!$ClassDistribution = $Cache->get_value('class_distribution')) {
 	$ClassDistribution = $Pie->url();
 	$Cache->cache_value('class_distribution',$ClassDistribution,3600*24*14);
 }
-if(!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
+if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
 	
 	
@@ -59,7 +59,7 @@ if(!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 	
 	$Platforms = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
-	foreach($Platforms as $Platform) {
+	foreach ($Platforms as $Platform) {
 		list($Label,$Users) = $Platform;
 		$Pie->add($Label,$Users);
 	}
@@ -67,10 +67,10 @@ if(!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 	$Pie->color('8A00B8');
 	$Pie->generate();
 	$PlatformDistribution = $Pie->url();
-	$Cache->cache_value('platform_distribution',$PlatformDistribution,3600*24*14);
+	$Cache->cache_value('platform_distribution',$PlatformDistribution,3600 * 24 * 14);
 }
 
-if(!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
+if (!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
 	
 	
@@ -78,7 +78,7 @@ if(!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
 	
 	$Browsers = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
-	foreach($Browsers as $Browser) {
+	foreach ($Browsers as $Browser) {
 		list($Label,$Users) = $Browser;
 		$Pie->add($Label,$Users);
 	}
@@ -86,7 +86,7 @@ if(!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
 	$Pie->color('008AB8');
 	$Pie->generate();
 	$BrowserDistribution = $Pie->url();
-	$Cache->cache_value('browser_distribution',$BrowserDistribution,3600*24*14);
+	$Cache->cache_value('browser_distribution',$BrowserDistribution,3600 * 24 * 14);
 }
 
 
@@ -96,13 +96,13 @@ if (!list($Labels,$InFlow,$OutFlow,$Max) = $Cache->get_value('users_timeline')) 
 	$TimelineIn = array_reverse($DB->to_array());
 	$DB->query("SELECT DATE_FORMAT(BanDate,'%b \\'%y') AS Month, COUNT(UserID) FROM users_info GROUP BY Month ORDER BY BanDate DESC LIMIT 1, 12");
 	$TimelineOut = array_reverse($DB->to_array());
-	foreach($TimelineIn as $Month) {
+	foreach ($TimelineIn as $Month) {
 		list($Label,$Amount) = $Month;
 		if ($Amount > $Max) {
 			$Max = $Amount;
 		}
 	}
-	foreach($TimelineOut as $Month) {
+	foreach ($TimelineOut as $Month) {
 		list($Label,$Amount) = $Month;
 		if ($Amount > $Max) {
 			$Max = $Amount;
@@ -110,16 +110,16 @@ if (!list($Labels,$InFlow,$OutFlow,$Max) = $Cache->get_value('users_timeline')) 
 	}
 
 	$Labels = array();
-	foreach($TimelineIn as $Month) {
+	foreach ($TimelineIn as $Month) {
 		list($Label,$Amount) = $Month;
 		$Labels[] = $Label;
-		$InFlow[] = number_format(($Amount/$Max)*100,4);
+		$InFlow[] = number_format(($Amount / $Max) * 100, 4);
 	}
-	foreach($TimelineOut as $Month) {
+	foreach ($TimelineOut as $Month) {
 		list($Label,$Amount) = $Month;
-		$OutFlow[] = number_format(($Amount/$Max)*100,4);
+		$OutFlow[] = number_format(($Amount / $Max) * 100, 4);
 	}
-	$Cache->cache_value('users_timeline',array($Labels,$InFlow,$OutFlow,$Max),mktime(0,0,0,date('n')+1,2)); //Tested: fine for dec -> jan
+	$Cache->cache_value('users_timeline',array($Labels,$InFlow,$OutFlow,$Max),mktime(0,0,0,date('n') + 1, 2)); //Tested: fine for dec -> jan
 }
 //End timeline generation
 

@@ -68,7 +68,7 @@ View::show_header($Title,'wiki,bbcode');
 				/>
 				<input value="Search" type="submit" class="hidden" />
 			</form>
-			<br style="line-height:10px;" />
+			<br style="line-height: 10px;" />
 			<strong><a href="wiki.php?action=browse" class="brackets">Browse articles</a></strong>
 		</div>
 		</div>
@@ -104,7 +104,7 @@ View::show_header($Title,'wiki,bbcode');
 		$i = 0;
 		foreach ($AliasArray as $AliasItem) {
 ?>
-						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem,20,1)?></a><? if (check_perms('admin_manage_wiki')) { ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>');return false;" class="brackets" title="Delete Alias">X</a> <a href="user.php?id=<?=$UserArray[$i]?>" class="brackets" title="View User">U</a><? } ?></li>
+						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem,20,1)?></a><? if (check_perms('admin_manage_wiki')) { ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>');return false;" class="brackets" title="Delete alias">X</a> <a href="user.php?id=<?=$UserArray[$i]?>" class="brackets" title="View user">U</a><? } ?></li>
 <?			$i++;
 		}
 	}

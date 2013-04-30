@@ -86,7 +86,7 @@ if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
 }
 
 // Let's hope we got some results - start printing out the content.
-View::show_header('Forums'.' > '.'Search', 'bbcode');
+View::show_header('Forums &gt; Search', 'bbcode');
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; Search<?=$Title?></h2>
@@ -271,14 +271,14 @@ $DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 $DB->set_query_id($Records);
 
-$Pages=Format::get_pages($Page,$Results,POSTS_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $Results, POSTS_PER_PAGE, 9);
 echo $Pages;
 ?>
 	</div>
 	<table cellpadding="6" cellspacing="1" border="0" class="forum_list border" width="100%">
 	<tr class="colhead">
 		<td>Forum</td>
-		<td><?=(!empty($ThreadID))?'Post Begins':'Topic'?></td>
+		<td><?=(!empty($ThreadID)) ? 'Post begins' : 'Topic' ?></td>
 		<td>Time</td>
 	</tr>
 <? if ($DB->record_count() == 0) { ?>

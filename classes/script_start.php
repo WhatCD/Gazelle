@@ -10,7 +10,6 @@
 /*------------------------------------------------------*/
 /********************************************************/
 require 'config.php'; //The config contains all site wide configuration information
-
 //Deal with dumbasses
 if (isset($_REQUEST['info_hash']) && isset($_REQUEST['peer_id'])) { die('d14:failure reason40:Invalid .torrent, try downloading again.e'); }
 
@@ -434,8 +433,6 @@ $Debug->set_flag('ending function definitions');
 //Include /sections/*/index.php
 $Document = basename(parse_url($_SERVER['SCRIPT_FILENAME'], PHP_URL_PATH), '.php');
 if (!preg_match('/^[a-z0-9]+$/i', $Document)) { error(404); }
-
-
 
 require(SERVER_ROOT.'/sections/'.$Document.'/index.php');
 $Debug->set_flag('completed module execution');

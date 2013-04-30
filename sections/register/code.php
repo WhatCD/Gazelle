@@ -1,7 +1,7 @@
 <?
 View::show_header('Register');
 ?>
-<div style="width:500px;">
+<div style="width: 500px;">
 	<form class="auth_form" name="invite" method="get" action="register.php">
 	Please enter your invite code into the box below.<br /><br />
 	<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">

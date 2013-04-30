@@ -34,7 +34,7 @@ function ArtistManager() {
 
 		var elArtistList = ArtistList.cloneNode(true);
 		elArtistList.id = 'artistmanager_list';
-		for(var i=0; i<elArtistList.children.length; i++) {
+		for (var i = 0; i < elArtistList.children.length; i++) {
 			switch (elArtistList.children[i].className) {
 				case 'artist_main':
 					importance = 1;
@@ -170,9 +170,9 @@ function SelectArtist(e,obj) {
 	}
 	Dir = (EndBox > StartBox ? 1 : -1);
 	var checked = obj.checked;
-	for(var i = StartBox; i != EndBox; i += Dir) {
+	for (var i = StartBox; i != EndBox; i += Dir) {
 		var key, importance = obj.value.substr(0,1), id = obj.value.substr(2);
-		$('#artistmanager_box'+i).raw().checked = checked;
+		$('#artistmanager_box' + i).raw().checked = checked;
 	}
 	StartBox = Number(obj.id.substr(17));
 }
@@ -180,7 +180,7 @@ function SelectArtist(e,obj) {
 function ArtistManagerSubmit() {
 	var Selection = new Array();
 	var MainSelectionCount = 0;
-	for(var i = 0, boxes = $('[name="artistmanager_box"]'); boxes.raw(i); i++) {
+	for (var i = 0, boxes = $('[name="artistmanager_box"]'); boxes.raw(i); i++) {
 		if (boxes.raw(i).checked) {
 			Selection.push(boxes.raw(i).value);
 			if (boxes.raw(i).value.substr(0,1) == '1') {

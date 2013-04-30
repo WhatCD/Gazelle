@@ -246,29 +246,29 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?	if ($UserResponse !== null || $Closed || $ThreadInfo['IsLocked'] || !check_forumperm($ForumID)) { ?>
 			<ul class="poll nobullet">
 <?
-		if(!$RevealVoters) {
-			foreach($Answers as $i => $Answer) {
+		if (!$RevealVoters) {
+			foreach ($Answers as $i => $Answer) {
 				if (!empty($Votes[$i]) && $TotalVotes > 0) {
-					$Ratio = $Votes[$i]/$MaxVotes;
-					$Percent = $Votes[$i]/$TotalVotes;
+					$Ratio = $Votes[$i] / $MaxVotes;
+					$Percent = $Votes[$i] / $TotalVotes;
 				} else {
-					$Ratio=0;
-					$Percent=0;
+					$Ratio = 0;
+					$Percent = 0;
 				}
 ?>
-					<li><?=display_str($Answer)?> (<?=number_format($Percent*100,2)?>%)</li>
+					<li><?=display_str($Answer)?> (<?=number_format($Percent * 100,2)?>%)</li>
 					<li class="graph">
 						<span class="left_poll"></span>
-						<span class="center_poll" style="width:<?=round($Ratio*750)?>px;"></span>
+						<span class="center_poll" style="width: <?=round($Ratio * 750)?>px;"></span>
 						<span class="right_poll"></span>
 					</li>
 <?			}
 			if ($Votes[0] > 0) {
 ?>
-				<li>(Blank) (<?=number_format((float)($Votes[0]/$TotalVotes*100),2)?>%)</li>
+				<li>(Blank) (<?=number_format((float)($Votes[0] / $TotalVotes * 100),2)?>%)</li>
 				<li class="graph">
 					<span class="left_poll"></span>
-					<span class="center_poll" style="width:<?=round(($Votes[0]/$MaxVotes)*750)?>px;"></span>
+					<span class="center_poll" style="width: <?=round(($Votes[0] / $MaxVotes) * 750)?>px;"></span>
 					<span class="right_poll"></span>
 				</li>
 <?			} ?>
@@ -309,20 +309,20 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			foreach($Answers as $i => $Answer) {
 ?>
 				<li>
-					<a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>"><?=display_str($Answer == '' ? "Blank" : $Answer)?></a>
-					 - <?=$StaffVotes[$i]?>&nbsp;(<?=number_format(((float) $Votes[$i]/$TotalVotes)*100, 2)?>%)
+					<a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>"><?=display_str($Answer == '' ? 'Blank' : $Answer)?></a>
+					 - <?=$StaffVotes[$i]?>&nbsp;(<?=number_format(((float) $Votes[$i] / $TotalVotes) * 100, 2)?>%)
 					 <a href="forums.php?action=delete_poll_option&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>" class="brackets">X</a>
 </li>
 <?			} ?>
-				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0">Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float) $Votes[0]/$TotalVotes)*100, 2)?>%)</li>
+				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0">Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float) $Votes[0] / $TotalVotes) * 100, 2)?>%)</li>
 			</ul>
 <?
-			if($ForumID == STAFF_FORUM) {
+			if ($ForumID == STAFF_FORUM) {
 ?>
 			<br />
 			<strong>Votes:</strong> <?=number_format($TotalVotes)?> / <?=$StaffCount ?>
 			<br />
-			<strong>Missing Votes:</strong> <?=implode(", ", $StaffNames)?>
+			<strong>Missing votes:</strong> <?=implode(", ", $StaffNames)?>
 			<br /><br />
 <?
 			}
@@ -349,7 +349,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?		} ?>
 						<li>
 							<br />
-							<input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank - Show the results!</label><br />
+							<input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; Show the results!</label><br />
 						</li>
 					</ul>
 <?		if($ForumID == STAFF_FORUM) { ?>
@@ -524,13 +524,13 @@ if(check_perms('site_moderate_forums')) {
 			<tr>
 				<td class="label">Sticky</td>
 				<td>
-					<input type="checkbox" name="sticky"<? if($ThreadInfo['IsSticky']) { echo ' checked="checked"'; } ?> tabindex="2" />
+					<input type="checkbox" name="sticky"<? if ($ThreadInfo['IsSticky']) { echo ' checked="checked"'; } ?> tabindex="2" />
 				</td>
 			</tr>
 			<tr>
 				<td class="label">Locked</td>
 				<td>
-					<input type="checkbox" name="locked"<? if($ThreadInfo['IsLocked']) { echo ' checked="checked"'; } ?> tabindex="2" />
+					<input type="checkbox" name="locked"<? if ($ThreadInfo['IsLocked']) { echo ' checked="checked"'; } ?> tabindex="2" />
 				</td>
 			</tr>
 			<tr>

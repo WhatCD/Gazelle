@@ -23,7 +23,7 @@ class Tracker {
 		}
 		$Path = TRACKER_SECRET.$Get;
 
-		$Return = "";
+		$Return = '';
 		$Attempts = 0;
 		while ($Return != "success" && $Attempts < 3) {
 
@@ -52,7 +52,7 @@ class Tracker {
 			} while (!feof($File) && !Misc::ends_with($ResHeader, "\r\n\r\n"));
 
 			$Response = '';
-			while($Line = fgets($File)) {
+			while ($Line = fgets($File)) {
 				$Response .= $Line;
 			}
 

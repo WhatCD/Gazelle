@@ -56,7 +56,7 @@ function main () {
 		get_headers(response);
 		elements.titles[0].innerHTML = title;
 		elements.pages[0].innerHTML = response;
-		if(back_name){
+		if (back_name) {
 			elements.buttons[0].textContent = back_name;
 		}
 	});
@@ -78,7 +78,7 @@ function go_back() {
 // Get data from comments
 function get_headers(response) {
 	title = response.match(/\<\!\-\-Title\:(.+?)\-\-\>/i)[1];
-	if(response.match(/\<\!\-\-Back\:(.+?)\:(.+?)\-\-\>/i)) {
+	if (response.match(/\<\!\-\-Back\:(.+?)\:(.+?)\-\-\>/i)) {
 		back_name = response.match(/\<\!\-\-Back\:(.+?)\:(.+?)\-\-\>/i)[1];
 		back_url = response.match(/\<\!\-\-Back\:(.+?)\:(.+?)\-\-\>/i)[2];
 	} else {
@@ -89,10 +89,16 @@ function get_headers(response) {
 
 // Load content
 function load(url,forward,formid) {
-	if(forward===undefined) { forward=true; }
-	if (transitions_in_progress && document.createTouch) { return; } //OS 2
-	if (moved_after_touch) { return; }
-	if(formid===undefined){
+	if (forward === undefined) {
+		forward = true;
+	}
+	if (transitions_in_progress && document.createTouch) { // OS 2
+		return;
+	}
+	if (moved_after_touch) {
+		return;
+	}
+	if (formid === undefined){
 		ajax.get(url, function (response) {
 			get_headers(response);
 			transition_to_new_element(response, forward);
@@ -105,12 +111,18 @@ function load(url,forward,formid) {
 
 // Moves
 var moved_after_touch = false;
-function touch_started () { moved_after_touch = false; };
-function touch_moved () { moved_after_touch = true; };
+function touch_started () {
+	moved_after_touch = false;
+};
+function touch_moved () {
+	moved_after_touch = true;
+};
 
 // Transitions
 var transitions_in_progress = false;
-function transition_ended () { transitions_in_progress = false; };
+function transition_ended () {
+	transitions_in_progress = false;
+};
 function transition_to_new_element (data, going_forward) {
 	transitions_in_progress = true;
 

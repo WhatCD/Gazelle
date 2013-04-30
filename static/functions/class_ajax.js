@@ -139,7 +139,7 @@ function Bookmark(type, id, newName) {
 }
 
 function Unbookmark(type, id, newName) {
-	if(window.location.pathname.indexOf('bookmarks.php') != -1) {
+	if (window.location.pathname.indexOf('bookmarks.php') != -1) {
 		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
 			$('#group_' + id).remove();
 			$('.groupid_' + id).remove();

@@ -56,26 +56,26 @@ class SphinxqlQuery {
 	 * @return current Sphinxql query object
 	 */
 	public function where($Attribute, $Values, $Exclude = false) {
-		if(empty($Attribute) && empty($Values)) {
+		if (empty($Attribute) && empty($Values)) {
 			return false;
 		}
 		$Filters = array();
-		if(is_array($Values)) {
-			foreach($Values as $Value) {
-				if(!is_number($Value)) {
+		if (is_array($Values)) {
+			foreach ($Values as $Value) {
+				if (!is_number($Value)) {
 					$this->error("Filters require numeric values");
 				}
 			}
-			if($Exclude) {
+			if ($Exclude) {
 				$Filters[] = "$Attribute NOT IN (".implode(",", $Values).")";
 			} else {
 				$Filters[] = "$Attribute IN (".implode(",", $Values).")";
 			}
 		} else {
-			if(!is_number($Values)) {
+			if (!is_number($Values)) {
 				$this->error("Filters require numeric values");
 			}
-			if($Exclude) {
+			if ($Exclude) {
 				$Filters[] = "$Attribute != $Values";
 			} else {
 				$Filters[] = "$Attribute = $Values";
@@ -93,7 +93,7 @@ class SphinxqlQuery {
 	 * @return current Sphinxql query object
 	 */
 	public function where_between($Attribute, $Values) {
-		if(empty($Attribute) || empty($Values) || count($Values) != 2 || !is_number($Values[0]) || !is_number($Values[1])) {
+		if (empty($Attribute) || empty($Values) || count($Values) != 2 || !is_number($Values[0]) || !is_number($Values[1])) {
 			$this->error("Filter range requires array of two numerical boundaries as values.");
 		}
 		$this->Filters[] = "$Attribute BETWEEN $Values[0] AND $Values[1]";
@@ -109,7 +109,7 @@ class SphinxqlQuery {
 	 * @return current Sphinxql query object
 	 */
 	public function where_match($Expr, $Field = '*', $Escape = true) {
-		if(empty($Expr)) {
+		if (empty($Expr)) {
 			return $this;
 		}
 		if ($Field !== false) {
@@ -216,29 +216,29 @@ class SphinxqlQuery {
 	 * Combine the query conditions into a valid Sphinx query segment
 	 */
 	private function build_query() {
-		if(!$this->Indexes) {
+		if (!$this->Indexes) {
 			$this->error('Index name is required.');
 		}
 		$this->QueryString = "SELECT $this->Select\nFROM $this->Indexes";
-		if(!empty($this->Expressions)) {
+		if (!empty($this->Expressions)) {
 			$this->Filters['expr'] = "MATCH('".implode(" ", $this->Expressions)."')";
 		}
-		if(!empty($this->Filters)) {
+		if (!empty($this->Filters)) {
 			$this->QueryString .= "\nWHERE ".implode("\n\tAND ", $this->Filters);
 		}
-		if(!empty($this->GroupBy)) {
+		if (!empty($this->GroupBy)) {
 			$this->QueryString .= "\nGROUP BY $this->GroupBy";
 		}
-		if(!empty($this->SortGroupBy)) {
+		if (!empty($this->SortGroupBy)) {
 			$this->QueryString .= "\nWITHIN GROUP ORDER BY $this->SortGroupBy";
 		}
-		if(!empty($this->SortBy)) {
+		if (!empty($this->SortBy)) {
 			$this->QueryString .= "\nORDER BY ".implode(", ", $this->SortBy);
 		}
-		if(!empty($this->Limits)) {
+		if (!empty($this->Limits)) {
 			$this->QueryString .= "\nLIMIT $this->Limits";
 		}
-		if(!empty($this->Options)) {
+		if (!empty($this->Options)) {
 			$Options = $this->build_options();
 			$this->QueryString .= "\nOPTION $Options";
 		}
@@ -279,12 +279,12 @@ class SphinxqlQuery {
 	 * @return Sphinxql result object
 	 */
 	private function send_query($GetMeta) {
-		if(!$this->QueryString) {
+		if (!$this->QueryString) {
 			return false;
 		}
 		$this->Sphinxql->connect();
 		$Result = $this->Sphinxql->query($this->QueryString);
-		if($Result === false) {
+		if ($Result === false) {
 			$Errno = $this->Sphinxql->errno;
 			$Error = $this->Sphinxql->error;
 			$this->error("Query returned error $Errno ($Error).\n$this->QueryString");

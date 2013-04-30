@@ -8,7 +8,7 @@
 		id = $("#recommendation_div").data('id');
 		$("#recommend").click(function() {
 			$("#recommendation_div").slideToggle(150);
-			if(!loaded) {
+			if (!loaded) {
 				$("#recommendation_status").html("Loading...");
 				$.ajax({
 					type : "POST",

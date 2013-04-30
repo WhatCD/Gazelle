@@ -93,11 +93,8 @@ foreach ($Friends as $Friend) {
 			<td width="50px" valign="top">
 <?
 	if (empty($HeavyInfo['DisableAvatars'])) {
-		if (!empty($Avatar)) {
-			if (check_perms('site_proxy_images')) {
-				$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Avatar);
-			} ?>
-					<img src="<?=$Avatar?>" alt="<?=$Username?>'s avatar" width="50px" />
+		if (!empty($Avatar)) { ?>
+					<img src="<?=ImageTools::process($Avatar)?>" alt="<?=$Username?>'s avatar" width="50px" />
 <?		} else { ?>
 					<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="50px" alt="Default avatar" />
 <?		}

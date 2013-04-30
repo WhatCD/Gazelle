@@ -70,7 +70,7 @@ function make_utf8($Str) {
 			$Encoding = 'UTF-8';
 		}
 		if (empty($Encoding)) {
-			$Encoding = mb_detect_encoding($Str,'UTF-8, ISO-8859-1');
+			$Encoding = mb_detect_encoding($Str, 'UTF-8, ISO-8859-1');
 		}
 		if (empty($Encoding)) {
 			$Encoding = 'ISO-8859-1';
@@ -78,7 +78,7 @@ function make_utf8($Str) {
 		if ($Encoding == 'UTF-8') {
 			return $Str;
 		} else {
-			return @mb_convert_encoding($Str,'UTF-8',$Encoding);
+			return @mb_convert_encoding($Str, 'UTF-8', $Encoding);
 		}
 	}
 }
@@ -108,9 +108,9 @@ function display_array($Array, $DontEscape = array()) {
 
 function make_secret($Length = 32) {
 	$Secret = '';
-	$Chars='abcdefghijklmnopqrstuvwxyz0123456789';
-	for($i=0; $i<$Length; $i++) {
-		$Rand = mt_rand(0, strlen($Chars)-1);
+	$Chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	for ($i = 0; $i < $Length; $i++) {
+		$Rand = mt_rand(0, strlen($Chars) - 1);
 		$Secret .= substr($Chars, $Rand, 1);
 	}
 	return str_shuffle($Secret);

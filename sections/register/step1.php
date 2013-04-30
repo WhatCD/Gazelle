@@ -5,21 +5,21 @@ echo $Val->GenerateJS('registerform');
 <script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
 <script src="<?=STATIC_SERVER?>functions/password_validate.js" type="text/javascript"></script>
 <form class="create_form" name="user" id="registerform" method="post" action="" onsubmit="return formVal();">
-<div style="width:500px;">
+<div style="width: 500px;">
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 <?
 
-if(empty($Sent)) {
-	if(!empty($_REQUEST['invite'])) {
+if (empty($Sent)) {
+	if (!empty($_REQUEST['invite'])) {
 		echo '<input type="hidden" name="invite" value="'.display_str($_REQUEST['invite']).'" />'."\n";
 	}
-	if(!empty($Err)) {
+	if (!empty($Err)) {
 ?>
 	<strong class="important_text"><?=$Err?></strong><br /><br />
 <?	} ?>
 	<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
 		<tr valign="top">
-			<td align="right" style="width:100px;">Username&nbsp;</td>
+			<td align="right" style="width: 100px;">Username&nbsp;</td>
 			<td align="left">
 				<input type="text" name="username" id="username" class="inputtext" value="<?=(!empty($_REQUEST['username']) ? display_str($_REQUEST['username']) : '')?>" />
 				<p>Use common sense when choosing your username. Offensive usernames will not be tolerated. <strong>Do not choose a username that can be associated with your real name.</strong> If you do so, we will not be changing it for you.</p>
@@ -61,7 +61,9 @@ if(empty($Sent)) {
 <? } else { ?>
 	An email has been sent to the address that you provided. After you confirm your email address, you will be able to log into your account.
 
-<? 		if($NewInstall) { echo "Since this is a new installation, you can log in directly without having to confirm your account."; }
+<? 		if ($NewInstall) {
+			echo "Since this is a new installation, you can log in directly without having to confirm your account.";
+		}
 } ?>
 </div>
 </form>

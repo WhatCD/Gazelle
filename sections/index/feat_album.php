@@ -16,10 +16,6 @@ if ($FeaturedAlbum === false) {
 }
 if (is_number($FeaturedAlbum['GroupID'])) {
 	$Artists = Artists::get_artist($FeaturedAlbum['GroupID']);
-
-	if (check_perms('site_proxy_images')) {
-		$FeaturedAlbum['WikiImage'] = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($FeaturedAlbum['WikiImage']);
-	}
 ?>
 		<div class="box">
 			<div class="head colhead_dark"><strong>Featured Album</strong></div>
@@ -28,7 +24,7 @@ if (is_number($FeaturedAlbum['GroupID'])) {
 			</div>
 			<div class="center">
 				<a href="torrents.php?id=<?=$FeaturedAlbum['GroupID']?>" title="<?=Artists::display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>">
-					<img src="<?=ImageTools::thumbnail($FeaturedAlbum['WikiImage'])?>" alt="<?=Artists::display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>" width="100%" />
+					<img src="<?=ImageTools::process($FeaturedAlbum['WikiImage'], true)?>" alt="<?=Artists::display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>" width="100%" />
 				</a>
 			</div>
 			<div class="center pad">

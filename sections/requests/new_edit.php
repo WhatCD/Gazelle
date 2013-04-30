@@ -146,7 +146,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					</td>
 					<td>
 						<select id="categories" name="type" onchange="Categories()">
-<?		foreach(Misc::display_array($Categories) as $Cat){ ?>
+<?		foreach (Misc::display_array($Categories) as $Cat) { ?>
 							<option value="<?=$Cat?>"<?=(!empty($CategoryName) && ($CategoryName ==  $Cat) ? ' selected="selected"' : '')?>><?=$Cat?></option>
 <?		} ?>
 						</select>
@@ -160,8 +160,8 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 
 		if (!empty($ArtistForm)) {
 			$First = true;
-			foreach($ArtistForm as $Importance => $ArtistNames) {
-				foreach($ArtistNames as $Artist) {
+			foreach ($ArtistForm as $Importance => $ArtistNames) {
+				foreach ($ArtistNames as $Artist) {
 ?>
 						<input type="text" id="artist" name="artists[]" size="45" value="<?=display_str($Artist['name']) ?>" />
 						<select id="importance" name="importance[]" >
@@ -245,7 +245,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 ?>
 						<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;" >
 							<option>---</option>
-<?	foreach (Misc::display_array($GenreTags) as $Genre){ ?>
+<?	foreach (Misc::display_array($GenreTags) as $Genre) { ?>
 							<option value="<?=$Genre ?>"><?=$Genre ?></option>
 <?	} ?>
 						</select>

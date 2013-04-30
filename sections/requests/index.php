@@ -6,16 +6,16 @@ $RequestTax = 0.1;
 
 // Minimum and default amount of upload to remove from the user when they vote.
 // Also change in static/functions/requests.js
-$MinimumVote = 20*1024*1024;
+$MinimumVote = 20 * 1024 * 1024;
 
-if(!empty($LoggedUser['DisableRequests'])) {
+if (!empty($LoggedUser['DisableRequests'])) {
 	error('Your request privileges have been removed.');
 }
 
-if(!isset($_REQUEST['action'])) {
+if (!isset($_REQUEST['action'])) {
 	include(SERVER_ROOT.'/sections/requests/requests.php');
 } else {
-	switch($_REQUEST['action']){
+	switch($_REQUEST['action']) {
 		case 'new':
 		case 'edit':
 			include(SERVER_ROOT.'/sections/requests/new_edit.php');
@@ -48,15 +48,17 @@ if(!isset($_REQUEST['action'])) {
 			authorize();
 
 			enforce_login();
-			if (!isset($_POST['requestid']) || !is_number($_POST['requestid']) || $_POST['body']==='' || !isset($_POST['body'])) {
+			if (!isset($_POST['requestid']) || !is_number($_POST['requestid']) || $_POST['body'] === '' || !isset($_POST['body'])) {
 				error(0);
 			}
-			if($LoggedUser['DisablePosting']) {
+			if ($LoggedUser['DisablePosting']) {
 				error('Your posting rights have been removed.');
 			}
 
 			$RequestID = $_POST['requestid'];
-			if(!$RequestID) { error(404); }
+			if (!$RequestID) {
+				error(404);
+			}
 
 			$DB->query("SELECT CEIL((SELECT COUNT(ID)+1 FROM requests_comments AS rc WHERE rc.RequestID='".$RequestID."')/".TORRENT_COMMENTS_PER_PAGE.") AS Pages");
 			list($Pages) = $DB->next_record();
@@ -85,7 +87,9 @@ if(!isset($_REQUEST['action'])) {
 
 		case 'get_post':
 			enforce_login();
-			if (!$_GET['post'] || !is_number($_GET['post'])) { error(0); }
+			if (!$_GET['post'] || !is_number($_GET['post'])) {
+				error(0);
+			}
 			$DB->query("SELECT Body FROM requests_comments WHERE ID='".db_string($_GET['post'])."'");
 			list($Body) = $DB->next_record(MYSQLI_NUM);
 
@@ -100,7 +104,9 @@ if(!isset($_REQUEST['action'])) {
 			$Text = new TEXT;
 
 			// Quick SQL injection check
-			if(!$_POST['post'] || !is_number($_POST['post'])) { error(0); }
+			if (!$_POST['post'] || !is_number($_POST['post'])) {
+				error(0);
+			}
 
 			// Mainly
 			$DB->query("SELECT
@@ -115,8 +121,12 @@ if(!isset($_REQUEST['action'])) {
 			$DB->query("SELECT ceil(COUNT(ID) / ".POSTS_PER_PAGE.") AS Page FROM requests_comments WHERE RequestID = $RequestID AND ID <= $_POST[post]");
 			list($Page) = $DB->next_record();
 
-			if ($LoggedUser['ID']!=$AuthorID && !check_perms('site_moderate_forums')) { error(404); }
-			if ($DB->record_count()==0) { error(404); }
+			if ($LoggedUser['ID'] != $AuthorID && !check_perms('site_moderate_forums')) {
+				error(404);
+			}
+			if ($DB->record_count() == 0) {
+				error(404);
+			}
 
 			// Perform the update
 			$DB->query("UPDATE requests_comments SET
@@ -152,10 +162,14 @@ if(!isset($_REQUEST['action'])) {
 			authorize();
 
 			// Quick SQL injection check
-			if (!$_GET['postid'] || !is_number($_GET['postid'])) { error(0); }
+			if (!$_GET['postid'] || !is_number($_GET['postid'])) {
+				error(0);
+			}
 
 			// Make sure they are moderators
-			if (!check_perms('site_moderate_forums')) { error(403); }
+			if (!check_perms('site_moderate_forums')) {
+				error(403);
+			}
 
 			// Get topicid, forumid, number of pages
 			$DB->query("SELECT DISTINCT

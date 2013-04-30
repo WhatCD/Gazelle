@@ -7,45 +7,45 @@ if (!list($Labels,$InFlow,$OutFlow,$NetFlow,$Max) = $Cache->get_value('torrents_
 	$DB->query("SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, COUNT(ID) FROM torrents GROUP BY Month ORDER BY Time DESC LIMIT 1, 12");
 	$TimelineNet = array_reverse($DB->to_array());
 
-	foreach($TimelineIn as $Month) {
+	foreach ($TimelineIn as $Month) {
 		list($Label,$Amount) = $Month;
 		if ($Amount > $Max) {
 			$Max = $Amount;
 		}
 	}
-	foreach($TimelineOut as $Month) {
+	foreach ($TimelineOut as $Month) {
 		list($Label,$Amount) = $Month;
 		if ($Amount > $Max) {
 			$Max = $Amount;
 		}
 	}
-	foreach($TimelineNet as $Month) {
+	foreach ($TimelineNet as $Month) {
 		list($Label,$Amount) = $Month;
 		if ($Amount > $Max) {
 			$Max = $Amount;
 		}
 	}
-	foreach($TimelineIn as $Month) {
+	foreach ($TimelineIn as $Month) {
 		list($Label,$Amount) = $Month;
 		$Labels[] = $Label;
-		$InFlow[] = number_format(($Amount/$Max)*100,4);
+		$InFlow[] = number_format(($Amount / $Max) * 100, 4);
 	}
-	foreach($TimelineOut as $Month) {
+	foreach ($TimelineOut as $Month) {
 		list($Label,$Amount) = $Month;
-		$OutFlow[] = number_format(($Amount/$Max)*100,4);
+		$OutFlow[] = number_format(($Amount / $Max) * 100, 4);
 	}
-	foreach($TimelineNet as $Month) {
+	foreach ($TimelineNet as $Month) {
 		list($Label,$Amount) = $Month;
-		$NetFlow[] = number_format(($Amount/$Max)*100,4);
+		$NetFlow[] = number_format(($Amount / $Max) * 100, 4);
 	}
-	$Cache->cache_value('torrents_timeline',array($Labels,$InFlow,$OutFlow,$NetFlow,$Max),mktime(0,0,0,date('n')+1,2)); //Tested: fine for dec -> jan
+	$Cache->cache_value('torrents_timeline',array($Labels,$InFlow,$OutFlow,$NetFlow,$Max),mktime(0,0,0,date('n') + 1,2)); //Tested: fine for dec -> jan
 }
 
 include_once(SERVER_ROOT.'/classes/class_charts.php');
 $DB->query("SELECT tg.CategoryID, COUNT(t.ID) AS Torrents FROM torrents AS t JOIN torrents_group AS tg ON tg.ID=t.GroupID GROUP BY tg.CategoryID ORDER BY Torrents DESC");
 $Groups = $DB->to_array();
 $Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
-foreach($Groups as $Group) {
+foreach ($Groups as $Group) {
 	list($CategoryID, $Torrents) = $Group;
 	$CategoryName = $Categories[$CategoryID - 1];
 	$Pie->add($CategoryName,$Torrents);

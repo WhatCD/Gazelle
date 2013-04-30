@@ -97,7 +97,7 @@ class CACHE extends Memcache
 	}
 
 	public function get_value($Key, $NoCache=false) {
-		if(!$this->InternalCache) {
+		if (!$this->InternalCache) {
 			$NoCache = true;
 		}
 		$StartTime=microtime(true);

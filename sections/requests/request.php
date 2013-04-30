@@ -127,12 +127,10 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
 <?
-if (!empty($Image)) {
-	if (check_perms('site_proxy_images')) {
-		$Image = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Image);
-	}
+	if (!empty($Image)) {
+		$Image = ImageTools::process($Image, true);
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::thumbnail($Image)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=$Image?>',220);" /></p>
+			<p align="center"><img style="max-width: 220px;" src="<?=$Image?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=$Image?>',220);" /></p>
 <?	} else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID-1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
 <?	} ?>

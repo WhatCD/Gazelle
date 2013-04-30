@@ -1,5 +1,7 @@
 <?
-if(!check_perms('admin_donor_log')) { error(403); }
+if (!check_perms('admin_donor_log')) {
+	error(403);
+}
 
 include(SERVER_ROOT.'/sections/donate/config.php');
 
@@ -15,7 +17,7 @@ $sql = "SELECT
 	d.Email,
 	d.Time
 	FROM donations AS d ";
-if(!empty($_GET['search'])) {
+if (!empty($_GET['search'])) {
 	$sql .= "WHERE d.Email LIKE '%".db_string($_GET['search'])."%' ";
 }
 $sql .= "ORDER BY d.Time DESC LIMIT $Limit";
@@ -30,7 +32,7 @@ if (empty($_GET['search']) && !isset($_GET['page']) && !$DonationTimeline = $Cac
 	$DB->query("SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, SUM(Amount) FROM donations GROUP BY Month ORDER BY Time DESC LIMIT 1, 18");
 	$Timeline = array_reverse($DB->to_array());
 	$Area = new AREA_GRAPH(880,160,array('Break'=>1));
-	foreach($Timeline as $Entry) {
+	foreach ($Timeline as $Entry) {
 		list($Label,$Amount) = $Entry;
 		$Area->add($Label,$Amount);
 	}
@@ -40,7 +42,7 @@ if (empty($_GET['search']) && !isset($_GET['page']) && !$DonationTimeline = $Cac
 	$Area->lines(2);
 	$Area->generate();
 	$DonationTimeline = $Area->url();
-	$Cache->cache_value('donation_timeline',$DonationTimeline,mktime(0,0,0,date('n')+1,2));
+	$Cache->cache_value('donation_timeline',$DonationTimeline,mktime(0,0,0,date('n') + 1, 2));
 }
 
 View::show_header('Donation log');
@@ -69,7 +71,7 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 <br />
 <div class="linkbox">
 <?
-	$Pages=Format::get_pages($Page,$Results,DONATIONS_PER_PAGE,11) ;
+	$Pages = Format::get_pages($Page, $Results, DONATIONS_PER_PAGE, 11);
 	echo $Pages;
 ?>
 </div>
@@ -81,7 +83,7 @@ if (empty($_GET['search']) && !isset($_GET['page'])) {
 		<td>Time</td>
 	</tr>
 <?
-	foreach($Donations as $Donation) {
+	foreach ($Donations as $Donation) {
 		list($UserID, $Amount, $Currency, $Email, $DonationTime) = $Donation;
 ?>
 	<tr>

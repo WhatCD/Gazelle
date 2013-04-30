@@ -387,7 +387,7 @@ foreach ($Importances as $Group) {
 				<td colspan="5" class="big_info">
 <? if ($LoggedUser['CoverArt']) : ?>
 					<div class="group_image float_left clear">
-						<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID - 1) ?>
+						<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 					</div>
 <? endif; ?>
 					<div class="group_info clear">
@@ -527,15 +527,11 @@ if (check_perms('site_torrents_notify')) {
 	</div>
 <? /* Misc::display_recommend($ArtistID, "artist"); */ ?>
 	<div class="sidebar">
-<?	if ($Image) {
-		$WikiImage = $Image;
-		if (check_perms('site_proxy_images')) {
-			$WikiImage = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($WikiImage);
-		} ?>
+<?	if ($Image) { ?>
 		<div class="box box_image">
 			<div class="head"><strong><?=$Name?></strong></div>
 			<div style="text-align: center; padding: 10px 0px;">
-				<img style="max-width: 220px;" src="<?=ImageTools::thumbnail($WikiImage)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=$WikiImage?>',220);" />
+				<img style="max-width: 220px;" src="<?=ImageTools::process($Image, true)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>',220);" />
 			</div>
 		</div>
 <?	} ?>

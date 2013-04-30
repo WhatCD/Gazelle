@@ -39,7 +39,7 @@ class SphinxqlResult {
 	 */
 	public function collect($Key) {
 		$Return = array();
-		while($Row = $this->fetch_array()) {
+		while ($Row = $this->fetch_array()) {
 			$Return[] = $Row[$Key];
 		}
 		$this->data_seek(0);
@@ -55,8 +55,8 @@ class SphinxqlResult {
 	 */
 	public function to_array($Key, $ResultType = MYSQLI_ASSOC) {
 		$Return = array();
-		while($Row = $this->fetch_array($ResultType)) {
-			if($Key !== false) {
+		while ($Row = $this->fetch_array($ResultType)) {
+			if ($Key !== false) {
 				$Return[$Row[$Key]] = $Row;
 			} else {
 				$Return[] = $Row;
@@ -75,7 +75,7 @@ class SphinxqlResult {
 	 */
 	public function to_pair($Key1, $Key2) {
 		$Return = array();
-		while($Row = $this->fetch_array()) {
+		while ($Row = $this->fetch_array()) {
 			$Return[$Row[$Key1]] = $Row[$Key2];
 		}
 		$this->data_seek(0);
@@ -89,11 +89,11 @@ class SphinxqlResult {
 	 * @return array with meta data
 	 */
 	public function get_meta($Keys = false) {
-		if($Keys !== false) {
-			if(is_array($Keys)) {
+		if ($Keys !== false) {
+			if (is_array($Keys)) {
 				$Return = array();
-				foreach($Keys as $Key) {
-					if(!isset($this->Meta[$Key])) {
+				foreach ($Keys as $Key) {
+					if (!isset($this->Meta[$Key])) {
 						continue;
 					}
 					$Return[$Key] = $this->Meta[$Key];
@@ -114,11 +114,11 @@ class SphinxqlResult {
 	 * @return array with result information
 	 */
 	public function get_result_info($Keys = false) {
-		if($Keys !== false) {
-			if(is_array($Keys)) {
+		if ($Keys !== false) {
+			if (is_array($Keys)) {
 				$Return = array();
-				foreach($Keys as $Key) {
-					if(!isset($this->Result->$Key)) {
+				foreach ($Keys as $Key) {
+					if (!isset($this->Result->$Key)) {
 						continue;
 					}
 					$Return[$Key] = $this->Result->$Key;

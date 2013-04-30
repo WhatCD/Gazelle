@@ -1,22 +1,22 @@
 <? View::show_header('Login'); ?>
 	<span id="no-cookies" class="hidden warning">You appear to have cookies disabled.<br /><br /></span>
-	<noscript><span class="warning">You appear to have javascript disabled.</span><br /><br /></noscript>
+	<noscript><span class="warning">You appear to have JavaScript disabled.</span><br /><br /></noscript>
 <?
-if(strtotime($BannedUntil)<time() && !$BanID) {
+if (strtotime($BannedUntil) < time() && !$BanID) {
 ?>
 	<form class="auth_form" name="login" id="loginform" method="post" action="login.php">
 <?
 
-	if(!empty($BannedUntil) && $BannedUntil != '0000-00-00 00:00:00') {
+	if (!empty($BannedUntil) && $BannedUntil != '0000-00-00 00:00:00') {
 		$DB->query("UPDATE login_attempts SET BannedUntil='0000-00-00 00:00:00', Attempts='0' WHERE ID='".db_string($AttemptID)."'");
 		$Attempts = 0;
 	}
-	if(isset($Err)) {
+	if (isset($Err)) {
 ?>
 	<span class="warning"><?=$Err?><br /><br /></span>
 <? } ?>
 <? if ($Attempts > 0) { ?>
-	You have <span class="info"><?=(6-$Attempts)?></span> attempts remaining.<br /><br />
+	You have <span class="info"><?=(6 - $Attempts)?></span> attempts remaining.<br /><br />
 	<strong>WARNING:</strong> You will be banned for 6 hours after your login attempts run out!<br /><br />
 <? } ?>
 	<table class="layout">
@@ -31,7 +31,7 @@ if(strtotime($BannedUntil)<time() && !$BanID) {
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" id="keeplogged" name="keeplogged" value="1"<? if(isset($_REQUEST['keeplogged']) && $_REQUEST['keeplogged']) { ?> checked="checked"<? } ?> />
+				<input type="checkbox" id="keeplogged" name="keeplogged" value="1"<? if (isset($_REQUEST['keeplogged']) && $_REQUEST['keeplogged']) { ?> checked="checked"<? } ?> />
 				<label for="keeplogged">Remember me</label>
 			</td>
 			<td><input type="submit" name="login" value="Login" class="submit" /></td>
@@ -40,9 +40,9 @@ if(strtotime($BannedUntil)<time() && !$BanID) {
 	</form>
 <?
 } else {
-	if($BanID) {
+	if ($BanID) {
 ?>
-	<span class="warning">Your IP is banned indefinitely.</span>
+	<span class="warning">Your IP address is banned indefinitely.</span>
 <? } else { ?>
 	<span class="warning">You are banned from logging in for another <?=time_diff($BannedUntil)?>.</span>
 <?

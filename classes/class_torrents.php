@@ -81,7 +81,7 @@ class Torrents {
 				g.ID, g.Name, g.Year, g.RecordLabel, g.CatalogueNumber, g.TagList, g.ReleaseType, g.VanityHouse, g.WikiImage, g.CategoryID
 				FROM torrents_group AS g WHERE g.ID IN ($IDs)");
 
-			while($Group = $DB->next_record(MYSQLI_ASSOC, true)) {
+			while ($Group = $DB->next_record(MYSQLI_ASSOC, true)) {
 				unset($NotFound[$Group['ID']]);
 				$Found[$Group['ID']] = $Group;
 				$Found[$Group['ID']]['Torrents'] = array();
@@ -104,7 +104,7 @@ class Torrents {
 							WHERE GroupID IN($IDs)
 							ORDER BY GroupID, Remastered, (RemasterYear <> 0) DESC, RemasterYear, RemasterTitle,
 							RemasterRecordLabel, RemasterCatalogueNumber, Media, Format, Encoding, ID");
-				while($Torrent = $DB->next_record(MYSQLI_ASSOC, true)) {
+				while ($Torrent = $DB->next_record(MYSQLI_ASSOC, true)) {
 					$Found[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;
 				}
 
@@ -262,7 +262,7 @@ class Torrents {
 
 		// Torrent notifications
 		$DB->query("SELECT UserID FROM users_notify_torrents WHERE TorrentID='$ID'");
-		while(list($UserID) = $DB->next_record()) {
+		while (list($UserID) = $DB->next_record()) {
 			$Cache->delete_value('notifications_new_'.$UserID);
 		}
 		$DB->query("DELETE FROM users_notify_torrents WHERE TorrentID='$ID'");

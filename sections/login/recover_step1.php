@@ -3,11 +3,11 @@ View::show_header('Recover Password','validate');
 echo $Validate->GenerateJS('recoverform');
 ?>
 <form class="auth_form" name="recovery" id="recoverform" method="post" action="" onsubmit="return formVal();">
-	<div style="width:320px;">
+	<div style="width: 320px;">
 		<span class="titletext">Reset your password - Step 1</span><br /><br />
 <?
-if(empty($Sent) || (!empty($Sent) && $Sent!=1)) {
-	if(!empty($Err)) {
+if (empty($Sent) || (!empty($Sent) && $Sent != 1)) {
+	if (!empty($Err)) {
 ?>
 		<strong class="important_text"><?=$Err ?></strong><br /><br />
 <?	} ?>
@@ -21,9 +21,11 @@ if(empty($Sent) || (!empty($Sent) && $Sent!=1)) {
 				<td colspan="2" align="right"><input type="submit" name="reset" value="Reset!" class="submit" /></td>
 			</tr>
 		</table>
-<? } else { ?>
+<?
+} else { ?>
 	An email has been sent to you; please follow the directions in that email to reset your password.
-<? } ?>
+<?
+} ?>
 	</div>
 </form>
 <?

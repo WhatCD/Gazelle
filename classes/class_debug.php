@@ -456,7 +456,7 @@ class DEBUG {
 
 	public function cache_table($CacheKeys=false) {
 		global $Cache;
-		$Header = 'Cache Keys';
+		$Header = 'Cache keys';
 		if (!is_array($CacheKeys)) {
 			$CacheKeys = $this->get_cache_keys();
 			$Header .= ' ('.number_format($this->get_cache_time(), 5).' ms)';

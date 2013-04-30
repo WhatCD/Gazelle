@@ -48,7 +48,7 @@ if (!empty($_REQUEST['confirm'])) {
 			list($UserCount)=$DB->next_record();
 
 			if ($UserCount) {
-				$Err = "There is already someone registered with that username.";
+				$Err = 'There is already someone registered with that username.';
 				$_REQUEST['username']='';
 			}
 

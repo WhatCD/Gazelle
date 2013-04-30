@@ -54,10 +54,6 @@ if (($UserInfo = $Cache->get_value('user_info_'.$UserID)) === false) {
 	extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', 'Title', 'Avatar', 'Donor', 'Warned'))));
 }
 
-if (check_perms('site_proxy_images') && !empty($Avatar)) {
-	$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;i='.urlencode($Avatar);
-}
-
 if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
 	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));

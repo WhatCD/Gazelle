@@ -22,6 +22,7 @@ $BaseQuery = "SELECT
 	g.ID,
 	g.Name,
 	g.CategoryID,
+	g.wikiImage,
 	g.TagList,
 	t.Format,
 	t.Encoding,
@@ -54,7 +55,7 @@ if ($Details == 'all' || $Details == 'day') {
 			ORDER BY (t.Seeders + t.Leechers) DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
-		$TopTorrentsActiveLastDay = $DB->to_array();
+		$TopTorrentsActiveLastDay = $DB->to_array(); // TODO: MYSQLI_NUM to avoid duplicate data in the cache (does that break something with generate_torrent_json?)
 		$Cache->cache_value('top10tor_day_'.$Limit.$WhereSum,$TopTorrentsActiveLastDay,3600*2);
 	}
 	$OuterResults[] = generate_torrent_json('Most Active Torrents Uploaded in the Past Day', 'day', $TopTorrentsActiveLastDay, $Limit);
@@ -144,7 +145,7 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 	global $LoggedUser,$Categories;
 	$results = array();
 	foreach ($Details as $Detail) {
-		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$TorrentTags,
+		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$WikiImage,$TorrentTags,
 			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
 			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType,$Size) = $Detail;
 

@@ -1,6 +1,6 @@
 <?
 //Require base class
-if(!extension_loaded('sphinx')) {
+if (!extension_loaded('sphinx')) {
 	require(SERVER_ROOT.'/classes/sphinxapi.php');
 }
 
@@ -51,17 +51,17 @@ class SPHINX_SEARCH extends SphinxClient {
 		$QueryEndTime=microtime(true);
 
 		$Filters = array();
-		foreach($this->Filters as $Name => $Values) {
-			foreach($Values as $Value) {
+		foreach ($this->Filters as $Name => $Values) {
+			foreach ($Values as $Value) {
 				$Filters[] = $Name." - ".$Value;
 			}
 		}
 
-		$this->Queries[]=array('Params: '.$Query.' Filters: '.implode(", ", $Filters).' Indicies: '.$this->Index,($QueryEndTime-$QueryStartTime)*1000);
-		$this->Time+=($QueryEndTime-$QueryStartTime)*1000;
+		$this->Queries[] = array('Params: '.$Query.' Filters: '.implode(", ", $Filters).' Indicies: '.$this->Index,($QueryEndTime-$QueryStartTime) * 1000);
+		$this->Time += ($QueryEndTime-$QueryStartTime) * 1000;
 
-		if($Result === false) {
-			if($this->_connerror && !$Cache->get_value('sphinx_crash_reported')) {
+		if ($Result === false) {
+			if ($this->_connerror && !$Cache->get_value('sphinx_crash_reported')) {
 				send_irc('PRIVMSG '.ADMIN_CHAN.' :!dev Connection to searchd failed');
 				$Cache->cache_value('sphinx_crash_reported', 1, 3600);
 			}
@@ -71,7 +71,7 @@ class SPHINX_SEARCH extends SphinxClient {
 		$this->TotalResults = $Result['total_found'];
 		$this->SearchTime = $Result['time'];
 
-		if(empty($Result['matches'])) {
+		if (empty($Result['matches'])) {
 			return false;
 		}
 		$Matches = $Result['matches'];
@@ -82,49 +82,49 @@ class SPHINX_SEARCH extends SphinxClient {
 
 		$NotFound = array();
 		$Skip = array();
-		if(!empty($ReturnData)) {
+		if (!empty($ReturnData)) {
 			$AllFields = false;
 		} else {
 			$AllFields = true;
 		}
 
-		foreach($MatchIDs as $Match) {
+		foreach ($MatchIDs as $Match) {
 			$Matches[$Match] = $Matches[$Match]['attrs'];
-			if(!empty($CachePrefix)) {
+			if (!empty($CachePrefix)) {
 				$Data = $Cache->get_value($CachePrefix.'_'.$Match);
-				if($Data == false) {
-					$NotFound[]=$Match;
+				if ($Data == false) {
+					$NotFound[] = $Match;
 					continue;
 				}
 			} else {
-				$NotFound[]=$Match;
+				$NotFound[] = $Match;
 			}
-			if(!$AllFields) {
+			if (!$AllFields) {
 				// Populate list of fields to unset (faster than picking out the ones we need). Should only be run once, on the first cache key
-				if(empty($Skip)) {
-					foreach(array_keys($Data) as $Key) {
-						if(!in_array($Key, $ReturnData)) {
-							$Skip[]=$Key;
+				if (empty($Skip)) {
+					foreach (array_keys($Data) as $Key) {
+						if (!in_array($Key, $ReturnData)) {
+							$Skip[] = $Key;
 						}
 					}
-					if(empty($Skip)) {
+					if (empty($Skip)) {
 						$AllFields = true;
 					}
 				}
-				foreach($Skip as $Key) {
+				foreach ($Skip as $Key) {
 					unset($Data[$Key]);
 				}
 				reset($Skip);
 			}
-			if(!empty($Data)) {
+			if (!empty($Data)) {
 				$Matches[$Match] = array_merge($Matches[$Match], $Data);
 			}
 		}
 
-		if($SQL!='') {
-			if(!empty($NotFound)) {
+		if ($SQL != '') {
+			if (!empty($NotFound)) {
 				$DB->query(str_replace('%ids', implode(',',$NotFound), $SQL));
-				while($Data = $DB->next_record(MYSQLI_ASSOC)) {
+				while ($Data = $DB->next_record(MYSQLI_ASSOC)) {
 					$Matches[$Data[$IDColumn]] = array_merge($Matches[$Data[$IDColumn]], $Data);
 					$Cache->cache_value($CachePrefix.'_'.$Data[$IDColumn], $Data, $CacheLength);
 				}
@@ -148,8 +148,8 @@ class SPHINX_SEARCH extends SphinxClient {
 	}
 
 	function set_filter($Name, $Vals, $Exclude=false) {
-		foreach($Vals as $Val) {
-			if($Exclude) {
+		foreach ($Vals as $Val) {
+			if ($Exclude) {
 				$this->Filters[$Name][] = "!$Val";
 			} else {
 				$this->Filters[$Name][] = $Val;

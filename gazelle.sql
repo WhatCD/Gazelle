@@ -1510,7 +1510,7 @@ CREATE TABLE `users_sessions` (
   `SessionID` char(32) NOT NULL,
   `KeepLogged` enum('0','1') NOT NULL DEFAULT '0',
   `Browser` varchar(40) DEFAULT NULL,
-  `OperatingSystem` varchar(8) DEFAULT NULL,
+  `OperatingSystem` varchar(13) DEFAULT NULL,
   `IP` varchar(15) NOT NULL,
   `LastUpdate` datetime NOT NULL,
   `Active` tinyint(4) NOT NULL DEFAULT '1',

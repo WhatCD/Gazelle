@@ -736,7 +736,7 @@ class TEXT {
 						}
 					}
 					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
-					if($this->InQuotes == $this->NestsBeforeHide) { //Close quote the deeply nested quote [hide].
+					if ($this->InQuotes == $this->NestsBeforeHide) { //Close quote the deeply nested quote [hide].
 					    $Str.='</blockquote><br />'; // Ensure new line after quote train hiding
 					}
 					$this->NoImg--;
@@ -772,10 +772,8 @@ class TEXT {
 						$LocalURL = $this->local_url($Block['Val']);
 						if ($LocalURL) {
 							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$LocalURL.'" />';
-						} elseif (check_perms('site_proxy_images')) {
-							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?i='.urlencode($Block['Val']).'" />';
 						} else {
-							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$Block['Val'].'" />';
+							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.ImageTools::process($Block['Val']).'" />';
 						}
 					}
 					break;

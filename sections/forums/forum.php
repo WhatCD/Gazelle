@@ -75,7 +75,7 @@ if ($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRea
 }
 
 // Start printing
-View::show_header('Forums > '. $Forums[$ForumID]['Name']);
+View::show_header('Forums &gt; '. $Forums[$ForumID]['Name']);
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <?=$ForumName?></h2>

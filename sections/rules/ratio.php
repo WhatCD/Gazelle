@@ -40,52 +40,52 @@ View::show_header('Ratio Requirements');
 					<td>Required Ratio (0% seeded)</td>
 					<td>Required Ratio (100% seeded)</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] < 5 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>0-5 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] < 5 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>0&ndash;5 GB</td>
 					<td>0.00</td>
 					<td>0.00</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 5 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 10 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>5-10 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 5 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 10 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>5&ndash;10 GB</td>
 					<td>0.15</td>
 					<td>0.00</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 10 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 20 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>10-20 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 10 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 20 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>10&ndash;20 GB</td>
 					<td>0.20</td>
 					<td>0.00</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 20 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 30 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>20-30 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 20 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 30 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>20&ndash;30 GB</td>
 					<td>0.30</td>
 					<td>0.05</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 30 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 40 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>30-40 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 30 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 40 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>30&ndash;40 GB</td>
 					<td>0.40</td>
 					<td>0.10</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 40 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 50 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>40-50 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 40 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 50 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>40&ndash;50 GB</td>
 					<td>0.50</td>
 					<td>0.20</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 50 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 60 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>50-60 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 50 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 60 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>50&ndash;60 GB</td>
 					<td>0.60</td>
 					<td>0.30</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 60 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 80 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>60-80 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 60 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 80 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>60&ndash;80 GB</td>
 					<td>0.60</td>
 					<td>0.40</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 80 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 100 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
-					<td>80-100 GB</td>
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 80 * 1024 * 1024 * 1024 && $LoggedUser['BytesDownloaded'] < 100 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
+					<td>80&ndash;100 GB</td>
 					<td>0.60</td>
 					<td>0.50</td>
 				</tr>
-				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 100 * 1024 * 1024 * 1024) ? 'a' : 'b'?>">
+				<tr class="row<?=($LoggedUser['BytesDownloaded'] >= 100 * 1024 * 1024 * 1024) ? 'a' : 'b' ?>">
 					<td>100+ GB</td>
 					<td>0.60</td>
 					<td>0.60</td>
@@ -101,15 +101,15 @@ View::show_header('Ratio Requirements');
 				bracket. The maximum and minimum required ratios are also referred to as the <strong>0% seeded</strong> and <strong>100% seeded</strong> required ratios, respectively.
 			</li>
 			<li><strong>2: Determine the actual required ratio.</strong> Your actual required ratio will be a number that falls between the maximum and minimum required ratio values determined in the
-				previous step. To determine your actual required ratio, the system first uses the maximum required ratio (0% seeded) and multiplies it by the value [1-seeding/snatched]. Formatted
+				previous step. To determine your actual required ratio, the system first uses the maximum required ratio (0% seeded) and multiplies it by the value [1 &minus; (seeding / snatched)]. Formatted
 				differently, the calculation performed by the system looks like this:
 			</li>
 		</ul>
 		<br />
 		<br />
 
-		<div style="text-align:center"><img style="vertical-align: middle" src="static/blank.gif"
-											onload="if (this.src.substr(this.src.length-9,this.src.length) == 'blank.gif') { this.src = 'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=%5Ctextrm%7B%28maximum+required+ratio%29+%2A+%281-%5Cfrac%7Bseeding%7D%7Bsnatched%7D%29%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode,null).color); }"/>
+		<div style="text-align: center;"><img style="vertical-align: middle;" src="static/blank.gif"
+											onload="if (this.src.substr(this.src.length-9,this.src.length) == 'blank.gif') { this.src = 'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=%5Ctextrm%7B%28maximum+required+ratio%29+%2A+%281-%5Cfrac%7Bseeding%7D%7Bsnatched%7D%29%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode,null).color); }" />
 		</div>
 		<br />
 		<br />
@@ -144,11 +144,11 @@ View::show_header('Ratio Requirements');
 		<br />
 		<strong>Required Ratio Example:</strong><br />
 		<ul>
-			<li>In this example, Rippy has downloaded 25 GB. Rippy falls into the 20-30 GB amount downloaded bracket in the table above. Rippy&#39;s maximum required ratio (0% seeded) is 0.30, and his minimum required ratio (100% seeded) is 0.05.
+			<li>In this example, Rippy has downloaded 25 GB. Rippy falls into the 20&ndash;30 GB amount downloaded bracket in the table above. Rippy&#39;s maximum required ratio (0% seeded) is 0.30, and his minimum required ratio (100% seeded) is 0.05.
 			</li>
 			<li>In this example, Rippy has snatched 90 torrents, and is currently seeding 45 torrents.</li>
-			<li>To calculate Rippy&#39;s actual required ratio, we take his maximum required ratio (0% seeded), which is 0.30, and multiply it by [1 - seeding/snatched] (which is 0.50). Written out:
-				0.3 * [1 - (45/90)] = 0.15.
+			<li>To calculate Rippy&#39;s actual required ratio, we take his maximum required ratio (0% seeded), which is 0.30, and multiply it by [1 &minus; (seeding / snatched)] (which is 0.50). Written out:
+				<samp>0.3 * [1 &minus; (45 / 90)] = 0.15</samp>
 			</li>
 			<li>The resulting required ratio is 0.15, which falls between the maximum required ratio of 0.30 and the minimum required ratio of 0.05 for his amount downloaded bracket.</li>
 			<li>If Rippy&#39;s on-site required ratio was listed as a value greater than the calculated value, this would be because he hadn&#39;t seeded those 45 torrents for a 72 hour period in the

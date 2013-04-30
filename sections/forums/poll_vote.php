@@ -1,6 +1,8 @@
 <?
 
-if(!isset($_POST['topicid']) || !is_number($_POST['topicid'])) { error(0,true); }
+if (!isset($_POST['topicid']) || !is_number($_POST['topicid'])) {
+	error(0,true);
+}
 $TopicID = $_POST['topicid'];
 
 if (!empty($_POST['large'])) {
@@ -9,7 +11,7 @@ if (!empty($_POST['large'])) {
 	$Size = 140;
 }
 
-if(!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
+if (!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
 	$DB->query("SELECT
 		t.Title,
 		t.ForumID,
@@ -23,7 +25,9 @@ if(!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
 		LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
 		WHERE t.ID = '$TopicID'
 		GROUP BY fp.TopicID");
-	if($DB->record_count()==0) { die(); }
+	if ($DB->record_count() == 0) {
+		die();
+	}
 	$ThreadInfo = $DB->next_record(MYSQLI_ASSOC);
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
 		$Cache->cache_value('thread_'.$TopicID.'_info', $ThreadInfo, 0);
@@ -77,7 +81,7 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 	<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />
 	<label for="answer_<?=$i?>"><?=display_str($Answers[$i])?></label><br />
 <? } ?>
-	<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank - Show the results!</label><br /><br />
+	<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; Show the results!</label><br /><br />
 	<input type="button" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote" />
 </form>
 <?
@@ -104,20 +108,20 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 ?>
 		<ul class="poll nobullet">
 <?
-		if($ForumID != STAFF_FORUM) {
+		if ($ForumID != STAFF_FORUM) {
 			for ($i = 1, $il = count($Answers); $i <= $il; $i++) {
 				if (!empty($Votes[$i]) && $TotalVotes > 0) {
-					$Ratio = $Votes[$i]/$MaxVotes;
-					$Percent = $Votes[$i]/$TotalVotes;
+					$Ratio = $Votes[$i] / $MaxVotes;
+					$Percent = $Votes[$i] / $TotalVotes;
 				} else {
-					$Ratio=0;
-					$Percent=0;
+					$Ratio = 0;
+					$Percent = 0;
 				}
 ?>
-					<li><?=display_str($Answers[$i])?> (<?=number_format($Percent*100,2)?>%)</li>
+					<li><?=display_str($Answers[$i])?> (<?=number_format($Percent * 100,2)?>%)</li>
 					<li class="graph">
 						<span class="left_poll"></span>
-						<span class="center_poll" style="width:<?=round($Ratio*$Size)?>px;"></span>
+						<span class="center_poll" style="width: <?=round($Ratio * $Size)?>px;"></span>
 						<span class="right_poll"></span>
 					</li>
 <?			}
@@ -131,10 +135,10 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 						GROUP BY fpv.Vote");
 
 			$StaffVotes = $DB->to_array();
-			foreach($StaffVotes as $StaffVote) {
+			foreach ($StaffVotes as $StaffVote) {
 				list($StaffString, $StaffVoted) = $StaffVote;
 ?>
-				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$TopicID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $StaffVoted?>"><?=display_str(empty($Answers[$StaffVoted]) ? "Blank" : $Answers[$StaffVoted])?></a> - <?=$StaffString?></li>
+				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$TopicID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $StaffVoted?>"><?=display_str(empty($Answers[$StaffVoted]) ? 'Blank' : $Answers[$StaffVoted])?></a> - <?=$StaffString?></li>
 <?
 			}
 		}

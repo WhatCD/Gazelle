@@ -172,7 +172,7 @@ class Tools {
 			$Cache->delete_value('user_stats_'.$UserID);
 
 			$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID' AND Active = 1");
-			while(list($SessionID) = $DB->next_record()) {
+			while (list($SessionID) = $DB->next_record()) {
 				$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 			}
 			$Cache->delete_value('users_sessions_'.$UserID);

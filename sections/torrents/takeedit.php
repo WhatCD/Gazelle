@@ -25,14 +25,14 @@ $TypeID = (int)$_POST['type'];
 $Type = $Categories[$TypeID-1];
 $TorrentID = (int)$_POST['torrentid'];
 $Properties['Remastered'] = (isset($_POST['remaster']))? 1 : 0;
-if($Properties['Remastered']) {
+if ($Properties['Remastered']) {
 	$Properties['UnknownRelease'] = (isset($_POST['unknown'])) ? 1 : 0;
 	$Properties['RemasterYear'] = $_POST['remaster_year'];
 	$Properties['RemasterTitle'] = $_POST['remaster_title'];
 	$Properties['RemasterRecordLabel'] = $_POST['remaster_record_label'];
 	$Properties['RemasterCatalogueNumber'] = $_POST['remaster_catalogue_number'];
 }
-if(!$Properties['Remastered']) {
+if (!$Properties['Remastered']) {
 	$Properties['UnknownRelease'] = 0;
 	$Properties['RemasterYear'] = '';
 	$Properties['RemasterTitle'] = '';
@@ -57,21 +57,21 @@ $Properties['Encoding'] = $_POST['bitrate'];
 $Properties['Trumpable'] = (isset($_POST['make_trumpable'])) ? 1 : 0;
 $Properties['TorrentDescription'] = $_POST['release_desc'];
 $Properties['Name'] = $_POST['title'];
-if($_POST['album_desc']) {
+if ($_POST['album_desc']) {
 	$Properties['GroupDescription'] = $_POST['album_desc'];
 }
-if(check_perms('torrents_freeleech')) {
+if (check_perms('torrents_freeleech')) {
 	$Free = (int)$_POST['freeleech'];
-	if(!in_array($Free, array(0,1,2))) {
+	if (!in_array($Free, array(0,1,2))) {
 		error(404);
 	}
 	$Properties['FreeLeech'] = $Free;
 
-	if($Free == 0) {
+	if ($Free == 0) {
 		$FreeType = 0;
 	} else {
 		$FreeType = (int)$_POST['freeleechtype'];
-		if(!in_array($Free, array(0,1,2,3))) {
+		if (!in_array($Free, array(0,1,2,3))) {
 			error(404);
 		}
 	}
@@ -82,22 +82,22 @@ if(check_perms('torrents_freeleech')) {
 //--------------- Validate data in edit form -----------------------------------//
 
 $DB->query('SELECT UserID, Remastered, RemasterYear, FreeTorrent FROM torrents WHERE ID='.$TorrentID);
-if($DB->record_count() == 0) {
+if ($DB->record_count() == 0) {
 	error(404);
 }
 list($UserID, $Remastered, $RemasterYear, $CurFreeLeech) = $DB->next_record(MYSQLI_BOTH, false);
 
-if($LoggedUser['ID']!=$UserID && !check_perms('torrents_edit')) {
+if ($LoggedUser['ID'] != $UserID && !check_perms('torrents_edit')) {
 	error(403);
 }
 
-if($Remastered == '1' && !$RemasterYear && !check_perms('edit_unknowns')) {
+if ($Remastered == '1' && !$RemasterYear && !check_perms('edit_unknowns')) {
 	error(403);
 }
 
-if($Properties['UnknownRelease'] && !($Remastered == '1' && !$RemasterYear) && !check_perms('edit_unknowns')) {
+if ($Properties['UnknownRelease'] && !($Remastered == '1' && !$RemasterYear) && !check_perms('edit_unknowns')) {
 	//It's Unknown now, and it wasn't before
-	if($LoggedUser['ID'] != $UserID) {
+	if ($LoggedUser['ID'] != $UserID) {
 		//Hax
 		die();
 	}
@@ -106,7 +106,7 @@ if($Properties['UnknownRelease'] && !($Remastered == '1' && !$RemasterYear) && !
 $Validate->SetFields('type','1','number','Not a valid type.',array('maxlength'=>count($Categories), 'minlength'=>1));
 switch ($Type) {
 	case 'Music':
-		if(!empty($Properties['Remastered']) && !$Properties['UnknownRelease']){
+		if (!empty($Properties['Remastered']) && !$Properties['UnknownRelease']) {
 			$Validate->SetFields('remaster_year', '1', 'number', 'Year of remaster/re-issue must be entered.');
 		} else {
 			$Validate->SetFields('remaster_year', '0','number', 'Invalid remaster year.');
@@ -142,11 +142,13 @@ switch ($Type) {
 
 
 		// Handle 'other' bitrates
-		if($Properties['Encoding'] == 'Other') {
+		if ($Properties['Encoding'] == 'Other') {
 			$Validate->SetFields('other_bitrate',
 				'1','text','You must enter the other bitrate (max length: 9 characters).', array('maxlength'=>9));
 			$enc = trim($_POST['other_bitrate']);
-			if(isset($_POST['vbr'])) { $enc.=' (VBR)'; }
+			if (isset($_POST['vbr'])) {
+				$enc.=' (VBR)';
+			}
 
 			$Properties['Encoding'] = $enc;
 			$Properties['Bitrate'] = $enc;
@@ -179,11 +181,13 @@ switch ($Type) {
 
 
 		// Handle 'other' bitrates
-		if($Properties['Encoding'] == 'Other') {
+		if ($Properties['Encoding'] == 'Other') {
 			$Validate->SetFields('other_bitrate',
 				'1','text','You must enter the other bitrate (max length: 9 characters).', array('maxlength'=>9));
 			$enc = trim($_POST['other_bitrate']);
-			if(isset($_POST['vbr'])) { $enc.=' (VBR)'; }
+			if (isset($_POST['vbr'])) {
+				$enc.=' (VBR)';
+			}
 
 			$Properties['Encoding'] = $enc;
 			$Properties['Bitrate'] = $enc;
@@ -209,9 +213,9 @@ switch ($Type) {
 
 $Err = $Validate->ValidateForm($_POST); // Validate the form
 
-if($Properties['Remastered'] && !$Properties['RemasterYear']) {
+if ($Properties['Remastered'] && !$Properties['RemasterYear']) {
 	//Unknown Edit!
-	if($LoggedUser['ID'] == $UserID || check_perms('edit_unknowns')) {
+	if ($LoggedUser['ID'] == $UserID || check_perms('edit_unknowns')) {
 		//Fine!
 	} else {
 		$Err = "You may not edit somebody else's upload to unknown release.";
@@ -226,8 +230,8 @@ if (preg_match($RegX, $Properties['Image'], $Matches)) {
 }
 ImageTools::blacklisted($Properties['Image']);
 
-if($Err){ // Show the upload form, with the data the user entered
-	if(check_perms('site_debug')) {
+if ($Err) { // Show the upload form, with the data the user entered
+	if (check_perms('site_debug')) {
 		die($Err);
 	}
 	error($Err);
@@ -240,8 +244,8 @@ if($Err){ // Show the upload form, with the data the user entered
 // Shorten and escape $Properties for database input
 $T = array();
 foreach ($Properties as $Key => $Value) {
-	$T[$Key]="'".db_string(trim($Value))."'";
-	if(!$T[$Key]){
+	$T[$Key] = "'".db_string(trim($Value))."'";
+	if (!$T[$Key]) {
 		$T[$Key] = NULL;
 	}
 }
@@ -286,13 +290,13 @@ $SQL = "
 		Scene=$T[Scene],
 		Description=$T[TorrentDescription],";
 
-if(check_perms('torrents_freeleech')) {
+if (check_perms('torrents_freeleech')) {
 	$SQL .= "FreeTorrent=$T[FreeLeech],";
 	$SQL .= "FreeLeechType=$T[FreeLeechType],";
 }
 
-if(check_perms('users_mod')) {
-	if($T[Format] != "'FLAC'") {
+if (check_perms('users_mod')) {
+	if ($T[Format] != "'FLAC'") {
 		$SQL .= "
 					HasLog='0',
 					HasCue='0',
@@ -381,7 +385,7 @@ $SQL .= "
 ";
 $DB->query($SQL);
 
-if(check_perms('torrents_freeleech') && $Properties['FreeLeech'] != $CurFreeLeech) {
+if (check_perms('torrents_freeleech') && $Properties['FreeLeech'] != $CurFreeLeech) {
 	Torrents::freeleech_torrents($TorrentID, $Properties['FreeLeech'], $Properties['FreeLeechType']);
 }
 
@@ -389,8 +393,8 @@ $DB->query("SELECT GroupID, Time FROM torrents WHERE ID='$TorrentID'");
 list($GroupID, $Time) = $DB->next_record();
 
 // Competition
-if(strtotime($Time)>1241352173) {
-	if($_POST['log_score'] == '100') {
+if (strtotime($Time)>1241352173) {
+	if ($_POST['log_score'] == '100') {
 		$DB->query("INSERT IGNORE into users_points (GroupID, UserID, Points) VALUES ('$GroupID', '$UserID', '1')");
 	}
 }
