@@ -223,7 +223,7 @@ class Artists {
 		// Delete requests
 		$DB->query("SELECT RequestID FROM requests_artists WHERE ArtistID=".$ArtistID." AND ArtistID != 0");
 		$Requests = $DB->to_array();
-		foreach($Requests AS $Request) {
+		foreach ($Requests AS $Request) {
 			list($RequestID) = $Request;
 			$DB->query('DELETE FROM requests WHERE ID='.$RequestID);
 			$DB->query('DELETE FROM requests_votes WHERE RequestID='.$RequestID);

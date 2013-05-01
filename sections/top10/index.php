@@ -16,7 +16,7 @@ include(SERVER_ROOT.'/sections/torrents/functions.php'); //Has get_reports($Torr
 if (empty($_GET['type']) || $_GET['type'] == 'torrents') {
 	include(SERVER_ROOT.'/sections/top10/torrents.php');
 } else {
-	switch($_GET['type']) {
+	switch ($_GET['type']) {
 		case 'users' :
 			include(SERVER_ROOT.'/sections/top10/users.php');
 			break;

@@ -4,16 +4,16 @@ $TagID = db_string($_GET['tagid']);
 $GroupID = db_string($_GET['groupid']);
 $Way = db_string($_GET['way']);
 
-if(!is_number($TagID) || !is_number($GroupID)) {
+if (!is_number($TagID) || !is_number($GroupID)) {
 	error(404);
 }
-if(!in_array($Way, array('up', 'down'))) {
+if (!in_array($Way, array('up', 'down'))) {
 	error(404);
 }
 
 $DB->query("SELECT TagID FROM torrents_tags_votes WHERE TagID='$TagID' AND GroupID='$GroupID' AND UserID='$UserID' AND Way='$Way'");
-if($DB->record_count() == 0) {
-	if($Way == 'down') {
+if ($DB->record_count() == 0) {
+	if ($Way == 'down') {
 		$Change = 'NegativeVotes=NegativeVotes+1';
 	} else {
 		$Change = 'PositiveVotes=PositiveVotes+2';

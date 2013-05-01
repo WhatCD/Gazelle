@@ -118,7 +118,7 @@ if (empty($_GET['type'])) {
 		$Wheres[] = "(TorrentID = 0 OR (TimeFilled > (NOW() - INTERVAL 3 DAY)))";
 	}
 } else {
-	switch($_GET['type']) {
+	switch ($_GET['type']) {
 		case 'created':
 			$Title = 'My requests';
 			$Wheres[] = "r.UserID = ".$LoggedUser['ID'];
@@ -161,7 +161,7 @@ if (empty($_GET['order'])) {
 
 $CurrentURL = get_url(array('order', 'sort'));
 
-switch($CurrentOrder) {
+switch ($CurrentOrder) {
 	case 'name' :
 		$OrderBy = "r.Title";
 		break;

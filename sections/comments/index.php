@@ -8,21 +8,23 @@ $Text = new TEXT;
 require(SERVER_ROOT.'/sections/comments/post.php'); // Post formatting function.
 
 $action = '';
-if(!empty($_REQUEST['action']))
+if (!empty($_REQUEST['action'])) {
 	$action = $_REQUEST['action'];
+}
 
 /**
  * Getting a userid if applicable
  */
-if(isset($_GET['id'])) {
+if (isset($_GET['id'])) {
 	$UserID = $_GET['id'];
-	if(!is_number($UserID))
+	if (!is_number($UserID)) {
 		error(404);
+	}
 
 	$UserInfo = Users::user_info($UserID);
 
 	$Username = $UserInfo['Username'];
-	if($LoggedUser['ID'] == $UserID) {
+	if ($LoggedUser['ID'] == $UserID) {
 		$Self = true;
 	} else {
 		$Self = false;
@@ -47,7 +49,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 }
 list($Page,$Limit) = Format::page_limit($PerPage);
 
-switch($action) {
+switch ($action) {
 	case 'requests':
 		require (SERVER_ROOT.'/sections/comments/requestcomments.php');
 		break;

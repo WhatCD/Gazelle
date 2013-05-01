@@ -14,26 +14,30 @@ View::show_header('Subscribed collages','browse,collage');
 $ShowAll = !empty($_GET['showall']);
 
 if (!$ShowAll) {
-	$sql = "SELECT c.ID,
-				c.Name,
-				c.NumTorrents,
-				s.LastVisit
-			FROM collages AS c
-				JOIN users_collage_subs AS s ON s.CollageID = c.ID
-				JOIN collages_torrents AS ct ON ct.CollageID = c.ID
-			WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
-				AND ct.AddedOn>s.LastVisit
-			GROUP BY c.ID";
+	$sql = "
+		SELECT
+			c.ID,
+			c.Name,
+			c.NumTorrents,
+			s.LastVisit
+		FROM collages AS c
+			JOIN users_collage_subs AS s ON s.CollageID = c.ID
+			JOIN collages_torrents AS ct ON ct.CollageID = c.ID
+		WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
+			AND ct.AddedOn>s.LastVisit
+		GROUP BY c.ID";
 } else {
-	$sql = "SELECT c.ID,
-				c.Name,
-				c.NumTorrents,
-				s.LastVisit
-			FROM collages AS c
-				JOIN users_collage_subs AS s ON s.CollageID = c.ID
-				LEFT JOIN collages_torrents AS ct ON ct.CollageID = c.ID
-			WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
-			GROUP BY c.ID";
+	$sql = "
+		SELECT
+			c.ID,
+			c.Name,
+			c.NumTorrents,
+			s.LastVisit
+		FROM collages AS c
+			JOIN users_collage_subs AS s ON s.CollageID = c.ID
+			LEFT JOIN collages_torrents AS ct ON ct.CollageID = c.ID
+		WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
+		GROUP BY c.ID";
 }
 
 $DB->query($sql);
@@ -69,9 +73,9 @@ if (!$NumResults) {
 	</div>
 <?
 } else {
-	$HideGroup='';
-	$ActionTitle="Hide";
-	$ActionURL="hide";
+	$HideGroup = '';
+	$ActionTitle = 'Hide';
+	$ActionURL = 'hide';
 	$ShowGroups = 0;
 
 	foreach ($CollageSubs as $Collage) {
@@ -188,7 +192,7 @@ if (!$NumResults) {
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
+		<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : '' ?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
@@ -231,7 +235,7 @@ if (!$NumResults) {
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
+		<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : '' ?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
@@ -239,15 +243,15 @@ if (!$NumResults) {
 			$TorrentTable.=ob_get_clean();
 		} ?>
 	<!-- I hate that proton is making me do it like this -->
-	<!--<div class="head colhead_dark" style="margin-top: 8px">-->
-	<table style="margin-top: 8px" class="subscribed_collages_table">
+	<!--<div class="head colhead_dark" style="margin-top: 8px;">-->
+	<table style="margin-top: 8px;" class="subscribed_collages_table">
 		<tr class="colhead_dark">
 			<td>
-				<span style="float:left;">
-					<strong><a href="collage.php?id=<?=$CollageID?>"><?=$CollageName?></a></strong> (<?=$NewTorrentCount?> new torrent<?=($NewTorrentCount==1?'':'s')?>)
+				<span style="float: left;">
+					<strong><a href="collage.php?id=<?=$CollageID?>"><?=$CollageName?></a></strong> (<?=$NewTorrentCount?> new torrent<?=($NewTorrentCount == 1 ? '' : 's')?>)
 				</span>&nbsp;
-				<span style="float:right;">
-					<a href="#" onclick="$('#discog_table_<?=$CollageID?>').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$ShowAll?'Show':'Hide'?></a>&nbsp;&nbsp;&nbsp;<a href="userhistory.php?action=catchup_collages&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;collageid=<?=$CollageID?>" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="CollageSubscribe(<?=$CollageID?>); return false;" id="subscribelink<?=$CollageID?>" class="brackets">Unsubscribe</a>
+				<span style="float: right;">
+					<a href="#" onclick="$('#discog_table_<?=$CollageID?>').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$ShowAll ? 'Show' : 'Hide' ?></a>&nbsp;&nbsp;&nbsp;<a href="userhistory.php?action=catchup_collages&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;collageid=<?=$CollageID?>" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;<a href="#" onclick="CollageSubscribe(<?=$CollageID?>); return false;" id="subscribelink<?=$CollageID?>" class="brackets">Unsubscribe</a>
 				</span>
 			</td>
 		</tr>
@@ -264,7 +268,7 @@ if (!$NumResults) {
 			</tr>
 <?=$TorrentTable?>
 		</table>
-<?	} // foreach() ?>
+<?	} // foreach () ?>
 <?
 } // else -- if (empty($NumResults)) ?>
 </div>

@@ -302,27 +302,27 @@ if (empty($_GET['order'])) {
 	}
 }
 
-switch($CurrentOrder) {
+switch ($CurrentOrder) {
 	case 'votes' :
-		$OrderBy = "Votes";
+		$OrderBy = 'Votes';
 		break;
 	case 'bounty' :
-		$OrderBy = "Bounty";
+		$OrderBy = 'Bounty';
 		break;
 	case 'created' :
-		$OrderBy = "TimeAdded";
+		$OrderBy = 'TimeAdded';
 		break;
 	case 'lastvote' :
-		$OrderBy = "LastVote";
+		$OrderBy = 'LastVote';
 		break;
 	case 'filled' :
-		$OrderBy = "TimeFilled";
+		$OrderBy = 'TimeFilled';
 		break;
 	case 'year' :
-		$OrderBy = "Year";
+		$OrderBy = 'Year';
 		break;
 	default :
-		$OrderBy = "TimeAdded";
+		$OrderBy = 'TimeAdded';
 		break;
 }
 //print($Way); print($OrderBy); die();
@@ -390,8 +390,8 @@ View::show_header($Title, 'requests');
 				<td class="label">Tags (comma-separated):</td>
 				<td>
 					<input type="text" name="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />&nbsp;
-					<input type="radio" name="tags_type" id="tags_type0" value="0" <? Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
-					<input type="radio" name="tags_type" id="tags_type1" value="1" <? Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
+					<input type="radio" name="tags_type" id="tags_type0" value="0"<? Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+					<input type="radio" name="tags_type" id="tags_type1" value="1"<? Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 				</td>
 			</tr>
 			<tr id="include_filled">

@@ -1,21 +1,24 @@
 <?
-if(!check_perms('admin_login_watch')) { error(403); }
+if (!check_perms('admin_login_watch')) {
+	error(403);
+}
 
-if(isset($_POST['submit']) && isset($_POST['id']) && $_POST['submit'] == 'Unban' && is_number($_POST['id'])){
+if (isset($_POST['submit']) && isset($_POST['id']) && $_POST['submit'] == 'Unban' && is_number($_POST['id'])) {
 	authorize();
 	$DB->query('DELETE FROM login_attempts WHERE ID='.$_POST['id']);
 }
 
 View::show_header('Login Watch');
 
-$DB->query('SELECT
-	l.ID,
-	l.IP,
-	l.UserID,
-	l.LastAttempt,
-	l.Attempts,
-	l.BannedUntil,
-	l.Bans
+$DB->query('
+	SELECT
+		l.ID,
+		l.IP,
+		l.UserID,
+		l.LastAttempt,
+		l.Attempts,
+		l.BannedUntil,
+		l.Bans
 	FROM login_attempts AS l
 	WHERE l.BannedUntil > "'.sqltime().'"
 	ORDER BY l.BannedUntil ASC');
@@ -31,11 +34,13 @@ $DB->query('SELECT
 			<td>Bans</td>
 			<td>Remaining</td>
 			<td>Submit</td>
-			<? if(check_perms('admin_manage_ipbans')) { ?>		<td>Submit</td><? } ?>
+<?	if (check_perms('admin_manage_ipbans')) { ?>
+			<td>Submit</td>
+<?	} ?>
 		</tr>
 <?
 $Row = 'b';
-while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $DB->next_record()){
+while (list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $DB->next_record()) {
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
 		<tr class="row<?=$Row?>">
@@ -59,7 +64,7 @@ while(list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $D
 					<input type="submit" name="submit" value="Unban" />
 				</form>
 			</td>
-<? if(check_perms('admin_manage_ipbans')) { ?>
+<? if (check_perms('admin_manage_ipbans')) { ?>
 			<td>
 				<form class="manage_form" name="bans" action="" method="post">
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />

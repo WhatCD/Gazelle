@@ -14,7 +14,9 @@ the cache for the artist page.
 ************************************************************************/
 
 $GroupID = $_GET['groupid'];
-if(!is_number($GroupID) || !$GroupID) { error(0); }
+if (!is_number($GroupID) || !$GroupID) {
+	error(0);
+}
 
 // Get the artist name and the body of the last revision
 $DB->query("SELECT
@@ -32,10 +34,14 @@ $DB->query("SELECT
 	FROM torrents_group AS tg
 	LEFT JOIN wiki_torrents AS wt ON wt.RevisionID=tg.RevisionID
 	WHERE tg.ID='$GroupID'");
-if($DB->record_count() == 0) { error(404); }
+if ($DB->record_count() == 0) {
+	error(404);
+}
 list($Name, $Image, $Body, $WikiImage, $WikiBody, $Year, $RecordLabel, $CatalogueNumber, $ReleaseType, $CategoryID, $VanityHouse) = $DB->next_record();
 
-if(!$Body) { $Body = $WikiBody; $Image = $WikiImage; }
+if (!$Body) {
+	$Body = $WikiBody; $Image = $WikiImage;
+}
 
 View::show_header('Edit torrent group');
 
@@ -55,7 +61,7 @@ View::show_header('Edit torrent group');
 				<input type="text" name="image" size="92" value="<?=$Image?>" /><br />
 				<h3>Description</h3>
 				<textarea name="body" cols="91" rows="20"><?=$Body?></textarea><br />
-<?	if($CategoryID == 1) { ?>
+<?	if ($CategoryID == 1) { ?>
 				<select id="releasetype" name="releasetype">
 <?		foreach ($ReleaseTypes as $Key => $Val) { ?>
 					<option value="<?=$Key?>"<?=($Key == $ReleaseType ? ' selected="selected"' : '')?>><?=$Val?></option>
@@ -76,7 +82,7 @@ View::show_header('Edit torrent group');
 	</div>
 <?	$DB->query("SELECT UserID FROM torrents WHERE GroupID = ".$GroupID);
 	//Users can edit the group info if they've uploaded a torrent to the group or have torrents_edit
-	if(in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?>
+	if (in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?>
 	<h3>Non-wiki group editing</h3>
 	<div class="box pad">
 		<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
@@ -105,7 +111,7 @@ View::show_header('Edit torrent group');
 						<input type="text" name="catalogue_number" size="40" value="<?=$CatalogueNumber?>" />
 					</td>
 				</tr>
-<? if(check_perms('torrents_freeleech')) { ?>
+<? if (check_perms('torrents_freeleech')) { ?>
 				<tr>
 					<td class="label">Torrent <strong>group</strong> leech status</td>
 					<td>
@@ -115,7 +121,7 @@ View::show_header('Edit torrent group');
 						 because
 						<select name="freeleechtype">
 <?		$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
-		foreach($FL as $Key => $FLType) { ?>
+		foreach ($FL as $Key => $FLType) { ?>
 							<option value="<?=$Key?>"<?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$FLType?></option>
 <?		} ?>
 						</select>
@@ -128,7 +134,7 @@ View::show_header('Edit torrent group');
 	</div>
 <?
 	}
-	if(check_perms('torrents_edit')) {
+	if (check_perms('torrents_edit')) {
 ?>
 	<h3>Rename (won't merge)</h3>
 	<div class="box pad">

@@ -39,7 +39,7 @@ if (isset($_GET['id'])) {
 $Order = "ORDER BY r.ReportedTime ASC";
 
 if (!$ID) {
-	switch($View) {
+	switch ($View) {
 		case 'resolved' :
 			$Title = 'All the old smelly reports';
 			$Where = "WHERE r.Status = 'Resolved'";
@@ -54,7 +54,7 @@ if (!$ID) {
 			break;
 	}
 } else {
-	switch($View) {
+	switch ($View) {
 		case 'staff' :
 			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
 			list($Username) = $DB->next_record();

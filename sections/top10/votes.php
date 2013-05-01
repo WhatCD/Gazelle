@@ -132,7 +132,7 @@ $Bookmarks = Bookmarks::all_bookmarks('torrent');
 if (empty($_GET['advanced'])) { ?>
 		<small class="top10_quantity_links">
 <?
-	switch($Limit) {
+	switch ($Limit) {
 		case 100: ?>
 			- <a href="top10.php?type=votes" class="brackets">Top 25</a>
 			- <span class="brackets">Top 100</span>

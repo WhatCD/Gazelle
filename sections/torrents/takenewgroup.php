@@ -6,7 +6,9 @@
 
 authorize();
 
-if(!check_perms('torrents_edit')) { error(403); }
+if (!check_perms('torrents_edit')) {
+	error(403);
+}
 
 $OldGroupID = $_POST['oldgroupid'];
 $TorrentID = $_POST['torrentid'];
@@ -15,12 +17,12 @@ $Title = db_string(trim($_POST['title']));
 $Year = trim($_POST['year']);
 $SearchText = db_string(trim($_POST['artist']) . ' ' . trim($_POST['title']) . ' ' . trim($_POST['year']));
 
-if(!is_number($OldGroupID) || !is_number($TorrentID) || !is_number($Year) || !$OldGroupID || !$TorrentID || !$Year || empty($Title) || empty($ArtistName)) {
+if (!is_number($OldGroupID) || !is_number($TorrentID) || !is_number($Year) || !$OldGroupID || !$TorrentID || !$Year || empty($Title) || empty($ArtistName)) {
 	error(0);
 }
 
 //Everything is legit, let's just confim they're not retarded
-if(empty($_POST['confirm'])) {
+if (empty($_POST['confirm'])) {
 	View::show_header();
 ?>
 	<div class="center thin">
@@ -47,7 +49,7 @@ if(empty($_POST['confirm'])) {
 	View::show_footer();
 } else {
 	$DB->query("SELECT ArtistID, AliasID, Redirect, Name FROM artists_alias WHERE Name = '$ArtistName'");
-	if($DB->record_count() == 0) {
+	if ($DB->record_count() == 0) {
 		$Redirect = 0;
 		$DB->query("INSERT INTO artists_group (Name) VALUES ('$ArtistName')");
 		$ArtistID = $DB->inserted_id();
@@ -55,7 +57,7 @@ if(empty($_POST['confirm'])) {
 		$AliasID = $DB->inserted_id();
 	} else {
 		list($ArtistID, $AliasID, $Redirect, $ArtistName) = $DB->next_record();
-		if($Redirect) {
+		if ($Redirect) {
 			$AliasID = $Redirect;
 		}
 	}
@@ -76,7 +78,7 @@ if(empty($_POST['confirm'])) {
 
 	// Delete old group if needed
 	$DB->query("SELECT ID FROM torrents WHERE GroupID='$OldGroupID'");
-	if($DB->record_count() == 0) {
+	if ($DB->record_count() == 0) {
 		Torrents::delete_group($OldGroupID);
 	} else {
 		Torrents::update_hash($OldGroupID);

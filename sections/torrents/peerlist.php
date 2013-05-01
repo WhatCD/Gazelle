@@ -1,28 +1,31 @@
 <?
-if(!isset($_GET['torrentid']) || !is_number($_GET['torrentid'])) { error(404); }
+if (!isset($_GET['torrentid']) || !is_number($_GET['torrentid'])) {
+	error(404);
+}
 $TorrentID = $_GET['torrentid'];
 
-if(!empty($_GET['page']) && is_number($_GET['page'])) {
+if (!empty($_GET['page']) && is_number($_GET['page'])) {
 	$Page = $_GET['page'];
-	$Limit = (string)(($Page-1)*100) .', 100';
+	$Limit = (string)(($Page - 1) * 100) .', 100';
 } else {
 	$Page = 1;
 	$Limit = 100;
 }
 
-$Result = $DB->query("SELECT SQL_CALC_FOUND_ROWS
-	xu.uid,
-	t.Size,
-	xu.active,
-	xu.connectable,
-	xu.uploaded,
-	xu.remaining,
-	xu.useragent
+$Result = $DB->query("
+	SELECT SQL_CALC_FOUND_ROWS
+		xu.uid,
+		t.Size,
+		xu.active,
+		xu.connectable,
+		xu.uploaded,
+		xu.remaining,
+		xu.useragent
 	FROM xbt_files_users AS xu
-	LEFT JOIN users_main AS um ON um.ID=xu.uid
-	JOIN torrents AS t ON t.ID=xu.fid
+		LEFT JOIN users_main AS um ON um.ID=xu.uid
+		JOIN torrents AS t ON t.ID=xu.fid
 	WHERE xu.fid='$TorrentID'
-	AND um.Visible='1'
+		AND um.Visible='1'
 	ORDER BY xu.uid = '$LoggedUser[ID]' DESC, xu.uploaded DESC
 	LIMIT $Limit");
 $DB->query("SELECT FOUND_ROWS()");
@@ -31,7 +34,7 @@ $DB->set_query_id($Result);
 
 ?>
 <h4>Peer List</h4>
-<? if($NumResults>100) { ?>
+<? if ($NumResults > 100) { ?>
 <div class="linkbox"><?=js_pages('show_peers', $_GET['torrentid'], $NumResults, $Page)?></div>
 <? } ?>
 
@@ -45,20 +48,20 @@ $DB->set_query_id($Result);
 		<td>Client</td>
 	</tr>
 <?
-while(list($PeerUserID, $Size, $Active, $Connectable, $Uploaded, $Remaining, $UserAgent) = $DB->next_record()) {
+while (list($PeerUserID, $Size, $Active, $Connectable, $Uploaded, $Remaining, $UserAgent) = $DB->next_record()) {
 ?>
 	<tr>
 		<td><?=Users::format_username($PeerUserID, false, false, false)?></td>
-		<td><?= ($Active) ? '<span style="color:green">Yes</span>' : '<span style="color:red">No</span>' ?></td>
-		<td><?= ($Connectable) ? '<span style="color:green">Yes</span>' : '<span style="color:red">No</span>' ?></td>
+		<td><?= ($Active) ? '<span style="color: green;">Yes</span>' : '<span style="color: red;">No</span>' ?></td>
+		<td><?= ($Connectable) ? '<span style="color: green;">Yes</span>' : '<span style="color: red;">No</span>' ?></td>
 		<td><?=Format::get_size($Uploaded) ?></td>
-		<td><?=number_format(($Size-$Remaining)/$Size*100, 2)?></td>
+		<td><?=number_format(($Size - $Remaining) / $Size * 100, 2)?></td>
 		<td><?=display_str($UserAgent)?></td>
 	</tr>
 <?
 }
 ?>
 </table>
-<? if($NumResults>100) { ?>
+<? if ($NumResults > 100) { ?>
 <div class="linkbox"><?=js_pages('show_peers', $_GET['torrentid'], $NumResults, $Page)?></div>
 <? } ?>

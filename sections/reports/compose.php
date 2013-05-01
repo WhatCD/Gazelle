@@ -1,17 +1,17 @@
 <?
-if(!check_perms('site_moderate_forums')) {
+if (!check_perms('site_moderate_forums')) {
 	error(403);
 }
 
-if(empty($Return)) {
+if (empty($Return)) {
 	$ToID = $_GET['to'];
-	if($ToID == $LoggedUser['ID']) {
+	if ($ToID == $LoggedUser['ID']) {
 		error("You cannot start a conversation with yourself!");
 		header('Location: inbox.php');
 	}
 }
 
-if(!$ToID || !is_number($ToID)) {
+if (!$ToID || !is_number($ToID)) {
 	error(404);
 }
 
@@ -19,26 +19,26 @@ $ReportID = $_GET['reportid'];
 $Type = $_GET['type'];
 $ThingID= $_GET['thingid'];
 
-if(!$ReportID || !is_number($ReportID) || !$ThingID || !is_number($ThingID) || !$Type) {
+if (!$ReportID || !is_number($ReportID) || !$ThingID || !is_number($ThingID) || !$Type) {
 	error(403);
 }
 
-if(!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$ToID])) {
+if (!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$ToID])) {
 	error(403);
 }
 
 $DB->query("SELECT Username FROM users_main WHERE ID='$ToID'");
 list($ComposeToUsername) = $DB->next_record();
-if(!$ComposeToUsername) {
+if (!$ComposeToUsername) {
 	error(404);
 }
 View::show_header('Compose', 'inbox,bbcode');
 
 // $TypeLink is placed directly in the <textarea> when composing a PM
-switch($Type) {
+switch ($Type) {
 	case "user" :
 		$DB->query("SELECT Username FROM users_main WHERE ID=".$ThingID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			$Error = "No user with the reported ID found";
 		} else {
 			list($Username) = $DB->next_record();
@@ -49,7 +49,7 @@ switch($Type) {
 	case "request" :
 	case "request_update" :
 		$DB->query("SELECT Title FROM requests WHERE ID=".$ThingID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			$Error = "No request with the reported ID found";
 		} else {
 			list($Name) = $DB->next_record();
@@ -59,7 +59,7 @@ switch($Type) {
 		break;
 	case "collage" :
 		$DB->query("SELECT Name FROM collages WHERE ID=".$ThingID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			$Error = "No collage with the reported ID found";
 		} else {
 			list($Name) = $DB->next_record();
@@ -69,7 +69,7 @@ switch($Type) {
 		break;
 	case "thread" :
 		$DB->query("SELECT Title FROM forums_topics WHERE ID=".$ThingID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			$Error = "No forum thread with the reported ID found";
 		} else {
 			list($Title) = $DB->next_record();
@@ -84,7 +84,7 @@ switch($Type) {
 			$PerPage = POSTS_PER_PAGE;
 		}
 		$DB->query("SELECT p.ID, p.Body, p.TopicID, (SELECT COUNT(ID) FROM forums_posts WHERE forums_posts.TopicID = p.TopicID AND forums_posts.ID<=p.ID) AS PostNum FROM forums_posts AS p WHERE ID=".$ThingID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			$Error =  "No forum post with the reported ID found";
 		} else {
 			list($PostID,$Body,$TopicID,$PostNum) = $DB->next_record();
@@ -94,7 +94,7 @@ switch($Type) {
 		break;
 	case "requests_comment" :
 		$DB->query("SELECT rc.RequestID, rc.Body, (SELECT COUNT(ID) FROM requests_comments WHERE ID <= ".$ThingID." AND requests_comments.RequestID = rc.RequestID) AS CommentNum FROM requests_comments AS rc WHERE ID=".$ThingID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			$Error =  "No request comment with the reported ID found";
 		} else {
 			list($RequestID, $Body, $PostNum) = $DB->next_record();
@@ -105,7 +105,7 @@ switch($Type) {
 		break;
 	case "torrents_comment" :
 		$DB->query("SELECT tc.GroupID, tc.Body, (SELECT COUNT(ID) FROM torrents_comments WHERE ID <= ".$ThingID." AND torrents_comments.GroupID = tc.GroupID) AS CommentNum FROM torrents_comments AS tc WHERE ID=".$ThingID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			$Error =  "No torrent comment with the reported ID found";
 		} else {
 			list($GroupID, $Body, $PostNum) = $DB->next_record();
@@ -116,7 +116,7 @@ switch($Type) {
 		break;
 	case "collages_comment" :
 		$DB->query("SELECT cc.CollageID, cc.Body, (SELECT COUNT(ID) FROM collages_comments WHERE ID <= ".$ThingID." AND collages_comments.CollageID = cc.CollageID) AS CommentNum FROM collages_comments AS cc WHERE ID=".$ThingID);
-		if($DB->record_count() < 1) {
+		if ($DB->record_count() < 1) {
 			$Error =  "No collage comment with the reported ID found";
 		} else {
 			list($CollageID, $Body, $PostNum) = $DB->next_record();
@@ -130,7 +130,7 @@ switch($Type) {
 		error("Incorrect type");
 		break;
 }
-if(isset($Error)) {
+if (isset($Error)) {
 	error($Error);
 }
 

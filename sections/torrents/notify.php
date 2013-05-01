@@ -135,7 +135,7 @@ View::show_header('My notifications', 'notifications');
 	<h2>Latest notifications</h2>
 </div>
 <div class="linkbox">
-<? if($FilterID) { ?>
+<? if ($FilterID) { ?>
 	<a href="torrents.php?action=notify" class="brackets">View all</a>&nbsp;&nbsp;&nbsp;
 <? } else { ?>
 	<a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all</a>&nbsp;&nbsp;&nbsp;

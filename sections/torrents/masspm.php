@@ -1,9 +1,12 @@
 <?
-if(!isset($_GET['id']) || !is_number($_GET['id']) || !isset($_GET['torrentid']) || !is_number($_GET['torrentid'])) { error(0); }
+if (!isset($_GET['id']) || !is_number($_GET['id']) || !isset($_GET['torrentid']) || !is_number($_GET['torrentid'])) {
+	error(0);
+}
 $GroupID = $_GET['id'];
 $TorrentID = $_GET['torrentid'];
 
-$DB->query("SELECT
+$DB->query("
+	SELECT
 		t.Media,
 		t.Format,
 		t.Encoding AS Bitrate,
@@ -23,18 +26,20 @@ $DB->query("SELECT
 		t.GroupID,
 		t.UserID,
 		t.FreeTorrent
-		FROM torrents AS t
+	FROM torrents AS t
 		JOIN torrents_group AS tg ON tg.ID=t.GroupID
 		LEFT JOIN artists_group AS ag ON ag.ArtistID=tg.ArtistID
-		WHERE t.ID='$TorrentID'");
+	WHERE t.ID='$TorrentID'");
 
 list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
 
-if(!$Properties) { error(404); }
+if (!$Properties) {
+	error(404);
+}
 
 View::show_header('Edit torrent', 'upload');
 
-if(!check_perms('site_moderate_requests')) {
+if (!check_perms('site_moderate_requests')) {
 	error(403);
 }
 

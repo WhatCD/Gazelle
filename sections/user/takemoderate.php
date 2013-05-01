@@ -94,41 +94,42 @@ $LightUpdates = array();
 
 
 
-$DB->query("SELECT
-	m.Username,
-	m.IP,
-	m.Email,
-	m.PermissionID,
-	p.Level AS Class,
-	m.Title,
-	m.Enabled,
-	m.Uploaded,
-	m.Downloaded,
-	m.Invites,
-	m.can_leech,
-	m.Visible,
-	i.AdminComment,
-	m.torrent_pass,
-	i.Donor,
-	i.Artist,
-	i.Warned,
-	i.SupportFor,
-	i.RestrictedForums,
-	i.PermittedForums,
-	DisableAvatar,
-	DisableInvites,
-	DisablePosting,
-	DisableForums,
-	DisableTagging,
-	DisableUpload,
-	DisableWiki,
-	DisablePM,
-	DisableIRC,
-	m.RequiredRatio,
-	m.FLTokens,
-	i.RatioWatchEnds,
-	SHA1(i.AdminComment) AS CommentHash,
-	GROUP_CONCAT(l.PermissionID SEPARATOR ',') AS SecondaryClasses
+$DB->query("
+	SELECT
+		m.Username,
+		m.IP,
+		m.Email,
+		m.PermissionID,
+		p.Level AS Class,
+		m.Title,
+		m.Enabled,
+		m.Uploaded,
+		m.Downloaded,
+		m.Invites,
+		m.can_leech,
+		m.Visible,
+		i.AdminComment,
+		m.torrent_pass,
+		i.Donor,
+		i.Artist,
+		i.Warned,
+		i.SupportFor,
+		i.RestrictedForums,
+		i.PermittedForums,
+		DisableAvatar,
+		DisableInvites,
+		DisablePosting,
+		DisableForums,
+		DisableTagging,
+		DisableUpload,
+		DisableWiki,
+		DisablePM,
+		DisableIRC,
+		m.RequiredRatio,
+		m.FLTokens,
+		i.RatioWatchEnds,
+		SHA1(i.AdminComment) AS CommentHash,
+		GROUP_CONCAT(l.PermissionID SEPARATOR ',') AS SecondaryClasses
 	FROM users_main AS m
 		JOIN users_info AS i ON i.UserID = m.ID
 		LEFT JOIN permissions AS p ON p.ID=m.PermissionID
@@ -157,7 +158,7 @@ if (!check_perms('users_mod', $Cur['Class'])) {
 
 // If we're deleting the user, we can ignore all the other crap
 
-if ($_POST['UserStatus'] == "delete" && check_perms('users_delete_users')) {
+if ($_POST['UserStatus'] == 'delete' && check_perms('users_delete_users')) {
 	Misc::write_log("User account ".$UserID." (".$Cur['Username'].") was deleted by ".$LoggedUser['Username']);
 	$DB->query("DELETE FROM users_main WHERE id=".$UserID);
 	$DB->query("DELETE FROM users_info WHERE UserID=".$UserID);
@@ -221,7 +222,7 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 
 	if ($_POST['LogOut']) {
 		$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
-		while(list($SessionID) = $DB->next_record()) {
+		while (list($SessionID) = $DB->next_record()) {
 			$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 		}
 		$Cache->delete_value('users_sessions_'.$UserID);
@@ -720,13 +721,13 @@ if (isset($ClearStaffIDCache)) {
 header("location: user.php?id=$UserID");
 
 function translateUserStatus($status) {
-	switch($status) {
+	switch ($status) {
 		case 0:
-			return "Unconfirmed";
+			return 'Unconfirmed';
 		case 1:
-			return "Enabled";
+			return 'Enabled';
 		case 2:
-			return "Disabled";
+			return 'Disabled';
 		default:
 			return $status;
 	}
@@ -735,9 +736,9 @@ function translateUserStatus($status) {
 function translateLeechStatus($status) {
 	switch ($status) {
 		case 0:
-			return "Disabled";
+			return 'Disabled';
 		case 1:
-			return "Enabled";
+			return 'Enabled';
 		default:
 			return $status;
 	}

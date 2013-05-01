@@ -72,7 +72,7 @@ foreach ($Friends as $Friend) {
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<table class="friends_table vertical_margin">
 		<tr class="colhead">
-			<td colspan="3">
+			<td colspan="<?=Users::has_avatars_enabled() ? 3 : 2?>">
 				<span style="float: left;"><?=Users::format_username($FriendID, true, true, true, true)?>
 <?	if (check_paranoia('ratio', $Paranoia, $Class, $FriendID)) { ?>
 				&nbsp;Ratio: <strong><?=Format::get_ratio_html($Uploaded, $Downloaded)?></strong>
@@ -90,20 +90,15 @@ foreach ($Friends as $Friend) {
 			</td>
 		</tr>
 		<tr>
-			<td width="50px" valign="top">
-<?
-	if (empty($HeavyInfo['DisableAvatars'])) {
-		if (!empty($Avatar)) { ?>
-					<img src="<?=ImageTools::process($Avatar)?>" alt="<?=$Username?>'s avatar" width="50px" />
-<?		} else { ?>
-					<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="50px" alt="Default avatar" />
-<?		}
-	} ?>
+<?	if (Users::has_avatars_enabled()) { ?>
+			<td class="col_avatar avatar" valign="top">
+				<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
 			</td>
+<?	}?>
 			<td valign="top">
 					<input type="hidden" name="friendid" value="<?=$FriendID?>" />
 
-					<textarea name="comment" rows="4" cols="80"><?=$Comment?></textarea>
+					<textarea name="comment" rows="4" cols="65"><?=$Comment?></textarea>
 				</td>
 				<td class="left" valign="top">
 					<input type="submit" name="action" value="Update" /><br />

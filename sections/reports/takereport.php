@@ -1,20 +1,20 @@
 <?
 authorize();
 
-if(empty($_POST['id']) || !is_number($_POST['id']) || empty($_POST['type']) || ($_POST['type'] != "request_update" && empty($_POST['reason']))) {
+if (empty($_POST['id']) || !is_number($_POST['id']) || empty($_POST['type']) || ($_POST['type'] != 'request_update' && empty($_POST['reason']))) {
 	error(404);
 }
 
 include(SERVER_ROOT.'/sections/reports/array.php');
 
-if(!array_key_exists($_POST['type'], $Types)) {
+if (!array_key_exists($_POST['type'], $Types)) {
 	error(403);
 }
 $Short = $_POST['type'];
 $Type = $Types[$Short];
 $ID = $_POST['id'];
-if($Short == "request_update") {
-	if(empty($_POST['year']) || !is_number($_POST['year'])) {
+if ($Short == "request_update") {
+	if (empty($_POST['year']) || !is_number($_POST['year'])) {
 		error('Year must be specified.');
 		header('Location: reports.php?action=report&type=request_update&id='.$ID);
 		die();
@@ -27,7 +27,7 @@ if($Short == "request_update") {
 	$Reason = $_POST['reason'];
 }
 
-switch($Short) {
+switch ($Short) {
 	case "request" :
 	case "request_update" :
 		$Link = 'requests.php?action=view&id='.$ID;

@@ -362,7 +362,7 @@ EXPLANATION OF PARSER LOGIC
 			}
 
 			// 6) Depending on what type of tag we're dealing with, create an array with the attribute and block.
-			switch($TagName) {
+			switch ($TagName) {
 				case 'inlineurl':
 					$Array[$ArrayPos] = array('Type'=>'inlineurl', 'Attr'=>$Block, 'Val'=>'');
 					break;
@@ -455,7 +455,7 @@ EXPLANATION OF PARSER LOGIC
 				$Str.=$this->smileys($Block);
 				continue;
 			}
-			switch($Block['Type']) {
+			switch ($Block['Type']) {
 				case 'b':
 					$Str.='<strong>'.$this->to_html($Block['Val']).'</strong>';
 					break;
@@ -616,7 +616,7 @@ EXPLANATION OF PARSER LOGIC
 				$Str.=$Block;
 				continue;
 			}
-			switch($Block['Type']) {
+			switch ($Block['Type']) {
 
 				case 'b':
 				case 'u':

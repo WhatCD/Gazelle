@@ -139,21 +139,21 @@ if (!$NumResults) {
 <?
 	while (list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()) {
 ?>
-	<table class="forum_post box vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : '' ?>">
+	<table class="forum_post box vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : '' ?>">
 		<colgroup>
-<?		if (empty($HeavyInfo['DisableAvatars'])) { ?>
+<?		if (Users::has_avatars_enabled()) { ?>
 			<col class="col_avatar" />
 <? 		} ?>
 			<col class="col_post_body" />
 		</colgroup>
 		<tr class="colhead_dark">
-			<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1 ?>">
+			<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1 ?>">
 				<span style="float:left;">
 					<a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$ForumName?></a> &gt;
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>
-<?			if ($PostID < $LastPostID && !$Locked) { ?>
+<?		if ($PostID < $LastPostID && !$Locked) { ?>
 					<span class="new">(New!)</span>
-<?			} ?>
+<?		} ?>
 				</span>
 				<span style="float:left;" class="last_read" title="Jump to last read">
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID.($PostID?'&amp;postid='.$PostID.'#post'.$PostID:'')?>"></a>
@@ -166,13 +166,9 @@ if (!$NumResults) {
 			</td>
 		</tr>
 		<tr class="row<?=$ShowCollapsed ? ' hidden' : '' ?>">
-<?		if (empty($HeavyInfo['DisableAvatars'])) { ?>
+<?		if (Users::has_avatars_enabled()) { ?>
 			<td class="avatar" valign="top">
-<?			if ($AuthorAvatar) { ?>
-				<img src="<?=ImageTools::process($AuthorAvatar)?>" width="150" style="max-height: 400px;" alt="<?=$AuthorName?>'s avatar" />
-<?			} else { ?>
-				<img src="<?=STATIC_SERVER.'common/avatars/default.png'?>" width="150" style="max-height: 400px;" alt="Default avatar" />
-<?			} ?>
+				<?=Users::show_avatar($AuthorAvatar, $AuthorName, $HeavyInfo['DisableAvatars'])?>
 			</td>
 <?		} ?>
 			<td class="body" valign="top">

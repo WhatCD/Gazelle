@@ -211,7 +211,7 @@ if (!empty($UsedReleases)) { ?>
 	<div class="box center">
 <?
 	foreach ($UsedReleases as $ReleaseID) {
-		switch($ReleaseTypes[$ReleaseID]) {
+		switch ($ReleaseTypes[$ReleaseID]) {
 			case "Remix" :
 				$DisplayName = "Remixes";
 				break;
@@ -300,7 +300,7 @@ foreach ($Importances as $Group) {
 	$TorrentTags = new Tags($TagList, false);
 
 	if ($ReleaseType != $LastReleaseType) {
-		switch($ReleaseTypes[$ReleaseType]) {
+		switch ($ReleaseTypes[$ReleaseType]) {
 			case "Remix" :
 				$DisplayName = "Remixes";
 				break;
@@ -339,7 +339,7 @@ foreach ($Importances as $Group) {
 	}
 
 
-	switch($ReleaseType){
+	switch ($ReleaseType){
 		case 1023: // Remixes, DJ Mixes, Guest artists, and Producers need the artist name
 		case 1024:
 		case 1021:

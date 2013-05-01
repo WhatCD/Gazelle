@@ -61,7 +61,7 @@ else {
 	if(empty($_GET['type']) || $_GET['type'] == 'main') {
 		include(SERVER_ROOT.'/sections/ajax/forum/main.php');
 	} else {
-		switch($_GET['type']) {
+		switch ($_GET['type']) {
 			case 'viewforum':
 				include(SERVER_ROOT.'/sections/ajax/forum/forum.php');
 				break;

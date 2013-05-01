@@ -251,15 +251,15 @@ if (empty($Results)) {
 <?
 	while (list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername, $TopicID, $ThreadTitle, $LastPostID, $LastRead, $Locked, $Sticky) = $DB->next_record()) {
 ?>
-	<table class="forum_post vertical_margin<?=$HeavyInfo['DisableAvatars'] ? ' noavatar' : '' ?>" id="post<?=$PostID ?>">
+	<table class="forum_post vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : '' ?>" id="post<?=$PostID ?>">
 		<colgroup>
-<?		if (empty($HeavyInfo['DisableAvatars'])) { ?>
+<?		if (Users::has_avatars_enabled()) { ?>
 			<col class="col_avatar" />
 <? 		} ?>
 			<col class="col_post_body" />
 		</colgroup>
 		<tr class="colhead_dark">
-			<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1 ?>">
+			<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1 ?>">
 				<span style="float: left;">
 					<?=time_diff($AddedTime) ?>
 					in <a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>
@@ -294,21 +294,11 @@ if (empty($Results)) {
 		if (!$ShowGrouped) {
 ?>
 		<tr>
-<?
-			if (empty($HeavyInfo['DisableAvatars'])) {
-?>
+<?	if (Users::has_avatars_enabled()) { ?>
 			<td class="avatar" valign="top">
-<?
-				if ($Avatar) {
-?>
-				<img src="<?=ImageTools::process($Avatar)?>" width="150" style="max-height:400px;" alt="<?=$Username?>'s avatar" />
-<?
-				}
-?>
+				<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
 			</td>
-<?
-			}
-?>
+<?	} ?>
 			<td class="body" valign="top">
 				<div id="content<?=$PostID?>">
 					<?=$Text->full_format($Body)?>

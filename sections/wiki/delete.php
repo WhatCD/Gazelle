@@ -6,7 +6,7 @@ if (!check_perms('admin_manage_wiki') || !is_number($ID) || ($ID == '136')) {
 
 $DB->query("SELECT Title FROM wiki_articles WHERE ID = $ID");
 
-if($DB->record_count() < 1) {
+if ($DB->record_count() < 1) {
 	error(404);
 }
 

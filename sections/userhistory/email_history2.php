@@ -11,12 +11,21 @@ user.
 ************************************************************************/
 
 $UserID = $_GET['userid'];
-if (!is_number($UserID)) { error(404); }
+if (!is_number($UserID)) {
+	error(404);
+}
 
-$DB->query("SELECT ui.JoinDate, p.Level AS Class FROM users_main AS um JOIN users_info AS ui ON um.ID=ui.UserID JOIN permissions AS p ON p.ID=um.PermissionID WHERE um.ID = $UserID");
+$DB->query("
+	SELECT
+		ui.JoinDate,
+		p.Level AS Class
+	FROM users_main AS um
+		JOIN users_info AS ui ON um.ID=ui.UserID
+		JOIN permissions AS p ON p.ID=um.PermissionID
+	WHERE um.ID = $UserID");
 list($Joined, $Class) = $DB->next_record();
 
-if(!check_perms('users_view_email', $Class)) {
+if (!check_perms('users_view_email', $Class)) {
 	error(403);
 }
 
@@ -40,9 +49,9 @@ $DB->query("
 		GROUP_CONCAT(i.Donor SEPARATOR '|') AS UsersDonor,
 		GROUP_CONCAT(i.Warned SEPARATOR '|') AS UsersWarned
 	FROM users_main AS m
-	LEFT JOIN users_history_emails AS h ON h.Email=m.Email AND h.UserID<>m.ID
-	LEFT JOIN users_main AS m2 ON m2.ID=h.UserID
-	LEFT JOIN users_info AS i ON i.UserID=h.UserID
+		LEFT JOIN users_history_emails AS h ON h.Email=m.Email AND h.UserID<>m.ID
+		LEFT JOIN users_main AS m2 ON m2.ID=h.UserID
+		LEFT JOIN users_info AS i ON i.UserID=h.UserID
 	WHERE m.ID='$UserID'"
 );
 $CurrentEmail = array_shift($DB->to_array());
@@ -61,9 +70,9 @@ $DB->query("
 		i2.Donor AS UsersDonor,
 		i2.Warned AS UsersWarned
 	FROM users_history_emails AS h2
-	LEFT JOIN users_history_emails AS h3 ON h3.Email=h2.Email AND h3.UserID<>h2.UserID
-	LEFT JOIN users_main AS m3 ON m3.ID=h3.UserID
-	LEFT JOIN users_info AS i2 ON i2.UserID=h3.UserID
+		LEFT JOIN users_history_emails AS h3 ON h3.Email=h2.Email AND h3.UserID<>h2.UserID
+		LEFT JOIN users_main AS m3 ON m3.ID=h3.UserID
+		LEFT JOIN users_info AS i2 ON i2.UserID=h3.UserID
 	WHERE h2.UserID='$UserID'
 	ORDER BY Time DESC"
 );
@@ -85,7 +94,7 @@ if ($CurrentEmail['Usernames'] != '') {
 	$UserSetTimes=explode('|', $CurrentEmail['UserSetTimes']);
 	$UserIPs=explode('|', $CurrentEmail['UserIPs']);
 
-	foreach($UserIDs as $Key => $Val) {
+	foreach ($UserIDs as $Key => $Val) {
 		$CurrentMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.Users::format_username($Val, true, true, true);
 		$CurrentMatches[$Key]['IP'] = $UserIPs[$Key];
 		$CurrentMatches[$Key]['EndTime'] = $UserSetTimes[$Key];
@@ -187,7 +196,7 @@ if ($Old) {
 <?
 if ($CurrentMatches) {
 	// Match on the current email
-	foreach($CurrentMatches as $Match) {
+	foreach ($CurrentMatches as $Match) {
 ?>
 		<tr class="rowb">
 			<td><?=$Match['Username']?></td>

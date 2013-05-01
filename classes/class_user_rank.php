@@ -25,13 +25,13 @@ class USER_RANK {
 		$Table = $DB->to_array();
 
 		// Give a little variation to the cache length, so all the tables don't expire at the same time
-		$Cache->cache_value($MemKey, $Table, 3600*24*rand(800,1000)*0.001);
+		$Cache->cache_value($MemKey, $Table, 3600 * 24 * rand(800, 1000) * 0.001);
 
 		return $Table;
 	}
 
 	function table_query($TableName) {
-		switch($TableName) {
+		switch ($TableName) {
 			case 'uploaded':
 				$Query =  "SELECT Uploaded FROM users_main WHERE Enabled='1' AND Uploaded>0 ORDER BY Uploaded;";
 				break;
@@ -98,14 +98,14 @@ class USER_RANK {
 		if (in_array(false, func_get_args(), true)) {
 			return false;
 		}
-		$TotalScore += $Uploaded*15;
-		$TotalScore += $Downloaded*8;
-		$TotalScore += $Uploads*25;
-		$TotalScore += $Requests*2;
+		$TotalScore += $Uploaded * 15;
+		$TotalScore += $Downloaded * 8;
+		$TotalScore += $Uploads * 25;
+		$TotalScore += $Requests * 2;
 		$TotalScore += $Posts;
 		$TotalScore += $Bounty;
 		$TotalScore += $Artists;
-		$TotalScore /= (15+8+25+2+1+1+1);
+		$TotalScore /= (15 + 8 + 25 + 2 + 1 + 1 + 1);
 		$TotalScore *= $Ratio;
 		return $TotalScore;
 	}

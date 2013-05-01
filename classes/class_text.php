@@ -412,7 +412,7 @@ class TEXT {
 			}
 
 			// 6) Depending on what type of tag we're dealing with, create an array with the attribute and block.
-			switch($TagName) {
+			switch ($TagName) {
 				case 'inlineurl':
 					$Array[$ArrayPos] = array('Type'=>'inlineurl', 'Attr'=>$Block, 'Val'=>'');
 					break;

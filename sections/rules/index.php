@@ -1,10 +1,10 @@
 <?
 //Include all the basic stuff...
 enforce_login();
-if(!isset($_GET['p'])) {
+if (!isset($_GET['p'])) {
 	require(SERVER_ROOT.'/sections/rules/rules.php');
 } else {
-	switch($_GET['p']) {
+	switch ($_GET['p']) {
 		case 'ratio':
 			require(SERVER_ROOT.'/sections/rules/ratio.php');
 			break;

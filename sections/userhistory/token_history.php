@@ -19,8 +19,8 @@ $UserInfo = Users::user_info($UserID);
 $Perms = Permissions::get_permissions($UserInfo['PermissionID']);
 $UserClass = $Perms['Class'];
 
-if(!check_perms('users_mod')) {
-	if($LoggedUser['ID'] != $UserID && !check_paranoia(false, $User['Paranoia'], $UserClass, $UserID)) {
+if (!check_perms('users_mod')) {
+	if ($LoggedUser['ID'] != $UserID && !check_paranoia(false, $User['Paranoia'], $UserClass, $UserID)) {
 		error(403);
 	}
 }
@@ -93,10 +93,10 @@ foreach ($Tokens as $Token) {
 	list($TorrentID, $GroupID, $Time, $Expired, $Downloaded, $Uses, $Name, $Format, $Encoding) = $Token;
 	$Name = "<a href=\"torrents.php?torrentid=$TorrentID\">$Name</a>";
 	$ArtistName = Artists::display_artists($Artists[$GroupID]);
-	if($ArtistName) {
+	if ($ArtistName) {
 		$Name = $ArtistName.$Name;
 	}
-	if($Format && $Encoding) {
+	if ($Format && $Encoding) {
 		$Name.=' ['.$Format.' / '.$Encoding.']';
 	}
 ?>

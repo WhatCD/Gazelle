@@ -12,27 +12,26 @@ if (!is_number($GroupID) || !$GroupID) {
 }
 
 $Tags = explode(',', $_POST['tagname']);
-foreach($Tags as $TagName) {
+foreach ($Tags as $TagName) {
 	$TagName = Misc::sanitize_tag($TagName);
 
-	if(!empty($TagName)) {
+	if (!empty($TagName)) {
 		$TagName = Misc::get_alias_tag($TagName);
 		// Check DB for tag matching name
 		$DB->query("SELECT t.ID FROM tags AS t WHERE t.Name LIKE '".$TagName."'");
 		list($TagID) = $DB->next_record();
 
-		if(!$TagID) { // Tag doesn't exist yet - create tag
+		if (!$TagID) { // Tag doesn't exist yet - create tag
 			$DB->query("INSERT INTO tags (Name, UserID) VALUES ('".$TagName."', ".$UserID.")");
 			$TagID = $DB->inserted_id();
 		} else {
 			$DB->query("SELECT TagID FROM torrents_tags_votes WHERE GroupID='$GroupID' AND TagID='$TagID' AND UserID='$UserID'");
-			if($DB->record_count()!=0) { // User has already voted on this tag, and is trying hax to make the rating go up
+			if ($DB->record_count() != 0) { // User has already voted on this tag, and is trying hax to make the rating go up
 				header('Location: '.$_SERVER['HTTP_REFERER']);
 				die();
 			}
 		}
 
-		
 
 		$DB->query("INSERT INTO torrents_tags
 			(TagID, GroupID, PositiveVotes, UserID) VALUES

@@ -23,7 +23,7 @@ Torrents::update_hash($GroupID);
 
 $DB->query("SELECT COUNT(GroupID) FROM torrents_tags WHERE TagID=".$TagID);
 list($Count) = $DB->next_record();
-if($Count < 1) {
+if ($Count < 1) {
 	$DB->query("SELECT Name FROM tags WHERE ID=".$TagID);
 	list($TagName) = $DB->next_record();
 

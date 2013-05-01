@@ -15,7 +15,7 @@ if (!empty($LoggedUser['DisableRequests'])) {
 if (!isset($_REQUEST['action'])) {
 	include(SERVER_ROOT.'/sections/requests/requests.php');
 } else {
-	switch($_REQUEST['action']) {
+	switch ($_REQUEST['action']) {
 		case 'new':
 		case 'edit':
 			include(SERVER_ROOT.'/sections/requests/new_edit.php');
@@ -187,9 +187,9 @@ if (!isset($_REQUEST['action'])) {
 			$DB->query("DELETE FROM requests_comments WHERE ID='".db_string($_GET['postid'])."'");
 
 			//We need to clear all subsequential catalogues as they've all been bumped with the absence of this post
-			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
-			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE*$Pages-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
-			for($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
+			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
+			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
+			for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
 				$Cache->delete('request_comments_'.$RequestID.'_catalogue_'.$i);
 			}
 

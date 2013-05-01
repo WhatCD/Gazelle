@@ -44,7 +44,7 @@ if (empty($_GET['order'])) {
 	}
 }
 
-switch($CurrentOrder) {
+switch ($CurrentOrder) {
 	case 'username' :
 		$OrderBy = "um.Username";
 		break;

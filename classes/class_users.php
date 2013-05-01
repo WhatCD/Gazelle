@@ -103,8 +103,6 @@ class Users {
 			$Cache->cache_value('user_info_'.$UserID, $UserInfo, 2592000);
 		}
 
-		// Image proxy
-		$UserInfo['Avatar'] = ImageTools::process($UserInfo['Avatar']);
 		return $UserInfo;
 	}
 
@@ -542,6 +540,7 @@ class Users {
 	 */
 	public static function show_avatar($Avatar, $Username, $Setting, $Size=150, $ReturnHTML = True) {
 		global $LoggedUser;
+		$Avatar = ImageTools::process($Avatar);
 		// case 1 is avatars disabled
 		switch ($Setting) {
 			case 0:

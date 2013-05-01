@@ -11,11 +11,10 @@ The wiki class is used here to generate the page history.
 
 ************************************************************************/
 
-
-
-
 $GroupID = $_GET['groupid'];
-if(!is_number($GroupID) || !$GroupID) { error(0); }
+if (!is_number($GroupID) || !$GroupID) {
+	error(0);
+}
 
 include(SERVER_ROOT.'/classes/class_wiki.php'); // Wiki class
 $Wiki = new WIKI('wiki_torrents', $GroupID, "/torrents.php?id=$GroupID");
@@ -24,7 +23,9 @@ $Wiki = new WIKI('wiki_torrents', $GroupID, "/torrents.php?id=$GroupID");
 $DB->query("SELECT Name FROM torrents_group WHERE ID='$GroupID'");
 list($Name) = $DB->next_record();
 
-if(!$Name) { error(404); }
+if (!$Name) {
+	error(404);
+}
 
 View::show_header("Revision history for $Name"); // Set title
 

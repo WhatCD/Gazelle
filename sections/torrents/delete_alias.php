@@ -3,10 +3,10 @@ $ArtistID = db_string($_GET['artistid']);
 $GroupID = db_string($_GET['groupid']);
 $Importance = db_string($_GET['importance']);
 
-if(!is_number($ArtistID) || !is_number($GroupID) || !is_number($Importance)) {
+if (!is_number($ArtistID) || !is_number($GroupID) || !is_number($Importance)) {
 	error(404);
 }
-if(!check_perms('torrents_edit')) {
+if (!check_perms('torrents_edit')) {
 	error(403);
 }
 
@@ -30,7 +30,7 @@ $DB->query("SELECT ag.ArtistID
 			WHERE ta.ArtistID IS NOT NULL
 				AND ag.ArtistID = ".$ArtistID);
 $GroupCount = $DB->record_count();
-if(($ReqCount + $GroupCount) == 0) {
+if (($ReqCount + $GroupCount) == 0) {
 	//The only group to use this artist
 	Artists::delete_artist($ArtistID);
 }

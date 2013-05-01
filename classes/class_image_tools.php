@@ -162,7 +162,6 @@ class ImageTools {
 	 * @return string
 	 */
 	public static function process($Url, $Thumb = false) {
-		global $LoggedUser;
 		if (empty($Url)) {
 			return '';
 		}
@@ -182,20 +181,11 @@ class ImageTools {
 			}
 		}
 
-		if (isset($LoggedUser['Permissions'])) {
-			/*
-			 * We only want to apply the proxy and store the processed URL if the
-			 * permissions were loaded before. This is necessary because self::process
-			 * is used in Users::user_info which is called in script_start.php before
-			 * the permissions are loaded, causing the own avatar to always load without
-			 * proxy later on.
-			 */
-			if (check_perms('site_proxy_images')) {
-				$ProcessedUrl = self::proxy_url($ProcessedUrl);
-			}
-
-			self::store($Url . ($Thumb ? '_thumb' : ''), $ProcessedUrl);
+		if (check_perms('site_proxy_images')) {
+			$ProcessedUrl = self::proxy_url($ProcessedUrl);
 		}
+
+		self::store($Url . ($Thumb ? '_thumb' : ''), $ProcessedUrl);
 		return $ProcessedUrl;
 	}
 

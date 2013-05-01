@@ -21,26 +21,22 @@ function comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorI
 ?>
 	<table class="forum_post box vertical_margin<?=$noavatar ? ' noavatar' : '' ?>" id="post<?=$PostID?>">
 		<colgroup>
-<?	if (empty($UserInfo['DisableAvatars'])) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 			<col class="col_avatar" />
 <? 	} ?>
 			<col class="col_post_body" />
 		</colgroup>
 		<tr class="colhead_dark">
-			<td colspan="<?=empty($UserInfo['DisableAvatars']) ? 2 : 1 ?>">
+			<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1 ?>">
 				<span style="float: left;"><a href="<?=$permalink ?>">#<?=$PostID?></a>
 					<?=$postheader ?>
 				</span>
 			</td>
 		</tr>
 		<tr>
-<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 			<td class="avatar" valign="top">
-<?		if ($UserInfo['Avatar']) { ?>
-				<img src="<?=$UserInfo['Avatar']?>" width="150" alt="<?=$UserInfo['Username']?>'s avatar" />
-<?		} else { ?>
-				<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<?		} ?>
+				<?=Users::show_avatar($UserInfo['Avatar'], $UserInfo['Username'], $HeavyInfo['DisableAvatars'])?>
 			</td>
 <?	} ?>
 			<td class="body" valign="top">

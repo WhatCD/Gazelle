@@ -46,13 +46,13 @@ View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbco
 <?	} ?>
 		<table class="forum_post box vertical_margin" style="text-align: left;">
 			<colgroup>
-<?	if (empty($HeavyInfo['DisableAvatars'])) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 				<col class="col_avatar" />
 <?	} ?>
 				<col class="col_post_body" />
 			</colgroup>
 			<tr class="colhead_dark">
-				<td colspan="<?=empty($HeavyInfo['DisableAvatars']) ? 2 : 1 ?>">
+				<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1 ?>">
 					<span style="float: left;"><a href="#newthreadpreview">#XXXXXX</a>
 						by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true, true)?></strong>
 					Just now
@@ -65,13 +65,11 @@ View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbco
 				</td>
 			</tr>
 			<tr>
+<?	if (Users::has_avatars_enabled()) { ?>
 				<td class="avatar" valign="top">
-<?				if (!empty($LoggedUser['Avatar'])) { ?>
-					<img src="<?=$LoggedUser['Avatar']?>" width="150" alt="<?=$LoggedUser['Username']?>'s avatar" />
-<?				} else { ?>
-					<img src="<?=STATIC_SERVER?>common/avatars/default.png" width="150" alt="Default avatar" />
-<?				} ?>
+					<?=Users::show_avatar($LoggedUser['Avatar'], $LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
 				</td>
+<?	} ?>
 				<td class="body" valign="top">
 					<div id="contentpreview" style="text-align: left;"></div>
 				</td>

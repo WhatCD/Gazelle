@@ -209,6 +209,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 	<div class="sidebar">
 <?
 	if ($Avatar && Users::has_avatars_enabled()) {
+		// TODO: use Users::show_avatar; why display_str in line 301??
 		if (check_perms('site_proxy_images') && !empty($Avatar)) {
 			$Avatar = 'http'.($SSL?'s':'').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($Avatar);
 		}

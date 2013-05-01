@@ -466,12 +466,13 @@ class Torrents {
 	 */
 	public static function regenerate_filelist($TorrentID) {
 		global $DB, $Cache;
-		$DB->query("SELECT tg.ID,
+		$DB->query("
+			SELECT tg.ID,
 				tf.File
 			FROM torrents_files AS tf
 				JOIN torrents AS t ON t.ID=tf.TorrentID
 				JOIN torrents_group AS tg ON tg.ID=t.GroupID
-				WHERE tf.TorrentID = ".$TorrentID);
+			WHERE tf.TorrentID = ".$TorrentID);
 		if ($DB->record_count() > 0) {
 			list($GroupID, $Contents) = $DB->next_record(MYSQLI_NUM, false);
 			if (Misc::is_new_torrent($Contents)) {
@@ -482,7 +483,7 @@ class Torrents {
 				$FilePath = isset($Tor->Val['info']->Val['files']) ? Format::make_utf8($Tor->get_name()) : '';
 			}
 			list($TotalSize, $FileList) = $Tor->file_list();
-			foreach($FileList as $File) {
+			foreach ($FileList as $File) {
 				$TmpFileList[] = self::filelist_format_file($File);
 			}
 			$FileString = implode("\n", $TmpFileList);

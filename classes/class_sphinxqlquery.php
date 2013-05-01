@@ -206,10 +206,10 @@ class SphinxqlQuery {
 	 */
 	private function build_options() {
 		$Options = array();
-		foreach($this->Options as $Option => $Value) {
+		foreach ($this->Options as $Option => $Value) {
 			$Options[] = "$Option = $Value";
 		}
-		return implode(", ", $Options);
+		return implode(', ', $Options);
 	}
 
 	/**
@@ -221,7 +221,7 @@ class SphinxqlQuery {
 		}
 		$this->QueryString = "SELECT $this->Select\nFROM $this->Indexes";
 		if (!empty($this->Expressions)) {
-			$this->Filters['expr'] = "MATCH('".implode(" ", $this->Expressions)."')";
+			$this->Filters['expr'] = "MATCH('".implode(' ', $this->Expressions)."')";
 		}
 		if (!empty($this->Filters)) {
 			$this->QueryString .= "\nWHERE ".implode("\n\tAND ", $this->Filters);

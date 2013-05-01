@@ -6,12 +6,14 @@ include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
 // Quick SQL injection check
-if(!$_REQUEST['groupid'] || !is_number($_REQUEST['groupid'])) {
+if (!$_REQUEST['groupid'] || !is_number($_REQUEST['groupid'])) {
 	error(404);
 }
 // End injection check
 
-if(!check_perms('site_edit_wiki')) { error(403); }
+if (!check_perms('site_edit_wiki')) {
+	error(403);
+}
 
 // Variables for database input
 $UserID = $LoggedUser['ID'];
@@ -23,12 +25,14 @@ if (!(list($OldVH) = $DB->next_record())) {
 	error(404);
 }
 
-if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverting to a previous revision
+if (!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverting to a previous revision
 	$RevisionID=$_GET['revisionid'];
-	if(!is_number($RevisionID)) { error(0); }
+	if (!is_number($RevisionID)) {
+		error(0);
+	}
 
 	// to cite from merge: "Everything is legit, let's just confim they're not retarded"
-	if(empty($_GET['confirm'])) {
+	if (empty($_GET['confirm'])) {
 		View::show_header();
 ?>
 	<div class="center thin">
@@ -61,18 +65,18 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 		$VanityHouse = $OldVH;
 	}
 
-	if(($GroupInfo = $Cache->get_value('torrents_details_'.$GroupID)) && !isset($GroupInfo[0][0])) {
+	if (($GroupInfo = $Cache->get_value('torrents_details_'.$GroupID)) && !isset($GroupInfo[0][0])) {
 		$GroupCategoryID = $GroupInfo[0]['CategoryID'];
 	} else {
 		$DB->query("SELECT CategoryID FROM torrents_group WHERE ID='$GroupID'");
 		list($GroupCategoryID) = $DB->next_record();
 	}
-	if($GroupCategoryID == 1 && !isset($ReleaseTypes[$ReleaseType]) || $GroupCategoryID != 1 && $ReleaseType) {
+	if ($GroupCategoryID == 1 && !isset($ReleaseTypes[$ReleaseType]) || $GroupCategoryID != 1 && $ReleaseType) {
 		error(403);
 	}
 
 	// Trickery
-	if(!preg_match("/^".IMAGE_REGEX."$/i", $Image)) {
+	if (!preg_match("/^".IMAGE_REGEX."$/i", $Image)) {
 		$Image = '';
 	}
 	ImageTools::blacklisted($Image);
@@ -80,7 +84,7 @@ if(!empty($_GET['action']) && $_GET['action'] == 'revert') { // if we're reverti
 }
 
 // Insert revision
-if(empty($RevisionID)) { // edit
+if (empty($RevisionID)) { // edit
 	$DB->query("INSERT INTO wiki_torrents (PageID, Body, Image, UserID, Summary, Time)
 				VALUES ('$GroupID', '".db_string($Body)."', '".db_string($Image)."', '$UserID', '$Summary', '".sqltime()."')");
 
@@ -90,7 +94,9 @@ if(empty($RevisionID)) { // edit
 else { // revert
 	$DB->query("SELECT PageID,Body,Image FROM wiki_torrents WHERE RevisionID='$RevisionID'");
 	list($PossibleGroupID, $Body, $Image) = $DB->next_record();
-	if($PossibleGroupID != $GroupID) { error(404); }
+	if ($PossibleGroupID != $GroupID) {
+		error(404);
+	}
 
 	$DB->query("INSERT INTO wiki_torrents (PageID, Body, Image, UserID, Summary, Time)
 		SELECT '$GroupID', Body, Image, '$UserID', 'Reverted to revision $RevisionID', '".sqltime()."'
@@ -105,7 +111,7 @@ $Image = db_string($Image);
 // Update torrents table (technically, we don't need the RevisionID column, but we can use it for a join which is nice and fast)
 $DB->query("UPDATE torrents_group SET
 	RevisionID='$RevisionID',
-	".((isset($VanityHouse)) ? "VanityHouse='$VanityHouse'," : "")."
+	".((isset($VanityHouse)) ? "VanityHouse='$VanityHouse'," : '')."
 	WikiBody='$Body',
 	WikiImage='$Image'
 	WHERE ID='$GroupID'");
@@ -119,7 +125,7 @@ if ($OldVH != $VanityHouse && check_perms('torrents_edit_vanityhouse')) {
 
 $Cache->delete_value('torrents_details_'.$GroupID);
 $DB->query("SELECT CollageID FROM collages_torrents WHERE GroupID='$GroupID'");
-if($DB->record_count()>0) {
+if ($DB->record_count() > 0) {
 	while(list($CollageID) = $DB->next_record()) {
 		$Cache->delete_value('collage_'.$CollageID);
 	}
@@ -132,12 +138,12 @@ $DB->query("SELECT DISTINCT UserID
 			WHERE tg.ID = $GroupID");
 
 $UserIDs = $DB->collect('UserID');
-foreach($UserIDs as $UserID) {
+foreach ($UserIDs as $UserID) {
 	$RecentUploads = $Cache->get_value('recent_uploads_'.$UserID);
-	if(is_array($RecentUploads)) {
-		foreach($RecentUploads as $Key => $Recent) {
-			if($Recent['ID'] == $GroupID) {
-				if($Recent['WikiImage'] != $Image) {
+	if (is_array($RecentUploads)) {
+		foreach ($RecentUploads as $Key => $Recent) {
+			if ($Recent['ID'] == $GroupID) {
+				if ($Recent['WikiImage'] != $Image) {
 					$Recent['WikiImage'] = $Image;
 					$Cache->begin_transaction('recent_uploads_'.$UserID);
 					$Cache->update_row($Key, $Recent);
@@ -149,16 +155,16 @@ foreach($UserIDs as $UserID) {
 }
 
 $DB->query("SELECT ID FROM torrents WHERE GroupID = ".$GroupID);
-if($DB->record_count()) {
-	$TorrentIDs = implode(",", $DB->collect('ID'));
+if ($DB->record_count()) {
+	$TorrentIDs = implode(',', $DB->collect('ID'));
 	$DB->query("SELECT DISTINCT uid FROM xbt_snatched WHERE fid IN (".$TorrentIDs.")");
 	$Snatchers = $DB->collect('uid');
-	foreach($Snatchers as $UserID) {
+	foreach ($Snatchers as $UserID) {
 		$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
-		if(is_array($RecentSnatches)) {
-			foreach($RecentSnatches as $Key => $Recent) {
-				if($Recent['ID'] == $GroupID) {
-					if($Recent['WikiImage'] != $Image) {
+		if (is_array($RecentSnatches)) {
+			foreach ($RecentSnatches as $Key => $Recent) {
+				if ($Recent['ID'] == $GroupID) {
+					if ($Recent['WikiImage'] != $Image) {
 						$Recent['WikiImage'] = $Image;
 						$Cache->begin_transaction('recent_snatches_'.$UserID);
 						$Cache->update_row($Key, $Recent);

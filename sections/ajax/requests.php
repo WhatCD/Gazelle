@@ -21,7 +21,7 @@ if (empty($_GET['type'])) {
 		$SS->set_filter('visible', array(1));
 	}
 } else {
-	switch($_GET['type']) {
+	switch ($_GET['type']) {
 		case 'created':
 			$Title = 'My requests';
 			$SS->set_filter('userid', array($LoggedUser['ID']));
@@ -231,27 +231,27 @@ if (empty($_GET['order'])) {
 	}
 }
 
-switch($CurrentOrder) {
+switch ($CurrentOrder) {
 	case 'votes' :
-		$OrderBy = "Votes";
+		$OrderBy = 'Votes';
 		break;
 	case 'bounty' :
-		$OrderBy = "Bounty";
+		$OrderBy = 'Bounty';
 		break;
 	case 'created' :
-		$OrderBy = "TimeAdded";
+		$OrderBy = 'TimeAdded';
 		break;
 	case 'lastvote' :
-		$OrderBy = "LastVote";
+		$OrderBy = 'LastVote';
 		break;
 	case 'filled' :
-		$OrderBy = "TimeFilled";
+		$OrderBy = 'TimeFilled';
 		break;
 	case 'year' :
-		$OrderBy = "Year";
+		$OrderBy = 'Year';
 		break;
 	default :
-		$OrderBy = "TimeAdded";
+		$OrderBy = 'TimeAdded';
 		break;
 }
 //print($Way); print($OrderBy); die();

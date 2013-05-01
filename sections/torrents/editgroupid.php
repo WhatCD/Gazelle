@@ -5,24 +5,26 @@
 * torrent.
 ****************************************************************/
 
-if(!check_perms('torrents_edit')) { error(403); }
+if (!check_perms('torrents_edit')) {
+	error(403);
+}
 
 $OldGroupID = $_POST['oldgroupid'];
 $GroupID = $_POST['groupid'];
 $TorrentID = $_POST['torrentid'];
 
-if(!is_number($OldGroupID) || !is_number($GroupID) || !is_number($TorrentID) || !$OldGroupID || !$GroupID || !$TorrentID) {
+if (!is_number($OldGroupID) || !is_number($GroupID) || !is_number($TorrentID) || !$OldGroupID || !$GroupID || !$TorrentID) {
 	error(0);
 }
-if($OldGroupID == $GroupID) {
+if ($OldGroupID == $GroupID) {
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	die();
 }
 
 //Everything is legit, let's just confim they're not retarded
-if(empty($_POST['confirm'])) {
+if (empty($_POST['confirm'])) {
 	$DB->query("SELECT Name FROM torrents_group WHERE ID = ".$OldGroupID);
-	if($DB->record_count() < 1) {
+	if ($DB->record_count() < 1) {
 		//Trying to move to an empty group? I think not!
 		set_message("That group doesn't exist!");
 		header('Location: '.$_SERVER['HTTP_REFERER']);
@@ -31,7 +33,7 @@ if(empty($_POST['confirm'])) {
 	list($Name) = $DB->next_record();
 	$DB->query("SELECT CategoryID, Name FROM torrents_group WHERE ID = ".$GroupID);
 	list($CategoryID, $NewName) = $DB->next_record();
-	if($Categories[$CategoryID-1] != 'Music') {
+	if ($Categories[$CategoryID-1] != 'Music') {
 		error('Target must be a music group.');
 	}
 
@@ -71,7 +73,7 @@ if(empty($_POST['confirm'])) {
 	// Delete old torrent group if it's empty now
 	$DB->query("SELECT COUNT(ID) FROM torrents WHERE GroupID='$OldGroupID'");
 	list($TorrentsInGroup) = $DB->next_record();
-	if($TorrentsInGroup == 0) {
+	if ($TorrentsInGroup == 0) {
 		$DB->query("UPDATE torrents_comments SET GroupID='$GroupID' WHERE GroupID='$OldGroupID'");
 		$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_0');
 		$Cache->delete_value('torrent_comments_'.$GroupID);

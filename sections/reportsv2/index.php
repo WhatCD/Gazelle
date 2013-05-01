@@ -8,8 +8,8 @@ enforce_login();
 
 include('array.php');
 
-if(isset($_REQUEST['action'])) {
-	switch($_REQUEST['action']){
+if (isset($_REQUEST['action'])) {
+	switch ($_REQUEST['action']){
 		case 'report':
 			include('report.php');
 			break;
@@ -57,7 +57,7 @@ if(isset($_REQUEST['action'])) {
 			break;
 	}
 } else {
-	if(isset($_GET['view'])) {
+	if (isset($_GET['view'])) {
 		include(SERVER_ROOT.'/sections/reportsv2/static.php');
 	} else {
 		include(SERVER_ROOT.'/sections/reportsv2/views.php');

@@ -2,7 +2,9 @@
 authorize();
 
 $TorrentID = $_POST['torrentid'];
-if(!$TorrentID || !is_number($TorrentID)) { error(404); }
+if (!$TorrentID || !is_number($TorrentID)) {
+	error(404);
+}
 
 $DB->query("SELECT
 	t.UserID,
@@ -20,16 +22,16 @@ $DB->query("SELECT
 	WHERE t.ID='$TorrentID'");
 list($UserID, $GroupID, $Size, $InfoHash, $Name, $ArtistName, $Time, $Snatches) = $DB->next_record(MYSQLI_NUM, false);
 
-if(($LoggedUser['ID']!=$UserID || time_ago($Time) > 3600*24*7 || $Snatches > 4) && !check_perms('torrents_delete')) {
+if (($LoggedUser['ID'] != $UserID || time_ago($Time) > 3600 * 24 * 7 || $Snatches > 4) && !check_perms('torrents_delete')) {
 	error(403);
 }
 
-if($ArtistName) {
+if ($ArtistName) {
 	$Name = $ArtistName.' - '.$Name;
 }
 
-if(isset($_SESSION['logged_user']['multi_delete'])) {
-	if($_SESSION['logged_user']['multi_delete']>=3 && !check_perms('torrents_delete_fast')) {
+if (isset($_SESSION['logged_user']['multi_delete'])) {
+	if ($_SESSION['logged_user']['multi_delete'] >= 3 && !check_perms('torrents_delete_fast')) {
 		error('You have recently deleted 3 torrents, please contact a staff member if you need to delete more.');
 	}
 	$_SESSION['logged_user']['multi_delete']++;
@@ -39,8 +41,8 @@ if(isset($_SESSION['logged_user']['multi_delete'])) {
 
 $InfoHash = unpack("H*", $InfoHash);
 Torrents::delete_torrent($TorrentID, $GroupID);
-Misc::write_log('Torrent '.$TorrentID.' ('.$Name.') ('.number_format($Size/(1024*1024), 2).' MB) ('.strtoupper($InfoHash[1]).') was deleted by '.$LoggedUser['Username'].': ' .$_POST['reason'].' '.$_POST['extra']);
-Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "deleted torrent (".number_format($Size/(1024*1024), 2)." MB, ".strtoupper($InfoHash[1]).") for reason: ".$_POST['reason']." ".$_POST['extra'], 0);
+Misc::write_log('Torrent '.$TorrentID.' ('.$Name.') ('.number_format($Size / (1024 * 1024), 2).' MB) ('.strtoupper($InfoHash[1]).') was deleted by '.$LoggedUser['Username'].': ' .$_POST['reason'].' '.$_POST['extra']);
+Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], "deleted torrent (".number_format($Size / (1024 * 1024), 2)." MB, ".strtoupper($InfoHash[1]).") for reason: ".$_POST['reason']." ".$_POST['extra'], 0);
 
 View::show_header('Torrent deleted');
 ?>

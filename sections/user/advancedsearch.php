@@ -59,7 +59,7 @@ function date_compare($Field, $Operand, $Date1, $Date2 = '') {
 	$Date2 = db_string($Date2);
 	$Return = array();
 
-	switch($Operand) {
+	switch ($Operand) {
 		case 'on':
 			$Return []= " $Field>='$Date1 00:00:00' ";
 			$Return []= " $Field<='$Date1 23:59:59' ";
@@ -91,7 +91,7 @@ function num_compare($Field, $Operand, $Num1, $Num2 = '') {
 
 	$Return = array();
 
-	switch($Operand) {
+	switch ($Operand) {
 		case 'equal':
 			$Return []= " $Field='$Num1' ";
 			break;

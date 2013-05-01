@@ -14,17 +14,29 @@ if (isset($_GET['ip']) && isset($_GET['port'])) {
 		$Octets[2] > 255 ||
 		$Octets[3] < 0 ||
 		$Octets[3] > 255 ||
+		/*
+		 * Per RFC 1918, the following CIDR blocks should never be found on the public Internet.
+		 *		10.0.0.0/8
+		 *		172.16.0.0/12
+		 *		192.168.0.0/16
+		 *
+		 * Per RFC 3330, the block 127.0.0.0/8 should never appear on any network.
+		 *
+		 */
 		$Octets[0] == 127 ||
-		$Octets[0] == 192
+		$Octets[0] == 10 ||
+		($Octets[0] == 172 && ((16 <= $Octets[1]) && ($Octets[1] <= 31))) ||
+		($Octets[0] == 192 && $Octets[1] == 168)
 	) {
-		die('Invalid IP');
+		die('Invalid IPv4 address');
 	}
 
+	// Valid port numbers are defined in RFC 1700
 	if (empty($_GET['port']) || !is_number($_GET['port']) || $_GET['port'] < 1 || $_GET['port'] > 65535) {
-		die('Invalid Port');
+		die('Invalid port');
 	}
 
-	//Error suppression, ugh.
+	// Error suppression, ugh.
 	if (@fsockopen($_GET['ip'], $_GET['port'], $Errno, $Errstr, 20)) {
 		die('Port '.$_GET['port'].' on '.$_GET['ip'].' connected successfully.');
 	} else {

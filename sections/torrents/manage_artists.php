@@ -1,8 +1,8 @@
 <?
-if(empty($_POST['importance']) || empty($_POST['artists']) || empty($_POST['groupid']) || !is_number($_POST['importance']) || !is_number($_POST['groupid'])) {
+if (empty($_POST['importance']) || empty($_POST['artists']) || empty($_POST['groupid']) || !is_number($_POST['importance']) || !is_number($_POST['groupid'])) {
 	error(0);
 }
-if(!check_perms('torrents_edit')) {
+if (!check_perms('torrents_edit')) {
 	error(403);
 }
 authorize();
@@ -13,17 +13,17 @@ $CleanArtists = array();
 $ArtistIDs = array();
 $ArtistsString = '0';
 
-foreach($Artists as $i => $Artist) {
+foreach ($Artists as $i => $Artist) {
 	list($Importance, $ArtistID) = explode(';',$Artist);
-	if(is_number($ArtistID) && is_number($Importance)) {
+	if (is_number($ArtistID) && is_number($Importance)) {
 		$CleanArtists[] = array($Importance, $ArtistID);
 		$ArtistIDs[] = $ArtistID;
 	}
 }
 
-if(count($CleanArtists) > 0) {
+if (count($CleanArtists) > 0) {
 	$ArtistsString = implode(',', $ArtistIDs);;
-	if($_POST['manager_action'] == 'delete') {
+	if ($_POST['manager_action'] == 'delete') {
 		$DB->query("SELECT Name FROM torrents_group WHERE ID = '".$_POST['groupid']."'");
 		list($GroupName) = $DB->next_record();
 		$DB->query("SELECT ArtistID, Name FROM artists_group WHERE ArtistID IN (".$ArtistsString.")");
@@ -35,15 +35,17 @@ if(count($CleanArtists) > 0) {
 			$DB->query("DELETE FROM torrents_artists WHERE GroupID = '$GroupID' AND ArtistID = '$ArtistID' AND Importance = '$Importance'");
 			$Cache->delete_value('artist_groups_'.$ArtistID);
 		}
-		$DB->query("SELECT ArtistID
-			FROM requests_artists
-			WHERE ArtistID IN (".$ArtistsString.")
-		UNION SELECT ArtistID
-			FROM torrents_artists
-			WHERE ArtistID IN (".$ArtistsString.")");
+		$DB->query("
+			SELECT ArtistID
+				FROM requests_artists
+				WHERE ArtistID IN (".$ArtistsString.")
+			UNION
+			SELECT ArtistID
+				FROM torrents_artists
+				WHERE ArtistID IN (".$ArtistsString.")");
 		$Items = $DB->collect('ArtistID');
 		$EmptyArtists = array_diff($ArtistIDs, $Items);
-		foreach($EmptyArtists as $ArtistID) {
+		foreach ($EmptyArtists as $ArtistID) {
 			Artists::delete_artist($ArtistID);
 		}
 	} else {

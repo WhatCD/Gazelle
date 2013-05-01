@@ -2,8 +2,8 @@
 //Include all the basic stuff...
 
 enforce_login();
-if(isset($_GET['method'])) {
-	switch($_GET['method']) {
+if (isset($_GET['method'])) {
+	switch ($_GET['method']) {
 		case 'transcode':
 			include(SERVER_ROOT.'/sections/ajax/better/transcode.php');
 			break;

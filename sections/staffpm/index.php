@@ -1,8 +1,9 @@
 <?
 enforce_login();
 
-if(!isset($_REQUEST['action']))
+if (!isset($_REQUEST['action'])) {
 	$_REQUEST['action'] = '';
+}
 
 // Get user level
 $DB->query("
@@ -10,8 +11,8 @@ $DB->query("
 		i.SupportFor,
 		p.DisplayStaff
 	FROM users_info as i
-	JOIN users_main as m ON m.ID = i.UserID
-	JOIN permissions as p ON p.ID = m.PermissionID
+		JOIN users_main as m ON m.ID = i.UserID
+		JOIN permissions as p ON p.ID = m.PermissionID
 	WHERE i.UserID = ".$LoggedUser['ID']
 );
 list($SupportFor, $DisplayStaff) = $DB->next_record();
@@ -20,7 +21,7 @@ $IsStaff = ($DisplayStaff == 1);
 // Logged in user is Staff or FLS
 $IsFLS = ($IsStaff || $LoggedUser['ExtraClasses'][41]);
 
-switch($_REQUEST['action']) {
+switch ($_REQUEST['action']) {
 	case 'viewconv':
 		require('viewconv.php');
 		break;

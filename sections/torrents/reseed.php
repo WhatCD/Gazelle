@@ -27,9 +27,9 @@ $Name .= Artists::display_artists(array('1'=>$Artists), false, true);
 $Name .= $GroupName;
 
 $DB->query("SELECT uid, tstamp FROM xbt_snatched WHERE fid='$TorrentID' ORDER BY tstamp DESC LIMIT 10");
-if($DB->record_count()>0) {
+if ($DB->record_count() > 0) {
 	$Users = $DB->to_array();
-	foreach($Users as $User) {
+	foreach ($Users as $User) {
 		$UserID = $User['uid'];
 
 		$DB->query("SELECT UserID FROM top_snatchers WHERE UserID='$UserID'");
