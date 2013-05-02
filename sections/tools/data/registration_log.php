@@ -1,5 +1,7 @@
 <?
-if(!check_perms('users_view_ips') || !check_perms('users_view_email')) { error(403); }
+if (!check_perms('users_view_ips') || !check_perms('users_view_email')) {
+	error(403);
+}
 View::show_header('Registration log');
 define('USERS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
@@ -7,57 +9,64 @@ list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
 $AfterDate = $_POST['after_date'];
 $BeforeDate = $_POST['before_date'];
 $DateSearch = false;
-if(!empty($AfterDate) && !empty($BeforeDate)) {
-	list($Y, $M, $D) = explode("-", $AfterDate);
-	if(!checkdate($M, $D, $Y)) {
-		error("Incorrect 'after' date format");
+if (!empty($AfterDate) && !empty($BeforeDate)) {
+	list($Y, $M, $D) = explode('-', $AfterDate);
+	if (!checkdate($M, $D, $Y)) {
+		error('Incorrect "after" date format');
 	}
-	list($Y, $M, $D) = explode("-", $BeforeDate);
-	if(!checkdate($M, $D, $Y)) {
-		error("Incorrect 'before' date format");
+	list($Y, $M, $D) = explode('-', $BeforeDate);
+	if (!checkdate($M, $D, $Y)) {
+		error('Incorrect "before" date format');
 	}
 	$AfterDate = db_string($AfterDate);
 	$BeforeDate = db_string($BeforeDate);
 	$DateSearch = true;
 }
 
-$RS = "SELECT
-	SQL_CALC_FOUND_ROWS
-	m.ID,
-	m.IP,
-	m.ipcc,
-	m.Email,
-	m.Username,
-	m.PermissionID,
-	m.Uploaded,
-	m.Downloaded,
-	m.Enabled,
-	i.Donor,
-	i.Warned,
-	i.JoinDate,
-	(SELECT COUNT(h1.UserID) FROM users_history_ips AS h1 WHERE h1.IP=m.IP) AS Uses,
-	im.ID,
-	im.IP,
-	im.ipcc,
-	im.Email,
-	im.Username,
-	im.PermissionID,
-	im.Uploaded,
-	im.Downloaded,
-	im.Enabled,
-	ii.Donor,
-	ii.Warned,
-	ii.JoinDate,
-	(SELECT COUNT(h2.UserID) FROM users_history_ips AS h2 WHERE h2.IP=im.IP) AS InviterUses
+$RS = "
+	SELECT
+		SQL_CALC_FOUND_ROWS
+		m.ID,
+		m.IP,
+		m.ipcc,
+		m.Email,
+		m.Username,
+		m.PermissionID,
+		m.Uploaded,
+		m.Downloaded,
+		m.Enabled,
+		i.Donor,
+		i.Warned,
+		i.JoinDate,
+		(	SELECT COUNT(h1.UserID)
+			FROM users_history_ips AS h1
+			WHERE h1.IP=m.IP
+		) AS Uses,
+		im.ID,
+		im.IP,
+		im.ipcc,
+		im.Email,
+		im.Username,
+		im.PermissionID,
+		im.Uploaded,
+		im.Downloaded,
+		im.Enabled,
+		ii.Donor,
+		ii.Warned,
+		ii.JoinDate,
+		(	SELECT COUNT(h2.UserID)
+			FROM users_history_ips AS h2
+			WHERE h2.IP=im.IP
+		) AS InviterUses
 	FROM users_main AS m
-	LEFT JOIN users_info AS i ON i.UserID=m.ID
-	LEFT JOIN users_main AS im ON i.Inviter = im.ID
-	LEFT JOIN users_info AS ii ON i.Inviter = ii.UserID
+		LEFT JOIN users_info AS i ON i.UserID=m.ID
+		LEFT JOIN users_main AS im ON i.Inviter = im.ID
+		LEFT JOIN users_info AS ii ON i.Inviter = ii.UserID
 	WHERE";
-if($DateSearch) {
+if ($DateSearch) {
 	$RS .= " i.JoinDate BETWEEN '$AfterDate' AND '$BeforeDate' ";
 } else {
-	$RS .= " i.JoinDate > '".time_minus(3600*24*3)."'";
+	$RS .= " i.JoinDate > '".time_minus(3600 * 24 * 3)."'";
 }
 $RS .= " ORDER BY i.Joindate DESC LIMIT $Limit";
 $QueryID = $DB->query($RS);
@@ -78,7 +87,7 @@ if ($DB->record_count()) {
 ?>
 	<div class="linkbox">
 <?
-	$Pages=Format::get_pages($Page,$Results,USERS_PER_PAGE,11) ;
+	$Pages = Format::get_pages($Page,$Results,USERS_PER_PAGE,11) ;
 	echo $Pages;
 ?>
 	</div>
@@ -94,7 +103,7 @@ if ($DB->record_count()) {
 			<td>Registered</td>
 		</tr>
 <?
-	while (list($UserID, $IP, $IPCC, $Email, $Username, $PermissionID, $Uploaded, $Downloaded, $Enabled, $Donor, $Warned, $Joined, $Uses, $InviterID, $InviterIP, $InviterIPCC, $InviterEmail, $InviterUsername, $InviterPermissionID, $InviterUploaded, $InviterDownloaded, $InviterEnabled, $InviterDonor, $InviterWarned, $InviterJoined, $InviterUses)=$DB->next_record()) {
+	while (list($UserID, $IP, $IPCC, $Email, $Username, $PermissionID, $Uploaded, $Downloaded, $Enabled, $Donor, $Warned, $Joined, $Uses, $InviterID, $InviterIP, $InviterIPCC, $InviterEmail, $InviterUsername, $InviterPermissionID, $InviterUploaded, $InviterDownloaded, $InviterEnabled, $InviterDonor, $InviterWarned, $InviterJoined, $InviterUses) = $DB->next_record()) {
 	$Row = ($IP == $InviterIP) ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
@@ -120,15 +129,20 @@ if ($DB->record_count()) {
 				<?=Tools::get_host_by_ajax($IP)?><br />
 				<?=Tools::get_host_by_ajax($InviterIP)?>
 			</td>
-			<td><?=time_diff($Joined)?><br /><?=time_diff($InviterJoined)?></td>
+			<td>
+				<?=time_diff($Joined)?><br />
+				<?=time_diff($InviterJoined)?>
+			</td>
 		</tr>
 <?	} ?>
 	</table>
 	<div class="linkbox">
 <? echo $Pages; ?>
 	</div>
-<? } else { ?>
+<?
+} else { ?>
 	<h2 align="center">There have been no new registrations in the past 72 hours.</h2>
-<? }
+<?
+}
 View::show_footer();
 ?>

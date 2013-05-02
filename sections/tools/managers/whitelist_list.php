@@ -1,5 +1,7 @@
 <?
-if(!check_perms('admin_whitelist')) { error(403); }
+if (!check_perms('admin_whitelist')) {
+	error(403);
+}
 
 View::show_header('Whitelist Management');
 $DB->query('SELECT id, vstring, peer_id FROM xbt_client_whitelist ORDER BY peer_id ASC');
@@ -16,7 +18,7 @@ $DB->query('SELECT id, vstring, peer_id FROM xbt_client_whitelist ORDER BY peer_
 </table>
 <?
 $Row = 'b';
-while(list($ID, $Client, $Peer_ID) = $DB->next_record()){
+while (list($ID, $Client, $Peer_ID) = $DB->next_record()) {
 	$Row = ($Row === 'a' ? 'b' : 'a');
 ?>
 <form class="manage_form" name="clients" action="" method="post">
@@ -44,7 +46,7 @@ while(list($ID, $Client, $Peer_ID) = $DB->next_record()){
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<table>
 		<tr class="colhead">
-			<td colspan="4">Add Client</td>
+			<td colspan="4">Add client</td>
 		</tr>
 		<tr class="rowa">
 

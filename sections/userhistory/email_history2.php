@@ -110,20 +110,20 @@ if (count($History) == 1) {
 	if ($Current['StartTime'] == '0000-00-00 00:00:00') { $Current['StartTime'] = $Joined; }
 } else {
 	foreach ($History as $Key => $Val) {
-		if ($History[$Key+1]['Time'] == '0000-00-00 00:00:00' && $Val['Time'] != '0000-00-00 00:00:00') {
+		if ($History[$Key + 1]['Time'] == '0000-00-00 00:00:00' && $Val['Time'] != '0000-00-00 00:00:00') {
 			// Invited email
 			$Invite['Email'] = $Val['Email'];
 			$Invite['EndTime'] = $Joined;
 			$Invite['AccountAge'] = date(time() + time() - strtotime($Joined)); // Same as EndTime but without ' ago'
 			$Invite['IP'] = $Val['IP'];
 
-		} elseif ($History[$Key-1]['Email'] != $Val['Email'] && $Val['Time'] != '0000-00-00 00:00:00') {
+		} elseif ($History[$Key - 1]['Email'] != $Val['Email'] && $Val['Time'] != '0000-00-00 00:00:00') {
 			// Old email
-			$i=1;
-			while($Val['Email'] == $History[$Key+$i]['Email']) {
+			$i = 1;
+			while ($Val['Email'] == $History[$Key + $i]['Email']) {
 				$i++;
 			}
-			$Old[$Key]['StartTime'] = (isset($History[$Key+$i]) && $History[$Key+$i]['Time'] != '0000-00-00 00:00:00') ? $History[$Key+$i]['Time'] : $Joined;
+			$Old[$Key]['StartTime'] = (isset($History[$Key + $i]) && $History[$Key + $i]['Time'] != '0000-00-00 00:00:00') ? $History[$Key + $i]['Time'] : $Joined;
 			$Old[$Key]['EndTime'] = $Val['Time'];
 			$Old[$Key]['IP'] = $Val['IP'];
 			$Old[$Key]['ElapsedTime'] = date(time() + strtotime($Old[$Key]['EndTime']) - strtotime($Old[$Key]['StartTime']));
@@ -131,7 +131,7 @@ if (count($History) == 1) {
 
 		} else {
 			// Shouldn't have to be here but I'll leave it anyway
-			$Other[$Key]['StartTime'] = (isset($History[$Key+$i])) ? $History[$Key+$i]['Time'] : $Joined;
+			$Other[$Key]['StartTime'] = (isset($History[$Key + $i])) ? $History[$Key + $i]['Time'] : $Joined;
 			$Other[$Key]['EndTime'] = $Val['Time'];
 			$Other[$Key]['IP'] = $Val['IP'];
 			$Other[$Key]['ElapsedTime'] = date(time() + strtotime($Other[$Key]['EndTime']) - strtotime($Other[$Key]['StartTime']));
@@ -151,14 +151,14 @@ if (count($History) == 1) {
 // Clean up arrays
 if ($Old) {
 	$Old = array_reverse(array_reverse($Old));
-	$LastOld = count($Old)-1;
+	$LastOld = count($Old) - 1;
 	if ($Old[$LastOld]['StartTime'] != $Invite['EndTime']) {
 		// Make sure the timeline is intact (invite email was used as email for the account in the beginning)
-		$Old[$LastOld+1]['Email'] = $Invite['Email'];
-		$Old[$LastOld+1]['StartTime'] = $Invite['EndTime'];
-		$Old[$LastOld+1]['EndTime'] = $Old[$LastOld]['StartTime'];
-		$Old[$LastOld+1]['ElapsedTime'] = date(time()+strtotime($Old[$LastOld+1]['EndTime'] )-strtotime($Old[$LastOld+1]['StartTime']));
-		$Old[$LastOld+1]['IP'] = $Invite['IP'];
+		$Old[$LastOld + 1]['Email'] = $Invite['Email'];
+		$Old[$LastOld + 1]['StartTime'] = $Invite['EndTime'];
+		$Old[$LastOld + 1]['EndTime'] = $Old[$LastOld]['StartTime'];
+		$Old[$LastOld + 1]['ElapsedTime'] = date(time() + strtotime($Old[$LastOld + 1]['EndTime'] ) - strtotime($Old[$LastOld + 1]['StartTime']));
+		$Old[$LastOld + 1]['IP'] = $Invite['IP'];
 	}
 }
 

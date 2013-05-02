@@ -1,14 +1,14 @@
 <?
-if(!check_perms('users_mod') || !check_perms('admin_clear_cache')) {
+if (!check_perms('users_mod') || !check_perms('admin_clear_cache')) {
 	error(403);
 }
 
 View::show_header('Clear a cache key');
 
 //Make sure the form was sent
-if(!empty($_GET['key']) && $_GET['type'] == "clear") {
-	if(preg_match('/(.*?)(\d+)\.\.(\d+)$/', $_GET['key'], $Matches) && is_number($Matches[2]) && is_number($Matches[3])) {
-		for($i=$Matches[2]; $i<=$Matches[3]; $i++) {
+if (!empty($_GET['key']) && $_GET['type'] == 'clear') {
+	if (preg_match('/(.*?)(\d+)\.\.(\d+)$/', $_GET['key'], $Matches) && is_number($Matches[2]) && is_number($Matches[3])) {
+		for ($i = $Matches[2]; $i <= $Matches[3]; $i++) {
 			$Cache->delete_value($Matches[1].$i);
 		}
 		echo '<div class="save_message">Keys '.display_str($_GET['key']).' cleared!</div>';
@@ -35,7 +35,7 @@ if(!empty($_GET['key']) && $_GET['type'] == "clear") {
 					<input type="submit" value="key" class="submit" />
 				</td>
 			</tr>
-<? if(!empty($_GET['key']) && $_GET['type'] == "view") { ?>
+<? if (!empty($_GET['key']) && $_GET['type'] == 'view') { ?>
 			<tr>
 				<td colspan="2">
 					<pre><? var_dump($Cache->get_value($_GET['key'])); ?></pre>

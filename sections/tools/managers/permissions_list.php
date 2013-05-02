@@ -18,24 +18,30 @@ function confirmDelete(id) {
 		</div>
 	</div>
 <?
-$DB->query("SELECT p.ID,p.Name,p.Level,p.Secondary,COUNT(u.ID)+COUNT(DISTINCT l.UserID)
+$DB->query("SELECT
+				p.ID,
+				p.Name,
+				p.Level,
+				p.Secondary,
+				COUNT(u.ID)+COUNT(DISTINCT l.UserID)
 			FROM permissions AS p
-			LEFT JOIN users_main AS u ON u.PermissionID=p.ID
-			LEFT JOIN users_levels AS l ON l.PermissionID=p.ID
-			GROUP BY p.ID ORDER BY p.Secondary ASC, p.Level ASC");
-if($DB->record_count()) {
+				LEFT JOIN users_main AS u ON u.PermissionID=p.ID
+				LEFT JOIN users_levels AS l ON l.PermissionID=p.ID
+			GROUP BY p.ID
+			ORDER BY p.Secondary ASC, p.Level ASC");
+if ($DB->record_count()) {
 ?>
 	<table width="100%">
 		<tr class="colhead">
 			<td>Name</td>
 			<td>Level</td>
-			<td>User Count</td>
+			<td>User count</td>
 			<td class="center">Actions</td>
 		</tr>
-<?	while(list($ID,$Name,$Level,$Secondary,$UserCount)=$DB->next_record()) { ?>
+<?	while (list($ID,$Name,$Level,$Secondary,$UserCount)=$DB->next_record()) { ?>
 		<tr>
 			<td><?=display_str($Name); ?></td>
-			<td><?=($Secondary?'Secondary':$Level) ?></td>
+			<td><?=($Secondary ? 'Secondary' : $Level) ?></td>
 			<td><?=number_format($UserCount); ?></td>
 			<td class="center">
 				<a href="tools.php?action=permissions&amp;id=<?=$ID ?>" class="brackets">Edit</a>
@@ -44,9 +50,11 @@ if($DB->record_count()) {
 		</tr>
 <?	} ?>
 	</table>
-<? } else { ?>
+<?
+} else { ?>
 	<h2 align="center">There are no permission classes.</h2>
-<? } ?>
+<?
+} ?>
 </div>
 <?
 View::show_footer();

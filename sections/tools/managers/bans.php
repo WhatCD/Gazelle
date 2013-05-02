@@ -130,7 +130,7 @@ $DB->set_query_id($Bans);
 	</tr>
 <?
 $Row = 'a';
-while(list($ID, $Start, $End, $Reason) = $DB->next_record()) {
+while (list($ID, $Start, $End, $Reason) = $DB->next_record()) {
 	$Row = ($Row === 'a' ? 'b' : 'a');
 	$Start=long2ip($Start);
 	$End=long2ip($End);

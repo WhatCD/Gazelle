@@ -1,5 +1,7 @@
 <?
-if(!check_perms('site_view_flow')) { error(403); }
+if (!check_perms('site_view_flow')) {
+	error(403);
+}
 View::show_header('Torrents');
 
 if (!$TorrentStats = $Cache->get_value('new_torrent_stats')) {
@@ -32,10 +34,10 @@ if (!$TorrentStats = $Cache->get_value('new_torrent_stats')) {
 				<li><strong>Total size: </strong><?=Format::get_size($TotalSize)?></li>
 				<li><strong>Total files: </strong><?=number_format($TotalFiles)?></li>
 				<br />
-				<li><strong>Mean torrents per user: </strong><?=number_format($TorrentCount/$NumUsers)?></li>
-				<li><strong>Mean torrent size: </strong><?=Format::get_size($TotalSize/$TorrentCount)?></li>
-				<li><strong>Mean files per torrent: </strong><?=number_format($TotalFiles/$TorrentCount)?></li>
-				<li><strong>Mean filesize: </strong><?=Format::get_size($TotalSize/$TotalFiles)?></li>
+				<li><strong>Mean torrents per user: </strong><?=number_format($TorrentCount / $NumUsers)?></li>
+				<li><strong>Mean torrent size: </strong><?=Format::get_size($TotalSize / $TorrentCount)?></li>
+				<li><strong>Mean files per torrent: </strong><?=number_format($TotalFiles / $TorrentCount)?></li>
+				<li><strong>Mean filesize: </strong><?=Format::get_size($TotalSize / $TotalFiles)?></li>
 			</ul>
 		</div>
 	</div>
@@ -52,17 +54,17 @@ if (!$TorrentStats = $Cache->get_value('new_torrent_stats')) {
 				<li><strong>Size this week: </strong><?=Format::get_size($WeekSize)?></li>
 				<li><strong>Files this week: </strong><?=number_format($WeekFiles)?></li>
 				<br />
-				<li><strong>Torrents per day this week: </strong><?=number_format($WeekNum/7)?></li>
-				<li><strong>Size per day this week: </strong><?=Format::get_size($WeekSize/7)?></li>
-				<li><strong>Files per day this week: </strong><?=number_format($WeekFiles/7)?></li>
+				<li><strong>Torrents per day this week: </strong><?=number_format($WeekNum / 7)?></li>
+				<li><strong>Size per day this week: </strong><?=Format::get_size($WeekSize / 7)?></li>
+				<li><strong>Files per day this week: </strong><?=number_format($WeekFiles / 7)?></li>
 				<br />
 				<li><strong>Torrents this month: </strong><?=number_format($MonthNum)?></li>
 				<li><strong>Size this month: </strong><?=Format::get_size($MonthSize)?></li>
 				<li><strong>Files this month: </strong><?=number_format($MonthFiles)?></li>
 				<br />
-				<li><strong>Torrents per day this month: </strong><?=number_format($MonthNum/30)?></li>
-				<li><strong>Size per day this month: </strong><?=Format::get_size($MonthSize/30)?></li>
-				<li><strong>Files per day this month: </strong><?=number_format($MonthFiles/30)?></li>
+				<li><strong>Torrents per day this month: </strong><?=number_format($MonthNum / 30)?></li>
+				<li><strong>Size per day this month: </strong><?=Format::get_size($MonthSize / 30)?></li>
+				<li><strong>Files per day this month: </strong><?=number_format($MonthFiles / 30)?></li>
 			</ul>
 		</div>
 	</div>

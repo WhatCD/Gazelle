@@ -2,14 +2,16 @@
 //TODO: Accelerator cache keys, removed scripts (stats here and a class to manage them (we'd probably never use it, but I like completeness))
 //INFO: http://bart.eaccelerator.net/doc/phpdoc/
 //INFO: http://bakery.cakephp.org/articles/view/eaccelerator-cache-engine - pertains to potential todo for eAccelerator cache class
-if(!check_perms('site_debug')) { error(403); }
+if (!check_perms('site_debug')) {
+	error(403);
+}
 
 if (!extension_loaded('eAccelerator')) {
 	error('eAccelerator Extension not loaded.');
 }
 
 if (isset($_POST['submit'])) {
-	if($_POST['cache'] == 1) {
+	if ($_POST['cache'] == 1) {
 		authorize();
 
 		eaccelerator_caching(true);
@@ -17,7 +19,7 @@ if (isset($_POST['submit'])) {
 		eaccelerator_caching(false);
 	}
 	if (function_exists('eaccelerator_optimizer')) {
-		if($_POST['optimize'] == 1) {
+		if ($_POST['optimize'] == 1) {
 
 			authorize();
 
@@ -61,10 +63,10 @@ View::show_header("Opcode Stats");
 				<tr>
 					<td><strong>Enable:</strong></td>
 					<td>
-						<input type="checkbox" name="cache" value="1" id="cache"<?=($Opcode['cache'])?' checked="checked"':''?> />
+						<input type="checkbox" name="cache" value="1" id="cache"<?=($Opcode['cache']) ? ' checked="checked"' : '' ?> />
 						<label for="cache">Cache</label>
 <? if (function_exists('eaccelerator_optimizer')) { ?>
-						<input type="checkbox" name="optimize" value="1" id="optimize"<?=($Opcode['optimizer'])?' checked="checked"':''?> />
+						<input type="checkbox" name="optimize" value="1" id="optimize"<?=($Opcode['optimizer']) ? ' checked="checked"' : '' ?> />
 						<label for="optimize">Optimize</label>
 <? } ?>
 					</td>
@@ -97,9 +99,9 @@ View::show_header("Opcode Stats");
 			<td>Total Storage:</td>
 			<td><?=Format::get_size($Opcode['memorySize'])?></td>
 			<td>Used Storage:</td>
-			<td><?=Format::get_size($Opcode['memoryAllocated'])?> (<?=number_format(($Opcode['memoryAllocated']/$Opcode['memorySize'])*100, 3);?>%)</td>
+			<td><?=Format::get_size($Opcode['memoryAllocated'])?> (<?=number_format(($Opcode['memoryAllocated'] / $Opcode['memorySize']) * 100, 3);?>%)</td>
 			<td>Free Storage:</td>
-			<td><?=Format::get_size($Opcode['memoryAvailable'])?> (<?=number_format(($Opcode['memoryAvailable']/$Opcode['memorySize'])*100, 3);?>%)</td>
+			<td><?=Format::get_size($Opcode['memoryAvailable'])?> (<?=number_format(($Opcode['memoryAvailable'] / $Opcode['memorySize']) * 100, 3);?>%)</td>
 		</tr>
 		<tr>
 			<td>Cached Scripts:</td>
@@ -123,7 +125,7 @@ View::show_header("Opcode Stats");
 		<td>Hits</td>
 	</tr>
 <?
-if(count($CachedScripts) == 0) { // Uh-oh, try again.
+if (count($CachedScripts) == 0) { // Uh-oh, try again.
 	echo '<tr><td colspan="5">No scripts cached.</td></tr>';
 }
 $Row = 'a'; // For the pretty colours

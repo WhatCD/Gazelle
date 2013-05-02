@@ -15,18 +15,19 @@ if (!empty($_POST['invitekey']) && check_perms('users_edit_invites')) {
 if (!empty($_GET['search'])) {
 	$Search = db_string($_GET['search']);
 } else {
-	$Search = "";
+	$Search = '';
 }
 
-$sql = "SELECT
-	SQL_CALC_FOUND_ROWS
-	um.ID,
-	um.IP,
-	i.InviteKey,
-	i.Expires,
-	i.Email
+$sql = "
+	SELECT
+		SQL_CALC_FOUND_ROWS
+		um.ID,
+		um.IP,
+		i.InviteKey,
+		i.Expires,
+		i.Email
 	FROM invites as i
-	JOIN users_main AS um ON um.ID = i.InviterID ";
+		JOIN users_main AS um ON um.ID = i.InviterID ";
 if ($Search) {
 	$sql .= "WHERE i.Email LIKE '%$Search%' ";
 }
@@ -70,7 +71,7 @@ $DB->set_query_id($RS);
 			<td>IP</td>
 			<td>InviteCode</td>
 			<td>Expires</td>
-<? if(check_perms('users_edit_invites')){ ?>
+<? if (check_perms('users_edit_invites')) { ?>
 			<td>Controls</td>
 <? } ?>
 		</tr>

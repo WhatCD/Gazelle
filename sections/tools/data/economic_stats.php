@@ -26,7 +26,9 @@ Tools necessary for economic management
 	a. number of users changed by ratio being changed
 	b. project effects with intelligent mathematical analysis of a 24, 48 or 72 hour freeleech
 */
-if(!check_perms('site_view_flow')) { error(403); }
+if (!check_perms('site_view_flow')) {
+	error(403);
+}
 View::show_header('Economy');
 
 if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
@@ -43,7 +45,7 @@ if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
 	$DB->query("SELECT COUNT(uid) FROM xbt_snatched");
 	list($TotalOverallSnatches) = $DB->next_record();
 
-	if(($PeerStats = $Cache->get_value('stats_peers')) === false) {
+	if (($PeerStats = $Cache->get_value('stats_peers')) === false) {
 		$DB->query("SELECT COUNT(fid) FROM xbt_files_users WHERE remaining=0");
 		list($TotalSeeders) = $DB->next_record();
 		$DB->query("SELECT COUNT(fid) FROM xbt_files_users WHERE remaining>0");
@@ -52,7 +54,12 @@ if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
 		list($TotalLeechers,$TotalSeeders) = $PeerStats;
 	}
 	$TotalPeers = $TotalLeechers + $TotalSeeders;
-	$DB->query("SELECT COUNT(ID) FROM users_main WHERE(SELECT COUNT(uid) FROM xbt_files_users WHERE uid=users_main.ID)>0");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM users_main
+		WHERE (		SELECT COUNT(uid)
+					FROM xbt_files_users
+					WHERE uid=users_main.ID)>0");
 	list($TotalPeerUsers) = $DB->next_record();
 	$Cache->cache_value('new_economic_stats',
 				array($TotalUpload,$TotalDownload,$NumUsers,$TotalBounty,
@@ -75,12 +82,12 @@ $TotalLeechers = $TotalPeers - $TotalSeeders;
 			<ul class="stats nobullet">
 				<li><strong>Total upload: </strong><?=Format::get_size($TotalUpload)?></li>
 				<li><strong>Total download: </strong><?=Format::get_size($TotalDownload)?></li>
-				<li><strong>Total buffer: </strong><?=Format::get_size($TotalUpload-$TotalDownload)?></li>
+				<li><strong>Total buffer: </strong><?=Format::get_size($TotalUpload - $TotalDownload)?></li>
 				<br />
-				<li><strong>Mean ratio: </strong><?=Format::get_ratio_html($TotalUpload,$TotalDownload)?></li>
-				<li><strong>Mean upload: </strong><?=Format::get_size($TotalUpload/$NumUsers)?></li>
-				<li><strong>Mean download: </strong><?=Format::get_size($TotalDownload/$NumUsers)?></li>
-				<li><strong>Mean buffer: </strong><?=Format::get_size(($TotalUpload-$TotalDownload)/$NumUsers)?></li>
+				<li><strong>Mean ratio: </strong><?=Format::get_ratio_html($TotalUpload, $TotalDownload)?></li>
+				<li><strong>Mean upload: </strong><?=Format::get_size($TotalUpload / $NumUsers)?></li>
+				<li><strong>Mean download: </strong><?=Format::get_size($TotalDownload / $NumUsers)?></li>
+				<li><strong>Mean buffer: </strong><?=Format::get_size(($TotalUpload - $TotalDownload) / $NumUsers)?></li>
 				<br />
 				<li><strong>Total request bounty: </strong><?=Format::get_size($TotalBounty)?></li>
 				<li><strong>Available request bounty: </strong><?=Format::get_size($AvailableBounty)?></li>
@@ -99,18 +106,18 @@ $TotalLeechers = $TotalPeers - $TotalSeeders;
 				<li><strong>Seeder/leecher ratio: </strong><?=Format::get_ratio_html($TotalSeeders,$TotalLeechers)?></li>
 				<li><strong>Seeder/snatch ratio: </strong><?=Format::get_ratio_html($TotalSeeders,$TotalOverallSnatches)?></li>
 				<br />
-				<li><strong>Mean seeders per torrent: </strong><?=number_format($TotalSeeders/$TotalTorrents, 2)?></li>
-				<li><strong>Mean leechers per torrent: </strong><?=number_format($TotalLeechers/$TotalTorrents, 2)?></li>
-				<li><strong>Mean snatches per torrent: </strong><?=number_format($TotalSnatches/$TotalTorrents, 2)?></li>
+				<li><strong>Mean seeders per torrent: </strong><?=number_format($TotalSeeders / $TotalTorrents, 2)?></li>
+				<li><strong>Mean leechers per torrent: </strong><?=number_format($TotalLeechers / $TotalTorrents, 2)?></li>
+				<li><strong>Mean snatches per torrent: </strong><?=number_format($TotalSnatches / $TotalTorrents, 2)?></li>
 				<br />
-				<li><strong>Mean seeding per user: </strong><?=number_format($TotalSeeders/$NumUsers, 2)?></li>
-				<li><strong>Mean leeching per user: </strong><?=number_format($TotalLeechers/$NumUsers, 2)?></li>
-				<li><strong>Mean snatches per user: </strong><?=number_format($TotalOverallSnatches/$NumUsers, 2)?></li>
+				<li><strong>Mean seeding per user: </strong><?=number_format($TotalSeeders / $NumUsers, 2)?></li>
+				<li><strong>Mean leeching per user: </strong><?=number_format($TotalLeechers / $NumUsers, 2)?></li>
+				<li><strong>Mean snatches per user: </strong><?=number_format($TotalOverallSnatches / $NumUsers, 2)?></li>
 				<br />
 				<li><strong>Total users in at least 1 swarm: </strong><?=number_format($TotalPeerUsers)?></li>
-				<li><strong>Mean seeding per user in at least 1 swarm: </strong><?=number_format($TotalSeeders/$TotalPeerUsers, 2)?></li>
-				<li><strong>Mean leeching per user in at least 1 swarm: </strong><?=number_format($TotalLeechers/$TotalPeerUsers, 2)?></li>
-				<li><strong>Mean snatches per user in at least 1 swarm: </strong><?=number_format($TotalSnatches/$TotalPeerUsers, 2)?></li>
+				<li><strong>Mean seeding per user in at least 1 swarm: </strong><?=number_format($TotalSeeders / $TotalPeerUsers, 2)?></li>
+				<li><strong>Mean leeching per user in at least 1 swarm: </strong><?=number_format($TotalLeechers / $TotalPeerUsers, 2)?></li>
+				<li><strong>Mean snatches per user in at least 1 swarm: </strong><?=number_format($TotalSnatches / $TotalPeerUsers, 2)?></li>
 			</ul>
 		</div>
 	</div>

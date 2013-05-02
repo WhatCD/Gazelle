@@ -162,22 +162,24 @@ $DB->query("SELECT
 							uploaded by <a href="user.php?id=<?=$UploaderID?>"><?=$UploaderName?></a> <?=time_diff($Time)?>
 							<br />
 							<div style="text-align: right;">was reported by <a href="user.php?id=<?=$ReporterID?>"><?=$ReporterName?></a> <?=time_diff($ReportedTime)?> for the reason: <strong><?=$ReportType['title']?></strong></div>
-<?				$DB->query("SELECT r.ID
-							FROM reportsv2 AS r
-								LEFT JOIN torrents AS t ON t.ID=r.TorrentID
-							WHERE r.Status != 'Resolved'
-								AND t.GroupID=$GroupID");
+<?				$DB->query("
+						SELECT r.ID
+						FROM reportsv2 AS r
+							LEFT JOIN torrents AS t ON t.ID=r.TorrentID
+						WHERE r.Status != 'Resolved'
+							AND t.GroupID=$GroupID");
 				$GroupOthers = ($DB->record_count() - 1);
 
 				if ($GroupOthers > 0) { ?>
 							<div style="text-align: right;">
 								<a href="reportsv2.php?view=group&amp;id=<?=$GroupID?>">There <?=(($GroupOthers > 1) ? "are $GroupOthers other reports" : "is 1 other report")?> for torrents in this group</a>
 							</div>
-<?				$DB->query("SELECT t.UserID
-							FROM reportsv2 AS r
-								JOIN torrents AS t ON t.ID=r.TorrentID
-							WHERE r.Status != 'Resolved'
-								AND t.UserID=$UploaderID");
+<?				$DB->query("
+						SELECT t.UserID
+						FROM reportsv2 AS r
+							JOIN torrents AS t ON t.ID=r.TorrentID
+						WHERE r.Status != 'Resolved'
+							AND t.UserID=$UploaderID");
 				$UploaderOthers = ($DB->record_count() - 1);
 
 				if ($UploaderOthers > 0) { ?>
@@ -186,20 +188,21 @@ $DB->query("SELECT
 							</div>
 <?				}
 
-				$DB->query("SELECT DISTINCT req.ID,
-								req.FillerID,
-								um.Username,
-								req.TimeFilled
-							FROM requests AS req
-								LEFT JOIN torrents AS t ON t.ID=req.TorrentID
-								LEFT JOIN reportsv2 AS rep ON rep.TorrentID=t.ID
-								JOIN users_main AS um ON um.ID=req.FillerID
-							WHERE rep.Status != 'Resolved'
-								AND req.TimeFilled > '2010-03-04 02:31:49'
-								AND req.TorrentID=$TorrentID");
+				$DB->query("
+						SELECT DISTINCT req.ID,
+							req.FillerID,
+							um.Username,
+							req.TimeFilled
+						FROM requests AS req
+							LEFT JOIN torrents AS t ON t.ID=req.TorrentID
+							LEFT JOIN reportsv2 AS rep ON rep.TorrentID=t.ID
+							JOIN users_main AS um ON um.ID=req.FillerID
+						WHERE rep.Status != 'Resolved'
+							AND req.TimeFilled > '2010-03-04 02:31:49'
+							AND req.TorrentID=$TorrentID");
 				$Requests = ($DB->record_count());
 				if ($Requests > 0) {
-					while(list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
+					while (list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 			?>
 								<div style="text-align: right;">
 									<strong class="important_text"><a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=view&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?></strong>
@@ -244,44 +247,45 @@ $DB->query("SELECT
 						<td colspan="3">
 <?
 				$First = true;
-				$Extras = explode(" ", $ExtraIDs);
+				$Extras = explode(' ', $ExtraIDs);
 				foreach ($Extras as $ExtraID) {
 
 
-						$DB->query("SELECT
-										tg.Name,
-										tg.ID,
-										CASE COUNT(ta.GroupID)
-											WHEN 1 THEN aa.ArtistID
-											WHEN 0 THEN '0'
-											ELSE '0'
-										END AS ArtistID,
-										CASE COUNT(ta.GroupID)
-											WHEN 1 THEN aa.Name
-											WHEN 0 THEN ''
-											ELSE 'Various Artists'
-										END AS ArtistName,
-										tg.Year,
-										t.Time,
-										t.Remastered,
-										t.RemasterTitle,
-										t.RemasterYear,
-										t.Media,
-										t.Format,
-										t.Encoding,
-										t.Size,
-										t.HasCue,
-										t.HasLog,
-										t.LogScore,
-										t.UserID AS UploaderID,
-										uploader.Username
-									FROM torrents AS t
-										LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-										LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-										LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-										LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
-									WHERE t.ID='$ExtraID'
-									GROUP BY tg.ID");
+						$DB->query("
+								SELECT
+									tg.Name,
+									tg.ID,
+									CASE COUNT(ta.GroupID)
+										WHEN 1 THEN aa.ArtistID
+										WHEN 0 THEN '0'
+										ELSE '0'
+									END AS ArtistID,
+									CASE COUNT(ta.GroupID)
+										WHEN 1 THEN aa.Name
+										WHEN 0 THEN ''
+										ELSE 'Various Artists'
+									END AS ArtistName,
+									tg.Year,
+									t.Time,
+									t.Remastered,
+									t.RemasterTitle,
+									t.RemasterYear,
+									t.Media,
+									t.Format,
+									t.Encoding,
+									t.Size,
+									t.HasCue,
+									t.HasLog,
+									t.LogScore,
+									t.UserID AS UploaderID,
+									uploader.Username
+								FROM torrents AS t
+									LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
+									LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
+									LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
+									LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
+								WHERE t.ID='$ExtraID'
+								GROUP BY tg.ID");
 
 						list($ExtraGroupName, $ExtraGroupID, $ExtraArtistID, $ExtraArtistName, $ExtraYear, $ExtraTime, $ExtraRemastered, $ExtraRemasterTitle,
 							$ExtraRemasterYear, $ExtraMedia, $ExtraFormat, $ExtraEncoding, $ExtraSize, $ExtraHasCue, $ExtraHasLog, $ExtraLogScore, $ExtraUploaderID, $ExtraUploaderName) = Misc::display_array($DB->next_record());
@@ -289,13 +293,12 @@ $DB->query("SELECT
 
 					if ($ExtraGroupName) {
 		if ($ArtistID == 0 && empty($ArtistName)) {
-			$ExtraLinkName = "<a href='torrents.php?id=$ExtraGroupID'>$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : "")."</a> <a href='torrents.php?torrentid=$ExtraID'> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : "")."</a> ".($ExtraHasLog == '1' ? " <a href='torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID'>(Log: $ExtraLogScore %)</a>" : "")." (".number_format($ExtraSize/(1024*1024), 2)." MB)";
+			$ExtraLinkName = "<a href=\"torrents.php?id=$ExtraGroupID\">$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : '')."</a> <a href=\"torrents.php?torrentid=$ExtraID\"> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : '').'</a> '.($ExtraHasLog == '1' ? " <a href=\"torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID\">(Log: $ExtraLogScore %)</a>" : '').' ('.number_format($ExtraSize / (1024 * 1024), 2).' MB)';
 		} elseif ($ArtistID == 0 && $ArtistName == 'Various Artists') {
-			$ExtraLinkName = "Various Artists - <a href='torrents.php?id=$ExtraGroupID'>$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : "")."</a> <a href='torrents.php?torrentid=$ExtraID'> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : "")."</a> ".($ExtraHasLog == '1' ? " <a href='torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID'>(Log: $ExtraLogScore %)</a>" : "")." (".number_format($ExtraSize/(1024*1024), 2)." MB)";
+			$ExtraLinkName = "Various Artists - <a href=\"torrents.php?id=$ExtraGroupID\">$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : '')."</a> <a href=\"torrents.php?torrentid=$ExtraID\"> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : '')."</a> ".($ExtraHasLog == '1' ? " <a href=\"torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID\">(Log: $ExtraLogScore %)</a>" : '').' ('.number_format($ExtraSize / (1024 * 1024), 2).' MB)';
 		} else {
-			$ExtraLinkName = "<a href='artist.php?id=$ExtraArtistID'>$ExtraArtistName</a> - <a href='torrents.php?id=$ExtraGroupID'>$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : "")."</a> <a href='torrents.php?torrentid=$ExtraID'> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : "")."</a> ".($ExtraHasLog == '1' ? " <a href='torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID'>(Log: $ExtraLogScore %)</a>" : "")." (".number_format($ExtraSize/(1024*1024), 2)." MB)";
+			$ExtraLinkName = "<a href=\"artist.php?id=$ExtraArtistID\">$ExtraArtistName</a> - <a href=\"torrents.php?id=$ExtraGroupID\">$ExtraGroupName".($ExtraYear ? " ($ExtraYear)" : '')."</a> <a href=\"torrents.php?torrentid=$ExtraID\"> [$ExtraFormat/$ExtraEncoding/$ExtraMedia]".($ExtraRemastered ? " &lt;$ExtraRemasterTitle - $ExtraRemasterYear&gt;" : '').'</a> '.($ExtraHasLog == '1' ? " <a href=\"torrents.php?action=viewlog&amp;torrentid=$ExtraID&amp;groupid=$ExtraGroupID\">(Log: $ExtraLogScore %)</a>" : '').' ('.number_format($ExtraSize / (1024 * 1024), 2).' MB)';
 		}
-
 			?>
 								<?=($First ? '' : '<br />')?>
 								<?=$ExtraLinkName?>
@@ -366,7 +369,7 @@ $DB->query("SELECT
 									<strong>Warning</strong>
 									<select name="warning" id="warning<?=$ReportID?>">
 <?
-	for($i = 0; $i < 9; $i++) {
+	for ($i = 0; $i < 9; $i++) {
 ?>
 										<option value="<?=$i?>"><?=$i?></option>
 <?
