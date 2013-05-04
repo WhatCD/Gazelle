@@ -6,11 +6,11 @@ echo $Validate->GenerateJS('recoverform');
 <script src="<?=STATIC_SERVER?>functions/password_validate.js" type="text/javascript"></script>
 <form class="auth_form" name="recovery" id="recoverform" method="post" action="" onsubmit="return formVal();">
 	<input type="hidden" name="key" value="<?=display_str($_REQUEST['key'])?>" />
-	<div style="width:500px;">
+	<div style="width: 500px;">
 		<span class="titletext">Reset your password - Final Step</span><br /><br />
 <?
-if(empty($Reset)) {
-	if(!empty($Err)) {
+if (empty($Reset)) {
+	if (!empty($Err)) {
 ?>
 		<strong class="important_text"><?=display_str($Err)?></strong><br /><br />
 <?	} ?> A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol.<br /><br />

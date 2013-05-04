@@ -341,7 +341,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 					<input type="hidden" name="large" value="1" />
 					<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
 					<ul style="list-style: none;" id="poll_options">
-<?		foreach($Answers as $i => $Answer) { //for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
+<?		foreach ($Answers as $i => $Answer) { //for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
 						<li>
 							<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />
 							<label for="answer_<?=$i?>"><?=display_str($Answer)?></label>
@@ -352,16 +352,16 @@ if ($ThreadInfo['NoPoll'] == 0) {
 							<input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; Show the results!</label><br />
 						</li>
 					</ul>
-<?		if($ForumID == STAFF_FORUM) { ?>
+<?		if ($ForumID == STAFF_FORUM) { ?>
 					<a href="#" onclick="AddPollOption(<?=$ThreadID?>); return false;" class="brackets">+</a>
 					<br />
 					<br />
 <?		} ?>
-					<input type="button" style="float: left;" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote" />
+					<input type="button" style="float: left;" onclick="ajax.post('index.php','poll',function(response) { $('#poll_container').raw().innerHTML = response});" value="Vote" />
 				</form>
 			</div>
-<?	} ?>
-<?	if(check_perms('forums_polls_moderate') && !$RevealVoters) {
+<?	}
+	if (check_perms('forums_polls_moderate') && !$RevealVoters) {
 		if (!$Featured || $Featured == '0000-00-00 00:00:00') {
 ?>
 			<form class="manage_form" name="poll" action="forums.php" method="post">
@@ -386,11 +386,11 @@ if ($ThreadInfo['NoPoll'] == 0) {
 } //End Polls
 
 //Sqeeze in stickypost
-if($ThreadInfo['StickyPostID']) {
-	if($ThreadInfo['StickyPostID'] != $Thread[0]['ID']) {
+if ($ThreadInfo['StickyPostID']) {
+	if ($ThreadInfo['StickyPostID'] != $Thread[0]['ID']) {
 		array_unshift($Thread, $ThreadInfo['StickyPost']);
 	}
-	if($ThreadInfo['StickyPostID'] != $Thread[count($Thread)-1]['ID']) {
+	if ($ThreadInfo['StickyPostID'] != $Thread[count($Thread) - 1]['ID']) {
 		$Thread[] = $ThreadInfo['StickyPost'];
 	}
 }
@@ -429,16 +429,16 @@ foreach ($Thread as $Key => $Post) {
 	if ((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write') && $AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums')) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
 <?	}
-	if(check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?>
+	if (check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
 <?	}
-	if($PostID == $ThreadInfo['StickyPostID']) { ?>
+	if ($PostID == $ThreadInfo['StickyPostID']) { ?>
 				<strong><span class="sticky_post_label" class="brackets">Sticky</span></strong>
-<?		if(check_perms('site_moderate_forums')) { ?>
+<?		if (check_perms('site_moderate_forums')) { ?>
 				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">X</a>
 <?		}
 	} else {
-		if(check_perms('site_moderate_forums')) { ?>
+		if (check_perms('site_moderate_forums')) { ?>
 				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">&#x21d5;</a>
 <? 		}
 	}
@@ -448,7 +448,7 @@ foreach ($Thread as $Key => $Post) {
 				<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>" class="brackets">Report</a>
 <?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);
-		if($LoggedUser['Class'] >= $AuthorInfo['Class']) {
+		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
 ?>
 				<form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
 					<input type="hidden" name="action" value="warn" />
@@ -471,7 +471,7 @@ foreach ($Thread as $Key => $Post) {
 		<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
 		</td>
 <?	} ?>
-		<td class="body" valign="top"<? if(!Users::has_avatars_enabled()) { echo ' colspan="2"'; } ?>>
+		<td class="body" valign="top"<? if (!Users::has_avatars_enabled()) { echo ' colspan="2"'; } ?>>
 			<div id="content<?=$PostID?>">
 				<?=$Text->full_format($Body) ?>
 <?	if ($EditedUserID) { ?>
@@ -498,7 +498,7 @@ foreach ($Thread as $Key => $Post) {
 </div>
 <?
 if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
-	if(check_forumperm($ForumID, 'Write') && !$LoggedUser['DisablePosting']) {
+	if (check_forumperm($ForumID, 'Write') && !$LoggedUser['DisablePosting']) {
 		View::parse('generic/reply/quickreply.php', array(
 			'InputTitle' => 'Post reply',
 			'InputName' => 'thread',
@@ -508,7 +508,7 @@ if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 		));
 	}
 }
-if(check_perms('site_moderate_forums')) {
+if (check_perms('site_moderate_forums')) {
 ?>
 	<br />
 	<h3>Edit thread</h3>
@@ -554,20 +554,20 @@ if(check_perms('site_moderate_forums')) {
 
 		if ($Forum['CategoryID'] != $LastCategoryID) {
 			$LastCategoryID = $Forum['CategoryID'];
-			if($OpenGroup) { ?>
+			if ($OpenGroup) { ?>
 					</optgroup>
 <?			} ?>
 					<optgroup label="<?=$ForumCats[$Forum['CategoryID']]?>">
 <?			$OpenGroup = true;
 		}
 ?>
-						<option value="<?=$Forum['ID']?>"<? if($ThreadInfo['ForumID'] == $Forum['ID']) { echo ' selected="selected"';} ?>><?=display_str($Forum['Name'])?></option>
+						<option value="<?=$Forum['ID']?>"<? if ($ThreadInfo['ForumID'] == $Forum['ID']) { echo ' selected="selected"';} ?>><?=display_str($Forum['Name'])?></option>
 <?	} ?>
 					</optgroup>
 					</select>
 				</td>
 			</tr>
-<?	if(check_perms('site_admin_forums')) { ?>
+<?	if (check_perms('site_admin_forums')) { ?>
 			<tr>
 				<td class="label">Delete thread</td>
 				<td>

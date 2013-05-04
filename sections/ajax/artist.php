@@ -1,6 +1,6 @@
 <?
 //For sorting tags
-function compare($X, $Y){
+function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 

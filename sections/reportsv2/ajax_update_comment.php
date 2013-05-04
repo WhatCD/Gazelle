@@ -3,11 +3,11 @@
 
 authorize();
 
-if(!check_perms('admin_reports')){
+if (!check_perms('admin_reports')) {
 	error(403);
 }
 
-if(empty($_POST['reportid']) || !is_number($_POST['reportid'])) {
+if (empty($_POST['reportid']) || !is_number($_POST['reportid'])) {
 	echo 'HAX ATTEMPT!'.$_GET['reportid'];
 	die();
 }
@@ -19,6 +19,6 @@ $Message = db_string($_POST['comment']);
 
 $DB->query("SELECT ModComment FROM reportsv2 WHERE ID=".$ReportID);
 list($ModComment) = $DB->next_record();
-if(isset($ModComment)) {
+if (isset($ModComment)) {
 	$DB->query("Update reportsv2 SET ModComment='".$Message."' WHERE ID=".$ReportID);
 }

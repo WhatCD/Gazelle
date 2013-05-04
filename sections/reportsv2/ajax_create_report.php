@@ -10,13 +10,13 @@
  * It should not be used on site as is, except in its current use (Switch) as it is lacking for any purpose but this.
  */
 
-if(!check_perms('admin_reports')){
+if (!check_perms('admin_reports')) {
 	error(403);
 }
 
 authorize();
 
-if(!is_number($_POST['torrentid'])) {
+if (!is_number($_POST['torrentid'])) {
 	echo 'No Torrent ID';
 	die();
 } else {
@@ -24,19 +24,19 @@ if(!is_number($_POST['torrentid'])) {
 }
 
 $DB->query("SELECT tg.CategoryID FROM torrents_group AS tg JOIN torrents AS t ON t.GroupID=tg.ID WHERE t.ID = ".$TorrentID);
-if($DB->record_count() < 1) {
-	$Err = "No torrent with that ID exists!";
+if ($DB->record_count() < 1) {
+	$Err = 'No torrent with that ID exists!';
 } else {
 	list($CategoryID) = $DB->next_record();
 }
 
-if(!isset($_POST['type'])) {
+if (!isset($_POST['type'])) {
 	echo 'Missing Type';
 	die();
 } else if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	$Type = $_POST['type'];
 	$ReportType = $Types[$CategoryID][$Type];
-} else if(array_key_exists($_POST['type'],$Types['master'])) {
+} else if (array_key_exists($_POST['type'],$Types['master'])) {
 	$Type = $_POST['type'];
 	$ReportType = $Types['master'][$Type];
 } else {
@@ -48,26 +48,31 @@ if(!isset($_POST['type'])) {
 
 $ExtraID = $_POST['otherid'];
 
-if(!empty($_POST['extra'])) {
+if (!empty($_POST['extra'])) {
 	$Extra = db_string($_POST['extra']);
 } else {
-	$Extra = "";
+	$Extra = '';
 }
 
-if(!empty($Err)) {
+if (!empty($Err)) {
 	echo $Err;
 	die();
 }
 
-$DB->query("SELECT ID FROM reportsv2 WHERE TorrentID=".$TorrentID." AND ReporterID=".db_string($LoggedUser['ID'])." AND ReportedTime > '".time_minus(3)."'");
-if($DB->record_count() > 0) {
+$DB->query("
+	SELECT ID
+	FROM reportsv2
+	WHERE TorrentID=$TorrentID
+		AND ReporterID=".db_string($LoggedUser['ID'])."
+		AND ReportedTime > '".time_minus(3)."'");
+if ($DB->record_count() > 0) {
 	die();
 }
 
 $DB->query("INSERT INTO reportsv2
 			(ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, ExtraID)
 			VALUES
-			(".db_string($LoggedUser['ID']).", $TorrentID, '".$Type."', '$Extra', 'New', '".sqltime()."', '$ExtraID')");
+			(".db_string($LoggedUser['ID']).", $TorrentID, '$Type', '$Extra', 'New', '".sqltime()."', '$ExtraID')");
 
 $ReportID = $DB->inserted_id();
 

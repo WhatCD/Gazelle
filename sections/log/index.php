@@ -26,7 +26,7 @@ include(SERVER_ROOT.'/sections/log/sphinx.php');
 		</form>
 	</div>
 
-<? if($TotalMatches > LOG_ENTRIES_PER_PAGE) { ?>
+<? if ($TotalMatches > LOG_ENTRIES_PER_PAGE) { ?>
 	<div class="linkbox">
 <?
 	$Pages = Format::get_pages($Page,$TotalMatches,LOG_ENTRIES_PER_PAGE,9);
@@ -38,9 +38,9 @@ include(SERVER_ROOT.'/sections/log/sphinx.php');
 			<td style="width: 180px;"><strong>Time</strong></td>
 			<td><strong>Message</strong></td>
 		</tr>
-<? if($QueryStatus) { ?>
+<? if ($QueryStatus) { ?>
 	<tr class="nobr"><td colspan="2">Search request failed (<?=$QueryError?>).</td></tr>
-<? } elseif($DB->record_count() == 0) { ?>
+<? } elseif ($DB->record_count() == 0) { ?>
 	<tr class="nobr"><td colspan="2">Nothing found!</td></tr>
 <? }
 $Row = 'a';
@@ -96,21 +96,21 @@ while(list($ID, $Message, $LogTime) = $DB->next_record()) {
 				break;
 			case "by":
 				$UserID = 0;
-				$User = "";
-				$URL = "";
+				$User = '';
+				$URL = '';
 				if ($MessageParts[$i + 1] == "user") {
 					$i++;
 					if (is_numeric($MessageParts[$i + 1])) {
 						$UserID = $MessageParts[++$i];
 					}
-					$URL = "user ".$UserID." ".'(<a href="user.php?id='.$UserID.'">'.substr($MessageParts[++$i],1,-1)."</a>)";
+					$URL = "user $UserID ".'(<a href="user.php?id='.$UserID.'">'.substr($MessageParts[++$i],1,-1)."</a>)";
 				} elseif (in_array($MessageParts[$i - 1], array('deleted','uploaded','edited','created','recovered'))) {
 					$User = $MessageParts[++$i];
-					if(substr($User,-1) == ':') {
+					if (substr($User,-1) == ':') {
 						$User = substr($User, 0, -1);
 						$Colon = true;
 					}
-					if(!isset($Usernames[$User])) {
+					if (!isset($Usernames[$User])) {
 						$DB->query("SELECT ID FROM users_main WHERE Username = _utf8 '".$User."' COLLATE utf8_bin");
 						list($UserID) = $DB->next_record();
 						$Usernames[$User] = $UserID ? $UserID : '';
@@ -118,7 +118,7 @@ while(list($ID, $Message, $LogTime) = $DB->next_record()) {
 						$UserID = $Usernames[$User];
 					}
 					$DB->set_query_id($Log);
-					$URL = $Usernames[$User] ? '<a href="user.php?id='.$UserID.'">'.$User."</a>".($Colon?':':'') : $User;
+					$URL = $Usernames[$User] ? '<a href="user.php?id='.$UserID.'">'.$User."</a>".($Colon ? ':' : '') : $User;
 				}
 				$Message = $Message." by ".$URL;
 				break;
@@ -149,7 +149,7 @@ while(list($ID, $Message, $LogTime) = $DB->next_record()) {
 			case "marked":
 				if ($i == 1) {
 					$User = $MessageParts[$i - 1];
-					if(!isset($Usernames[$User])) {
+					if (!isset($Usernames[$User])) {
 						$DB->query("SELECT ID FROM users_main WHERE Username = _utf8 '".$User."' COLLATE utf8_bin");
 						list($UserID) = $DB->next_record();
 						$Usernames[$User] = $UserID ? $UserID : '';
@@ -183,7 +183,7 @@ while(list($ID, $Message, $LogTime) = $DB->next_record()) {
 				<?=time_diff($LogTime)?>
 			</td>
 			<td>
-				<span<? if($Color) { ?> style="color: <?=$Color?>;"<? } ?>><?=$Message?></span>
+				<span<? if ($Color) { ?> style="color: <?=$Color?>;"<? } ?>><?=$Message?></span>
 			</td>
 		</tr>
 <?

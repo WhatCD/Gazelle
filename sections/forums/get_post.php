@@ -12,7 +12,7 @@ $_GET['post'], which is the ID of the post.
 \*********************************************************************/
 
 // Quick SQL injection check
-if(!$_GET['post'] || !is_number($_GET['post'])){
+if (!$_GET['post'] || !is_number($_GET['post'])) {
 	error(0);
 }
 
@@ -20,14 +20,17 @@ if(!$_GET['post'] || !is_number($_GET['post'])){
 $PostID = $_GET['post'];
 
 // Mainly
-$DB->query("SELECT
-		p.Body, t.ForumID
-		FROM forums_posts as p JOIN forums_topics as t on p.TopicID = t.ID
-		WHERE p.ID='$PostID'");
+$DB->query("
+	SELECT
+		p.Body,
+		t.ForumID
+	FROM forums_posts as p
+		JOIN forums_topics as t on p.TopicID = t.ID
+	WHERE p.ID='$PostID'");
 list($Body, $ForumID) = $DB->next_record(MYSQLI_NUM);
 
 // Is the user allowed to view the post?
-if(!check_forumperm($ForumID)) {
+if (!check_forumperm($ForumID)) {
 	error(0);
 }
 

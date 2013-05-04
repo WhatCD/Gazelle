@@ -1,10 +1,10 @@
 <?
 
 /*-- TODO ---------------------------//
-Add the javascript validation into the display page using the class
+Add the JavaScript validation into the display page using the class
 //-----------------------------------*/
 
-if(!empty($LoggedUser['ID'])) {
+if (!empty($LoggedUser['ID'])) {
 	header('Location: index.php');
 	die();
 }
@@ -14,14 +14,14 @@ if (BLOCK_OPERA_MINI && isset($_SERVER['HTTP_X_OPERAMINI_PHONE'])) {
 }
 
 // Check if IP is banned
-if(Tools::site_ban_ip($_SERVER['REMOTE_ADDR'])) {
+if (Tools::site_ban_ip($_SERVER['REMOTE_ADDR'])) {
 	error('Your IP has been banned.');
 }
 
 require(SERVER_ROOT."/classes/class_validate.php");
 $Validate=NEW VALIDATE;
 
-if(array_key_exists('action', $_GET) && $_GET['action'] == 'disabled') {
+if (array_key_exists('action', $_GET) && $_GET['action'] == 'disabled') {
 	require('disabled.php');
 	die();
 }
@@ -30,16 +30,17 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 	// Recover password
 	if (!empty($_REQUEST['key'])) {
 		// User has entered a new password, use step 2
-		$DB->query("SELECT
-			m.ID,
-			m.Email,
-			m.ipcc,
-			i.ResetExpires
+		$DB->query("
+			SELECT
+				m.ID,
+				m.Email,
+				m.ipcc,
+				i.ResetExpires
 			FROM users_main AS m
-			INNER JOIN users_info AS i ON i.UserID=m.ID
+				INNER JOIN users_info AS i ON i.UserID=m.ID
 			WHERE i.ResetKey='".db_string($_REQUEST['key'])."'
-			AND i.ResetKey<>''
-			AND m.Enabled='1'");
+				AND i.ResetKey<>''
+				AND m.Enabled='1'");
 		list($UserID,$Email,$Country,$Expires)=$DB->next_record();
 
 		if ($UserID && strtotime($Expires)>time()) {
@@ -53,14 +54,16 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 				$Err=$Validate->ValidateForm($_REQUEST);
 				if ($Err=='') {
 					// Form validates without error, set new secret and password.
-					$DB->query("UPDATE
-						users_main AS m,
-						users_info AS i
-						SET m.PassHash='".db_string(Users::make_crypt_hash($_REQUEST['password']))."',
-						i.ResetKey='',
-						i.ResetExpires='0000-00-00 00:00:00'
+					$DB->query("
+						UPDATE
+							users_main AS m,
+							users_info AS i
+						SET
+							m.PassHash='".db_string(Users::make_crypt_hash($_REQUEST['password']))."',
+							i.ResetKey='',
+							i.ResetExpires='0000-00-00 00:00:00'
 						WHERE m.ID='".db_string($UserID)."'
-						AND i.UserID=m.ID");
+							AND i.UserID=m.ID");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
 
 					
@@ -76,12 +79,12 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 
 			if (strtotime($Expires) < time() && $UserID) {
 				// If his key has expired, clear all the reset information
-				$DB->query("UPDATE
-					users_info
+				$DB->query("
+					UPDATE users_info
 					SET ResetKey='',
-					ResetExpires='0000-00-00 00:00:00'
+						ResetExpires='0000-00-00 00:00:00'
 					WHERE UserID='$UserID'");
-				$_SESSION['reseterr']="The link you were given has expired."; // Error message to display on form
+				$_SESSION['reseterr'] = "The link you were given has expired."; // Error message to display on form
 			}
 			// Show him the first form (enter email address)
 			header('Location: login.php?act=recover');
@@ -95,17 +98,18 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 
 		if (!empty($_REQUEST['email'])) {
 			// User has entered email and submitted form
-			$Err=$Validate->ValidateForm($_REQUEST);
+			$Err = $Validate->ValidateForm($_REQUEST);
 
 			if (!$Err) {
 				// Form validates correctly
-				$DB->query("SELECT
-					ID,
-					Username,
-					Email
+				$DB->query("
+					SELECT
+						ID,
+						Username,
+						Email
 					FROM users_main
 					WHERE Email='".db_string($_REQUEST['email'])."'
-					AND Enabled='1'");
+						AND Enabled='1'");
 				list($UserID,$Username,$Email)=$DB->next_record();
 
 				if ($UserID) {
@@ -137,7 +141,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 					$Cache->delete_value('enabled_'.$UserID);
 
 					$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
-					while(list($SessionID) = $DB->next_record()) {
+					while (list($SessionID) = $DB->next_record()) {
 						$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 					}
 					$DB->query("UPDATE users_sessions SET Active = 0 WHERE UserID='$UserID' AND Active = 1");
@@ -152,7 +156,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 			// User has not entered email address, and there is an error set in session data
 			// This is typically because their key has expired.
 			// Stick the error into $Err so recover_step1.php can take care of it
-			$Err=$_SESSION['reseterr'];
+			$Err = $_SESSION['reseterr'];
 			unset($_SESSION['reseterr']);
 		}
 
@@ -176,7 +180,7 @@ else {
 		$IPStr = $_SERVER['REMOTE_ADDR'];
 		$IPA = substr($IPStr, 0, strcspn($IPStr, '.'));
 		$IP = Tools::ip_to_unsigned($IPStr);
-		if($AttemptID) { // User has attempted to log in recently
+		if ($AttemptID) { // User has attempted to log in recently
 			$Attempts++;
 			if ($Attempts>5) { // Only 6 allowed login attempts, ban user's IP
 				$BannedUntil=time_plus(60*60*6);
@@ -187,12 +191,12 @@ else {
 					Bans=Bans+1
 					WHERE ID='".db_string($AttemptID)."'");
 				
-				if ($Bans>9) { // Automated bruteforce prevention
+				if ($Bans > 9) { // Automated bruteforce prevention
 					$DB->query("SELECT Reason FROM ip_bans WHERE ".$IP." BETWEEN FromIP AND ToIP");
-					if($DB->record_count() > 0) {
+					if ($DB->record_count() > 0) {
 						//Ban exists already, only add new entry if not for same reason
 						list($Reason) = $DB->next_record(MYSQLI_BOTH, false);
-						if($Reason != "Automated ban per >60 failed login attempts") {
+						if ($Reason != 'Automated ban per >60 failed login attempts') {
 							$DB->query("UPDATE ip_bans
 								SET Reason = CONCAT('Automated ban per >60 failed login attempts AND ', Reason)
 								WHERE FromIP = ".$IP." AND ToIP = ".$IP);
@@ -222,25 +226,27 @@ else {
 	} // end log_attempt function
 
 	// If user has submitted form
-	if(isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password'])) {
+	if (isset($_POST['username']) && !empty($_POST['username']) && isset($_POST['password']) && !empty($_POST['password'])) {
 		if (strtotime($BannedUntil) > time()) {
 			header("Location: login.php");
 			die();
 		}
 		$Err=$Validate->ValidateForm($_POST);
 
-		if(!$Err) {
+		if (!$Err) {
 			// Passes preliminary validation (username and password "look right")
-			$DB->query("SELECT
-				ID,
-				PermissionID,
-				CustomPermissions,
-				PassHash,
-				Secret,
-				Enabled
-				FROM users_main WHERE Username='".db_string($_POST['username'])."'
-				AND Username<>''");
-			list($UserID,$PermissionID,$CustomPermissions,$PassHash,$Secret,$Enabled)=$DB->next_record(MYSQLI_NUM, array(2));
+			$DB->query("
+				SELECT
+					ID,
+					PermissionID,
+					CustomPermissions,
+					PassHash,
+					Secret,
+					Enabled
+				FROM users_main
+				WHERE Username='".db_string($_POST['username'])."'
+					AND Username<>''");
+			list($UserID,$PermissionID,$CustomPermissions,$PassHash,$Secret,$Enabled) = $DB->next_record(MYSQLI_NUM, array(2));
 			if (strtotime($BannedUntil)<time()) {
 				if ($UserID && Users::check_password($_POST['password'], $PassHash, $Secret)) {
 					if (!Users::is_crypt_hash($PassHash)) {
@@ -251,7 +257,7 @@ else {
 						$SessionID = Users::make_secret();
 						$Cookie = $Enc->encrypt($Enc->encrypt($SessionID.'|~|'.$UserID));
 
-						if(isset($_POST['keeplogged']) && $_POST['keeplogged']) {
+						if (isset($_POST['keeplogged']) && $_POST['keeplogged']) {
 							$KeepLogged = 1;
 							setcookie('session', $Cookie, time()+60*60*24*365, '/', '', $SSL, true);
 						} else {
@@ -295,7 +301,7 @@ else {
 
 						if (!empty($_COOKIE['redirect'])) {
 							$URL = $_COOKIE['redirect'];
-							setcookie('redirect','',time()-60*60*24,'/','',false);
+							setcookie('redirect','',time() - 60 * 60 * 24,'/','',false);
 							header('Location: '.$URL);
 							die();
 						} else {
@@ -304,29 +310,29 @@ else {
 						}
 					} else {
 						log_attempt($UserID);
-						if ($Enabled==2) {
+						if ($Enabled == 2) {
 							
 							header('location:login.php?action=disabled');
-						} elseif ($Enabled==0) {
-							$Err="Your account has not been confirmed.<br />Please check your email.";
+						} elseif ($Enabled == 0) {
+							$Err = "Your account has not been confirmed.<br />Please check your email.";
 						}
-						setcookie('keeplogged','',time()+60*60*24*365,'/','',false);
+						setcookie('keeplogged','',time() + 60 * 60 * 24 * 365,'/','',false);
 					}
 				} else {
 					log_attempt($UserID);
 					
-					$Err="Your username or password was incorrect.";
-					setcookie('keeplogged','',time()+60*60*24*365,'/','',false);
+					$Err = "Your username or password was incorrect.";
+					setcookie('keeplogged','',time() + 60 * 60 * 24 * 365,'/','',false);
 				}
 
 			} else {
 				log_attempt($UserID);
-				setcookie('keeplogged','',time()+60*60*24*365,'/','',false);
+				setcookie('keeplogged','',time() + 60 * 60 * 24 * 365,'/','',false);
 			}
 
 		} else {
 			log_attempt('0');
-			setcookie('keeplogged','',time()+60*60*24*365,'/','',false);
+			setcookie('keeplogged','',time() + 60 * 60 * 24 * 365,'/','',false);
 		}
 	}
 	require("sections/login/login.php");

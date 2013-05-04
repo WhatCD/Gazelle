@@ -12,17 +12,18 @@ if (!empty($_POST['large'])) {
 }
 
 if (!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
-	$DB->query("SELECT
-		t.Title,
-		t.ForumID,
-		t.IsLocked,
-		t.IsSticky,
-		COUNT(fp.id) AS Posts,
-		t.LastPostAuthorID,
-		ISNULL(p.TopicID) AS NoPoll
+	$DB->query("
+		SELECT
+			t.Title,
+			t.ForumID,
+			t.IsLocked,
+			t.IsSticky,
+			COUNT(fp.id) AS Posts,
+			t.LastPostAuthorID,
+			ISNULL(p.TopicID) AS NoPoll
 		FROM forums_topics AS t
-		JOIN forums_posts AS fp ON fp.TopicID = t.ID
-		LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
+			JOIN forums_posts AS fp ON fp.TopicID = t.ID
+			LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
 		WHERE t.ID = '$TopicID'
 		GROUP BY fp.TopicID");
 	if ($DB->record_count() == 0) {
@@ -36,10 +37,22 @@ if (!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
 $ForumID = $ThreadInfo['ForumID'];
 
 if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('polls_'.$TopicID)) {
-	$DB->query("SELECT Question, Answers, Featured, Closed FROM forums_polls WHERE TopicID='".$TopicID."'");
+	$DB->query("
+		SELECT
+			Question,
+			Answers,
+			Featured,
+			Closed
+		FROM forums_polls
+		WHERE TopicID='$TopicID'");
 	list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 	$Answers = unserialize($Answers);
-	$DB->query("SELECT Vote, COUNT(UserID) FROM forums_polls_votes WHERE TopicID='$TopicID' AND Vote <> '0' GROUP BY Vote");
+	$DB->query("
+		SELECT Vote, COUNT(UserID)
+		FROM forums_polls_votes
+		WHERE TopicID='$TopicID'
+			AND Vote <> '0'
+		GROUP BY Vote");
 	$VoteArray = $DB->to_array(false, MYSQLI_NUM);
 
 	$Votes = array();
@@ -82,13 +95,15 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 	<label for="answer_<?=$i?>"><?=display_str($Answers[$i])?></label><br />
 <? } ?>
 	<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; Show the results!</label><br /><br />
-	<input type="button" onclick="ajax.post('index.php','poll',function(response){$('#poll_container').raw().innerHTML = response});" value="Vote" />
+	<input type="button" onclick="ajax.post('index.php','poll',function(response) { $('#poll_container').raw().innerHTML = response });" value="Vote" />
 </form>
 <?
 } else {
 	authorize();
 	$Vote = $_POST['vote'];
-	if (!isset($Answers[$Vote]) && $Vote != 0) { error(0,true); }
+	if (!isset($Answers[$Vote]) && $Vote != 0) {
+		error(0,true);
+	}
 
 	//Add our vote
 	$DB->query('INSERT IGNORE INTO forums_polls_votes (TopicID, UserID, Vote) VALUES ('.$TopicID.','.$LoggedUser['ID'].','.$Vote.')');
@@ -127,12 +142,13 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 <?			}
 		} else {
 			//Staff forum, output voters, not percentages
-			$DB->query("SELECT GROUP_CONCAT(um.Username SEPARATOR ', '),
-							fpv.Vote
-						FROM users_main AS um
-							JOIN forums_polls_votes AS fpv ON um.ID = fpv.UserID
-						WHERE TopicID = ".$TopicID."
-						GROUP BY fpv.Vote");
+			$DB->query("
+				SELECT GROUP_CONCAT(um.Username SEPARATOR ', '),
+					fpv.Vote
+				FROM users_main AS um
+					JOIN forums_polls_votes AS fpv ON um.ID = fpv.UserID
+				WHERE TopicID = $TopicID
+				GROUP BY fpv.Vote");
 
 			$StaffVotes = $DB->to_array();
 			foreach ($StaffVotes as $StaffVote) {

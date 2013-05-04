@@ -8,7 +8,7 @@ function ChangeTo(to) {
 			buttons[i].setAttribute('onclick',"ChangeTo('links'); return false;");
 		}
 	} else if (to == "links") {
-		ajax.post("ajax.php?action=preview","form", function(response){
+		ajax.post("ajax.php?action=preview","form", function(response) {
 			$('#admincommentlinks').raw().innerHTML = response;
 			$('#admincomment').hide();
 			$('#admincommentlinks').show();

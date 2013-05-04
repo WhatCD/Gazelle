@@ -87,7 +87,7 @@ if (!empty($_GET['search'])) {
 	}
 }
 
-if (!empty($_GET['tags'])){
+if (!empty($_GET['tags'])) {
 	$Tags = explode(',', $_GET['tags']);
 	$TagNames = array();
 	foreach ($Tags as $Tag) {
@@ -114,7 +114,7 @@ if (!empty($_GET['filter_cat'])) {
 	$CategoryArray = array_keys($_GET['filter_cat']);
 	if (count($CategoryArray) != count($Categories)) {
 		foreach ($CategoryArray as $Key => $Index) {
-			if (!isset($Categories[$Index-1])) {
+			if (!isset($Categories[$Index - 1])) {
 				unset($CategoryArray[$Key]);
 			}
 		}

@@ -4,7 +4,7 @@
  * that actually populate the page and shows the proper header and footer.
  * The important function is AddMore().
  */
-if(!check_perms('admin_reports')){
+if (!check_perms('admin_reports')) {
 	error(403);
 }
 
@@ -22,7 +22,7 @@ View::show_header('Reports V2!', 'reportsv2');
 	| <span title="Unclaim all of the reports currently displayed"><input type="button" onclick="GiveBack();" value="Unclaim all" /></span>
 </div>
 <br />
-<div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto">
+<div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto;">
 </div>
 <?
 View::show_footer();

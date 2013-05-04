@@ -5,7 +5,7 @@
  * and the current in-progress reports by staff member.
  * All the different views are self explanatory by their names.
  */
-if(!check_perms('admin_reports')){
+if (!check_perms('admin_reports')) {
 	error(403);
 }
 
@@ -23,10 +23,19 @@ $Owner = display_str($Owner);
 	<? include('header.php'); ?>
 </div>
 <br />
-<div class="box pad thin" style="padding: 0px 0px 0px 20px; width: 70%; margin-left: auto; margin-right: auto">
+<div class="box pad thin" style="padding: 0px 0px 0px 20px; width: 70%; margin-left: auto; margin-right: auto;">
 	<table class="layout"><tr><td style="width: 50%;">
 <?
-$DB->query("SELECT um.ID, um.Username, COUNT(r.ID) AS Reports FROM reportsv2 AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.LastChangeTime > NOW() - INTERVAL 24 HOUR GROUP BY r.ResolverID ORDER BY Reports DESC");
+$DB->query("
+	SELECT
+		um.ID,
+		um.Username,
+		COUNT(r.ID) AS Reports
+	FROM reportsv2 AS r
+		JOIN users_main AS um ON um.ID=r.ResolverID
+	WHERE r.LastChangeTime > NOW() - INTERVAL 24 HOUR
+	GROUP BY r.ResolverID
+	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<strong>Reports resolved in the last 24 hours</strong>
@@ -46,7 +55,16 @@ $Results = $DB->to_array();
 		</table>
 		<br />
 <?
-$DB->query("SELECT um.ID, um.Username, COUNT(r.ID) AS Reports FROM reportsv2 AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.LastChangeTime > NOW() - INTERVAL 1 WEEK GROUP BY r.ResolverID ORDER BY Reports DESC");
+$DB->query("
+	SELECT
+		um.ID,
+		um.Username,
+		COUNT(r.ID) AS Reports
+	FROM reportsv2 AS r
+		JOIN users_main AS um ON um.ID=r.ResolverID
+	WHERE r.LastChangeTime > NOW() - INTERVAL 1 WEEK
+	GROUP BY r.ResolverID
+	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<strong>Reports resolved in the last week</strong>
@@ -55,7 +73,7 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
 			</tr>
-<? foreach($Results as $Result) {
+<? foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
 ?>
 			<tr>
@@ -66,7 +84,16 @@ $Results = $DB->to_array();
 		</table>
 		<br />
 <?
-$DB->query("SELECT um.ID, um.Username, COUNT(r.ID) AS Reports FROM reportsv2 AS r JOIN users_main AS um ON um.ID=r.ResolverID WHERE r.LastChangeTime > NOW() - INTERVAL 1 MONTH GROUP BY r.ResolverID ORDER BY Reports DESC");
+$DB->query("
+	SELECT
+		um.ID,
+		um.Username,
+		COUNT(r.ID) AS Reports
+	FROM reportsv2 AS r
+		JOIN users_main AS um ON um.ID=r.ResolverID
+	WHERE r.LastChangeTime > NOW() - INTERVAL 1 MONTH
+	GROUP BY r.ResolverID
+	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<strong>Reports resolved in the last month</strong>
@@ -75,7 +102,7 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
 			</tr>
-<? foreach($Results as $Result) {
+<? foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
 ?>
 			<tr>
@@ -86,7 +113,14 @@ $Results = $DB->to_array();
 		</table>
 		<br />
 <?
-$DB->query("SELECT um.Username, COUNT(r.ID) AS Reports FROM reportsv2 AS r JOIN users_main AS um ON um.ID=r.ResolverID GROUP BY r.ResolverID ORDER BY Reports DESC");
+$DB->query("
+	SELECT
+		um.Username,
+		COUNT(r.ID) AS Reports
+	FROM reportsv2 AS r
+		JOIN users_main AS um ON um.ID=r.ResolverID
+	GROUP BY r.ResolverID
+	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<strong>Reports resolved since Reports v2 (2009-07-27)</strong>
@@ -95,7 +129,7 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
 			</tr>
-<? foreach($Results as $Result) {
+<? foreach ($Results as $Result) {
 	list($Username, $Reports) = $Result;
 ?>
 			<tr>
@@ -171,15 +205,17 @@ $Results = $DB->to_array();
 	</td>
 	<td style="vertical-align: top;">
 <?
-	$DB->query("SELECT r.ResolverID,
-						um.Username,
-						COUNT(r.ID) AS Count,
-						COUNT(tasted.Tasted) AS Tasted
-				FROM reportsv2 AS r
-				LEFT JOIN users_main AS um ON r.ResolverID=um.ID
-				LEFT JOIN torrents AS tasted ON tasted.ID=r.TorrentID AND tasted.Tasted = '1'
-				WHERE r.Status = 'InProgress'
-				GROUP BY r.ResolverID");
+	$DB->query("
+		SELECT
+			r.ResolverID,
+			um.Username,
+			COUNT(r.ID) AS Count,
+			COUNT(tasted.Tasted) AS Tasted
+		FROM reportsv2 AS r
+			LEFT JOIN users_main AS um ON r.ResolverID=um.ID
+			LEFT JOIN torrents AS tasted ON tasted.ID=r.TorrentID AND tasted.Tasted = '1'
+		WHERE r.Status = 'InProgress'
+		GROUP BY r.ResolverID");
 	$Staff = $DB->to_array();
 ?>
 		<strong>Currently assigned reports by staff member</strong>
@@ -191,7 +227,7 @@ $Results = $DB->to_array();
 			</tr>
 
 	<?
-		foreach($Staff as $Array) {	?>
+		foreach ($Staff as $Array) {	?>
 			<tr>
 				<td>
 					<a href="reportsv2.php?view=staff&amp;id=<?=$Array['ResolverID']?>"><?=display_str($Array['Username'])?>'s reports</a>
@@ -208,13 +244,15 @@ $Results = $DB->to_array();
 		<br />
 		<h3>Different view modes by report type</h3>
 <?
-	$DB->query("SELECT 	r.Type,
-						COUNT(r.ID) AS Count
-				FROM reportsv2 AS r
-				WHERE r.Status='New'
-				GROUP BY r.Type");
+	$DB->query("
+		SELECT
+			r.Type,
+			COUNT(r.ID) AS Count
+		FROM reportsv2 AS r
+		WHERE r.Status='New'
+		GROUP BY r.Type");
 	$Current = $DB->to_array();
-	if(!empty($Current)) {
+	if (!empty($Current)) {
 ?>
 		<table>
 			<tr class="colhead">
@@ -222,10 +260,10 @@ $Results = $DB->to_array();
 				<td>Current count</td>
 			</tr>
 <?
-		foreach($Current as $Array) {
+		foreach ($Current as $Array) {
 			//Ugliness
-			foreach($Types as $Category) {
-				if(!empty($Category[$Array['Type']])) {
+			foreach ($Types as $Category) {
+				if (!empty($Category[$Array['Type']])) {
 					$Title = $Category[$Array['Type']]['title'];
 					break;
 				}

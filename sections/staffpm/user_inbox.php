@@ -58,8 +58,8 @@ if ($DB->record_count() == 0) {
 	// List messages
 	$Row = 'a';
 	$ShowBox = 1;
-	while(list($ID, $Subject, $UserID, $Status, $Level, $AssignedToUser, $Date, $Unread, $Resolved) = $DB->next_record()) {
-		if($Unread === '1') {
+	while (list($ID, $Subject, $UserID, $Status, $Level, $AssignedToUser, $Date, $Unread, $Resolved) = $DB->next_record()) {
+		if ($Unread === '1') {
 			$RowClass = 'unreadpm';
 		} else {
 			$Row = ($Row === 'a') ? 'b' : 'a';
@@ -84,9 +84,9 @@ if ($DB->record_count() == 0) {
 		}
 
 		// Get assigned
-		$Assigned = ($Level == 0) ? "First Line Support" : $ClassLevels[$Level]['Name'];
+		$Assigned = ($Level == 0) ? 'First Line Support' : $ClassLevels[$Level]['Name'];
 		// No + on Sysops
-		if ($Assigned != 'Sysop') { $Assigned .= "+"; }
+		if ($Assigned != 'Sysop') { $Assigned .= '+'; }
 
 		// Table row
 ?>

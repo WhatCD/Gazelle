@@ -162,7 +162,7 @@ if ($Catalogue === false) {
 $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
 
 $JsonRequestComments = array();
-foreach ($Thread as $Key => $Post){
+foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 	$JsonRequestComments[] = array(

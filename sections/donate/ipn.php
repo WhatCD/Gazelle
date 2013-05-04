@@ -2,7 +2,9 @@
 // Paypal hits this page once a donation has gone through.
 // This may appear to be light on the input validation, but the vast majority of that is handled through paypal confirmation
 // $_POST['txn_id'] centains the unique identifier if anyone ever needs it
-if(!is_number($_POST['custom'])) { die(); } //Seems too stupid a mistake to bother banning
+if (!is_number($_POST['custom'])) {
+	die(); //Seems too stupid a mistake to bother banning
+}
 
 // Create request to return to paypal
 $Request = 'cmd=_notify-validate';
@@ -35,7 +37,7 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 				if (($_POST['payment_status'] == "Completed") || ($_POST['payment_status'] == "Pending")) {
 					$DB->query('SELECT Donor FROM users_info WHERE UserID=\''.$_POST['custom'].'\'');
 					list($Donor) = $DB->next_record();
-					if($Donor == 0){
+					if ($Donor == 0) {
 						//First time donor
 						$DB->query('UPDATE users_main SET Invites = Invites + \''.DONOR_INVITES.'\' WHERE ID=\''.$_POST['custom'].'\'');
 						$DB->query('UPDATE users_info SET Donor = \'1\' WHERE UserID=\''.$_POST['custom'].'\'');
@@ -69,7 +71,7 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 			if ($TotalDonated+$_POST['mc_gross'] == 0) {
 				$DB->query("SELECT Invites FROM users_main WHERE ID='".$_POST['custom']."'");
 				list($Invites) = $DB->next_record();
-				if(($Invites - DONOR_INVITES) >= 0) {
+				if (($Invites - DONOR_INVITES) >= 0) {
 					$NewInvites = $Invites - DONOR_INVITES;
 				} else {
 					$NewInvites = 0;

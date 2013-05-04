@@ -15,7 +15,7 @@ $Text = new TEXT;
 
 // Check for lame SQL injection attempts
 $CollageID = $_GET['collageid'];
-if(!is_number($CollageID)) {
+if (!is_number($CollageID)) {
 	error(0);
 }
 
@@ -28,12 +28,13 @@ $CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 //---------- Get some data to start processing
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-if(!list($Catalogue,$Posts) = $Cache->get_value('collage_'.$CollageID.'_catalogue_'.$CatalogueID)) {
-	$DB->query("SELECT SQL_CALC_FOUND_ROWS
-		ID,
-		UserID,
-		Time,
-		Body
+if (!list($Catalogue,$Posts) = $Cache->get_value('collage_'.$CollageID.'_catalogue_'.$CatalogueID)) {
+	$DB->query("
+		SELECT SQL_CALC_FOUND_ROWS
+			ID,
+			UserID,
+			Time,
+			Body
 		FROM collages_comments
 		WHERE CollageID = '$CollageID'
 		LIMIT $CatalogueLimit");
@@ -44,7 +45,7 @@ if(!list($Catalogue,$Posts) = $Cache->get_value('collage_'.$CollageID.'_catalogu
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue,((POSTS_PER_PAGE*$Page-POSTS_PER_PAGE)%THREAD_CATALOGUE),POSTS_PER_PAGE,true);
+$Thread = array_slice($Catalogue, ((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) % THREAD_CATALOGUE), POSTS_PER_PAGE, true);
 
 $DB->query("SELECT Name FROM collages WHERE ID='$CollageID'");
 list($Name) = $DB->next_record();
@@ -60,7 +61,7 @@ View::show_header('Comments for collage '.$Name, 'comments,bbcode,jquery');
 		</h2>
 		<div class="linkbox">
 <?
-$Pages=Format::get_pages($Page,$Posts,POSTS_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $Posts, POSTS_PER_PAGE, 9);
 echo $Pages;
 ?>
 		</div>
@@ -68,24 +69,24 @@ echo $Pages;
 <?
 
 //---------- Begin printing
-foreach($Thread as $Post){
+foreach ($Thread as $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body) = $Post;
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
-<table class="forum_post box vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+<table class="forum_post box vertical_margin<?=(!Users::has_avatars_enabled() ? ' noavatar' : '')?>" id="post<?=$PostID?>">
 	<colgroup>
-<?	if(Users::has_avatars_enabled()) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 		<col class="col_avatar" />
 <? 	} ?>
 		<col class="col_post_body" />
 	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
+		<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
 			<span style="float: left;"><a href="#post<?=$PostID?>">#<?=$PostID?></a>
 				<?=Users::format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?>
-<? if (!$ThreadInfo['IsLocked']){ ?>				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a><? }
-if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>');" class="brackets">Edit</a><? }
-if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a> <? } ?>
+<? if (!$ThreadInfo['IsLocked']) { ?>				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a><? }
+if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>');" class="brackets">Edit</a><? }
+if (check_perms('site_moderate_forums')) { ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a> <? } ?>
 			</span>
 			<span id="bar<?=$PostID?>" style="float: right;">
 				<a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
@@ -107,8 +108,8 @@ if (check_perms('site_moderate_forums')){ ?>				- <a href="#post<?=$PostID?>" on
 	</tr>
 </table>
 <?	}
-if(!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
-	if($ThreadInfo['MinClassWrite'] <= $LoggedUser['Class'] && !$LoggedUser['DisablePosting']) {
+if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
+	if ($ThreadInfo['MinClassWrite'] <= $LoggedUser['Class'] && !$LoggedUser['DisablePosting']) {
 
 	View::parse('generic/reply/quickreply.php', array(
 			'InputName' => 'collageid',

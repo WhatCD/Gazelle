@@ -9,7 +9,7 @@ enforce_login();
 include('array.php');
 
 if (isset($_REQUEST['action'])) {
-	switch ($_REQUEST['action']){
+	switch ($_REQUEST['action']) {
 		case 'report':
 			include('report.php');
 			break;

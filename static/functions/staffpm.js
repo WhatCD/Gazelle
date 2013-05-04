@@ -109,11 +109,11 @@ function PreviewMessage() {
 function Quote(post, user) {
 	username = user;
 	postid = post;
-	ajax.get("?action=get_post&post=" + postid, function(response){
+	ajax.get("?action=get_post&post=" + postid, function(response) {
 		if ($('#quickpost').raw().value !== '') {
 			$('#quickpost').raw().value = $('#quickpost').raw().value + "\n\n";
 		}
-		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote="+username+"]" +
+		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote=" + username + "]" +
 			//response.replace(/(img|aud)(\]|=)/ig,'url$2').replace(/\[url\=(https?:\/\/[^\s\[\]<>"\'()]+?)\]\[url\](.+?)\[\/url\]\[\/url\]/gi, "[url]$1[/url]")
 			html_entity_decode(response)
 		+ "[/quote]";

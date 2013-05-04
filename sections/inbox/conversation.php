@@ -3,13 +3,15 @@ include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
 $ConvID = $_GET['id'];
-if(!$ConvID || !is_number($ConvID)) { error(404); }
+if (!$ConvID || !is_number($ConvID)) {
+	error(404);
+}
 
 
 
 $UserID = $LoggedUser['ID'];
 $DB->query("SELECT InInbox, InSentbox FROM pm_conversations_users WHERE UserID='$UserID' AND ConvID='$ConvID'");
-if($DB->record_count() == 0) {
+if ($DB->record_count() == 0) {
 	error(403);
 }
 list($InInbox, $InSentbox) = $DB->next_record();
@@ -23,23 +25,26 @@ if (!$InInbox && !$InSentbox) {
 }
 
 // Get information on the conversation
-$DB->query("SELECT
-	c.Subject,
-	cu.Sticky,
-	cu.UnRead,
-	cu.ForwardedTo
+$DB->query("
+	SELECT
+		c.Subject,
+		cu.Sticky,
+		cu.UnRead,
+		cu.ForwardedTo
 	FROM pm_conversations AS c
-	JOIN pm_conversations_users AS cu ON c.ID=cu.ConvID
-	WHERE c.ID='$ConvID' AND UserID='$UserID'");
+		JOIN pm_conversations_users AS cu ON c.ID=cu.ConvID
+	WHERE c.ID='$ConvID'
+		AND UserID='$UserID'");
 list($Subject, $Sticky, $UnRead, $ForwardedID) = $DB->next_record();
 
 
-$DB->query("SELECT um.ID, Username
+$DB->query("
+	SELECT um.ID, Username
 	FROM pm_messages AS pm
-	JOIN users_main AS um ON um.ID=pm.SenderID
+		JOIN users_main AS um ON um.ID=pm.SenderID
 	WHERE pm.ConvID='$ConvID'");
 
-while(list($PMUserID, $Username) = $DB->next_record()) {
+while (list($PMUserID, $Username) = $DB->next_record()) {
 	$PMUserID = (int)$PMUserID;
 	$Users[$PMUserID]['UserStr'] = Users::format_username($PMUserID, true, true, true, true);
 	$Users[$PMUserID]['Username'] = $Username;
@@ -49,7 +54,7 @@ $Users[0]['Username'] = 'System';
 
 
 
-if($UnRead=='1') {
+if ($UnRead == '1') {
 
 	$DB->query("UPDATE pm_conversations_users SET UnRead='0' WHERE ConvID='$ConvID' AND UserID='$UserID'");
 	// Clear the caches of the inbox and sentbox
@@ -62,7 +67,7 @@ View::show_header('View conversation '.$Subject, 'comments,inbox,bbcode');
 $DB->query("SELECT SentDate, SenderID, Body, ID FROM pm_messages AS m WHERE ConvID='$ConvID' ORDER BY ID");
 ?>
 <div class="thin">
-	<h2><?=$Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')':'')?></h2>
+	<h2><?=$Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')' : '')?></h2>
 	<div class="linkbox">
 		<a href="inbox.php" class="brackets">Back to inbox</a>
 	</div>
@@ -83,7 +88,7 @@ $DB->query("SELECT UserID FROM pm_conversations_users WHERE UserID!='$LoggedUser
 $ReceiverIDs = $DB->collect('UserID');
 
 
-if(!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect($ReceiverIDs, array_keys($StaffIDs)))) {
+if (!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect($ReceiverIDs, array_keys($StaffIDs)))) {
 ?>
 	<h3>Reply</h3>
 	<form class="send_form" name="reply" action="inbox.php" method="post" id="messageform">
@@ -114,7 +119,7 @@ if(!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect($
 				<tr>
 					<td class="label"><label for="sticky">Sticky</label></td>
 					<td>
-						<input type="checkbox" id="sticky" name="sticky"<? if($Sticky) { echo ' checked="checked"'; } ?> />
+						<input type="checkbox" id="sticky" name="sticky"<? if ($Sticky) { echo ' checked="checked"'; } ?> />
 					</td>
 					<td class="label"><label for="mark_unread">Mark as unread</label></td>
 					<td>
@@ -135,7 +140,7 @@ if(!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect($
 <?
 $DB->query("SELECT SupportFor FROM users_info WHERE UserID = ".$LoggedUser['ID']);
 list($FLS) = $DB->next_record();
-if((check_perms('users_mod') || $FLS != "") && (!$ForwardedID || $ForwardedID == $LoggedUser['ID'])) {
+if ((check_perms('users_mod') || $FLS != '') && (!$ForwardedID || $ForwardedID == $LoggedUser['ID'])) {
 ?>
 	<h3>Forward conversation</h3>
 	<form class="send_form" name="forward" action="inbox.php" method="post">
@@ -146,8 +151,8 @@ if((check_perms('users_mod') || $FLS != "") && (!$ForwardedID || $ForwardedID ==
 			<label for="receiverid">Forward to</label>
 			<select id="receiverid" name="receiverid">
 <?
-	foreach($StaffIDs as $StaffID => $StaffName) {
-		if($StaffID == $LoggedUser['ID'] || in_array($StaffID, $ReceiverIDs)) {
+	foreach ($StaffIDs as $StaffID => $StaffName) {
+		if ($StaffID == $LoggedUser['ID'] || in_array($StaffID, $ReceiverIDs)) {
 			continue;
 		}
 ?>

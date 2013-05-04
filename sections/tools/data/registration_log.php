@@ -117,9 +117,9 @@ if ($DB->record_count()) {
 			</td>
 			<td>
 				<span style="float: left;"><?=display_str($IP)?></span>
-				<span style="float: right;"><?=display_str($Uses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets">S</a></span><br />
+				<span style="float: right;"><?=display_str($Uses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($IP)?>" title="WI" class="brackets">WI</a></span><br />
 				<span style="float: left;"><?=display_str($InviterIP)?></span>
-				<span style="float: right;"><?=display_str($InviterUses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search" class="brackets">S</a></span><br />
+				<span style="float: right;"><?=display_str($InviterUses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search" class="brackets">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($InviterIP)?>" title="WI" class="brackets">WI</a></span><br />
 			</td>
 			<td>
 				<?=$IPCC?> <br />

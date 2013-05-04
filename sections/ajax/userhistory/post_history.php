@@ -46,7 +46,7 @@ if (($UserInfo = $Cache->get_value('user_info_'.$UserID)) === false) {
 			JOIN users_info AS i ON i.UserID = m.ID
 		WHERE m.ID = $UserID");
 
-	if ($DB->record_count() == 0){ // If user doesn't exist
+	if ($DB->record_count() == 0) { // If user doesn't exist
 			error_out('User does not exist!');
 	}
 	list($Username, $Enabled, $Title, $Avatar, $Donor, $Warned) = $DB->next_record();

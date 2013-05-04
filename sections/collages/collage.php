@@ -3,7 +3,7 @@ ini_set('max_execution_time',600);
 
 //~~~~~~~~~~~ Main collage page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
-function compare($X, $Y){
+function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 
@@ -369,7 +369,7 @@ View::show_header($Name,'browse,collage,bbcode,voting,jquery,recommend');
 			<div class="pad"><?=$Text->full_format($Description)?></div>
 		</div>
 <?
-if (check_perms('zip_downloader')){
+if (check_perms('zip_downloader')) {
 	if (isset($LoggedUser['Collector'])) {
 		list($ZIPList,$ZIPPrefs) = $LoggedUser['Collector'];
 		$ZIPList = explode(':',$ZIPList);
@@ -412,19 +412,19 @@ foreach ($ZIPOptions as $Option) {
 <?		$OpenGroup = true;
 	}
 ?>
-						<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID,$ZIPList)){ echo ' disabled="disabled"'; }?>><?=$OptName?></option>
+						<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID,$ZIPList)) { echo ' disabled="disabled"'; }?>><?=$OptName?></option>
 <?
 }
 ?>
 					</optgroup>
 				</select>
 				<button type="button" onclick="add_selection()">+</button>
-				<select name="preference" style="width:210px">
-					<option value="0"<? if ($ZIPPrefs == 0){ echo ' selected="selected"'; } ?>>Prefer Original</option>
-					<option value="1"<? if ($ZIPPrefs == 1){ echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
-					<option value="2"<? if ($ZIPPrefs == 2){ echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
+				<select name="preference" style="width: 210px;">
+					<option value="0"<? if ($ZIPPrefs == 0) { echo ' selected="selected"'; } ?>>Prefer Original</option>
+					<option value="1"<? if ($ZIPPrefs == 1) { echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
+					<option value="2"<? if ($ZIPPrefs == 2) { echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
 				</select>
-				<input type="submit" style="width:210px" value="Download" />
+				<input type="submit" style="width: 210px;" value="Download" />
 				</form>
 			</div>
 		</div>
@@ -474,7 +474,7 @@ foreach ($TopArtists as $ID => $Artist) {
 		<div class="box box_contributors">
 			<div class="head"><strong>Top contributors</strong></div>
 			<div class="pad">
-				<ol style="padding-left:5px;">
+				<ol style="padding-left: 5px;">
 <?
 uasort($Users, 'compare');
 $i = 0;
@@ -493,7 +493,7 @@ foreach ($Users as $ID => $User) {
 		</div>
 <? if (check_perms('site_collages_manage') && !$PreventAdditions) { ?>
 		<div class="box box_addtorrent">
-			<div class="head"><strong>Add torrent</strong><span class="float_right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add'?'Individual add':'Batch add'); return false;" class="brackets">Batch add</a></span></div>
+			<div class="head"><strong>Add torrent</strong><span class="float_right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add' ? 'Individual add' : 'Batch add'); return false;" class="brackets">Batch add</a></span></div>
 			<div class="pad add_torrent_container">
 				<form class="add_form" name="torrent" action="collages.php" method="post">
 					<input type="hidden" name="action" value="add_torrent" />
@@ -521,16 +521,18 @@ foreach ($Users as $ID => $User) {
 		<h3>Comments</h3>
 <?
 if (empty($CommentList)) {
-	$DB->query("SELECT
-		cc.ID,
-		cc.Body,
-		cc.UserID,
-		um.Username,
-		cc.Time
+	$DB->query("
+		SELECT
+			cc.ID,
+			cc.Body,
+			cc.UserID,
+			um.Username,
+			cc.Time
 		FROM collages_comments AS cc
 			LEFT JOIN users_main AS um ON um.ID=cc.UserID
 		WHERE CollageID='$CollageID'
-		ORDER BY ID DESC LIMIT 15");
+		ORDER BY ID DESC
+		LIMIT 15");
 	$CommentList = $DB->to_array(false, MYSQLI_NUM);
 }
 foreach ($CommentList as $Comment) {
@@ -588,11 +590,11 @@ if ($CollageCovers != 0) { ?>
 			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.page(0, this); return false;"><strong>&lt;&lt; First</strong></a> | </span>
 			<span id="prevpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.prevPage(); return false;"><strong>&lt; Prev</strong></a> | </span>
 <?			for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
-			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? 'selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><strong><?=$CollageCovers * $i + 1?>-<?=min($NumGroups,$CollageCovers * ($i + 1))?></strong></a><?=($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : ''?></span>
+			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? 'selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><strong><?=$CollageCovers * $i + 1?>-<?=min($NumGroups,$CollageCovers * ($i + 1))?></strong></a><?=(($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : '')?></span>
 <?			} ?>
 			<span id="nextbar" class="<?=($NumGroups / $CollageCovers > 5) ? 'hidden' : ''?>"> | </span>
 			<span id="nextpage"><a href="#" class="pageslink" onclick="collageShow.nextPage(); return false;"><strong>Next &gt;</strong></a></span>
-			<span id="lastpage" class="<?=ceil($NumGroups / $CollageCovers) == 2 ? 'invisible' : ''?>"> | <a href="#" class="pageslink" onclick="collageShow.page(<?=ceil($NumGroups / $CollageCovers) - 1?>, this); return false;"><strong>Last &gt;&gt;</strong></a></span>
+			<span id="lastpage" class="<?=(ceil($NumGroups / $CollageCovers) == 2 ? 'invisible' : '')?>"> | <a href="#" class="pageslink" onclick="collageShow.page(<?=ceil($NumGroups / $CollageCovers) - 1?>, this); return false;"><strong>Last &gt;&gt;</strong></a></span>
 		</div>
 		<script type="text/javascript">//<![CDATA[
 			collageShow.init(<?=json_encode($CollagePages)?>);

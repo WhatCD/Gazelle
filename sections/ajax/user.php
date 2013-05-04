@@ -11,44 +11,46 @@ if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
 $UserID = $_GET['id'];
 
 
-if($UserID == $LoggedUser['ID']) {
+if ($UserID == $LoggedUser['ID']) {
 	$OwnProfile = true;
 } else {
 	$OwnProfile = false;
 }
 
 // Always view as a normal user.
-$DB->query("SELECT
-	m.Username,
-	m.Email,
-	m.LastAccess,
-	m.IP,
-	p.Level AS Class,
-	m.Uploaded,
-	m.Downloaded,
-	m.RequiredRatio,
-	m.Enabled,
-	m.Paranoia,
-	m.Invites,
-	m.Title,
-	m.torrent_pass,
-	m.can_leech,
-	i.JoinDate,
-	i.Info,
-	i.Avatar,
-	i.Country,
-	i.Donor,
-	i.Warned,
-	COUNT(posts.id) AS ForumPosts,
-	i.Inviter,
-	i.DisableInvites,
-	inviter.username
+$DB->query("
+	SELECT
+		m.Username,
+		m.Email,
+		m.LastAccess,
+		m.IP,
+		p.Level AS Class,
+		m.Uploaded,
+		m.Downloaded,
+		m.RequiredRatio,
+		m.Enabled,
+		m.Paranoia,
+		m.Invites,
+		m.Title,
+		m.torrent_pass,
+		m.can_leech,
+		i.JoinDate,
+		i.Info,
+		i.Avatar,
+		i.Country,
+		i.Donor,
+		i.Warned,
+		COUNT(posts.id) AS ForumPosts,
+		i.Inviter,
+		i.DisableInvites,
+		inviter.username
 	FROM users_main AS m
-	JOIN users_info AS i ON i.UserID = m.ID
-	LEFT JOIN permissions AS p ON p.ID=m.PermissionID
-	LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
-	LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
-	WHERE m.ID = $UserID GROUP BY AuthorID");
+		JOIN users_info AS i ON i.UserID = m.ID
+		LEFT JOIN permissions AS p ON p.ID=m.PermissionID
+		LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
+		LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
+	WHERE m.ID = $UserID
+	GROUP BY AuthorID");
 
 if ($DB->record_count() == 0) { // If user doesn't exist
         json_die("failure", "no such user");
@@ -57,13 +59,13 @@ if ($DB->record_count() == 0) { // If user doesn't exist
 list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9,11));
 
 $Paranoia = unserialize($Paranoia);
-if(!is_array($Paranoia)) {
+if (!is_array($Paranoia)) {
 	$Paranoia = array();
 }
 $ParanoiaLevel = 0;
-foreach($Paranoia as $P) {
+foreach ($Paranoia as $P) {
 	$ParanoiaLevel++;
-	if(strpos($P, '+')) {
+	if (strpos($P, '+')) {
 		$ParanoiaLevel++;
 	}
 }
@@ -79,7 +81,7 @@ function check_paranoia_here($Setting) {
 
 $Friend = false;
 $DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
-if($DB->record_count() != 0) {
+if ($DB->record_count() != 0) {
 	$Friend = true;
 }
 
@@ -95,7 +97,7 @@ if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requests
 	$RequestsVoted = 0;
 	$TotalSpent = 0;
 }
-if(check_paranoia_here('uploads+')) {
+if (check_paranoia_here('uploads+')) {
 	$DB->query("SELECT COUNT(ID) FROM torrents WHERE UserID='$UserID'");
 	list($Uploads) = $DB->next_record();
 } else {
@@ -145,9 +147,9 @@ if (check_paranoia_here('artistsadded')) {
 	$ArtistsRank = null;
 }
 
-if($Downloaded == 0) {
+if ($Downloaded == 0) {
 	$Ratio = 1;
-} elseif($Uploaded == 0) {
+} elseif ($Uploaded == 0) {
 	$Ratio = 0.5;
 } else {
 	$Ratio = round($Uploaded/$Downloaded, 2);
@@ -159,7 +161,7 @@ if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfil
 }
 
 // Community section
-if(check_paranoia_here(array('snatched', 'snatched+'))) {
+if (check_paranoia_here(array('snatched', 'snatched+'))) {
 $DB->query("SELECT COUNT(x.uid), COUNT(DISTINCT x.fid) FROM xbt_snatched AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID'");
 list($Snatched, $UniqueSnatched) = $DB->next_record();
 }
@@ -185,7 +187,21 @@ if (check_paranoia_here(array('uniquegroups', 'uniquegroups+'))) {
 }
 
 if (check_paranoia_here(array('perfectflacs', 'perfectflacs+'))) {
-	$DB->query("SELECT COUNT(ID) FROM torrents WHERE ((LogScore = 100 AND Format = 'FLAC') OR (Media = 'Vinyl' AND Format = 'FLAC') OR (Media = 'WEB' AND Format = 'FLAC') OR (Media = 'DVD' AND Format = 'FLAC') OR (Media = 'Soundboard' AND Format = 'FLAC') OR (Media = 'Cassette' AND Format = 'FLAC') OR (Media = 'SACD' AND Format = 'FLAC') OR (Media = 'Blu-ray' AND Format = 'FLAC') OR (Media = 'DAT' AND Format = 'FLAC')) AND UserID = '$UserID'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM torrents
+		WHERE (
+			(LogScore = 100 AND Format = 'FLAC')
+			OR (Media = 'Vinyl' AND Format = 'FLAC')
+			OR (Media = 'WEB' AND Format = 'FLAC')
+			OR (Media = 'DVD' AND Format = 'FLAC')
+			OR (Media = 'Soundboard' AND Format = 'FLAC')
+			OR (Media = 'Cassette' AND Format = 'FLAC')
+			OR (Media = 'SACD' AND Format = 'FLAC')
+			OR (Media = 'Blu-ray' AND Format = 'FLAC')
+			OR (Media = 'DAT' AND Format = 'FLAC')
+			)
+			AND UserID = '$UserID'");
 	list($PerfectFLACs) = $DB->next_record();
 }
 
@@ -199,18 +215,18 @@ if (check_paranoia_here('leeching+')) {
 	list($Leeching) = $DB->next_record();
 }
 
-if(check_paranoia_here('invitedcount')) {
+if (check_paranoia_here('invitedcount')) {
 	$DB->query("SELECT COUNT(UserID) FROM users_info WHERE Inviter='$UserID'");
 	list($Invited) = $DB->next_record();
 }
 
 if (!$OwnProfile) {
-	$torrent_pass = "";
+	$torrent_pass = '';
 }
 
 // Run through some paranoia stuff to decide what we can send out.
 if (!check_paranoia_here('lastseen')) {
-	$LastAccess = "";
+	$LastAccess = '';
 }
 if (!check_paranoia_here('uploaded')) {
 	$Uploaded = null;
@@ -221,21 +237,21 @@ if (!check_paranoia_here('downloaded')) {
 if (isset($RequiredRatio) && !check_paranoia_here('requiredratio')) {
 	$RequiredRatio = null;
 }
-if($ParanoiaLevel == 0) {
+if ($ParanoiaLevel == 0) {
 	$ParanoiaLevelText = 'Off';
-} elseif($ParanoiaLevel == 1) {
+} elseif ($ParanoiaLevel == 1) {
 	$ParanoiaLevelText = 'Very Low';
-} elseif($ParanoiaLevel <= 5) {
+} elseif ($ParanoiaLevel <= 5) {
 	$ParanoiaLevelText = 'Low';
-} elseif($ParanoiaLevel <= 20) {
+} elseif ($ParanoiaLevel <= 20) {
 	$ParanoiaLevelText = 'High';
 } else {
 	$ParanoiaLevelText = 'Very high';
 }
 
 //Bugfix for no access time available
-if ($LastAccess == "0000-00-00 00:00:00"){
-    $LastAccess = "";
+if ($LastAccess == '0000-00-00 00:00:00') {
+    $LastAccess = '';
 }
 
 header('Content-Type: text/plain; charset=utf-8');

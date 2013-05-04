@@ -15,7 +15,7 @@ the front page.
 if (!is_number($_POST['threadid'])) {
 	error(404);
 }
-if ($_POST['title'] == ''){
+if ($_POST['title'] == '') {
 	error(0);
 }
 // End injection check

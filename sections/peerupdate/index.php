@@ -33,11 +33,11 @@ $RowNum = 0;
 $LastGroupID = 0;
 $UpdatedKeys = $UncachedGroups = 0;
 list($TorrentID, $GroupID, $Seeders, $Leechers, $Snatches) = $DB->next_record(MYSQLI_NUM, false);
-while($TorrentID) {
-	if($LastGroupID != $GroupID) {
+while ($TorrentID) {
+	if ($LastGroupID != $GroupID) {
 		$CachedData = $Cache->get_value('torrent_group_'.$GroupID);
-		if($CachedData !== false) {
-			if(isset($CachedData['ver']) && $CachedData['ver'] == CACHE::GROUP_VERSION) {
+		if ($CachedData !== false) {
+			if (isset($CachedData['ver']) && $CachedData['ver'] == CACHE::GROUP_VERSION) {
 				$CachedStats = &$CachedData['d']['Torrents'];
 			}
 		} else {
@@ -45,9 +45,9 @@ while($TorrentID) {
 		}
 		$LastGroupID = $GroupID;
 	}
-	while($LastGroupID == $GroupID) {
+	while ($LastGroupID == $GroupID) {
 		$RowNum++;
-		if(isset($CachedStats) && is_array($CachedStats[$TorrentID])) {
+		if (isset($CachedStats) && is_array($CachedStats[$TorrentID])) {
 			$OldValues = &$CachedStats[$TorrentID];
 			$OldValues['Seeders'] = $Seeders;
 			$OldValues['Leechers'] = $Leechers;
@@ -55,14 +55,14 @@ while($TorrentID) {
 			$Changed = true;
 			unset($OldValues);
 		}
-		if(!($RowNum % $StepSize)) {
+		if (!($RowNum % $StepSize)) {
 			$DB->query("SELECT * FROM tpc_temp WHERE GroupID > $GroupID OR (GroupID = $GroupID AND TorrentID > $TorrentID)
 				ORDER BY GroupID ASC, TorrentID ASC LIMIT $StepSize");
 		}
 		$LastGroupID = $GroupID;
 		list($TorrentID, $GroupID, $Seeders, $Leechers, $Snatches) = $DB->next_record(MYSQLI_NUM, false);
 	}
-	if($Changed) {
+	if ($Changed) {
 		$Cache->cache_value('torrent_group_'.$LastGroupID, $CachedData, 0);
 		unset($CachedStats);
 		$UpdatedKeys++;

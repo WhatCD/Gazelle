@@ -1,22 +1,26 @@
 <?
 
-if(empty($Return)) {
+if (empty($Return)) {
 	$ToID = $_GET['to'];
-	if($ToID == $LoggedUser['ID']) {
+	if ($ToID == $LoggedUser['ID']) {
 		error("You cannot start a conversation with yourself!");
 		header('Location: inbox.php');
 	}
 }
 
-if(!$ToID || !is_number($ToID)) { error(404); }
+if (!$ToID || !is_number($ToID)) {
+	error(404);
+}
 
-if(!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$ToID])) {
+if (!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$ToID])) {
 	error(403);
 }
 
 $DB->query("SELECT Username FROM users_main WHERE ID='$ToID'");
 list($Username) = $DB->next_record();
-if(!$Username) { error(404); }
+if (!$Username) {
+	error(404);
+}
 View::show_header('Compose', 'inbox,bbcode');
 ?>
 <div class="thin">

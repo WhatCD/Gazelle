@@ -4,16 +4,18 @@ ini_set('memory_limit', -1);
 //~~~~~~~~~~~ Main bookmarks page ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 
-function compare($X, $Y){
+function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 
-if(!empty($_GET['userid'])) {
-	if(!check_perms('users_override_paranoia')) {
+if (!empty($_GET['userid'])) {
+	if (!check_perms('users_override_paranoia')) {
 		error(403);
 	}
 	$UserID = $_GET['userid'];
-	if(!is_number($UserID)) { error(404); }
+	if (!is_number($UserID)) {
+		error(404);
+	}
 	$DB->query("SELECT Username FROM users_main WHERE ID='$UserID'");
 	list($Username) = $DB->next_record();
 } else {

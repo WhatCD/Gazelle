@@ -112,7 +112,7 @@ function calculateComplexity(password) {
 		setStatus(CLEAR);
 	}
 	if (isUserPage()) {
-		if (irckey.length > 0){
+		if (irckey.length > 0) {
 			if (password.toLowerCase() == irckey.toLowerCase()) {
 				setStatus(MATCH_IRCKEY);
 			}

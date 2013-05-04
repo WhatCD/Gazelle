@@ -16,7 +16,7 @@ var autocomp = {
 		this.cache[id] = ["",[],[],[]];
 		this.input = document.getElementById(id + "search");
 		this.list = document.getElementById(id + "complete");
-		listener.set(document.body,'click',function(){
+		listener.set(document.body,'click',function() {
 			autocomp.value = autocomp.input.value;
 			autocomp.end();
 		});
@@ -30,7 +30,7 @@ var autocomp = {
 	},
 	keyup: function (e) {
 		clearTimeout(this.timer);
-		var key = (window.event)?window.event.keyCode:e.keyCode;
+		var key = (window.event) ? window.event.keyCode : e.keyCode;
 		switch (key) {
 			case 27: //esc
 				break;
@@ -101,7 +101,7 @@ var autocomp = {
 		if (this.pos >= this.list.children.length) {
 			this.pos = -1;
 		} else if (this.pos < -1) {
-			this.pos = this.list.children.length-1;
+			this.pos = this.list.children.length - 1;
 		}
 
 		if (this.pos !== -1) {
@@ -115,29 +115,29 @@ var autocomp = {
 		this.pos = -1;
 		this.value = unescape(value);
 
-		if (typeof this.cache[this.id+value] === 'object') {
-			this.display(this.cache[this.id+value]);
+		if (typeof this.cache[this.id + value] === 'object') {
+			this.display(this.cache[this.id + value]);
 			return;
 		}
 
-		ajax.get(this.id+'.php?action=autocomplete&name='+this.input.value,function(jstr){
+		ajax.get(this.id+'.php?action=autocomplete&name='+this.input.value,function(jstr) {
 			var data = json.decode(jstr);
 			autocomp.cache[autocomp.id+data[0]] = data;
 			autocomp.display(data);
 		});
 	},
 	display: function (data) {
-		var i,il,li;
+		var i, il, li;
 		this.list.innerHTML = '';
-		for (i=0,il=data[1].length;i<il;++i) {
+		for (i = 0, il = data[1].length; i < il; ++i) {
 			li = document.createElement('li');
 			li.innerHTML = data[1][i];
 			li.i = i;
 			li.artistid = data[3][i];
-			listener.set(li,'mouseover',function(){
+			listener.set(li,'mouseover',function() {
 				autocomp.highlight(this.i);
 			});
-			listener.set(li,'click',function(){
+			listener.set(li,'click',function() {
 				window.location = autocomp.id + '.php?id='+this.artistid;
 			});
 			this.list.appendChild(li);

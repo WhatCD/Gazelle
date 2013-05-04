@@ -1,21 +1,21 @@
 <?
 // perform the back end of updating a resolve type
 
-if(!check_perms('admin_reports')){
+if (!check_perms('admin_reports')) {
 	error(403);
 }
 
-if(empty($_GET['reportid']) || !is_number($_GET['reportid'])) {
+if (empty($_GET['reportid']) || !is_number($_GET['reportid'])) {
 	echo 'HAX ATTEMPT!'.$_GET['reportid'];
 	die();
 }
 
-if(empty($_GET['categoryid']) || !is_number($_GET['categoryid'])) {
+if (empty($_GET['categoryid']) || !is_number($_GET['categoryid'])) {
 	echo 'HAX ATTEMPT!!'.$_GET['categoryid'];
 	die();
 }
 
-if(empty($_GET['newresolve'])) {
+if (empty($_GET['newresolve'])) {
 	echo "No new resolve";
 	die();
 }
@@ -35,7 +35,7 @@ if (!empty($Types[$CategoryID])) {
 	$TypeList = $Types['master'];
 }
 
-if(!array_key_exists($NewType, $TypeList)) {
+if (!array_key_exists($NewType, $TypeList)) {
 	echo "No resolve from that category";
 	die();
 }

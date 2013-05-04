@@ -62,7 +62,12 @@ function main () {
 	});
 
 	// Hide the address bar
-	setTimeout(function(){window.scrollTo(0, 1);setTimeout(function(){window.scrollTo(0, 0);},0);},500);
+	setTimeout(function() {
+		window.scrollTo(0, 1);
+		setTimeout(function() {
+			window.scrollTo(0, 0);
+		},0);
+	}, 500);
 };
 
 // Tap header to swap for ratio
@@ -98,7 +103,7 @@ function load(url,forward,formid) {
 	if (moved_after_touch) {
 		return;
 	}
-	if (formid === undefined){
+	if (formid === undefined) {
 		ajax.get(url, function (response) {
 			get_headers(response);
 			transition_to_new_element(response, forward);

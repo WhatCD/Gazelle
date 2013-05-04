@@ -7,11 +7,11 @@ function notify ($Channel, $Message) {
 
 $Errors = array('403','404','413','504');
 
-if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
-	//Webserver error i.e. http://sitename/madeupdocument.php
+if (!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
+	// Web server error i.e. http://sitename/madeupdocument.php
 	include($_GET['e'].'.php');
 } else {
-	//Gazelle error (Come from the error() function)
+	// Gazelle error (Come from the error() function)
 	switch ($Error) {
 
 		case '403':
@@ -33,7 +33,7 @@ if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 			$Description = "Something was wrong with your request, and the server is refusing to fulfill it.";
 			break;
 		default:
-			if(!empty($Error)) {
+			if (!empty($Error)) {
 				$Title = 'Error';
 				$Description = $Error;
 			} else {
@@ -42,11 +42,11 @@ if(!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 			}
 	}
 
-	if($Log) {
+	if ($Log) {
 		$Description .= ' <a href="log.php?search='.$Log.'">Search Log</a>';
 	}
 
-	if(empty($Ajax) && $Error != -1) {
+	if (empty($Ajax) && $Error != -1) {
 		View::show_header($Title);
 ?>
 	<div class="thin">

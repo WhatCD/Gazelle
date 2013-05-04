@@ -4,16 +4,16 @@ $SimilarID = db_string($_GET['similarid']);
 $ArtistID = db_string($_GET['artistid']);
 $Way = db_string($_GET['way']);
 
-if(!is_number($SimilarID) || !is_number($ArtistID)) {
+if (!is_number($SimilarID) || !is_number($ArtistID)) {
 	error(404);
 }
-if(!in_array($Way, array('up', 'down'))){
+if (!in_array($Way, array('up', 'down'))) {
 	error(404);
 }
 
 $DB->query("SELECT SimilarID FROM artists_similar_votes WHERE SimilarID='$SimilarID' AND UserID='$UserID' AND Way='$Way'");
-if($DB->record_count() == 0) {
-	if($Way == 'down') {
+if ($DB->record_count() == 0) {
+	if ($Way == 'down') {
 		$Score = 'Score-100';
 	} elseif($Way == 'up') {
 		$Score = 'Score+100';

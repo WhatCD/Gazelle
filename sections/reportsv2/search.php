@@ -2,7 +2,7 @@
 /*
  * TODO: I'm not writing documentation for this page until I write this page >.>
  */
-if(!check_perms('admin_reports')){
+if (!check_perms('admin_reports')) {
 	error(403);
 }
 

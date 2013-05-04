@@ -77,15 +77,17 @@ switch ($_GET['feed']) {
 		$Feed->channel('Blog', 'RSS feed for site blog.');
 		if (!$Blog = $Cache->get_value('blog')) {
 			require(SERVER_ROOT.'/classes/class_mysql.php'); //Require the database wrapper
-			$DB=NEW DB_MYSQL; //Load the database wrapper
-			$DB->query("SELECT
-				b.ID,
-				um.Username,
-				b.Title,
-				b.Body,
-				b.Time,
-				b.ThreadID
-				FROM blog AS b LEFT JOIN users_main AS um ON b.UserID=um.ID
+			$DB = NEW DB_MYSQL; //Load the database wrapper
+			$DB->query("
+				SELECT
+					b.ID,
+					um.Username,
+					b.Title,
+					b.Body,
+					b.Time,
+					b.ThreadID
+				FROM blog AS b
+					LEFT JOIN users_main AS um ON b.UserID=um.ID
 				ORDER BY Time DESC
 				LIMIT 20");
 			$Blog = $DB->to_array();
@@ -93,7 +95,7 @@ switch ($_GET['feed']) {
 		}
 		foreach ($Blog as $BlogItem) {
 			list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
-			if($ThreadID) {
+			if ($ThreadID) {
 				echo $Feed->item($Title, $Text->strip_bbcode($Body), 'forums.php?action=viewthread&amp;threadid='.$ThreadID, SITE_NAME.' Staff','','',$BlogTime);
 			} else {
 				echo $Feed->item($Title, $Text->strip_bbcode($Body), 'blog.php#blog'.$BlogID, SITE_NAME.' Staff','','',$BlogTime);
@@ -154,15 +156,15 @@ switch ($_GET['feed']) {
 		break;
 	default:
 		// Personalized torrents
-		if(empty($_GET['name']) && substr($_GET['feed'], 0, 16) == 'torrents_notify_'){
+		if (empty($_GET['name']) && substr($_GET['feed'], 0, 16) == 'torrents_notify_') {
 			// All personalized torrent notifications
 			$Feed->channel('Personalized torrent notifications', 'RSS feed for personalized torrent notifications.');
 			$Feed->retrieve($_GET['feed'],$_GET['authkey'],$_GET['passkey']);
-		} elseif(!empty($_GET['name']) && substr($_GET['feed'], 0, 16) == 'torrents_notify_'){
+		} elseif (!empty($_GET['name']) && substr($_GET['feed'], 0, 16) == 'torrents_notify_') {
 			// Specific personalized torrent notification channel
 			$Feed->channel(display_str($_GET['name']), 'Personal RSS feed: '.display_str($_GET['name']));
 			$Feed->retrieve($_GET['feed'],$_GET['authkey'],$_GET['passkey']);
-		} elseif(!empty($_GET['name']) && substr($_GET['feed'], 0, 21) == 'torrents_bookmarks_t_') {
+		} elseif (!empty($_GET['name']) && substr($_GET['feed'], 0, 21) == 'torrents_bookmarks_t_') {
 			// Bookmarks
 			$Feed->channel('Bookmarked torrent notifications', 'RSS feed for bookmarked torrents.');
 			$Feed->retrieve($_GET['feed'],$_GET['authkey'],$_GET['passkey']);

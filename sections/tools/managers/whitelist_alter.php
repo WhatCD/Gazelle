@@ -24,7 +24,7 @@ if ($_POST['submit'] == 'Delete') {
 	$Client = db_string($_POST['client']);
 	$PeerID = db_string($_POST['peer_id']);
 
-	if ($_POST['submit'] == 'Edit'){ //Edit
+	if ($_POST['submit'] == 'Edit') { //Edit
 		if (empty($_POST['id']) || !is_number($_POST['id'])) {
 			error('3');
 		} else {

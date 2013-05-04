@@ -9,7 +9,7 @@
  * replicated on the auto page (reports.php).
  */
 
-if (!check_perms('admin_reports')){
+if (!check_perms('admin_reports')) {
 	error(403);
 }
 
@@ -20,14 +20,14 @@ define('REPORTS_PER_PAGE', '10');
 list($Page,$Limit) = Format::page_limit(REPORTS_PER_PAGE);
 
 
-if (isset($_GET['view'])){
+if (isset($_GET['view'])) {
 	$View = $_GET['view'];
 } else {
 	error(404);
 }
 
 if (isset($_GET['id'])) {
-	if (!is_number($_GET['id']) && $View != "type") {
+	if (!is_number($_GET['id']) && $View != 'type') {
 		error(404);
 	} else {
 		$ID = db_string($_GET['id']);

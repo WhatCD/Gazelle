@@ -12,7 +12,7 @@ $_GET['post'], which is the ID of the post.
 \*********************************************************************/
 
 // Quick SQL injection check
-if(!$_GET['post'] || !is_number($_GET['post'])){
+if (!$_GET['post'] || !is_number($_GET['post'])) {
 	error(0);
 }
 
@@ -20,11 +20,12 @@ if(!$_GET['post'] || !is_number($_GET['post'])){
 $PostID = $_GET['post'];
 
 // Message is selected providing the user quoting is one of the two people in the thread
-$DB->query("SELECT
+$DB->query("
+	SELECT
 		m.Body
-		FROM pm_messages as m
+	FROM pm_messages as m
 		JOIN pm_conversations_users AS u ON m.ConvID=u.ConvID
-		WHERE m.ID='$PostID'
+	WHERE m.ID='$PostID'
 		AND u.UserID=".$LoggedUser['ID']);
 list($Body) = $DB->next_record(MYSQLI_NUM);
 

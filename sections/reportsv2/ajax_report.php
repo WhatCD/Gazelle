@@ -11,9 +11,9 @@ authorize();
 <?
 $CategoryID = $_POST['categoryid'];
 
-if(array_key_exists($_POST['type'], $Types[$CategoryID])) {
+if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	$ReportType = $Types[$CategoryID][$_POST['type']];
-} else if(array_key_exists($_POST['type'],$Types['master'])) {
+} else if (array_key_exists($_POST['type'],$Types['master'])) {
 	$ReportType = $Types['master'][$_POST['type']];
 } else {
 	echo 'HAX IN REPORT TYPE';
@@ -30,7 +30,7 @@ foreach($ReportType['report_messages'] as $Message) {
 <br />
 <table class="layout border" cellpadding="3" cellspacing="1" border="0" width="100%">
 <?
-if(array_key_exists('image', $ReportType['report_fields'])) {
+if (array_key_exists('image', $ReportType['report_fields'])) {
 ?>
 	<tr>
 		<td class="label">
@@ -42,7 +42,7 @@ if(array_key_exists('image', $ReportType['report_fields'])) {
 	</tr>
 <?
 }
-if(array_key_exists('track', $ReportType['report_fields'])) {
+if (array_key_exists('track', $ReportType['report_fields'])) {
 ?>
 	<tr>
 		<td class="label">
@@ -54,7 +54,7 @@ if(array_key_exists('track', $ReportType['report_fields'])) {
 	</tr>
 <?
 }
-if(array_key_exists('link', $ReportType['report_fields'])) {
+if (array_key_exists('link', $ReportType['report_fields'])) {
 ?>
 	<tr>
 		<td class="label">
@@ -66,7 +66,7 @@ if(array_key_exists('link', $ReportType['report_fields'])) {
 	</tr>
 <?
 }
-if(array_key_exists('sitelink', $ReportType['report_fields'])) {
+if (array_key_exists('sitelink', $ReportType['report_fields'])) {
 ?>
 	<tr>
 		<td class="label">

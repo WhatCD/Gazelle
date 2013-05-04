@@ -22,7 +22,7 @@ function Quote(post, user) {
 function Quote(post, user, link) {
 	username = user;
 	postid = post;
-	ajax.get("?action=get_post&post=" + postid, function(response){
+	ajax.get("?action=get_post&post=" + postid, function(response) {
 		if ($('#quickpost').raw().value !== '') {
 			$('#quickpost').raw().value = $('#quickpost').raw().value + "\n\n";
 		}
@@ -65,7 +65,7 @@ function Edit_Form(post,key) {
 	 * If editing is already underway and edit is pressed again, reset the post
 	 * (keeps current functionality, move into brackets to stop from happening).
 	 */
-	ajax.get("?action=get_post&post=" + postid, function(response){
+	ajax.get("?action=get_post&post=" + postid, function(response) {
 		$('#editbox' + postid).raw().value = html_entity_decode(response);
 		resize('editbox' + postid);
 	});
@@ -82,7 +82,7 @@ function Cancel_Edit(postid) {
 
 function Preview_Edit(postid) {
 	$('#bar' + postid).raw().innerHTML = "<input type=\"button\" value=\"Editor\" onclick=\"Cancel_Preview(" + postid + ");\" /><input type=\"button\" value=\"Post\" onclick=\"Save_Edit(" + postid + ")\" /><input type=\"button\" value=\"Cancel\" onclick=\"Cancel_Edit(" + postid + ");\" />";
-	ajax.post("ajax.php?action=preview","form" + postid, function(response){
+	ajax.post("ajax.php?action=preview","form" + postid, function(response) {
 		$('#preview' + postid).raw().innerHTML = response;
 		$('#editbox' + postid).hide();
 	});
@@ -146,7 +146,7 @@ function Delete(post) {
 				$('#post' + postid).hide();
 			});
 		} else if (location.href.match(/artist\.php/)) {
-			ajax.get("artist.php?action=delete_comment&auth="+authkey+ "&postid=" + postid, function (){
+			ajax.get("artist.php?action=delete_comment&auth="+authkey+ "&postid=" + postid, function () {
 				$('#post' + postid).hide();
 			});
 		} else {
@@ -161,7 +161,7 @@ function Quick_Preview() {
 	var quickreplybuttons;
 	$('#post_preview').raw().value = "Make changes";
 	$('#post_preview').raw().preview = true;
-	ajax.post("ajax.php?action=preview","quickpostform", function(response){
+	ajax.post("ajax.php?action=preview","quickpostform", function(response) {
 		$('#quickreplypreview').show();
 		$('#contentpreview').raw().innerHTML = response;
 		$('#quickreplytext').hide();
@@ -180,7 +180,7 @@ function Newthread_Preview(mode) {
 	$('#newthreadpreviewbutton').toggle();
 	$('#newthreadeditbutton').toggle();
 	if (mode) { // Preview
-		ajax.post("ajax.php?action=preview","newthreadform", function(response){
+		ajax.post("ajax.php?action=preview","newthreadform", function(response) {
 			$('#contentpreview').raw().innerHTML = response;
 		});
 		$('#newthreadtitle').raw().innerHTML = $('#title').raw().value;

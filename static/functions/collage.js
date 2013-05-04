@@ -1,5 +1,5 @@
 function Add(input) {
-	if(input.checked == false) {
+	if (input.checked == false) {
 		Cancel();
 	} else {
 		if(document.getElementById("choices").raw().value == "") {
@@ -12,8 +12,8 @@ function Add(input) {
 
 function Cancel() {
 	var e=document.getElementsByTagName("input");
-	for(i=0;i<e.length;i++){
-		if(e[i].type=="checkbox"){
+	for (i = 0; i < e.length; i++) {
+		if (e[i].type == "checkbox") {
 			e[i].checked=false;
 		}
 	}
@@ -23,7 +23,7 @@ function Cancel() {
 function CollageSubscribe(collageid) {
 	ajax.get("userhistory.php?action=collage_subscribe&collageid=" + collageid + "&auth=" + authkey, function() {
 		var subscribeLink = $("#subscribelink" + collageid).raw();
-		if(subscribeLink) {
+		if (subscribeLink) {
 			subscribeLink.firstChild.nodeValue = subscribeLink.firstChild.nodeValue.charAt(0) == 'U'
 				? "Subscribe"
 				: "Unsubscribe";
@@ -35,15 +35,15 @@ var collageShow = {
 	pg:0,
 	pages:false,
 	wrap:false,
-	init:function(collagePages){
+	init:function(collagePages) {
 		this.wrap = document.getElementById('coverart');
 		this.pages = collagePages;
-		this.max = this.pages.length-1;
+		this.max = this.pages.length - 1;
 	},
-	selected:function(){
+	selected:function() {
 		return $('.linkbox .selected').raw();
 	},
-	createUL:function(data){
+	createUL:function(data) {
 		var ul = document.createElement('ul');
 		$(ul).add_class('collage_images');
 		ul.id = 'collage_page'+this.pg;
@@ -51,24 +51,30 @@ var collageShow = {
 		this.wrap.appendChild(ul);
 		return ul;
 	},
-	page:function(num,el){
+	page:function(num,el) {
 		var ul = $('#collage_page'+num).raw(), s = this.selected(), covers, lists, i;
 		this.pg = num;
 
-		if(!ul){
+		if (!ul) {
 			covers = this.pages[num];
-			if(covers){
+			if (covers) {
 				ul = this.createUL(covers);
 			}
 		}
 
 		lists = $('.collage_images').objects;
 		i = lists.length;
-		while(i--){ $(lists[i]).hide(); }
+		while (i--) {
+			$(lists[i]).hide();
+		}
 
 		$(ul).show();
-		if(s){ $(s).remove_class('selected'); }
-		if(el){ $(el.parentNode).add_class('selected'); }
+		if (s) {
+			$(s).remove_class('selected');
+		}
+		if (el) {
+			$(el.parentNode).add_class('selected');
+		}
 
 
 		// Toggle the page number links
@@ -116,15 +122,15 @@ var collageShow = {
 			$('#nextbar').hide();
 		}
 	},
-	nextPage:function(){
-		this.pg =  this.pg < this.max ? this.pg+1 : this.pg;
+	nextPage:function() {
+		this.pg =  this.pg < this.max ? this.pg + 1 : this.pg;
 		this.pager();
 	},
-	prevPage:function(){
-		this.pg = this.pg > 0 ? this.pg-1 : this.pg;
+	prevPage:function() {
+		this.pg = this.pg > 0 ? this.pg - 1 : this.pg;
 		this.pager();
 	},
-	pager:function(){
+	pager:function() {
 		this.page(this.pg,$('#pagelink'+this.pg).raw().firstChild);
 	}
 };

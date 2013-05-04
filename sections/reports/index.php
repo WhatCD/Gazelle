@@ -5,7 +5,7 @@ if (empty($_REQUEST['action'])) {
 	$_REQUEST['action'] = '';
 }
 
-switch ($_REQUEST['action']){
+switch ($_REQUEST['action']) {
 	case 'report':
 		include('report.php');
 		break;

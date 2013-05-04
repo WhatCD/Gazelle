@@ -5,18 +5,18 @@ $UserID = $LoggedUser['ID'];
 $Artist1ID = db_string($_POST['artistid']);
 $Artist2Name = db_string($_POST['artistname']);
 
-if(!is_number($Artist1ID)) {
+if (!is_number($Artist1ID)) {
 	error(0);
 }
 
-if(empty($Artist2Name)) {
+if (empty($Artist2Name)) {
 	error('Blank artist name.');
 }
 
 $DB->query("SELECT ag.ArtistID FROM artists_group AS ag WHERE ag.Name LIKE '$Artist2Name'");
 list($Artist2ID) = $DB->next_record();
 
-if(!empty($Artist2ID)) { // artist was found in the database
+if (!empty($Artist2ID)) { // artist was found in the database
 
 	// Let's see if there's already a similar artists field for these two
 	$DB->query("SELECT
@@ -26,7 +26,7 @@ if(!empty($Artist2ID)) { // artist was found in the database
 		WHERE s1.ArtistID='$Artist1ID' AND s2.ArtistID='$Artist2ID'");
 	list($SimilarID) = $DB->next_record();
 
-	if($SimilarID){ // The similar artists field already exists, just update the score
+	if ($SimilarID) { // The similar artists field already exists, just update the score
 		$DB->query("UPDATE artists_similar_scores SET Score=Score+200 WHERE SimilarID='$SimilarID'");
 	} else { // No, it doesn't exist - create it
 		$DB->query("INSERT INTO artists_similar_scores (Score) VALUES ('200')");
@@ -36,7 +36,7 @@ if(!empty($Artist2ID)) { // artist was found in the database
 	}
 
 	$DB->query("SELECT SimilarID FROM artists_similar_votes WHERE SimilarID='$SimilarID' AND UserID='$UserID' AND Way='up'");
-	if($DB->record_count() == 0) {
+	if ($DB->record_count() == 0) {
 		$DB->query("INSERT INTO artists_similar_votes (SimilarID, UserID, way) VALUES ('$SimilarID', '$UserID', 'up')");
 	}
 

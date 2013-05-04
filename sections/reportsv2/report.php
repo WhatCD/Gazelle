@@ -10,8 +10,8 @@ include(SERVER_ROOT.'/classes/class_text.php');
 $Text = NEW TEXT;
 
 //If we're not coming from torrents.php, check we're being returned because of an error.
-if(!isset($_GET['id']) || !is_number($_GET['id'])) {
-	if(!isset($Err)) {
+if (!isset($_GET['id']) || !is_number($_GET['id'])) {
+	if (!isset($Err)) {
 		error(404);
 	}
 } else {

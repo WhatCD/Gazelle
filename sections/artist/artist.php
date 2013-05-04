@@ -41,23 +41,25 @@ if ($Data) {
 	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, , , $VanityHouseArtist)) = each($Data);
 } else {
 	if ($RevisionID) {
-		$sql = "SELECT
-					a.Name,
-					wiki.Image,
-					wiki.body,
-					a.VanityHouse
-				FROM wiki_artists AS wiki
-					LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
-				WHERE wiki.RevisionID='$RevisionID' ";
+		$sql = "
+			SELECT
+				a.Name,
+				wiki.Image,
+				wiki.body,
+				a.VanityHouse
+			FROM wiki_artists AS wiki
+				LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
+			WHERE wiki.RevisionID='$RevisionID' ";
 	} else {
-		$sql = "SELECT
-					a.Name,
-					wiki.Image,
-					wiki.body,
-					a.VanityHouse
-				FROM artists_group AS a
-					LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID=a.RevisionID
-				WHERE a.ArtistID='$ArtistID' ";
+		$sql = "
+			SELECT
+				a.Name,
+				wiki.Image,
+				wiki.body,
+				a.VanityHouse
+			FROM artists_group AS a
+				LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID=a.RevisionID
+			WHERE a.ArtistID='$ArtistID' ";
 	}
 	$sql .= " GROUP BY a.ArtistID";
 	$DB->query($sql);
@@ -77,21 +79,22 @@ ob_start();
 // Requests
 $Requests = $Cache->get_value('artists_requests_'.$ArtistID);
 if (!is_array($Requests)) {
-	$DB->query("SELECT
-					r.ID,
-					r.CategoryID,
-					r.Title,
-					r.Year,
-					r.TimeAdded,
-					COUNT(rv.UserID) AS Votes,
-					SUM(rv.Bounty) AS Bounty
-				FROM requests AS r
-					LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-					LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
-				WHERE ra.ArtistID = ".$ArtistID."
-					AND r.TorrentID = 0
-				GROUP BY r.ID
-				ORDER BY Votes DESC");
+	$DB->query("
+		SELECT
+			r.ID,
+			r.CategoryID,
+			r.Title,
+			r.Year,
+			r.TimeAdded,
+			COUNT(rv.UserID) AS Votes,
+			SUM(rv.Bounty) AS Bounty
+		FROM requests AS r
+			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
+			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
+		WHERE ra.ArtistID = ".$ArtistID."
+			AND r.TorrentID = 0
+		GROUP BY r.ID
+		ORDER BY Votes DESC");
 
 	if ($DB->record_count() > 0) {
 		$Requests = $DB->to_array();
@@ -104,12 +107,13 @@ $NumRequests = count($Requests);
 
 
 if (($Importances = $Cache->get_value('artist_groups_'.$ArtistID)) === false) {
-	$DB->query("SELECT
-					DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
-				FROM torrents_artists AS ta
-					JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-				WHERE ta.ArtistID='$ArtistID'
-				ORDER BY tg.Year DESC, tg.Name DESC");
+	$DB->query("
+		SELECT
+			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
+		FROM torrents_artists AS ta
+			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
+		WHERE ta.ArtistID='$ArtistID'
+		ORDER BY tg.Year DESC, tg.Name DESC");
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
 	$Cache->cache_value('artist_groups_'.$ArtistID, $Importances, 0);
@@ -339,7 +343,7 @@ foreach ($Importances as $Group) {
 	}
 
 
-	switch ($ReleaseType){
+	switch ($ReleaseType) {
 		case 1023: // Remixes, DJ Mixes, Guest artists, and Producers need the artist name
 		case 1024:
 		case 1021:
@@ -594,17 +598,17 @@ foreach ($ZIPOptions as $Option) {
 <?		$OpenGroup = true;
 	}
 ?>
-							<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID,$ZIPList)){ echo ' disabled="disabled"'; }?>><?=$OptName?></option>
+							<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID,$ZIPList)) { echo ' disabled="disabled"'; }?>><?=$OptName?></option>
 <?
 }
 ?>
 						</optgroup>
 					</select>
 					<button type="button" onclick="add_selection()">+</button>
-					<select name="preference" style="width: 210px">
-						<option value="0"<? if ($ZIPPrefs == 0){ echo ' selected="selected"'; } ?>>Prefer Original</option>
-						<option value="1"<? if ($ZIPPrefs == 1){ echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
-						<option value="2"<? if ($ZIPPrefs == 2){ echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
+					<select name="preference" style="width: 210px;">
+						<option value="0"<? if ($ZIPPrefs == 0) { echo ' selected="selected"'; } ?>>Prefer Original</option>
+						<option value="1"<? if ($ZIPPrefs == 1) { echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
+						<option value="2"<? if ($ZIPPrefs == 2) { echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
 					</select>
 					<input type="submit" style="width:210px" value="Download" />
 				</form>
@@ -683,7 +687,7 @@ if (empty($SimilarArray)) {
 						<span class="remove remove_artist"><a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove this similar artist" class="brackets">X</a></span>
 <?		} ?>
 					</div>
-					<br style="clear:both" />
+					<br style="clear: both;" />
 				</li>
 <?		} ?>
 			</ul>
@@ -713,7 +717,7 @@ if ($NumRequests > 0) {
 ?>
 	<table cellpadding="6" cellspacing="1" border="0" class="request_table border" width="100%" id="requests">
 		<tr class="colhead_dark">
-			<td style="width:48%;">
+			<td style="width: 48%;">
 				<a href="#">&uarr;</a>&nbsp;
 				<strong>Request name</strong>
 			</td>
@@ -733,14 +737,14 @@ if ($NumRequests > 0) {
 
 			$CategoryName = $Categories[$CategoryID - 1];
 
-			if ($CategoryName == "Music") {
+			if ($CategoryName == 'Music') {
 				$ArtistForm = get_request_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
-			} elseif ($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
-				$FullName = "<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
+				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
+			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
+				$FullName = "<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
 			} else {
-				$FullName ="<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title."</a>";
+				$FullName ="<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title</a>";
 			}
 
 			$Row = ($Row == 'a') ? 'b' : 'a';
@@ -748,7 +752,7 @@ if ($NumRequests > 0) {
 			$Tags = get_request_tags($RequestID);
 			$ReqTagList = array();
 			foreach ($Tags as $TagID => $TagName) {
-				   $ReqTagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
+				   $ReqTagList[] = "<a href=\"requests.php?tags=".$TagName.'">'.display_str($TagName).'</a>';
 			}
 			$ReqTagList = implode(', ', $ReqTagList);
 ?>
@@ -759,7 +763,7 @@ if ($NumRequests > 0) {
 			</td>
 			<td>
 				<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
-<?  	if (check_perms('site_vote')){ ?>
+<?  	if (check_perms('site_vote')) { ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 <?		} ?>
@@ -799,7 +803,7 @@ if ($NumSimilar > 0) {
 
 		$SimilarData = $Similar->dump_data();
 
-		$Cache->cache_value('similar_positions_'.$ArtistID, $SimilarData, 3600*24);
+		$Cache->cache_value('similar_positions_'.$ArtistID, $SimilarData, 3600 * 24);
 	}
 ?>
 		<div id="similar_artist_map" class="box">
@@ -808,17 +812,17 @@ if ($NumSimilar > 0) {
 				<strong id="flipper_title">Similar artist map</strong>
 				<a id="flip_to" class="brackets" href="#null" onclick="flipView();">Switch to cloud</a>
 			</div>
-			<div id="flip_view_1" style="display:block;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;position:relative;background-image:url(static/similar/<?=$ArtistID?>.png?t=<?=time()?>)">
+			<div id="flip_view_1" style="display: block; width: <?=(WIDTH)?>px; height: <?=(HEIGHT)?>px; position: relative; background-image: url(static/similar/<?=($ArtistID)?>.png?t=<?=(time())?>)">
 <?
 	$Similar->write_artists();
 ?>
 			</div>
-		<div id="flip_view_2" style="display:none;width:<?=WIDTH?>px;height:<?=HEIGHT?>px;">
-			<canvas width="<?=WIDTH?>px" height="<?=HEIGHT-20?>px" id="similarArtistsCanvas"></canvas>
-			<div id="artistTags" style="display:none;">
+		<div id="flip_view_2" style="display: none; width: <?=WIDTH?>px; height: <?=HEIGHT?>px;">
+			<canvas width="<?=(WIDTH)?>px" height="<?=(HEIGHT - 20)?>px" id="similarArtistsCanvas"></canvas>
+			<div id="artistTags" style="display: none;">
 				<ul><li></li></ul>
 			</div>
-			<strong style="margin-left:10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
+			<strong style="margin-left: 10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
 		</div>
 		</div>
 
@@ -875,7 +879,7 @@ function require(file, callback) {
 //]]>
 </script>
 
-<? } // if $NumSimilar>0 ?>
+<? } // if $NumSimilar > 0 ?>
 		<div class="box">
 			<div id="info" class="head">
 				<a href="#">&uarr;</a>&nbsp;
@@ -891,16 +895,21 @@ function require(file, callback) {
 // gets the amount of comments for this group
 $Results = $Cache->get_value('artist_comments_'.$ArtistID);
 if ($Results === false) {
-	$DB->query("SELECT
+	$DB->query("
+		SELECT
 			COUNT(c.ID)
-			FROM artist_comments as c
-			WHERE c.ArtistID = '$ArtistID'");
+		FROM artist_comments as c
+		WHERE c.ArtistID = '$ArtistID'");
 	list($Results) = $DB->next_record();
 	$Cache->cache_value('artist_comments_'.$ArtistID, $Results, 0);
 }
 
 if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
-	$DB->query("SELECT COUNT(ID) FROM artist_comments WHERE ArtistID = $ArtistID AND ID <= $_GET[postid]");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM artist_comments
+		WHERE ArtistID = $ArtistID
+			AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
 	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
 } else {
@@ -908,15 +917,16 @@ if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_C
 }
 
 //Get the cache catalogue
-$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
-$CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
+$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
+$CatalogueLimit = $CatalogueID * THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 
 //---------- Get some data to start processing
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
 $Catalogue = $Cache->get_value('artist_comments_'.$ArtistID.'_catalogue_'.$CatalogueID);
 if ($Catalogue === false) {
-	$DB->query("SELECT
+	$DB->query("
+		SELECT
 			c.ID,
 			c.AuthorID,
 			c.AddedTime,
@@ -924,17 +934,17 @@ if ($Catalogue === false) {
 			c.EditedUserID,
 			c.EditedTime,
 			u.Username
-			FROM artist_comments as c
+		FROM artist_comments as c
 			LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
-			WHERE c.ArtistID = '$ArtistID'
-			ORDER BY c.ID
-			LIMIT $CatalogueLimit");
+		WHERE c.ArtistID = '$ArtistID'
+		ORDER BY c.ID
+		LIMIT $CatalogueLimit");
 	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
 	$Cache->cache_value('artist_comments_'.$ArtistID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)%THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
+$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
 ?>
 	<div id="artistcomments" class="linkbox">
 		<a name="comments"></a>
@@ -950,7 +960,7 @@ foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $CommentBody, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
-<table class="forum_post box vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+<table class="forum_post box vertical_margin<?=(!Users::has_avatars_enabled() ? ' noavatar' : '')?>" id="post<?=$PostID?>">
 	<colgroup>
 <?	if (Users::has_avatars_enabled()) { ?>
 		<col class="col_avatar" />
@@ -958,7 +968,7 @@ foreach ($Thread as $Key => $Post) {
 		<col class="col_post_body" />
 	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
+		<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
 			<div style="float:left;"><a class="post_id" href='artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
@@ -1015,7 +1025,7 @@ foreach ($Thread as $Key => $Post) {
 </table>
 <? } ?>
 		<div class="linkbox">
-		<?=$Pages?>
+		<?=($Pages)?>
 		</div>
 <?
 	View::parse('generic/reply/quickreply.php', array(
@@ -1031,9 +1041,9 @@ View::show_footer();
 // Cache page for later use
 
 if ($RevisionID) {
-	$Key = "artist_$ArtistID"."_revision_$RevisionID";
+	$Key = "artist_$ArtistID" . "_revision_$RevisionID";
 } else {
-	$Key = 'artist_'.$ArtistID;
+	$Key = 'artist_' . $ArtistID;
 }
 
 $Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), array(), $VanityHouseArtist));

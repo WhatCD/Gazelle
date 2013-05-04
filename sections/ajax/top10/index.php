@@ -2,7 +2,7 @@
 // Already done in /sections/ajax/index.php
 //enforce_login();
 
-if (!check_perms('site_top10')){
+if (!check_perms('site_top10')) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }

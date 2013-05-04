@@ -21,7 +21,7 @@ if ($TorrentHash) {
         json_die("failure", "bad hash parameter");
     } else {
         $TorrentID = (int)torrenthash_to_torrentid($TorrentHash);
-        if (!$TorrentID){
+        if (!$TorrentID) {
             json_die("failure", "bad hash parameter");
         }
     }
@@ -40,7 +40,7 @@ if (!$TorrentCache) {
 list($TorrentDetails, $TorrentList) = $TorrentCache;
 
 $ArtistForm = Artists::get_artist($GroupID);
-if($TorrentDetails['CategoryID'] == 0) {
+if ($TorrentDetails['CategoryID'] == 0) {
 	$CategoryName = "Unknown";
 } else {
 	$CategoryName = $Categories[$TorrentDetails['CategoryID'] - 1];

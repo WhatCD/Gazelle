@@ -20,7 +20,7 @@ if ($TorrentHash) {
         json_die("failure", "bad hash parameter");
     } else {
         $GroupID = (int)torrenthash_to_groupid($TorrentHash);
-        if (!$GroupID){
+        if (!$GroupID) {
             json_die("failure", "bad hash parameter");
         }
     }
