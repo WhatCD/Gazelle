@@ -43,7 +43,7 @@ if (empty($_GET['type'])) {
 			}
 			break;
 		case 'filled':
-			if(empty($_GET['userid']) || !is_number($_GET['userid'])) {
+			if (empty($_GET['userid']) || !is_number($_GET['userid'])) {
 				json_die("failure");
 			} else {
 				if (!check_paranoia('requestsfilled_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
@@ -314,13 +314,13 @@ if ($NumResults == 0) {
 		$VoteCount = count($RequestVotes['Voters']);
 
 		if ($CategoryID == 0) {
-			$CategoryName = "Unknown";
+			$CategoryName = 'Unknown';
 		} else {
 			$CategoryName = $Categories[$CategoryID - 1];
 		}
 
 		$JsonArtists = array();
-		if ($CategoryName == "Music") {
+		if ($CategoryName == 'Music') {
 			$ArtistForm = get_request_artists($RequestID);
 			$JsonArtists = array_values($ArtistForm);
 		}
@@ -350,9 +350,9 @@ if ($NumResults == 0) {
 			'logCue' => $LogCue,
 			'isFilled' => ($TorrentID > 0),
 			'fillerId' => (int) $FillerID,
-			'fillerName' => $FillerName == 0 ? "" : $FillerName,
+			'fillerName' => $FillerName == 0 ? '' : $FillerName,
 			'torrentId' => (int) $TorrentID,
-			'timeFilled' => $TimeFilled == 0 ? "" : $TimeFilled
+			'timeFilled' => $TimeFilled == 0 ? '' : $TimeFilled
 		);
 	}
         json_die("success", array(

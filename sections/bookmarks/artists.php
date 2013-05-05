@@ -1,12 +1,14 @@
 <?
 
-if(!empty($_GET['userid'])) {
-	if(!check_perms('users_override_paranoia')) {
+if (!empty($_GET['userid'])) {
+	if (!check_perms('users_override_paranoia')) {
 		error(403);
 	}
 	$UserID = $_GET['userid'];
 	$Sneaky = ($UserID != $LoggedUser['ID']);
-	if(!is_number($UserID)) { error(404); }
+	if (!is_number($UserID)) {
+		error(404);
+	}
 	$DB->query("SELECT Username FROM users_main WHERE ID='$UserID'");
 	list($Username) = $DB->next_record();
 } else {
@@ -17,15 +19,16 @@ $Sneaky = ($UserID != $LoggedUser['ID']);
 
 //$ArtistList = Bookmarks::all_bookmarks('artist', $UserID);
 
-$DB->query('SELECT ag.ArtistID, ag.Name
+$DB->query('
+	SELECT ag.ArtistID, ag.Name
 	FROM bookmarks_artists AS ba
-	INNER JOIN artists_group AS ag ON ba.ArtistID = ag.ArtistID
+		INNER JOIN artists_group AS ag ON ba.ArtistID = ag.ArtistID
 	WHERE ba.UserID = '.$UserID.'
 	ORDER BY ag.Name');
 
 $ArtistList = $DB->to_array();
 
-$Title = ($Sneaky)?"$Username's bookmarked artists":'Your bookmarked artists';
+$Title = ($Sneaky) ? "$Username's bookmarked artists" : 'Your bookmarked artists';
 
 View::show_header($Title,'browse');
 
@@ -62,21 +65,26 @@ foreach ($ArtistList as $Artist) {
 		<tr class="row<?=$Row?> bookmark_<?=$ArtistID?>">
 			<td>
 				<a href="artist.php?id=<?=$ArtistID?>"><?=$Name?></a>
-				<span style="float: right">
+				<span style="float: right;">
 <?
 	if (check_perms('site_torrents_notify')) {
 		if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === false) {
-			$DB->query("SELECT ID, Artists FROM users_notify_filters WHERE UserID='$LoggedUser[ID]' AND Label='Artist notifications' LIMIT 1");
+			$DB->query("
+				SELECT ID, Artists
+				FROM users_notify_filters
+				WHERE UserID='$LoggedUser[ID]'
+					AND Label='Artist notifications'
+				LIMIT 1");
 			$Notify = $DB->next_record(MYSQLI_ASSOC);
 			$Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
 		}
 		if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
 ?>
-		<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
+					<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
 <?
 		} else {
 ?>
-		<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Do not notify of new uploads</a>
+					<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Do not notify of new uploads</a>
 <?
 		}
 	}

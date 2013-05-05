@@ -4,7 +4,9 @@ include(SERVER_ROOT.'/classes/class_text.php'); // strip_bbcode
 
 authorize();
 
-if (!Bookmarks::can_bookmark($_GET['type'])) { error(404); }
+if (!Bookmarks::can_bookmark($_GET['type'])) {
+	error(404);
+}
 $Feed = new FEED;
 $Text = new TEXT;
 
@@ -12,50 +14,70 @@ $Type = $_GET['type'];
 
 list($Table, $Col) = Bookmarks::bookmark_schema($Type);
 
-if(!is_number($_GET['id'])) {
+if (!is_number($_GET['id'])) {
 	error(0);
 }
 
-$DB->query("SELECT UserID FROM $Table WHERE UserID='$LoggedUser[ID]' AND $Col='".db_string($_GET['id'])."'");
-if($DB->record_count() == 0) {
+$DB->query("
+	SELECT UserID
+	FROM $Table
+	WHERE UserID='$LoggedUser[ID]'
+		AND $Col='".db_string($_GET['id'])."'");
+if ($DB->record_count() == 0) {
 	if ($Type === 'torrent') {
 		$DB->query('SELECT MAX(Sort) FROM `bookmarks_torrents` WHERE UserID =' . $LoggedUser['ID']);
 		list($Sort) = $DB->next_record();
 		if (!$Sort) $Sort = 0;
 		$Sort += 1;
-		$DB->query("INSERT IGNORE INTO $Table
-			(UserID, $Col, Time, Sort)
-			VALUES
-			('$LoggedUser[ID]', '".db_string($_GET['id'])."', '".sqltime()."', $Sort)");
+		$DB->query("
+			INSERT IGNORE INTO $Table (UserID, $Col, Time, Sort)
+			VALUES ('$LoggedUser[ID]', '".db_string($_GET['id'])."', '".sqltime()."', $Sort)");
 	} else {
-		$DB->query("INSERT IGNORE INTO $Table
-			(UserID, $Col, Time)
-			VALUES
-			('$LoggedUser[ID]', '".db_string($_GET['id'])."', '".sqltime()."')");
+		$DB->query("
+			INSERT IGNORE INTO $Table (UserID, $Col, Time)
+			VALUES ('$LoggedUser[ID]', '".db_string($_GET['id'])."', '".sqltime()."')");
 	}
 	$Cache->delete_value('bookmarks_'.$Type.'_'.$LoggedUser['ID']);
 	if ($Type == 'torrent') {
 		$Cache->delete_value('bookmarks_group_ids_' . $UserID);
 		$GroupID = (int) $_GET['id'];
 
-		$DB->query("SELECT Name, Year, WikiBody, TagList FROM torrents_group WHERE ID = '$GroupID'");
+		$DB->query("
+			SELECT Name, Year, WikiBody, TagList
+			FROM torrents_group
+			WHERE ID = '$GroupID'");
 		list($GroupTitle, $Year, $Body, $TagList) = $DB->next_record();
 		$TagList = str_replace('_','.',$TagList);
 
-		$DB->query("SELECT ID, Format, Encoding, HasLog, HasCue, LogScore, Media, Scene, FreeTorrent, UserID FROM torrents WHERE GroupID = '$GroupID'");
+		$DB->query("
+			SELECT ID, Format, Encoding, HasLog, HasCue, LogScore, Media, Scene, FreeTorrent, UserID
+			FROM torrents
+			WHERE GroupID = '$GroupID'");
 		// RSS feed stuff
 		while ($Torrent = $DB->next_record()) {
 			$Title = $GroupTitle;
 			list($TorrentID, $Format, $Bitrate, $HasLog, $HasCue, $LogScore, $Media, $Scene, $Freeleech, $UploaderID) = $Torrent;
-			$Title .= " [".$Year."] - ";
+			$Title .= " [$Year] - ";
 			$Title .= $Format." / ".$Bitrate;
-			if ($HasLog == "'1'") { $Title .= " / Log"; }
-			if ($HasLog) { $Title .= " / ".$LogScore.'%'; }
-			if ($HasCue == "'1'") { $Title .= " / Cue"; }
+			if ($HasLog == "'1'") {
+				$Title .= " / Log";
+			}
+			if ($HasLog) {
+				$Title .= " / ".$LogScore.'%';
+			}
+			if ($HasCue == "'1'") {
+				$Title .= " / Cue";
+			}
 			$Title .= " / ".trim($Media);
-			if ($Scene == "1") { $Title .= " / Scene"; }
-			if ($Freeleech == "1") { $Title .= " / Freeleech!"; }
-			if ($Freeleech == "2") { $Title .= " / Neutral leech!"; }
+			if ($Scene == '1') {
+				$Title .= " / Scene";
+			}
+			if ($Freeleech == '1') {
+				$Title .= " / Freeleech!";
+			}
+			if ($Freeleech == '2') {
+				$Title .= " / Neutral leech!";
+			}
 
 			$UploaderInfo = Users::user_info($UploaderID);
 			$Item = $Feed->item($Title,

@@ -16,7 +16,7 @@ include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
-if(empty($_GET['id']) || !is_number($_GET['id'])) {
+if (empty($_GET['id']) || !is_number($_GET['id'])) {
         json_die("failure");
 }
 
@@ -26,7 +26,7 @@ $RequestID = $_GET['id'];
 
 $Request = Requests::get_requests(array($RequestID));
 $Request = $Request['matches'][$RequestID];
-if(empty($Request)) {
+if (empty($Request)) {
 	json_die("failure");
 }
 

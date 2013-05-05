@@ -52,7 +52,7 @@ if (!isset($_REQUEST['action'])) {
 				error(0);
 			}
 			if ($LoggedUser['DisablePosting']) {
-				error('Your posting rights have been removed.');
+				error('Your posting privileges have been removed.');
 			}
 
 			$RequestID = $_POST['requestid'];
@@ -60,14 +60,22 @@ if (!isset($_REQUEST['action'])) {
 				error(404);
 			}
 
-			$DB->query("SELECT CEIL((SELECT COUNT(ID)+1 FROM requests_comments AS rc WHERE rc.RequestID='".$RequestID."')/".TORRENT_COMMENTS_PER_PAGE.") AS Pages");
+			$DB->query("
+				SELECT
+					CEIL((
+						SELECT COUNT(ID)+1
+						FROM requests_comments AS rc
+						WHERE rc.RequestID='".$RequestID."'
+						)/".TORRENT_COMMENTS_PER_PAGE."
+					) AS Pages");
 			list($Pages) = $DB->next_record();
 
-			$DB->query("INSERT INTO requests_comments (RequestID,AuthorID,AddedTime,Body) VALUES (
-				'".$RequestID."', '".db_string($LoggedUser['ID'])."','".sqltime()."','".db_string($_POST['body'])."')");
-			$PostID=$DB->inserted_id();
+			$DB->query("
+				INSERT INTO requests_comments (RequestID,AuthorID,AddedTime,Body)
+				VALUES ('$RequestID', '".db_string($LoggedUser['ID'])."','".sqltime()."','".db_string($_POST['body'])."')");
+			$PostID = $DB->inserted_id();
 
-			$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Pages-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
+			$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			$Cache->begin_transaction('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID);
 			$Post = array(
 				'ID'=>$PostID,
@@ -109,16 +117,21 @@ if (!isset($_REQUEST['action'])) {
 			}
 
 			// Mainly
-			$DB->query("SELECT
-				rc.Body,
-				rc.AuthorID,
-				rc.RequestID,
-				rc.AddedTime
+			$DB->query("
+				SELECT
+					rc.Body,
+					rc.AuthorID,
+					rc.RequestID,
+					rc.AddedTime
 				FROM requests_comments AS rc
 				WHERE rc.ID='".db_string($_POST['post'])."'");
 			list($OldBody, $AuthorID,$RequestID,$AddedTime)=$DB->next_record();
 
-			$DB->query("SELECT ceil(COUNT(ID) / ".POSTS_PER_PAGE.") AS Page FROM requests_comments WHERE RequestID = $RequestID AND ID <= $_POST[post]");
+			$DB->query("
+				SELECT ceil(COUNT(ID) / ".POSTS_PER_PAGE.") AS Page
+				FROM requests_comments
+				WHERE RequestID = $RequestID
+					AND ID <= $_POST[post]");
 			list($Page) = $DB->next_record();
 
 			if ($LoggedUser['ID'] != $AuthorID && !check_perms('site_moderate_forums')) {
@@ -129,10 +142,12 @@ if (!isset($_REQUEST['action'])) {
 			}
 
 			// Perform the update
-			$DB->query("UPDATE requests_comments SET
-				Body = '".db_string($_POST['body'])."',
-				EditedUserID = '".db_string($LoggedUser['ID'])."',
-				EditedTime = '".sqltime()."'
+			$DB->query("
+				UPDATE requests_comments
+				SET
+					Body = '".db_string($_POST['body'])."',
+					EditedUserID = '".db_string($LoggedUser['ID'])."',
+					EditedTime = '".sqltime()."'
 				WHERE ID='".db_string($_POST['post'])."'");
 
 			// Update the cache
@@ -150,8 +165,9 @@ if (!isset($_REQUEST['action'])) {
 			));
 			$Cache->commit_transaction(0);
 
-			$DB->query("INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
-								VALUES ('requests', ".db_string($_POST['post']).", ".db_string($LoggedUser['ID']).", '".sqltime()."', '".db_string($OldBody)."')");
+			$DB->query("
+				INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
+				VALUES ('requests', ".db_string($_POST['post']).", ".db_string($LoggedUser['ID']).", '".sqltime()."', '".db_string($OldBody)."')");
 
 			// This gets sent to the browser, which echoes it in place of the old body
 			echo $Text->full_format($_POST['body']);
@@ -172,13 +188,18 @@ if (!isset($_REQUEST['action'])) {
 			}
 
 			// Get topicid, forumid, number of pages
-			$DB->query("SELECT DISTINCT
-				RequestID,
-				CEIL(COUNT(rc.ID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
-				CEIL(SUM(IF(rc.ID<=".$_GET['postid'].",1,0))/".TORRENT_COMMENTS_PER_PAGE.") AS Page
+			$DB->query("
+				SELECT DISTINCT
+					RequestID,
+					CEIL(COUNT(rc.ID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
+					CEIL(SUM(IF(rc.ID<=".$_GET['postid'].",1,0))/".TORRENT_COMMENTS_PER_PAGE.") AS Page
 				FROM requests_comments AS rc
-				WHERE rc.RequestID=(SELECT RequestID FROM requests_comments WHERE ID='".db_string($_GET['postid'])."')");
-			list($RequestID,$Pages,$Page)=$DB->next_record();
+				WHERE rc.RequestID=(
+						SELECT RequestID
+						FROM requests_comments
+						WHERE ID='".db_string($_GET['postid'])."'
+						)");
+			list($RequestID,$Pages,$Page) = $DB->next_record();
 
 			// $Pages = number of pages in the thread
 			// $Page = which page the post is on

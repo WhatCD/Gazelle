@@ -31,9 +31,11 @@ function has_bookmarked($Type, $ID) {
 
 function all_bookmarks($Type, $UserID = false) {
 	global $DB, $Cache, $LoggedUser;
-	if ($UserID === false) { $UserID = $LoggedUser['ID']; }
+	if ($UserID === false) {
+		$UserID = $LoggedUser['ID'];
+	}
 	$CacheKey = 'bookmarks_'.$Type.'_'.$UserID;
-	if(($Bookmarks = $Cache->get_value($CacheKey)) === FALSE) {
+	if (($Bookmarks = $Cache->get_value($CacheKey)) === FALSE) {
 		list($Table, $Col) = bookmark_schema($Type);
 		$DB->query("SELECT $Col FROM $Table WHERE UserID = '$UserID'");
 		$Bookmarks = $DB->collect($Col);

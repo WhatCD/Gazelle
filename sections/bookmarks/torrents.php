@@ -66,7 +66,9 @@ foreach ($TorrentList as $GroupID => $Group) {
 	if ($GroupYear > 0) {
 		$DisplayName = $DisplayName . " [$GroupYear]";
 	}
-	if ($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
+	if ($GroupVanityHouse) {
+		$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+	}
 	$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
 
 	// Start an output buffer, so we can store this output in $TorrentTable

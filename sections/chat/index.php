@@ -5,13 +5,13 @@ View::show_header('IRC');
 $DB->query("SELECT IRCKey FROM users_main WHERE ID = $LoggedUser[ID]");
 list($IRCKey) = $DB->next_record();
 
-if(empty($IRCKey)) {
+if (empty($IRCKey)) {
 ?>
 <div class="thin">
 	<div class="header">
 		<h3 id="irc">IRC Rules - Please read these carefully!</h3>
 	</div>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<p>
 			<strong>Please set your IRC Key on your <a href="user.php?action=edit&amp;userid=<?=$LoggedUser['ID']?>">profile</a> first! For more information on IRC, please read the <a href="wiki.php?action=article&amp;name=IRC+-+How+to+join">wiki article</a>.</strong>
 		</p>
@@ -19,13 +19,13 @@ if(empty($IRCKey)) {
 </div>
 <?
 } else {
-	if(!isset($_POST["accept"])) {
+	if (!isset($_POST['accept'])) {
 ?>
 <div class="thin">
 	<div class="header">
 		<h3 id="irc">IRC Rules - Please read these carefully!</h3>
 	</div>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<ul>
 			<li>Staff have the final decision, if they say stop and you continue, expect at least to be banned from the IRC network.</li>
 			<li>Be respectful to IRC Operators and Administrators. These people are site staff who volunteer their time for little compensation. They are there for the benefit of all and to aid in conflict resolution; do not waste their time.</li>
@@ -51,13 +51,13 @@ if(empty($IRCKey)) {
 </div>
 <?
 	} else {
-		$nick = $LoggedUser["Username"];
+		$nick = $LoggedUser['Username'];
 		$nick = preg_replace('/[^a-zA-Z0-9\[\]\\`\^\{\}\|_]/', '', $nick);
-		if(strlen($nick) == 0) {
-			$nick = "WhatGuest????";
+		if (strlen($nick) == 0) {
+			$nick = 'WhatGuest????';
 		} else {
-			if(is_numeric(substr($nick, 0, 1))) {
-				$nick = "_" . $nick;
+			if (is_numeric(substr($nick, 0, 1))) {
+				$nick = '_' . $nick;
 			}
 		}
 ?>
@@ -65,8 +65,8 @@ if(empty($IRCKey)) {
 	<div class="header">
 		<h3 id="general">IRC</h3>
 	</div>
-	<div class="box pad" style="padding:10px 0px 10px 0px;">
-		<div style="padding:0px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 0px 10px 0px;">
+		<div style="padding: 0px 10px 10px 20px;">
 			<p>If you have an IRC client, refer to <a href="wiki.php?action=article&amp;name=IRC+-+How+to+join">this wiki article</a> for information on how to connect. (IRC applet users are automatically identified with Drone.)</p>
 		</div>
 		<applet codebase="static/irc/" code="IRCApplet.class" archive="irc.jar,sbox.jar" width="800" height="600" align="center">

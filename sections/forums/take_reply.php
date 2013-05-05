@@ -27,23 +27,23 @@ if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-if(isset($_POST['thread']) && !is_number($_POST['thread'])) {
+if (isset($_POST['thread']) && !is_number($_POST['thread'])) {
 	error(0);
 }
-if(isset($_POST['forum']) && !is_number($_POST['forum'])) {
+if (isset($_POST['forum']) && !is_number($_POST['forum'])) {
 	error(0);
 }
 
-//If you're not sending anything, go back
-if($_POST['body']==='' || !isset($_POST['body'])) {
+// If you're not sending anything, go back
+if ($_POST['body'] === '' || !isset($_POST['body'])) {
 	header('Location: '.$_SERVER['HTTP_REFERER']);
 	die();
 }
 
 $Body = $_POST['body'];
 
-if($LoggedUser['DisablePosting']) {
-	error('Your posting rights have been removed');
+if ($LoggedUser['DisablePosting']) {
+	error('Your posting privileges have been removed');
 }
 
 $TopicID = $_POST['thread'];
@@ -51,38 +51,57 @@ $ThreadInfo = get_thread_info($TopicID);
 $ForumID = $ThreadInfo['ForumID'];
 $SQLTime = sqltime();
 
-if(!check_forumperm($ForumID)) { error(403); }
-if(!check_forumperm($ForumID, 'Write') || $LoggedUser['DisablePosting'] || $ThreadInfo['IsLocked'] == "1" && !check_perms('site_moderate_forums')) { error(403); }
+if (!check_forumperm($ForumID)) {
+	error(403);
+}
+if (!check_forumperm($ForumID, 'Write') || $LoggedUser['DisablePosting'] || $ThreadInfo['IsLocked'] == '1' && !check_perms('site_moderate_forums')) {
+	error(403);
+}
 
-if(isset($_POST['subscribe'])) {
-	$DB->query("INSERT IGNORE INTO users_subscriptions VALUES ($LoggedUser[ID], '".db_string($TopicID)."')");
+if (isset($_POST['subscribe'])) {
+	$DB->query("
+		INSERT IGNORE INTO users_subscriptions
+		VALUES ($LoggedUser[ID], '".db_string($TopicID)."')");
 	$Cache->delete_value('subscriptions_user_'.$LoggedUser['ID']);
 }
 
 //Now lets handle the special case of merging posts, we can skip bumping the thread and all that fun
 if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site_forums_double_post') && !in_array($ForumID, $ForumsDoublePost)) || isset($_POST['merge']))) {
 	//Get the id for this post in the database to append
-	$DB->query("SELECT ID, Body FROM forums_posts WHERE TopicID='$TopicID' AND AuthorID='".$LoggedUser['ID']."' ORDER BY ID DESC LIMIT 1");
+	$DB->query("
+		SELECT ID, Body
+		FROM forums_posts
+		WHERE TopicID='$TopicID'
+			AND AuthorID='".$LoggedUser['ID']."'
+		ORDER BY ID DESC
+		LIMIT 1");
 	list($PostID, $OldBody) = $DB->next_record(MYSQLI_NUM, false);
 
 	//Edit the post
-	$DB->query("UPDATE forums_posts SET Body = CONCAT(Body,'"."\n\n".db_string($Body)."'), EditedUserID = '".$LoggedUser['ID']."', EditedTime = '".$SQLTime."' WHERE ID='$PostID'");
+	$DB->query("
+		UPDATE forums_posts
+		SET
+			Body = CONCAT(Body,'"."\n\n".db_string($Body)."'),
+			EditedUserID = '".$LoggedUser['ID']."',
+			EditedTime = '$SQLTime'
+		WHERE ID='$PostID'");
 
 	//Store edit history
-	$DB->query("INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
-				VALUES ('forums', ".$PostID.", ".$LoggedUser['ID'].", '".$SQLTime."', '".db_string($OldBody)."')");
+	$DB->query("
+		INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
+		VALUES ('forums', $PostID, ".$LoggedUser['ID'].", '$SQLTime', '".db_string($OldBody)."')");
 	$Cache->delete_value("forums_edits_$PostID");
 
 	//Get the catalogue it is in
-	$CatalogueID = floor((POSTS_PER_PAGE*ceil($ThreadInfo['Posts']/POSTS_PER_PAGE)-POSTS_PER_PAGE)/THREAD_CATALOGUE);
+	$CatalogueID = floor((POSTS_PER_PAGE * ceil($ThreadInfo['Posts'] / POSTS_PER_PAGE) - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 
 	//Get the catalogue value for the post we're appending to
-	if($ThreadInfo['Posts']%THREAD_CATALOGUE == 0) {
-		$Key = THREAD_CATALOGUE-1;
+	if ($ThreadInfo['Posts'] % THREAD_CATALOGUE == 0) {
+		$Key = THREAD_CATALOGUE - 1;
 	} else {
-		$Key = ($ThreadInfo['Posts']%THREAD_CATALOGUE)-1;
+		$Key = ($ThreadInfo['Posts'] % THREAD_CATALOGUE) - 1;
 	}
-	if($ThreadInfo['StickyPostID'] == $PostID) {
+	if ($ThreadInfo['StickyPostID'] == $PostID) {
 		$ThreadInfo['StickyPost']['Body'] .= "\n\n$Body";
 		$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];
 		$ThreadInfo['StickyPost']['EditedTime'] = $SQLTime;
@@ -102,37 +121,42 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 //Now we're dealing with a normal post
 } else {
 	//Insert the post into the posts database
-	$DB->query("INSERT INTO forums_posts (TopicID, AuthorID, AddedTime, Body)
-			VALUES ('$TopicID', '".$LoggedUser['ID']."', '".$SQLTime."', '".db_string($Body)."')");
+	$DB->query("
+		INSERT INTO forums_posts (TopicID, AuthorID, AddedTime, Body)
+		VALUES ('$TopicID', '".$LoggedUser['ID']."', '$SQLTime', '".db_string($Body)."')");
 
 	$PostID = $DB->inserted_id();
 
 	//This updates the root index
-	$DB->query("UPDATE forums SET
-			NumPosts		  = NumPosts+1,
-			LastPostID		= '$PostID',
-			LastPostAuthorID  = '".$LoggedUser['ID']."',
-			LastPostTopicID   = '$TopicID',
-			LastPostTime	  = '".$SQLTime."'
-			WHERE ID = '$ForumID'");
+	$DB->query("
+		UPDATE forums
+		SET
+			NumPosts = NumPosts+1,
+			LastPostID = '$PostID',
+			LastPostAuthorID = '".$LoggedUser['ID']."',
+			LastPostTopicID = '$TopicID',
+			LastPostTime = '$SQLTime'
+		WHERE ID = '$ForumID'");
 
 	//Update the topic
-	$DB->query("UPDATE forums_topics SET
-			NumPosts		  = NumPosts+1,
-			LastPostID		= '$PostID',
-			LastPostAuthorID  = '".$LoggedUser['ID']."',
-			LastPostTime	  = '".$SQLTime."'
-			WHERE ID = '$TopicID'");
+	$DB->query("
+		UPDATE forums_topics
+		SET
+			NumPosts = NumPosts+1,
+			LastPostID = '$PostID',
+			LastPostAuthorID = '".$LoggedUser['ID']."',
+			LastPostTime = '$SQLTime'
+		WHERE ID = '$TopicID'");
 
 	//if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
 	if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 		list($Forum,,,$Stickies) = $Forum;
 
 		//if the topic is already on this page
-		if (array_key_exists($TopicID,$Forum)) {
+		if (array_key_exists($TopicID, $Forum)) {
 			$Thread = $Forum[$TopicID];
 			unset($Forum[$TopicID]);
-			$Thread['NumPosts'] = $Thread['NumPosts']+1; //Increment post count
+			$Thread['NumPosts'] = $Thread['NumPosts'] + 1; //Increment post count
 			$Thread['LastPostID'] = $PostID; //Set postid for read/unread
 			$Thread['LastPostTime'] = $SQLTime; //Time of last post
 			$Thread['LastPostAuthorID'] = $LoggedUser['ID']; //Last poster id
@@ -147,7 +171,16 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			//Never know if we get a page full of stickies...
 			if ($Stickies < TOPICS_PER_PAGE || $ThreadInfo['IsSticky'] == 1) {
 				//Pull the data for the thread we're bumping
-				$DB->query("SELECT f.AuthorID, f.IsLocked, f.IsSticky, f.NumPosts, ISNULL(p.TopicID) AS NoPoll FROM forums_topics AS f LEFT JOIN forums_polls AS p ON p.TopicID=f.ID WHERE f.ID ='$TopicID'");
+				$DB->query("
+					SELECT
+						f.AuthorID,
+						f.IsLocked,
+						f.IsSticky,
+						f.NumPosts,
+						ISNULL(p.TopicID) AS NoPoll
+					FROM forums_topics AS f
+						LEFT JOIN forums_polls AS p ON p.TopicID=f.ID
+					WHERE f.ID ='$TopicID'");
 				list($AuthorID,$IsLocked,$IsSticky,$NumPosts,$NoPoll) = $DB->next_record();
 				$Part2 = array($TopicID => array(
 					'ID' => $TopicID,
@@ -166,15 +199,19 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 			}
 		}
 		if ($Stickies > 0) {
-			$Part1 = array_slice($Forum,0,$Stickies,true); //Stickies
-			$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE-$Stickies-1,true); //Rest of page
+			$Part1 = array_slice($Forum, 0, $Stickies, true); //Stickies
+			$Part3 = array_slice($Forum, $Stickies, TOPICS_PER_PAGE - $Stickies - 1, true); //Rest of page
 		} else {
 			$Part1 = array();
 			$Part3 = $Forum;
 		}
-		if (is_null($Part1)) { $Part1 = array(); }
-		if (is_null($Part3)) { $Part3 = array(); }
-		if($ThreadInfo['IsSticky'] == 1) {
+		if (is_null($Part1)) {
+			$Part1 = array();
+		}
+		if (is_null($Part3)) {
+			$Part3 = array();
+		}
+		if ($ThreadInfo['IsSticky'] == 1) {
 			$Forum = $Part2 + $Part1 + $Part3; //Merge it
 		} else {
 			$Forum = $Part1 + $Part2 + $Part3; //Merge it
@@ -201,7 +238,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 
 
 	//This calculates the block of 500 posts that this one will fall under
-	$CatalogueID = floor((POSTS_PER_PAGE*ceil($ThreadInfo['Posts']/POSTS_PER_PAGE)-POSTS_PER_PAGE)/THREAD_CATALOGUE);
+	$CatalogueID = floor((POSTS_PER_PAGE * ceil($ThreadInfo['Posts'] / POSTS_PER_PAGE) - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 
 	//Insert the post into the thread catalogue (block of 500 posts)
 	$Cache->begin_transaction('thread_'.$TopicID.'_catalogue_'.$CatalogueID);
@@ -226,12 +263,12 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 }
 
 $DB->query("SELECT UserID FROM users_subscriptions WHERE TopicID = ".$TopicID);
-if($DB->record_count() > 0) {
+if ($DB->record_count() > 0) {
 	$Subscribers = $DB->collect('UserID');
-	foreach($Subscribers as $Subscriber) {
+	foreach ($Subscribers as $Subscriber) {
 		$Cache->delete_value('subscriptions_user_new_'.$Subscriber);
 	}
 }
 Forums::quote_notify($Body, $PostID, 'forums', $TopicID);
-header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.ceil($ThreadInfo['Posts']/$PerPage));
+header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.ceil($ThreadInfo['Posts'] / $PerPage));
 die();

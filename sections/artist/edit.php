@@ -11,19 +11,22 @@ ID of the artist, and must be set.
 ************************************************************************/
 
 $ArtistID = $_GET['artistid'];
-if(!is_number($ArtistID)) { error(0); }
+if (!is_number($ArtistID)) {
+	error(0);
+}
 
 // Get the artist name and the body of the last revision
-$DB->query("SELECT
-	Name,
-	Image,
-	Body,
-	VanityHouse
+$DB->query("
+	SELECT
+		Name,
+		Image,
+		Body,
+		VanityHouse
 	FROM artists_group AS a
-	LEFT JOIN wiki_artists ON wiki_artists.RevisionID=a.RevisionID
+		LEFT JOIN wiki_artists ON wiki_artists.RevisionID=a.RevisionID
 	WHERE a.ArtistID='$ArtistID'");
 
-if($DB->record_count() < 1) {
+if ($DB->record_count() < 1) {
 	error("Cannot find the artist with the ID ".$ArtistID.': See the <a href="log.php?search=Artist+'.$ArtistID.'">log</a>.');
 }
 
@@ -46,7 +49,7 @@ View::show_header('Edit artist');
 				<input type="text" name="image" size="92" value="<?=$Image?>" /><br />
 				<h3>Artist info</h3>
 				<textarea name="body" cols="91" rows="20"><?=$Body?></textarea> <br />
-				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1"  <?=( check_perms('artist_edit_vanityhouse') ? '' : 'disabled="disabled"' )?> <?=($VanityHouse ? 'checked="checked"' : '')?> /></h3>
+				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1"<?=(check_perms('artist_edit_vanityhouse') ? '' : ' disabled="disabled"' )?><?=($VanityHouse ? ' checked="checked"' : '')?> /></h3>
 				<h3>Edit summary</h3>
 				<input type="text" name="summary" size="92" /><br />
 				<div style="text-align: center;">
@@ -55,7 +58,7 @@ View::show_header('Edit artist');
 			</div>
 		</form>
 	</div>
-<? if(check_perms('torrents_edit')) { ?>
+<? if (check_perms('torrents_edit')) { ?>
 	<h2>Rename</h2>
 	<div class="box pad">
 		<form class="rename_form" name="artist" action="artist.php" method="post">
@@ -97,13 +100,20 @@ View::show_header('Edit artist');
 
 <?
 	$DB->query("SELECT AliasID, Name, UserID, Redirect FROM artists_alias WHERE ArtistID='$ArtistID'");
-	while(list($AliasID, $AliasName, $User, $Redirect) = $DB->next_record(MYSQLI_NUM, true)) {
-		if($AliasName == $Name) { $DefaultRedirectID = $AliasID; }
+	while (list($AliasID, $AliasName, $User, $Redirect) = $DB->next_record(MYSQLI_NUM, true)) {
+		if ($AliasName == $Name) {
+			$DefaultRedirectID = $AliasID;
+		}
 ?>
-			<li><span title="Alias ID"><?=$AliasID?></span>. <span title="Alias name"><?=$AliasName?></span>
-<?		if($User) { ?> <a href="user.php?id=<?=$User?>" title="Alias creator" class="brackets">User</a> <?}
-		if($Redirect) { ?> (writes redirect to <span title="Target alias ID"><?=$Redirect?></span>)<? } ?>
-			<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Delete this alias" class="brackets">X</a>
+			<li>
+				<span title="Alias ID"><?=$AliasID?></span>. <span title="Alias name"><?=$AliasName?></span>
+<?		if ($User) { ?>
+				<a href="user.php?id=<?=$User?>" title="Alias creator" class="brackets">User</a>
+<?		}
+		if ($Redirect) { ?>
+				(writes redirect to <span title="Target alias ID"><?=$Redirect?></span>)
+<?		} ?>
+				<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Delete this alias" class="brackets">X</a>
 			</li>
 <?	}
 ?>

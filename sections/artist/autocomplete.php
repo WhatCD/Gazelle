@@ -2,7 +2,9 @@
 header('Content-type: application/x-suggestions+json');
 require('classes/ajax_start.php');
 
-if(empty($_GET['name'])) { die('["",[],[],[]]'); }
+if (empty($_GET['name'])) {
+	die('["",[],[],[]]');
+}
 
 $FullName = rawurldecode($_GET['name']);
 
@@ -14,25 +16,26 @@ $KeySize = min($MaxKeySize,max(1,strlen($FullName)));
 
 $Letters = strtolower(substr($FullName,0,$KeySize));
 $AutoSuggest = $Cache->get('autocomplete_artist_'.$KeySize.'_'.$Letters);
-if(!is_array($AutoSuggest)) {
-	if(!isset($DB) || !is_object($DB)) {
+if (!is_array($AutoSuggest)) {
+	if (!isset($DB) || !is_object($DB)) {
 		require(SERVER_ROOT.'/classes/class_mysql.php'); //Require the database wrapper
 		$DB=NEW DB_MYSQL; //Load the database wrapper
 	}
-	$Limit = (($KeySize === $MaxKeySize)?250:10);
-	$DB->query("SELECT
-		a.ArtistID,
-		a.Name,
-		SUM(t.Snatched) AS Snatches
+	$Limit = (($KeySize === $MaxKeySize) ? 250 : 10);
+	$DB->query("
+		SELECT
+			a.ArtistID,
+			a.Name,
+			SUM(t.Snatched) AS Snatches
 		FROM artists_group AS a
-		INNER JOIN torrents_artists AS ta ON ta.ArtistID=a.ArtistID
-		INNER JOIN torrents AS t ON t.GroupID=ta.GroupID
+			INNER JOIN torrents_artists AS ta ON ta.ArtistID=a.ArtistID
+			INNER JOIN torrents AS t ON t.GroupID=ta.GroupID
 		WHERE a.Name LIKE '".db_string(str_replace('\\','\\\\',$Letters),true)."%'
 		GROUP BY ta.ArtistID
 		ORDER BY Snatches DESC
 		LIMIT $Limit");
 	$AutoSuggest = $DB->to_array(false,MYSQLI_NUM,false);
-	$Cache->cache_value('autocomplete_artist_'.$KeySize.'_'.$Letters,$AutoSuggest,1800+7200*($MaxKeySize-$KeySize)); // Can't cache things for too long in case names are edited
+	$Cache->cache_value('autocomplete_artist_'.$KeySize.'_'.$Letters,$AutoSuggest,1800 + 7200 * ($MaxKeySize - $KeySize)); // Can't cache things for too long in case names are edited
 }
 
 $Matched = 0;

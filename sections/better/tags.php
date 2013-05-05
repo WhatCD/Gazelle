@@ -1,6 +1,6 @@
 <?php
 
-if(check_perms('admin_reports') && !empty($_GET['remove']) && is_number($_GET['remove'])) {
+if (check_perms('admin_reports') && !empty($_GET['remove']) && is_number($_GET['remove'])) {
 	$DB->query("DELETE FROM torrents_bad_tags WHERE TorrentID = ".$_GET['remove']);
 	$DB->query("SELECT GroupID FROM torrents WHERE ID = ".$_GET['remove']);
 	list($GroupID) = $DB->next_record();
@@ -8,8 +8,8 @@ if(check_perms('admin_reports') && !empty($_GET['remove']) && is_number($_GET['r
 }
 
 
-if(!empty($_GET['filter']) && $_GET['filter'] == "all") {
-	$Join = "";
+if (!empty($_GET['filter']) && $_GET['filter'] == 'all') {
+	$Join = '';
 	$All = true;
 } else {
 	$Join = "JOIN xbt_snatched as x ON x.fid=tbt.TorrentID AND x.uid = ".$LoggedUser['ID'];
@@ -17,16 +17,21 @@ if(!empty($_GET['filter']) && $_GET['filter'] == "all") {
 }
 
 View::show_header('Torrents with bad tags');
-$DB->query("SELECT tbt.TorrentID, t.GroupID FROM torrents_bad_tags AS tbt JOIN torrents AS t ON t.ID = tbt.TorrentID ".$Join." ORDER BY tbt.TimeAdded ASC");
+$DB->query("
+	SELECT tbt.TorrentID, t.GroupID
+	FROM torrents_bad_tags AS tbt
+		JOIN torrents AS t ON t.ID = tbt.TorrentID
+		$Join
+	ORDER BY tbt.TimeAdded ASC");
 $TorrentsInfo = $DB->to_array('TorrentID', MYSQLI_ASSOC);
-foreach($TorrentsInfo as $Torrent) {
+foreach ($TorrentsInfo as $Torrent) {
 	$GroupIDs[] = $Torrent['GroupID'];
 }
 $Results = Torrents::get_groups($GroupIDs);
 $Results = $Results['matches'];
 ?>
 <div class="header">
-<? if($All) { ?>
+<? if ($All) { ?>
 		<h2>All torrents trumpable for bad tags</h2>
 <? } else { ?>
 		<h2>Torrents trumpable for bad tags that you have snatched</h2>
@@ -34,7 +39,7 @@ $Results = $Results['matches'];
 
 	<div class="linkbox">
 		<a href="better.php" class="brackets">Back to better.php list</a>
-<? if($All) { ?>
+<? if ($All) { ?>
 		<a href="better.php?method=tags" class="brackets">Show only those you have snatched</a>
 <? } else { ?>
 		<a href="better.php?method=tags&amp;filter=all" class="brackets">Show all</a>
@@ -46,7 +51,7 @@ $Results = $Results['matches'];
 	<h3>There are <?=number_format(count($TorrentsInfo))?> torrents remaining</h3>
 	<table class="torrent_table">
 <?
-foreach($TorrentsInfo as $TorrentID => $Info) {
+foreach ($TorrentsInfo as $TorrentID => $Info) {
 	extract(Torrents::array_group($Results[$Info['GroupID']]));
 	$TorrentTags = new Tags($TagList);
 
@@ -58,11 +63,15 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 		$DisplayName = '';
 	}
 	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'#torrent'.$TorrentID.'" title="View Torrent">'.$GroupName.'</a>';
-	if($GroupYear>0) { $DisplayName.=" [".$GroupYear."]"; }
-	if($ReleaseType>0) { $DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]"; }
+	if ($GroupYear > 0) {
+		$DisplayName.=" [$GroupYear]";
+	}
+	if ($ReleaseType > 0) {
+		$DisplayName.=' ['.$ReleaseTypes[$ReleaseType].']';
+	}
 
 	$ExtraInfo = Torrents::torrent_info($Torrents[$TorrentID]);
-	if($ExtraInfo) {
+	if ($ExtraInfo) {
 		$DisplayName.=' - '.$ExtraInfo;
 	}
 ?>
@@ -72,7 +81,7 @@ foreach($TorrentsInfo as $TorrentID => $Info) {
 					<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets" title="Download torrent">DL</a>
 				</span>
 				<?=$DisplayName?>
-<?	if(check_perms('admin_reports')) { ?>
+<?	if (check_perms('admin_reports')) { ?>
 				<a href="better.php?method=tags&amp;remove=<?=$TorrentID?>" class="brackets">X</a>
 <? 	} ?>
 				<div class="tags"><?=$TorrentTags->format()?></div>

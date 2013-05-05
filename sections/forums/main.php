@@ -7,21 +7,27 @@ if (isset($LoggedUser['PostsPerPage'])) {
 
 //We have to iterate here because if one is empty it breaks the query
 $TopicIDs = array();
-foreach($Forums as $Forum) {
+foreach ($Forums as $Forum) {
 	if (!empty($Forum['LastPostTopicID'])) {
 		$TopicIDs[]=$Forum['LastPostTopicID'];
 	}
 }
 
 //Now if we have IDs' we run the query
-if(!empty($TopicIDs)) {
-	$DB->query("SELECT
-		l.TopicID,
-		l.PostID,
-		CEIL((SELECT COUNT(ID) FROM forums_posts WHERE forums_posts.TopicID = l.TopicID AND forums_posts.ID<=l.PostID)/$PerPage) AS Page
+if (!empty($TopicIDs)) {
+	$DB->query("
+		SELECT
+			l.TopicID,
+			l.PostID,
+			CEIL((
+					SELECT COUNT(ID)
+					FROM forums_posts
+					WHERE forums_posts.TopicID = l.TopicID
+						AND forums_posts.ID<=l.PostID
+				)/$PerPage) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN(".implode(',',$TopicIDs).") AND
-		UserID='$LoggedUser[ID]'");
+		WHERE TopicID IN(".implode(',',$TopicIDs).")
+			AND UserID='$LoggedUser[ID]'");
 	$LastRead = $DB->to_array('TopicID', MYSQLI_ASSOC);
 } else {
 	$LastRead = array();
@@ -35,7 +41,7 @@ View::show_header('Forums');
 <?
 
 $Row = 'a';
-$LastCategoryID=0;
+$LastCategoryID = 0;
 $OpenTable = false;
 $DB->query("SELECT RestrictedForums FROM users_info WHERE UserID = ".$LoggedUser['ID']);
 list($RestrictedForums) = $DB->next_record();
@@ -74,8 +80,12 @@ foreach ($Forums as $Forum) {
 		$Read = 'read';
 	}
 /* Removed per request, as distracting
-	if($Locked) { $Read .= "_locked"; }
-	if($Sticky) { $Read .= "_sticky"; }
+	if ($Locked) {
+		$Read .= "_locked";
+	}
+	if ($Sticky) {
+		$Read .= "_sticky";
+	}
 */
 ?>
 	<tr class="row<?=$Row?>">

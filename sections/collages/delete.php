@@ -1,21 +1,21 @@
 <?
 
 $CollageID = $_GET['collageid'];
-if(!is_number($CollageID) || !$CollageID) {
+if (!is_number($CollageID) || !$CollageID) {
 	error(404);
 }
 
 $DB->query("SELECT Name, UserID FROM collages WHERE ID='$CollageID'");
 list($Name, $UserID) = $DB->next_record();
 
-if(!check_perms('site_collages_delete') && $UserID != $LoggedUser['ID']) {
+if (!check_perms('site_collages_delete') && $UserID != $LoggedUser['ID']) {
 	error(403);
 }
 
 View::show_header('Delete collage');
 ?>
 <div class="thin center">
-	<div class="box" style="width:600px; margin:0px auto;">
+	<div class="box" style="width: 600px; margin: 0px auto;">
 		<div class="head colhead">
 			Delete collage
 		</div>

@@ -2,7 +2,6 @@
 $Available = array(
 	'access_request',
 	'access_state',
-
 	'user_stats_ratio',
 	'user_stats_torrent',
 	'user_stats_comumnity',
@@ -25,7 +24,7 @@ $AppID = $_GET['aid'];
 $UserID = $_GET['uid'];
 
 $App = $Cache->get_value('api_apps_'.$AppID);
-if(!is_array($App)) {
+if (!is_array($App)) {
 	if (!isset($DB)) {
 		require(SERVER_ROOT.'/classes/class_mysql.php');
 		$DB = new DB_MYSQL;
@@ -43,12 +42,16 @@ if ($_GET['req'] === 'access_request') {
 	}
 } else {
 	$User = $Cache->get_value('api_users_'.$UserID);
-	if(!is_array($User)) {
+	if (!is_array($User)) {
 		if (!isset($DB)) {
 			require(SERVER_ROOT.'/classes/class_mysql.php');
 			$DB = new DB_MYSQL;
 		}
-		$DB->query("SELECT AppID, Token, State, Time, Access FROM api_users WHERE UserID='$UserID' LIMIT 1"); //int, no db_string
+		$DB->query("
+			SELECT AppID, Token, State, Time, Access
+			FROM api_users
+			WHERE UserID='$UserID'
+			LIMIT 1"); //int, no db_string
 		$User = $DB->to_array('AppID',MYSQLI_ASSOC);
 		$Cache->cache_value('api_users_'.$UserID, $User, 0);
 	}

@@ -3,7 +3,7 @@ include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
 $ConvID = $_GET['id'];
-if(!$ConvID || !is_number($ConvID)) {
+if (!$ConvID || !is_number($ConvID)) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }
@@ -11,8 +11,12 @@ if(!$ConvID || !is_number($ConvID)) {
 
 
 $UserID = $LoggedUser['ID'];
-$DB->query("SELECT InInbox, InSentbox FROM pm_conversations_users WHERE UserID='$UserID' AND ConvID='$ConvID'");
-if($DB->record_count() == 0) {
+$DB->query("
+	SELECT InInbox, InSentbox
+	FROM pm_conversations_users
+	WHERE UserID='$UserID'
+		AND ConvID='$ConvID'");
+if ($DB->record_count() == 0) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }
@@ -27,24 +31,27 @@ if (!$InInbox && !$InSentbox) {
 }
 
 // Get information on the conversation
-$DB->query("SELECT
-	c.Subject,
-	cu.Sticky,
-	cu.UnRead,
-	cu.ForwardedTo,
-	um.Username
+$DB->query("
+	SELECT
+		c.Subject,
+		cu.Sticky,
+		cu.UnRead,
+		cu.ForwardedTo,
+		um.Username
 	FROM pm_conversations AS c
-	JOIN pm_conversations_users AS cu ON c.ID=cu.ConvID
-	LEFT JOIN users_main AS um ON um.ID=cu.ForwardedTo
-	WHERE c.ID='$ConvID' AND UserID='$UserID'");
+		JOIN pm_conversations_users AS cu ON c.ID=cu.ConvID
+		LEFT JOIN users_main AS um ON um.ID=cu.ForwardedTo
+	WHERE c.ID='$ConvID'
+		AND UserID='$UserID'");
 list($Subject, $Sticky, $UnRead, $ForwardedID, $ForwardedName) = $DB->next_record();
 
-$DB->query("SELECT um.ID, Username
+$DB->query("
+	SELECT um.ID, Username
 	FROM pm_messages AS pm
-	JOIN users_main AS um ON um.ID=pm.SenderID
+		JOIN users_main AS um ON um.ID=pm.SenderID
 	WHERE pm.ConvID='$ConvID'");
 
-while(list($PMUserID, $Username) = $DB->next_record()) {
+while (list($PMUserID, $Username) = $DB->next_record()) {
 	$PMUserID = (int)$PMUserID;
 	$Users[$PMUserID]['UserStr'] = Users::format_username($PMUserID, true, true, true, true);
 	$Users[$PMUserID]['Username'] = $Username;
@@ -54,18 +61,26 @@ $Users[0]['Username'] = 'System';
 
 
 
-if($UnRead=='1') {
+if ($UnRead == '1') {
 
-	$DB->query("UPDATE pm_conversations_users SET UnRead='0' WHERE ConvID='$ConvID' AND UserID='$UserID'");
+	$DB->query("
+		UPDATE pm_conversations_users
+		SET UnRead='0'
+		WHERE ConvID='$ConvID'
+			AND UserID='$UserID'");
 	// Clear the caches of the inbox and sentbox
 	$Cache->decrement('inbox_new_'.$UserID);
 }
 
 // Get messages
-$DB->query("SELECT SentDate, SenderID, Body, ID FROM pm_messages AS m WHERE ConvID='$ConvID' ORDER BY ID");
+$DB->query("
+	SELECT SentDate, SenderID, Body, ID
+	FROM pm_messages AS m
+	WHERE ConvID='$ConvID'
+	ORDER BY ID");
 
 $JsonMessages = array();
-while(list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) {
+while (list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) {
 	$JsonMessage = array(
 		'messageId' => (int) $MessageID,
 		'senderId' => (int) $SenderID,
@@ -83,7 +98,7 @@ print
 			'status' => 'success',
 			'response' => array(
 				'convId' => (int) $ConvID,
-				'subject' => $Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')':''),
+				'subject' => $Subject.($ForwardedID > 0 ? " (Forwarded to $ForwardedName)" : ''),
 				'sticky' => $Sticky == 1,
 				'messages' => $JsonMessages
 			)

@@ -11,17 +11,27 @@ if (!in_array($Way, array('up', 'down'))) {
 	error(404);
 }
 
-$DB->query("SELECT SimilarID FROM artists_similar_votes WHERE SimilarID='$SimilarID' AND UserID='$UserID' AND Way='$Way'");
+$DB->query("
+	SELECT SimilarID
+	FROM artists_similar_votes
+	WHERE SimilarID='$SimilarID'
+		AND UserID='$UserID'
+		AND Way='$Way'");
 if ($DB->record_count() == 0) {
 	if ($Way == 'down') {
 		$Score = 'Score-100';
-	} elseif($Way == 'up') {
+	} elseif ($Way == 'up') {
 		$Score = 'Score+100';
 	} else { // Nothing is impossible!
 		$Score = 'Score';
 	}
-	$DB->query("UPDATE artists_similar_scores SET Score=$Score WHERE SimilarID='$SimilarID'");
-	$DB->query("INSERT iNTO artists_similar_votes (SimilarID, UserID, Way) VALUES ('$SimilarID', '$UserID', '$Way')");
+	$DB->query("
+		UPDATE artists_similar_scores
+		SET Score=$Score
+		WHERE SimilarID='$SimilarID'");
+	$DB->query("
+		INSERT INTO artists_similar_votes (SimilarID, UserID, Way)
+		VALUES ('$SimilarID', '$UserID', '$Way')");
 	$Cache->delete_value('artist_'.$ArtistID); // Delete artist cache
 }
 header('Location: '.$_SERVER['HTTP_REFERER']);

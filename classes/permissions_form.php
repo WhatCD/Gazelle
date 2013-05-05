@@ -63,7 +63,7 @@ $PermissionsArray = array(
 	'users_give_donor' => 'Can give donor access.',
 	'users_warn' => 'Can warn users.',
 	'users_disable_users' => 'Can disable users.',
-	'users_disable_posts' => 'Can disable users\' posting rights.',
+	'users_disable_posts' => 'Can disable users\' posting privileges.',
 	'users_disable_any' => 'Can disable any users\' rights.',
 	'users_delete_users' => 'Can delete users.',
 	'users_view_invites' => 'Can view who user has invited.',
@@ -193,7 +193,7 @@ function permissions_form() { ?>
 					<? display_perm('users_give_donor', 'Can give donor access.'); ?>
 					<? display_perm('users_warn', 'Can warn users.'); ?>
 					<? display_perm('users_disable_users', 'Can disable users.'); ?>
-					<? display_perm('users_disable_posts', 'Can disable users\' posting rights.'); ?>
+					<? display_perm('users_disable_posts', 'Can disable users\' posting privileges.'); ?>
 					<? display_perm('users_disable_any', 'Can disable any users\' rights.'); ?>
 					<? display_perm('users_delete_users', 'Can delete anyone\'s account'); ?>
 					<? display_perm('users_view_invites', 'Can view who user has invited'); ?>

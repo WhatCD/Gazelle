@@ -1,20 +1,19 @@
 <?
-
-
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
 if (!$News = $Cache->get_value('news')) {
-	$DB->query("SELECT
-		ID,
-		Title,
-		Body,
-		Time
+	$DB->query("
+		SELECT
+			ID,
+			Title,
+			Body,
+			Time
 		FROM news
 		ORDER BY Time DESC
 		LIMIT 5");
 	$News = $DB->to_array(false,MYSQLI_NUM,false);
-	$Cache->cache_value('news',$News,3600*24*30);
+	$Cache->cache_value('news',$News,3600 * 24 * 30);
 	$Cache->cache_value('news_latest_id', $News[0][0], 0);
 }
 
@@ -26,15 +25,17 @@ if ($LoggedUser['LastReadNews'] != $News[0][0]) {
 	$LoggedUser['LastReadNews'] = $News[0][0];
 }
 
-if(($Blog = $Cache->get_value('blog')) === false) {
-	$DB->query("SELECT
-		b.ID,
-		um.Username,
-		b.Title,
-		b.Body,
-		b.Time,
-		b.ThreadID
-		FROM blog AS b LEFT JOIN users_main AS um ON b.UserID=um.ID
+if (($Blog = $Cache->get_value('blog')) === false) {
+	$DB->query("
+		SELECT
+			b.ID,
+			um.Username,
+			b.Title,
+			b.Body,
+			b.Time,
+			b.ThreadID
+		FROM blog AS b
+			LEFT JOIN users_main AS um ON b.UserID=um.ID
 		ORDER BY Time DESC
 		LIMIT 20");
 	$Blog = $DB->to_array();

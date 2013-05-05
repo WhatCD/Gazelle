@@ -16,14 +16,13 @@ include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT(true);
 
 // Check for lame SQL injection attempts
-if(!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
-	if(isset($_GET['topicid']) && is_number($_GET['topicid'])) {
+if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
+	if (isset($_GET['topicid']) && is_number($_GET['topicid'])) {
 		$ThreadID = $_GET['topicid'];
-	}
-	elseif(isset($_GET['postid']) && is_number($_GET['postid'])) {
+	} elseif (isset($_GET['postid']) && is_number($_GET['postid'])) {
 		$DB->query("SELECT TopicID FROM forums_posts WHERE ID = $_GET[postid]");
 		list($ThreadID) = $DB->next_record();
-		if($ThreadID) {
+		if ($ThreadID) {
 			header("Location: forums.php?action=viewthread&threadid=$ThreadID&postid=$_GET[postid]#post$_GET[postid]");
 			die();
 		} else {
@@ -48,7 +47,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 $ThreadInfo = get_thread_info($ThreadID, true, true);
 $ForumID = $ThreadInfo['ForumID'];
 // Make sure they're allowed to look at the page
-if(!check_forumperm($ForumID)) {
+if (!check_forumperm($ForumID)) {
 	error(403);
 }
 
@@ -57,11 +56,15 @@ $ThreadTitle = display_str($ThreadInfo['Title']);
 $ForumName = display_str($Forums[$ForumID]['Name']);
 
 //Post links utilize the catalogue & key params to prevent issues with custom posts per page
-if($ThreadInfo['Posts'] > $PerPage) {
-	if(isset($_GET['post']) && is_number($_GET['post'])) {
+if ($ThreadInfo['Posts'] > $PerPage) {
+	if (isset($_GET['post']) && is_number($_GET['post'])) {
 		$PostNum = $_GET['post'];
-	} elseif(isset($_GET['postid']) && is_number($_GET['postid']) && $_GET['postid'] != $ThreadInfo['StickyPostID']) {
-		$SQL = "SELECT COUNT(ID) FROM forums_posts WHERE TopicID = $ThreadID AND ID <= $_GET[postid]";
+	} elseif (isset($_GET['postid']) && is_number($_GET['postid']) && $_GET['postid'] != $ThreadInfo['StickyPostID']) {
+		$SQL = "
+			SELECT COUNT(ID)
+			FROM forums_posts
+			WHERE TopicID = $ThreadID
+				AND ID <= $_GET[postid]";
 		if ($ThreadInfo['StickyPostID'] < $_GET['postid']) {
 			$SQL .= " AND ID != $ThreadInfo[StickyPostID]";
 		}
@@ -74,24 +77,26 @@ if($ThreadInfo['Posts'] > $PerPage) {
 	$PostNum = 1;
 }
 list($Page,$Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
-if(($Page-1)*$PerPage > $ThreadInfo['Posts']) {
-	$Page = ceil($ThreadInfo['Posts']/$PerPage);
+if (($Page - 1) * $PerPage > $ThreadInfo['Posts']) {
+	$Page = ceil($ThreadInfo['Posts'] / $PerPage);
 }
 list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-if(!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
-	$DB->query("SELECT
-		p.ID,
-		p.AuthorID,
-		p.AddedTime,
-		p.Body,
-		p.EditedUserID,
-		p.EditedTime,
-		ed.Username
+if (!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
+	$DB->query("
+		SELECT
+			p.ID,
+			p.AuthorID,
+			p.AddedTime,
+			p.Body,
+			p.EditedUserID,
+			p.EditedTime,
+			ed.Username
 		FROM forums_posts as p
-		LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
-		WHERE p.TopicID = '$ThreadID' AND p.ID != '".$ThreadInfo['StickyPostID']."'
+			LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
+		WHERE p.TopicID = '$ThreadID'
+			AND p.ID != '".$ThreadInfo['StickyPostID']."'
 		LIMIT $CatalogueLimit");
 	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
@@ -103,7 +108,7 @@ if ($_GET['updatelastread'] != '0') {
 	$LastPost = end($Thread);
 	$LastPost = $LastPost['ID'];
 	reset($Thread);
-	if($ThreadInfo['Posts'] <= $PerPage*$Page && $ThreadInfo['StickyPostID'] > $LastPost) {
+	if ($ThreadInfo['Posts'] <= $PerPage * $Page && $ThreadInfo['StickyPostID'] > $LastPost) {
 		$LastPost = $ThreadInfo['StickyPostID'];
 	}
 
@@ -112,12 +117,16 @@ if ($_GET['updatelastread'] != '0') {
 	
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
 	
-		$DB->query("SELECT PostID From forums_last_read_topics WHERE UserID='$LoggedUser[ID]' AND TopicID='$ThreadID'");
+		$DB->query("
+			SELECT PostID
+			FROM forums_last_read_topics
+			WHERE UserID='$LoggedUser[ID]'
+				AND TopicID='$ThreadID'");
 		list($LastRead) = $DB->next_record();
-		if($LastRead < $LastPost) {
-			$DB->query("INSERT INTO forums_last_read_topics
-				(UserID, TopicID, PostID) VALUES
-				('$LoggedUser[ID]', '".$ThreadID ."', '".db_string($LastPost)."')
+		if ($LastRead < $LastPost) {
+			$DB->query("
+				INSERT INTO forums_last_read_topics (UserID, TopicID, PostID)
+				VALUES ('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
 				ON DUPLICATE KEY UPDATE PostID='$LastPost'");
 		}
 	}
@@ -139,7 +148,12 @@ if (in_array($ThreadID, $UserSubscriptions)) {
 }
 
 
-$DB->query("UPDATE users_notify_quoted SET UnRead = false WHERE UserID = '$LoggedUser[ID]' AND Page = 'forums' AND PageID = '$ThreadID'");
+$DB->query("
+	UPDATE users_notify_quoted
+	SET UnRead = false
+	WHERE UserID = '$LoggedUser[ID]'
+		AND Page = 'forums'
+		AND PageID = '$ThreadID'");
 $Cache->delete_value('notify_quoted_' . $LoggedUser['ID']);
 /*
 $QuoteNotificationsCount = $Cache->get_value('notify_quoted_' . $LoggedUser['ID']);
@@ -151,7 +165,7 @@ if ($QuoteNotificationsCount > 0) {
 */
 
 // Start printing
-View::show_header($ThreadInfo['Title'] . ' < '.$Forums[$ForumID]['Name'].' < '. 'Forums','comments,subscriptions,bbcode,jquery');
+View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &lt; Forums','comments,subscriptions,bbcode,jquery');
 ?>
 <div class="thin">
 	<h2>
@@ -163,7 +177,7 @@ View::show_header($ThreadInfo['Title'] . ' < '.$Forums[$ForumID]['Name'].' < '. 
 		<div class="center">
 			<a href="reports.php?action=report&amp;type=thread&amp;id=<?=$ThreadID?>" class="brackets">Report thread</a>
 			<a href="#" onclick="Subscribe(<?=$ThreadID?>);return false;" id="subscribelink<?=$ThreadID?>" class="brackets"><?=(in_array($ThreadID, $UserSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
-			<a href="#" onclick="$('#searchthread').toggle(); this.innerHTML = (this.innerHTML == 'Search this thread'?'Hide search':'Search this thread'); return false;" class="brackets">Search this thread</a>
+			<a href="#" onclick="$('#searchthread').toggle(); this.innerHTML = (this.innerHTML == 'Search this thread' ? 'Hide search' : 'Search this thread'); return false;" class="brackets">Search this thread</a>
 		</div>
 		<div id="searchthread" class="hidden center">
 			<div style="display: inline-block;">
@@ -179,7 +193,7 @@ View::show_header($ThreadInfo['Title'] . ' < '.$Forums[$ForumID]['Name'].' < '. 
 							<td><input type="text" id="username" name="user" size="70" /></td>
 						</tr>
 						<tr>
-							<td colspan="2" style="text-align: center">
+							<td colspan="2" style="text-align: center;">
 								<input type="hidden" name="action" value="search" />
 								<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
 								<input type="submit" name="submit" value="Search" />
@@ -191,17 +205,24 @@ View::show_header($ThreadInfo['Title'] . ' < '.$Forums[$ForumID]['Name'].' < '. 
 			</div>
 		</div>
 <?
-$Pages=Format::get_pages($Page,$ThreadInfo['Posts'],$PerPage,9);
+$Pages = Format::get_pages($Page,$ThreadInfo['Posts'],$PerPage,9);
 echo $Pages;
 ?>
 	</div>
 <?
 if ($ThreadInfo['NoPoll'] == 0) {
 	if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('polls_'.$ThreadID)) {
-		$DB->query("SELECT Question, Answers, Featured, Closed FROM forums_polls WHERE TopicID='".$ThreadID."'");
+		$DB->query("
+			SELECT Question, Answers, Featured, Closed
+			FROM forums_polls
+			WHERE TopicID='$ThreadID'");
 		list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 		$Answers = unserialize($Answers);
-		$DB->query("SELECT Vote, COUNT(UserID) FROM forums_polls_votes WHERE TopicID='$ThreadID' GROUP BY Vote");
+		$DB->query("
+			SELECT Vote, COUNT(UserID)
+			FROM forums_polls_votes
+			WHERE TopicID='$ThreadID'
+			GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
 
 		$Votes = array();
@@ -210,7 +231,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			$Votes[$Key] = $Value;
 		}
 
-		foreach(array_keys($Answers) as $i) {
+		foreach (array_keys($Answers) as $i) {
 			if (!isset($Votes[$i])) {
 				$Votes[$i] = 0;
 			}
@@ -228,12 +249,16 @@ if ($ThreadInfo['NoPoll'] == 0) {
 
 	$RevealVoters = in_array($ForumID, $ForumsRevealVoters);
 	//Polls lose the you voted arrow thingy
-	$DB->query("SELECT Vote FROM forums_polls_votes WHERE UserID='".$LoggedUser['ID']."' AND TopicID='$ThreadID'");
+	$DB->query("
+		SELECT Vote
+		FROM forums_polls_votes
+		WHERE UserID='".$LoggedUser['ID']."'
+			AND TopicID='$ThreadID'");
 	list($UserResponse) = $DB->next_record();
 	if (!empty($UserResponse) && $UserResponse != 0) {
 		$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
 	} else {
-		if(!empty($UserResponse) && $RevealVoters) {
+		if (!empty($UserResponse) && $RevealVoters) {
 			$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
 		}
 	}
@@ -282,31 +307,33 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			$Staff = get_staff();
 
 			$StaffNames = array();
-			foreach($Staff as $Staffer) {
+			foreach ($Staff as $Staffer) {
 				$StaffNames[] = $Staffer['Username'];
 			}
 
-			$DB->query("SELECT fpv.Vote AS Vote,
-						GROUP_CONCAT(um.Username SEPARATOR ', ')
-						FROM users_main AS um
-							LEFT JOIN forums_polls_votes AS fpv ON um.ID = fpv.UserID
-						WHERE TopicID = ".$ThreadID."
-						GROUP BY fpv.Vote");
+			$DB->query("
+				SELECT
+					fpv.Vote AS Vote,
+					GROUP_CONCAT(um.Username SEPARATOR ', ')
+				FROM users_main AS um
+					LEFT JOIN forums_polls_votes AS fpv ON um.ID = fpv.UserID
+				WHERE TopicID = ".$ThreadID."
+				GROUP BY fpv.Vote");
 
 			$StaffVotesTmp = $DB->to_array();
 			$StaffCount = count($StaffNames);
 
 			$StaffVotes = array();
-			foreach($StaffVotesTmp as $StaffVote) {
+			foreach ($StaffVotesTmp as $StaffVote) {
 				list($Vote, $Names) = $StaffVote;
 				$StaffVotes[$Vote] = $Names;
-				$Names = explode(", ", $Names);
+				$Names = explode(', ', $Names);
 				$StaffNames = array_diff($StaffNames, $Names);
 			}
 ?>			<ul style="list-style: none;" id="poll_options">
 <?
 
-			foreach($Answers as $i => $Answer) {
+			foreach ($Answers as $i => $Answer) {
 ?>
 				<li>
 					<a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>"><?=display_str($Answer == '' ? 'Blank' : $Answer)?></a>
@@ -400,7 +427,7 @@ foreach ($Thread as $Key => $Post) {
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
 <table class="forum_post wrap_overflow box vertical_margin<?
-	if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID>$LastRead && strtotime($AddedTime)>$LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key==$RequestKey)) {
+	if (((!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) && $PostID > $LastRead && strtotime($AddedTime) > $LoggedUser['CatchupTime']) || (isset($RequestKey) && $Key == $RequestKey)) {
 		echo ' forum_unread';
 	}
 	if (!Users::has_avatars_enabled()) {
@@ -420,7 +447,7 @@ foreach ($Thread as $Key => $Post) {
 	</colgroup>
 	<tr class="colhead_dark">
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
-			<div style="float:left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
+			<div style="float: left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<?=Users::format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?>
 <?	if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) { ?>
@@ -444,7 +471,7 @@ foreach ($Thread as $Key => $Post) {
 	}
 ?>
 			</div>
-			<div id="bar<?=$PostID?>" style="float:right;">
+			<div id="bar<?=$PostID?>" style="float: right;">
 				<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>" class="brackets">Report</a>
 <?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);
@@ -477,7 +504,7 @@ foreach ($Thread as $Key => $Post) {
 <?	if ($EditedUserID) { ?>
 				<br />
 				<br />
-<?		if(check_perms('site_admin_forums')) { ?>
+<?		if (check_perms('site_admin_forums')) { ?>
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a>
 <?		} ?>
 				Last edited by

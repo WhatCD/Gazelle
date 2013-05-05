@@ -1,7 +1,7 @@
 <?
 
-if(!empty($_GET['userid'])) {
-	if(!check_perms('users_override_paranoia')) {
+if (!empty($_GET['userid'])) {
+	if (!check_perms('users_override_paranoia')) {
 		print
 			json_encode(
 				array(
@@ -12,7 +12,7 @@ if(!empty($_GET['userid'])) {
 	}
 	$UserID = $_GET['userid'];
 	$Sneaky = ($UserID != $LoggedUser['ID']);
-	if(!is_number($UserID)) {
+	if (!is_number($UserID)) {
 		print
 			json_encode(
 				array(
@@ -31,15 +31,16 @@ $Sneaky = ($UserID != $LoggedUser['ID']);
 
 //$ArtistList = Bookmarks::all_bookmarks('artist', $UserID);
 
-$DB->query('SELECT ag.ArtistID, ag.Name
+$DB->query('
+	SELECT ag.ArtistID, ag.Name
 	FROM bookmarks_artists AS ba
-	INNER JOIN artists_group AS ag ON ba.ArtistID = ag.ArtistID
+		INNER JOIN artists_group AS ag ON ba.ArtistID = ag.ArtistID
 	WHERE ba.UserID = '.$UserID);
 
 $ArtistList = $DB->to_array();
 
 $JsonArtists = array();
-foreach($ArtistList as $Artist) {
+foreach ($ArtistList as $Artist) {
 	list($ArtistID, $Name) = $Artist;
 	$JsonArtists[] = array(
 		'artistId' => (int) $ArtistID,

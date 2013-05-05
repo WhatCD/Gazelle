@@ -39,7 +39,7 @@ if (!empty($Err)) {
 				<td><input type="text" name="name" size="60" value="<?=$Name?>" /></td>
 			</tr>
 <? }
-if($CategoryID > 0 || check_perms('site_collages_delete')) { ?>
+if ($CategoryID > 0 || check_perms('site_collages_delete')) { ?>
 			<tr>
 				<td class="label"><strong>Category</strong></td>
 				<td>
@@ -72,7 +72,7 @@ if($CategoryID > 0 || check_perms('site_collages_delete')) { ?>
 				<td><input type="checkbox" name="featured"<?=($Featured ? ' checked="checked"' : '')?> /></td>
 			</tr>
 <? }
-if(check_perms('site_collages_delete')) { ?>
+if (check_perms('site_collages_delete')) { ?>
 			<tr>
 				<td class="label">Locked</td>
 				<td><input type="checkbox" name="locked" <?=$Locked ? 'checked="checked" ' : ''?>/></td>

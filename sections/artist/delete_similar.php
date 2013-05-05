@@ -2,10 +2,10 @@
 authorize();
 $SimilarID = db_string($_GET['similarid']);
 
-if(!is_number($SimilarID) || !$SimilarID) {
+if (!is_number($SimilarID) || !$SimilarID) {
 	error(404);
 }
-if(!check_perms('site_delete_tag')) {
+if (!check_perms('site_delete_tag')) {
 	error(403);
 }
 $DB->query("SELECT ArtistID FROM artists_similar WHERE SimilarID='$SimilarID'");

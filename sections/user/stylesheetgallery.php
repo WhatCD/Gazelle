@@ -16,7 +16,7 @@ if (!isset($_GET['name'])) {
 	if (isset($_GET['format']) && $_GET['format'] === "data") {
 		global $Cache;
 		$ImageData = $Cache->get_value("cssgallery_".$Name);
-		if(!empty($ImageData)){
+		if (!empty($ImageData)) {
 			echo json_encode(array('data' => $ImageData, 'status' => "0"));
 			die();
 		} else {

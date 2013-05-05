@@ -19,10 +19,10 @@ if (!empty($_GET['userid']) && is_number($_GET['userid'])) {
 	$UserID = $LoggedUser['ID'];
 }
 
-if(empty($_GET['filter']) || !in_array($_GET['filter'], array('uploaded', 'seeding', 'snatched'))) {
+if (empty($_GET['filter']) || !in_array($_GET['filter'], array('uploaded', 'seeding', 'snatched'))) {
 	$_GET['filter'] = 'all';
 }
-if(empty($_GET['target']) || !in_array($_GET['target'], array('v0', 'v2', '320', 'all'))) {
+if (empty($_GET['target']) || !in_array($_GET['target'], array('v0', 'v2', '320', 'all'))) {
 	$_GET['target'] = 'any';
 }
 $Encodings = array('v0' => 'V0 (VBR)', 'v2' => 'V2 (VBR)', '320' => '320');
@@ -37,16 +37,16 @@ function transcode_init_sphql() {
 		->order_by('RAND()')
 		->limit(0, TORRENTS_PER_PAGE, TORRENTS_PER_PAGE);
 	if (in_array($_GET['target'], array('v0', 'v2', '320'))) {
-		// v0/v2/320 is missing
+		// V0/V2/320 is missing
 		$SphQL->where_match('!'.$_GET['target'], 'encoding', false);
-	} elseif($_GET['target'] == 'all') {
+	} elseif ($_GET['target'] == 'all') {
 		// all transcodes are missing
 		$SphQL->where_match('!(v0 | v2 | 320)', 'encoding', false);
 	} else {
 		// any transcode is missing
 		$SphQL->where_match('!(v0 v2 320)', 'encoding', false);
 	}
-	if(!empty($_GET['search'])) {
+	if (!empty($_GET['search'])) {
 		$SphQL->where_match($_GET['search'], '(groupname,artistname,year,taglist)');
 	}
 	return $SphQL;
@@ -71,21 +71,36 @@ function transcode_parse_groups($Groups) {
 				);
 			}
 			if (!isset($TorrentGroups[$GroupID]['Editions'][$RemIdent])) {
-				if($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
+				if ($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {
 					$EditionName = $Torrent['RemasterYear'];
-					$AddExtra = " - ";
-					if($Torrent['RemasterRecordLabel']) { $EditionName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']); $AddExtra=' / '; }
-					if($Torrent['RemasterCatalogueNumber']) { $EditionName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']); $AddExtra=' / '; }
-					if($Torrent['RemasterTitle']) { $EditionName .= $AddExtra.display_str($Torrent['RemasterTitle']); $AddExtra=' / '; }
+					$AddExtra = ' - ';
+					if ($Torrent['RemasterRecordLabel']) {
+						$EditionName .= $AddExtra.display_str($Torrent['RemasterRecordLabel']);
+						$AddExtra = ' / ';
+					}
+					if ($Torrent['RemasterCatalogueNumber']) {
+						$EditionName .= $AddExtra.display_str($Torrent['RemasterCatalogueNumber']);
+						$AddExtra = ' / ';
+					}
+					if ($Torrent['RemasterTitle']) {
+						$EditionName .= $AddExtra.display_str($Torrent['RemasterTitle']);
+						$AddExtra = ' / ';
+					}
 					$EditionName .= $AddExtra.display_str($Torrent['Media']);
 				} else {
-					$AddExtra = " / ";
-					if(!$Torrent['Remastered']) {
-						$EditionName = "Original Release";
-						if($Group['RecordLabel']) { $EditionName .= $AddExtra.$Group['RecordLabel']; $AddExtra=' / '; }
-						if($Group['CatalogueNumber']) { $EditionName .= $AddExtra.$Group['CatalogueNumber']; $AddExtra=' / '; }
+					$AddExtra = ' / ';
+					if (!$Torrent['Remastered']) {
+						$EditionName = 'Original Release';
+						if ($Group['RecordLabel']) {
+							$EditionName .= $AddExtra.$Group['RecordLabel'];
+							$AddExtra = ' / ';
+						}
+						if ($Group['CatalogueNumber']) {
+							$EditionName .= $AddExtra.$Group['CatalogueNumber'];
+							$AddExtra = ' / ';
+						}
 					} else {
-						$EditionName = "Unknown Release(s)";
+						$EditionName = 'Unknown Release(s)';
 					}
 					$EditionName .= $AddExtra.display_str($Torrent['Media']);
 				}
@@ -112,9 +127,9 @@ function transcode_parse_groups($Groups) {
 
 $Groups = array();
 $ResultCount = 0;
-if(in_array($_GET['filter'], array('all', 'uploaded'))) {
+if (in_array($_GET['filter'], array('all', 'uploaded'))) {
 	$SphQL = transcode_init_sphql();
-	if($_GET['filter'] == 'uploaded') {
+	if ($_GET['filter'] == 'uploaded') {
 		$SphQL->where('uploader', $UserID);
 	}
 
@@ -126,9 +141,10 @@ if(in_array($_GET['filter'], array('all', 'uploaded'))) {
 		$Groups = transcode_parse_groups($Groups['matches']);
 	}
 	unset($SphQL, $SphQLResult, $Results);
-} elseif(in_array($_GET['filter'], array('snatched', 'seeding'))) {
+} elseif (in_array($_GET['filter'], array('snatched', 'seeding'))) {
 	// Read all snatched/seeding torrents
-	$DB->query("SELECT t.GroupID, x.fid
+	$DB->query("
+		SELECT t.GroupID, x.fid
 		FROM ".($_GET['filter'] == 'seeding' ? 'xbt_files_users' : 'xbt_snatched')." AS x
 			JOIN torrents AS t ON t.ID=x.fid
 			JOIN torrents_group AS tg ON tg.ID = t.GroupID
@@ -136,12 +152,12 @@ if(in_array($_GET['filter'], array('all', 'uploaded'))) {
 			AND (t.LogScore = '100' OR t.Media != 'CD')
 			AND tg.CategoryID = 1
 			AND x.uid='$UserID'
-			".($_GET['filter'] == 'seeding' ? "AND x.active=1 AND x.Remaining=0" : ""));
+			".($_GET['filter'] == 'seeding' ? 'AND x.active=1 AND x.Remaining=0' : ''));
 	$Debug->set_flag('SELECTed ' . $_GET['filter'] . ' torrents');
 	$Snatched = $DB->to_array();
 	$Debug->set_flag('Received data from DB');
 	shuffle($Snatched); // randomize results
-	while($ResultCount < TORRENTS_PER_PAGE && count($Snatched) > 0) {
+	while ($ResultCount < TORRENTS_PER_PAGE && count($Snatched) > 0) {
 		// we throw TORRENTS_PER_PAGE results into Sphinx until we have at least TORRENTS_PER_PAGE results (or no snatches left)
 		$SnatchedTmp = array_slice($Snatched, 0, TORRENTS_PER_PAGE);
 		$Snatched = array_slice($Snatched, TORRENTS_PER_PAGE);
@@ -154,21 +170,21 @@ if(in_array($_GET['filter'], array('all', 'uploaded'))) {
 		$GroupsTmp = Torrents::get_groups(array_values($ResultsTmp));
 		$GroupsTmp = transcode_parse_groups($GroupsTmp['matches']);
 		// Since we're asking Sphinxql about groups and remidents, the result can/will contain different editions that are transcodable but weren't snatched, so let's filter them out
-		foreach($GroupsTmp as $GroupID => $Group) {
-			foreach($Group['Editions'] as $RemIdent => $Edition) {
+		foreach ($GroupsTmp as $GroupID => $Group) {
+			foreach ($Group['Editions'] as $RemIdent => $Edition) {
 				$EditionSnatched = false;
-				foreach($SnatchedTmp as $SnatchedTmpE) {
-					if(isset($Edition['FlacIDs'][$SnatchedTmpE['fid']])) {
+				foreach ($SnatchedTmp as $SnatchedTmpE) {
+					if (isset($Edition['FlacIDs'][$SnatchedTmpE['fid']])) {
 						$EditionSnatched = true;
 						break;
 					}
 				}
-				if(!$EditionSnatched || count($Edition['MP3s']) == 3) {
+				if (!$EditionSnatched || count($Edition['MP3s']) == 3) {
 					unset($GroupsTmp[$GroupID]['Editions'][$RemIdent]);
 				}
 			}
 			$ResultCount += count($GroupsTmp[$GroupID]['Editions']);
-			if(count($GroupsTmp[$GroupID]['Editions']) == 0) {
+			if (count($GroupsTmp[$GroupID]['Editions']) == 0) {
 				unset($GroupsTmp[$GroupID]);
 			}
 		}
@@ -185,8 +201,8 @@ $Counter = array(
 	'miss_V2 (VBR)' => 0, //how many V2 transcodes are missing?
 	'miss_320' => 0, //how many 320 transcodes are missing?
 );
-foreach($Groups as $GroupID => $Group) {
-	foreach($Group['Editions'] as $RemIdent => $Edition) {
+foreach ($Groups as $GroupID => $Group) {
+	foreach ($Group['Editions'] as $RemIdent => $Edition) {
 		if (count($Edition['FlacIDs']) == 0 //no FLAC in this group
 				|| (!empty($Edition['MP3s']) && $_GET['target'] == 'all') //at least one transcode present when we only wanted groups containing no transcodes at all
 				|| isset($Edition['MP3s'][$Encodings[$_GET['target']]]) //the transcode we asked for is already there
@@ -197,8 +213,8 @@ foreach($Groups as $GroupID => $Group) {
 			continue;
 		}
 		$edition_miss = 0; //number of transcodes missing in this edition
-		foreach($Encodings as $Encoding) {
-			if(!isset($Edition['MP3s'][$Encoding])) {
+		foreach ($Encodings as $Encoding) {
+			if (!isset($Edition['MP3s'][$Encoding])) {
 				++$edition_miss;
 				++$Counter['miss_'.$Encoding];
 			}
@@ -246,7 +262,7 @@ View::show_header('Transcode Search');
 		</table>
 	</form>
 	<h3>About</h3>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<p>
 			This page aims at listing <?=TORRENTS_PER_PAGE?> random transcodable perfect FLACs matching the options you selected above, but there can be more or less matches on this page. The following numbers tell you something about the torrents currently listed below and can change if you reload.<br /><br />
 
@@ -264,7 +280,7 @@ View::show_header('Transcode Search');
 			<td>320</td>
 		</tr>
 <?
-if($ResultCount == 0) {
+if ($ResultCount == 0) {
 ?>
 		<tr><td colspan="4">No results found!</td></tr>
 <?
@@ -289,11 +305,11 @@ if($ResultCount == 0) {
 			// TODO: point to the correct FLAC (?)
 			$FlacID = array_search(true, $Edition['FlacIDs']);
 			$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'#torrent'.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
-			if($GroupYear > 0) {
-				$DisplayName .= " [".$GroupYear."]";
+			if ($GroupYear > 0) {
+				$DisplayName .= " [$GroupYear]";
 			}
 			if ($ReleaseType > 0) {
-				$DisplayName .= " [".$ReleaseTypes[$ReleaseType]."]";
+				$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 			}
 			if ($Edition['FLACIsSnatched']) {
 				$DisplayName .= ' ' . Format::torrent_label('Snatched!');

@@ -226,10 +226,10 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 							<input class="sort_numbers" type="text" name="sort[<?=$GroupID?>]" value="<?=$Sort?>" id="sort_<?=$GroupID?>" size="4" />
 						</td>
 						<td><?=$this->NumGroups?></td>
-						<td><?=$GroupYear?trim($GroupYear):' '?></td>
-						<td><?=$DisplayName?trim($DisplayName):' '?></td>
-						<td><?=$TorrentLink?trim($TorrentLink):' '?></td>
-						<td class="nobr" title="<?=$DateAdded?>"><?=$DateAdded?time_diff($DateAdded):' '?></td>
+						<td><?=$GroupYear ? trim($GroupYear) : ' '?></td>
+						<td><?=$DisplayName ? trim($DisplayName) : ' '?></td>
+						<td><?=$TorrentLink ? trim($TorrentLink) : ' '?></td>
+						<td class="nobr" title="<?=$DateAdded?>"><?=$DateAdded ? time_diff($DateAdded) : ' '?></td>
 						<td class="center"><input type="checkbox" name="remove[<?=$GroupID?>]" value="" /></td>
 					</tr>
 <?
@@ -246,13 +246,15 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 	static public function display_name (array &$ExtendedArtists, array &$Artists, $VanityHouse) {
 		$DisplayName = '';
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4])
-			|| !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+				|| !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2], $ExtendedArtists[3]);
 			$DisplayName = Artists::display_artists($ExtendedArtists, true, false);
 		} elseif (count($Artists) > 0) {
 			$DisplayName = Artists::display_artists(array('1'=>$Artists), true, false);
 		}
-		if ($VanityHouse) $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]';
+		if ($VanityHouse) {
+			$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+		}
 		return $DisplayName;
 	}
 

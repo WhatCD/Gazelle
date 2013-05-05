@@ -23,7 +23,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 		<? View::parse('generic/reply/staffpm.php', array('Hidden' => true)); ?>
 		<br />
 		<h3>First-line Support</h3>
-		<p><strong>These users are not official staff members</strong> - they're users who have volunteered their time to help people in need. Please treat them with respect and read <a href="wiki.php?action=article&amp;id=260">this</a> before contacting them.</p>
+		<p><strong>These users are not official staff members.</strong> They are users who have volunteered their time to help people in need. Please treat them with respect, and read <a href="wiki.php?action=article&amp;id=260">this</a> before contacting them.</p>
 		<table class="staff" width="100%">
 			<tr class="colhead">
 				<td style="width: 130px;">Username</td>
@@ -34,27 +34,13 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 	$Row = 'a';
 	foreach ($FrontLineSupport as $Support) {
 		list($ID, $Class, $Username, $Paranoia, $LastAccess, $SupportFor) = $Support;
-		$Row = ($Row == 'a') ? 'b' : 'a';
-?>
-			<tr class="row<?=$Row?>">
-				<td class="nobr">
-					<?=Users::format_username($ID, false, false, false) ?>
-				</td>
-				<td class="nobr">
-<?					if (check_paranoia('lastseen', $Paranoia, $Class)) {
-						echo time_diff($LastAccess);
-					} else {
-						echo 'Hidden by user';
-					}
-?>
-				</td>
-				<td class="nobr">
-					<?=$SupportFor?>
-				</td>
-			</tr>
-<?	} ?>
+
+		$Row = make_staff_row($Row, $ID, $Paranoia, $Class, $LastAccess, $SupportFor);
+
+	} ?>
 		</table>
 	</div>
+	<br />
 	<div class="box pad" style="padding: 0px 10px 10px 10px;">
 		<br />
 		<h3>Forum Moderators</h3>
@@ -69,29 +55,15 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 	$Row = 'a';
 	foreach ($ForumStaff as $Support) {
 		list($ID, $Class, $Username, $Paranoia, $LastAccess, $SupportFor) = $Support;
-		$Row = ($Row == 'a') ? 'b' : 'a';
-?>
-			<tr class="row<?=$Row?>">
-				<td class="nobr">
-					<?=Users::format_username($ID, false, false, false) ?>
-				</td>
-				<td class="nobr">
-<?					if (check_paranoia('lastseen', $Paranoia, $Class)) {
-						echo time_diff($LastAccess);
-					} else {
-						echo 'Hidden by user';
-					}
-?>
-				</td>
-				<td class="nobr">
-					<?=$SupportFor?>
-				</td>
-			</tr>
-<?	} ?>
+
+		$Row = make_staff_row($Row, $ID, $Paranoia, $Class, $LastAccess, $SupportFor);
+
+	} ?>
 		</table>
 	</div>
 	<br />
 	<div class="box pad" style="padding: 0px 10px 10px 10px;">
+		<br />
 <?
 	$CurClass = 0;
 	$CloseTable = false;
@@ -101,11 +73,12 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 			$Row = 'a';
 			if ($CloseTable) {
 				$CloseTable = false;
-				echo "\t</table><br />";
+				// the "\t" and "\n" are used here to make the HTML look pretty
+				echo "\t\t</table>\n\t\t<br />\n";
 			}
 			$CurClass = $Class;
 			$CloseTable = true;
-			echo '<h3>'.$ClassName.'s</h3>';
+			echo "\t\t<h3>".$ClassName."s</h3>\n";
 ?>
 		<table class="staff" width="100%">
 			<tr class="colhead">
@@ -116,26 +89,12 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 <?
 		} // End new class header
 
+		$HiddenBy = 'Hidden by staff member';
+
 		// Display staff members for this class
-		$Row = ($Row == 'a') ? 'b' : 'a';
-?>
-			<tr class="row<?=$Row?>">
-				<td class="nobr">
-					<?=Users::format_username($ID, false, false, false) ?>
-				</td>
-				<td class="nobr">
-<?					if (check_paranoia('lastseen', $Paranoia, $Class)) {
-						echo time_diff($LastAccess);
-					} else {
-						echo 'Hidden by staff member';
-					}
-?>
-				</td>
-				<td class="nobr">
-					<?=$Remark?>
-				</td>
-			</tr>
-<?	} ?>
+		$Row = make_staff_row($Row, $ID, $Paranoia, $Class, $LastAccess, $Remark, $HiddenBy);
+
+	} ?>
 		</table>
 
 	</div>

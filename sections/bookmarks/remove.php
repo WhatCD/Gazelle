@@ -1,17 +1,22 @@
 <?
 authorize();
 
-if (!Bookmarks::can_bookmark($_GET['type'])) { error(404); }
+if (!Bookmarks::can_bookmark($_GET['type'])) {
+	error(404);
+}
 
 $Type = $_GET['type'];
 
 list($Table, $Col) = Bookmarks::bookmark_schema($Type);
 
-if(!is_number($_GET['id'])) {
+if (!is_number($_GET['id'])) {
 	error(0);
 }
 
-$DB->query("DELETE FROM $Table WHERE UserID='".$LoggedUser['ID']."' AND $Col='".db_string($_GET['id'])."'");
+$DB->query("
+	DELETE FROM $Table
+	WHERE UserID='".$LoggedUser['ID']."'
+		AND $Col='".db_string($_GET['id'])."'");
 $Cache->delete_value('bookmarks_'.$Type.'_'.$UserID);
 
 if ($Type === 'torrent') {

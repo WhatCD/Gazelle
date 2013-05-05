@@ -27,7 +27,7 @@ $DB->query("SELECT t.GroupID, x.fid
 		AND ((t.LogScore = '100' AND t.Media = 'CD')
 			OR t.Media != 'CD')
 		AND tg.CategoryID = 1
-		AND x.uid='$UserID'");
+		AND x.uid='$UserID'" . ($SeedingOnly ? ' AND x.active = 1 AND x.remaining = 0' : ''));
 
 $SnatchedTorrentIDs = array_fill_keys($DB->collect('fid'), true);
 $SnatchedGroupIDs = array_unique($DB->collect('GroupID'));
@@ -113,12 +113,14 @@ $Counter = array(
 	'miss_V2 (VBR)' => 0, //how many V2 transcodes are missing?
 	'miss_320' => 0, //how many 320 transcodes are missing?
 );
-foreach($TorrentGroups as $Editions) {
-	foreach($Editions as $Edition) {
-		if($Edition['FlacID'] == 0) { continue; } // no FLAC in this edition
+foreach ($TorrentGroups as $Editions) {
+	foreach ($Editions as $Edition) {
+		if ($Edition['FlacID'] == 0) { // no FLAC in this edition
+			continue;
+		}
 		$edition_miss = 0; //number of transcodes missing in this edition
-		foreach($Encodings as $Encoding) {
-			if(!isset($Edition['Formats'][$Encoding])) {
+		foreach ($Encodings as $Encoding) {
+			if (!isset($Edition['Formats'][$Encoding])) {
 				++$edition_miss;
 				++$Counter['miss_'.$Encoding];
 			}
@@ -179,8 +181,8 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 			continue;
 		}
 		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" title="View Torrent">'.$GroupName.'</a>';
-		if($GroupYear > 0) {
-			$DisplayName .= " [".$GroupYear."]";
+		if ($GroupYear > 0) {
+			$DisplayName .= " [$GroupYear]";
 		}
 		if ($ReleaseType > 0) {
 			$DisplayName .= " [".$ReleaseTypes[$ReleaseType]."]";

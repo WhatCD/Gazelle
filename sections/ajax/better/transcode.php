@@ -1,5 +1,5 @@
 <?
-if(!isset($_GET['type']) || !is_number($_GET['type']) || $_GET['type'] > 3) {
+if (!isset($_GET['type']) || !is_number($_GET['type']) || $_GET['type'] > 3) {
 	error(0);
 }
 
@@ -11,7 +11,7 @@ if ($_GET['type'] == 3) {
 	$List = "!(v0 | v2 | 320)";
 } else {
 	$List = '!'.$Options[$_GET['type']];
-	if($_GET['type'] == 0) {
+	if ($_GET['type'] == 0) {
 		$_GET['type'] = '0';
 	} else {
 		$_GET['type'] = display_str($_GET['type']);
@@ -25,7 +25,7 @@ $SphQL->select('id, groupid')
 	->where_match($List, 'encoding', false)
 	->order_by('RAND()')
 	->limit(0, TORRENTS_PER_PAGE, TORRENTS_PER_PAGE);
-if(!empty($_GET['search'])) {
+if (!empty($_GET['search'])) {
 	$SphQL->where_match($_GET['search'], '(groupname,artistname,year,taglist)');
 }
 

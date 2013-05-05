@@ -1,27 +1,33 @@
 <?php
 
 	$CollageID = $_GET['collageid'];
-	if(!is_number($CollageID)) { error(0); }
+	if (!is_number($CollageID)) {
+		error(0);
+	}
 
 	$DB->query("SELECT Name, UserID, CategoryID FROM collages WHERE ID='$CollageID'");
 	list($Name, $UserID, $CategoryID) = $DB->next_record();
-	if($CategoryID == 0 && $UserID!=$LoggedUser['ID'] && !check_perms('site_collages_delete')) { error(403); }
+	if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
+		error(403);
+	}
 
-	$DB->query("SELECT ct.GroupID,
-		um.ID,
-		um.Username,
-		ct.Sort,
-		tg.CatalogueNumber
+	$DB->query("
+		SELECT
+			ct.GroupID,
+			um.ID,
+			um.Username,
+			ct.Sort,
+			tg.CatalogueNumber
 		FROM collages_torrents AS ct
-		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
-		LEFT JOIN users_main AS um ON um.ID=ct.UserID
+			JOIN torrents_group AS tg ON tg.ID=ct.GroupID
+			LEFT JOIN users_main AS um ON um.ID=ct.UserID
 		WHERE ct.CollageID='$CollageID'
 		ORDER BY ct.Sort");
 
 	$GroupIDs = $DB->collect('GroupID');
 
 	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
-	if(count($GroupIDs)>0) {
+	if (count($GroupIDs) > 0) {
 		$TorrentList = Torrents::get_groups($GroupIDs);
 		$TorrentList = $TorrentList['matches'];
 	} else {
@@ -63,14 +69,14 @@
 	<table id="manage_collage_table">
 		<thead>
 			<tr class="colhead">
-				<th style="width:7%">Order</th>
-				<th style="width:1%"><span><abbr title="Current Rank">#</abbr></span></th>
-				<th style="width:7%"><span>Cat #</span></th>
-				<th style="width:1%"><span>Year</span></th>
-				<th style="width:15%"><span>Artist</span></th>
+				<th style="width: 7%">Order</th>
+				<th style="width: 1%"><span><abbr title="Current Rank">#</abbr></span></th>
+				<th style="width: 7%"><span>Cat #</span></th>
+				<th style="width: 1%"><span>Year</span></th>
+				<th style="width: 15%"><span>Artist</span></th>
 				<th><span>Torrent</span></th>
-				<th style="width:1%"><span>User</span></th>
-				<th style="width:1%; text-align: right" class="nobr"><span><abbr title="Modify an individual row.">Tweak</abbr></span></th>
+				<th style="width: 1%"><span>User</span></th>
+				<th style="width: 1%; text-align: right;" class="nobr"><span><abbr title="Modify an individual row.">Tweak</abbr></span></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -88,12 +94,14 @@
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
 			$DisplayName .= Artists::display_artists($ExtendedArtists, true, false);
-		} elseif(count($Artists)>0) {
+		} elseif (count($Artists) > 0) {
 			$DisplayName .= Artists::display_artists(array('1'=>$Artists), true, false);
 		}
 		$TorrentLink = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 		$GroupYear = $GroupYear > 0 ? $GroupYear : '';
-		if($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
+		if ($GroupVanityHouse) {
+			$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+		}
 
 		$AltCSS = $Number % 2 === 0 ? 'rowa' : 'rowb';
 ?>

@@ -171,7 +171,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 							<option value="5"<?=($Importance == '5' ? ' selected="selected"' : '')?>>Conductor</option>
 							<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
 							<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
-							<option value="3"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
+							<option value="7"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
 						</select>
 						<? if ($First) { ?><a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a><? } $First = false; ?>
 						<br />
@@ -186,6 +186,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 							<option value="5">Conductor</option>
 							<option value="6">DJ / Compiler</option>
 							<option value="3">Remixer</option>
+							<option value="7">Producer</option>
 						</select>
 						<a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a>
 <?

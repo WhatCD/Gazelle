@@ -1,26 +1,31 @@
 <?
 
 enforce_login();
-if(!check_perms('site_moderate_forums')) {
+if (!check_perms('site_moderate_forums')) {
 	error(403);
 }
 
 
 $ForumID = $_GET['forumid'];
-if(!is_number($ForumID)) {
+if (!is_number($ForumID)) {
 	error(404);
 }
 
 
-if(!empty($_POST['add']) || (!empty($_POST['del']))) {
-	if(!empty($_POST['add'])) {
-		if(is_number($_POST['new_thread'])) {
-			$DB->query("INSERT INTO forums_specific_rules (ForumID, ThreadID) VALUES (".$ForumID.", ".$_POST['new_thread'].")");
+if (!empty($_POST['add']) || (!empty($_POST['del']))) {
+	if (!empty($_POST['add'])) {
+		if (is_number($_POST['new_thread'])) {
+			$DB->query("
+				INSERT INTO forums_specific_rules (ForumID, ThreadID)
+				VALUES ($ForumID, ".$_POST['new_thread'].')');
 		}
 	}
-	if(!empty($_POST['del'])) {
-		if(is_number($_POST['threadid'])) {
-			$DB->query("DELETE FROM forums_specific_rules WHERE ForumID = ".$ForumID." AND ThreadID = ".$_POST['threadid']);
+	if (!empty($_POST['del'])) {
+		if (is_number($_POST['threadid'])) {
+			$DB->query("
+				DELETE FROM forums_specific_rules
+				WHERE ForumID = $ForumID
+					AND ThreadID = ".$_POST['threadid']);
 		}
 	}
 	$Cache->delete_value('forums_list');
@@ -56,7 +61,7 @@ View::show_header();
 					<input type="submit" name="add" value="Add thread" />
 				</td>
 			</form>
-<? foreach($ThreadIDs as $ThreadID) { ?>
+<? foreach ($ThreadIDs as $ThreadID) { ?>
 		<tr>
 			<td><?=$ThreadID?></td>
 			<td>

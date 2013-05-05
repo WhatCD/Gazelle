@@ -1,32 +1,40 @@
 <?
-
-
-if(!check_perms('site_torrents_notify')) {
+if (!check_perms('site_torrents_notify')) {
         json_die("failure");
 }
 
 define('NOTIFICATIONS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
 
-$Results = $DB->query("SELECT SQL_CALC_FOUND_ROWS unt.TorrentID, unt.UnRead, unt.FilterID, unf.Label, t.GroupID
+$Results = $DB->query("
+		SELECT SQL_CALC_FOUND_ROWS
+			unt.TorrentID,
+			unt.UnRead,
+			unt.FilterID,
+			unf.Label,
+			t.GroupID
 		FROM users_notify_torrents AS unt
-		JOIN torrents AS t ON t.ID = unt.TorrentID
-		LEFT JOIN users_notify_filters AS unf ON unf.ID = unt.FilterID
+			JOIN torrents AS t ON t.ID = unt.TorrentID
+			LEFT JOIN users_notify_filters AS unf ON unf.ID = unt.FilterID
 		WHERE unt.UserID=$LoggedUser[ID]".
 		((!empty($_GET['filterid']) && is_number($_GET['filterid']))
 			? " AND unf.ID='$_GET[filterid]'"
-			: "")."
-		ORDER BY TorrentID DESC LIMIT $Limit");
+			: '')."
+		ORDER BY TorrentID DESC
+		LIMIT $Limit");
 $GroupIDs = array_unique($DB->collect('GroupID'));
 
 $DB->query('SELECT FOUND_ROWS()');
 list($TorrentCount) = $DB->next_record();
 
-if(count($GroupIDs)) {
+if (count($GroupIDs)) {
 	$TorrentGroups = Torrents::get_groups($GroupIDs);
 	$TorrentGroups = $TorrentGroups['matches'];
 
-	$DB->query("UPDATE users_notify_torrents SET UnRead='0' WHERE UserID=".$LoggedUser['ID']);
+	$DB->query("
+		UPDATE users_notify_torrents
+		SET UnRead='0'
+		WHERE UserID=".$LoggedUser['ID']);
 	$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
 }
 
@@ -36,11 +44,11 @@ $JsonNotifications = array();
 $NumNew = 0;
 
 $FilterGroups = array();
-while($Result = $DB->next_record(MYSQLI_ASSOC)) {
-	if(!$Result['FilterID']) {
+while ($Result = $DB->next_record(MYSQLI_ASSOC)) {
+	if (!$Result['FilterID']) {
 		$Result['FilterID'] = 0;
 	}
-	if(!isset($FilterGroups[$Result['FilterID']])) {
+	if (!isset($FilterGroups[$Result['FilterID']])) {
 		$FilterGroups[$Result['FilterID']] = array();
 		$FilterGroups[$Result['FilterID']]['FilterLabel'] = $Result['Label'] ? $Result['Label'] : false;
 	}
@@ -48,9 +56,9 @@ while($Result = $DB->next_record(MYSQLI_ASSOC)) {
 }
 unset($Result);
 
-foreach($FilterGroups as $FilterID => $FilterResults) {
+foreach ($FilterGroups as $FilterID => $FilterResults) {
 	unset($FilterResults['FilterLabel']);
-	foreach($FilterResults as $Result) {
+	foreach ($FilterResults as $Result) {
 		$TorrentID = $Result['TorrentID'];
 //		$GroupID = $Result['GroupID'];
 
@@ -58,7 +66,9 @@ foreach($FilterGroups as $FilterID => $FilterResults) {
 		extract(Torrents::array_group($GroupInfo)); // all group data
 		$TorrentInfo = $GroupInfo['Torrents'][$TorrentID];
 
-		if ($Result['UnRead'] == 1) $NumNew++;
+		if ($Result['UnRead'] == 1) {
+			$NumNew++;
+		}
 
 		$JsonNotifications[] = array(
 			'torrentId' => (int) $TorrentID,

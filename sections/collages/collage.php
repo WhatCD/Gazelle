@@ -146,8 +146,12 @@ foreach ($TorrentList as $GroupID => $Group) {
 	}
 
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
-	if ($GroupYear > 0) { $DisplayName = $DisplayName. ' ['. $GroupYear .']';}
-	if ($GroupVanityHouse) { $DisplayName .= ' [<abbr title="This is a vanity house release">VH</abbr>]'; }
+	if ($GroupYear > 0) {
+		$DisplayName = "$DisplayName [$GroupYear]";
+	}
+	if ($GroupVanityHouse) {
+		$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+	}
 	$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start();
@@ -301,7 +305,7 @@ if (!check_perms('site_collages_delete') && ($Locked || ($MaxGroups > 0 && $NumG
 }
 
 // Silly hack for people who are on the old setting
-$CollageCovers = isset($LoggedUser['CollageCovers'])?$LoggedUser['CollageCovers']:25*(abs($LoggedUser['HideCollage'] - 1));
+$CollageCovers = isset($LoggedUser['CollageCovers']) ? $LoggedUser['CollageCovers'] : 25 * (abs($LoggedUser['HideCollage'] - 1));
 $CollagePages = array();
 
 // Pad it out
@@ -313,7 +317,7 @@ if ($NumGroups > $CollageCovers) {
 
 
 for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) {
-	$Groups = array_slice($Collage, $i*$CollageCovers, $CollageCovers);
+	$Groups = array_slice($Collage, $i * $CollageCovers, $CollageCovers);
 	$CollagePage = '';
 	foreach ($Groups as $Group) {
 		$CollagePage .= $Group;

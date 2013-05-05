@@ -12,7 +12,9 @@ The wiki class is used here to generate the page history.
 ************************************************************************/
 
 $ArtistID = $_GET['artistid'];
-if(!is_number($ArtistID)) { error(0); }
+if (!is_number($ArtistID)) {
+	error(0);
+}
 
 include(SERVER_ROOT.'/classes/class_wiki.php'); // Wiki class
 $Wiki = new WIKI('wiki_artists', $ArtistID, "artist.php?id=$ArtistID");
@@ -21,7 +23,7 @@ $Wiki = new WIKI('wiki_artists', $ArtistID, "artist.php?id=$ArtistID");
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
 list($Name) = $DB->next_record(MYSQLI_NUM, true);
 
-View::show_header("Revision history for ".$Name); // Set title
+View::show_header("Revision history for $Name"); // Set title
 
 // Start printing form
 ?>

@@ -183,7 +183,7 @@ if (!empty($_REQUEST['action'])) {
 				error(0);
 			}
 			if ($LoggedUser['DisablePosting']) {
-				error('Your posting rights have been removed.');
+				error('Your posting privileges have been removed.');
 			}
 
 			$GroupID = $_POST['groupid'];
@@ -191,12 +191,19 @@ if (!empty($_REQUEST['action'])) {
 				error(404);
 			}
 
-			$DB->query("SELECT CEIL((SELECT COUNT(ID)+1 FROM torrents_comments AS tc WHERE tc.GroupID='".db_string($GroupID)."')/".TORRENT_COMMENTS_PER_PAGE.") AS Pages");
+			$DB->query("
+				SELECT
+					CEIL((
+						SELECT COUNT(ID)+1
+						FROM torrents_comments AS tc
+						WHERE tc.GroupID='".db_string($GroupID)."')/".TORRENT_COMMENTS_PER_PAGE."
+					) AS Pages");
 			list($Pages) = $DB->next_record();
 
-			$DB->query("INSERT INTO torrents_comments (GroupID,AuthorID,AddedTime,Body) VALUES (
-				'".db_string($GroupID)."', '".db_string($LoggedUser['ID'])."','".sqltime()."','".db_string($_POST['body'])."')");
-			$PostID=$DB->inserted_id();
+			$DB->query("
+				INSERT INTO torrents_comments (GroupID,AuthorID,AddedTime,Body)
+				VALUES ('".db_string($GroupID)."', '".db_string($LoggedUser['ID'])."','".sqltime()."','".db_string($_POST['body'])."')");
+			$PostID = $DB->inserted_id();
 
 			$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			$Cache->begin_transaction('torrent_comments_'.$GroupID.'_catalogue_'.$CatalogueID);

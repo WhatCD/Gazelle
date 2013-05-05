@@ -1,16 +1,19 @@
 <?
-if(($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
-	$DB->query("SELECT t.ID AS TorrentID,
+if (($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
+	$DB->query("
+		SELECT
+			t.ID AS TorrentID,
 	       	t.GroupID AS GroupID
 		FROM xbt_files_users AS x
 			JOIN torrents AS t ON t.ID=x.fid
 		WHERE t.Format='FLAC'
 		GROUP BY x.fid
-			HAVING COUNT(x.uid) = 1
-		ORDER BY t.LogScore DESC, t.Time ASC LIMIT 30");
+		HAVING COUNT(x.uid) = 1
+		ORDER BY t.LogScore DESC, t.Time ASC
+		LIMIT 30");
 
 	$GroupIDs = $DB->to_array('GroupID');
-	$Cache->cache_value('better_single_groupids', $GroupIDs, 30*60);
+	$Cache->cache_value('better_single_groupids', $GroupIDs, 30 * 60);
 }
 
 $Results = Torrents::get_groups(array_keys($GroupIDs));
@@ -23,7 +26,7 @@ foreach ($Results as $GroupID=>$Group) {
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 
 	$JsonArtists = array();
-	if(count($Artists)>0) {
+	if (count($Artists) > 0) {
 		foreach ($Artists as $Artist) {
 			$JsonArtists[] = array(
 				'id' => (int) $Artist['id'],
