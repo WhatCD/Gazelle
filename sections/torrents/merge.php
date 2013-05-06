@@ -106,7 +106,7 @@ if (empty($_POST['confirm'])) {
 
 	//Collages
 	$DB->query("SELECT CollageID FROM collages_torrents WHERE GroupID='$OldGroupID'"); //Select all collages that contain edited group
-	while(list($CollageID) = $DB->next_record()) {
+	while (list($CollageID) = $DB->next_record()) {
 		$DB->query("UPDATE IGNORE collages_torrents SET GroupID='$NewGroupID' WHERE GroupID='$OldGroupID' AND CollageID='$CollageID'"); //Change collage groupid to new ID
 		$DB->query("DELETE FROM collages_torrents WHERE GroupID='$OldGroupID' AND CollageID='$CollageID'");
 		$Cache->delete_value('collage_'.$CollageID);
@@ -121,7 +121,7 @@ if (empty($_POST['confirm'])) {
 	}
 
 	$DB->query("SELECT ID FROM torrents WHERE GroupID='$OldGroupID'");
-	while(list($TorrentID) = $DB->next_record()) {
+	while (list($TorrentID) = $DB->next_record()) {
 		$Cache->delete_value('torrent_download_'.$TorrentID);
 	}
 	$Cache->delete_value('torrents_details_'.$GroupID);

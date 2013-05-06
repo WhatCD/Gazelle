@@ -188,18 +188,18 @@ function Newthread_Preview(mode) {
 		if (pollanswers && pollanswers.children.length > 4) {
 			pollanswers = pollanswers.children;
 			$('#pollquestion').raw().innerHTML = $('#pollquestionfield').raw().value;
-			for(var i=0; i<pollanswers.length; i+=2) {
+			for (var i = 0; i < pollanswers.length; i += 2) {
 				if (!pollanswers[i].value) {
 					continue;
 				}
 				var el = document.createElement('input');
-				el.id = 'answer_'+(i+1);
+				el.id = 'answer_' + (i + 1);
 				el.type = 'radio';
 				el.name = 'vote';
 				$('#pollanswers').raw().appendChild(el);
 				$('#pollanswers').raw().appendChild(document.createTextNode(' '));
 				el = document.createElement('label');
-				el.htmlFor = 'answer_'+(i+1);
+				el.htmlFor = 'answer_' + (i + 1);
 				el.innerHTML = pollanswers[i].value;
 				$('#pollanswers').raw().appendChild(el);
 				$('#pollanswers').raw().appendChild(document.createElement('br'));

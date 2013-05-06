@@ -658,7 +658,7 @@ class TEXT {
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'tex':
-					$Str.='<img style="vertical-align: middle" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="'.$Block['Val'].'" />';
+					$Str.='<img style="vertical-align: middle;" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="'.$Block['Val'].'" />';
 					break;
 				case 'plain':
 					$Str.=$Block['Val'];
@@ -729,7 +729,7 @@ class TEXT {
 						$Exploded = explode('|', $this->to_html($Block['Attr']));
 						if (isset($Exploded[1]) && is_numeric($Exploded[1]))  {
 							$PostID = trim($Exploded[1]);
-							$Str.='<a href="forums.php?action=viewthread&postid='.$PostID.'" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
+							$Str.='<a href="forums.php?action=viewthread&amp;postid='.$PostID.'" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
 						else {
 							$Str.='<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';

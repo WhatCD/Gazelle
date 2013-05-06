@@ -20,7 +20,7 @@ if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	die();
 }
 
-foreach($ReportType['report_messages'] as $Message) {
+foreach ($ReportType['report_messages'] as $Message) {
 ?>
 	<li><?=$Message?></li>
 <?

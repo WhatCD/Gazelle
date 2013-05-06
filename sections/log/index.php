@@ -45,7 +45,7 @@ include(SERVER_ROOT.'/sections/log/sphinx.php');
 <? }
 $Row = 'a';
 $Usernames = array();
-while(list($ID, $Message, $LogTime) = $DB->next_record()) {
+while (list($ID, $Message, $LogTime) = $DB->next_record()) {
 	$MessageParts = explode(" ", $Message);
 	$Message = "";
 	$Color = $Colon = false;

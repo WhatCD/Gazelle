@@ -523,9 +523,7 @@ if (check_perms('site_torrents_notify')) {
 
 	if ($RevisionID && check_perms('site_edit_wiki')) {
 ?>
-			<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">
-				Revert to this revision
-			</a>
+			<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Revert to this revision</a>
 <?	} ?>
 		</div>
 	</div>

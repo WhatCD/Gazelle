@@ -17,7 +17,7 @@ function Remaster() {
 
 function Format() {
 	if ($('#format').raw().options[$('#format').raw().selectedIndex].value == 'FLAC') {
-		for (var i = 0; i<$('#bitrate').raw().options.length; i++) {
+		for (var i = 0; i < $('#bitrate').raw().options.length; i++) {
 			if ($('#bitrate').raw().options[i].value == 'Lossless') {
 				$('#bitrate').raw()[i].selected = true;
 			}

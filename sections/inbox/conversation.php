@@ -73,7 +73,7 @@ $DB->query("SELECT SentDate, SenderID, Body, ID FROM pm_messages AS m WHERE Conv
 	</div>
 <?
 
-while(list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) { ?>
+while (list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) { ?>
 	<div class="box vertical_space">
 		<div class="head">
 			<strong><?=$Users[(int)$SenderID]['UserStr']?></strong> <?=time_diff($SentDate)?> - <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Users[(int)$SenderID]['Username']?>');" class="brackets">Quote</a>
@@ -84,7 +84,12 @@ while(list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) { ?>
 	</div>
 <?
 }
-$DB->query("SELECT UserID FROM pm_conversations_users WHERE UserID!='$LoggedUser[ID]' AND ConvID='$ConvID' AND (ForwardedTo=0 OR ForwardedTo=UserID)");
+$DB->query("
+	SELECT UserID
+	FROM pm_conversations_users
+	WHERE UserID!='$LoggedUser[ID]'
+		AND ConvID='$ConvID'
+		AND (ForwardedTo=0 OR ForwardedTo=UserID)");
 $ReceiverIDs = $DB->collect('UserID');
 
 

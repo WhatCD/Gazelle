@@ -203,7 +203,7 @@ if (check_perms('admin_reports')) {
 						AND req.TorrentID=$TorrentID");
 			$Requests = ($DB->record_count());
 			if ($Requests > 0) {
-				while(list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
+				while (list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 		?>
 							<div style="text-align: right;">
 								<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=viewrequest&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?>
@@ -244,7 +244,7 @@ foreach ($TypeList as $IType => $Data) {
 							<span title="Warning length in weeks">
 								<strong>Warning</strong>
 								<select name="warning" id="warning<?=$ReportID?>">
-<?	for($i = 0; $i < 9; $i++) { ?>
+<?	for ($i = 0; $i < 9; $i++) { ?>
 								<option value="<?=$i?>"<?=(($ReportType['resolve_options']['warn'] == $i) ? ' selected="selected"' : '')?>><?=$i?></option>
 <?	} ?>
 								</select>

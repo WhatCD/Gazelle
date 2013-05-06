@@ -109,16 +109,19 @@ $Body = db_string($Body);
 $Image = db_string($Image);
 
 // Update torrents table (technically, we don't need the RevisionID column, but we can use it for a join which is nice and fast)
-$DB->query("UPDATE torrents_group SET
-	RevisionID='$RevisionID',
-	".((isset($VanityHouse)) ? "VanityHouse='$VanityHouse'," : '')."
-	WikiBody='$Body',
-	WikiImage='$Image'
+$DB->query("
+	UPDATE torrents_group
+	SET
+		RevisionID='$RevisionID',
+		".((isset($VanityHouse)) ? "VanityHouse='$VanityHouse'," : '')."
+		WikiBody='$Body',
+		WikiImage='$Image'
 	WHERE ID='$GroupID'");
 // Log VH changes
 if ($OldVH != $VanityHouse && check_perms('torrents_edit_vanityhouse')) {
-	$DB->query("INSERT INTO group_log (GroupID, UserID, Time, Info)
-				VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string('Vanity house status changed to '.($VanityHouse?'true':'false'))."')");
+	$DB->query("
+		INSERT INTO group_log (GroupID, UserID, Time, Info)
+		VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string('Vanity house status changed to '.($VanityHouse ? 'true' : 'false'))."')");
 }
 
 // There we go, all done!
@@ -126,16 +129,17 @@ if ($OldVH != $VanityHouse && check_perms('torrents_edit_vanityhouse')) {
 $Cache->delete_value('torrents_details_'.$GroupID);
 $DB->query("SELECT CollageID FROM collages_torrents WHERE GroupID='$GroupID'");
 if ($DB->record_count() > 0) {
-	while(list($CollageID) = $DB->next_record()) {
+	while (list($CollageID) = $DB->next_record()) {
 		$Cache->delete_value('collage_'.$CollageID);
 	}
 }
 
 //Fix Recent Uploads/Downloads for image change
-$DB->query("SELECT DISTINCT UserID
-			FROM torrents AS t
-			LEFT JOIN torrents_group AS tg ON t.GroupID=tg.ID
-			WHERE tg.ID = $GroupID");
+$DB->query("
+	SELECT DISTINCT UserID
+	FROM torrents AS t
+		LEFT JOIN torrents_group AS tg ON t.GroupID=tg.ID
+	WHERE tg.ID = $GroupID");
 
 $UserIDs = $DB->collect('UserID');
 foreach ($UserIDs as $UserID) {

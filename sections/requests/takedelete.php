@@ -42,7 +42,7 @@ $DB->query("DELETE FROM requests_votes WHERE RequestID='$RequestID'");
 $DB->query("DELETE FROM requests_tags WHERE RequestID='$RequestID'");
 $DB->query("SELECT ArtistID FROM requests_artists WHERE RequestID = ".$RequestID);
 $RequestArtists = $DB->to_array();
-foreach($RequestArtists as $RequestArtist) {
+foreach ($RequestArtists as $RequestArtist) {
 	$Cache->delete_value('artists_requests_'.$RequestArtist);
 }
 $DB->query("DELETE FROM requests_artists WHERE RequestID='$RequestID'");

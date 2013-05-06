@@ -182,13 +182,13 @@ if ($ThreadInfo['NoPoll'] == 0) {
 	$JsonPoll['totalVotes'] = $TotalVotes;
 	$JsonPollAnswers = array();
 
-	foreach($Answers as $i => $Answer) {
+	foreach ($Answers as $i => $Answer) {
 		if (!empty($Votes[$i]) && $TotalVotes > 0) {
-			$Ratio = $Votes[$i]/$MaxVotes;
-			$Percent = $Votes[$i]/$TotalVotes;
+			$Ratio = $Votes[$i] / $MaxVotes;
+			$Percent = $Votes[$i] / $TotalVotes;
 		} else {
-			$Ratio=0;
-			$Percent=0;
+			$Ratio = 0;
+			$Percent = 0;
 		}
 		$JsonPollAnswers[] = array(
 			'answer' => $Answer,

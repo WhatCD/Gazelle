@@ -15,15 +15,16 @@ if (isset($_GET['username'])) {
 	$_GET['username'] = trim($_GET['username']);
 	
 	list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
-	$DB->query("SELECT SQL_CALC_FOUND_ROWS
-		ID,
-		Username,
-		Enabled,
-		PermissionID,
-		Donor,
-		Warned
+	$DB->query("
+		SELECT SQL_CALC_FOUND_ROWS
+			ID,
+			Username,
+			Enabled,
+			PermissionID,
+			Donor,
+			Warned
 		FROM users_main AS um
-		JOIN users_info AS ui ON ui.UserID=um.ID
+			JOIN users_info AS ui ON ui.UserID=um.ID
 		WHERE Username LIKE '%".db_string($_GET['username'])."%'
 		ORDER BY Username
 		LIMIT $Limit");
@@ -34,7 +35,7 @@ if (isset($_GET['username'])) {
 }
 
 $JsonUsers = array();
-foreach($Results as $Result) {
+foreach ($Results as $Result) {
 	list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned) = $Result;
 
 	$JsonUsers[] = array(

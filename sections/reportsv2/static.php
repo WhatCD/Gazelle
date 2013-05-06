@@ -5,7 +5,7 @@
  * for that (reports.php). If you wanted to add a new view, you'd simply
  * add to the case statement(s) below and add an entry to views.php to
  * explain it.
- * Any changes made to this page within the foreach() should probably be
+ * Any changes made to this page within the foreach loop should probably be
  * replicated on the auto page (reports.php).
  */
 
@@ -532,7 +532,7 @@ if (count($Reports) == 0) {
 										<strong>Warning</strong>
 										<select name="warning" id="warning<?=$ReportID?>">
 <?
-		for($i = 0; $i < 9; $i++) { ?>
+		for ($i = 0; $i < 9; $i++) { ?>
 										<option value="<?=$i?>"><?=$i?></option>
 <?
 		} ?>

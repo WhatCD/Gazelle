@@ -44,7 +44,7 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
 			</tr>
-<? foreach($Results as $Result) {
+<? foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
 ?>
 			<tr>

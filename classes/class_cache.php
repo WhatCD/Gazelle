@@ -16,10 +16,10 @@ CACHE::get_value and CACHE::cache_value. get_value uses the same argument
 as get, but cache_value only takes the key, the value, and the duration
 (no zlib).
 
-//unix sockets
+// Unix sockets
 memcached -d -m 5120 -s /var/run/memcached.sock -a 0777 -t16 -C -u root
 
-//tcp bind
+// TCP bind
 memcached -d -m 8192 -l 10.10.0.1 -t8 -C
 
 |*************************************************************************/
@@ -28,8 +28,7 @@ if (!extension_loaded('memcache')) {
 	die('Memcache Extension not loaded.');
 }
 
-class CACHE extends Memcache
-{
+class CACHE extends Memcache {
 	/**
 	 * Torrent Group cache version
 	 */
@@ -64,51 +63,51 @@ class CACHE extends Memcache
 
 	// Allows us to set an expiration on otherwise perminantly cache'd values
 	// Useful for disabled users, locked threads, basically reducing ram usage
-	public function expire_value($Key, $Duration=2592000) {
-		$StartTime=microtime(true);
+	public function expire_value($Key, $Duration = 2592000) {
+		$StartTime = microtime(true);
 		$this->set($Key, $this->get($Key), $Duration);
-		$this->Time+=(microtime(true)-$StartTime)*1000;
+		$this->Time += (microtime(true) - $StartTime) * 1000;
 	}
 
 	// Wrapper for Memcache::set, with the zlib option removed and default duration of 30 days
-	public function cache_value($Key, $Value, $Duration=2592000) {
-		$StartTime=microtime(true);
+	public function cache_value($Key, $Value, $Duration = 2592000) {
+		$StartTime = microtime(true);
 		if (empty($Key)) {
 			trigger_error("Cache insert failed for empty key");
 		}
 		if (!$this->set($Key, $Value, 0, $Duration)) {
 			trigger_error("Cache insert failed for key $Key");
 		}
-		$this->Time+=(microtime(true)-$StartTime)*1000;
+		$this->Time += (microtime(true) - $StartTime) * 1000;
 	}
 
 	// Wrapper for Memcache::add, with the zlib option removed and default duration of 30 days
-	public function add_value($Key, $Value, $Duration=2592000) {
-		$StartTime=microtime(true);
-		$Added=$this->add($Key, $Value, 0, $Duration);
-		$this->Time+=(microtime(true)-$StartTime)*1000;
+	public function add_value($Key, $Value, $Duration = 2592000) {
+		$StartTime = microtime(true);
+		$Added = $this->add($Key, $Value, 0, $Duration);
+		$this->Time += (microtime(true) - $StartTime) * 1000;
 		return $Added;
 	}
 
-	public function replace_value($Key, $Value, $Duration=2592000) {
-		$StartTime=microtime(true);
+	public function replace_value($Key, $Value, $Duration = 2592000) {
+		$StartTime = microtime(true);
 		$this->replace($Key, $Value, false, $Duration);
-		$this->Time+=(microtime(true)-$StartTime)*1000;
+		$this->Time += (microtime(true) - $StartTime) * 1000;
 	}
 
-	public function get_value($Key, $NoCache=false) {
+	public function get_value($Key, $NoCache = false) {
 		if (!$this->InternalCache) {
 			$NoCache = true;
 		}
 		$StartTime=microtime(true);
 		if (empty($Key)) {
-			trigger_error("Cache retrieval failed for empty key");
+			trigger_error('Cache retrieval failed for empty key');
 		}
 
 		if (isset($_GET['clearcache']) && $this->CanClear && !Misc::in_array_partial($Key, $this->PersistentKeys)) {
 			if ($_GET['clearcache'] == 1) {
-				//Because check_perms isn't true until loggeduser is pulled from the cache, we have to remove the entries loaded before the loggeduser data
-				//Because of this, not user cache data will require a secondary pageload following the clearcache to update
+				// Because check_perms() isn't true until LoggedUser is pulled from the cache, we have to remove the entries loaded before the LoggedUser data
+				// Because of this, not user cache data will require a secondary pageload following the clearcache to update
 				if (count($this->CacheHits) > 0) {
 					foreach (array_keys($this->CacheHits) as $HitKey) {
 						if (!Misc::in_array_partial($HitKey, $this->PersistentKeys)) {
@@ -118,11 +117,11 @@ class CACHE extends Memcache
 					}
 				}
 				$this->delete($Key);
-				$this->Time+=(microtime(true)-$StartTime)*1000;
+				$this->Time += (microtime(true) - $StartTime) * 1000;
 				return false;
 			} elseif ($_GET['clearcache'] == $Key) {
 				$this->delete($Key);
-				$this->Time+=(microtime(true)-$StartTime)*1000;
+				$this->Time += (microtime(true) - $StartTime) * 1000;
 				return false;
 			} elseif (in_array($_GET['clearcache'], $this->CacheHits)) {
 				unset($this->CacheHits[$_GET['clearcache']]);
@@ -130,9 +129,9 @@ class CACHE extends Memcache
 			}
 		}
 
-		//For cases like the forums, if a keys already loaded grab the existing pointer
+		// For cases like the forums, if a key is already loaded, grab the existing pointer
 		if (isset($this->CacheHits[$Key]) && !$NoCache) {
-			$this->Time+=(microtime(true)-$StartTime)*1000;
+			$this->Time += (microtime(true) - $StartTime) * 1000;
 			return $this->CacheHits[$Key];
 		}
 
@@ -140,26 +139,26 @@ class CACHE extends Memcache
 		if ($Return !== false) {
 			$this->CacheHits[$Key] = $NoCache ? null : $Return;
 		}
-		$this->Time+=(microtime(true)-$StartTime)*1000;
+		$this->Time += (microtime(true) - $StartTime) * 1000;
 		return $Return;
 	}
 
 	// Wrapper for Memcache::delete. For a reason, see above.
 	public function delete_value($Key) {
-		$StartTime=microtime(true);
+		$StartTime = microtime(true);
 		if (empty($Key)) {
-			trigger_error("Cache deletion failed for empty key");
+			trigger_error('Cache deletion failed for empty key');
 		}
 		if (!$this->delete($Key)) {
 			//trigger_error("Cache delete failed for key $Key");
 		}
-		$this->Time+=(microtime(true)-$StartTime)*1000;
+		$this->Time += (microtime(true) - $StartTime) * 1000;
 	}
 
-	public function increment_value($Key,$Value=1) {
-		$StartTime=microtime(true);
-		$this->increment($Key,$Value);
-		$this->Time+=(microtime(true)-$StartTime)*1000;
+	public function increment_value($Key, $Value = 1) {
+		$StartTime = microtime(true);
+		$this->increment($Key, $Value);
+		$this->Time += (microtime(true) - $StartTime) * 1000;
 	}
 
 	//---------- memcachedb functions ----------//
@@ -184,7 +183,7 @@ class CACHE extends Memcache
 		$this->MemcacheDBKey = '';
 	}
 
-	public function commit_transaction($Time=2592000) {
+	public function commit_transaction($Time = 2592000) {
 		if (!$this->InTransaction) {
 			return false;
 		}
@@ -261,10 +260,10 @@ class CACHE extends Memcache
 		}
 		foreach ($Values as $Key => $Value) {
 			if (!array_key_exists($Key, $UpdateArray)) {
-				trigger_error('Bad transaction key ('.$Key.') for cache '.$this->MemcacheDBKey);
+				trigger_error("Bad transaction key ($Key) for cache ".$this->MemcacheDBKey);
 			}
 			if (!is_number($Value)) {
-				trigger_error('Tried to increment with non-number ('.$Key.') for cache '.$this->MemcacheDBKey);
+				trigger_error("Tried to increment with non-number ($Key) for cache ".$this->MemcacheDBKey);
 			}
 			$UpdateArray[$Key] += $Value; // Increment value
 		}
@@ -316,12 +315,12 @@ class CACHE extends Memcache
 			return false;
 		}
 		if (!isset($this->MemcacheDBArray[$Row])) {
-			trigger_error('Tried to delete non-existent row ('.$Row.') for cache '.$this->MemcacheDBKey);
+			trigger_error("Tried to delete non-existent row ($Row) for cache ".$this->MemcacheDBKey);
 		}
 		unset($this->MemcacheDBArray[$Row]);
 	}
 
-	public function update($Key, $Rows, $Values, $Time=2592000) {
+	public function update($Key, $Rows, $Values, $Time = 2592000) {
 		if (!$this->InTransaction) {
 			$this->begin_transaction($Key);
 			$this->update_transaction($Rows, $Values);
@@ -329,7 +328,6 @@ class CACHE extends Memcache
 		} else {
 			$this->update_transaction($Rows, $Values);
 		}
-
 	}
 
 	/**
