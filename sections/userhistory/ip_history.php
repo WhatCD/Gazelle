@@ -143,12 +143,12 @@ $Pages = Format::get_pages($Page, $NumResults, IPS_PER_PAGE, 9);
 	</div>
 	<div class="linkbox">
 <?	if ($UsersOnly) { ?>
-	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View all IP addresses</a>
+		<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View all IP addresses</a>
 <?	} else { ?>
-	<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View IP addresses with users</a>
+		<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View IP addresses with users</a>
 <?	} ?>
-	<br />
-	<?=$Pages?>
+		<br />
+		<?=$Pages?>
 	</div>
 	<table>
 		<tr class="colhead">
@@ -163,11 +163,13 @@ $Pages = Format::get_pages($Page, $NumResults, IPS_PER_PAGE, 9);
 		</td></tr>
 	</table>
 
-<table>
+	<table id="iphistory">
 		<tr class="colhead">
 			<td>IP address</td>
-			<td>Started</td>
+			<td>Started <a href="#" onclick="$('#iphistory td:nth-child(2), #iphistory td:nth-child(4)').hide(); $('#iphistory td:nth-child(3), #iphistory td:nth-child(5)').show(); return false;" class="brackets">Toggle</a></td>
+			<td class="hidden">Started <a href="#" onclick="$('#iphistory td:nth-child(2), #iphistory td:nth-child(4)').show(); $('#iphistory td:nth-child(3), #iphistory td:nth-child(5)').hide(); return false;" class="brackets">Toggle</a></td>
 			<td>Ended</td>
+			<td class="hidden">Ended</td>
 			<td>Elapsed</td>
 		</tr>
 <?
@@ -198,54 +200,55 @@ foreach ($Results as $Index => $Result) {
 			<td>
 				<?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)<?
 	if ($CanManageIPBans) {
-			if (!isset($IPs[$IP])) {
-					$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".Tools::ip_to_unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
+		if (!isset($IPs[$IP])) {
+			$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".Tools::ip_to_unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
 			$DB->query($sql);
 
 			if ($DB->record_count() > 0) {
-							$IPs[$IP] = true;
-			?>
-				<strong>[Banned]
-			<? }
-					else {
-				$IPs[$IP] = false; ?>
+				$IPs[$IP] = true;
+?>
+				<strong>[Banned]</strong>
+<?
+			} else {
+				$IPs[$IP] = false;
+?>
 				<a id="<?=$counter?>" href="#" onclick="Ban('<?=$IP?>', '<?=$ID?>', '<?=$counter?>'); this.onclick=null;return false;" class="brackets">Ban</a>
-<?			}
+<?
+			}
 			$counter++;
 		}
 	}
 ?>
-
-
-			<br />
-			<?=Tools::get_host_by_ajax($IP)?>
-			<?=($HasDupe ?
-			'<a href="#" onclick="ShowIPs('.$Index.'); return false;">('.count($UserIDs).')</a>'
-			: '(0)')?></td>
+				<br />
+				<?=Tools::get_host_by_ajax($IP)?>
+				<?=($HasDupe ? '<a href="#" onclick="ShowIPs('.$Index.'); return false;">('.count($UserIDs).')</a>' : '(0)')?>
+			</td>
 			<td><?=time_diff($StartTime)?></td>
+			<td class="hidden"><?=$StartTime?></td>
 			<td><?=time_diff($EndTime)?></td>
+			<td class="hidden"><?=$EndTime?></td>
 			<td><?//time_diff(strtotime($StartTime), strtotime($EndTime)); ?></td>
 		</tr>
 <?
 	if ($HasDupe) {
 		$HideMe = (count($UserIDs) > 10);
 		foreach ($UserIDs as $Key => $Val) {
-		if (!$UserEndTimes[$Key]) {
-			$UserEndTimes[$Key] = sqltime();
-		}
+			if (!$UserEndTimes[$Key]) {
+				$UserEndTimes[$Key] = sqltime();
+			}
 ?>
 		<tr class="rowb<?=($HideMe ? ' hidden' : '')?>" name="<?=$Index?>">
 			<td>&nbsp;&nbsp;&#187;&nbsp;<?=Users::format_username($Val, true, true, true)?></td>
 			<td><?=time_diff($UserStartTimes[$Key])?></td>
+			<td class="hidden"><?=$UserStartTimes[$Key]?></td>
 			<td><?=time_diff($UserEndTimes[$Key])?></td>
+			<td class="hidden"><?=$UserEndTimes[$Key]?></td>
 			<td><?//time_diff(strtotime($UserStartTimes[$Key]), strtotime($UserEndTimes[$Key])); ?></td>
 		</tr>
 <?
 
 		}
 	}
-?>
-<?
 }
 ?>
 	</table>
@@ -253,5 +256,5 @@ foreach ($Results as $Index => $Result) {
 		<?=$Pages?>
 	</div>
 </div>
-
-<? View::show_footer(); ?>
+<?
+View::show_footer();

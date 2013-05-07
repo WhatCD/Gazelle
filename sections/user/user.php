@@ -664,7 +664,7 @@ if ((check_perms('users_view_invites')) && $Invited > 0) {
 }
 
 // Requests
-if (check_paranoia_here('requestsvoted_list')) {
+if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_list')) {
 	$DB->query("SELECT
 			r.ID,
 			r.CategoryID,

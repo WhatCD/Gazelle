@@ -188,6 +188,8 @@ if ($_POST['ResetIPHistory'] && check_perms('users_edit_reset_keys')) {
 	$DB->query("UPDATE users_main SET IP='127.0.0.1' WHERE ID='$UserID'");
 	$DB->query("UPDATE xbt_snatched SET IP = '' WHERE uid='$UserID'");
 	$DB->query("UPDATE users_history_passwords SET ChangerIP = '' WHERE UserID = ".$UserID);
+	$DB->query("UPDATE users_history_passkeys SET ChangerIP = '' WHERE UserID = ".$UserID);
+
 	$EditSummary[] = 'IP history cleared';
 }
 

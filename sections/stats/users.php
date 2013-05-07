@@ -38,7 +38,13 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 
 if (!$ClassDistribution = $Cache->get_value('class_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
-	$DB->query("SELECT p.Name, COUNT(m.ID) AS Users FROM users_main AS m JOIN permissions AS p ON m.PermissionID=p.ID WHERE m.Enabled='1' GROUP BY p.Name ORDER BY Users DESC");
+	$DB->query("
+		SELECT p.Name, COUNT(m.ID) AS Users
+		FROM users_main AS m
+			JOIN permissions AS p ON m.PermissionID=p.ID
+		WHERE m.Enabled='1'
+		GROUP BY p.Name
+		ORDER BY Users DESC");
 	$ClassSizes = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
 	foreach ($ClassSizes as $ClassSize) {
@@ -49,13 +55,17 @@ if (!$ClassDistribution = $Cache->get_value('class_distribution')) {
 	$Pie->color('FF33CC');
 	$Pie->generate();
 	$ClassDistribution = $Pie->url();
-	$Cache->cache_value('class_distribution',$ClassDistribution,3600*24*14);
+	$Cache->cache_value('class_distribution', $ClassDistribution, 3600 * 24 * 14);
 }
 if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
 	
 	
-	$DB->query("SELECT OperatingSystem, COUNT(UserID) AS Users FROM users_sessions GROUP BY OperatingSystem ORDER BY Users DESC");
+	$DB->query("
+		SELECT OperatingSystem, COUNT(UserID) AS Users
+		FROM users_sessions
+		GROUP BY OperatingSystem
+		ORDER BY Users DESC");
 	
 	$Platforms = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
@@ -67,14 +77,18 @@ if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 	$Pie->color('8A00B8');
 	$Pie->generate();
 	$PlatformDistribution = $Pie->url();
-	$Cache->cache_value('platform_distribution',$PlatformDistribution,3600 * 24 * 14);
+	$Cache->cache_value('platform_distribution', $PlatformDistribution, 3600 * 24 * 14);
 }
 
 if (!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
 	
 	
-	$DB->query("SELECT Browser, COUNT(UserID) AS Users FROM users_sessions GROUP BY Browser ORDER BY Users DESC");
+	$DB->query("
+		SELECT Browser, COUNT(UserID) AS Users
+		FROM users_sessions
+		GROUP BY Browser
+		ORDER BY Users DESC");
 	
 	$Browsers = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
@@ -86,15 +100,25 @@ if (!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
 	$Pie->color('008AB8');
 	$Pie->generate();
 	$BrowserDistribution = $Pie->url();
-	$Cache->cache_value('browser_distribution',$BrowserDistribution,3600 * 24 * 14);
+	$Cache->cache_value('browser_distribution', $BrowserDistribution, 3600 * 24 * 14);
 }
 
 
 //Timeline generation
 if (!list($Labels,$InFlow,$OutFlow,$Max) = $Cache->get_value('users_timeline')) {
-	$DB->query("SELECT DATE_FORMAT(JoinDate,'%b \\'%y') AS Month, COUNT(UserID) FROM users_info GROUP BY Month ORDER BY JoinDate DESC LIMIT 1, 12");
+	$DB->query("
+		SELECT DATE_FORMAT(JoinDate,'%b \\'%y') AS Month, COUNT(UserID)
+		FROM users_info
+		GROUP BY Month
+		ORDER BY JoinDate DESC
+		LIMIT 1, 12");
 	$TimelineIn = array_reverse($DB->to_array());
-	$DB->query("SELECT DATE_FORMAT(BanDate,'%b \\'%y') AS Month, COUNT(UserID) FROM users_info GROUP BY Month ORDER BY BanDate DESC LIMIT 1, 12");
+	$DB->query("
+		SELECT DATE_FORMAT(BanDate,'%b \\'%y') AS Month, COUNT(UserID)
+		FROM users_info
+		GROUP BY Month
+		ORDER BY BanDate DESC
+		LIMIT 1, 12");
 	$TimelineOut = array_reverse($DB->to_array());
 	foreach ($TimelineIn as $Month) {
 		list($Label,$Amount) = $Month;

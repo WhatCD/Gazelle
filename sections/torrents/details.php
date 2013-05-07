@@ -608,7 +608,7 @@ foreach ($TorrentList as $Torrent) {
 		</table>
 <?
 $Requests = get_group_requests($GroupID);
-if (count($Requests) > 0) {
+if (empty($LoggedUser['DisableRequests']) && count($Requests) > 0) {
 	$i = 0;
 ?>
 		<div class="box">

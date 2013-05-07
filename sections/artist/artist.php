@@ -77,31 +77,34 @@ if ($Data) {
 ob_start();
 
 // Requests
-$Requests = $Cache->get_value('artists_requests_'.$ArtistID);
-if (!is_array($Requests)) {
-	$DB->query("
-		SELECT
-			r.ID,
-			r.CategoryID,
-			r.Title,
-			r.Year,
-			r.TimeAdded,
-			COUNT(rv.UserID) AS Votes,
-			SUM(rv.Bounty) AS Bounty
-		FROM requests AS r
-			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
-		WHERE ra.ArtistID = ".$ArtistID."
-			AND r.TorrentID = 0
-		GROUP BY r.ID
-		ORDER BY Votes DESC");
+$Requests = array();
+if (empty($LoggedUser['DisableRequests'])) {
+	$Requests = $Cache->get_value('artists_requests_'.$ArtistID);
+	if (!is_array($Requests)) {
+		$DB->query("
+			SELECT
+				r.ID,
+				r.CategoryID,
+				r.Title,
+				r.Year,
+				r.TimeAdded,
+				COUNT(rv.UserID) AS Votes,
+				SUM(rv.Bounty) AS Bounty
+			FROM requests AS r
+				LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
+				LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
+			WHERE ra.ArtistID = ".$ArtistID."
+				AND r.TorrentID = 0
+			GROUP BY r.ID
+			ORDER BY Votes DESC");
 
-	if ($DB->record_count() > 0) {
-		$Requests = $DB->to_array();
-	} else {
-		$Requests = array();
+		if ($DB->record_count() > 0) {
+			$Requests = $DB->to_array();
+		} else {
+			$Requests = array();
+		}
+		$Cache->cache_value('artists_requests_'.$ArtistID, $Requests);
 	}
-	$Cache->cache_value('artists_requests_'.$ArtistID, $Requests);
 }
 $NumRequests = count($Requests);
 
