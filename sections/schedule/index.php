@@ -248,8 +248,7 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 				$Query .= " OR NOT ".$L['Extra'];
 			}
 			$Query .= ")
-				AND Enabled='1'
-				AND ID NOT IN (213461)";
+				AND Enabled='1'";
 
 		$DB->query($Query);
 		$UserIDs = $DB->collect('ID');
@@ -346,7 +345,7 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 		$UserIDs = $DB->collect('ID');
 	if (count($UserIDs) > 0) {
 		$Subject = 'Leeching Disabled';
-		$Message = 'You have downloaded more then 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://what.cd/wiki.php?action=article&amp;id=110';
+		$Message = 'You have downloaded more then 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://'.SSL_SITE_URL.'/wiki.php?action=article&amp;id=110';
 		foreach ($UserIDs as $UserID) {
 			Misc::send_pm($UserID, 0, $Subject, $Message);
 			send_irc('PRIVMSG #reports :!leechdisabled Downloaded 10 GB+ on Ratio Watch. https://'.SSL_SITE_URL."/user.php?id=$UserID");
@@ -697,13 +696,14 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 
 	//------------- Lock old threads ----------------------------------------//
 	sleep(10);
-	$DB->query("SELECT t.ID
+	$DB->query("SELECT t.ID, t.ForumID
 				FROM forums_topics AS t
 					JOIN forums AS f ON t.ForumID = f.ID
 				WHERE t.IsLocked='0' AND t.IsSticky='0'
 					AND DATEDIFF(CURDATE(),DATE(t.LastPostTime))/7>f.AutoLockWeeks
 					AND f.AutoLock = '1'");
 	$IDs = $DB->collect('ID');
+	$ForumIDs = $DB->collect('ForumID');
 
 	if (count($IDs) > 0) {
 		$LockIDs = implode(',', $IDs);
@@ -715,8 +715,13 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 			$Cache->begin_transaction('thread_'.$ID.'_info');
 			$Cache->update_row(false, array('IsLocked'=>'1'));
 			$Cache->commit_transaction(3600 * 24 * 30);
-			$Cache->expire_value('thread_'.$TopicID.'_catalogue_0',3600 * 24 * 30);
-			$Cache->expire_value('thread_'.$TopicID.'_info',3600 * 24 * 30);
+			$Cache->expire_value('thread_'.$ID.'_catalogue_0',3600 * 24 * 30);
+			$Cache->expire_value('thread_'.$ID.'_info',3600 * 24 * 30);
+		}
+
+		$ForumIDs = array_flip(array_flip($ForumIDs));
+		foreach ($ForumIDs as $ForumID) {
+			$Cache->delete_value('forums_'.$ForumID);
 		}
 	}
 	echo "Old threads locked\n";
@@ -1041,7 +1046,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 			$TorrentAlerts[$UserID]['Count']++;
 		}
 		foreach ($TorrentAlerts as $UserID => $MessageInfo) {
-			Misc::send_pm($UserID, 0, 'Unseeded torrent notification', $MessageInfo['Count']." of your uploads will be deleted for inactivity soon. Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=https://what.cd/wiki.php?action=article&amp;id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count'] > 1 ? 's' : '').' will be removed for inactivity:'.$MessageInfo['Msg']."\n\nIf you no longer wish to receive these notifications, please disable them in your profile settings.");
+			Misc::send_pm($UserID, 0, 'Unseeded torrent notification', $MessageInfo['Count']." of your uploads will be deleted for inactivity soon. Unseeded torrents are deleted after 4 weeks. If you still have the files, you can seed your uploads by ensuring the torrents are in your client and that they aren't stopped. You can view the time that a torrent has been unseeded by clicking on the torrent description line and looking for the \"Last active\" time. For more information, please go [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;id=663]here[/url].\n\nThe following torrent".($MessageInfo['Count'] > 1 ? 's' : '').' will be removed for inactivity:'.$MessageInfo['Msg']."\n\nIf you no longer wish to receive these notifications, please disable them in your profile settings.");
 		}
 	}
 

@@ -129,7 +129,7 @@ if ($_REQUEST['usetoken'] && $FreeTorrent == '0') {
 }
 
 //Stupid Recent Snatches On User Page
-if ($CategoryID == '1' && $Image != "") {
+if ($CategoryID == '1' && $Image != '') {
 	$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
 	if (!empty($RecentSnatches)) {
 		$Snatch = array('ID'=>$GroupID,'Name'=>$Name,'Artist'=>$Artists,'WikiImage'=>$Image);
@@ -145,8 +145,9 @@ if ($CategoryID == '1' && $Image != "") {
 	}
 }
 
-$DB->query("INSERT IGNORE INTO users_downloads (UserID, TorrentID, Time) VALUES ('$UserID', '$TorrentID', '".sqltime()."')");
-
+$DB->query("
+	INSERT IGNORE INTO users_downloads (UserID, TorrentID, Time)
+	VALUES ('$UserID', '$TorrentID', '".sqltime()."')");
 
 $DB->query("SELECT File FROM torrents_files WHERE TorrentID='$TorrentID'");
 

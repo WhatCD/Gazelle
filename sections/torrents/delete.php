@@ -37,7 +37,7 @@ if ($Snatches > 4 && !check_perms('torrents_delete')) { // Should this be torren
 View::show_header('Delete torrent', 'reportsv2');
 ?>
 <div class="thin center">
-	<div class="box" style="width:600px; margin:0px auto;">
+	<div class="box" style="width: 600px; margin: 0px auto;">
 		<div class="head colhead">
 			Delete torrent
 		</div>
@@ -65,44 +65,45 @@ View::show_header('Delete torrent', 'reportsv2');
 <?
 if (check_perms('admin_reports')) {
 ?>
-<div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto">
+<div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto;">
 <?
 	require(SERVER_ROOT.'/sections/reportsv2/array.php');
 	require(SERVER_ROOT.'/classes/class_text.php');
 	$Text = NEW TEXT;
 	$ReportID = 0;
-	$DB->query("SELECT
-			tg.Name,
-			tg.ID,
-			CASE COUNT(ta.GroupID)
-				WHEN 1 THEN aa.ArtistID
-				WHEN 0 THEN '0'
-				ELSE '0'
-			END AS ArtistID,
-			CASE COUNT(ta.GroupID)
-				WHEN 1 THEN aa.Name
-				WHEN 0 THEN ''
-				ELSE 'Various Artists'
-			END AS ArtistName,
-			tg.Year,
-			tg.CategoryID,
-			t.Time,
-			t.Remastered,
-			t.RemasterTitle,
-			t.RemasterYear,
-			t.Media,
-			t.Format,
-			t.Encoding,
-			t.Size,
-			t.HasLog,
-			t.LogScore,
-			t.UserID AS UploaderID,
-			uploader.Username
+	$DB->query("
+			SELECT
+				tg.Name,
+				tg.ID,
+				CASE COUNT(ta.GroupID)
+					WHEN 1 THEN aa.ArtistID
+					WHEN 0 THEN '0'
+					ELSE '0'
+				END AS ArtistID,
+				CASE COUNT(ta.GroupID)
+					WHEN 1 THEN aa.Name
+					WHEN 0 THEN ''
+					ELSE 'Various Artists'
+				END AS ArtistName,
+				tg.Year,
+				tg.CategoryID,
+				t.Time,
+				t.Remastered,
+				t.RemasterTitle,
+				t.RemasterYear,
+				t.Media,
+				t.Format,
+				t.Encoding,
+				t.Size,
+				t.HasLog,
+				t.LogScore,
+				t.UserID AS UploaderID,
+				uploader.Username
 			FROM torrents AS t
-			LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-			LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-			LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-			LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
+				LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
+				LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
+				LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
+				LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
 			WHERE t.ID=".$TorrentID);
 
 	if ($DB->record_count() < 1) {
@@ -123,7 +124,7 @@ if (check_perms('admin_reports')) {
 		$ReportType = $Types['master']['other'];
 	}
 	if ($ArtistID == 0 && empty($ArtistName)) {
-		$RawName = $GroupName.($Year ? " ($Year)" : "").($Format || $Encoding || $Media ? " [$Format/$Encoding/$Media]" : "").($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "").($HasLog ? " ($LogScore %)" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
+		$RawName = $GroupName.($Year ? " ($Year)" : '').($Format || $Encoding || $Media ? " [$Format/$Encoding/$Media]" : '').($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : '').($HasLog ? " ($LogScore %)" : '').' ('.number_format($Size / (1024 * 1024), 2).' MB)';
 		$LinkName = "<a href='torrents.php?id=$GroupID'>$GroupName".($Year ? " ($Year)" : "")."</a> <a href='torrents.php?torrentid=$TorrentID'>".($Format || $Encoding || $Media ? " [$Format/$Encoding/$Media]" : "").($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."</a>".($HasLog ? " <a href='torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'>(Log: $LogScore %)</a>" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 		$BBName = "[url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : "")."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]".($Remastered ? " &lt;$RemasterTitle - $RemasterYear&gt;" : "")."[/url] ".($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID'](Log: $LogScore %)[/url]" : "")." (".number_format($Size/(1024*1024), 2)." MB)";
 	} elseif ($ArtistID == 0 && $ArtistName == 'Various Artists') {

@@ -51,7 +51,7 @@ View::show_header('Uploading Rules');
 	</form>
 	<br />
 	<div class="before_rules">
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="Introk"><a href="#Intro"><strong>Introduction</strong></a></li>
 				<li id="h1k"><a href="#h1">1. <strong>Uploading Rules</strong></a>
@@ -110,15 +110,15 @@ View::show_header('Uploading Rules');
 	<div id="actual_rules">
 		<div class="before_rules">
 			<h4 id="Intro"><a href="#Introk"><strong>&uarr;</strong></a> Introduction</h4>
-			<div class="box pad" style="padding:10px 10px 10px 20px;">
+			<div class="box pad" style="padding: 10px 10px 10px 20px;">
 				<p>The uploading rules below are overwhelmingly long and detailed for a reason. The length is necessary to explain the rules clearly and thoroughly. A summary of each rule is in <span style="font-weight: bold;">bold text</span> before the actual rule for easier reading. You may also find the corresponding rule sections in the <a href="#Index">Index</a>. The corresponding <a href="#">&uarr;</a> (move one level up) and <a href="#Index">rule section links</a> (move down into the document) help provide quick navigation.</p>
-				<p>Before you upload anything, if you are still unsure of what a rule means, PLEASE ask your questions at any of the following points of site user support: <a href="staff.php">First-Line Support</a>, <a href="forums.php?action=viewforum&amp;forumid=8">The Help Forum</a>, or <a href="wiki.php?action=article&amp;name=IRC">#what.cd-help on IRC</a>. Privately message a <a href="staff.php">moderator</a> on the site if other support has directed you to a moderator or if support has been unhelpful in your particular case. If you find any dead links in the upload rules, let a <a href="staff.php">staff member</a> know so it can be promptly fixed.</p>
+				<p>Before you upload anything, if you are still unsure of what a rule means, PLEASE ask your questions at any of the following points of site user support: <a href="staff.php">First-Line Support</a>, <a href="forums.php?action=viewforum&amp;forumid=8">The Help Forum</a>, or <a href="wiki.php?action=article&amp;name=IRC"><?=BOT_HELP_CHAN?> on IRC</a>. Privately message a <a href="staff.php">moderator</a> on the site if other support has directed you to a moderator or if support has been unhelpful in your particular case. If you find any dead links in the upload rules, let a <a href="staff.php">developer</a> know so it can be promptly fixed.</p>
 			</div>
 		</div>
 		<h4 id="h1"><a href="#h1k"><strong>&uarr;</strong></a> <a href="#h1">1.</a> Uploading Rules</h4>
 
 		<h5 id="h1.1"><a href="#h1.1k"><strong>&uarr;</strong></a> <a href="#h1.1">1.1.</a> General</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r1.1.1"><a href="#h1.1"><strong>&uarr;_</strong></a> <a href="#r1.1.1">1.1.1.</a> <strong>Only music, applications, comic books, ebooks, comedy (audio), audiobooks, and music-related eLearning videos are allowed on the site.</strong> </li>
 				<li id="r1.1.2"><a href="#h1.1"><strong>&uarr;_</strong></a> <a href="#r1.1.2">1.1.2.</a> <strong>Duplicate torrents in any category are not allowed.</strong> There are some exceptions to this rule, which are outlined in their relevant sections below.</li>
@@ -135,7 +135,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h1.2"><a href="#h1.2k"><strong>&uarr;</strong></a> <a href="#h1.2">1.2.</a> Specifically Banned</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r1.2.1"><a href="#h1.2"><strong>&uarr;_</strong></a> <a href="#r1.2.1">1.2.1.</a> <strong>Anything not specifically allowed below.</strong> If you have any doubts, ask before uploading.</li>
 				<li id="r1.2.2"><a href="#h1.2"><strong>&uarr;_</strong></a> <a href="#r1.2.2">1.2.2.</a> <strong>Any car parts and car data programs.</strong> This ban includes programs like AllData and vendor-specific diagnostic programs such as Carsoft.</li>
@@ -148,7 +148,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h1.3"><a href="#h1.3k"><strong>&uarr;</strong></a> <a href="#h1.3">1.3.</a> Scene Uploads</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r1.3.1"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.1">1.3.1.</a> <strong>Do not add irrelevant credits to your torrent.</strong> Your name is credited to the upload, and there's no need to add it anywhere else.</li>
 				<li id="r1.3.2"><a href="#h1.3"><strong>&uarr;_</strong></a> <a href="#r1.3.2">1.3.2.</a> <strong>You may give credit to the release group (optional).</strong> If you really want to give credit to the release group, mention the full release name, including group name, in the Release description section only. Do not add this information to the Album description section.</li>
@@ -162,7 +162,7 @@ View::show_header('Uploading Rules');
 		<h4 id="h2"><a href="#h2k"><strong>&uarr;</strong></a> <a href="#h2">2.</a> Music</h4>
 
 		<h5 id="h2.1"><a href="#h2.1k"><strong>&uarr;</strong></a> <a href="#h2.1">2.1.</a> General</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 
 				<li id="r2.1.1"><a href="#h2.1"><strong>&uarr;_</strong></a> <a href="#r2.1.1">2.1.1.</a> <strong>The only formats allowed for music are:</strong>
@@ -235,10 +235,10 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h2.2"><a href="#h2.2k"><strong>&uarr;</strong></a> <a href="#h2.2">2.2.</a> Duplicates &amp; Trumping</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.2.0"><a href="#h2.2"><strong>&uarr;_</strong></a> <a href="#r2.2.0">2.2.0.</a> <strong>Overview</strong>
-					<p style="text-align:center">
+					<p style="text-align: center;">
 						<img src="static/common/trumpchart.png" alt="Audio Dupe and Trump Chart" /><br /><br />
 						<em>This chart is an overview of how the dupe and trump rules work.</em>
 					</p>
@@ -325,11 +325,11 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h2.3"><a href="#h2.3k"><strong>&uarr;</strong></a> <a href="#h2.3">2.3.</a> Formatting</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.3.1"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.1">2.3.1.</a> <strong>Music releases must be in a directory that contains the music.</strong> This includes single track releases, which must be enclosed in a torrent folder even if there is only one file in the torrent. No music may be compressed in an archive (e.g., .rar, .zip, .tar, .iso). Scene archives of music must be unpacked and not labeled as "scene."</li>
 				<li id="r2.3.2"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.2">2.3.2.</a> <strong>Name your directories with meaningful titles, such as "Artist - Album (Year) - Format." The minimum acceptable is "Album" although it is preferable to include more information.</strong> If the directory name does not include this minimum then another user can rename the directory, re-upload, and report your torrent for deletion. In addition, torrent folders that are named using the scene convention will be trumpable if the Scene label is absent from the torrent.</li>
-				<li id="r2.3.3"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.3">2.3.3.</a> <strong>Avoid creating unnecessary nested folders (such as an extra folder for the actual album) inside your properly named directory.</strong> A torrent with unnecessary nested folders is trumpable by a torrent with such folders removed. For single disc albums, all audio files must be included in the main torrent folder. For multi-disc albums, the main torrent folder may include one sub-folder that holds the audio file contents for each disc in the box set, e.g., the main torrent folder is "Adele - 19 (2008) - FLAC" while appropriate sub-folders may include "19 (Disc 1of2)" or "19" and "Live From The Hotel Cafe (Disc 2of2)" or "Acoustic Set Live From The Hotel Cafe, Los Angeles." Additional folders are unnecessary because they do nothing to improve the organization of the torrent. If you are uncertain about what to do for other cases, PM a staff member for guidance.</li>
+				<li id="r2.3.3"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.3">2.3.3.</a> <strong>Avoid creating unnecessary nested folders (such as an extra folder for the actual album) inside your properly named directory.</strong> A torrent with unnecessary nested folders is trumpable by a torrent with such folders removed. For single disc albums, all audio files must be included in the main torrent folder. For multi-disc albums, the main torrent folder may include one sub-folder that holds the audio file contents for each disc in the box set, e.g., the main torrent folder is &quot;<samp>Adele - 19 (2008) - FLAC</samp>&quot; while appropriate sub-folders may include &quot;<samp>19 (Disc 1of2)</samp>&quot; or &quot;<samp>19</samp>&quot; and &quot;<samp>Live From The Hotel Cafe (Disc 2of2)</samp>&quot; or &quot;<samp>Acoustic Set Live From The Hotel Cafe, Los Angeles</samp>&quot;. Additional folders are unnecessary because they do nothing to improve the organization of the torrent. If you are uncertain about what to do for other cases, PM a staff member for guidance.</li>
 				<li id="r2.3.4"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.4">2.3.4.</a> <strong>Label your torrents according to site standards.</strong> Follow the <a href="wiki.php?action=article&amp;id=159">torrent naming guide</a> for help on how to name your uploaded torrents properly. Use the Edition Information box on the <a href="upload.php">upload page</a> to denote different editions or versions of an album (e.g., censored version versus an uncensored version). If you need help merging or editing your upload, please request help in <a href="forums.php?action=viewforum&amp;forumid=61">this forum</a>. For the album category/release type, follow the <a href="wiki.php?action=article&amp;id=202">guidelines here</a>.</li>
 				<li id="r2.3.5"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.5">2.3.5.</a> <strong>Torrents should never have [REQ] or [REQUEST] in the title or artist name.</strong> If you fill a request using the <a href="requests.php">Requests system</a>, everyone who voted for it will be automatically notified.</li>
 				<li id="r2.3.6"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.6">2.3.6.</a> <strong>Torrent album titles must accurately reflect the actual album titles.</strong> Use proper capitalization when naming your albums. Typing the album titles in all lowercase letters or all capital letters is unacceptable and makes the torrent trumpable. For detailed information on naming practices see <a href="wiki.php?action=article&amp;id=369">this wiki</a> and <a href="wiki.php?action=article&amp;id=317">this wiki</a>. Any descriptions like [Advance] or [CDM] (if you must use them) should be entered in the Edition Information box on the <a href="upload.php">upload page</a>, not in the title. Exceptions: If the album uses special capitalization, then you may follow that convention.</li>
@@ -338,18 +338,18 @@ View::show_header('Uploading Rules');
 				<li id="r2.3.9"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.9">2.3.9.</a> <strong>All lossless analog rips should include clear information about source lineage.</strong> All lossless SACD digital layer analog rips and vinyl rips must include clear information about recording equipment used (see <a href="#h2.8">2.8</a>). If you used a USB turntable for a vinyl rip, clearly indicate this in your lineage information. Also include all intermediate steps up to lossless encoding, such as the program used for mastering, sound card used, etc. Lossless analog rips missing rip information can be trumped by better documented lossless analog rips of equal or better quality. In order to trump a lossless analog rip without a lineage, this lineage must be included as a .txt or .log file within the new torrent.</li>
 				<li id="r2.3.10"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.10">2.3.10.</a> <strong>All lossless soundboard recordings must include clear information about source lineage.</strong> This information should be displayed in the torrent description. Optionally, the uploader may include the information in a .txt or .log file within the torrent. Lossless soundboard recordings missing lineage information will be deleted if reported (see <a href="#r2.6.7">2.6.7</a>).</li>
 				<li id="r2.3.11"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.11">2.3.11.</a> <strong>File names must accurately reflect the song titles.</strong> You may not have file names like 01track.mp3, 02track.mp3, etc. Torrents containing files that are named with incorrect song titles can be trumped by properly labeled torrents. Also, torrents that are sourced from the scene but do not have the Scene label must comply with site naming rules (no release group names in the file names, no advertisements in the file names, etc.). Note that these must be substantial improvements such as the removal of garbage characters. Small changes such as diacritical marks are insufficient grounds for trumping. English translations of song titles in file names are encouraged, but not necessary for foreign language song titles. If all the letters in the track titles are capitalized, the torrent is trumpable. Exceptions: Rare albums featuring no track listing or untitled tracks may have file names like 01track.mp3, 02track.mp3, and so forth. Please note this tracklist in the Album description. If foreign language characters create playback problems for some systems and cannot be coherently translated, file names such as "01track" are acceptable for those few cases.</li>
-				<li id="r2.3.12"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.12">2.3.12.</a> <strong>The maximum character length for audio files is 180 characters.</strong> Path length values must not be so long that they cause incompatibility problems with operating systems and media players. For example, "My Artist Name - My Album Name (2012) - FLAC/01 - Long Track Name for the First Track.flac" is a typical torrent folder that contains the audio files. This path name consists of 90 characters. As of September 01, 2012, new torrents will be trumpable if their path lengths exceed 180 characters. This limit includes the number of characters in the main torrent folder (in this case, 46 characters) and any sub-folders and audio files within that torrent folder. For example, unnecessary nested folders will count towards this limit; and lengthy classical music file names will count towards this limit. Torrents that were uploaded prior to September 01, 2012 with character lengths that are longer than 180 characters may remain on the site. However, torrents with exceedingly long path lengths will only remain on the site at the discretion of staff.</li>
-				<li id="r2.3.13"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.13">2.3.13.</a> <strong>Track numbers are required in file names (e.g., "01 - TrackName.mp3").</strong> If a torrent without track numbers in the file names is uploaded, then a torrent with the track numbers in the file names can take its place. When formatted properly, file names will sort in order by track number or playing order. Also see <a href="#r2.3.14">2.3.14</a>. Exception: Track numbers are not required for single-track torrents.</li>
+				<li id="r2.3.12"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.12">2.3.12.</a> <strong>The maximum character length for audio files is 180 characters.</strong> Path length values must not be so long that they cause incompatibility problems with operating systems and media players. For example, &quot;<samp>My Artist Name - My Album Name (2012) - FLAC/01 - Long Track Name for the First Track.flac</samp>&quot; is a typical torrent folder that contains the audio files. This path name consists of 90 characters. As of September 01, 2012, new torrents will be trumpable if their path lengths exceed 180 characters. This limit includes the number of characters in the main torrent folder (in this case, 46 characters) and any sub-folders and audio files within that torrent folder. For example, unnecessary nested folders will count towards this limit; and lengthy classical music file names will count towards this limit. Torrents that were uploaded prior to September 01, 2012 with character lengths that are longer than 180 characters may remain on the site. However, torrents with exceedingly long path lengths will only remain on the site at the discretion of staff.</li>
+				<li id="r2.3.13"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.13">2.3.13.</a> <strong>Track numbers are required in file names (e.g., "<samp>01 - TrackName.mp3</samp>").</strong> If a torrent without track numbers in the file names is uploaded, then a torrent with the track numbers in the file names can take its place. When formatted properly, file names will sort in order by track number or playing order. Also see <a href="#r2.3.14">2.3.14</a>. Exception: Track numbers are not required for single-track torrents.</li>
 				<li id="r2.3.14"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.14">2.3.14.</a> <strong>When formatted properly, file names will alphabetically sort into the original playing order of the release.</strong>
 					<ul>
-						<li id="r2.3.14.1"><a href="#r2.3.14"><strong>&uarr;_</strong></a> <a href="#r2.3.14.1">2.3.14.1.</a><strong>For albums with more than one artist, if the name of the artist is in the filename, it must come after the track number in order for the tracks to sort into the correct order.</strong> For example, "01 U2 - Where the Streets Have No Name.flac" is a properly formatted file name for a multiple-artist album. "U2 - 01 - Where the Streets Have No Name.mp3" is not correct in the context of a compilation album because the resultant file list will sort in alphabetical order by artist rather than by numerical track number. <strong>Note:</strong> there is no requirement for artist names to be in the track filenames, other than <a href="#r2.3.16.2">2.3.16.2.</a> Torrents that have improperly-formatted or incomplete file names will be trumpable.</li>
+						<li id="r2.3.14.1"><a href="#r2.3.14"><strong>&uarr;_</strong></a> <a href="#r2.3.14.1">2.3.14.1.</a><strong>For albums with more than one artist, if the name of the artist is in the filename, it must come after the track number in order for the tracks to sort into the correct order.</strong> For example, &quot;<samp>01 - U2 - Where the Streets Have No Name.flac</samp>&quot; is a properly formatted file name for a multiple-artist album. &quot;<samp>U2 - 01 - Where the Streets Have No Name.mp3</samp>&quot; is not correct in the context of a compilation album because the resultant file list will sort in alphabetical order by artist rather than by numerical track number. <strong>Note:</strong> there is no requirement for artist names to be in the track filenames, other than <a href="#r2.3.16.2">2.3.16.2.</a> Torrents that have improperly-formatted or incomplete file names will be trumpable.</li>
 						<li id="r2.3.14.2"><a href="#r2.3.14"><strong>&uarr;_</strong></a> <a href="#r2.3.14.2">2.3.14.2.</a><strong>If a torrent has subfolders for multiple discs of a release, these subfolders must sort by disc order.</strong> If each disc has a title (<a href="torrents.php?id=62329">torrents.php?id=62329</a>, for example) and the discs are not numbered, this rule does not apply, and each subdirectory should have the disc name included.</li>
 					</ul>
 				</li>
-				<li id="r2.3.15"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.15">2.3.15.</a> <strong>Multiple-disc torrents cannot have tracks with the same numbers in one directory.</strong> You may place all the tracks for Disc One in one directory and all the tracks for Disc Two in another directory. If you prefer to use one directory for all the audio files, you must use successive numbering. For example, Disc One has 15 tracks and Disc Two has 20. You may either number tracks in Disc One as #01-#15 and those of Disc Two as #16-#35 in the same directory, or you may add a Disc number before the track numbers such that the numbers are #1 06 for Disc One Track 06, and #2 03 for Disc 2 Track 03, and so forth.</li>
+				<li id="r2.3.15"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.15">2.3.15.</a> <strong>Multiple-disc torrents cannot have tracks with the same numbers in one directory.</strong> You may place all the tracks for disc one in one directory and all the tracks for disc two in another directory. If you prefer to use one directory for all the audio files, you must use successive numbering. For example, disc one has 15 tracks and disc two has 20 tracks. You may either number tracks in disc one as #01-#15 and those of disc two as #16-#35 in the same directory, or you may add a disc number before the track numbers such that the numbers are #1 06 for Disc One Track 06, and #2 03 for Disc 2 Track 03, and so forth.</li>
 				<li id="r2.3.16"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.16">2.3.16.</a> <strong>Properly tag your music files.</strong>
 				<ul>
-					<li id="r2.3.16.1"><a href="#r2.3.16"><strong>&uarr;_</strong></a> <a href="#r2.3.16.1">2.3.16.1.</a>Certain meta tags (e.g., ID3, Vorbis) are required on all music uploads. Make sure to use the proper format tags for your files (e.g., no ID3 tags for FLAC - see <a href="#r2.2.10.8">2.2.10.8</a>. ID3v2 tags for files are highly recommended over ID3v1.</li>
+					<li id="r2.3.16.1"><a href="#r2.3.16"><strong>&uarr;_</strong></a> <a href="#r2.3.16.1">2.3.16.1.</a>Certain meta tags (e.g., ID3, Vorbis) are required on all music uploads. Make sure to use the proper format tags for your files (e.g., no ID3 tags for FLAC&mdash;see <a href="#r2.2.10.8">2.2.10.8</a>). ID3v2 tags for files are highly recommended over ID3v1.</li>
 					<li id="r2.3.16.2"><a href="#r2.3.16"><strong>&uarr;_</strong></a> <a href="#r2.3.16.2">2.3.16.2.</a>ID3 tags are recommended for AC3 torrents, but are not mandatory because the format does not natively support file metadata tagging (for AC3, the file names become the vehicle for correctly labeling media files). Because of this lack of support, the Album and Artist information must be included in the torrent folder for AC3 and DTS files. In addition, the Track Number and Track Title information must be included in the file names for AC3 and DTS files; for various artists compilations, the Track Artist must be included in the file names as well. ensuring that they also satisfy <a href="#r2.3.14">2.3.14.</a></li>
 					<li id="r2.3.16.3"><a href="#r2.3.16"><strong>&uarr;_</strong></a> <a href="#r2.3.16.3">2.3.16.3.</a>Torrents uploaded with both good ID3v1 tags and blank ID3v2 tags (a dual set of tags) are trumpable by torrents with either just good ID3v1 tags or good ID3v2 tags (a single set of tags). See <a href="wiki.php?action=article&amp;id=170">this wiki</a> for more information on ID3 tags.</li>
 					<li id="r2.3.16.4"><a href="#r2.3.16"><strong>&uarr;_</strong></a> <a href="#r2.3.16.4">2.3.16.4.</a>If you upload an album missing one or more of the required tags, then another user may add the tags, re-upload, and report your torrent for deletion. The required tags are:
@@ -364,13 +364,13 @@ View::show_header('Uploading Rules');
 				<span style="font-style: italic;">Note: The "Year" tag is optional, but strongly encouraged. However, if missing or incorrect, this is not grounds for trumping a torrent.</span>
 				</li>
 				<li id="r2.3.17"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.17">2.3.17.</a> <strong>The torrent artist for classical works should use the full composer name.</strong> Before uploading see <a href="wiki.php?action=article&amp;id=700">this wiki</a> for guidelines on uploading classical music torrents. Also, consult <a href="wiki.php?action=article&amp;id=691">this wiki</a> for a full explanation of the classical music tagging system.</li>
-				<li id="r2.3.18"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.18">2.3.18.</a> <strong>Newly re-tagged torrents trumping badly tagged torrents must reflect a substantial improvement over the previous tags.</strong> Small changes that include replacing ASCII characters with proper foreign language characters with diacritical marks, fixing slight misspellings, or missing an alternate spelling of an artist (e.g., excluding "The" before a band name) are insufficient grounds for replacing other torrents. Artist names that are misspelled in the tags are grounds for trumping; this includes character accents and characters that mean one letter in one language and a different letter in another language. Improper capitalization in the tags is grounds for trumping; this includes artist tags (or composer tags) that contain names that are all capitalized or track titles that are all capitalized. Tags with multiple entries in the same tag (e.g., track number and track title in the track title tags; or track number, artist, and track title in the artist tags) are subject to trumping. You may trump a release if the tags do not follow the data from a reputable music cataloguing service such as <a href="http://musicbrainz.org/">Musicbrainz</a> or <a href="http://www.discogs.com/">Discogs</a>. In the case of a conflict between reputable listings, either tagged version is equally preferred on the site and cannot trump the other. For example, an album is tagged differently in <a href="http://musicbrainz.org/">Musicbrainz</a> and in <a href="http://www.discogs.com/">Discogs</a>. Either style of tagging is permitted; neither is "better" than the other. In that case, any newly tagged torrents replacing an already properly tagged torrent, which follows good tagging convention, will result in a dupe. Note: For classical music, please follow these <a href="wiki.php?action=article&amp;id=691">tagging guidelines</a>.</li>
+				<li id="r2.3.18"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.18">2.3.18.</a> <strong>Newly re-tagged torrents trumping badly tagged torrents must reflect a substantial improvement over the previous tags.</strong> Small changes that include replacing ASCII characters with proper foreign language characters with diacritical marks, fixing slight misspellings, or missing an alternate spelling of an artist (e.g., excluding "The" before a band name) are insufficient grounds for replacing other torrents. Artist names that are misspelled in the tags are grounds for trumping; this includes character accents and characters that mean one letter in one language and a different letter in another language. Improper capitalization in the tags is grounds for trumping; this includes artist tags (or composer tags) that contain names that are all capitalized or track titles that are all capitalized. Tags with multiple entries in the same tag (e.g., track number and track title in the track title tags; or track number, artist, and track title in the artist tags) are subject to trumping. You may trump a release if the tags do not follow the data from a reputable music cataloguing service such as <a href="http://musicbrainz.org/">MusicBrainz</a> or <a href="http://www.discogs.com/">Discogs</a>. In the case of a conflict between reputable listings, either tagged version is equally preferred on the site and cannot trump the other. For example, an album is tagged differently in <a href="http://musicbrainz.org/">MusicBrainz</a> and in <a href="http://www.discogs.com/">Discogs</a>. Either style of tagging is permitted; neither is "better" than the other. In that case, any newly tagged torrents replacing an already properly tagged torrent, which follows good tagging convention, will result in a dupe. Note: For classical music, please follow these <a href="wiki.php?action=article&amp;id=691">tagging guidelines</a>.</li>
 				<li id="r2.3.19"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.19">2.3.19.</a> <strong>Avoid embedding large images if including cover art in the meta tags.</strong> Do not embed large images (in excess of 512 KB) in the file meta tags. It adds unnecessary bloat to the files. Include the artwork in a separate directory if it is too big or if it consists of high-resolution images. Should you include an image of over 512 KB as embedded artwork, your torrent will be trumpable.</li>
 				<li id="r2.3.20"><a href="#h2.3"><strong>&uarr;_</strong></a> <a href="#r2.3.20">2.3.20.</a> <strong>Leading spaces are not allowed in any file or folder names.</strong> Leading spaces cause usability and interoperability problems among various operating systems and programs. Torrents with file or folder names that contain leading space characters are trumpable.</li>
 			</ul>
 		</div>
 		<h5 id="h2.4"><a href="#h2.4k"><strong>&uarr;</strong></a> <a href="#h2.4">2.4.</a> Bonus Content</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.4.1"><a href="#h2.4"><strong>&uarr;_</strong></a> <a href="#r2.4.1">2.4.1.</a> <strong>All music torrents must represent a complete release, and may not be missing tracks or discs (see <a href="#r2.1.19">2.1.19</a>).</strong> Bonus tracks or bonus discs should be uploaded as a complete release with the main album. Do not cobble together main album and bonus content from different sources if you do not have the complete release. Such torrents will be regarded as mutt rips and a staff member may ask for proof of the torrent's authenticity.</li>
 				<li id="r2.4.2"><a href="#h2.4"><strong>&uarr;_</strong></a> <a href="#r2.4.2">2.4.2.</a> <strong>A FLAC bonus disc-only release is not automatically deleted due to the presence of the complete set (Album + Bonus disc).</strong> An upload consisting solely of a bonus disc can only be trumped by the complete set when the trumping torrent's log score qualifies based on the usual lossless rules (see <a href="#r2.2.10">2.2.10</a>). No bonus disc-only upload can trump a complete set that has a total score of 100%.</li>
@@ -382,7 +382,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h2.5"><a href="#h2.5k"><strong>&uarr;</strong></a> <a href="#h2.5">2.5.</a> Vinyl</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.5.1"><a href="#h2.5"><strong>&uarr;_</strong></a> <a href="#r2.5.1">2.5.1.</a> <strong>Downsampling of analog rips is allowed.</strong> Analog rips that have been downsampled may be uploaded (e.g., a 24/96 vinyl rip downsampled to 16/44.1). Any downsampled torrents must include the specific programs and methods used to downsample in addition to the lineage for the original rip or it will be deleted.</li>
 				<li id="r2.5.2"><a href="#h2.5"><strong>&uarr;_</strong></a> <a href="#r2.5.2">2.5.2.</a> <strong>Only one lossy vinyl rip in a specific bitrate is allowed per edition.</strong> Once someone has uploaded a lossy format vinyl rip (in MP3), you may not upload another copy in the same bitrate. It does not matter whether or not the lossy files are of differing sampling rates. For example, if a 44.1 kHz V2 (VBR) copy is already up, you may not upload the same album in V2 (VBR) at 48 kHz.</li>
@@ -411,7 +411,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h2.6"><a href="#h2.6k"><strong>&uarr;</strong></a> <a href="#h2.6">2.6.</a> Live Music and Soundboards</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.6.1"><a href="#h2.6"><strong>&uarr;_</strong></a> <a href="#r2.6.1">2.6.1.</a> <strong>Live soundboard material should be uploaded as one torrent per show.</strong> </li>
 				<li id="r2.6.2"><a href="#h2.6"><strong>&uarr;_</strong></a> <a href="#r2.6.2">2.6.2.</a> <strong>Only one edition of each unofficial live recording is allowed.</strong> Such bootlegs and mixtapes can be unofficially remastered several times, and such constant remastering is of little consequence on a site where bootlegs are not the primary focus. Only one unofficial soundboard recording of each show is allowed, and it should be uploaded on the torrent page in the absence of any edition information. See <a href="wiki.php?action=article&amp;id=750">this wiki</a> for more information on how live music is organized on the site.</li>
@@ -468,7 +468,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h2.7"><a href="#h2.7k"><strong>&uarr;</strong></a> <a href="#h2.7">2.7.</a> Multichannel</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.7.1"><a href="#h2.7"><strong>&uarr;_</strong></a> <a href="#r2.7.1">2.7.1.</a> <strong>The only lossy multichannel audio formats allowed are AC3 and DTS.</strong> If the source is DTS or AC3, do not transcode to other formats. Exceptions: Transcoding is allowed if the source is lossless (LPCM or MLP). Those should be compressed with multichannel FLAC. See <a href="wiki.php?action=article&amp;id=143">this wiki</a> for more information.</li>
 				<li id="r2.7.2"><a href="#h2.7"><strong>&uarr;_</strong></a> <a href="#r2.7.2">2.7.2.</a> <strong>DTS-CD rips cannot be re-compressed to a lossless codec and they must be kept as WAV files with the .dts extension.</strong> </li>
@@ -478,7 +478,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h2.8"><a href="#h2.8k"><strong>&uarr;</strong></a> <a href="#h2.8">2.8.</a> SACD</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.8.1"><a href="#h2.8"><strong>&uarr;_</strong></a> <a href="#r2.8.1">2.8.1.</a> <strong>Digital rips produced by the PlayStation 3 (PS3) - SACD ripper process (see <a href="wiki.php?action=article&amp;id=922">this wiki</a>) trump any other SACD digital or analog rips (e.g., Oppo method, analog output to ADC, DSD stream from a SACD player, etc.).</strong> Non-PS3 digital SACD rips trump analog SACD rips. Torrents containing a 88.2 kHz digitally-sourced PCM stream compressed with FLAC are trumpable by new digital rips made directly from the SACD disc using the PS3-SACD ripper method. See <a href="wiki.php?action=article&amp;id=922">this wiki</a> for more information on the SACD format. Note: This means that you cannot download another user's uncompressed DSD source files and manipulate those.</li>
 				<li id="r2.8.2"><a href="#h2.8"><strong>&uarr;_</strong></a> <a href="#r2.8.2">2.8.2.</a> <strong>Analog SACD rips may have a sampling rate equal to 88.2 or 96 kHz and may be trumped at any time by a digital 24/88.2 SACD rip.</strong> If a digital SACD rip has frequencies higher than 44.1 kHz, contact a moderator privately for approval to upload a 24-bit rip with a sampling rate greater than 88.2 kHz.</li>
@@ -506,7 +506,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h2.9"><a href="#h2.9k"><strong>&uarr;</strong></a> <a href="#h2.9">2.9.</a> Blu-ray</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.9.1"><a href="#h2.9"><strong>&uarr;_</strong></a> <a href="#r2.9.1">2.9.1.</a> <strong>Only digital rips of the lossless audio track from a Blu-ray disc may be uploaded (see <a href="wiki.php?action=article&amp;id=926">this wiki</a> and <a href="wiki.php?action=article&amp;id=854">this wiki</a> for more information).</strong> Analog Blu-ray rips are forbidden. Blu-ray discs may contain all of the following formats: Dolby Digital (AC3), DTS, Dolby Digital Plus (AC3), DTS-HD, PCM, Dolby TrueHD, DTS-HD Master Audio. Only PCM, Dolby TrueHD, and DTS-HD Master Audio contain truly lossless audio material on the Blu-ray disc. See <a href="#r2.1.1">2.1.1</a> and <a href="#r2.7.1">2.7.1 </a> for more information on multichannel audio material on the site.</li>
 				<li id="r2.9.2"><a href="#h2.9"><strong>&uarr;_</strong></a> <a href="#r2.9.2">2.9.2.</a> <strong> Uploading movie audio tracks is prohibited.</strong> For example, the Inception Blu-ray disc set features a DTS-HD Master Audio 5.1 surround sound track for the entire movie, which cannot be uploaded, and a DTS-HD Master Audio 5.1 surround sound mix of the movie soundtrack, which can be uploaded. Uploading movie audio tracks will result in a warning and the loss of your uploading privileges.</li>
@@ -533,7 +533,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h2.10"><a href="#h2.10k"><strong>&uarr;</strong></a> <a href="#h2.10">2.10.</a> Cassettes</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r2.10.1"><a href="#h2.10"><strong>&uarr;_</strong></a> <a href="#r2.10.1">2.10.1.</a> <strong>Cassettes are allowed under strict conditions.</strong> "Cassettes" include compact cassettes, 8-track tape cartridges, and non-cassette consumer reel-to-reel audio tape recordings.
 					<ul>
@@ -551,7 +551,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h4 id="h3"><a href="#h3k"><strong>&uarr;</strong></a> <a href="#h3">3.</a> Comedy (Audio) &amp; Audiobooks</h4>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r3.1"><a href="#r3.1k"><strong>&uarr;_</strong></a> <a href="#r3.1">3.1.</a> The only formats allowed for comedy and audiobooks are those listed below:
 					<ul>
@@ -584,7 +584,7 @@ View::show_header('Uploading Rules');
 
 		<h4 id="h4"><a href="#h4k"><strong>&uarr;</strong></a> <a href="#h4">4.</a> Applications</h4>
 		<h5 id="h4.1"><a href="#h4.1k"><strong>&uarr;</strong></a> <a href="#h4.1">4.1.</a> General</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r4.1.1"><a href="#h4.1"><strong>&uarr;_</strong></a> <a href="#r4.1.1">4.1.1.</a> <strong>App releases can be either a torrent of a directory or a single archive.</strong>
 					<ul>
@@ -608,7 +608,7 @@ View::show_header('Uploading Rules');
 			</ul>
 		</div>
 		<h5 id="h4.2"><a href="#h4.2k"><strong>&uarr;</strong></a> <a href="#h4.2">4.2.</a> Duplicates &amp; Trumping</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r4.2.1"><a href="#h4.2"><strong>&uarr;_</strong></a> <a href="#r4.2.1">4.2.1.</a> <strong>Applications having the same version number are dupes.</strong> An application may have older versions than those already uploaded. Those are not dupes. Only identical versions are duplicates. Note: Not everyone has updated to the latest operating system. In such cases, older versions of applications may still be useful for a number of users.</li>
 				<li id="r4.2.2"><a href="#h4.2"><strong>&uarr;_</strong></a> <a href="#r4.2.2">4.2.2.</a> <strong>A scene archived torrent may coexist with an unarchived torrent of the same application version.</strong> If both a scene archive and an unarchived copy are uploaded of the same application and version, both may stay on the site. Any subsequent uploads of the same torrent in either form (with identical install methods) are dupes.</li>
@@ -620,7 +620,7 @@ View::show_header('Uploading Rules');
 
 		<h4 id="h5"><a href="#h5k"><strong>&uarr;</strong></a> <a href="#h5">5.</a> Comic Books</h4>
 		<h5 id="h5.1"><a href="#h5.1k"><strong>&uarr;</strong></a> <a href="#h5.1">5.1.</a> General</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r5.1.1"><a href="#h5.1"><strong>&uarr;_</strong></a> <a href="#r5.1.1">5.1.1.</a> <strong>Comic books must be uploaded in the following specified formats, according to descending preference:</strong>
 					<ul>
@@ -637,7 +637,7 @@ View::show_header('Uploading Rules');
 		</div>
 
 		<h5 id="h5.2"><a href="#h5.2k"><strong>&uarr;</strong></a> <a href="#h5.2">5.2.</a> Multi-comic</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r5.2.1"><a href="#h5.2"><strong>&uarr;_</strong></a> <a href="#r5.2.1">5.2.1.</a> <strong>Multi-comic and series packs must follow site formatting requirements.</strong> Multi-comic and series packs are both accepted and encouraged but care must be taken to make a valid compilation. The rules in this section outline the requirements for multi-comic torrents.</li>
 				<li id="r5.2.2"><a href="#h5.2"><strong>&uarr;_</strong></a> <a href="#r5.2.2">5.2.2.</a> <strong>0-Day comic packs are allowed.</strong> Make sure such uploads are synchronized with any previous packs. 0-Day comic uploads must not be missing any of their corresponding DCP or Minutemen scans for that time period.</li>
@@ -650,7 +650,7 @@ View::show_header('Uploading Rules');
 		</div>
 
 		<h5 id="h5.3"><a href="#h5.3k"><strong>&uarr;</strong></a> <a href="#h5.3">5.3.</a> Duplicates &amp; Trumping</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r5.3.1"><a href="#h5.3"><strong>&uarr;_</strong></a> <a href="#r5.3.1">5.3.1.</a> <strong>A dupe of a single comic is defined as two scans of the same book by the same scanner, where the same pages have been scanned.</strong> The scanner may be an individual, a release group, or a scanning device. Exceptions: The following examples are NOT dupes:
 					<ul>
@@ -673,16 +673,16 @@ View::show_header('Uploading Rules');
 		</div>
 
 		<h5 id="h5.4"><a href="#h5.4k"><strong>&uarr;</strong></a> <a href="#h5.4">5.4.</a> Formatting</h5>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
-				<li id="r5.4.1"><a href="#h5.4"><strong>&uarr;_</strong></a> <a href="#r5.4.1">5.4.1.</a> <strong>All comic page scans must have zero-padded numbers and may be archived in .pdf, .rar (.cbr) or .zip (.cbz) files.</strong> The contents of the archive or directory must be image files (either JPEG or PNG), which are named sequentially so that they display in the correct order by <a href="http://en.wikipedia.org/wiki/Comparison_of_image_viewers">comic reading software</a> such as <a href="http://www.cdisplay.me/">CDisplay</a> and <a href="http://www.feedface.com/software/ffview.html">FFView</a>. The page numbers and books must be zero-padded for this same reason. For example, this constitutes good numbering: file01.jpg, file02.jpg,... file30.jpg; and this constitutes bad numbering: file1.jpg, file2.jpg, file3.jpg,... file30.jpg.</li>
-				<li id="r5.4.2"><a href="#h5.4"><strong>&uarr;_</strong></a> <a href="#r5.4.2">5.4.2.</a> <strong>Comic book archive file names must be informative.</strong> The archive names should include at least the book's name (e.g., Uncanny X-Men), the volume (if there's more than one volume for that book), and the issue number. Including the cover year, scanner information (to differentiate between different scans of the same book), and the issue's title (e.g., Days of Future Past) is strongly recommended. For example: Buffy the Vampire Slayer Season Eight - #01 - 2007 - The Long Way Home Part 1.cbr and Amazing Spiderman - Volume 1 - #10 - 1964.cbz.</li>
-				<li id="r5.4.3"><a href="#h5.4"><strong>&uarr;_</strong></a> <a href="#r5.4.3">5.4.3.</a> <strong>The directory name should uniquely identify its contents.</strong> You should include the title, as well as the issue numbers included (if applicable). The title, volume, cover year, and story name can often be found in small type at the bottom of the page opposite the inside cover. Directories should be named with the title of the series and the issue numbers. For example: ../Buffy the Vampire Slayer Season Eight - #01-#08/ and ../Amazing Spiderman - Volume 1 - #10-#20/.</li>
+				<li id="r5.4.1"><a href="#h5.4"><strong>&uarr;_</strong></a> <a href="#r5.4.1">5.4.1.</a> <strong>All comic page scans must have zero-padded numbers and may be archived in .pdf, .rar (.cbr) or .zip (.cbz) files.</strong> The contents of the archive or directory must be image files (either JPEG or PNG), which are named sequentially so that they display in the correct order by <a href="http://en.wikipedia.org/wiki/Comparison_of_image_viewers">comic reading software</a> such as <a href="http://www.cdisplay.me/">CDisplay</a> and <a href="http://www.feedface.com/software/ffview.html">FFView</a>. The page numbers and books must be zero-padded for this same reason. For example, this constitutes good numbering: <samp>file01.jpg</samp>, <samp>file02.jpg</samp>,... <samp>file30.jpg</samp>; and this constitutes bad numbering: <samp>file1.jpg</samp>, <samp>file2.jpg</samp>, <samp>file3.jpg</samp>,... <samp>file30.jpg</samp>.</li>
+				<li id="r5.4.2"><a href="#h5.4"><strong>&uarr;_</strong></a> <a href="#r5.4.2">5.4.2.</a> <strong>Comic book archive file names must be informative.</strong> The archive names should include at least the book's name (e.g., "Uncanny X-Men"), the volume (if there's more than one volume for that book), and the issue number. Including the cover year, scanner information (to differentiate between different scans of the same book), and the issue's title (e.g., "Days of Future Past") is strongly recommended. For example: <samp>Buffy the Vampire Slayer Season Eight - #01 - 2007 - The Long Way Home Part 1.cbr</samp> and <samp>Amazing Spiderman - Volume 1 - #10 - 1964.cbz</samp>.</li>
+				<li id="r5.4.3"><a href="#h5.4"><strong>&uarr;_</strong></a> <a href="#r5.4.3">5.4.3.</a> <strong>The directory name should uniquely identify its contents.</strong> You should include the title, as well as the issue numbers included (if applicable). The title, volume, cover year, and story name can often be found in small type at the bottom of the page opposite the inside cover. Directories should be named with the title of the series and the issue numbers. For example: <samp>../Buffy the Vampire Slayer Season Eight - #01-#08/</samp> and <samp>../Amazing Spiderman - Volume 1 - #10-#20/</samp>.</li>
 			</ul>
 		</div>
 
 		<h4 id="h6"><a href="#h6k"><strong>&uarr;</strong></a> <a href="#h6">6.</a> ebooks, eLearning Books &amp; Sheet Music</h4>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r6.1"><a href="#r6.1k"><strong>&uarr;_</strong></a> <a href="#r6.1">6.1.</a> <strong>Individual releases can be either a torrent of a directory, an archive, or the original format (e.g., .epub, .pdf, .chm, .txt, etc.).</strong> Neither the individual release or archive can be password protected. Note: ebooks cannot be uploaded in an archive. Users must be able to see the ebook format that is in the torrent.</li>
 				<li id="r6.2"><a href="#r6.2k"><strong>&uarr;_</strong></a> <a href="#r6.2">6.2.</a> <strong>Uploading a pack of ebooks in one archive (e.g., .tar, .rar, .zip) is prohibited.</strong> ebook collections cannot be uploaded. Exception: ebooks that come in a retail set may be uploaded in a single torrent.</li>
@@ -696,7 +696,7 @@ View::show_header('Uploading Rules');
 		</div>
 
 		<h4 id="h7"><a href="#h7k"><strong>&uarr;</strong></a> <a href="#h7">7.</a> eLearning Videos</h4>
-		<div class="box pad" style="padding:10px 10px 10px 20px;">
+		<div class="box pad" style="padding: 10px 10px 10px 20px;">
 			<ul>
 				<li id="r7.1"><a href="#h7"><strong>&uarr;_</strong></a> <a href="#r7.1">7.1.</a> <strong>The eLearning Videos category is only for tutorial videos on specific topics pertaining to music (see <a href="#r7.3">7.3</a> in this section).</strong> Any video clips mentioned in <a href="#h1.2">Section 1.2</a> cannot be uploaded to the eLearning Videos category.</li>
 				<li id="r7.2"><a href="#h7"><strong>&uarr;_</strong></a> <a href="#r7.2">7.2.</a> <strong>No freely available eLearning videos are allowed.</strong> You may not upload videos that are officially hosted from university sites, the author's site, the Internet Archive, or the publisher's site. You may upload videos from other torrent sites as long as they conform to the rules in this section.</li>

@@ -16,7 +16,7 @@ define('SSL_STATIC_SERVER', 'static/');
 // Keys
 define('ENCKEY', ''); //Random key. The key for encryption
 define('SITE_SALT', ''); //Random key. Default site wide salt for passwords, DO NOT LEAVE THIS BLANK/CHANGE AFTER LAUNCH!
-define('SCHEDULE_KEY', ''); // Random key. This key must be the argument to schedule.php for the schedule to work. 
+define('SCHEDULE_KEY', ''); // Random key. This key must be the argument to schedule.php for the schedule to work.
 define('RSS_HASH', ''); //Random key. Used for generating unique RSS auth key.
 
 // MySQL details
@@ -63,7 +63,7 @@ if (PHP_VERSION_ID < 50307) {
 } else {
 	define('CRYPT_HASH_PREFIX', '$2y$07$');
 }
-define('DEBUG_MODE', false); //Set to false if you dont want everyone to see debug information, can be overriden with 'site_debug' 
+define('DEBUG_MODE', false); //Set to false if you dont want everyone to see debug information, can be overriden with 'site_debug'
 define('OPEN_REGISTRATION', true); //Set to false to disable open regirstration, true to allow anyone to register
 define('USER_LIMIT', 5000); //The maximum number of users the site can have, 0 for no limit
 define('STARTING_INVITES', 0); //# of invites to give to newly registered users
@@ -92,7 +92,7 @@ define('FLS_TEAM',	'21');
 define('POWER_TM',	'22');
 define('ELITE_TM',	'23');
 
-//Pagination
+// Pagination
 define('TORRENT_COMMENTS_PER_PAGE', 10);
 define('POSTS_PER_PAGE', 25);
 define('TOPICS_PER_PAGE', 50);
@@ -101,7 +101,7 @@ define('REQUESTS_PER_PAGE', 25);
 define('MESSAGES_PER_PAGE', 25);
 define('LOG_ENTRIES_PER_PAGE', 50);
 
-//Cache catalogues
+// Cache catalogues
 define('THREAD_CATALOGUE', 500); // Limit to THREAD_CATALOGUE posts per cache key.
 
 // IRC settings
@@ -116,6 +116,10 @@ define('BOT_HELP_CHAN', '#');
 define('BOT_DEBUG_CHAN', '#');
 define('BOT_REPORT_CHAN', '#');
 define('BOT_NICKSERV_PASS', '');
+define('BOT_INVITE_CHAN',BOT_CHAN.'-invites'); // Channel for non-members seeking an interview
+define('BOT_INTERVIEW_CHAN',BOT_CHAN.'-interview'); // Channel for the interviews
+define('BOT_INTERVIEW_NUM',5);
+define('BOT_INTERVIEW_STAFF',BOT_CHAN.'-interviewers'); // Channel for the interviewers
 define('SOCKET_LISTEN_PORT', 51010);
 define('SOCKET_LISTEN_ADDRESS', 'localhost');
 define('ADMIN_CHAN', '#');
@@ -180,12 +184,12 @@ $ZIPOptions = array(
 // Ratio requirements, in descending order
 // Columns: Download amount, required ratio, grace period
 $RatioRequirements = array(
-	array(50*1024*1024*1024, 0.60, date('Y-m-d H:i:s')),
-	array(40*1024*1024*1024, 0.50, date('Y-m-d H:i:s')),
-	array(30*1024*1024*1024, 0.40, date('Y-m-d H:i:s')),
-	array(20*1024*1024*1024, 0.30, date('Y-m-d H:i:s')),
-	array(10*1024*1024*1024, 0.20, date('Y-m-d H:i:s')),
-	array(5*1024*1024*1024,  0.15, date('Y-m-d H:i:s', time()-(60*60*24*14)))
+	array(50 * 1024 * 1024 * 1024, 0.60, date('Y-m-d H:i:s')),
+	array(40 * 1024 * 1024 * 1024, 0.50, date('Y-m-d H:i:s')),
+	array(30 * 1024 * 1024 * 1024, 0.40, date('Y-m-d H:i:s')),
+	array(20 * 1024 * 1024 * 1024, 0.30, date('Y-m-d H:i:s')),
+	array(10 * 1024 * 1024 * 1024, 0.20, date('Y-m-d H:i:s')),
+	array(5 * 1024 * 1024 * 1024,  0.15, date('Y-m-d H:i:s', time() - (60 * 60 * 24 * 14)))
 );
 
 //Captcha fonts should be located in /classes/fonts

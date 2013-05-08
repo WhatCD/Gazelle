@@ -25,10 +25,11 @@ if ($ConvID = (int)$_GET['convid']) {
 					break;
 			}
 
-			$DB->query("UPDATE staff_pm_conversations
-						SET Status='Unanswered',
-							Level=$Level
-						WHERE ID=$ConvID");
+			$DB->query("
+				UPDATE staff_pm_conversations
+				SET Status='Unanswered',
+					Level=$Level
+				WHERE ID=$ConvID");
 			header('Location: staffpm.php');
 		} else {
 			error(404);
@@ -49,11 +50,12 @@ if ($ConvID = (int)$_GET['convid']) {
 
 		if ($LevelType == 'class') {
 			// Assign to class
-			$DB->query("UPDATE staff_pm_conversations
-						SET Status='Unanswered',
-							Level=$NewLevel,
-							AssignedToUser=NULL
-						WHERE ID=$ConvID");
+			$DB->query("
+				UPDATE staff_pm_conversations
+				SET Status='Unanswered',
+					Level=$NewLevel,
+					AssignedToUser=NULL
+				WHERE ID=$ConvID");
 		} else {
 			$UserInfo = Users::user_info($NewLevel);
 			$Level = $Classes[$UserInfo['PermissionID']]['Level'];
@@ -62,7 +64,12 @@ if ($ConvID = (int)$_GET['convid']) {
 			}
 
 			// Assign to user
-			$DB->query("UPDATE staff_pm_conversations SET Status='Unanswered', AssignedToUser=$NewLevel, Level=$Level WHERE ID=$ConvID");
+			$DB->query("
+				UPDATE staff_pm_conversations
+				SET Status='Unanswered',
+					AssignedToUser=$NewLevel,
+					Level=$Level
+				WHERE ID=$ConvID");
 			
 		}
 		echo '1';
