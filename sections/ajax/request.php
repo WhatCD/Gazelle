@@ -11,13 +11,11 @@ $MinimumVote = 20 * 1024 * 1024;
  */
 
 include(SERVER_ROOT.'/sections/requests/functions.php');
-
-// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
 if (empty($_GET['id']) || !is_number($_GET['id'])) {
-        json_die("failure");
+	json_die("failure");
 }
 
 $RequestID = $_GET['id'];
@@ -191,6 +189,7 @@ json_die("success", array(
     'requestId' => (int) $RequestID,
     'requestorId' => (int) $RequestorID,
     'requestorName' => $RequestorName,
+	'isBookmarked' => Bookmarks::has_bookmarked('request', $RequestID),
     'requestTax' => $RequestTax,
     'timeAdded' => $TimeAdded,
     'canEdit' => $CanEdit,

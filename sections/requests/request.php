@@ -4,7 +4,6 @@
  * This is the page that displays the request to the end user after being created.
  */
 
-// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/classes/class_text.php');
 
 $Text = new TEXT;

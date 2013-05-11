@@ -1,5 +1,4 @@
 <?
-//TODO: replace 24-43 with Users::user_info()
 /*
 User post history page
 */
@@ -34,25 +33,8 @@ if (isset($LoggedUser['PostsPerPage'])) {
 
 list($Page,$Limit) = Format::page_limit($PerPage);
 
-if (($UserInfo = $Cache->get_value('user_info_'.$UserID)) === false) {
-	$DB->query("SELECT
-		m.Username,
-		m.Enabled,
-		m.Title,
-		i.Avatar,
-		i.Donor,
-		i.Warned
-		FROM users_main AS m
-			JOIN users_info AS i ON i.UserID = m.ID
-		WHERE m.ID = $UserID");
-
-	if ($DB->record_count() == 0) { // If user doesn't exist
-			error_out('User does not exist!');
-	}
-	list($Username, $Enabled, $Title, $Avatar, $Donor, $Warned) = $DB->next_record();
-} else {
-	extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', 'Title', 'Avatar', 'Donor', 'Warned'))));
-}
+$UserInfo = Users::user_info($UserID);
+extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', 'Title', 'Avatar', 'Donor', 'Warned'))));
 
 if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);

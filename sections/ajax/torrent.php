@@ -1,8 +1,5 @@
-<?php
-
-
+<?
 require(SERVER_ROOT.'/sections/torrents/functions.php');
-include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
@@ -12,7 +9,7 @@ $TorrentAllowed = array('ID', 'Media', 'Format', 'Encoding', 'Remastered', 'Rema
 $TorrentID = (int)$_GET['id'];
 $TorrentHash = (string)$_GET['hash'];
 
-if ($GroupID && $TorrentHash) {
+if ($TorrentID && $TorrentHash) {
     json_die("failure", "bad parameters");
 }
 
@@ -38,6 +35,12 @@ if (!$TorrentCache) {
 }
 
 list($TorrentDetails, $TorrentList) = $TorrentCache;
+
+if (!isset($TorrentList[$TorrentID])) {
+    json_die("failure", "bad id parameter");
+}
+
+$GroupID = $TorrentDetails['ID'];
 
 $ArtistForm = Artists::get_artist($GroupID);
 if ($TorrentDetails['CategoryID'] == 0) {
@@ -74,11 +77,11 @@ $JsonTorrentDetails = array(
 	'categoryName' => $CategoryName,
 	'time' => $TorrentDetails['Time'],
 	'vanityHouse' => $TorrentDetails['VanityHouse'] == 1,
-	'isBookmarked' => has_bookmarked('torrent', $GroupID),
+	'isBookmarked' => Bookmarks::has_bookmarked('torrent', $GroupID),
 	'musicInfo' => $JsonMusicInfo
 );
 
-$Torrent = array_pop($TorrentList);
+$Torrent = $TorrentList[$TorrentID];
 // Convert file list back to the old format
 $FileList = explode("\n", $Torrent['FileList']);
 foreach ($FileList as &$File) {

@@ -1,6 +1,4 @@
 <?
-// Bookmarks::has_bookmarked()
-
 $Where = array();
 
 if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {

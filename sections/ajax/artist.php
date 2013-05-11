@@ -4,9 +4,7 @@ function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 
-// Bookmarks::has_bookmarked()
 include(SERVER_ROOT.'/sections/requests/functions.php');
-include(SERVER_ROOT.'/sections/bookmarks/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
@@ -231,7 +229,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 		'releaseType' => (int) $ReleaseType,
 		'wikiImage' => $WikiImage,
 		'groupVanityHouse' => $GroupVanityHouse == 1,
-		'hasBookmarked' => $hasBookmarked = Bookmarks::has_bookmarked('torrent', $GroupID),
+		'hasBookmarked' => Bookmarks::has_bookmarked('torrent', $GroupID),
 		'torrent' => $InnerTorrents
 	);
 }
@@ -319,7 +317,7 @@ json_die("success", array(
     'id' => (int) $ArtistID,
     'name' => $Name,
     'notificationsEnabled' => $notificationsEnabled,
-    'hasBookmarked' => has_bookmarked('artist', $ArtistID),
+    'hasBookmarked' => Bookmarks::has_bookmarked('artist', $ArtistID),
     'image' => $Image,
     'body' => $Text->full_format($Body),
     'vanityHouse' => $VanityHouseArtist == 1,
