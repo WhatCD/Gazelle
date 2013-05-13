@@ -32,7 +32,7 @@ if (!$NewRequest) {
 
 		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
 			$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
-		$VoteArray = get_votes_array($RequestID);
+		$VoteArray = Requests::get_votes_array($RequestID);
 		$VoteCount = count($VoteArray['Voters']);
 
 		$NeedCue = (strpos($LogCue, 'Cue') !== false);
@@ -55,7 +55,7 @@ if (!$NewRequest) {
 		}
 
 		if ($CategoryName == 'Music') {
-			$ArtistForm = get_request_artists($RequestID);
+			$ArtistForm = Requests::get_artists($RequestID);
 
 			$BitrateArray = array();
 			if ($BitrateList == 'Any') {

@@ -1,6 +1,5 @@
 <?
 enforce_login();
-include(SERVER_ROOT.'/sections/requests/functions.php');
 
 $RequestTax = 0.1;
 

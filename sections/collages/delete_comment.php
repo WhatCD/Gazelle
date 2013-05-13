@@ -15,11 +15,27 @@ if (!check_perms('site_moderate_forums')) {
 	error(403);
 }
 
-$DB->query("SELECT CollageID FROM collages_comments WHERE ID='$PostID'");
-list($CollageID) = $DB->next_record();
+// Get number of pages
+// $Pages = number of pages in the thread
+// $Page = which page the post is on
+$DB->query("SELECT
+	CollageID,
+	CEIL(COUNT(ID)/" . TORRENT_COMMENTS_PER_PAGE . ") AS Pages,
+	CEIL(SUM(IF(ID<='$PostID',1,0))/" . TORRENT_COMMENTS_PER_PAGE . ") AS Page
+	FROM collages_comments
+	WHERE CollageID=(SELECT CollageID FROM collages_comments WHERE ID='$PostID')
+	GROUP BY CollageID");
+list($CollageID, $Pages, $Page) = $DB->next_record();
 
 $DB->query("DELETE FROM collages_comments WHERE ID='$PostID'");
 
 $Cache->delete_value('collage_'.$CollageID);
-$Cache->delete_value('collage_'.$CollageID.'_catalogue_0'); //Because these never exceed 500 posts, and I'm really tired right now.
+$Cache->increment_value('collage_comments_'.$CollageID, -1);
+
+//We need to clear all subsequential catalogues as they've all been bumped with the absence of this post
+$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
+$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
+for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
+	$Cache->delete('collage_comments_'.$CollageID.'_catalogue_'.$i);
+}
 ?>

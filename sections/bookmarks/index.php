@@ -61,7 +61,6 @@ switch ($_REQUEST['action']) {
 				require(SERVER_ROOT.'/sections/collages/browse.php');
 				break;
 			case 'requests':
-				include(SERVER_ROOT.'/sections/requests/functions.php');
 				$_GET['type'] = 'bookmarks';
 				require(SERVER_ROOT.'/sections/requests/requests.php');
 				break;

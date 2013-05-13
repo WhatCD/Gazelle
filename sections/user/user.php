@@ -3,8 +3,6 @@
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
-include(SERVER_ROOT.'/sections/requests/functions.php');
-
 if (empty($_GET['id']) || !is_numeric($_GET['id']))
 	error(404);
 
@@ -720,7 +718,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 			$CategoryName = $Categories[$CategoryID - 1];
 
 			if ($CategoryName == 'Music') {
-				$ArtistForm = get_request_artists($RequestID);
+				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {

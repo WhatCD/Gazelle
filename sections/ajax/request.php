@@ -10,7 +10,6 @@ $MinimumVote = 20 * 1024 * 1024;
  * This is the page that displays the request to the end user after being created.
  */
 
-include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
@@ -43,7 +42,7 @@ if ($CategoryID == 0) {
 
 //Do we need to get artists?
 if ($CategoryName == 'Music') {
-	$ArtistForm = get_request_artists($RequestID);
+	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
@@ -79,7 +78,7 @@ if ($CategoryName == 'Music') {
 }
 
 //Votes time
-$RequestVotes = get_votes_array($RequestID);
+$RequestVotes = Requests::get_votes_array($RequestID);
 $VoteCount = count($RequestVotes['Voters']);
 $ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0)));
 $UserCanEdit = (!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2);

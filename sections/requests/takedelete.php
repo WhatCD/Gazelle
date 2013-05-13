@@ -27,7 +27,7 @@ $CategoryName = $Categories[$CategoryID - 1];
 
 //Do we need to get artists?
 if ($CategoryName == 'Music') {
-	$ArtistForm = get_request_artists($RequestID);
+	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$FullName = $ArtistName.$Title;
 } else {

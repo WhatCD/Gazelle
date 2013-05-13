@@ -51,8 +51,8 @@ $Cache->delete_value('collage_'.$CollageID);
 
 
 $PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-$CatalogueID = floor((POSTS_PER_PAGE * $PageNum - POSTS_PER_PAGE) / THREAD_CATALOGUE);
-$Cache->delete_value('collage_'.$CollageID.'_catalogue_'.$CatalogueID);
+$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $PageNum - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
+$Cache->delete_value('collage_comments_'.$CollageID.'_catalogue_'.$CatalogueID);
 
 $DB->query("
 	INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)

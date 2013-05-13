@@ -50,7 +50,6 @@ if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid']
 		$Properties['RequestID'] = $_GET['requestid'];
 	}
 } elseif (empty($Properties) && !empty($_GET['requestid']) && is_number($_GET['requestid'])) {
-	include(SERVER_ROOT.'/sections/requests/functions.php');
 	$DB->query('
 		SELECT
 			r.ID AS RequestID,
@@ -67,8 +66,8 @@ if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid']
 	list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
 	$UploadForm = $Categories[$Properties['CategoryID'] - 1];
 	$Properties['CategoryName'] = $Categories[$Properties['CategoryID'] - 1];
-	$Properties['Artists'] = get_request_artists($_GET['requestid']);
-	$Properties['TagList'] = implode(', ', get_request_tags($_GET['requestid']));
+	$Properties['Artists'] = Requests::get_artists($_GET['requestid']);
+	$Properties['TagList'] = implode(', ', Requests::get_tags($_GET['requestid']));
 }
 
 if (!empty($ArtistForm)) {

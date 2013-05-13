@@ -3,8 +3,6 @@
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
-require(SERVER_ROOT.'/sections/requests/functions.php');
-
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
     json_die("failure", "bad id parameter");
 }

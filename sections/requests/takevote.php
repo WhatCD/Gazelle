@@ -52,7 +52,7 @@ if ($LoggedUser['BytesUploaded'] >= $Amount && $Filled == 0) {
 	$Cache->delete_value('request_'.$RequestID);
 	$Cache->delete_value('request_votes_'.$RequestID);
 
-	$ArtistForm = get_request_artists($RequestID);
+	$ArtistForm = Requests::get_artists($RequestID);
 	foreach ($ArtistForm as $Importance) {
 		foreach ($Importance as $Artist) {
 			$Cache->delete_value('artists_requests_'.$Artist['id']);

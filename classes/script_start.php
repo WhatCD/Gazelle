@@ -98,6 +98,9 @@ spl_autoload_register(function ($ClassName) {
 		case 'Bookmarks':
 			$FileName = 'bookmarks.class';
 			break;
+		case 'Collages':
+			$FileName = 'class_collages';
+			break;
 		case 'Format':
 			$FileName = 'class_format';
 			break;

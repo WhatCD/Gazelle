@@ -1,6 +1,4 @@
 <?
-include(SERVER_ROOT.'/sections/requests/functions.php'); // get_request_tags()
-
 function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProperties = true, $ApiCall = false) {
 	global $Cache, $DB;
 	if (!$RevisionID) {

@@ -619,7 +619,7 @@ if (empty($LoggedUser['DisableRequests']) && count($Requests) > 0) {
 					<td>Bounty</td>
 				</tr>
 <?	foreach ($Requests as $Request) {
-		$RequestVotes = get_votes_array($Request['ID']);
+		$RequestVotes = Requests::get_votes_array($Request['ID']);
 
 		if ($Request['BitrateList'] != "") {
 			$BitrateString = implode(", ", explode("|", $Request['BitrateList']));

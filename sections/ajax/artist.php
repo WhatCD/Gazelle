@@ -4,7 +4,6 @@ function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 
-include(SERVER_ROOT.'/sections/requests/functions.php');
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 

@@ -596,7 +596,7 @@ foreach ($Categories as $CatKey => $CatName) {
 			list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
 				$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
 
-			$RequestVotes = get_votes_array($RequestID);
+			$RequestVotes = Requests::get_votes_array($RequestID);
 
 			$VoteCount = count($RequestVotes['Voters']);
 
@@ -609,7 +609,7 @@ foreach ($Categories as $CatKey => $CatName) {
 			$IsFilled = ($TorrentID != 0);
 
 			if ($CategoryName == 'Music') {
-				$ArtistForm = get_request_artists($RequestID);
+				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {

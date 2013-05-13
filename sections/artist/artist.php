@@ -9,8 +9,6 @@ function compare($X, $Y) {
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
-include(SERVER_ROOT.'/sections/requests/functions.php');
-
 // Similar artist map
 include(SERVER_ROOT.'/classes/class_artists_similar.php');
 
@@ -738,7 +736,7 @@ if ($NumRequests > 0) {
 			$CategoryName = $Categories[$CategoryID - 1];
 
 			if ($CategoryName == 'Music') {
-				$ArtistForm = get_request_artists($RequestID);
+				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
@@ -749,7 +747,7 @@ if ($NumRequests > 0) {
 
 			$Row = ($Row == 'a') ? 'b' : 'a';
 
-			$Tags = get_request_tags($RequestID);
+			$Tags = Requests::get_tags($RequestID);
 			$ReqTagList = array();
 			foreach ($Tags as $TagID => $TagName) {
 				   $ReqTagList[] = "<a href=\"requests.php?tags=".$TagName.'">'.display_str($TagName).'</a>';

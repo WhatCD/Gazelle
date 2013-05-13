@@ -37,7 +37,7 @@ if ($CategoryID == 0) {
 
 //Do we need to get artists?
 if ($CategoryName == 'Music') {
-	$ArtistForm = get_request_artists($RequestID);
+	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
@@ -73,7 +73,7 @@ if ($CategoryName == 'Music') {
 }
 
 //Votes time
-$RequestVotes = get_votes_array($RequestID);
+$RequestVotes = Requests::get_votes_array($RequestID);
 $VoteCount = count($RequestVotes['Voters']);
 $ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0)));
 $UserCanEdit = (!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2);
@@ -462,15 +462,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 		</table>
 <?
 
-$Results = $Cache->get_value('request_comments_'.$RequestID);
-if ($Results === false) {
-	$DB->query("SELECT
-			COUNT(c.ID)
-			FROM requests_comments as c
-			WHERE c.RequestID = '$RequestID'");
-	list($Results) = $DB->next_record();
-	$Cache->cache_value('request_comments_'.$RequestID, $Results, 0);
-}
+$Results = Requests::get_comment_count($RequestID);
 
 if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
 	$DB->query("SELECT COUNT(ID) FROM requests_comments WHERE RequestID = $RequestID AND ID <= $_GET[postid]");
@@ -482,29 +474,11 @@ if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_C
 
 //Get the cache catalogue
 $CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
-$CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 
 //---------- Get some data to start processing
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-$Catalogue = $Cache->get_value('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID);
-if ($Catalogue === false) {
-	$DB->query("SELECT
-			c.ID,
-			c.AuthorID,
-			c.AddedTime,
-			c.Body,
-			c.EditedUserID,
-			c.EditedTime,
-			u.Username
-			FROM requests_comments as c
-			LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
-			WHERE c.RequestID = '$RequestID'
-			ORDER BY c.ID
-			LIMIT $CatalogueLimit");
-	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
-	$Cache->cache_value('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
-}
+$Catalogue = Requests::get_comment_catalogue($RequestID, $CatalogueID);
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
 $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)%THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);

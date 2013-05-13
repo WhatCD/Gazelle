@@ -38,14 +38,14 @@ $DB->query("
 $CategoryName = $Categories[$CategoryID - 1];
 
 if ($CategoryName == 'Music') {
-	$ArtistForm = get_request_artists($RequestID);
+	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$FullName = $ArtistName.$Title;
 } else {
 	$FullName = $Title;
 }
 
-$RequestVotes = get_votes_array($RequestID);
+$RequestVotes = Requests::get_votes_array($RequestID);
 
 if ($RequestVotes['TotalBounty'] > $Uploaded) {
 	// If we can't take it all out of upload, zero that out and add whatever is left as download.

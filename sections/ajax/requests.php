@@ -1,7 +1,5 @@
 <?
 
-include(SERVER_ROOT.'/sections/requests/functions.php');
-
 $Queries = array();
 
 $OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
@@ -309,7 +307,7 @@ if ($NumResults == 0) {
 		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber,
 			$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
 
-		$RequestVotes = get_votes_array($RequestID);
+		$RequestVotes = Requests::get_votes_array($RequestID);
 
 		$VoteCount = count($RequestVotes['Voters']);
 
@@ -321,7 +319,7 @@ if ($NumResults == 0) {
 
 		$JsonArtists = array();
 		if ($CategoryName == 'Music') {
-			$ArtistForm = get_request_artists($RequestID);
+			$ArtistForm = Requests::get_artists($RequestID);
 			$JsonArtists = array_values($ArtistForm);
 		}
 

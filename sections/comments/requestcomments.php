@@ -1,8 +1,4 @@
-<?php
-// using the requests functions.php because we need get_request_artists()
-// TODO: move that function to class_artists?
-include(SERVER_ROOT.'/sections/requests/functions.php');
-
+<?
 /*
  * $_REQUEST['type']:
  *	created = comments left on one's requests
@@ -87,7 +83,7 @@ $Links = implode(' ', $Links);
 <?
 if ($Count > 0) {
 	while (list($UserID, $RequestID, $Title, $PostID, $Body, $AddedTime, $EditedTime, $EditorID) = $DB->next_record()) {
-		$Artists = get_request_artists($RequestID);
+		$Artists = Requests::get_artists($RequestID);
 		$permalink = "requests.php?action=view&id=$RequestID&amp;postid=$PostID#post$PostID";
 		$postheader = " on " . Artists::display_artists($Artists) . " <a href=\"requests.php?action=view&id=$RequestID\">$Title</a>";
 		comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorID, $AddedTime, $EditedTime);

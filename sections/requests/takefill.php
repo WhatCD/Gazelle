@@ -171,7 +171,7 @@ $DB->query("
 	WHERE ID = $RequestID");
 
 if ($CategoryName == 'Music') {
-	$ArtistForm = get_request_artists($RequestID);
+	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$FullName = $ArtistName.$Title;
 } else {
@@ -185,7 +185,7 @@ foreach ($UserIDs as $User) {
 	Misc::send_pm($VoterID, 0, "The request \"$FullName\" has been filled", 'One of your requests &mdash; [url=https://'.SSL_SITE_URL.'/requests.php?action=view&amp;id='.$RequestID.']'.$FullName.'[/url] &mdash; has been filled. You can view it here: [url]https://'.SSL_SITE_URL.'/torrents.php?torrentid='.$TorrentID.'[/url]');
 }
 
-$RequestVotes = get_votes_array($RequestID);
+$RequestVotes = Requests::get_votes_array($RequestID);
 Misc::write_log("Request $RequestID (".$FullName.") was filled by user $FillerID (".$FillerUsername.") with the torrent $TorrentID for a ".Format::get_size($RequestVotes['TotalBounty']).' bounty.');
 
 // Give bounty
