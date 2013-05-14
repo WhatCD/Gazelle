@@ -101,7 +101,7 @@ if ($CategoryName == "Music") {
 		'producer' => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
 	);
 } else {
-        $JsonMusicInfo = new stdClass; //json_encodes into an empty object: {}
+	$JsonMusicInfo = new stdClass; //json_encodes into an empty object: {}
 }
 
 $JsonTopContributors = array();
@@ -185,42 +185,42 @@ foreach ($Request['Tags'] as $Tag) {
 }
 
 json_die("success", array(
-    'requestId' => (int) $RequestID,
-    'requestorId' => (int) $RequestorID,
-    'requestorName' => $RequestorName,
+	'requestId' => (int) $RequestID,
+	'requestorId' => (int) $RequestorID,
+	'requestorName' => $RequestorName,
 	'isBookmarked' => Bookmarks::has_bookmarked('request', $RequestID),
-    'requestTax' => $RequestTax,
-    'timeAdded' => $TimeAdded,
-    'canEdit' => $CanEdit,
-    'canVote' => $CanVote,
-    'minimumVote' => $MinimumVote,
-    'voteCount' => $VoteCount,
-    'lastVote' => $LastVote,
-    'topContributors' => $JsonTopContributors,
-    'totalBounty' => (int) $RequestVotes['TotalBounty'],
-    'categoryId' => (int) $CategoryID,
-    'categoryName' => $CategoryName,
-    'title' => $Title,
-    'year' => (int) $Year,
-    'image' => $Image,
-    'description' => $Text->full_format($Description),
-    'musicInfo' => $JsonMusicInfo,
-    'catalogueNumber' => $CatalogueNumber,
-    'releaseType' => (int) $ReleaseType,
-    'releaseName' => $ReleaseName,
-    'bitrateList' => $BitrateList,
-    'formatList' => $FormatList,
-    'mediaList' => $MediaList,
-    'logCue' => $LogCue,
-    'isFilled' => $IsFilled,
-    'fillerId' => (int) $FillerID,
-    'fillerName' => $FillerName,
-    'torrentId' => (int) $TorrentID,
-    'timeFilled' => $TimeFilled,
-    'tags' => $JsonTags,
-    'comments' => $JsonRequestComments,
-    'commentPage' => (int) $Page,
-    'commentPages' => (int) ceil($Results / TORRENT_COMMENTS_PER_PAGE)
+	'requestTax' => $RequestTax,
+	'timeAdded' => $TimeAdded,
+	'canEdit' => $CanEdit,
+	'canVote' => $CanVote,
+	'minimumVote' => $MinimumVote,
+	'voteCount' => $VoteCount,
+	'lastVote' => $LastVote,
+	'topContributors' => $JsonTopContributors,
+	'totalBounty' => (int) $RequestVotes['TotalBounty'],
+	'categoryId' => (int) $CategoryID,
+	'categoryName' => $CategoryName,
+	'title' => $Title,
+	'year' => (int) $Year,
+	'image' => $Image,
+	'description' => $Text->full_format($Description),
+	'musicInfo' => $JsonMusicInfo,
+	'catalogueNumber' => $CatalogueNumber,
+	'releaseType' => (int) $ReleaseType,
+	'releaseName' => $ReleaseName,
+	'bitrateList' => $BitrateList,
+	'formatList' => $FormatList,
+	'mediaList' => $MediaList,
+	'logCue' => $LogCue,
+	'isFilled' => $IsFilled,
+	'fillerId' => (int) $FillerID,
+	'fillerName' => $FillerName,
+	'torrentId' => (int) $TorrentID,
+	'timeFilled' => $TimeFilled,
+	'tags' => $JsonTags,
+	'comments' => $JsonRequestComments,
+	'commentPage' => (int) $Page,
+	'commentPages' => (int) ceil($Results / TORRENT_COMMENTS_PER_PAGE)
 ));
 
 ?>

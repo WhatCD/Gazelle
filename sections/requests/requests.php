@@ -331,7 +331,7 @@ $SS->SetSortMode($Way, $OrderBy);
 if (count($Queries) > 0) {
 	$Query = implode(' ',$Queries);
 } else {
-	$Query='';
+	$Query = '';
 }
 
 $SS->set_index('requests requests_delta');
@@ -646,11 +646,11 @@ foreach ($Categories as $CatKey => $CatName) {
 				<?=Format::get_size($RequestVotes['TotalBounty'])?>
 			</td>
 			<td>
-<?   		if ($IsFilled) { ?>
+<?			if ($IsFilled) { ?>
 				<a href="torrents.php?<?=(strtotime($TimeFilled) < $TimeCompare ? 'id=' : 'torrentid=').$TorrentID?>"><strong><?=time_diff($TimeFilled)?></strong></a>
-<?   		} else { ?>
+<?			} else { ?>
 				<strong>No</strong>
-<?   		} ?>
+<?			} ?>
 			</td>
 			<td>
 <?			if ($IsFilled) { ?>

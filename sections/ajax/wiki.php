@@ -10,7 +10,7 @@ if (!empty($_GET['id']) && is_number($_GET['id'])) { //Visiting article via ID
 } elseif ($_GET['name'] != '') { //Retrieve article ID via alias.
 	$ArticleID = $Alias->to_id($_GET['name']);
 } else {
-        json_die("failure");
+	json_die("failure");
 }
 
 if (!$ArticleID) { //No article found
@@ -29,13 +29,13 @@ if ($Read > $LoggedUser['EffectiveClass']) {
 $TextBody = $Text->full_format($Body, false);
 
 json_die("success", array(
-    'title' => $Title,
-    'bbBody' => $Body,
-    'body' => $TextBody,
-    'aliases' => $Aliases,
-    'authorID' => (int) $AuthorID,
-    'authorName' => $AuthorName,
-    'date' => $Date,
-    'revision' => (int) $Revision
+	'title' => $Title,
+	'bbBody' => $Body,
+	'body' => $TextBody,
+	'aliases' => $Aliases,
+	'authorID' => (int) $AuthorID,
+	'authorName' => $AuthorName,
+	'date' => $Date,
+	'revision' => (int) $Revision
 ));
 ?>

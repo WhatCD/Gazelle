@@ -23,10 +23,12 @@ if ($_REQUEST['do'] == 'vote') {
 		echo 'badvote';
 		die();
 	}
-	$Type = ($_REQUEST['vote'] == 'up')?"Up":"Down";
+	$Type = ($_REQUEST['vote'] == 'up') ? 'Up' : 'Down';
 
 	// Update the two votes tables if needed
-	$DB->query("INSERT IGNORE INTO users_votes (UserID, GroupID, Type) VALUES ($UserID, $GroupID, '$Type')");
+	$DB->query("
+		INSERT IGNORE INTO users_votes (UserID, GroupID, Type)
+		VALUES ($UserID, $GroupID, '$Type')");
 	if ($DB->affected_rows() == 0) {
 		echo 'noaction';
 		die();
@@ -34,7 +36,7 @@ if ($_REQUEST['do'] == 'vote') {
 
 	// Update the group's cache key
 	$GroupVotes['Total'] += 1;
-	if ($Type == "Up") {
+	if ($Type == 'Up') {
 		$GroupVotes['Ups'] += 1;
 	}
 	$Cache->cache_value('votes_'.$GroupID, $GroupVotes);
@@ -43,10 +45,10 @@ if ($_REQUEST['do'] == 'vote') {
 	// so we can cut corners and use the magic of INSERT...ON DUPLICATE KEY UPDATE...
 	// to accomplish both in one query
 	$DB->query("INSERT INTO torrents_votes (GroupID, Total, Ups, Score)
-				VALUES ($GroupID, 1, ".($Type=='Up'?1:0).", 0)
+				VALUES ($GroupID, 1, ".($Type == 'Up' ? 1 : 0).", 0)
 				ON DUPLICATE KEY UPDATE Total = Total + 1,
-				Score = IFNULL(binomial_ci(Ups".($Type=='Up'?'+1':'').",Total),0)".
-				($Type=='Up'?', Ups = Ups+1':''));
+				Score = IFNULL(binomial_ci(Ups".($Type == 'Up' ? '+1' : '').",Total),0)".
+				($Type == 'Up' ? ', Ups = Ups+1' : ''));
 
 	$UserVotes[$GroupID] = array('GroupID' => $GroupID, 'Type' => $Type);
 
@@ -72,8 +74,8 @@ if ($_REQUEST['do'] == 'vote') {
 					}
 				} else {
 					$VotePairs[$Vote['GroupID']] = array('GroupID'=>$Vote['GroupID'],
-					                                     'Total' => 1,
-														 'Ups'=>($Type == 'Up')?1:0);
+														'Total' => 1,
+														'Ups'=>($Type == 'Up') ? 1 : 0);
 				}
 			}
 		}
@@ -101,8 +103,8 @@ if ($_REQUEST['do'] == 'vote') {
 				}
 			} else {
 				$VotePairs[$GroupID] = array('GroupID' => $GroupID,
-				                             'Total' => 1,
-											 'Ups'=>($Type == 'Up')?1:0);
+											'Total' => 1,
+											'Ups'=>($Type == 'Up') ? 1 : 0);
 			}
 			$Cache->cache_value('vote_pairs_'.$VGID, $VotePairs);
 		}
@@ -117,7 +119,10 @@ if ($_REQUEST['do'] == 'vote') {
 	}
 	$Type = $UserVotes[$GroupID]['Type'];
 
-	$DB->query("DELETE FROM users_votes WHERE UserID=$UserID AND GroupID=$GroupID");
+	$DB->query("
+		DELETE FROM users_votes
+		WHERE UserID=$UserID
+			AND GroupID=$GroupID");
 
 	// Update personal cache key
 	unset($UserVotes[$GroupID]);
@@ -125,15 +130,17 @@ if ($_REQUEST['do'] == 'vote') {
 
 	// Update the group's cache key
 	$GroupVotes['Total'] -= 1;
-	if ($Type == "Up") {
+	if ($Type == 'Up') {
 		$GroupVotes['Ups'] -= 1;
 	}
 	$Cache->cache_value('votes_'.$GroupID, $GroupVotes);
 
-	$DB->query("UPDATE torrents_votes SET Total = GREATEST(0, Total - 1),
-				Score = IFNULL(binomial_ci(GREATEST(0,Ups".($Type == 'Up' ? '-1' : '')."),GREATEST(0, Total)),0)".
-			    ($Type == 'Up' ? ', Ups = GREATEST(0, Ups - 1)' : '')."
-				WHERE GroupID=$GroupID");
+	$DB->query("
+		UPDATE torrents_votes
+		SET Total = GREATEST(0, Total - 1),
+			Score = IFNULL(binomial_ci(GREATEST(0,Ups".($Type == 'Up' ? '-1' : '')."),GREATEST(0, Total)),0)".
+			($Type == 'Up' ? ', Ups = GREATEST(0, Ups - 1)' : '')."
+		WHERE GroupID=$GroupID");
 	// Update paired cache keys
 	// First update this album's paired votes.  If this keys is magically not set,
 	// our life just got a bit easier.  We're only tracking paired votes on upvotes.

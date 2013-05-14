@@ -102,13 +102,13 @@ function check_perms($PermissionName, $MinClass = 0) {
  */
 
 function json_die($Status, $Message) {
-    if ($Status == "success" && $Message) {
-        print json_encode(array('status' => $Status, 'response' => $Message));
-    } else if ($Message) {
-        print json_encode(array('status' => $Status, 'error' => $Message));
-    } else {
-        print json_encode(array('status' => $Status));
-    }
-    die();
+	if ($Status == "success" && $Message) {
+		print json_encode(array('status' => $Status, 'response' => $Message));
+	} else if ($Message) {
+		print json_encode(array('status' => $Status, 'error' => $Message));
+	} else {
+		print json_encode(array('status' => $Status));
+	}
+	die();
 }
 ?>

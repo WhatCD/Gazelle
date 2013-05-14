@@ -86,7 +86,7 @@ foreach ($Thread as $Key => $Post) {
 }
 
 json_die("success", array(
-    'page' => (int) $Page,
-    'pages' => ceil($Results / TORRENT_COMMENTS_PER_PAGE),
-    'comments' => $JsonComments
+	'page' => (int) $Page,
+	'pages' => ceil($Results / TORRENT_COMMENTS_PER_PAGE),
+	'comments' => $JsonComments
 ));

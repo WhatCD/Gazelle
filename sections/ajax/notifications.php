@@ -1,6 +1,6 @@
 <?
 if (!check_perms('site_torrents_notify')) {
-        json_die("failure");
+	json_die("failure");
 }
 
 define('NOTIFICATIONS_PER_PAGE', 50);
@@ -101,8 +101,8 @@ foreach ($FilterGroups as $FilterID => $FilterResults) {
 }
 
 json_die("success", array(
-    'currentPages' => intval($Page),
-    'pages' => ceil($TorrentCount / NOTIFICATIONS_PER_PAGE),
-    'numNew' => $NumNew,
-    'results' => $JsonNotifications
+	'currentPages' => intval($Page),
+	'pages' => ceil($TorrentCount / NOTIFICATIONS_PER_PAGE),
+	'numNew' => $NumNew,
+	'results' => $JsonNotifications
 ));

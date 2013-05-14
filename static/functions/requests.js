@@ -19,7 +19,7 @@ function Vote(amount, requestid) {
 	}
 
 	if (amount > 20*1024*1024) {
-		upload   = $('#current_uploaded').raw().value;
+		upload = $('#current_uploaded').raw().value;
 		download = $('#current_downloaded').raw().value;
 		rr = $('#current_rr').raw().value;
 		if (amount > .3*(upload - rr * download)) {

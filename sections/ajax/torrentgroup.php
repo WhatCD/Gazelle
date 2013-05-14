@@ -12,28 +12,28 @@ $GroupID = (int)$_GET['id'];
 $TorrentHash = (string)$_GET['hash'];
 
 if ($GroupID && $TorrentHash) {
-    json_die("failure", "bad parameters");
+	json_die("failure", "bad parameters");
 }
 
 if ($TorrentHash) {
-    if (!is_valid_torrenthash($TorrentHash)) {
-        json_die("failure", "bad hash parameter");
-    } else {
-        $GroupID = (int)torrenthash_to_groupid($TorrentHash);
-        if (!$GroupID) {
-            json_die("failure", "bad hash parameter");
-        }
-    }
+	if (!is_valid_torrenthash($TorrentHash)) {
+		json_die("failure", "bad hash parameter");
+	} else {
+		$GroupID = (int)torrenthash_to_groupid($TorrentHash);
+		if (!$GroupID) {
+			json_die("failure", "bad hash parameter");
+		}
+	}
 }
 
 if ($GroupID <= 0) {
-    json_die("failure", "bad id parameter");
+	json_die("failure", "bad id parameter");
 }
 
 $TorrentCache = get_group_info($GroupID, true, 0, true, true);
 
 if (!$TorrentCache) {
-    json_die("failure", "bad id parameter");
+	json_die("failure", "bad id parameter");
 }
 
 list($TorrentDetails, $TorrentList) = $TorrentCache;

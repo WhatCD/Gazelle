@@ -131,7 +131,9 @@ if (!empty($_GET['userid'])) {
 			$SQL .= " AND c.ID IN(".db_string(implode(',', $CollageIDs)).")";
 		}
 	} else {
-		if (!check_paranoia('collages', $User['Paranoia'], $UserClass, $UserID)) { error(403); }
+		if (!check_paranoia('collages', $User['Paranoia'], $UserClass, $UserID)) {
+			error(403);
+		}
 		$SQL .= " AND UserID='".$_GET['userid']."'";
 	}
 	$Categories[] = 0;

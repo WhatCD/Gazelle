@@ -515,10 +515,10 @@ $DB->query("SELECT
 	}
 
 
-        json_die("success", array(
-            'results' => array(),
-            'youMightLike' => $JsonYouMightLike
-        ));
+	json_die("success", array(
+		'results' => array(),
+		'youMightLike' => $JsonYouMightLike
+	));
 }
 
 $Bookmarks = Bookmarks::all_bookmarks('torrent');
@@ -710,7 +710,7 @@ foreach ($Results as $Result) {
 }
 
 json_die("success", array(
-    'currentPage' => intval($Page),
-    'pages' => ceil($TorrentCount / TORRENTS_PER_PAGE),
-    'results' => $JsonGroups
+	'currentPage' => intval($Page),
+	'pages' => ceil($TorrentCount / TORRENTS_PER_PAGE),
+	'results' => $JsonGroups
 ));

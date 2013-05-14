@@ -1,6 +1,8 @@
 <?
 $GroupID = $_GET['groupid'];
-if (!is_number($GroupID)) { error(404); }
+if (!is_number($GroupID)) {
+	error(404);
+}
 
 View::show_header("History for Group $GroupID");
 
@@ -27,8 +29,7 @@ if (!empty($Groups['matches'][$GroupID])) {
 <?
 	$Log = $DB->query("SELECT TorrentID, UserID, Info, Time FROM group_log WHERE GroupID = ".$GroupID." ORDER BY Time DESC");
 	$LogEntries = $DB->to_array(false, MYSQL_NUM);
-	foreach ($LogEntries AS $LogEntry)
-	{
+	foreach ($LogEntries AS $LogEntry) {
 		list($TorrentID, $UserID, $Info, $Time) = $LogEntry;
 ?>
 		<tr class="rowa">
@@ -39,7 +40,7 @@ if (!empty($Groups['matches'][$GroupID])) {
 				list($Media, $Format, $Encoding) = $DB->next_record();
 				if ($DB->record_count() == 0) { ?>
 					<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a> (Deleted)</td><?
-				} elseif ($Media == "") { ?>
+				} elseif ($Media == '') { ?>
 					<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a></td><?
 				} else { ?>
 					<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a> (<?=$Format?>/<?=$Encoding?>/<?=$Media?>)</td>

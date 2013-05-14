@@ -4,7 +4,7 @@ User topic subscription page
 */
 
 if (!empty($LoggedUser['DisableForums'])) {
-    json_die('failure');
+	json_die('failure');
 }
 
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
@@ -104,6 +104,6 @@ while (list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $L
 }
 
 json_die('success', array(
-    'threads' => $JsonPosts
+	'threads' => $JsonPosts
 ));
 ?>

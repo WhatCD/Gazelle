@@ -61,7 +61,7 @@ class Votes {
 			} else {
 				$GroupVotes = $DB->next_record(MYSQLI_ASSOC, false);
 			}
-			$Cache->cache_value('votes_'.$GroupID, $GroupVotes, 259200);
+			$Cache->cache_value('votes_'.$GroupID, $GroupVotes, 259200); // 3 days
 		}
 		return $GroupVotes;
 	}
@@ -211,7 +211,7 @@ class Votes {
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
-			$Cache->cache_value('voting_ranks_overall', $Rankings, 259200);
+			$Cache->cache_value('voting_ranks_overall', $Rankings, 259200); // 3 days
 		}
 
 		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
@@ -246,7 +246,7 @@ class Votes {
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
-			$Cache->cache_value('voting_ranks_year_'.$Year , $Rankings, 259200);
+			$Cache->cache_value('voting_ranks_year_'.$Year , $Rankings, 259200); // 3 days
 		}
 
 		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
@@ -286,7 +286,7 @@ class Votes {
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
-			$Cache->cache_value('voting_ranks_decade_'.$Year , $Rankings, 259200);
+			$Cache->cache_value('voting_ranks_decade_'.$Year , $Rankings, 259200); // 3 days
 		}
 
 		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;

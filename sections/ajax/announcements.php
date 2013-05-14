@@ -75,8 +75,8 @@ foreach ($News as $NewsItem) {
 }
 
 json_die("success", array(
-    'announcements' => $JsonAnnouncements,
-    'blogPosts' => $JsonBlog
+	'announcements' => $JsonAnnouncements,
+	'blogPosts' => $JsonBlog
 ));
 
 ?>

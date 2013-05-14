@@ -8,12 +8,12 @@ include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
 if ($_GET['id'] && $_GET['artistname']) {
-        json_die("failure", "bad parameters");
+	json_die("failure", "bad parameters");
 }
 
 $ArtistID = $_GET['id'];
 if ($ArtistID && !is_number($ArtistID)) {
-        json_die("failure");
+	json_die("failure");
 }
 
 if (empty($ArtistID)) {
@@ -21,8 +21,7 @@ if (empty($ArtistID)) {
 		$Name = db_string(trim($_GET['artistname']));
 		$DB->query("SELECT ArtistID FROM artists_alias WHERE Name LIKE '$Name'");
 		if (!(list($ArtistID) = $DB->next_record(MYSQLI_NUM, false))) {
-		//if (list($ID) = $DB->next_record(MYSQLI_NUM, false)) {
-                        json_die("failure");
+			json_die("failure");
 		}
 		// If we get here, we got the ID!
 	}
@@ -70,7 +69,7 @@ if ($Data) {
 	$DB->query($sql);
 
 	if ($DB->record_count() == 0) {
-                json_die("failure");
+		json_die("failure");
 	}
 
 	list($Name, $Image, $Body, $VanityHouseArtist) = $DB->next_record(MYSQLI_NUM, array(0));
@@ -260,8 +259,8 @@ if (empty($SimilarArray)) {
 	}
 	$NumSimilar = count($SimilarArray);
 } else {
-        //If data already exists, use it
-        foreach ($SimilarArray as $Similar) {
+	//If data already exists, use it
+	foreach ($SimilarArray as $Similar) {
 		$JsonSimilar[] = array(
 			'artistId' => (int) $Similar['ArtistID'],
 			'name' => $Similar['Name'],
@@ -313,24 +312,24 @@ $Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), a
 $Cache->cache_value($Key, $Data, 3600);
 
 json_die("success", array(
-    'id' => (int) $ArtistID,
-    'name' => $Name,
-    'notificationsEnabled' => $notificationsEnabled,
-    'hasBookmarked' => Bookmarks::has_bookmarked('artist', $ArtistID),
-    'image' => $Image,
-    'body' => $Text->full_format($Body),
-    'vanityHouse' => $VanityHouseArtist == 1,
-    'tags' => array_values($Tags),
-    'similarArtists' => $JsonSimilar,
-    'statistics' => array(
-        'numGroups' => $NumGroups,
-        'numTorrents' => $NumTorrents,
-        'numSeeders' => $NumSeeders,
-        'numLeechers' => $NumLeechers,
-        'numSnatches' => $NumSnatches
-    ),
-    'torrentgroup' => $JsonTorrents,
-    'requests' => $JsonRequests
+	'id' => (int) $ArtistID,
+	'name' => $Name,
+	'notificationsEnabled' => $notificationsEnabled,
+	'hasBookmarked' => Bookmarks::has_bookmarked('artist', $ArtistID),
+	'image' => $Image,
+	'body' => $Text->full_format($Body),
+	'vanityHouse' => $VanityHouseArtist == 1,
+	'tags' => array_values($Tags),
+	'similarArtists' => $JsonSimilar,
+	'statistics' => array(
+		'numGroups' => $NumGroups,
+		'numTorrents' => $NumTorrents,
+		'numSeeders' => $NumSeeders,
+		'numLeechers' => $NumLeechers,
+		'numSnatches' => $NumSnatches
+	),
+	'torrentgroup' => $JsonTorrents,
+	'requests' => $JsonRequests
 ));
 
 ?>

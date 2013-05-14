@@ -13,7 +13,9 @@ if (isset($_GET['userid'])) {
 } else {
 	$UserID = $LoggedUser['ID'];
 }
-if (!is_number($UserID)) { error(404); }
+if (!is_number($UserID)) {
+	error(404);
+}
 
 $UserInfo = Users::user_info($UserID);
 $Perms = Permissions::get_permissions($UserInfo['PermissionID']);
@@ -26,11 +28,15 @@ if (!check_perms('users_mod')) {
 }
 
 if (isset($_GET['expire'])) {
-	if (!check_perms('users_mod')) { error(403); }
+	if (!check_perms('users_mod')) {
+		error(403);
+	}
 	$UserID = $_GET['userid'];
 	$TorrentID = $_GET['torrentid'];
 
-	if (!is_number($UserID) || !is_number($TorrentID)) { error(403); }
+	if (!is_number($UserID) || !is_number($TorrentID)) {
+		error(403);
+	}
 	$DB->query("SELECT info_hash FROM torrents where ID = $TorrentID");
 	if (list($InfoHash) = $DB->next_record(MYSQLI_NUM, FALSE)) {
 		$DB->query("UPDATE users_freeleeches SET Expired=TRUE WHERE UserID=$UserID AND TorrentID=$TorrentID");
@@ -44,27 +50,28 @@ View::show_header('Freeleech token history');
 
 list($Page,$Limit) = Format::page_limit(25);
 
-$DB->query("SELECT SQL_CALC_FOUND_ROWS
-				f.TorrentID,
-				t.GroupID,
-				f.Time,
-				f.Expired,
-				f.Downloaded,
-				f.Uses,
-				g.Name,
-				t.Format,
-				t.Encoding
-			FROM users_freeleeches AS f
-			JOIN torrents AS t ON t.ID = f.TorrentID
-			JOIN torrents_group AS g ON g.ID = t.GroupID
-			WHERE f.UserID = $UserID
-			ORDER BY f.Time DESC
-			LIMIT $Limit");
+$DB->query("
+	SELECT SQL_CALC_FOUND_ROWS
+		f.TorrentID,
+		t.GroupID,
+		f.Time,
+		f.Expired,
+		f.Downloaded,
+		f.Uses,
+		g.Name,
+		t.Format,
+		t.Encoding
+	FROM users_freeleeches AS f
+		JOIN torrents AS t ON t.ID = f.TorrentID
+		JOIN torrents_group AS g ON g.ID = t.GroupID
+	WHERE f.UserID = $UserID
+	ORDER BY f.Time DESC
+	LIMIT $Limit");
 $Tokens = $DB->to_array();
 
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
-$Pages=Format::get_pages($Page, $NumResults, 25);
+$Pages = Format::get_pages($Page, $NumResults, 25);
 
 ?>
 <div class="header">
@@ -97,10 +104,10 @@ foreach ($Tokens as $Token) {
 		$Name = $ArtistName.$Name;
 	}
 	if ($Format && $Encoding) {
-		$Name.=' ['.$Format.' / '.$Encoding.']';
+		$Name.=" [$Format / $Encoding]";
 	}
 ?>
-	<tr class="<?=($i?'rowa':'rowb')?>">
+	<tr class="<?=($i ? 'rowa' : 'rowb')?>">
 		<td><?=$Name?></td>
 		<td><?=time_diff($Time)?></td>
 		<td><?=($Expired ? 'Yes' : 'No')?><?=(check_perms('users_mod') && !$Expired)?" <a href=\"userhistory.php?action=token_history&amp;expire=1&amp;userid=$UserID&amp;torrentid=$TorrentID\">(expire)</a>":''?>

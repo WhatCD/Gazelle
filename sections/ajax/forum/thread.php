@@ -24,7 +24,7 @@ if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 		$DB->query("SELECT TopicID FROM forums_posts WHERE ID = $_GET[postid]");
 		list($ThreadID) = $DB->next_record();
 		if ($ThreadID) {
-                        //Redirect postid to threadid when necessary.
+			//Redirect postid to threadid when necessary.
 			header("Location: ajax.php?action=forum&type=viewthread&threadid=$ThreadID&postid=$_GET[postid]");
 			die();
 		} else {

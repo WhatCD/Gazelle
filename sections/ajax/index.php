@@ -16,7 +16,7 @@ $AJAX_LIMIT = array(5,10);
 $Limited_Pages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup');
 
 header('Content-Type: application/json; charset=utf-8');
-            
+
 //	Enforce rate limiting everywhere except info.php
 if (isset($_GET['action']) && in_array($_GET['action'],$Limited_Pages)) {
 	if (!$userrequests = $Cache->get_value('ajax_requests_'.$UserID)) {

@@ -2,7 +2,9 @@
 ini_set('memory_limit', '5G');
 set_time_limit(0);
 
-//if (!check_perms('site_debug')) { error(403); }
+//if (!check_perms('site_debug')) {
+//	error(403);
+//}
 
 View::show_header();
 
@@ -12,32 +14,32 @@ shell_exec('unzip GeoLiteCity-latest.zip');
 shell_exec('rm GeoLiteCity-latest.zip');
 
 if (($Locations = file("GeoLiteCity_".date('Ym')."07/GeoLiteCity-Location.csv", FILE_IGNORE_NEW_LINES)) === false) {
-	error("Download or extraction of maxmind database failed");
+	error('Download or extraction of maxmind database failed');
 }
 array_shift($Locations);
 array_shift($Locations);
 
-echo "There are ".count($Locations)." locations";
-echo "<br />";
+echo 'There are '.count($Locations).' locations';
+echo '<br />';
 
 $CountryIDs = array();
 foreach ($Locations as $Location) {
-	$Parts = explode(",", $Location);
+	$Parts = explode(',', $Location);
 	//CountryIDs[1] = "AP";
 	$CountryIDs[trim($Parts[0], '"')] = trim($Parts[1], '"');
 }
 
-echo "There are ".count($CountryIDs)." CountryIDs";
-echo "<br />";
+echo 'There are '.count($CountryIDs).' CountryIDs';
+echo '<br />';
 
 if (($Blocks = file("GeoLiteCity_".date('Ym')."07/GeoLiteCity-Blocks.csv", FILE_IGNORE_NEW_LINES)) === false) {
-	echo "Error";
+	echo 'Error';
 }
 array_shift($Blocks);
 array_shift($Blocks);
 
-echo "There are ".count($Blocks)." blocks";
-echo "<br />";
+echo 'There are '.count($Blocks).' blocks';
+echo '<br />';
 
 //Because 4,000,000 rows is a lot for any server to handle, we split it into manageable groups of 10,000
 $SplitOn = 10000;
@@ -49,15 +51,19 @@ foreach ($Blocks as $Index => $Block) {
 	$StartIP = trim($StartIP, '"');
 	$EndIP = trim($EndIP, '"');
 	$CountryID = trim($CountryID, '"');
-	$Values[] = "('".$StartIP."', '".$EndIP."', '".$CountryIDs[$CountryID]."')";
+	$Values[] = "('$StartIP', '$EndIP', '".$CountryIDs[$CountryID]."')";
 	if ($Index % $SplitOn == 0) {
-		$DB->query("INSERT INTO geoip_country (StartIP, EndIP, Code) VALUES ".implode(", ", $Values));
+		$DB->query('
+			INSERT INTO geoip_country (StartIP, EndIP, Code)
+			VALUES '.implode(', ', $Values));
 		$Values = array();
 	}
 }
 
 if (count($Values) > 0) {
-	$DB->query("INSERT INTO geoip_country (StartIP, EndIP, Code) VALUES ".implode(", ", $Values));
+	$DB->query("
+		INSERT INTO geoip_country (StartIP, EndIP, Code)
+		VALUES ".implode(', ', $Values));
 }
 
 
@@ -73,7 +79,7 @@ if (!check_perms('admin_update_geoip')) {
 }
 enforce_login();
 
-ini_set('memory_limit',1024*1024*1024);
+ini_set('memory_limit', 1024 * 1024 * 1024);
 ini_set('max_execution_time', 3600);
 
 header('Content-type: text/plain');

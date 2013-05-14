@@ -4,7 +4,7 @@
  **********************************************************************/
 
 if (empty($_GET['search'])) {
-    json_die("failure", "no search terms");
+	json_die("failure", "no search terms");
 } else {
 	$_GET['username'] = $_GET['search'];
 }
@@ -49,7 +49,7 @@ foreach ($Results as $Result) {
 }
 
 json_die("success", array(
-    'currentPage' => (int) $Page,
-    'pages' => ceil($NumResults / USERS_PER_PAGE),
-    'results' => $JsonUsers
+	'currentPage' => (int) $Page,
+	'pages' => ceil($NumResults / USERS_PER_PAGE),
+	'results' => $JsonUsers
 ));

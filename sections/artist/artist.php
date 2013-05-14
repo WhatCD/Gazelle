@@ -750,7 +750,7 @@ if ($NumRequests > 0) {
 			$Tags = Requests::get_tags($RequestID);
 			$ReqTagList = array();
 			foreach ($Tags as $TagID => $TagName) {
-				   $ReqTagList[] = "<a href=\"requests.php?tags=".$TagName.'">'.display_str($TagName).'</a>';
+				$ReqTagList[] = "<a href=\"requests.php?tags=".$TagName.'">'.display_str($TagName).'</a>';
 			}
 			$ReqTagList = implode(', ', $ReqTagList);
 ?>

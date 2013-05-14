@@ -1,7 +1,11 @@
 <?
-if (!check_perms('site_debug')) { error(403); }
+if (!check_perms('site_debug')) {
+	error(403);
+}
 
-if (!isset($_GET['case']) || !$Analysis = $Cache->get_value('analysis_'.$_GET['case'])) { error(404); }
+if (!isset($_GET['case']) || !$Analysis = $Cache->get_value('analysis_'.$_GET['case'])) {
+	error(404);
+}
 
 View::show_header('Case Analysis');
 ?>

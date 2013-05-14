@@ -60,16 +60,16 @@ if (!isset($Forum) || !is_array($Forum)) {
 }
 
 if (!isset($Forums[$ForumID])) {
-        json_die("failure");
+	json_die("failure");
 }
 // Make sure they're allowed to look at the page
 if (!check_perms('site_moderate_forums')) {
 	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) {
-                json_die("failure", "unsufficient permissions to view page");
-        }
+		json_die("failure", "unsufficient permissions to view page");
+	}
 }
 if ($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) {
-        json_die("failure", "unsufficient permissions to view page");
+	json_die("failure", "unsufficient permissions to view page");
 }
 
 $ForumName = display_str($Forums[$ForumID]['Name']);

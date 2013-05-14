@@ -3,7 +3,7 @@ if (($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
 	$DB->query("
 		SELECT
 			t.ID AS TorrentID,
-	       	t.GroupID AS GroupID
+			t.GroupID AS GroupID
 		FROM xbt_files_users AS x
 			JOIN torrents AS t ON t.ID=x.fid
 		WHERE t.Format='FLAC'

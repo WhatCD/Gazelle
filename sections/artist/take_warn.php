@@ -1,5 +1,6 @@
 <?php
-if (!check_perms('users_warn')) { error(404);
+if (!check_perms('users_warn')) {
+	error(404);
 }
 Misc::assert_isset_request($_POST, array('reason', 'privatemessage', 'body', 'length', 'artistid', 'postid', 'userid'));
 

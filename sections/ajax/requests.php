@@ -28,7 +28,7 @@ if (empty($_GET['type'])) {
 			if (!empty($_GET['userid'])) {
 				if (is_number($_GET['userid'])) {
 					if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
-                                                json_die("failure");
+						json_die("failure");
 					}
 					$Title = "Requests voted for by ".$UserInfo['Username'];
 					$SS->set_filter('voter', array($_GET['userid']));
@@ -290,11 +290,11 @@ if (!empty($SphinxResults['notfound'])) {
 $Requests = $SphinxResults['matches'];
 
 if ($NumResults == 0) {
-        json_die("success", array(
-            'currentPage' => 1,
-            'pages' => 1,
-            'results' => array()
-        ));
+	json_die("success", array(
+		'currentPage' => 1,
+		'pages' => 1,
+		'results' => array()
+	));
 } else {
 	$JsonResults = array();
 	$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
@@ -353,10 +353,10 @@ if ($NumResults == 0) {
 			'timeFilled' => $TimeFilled == 0 ? '' : $TimeFilled
 		);
 	}
-        json_die("success", array(
-            'currentPage' => intval($Page),
-            'pages' => ceil($NumResults / REQUESTS_PER_PAGE),
-            'results' => $JsonResults
-        ));
+	json_die("success", array(
+		'currentPage' => intval($Page),
+		'pages' => ceil($NumResults / REQUESTS_PER_PAGE),
+		'results' => $JsonResults
+	));
 }
 ?>
