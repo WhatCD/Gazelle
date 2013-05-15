@@ -70,15 +70,16 @@ if ($BookmarkView) {
 	$BookmarkJoin = '';
 }
 
-$BaseSQL = $SQL = "SELECT SQL_CALC_FOUND_ROWS
-	c.ID,
-	c.Name,
-	c.NumTorrents,
-	c.TagList,
-	c.CategoryID,
-	c.UserID
+$BaseSQL = $SQL = "
+	SELECT SQL_CALC_FOUND_ROWS
+		c.ID,
+		c.Name,
+		c.NumTorrents,
+		c.TagList,
+		c.CategoryID,
+		c.UserID
 	FROM collages AS c
-	$BookmarkJoin
+		$BookmarkJoin
 	WHERE Deleted = '0'";
 
 if ($BookmarkView) {
@@ -187,7 +188,7 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 					<td class="label">Categories:</td>
 					<td>
 <? foreach ($CollageCats as $ID=>$Cat) { ?>
-						<input type="checkbox" value="1" name="cats[<?=$ID?>]" id="cats_<?=$ID?>"<? if (in_array($ID, $Categories)) { echo ' checked="checked"'; }?> />
+						<input type="checkbox" value="1" name="cats[<?=$ID?>]" id="cats_<?=$ID?>"<? if (in_array($ID, $Categories)) { echo ' checked="checked"'; } ?> />
 						<label for="cats_<?=$ID?>"><?=$Cat?></label>&nbsp;&nbsp;
 <? } ?>
 					</td>
@@ -195,8 +196,8 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 				<tr id="search_name_description">
 					<td class="label">Search in:</td>
 					<td>
-						<input type="radio" name="type" value="c.name" <? if ($Type == 'c.name') { echo 'checked="checked" '; }?>/> Names&nbsp;&nbsp;
-						<input type="radio" name="type" value="description" <? if ($Type == 'description') { echo 'checked="checked" '; }?>/> Descriptions
+						<input type="radio" name="type" value="c.name" <? if ($Type == 'c.name') { echo 'checked="checked" '; } ?>/> Names&nbsp;&nbsp;
+						<input type="radio" name="type" value="description" <? if ($Type == 'description') { echo 'checked="checked" '; } ?>/> Descriptions
 					</td>
 				</tr>
 				<tr id="order_by">
@@ -263,7 +264,7 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 <?	} ?>
 <br /><br />
 <?
-$Pages = Format::get_pages($Page,$NumResults,COLLAGES_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $NumResults, COLLAGES_PER_PAGE, 9);
 echo $Pages;
 ?>
 	</div>

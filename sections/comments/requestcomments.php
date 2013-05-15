@@ -29,28 +29,29 @@ if (!isset($Title)) {
 	$Header = 'Request comments made by ' . ($Self ? 'you' : Users::format_username($UserID, false, false, false));
 }
 
-$Comments = $DB->query("SELECT
-	SQL_CALC_FOUND_ROWS
-	rc.AuthorID,
-	r.ID as RequestID,
-	r.Title,
-	rc.ID as PostID,
-	rc.Body,
-	rc.AddedTime,
-	rc.EditedTime,
-	rc.EditedUserID as EditorID
-FROM requests as r
-	JOIN requests_comments as rc ON rc.RequestID = r.ID
-	$ExtraJoin
-$Conditions
-GROUP BY rc.ID
-ORDER BY rc.AddedTime DESC
-LIMIT $Limit;");
+$Comments = $DB->query("
+	SELECT
+		SQL_CALC_FOUND_ROWS
+		rc.AuthorID,
+		r.ID as RequestID,
+		r.Title,
+		rc.ID as PostID,
+		rc.Body,
+		rc.AddedTime,
+		rc.EditedTime,
+		rc.EditedUserID as EditorID
+	FROM requests as r
+		JOIN requests_comments as rc ON rc.RequestID = r.ID
+		$ExtraJoin
+	$Conditions
+	GROUP BY rc.ID
+	ORDER BY rc.AddedTime DESC
+	LIMIT $Limit;");
 $Count = $DB->record_count();
 
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
-$Pages=Format::get_pages($Page,$Results,$PerPage, 11);
+$Pages = Format::get_pages($Page, $Results, $PerPage, 11);
 
 View::show_header($Title,'bbcode');
 $DB->set_query_id($Comments);

@@ -415,7 +415,7 @@ foreach ($ZIPOptions as $Option) {
 <?		$OpenGroup = true;
 	}
 ?>
-						<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID,$ZIPList)) { echo ' disabled="disabled"'; }?>><?=$OptName?></option>
+						<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID, $ZIPList)) { echo ' disabled="disabled"'; } ?>><?=$OptName?></option>
 <?
 }
 ?>
@@ -585,16 +585,16 @@ if ($CollageCovers != 0) { ?>
 	$Page1 = array_slice($Collage, 0, $CollageCovers);
 	foreach ($Page1 as $Group) {
 		echo $Group;
-}?>
+	} ?>
 			</ul>
 		</div>
-<?		if ($NumGroups > $CollageCovers) { ?>
+<?	if ($NumGroups > $CollageCovers) { ?>
 		<div class="linkbox pager" style="clear: left;" id="pageslinksdiv">
 			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.page(0, this); return false;"><strong>&lt;&lt; First</strong></a> | </span>
 			<span id="prevpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.prevPage(); return false;"><strong>&lt; Prev</strong></a> | </span>
-<?			for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
+<?		for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
 			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? 'selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><strong><?=$CollageCovers * $i + 1?>-<?=min($NumGroups,$CollageCovers * ($i + 1))?></strong></a><?=(($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : '')?></span>
-<?			} ?>
+<?		} ?>
 			<span id="nextbar" class="<?=($NumGroups / $CollageCovers > 5) ? 'hidden' : ''?>"> | </span>
 			<span id="nextpage"><a href="#" class="pageslink" onclick="collageShow.nextPage(); return false;"><strong>Next &gt;</strong></a></span>
 			<span id="lastpage" class="<?=(ceil($NumGroups / $CollageCovers) == 2 ? 'invisible' : '')?>"> | <a href="#" class="pageslink" onclick="collageShow.page(<?=ceil($NumGroups / $CollageCovers) - 1?>, this); return false;"><strong>Last &gt;&gt;</strong></a></span>
@@ -602,7 +602,7 @@ if ($CollageCovers != 0) { ?>
 		<script type="text/javascript">//<![CDATA[
 			collageShow.init(<?=json_encode($CollagePages)?>);
 		//]]></script>
-<?		}
+<?	}
 } ?>
 		<table class="torrent_table grouping cats" id="discog_table">
 			<tr class="colhead_dark">

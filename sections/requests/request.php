@@ -410,7 +410,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 					</form>
 				</td>
 			</tr>
-<? }?>
+<? } ?>
 			<tr id="bounty">
 				<td class="label">Bounty</td>
 				<td id="formatted_bounty"><?=Format::get_size($RequestVotes['TotalBounty'])?></td>
@@ -473,7 +473,7 @@ if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_C
 }
 
 //Get the cache catalogue
-$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
+$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 
 //---------- Get some data to start processing
 
@@ -481,11 +481,11 @@ $CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)
 $Catalogue = Requests::get_comment_catalogue($RequestID, $CatalogueID);
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)%THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
+$Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
 ?>
 	<div class="linkbox"><a name="comments"></a>
 <?
-$Pages=Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
+$Pages = Format::get_pages($Page, $Results, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 echo $Pages;
 ?>
 	</div>
@@ -515,7 +515,7 @@ foreach ($Thread as $Key => $Post) {
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
 <?	} ?>
 			</div>
-			<div id="bar<?=$PostID?>" style="float:right;">
+			<div id="bar<?=$PostID?>" style="float: right;">
 				<a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
 <?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);

@@ -112,7 +112,7 @@ $DB->set_query_id($RS);
 <? } ?>
 	<div class="linkbox">
 <?
-$Pages = Format::get_pages($Page,$Results,DAYS_PER_PAGE,11) ;
+$Pages = Format::get_pages($Page, $Results, DAYS_PER_PAGE, 11) ;
 echo $Pages;
 ?>
 	</div>

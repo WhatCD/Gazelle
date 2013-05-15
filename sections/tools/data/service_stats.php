@@ -123,7 +123,7 @@ View::show_header("Service Stats");
 			<tr><td colspan="2"><strong>CAS/Update (Success)</strong></td></tr>
 			<tr>
 				<td<? if ($MemStats['cas_hits'] > 0 && $MemStats['cas_hits'] / ($MemStats['cas_hits'] + $MemStats['cas_misses']) < 0.7) { echo ' class="invalid" title="More than 30% of the issued CAS commands were unnecessarily wasting time and resources." '; } elseif ($MemStats['cas_hits'] == 0) { echo ' class="notice" title="Disable CAS with the -C parameter and save resources since it is not used." '; } ?>>Cache:</td>
-				<td><?=number_format($MemStats['cas_hits'])?> <span style="float: right;">(<? if ($MemStats['cas_hits'] > 0) { echo number_format(($MemStats['cas_hits'] / ($MemStats['cas_hits'] + $MemStats['cas_misses'])) * 100, 3); } else { echo '0.000'; }?>%)</span></td>
+				<td><?=number_format($MemStats['cas_hits'])?> <span style="float: right;">(<? if ($MemStats['cas_hits'] > 0) { echo number_format(($MemStats['cas_hits'] / ($MemStats['cas_hits'] + $MemStats['cas_misses'])) * 100, 3); } else { echo '0.000'; } ?>%)</span></td>
 			</tr>
 			<tr>
 				<td>Database:</td>

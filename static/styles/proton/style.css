@@ -1228,8 +1228,8 @@ strong.quoteheader {
 /* Toolbox */
 
 .permission_container {
-	float:left;
-	width:33.3%;
+	float: left;
+	width: 33.3%;
 }
 
 /* TORRENTS */
@@ -1239,7 +1239,7 @@ strong.quoteheader {
 }
 
 .main_column .torrent_table .torrent {
-	background-color:#f6f6f6;
+	background-color: #f6f6f6;
 }
 
 .main_column .torrent_table .pad blockquote {

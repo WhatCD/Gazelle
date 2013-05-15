@@ -104,9 +104,9 @@ if (empty($ThreadID)) { ?>
 			<tr>
 				<td><strong>Search in:</strong></td>
 				<td>
-					<input type="radio" name="type" id="type_title" value="title" <? if ($Type == 'title') { echo 'checked="checked" '; }?>/>
+					<input type="radio" name="type" id="type_title" value="title" <? if ($Type == 'title') { echo 'checked="checked" '; } ?>/>
 					<label for="type_title">Titles</label>
-					<input type="radio" name="type" id="type_body" value="body" <? if ($Type == 'body') { echo 'checked="checked" '; }?>/>
+					<input type="radio" name="type" id="type_body" value="body" <? if ($Type == 'body') { echo 'checked="checked" '; } ?>/>
 					<label for="type_body">Post bodies</label>
 				</td>
 			</tr>

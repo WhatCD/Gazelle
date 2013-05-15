@@ -907,7 +907,6 @@ if ($Properties['Year'] && $Properties['RemasterYear']) {
 } else {
 	$SQL.=" AND (FromYear=0 AND ToYear=0) ";
 }
-
 $SQL.=" AND UserID != '".$LoggedUser['ID']."' ";
 
 $DB->query($SQL);

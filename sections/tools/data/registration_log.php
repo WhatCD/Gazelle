@@ -87,7 +87,7 @@ if ($DB->record_count()) {
 ?>
 	<div class="linkbox">
 <?
-	$Pages = Format::get_pages($Page,$Results,USERS_PER_PAGE,11) ;
+	$Pages = Format::get_pages($Page, $Results, USERS_PER_PAGE, 11) ;
 	echo $Pages;
 ?>
 	</div>

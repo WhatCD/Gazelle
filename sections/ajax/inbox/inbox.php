@@ -79,7 +79,7 @@ if (empty($CurURL)) {
 	$CurURL = "inbox.php?".$CurURL."&";
 }
 
-$Pages = Format::get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $NumResults, MESSAGES_PER_PAGE, 9);
 
 $JsonMessages = array();
 while (list($ConvID, $Subject, $Unread, $Sticky, $ForwardedID, $ForwardedName, $SenderID, $Username, $Donor, $Warned, $Enabled, $Date) = $DB->next_record()) {

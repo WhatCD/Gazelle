@@ -94,7 +94,7 @@ foreach ($Friends as $Friend) {
 			<td class="col_avatar avatar" valign="top">
 				<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
 			</td>
-<?	}?>
+<?	} ?>
 			<td valign="top">
 					<input type="hidden" name="friendid" value="<?=$FriendID?>" />
 

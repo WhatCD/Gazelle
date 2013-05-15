@@ -83,7 +83,7 @@ if (empty($CurURL)) {
 	$CurURL = "inbox.php?".$CurURL."&amp;";
 }
 
-$Pages=Format::get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $NumResults, MESSAGES_PER_PAGE, 9);
 echo $Pages;
 ?>
 	</div>
@@ -167,7 +167,7 @@ echo $Pages;
 <?			} ?>
 				</tr>
 <?		}
-	}?>
+	} ?>
 			</table>
 			<input type="submit" name="read" value="Mark as read" />&nbsp;
 			<input type="submit" name="unread" value="Mark as unread" />&nbsp;

@@ -27,7 +27,7 @@ if (isset($_GET['pp'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-list($Page,$Limit) = Format::page_limit(TOPICS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(TOPICS_PER_PAGE);
 
 //---------- Get some data to start processing
 
@@ -37,16 +37,17 @@ if ($Page == 1) {
 	list($Forum,,,$Stickies) = $Cache->get_value('forums_'.$ForumID);
 }
 if (!isset($Forum) || !is_array($Forum)) {
-	$DB->query("SELECT
-		t.ID,
-		t.Title,
-		t.AuthorID,
-		t.IsLocked,
-		t.IsSticky,
-		t.NumPosts,
-		t.LastPostID,
-		t.LastPostTime,
-		t.LastPostAuthorID
+	$DB->query("
+		SELECT
+			t.ID,
+			t.Title,
+			t.AuthorID,
+			t.IsLocked,
+			t.IsSticky,
+			t.NumPosts,
+			t.LastPostID,
+			t.LastPostTime,
+			t.LastPostAuthorID
 		FROM forums_topics AS t
 		WHERE t.ForumID = '$ForumID'
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
@@ -65,11 +66,11 @@ if (!isset($Forums[$ForumID])) {
 // Make sure they're allowed to look at the page
 if (!check_perms('site_moderate_forums')) {
 	if (isset($LoggedUser['CustomForums'][$ForumID]) && $LoggedUser['CustomForums'][$ForumID] === 0) {
-		json_die("failure", "unsufficient permissions to view page");
+		json_die("failure", "insufficient permissions to view page");
 	}
 }
 if ($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) {
-	json_die("failure", "unsufficient permissions to view page");
+	json_die("failure", "insufficient permissions to view page");
 }
 
 $ForumName = display_str($Forums[$ForumID]['Name']);
@@ -82,7 +83,7 @@ foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
 	);
 }
 
-$Pages=Format::get_pages($Page,$Forums[$ForumID]['NumTopics'],TOPICS_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $Forums[$ForumID]['NumTopics'], TOPICS_PER_PAGE, 9);
 
 if (count($Forum) == 0) {
 	print
@@ -138,7 +139,7 @@ if (count($Forum) == 0) {
 			'lastAuthorName' => $LastAuthorName == null ? '' : $LastAuthorName,
 			'lastReadPage' => $LastRead[$TopicID]['Page'] == null ? 0 : (int) $LastRead[$TopicID]['Page'],
 			'lastReadPostId' => $LastRead[$TopicID]['PostID'] == null ? 0 : (int) $LastRead[$TopicID]['PostID'],
-			'read' => $Read == "read"
+			'read' => $Read == 'read'
 		);
 	}
 

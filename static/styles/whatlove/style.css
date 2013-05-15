@@ -722,8 +722,8 @@ tr.group_torrent {
 }
 
 .torrent span {
-	font-weight:normal;
-	float:right;
+	font-weight: normal;
+	float: right;
 }
 
 .nobr {
@@ -879,7 +879,9 @@ form tr {
 	background-color: #D1F0FD;
 }
 
-#site_debug .hidden { display: none; }
+#site_debug .hidden {
+	display: none;
+}
 
 .center {
 	text-align: center;

@@ -39,6 +39,7 @@ extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', '
 if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
 	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
+	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 }
 $ViewingOwn = ($UserID == $LoggedUser['ID']);
 $ShowUnread = ($ViewingOwn && (!isset($_GET['showunread']) || !!$_GET['showunread']));
@@ -56,7 +57,7 @@ if ($ShowGrouped) {
 	$sql .= '
 			LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = '.$UserID.'
-			AND ((f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
+			AND ((f.MinClassRead <= '.$LoggedUser['Class'];
 	if (!empty($RestrictedForums)) {
 		$sql.='
 			AND f.ID NOT IN (\''.$RestrictedForums.'\')';
@@ -137,12 +138,19 @@ if ($ShowGrouped) {
 			JOIN forums AS f ON f.ID = t.ForumID
 			LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
 		WHERE p.AuthorID = '.$UserID.'
-			AND f.MinClassRead <= '.$LoggedUser['EffectiveClass'];
+			AND ((f.MinClassRead <= '.$LoggedUser['Class'];
 
 	if (!empty($RestrictedForums)) {
 		$sql.='
 			AND f.ID NOT IN (\''.$RestrictedForums.'\')';
 	}
+	$sql .= ')';
+
+	if (!empty($PermittedForums)) {
+		$sql.='
+			OR f.ID IN (\''.$PermittedForums.'\')';
+	}
+	$sql .= ')';
 
 	if ($ShowUnread) {
 		$sql.='

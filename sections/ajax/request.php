@@ -203,6 +203,7 @@ json_die("success", array(
 	'title' => $Title,
 	'year' => (int) $Year,
 	'image' => $Image,
+	'bbDescription' => $Description,
 	'description' => $Text->full_format($Description),
 	'musicInfo' => $JsonMusicInfo,
 	'catalogueNumber' => $CatalogueNumber,

@@ -168,7 +168,7 @@ View::show_header($Username,'user,bbcode,requests,jquery,lastfm');
 	$DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
 	if ($DB->record_count() == 0) { ?>
 		<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Add to friends</a>
-<?	}?>
+<?	} ?>
 		<a href="reports.php?action=report&amp;type=user&amp;id=<?=$UserID?>" class="brackets">Report user</a>
 <?
 
@@ -491,9 +491,9 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 <? } ?>
 		<div class="box">
 			<div class="head">
-				<span style="float: left;">Profile<? if ($CustomTitle) {?>&nbsp;-&nbsp;</span>
+				<span style="float: left;">Profile<? if ($CustomTitle) { ?>&nbsp;-&nbsp;</span>
 				<span class="user_title"><? echo html_entity_decode($DisplayCustomTitle); } ?></span>
-				<span style="float: right;"><?=!empty($Badges)?"$Badges&nbsp;&nbsp;":''?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
+				<span style="float: right;"><?=(!empty($Badges) ? "$Badges&nbsp;&nbsp;" : '')?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
 			</div>
 			<div class="pad" id="profilediv">
 <?	if (!$Info) { ?>
@@ -510,19 +510,20 @@ if ($RatioWatchEnds!='0000-00-00 00:00:00'
 if ($Snatched > 4 && check_paranoia_here('snatched')) {
 	$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
 	if (!is_array($RecentSnatches)) {
-		$DB->query("SELECT
-		g.ID,
-		g.Name,
-		g.WikiImage
-		FROM xbt_snatched AS s
-			INNER JOIN torrents AS t ON t.ID=s.fid
-			INNER JOIN torrents_group AS g ON t.GroupID=g.ID
-		WHERE s.uid='$UserID'
-			AND g.CategoryID='1'
-			AND g.WikiImage <> ''
-		GROUP BY g.ID
-		ORDER BY s.tstamp DESC
-		LIMIT 5");
+		$DB->query("
+			SELECT
+				g.ID,
+				g.Name,
+				g.WikiImage
+			FROM xbt_snatched AS s
+				INNER JOIN torrents AS t ON t.ID=s.fid
+				INNER JOIN torrents_group AS g ON t.GroupID=g.ID
+			WHERE s.uid='$UserID'
+				AND g.CategoryID='1'
+				AND g.WikiImage <> ''
+			GROUP BY g.ID
+			ORDER BY s.tstamp DESC
+			LIMIT 5");
 		$RecentSnatches = $DB->to_array();
 
 		$Artists = Artists::get_artists($DB->collect('ID'));
@@ -555,18 +556,19 @@ if (!isset($Uploads)) {
 if ($Uploads > 4 && check_paranoia_here('uploads')) {
 	$RecentUploads = $Cache->get_value('recent_uploads_'.$UserID);
 	if (!is_array($RecentUploads)) {
-		$DB->query("SELECT
-		g.ID,
-		g.Name,
-		g.WikiImage
-		FROM torrents_group AS g
-			INNER JOIN torrents AS t ON t.GroupID=g.ID
-		WHERE t.UserID='$UserID'
-			AND g.CategoryID='1'
-			AND g.WikiImage <> ''
-		GROUP BY g.ID
-		ORDER BY t.Time DESC
-		LIMIT 5");
+		$DB->query("
+			SELECT
+				g.ID,
+				g.Name,
+				g.WikiImage
+			FROM torrents_group AS g
+				INNER JOIN torrents AS t ON t.GroupID=g.ID
+			WHERE t.UserID='$UserID'
+				AND g.CategoryID='1'
+				AND g.WikiImage <> ''
+			GROUP BY g.ID
+			ORDER BY t.Time DESC
+			LIMIT 5");
 		$RecentUploads = $DB->to_array();
 		$Artists = Artists::get_artists($DB->collect('ID'));
 		foreach ($RecentUploads as $Key => $UploadInfo) {
@@ -592,28 +594,36 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 <?
 }
 
-$DB->query("SELECT ID, Name FROM collages WHERE UserID='$UserID' AND CategoryID='0' AND Deleted='0' ORDER BY Featured DESC, Name ASC");
+$DB->query("
+	SELECT ID, Name
+	FROM collages
+	WHERE UserID='$UserID'
+		AND CategoryID='0'
+		AND Deleted='0'
+	ORDER BY Featured DESC, Name ASC");
 $Collages = $DB->to_array();
 $FirstCol = true;
 foreach ($Collages as $CollageInfo) {
 	list($CollageID, $CName) = $CollageInfo;
-	$DB->query("SELECT ct.GroupID,
-		tg.WikiImage,
-		tg.CategoryID
+	$DB->query("
+		SELECT ct.GroupID,
+			tg.WikiImage,
+			tg.CategoryID
 		FROM collages_torrents AS ct
 			JOIN torrents_group AS tg ON tg.ID=ct.GroupID
 		WHERE ct.CollageID='$CollageID'
-		ORDER BY ct.Sort LIMIT 5");
+		ORDER BY ct.Sort
+		LIMIT 5");
 	$Collage = $DB->to_array();
 ?>
 	<table class="layout recent" id="collage<?=$CollageID?>_box" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">
-				<span style="float:left;">
+				<span style="float: left;">
 					<a href="#collage<?=$CollageID?>_box"><strong>&uarr;</strong></a> <?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
 				</span>
-				<span style="float:right;">
-					<a href="#" onclick="$('#collage<?=$CollageID?>_box .images').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$FirstCol?'Hide':'Show'?></a>
+				<span style="float: right;">
+					<a href="#" onclick="$('#collage<?=$CollageID?>_box .images').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$FirstCol ? 'Hide' : 'Show' ?></a>
 				</span>
 			</td>
 		</tr>
@@ -636,8 +646,6 @@ foreach ($Collages as $CollageInfo) {
 <?
 	$FirstCol = false;
 }
-
-
 
 
 // Linked accounts
@@ -663,7 +671,8 @@ if ((check_perms('users_view_invites')) && $Invited > 0) {
 
 // Requests
 if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_list')) {
-	$DB->query("SELECT
+	$DB->query("
+		SELECT
 			r.ID,
 			r.CategoryID,
 			r.Title,
@@ -674,7 +683,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 		FROM requests AS r
 			LEFT JOIN users_main AS u ON u.ID=UserID
 			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-		WHERE r.UserID = ".$UserID."
+		WHERE r.UserID = $UserID
 			AND r.TorrentID = 0
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
@@ -689,7 +698,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 			<div id="requests" class="request_table hidden">
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 					<tr class="colhead_dark">
-						<td style="width:48%;">
+						<td style="width: 48%;">
 							<strong>Request name</strong>
 						</td>
 						<td>
@@ -768,18 +777,20 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 $IsFLS = $LoggedUser['ExtraClasses'][41];
 if (check_perms('users_mod', $Class) || $IsFLS) {
 	$UserLevel = $LoggedUser['EffectiveClass'];
-	$DB->query("SELECT
-					SQL_CALC_FOUND_ROWS
-					ID,
-					Subject,
-					Status,
-					Level,
-					AssignedToUser,
-					Date,
-					ResolverID
-				FROM staff_pm_conversations
-				WHERE UserID = $UserID AND (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."')
-				ORDER BY Date DESC");
+	$DB->query("
+		SELECT
+			SQL_CALC_FOUND_ROWS
+			ID,
+			Subject,
+			Status,
+			Level,
+			AssignedToUser,
+			Date,
+			ResolverID
+		FROM staff_pm_conversations
+		WHERE UserID = $UserID
+			AND (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."')
+		ORDER BY Date DESC");
 	if ($DB->record_count()) {
 		$StaffPMs = $DB->to_array();
 ?>
@@ -799,10 +810,10 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 			// Get assigned
 			if ($AssignedToUser == '') {
 				// Assigned to class
-				$Assigned = ($Level == 0) ? "First Line Support" : $ClassLevels[$Level]['Name'];
+				$Assigned = ($Level == 0) ? 'First Line Support' : $ClassLevels[$Level]['Name'];
 				// No + on Sysops
 				if ($Assigned != 'Sysop') {
-					$Assigned .= "+";
+					$Assigned .= '+';
 				}
 
 			} else {
@@ -813,7 +824,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 			if ($ResolverID) {
 				$Resolver = Users::format_username($ResolverID, true, true, true, true);
 			} else {
-				$Resolver = "(unresolved)";
+				$Resolver = '(unresolved)';
 			}
 
 			?>
@@ -841,7 +852,7 @@ if ($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
 <div class="box">
 	<div class="head">Forum warnings</div>
 	<div class="pad">
-		<div id="forumwarningslinks" class="AdminComment box" style="width:98%;"><?=$Text->full_format($ForumWarnings)?></div>
+		<div id="forumwarningslinks" class="AdminComment box" style="width: 98%;"><?=$Text->full_format($ForumWarnings)?></div>
 	</div>
 </div>
 <br />
@@ -862,8 +873,8 @@ if (check_perms('users_mod', $Class)) { ?>
 			</div>
 			<div id="staffnotes" class="pad">
 				<input type="hidden" name="comment_hash" value="<?=$CommentHash?>" />
-				<div id="admincommentlinks" class="AdminComment box" style="width:98%;"><?=$Text->full_format($AdminComment)?></div>
-				<textarea id="admincomment" onkeyup="resize('admincomment');" class="AdminComment hidden" name="AdminComment" cols="65" rows="26" style="width:98%;"><?=display_str($AdminComment)?></textarea>
+				<div id="admincommentlinks" class="AdminComment box" style="width: 98%;"><?=$Text->full_format($AdminComment)?></div>
+				<textarea id="admincomment" onkeyup="resize('admincomment');" class="AdminComment hidden" name="AdminComment" cols="65" rows="26" style="width: 98%;"><?=display_str($AdminComment)?></textarea>
 				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;" class="brackets">Toggle edit</a>
 				<script type="text/javascript">
 					resize('admincomment');
@@ -893,7 +904,7 @@ if (check_perms('users_mod', $Class)) { ?>
 <?
 	}
 
-	if (check_perms('users_promote_below', $Class) || check_perms('users_promote_to', $Class-1)) {
+	if (check_perms('users_promote_below', $Class) || check_perms('users_promote_to', $Class - 1)) {
 ?>
 			<tr>
 				<td class="label">Primary class:</td>
@@ -937,11 +948,12 @@ if (check_perms('users_mod', $Class)) { ?>
 			<td class="label">Secondary classes:</td>
 			<td>
 <?
-		$DB->query("SELECT p.ID, p.Name, l.UserID
-					FROM permissions AS p
-						LEFT JOIN users_levels AS l ON l.PermissionID = p.ID AND l.UserID = '$UserID'
-					WHERE p.Secondary = 1
-					ORDER BY p.Name");
+		$DB->query("
+			SELECT p.ID, p.Name, l.UserID
+			FROM permissions AS p
+				LEFT JOIN users_levels AS l ON l.PermissionID = p.ID AND l.UserID = '$UserID'
+			WHERE p.Secondary = 1
+			ORDER BY p.Name");
 		$i = 0;
 		while (list($PermID, $PermName, $IsSet) = $DB->next_record()) {
 			$i++;
@@ -1068,7 +1080,7 @@ if (check_perms('users_mod', $Class)) { ?>
 					<input type="checkbox" name="Warned"<? if ($Warned != '0000-00-00 00:00:00') { ?> checked="checked"<? } ?> />
 				</td>
 			</tr>
-<?		if ($Warned=='0000-00-00 00:00:00') { // user is not warned ?>
+<?		if ($Warned == '0000-00-00 00:00:00') { // user is not warned ?>
 			<tr>
 				<td class="label">Expiration:</td>
 				<td>
@@ -1122,7 +1134,11 @@ if (check_perms('users_mod', $Class)) { ?>
 				</td>
 			</tr>
 <?	if (check_perms('users_disable_posts') || check_perms('users_disable_any')) {
-		$DB->query("SELECT DISTINCT Email, IP FROM users_history_emails WHERE UserID = ".$UserID." ORDER BY Time ASC");
+		$DB->query("
+			SELECT DISTINCT Email, IP
+			FROM users_history_emails
+			WHERE UserID = $UserID
+			ORDER BY Time ASC");
 		$Emails = $DB->to_array();
 ?>
 			<tr>

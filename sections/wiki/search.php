@@ -85,8 +85,8 @@ $DB->set_query_id($RS);
 				<tr>
 					<td class="label"><strong>Search in:</strong></td>
 					<td>
-						<input type="radio" name="type" value="Title" <? if ($Type == 'w.Title') { echo 'checked="checked" '; }?>/> Title
-						<input type="radio" name="type" value="Body" <? if ($Type == 'w.Body') { echo 'checked="checked" '; }?>/> Body
+						<input type="radio" name="type" value="Title" <? if ($Type == 'w.Title') { echo 'checked="checked" '; } ?>/> Title
+						<input type="radio" name="type" value="Body" <? if ($Type == 'w.Body') { echo 'checked="checked" '; } ?>/> Body
 					</td>
 					<td class="label"><strong>Order by:</strong></td>
 					<td>

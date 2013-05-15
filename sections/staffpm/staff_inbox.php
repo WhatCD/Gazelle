@@ -72,7 +72,7 @@ if (empty($CurURL)) {
 } else {
 	$CurURL = 'staffpm.php?'.$CurURL.'&';
 }
-$Pages=Format::get_pages($Page,$NumResults,MESSAGES_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $NumResults, MESSAGES_PER_PAGE, 9);
 
 $Row = 'a';
 

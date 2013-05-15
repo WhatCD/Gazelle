@@ -327,7 +327,7 @@ foreach ($Categories as $CatKey => $CatName) {
 							<?=(((!$Submitted) || !empty($ReleaseArray) && in_array($Key, $ReleaseArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
 <?			$i++;
-		}?>
+		} ?>
 					</td>
 				</tr>
 				<tr id="format_list">
@@ -339,7 +339,7 @@ foreach ($Categories as $CatKey => $CatName) {
 						<input type="checkbox" name="formats[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
-<?		}?>
+<?		} ?>
 					</td>
 				</tr>
 				<tr id="bitrate_list">
@@ -351,7 +351,7 @@ foreach ($Categories as $CatKey => $CatName) {
 						<input type="checkbox" name="bitrates[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
-<?		}?>
+<?		} ?>
 					</td>
 				</tr>
 				<tr id="media_list">
@@ -363,7 +363,7 @@ foreach ($Categories as $CatKey => $CatName) {
 						<input type="checkbox" name="media[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
-<?		}?>
+<?		} ?>
 					</td>
 				</tr>
 				<tr>

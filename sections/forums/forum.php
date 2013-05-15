@@ -154,7 +154,7 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name']);
 <?	} ?>
 	<div class="linkbox pager">
 <?
-$Pages = Format::get_pages($Page,$Forums[$ForumID]['NumTopics'],TOPICS_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $Forums[$ForumID]['NumTopics'], TOPICS_PER_PAGE, 9);
 echo $Pages;
 ?>
 	</div>

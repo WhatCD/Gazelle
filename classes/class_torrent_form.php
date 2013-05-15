@@ -186,7 +186,7 @@ class TORRENT_FORM {
 		$LossywebApproved = $Torrent['LossywebApproved'];
 		global $ReleaseTypes;
 ?>
-		<table cellpadding="3" cellspacing="1" border="0" class="layout border<? if ($this->NewTorrent) { echo ' slice'; }?>" width="100%">
+		<table cellpadding="3" cellspacing="1" border="0" class="layout border<? if ($this->NewTorrent) { echo ' slice'; } ?>" width="100%">
 <?		if ($this->NewTorrent) { ?>
 			<tr id="artist_tr">
 			<td class="label">Artist(s):</td>
@@ -383,7 +383,7 @@ function show() {
 								</tr>
 								<tr id="edition_catalogue_number">
 									<td class="label">Catalogue number:</td>
-									<td><input type="text" id="remaster_catalogue_number" name="remaster_catalogue_number" size="50" value="<?=display_str($Torrent['RemasterCatalogueNumber']) ?>"<? if ($UnknownRelease) { echo ' disabled="disabled"';}?> />
+									<td><input type="text" id="remaster_catalogue_number" name="remaster_catalogue_number" size="50" value="<?=display_str($Torrent['RemasterCatalogueNumber']) ?>"<? if ($UnknownRelease) { echo ' disabled="disabled"';} ?> />
 										<p class="min_padding">This is for the catalogue number of the <strong>release</strong>.</p>
 									</td>
 								</tr>
@@ -395,7 +395,7 @@ function show() {
 			<tr>
 				<td class="label">Scene:</td>
 				<td>
-					<input type="checkbox" id="scene" name="scene" <? if ($Torrent['Scene']) { echo 'checked="checked" ';}?>/>
+					<input type="checkbox" id="scene" name="scene" <? if ($Torrent['Scene']) { echo 'checked="checked" ';} ?>/>
 					<label for="scene">Check this only if this is a 'scene release'.<br />If you ripped it yourself, it is <strong>not</strong> a scene release. If you are not sure, <strong class="important_text">do not</strong> check it; you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29" target="_blank">Wikipedia</a>.</label>
 				</td>
 			</tr>
@@ -524,7 +524,7 @@ function show() {
 <?
 				}
 ?>
-							<input type="checkbox" id="make_trumpable" name="make_trumpable"<? if ($Torrent['LogScore'] == 99) { echo ' checked="checked"';}?> /> <label for="make_trumpable">Check this box if you want this torrent to be trumpable (subtracts 1 point).</label>
+							<input type="checkbox" id="make_trumpable" name="make_trumpable"<? if ($Torrent['LogScore'] == 99) { echo ' checked="checked"';} ?> /> <label for="make_trumpable">Check this box if you want this torrent to be trumpable (subtracts 1 point).</label>
 <?
 				if (!check_perms('users_mod')) {
 ?>						</td>
@@ -720,7 +720,7 @@ function show() {
 					<p class="min_padding">Contains information like the track listing, a review, a link to Discogs or MusicBrainz, etc.</p>
 				</td>
 			</tr>
-<?		}?>
+<?		} ?>
 			<tr>
 				<td class="label">Release description (optional):</td>
 				<td>

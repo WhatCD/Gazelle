@@ -17,7 +17,7 @@ include(SERVER_ROOT.'/sections/log/sphinx.php');
 				<tr>
 					<td class="label"><strong>Search for:</strong></td>
 					<td>
-						<input type="text" name="search" size="60"<?=!empty($_GET['search']) ? ' value="'.display_str($_GET['search']).'"' : '' ?> />
+						<input type="text" name="search" size="60"<?=(!empty($_GET['search']) ? ' value="'.display_str($_GET['search']).'"' : '')?> />
 						&nbsp;
 						<input type="submit" value="Search log" />
 					</td>
@@ -29,7 +29,7 @@ include(SERVER_ROOT.'/sections/log/sphinx.php');
 <? if ($TotalMatches > LOG_ENTRIES_PER_PAGE) { ?>
 	<div class="linkbox">
 <?
-	$Pages = Format::get_pages($Page,$TotalMatches,LOG_ENTRIES_PER_PAGE,9);
+	$Pages = Format::get_pages($Page, $TotalMatches, LOG_ENTRIES_PER_PAGE, 9);
 	echo $Pages;?>
 	</div>
 <? } ?>
@@ -98,15 +98,15 @@ while (list($ID, $Message, $LogTime) = $DB->next_record()) {
 				$UserID = 0;
 				$User = '';
 				$URL = '';
-				if ($MessageParts[$i + 1] == "user") {
+				if ($MessageParts[$i + 1] == 'user') {
 					$i++;
 					if (is_numeric($MessageParts[$i + 1])) {
 						$UserID = $MessageParts[++$i];
 					}
-					$URL = "user $UserID ".'(<a href="user.php?id='.$UserID.'">'.substr($MessageParts[++$i],1,-1)."</a>)";
-				} elseif (in_array($MessageParts[$i - 1], array('deleted','uploaded','edited','created','recovered'))) {
+					$URL = "user $UserID ".'(<a href="user.php?id='.$UserID.'">'.substr($MessageParts[++$i], 1, -1)."</a>)";
+				} elseif (in_array($MessageParts[$i - 1], array('deleted', 'uploaded', 'edited', 'created', 'recovered'))) {
 					$User = $MessageParts[++$i];
-					if (substr($User,-1) == ':') {
+					if (substr($User, -1) == ':') {
 						$User = substr($User, 0, -1);
 						$Colon = true;
 					}
@@ -120,37 +120,37 @@ while (list($ID, $Message, $LogTime) = $DB->next_record()) {
 					$DB->set_query_id($Log);
 					$URL = $Usernames[$User] ? '<a href="user.php?id='.$UserID.'">'.$User."</a>".($Colon ? ':' : '') : $User;
 				}
-				$Message = $Message." by ".$URL;
+				$Message = "$Message by $URL";
 				break;
 			case "uploaded":
 				if ($Color === false) {
 					$Color = 'green';
 				}
-				$Message = $Message." ".$MessageParts[$i];
+				$Message = $Message.' '.$MessageParts[$i];
 				break;
 			case "deleted":
 				if ($Color === false || $Color === 'green') {
 					$Color = 'red';
 				}
-				$Message = $Message." ".$MessageParts[$i];
+				$Message = $Message.' '.$MessageParts[$i];
 				break;
 			case "edited":
 				if ($Color === false) {
 					$Color = 'blue';
 				}
-				$Message = $Message." ".$MessageParts[$i];
+				$Message = $Message.' '.$MessageParts[$i];
 				break;
 			case "un-filled":
 				if ($Color === false) {
 					$Color = '';
 				}
-				$Message = $Message." ".$MessageParts[$i];
+				$Message = $Message.' '.$MessageParts[$i];
 				break;
 			case "marked":
 				if ($i == 1) {
 					$User = $MessageParts[$i - 1];
 					if (!isset($Usernames[$User])) {
-						$DB->query("SELECT ID FROM users_main WHERE Username = _utf8 '".$User."' COLLATE utf8_bin");
+						$DB->query("SELECT ID FROM users_main WHERE Username = _utf8 '$User' COLLATE utf8_bin");
 						list($UserID) = $DB->next_record();
 						$Usernames[$User] = $UserID ? $UserID : '';
 						$DB->set_query_id($Log);
@@ -173,10 +173,10 @@ while (list($ID, $Message, $LogTime) = $DB->next_record()) {
 				}
 				break;
 			default:
-				$Message = $Message." ".$MessageParts[$i];
+				$Message = $Message.' '.$MessageParts[$i];
 		}
 	}
-	$Row = ($Row == 'a') ? 'b' : 'a';
+	$Row = (($Row == 'a') ? 'b' : 'a');
 ?>
 		<tr class="row<?=$Row?>" id="log_<?=$ID?>">
 			<td class="nobr">

@@ -254,15 +254,15 @@ if ((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 	$DB->query("
 		INSERT IGNORE INTO temp_sections_torrents_user
 			SELECT
-			t.GroupID,
-			t.ID AS TorrentID,
-			$Time AS Time,
-			tg.CategoryID,
-			t.Seeders,
-			t.Leechers,
-			t.Snatched,
-			CONCAT_WS(' ', GROUP_CONCAT(aa.Name SEPARATOR ' '), ' ', tg.Name, ' ', tg.Year, ' ') AS Name,
-			t.Size
+				t.GroupID,
+				t.ID AS TorrentID,
+				$Time AS Time,
+				tg.CategoryID,
+				t.Seeders,
+				t.Leechers,
+				t.Snatched,
+				CONCAT_WS(' ', GROUP_CONCAT(aa.Name SEPARATOR ' '), ' ', tg.Name, ' ', tg.Year, ' ') AS Name,
+				t.Size
 			FROM $From
 				JOIN torrents_group AS tg ON tg.ID=t.GroupID
 				LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID
@@ -274,15 +274,17 @@ if ((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 		$Words = array_unique(explode(' ', db_string($_GET['search'])));
 	}
 
-	$SQL = "SELECT SQL_CALC_FOUND_ROWS
-		GroupID, TorrentID, Time, CategoryID
+	$SQL = "
+		SELECT SQL_CALC_FOUND_ROWS
+			GroupID, TorrentID, Time, CategoryID
 		FROM temp_sections_torrents_user";
 	if (!empty($Words)) {
 		$SQL .= "
 		WHERE Name LIKE '%".implode("%' AND Name LIKE '%", $Words)."%'";
 	}
 	$SQL .= "
-		ORDER BY $Order $Way LIMIT $Limit";
+		ORDER BY $Order $Way
+		LIMIT $Limit";
 }
 
 $DB->query($SQL);
@@ -299,7 +301,7 @@ $User = Users::user_info($UserID);
 
 View::show_header($User['Username'].'\'s '.$Action.' torrents','voting');
 
-$Pages=Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
+$Pages = Format::get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
 
 
 ?>

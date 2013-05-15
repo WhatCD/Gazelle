@@ -6,15 +6,17 @@ if (!check_perms('users_view_email')) {
 list ($Page, $Limit) = Format::page_limit(EMAILS_PER_PAGE);
 
 View::show_header('Manage email blacklist');
-$DB->query("SELECT
-	SQL_CALC_FOUND_ROWS
-	eb.ID,
-	eb.UserID,
-	eb.Time,
-	eb.Email,
-	eb.Comment
+$DB->query("
+	SELECT
+		SQL_CALC_FOUND_ROWS
+		eb.ID,
+		eb.UserID,
+		eb.Time,
+		eb.Email,
+		eb.Comment
 	FROM email_blacklist AS eb
-	ORDER BY eb.Time DESC LIMIT $Limit");
+	ORDER BY eb.Time DESC
+	LIMIT $Limit");
 $Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 $DB->query("SELECT FOUND_ROWS()");
 list ($NumResults) = $DB->next_record();
@@ -48,7 +50,7 @@ list ($NumResults) = $DB->next_record();
 			<td><input type="submit" value="Create" /></td>
 		</form>
 	</tr>
-	<?
+<?
 
 	foreach ($Results as $Result) {
 		?>
@@ -68,7 +70,7 @@ list ($NumResults) = $DB->next_record();
 			</td>
 		</form>
 	</tr>
-	<? }?>
+<?	} ?>
 </table>
 <div class="linkbox pager">
 	<br />

@@ -137,8 +137,14 @@ var autocomp = {
 			listener.set(li,'mouseover',function() {
 				autocomp.highlight(this.i);
 			});
-			listener.set(li,'click',function() {
-				window.location = autocomp.id + '.php?id='+this.artistid;
+			listener.set(li,'click',function(e) {
+			    var location = autocomp.id + '.php?id='+this.artistid;
+			    if(e.button == 0) {
+			        window.open(location, '_self');
+			    } else if(e.button == 1) {
+			        var win = window.open(location, '_blank');
+					win.focus();
+			    }
 			});
 			this.list.appendChild(li);
 		}

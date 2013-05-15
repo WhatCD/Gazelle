@@ -30,7 +30,8 @@ if ($MyTorrents) {
 	}
 }
 
-$Comments = $DB->query("SELECT
+$Comments = $DB->query("
+	SELECT
 		SQL_CALC_FOUND_ROWS
 		tc.AuthorID,
 		t.ID,
@@ -52,7 +53,7 @@ $Comments = $DB->query("SELECT
 
 $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
-$Pages=Format::get_pages($Page,$Results,$PerPage, 11);
+$Pages = Format::get_pages($Page, $Results, $PerPage, 11);
 
 $DB->set_query_id($Comments);
 $GroupIDs = $DB->collect('GroupID');

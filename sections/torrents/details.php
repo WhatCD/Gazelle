@@ -283,7 +283,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 <?
 		if (check_perms('torrents_add_artist')) { ?>
 		<div class="box box_addartists">
-			<div class="head"><strong>Add artist</strong><span style="float:right;" class="additional_add_artist"><a onclick="AddArtistField(); return false;" href="#" class="brackets">+</a></span></div>
+			<div class="head"><strong>Add artist</strong><span style="float: right;" class="additional_add_artist"><a onclick="AddArtistField(); return false;" href="#" class="brackets">+</a></span></div>
 			<div class="body">
 				<form class="add_form" name="artists" action="torrents.php" method="post">
 					<div id="AddArtists">
@@ -320,8 +320,8 @@ if (count($Tags) > 0) {
 	foreach ($Tags as $TagKey=>$Tag) {
 ?>
 				<li>
-					<a href="torrents.php?taglist=<?=$Tag['name']?>" style="float:left; display:block;"><?=display_str($Tag['name'])?></a>
-					<div style="float:right; display:block; letter-spacing: -1px;" class="edit_tags_votes">
+					<a href="torrents.php?taglist=<?=$Tag['name']?>" style="float: left; display: block;"><?=display_str($Tag['name'])?></a>
+					<div style="float: right; display: block; letter-spacing: -1px;" class="edit_tags_votes">
 					<a href="torrents.php?action=vote_tag&amp;way=down&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag down" class="brackets vote_tag_down">&minus;</a>
 					<?=$Tag['score']?>
 					<a href="torrents.php?action=vote_tag&amp;way=up&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" style="font-family: monospace;" title="Vote this tag up" class="brackets vote_tag_up">+</a>
@@ -611,7 +611,7 @@ if (empty($LoggedUser['DisableRequests']) && count($Requests) > 0) {
 	$i = 0;
 ?>
 		<div class="box">
-			<div class="head"><span style="font-weight: bold;">Requests (<?=number_format(count($Requests))?>)</span> <a href="#" style="float:right;" onclick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Show</a></div>
+			<div class="head"><span style="font-weight: bold;">Requests (<?=number_format(count($Requests))?>)</span> <a href="#" style="float: right;" onclick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Show</a></div>
 			<table id="requests" class="request_table hidden">
 				<tr class="colhead">
 					<td>Format / Bitrate / Media</td>
@@ -621,20 +621,20 @@ if (empty($LoggedUser['DisableRequests']) && count($Requests) > 0) {
 <?	foreach ($Requests as $Request) {
 		$RequestVotes = Requests::get_votes_array($Request['ID']);
 
-		if ($Request['BitrateList'] != "") {
-			$BitrateString = implode(", ", explode("|", $Request['BitrateList']));
-			$FormatString = implode(", ", explode("|", $Request['FormatList']));
-			$MediaString = implode(", ", explode("|", $Request['MediaList']));
+		if ($Request['BitrateList'] != '') {
+			$BitrateString = implode(', ', explode('|', $Request['BitrateList']));
+			$FormatString = implode(', ', explode('|', $Request['FormatList']));
+			$MediaString = implode(', ', explode('|', $Request['MediaList']));
 			if ($Request['LogCue']) {
 				$FormatString .= ' - '.$Request['LogCue'];
 			}
 		} else {
-			$BitrateString = "Unknown";
-			$FormatString = "Unknown";
-			$MediaString = "Unknown";
+			$BitrateString = 'Unknown';
+			$FormatString = 'Unknown';
+			$MediaString = 'Unknown';
 		}
 ?>
-				<tr class="requestrows <?=(++$i%2?'rowa':'rowb')?>">
+				<tr class="requestrows <?=(++$i % 2 ? 'rowa' : 'rowb')?>">
 					<td><a href="requests.php?action=view&amp;id=<?=$Request['ID']?>"><?=$FormatString?> / <?=$BitrateString?> / <?=$MediaString?></a></td>
 					<td>
 						<span id="vote_count_<?=$Request['ID']?>"><?=count($RequestVotes['Voters'])?></span>
@@ -651,25 +651,31 @@ if (empty($LoggedUser['DisableRequests']) && count($Requests) > 0) {
 }
 $Collages = $Cache->get_value('torrent_collages_'.$GroupID);
 if (!is_array($Collages)) {
-	$DB->query("SELECT c.Name, c.NumTorrents, c.ID FROM collages AS c JOIN collages_torrents AS ct ON ct.CollageID=c.ID WHERE ct.GroupID='$GroupID' AND Deleted='0' AND CategoryID!='0'");
+	$DB->query("
+		SELECT c.Name, c.NumTorrents, c.ID
+		FROM collages AS c
+			JOIN collages_torrents AS ct ON ct.CollageID=c.ID
+		WHERE ct.GroupID='$GroupID'
+			AND Deleted='0'
+			AND CategoryID!='0'");
 	$Collages = $DB->to_array();
-	$Cache->cache_value('torrent_collages_'.$GroupID, $Collages, 3600*6);
+	$Cache->cache_value('torrent_collages_'.$GroupID, $Collages, 3600 * 6);
 }
 if (count($Collages) > 0) {
 	if (count($Collages) > MAX_COLLAGES) {
 		// Pick some at random
-		$Range = range(0,count($Collages) - 1);
+		$Range = range(0, count($Collages) - 1);
 		shuffle($Range);
 		$Indices = array_slice($Range, 0, MAX_COLLAGES);
 		$SeeAll = ' <a href="#" onclick="$(\'.collage_rows\').toggle(); return false;">(See all)</a>';
 	} else {
-		$Indices = range(0, count($Collages)-1);
+		$Indices = range(0, count($Collages) - 1);
 		$SeeAll = '';
 	}
 ?>
 		<table class="collage_table" id="collages">
 			<tr class="colhead">
-				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=number_format(count($Collages))?> collage<?=((count($Collages)>1) ? 's' : '')?><?=$SeeAll?></td>
+				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=number_format(count($Collages))?> collage<?=((count($Collages) > 1) ? 's' : '')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
 <?	foreach ($Indices as $i) {
@@ -695,9 +701,15 @@ if (count($Collages) > 0) {
 
 $PersonalCollages = $Cache->get_value('torrent_collages_personal_'.$GroupID);
 if (!is_array($PersonalCollages)) {
-	$DB->query("SELECT c.Name, c.NumTorrents, c.ID FROM collages AS c JOIN collages_torrents AS ct ON ct.CollageID=c.ID WHERE ct.GroupID='$GroupID' AND Deleted='0' AND CategoryID='0'");
+	$DB->query("
+		SELECT c.Name, c.NumTorrents, c.ID
+		FROM collages AS c
+			JOIN collages_torrents AS ct ON ct.CollageID=c.ID
+		WHERE ct.GroupID='$GroupID'
+			AND Deleted='0'
+			AND CategoryID='0'");
 	$PersonalCollages = $DB->to_array(false, MYSQLI_NUM);
-	$Cache->cache_value('torrent_collages_personal_'.$GroupID, $PersonalCollages, 3600*6);
+	$Cache->cache_value('torrent_collages_personal_'.$GroupID, $PersonalCollages, 3600 * 6);
 }
 
 if (count($PersonalCollages) > 0) {
@@ -708,13 +720,13 @@ if (count($PersonalCollages) > 0) {
 		$Indices = array_slice($Range, 0, MAX_PERS_COLLAGES);
 		$SeeAll = ' <a href="#" onclick="$(\'.personal_rows\').toggle(); return false;">(See all)</a>';
 	} else {
-		$Indices = range(0, count($PersonalCollages)-1);
+		$Indices = range(0, count($PersonalCollages) - 1);
 		$SeeAll = '';
 	}
 ?>
 		<table class="collage_table" id="personal_collages">
 			<tr class="colhead">
-				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=number_format(count($PersonalCollages))?> personal collage<?=((count($PersonalCollages)>1) ? 's' : '')?><?=$SeeAll?></td>
+				<td width="85%"><a href="#">&uarr;</a>&nbsp;This album is in <?=number_format(count($PersonalCollages))?> personal collage<?=((count($PersonalCollages) > 1) ? 's' : '')?><?=$SeeAll?></td>
 				<td># torrents</td>
 			</tr>
 <?	foreach ($Indices as $i) {
@@ -742,7 +754,7 @@ include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 ?>
 		<div class="box">
 			<div class="head"><a href="#">&uarr;</a>&nbsp;<strong><?=(!empty($ReleaseType) ? $ReleaseTypes[$ReleaseType].' info' : 'Info' )?></strong></div>
-			<div class="body"><? if ($WikiBody!="") { echo $WikiBody; } else { echo "There is no information on this torrent."; } ?></div>
+			<div class="body"><? if ($WikiBody != '') { echo $WikiBody; } else { echo 'There is no information on this torrent.'; } ?></div>
 		</div>
 <?
 // --- Comments ---
@@ -750,16 +762,20 @@ include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 // gets the amount of comments for this group
 $Results = $Cache->get_value('torrent_comments_'.$GroupID);
 if ($Results === false) {
-	$DB->query("SELECT
-			COUNT(c.ID)
-			FROM torrents_comments as c
-			WHERE c.GroupID = '$GroupID'");
+	$DB->query("
+		SELECT COUNT(c.ID)
+		FROM torrents_comments as c
+		WHERE c.GroupID = '$GroupID'");
 	list($Results) = $DB->next_record();
 	$Cache->cache_value('torrent_comments_'.$GroupID, $Results, 0);
 }
 
 if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
-	$DB->query("SELECT COUNT(ID) FROM torrents_comments WHERE GroupID = $GroupID AND ID <= $_GET[postid]");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM torrents_comments
+		WHERE GroupID = $GroupID
+			AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
 	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
 } else {
@@ -767,15 +783,16 @@ if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_C
 }
 
 //Get the cache catalogue
-$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)/THREAD_CATALOGUE);
-$CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
+$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
+$CatalogueLimit = $CatalogueID * THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 
 //---------- Get some data to start processing
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
 $Catalogue = $Cache->get_value('torrent_comments_'.$GroupID.'_catalogue_'.$CatalogueID);
 if ($Catalogue === false) {
-	$DB->query("SELECT
+	$DB->query("
+		SELECT
 			c.ID,
 			c.AuthorID,
 			c.AddedTime,
@@ -783,21 +800,21 @@ if ($Catalogue === false) {
 			c.EditedUserID,
 			c.EditedTime,
 			u.Username
-			FROM torrents_comments as c
+		FROM torrents_comments as c
 			LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
-			WHERE c.GroupID = '$GroupID'
-			ORDER BY c.ID
-			LIMIT $CatalogueLimit");
+		WHERE c.GroupID = '$GroupID'
+		ORDER BY c.ID
+		LIMIT $CatalogueLimit");
 	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
 	$Cache->cache_value('torrent_comments_'.$GroupID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE*$Page-TORRENT_COMMENTS_PER_PAGE)%THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
+$Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
 ?>
 	<div class="linkbox"><a name="comments"></a>
 <?
-$Pages=Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
+$Pages = Format::get_pages($Page, $Results, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 echo $Pages;
 ?>
 	</div>
@@ -816,7 +833,7 @@ foreach ($Thread as $Key => $Post) {
 	</colgroup>
 	<tr class="colhead_dark">
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
-			<div style="float:left;"><a class="post_id" href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
+			<div style="float: left;"><a class="post_id" href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
 <? 	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
@@ -826,7 +843,7 @@ foreach ($Thread as $Key => $Post) {
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
 <?	} ?>
 			</div>
-			<div id="bar<?=$PostID?>" style="float:right;">
+			<div id="bar<?=$PostID?>" style="float: right;">
 				<a href="reports.php?action=report&amp;type=torrents_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
 <?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);

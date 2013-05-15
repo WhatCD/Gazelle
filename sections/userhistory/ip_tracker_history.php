@@ -45,18 +45,24 @@ function ShowIPs(rowname) {
 <?
 list($Page,$Limit) = Format::page_limit(IPS_PER_PAGE);
 
-$TrackerIps = $DB->query("SELECT IP, fid, tstamp FROM xbt_snatched WHERE uid = ".$UserID." AND IP != '' ORDER BY tstamp DESC LIMIT $Limit");
+$TrackerIps = $DB->query("
+	SELECT IP, fid, tstamp
+	FROM xbt_snatched
+	WHERE uid = $UserID
+		AND IP != ''
+	ORDER BY tstamp DESC
+	LIMIT $Limit");
 
 $DB->query("SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($TrackerIps);
 
-$Pages=Format::get_pages($Page,$NumResults,IPS_PER_PAGE,9);
+$Pages = Format::get_pages($Page, $NumResults, IPS_PER_PAGE, 9);
 
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>Tracker IP address history for <a href="/user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
+		<h2>Tracker IP address history for <a href="user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
 	</div>
 	<div class="linkbox"><?=$Pages?></div>
 	<table>

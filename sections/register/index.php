@@ -81,12 +81,12 @@ if (!empty($_REQUEST['confirm'])) {
 				$Enabled = '0';
 			}
 
-			$ipcc = Tools::geoip($_SERVER['REMOTE_ADDR']);
+			$IPcc = Tools::geoip($_SERVER['REMOTE_ADDR']);
 			
 			
 			$DB->query("INSERT INTO users_main
 				(Username,Email,PassHash,torrent_pass,IP,PermissionID,Enabled,Invites,Uploaded,ipcc) VALUES
-				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(Users::make_crypt_hash($_POST['password']))."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000', '$ipcc')");
+				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(Users::make_crypt_hash($_POST['password']))."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000', '$IPcc')");
 
 			$UserID = $DB->inserted_id();
 			
@@ -122,9 +122,10 @@ if (!empty($_REQUEST['confirm'])) {
 			// Manage invite trees, delete invite
 
 			if ($InviterID !== NULL) {
-				$DB->query("SELECT
-					TreePosition, TreeID, TreeLevel
-					FROM invite_tree WHERE UserID='$InviterID'");
+				$DB->query("
+					SELECT TreePosition, TreeID, TreeLevel
+					FROM invite_tree
+					WHERE UserID='$InviterID'");
 				list($InviterTreePosition, $TreeID, $TreeLevel) = $DB->next_record();
 
 				// If the inviter doesn't have an invite tree
@@ -133,28 +134,33 @@ if (!empty($_REQUEST['confirm'])) {
 					$DB->query("SELECT MAX(TreeID)+1 FROM invite_tree");
 					list($TreeID) = $DB->next_record();
 
-					$DB->query("INSERT INTO invite_tree
-						(UserID, InviterID, TreePosition, TreeID, TreeLevel)
+					$DB->query("
+						INSERT INTO invite_tree
+							(UserID, InviterID, TreePosition, TreeID, TreeLevel)
 						VALUES ('$InviterID', '0', '1', '$TreeID', '1')");
 
 					$TreePosition = 2;
 					$TreeLevel = 2;
 				} else {
-					$DB->query("SELECT
-						TreePosition
+					$DB->query("
+						SELECT TreePosition
 						FROM invite_tree
 						WHERE TreePosition>'$InviterTreePosition'
-						AND TreeLevel<='$TreeLevel'
-						AND TreeID='$TreeID'
+							AND TreeLevel<='$TreeLevel'
+							AND TreeID='$TreeID'
 						ORDER BY TreePosition
 						LIMIT 1");
 					list($TreePosition) = $DB->next_record();
 
 					if ($TreePosition) {
-						$DB->query("UPDATE invite_tree SET TreePosition=TreePosition+1 WHERE TreeID='$TreeID' AND TreePosition>='$TreePosition'");
+						$DB->query("
+							UPDATE invite_tree
+							SET TreePosition=TreePosition+1
+							WHERE TreeID='$TreeID'
+								AND TreePosition>='$TreePosition'");
 					} else {
-						$DB->query("SELECT
-							TreePosition+1
+						$DB->query("
+							SELECT TreePosition+1
 							FROM invite_tree
 							WHERE TreeID='$TreeID'
 							ORDER BY TreePosition DESC
@@ -164,22 +170,22 @@ if (!empty($_REQUEST['confirm'])) {
 					$TreeLevel++;
 
 					// Create invite tree record
-					$DB->query("INSERT INTO invite_tree
-						(UserID, InviterID, TreePosition, TreeID, TreeLevel) VALUES
-						('$UserID', '$InviterID', '$TreePosition', '$TreeID', '$TreeLevel')");
+					$DB->query("
+						INSERT INTO invite_tree (UserID, InviterID, TreePosition, TreeID, TreeLevel)
+						VALUES ('$UserID', '$InviterID', '$TreePosition', '$TreeID', '$TreeLevel')");
 				}
 			} else { // No inviter (open registration)
 				$DB->query("SELECT MAX(TreeID) FROM invite_tree");
 				list($TreeID) = $DB->next_record();
 				$TreeID++;
 				$InviterID = 0;
-				$TreePosition=1;
-				$TreeLevel=1;
+				$TreePosition = 1;
+				$TreeLevel = 1;
 			}
 
 
 			include(SERVER_ROOT.'/classes/class_templates.php');
-			$TPL=NEW TEMPLATE;
+			$TPL = NEW TEMPLATE;
 			$TPL->open(SERVER_ROOT.'/templates/new_registration.tpl');
 
 			$TPL->set('Username',$_REQUEST['username']);
@@ -189,7 +195,7 @@ if (!empty($_REQUEST['confirm'])) {
 
 			Misc::send_email($_REQUEST['email'],'New account confirmation at '.SITE_NAME,$TPL->get(),'noreply');
 			Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
-			$Sent=1;
+			$Sent = 1;
 
 			
 		}

@@ -143,16 +143,18 @@ function user_dupes_table($UserID) {
 	if (!is_number($UserID)) {
 		error(403);
 	}
-	$DB->query("SELECT d.ID, d.Comments, SHA1(d.Comments) AS CommentHash
-				FROM dupe_groups AS d
-				JOIN users_dupes AS u ON u.GroupID = d.ID
-				WHERE u.UserID = $UserID");
+	$DB->query("
+		SELECT d.ID, d.Comments, SHA1(d.Comments) AS CommentHash
+		FROM dupe_groups AS d
+			JOIN users_dupes AS u ON u.GroupID = d.ID
+		WHERE u.UserID = $UserID");
 	if (list($GroupID, $Comments, $CommentHash) = $DB->next_record()) {
-		$DB->query("SELECT m.ID
-					FROM users_main AS m
-					JOIN users_dupes AS d ON m.ID = d.UserID
-					WHERE d.GroupID = $GroupID
-					ORDER BY m.ID ASC");
+		$DB->query("
+			SELECT m.ID
+			FROM users_main AS m
+				JOIN users_dupes AS d ON m.ID = d.UserID
+			WHERE d.GroupID = $GroupID
+			ORDER BY m.ID ASC");
 		$DupeCount = $DB->record_count();
 		$Dupes = $DB->to_array();
 	} else {
@@ -168,10 +170,10 @@ function user_dupes_table($UserID) {
 			<input type="hidden" id="form_comment_hash" name="form_comment_hash" value="<?=$CommentHash?>" />
 			<div class="box" id="l_a_box">
 				<div class="head">
-					<a href="#l_a_box"><strong>&uarr;</strong></a> <?=max($DupeCount - 1, 0)?> Linked account<?=(($DupeCount == 2)?'':'s')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;" class="brackets">View</a>
+					<a href="#l_a_box"><strong>&uarr;</strong></a> <?=max($DupeCount - 1, 0)?> Linked account<?=(($DupeCount == 2) ? '' : 's')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;" class="brackets">View</a>
 				</div>
 				<table width="100%" class="layout hidden linkedaccounts">
-					<?=$DupeCount?'<tr>':''?>
+					<?=$DupeCount ? '<tr>' : ''?>
 <?
 	$i = 0;
 	foreach ($Dupes as $Dupe) {
@@ -180,30 +182,31 @@ function user_dupes_table($UserID) {
 		$DupeInfo = Users::user_info($DupeID);
 ?>
 					<td align="left"><?=Users::format_username($DupeID, true, true, true, true)?>
-						<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');" class="brackets">x</a></td>
+						<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');" class="brackets">x</a>
+					</td>
 <?
 		if ($i == 5) {
 			$i = 0;
-			echo "</tr><tr>";
+			echo "\t\t\t\t\t</tr>\n\t\t\t\t\t<tr>";
 		}
 	}
 	if ($DupeCount) {
 		for ($j = $i; $j < 5; $j++) {
-			echo '<td>&nbsp;</td>';
+			echo "\t\t\t\t\t\t<td>&nbsp;</td>";
 		}
 ?>
 					</tr>
 <?	}	?>
 					<tr>
-						<td colspan="5" align="left" style="border-top: thin solid"><strong>Comments:</strong></td>
+						<td colspan="5" align="left" style="border-top: thin solid;"><strong>Comments:</strong></td>
 					</tr>
 					<tr>
 						<td colspan="5" align="left">
-							<div id="dupecomments" class="<?=$DupeCount?'':'hidden'?>"><?=$Text->full_format($Comments);?></div>
-							<div id="editdupecomments" class="<?=$DupeCount?'hidden':''?>">
-								<textarea name="dupecomments" onkeyup="resize('dupecommentsbox');" id="dupecommentsbox" cols="65" rows="5" style="width:98%;"><?=display_str($Comments)?></textarea>
+							<div id="dupecomments" class="<?=$DupeCount ? '' : 'hidden'?>"><?=$Text->full_format($Comments);?></div>
+							<div id="editdupecomments" class="<?=$DupeCount ? 'hidden' : ''?>">
+								<textarea name="dupecomments" onkeyup="resize('dupecommentsbox');" id="dupecommentsbox" cols="65" rows="5" style="width: 98%;"><?=display_str($Comments)?></textarea>
 							</div>
-							<span style="float:right; font-style: italic;"><a href="#" onclick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;" class="brackets">Edit linked account comments</a></span>
+							<span style="float: right; font-style: italic;"><a href="#" onclick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;" class="brackets">Edit linked account comments</a></span>
 						</td>
 					</tr>
 				</table>

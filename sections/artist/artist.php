@@ -452,7 +452,7 @@ foreach ($Importances as $Group) {
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
+		<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
@@ -461,7 +461,7 @@ foreach ($Importances as $Group) {
 if (!empty($TorrentList)) { ?>
 			</table>
 		</div>
-<?}
+<? }
 
 $TorrentDisplayList = ob_get_clean();
 
@@ -596,7 +596,7 @@ foreach ($ZIPOptions as $Option) {
 <?		$OpenGroup = true;
 	}
 ?>
-							<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID,$ZIPList)) { echo ' disabled="disabled"'; }?>><?=$OptName?></option>
+							<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID, $ZIPList)) { echo ' disabled="disabled"'; } ?>><?=$OptName?></option>
 <?
 }
 ?>
@@ -608,7 +608,7 @@ foreach ($ZIPOptions as $Option) {
 						<option value="1"<? if ($ZIPPrefs == 1) { echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
 						<option value="2"<? if ($ZIPPrefs == 2) { echo ' selected="selected"'; } ?>>Prefer Bonus Tracks</option>
 					</select>
-					<input type="submit" style="width:210px" value="Download" />
+					<input type="submit" style="width: 210px;" value="Download" />
 				</form>
 			</div>
 		</div>
@@ -673,7 +673,7 @@ if (empty($SimilarArray)) {
 			$First = false;
 		}
 
-		$FontSize = (ceil((((($Score - 2)/$Max - 2) * 4)))) + 8;
+		$FontSize = (ceil((((($Score - 2) / $Max - 2) * 4)))) + 8;
 
 ?>
 				<li>
@@ -947,7 +947,7 @@ $Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_C
 	<div id="artistcomments" class="linkbox">
 		<a name="comments"></a>
 <?
-$Pages = Format::get_pages($Page,$Results,TORRENT_COMMENTS_PER_PAGE,9,'#comments');
+$Pages = Format::get_pages($Page, $Results, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 echo $Pages;
 ?>
 	</div>
@@ -967,7 +967,7 @@ foreach ($Thread as $Key => $Post) {
 	</colgroup>
 	<tr class="colhead_dark">
 		<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
-			<div style="float:left;"><a class="post_id" href='artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
+			<div style="float: left;"><a class="post_id" href='artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
 <?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
@@ -977,7 +977,7 @@ foreach ($Thread as $Key => $Post) {
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
 <?	} ?>
 			</div>
-			<div id="bar<?=$PostID?>" style="float:right;">
+			<div id="bar<?=$PostID?>" style="float: right;">
 				<a href="reports.php?action=report&amp;type=artist_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
 <?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);

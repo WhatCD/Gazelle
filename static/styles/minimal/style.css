@@ -18,8 +18,8 @@ input#file, input[type="file"]{color:#000}
 textarea#quickpost{margin:0; padding:0}
 
 /* GENERAL */
-.box, #content table tr td{background:#373737; margin-bottom:15px}
-.pad{padding:10px}
+.box, #content table tr td{background: #373737; margin-bottom: 15px;}
+.pad{padding: 10px;}
 
 .sidebar .box{position:relative}
 .sidebar img{max-width:228px}
@@ -32,25 +32,25 @@ textarea#quickpost{margin:0; padding:0}
 .label{width:15%}
 
 /* wrapper */
-#wrapper{width:980px; margin:0 auto}
+#wrapper{width: 980px; margin: 0 auto;}
 
 /* header layout */
-#header{position:relative; overflow:visible; height:110px; z-index:4}
-#logo{width:94px; height:74px; position:absolute; top:8px; left:0; background-repeat:no-repeat; background-image:url(images/logo.png)}
-#logo a{width:94px; height:74px; display:block}
+#header{position: relative; overflow: visible; height: 110px; z-index: 4;}
+#logo{width: 94px; height: 74px; position: absolute; top: 8px; left: 0; background-repeat: no-repeat; background-image: url(images/logo.png);}
+#logo a{width: 94px; height: 74px; display: block;}
 
 /* menu */
-#menu{margin:0 0 0 105px; padding:0 249px 7px 0; border-bottom:1px solid #353535; overflow:hidden}
-#menu *{text-transform:lowercase}
-#menu ul{list-style:none; margin:0; padding:0}
-#menu ul li{float:left; margin:2px 6px 0; text-align:center}
-#menu ul li a{padding:12px 4px 3px; font-weight:bold; display:block; text-decoration:none; color:#FFF}
-#menu ul li:hover{background:#353535}
-#menu ul li:hover a{color:#FFF}
+#menu{margin: 0 0 0 105px; padding: 0 249px 7px 0; border-bottom: 1px solid #353535; overflow: hidden;}
+#menu *{text-transform: lowercase;}
+#menu ul{list-style: none; margin: 0; padding: 0;}
+#menu ul li{float: left; margin: 2px 6px 0; text-align: center;}
+#menu ul li a{padding: 12px 4px 3px; font-weight: bold; display: block; text-decoration: none; color: #FFF;}
+#menu ul li:hover{background: #353535;}
+#menu ul li:hover a{color: #FFF;}
 
 /* active menu item */
 #index #nav_index a, #torrents #nav_torrents a, #collage #nav_collages a, #requests #nav_requests a, #forums #nav_forums a, #top10 #nav_top10 a, #rules #nav_rules a, #kb #nav_wiki a, #wiki #nav_wiki a, #staff #nav_staff a, #chat #nav_irc a
-{background:#5AF}
+{background: #5AF;}
 
 /* sprite */
 #userinfo_username li:first-child, #userinfo_major li:first-child, #userinfo_minor li:first-child, #userinfo_username li:first-child:hover, #userinfo_major li:first-child:hover, #userinfo_minor li:first-child:hover,

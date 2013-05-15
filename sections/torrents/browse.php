@@ -646,7 +646,7 @@ if (!is_array($TorrentCache)) {
 }
 
 // List of pages
-$Pages = Format::get_pages($Page,$TorrentCount,TORRENTS_PER_PAGE);
+$Pages = Format::get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
 
 // Gets tacked onto torrent download URLs
 $DownloadString = '&amp;authkey='.$LoggedUser['AuthKey'].'&amp;torrent_pass='.$LoggedUser['torrent_pass'];

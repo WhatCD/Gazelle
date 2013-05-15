@@ -205,7 +205,7 @@ View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &l
 			</div>
 		</div>
 <?
-$Pages = Format::get_pages($Page,$ThreadInfo['Posts'],$PerPage,9);
+$Pages = Format::get_pages($Page, $ThreadInfo['Posts'], $PerPage, 9);
 echo $Pages;
 ?>
 	</div>
@@ -236,7 +236,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				$Votes[$i] = 0;
 			}
 		}
-		$Cache->cache_value('polls_'.$ThreadID, array($Question,$Answers,$Votes,$Featured,$Closed), 0);
+		$Cache->cache_value('polls_'.$ThreadID, array($Question, $Answers, $Votes, $Featured, $Closed), 0);
 	}
 
 	if (!empty($Votes)) {
@@ -290,7 +290,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?			}
 			if ($Votes[0] > 0) {
 ?>
-				<li>(Blank) (<?=number_format((float)($Votes[0] / $TotalVotes * 100),2)?>%)</li>
+				<li>(Blank) (<?=number_format((float)($Votes[0] / $TotalVotes * 100), 2)?>%)</li>
 				<li class="graph">
 					<span class="left_poll"></span>
 					<span class="center_poll" style="width: <?=round(($Votes[0] / $MaxVotes) * 750)?>px;"></span>

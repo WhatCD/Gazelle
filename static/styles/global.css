@@ -199,8 +199,7 @@ div#AddArtists a {
 	z-index: 25;
 	display: block;
 	position: fixed;
-	background: transparent url('../rippy/rippy.png') no-repeat bottom
-		center;
+	background: transparent url('../rippy/rippy.png') no-repeat bottom center;
 	color: black;
 	text-align: center;
 	width: 190px;
@@ -275,23 +274,20 @@ span.secondary_class {
 }
 
 .headerSort span {
-	background: url("../common/table-order.png") no-repeat scroll right
-		-38px transparent;
+	background: url("../common/table-order.png") no-repeat scroll right -38px transparent;
 	padding: 0px 20px 0 0;
 }
 
 .headerSortDown span {
-	background: url("../common/table-order.png") no-repeat scroll right 4px
-		transparent;
+	background: url("../common/table-order.png") no-repeat scroll right 4px transparent;
 }
 
 .headerSortUp span {
-	background: url("../common/table-order.png") no-repeat scroll right
-		-79px transparent;
+	background: url("../common/table-order.png") no-repeat scroll right -79px transparent;
 }
 
 .album_votes {
-	text-align: center
+	text-align: center;
 }
 
 .favoritecount {
@@ -413,13 +409,13 @@ tr.torrent .bookmark>a:after {
 	overflow:hidden;
 }
 .float_left {
-	float:left;
+	float: left;
 }
 .float_right {
-	float:right;
+	float: right;
 }
 .float_clear {
-	clear:both;
+	clear: both;
 }
 .group_image + .group_info {
 	margin-left: 100px;
@@ -463,7 +459,7 @@ tr.torrent .bookmark>a:after {
 }
 /* Fix long overflow for Opera (doesn't support word-break). */
 .reportinfo_table {
-	table-layout:fixed;
+	table-layout: fixed;
 }
 /* Wrap release info for consistent DOM and to limit table expansion. */
 .no_overflow {
