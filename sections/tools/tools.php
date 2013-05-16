@@ -24,7 +24,7 @@ View::show_header('Staff Tools');
 <?	} if (check_perms('admin_manage_news')) { ?>
 			<tr><td><a href="tools.php?action=news">News</a></td></tr>
 <?	} if (check_perms('admin_dnu')) { ?>
-			<tr><td><a href="tools.php?action=dnu">Do not upload list</a></td></tr>
+			<tr><td><a href="tools.php?action=dnu">"Do Not Upload" list</a></td></tr>
 <?	} if (check_perms('site_recommend_own') || check_perms('site_manage_recommendations')) { ?>
 			<tr><td><a href="tools.php?action=recommend">Vanity House additions</a></td></tr>
 

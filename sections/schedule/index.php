@@ -319,7 +319,7 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 	
 	//------------- Lower Login Attempts ------------------------------------//
 	$DB->query("UPDATE login_attempts SET Attempts=Attempts-1 WHERE Attempts>0");
-	$DB->query("DELETE FROM login_attempts WHERE LastAttempt<'".time_minus(3600*24*90)."'");
+	$DB->query("DELETE FROM login_attempts WHERE LastAttempt<'".time_minus(3600 * 24 * 90)."'");
 
 	//------------- Remove expired warnings ---------------------------------//
 	$DB->query("SELECT UserID FROM users_info WHERE Warned<'$sqltime'");
@@ -520,23 +520,25 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 
 	// Put user on ratio watch if he doesn't meet the standards
 	sleep(10);
-	$DB->query("SELECT m.ID,
-					m.Downloaded
-				FROM users_info AS i
-					JOIN users_main AS m ON m.ID=i.UserID
-				WHERE m.Uploaded/m.Downloaded < m.RequiredRatio
-					AND i.RatioWatchEnds='0000-00-00 00:00:00'
-					AND m.Enabled='1'
-					AND m.can_leech='1'");
+	$DB->query("
+		SELECT m.ID,
+			m.Downloaded
+		FROM users_info AS i
+			JOIN users_main AS m ON m.ID=i.UserID
+		WHERE m.Uploaded/m.Downloaded < m.RequiredRatio
+			AND i.RatioWatchEnds='0000-00-00 00:00:00'
+			AND m.Enabled='1'
+			AND m.can_leech='1'");
 	$OnRatioWatch = $DB->collect('ID');
 
-	if (count($OnRatioWatch)>0) {
-		$DB->query("UPDATE users_info AS i
-						JOIN users_main AS m ON m.ID=i.UserID
-					SET i.RatioWatchEnds='".time_plus(60 * 60 * 24 * 14)."',
-						i.RatioWatchTimes = i.RatioWatchTimes+1,
-						i.RatioWatchDownload = m.Downloaded
-					WHERE m.ID IN(".implode(",", $OnRatioWatch).")");
+	if (count($OnRatioWatch) > 0) {
+		$DB->query("
+			UPDATE users_info AS i
+				JOIN users_main AS m ON m.ID=i.UserID
+			SET i.RatioWatchEnds='".time_plus(60 * 60 * 24 * 14)."',
+				i.RatioWatchTimes = i.RatioWatchTimes+1,
+				i.RatioWatchDownload = m.Downloaded
+			WHERE m.ID IN(".implode(',', $OnRatioWatch).')');
 	}
 
 	foreach ($OnRatioWatch as $UserID) {
@@ -551,17 +553,21 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 
 	//------------- Rescore 0.95 logs of disabled users
 
-	$LogQuery = $DB->query("SELECT DISTINCT t.ID
-							FROM torrents AS t
-								JOIN users_main AS um ON t.UserID = um.ID
-								JOIN torrents_logs_new AS tl ON tl.TorrentID = t.ID
-							WHERE um.Enabled = '2' and t.HasLog = '1' and LogScore = 100 and Log LIKE 'EAC extraction logfile from%'");
+	$LogQuery = $DB->query("
+		SELECT DISTINCT t.ID
+		FROM torrents AS t
+			JOIN users_main AS um ON t.UserID = um.ID
+			JOIN torrents_logs_new AS tl ON tl.TorrentID = t.ID
+		WHERE um.Enabled = '2'
+			AND t.HasLog = '1'
+			AND LogScore = 100
+			AND Log LIKE 'EAC extraction logfile from%'");
 	$Details = array();
 	$Details[] = "Ripped with EAC v0.95, -1 point [1]";
 	$Details = serialize($Details);
 	while (list($TorrentID) = $DB->next_record()) {
 		$DB->query("UPDATE torrents SET LogScore = 99 WHERE ID = ".$TorrentID);
-		$DB->query("UPDATE torrents_logs_new SET Score = 99, Details = '".$Details."' WHERE TorrentID = ".$TorrentID);
+		$DB->query("UPDATE torrents_logs_new SET Score = 99, Details = '$Details' WHERE TorrentID = ".$TorrentID);
 	}
 
 	sleep(5);
@@ -569,21 +575,23 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 	//------------- Disable downloading ability of users on ratio watch
 
 
-	$UserQuery = $DB->query("SELECT ID, torrent_pass
-							FROM users_info AS i
-								JOIN users_main AS m ON m.ID=i.UserID
-							WHERE i.RatioWatchEnds!='0000-00-00 00:00:00'
-								AND i.RatioWatchEnds<'$sqltime'
-								AND m.Enabled='1'
-								AND m.can_leech!='0'");
+	$UserQuery = $DB->query("
+			SELECT ID, torrent_pass
+			FROM users_info AS i
+				JOIN users_main AS m ON m.ID=i.UserID
+			WHERE i.RatioWatchEnds!='0000-00-00 00:00:00'
+				AND i.RatioWatchEnds<'$sqltime'
+				AND m.Enabled='1'
+				AND m.can_leech!='0'");
 
 	$UserIDs = $DB->collect('ID');
 	if (count($UserIDs) > 0) {
-		$DB->query("UPDATE users_info AS i
-						JOIN users_main AS m ON m.ID=i.UserID
-					SET	m.can_leech='0',
-						i.AdminComment=CONCAT('$sqltime - Leeching ability disabled by ratio watch system - required ratio: ', m.RequiredRatio,'', i.AdminComment)
-					WHERE m.ID IN(".implode(',',$UserIDs).")");
+		$DB->query("
+			UPDATE users_info AS i
+				JOIN users_main AS m ON m.ID=i.UserID
+			SET	m.can_leech='0',
+				i.AdminComment=CONCAT('$sqltime - Leeching ability disabled by ratio watch system - required ratio: ', m.RequiredRatio,'', i.AdminComment)
+			WHERE m.ID IN(".implode(',',$UserIDs).")");
 
 		
 		$DB->query("DELETE FROM users_torrent_history WHERE UserID IN (".implode(',',$UserIDs).")");

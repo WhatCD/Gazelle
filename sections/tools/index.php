@@ -97,15 +97,15 @@ switch ($_REQUEST['action']) {
 		break;
 
 	case 'email_blacklist':
-		include('managers/eb.php');
+		include('managers/email_blacklist.php');
 		break;
 
-	case 'eb_alter':
-		include('managers/eb_alter.php');
+	case 'email_blacklist_alter':
+		include('managers/email_blacklist_alter.php');
 		break;
 
-	case 'eb_search':
-		include('managers/eb_search.php');
+	case 'email_blacklist_search':
+		include('managers/email_blacklist_search.php');
 		break;
 
 	case 'dnu':
@@ -237,25 +237,30 @@ switch ($_REQUEST['action']) {
 
 				if (!$Err) {
 					if (!is_numeric($_REQUEST['id'])) {
-						$DB->query("INSERT INTO permissions (Level,Name,Secondary,PermittedForums,`Values`,DisplayStaff)
-									VALUES ('".db_string($Level)."',
-											'".db_string($Name)."',
-											".$Secondary.",
-											'".db_string($Forums)."',
-											'".db_string(serialize($Values))."',
-											'".db_string($DisplayStaff)."')");
+						$DB->query("
+							INSERT INTO permissions (Level,Name,Secondary,PermittedForums,`Values`,DisplayStaff)
+							VALUES ('".db_string($Level)."',
+									'".db_string($Name)."',
+									$Secondary,
+									'".db_string($Forums)."',
+									'".db_string(serialize($Values))."',
+									'".db_string($DisplayStaff)."')");
 					} else {
-						$DB->query("UPDATE permissions
-									SET Level='".db_string($Level)."',
-										Name='".db_string($Name)."',
-										Secondary=".$Secondary.",
-										PermittedForums='".db_string($Forums)."',
-										`Values`='".db_string(serialize($Values))."',
-										DisplayStaff='".db_string($DisplayStaff)."'
-									WHERE ID='".db_string($_REQUEST['id'])."'");
+						$DB->query("
+							UPDATE permissions
+							SET Level='".db_string($Level)."',
+								Name='".db_string($Name)."',
+								Secondary=$Secondary,
+								PermittedForums='".db_string($Forums)."',
+								`Values`='".db_string(serialize($Values))."',
+								DisplayStaff='".db_string($DisplayStaff)."'
+							WHERE ID='".db_string($_REQUEST['id'])."'");
 						$Cache->delete_value('perm_'.$_REQUEST['id']);
 						if ($Secondary) {
-							$DB->query("SELECT DISTINCT UserID FROM users_levels WHERE PermissionID = ".db_string($_REQUEST['id']));
+							$DB->query("
+								SELECT DISTINCT UserID
+								FROM users_levels
+								WHERE PermissionID = ".db_string($_REQUEST['id']));
 							while ($UserID = $DB->next_record()) {
 								$Cache->delete_value('user_info_heavy_'.$UserID);
 							}
@@ -309,7 +314,7 @@ switch ($_REQUEST['action']) {
 		include('data/donation_log.php');
 		break;
 
-	
+
 	case 'upscale_pool':
 		include('data/upscale_pool.php');
 		break;
@@ -317,6 +322,7 @@ switch ($_REQUEST['action']) {
 	case 'invite_pool':
 		include('data/invite_pool.php');
 		break;
+
 	case 'torrent_stats':
 		include('data/torrent_stats.php');
 		break;
@@ -348,9 +354,9 @@ switch ($_REQUEST['action']) {
 	case 'browser_support':
 		include('data/browser_support.php');
 		break;
-		//END Data
+	//END Data
 
-		//Misc
+	//Misc
 	case 'update_geoip':
 		include('misc/update_geoip.php');
 		break;
@@ -378,10 +384,10 @@ switch ($_REQUEST['action']) {
 	case 'analysis':
 		include('misc/analysis.php');
 		break;
-	
+
 	case 'rerender_gallery':
-	include('misc/rerender_gallery.php');
-	break;
+		include('misc/rerender_gallery.php');
+		break;
 
 	case 'sandbox1':
 		include('misc/sandbox1.php');

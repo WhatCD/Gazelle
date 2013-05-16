@@ -2,8 +2,9 @@
 if (!check_perms('admin_dnu')) {
 	error(403);
 }
+$Title = 'Manage the "Do Not Upload" list';
 
-View::show_header('Manage "Do Not Upload" list');
+View::show_header($Title);
 $DB->query("
 	SELECT
 		d.ID,
@@ -16,9 +17,27 @@ $DB->query("
 	ORDER BY d.Time DESC");
 ?>
 <div class="header">
-	<h2>Do Not Uploads</h2>
+	<h2><?=($Title)?></h2>
 </div>
 <table>
+	<tr class="colhead">
+		<td colspan="4">Add an entry to the "Do Not Upload" list</td>
+	</tr>
+	<tr class="rowa">
+		<form class="add_form" name="dnu" action="tools.php" method="post">
+			<input type="hidden" name="action" value="dnu_alter" />
+			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+			<td>
+				<input type="text" name="name" size="30" />
+			</td>
+			<td colspan="2">
+				<input type="text" name="comment" size="60" />
+			</td>
+			<td>
+				<input type="submit" value="Create" />
+			</td>
+		</form>
+	</tr>
 	<tr class="colhead">
 		<td>Name</td>
 		<td>Comment</td>
@@ -39,7 +58,7 @@ $DB->query("
 			</td>
 			<td>
 				<?=Users::format_username($UserID, false, false, false)?><br />
-				<?=time_diff($DNUTime, 1)?>
+				<?	echo time_diff($DNUTime, 1) . "\n"; ?>
 			</td>
 			<td>
 				<input type="submit" name="submit" value="Edit" />
@@ -48,23 +67,5 @@ $DB->query("
 		</form>
 	</tr>
 <?	} ?>
-<tr class="colhead">
-	<td colspan="4">Add Do Not Upload</td>
-</tr>
-<tr class="rowa">
-	<form class="add_form" name="dnu" action="tools.php" method="post">
-		<input type="hidden" name="action" value="dnu_alter" />
-		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<td>
-			<input type="text" name="name" size="30" />
-		</td>
-		<td colspan="2">
-			<input type="text" name="comment" size="60" />
-		</td>
-		<td>
-			<input type="submit" value="Create" />
-		</td>
-	</form>
-</tr>
 </table>
 <? View::show_footer(); ?>

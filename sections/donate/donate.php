@@ -70,7 +70,7 @@ View::show_header('Donate');
 		</form>
 	</div>
 
-	<h3>What you will receive for a 5&euro; or 0.5 BTC minimum donation</h3>
+	<h3>What you will receive for a 5&euro; or 0.1 BTC minimum donation</h3>
 	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<ul>
 <?

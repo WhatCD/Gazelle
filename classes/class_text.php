@@ -314,7 +314,7 @@ class TEXT {
 				if (!empty($Tag[3][0])) {
 					$Attrib = substr($Tag[3][0], 1);
 				} else {
-					$Attrib='';
+					$Attrib = '';
 				}
 			}
 
@@ -359,7 +359,7 @@ class TEXT {
 				$NewLine = $i;
 				do { // Look for \n[*]
 					$NewLine = strpos($Str, "\n", $NewLine + 1);
-				} while ($NewLine !== false && substr($Str, $NewLine + 1, 3) == '['.$TagName.']');
+				} while ($NewLine !== false && substr($Str, $NewLine + 1, 3) == "[$TagName]");
 
 				$CloseTag = $NewLine;
 				if ($CloseTag === false) { // block finishes with list
@@ -384,7 +384,7 @@ class TEXT {
 				// Every time we find an internal open tag of the same type, search for the next close tag
 				// (as the first close tag won't do - it's been opened again)
 				do {
-					$CloseTag = stripos($Str, '[/'.$TagName.']', $CloseTag + 1);
+					$CloseTag = stripos($Str, "[/$TagName]", $CloseTag + 1);
 					if ($CloseTag === false) {
 						$CloseTag = $Len;
 						break;
@@ -490,7 +490,7 @@ class TEXT {
 				case '*':
 						$Array[$ArrayPos] = array('Type'=>'list');
 						$Array[$ArrayPos]['Val'] = explode('['.$TagName.']', $Block);
-						$Array[$ArrayPos]['ListType'] = $TagName === '*' ? 'ul' : 'ol';
+						$Array[$ArrayPos]['ListType'] = ($TagName === '*' ? 'ul' : 'ol');
 						$Array[$ArrayPos]['Tag'] = $TagName;
 						foreach ($Array[$ArrayPos]['Val'] as $Key=>$Val) {
 							$Array[$ArrayPos]['Val'][$Key] = $this->parse(trim($Val));
@@ -507,7 +507,7 @@ class TEXT {
 						// Basic tags, like [b] or [size=5]
 
 						$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>$this->parse($Block));
-						if (!empty($Attrib) && $MaxAttribs>0) {
+						if (!empty($Attrib) && $MaxAttribs > 0) {
 							$Array[$ArrayPos]['Attr'] = strtolower($Attrib);
 						}
 					}
@@ -574,11 +574,11 @@ class TEXT {
 			if ($Offset > 0) $List .= str_repeat('<li><ol>', $Offset - 2);
 
 			if ($ItemLevel > 1) {
-				$List .= $i === 0 ? '<li>' : '';
-				$List .= "\n" . '<ol>' . "\n";
+				$List .= ($i === 0 ? '<li>' : '');
+				$List .= ("\n<ol>\n");
 			}
 		} else {
-			$List .= $i > 0 ? '</li>' : '<li>';
+			$List .= ($i > 0 ? '</li>' : '<li>');
 		}
 	}
 
@@ -658,7 +658,7 @@ class TEXT {
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'tex':
-					$Str.='<img style="vertical-align: middle;" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="'.$Block['Val'].'" />';
+					$Str.='<img style="vertical-align: middle;" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'], 'UTF-8', 'HTML-ENTITIES')).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="'.$Block['Val'].'" />';
 					break;
 				case 'plain':
 					$Str.=$Block['Val'];
@@ -682,7 +682,7 @@ class TEXT {
 					if (!in_array($Block['Attr'], $ValidAttribs)) {
 						$Str.='[align='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/align]';
 					} else {
-						$Str.='<div style="text-align:'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</div>';
+						$Str.='<div style="text-align: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</div>';
 					}
 					break;
 				case 'color':
@@ -691,7 +691,7 @@ class TEXT {
 					if (!in_array($Block['Attr'], $ValidAttribs) && !preg_match('/^#[0-9a-f]{6}$/', $Block['Attr'])) {
 						$Str.='[color='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/color]';
 					} else {
-						$Str.='<span style="color:'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
+						$Str.='<span style="color: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</span>';
 					}
 					break;
 				case 'headline':

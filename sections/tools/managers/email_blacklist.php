@@ -39,11 +39,11 @@ list ($NumResults) = $DB->next_record();
 		<td>Submit</td>
 	</tr>
 	<tr class="colhead">
-		<td colspan="4">Add Email or Domain to Blacklist</td>
+		<td colspan="4">Add email address or domain to blacklist</td>
 	</tr>
 	<tr class="rowa">
 		<form class="add_form" name="email_blacklist" action="tools.php" method="post">
-			<input type="hidden" name="action" value="eb_alter" />
+			<input type="hidden" name="action" value="email_blacklist_alter" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<td><input type="text" name="email" size="30" /></td>
 			<td colspan="2"><input type="text" name="comment" size="60" /></td>
@@ -57,7 +57,7 @@ list ($NumResults) = $DB->next_record();
 	<tr>
 		<form class="manage_form" name="email_blacklist" action="tools.php" method="post">
 			<td>
-				<input type="hidden" name="action" value="eb_alter" />
+				<input type="hidden" name="action" value="email_blacklist_alter" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="id" value="<?=$Result['ID']?>" />
 				<input type="text" name="email" value="<?=display_str($Result['Email'])?>" size="30" />

@@ -398,7 +398,7 @@ EXPLANATION OF PARSER LOGIC
 						// Basic tags, like [b] or [size=5]
 
 						$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>$this->parse($Block));
-						if (!empty($Attrib) && $MaxAttribs>0) {
+						if (!empty($Attrib) && $MaxAttribs > 0) {
 							$Array[$ArrayPos]['Attr'] = strtolower($Attrib);
 						}
 					}
@@ -411,7 +411,9 @@ EXPLANATION OF PARSER LOGIC
 
 	function to_html($Array) {
 		$this->Levels++;
-		if ($this->Levels>10) { return $Block['Val']; } // Hax prevention
+		if ($this->Levels > 10) { // Hax prevention
+			return $Block['Val'];
+		}
 		$Str = '';
 
 		foreach ($Array as $Block) {

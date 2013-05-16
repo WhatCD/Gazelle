@@ -366,7 +366,7 @@ if (isset($LoginCookie)) {
 	}
 
 	//A9 TODO: Clean up this messy solution
-	$LoggedUser['StyleName']=$Stylesheets[$LoggedUser['StyleID']]['Name'];
+	$LoggedUser['StyleName'] = $Stylesheets[$LoggedUser['StyleID']]['Name'];
 
 	if (empty($LoggedUser['Username'])) {
 		logout(); // Ghost
@@ -384,9 +384,9 @@ $Debug->set_flag('start function definitions');
  */
 function logout() {
 	global $SessionID, $LoggedUser, $DB, $Cache;
-	setcookie('session','',time()-60*60*24*365,'/','',false);
-	setcookie('keeplogged','',time()-60*60*24*365,'/','',false);
-	setcookie('session','',time()-60*60*24*365,'/','',false);
+	setcookie('session', '', time() - 60 * 60 * 24 * 365, '/', '', false);
+	setcookie('keeplogged', '', time() - 60 * 60 * 24 * 365, '/', '', false);
+	setcookie('session', '', time() - 60 * 60 * 24 * 365, '/', '', false);
 	if ($SessionID) {
 		
 		
@@ -408,7 +408,7 @@ function logout() {
 function enforce_login() {
 	global $SessionID, $LoggedUser;
 	if (!$SessionID || !$LoggedUser) {
-		setcookie('redirect',$_SERVER['REQUEST_URI'],time()+60*30,'/','',false);
+		setcookie('redirect', $_SERVER['REQUEST_URI'], time() + 60 * 30, '/', '', false);
 		logout();
 	}
 }
@@ -435,7 +435,9 @@ function authorize($Ajax = false) {
 $Debug->set_flag('ending function definitions');
 //Include /sections/*/index.php
 $Document = basename(parse_url($_SERVER['SCRIPT_FILENAME'], PHP_URL_PATH), '.php');
-if (!preg_match('/^[a-z0-9]+$/i', $Document)) { error(404); }
+if (!preg_match('/^[a-z0-9]+$/i', $Document)) {
+	error(404);
+}
 
 require(SERVER_ROOT.'/sections/'.$Document.'/index.php');
 $Debug->set_flag('completed module execution');

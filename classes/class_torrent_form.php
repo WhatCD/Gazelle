@@ -378,7 +378,7 @@ function show() {
 									<td class="label">Record label:</td>
 									<td>
 										<input type="text" id="remaster_record_label" name="remaster_record_label" size="50" value="<?=display_str($Torrent['RemasterRecordLabel']) ?>"<? if ($UnknownRelease) { echo ' disabled="disabled"';} ?> />
-										<p class="min_padding">This is for the record label of the <strong>release</strong> (It may differ from the original).</p>
+										<p class="min_padding">This is for the record label of the <strong>release</strong>. It may differ from the original.</p>
 									</td>
 								</tr>
 								<tr id="edition_catalogue_number">
@@ -396,7 +396,7 @@ function show() {
 				<td class="label">Scene:</td>
 				<td>
 					<input type="checkbox" id="scene" name="scene" <? if ($Torrent['Scene']) { echo 'checked="checked" ';} ?>/>
-					<label for="scene">Check this only if this is a 'scene release'.<br />If you ripped it yourself, it is <strong>not</strong> a scene release. If you are not sure, <strong class="important_text">do not</strong> check it; you will be penalized. For information on the scene, visit <a href="http://en.wikipedia.org/wiki/Scene_%28software%29" target="_blank">Wikipedia</a>.</label>
+					<label for="scene">Check this only if this is a "scene release".<br />If you ripped it yourself, it is <strong>not</strong> a scene release. If you are not sure, <strong class="important_text">do not</strong> check it; you will be penalized. For information on the scene, visit <a href="https://en.wikipedia.org/wiki/Warez_scene" target="_blank">Wikipedia</a>.</label>
 				</td>
 			</tr>
 			<tr>

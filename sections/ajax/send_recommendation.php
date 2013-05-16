@@ -29,7 +29,7 @@ if ($DB->record_count() == 0) {
 $Type = strtolower($Type);
 $Link = '';
 // "a" vs "an", english language is so confusing.
-// http://en.wikipedia.org/wiki/English_articles#Distinction_between_a_and_an
+// https://en.wikipedia.org/wiki/English_articles#Distinction_between_a_and_an
 $Article = 'a';
 switch ($Type) {
 	case 'torrent':
