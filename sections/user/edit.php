@@ -1,9 +1,4 @@
 <?
-
-
-));)))));; echo)(;
-
-
 $UserID = $_REQUEST['userid'];
 if (!is_number($UserID)) {
 	error(404);
