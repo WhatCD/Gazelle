@@ -61,13 +61,14 @@ if (check_perms('admin_manage_blog')) {
 					}
 				}
 
-				$DB->query("INSERT INTO blog (UserID, Title, Body, Time, ThreadID, Important)
-							VALUES ('".$LoggedUser['ID']."',
-									'".db_string($_POST['title'])."',
-									'".db_string($_POST['body'])."',
-									'".sqltime()."',
-									$ThreadID,
-									'".(($_POST['important'] == '1') ? '1' : '0')."')");
+				$DB->query("
+					INSERT INTO blog (UserID, Title, Body, Time, ThreadID, Important)
+					VALUES ('".$LoggedUser['ID']."',
+							'".db_string($_POST['title'])."',
+							'".db_string($_POST['body'])."',
+							'".sqltime()."',
+							$ThreadID,
+							'".(($_POST['important'] == '1') ? '1' : '0')."')");
 				$Cache->delete_value('blog');
 				if ($_POST['important'] == '1') {
 					$Cache->delete_value('blog_latest_id');
@@ -76,7 +77,6 @@ if (check_perms('admin_manage_blog')) {
 					$DB->query("INSERT IGNORE INTO users_subscriptions VALUES ('$LoggedUser[ID]', $ThreadID)");
 					$Cache->delete_value('subscriptions_user_'.$LoggedUser['ID']);
 				}
-				
 				header('Location: blog.php');
 				break;
 		}

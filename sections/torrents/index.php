@@ -247,16 +247,21 @@ if (!empty($_REQUEST['action'])) {
 			}
 
 			// Mainly
-			$DB->query("SELECT
-				tc.Body,
-				tc.AuthorID,
-				tc.GroupID,
-				tc.AddedTime
+			$DB->query("
+				SELECT
+					tc.Body,
+					tc.AuthorID,
+					tc.GroupID,
+					tc.AddedTime
 				FROM torrents_comments AS tc
 				WHERE tc.ID='".db_string($_POST['post'])."'");
-			list($OldBody, $AuthorID,$GroupID,$AddedTime)=$DB->next_record();
+			list($OldBody, $AuthorID,$GroupID,$AddedTime) = $DB->next_record();
 
-			$DB->query("SELECT ceil(COUNT(ID) / ".TORRENT_COMMENTS_PER_PAGE.") AS Page FROM torrents_comments WHERE GroupID = $GroupID AND ID <= $_POST[post]");
+			$DB->query("
+				SELECT ceil(COUNT(ID) / ".TORRENT_COMMENTS_PER_PAGE.") AS Page
+				FROM torrents_comments
+				WHERE GroupID = $GroupID
+					AND ID <= $_POST[post]");
 			list($Page) = $DB->next_record();
 
 			if ($LoggedUser['ID'] != $AuthorID && !check_perms('site_moderate_forums')) {
@@ -267,10 +272,12 @@ if (!empty($_REQUEST['action'])) {
 			}
 
 			// Perform the update
-			$DB->query("UPDATE torrents_comments SET
-				Body = '".db_string($_POST['body'])."',
-				EditedUserID = '".db_string($LoggedUser['ID'])."',
-				EditedTime = '".sqltime()."'
+			$DB->query("
+				UPDATE torrents_comments
+				SET
+					Body = '".db_string($_POST['body'])."',
+					EditedUserID = '".db_string($LoggedUser['ID'])."',
+					EditedTime = '".sqltime()."'
 				WHERE ID='".db_string($_POST['post'])."'");
 
 			// Update the cache

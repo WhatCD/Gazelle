@@ -59,14 +59,14 @@ if (!$ClassDistribution = $Cache->get_value('class_distribution')) {
 }
 if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
-	
-	
+
+
 	$DB->query("
 		SELECT OperatingSystem, COUNT(UserID) AS Users
 		FROM users_sessions
 		GROUP BY OperatingSystem
 		ORDER BY Users DESC");
-	
+
 	$Platforms = $DB->to_array();
 	$Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
 	foreach ($Platforms as $Platform) {
@@ -82,7 +82,7 @@ if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 
 if (!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
 	include_once(SERVER_ROOT.'/classes/class_charts.php');
-	
+
 	
 	$DB->query("
 		SELECT Browser, COUNT(UserID) AS Users

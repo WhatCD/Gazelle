@@ -1018,7 +1018,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
 		<td class="nobr"><?=Format::get_size($MaxSize)?> (Max)</td>
 		<td><?=number_format($TotalSnatched)?></td>
-		<td<?=($TotalSeeders==0)?' class="r00"':''?>><?=number_format($TotalSeeders)?></td>
+		<td<?=(($TotalSeeders == 0) ? ' class="r00"' : '')?>><?=number_format($TotalSeeders)?></td>
 		<td><?=number_format($TotalLeechers)?></td>
 	</tr>
 <?

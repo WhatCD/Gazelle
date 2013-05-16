@@ -22,7 +22,7 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 
 	Tracker::update_tracker('add_torrent', array('id' => $ExtraTorrentID, 'info_hash' => rawurlencode($ExtraTorrent['InfoHash']), 'freetorrent' => $T['FreeLeech']));
 
-	
+
 
 	//******************************************************************************//
 	//--------------- Write torrent file -------------------------------------------//

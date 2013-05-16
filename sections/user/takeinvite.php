@@ -81,7 +81,7 @@ EOT;
 
 	Misc::send_email($CurEmail, 'You have been invited to '.SITE_NAME, $Message,'noreply');
 
-	
+
 }
 
 header('Location: user.php?action=invite');

@@ -123,7 +123,7 @@ echo $Pages;
 				<tr class="colhead">
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>
 					<td width="50%">Subject</td>
-					<td><?=(($Section == 'sentbox')? 'Receiver' : 'Sender')?></td>
+					<td><?=(($Section == 'sentbox') ? 'Receiver' : 'Sender')?></td>
 					<td>Date</td>
 <?		if (check_perms('users_mod')) { ?>
 					<td>Forwarded to</td>

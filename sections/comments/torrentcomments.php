@@ -83,7 +83,7 @@ while (list($UserID, $TorrentID, $GroupID, $Title, $PostID, $Body, $AddedTime, $
 	comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorID, $AddedTime, $EditedTime);
 
 } /* end while loop*/ ?>
-	<div class="linkbox"><?= $Pages; ?></div>
+	<div class="linkbox"><?=($Pages)?></div>
 </div>
 <?
 

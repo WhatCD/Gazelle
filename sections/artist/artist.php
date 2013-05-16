@@ -886,7 +886,7 @@ function require(file, callback) {
 			</div>
 			<div id="body" class="body"><?=$Text->full_format($Body)?></div>
 		</div>
-<!--	-->
+<!---->
 <?php
 // --- Comments ---
 
@@ -909,9 +909,9 @@ if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_C
 		WHERE ArtistID = $ArtistID
 			AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
-	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $PostNum);
 } else {
-	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $Results);
 }
 
 //Get the cache catalogue
@@ -937,12 +937,12 @@ if ($Catalogue === false) {
 		WHERE c.ArtistID = '$ArtistID'
 		ORDER BY c.ID
 		LIMIT $CatalogueLimit");
-	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
+	$Catalogue = $DB->to_array(false, MYSQLI_ASSOC);
 	$Cache->cache_value('artist_comments_'.$ArtistID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
+$Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
 ?>
 	<div id="artistcomments" class="linkbox">
 		<a name="comments"></a>

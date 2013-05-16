@@ -150,7 +150,7 @@ if ($CurEmail != $_POST['email']) {
 		die();
 	}
 
-	
+
 }
 //End Email change
 
@@ -271,17 +271,20 @@ $Cache->commit_transaction(0);
 
 
 
-$SQL="UPDATE users_main AS m JOIN users_info AS i ON m.ID=i.UserID SET
-	i.StyleID='".db_string($_POST['stylesheet'])."',
-	i.StyleURL='".db_string($_POST['styleurl'])."',
-	i.Avatar='".db_string($_POST['avatar'])."',
-	i.SiteOptions='".db_string(serialize($Options))."',
-	i.NotifyOnQuote = '".db_string($Options['NotifyOnQuote'])."',
-	i.Info='".db_string($_POST['info'])."',
-	i.DownloadAlt='$DownloadAlt',
-	i.UnseededAlerts='$UnseededAlerts',
-	m.Email='".db_string($_POST['email'])."',
-	m.IRCKey='".db_string($_POST['irckey'])."',";
+$SQL = "
+	UPDATE users_main AS m
+		JOIN users_info AS i ON m.ID=i.UserID
+	SET
+		i.StyleID='".db_string($_POST['stylesheet'])."',
+		i.StyleURL='".db_string($_POST['styleurl'])."',
+		i.Avatar='".db_string($_POST['avatar'])."',
+		i.SiteOptions='".db_string(serialize($Options))."',
+		i.NotifyOnQuote = '".db_string($Options['NotifyOnQuote'])."',
+		i.Info='".db_string($_POST['info'])."',
+		i.DownloadAlt='$DownloadAlt',
+		i.UnseededAlerts='$UnseededAlerts',
+		m.Email='".db_string($_POST['email'])."',
+		m.IRCKey='".db_string($_POST['irckey'])."',";
 
 $SQL .= "m.Paranoia='".db_string(serialize($Paranoia))."'";
 
@@ -289,24 +292,25 @@ if ($ResetPassword) {
 	$ChangerIP = db_string($LoggedUser['IP']);
 	$PassHash=Users::make_crypt_hash($_POST['new_pass_1']);
 	$SQL.=",m.PassHash='".db_string($PassHash)."'";
-	$DB->query("INSERT INTO users_history_passwords
-		(UserID, ChangerIP, ChangeTime) VALUES
-		('$UserID', '$ChangerIP', '".sqltime()."')");
+	$DB->query("
+		INSERT INTO users_history_passwords
+			(UserID, ChangerIP, ChangeTime)
+		VALUES
+			('$UserID', '$ChangerIP', '".sqltime()."')");
 
-	
 }
 
 if (isset($_POST['resetpasskey'])) {
-
-	
 
 	$UserInfo = Users::user_heavy_info($UserID);
 	$OldPassKey = db_string($UserInfo['torrent_pass']);
 	$NewPassKey = db_string(Users::make_secret());
 	$ChangerIP = db_string($LoggedUser['IP']);
 	$SQL.=",m.torrent_pass='$NewPassKey'";
-	$DB->query("INSERT INTO users_history_passkeys
-			(UserID, OldPassKey, NewPassKey, ChangerIP, ChangeTime) VALUES
+	$DB->query("
+		INSERT INTO users_history_passkeys
+			(UserID, OldPassKey, NewPassKey, ChangerIP, ChangeTime)
+		VALUES
 			('$UserID', '$OldPassKey', '$NewPassKey', '$ChangerIP', '".sqltime()."')");
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
 	$Cache->update_row(false, array('torrent_pass'=>$NewPassKey));

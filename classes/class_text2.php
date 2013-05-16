@@ -600,9 +600,8 @@ EXPLANATION OF PARSER LOGIC
 							$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Attr'].'</a>';
 						}
 					}
-
 					break;
-				
+
 			}
 		}
 		$this->Levels--;
@@ -626,7 +625,7 @@ EXPLANATION OF PARSER LOGIC
 				case 'size':
 				case 'quote':
 				case 'align':
-				
+
 					$Str.=$this->raw_text($Block['Val']);
 					break;
 				case 'tex': //since this will never strip cleanly, just remove it

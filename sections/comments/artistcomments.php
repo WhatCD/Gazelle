@@ -56,8 +56,7 @@ while (list($UserID, $ArtistID, $ArtistName, $PostID, $Body, $AddedTime, $Edited
 	comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorID, $AddedTime, $EditedTime);
 
 } /* end while loop*/ ?>
-	<div class="linkbox"><?= $Pages; ?></div>
+	<div class="linkbox"><?=($Pages)?></div>
 </div>
 <?
 View::show_footer();
-

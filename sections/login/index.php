@@ -66,7 +66,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 							AND i.UserID=m.ID");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
 
-					
+
 				}
 			}
 
@@ -182,46 +182,51 @@ else {
 		$IP = Tools::ip_to_unsigned($IPStr);
 		if ($AttemptID) { // User has attempted to log in recently
 			$Attempts++;
-			if ($Attempts>5) { // Only 6 allowed login attempts, ban user's IP
-				$BannedUntil=time_plus(60*60*6);
-				$DB->query("UPDATE login_attempts SET
-					LastAttempt='".sqltime()."',
-					Attempts='".db_string($Attempts)."',
-					BannedUntil='".db_string($BannedUntil)."',
-					Bans=Bans+1
+			if ($Attempts > 5) { // Only 6 allowed login attempts, ban user's IP
+				$BannedUntil = time_plus(60 * 60 * 6);
+				$DB->query("
+					UPDATE login_attempts
+					SET
+						LastAttempt='".sqltime()."',
+						Attempts='".db_string($Attempts)."',
+						BannedUntil='".db_string($BannedUntil)."',
+						Bans=Bans+1
 					WHERE ID='".db_string($AttemptID)."'");
-				
+
 				if ($Bans > 9) { // Automated bruteforce prevention
 					$DB->query("SELECT Reason FROM ip_bans WHERE ".$IP." BETWEEN FromIP AND ToIP");
 					if ($DB->record_count() > 0) {
 						//Ban exists already, only add new entry if not for same reason
 						list($Reason) = $DB->next_record(MYSQLI_BOTH, false);
 						if ($Reason != 'Automated ban per >60 failed login attempts') {
-							$DB->query("UPDATE ip_bans
+							$DB->query("
+								UPDATE ip_bans
 								SET Reason = CONCAT('Automated ban per >60 failed login attempts AND ', Reason)
-								WHERE FromIP = ".$IP." AND ToIP = ".$IP);
+								WHERE FromIP = $IP AND ToIP = $IP");
 						}
 					} else {
 						//No ban
-						$DB->query("INSERT IGNORE INTO ip_bans
-							(FromIP, ToIP, Reason) VALUES
-							('$IP','$IP', 'Automated ban per >60 failed login attempts')");
+						$DB->query("
+							INSERT IGNORE INTO ip_bans (FromIP, ToIP, Reason)
+							VALUES ('$IP','$IP', 'Automated ban per >60 failed login attempts')");
 						$Cache->delete_value('ip_bans_'.$IPA);
 					}
 				}
 			} else {
 				// User has attempted fewer than 6 logins
-				$DB->query("UPDATE login_attempts SET
-					LastAttempt='".sqltime()."',
-					Attempts='".db_string($Attempts)."',
-					BannedUntil='0000-00-00 00:00:00'
+				$DB->query("
+					UPDATE login_attempts
+					SET
+						LastAttempt='".sqltime()."',
+						Attempts='".db_string($Attempts)."',
+						BannedUntil='0000-00-00 00:00:00'
 					WHERE ID='".db_string($AttemptID)."'");
 			}
 		} else { // User has not attempted to log in recently
-			$Attempts=1;
-			$DB->query("INSERT INTO login_attempts
-				(UserID,IP,LastAttempt,Attempts) VALUES
-				('".db_string($UserID)."','".db_string($IPStr)."','".sqltime()."',1)");
+			$Attempts = 1;
+			$DB->query("
+				INSERT INTO login_attempts (UserID,IP,LastAttempt,Attempts)
+				VALUES ('".db_string($UserID)."','".db_string($IPStr)."','".sqltime()."',1)");
 		}
 	} // end log_attempt function
 
@@ -231,7 +236,7 @@ else {
 			header("Location: login.php");
 			die();
 		}
-		$Err=$Validate->ValidateForm($_POST);
+		$Err = $Validate->ValidateForm($_POST);
 
 		if (!$Err) {
 			// Passes preliminary validation (username and password "look right")
@@ -274,7 +279,7 @@ else {
 							isset($CustomPermissions['site_disable_ip_history'])
 						) { $_SERVER['REMOTE_ADDR'] = '127.0.0.1'; }
 
-						
+
 
 						$DB->query("INSERT INTO users_sessions
 							(UserID, SessionID, KeepLogged, Browser, OperatingSystem, IP, LastUpdate, FullUA)
@@ -290,11 +295,12 @@ else {
 								));
 						$Cache->commit_transaction(0);
 
-						$Sql = "UPDATE users_main
+						$Sql = "
+							UPDATE users_main
 							SET
 								LastLogin='".sqltime()."',
 								LastAccess='".sqltime()."'";
-						
+
 						$Sql .= "	WHERE ID='".db_string($UserID)."'";
 
 						$DB->query($Sql);
@@ -311,7 +317,7 @@ else {
 					} else {
 						log_attempt($UserID);
 						if ($Enabled == 2) {
-							
+
 							header('location:login.php?action=disabled');
 						} elseif ($Enabled == 0) {
 							$Err = "Your account has not been confirmed.<br />Please check your email.";
@@ -320,7 +326,7 @@ else {
 					}
 				} else {
 					log_attempt($UserID);
-					
+
 					$Err = "Your username or password was incorrect.";
 					setcookie('keeplogged','',time() + 60 * 60 * 24 * 365,'/','',false);
 				}

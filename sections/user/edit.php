@@ -7,24 +7,25 @@ if (!is_number($UserID)) {
 global $Cache;
 
 
-$DB->query("SELECT
-			m.Username,
-			m.Email,
-			m.IRCKey,
-			m.Paranoia,
-			i.Info,
-			i.Avatar,
-			i.Country,
-			i.StyleID,
-			i.StyleURL,
-			i.SiteOptions,
-			i.UnseededAlerts,
-			p.Level AS Class
-			FROM users_main AS m
-				JOIN users_info AS i ON i.UserID = m.ID
-				LEFT JOIN permissions AS p ON p.ID=m.PermissionID
-			WHERE m.ID = '".db_string($UserID)."'");
-list($Username,$Email,$IRCKey,$Paranoia,$Info,$Avatar,$Country,$StyleID,$StyleURL,$SiteOptions,$UnseededAlerts,$Class)=$DB->next_record(MYSQLI_NUM, array(3,9));
+$DB->query("
+	SELECT
+		m.Username,
+		m.Email,
+		m.IRCKey,
+		m.Paranoia,
+		i.Info,
+		i.Avatar,
+		i.Country,
+		i.StyleID,
+		i.StyleURL,
+		i.SiteOptions,
+		i.UnseededAlerts,
+		p.Level AS Class
+	FROM users_main AS m
+		JOIN users_info AS i ON i.UserID = m.ID
+		LEFT JOIN permissions AS p ON p.ID=m.PermissionID
+	WHERE m.ID = '".db_string($UserID)."'");
+list($Username, $Email, $IRCKey, $Paranoia, $Info, $Avatar, $Country, $StyleID, $StyleURL, $SiteOptions, $UnseededAlerts, $Class) = $DB->next_record(MYSQLI_NUM, array(3, 9));
 
 
 if ($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Class)) {
@@ -58,7 +59,7 @@ if ($SiteOptions) {
 	$SiteOptions = array();
 }
 
-View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery');
+View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery,preview_paranoia');
 
 
 
@@ -99,7 +100,7 @@ echo $Val->GenerateJS('userform');
 							 <? foreach ($Stylesheets as $Style) { ?>
 								<div class="preview_wrapper">
 									<div class="preview_image" name="<?=$Style['Name']?>" style="background: url('<?=STATIC_SERVER.'thumb_'.$Style['Name'].'.png'?>') no-repeat scroll center top #CCC"></div>
-									<p class="preview_name"><input type="radio" name="stylesheet_gallery" value="<?= $Style['ID'] ?>" /> <?= $Style["ProperName"] ?></p>
+									<p class="preview_name"><input type="radio" name="stylesheet_gallery" value="<?=($Style['ID'])?>" /> <?=($Style['ProperName'])?></p>
 								</div>
 							<? } ?>
 					</div>
@@ -267,7 +268,7 @@ echo $Val->GenerateJS('userform');
 					</select>
 				</td>
 			</tr>
-		<!--						-->
+<!---->
 			<tr>
 				<td class="label"><strong>Auto-save text</strong></td>
 				<td>
@@ -468,6 +469,10 @@ list($ArtistsAdded) = $DB->next_record();
 ?>
 					<br /><label><input type="checkbox" name="p_artistsadded" <?=checked(!in_array('artistsadded', $Paranoia))?>/> Number of artists added</label>
 				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="#" id="preview_paranoia" class="brackets">Preview paranoia</a><noscript> (Requires Javascript)</noscript></td>
 			</tr>
 			<tr class="colhead_dark">
 				<td colspan="2">

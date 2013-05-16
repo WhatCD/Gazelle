@@ -117,7 +117,7 @@ foreach ($History as $Key => $Values) {
 		<td><?=display_str($IP)?></td>
 <? $UserURL = "https://".SSL_SITE_URL."/user.php?id=$UserID2";
 			$DB->query("SELECT Enabled FROM users_main WHERE ID = ".$UserID2);
-			list($Enabled)=$DB->next_record();
+			list($Enabled) = $DB->next_record();
 			$DB->set_query_id($ueQuery);
 ?>
 		<td><a href="<?=display_str($UserURL)?>"><?=Users::format_username($UserID2, false, false, true)?></a></td>

@@ -28,7 +28,7 @@ if (!is_number($UserID)) {
 
 if (!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
 	$Page = $_GET['page'];
-	$Limit = ($Page-1)*TORRENTS_PER_PAGE.', '.TORRENTS_PER_PAGE;
+	$Limit = ($Page - 1) * TORRENTS_PER_PAGE.', '.TORRENTS_PER_PAGE;
 } else {
 	$Page = 1;
 	$Limit = TORRENTS_PER_PAGE;
@@ -461,7 +461,7 @@ foreach ($Categories as $CatKey => $CatName) {
 
 		extract(Torrents::array_group($Results[$GroupID]));
 		$Torrent = $Torrents[$TorrentID];
-		
+
 
 		$TorrentTags = new Tags($TagList);
 
@@ -512,7 +512,7 @@ foreach ($Categories as $CatKey => $CatName) {
 			<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : ''?>><?=number_format($Torrent['Seeders'])?></td>
 			<td><?=number_format($Torrent['Leechers'])?></td>
 		</tr>
-<?		} ?>
+<?		}?>
 	</table>
 <?	} ?>
 	<div class="linkbox"><?=$Pages?></div>

@@ -195,27 +195,30 @@ if (count($_GET)) {
 		$Order = '';
 
 
-		$SQL = 'SQL_CALC_FOUND_ROWS
-			um1.ID,
-			um1.Username,
-			um1.Uploaded,
-			um1.Downloaded,';
+		$SQL = '
+				SQL_CALC_FOUND_ROWS
+				um1.ID,
+				um1.Username,
+				um1.Uploaded,
+				um1.Downloaded,';
 		if ($_GET['snatched'] == "off") {
 			$SQL .= "'X' AS Snatches,";
 		} else {
 			$SQL .= "(SELECT COUNT(uid) FROM xbt_snatched AS xs WHERE xs.uid=um1.ID) AS Snatches,";
 		}
-		$SQL .= 'um1.PermissionID,
-			um1.Email,
-			um1.Enabled,
-			um1.IP,
-			um1.Invites,
-			ui1.DisableInvites,
-			ui1.Warned,
-			ui1.Donor,
-			ui1.JoinDate,
-			um1.LastAccess
-			FROM users_main AS um1 JOIN users_info AS ui1 ON ui1.UserID=um1.ID ';
+		$SQL .= '
+				um1.PermissionID,
+				um1.Email,
+				um1.Enabled,
+				um1.IP,
+				um1.Invites,
+				ui1.DisableInvites,
+				ui1.Warned,
+				ui1.Donor,
+				ui1.JoinDate,
+				um1.LastAccess
+			FROM users_main AS um1
+				JOIN users_info AS ui1 ON ui1.UserID=um1.ID ';
 
 
 		if (!empty($_GET['username'])) {
@@ -225,17 +228,19 @@ if (count($_GET)) {
 		if (!empty($_GET['email'])) {
 			if (isset($_GET['email_history'])) {
 				$Distinct = 'DISTINCT ';
-				$Join['he']=' JOIN users_history_emails AS he ON he.UserID=um1.ID ';
-				$Where[]= ' he.Email '.$Match.wrap($_GET['email']);
-				
+				$Join['he'] = ' JOIN users_history_emails AS he ON he.UserID=um1.ID ';
+				$Where[] = ' he.Email '.$Match.wrap($_GET['email']);
 			} else {
-				$Where[]='um1.Email'.$Match.wrap($_GET['email']);
+				$Where[] = 'um1.Email'.$Match.wrap($_GET['email']);
 			}
 		}
-		
 
 		if (!empty($_GET['email_cnt']) && is_number($_GET['email_cnt'])) {
-			$Query = "SELECT UserID FROM users_history_emails GROUP BY UserID HAVING COUNT(DISTINCT Email) ";
+			$Query = "
+				SELECT UserID
+				FROM users_history_emails
+				GROUP BY UserID
+				HAVING COUNT(DISTINCT Email) ";
 			if ($_GET['emails_opt'] === 'equal') {
 				$operator = '=';
 			}
@@ -249,7 +254,7 @@ if (count($_GET)) {
 			$DB->query($Query);
 			$Users = implode(',', $DB->collect('UserID'));
 			if (!empty($Users)) {
-				$Where[] = "um1.ID IN (".$Users.")";
+				$Where[] = "um1.ID IN ($Users)";
 			}
 		}
 
@@ -257,37 +262,35 @@ if (count($_GET)) {
 		if (!empty($_GET['ip'])) {
 			if (isset($_GET['ip_history'])) {
 				$Distinct = 'DISTINCT ';
-				$Join['hi']=' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
-				$Where[]= ' hi.IP '.$Match.wrap($_GET['ip'], '', true);
-				
+				$Join['hi'] = ' JOIN users_history_ips AS hi ON hi.UserID=um1.ID ';
+				$Where[] = ' hi.IP '.$Match.wrap($_GET['ip'], '', true);
 			} else {
-				$Where[]='um1.IP'.$Match.wrap($_GET['ip'], '', true);
+				$Where[] = 'um1.IP'.$Match.wrap($_GET['ip'], '', true);
 			}
 		}
-		
 
 		if (!empty($_GET['cc'])) {
 			if ($_GET['cc_op'] == "equal") {
-				$Where[]="um1.ipcc = '".db_string($_GET['cc'])."'";
+				$Where[] = "um1.ipcc = '".db_string($_GET['cc'])."'";
 			} else {
-				$Where[]="um1.ipcc != '".db_string($_GET['cc'])."'";
+				$Where[] = "um1.ipcc != '".db_string($_GET['cc'])."'";
 			}
 		}
 
 		if (!empty($_GET['tracker_ip'])) {
 				$Distinct = 'DISTINCT ';
-				$Join['xfu']=' JOIN xbt_files_users AS xfu ON um1.ID=xfu.uid ';
-				$Where[]= ' xfu.ip '.$Match.wrap($_GET['tracker_ip'], '', true);
+				$Join['xfu'] = ' JOIN xbt_files_users AS xfu ON um1.ID=xfu.uid ';
+				$Where[] = ' xfu.ip '.$Match.wrap($_GET['tracker_ip'], '', true);
 		}
 
 //		if (!empty($_GET['tracker_ip'])) {
 //				$Distinct = 'DISTINCT ';
-//				$Join['xs']=' JOIN xbt_snatched AS xs ON um1.ID=xs.uid ';
-//				$Where[]= ' xs.IP '.$Match.wrap($_GET['ip']);
+//				$Join['xs'] = ' JOIN xbt_snatched AS xs ON um1.ID=xs.uid ';
+//				$Where[] = ' xs.IP '.$Match.wrap($_GET['ip']);
 //		}
 
 		if (!empty($_GET['comment'])) {
-			$Where[]='ui1.AdminComment'.$Match.wrap($_GET['comment']);
+			$Where[] = 'ui1.AdminComment'.$Match.wrap($_GET['comment']);
 		}
 
 		if (!empty($_GET['lastfm'])) {
@@ -300,27 +303,27 @@ if (count($_GET)) {
 		if (strlen($_GET['invites1'])) {
 			$Invites1 = round($_GET['invites1']);
 			$Invites2 = round($_GET['invites2']);
-			$Where[]=implode(' AND ', num_compare('Invites', $_GET['invites'], $Invites1, $Invites2));
+			$Where[] = implode(' AND ', num_compare('Invites', $_GET['invites'], $Invites1, $Invites2));
 		}
 
 		if ($_GET['disabled_invites'] == 'yes') {
-			$Where[]='ui1.DisableInvites=\'1\'';
+			$Where[] = 'ui1.DisableInvites=\'1\'';
 		} elseif ($_GET['disabled_invites'] == 'no') {
-			$Where[]='ui1.DisableInvites=\'0\'';
+			$Where[] = 'ui1.DisableInvites=\'0\'';
 		}
 
 		if ($_GET['disabled_uploads'] == 'yes') {
-			$Where[]='ui1.DisableUpload=\'1\'';
+			$Where[] = 'ui1.DisableUpload=\'1\'';
 		} elseif ($_GET['disabled_uploads'] == 'no') {
-			$Where[]='ui1.DisableUpload=\'0\'';
+			$Where[] = 'ui1.DisableUpload=\'0\'';
 		}
 
 		if ($_GET['join1']) {
-			$Where[]=implode(' AND ', date_compare('ui1.JoinDate', $_GET['joined'], $_GET['join1'], $_GET['join2']));
+			$Where[] = implode(' AND ', date_compare('ui1.JoinDate', $_GET['joined'], $_GET['join1'], $_GET['join2']));
 		}
 
 		if ($_GET['lastactive1']) {
-			$Where[]=implode(' AND ', date_compare('um1.LastAccess', $_GET['lastactive'], $_GET['lastactive1'], $_GET['lastactive2']));
+			$Where[] = implode(' AND ', date_compare('um1.LastAccess', $_GET['lastactive'], $_GET['lastactive1'], $_GET['lastactive2']));
 		}
 
 		if ($_GET['ratio1']) {
@@ -328,16 +331,16 @@ if (count($_GET)) {
 			if (!$Decimals) {
 				$Decimals = 0;
 			}
-			$Where[]=implode(' AND ', num_compare("ROUND(Uploaded/Downloaded,$Decimals)", $_GET['ratio'], $_GET['ratio1'], $_GET['ratio2']));
+			$Where[] = implode(' AND ', num_compare("ROUND(Uploaded/Downloaded,$Decimals)", $_GET['ratio'], $_GET['ratio1'], $_GET['ratio2']));
 		}
 
 		if (strlen($_GET['uploaded1'])) {
 			$Upload1 = round($_GET['uploaded1']);
 			$Upload2 = round($_GET['uploaded2']);
-			if ($_GET['uploaded']!='buffer') {
-				$Where[]=implode(' AND ', num_compare('ROUND(Uploaded/1024/1024/1024)', $_GET['uploaded'], $Upload1, $Upload2));
+			if ($_GET['uploaded'] != 'buffer') {
+				$Where[] = implode(' AND ', num_compare('ROUND(Uploaded/1024/1024/1024)', $_GET['uploaded'], $Upload1, $Upload2));
 			} else {
-				$Where[]=implode(' AND ', num_compare('ROUND((Uploaded/1024/1024/1024)-(Downloaded/1024/1024/1023))', 'between', $Upload1*0.9, $Upload1*1.1));
+				$Where[] = implode(' AND ', num_compare('ROUND((Uploaded/1024/1024/1024)-(Downloaded/1024/1024/1023))', 'between', $Upload1 * 0.9, $Upload1 * 1.1));
 			}
 		}
 
@@ -360,7 +363,6 @@ if (count($_GET)) {
 		if ($_GET['class'] != '') {
 			$Where[]='um1.PermissionID='.wrap($_GET['class'], '=');
 		}
-		
 
 		if ($_GET['secclass'] != '') {
 			$Join['ul']=' JOIN users_levels AS ul ON um1.ID=ul.UserID ';

@@ -9,7 +9,6 @@ if (!isset($_REQUEST['action'])) {
 		case 'ipn': // PayPal hits this page when a donation is received
 			include(SERVER_ROOT.'/sections/donate/ipn.php');
 			break;
-		
 		case 'complete':
 			include(SERVER_ROOT.'/sections/donate/complete.php');
 			break;

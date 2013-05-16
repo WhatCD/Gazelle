@@ -10,9 +10,9 @@ if ($DB->record_count()) {
 		<div class="head colhead_dark">Last.fm</div>
 		<ul class="stats nobullet">
 			<li>
-				Username: <a id="lastfm_username" href="<?= $LastFMInfo['user']['url'] ?>" target="_blank" title="<?= $LastFMInfo['user']['name'] ?> on Last.fm: <?= number_format($LastFMInfo['user']['playcount']) ?> plays, <?= number_format($LastFMInfo['user']['playlists']) ?> playlists."><?= $LastFMInfo['user']['name'] ?></a>
+				Username: <a id="lastfm_username" href="<?=($LastFMInfo['user']['url'])?>" target="_blank" title="<?=($LastFMInfo['user']['name'])?> on Last.fm: <?=(number_format($LastFMInfo['user']['playcount']))?> plays, <?=(number_format($LastFMInfo['user']['playlists']))?> playlists."><?=($LastFMInfo['user']['name'])?></a>
 			</li>
-			<div id="lastfm_stats"<? if ($OwnProfile == true): ?> data-uid="<?= $OwnProfile ?>"<? endif; ?>>
+			<div id="lastfm_stats"<? if ($OwnProfile == true): ?> data-uid="<?=($OwnProfile)?>"<? endif; ?>>
 			</div>
 			<li>
 				<a href="#" id="lastfm_expand" onclick="return false" class="brackets">Show more info</a>

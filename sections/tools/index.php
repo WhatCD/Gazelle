@@ -163,7 +163,7 @@ switch ($_REQUEST['action']) {
 		$DB->query("INSERT INTO news (UserID, Title, Body, Time)
 					VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."')");
 
-		
+
 
 		$Cache->cache_value('news_latest_id', $DB->inserted_id(), 0);
 		$Cache->delete_value('news');

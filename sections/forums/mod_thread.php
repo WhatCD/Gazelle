@@ -128,7 +128,7 @@ if (isset($_POST['delete'])) {
 	}
 
 } else { // If we're just editing it
-	
+
 	$Cache->begin_transaction('thread_'.$TopicID.'_info');
 	$UpdateArray = array(
 		'IsSticky' => $Sticky,
@@ -287,5 +287,5 @@ if (isset($_POST['delete'])) {
 		$Cache->delete_value('polls_'.$TopicID);
 	}
 	header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.$Page);
-	
+
 }

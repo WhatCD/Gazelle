@@ -15,7 +15,7 @@ if (isset($_GET['userid']) && check_perms('users_view_invites')) {
 
 	$UserID = $LoggedUser['ID'];
 	$Sneaky = false;
-	
+
 }
 
 list($UserID, $Username, $PermissionID) = array_values(Users::user_info($UserID));

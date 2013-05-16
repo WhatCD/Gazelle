@@ -16,7 +16,7 @@ class Users {
 			$Cache->cache_value('classes', array($Classes, $ClassLevels), 0);
 		}
 		$Debug->set_flag('Loaded permissions');
-		
+
 		return array($Classes, $ClassLevels);
 	}
 
@@ -47,30 +47,31 @@ class Users {
 		// the !isset($UserInfo['Paranoia']) can be removed after a transition period
 		if (empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia']) || empty($UserInfo['Class'])) {
 			$OldQueryID = $DB->get_query_id();
-	
-	
-			$DB->query("SELECT
-				m.ID,
-				m.Username,
-				m.PermissionID,
-				m.Paranoia,
-				i.Artist,
-				i.Donor,
-				i.Warned,
-				i.Avatar,
-				m.Enabled,
-				m.Title,
-				i.CatchupTime,
-				m.Visible,
-				GROUP_CONCAT(ul.PermissionID SEPARATOR ',') AS Levels
+
+
+			$DB->query("
+				SELECT
+					m.ID,
+					m.Username,
+					m.PermissionID,
+					m.Paranoia,
+					i.Artist,
+					i.Donor,
+					i.Warned,
+					i.Avatar,
+					m.Enabled,
+					m.Title,
+					i.CatchupTime,
+					m.Visible,
+					GROUP_CONCAT(ul.PermissionID SEPARATOR ',') AS Levels
 				FROM users_main AS m
-				INNER JOIN users_info AS i ON i.UserID=m.ID
-				LEFT JOIN users_levels AS ul ON ul.UserID = m.ID
+					INNER JOIN users_info AS i ON i.UserID=m.ID
+					LEFT JOIN users_levels AS ul ON ul.UserID = m.ID
 				WHERE m.ID='$UserID'
 				GROUP BY m.ID");
 			if ($DB->record_count() == 0) { // Deleted user, maybe?
 				$UserInfo = array('ID'=>'','Username'=>'','PermissionID'=>0,'Artist'=>false,'Donor'=>false,'Warned'=>'0000-00-00 00:00:00','Avatar'=>'','Enabled'=>0,'Title'=>'', 'CatchupTime'=>0, 'Visible'=>'1');
-	
+
 			} else {
 				$UserInfo = $DB->next_record(MYSQLI_ASSOC, array('Paranoia', 'Title'));
 				$UserInfo['CatchupTime'] = strtotime($UserInfo['CatchupTime']);
@@ -118,39 +119,40 @@ class Users {
 		global $DB, $Cache;
 
 		$HeavyInfo = $Cache->get_value('user_info_heavy_'.$UserID);
-	
+
 		if (empty($HeavyInfo)) {
-	
-			$DB->query("SELECT
-				m.Invites,
-				m.torrent_pass,
-				m.IP,
-				m.CustomPermissions,
-				m.can_leech AS CanLeech,
-				i.AuthKey,
-				i.RatioWatchEnds,
-				i.RatioWatchDownload,
-				i.StyleID,
-				i.StyleURL,
-				i.DisableInvites,
-				i.DisablePosting,
-				i.DisableUpload,
-				i.DisableWiki,
-				i.DisableAvatar,
-				i.DisablePM,
-				i.DisableRequests,
-				i.DisableForums,
-				i.DisableTagging,
-				i.SiteOptions,
-				i.DownloadAlt,
-				i.LastReadNews,
-				i.LastReadBlog,
-				i.RestrictedForums,
-				i.PermittedForums,
-				m.FLTokens,
-				m.PermissionID
+
+			$DB->query("
+				SELECT
+					m.Invites,
+					m.torrent_pass,
+					m.IP,
+					m.CustomPermissions,
+					m.can_leech AS CanLeech,
+					i.AuthKey,
+					i.RatioWatchEnds,
+					i.RatioWatchDownload,
+					i.StyleID,
+					i.StyleURL,
+					i.DisableInvites,
+					i.DisablePosting,
+					i.DisableUpload,
+					i.DisableWiki,
+					i.DisableAvatar,
+					i.DisablePM,
+					i.DisableRequests,
+					i.DisableForums,
+					i.DisableTagging,
+					i.SiteOptions,
+					i.DownloadAlt,
+					i.LastReadNews,
+					i.LastReadBlog,
+					i.RestrictedForums,
+					i.PermittedForums,
+					m.FLTokens,
+					m.PermissionID
 				FROM users_main AS m
-				INNER JOIN users_info AS i ON i.UserID=m.ID
+					INNER JOIN users_info AS i ON i.UserID=m.ID
 				WHERE m.ID='$UserID'");
 			$HeavyInfo = $DB->next_record(MYSQLI_ASSOC, array('CustomPermissions', 'SiteOptions'));
 

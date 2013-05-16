@@ -831,7 +831,7 @@ class TEXT {
 					}
 
 					break;
-				
+
 			}
 		}
 		}
@@ -857,7 +857,7 @@ class TEXT {
 				case 'size':
 				case 'quote':
 				case 'align':
-				
+
 					$Str.=$this->raw_text($Block['Val']);
 					break;
 				case 'tex': //since this will never strip cleanly, just remove it

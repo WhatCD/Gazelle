@@ -72,21 +72,30 @@ class Misc {
 					WHERE UserID IN (".implode(',', $ToID).")
 					AND ConvID='$ConvID'");
 
-			$DB->query("UPDATE pm_conversations_users SET
+			$DB->query("
+				UPDATE pm_conversations_users
+				SET
 					InSentbox='1',
 					SentDate='".sqltime()."'
-					WHERE UserID='$FromID'
+				WHERE UserID='$FromID'
 					AND ConvID='$ConvID'");
 		}
 
 		// Now that we have a $ConvID for sure, send the message.
-		$DB->query("INSERT INTO pm_messages
-				(SenderID, ConvID, SentDate, Body) VALUES
-				('$FromID', '$ConvID', '".sqltime()."', '".$Body."')");
+		$DB->query("
+			INSERT INTO pm_messages
+				(SenderID, ConvID, SentDate, Body)
+			VALUES
+				('$FromID', '$ConvID', '".sqltime()."', '$Body')");
 
 		// Update the cached new message count.
 		foreach ($ToID as $ID) {
-			$DB->query("SELECT COUNT(ConvID) FROM pm_conversations_users WHERE UnRead = '1' and UserID='$ID' AND InInbox = '1'");
+			$DB->query("
+				SELECT COUNT(ConvID)
+				FROM pm_conversations_users
+				WHERE UnRead = '1'
+					AND UserID='$ID'
+					AND InInbox = '1'");
 			list($UnRead) = $DB->next_record();
 			$Cache->cache_value('inbox_new_'.$ID, $UnRead);
 		}
@@ -94,15 +103,20 @@ class Misc {
 		$DB->query("SELECT Username FROM users_main WHERE ID = '$FromID'");
 		list($SenderName) = $DB->next_record();
 		foreach ($ToID as $ID) {
-			$DB->query("SELECT COUNT(ConvID) FROM pm_conversations_users WHERE UnRead = '1' and UserID='$ID' AND InInbox = '1'");
+			$DB->query("
+				SELECT COUNT(ConvID)
+				FROM pm_conversations_users
+				WHERE UnRead = '1'
+					AND UserID='$ID'
+					AND InInbox = '1'");
 			list($UnRead) = $DB->next_record();
 			$Cache->cache_value('inbox_new_'.$ID, $UnRead);
-			
+
 		}
 
 		return $ConvID;
 	}
-	
+
 
 	/**
 	 * Create thread function, things should already be escaped when sent here.
@@ -129,34 +143,40 @@ class Misc {
 		$ThreadInfo['IsLocked'] = 0;
 		$ThreadInfo['IsSticky'] = 0;
 
-		$DB->query("INSERT INTO forums_topics
-			(Title, AuthorID, ForumID, LastPostTime, LastPostAuthorID)
-			Values
-			('".$Title."', '".$AuthorID."', '$ForumID', '".sqltime()."', '".$AuthorID."')");
+		$DB->query("
+			INSERT INTO forums_topics
+				(Title, AuthorID, ForumID, LastPostTime, LastPostAuthorID)
+			VALUES
+				('$Title', '$AuthorID', '$ForumID', '".sqltime()."', '$AuthorID')");
 		$TopicID = $DB->inserted_id();
 		$Posts = 1;
 
-		$DB->query("INSERT INTO forums_posts
+		$DB->query("
+			INSERT INTO forums_posts
 				(TopicID, AuthorID, AddedTime, Body)
-				VALUES
-				('$TopicID', '".$AuthorID."', '".sqltime()."', '".$PostBody."')");
+			VALUES
+				('$TopicID', '$AuthorID', '".sqltime()."', '$PostBody')");
 		$PostID = $DB->inserted_id();
 
-		$DB->query("UPDATE forums SET
-					NumPosts  = NumPosts+1,
-					NumTopics = NumTopics+1,
-					LastPostID = '$PostID',
-					LastPostAuthorID = '".$AuthorID."',
-					LastPostTopicID = '$TopicID',
-					LastPostTime = '".sqltime()."'
-					WHERE ID = '$ForumID'");
+		$DB->query("
+			UPDATE forums
+			SET
+				NumPosts  = NumPosts+1,
+				NumTopics = NumTopics+1,
+				LastPostID = '$PostID',
+				LastPostAuthorID = '$AuthorID',
+				LastPostTopicID = '$TopicID',
+				LastPostTime = '".sqltime()."'
+			WHERE ID = '$ForumID'");
 
-		$DB->query("UPDATE forums_topics SET
+		$DB->query("
+			UPDATE forums_topics
+			SET
 				NumPosts = NumPosts+1,
 				LastPostID = '$PostID',
-				LastPostAuthorID = '".$AuthorID."',
+				LastPostAuthorID = '$AuthorID',
 				LastPostTime = '".sqltime()."'
-				WHERE ID = '$TopicID'");
+			WHERE ID = '$TopicID'");
 
 		// Bump this topic to head of the cache
 		list($Forum,,,$Stickies) = $Cache->get_value('forums_'.$ForumID);
@@ -164,12 +184,14 @@ class Misc {
 			if (count($Forum) == TOPICS_PER_PAGE && $Stickies < TOPICS_PER_PAGE) {
 				array_pop($Forum);
 			}
-			$DB->query("SELECT f.IsLocked, f.IsSticky, f.NumPosts FROM forums_topics AS f
+			$DB->query("
+				SELECT f.IsLocked, f.IsSticky, f.NumPosts
+				FROM forums_topics AS f
 				WHERE f.ID ='$TopicID'");
-			list($IsLocked,$IsSticky,$NumPosts) = $DB->next_record();
-			$Part1 = array_slice($Forum,0,$Stickies,true); //Stickys
+			list($IsLocked, $IsSticky, $NumPosts) = $DB->next_record();
+			$Part1 = array_slice($Forum, 0, $Stickies, true); //Stickys
 			$Part2 = array(
-				$TopicID=>array(
+				$TopicID => array(
 					'ID' => $TopicID,
 					'Title' => $Title,
 					'AuthorID' => $AuthorID,
@@ -181,10 +203,10 @@ class Misc {
 					'LastPostAuthorID' => $AuthorID,
 					)
 				); //Bumped thread
-			$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE,true); //Rest of page
+			$Part3 = array_slice($Forum, $Stickies, TOPICS_PER_PAGE, true); //Rest of page
 			if ($Stickies > 0) {
-				$Part1 = array_slice($Forum,0,$Stickies,true); //Stickies
-				$Part3 = array_slice($Forum,$Stickies,TOPICS_PER_PAGE-$Stickies-1,true); //Rest of page
+				$Part1 = array_slice($Forum, 0, $Stickies, true); //Stickies
+				$Part3 = array_slice($Forum, $Stickies, TOPICS_PER_PAGE - $Stickies - 1, true); //Rest of page
 			} else {
 				$Part1 = array();
 				$Part3 = $Forum;
@@ -192,7 +214,7 @@ class Misc {
 			if (is_null($Part1)) { $Part1 = array(); }
 			if (is_null($Part3)) { $Part3 = array(); }
 			$Forum = $Part1 + $Part2 + $Part3;
-			$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
+			$Cache->cache_value('forums_'.$ForumID, array($Forum, '', 0, $Stickies), 0);
 		}
 
 		//Update the forum root
@@ -209,12 +231,12 @@ class Misc {
 			'IsSticky'=>$ThreadInfo['IsSticky']
 			);
 
-		$UpdateArray['NumTopics']='+1';
+		$UpdateArray['NumTopics'] = '+1';
 
 		$Cache->update_row($ForumID, $UpdateArray);
 		$Cache->commit_transaction(0);
 
-		$CatalogueID = floor((POSTS_PER_PAGE*ceil($Posts/POSTS_PER_PAGE)-POSTS_PER_PAGE)/THREAD_CATALOGUE);
+		$CatalogueID = floor((POSTS_PER_PAGE * ceil($Posts / POSTS_PER_PAGE) - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 		$Cache->begin_transaction('thread_'.$TopicID.'_catalogue_'.$CatalogueID);
 		$Post = array(
 			'ID'=>$PostID,
@@ -271,7 +293,7 @@ class Misc {
 		}
 		foreach ($Haystack as $String) {
 			if (substr($String, -1) == '*') {
-				if (!strncmp($Needle, $String, strlen($String)-1)) {
+				if (!strncmp($Needle, $String, strlen($String) - 1)) {
 					$Searches[$Needle] = true;
 					return true;
 				}
@@ -293,7 +315,7 @@ class Misc {
 	 * @param boolean $AllowEmpty If set to true, a key that is in the request but blank will not throw an error.
 	 * @param int $Error The error code to throw if one of the keys isn't in the array.
 	 */
-	public static function assert_isset_request($Request, $Keys=NULL, $AllowEmpty = False, $Error=0) {
+	public static function assert_isset_request($Request, $Keys = NULL, $AllowEmpty = False, $Error = 0) {
 		if (isset($Keys)) {
 			foreach ($Keys as $K) {
 				if (!isset($Request[$K]) || ($AllowEmpty == False && $Request[$K] == '')) {
@@ -329,7 +351,10 @@ class Misc {
 			}
 		}
 		if (count($TagNames) > 0) {
-			$DB->query("SELECT ID, Name FROM tags WHERE Name IN ('".implode("', '", $TagNames)."')");
+			$DB->query("
+				SELECT ID, Name
+				FROM tags
+				WHERE Name IN ('".implode("', '", $TagNames)."')");
 			$SQLTagIDs = $DB->to_array();
 			foreach ($SQLTagIDs as $Tag) {
 				$TagIDs[$Tag['ID']] = $Tag['Name'];
@@ -348,13 +373,13 @@ class Misc {
 	 * @return string The aliased tag.
 	 */
 	public static function get_alias_tag($BadTag) {
-			 global $DB;
-			 $DB->query("SELECT AliasTag FROM tag_aliases WHERE BadTag = '". $BadTag ."' LIMIT 1");
-					if ($DB->record_count() > 0) {
-							list($AliasTag) = $DB->next_record();
-							return $AliasTag;
-			 }
-			 return $BadTag;
+		global $DB;
+		$DB->query("SELECT AliasTag FROM tag_aliases WHERE BadTag = '". $BadTag ."' LIMIT 1");
+		if ($DB->record_count() > 0) {
+			list($AliasTag) = $DB->next_record();
+			return $AliasTag;
+		}
+		return $BadTag;
 	}
 
 
@@ -365,8 +390,9 @@ class Misc {
 	 */
 	public static function write_log($Message) {
 		global $DB,$Time;
-		$DB->query('INSERT INTO log (Message, Time) VALUES (\''
-			.db_string($Message).'\', \''.sqltime().'\')');
+		$DB->query("
+			INSERT INTO log (Message, Time)
+			VALUES ('" . db_string($Message) . "', '" . sqltime() . "')");
 	}
 
 
@@ -417,10 +443,10 @@ class Misc {
 	public static function display_recommend($ID, $Type, $Hide = true) {
 		global $DB, $LoggedUser;
 		if ($Hide) {
-			$Hide = 'style="display: none;"';
+			$Hide = ' style="display: none;"';
 		}
 		?>
-		<div id="recommendation_div" data-id="<?=$ID?>" data-type="<?=$Type?>" <?=$Hide?> class="center">
+		<div id="recommendation_div" data-id="<?=$ID?>" data-type="<?=$Type?>"<?=$Hide?> class="center">
 			<div style="display: inline-block;">
 				<strong>Recommend to:</strong>
 				<select id="friend" name="friend">
@@ -431,7 +457,7 @@ class Misc {
 			</div>
 			<div class="new" id="recommendation_status"><br /></div>
 		</div>
-		<?
+<?
 	}
 }
 ?>

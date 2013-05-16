@@ -51,7 +51,7 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=registration_log">Registration log</a></td></tr>
 <?	} if (check_perms('users_view_invites')) { ?>
 			<tr><td><a href="tools.php?action=invite_pool">Invite pool</a></td></tr>
-			
+
 <?	} if (check_perms('site_view_flow')) { ?>
 			<tr><td><a href="tools.php?action=upscale_pool">Upscale pool</a></td></tr>
 			<tr><td><a href="tools.php?action=user_flow">User flow</a></td></tr>
@@ -74,7 +74,7 @@ View::show_header('Staff Tools');
 <?	}
 	if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=manipulate_tree">Manipulate tree</a></td></tr>
-<?	} 
+<?	}
 	if (check_perms('admin_update_geoip')) { ?>
 			<tr><td><a href="tools.php?action=update_geoip">Update GeoIP </a></td></tr>
 <?	} if (check_perms('admin_create_users')) { ?>

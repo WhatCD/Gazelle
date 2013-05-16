@@ -70,7 +70,7 @@ if ($ConvID = (int)$_GET['convid']) {
 					AssignedToUser=$NewLevel,
 					Level=$Level
 				WHERE ID=$ConvID");
-			
+
 		}
 		echo '1';
 

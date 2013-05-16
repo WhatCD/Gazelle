@@ -110,7 +110,7 @@ if ($Mobile) { ?>
 <?
 if (check_perms('site_send_unlimited_invites')) {
 	$Invites = ' (∞)';
-} elseif ($LoggedUser['Invites']>0) {
+} elseif ($LoggedUser['Invites'] > 0) {
 	$Invites = ' ('.$LoggedUser['Invites'].')';
 } else {
 	$Invites = '';
@@ -118,7 +118,7 @@ if (check_perms('site_send_unlimited_invites')) {
 ?>
 			<li id="nav_invite" class="brackets<?=Format::add_class($PageID, array('user','invite'), 'active', false)?>"><a href="user.php?action=invite">Invite<?=$Invites?></a></li>
 			<li id="nav_donate" class="brackets<?=Format::add_class($PageID, array('donate'), 'active', false)?>"><a href="donate.php">Donate</a></li>
-			
+
 		</ul>
 		<ul id="userinfo_stats">
 			<li id="stats_seeding"><a href="torrents.php?type=seeding&amp;userid=<?=$LoggedUser['ID']?>">Up</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesUploaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span></li>
@@ -139,20 +139,21 @@ if ($NewSubscriptions === false) {
 		$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 		$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 	}
-	$DB->query("SELECT COUNT(s.TopicID)
-				FROM users_subscriptions AS s
-					JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
-					JOIN forums_topics AS t ON l.TopicID = t.ID
-					JOIN forums AS f ON t.ForumID = f.ID
-				WHERE (f.MinClassRead <= ".$LoggedUser['Class']." OR f.ID IN ('$PermittedForums'))
-					AND l.PostID < t.LastPostID
-					AND s.UserID = ".$LoggedUser['ID'].
-				(!empty($RestrictedForums) ? "
-					AND f.ID NOT IN ('".$RestrictedForums."')" : ""));
+	$DB->query("
+		SELECT COUNT(s.TopicID)
+		FROM users_subscriptions AS s
+			JOIN forums_last_read_topics AS l ON s.UserID = l.UserID AND s.TopicID = l.TopicID
+			JOIN forums_topics AS t ON l.TopicID = t.ID
+			JOIN forums AS f ON t.ForumID = f.ID
+		WHERE (f.MinClassRead <= ".$LoggedUser['Class']." OR f.ID IN ('$PermittedForums'))
+			AND l.PostID < t.LastPostID
+			AND s.UserID = ".$LoggedUser['ID'].
+		(!empty($RestrictedForums) ? "
+			AND f.ID NOT IN ('$RestrictedForums')" : ''));
 	list($NewSubscriptions) = $DB->next_record();
 	$Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
 } ?>
-		<ul id="userinfo_minor"<?=$NewSubscriptions ? ' class="highlite"' : ''?>>
+		<ul id="userinfo_minor"<?=($NewSubscriptions ? ' class="highlite"' : '')?>>
 			<li id="nav_inbox"<?=Format::add_class($PageID, array('inbox'), 'active', true)?>><a onmousedown="Stats('inbox');" href="inbox.php">Inbox</a></li>
 			<li id="nav_staffinbox"<?=Format::add_class($PageID, array('staffpm'), 'active', true)?>><a onmousedown="Stats('staffpm');" href="staffpm.php">Staff Inbox</a></li>
 			<li id="nav_uploaded"<?=Format::add_class($PageID, array('torrents',false,'uploaded'), 'active', true, 'userid')?>><a onmousedown="Stats('uploads');" href="torrents.php?type=uploaded&amp;userid=<?=$LoggedUser['ID']?>">Uploads</a></li>
@@ -194,11 +195,15 @@ if ($LoggedUser['NotifyOnQuote']) {
 			$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
 			$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
 		}
-		$sql = "SELECT COUNT(q.UnRead)
-				FROM users_notify_quoted AS q
-					LEFT JOIN forums_topics AS t ON t.ID = q.PageID
-					LEFT JOIN forums AS f ON f.ID = t.ForumID
-				WHERE q.UserID=$LoggedUser[ID] AND q.UnRead=1 AND q.Page = 'forums' AND ((f.MinClassRead<='$LoggedUser[Class]'";
+		$sql = "
+			SELECT COUNT(q.UnRead)
+			FROM users_notify_quoted AS q
+				LEFT JOIN forums_topics AS t ON t.ID = q.PageID
+				LEFT JOIN forums AS f ON f.ID = t.ForumID
+			WHERE q.UserID=$LoggedUser[ID]
+				AND q.UnRead=1
+				AND q.Page = 'forums'
+				AND ((f.MinClassRead<='$LoggedUser[Class]'";
 		if (!empty($RestrictedForums)) {
 			$sql .= " AND f.ID NOT IN ('$RestrictedForums')";
 		}

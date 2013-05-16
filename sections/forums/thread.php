@@ -113,10 +113,10 @@ if ($_GET['updatelastread'] != '0') {
 	}
 
 	//Handle last read
-	
-	
+
+
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
-	
+
 		$DB->query("
 			SELECT PostID
 			FROM forums_last_read_topics

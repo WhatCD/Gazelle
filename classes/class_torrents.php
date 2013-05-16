@@ -243,7 +243,7 @@ class Torrents {
 			}
 		}
 
-		
+
 		$DB->query("SELECT info_hash FROM torrents WHERE ID = ".$ID);
 		list($InfoHash) = $DB->next_record(MYSQLI_BOTH, false);
 		$DB->query("DELETE FROM torrents WHERE ID = ".$ID);
@@ -314,7 +314,7 @@ class Torrents {
 		}
 		$Cache->decrement('stats_group_count');
 
-		
+
 
 		// Collages
 		$DB->query("SELECT CollageID FROM collages_torrents WHERE GroupID='$GroupID'");

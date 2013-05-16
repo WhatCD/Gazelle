@@ -30,32 +30,37 @@ class INVITE_TREE {
 		if (!$TreeID) {
 			return;
 		}
-		$DB->query("SELECT
-			TreePosition FROM invite_tree
-			WHERE TreeID=$TreeID AND TreeLevel=$TreeLevel AND TreePosition>$TreePosition
-			ORDER BY TreePosition ASC LIMIT 1");
+		$DB->query("
+			SELECT TreePosition
+			FROM invite_tree
+			WHERE TreeID=$TreeID
+				AND TreeLevel=$TreeLevel
+				AND TreePosition>$TreePosition
+			ORDER BY TreePosition ASC
+			LIMIT 1");
 		if ($DB->record_count()) {
 			list($MaxPosition) = $DB->next_record(MYSQLI_NUM, false);
 		} else {
 			$MaxPosition = false;
 		}
-		$TreeQuery = $DB->query("SELECT
-			it.UserID,
-			Enabled,
-			PermissionID,
-			Donor,
-			Uploaded,
-			Downloaded,
-			Paranoia,
-			TreePosition,
-			TreeLevel
+		$TreeQuery = $DB->query("
+			SELECT
+				it.UserID,
+				Enabled,
+				PermissionID,
+				Donor,
+				Uploaded,
+				Downloaded,
+				Paranoia,
+				TreePosition,
+				TreeLevel
 			FROM invite_tree AS it
-			JOIN users_main AS um ON um.ID=it.UserID
-			JOIN users_info AS ui ON ui.UserID=it.UserID
+				JOIN users_main AS um ON um.ID=it.UserID
+				JOIN users_info AS ui ON ui.UserID=it.UserID
 			WHERE TreeID=$TreeID
-			AND TreePosition>$TreePosition".
-			($MaxPosition ? " AND TreePosition<$MaxPosition" : '')."
-			AND TreeLevel>$TreeLevel
+				AND TreePosition>$TreePosition".
+				($MaxPosition ? " AND TreePosition<$MaxPosition" : '')."
+				AND TreeLevel>$TreeLevel
 			ORDER BY TreePosition");
 
 		$PreviousTreeLevel = $TreeLevel;
@@ -108,20 +113,18 @@ class INVITE_TREE {
 			// Manage tree depth
 			if ($TreeLevel > $PreviousTreeLevel) {
 				for ($i = 0; $i < $TreeLevel - $PreviousTreeLevel; $i++) {
-					echo '<ul class="invitetree"><li>';
+					echo "<ul class=\"invitetree\">\n\t<li>";
 				}
 			} elseif ($TreeLevel < $PreviousTreeLevel) {
 				for ($i = 0; $i < $PreviousTreeLevel - $TreeLevel; $i++) {
-					echo '</li></ul>';
+					echo "\t</li>\n</ul>";
 				}
-				echo '</li>';
-				echo '<li>';
+				echo "\t</li>\n<li>";
 			} else {
-				echo '</li>';
-				echo '<li>';
+				echo "\t</li>\n<li>";
 			}
 ?>
-				<strong><?=Users::format_username($ID, true, true, $Enabled != 2 ? false : true, true)?></strong>
+				<strong><?=Users::format_username($ID, true, true, ($Enabled != 2 ? false : true), true)?></strong>
 <?
 			if (check_paranoia(array('uploaded', 'downloaded'), $Paranoia, $UserClass)) {
 				$TotalUpload += $Uploaded;
@@ -145,13 +148,13 @@ class INVITE_TREE {
 
 		$Tree = ob_get_clean();
 		for ($i = 0; $i < $PreviousTreeLevel - $OriginalTreeLevel; $i++) {
-			$Tree .= "</li></ul>\n";
+			$Tree .= "\t</li>\n</ul>\n";
 		}
 
 		if ($Count) {
 
 ?> 		<p style="font-weight: bold;">
-			This tree has <?=$Count?> entries, <?=$Branches?> branches, and a depth of <?=$MaxTreeLevel - $OriginalTreeLevel?>.
+			This tree has <?=number_format($Count)?> entries, <?=number_format($Branches)?> branches, and a depth of <?=number_format($MaxTreeLevel - $OriginalTreeLevel)?>.
 			It has
 <?
 			$ClassStrings = array();
@@ -208,10 +211,10 @@ class INVITE_TREE {
 			echo 'The total amount uploaded by direct invitees (the top level) was '.Format::get_size($TopLevelUpload);
 			echo '; the total amount downloaded was '.Format::get_size($TopLevelDownload);
 			echo '; and the total ratio is '.Format::get_ratio_html($TopLevelUpload, $TopLevelDownload).'. ';
-			
-			
+
+
 			echo 'These numbers include the stats of paranoid users and will be factored into the invitation giving script.</p>';
-			
+
 			if ($ParanoidCount) {
 				echo '<p style="font-weight: bold;">';
 				echo $ParanoidCount;

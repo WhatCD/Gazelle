@@ -30,7 +30,7 @@ if (isset($_GET['action']) && in_array($_GET['action'],$Limited_Pages)) {
 				'response' => 'Rate limit exceeded.'
 				)
 			);
-		
+
 		json_die("failure", "rate limit exceeded");
 	} else {
 		$Cache->increment_value('ajax_requests_'.$UserID);
@@ -58,7 +58,7 @@ switch ($_GET['action']) {
 	case 'stats':
 		require(SERVER_ROOT . '/sections/ajax/stats.php');
 		break;
-	
+
 	case 'checkprivate':
 		include('checkprivate.php');
 		break;

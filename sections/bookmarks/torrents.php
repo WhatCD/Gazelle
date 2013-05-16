@@ -143,7 +143,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 		</td>
 		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
+		<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
 		<td><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?

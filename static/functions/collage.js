@@ -2,7 +2,7 @@ function Add(input) {
 	if (input.checked == false) {
 		Cancel();
 	} else {
-		if(document.getElementById("choices").raw().value == "") {
+		if (document.getElementById("choices").raw().value == "") {
 			document.getElementById("choices").raw().value += input.name;
 		} else {
 			document.getElementById("choices").raw().value += "|" + input.name;

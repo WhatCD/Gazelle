@@ -458,8 +458,8 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 
 		$EditionID++;
 ?>
-				<tr class="releases_<?= $ReleaseType ?> groupid_<?= $GroupID ?> edition group_torrent">
-					<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?= $GroupID ?>, <?= $EditionID ?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?= Torrents::edition_string($Torrent, $TorrentDetails) ?></strong></td>
+				<tr class="releases_<?=($ReleaseType)?> groupid_<?=($GroupID)?> edition group_torrent">
+					<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=($GroupID)?>, <?=($EditionID)?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?= Torrents::edition_string($Torrent, $TorrentDetails) ?></strong></td>
 				</tr>
 <?
 	}
@@ -469,65 +469,65 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 	$LastRemasterCatalogueNumber = $RemasterCatalogueNumber;
 	$LastMedia = $Media;
 		?>
-				<tr class="torrent_row releases_<?= $ReleaseType ?> groupid_<?= $GroupID ?> edition_<?= $EditionID ?> group_torrent<?= $IsSnatched ? ' snatched_torrent' : '' ?>" style="font-weight: normal;" id="torrent<?= $TorrentID ?>">
+				<tr class="torrent_row releases_<?=($ReleaseType)?> groupid_<?=($GroupID)?> edition_<?=($EditionID)?> group_torrent<?=($IsSnatched ? ' snatched_torrent' : '')?>" style="font-weight: normal;" id="torrent<?=($TorrentID)?>">
 					<td>
-						<span>[ <a href="torrents.php?action=download&amp;id=<?= $TorrentID ?>&amp;authkey=<?= $LoggedUser['AuthKey'] ?>&amp;torrent_pass=<?= $LoggedUser['torrent_pass'] ?>" title="Download"><?= $HasFile ? 'DL' : 'Missing' ?></a>
+						<span>[ <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>" title="Download"><?=($HasFile ? 'DL' : 'Missing')?></a>
 <?	if (Torrents::can_use_token($Torrent)) { ?>
-							| <a href="torrents.php?action=download&amp;id=<?= $TorrentID ?>&amp;authkey=<?= $LoggedUser['AuthKey'] ?>&amp;torrent_pass=<?= $LoggedUser['torrent_pass'] ?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+							| <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?	} ?>
-							| <a href="reportsv2.php?action=report&amp;id=<?= $TorrentID ?>" title="Report">RP</a>
+							| <a href="reportsv2.php?action=report&amp;id=<?=($TorrentID)?>" title="Report">RP</a>
 <?	if ($CanEdit) { ?>
-							| <a href="torrents.php?action=edit&amp;id=<?= $TorrentID ?>" title="Edit">ED</a>
+							| <a href="torrents.php?action=edit&amp;id=<?=($TorrentID)?>" title="Edit">ED</a>
 <?	}
 	if (check_perms('torrents_delete') || $UserID == $LoggedUser['ID']) { ?>
-							| <a href="torrents.php?action=delete&amp;torrentid=<?= $TorrentID ?>" title="Remove">RM</a>
+							| <a href="torrents.php?action=delete&amp;torrentid=<?=($TorrentID)?>" title="Remove">RM</a>
 <?	} ?>
-							| <a href="torrents.php?torrentid=<?= $TorrentID ?>" title="Permalink">PL</a>
+							| <a href="torrents.php?torrentid=<?=($TorrentID)?>" title="Permalink">PL</a>
 						]</span>
-						&raquo; <a href="#" onclick="$('#torrent_<?= $TorrentID ?>').toggle(); return false;"><?= $ExtraInfo; ?></a>
+						&raquo; <a href="#" onclick="$('#torrent_<?=($TorrentID)?>').toggle(); return false;"><?=($ExtraInfo)?></a>
 					</td>
-					<td class="nobr"><?= Format::get_size($Size) ?></td>
-					<td><?= number_format($Snatched) ?></td>
-					<td><?= number_format($Seeders) ?></td>
-					<td><?= number_format($Leechers) ?></td>
+					<td class="nobr"><?=(Format::get_size($Size))?></td>
+					<td><?=(number_format($Snatched))?></td>
+					<td><?=(number_format($Seeders))?></td>
+					<td><?=(number_format($Leechers))?></td>
 				</tr>
-				<tr class="releases_<?= $ReleaseType ?> groupid_<?= $GroupID ?> edition_<?= $EditionID ?> torrentdetails pad<? if (!isset($_GET['torrentid']) || $_GET['torrentid'] != $TorrentID) { ?> hidden<? } ?>" id="torrent_<?= $TorrentID; ?>">
+				<tr class="releases_<?=($ReleaseType)?> groupid_<?=($GroupID)?> edition_<?=($EditionID)?> torrentdetails pad<? if (!isset($_GET['torrentid']) || $_GET['torrentid'] != $TorrentID) { ?> hidden<? } ?>" id="torrent_<?=($TorrentID)?>">
 					<td colspan="5">
 						<blockquote>
-							Uploaded by <?= Users::format_username($UserID, false, false, false) ?> <?= time_diff($TorrentTime); ?>
+							Uploaded by <?=(Users::format_username($UserID, false, false, false))?> <?=time_diff($TorrentTime);?>
 <?	if ($Seeders == 0) {
 		if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
-								<br /><strong>Last active: <?= time_diff($LastActive); ?></strong>
+								<br /><strong>Last active: <?=time_diff($LastActive);?></strong>
 <?		} else { ?>
-								<br />Last active: <?= time_diff($LastActive); ?>
+								<br />Last active: <?=time_diff($LastActive);?>
 <?		}
 		if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) { ?>
-								<br /><a href="torrents.php?action=reseed&amp;torrentid=<?= $TorrentID ?>&amp;groupid=<?= $GroupID ?>" class="brackets">Request re-seed</a>
+								<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=($TorrentID)?>&amp;groupid=<?=($GroupID)?>" class="brackets">Request re-seed</a>
 <?		}
 	} ?>
 						</blockquote>
 <?	if (check_perms('site_moderate_requests')) { ?>
 						<div class="linkbox">
-							<a href="torrents.php?action=masspm&amp;id=<?= $GroupID ?>&amp;torrentid=<?= $TorrentID ?>" class="brackets">Mass PM snatchers</a>
+							<a href="torrents.php?action=masspm&amp;id=<?=($GroupID)?>&amp;torrentid=<?=($TorrentID)?>" class="brackets">Mass PM snatchers</a>
 						</div>
 <?	} ?>
 						<div class="linkbox">
-							<a href="#" class="brackets" onclick="show_peers('<?= $TorrentID ?>', 0);return false;">View peer list</a>
+							<a href="#" class="brackets" onclick="show_peers('<?=($TorrentID)?>', 0);return false;">View peer list</a>
 <?	if (check_perms('site_view_torrent_snatchlist')) { ?>
-							<a href="#" class="brackets" onclick="show_downloads('<?= $TorrentID ?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
-							<a href="#" class="brackets" onclick="show_snatches('<?= $TorrentID ?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
+							<a href="#" class="brackets" onclick="show_downloads('<?=($TorrentID)?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
+							<a href="#" class="brackets" onclick="show_snatches('<?=($TorrentID)?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
 <?	} ?>
-							<a href="#" class="brackets" onclick="show_files('<?= $TorrentID ?>');return false;">View file list</a>
+							<a href="#" class="brackets" onclick="show_files('<?=($TorrentID)?>');return false;">View file list</a>
 <?	if ($Reported) { ?>
-							<a href="#" class="brackets" onclick="show_reported('<?= $TorrentID ?>');return false;">View report information</a>
+							<a href="#" class="brackets" onclick="show_reported('<?=($TorrentID)?>');return false;">View report information</a>
 <?	} ?>
 						</div>
-						<div id="peers_<?= $TorrentID ?>" class="hidden"></div>
-						<div id="downloads_<?= $TorrentID ?>" class="hidden"></div>
-						<div id="snatches_<?= $TorrentID ?>" class="hidden"></div>
-						<div id="files_<?= $TorrentID ?>" class="hidden"><?= $FileTable ?></div>
+						<div id="peers_<?=($TorrentID)?>" class="hidden"></div>
+						<div id="downloads_<?=($TorrentID)?>" class="hidden"></div>
+						<div id="snatches_<?=($TorrentID)?>" class="hidden"></div>
+						<div id="files_<?=($TorrentID)?>" class="hidden"><?=($FileTable)?></div>
 <?	if ($Reported) { ?>
-						<div id="reported_<?= $TorrentID ?>" class="hidden"><?= $ReportInfo ?></div>
+						<div id="reported_<?=($TorrentID)?>" class="hidden"><?=($ReportInfo)?></div>
 <?	}
 	if (!empty($Description)) {
 		echo '<blockquote>' . $Text->full_format($Description) . '</blockquote>';

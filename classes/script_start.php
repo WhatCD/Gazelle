@@ -11,7 +11,9 @@
 /********************************************************/
 require 'config.php'; //The config contains all site wide configuration information
 //Deal with dumbasses
-if (isset($_REQUEST['info_hash']) && isset($_REQUEST['peer_id'])) { die('d14:failure reason40:Invalid .torrent, try downloading again.e'); }
+if (isset($_REQUEST['info_hash']) && isset($_REQUEST['peer_id'])) {
+	die('d14:failure reason40:Invalid .torrent, try downloading again.e');
+}
 
 require(SERVER_ROOT.'/classes/class_proxies.php');
 
@@ -221,15 +223,16 @@ if (isset($LoginCookie)) {
 
 	$UserSessions = $Cache->get_value('users_sessions_'.$UserID);
 	if (!is_array($UserSessions)) {
-		$DB->query("SELECT
-			SessionID,
-			Browser,
-			OperatingSystem,
-			IP,
-			LastUpdate
+		$DB->query("
+			SELECT
+				SessionID,
+				Browser,
+				OperatingSystem,
+				IP,
+				LastUpdate
 			FROM users_sessions
 			WHERE UserID='$UserID'
-			AND Active = 1
+				AND Active = 1
 			ORDER BY LastUpdate DESC");
 		$UserSessions = $DB->to_array('SessionID',MYSQLI_ASSOC);
 		$Cache->cache_value('users_sessions_'.$UserID, $UserSessions, 0);
@@ -243,20 +246,21 @@ if (isset($LoginCookie)) {
 	$Enabled = $Cache->get_value('enabled_'.$LoggedUser['ID']);
 	if ($Enabled === false) {
 		$DB->query("SELECT Enabled FROM users_main WHERE ID='$LoggedUser[ID]'");
-		list($Enabled)=$DB->next_record();
+		list($Enabled) = $DB->next_record();
 		$Cache->cache_value('enabled_'.$LoggedUser['ID'], $Enabled, 0);
 	}
-	if ($Enabled==2) {
-		
+	if ($Enabled == 2) {
+
 		logout();
 	}
-
-	
 
 	// Up/Down stats
 	$UserStats = $Cache->get_value('user_stats_'.$LoggedUser['ID']);
 	if (!is_array($UserStats)) {
-		$DB->query("SELECT Uploaded AS BytesUploaded, Downloaded AS BytesDownloaded, RequiredRatio FROM users_main WHERE ID='$LoggedUser[ID]'");
+		$DB->query("
+			SELECT Uploaded AS BytesUploaded, Downloaded AS BytesDownloaded, RequiredRatio
+			FROM users_main
+			WHERE ID='$LoggedUser[ID]'");
 		$UserStats = $DB->next_record(MYSQLI_ASSOC);
 		$Cache->cache_value('user_stats_'.$LoggedUser['ID'], $UserStats, 3600);
 	}
@@ -273,11 +277,11 @@ if (isset($LoginCookie)) {
 
 	$LoggedUser['RSS_Auth']=md5($LoggedUser['ID'].RSS_HASH.$LoggedUser['torrent_pass']);
 
-	//$LoggedUser['RatioWatch'] as a bool to disable things for users on Ratio Watch
+	// $LoggedUser['RatioWatch'] as a bool to disable things for users on Ratio Watch
 	$LoggedUser['RatioWatch'] = (
 		$LoggedUser['RatioWatchEnds'] != '0000-00-00 00:00:00' &&
 		time() < strtotime($LoggedUser['RatioWatchEnds']) &&
-		($LoggedUser['BytesDownloaded']*$LoggedUser['RequiredRatio'])>$LoggedUser['BytesUploaded']
+		($LoggedUser['BytesDownloaded'] * $LoggedUser['RequiredRatio']) > $LoggedUser['BytesUploaded']
 	);
 	if (!isset($LoggedUser['ID'])) {
 		$Debug->log_var($LightInfo, 'LightInfo');
@@ -286,19 +290,30 @@ if (isset($LoginCookie)) {
 		$Debug->log_var($UserStats, 'UserStats');
 	}
 
-	//Load in the permissions
+	// Load in the permissions
 	$LoggedUser['Permissions'] = Permissions::get_permissions_for_user($LoggedUser['ID'], $LoggedUser['CustomPermissions']);
 
-	//Change necessary triggers in external components
+	// Change necessary triggers in external components
 	$Cache->CanClear = check_perms('admin_clear_cache');
 
 	// Because we <3 our staff
 	if (check_perms('site_disable_ip_history')) { $_SERVER['REMOTE_ADDR'] = '127.0.0.1'; }
 
 	// Update LastUpdate every 10 minutes
-	if (strtotime($UserSessions[$SessionID]['LastUpdate'])+600<time()) {
-		$DB->query("UPDATE users_main SET LastAccess='".sqltime()."' WHERE ID='$LoggedUser[ID]'");
-		$DB->query("UPDATE users_sessions SET IP='".$_SERVER['REMOTE_ADDR']."', Browser='".$Browser."', OperatingSystem='".$OperatingSystem."', LastUpdate='".sqltime()."' WHERE UserID='$LoggedUser[ID]' AND SessionID='".db_string($SessionID)."'");
+	if (strtotime($UserSessions[$SessionID]['LastUpdate']) + 600 < time()) {
+		$DB->query("
+			UPDATE users_main
+			SET LastAccess='".sqltime()."'
+			WHERE ID='$LoggedUser[ID]'");
+		$DB->query("
+			UPDATE users_sessions
+			SET
+				IP='".$_SERVER['REMOTE_ADDR']."',
+				Browser='$Browser',
+				OperatingSystem='$OperatingSystem',
+				LastUpdate='".sqltime()."'
+			WHERE UserID='$LoggedUser[ID]'
+				AND SessionID='".db_string($SessionID)."'");
 		$Cache->begin_transaction('users_sessions_'.$UserID);
 		$Cache->delete_row($SessionID);
 		$Cache->insert_front($SessionID,array(
@@ -327,23 +342,26 @@ if (isset($LoginCookie)) {
 	}
 
 	// IP changed
-	
-	
+
+
 	if ($LoggedUser['IP'] != $_SERVER['REMOTE_ADDR'] && !check_perms('site_disable_ip_history')) {
-	
+
 		if (Tools::site_ban_ip($_SERVER['REMOTE_ADDR'])) {
-			error('Your IP has been banned.');
+			error('Your IP address has been banned.');
 		}
 
 		$CurIP = db_string($LoggedUser['IP']);
 		$NewIP = db_string($_SERVER['REMOTE_ADDR']);
-		$DB->query("UPDATE users_history_ips SET
-				EndTime='".sqltime()."'
-				WHERE EndTime IS NULL
+		$DB->query("
+			UPDATE users_history_ips
+			SET EndTime='".sqltime()."'
+			WHERE EndTime IS NULL
 				AND UserID='$LoggedUser[ID]'
 				AND IP='$CurIP'");
-		$DB->query("INSERT IGNORE INTO users_history_ips
-				(UserID, IP, StartTime) VALUES
+		$DB->query("
+			INSERT IGNORE INTO users_history_ips
+				(UserID, IP, StartTime)
+			VALUES
 				('$LoggedUser[ID]', '$NewIP', '".sqltime()."')");
 
 		$ipcc = Tools::geoip($NewIP);
@@ -352,10 +370,9 @@ if (isset($LoginCookie)) {
 		$Cache->update_row(false, array('IP' => $_SERVER['REMOTE_ADDR']));
 		$Cache->commit_transaction(0);
 
-		
+
 	}
 
-	
 
 	// Get stylesheets
 	$Stylesheets = $Cache->get_value('stylesheets');
@@ -388,10 +405,10 @@ function logout() {
 	setcookie('keeplogged', '', time() - 60 * 60 * 24 * 365, '/', '', false);
 	setcookie('session', '', time() - 60 * 60 * 24 * 365, '/', '', false);
 	if ($SessionID) {
-		
-		
+
+
 		$DB->query("DELETE FROM users_sessions WHERE UserID='$LoggedUser[ID]' AND SessionID='".db_string($SessionID)."'");
-		
+
 		$Cache->begin_transaction('users_sessions_'.$LoggedUser['ID']);
 		$Cache->delete_row($SessionID);
 		$Cache->commit_transaction(0);

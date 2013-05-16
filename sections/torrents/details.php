@@ -542,11 +542,10 @@ foreach ($TorrentList as $Torrent) {
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
 <?	if ($CanEdit) { ?>
 						| <a href="torrents.php?action=edit&amp;id=<?=$TorrentID ?>" title="Edit">ED</a>
-<?	} ?>
-<?	if (check_perms('torrents_delete') || $UserID == $LoggedUser['ID']) { ?>
+<?	}
+	if (check_perms('torrents_delete') || $UserID == $LoggedUser['ID']) { ?>
 						| <a href="torrents.php?action=delete&amp;torrentid=<?=$TorrentID ?>" title="Remove">RM</a>
-<?	} ?>
-
+<?	}?>
 						| <a href="torrents.php?torrentid=<?=$TorrentID ?>" title="Permalink">PL</a>
 					]</span>
 					&raquo; <a href="#" onclick="$('#torrent_<?=$TorrentID?>').toggle(); return false;"><?=$ExtraInfo; ?></a>
@@ -561,18 +560,17 @@ foreach ($TorrentList as $Torrent) {
 					<div id="release_<?=$TorrentID?>" class="no_overflow">
 						<blockquote>
 							Uploaded by <?=Users::format_username($UserID, false, false, false)?> <?=time_diff($TorrentTime);?>
-<?	if ($Seeders == 0) { ?>
-<?
-					if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
+<?	if ($Seeders == 0) {
+		if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 1209600) { ?>
 						<br /><strong>Last active: <?=time_diff($LastActive); ?></strong>
-<?					} else { ?>
+<?		} else { ?>
 						<br />Last active: <?=time_diff($LastActive); ?>
-<?					}
-					if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) { ?>
+<?		}
+		if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) { ?>
 						<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
-<?					} ?>
+<?		} ?>
 
-<?	} ?>
+<?	}?>
 						</blockquote>
 					</div>
 <?	if (check_perms('site_moderate_requests')) { ?>
@@ -585,7 +583,7 @@ foreach ($TorrentList as $Torrent) {
 <?	if (check_perms('site_view_torrent_snatchlist')) { ?>
 						<a href="#" class="brackets" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
 						<a href="#" class="brackets" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
-<?	} ?>
+<?	}?>
 						<a href="#" class="brackets" onclick="show_files('<?=$TorrentID?>');return false;">View file list</a>
 <?	if ($Reported) { ?>
 						<a href="#" class="brackets" onclick="show_reported('<?=$TorrentID?>');return false;">View report information</a>

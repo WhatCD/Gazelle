@@ -130,7 +130,7 @@ class Tools {
 	public static function display_ip($IP) {
 		$Line = display_str($IP).' ('.Tools::get_country_code_by_ajax($IP).') ';
 		$Line .= '<a href="user.php?action=search&amp;ip_history=on&amp;ip='.display_str($IP).'&amp;matchtype=strict" title="Search" class="brackets">S</a>';
-		
+
 		return $Line;
 	}
 
@@ -141,7 +141,7 @@ class Tools {
 	}
 
 
-	
+
 
 	/**
 	 * Disable an array of users.
@@ -161,7 +161,7 @@ class Tools {
 				m.can_leech='0',
 				i.AdminComment = CONCAT('".sqltime()." - ".($AdminComment ? $AdminComment : 'Disabled by system')."\n\n', i.AdminComment),
 				i.BanDate='".sqltime()."',
-				i.BanReason='".$BanReason."',
+				i.BanReason='$BanReason',
 				i.RatioWatchDownload=".($BanReason == 2 ? 'm.Downloaded' : "'0'")."
 			WHERE m.ID IN(".implode(',',$UserIDs).") ");
 		$Cache->decrement('stats_user_count',$DB->affected_rows());
@@ -176,14 +176,14 @@ class Tools {
 				$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 			}
 			$Cache->delete_value('users_sessions_'.$UserID);
-			
-			
+
+
 			$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
-			
+
 		}
 
 		// Remove the users from the tracker.
-		$DB->query("SELECT torrent_pass FROM users_main WHERE ID in (".implode(", ",$UserIDs).")");
+		$DB->query("SELECT torrent_pass FROM users_main WHERE ID in (".implode(', ',$UserIDs).')');
 		$PassKeys = $DB->collect('torrent_pass');
 		$Concat = '';
 		foreach ($PassKeys as $PassKey) {
@@ -223,10 +223,12 @@ class Tools {
 
 			$AdminComment = date('Y-m-d').' - Warning (Clash) extended to expire at '.$NewExpDate.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
 
-			$DB->query('UPDATE users_info SET
-				Warned=\''.db_string($NewExpDate).'\',
-				WarnedTimes=WarnedTimes+1,
-				AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
+			$DB->query('
+				UPDATE users_info
+				SET
+					Warned=\''.db_string($NewExpDate).'\',
+					WarnedTimes=WarnedTimes+1,
+					AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
 				WHERE UserID=\''.db_string($UserID).'\'');
 		} else {
 			//Not changing, user was not already warned
@@ -238,10 +240,12 @@ class Tools {
 
 			$AdminComment = date('Y-m-d').' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
 
-			$DB->query('UPDATE users_info SET
-				Warned=\''.db_string($WarnTime).'\',
-				WarnedTimes=WarnedTimes+1,
-				AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
+			$DB->query('
+				UPDATE users_info
+				SET
+					Warned=\''.db_string($WarnTime).'\',
+					WarnedTimes=WarnedTimes+1,
+					AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
 				WHERE UserID=\''.db_string($UserID).'\'');
 		}
 	}
@@ -253,9 +257,10 @@ class Tools {
 	 */
 	public static function update_user_notes($UserID, $AdminComment) {
 		global $DB;
-		$DB->query('UPDATE users_info SET
-					AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
-					WHERE UserID=\''.db_string($UserID).'\'');
+		$DB->query('
+			UPDATE users_info
+			SET AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
+			WHERE UserID=\''.db_string($UserID).'\'');
 	}
 }
 ?>

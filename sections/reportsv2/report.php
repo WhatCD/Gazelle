@@ -114,7 +114,7 @@ View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
 				}
 				foreach ($TypeList as $Type => $Data) {
 					?>
-							<option value="<?= $Type ?>"><?= $Data['title'] ?></option>
+							<option value="<?=($Type)?>"><?=($Data['title'])?></option>
 <?				} ?>
 						</select>
 					</td>
@@ -126,7 +126,7 @@ View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
 			<br />
 
 			<div id="dynamic_form">
-				<?
+<?
 				/*
 				 * THIS IS WHERE SEXY AJAX COMES IN
 				 * The following malarky is needed so that if you get sent back here the fields are filled in

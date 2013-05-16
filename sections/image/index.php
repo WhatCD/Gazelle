@@ -82,7 +82,7 @@ if (isset($_GET['avatar'])) {
 
 Your avatar at $DBURL has been found to exceed these rules. As such, it has been automatically reset. You are welcome to reinstate your avatar once it has been resized down to an acceptable size.");
 
-			
+
 		}
 	}
 }

@@ -3,109 +3,123 @@
 include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
 $Text = new TEXT;
 
-if (empty($_GET['id']) || !is_numeric($_GET['id']))
-	error(404);
+include(SERVER_ROOT.'/sections/requests/functions.php');
 
+if (empty($_GET['id']) || !is_numeric($_GET['id']) || (!empty($_GET['preview']) && !is_numeric($_GET['preview']))) {
+	error(404);
+}
 $UserID = $_GET['id'];
+$Preview = $_GET['preview'];
 if ($UserID == $LoggedUser['ID']) {
 	$OwnProfile = true;
+	if ($Preview == 1) {
+		$OwnProfile = false;
+		$ParanoiaString = $_GET['paranoia'];
+		$CustomParanoia = explode(',', $ParanoiaString);
+	}
 } else {
 	$OwnProfile = false;
+	//Don't allow any kind of previewing on others' profiles
+	$Preview = 0;
 }
 
 
 
 if (check_perms('users_mod')) { // Person viewing is a staff member
-	$DB->query("SELECT
-		m.Username,
-		m.Email,
-		m.LastAccess,
-		m.IP,
-		p.Level AS Class,
-		m.Uploaded,
-		m.Downloaded,
-		m.RequiredRatio,
-		m.Title,
-		m.torrent_pass,
-		m.Enabled,
-		m.Paranoia,
-		m.Invites,
-		m.can_leech,
-		m.Visible,
-		i.JoinDate,
-		i.Info,
-		i.Avatar,
-		i.Country,
-		i.AdminComment,
-		i.Donor,
-		i.Artist,
-		i.Warned,
-		i.SupportFor,
-		i.RestrictedForums,
-		i.PermittedForums,
-		i.Inviter,
-		inviter.Username,
-		COUNT(posts.id) AS ForumPosts,
-		i.RatioWatchEnds,
-		i.RatioWatchDownload,
-		i.DisableAvatar,
-		i.DisableInvites,
-		i.DisablePosting,
-		i.DisableForums,
-		i.DisableTagging,
-		i.DisableUpload,
-		i.DisableWiki,
-		i.DisablePM,
-		i.DisableIRC,
-		i.DisableRequests,
-		i.HideCountryChanges,
-		m.FLTokens,
-		SHA1(i.AdminComment)
+	$DB->query("
+		SELECT
+			m.Username,
+			m.Email,
+			m.LastAccess,
+			m.IP,
+			p.Level AS Class,
+			m.Uploaded,
+			m.Downloaded,
+			m.RequiredRatio,
+			m.Title,
+			m.torrent_pass,
+			m.Enabled,
+			m.Paranoia,
+			m.Invites,
+			m.can_leech,
+			m.Visible,
+			i.JoinDate,
+			i.Info,
+			i.Avatar,
+			i.Country,
+			i.AdminComment,
+			i.Donor,
+			i.Artist,
+			i.Warned,
+			i.SupportFor,
+			i.RestrictedForums,
+			i.PermittedForums,
+			i.Inviter,
+			inviter.Username,
+			COUNT(posts.id) AS ForumPosts,
+			i.RatioWatchEnds,
+			i.RatioWatchDownload,
+			i.DisableAvatar,
+			i.DisableInvites,
+			i.DisablePosting,
+			i.DisableForums,
+			i.DisableTagging,
+			i.DisableUpload,
+			i.DisableWiki,
+			i.DisablePM,
+			i.DisableIRC,
+			i.DisableRequests,
+			i.HideCountryChanges,
+			m.FLTokens,
+			SHA1(i.AdminComment)
 		FROM users_main AS m
 			JOIN users_info AS i ON i.UserID = m.ID
 			LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
 			LEFT JOIN permissions AS p ON p.ID=m.PermissionID
 			LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
-		WHERE m.ID = '".$UserID."' GROUP BY AuthorID");
+		WHERE m.ID = '$UserID'
+		GROUP BY AuthorID");
 
 	if ($DB->record_count() == 0) { // If user doesn't exist
 		header("Location: log.php?search=User+".$UserID);
 	}
 
-	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $Country, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $PermittedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $DisableCountry, $FLTokens, $CommentHash) = $DB->next_record(MYSQLI_NUM, array(8,11));
+	list($Username,	$Email,	$LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $CustomTitle, $torrent_pass, $Enabled, $Paranoia, $Invites, $DisableLeech, $Visible, $JoinDate, $Info, $Avatar, $Country, $AdminComment, $Donor, $Artist, $Warned, $SupportFor, $RestrictedForums, $PermittedForums, $InviterID, $InviterName, $ForumPosts, $RatioWatchEnds, $RatioWatchDownload, $DisableAvatar, $DisableInvites, $DisablePosting, $DisableForums, $DisableTagging, $DisableUpload, $DisableWiki, $DisablePM, $DisableIRC, $DisableRequests, $DisableCountry, $FLTokens, $CommentHash) = $DB->next_record(MYSQLI_NUM, array(8, 11));
 } else { // Person viewing is a normal user
-	$DB->query("SELECT
-		m.Username,
-		m.Email,
-		m.LastAccess,
-		m.IP,
-		p.Level AS Class,
-		m.Uploaded,
-		m.Downloaded,
-		m.RequiredRatio,
-		m.Enabled,
-		m.Paranoia,
-		m.Invites,
-		m.Title,
-		m.torrent_pass,
-		m.can_leech,
-		i.JoinDate,
-		i.Info,
-		i.Avatar,
-		m.FLTokens,
-		i.Country,
-		i.Donor,
-		i.Warned,
-		COUNT(posts.id) AS ForumPosts,
-		i.Inviter,
-		i.DisableInvites,
-		inviter.username
+	$DB->query("
+		SELECT
+			m.Username,
+			m.Email,
+			m.LastAccess,
+			m.IP,
+			p.Level AS Class,
+			m.Uploaded,
+			m.Downloaded,
+			m.RequiredRatio,
+			m.Enabled,
+			m.Paranoia,
+			m.Invites,
+			m.Title,
+			m.torrent_pass,
+			m.can_leech,
+			i.JoinDate,
+			i.Info,
+			i.Avatar,
+			m.FLTokens,
+			i.Country,
+			i.Donor,
+			i.Warned,
+			COUNT(posts.id) AS ForumPosts,
+			i.Inviter,
+			i.DisableInvites,
+			inviter.username
 		FROM users_main AS m
 			JOIN users_info AS i ON i.UserID = m.ID
 			LEFT JOIN permissions AS p ON p.ID=m.PermissionID
 			LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
 			LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
-		WHERE m.ID = $UserID GROUP BY AuthorID");
+		WHERE m.ID = $UserID
+		GROUP BY AuthorID");
 
 	if ($DB->record_count() == 0) { // If user doesn't exist
 		header("Location: log.php?search=User+".$UserID);
@@ -117,14 +131,23 @@ if (check_perms('users_mod')) { // Person viewing is a staff member
 // Image proxy CTs
 $DisplayCustomTitle = $CustomTitle;
 if (check_perms('site_proxy_images') && !empty($CustomTitle)) {
-	$DisplayCustomTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~', function($Matches) {
-																		return 'src=' . $Matches[1] . ImageTools::process($Matches[2]) . $Matches[3];
-																	}, $CustomTitle);
+	$DisplayCustomTitle = preg_replace_callback('~src=("?)(http.+?)(["\s>])~',
+								function($Matches) {
+									return 'src=' . $Matches[1] . ImageTools::process($Matches[2]) . $Matches[3];
+								}, $CustomTitle);
 }
 
-$Paranoia = unserialize($Paranoia);
-if (!is_array($Paranoia)) {
-	$Paranoia = array();
+if ($Preview == 1) {
+	if (strlen($ParanoiaString) == 0) {
+		$Paranoia = array();
+	} else {
+		$Paranoia =  $CustomParanoia;
+	}
+} else {
+	$Paranoia = unserialize($Paranoia);
+	if (!is_array($Paranoia)) {
+		$Paranoia = array();
+	}
 }
 $ParanoiaLevel = 0;
 foreach ($Paranoia as $P) {
@@ -138,17 +161,21 @@ $JoinedDate = time_diff($JoinDate);
 $LastAccess = time_diff($LastAccess);
 
 function check_paranoia_here($Setting) {
-	global $Paranoia, $Class, $UserID;
-	return check_paranoia($Setting, $Paranoia, $Class, $UserID);
+	global $Paranoia, $Class, $UserID, $Preview;
+	if ($Preview == 1) {
+		return check_paranoia($Setting, $Paranoia, $Class);
+	} else {
+		return check_paranoia($Setting, $Paranoia, $Class, $UserID);
+	}
 }
 
-$Badges=($Donor) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" /></a>' : '';
+$Badges = (($Donor) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" /></a>' : '');
 
 
-$Badges.=($Warned!='0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" />' : '';
-$Badges.=($Enabled == '1' || $Enabled == '0' || !$Enabled) ? '': '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" />';
+$Badges.=(($Warned!='0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" />' : '');
+$Badges.=(($Enabled == '1' || $Enabled == '0' || !$Enabled) ? '' : '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" />');
 
-View::show_header($Username,'user,bbcode,requests,jquery,lastfm');
+View::show_header($Username, 'user,bbcode,requests,jquery,lastfm');
 
 ?>
 <div class="thin">
@@ -214,7 +241,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 ?>
 		<div class="box box_image box_image_avatar">
 			<div class="head colhead_dark">Avatar</div>
-			<div align="center"><img src="<?=display_str($Avatar)?>" width="150" style="max-height:400px;" alt="<?=$Username?>'s avatar" /></div>
+			<div align="center"><img src="<?=display_str($Avatar)?>" width="150" style="max-height: 400px;" alt="<?=$Username?>'s avatar" /></div>
 		</div>
 <? } ?>
 		<div class="box box_info box_userinfo_stats">
@@ -222,50 +249,58 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 			<ul class="stats nobullet">
 				<li>Joined: <?=$JoinedDate?></li>
 <?	if (($Override = check_paranoia_here('lastseen'))) { ?>
-				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>>Last seen: <?=$LastAccess?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Last seen: <?=$LastAccess?></li>
 <?	}
 	if (($Override=check_paranoia_here('uploaded'))) { ?>
-				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
 <?	}
 	if (($Override=check_paranoia_here('downloaded'))) { ?>
-				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
 <?	}
 	if (($Override=check_paranoia_here('ratio'))) { ?>
-				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
 <?	}
 	if (($Override=check_paranoia_here('requiredratio')) && isset($RequiredRatio)) { ?>
-				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
 <?	}
 	if ($OwnProfile || ($Override=check_paranoia_here(false)) || check_perms('users_mod')) { ?>
-				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <?	}
 	if (($OwnProfile || check_perms('users_mod')) && $Warned!='0000-00-00 00:00:00') { ?>
-				<li<?= $Override === 2 ? ' class="paranoia_override"' : ''?>>Warning expires: <?= date('Y-m-d H:i', strtotime($Warned)) ?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Warning expires: <?=(date('Y-m-d H:i', strtotime($Warned)))?></li>
 <?	} ?>
 			</ul>
 		</div>
 
 
 <?
-//Last.fm statistics and comparability
+// Last.fm statistics and comparability
 include(SERVER_ROOT.'/sections/user/lastfm.php');
 
 if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requestsfilled_bounty')) {
-	$DB->query("SELECT
-					COUNT(DISTINCT r.ID),
-					SUM(rv.Bounty)
-				FROM requests AS r
-					LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID
-				WHERE r.FillerID = ".$UserID);
+	$DB->query("
+		SELECT
+			COUNT(DISTINCT r.ID),
+			SUM(rv.Bounty)
+		FROM requests AS r
+			LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID
+		WHERE r.FillerID = $UserID");
 	list($RequestsFilled, $TotalBounty) = $DB->next_record();
 } else {
 	$RequestsFilled = $TotalBounty = 0;
 }
 
 if (check_paranoia_here('requestsvoted_count') || check_paranoia_here('requestsvoted_bounty')) {
-	$DB->query("SELECT COUNT(rv.RequestID), SUM(rv.Bounty) FROM requests_votes AS rv WHERE rv.UserID = ".$UserID);
+	$DB->query("
+		SELECT COUNT(rv.RequestID), SUM(rv.Bounty)
+		FROM requests_votes AS rv
+		WHERE rv.UserID = $UserID");
 	list($RequestsVoted, $TotalSpent) = $DB->next_record();
-	$DB->query('SELECT COUNT(r.ID), SUM(rv.Bounty) FROM requests AS r LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID AND rv.UserID = r.UserID WHERE r.UserID = ' . $UserID);
+	$DB->query("
+		SELECT COUNT(r.ID), SUM(rv.Bounty)
+		FROM requests AS r
+			LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID AND rv.UserID = r.UserID
+		WHERE r.UserID = $UserID");
 	list($RequestsCreated, $RequestsCreatedSpent) = $DB->next_record();
 } else {
 	$RequestsVoted = $TotalSpent = $RequestsCreated = $RequestsCreatedSpent = 0;
@@ -301,7 +336,7 @@ if ($Downloaded == 0) {
 } elseif ($Uploaded == 0) {
 	$Ratio = 0.5;
 } else {
-	$Ratio = round($Uploaded/$Downloaded, 2);
+	$Ratio = round($Uploaded / $Downloaded, 2);
 }
 $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio);
 
@@ -310,23 +345,23 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 			<div class="head colhead_dark">Percentile rankings (hover for values)</div>
 			<ul class="stats nobullet">
 <? if (($Override=check_paranoia_here('uploaded'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('downloaded'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('uploads+'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?> title="<?=number_format($Uploads)?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($Uploads)?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('requestsfilled_count'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?> title="<?=number_format($RequestsFilled)?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($RequestsFilled)?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
 <? } ?>
 <? if (($Override=check_paranoia_here('requestsvoted_bounty'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?> title="<?=Format::get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
 <? } ?>
 				<li title="<?=number_format($ForumPosts)?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
 <? if (($Override=check_paranoia_here('artistsadded'))) { ?>
-				<li<?= $Override===2 ? ' class="paranoia_override"' : ''?> title="<?=number_format($ArtistsAdded)?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($ArtistsAdded)?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
 <? } ?>
 <? if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfilled_count', 'requestsvoted_bounty', 'artistsadded'))) { ?>
 				<li><strong>Overall rank: <?=$OverallRank === false ? 'Server busy' : number_format($OverallRank)?></strong></li>
@@ -362,12 +397,12 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 	if (check_perms('users_view_ips',$Class)) {
 ?>
 			<li>IPs: <?=number_format($IPChanges)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View users</a></li>
-<?		if (check_perms('users_view_ips',$Class) && check_perms('users_mod',$Class)) { ?>
+<?		if (check_perms('users_view_ips', $Class) && check_perms('users_mod', $Class)) { ?>
 			<li>Tracker IPs: <?=number_format($TrackerIPs)?> <a href="userhistory.php?action=tracker_ips&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?		} ?>
 <?
 	}
-	if (check_perms('users_view_keys',$Class)) {
+	if (check_perms('users_view_keys', $Class)) {
 ?>
 			<li>Passkeys: <?=number_format($PasskeyChanges)?> <a href="userhistory.php?action=passkeys&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?
@@ -377,7 +412,7 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 			<li>Passwords: <?=number_format($PasswordChanges)?> <a href="userhistory.php?action=passwords&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 			<li>Stats: N/A <a href="userhistory.php?action=stats&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?
-			
+
 	}
 ?>
 		</ul>
@@ -416,7 +451,7 @@ if ($ParanoiaLevel == 0) {
 }
 ?>
 				<li>Paranoia level: <span title="<?=$ParanoiaLevel?>"><?=$ParanoiaLevelText?></span></li>
-<?	if (check_perms('users_view_email',$Class) || $OwnProfile) { ?>
+<?	if (check_perms('users_view_email', $Class) || $OwnProfile) { ?>
 				<li>Email: <a href="mailto:<?=display_str($Email)?>"><?=display_str($Email)?></a>
 <?		if (check_perms('users_view_email',$Class)) { ?>
 					<a href="user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a>
@@ -441,7 +476,7 @@ if (check_perms('users_view_invites')) {
 	} else {
 		$Invited='<a href="user.php?id='.$InviterID.'">'.$InviterName.'</a>';
 	}
-	
+
 ?>
 				<li>Invited by: <?=$Invited?></li>
 				<li>Invites: <?
@@ -452,7 +487,7 @@ if (check_perms('users_view_invites')) {
 				} else {
 					echo number_format($Invites);
 				}
-				echo " (".$Pending.")"
+				echo " ($Pending)"
 				?></li>
 <?
 }
@@ -461,12 +496,12 @@ if (!isset($SupportFor)) {
 	$DB->query("SELECT SupportFor FROM users_info WHERE UserID = ".$LoggedUser['ID']);
 	list($SupportFor) = $DB->next_record();
 }
-if ($Override=check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
+if ($Override = check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
 	?>
-		<li <?= $Override===2 || $SupportFor ? 'class="paranoia_override"' : ''?>>Clients: <?
+		<li <?=($Override === 2 || $SupportFor ? 'class="paranoia_override"' : '')?>>Clients: <?
 		$DB->query("SELECT DISTINCT useragent FROM xbt_files_users WHERE uid = ".$UserID);
 		$Clients = $DB->collect(0);
-		echo implode("; ", $Clients);
+		echo implode('; ', $Clients);
 		?></li>
 <?
 }

@@ -48,14 +48,13 @@ if (!isset($Forum) || !is_array($Forum)) {
 		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
 	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
-	
+
 	if ($Page == 1) {
 		$DB->query("SELECT COUNT(ID) FROM forums_topics WHERE ForumID='$ForumID' AND IsSticky='1'");
 		list($Stickies) = $DB->next_record();
 		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
 	}
 }
-
 
 if (!isset($Forums[$ForumID])) {
 	error(404);
@@ -66,7 +65,6 @@ if (!check_perms('site_moderate_forums')) {
 		error(403);
 	}
 }
-
 
 
 $ForumName = display_str($Forums[$ForumID]['Name']);
@@ -247,7 +245,7 @@ if (count($Forum) == 0) {
 		unset($PageLinks);
 		$Title = display_str($Title);
 		$DisplayTitle = $Title;
-		
+
 ?>
 				<strong>
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=$Title?>"><?=Format::cut_string($DisplayTitle, $TopicLength) ?></a>

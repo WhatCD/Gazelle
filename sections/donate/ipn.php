@@ -55,7 +55,7 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 						Misc::send_pm($_POST['custom'], 0, 'Thank you for your donation', 'Your donation from '.$_POST['payer_email'].' of '.$_POST['mc_gross'].' '.PAYPAL_CURRENCY.' has been successfully processed. Your continued support is highly appreciated and helps to make this place possible.');
 					}
 
-					
+
 				}
 			}
 		}
@@ -66,7 +66,10 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 		} else {
 			//Failed pending donation
 			$Message = "User https://".SSL_SITE_URL."/user.php?id=".$_POST['custom']." had donation of ".$TotalDonated." ".PAYPAL_CURRENCY." at ".$DonationTime." UTC from ".$_POST['payer_email']." returned.";
-			$DB->query('SELECT SUM(Amount), MIN(Time) FROM donations WHERE UserID=\''.$_POST['custom'].'\';');
+			$DB->query('
+				SELECT SUM(Amount), MIN(Time)
+				FROM donations
+				WHERE UserID=\''.$_POST['custom'].'\';');
 			list($TotalDonated,$DonationTime) = $DB->next_record();
 			if ($TotalDonated+$_POST['mc_gross'] == 0) {
 				$DB->query("SELECT Invites FROM users_main WHERE ID='".$_POST['custom']."'");
@@ -92,17 +95,22 @@ if (strpos($Result,'VERIFIED') !== false || check_perms('site_debug')) {
 			}
 		}
 	}
-	$DB->query("UPDATE users_info
+	$DB->query("
+		UPDATE users_info
 		SET
-		AdminComment=CONCAT('".sqltime()." - User donated ".db_string($_POST['mc_gross'])." ".db_string(PAYPAL_CURRENCY)." from ".db_string($_POST['payer_email']).".\n',AdminComment)
+			AdminComment=CONCAT('".sqltime()." - User donated ".db_string($_POST['mc_gross'])." ".db_string(PAYPAL_CURRENCY)." from ".db_string($_POST['payer_email']).".\n',AdminComment)
 		WHERE UserID='".$_POST['custom']."'");
-	$DB->query("INSERT INTO donations
-	(UserID, Amount, Email, Time)	VALUES
-	('".$_POST['custom']."', '".db_string($_POST['mc_gross'])."', '".db_string($_POST['payer_email'])."', '".sqltime()."')");
+	$DB->query("
+		INSERT INTO donations
+			(UserID, Amount, Email, Time)
+		VALUES
+			('".$_POST['custom']."', '".db_string($_POST['mc_gross'])."', '".db_string($_POST['payer_email'])."', '".sqltime()."')");
 } else {
-	$DB->query("INSERT INTO ip_bans
-	(FromIP, ToIP, Reason) VALUES
-	('".Tools::ip_to_unsigned($_SERVER['REMOTE_ADDR'])."','".ip2long($_SERVER['REMOTE_ADDR'])."', 'Attempted to exploit donation system.')");
+	$DB->query("
+		INSERT INTO ip_bans
+			(FromIP, ToIP, Reason)
+		VALUES
+			('".Tools::ip_to_unsigned($_SERVER['REMOTE_ADDR'])."','".ip2long($_SERVER['REMOTE_ADDR'])."', 'Attempted to exploit donation system.')");
 }
 fclose ($Socket);
 if (check_perms('site_debug')) {

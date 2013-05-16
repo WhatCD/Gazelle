@@ -17,7 +17,7 @@ list($UserID, $Username) = array_values($User);
 if (empty($_GET['type'])) {
 	error(0);
 } else {
-	
+
 	switch ($_GET['type']) {
 		case 'uploads':
 			if (!check_paranoia('uploads', $User['Paranoia'], $UserClass, $UserID)) {
@@ -45,19 +45,20 @@ if (empty($_GET['type'])) {
 	}
 }
 
-$DownloadsQ = $DB->query("SELECT
-	t.ID AS TorrentID,
-	DATE_FORMAT(".$Month.",'%Y - %m') AS Month,
-	t.GroupID,
-	t.Media,
-	t.Format,
-	t.Encoding,
-	IF(t.RemasterYear=0,tg.Year,t.RemasterYear) AS Year,
-	tg.Name,
-	t.Size
+$DownloadsQ = $DB->query("
+	SELECT
+		t.ID AS TorrentID,
+		DATE_FORMAT($Month,'%Y - %m') AS Month,
+		t.GroupID,
+		t.Media,
+		t.Format,
+		t.Encoding,
+		IF(t.RemasterYear=0,tg.Year,t.RemasterYear) AS Year,
+		tg.Name,
+		t.Size
 	FROM torrents as t
-	JOIN torrents_group AS tg ON t.GroupID=tg.ID
-	".$SQL."
+		JOIN torrents_group AS tg ON t.GroupID=tg.ID
+	$SQL
 	GROUP BY TorrentID");
 
 $Collector = new TorrentsDL($DownloadsQ, "$Username's ".ucfirst($_GET['type']));
@@ -65,7 +66,10 @@ $Collector = new TorrentsDL($DownloadsQ, "$Username's ".ucfirst($_GET['type']));
 while (list($Downloads, $GroupIDs) = $Collector->get_downloads('TorrentID')) {
 	$Artists = Artists::get_artists($GroupIDs);
 	$TorrentIDs = array_keys($GroupIDs);
-	$TorrentFilesQ = $DB->query("SELECT TorrentID, File FROM torrents_files WHERE TorrentID IN (".implode(',', $TorrentIDs).")", false);
+	$TorrentFilesQ = $DB->query('
+		SELECT TorrentID, File
+		FROM torrents_files
+		WHERE TorrentID IN ('.implode(',', $TorrentIDs).')', false);
 	if (is_int($TorrentFilesQ)) {
 		// Query failed. Let's not create a broken zip archive
 		foreach ($TorrentIDs as $TorrentID) {

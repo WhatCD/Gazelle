@@ -38,9 +38,7 @@ switch ($_REQUEST['action']) {
 	case 'search':// User search
 		if (check_perms('admin_advanced_user_search') && check_perms('users_view_ips') && check_perms('users_view_email')) {
 			include('advancedsearch.php');
-		}
-		
-		else {
+		} else {
 			include('search.php');
 		}
 		break;
@@ -95,8 +93,8 @@ switch ($_REQUEST['action']) {
 		$Cache->delete_value('collage_subs_user_new_'.$UserID);
 		include(SERVER_ROOT.'/sections/user/user.php');
 		break;
-	
-	//Provide public methods for Last.fm data gets.
+
+	// Provide public methods for Last.fm data gets.
 	case 'lastfm_compare':
 		if (isset($_GET['username'])) {
 			echo LastFM::compare_user_with($_GET['username']);

@@ -302,7 +302,7 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 
 	$AgoMins = time_minus(60 * 30);
 	$AgoDays = time_minus(3600 * 24 * 30);
-	
+
 	
 	$SessionQuery = $DB->query("SELECT UserID, SessionID
 								FROM users_sessions
@@ -316,7 +316,7 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 		$Cache->commit_transaction(0);
 	}
 
-	
+
 	//------------- Lower Login Attempts ------------------------------------//
 	$DB->query("UPDATE login_attempts SET Attempts=Attempts-1 WHERE Attempts>0");
 	$DB->query("DELETE FROM login_attempts WHERE LastAttempt<'".time_minus(3600 * 24 * 90)."'");
@@ -593,7 +593,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 				i.AdminComment=CONCAT('$sqltime - Leeching ability disabled by ratio watch system - required ratio: ', m.RequiredRatio,'', i.AdminComment)
 			WHERE m.ID IN(".implode(',',$UserIDs).")");
 
-		
+
 		$DB->query("DELETE FROM users_torrent_history WHERE UserID IN (".implode(',',$UserIDs).")");
 	}
 
@@ -770,7 +770,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 
 	// Exceptions for inactivity deletion
 	$InactivityExceptionsMade = array(//UserID => expiry time of exception
-		
+
 	);
 	foreach ($TorrentIDs as $TorrentID) {
 		list($ID, $GroupID, $Name, $ArtistName, $LastAction, $Format, $Encoding, $UserID, $Media, $InfoHash) = $TorrentID;
@@ -821,7 +821,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 		$DB->query("DELETE FROM artists_similar_votes WHERE SimilarID IN($SimilarIDs)");
 	}
 
-	
+
 
 	// Daily top 10 history.
 	$DB->query("INSERT INTO top10_history (Date, Type) VALUES ('".$sqltime."', 'Daily')");

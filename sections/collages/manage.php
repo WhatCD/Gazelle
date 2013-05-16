@@ -26,7 +26,7 @@
 
 	$GroupIDs = $DB->collect('GroupID');
 
-	$CollageDataList=$DB->to_array('GroupID', MYSQLI_ASSOC);
+	$CollageDataList = $DB->to_array('GroupID', MYSQLI_ASSOC);
 	if (count($GroupIDs) > 0) {
 		$TorrentList = Torrents::get_groups($GroupIDs);
 		$TorrentList = $TorrentList['matches'];

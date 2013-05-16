@@ -14,82 +14,84 @@ $Text = NEW TEXT;
 
 
 
-$DB->query("SELECT
-				r.ID,
-				r.ReporterID,
-				reporter.Username,
-				r.TorrentID,
-				r.Type,
-				r.UserComment,
-				r.ResolverID,
-				resolver.Username,
-				r.Status,
-				r.ReportedTime,
-				r.LastChangeTime,
-				r.ModComment,
-				r.Track,
-				r.Image,
-				r.ExtraID,
-				r.Link,
-				r.LogMessage,
-				tg.Name,
-				tg.ID,
-				CASE COUNT(ta.GroupID)
-					WHEN 1 THEN aa.ArtistID
-					WHEN 0 THEN '0'
-					ELSE '0'
-				END AS ArtistID,
-				CASE COUNT(ta.GroupID)
-					WHEN 1 THEN aa.Name
-					WHEN 0 THEN ''
-					ELSE 'Various Artists'
-				END AS ArtistName,
-				tg.Year,
-				tg.CategoryID,
-				t.Time,
-				t.Remastered,
-				t.RemasterTitle,
-				t.RemasterYear,
-				t.Media,
-				t.Format,
-				t.Encoding,
-				t.Size,
-				t.HasCue,
-				t.HasLog,
-				t.LogScore,
-				t.UserID AS UploaderID,
-				t.Tasted,
-				uploader.Username
-			FROM reportsv2 AS r
-				LEFT JOIN torrents AS t ON t.ID=r.TorrentID
-				LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-				LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-				LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-				LEFT JOIN users_main AS resolver ON resolver.ID=r.ResolverID
-				LEFT JOIN users_main AS reporter ON reporter.ID=r.ReporterID
-				LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
-			WHERE r.Status = 'New'
-			GROUP BY r.ID
-			ORDER BY ReportedTime ASC
-			LIMIT 1");
-
+$DB->query("
+	SELECT
+		r.ID,
+		r.ReporterID,
+		reporter.Username,
+		r.TorrentID,
+		r.Type,
+		r.UserComment,
+		r.ResolverID,
+		resolver.Username,
+		r.Status,
+		r.ReportedTime,
+		r.LastChangeTime,
+		r.ModComment,
+		r.Track,
+		r.Image,
+		r.ExtraID,
+		r.Link,
+		r.LogMessage,
+		tg.Name,
+		tg.ID,
+		CASE COUNT(ta.GroupID)
+			WHEN 1 THEN aa.ArtistID
+			WHEN 0 THEN '0'
+			ELSE '0'
+		END AS ArtistID,
+		CASE COUNT(ta.GroupID)
+			WHEN 1 THEN aa.Name
+			WHEN 0 THEN ''
+			ELSE 'Various Artists'
+		END AS ArtistName,
+		tg.Year,
+		tg.CategoryID,
+		t.Time,
+		t.Remastered,
+		t.RemasterTitle,
+		t.RemasterYear,
+		t.Media,
+		t.Format,
+		t.Encoding,
+		t.Size,
+		t.HasCue,
+		t.HasLog,
+		t.LogScore,
+		t.UserID AS UploaderID,
+		t.Tasted,
+		uploader.Username
+	FROM reportsv2 AS r
+		LEFT JOIN torrents AS t ON t.ID=r.TorrentID
+		LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
+		LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
+		LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
+		LEFT JOIN users_main AS resolver ON resolver.ID=r.ResolverID
+		LEFT JOIN users_main AS reporter ON reporter.ID=r.ReporterID
+		LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
+	WHERE r.Status = 'New'
+	GROUP BY r.ID
+	ORDER BY ReportedTime ASC
+	LIMIT 1");
 
 		if ($DB->record_count() < 1) {
 			die();
 		}
-		
-		
+
+
 		list($ReportID, $ReporterID, $ReporterName, $TorrentID, $Type, $UserComment, $ResolverID, $ResolverName, $Status, $ReportedTime, $LastChangeTime,
 			$ModComment, $Tracks, $Images, $ExtraIDs, $Links, $LogMessage, $GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
 			$RemasterYear, $Media, $Format, $Encoding, $Size, $HasCue, $HasLog, $LogScore, $UploaderID, $UploaderName) = $DB->next_record(MYSQLI_BOTH, array("ModComment"));
-		
+
 		if (!$GroupID) {
 			//Torrent already deleted
-			$DB->query("UPDATE reportsv2
-						SET Status='Resolved',
-							LastChangeTime='".sqltime()."',
-							ModComment='Report already dealt with (torrent deleted)'
-						WHERE ID=".$ReportID);
+			$DB->query("
+				UPDATE reportsv2
+				SET
+					Status='Resolved',
+					LastChangeTime='".sqltime()."',
+					ModComment='Report already dealt with (torrent deleted)'
+				WHERE ID=".$ReportID);
 ?>
 	<div>
 		<table class="layout">
@@ -249,7 +251,6 @@ $DB->query("SELECT
 				$First = true;
 				$Extras = explode(' ', $ExtraIDs);
 				foreach ($Extras as $ExtraID) {
-
 
 						$DB->query("
 								SELECT

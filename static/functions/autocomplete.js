@@ -42,13 +42,13 @@ var autocomp = {
 			case 38: //up
 			case 40: //down
 				this.highlight(key);
-				if(this.pos !== -1) {
+				if (this.pos !== -1) {
 					this.artistid = this.list.children[this.pos].artistid;
 					this.input.value = this.list.children[this.pos].textContent || this.list.children[this.pos].value;
 				}
 				break;
 			case 13:
-				if(this.artistid != null) {
+				if (this.artistid != null) {
 					window.location = this.id + '.php?id='+this.artistid;
 				}
 				return 0;
@@ -139,9 +139,9 @@ var autocomp = {
 			});
 			listener.set(li,'click',function(e) {
 			    var location = autocomp.id + '.php?id='+this.artistid;
-			    if(e.button == 0) {
+			    if (e.button == 0) {
 			        window.open(location, '_self');
-			    } else if(e.button == 1) {
+			    } else if (e.button == 1) {
 			        var win = window.open(location, '_blank');
 					win.focus();
 			    }

@@ -228,10 +228,10 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 			$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 		}
 		$Cache->delete_value('users_sessions_'.$UserID);
-		
-		
+
+
 		$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
-		
+
 	}
 }
 
@@ -340,7 +340,7 @@ if (count($AddedClasses) > 0) {
 	$Values = array();
 	foreach ($AddedClasses as $PermID) {
 		$Values[] = "($UserID, $PermID)";
-		
+
 	}
 	$DB->query("INSERT INTO users_levels (UserID, PermissionID) VALUES ".implode(', ',$Values));
 	//$LightUpdates['ExtraClasses'] = array_fill_keys($SecondaryClasses, 1);
@@ -653,10 +653,10 @@ if ($Pass && check_perms('users_edit_password')) {
 		$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 	}
 	$Cache->delete_value('users_sessions_'.$UserID);
-	
-	
+
+
 	$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
-	
+
 }
 
 if (empty($UpdateSet) && empty($EditSummary)) {
@@ -695,13 +695,13 @@ if ($EditSummary) {
 		$Summary .= "\nReason: ".$Reason;
 	}
 
-	
+
 
 	$Summary .= "\n\n".$AdminComment;
 } elseif (empty($UpdateSet) && empty($EditSummary) && $Cur['AdminComment'] == $_POST['AdminComment']) {
 	$Summary = sqltime().' - '.'Comment added by '.$LoggedUser['Username'].': '.$Reason."\n\n";
 
-	
+
 }
 
 
@@ -718,11 +718,11 @@ if (!empty($Summary)) {
 
 $SET = implode(', ', $UpdateSet);
 
-$sql = "UPDATE users_main AS m JOIN users_info AS i ON m.ID=i.UserID SET $SET WHERE m.ID='$UserID'";
+$SQL = "UPDATE users_main AS m JOIN users_info AS i ON m.ID=i.UserID SET $SET WHERE m.ID='$UserID'";
 
 // Perform update
-//die($sql);
-$DB->query($sql);
+//die($SQL);
+$DB->query($SQL);
 
 if (isset($ClearStaffIDCache)) {
 	$Cache->delete_value('staff_ids');
@@ -731,8 +731,8 @@ if (isset($ClearStaffIDCache)) {
 // redirect to user page
 header("location: user.php?id=$UserID");
 
-function translateUserStatus($status) {
-	switch ($status) {
+function translateUserStatus($Status) {
+	switch ($Status) {
 		case 0:
 			return 'Unconfirmed';
 		case 1:
@@ -740,18 +740,18 @@ function translateUserStatus($status) {
 		case 2:
 			return 'Disabled';
 		default:
-			return $status;
+			return $Status;
 	}
 }
 
-function translateLeechStatus($status) {
-	switch ($status) {
+function translateLeechStatus($Status) {
+	switch ($Status) {
 		case 0:
 			return 'Disabled';
 		case 1:
 			return 'Enabled';
 		default:
-			return $status;
+			return $Status;
 	}
 }
 ?>

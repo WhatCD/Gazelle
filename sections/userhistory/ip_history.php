@@ -37,7 +37,7 @@ if (isset($_POST['ip'])) {
 	$SearchIPQuery = " AND h1.IP = '$SearchIP' ";
 }
 
-View::show_header("IP history for $Username");
+View::show_header("IP address history for $Username");
 ?>
 <script type="text/javascript">//<![CDATA[
 function ShowIPs(rowname) {
@@ -54,7 +54,7 @@ function Ban(ip, id, elemID) {
 			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 		}
 		xmlhttp.onreadystatechange=function() {
-			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				document.getElementById(elemID).innerHTML = "<strong>[Banned]</strong>";
 			}
 		}
@@ -72,9 +72,9 @@ function UnBan(ip, id, elemID) {
 			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 		}
 		xmlhttp.onreadystatechange=function() {
-			if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				document.getElementById(elemID).innerHTML = "Ban";
-				document.getElementById(elemID).onclick = function() { Ban(ip, id, elemID); return false;};
+				document.getElementById(elemID).onclick = function() { Ban(ip, id, elemID); return false; };
 			}
 		}
 		xmlhttp.open("GET","tools.php?action=quick_ban&perform=delete&id=" + id + "&ip=" + ip,true);

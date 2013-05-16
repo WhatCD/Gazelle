@@ -1,7 +1,7 @@
 <?
 if ($Message = db_string($_POST['message'])) {
 	if ($Subject = db_string($_POST['subject'])) {
-		// New staff pm conversation
+		// New staff PM conversation
 		$Level = db_string($_POST['level']);
 		$DB->query("
 			INSERT INTO staff_pm_conversations
@@ -25,8 +25,6 @@ if ($Message = db_string($_POST['message'])) {
 		// Check if conversation belongs to user
 		$DB->query("SELECT UserID, AssignedToUser FROM staff_pm_conversations WHERE ID=$ConvID");
 		list($UserID, $AssignedToUser) = $DB->next_record();
-		
-
 
 		if ($UserID == $LoggedUser['ID'] || $IsFLS || $UserID == $AssignedToUser) {
 			// Response to existing conversation
@@ -40,11 +38,17 @@ if ($Message = db_string($_POST['message'])) {
 			// Update conversation
 			if ($IsFLS) {
 				// FLS/Staff
-				$DB->query("UPDATE staff_pm_conversations SET Date='".sqltime()."', Unread=true, Status='Open' WHERE ID=$ConvID");
+				$DB->query("
+					UPDATE staff_pm_conversations
+					SET Date='".sqltime()."', Unread=true, Status='Open'
+					WHERE ID=$ConvID");
 				$Cache->delete_value('num_staff_pms_'.$LoggedUser['ID']);
 			} else {
 				// User
-				$DB->query("UPDATE staff_pm_conversations SET Date='".sqltime()."', Unread=true, Status='Unanswered' WHERE ID=$ConvID");
+				$DB->query("
+					UPDATE staff_pm_conversations
+					SET Date='".sqltime()."', Unread=true, Status='Unanswered'
+					WHERE ID=$ConvID");
 			}
 
 			// Clear cache for user
@@ -56,18 +60,17 @@ if ($Message = db_string($_POST['message'])) {
 			// User is trying to respond to conversation that does no belong to them
 			error(403);
 		}
-
 	} else {
-		// Message but no subject or conversation id
+		// Message but no subject or conversation ID
 		header("Location: staffpm.php?action=viewconv&id=$ConvID");
 
 	}
 } elseif ($ConvID = (int)$_POST['convid']) {
-	// No message, but conversation id
+	// No message, but conversation ID
 	header("Location: staffpm.php?action=viewconv&id=$ConvID");
 
 } else {
-	// No message or conversation id
+	// No message or conversation ID
 	header('Location: staffpm.php');
 }
 

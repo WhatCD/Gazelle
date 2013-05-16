@@ -2,7 +2,7 @@
 
 /*
 if (isset($LoggedUser)) {
-	
+
 	//Silly user, what are you doing here!
 	header('Location: index.php');
 	die();
@@ -82,7 +82,7 @@ if (!empty($_REQUEST['confirm'])) {
 			}
 
 			$IPcc = Tools::geoip($_SERVER['REMOTE_ADDR']);
-			
+
 			
 			$DB->query("INSERT INTO users_main
 				(Username,Email,PassHash,torrent_pass,IP,PermissionID,Enabled,Invites,Uploaded,ipcc) VALUES
@@ -104,7 +104,7 @@ if (!empty($_REQUEST['confirm'])) {
 					(UserID, IP, StartTime) VALUES
 					('$UserID', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."')");
 
-			
+
 
 
 			$DB->query("INSERT INTO users_history_emails
@@ -197,7 +197,7 @@ if (!empty($_REQUEST['confirm'])) {
 			Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
 			$Sent = 1;
 
-			
+
 		}
 
 	} elseif ($_GET['invite']) {
