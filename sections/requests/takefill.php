@@ -18,7 +18,7 @@ if (!empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {
 	} else {
 		$Link = $_POST['link'];
 		if (preg_match('/'.TORRENT_REGEX.'/i', $Link, $Matches) < 1) {
-			$Err = "Your link didn't seem to be a valid torrent link";
+			$Err = 'Your link didn\'t seem to be a valid torrent link';
 		} else {
 			$TorrentID = $Matches[0];
 		}
@@ -73,7 +73,7 @@ if (!empty($_POST['user']) && check_perms('site_moderate_requests')) {
 }
 
 if (time_ago($UploadTime) < 3600 && $UploaderID != $FillerID && !check_perms('site_moderate_requests')) {
-	$Err = "There is a one hour grace period for new uploads to allow the torrent's uploader to fill the request.";
+	$Err = 'There is a one hour grace period for new uploads to allow the torrent\'s uploader to fill the request.';
 }
 
 
@@ -186,7 +186,7 @@ foreach ($UserIDs as $User) {
 }
 
 $RequestVotes = Requests::get_votes_array($RequestID);
-Misc::write_log("Request $RequestID (".$FullName.") was filled by user $FillerID (".$FillerUsername.") with the torrent $TorrentID for a ".Format::get_size($RequestVotes['TotalBounty']).' bounty.');
+Misc::write_log("Request $RequestID ($FullName) was filled by user $FillerID ($FillerUsername) with the torrent $TorrentID for a ".Format::get_size($RequestVotes['TotalBounty']).' bounty.');
 
 // Give bounty
 $DB->query("
