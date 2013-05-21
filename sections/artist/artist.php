@@ -402,7 +402,7 @@ foreach ($Importances as $Group) {
 							echo " <a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent',$GroupID,'Unbookmark');return false;\">Bookmark</a>";
 						} ?>
 						<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
-						<div class="tags"><?=$TorrentTags->format()?></div>
+						<div class="tags"><?=$TorrentTags->format('torrents.php?taglist=', $Name)?></div>
 					</div>
 				</td>
 			</tr>
@@ -617,7 +617,7 @@ foreach ($ZIPOptions as $Option) {
 			<div class="head"><strong>Tags</strong></div>
 			<ul class="stats nobullet">
 <?
-			Tags::format_top(50);
+			Tags::format_top(50, "torrents.php?taglist=", $Name);
 ?>
 			</ul>
 		</div>
@@ -967,7 +967,7 @@ foreach ($Thread as $Key => $Post) {
 	</colgroup>
 	<tr class="colhead_dark">
 		<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
-			<div style="float: left;"><a class="post_id" href='artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>'>#<?=$PostID?></a>
+			<div style="float: left;"><a class="post_id" href="artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
 <?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>

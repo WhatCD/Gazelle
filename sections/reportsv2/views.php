@@ -115,6 +115,7 @@ $Results = $DB->to_array();
 <?
 $DB->query("
 	SELECT
+		um.ID,
 		um.Username,
 		COUNT(r.ID) AS Reports
 	FROM reportsv2 AS r
@@ -130,10 +131,10 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Reports</td>
 			</tr>
 <? foreach ($Results as $Result) {
-	list($Username, $Reports) = $Result;
+	list($UserID, $Username, $Reports) = $Result;
 ?>
 			<tr>
-				<td><?=$Username?></td>
+				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
 				<td><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>

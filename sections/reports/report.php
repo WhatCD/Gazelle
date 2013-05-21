@@ -101,7 +101,7 @@ switch ($Short) {
 		break;
 }
 
-View::show_header('Report a '.$Type['title'],'bbcode');
+View::show_header('Report a '.$Type['title'],'bbcode,jquery,jquery.validate,form_validate');
 ?>
 <div class="thin">
 	<div class="header">
@@ -150,7 +150,7 @@ switch ($Short) {
 
 	<div class="box pad center">
 		<p><strong>It will greatly increase the turnover rate of the updates if you can fill in as much of the following details as possible.</strong></p>
-		<form class="create_form" name="report" action="" method="post">
+		<form class="create_form" id="report_form" name="report" action="" method="post">
 			<input type="hidden" name="action" value="takereport" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="id" value="<?=$ID?>" />
@@ -159,7 +159,7 @@ switch ($Short) {
 				<tr>
 					<td class="label">Year (required)</td>
 					<td>
-						<input type="text" size="4" name="year" />
+						<input type="text" size="4" name="year" class="required" />
 					</td>
 				</tr>
 				<tr>
@@ -179,7 +179,7 @@ switch ($Short) {
 				<tr>
 					<td class="label">Comment</td>
 					<td>
-						<textarea rows="8" cols="80" name="comment"></textarea>
+						<textarea rows="8" cols="80" name="comment" class="required"></textarea>
 					</td>
 				</tr>
 			</table>
@@ -275,12 +275,12 @@ if (empty($NoReason)) {
 ?>
 	<h3>Reason</h3>
 	<div class="box pad center">
-		<form class="create_form" name="report" action="" method="post">
+		<form class="create_form" name="report" id="report_form" action="" method="post">
 			<input type="hidden" name="action" value="takereport" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="id" value="<?=$ID?>" />
 			<input type="hidden" name="type" value="<?=$Short?>" />
-			<textarea rows="10" cols="95" name="reason"></textarea><br /><br />
+			<textarea class="required" rows="10" cols="95" name="reason"></textarea><br /><br />
 			<input type="submit" value="Submit report" />
 		</form>
 	</div>

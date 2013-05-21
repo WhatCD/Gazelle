@@ -22,7 +22,7 @@ if ($Forum === false) {
 if (!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) {
 	error(403);
 }
-View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbcode');
+View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbcode,jquery,jquery.validate,form_validate');
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$Forum['Name']?></a> &gt; <span id="newthreadtitle">New Topic</span></h2>
@@ -77,18 +77,18 @@ View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbco
 		</table>
 	</div>
 	<div class="box pad">
-		<form class="create_form" name="forum_thread" action="" id="newthreadform" onsubmit="newthreadform.submit_button.disabled=true;" method="post">
+		<form class="create_form" name="forum_thread" action="" id="newthreadform" method="post">
 			<input type="hidden" name="action" value="new" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="forum" value="<?=$ForumID?>" />
 			<table id="newthreadtext" class="layout">
 				<tr>
 					<td class="label">Title:</td>
-					<td><input id="title" type="text" name="title" style="width: 98%;" /></td>
+					<td><input id="title" class="required" type="text" name="title" style="width: 98%;" /></td>
 				</tr>
 				<tr>
 					<td class="label">Body:</td>
-					<td><textarea id="posttext" style="width: 98%;" onkeyup="resize('posttext');" name="body" cols="90" rows="8"></textarea></td>
+					<td><textarea id="posttext" class="required" style="width: 98%;" onkeyup="resize('posttext');" name="body" cols="90" rows="8"></textarea></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -111,6 +111,7 @@ if (check_perms('forums_polls_create')) {
 						var AnswerField = document.createElement("input");
 						AnswerField.type = "text";
 						AnswerField.id = "answer_"+AnswerCount;
+						AnswerField.className = "required";
 						AnswerField.name = "answers[]";
 						AnswerField.style.width = "90%";
 
@@ -140,12 +141,12 @@ if (check_perms('forums_polls_create')) {
 				</tr>
 				<tr id="poll_question" class="hidden">
 					<td class="label">Question:</td>
-					<td><input type="text" name="question" id="pollquestionfield" style="width: 98%;" /></td>
+					<td><input type="text" name="question" id="pollquestionfield" class="required" style="width: 98%;" /></td>
 				</tr>
 				<tr id="poll_answers" class="hidden">
 					<td class="label">Answers:</td>
 					<td id="answer_block">
-						<input type="text" name="answers[]" style="width: 90%;" />
+						<input type="text" name="answers[]" class="required" style="width: 90%;" />
 						<a href="#" onclick="AddAnswerField();return false;" class="brackets">+</a>
 						<a href="#" onclick="RemoveAnswerField();return false;" class="brackets">&minus;</a>
 					</td>
@@ -159,7 +160,7 @@ if (check_perms('forums_polls_create')) {
 			<div id="buttons" class="center">
 				<input type="button" value="Preview" onclick="Newthread_Preview(1);" id="newthreadpreviewbutton" />
 				<input type="button" value="Editor" onclick="Newthread_Preview(0);" id="newthreadeditbutton" class="hidden" />
-				<input type="submit" id="submit_button" value="Create thread" />
+				<input type="submit" class="submit" id="submit_button" value="Create thread" />
 			</div>
 		</form>
 	</div>

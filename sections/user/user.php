@@ -757,18 +757,18 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 			}
 
 			list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $ReleaseType,
-			$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
+				$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
 
 			$CategoryName = $Categories[$CategoryID - 1];
 
 			if ($CategoryName == 'Music') {
 				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
+				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
-				$FullName = "<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
 			} else {
-				$FullName ="<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title</a>";
+				$FullName ="<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
 			}
 
 			$Row = (empty($Row) || $Row == 'a') ? 'b' : 'a';
@@ -781,11 +781,11 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 			$Tags = $Request['Tags'];
 			$TagList = array();
 			foreach ($Tags as $TagID => $TagName) {
-				$TagList[] = "<a href='requests.php?tags=".$TagName."'>".display_str($TagName)."</a>";
+				$TagList[] = "<a href=\"requests.php?tags=$TagName\">".display_str($TagName).'</a>';
 			}
 			$TagList = implode(', ', $TagList);
 ?>
-								<?=$TagList ?>
+								<?=($TagList)?>
 							</div>
 						</td>
 						<td>

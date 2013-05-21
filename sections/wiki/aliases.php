@@ -15,9 +15,9 @@ View::show_header($Title." Aliases");
 <div class="thin">
 	<div class="header">
 		<h2><a href="wiki.php?action=article&amp;id=<?=$ArticleID?>"><?=$Title?></a> Aliases</h2>
-		<div class="linkbox">
+		<p>
 			Aliases are exact search strings or names that can be used to link to an article. [[Alias]]
-		</div>
+		</p>
 	</div>
 	<form class="add_form" name="aliases" action="wiki.php" method="get">
 		<input type="hidden" name="action" id="action" value="compare" />

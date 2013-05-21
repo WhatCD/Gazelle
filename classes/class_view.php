@@ -1,6 +1,5 @@
 <?
-class View
-{
+class View {
 	/**
 	 * @var string Path relative to where (P)HTML templates reside
 	 */
@@ -14,8 +13,7 @@ class View
 	 *                    the page. ONLY PUT THE RELATIVE LOCATION WITHOUT '.js'
 	 *                    example: 'somefile,somedir/somefile'
 	 */
-	public static function show_header($PageTitle='',$JSIncludes='')
-	{
+	public static function show_header($PageTitle = '', $JSIncludes = '') {
 		global $Document, $Cache, $DB, $LoggedUser, $Mobile, $Classes;
 
 		if ($PageTitle != '') {
@@ -43,11 +41,13 @@ class View
 	 *	               Here is a list of parameters that work in the $Options array:
 	 *                 ['disclaimer'] = [boolean] (False) Displays the disclaimer in the footer
 	 */
-	public static function show_footer ($Options=array())
-	{
+	public static function show_footer ($Options = array()) {
 		global $ScriptStartTime, $LoggedUser, $Cache, $DB, $SessionID, $UserSessions, $Debug, $Time;
-		if (!is_array($LoggedUser)) { require(SERVER_ROOT.'/design/publicfooter.php'); }
-		else { require(SERVER_ROOT.'/design/privatefooter.php'); }
+		if (!is_array($LoggedUser)) {
+			require(SERVER_ROOT.'/design/publicfooter.php');
+		} else {
+			require(SERVER_ROOT.'/design/privatefooter.php');
+		}
 	}
 
 	/**
@@ -65,8 +65,7 @@ class View
 	 * @param string $TemplateName The name of the template, in underscore_format
 	 * @param array $Args the arguments passed to the template.
 	 */
-	public static function render_template ($TemplateName, $Args)
-	{
+	public static function render_template ($TemplateName, $Args) {
 		static $LoadedTemplates; // Keep track of templates we've already loaded.
 		$ClassName = '';
 		if (isset($LoadedTemplates[$TemplateName])) {
@@ -114,8 +113,7 @@ class View
 	 *  echo $SavedTemplate; // Output the buffer
 	 * </pre>
 	 */
-	public static function parse ($TemplateFile, array $Variables = null, $Buffer = false)
-	{
+	public static function parse ($TemplateFile, array $Variables = null, $Buffer = false) {
 		$Template = self::IncludePath . $TemplateFile;
 		if (file_exists($Template)) {
 			extract($Variables);

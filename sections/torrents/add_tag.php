@@ -11,6 +11,11 @@ if (!is_number($GroupID) || !$GroupID) {
 	error(0);
 }
 
+//Delete cached tag used for undos
+if(isset($_POST['undo'])) {
+	$Cache->delete_value('deleted_tags_'.$GroupID.'_'.$LoggedUser['ID']);
+}
+
 $Tags = explode(',', $_POST['tagname']);
 foreach ($Tags as $TagName) {
 	$TagName = Misc::sanitize_tag($TagName);
@@ -44,6 +49,7 @@ foreach ($Tags as $TagName) {
 					VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string('Tag "'.$TagName.'" added to group')."')");
 	}
 }
+
 
 Torrents::update_hash($GroupID); // Delete torrent group cache
 header('Location: '.$_SERVER['HTTP_REFERER']);

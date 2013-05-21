@@ -52,7 +52,11 @@ class USER_AGENT {
 		'android'			=> 'Android',
 		'palm'				=> 'Palm',
 		'mot-razr'			=> 'Motorola Razr',
+		'tablet PC'			=> 'Windows RT',
+		'ARM; Trident'		=> 'Windows RT',
 		//Windows
+		'Windows NT 6.2'	=> 'Windows 8',
+		'Windows 8'			=> 'Windows 8',
 		'Windows NT 6.1'	=> 'Windows 7',
 		'Windows 7'			=> 'Windows 7',
 		'Windows NT 6.0'	=> 'Windows Vista',
@@ -110,14 +114,12 @@ class USER_AGENT {
 		if (empty($UserAgentString)) {
 			return 'Hidden';
 		}
-		$Return = 'Unknown';
 		foreach ($this->OperatingSystems as $String => $OperatingSystem) {
 			if (stripos($UserAgentString, $String) !== false) {
-				$Return = $OperatingSystem;
-				break;
+				return $OperatingSystem;
 			}
 		}
-		return $Return;
+		return 'Unknown';
 	}
 
 	public function mobile(&$UserAgentString) {

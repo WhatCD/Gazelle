@@ -183,6 +183,8 @@ View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &l
 			<div style="display: inline-block;">
 				<h3>Search this thread:</h3>
 				<form class="search_form" name="forum_thread" action="forums.php" method="get">
+					<input type="hidden" name="action" value="search" />
+					<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
 					<table cellpadding="6" cellspacing="1" border="0" class="layout border">
 						<tr>
 							<td><strong>Search for:</strong></td>
@@ -194,8 +196,6 @@ View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &l
 						</tr>
 						<tr>
 							<td colspan="2" style="text-align: center;">
-								<input type="hidden" name="action" value="search" />
-								<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
 								<input type="submit" name="submit" value="Search" />
 							</td>
 						</tr>

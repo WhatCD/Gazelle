@@ -318,6 +318,4 @@ foreach ($Collages as $Collage) {
 </table>
 	<div class="linkbox"><?=$Pages?></div>
 </div>
-<?
-View::show_footer();
-?>
+<? View::show_footer(); ?>

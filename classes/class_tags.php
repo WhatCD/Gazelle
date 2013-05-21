@@ -15,7 +15,7 @@
  * // returns a tag link list of tags ordered by amount
  * Tags::format_top();
  * ?></pre>
- * eg:
+ * e.g.:
  *	pop (2)
  *  rock (2)
  *  hip.hop (1)
@@ -24,8 +24,7 @@
  * Each time a new Tags object is instantiated, the tag list is merged with the
  * overall total amount of tags to provide the top tags. Merging is optional.
  */
-class Tags
-{
+class Tags {
 	/**
 	 * Collects all tags processed by the Tags Class
 	 * @static
@@ -124,12 +123,16 @@ class Tags
 	/**
 	 * Formats tags
 	 * @param string $Link Link to a taglist page
+	 * @param string $ArtistName Restrict tag search by this artist
 	 * @return string List of tag links
 	 */
-	public function format($Link = 'torrents.php?taglist=') {
+	public function format($Link = 'torrents.php?taglist=', $ArtistName = '') {
+		if (!empty($ArtistName)) {
+			$ArtistName = "&amp;artistname=" . urlencode($ArtistName) . "&amp;action=advanced&amp;searchsubmit=1";
+		}
 		foreach ($this->Tags as $Tag) {
 			if (empty($this->TagLink[$Tag])) {
-				$this->TagLink[$Tag] = '<a href="' . $Link . $Tag . '">' . $Tag . '</a>';
+				$this->TagLink[$Tag] = '<a href="' . $Link . $Tag . $ArtistName . '">' . $Tag . '</a>';
 			}
 		}
 		return implode(', ', $this->TagLink);
@@ -139,13 +142,17 @@ class Tags
 	 * Format a list of top tags
 	 * @param int $Max Max number of items to get
 	 */
-	public static function format_top($Max = 5, $Link = 'torrents.php?taglist=') {
+	public static function format_top($Max = 5, $Link = 'torrents.php?taglist=', $ArtistName = '') {
 		if (empty(self::$All)) { ?>
 			<li>No torrent tags</li>
-<?			return;
+			<?
+			return;
+		}
+		if (!empty($ArtistName)) {
+			$ArtistName = '&amp;artistname=' . urlencode($ArtistName) . '&amp;action=advanced&amp;searchsubmit=1';
 		}
 		foreach (array_slice(self::sorted(), 0, $Max) as $TagName => $Total) { ?>
-				<li><a href="<?=$Link . display_str($TagName)?>"><?=display_str($TagName)?></a> (<?=$Total?>)</li>
-<?		}
+			<li><a href="<?=$Link . display_str($TagName) . $ArtistName?>"><?=display_str($TagName)?></a> (<?=$Total?>)</li>
+		<? }
 	}
 }

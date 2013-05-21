@@ -16,47 +16,48 @@ if (!is_number($_GET['id']) || !$_GET['id']) {
 
 $TorrentID = $_GET['id'];
 
-$DB->query("SELECT
-	t.Media,
-	t.Format,
-	t.Encoding AS Bitrate,
-	t.RemasterYear,
-	t.Remastered,
-	t.RemasterTitle,
-	t.RemasterCatalogueNumber,
-	t.RemasterRecordLabel,
-	t.Scene,
-	t.FreeTorrent,
-	t.FreeLeechType,
-	t.Dupable,
-	t.DupeReason,
-	t.Description AS TorrentDescription,
-	tg.CategoryID,
-	tg.Name AS Title,
-	tg.Year,
-	tg.ArtistID,
-	tg.VanityHouse,
-	ag.Name AS ArtistName,
-	t.GroupID,
-	t.UserID,
-	t.HasLog,
-	t.HasCue,
-	t.LogScore,
-	bt.TorrentID AS BadTags,
-	bf.TorrentID AS BadFolders,
-	bfi.TorrentID AS BadFiles,
-	ca.TorrentID AS CassetteApproved,
-	lma.TorrentID AS LossymasterApproved,
-	lwa.TorrentID AS LossywebApproved
+$DB->query("
+	SELECT
+		t.Media,
+		t.Format,
+		t.Encoding AS Bitrate,
+		t.RemasterYear,
+		t.Remastered,
+		t.RemasterTitle,
+		t.RemasterCatalogueNumber,
+		t.RemasterRecordLabel,
+		t.Scene,
+		t.FreeTorrent,
+		t.FreeLeechType,
+		t.Dupable,
+		t.DupeReason,
+		t.Description AS TorrentDescription,
+		tg.CategoryID,
+		tg.Name AS Title,
+		tg.Year,
+		tg.ArtistID,
+		tg.VanityHouse,
+		ag.Name AS ArtistName,
+		t.GroupID,
+		t.UserID,
+		t.HasLog,
+		t.HasCue,
+		t.LogScore,
+		bt.TorrentID AS BadTags,
+		bf.TorrentID AS BadFolders,
+		bfi.TorrentID AS BadFiles,
+		ca.TorrentID AS CassetteApproved,
+		lma.TorrentID AS LossymasterApproved,
+		lwa.TorrentID AS LossywebApproved
 	FROM torrents AS t
-	LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-	LEFT JOIN artists_group AS ag ON ag.ArtistID=tg.ArtistID
-	LEFT JOIN torrents_bad_tags AS bt ON bt.TorrentID=t.ID
-	LEFT JOIN torrents_bad_folders AS bf ON bf.TorrentID=t.ID
-	LEFT JOIN torrents_bad_files AS bfi ON bfi.TorrentID=t.ID
-	LEFT JOIN torrents_cassette_approved AS ca ON ca.TorrentID=t.ID
-	LEFT JOIN torrents_lossymaster_approved AS lma ON lma.TorrentID=t.ID
-	LEFT JOIN torrents_lossyweb_approved AS lwa ON lwa.TorrentID=t.id
+		LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
+		LEFT JOIN artists_group AS ag ON ag.ArtistID=tg.ArtistID
+		LEFT JOIN torrents_bad_tags AS bt ON bt.TorrentID=t.ID
+		LEFT JOIN torrents_bad_folders AS bf ON bf.TorrentID=t.ID
+		LEFT JOIN torrents_bad_files AS bfi ON bfi.TorrentID=t.ID
+		LEFT JOIN torrents_cassette_approved AS ca ON ca.TorrentID=t.ID
+		LEFT JOIN torrents_lossymaster_approved AS lma ON lma.TorrentID=t.ID
+		LEFT JOIN torrents_lossyweb_approved AS lwa ON lwa.TorrentID=t.id
 	WHERE t.ID='$TorrentID'");
 
 list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
@@ -64,7 +65,7 @@ if (!$Properties) {
 	error(404);
 }
 
-$UploadForm = $Categories[$Properties['CategoryID']-1];
+$UploadForm = $Categories[$Properties['CategoryID'] - 1];
 
 if (($LoggedUser['ID'] != $Properties['UserID'] && !check_perms('torrents_edit')) || $LoggedUser['DisableWiki']) {
 	error(403);
@@ -94,6 +95,7 @@ if (!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms(
 		case 'E-Learning Videos':
 			$TorrentForm->simple_form($Properties['CategoryID']);
 			break;
+
 		default:
 			$TorrentForm->music_form('');
 	}
@@ -105,7 +107,9 @@ if (check_perms('torrents_edit') && (check_perms('users_mod') || $Properties['Ca
 <?
 	if ($Properties['CategoryID'] == 1) {
 ?>
-	<h2>Change group</h2>
+	<div class="header">
+		<h2>Change group</h2>
+	</div>
 	<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
 		<input type="hidden" name="action" value="editgroupid" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -175,7 +179,7 @@ if (check_perms('torrents_edit') && (check_perms('users_mod') || $Properties['Ca
 				<td>
 					<select id="newcategoryid" name="newcategoryid" onchange="ChangeCategory(this.value);">
 <?		foreach ($Categories as $CatID => $CatName) { ?>
-						<option value="<?=$CatID+1?>"<?Format::selected('CategoryID',$CatID+1,'selected',$Properties)?>><?=$CatName?></option>
+						<option value="<?=($CatID + 1)?>"<?Format::selected('CategoryID', $CatID + 1, 'selected', $Properties)?>><?=($CatName)?></option>
 <?		} ?>
 					</select>
 				</td>
@@ -184,7 +188,7 @@ if (check_perms('torrents_edit') && (check_perms('users_mod') || $Properties['Ca
 				<td>
 					<select name="releasetype">
 <?		foreach ($ReleaseTypes as $RTID => $ReleaseType) { ?>
-						<option value="<?=$RTID?>"><?=$ReleaseType?></option>
+						<option value="<?=($RTID)?>"><?=($ReleaseType)?></option>
 <?		} ?>
 					</select>
 				</td>

@@ -44,14 +44,15 @@ class WIKI {
 		global $DB;
 
 		$BaseURL = $this->BaseURL;
-		$DB->query("SELECT
+		$DB->query("
+			SELECT
 				RevisionID,
 				Summary,
 				Time,
 				UserID
-				FROM ".$this->Table." AS wiki
-				WHERE wiki.PageID = ".$this->PageID."
-				ORDER BY RevisionID DESC");
+			FROM ".$this->Table." AS wiki
+			WHERE wiki.PageID = ".$this->PageID."
+			ORDER BY RevisionID DESC");
 //----------------------------------------------- ?>
 	<table cellpadding="6" cellspacing="1" border="0" width="100%" class="border">
 		<tr class="colhead">
@@ -63,11 +64,11 @@ class WIKI {
 <? //-----------------------------------------
 		$Row = 'a';
 		while (list($RevisionID, $Summary, $Time, $UserID, $Username) = $DB->next_record()) {
-			$Row = ($Row == 'a') ? 'b' : 'a';
+			$Row = (($Row == 'a') ? 'b' : 'a');
 //------------------------------------------------------ ?>
 		<tr class="row<?=$Row?>">
 			<td>
-				<?= "<a href='$BaseURL&amp;revisionid=$RevisionID'>#$RevisionID</a>" ?>
+				<?= "<a href=\"$BaseURL&amp;revisionid=$RevisionID\">#$RevisionID</a>" ?>
 			</td>
 			<td>
 				<?=$Time?>

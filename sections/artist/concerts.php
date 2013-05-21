@@ -40,13 +40,13 @@ function make_concert_link($Event) {
 		return;
 	}
 	$Date = get_date_title($Event['startDate']);
-	$ConcertTitle = $Date . " - " . $Event['venue']['name'] . " at " .
+	$ConcertTitle = $Date . ' - ' . $Event['venue']['name'] . ' at ' .
 	$Event['venue']['location']['city'] . ', ' . $Event['venue']['location']['country'];
-	$Concert = "<a href='" . $Event['url'] . "'>" . $ConcertTitle . "</a>";
+	$Concert = "<a href=\"" . $Event['url'] . "\">$ConcertTitle</a>";
 ?>
 	<form class="hidden" action="" id="concert<?=$Event['id']?>" method="post">
 		<input type="hidden" name="action" value="concert_thread" />
-		<input type="hidden" name="concert_title" value="<?="[Concert] " . display_str($Name) . " - " . $ConcertTitle?>" />
+		<input type="hidden" name="concert_title" value="<?='[Concert] ' . display_str($Name) . ' - ' . $ConcertTitle?>" />
 		<input type="hidden" name="concert_id" value="<?=$Event['id']?>" />
 		<input type="hidden" name="concert_template" value="<?=get_concert_post_template($Name, $Event)?>" />
 	</form>

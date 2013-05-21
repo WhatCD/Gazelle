@@ -111,12 +111,10 @@ $DB->set_query_id($RS);
 		</form>
 	</div>
 	<br />
-	<div class="linkbox">
-<?
-$Pages = Format::get_pages($Page, $NumResults, ARTICLES_PER_PAGE);
-echo $Pages;
-?>
-	</div>
+<?	$Pages = Format::get_pages($Page, $NumResults, ARTICLES_PER_PAGE);
+	if ($Pages) { ?>
+	<div class="linkbox pager"><?=($Pages)?></div>
+<?	} ?>
 <table width="100%">
 	<tr class="colhead">
 		<td>Article</td>

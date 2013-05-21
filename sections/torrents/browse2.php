@@ -781,7 +781,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 					<label for="group_results">Group by release:</label>
 				</td>
 				<td colspan="3" class="ft_group_results">
-					<input type="checkbox" value="1" name="group_results" id="group_results"<?Format::selected('group_results',1,'checked')?> />
+					<input type="checkbox" value="1" name="group_results" id="group_results"<?Format::selected('group_results', 1, 'checked')?> />
 				</td>
 			</tr>
 		</table>
@@ -801,8 +801,8 @@ foreach ($Categories as $CatKey => $CatName) {
 	$x++;
 ?>
 				<td>
-					<input type="checkbox" name="filter_cat[<?=($CatKey + 1) ?>]" id="cat_<?=($CatKey + 1) ?>" value="1"<? if (isset($_GET['filter_cat'][$CatKey + 1])) { ?> checked="checked" <? } ?>/>
-					<label for="cat_<?=($CatKey + 1) ?>"><?=$CatName?></label>
+					<input type="checkbox" name="filter_cat[<?=($CatKey + 1)?>]" id="cat_<?=($CatKey + 1)?>" value="1"<? if (isset($_GET['filter_cat'][$CatKey + 1])) { ?> checked="checked"<? } ?> />
+					<label for="cat_<?=($CatKey + 1)?>"><?=$CatName?></label>
 				</td>
 <?
 }
@@ -834,21 +834,21 @@ foreach ($GenreTags as $Tag) {
 }
 if ($x % 7 != 0) { // Padding
 ?>
-				<td colspan="<?=7 - ($x % 7) ?>"> </td>
+				<td colspan="<?=(7 - ($x % 7))?>"> </td>
 <? } ?>
 			</tr>
 		</table>
 		<table class="layout cat_list" width="100%">
 			<tr>
 				<td class="label">
-					<a class="brackets" href="#" onclick="$('#taglist').toggle(); if (this.innerHTML=='View tags') {this.innerHTML='Hide tags';} else {this.innerHTML='View tags';}; return false;"><?=(empty($LoggedUser['ShowTags'])) ? 'View tags' : 'Hide tags'?></a>
+					<a class="brackets" href="#" onclick="$('#taglist').toggle(); if (this.innerHTML=='View tags') {this.innerHTML='Hide tags';} else {this.innerHTML='View tags';}; return false;"><?=((empty($LoggedUser['ShowTags'])) ? 'View tags' : 'Hide tags')?></a>
 				</td>
 			</tr>
 		</table>
 		<div class="submit ft_submit">
 			<span style="float: left;"><?=number_format($TorrentCount)?> Results</span>
 			<input type="submit" value="Filter torrents" />
-			<input type="hidden" name="action" id="ft_type" value="<?=$AdvancedSearch ? 'advanced' : 'basic'?>" />
+			<input type="hidden" name="action" id="ft_type" value="<?=($AdvancedSearch ? 'advanced' : 'basic')?>" />
 			<input type="hidden" name="searchsubmit" value="1" />
 			<input type="button" value="Reset" onclick="location.href='torrents.php<? if (isset($_GET['action']) && $_GET['action'] == 'advanced') { ?>?action=advanced<? } ?>'" />
 			&nbsp;&nbsp;

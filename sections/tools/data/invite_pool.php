@@ -99,7 +99,7 @@ $DB->set_query_id($RS);
 		</tr>
 <?	} ?>
 	</table>
-	<div class="linkbox">
-<? echo $Pages; ?>
-	</div>
-<? View::show_footer(); ?>
+<?	if ($Pages) { ?>
+	<div class="linkbox pager"><?=($Pages)?></div>
+<?	}
+View::show_footer(); ?>

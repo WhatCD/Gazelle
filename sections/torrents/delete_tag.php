@@ -29,6 +29,7 @@ if ($Count < 1) {
 
 	$DB->query("DELETE FROM tags WHERE ID=".$TagID);
 }
-
+// Cache the deleted tag for 5 minutes
+$Cache->cache_value('deleted_tags_'.$GroupID.'_'.$LoggedUser['ID'], $TagName, 300);
 header('Location: '.$_SERVER['HTTP_REFERER']);
 ?>

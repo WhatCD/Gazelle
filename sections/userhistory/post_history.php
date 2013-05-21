@@ -317,8 +317,4 @@ if (empty($Results)) {
 	</div>
 <? } ?>
 </div>
-<?
-
-View::show_footer();
-
-?>
+<? View::show_footer(); ?>

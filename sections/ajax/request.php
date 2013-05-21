@@ -27,8 +27,8 @@ if (empty($Request)) {
 	json_die("failure");
 }
 
-list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $ReleaseType,
-	$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
+list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel, $ReleaseType,
+	$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 
 //Convenience variables
 $IsFilled = !empty($TorrentID);
@@ -46,35 +46,11 @@ if ($CategoryName == 'Music') {
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
-	if ($IsFilled) {
-		$DisplayLink = $ArtistLink."<a href=\"torrents.php?torrentid=".$TorrentID."\">".$Title."</a> [$Year]";
-	} else {
-		$DisplayLink = $ArtistLink.$Title." [$Year]";
-	}
-	$FullName = $ArtistName.$Title." [$Year]";
-
-	if ($BitrateList != '') {
-		$BitrateString = implode(', ', explode('|', $BitrateList));
-		$FormatString = implode(', ', explode('|', $FormatList));
-		$MediaString = implode(', ', explode('|', $MediaList));
-	} else {
-		$BitrateString = 'Unknown, please read the description.';
-		$FormatString = 'Unknown, please read the description.';
-		$MediaString = 'Unknown, please read the description.';
-	}
-
 	if (empty($ReleaseType)) {
 		$ReleaseName = 'Unknown';
 	} else {
 		$ReleaseName = $ReleaseTypes[$ReleaseType];
 	}
-
-} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
-	$FullName = $Title." [$Year]";
-	$DisplayLink = $Title." [$Year]";
-} else {
-	$FullName = $Title;
-	$DisplayLink = $Title;
 }
 
 //Votes time
@@ -87,18 +63,18 @@ $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_reques
 if ($CategoryName == "Music") {
 	$JsonMusicInfo = array(
 		/*'composers' => $ArtistForm[4] != null ? $ArtistForm[4] : array(),
-		'dj' => $ArtistForm[6] != null ? $ArtistForm[6] : array(),
-		'artists' => $ArtistForm[1] != null ? $ArtistForm[1] : array(),
-		'with' => $ArtistForm[2] != null ? $ArtistForm[2] : array(),
+		'dj'        => $ArtistForm[6] != null ? $ArtistForm[6] : array(),
+		'artists'   => $ArtistForm[1] != null ? $ArtistForm[1] : array(),
+		'with'      => $ArtistForm[2] != null ? $ArtistForm[2] : array(),
 		'conductor' => $ArtistForm[5] != null ? $ArtistForm[5] : array(),
 		'remixedBy' => $ArtistForm[3] != null ? $ArtistForm[3] : array()*/
 		'composers' => $ArtistForm[4] == null ? array() : pullmediainfo($ArtistForm[4]),
-		'dj' => $ArtistForm[6] == null ? array() : pullmediainfo($ArtistForm[6]),
-		'artists' => $ArtistForm[1] == null ? array() : pullmediainfo($ArtistForm[1]),
-		'with' => $ArtistForm[2] == null ? array() : pullmediainfo($ArtistForm[2]),
+		'dj'        => $ArtistForm[6] == null ? array() : pullmediainfo($ArtistForm[6]),
+		'artists'   => $ArtistForm[1] == null ? array() : pullmediainfo($ArtistForm[1]),
+		'with'      => $ArtistForm[2] == null ? array() : pullmediainfo($ArtistForm[2]),
 		'conductor' => $ArtistForm[5] == null ? array() : pullmediainfo($ArtistForm[5]),
 		'remixedBy' => $ArtistForm[3] == null ? array() : pullmediainfo($ArtistForm[3]),
-		'producer' => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
+		'producer'  => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
 	);
 } else {
 	$JsonMusicInfo = new stdClass; //json_encodes into an empty object: {}
@@ -118,19 +94,19 @@ reset($RequestVotes['Voters']);
 
 $Results = $Cache->get_value('request_comments_'.$RequestID);
 if ($Results === false) {
-	$DB->query("SELECT
-			COUNT(c.ID)
-			FROM requests_comments as c
-			WHERE c.RequestID = '$RequestID'");
+	$DB->query("
+		SELECT COUNT(c.ID)
+		FROM requests_comments as c
+		WHERE c.RequestID = '$RequestID'");
 	list($Results) = $DB->next_record();
 	$Cache->cache_value('request_comments_'.$RequestID, $Results, 0);
 }
 
-list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $Results);
 
-//Get the cache catalogue
+// Get the cache catalogue
 $CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
-$CatalogueLimit=$CatalogueID*THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
+$CatalogueLimit = $CatalogueID * THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 
 //---------- Get some data to start processing
 
@@ -156,7 +132,7 @@ if ($Catalogue === false) {
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
+$Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
 
 $JsonRequestComments = array();
 foreach ($Thread as $Key => $Post) {
@@ -209,10 +185,10 @@ json_die("success", array(
 	'catalogueNumber' => $CatalogueNumber,
 	'releaseType' => (int) $ReleaseType,
 	'releaseName' => $ReleaseName,
-	'bitrateList' => $BitrateList,
-	'formatList' => $FormatList,
-	'mediaList' => $MediaList,
-	'logCue' => $LogCue,
+	'bitrateList' => preg_split('/\|/', $BitrateList, NULL, PREG_SPLIT_NO_EMPTY),
+	'formatList' => preg_split('/\|/', $FormatList, NULL, PREG_SPLIT_NO_EMPTY),
+	'mediaList' => preg_split('/\|/', $MediaList, NULL, PREG_SPLIT_NO_EMPTY),
+	'logCue' => html_entity_decode($LogCue),
 	'isFilled' => $IsFilled,
 	'fillerId' => (int) $FillerID,
 	'fillerName' => $FillerName,
@@ -221,7 +197,9 @@ json_die("success", array(
 	'tags' => $JsonTags,
 	'comments' => $JsonRequestComments,
 	'commentPage' => (int) $Page,
-	'commentPages' => (int) ceil($Results / TORRENT_COMMENTS_PER_PAGE)
+	'commentPages' => (int) ceil($Results / TORRENT_COMMENTS_PER_PAGE),
+	'recordLabel' => $RecordLabel,
+	'oclc' => $OCLC
 ));
 
 ?>

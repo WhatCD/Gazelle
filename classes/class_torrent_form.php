@@ -504,7 +504,7 @@ function show() {
 			</tr>
 <?		if (!$this->NewTorrent && check_perms('users_mod')) { ?>
 			<tr>
-				<td class="label">Log/Cue:</td>
+				<td class="label">Log/cue:</td>
 				<td>
 					<input type="checkbox" id="flac_log" name="flac_log"<? if ($HasLog) { echo ' checked="checked"';} ?> /> <label for="flac_log">Check this box if the torrent has, or should have, a log file.</label><br />
 					<input type="checkbox" id="flac_cue" name="flac_cue"<? if ($HasCue) { echo ' checked="checked"';} ?> /> <label for="flac_cue">Check this box if the torrent has, or should have, a cue file.</label><br />

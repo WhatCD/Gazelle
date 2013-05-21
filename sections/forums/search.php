@@ -6,7 +6,7 @@ Forums search result page
 include(SERVER_ROOT.'/classes/class_text.php');
 $Text = new TEXT;
 
-list($Page,$Limit) = Format::page_limit(POSTS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(POSTS_PER_PAGE);
 
 if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
@@ -70,11 +70,11 @@ if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
 	if (!empty($RestrictedForums)) {
 		$SQL .= " AND f.ID NOT IN ('$RestrictedForums')";
 	}
-	$SQL .= ")";
+	$SQL .= ')';
 	if (!empty($PermittedForums)) {
 		$SQL .= " OR f.ID IN ('$PermittedForums')";
 	}
-	$SQL .= ")";
+	$SQL .= ')';
 	$DB->query($SQL);
 	if (list($Title) = $DB->next_record()) {
 		$Title = " &gt; <a href=\"forums.php?action=viewthread&amp;threadid=$ThreadID\">$Title</a>";
@@ -86,10 +86,12 @@ if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
 }
 
 // Let's hope we got some results - start printing out the content.
-View::show_header('Forums &gt; Search', 'bbcode');
+View::show_header('Forums &gt; Search', 'bbcode,jquery,forum_search');
 ?>
 <div class="thin">
-	<h2><a href="forums.php">Forums</a> &gt; Search<?=$Title?></h2>
+	<div class="header">
+		<h2><a href="forums.php">Forums</a> &gt; Search<?=$Title?></h2>
+	</div>
 	<form class="search_form" name="forums" action="" method="get">
 		<input type="hidden" name="action" value="search" />
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
@@ -116,11 +118,11 @@ if (empty($ThreadID)) { ?>
 		<table class="cat_list layout">
 
 
-	<?// List of forums
+<?	// List of forums
 	$Open = false;
 	$LastCategoryID = -1;
 	$Columns = 0;
-
+	$i = 0;
 	foreach ($Forums as $Forum) {
 		if (!check_forumperm($Forum['ID'])) {
 			continue;
@@ -142,9 +144,13 @@ if (empty($ThreadID)) { ?>
 			}
 			$Columns = 0;
 			$Open = true;
+			$i++;
 ?>
 			<tr>
-				<td colspan="5"><strong><?=$ForumCats[$Forum['CategoryID']]?></strong></td>
+				<td colspan="5">
+					<strong><?=$ForumCats[$Forum['CategoryID']]?></strong>
+					<a href="#" class="brackets forum_category" id="forum_category_<?=$i?>">Check all</a>
+				</td>
 			</tr>
 			<tr>
 <?		} elseif ($Columns % 5 == 0) { ?>
@@ -152,7 +158,7 @@ if (empty($ThreadID)) { ?>
 			<tr>
 <?		} ?>
 				<td>
-					<input type="checkbox" name="forums[]" value="<?=$Forum['ID']?>" id="forum_<?=$Forum['ID']?>"<? if (isset($_GET['forums']) && in_array($Forum['ID'], $_GET['forums'])) { echo ' checked="checked"';} ?> />
+					<input type="checkbox" name="forums[]" value="<?=$Forum['ID']?>" data-category="forum_category_<?=$i?>" id="forum_<?=$Forum['ID']?>"<? if (isset($_GET['forums']) && in_array($Forum['ID'], $_GET['forums'])) { echo ' checked="checked"';} ?> />
 					<label for="forum_<?=$Forum['ID']?>"><?=htmlspecialchars($Forum['Name'])?></label>
 				</td>
 <? 	}
@@ -278,7 +284,7 @@ echo $Pages;
 	<table cellpadding="6" cellspacing="1" border="0" class="forum_list border" width="100%">
 	<tr class="colhead">
 		<td>Forum</td>
-		<td><?=(!empty($ThreadID)) ? 'Post begins' : 'Topic' ?></td>
+		<td><?=((!empty($ThreadID)) ? 'Post begins' : 'Topic')?></td>
 		<td>Time</td>
 	</tr>
 <? if ($DB->record_count() == 0) { ?>

@@ -1,7 +1,5 @@
 <?
-if (!check_perms('users_mod')
-
-) {
+if (!check_perms('users_mod')) {
 	error(403);
 }
 View::show_header('Staff Tools');
@@ -16,7 +14,6 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=whitelist">Client whitelist</a></td></tr>
 <?	} if (check_perms('admin_manage_ipbans')) { ?>
 			<tr><td><a href="tools.php?action=ip_ban">IP address bans</a></td></tr>
-
 <?	} if (check_perms('admin_login_watch')) { ?>
 			<tr><td><a href="tools.php?action=login_watch">Login watch</a></td></tr>
 <?	} if (check_perms('admin_manage_forums')) { ?>
@@ -27,31 +24,25 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=dnu">"Do Not Upload" list</a></td></tr>
 <?	} if (check_perms('site_recommend_own') || check_perms('site_manage_recommendations')) { ?>
 			<tr><td><a href="tools.php?action=recommend">Vanity House additions</a></td></tr>
-
 <?	} if (check_perms('users_view_email')) { ?>
 			<tr><td><a href="tools.php?action=email_blacklist">Email blacklist</a></td></tr>
 <?	} if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=tokens">Manage freeleech tokens</a></td></tr>
 			<tr><td><a href="tools.php?action=official_tags">Official tags manager</a></td></tr>
 			<tr><td><a href="tools.php?action=tag_aliases">Tag aliases</a></td></tr>
-
-
 <?	} ?>
 		</table>
 	</div>
 	<div class="permission_container">
 		<table class="layout">
 			<tr class="colhead"><td>Data</td></tr>
-
-<?
-	if (check_perms('admin_donor_log')) { ?>
+<?	if (check_perms('admin_donor_log')) { ?>
 			<tr><td><a href="tools.php?action=donation_log">Donation log</a></td></tr>
 			<tr><td><a href="tools.php?action=bitcoin_balance">Bitcoin donation balance</a></td></tr>
 <?	} if (check_perms('users_view_ips') && check_perms('users_view_email')) { ?>
 			<tr><td><a href="tools.php?action=registration_log">Registration log</a></td></tr>
 <?	} if (check_perms('users_view_invites')) { ?>
 			<tr><td><a href="tools.php?action=invite_pool">Invite pool</a></td></tr>
-
 <?	} if (check_perms('site_view_flow')) { ?>
 			<tr><td><a href="tools.php?action=upscale_pool">Upscale pool</a></td></tr>
 			<tr><td><a href="tools.php?action=user_flow">User flow</a></td></tr>
@@ -62,7 +53,6 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=service_stats">Service stats</a></td></tr>
 <?	} if (check_perms('admin_manage_permissions')) { ?>
 			<tr><td><a href="tools.php?action=special_users">Special users</a></td></tr>
-
 <?	} ?>
 		</table>
 	</div>
@@ -71,8 +61,7 @@ View::show_header('Staff Tools');
 			<tr class="colhead"><td>Misc</td></tr>
 <?	if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=edit_tags">Batch tag editor</a></td></tr>
-<?	}
-	if (check_perms('users_mod')) { ?>
+<?	} if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=manipulate_tree">Manipulate tree</a></td></tr>
 <?	}
 	if (check_perms('admin_update_geoip')) { ?>
@@ -83,7 +72,6 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=clear_cache">Clear/view a cache key</a></td></tr>
 <?	} if (check_perms('users_view_ips')) { ?>
 			<tr><td><a href="tools.php?action=dupe_ips">Duplicate IP addresses</a></td></tr>
-
 <?	} if (check_perms('site_debug')) { ?>
 			<tr><td><a href="tools.php?action=sandbox1">Sandbox (1)</a></td></tr>
 			<tr><td><a href="tools.php?action=sandbox2">Sandbox (2)</a></td></tr>
@@ -93,7 +81,6 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=sandbox6">Sandbox (6)</a></td></tr>
 			<tr><td><a href="tools.php?action=sandbox7">Sandbox (7)</a></td></tr>
 			<tr><td><a href="tools.php?action=sandbox8">Sandbox (8)</a></td></tr>
-
 			<tr><td><a href="schedule.php?auth=<?=$LoggedUser['AuthKey']?>">Schedule</a></td></tr>
 <?	} if (check_perms('admin_clear_cache') || check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=rerender_gallery">Rerender stylesheet gallery images</a></td></tr>

@@ -678,6 +678,4 @@ foreach ($Categories as $CatKey => $CatName) {
 		<?=$PageLinks?>
 	</div>
 </div>
-<?
-View::show_footer();
-?>
+<? View::show_footer(); ?>

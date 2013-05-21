@@ -22,6 +22,7 @@ if (empty($Request)) {
 	error(404);
 }
 
+// If you change this line, make sure to do the same change to the corresponding line in sections/ajax/request.php
 list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel, $ReleaseType,
 	$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 
@@ -42,7 +43,7 @@ if ($CategoryName == 'Music') {
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
 	if ($IsFilled) {
-		$DisplayLink = $ArtistLink."<a href='torrents.php?torrentid=".$TorrentID."'>$Title</a> [$Year]";
+		$DisplayLink = $ArtistLink."<a href=\"torrents.php?torrentid=$TorrentID\">$Title</a> [$Year]";
 	} else {
 		$DisplayLink = $ArtistLink.$Title." [$Year]";
 	}
@@ -99,23 +100,22 @@ View::show_header('View request: '.$FullName, 'comments,requests,bbcode,jquery')
 <?	} ?>
 			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>" class="brackets">Report request</a>
 <?	if (!$IsFilled) { ?>
-			<a href="upload.php?requestid=<?=$RequestID?><?= ($GroupID ? "&amp;groupid=$GroupID" : '') ?>" class="brackets">Upload request</a>
+			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID ? "&amp;groupid=$GroupID" : '')?>" class="brackets">Upload request</a>
 <?	}
 	if (!$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0))) { ?>
 			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>" class="brackets">Request update</a>
 <? } ?>
 
 <?
-//create a search url to worldcat and google based on title
-$encoded_title = urlencode(preg_replace("/\([^\)]+\)/", "", $Title));
-$encoded_artist = substr(str_replace("&amp;","and",$ArtistName), 0, -3);
-$encoded_artist = str_ireplace("Performed By", "", $encoded_artist);
-$encoded_artist = preg_replace("/\([^\)]+\)/", "", $encoded_artist);
+//create a search URL to WorldCat and google based on title
+$encoded_title = urlencode(preg_replace("/\([^\)]+\)/", '', $Title));
+$encoded_artist = substr(str_replace('&amp;', 'and', $ArtistName), 0, -3);
+$encoded_artist = str_ireplace('Performed By', '', $encoded_artist);
+$encoded_artist = preg_replace("/\([^\)]+\)/", '', $encoded_artist);
 $encoded_artist = urlencode($encoded_artist);
 
-$worldcat_url = "http://worldcat.org/search?q=" . $encoded_artist . " " . $encoded_title;
-$google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . " " . $encoded_title;
-
+$worldcat_url = "http://worldcat.org/search?q=" . "$encoded_artist $encoded_title";
+$google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $encoded_title";
 ?>
 			<a href="<? echo $worldcat_url; ?>" class="brackets">Find in library</a>
 			<a href="<? echo $google_url; ?>" class="brackets">Find in stores</a>
@@ -131,7 +131,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 ?>
 			<p align="center"><img style="max-width: 220px;" src="<?=$Image?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=$Image?>',220);" /></p>
 <?	} else { ?>
-			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID-1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
+			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
 <?	} ?>
 		</div>
 <? }
@@ -224,7 +224,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 <?	foreach ($Request['Tags'] as $TagID => $TagName) { ?>
 				<li>
 					<a href="torrents.php?taglist=<?=$TagName?>"><?=display_str($TagName)?></a>
-					<br style="clear:both" />
+					<br style="clear: both;" />
 				</li>
 <?	} ?>
 			</ul>
@@ -244,10 +244,10 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 ?>
 				<tr>
 					<td>
-						<a href="user.php?id=<?=$User['UserID']?>"><?=$Boldify?'<strong>':''?><?=display_str($User['Username'])?><?=$Boldify?'</strong>':''?></a>
+						<a href="user.php?id=<?=$User['UserID']?>"><?=($Boldify ? '<strong>' : '')?><?=display_str($User['Username'])?><?=($Boldify ? '</strong>' : '')?></a>
 					</td>
 					<td>
-						<?=$Boldify?'<strong>':''?><?=Format::get_size($User['Bounty'])?><?=$Boldify?'</strong>':''?>
+						<?=($Boldify ? '<strong>' : '')?><?=Format::get_size($User['Bounty'])?><?=($Boldify ? '</strong>' : '')?>
 					</td>
 				</tr>
 <?	}
@@ -278,7 +278,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 					<?=time_diff($TimeAdded)?> by <strong><?=Users::format_username($RequestorID, false, false, false)?></strong>
 				</td>
 			</tr>
-<?	if ($CategoryName == "Music") {
+<?	if ($CategoryName == 'Music') {
 		if (!empty($RecordLabel)) { ?>
 			<tr>
 				<td class="label">Record label</td>
@@ -328,10 +328,10 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . $encoded_artist . "
 			</tr>
 <?		}
 	}
-	$Worldcat = "";
-	$OCLC = str_replace(" ", "", $OCLC);
-	if ($OCLC != "") {
-		$OCLCs = explode(",", $OCLC);
+	$Worldcat = '';
+	$OCLC = str_replace(' ', '', $OCLC);
+	if ($OCLC != '') {
+		$OCLCs = explode(',', $OCLC);
 		for ($i = 0; $i < count($OCLCs); $i++) {
 			if (!empty($Worldcat)) {
 				$Worldcat .= ', <a href="http://www.worldcat.org/oclc/'.$OCLCs[$i].'">'.$OCLCs[$i].'</a>';
@@ -558,11 +558,13 @@ foreach ($Thread as $Key => $Post) {
 		</td>
 	</tr>
 </table>
-<?	} ?>
-		<div class="linkbox">
-		<?=$Pages?>
-		</div>
+<?	}
+
+if ($Pages) { ?>
+	<div class="linkbox pager"><?=$Pages?></div>
 <?
+}
+
 	View::parse('generic/reply/quickreply.php', array(
 			'InputName' => 'requestid',
 			'InputID' => $RequestID));

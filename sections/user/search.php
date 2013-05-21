@@ -52,12 +52,10 @@ View::show_header('User search');
 	<div class="header">
 		<h3>Search results</h3>
 	</div>
-	<div class="linkbox">
-<?
-$Pages = Format::get_pages($Page, $NumResults, USERS_PER_PAGE, 9);
-echo $Pages;
-?>
-	</div>
+<?	$Pages = Format::get_pages($Page, $NumResults, USERS_PER_PAGE, 9);
+	if ($Pages) { ?>
+	<div class="linkbox pager"><?=($Pages)?></div>
+<?	} ?>
 	<form class="search_form" name="users" action="user.php" method="get">
 		<input type="hidden" name="action" value="search" />
 		<table class="layout" width="100%">

@@ -23,8 +23,7 @@
  * Globals are required as this template is included within a
  * function scope.
  */
-	global $LoggedUser, $HeavyInfo, $UserSubscriptions, $ThreadInfo,
-			$ForumsDoublePost;
+	global $LoggedUser, $HeavyInfo, $UserSubscriptions, $ThreadInfo, $ForumsDoublePost;
 
 	if ($LoggedUser['DisablePosting']) {
 		return;
@@ -68,8 +67,8 @@
 							<col class="col_post_body" />
 						</colgroup>
 						<tr class="colhead_dark">
-							<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
-								<div style="float: left;"><a href='#quickreplypreview'>#XXXXXX</a>
+							<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
+								<div style="float: left;"><a href="#quickreplypreview">#XXXXXX</a>
 									by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong> Just now
 								</div>
 								<div style="float: right;">

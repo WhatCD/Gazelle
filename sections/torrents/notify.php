@@ -223,12 +223,10 @@ if (empty($Results)) {
 						}
 					}
 				}
-				$MatchingArtistsText = !empty($MatchingArtists)
-					? 'Caught by filter for '.implode(', ', $MatchingArtists)
-					: '';
+				$MatchingArtistsText = (!empty($MatchingArtists) ? 'Caught by filter for '.implode(', ', $MatchingArtists) : '');
 				$DisplayName = Artists::display_artists($GroupInfo['ExtendedArtists'], true, true);
 			}
-			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID' title='View Torrent' dir='ltr'>".$GroupInfo['Name']."</a>";
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID\" title=\"View Torrent\" dir=\"ltr\">" . $GroupInfo['Name'] . '</a>';
 
 			$GroupCategoryID = $GroupInfo['CategoryID'];
 			if ($GroupCategoryID == 1) {
@@ -236,7 +234,7 @@ if (empty($Results)) {
 					$DisplayName .= " [$GroupInfo[Year]]";
 				}
 				if ($GroupInfo['ReleaseType'] > 0) {
-					$DisplayName.= " [".$ReleaseTypes[$GroupInfo['ReleaseType']]."]";
+					$DisplayName.= ' ['.$ReleaseTypes[$GroupInfo['ReleaseType']].']';
 				}
 			}
 
@@ -246,12 +244,12 @@ if (empty($Results)) {
 			$TorrentTags = new Tags($GroupInfo['TagList']);
 
 			if ($GroupInfo['TagList'] == '')
-				$TorrentTags->set_primary($Categories[$GroupCategoryID-1]);
+				$TorrentTags->set_primary($Categories[$GroupCategoryID - 1]);
 
 		// print row
 ?>
-	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '')?>" id="torrent<?=$TorrentID?>"<?=$MatchingArtistsText ? 'title="'.display_str($MatchingArtistsText).'"' : ''?>>
-		<td style="text-align: center"><input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
+	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '')?>" id="torrent<?=$TorrentID?>"<?=($MatchingArtistsText ? 'title="'.display_str($MatchingArtistsText).'"' : '')?>>
+		<td style="text-align: center;"><input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
 		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>"class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td class="big_info">
 <? if ($LoggedUser['CoverArt']) : ?>
@@ -293,9 +291,8 @@ if (empty($Results)) {
 	}
 }
 
-?>
-<div class="linkbox">
-	<?=$Pages?>
-</div>
+	if ($Pages) { ?>
+	<div class="linkbox"><?=$Pages?></div>
+<?	} ?>
 </div>
 <? View::show_footer(); ?>

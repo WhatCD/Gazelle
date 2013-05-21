@@ -311,7 +311,22 @@ include(SERVER_ROOT.'/sections/torrents/vote_ranks.php');
 include(SERVER_ROOT.'/sections/torrents/vote.php');
 ?>
 		<div class="box box_tags">
-			<div class="head"><strong>Tags</strong></div>
+			<div class="head">
+				<strong>Tags</strong>
+				<?
+				$DeletedTag = $Cache->get_value('deleted_tags_'.$GroupID.'_'.$LoggedUser['ID']);
+				if(!empty($DeletedTag)) { ?>
+					<form style="display: none;" id="undo_tag_delete_form" name="tags" action="torrents.php" method="post">
+						<input type="hidden" name="action" value="add_tag" />
+						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+						<input type="hidden" name="tagname" value="<?=$DeletedTag?>" />
+						<input type="hidden" name="undo" value="true" />
+					</form>
+					<a class="brackets" href="#" onclick="$('#undo_tag_delete_form').raw().submit(); return false;";>Undo Delete</a>
+
+				<? } ?>
+			</div>
 <?
 if (count($Tags) > 0) {
 ?>
@@ -443,7 +458,7 @@ foreach ($TorrentList as $Torrent) {
 				//There was a type but it wasn't an option!
 				$ReportType = $Types['master']['other'];
 			}
-			$ReportInfo .= "<tr><td>".(check_perms('admin_reports') ? "<a href='user.php?id=$ReporterID'>$ReporterName</a> <a href='reportsv2.php?view=report&amp;id=$ReportID'>reported it</a> " : "Someone reported it ").time_diff($ReportedTime,2,true,true)." for the reason '".$ReportType['title']."':";
+			$ReportInfo .= "<tr><td>".(check_perms('admin_reports') ? "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$ReportID\">reported it</a> " : 'Someone reported it ') . time_diff($ReportedTime, 2, true, true) . ' for the reason "' . $ReportType['title'] . '":';
 			$ReportInfo .= "<blockquote>".$Text->full_format($ReportReason)."</blockquote></td></tr>";
 		}
 		$ReportInfo .= "</table>";
@@ -468,7 +483,7 @@ foreach ($TorrentList as $Torrent) {
 			if ($Spaces = strspn($Name, ' ')) {
 				$Name = str_replace(' ', '&nbsp;', substr($Name, 0, $Spaces)) . substr($Name, $Spaces);
 			}
-			$FileSize = substr($File, $NameEnd+3, -3);
+			$FileSize = substr($File, $NameEnd + 3, -3);
 			$FileTable .= sprintf("\n<tr><td>%s</td><td>%s</td></tr>",
 				$Name, Format::get_size($FileSize));
 		}
@@ -483,8 +498,8 @@ foreach ($TorrentList as $Torrent) {
 	$FileTable .= '
 	</table>';
 
-	$ExtraInfo=''; // String that contains information on the torrent (e.g. format and encoding)
-	$AddExtra=''; // Separator between torrent properties
+	$ExtraInfo = ''; // String that contains information on the torrent (e.g. format and encoding)
+	$AddExtra = ''; // Separator between torrent properties
 
 	$TorrentUploader = $Username; // Save this for "Uploaded by:" below
 
@@ -533,9 +548,9 @@ foreach ($TorrentList as $Torrent) {
 	$LastMedia = $Media;
 ?>
 
-			<tr class="torrent_row releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent<?=$IsSnatched ? ' snatched_torrent' : ''?>" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
+			<tr class="torrent_row releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent<?=($IsSnatched ? ' snatched_torrent' : '')?>" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
 				<td>
-					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$HasFile ? 'DL' : 'Missing'?></a>
+					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=($HasFile ? 'DL' : 'Missing')?></a>
 <?	if (Torrents::can_use_token($Torrent)) { ?>
 						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?	} ?>

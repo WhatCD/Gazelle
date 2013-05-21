@@ -374,15 +374,13 @@ foreach ($Categories as $CatKey => $CatName) {
 			</table>
 		</form>
 	</div>
-
 	<div class="linkbox">
 		<?=$PageLinks?>
 	</div>
-
 	<table id="request_table" class="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;">
-				<a href="requests.php?order=name&amp;sort=<?=(($CurrentOrder == 'name') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Request Name</strong></a>
+				<a href="requests.php?order=name&amp;sort=<?=(($CurrentOrder == 'name') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Request name</strong></a>
 			</td>
 			<td>
 				<strong><a href="requests.php?order=votes&amp;sort=<?=(($CurrentOrder == 'votes') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>">Vote (20MB)</a></strong></td>
@@ -401,7 +399,7 @@ foreach ($Categories as $CatKey => $CatName) {
 				<a href="requests.php?order=created&amp;sort=<?=(($CurrentOrder == 'created') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Last Vote</strong></a>
+				<a href="requests.php?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Last vote</strong></a>
 			</td>
 		</tr>
 
@@ -422,14 +420,14 @@ foreach ($Categories as $CatKey => $CatName) {
 			if ($CategoryName == "Music") {
 				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
+				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
-				$FullName = "<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title." [".$Year."]</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
 			} else {
-				$FullName ="<a href='requests.php?action=view&amp;id=".$RequestID."'>".$Title."</a>";
+				$FullName ="<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
 			}
 
-			$Row = ($Row == 'a') ? 'b' : 'a';
+			$Row = (($Row == 'a') ? 'b' : 'a');
 
 			$Tags = Requests::get_tags($RequestID);
 ?>
@@ -440,7 +438,7 @@ foreach ($Categories as $CatKey => $CatName) {
 <?
 			$TagList = array();
 			foreach ($Tags as $TagID => $TagName) {
-				$TagList[] = "<a href='requests.php?tag=".$TagID."'>".display_str($TagName)."</a>";
+				$TagList[] = "<a href=\"requests.php?tag=$TagID\">" . display_str($TagName) . '</a>';
 			}
 			$TagList = implode(', ', $TagList);
 ?>

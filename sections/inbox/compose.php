@@ -21,7 +21,7 @@ list($Username) = $DB->next_record();
 if (!$Username) {
 	error(404);
 }
-View::show_header('Compose', 'inbox,bbcode');
+View::show_header('Compose', 'inbox,bbcode,jquery,jquery.validate,form_validate');
 ?>
 <div class="thin">
 	<div class="header">
@@ -34,9 +34,9 @@ View::show_header('Compose', 'inbox,bbcode');
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<div id="quickpost">
 				<h3>Subject</h3>
-				<input type="text" name="subject" size="95" value="<?=(!empty($Subject) ? $Subject : '')?>" /><br />
+				<input type="text" class="required" name="subject" size="95" value="<?=(!empty($Subject) ? $Subject : '')?>" /><br />
 				<h3>Body</h3>
-				<textarea id="body" name="body"  cols="95"  rows="10" onkeyup="resize('body')"><?=(!empty($Body) ? $Body : '')?></textarea>
+				<textarea id="body" class="required" name="body"  cols="95"  rows="10" onkeyup="resize('body')"><?=(!empty($Body) ? $Body : '')?></textarea>
 			</div>
 			<div id="preview" class="hidden"></div>
 			<div id="buttons" class="center">

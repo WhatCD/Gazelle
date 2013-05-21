@@ -120,7 +120,7 @@ if (!empty($_GET['date'])) {
 				$DisplayName = Artists::display_artists($Artists, true, true);
 			}
 
-			$DisplayName .= "<a href='torrents.php?id=$GroupID&amp;torrentid=$TorrentID' title='View Torrent'>$GroupName</a>";
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\">$GroupName</a>";
 
 			if ($GroupCategoryID == 1 && $GroupYear > 0) {
 				$DisplayName.= " [$GroupYear]";
@@ -130,36 +130,36 @@ if (!empty($_GET['date'])) {
 			$ExtraInfo = '';
 			$AddExtra = '';
 			if ($Format) {
-				$ExtraInfo.=$Format;
+				$ExtraInfo.= $Format;
 				$AddExtra = ' / ';
 			}
 			if ($Encoding) {
-				$ExtraInfo.=$AddExtra.$Encoding;
+				$ExtraInfo.= $AddExtra.$Encoding;
 				$AddExtra = ' / ';
 			}
 			//"FLAC / Lossless / Log (100%) / Cue / CD";
 			if ($HasLog) {
-				$ExtraInfo.=$AddExtra."Log (".$LogScore."%)";
+				$ExtraInfo.= "$AddExtra Log ($LogScore".'%)';
 				$AddExtra = ' / ';
 			}
 			if ($HasCue) {
-				$ExtraInfo.=$AddExtra."Cue";
+				$ExtraInfo.= $AddExtra.'Cue';
 				$AddExtra = ' / ';
 			}
 			if ($Media) {
-				$ExtraInfo.=$AddExtra.$Media;
+				$ExtraInfo.= $AddExtra.$Media;
 				$AddExtra = ' / ';
 			}
 			if ($Scene) {
-				$ExtraInfo.=$AddExtra.'Scene';
+				$ExtraInfo.= $AddExtra.'Scene';
 				$AddExtra = ' / ';
 			}
 			if ($Year > 0) {
-				$ExtraInfo.=$AddExtra.$Year;
+				$ExtraInfo.= $AddExtra.$Year;
 				$AddExtra = ' ';
 			}
 			if ($RemasterTitle) {
-				$ExtraInfo.=$AddExtra.$RemasterTitle;
+				$ExtraInfo.= $AddExtra.$RemasterTitle;
 			}
 			if ($ExtraInfo != '') {
 				$ExtraInfo = "- [$ExtraInfo]";
