@@ -37,7 +37,6 @@ foreach ($Tags as $TagName) {
 			}
 		}
 
-
 		$DB->query("INSERT INTO torrents_tags
 			(TagID, GroupID, PositiveVotes, UserID) VALUES
 			('$TagID', '$GroupID', '3', '$UserID')

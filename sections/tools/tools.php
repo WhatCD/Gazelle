@@ -63,8 +63,7 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=edit_tags">Batch tag editor</a></td></tr>
 <?	} if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=manipulate_tree">Manipulate tree</a></td></tr>
-<?	}
-	if (check_perms('admin_update_geoip')) { ?>
+<?	} if (check_perms('admin_update_geoip')) { ?>
 			<tr><td><a href="tools.php?action=update_geoip">Update GeoIP </a></td></tr>
 <?	} if (check_perms('admin_create_users')) { ?>
 			<tr><td><a href="tools.php?action=create_user">Create user</a></td></tr>

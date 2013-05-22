@@ -62,7 +62,10 @@ if ($ConvID = (int)$_GET['id']) {
 	<div id="inbox">
 <?
 	// Get messages
-	$StaffPMs = $DB->query("SELECT UserID, SentDate, Message, ID FROM staff_pm_messages WHERE ConvID=$ConvID");
+	$StaffPMs = $DB->query("
+		SELECT UserID, SentDate, Message, ID
+		FROM staff_pm_messages
+		WHERE ConvID=$ConvID");
 
 	while (list($UserID, $SentDate, $Message, $MessageID) = $DB->next_record()) {
 		// Set user string
@@ -77,11 +80,12 @@ if ($ConvID = (int)$_GET['id']) {
 			$Username = $UserInfo['Username'];
 		}
 ?>
-		<div class="box vertical_space">
+		<div class="box vertical_space" id="post<?=$MessageID?>">
 			<div class="head">
+<?				// TODO: the inline style in the <a> tag is an ugly hack. get rid of it. ?>
+				<a class="postid" href="staffpm.php?action=viewconv&amp;id=<?=$ConvID?>#post<?=$MessageID?>" style="font-weight: normal;">#<?=$MessageID?></a>
 				<strong>
 					<?=$UserString?>
-
 				</strong>
 				<?=time_diff($SentDate, 2, true)?>
 <?		if ($Status != 'Resolved') { ?>
@@ -90,7 +94,7 @@ if ($ConvID = (int)$_GET['id']) {
 			</div>
 			<div class="body"><?=$Text->full_format($Message)?></div>
 		</div>
-		<div align="center" style="display: none"></div>
+		<div align="center" style="display: none;"></div>
 <?
 		$DB->set_query_id($StaffPMs);
 	}
@@ -128,7 +132,7 @@ if ($ConvID = (int)$_GET['id']) {
 		<div id="ajax_message" class="hidden center alertbar"></div>
 <?	}
 
-	// Replybox and buttons
+	// Reply box and buttons
 ?>
 		<h3>Reply</h3>
 		<div class="box pad">
@@ -148,14 +152,14 @@ if ($ConvID = (int)$_GET['id']) {
 					<select id="assign_to" name="assign">
 						<optgroup label="User classes">
 <?		// FLS "class"
-		$Selected = (!$AssignedToUser && $Level == 0) ? ' selected="selected"' : '';
+		$Selected = ((!$AssignedToUser && $Level == 0) ? ' selected="selected"' : '');
 ?>
 							<option value="class_0"<?=$Selected?>>First Line Support</option>
 <?		// Staff classes
 		foreach ($ClassLevels as $Class) {
 			// Create one <option> for each staff user class
 			if ($Class['Level'] >= 650) {
-				$Selected = (!$AssignedToUser && ($Level == $Class['Level'])) ? ' selected="selected"' : '';
+				$Selected = ((!$AssignedToUser && ($Level == $Class['Level'])) ? ' selected="selected"' : '');
 ?>
 							<option value="class_<?=$Class['Level']?>"<?=$Selected?>><?=$Class['Name']?></option>
 <?			}
@@ -174,7 +178,7 @@ if ($ConvID = (int)$_GET['id']) {
 		);
 		while (list($ID, $Name) = $DB->next_record()) {
 			// Create one <option> for each staff member
-			$Selected = ($AssignedToUser == $ID) ? ' selected="selected"' : '';
+			$Selected = (($AssignedToUser == $ID) ? ' selected="selected"' : '');
 ?>
 							<option value="user_<?=$ID?>"<?=$Selected?>><?=$Name?></option>
 <?		} ?>
@@ -194,7 +198,7 @@ if ($ConvID = (int)$_GET['id']) {
 		");
 		while (list($ID, $Name) = $DB->next_record()) {
 			// Create one <option> for each FLS user
-			$Selected = ($AssignedToUser == $ID) ? ' selected="selected"' : '';
+			$Selected = (($AssignedToUser == $ID) ? ' selected="selected"' : '');
 ?>
 							<option value="user_<?=$ID?>"<?=$Selected?>><?=$Name?></option>
 <?		} ?>

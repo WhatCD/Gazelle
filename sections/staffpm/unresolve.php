@@ -1,7 +1,10 @@
 <?
 if ($ID = (int)($_GET['id'])) {
 	// Check if conversation belongs to user
-	$DB->query("SELECT UserID, Level, AssignedToUser FROM staff_pm_conversations WHERE ID=$ID");
+	$DB->query("
+		SELECT UserID, Level, AssignedToUser
+		FROM staff_pm_conversations
+		WHERE ID=$ID");
 	list($UserID, $Level, $AssignedToUser) = $DB->next_record();
 
 	if ($UserID == $LoggedUser['ID'] || ($IsFLS && $Level == 0) ||
@@ -11,7 +14,10 @@ if ($ID = (int)($_GET['id'])) {
 		}*/
 
 		// Conversation belongs to user or user is staff, unresolve it
-		$DB->query("UPDATE staff_pm_conversations SET Status='Unanswered' WHERE ID=$ID");
+		$DB->query("
+			UPDATE staff_pm_conversations
+			SET Status='Unanswered'
+			WHERE ID=$ID");
 		// Clear cache for user
 		$Cache->delete_value('num_staff_pms_'.$LoggedUser['ID']);
 

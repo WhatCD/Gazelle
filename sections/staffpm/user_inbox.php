@@ -26,7 +26,7 @@ $StaffPMs = $DB->query("
 	<div class="header">
 		<h2>Staff PMs</h2>
 		<div class="linkbox">
-			<a href="#" onclick="$('#compose').toggle();" class="brackets">Compose New</a>
+			<a href="#" onclick="$('#compose').toggle();" class="brackets">Compose new</a>
 		</div>
 	</div>
 	<br />
@@ -40,7 +40,6 @@ if ($DB->record_count() == 0) {
 ?>
 		<h2>No messages</h2>
 <?
-
 } else {
 	// Messages, draw table
 ?>
@@ -62,11 +61,13 @@ if ($DB->record_count() == 0) {
 		if ($Unread === '1') {
 			$RowClass = 'unreadpm';
 		} else {
-			$Row = ($Row === 'a') ? 'b' : 'a';
+			$Row = (($Row === 'a') ? 'b' : 'a');
 			$RowClass = 'row'.$Row;
 		}
 
-		if ($Status == 'Resolved') { $ShowBox++; }
+		if ($Status == 'Resolved') {
+			$ShowBox++;
+		}
 		if ($ShowBox == 2) {
 			// First resolved PM
 ?>
@@ -86,12 +87,13 @@ if ($DB->record_count() == 0) {
 		// Get assigned
 		$Assigned = ($Level == 0) ? 'First Line Support' : $ClassLevels[$Level]['Name'];
 		// No + on Sysops
-		if ($Assigned != 'Sysop') { $Assigned .= '+'; }
+		if ($Assigned != 'Sysop') {
+			$Assigned .= '+';
+		}
 
 		// Table row
 ?>
 				<tr class="<?=$RowClass?>">
-
 					<td class="center"><input type="checkbox" name="id[]" value="<?=$ID?>" /></td>
 					<td><a href="staffpm.php?action=viewconv&amp;id=<?=$ID?>"><?=display_str($Subject)?></a></td>
 					<td><?=time_diff($Date, 2, true)?></td>
@@ -107,9 +109,7 @@ if ($DB->record_count() == 0) {
 			<input type="submit" value="Resolve selected" />
 		</form>
 <?
-
 }
-
 ?>
 	</div>
 </div>
