@@ -85,7 +85,7 @@ if ($StatsShown == 2) {
 }
 
 $Paranoia = array();
-$Checkboxes = array('downloaded', 'uploaded', 'ratio', 'lastseen', 'requiredratio', 'invitedcount', 'artistsadded');
+$Checkboxes = array('downloaded', 'uploaded', 'ratio', 'lastseen', 'requiredratio', 'invitedcount', 'artistsadded', 'notifications');
 foreach ($Checkboxes as $C) {
 	if (!isset($_POST['p_'.$C])) {
 		$Paranoia[] = $C;

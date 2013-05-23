@@ -126,6 +126,16 @@ switch ($Type) {
 			$Subject = "Collage Comment Report: ID #".display_str($ThingID);
 		}
 		break;
+	case 'rippy':
+		$DB->query('SELECT Message FROM rippies WHERE ID = ' . $ThingID);
+		if ($DB->record_count() < 1) {
+			$Error = "No rippy message with the reported ID found";
+		} else {
+			list($Message) = $DB->next_record();
+			$TypeLink = 'the rippy message "' . display_str($Message) . '"';
+			$Subject = 'Rippy message report: '.display_str($Message);
+		}
+		break;
 	default:
 		error("Incorrect type");
 		break;

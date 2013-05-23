@@ -523,7 +523,7 @@ ul#userinfo_username {
 }
 
 #content .header h2,
-#content > .thin > h2:first-of-type,
+#content > .thin > h2:first-child,
 #content > .thin > .header:first-of-type > h3:first-of-type {
 	background-color: #f0f0f0;
 	margin: 20px -20px -1px -20px !important;
@@ -540,7 +540,7 @@ ul#userinfo_username {
 }
 
 #content .header:first-child h2,
-#content > .thin > h2:first-of-type,
+#content > .thin > h2:first-child,
 #content > .thin > .header:first-of-type > h3:first-of-type {
 	margin-top: -20px !important;
 }
@@ -759,6 +759,7 @@ table {
 	-moz-box-shadow: -4px 1px 8px rgba(187, 215, 235, 0.8);
 	box-shadow: -4px 1px 8px rgba(187, 215, 235, 0.8);
 	background-color: #F5F5F5;
+	word-break: break-word;
 }
 
 .forum_post .body div {
@@ -1625,6 +1626,10 @@ ul.collage_images {
 #requests label {
 	display: inline-block;
 	min-width: 60px;
+}
+
+#requests .scale_image {
+	max-width: 440px;
 }
 
 #quickreplybuttons {

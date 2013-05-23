@@ -468,6 +468,7 @@ $DB->query("SELECT COUNT(ta.ArtistID) FROM torrents_artists AS ta WHERE ta.UserI
 list($ArtistsAdded) = $DB->next_record();
 ?>
 					<br /><label><input type="checkbox" name="p_artistsadded" <?=checked(!in_array('artistsadded', $Paranoia))?>/> Number of artists added</label>
+					<br /><label><input type="checkbox" name="p_notifications" <?=checked(!in_array('notifications', $Paranoia))?>/> Allow users to subscribe to my uploads</label>
 				</td>
 			</tr>
 			<tr>
