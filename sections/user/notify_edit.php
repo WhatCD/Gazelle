@@ -50,7 +50,7 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 	$N['Users'] 		= explode('|', substr($N['Users'], 1, -1));
 
     $Usernames = '';
-	foreach($N['Users'] as $UserID) {
+	foreach ($N['Users'] as $UserID) {
 		$UserInfo = Users::user_info($UserID);
 		$Usernames .= $UserInfo['Username'] . ', ';
 	}

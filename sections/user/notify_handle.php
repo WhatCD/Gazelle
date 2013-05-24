@@ -123,7 +123,7 @@ if ($_POST['fromyear'.$FormID] && is_number($_POST['fromyear'.$FormID])) {
 if ($_POST['users'.$FormID]) {
 	$Usernames = explode(',', $_POST['users'.$FormID]);
 	$EscapedUsernames = array();
-	foreach($Usernames as $Username) {
+	foreach ($Usernames as $Username) {
 		$EscapedUsernames[] = db_string(trim($Username));;
 	}
 
