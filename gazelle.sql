@@ -167,11 +167,24 @@ CREATE TABLE `collages` (
   `MaxGroups` int(10) NOT NULL DEFAULT '0',
   `MaxGroupsPerUser` int(10) NOT NULL DEFAULT '0',
   `Featured` tinyint(4) NOT NULL DEFAULT '0',
+  `Subscribers` int(10) DEFAULT '0',
+  `updated` datetime NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Name` (`Name`),
   KEY `UserID` (`UserID`),
   KEY `CategoryID` (`CategoryID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE `collages_artists` (
+  `CollageID` int(10) NOT NULL,
+  `ArtistID` int(10) NOT NULL,
+  `UserID` int(10) NOT NULL,
+  `Sort` int(10) NOT NULL DEFAULT '0',
+  `AddedOn` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`CollageID`,`ArtistID`),
+  KEY `UserID` (`UserID`),
+  KEY `Sort` (`Sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `collages_comments` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,

@@ -9,7 +9,7 @@ class Votes {
 	public static function vote_link($GroupID, $Vote = '') {
 		global $LoggedUser;
 		if (!$LoggedUser['NoVoteLinks'] && check_perms('site_album_votes')) { ?>
-			<span class="votespan brackets" style="white-space: nowrap">
+			<span class="votespan brackets" style="white-space: nowrap;">
 				Vote:
 				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>" title="Upvote">↑</a>
 				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote))?' hidden':'')?>" title="Upvoted">↑</span>

@@ -1,4 +1,5 @@
 <?
+define('ARTIST_COLLAGE', 'Artists');
 enforce_login();
 
 if (empty($_REQUEST['action'])) {
@@ -25,6 +26,13 @@ switch ($_REQUEST['action']) {
 		}
 		require(SERVER_ROOT.'/sections/collages/add_torrent.php');
 		break;
+	case 'add_artist':
+	case 'add_artist_batch':
+		if (!check_perms('site_collages_manage')) {
+			error(403);
+		}
+		require(SERVER_ROOT.'/sections/collages/add_artist.php');
+		break;
 	case 'manage':
 		if (!check_perms('site_collages_manage')) {
 			error(403);
@@ -36,6 +44,18 @@ switch ($_REQUEST['action']) {
 			error(403);
 		}
 		require(SERVER_ROOT.'/sections/collages/manage_handle.php');
+		break;
+	case 'manage_artists':
+		if (!check_perms('site_collages_manage')) {
+			error(403);
+		}
+		require(SERVER_ROOT.'/sections/collages/manage_artists.php');
+		break;
+	case 'manage_artists_handle':
+		if (!check_perms('site_collages_manage')) {
+			error(403);
+		}
+		require(SERVER_ROOT.'/sections/collages/manage_artists_handle.php');
 		break;
 	case 'edit':
 		if (!check_perms('site_edit_wiki')) {

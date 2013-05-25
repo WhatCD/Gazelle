@@ -273,7 +273,7 @@ foreach ($TypeList as $IType => $Data) {
 					</td>
 				</tr>
 				<tr>
-					<td class="label">PM Uploader</td>
+					<td class="label">PM uploader</td>
 					<td colspan="3">
 						<span title="Appended to the regular message unless using &quot;Send Now&quot;.">
 							<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
@@ -282,11 +282,11 @@ foreach ($TypeList as $IType => $Data) {
 					</td>
 				</tr>
 				<tr>
-					<td class="label"><strong>Extra</strong> Log Message:</td>
+					<td class="label"><strong>Extra</strong> log message:</td>
 					<td>
 						<input type="text" name="log_message" id="log_message<?=$ReportID?>" size="40" />
 					</td>
-					<td class="label"><strong>Extra</strong> Staff Notes:</td>
+					<td class="label"><strong>Extra</strong> staff notes:</td>
 					<td>
 						<input type="text" name="admin_message" id="admin_message<?=$ReportID?>" size="40" />
 					</td>

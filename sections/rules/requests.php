@@ -6,7 +6,7 @@ View::show_header('Request Rules');
 	<div class="header">
 		<h2 class="center">Requests</h2>
 	</div>
-	<div class="box pad rule_summary" style="padding:10px 10px 10px 20px;">
+	<div class="box pad rule_summary" style="padding: 10px 10px 10px 20px;">
 		<ul>
 			<li>
 				<strong>Do not make requests for torrents that break the rules.</strong> It is your responsibility that the request follows the rules. Your request will be deleted, and you will not get your bounty back. Requests cannot be more specific than the upload (and trumping) rules. For example, requesting an MP3 torrent with a log when the rules prohibit replacing an MP3 torrent without a log. Such a request asks for a duplicate to be uploaded. Exceptions: Requests made before the November 2008 rule change are not subject to deletion. However, you are advised to edit such older requests to comply with the rules.

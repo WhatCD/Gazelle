@@ -73,8 +73,8 @@ class ARTISTS_SIMILAR extends ARTIST{
 			}
 			$this->Artists[$ArtistID] = new ARTIST($ArtistID, $Name);
 			$this->Similar[$ArtistID] = array('ID'=>$ArtistID,'Score'=>$Score);
-			$this->TotalScore+=$Score;
-			$ArtistIDs[]=$ArtistID;
+			$this->TotalScore += $Score;
+			$ArtistIDs[] = $ArtistID;
 		}
 
 		// Get similarities between artists on the map
@@ -86,9 +86,8 @@ class ARTISTS_SIMILAR extends ARTIST{
 				JOIN artists_similar AS s2 ON s1.SimilarID=s2.SimilarID AND s1.ArtistID!=s2.ArtistID
 				JOIN artists_similar_scores AS ass ON ass.SimilarID=s1.SimilarID
 				JOIN artists_group AS a ON a.ArtistID=s2.ArtistID
-			WHERE s1.ArtistID IN(".implode(',',$ArtistIDs).")
-				AND s2.ArtistID IN(".implode(',',$ArtistIDs).")
-			");
+			WHERE s1.ArtistID IN(".implode(',',$ArtistIDs).')
+				AND s2.ArtistID IN('.implode(',',$ArtistIDs).')');
 
 		// Build into array
 		while (list($Artist1ID, $Artist2ID) = $DB->next_record()) {
@@ -149,7 +148,7 @@ class ARTISTS_SIMILAR extends ARTIST{
 			//	$xValues[$Minus - 30] = $Minus - 30;
 			}
 
-			$Offset = $Offset + rand(5,20); // Increase offset, and go again
+			$Offset = $Offset + rand(5, 20); // Increase offset, and go again
 		}
 
 		foreach ($this->Artists as $Artist) {
@@ -304,8 +303,8 @@ class ARTISTS_SIMILAR extends ARTIST{
 
 	function write_artists() {
 ?>
-		<div style="position: absolute; bottom: <?=$this->y - 10 ?>px; left: <?=$this->x - $this->NameLength * 4 ?>px; font-size: 13pt; white-space: nowrap;" class="similar_artist_header">
-			<?=$this->Name?>
+		<div style="position: absolute; bottom: <?=($this->y - 10)?>px; left: <?=($this->x - $this->NameLength * 4)?>px; font-size: 13pt; white-space: nowrap;" class="similar_artist_header">
+			<?=($this->Name)?>
 		</div>
 <?
 		foreach ($this->Artists as $Artist) {
@@ -330,8 +329,8 @@ class ARTISTS_SIMILAR extends ARTIST{
 				$FontSize = 12;
 			}
 ?>
-		<div style="position: absolute; top: <?=$Artist->y - 5 ?>px; left: <?=$xPosition?>px; font-size: <?=$FontSize?>pt; white-space: nowrap;">
-			<a href="artist.php?id=<?=$Artist->ID?>" class="similar_artist"><?=$Artist->Name?></a>
+		<div style="position: absolute; top: <?=($Artist->y - 5)?>px; left: <?=$xPosition?>px; font-size: <?=$FontSize?>pt; white-space: nowrap;">
+			<a href="artist.php?id=<?=($Artist->ID)?>" class="similar_artist"><?=($Artist->Name)?></a>
 		</div>
 <?
 		}
@@ -347,7 +346,7 @@ class ARTISTS_SIMILAR extends ARTIST{
 			$Decimal = $this->Similar[$ArtistID]['Decimal'];
 			$Width = ceil($Decimal * 4) + 1;
 
-			$Img->line($this->x, $this->y, $Artist->x, $Artist->y,$Img->color(199,218,255), $Width);
+			$Img->line($this->x, $this->y, $Artist->x, $Artist->y, $Img->color(199, 218, 255), $Width);
 
 			unset($Artist->Similar[$this->ID]);
 			reset($Artist->Similar);
@@ -355,7 +354,7 @@ class ARTISTS_SIMILAR extends ARTIST{
 				list($Artist2ID) = array_values($SimilarArtist2);
 				if ($this->Artists[$Artist2ID]) {
 					$Artist2 = $this->Artists[$Artist2ID];
-					$Img->line($Artist->x, $Artist->y, $Artist2->x, $Artist2->y,$Img->color(173,201,255));
+					$Img->line($Artist->x, $Artist->y, $Artist2->x, $Artist2->y, $Img->color(173, 201, 255));
 					unset($Artist2->Similar[$ArtistID]);
 				}
 			}
@@ -371,8 +370,8 @@ class ARTISTS_SIMILAR extends ARTIST{
 			echo ' - ';
 			echo $Artist->Name;
 			echo "\n";
-			echo "x - ".$Artist->x."\n";
-			echo "y - ".$Artist->y."\n";
+			echo 'x - ' . $Artist->x . "\n";
+			echo 'y - ' . $Artist->y . "\n";
 			print_r($this->Similar[$Artist->ID]);
 			//print_r($Artist->Similar);
 			echo "\n\n---\n\n";

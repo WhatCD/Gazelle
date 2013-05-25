@@ -33,7 +33,7 @@ View::show_header('Ratio Requirements');
 		<br />
 		<br />
 
-		<div style="text-align:center"><strong>Required Ratio Table</strong><br /><br />
+		<div style="text-align: center;"><strong>Required Ratio Table</strong><br /><br />
 			<table class="ratio_table">
 				<tr class="colhead">
 					<td><span title="These units are actually in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Amount Downloaded</span></td>

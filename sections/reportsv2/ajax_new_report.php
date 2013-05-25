@@ -59,7 +59,6 @@ $DB->query("
 		t.HasLog,
 		t.LogScore,
 		t.UserID AS UploaderID,
-		t.Tasted,
 		uploader.Username
 	FROM reportsv2 AS r
 		LEFT JOIN torrents AS t ON t.ID=r.TorrentID

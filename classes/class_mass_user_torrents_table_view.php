@@ -10,8 +10,7 @@
  *
  * It can be used for Bookmarks, Collages, or anywhere where torrents are managed.
  */
-class MASS_USER_TORRENTS_TABLE_VIEW
-{
+class MASS_USER_TORRENTS_TABLE_VIEW {
 	/**
 	 * Used to set text the page heading (h2 tag)
 	 * @var string $Heading
@@ -147,13 +146,13 @@ class MASS_USER_TORRENTS_TABLE_VIEW
 		<table id="manage_collage_table">
 			<thead>
 				<tr class="colhead">
-					<th style="width: 7%">Order</th>
-					<th style="width: 1%"><span><abbr title="Current order">#</abbr></span></th>
-					<th style="width: 1%"><span>Year</span></th>
-					<th style="width: 15%"><span>Artist</span></th>
+					<th style="width: 7%;">Order</th>
+					<th style="width: 1%;"><span><abbr title="Current order">#</abbr></span></th>
+					<th style="width: 1%;"><span>Year</span></th>
+					<th style="width: 15%;"><span>Artist</span></th>
 					<th><span>Torrent</span></th>
-					<th style="width: 5%"><span>Bookmarked</span></th>
-					<th style="width: 1%" id="check_all"><span>Remove</span></th>
+					<th style="width: 5%;"><span>Bookmarked</span></th>
+					<th style="width: 1%;" id="check_all"><span>Remove</span></th>
 				</tr>
 			</thead>
 			<tbody>

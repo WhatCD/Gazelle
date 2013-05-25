@@ -4,12 +4,12 @@ View::show_header('Chat Rules');
 ?>
 <!-- Forum Rules -->
 <div class="thin">
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<p>Anything not allowed on the forums is also not allowed on IRC and vice versa. They are separated for convenience only.</p>
 	</div>
 	<br />
 	<h3 id="forums">Forum Rules</h3>
-	<div class="box pad rule_summary" style="padding:10px 10px 10px 20px;">
+	<div class="box pad rule_summary" style="padding: 10px 10px 10px 20px;">
 		<ul>
 			<li>
 				Many forums (Tutorials, The Library, etc.) have their own set of rules. Make sure you read and take note of these rules before you attempt to post in one of these forums.
@@ -88,7 +88,7 @@ View::show_header('Chat Rules');
 <!-- IRC Rules -->
 <div class="thin">
 	<h3 id="irc">IRC Rules</h3>
-	<div class="box pad rule_summary" style="padding:10px 10px 10px 20px;">
+	<div class="box pad rule_summary" style="padding: 10px 10px 10px 20px;">
 		<ul>
 			<li>
 				Staff have the final decision, if they say stop and you continue, expect at least to be banned from the IRC server.

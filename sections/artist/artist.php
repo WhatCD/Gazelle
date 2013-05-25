@@ -710,6 +710,55 @@ if (empty($SimilarArray)) {
 
 echo $TorrentDisplayList;
 
+$Collages = $Cache->get_value('artists_collages_'.$ArtistID);
+if (!is_array($Collages)) {
+	$DB->query("SELECT 
+					c.Name, c.NumTorrents, c.ID 
+				FROM collages AS c 
+				JOIN collages_artists AS ca ON ca.CollageID=c.ID 
+				WHERE ca.ArtistID='$ArtistID' 
+				AND Deleted='0' AND CategoryID = '7'");
+	$Collages = $DB->to_array();
+	$Cache->cache_value('artists_collages_'.$ArtistID, $Collages, 3600*6);
+}
+if (count($Collages) > 0) {
+	if (count($Collages) > MAX_COLLAGES) {
+		// Pick some at random
+		$Range = range(0,count($Collages) - 1);
+		shuffle($Range);
+		$Indices = array_slice($Range, 0, MAX_COLLAGES);
+		$SeeAll = ' <a href="#" onclick="$(\'.collage_rows\').toggle(); return false;">(See all)</a>';
+	} else {
+		$Indices = range(0, count($Collages)-1);
+		$SeeAll = '';
+	}
+?>
+	<table class="collage_table" id="collages">
+		<tr class="colhead">
+			<td width="85%"><a href="#">&uarr;</a>&nbsp;This artists is in <?=number_format(count($Collages))?> collage<?=((count($Collages)>1) ? 's' : '')?><?=$SeeAll?></td>
+			<td># artists</td>
+		</tr>
+		<?	foreach ($Indices as $i) {
+				list($CollageName, $CollageArtists, $CollageID) = $Collages[$i];
+				unset($Collages[$i]);
+		?>
+					<tr>
+						<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
+						<td><?=number_format($CollageArtists)?></td>
+					</tr>
+		<?	}
+			foreach ($Collages as $Collage) {
+				list($CollageName, $CollageArtists, $CollageID) = $Collage;
+		?>
+					<tr class="collage_rows hidden">
+						<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
+						<td><?=number_format($CollageArtists)?></td>
+					</tr>
+		<?	} ?>
+	</table>
+<?
+}
+
 if ($NumRequests > 0) {
 
 ?>
@@ -792,7 +841,7 @@ if ($NumSimilar > 0) {
 		include(SERVER_ROOT.'/classes/class_image.php');
 		$Img = new IMAGE;
 		$Img->create(WIDTH, HEIGHT);
-		$Img->color(255,255,255, 127);
+		$Img->color(255, 255, 255, 127);
 
 		$Similar = new ARTISTS_SIMILAR($ArtistID, $Name);
 		$Similar->set_up();
@@ -810,7 +859,7 @@ if ($NumSimilar > 0) {
 				<strong id="flipper_title">Similar artist map</strong>
 				<a id="flip_to" class="brackets" href="#null" onclick="flipView();">Switch to cloud</a>
 			</div>
-			<div id="flip_view_1" style="display: block; width: <?=(WIDTH)?>px; height: <?=(HEIGHT)?>px; position: relative; background-image: url(static/similar/<?=($ArtistID)?>.png?t=<?=(time())?>)">
+			<div id="flip_view_1" style="display: block; width: <?=(WIDTH)?>px; height: <?=(HEIGHT)?>px; position: relative; background-image: url(static/similar/<?=($ArtistID)?>.png?t=<?=(time())?>);">
 <?
 	$Similar->write_artists();
 ?>

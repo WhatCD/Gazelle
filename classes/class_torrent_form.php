@@ -472,7 +472,7 @@ function show() {
 <? if ($this->NewTorrent) { ?>
 		<tr>
 		   <td class="label">Multi-format uploader:</td>
-		   <td><input type="button" value="+" id="add_format" /><input type="button" style="display: none" value="-" id="remove_format" /></td>
+		   <td><input type="button" value="+" id="add_format" /><input type="button" style="display: none;" value="-" id="remove_format" /></td>
 		</tr>
 		<tr id="placeholder_row_top"></tr>
 		<tr id="placeholder_row_bottom"></tr>

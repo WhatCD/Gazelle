@@ -2,8 +2,8 @@
 View::show_header('Recover Password','validate');
 echo $Validate->GenerateJS('recoverform');
 ?>
-<script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
-<script src="<?=STATIC_SERVER?>functions/password_validate.js" type="text/javascript"></script>
+<script src="<?=(STATIC_SERVER)?>functions/jquery.js" type="text/javascript"></script>
+<script src="<?=(STATIC_SERVER)?>functions/password_validate.js" type="text/javascript"></script>
 <form class="auth_form" name="recovery" id="recoverform" method="post" action="" onsubmit="return formVal();">
 	<input type="hidden" name="key" value="<?=display_str($_REQUEST['key'])?>" />
 	<div style="width: 500px;">
@@ -16,7 +16,7 @@ if (empty($Reset)) {
 <?	} ?> A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol.<br /><br />
 		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center" width="100%">
 			<tr valign="top">
-				<td align="right" style="width:100px;">Password&nbsp;</td>
+				<td align="right" style="width: 100px;">Password&nbsp;</td>
 				<td align="left"><input type="password" name="password" id="new_pass_1" class="inputtext" /> <strong id="pass_strength"></strong></td>
 			</tr>
 			<tr valign="top">

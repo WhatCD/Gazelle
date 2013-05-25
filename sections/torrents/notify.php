@@ -7,12 +7,12 @@ define('NOTIFICATIONS_PER_PAGE', 50);
 define('NOTIFICATIONS_MAX_SLOWSORT', 10000);
 
 $OrderBys = array(
-		'time' => array('unt' => 'unt.TorrentID'),
-		'size' => array('t' => 't.Size'),
-		'snatches' => array('t' => 't.Snatched'),
-		'seeders' => array('t' => 't.Seeders'),
-		'leechers' => array('t' => 't.Leechers'),
-		'year' => array('tg' => 'tnt.Year'));
+		'time'     => array('unt' => 'unt.TorrentID'),
+		'size'     => array('t'   => 't.Size'),
+		'snatches' => array('t'   => 't.Snatched'),
+		'seeders'  => array('t'   => 't.Seeders'),
+		'leechers' => array('t'   => 't.Leechers'),
+		'year'     => array('tg'  => 'tnt.Year'));
 
 if (empty($_GET['order_by']) || !isset($OrderBys[$_GET['order_by']])) {
 	$_GET['order_by'] = 'time';
@@ -34,59 +34,72 @@ if (!empty($_GET['filterid']) && is_number($_GET['filterid'])) {
 list($Page,$Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
 
 // The "order by x" links on columns headers
-function header_link($SortKey, $DefaultWay = "desc") {
+function header_link($SortKey, $DefaultWay = 'desc') {
 	global $OrderWay;
 	if ($SortKey == $_GET['order_by']) {
-		if ($OrderWay == "DESC") {
-			$NewWay = "asc";
+		if ($OrderWay == 'DESC') {
+			$NewWay = 'asc';
 		} else {
-			$NewWay = "desc";
+			$NewWay = 'desc';
 		}
 	} else {
 		$NewWay = $DefaultWay;
 	}
-	return "?action=notify&amp;order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('page','order_way','order_by'));
+	return "?action=notify&amp;order_way=$NewWay&amp;order_by=$SortKey&amp;".Format::get_url(array('page', 'order_way', 'order_by'));
 }
 $UserID = $LoggedUser['ID'];
 
 // Sorting by release year requires joining torrents_group, which is slow. Using a temporary table
 // makes it speedy enough as long as there aren't too many records to create
 if ($OrderTbl == 'tg') {
-	$DB->query("SELECT COUNT(*) FROM users_notify_torrents AS unt
-		JOIN torrents AS t ON t.ID=unt.TorrentID
+	$DB->query("
+		SELECT COUNT(*)
+		FROM users_notify_torrents AS unt
+			JOIN torrents AS t ON t.ID=unt.TorrentID
 		WHERE unt.UserID=$UserID".
 		($FilterID
 			? " AND FilterID=$FilterID"
-			: ""));
+			: ''));
 	list($TorrentCount) = $DB->next_record();
 	if ($TorrentCount > NOTIFICATIONS_MAX_SLOWSORT) {
-		error("Due to performance issues, torrent lists with more than ".number_format(NOTIFICATIONS_MAX_SLOWSORT)." items cannot be ordered by release year.");
+		error('Due to performance issues, torrent lists with more than '.number_format(NOTIFICATIONS_MAX_SLOWSORT).' items cannot be ordered by release year.');
 	}
 
-	$DB->query("CREATE TEMPORARY TABLE temp_notify_torrents
-		(TorrentID int, GroupID int, UnRead tinyint, FilterID int, Year smallint, PRIMARY KEY(GroupID, TorrentID), KEY(Year)) ENGINE=MyISAM");
-	$DB->query("INSERT IGNORE INTO temp_notify_torrents (TorrentID, GroupID, UnRead, FilterID)
+	$DB->query("
+		CREATE TEMPORARY TABLE temp_notify_torrents
+			(TorrentID int, GroupID int, UnRead tinyint, FilterID int, Year smallint, PRIMARY KEY(GroupID, TorrentID), KEY(Year))
+		ENGINE=MyISAM");
+	$DB->query("
+		INSERT IGNORE INTO temp_notify_torrents (TorrentID, GroupID, UnRead, FilterID)
 		SELECT t.ID, t.GroupID, unt.UnRead, unt.FilterID
-		FROM users_notify_torrents AS unt JOIN torrents AS t ON t.ID=unt.TorrentID
+		FROM users_notify_torrents AS unt
+			JOIN torrents AS t ON t.ID=unt.TorrentID
 		WHERE unt.UserID=$UserID".
 		($FilterID
 			? " AND unt.FilterID=$FilterID"
-			: ""));
-	$DB->query("UPDATE temp_notify_torrents AS tnt JOIN torrents_group AS tg ON tnt.GroupID=tg.ID SET tnt.Year=tg.Year");
+			: ''));
+	$DB->query("
+		UPDATE temp_notify_torrents AS tnt
+			JOIN torrents_group AS tg ON tnt.GroupID=tg.ID
+		SET tnt.Year=tg.Year");
 
-	$DB->query("SELECT TorrentID, GroupID, UnRead, FilterID
+	$DB->query("
+		SELECT TorrentID, GroupID, UnRead, FilterID
 		FROM temp_notify_torrents AS tnt
-		ORDER BY $OrderCol $OrderWay, GroupID $OrderWay LIMIT $Limit");
+		ORDER BY $OrderCol $OrderWay, GroupID $OrderWay
+		LIMIT $Limit");
 	$Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 } else {
-	$DB->query("SELECT SQL_CALC_FOUND_ROWS unt.TorrentID, unt.UnRead, unt.FilterID, t.GroupID
+	$DB->query("
+		SELECT SQL_CALC_FOUND_ROWS unt.TorrentID, unt.UnRead, unt.FilterID, t.GroupID
 		FROM users_notify_torrents AS unt
-		JOIN torrents AS t ON t.ID = unt.TorrentID
+			JOIN torrents AS t ON t.ID = unt.TorrentID
 		WHERE unt.UserID=$UserID".
 		($FilterID
 			? " AND unt.FilterID=$FilterID"
-			: "")."
-		ORDER BY $OrderCol $OrderWay LIMIT $Limit");
+			: '')."
+		ORDER BY $OrderCol $OrderWay
+		LIMIT $Limit");
 	$Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 	$DB->query("SELECT FOUND_ROWS()");
 	list($TorrentCount) = $DB->next_record();
@@ -109,7 +122,10 @@ if (!empty($GroupIDs)) {
 	$TorrentGroups = $TorrentGroups['matches'];
 
 	// Get the relevant filter labels
-	$DB->query("SELECT ID, Label, Artists FROM users_notify_filters WHERE ID IN (".implode(',', $FilterIDs).")");
+	$DB->query('
+		SELECT ID, Label, Artists
+		FROM users_notify_filters
+		WHERE ID IN ('.implode(',', $FilterIDs).')');
 	$Filters = $DB->to_array('ID', MYSQLI_ASSOC, array('Artists'));
 	foreach ($Filters as &$Filter) {
 		$Filter['Artists'] = explode('|', trim($Filter['Artists'], '|'));
@@ -122,7 +138,11 @@ if (!empty($GroupIDs)) {
 
 	if (!empty($UnReadIDs)) {
 		//Clear before header but after query so as to not have the alert bar on this page load
-		$DB->query("UPDATE users_notify_torrents SET UnRead='0' WHERE UserID=".$LoggedUser['ID']." AND TorrentID IN (".implode(',', $UnReadIDs).")");
+		$DB->query("
+			UPDATE users_notify_torrents
+			SET UnRead='0'
+			WHERE UserID=".$LoggedUser['ID'].'
+				AND TorrentID IN ('.implode(',', $UnReadIDs).')');
 		$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
 	}
 }
@@ -191,9 +211,9 @@ if (empty($Results)) {
 <form class="manage_form" name="torrents" id="notificationform_<?=$FilterID?>" action="">
 <table class="torrent_table cats checkboxes border">
 	<tr class="colhead">
-		<td style="text-align: center"><input type="checkbox" name="toggle" onclick="toggleBoxes(<?=$FilterID?>, this.checked)" /></td>
+		<td style="text-align: center;"><input type="checkbox" name="toggle" onclick="toggleBoxes(<?=$FilterID?>, this.checked)" /></td>
 		<td class="small cats_col"></td>
-		<td style="width:100%;">Name<?=$TorrentCount <= NOTIFICATIONS_MAX_SLOWSORT ? ' / <a href="'.header_link('year').'">Year</a>' : ''?></td>
+		<td style="width: 100%;">Name<?=$TorrentCount <= NOTIFICATIONS_MAX_SLOWSORT ? ' / <a href="'.header_link('year').'">Year</a>' : ''?></td>
 		<td>Files</td>
 		<td><a href="<?=header_link('time')?>">Time</a></td>
 		<td><a href="<?=header_link('size')?>">Size</a></td>
@@ -276,11 +296,11 @@ if (empty($Results)) {
 			</div>
 		</td>
 		<td><?=$TorrentInfo['FileCount']?></td>
-		<td style="text-align:right" class="nobr"><?=time_diff($TorrentInfo['Time'])?></td>
-		<td class="nobr" style="text-align:right"><?=Format::get_size($TorrentInfo['Size'])?></td>
-		<td style="text-align:right"><?=number_format($TorrentInfo['Snatched'])?></td>
-		<td style="text-align:right"><?=number_format($TorrentInfo['Seeders'])?></td>
-		<td style="text-align:right"><?=number_format($TorrentInfo['Leechers'])?></td>
+		<td style="text-align: right;" class="nobr"><?=time_diff($TorrentInfo['Time'])?></td>
+		<td class="nobr" style="text-align: right;"><?=Format::get_size($TorrentInfo['Size'])?></td>
+		<td style="text-align: right;"><?=number_format($TorrentInfo['Snatched'])?></td>
+		<td style="text-align: right;"><?=number_format($TorrentInfo['Seeders'])?></td>
+		<td style="text-align: right;"><?=number_format($TorrentInfo['Leechers'])?></td>
 	</tr>
 <?
 		}

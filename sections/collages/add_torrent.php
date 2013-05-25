@@ -5,7 +5,7 @@ authorize();
 include(SERVER_ROOT.'/classes/class_validate.php');
 $Val = new VALIDATE;
 
-function AddTorrent($CollageID, $GroupID) {
+function add_torrent($CollageID, $GroupID) {
 	global $Cache, $LoggedUser, $DB;
 
 	$DB->query("SELECT MAX(Sort) FROM collages_torrents WHERE CollageID='$CollageID'");
@@ -19,7 +19,7 @@ function AddTorrent($CollageID, $GroupID) {
 			VALUES
 			('$CollageID', '$GroupID', '$LoggedUser[ID]', '$Sort', NOW())");
 
-		$DB->query("UPDATE collages SET NumTorrents=NumTorrents+1 WHERE ID='$CollageID'");
+		$DB->query("UPDATE collages SET NumTorrents=NumTorrents+1, Updated = NOW() WHERE ID='$CollageID'");
 
 		$Cache->delete_value('collage_'.$CollageID);
 		$Cache->delete_value('torrents_details_'.$GroupID);
@@ -89,7 +89,7 @@ if ($_REQUEST['action'] == 'add_torrent') {
 		error('The torrent was not found in the database.');
 	}
 
-	AddTorrent($CollageID, $GroupID);
+	add_torrent($CollageID, $GroupID);
 } else {
 	$URLRegex = '/^https?:\/\/(www\.|ssl\.)?'.NONSSL_SITE_URL.'\/torrents\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
 
@@ -135,7 +135,7 @@ if ($_REQUEST['action'] == 'add_torrent') {
 	}
 
 	foreach ($GroupIDs as $GroupID) {
-		AddTorrent($CollageID, $GroupID);
+		add_torrent($CollageID, $GroupID);
 	}
 }
 header('Location: collages.php?id='.$CollageID);

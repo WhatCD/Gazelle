@@ -761,7 +761,7 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 			<tr id="order">
 				<td class="label">Order by:</td>
 				<td colspan="3" class="ft_order">
-					<select name="order_by" style="width:auto;" class="ft_order_by">
+					<select name="order_by" style="width: auto;" class="ft_order_by">
 						<option value="time"<?Format::selected('order_by','time')?>>Time added</option>
 						<option value="year"<?Format::selected('order_by','year')?>>Year</option>
 						<option value="size"<?Format::selected('order_by','size')?>>Size</option>

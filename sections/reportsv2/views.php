@@ -206,41 +206,33 @@ $Results = $DB->to_array();
 	</td>
 	<td style="vertical-align: top;">
 <?
+
 	$DB->query("
 		SELECT
 			r.ResolverID,
 			um.Username,
 			COUNT(r.ID) AS Count,
-			COUNT(tasted.Tasted) AS Tasted
 		FROM reportsv2 AS r
 			LEFT JOIN users_main AS um ON r.ResolverID=um.ID
-			LEFT JOIN torrents AS tasted ON tasted.ID=r.TorrentID AND tasted.Tasted = '1'
 		WHERE r.Status = 'InProgress'
 		GROUP BY r.ResolverID");
+
 	$Staff = $DB->to_array();
 ?>
 		<strong>Currently assigned reports by staff member</strong>
 		<table>
 			<tr class="colhead">
 				<td>Staff member</td>
-				<td>Current count</td>
-				<td>Tasted count</td>
-			</tr>
-
-	<?
+				<td>Current count</td>			</tr>
+<?
 		foreach ($Staff as $Array) {	?>
 			<tr>
 				<td>
 					<a href="reportsv2.php?view=staff&amp;id=<?=$Array['ResolverID']?>"><?=display_str($Array['Username'])?>'s reports</a>
 				</td>
-				<td><?=number_format($Array['Count'])?></td>
-				<td>
-					<a href="reportsv2.php?view=tasted&amp;id=<?=$Array['ResolverID']?>"><?=number_format($Array['Tasted'])?></a>
-				</td>
-			</tr>
-	<?
-		}
-	?>
+				<td><?=number_format($Array['Count'])?></td>			</tr>
+<?
+		} ?>
 		</table>
 		<br />
 		<h3>Different view modes by report type</h3>

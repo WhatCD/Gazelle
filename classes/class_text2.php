@@ -319,8 +319,8 @@ EXPLANATION OF PARSER LOGIC
 				$i = $CloseTag; // 5d) Move the pointer past the end of the [/close] tag.
 			} else {
 				//5b) If it's a normal tag, it may have versions of itself nested inside
-				$CloseTag = $i-1;
-				$InTagPos = $i-1;
+				$CloseTag = $i - 1;
+				$InTagPos = $i - 1;
 				$NumInOpens = 0;
 				$NumInCloses = -1;
 
@@ -466,7 +466,7 @@ EXPLANATION OF PARSER LOGIC
 					$Str.='<em>'.$this->to_html($Block['Val'])."</em>";
 					break;
 				case 's':
-					$Str.='<span style="text-decoration: line-through">'.$this->to_html($Block['Val']).'</span>';
+					$Str.='<span style="text-decoration: line-through;">'.$this->to_html($Block['Val']).'</span>';
 					break;
 				case 'user':
 					$Str.='<a href="user.php?action=search&amp;search='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
@@ -478,7 +478,7 @@ EXPLANATION OF PARSER LOGIC
 					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'tex':
-					$Str.='<img style="vertical-align: middle" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" />';
+					$Str.='<img style="vertical-align: middle;" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'],"UTF-8","HTML-ENTITIES")).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" />';
 					break;
 				case 'plain':
 					$Str.=$Block['Val'];
@@ -502,7 +502,7 @@ EXPLANATION OF PARSER LOGIC
 					if (!in_array($Block['Attr'], $ValidAttribs)) {
 						$Str.='[align='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/align]';
 					} else {
-						$Str.='<div style="text-align:'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</div>';
+						$Str.='<div style="text-align: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</div>';
 					}
 					break;
 				case 'color':
@@ -511,7 +511,7 @@ EXPLANATION OF PARSER LOGIC
 					if (!in_array($Block['Attr'], $ValidAttribs) && !preg_match('/^#[0-9a-f]{6}$/', $Block['Attr'])) {
 						$Str.='[color='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/color]';
 					} else {
-						$Str.='<span style="color:'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
+						$Str.='<span style="color: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</span>';
 					}
 					break;
 				case 'inlinesize':

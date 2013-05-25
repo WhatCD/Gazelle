@@ -42,7 +42,7 @@ switch ($_GET['action']) {
 			<input type="hidden" name="newsid" value="<?=$NewsID; ?>" />
 <? } ?>
 			<h3>Title</h3>
-			<input type="text" name="title" size="95" <? if (!empty($Title)) { echo 'value="'.display_str($Title).'"'; } ?> />
+			<input type="text" name="title" size="95"<? if (!empty($Title)) { echo ' value="'.display_str($Title).'"'; } ?> />
 <!-- Why did someone add this?	<input type="datetime" name="datetime" value="<?=sqltime()?>" /> -->
 			<br />
 			<h3>Body</h3>
@@ -56,9 +56,15 @@ switch ($_GET['action']) {
 	</form>
 
 	<h2>News archive</h2>
-
 <?
-$DB->query('SELECT n.ID,n.Title,n.Body,n.Time FROM news AS n ORDER BY n.Time DESC');// LIMIT 20
+$DB->query('
+	SELECT
+		n.ID,
+		n.Title,
+		n.Body,
+		n.Time
+	FROM news AS n
+	ORDER BY n.Time DESC');// LIMIT 20
 while (list($NewsID, $Title, $Body, $NewsTime) = $DB->next_record()) {
 ?>
 	<div class="box vertical_space">

@@ -73,11 +73,11 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 				<a href="#" onclick="$('#filter_<?=$N['ID']?>').toggle(); return false;" class="brackets">Show</a>
 			</h3>
 <?	} ?>
-	<form class="<?=($i > $NumFilters) ? 'create_form' : 'edit_form'?>" name="notification" action="user.php" method="post">
+	<form class="<?=(($i > $NumFilters) ? 'create_form' : 'edit_form')?>" name="notification" action="user.php" method="post">
 		<input type="hidden" name="formid" value="<?=$i?>" />
 		<input type="hidden" name="action" value="notify_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table <?=($i <= $NumFilters) ? 'id="filter_'.$N['ID'].'" class="layout hidden"' : 'class="layout"'?>>
+		<table <?=(($i <= $NumFilters) ? 'id="filter_'.$N['ID'].'" class="layout hidden"' : 'class="layout"')?>>
 <?	if ($i > $NumFilters) { ?>
 			<tr>
 				<td class="label"><strong>Notification filter name</strong></td>
@@ -106,7 +106,7 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 			<tr>
 				<td class="label"><strong>One of these users</strong></td>
 				<td>
-					<textarea name="users<?=$i?>" style="width:100%" rows="5"><?=display_str($Usernames)?></textarea>
+					<textarea name="users<?=$i?>" style="width: 100%;" rows="5"><?=display_str($Usernames)?></textarea>
 					<p class="min_padding">Comma-separated list of usernames</em></p>
 				</td>
 			</tr>

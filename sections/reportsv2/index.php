@@ -37,9 +37,6 @@ if (isset($_REQUEST['action'])) {
 		case 'ajax_change_resolve':
 			include('ajax_change_resolve.php');
 			break;
-		case 'ajax_taste':
-			include('ajax_taste.php');
-			break;
 		case 'ajax_take_pm':
 			include('ajax_take_pm.php');
 			break;

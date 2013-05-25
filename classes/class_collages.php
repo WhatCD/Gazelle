@@ -30,4 +30,16 @@ class Collages {
 		}
 		return $Catalogue;
 	}
+
+	public static function increase_subscriptions($CollageID) {
+		global $DB;
+		$DB->query("UPDATE collages SET Subscribers = Subscribers + 1 WHERE ID = '$CollageID'");
+
+	}
+
+	public static function decrease_subscriptions($CollageID) {
+		global $DB;
+		$DB->query("UPDATE collages SET Subscribers = IF(Subscribers < 1, 0, Subscribers - 1) WHERE ID = '$CollageID'");
+	}
+
 }

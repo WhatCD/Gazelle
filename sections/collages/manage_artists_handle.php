@@ -12,34 +12,35 @@ list($UserID, $CategoryID) = $DB->next_record();
 if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
 	error(403);
 }
+if($CategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
+	error(403);
+}
 
-
-$GroupID = $_POST['groupid'];
-if (!is_number($GroupID)) {
+$ArtistID = $_POST['artistid'];
+if (!is_number($ArtistID)) {
 	error(404);
 }
 
 if ($_POST['submit'] == 'Remove') {
-	$DB->query("DELETE FROM collages_torrents WHERE CollageID='$CollageID' AND GroupID='$GroupID'");
+	$DB->query("DELETE FROM collages_artists WHERE CollageID='$CollageID' AND ArtistID='$ArtistID'");
 	$Rows = $DB->affected_rows();
 	$DB->query("UPDATE collages SET NumTorrents=NumTorrents-$Rows WHERE ID='$CollageID'");
-	$Cache->delete_value('torrents_details_'.$GroupID);
-	$Cache->delete_value('torrent_collages_'.$GroupID);
-	$Cache->delete_value('torrent_collages_personal_'.$GroupID);
+	$Cache->delete_value('artists_collages_'.$ArtistID);
+	$Cache->delete_value('artists_collages_personal_'.$ArtistID);
 } elseif (isset($_POST['drag_drop_collage_sort_order'])) {
 
 	@parse_str($_POST['drag_drop_collage_sort_order'], $Series);
 	$Series = @array_shift($Series);
 	if (is_array($Series)) {
 		$SQL = array();
-		foreach ($Series as $Sort => $GroupID) {
-			if (is_number($Sort) && is_number($GroupID)) {
+		foreach ($Series as $Sort => $ArtistID) {
+			if (is_number($Sort) && is_number($ArtistID)) {
 				$Sort = ($Sort + 1) * 10;
-				$SQL[] = sprintf('(%d, %d, %d)', $GroupID, $Sort, $CollageID);
+				$SQL[] = sprintf('(%d, %d, %d)', $ArtistID, $Sort, $CollageID);
 			}
 		}
 
-		$SQL = 'INSERT INTO collages_torrents (GroupID, Sort, CollageID) VALUES '
+		$SQL = 'INSERT INTO collages_artists (ArtistID, Sort, CollageID) VALUES '
 			. implode(', ', $SQL)
 			. ' ON DUPLICATE KEY UPDATE Sort = VALUES (Sort)';
 
@@ -51,8 +52,8 @@ if ($_POST['submit'] == 'Remove') {
 	if (!is_number($Sort)) {
 		error(404);
 	}
-	$DB->query("UPDATE collages_torrents SET Sort='$Sort' WHERE CollageID='$CollageID' AND GroupID='$GroupID'");
+	$DB->query("UPDATE collages_artists SET Sort='$Sort' WHERE CollageID='$CollageID' AND ArtistID='$ArtistID'");
 }
 
 $Cache->delete_value('collage_'.$CollageID);
-header('Location: collages.php?action=manage&collageid='.$CollageID);
+header('Location: collages.php?action=manage_artists&collageid='.$CollageID);

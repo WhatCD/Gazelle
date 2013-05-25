@@ -13,16 +13,16 @@ And join <?=BOT_DISABLED_CHAN?><br /><br />
 <strong>Before joining the disabled channel, please read our <br /> <span style="color: gold;">Golden Rules</span> which can be found <a style="color: #1464F4;" href="#" onclick="toggle_visibility('golden_rules')">here</a>.</strong> <br /><br />
 
 <script type="text/javascript">
-	function toggle_visibility(id) {
-		var e = document.getElementById(id);
-		if (e.style.display == 'block')
-			e.style.display = 'none';
-		else
-			e.style.display = 'block';
-	}
+function toggle_visibility(id) {
+	var e = document.getElementById(id);
+	if (e.style.display == 'block')
+		e.style.display = 'none';
+	else
+		e.style.display = 'block';
+}
 </script>
 
-<div id="golden_rules" style="width:35%;font-weight:bold;display:none;" >
+<div id="golden_rules" style="width: 35%; font-weight: bold; display: none;">
 <ul>
 	<li>All staff decisions must be respected. If you take issue with a decision, you must do so privately with the staff member who issued the decision or with an administrator of the site. Complaining about staff decisions in public or otherwise disrespecting staff members will not be taken lightly.</li>
 	<li>Access to this web site is a privilege, not a right, and it can be taken away from you for any reason.</li>
@@ -54,13 +54,13 @@ Please use your What.CD username.
 
 <?
 } else {
-	$nick = $_POST['username'];
-	$nick = preg_replace('/[^a-zA-Z0-9\[\]\\`\^\{\}\|_]/', '', $nick);
-	if (strlen($nick) == 0) {
-		$nick = 'WhatGuest????';
+	$Nick = $_POST['username'];
+	$Nick = preg_replace('/[^a-zA-Z0-9\[\]\\`\^\{\}\|_]/', '', $Nick);
+	if (strlen($Nick) == 0) {
+		$Nick = 'WhatGuest????';
 	} else {
-		if (is_numeric(substr($nick, 0, 1))) {
-			$nick = '_' . $nick;
+		if (is_numeric(substr($Nick, 0, 1))) {
+			$Nick = '_' . $Nick;
 		}
 	}
 ?>
@@ -73,10 +73,10 @@ Please use your What.CD username.
 			<p>Please read the topic carefully.</p>
 		</div>
 		<applet codebase="static/irc/" code="IRCApplet.class" archive="irc.jar,sbox.jar" width="800" height="600" align="center">
-			<param name="nick" value="<?=$nick?>" />
+			<param name="nick" value="<?=($Nick)?>" />
 			<param name="alternatenick" value="WhatGuest????" />
 			<param name="name" value="Java IRC User" />
-			<param name="host" value="<?=BOT_SERVER?>" />
+			<param name="host" value="<?=(BOT_SERVER)?>" />
 			<param name="multiserver" value="false" />
 			<param name="autorejoin" value="false" />
 

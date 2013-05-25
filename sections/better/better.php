@@ -4,15 +4,15 @@ View::show_header('Better');
 ?>
 <div class="thin">
 	<h3 id="general">Pursuit of Perfection</h3>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<p>Here at What.CD, we believe that there's always room for improvement. To aid our effort in the pursuit of perfection, we've put together a few simple lists that can help you build ratio and help us improve our overall quality. Most lists feature 100 torrents at a time and update every 15 minutes.</p>
 	</div>
 	<h3 id="lists">Lists</h3>
-	<div class="box pad" style="padding:10px 10px 10px 20px;">
+	<div class="box pad" style="padding: 10px 10px 10px 20px;">
 		<table width="100%">
 			<tr class="colhead">
-				<td style="width:150px;">Method</td>
-				<td style="width:400px;">Additional information</td>
+				<td style="width: 150px;">Method</td>
+				<td style="width: 400px;">Additional information</td>
 			</tr>
 			<tr class="rowb">
 				<td class="nobr">

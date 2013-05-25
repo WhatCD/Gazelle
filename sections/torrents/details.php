@@ -347,7 +347,7 @@ if (count($Tags) > 0) {
 					<span class="remove remove_tag"><a href="torrents.php?action=delete_tag&amp;groupid=<?=$GroupID?>&amp;tagid=<?=$Tag['id']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets" title="Remove tag">X</a></span>
 <?		} ?>
 					</div>
-					<br style="clear:both" />
+					<br style="clear: both;" />
 				</li>
 <?
 	}

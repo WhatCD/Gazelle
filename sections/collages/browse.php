@@ -7,9 +7,9 @@ $Text = new TEXT;
 list($Page,$Limit) = Format::page_limit(COLLAGES_PER_PAGE);
 
 
-$OrderVals = array('Time', 'Name', 'Torrents');
+$OrderVals = array('Time', 'Name', 'Subscribers', 'Torrents', 'Updated');
 $WayVals = array('Ascending', 'Descending');
-$OrderTable = array('Time'=>'ID', 'Name'=>'c.Name', 'Torrents'=>'NumTorrents');
+$OrderTable = array('Time'=>'ID', 'Name'=>'c.Name', 'Subscribers'=> 'c.Subscribers', 'Torrents'=>'NumTorrents', 'Updated' => 'c.Updated');
 $WayTable = array('Ascending'=>'ASC', 'Descending'=>'DESC');
 
 // Are we searching in bodies, or just names?
@@ -45,7 +45,7 @@ if (!empty($_GET['cats'])) {
 	}
 	$Categories = array_keys($Categories);
 } else {
-	$Categories = array(1,2,3,4,5,6);
+	$Categories = array(1,2,3,4,5,6,7);
 }
 
 // Ordering
@@ -77,7 +77,9 @@ $BaseSQL = $SQL = "
 		c.NumTorrents,
 		c.TagList,
 		c.CategoryID,
-		c.UserID
+		c.UserID,
+		c.Subscribers,
+		c.Updated
 	FROM collages AS c
 		$BookmarkJoin
 	WHERE Deleted = '0'";
@@ -286,12 +288,14 @@ echo $Pages;
 		<td>Category</td>
 		<td>Collage</td>
 		<td>Torrents</td>
+		<td>Subscribers</td>
+		<td>Updated</td>
 		<td>Author</td>
 	</tr>
 <?
 $Row = 'a'; // For the pretty colours
 foreach ($Collages as $Collage) {
-	list($ID, $Name, $NumTorrents, $TagList, $CategoryID, $UserID) = $Collage;
+	list($ID, $Name, $NumTorrents, $TagList, $CategoryID, $UserID, $Subscribers, $Updated) = $Collage;
 	$Row = ($Row == 'a') ? 'b' : 'a';
 	$TorrentTags = new Tags($TagList);
 
@@ -311,6 +315,8 @@ foreach ($Collages as $Collage) {
 			<div class="tags"><?=$TorrentTags->format('collages.php?action=search&amp;tags=')?></div>
 		</td>
 		<td><?=number_format((int)$NumTorrents)?></td>
+		<td><?=number_format((int)$Subscribers)?></td>
+		<td><?=time_diff($Updated)?></td>
 		<td><?=Users::format_username($UserID, false, false, false)?></td>
 	</tr>
 <?

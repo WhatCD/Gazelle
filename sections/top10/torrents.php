@@ -76,7 +76,7 @@ if (check_perms('site_advanced_top10')) {
 			<tr>
 				<td class="label">Format:</td>
 				<td>
-					<select name="format" style="width:auto;" class="ft_format">
+					<select name="format" style="width: auto;" class="ft_format">
 						<option value="">Any</option>
 <?	foreach ($Formats as $FormatName) { ?>
 						<option value="<?=display_str($FormatName)?>"<? if (isset($_GET['format']) && $FormatName==$_GET['format']) { ?> selected="selected"<? } ?>><?=display_str($FormatName)?></option>
@@ -372,15 +372,15 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		</h3>
 	<table class="torrent_table cats numbering border">
 	<tr class="colhead">
-		<td class="center" style="width:15px;"></td>
+		<td class="center" style="width: 15px;"></td>
 		<td class="cats_col"></td>
 		<td><strong>Name</strong></td>
-		<td style="text-align:right"><strong>Size</strong></td>
-		<td style="text-align:right"><strong>Data</strong></td>
-		<td style="text-align:right"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-		<td style="text-align:right"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-		<td style="text-align:right"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
-		<td style="text-align:right"><strong>Peers</strong></td>
+		<td style="text-align: right;"><strong>Size</strong></td>
+		<td style="text-align: right;"><strong>Data</strong></td>
+		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
+		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
+		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+		<td style="text-align: right;"><strong>Peers</strong></td>
 	</tr>
 <?
 	// Server is already processing a top10 query. Starting another one will make things slow
@@ -446,36 +446,36 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		$ExtraInfo = '';
 		$AddExtra = '';
 		if ($Format) {
-			$ExtraInfo.=$Format;
+			$ExtraInfo.= $Format;
 			$AddExtra = ' / ';
 		}
 		if ($Encoding) {
-			$ExtraInfo.=$AddExtra.$Encoding;
+			$ExtraInfo.= $AddExtra.$Encoding;
 			$AddExtra = ' / ';
 		}
 		// "FLAC / Lossless / Log (100%) / Cue / CD";
 		if ($HasLog) {
-			$ExtraInfo.=$AddExtra.'Log ('.$LogScore.'%)';
+			$ExtraInfo.= $AddExtra.'Log ('.$LogScore.'%)';
 			$AddExtra = ' / ';
 		}
 		if ($HasCue) {
-			$ExtraInfo.=$AddExtra.'Cue';
+			$ExtraInfo.= $AddExtra.'Cue';
 			$AddExtra = ' / ';
 		}
 		if ($Media) {
-			$ExtraInfo.=$AddExtra.$Media;
+			$ExtraInfo.= $AddExtra.$Media;
 			$AddExtra = ' / ';
 		}
 		if ($Scene) {
-			$ExtraInfo.=$AddExtra.'Scene';
+			$ExtraInfo.= $AddExtra.'Scene';
 			$AddExtra = ' / ';
 		}
 		if ($Year > 0) {
-			$ExtraInfo.=$AddExtra.$Year;
+			$ExtraInfo.= $AddExtra.$Year;
 			$AddExtra = ' ';
 		}
 		if ($RemasterTitle) {
-			$ExtraInfo.=$AddExtra.$RemasterTitle;
+			$ExtraInfo.= $AddExtra.$RemasterTitle;
 		}
 		if ($IsSnatched) {
 			if ($GroupCategoryID == 1) {

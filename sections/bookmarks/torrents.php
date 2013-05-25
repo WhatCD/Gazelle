@@ -196,7 +196,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 	</tr>
 <?
 	}
-	$TorrentTable.=ob_get_clean();
+	$TorrentTable.= ob_get_clean();
 
 	// Album art
 
@@ -217,23 +217,22 @@ foreach ($TorrentList as $GroupID => $Group) {
 ?>
 		<li class="image_group_<?=$GroupID?>">
 			<a href="torrents.php?id=<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
-<?	if ($WikiImage) {
-?>
+<?	if ($WikiImage) { ?>
 				<img src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
 <?	} else { ?>
-				<div style="width:107px;padding:5px"><?=$DisplayName?></div>
+				<div style="width: 107px; padding: 5px;"><?=$DisplayName?></div>
 <?	} ?>
 			</a>
 		</li>
 <?
-	$Collage[]=ob_get_clean();
+	$Collage[] = ob_get_clean();
 
 }
 
-$CollageCovers = isset($LoggedUser['CollageCovers'])?$LoggedUser['CollageCovers']:25;
+$CollageCovers = isset($LoggedUser['CollageCovers']) ? $LoggedUser['CollageCovers'] : 25;
 $CollagePages = array();
-for ($i=0; $i < $NumGroups/$CollageCovers; $i++) {
-	$Groups = array_slice($Collage, $i*$CollageCovers, $CollageCovers);
+for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) {
+	$Groups = array_slice($Collage, $i * $CollageCovers, $CollageCovers);
 	$CollagePage = '';
 	foreach ($Groups as $Group) {
 		$CollagePage .= $Group;

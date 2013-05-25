@@ -1,10 +1,10 @@
 <!-- Other Sections -->
 <h3 id="jump">Other Sections</h3>
-<div class="box pad rule_table" style="padding:10px 10px 10px 20px;">
+<div class="box pad rule_table" style="padding: 10px 10px 10px 20px;">
 	<table width="100%">
 		<tr class="colhead">
-			<td style="width:150px;">Category</td>
-			<td style="width:400px;">Additional information</td>
+			<td style="width: 150px;">Category</td>
+			<td style="width: 400px;">Additional information</td>
 		</tr>
 		<tr class="rowb">
 			<td class="nobr">
