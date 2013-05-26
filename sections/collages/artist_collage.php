@@ -1,16 +1,17 @@
 <?
-$DB->query("SELECT 
-				ca.ArtistID,
-				ag.Name,
-				aw.Image,
-				um.ID AS UserID,
-				um.Username
-			FROM collages_artists AS ca
-			JOIN artists_group AS ag ON ag.ArtistID=ca.ArtistID
-			LEFT JOIN wiki_artists AS aw ON aw.RevisionID = ag.RevisionID
-			LEFT JOIN users_main AS um ON um.ID=ca.UserID
-			WHERE ca.CollageID='$CollageID'
-			ORDER BY ca.Sort");
+$DB->query("
+	SELECT
+		ca.ArtistID,
+		ag.Name,
+		aw.Image,
+		um.ID AS UserID,
+		um.Username
+	FROM collages_artists AS ca
+		JOIN artists_group AS ag ON ag.ArtistID=ca.ArtistID
+		LEFT JOIN wiki_artists AS aw ON aw.RevisionID = ag.RevisionID
+		LEFT JOIN users_main AS um ON um.ID=ca.UserID
+	WHERE ca.CollageID='$CollageID'
+	ORDER BY ca.Sort");
 
 
 $Artists = $DB->to_array('ArtistID', MYSQLI_ASSOC);
@@ -24,7 +25,7 @@ $NumArtists = 0;
 $NumArtistsByUser = 0;
 $Users = array();
 
-foreach($Artists as $Artist) {
+foreach ($Artists as $Artist) {
 	$UserID = $Artist['UserID'];
 	$Username = $Artist['Username'];
 	$NumArtists++;
@@ -54,11 +55,11 @@ foreach($Artists as $Artist) {
 	?>
 	<li class="image_group_<?=$Artist['ArtistID']?>">
 		<a href="artist.php?id=<?=$Artist['ArtistID']?>">
-			<?	if ($Artist['Image']) { ?>
-					<img src="<?=ImageTools::process($Artist['Image'], true)?>" alt="<?=$Artist['Name']?>" title="<?=$Artist['Name']?>" width="118" />
-			<?	} else { ?>
-					<span style="width: 107px; padding: 5px;"><?=$Artist['Name']?></span>
-			<?	} ?>
+<?		if ($Artist['Image']) { ?>
+			<img src="<?=ImageTools::process($Artist['Image'], true)?>" alt="<?=$Artist['Name']?>" title="<?=$Artist['Name']?>" width="118" />
+<?		} else { ?>
+			<span style="width: 107px; padding: 5px;"><?=$Artist['Name']?></span>
+<?		} ?>
 		</a>
 	</li>
 <?

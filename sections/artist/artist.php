@@ -712,12 +712,13 @@ echo $TorrentDisplayList;
 
 $Collages = $Cache->get_value('artists_collages_'.$ArtistID);
 if (!is_array($Collages)) {
-	$DB->query("SELECT 
-					c.Name, c.NumTorrents, c.ID 
-				FROM collages AS c 
-				JOIN collages_artists AS ca ON ca.CollageID=c.ID 
-				WHERE ca.ArtistID='$ArtistID' 
-				AND Deleted='0' AND CategoryID = '7'");
+	$DB->query("
+		SELECT c.Name, c.NumTorrents, c.ID
+		FROM collages AS c
+			JOIN collages_artists AS ca ON ca.CollageID=c.ID
+		WHERE ca.ArtistID='$ArtistID'
+			AND Deleted='0'
+			AND CategoryID = '7'");
 	$Collages = $DB->to_array();
 	$Cache->cache_value('artists_collages_'.$ArtistID, $Collages, 3600*6);
 }
@@ -735,7 +736,7 @@ if (count($Collages) > 0) {
 ?>
 	<table class="collage_table" id="collages">
 		<tr class="colhead">
-			<td width="85%"><a href="#">&uarr;</a>&nbsp;This artists is in <?=number_format(count($Collages))?> collage<?=((count($Collages)>1) ? 's' : '')?><?=$SeeAll?></td>
+			<td width="85%"><a href="#">&uarr;</a>&nbsp;This artists is in <?=number_format(count($Collages))?> collage<?=((count($Collages) > 1) ? 's' : '')?><?=$SeeAll?></td>
 			<td># artists</td>
 		</tr>
 		<?	foreach ($Indices as $i) {

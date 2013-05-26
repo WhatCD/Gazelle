@@ -952,7 +952,7 @@ $Paranoia = unserialize($Paranoia);
 if (!is_array($Paranoia)) {
 	$Paranoia = array();
 }
-if(!in_array('notifications', $Paranoia)) {
+if (!in_array('notifications', $Paranoia)) {
 	$SQL.=" AND (Users LIKE '%|".$LoggedUser['ID']."|%' OR Users = '') ";
 }
 

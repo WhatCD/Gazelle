@@ -136,6 +136,9 @@ spl_autoload_register(function ($ClassName) {
 		case 'Rippy':
 			$FileName = 'rippy.class';
 			break;
+		case 'Rules':
+			$FileName = 'rules.class';
+			break;
 		case 'Sphinxql':
 			$FileName = 'class_sphinxql';
 			break;

@@ -313,9 +313,9 @@ include(SERVER_ROOT.'/sections/torrents/vote.php');
 		<div class="box box_tags">
 			<div class="head">
 				<strong>Tags</strong>
-				<?
+<?
 				$DeletedTag = $Cache->get_value('deleted_tags_'.$GroupID.'_'.$LoggedUser['ID']);
-				if(!empty($DeletedTag)) { ?>
+				if (!empty($DeletedTag)) { ?>
 					<form style="display: none;" id="undo_tag_delete_form" name="tags" action="torrents.php" method="post">
 						<input type="hidden" name="action" value="add_tag" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -325,7 +325,7 @@ include(SERVER_ROOT.'/sections/torrents/vote.php');
 					</form>
 					<a class="brackets" href="#" onclick="$('#undo_tag_delete_form').raw().submit(); return false;";>Undo Delete</a>
 
-				<? } ?>
+<?				} ?>
 			</div>
 <?
 if (count($Tags) > 0) {

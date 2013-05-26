@@ -12,7 +12,7 @@ if (!is_number($GroupID) || !$GroupID) {
 }
 
 //Delete cached tag used for undos
-if(isset($_POST['undo'])) {
+if (isset($_POST['undo'])) {
 	$Cache->delete_value('deleted_tags_'.$GroupID.'_'.$LoggedUser['ID']);
 }
 
@@ -23,29 +23,44 @@ foreach ($Tags as $TagName) {
 	if (!empty($TagName)) {
 		$TagName = Misc::get_alias_tag($TagName);
 		// Check DB for tag matching name
-		$DB->query("SELECT t.ID FROM tags AS t WHERE t.Name LIKE '".$TagName."'");
+		$DB->query("
+			SELECT t.ID
+			FROM tags AS t
+			WHERE t.Name LIKE '$TagName'");
 		list($TagID) = $DB->next_record();
 
 		if (!$TagID) { // Tag doesn't exist yet - create tag
-			$DB->query("INSERT INTO tags (Name, UserID) VALUES ('".$TagName."', ".$UserID.")");
+			$DB->query("
+				INSERT INTO tags (Name, UserID)
+				VALUES ('$TagName', $UserID)");
 			$TagID = $DB->inserted_id();
 		} else {
-			$DB->query("SELECT TagID FROM torrents_tags_votes WHERE GroupID='$GroupID' AND TagID='$TagID' AND UserID='$UserID'");
+			$DB->query("
+				SELECT TagID
+				FROM torrents_tags_votes
+				WHERE GroupID='$GroupID'
+					AND TagID='$TagID'
+					AND UserID='$UserID'");
 			if ($DB->record_count() != 0) { // User has already voted on this tag, and is trying hax to make the rating go up
 				header('Location: '.$_SERVER['HTTP_REFERER']);
 				die();
 			}
 		}
 
-		$DB->query("INSERT INTO torrents_tags
-			(TagID, GroupID, PositiveVotes, UserID) VALUES
-			('$TagID', '$GroupID', '3', '$UserID')
+		$DB->query("
+			INSERT INTO torrents_tags
+				(TagID, GroupID, PositiveVotes, UserID)
+			VALUES
+				('$TagID', '$GroupID', '3', '$UserID')
 			ON DUPLICATE KEY UPDATE PositiveVotes=PositiveVotes+2");
 
-		$DB->query("INSERT INTO torrents_tags_votes (GroupID, TagID, UserID, Way) VALUES ('$GroupID', '$TagID', '$UserID', 'up')");
+		$DB->query("
+			INSERT INTO torrents_tags_votes (GroupID, TagID, UserID, Way)
+			VALUES ('$GroupID', '$TagID', '$UserID', 'up')");
 
-		$DB->query("INSERT INTO group_log (GroupID, UserID, Time, Info)
-					VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string('Tag "'.$TagName.'" added to group')."')");
+		$DB->query("
+			INSERT INTO group_log (GroupID, UserID, Time, Info)
+			VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string('Tag "'.$TagName.'" added to group')."')");
 	}
 }
 

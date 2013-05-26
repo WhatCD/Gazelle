@@ -12,7 +12,7 @@ list($UserID, $CategoryID) = $DB->next_record();
 if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
 	error(403);
 }
-if($CategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
+if ($CategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
 	error(403);
 }
 
@@ -52,7 +52,11 @@ if ($_POST['submit'] == 'Remove') {
 	if (!is_number($Sort)) {
 		error(404);
 	}
-	$DB->query("UPDATE collages_artists SET Sort='$Sort' WHERE CollageID='$CollageID' AND ArtistID='$ArtistID'");
+	$DB->query("
+		UPDATE collages_artists
+		SET Sort='$Sort'
+		WHERE CollageID='$CollageID'
+			AND ArtistID='$ArtistID'");
 }
 
 $Cache->delete_value('collage_'.$CollageID);

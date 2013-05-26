@@ -346,6 +346,10 @@ ul#userinfo_stats li a {
 	color: #626262;
 }
 
+.blend:hover a {
+	color: white;
+}
+
 .blend a {
 	color: #575757;
 }

@@ -223,14 +223,16 @@ $Results = $DB->to_array();
 		<table>
 			<tr class="colhead">
 				<td>Staff member</td>
-				<td>Current count</td>			</tr>
+				<td>Current count</td>
+			</tr>
 <?
 		foreach ($Staff as $Array) {	?>
 			<tr>
 				<td>
 					<a href="reportsv2.php?view=staff&amp;id=<?=$Array['ResolverID']?>"><?=display_str($Array['Username'])?>'s reports</a>
 				</td>
-				<td><?=number_format($Array['Count'])?></td>			</tr>
+				<td><?=number_format($Array['Count'])?></td>
+			</tr>
 <?
 		} ?>
 		</table>

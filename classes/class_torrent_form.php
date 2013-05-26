@@ -573,8 +573,8 @@ function show() {
 				<td class="label">Lossy web approved:</td>
 				<td><input type="checkbox" id="lossyweb_approved" name="lossyweb_approved"<? if ($LossywebApproved) { echo ' checked="checked"';} ?> /> <label for="lossyweb_approved">Check this box if the torrent is an approved lossy WEB release.</label></td>
 			</tr>
-<?		 } ?>
-<?		 if ($this->NewTorrent) { ?>
+<?		 }
+		 if ($this->NewTorrent) { ?>
 			<tr>
 				<td class="label">Tags:</td>
 				<td>
@@ -588,19 +588,7 @@ function show() {
 <?			} ?>
 					<input type="text" id="tags" name="tags" size="40" value="<?=display_str($Torrent['TagList']) ?>"<?=$this->Disabled?> />
 					<br />
-					Tags should be comma-separated, and you should use a period (".") to separate words inside a tag &mdash; e.g. "<strong class="important_text_alt">hip.hop</strong>".
-					<br /><br />
-					There is a list of official tags to the left of the text box. Please use these tags instead of "unofficial" tags (e.g. use the official "<strong class="important_text_alt">drum.and.bass</strong>" tag, instead of an unofficial "<strong class="important_text">dnb</strong>" tag). <strong>Please note that the "<strong class="important_text_alt">2000s</strong>" tag refers to music produced between 2000 and 2009.</strong>
-					<br /><br />
-					Avoid abbreviations if at all possible. So instead of tagging an album as "<strong class="important_text">alt</strong>", tag it as "<strong class="important_text_alt">alternative</strong>". Make sure that you use correct spelling.
-					<br /><br />
-					Avoid using multiple synonymous tags. Using both "<strong class="important_text">prog.rock</strong>" and "<strong class="important_text_alt">progressive.rock</strong>" is redundant and annoying&mdash;just use the official "<strong class="important_text_alt">progressive.rock</strong>" tag.
-					<br /><br />
-					Do not add "useless" tags, such as "<strong class="important_text">seen.live</strong>", "<strong class="important_text">awesome</strong>", "<strong class="important_text">rap</strong>" (is encompassed by "<strong class="important_text_alt">hip.hop</strong>"), etc. If an album is live, you can tag it as "<strong class="important_text_alt">live</strong>".
-					<br /><br />
-					Only tag information on the album itself&mdash;NOT THE INDIVIDUAL RELEASE. Tags such as "<strong class="important_text">v0</strong>", "<strong class="important_text">eac</strong>", "<strong class="important_text">vinyl</strong>", "<strong class="important_text">from.oink</strong>", etc. are strictly forbidden. Remember that these tags will be used for other versions of the same album.
-					<br /><br />
-					<strong>You should be able to build up a list of tags using only the official tags to the left of the text box. If you are in any doubt about whether or not a tag is acceptable, do not add it.</strong>
+			<? Rules::display_site_tag_rules(true) // indent the opening PHP tag with 3 tabs for proper HTML generation ?>
 				</td>
 			</tr>
 			<tr>

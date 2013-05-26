@@ -1,16 +1,17 @@
 <?
 // Build the data for the collage and the torrent list
-$DB->query("SELECT 
-				ct.GroupID,
-				tg.WikiImage,
-				tg.CategoryID,
-				um.ID,
-				um.Username
-			FROM collages_torrents AS ct
-			JOIN torrents_group AS tg ON tg.ID=ct.GroupID
-			LEFT JOIN users_main AS um ON um.ID=ct.UserID
-			WHERE ct.CollageID='$CollageID'
-			ORDER BY ct.Sort");
+$DB->query("
+	SELECT
+		ct.GroupID,
+		tg.WikiImage,
+		tg.CategoryID,
+		um.ID,
+		um.Username
+	FROM collages_torrents AS ct
+		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
+		LEFT JOIN users_main AS um ON um.ID=ct.UserID
+	WHERE ct.CollageID='$CollageID'
+	ORDER BY ct.Sort");
 
 $GroupIDs = $DB->collect('GroupID');
 $CollageDataList = $DB->to_array('GroupID', MYSQLI_ASSOC);

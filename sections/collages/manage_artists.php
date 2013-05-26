@@ -9,21 +9,22 @@ list($Name, $UserID, $CategoryID) = $DB->next_record();
 if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
 	error(403);
 }
-if($CategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
+if ($CategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
 	error(403);
 }
 
-$DB->query("SELECT 
-				ca.ArtistID,
-				ag.Name,
-				um.ID AS UserID,
-				um.Username,
-				ca.Sort
-			FROM collages_artists AS ca
-			JOIN artists_group AS ag ON ag.ArtistID=ca.ArtistID
-			LEFT JOIN users_main AS um ON um.ID=ca.UserID
-			WHERE ca.CollageID='$CollageID'
-			ORDER BY ca.Sort");
+$DB->query("
+	SELECT
+		ca.ArtistID,
+		ag.Name,
+		um.ID AS UserID,
+		um.Username,
+		ca.Sort
+	FROM collages_artists AS ca
+		JOIN artists_group AS ag ON ag.ArtistID=ca.ArtistID
+		LEFT JOIN users_main AS um ON um.ID=ca.UserID
+	WHERE ca.CollageID='$CollageID'
+	ORDER BY ca.Sort");
 
 $Artists = $DB->to_array('ArtistID', MYSQLI_ASSOC);
 
@@ -64,7 +65,7 @@ View::show_header('Manage collage '.$Name);
 		<thead>
 			<tr class="colhead">
 				<th style="width: 7%">Order</th>
-				<th style="width: 1%"><span><abbr title="Current Rank">#</abbr></span></th>
+				<th style="width: 1%"><span><abbr title="Current rank">#</abbr></span></th>
 				<th style="text-align: left;"><span>Artist</span></th>
 				<th style="width: 7%"><span>User</span></th>
 				<th style="width: 7%; text-align: right;" class="nobr"><span><abbr title="Modify an individual row.">Tweak</abbr></span></th>
