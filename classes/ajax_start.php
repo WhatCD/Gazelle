@@ -1,8 +1,8 @@
 <?
 require 'config.php'; //The config contains all site wide configuration information as well as memcached rules
-require(SERVER_ROOT.'/classes/class_debug.php');
-require(SERVER_ROOT.'/classes/class_cache.php'); //Require the caching class
-require(SERVER_ROOT.'/classes/class_encrypt.php'); //Require the caching class
+require(SERVER_ROOT.'/classes/debug.class.php');
+require(SERVER_ROOT.'/classes/cache.class.php'); //Require the caching class
+require(SERVER_ROOT.'/classes/encrypt.class.php'); //Require the caching class
 
 $Debug = new DEBUG;
 $Cache = NEW CACHE($MemcachedServers); //Load the caching class
@@ -21,7 +21,7 @@ if (isset($LoginCookie)) {
 	}
 
 	if (!$Enabled = $Cache->get_value('enabled_'.$UserID)) {
-		require(SERVER_ROOT.'/classes/class_mysql.php'); //Require the database wrapper
+		require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
 		$DB=NEW DB_MYSQL; //Load the database wrapper
 		$DB->query("SELECT Enabled FROM users_main WHERE ID='$UserID'");
 		list($Enabled) = $DB->next_record();

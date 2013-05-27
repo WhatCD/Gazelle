@@ -4,7 +4,7 @@ if (!check_perms('admin_manage_news')) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
 View::show_header('Manage news','bbcode');
 

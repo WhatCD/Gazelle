@@ -1,6 +1,6 @@
 <?
 if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements) = $Cache->get_value('geodistribution')) {
-	include_once(SERVER_ROOT.'/classes/class_charts.php');
+	include_once(SERVER_ROOT.'/classes/charts.class.php');
 	$DB->query('SELECT Code, Users FROM users_geodistribution');
 	$Data = $DB->to_array();
 	$Count = $DB->record_count() - 1;
@@ -37,7 +37,7 @@ if (!list($Countries,$Rank,$CountryUsers,$CountryMax,$CountryMin,$LogIncrements)
 }
 
 if (!$ClassDistribution = $Cache->get_value('class_distribution')) {
-	include_once(SERVER_ROOT.'/classes/class_charts.php');
+	include_once(SERVER_ROOT.'/classes/charts.class.php');
 	$DB->query("
 		SELECT p.Name, COUNT(m.ID) AS Users
 		FROM users_main AS m
@@ -58,7 +58,7 @@ if (!$ClassDistribution = $Cache->get_value('class_distribution')) {
 	$Cache->cache_value('class_distribution', $ClassDistribution, 3600 * 24 * 14);
 }
 if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
-	include_once(SERVER_ROOT.'/classes/class_charts.php');
+	include_once(SERVER_ROOT.'/classes/charts.class.php');
 
 
 	$DB->query("
@@ -81,7 +81,7 @@ if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 }
 
 if (!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
-	include_once(SERVER_ROOT.'/classes/class_charts.php');
+	include_once(SERVER_ROOT.'/classes/charts.class.php');
 
 	
 	$DB->query("

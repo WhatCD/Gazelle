@@ -7,7 +7,7 @@ if (!check_perms('admin_reports') && !check_perms('project_team') && !check_perm
 
 // Number of reports per page
 define('REPORTS_PER_PAGE', '10');
-include(SERVER_ROOT . '/classes/class_text.php');
+include(SERVER_ROOT . '/classes/text.class.php');
 $Text = NEW TEXT;
 
 list($Page, $Limit) = Format::page_limit(REPORTS_PER_PAGE);

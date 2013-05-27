@@ -3,7 +3,7 @@ enforce_login();
 
 define('ANNOUNCEMENT_FORUM_ID', 19);
 View::show_header('Blog','bbcode');
-require(SERVER_ROOT.'/classes/class_text.php');
+require(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
 
 if (check_perms('admin_manage_blog')) {

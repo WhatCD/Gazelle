@@ -1,5 +1,5 @@
 <?
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
 
 $ConvID = $_GET['id'];

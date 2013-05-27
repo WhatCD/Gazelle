@@ -42,7 +42,7 @@ class Misc {
 	 * @param int $ConvID The conversation the message goes in. Leave blank to start a new conversation.
 	 * @return
 	 */
-	public static function send_pm($ToID,$FromID,$Subject,$Body,$ConvID='') {
+	public static function send_pm($ToID, $FromID, $Subject, $Body, $ConvID = '') {
 		global $DB, $Cache, $Time;
 		$Subject = db_string($Subject);
 		$Body = db_string($Body);
@@ -50,26 +50,34 @@ class Misc {
 			// Don't allow users to send messages to the system or themselves
 			return;
 		}
-		if ($ConvID=='') {
+		if ($ConvID == '') {
 			// Create a new conversation.
-			$DB->query("INSERT INTO pm_conversations(Subject) VALUES ('".$Subject."')");
+			$DB->query("
+				INSERT INTO pm_conversations (Subject)
+				VALUES ('$Subject')");
 			$ConvID = $DB->inserted_id();
-			$DB->query("INSERT INTO pm_conversations_users
-					(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead) VALUES
+			$DB->query("
+				INSERT INTO pm_conversations_users
+					(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead)
+				VALUES
 					('$ToID', '$ConvID', '1','0','".sqltime()."', '".sqltime()."', '1')");
 			if ($FromID != 0) {
-				$DB->query("INSERT INTO pm_conversations_users
-					(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead) VALUES
-					('$FromID', '$ConvID', '0','1','".sqltime()."', '".sqltime()."', '0')");
+				$DB->query("
+					INSERT INTO pm_conversations_users
+						(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead)
+					VALUES
+						('$FromID', '$ConvID', '0','1','".sqltime()."', '".sqltime()."', '0')");
 			}
 			$ToID = array($ToID);
 		} else {
 			// Update the pre-existing conversations.
-			$DB->query("UPDATE pm_conversations_users SET
+			$DB->query("
+				UPDATE pm_conversations_users
+				SET
 					InInbox='1',
 					UnRead='1',
 					ReceivedDate='".sqltime()."'
-					WHERE UserID IN (".implode(',', $ToID).")
+				WHERE UserID IN (".implode(',', $ToID).")
 					AND ConvID='$ConvID'");
 
 			$DB->query("
@@ -374,7 +382,11 @@ class Misc {
 	 */
 	public static function get_alias_tag($BadTag) {
 		global $DB;
-		$DB->query("SELECT AliasTag FROM tag_aliases WHERE BadTag = '". $BadTag ."' LIMIT 1");
+		$DB->query("
+			SELECT AliasTag
+			FROM tag_aliases
+			WHERE BadTag = '$BadTag'
+			LIMIT 1");
 		if ($DB->record_count() > 0) {
 			list($AliasTag) = $DB->next_record();
 			return $AliasTag;

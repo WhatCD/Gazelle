@@ -18,7 +18,7 @@ list($Page,$Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 View::show_header('Inbox');
 ?>
 <div class="thin">
-	<h2><?= ($Section == 'sentbox') ? 'Sentbox' : 'Inbox' ?></h2>
+	<h2><?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?></h2>
 	<div class="linkbox">
 <?
 
@@ -32,7 +32,7 @@ if ($Section == 'inbox') { ?>
 		<br /><br />
 <?
 
-$Sort = empty($_GET['sort']) || $_GET['sort'] != "unread" ? "Date DESC" : "cu.Unread = '1' DESC, DATE DESC";
+$Sort = (empty($_GET['sort']) || $_GET['sort'] != 'unread' ? 'Date DESC' : "cu.Unread = '1' DESC, DATE DESC");
 
 $sql = "
 	SELECT SQL_CALC_FOUND_ROWS
@@ -78,9 +78,9 @@ $Count = $DB->record_count();
 
 $CurURL = Format::get_url(array('sort'));
 if (empty($CurURL)) {
-	$CurURL = "inbox.php?";
+	$CurURL = 'inbox.php?';
 } else {
-	$CurURL = "inbox.php?".$CurURL."&amp;";
+	$CurURL = "inbox.php?$CurURL&amp;";
 }
 
 $Pages = Format::get_pages($Page, $NumResults, MESSAGES_PER_PAGE, 9);
@@ -163,7 +163,7 @@ echo $Pages;
 					<td><?=Users::format_username($SenderID, true, true, true, true)?></td>
 					<td><?=time_diff($Date)?></td>
 <?			if (check_perms('users_mod')) { ?>
-					<td><?=($ForwardedID && $ForwardedID != $LoggedUser['ID'] ? Users::format_username($ForwardedID, false, false, false):'')?></td>
+					<td><?=(($ForwardedID && $ForwardedID != $LoggedUser['ID']) ? Users::format_username($ForwardedID, false, false, false) : '')?></td>
 <?			} ?>
 				</tr>
 <?		}

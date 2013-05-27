@@ -1,6 +1,6 @@
 <?
-include(SERVER_ROOT . '/classes/class_text.php');
-include(SERVER_ROOT . '/classes/class_alias.php');
+include(SERVER_ROOT . '/classes/text.class.php');
+include(SERVER_ROOT . '/classes/alias.class.php');
 $Text = new TEXT(true);
 $Alias = new ALIAS;
 

@@ -1,6 +1,6 @@
 <?
 
-include(SERVER_ROOT.'/classes/class_bencodetorrent.php');
+include(SERVER_ROOT.'/classes/bencodetorrent.class.php');
 
 $TorrentID = $_GET['torrentid'];
 if (!is_number($TorrentID)) {

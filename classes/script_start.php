@@ -15,7 +15,7 @@ if (isset($_REQUEST['info_hash']) && isset($_REQUEST['peer_id'])) {
 	die('d14:failure reason40:Invalid .torrent, try downloading again.e');
 }
 
-require(SERVER_ROOT.'/classes/class_proxies.php');
+require(SERVER_ROOT.'/classes/proxies.class.php');
 
 // Get the user's actual IP address if they're proxied.
 if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])
@@ -54,19 +54,19 @@ if (!isset($argv) && !empty($_SERVER['HTTP_HOST'])) {
 $ScriptStartTime = microtime(true); //To track how long a page takes to create
 if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
 	$RUsage = getrusage();
-	$CPUTimeStart = $RUsage['ru_utime.tv_sec']*1000000 + $RUsage['ru_utime.tv_usec'];
+	$CPUTimeStart = $RUsage['ru_utime.tv_sec'] * 1000000 + $RUsage['ru_utime.tv_usec'];
 }
 ob_start(); //Start a buffer, mainly in case there is a mysql error
 
 
-require(SERVER_ROOT.'/classes/class_debug.php'); //Require the debug class
-require(SERVER_ROOT.'/classes/class_mysql.php'); //Require the database wrapper
-require(SERVER_ROOT.'/classes/class_cache.php'); //Require the caching class
-require(SERVER_ROOT.'/classes/class_encrypt.php'); //Require the encryption class
-require(SERVER_ROOT.'/classes/class_useragent.php'); //Require the useragent class
-require(SERVER_ROOT.'/classes/class_time.php'); //Require the time class
-require(SERVER_ROOT.'/classes/class_search.php'); //Require the searching class
-require(SERVER_ROOT.'/classes/class_paranoia.php'); //Require the paranoia check_paranoia function
+require(SERVER_ROOT.'/classes/debug.class.php'); //Require the debug class
+require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
+require(SERVER_ROOT.'/classes/cache.class.php'); //Require the caching class
+require(SERVER_ROOT.'/classes/encrypt.class.php'); //Require the encryption class
+require(SERVER_ROOT.'/classes/useragent.class.php'); //Require the useragent class
+require(SERVER_ROOT.'/classes/time.class.php'); //Require the time class
+require(SERVER_ROOT.'/classes/search.class.php'); //Require the searching class
+require(SERVER_ROOT.'/classes/paranoia.class.php'); //Require the paranoia check_paranoia function
 require(SERVER_ROOT.'/classes/regex.php');
 require(SERVER_ROOT.'/classes/util.php');
 
@@ -86,52 +86,52 @@ spl_autoload_register(function ($ClassName) {
 	$FileName='';
 	switch ($ClassName) {
 		case 'Artists':
-			$FileName = 'class_artists';
+			$FileName = 'artists.class';
 			break;
 		case 'Bencode':
-			$FileName = 'class_bencode';
+			$FileName = 'bencode.class';
 			break;
 		case 'BencodeDecode':
-			$FileName = 'class_bencodedecode';
+			$FileName = 'bencodedecode.class';
 			break;
 		case 'BencodeTorrent':
-			$FileName = 'class_bencodetorrent';
+			$FileName = 'bencodetorrent.class';
 			break;
 		case 'Bookmarks':
 			$FileName = 'bookmarks.class';
 			break;
 		case 'Collages':
-			$FileName = 'class_collages';
+			$FileName = 'collages.class';
 			break;
 		case 'Format':
-			$FileName = 'class_format';
+			$FileName = 'format.class';
 			break;
 		case 'Forums':
-			$FileName = 'class_forums';
+			$FileName = 'forums.class';
 			break;
 		case 'ImageTools':
-			$FileName = 'class_image_tools';
+			$FileName = 'image_tools.class';
 			break;
 		case 'LastFM':
-			$FileName = 'class_lastfm';
+			$FileName = 'lastfm.class';
 			break;
 		case 'MASS_USER_BOOKMARKS_EDITOR':
-			$FileName = 'class_mass_user_bookmarks_editor';
+			$FileName = 'mass_user_bookmarks_editor.class';
 			break;
 		case 'MASS_USER_TORRENTS_EDITOR':
-			$FileName = 'class_mass_user_torrents_editor';
+			$FileName = 'mass_user_torrents_editor.class';
 			break;
 		case 'MASS_USER_TORRENTS_TABLE_VIEW':
-			$FileName = 'class_mass_user_torrents_table_view';
+			$FileName = 'mass_user_torrents_table_view.class';
 		    break;
 		case 'Misc':
-			$FileName = 'class_misc';
+			$FileName = 'misc.class';
 			break;
 		case 'Permissions':
-			$FileName = 'class_permissions';
+			$FileName = 'permissions.class';
 			break;
 		case 'Requests':
-			$FileName = 'class_requests';
+			$FileName = 'requests.class';
 			break;
 		case 'Rippy':
 			$FileName = 'rippy.class';
@@ -140,48 +140,48 @@ spl_autoload_register(function ($ClassName) {
 			$FileName = 'rules.class';
 			break;
 		case 'Sphinxql':
-			$FileName = 'class_sphinxql';
+			$FileName = 'sphinxql.class';
 			break;
 		case 'SphinxqlQuery':
-			$FileName = 'class_sphinxqlquery';
+			$FileName = 'sphinxqlquery.class';
 			break;
 		case 'SphinxqlResult':
-			$FileName = 'class_sphinxqlresult';
+			$FileName = 'sphinxqlresult.class';
 			break;
 		case 'Tags':
-			$FileName = 'class_tags';
+			$FileName = 'tags.class';
 			break;
 		case 'TEXTAREA_PREVIEW':
-			$FileName = 'class_textarea_preview';
+			$FileName = 'textarea_preview.class';
 			break;
 		case 'Tools':
-			$FileName = 'class_tools';
+			$FileName = 'tools.class';
 			break;
 		case 'TORRENT':
 		case 'BENCODE_DICT':
 		case 'BENCODE_LIST':
-			$FileName = 'class_torrent';
+			$FileName = 'torrent.class';
 			break;
 		case 'Torrents':
-			$FileName = 'class_torrents';
+			$FileName = 'torrents.class';
 			break;
 		case 'TorrentsDL':
-			$FileName = 'class_torrentsdl';
+			$FileName = 'torrentsdl.class';
 			break;
 		case 'Tracker':
-			$FileName = 'class_tracker';
+			$FileName = 'tracker.class';
 			break;
 		case 'Users':
-			$FileName = 'class_users';
+			$FileName = 'users.class';
 			break;
 		case 'View':
-			$FileName = 'class_view';
+			$FileName = 'view.class';
 			break;
 		case 'Votes':
-			$FileName = 'class_votes';
+			$FileName = 'votes.class';
 			break;
 		case 'Zip':
-			$FileName = 'class_zip';
+			$FileName = 'zip.class';
 			break;
 		default:
 			die("Couldn't import class " . $ClassName);

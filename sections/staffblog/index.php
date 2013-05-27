@@ -9,7 +9,7 @@ $DB->query("INSERT INTO staff_blog_visits (UserID, Time) VALUES (".$LoggedUser['
 $Cache->delete_value('staff_blog_read_'.$LoggedUser['ID']);
 
 define('ANNOUNCEMENT_FORUM_ID', 19);
-require(SERVER_ROOT.'/classes/class_text.php');
+require(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
 
 if (check_perms('admin_manage_blog')) {

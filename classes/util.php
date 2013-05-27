@@ -91,7 +91,7 @@ function error($Error, $Ajax=false, $Log=false) {
 
 
 /**
- * Convenience function. See doc in class_permissions.php
+ * Convenience function. See doc in permissions.class.php
  */
 function check_perms($PermissionName, $MinClass = 0) {
 	return Permissions::check_perms($PermissionName, $MinClass);

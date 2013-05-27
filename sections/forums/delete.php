@@ -40,7 +40,8 @@ list($LastID) = $DB->next_record();
 $DB->query("
 	UPDATE forums AS f, forums_topics AS t
 	SET f.NumPosts=f.NumPosts-1, t.NumPosts=t.NumPosts-1
-	WHERE f.ID='$ForumID' AND t.ID='$TopicID'");
+	WHERE f.ID='$ForumID'
+		AND t.ID='$TopicID'");
 
 if ($LastID < $PostID) { // Last post in a topic was removed
 	$DB->query("
@@ -66,7 +67,8 @@ if ($LastID < $PostID) { // Last post in a topic was removed
 			u.Username
 		FROM forums_topics AS t
 			LEFT JOIN users_main AS u ON u.ID = t.LastPostAuthorID
-		WHERE ForumID='$ForumID' AND t.ID<>'$TopicID'
+		WHERE ForumID='$ForumID'
+			AND t.ID != '$TopicID'
 		ORDER BY LastPostID DESC
 		LIMIT 1");
 	list($LastTopicID, $LastTopicTitle, $LastTopicPostID, $LastTopicPostTime, $LastTopicAuthorID, $LastTopicAuthorName) = $DB->next_record(MYSQLI_BOTH, false);

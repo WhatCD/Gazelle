@@ -9,18 +9,22 @@ define('DONATIONS_PER_PAGE', 50);
 list($Page,$Limit) = Format::page_limit(DONATIONS_PER_PAGE);
 
 
-$sql = "SELECT
-	SQL_CALC_FOUND_ROWS
-	d.UserID,
-	d.Amount,
-	d.Currency,
-	d.Email,
-	d.Time
+$sql = "
+	SELECT
+		SQL_CALC_FOUND_ROWS
+		d.UserID,
+		d.Amount,
+		d.Currency,
+		d.Email,
+		d.Time
 	FROM donations AS d ";
 if (!empty($_GET['search'])) {
-	$sql .= "WHERE d.Email LIKE '%".db_string($_GET['search'])."%' ";
+	$sql .= "
+	WHERE d.Email LIKE '%".db_string($_GET['search'])."%' ";
 }
-$sql .= "ORDER BY d.Time DESC LIMIT $Limit";
+$sql .= "
+	ORDER BY d.Time DESC
+	LIMIT $Limit";
 $DB->query($sql);
 $Donations = $DB->to_array(false,MYSQLI_NUM);
 
@@ -28,13 +32,18 @@ $DB->query("SELECT FOUND_ROWS()");
 list($Results) = $DB->next_record();
 
 if (empty($_GET['search']) && !isset($_GET['page']) && !$DonationTimeline = $Cache->get_value('donation_timeline')) {
-	include(SERVER_ROOT.'/classes/class_charts.php');
-	$DB->query("SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, SUM(Amount) FROM donations GROUP BY Month ORDER BY Time DESC LIMIT 1, 18");
+	include(SERVER_ROOT.'/classes/charts.class.php');
+	$DB->query("
+		SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, SUM(Amount)
+		FROM donations
+		GROUP BY Month
+		ORDER BY Time DESC
+		LIMIT 1, 18");
 	$Timeline = array_reverse($DB->to_array());
-	$Area = new AREA_GRAPH(880,160,array('Break'=>1));
+	$Area = new AREA_GRAPH(880, 160, array('Break'=>1));
 	foreach ($Timeline as $Entry) {
-		list($Label,$Amount) = $Entry;
-		$Area->add($Label,$Amount);
+		list($Label, $Amount) = $Entry;
+		$Area->add($Label, $Amount);
 	}
 	$Area->transparent();
 	$Area->grid_lines();

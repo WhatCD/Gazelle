@@ -6,11 +6,11 @@ function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 
-include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
 // Similar artist map
-include(SERVER_ROOT.'/classes/class_artists_similar.php');
+include(SERVER_ROOT.'/classes/artists_similar.class.php');
 
 $UserVotes = Votes::get_user_votes($LoggedUser['ID']);
 
@@ -839,7 +839,7 @@ if ($NumSimilar > 0) {
 		}
 	}
 	if (empty($Similar) || empty($Similar->Artists)) {
-		include(SERVER_ROOT.'/classes/class_image.php');
+		include(SERVER_ROOT.'/classes/image.class.php');
 		$Img = new IMAGE;
 		$Img->create(WIDTH, HEIGHT);
 		$Img->color(255, 255, 255, 127);

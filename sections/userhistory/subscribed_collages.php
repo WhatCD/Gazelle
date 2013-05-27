@@ -6,7 +6,7 @@ if (!check_perms('site_collages_subscribe')) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
 View::show_header('Subscribed collages','browse,collage');

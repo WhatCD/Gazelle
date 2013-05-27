@@ -1,10 +1,27 @@
 <?
-if (!list($Labels,$InFlow,$OutFlow,$NetFlow,$Max) = $Cache->get_value('torrents_timeline')) {
-	$DB->query("SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, COUNT(ID) FROM log WHERE Message LIKE 'Torrent % was uploaded by %' GROUP BY Month ORDER BY Time DESC LIMIT 1, 12");
+if (!list($Labels, $InFlow, $OutFlow, $NetFlow, $Max) = $Cache->get_value('torrents_timeline')) {
+	$DB->query("
+		SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, COUNT(ID)
+		FROM log
+		WHERE Message LIKE 'Torrent % was uploaded by %'
+		GROUP BY Month
+		ORDER BY Time DESC
+		LIMIT 1, 12");
 	$TimelineIn = array_reverse($DB->to_array());
-	$DB->query("SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, COUNT(ID) FROM log WHERE Message LIKE 'Torrent % was deleted %' GROUP BY Month ORDER BY Time DESC LIMIT 1, 12");
+	$DB->query("
+		SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, COUNT(ID)
+		FROM log
+		WHERE Message LIKE 'Torrent % was deleted %'
+		GROUP BY Month
+		ORDER BY Time DESC
+		LIMIT 1, 12");
 	$TimelineOut = array_reverse($DB->to_array());
-	$DB->query("SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, COUNT(ID) FROM torrents GROUP BY Month ORDER BY Time DESC LIMIT 1, 12");
+	$DB->query("
+		SELECT DATE_FORMAT(Time,'%b \'%y') AS Month, COUNT(ID)
+		FROM torrents
+		GROUP BY Month
+		ORDER BY Time DESC
+		LIMIT 1, 12");
 	$TimelineNet = array_reverse($DB->to_array());
 
 	foreach ($TimelineIn as $Month) {
@@ -38,17 +55,22 @@ if (!list($Labels,$InFlow,$OutFlow,$NetFlow,$Max) = $Cache->get_value('torrents_
 		list($Label,$Amount) = $Month;
 		$NetFlow[] = number_format(($Amount / $Max) * 100, 4);
 	}
-	$Cache->cache_value('torrents_timeline',array($Labels,$InFlow,$OutFlow,$NetFlow,$Max),mktime(0,0,0,date('n') + 1,2)); //Tested: fine for dec -> jan
+	$Cache->cache_value('torrents_timeline', array($Labels, $InFlow, $OutFlow, $NetFlow, $Max), mktime(0, 0, 0, date('n') + 1, 2)); //Tested: fine for dec -> jan
 }
 
-include_once(SERVER_ROOT.'/classes/class_charts.php');
-$DB->query("SELECT tg.CategoryID, COUNT(t.ID) AS Torrents FROM torrents AS t JOIN torrents_group AS tg ON tg.ID=t.GroupID GROUP BY tg.CategoryID ORDER BY Torrents DESC");
+include_once(SERVER_ROOT.'/classes/charts.class.php');
+$DB->query("
+	SELECT tg.CategoryID, COUNT(t.ID) AS Torrents
+	FROM torrents AS t
+		JOIN torrents_group AS tg ON tg.ID=t.GroupID
+	GROUP BY tg.CategoryID
+	ORDER BY Torrents DESC");
 $Groups = $DB->to_array();
 $Pie = new PIE_CHART(750,400,array('Other'=>1,'Percentage'=>1));
 foreach ($Groups as $Group) {
 	list($CategoryID, $Torrents) = $Group;
 	$CategoryName = $Categories[$CategoryID - 1];
-	$Pie->add($CategoryName,$Torrents);
+	$Pie->add($CategoryName, $Torrents);
 }
 $Pie->transparent();
 $Pie->color('FF33CC');

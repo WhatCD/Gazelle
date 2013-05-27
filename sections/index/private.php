@@ -1,18 +1,19 @@
 <?
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT(true);
 
 if (!$News = $Cache->get_value('news')) {
-	$DB->query("SELECT
-		ID,
-		Title,
-		Body,
-		Time
+	$DB->query("
+		SELECT
+			ID,
+			Title,
+			Body,
+			Time
 		FROM news
 		ORDER BY Time DESC
 		LIMIT 5");
-	$News = $DB->to_array(false,MYSQLI_NUM,false);
-	$Cache->cache_value('news',$News,3600*24*30);
+	$News = $DB->to_array(false, MYSQLI_NUM, false);
+	$Cache->cache_value('news', $News, 3600 * 24 * 30);
 	$Cache->cache_value('news_latest_id', $News[0][0], 0);
 }
 
@@ -220,7 +221,11 @@ if (($PeerStats = $Cache->get_value('stats_peers')) === false) {
 	$PeerStatsLocked = $Cache->get_value('stats_peers_lock');
 	if (!$PeerStatsLocked) {
 		$Cache->cache_value('stats_peers_lock', 1, 30);
-		$DB->query("SELECT IF(remaining=0,'Seeding','Leeching') AS Type, COUNT(uid) FROM xbt_files_users WHERE active=1 GROUP BY Type");
+		$DB->query("
+			SELECT IF(remaining=0,'Seeding','Leeching') AS Type, COUNT(uid)
+			FROM xbt_files_users
+			WHERE active=1
+			GROUP BY Type");
 		$PeerCount = $DB->to_array(0, MYSQLI_NUM, false);
 		$SeederCount = $PeerCount['Seeding'][1] ?: 0;
 		$LeecherCount = $PeerCount['Leeching'][1] ?: 0;
@@ -249,16 +254,28 @@ if (!$PeerStatsLocked) {
 		</div>
 <?
 if (($TopicID = $Cache->get_value('polls_featured')) === false) {
-	$DB->query("SELECT TopicID FROM forums_polls ORDER BY Featured DESC LIMIT 1");
+	$DB->query("
+		SELECT TopicID
+		FROM forums_polls
+		ORDER BY Featured DESC
+		LIMIT 1");
 	list($TopicID) = $DB->next_record();
 	$Cache->cache_value('polls_featured',$TopicID,0);
 }
 if ($TopicID) {
 	if (($Poll = $Cache->get_value('polls_'.$TopicID)) === false) {
-		$DB->query("SELECT Question, Answers, Featured, Closed FROM forums_polls WHERE TopicID='".$TopicID."'");
+		$DB->query("
+			SELECT Question, Answers, Featured, Closed
+			FROM forums_polls
+			WHERE TopicID='$TopicID'");
 		list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 		$Answers = unserialize($Answers);
-		$DB->query("SELECT Vote, COUNT(UserID) FROM forums_polls_votes WHERE TopicID='$TopicID' AND Vote <> '0' GROUP BY Vote");
+		$DB->query("
+			SELECT Vote, COUNT(UserID)
+			FROM forums_polls_votes
+			WHERE TopicID='$TopicID'
+				AND Vote != '0'
+			GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
 
 		$Votes = array();
@@ -285,7 +302,11 @@ if ($TopicID) {
 		$MaxVotes = 0;
 	}
 
-	$DB->query("SELECT Vote FROM forums_polls_votes WHERE UserID='".$LoggedUser['ID']."' AND TopicID='$TopicID'");
+	$DB->query("
+		SELECT Vote
+		FROM forums_polls_votes
+		WHERE UserID='".$LoggedUser['ID']."'
+			AND TopicID='$TopicID'");
 	list($UserResponse) = $DB->next_record();
 	if (!empty($UserResponse) && $UserResponse != 0) {
 		$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];

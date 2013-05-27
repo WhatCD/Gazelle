@@ -9,7 +9,7 @@ if (isset($LoggedUser)) {
 }
 */
 
-include(SERVER_ROOT.'/classes/class_validate.php');
+include(SERVER_ROOT.'/classes/validate.class.php');
 
 $Val=NEW VALIDATE;
 
@@ -84,9 +84,11 @@ if (!empty($_REQUEST['confirm'])) {
 			$IPcc = Tools::geoip($_SERVER['REMOTE_ADDR']);
 
 			
-			$DB->query("INSERT INTO users_main
-				(Username,Email,PassHash,torrent_pass,IP,PermissionID,Enabled,Invites,Uploaded,ipcc) VALUES
-				('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(Users::make_crypt_hash($_POST['password']))."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','".$Class."','".$Enabled."','".STARTING_INVITES."', '524288000', '$IPcc')");
+			$DB->query("
+				INSERT INTO users_main
+					(Username, Email, PassHash, torrent_pass, IP, PermissionID, Enabled, Invites, Uploaded, ipcc)
+				VALUES
+					('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(Users::make_crypt_hash($_POST['password']))."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','$Class','$Enabled','".STARTING_INVITES."', '524288000', '$IPcc')");
 
 			$UserID = $DB->inserted_id();
 			
@@ -98,23 +100,33 @@ if (!empty($_REQUEST['confirm'])) {
 			list($StyleID) = $DB->next_record();
 			$AuthKey = Users::make_secret();
 
-			$DB->query("INSERT INTO users_info (UserID,StyleID,AuthKey, Inviter, JoinDate) VALUES ('$UserID','$StyleID','".db_string($AuthKey)."', '$InviterID', '".sqltime()."')");
+			$DB->query("
+				INSERT INTO users_info
+					(UserID, StyleID, AuthKey, Inviter, JoinDate)
+				VALUES
+					('$UserID','$StyleID','".db_string($AuthKey)."', '$InviterID', '".sqltime()."')");
 
-			$DB->query("INSERT INTO users_history_ips
-					(UserID, IP, StartTime) VALUES
+			$DB->query("
+				INSERT INTO users_history_ips
+					(UserID, IP, StartTime)
+				VALUES
 					('$UserID', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."')");
 
 
 
 
-			$DB->query("INSERT INTO users_history_emails
-				(UserID, Email, Time, IP) VALUES
-				('$UserID', '".db_string($_REQUEST['email'])."', '0000-00-00 00:00:00', '".db_string($_SERVER['REMOTE_ADDR'])."')");
+			$DB->query("
+				INSERT INTO users_history_emails
+					(UserID, Email, Time, IP)
+				VALUES
+					('$UserID', '".db_string($_REQUEST['email'])."', '0000-00-00 00:00:00', '".db_string($_SERVER['REMOTE_ADDR'])."')");
 
 			if ($_REQUEST['email'] != $InviteEmail) {
-				$DB->query("INSERT INTO users_history_emails
-					(UserID, Email, Time, IP) VALUES
-					('$UserID', '$InviteEmail', '".sqltime()."', '".db_string($_SERVER['REMOTE_ADDR'])."')");
+				$DB->query("
+					INSERT INTO users_history_emails
+						(UserID, Email, Time, IP)
+					VALUES
+						('$UserID', '$InviteEmail', '".sqltime()."', '".db_string($_SERVER['REMOTE_ADDR'])."')");
 			}
 
 
@@ -183,8 +195,7 @@ if (!empty($_REQUEST['confirm'])) {
 				$TreeLevel = 1;
 			}
 
-
-			include(SERVER_ROOT.'/classes/class_templates.php');
+			include(SERVER_ROOT.'/classes/templates.class.php');
 			$TPL = NEW TEMPLATE;
 			$TPL->open(SERVER_ROOT.'/templates/new_registration.tpl');
 
@@ -199,10 +210,12 @@ if (!empty($_REQUEST['confirm'])) {
 
 
 		}
-
 	} elseif ($_GET['invite']) {
 		// If they haven't submitted the form, check to see if their invite is good
-		$DB->query("SELECT InviteKey FROM invites WHERE InviteKey='".db_string($_GET['invite'])."'");
+		$DB->query("
+			SELECT InviteKey
+			FROM invites
+			WHERE InviteKey='".db_string($_GET['invite'])."'");
 		if ($DB->record_count() == 0) {
 			error('Invite not found!');
 		}

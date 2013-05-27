@@ -11,16 +11,21 @@ class USER_RANK {
 
 		$DB->query("DROP TEMPORARY TABLE IF EXISTS temp_stats");
 
-		$DB->query("CREATE TEMPORARY TABLE temp_stats
-			(ID int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-			Val bigint(20) NOT NULL);");
+		$DB->query("
+			CREATE TEMPORARY TABLE temp_stats (
+				ID int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+				Val bigint(20) NOT NULL
+			);");
 
 		$DB->query("INSERT INTO temp_stats (Val) ".$Query);
 
 		$DB->query("SELECT COUNT(ID) FROM temp_stats");
 		list($UserCount) = $DB->next_record();
 
-		$DB->query("SELECT MIN(Val) FROM temp_stats GROUP BY CEIL(ID/(".(int)$UserCount."/100));");
+		$DB->query("
+			SELECT MIN(Val)
+			FROM temp_stats
+			GROUP BY CEIL(ID/(".(int)$UserCount."/100));");
 
 		$Table = $DB->to_array();
 
@@ -33,27 +38,68 @@ class USER_RANK {
 	function table_query($TableName) {
 		switch ($TableName) {
 			case 'uploaded':
-				$Query =  "SELECT Uploaded FROM users_main WHERE Enabled='1' AND Uploaded>0 ORDER BY Uploaded;";
+				$Query =  "
+					SELECT Uploaded
+					FROM users_main
+					WHERE Enabled='1'
+						AND Uploaded > 0
+					ORDER BY Uploaded;";
 				break;
 			case 'downloaded':
-				$Query =  "SELECT Downloaded FROM users_main WHERE Enabled='1' AND Downloaded>0 ORDER BY Downloaded;";
+				$Query =  "
+					SELECT Downloaded
+					FROM users_main
+					WHERE Enabled='1'
+						AND Downloaded > 0
+					ORDER BY Downloaded;";
 				break;
 			case 'uploads':
-				$Query = "SELECT COUNT(t.ID) AS Uploads FROM users_main AS um JOIN torrents AS t ON t.UserID=um.ID WHERE um.Enabled='1' GROUP BY um.ID ORDER BY Uploads;";
+				$Query = "
+					SELECT COUNT(t.ID) AS Uploads
+					FROM users_main AS um
+						JOIN torrents AS t ON t.UserID=um.ID
+					WHERE um.Enabled='1'
+					GROUP BY um.ID
+					ORDER BY Uploads;";
 				break;
 			case 'requests':
-				$Query = "SELECT COUNT(r.ID) AS Requests FROM users_main AS um JOIN requests AS r ON r.FillerID=um.ID WHERE um.Enabled='1' GROUP BY um.ID ORDER BY Requests;";
+				$Query = "
+					SELECT COUNT(r.ID) AS Requests
+					FROM users_main AS um
+						JOIN requests AS r ON r.FillerID=um.ID
+					WHERE um.Enabled='1'
+					GROUP BY um.ID
+					ORDER BY Requests;";
 				break;
 			case 'posts':
-				$Query = "SELECT COUNT(p.ID) AS Posts FROM users_main AS um JOIN forums_posts AS p ON p.AuthorID=um.ID WHERE um.Enabled='1' GROUP BY um.ID ORDER BY Posts;";
+				$Query = "
+					SELECT COUNT(p.ID) AS Posts
+					FROM users_main AS um
+						JOIN forums_posts AS p ON p.AuthorID=um.ID
+					WHERE um.Enabled='1'
+					GROUP BY um.ID
+					ORDER BY Posts;";
 				break;
 			case 'bounty':
 
-				$Query = "SELECT SUM(rv.Bounty) AS Bounty FROM users_main AS um JOIN requests_votes AS rv ON rv.UserID=um.ID WHERE um.Enabled='1' GROUP BY um.ID ORDER BY Bounty;";
+				$Query = "
+					SELECT SUM(rv.Bounty) AS Bounty
+					FROM users_main AS um
+						JOIN requests_votes AS rv ON rv.UserID=um.ID
+					WHERE um.Enabled='1'
+					GROUP BY um.ID
+					ORDER BY Bounty;";
 
 				break;
 			case 'artists':
-				$Query = "SELECT COUNT(ta.ArtistID) AS Artists FROM torrents_artists AS ta JOIN torrents_group AS tg ON tg.ID=ta.GroupID JOIN torrents AS t ON t.GroupID = tg.ID WHERE t.UserID != ta.UserID GROUP BY tg.ID ORDER BY Artists ASC";
+				$Query = "
+					SELECT COUNT(ta.ArtistID) AS Artists
+					FROM torrents_artists AS ta
+						JOIN torrents_group AS tg ON tg.ID=ta.GroupID
+						JOIN torrents AS t ON t.GroupID = tg.ID
+					WHERE t.UserID != ta.UserID
+					GROUP BY tg.ID
+					ORDER BY Artists ASC";
 				break;
 		}
 		return $Query;

@@ -18,8 +18,8 @@ if (Tools::site_ban_ip($_SERVER['REMOTE_ADDR'])) {
 	error('Your IP has been banned.');
 }
 
-require(SERVER_ROOT."/classes/class_validate.php");
-$Validate=NEW VALIDATE;
+require(SERVER_ROOT."/classes/validate.class.php");
+$Validate = NEW VALIDATE;
 
 if (array_key_exists('action', $_GET) && $_GET['action'] == 'disabled') {
 	require('disabled.php');
@@ -39,7 +39,7 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 			FROM users_main AS m
 				INNER JOIN users_info AS i ON i.UserID=m.ID
 			WHERE i.ResetKey='".db_string($_REQUEST['key'])."'
-				AND i.ResetKey<>''
+				AND i.ResetKey != ''
 				AND m.Enabled='1'");
 		list($UserID,$Email,$Country,$Expires)=$DB->next_record();
 
@@ -118,10 +118,10 @@ if (isset($_REQUEST['act']) && $_REQUEST['act']=="recover") {
 					$ResetKey=Users::make_secret();
 					$DB->query("UPDATE users_info SET
 						ResetKey='".db_string($ResetKey)."',
-						ResetExpires='".time_plus(60*60)."'
+						ResetExpires='".time_plus(60 * 60)."'
 						WHERE UserID='$UserID'");
 
-					require(SERVER_ROOT.'/classes/class_templates.php');
+					require(SERVER_ROOT.'/classes/templates.class.php');
 					$TPL=NEW TEMPLATE;
 					$TPL->open(SERVER_ROOT.'/templates/password_reset.tpl'); // Password reset template
 
@@ -250,7 +250,7 @@ else {
 					Enabled
 				FROM users_main
 				WHERE Username='".db_string($_POST['username'])."'
-					AND Username<>''");
+					AND Username != ''");
 			list($UserID,$PermissionID,$CustomPermissions,$PassHash,$Secret,$Enabled) = $DB->next_record(MYSQLI_NUM, array(2));
 			if (strtotime($BannedUntil)<time()) {
 				if ($UserID && Users::check_password($_POST['password'], $PassHash, $Secret)) {

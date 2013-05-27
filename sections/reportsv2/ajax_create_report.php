@@ -23,7 +23,11 @@ if (!is_number($_POST['torrentid'])) {
 	$TorrentID = $_POST['torrentid'];
 }
 
-$DB->query("SELECT tg.CategoryID FROM torrents_group AS tg JOIN torrents AS t ON t.GroupID=tg.ID WHERE t.ID = ".$TorrentID);
+$DB->query("
+	SELECT tg.CategoryID
+	FROM torrents_group AS tg
+		JOIN torrents AS t ON t.GroupID=tg.ID
+	WHERE t.ID = ".$TorrentID);
 if ($DB->record_count() < 1) {
 	$Err = 'No torrent with that ID exists!';
 } else {
@@ -69,10 +73,11 @@ if ($DB->record_count() > 0) {
 	die();
 }
 
-$DB->query("INSERT INTO reportsv2
-			(ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, ExtraID)
-			VALUES
-			(".db_string($LoggedUser['ID']).", $TorrentID, '$Type', '$Extra', 'New', '".sqltime()."', '$ExtraID')");
+$DB->query("
+	INSERT INTO reportsv2
+		(ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, ExtraID)
+	VALUES
+		(".db_string($LoggedUser['ID']).", $TorrentID, '$Type', '$Extra', 'New', '".sqltime()."', '$ExtraID')");
 
 $ReportID = $DB->inserted_id();
 

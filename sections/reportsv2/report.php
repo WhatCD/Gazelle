@@ -5,7 +5,7 @@
  */
 
 include(SERVER_ROOT.'/sections/torrents/functions.php');
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 
 $Text = NEW TEXT;
 
@@ -16,7 +16,11 @@ if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	}
 } else {
 	$TorrentID = $_GET['id'];
-	$DB->query("SELECT tg.CategoryID, t.GroupID FROM torrents_group AS tg LEFT JOIN torrents AS t ON t.GroupID=tg.ID WHERE t.ID=" . $_GET['id']);
+	$DB->query("
+		SELECT tg.CategoryID, t.GroupID
+		FROM torrents_group AS tg
+			LEFT JOIN torrents AS t ON t.GroupID=tg.ID
+		WHERE t.ID=" . $_GET['id']);
 	list($CategoryID, $GroupID) = $DB->next_record();
 	$Artists = Artists::get_artist($GroupID);
 	$TorrentCache = get_group_info($GroupID, true, $RevisionID);
@@ -72,13 +76,13 @@ View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
 		<h3><?=$DisplayName?></h3>
 	</div>
 	<div class="thin">
-		<table class="torrent_table details<?=$GroupFlags['IsSnatched'] ? ' snatched' : '' ?>" id="torrent_details">
+		<table class="torrent_table details<?=($GroupFlags['IsSnatched'] ? ' snatched' : '')?>" id="torrent_details">
 			<tr class="colhead_dark">
 				<td width="80%"><strong>Reported torrent</strong></td>
 				<td><strong>Size</strong></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
+				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
+				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
 			</tr>
 			<?
 			build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $GroupCategoryID, $ReleaseType, $TorrentList, $Types, $Text, $Username, $ReportedTimes);
@@ -129,7 +133,7 @@ View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
 <?
 				/*
 				 * THIS IS WHERE SEXY AJAX COMES IN
-				 * The following malarky is needed so that if you get sent back here the fields are filled in
+				 * The following malarky is needed so that if you get sent back here, the fields are filled in.
 				 */
 				?>
 				<input id="sitelink" type="hidden" name="sitelink" size="50" value="<?=(!empty($_POST['sitelink']) ? display_str($_POST['sitelink']) : '')?>" />

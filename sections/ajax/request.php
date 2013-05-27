@@ -10,7 +10,7 @@ $MinimumVote = 20 * 1024 * 1024;
  * This is the page that displays the request to the end user after being created.
  */
 
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
 
 if (empty($_GET['id']) || !is_number($_GET['id'])) {

@@ -58,7 +58,7 @@ close_stream();
 
 //------------- Detailed example -------------//
 
-require('classes/class_zip.php');
+require('classes/zip.class.php');
 $Zip = new Zip('FileName');
 $Name = 'Ubuntu-8.10';
 $Zip->add_file($TorrentData, 'Torrents/'.Misc::file_string($Name).'.torrent');

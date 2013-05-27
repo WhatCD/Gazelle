@@ -29,7 +29,7 @@ class Users {
 	 *	int	ID
 	 *	string	Username
 	 *	int	PermissionID
-	 *	array	Paranoia - $Paranoia array sent to class_paranoia
+	 *	array	Paranoia - $Paranoia array sent to paranoia.class
 	 *	boolean	Artist
 	 *	boolean	Donor
 	 *	string	Warned - When their warning expires in international time format

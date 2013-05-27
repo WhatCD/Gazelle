@@ -21,8 +21,8 @@ if (!extension_loaded('gd')) {
 	error('nogd');
 }
 
-require(SERVER_ROOT.'/classes/class_cache.php'); //Require the caching class
-require(SERVER_ROOT.'/classes/class_encrypt.php'); //Require the encryption class
+require(SERVER_ROOT.'/classes/cache.class.php'); //Require the caching class
+require(SERVER_ROOT.'/classes/encrypt.class.php'); //Require the encryption class
 require(SERVER_ROOT.'/classes/regex.php');
 
 $Cache = NEW CACHE($MemcachedServers); //Load the caching class

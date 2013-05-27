@@ -19,7 +19,7 @@ if (isset($_GET['userid']) && check_perms('users_view_invites')) {
 
 list($UserID, $Username, $PermissionID) = array_values(Users::user_info($UserID));
 
-include(SERVER_ROOT.'/classes/class_invite_tree.php');
+include(SERVER_ROOT.'/classes/invite_tree.class.php');
 $Tree = new INVITE_TREE($UserID);
 
 View::show_header($Username.' &gt; Invites &gt; Tree');

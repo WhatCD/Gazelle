@@ -1,6 +1,6 @@
 <?php
 
-include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -78,13 +78,21 @@ function check_paranoia_here($Setting) {
 }
 
 $Friend = false;
-$DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
+$DB->query("
+	SELECT FriendID
+	FROM friends
+	WHERE UserID='$LoggedUser[ID]'
+		AND FriendID='$UserID'");
 if ($DB->record_count() != 0) {
 	$Friend = true;
 }
 
 if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requestsfilled_bounty')) {
-	$DB->query("SELECT COUNT(DISTINCT r.ID), SUM(rv.Bounty) FROM requests AS r LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID WHERE r.FillerID = ".$UserID);
+	$DB->query("
+		SELECT COUNT(DISTINCT r.ID), SUM(rv.Bounty)
+		FROM requests AS r
+			LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID
+		WHERE r.FillerID = ".$UserID);
 	list($RequestsFilled, $TotalBounty) = $DB->next_record();
 	$DB->query("SELECT COUNT(rv.RequestID), SUM(rv.Bounty) FROM requests_votes AS rv WHERE rv.UserID = ".$UserID);
 	list($RequestsVoted, $TotalSpent) = $DB->next_record();
@@ -103,14 +111,17 @@ if (check_paranoia_here('uploads+')) {
 }
 
 if (check_paranoia_here('artistsadded')) {
-	$DB->query("SELECT COUNT(ta.ArtistID) FROM torrents_artists AS ta WHERE ta.UserID = ".$UserID);
+	$DB->query("
+		SELECT COUNT(ta.ArtistID)
+		FROM torrents_artists AS ta
+		WHERE ta.UserID = ".$UserID);
 	list($ArtistsAdded) = $DB->next_record();
 } else {
 	$ArtistsAdded = 0;
 }
 
 // Do the ranks.
-include(SERVER_ROOT.'/classes/class_user_rank.php');
+include(SERVER_ROOT.'/classes/user_rank.class.php');
 $Rank = new USER_RANK;
 
 if (check_paranoia_here('uploaded')) {
@@ -160,27 +171,46 @@ if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfil
 
 // Community section
 if (check_paranoia_here(array('snatched', 'snatched+'))) {
-$DB->query("SELECT COUNT(x.uid), COUNT(DISTINCT x.fid) FROM xbt_snatched AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID'");
+$DB->query("
+	SELECT COUNT(x.uid), COUNT(DISTINCT x.fid)
+	FROM xbt_snatched AS x
+		INNER JOIN torrents AS t ON t.ID=x.fid
+	WHERE x.uid='$UserID'");
 list($Snatched, $UniqueSnatched) = $DB->next_record();
 }
 
 if (check_paranoia_here(array('torrentcomments', 'torrentcomments+'))) {
-	$DB->query("SELECT COUNT(ID) FROM torrents_comments WHERE AuthorID='$UserID'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM torrents_comments
+		WHERE AuthorID='$UserID'");
 	list($NumComments) = $DB->next_record();
 }
 
 if (check_paranoia_here(array('collages', 'collages+'))) {
-	$DB->query("SELECT COUNT(ID) FROM collages WHERE Deleted='0' AND UserID='$UserID'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM collages
+		WHERE Deleted='0'
+			AND UserID='$UserID'");
 	list($NumCollages) = $DB->next_record();
 }
 
 if (check_paranoia_here(array('collagecontribs', 'collagecontribs+'))) {
-	$DB->query("SELECT COUNT(DISTINCT CollageID) FROM collages_torrents AS ct JOIN collages ON CollageID = ID WHERE Deleted='0' AND ct.UserID='$UserID'");
+	$DB->query("
+		SELECT COUNT(DISTINCT CollageID)
+		FROM collages_torrents AS ct
+			JOIN collages ON CollageID = ID
+		WHERE Deleted='0'
+			AND ct.UserID='$UserID'");
 	list($NumCollageContribs) = $DB->next_record();
 }
 
 if (check_paranoia_here(array('uniquegroups', 'uniquegroups+'))) {
-	$DB->query("SELECT COUNT(DISTINCT GroupID) FROM torrents WHERE UserID = '$UserID'");
+	$DB->query("
+		SELECT COUNT(DISTINCT GroupID)
+		FROM torrents
+		WHERE UserID = '$UserID'");
 	list($UniqueGroups) = $DB->next_record();
 }
 
@@ -204,17 +234,30 @@ if (check_paranoia_here(array('perfectflacs', 'perfectflacs+'))) {
 }
 
 if (check_paranoia_here('seeding+')) {
-	$DB->query("SELECT COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.remaining=0");
+	$DB->query("
+		SELECT COUNT(x.uid)
+		FROM xbt_files_users AS x
+			INNER JOIN torrents AS t ON t.ID=x.fid
+		WHERE x.uid='$UserID'
+			AND x.remaining=0");
 	list($Seeding) = $DB->next_record();
 }
 
 if (check_paranoia_here('leeching+')) {
-	$DB->query("SELECT COUNT(x.uid) FROM xbt_files_users AS x INNER JOIN torrents AS t ON t.ID=x.fid WHERE x.uid='$UserID' AND x.remaining>0");
+	$DB->query("
+		SELECT COUNT(x.uid)
+		FROM xbt_files_users AS x
+			INNER JOIN torrents AS t ON t.ID=x.fid
+		WHERE x.uid='$UserID'
+			AND x.remaining>0");
 	list($Leeching) = $DB->next_record();
 }
 
 if (check_paranoia_here('invitedcount')) {
-	$DB->query("SELECT COUNT(UserID) FROM users_info WHERE Inviter='$UserID'");
+	$DB->query("
+		SELECT COUNT(UserID)
+		FROM users_info
+		WHERE Inviter='$UserID'");
 	list($Invited) = $DB->next_record();
 }
 

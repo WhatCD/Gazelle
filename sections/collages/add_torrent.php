@@ -2,7 +2,7 @@
 
 authorize();
 
-include(SERVER_ROOT.'/classes/class_validate.php');
+include(SERVER_ROOT.'/classes/validate.class.php');
 $Val = new VALIDATE;
 
 function add_torrent($CollageID, $GroupID) {
@@ -17,9 +17,9 @@ function add_torrent($CollageID, $GroupID) {
 		$DB->query("INSERT IGNORE INTO collages_torrents
 			(CollageID, GroupID, UserID, Sort, AddedOn)
 			VALUES
-			('$CollageID', '$GroupID', '$LoggedUser[ID]', '$Sort', NOW())");
+			('$CollageID', '$GroupID', '$LoggedUser[ID]', '$Sort', '" . sqltime() . "')");
 
-		$DB->query("UPDATE collages SET NumTorrents=NumTorrents+1, Updated = NOW() WHERE ID='$CollageID'");
+		$DB->query("UPDATE collages SET NumTorrents=NumTorrents+1, Updated = '" . sqltime() . "' WHERE ID='$CollageID'");
 
 		$Cache->delete_value('collage_'.$CollageID);
 		$Cache->delete_value('torrents_details_'.$GroupID);

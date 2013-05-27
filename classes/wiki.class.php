@@ -10,7 +10,7 @@ The only useful function in here is revision_history(). It creates a
 table with the revision history for that particular wiki page.
 
 
-class_wiki depends on your wiki table being structured like this:
+wiki.class depends on your wiki table being structured like this:
 
 +------------+--------------+------+-----+----------------------+-------+
 | Field		 | Type			| Null | Key | Default				| Extra |

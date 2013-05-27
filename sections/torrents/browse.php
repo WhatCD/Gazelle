@@ -168,7 +168,11 @@ if (in_array(strtolower($_GET['order_way']),array('desc','asc'))) {
 if ($_GET['userid'] && is_number($_GET['userid'])) {
 	$UserID=ceil($_GET['userid']);
 
-	$DB->query("SELECT m.Paranoia, p.Level FROM users_main AS m JOIN permissions AS p ON p.ID=m.PermissionID WHERE ID='".$UserID."'");
+	$DB->query("
+		SELECT m.Paranoia, p.Level
+		FROM users_main AS m
+			JOIN permissions AS p ON p.ID=m.PermissionID
+		WHERE ID='$UserID'");
 	list($Paranoia, $UserClass) = $DB->next_record();
 
 	$TorrentWhere='';
@@ -252,7 +256,9 @@ if ((strtolower($_GET['action']) == 'advanced' || ($LoggedUser['SearchType'] && 
 
 	// And now we start building the mega SQL query
 	if ($_GET['artistname'] != '') {
-			$TorrentJoin .= ' LEFT JOIN torrents_artists AS ta ON g.ID = ta.GroupID LEFT JOIN artists AS a ON ta.ArtistID = a.ID';
+			$TorrentJoin .= '
+				LEFT JOIN torrents_artists AS ta ON g.ID = ta.GroupID
+				LEFT JOIN artists AS a ON ta.ArtistID = a.ID';
 			$TorrentWhere = build_search($_GET['artistname'],'a.Name',$_GET['exactartist'],$TorrentWhere);
 	}
 
@@ -1232,9 +1238,9 @@ $DB->query("SELECT
 				INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
 				INNER JOIN tags ON tags.ID=tt.TagID
 			WHERE s.uid='$LoggedUser[ID]'
-				AND tt.TagID<>'13679'
-				AND tt.TagID<>'4820'
-				AND tt.TagID<>'2838'
+				AND tt.TagID != '13679'
+				AND tt.TagID != '4820'
+				AND tt.TagID != '2838'
 				AND g.CategoryID='1'
 				AND tags.Uses > '10'
 			GROUP BY tt.TagID

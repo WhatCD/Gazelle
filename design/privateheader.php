@@ -225,7 +225,11 @@ if ($LoggedUser['NotifyOnQuote']) {
 $MyNews = $LoggedUser['LastReadNews'];
 $CurrentNews = $Cache->get_value('news_latest_id');
 if ($CurrentNews === false) {
-	$DB->query("SELECT ID FROM news ORDER BY Time DESC LIMIT 1");
+	$DB->query("
+		SELECT ID
+		FROM news
+		ORDER BY Time DESC
+		LIMIT 1");
 	if ($DB->record_count() == 1) {
 		list($CurrentNews) = $DB->next_record();
 	} else {
@@ -241,7 +245,12 @@ if ($MyNews < $CurrentNews) {
 $MyBlog = $LoggedUser['LastReadBlog'];
 $CurrentBlog = $Cache->get_value('blog_latest_id');
 if ($CurrentBlog === false) {
-	$DB->query("SELECT ID FROM blog WHERE Important = 1 ORDER BY Time DESC LIMIT 1");
+	$DB->query("
+		SELECT ID
+		FROM blog
+		WHERE Important = 1
+		ORDER BY Time DESC
+		LIMIT 1");
 	if ($DB->record_count() == 1) {
 		list($CurrentBlog) = $DB->next_record();
 	} else {
@@ -282,7 +291,11 @@ if (check_perms('users_mod')) {
 //Staff PM
 $NewStaffPMs = $Cache->get_value('staff_pm_new_'.$LoggedUser['ID']);
 if ($NewStaffPMs === false) {
-	$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE UserID='".$LoggedUser['ID']."' AND Unread = '1'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM staff_pm_conversations
+		WHERE UserID='".$LoggedUser['ID']."'
+			AND Unread = '1'");
 	list($NewStaffPMs) = $DB->next_record();
 	$Cache->cache_value('staff_pm_new_'.$LoggedUser['ID'], $NewStaffPMs, 0);
 }
@@ -294,7 +307,12 @@ if ($NewStaffPMs > 0) {
 //Inbox
 $NewMessages = $Cache->get_value('inbox_new_'.$LoggedUser['ID']);
 if ($NewMessages === false) {
-	$DB->query("SELECT COUNT(UnRead) FROM pm_conversations_users WHERE UserID='".$LoggedUser['ID']."' AND UnRead = '1' AND InInbox = '1'");
+	$DB->query("
+		SELECT COUNT(UnRead)
+		FROM pm_conversations_users
+		WHERE UserID='".$LoggedUser['ID']."'
+			AND UnRead = '1'
+			AND InInbox = '1'");
 	list($NewMessages) = $DB->next_record();
 	$Cache->cache_value('inbox_new_'.$LoggedUser['ID'], $NewMessages, 0);
 }
@@ -312,7 +330,11 @@ if ($LoggedUser['RatioWatch']) {
 if (check_perms('site_torrents_notify')) {
 	$NewNotifications = $Cache->get_value('notifications_new_'.$LoggedUser['ID']);
 	if ($NewNotifications === false) {
-		$DB->query("SELECT COUNT(UserID) FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]' AND UnRead='1'");
+		$DB->query("
+			SELECT COUNT(UserID)
+			FROM users_notify_torrents
+			WHERE UserID='$LoggedUser[ID]'
+				AND UnRead='1'");
 		list($NewNotifications) = $DB->next_record();
 		/* if ($NewNotifications && !check_perms('site_torrents_notify')) {
 			$DB->query("DELETE FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]'");
@@ -329,11 +351,14 @@ if (check_perms('site_torrents_notify')) {
 if (check_perms('site_collages_subscribe')) {
 	$NewCollages = $Cache->get_value('collage_subs_user_new_'.$LoggedUser['ID']);
 	if ($NewCollages === false) {
-			$DB->query("SELECT COUNT(DISTINCT s.CollageID)
-						FROM users_collage_subs as s
-							JOIN collages as c ON s.CollageID = c.ID
-							JOIN collages_torrents as ct on ct.CollageID = c.ID
-						WHERE s.UserID = $LoggedUser[ID] AND ct.AddedOn > s.LastVisit AND c.Deleted = '0'");
+			$DB->query("
+				SELECT COUNT(DISTINCT s.CollageID)
+				FROM users_collage_subs as s
+					JOIN collages as c ON s.CollageID = c.ID
+					JOIN collages_torrents as ct on ct.CollageID = c.ID
+				WHERE s.UserID = $LoggedUser[ID]
+					AND ct.AddedOn > s.LastVisit
+					AND c.Deleted = '0'");
 			list($NewCollages) = $DB->next_record();
 			$Cache->cache_value('collage_subs_user_new_'.$LoggedUser['ID'], $NewCollages, 0);
 	}
@@ -348,10 +373,21 @@ if (check_perms('users_mod') || $LoggedUser['PermissionID'] == FORUM_MOD) {
 	$NumStaffPMs = $Cache->get_value('num_staff_pms_'.$LoggedUser['ID']);
 	if ($NumStaffPMs === false) {
 		if (check_perms('users_mod')) {
-			$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR (Level >= ".max(700,$Classes[MOD]['Level'])." AND Level <=".$LoggedUser['Class']."))");
+			$DB->query("
+				SELECT COUNT(ID)
+				FROM staff_pm_conversations
+				WHERE Status='Unanswered'
+					AND (AssignedToUser=".$LoggedUser['ID']."
+						OR (Level >= ".max(700,$Classes[MOD]['Level'])."
+							AND Level <=".$LoggedUser['Class']."))");
 		}
 		if ($LoggedUser['PermissionID'] == FORUM_MOD) {
-			$DB->query("SELECT COUNT(ID) FROM staff_pm_conversations WHERE Status='Unanswered' AND (AssignedToUser=".$LoggedUser['ID']." OR Level = '". $Classes[FORUM_MOD]['Level'] . "')");
+			$DB->query("
+				SELECT COUNT(ID)
+				FROM staff_pm_conversations
+				WHERE Status='Unanswered'
+					AND (AssignedToUser=".$LoggedUser['ID']."
+						OR Level = '". $Classes[FORUM_MOD]['Level'] . "')");
 		}
 		list($NumStaffPMs) = $DB->next_record();
 		$Cache->cache_value('num_staff_pms_'.$LoggedUser['ID'], $NumStaffPMs , 1000);
@@ -386,7 +422,11 @@ if (check_perms('admin_reports')) {
 } elseif (check_perms('project_team')) {
 	$NumUpdateReports = $Cache->get_value('num_update_reports');
 	if ($NumUpdateReports === false) {
-		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New' AND Type = 'request_update'");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM reports
+			WHERE Status='New'
+				AND Type = 'request_update'");
 		list($NumUpdateReports) = $DB->next_record();
 		$Cache->cache_value('num_update_reports', $NumUpdateReports, 0);
 	}
@@ -397,7 +437,11 @@ if (check_perms('admin_reports')) {
 } elseif (check_perms('site_moderate_forums')) {
 	$NumForumReports = $Cache->get_value('num_forum_reports');
 	if ($NumForumReports === false) {
-		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New' AND Type IN('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment')");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM reports
+			WHERE Status='New'
+				AND Type IN('artist_comment', 'collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment')");
 		list($NumForumReports) = $DB->next_record();
 		$Cache->cache_value('num_forum_reports', $NumForumReports, 0);
 	}

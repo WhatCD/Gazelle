@@ -20,7 +20,7 @@ if (empty($_GET['type']) || !in_array($_GET['type'], array('forums', 'collages',
 }
 $Type = $_GET['type'];
 
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
 
 $Edits = $Cache->get_value($Type.'_edits_'.$PostID);

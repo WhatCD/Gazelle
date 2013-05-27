@@ -15,8 +15,8 @@ if (isset($_GET['clearcache'])) {
 
 require 'classes/config.php'; //The config contains all site wide configuration information as well as memcached rules
 
-require(SERVER_ROOT.'/classes/class_cache.php'); //Require the caching class
-require(SERVER_ROOT.'/classes/class_debug.php'); //Require the debug class
+require(SERVER_ROOT.'/classes/cache.class.php'); //Require the caching class
+require(SERVER_ROOT.'/classes/debug.class.php'); //Require the debug class
 $Cache = NEW CACHE($MemcachedServers); //Load the caching class
 
 $Debug = new DEBUG;

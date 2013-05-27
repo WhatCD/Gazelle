@@ -238,7 +238,7 @@ if (!empty($_REQUEST['action'])) {
 			enforce_login();
 			authorize();
 
-			include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+			include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 			$Text = new TEXT;
 
 			// Quick SQL injection check
@@ -374,6 +374,12 @@ if (!empty($_REQUEST['action'])) {
 			break;
 		case 'take_warn' :
 			include(SERVER_ROOT.'/sections/torrents/take_warn.php');
+			break;
+		case 'add_cover_art':
+			include(SERVER_ROOT.'/sections/torrents/add_cover_art.php');
+			break;
+		case 'remove_cover_art':
+			include(SERVER_ROOT.'/sections/torrents/remove_cover_art.php');
 			break;
 		default:
 			enforce_login();

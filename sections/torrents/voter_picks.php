@@ -6,13 +6,18 @@ $Top10 = $Cache->get_value('similar_albums_'.$GroupID);
 if ($Top10 === False || isset($Top10[$GroupID])) {
 
 	$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
-	if ($VotePairs === False|| isset($VotePairs[$GroupID])) {
-		$DB->query("SELECT v.GroupID, SUM(IF(v.Type='Up',1,0)) AS Ups, COUNT(1) AS Total
-					FROM (SELECT UserID FROM users_votes WHERE GroupID = $GroupID AND Type='Up') AS a
-					JOIN users_votes AS v USING (UserID)
-					WHERE v.GroupID <> $GroupID
-					GROUP BY v.GroupID
-					HAVING Ups > 0");
+	if ($VotePairs === False || isset($VotePairs[$GroupID])) {
+		$DB->query("
+			SELECT v.GroupID, SUM(IF(v.Type='Up',1,0)) AS Ups, COUNT(1) AS Total
+			FROM (	SELECT UserID
+					FROM users_votes
+					WHERE GroupID = $GroupID
+						AND Type='Up'
+				) AS a
+				JOIN users_votes AS v USING (UserID)
+			WHERE v.GroupID != $GroupID
+			GROUP BY v.GroupID
+			HAVING Ups > 0");
 		$VotePairs = $DB->to_array('GroupID', MYSQL_ASSOC, false);
 		$Cache->cache_value('vote_pairs_'.$GroupID, $VotePairs);
 	}
@@ -28,7 +33,7 @@ if ($Top10 === False || isset($Top10[$GroupID])) {
 
 	arsort($GroupScores);
 	$Top10 = array_slice($GroupScores, 0, 10, true);
-	$Cache->cache_value('similar_albums_'.$GroupID, $Top10, .5*3600);
+	$Cache->cache_value('similar_albums_'.$GroupID, $Top10, 0.5 * 3600);
 }
 if (count($Top10) > 0) {
 ?>
@@ -45,7 +50,7 @@ if (count($Top10) > 0) {
 		$i++;
 		$Str = Artists::display_artists($MatchGroup['ExtendedArtists']).'<a href="torrents.php?id='.$MatchGroupID.'">'.$MatchGroup['Name'].'</a>';
 ?>
-			<tr class="votes_rows hidden <?=($i%2?'rowb':'rowa')?>">
+			<tr class="votes_rows hidden <?=($i % 2 ? 'rowb' : 'rowa')?>">
 				<td><span class="like_ranks"><?=$i?>.</span> <?=$Str?></td>
 			</tr>
 <?	} ?>

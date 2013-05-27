@@ -14,8 +14,8 @@ turned off by setting $Escape to false in next_record or to_array.
 
 * Creating the object.
 
-require(SERVER_ROOT.'/classes/class_mysql.php');
-$DB=NEW DB_MYSQL;
+require(SERVER_ROOT.'/classes/mysql.class.php');
+$DB = NEW DB_MYSQL;
 -----
 
 * Making a query
@@ -48,12 +48,12 @@ db_string($str);
 
 * The conventional way of retrieving a row from a result set is as follows:
 
-list($All,$Columns,$That,$You,$Select)=$DB->next_record();
+list($All,$Columns,$That,$You,$Select) = $DB->next_record();
 -----
 
 * This is how you loop over the result set:
 
-while (list($All,$Columns,$That,$You,$Select)=$DB->next_record()) {
+while (list($All,$Columns,$That,$You,$Select) = $DB->next_record()) {
 	echo "Do stuff with ".$All." of the ".$Columns.$That.$You.$Select;
 }
 -----

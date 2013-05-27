@@ -227,6 +227,17 @@ CREATE TABLE `concerts` (
   KEY `TopicID` (`TopicID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `cover_art` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `GroupID` int(10) NOT NULL,
+  `Image` varchar(255) NOT NULL DEFAULT '',
+  `Summary` varchar(100) DEFAULT NULL,
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `Time` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `GroupID` (`GroupID`,`Image`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `do_not_upload` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) COLLATE utf8_bin NOT NULL,

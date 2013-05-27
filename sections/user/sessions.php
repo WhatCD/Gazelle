@@ -14,7 +14,7 @@ if (isset($_GET['userid']) && check_perms('users_view_ips') && check_perms('user
 if (isset($_POST['all'])) {
 	authorize();
 
-	$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID' AND SessionID<>'$SessionID'");
+	$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID' AND SessionID != '$SessionID'");
 		$Cache->delete_value('users_sessions_'.$UserID);
 }
 

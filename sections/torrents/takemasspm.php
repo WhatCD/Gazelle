@@ -10,7 +10,7 @@ authorize();
 
 enforce_login();
 
-require(SERVER_ROOT.'/classes/class_validate.php');
+require(SERVER_ROOT.'/classes/validate.class.php');
 $Validate = new VALIDATE;
 
 $TorrentID = (int)$_POST['torrentid'];

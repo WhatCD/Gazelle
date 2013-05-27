@@ -1,7 +1,7 @@
 <?
 authorize();
 
-include(SERVER_ROOT.'/classes/class_validate.php');
+include(SERVER_ROOT.'/classes/validate.class.php');
 $Val = new VALIDATE;
 
 $P = array();

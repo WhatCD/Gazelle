@@ -9,12 +9,12 @@
 ini_set('upload_max_filesize', 2097152);
 ini_set('max_file_uploads', 100);
 define(MAX_FILENAME_LENGTH, 180);
-include(SERVER_ROOT.'/classes/class_validate.php');
-include(SERVER_ROOT.'/classes/class_feed.php');
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/validate.class.php');
+include(SERVER_ROOT.'/classes/feed.class.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 include(SERVER_ROOT.'/sections/torrents/functions.php');
+include(SERVER_ROOT.'/classes/file_checker.class.php');
 
-include(SERVER_ROOT.'/classes/class_file_checker.php');
 enforce_login();
 authorize();
 

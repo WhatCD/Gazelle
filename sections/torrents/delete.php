@@ -75,10 +75,10 @@ if (check_perms('admin_reports')) {
 ?>
 <div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto;">
 <?
-	include(SERVER_ROOT.'/classes/class_reports.php');
+	include(SERVER_ROOT.'/classes/reports.class.php');
 
 	require(SERVER_ROOT.'/sections/reportsv2/array.php');
-	require(SERVER_ROOT.'/classes/class_text.php');
+	require(SERVER_ROOT.'/classes/text.class.php');
 	$Text = NEW TEXT;
 	$ReportID = 0;
 	$DB->query("

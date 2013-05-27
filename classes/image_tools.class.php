@@ -62,11 +62,13 @@ class ImageTools {
 	 * @param string $Url Link to an image
 	 * @return boolean
 	 */
-	public static function blacklisted($Url) {
+	public static function blacklisted($Url, $ShowError = true) {
 		foreach (self::$Blacklist as &$Value) {
 			if (stripos($Url, $Value)) {
 				$ParsedUrl = parse_url($Url);
-				error($ParsedUrl['host'] . ' is not an allowed image host. Please use a different host.');
+				if($ShowError) {
+					error($ParsedUrl['host'] . ' is not an allowed image host. Please use a different host.');
+				}
 				return true;
 			}
 		}

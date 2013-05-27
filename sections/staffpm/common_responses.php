@@ -6,7 +6,7 @@ if (!($IsFLS)) {
 
 View::show_header('Staff PMs', 'staffpm');
 
-include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
 ?>

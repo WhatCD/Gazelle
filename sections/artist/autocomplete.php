@@ -18,8 +18,8 @@ $Letters = strtolower(substr($FullName,0,$KeySize));
 $AutoSuggest = $Cache->get('autocomplete_artist_'.$KeySize.'_'.$Letters);
 if (!is_array($AutoSuggest)) {
 	if (!isset($DB) || !is_object($DB)) {
-		require(SERVER_ROOT.'/classes/class_mysql.php'); //Require the database wrapper
-		$DB=NEW DB_MYSQL; //Load the database wrapper
+		require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
+		$DB = NEW DB_MYSQL; //Load the database wrapper
 	}
 	$Limit = (($KeySize === $MaxKeySize) ? 250 : 10);
 	$DB->query("

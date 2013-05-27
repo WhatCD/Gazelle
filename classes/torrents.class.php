@@ -102,7 +102,7 @@ class Torrents {
 							FileCount, FreeTorrent, Size, Leechers, Seeders, Snatched, Time, ID AS HasFile
 							FROM torrents AS t
 							WHERE GroupID IN($IDs)
-							ORDER BY GroupID, Remastered, (RemasterYear <> 0) DESC, RemasterYear, RemasterTitle,
+							ORDER BY GroupID, Remastered, (RemasterYear != 0) DESC, RemasterYear, RemasterTitle,
 							RemasterRecordLabel, RemasterCatalogueNumber, Media, Format, Encoding, ID");
 				while ($Torrent = $DB->next_record(MYSQLI_ASSOC, true)) {
 					$Found[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;

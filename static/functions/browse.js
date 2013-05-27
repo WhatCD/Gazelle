@@ -224,6 +224,39 @@ function AddArtistField() {
 	ArtistFieldCount++;
 }
 
+var coverFieldCount = 0;
+var hasCoverAddButton = false;
+
+function addCoverField() {
+	if (coverFieldCount >= 100) {
+		return;
+	}
+	var x = $('#add_cover').raw();
+	x.appendChild(document.createElement("br"));
+	var field = document.createElement("input");
+	field.type = "text";
+	field.name = "image[]";
+	field.placeholder = "URL";
+	x.appendChild(field);
+	x.appendChild(document.createTextNode(' '));
+	var summary = document.createElement("input");
+	summary.type = "text";
+	summary.name = "summary[]";
+	summary.placeholder = "Summary";
+	x.appendChild(summary);
+	coverFieldCount++;
+
+	if(!hasCoverAddButton) {
+		x = $('#add_covers_form').raw();
+		field = document.createElement("input");
+		field.type = "submit";
+		field.value = "Add";
+		x.appendChild(field);
+		hasCoverAddButton = true;
+	}
+}
+
+
 function ToggleEditionRows() {
 	$('#edition_title').toggle();
 	$('#edition_label').toggle();

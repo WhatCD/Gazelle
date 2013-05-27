@@ -29,8 +29,7 @@ step in properly enforcing coding standards throughout the project.
 
 		1. FILE FORMATTING
 
-Tabs shall always be used for indentation. Do not use spaces to make code
-blocks align in a pretty fashion.
+Tabs shall always be used for indentation.
 
 Files shall be encoded in ASCII.
 
@@ -99,6 +98,12 @@ Use indents as appropriate to aid readability.
 
 The SQL keywords JOIN, RIGHT JOIN, LEFT JOIN must be indented once from
 the SELECT statement.
+
+The SQL keyword AND must be indented once from the WHILE (and similar)
+statements.
+
+The "not equal to" operator "!=" must be used instead of the alternative
+operator "<>".
 
 
 		3. NAMING CONVENTIONS
@@ -231,14 +236,14 @@ ORDER BY e.EditionID, r.Year ASC
 SELECT SQL_CALC_FOUND_ROWS c.ID, c.Subject, cu.Unread, cu.Sticky,
 	cu.ForwardedTo, cu2.UserID, cu.ReceivedDate AS Date
 FROM pm_conversations AS c
-	LEFT JOIN pm_conversations_users AS cu ON cu.ConvID=c.ID
-		AND cu.UserID='1'
-	LEFT JOIN pm_conversations_users AS cu2 ON cu2.ConvID=c.ID
-		AND cu2.UserID!='1'
-		AND cu2.ForwardedTo=0
-	LEFT JOIN users_main AS um ON um.ID=cu2.UserID
+	LEFT JOIN pm_conversations_users AS cu ON cu.ConvID = c.ID
+		AND cu.UserID = '1'
+	LEFT JOIN pm_conversations_users AS cu2 ON cu2.ConvID = c.ID
+		AND cu2.UserID != '1'
+		AND cu2.ForwardedTo = 0
+	LEFT JOIN users_main AS um ON um.ID = cu2.UserID
 WHERE um.Username LIKE 'test'
-	AND cu.InInbox='1'
+	AND cu.InInbox = '1'
 GROUP BY c.ID
 ORDER BY cu.Sticky, Date DESC
 LIMIT 25

@@ -16,7 +16,7 @@ function time_ago($TimeStamp) {
 	return time() - $TimeStamp;
 }
 
-function time_diff($TimeStamp, $Levels=2, $Span=true, $Lowercase=false) {
+function time_diff($TimeStamp, $Levels = 2, $Span = true, $Lowercase = false) {
 	/*
 	Returns a <span> by default but can optionally return the raw time
 	difference in text (e.g. "16 hours and 28 minutes", "1 day, 18 hours").
@@ -178,9 +178,9 @@ function validDate($DateString) {
 		return false;
 	}
 	list($H, $M, $S) = $SplitTime;
-	if ($H != 0 && !(is_number($H) && $H < 24 && $H >= 0)) return false;
-	if ($M != 0 && !(is_number($M) && $M < 60 && $M >= 0)) return false;
-	if ($S != 0 && !(is_number($S) && $S < 60 && $S >= 0)) return false;
+	if ($H != 0 && !(is_number($H) && $H < 24 && $H >= 0)) { return false; }
+	if ($M != 0 && !(is_number($M) && $M < 60 && $M >= 0)) { return false; }
+	if ($S != 0 && !(is_number($S) && $S < 60 && $S >= 0)) { return false; }
 	$SplitDate = explode('-', $Date);
 	if (count($SplitDate) != 3) {
 		return false;

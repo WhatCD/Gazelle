@@ -13,7 +13,7 @@ Things to expect in $_GET:
 
 //---------- Things to sort out before it can start printing/generating content
 
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
 
 // Check for lame SQL injection attempts
@@ -106,12 +106,18 @@ if ($_GET['updatelastread'] != '0') {
 	}
 	//Handle last read
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
-		$DB->query("SELECT PostID From forums_last_read_topics WHERE UserID='$LoggedUser[ID]' AND TopicID='$ThreadID'");
+		$DB->query("
+			SELECT PostID
+			FROM forums_last_read_topics
+			WHERE UserID='$LoggedUser[ID]'
+				AND TopicID='$ThreadID'");
 		list($LastRead) = $DB->next_record();
 		if ($LastRead < $LastPost) {
-			$DB->query("INSERT INTO forums_last_read_topics
-				(UserID, TopicID, PostID) VALUES
-				('$LoggedUser[ID]', '".$ThreadID ."', '".db_string($LastPost)."')
+			$DB->query("
+				INSERT INTO forums_last_read_topics
+					(UserID, TopicID, PostID)
+				VALUES
+					('$LoggedUser[ID]', '".$ThreadID ."', '".db_string($LastPost)."')
 				ON DUPLICATE KEY UPDATE PostID='$LastPost'");
 		}
 	}
@@ -119,7 +125,10 @@ if ($_GET['updatelastread'] != '0') {
 
 //Handle subscriptions
 if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
-	$DB->query("SELECT TopicID FROM users_subscriptions WHERE UserID = '$LoggedUser[ID]'");
+	$DB->query("
+		SELECT TopicID
+		FROM users_subscriptions
+		WHERE UserID = '$LoggedUser[ID]'");
 	$UserSubscriptions = $DB->collect(0);
 	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
 }
@@ -135,10 +144,17 @@ if (in_array($ThreadID, $UserSubscriptions)) {
 $JsonPoll = array();
 if ($ThreadInfo['NoPoll'] == 0) {
 	if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('polls_'.$ThreadID)) {
-		$DB->query("SELECT Question, Answers, Featured, Closed FROM forums_polls WHERE TopicID='".$ThreadID."'");
+		$DB->query("
+			SELECT Question, Answers, Featured, Closed
+			FROM forums_polls
+			WHERE TopicID='".$ThreadID."'");
 		list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 		$Answers = unserialize($Answers);
-		$DB->query("SELECT Vote, COUNT(UserID) FROM forums_polls_votes WHERE TopicID='$ThreadID' GROUP BY Vote");
+		$DB->query("
+			SELECT Vote, COUNT(UserID)
+			FROM forums_polls_votes
+			WHERE TopicID='$ThreadID'
+			GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
 
 		$Votes = array();
@@ -165,7 +181,11 @@ if ($ThreadInfo['NoPoll'] == 0) {
 
 	$RevealVoters = in_array($ForumID, $ForumsRevealVoters);
 	//Polls lose the you voted arrow thingy
-	$DB->query("SELECT Vote FROM forums_polls_votes WHERE UserID='".$LoggedUser['ID']."' AND TopicID='$ThreadID'");
+	$DB->query("
+		SELECT Vote
+		FROM forums_polls_votes
+		WHERE UserID='".$LoggedUser['ID']."'
+			AND TopicID='$ThreadID'");
 	list($UserResponse) = $DB->next_record();
 	if (!empty($UserResponse) && $UserResponse != 0) {
 		$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
@@ -211,7 +231,7 @@ if ($ThreadInfo['StickyPostID']) {
 	if ($ThreadInfo['StickyPostID'] != $Thread[0]['ID']) {
 		array_unshift($Thread, $ThreadInfo['StickyPost']);
 	}
-	if ($ThreadInfo['StickyPostID'] != $Thread[count($Thread)-1]['ID']) {
+	if ($ThreadInfo['StickyPostID'] != $Thread[count($Thread) - 1]['ID']) {
 		$Thread[] = $ThreadInfo['StickyPost'];
 	}
 }
@@ -235,7 +255,7 @@ foreach ($Thread as $Key => $Post) {
 			'paranoia' => $Paranoia,
 			'artist' => $Artist == 1,
 			'donor' => $Donor == 1,
-			'warned' => ($Warned!='0000-00-00 00:00:00'),
+			'warned' => ($Warned != '0000-00-00 00:00:00'),
 			'avatar' => $Avatar,
 			'enabled' => $Enabled == 2 ? false : true,
 			'userTitle' => $UserTitle
@@ -257,7 +277,7 @@ print
 				'locked' => $ThreadInfo['IsLocked'] == 1,
 				'sticky' => $ThreadInfo['IsSticky'] == 1,
 				'currentPage' => (int) $Page,
-				'pages' => ceil($ThreadInfo['Posts']/$PerPage),
+				'pages' => ceil($ThreadInfo['Posts'] / $PerPage),
 				'poll' => empty($JsonPoll) ? null : $JsonPoll,
 				'posts' => $JsonPosts
 			)

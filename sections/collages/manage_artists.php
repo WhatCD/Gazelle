@@ -64,10 +64,10 @@ View::show_header('Manage collage '.$Name);
 	<table id="manage_collage_table">
 		<thead>
 			<tr class="colhead">
-				<th style="width: 7%">Order</th>
-				<th style="width: 1%"><span><abbr title="Current rank">#</abbr></span></th>
+				<th style="width: 7%;">Order</th>
+				<th style="width: 1%;"><span><abbr title="Current rank">#</abbr></span></th>
 				<th style="text-align: left;"><span>Artist</span></th>
-				<th style="width: 7%"><span>User</span></th>
+				<th style="width: 7%;"><span>User</span></th>
 				<th style="width: 7%; text-align: right;" class="nobr"><span><abbr title="Modify an individual row.">Tweak</abbr></span></th>
 			</tr>
 		</thead>
@@ -77,7 +77,7 @@ View::show_header('Manage collage '.$Name);
 	$Number = 0;
 	foreach ($Artists as $Artist) {
 		$Number++;
-		$AltCSS = $Number % 2 === 0 ? 'rowa' : 'rowb';
+		$AltCSS = ($Number % 2 === 0 ? 'rowa' : 'rowb');
 		?>
 		<tr class="drag <?=$AltCSS?>" id="li_<?=$Artist['ArtistID']?>">
 			<form class="manage_form" name="collage" action="collages.php" method="post">
@@ -85,7 +85,7 @@ View::show_header('Manage collage '.$Name);
 					<input class="sort_numbers" type="text" name="sort" value="<?=$Artist['Sort']?>" id="sort_<?=$Artist['ArtistID']?>" size="4" />
 				</td>
 				<td><?=$Number?></td>
-				<td><?=trim($Artist['Name']) ?: '&nbsp;'?></td>
+				<td><?=(trim($Artist['Name']) ?: '&nbsp;')?></td>
 				<td class="nobr"><?=Users::format_username($Artist['UserID'], $$Artist['Username'], false, false, false)?></td>
 				<td class="nobr">
 					<input type="hidden" name="action" value="manage_artists_handle" />
@@ -97,7 +97,7 @@ View::show_header('Manage collage '.$Name);
 				</td>
 			</form>
 		</tr>
-<? } ?>
+<?	} ?>
 		</tbody>
 	</table>
 	<div class="drag_drop_save hidden">

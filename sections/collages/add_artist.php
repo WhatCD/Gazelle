@@ -3,7 +3,7 @@
 
 authorize();
 
-include(SERVER_ROOT.'/classes/class_validate.php');
+include(SERVER_ROOT.'/classes/validate.class.php');
 $Val = new VALIDATE;
 
 function add_artist($CollageID, $ArtistID) {
@@ -18,9 +18,9 @@ function add_artist($CollageID, $ArtistID) {
 		$DB->query("INSERT IGNORE INTO collages_artists
 			(CollageID, ArtistID, UserID, Sort, AddedOn)
 			VALUES
-			('$CollageID', '$ArtistID', '$LoggedUser[ID]', '$Sort', NOW())");
+			('$CollageID', '$ArtistID', '$LoggedUser[ID]', '$Sort', '" . sqltime() . "')");
 
-		$DB->query("UPDATE collages SET NumTorrents=NumTorrents+1 WHERE ID='$CollageID'");
+		$DB->query("UPDATE collages SET NumTorrents=NumTorrents+1, Updated = '" . sqltime() . "' WHERE ID='$CollageID'");
 
 		$Cache->delete_value('collage_'.$CollageID);
 		$Cache->delete_value('artists_collages_'.$ArtistID);

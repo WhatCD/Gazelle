@@ -74,10 +74,10 @@ if (($Escaped['resolve_type'] == "manual" || $Escaped['resolve_type'] == "dismis
 		SET
 			Status='Resolved',
 			LastChangeTime='".sqltime()."',
-			ModComment = '".$Comment."',
+			ModComment = '$Comment',
 			ResolverID='".$LoggedUser['ID']."'
-		WHERE ID='".$ReportID."'
-			AND Status <> 'Resolved'");
+		WHERE ID='$ReportID'
+			AND Status != 'Resolved'");
 
 	if ($DB->affected_rows() > 0) {
 		$Cache->delete_value('num_torrent_reportsv2');
@@ -133,8 +133,8 @@ if ($Report) {
 		SET Status='Resolved',
 			LastChangeTime='".sqltime()."',
 			ResolverID='".$LoggedUser['ID']."'
-		WHERE ID=".$ReportID."
-			AND Status <> 'Resolved'");
+		WHERE ID=$ReportID
+			AND Status != 'Resolved'");
 }
 
 //See if it we managed to resolve

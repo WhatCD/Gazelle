@@ -39,10 +39,10 @@ if (substr($_REQUEST['action'], 0, 12) == 'update_geoip' && !isset($argv[1])) {
 	}
 }
 
-include(SERVER_ROOT."/classes/class_validate.php");
+include(SERVER_ROOT."/classes/validate.class.php");
 $Val = new VALIDATE;
 
-include(SERVER_ROOT.'/classes/class_feed.php');
+include(SERVER_ROOT.'/classes/feed.class.php');
 $Feed = new FEED;
 
 switch ($_REQUEST['action']) {

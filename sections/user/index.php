@@ -6,8 +6,8 @@ Should the advanced search really only show if they match 3 perms?
 Make sure all constants are defined in config.php and not in random files
 *****************************************************************/
 enforce_login();
-include(SERVER_ROOT."/classes/class_validate.php");
-$Val=NEW VALIDATE;
+include(SERVER_ROOT."/classes/validate.class.php");
+$Val = NEW VALIDATE;
 
 if (empty($_REQUEST['action'])) {
 	$_REQUEST['action'] = '';

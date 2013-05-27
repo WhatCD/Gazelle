@@ -210,8 +210,8 @@ class Tools {
 		$DB->query("
 			SELECT Warned
 			FROM users_info
-			WHERE UserID=".$UserID."
-				AND Warned <> '0000-00-00 00:00:00'");
+			WHERE UserID=$UserID
+				AND Warned != '0000-00-00 00:00:00'");
 		if ($DB->record_count() > 0) {
 			//User was already warned, appending new warning to old.
 			list($OldDate) = $DB->next_record();

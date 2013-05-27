@@ -9,7 +9,7 @@ much.
 
 // Number of users per page
 define('FRIENDS_PER_PAGE', '20');
-include_once(SERVER_ROOT.'/classes/class_paranoia.php');
+include_once(SERVER_ROOT.'/classes/paranoia.class.php');
 
 
 

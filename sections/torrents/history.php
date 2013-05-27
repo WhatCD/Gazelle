@@ -16,7 +16,7 @@ if (!is_number($GroupID) || !$GroupID) {
 	error(0);
 }
 
-include(SERVER_ROOT.'/classes/class_wiki.php'); // Wiki class
+include(SERVER_ROOT.'/classes/wiki.class.php'); // Wiki class
 $Wiki = new WIKI('wiki_torrents', $GroupID, "/torrents.php?id=$GroupID");
 
 // Get the artist name and the body of the last revision

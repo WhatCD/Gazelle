@@ -139,9 +139,15 @@ if ($CurEmail != $_POST['email']) {
 
 		//This piece of code will update the time of their last email change to the current time *not* the current change.
 		$ChangerIP = db_string($LoggedUser['IP']);
-		$DB->query("UPDATE users_history_emails SET Time='".sqltime()."' WHERE UserID='$UserID' AND Time='0000-00-00 00:00:00'");
-		$DB->query("INSERT INTO users_history_emails
-				(UserID, Email, Time, IP) VALUES
+		$DB->query("
+			UPDATE users_history_emails
+			SET Time='".sqltime()."'
+			WHERE UserID='$UserID'
+				AND Time='0000-00-00 00:00:00'");
+		$DB->query("
+			INSERT INTO users_history_emails
+				(UserID, Email, Time, IP)
+			VALUES
 				('$UserID', '$NewEmail', '0000-00-00 00:00:00', '".db_string($_SERVER['REMOTE_ADDR'])."')");
 
 	} else {
@@ -155,20 +161,23 @@ if ($CurEmail != $_POST['email']) {
 //End Email change
 
 if (!$Err && ($_POST['cur_pass'] || $_POST['new_pass_1'] || $_POST['new_pass_2'])) {
-	$DB->query("SELECT PassHash,Secret FROM users_main WHERE ID='".db_string($UserID)."'");
-	list($PassHash,$Secret)=$DB->next_record();
+	$DB->query("
+		SELECT PassHash, Secret
+		FROM users_main
+		WHERE ID='".db_string($UserID)."'");
+	list($PassHash, $Secret) = $DB->next_record();
 
 	if (Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
 		if ($_POST['new_pass_1'] && $_POST['new_pass_2']) {
 			$ResetPassword = true;
 		}
 	} else {
-		$Err = "You did not enter the correct password.";
+		$Err = 'You did not enter the correct password.';
 	}
 }
 
 if ($LoggedUser['DisableAvatar'] && $_POST['avatar'] != $U['Avatar']) {
-	$Err = "Your avatar rights have been removed.";
+	$Err = 'Your avatar rights have been removed.';
 }
 
 if ($Err) {
@@ -180,26 +189,25 @@ if ($Err) {
 if (!empty($LoggedUser['DefaultSearch'])) {
 	$Options['DefaultSearch'] = $LoggedUser['DefaultSearch'];
 }
-$Options['DisableGrouping2'] = (!empty($_POST['disablegrouping']) ? 1 : 0);
-$Options['TorrentGrouping'] = (!empty($_POST['torrentgrouping']) ? 1 : 0);
-$Options['DiscogView'] = (!empty($_POST['discogview']) ? 1 : 0);
-$Options['PostsPerPage'] = (int) $_POST['postsperpage'];
-//$Options['HideCollage'] = (!empty($_POST['hidecollage']) ? 1 : 0);
-$Options['CollageCovers'] = empty($_POST['collagecovers']) ? 0 : $_POST['collagecovers'];
-$Options['ShowTorFilter'] = empty($_POST['showtfilter']) ? 0 : 1;
-$Options['ShowTags'] = (!empty($_POST['showtags']) ? 1 : 0);
-$Options['AutoSubscribe'] = (!empty($_POST['autosubscribe']) ? 1 : 0);
-$Options['DisableSmileys'] = (!empty($_POST['disablesmileys']) ? 1 : 0);
+$Options['DisableGrouping2']    = (!empty($_POST['disablegrouping']) ? 1 : 0);
+$Options['TorrentGrouping']     = (!empty($_POST['torrentgrouping']) ? 1 : 0);
+$Options['DiscogView']          = (!empty($_POST['discogview']) ? 1 : 0);
+$Options['PostsPerPage']        = (int) $_POST['postsperpage'];
+//$Options['HideCollage']         = (!empty($_POST['hidecollage']) ? 1 : 0);
+$Options['CollageCovers']       = (empty($_POST['collagecovers']) ? 0 : $_POST['collagecovers']);
+$Options['ShowTorFilter']       = (empty($_POST['showtfilter']) ? 0 : 1);
+$Options['ShowTags']            = (!empty($_POST['showtags']) ? 1 : 0);
+$Options['AutoSubscribe']       = (!empty($_POST['autosubscribe']) ? 1 : 0);
+$Options['DisableSmileys']      = (!empty($_POST['disablesmileys']) ? 1 : 0);
 $Options['EnableMatureContent'] = (!empty($_POST['enablematurecontent']) ? 1 : 0);
-$Options['DisableAvatars'] = db_string($_POST['disableavatars']);
-$Options['Identicons'] = (!empty($_POST['identicons']) ? (int) $_POST['identicons'] : 0);
-$Options['DisablePMAvatars'] = (!empty($_POST['disablepmavatars']) ? 1 : 0);
-$Options['NotifyOnQuote'] = (!empty($_POST['notifyquotes']) ? 1 : 0);
-$Options['ShowSnatched'] = (!empty($_POST['showsnatched']) ? 1 : 0);
-$Options['DisableAutoSave'] = (!empty($_POST['disableautosave']) ? 1 : 0);
-$Options['NoVoteLinks'] = (!empty($_POST['novotelinks']) ? 1 : 0);
-
-$Options['CoverArt'] = (int) !empty($_POST['coverart']);
+$Options['DisableAvatars']      = db_string($_POST['disableavatars']);
+$Options['Identicons']          = (!empty($_POST['identicons']) ? (int) $_POST['identicons'] : 0);
+$Options['DisablePMAvatars']    = (!empty($_POST['disablepmavatars']) ? 1 : 0);
+$Options['NotifyOnQuote']       = (!empty($_POST['notifyquotes']) ? 1 : 0);
+$Options['ShowSnatched']        = (!empty($_POST['showsnatched']) ? 1 : 0);
+$Options['DisableAutoSave']     = (!empty($_POST['disableautosave']) ? 1 : 0);
+$Options['NoVoteLinks']         = (!empty($_POST['novotelinks']) ? 1 : 0);
+$Options['CoverArt']            = (int) !empty($_POST['coverart']);
 
 if (isset($LoggedUser['DisableFreeTorrentTop10'])) {
 	$Options['DisableFreeTorrentTop10'] = $LoggedUser['DisableFreeTorrentTop10'];
@@ -232,7 +240,7 @@ $UnseededAlerts = (isset($_POST['unseededalerts'])) ? 1 : 0;
 
 
 $LastFMUsername = db_string($_POST['lastfm_username']);
-$OldLastFMUsername = "";
+$OldLastFMUsername = '';
 $DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
 if ($DB->record_count() > 0) {
 	list($OldLastFMUsername) = $DB->next_record();
@@ -244,7 +252,9 @@ if ($DB->record_count() > 0) {
 		}
 	}
 } elseif (!empty($LastFMUsername)) {
-	$DB->query("INSERT INTO lastfm_users (ID, Username) VALUES ('$UserID', '$LastFMUsername')");
+	$DB->query("
+		INSERT INTO lastfm_users (ID, Username)
+		VALUES ('$UserID', '$LastFMUsername')");
 }
 
 // Information on how the user likes to download torrents is stored in cache
@@ -290,8 +300,8 @@ $SQL .= "m.Paranoia='".db_string(serialize($Paranoia))."'";
 
 if ($ResetPassword) {
 	$ChangerIP = db_string($LoggedUser['IP']);
-	$PassHash=Users::make_crypt_hash($_POST['new_pass_1']);
-	$SQL.=",m.PassHash='".db_string($PassHash)."'";
+	$PassHash = Users::make_crypt_hash($_POST['new_pass_1']);
+	$SQL.= ",m.PassHash='".db_string($PassHash)."'";
 	$DB->query("
 		INSERT INTO users_history_passwords
 			(UserID, ChangerIP, ChangeTime)

@@ -291,6 +291,13 @@ if (empty($Results)) {
 					<? if ($Result['UnRead']) {
 					echo '<strong class="new">New!</strong>';
 					} ?>
+								<span class="bookmark" style="float: right;">
+<?				if (Bookmarks::has_bookmarked("torrent", $GroupID)) { ?>
+					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+<?				} else { ?>
+					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+<?				} ?>
+				</span>
 				</div>
 				<div class="tags"><?=$TorrentTags->format()?></div>
 			</div>

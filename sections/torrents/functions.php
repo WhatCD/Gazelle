@@ -110,7 +110,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 			WHERE t.GroupID='".db_string($GroupID)."'
 			GROUP BY t.ID
 			ORDER BY t.Remastered ASC,
-				(t.RemasterYear <> 0) DESC,
+				(t.RemasterYear != 0) DESC,
 				t.RemasterYear ASC,
 				t.RemasterTitle ASC,
 				t.RemasterRecordLabel ASC,

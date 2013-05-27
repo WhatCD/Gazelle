@@ -16,7 +16,7 @@ if (!is_number($ArtistID)) {
 	error(0);
 }
 
-include(SERVER_ROOT.'/classes/class_wiki.php'); // Wiki class
+include(SERVER_ROOT.'/classes/wiki.class.php'); // Wiki class
 $Wiki = new WIKI('wiki_artists', $ArtistID, "artist.php?id=$ArtistID");
 
 // Get the artist name and the body of the last revision

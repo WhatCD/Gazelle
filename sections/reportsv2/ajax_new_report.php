@@ -9,7 +9,7 @@ if (!check_perms('admin_reports')) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 $Text = NEW TEXT;
 
 

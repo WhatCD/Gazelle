@@ -1,6 +1,6 @@
 <?
 
-include_once(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include_once(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 
 
 function link_users($UserID, $TargetID) {
@@ -18,14 +18,24 @@ function link_users($UserID, $TargetID) {
 		return;
 	}
 
-	$DB->query("SELECT 1 FROM users_main WHERE ID IN ($UserID, $TargetID)");
+	$DB->query("
+		SELECT 1
+		FROM users_main
+		WHERE ID IN ($UserID, $TargetID)");
 	if ($DB->record_count() != 2) {
 		error(403);
 	}
 
-	$DB->query("SELECT GroupID FROM users_dupes WHERE UserID = $TargetID");
+	$DB->query("
+		SELECT GroupID
+		FROM users_dupes
+		WHERE UserID = $TargetID");
 	list($TargetGroupID) = $DB->next_record();
-	$DB->query("SELECT u.GroupID, d.Comments FROM users_dupes AS u JOIN dupe_groups AS d ON d.ID = u.GroupID WHERE UserID = $UserID");
+	$DB->query("
+		SELECT u.GroupID, d.Comments
+		FROM users_dupes AS u
+			JOIN dupe_groups AS d ON d.ID = u.GroupID
+		WHERE UserID = $UserID");
 	list($UserGroupID, $Comments) = $DB->next_record();
 
 	$UserInfo = Users::user_info($UserID);
@@ -39,8 +49,14 @@ function link_users($UserID, $TargetID) {
 			return;
 		}
 		if ($UserGroupID) {
-			$DB->query("UPDATE users_dupes SET GroupID = $TargetGroupID WHERE GroupID = $UserGroupID");
-			$DB->query("UPDATE dupe_groups SET Comments = CONCAT('".db_string($Comments)."\n\n',Comments) WHERE ID = $TargetGroupID");
+			$DB->query("
+				UPDATE users_dupes
+				SET GroupID = $TargetGroupID
+				WHERE GroupID = $UserGroupID");
+			$DB->query("
+				UPDATE dupe_groups
+				SET Comments = CONCAT('".db_string($Comments)."\n\n',Comments)
+				WHERE ID = $TargetGroupID");
 			$DB->query("DELETE FROM dupe_groups WHERE ID = $UserGroupID");
 			$GroupID = $UserGroupID;
 		} else {
@@ -58,10 +74,11 @@ function link_users($UserID, $TargetID) {
 	}
 
 	$AdminComment = sqltime()." - Linked accounts updated: [user]".$UserInfo['Username']."[/user] and [user]".$TargetInfo['Username']."[/user] linked by ".$LoggedUser['Username'];
-	$DB->query("UPDATE users_info AS i
-				JOIN users_dupes AS d ON d.UserID = i.UserID
-				SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
-				WHERE d.GroupID = $GroupID");
+	$DB->query("
+		UPDATE users_info AS i
+			JOIN users_dupes AS d ON d.UserID = i.UserID
+		SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
+		WHERE d.GroupID = $GroupID");
 }
 
 function unlink_user($UserID) {
@@ -80,13 +97,18 @@ function unlink_user($UserID) {
 		return;
 	}
 	$AdminComment = sqltime()." - Linked accounts updated: [user]".$UserInfo['Username']."[/user] unlinked by ".$LoggedUser['Username'];
-	$DB->query("UPDATE users_info AS i
-				JOIN users_dupes AS d1 ON d1.UserID = i.UserID
-				JOIN users_dupes AS d2 ON d2.GroupID = d1.GroupID
-				SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
-				WHERE d2.UserID = $UserID");
+	$DB->query("
+		UPDATE users_info AS i
+			JOIN users_dupes AS d1 ON d1.UserID = i.UserID
+			JOIN users_dupes AS d2 ON d2.GroupID = d1.GroupID
+		SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
+		WHERE d2.UserID = $UserID");
 	$DB->query("DELETE FROM users_dupes WHERE UserID='$UserID'");
-	$DB->query("DELETE g.* FROM dupe_groups AS g LEFT JOIN users_dupes AS u ON u.GroupID = g.ID WHERE u.GroupID IS NULL");
+	$DB->query("
+		DELETE g.*
+		FROM dupe_groups AS g
+			LEFT JOIN users_dupes AS u ON u.GroupID = g.ID
+		WHERE u.GroupID IS NULL");
 }
 
 function delete_dupegroup($GroupID) {
@@ -121,15 +143,22 @@ function dupe_comments($GroupID, $Comments) {
 	if ($OldCommentHash != sha1($Comments)) {
 		$AdminComment = sqltime()." - Linked accounts updated: Comments updated by ".$LoggedUser['Username'];
 		if ($_POST['form_comment_hash'] == $OldCommentHash) {
-			$DB->query("UPDATE dupe_groups SET Comments = '".db_string($Comments)."' WHERE ID = '$GroupID'");
+			$DB->query("
+				UPDATE dupe_groups
+				SET Comments = '".db_string($Comments)."'
+				WHERE ID = '$GroupID'");
 		} else {
-			$DB->query("UPDATE dupe_groups SET Comments = CONCAT('".db_string($Comments)."\n\n',Comments) WHERE ID = '$GroupID'");
+			$DB->query("
+				UPDATE dupe_groups
+				SET Comments = CONCAT('".db_string($Comments)."\n\n',Comments)
+				WHERE ID = '$GroupID'");
 		}
 
-		$DB->query("UPDATE users_info AS i
-					JOIN users_dupes AS d ON d.UserID = i.UserID
-					SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
-					WHERE d.GroupID = $GroupID");
+		$DB->query("
+			UPDATE users_info AS i
+				JOIN users_dupes AS d ON d.UserID = i.UserID
+			SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
+			WHERE d.GroupID = $GroupID");
 	}
 }
 
@@ -173,7 +202,7 @@ function user_dupes_table($UserID) {
 					<a href="#l_a_box"><strong>&uarr;</strong></a> <?=max($DupeCount - 1, 0)?> Linked account<?=(($DupeCount == 2) ? '' : 's')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;" class="brackets">View</a>
 				</div>
 				<table width="100%" class="layout hidden linkedaccounts">
-					<?=$DupeCount ? '<tr>' : ''?>
+					<?=($DupeCount ? '<tr>' : '')?>
 <?
 	$i = 0;
 	foreach ($Dupes as $Dupe) {
@@ -202,8 +231,8 @@ function user_dupes_table($UserID) {
 					</tr>
 					<tr>
 						<td colspan="5" align="left">
-							<div id="dupecomments" class="<?=$DupeCount ? '' : 'hidden'?>"><?=$Text->full_format($Comments);?></div>
-							<div id="editdupecomments" class="<?=$DupeCount ? 'hidden' : ''?>">
+							<div id="dupecomments" class="<?=($DupeCount ? '' : 'hidden')?>"><?=$Text->full_format($Comments);?></div>
+							<div id="editdupecomments" class="<?=($DupeCount ? 'hidden' : '')?>">
 								<textarea name="dupecomments" onkeyup="resize('dupecommentsbox');" id="dupecommentsbox" cols="65" rows="5" style="width: 98%;"><?=display_str($Comments)?></textarea>
 							</div>
 							<span style="float: right; font-style: italic;"><a href="#" onclick="$('#dupecomments').toggle(); $('#editdupecomments').toggle(); resize('dupecommentsbox'); return false;" class="brackets">Edit linked account comments</a></span>

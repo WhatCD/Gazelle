@@ -1,6 +1,6 @@
 <?
 
-include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
 include(SERVER_ROOT.'/sections/requests/functions.php');
@@ -267,7 +267,7 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <?	}
 	if (($OwnProfile || check_perms('users_mod')) && $Warned!='0000-00-00 00:00:00') { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Warning expires: <?=(date('Y-m-d H:i', strtotime($Warned)))?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Warning expires in: <?=time_diff((date('Y-m-d H:i', strtotime($Warned))))?></li>
 <?	} ?>
 			</ul>
 		</div>
@@ -320,7 +320,7 @@ if (check_paranoia_here('artistsadded')) {
 	$ArtistsAdded = 0;
 }
 
-include(SERVER_ROOT.'/classes/class_user_rank.php');
+include(SERVER_ROOT.'/classes/user_rank.class.php');
 $Rank = new USER_RANK;
 
 $UploadedRank = $Rank->get_rank('uploaded', $Uploaded);
@@ -555,7 +555,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 				INNER JOIN torrents_group AS g ON t.GroupID=g.ID
 			WHERE s.uid='$UserID'
 				AND g.CategoryID='1'
-				AND g.WikiImage <> ''
+				AND g.WikiImage != ''
 			GROUP BY g.ID
 			ORDER BY s.tstamp DESC
 			LIMIT 5");
@@ -600,7 +600,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 				INNER JOIN torrents AS t ON t.GroupID=g.ID
 			WHERE t.UserID='$UserID'
 				AND g.CategoryID='1'
-				AND g.WikiImage <> ''
+				AND g.WikiImage != ''
 			GROUP BY g.ID
 			ORDER BY t.Time DESC
 			LIMIT 5");
@@ -690,7 +690,7 @@ if (check_perms('users_mod')) {
 }
 
 if ((check_perms('users_view_invites')) && $Invited > 0) {
-	include(SERVER_ROOT.'/classes/class_invite_tree.php');
+	include(SERVER_ROOT.'/classes/invite_tree.class.php');
 	$Tree = new INVITE_TREE($UserID, array('visible'=>false));
 ?>
 		<div class="box" id="invitetree_box">

@@ -8,7 +8,7 @@
 // most members.														//
 //**********************************************************************//
 
-require(SERVER_ROOT.'/classes/class_torrent_form.php');
+require(SERVER_ROOT.'/classes/torrent_form.class.php');
 
 if (!is_number($_GET['id']) || !$_GET['id']) {
 	error(0);

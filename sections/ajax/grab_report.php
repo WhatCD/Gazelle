@@ -11,7 +11,7 @@ $DB->query("
 	UPDATE reportsv2
 	SET Status='New'
 	WHERE ID=".$_GET['id']."
-		AND Status <> 'Resolved'");
+		AND Status != 'Resolved'");
 if ($DB->affected_rows() > 0) {
 		//Win
 } else {

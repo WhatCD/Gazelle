@@ -362,7 +362,7 @@ if ($Uploaded != $Cur['Uploaded'] && $Uploaded != $_POST['OldUploaded'] && (chec
 
 if ($Downloaded != $Cur['Downloaded'] && $Downloaded != $_POST['OldDownloaded'] && (check_perms('users_edit_ratio')
 	|| (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID']))) {
-		$UpdateSet[] = "Downloaded='".$Downloaded."'";
+		$UpdateSet[] = "Downloaded='$Downloaded'";
 		$EditSummary[] = "downloaded changed from ".Format::get_size($Cur['Downloaded'])." to ".Format::get_size($Downloaded);
 		$Cache->delete_value('users_stats_'.$UserID);
 }
@@ -380,41 +380,42 @@ if ($Invites != $Cur['Invites'] && check_perms('users_edit_invites')) {
 }
 
 if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('users_warn')) {
-	Misc::send_pm($UserID, 0, 'You have received a warning', "You have been [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;id=218]warned for $WarnLength week(s)[/url] by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
+	$Weeks = 'week' . (($WarnLength == 1) ? '' : 's');
+	Misc::send_pm($UserID, 0, 'You have received a warning', "You have been [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;id=218]warned for $WarnLength {$Weeks}[/url] by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
 	$UpdateSet[] = "Warned='".sqltime()."' + INTERVAL $WarnLength WEEK";
-	$Msg = "warned for $WarnLength week(s)";
+	$Msg = "warned for $WarnLength $Weeks";
 	if ($WarnReason) {
 		$Msg.=" for $WarnReason";
 	}
 	$EditSummary[] = db_string($Msg);
-	$LightUpdates['Warned'] = time_plus(3600*24*7*$WarnLength);
+	$LightUpdates['Warned'] = time_plus(3600 * 24 * 7 * $WarnLength);
 
 } elseif ($Warned == 0 && $Cur['Warned'] != '0000-00-00 00:00:00' && check_perms('users_warn')) {
 	$UpdateSet[] = "Warned='0000-00-00 00:00:00'";
-	$EditSummary[] = "warning removed";
+	$EditSummary[] = 'warning removed';
 	$LightUpdates['Warned'] = '0000-00-00 00:00:00';
 
 } elseif ($Warned == 1 && $ExtendWarning != '---' && check_perms('users_warn')) {
-
-	Misc::send_pm($UserID, 0, 'Your warning has been extended', "Your warning has been extended by $ExtendWarning week(s) by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
+	$Weeks = 'week' . (($ExtendWarning == 1) ? '' : 's');
+	Misc::send_pm($UserID, 0, 'Your warning has been extended', "Your warning has been extended by $ExtendWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
 
 	$UpdateSet[] = "Warned=Warned + INTERVAL $ExtendWarning WEEK";
 	$DB->query("SELECT Warned + INTERVAL $ExtendWarning WEEK FROM users_info WHERE UserID='$UserID'");
 	list($WarnedUntil) = $DB->next_record();
-	$Msg = "warning extended by $ExtendWarning week(s) to $WarnedUntil";
+	$Msg = "warning extended by $ExtendWarning $Weeks to $WarnedUntil";
 	if ($WarnReason) {
 		$Msg.=" for $WarnReason";
 	}
 	$EditSummary[] = db_string($Msg);
 	$LightUpdates['Warned'] = $WarnedUntil;
+
 } elseif ($Warned == 1 && $ExtendWarning == '---' && $ReduceWarning != '---' && check_perms('users_warn')) {
-
-	Misc::send_pm($UserID, 0, 'Your warning has been reduced', "Your warning has been reduced by $ReduceWarning week(s) by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
-
+	$Weeks = 'week' . (($ReduceWarning == 1) ? '' : 's');
+	Misc::send_pm($UserID, 0, 'Your warning has been reduced', "Your warning has been reduced by $ReduceWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
 	$UpdateSet[] = "Warned=Warned - INTERVAL $ReduceWarning WEEK";
 	$DB->query("SELECT Warned - INTERVAL $ReduceWarning WEEK FROM users_info WHERE UserID='$UserID'");
 	list($WarnedUntil) = $DB->next_record();
-	$Msg = "warning reduced by $ReduceWarning week(s) to $WarnedUntil";
+	$Msg = "warning reduced by $ReduceWarning $Weeks to $WarnedUntil";
 	if ($WarnReason) {
 		$Msg.=" for $WarnReason";
 	}

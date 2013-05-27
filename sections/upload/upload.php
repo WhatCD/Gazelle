@@ -74,11 +74,11 @@ if (!empty($ArtistForm)) {
 	$Properties['Artists'] = $ArtistForm;
 }
 
-require(SERVER_ROOT.'/classes/class_torrent_form.php');
+require(SERVER_ROOT.'/classes/torrent_form.class.php');
 $TorrentForm = new TORRENT_FORM($Properties, $Err);
 
 if (!isset($Text)) {
-	include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+	include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 	$Text = new TEXT;
 }
 

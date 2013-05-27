@@ -1,7 +1,7 @@
 <?
 authorize();
 
-include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
 // Quick SQL injection check

@@ -23,7 +23,7 @@ if (
 $User = (int)$_GET['user'];
 
 if (!$Enabled = $Cache->get_value('enabled_'.$User)) {
-	require(SERVER_ROOT.'/classes/class_mysql.php');
+	require(SERVER_ROOT.'/classes/mysql.class.php');
 	$DB=NEW DB_MYSQL; //Load the database wrapper
 	$DB->query("SELECT Enabled FROM users_main WHERE ID='$User'");
 	list($Enabled) = $DB->next_record();
@@ -42,11 +42,11 @@ if (md5($User.RSS_HASH.$_GET['passkey']) != $_GET['auth'] || $Enabled != 1) {
 $Feed->open_feed();
 switch ($_GET['feed']) {
 	case 'feed_news':
-		include(SERVER_ROOT.'/classes/class_text.php');
+		include(SERVER_ROOT.'/classes/text.class.php');
 		$Text = new TEXT;
 		$Feed->channel('News', 'RSS feed for site news.');
 		if (!$News = $Cache->get_value('news')) {
-			require(SERVER_ROOT.'/classes/class_mysql.php'); //Require the database wrapper
+			require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
 			$DB=NEW DB_MYSQL; //Load the database wrapper
 			$DB->query("SELECT
 				ID,
@@ -72,11 +72,11 @@ switch ($_GET['feed']) {
 		}
 		break;
 	case 'feed_blog':
-		include(SERVER_ROOT.'/classes/class_text.php');
+		include(SERVER_ROOT.'/classes/text.class.php');
 		$Text = new TEXT;
 		$Feed->channel('Blog', 'RSS feed for site blog.');
 		if (!$Blog = $Cache->get_value('blog')) {
-			require(SERVER_ROOT.'/classes/class_mysql.php'); //Require the database wrapper
+			require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
 			$DB = NEW DB_MYSQL; //Load the database wrapper
 			$DB->query("
 				SELECT

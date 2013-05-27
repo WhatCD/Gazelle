@@ -26,7 +26,7 @@ $UserID = $_GET['uid'];
 $App = $Cache->get_value('api_apps_'.$AppID);
 if (!is_array($App)) {
 	if (!isset($DB)) {
-		require(SERVER_ROOT.'/classes/class_mysql.php');
+		require(SERVER_ROOT.'/classes/mysql.class.php');
 		$DB = new DB_MYSQL;
 	}
 	$DB->query("SELECT Token, Name FROM api_applications WHERE ID='$AppID' LIMIT 1");
@@ -44,7 +44,7 @@ if ($_GET['req'] === 'access_request') {
 	$User = $Cache->get_value('api_users_'.$UserID);
 	if (!is_array($User)) {
 		if (!isset($DB)) {
-			require(SERVER_ROOT.'/classes/class_mysql.php');
+			require(SERVER_ROOT.'/classes/mysql.class.php');
 			$DB = new DB_MYSQL;
 		}
 		$DB->query("

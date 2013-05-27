@@ -24,7 +24,7 @@ if ($ID = (int)$_GET['id']) {
 	if ($_GET['plain'] == 1) {
 		echo $Message;
 	} else {
-		include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+		include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 		$Text = new TEXT;
 		echo $Text->full_format($Message);
 	}

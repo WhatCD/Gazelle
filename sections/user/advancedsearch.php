@@ -769,7 +769,11 @@ while (list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Emai
 			<td><?=time_diff($LastAccess)?></td>
 			<td><?=Format::get_size($Uploaded)?></td>
 			<td><?=Format::get_size($Downloaded)?></td>
-<?			$DB->query("SELECT COUNT(ud.UserID) FROM users_downloads AS ud JOIN torrents AS t ON t.ID = ud.TorrentID WHERE ud.UserID = ".$UserID);
+<?			$DB->query("
+				SELECT COUNT(ud.UserID)
+				FROM users_downloads AS ud
+					JOIN torrents AS t ON t.ID = ud.TorrentID
+				WHERE ud.UserID = $UserID");
 			list($Downloads) = $DB->next_record();
 			$DB->set_query_id($Results);
 ?>

@@ -58,8 +58,8 @@ if (isset($_GET['avatar'])) {
 			$Data2 = $Data;
 		}
 		if (strlen($Data2) > 256 * 1024 || image_height($Type, $Data2) > 400) {
-			require_once(SERVER_ROOT.'/classes/class_mysql.php');
-			require_once(SERVER_ROOT.'/classes/class_time.php'); //Require the time class
+			require_once(SERVER_ROOT.'/classes/mysql.class.php');
+			require_once(SERVER_ROOT.'/classes/time.class.php'); //Require the time class
 
 			$DB = new DB_MYSQL;
 			$DBURL = db_string($URL);

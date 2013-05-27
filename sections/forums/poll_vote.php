@@ -50,8 +50,8 @@ if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('poll
 	$DB->query("
 		SELECT Vote, COUNT(UserID)
 		FROM forums_polls_votes
-		WHERE TopicID='$TopicID'
-			AND Vote <> '0'
+		WHERE TopicID = '$TopicID'
+			AND Vote != '0'
 		GROUP BY Vote");
 	$VoteArray = $DB->to_array(false, MYSQLI_NUM);
 

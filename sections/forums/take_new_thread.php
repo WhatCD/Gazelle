@@ -98,7 +98,7 @@ if (isset($_POST['subscribe'])) {
 //auto subscribe
 /*
 if (check_perms('users_mod')) {
-	$DB->query("SELECT SubscriberID FROM subscribed_forums WHERE ForumID = '$ForumID' AND SubscriberID <> '$LoggedUser[ID]'");
+	$DB->query("SELECT SubscriberID FROM subscribed_forums WHERE ForumID = '$ForumID' AND SubscriberID != '$LoggedUser[ID]'");
 	while (list($SubscriberID) = $DB->next_record()) {
 		$DB->query("INSERT INTO users_subscriptions VALUES ($SubscriberID, $TopicID)");
 		//	$DB->query("INSERT INTO forums_last_read_topics

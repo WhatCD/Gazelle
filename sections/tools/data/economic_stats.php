@@ -32,13 +32,24 @@ if (!check_perms('site_view_flow')) {
 View::show_header('Economy');
 
 if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
-	$DB->query("SELECT SUM(Uploaded), SUM(Downloaded), COUNT(ID) FROM users_main WHERE Enabled='1'");
+	$DB->query("
+		SELECT SUM(Uploaded), SUM(Downloaded), COUNT(ID)
+		FROM users_main
+		WHERE Enabled='1'");
 	list($TotalUpload, $TotalDownload, $NumUsers) = $DB->next_record();
-	$DB->query("SELECT SUM(Bounty) FROM requests_votes");
+	$DB->query("
+		SELECT SUM(Bounty)
+		FROM requests_votes");
 	list($TotalBounty) = $DB->next_record();
-	$DB->query("SELECT SUM(rv.Bounty) FROM requests_votes AS rv JOIN requests AS r ON r.ID=rv.RequestID WHERE TorrentID>0");
+	$DB->query("
+		SELECT SUM(rv.Bounty)
+		FROM requests_votes AS rv
+			JOIN requests AS r ON r.ID=rv.RequestID
+		WHERE TorrentID>0");
 	list($AvailableBounty) = $DB->next_record();
-	$DB->query("SELECT SUM(Snatched), COUNT(ID) FROM torrents");
+	$DB->query("
+		SELECT SUM(Snatched), COUNT(ID)
+		FROM torrents");
 	list($TotalSnatches, $TotalTorrents) = $DB->next_record(); // This is the total number of snatches for torrents that still exist
 
 

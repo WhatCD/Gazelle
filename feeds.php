@@ -13,8 +13,8 @@ if (isset($_GET['clearcache'])) {
 
 require 'classes/config.php'; //The config contains all site wide configuration information as well as memcached rules
 
-require(SERVER_ROOT.'/classes/class_cache.php'); //Require the caching class
-require(SERVER_ROOT.'/classes/class_feed.php'); //Require the caching class
+require(SERVER_ROOT.'/classes/cache.class.php'); //Require the caching class
+require(SERVER_ROOT.'/classes/feed.class.php'); //Require the caching class
 $Cache = NEW CACHE($MemcachedServers); //Load the caching class
 $Feed = NEW FEED; //Lead the time class
 

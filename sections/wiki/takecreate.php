@@ -4,7 +4,7 @@ authorize();
 $P = array();
 $P = db_array($_POST);
 
-include(SERVER_ROOT.'/classes/class_validate.php');
+include(SERVER_ROOT.'/classes/validate.class.php');
 $Val = new VALIDATE;
 
 $Val->SetFields('title', '1','string','The title must be between 3 and 100 characters',array('maxlength'=>100, 'minlength'=>3));

@@ -291,7 +291,11 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 
 	//------------- Hide old requests ---------------------------------------//
 	sleep(3);
-	$DB->query("UPDATE requests SET Visible = 0 WHERE TimeFilled < (NOW() - INTERVAL 7 DAY) AND TimeFilled <> '0000-00-00 00:00:00'");
+	$DB->query("
+		UPDATE requests
+		SET Visible = 0
+		WHERE TimeFilled < (NOW() - INTERVAL 7 DAY)
+			AND TimeFilled != '0000-00-00 00:00:00'");
 
 	//------------- Remove dead peers ---------------------------------------//
 	sleep(3);
@@ -304,10 +308,15 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 	$AgoDays = time_minus(3600 * 24 * 30);
 
 	
-	$SessionQuery = $DB->query("SELECT UserID, SessionID
-								FROM users_sessions
-								WHERE (LastUpdate<'$AgoDays' AND KeepLogged='1') OR (LastUpdate<'$AgoMins' AND KeepLogged='0')");
-	$DB->query("DELETE FROM users_sessions WHERE (LastUpdate<'$AgoDays' AND KeepLogged='1') OR (LastUpdate<'$AgoMins' AND KeepLogged='0')");
+	$SessionQuery = $DB->query("
+			SELECT UserID, SessionID
+			FROM users_sessions
+			WHERE (LastUpdate<'$AgoDays' AND KeepLogged='1')
+				OR (LastUpdate<'$AgoMins' AND KeepLogged='0')");
+	$DB->query("
+		DELETE FROM users_sessions
+		WHERE (LastUpdate<'$AgoDays' AND KeepLogged='1')
+			OR (LastUpdate<'$AgoMins' AND KeepLogged='0')");
 	
 	$DB->set_query_id($SessionQuery);
 	while (list($UserID, $SessionID) = $DB->next_record()) {

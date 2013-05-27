@@ -1,6 +1,6 @@
 <?
-include(SERVER_ROOT.'/classes/class_feed.php'); // RSS feeds
-include(SERVER_ROOT.'/classes/class_text.php'); // strip_bbcode
+include(SERVER_ROOT.'/classes/feed.class.php'); // RSS feeds
+include(SERVER_ROOT.'/classes/text.class.php'); // strip_bbcode
 
 authorize();
 

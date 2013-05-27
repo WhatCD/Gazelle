@@ -7,7 +7,7 @@ header('Access-Control-Allow-Origin: *');
 define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by default
 define('MAX_COLLAGES', 5); // How many normal collages should be shown by default
 
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 
 $Text = NEW TEXT;
 
@@ -80,8 +80,22 @@ if ($TorrentTags != '') {
 	die();
 }*/
 
+$CoverArt = $Cache->get_value('torrents_cover_art_' . $GroupID);
+if (!$CoverArt) {
+	$DB->query("
+		SELECT ID, Image, Summary, UserID, Time
+		FROM cover_art
+		WHERE GroupID = '$GroupID'");
+	$CoverArt = array();
+	$CoverArt = $DB->to_array();
+	if ($DB->record_count() > 0) {
+		$Cache->cache_value('torrents_cover_art_' . $GroupID, $CoverArt, 0);
+	}
+}
+
+
 // Start output
-View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
+View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend,cover_art');
 ?>
 <div class="thin">
 	<div class="header">
@@ -99,8 +113,7 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
 <?	} else { ?>
 			<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
-<?	}
-?>
+<?	} ?>
 <!-- <a href="#" id="recommend" class="brackets">Recommend</a> -->
 <?
 	if ($Categories[$GroupCategoryID-1] == 'Music') { ?>
@@ -115,19 +128,84 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend');
 <? /* Misc::display_recommend($GroupID, "torrent"); */ ?>
 	<div class="sidebar">
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
-			<div class="head"><strong>Cover</strong></div>
+			<div class="head">
+				<strong><?=(count($CoverArt) > 0 ? 'Covers (' . (count($CoverArt) + 1) . ')' : 'Cover')?></strong>
+
+<?			if(count($CoverArt) > 0) {
+			for ($Index = 0; $Index <= count($CoverArt); $Index++) { ?>
+				<span id="cover_controls_<?=($Index)?>"<?=($Index > 0 ? ' style="display: none;"' : '')?>>
+<?					if ($Index == count($CoverArt)) { ?>
+						<a class="brackets prev_cover" data-gazelle-prev-cover="<?=($Index - 1)?>" href="#">Prev</a>
+						<a class="brackets show_all_covers" href="#">Show all</a>
+<?					} elseif ($Index > 0) { ?>
+						<a class="brackets prev_cover" data-gazelle-prev-cover="<?=($Index - 1)?>" href="#">Prev</a>
+						<a class="brackets show_all_covers" href="#">Show all</a>
+						<a class="brackets next_cover" data-gazelle-next-cover="<?=($Index + 1)?>" href="#">Next</a>
+<?					} elseif ($Index == 0 && count($CoverArt) > 0) { ?>
+						<a class="brackets show_all_covers" href="#">Show all</a>
+						<a class="brackets next_cover" data-gazelle-next-cover="<?=($Index + 1)?>" href="#">Next</a>
+<?					} ?>
+				</span>
+<?				}
+			} ?>
+			</div>
 <?
-if ($WikiImage != '') {
+$Index = 0;
 ?>
+<div id="covers">
+<div id="cover_div_<?=$Index?>">
+<? if ($WikiImage != '') { ?>
 			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=ImageTools::process($WikiImage)?>',220);" /></p>
-<?
-} else {
-?>
+<? } else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID - 1]?>" alt="<?=$Categories[$GroupCategoryID - 1]?>" title="<?=$Categories[$GroupCategoryID - 1]?>" width="220" height="220" border="0" /></p>
 <?
 }
+$Index++;
 ?>
+</div>
+<?			foreach ($CoverArt as $Cover) {
+				list($ImageID, $Image, $Summary, $AddedBy) = $Cover;
+				?>
+				<div id="cover_div_<?=$Index?>" style="display: none;">
+				<p align="center">
+<?
+					$Src = 'src="" data-gazelle-temp-src="' . ImageTools::process($Image, true) . '"';
+?>
+					<img id="cover_<?=$Index?>" style="max-width: 220px;" <?=$Src?> alt="<?=$Summary?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>',220);" />
+				</p>
+				<ul class="stats nobullet">
+					<li>
+						<?=$Summary?>
+						<?=(check_perms('users_mod') ? ' added by ' . Users::format_username($AddedBy, false, false, false, false, false) : '')?>
+						<span class="remove remove_cover_art"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=remove_cover_art&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;id=<?=$ImageID?>');this.parentNode.parentNode.parentNode.style.display = 'none';this.parentNode.parentNode.parentNode.previousElementSibling.style.display = 'none';" class="brackets" title="Remove Image">X</a></span>
+					</li>
+				</ul>
+			</div>
+<?				$Index++;
+			} ?>
 		</div>
+
+<?
+		if (check_perms('site_edit_wiki') && $WikiImage != '') { ?>
+		<div id="add_cover_div">
+			<div style="padding: 10px;">
+				<span style="float: right;" class="additional_add_artists">
+					<a onclick="addCoverField(); return false;" href="#" class="brackets">Add alternate cover</a>
+				</span>
+			</div>
+			<div class="body">
+				<form class="add_form" name="covers" id="add_covers_form" action="torrents.php" method="post">
+					<div id="add_cover">
+						<input type="hidden" name="action" value="add_cover_art" />
+						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
+					</div>
+				</form>
+			</div>
+		</div>
+<?		} ?>
+
+	</div>
 <?
 if ($Categories[$GroupCategoryID - 1] == 'Music') {
 	$ShownWith = false;
@@ -144,7 +222,12 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 				<li class="artists_composers">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if (check_perms('torrents_edit')) {
-				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+				$DB->query("
+					SELECT AliasID
+					FROM artists_alias
+					WHERE ArtistID = ".$Artist['id']."
+						AND ArtistID != AliasID
+						AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
 					$AliasID = $Artist['id'];
@@ -264,7 +347,12 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 				<li class="artists_producer">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if (check_perms('torrents_edit')) {
-					$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+					$DB->query("
+						SELECT AliasID
+						FROM artists_alias
+						WHERE ArtistID = ".$Artist['id']."
+							AND ArtistID != AliasID
+							AND Name = '".db_string($Artist['name'])."'");
 					list($AliasID) = $DB->next_record();
 					if (empty($AliasID)) {
 						$AliasID = $Artist['id'];
@@ -280,8 +368,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 			</ul>
 		</div>
-<?
-		if (check_perms('torrents_add_artist')) { ?>
+<?		if (check_perms('torrents_add_artist')) { ?>
 		<div class="box box_addartists">
 			<div class="head"><strong>Add artist</strong><span style="float: right;" class="additional_add_artist"><a onclick="AddArtistField(); return false;" href="#" class="brackets">+</a></span></div>
 			<div class="body">

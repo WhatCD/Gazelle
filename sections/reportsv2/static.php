@@ -13,8 +13,8 @@ if (!check_perms('admin_reports')) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/classes/class_text.php');
-include(SERVER_ROOT.'/classes/class_reports.php');
+include(SERVER_ROOT.'/classes/text.class.php');
+include(SERVER_ROOT.'/classes/reports.class.php');
 $Text = NEW TEXT;
 
 define('REPORTS_PER_PAGE', '10');

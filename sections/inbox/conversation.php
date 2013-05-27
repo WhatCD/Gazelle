@@ -1,5 +1,5 @@
 <?
-include(SERVER_ROOT.'/classes/class_text.php');
+include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
 
 $ConvID = $_GET['id'];
@@ -10,7 +10,11 @@ if (!$ConvID || !is_number($ConvID)) {
 
 
 $UserID = $LoggedUser['ID'];
-$DB->query("SELECT InInbox, InSentbox FROM pm_conversations_users WHERE UserID='$UserID' AND ConvID='$ConvID'");
+$DB->query("
+	SELECT InInbox, InSentbox
+	FROM pm_conversations_users
+	WHERE UserID='$UserID'
+		AND ConvID='$ConvID'");
 if ($DB->record_count() == 0) {
 	error(403);
 }
@@ -56,7 +60,11 @@ $Users[0]['Username'] = 'System';
 
 if ($UnRead == '1') {
 
-	$DB->query("UPDATE pm_conversations_users SET UnRead='0' WHERE ConvID='$ConvID' AND UserID='$UserID'");
+	$DB->query("
+		UPDATE pm_conversations_users
+		SET UnRead='0'
+		WHERE ConvID='$ConvID'
+			AND UserID='$UserID'");
 	// Clear the caches of the inbox and sentbox
 	$Cache->decrement('inbox_new_'.$UserID);
 }
@@ -64,7 +72,11 @@ if ($UnRead == '1') {
 View::show_header('View conversation '.$Subject, 'comments,inbox,bbcode,jquery,jquery.validate,form_validate');
 
 // Get messages
-$DB->query("SELECT SentDate, SenderID, Body, ID FROM pm_messages AS m WHERE ConvID='$ConvID' ORDER BY ID");
+$DB->query("
+	SELECT SentDate, SenderID, Body, ID
+	FROM pm_messages AS m
+	WHERE ConvID='$ConvID'
+	ORDER BY ID");
 ?>
 <div class="thin">
 	<h2><?=$Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')' : '')?></h2>
@@ -143,7 +155,10 @@ if (!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect(
 		</div>
 	</form>
 <?
-$DB->query("SELECT SupportFor FROM users_info WHERE UserID = ".$LoggedUser['ID']);
+$DB->query("
+	SELECT SupportFor
+	FROM users_info
+	WHERE UserID = ".$LoggedUser['ID']);
 list($FLS) = $DB->next_record();
 if ((check_perms('users_mod') || $FLS != '') && (!$ForwardedID || $ForwardedID == $LoggedUser['ID'])) {
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-//require_once 'class_mass_user_torrents_editor.php';
+//require_once 'mass_user_torrents_editor.class.php';
 
 /**
  * This class helps with mass-editing bookmarked torrents.
@@ -8,10 +8,8 @@
  * It can later be used for other bookmark tables.
  *
  */
-class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR
-{
-	public function __construct ($Table = 'bookmarks_torrents')
-	{
+class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR {
+	public function __construct ($Table = 'bookmarks_torrents') {
 		parent::__construct();
 		$this->set_table($Table);
 	}
@@ -23,8 +21,7 @@ class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR
 	 *
 	 * @param string $sql
 	 */
-	protected function query_and_clear_cache ($sql)
-	{
+	protected function query_and_clear_cache ($sql) {
 		if (is_string($sql) && $this->DB->query($sql))
 			$this->Cache->delete_value('bookmarks_group_ids_' . $this->UserID);
 	}

@@ -52,7 +52,11 @@ switch ($Short) {
 		break;
 
 	case 'thread' :
-		$DB->query("SELECT ft.Title, ft.ForumID, um.Username FROM forums_topics AS ft JOIN users_main AS um ON um.ID=ft.AuthorID WHERE ft.ID=".$ID);
+		$DB->query("
+			SELECT ft.Title, ft.ForumID, um.Username
+			FROM forums_topics AS ft
+				JOIN users_main AS um ON um.ID=ft.AuthorID
+			WHERE ft.ID=".$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
 		}
@@ -67,7 +71,11 @@ switch ($Short) {
 		break;
 
 	case 'post' :
-		$DB->query('SELECT fp.Body, fp.TopicID, um.Username FROM forums_posts AS fp JOIN users_main AS um ON um.ID=fp.AuthorID WHERE fp.ID='.$ID);
+		$DB->query('
+			SELECT fp.Body, fp.TopicID, um.Username
+			FROM forums_posts AS fp
+				JOIN users_main AS um ON um.ID=fp.AuthorID
+			WHERE fp.ID='.$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
 		}
@@ -93,7 +101,11 @@ switch ($Short) {
 		} else {
 			$Column = 'AuthorID';
 		}
-		$DB->query('SELECT '.$Short.".Body, um.Username FROM ".$Table." AS ".$Short." JOIN users_main AS um ON um.ID=".$Short.".".$Column." WHERE ".$Short.".ID=".$ID);
+		$DB->query('
+			SELECT '.$Short.".Body, um.Username
+			FROM $Table AS $Short
+				JOIN users_main AS um ON um.ID=$Short.$Column
+			WHERE $Short.ID=".$ID);
 		if ($DB->record_count() < 1) {
 			error(404);
 		}
@@ -121,7 +133,7 @@ foreach ($Type['guidelines'] as $Guideline) {
 	</div>
 <?
 
-include(SERVER_ROOT.'/classes/class_text.php'); // Text formatting class
+include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
 
@@ -169,7 +181,7 @@ switch ($Short) {
 							<option value="0">---</option>
 <?
 		foreach ($ReleaseTypes as $Key => $Val) {
-?>							<option value="<?=$Key?>"<?=(!empty($ReleaseType) ? ($Key == $ReleaseType ? ' selected="selected"' : '') : '') ?>><?=$Val?></option>
+?>							<option value="<?=$Key?>"<?=(!empty($ReleaseType) ? ($Key == $ReleaseType ? ' selected="selected"' : '') : '')?>><?=$Val?></option>
 <?
 		}
 ?>
