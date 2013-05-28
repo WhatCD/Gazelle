@@ -5,7 +5,7 @@ if (!extension_loaded('sphinx')) {
 }
 
 class SPHINX_SEARCH extends SphinxClient {
-	private $Index='*';
+	private $Index = '*';
 	public $TotalResults = 0;
 	public $Queries = array();
 	public $Time = 0.0;
@@ -44,11 +44,11 @@ class SPHINX_SEARCH extends SphinxClient {
 
 	****************************************************************/
 
-	function search($Query='', $CachePrefix='', $CacheLength=0, $ReturnData=array(), $SQL = '', $IDColumn='ID') {
+	function search($Query = '', $CachePrefix = '', $CacheLength = 0, $ReturnData = array(), $SQL = '', $IDColumn = 'ID') {
 		global $Cache, $DB;
-		$QueryStartTime=microtime(true);
+		$QueryStartTime = microtime(true);
 		$Result = $this->Query($Query, $this->Index);
-		$QueryEndTime=microtime(true);
+		$QueryEndTime = microtime(true);
 
 		$Filters = array();
 		foreach ($this->Filters as $Name => $Values) {
@@ -57,8 +57,8 @@ class SPHINX_SEARCH extends SphinxClient {
 			}
 		}
 
-		$this->Queries[] = array('Params: '.$Query.' Filters: '.implode(", ", $Filters).' Indicies: '.$this->Index,($QueryEndTime-$QueryStartTime) * 1000);
-		$this->Time += ($QueryEndTime-$QueryStartTime) * 1000;
+		$this->Queries[] = array('Params: '.$Query.' Filters: '.implode(", ", $Filters).' Indicies: '.$this->Index,($QueryEndTime - $QueryStartTime) * 1000);
+		$this->Time += ($QueryEndTime - $QueryStartTime) * 1000;
 
 		if ($Result === false) {
 			if ($this->_connerror && !$Cache->get_value('sphinx_crash_reported')) {
@@ -77,8 +77,6 @@ class SPHINX_SEARCH extends SphinxClient {
 		$Matches = $Result['matches'];
 
 		$MatchIDs = array_keys($Matches);
-
-
 
 		$NotFound = array();
 		$Skip = array();
@@ -123,7 +121,7 @@ class SPHINX_SEARCH extends SphinxClient {
 
 		if ($SQL != '') {
 			if (!empty($NotFound)) {
-				$DB->query(str_replace('%ids', implode(',',$NotFound), $SQL));
+				$DB->query(str_replace('%ids', implode(',', $NotFound), $SQL));
 				while ($Data = $DB->next_record(MYSQLI_ASSOC)) {
 					$Matches[$Data[$IDColumn]] = array_merge($Matches[$Data[$IDColumn]], $Data);
 					$Cache->cache_value($CachePrefix.'_'.$Data[$IDColumn], $Data, $CacheLength);
@@ -139,7 +137,7 @@ class SPHINX_SEARCH extends SphinxClient {
 	function limit($Start, $Length) {
 		$Start = (int)$Start;
 		$Length = (int)$Length;
-		$this->SetLimits($Start, $Length, $Start+$Length);
+		$this->SetLimits($Start, $Length, $Start + $Length);
 	}
 
 
@@ -147,7 +145,7 @@ class SPHINX_SEARCH extends SphinxClient {
 		$this->Index = $Index;
 	}
 
-	function set_filter($Name, $Vals, $Exclude=false) {
+	function set_filter($Name, $Vals, $Exclude = false) {
 		foreach ($Vals as $Val) {
 			if ($Exclude) {
 				$this->Filters[$Name][] = "!$Val";
@@ -182,7 +180,5 @@ class SPHINX_SEARCH extends SphinxClient {
 			'$'=>'\$',
 			'='=>'\='));
 		}
-
-
 }
 ?>

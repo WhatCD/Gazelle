@@ -1,4 +1,4 @@
-<?
+<?php
 /**********************************************************************
  *>>>>>>>>>>>>>>>>>>>>>>>>>>> User search <<<<<<<<<<<<<<<<<<<<<<<<<<<<*
  **********************************************************************/
@@ -19,7 +19,7 @@ if (isset($_GET['username'])) {
 
 	if (!$Err) {
 		// Passed validation. Let's rock.
-		list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
+		list($Page, $Limit) = Format::page_limit(USERS_PER_PAGE);
 		if ($Page > 10) {
 			$Page = 10;
 			$Limit = sprintf("%d, %d", ($Page - 1) * USERS_PER_PAGE, USERS_PER_PAGE);

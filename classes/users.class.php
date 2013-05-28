@@ -10,7 +10,10 @@ class Users {
 		// Get permissions
 		list($Classes, $ClassLevels) = $Cache->get_value('classes');
 		if (!$Classes || !$ClassLevels) {
-			$DB->query('SELECT ID, Name, Level, Secondary FROM permissions ORDER BY Level');
+			$DB->query('
+				SELECT ID, Name, Level, Secondary
+				FROM permissions
+				ORDER BY Level');
 			$Classes = $DB->to_array('ID');
 			$ClassLevels = $DB->to_array('Level');
 			$Cache->cache_value('classes', array($Classes, $ClassLevels), 0);
@@ -232,8 +235,11 @@ class Users {
 		global $DB, $Cache, $LoggedUser;
 
 		// Get SiteOptions
-		$DB->query("SELECT SiteOptions FROM users_info WHERE UserID = $UserID");
-		list($SiteOptions) = $DB->next_record(MYSQLI_NUM,false);
+		$DB->query("
+			SELECT SiteOptions
+			FROM users_info
+			WHERE UserID = $UserID");
+		list($SiteOptions) = $DB->next_record(MYSQLI_NUM, false);
 		$SiteOptions = unserialize($SiteOptions);
 
 		// Get HeavyInfo
@@ -244,7 +250,10 @@ class Users {
 		$HeavyInfo = array_merge($HeavyInfo, $NewOptions);
 
 		// Update DB
-		$DB->query("UPDATE users_info SET SiteOptions = '".db_string(serialize($SiteOptions))."' WHERE UserID = $UserID");
+		$DB->query("
+			UPDATE users_info
+			SET SiteOptions = '".db_string(serialize($SiteOptions))."'
+			WHERE UserID = $UserID");
 
 		// Update cache
 		$Cache->cache_value('user_info_heavy_'.$UserID, $HeavyInfo, 0);
@@ -262,8 +271,7 @@ class Users {
 	 * @global array $SiteOptions
 	 * @param boolean $Default Returns the default list if true
 	 */
-	public static function release_order ($Default = false)
-	{
+	public static function release_order ($Default = false) {
 		global $SiteOptions, $ReleaseTypes;
 
 		$RT = $ReleaseTypes + array(
@@ -281,19 +289,17 @@ class Users {
 
 		foreach ($Sort as $Key => $Val) {
 			if (isset($Defaults)) {
-				$Checked = $Defaults && isset($SiteOptions['HideTypes'][$Key]) ? 'checked="checked"' : '';
+				$Checked = ($Defaults && isset($SiteOptions['HideTypes'][$Key]) ? ' checked="checked"' : '');
 			} else {
-				$Checked = $Val ? 'checked="checked"' : '';
-				$Val = isset($RT[$Key]) ? $RT[$Key] : 'Error';
+				$Checked = ($Val ? ' checked="checked"' : '');
+				$Val = (isset($RT[$Key]) ? $RT[$Key] : 'Error');
 			}
 
 			$ID = $Key . '_' . (int) !!$Checked;
 ?>
-
 			<li class="sortable_item">
-				<label><input type="checkbox" <?=$Checked?> id="<?=$ID?>" /> <?=$Val?></label>
+				<label><input type="checkbox"<?=$Checked?> id="<?=$ID?>" /> <?=$Val?></label>
 			</li>
-
 <?
 		}
 	}
@@ -302,8 +308,7 @@ class Users {
 	 * Returns the default order for the sort list in a JS-friendly string
 	 * @return string
 	 */
-	public static function release_order_default_js ()
-	{
+	public static function release_order_default_js () {
 		ob_start();
 		self::release_order(true);
 		$HTML = ob_get_contents();
@@ -319,8 +324,8 @@ class Users {
 	 */
 	public static function make_secret($Length = 32) {
 		$Secret = '';
-		$Chars='abcdefghijklmnopqrstuvwxyz0123456789';
-		$CharLen = strlen($Chars)-1;
+		$Chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+		$CharLen = strlen($Chars) - 1;
 		for ($i = 0; $i < $Length; ++$i) {
 			$Secret .= $Chars[mt_rand(0, $CharLen)];
 		}
@@ -335,7 +340,7 @@ class Users {
 	 * @param $Secret salt
 	 * @return password hash
 	 */
-	public static function make_hash($Str,$Secret) {
+	public static function make_hash($Str, $Secret) {
 		return sha1(md5($Secret).$Str.sha1($Secret).SITE_SALT);
 	}
 
@@ -348,7 +353,7 @@ class Users {
 	 *			   with the deprecated Users::make_hash() method
 	 * @return true on correct password
 	 */
-	public static function check_password($Password, $Hash, $Secret='') {
+	public static function check_password($Password, $Hash, $Secret = '') {
 		if (!$Password || !$Hash) {
 			return false;
 		}
@@ -448,11 +453,11 @@ class Users {
 			$Str .= ($UserInfo['Donor'] == 1) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>' : '';
 		}
 
-		$Str .= ($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"'
+		$Str .= (($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"'
 					. '><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned'
 					. ($LoggedUser['ID'] === $UserID ? ' - Expires ' . date('Y-m-d H:i', strtotime($UserInfo['Warned'])) : '')
-					. '" /></a>' : '';
-		$Str .= ($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '';
+					. '" /></a>' : '');
+		$Str .= (($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '');
 
 		if ($Badges) {
 			$ClassesDisplay = array();
@@ -518,7 +523,11 @@ class Users {
 		if (($Data = $Cache->get_value('bookmarks_group_ids_' . $UserID))) {
 			list($GroupIDs, $BookmarkData) = $Data;
 		} else {
-			$DB->query("SELECT GroupID, Sort, `Time` FROM bookmarks_torrents WHERE UserID=$UserID ORDER BY Sort, `Time` ASC");
+			$DB->query("
+				SELECT GroupID, Sort, `Time`
+				FROM bookmarks_torrents
+				WHERE UserID=$UserID
+				ORDER BY Sort, `Time` ASC");
 			$GroupIDs = $DB->collect('GroupID');
 			$BookmarkData = $DB->to_array('GroupID', MYSQLI_ASSOC);
 			$Cache->cache_value('bookmarks_group_ids_' . $UserID,
@@ -526,7 +535,7 @@ class Users {
 		}
 
 		$TorrentList = Torrents::get_groups($GroupIDs);
-		$TorrentList = isset($TorrentList['matches']) ? $TorrentList['matches'] : array();
+		$TorrentList = (isset($TorrentList['matches']) ? $TorrentList['matches'] : array());
 
 		return array($GroupIDs, $BookmarkData, $TorrentList);
 	}
@@ -547,10 +556,10 @@ class Users {
 		switch ($Setting) {
 			case 0:
 				if (!empty($Avatar)) {
-					$ToReturn = $ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"$Username avatar\" />" : $Avatar;
+					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"$Username avatar\" />" : $Avatar);
 				} else {
 					$URL = STATIC_SERVER.'common/avatars/default.png';
-					$ToReturn = $ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL;
+					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL);
 				}
 				break;
 			case 2:
@@ -588,17 +597,17 @@ class Users {
 				if (!$Robot) {
 					$URL = 'https://secure.gravatar.com/avatar/'.md5(strtolower(trim($Username)))."?s=$Size&amp;d=$Type&amp;r=$Rating";
 				} else {
-					$URL = 'https://robohash.org/'.md5($Username).'?set=set'.$Type.'&amp;size='.$Size.'x'.$Size;
+					$URL = 'https://robohash.org/'.md5($Username)."?set=set$Type&amp;size={$Size}x$Size";
 				}
 				if ($ShowAvatar == True && !empty($Avatar)) {
-					$ToReturn = $ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"$Username avatar\" />" : $Avatar;
+					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"$Username avatar\" />" : $Avatar);
 				} else {
-					$ToReturn = $ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL;
+					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL);
 				}
 				break;
 			default:
 				$URL = STATIC_SERVER.'common/avatars/default.png';
-				$ToReturn = $ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL;
+				$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL);
 		}
 		return $ToReturn;
 	}

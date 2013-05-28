@@ -1,4 +1,4 @@
-<?
+<?php
 if (!check_perms('admin_donor_log')) {
 	error(403);
 }
@@ -6,7 +6,7 @@ if (!check_perms('admin_donor_log')) {
 include(SERVER_ROOT.'/sections/donate/config.php');
 
 define('DONATIONS_PER_PAGE', 50);
-list($Page,$Limit) = Format::page_limit(DONATIONS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(DONATIONS_PER_PAGE);
 
 
 $sql = "

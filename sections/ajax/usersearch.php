@@ -1,4 +1,4 @@
-<?
+<?php
 /**********************************************************************
  *>>>>>>>>>>>>>>>>>>>>>>>>>>> User search <<<<<<<<<<<<<<<<<<<<<<<<<<<<*
  **********************************************************************/
@@ -14,7 +14,7 @@ define('USERS_PER_PAGE', 30);
 if (isset($_GET['username'])) {
 	$_GET['username'] = trim($_GET['username']);
 
-	list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
+	list($Page, $Limit) = Format::page_limit(USERS_PER_PAGE);
 	$DB->query("
 		SELECT SQL_CALC_FOUND_ROWS
 			ID,

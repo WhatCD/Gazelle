@@ -1,4 +1,4 @@
-<?
+<?php
 /**********|| Page to show individual forums || ********************************\
 
 Things to expect in $_GET:
@@ -22,7 +22,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-list($Page,$Limit) = Format::page_limit(TOPICS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(TOPICS_PER_PAGE);
 
 //---------- Get some data to start processing
 

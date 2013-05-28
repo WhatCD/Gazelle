@@ -1,11 +1,11 @@
-<?
+<?php
 if (!check_perms('site_view_flow')) {
 	error(403);
 }
 
 //Timeline generation
 if (!isset($_GET['page'])) {
-	if (!list($Labels,$InFlow,$OutFlow,$Max) = $Cache->get_value('users_timeline')) {
+	if (!list($Labels, $InFlow, $OutFlow, $Max) = $Cache->get_value('users_timeline')) {
 		$DB->query("
 			SELECT DATE_FORMAT(JoinDate,'%b \'%y') AS Month, COUNT(UserID)
 			FROM users_info
@@ -41,14 +41,14 @@ if (!isset($_GET['page'])) {
 			list($Label,$Amount) = $Month;
 			$OutFlow[] = number_format(($Amount / $Max) * 100, 4);
 		}
-		$Cache->cache_value('users_timeline',array($Labels,$InFlow,$OutFlow,$Max),mktime(0,0,0,date('n') + 1,2));
+		$Cache->cache_value('users_timeline', array($Labels, $InFlow, $OutFlow, $Max), mktime(0, 0, 0, date('n') + 1, 2));
 	}
 }
 //End timeline generation
 
 
 define('DAYS_PER_PAGE', 100);
-list($Page,$Limit) = Format::page_limit(DAYS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(DAYS_PER_PAGE);
 
 $RS = $DB->query("
 		SELECT
@@ -122,7 +122,7 @@ $DB->set_query_id($RS);
 <? } ?>
 	<div class="linkbox">
 <?
-$Pages = Format::get_pages($Page, $Results, DAYS_PER_PAGE, 11) ;
+$Pages = Format::get_pages($Page, $Results, DAYS_PER_PAGE, 11);
 echo $Pages;
 ?>
 	</div>

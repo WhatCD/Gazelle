@@ -1,4 +1,4 @@
-<?
+<?php
 /************************************************************************
 ||------------------|| User token history page ||-----------------------||
 This page lists the torrents a user has spent his tokens on. It
@@ -48,7 +48,7 @@ if (isset($_GET['expire'])) {
 
 View::show_header('Freeleech token history');
 
-list($Page,$Limit) = Format::page_limit(25);
+list($Page, $Limit) = Format::page_limit(25);
 
 $DB->query("
 	SELECT SQL_CALC_FOUND_ROWS

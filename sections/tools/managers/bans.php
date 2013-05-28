@@ -1,4 +1,4 @@
-<?
+<?php
 if (!check_perms('admin_manage_ipbans')) {
 	error(403);
 }
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
 }
 
 define('BANS_PER_PAGE', '20');
-list($Page,$Limit) = Format::page_limit(BANS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(BANS_PER_PAGE);
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS ID, FromIP, ToIP, Reason FROM ip_bans AS i ";
 

@@ -1,4 +1,4 @@
-<?
+<?php
 /************************************************************************
 ||------------|| User IP history page ||---------------------------||
 
@@ -84,7 +84,7 @@ function UnBan(ip, id, elemID) {
 //]]>
 </script>
 <?
-list($Page,$Limit) = Format::page_limit(IPS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(IPS_PER_PAGE);
 
 if ($UsersOnly == 1) {
 	$RS = $DB->query("

@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  * This page is used for viewing reports in every viewpoint except auto.
  * It doesn't AJAX grab a new report when you resolve each one, use auto
@@ -18,7 +18,7 @@ include(SERVER_ROOT.'/classes/reports.class.php');
 $Text = NEW TEXT;
 
 define('REPORTS_PER_PAGE', '10');
-list($Page,$Limit) = Format::page_limit(REPORTS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(REPORTS_PER_PAGE);
 
 
 if (isset($_GET['view'])) {

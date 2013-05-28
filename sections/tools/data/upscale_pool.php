@@ -1,10 +1,10 @@
-<?
+<?php
 if (!check_perms('site_view_flow')) {
 	error(403);
 }
 View::show_header('Upscale Pool');
 define('USERS_PER_PAGE', 50);
-list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(USERS_PER_PAGE);
 
 $RS = $DB->query("
 	SELECT

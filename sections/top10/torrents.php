@@ -121,9 +121,25 @@ if (!empty($FreeleechToggleQuery))
 
 $FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
 
+$GroupByToggleQuery = "&amp;groups=";
+$GroupBy = "";
+$GroupBySum = "";
+if(isset($_GET['groups']) && $_GET['groups'] == "show") {
+	$GroupBy = " GROUP BY g.ID ";
+	$GroupBySum = md5($GroupBy);
+	$GroupByToggleQuery .= "hide";
+	$GroupByToggleName = "Show Top Torrents";
+} else {
+	$GroupByToggleQuery .= "show";
+	$GroupByToggleName = "Show Top Groups";
+}
+
 ?>
 	<div style="text-align: right;" class="linkbox">
 		<a href="top10.php?<?=$FreeleechToggleQuery?>" class="brackets"><?=ucfirst($FreeleechToggleName)?> freeleech in Top 10</a>
+<?		if(check_perms("users_mod")) {  ?>
+			<a href="top10.php?<?=$GroupByToggleQuery?>" class="brackets"><?=ucfirst($GroupByToggleName)?></a>
+<?		} ?>
 	</div>
 <?
 
@@ -160,7 +176,7 @@ $BaseQuery = "SELECT
 	LEFT JOIN torrents_group AS g ON g.ID = t.GroupID ";
 
 if ($Details=='all' || $Details=='day') {
-	$TopTorrentsActiveLastDay = $Cache->get_value('top10tor_day_'.$Limit.$WhereSum);
+	$TopTorrentsActiveLastDay = $Cache->get_value('top10tor_day_'.$Limit.$WhereSum.$GroupBySum);
 	if ($TopTorrentsActiveLastDay === false) {
 		if ($Cache->get_query_lock('top10')) {
 			$DayAgo = time_minus(86400);
@@ -168,11 +184,12 @@ if ($Details=='all' || $Details=='day') {
 			if (!empty($Where)) { $Query .= $Where.' AND '; }
 			$Query .= "
 				t.Time>'$DayAgo'
+				$GroupID
 				ORDER BY (t.Seeders + t.Leechers) DESC
 				LIMIT $Limit;";
 			$DB->query($Query);
 			$TopTorrentsActiveLastDay = $DB->to_array(false, MYSQLI_NUM);
-			$Cache->cache_value('top10tor_day_'.$Limit.$WhereSum,$TopTorrentsActiveLastDay,3600*2);
+			$Cache->cache_value('top10tor_day_'.$Limit.$WhereSum.$GroupBySum,$TopTorrentsActiveLastDay,3600*2);
 			$Cache->clear_query_lock('top10');
 		} else {
 			$TopTorrentsActiveLastDay = false;
@@ -181,7 +198,7 @@ if ($Details=='all' || $Details=='day') {
 	generate_torrent_table('Most Active Torrents Uploaded in the Past Day', 'day', $TopTorrentsActiveLastDay, $Limit);
 }
 if ($Details=='all' || $Details=='week') {
-	$TopTorrentsActiveLastWeek = $Cache->get_value('top10tor_week_'.$Limit.$WhereSum);
+	$TopTorrentsActiveLastWeek = $Cache->get_value('top10tor_week_'.$Limit.$WhereSum.$GroupBySum);
 	if ($TopTorrentsActiveLastWeek === false) {
 		if ($Cache->get_query_lock('top10')) {
 			$WeekAgo = time_minus(604800);
@@ -189,11 +206,12 @@ if ($Details=='all' || $Details=='week') {
 			if (!empty($Where)) { $Query .= $Where.' AND '; }
 			$Query .= "
 				t.Time>'$WeekAgo'
+				$GroupBy
 				ORDER BY (t.Seeders + t.Leechers) DESC
 				LIMIT $Limit;";
 			$DB->query($Query);
 			$TopTorrentsActiveLastWeek = $DB->to_array(false, MYSQLI_NUM);
-			$Cache->cache_value('top10tor_week_'.$Limit.$WhereSum,$TopTorrentsActiveLastWeek,3600*6);
+			$Cache->cache_value('top10tor_week_'.$Limit.$WhereSum.$GroupBySum,$TopTorrentsActiveLastWeek,3600*6);
 			$Cache->clear_query_lock('top10');
 		} else {
 			$TopTorrentsActiveLastWeek = false;
@@ -203,18 +221,19 @@ if ($Details=='all' || $Details=='week') {
 }
 
 if ($Details=='all' || $Details=='month') {
-	$TopTorrentsActiveLastMonth = $Cache->get_value('top10tor_month_'.$Limit.$WhereSum);
+	$TopTorrentsActiveLastMonth = $Cache->get_value('top10tor_month_'.$Limit.$WhereSum.$GroupBySum);
 	if ($TopTorrentsActiveLastMonth === false) {
 		if ($Cache->get_query_lock('top10')) {
 			$Query = $BaseQuery.' WHERE ';
 			if (!empty($Where)) { $Query .= $Where.' AND '; }
 			$Query .= "
 				t.Time>'".sqltime()."' - INTERVAL 1 MONTH
+				$GroupBy
 				ORDER BY (t.Seeders + t.Leechers) DESC
 				LIMIT $Limit;";
 			$DB->query($Query);
 			$TopTorrentsActiveLastMonth = $DB->to_array(false, MYSQLI_NUM);
-			$Cache->cache_value('top10tor_month_'.$Limit.$WhereSum,$TopTorrentsActiveLastMonth,3600*6);
+			$Cache->cache_value('top10tor_month_'.$Limit.$WhereSum.$GroupBySum,$TopTorrentsActiveLastMonth,3600*6);
 			$Cache->clear_query_lock('top10');
 		} else {
 			$TopTorrentsActiveLastMonth = false;
@@ -224,7 +243,7 @@ if ($Details=='all' || $Details=='month') {
 }
 
 if ($Details=='all' || $Details=='year') {
-	$TopTorrentsActiveLastYear = $Cache->get_value('top10tor_year_'.$Limit.$WhereSum);
+	$TopTorrentsActiveLastYear = $Cache->get_value('top10tor_year_'.$Limit.$WhereSum.$GroupBySum);
 	if ($TopTorrentsActiveLastYear === false) {
 		if ($Cache->get_query_lock('top10')) {
 			// IMPORTANT NOTE - we use WHERE t.Seeders>200 in order to speed up this query. You should remove it!
@@ -236,11 +255,12 @@ if ($Details=='all' || $Details=='year') {
 			elseif (!empty($Where)) { $Query .= $Where.' AND '; }
 			$Query .= "
 				t.Time>'".sqltime()."' - INTERVAL 1 YEAR
+				$GroupBy
 				ORDER BY (t.Seeders + t.Leechers) DESC
 				LIMIT $Limit;";
 			$DB->query($Query);
 			$TopTorrentsActiveLastYear = $DB->to_array(false, MYSQLI_NUM);
-			$Cache->cache_value('top10tor_year_'.$Limit.$WhereSum,$TopTorrentsActiveLastYear,3600*6);
+			$Cache->cache_value('top10tor_year_'.$Limit.$WhereSum.$GroupBySum,$TopTorrentsActiveLastYear,3600*6);
 			$Cache->clear_query_lock('top10');
 		} else {
 			$TopTorrentsActiveLastYear = false;
@@ -250,7 +270,7 @@ if ($Details=='all' || $Details=='year') {
 }
 
 if ($Details=='all' || $Details=='overall') {
-	$TopTorrentsActiveAllTime = $Cache->get_value('top10tor_overall_'.$Limit.$WhereSum);
+	$TopTorrentsActiveAllTime = $Cache->get_value('top10tor_overall_'.$Limit.$WhereSum.$GroupBySum);
 	if ($TopTorrentsActiveAllTime === false) {
 		if ($Cache->get_query_lock('top10')) {
 			// IMPORTANT NOTE - we use WHERE t.Seeders>500 in order to speed up this query. You should remove it!
@@ -261,11 +281,12 @@ if ($Details=='all' || $Details=='overall') {
 			}
 			elseif (!empty($Where)) { $Query .= ' WHERE '.$Where; }
 			$Query .= "
+				$GroupBy
 				ORDER BY (t.Seeders + t.Leechers) DESC
 				LIMIT $Limit;";
 			$DB->query($Query);
 			$TopTorrentsActiveAllTime = $DB->to_array(false, MYSQLI_NUM);
-			$Cache->cache_value('top10tor_overall_'.$Limit.$WhereSum,$TopTorrentsActiveAllTime,3600*6);
+			$Cache->cache_value('top10tor_overall_'.$Limit.$WhereSum.$GroupBySum,$TopTorrentsActiveAllTime,3600*6);
 			$Cache->clear_query_lock('top10');
 		} else {
 			$TopTorrentsActiveAllTime = false;
@@ -275,17 +296,18 @@ if ($Details=='all' || $Details=='overall') {
 }
 
 if (($Details=='all' || $Details=='snatched') && !$Filtered) {
-	$TopTorrentsSnatched = $Cache->get_value('top10tor_snatched_'.$Limit.$WhereSum);
+	$TopTorrentsSnatched = $Cache->get_value('top10tor_snatched_'.$Limit.$WhereSum.$GroupBySum);
 	if ($TopTorrentsSnatched === false) {
 		if ($Cache->get_query_lock('top10')) {
 			$Query = $BaseQuery;
 			if (!empty($Where)) { $Query .= ' WHERE '.$Where; }
 			$Query .= "
+				$GroupBy
 				ORDER BY t.Snatched DESC
 				LIMIT $Limit;";
 			$DB->query($Query);
 			$TopTorrentsSnatched = $DB->to_array(false, MYSQLI_NUM);
-			$Cache->cache_value('top10tor_snatched_'.$Limit.$WhereSum,$TopTorrentsSnatched,3600*6);
+			$Cache->cache_value('top10tor_snatched_'.$Limit.$WhereSum.$GroupBySum,$TopTorrentsSnatched,3600*6);
 			$Cache->clear_query_lock('top10');
 		} else {
 			$TopTorrentsSnatched = false;
@@ -295,7 +317,7 @@ if (($Details=='all' || $Details=='snatched') && !$Filtered) {
 }
 
 if (($Details=='all' || $Details=='data') && !$Filtered) {
-	$TopTorrentsTransferred = $Cache->get_value('top10tor_data_'.$Limit.$WhereSum);
+	$TopTorrentsTransferred = $Cache->get_value('top10tor_data_'.$Limit.$WhereSum.$GroupBySum);
 	if ($TopTorrentsTransferred === false) {
 		if ($Cache->get_query_lock('top10')) {
 			// IMPORTANT NOTE - we use WHERE t.Snatched>100 in order to speed up this query. You should remove it!
@@ -305,11 +327,12 @@ if (($Details=='all' || $Details=='data') && !$Filtered) {
 				if (!empty($Where)) { $Query .= ' AND '.$Where; }
 			}
 			$Query .= "
+				$GroupBy
 				ORDER BY Data DESC
 				LIMIT $Limit;";
 			$DB->query($Query);
 			$TopTorrentsTransferred = $DB->to_array(false, MYSQLI_NUM);
-			$Cache->cache_value('top10tor_data_'.$Limit.$WhereSum,$TopTorrentsTransferred,3600*6);
+			$Cache->cache_value('top10tor_data_'.$Limit.$WhereSum.$GroupBySum,$TopTorrentsTransferred,3600*6);
 			$Cache->clear_query_lock('top10');
 		} else {
 			$TopTorrentsTransferred = false;
@@ -319,17 +342,18 @@ if (($Details=='all' || $Details=='data') && !$Filtered) {
 }
 
 if (($Details=='all' || $Details=='seeded') && !$Filtered) {
-	$TopTorrentsSeeded = $Cache->get_value('top10tor_seeded_'.$Limit.$WhereSum);
+	$TopTorrentsSeeded = $Cache->get_value('top10tor_seeded_'.$Limit.$WhereSum.$GroupBySum);
 	if ($TopTorrentsSeeded === false) {
 		if ($Cache->get_query_lock('top10')) {
 			$Query = $BaseQuery;
 			if (!empty($Where)) { $Query .= ' WHERE '.$Where; }
 			$Query .= "
+				$GroupBy
 				ORDER BY t.Seeders DESC
 				LIMIT $Limit;";
 			$DB->query($Query);
 			$TopTorrentsSeeded = $DB->to_array(false, MYSQLI_NUM);
-			$Cache->cache_value('top10tor_seeded_'.$Limit.$WhereSum,$TopTorrentsSeeded,3600*6);
+			$Cache->cache_value('top10tor_seeded_'.$Limit.$WhereSum.$GroupBySum,$TopTorrentsSeeded,3600*6);
 			$Cache->clear_query_lock('top10');
 		} else {
 			$TopTorrentsSeeded = false;
@@ -445,46 +469,48 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		// append extra info to torrent title
 		$ExtraInfo = '';
 		$AddExtra = '';
-		if ($Format) {
-			$ExtraInfo.= $Format;
-			$AddExtra = ' / ';
-		}
-		if ($Encoding) {
-			$ExtraInfo.= $AddExtra.$Encoding;
-			$AddExtra = ' / ';
-		}
-		// "FLAC / Lossless / Log (100%) / Cue / CD";
-		if ($HasLog) {
-			$ExtraInfo.= $AddExtra.'Log ('.$LogScore.'%)';
-			$AddExtra = ' / ';
-		}
-		if ($HasCue) {
-			$ExtraInfo.= $AddExtra.'Cue';
-			$AddExtra = ' / ';
-		}
-		if ($Media) {
-			$ExtraInfo.= $AddExtra.$Media;
-			$AddExtra = ' / ';
-		}
-		if ($Scene) {
-			$ExtraInfo.= $AddExtra.'Scene';
-			$AddExtra = ' / ';
-		}
-		if ($Year > 0) {
-			$ExtraInfo.= $AddExtra.$Year;
-			$AddExtra = ' ';
-		}
-		if ($RemasterTitle) {
-			$ExtraInfo.= $AddExtra.$RemasterTitle;
-		}
-		if ($IsSnatched) {
-			if ($GroupCategoryID == 1) {
-				$ExtraInfo .= ' / ';
+		if(empty($GroupBy)) {
+			if ($Format) {
+				$ExtraInfo.= $Format;
+				$AddExtra = ' / ';
 			}
-			$ExtraInfo.= Format::torrent_label('Snatched!');
-		}
-		if ($ExtraInfo != '') {
-			$ExtraInfo = "- [$ExtraInfo]";
+			if ($Encoding) {
+				$ExtraInfo.= $AddExtra.$Encoding;
+				$AddExtra = ' / ';
+			}
+			// "FLAC / Lossless / Log (100%) / Cue / CD";
+			if ($HasLog) {
+				$ExtraInfo.= $AddExtra.'Log ('.$LogScore.'%)';
+				$AddExtra = ' / ';
+			}
+			if ($HasCue) {
+				$ExtraInfo.= $AddExtra.'Cue';
+				$AddExtra = ' / ';
+			}
+			if ($Media) {
+				$ExtraInfo.= $AddExtra.$Media;
+				$AddExtra = ' / ';
+			}
+			if ($Scene) {
+				$ExtraInfo.= $AddExtra.'Scene';
+				$AddExtra = ' / ';
+			}
+			if ($Year > 0) {
+				$ExtraInfo.= $AddExtra.$Year;
+				$AddExtra = ' ';
+			}
+			if ($RemasterTitle) {
+				$ExtraInfo.= $AddExtra.$RemasterTitle;
+			}
+			if ($IsSnatched) {
+				if ($GroupCategoryID == 1) {
+					$ExtraInfo .= ' / ';
+				}
+				$ExtraInfo.= Format::torrent_label('Snatched!');
+			}
+			if ($ExtraInfo != '') {
+				$ExtraInfo = "- [$ExtraInfo]";
+			}
 		}
 
 		$TorrentTags = new Tags($TagsList);

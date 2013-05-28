@@ -1,4 +1,4 @@
-<?
+<?php
 /************************************************************************
 //------------// Main friends page //----------------------------------//
 This page lists a user's friends.
@@ -19,7 +19,7 @@ View::show_header('Friends');
 $UserID = $LoggedUser['ID'];
 
 
-list($Page,$Limit) = Format::page_limit(FRIENDS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(FRIENDS_PER_PAGE);
 
 // Main query
 $DB->query("
@@ -72,7 +72,7 @@ foreach ($Friends as $Friend) {
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<table class="friends_table vertical_margin">
 		<tr class="colhead">
-			<td colspan="<?=Users::has_avatars_enabled() ? 3 : 2?>">
+			<td colspan="<?=(Users::has_avatars_enabled() ? 3 : 2)?>">
 				<span style="float: left;"><?=Users::format_username($FriendID, true, true, true, true)?>
 <?	if (check_paranoia('ratio', $Paranoia, $Class, $FriendID)) { ?>
 				&nbsp;Ratio: <strong><?=Format::get_ratio_html($Uploaded, $Downloaded)?></strong>

@@ -47,7 +47,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 } else {
 	$PerPage = POSTS_PER_PAGE;
 }
-list($Page,$Limit) = Format::page_limit($PerPage);
+list($Page, $Limit) = Format::page_limit($PerPage);
 
 switch ($action) {
 	case 'requests':

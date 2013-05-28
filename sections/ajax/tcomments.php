@@ -1,5 +1,4 @@
-<?
-
+<?php
 
 include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
@@ -24,9 +23,9 @@ if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_C
 		WHERE GroupID = $GroupID
 			AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
-	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $PostNum);
 } else {
-	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $Results);
 }
 
 //Get the cache catalogue
@@ -57,7 +56,7 @@ if ($Catalogue === false) {
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue,((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE),TORRENT_COMMENTS_PER_PAGE,true);
+$Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
 
 //---------- Begin printing
 $JsonComments = array();
@@ -79,7 +78,7 @@ foreach ($Thread as $Key => $Post) {
 			'donor' => $Donor == 1,
 			'warned' => ($Warned != '0000-00-00 00:00:00'),
 			'avatar' => $Avatar,
-			'enabled' => $Enabled == 2 ? false : true,
+			'enabled' => ($Enabled == 2 ? false : true),
 			'userTitle' => $UserTitle
 		)
 	);

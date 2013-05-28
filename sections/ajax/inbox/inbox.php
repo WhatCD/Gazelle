@@ -1,5 +1,4 @@
-<?
-
+<?php
 
 $UserID = $LoggedUser['ID'];
 
@@ -19,7 +18,7 @@ if (!in_array($Section, array('inbox', 'sentbox'))) {
 	die();
 }
 
-list($Page,$Limit) = Format::page_limit(MESSAGES_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 
 $Sort = empty($_GET['sort']) || $_GET['sort'] != "unread" ? "Date DESC" : "cu.Unread = '1' DESC, DATE DESC";
 

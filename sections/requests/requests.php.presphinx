@@ -1,6 +1,6 @@
-<?
+<?php
 
-list($Page,$Limit) = page_limit(REQUESTS_PER_PAGE);
+list($Page, $Limit) = page_limit(REQUESTS_PER_PAGE);
 $OrderWays = array('name', 'votes', 'bounty', 'filler', 'requestor', 'created', 'lastvote', 'filled');
 $Wheres = array();
 $ExtraJoins = array();

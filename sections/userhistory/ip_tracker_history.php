@@ -1,4 +1,4 @@
-<?
+<?php
 /************************************************************************
 ||------------|| User IP history page ||---------------------------||
 
@@ -43,7 +43,7 @@ function ShowIPs(rowname) {
 }
 </script>
 <?
-list($Page,$Limit) = Format::page_limit(IPS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(IPS_PER_PAGE);
 
 $TrackerIps = $DB->query("
 	SELECT IP, fid, tstamp

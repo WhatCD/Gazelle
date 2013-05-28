@@ -199,7 +199,7 @@ function user_dupes_table($UserID) {
 			<input type="hidden" id="form_comment_hash" name="form_comment_hash" value="<?=$CommentHash?>" />
 			<div class="box" id="l_a_box">
 				<div class="head">
-					<a href="#l_a_box"><strong>&uarr;</strong></a> <?=max($DupeCount - 1, 0)?> Linked account<?=(($DupeCount == 2) ? '' : 's')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;" class="brackets">View</a>
+					<a href="#l_a_box" class="brackets anchor">#</a> <?=max($DupeCount - 1, 0)?> Linked account<?=(($DupeCount == 2) ? '' : 's')?> <a href="#" onclick="$('.linkedaccounts').toggle(); return false;" class="brackets">View</a>
 				</div>
 				<table width="100%" class="layout hidden linkedaccounts">
 					<?=($DupeCount ? '<tr>' : '')?>

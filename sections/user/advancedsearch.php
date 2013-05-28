@@ -1,4 +1,4 @@
-<?
+<?php
 /**********************************************************************
  *>>>>>>>>>>>>>>>>>>>>>>>>>>> User search <<<<<<<<<<<<<<<<<<<<<<<<<<<<*
  * Best viewed with a wide screen monitor							  *
@@ -428,7 +428,7 @@ if (count($_GET)) {
 			$RunQuery = true;
 		}
 
-		list($Page,$Limit) = Format::page_limit(USERS_PER_PAGE);
+		list($Page, $Limit) = Format::page_limit(USERS_PER_PAGE);
 		$SQL.=" LIMIT $Limit";
 	} else { error($Err); }
 
@@ -447,10 +447,10 @@ View::show_header('User search');
 				<td class="label nobr"><span title="Date format is YYYY-MM-DD">Joined:</span></td>
 				<td width="24%">
 					<select name="joined">
-						<option value="on"<? if ($_GET['joined']==='on') {echo ' selected="selected"';} ?>>On</option>
-						<option value="before"<? if ($_GET['joined']==='before') {echo ' selected="selected"';} ?>>Before</option>
-						<option value="after"<? if ($_GET['joined']==='after') {echo ' selected="selected"';} ?>>After</option>
-						<option value="between"<? if ($_GET['joined']==='between') {echo ' selected="selected"';} ?>>Between</option>
+						<option value="on"<?      if ($_GET['joined'] === 'on')      { echo ' selected="selected"'; } ?>>On</option>
+						<option value="before"<?  if ($_GET['joined'] === 'before')  { echo ' selected="selected"'; } ?>>Before</option>
+						<option value="after"<?   if ($_GET['joined'] === 'after')   { echo ' selected="selected"'; } ?>>After</option>
+						<option value="between"<? if ($_GET['joined'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
 					</select>
 					<input type="text" name="join1" size="6" value="<?=display_str($_GET['join1'])?>" />
 					<input type="text" name="join2" size="6" value="<?=display_str($_GET['join2'])?>" />
@@ -458,10 +458,10 @@ View::show_header('User search');
 				<td class="label nobr">Enabled:</td>
 				<td>
 					<select name="enabled">
-						<option value=""<?  if ($_GET['enabled']==='')  {echo ' selected="selected"';} ?>>Any</option>
-						<option value="0"<? if ($_GET['enabled']==='0') {echo ' selected="selected"';} ?>>Unconfirmed</option>
-						<option value="1"<? if ($_GET['enabled']==='1') {echo ' selected="selected"';} ?>>Enabled</option>
-						<option value="2"<? if ($_GET['enabled']==='2') {echo ' selected="selected"';} ?>>Disabled</option>
+						<option value=""<?  if ($_GET['enabled'] === '')  { echo ' selected="selected"'; } ?>>Any</option>
+						<option value="0"<? if ($_GET['enabled'] === '0') { echo ' selected="selected"'; } ?>>Unconfirmed</option>
+						<option value="1"<? if ($_GET['enabled'] === '1') { echo ' selected="selected"'; } ?>>Enabled</option>
+						<option value="2"<? if ($_GET['enabled'] === '2') { echo ' selected="selected"'; } ?>>Disabled</option>
 					</select>
 				</td>
 			</tr>
@@ -473,10 +473,10 @@ View::show_header('User search');
 				<td class="label nobr"><span title="Date format is YYYY-MM-DD">Last active:</span></td>
 				<td width="30%">
 					<select name="lastactive">
-						<option value="on"<? if ($_GET['lastactive']==='on') {echo ' selected="selected"';} ?>>On</option>
-						<option value="before"<? if ($_GET['lastactive']==='before') {echo ' selected="selected"';} ?>>Before</option>
-						<option value="after"<? if ($_GET['lastactive']==='after') {echo ' selected="selected"';} ?>>After</option>
-						<option value="between"<? if ($_GET['lastactive']==='between') {echo ' selected="selected"';} ?>>Between</option>
+						<option value="on"<?      if ($_GET['lastactive'] === 'on')      { echo ' selected="selected"'; } ?>>On</option>
+						<option value="before"<?  if ($_GET['lastactive'] === 'before')  { echo ' selected="selected"'; } ?>>Before</option>
+						<option value="after"<?   if ($_GET['lastactive'] === 'after')   { echo ' selected="selected"'; } ?>>After</option>
+						<option value="between"<? if ($_GET['lastactive'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
 					</select>
 					<input type="text" name="lastactive1" size="6" value="<?=display_str($_GET['lastactive1'])?>" />
 					<input type="text" name="lastactive2" size="6" value="<?=display_str($_GET['lastactive2'])?>" />
@@ -484,13 +484,13 @@ View::show_header('User search');
 				<td class="label nobr">Primary class:</td>
 				<td>
 					<select name="class">
-						<option value=""<? if ($_GET['class']==='') {echo ' selected="selected"';} ?>>Any</option>
+						<option value=""<? if ($_GET['class'] === '') { echo ' selected="selected"'; } ?>>Any</option>
 <?	foreach ($ClassLevels as $Class) {
 		if ($Class['Secondary']) {
 			continue;
 		}
 ?>
-						<option value="<?=$Class['ID'] ?>"<? if ($_GET['class']===$Class['ID']) {echo ' selected="selected"';} ?>><?=Format::cut_string($Class['Name'], 10, 1, 1).' ('.$Class['Level'].')'?></option>
+						<option value="<?=$Class['ID'] ?>"<? if ($_GET['class'] === $Class['ID']) { echo ' selected="selected"'; } ?>><?=Format::cut_string($Class['Name'], 10, 1, 1).' ('.$Class['Level'].')'?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -505,11 +505,11 @@ View::show_header('User search');
 				<td class="label nobr">Secondary class:</td>
 				<td>
 					<select name="secclass">
-						<option value=""<? if ($_GET['secclass']==='') {echo ' selected="selected"';} ?>>Any</option>
+						<option value=""<? if ($_GET['secclass'] === '') { echo ' selected="selected"'; } ?>>Any</option>
 <?	$Secondaries = array();
 	// Neither level nor ID is particularly useful when searching secondary classes, so let's do some
 	// kung-fu to sort them alphabetically.
-	$fnc = function($Class1, $Class2) { return strcmp($Class1['Name'], $Class2['Name']);};
+	$fnc = function($Class1, $Class2) { return strcmp($Class1['Name'], $Class2['Name']); };
 	foreach ($ClassLevels as $Class) {
 		if (!$Class['Secondary']) {
 			continue;
@@ -519,7 +519,7 @@ View::show_header('User search');
 	usort($Secondaries, $fnc);
 	foreach ($Secondaries as $Class) {
 ?>
-						<option value="<?=$Class['ID'] ?>"<? if ($_GET['secclass']===$Class['ID']) {echo ' selected="selected"';} ?>><?=Format::cut_string($Class['Name'], 20, 1, 1)?></option>
+						<option value="<?=$Class['ID'] ?>"<? if ($_GET['secclass'] === $Class['ID']) { echo ' selected="selected"'; } ?>><?=Format::cut_string($Class['Name'], 20, 1, 1)?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -536,10 +536,10 @@ View::show_header('User search');
 				<td class="label nobr">Ratio:</td>
 				<td width="30%">
 					<select name="ratio">
-						<option value="equal"<? if ($_GET['ratio']==='equal') {echo ' selected="selected"';} ?>>Equal</option>
-						<option value="above"<? if ($_GET['ratio']==='above') {echo ' selected="selected"';} ?>>Above</option>
-						<option value="below"<? if ($_GET['ratio']==='below') {echo ' selected="selected"';} ?>>Below</option>
-						<option value="between"<? if ($_GET['ratio']==='between') {echo ' selected="selected"';} ?>>Between</option>
+						<option value="equal"<?   if ($_GET['ratio'] === 'equal')   { echo ' selected="selected"'; } ?>>Equal</option>
+						<option value="above"<?   if ($_GET['ratio'] === 'above')   { echo ' selected="selected"'; } ?>>Above</option>
+						<option value="below"<?   if ($_GET['ratio'] === 'below')   { echo ' selected="selected"'; } ?>>Below</option>
+						<option value="between"<? if ($_GET['ratio'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
 					</select>
 					<input type="text" name="ratio1" size="6" value="<?=display_str($_GET['ratio1'])?>" />
 					<input type="text" name="ratio2" size="6" value="<?=display_str($_GET['ratio2'])?>" />
@@ -547,9 +547,9 @@ View::show_header('User search');
 				<td class="label nobr">Donor:</td>
 				<td>
 					<select name="donor">
-						<option value=""<? if ($_GET['donor']==='') {echo ' selected="selected"';} ?>>Any</option>
-						<option value="yes"<? if ($_GET['donor']==='yes') {echo ' selected="selected"';} ?>>Yes</option>
-						<option value="no"<? if ($_GET['donor']==='no') {echo ' selected="selected"';} ?>>No</option>
+						<option value=""<?    if ($_GET['donor'] === '')    { echo ' selected="selected"'; } ?>>Any</option>
+						<option value="yes"<? if ($_GET['donor'] === 'yes') { echo ' selected="selected"'; } ?>>Yes</option>
+						<option value="no"<?  if ($_GET['donor'] === 'no')  { echo ' selected="selected"'; } ?>>No</option>
 					</select>
 				</td>
 			</tr>
@@ -567,11 +567,11 @@ View::show_header('User search');
 				<td class="label nobr"><span title="Units are in gibibytes (the base 2 sibling of gigabytes)">Uploaded:</span></td>
 				<td width="30%">
 					<select name="uploaded">
-						<option value="equal"<? if ($_GET['uploaded']==='equal') {echo ' selected="selected"';} ?>>Equal</option>
-						<option value="above"<? if ($_GET['uploaded']==='above') {echo ' selected="selected"';} ?>>Above</option>
-						<option value="below"<? if ($_GET['uploaded']==='below') {echo ' selected="selected"';} ?>>Below</option>
-						<option value="between"<? if ($_GET['uploaded']==='between') {echo ' selected="selected"';} ?>>Between</option>
-						<option value="buffer"<? if ($_GET['uploaded']==='buffer') {echo ' selected="selected"';} ?>>Buffer</option>
+						<option value="equal"<?   if ($_GET['uploaded'] === 'equal')   { echo ' selected="selected"'; } ?>>Equal</option>
+						<option value="above"<?   if ($_GET['uploaded'] === 'above')   { echo ' selected="selected"'; } ?>>Above</option>
+						<option value="below"<?   if ($_GET['uploaded'] === 'below')   { echo ' selected="selected"'; } ?>>Below</option>
+						<option value="between"<? if ($_GET['uploaded'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
+						<option value="buffer"<?  if ($_GET['uploaded'] === 'buffer')  { echo ' selected="selected"'; } ?>>Buffer</option>
 					</select>
 					<input type="text" name="uploaded1" size="6" value="<?=display_str($_GET['uploaded1'])?>" />
 					<input type="text" name="uploaded2" size="6" value="<?=display_str($_GET['uploaded2'])?>" />
@@ -579,9 +579,9 @@ View::show_header('User search');
 				<td class="label nobr">Warned:</td>
 				<td>
 					<select name="warned">
-						<option value=""<? if ($_GET['warned']==='') {echo ' selected="selected"';} ?>>Any</option>
-						<option value="yes"<? if ($_GET['warned']==='yes') {echo ' selected="selected"';} ?>>Yes</option>
-						<option value="no"<? if ($_GET['warned']==='no') {echo ' selected="selected"';} ?>>No</option>
+						<option value=""<?    if ($_GET['warned'] === '')    { echo ' selected="selected"'; } ?>>Any</option>
+						<option value="yes"<? if ($_GET['warned'] === 'yes') { echo ' selected="selected"'; } ?>>Yes</option>
+						<option value="no"<?  if ($_GET['warned'] === 'no')  { echo ' selected="selected"'; } ?>>No</option>
 					</select>
 				</td>
 			</tr>
@@ -590,10 +590,10 @@ View::show_header('User search');
 				<td class="label nobr"># of invites:</td>
 				<td>
 					<select name="invites">
-						<option value="equal"<? if ($_GET['invites']==='equal') {echo ' selected="selected"';} ?>>Equal</option>
-						<option value="above"<? if ($_GET['invites']==='above') {echo ' selected="selected"';} ?>>Above</option>
-						<option value="below"<? if ($_GET['invites']==='below') {echo ' selected="selected"';} ?>>Below</option>
-						<option value="between"<? if ($_GET['invites']==='between') {echo ' selected="selected"';} ?>>Between</option>
+						<option value="equal"<?   if ($_GET['invites'] === 'equal')   { echo ' selected="selected"'; } ?>>Equal</option>
+						<option value="above"<?   if ($_GET['invites'] === 'above')   { echo ' selected="selected"'; } ?>>Above</option>
+						<option value="below"<?   if ($_GET['invites'] === 'below')   { echo ' selected="selected"'; } ?>>Below</option>
+						<option value="between"<? if ($_GET['invites'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
 					</select>
 					<input type="text" name="invites1" size="6" value="<?=display_str($_GET['invites1'])?>" />
 					<input type="text" name="invites2" size="6" value="<?=display_str($_GET['invites2'])?>" />
@@ -601,10 +601,10 @@ View::show_header('User search');
 				<td class="label nobr"><span title="Units are in gibibytes (the base 2 sibling of gigabytes)">Downloaded:</span></td>
 				<td width="30%">
 					<select name="downloaded">
-						<option value="equal"<? if ($_GET['downloaded']==='equal') {echo ' selected="selected"';} ?>>Equal</option>
-						<option value="above"<? if ($_GET['downloaded']==='above') {echo ' selected="selected"';} ?>>Above</option>
-						<option value="below"<? if ($_GET['downloaded']==='below') {echo ' selected="selected"';} ?>>Below</option>
-						<option value="between"<? if ($_GET['downloaded']==='between') {echo ' selected="selected"';} ?>>Between</option>
+						<option value="equal"<?   if ($_GET['downloaded'] === 'equal')   { echo ' selected="selected"'; } ?>>Equal</option>
+						<option value="above"<?   if ($_GET['downloaded'] === 'above')   { echo ' selected="selected"'; } ?>>Above</option>
+						<option value="below"<?   if ($_GET['downloaded'] === 'below')   { echo ' selected="selected"'; } ?>>Below</option>
+						<option value="between"<? if ($_GET['downloaded'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
 					</select>
 					<input type="text" name="downloaded1" size="6" value="<?=display_str($_GET['downloaded1'])?>" />
 					<input type="text" name="downloaded2" size="6" value="<?=display_str($_GET['downloaded2'])?>" />
@@ -621,19 +621,19 @@ View::show_header('User search');
 				<td class="label nobr">Disabled invites:</td>
 				<td>
 					<select name="disabled_invites">
-						<option value=""<? if ($_GET['disabled_invites']==='') {echo ' selected="selected"';} ?>>Any</option>
-						<option value="yes"<? if ($_GET['disabled_invites']==='yes') {echo ' selected="selected"';} ?>>Yes</option>
-						<option value="no"<? if ($_GET['disabled_invites']==='no') {echo ' selected="selected"';} ?>>No</option>
+						<option value=""<?    if ($_GET['disabled_invites'] === '')    { echo ' selected="selected"'; } ?>>Any</option>
+						<option value="yes"<? if ($_GET['disabled_invites'] === 'yes') { echo ' selected="selected"'; } ?>>Yes</option>
+						<option value="no"<?  if ($_GET['disabled_invites'] === 'no')  { echo ' selected="selected"'; } ?>>No</option>
 					</select>
 				</td>
 				<td class="label nobr">Snatched:</td>
 				<td width="30%">
 					<select name="snatched">
-						<option value="equal"<? if (isset($_GET['snatched']) && $_GET['snatched']==='equal') {echo ' selected="selected"';} ?>>Equal</option>
-						<option value="above"<? if (isset($_GET['snatched']) && $_GET['snatched']==='above') {echo ' selected="selected"';} ?>>Above</option>
-						<option value="below"<? if (isset($_GET['snatched']) && $_GET['snatched']==='below') {echo ' selected="selected"';} ?>>Below</option>
-						<option value="between"<? if (isset($_GET['snatched']) && $_GET['snatched']==='between') {echo ' selected="selected"';} ?>>Between</option>
-						<option value="off"<? if (isset($_GET['snatched']) && $_GET['snatched']==='off') {echo ' selected="selected"';} ?>>Off</option>
+						<option value="equal"<?   if (isset($_GET['snatched']) && $_GET['snatched'] === 'equal')   { echo ' selected="selected"'; } ?>>Equal</option>
+						<option value="above"<?   if (isset($_GET['snatched']) && $_GET['snatched'] === 'above')   { echo ' selected="selected"'; } ?>>Above</option>
+						<option value="below"<?   if (isset($_GET['snatched']) && $_GET['snatched'] === 'below')   { echo ' selected="selected"'; } ?>>Below</option>
+						<option value="between"<? if (isset($_GET['snatched']) && $_GET['snatched'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
+						<option value="off"<?     if (isset($_GET['snatched']) && $_GET['snatched'] === 'off')     { echo ' selected="selected"'; } ?>>Off</option>
 					</select>
 					<input type="text" name="snatched1" size="6" value="<?=display_str($_GET['snatched1'])?>" />
 					<input type="text" name="snatched2" size="6" value="<?=display_str($_GET['snatched2'])?>" />
@@ -641,9 +641,9 @@ View::show_header('User search');
 				<td class="label nobr">Disabled uploads:</td>
 				<td>
 					<select name="disabled_uploads">
-						<option value=""<? if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='') {echo ' selected="selected"';} ?>>Any</option>
-						<option value="yes"<? if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='yes') {echo ' selected="selected"';} ?>>Yes</option>
-						<option value="no"<? if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads']==='no') {echo ' selected="selected"';} ?>>No</option>
+						<option value=""<?    if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads'] === '')    { echo ' selected="selected"'; } ?>>Any</option>
+						<option value="yes"<? if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads'] === 'yes') { echo ' selected="selected"'; } ?>>Yes</option>
+						<option value="no"<?  if (isset($_GET['disabled_uploads']) && $_GET['disabled_uploads'] === 'no')  { echo ' selected="selected"'; } ?>>No</option>
 					</select>
 				</td>
 			</tr>
@@ -679,8 +679,8 @@ View::show_header('User search');
 				<td class="label nobr"><span title="Two-letter codes as defined in ISO 3166-1 alpha-2">Country code:</span></td>
 				<td width="30%">
 					<select name="cc_op">
-						<option value="equal"<? if ($_GET['cc_op'] === 'equal') { echo ' selected="selected"';} ?>>Equals</option>
-						<option value="not_equal"<? if ($_GET['cc_op'] === 'not_equal') { echo ' selected="selected"';} ?>>Not equal</option>
+						<option value="equal"<?     if ($_GET['cc_op'] === 'equal')     { echo ' selected="selected"'; } ?>>Equals</option>
+						<option value="not_equal"<? if ($_GET['cc_op'] === 'not_equal') { echo ' selected="selected"'; } ?>>Not equal</option>
 					</select>
 					<input type="text" name="cc" size="2" value="<?=display_str($_GET['cc'])?>" />
 				</td>
@@ -710,9 +710,9 @@ View::show_header('User search');
 				<td class="label nobr"># of emails:</td>
 				<td>
 					<select name="emails_opt">
-						<option value="equal"<? if ($_GET['emails_opt']==='equal') {echo ' selected="selected"';} ?>>Equal</option>
-						<option value="above"<? if ($_GET['emails_opt']==='above') {echo ' selected="selected"';} ?>>Above</option>
-						<option value="below"<? if ($_GET['emails_opt']==='below') {echo ' selected="selected"';} ?>>Below</option>
+						<option value="equal"<? if ($_GET['emails_opt'] === 'equal') { echo ' selected="selected"'; } ?>>Equal</option>
+						<option value="above"<? if ($_GET['emails_opt'] === 'above') { echo ' selected="selected"'; } ?>>Above</option>
+						<option value="below"<? if ($_GET['emails_opt'] === 'below') { echo ' selected="selected"'; } ?>>Below</option>
 					</select>
 					<input type="text" name="email_cnt" size="6" value="<?=display_str($_GET['email_cnt'])?>" />
 				</td>
@@ -778,7 +778,7 @@ while (list($UserID, $Username, $Uploaded, $Downloaded, $Snatched, $Class, $Emai
 			$DB->set_query_id($Results);
 ?>
 			<td><?=number_format((int)$Downloads)?></td>
-			<td><?=is_numeric($Snatched) ? number_format($Snatched) : display_str($Snatched)?></td>
+			<td><?=(is_numeric($Snatched) ? number_format($Snatched) : display_str($Snatched))?></td>
 			<td><? if ($DisableInvites) { echo 'X'; } else { echo number_format($Invites); } ?></td>
 		</tr>
 <?

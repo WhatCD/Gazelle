@@ -1,4 +1,4 @@
-<?
+<?php
 if (!check_perms('site_torrents_notify')) {
 	error(403);
 }
@@ -31,7 +31,7 @@ if (!empty($_GET['filterid']) && is_number($_GET['filterid'])) {
 	$FilterID = false;
 }
 
-list($Page,$Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
 
 // The "order by x" links on columns headers
 function header_link($SortKey, $DefaultWay = 'desc') {

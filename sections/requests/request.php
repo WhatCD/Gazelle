@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
  * This is the page that displays the request to the end user after being created.
@@ -467,9 +467,9 @@ $Results = Requests::get_comment_count($RequestID);
 if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
 	$DB->query("SELECT COUNT(ID) FROM requests_comments WHERE RequestID = $RequestID AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
-	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $PostNum);
 } else {
-	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $Results);
 }
 
 //Get the cache catalogue
@@ -496,7 +496,7 @@ foreach ($Thread as $Key => $Post) {
 	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 ?>
-<table class="forum_post box vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : ''?>" id="post<?=$PostID?>">
+<table class="forum_post box vertical_margin<?=(!Users::has_avatars_enabled() ? ' noavatar' : '')?>" id="post<?=$PostID?>">
 	<colgroup>
 <?	if (Users::has_avatars_enabled()) { ?>
 		<col class="col_avatar" />
@@ -504,7 +504,7 @@ foreach ($Thread as $Key => $Post) {
 		<col class="col_post_body" />
 	</colgroup>
 	<tr class="colhead_dark">
-		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
+		<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
 			<div style="float: left;"><a href="#post<?=$PostID?>">#<?=$PostID?></a>
 				by <strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
@@ -552,7 +552,7 @@ foreach ($Thread as $Key => $Post) {
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('requests', <?=$PostID?>, 1); return false;">&laquo;</a>
 <? 		} ?>
 				Last edited by
-				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=Users::format_username($EditedUserID, false, false, false)?> <?=time_diff($EditedTime, 2, true, true)?>
 <?	} ?>
 			</div>
 		</td>

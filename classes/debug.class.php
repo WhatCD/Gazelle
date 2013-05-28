@@ -3,7 +3,7 @@
 ini_set('max_execution_time',600);
 define('MAX_TIME', 20000); //Maximum execution time in ms
 define('MAX_ERRORS', 0); //Maxmimum errors, warnings, notices we will allow in a page
-define('MAX_MEMORY', 80*1024*1024); //Maximum memory used per pageload
+define('MAX_MEMORY', 80 * 1024 * 1024); //Maximum memory used per pageload
 define('MAX_QUERIES', 30); //Maxmimum queries
 
 class DEBUG {
@@ -12,7 +12,7 @@ class DEBUG {
 	public $Perf = array();
 	private $LoggedVars = array();
 
-	public function profile($Automatic='') {
+	public function profile($Automatic = '') {
 		global $ScriptStartTime;
 		$Reason = array();
 
@@ -20,14 +20,14 @@ class DEBUG {
 			$Reason[] = $Automatic;
 		}
 
-		$Micro = (microtime(true)-$ScriptStartTime)*1000;
+		$Micro = (microtime(true) - $ScriptStartTime) * 1000;
 		if ($Micro > MAX_TIME && !defined('TIME_EXCEPTION')) {
 			$Reason[] = number_format($Micro, 3).' ms';
 		}
 
 		$Errors = count($this->get_errors());
 		if ($Errors > MAX_ERRORS && !defined('ERROR_EXCEPTION')) {
-			$Reason[] = $Errors.' PHP Errors';
+			$Reason[] = $Errors.' PHP errors';
 		}
 		/*
 		$Queries = count($this->get_queries());
@@ -37,7 +37,7 @@ class DEBUG {
 		*/
 		$Ram = memory_get_usage(true);
 		if ($Ram > MAX_MEMORY && !defined('MEMORY_EXCEPTION')) {
-			$Reason[] = Format::get_size($Ram).' Ram Used';
+			$Reason[] = Format::get_size($Ram).' RAM used';
 		}
 
 		if (isset($_REQUEST['profile'])) {
@@ -45,7 +45,7 @@ class DEBUG {
 			$Reason[] = 'Requested by '.$LoggedUser['Username'];
 		}
 
-		$this->Perf['Memory usage'] = (($Ram>>10)/1024).' MB';
+		$this->Perf['Memory usage'] = (($Ram>>10) / 1024).' MB';
 		$this->Perf['Page process time'] = number_format($Micro / 1000, 3).' s';
 		$this->Perf['CPU time'] = number_format($this->get_cpu_time() / 1000000, 3).' s';
 
@@ -57,7 +57,7 @@ class DEBUG {
 		return false;
 	}
 
-	public function analysis($Message, $Report='', $Time=43200) {
+	public function analysis($Message, $Report = '', $Time = 43200) {
 		global $Cache, $Document;
 		if (empty($Report)) {
 			$Report = $Message;
@@ -78,14 +78,14 @@ class DEBUG {
 			),
 			$Time
 		);
-		send_irc('PRIVMSG '.LAB_CHAN.' :'.$Message.' '.$Document.' '.' https://'.SSL_SITE_URL.'/tools.php?action=analysis&case='.$Identifier.' https://'.SSL_SITE_URL.$_SERVER['REQUEST_URI']);
+		send_irc('PRIVMSG '.LAB_CHAN." :{$Message} $Document https://".SSL_SITE_URL.'/tools.php?action=analysis&case='.$Identifier.' https://'.SSL_SITE_URL.$_SERVER['REQUEST_URI']);
 	}
 
 	public function get_cpu_time() {
 		if (!defined('PHP_WINDOWS_VERSION_MAJOR')) {
 			global $CPUTimeStart;
 			$RUsage = getrusage();
-			$CPUTime = $RUsage['ru_utime.tv_sec']*1000000 + $RUsage['ru_utime.tv_usec'] - $CPUTimeStart;
+			$CPUTime = $RUsage['ru_utime.tv_sec'] * 1000000 + $RUsage['ru_utime.tv_usec'] - $CPUTimeStart;
 			return $CPUTime;
 		}
 		return false;
@@ -122,9 +122,9 @@ class DEBUG {
 				$Return[$Key] .= "'$Key' => ";
 			}
 				if ($Val === true) {
-					$Return[$Key] .= "true";
+					$Return[$Key] .= 'true';
 				} elseif ($Val === false) {
-					$Return[$Key] .= "false";
+					$Return[$Key] .= 'false';
 				} elseif (is_string($Val)) {
 					$Return[$Key] .= "'$Val'";
 				} elseif (is_int($Val)) {
@@ -223,7 +223,7 @@ class DEBUG {
 		return $this->Flags;
 	}
 
-	public function get_errors($Light=false) {
+	public function get_errors($Light = false) {
 		//Because the cache can't take some of these variables
 		if ($Light) {
 			foreach ($this->Errors as $Key => $Value) {
@@ -304,7 +304,7 @@ class DEBUG {
 
 	/* Output Formatting */
 
-	public function perf_table($Perf=false) {
+	public function perf_table($Perf = false) {
 		if (!is_array($Perf)) {
 			$Perf = $this->get_perf();
 		}
@@ -332,7 +332,7 @@ class DEBUG {
 <?
 	}
 
-	public function include_table($Includes=false) {
+	public function include_table($Includes = false) {
 		if (!is_array($Includes)) {
 			$Includes = $this->get_includes();
 		}
@@ -356,7 +356,7 @@ class DEBUG {
 <?
 	}
 
-	public function class_table($Classes=false) {
+	public function class_table($Classes = false) {
 		if (!is_array($Classes)) {
 			$Classes = $this->get_classes();
 		}
@@ -393,7 +393,7 @@ class DEBUG {
 <?
 	}
 
-	public function flag_table($Flags=false) {
+	public function flag_table($Flags = false) {
 		if (!is_array($Flags)) {
 			$Flags = $this->get_flags();
 		}
@@ -434,7 +434,7 @@ class DEBUG {
 <?
 	}
 
-	public function constant_table($Constants=false) {
+	public function constant_table($Constants = false) {
 		if (!is_array($Constants)) {
 			$Constants = $this->get_constants();
 		}
@@ -454,7 +454,7 @@ class DEBUG {
 <?
 	}
 
-	public function cache_table($CacheKeys=false) {
+	public function cache_table($CacheKeys = false) {
 		global $Cache;
 		$Header = 'Cache keys';
 		if (!is_array($CacheKeys)) {
@@ -464,7 +464,7 @@ class DEBUG {
 		if (empty($CacheKeys)) {
 			return;
 		}
-		$Header = ' '.number_format(count($CacheKeys)).' '.$Header.':';
+		$Header = ' '.number_format(count($CacheKeys))." $Header:";
 
 ?>
 	<table class="layout" width="100%">
@@ -487,7 +487,7 @@ class DEBUG {
 <?
 	}
 
-	public function error_table($Errors=false) {
+	public function error_table($Errors = false) {
 		if (!is_array($Errors)) {
 			$Errors = $this->get_errors();
 		}
@@ -503,7 +503,7 @@ class DEBUG {
 	<table id="debug_error" class="debug_table hidden" width="100%">
 <?
 		foreach ($Errors as $Error) {
-			list($Error,$Location,$Call,$Args) = $Error;
+			list($Error, $Location, $Call, $Args) = $Error;
 ?>
 		<tr valign="top">
 			<td align="left" class="debug_info debug_error_call">
@@ -532,7 +532,7 @@ class DEBUG {
 		if (empty($Queries)) {
 			return;
 		}
-		$Header = ' '.number_format(count($Queries)).' '.$Header.':';
+		$Header = ' '.number_format(count($Queries))." $Header:";
 ?>
 	<table class="layout" width="100%">
 		<tr>
@@ -542,7 +542,7 @@ class DEBUG {
 	<table id="debug_database" class="debug_table hidden" width="100%">
 <?
 		foreach ($Queries as $Query) {
-			list($SQL,$Time) = $Query;
+			list($SQL, $Time) = $Query;
 ?>
 		<tr valign="top">
 			<td class="debug_data debug_query_data"><div><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str($SQL)))?></div></td>
@@ -555,7 +555,7 @@ class DEBUG {
 <?
 	}
 
-	public function sphinx_table($Queries=false) {
+	public function sphinx_table($Queries = false) {
 		$Header = 'Searches';
 		if (!is_array($Queries)) {
 			$Queries = $this->get_sphinx_queries();
@@ -567,7 +567,7 @@ class DEBUG {
 		if (empty($Queries)) {
 			return;
 		}
-		$Header = ' '.number_format(count($Queries)).' '.$Header.':';
+		$Header = ' '.number_format(count($Queries))." $Header:";
 ?>
 	<table class="layout" width="100%">
 		<tr>
@@ -577,7 +577,7 @@ class DEBUG {
 	<table id="debug_sphinx" class="debug_table hidden" width="100%">
 <?
 		foreach ($Queries as $Query) {
-			list($Params,$Time) = $Query;
+			list($Params, $Time) = $Query;
 ?>
 		<tr valign="top">
 			<td class="debug_data debug_sphinx_data"><pre><?=str_replace("\t", '	', $Params)?></pre></td>
@@ -590,7 +590,7 @@ class DEBUG {
 <?
 	}
 
-	public function vars_table($Vars=false) {
+	public function vars_table($Vars = false) {
 		$Header = 'Logged Variables';
 		if (empty($Vars)) {
 			if (empty($this->LoggedVars)) {
@@ -598,7 +598,7 @@ class DEBUG {
 			}
 			$Vars = $this->LoggedVars;
 		}
-		$Header = ' '.number_format(count($Vars)).' '.$Header.':';
+		$Header = ' '.number_format(count($Vars))." $Header:";
 
 ?>
 	<table class="layout" width="100%">

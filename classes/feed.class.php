@@ -8,10 +8,12 @@ class FEED {
 		echo '<xhtml:meta xmlns:xhtml="http://www.w3.org/1999/xhtml" name="robots" content="noindex" />'."\n";
 		echo '<meta xmlns="http://pipes.yahoo.com" name="pipes" content="noprocess" />'."\n";
 	}
+
 	function close_feed() {
 		echo "\t</channel>\n</rss>";
 	}
-	function channel($Title, $Description, $Section='') {
+
+	function channel($Title, $Description, $Section = '') {
 		$Site = $this->UseSSL ? 'https://'.SSL_SITE_URL : 'http://'.NONSSL_SITE_URL;
 		echo "\t\t<title>$Title :: ". SITE_NAME. "</title>\n";
 		echo "\t\t<link>$Site/$Section</link>\n";
@@ -21,13 +23,14 @@ class FEED {
 		echo "\t\t<docs>http://blogs.law.harvard.edu/tech/rss</docs>\n";
 		echo "\t\t<generator>Gazelle Feed Class</generator>\n\n";
 	}
-	function item($Title, $Description, $Page, $Creator, $Comments='', $Category='', $Date='') { //Escape with CDATA, otherwise the feed breaks.
+
+	function item($Title, $Description, $Page, $Creator, $Comments = '', $Category = '', $Date = '') { //Escape with CDATA, otherwise the feed breaks.
 		if ($Date == '') {
 			$Date = date('r');
 		} else {
-			$Date = date('r',strtotime($Date));
+			$Date = date('r', strtotime($Date));
 		}
-		$Site = $this->UseSSL ? 'https://'.SSL_SITE_URL : 'http://'.NONSSL_SITE_URL;
+		$Site = ($this->UseSSL ? 'https://'.SSL_SITE_URL : 'http://'.NONSSL_SITE_URL);
 		$Item = "\t\t<item>\n";
 		$Item .= "\t\t\t<title><![CDATA[$Title]]></title>\n";
 		$Item .= "\t\t\t<description><![CDATA[$Description]]></description>\n";
@@ -51,14 +54,14 @@ class FEED {
 			$Entries = array();
 		} else {
 			foreach ($Entries as $Item) {
-				echo str_replace(array('[[PASSKEY]]','[[AUTHKEY]]'),array(display_str($PassKey),display_str($AuthKey)),$Item);
+				echo str_replace(array('[[PASSKEY]]', '[[AUTHKEY]]'), array(display_str($PassKey), display_str($AuthKey)), $Item);
 			}
 		}
 	}
 
 	function populate($CacheKey, $Item) {
 		global $Cache;
-		$Entries = $Cache->get_value($CacheKey,true);
+		$Entries = $Cache->get_value($CacheKey, true);
 		if (!$Entries) {
 			$Entries = array();
 		} else {

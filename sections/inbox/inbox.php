@@ -1,4 +1,4 @@
-<?
+<?php
 
 
 $UserID = $LoggedUser['ID'];
@@ -13,7 +13,7 @@ if (!in_array($Section, array('inbox', 'sentbox'))) {
 	error(404);
 }
 
-list($Page,$Limit) = Format::page_limit(MESSAGES_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 
 View::show_header('Inbox');
 ?>

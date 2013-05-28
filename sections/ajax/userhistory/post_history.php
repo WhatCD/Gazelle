@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 User post history page
 */
@@ -31,7 +31,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = POSTS_PER_PAGE;
 }
 
-list($Page,$Limit) = Format::page_limit($PerPage);
+list($Page, $Limit) = Format::page_limit($PerPage);
 
 $UserInfo = Users::user_info($UserID);
 extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', 'Title', 'Avatar', 'Donor', 'Warned'))));

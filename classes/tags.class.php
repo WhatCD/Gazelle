@@ -145,7 +145,7 @@ class Tags {
 	public static function format_top($Max = 5, $Link = 'torrents.php?taglist=', $ArtistName = '') {
 		if (empty(self::$All)) { ?>
 			<li>No torrent tags</li>
-			<?
+<?
 			return;
 		}
 		if (!empty($ArtistName)) {
@@ -153,6 +153,6 @@ class Tags {
 		}
 		foreach (array_slice(self::sorted(), 0, $Max) as $TagName => $Total) { ?>
 			<li><a href="<?=$Link . display_str($TagName) . $ArtistName?>"><?=display_str($TagName)?></a> (<?=$Total?>)</li>
-		<? }
+<?		}
 	}
 }

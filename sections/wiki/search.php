@@ -1,4 +1,4 @@
-<?
+<?php
 if (empty($_GET['nojump'])) {
 	$ArticleID = $Alias->to_id($_GET['search']);
 	if ($ArticleID) { //Found Article
@@ -7,7 +7,7 @@ if (empty($_GET['nojump'])) {
 }
 
 define('ARTICLES_PER_PAGE', 25);
-list($Page,$Limit) = Format::page_limit(ARTICLES_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(ARTICLES_PER_PAGE);
 
 $OrderVals = array('Title', 'Created', 'Edited');
 $WayVals = array('Ascending', 'Descending');

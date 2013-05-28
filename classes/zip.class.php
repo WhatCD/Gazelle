@@ -85,7 +85,7 @@ function dostime($TimeStamp = 0) {
 		}
 		$TimeStamp = strtotime($TimeStamp);
 	}
-	$Date = ($TimeStamp == 0) ? getdate() : getdate($TimeStamp);
+	$Date = (($TimeStamp == 0) ? getdate() : getdate($TimeStamp));
 	$Hex = dechex((($Date['year'] - 1980) << 25) | ($Date['mon'] << 21) | ($Date['mday'] << 16) | ($Date['hours'] << 11) | ($Date['minutes'] << 5) | ($Date['seconds'] >> 1));
 	eval("\$Return = \"\x$Hex[6]$Hex[7]\x$Hex[4]$Hex[5]\x$Hex[2]$Hex[3]\x$Hex[0]$Hex[1]\";");
 	return $Return;
@@ -93,20 +93,20 @@ function dostime($TimeStamp = 0) {
 */
 
 class Zip {
-	public $ArchiveSize = 0; //Total size
+	public $ArchiveSize = 0; // Total size
 	public $ArchiveFiles = 0; // Total files
 	private $Structure = ''; // Structure saved to memory
 	private $FileOffset = 0; // Offset to write data
 	private $Data = ''; //An idea
 
-	public function __construct ($ArchiveName='Archive') {
-		header("Content-type: application/octet-stream"); //Stream download
-		header("Content-disposition: attachment; filename=\"$ArchiveName.zip\""); //Name the archive - Should not be urlencoded
+	public function __construct ($ArchiveName = 'Archive') {
+		header("Content-type: application/octet-stream"); // Stream download
+		header("Content-disposition: attachment; filename=\"$ArchiveName.zip\""); // Name the archive - Should not be urlencoded
 	}
 
 	public static function unlimit () {
 		ob_end_clean();
-		set_time_limit(3600); //Limit 1 hour
+		set_time_limit(3600); // Limit 1 hour
 		ini_set('memory_limit', '1024M'); // Because the buffers can get extremely large
 	}
 
@@ -116,19 +116,19 @@ class Zip {
 		$this->Data .= "\x14\x00"; // Version requirements
 		$this->Data .= "\x00\x08"; // Bit flag - 0x8 = UTF-8 file names
 		$this->Data .= "\x08\x00"; // Compression
-		//$this->Data .= dostime($TimeStamp); //Last modified
+		//$this->Data .= dostime($TimeStamp); // Last modified
 		$this->Data .= "\x00\x00\x00\x00";
-		$DataLength = strlen($FileData); // Saved as varibale to avoid wasting CPU calculating it multiple times.
+		$DataLength = strlen($FileData); // Saved as variable to avoid wasting CPU calculating it multiple times.
 		$CRC32 = crc32($FileData); // Ditto.
 		$ZipData = gzcompress($FileData); // Ditto.
-		$ZipData = substr ($ZipData, 2,(strlen($ZipData) - 6)); // Checksum resolution
-		$ZipLength = strlen($ZipData); //Ditto.
-		$this->Data .= pack("V",$CRC32); // CRC-32
-		$this->Data .= pack("V",$ZipLength); // Compressed filesize
-		$this->Data .= pack("V",$DataLength); // Uncompressed filesize
-		$this->Data .= pack("v",strlen($ArchivePath)); // Pathname length
+		$ZipData = substr ($ZipData, 2, (strlen($ZipData) - 6)); // Checksum resolution
+		$ZipLength = strlen($ZipData); // Ditto.
+		$this->Data .= pack('V', $CRC32); // CRC-32
+		$this->Data .= pack('V', $ZipLength); // Compressed file size
+		$this->Data .= pack('V', $DataLength); // Uncompressed file size
+		$this->Data .= pack('v', strlen($ArchivePath)); // Path name length
 		$this->Data .="\x00\x00"; // Extra field length (0'd so we can ignore this)
-		$this->Data .= $ArchivePath; // Filename  & Exta Field (length set to 0 so ignored)
+		$this->Data .= $ArchivePath; // File name & Extra Field (length set to 0 so ignored)
 		/* END file header */
 
 		/* File data */
@@ -137,9 +137,9 @@ class Zip {
 
 		/* Data descriptor
 		Not needed (only needed when 3rd bitflag is set), causes problems with OS X archive utility
-		$this->Data .= pack("V",$CRC32); // CRC-32
-		$this->Data .= pack("V",$ZipLength); // Compressed filesize
-		$this->Data .= pack("V",$DataLength); // Uncompressed filesize
+		$this->Data .= pack('V', $CRC32); // CRC-32
+		$this->Data .= pack('V', $ZipLength); // Compressed file size
+		$this->Data .= pack('V', $DataLength); // Uncompressed file size
 		END data descriptor */
 
 		$FileDataLength = strlen($this->Data);
@@ -154,17 +154,17 @@ class Zip {
 		$CDS .="\x00\x08"; // Bit flag - 0x8 = UTF-8 file names
 		$CDS .="\x08\x00"; // Compression
 		$CDS .="\x00\x00\x00\x00"; // Last modified
-		$CDS .= pack("V",$CRC32); // CRC-32
-		$CDS .= pack("V",$ZipLength); // Compressed filesize
-		$CDS .= pack("V",$DataLength); // Uncompressed filesize
-		$CDS .= pack("v",strlen($ArchivePath)); // Pathname length
+		$CDS .= pack('V', $CRC32); // CRC-32
+		$CDS .= pack('V', $ZipLength); // Compressed file size
+		$CDS .= pack('V', $DataLength); // Uncompressed file size
+		$CDS .= pack('v', strlen($ArchivePath)); // Path name length
 		$CDS .="\x00\x00"; // Extra field length (0'd so we can ignore this)
 		$CDS .="\x00\x00"; // File comment length  (no comment, 0'd)
 		$CDS .="\x00\x00"; // Disk number start (0 seems valid)
 		$CDS .="\x00\x00"; // Internal file attributes (again with the 0's)
 		$CDS .="\x20\x00\x00\x00"; // External file attributes
-		$CDS .= pack("V", $this->FileOffset ); // Offsets
-		$CDS .= $ArchivePath; // Filename  & Exta Field (length set to 0 so ignored)
+		$CDS .= pack('V', $this->FileOffset); // Offsets
+		$CDS .= $ArchivePath; // File name & Extra Field (length set to 0 so ignored)
 		/* END central Directory Structure */
 
 		$this->FileOffset = $CurrentOffset; // Update offsets
@@ -177,10 +177,10 @@ class Zip {
 		echo "\x50\x4b\x05\x06"; // End of central directory signature
 		echo "\x00\x00"; // This disk
 		echo "\x00\x00"; // CDS start
-		echo pack("v", $this->ArchiveFiles); // Handle the numebr of entries
-		echo pack("v", $this->ArchiveFiles); // Ditto
-		echo pack("V", strlen($this->Structure)); //Size
-		echo pack("V", $this->ArchiveSize); // Offset
+		echo pack('v', $this->ArchiveFiles); // Handle the number of entries
+		echo pack('v', $this->ArchiveFiles); // Ditto
+		echo pack('V', strlen($this->Structure)); //Size
+		echo pack('V', $this->ArchiveSize); // Offset
 		echo "\x00\x00"; // No comment, close it off
 	}
 }

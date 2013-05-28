@@ -11,7 +11,10 @@ class Tools {
 		$IPNum = Tools::ip_to_unsigned($IP);
 		$IPBans = $Cache->get_value('ip_bans_'.$A);
 		if (!is_array($IPBans)) {
-			$SQL = sprintf("SELECT ID, FromIP, ToIP FROM ip_bans WHERE FromIP BETWEEN %d << 24 AND (%d << 24) - 1", $A, $A+1);
+			$SQL = sprintf("
+				SELECT ID, FromIP, ToIP
+				FROM ip_bans
+				WHERE FromIP BETWEEN %d << 24 AND (%d << 24) - 1", $A, $A + 1);
 			$DB->query($SQL);
 			$IPBans = $DB->to_array(0, MYSQLI_NUM);
 			$Cache->cache_value('ip_bans_'.$A, $IPBans, 0);
@@ -57,8 +60,13 @@ class Tools {
 			return false;
 		}
 		global $DB;
-		$DB->query("SELECT EndIP,Code FROM geoip_country WHERE $Long >= StartIP ORDER BY StartIP DESC LIMIT 1");
-		if ((!list($EndIP,$Country) = $DB->next_record()) || $EndIP < $Long) {
+		$DB->query("
+			SELECT EndIP, Code
+			FROM geoip_country
+			WHERE $Long >= StartIP
+			ORDER BY StartIP DESC
+			LIMIT 1");
+		if ((!list($EndIP, $Country) = $DB->next_record()) || $EndIP < $Long) {
 			$Country = '?';
 		}
 		$IPs[$IP] = $Country;
@@ -72,7 +80,7 @@ class Tools {
 	 * @return hostname fetched
 	 */
 	public static function get_host_by_ip($IP) {
-		$testar = explode('.',$IP);
+		$testar = explode('.', $IP);
 		if (count($testar) != 4) {
 			return $IP;
 		}
@@ -83,7 +91,7 @@ class Tools {
 		}
 
 		$host = `host -W 1 $IP`;
-		return (($host ? end ( explode (' ', $host)) : $IP));
+		return ($host ? end(explode(' ', $host)) : $IP);
 	}
 
 	/**
@@ -139,8 +147,6 @@ class Tools {
 		++$ID;
 		return '<span id="cc_'.$ID.'">Resolving CC...<script type="text/javascript">ajax.get(\'tools.php?action=get_cc&ip='.$IP.'\',function(cc) {$(\'#cc_'.$ID.'\').raw().innerHTML=cc;});</script></span>';
 	}
-
-
 
 
 	/**

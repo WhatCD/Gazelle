@@ -1,9 +1,9 @@
-<?
+<?php
 
 $Queries = array();
 
 $OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
-list($Page,$Limit) = Format::page_limit(REQUESTS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(REQUESTS_PER_PAGE);
 $Submitted = !empty($_GET['submit']);
 
 //Paranoia

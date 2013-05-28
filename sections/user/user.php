@@ -183,15 +183,7 @@ View::show_header($Username, 'user,bbcode,requests,jquery,lastfm');
 	<div class="linkbox">
 <? if (!$OwnProfile) { ?>
 		<a href="inbox.php?action=compose&amp;to=<?=$UserID?>" class="brackets">Send message</a>
-
-<? 	if (check_perms("users_mod")) {
-	$DB->query("SELECT PushService FROM users_push_notifications WHERE UserID = '$UserID'");
-	if ($DB->record_count() > 0) { ?>
-		<a
-			href="user.php?action=take_push&amp;push=1&amp;userid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets"
-			>Push user</a>
-		<?	}
-}
+<?
 	$DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
 	if ($DB->record_count() == 0) { ?>
 		<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Add to friends</a>
@@ -571,7 +563,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 	<table class="layout recent" id="recent_snatches" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">
-				<a href="#recent_snatches"><strong>&uarr;</strong></a> Recent snatches
+				<a href="#recent_snatches" class="brackets anchor">#</a> Recent snatches
 			</td>
 		</tr>
 		<tr>
@@ -615,7 +607,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 	<table class="layout recent" id="recent_uploads" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
 			<td colspan="5">
-				<a href="#recent_uploads"><strong>&uarr;</strong></a> Recent uploads
+				<a href="#recent_uploads" class="brackets anchor">#</a> Recent uploads
 			</td>
 		</tr>
 		<tr>
@@ -655,7 +647,7 @@ foreach ($Collages as $CollageInfo) {
 		<tr class="colhead">
 			<td colspan="5">
 				<span style="float: left;">
-					<a href="#collage<?=$CollageID?>_box"><strong>&uarr;</strong></a> <?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
+					<a href="#collage<?=$CollageID?>_box" class="brackets anchor">#</a> <?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
 				</span>
 				<span style="float: right;">
 					<a href="#" onclick="$('#collage<?=$CollageID?>_box .images').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$FirstCol ? 'Hide' : 'Show' ?></a>
@@ -695,7 +687,7 @@ if ((check_perms('users_view_invites')) && $Invited > 0) {
 ?>
 		<div class="box" id="invitetree_box">
 			<div class="head">
-				<a href="#invitetree_box"><strong>&uarr;</strong></a> Invite tree <a href="#" onclick="$('#invitetree').toggle();return false;" class="brackets">View</a>
+				<a href="#invitetree_box" class="brackets anchor">#</a> Invite tree <a href="#" onclick="$('#invitetree').toggle();return false;" class="brackets">View</a>
 			</div>
 			<div id="invitetree" class="hidden">
 				<? $Tree->make_tree(); ?>
@@ -728,7 +720,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 ?>
 		<div class="box" id="requests_box">
 			<div class="head">
-				<a href="#requests_box"><strong>&uarr;</strong></a> Requests <a href="#" onclick="$('#requests').toggle();return false;" class="brackets">View</a>
+				<a href="#requests_box" class="brackets anchor">#</a> Requests <a href="#" onclick="$('#requests').toggle();return false;" class="brackets">View</a>
 			</div>
 			<div id="requests" class="request_table hidden">
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
@@ -831,7 +823,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 ?>
 		<div class="box" id="staffpms_box">
 			<div class="head">
-				<a href="#staffpms_box"><strong>&uarr;</strong></a> Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;" class="brackets">View</a>
+				<a href="#staffpms_box" class="brackets anchor">#</a> Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;" class="brackets">View</a>
 			</div>
 			<table width="100%" class="message_table hidden" id="staffpms">
 				<tr class="colhead">
@@ -902,7 +894,7 @@ if (check_perms('users_mod', $Class)) { ?>
 
 		<div class="box" id="staff_notes_box">
 			<div class="head">
-				<a href="#staff_notes_box"><strong>&uarr;</strong></a> Staff notes
+				<a href="#staff_notes_box" class="brackets anchor">#</a> Staff notes
 				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;" class="brackets">Edit</a>
 				<a href="#" onclick="$('#staffnotes').toggle(); return false;" class="brackets">Toggle</a>
 			</div>
@@ -920,7 +912,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="user_info_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#user_info_box"><strong>&uarr;</strong></a> User information
+					<a href="#user_info_box" class="brackets anchor">#</a> User information
 				</td>
 			</tr>
 <?	if (check_perms('users_edit_usernames', $Class)) { ?>
@@ -1106,7 +1098,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="warn_user_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#warn_user_box"><strong>&uarr;</strong></a> Warn user
+					<a href="#warn_user_box" class="brackets anchor">#</a> Warn user
 				</td>
 			</tr>
 			<tr>
@@ -1165,7 +1157,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="user_privs_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#user_privs_box"><strong>&uarr;</strong></a> User privileges
+					<a href="#user_privs_box" class="brackets anchor">#</a> User privileges
 				</td>
 			</tr>
 <?	if (check_perms('users_disable_posts') || check_perms('users_disable_any')) {
@@ -1255,7 +1247,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="session_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#session_box"><strong>&uarr;</strong></a> Session
+					<a href="#session_box" class="brackets anchor">#</a> Session
 				</td>
 			</tr>
 			<tr>
@@ -1272,7 +1264,7 @@ if (check_perms('users_mod', $Class)) { ?>
 		<table class="layout" id="submit_box">
 			<tr class="colhead">
 				<td colspan="2">
-					<a href="#submit_box"><strong>&uarr;</strong></a> Submit
+					<a href="#submit_box" class="brackets anchor">#</a> Submit
 				</td>
 			</tr>
 			<tr>

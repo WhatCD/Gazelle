@@ -31,7 +31,7 @@ if (EXPLAIN_HACK) {
 
 // Function to build a SQL WHERE to search for a string
 // Offers exact searching, fulltext searching, and negative searching
-function build_search($SearchStr, $Field, $Exact=false, $SQLWhere='', $FullText=0, &$FilterString='') {
+function build_search($SearchStr, $Field, $Exact = false, $SQLWhere = '', $FullText = 0, &$FilterString = '') {
 	if ($SQLWhere != '') {
 		$AddWhere = false;
 	} else {
@@ -81,8 +81,8 @@ function build_search($SearchStr, $Field, $Exact=false, $SQLWhere='', $FullText=
 		if ($SQLWhere != '') {
 			$SQLWhere.= ' AND ';
 		}
-		$SQLWhere.=$Field." LIKE '".db_string($SearchStr)."'";
-		$FilterString.="(.+?)($SearchStr)(.+?)";
+		$SQLWhere.= $Field." LIKE '".db_string($SearchStr)."'";
+		$FilterString.= "(.+?)($SearchStr)(.+?)";
 	}
 	$Search = 1;
 	$FilterString = "/$FilterString/si";
@@ -93,13 +93,13 @@ function build_search($SearchStr, $Field, $Exact=false, $SQLWhere='', $FullText=
 }
 
 function quotes($Str) {
-	$Str = str_replace(' ','{{SPACE}}',trim($Str[1]));
+	$Str = str_replace(' ', '{{SPACE}}', trim($Str[1]));
 	return ' '.$Str.' ';
 }
 
 // The "order by x" links on columns headers
-function header_link($SortKey,$DefaultWay = 'DESC') {
-	global $OrderBy,$OrderWay;
+function header_link($SortKey, $DefaultWay = 'DESC') {
+	global $OrderBy, $OrderWay;
 	if ($SortKey == $OrderBy) {
 		if ($OrderWay == 'DESC') {
 			$NewWay = 'ASC';
@@ -155,7 +155,7 @@ if ($_SERVER['QUERY_STRING'] != '' && !check_perms('torrents_search_fast') && $_
 $OrderBy = 's3'; // We order by GroupTime by default
 $OrderWay = 'DESC'; // We also order descending by default
 
-list($Page,$Limit) = Format::page_limit(TORRENTS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(TORRENTS_PER_PAGE);
 
 if (preg_match('/^s[1-7]$/',$_GET['order_by'])) {
 	$OrderBy = strtolower($_GET['order_by']);

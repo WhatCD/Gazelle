@@ -1,10 +1,10 @@
-<?
+<?php
 if (!check_perms('site_torrents_notify')) {
 	json_die("failure");
 }
 
 define('NOTIFICATIONS_PER_PAGE', 50);
-list($Page,$Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
 
 $Results = $DB->query("
 		SELECT SQL_CALC_FOUND_ROWS

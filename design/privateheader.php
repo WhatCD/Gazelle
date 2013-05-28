@@ -62,7 +62,7 @@ if (isset($LoggedUser['Notify'])) {
 
 	<script src="<?=STATIC_SERVER?>functions/sizzle.js" type="text/javascript"></script>
 	<script src="<?=STATIC_SERVER?>functions/script_start.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/script_start.js')?>" type="text/javascript"></script>
-	<script src="<?=STATIC_SERVER?>functions/class_ajax.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/class_ajax.js')?>" type="text/javascript"></script>
+	<script src="<?=STATIC_SERVER?>functions/ajax.class.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/ajax.class.js')?>" type="text/javascript"></script>
 	<script type="text/javascript">//<![CDATA[
 		var authkey = "<?=$LoggedUser['AuthKey']?>";
 		var userid = <?=$LoggedUser['ID']?>;
@@ -70,7 +70,7 @@ if (isset($LoggedUser['Notify'])) {
 	<script src="<?=STATIC_SERVER?>functions/global.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/global.js')?>" type="text/javascript"></script>
 <?
 
-$Scripts=explode(',',$JSIncludes);
+$Scripts = explode(',', $JSIncludes);
 
 foreach ($Scripts as $Script) {
 	if (empty($Script)) {

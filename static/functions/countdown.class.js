@@ -1,5 +1,5 @@
 /*
-	TODO: Move to more efficient structure used in class_ajax.
+	TODO: Move to more efficient structure used in ajax.class.
 
 	Example Usage:
 	<script type="text/javascript">

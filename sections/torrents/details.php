@@ -1,4 +1,4 @@
-<?
+<?php
 function compare($X, $Y) {
 	return($Y['score'] - $X['score']);
 }
@@ -85,7 +85,8 @@ if (!$CoverArt) {
 	$DB->query("
 		SELECT ID, Image, Summary, UserID, Time
 		FROM cover_art
-		WHERE GroupID = '$GroupID'");
+		WHERE GroupID = '$GroupID'
+		ORDER BY Time ASC");
 	$CoverArt = array();
 	$CoverArt = $DB->to_array();
 	if ($DB->record_count() > 0) {
@@ -137,11 +138,13 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend,cover_
 <?					if ($Index == count($CoverArt)) { ?>
 						<a class="brackets prev_cover" data-gazelle-prev-cover="<?=($Index - 1)?>" href="#">Prev</a>
 						<a class="brackets show_all_covers" href="#">Show all</a>
+						<span class="brackets next_cover">Next</span>
 <?					} elseif ($Index > 0) { ?>
 						<a class="brackets prev_cover" data-gazelle-prev-cover="<?=($Index - 1)?>" href="#">Prev</a>
 						<a class="brackets show_all_covers" href="#">Show all</a>
 						<a class="brackets next_cover" data-gazelle-next-cover="<?=($Index + 1)?>" href="#">Next</a>
 <?					} elseif ($Index == 0 && count($CoverArt) > 0) { ?>
+						<span class="brackets prev_cover">Prev</span>
 						<a class="brackets show_all_covers" href="#">Show all</a>
 						<a class="brackets next_cover" data-gazelle-next-cover="<?=($Index + 1)?>" href="#">Next</a>
 <?					} ?>
@@ -177,7 +180,7 @@ $Index++;
 					<li>
 						<?=$Summary?>
 						<?=(check_perms('users_mod') ? ' added by ' . Users::format_username($AddedBy, false, false, false, false, false) : '')?>
-						<span class="remove remove_cover_art"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=remove_cover_art&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;id=<?=$ImageID?>');this.parentNode.parentNode.parentNode.style.display = 'none';this.parentNode.parentNode.parentNode.previousElementSibling.style.display = 'none';" class="brackets" title="Remove Image">X</a></span>
+						<span class="remove remove_cover_art"><a href="#" onclick="ajax.get('torrents.php?action=remove_cover_art&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;id=<?=$ImageID?>&amp;groupid=<?=$GroupID?>');this.parentNode.parentNode.parentNode.style.display = 'none';this.parentNode.parentNode.parentNode.previousElementSibling.style.display = 'none';" class="brackets" title="Remove Image">X</a></span>
 					</li>
 				</ul>
 			</div>
@@ -877,9 +880,9 @@ if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_C
 		WHERE GroupID = $GroupID
 			AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
-	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
 } else {
-	list($Page,$Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
 }
 
 //Get the cache catalogue

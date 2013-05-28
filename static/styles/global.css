@@ -491,3 +491,8 @@ tr.torrent .bookmark>a:after {
 	text-align: center;
 	margin-top: 10px;
 }
+
+.anchor {
+	font-size: 85%;
+	font-weight: normal;
+}

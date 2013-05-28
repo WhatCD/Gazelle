@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 User topic subscription page
 */
@@ -15,7 +15,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 } else {
 	$PerPage = POSTS_PER_PAGE;
 }
-list($Page,$Limit) = Format::page_limit($PerPage);
+list($Page, $Limit) = Format::page_limit($PerPage);
 
 if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);

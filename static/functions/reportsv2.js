@@ -47,7 +47,7 @@ function Load(reportid) {
 function ErrorBox(reportid, message) {
 	var div = document.createElement("div");
 	div.id = "#error_box";
-	div.innerHTML = "<table class='layout'><tr><td class='center'>Message from report " + reportid + ": " + message + "\n <input type='button' value='Hide Errors' onclick='HideErrors();' /></td></tr></table>";
+	div.innerHTML = '<table class="layout"><tr><td class="center">Message from report ' + reportid + ': ' + message + '\n <input type="button" value="Hide Errors" onclick="HideErrors();" /></td></tr></table>';
 	$('#all_reports').raw().insertBefore(div, $('#all_reports').raw().firstChild);
 }
 
@@ -102,7 +102,7 @@ function NewReport(q, view, id) {
 				if (!$('#report').results() && !$('#no_reports').results()) {
 					var div = document.createElement("div");
 					div.id = "no_reports";
-					div.innerHTML = "<table class='layout'><tr><td class='center'><strong>No new reports! \\o/</strong></td></tr></table>";
+					div.innerHTML = '<table class="layout"><tr><td class="center"><strong>No new reports! \\o/</strong></td></tr></table>';
 					$('#all_reports').raw().appendChild(div);
 				}
 			}

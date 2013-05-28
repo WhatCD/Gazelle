@@ -1,4 +1,4 @@
-<?
+<?php
 //TODO: Normalize thread_*_info don't need to waste all that ram on things that are already in other caches
 /**********|| Page to show individual threads || ********************************\
 
@@ -76,7 +76,7 @@ if ($ThreadInfo['Posts'] > $PerPage) {
 } else {
 	$PostNum = 1;
 }
-list($Page,$Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
+list($Page, $Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
 if (($Page - 1) * $PerPage > $ThreadInfo['Posts']) {
 	$Page = ceil($ThreadInfo['Posts'] / $PerPage);
 }

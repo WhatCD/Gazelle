@@ -1,4 +1,4 @@
-<?
+<?php
 
 View::show_header('Staff Inbox');
 
@@ -42,7 +42,7 @@ switch ($View) {
 		break;
 }
 
-list($Page,$Limit) = Format::page_limit(MESSAGES_PER_PAGE);
+list($Page, $Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 // Get messages
 $StaffPMs = $DB->query("
 	SELECT
