@@ -21,7 +21,8 @@ if ($LoggedUser['CustomForums']) {
 }
 $sql = "
 	SELECT
-		SQL_CALC_FOUND_ROWS f.ID as ForumID,
+		SQL_CALC_FOUND_ROWS
+		f.ID as ForumID,
 		f.Name as ForumName,
 		t.Title,
 		q.PageID,

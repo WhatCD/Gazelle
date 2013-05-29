@@ -91,7 +91,12 @@ if ($OrderTbl == 'tg') {
 	$Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 } else {
 	$DB->query("
-		SELECT SQL_CALC_FOUND_ROWS unt.TorrentID, unt.UnRead, unt.FilterID, t.GroupID
+		SELECT
+			SQL_CALC_FOUND_ROWS
+			unt.TorrentID,
+			unt.UnRead,
+			unt.FilterID,
+			t.GroupID
 		FROM users_notify_torrents AS unt
 			JOIN torrents AS t ON t.ID = unt.TorrentID
 		WHERE unt.UserID=$UserID".

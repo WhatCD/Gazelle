@@ -35,7 +35,8 @@ if ($Section == 'inbox') { ?>
 $Sort = (empty($_GET['sort']) || $_GET['sort'] != 'unread' ? 'Date DESC' : "cu.Unread = '1' DESC, DATE DESC");
 
 $sql = "
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		c.ID,
 		c.Subject,
 		cu.Unread,

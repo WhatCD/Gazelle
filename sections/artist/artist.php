@@ -32,9 +32,6 @@ if (!empty($_GET['revisionid'])) { // if they're viewing an old revision
 }
 
 if ($Data) {
-	if (!is_array($Data)) {
-		$Data = unserialize($Data);
-	}
 	list($K, list($Name, $Image, $Body, $NumSimilar, $SimilarArray, , , $VanityHouseArtist)) = each($Data);
 } else {
 	if ($RevisionID) {

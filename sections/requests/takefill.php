@@ -37,7 +37,8 @@ if (!empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {
 
 //Torrent exists, check it's applicable
 $DB->query("
-	SELECT t.UserID,
+	SELECT
+		t.UserID,
 		t.Time,
 		tg.ReleaseType,
 		t.Encoding,
@@ -50,7 +51,7 @@ $DB->query("
 		IF(t.Remastered = '1', t.RemasterCatalogueNumber, tg.CatalogueNumber)
 	FROM torrents AS t
 		LEFT JOIN torrents_group AS tg ON t.GroupID=tg.ID
-	WHERE t.ID = ".$TorrentID."
+	WHERE t.ID = $TorrentID
 	LIMIT 1");
 
 

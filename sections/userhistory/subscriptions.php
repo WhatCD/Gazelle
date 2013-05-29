@@ -28,7 +28,8 @@ if ($LoggedUser['CustomForums']) {
 $ShowUnread = (!isset($_GET['showunread']) && !isset($HeavyInfo['SubscriptionsUnread']) || isset($HeavyInfo['SubscriptionsUnread']) && !!$HeavyInfo['SubscriptionsUnread'] || isset($_GET['showunread']) && !!$_GET['showunread']);
 $ShowCollapsed = (!isset($_GET['collapse']) && !isset($HeavyInfo['SubscriptionsCollapse']) || isset($HeavyInfo['SubscriptionsCollapse']) && !!$HeavyInfo['SubscriptionsCollapse'] || isset($_GET['collapse']) && !!$_GET['collapse']);
 $sql = '
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		MAX(p.ID) AS ID
 	FROM (	SELECT TopicID
 			FROM users_subscriptions

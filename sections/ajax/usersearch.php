@@ -16,7 +16,8 @@ if (isset($_GET['username'])) {
 
 	list($Page, $Limit) = Format::page_limit(USERS_PER_PAGE);
 	$DB->query("
-		SELECT SQL_CALC_FOUND_ROWS
+		SELECT
+			SQL_CALC_FOUND_ROWS
 			ID,
 			Username,
 			Enabled,
@@ -42,7 +43,7 @@ foreach ($Results as $Result) {
 		'userId' => (int) $UserID,
 		'username' => $Username,
 		'donor' => $Donor == 1,
-		'warned' => ($Warned!='0000-00-00 00:00:00'),
+		'warned' => ($Warned != '0000-00-00 00:00:00'),
 		'enabled' => ($Enabled == 2 ? false : true),
 		'class' => Users::make_class_string($PermissionID)
 	);

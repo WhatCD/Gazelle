@@ -45,7 +45,7 @@ if (!empty($_GET['cats'])) {
 	}
 	$Categories = array_keys($Categories);
 } else {
-	$Categories = array(1,2,3,4,5,6,7);
+	$Categories = array(1, 2, 3, 4, 5, 6, 7);
 }
 
 // Ordering
@@ -71,7 +71,8 @@ if ($BookmarkView) {
 }
 
 $BaseSQL = $SQL = "
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		c.ID,
 		c.Name,
 		c.NumTorrents,
@@ -87,8 +88,6 @@ $BaseSQL = $SQL = "
 if ($BookmarkView) {
 	$SQL .= " AND bc.UserID = '" . $LoggedUser['ID'] . "'";
 }
-
-
 
 if (!empty($Search)) {
 	$SQL .= " AND $Type LIKE '%";

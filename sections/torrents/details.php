@@ -131,8 +131,8 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend,cover_
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head">
 				<strong><?=(count($CoverArt) > 0 ? 'Covers (' . (count($CoverArt) + 1) . ')' : 'Cover')?></strong>
-
 <?			if(count($CoverArt) > 0) {
+            if(empty($LoggedUser['ShowExtraCovers'])) {
 			for ($Index = 0; $Index <= count($CoverArt); $Index++) { ?>
 				<span id="cover_controls_<?=($Index)?>"<?=($Index > 0 ? ' style="display: none;"' : '')?>>
 <?					if ($Index == count($CoverArt)) { ?>
@@ -150,7 +150,12 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend,cover_
 <?					} ?>
 				</span>
 <?				}
-			} ?>
+            } else { ?>
+                <span>
+                    <a class="brackets show_all_covers" href="#">Hide</a>
+                </span>
+            <? } 
+            }?>
 			</div>
 <?
 $Index = 0;
@@ -169,10 +174,13 @@ $Index++;
 <?			foreach ($CoverArt as $Cover) {
 				list($ImageID, $Image, $Summary, $AddedBy) = $Cover;
 				?>
-				<div id="cover_div_<?=$Index?>" style="display: none;">
+                    <div id="cover_div_<?=$Index?>" <?=empty($LoggedUser['ShowExtraCovers']) ? 'style="display: none;"' : ""?>>
 				<p align="center">
-<?
-					$Src = 'src="" data-gazelle-temp-src="' . ImageTools::process($Image, true) . '"';
+<?                  if(empty($LoggedUser['ShowExtraCovers'])) { 
+    					$Src = 'src="" data-gazelle-temp-src="' . ImageTools::process($Image, true) . '"';
+                    } else {
+                        $Src = 'src="' . ImageTools::process($Image, true) . '"';
+                    }
 ?>
 					<img id="cover_<?=$Index?>" style="max-width: 220px;" <?=$Src?> alt="<?=$Summary?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>',220);" />
 				</p>

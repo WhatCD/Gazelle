@@ -21,9 +21,6 @@ if (!is_number($CollageID)) {
 $Data = $Cache->get_value('collage_'.$CollageID);
 
 if ($Data) {
-	if (!is_array($Data)) {
-		$Data = unserialize($Data);
-	}
 	list($K, list($Name, $Description, , , $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser)) = each($Data);
 } else {
 	$DB->query("SELECT Name, Description, UserID, Deleted, CategoryID, Locked, MaxGroups, MaxGroupsPerUser FROM collages WHERE ID='$CollageID'");

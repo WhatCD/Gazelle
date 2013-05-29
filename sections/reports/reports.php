@@ -46,7 +46,8 @@ if (!check_perms('admin_reports')) {
 }
 
 $Reports = $DB->query("
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		r.ID,
 		r.UserID,
 		um.Username,

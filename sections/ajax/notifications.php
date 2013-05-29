@@ -7,7 +7,8 @@ define('NOTIFICATIONS_PER_PAGE', 50);
 list($Page, $Limit) = Format::page_limit(NOTIFICATIONS_PER_PAGE);
 
 $Results = $DB->query("
-		SELECT SQL_CALC_FOUND_ROWS
+		SELECT
+			SQL_CALC_FOUND_ROWS
 			unt.TorrentID,
 			unt.UnRead,
 			unt.FilterID,
@@ -50,7 +51,7 @@ while ($Result = $DB->next_record(MYSQLI_ASSOC)) {
 	}
 	if (!isset($FilterGroups[$Result['FilterID']])) {
 		$FilterGroups[$Result['FilterID']] = array();
-		$FilterGroups[$Result['FilterID']]['FilterLabel'] = $Result['Label'] ? $Result['Label'] : false;
+		$FilterGroups[$Result['FilterID']]['FilterLabel'] = ($Result['Label'] ? $Result['Label'] : false);
 	}
 	array_push($FilterGroups[$Result['FilterID']], $Result);
 }

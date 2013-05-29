@@ -209,7 +209,7 @@ if (!empty($_GET['filter'])) {
 		if (empty($_GET['media'])) {
 			$ExtraWhere .= " AND (
 				t.LogScore = 100 OR
-				t.Media IN ('Vinyl','WEB','DVD','Soundboard','Casette','SACD','Blu-ray','DAT')
+				t.Media IN ('Vinyl','WEB','DVD','Soundboard','Cassette','SACD','Blu-ray','DAT')
 				)";
 		} elseif (strtoupper($_GET['media']) == 'CD' && empty($_GET['log'])) {
 			$ExtraWhere .= " AND t.LogScore = 100";
@@ -226,18 +226,22 @@ if (empty($GroupBy)) {
 	$GroupBy = 't.ID';
 }
 
-if ((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
+if ((empty($_GET['search']) || trim($_GET['search']) == '') && $Order != 'Name') {
 	$SQL = "
 		SELECT
-			SQL_CALC_FOUND_ROWS t.GroupID,
+			SQL_CALC_FOUND_ROWS
+			t.GroupID,
 			t.ID AS TorrentID,
 			$Time AS Time,
 			tg.CategoryID
 		FROM $From
 			JOIN torrents_group AS tg ON tg.ID=t.GroupID
-		WHERE $UserField='$UserID' $ExtraWhere $SearchWhere
-		GROUP BY ".$GroupBy."
-		ORDER BY $Order $Way LIMIT $Limit";
+		WHERE $UserField='$UserID'
+			$ExtraWhere
+			$SearchWhere
+		GROUP BY $GroupBy
+		ORDER BY $Order $Way
+		LIMIT $Limit";
 } else {
 	$DB->query("
 		CREATE TEMPORARY TABLE temp_sections_torrents_user (
@@ -267,7 +271,9 @@ if ((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 				JOIN torrents_group AS tg ON tg.ID=t.GroupID
 				LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID
 				LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-			WHERE $UserField='$UserID' $ExtraWhere $SearchWhere
+			WHERE $UserField='$UserID'
+				$ExtraWhere
+				$SearchWhere
 			GROUP BY TorrentID, Time");
 
 	if (!empty($_GET['search']) && trim($_GET['search']) != '') {
@@ -275,8 +281,12 @@ if ((empty($_GET['search']) || trim($_GET['search']) == '') && $Order!='Name') {
 	}
 
 	$SQL = "
-		SELECT SQL_CALC_FOUND_ROWS
-			GroupID, TorrentID, Time, CategoryID
+		SELECT
+			SQL_CALC_FOUND_ROWS
+			GroupID,
+			TorrentID,
+			Time,
+			CategoryID
 		FROM temp_sections_torrents_user";
 	if (!empty($Words)) {
 		$SQL .= "

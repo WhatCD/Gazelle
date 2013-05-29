@@ -2,6 +2,7 @@
 	var show_all = false;
 	var current;
 	$(document).ready(function() {
+		show_all = $(".show_all_covers").text() == "Hide";
 		$(".next_cover").click(function(e) {
 			e.preventDefault();
 			var next = $(this).data("gazelle-next-cover");

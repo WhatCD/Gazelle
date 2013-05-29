@@ -460,7 +460,7 @@ if (check_perms('users_view_ips',$Class)) {
 
 if (check_perms('users_view_keys',$Class) || $OwnProfile) {
 ?>
-				<li>Passkey: <a href="#" onclick="this.innerHTML='<?=display_str($torrent_pass)?>'; return false;" class="brackets">View</a></li>
+				<li>Passkey: <a href="#" id="passkey" onclick="togglePassKey('<?=display_str($torrent_pass)?>'); return false;" class="brackets">View</a></li>
 <? }
 if (check_perms('users_view_invites')) {
 	if (!$InviterID) {

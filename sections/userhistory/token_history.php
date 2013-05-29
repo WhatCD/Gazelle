@@ -39,7 +39,11 @@ if (isset($_GET['expire'])) {
 	}
 	$DB->query("SELECT info_hash FROM torrents where ID = $TorrentID");
 	if (list($InfoHash) = $DB->next_record(MYSQLI_NUM, FALSE)) {
-		$DB->query("UPDATE users_freeleeches SET Expired=TRUE WHERE UserID=$UserID AND TorrentID=$TorrentID");
+		$DB->query("
+			UPDATE users_freeleeches
+			SET Expired=TRUE
+			WHERE UserID=$UserID
+				AND TorrentID=$TorrentID");
 		$Cache->delete_value('users_tokens_'.$UserID);
 		Tracker::update_tracker('remove_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID));
 	}
@@ -51,7 +55,8 @@ View::show_header('Freeleech token history');
 list($Page, $Limit) = Format::page_limit(25);
 
 $DB->query("
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		f.TorrentID,
 		t.GroupID,
 		f.Time,

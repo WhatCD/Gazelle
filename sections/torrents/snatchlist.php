@@ -13,7 +13,8 @@ if (!empty($_GET['page']) && is_number($_GET['page'])) {
 }
 
 $Result = $DB->query("
-				SELECT SQL_CALC_FOUND_ROWS
+				SELECT
+					SQL_CALC_FOUND_ROWS
 					xs.uid,
 					xs.tstamp
 				FROM xbt_snatched AS xs

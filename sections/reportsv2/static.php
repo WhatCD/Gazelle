@@ -124,7 +124,8 @@ if (!$ID) {
 
 
 $DB->query("
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		r.ID,
 		r.ReporterID,
 		reporter.Username,

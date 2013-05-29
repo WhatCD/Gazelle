@@ -167,3 +167,12 @@ function userform_submit() {
 		userform.submit();
 	};
 }
+
+function togglePassKey(key) {
+	if ($('#passkey').raw().innerHTML == 'View') {
+		$('#passkey').raw().innerHTML = key;
+	} else {
+		$('#passkey').raw().innerHTML = 'View';
+	}
+
+}

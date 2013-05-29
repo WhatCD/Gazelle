@@ -88,7 +88,8 @@ list($Page, $Limit) = Format::page_limit(IPS_PER_PAGE);
 
 if ($UsersOnly == 1) {
 	$RS = $DB->query("
-		SELECT SQL_CALC_FOUND_ROWS
+		SELECT
+			SQL_CALC_FOUND_ROWS
 			h1.IP,
 			h1.StartTime,
 			h1.EndTime,
@@ -110,7 +111,8 @@ if ($UsersOnly == 1) {
 		LIMIT $Limit");
 } else {
 	$RS = $DB->query("
-		SELECT SQL_CALC_FOUND_ROWS
+		SELECT
+			SQL_CALC_FOUND_ROWS
 			h1.IP,
 			h1.StartTime,
 			h1.EndTime,

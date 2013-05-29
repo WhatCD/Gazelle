@@ -8,7 +8,8 @@ if (!empty($_GET['search'])) {
 }
 $Words = explode(' ', $Search);
 $sql = '
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		ID,
 		Message,
 		Time

@@ -15,7 +15,8 @@ if (!empty($_GET['page']) && is_number($_GET['page'])) {
 
 
 $DB->query("
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		ud.UserID,
 		ud.Time
 	FROM users_downloads AS ud
@@ -30,10 +31,19 @@ list($NumResults) = $DB->next_record();
 
 if (count($UserIDs) > 0) {
 	$UserIDs = implode(',',$UserIDs);
-	$DB->query("SELECT uid FROM xbt_snatched WHERE fid='$TorrentID' AND uid IN($UserIDs)");
+	$DB->query("
+		SELECT uid
+		FROM xbt_snatched
+		WHERE fid='$TorrentID'
+			AND uid IN($UserIDs)");
 	$Snatched = $DB->to_array('uid');
 
-	$DB->query("SELECT uid FROM xbt_files_users WHERE fid='$TorrentID' AND Remaining=0 AND uid IN($UserIDs)");
+	$DB->query("
+		SELECT uid
+		FROM xbt_files_users
+		WHERE fid='$TorrentID'
+			AND Remaining=0
+			AND uid IN($UserIDs)");
 	$Seeding = $DB->to_array('uid');
 }
 

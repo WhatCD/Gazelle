@@ -25,7 +25,8 @@ if (isset($_GET['username'])) {
 			$Limit = sprintf("%d, %d", ($Page - 1) * USERS_PER_PAGE, USERS_PER_PAGE);
 		}
 		$DB->query("
-			SELECT SQL_CALC_FOUND_ROWS
+			SELECT
+				SQL_CALC_FOUND_ROWS
 				ID,
 				Username,
 				Enabled,

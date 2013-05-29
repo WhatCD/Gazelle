@@ -190,6 +190,8 @@ echo $Val->GenerateJS('userform');
 					<input type="hidden" name="coverart" value="" />
 					<input type="checkbox" name="coverart" id="coverart"<?=$SiteOptions['CoverArt'] ? ' checked="checked"' : ''?> />
 					<label for="coverart">Show cover artwork next to torrent information</label>
+					<input type="checkbox" name="show_extra_covers" id="show_extra_covers"<?=$SiteOptions['ShowExtraCovers'] ? ' checked="checked"' : ''?> />
+					<label for="show_extra_covers">Show all additional cover art on torrent pages by default</label>
 				</td>
 			</tr>
 			<tr>

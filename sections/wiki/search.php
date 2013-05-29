@@ -41,7 +41,8 @@ if (!$Way) {
 }
 
 $SQL = "
-	SELECT SQL_CALC_FOUND_ROWS
+	SELECT
+		SQL_CALC_FOUND_ROWS
 		w.ID,
 		w.Title,
 		w.Date,

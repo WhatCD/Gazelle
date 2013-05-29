@@ -30,15 +30,19 @@ if (isset($_POST['submit'])) {
 			if (empty($_POST['id']) || !is_number($_POST['id'])) {
 				error(404);
 			}
-			$DB->query("UPDATE ip_bans SET
-				FromIP=$Start,
-				ToIP='$End',
-				Reason='$Notes'
+			$DB->query("
+				UPDATE ip_bans
+				SET
+					FromIP=$Start,
+					ToIP='$End',
+					Reason='$Notes'
 				WHERE ID='".$_POST['id']."'");
 		} else { //Create
-			$DB->query("INSERT INTO ip_bans
-				(FromIP, ToIP, Reason) VALUES
-				('$Start','$End', '$Notes')");
+			$DB->query("
+				INSERT INTO ip_bans
+					(FromIP, ToIP, Reason)
+				VALUES
+					('$Start','$End', '$Notes')");
 		}
 		$Cache->delete_value('ip_bans_'.$IPA);
 	}
@@ -47,7 +51,14 @@ if (isset($_POST['submit'])) {
 define('BANS_PER_PAGE', '20');
 list($Page, $Limit) = Format::page_limit(BANS_PER_PAGE);
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS ID, FromIP, ToIP, Reason FROM ip_bans AS i ";
+$sql = "
+	SELECT
+		SQL_CALC_FOUND_ROWS
+		ID,
+		FromIP,
+		ToIP,
+		Reason
+	FROM ip_bans AS i ";
 
 if (!empty($_REQUEST['notes'])) {
 	$sql .= "WHERE Reason LIKE '%".db_string($_REQUEST['notes'])."%' ";
@@ -68,7 +79,7 @@ $Bans = $DB->query($sql);
 $DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 
-$PageLinks=Format::get_pages($Page,$Results,BANS_PER_PAGE,11);
+$PageLinks = Format::get_pages($Page, $Results, BANS_PER_PAGE, 11);
 
 View::show_header('IP Address Bans');
 $DB->set_query_id($Bans);
@@ -132,8 +143,8 @@ $DB->set_query_id($Bans);
 $Row = 'a';
 while (list($ID, $Start, $End, $Reason) = $DB->next_record()) {
 	$Row = ($Row === 'a' ? 'b' : 'a');
-	$Start=long2ip($Start);
-	$End=long2ip($End);
+	$Start = long2ip($Start);
+	$End = long2ip($End);
 ?>
 	<tr class="row<?=$Row?>">
 		<form class="manage_form" name="ban" action="" method="post">
