@@ -19,7 +19,7 @@ if ($Short == 'request_update') {
 		header('Location: reports.php?action=report&type=request_update&id='.$ID);
 		die();
 	}
-	$Reason  = '[b]Year[/b]: '.$_POST['year'].".\n\n";
+	$Reason = '[b]Year[/b]: '.$_POST['year'].".\n\n";
 	// If the release type is somehow invalid, return "Not given"; otherwise, return the release type.
 	$Reason .= '[b]Release type[/b]: '.((empty($_POST['releasetype']) || !is_number($_POST['releasetype']) || $_POST['releasetype'] == 0) ? 'Not given' : $ReleaseTypes[$_POST['releasetype']]).". \n\n";
 	$Reason .= '[b]Additional comments[/b]: '.$_POST['comment'];

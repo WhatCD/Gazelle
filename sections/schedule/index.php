@@ -1072,6 +1072,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 				WHERE Date < NOW() - INTERVAL 1 MONTH
 					AND Status = 'Open'
 					AND AssignedToUser IS NULL");
+	
 
 }
 /*************************************************************************\

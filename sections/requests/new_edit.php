@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*
  * Yeah, that's right, edit and new are the same place again.
@@ -89,12 +89,16 @@ if (!$NewRequest) {
 			}
 		}
 
-		$Tags = implode(", ", $Request['Tags']);
+		$Tags = implode(', ', $Request['Tags']);
 	}
 }
 
 if ($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
-	$DB->query("SELECT Name FROM artists_group WHERE artistid = ".$_GET['artistid']." LIMIT 1");
+	$DB->query("
+		SELECT Name
+		FROM artists_group
+		WHERE artistid = ".$_GET['artistid']."
+		LIMIT 1");
 	list($ArtistName) = $DB->next_record();
 	$ArtistForm = array(
 		1 => array(array('name' => trim($ArtistName))),
@@ -103,36 +107,38 @@ if ($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 	);
 } elseif ($NewRequest && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	$ArtistForm = Artists::get_artist($_GET['groupid']);
-	$DB->query("SELECT tg.Name,
-					tg.Year,
-					tg.ReleaseType,
-					tg.WikiImage,
-					GROUP_CONCAT(t.Name SEPARATOR ', '),
-					tg.CategoryID
-				FROM torrents_group AS tg
-					JOIN torrents_tags AS tt ON tt.GroupID=tg.ID
-					JOIN tags AS t ON t.ID=tt.TagID
-				WHERE tg.ID = ".$_GET['groupid']);
+	$DB->query("
+		SELECT
+			tg.Name,
+			tg.Year,
+			tg.ReleaseType,
+			tg.WikiImage,
+			GROUP_CONCAT(t.Name SEPARATOR ', '),
+			tg.CategoryID
+		FROM torrents_group AS tg
+			JOIN torrents_tags AS tt ON tt.GroupID=tg.ID
+			JOIN tags AS t ON t.ID=tt.TagID
+		WHERE tg.ID = ".$_GET['groupid']);
 	if (list($Title, $Year, $ReleaseType, $Image, $Tags, $CategoryID) = $DB->next_record()) {
 		$GroupID = trim($_REQUEST['groupid']);
 	}
 }
 
-View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'requests');
+View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'requests');
 ?>
 <div class="thin">
 	<div class="header">
-		<h2><?=($NewRequest ? "Create a request" : "Edit a request")?></h2>
+		<h2><?=($NewRequest ? 'Create a request' : 'Edit a request')?></h2>
 	</div>
 
 	<div class="box pad">
 		<form action="" method="post" id="request_form" onsubmit="Calculate();">
 			<div>
-<? if (!$NewRequest) { ?>
+<?	if (!$NewRequest) { ?>
 				<input type="hidden" name="requestid" value="<?=$RequestID?>" />
-<? } ?>
+<?	} ?>
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				<input type="hidden" name="action" value="<?=$NewRequest ? 'takenew' : 'takeedit'?>" />
+				<input type="hidden" name="action" value="<?=($NewRequest ? 'takenew' : 'takeedit')?>" />
 			</div>
 
 			<table class="layout">
@@ -147,7 +153,7 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 					<td>
 						<select id="categories" name="type" onchange="Categories()">
 <?		foreach (Misc::display_array($Categories) as $Cat) { ?>
-							<option value="<?=$Cat?>"<?=(!empty($CategoryName) && ($CategoryName ==  $Cat) ? ' selected="selected"' : '')?>><?=$Cat?></option>
+							<option value="<?=$Cat?>"<?=(!empty($CategoryName) && ($CategoryName == $Cat) ? ' selected="selected"' : '')?>><?=$Cat?></option>
 <?		} ?>
 						</select>
 					</td>
@@ -239,9 +245,13 @@ View::show_header(($NewRequest ? "Create a request" : "Edit a request"), 'reques
 <?
 	$GenreTags = $Cache->get_value('genre_tags');
 	if (!$GenreTags) {
-		$DB->query('SELECT Name FROM tags WHERE TagType=\'genre\' ORDER BY Name');
-		$GenreTags =  $DB->collect('Name');
-		$Cache->cache_value('genre_tags', $GenreTags, 3600*6);
+		$DB->query('
+			SELECT Name
+			FROM tags
+			WHERE TagType=\'genre\'
+			ORDER BY Name');
+		$GenreTags = $DB->collect('Name');
+		$Cache->cache_value('genre_tags', $GenreTags, 3600 * 6);
 	}
 ?>
 						<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;" >

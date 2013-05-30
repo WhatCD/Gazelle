@@ -14,7 +14,7 @@ else {
 	if ($ForumCats === false) {
 		$DB->query("SELECT ID, Name FROM forums_categories");
 		$ForumCats = array();
-		while (list($ID, $Name) =  $DB->next_record()) {
+		while (list($ID, $Name) = $DB->next_record()) {
 			$ForumCats[$ID] = $Name;
 		}
 		$Cache->cache_value('forums_categories', $ForumCats, 0); //Inf cache.
@@ -50,7 +50,10 @@ else {
 		$Forums = $DB->to_array('ID', MYSQLI_ASSOC, false);
 		foreach ($Forums as $ForumID => $Forum) {
 			if (count($Forum['SpecificRules'])) {
-				$DB->query("SELECT ThreadID FROM forums_specific_rules WHERE ForumID = ".$ForumID);
+				$DB->query("
+					SELECT ThreadID
+					FROM forums_specific_rules
+					WHERE ForumID = $ForumID");
 				$ThreadIDs = $DB->collect('ThreadID');
 				$Forums[$ForumID]['SpecificRules'] = $ThreadIDs;
 			}

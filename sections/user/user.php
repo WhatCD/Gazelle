@@ -141,7 +141,7 @@ if ($Preview == 1) {
 	if (strlen($ParanoiaString) == 0) {
 		$Paranoia = array();
 	} else {
-		$Paranoia =  $CustomParanoia;
+		$Paranoia = $CustomParanoia;
 	}
 } else {
 	$Paranoia = unserialize($Paranoia);

@@ -5,7 +5,7 @@
 authorize();
 
 
-if ($_POST['action'] != 'takenew' &&  $_POST['action'] != 'takeedit') {
+if ($_POST['action'] != 'takenew' && $_POST['action'] != 'takeedit') {
 	error(0);
 }
 

@@ -33,7 +33,7 @@ if (isset($_GET['id'])) {
 	$UserClass = $Perms['Class'];
 	if (!check_paranoia('torrentcomments', $UserInfo['Paranoia'], $UserClass, $UserID))
 		error(403);
-}  else {
+} else {
 	$UserID = $LoggedUser['ID'];
 	$Username = $LoggedUser['Username'];
 	$Self = true;

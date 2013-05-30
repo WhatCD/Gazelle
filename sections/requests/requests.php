@@ -638,7 +638,7 @@ foreach ($Categories as $CatKey => $CatName) {
 			</td>
 			<td class="nobr">
 				<span id="vote_count_<?=$RequestID?>"><?=number_format($VoteCount)?></span>
-<?  	 	if (!$IsFilled && check_perms('site_vote')) { ?>
+<?		 	if (!$IsFilled && check_perms('site_vote')) { ?>
 				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 <?			} ?>
 			</td>

@@ -808,7 +808,7 @@ if ($NumRequests > 0) {
 			</td>
 			<td>
 				<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
-<?  	if (check_perms('site_vote')) { ?>
+<?		if (check_perms('site_vote')) { ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 <?		} ?>

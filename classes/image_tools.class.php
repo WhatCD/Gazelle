@@ -66,7 +66,7 @@ class ImageTools {
 		foreach (self::$Blacklist as &$Value) {
 			if (stripos($Url, $Value)) {
 				$ParsedUrl = parse_url($Url);
-				if($ShowError) {
+				if ($ShowError) {
 					error($ParsedUrl['host'] . ' is not an allowed image host. Please use a different host.');
 				}
 				return true;

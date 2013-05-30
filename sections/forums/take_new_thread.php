@@ -73,32 +73,38 @@ $PostID = $DB->inserted_id();
 $DB->query("
 	UPDATE forums
 	SET
-		NumPosts		  = NumPosts+1,
-		NumTopics		 = NumTopics+1,
-		LastPostID		= '$PostID',
-		LastPostAuthorID  = '".$LoggedUser['ID']."',
-		LastPostTopicID   = '$TopicID',
-		LastPostTime	  = '".sqltime()."'
+		NumPosts         = NumPosts + 1,
+		NumTopics        = NumTopics + 1,
+		LastPostID       = '$PostID',
+		LastPostAuthorID = '".$LoggedUser['ID']."',
+		LastPostTopicID  = '$TopicID',
+		LastPostTime     = '".sqltime()."'
 	WHERE ID = '$ForumID'");
 
 $DB->query("
 	UPDATE forums_topics
 	SET
-		NumPosts		  = NumPosts+1,
-		LastPostID		= '$PostID',
-		LastPostAuthorID  = '".$LoggedUser['ID']."',
-		LastPostTime	  = '".sqltime()."'
+		NumPosts         = NumPosts + 1,
+		LastPostID       = '$PostID',
+		LastPostAuthorID = '".$LoggedUser['ID']."',
+		LastPostTime     = '".sqltime()."'
 	WHERE ID = '$TopicID'");
 
 if (isset($_POST['subscribe'])) {
-	$DB->query("INSERT INTO users_subscriptions VALUES ($LoggedUser[ID], $TopicID)");
+	$DB->query("
+		INSERT INTO users_subscriptions
+		VALUES ($LoggedUser[ID], $TopicID)");
 	$Cache->delete_value('subscriptions_user_'.$LoggedUser['ID']);
 }
 
 //auto subscribe
 /*
 if (check_perms('users_mod')) {
-	$DB->query("SELECT SubscriberID FROM subscribed_forums WHERE ForumID = '$ForumID' AND SubscriberID != '$LoggedUser[ID]'");
+	$DB->query("
+		SELECT SubscriberID
+		FROM subscribed_forums
+		WHERE ForumID = '$ForumID'
+			AND SubscriberID != '$LoggedUser[ID]'");
 	while (list($SubscriberID) = $DB->next_record()) {
 		$DB->query("INSERT INTO users_subscriptions VALUES ($SubscriberID, $TopicID)");
 		//	$DB->query("INSERT INTO forums_last_read_topics
@@ -118,9 +124,11 @@ if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forum
 	$Answers = array();
 	$Votes = array();
 
-	//This can cause polls to have answer ids of 1 3 4 if the second box is empty
+	//This can cause polls to have answer IDs of 1 3 4 if the second box is empty
 	foreach ($_POST['answers'] as $i => $Answer) {
-		if ($Answer == '') { continue; }
+		if ($Answer == '') {
+			continue;
+		}
 		$Answers[$i + 1] = $Answer;
 		$Votes[$i + 1] = 0;
 	}
@@ -131,26 +139,30 @@ if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forum
 		error('You cannot create a poll with greater than 25 answers.');
 	}
 
-	$DB->query('INSERT INTO forums_polls (TopicID, Question, Answers) VALUES (\''.$TopicID.'\',\''.db_string($Question).'\',\''.db_string(serialize($Answers)).'\')');
-	$Cache->cache_value('polls_'.$TopicID, array($Question,$Answers,$Votes,'0000-00-00 00:00:00','0'), 0);
+	$DB->query("
+		INSERT INTO forums_polls
+			(TopicID, Question, Answers)
+		VALUES
+			('$TopicID', '".db_string($Question)."', '".db_string(serialize($Answers))."')");
+	$Cache->cache_value('polls_'.$TopicID, array($Question, $Answers, $Votes, '0000-00-00 00:00:00', '0'), 0);
 
 	if ($ForumID == STAFF_FORUM) {
-		send_irc("PRIVMSG ".ADMIN_CHAN." :!mod Poll created by ".$LoggedUser['Username'].': "'.$Question.'" https://'.SSL_SITE_URL.'/forums.php?action=viewthread&threadid='.$TopicID);
+		send_irc('PRIVMSG '.ADMIN_CHAN.' :!mod Poll created by '.$LoggedUser['Username'].": \"$Question\" https://".SSL_SITE_URL.'/forums.php?action=viewthread&threadid='.$TopicID);
 	}
 }
 
-//if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
+// if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
 if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 	list($Forum,,,$Stickies) = $Forum;
 
-	//Remove the last thread from the index
+	// Remove the last thread from the index
 	if (count($Forum) == TOPICS_PER_PAGE && $Stickies < TOPICS_PER_PAGE) {
 		array_pop($Forum);
 	}
 
 	if ($Stickies > 0) {
-		$Part1 = array_slice($Forum, 0, $Stickies, true); //Stickies
-		$Part3 = array_slice($Forum, $Stickies, TOPICS_PER_PAGE - $Stickies - 1, true); //Rest of page
+		$Part1 = array_slice($Forum, 0, $Stickies, true); // Stickies
+		$Part3 = array_slice($Forum, $Stickies, TOPICS_PER_PAGE - $Stickies - 1, true); // Rest of page
 	} else {
 		$Part1 = array();
 		$Part3 = $Forum;

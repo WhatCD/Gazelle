@@ -4,7 +4,7 @@
  * $_GET['filter'] determines which torrents should be shown and can be empty/all (default), uploaded, snatched or seeding
  * $_GET['target'] further filters which transcodes one would like to do and can be empty/any (default), v0, v2, 320 or all
  *	Here, 'any' means that at least one of the formats V0, V2 and 320 is missing and 'all' means that all of them are missing.
- *  'v0' etc mean that this specific format is missing (but others might be present).
+ *	'v0', etc. mean that this specific format is missing (but others might be present).
  *
  * Furthermore, there's $_GET['userid'] which allows to see the page as a different user would see it (specifically relevant for uploaded/snatched/seeding).
  */
@@ -304,7 +304,7 @@ if ($ResultCount == 0) {
 		foreach ($Group['Editions'] as $RemIdent => $Edition) {
 			// TODO: point to the correct FLAC (?)
 			$FlacID = array_search(true, $Edition['FlacIDs']);
-			$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'#torrent'.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
+			$DisplayName = $ArtistNames . "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$FlacID#torrent$FlacID\" title=\"View Torrent\">$GroupName</a>";
 			if ($GroupYear > 0) {
 				$DisplayName .= " [$GroupYear]";
 			}
@@ -315,7 +315,7 @@ if ($ResultCount == 0) {
 				$DisplayName .= ' ' . Format::torrent_label('Snatched!');
 			}
 ?>
-		<tr<?=$Edition['FLACIsSnatched'] ? ' class="snatched_torrent"' : ''?>>
+		<tr<?=($Edition['FLACIsSnatched'] ? ' class="snatched_torrent"' : '')?>>
 			<td>
 				<span class="torrent_links_block">
 					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
@@ -324,9 +324,9 @@ if ($ResultCount == 0) {
 				<div class="torrent_info"><?=$Edition['EditionName']?></div>
 				<div class="tags"><?=$TorrentTags->format('better.php?action=transcode&tags=')?></div>
 			</td>
-			<td><strong <?=isset($Edition['MP3s']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
-			<td><strong <?=isset($Edition['MP3s']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
-			<td><strong <?=isset($Edition['MP3s']['320']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
+			<td><strong <?=(isset($Edition['MP3s']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO')?></strong></td>
+			<td><strong <?=(isset($Edition['MP3s']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO')?></strong></td>
+			<td><strong <?=(isset($Edition['MP3s']['320']) ? 'class="important_text_alt">YES' : 'class="important_text">NO')?></strong></td>
 		</tr>
 <?
 		}

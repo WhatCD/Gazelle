@@ -56,8 +56,8 @@ if ($_REQUEST['do'] == 'vote') {
 	$Cache->cache_value('voted_albums_'.$LoggedUser['ID'], $UserVotes);
 
 	// Update the paired cache keys for "people who liked"
-	// First update this album's paired votes.  If this keys is magically not set,
-	// our life just got a bit easier.  We're only tracking paired votes on upvotes.
+	// First update this album's paired votes. If this keys is magically not set,
+	// our life just got a bit easier. We're only tracking paired votes on upvotes.
 	if ($Type == 'Up') {
 		$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
 		if ($VotePairs !== false) {
@@ -135,15 +135,15 @@ if ($_REQUEST['do'] == 'vote') {
 	}
 	$Cache->cache_value('votes_'.$GroupID, $GroupVotes);
 
-	$DB->query("
+	$DB->query('
 		UPDATE torrents_votes
 		SET Total = GREATEST(0, Total - 1),
-			Score = IFNULL(binomial_ci(GREATEST(0,Ups".($Type == 'Up' ? '-1' : '')."),GREATEST(0, Total)),0)".
+			Score = IFNULL(binomial_ci(GREATEST(0, Ups'.($Type == 'Up' ? '-1' : '').'),GREATEST(0, Total)), 0)'.
 			($Type == 'Up' ? ', Ups = GREATEST(0, Ups - 1)' : '')."
 		WHERE GroupID=$GroupID");
 	// Update paired cache keys
-	// First update this album's paired votes.  If this keys is magically not set,
-	// our life just got a bit easier.  We're only tracking paired votes on upvotes.
+	// First update this album's paired votes. If this keys is magically not set,
+	// our life just got a bit easier. We're only tracking paired votes on upvotes.
 	if ($Type == 'Up') {
 		$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
 		if ($VotePairs !== false) {

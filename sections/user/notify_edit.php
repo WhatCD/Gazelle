@@ -49,7 +49,7 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 	$N['Media'] 		= explode('|', substr($N['Media'], 1, -1));
 	$N['Users'] 		= explode('|', substr($N['Users'], 1, -1));
 
-    $Usernames = '';
+	$Usernames = '';
 	foreach ($N['Users'] as $UserID) {
 		$UserInfo = Users::user_info($UserID);
 		$Usernames .= $UserInfo['Username'] . ', ';
@@ -101,8 +101,8 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 					<p class="min_padding">Comma-separated list &mdash; e.g. <em>Pink Floyd, Led Zeppelin, Neil Young</em></p>
 					<input type="checkbox" name="excludeva<?=$i?>" id="excludeva_<?=$N['ID']?>"<? if ($N['ExcludeVA'] == '1') { echo ' checked="checked"';} ?> />
 					<label for="excludeva_<?=$N['ID']?>">Exclude Various Artists releases</label>
-                </td>
-            </tr>
+				</td>
+			</tr>
 			<tr>
 				<td class="label"><strong>One of these users</strong></td>
 				<td>
