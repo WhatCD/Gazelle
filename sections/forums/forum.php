@@ -50,7 +50,11 @@ if (!isset($Forum) || !is_array($Forum)) {
 	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
 
 	if ($Page == 1) {
-		$DB->query("SELECT COUNT(ID) FROM forums_topics WHERE ForumID='$ForumID' AND IsSticky='1'");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM forums_topics
+			WHERE ForumID='$ForumID'
+				AND IsSticky='1'");
 		list($Stickies) = $DB->next_record();
 		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
 	}
@@ -123,7 +127,11 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name']);
 <?
 /*
 	if (check_perms('users_mod')) {
-		$DB->query("SELECT ForumID from subscribed_forums WHERE ForumID='$ForumID' AND SubscriberID='$LoggedUser[ID]'");
+		$DB->query("
+			SELECT ForumID
+			FROM subscribed_forums
+			WHERE ForumID='$ForumID'
+				AND SubscriberID='$LoggedUser[ID]'");
 		if ($DB->record_count() == 0) { ?>
 			<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Subscribe to forum</a>
 <?		} else { ?>
@@ -199,7 +207,7 @@ if (count($Forum) == 0) {
 	$Row = 'a';
 	foreach ($Forum as $Topic) {
 		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
-		$Row = ($Row == 'a') ? 'b' : 'a';
+		$Row = (($Row == 'a') ? 'b' : 'a');
 			// Build list of page links
 		// Only do this if there is more than one page
 		$PageLinks = array();
@@ -237,7 +245,7 @@ if (count($Forum) == 0) {
 		}
 ?>
 	<tr class="row<?=$Row?>">
-		<td class="<?=$Read?>" title="<?=ucwords(str_replace('_',' ',$Read))?>"></td>
+		<td class="<?=$Read?>" title="<?=ucwords(str_replace('_', ' ', $Read))?>"></td>
 		<td>
 			<span style="float: left;" class="last_topic">
 <?

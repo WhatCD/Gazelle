@@ -32,7 +32,7 @@ if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 } else {
 	// error out on invalid requests (before caching)
 	if (isset($_GET['details'])) {
-		if (in_array($_GET['details'], array('day','week','overall','snatched','data','seeded','month','year'))) {
+		if (in_array($_GET['details'], array('day', 'week', 'overall', 'snatched', 'data', 'seeded', 'month', 'year'))) {
 			$Details = $_GET['details'];
 		} else {
 			error(404);
@@ -42,11 +42,11 @@ if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	}
 
 	// defaults to 10 (duh)
-	$Limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
-	$Limit = in_array($Limit, array(10, 100, 250)) ? $Limit : 10;
+	$Limit = (isset($_GET['limit']) ? intval($_GET['limit']) : 10);
+	$Limit = (in_array($Limit, array(10, 100, 250)) ? $Limit : 10);
 }
 $Filtered = !empty($Where);
-View::show_header('Top '.$Limit.' Torrents');
+View::show_header("Top $Limit Torrents");
 ?>
 <div class="thin">
 	<div class="header">
@@ -121,7 +121,7 @@ if (!empty($FreeleechToggleQuery))
 
 $FreeleechToggleQuery .= 'freeleech=' . $FreeleechToggleName;
 
-$GroupByToggleName = ($_GET['groups'] == "show" ? 'hide' : 'show');
+$GroupByToggleName = ($_GET['groups'] == 'show' ? 'hide' : 'show');
 $GroupByToggleQuery = Format::get_url(array('freeleech', 'groups'));
 
 if (!empty($GroupByToggleQuery))
