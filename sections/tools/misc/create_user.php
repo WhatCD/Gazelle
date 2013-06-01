@@ -20,31 +20,37 @@ if (isset($_POST['Username'])) {
 	if (!empty($Username) && !empty($Email) && !empty($Password)) {
 
 		//Create hashes...
-		$Secret=Users::make_secret();
-		$torrent_pass=Users::make_secret();
+		$Secret = Users::make_secret();
+		$torrent_pass = Users::make_secret();
 
 		//Create the account
-		$DB->query("INSERT INTO users_main (Username,Email,PassHash,torrent_pass,Enabled,PermissionID, Language) VALUES ('".db_string($Username)."','".db_string($Email)."','".db_string(Users::make_crypt_hash($Password))."','".db_string($torrent_pass)."','1','".USER."', 'en')");
+		$DB->query("
+			INSERT INTO users_main
+				(Username, Email, PassHash, torrent_pass, Enabled, PermissionID, Language)
+			VALUES
+				('".db_string($Username)."','".db_string($Email)."','".db_string(Users::make_crypt_hash($Password))."','".db_string($torrent_pass)."','1','".USER."', 'en')");
 
 		//Increment site user count
 		$Cache->increment('stats_user_count');
 
-		//Grab the userid
-		$UserID=$DB->inserted_id();
+		//Grab the userID
+		$UserID = $DB->inserted_id();
 
 		Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
 
 		//Default stylesheet
 		$DB->query("SELECT ID FROM stylesheets");
-		list($StyleID)=$DB->next_record();
+		list($StyleID) = $DB->next_record();
 
 		//Auth key
 		$AuthKey = Users::make_secret();
 
 		//Give them a row in users_info
-		$DB->query("INSERT INTO users_info
-		(UserID,StyleID,AuthKey,JoinDate) VALUES
-		('".db_string($UserID)."','".db_string($StyleID)."','".db_string($AuthKey)."', '".sqltime()."')");
+		$DB->query("
+			INSERT INTO users_info
+				(UserID, StyleID, AuthKey, JoinDate)
+			VALUES
+				('".db_string($UserID)."','".db_string($StyleID)."','".db_string($AuthKey)."', '".sqltime()."')");
 
 		//Redirect to users profile
 		header ("Location: user.php?id=".$UserID);
@@ -80,6 +86,7 @@ if (isset($_POST['Username'])) {
 		<h2>Create a User</h2>
 	</div>
 
+	<div class="thin box pad">
 	<form class="create_form" name="user" method="post" action="">
 		<input type="hidden" name="action" value="create_user" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -101,7 +108,8 @@ if (isset($_POST['Username'])) {
 			</tr>
 		</table>
 	</form>
-	<?
+	</div>
+<?
 }
 
 View::show_footer(); ?>

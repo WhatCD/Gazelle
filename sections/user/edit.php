@@ -358,8 +358,8 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label">Preset</td>
 				<td>
-					<input type="button" onclick="ParanoiaResetOff()">Show everything</input>
-					<input type="button" onclick="ParanoiaResetStats()">Show stats only</input>
+					<input type="button" onclick="ParanoiaResetOff()" value="Show everything" />
+					<input type="button" onclick="ParanoiaResetStats()" value="Show stats only" />
 					<!--<input type="button" onclick="ParanoiaResetOn()">Show nothing</input>-->
 				</td>
 			</tr>

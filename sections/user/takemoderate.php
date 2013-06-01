@@ -561,7 +561,7 @@ if ($EnableUser != $Cur['Enabled'] && check_perms('users_disable_users')) {
 		Tools::disable_users($UserID, '', 1);
 	} elseif ($EnableUser == '1') {
 		$Cache->increment('stats_user_count');
-		Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $Cur['torrent_pass']), true);
+		Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $Cur['torrent_pass']));
 		if (($Cur['Downloaded'] == 0) || ($Cur['Uploaded']/$Cur['Downloaded'] >= $Cur['RequiredRatio'])) {
 			$UpdateSet[] = "i.RatioWatchEnds='0000-00-00 00:00:00'";
 			$CanLeech = 1;
@@ -574,7 +574,7 @@ if ($EnableUser != $Cur['Enabled'] && check_perms('users_disable_users')) {
 				$UpdateSet[] = "i.RatioWatchDownload=m.Downloaded";
 				$CanLeech = 0;
 			}
-			Tracker::update_tracker('update_user', array('passkey' => $Cur['torrent_pass'], 'can_leech' => '0'), true);
+			Tracker::update_tracker('update_user', array('passkey' => $Cur['torrent_pass'], 'can_leech' => '0'));
 		}
 		$UpdateSet[] = "Enabled='1'";
 		$LightUpdates['Enabled'] = 1;
