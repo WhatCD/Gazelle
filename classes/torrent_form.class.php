@@ -44,7 +44,6 @@ class TORRENT_FORM {
 		}
 	}
 
-
 	function head() {
 		global $LoggedUser;
 ?>
@@ -88,11 +87,11 @@ class TORRENT_FORM {
 				<td>
 				<select id="categories" name="type" onchange="Categories()"<?=$this->Disabled?>>
 <?			foreach (Misc::display_array($this->Categories) as $Index => $Cat) {
-				echo '<option value="'.$Index.'"';
-				if ($Cat == $this->Torrent['CategoryName']) { echo ' selected="selected"'; }
-				echo '>';
-				echo $Cat;
-				echo "</option>\n";
+				echo "\t\t\t\t\t<option value=\"$Index\"";
+				if ($Cat == $this->Torrent['CategoryName']) {
+					echo ' selected="selected"';
+				}
+				echo ">$Cat</option>\n";
 			}
 ?>
 				</select>
@@ -156,19 +155,21 @@ class TORRENT_FORM {
 
 		if ($Torrent['GroupID']) {
 			global $DB;
-			$DB->query("SELECT ID,
-							RemasterYear,
-							RemasterTitle,
-							RemasterRecordLabel,
-							RemasterCatalogueNumber
-						FROM torrents
-						WHERE GroupID = ".$Torrent['GroupID']."
-							AND Remastered = '1'
-							AND RemasterYear != 0
-						ORDER BY RemasterYear DESC,
-							RemasterTitle DESC,
-							RemasterRecordLabel DESC,
-							RemasterCatalogueNumber DESC");
+			$DB->query('
+				SELECT
+					ID,
+					RemasterYear,
+					RemasterTitle,
+					RemasterRecordLabel,
+					RemasterCatalogueNumber
+				FROM torrents
+				WHERE GroupID = '.$Torrent['GroupID']."
+					AND Remastered = '1'
+					AND RemasterYear != 0
+				ORDER BY RemasterYear DESC,
+					RemasterTitle DESC,
+					RemasterRecordLabel DESC,
+					RemasterCatalogueNumber DESC");
 
 			if ($DB->record_count() > 0) {
 				$GroupRemasters = $DB->to_array(false, MYSQLI_BOTH, false);
@@ -237,7 +238,7 @@ class TORRENT_FORM {
 			<tr id="title_tr">
 				<td class="label">Album title:</td>
 				<td>
-					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title']) ?>"<?=$this->Disabled?> />
+					<input type="text" id="title" name="title" size="60" value="<?=display_str($Torrent['Title'])?>"<?=$this->Disabled?> />
 					<p class="min_padding">Do not include the words remaster, re-issue, MFSL Gold, limited edition, bonus tracks, bonus disc or country-specific information in this field. That belongs in the edition information fields below; see <a href="wiki.php?action=article&amp;id=159" target="_blank">this</a> for further information. Also remember to use the correct capitalization for your upload. See the <a href="wiki.php?action=article&amp;id=317" target="_blank">Capitalization Guidelines</a> for more information.</p>
 				</td>
 			</tr>
@@ -316,11 +317,11 @@ function show() {
 						<option>---</option>
 <?
 			foreach ($ReleaseTypes as $Key => $Val) {
-				echo '<option value="'.$Key.'"';
-				if ($Key == $Torrent['ReleaseType']) { echo ' selected="selected"'; }
-				echo '>';
-				echo $Val;
-				echo "</option>\n";
+				echo "\t\t\t\t\t\t<option value=\"$Key\"";
+				if ($Key == $Torrent['ReleaseType']) {
+					echo ' selected="selected"';
+				}
+				echo ">$Val</option>\n";
 			}
 ?>
 					</select> Please take the time to fill this out properly. Need help? Try reading <a href="wiki.php?action=article&amp;id=202" target="_blank">this wiki article</a> or searching <a href="http://musicbrainz.org/search.html" target="_blank">MusicBrainz</a>.
@@ -351,7 +352,7 @@ function show() {
 			$LastLine = $Line;
 
 ?>
-							<option value="<?=$Index?>"<?=($Remaster['ID'] == $this->TorrentID) ? ' selected="selected"' : '' ?>><?=$Line?></option>
+							<option value="<?=$Index?>"<?=(($Remaster['ID'] == $this->TorrentID) ? ' selected="selected"' : '')?>><?=$Line?></option>
 <?
 		}
 	}
@@ -371,7 +372,7 @@ function show() {
 									<td class="label">Title:</td>
 									<td>
 										<input type="text" id="remaster_title" name="remaster_title" size="50" value="<?=display_str($Torrent['RemasterTitle']) ?>"<? if ($UnknownRelease) { echo ' disabled="disabled"';} ?> />
-										<p class="min_padding">Title of the release (e.g. <span style="font-style: italic;">'Deluxe Edition' or 'Remastered'</span>).</p>
+										<p class="min_padding">Title of the release (e.g. <span style="font-style: italic;">"Deluxe Edition" or "Remastered"</span>).</p>
 									</td>
 								</tr>
 								<tr id="edition_record_label">
@@ -405,11 +406,11 @@ function show() {
 					<select id="format" name="format" onchange="Format()">
 						<option>---</option>
 <?		foreach (Misc::display_array($this->Formats) as $Format) {
-			echo '<option value="'.$Format.'"';
-			if ($Format == $Torrent['Format']) { echo ' selected="selected"'; }
-			echo '>';
-			echo $Format;
-			echo "</option>\n";
+			echo "\t\t\t\t\t\t<option value=\"$Format\"";
+			if ($Format == $Torrent['Format']) {
+				echo ' selected="selected"';
+			}
+			echo ">$Format</option>\n";
 			// <option value="$Format" selected="selected">$Format</option>
 		}
 ?>
@@ -423,7 +424,6 @@ function show() {
 					<select id="bitrate" name="bitrate" onchange="Bitrate()">
 						<option value="">---</option>
 <?
-
 		if ($Torrent['Bitrate'] && !in_array($Torrent['Bitrate'], $this->Bitrates)) {
 			$OtherBitrate = true;
 			if (substr($Torrent['Bitrate'], strlen($Torrent['Bitrate']) - strlen(' (VBR)')) == ' (VBR)') {
@@ -441,13 +441,11 @@ function show() {
 
 
 		foreach (Misc::display_array($this->Bitrates) as $Bitrate) {
-			echo '<option value="'.$Bitrate.'"';
+			echo "\t\t\t\t\t\t<option value=\"$Bitrate\"";
 			if (($SimpleBitrate && preg_match('/^'.$SimpleBitrate.'.*/', $Bitrate)) || ($OtherBitrate && $Bitrate == 'Other')) {
 				echo ' selected="selected"';
 			}
-			echo '>';
-			echo $Bitrate;
-			echo "</option>\n";
+			echo ">$Bitrate</option>\n";
 		} ?>
 					</select>
 					<span id="other_bitrate_span"<? if (!$OtherBitrate) { echo ' class="hidden"'; } ?>>
@@ -492,11 +490,11 @@ function show() {
 					<select name="media" onchange="CheckYear();" id="media">
 						<option>---</option>
 <?		foreach ($this->Media as $Media) {
-			echo '<option value="'.$Media.'"';
-			if (isset($Torrent['Media']) && $Media == $Torrent['Media']) { echo ' selected="selected"'; }
-			echo '>';
-			echo $Media;
-			echo "</option>\n";
+			echo "\t\t\t\t\t\t<option value=\"$Media\"";
+			if (isset($Torrent['Media']) && $Media == $Torrent['Media']) {
+				echo ' selected="selected"';
+			}
+			echo ">$Media</option>\n";
 		}
 ?>
 					</select>
@@ -508,27 +506,27 @@ function show() {
 				<td>
 					<input type="checkbox" id="flac_log" name="flac_log"<? if ($HasLog) { echo ' checked="checked"';} ?> /> <label for="flac_log">Check this box if the torrent has, or should have, a log file.</label><br />
 					<input type="checkbox" id="flac_cue" name="flac_cue"<? if ($HasCue) { echo ' checked="checked"';} ?> /> <label for="flac_cue">Check this box if the torrent has, or should have, a cue file.</label><br />
-<?
-		}
+<?		}
 		global $LoggedUser;
 		if ((check_perms('users_mod') || $LoggedUser['ID'] == $Torrent['UserID']) && ($Torrent['LogScore'] == 100 || $Torrent['LogScore'] == 99)) {
 
-			$DB->query("SELECT LogID FROM torrents_logs_new where TorrentID = ".$this->TorrentID." AND Log LIKE 'EAC extraction logfile%' AND (Adjusted = '0' OR Adjusted = '')");
+			$DB->query('
+				SELECT LogID
+				FROM torrents_logs_new
+				WHERE TorrentID = '.$this->TorrentID."
+					AND Log LIKE 'EAC extraction logfile%'
+					AND (Adjusted = '0' OR Adjusted = '')");
 			list($LogID) = $DB->next_record();
 			if ($LogID) {
-				if (!check_perms('users_mod')) {
-?>
-					<tr>
-						<td class="label">Trumpable:</td>
-						<td>
-<?
-				}
-?>
-							<input type="checkbox" id="make_trumpable" name="make_trumpable"<? if ($Torrent['LogScore'] == 99) { echo ' checked="checked"';} ?> /> <label for="make_trumpable">Check this box if you want this torrent to be trumpable (subtracts 1 point).</label>
-<?
-				if (!check_perms('users_mod')) {
-?>						</td>
-					</tr>
+				if (!check_perms('users_mod')) { ?>
+			<tr>
+				<td class="label">Trumpable:</td>
+				<td>
+<?				} ?>
+					<input type="checkbox" id="make_trumpable" name="make_trumpable"<? if ($Torrent['LogScore'] == 99) { echo ' checked="checked"';} ?> /> <label for="make_trumpable">Check this box if you want this torrent to be trumpable (subtracts 1 point).</label>
+<?				if (!check_perms('users_mod')) { ?>
+				</td>
+			</tr>
 <?
 				}
 			}
@@ -582,7 +580,7 @@ function show() {
 					<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;"<?=$this->Disabled?>>
 						<option>---</option>
 <?				foreach (Misc::display_array($GenreTags) as $Genre) { ?>
-						<option value="<?=$Genre ?>"><?=$Genre ?></option>
+						<option value="<?=$Genre?>"><?=$Genre?></option>
 <?				} ?>
 					</select>
 <?			} ?>
@@ -646,7 +644,7 @@ function show() {
 						<option value="">---</option>
 <?
 		foreach (Misc::display_array($this->Formats) as $Format) {
-			echo '<option value="'.$Format.'"';
+			echo "\t\t\t\t\t\t<option value=\"$Format\"";
 			if ($Format == $Torrent['Format']) {
 				echo ' selected="selected"';
 			}
@@ -674,7 +672,7 @@ function show() {
 			$OtherBitrate = false;
 		}
 		foreach (Misc::display_array($this->Bitrates) as $Bitrate) {
-			echo '<option value="'.$Bitrate.'"';
+			echo "\t\t\t\t\t\t<option value=\"$Bitrate\"";
 			if ($Bitrate == $Torrent['Bitrate'] || ($OtherBitrate && $Bitrate == 'Other')) {
 				echo ' selected="selected"';
 			}

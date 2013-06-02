@@ -187,11 +187,17 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Cover art</strong></td>
 				<td>
-					<input type="hidden" name="coverart" value="" />
-					<input type="checkbox" name="coverart" id="coverart"<?=$SiteOptions['CoverArt'] ? ' checked="checked"' : ''?> />
-					<label for="coverart">Show cover artwork next to torrent information</label>
-					<input type="checkbox" name="show_extra_covers" id="show_extra_covers"<?=$SiteOptions['ShowExtraCovers'] ? ' checked="checked"' : ''?> />
-					<label for="show_extra_covers">Show all additional cover art on torrent pages by default</label>
+					<ul class="options_list nobullet">
+						<li>
+							<input type="hidden" name="coverart" value="" />
+							<input type="checkbox" name="coverart" id="coverart"<?=($SiteOptions['CoverArt'] ? ' checked="checked"' : '')?> />
+							<label for="coverart">Show cover artwork next to torrent information</label>
+						</li>
+						<li>
+							<input type="checkbox" name="show_extra_covers" id="show_extra_covers"<?=($SiteOptions['ShowExtraCovers'] ? ' checked="checked"' : '')?> />
+							<label for="show_extra_covers">Show all additional cover art on torrent pages by default</label>
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
@@ -248,6 +254,15 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<input type="checkbox" name="enablematurecontent" id="enablematurecontent"<? if (!empty($SiteOptions['EnableMatureContent'])) { ?> checked="checked"<? } ?> />
 					<label for="enablematurecontent">Show mature content</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><strong>OpenDyslexic</strong></td>
+				<td>
+					<input type="checkbox" name="useopendyslexic" id="useopendyslexic"<? if (!empty($SiteOptions['UseOpenDyslexic'])) { ?> checked="checked"<? } ?> />
+					<label for="useopendyslexic">Use the OpenDyslexic font</label>
+					<p>Read about OpenDyslexic, a <span title="Creative Commons Attribution 3.0 Unported License">CC-BY 3.0</span> licensed font designed for users with dyslexia, at <a href="http://opendyslexic.org" target="_blank">http://opendyslexic.org/</a>.</p>
+					<p>This is an experimental feature, and some stylesheets will have display issues.</p>
 				</td>
 			</tr>
 			<tr>

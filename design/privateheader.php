@@ -57,6 +57,13 @@ if (isset($LoggedUser['Notify'])) {
 	<link href="<?=$LoggedUser['StyleURL']?>" title="External CSS" rel="stylesheet" type="text/css" media="screen" />
 <?
 	}
+	if ($LoggedUser['UseOpenDyslexic']) {
+		// load the OpenDyslexic font ?>
+	<link rel="stylesheet" href="<?=STATIC_SERVER?>styles/opendyslexic/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/opendyslexic/style.css')?>" type="text/css" charset="utf-8" />
+
+<!--<link href="<?=STATIC_SERVER?>styles/opendyslexic/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/opendyslexic/style.css')?>" title="OpenDyslexic" rel="stylesheet" type="text/css" media="screen" />-->
+<?
+	}
 }
 ?>
 

@@ -200,6 +200,7 @@ $Options['ShowTags']            = (!empty($_POST['showtags']) ? 1 : 0);
 $Options['AutoSubscribe']       = (!empty($_POST['autosubscribe']) ? 1 : 0);
 $Options['DisableSmileys']      = (!empty($_POST['disablesmileys']) ? 1 : 0);
 $Options['EnableMatureContent'] = (!empty($_POST['enablematurecontent']) ? 1 : 0);
+$Options['UseOpenDyslexic']     = (!empty($_POST['useopendyslexic']) ? 1 : 0);
 $Options['DisableAvatars']      = db_string($_POST['disableavatars']);
 $Options['Identicons']          = (!empty($_POST['identicons']) ? (int) $_POST['identicons'] : 0);
 $Options['DisablePMAvatars']    = (!empty($_POST['disablepmavatars']) ? 1 : 0);
