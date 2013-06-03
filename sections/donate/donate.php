@@ -11,9 +11,6 @@ if (!$UserCount = $Cache->get_value('stats_user_count')) {
 
 $DonorPerms = Permissions::get_permissions(DONOR);
 
-if ($_GET['miner']) {
-	$LoggedUser['BitcoinMiner'] = 1; $_GET['showminer'] = 1;
-}
 View::show_header('Donate');
 
 

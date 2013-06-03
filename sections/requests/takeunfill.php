@@ -54,7 +54,7 @@ if ($RequestVotes['TotalBounty'] > $Uploaded) {
 } else {
 	$DB->query('UPDATE users_main SET Uploaded = Uploaded - '.$RequestVotes['TotalBounty'].' WHERE ID = '.$FillerID);
 }
-Misc::send_pm($FillerID, 0, 'A request you filled has been unfilled', "The request \"[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=$RequestID]".$FullName."[/url]\" was unfilled by [url=https://".SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].']'.$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']);
+Misc::send_pm($FillerID, 0, 'A request you filled has been unfilled', "The request \"[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=$RequestID]".$FullName."[/url]\" was unfilled by [url=https://".SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].']'.$LoggedUser['Username'].'[/url] for the reason: '.$_POST['reason']."\n\nIf you feel like this request was unjustly unfilled, please [url=https://".SSL_SITE_URL."/reports.php?action=report&amp;type=request&amp;id=$RequestID]report the request[/url] and explain why this request should not have been unfilled.");
 
 $Cache->delete_value('user_stats_'.$FillerID);
 

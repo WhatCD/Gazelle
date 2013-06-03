@@ -296,10 +296,13 @@ class Users {
 			}
 
 			$ID = $Key . '_' . (int) !!$Checked;
+
+							// The HTML is indented this far for proper indentation in the generated HTML
+							// on user.php?action=edit
 ?>
-			<li class="sortable_item">
-				<label><input type="checkbox"<?=$Checked?> id="<?=$ID?>" /> <?=$Val?></label>
-			</li>
+							<li class="sortable_item">
+								<label><input type="checkbox"<?=$Checked?> id="<?=$ID?>" /> <?=$Val?></label>
+							</li>
 <?
 		}
 	}

@@ -421,7 +421,7 @@ include(SERVER_ROOT.'/sections/torrents/vote.php');
 						<input type="hidden" name="tagname" value="<?=$DeletedTag?>" />
 						<input type="hidden" name="undo" value="true" />
 					</form>
-					<a class="brackets" href="#" onclick="$('#undo_tag_delete_form').raw().submit(); return false;";>Undo Delete</a>
+					<a class="brackets" href="#" onclick="$('#undo_tag_delete_form').raw().submit(); return false;";>Undo delete</a>
 
 <?				} ?>
 			</div>
@@ -679,11 +679,13 @@ foreach ($TorrentList as $Torrent) {
 <?		} else { ?>
 						<br />Last active: <?=time_diff($LastActive); ?>
 <?		}
-		if ($LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) { ?>
-						<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
-<?		} ?>
+	}
 
-<?	}?>
+	if (($Seeders === 0 &&$LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) || check_perms("users_mod")) { ?>
+						<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
+<?	}
+
+	?>
 						</blockquote>
 					</div>
 <?	if (check_perms('site_moderate_requests')) { ?>

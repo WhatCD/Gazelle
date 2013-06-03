@@ -45,12 +45,12 @@ function paranoia_level($Setting) {
 
 function display_paranoia($FieldName) {
 	$Level = paranoia_level($FieldName);
-	print '<label><input type="checkbox" name="p_'.$FieldName.'_c" '.checked($Level >= 1).' onchange="AlterParanoia()" /> Show count</label>'."&nbsp;&nbsp;\n";
-	print '<label><input type="checkbox" name="p_'.$FieldName.'_l" '.checked($Level >= 2).' onchange="AlterParanoia()" /> Show list</label>';
+	print "\t\t\t\t\t<label><input type=\"checkbox\" name=\"p_{$FieldName}_c\"".checked($Level >= 1).' onchange="AlterParanoia()" /> Show count</label>'."&nbsp;&nbsp;\n";
+	print "\t\t\t\t\t<label><input type=\"checkbox\" name=\"p_{$FieldName}_l\"".checked($Level >= 2).' onchange="AlterParanoia()" /> Show list</label>'."\n";
 }
 
 function checked($Checked) {
-	return $Checked ? 'checked="checked"' : '';
+	return ($Checked ? ' checked="checked"' : '');
 }
 
 if ($SiteOptions) {
@@ -63,7 +63,10 @@ View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,pa
 
 
 
-$DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
+$DB->query("
+	SELECT username
+	FROM lastfm_users
+	WHERE ID = '$UserID'");
 $LastFMUsername = '';
 list($LastFMUsername) = $DB->next_record();
 
@@ -89,20 +92,20 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Stylesheet</strong></td>
 				<td>
 					<select name="stylesheet" id="stylesheet">
-<? foreach ($Stylesheets as $Style) { ?>
+<?	foreach ($Stylesheets as $Style) { ?>
 						<option value="<?=$Style['ID']?>"<? if ($Style['ID'] == $StyleID) { ?> selected="selected"<? } ?>><?=$Style['ProperName']?></option>
-<? } ?>
+<?	} ?>
 					</select>&nbsp;&nbsp;
 					<a href="#" id="toggle_css_gallery" class="brackets">Show gallery</a>
 					&nbsp;&nbsp;&nbsp;&nbsp;- Or -&nbsp;&nbsp;&nbsp;&nbsp;
 					External CSS: <input type="text" size="40" name="styleurl" id="styleurl" value="<?=display_str($StyleURL)?>" />
 					<div id="css_gallery">
-							 <? foreach ($Stylesheets as $Style) { ?>
-								<div class="preview_wrapper">
-									<div class="preview_image" name="<?=$Style['Name']?>" style="background: url('<?=STATIC_SERVER.'thumb_'.$Style['Name'].'.png'?>') no-repeat scroll center top #CCC;"></div>
-									<p class="preview_name"><input type="radio" name="stylesheet_gallery" value="<?=($Style['ID'])?>" /> <?=($Style['ProperName'])?></p>
-								</div>
-							<? } ?>
+<?	foreach ($Stylesheets as $Style) { ?>
+						<div class="preview_wrapper">
+							<div class="preview_image" name="<?=$Style['Name']?>" style="background: url('<?=STATIC_SERVER.'thumb_'.$Style['Name'].'.png'?>') no-repeat scroll center top #CCC;"></div>
+							<p class="preview_name"><input type="radio" name="stylesheet_gallery" value="<?=($Style['ID'])?>" /> <?=($Style['ProperName'])?></p>
+						</div>
+<?	} ?>
 					</div>
 				</td>
 			</tr>
@@ -243,6 +246,13 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
+				<td class="label"><strong>Inbox message sorting</strong></td>
+				<td>
+					<input type="checkbox" name="list_unread_pms_first" id="list_unread_pms_first"<? if (!empty($SiteOptions['ListUnreadPMsFirst'])) { ?> checked="checked"<? } ?> />
+					<label for="list_unread_pms_first">List unread private messages first</label>
+				</td>
+			</tr>
+			<tr>
 				<td class="label"><strong>Smileys</strong></td>
 				<td>
 					<input type="checkbox" name="disablesmileys" id="disablesmileys"<? if (!empty($SiteOptions['DisableSmileys'])) { ?> checked="checked"<? } ?> />
@@ -310,7 +320,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Unseeded torrent alerts</strong></td>
 				<td>
-					<input type="checkbox" name="unseededalerts" id="unseededalerts" <?=checked($UnseededAlerts)?> />
+					<input type="checkbox" name="unseededalerts" id="unseededalerts"<?=checked($UnseededAlerts)?> />
 					<label for="unseededalerts">Receive a PM alert before your uploads are deleted for being unseeded</label>
 				</td>
 			</tr>
@@ -367,7 +377,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label">Recent activity</td>
 				<td>
-					<label><input type="checkbox" name="p_lastseen" <?=checked(!in_array('lastseen', $Paranoia))?>/> Last seen</label>
+					<label><input type="checkbox" name="p_lastseen"<?=checked(!in_array('lastseen', $Paranoia))?> /> Last seen</label>
 				</td>
 			</tr>
 			<tr>
@@ -417,9 +427,9 @@ $RequestsFilledCountChecked = checked(!in_array('requestsfilled_count', $Paranoi
 $RequestsFilledBountyChecked = checked(!in_array('requestsfilled_bounty', $Paranoia));
 $RequestsFilledListChecked = checked(!in_array('requestsfilled_list', $Paranoia));
 ?>
-					<label><input type="checkbox" name="p_requestsfilled_count" onchange="AlterParanoia()" <?=$RequestsFilledCountChecked?> /> Show count</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_requestsfilled_bounty" onchange="AlterParanoia()" <?=$RequestsFilledBountyChecked?> /> Show bounty</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_requestsfilled_list" onchange="AlterParanoia()" <?=$RequestsFilledListChecked?> /> Show list</label>
+					<label><input type="checkbox" name="p_requestsfilled_count" onchange="AlterParanoia()"<?=$RequestsFilledCountChecked?> /> Show count</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_requestsfilled_bounty" onchange="AlterParanoia()"<?=$RequestsFilledBountyChecked?> /> Show bounty</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_requestsfilled_list" onchange="AlterParanoia()"<?=$RequestsFilledListChecked?> /> Show list</label>
 				</td>
 			</tr>
 			<tr>
@@ -430,9 +440,9 @@ $RequestsVotedCountChecked = checked(!in_array('requestsvoted_count', $Paranoia)
 $RequestsVotedBountyChecked = checked(!in_array('requestsvoted_bounty', $Paranoia));
 $RequestsVotedListChecked = checked(!in_array('requestsvoted_list', $Paranoia));
 ?>
-					<label><input type="checkbox" name="p_requestsvoted_count" onchange="AlterParanoia()" <?=$RequestsVotedCountChecked?> /> Show count</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_requestsvoted_bounty" onchange="AlterParanoia()" <?=$RequestsVotedBountyChecked?> /> Show bounty</label>&nbsp;&nbsp;
-					<label><input type="checkbox" name="p_requestsvoted_list" onchange="AlterParanoia()" <?=$RequestsVotedListChecked?> /> Show list</label>
+					<label><input type="checkbox" name="p_requestsvoted_count" onchange="AlterParanoia()"<?=$RequestsVotedCountChecked?> /> Show count</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_requestsvoted_bounty" onchange="AlterParanoia()"<?=$RequestsVotedBountyChecked?> /> Show bounty</label>&nbsp;&nbsp;
+					<label><input type="checkbox" name="p_requestsvoted_list" onchange="AlterParanoia()"<?=$RequestsVotedListChecked?> /> Show list</label>
 				</td>
 			</tr>
 			<tr>
@@ -474,18 +484,34 @@ $RequestsVotedListChecked = checked(!in_array('requestsvoted_list', $Paranoia));
 			<tr>
 				<td class="label">Miscellaneous</td>
 				<td>
-					<label><input type="checkbox" name="p_requiredratio" <?=checked(!in_array('requiredratio', $Paranoia))?>/> Required ratio</label>
+					<ul class="options_list nobullet">
+						<li>
+							<label><input type="checkbox" name="p_requiredratio"<?=checked(!in_array('requiredratio', $Paranoia))?> /> Required ratio</label>
+						</li>
 <?
-$DB->query("SELECT COUNT(UserID) FROM users_info WHERE Inviter='$UserID'");
+$DB->query("
+	SELECT COUNT(UserID)
+	FROM users_info
+	WHERE Inviter='$UserID'");
 list($Invited) = $DB->next_record();
 ?>
-					<br /><label><input type="checkbox" name="p_invitedcount" <?=checked(!in_array('invitedcount', $Paranoia))?>/> Number of users invited</label>
+						<li>
+							<label><input type="checkbox" name="p_invitedcount"<?=checked(!in_array('invitedcount', $Paranoia))?> /> Number of users invited</label>
+						</li>
 <?
-$DB->query("SELECT COUNT(ta.ArtistID) FROM torrents_artists AS ta WHERE ta.UserID = ".$UserID);
+$DB->query("
+	SELECT COUNT(ta.ArtistID)
+	FROM torrents_artists AS ta
+	WHERE ta.UserID = $UserID");
 list($ArtistsAdded) = $DB->next_record();
 ?>
-					<br /><label><input type="checkbox" name="p_artistsadded" <?=checked(!in_array('artistsadded', $Paranoia))?>/> Number of artists added</label>
-					<br /><label><input type="checkbox" name="p_notifications" <?=checked(!in_array('notifications', $Paranoia))?>/> Allow users to subscribe to my uploads</label>
+						<li>
+							<label><input type="checkbox" name="p_artistsadded"<?=checked(!in_array('artistsadded', $Paranoia))?> /> Number of artists added</label>
+						</li>
+						<li>
+							<label><input type="checkbox" name="p_notifications"<?=checked(!in_array('notifications', $Paranoia))?> /> Allow users to subscribe to my uploads</label>
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>

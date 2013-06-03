@@ -77,13 +77,6 @@ list($NumResults) = $DB->next_record();
 $DB->set_query_id($Results);
 $Count = $DB->record_count();
 
-$CurURL = Format::get_url(array('sort'));
-if (empty($CurURL)) {
-	$CurURL = 'inbox.php?';
-} else {
-	$CurURL = "inbox.php?$CurURL&amp;";
-}
-
 $Pages = Format::get_pages($Page, $NumResults, MESSAGES_PER_PAGE, 9);
 echo $Pages;
 ?>
@@ -99,13 +92,6 @@ echo $Pages;
 				<input type="radio" name="searchtype" value="user"<?=(empty($_GET['searchtype']) || $_GET['searchtype'] == 'user' ? ' checked="checked"' : '')?> /> User
 				<input type="radio" name="searchtype" value="subject"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'subject' ? ' checked="checked"' : '')?> /> Subject
 				<input type="radio" name="searchtype" value="message"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'message' ? ' checked="checked"' : '')?> /> Message
-				<span style="float: right;">
-<?			if (empty($_GET['sort']) || $_GET['sort'] != "unread") { ?>
-					<a href="<?=$CurURL?>sort=unread" class="brackets">List unread first</a>
-<?			} else { ?>
-					<a href="<?=$CurURL?>" class="brackets">List latest first</a>
-<?			} ?>
-				</span>
 				<br />
 				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section == 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"
 						onfocus="if (this.value == 'Search <?= ($Section == 'sentbox') ? 'Sentbox' : 'Inbox' ?>') this.value='';"
