@@ -54,9 +54,13 @@ if (!isset($Forum) || !is_array($Forum)) {
 		LIMIT $Limit"); // Can be cached until someone makes a new post
 	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
 	if ($Page == 1) {
-		$DB->query("SELECT COUNT(ID) FROM forums_topics WHERE ForumID='$ForumID' AND IsSticky='1'");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM forums_topics
+			WHERE ForumID='$ForumID'
+				AND IsSticky='1'");
 		list($Stickies) = $DB->next_record();
-		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
+		$Cache->cache_value('forums_'.$ForumID, array($Forum, '', 0, $Stickies), 0);
 	}
 }
 
@@ -96,13 +100,18 @@ if (count($Forum) == 0) {
 		);
 } else {
 	// forums_last_read_topics is a record of the last post a user read in a topic, and what page that was on
-	$DB->query('SELECT
-		l.TopicID,
-		l.PostID,
-		CEIL((SELECT COUNT(ID) FROM forums_posts WHERE forums_posts.TopicID = l.TopicID AND forums_posts.ID<=l.PostID)/'.$PerPage.') AS Page
+	$DB->query('
+		SELECT
+			l.TopicID,
+			l.PostID,
+			CEIL((	SELECT COUNT(ID)
+					FROM forums_posts
+					WHERE forums_posts.TopicID = l.TopicID
+						AND forums_posts.ID <= l.PostID) / '.$PerPage.'
+				) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN('.implode(', ', array_keys($Forum)).') AND
-		UserID=\''.$LoggedUser['ID'].'\'');
+		WHERE TopicID IN('.implode(', ', array_keys($Forum)).')
+			AND UserID=\''.$LoggedUser['ID'].'\'');
 
 	// Turns the result set into a multi-dimensional array, with
 	// forums_last_read_topics.TopicID as the key.
@@ -130,16 +139,16 @@ if (count($Forum) == 0) {
 			'title' => display_str($Title),
 			'authorId' => (int) $AuthorID,
 			'authorName' => $AuthorName,
-			'locked' => $Locked == 1,
-			'sticky' => $Sticky == 1,
+			'locked' => ($Locked == 1),
+			'sticky' => ($Sticky == 1),
 			'postCount' => (int) $PostCount,
-			'lastID' => $LastID == null ? 0 : (int) $LastID,
+			'lastID' => (($LastID == null) ? 0 : (int) $LastID),
 			'lastTime' => $LastTime,
-			'lastAuthorId' => $LastAuthorID == null ? 0 : (int) $LastAuthorID,
-			'lastAuthorName' => $LastAuthorName == null ? '' : $LastAuthorName,
-			'lastReadPage' => $LastRead[$TopicID]['Page'] == null ? 0 : (int) $LastRead[$TopicID]['Page'],
-			'lastReadPostId' => $LastRead[$TopicID]['PostID'] == null ? 0 : (int) $LastRead[$TopicID]['PostID'],
-			'read' => $Read == 'read'
+			'lastAuthorId' => (($LastAuthorID == null) ? 0 : (int) $LastAuthorID),
+			'lastAuthorName' => (($LastAuthorName == null) ? '' : $LastAuthorName),
+			'lastReadPage' => (($LastRead[$TopicID]['Page'] == null) ? 0 : (int) $LastRead[$TopicID]['Page']),
+			'lastReadPostId' => (($LastRead[$TopicID]['PostID'] == null) ? 0 : (int) $LastRead[$TopicID]['PostID']),
+			'read' => ($Read == 'read')
 		);
 	}
 
@@ -151,7 +160,7 @@ if (count($Forum) == 0) {
 					'forumName' => $ForumName,
 					'specificRules' => $JsonSpecificRules,
 					'currentPage' => (int) $Page,
-					'pages' => ceil($Forums[$ForumID]['NumTopics']/TOPICS_PER_PAGE),
+					'pages' => ceil($Forums[$ForumID]['NumTopics'] / TOPICS_PER_PAGE),
 					'threads' => $JsonTopics
 				)
 			)

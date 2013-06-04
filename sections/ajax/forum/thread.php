@@ -62,7 +62,11 @@ if ($ThreadInfo['Posts'] > $PerPage) {
 	if (isset($_GET['post']) && is_number($_GET['post'])) {
 		$PostNum = $_GET['post'];
 	} elseif (isset($_GET['postid']) && is_number($_GET['postid'])) {
-		$DB->query("SELECT COUNT(ID) FROM forums_posts WHERE TopicID = $ThreadID AND ID <= $_GET[postid]");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM forums_posts
+			WHERE TopicID = $ThreadID
+				AND ID <= $_GET[postid]");
 		list($PostNum) = $DB->next_record();
 	} else {
 		$PostNum = 1;
@@ -70,30 +74,32 @@ if ($ThreadInfo['Posts'] > $PerPage) {
 } else {
 	$PostNum = 1;
 }
-list($Page, $Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'],$PostNum));
+list($Page, $Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'], $PostNum));
 if (($Page - 1) * $PerPage > $ThreadInfo['Posts']) {
-	$Page = ceil($ThreadInfo['Posts']/$PerPage);
+	$Page = ceil($ThreadInfo['Posts'] / $PerPage);
 }
-list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
+list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page, $PerPage, THREAD_CATALOGUE);
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
 if (!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
-	$DB->query("SELECT
-		p.ID,
-		p.AuthorID,
-		p.AddedTime,
-		p.Body,
-		p.EditedUserID,
-		p.EditedTime
+	$DB->query("
+		SELECT
+			p.ID,
+			p.AuthorID,
+			p.AddedTime,
+			p.Body,
+			p.EditedUserID,
+			p.EditedTime
 		FROM forums_posts as p
-		WHERE p.TopicID = '$ThreadID' AND p.ID != '".$ThreadInfo['StickyPostID']."'
+		WHERE p.TopicID = '$ThreadID'
+			AND p.ID != '".$ThreadInfo['StickyPostID']."'
 		LIMIT $CatalogueLimit");
 	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
 		$Cache->cache_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
 	}
 }
-$Thread = Format::catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
+$Thread = Format::catalogue_select($Catalogue, $Page, $PerPage, THREAD_CATALOGUE);
 
 if ($_GET['updatelastread'] != '0') {
 	$LastPost = end($Thread);
@@ -115,7 +121,7 @@ if ($_GET['updatelastread'] != '0') {
 				INSERT INTO forums_last_read_topics
 					(UserID, TopicID, PostID)
 				VALUES
-					('$LoggedUser[ID]', '".$ThreadID ."', '".db_string($LastPost)."')
+					('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
 				ON DUPLICATE KEY UPDATE PostID='$LastPost'");
 		}
 	}
@@ -128,7 +134,7 @@ if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['I
 		FROM users_subscriptions
 		WHERE UserID = '$LoggedUser[ID]'");
 	$UserSubscriptions = $DB->collect(0);
-	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
+	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'], $UserSubscriptions, 0);
 }
 
 if (empty($UserSubscriptions)) {
@@ -141,11 +147,11 @@ if (in_array($ThreadID, $UserSubscriptions)) {
 
 $JsonPoll = array();
 if ($ThreadInfo['NoPoll'] == 0) {
-	if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('polls_'.$ThreadID)) {
+	if (!list($Question, $Answers, $Votes, $Featured, $Closed) = $Cache->get_value('polls_'.$ThreadID)) {
 		$DB->query("
 			SELECT Question, Answers, Featured, Closed
 			FROM forums_polls
-			WHERE TopicID='".$ThreadID."'");
+			WHERE TopicID='$ThreadID'");
 		list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 		$Answers = unserialize($Answers);
 		$DB->query("
@@ -157,7 +163,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 
 		$Votes = array();
 		foreach ($VoteArray as $VoteSet) {
-			list($Key,$Value) = $VoteSet;
+			list($Key, $Value) = $VoteSet;
 			$Votes[$Key] = $Value;
 		}
 
@@ -166,7 +172,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				$Votes[$i] = 0;
 			}
 		}
-		$Cache->cache_value('polls_'.$ThreadID, array($Question,$Answers,$Votes,$Featured,$Closed), 0);
+		$Cache->cache_value('polls_'.$ThreadID, array($Question, $Answers, $Votes, $Featured, $Closed), 0);
 	}
 
 	if (!empty($Votes)) {
@@ -193,7 +199,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		}
 	}
 
-	$JsonPoll['closed'] = $Closed == 1;
+	$JsonPoll['closed'] = ($Closed == 1);
 	$JsonPoll['featured'] = $Featured;
 	$JsonPoll['question'] = $Question;
 	$JsonPoll['maxVotes'] = (int) $MaxVotes;
@@ -251,11 +257,11 @@ foreach ($Thread as $Key => $Post) {
 			'authorId' => (int) $AuthorID,
 			'authorName' => $Username,
 			'paranoia' => $Paranoia,
-			'artist' => $Artist == 1,
-			'donor' => $Donor == 1,
+			'artist' => ($Artist == 1),
+			'donor' => ($Donor == 1),
 			'warned' => ($Warned != '0000-00-00 00:00:00'),
 			'avatar' => $Avatar,
-			'enabled' => $Enabled == 2 ? false : true,
+			'enabled' => (($Enabled == 2) ? false : true),
 			'userTitle' => $UserTitle
 		),
 
@@ -272,11 +278,11 @@ print
 				'threadId' => (int) $ThreadID,
 				'threadTitle' => display_str($ThreadInfo['Title']),
 				'subscribed' => in_array($ThreadID, $UserSubscriptions),
-				'locked' => $ThreadInfo['IsLocked'] == 1,
-				'sticky' => $ThreadInfo['IsSticky'] == 1,
+				'locked' => ($ThreadInfo['IsLocked'] == 1),
+				'sticky' => ($ThreadInfo['IsSticky'] == 1),
 				'currentPage' => (int) $Page,
 				'pages' => ceil($ThreadInfo['Posts'] / $PerPage),
-				'poll' => empty($JsonPoll) ? null : $JsonPoll,
+				'poll' => (empty($JsonPoll) ? null : $JsonPoll),
 				'posts' => $JsonPosts
 			)
 		)

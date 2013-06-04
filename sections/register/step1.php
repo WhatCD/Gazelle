@@ -27,29 +27,43 @@ if (empty($Sent)) {
 		</tr>
 		<tr valign="top">
 			<td align="right">Email&nbsp;</td>
-			<td align="left"><input type="text" name="email" id="email" class="inputtext" value="<?=(!empty($_REQUEST['email']) ? display_str($_REQUEST['email']) : (!empty($InviteEmail) ? display_str($InviteEmail) : ''))?>" /></td>
+			<td align="left">
+				<input type="text" name="email" id="email" class="inputtext" value="<?=(!empty($_REQUEST['email']) ? display_str($_REQUEST['email']) : (!empty($InviteEmail) ? display_str($InviteEmail) : ''))?>" />
+			</td>
 		</tr>
 		<tr valign="top">
 			<td align="right">Password&nbsp;</td>
-			<td align="left"><input type="password" name="password" id="new_pass_1" class="inputtext" /> <strong id="pass_strength"></strong></td>
+			<td align="left">
+				<input type="password" name="password" id="new_pass_1" class="inputtext" /> <strong id="pass_strength"></strong>
+			</td>
 		</tr>
 		<tr valign="top">
-			<td align="right">Verify Password&nbsp;</td>
-			<td align="left"><input type="password" name="confirm_password" id="new_pass_2" class="inputtext" /> <strong id="pass_match"></strong>
-			<p>A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or a symbol.</p>
+			<td align="right">Verify password&nbsp;</td>
+			<td align="left">
+				<input type="password" name="confirm_password" id="new_pass_2" class="inputtext" /> <strong id="pass_match"></strong>
+				<p>A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or a symbol.</p>
 			</td>
 		</tr>
 		<tr valign="top">
 			<td></td>
-			<td align="left"><input type="checkbox" name="readrules" id="readrules" value="1"<? if (!empty($_REQUEST['readrules'])) { ?> checked="checked"<? } ?> /> <label for="readrules">I will read the rules.</label></td>
+			<td align="left">
+				<input type="checkbox" name="readrules" id="readrules" value="1"<? if (!empty($_REQUEST['readrules'])) { ?> checked="checked"<? } ?> />
+				<label for="readrules">I will read the rules.</label>
+			</td>
 		</tr>
 		<tr valign="top">
 			<td></td>
-			<td align="left"><input type="checkbox" name="readwiki" id="readwiki" value="1"<? if (!empty($_REQUEST['readwiki'])) { ?> checked="checked"<? } ?> /> <label for="readwiki">I will read the wiki.</label></td>
+			<td align="left">
+				<input type="checkbox" name="readwiki" id="readwiki" value="1"<? if (!empty($_REQUEST['readwiki'])) { ?> checked="checked"<? } ?> />
+				<label for="readwiki">I will read the wiki.</label>
+			</td>
 		</tr>
 		<tr valign="top">
 			<td></td>
-			<td align="left"><input type="checkbox" name="agereq" id="agereq" value="1"<? if (!empty($_REQUEST['agereq'])) { ?> checked="checked"<? } ?> /> <label for="agereq">I am 13 years of age or older.</label></td>
+			<td align="left">
+				<input type="checkbox" name="agereq" id="agereq" value="1"<? if (!empty($_REQUEST['agereq'])) { ?> checked="checked"<? } ?> />
+				<label for="agereq">I am 13 years of age or older.</label>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="2" height="10"></td>

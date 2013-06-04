@@ -11,7 +11,10 @@ if (check_perms('admin_manage_blog')) {
 		switch ($_REQUEST['action']) {
 			case 'deadthread' :
 				if (is_number($_GET['id'])) {
-					$DB->query("UPDATE blog SET ThreadID=NULL WHERE ID=".$_GET['id']);
+					$DB->query("
+						UPDATE blog
+						SET ThreadID=NULL
+						WHERE ID=".$_GET['id']);
 					$Cache->delete_value('blog');
 					$Cache->delete_value('feed_blog');
 				}
@@ -20,7 +23,10 @@ if (check_perms('admin_manage_blog')) {
 			case 'takeeditblog':
 				authorize();
 				if (is_number($_POST['blogid']) && is_number($_POST['thread'])) {
-					$DB->query("UPDATE blog SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."', ThreadID=".$_POST['thread']." WHERE ID='".db_string($_POST['blogid'])."'");
+					$DB->query("
+						UPDATE blog
+						SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."', ThreadID=".$_POST['thread']."
+						WHERE ID='".db_string($_POST['blogid'])."'");
 					$Cache->delete_value('blog');
 					$Cache->delete_value('feed_blog');
 				}
@@ -29,14 +35,19 @@ if (check_perms('admin_manage_blog')) {
 			case 'editblog':
 				if (is_number($_GET['id'])) {
 					$BlogID = $_GET['id'];
-					$DB->query("SELECT Title, Body, ThreadID FROM blog WHERE ID=$BlogID");
+					$DB->query("
+						SELECT Title, Body, ThreadID
+						FROM blog
+						WHERE ID=$BlogID");
 					list($Title, $Body, $ThreadID) = $DB->next_record();
 				}
 				break;
 			case 'deleteblog':
 				if (is_number($_GET['id'])) {
 					authorize();
-					$DB->query("DELETE FROM blog WHERE ID='".db_string($_GET['id'])."'");
+					$DB->query("
+						DELETE FROM blog
+						WHERE ID='".db_string($_GET['id'])."'");
 					$Cache->delete_value('blog');
 					$Cache->delete_value('feed_blog');
 				}
@@ -49,7 +60,10 @@ if (check_perms('admin_manage_blog')) {
 				$Body = db_string($_POST['body']);
 				$ThreadID = $_POST['thread'];
 				if ($ThreadID && is_number($ThreadID)) {
-					$DB->query("SELECT ForumID FROM forums_topics WHERE ID=".$ThreadID);
+					$DB->query("
+						SELECT ForumID
+						FROM forums_topics
+						WHERE ID = $ThreadID");
 					if ($DB->record_count() < 1) {
 						error('No such thread exists!');
 						header('Location: blog.php');
@@ -74,7 +88,9 @@ if (check_perms('admin_manage_blog')) {
 					$Cache->delete_value('blog_latest_id');
 				}
 				if (isset($_POST['subscribe'])) {
-					$DB->query("INSERT IGNORE INTO users_subscriptions VALUES ('$LoggedUser[ID]', $ThreadID)");
+					$DB->query("
+						INSERT IGNORE INTO users_subscriptions
+						VALUES ('$LoggedUser[ID]', $ThreadID)");
 					$Cache->delete_value('subscriptions_user_'.$LoggedUser['ID']);
 				}
 				header('Location: blog.php');
@@ -98,7 +114,7 @@ if (check_perms('admin_manage_blog')) {
 					<input type="text" name="title" size="95"<? if (!empty($Title)) { echo ' value="'.display_str($Title).'"'; } ?> /><br />
 					<h3>Body</h3>
 					<textarea name="body" cols="95" rows="15"><? if (!empty($Body)) { echo display_str($Body); } ?></textarea> <br />
-					<input type="checkbox" value="1" name="important" id="important" checked="checked"/><label for="important">Important</label><br />
+					<input type="checkbox" value="1" name="important" id="important" checked="checked" /><label for="important">Important</label><br />
 					<h3>Thread ID</h3>
 					<input type="text" name="thread" size="8"<? if (!empty($ThreadID)) { echo ' value="'.display_str($ThreadID).'"'; } ?> />
 					(Leave blank to create thread automatically)

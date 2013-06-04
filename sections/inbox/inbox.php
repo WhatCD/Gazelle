@@ -23,9 +23,9 @@ View::show_header('Inbox');
 <?
 
 if ($Section == 'inbox') { ?>
-		<a href="inbox.php?action=sentbox" class="brackets">Sentbox</a>
+		<a href="<?=Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst'], 'sentbox'); ?>" class="brackets">Sentbox</a>
 <? } elseif ($Section == 'sentbox') { ?>
-		<a href="inbox.php" class="brackets">Inbox</a>
+		<a href="<?=Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']); ?>" class="brackets">Inbox</a>
 <? }
 
 ?>
@@ -43,34 +43,36 @@ $sql = "
 		cu.Sticky,
 		cu.ForwardedTo,
 		cu2.UserID,";
-$sql .= ($Section == 'sentbox')? ' cu.SentDate ' : ' cu.ReceivedDate ';
+$sql .= (($Section == 'sentbox') ? ' cu.SentDate ' : ' cu.ReceivedDate ');
 $sql .= "AS Date
 	FROM pm_conversations AS c
 		LEFT JOIN pm_conversations_users AS cu ON cu.ConvID=c.ID AND cu.UserID='$UserID'
 		LEFT JOIN pm_conversations_users AS cu2 ON cu2.ConvID=c.ID AND cu2.UserID!='$UserID' AND cu2.ForwardedTo=0
 		LEFT JOIN users_main AS um ON um.ID=cu2.UserID";
 
-if (!empty($_GET['search']) && $_GET['searchtype'] == "message") {
-	$sql .=	" JOIN pm_messages AS m ON c.ID=m.ConvID";
+if (!empty($_GET['search']) && $_GET['searchtype'] == 'message') {
+	$sql .=	' JOIN pm_messages AS m ON c.ID=m.ConvID';
 }
-$sql .= " WHERE ";
+$sql .= ' WHERE ';
 if (!empty($_GET['search'])) {
 	$Search = db_string($_GET['search']);
-	if ($_GET['searchtype'] == "user") {
-		$sql .= "um.Username LIKE '".$Search."' AND ";
-	} elseif ($_GET['searchtype'] == "subject") {
+	if ($_GET['searchtype'] == 'user') {
+		$sql .= "um.Username LIKE '$Search' AND ";
+	} elseif ($_GET['searchtype'] == 'subject') {
 		$Words = explode(' ', $Search);
 		$sql .= "c.Subject LIKE '%".implode("%' AND c.Subject LIKE '%", $Words)."%' AND ";
-	} elseif ($_GET['searchtype'] == "message") {
+	} elseif ($_GET['searchtype'] == 'message') {
 		$Words = explode(' ', $Search);
 		$sql .= "m.Body LIKE '%".implode("%' AND m.Body LIKE '%", $Words)."%' AND ";
 	}
 }
-$sql .= ($Section == 'sentbox')? ' cu.InSentbox' : ' cu.InInbox';
+$sql .= (($Section == 'sentbox') ? ' cu.InSentbox' : ' cu.InInbox');
 $sql .="='1'";
 
-$sql .=" GROUP BY c.ID
-	ORDER BY cu.Sticky, ".$Sort." LIMIT $Limit";
+$sql .="
+	GROUP BY c.ID
+	ORDER BY cu.Sticky, $Sort
+	LIMIT $Limit";
 $Results = $DB->query($sql);
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
@@ -84,7 +86,7 @@ echo $Pages;
 
 	<div class="box pad">
 <? if ($Count == 0 && empty($_GET['search'])) { ?>
-	<h2>Your <?= ($Section == 'sentbox') ? 'sentbox' : 'inbox' ?> is currently empty</h2>
+	<h2>Your <?=(($Section == 'sentbox') ? 'sentbox' : 'inbox')?> is currently empty</h2>
 <? } else { ?>
 		<form class="search_form" name="<?=(($Section == 'sentbox') ? 'sentbox' : 'inbox')?>" action="inbox.php" method="get" id="searchbox">
 			<div>
@@ -94,8 +96,8 @@ echo $Pages;
 				<input type="radio" name="searchtype" value="message"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'message' ? ' checked="checked"' : '')?> /> Message
 				<br />
 				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section == 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"
-						onfocus="if (this.value == 'Search <?= ($Section == 'sentbox') ? 'Sentbox' : 'Inbox' ?>') this.value='';"
-						onblur="if (this.value == '') this.value='Search <?= ($Section == 'sentbox') ? 'Sentbox' : 'Inbox' ?>';"
+						onfocus="if (this.value == 'Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>') this.value='';"
+						onblur="if (this.value == '') this.value='Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>';"
 				/>
 			</div>
 		</form>
@@ -127,7 +129,7 @@ echo $Pages;
 			if ($Unread === '1') {
 				$RowClass = 'unreadpm';
 			} else {
-				$Row = ($Row === 'a') ? 'b' : 'a';
+				$Row = (($Row === 'a') ? 'b' : 'a');
 				$RowClass = 'row'.$Row;
 			}
 ?>

@@ -12,12 +12,13 @@ if (isset($_POST['Username'])) {
 	authorize();
 
 	//Create variables for all the fields
-	$Username = $_POST['Username'];
-	$Email = $_POST['Email'];
+	$Username = trim($_POST['Username']);
+	$Email = trim($_POST['Email']);
 	$Password = $_POST['Password'];
 
 	//Make sure all the fields are filled in
-	if (!empty($Username) && !empty($Email) && !empty($Password)) {
+	//Don't allow a username of "0" or "1" because of PHP's type juggling
+	if (!empty($Username) && !empty($Email) && !empty($Password) && $Username != '0' && $Username != '1') {
 
 		//Create hashes...
 		$Secret = Users::make_secret();

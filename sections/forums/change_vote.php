@@ -4,8 +4,11 @@ $ThreadID = $_GET['threadid'];
 $NewVote = $_GET['vote'];
 
 if (is_number($ThreadID) && is_number($NewVote)) {
-	if (!check_perms("site_moderate_forums")) {
-		$DB->query("SELECT ForumID FROM forums_topics WHERE ID = $ThreadID");
+	if (!check_perms('site_moderate_forums')) {
+		$DB->query("
+			SELECT ForumID
+			FROM forums_topics
+			WHERE ID = $ThreadID");
 		list($ForumID) = $DB->next_record();
 		if (!in_array($ForumID, $ForumsRevealVoters)) {
 			error(403);

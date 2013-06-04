@@ -81,7 +81,7 @@ $DB->query("
 <div class="thin">
 	<h2><?=$Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')' : '')?></h2>
 	<div class="linkbox">
-		<a href="inbox.php" class="brackets">Back to inbox</a>
+		<a href="<?=Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']); ?>" class="brackets">Back to inbox</a>
 	</div>
 <?
 
@@ -112,7 +112,7 @@ if (!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect(
 		<div class="box pad">
 			<input type="hidden" name="action" value="takecompose" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-			<input type="hidden" name="toid" value="<?=implode(',',$ReceiverIDs)?>" />
+			<input type="hidden" name="toid" value="<?=implode(',', $ReceiverIDs)?>" />
 			<input type="hidden" name="convid" value="<?=$ConvID?>" />
 			<textarea id="quickpost" class="required" name="body" cols="90" rows="10" onkeyup="resize('quickpost')"></textarea> <br />
 			<div id="preview" class="box vertical_space body hidden"></div>

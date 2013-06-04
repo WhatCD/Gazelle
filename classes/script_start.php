@@ -112,6 +112,9 @@ spl_autoload_register(function ($ClassName) {
 		case 'ImageTools':
 			$FileName = 'image_tools.class';
 			break;
+		case 'Inbox':
+			$FileName = 'inbox.class';
+			break;
 		case 'LastFM':
 			$FileName = 'lastfm.class';
 			break;

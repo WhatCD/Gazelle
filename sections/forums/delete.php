@@ -112,7 +112,10 @@ if ($LastID < $PostID) { // Last post in a topic was removed
 }
 
 if ($StickyPostID == $PostID) {
-	$DB->query("UPDATE forums_topics SET StickyPostID = 0 WHERE ID = $TopicID");
+	$DB->query("
+		UPDATE forums_topics
+		SET StickyPostID = 0
+		WHERE ID = $TopicID");
 }
 
 //We need to clear all subsequential catalogues as they've all been bumped with the absence of this post

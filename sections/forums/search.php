@@ -235,7 +235,9 @@ if ($Type == 'body') {
 		$sql.=" AND t.ID='$ThreadID' ";
 	}
 
-	$sql .= "ORDER BY p.AddedTime DESC LIMIT $Limit";
+	$sql .= "
+		ORDER BY p.AddedTime DESC
+		LIMIT $Limit";
 
 } else {
 	$sql = "
@@ -268,7 +270,9 @@ if ($Type == 'body') {
 	if (isset($AuthorID)) {
 		$sql.=" AND t.AuthorID='$AuthorID' ";
 	}
-	$sql .= "ORDER BY t.LastPostTime DESC LIMIT $Limit";
+	$sql .= "
+		ORDER BY t.LastPostTime DESC
+		LIMIT $Limit";
 }
 
 // Perform the query
@@ -288,12 +292,12 @@ echo $Pages;
 		<td>Time</td>
 	</tr>
 <? if ($DB->record_count() == 0) { ?>
-		<tr><td colspan="3">Nothing found<?=(isset($AuthorID) && $AuthorID == 0) ? ' (unknown username)' : '' ?>!</td></tr>
+		<tr><td colspan="3">Nothing found<?=((isset($AuthorID) && $AuthorID == 0) ? ' (unknown username)' : '')?>!</td></tr>
 <? }
 
 $Row = 'a'; // For the pretty colours
 while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB->next_record()) {
-	$Row = ($Row == 'a') ? 'b' : 'a';
+	$Row = (($Row == 'a') ? 'b' : 'a');
 	// Print results
 ?>
 		<tr class="row<?=$Row?>">

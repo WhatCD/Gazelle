@@ -32,7 +32,10 @@ if (!empty($_POST['add']) || (!empty($_POST['del']))) {
 }
 
 
-$DB->query("SELECT ThreadID FROM forums_specific_rules WHERE ForumID = ".$ForumID);
+$DB->query("
+	SELECT ThreadID
+	FROM forums_specific_rules
+	WHERE ForumID = $ForumID");
 $ThreadIDs = $DB->collect('ThreadID');
 
 View::show_header();
@@ -61,7 +64,7 @@ View::show_header();
 					<input type="submit" name="add" value="Add thread" />
 				</td>
 			</form>
-<? foreach ($ThreadIDs as $ThreadID) { ?>
+<?	foreach ($ThreadIDs as $ThreadID) { ?>
 		<tr>
 			<td><?=$ThreadID?></td>
 			<td>
@@ -71,7 +74,7 @@ View::show_header();
 				</form>
 			</td>
 		</tr>
-<? } ?>
+<?	} ?>
 	</table>
 </div>
 <?

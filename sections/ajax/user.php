@@ -92,19 +92,28 @@ if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requests
 		SELECT COUNT(DISTINCT r.ID), SUM(rv.Bounty)
 		FROM requests AS r
 			LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID
-		WHERE r.FillerID = ".$UserID);
+		WHERE r.FillerID = $UserID");
 	list($RequestsFilled, $TotalBounty) = $DB->next_record();
-	$DB->query("SELECT COUNT(rv.RequestID), SUM(rv.Bounty) FROM requests_votes AS rv WHERE rv.UserID = ".$UserID);
+	$DB->query("
+		SELECT COUNT(rv.RequestID), SUM(rv.Bounty)
+		FROM requests_votes AS rv
+		WHERE rv.UserID = $UserID");
 	list($RequestsVoted, $TotalSpent) = $DB->next_record();
 
-	$DB->query("SELECT COUNT(ID) FROM torrents WHERE UserID='$UserID'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM torrents
+		WHERE UserID='$UserID'");
 	list($Uploads) = $DB->next_record();
 } else {
 	$RequestsVoted = 0;
 	$TotalSpent = 0;
 }
 if (check_paranoia_here('uploads+')) {
-	$DB->query("SELECT COUNT(ID) FROM torrents WHERE UserID='$UserID'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM torrents
+		WHERE UserID='$UserID'");
 	list($Uploads) = $DB->next_record();
 } else {
 	$Uploads = null;
@@ -114,7 +123,7 @@ if (check_paranoia_here('artistsadded')) {
 	$DB->query("
 		SELECT COUNT(ta.ArtistID)
 		FROM torrents_artists AS ta
-		WHERE ta.UserID = ".$UserID);
+		WHERE ta.UserID = $UserID");
 	list($ArtistsAdded) = $DB->next_record();
 } else {
 	$ArtistsAdded = 0;
@@ -161,7 +170,7 @@ if ($Downloaded == 0) {
 } elseif ($Uploaded == 0) {
 	$Ratio = 0.5;
 } else {
-	$Ratio = round($Uploaded/$Downloaded, 2);
+	$Ratio = round($Uploaded / $Downloaded, 2);
 }
 if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfilled_count', 'requestsvoted_bounty', 'artistsadded'))) {
 	$OverallRank = floor($Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio));
@@ -305,10 +314,10 @@ json_die("success", array(
 	'stats' => array(
 		'joinedDate' => $JoinDate,
 		'lastAccess' => $LastAccess,
-		'uploaded' => $Uploaded == null ? null : (int) $Uploaded,
-		'downloaded' => $Downloaded == null ? null : (int) $Downloaded,
+		'uploaded' => (($Uploaded == null) ? null : (int) $Uploaded),
+		'downloaded' => (($Downloaded == null) ? null : (int) $Downloaded),
 		'ratio' => $Ratio,
-		'requiredRatio' => $RequiredRatio == null ? null : (float) $RequiredRatio
+		'requiredRatio' => (($RequiredRatio == null) ? null : (float) $RequiredRatio)
 	),
 	'ranks' => array(
 		'uploaded' => $UploadedRank,
@@ -318,13 +327,13 @@ json_die("success", array(
 		'bounty' => $BountyRank,
 		'posts' => $PostRank,
 		'artists' => $ArtistsRank,
-		'overall' => $OverallRank == null ? 0 : $OverallRank
+		'overall' => (($OverallRank == null) ? 0 : $OverallRank)
 	),
 	'personal' => array(
 		'class' => $ClassLevels[$Class]['Name'],
 		'paranoia' => $ParanoiaLevel,
 		'paranoiaText' => $ParanoiaLevelText,
-		'donor' => $Donor == 1,
+		'donor' => ($Donor == 1),
 		'warned' => ($Warned != '0000-00-00 00:00:00'),
 		'enabled' => ($Enabled == '1' || $Enabled == '0' || !$Enabled),
 		'passkey' => $torrent_pass
@@ -332,17 +341,17 @@ json_die("success", array(
 	'community' => array(
 		'posts' => (int) $ForumPosts,
 		'torrentComments' => (int) $NumComments,
-		'collagesStarted' => $NumCollages == null ? null : (int) $NumCollages,
-		'collagesContrib' => $NumCollageContribs == null ? null : (int) $NumCollageContribs,
-		'requestsFilled' => $RequestsFilled == null ? null : (int) $RequestsFilled,
-		'requestsVoted' => $RequestsVoted == null ? null : (int) $RequestsVoted,
-		'perfectFlacs' => $PerfectFLACs == null ? null : (int) $PerfectFLACs,
-		'uploaded' => $Uploads == null ? null : (int) $Uploads,
-		'groups' => $UniqueGroups == null ? null : (int) $UniqueGroups,
-		'seeding' => $Seeding == null ? null : (int) $Seeding,
-		'leeching' => $Leeching == null ? null : (int) $Leeching,
-		'snatched' => $Snatched == null ? null : (int) $Snatched,
-		'invited' => $Invited == null ? null : (int) $Invited
+		'collagesStarted' => (($NumCollages == null) ? null : (int) $NumCollages),
+		'collagesContrib' => (($NumCollageContribs == null) ? null : (int) $NumCollageContribs),
+		'requestsFilled' => (($RequestsFilled == null) ? null : (int) $RequestsFilled),
+		'requestsVoted' => (($RequestsVoted == null) ? null : (int) $RequestsVoted),
+		'perfectFlacs' => (($PerfectFLACs == null) ? null : (int) $PerfectFLACs),
+		'uploaded' => (($Uploads == null) ? null : (int) $Uploads),
+		'groups' => (($UniqueGroups == null) ? null : (int) $UniqueGroups),
+		'seeding' => (($Seeding == null) ? null : (int) $Seeding),
+		'leeching' => (($Leeching == null) ? null : (int) $Leeching),
+		'snatched' => (($Snatched == null) ? null : (int) $Snatched),
+		'invited' => (($Invited == null) ? null : (int) $Invited)
 	)
 ));
 ?>

@@ -8,7 +8,10 @@ if (!is_number($TorrentID)) {
 	die();
 }
 
-$DB->query("SELECT File FROM torrents_files WHERE TorrentID='$TorrentID'");
+$DB->query("
+	SELECT File
+	FROM torrents_files
+	WHERE TorrentID='$TorrentID'");
 if ($DB->record_count() == 0) {
 	echo('Torrent not found.');
 	die();

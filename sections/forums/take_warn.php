@@ -35,12 +35,15 @@ if ($Length != 'verbal') {
 	Tools::update_user_notes($UserID, $AdminComment);
 }
 
-$DB->query("INSERT INTO users_warnings_forums (UserID, Comment) VALUES('$UserID', '" . db_string($AdminComment) . "')
-		ON DUPLICATE KEY UPDATE Comment = CONCAT('" . db_string($AdminComment) . "', Comment)");
+$DB->query("
+	INSERT INTO users_warnings_forums (UserID, Comment)
+	VALUES('$UserID', '" . db_string($AdminComment) . "')
+	ON DUPLICATE KEY UPDATE Comment = CONCAT('" . db_string($AdminComment) . "', Comment)");
 Misc::send_pm($UserID, $LoggedUser['ID'], $Subject, $PrivateMessage);
 
 //edit the post
-$DB->query("SELECT
+$DB->query("
+	SELECT
 		p.Body,
 		p.AuthorID,
 		p.TopicID,
@@ -50,18 +53,19 @@ $DB->query("SELECT
 				WHERE forums_posts.TopicID = p.TopicID
 					AND forums_posts.ID <= '$PostID')/" . POSTS_PER_PAGE
 		. ") AS Page
-		FROM forums_posts as p
-			JOIN forums_topics as t on p.TopicID = t.ID
-			JOIN forums as f ON t.ForumID=f.ID
-		WHERE p.ID='$PostID'");
+	FROM forums_posts as p
+		JOIN forums_topics as t on p.TopicID = t.ID
+		JOIN forums as f ON t.ForumID=f.ID
+	WHERE p.ID='$PostID'");
 list($OldBody, $AuthorID, $TopicID, $ForumID, $Page) = $DB->next_record();
 
 // Perform the update
-$DB->query("UPDATE forums_posts
-			SET Body = '" . db_string($Body) . "',
-				EditedUserID = '$UserID',
-				EditedTime = '" . $SQLTime . "'
-			WHERE ID='$PostID'");
+$DB->query("
+	UPDATE forums_posts
+	SET Body = '" . db_string($Body) . "',
+		EditedUserID = '$UserID',
+		EditedTime = '$SQLTime'
+	WHERE ID='$PostID'");
 
 $CatalogueID = floor((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 $Cache->begin_transaction('thread_' . $TopicID . '_catalogue_' . $CatalogueID);
@@ -70,9 +74,14 @@ if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 	$Cache->delete('thread_' . $TopicID . '_catalogue_' . $CatalogueID);
 	//just clear the cache for would be cache-screwer-uppers
 } else {
-	$Cache->update_row($Key, array('ID' => $Cache->MemcacheDBArray[$Key]['ID'], 'AuthorID' => $Cache->MemcacheDBArray[$Key]['AuthorID'], 'AddedTime' => $Cache->MemcacheDBArray[$Key]['AddedTime'],
-					'Body' => $Body, //Don't url decode.
-					'EditedUserID' => $LoggedUser['ID'], 'EditedTime' => $SQLTime, 'Username' => $LoggedUser['Username']));
+	$Cache->update_row($Key, array(
+						'ID' => $Cache->MemcacheDBArray[$Key]['ID'],
+						'AuthorID' => $Cache->MemcacheDBArray[$Key]['AuthorID'],
+						'AddedTime' => $Cache->MemcacheDBArray[$Key]['AddedTime'],
+						'Body' => $Body, //Don't url decode.
+						'EditedUserID' => $LoggedUser['ID'],
+						'EditedTime' => $SQLTime,
+						'Username' => $LoggedUser['Username']));
 	$Cache->commit_transaction(3600 * 24 * 5);
 }
 $ThreadInfo = get_thread_info($TopicID);
@@ -83,8 +92,11 @@ if ($ThreadInfo['StickyPostID'] == $PostID) {
 	$Cache->cache_value('thread_' . $TopicID . '_info', $ThreadInfo, 0);
 }
 
-$DB->query("INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
-			VALUES ('forums', " . $PostID . ", " . $UserID . ", '" . $SQLTime . "', '" . db_string($OldBody) . "')");
+$DB->query("
+	INSERT INTO comments_edits
+		(Page, PostID, EditUser, EditTime, Body)
+	VALUES
+		('forums', $PostID, $UserID, '$SQLTime', '" . db_string($OldBody) . "')");
 $Cache->delete_value("forums_edits_$PostID");
 
 header("Location: forums.php?action=viewthread&postid=$PostID#post$PostID");

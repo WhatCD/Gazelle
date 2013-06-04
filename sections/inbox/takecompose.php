@@ -11,6 +11,9 @@ if (!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$_POST['toid']])) {
 }
 
 
+
+
+
 if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 	$ConvID = $_POST['convid'];
 	$Subject = '';

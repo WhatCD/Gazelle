@@ -44,7 +44,7 @@ View::show_header('Warn User');
 						<option value="1">1 week</option>
 						<option value="2">2 weeks</option>
 						<option value="4">4 weeks</option>
-<?					if (check_perms("users_mod")) { ?>
+<?					if (check_perms('users_mod')) { ?>
 						<option value="8">8 weeks</option>
 <?					} ?>
 					</select></td>
@@ -60,7 +60,7 @@ View::show_header('Warn User');
 					<td>
 						<textarea id="body" style="width: 95%;" tabindex="1" onkeyup="resize('body');" name="body" cols="90" rows="8"><?=$PostBody?></textarea>
 						<br />
-						<input type="submit" id="submit_button" value="Warn User" tabindex="1" />
+						<input type="submit" id="submit_button" value="Warn user" tabindex="1" />
 					</td>
 				</tr>
 			</table>

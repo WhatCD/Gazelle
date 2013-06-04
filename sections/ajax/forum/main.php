@@ -1,6 +1,5 @@
 <?
 
-
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {
@@ -17,19 +16,26 @@ foreach ($Forums as $Forum) {
 
 //Now if we have IDs' we run the query
 if (!empty($TopicIDs)) {
-	$DB->query("SELECT
-		l.TopicID,
-		l.PostID,
-		CEIL((SELECT COUNT(ID) FROM forums_posts WHERE forums_posts.TopicID = l.TopicID AND forums_posts.ID<=l.PostID)/$PerPage) AS Page
+	$DB->query("
+		SELECT
+			l.TopicID,
+			l.PostID,
+			CEIL((	SELECT COUNT(ID)
+					FROM forums_posts
+					WHERE forums_posts.TopicID = l.TopicID
+						AND forums_posts.ID <= l.PostID) / $PerPage) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN(".implode(',',$TopicIDs).") AND
-		UserID='$LoggedUser[ID]'");
+		WHERE TopicID IN(".implode(',', $TopicIDs).")
+			AND UserID='$LoggedUser[ID]'");
 	$LastRead = $DB->to_array('TopicID', MYSQLI_ASSOC);
 } else {
 	$LastRead = array();
 }
 
-$DB->query("SELECT RestrictedForums FROM users_info WHERE UserID = ".$LoggedUser['ID']);
+$DB->query("
+	SELECT RestrictedForums
+	FROM users_info
+	WHERE UserID = ".$LoggedUser['ID']);
 list($RestrictedForums) = $DB->next_record();
 $RestrictedForums = explode(',', $RestrictedForums);
 $PermittedForums = array_keys($LoggedUser['PermittedForums']);
@@ -77,9 +83,9 @@ foreach ($Forums as $Forum) {
 		'lastTime' => $LastTime,
 		'specificRules' => $SpecificRules,
 		'lastTopic' => display_str($LastTopic),
-		'read' => $Read == 1,
-		'locked' => $Locked == 1,
-		'sticky' => $Sticky == 1
+		'read' => ($Read == 1),
+		'locked' => ($Locked == 1),
+		'sticky' => ($Sticky == 1)
 	);
 }
 // ...And an extra one to catch the last category.

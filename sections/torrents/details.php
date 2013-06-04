@@ -681,7 +681,7 @@ foreach ($TorrentList as $Torrent) {
 <?		}
 	}
 
-	if (($Seeders === 0 &&$LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) || check_perms("users_mod")) { ?>
+	if (($Seeders === 0 &&$LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) || check_perms('users_mod')) { ?>
 						<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
 <?	}
 

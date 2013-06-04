@@ -52,7 +52,7 @@ foreach ($Forums as $Forum) {
 	if ($LoggedUser['CustomForums'][$ForumID] != 1 && ($MinRead > $LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== false)) {
 		continue;
 	}
-	$Row = ($Row == 'a') ? 'b' : 'a';
+	$Row = (($Row == 'a') ? 'b' : 'a');
 	$ForumDescription = display_str($ForumDescription);
 
 	if ($CategoryID != $LastCategoryID) {
@@ -97,7 +97,7 @@ foreach ($Forums as $Forum) {
 		</td>
 <? if ($NumPosts == 0) { ?>
 		<td colspan="3">
-			There are no topics here.<?=($MinCreate <= $LoggedUser['Class']) ? ', <a href="forums.php?action=new&amp;forumid='.$ForumID.'">Create one!</a>' : '' ?>.
+			There are no topics here.<?=(($MinCreate <= $LoggedUser['Class']) ? ', <a href="forums.php?action=new&amp;forumid='.$ForumID.'">Create one!</a>' : '')?>.
 		</td>
 <? } else { ?>
 		<td>
@@ -109,7 +109,7 @@ foreach ($Forums as $Forum) {
 				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>&amp;page=<?=$LastRead[$LastTopicID]['Page']?>#post<?=$LastRead[$LastTopicID]['PostID']?>"></a>
 			</span>
 <? } ?>
-			<span style="float: right;" class="last_poster">by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?></span>
+			<span style="float: right;" class="last_poster">by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime, 1)?></span>
 		</td>
 		<td><?=number_format($NumTopics)?></td>
 		<td><?=number_format($NumPosts)?></td>

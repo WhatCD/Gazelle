@@ -7,7 +7,10 @@ if (!is_number($_GET['id'])) {
 	error(0);
 }
 
-$DB->query("SELECT Status FROM reportsv2 WHERE ID=".$_GET['id']);
+$DB->query("
+	SELECT Status
+	FROM reportsv2
+	WHERE ID=".$_GET['id']);
 list($Status) = $DB->next_record();
 if (isset($Status)) {
 	$DB->query("

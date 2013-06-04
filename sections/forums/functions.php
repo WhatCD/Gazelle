@@ -2,16 +2,17 @@
 function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 	global $DB, $Cache;
 	if ((!$ThreadInfo = $Cache->get_value('thread_'.$ThreadID.'_info')) || !isset($ThreadInfo['OP'])) {
-		$DB->query("SELECT
-			t.Title,
-			t.ForumID,
-			t.IsLocked,
-			t.IsSticky,
-			COUNT(fp.id) AS Posts,
-			t.LastPostAuthorID,
-			ISNULL(p.TopicID) AS NoPoll,
-			t.StickyPostID,
-			t.AuthorID as OP
+		$DB->query("
+			SELECT
+				t.Title,
+				t.ForumID,
+				t.IsLocked,
+				t.IsSticky,
+				COUNT(fp.id) AS Posts,
+				t.LastPostAuthorID,
+				ISNULL(p.TopicID) AS NoPoll,
+				t.StickyPostID,
+				t.AuthorID as OP
 			FROM forums_topics AS t
 				JOIN forums_posts AS fp ON fp.TopicID = t.ID
 				LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
@@ -23,17 +24,19 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 		$ThreadInfo = $DB->next_record(MYSQLI_ASSOC, false);
 		if ($ThreadInfo['StickyPostID']) {
 			$ThreadInfo['Posts']--;
-			$DB->query("SELECT
-				p.ID,
-				p.AuthorID,
-				p.AddedTime,
-				p.Body,
-				p.EditedUserID,
-				p.EditedTime,
-				ed.Username
+			$DB->query("
+				SELECT
+					p.ID,
+					p.AuthorID,
+					p.AddedTime,
+					p.Body,
+					p.EditedUserID,
+					p.EditedTime,
+					ed.Username
 				FROM forums_posts as p
 					LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
-				WHERE p.TopicID = '$ThreadID' AND p.ID = '".$ThreadInfo['StickyPostID']."'");
+				WHERE p.TopicID = '$ThreadID'
+					AND p.ID = '".$ThreadInfo['StickyPostID']."'");
 			list($ThreadInfo['StickyPost']) = $DB->to_array(false, MYSQLI_ASSOC);
 		}
 		if (!$SelectiveCache || !$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
@@ -65,12 +68,13 @@ function get_forum_info($ForumID) {
 	global $DB, $Cache;
 	$Forum = $Cache->get_value('ForumInfo_'.$ForumID);
 	if (!$Forum) {
-		$DB->query("SELECT
-			Name,
-			MinClassRead,
-			MinClassWrite,
-			MinClassCreate,
-			COUNT(forums_topics.ID) AS Topics
+		$DB->query("
+			SELECT
+				Name,
+				MinClassRead,
+				MinClassWrite,
+				MinClassCreate,
+				COUNT(forums_topics.ID) AS Topics
 			FROM forums
 				LEFT JOIN forums_topics ON forums_topics.ForumID=forums.ID
 			WHERE forums.ID='$ForumID'
