@@ -34,9 +34,12 @@ if ($DB->record_count() == 0) {
 			(UserID, ConvID, InInbox, InSentbox, ReceivedDate)
 		VALUES ('$ReceiverID', '$ConvID', '1', '0', NOW())
 		ON DUPLICATE KEY UPDATE ForwardedTo = 0, UnRead = 1");
-	$DB->query("UPDATE pm_conversations_users SET ForwardedTo='$ReceiverID' WHERE ConvID='$ConvID' AND UserID='$UserID'");
+	$DB->query("
+		UPDATE pm_conversations_users
+		SET ForwardedTo='$ReceiverID'
+		WHERE ConvID='$ConvID' AND UserID='$UserID'");
 	$Cache->delete_value('inbox_new_'.$ReceiverID);
-	header('Location: inbox.php');
+	header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));
 } else {
 	error("$StaffIDs[$ReceiverID] already has this conversation in their inbox.");
 	header('Location: inbox.php?action=viewconv&id='.$ConvID);

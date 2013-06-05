@@ -159,9 +159,13 @@ if (!check_perms('users_mod', $Cur['Class'])) {
 // If we're deleting the user, we can ignore all the other crap
 
 if ($_POST['UserStatus'] == 'delete' && check_perms('users_delete_users')) {
-	Misc::write_log("User account ".$UserID." (".$Cur['Username'].") was deleted by ".$LoggedUser['Username']);
-	$DB->query("DELETE FROM users_main WHERE id=".$UserID);
-	$DB->query("DELETE FROM users_info WHERE UserID=".$UserID);
+	Misc::write_log("User account $UserID (".$Cur['Username'].") was deleted by ".$LoggedUser['Username']);
+	$DB->query("
+		DELETE FROM users_main
+		WHERE id = $UserID");
+	$DB->query("
+		DELETE FROM users_info
+		WHERE UserID = $UserID");
 	$Cache->delete_value('user_info_'.$UserID);
 
 	Tracker::update_tracker('remove_user', array('passkey' => $Cur['torrent_pass']));
@@ -176,9 +180,10 @@ $UpdateSet = array();
 $EditSummary = array();
 
 if ($_POST['ResetRatioWatch'] && check_perms('users_edit_reset_keys')) {
-	$DB->query("UPDATE users_info
-				SET RatioWatchEnds='0000-00-00 00:00:00', RatioWatchDownload='0', RatioWatchTimes='0'
-				WHERE UserID='$UserID'");
+	$DB->query("
+		UPDATE users_info
+		SET RatioWatchEnds='0000-00-00 00:00:00', RatioWatchDownload='0', RatioWatchTimes='0'
+		WHERE UserID='$UserID'");
 	$EditSummary[] = 'RatioWatch history reset';
 }
 
@@ -196,13 +201,18 @@ if ($_POST['ResetIPHistory'] && check_perms('users_edit_reset_keys')) {
 if ($_POST['ResetEmailHistory'] && check_perms('users_edit_reset_keys')) {
 	$DB->query("DELETE FROM users_history_emails WHERE UserID='$UserID'");
 	if ($_POST['ResetIPHistory']) {
-		$DB->query("INSERT INTO users_history_emails (UserID, Email, Time, IP)
-					VALUES ('$UserID','$Username@".SITE_URL."','0000-00-00 00:00:00','127.0.0.1')");
+		$DB->query("
+			INSERT INTO users_history_emails (UserID, Email, Time, IP)
+			VALUES ('$UserID','$Username@".SITE_URL."','0000-00-00 00:00:00','127.0.0.1')");
 	} else {
-		$DB->query("INSERT INTO users_history_emails (UserID, Email, Time, IP)
-					VALUES ('$UserID','$Username@".SITE_URL."','0000-00-00 00:00:00','".$Cur['IP']."')");
+		$DB->query("
+			INSERT INTO users_history_emails (UserID, Email, Time, IP)
+			VALUES ('$UserID','$Username@".SITE_URL."','0000-00-00 00:00:00','".$Cur['IP']."')");
 	}
-	$DB->query("UPDATE users_main SET Email='$Username@".SITE_URL."' WHERE ID='$UserID'");
+	$DB->query("
+		UPDATE users_main
+		SET Email='$Username@".SITE_URL."'
+		WHERE ID='$UserID'");
 	$EditSummary[] = 'Email history cleared';
 }
 
@@ -236,14 +246,15 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 }
 
 if ($Logs095 !== 0) {
-	$TargetScore = $Logs095 === 100 ? 99 : 100;
-	$Logs = $DB->query("SELECT DISTINCT TorrentID
-						FROM torrents_logs_new
-							JOIN torrents ON ID = TorrentID
-						WHERE Log LIKE 'EAC extraction logfile%'
-							AND UserID = $UserID
-							AND Score = $TargetScore
-							AND (Adjusted = '0' OR Adjusted = '')");
+	$TargetScore = (($Logs095 === 100) ? 99 : 100);
+	$Logs = $DB->query("
+		SELECT DISTINCT TorrentID
+		FROM torrents_logs_new
+			JOIN torrents ON ID = TorrentID
+		WHERE Log LIKE 'EAC extraction logfile%'
+			AND UserID = $UserID
+			AND Score = $TargetScore
+			AND (Adjusted = '0' OR Adjusted = '')");
 	while (list($TorrentID) = $DB->next_record()) {
 		$Results = array();
 		if ($Logs095 === 100) {
@@ -253,8 +264,14 @@ if ($Logs095 !== 0) {
 			$Details = db_string(serialize($Results));
 		}
 
-		$DB->query("UPDATE torrents SET LogScore = $Logs095 WHERE ID = $TorrentID");
-		$DB->query("UPDATE torrents_logs_new SET Score = $Logs095, Details = '$Details' WHERE TorrentID = $TorrentID");
+		$DB->query("
+			UPDATE torrents
+			SET LogScore = $Logs095
+			WHERE ID = $TorrentID");
+		$DB->query("
+			UPDATE torrents_logs_new
+			SET Score = $Logs095, Details = '$Details'
+			WHERE TorrentID = $TorrentID");
 		$DB->set_query_id($Logs);
 	}
 	$EditSummary[] = 'EAC v0.95 logs rescored to '.$Logs095;
@@ -281,14 +298,21 @@ if ($Classes[$Class]['Level'] != $Cur['Class'] && (
 }
 
 if ($Username != $Cur['Username'] && check_perms('users_edit_usernames', $Cur['Class'] - 1)) {
-	$DB->query("SELECT ID FROM users_main WHERE Username = '".$Username."'");
+	$DB->query("
+		SELECT ID
+		FROM users_main
+		WHERE Username = '$Username'");
 	if ($DB->next_record() > 0) {
 		list($UsedUsernameID) = $DB->next_record();
 		error('Username already in use by <a href="user.php?id='.$UsedUsernameID."\">$Username</a>");
 		header('Location: user.php?id='.$UserID);
 		die();
+	} elseif ($Username == '0' || $Username == '1') {
+		error('You cannot set a username of "0" or "1".');
+		header('Location: user.php?id='.$UserID);
+		die();
 	} else {
-		$UpdateSet[] = "Username='".$Username."'";
+		$UpdateSet[] = "Username='$Username'";
 		$EditSummary[] = "username changed from ".$Cur['Username']." to ".$Username;
 		$LightUpdates['Username'] = $Username;
 	}
@@ -297,7 +321,7 @@ if ($Username != $Cur['Username'] && check_perms('users_edit_usernames', $Cur['C
 if ($Title != db_string($Cur['Title']) && check_perms('users_edit_titles')) {
 	// Using the unescaped value for the test to avoid confusion
 	if (strlen($_POST['Title']) > 1024) {
-		error("Custom titles can be at most 1024 characters.");
+		error("Custom titles have a maximum length of 1,024 characters.");
 		header("Location: user.php?id=".$UserID);
 		die();
 	} else {
@@ -323,7 +347,10 @@ if (count($DroppedClasses) > 0) {
 		$ClassChanges[] = $Classes[$PermID]['Name'];
 	}
 	$EditSummary[] = 'Secondary classes dropped: '.implode(', ',$ClassChanges);
-	$DB->query("DELETE FROM users_levels WHERE UserID = '$UserID' AND PermissionID IN (".implode(',',$DroppedClasses).")");
+	$DB->query("
+		DELETE FROM users_levels
+		WHERE UserID = '$UserID'
+			AND PermissionID IN (".implode(',', $DroppedClasses).')');
 	if (count($SecondaryClasses) > 0) {
 		$LightUpdates['ExtraClasses'] = array_fill_keys($SecondaryClasses, 1);
 	} else {
@@ -349,7 +376,7 @@ if (count($AddedClasses) > 0) {
 
 if ($Visible != $Cur['Visible'] && check_perms('users_make_invisible')) {
 	$UpdateSet[] = "Visible='$Visible'";
-	$EditSummary[] = "visibility changed";
+	$EditSummary[] = 'visibility changed';
 	$LightUpdates['Visible'] = $Visible;
 }
 

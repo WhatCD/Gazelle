@@ -41,7 +41,7 @@ if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 }
 $Body = trim($_POST['body']);
 if ($Body === '' || $Body === false) {
-	$Err = "You can't send a message without a body!";
+	$Err = "You can't send a message without a body.";
 }
 
 if (!empty($Err)) {
@@ -55,5 +55,5 @@ if (!empty($Err)) {
 
 $ConvID = Misc::send_pm($ToID, $LoggedUser['ID'], $Subject, $Body, $ConvID);
 
-header('Location: inbox.php');
+header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));
 ?>

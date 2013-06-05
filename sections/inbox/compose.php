@@ -4,7 +4,7 @@ if (empty($Return)) {
 	$ToID = $_GET['to'];
 	if ($ToID == $LoggedUser['ID']) {
 		error('You cannot start a conversation with yourself!');
-		header('Location: inbox.php');
+		header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));
 	}
 }
 
@@ -16,7 +16,10 @@ if (!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$ToID])) {
 	error(403);
 }
 
-$DB->query("SELECT Username FROM users_main WHERE ID='$ToID'");
+$DB->query("
+	SELECT Username
+	FROM users_main
+	WHERE ID='$ToID'");
 list($Username) = $DB->next_record();
 if (!$Username) {
 	error(404);
@@ -46,7 +49,6 @@ View::show_header('Compose', 'inbox,bbcode,jquery,jquery.validate,form_validate'
 		</div>
 	</form>
 </div>
-
 <?
 View::show_footer();
 ?>

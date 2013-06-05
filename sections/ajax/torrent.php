@@ -82,6 +82,13 @@ $JsonTorrentDetails = array(
 );
 
 $Torrent = $TorrentList[$TorrentID];
+
+$Reports = get_reports($TorrentID);
+if (count($Reports) > 0) {
+	$Torrent['Reported'] = true;
+} else {
+	$Torrent['Reported'] = false;
+}
 // Convert file list back to the old format
 $FileList = explode("\n", $Torrent['FileList']);
 foreach ($FileList as &$File) {
@@ -92,6 +99,7 @@ $FileList = implode('|||', $FileList);
 $Userinfo = Users::user_info($Torrent['UserID']);
 $JsonTorrentList[] = array(
 	'id' => (int) $Torrent['ID'],
+	'infoHash' => $Torrent['InfoHash'],
 	'media' => $Torrent['Media'],
 	'format' => $Torrent['Format'],
 	'encoding' => $Torrent['Encoding'],
@@ -110,6 +118,7 @@ $JsonTorrentList[] = array(
 	'leechers' => (int) $Torrent['Leechers'],
 	'snatched' => (int) $Torrent['Snatched'],
 	'freeTorrent' => $Torrent['FreeTorrent'] == 1,
+	'reported' => $Torrent['Reported'],
 	'time' => $Torrent['Time'],
 	'description' => $Torrent['Description'],
 	'fileList' => $FileList,
