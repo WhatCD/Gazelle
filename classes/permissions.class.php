@@ -25,7 +25,10 @@ class Permissions {
 		global $DB, $Cache;
 		$Permission = $Cache->get_value('perm_'.$PermissionID);
 		if (empty($Permission)) {
-			$DB->query("SELECT p.Level AS Class, p.Values as Permissions, p.Secondary, p.PermittedForums FROM permissions AS p WHERE ID='$PermissionID'");
+			$DB->query("
+				SELECT p.Level AS Class, p.Values as Permissions, p.Secondary, p.PermittedForums
+				FROM permissions AS p
+				WHERE ID='$PermissionID'");
 			$Permission = $DB->next_record(MYSQLI_ASSOC, array('Permissions'));
 			$Permission['Permissions'] = unserialize($Permission['Permissions']);
 			$Cache->cache_value('perm_'.$PermissionID, $Permission, 2592000);
@@ -49,8 +52,10 @@ class Permissions {
 
 		// Fetch custom permissions if they weren't passed in.
 		if ($CustomPermissions === false) {
-			$DB->query('SELECT um.CustomPermissions FROM users_main AS um
-					WHERE um.ID = '.((int)$UserID));
+			$DB->query('
+				SELECT um.CustomPermissions
+				FROM users_main AS um
+				WHERE um.ID = '.((int)$UserID));
 			list($CustomPermissions) = $DB->next_record(MYSQLI_NUM, false);
 		}
 

@@ -41,12 +41,14 @@ class Forums {
 		//remove any dupes in the array (the fast way)
 		$Usernames = array_flip(array_flip($Usernames));
 
-		$DB->query("SELECT m.ID, p.PushService
-					FROM users_main AS m
-						LEFT JOIN users_info AS i ON i.UserID = m.ID
-						LEFT JOIN users_push_notifications AS p ON p.UserID = m.ID
-					WHERE m.Username IN ('" . implode("', '", $Usernames) . "')
-						AND i.NotifyOnQuote = '1' AND i.UserID != $LoggedUser[ID]");
+		$DB->query("
+			SELECT m.ID, p.PushService
+			FROM users_main AS m
+				LEFT JOIN users_info AS i ON i.UserID = m.ID
+				LEFT JOIN users_push_notifications AS p ON p.UserID = m.ID
+			WHERE m.Username IN ('" . implode("', '", $Usernames) . "')
+				AND i.NotifyOnQuote = '1'
+				AND i.UserID != $LoggedUser[ID]");
 
 		$Results = $DB->to_array();
 		foreach ($Results as $Result) {
@@ -57,8 +59,11 @@ class Forums {
 			$PageID = db_string($PageID);
 			$PostID = db_string($PostID);
 
-			$DB->query("INSERT IGNORE INTO users_notify_quoted (UserID, QuoterID, Page, PageID, PostID, Date)
-				VALUES ('$UserID', '$QuoterID', '$Page', '$PageID', '$PostID', '" . sqltime() . "')");
+			$DB->query("
+				INSERT IGNORE INTO users_notify_quoted
+					(UserID, QuoterID, Page, PageID, PostID, Date)
+				VALUES
+					('$UserID', '$QuoterID', '$Page', '$PageID', '$PostID', '" . sqltime() . "')");
 			$Cache->delete_value('notify_quoted_' . $UserID);
 
 		}

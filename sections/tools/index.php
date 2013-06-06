@@ -39,6 +39,12 @@ if (substr($_REQUEST['action'], 0, 12) == 'update_geoip' && !isset($argv[1])) {
 	}
 }
 
+if (substr($_REQUEST['action'],0,16) == 'rerender_gallery' && !isset($argv[1])) {
+	if (!check_perms('site_debug')) {
+		error(403);
+	}
+}
+
 include(SERVER_ROOT."/classes/validate.class.php");
 $Val = new VALIDATE;
 

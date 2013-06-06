@@ -23,7 +23,10 @@ if (isset($LoginCookie)) {
 	if (!$Enabled = $Cache->get_value('enabled_'.$UserID)) {
 		require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
 		$DB=NEW DB_MYSQL; //Load the database wrapper
-		$DB->query("SELECT Enabled FROM users_main WHERE ID='$UserID'");
+		$DB->query("
+			SELECT Enabled
+			FROM users_main
+			WHERE ID='$UserID'");
 		list($Enabled) = $DB->next_record();
 		$Cache->cache_value('enabled_'.$UserID, $Enabled, 0);
 	}

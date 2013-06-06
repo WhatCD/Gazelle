@@ -271,7 +271,10 @@ if ($MyBlog < $CurrentBlog) {
 if (check_perms('users_mod')) {
 	global $SBlogReadTime, $LatestSBlogTime;
 	if (!$SBlogReadTime && ($SBlogReadTime = $Cache->get_value('staff_blog_read_'.$LoggedUser['ID'])) === false) {
-		$DB->query("SELECT Time FROM staff_blog_visits WHERE UserID = ".$LoggedUser['ID']);
+		$DB->query("
+			SELECT Time
+			FROM staff_blog_visits
+			WHERE UserID = ".$LoggedUser['ID']);
 		if (list($SBlogReadTime) = $DB->next_record()) {
 			$SBlogReadTime = strtotime($SBlogReadTime);
 		} else {
@@ -280,7 +283,9 @@ if (check_perms('users_mod')) {
 		$Cache->cache_value('staff_blog_read_'.$LoggedUser['ID'], $SBlogReadTime, 1209600);
 	}
 	if (!$LatestSBlogTime && ($LatestSBlogTime = $Cache->get_value('staff_blog_latest_time')) === false) {
-		$DB->query("SELECT MAX(Time) FROM staff_blog");
+		$DB->query("
+			SELECT MAX(Time)
+			FROM staff_blog");
 		if (list($LatestSBlogTime) = $DB->next_record()) {
 			$LatestSBlogTime = strtotime($LatestSBlogTime);
 		} else {
@@ -406,7 +411,10 @@ if (check_perms('admin_reports')) {
 // Torrent reports code
 	$NumTorrentReports = $Cache->get_value('num_torrent_reportsv2');
 	if ($NumTorrentReports === false) {
-		$DB->query("SELECT COUNT(ID) FROM reportsv2 WHERE Status='New'");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM reportsv2
+			WHERE Status='New'");
 		list($NumTorrentReports) = $DB->next_record();
 		$Cache->cache_value('num_torrent_reportsv2', $NumTorrentReports, 0);
 	}
@@ -416,7 +424,10 @@ if (check_perms('admin_reports')) {
 // Other reports code
 	$NumOtherReports = $Cache->get_value('num_other_reports');
 	if ($NumOtherReports === false) {
-		$DB->query("SELECT COUNT(ID) FROM reports WHERE Status='New'");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM reports
+			WHERE Status='New'");
 		list($NumOtherReports) = $DB->next_record();
 		$Cache->cache_value('num_other_reports', $NumOtherReports, 0);
 	}

@@ -7,7 +7,9 @@ class ALIAS {
 	//Alternative approach with potential.
 	function flush() {
 		global $Cache, $DB;
-		$DB->query("SELECT Alias, ArticleID FROM wiki_aliases");
+		$DB->query("
+			SELECT Alias, ArticleID
+			FROM wiki_aliases");
 		$Aliases = $DB->to_array('Alias');
 		$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
 	}
@@ -16,7 +18,9 @@ class ALIAS {
 		global $Cache, $DB;
 		$Aliases = $Cache->get_value('wiki_aliases');
 		if (!$Aliases) {
-			$DB->query("SELECT Alias, ArticleID FROM wiki_aliases");
+			$DB->query("
+				SELECT Alias, ArticleID
+				FROM wiki_aliases");
 			$Aliases = $DB->to_array('Alias');
 			$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
 		}
@@ -30,7 +34,10 @@ class ALIAS {
 	function to_id($Alias) {
 		global $DB;
 		$Alias = $this->convert($Alias);
-		$DB->query("SELECT ArticleID FROM wiki_aliases WHERE Alias LIKE '$Alias'");
+		$DB->query("
+			SELECT ArticleID
+			FROM wiki_aliases
+			WHERE Alias LIKE '$Alias'");
 		list($ArticleID) = $DB->next_record();
 		return $ArticleID;
 	}

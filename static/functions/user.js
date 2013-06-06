@@ -157,15 +157,12 @@ function ToggleIdenticons() {
 }
 
 function userform_submit() {
-	var userform = jQuery('#userform');
 	if (jQuery('#resetpasskey').is(':checked')) {
-		if (confirm('Are you sure you want to reset your passkey?')) {
-			userform.submit();
+		if (!confirm('Are you sure you want to reset your passkey?')) {
+			return false;
 		}
 	}
-	else {
-		userform.submit();
-	};
+	return formVal();
 }
 
 function togglePassKey(key) {

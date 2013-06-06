@@ -8,30 +8,34 @@ class Requests {
 	public static function update_sphinx_requests($RequestID) {
 		global $DB, $Cache;
 
-		$DB->query("REPLACE INTO sphinx_requests_delta (
-					ID, UserID, TimeAdded, LastVote, CategoryID, Title,
-					Year, ReleaseType, CatalogueNumber, BitrateList,
-					FormatList, MediaList, LogCue, FillerID, TorrentID,
-					TimeFilled, Visible, Votes, Bounty)
-				SELECT
-					ID, r.UserID, UNIX_TIMESTAMP(TimeAdded) AS TimeAdded,
-					UNIX_TIMESTAMP(LastVote) AS LastVote, CategoryID,
-					Title, Year, ReleaseType, CatalogueNumber, BitrateList,
-					FormatList, MediaList, LogCue, FillerID, TorrentID,
-					UNIX_TIMESTAMP(TimeFilled) AS TimeFilled, Visible,
-					COUNT(rv.UserID) AS Votes, SUM(rv.Bounty) >> 10 AS Bounty
-				FROM requests AS r LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-					wHERE ID = ".$RequestID."
-					GROUP BY r.ID");
+		$DB->query("
+			REPLACE INTO sphinx_requests_delta (
+				ID, UserID, TimeAdded, LastVote, CategoryID, Title,
+				Year, ReleaseType, CatalogueNumber, BitrateList,
+				FormatList, MediaList, LogCue, FillerID, TorrentID,
+				TimeFilled, Visible, Votes, Bounty)
+			SELECT
+				ID, r.UserID, UNIX_TIMESTAMP(TimeAdded) AS TimeAdded,
+				UNIX_TIMESTAMP(LastVote) AS LastVote, CategoryID,
+				Title, Year, ReleaseType, CatalogueNumber, BitrateList,
+				FormatList, MediaList, LogCue, FillerID, TorrentID,
+				UNIX_TIMESTAMP(TimeFilled) AS TimeFilled, Visible,
+				COUNT(rv.UserID) AS Votes, SUM(rv.Bounty) >> 10 AS Bounty
+			FROM requests AS r
+				LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
+			WHERE ID = $RequestID
+			GROUP BY r.ID");
 
-		$DB->query("UPDATE sphinx_requests_delta
-						SET ArtistList = (SELECT
-							GROUP_CONCAT(aa.Name SEPARATOR ' ')
-						FROM requests_artists AS ra
-							JOIN artists_alias AS aa ON aa.AliasID=ra.AliasID
-						WHERE ra.RequestID = ".$RequestID."
-						GROUP BY NULL)
-					WHERE ID = ".$RequestID);
+		$DB->query("
+			UPDATE sphinx_requests_delta
+			SET ArtistList = (
+					SELECT GROUP_CONCAT(aa.Name SEPARATOR ' ')
+					FROM requests_artists AS ra
+						JOIN artists_alias AS aa ON aa.AliasID=ra.AliasID
+					WHERE ra.RequestID = $RequestID
+					GROUP BY NULL
+					)
+			WHERE ID = $RequestID");
 
 		$Cache->delete_value('requests_'.$RequestID);
 	}
@@ -72,35 +76,36 @@ class Requests {
 		*/
 
 		if (count($NotFound) > 0) {
-			$DB->query("SELECT
-						r.ID AS ID,
-						r.UserID,
-						u.Username,
-						r.TimeAdded,
-						r.LastVote,
-						r.CategoryID,
-						r.Title,
-						r.Year,
-						r.Image,
-						r.Description,
-						r.CatalogueNumber,
-						r.RecordLabel,
-						r.ReleaseType,
-						r.BitrateList,
-						r.FormatList,
-						r.MediaList,
-						r.LogCue,
-						r.FillerID,
-						filler.Username,
-						r.TorrentID,
-						r.TimeFilled,
-						r.GroupID,
-						r.OCLC
-					FROM requests AS r
-						LEFT JOIN users_main AS u ON u.ID=r.UserID
-						LEFT JOIN users_main AS filler ON filler.ID=FillerID AND FillerID!=0
-					WHERE r.ID IN (".$IDs.")
-					ORDER BY ID");
+			$DB->query("
+				SELECT
+					r.ID AS ID,
+					r.UserID,
+					u.Username,
+					r.TimeAdded,
+					r.LastVote,
+					r.CategoryID,
+					r.Title,
+					r.Year,
+					r.Image,
+					r.Description,
+					r.CatalogueNumber,
+					r.RecordLabel,
+					r.ReleaseType,
+					r.BitrateList,
+					r.FormatList,
+					r.MediaList,
+					r.LogCue,
+					r.FillerID,
+					filler.Username,
+					r.TorrentID,
+					r.TimeFilled,
+					r.GroupID,
+					r.OCLC
+				FROM requests AS r
+					LEFT JOIN users_main AS u ON u.ID=r.UserID
+					LEFT JOIN users_main AS filler ON filler.ID=FillerID AND FillerID!=0
+				WHERE r.ID IN ($IDs)
+				ORDER BY ID");
 
 			$Requests = $DB->to_array();
 			foreach ($Requests as $Request) {
@@ -121,7 +126,10 @@ class Requests {
 		global $Cache, $DB;
 		$NumComments = $Cache->get_value('request_comments_'.$RequestID);
 		if ($NumComments === false) {
-			$DB->query("SELECT COUNT(ID) FROM requests_comments WHERE RequestID = '$RequestID'");
+			$DB->query("
+				SELECT COUNT(ID)
+				FROM requests_comments
+				WHERE RequestID = '$RequestID'");
 			list($NumComments) = $DB->next_record();
 			$Cache->cache_value('request_comments_'.$RequestID, $NumComments, 0);
 		}

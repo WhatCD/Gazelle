@@ -4,7 +4,10 @@ class Collages {
 		global $DB, $Cache;
 		$NumComments = $Cache->get_value('collage_comments_'.$CollageID);
 		if ($NumComments === false) {
-			$DB->query("SELECT COUNT(ID) FROM collages_comments WHERE CollageID = '$CollageID'");
+			$DB->query("
+				SELECT COUNT(ID)
+				FROM collages_comments
+				WHERE CollageID = '$CollageID'");
 			list($NumComments) = $DB->next_record();
 			$Cache->cache_value('collage_comments_'.$CollageID, $NumComments, 0);
 		}
@@ -33,13 +36,19 @@ class Collages {
 
 	public static function increase_subscriptions($CollageID) {
 		global $DB;
-		$DB->query("UPDATE collages SET Subscribers = Subscribers + 1 WHERE ID = '$CollageID'");
+		$DB->query("
+			UPDATE collages
+			SET Subscribers = Subscribers + 1
+			WHERE ID = '$CollageID'");
 
 	}
 
 	public static function decrease_subscriptions($CollageID) {
 		global $DB;
-		$DB->query("UPDATE collages SET Subscribers = IF(Subscribers < 1, 0, Subscribers - 1) WHERE ID = '$CollageID'");
+		$DB->query("
+			UPDATE collages
+			SET Subscribers = IF(Subscribers < 1, 0, Subscribers - 1)
+			WHERE ID = '$CollageID'");
 	}
 
 }

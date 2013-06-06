@@ -16,7 +16,7 @@ var listener = {
 			var f = function() {
 				callback.call(el);
 			};
-			el.attachEvent('on'+type, f);
+			el.attachEvent('on' + type, f);
 		}
 	}
 };
@@ -51,9 +51,9 @@ function html_entity_decode(str) {
 
 function get_size(size) {
 	var steps = 0;
-	while (size>=1024) {
+	while (size >= 1024) {
 		steps++;
-		size=size/1024;
+		size = size / 1024;
 	}
 	var ext;
 	switch(steps) {
@@ -107,7 +107,7 @@ function ratio(dividend, divisor, color) {
 	} else if (dividend == 0 && divisor > 0) {
 		return '<span class="r00">-∞</span>';
 	}
-	var rat = ((dividend/divisor)-0.005).toFixed(2); //Subtract .005 to floor to 2 decimals
+	var rat = ((dividend / divisor) - 0.005).toFixed(2); //Subtract .005 to floor to 2 decimals
 	if (color) {
 		var col = get_ratio_color(rat);
 		if (col) {
@@ -132,7 +132,7 @@ function error_message(message) {
 	$("#content").raw().insertBefore(messageDiv,$("#content").raw().firstChild);
 }
 
-//returns key if true, and false if false better than the php funciton
+//returns key if true, and false if false. better than the PHP funciton
 function in_array(needle, haystack, strict) {
 	if (strict === undefined) {
 		strict = false;
@@ -160,7 +160,6 @@ function array_search(needle, haystack, strict) {
 var util = function (selector, context) {
 	return new util.fn.init(selector, context);
 }
-
 
 util.fn = util.prototype = {
 	objects: new Array(),
@@ -191,7 +190,7 @@ util.fn = util.prototype = {
 		return this;
 	},
 	listen: function (event, callback) {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			var object = this.objects[i];
 			if (document.addEventListener) {
 				object.addEventListener(event, callback, false);
@@ -201,15 +200,26 @@ util.fn = util.prototype = {
 		}
 		return this;
 	},
+	unbind: function (event, callback) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
+			var object = this.objects[i];
+			if (document.addEventListener) {
+				object.removeEventListener(event, callback, false);
+			} else {
+				object.detachEvent('on' + event, callback);
+			}
+		}
+		return this;
+	},
 	remove: function () {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			var object = this.objects[i];
 			object.parentNode.removeChild(object);
 		}
 		return this;
 	},
 	add_class: function (class_name, force) {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			var object = this.objects[i];
 			if (object.className === '') {
 				object.className = class_name;
@@ -220,7 +230,7 @@ util.fn = util.prototype = {
 		return this;
 	},
 	remove_class: function (class_name) {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			var object = this.objects[i];
 			var classes = object.className.split(' ');
 			var result = array_search(class_name, classes);
@@ -232,7 +242,7 @@ util.fn = util.prototype = {
 		return this;
 	},
 	has_class: function(class_name) {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			var object = this.objects[i];
 			var classes = object.className.split(' ');
 			if (array_search(class_name, classes)) {
@@ -242,7 +252,7 @@ util.fn = util.prototype = {
 		return false;
 	},
 	toggle_class: function(class_name) {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			var object = this.objects[i];
 			var classes = object.className.split(' ');
 			var result = array_search(class_name, classes);
@@ -260,13 +270,13 @@ util.fn = util.prototype = {
 		return this;
 	},
 	disable : function () {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			this.objects[i].disabled = true;
 		}
 		return this;
 	},
 	enable : function () {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			if (this.objects[i].disabled == true) {
 				this.objects[i].disabled = false;
 			}
@@ -274,7 +284,7 @@ util.fn = util.prototype = {
 		return this;
 	},
 	html : function (html) {
-		for (var i=0,il=this.objects.length;i<il;i++) {
+		for (var i = 0, il = this.objects.length; i < il; i++) {
 			this.objects[i].innerHTML = html;
 		}
 		return this;
@@ -306,7 +316,6 @@ util.fn = util.prototype = {
 		return $(here);
 	}
 }
-
 
 util.fn.init.prototype = util.fn;
 var $ = util;

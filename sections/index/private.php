@@ -30,7 +30,7 @@ View::show_header('News','bbcode');
 <div class="thin">
 	<div class="sidebar">
 <?
-
+include('feat_merch.php');
 include('feat_album.php');
 
 if (check_perms('users_mod')) {

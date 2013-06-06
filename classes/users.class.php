@@ -178,7 +178,10 @@ class Users {
 			}
 			unset($HeavyInfo['PermittedForums']);
 
-			$DB->query("SELECT PermissionID FROM users_levels WHERE UserID = $UserID");
+			$DB->query("
+				SELECT PermissionID
+				FROM users_levels
+				WHERE UserID = $UserID");
 			$PermIDs = $DB->collect('PermissionID');
 			foreach ($PermIDs AS $PermID) {
 				$Perms = Permissions::get_permissions($PermID);

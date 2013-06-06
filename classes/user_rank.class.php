@@ -7,9 +7,10 @@ class USER_RANK {
 	// Returns a 101 row array (101 percentiles - 0 - 100), with the minimum value for that percentile as the value for each row
 	// BTW - ingenious
 	function build_table($MemKey, $Query) {
-		global $Cache,$DB;
+		global $Cache, $DB;
 
-		$DB->query("DROP TEMPORARY TABLE IF EXISTS temp_stats");
+		$DB->query("
+			DROP TEMPORARY TABLE IF EXISTS temp_stats");
 
 		$DB->query("
 			CREATE TEMPORARY TABLE temp_stats (
@@ -17,9 +18,13 @@ class USER_RANK {
 				Val bigint(20) NOT NULL
 			);");
 
-		$DB->query("INSERT INTO temp_stats (Val) ".$Query);
+		$DB->query("
+			INSERT INTO temp_stats (Val) ".
+			$Query);
 
-		$DB->query("SELECT COUNT(ID) FROM temp_stats");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM temp_stats");
 		list($UserCount) = $DB->next_record();
 
 		$DB->query("

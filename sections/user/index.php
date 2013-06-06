@@ -14,9 +14,6 @@ if (empty($_REQUEST['action'])) {
 }
 
 switch ($_REQUEST['action']) {
-	case 'stylesheetgallery':
-		include('stylesheetgallery.php');
-		break;
 	case 'notify':
 		include('notify_edit.php');
 		break;

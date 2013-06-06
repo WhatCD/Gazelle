@@ -25,7 +25,10 @@ class LastFM {
 
 	public static function compare_user_with($Username1, $Limit = 15) {
 		global $Cache, $LoggedUser, $DB;
-		$DB->query("SELECT username FROM lastfm_users WHERE ID='$LoggedUser[ID]'");
+		$DB->query("
+			SELECT username
+			FROM lastfm_users
+			WHERE ID='$LoggedUser[ID]'");
 		if ($DB->record_count() > 0) {
 			list($Username2) = $DB->next_record();
 			//Make sure the usernames are in the correct order to avoid dupe cache keys.
@@ -104,7 +107,10 @@ class LastFM {
 			$Cache->delete_value('lastfm_top_artists_' . $Username);
 			$Cache->delete_value('lastfm_top_albums_' . $Username);
 			$Cache->delete_value('lastfm_top_tracks_' . $Username);
-			$DB->query("SELECT username FROM lastfm_users WHERE ID='$LoggedUser[ID]'");
+			$DB->query("
+				SELECT username
+				FROM lastfm_users
+				WHERE ID='$LoggedUser[ID]'");
 			if ($DB->record_count() > 0) {
 				list($Username2) = $DB->next_record();
 				//Make sure the usernames are in the correct order to avoid dupe cache keys.

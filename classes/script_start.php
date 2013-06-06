@@ -216,12 +216,14 @@ list($Classes, $ClassLevels) = Users::get_classes();
 // Enabled - if the user's enabled or not
 // Permissions
 
-if (isset($_COOKIE['session'])) { $LoginCookie=$Enc->decrypt($_COOKIE['session']); }
+if (isset($_COOKIE['session'])) {
+	$LoginCookie = $Enc->decrypt($_COOKIE['session']);
+}
 if (isset($LoginCookie)) {
-	list($SessionID, $LoggedUser['ID'])=explode("|~|",$Enc->decrypt($LoginCookie));
+	list($SessionID, $LoggedUser['ID']) = explode("|~|", $Enc->decrypt($LoginCookie));
 	$LoggedUser['ID'] = (int)$LoggedUser['ID'];
 
-	$UserID=$LoggedUser['ID']; //TODO: UserID should not be LoggedUser
+	$UserID = $LoggedUser['ID']; //TODO: UserID should not be LoggedUser
 
 	if (!$LoggedUser['ID'] || !$SessionID) {
 		logout();
@@ -244,14 +246,17 @@ if (isset($LoginCookie)) {
 		$Cache->cache_value('users_sessions_'.$UserID, $UserSessions, 0);
 	}
 
-	if (!array_key_exists($SessionID,$UserSessions)) {
+	if (!array_key_exists($SessionID, $UserSessions)) {
 		logout();
 	}
 
 	// Check if user is enabled
 	$Enabled = $Cache->get_value('enabled_'.$LoggedUser['ID']);
 	if ($Enabled === false) {
-		$DB->query("SELECT Enabled FROM users_main WHERE ID='$LoggedUser[ID]'");
+		$DB->query("
+			SELECT Enabled
+			FROM users_main
+			WHERE ID='$LoggedUser[ID]'");
 		list($Enabled) = $DB->next_record();
 		$Cache->cache_value('enabled_'.$LoggedUser['ID'], $Enabled, 0);
 	}
@@ -336,7 +341,10 @@ if (isset($LoginCookie)) {
 	if (isset($LoggedUser['Permissions']['site_torrents_notify'])) {
 		$LoggedUser['Notify'] = $Cache->get_value('notify_filters_'.$LoggedUser['ID']);
 		if (!is_array($LoggedUser['Notify'])) {
-			$DB->query("SELECT ID, Label FROM users_notify_filters WHERE UserID='$LoggedUser[ID]'");
+			$DB->query("
+				SELECT ID, Label
+				FROM users_notify_filters
+				WHERE UserID='$LoggedUser[ID]'");
 			$LoggedUser['Notify'] = $DB->to_array('ID');
 			$Cache->cache_value('notify_filters_'.$LoggedUser['ID'], $LoggedUser['Notify'], 2592000);
 		}
@@ -371,7 +379,10 @@ if (isset($LoginCookie)) {
 				('$LoggedUser[ID]', '$NewIP', '".sqltime()."')");
 
 		$ipcc = Tools::geoip($NewIP);
-		$DB->query("UPDATE users_main SET IP='$NewIP', ipcc='".$ipcc."' WHERE ID='$LoggedUser[ID]'");
+		$DB->query("
+			UPDATE users_main
+			SET IP='$NewIP', ipcc='$ipcc'
+			WHERE ID='$LoggedUser[ID]'");
 		$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
 		$Cache->update_row(false, array('IP' => $_SERVER['REMOTE_ADDR']));
 		$Cache->commit_transaction(0);
@@ -383,7 +394,12 @@ if (isset($LoginCookie)) {
 	// Get stylesheets
 	$Stylesheets = $Cache->get_value('stylesheets');
 	if (!is_array($Stylesheets)) {
-		$DB->query('SELECT ID, LOWER(REPLACE(Name," ","_")) AS Name, Name AS ProperName FROM stylesheets');
+		$DB->query('
+			SELECT
+				ID,
+				LOWER(REPLACE(Name," ","_")) AS Name,
+				Name AS ProperName
+			FROM stylesheets');
 		$Stylesheets = $DB->to_array('ID', MYSQLI_BOTH);
 		$Cache->cache_value('stylesheets', $Stylesheets, 600);
 	}
@@ -396,11 +412,9 @@ if (isset($LoginCookie)) {
 	}
 }
 
-
 $Debug->set_flag('end user handling');
 
 $Debug->set_flag('start function definitions');
-
 
 /**
  * Log out the current session
@@ -413,7 +427,10 @@ function logout() {
 	if ($SessionID) {
 
 
-		$DB->query("DELETE FROM users_sessions WHERE UserID='$LoggedUser[ID]' AND SessionID='".db_string($SessionID)."'");
+		$DB->query("
+			DELETE FROM users_sessions
+			WHERE UserID='$LoggedUser[ID]'
+				AND SessionID='".db_string($SessionID)."'");
 
 		$Cache->begin_transaction('users_sessions_'.$LoggedUser['ID']);
 		$Cache->delete_row($SessionID);
@@ -452,8 +469,6 @@ function authorize($Ajax = false) {
 	}
 	return true;
 }
-
-
 
 $Debug->set_flag('ending function definitions');
 //Include /sections/*/index.php

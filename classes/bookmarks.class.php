@@ -85,7 +85,10 @@ class Bookmarks {
 		$CacheKey = 'bookmarks_' . $Type . '_' . $UserID;
 		if (($Bookmarks = $Cache->get_value($CacheKey)) === false) {
 			list ($Table, $Col) = self::bookmark_schema($Type);
-			$DB->query("SELECT $Col FROM $Table WHERE UserID = '$UserID'");
+			$DB->query("
+				SELECT $Col
+				FROM $Table
+				WHERE UserID = '$UserID'");
 			$Bookmarks = $DB->collect($Col);
 			$Cache->cache_value($CacheKey, $Bookmarks, 0);
 		}

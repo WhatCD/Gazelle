@@ -67,6 +67,7 @@ function validDate(theDate) {
 
 function showError(fields,alertStr) {
 	var tField=Array();
+	var obj, el;
 
 	if (typeof(fields) == 'object') {
 		tField[0] = fields;
@@ -74,22 +75,20 @@ function showError(fields,alertStr) {
 		tField = fields.split(',');
 	}
 	for (s = 0; s <= tField.length - 1; s++) {
-		if ($('#'+tField[s])) {
-			$('#'+tField[s]).className=$('#'+tField[s]).className+" elem_error";
+		obj = $('#'+tField[s]);
+		if (obj) {
+			el = obj.raw();
+			obj.add_class("elem_error");
 			if (s == 0) {
-				$('#'+tField[s]).focus();
+				el.focus();
 				try {
-					$('#'+tField[s]).select();
+					el.select();
 				} catch (error) {
 				}
 			}
-
-			errorElems[errorElems.length] = tField[s];
-			if ($('#'+tField[s]).type != "select-one") {
-				$('#'+tField[s]).onkeypress=function() { clearElemError(); };
-			} else {
-				$('#'+tField[s]).onchange=function() { clearElemError(); };
-			}
+			var evtType = el.type == "select-one" ? "change" : "keypress";
+			obj.listen(evtType, clearElemError);
+			errorElems.push(tField[s]);
 		}
 	}
 
@@ -115,14 +114,13 @@ function clearErrors(theForm) {
 }
 
 function clearElemError(evt) {
+	var obj, el;
 	for (x = 0; x <= errorElems.length - 1; x++) {
-		elem = $('#'+errorElems[x]);
-		if ($('#'+elem).type != "select-one") {
-			$('#'+elem).onkeypress = "";
-		} else {
-			$('#'+elem).onchange = "";
-		}
-		elem.className = elemStyles[elem.id];
+		obj = $('#'+errorElems[x]);
+		el = obj.raw();
+		var evtType = el.type == "select-one" ? "change" : "keypress";
+		obj.unbind(evtType, clearElemError);
+		el.className = elemStyles[el.id];
 	}
 	errorElems = Array();
 }

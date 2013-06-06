@@ -135,44 +135,66 @@ function image_height($Type, $Data) {
 }
 
 
-function send_pm($ToID,$FromID,$Subject,$Body,$ConvID='') {
+function send_pm($ToID, $FromID, $Subject, $Body, $ConvID = '') {
 	global $DB, $Cache;
 	if ($ToID == 0) {
 		// Don't allow users to send messages to the system
 		return;
 	}
 	if ($ConvID == '') {
-		$DB->query("INSERT INTO pm_conversations(Subject) VALUES ('$Subject')");
+		$DB->query("
+			INSERT INTO pm_conversations (Subject)
+			VALUES ('$Subject')");
 		$ConvID = $DB->inserted_id();
-		$DB->query("INSERT INTO pm_conversations_users
-				(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead) VALUES
+		$DB->query("
+			INSERT INTO pm_conversations_users
+				(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead)
+			VALUES
 				('$ToID', '$ConvID', '1','0','".sqltime()."', '".sqltime()."', '1')");
 		if ($FromID != 0) {
-			$DB->query("INSERT INTO pm_conversations_users
-				(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead) VALUES
-				('$FromID', '$ConvID', '0','1','".sqltime()."', '".sqltime()."', '0')");
+			$DB->query("
+				INSERT INTO pm_conversations_users
+					(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead)
+				VALUES
+					('$FromID', '$ConvID', '0','1','".sqltime()."', '".sqltime()."', '0')");
 		}
 	} else {
-		$DB->query("UPDATE pm_conversations_users SET
+		$DB->query("
+			UPDATE pm_conversations_users
+			SET
 				InInbox='1',
 				UnRead='1',
 				ReceivedDate='".sqltime()."'
-				WHERE UserID='$ToID'
+			WHERE UserID='$ToID'
 				AND ConvID='$ConvID'");
 
-		$DB->query("UPDATE pm_conversations_users SET
+		$DB->query("
+			UPDATE pm_conversations_users
+			SET
 				InSentbox='1',
 				SentDate='".sqltime()."'
-				WHERE UserID='$FromID'
+			WHERE UserID='$FromID'
 				AND ConvID='$ConvID'");
 	}
-	$DB->query("INSERT INTO pm_messages
-			(SenderID, ConvID, SentDate, Body) VALUES
-			('$FromID', '$ConvID', '".sqltime()."', '".$Body."')");
+	$DB->query("
+		INSERT INTO pm_messages
+			(SenderID, ConvID, SentDate, Body)
+		VALUES
+			('$FromID', '$ConvID', '".sqltime()."', '$Body')");
 
 	// Clear the caches of the inbox and sentbox
-	//$DB->query("SELECT UnRead from pm_conversations_users WHERE ConvID='$ConvID' AND UserID='$ToID'");
-	$DB->query("SELECT COUNT(ConvID) FROM pm_conversations_users WHERE UnRead = '1' and UserID='$ToID' AND InInbox = '1'");
+	/*$DB->query("
+		SELECT UnRead
+		FROM pm_conversations_users
+		WHERE ConvID='$ConvID'
+			AND UserID='$ToID'");
+	*/
+	$DB->query("
+		SELECT COUNT(ConvID)
+		FROM pm_conversations_users
+		WHERE UnRead = '1'
+			AND UserID='$ToID'
+			AND InInbox = '1'");
 	list($UnRead) = $DB->next_record(MYSQLI_BOTH, FALSE);
 	$Cache->cache_value('inbox_new_'.$ToID, $UnRead);
 
@@ -218,7 +240,7 @@ function make_utf8($Str) {
 			$Encoding = 'UTF-8';
 		}
 		if (empty($Encoding)) {
-			$Encoding = mb_detect_encoding($Str,'UTF-8, ISO-8859-1');
+			$Encoding = mb_detect_encoding($Str, 'UTF-8, ISO-8859-1');
 		}
 		if (empty($Encoding)) {
 			$Encoding = 'ISO-8859-1';
@@ -226,7 +248,7 @@ function make_utf8($Str) {
 		if ($Encoding == 'UTF-8') {
 			return $Str;
 		} else {
-			return @mb_convert_encoding($Str,'UTF-8',$Encoding);
+			return @mb_convert_encoding($Str, 'UTF-8', $Encoding);
 		}
 	}
 }

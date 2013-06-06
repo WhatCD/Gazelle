@@ -36,7 +36,10 @@ class Votes {
 
 		$UserVotes = $Cache->get_value('voted_albums_'.$UserID);
 		if ($UserVotes === false) {
-			$DB->query('SELECT GroupID, Type FROM users_votes WHERE UserID='.$UserID);
+			$DB->query('
+				SELECT GroupID, Type
+				FROM users_votes
+				WHERE UserID='.$UserID);
 			$UserVotes = $DB->to_array('GroupID', MYSQL_ASSOC, false);
 			$Cache->cache_value('voted_albums_'.$UserID, $UserVotes);
 		}
@@ -55,7 +58,10 @@ class Votes {
 
 		$GroupVotes = $Cache->get_value('votes_'.$GroupID);
 		if ($GroupVotes === false) {
-			$DB->query("SELECT Ups AS Ups, Total AS Total FROM torrents_votes WHERE GroupID=$GroupID");
+			$DB->query("
+				SELECT Ups AS Ups, Total AS Total
+				FROM torrents_votes
+				WHERE GroupID = $GroupID");
 			if ($DB->record_count() == 0) {
 				$GroupVotes = array('Ups'=>0, 'Total'=>0);
 			} else {
@@ -166,8 +172,10 @@ class Votes {
 		if (($Total <= 0) || ($Ups < 0)) {
 			return 0;
 		}
-		$phat = $Ups/$Total;
-		return ($phat + Z_VAL*Z_VAL/(2*$Total) - Z_VAL*sqrt(($phat*(1-$phat)+Z_VAL*Z_VAL/(4*$Total))/$Total))/(1+Z_VAL*Z_VAL/$Total);
+		$phat = $Ups / $Total;
+		$Numerator = ($phat + Z_VAL * Z_VAL / (2 * $Total) - Z_VAL * sqrt(($phat * (1 - $phat) + Z_VAL * Z_VAL / (4 * $Total)) / $Total));
+		$Denominator = (1 + Z_VAL * Z_VAL / $Total);
+		return ($Numerator / $Denominator);
 	}
 
 	/**
@@ -207,14 +215,18 @@ class Votes {
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query("SELECT GroupID FROM torrents_votes ORDER BY Score DESC LIMIT 100");
+			$DB->query("
+				SELECT GroupID
+				FROM torrents_votes
+				ORDER BY Score DESC
+				LIMIT 100");
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
 			$Cache->cache_value('voting_ranks_overall', $Rankings, 259200); // 3 days
 		}
 
-		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
+		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);
 	}
 
 	/**
@@ -238,18 +250,20 @@ class Votes {
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query("SELECT GroupID
-						FROM torrents_votes  AS v
-						JOIN torrents_group AS g ON g.ID = v.GroupID
-						WHERE g.Year = $Year
-						ORDER BY Score DESC LIMIT 100");
+			$DB->query("
+				SELECT GroupID
+				FROM torrents_votes  AS v
+					JOIN torrents_group AS g ON g.ID = v.GroupID
+				WHERE g.Year = $Year
+				ORDER BY Score DESC
+				LIMIT 100");
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
 			$Cache->cache_value('voting_ranks_year_'.$Year , $Rankings, 259200); // 3 days
 		}
 
-		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
+		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);
 	}
 
 	/**
@@ -277,19 +291,21 @@ class Votes {
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query("SELECT GroupID
-						FROM torrents_votes  AS v
-						JOIN torrents_group AS g ON g.ID = v.GroupID
-						WHERE g.Year BETWEEN $Year AND ".($Year+9)."
-						  AND g.CategoryID = 1
-						ORDER BY Score DESC LIMIT 100");
+			$DB->query("
+				SELECT GroupID
+				FROM torrents_votes  AS v
+					JOIN torrents_group AS g ON g.ID = v.GroupID
+				WHERE g.Year BETWEEN $Year AND " . ($Year + 9) . "
+					  AND g.CategoryID = 1
+				ORDER BY Score DESC
+				LIMIT 100");
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
 			$Cache->cache_value('voting_ranks_decade_'.$Year , $Rankings, 259200); // 3 days
 		}
 
-		return isset($Rankings[$GroupID])?$Rankings[$GroupID]:false;
+		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);
 	}
 }
 ?>

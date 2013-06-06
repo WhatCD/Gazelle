@@ -58,7 +58,11 @@ function get_body($ID, $Rev) {
 	if ($Rev == $Revision) {
 		$Str = $Body;
 	} else {
-		$DB->query("SELECT Body FROM wiki_revisions WHERE ID='$ID' AND Revision='$Rev'");
+		$DB->query("
+			SELECT Body
+			FROM wiki_revisions
+			WHERE ID='$ID'
+				AND Revision='$Rev'");
 		if (!$DB->record_count()) {
 			error(404);
 		}

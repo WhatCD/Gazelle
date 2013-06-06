@@ -30,15 +30,33 @@ $DB->query("
 		ToYear,
 		Users
 	FROM users_notify_filters
-	WHERE UserID='$LoggedUser[ID]'
-	UNION ALL
-	SELECT NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL");
-$i = 0;
-$NumFilters = $DB->record_count() - 1;
+	WHERE UserID=$LoggedUser[ID]");
+
+$NumFilters = $DB->record_count();
 
 $Notifications = $DB->to_array();
+$Notifications[] = array(
+	'ID' => false,
+	'Label' => '',
+	'Artists' => '',
+	'ExcludeVA' => false,
+	'NewGroupsOnly' => true,
+	'Tags' => '',
+	'NotTags' => '',
+	'ReleaseTypes' => '',
+	'Categories' => '',
+	'Formats' => '',
+	'Encodings' => '',
+	'Media' => '',
+	'FromYear' => '',
+	'ToYear' => '',
+	'Users' => ''
+);
 
+$i = 0;
 foreach ($Notifications as $N) { // $N stands for Notifications
+	$i++;
+	$NewFilter = $N['ID'] === false;
 	$N['Artists']		= implode(', ', explode('|', substr($N['Artists'], 1, -1)));
 	$N['Tags']			= implode(', ', explode('|', substr($N['Tags'], 1, -1)));
 	$N['NotTags']		= implode(', ', explode('|', substr($N['NotTags'], 1, -1)));
@@ -62,23 +80,27 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 	if ($N['ToYear'] == 0) {
 		$N['ToYear'] = '';
 	}
-	$i++;
-	if ($i > $NumFilters && $NumFilters > 0) { ?>
-			<h3>Create a new notification filter</h3>
+	if ($NewFilter && $NumFilters > 0) {
+?>
+	<br /><br />
+	<h3>Create a new notification filter</h3>
 <?	} elseif ($NumFilters > 0) { ?>
-			<h3>
-				<a href="feeds.php?feed=torrents_notify_<?=$N['ID']?>_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode($N['Label'])?>"><img src="<?=STATIC_SERVER?>/common/symbols/rss.png" alt="RSS feed" /></a>
-				<?=display_str($N['Label'])?>
-				<a href="user.php?action=notify_delete&amp;id=<?=$N['ID']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this notification filter?')" class="brackets">Delete</a>
-				<a href="#" onclick="$('#filter_<?=$N['ID']?>').toggle(); return false;" class="brackets">Show</a>
-			</h3>
+	<h3>
+		<a href="feeds.php?feed=torrents_notify_<?=$N['ID']?>_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode($N['Label'])?>"><img src="<?=STATIC_SERVER?>/common/symbols/rss.png" alt="RSS feed" /></a>
+		<?=display_str($N['Label'])?>
+		<a href="user.php?action=notify_delete&amp;id=<?=$N['ID']?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this notification filter?')" class="brackets">Delete</a>
+		<a href="#" onclick="$('#filter_<?=$N['ID']?>').toggle(); return false;" class="brackets">Show</a>
+	</h3>
 <?	} ?>
-	<form class="<?=(($i > $NumFilters) ? 'create_form' : 'edit_form')?>" name="notification" action="user.php" method="post">
+	<form class="<?=($NewFilter ? 'create_form' : 'edit_form')?>" name="notification" action="user.php" method="post">
 		<input type="hidden" name="formid" value="<?=$i?>" />
 		<input type="hidden" name="action" value="notify_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-		<table <?=(($i <= $NumFilters) ? 'id="filter_'.$N['ID'].'" class="layout hidden"' : 'class="layout"')?>>
-<?	if ($i > $NumFilters) { ?>
+<?	if (!$NewFilter) { ?>
+		<input type="hidden" name="id<?=$i?>" value="<?=$N['ID']?>" />
+<?	} ?>
+		<table <?=(!$NewFilter ? 'id="filter_'.$N['ID'].'" class="layout hidden"' : 'class="layout"')?>>
+<?	if ($NewFilter) { ?>
 			<tr>
 				<td class="label"><strong>Notification filter name</strong></td>
 				<td>
@@ -91,8 +113,6 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 					<strong>All fields below here are optional</strong>
 				</td>
 			</tr>
-<?	} else { ?>
-			<input type="hidden" name="id<?=$i?>" value="<?=$N['ID']?>" />
 <?	} ?>
 			<tr>
 				<td class="label"><strong>One of these artists</strong></td>
@@ -107,7 +127,7 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 				<td class="label"><strong>One of these users</strong></td>
 				<td>
 					<textarea name="users<?=$i?>" style="width: 100%;" rows="5"><?=display_str($Usernames)?></textarea>
-					<p class="min_padding">Comma-separated list of usernames</em></p>
+					<p class="min_padding">Comma-separated list of usernames</p>
 				</td>
 			</tr>
 			<tr>
@@ -186,14 +206,11 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 			</tr>
 			<tr>
 				<td colspan="2" class="center">
-					<input type="submit" value="<?=(($i > $NumFilters) ? 'Create filter' : 'Update filter')?>" />
+					<input type="submit" value="<?=($NewFilter ? 'Create filter' : 'Update filter')?>" />
 				</td>
 			</tr>
 		</table>
 	</form>
-<?	if ($i == $NumFilters) { ?>
-	<br /><br />
-<?	}
-} ?>
+<? } ?>
 </div>
 <? View::show_footer(); ?>

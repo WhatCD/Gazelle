@@ -1,44 +1,20 @@
-<?
-
-if (!isset($_GET['name'])) {
-	if (!isset($Err)) {
-		error(404);
-	}
-} else {
-	$Name = false;
-	foreach ($Stylesheets as $Stylesheet) {
-		if ($Stylesheet["Name"] === $_GET['name'])
-			$Name = $_GET['name'];
-	}
-	if (!$Name) {
-		error(404);
-	}
-	if (isset($_GET['format']) && $_GET['format'] === "data") {
-		global $Cache;
-		$ImageData = $Cache->get_value("cssgallery_".$Name);
-		if (!empty($ImageData)) {
-			echo json_encode(array('data' => $ImageData, 'status' => "0"));
-			die();
-		} else {
-			echo json_encode(array('status' => "-1"));
-			die();
-		}
-	} else {
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="overflow: hidden !important; margin: 0 !important; padding: 0 !important;">
 	<head>
 		<title>Stylesheet Gallery</title>
-		<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge" />
+		<meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link href="<? echo STATIC_SERVER; ?>styles/global.css?v=<?=filemtime(STATIC_SERVER.'styles/global.css')?>" rel="stylesheet" type="text/css" />
-		<link href="<? echo STATIC_SERVER; ?>styles/<?= $Name ?>/style.css?v=<?=filemtime(STATIC_SERVER.'styles/'.$Name.'/style.css')?>" title="<?= $Name ?>" rel="stylesheet" type="text/css" media="screen" />
-<?		if (isset($_GET['save']) && $_GET['save'] === 'true' && check_perms('admin_clear_cache')) { ?>
-		<script src="<? echo STATIC_SERVER; ?>functions/jquery.js?v=<?=filemtime(STATIC_SERVER.'functions/jquery.js')?>"></script>
-		<script src="<? echo STATIC_SERVER; ?>functions/stylesheetgallery.js?v=<?=filemtime(STATIC_SERVER.'functions/stylesheetgallery.js')?>"></script>
-<?		} ?>
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<link type="text/css" rel="stylesheet" href="../global.css" />
+		<style>
+			html, body {
+				width: 1200px !important;
+				height: 1000px !important;
+				overflow: hidden !important;
+			}
+		</style>
 	</head>
-	<body id="user" style="overflow: hidden !important; margin: 0 !important; padding: 0 !important; position: absolute !important;" stylesheet="<?= $Name ?>">
+	<body id="user" style="overflow: hidden !important; margin: 0 !important; padding: 0 !important; position: absolute !important;">
 		<div id="wrapper">
 			<h1 class="hidden">Gazelle</h1>
 			<div id="header">
@@ -110,38 +86,39 @@ if (!isset($_GET['name'])) {
 							<span class="hidden">Artist: </span>
 							<form class="search_form" name="artists" action="" method="get">
 								<script type="text/javascript" src="static/functions/autocomplete.js?v=1362029969"></script>
-								<input id="artistsearch" value="Artists" type="text" name="artistname" size="17" />
+								<input id="artistsearch" value="Artists" type="text" name="artistname" size="17"/>
 								<ul id="artistcomplete" style="visibility: hidden;"><li/></ul>
 							</form>
 						</li>
 						<li id="searchbar_requests">
 							<span class="hidden">Requests: </span>
 							<form class="search_form" name="requests" action="" method="get">
-								<input id="requestssearch" value="Requests" type="text" name="search" size="17" />
+								<input id="requestssearch" value="Requests" type="text" name="search" size="17"/>
 							</form>
 						</li>
 						<li id="searchbar_forums">
 							<span class="hidden">Forums: </span>
 							<form class="search_form" name="forums" action="" method="get">
 								<input value="search" type="hidden" name="action" />
-								<input id="forumssearch" value="Forums" type="text" name="search" size="17" />
+								<input id="forumssearch" value="Forums" type="text" name="search" size="17"/>
 							</form>
 						</li>
 						<li id="searchbar_log">
 							<span class="hidden">Log: </span>
 							<form class="search_form" name="log" action="" method="get">
-								<input id="logsearch" value="Log" type="text" name="search" size="17" />
+								<input id="logsearch" value="Log" type="text" name="search" size="17"/>
 							</form>
 						</li>
 						<li id="searchbar_users">
 							<span class="hidden">Users: </span>
 							<form class="search_form" name="users" action="" method="get">
 								<input type="hidden" name="action" value="search" />
-								<input id="userssearch" value="Users" type="text" name="search" size="20" />
+								<input id="userssearch" value="Users" type="text" name="search" size="20"/>
 							</form>
 						</li>
 					</ul>
 				</div>
+
 			</div>
 			<div id="content">
 				<div class="thin">
@@ -171,7 +148,7 @@ if (!isset($_GET['name'])) {
 										<span title="Jump to last read" class="last_read" style="float: left;">
 											<a href="#"></a>
 										</span>
-										<span class="last_poster" style="float: right;">by <a href="#">Rippy</a> <span title="Aug 14 1992, 18:35" class="time">Just now</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">Ananke</a> <span title="Aug 14 1992, 18:35" class="time">Just now</span></span>
 									</td>
 									<td>385</td>
 									<td>95,197</td>
@@ -180,7 +157,7 @@ if (!isset($_GET['name'])) {
 									<td title="Read" class="read"></td>
 									<td>
 										<h4 class="min_padding">
-											<a href="#"><?=SITE_NAME?></a>
+											<a href="#">What.CD</a>
 										</h4>
 									</td>
 									<td>
@@ -196,7 +173,8 @@ if (!isset($_GET['name'])) {
 						</table>
 						<h3>Community</h3>
 						<table class="forum_index">
-							<tbody><tr class="colhead">
+							<tbody>
+								<tr class="colhead">
 									<td style="width: 2%;"></td>
 									<td style="width: 25%;">Forum</td>
 									<td>Last post</td>
@@ -315,13 +293,13 @@ if (!isset($_GET['name'])) {
 										<span title="Jump to last read" class="last_read" style="float: left;">
 											<a href="#"></a>
 										</span>
-										<span class="last_poster" style="float: right;">by <a href="#">Ananke</a> <span class="time">1 min ago</span></span>
+										<span class="last_poster" style="float: right;">by <a href="#">tuutiki</a> <span class="time">1 min ago</span></span>
 									</td>
 									<td>22,564</td>
 									<td>608,253</td>
 								</tr>
 								<tr class="rowa">
-									<td title="Unead" class="unread"></td>
+									<td title="Unread" class="unread"></td>
 									<td>
 										<h4 class="min_padding">
 											<a href="#">Vanity House</a>
@@ -341,8 +319,12 @@ if (!isset($_GET['name'])) {
 					</div>
 				</div>
 			</div>
+			<div id="extra1"><span></span></div>
+			<div id="extra2"><span></span></div>
+			<div id="extra3"><span></span></div>
+			<div id="extra4"><span></span></div>
+			<div id="extra5"><span></span></div>
+			<div id="extra6"><span></span></div>
+		</div>
 	</body>
 </html>
-<?
-	}
-}

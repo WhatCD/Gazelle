@@ -12,7 +12,10 @@ $Val->SetFields('title', '1','string','The title must be between 3 and 100 chara
 $Err = $Val->ValidateForm($_POST);
 
 if (!$Err) {
-	$DB->query("SELECT ID FROM wiki_articles WHERE Title='$P[title]'");
+	$DB->query("
+		SELECT ID
+		FROM wiki_articles
+		WHERE Title='$P[title]'");
 	if ($DB->record_count() > 0) {
 		list($ID) = $DB->next_record();
 		$Err = 'An article with that name already exists <a href="wiki.php?action=article&amp;id='.$ID.'">here</a>.';
@@ -39,29 +42,36 @@ if (check_perms('admin_manage_wiki')) {
 		$Edit = $Read; //Human error fix.
 	}
 } else {
-	$Read=100;
-	$Edit=100;
+	$Read = 100;
+	$Edit = 100;
 }
 
-$DB->query("INSERT INTO wiki_articles
-	(Revision, Title, Body, MinClassRead, MinClassEdit, Date, Author) VALUES
-	('1', '$P[title]', '$P[body]', '$Read', '$Edit', '".sqltime()."', '$LoggedUser[ID]')");
+$DB->query("
+	INSERT INTO wiki_articles
+		(Revision, Title, Body, MinClassRead, MinClassEdit, Date, Author)
+	VALUES
+		('1', '$P[title]', '$P[body]', '$Read', '$Edit', '".sqltime()."', '$LoggedUser[ID]')");
 
 $ArticleID = $DB->inserted_id();
 
-//$NewAlias = $Alias->convert($_POST['alias']);
-//if ($NewAlias != '') {
-//	$DB->query("INSERT INTO wiki_aliases (Alias, ArticleID) VALUES ('$NewAlias', '$ArticleID')");
-//}
-
+/*
+$NewAlias = $Alias->convert($_POST['alias']);
+if ($NewAlias != '') {
+	$DB->query("
+		INSERT INTO wiki_aliases (Alias, ArticleID)
+		VALUES ('$NewAlias', '$ArticleID')");
+}
+*/
 $TitleAlias = $Alias->convert($_POST['title']);
 if ($TitleAlias != $Alias) {
-	$DB->query("INSERT INTO wiki_aliases (Alias, ArticleID) VALUES ('".db_string($TitleAlias)."', '$ArticleID')");
+	$DB->query("
+		INSERT INTO wiki_aliases (Alias, ArticleID)
+		VALUES ('".db_string($TitleAlias)."', '$ArticleID')");
 }
 
 $Alias->flush();
 
-Misc::write_log("Wiki article ".$ArticleID." (".$_POST['title'].") was created by ".$LoggedUser['Username']);
+Misc::write_log("Wiki article $ArticleID (".$_POST['title'].") was created by ".$LoggedUser['Username']);
 
 header('Location: wiki.php?action=article&id='.$ArticleID);
 

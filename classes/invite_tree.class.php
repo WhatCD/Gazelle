@@ -24,7 +24,10 @@ class INVITE_TREE {
 ?>
 		<div class="invitetree pad">
 <?
-		$DB->query("SELECT TreePosition, TreeID, TreeLevel FROM invite_tree WHERE UserID=$UserID");
+		$DB->query("
+			SELECT TreePosition, TreeID, TreeLevel
+			FROM invite_tree
+			WHERE UserID = $UserID");
 		list($TreePosition, $TreeID, $TreeLevel) = $DB->next_record(MYSQLI_NUM, false);
 
 		if (!$TreeID) {
@@ -33,9 +36,9 @@ class INVITE_TREE {
 		$DB->query("
 			SELECT TreePosition
 			FROM invite_tree
-			WHERE TreeID=$TreeID
-				AND TreeLevel=$TreeLevel
-				AND TreePosition>$TreePosition
+			WHERE TreeID = $TreeID
+				AND TreeLevel = $TreeLevel
+				AND TreePosition > $TreePosition
 			ORDER BY TreePosition ASC
 			LIMIT 1");
 		if ($DB->record_count()) {

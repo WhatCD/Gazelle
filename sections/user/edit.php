@@ -59,7 +59,7 @@ if ($SiteOptions) {
 	$SiteOptions = array();
 }
 
-View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery,preview_paranoia');
+View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery,preview_paranoia,bbcode');
 
 
 
@@ -69,14 +69,13 @@ $DB->query("
 	WHERE ID = '$UserID'");
 $LastFMUsername = '';
 list($LastFMUsername) = $DB->next_record();
-
 echo $Val->GenerateJS('userform');
 ?>
 <div class="thin">
 	<div class="header">
 		<h2><?=Users::format_username($UserID, false, false, false)?> &gt; Settings</h2>
 	</div>
-	<form class="edit_form" name="user" id="userform" action="" method="post" onsubmit="return formVal();" autocomplete="off">
+	<form class="edit_form" name="user" id="userform" action="" method="post" onsubmit="return userform_submit();" autocomplete="off">
 		<div>
 			<input type="hidden" name="action" value="takeedit" />
 			<input type="hidden" name="userid" value="<?=$UserID?>" />
@@ -93,7 +92,7 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<select name="stylesheet" id="stylesheet">
 <?	foreach ($Stylesheets as $Style) { ?>
-						<option value="<?=$Style['ID']?>"<? if ($Style['ID'] == $StyleID) { ?> selected="selected"<? } ?>><?=$Style['ProperName']?></option>
+						<option value="<?=($Style['ID'])?>"<? if ($Style['ID'] == $StyleID) { ?> selected="selected"<? } ?>><?=($Style['ProperName'])?></option>
 <?	} ?>
 					</select>&nbsp;&nbsp;
 					<a href="#" id="toggle_css_gallery" class="brackets">Show gallery</a>
@@ -102,14 +101,28 @@ echo $Val->GenerateJS('userform');
 					<div id="css_gallery">
 <?	foreach ($Stylesheets as $Style) { ?>
 						<div class="preview_wrapper">
-							<div class="preview_image" name="<?=$Style['Name']?>" style="background: url('<?=STATIC_SERVER.'thumb_'.$Style['Name'].'.png'?>') no-repeat scroll center top #CCC;"></div>
+							<div class="preview_image" name="<?=($Style['Name'])?>" style="background: url('<?=(STATIC_SERVER.'stylespreview/thumb_'.$Style['Name'].'.png')?>') no-repeat scroll center top #CCC;"></div>
 							<p class="preview_name"><input type="radio" name="stylesheet_gallery" value="<?=($Style['ID'])?>" /> <?=($Style['ProperName'])?></p>
 						</div>
 <?	} ?>
 					</div>
 				</td>
 			</tr>
-<? if (check_perms('site_advanced_search')) { ?>
+			<tr>
+				<td class="label"><strong>OpenDyslexic</strong></td>
+				<td>
+					<input type="checkbox" name="useopendyslexic" id="useopendyslexic"<? if (!empty($SiteOptions['UseOpenDyslexic'])) { ?> checked="checked"<? } ?> />
+					<label for="useopendyslexic">Use the OpenDyslexic font</label>
+					<p>Read about OpenDyslexic, a <span title="Creative Commons Attribution 3.0 Unported License">CC-BY 3.0</span> licensed font designed for users with dyslexia, at <a href="http://opendyslexic.org" target="_blank">http://opendyslexic.org/</a>.</p>
+					<p>This is an experimental feature, and some stylesheets will have display issues.</p>
+				</td>
+			</tr>
+			<tr class="colhead_dark">
+				<td colspan="2">
+					<strong>Torrent options</strong>
+				</td>
+			</tr>
+<?	if (check_perms('site_advanced_search')) { ?>
 			<tr>
 				<td class="label"><strong>Default search type</strong></td>
 				<td>
@@ -119,7 +132,7 @@ echo $Val->GenerateJS('userform');
 					</select>
 				</td>
 			</tr>
-<? } ?>
+<?	} ?>
 			<tr>
 				<td class="label"><strong>Torrent grouping</strong></td>
 				<td>
@@ -147,16 +160,6 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<input type="checkbox" name="showsnatched" id="showsnatched" <? if (!empty($SiteOptions['ShowSnatched'])) { ?>checked="checked" <? } ?>/>
 					<label for="showsnatched">Display "Snatched!" next to snatched torrents</label>
-				</td>
-			</tr>
-			<tr>
-				<td class="label"><strong>Forum posts per page</strong></td>
-				<td>
-					<select name="postsperpage" id="postsperpage">
-						<option value="25"<? if ($SiteOptions['PostsPerPage'] == 25) { ?> selected="selected"<? } ?>>25 (Default)</option>
-						<option value="50"<? if ($SiteOptions['PostsPerPage'] == 50) { ?> selected="selected"<? } ?>>50</option>
-						<option value="100"<? if ($SiteOptions['PostsPerPage'] == 100) { ?> selected="selected"<? } ?>>100</option>
-					</select>
 				</td>
 			</tr>
 			<tr>
@@ -221,7 +224,7 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<ul class="options_list nobullet">
 						<li>
-							<input type="checkbox" name="showtfilter" id="showtfilter"<?=!isset($SiteOptions['ShowTorFilter']) || $SiteOptions['ShowTorFilter'] ? ' checked="checked"' : ''?>/>
+							<input type="checkbox" name="showtfilter" id="showtfilter"<?=(!isset($SiteOptions['ShowTorFilter']) || $SiteOptions['ShowTorFilter'] ? ' checked="checked"' : '')?>/>
 							<label for="showtfilter">Show filter</label>
 						</li>
 						<li>
@@ -232,17 +235,32 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Subscription</strong></td>
+				<td class="label"><strong>Voting links</strong></td>
 				<td>
-					<input type="checkbox" name="autosubscribe" id="autosubscribe"<? if (!empty($SiteOptions['AutoSubscribe'])) { ?> checked="checked"<? } ?> />
-					<label for="autosubscribe">Subscribe to topics when posting</label>
+					<input type="checkbox" name="novotelinks" id="novotelinks" <? if (!empty($SiteOptions['NoVoteLinks'])) { ?>checked="checked" <? } ?>/>
+					<label for="novotelinks">Disable voting links on artist pages, collages, and snatched lists</label>
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Quote notifications</strong></td>
+				<td class="label"><strong>Download torrents as text files</strong></td>
 				<td>
-					<input type="checkbox" name="notifyquotes" id="notifyquotes"<? if (!empty($SiteOptions['NotifyOnQuote'])) { ?> checked="checked"<? } ?> />
-					<label for="notifyquotes">Notifications when someone quotes you in the forum</label>
+					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked" <? } ?>/>
+					<label for="downloadalt">For users whose ISP blocks the downloading of torrent files</label>
+				</td>
+			</tr>
+			<tr class="colhead_dark">
+				<td colspan="2">
+					<strong>Community options</strong>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><strong>Forum posts per page</strong></td>
+				<td>
+					<select name="postsperpage" id="postsperpage">
+						<option value="25"<? if ($SiteOptions['PostsPerPage'] == 25) { ?> selected="selected"<? } ?>>25 (Default)</option>
+						<option value="50"<? if ($SiteOptions['PostsPerPage'] == 50) { ?> selected="selected"<? } ?>>50</option>
+						<option value="100"<? if ($SiteOptions['PostsPerPage'] == 100) { ?> selected="selected"<? } ?>>100</option>
+					</select>
 				</td>
 			</tr>
 			<tr>
@@ -267,15 +285,6 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>OpenDyslexic</strong></td>
-				<td>
-					<input type="checkbox" name="useopendyslexic" id="useopendyslexic"<? if (!empty($SiteOptions['UseOpenDyslexic'])) { ?> checked="checked"<? } ?> />
-					<label for="useopendyslexic">Use the OpenDyslexic font</label>
-					<p>Read about OpenDyslexic, a <span title="Creative Commons Attribution 3.0 Unported License">CC-BY 3.0</span> licensed font designed for users with dyslexia, at <a href="http://opendyslexic.org" target="_blank">http://opendyslexic.org/</a>.</p>
-					<p>This is an experimental feature, and some stylesheets will have display issues.</p>
-				</td>
-			</tr>
-			<tr>
 				<td class="label"><strong>Avatars</strong></td>
 				<td>
 					<select name="disableavatars" id="disableavatars" onclick="ToggleIdenticons();">
@@ -295,7 +304,6 @@ echo $Val->GenerateJS('userform');
 					</select>
 				</td>
 			</tr>
-<!---->
 			<tr>
 				<td class="label"><strong>Auto-save text</strong></td>
 				<td>
@@ -303,18 +311,23 @@ echo $Val->GenerateJS('userform');
 					<label for="disableautosave">Disable reply text from being saved automatically when changing pages in a thread</label>
 				</td>
 			</tr>
-			<tr>
-				<td class="label"><strong>Voting links</strong></td>
-				<td>
-					<input type="checkbox" name="novotelinks" id="novotelinks" <? if (!empty($SiteOptions['NoVoteLinks'])) { ?>checked="checked" <? } ?>/>
-					<label for="novotelinks">Disable voting links on artist pages, collages, and snatched lists</label>
+			<tr class="colhead_dark">
+				<td colspan="2">
+					<strong>Notifications</strong>
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Download torrents as text files</strong></td>
+				<td class="label"><strong>Subscriptions</strong></td>
 				<td>
-					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked" <? } ?>/>
-					<label for="downloadalt">For users whose ISP blocks the downloading of torrent files</label>
+					<input type="checkbox" name="autosubscribe" id="autosubscribe"<? if (!empty($SiteOptions['AutoSubscribe'])) { ?> checked="checked"<? } ?> />
+					<label for="autosubscribe">Subscribe to topics when posting</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="label"><strong>Quote notifications</strong></td>
+				<td>
+					<input type="checkbox" name="notifyquotes" id="notifyquotes"<? if (!empty($SiteOptions['NotifyOnQuote'])) { ?> checked="checked"<? } ?> />
+					<label for="notifyquotes">Notifications when someone quotes you in the forum</label>
 				</td>
 			</tr>
 			<tr>
@@ -370,7 +383,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label">&nbsp;</td>
 				<td>
 					<p><span class="warning">Note: Paranoia has nothing to do with your security on this site; the only thing affected by this setting is other users' ability to see your site activity and taste in music.</span></p>
-					<p>Select the elements <strong>you want to show</strong> on your profile. For example, if you tick "Show count" for "Snatched", users will be able to see how many torrents you have snatched. If you tick "Show list", they will be able to see the full list of torrents you've snatched.</p>
+					<p>Select the elements <strong>you want to show</strong> on your profile. For example, if you check "Show count" for "Snatched", users will be able to see how many torrents you have snatched. If you check "Show list", they will be able to see the full list of torrents you have snatched.</p>
 					<p><span class="warning">Some information will still be available in the site log.</span></p>
 				</td>
 			</tr>
@@ -558,7 +571,7 @@ list($ArtistsAdded) = $DB->next_record();
 			</tr>
 			<tr>
 				<td colspan="2" class="right">
-					<input type="button" value="Save Profile" onclick="userform_submit();"/>
+					<input type="submit" value="Save Profile" />
 				</td>
 			</tr>
 		</table>

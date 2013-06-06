@@ -177,19 +177,28 @@ class Tools {
 			$Cache->delete_value('user_info_heavy_'.$UserID);
 			$Cache->delete_value('user_stats_'.$UserID);
 
-			$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID' AND Active = 1");
+			$DB->query("
+				SELECT SessionID
+				FROM users_sessions
+				WHERE UserID='$UserID'
+					AND Active = 1");
 			while (list($SessionID) = $DB->next_record()) {
 				$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 			}
 			$Cache->delete_value('users_sessions_'.$UserID);
 
 
-			$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
+			$DB->query("
+				DELETE FROM users_sessions
+				WHERE UserID='$UserID'");
 
 		}
 
 		// Remove the users from the tracker.
-		$DB->query("SELECT torrent_pass FROM users_main WHERE ID in (".implode(', ',$UserIDs).')');
+		$DB->query("
+			SELECT torrent_pass
+			FROM users_main
+			WHERE ID in (".implode(', ',$UserIDs).')');
 		$PassKeys = $DB->collect('torrent_pass');
 		$Concat = '';
 		foreach ($PassKeys as $PassKey) {

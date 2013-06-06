@@ -55,9 +55,12 @@ if ($Search != '') {
 	$SQL .= "%' ";
 }
 
-$SQL.=" ORDER BY $Order $Way LIMIT $Limit ";
+$SQL.= "
+	ORDER BY $Order $Way
+	LIMIT $Limit ";
 $RS = $DB->query($SQL);
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query("
+	SELECT FOUND_ROWS()");
 list($NumResults) = $DB->next_record();
 
 View::show_header('Search articles');

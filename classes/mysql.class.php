@@ -20,7 +20,10 @@ $DB = NEW DB_MYSQL;
 
 * Making a query
 
-$DB->query("SELECT * FROM table...");
+$DB->query("
+	SELECT *
+	FROM table...");
+
 	Is functionally equivalent to using mysqli_query("SELECT * FROM table...")
 	Stores the result set in $this->QueryID
 	Returns the result set, so you can save it for later (see set_query_id())
@@ -48,13 +51,13 @@ db_string($str);
 
 * The conventional way of retrieving a row from a result set is as follows:
 
-list($All,$Columns,$That,$You,$Select) = $DB->next_record();
+list($All, $Columns, $That, $You, $Select) = $DB->next_record();
 -----
 
 * This is how you loop over the result set:
 
-while (list($All,$Columns,$That,$You,$Select) = $DB->next_record()) {
-	echo "Do stuff with ".$All." of the ".$Columns.$That.$You.$Select;
+while (list($All, $Columns, $That, $You, $Select) = $DB->next_record()) {
+	echo "Do stuff with $All of the ".$Columns.$That.$You.$Select;
 }
 -----
 
@@ -96,8 +99,12 @@ set_query_id($ResultSet)
 
 	Example:
 
-	$FoodRS = $DB->query("SELECT * FROM food");
-	$DB->query("SELECT * FROM drink");
+	$FoodRS = $DB->query("
+			SELECT *
+			FROM food");
+	$DB->query("
+		SELECT *
+		FROM drink");
 	$Drinks = $DB->next_record();
 	$DB->set_query_id($FoodRS);
 	$Food = $DB->next_record();

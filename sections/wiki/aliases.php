@@ -46,13 +46,17 @@ View::show_header($Title." Aliases");
 
 			</tr>
 <?
-$DB->query("SELECT Alias FROM wiki_aliases WHERE ArticleID='$ArticleID'");
+$DB->query("
+	SELECT Alias
+	FROM wiki_aliases
+	WHERE ArticleID = '$ArticleID'");
 while (list($Revision, $Title, $AuthorID, $AuthorName, $Date) = $DB->next_record()) { ?>
 			<tr>
 				<td><?=$Revision?></td>
 				<td><?=$Title?></td>
 			</tr>
-<? } ?>
+<?
+} ?>
 			<tr>
 				<td class="center" colspan="6">
 					<input type="submit" value="Compare" />

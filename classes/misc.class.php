@@ -108,7 +108,10 @@ class Misc {
 			$Cache->cache_value('inbox_new_'.$ID, $UnRead);
 		}
 
-		$DB->query("SELECT Username FROM users_main WHERE ID = '$FromID'");
+		$DB->query("
+			SELECT Username
+			FROM users_main
+			WHERE ID = '$FromID'");
 		list($SenderName) = $DB->next_record();
 		foreach ($ToID as $ID) {
 			$DB->query("
@@ -141,7 +144,10 @@ class Misc {
 			return -1;
 		}
 
-		$DB->query("SELECT Username FROM users_main WHERE ID=".$AuthorID);
+		$DB->query("
+			SELECT Username
+			FROM users_main
+			WHERE ID=".$AuthorID);
 		if ($DB->record_count() < 1) {
 			return -2;
 		}
