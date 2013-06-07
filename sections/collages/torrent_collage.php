@@ -106,7 +106,13 @@ foreach ($TorrentList as $GroupID => $Group) {
 					<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 				</td>
 				<td colspan="5">
-					<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
+					<strong><?=$DisplayName?></strong>
+					<? if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
+						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent',$GroupID,'Bookmark');return false;\">Unbookmark</a>";
+					} else {
+						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent',$GroupID,'Unbookmark');return false;\">Bookmark</a>";
+					} ?>
+					<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
 					<div class="tags"><?=$TorrentTags->format()?></div>
 				</td>
 			</tr>

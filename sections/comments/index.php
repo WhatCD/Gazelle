@@ -56,6 +56,9 @@ switch ($action) {
 	case 'artists':
 		require (SERVER_ROOT.'/sections/comments/artistcomments.php');
 		break;
+	case 'collages':
+		require (SERVER_ROOT.'/sections/comments/collagecomments.php');
+		break;
 	case 'torrents':
 	case 'my_torrents':
 	default:

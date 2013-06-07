@@ -62,14 +62,14 @@ View::show_header($Title,'wiki,bbcode');
 			<form class="search_form" name="articles" action="wiki.php" method="get">
 				<input type="hidden" name="action" value="search" />
 				<input
-					onfocus="if (this.value == 'Search Articles') this.value='';"
-					onblur="if (this.value == '') this.value='Search Articles';"
-					value="Search Articles" type="text" name="search" size="20"
+					onfocus="if (this.value == 'Search articles') this.value='';"
+					onblur="if (this.value == '') this.value='Search articles';"
+					value="Search articles" type="text" name="search" size="20"
 				/>
 				<input value="Search" type="submit" class="hidden" />
 			</form>
 			<br style="line-height: 10px;" />
-			<strong><a href="wiki.php?action=browse" class="brackets">Browse articles</a></strong>
+			<a href="wiki.php?action=browse" class="brackets">Browse articles</a>
 		</div>
 		</div>
 		<div class="box">
@@ -121,9 +121,9 @@ View::show_header($Title,'wiki,bbcode');
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="article" value="<?=$ArticleID?>" />
 					<input
-						onfocus="if (this.value == 'Add Alias') this.value='';"
-						onblur="if (this.value == '') this.value='Add Alias';"
-						value="Add Alias" type="text" name="alias" size="20"
+						onfocus="if (this.value == 'Add alias') this.value='';"
+						onblur="if (this.value == '') this.value='Add alias';"
+						value="Add alias" type="text" name="alias" size="20"
 					/>
 					<input type="submit" value="+" />
 				</form>

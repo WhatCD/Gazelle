@@ -12,7 +12,7 @@ if (!empty($_REQUEST['action'])) {
 	$MyTorrents = false;
 }
 
-$OtherLink = '<a href="comments.php?action=requests" class="brackets">Request comments</a> <a href="comments.php?action=artists" class="brackets">Artist comments</a><br/>';
+$OtherLink = '<a href="comments.php?action=artists" class="brackets">Artist comments</a> <a href="comments.php?action=collages" class="brackets">Collage comments</a> <a href="comments.php?action=requests" class="brackets">Request comments</a><br/>';
 
 if ($MyTorrents) {
 	$Conditions = "WHERE t.UserID = $UserID AND tc.AuthorID != t.UserID AND tc.AddedTime > t.Time";

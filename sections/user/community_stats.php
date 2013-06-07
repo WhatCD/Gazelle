@@ -15,6 +15,9 @@ list($NumComments) = $DB->next_record();
 $DB->query("SELECT COUNT(ID) FROM artist_comments WHERE AuthorID='$UserID'");
 list($NumArtistComments) = $DB->next_record();
 
+$DB->query("SELECT COUNT(ID) FROM collages_comments WHERE UserID='$UserID'");
+list($NumCollageComments) = $DB->next_record();
+
 $DB->query("SELECT COUNT(ID) FROM requests_comments WHERE AuthorID='$UserID'");
 list($NumRequestComments) = $DB->next_record();
 
@@ -60,6 +63,11 @@ list($PerfectFLACs) = $DB->next_record();
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Artist comments: <?=number_format($NumArtistComments)?>
 <?				if ($Override = check_paranoia_here('torrentcomments')) { ?>
 					<a href="comments.php?id=<?=$UserID?>&amp;action=artists" class="brackets<?=($Override === 2 ? ' paranoia_override' : '')?>" title="View">View</a>
+<?				} ?>
+				</li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Collage comments: <?=number_format($NumCollageComments)?>
+<?				if ($Override = check_paranoia_here('torrentcomments')) { ?>
+					<a href="comments.php?id=<?=$UserID?>&amp;action=collages" class="brackets<?=($Override === 2 ? ' paranoia_override' : '')?>" title="View">View</a>
 <?				} ?>
 				</li>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Request comments: <?=number_format($NumRequestComments)?>

@@ -1,14 +1,14 @@
 (function($) {
-	
+
 	$(document).ready(function () {
 		// If the custom stylesheet field is empty, select the current style from the previews
-		if(!$('input#styleurl').val()){
-			var radiobutton = $('input[name="stylesheet_gallery"][value="'+$('select#stylesheet').val()+'"]');
+		if (!$('input#styleurl').val()){
+			var radiobutton = $('input[name="stylesheet_gallery"][value="' + $('select#stylesheet').val() + '"]');
 			radiobutton.click();
 			$('.preview_wrapper').removeClass('selected');
 			radiobutton.parent().parent().addClass('selected');
 		}
-		// If an overlay is clicked, select the right item in the dropdown and clear the custom css field
+		// If an overlay is clicked, select the right item in the drop-down and clear the custom CSS field
 		$('div.preview_image').click(function() {
 			$('.preview_wrapper').removeClass('selected');
 			var parent = $(this).parent();
@@ -22,9 +22,9 @@
 		$('input[name="stylesheet_gallery"]').change(function() {
 			$(this).parent().parent().find('div.preview_image').click();
 		})
-		// If the dropdown is changed, select the appropriate item in gallery, clear the custom CSS field
+		// If the drop-down is changed, select the appropriate item in gallery, clear the custom CSS field
 		$('select#stylesheet').change(function() {
-			var radiobutton = $('input[name="stylesheet_gallery"][value="'+$(this).val()+'"]');
+			var radiobutton = $('input[name="stylesheet_gallery"][value="' + $(this).val() + '"]');
 			radiobutton.prop('checked', true);
 			$('.preview_wrapper').removeClass('selected');
 			radiobutton.parent().parent().addClass('selected');
@@ -37,7 +37,7 @@
 			})
 			$('.preview_wrapper').removeClass('selected');
 		})
-		// If the input is empty, select appropriate gallery item again by the dropdown
+		// If the input is empty, select appropriate gallery item again by the drop-down
 		$('input#styleurl').keyup(function() {
 			if (!$(this).val()){
 				$('select#stylesheet').change();
