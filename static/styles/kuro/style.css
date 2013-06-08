@@ -475,6 +475,14 @@ p.min_padding {
 	padding: 1em;
 }
 
+.sidebar .pad {
+	padding: 4px;
+}
+
+#index .sidebar .pad {
+	padding: 9px;
+}
+
 .vertical_space {
 	margin-bottom: 10px;
 }

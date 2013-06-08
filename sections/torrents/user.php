@@ -502,24 +502,25 @@ foreach ($Categories as $CatKey => $CatName) {
 				<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 			</td>
 			<td class="big_info">
-<? if ($LoggedUser['CoverArt']) : ?>
+<?	if ($LoggedUser['CoverArt']) : ?>
 				<div class="group_image float_left clear">
 					<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 				</div>
-<? endif; ?>
+<?	endif; ?>
 				<div class="group_info clear">
 					<span class="torrent_links_block">
 						[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 					</span>
-					<?=$DisplayName?> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
+					<? echo "$DisplayName\n"; ?>
+<?					Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']); ?>
 					<div class="tags"><?=$TorrentTags->format('torrents.php?type='.$Action.'&amp;userid='.$UserID.'&amp;tags=')?></div>
 				</div>
 			</td>
 			<td class="nobr"><?=time_diff($Time,1)?></td>
 			<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
 			<td><?=number_format($Torrent['Snatched'])?></td>
-			<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : ''?>><?=number_format($Torrent['Seeders'])?></td>
+			<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
 			<td><?=number_format($Torrent['Leechers'])?></td>
 		</tr>
 <?		}?>

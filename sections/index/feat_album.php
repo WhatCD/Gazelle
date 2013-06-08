@@ -22,7 +22,7 @@ if (is_number($FeaturedAlbum['GroupID'])) {
 			<div class="center pad">
 				<?=Artists::display_artists($Artists, true, true)?><a href="torrents.php?id=<?=$FeaturedAlbum['GroupID']?>"><?=$FeaturedAlbum['Name']?></a>
 			</div>
-			<div class="center">
+			<div class="center pad">
 				<a href="torrents.php?id=<?=$FeaturedAlbum['GroupID']?>" title="<?=Artists::display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>">
 					<img src="<?=ImageTools::process($FeaturedAlbum['WikiImage'], true)?>" alt="<?=Artists::display_artists($Artists, false, false)?> - <?=$FeaturedAlbum['Name']?>" width="100%" />
 				</a>

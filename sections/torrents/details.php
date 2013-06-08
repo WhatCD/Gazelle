@@ -161,9 +161,9 @@ View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend,cover_
 $Index = 0;
 ?>
 <div id="covers">
-<div id="cover_div_<?=$Index?>">
+<div id="cover_div_<?=$Index?>" class="pad">
 <?	if ($WikiImage != '') { ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=ImageTools::process($WikiImage)?>',220);" /></p>
+			<p align="center"><img width="100%" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=ImageTools::process($WikiImage)?>',220);" /></p>
 <?	} else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID - 1]?>" alt="<?=$Categories[$GroupCategoryID - 1]?>" title="<?=$Categories[$GroupCategoryID - 1]?>" width="220" height="220" border="0" /></p>
 <?
@@ -174,7 +174,7 @@ $Index++;
 <?			foreach ($CoverArt as $Cover) {
 				list($ImageID, $Image, $Summary, $AddedBy) = $Cover;
 				?>
-					<div id="cover_div_<?=$Index?>" <?=(empty($LoggedUser['ShowExtraCovers']) ? 'style="display: none;"' : '')?>>
+					<div id="cover_div_<?=$Index?>" class="pad" <?=(empty($LoggedUser['ShowExtraCovers']) ? 'style="display: none;"' : '')?>>
 				<p align="center">
 <?					if (empty($LoggedUser['ShowExtraCovers'])) {
 						$Src = 'src="" data-gazelle-temp-src="' . ImageTools::process($Image, true) . '"';
@@ -182,7 +182,7 @@ $Index++;
 						$Src = 'src="' . ImageTools::process($Image, true) . '"';
 					}
 ?>
-					<img id="cover_<?=$Index?>" style="max-width: 220px;" <?=$Src?> alt="<?=$Summary?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>',220);" />
+					<img id="cover_<?=$Index?>" width="100%" <?=$Src?> alt="<?=$Summary?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>',220);" />
 				</p>
 				<ul class="stats nobullet">
 					<li>

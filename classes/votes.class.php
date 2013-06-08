@@ -11,11 +11,11 @@ class Votes {
 		if (!$LoggedUser['NoVoteLinks'] && check_perms('site_album_votes')) { ?>
 			<span class="votespan brackets" style="white-space: nowrap;">
 				Vote:
-				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>" title="Upvote">↑</a>
-				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote))?' hidden':'')?>" title="Upvoted">↑</span>
-				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote)?' hidden':'')?>" title="Downvote">↓</a>
-				<span class="voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up'|| empty($Vote))?' hidden':'')?>" title="Downvoted">↓</span>
-				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote)?' hidden':'')?>" title="Clear your vote">x</a>
+				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" title="Upvote">↑</a>
+				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote)) ? ' hidden' : '')?>" title="Upvoted">↑</span>
+				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" title="Downvote">↓</a>
+				<span class="voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up' || empty($Vote)) ? ' hidden' : '')?>" title="Downvoted">↓</span>
+				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote) ? ' hidden' : '')?>" title="Clear your vote">x</a>
 			</span>
 <?		}
 	}
@@ -63,7 +63,7 @@ class Votes {
 				FROM torrents_votes
 				WHERE GroupID = $GroupID");
 			if ($DB->record_count() == 0) {
-				$GroupVotes = array('Ups'=>0, 'Total'=>0);
+				$GroupVotes = array('Ups' => 0, 'Total' => 0);
 			} else {
 				$GroupVotes = $DB->next_record(MYSQLI_ASSOC, false);
 			}

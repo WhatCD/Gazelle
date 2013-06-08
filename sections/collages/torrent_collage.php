@@ -88,7 +88,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 	if ($GroupVanityHouse) {
 		$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
 	}
-	$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
+	$SnatchedGroupClass = ($GroupFlags['IsSnatched'] ? ' snatched_group' : '');
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start();
 
@@ -107,12 +107,14 @@ foreach ($TorrentList as $GroupID => $Group) {
 				</td>
 				<td colspan="5">
 					<strong><?=$DisplayName?></strong>
-					<? if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
+					<? // PHP start tag is indented for proper formatting of generated HTML
+					if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
 						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent',$GroupID,'Bookmark');return false;\">Unbookmark</a>";
 					} else {
 						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent',$GroupID,'Unbookmark');return false;\">Bookmark</a>";
-					} ?>
-					<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
+					}
+					echo "\n";
+					echo Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
 					<div class="tags"><?=$TorrentTags->format()?></div>
 				</td>
 			</tr>
@@ -131,15 +133,15 @@ foreach ($TorrentList as $GroupID => $Group) {
 			if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
-			$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
+			$SnatchedTorrentClass = ($Torrent['IsSnatched'] ? ' snatched_torrent' : '');
 
 			if ($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
 				$EditionID++;
 ?>
-	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
-		<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
-	</tr>
+			<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
+				<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
+			</tr>
 <?
 			}
 			$LastRemasterTitle = $Torrent['RemasterTitle'];
@@ -148,22 +150,22 @@ foreach ($TorrentList as $GroupID => $Group) {
 			$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 			$LastMedia = $Torrent['Media'];
 ?>
-<tr class="group_torrent torrent_row groupid_<?=$GroupID?> edition_<?=$EditionID?><?=$SnatchedTorrentClass . $SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
-		<td colspan="3">
-			<span class="brackets">
-				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+			<tr class="group_torrent torrent_row groupid_<?=$GroupID?> edition_<?=$EditionID?><?=$SnatchedTorrentClass . $SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
+				<td colspan="3">
+					<span class="brackets">
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?			if (Torrents::can_use_token($Torrent)) { ?>
-				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?			} ?>
-				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
-			</span>
-			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
-		</td>
-		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders']==0)?' class="r00"':''?>><?=number_format($Torrent['Seeders'])?></td>
-		<td><?=number_format($Torrent['Leechers'])?></td>
-	</tr>
+						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
+					</span>
+					&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
+				</td>
+				<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
+				<td><?=number_format($Torrent['Snatched'])?></td>
+				<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
+				<td><?=number_format($Torrent['Leechers'])?></td>
+			</tr>
 <?
 		}
 	} else {
@@ -183,33 +185,34 @@ foreach ($TorrentList as $GroupID => $Group) {
 		} elseif ($Torrent['PersonalFL']) {
 			$DisplayName .= ' ' . Format::torrent_label('Personal Freeleech!');
 		}
-		$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
+		$SnatchedTorrentClass = ($Torrent['IsSnatched'] ? ' snatched_torrent' : '');
 ?>
-	<tr class="torrent torrent_row<?=$SnatchedTorrentClass . $SnatchedGroupClass?>" id="group_<?=$GroupID?>">
-		<td></td>
-		<td class="center">
-			<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
-			</div>
-		</td>
-		<td>
-			<span class="brackets">
-				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+			<tr class="torrent torrent_row<?=$SnatchedTorrentClass . $SnatchedGroupClass?>" id="group_<?=$GroupID?>">
+				<td></td>
+				<td class="center">
+					<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
+					</div>
+				</td>
+				<td>
+					<span class="brackets">
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Torrent)) { ?>
-				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?>
-				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
-			</span>
-			<strong><?=$DisplayName?></strong> <?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
-			<div class="tags"><?=$TorrentTags->format()?></div>
-		</td>
-		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : '' ?>><?=number_format($Torrent['Seeders'])?></td>
-		<td><?=number_format($Torrent['Leechers'])?></td>
-	</tr>
+						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
+					</span>
+					<strong><?=$DisplayName?></strong>
+<?			Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
+					<div class="tags"><?=$TorrentTags->format()?></div>
+				</td>
+				<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
+				<td><?=number_format($Torrent['Snatched'])?></td>
+				<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
+				<td><?=number_format($Torrent['Leechers'])?></td>
+			</tr>
 <?
 	}
-	$TorrentTable.=ob_get_clean();
+	$TorrentTable.= ob_get_clean();
 
 	// Album art
 
@@ -221,23 +224,23 @@ foreach ($TorrentList as $GroupID => $Group) {
 		unset($ExtendedArtists[3]);
 		$DisplayName .= Artists::display_artists($ExtendedArtists, false);
 	} elseif (count($GroupArtists) > 0) {
-		$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists), false);
+		$DisplayName .= Artists::display_artists(array('1' => $GroupArtists), false);
 	}
 	$DisplayName .= $GroupName;
 	if ($GroupYear > 0) {
 		$DisplayName = $DisplayName. " [$GroupYear]";
 	}
 ?>
-		<li class="image_group_<?=$GroupID?>">
-			<a href="torrents.php?id=<?=$GroupID?>">
+				<li class="image_group_<?=$GroupID?>">
+					<a href="torrents.php?id=<?=$GroupID?>">
 <?	if ($WikiImage) {
 ?>
-				<img src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="118" />
+						<img src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="118" />
 <?	} else { ?>
-				<span style="width: 107px; padding: 5px;"><?=$DisplayName?></span>
+						<span style="width: 107px; padding: 5px;"><?=$DisplayName?></span>
 <?	} ?>
-			</a>
-		</li>
+					</a>
+				</li>
 <?
 	$Collage[] = ob_get_clean();
 }
@@ -247,7 +250,7 @@ if (!check_perms('site_collages_delete') && ($Locked || ($MaxGroups > 0 && $NumG
 }
 
 // Silly hack for people who are on the old setting
-$CollageCovers = isset($LoggedUser['CollageCovers']) ? $LoggedUser['CollageCovers'] : 25 * (abs($LoggedUser['HideCollage'] - 1));
+$CollageCovers = (isset($LoggedUser['CollageCovers']) ? $LoggedUser['CollageCovers'] : 25 * (abs($LoggedUser['HideCollage'] - 1)));
 $CollagePages = array();
 
 // Pad it out
@@ -318,9 +321,9 @@ View::show_header($Name,'browse,collage,bbcode,voting,jquery,recommend');
 if (check_perms('zip_downloader')) {
 	if (isset($LoggedUser['Collector'])) {
 		list($ZIPList,$ZIPPrefs) = $LoggedUser['Collector'];
-		$ZIPList = explode(':',$ZIPList);
+		$ZIPList = explode(':', $ZIPList);
 	} else {
-		$ZIPList = array('00','11');
+		$ZIPList = array('00', '11');
 		$ZIPPrefs = 1;
 	}
 ?>
@@ -341,7 +344,7 @@ if (check_perms('zip_downloader')) {
 					</li>
 <? } ?>
 				</ul>
-				<select id="formats" style="width:180px">
+				<select id="formats" style="width: 180px;">
 <?
 $OpenGroup = false;
 $LastGroupID = -1;
@@ -536,7 +539,7 @@ if ($CollageCovers != 0) { ?>
 			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.page(0, this); return false;"><strong>&lt;&lt; First</strong></a> | </span>
 			<span id="prevpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.prevPage(); return false;"><strong>&lt; Prev</strong></a> | </span>
 <?			for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
-			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? 'selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><strong><?=$CollageCovers * $i + 1?>-<?=min($NumGroups,$CollageCovers * ($i + 1))?></strong></a><?=(($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : '')?></span>
+			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? 'selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><strong><?=$CollageCovers * $i + 1?>-<?=min($NumGroups, $CollageCovers * ($i + 1))?></strong></a><?=(($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : '')?></span>
 <?			} ?>
 			<span id="nextbar" class="<?=($NumGroups / $CollageCovers > 5) ? 'hidden' : ''?>"> | </span>
 			<span id="nextpage"><a href="#" class="pageslink" onclick="collageShow.nextPage(); return false;"><strong>Next &gt;</strong></a></span>
