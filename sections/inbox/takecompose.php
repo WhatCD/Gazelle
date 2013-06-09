@@ -55,5 +55,7 @@ if (!empty($Err)) {
 
 $ConvID = Misc::send_pm($ToID, $LoggedUser['ID'], $Subject, $Body, $ConvID);
 
+
+
 header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));
 ?>

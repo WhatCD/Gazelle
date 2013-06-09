@@ -8,7 +8,10 @@ if (isset($_GET['userid']) && check_perms('users_view_invites')) {
 	$Sneaky = true;
 } else {
 	if (!$UserCount = $Cache->get_value('stats_user_count')) {
-		$DB->query("SELECT COUNT(ID) FROM users_main WHERE Enabled='1'");
+		$DB->query("
+			SELECT COUNT(ID)
+			FROM users_main
+			WHERE Enabled = '1'");
 		list($UserCount) = $DB->next_record();
 		$Cache->cache_value('stats_user_count', $UserCount, 0);
 	}
@@ -21,7 +24,11 @@ if (isset($_GET['userid']) && check_perms('users_view_invites')) {
 list($UserID, $Username, $PermissionID) = array_values(Users::user_info($UserID));
 
 
-$DB->query("SELECT InviteKey, Email, Expires FROM invites WHERE InviterID='$UserID' ORDER BY Expires");
+$DB->query("
+	SELECT InviteKey, Email, Expires
+	FROM invites
+	WHERE InviterID = '$UserID'
+	ORDER BY Expires");
 $Pending = 	$DB->to_array();
 
 $OrderWays = array('username', 'email',	'joined', 'lastseen', 'uploaded', 'downloaded', 'ratio');
@@ -73,17 +80,18 @@ switch ($CurrentOrder) {
 
 $CurrentURL = Format::get_url(array('action', 'order', 'sort'));
 
-$DB->query("SELECT
-	ID,
-	Email,
-	Uploaded,
-	Downloaded,
-	JoinDate,
-	LastAccess
+$DB->query("
+	SELECT
+		ID,
+		Email,
+		Uploaded,
+		Downloaded,
+		JoinDate,
+		LastAccess
 	FROM users_main as um
-	LEFT JOIN users_info AS ui ON ui.UserID=um.ID
-	WHERE ui.Inviter='$UserID'
-	ORDER BY ".$OrderBy." ".$CurrentSort);
+		LEFT JOIN users_info AS ui ON ui.UserID=um.ID
+	WHERE ui.Inviter = '$UserID'
+	ORDER BY $OrderBy $CurrentSort");
 
 $Invited = $DB->to_array();
 
@@ -111,7 +119,10 @@ View::show_header('Invites');
 		-Cannot 'invite always' and the user limit is reached
 */
 
-$DB->query("SELECT can_leech FROM users_main WHERE ID = ".$UserID);
+$DB->query("
+	SELECT can_leech
+	FROM users_main
+	WHERE ID = $UserID");
 list($CanLeech) = $DB->next_record();
 
 if (!$Sneaky
@@ -144,12 +155,12 @@ if (!$Sneaky
 	</div>
 <?
 } elseif (!empty($LoggedUser['DisableInvites'])) { ?>
-	<div class="box pad" style="text-align: center">
+	<div class="box pad" style="text-align: center;">
 		<strong class="important_text">Your invites have been disabled. Please read <a href="wiki.php?action=article&amp;id=310">this article</a> for more information.</strong>
 	</div>
 <?
 } elseif ($LoggedUser['RatioWatch'] || !$CanLeech) { ?>
-	<div class="box pad" style="text-align:center">
+	<div class="box pad" style="text-align: center;">
 		<strong class="important_text">You may not send invites while on Ratio Watch or while your leeching privileges are disabled. Please read <a href="wiki.php?action=article&amp;id=310">this article</a> for more information.</strong>
 	</div>
 <?
@@ -169,7 +180,7 @@ if (!empty($Pending)) {
 	$Row = 'a';
 	foreach ($Pending as $Invite) {
 		list($InviteKey, $Email, $Expires) = $Invite;
-		$Row = ($Row == 'a') ? 'b' : 'a';
+		$Row = (($Row == 'a') ? 'b' : 'a');
 ?>
 			<tr class="row<?=$Row?>">
 				<td><?=display_str($Email)?></td>
@@ -199,13 +210,13 @@ if (!empty($Pending)) {
 	$Row = 'a';
 	foreach ($Invited as $User) {
 		list($ID, $Email, $Uploaded, $Downloaded, $JoinDate, $LastAccess) = $User;
-		$Row = ($Row == 'a') ? 'b' : 'a';
+		$Row = (($Row == 'a') ? 'b' : 'a');
 ?>
 			<tr class="row<?=$Row?>">
 				<td><?=Users::format_username($ID, true, true, true, true)?></td>
 				<td><?=display_str($Email)?></td>
-				<td><?=time_diff($JoinDate,1)?></td>
-				<td><?=time_diff($LastAccess,1);?></td>
+				<td><?=time_diff($JoinDate, 1)?></td>
+				<td><?=time_diff($LastAccess, 1);?></td>
 				<td><?=Format::get_size($Uploaded)?></td>
 				<td><?=Format::get_size($Downloaded)?></td>
 				<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>

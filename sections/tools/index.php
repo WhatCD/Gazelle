@@ -190,6 +190,9 @@ switch ($_REQUEST['action']) {
 	case 'tag_aliases':
 		include('managers/tag_aliases.php');
 		break;
+	case 'label_aliases':
+		include('managers/label_aliases.php');
+		break;
 	case 'permissions':
 		if (!check_perms('admin_manage_permissions')) {
 			error(403);

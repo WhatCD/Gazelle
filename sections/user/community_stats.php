@@ -6,33 +6,52 @@ $DB->query("
 	SELECT COUNT(x.uid), COUNT(DISTINCT x.fid)
 	FROM xbt_snatched AS x
 		INNER JOIN torrents AS t ON t.ID=x.fid
-	WHERE x.uid='$UserID'");
+	WHERE x.uid = '$UserID'");
 list($Snatched, $UniqueSnatched) = $DB->next_record();
 
-$DB->query("SELECT COUNT(ID) FROM torrents_comments WHERE AuthorID='$UserID'");
+$DB->query("
+	SELECT COUNT(ID)
+	FROM torrents_comments
+	WHERE AuthorID = '$UserID'");
 list($NumComments) = $DB->next_record();
 
-$DB->query("SELECT COUNT(ID) FROM artist_comments WHERE AuthorID='$UserID'");
+$DB->query("
+	SELECT COUNT(ID)
+	FROM artist_comments
+	WHERE AuthorID = '$UserID'");
 list($NumArtistComments) = $DB->next_record();
 
-$DB->query("SELECT COUNT(ID) FROM collages_comments WHERE UserID='$UserID'");
+$DB->query("
+	SELECT COUNT(ID)
+	FROM collages_comments
+	WHERE UserID = '$UserID'");
 list($NumCollageComments) = $DB->next_record();
 
-$DB->query("SELECT COUNT(ID) FROM requests_comments WHERE AuthorID='$UserID'");
+$DB->query("
+	SELECT COUNT(ID)
+	FROM requests_comments
+	WHERE AuthorID = '$UserID'");
 list($NumRequestComments) = $DB->next_record();
 
-$DB->query("SELECT COUNT(ID) FROM collages WHERE Deleted='0' AND UserID='$UserID'");
+$DB->query("
+	SELECT COUNT(ID)
+	FROM collages
+	WHERE Deleted = '0'
+		AND UserID = '$UserID'");
 list($NumCollages) = $DB->next_record();
 
 $DB->query("
 	SELECT COUNT(DISTINCT CollageID)
 	FROM collages_torrents AS ct
 		JOIN collages ON CollageID = ID
-	WHERE Deleted='0'
-		AND ct.UserID='$UserID'");
+	WHERE Deleted = '0'
+		AND ct.UserID = '$UserID'");
 list($NumCollageContribs) = $DB->next_record();
 
-$DB->query("SELECT COUNT(DISTINCT GroupID) FROM torrents WHERE UserID = '$UserID'");
+$DB->query("
+	SELECT COUNT(DISTINCT GroupID)
+	FROM torrents
+	WHERE UserID = '$UserID'");
 list($UniqueGroups) = $DB->next_record();
 
 $DB->query("
@@ -220,8 +239,11 @@ $ViewBounty = check_paranoia_here('requestsvoted_bounty');
 					<a href="torrents.php?type=downloaded&amp;userid=<?=$UserID?>" class="brackets" title="View">View</a>
 				</li>
 <?	}
-	if (($Override=check_paranoia_here('invitedcount'))) {
-	$DB->query("SELECT COUNT(UserID) FROM users_info WHERE Inviter='$UserID'");
+	if (($Override = check_paranoia_here('invitedcount'))) {
+	$DB->query("
+		SELECT COUNT(UserID)
+		FROM users_info
+		WHERE Inviter = '$UserID'");
 	list($Invited) = $DB->next_record();
 ?>
 				<li>Invited: <?=number_format($Invited)?></li>

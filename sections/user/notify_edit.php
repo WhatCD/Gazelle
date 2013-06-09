@@ -2,7 +2,7 @@
 if (!check_perms('site_torrents_notify')) {
 	error(403);
 }
-View::show_header('Manage notifications');
+View::show_header('Manage notifications', 'jquery,jquery.validate,form_validate');
 ?>
 <div class="thin">
 	<div class="header">
@@ -92,7 +92,7 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 		<a href="#" onclick="$('#filter_<?=$N['ID']?>').toggle(); return false;" class="brackets">Show</a>
 	</h3>
 <?	} ?>
-	<form class="<?=($NewFilter ? 'create_form' : 'edit_form')?>" name="notification" action="user.php" method="post">
+	<form class="<?=($NewFilter ? 'create_form' : 'edit_form')?>" id="<?=($NewFilter ? 'filter_form' : '')?>" name="notification" action="user.php" method="post">
 		<input type="hidden" name="formid" value="<?=$i?>" />
 		<input type="hidden" name="action" value="notify_handle" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
@@ -104,7 +104,7 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 			<tr>
 				<td class="label"><strong>Notification filter name</strong></td>
 				<td>
-					<input type="text" name="label<?=$i?>" style="width: 100%;" />
+					<input type="text" class="required" name="label<?=$i?>" style="width: 100%;" />
 					<p class="min_padding">A name for the notification filter set to tell different filters apart.</p>
 				</td>
 			</tr>

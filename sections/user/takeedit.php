@@ -122,15 +122,21 @@ foreach ($Bounties as $B) {
 // End building $Paranoia
 
 
-//Email change
-$DB->query("SELECT Email FROM users_main WHERE ID=".$UserID);
+// Email change
+$DB->query("
+	SELECT Email
+	FROM users_main
+	WHERE ID=".$UserID);
 list($CurEmail) = $DB->next_record();
 if ($CurEmail != $_POST['email']) {
 	if (!check_perms('users_edit_profiles')) { // Non-admins have to authenticate to change email
-		$DB->query("SELECT PassHash,Secret FROM users_main WHERE ID='".db_string($UserID)."'");
+		$DB->query("
+			SELECT PassHash, Secret
+			FROM users_main
+			WHERE ID='".db_string($UserID)."'");
 		list($PassHash,$Secret)=$DB->next_record();
 		if (!Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
-			$Err = "You did not enter the correct password.";
+			$Err = 'You did not enter the correct password.';
 		}
 	}
 	if (!$Err) {
@@ -244,14 +250,22 @@ $UnseededAlerts = (isset($_POST['unseededalerts'])) ? 1 : 0;
 
 $LastFMUsername = db_string($_POST['lastfm_username']);
 $OldLastFMUsername = '';
-$DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
+$DB->query("
+	SELECT username
+	FROM lastfm_users
+	WHERE ID = '$UserID'");
 if ($DB->record_count() > 0) {
 	list($OldLastFMUsername) = $DB->next_record();
 	if ($OldLastFMUsername != $LastFMUsername) {
 		if (empty($LastFMUsername)) {
-			$DB->query("DELETE FROM lastfm_users WHERE ID = '$UserID'");
+			$DB->query("
+				DELETE FROM lastfm_users
+				WHERE ID = '$UserID'");
 		} else {
-			$DB->query("UPDATE lastfm_users SET Username = '$LastFMUsername' WHERE ID = '$UserID'");
+			$DB->query("
+				UPDATE lastfm_users
+				SET Username = '$LastFMUsername'
+				WHERE ID = '$UserID'");
 		}
 	}
 } elseif (!empty($LastFMUsername)) {
@@ -297,9 +311,8 @@ $SQL = "
 		i.DownloadAlt='$DownloadAlt',
 		i.UnseededAlerts='$UnseededAlerts',
 		m.Email='".db_string($_POST['email'])."',
-		m.IRCKey='".db_string($_POST['irckey'])."',";
-
-$SQL .= "m.Paranoia='".db_string(serialize($Paranoia))."'";
+		m.IRCKey='".db_string($_POST['irckey'])."',
+		m.Paranoia='".db_string(serialize($Paranoia))."'";
 
 if ($ResetPassword) {
 	$ChangerIP = db_string($LoggedUser['IP']);

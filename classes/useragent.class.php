@@ -52,8 +52,8 @@ class USER_AGENT {
 		'android'			=> 'Android',
 		'palm'				=> 'Palm',
 		'mot-razr'			=> 'Motorola Razr',
-		'tablet PC'			=> 'Windows RT',
-		'ARM; Trident'		=> 'Windows RT',
+		// 'tablet PC'			=> 'Windows RT',
+		// 'ARM; Trident'		=> 'Windows RT',
 		//Windows
 		'Windows NT 6.2'	=> 'Windows 8',
 		'Windows 8'			=> 'Windows 8',

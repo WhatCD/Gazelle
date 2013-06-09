@@ -25,6 +25,11 @@
 					$("#messageform").validate();
 				}
 				break;
+			case "user":
+				if(query['action'] == "notify") {
+					$("#filter_form").validate();
+				}
+				break;
 			default:
 				break;
 		}

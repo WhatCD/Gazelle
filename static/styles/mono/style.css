@@ -1025,15 +1025,17 @@ ul#artistcomplete {
 #lightbox {
 	z-index: 1;
 	position: fixed;
-	top: 25%;
+	top: 10%;
 	left: 50%;
 	width: 800px;
+	height: 80%;
 	margin-left: -400px;
 	text-align: center;
 }
 
 #lightbox img {
 	max-width: 800px;
+	max-height: 100%;
 	padding: 10px;
 	background: #fff;
 	-webkit-box-shadow: 0 2px 5px #222;

@@ -16,7 +16,10 @@ switch ($_REQUEST['dupeaction']) {
 	case 'update':
 		if ($_REQUEST['target']) {
 			$Target = $_REQUEST['target'];
-			$DB->query("SELECT ID FROM users_main WHERE Username LIKE '".db_string($Target)."'");
+			$DB->query("
+				SELECT ID
+				FROM users_main
+				WHERE Username LIKE '".db_string($Target)."'");
 			if (list($TargetID) = $DB->next_record()) {
 				link_users($UserID, $TargetID);
 			} else {
@@ -24,7 +27,10 @@ switch ($_REQUEST['dupeaction']) {
 			}
 		}
 
-		$DB->query("SELECT GroupID FROM users_dupes WHERE UserID = '$UserID'");
+		$DB->query("
+			SELECT GroupID
+			FROM users_dupes
+			WHERE UserID = '$UserID'");
 		list($GroupID) = $DB->next_record();
 
 		if ($_REQUEST['dupecomments'] && $GroupID) {

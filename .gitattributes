@@ -1,0 +1,32 @@
+# Try to autodetect as fallback
+* text=auto
+
+# 
+# Explicit settings in case git gets retarded
+#
+
+#
+# Text files
+#
+*.sql
+*.php text
+*.xml text
+*.js text
+*.html text
+*.txt text
+*.css text
+*.phtml text
+*.tpl text
+
+# 
+# Binary files
+#
+*.png binary
+*.jpeg binary
+*.jpg binary
+*.gif binary
+*.jar binary
+*.ico binary
+*.TTF binary
+*.tar.* binary
+*.bz2 binary

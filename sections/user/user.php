@@ -184,7 +184,11 @@ View::show_header($Username, 'user,bbcode,requests,jquery,lastfm');
 <? if (!$OwnProfile) { ?>
 		<a href="inbox.php?action=compose&amp;to=<?=$UserID?>" class="brackets">Send message</a>
 <?
-	$DB->query("SELECT FriendID FROM friends WHERE UserID='$LoggedUser[ID]' AND FriendID='$UserID'");
+	$DB->query("
+		SELECT FriendID
+		FROM friends
+		WHERE UserID='$LoggedUser[ID]'
+			AND FriendID='$UserID'");
 	if ($DB->record_count() == 0) { ?>
 		<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Add to friends</a>
 <?	} ?>
@@ -299,14 +303,20 @@ if (check_paranoia_here('requestsvoted_count') || check_paranoia_here('requestsv
 }
 
 if (check_paranoia_here('uploads+')) {
-	$DB->query("SELECT COUNT(ID) FROM torrents WHERE UserID='$UserID'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM torrents
+		WHERE UserID = '$UserID'");
 	list($Uploads) = $DB->next_record();
 } else {
 	$Uploads = 0;
 }
 
 if (check_paranoia_here('artistsadded')) {
-	$DB->query("SELECT COUNT(ta.ArtistID) FROM torrents_artists AS ta WHERE ta.UserID = ".$UserID);
+	$DB->query("
+		SELECT COUNT(ta.ArtistID)
+		FROM torrents_artists AS ta
+		WHERE ta.UserID = $UserID");
 	list($ArtistsAdded) = $DB->next_record();
 } else {
 	$ArtistsAdded = 0;
@@ -362,20 +372,36 @@ $OverallRank = $Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank
 		</div>
 <?
 	if (check_perms('users_mod', $Class) || check_perms('users_view_ips',$Class) || check_perms('users_view_keys',$Class)) {
-		$DB->query("SELECT COUNT(*) FROM users_history_passwords WHERE UserID='$UserID'");
+		$DB->query("
+			SELECT COUNT(*)
+			FROM users_history_passwords
+			WHERE UserID = '$UserID'");
 		list($PasswordChanges) = $DB->next_record();
 		if (check_perms('users_view_keys',$Class)) {
-			$DB->query("SELECT COUNT(*) FROM users_history_passkeys WHERE UserID='$UserID'");
+			$DB->query("
+				SELECT COUNT(*)
+				FROM users_history_passkeys
+				WHERE UserID = '$UserID'");
 			list($PasskeyChanges) = $DB->next_record();
 		}
 		if (check_perms('users_view_ips',$Class)) {
-			$DB->query("SELECT COUNT(DISTINCT IP) FROM users_history_ips WHERE UserID='$UserID'");
+			$DB->query("
+				SELECT COUNT(DISTINCT IP)
+				FROM users_history_ips
+				WHERE UserID = '$UserID'");
 			list($IPChanges) = $DB->next_record();
-			$DB->query("SELECT COUNT(DISTINCT IP) FROM xbt_snatched WHERE uid='$UserID' AND IP != ''");
+			$DB->query("
+				SELECT COUNT(DISTINCT IP)
+				FROM xbt_snatched
+				WHERE uid = '$UserID'
+					AND IP != ''");
 			list($TrackerIPs) = $DB->next_record();
 		}
 		if (check_perms('users_view_email',$Class)) {
-			$DB->query("SELECT COUNT(*) FROM users_history_emails WHERE UserID='$UserID'");
+			$DB->query("
+				SELECT COUNT(*)
+				FROM users_history_emails
+				WHERE UserID = '$UserID'");
 			list($EmailChanges) = $DB->next_record();
 		}
 ?>
@@ -464,15 +490,18 @@ if (check_perms('users_view_keys',$Class) || $OwnProfile) {
 <? }
 if (check_perms('users_view_invites')) {
 	if (!$InviterID) {
-		$Invited='<span style="font-style: italic;">Nobody</span>';
+		$Invited = '<span style="font-style: italic;">Nobody</span>';
 	} else {
-		$Invited='<a href="user.php?id='.$InviterID.'">'.$InviterName.'</a>';
+		$Invited = '<a href="user.php?id='.$InviterID.'">'.$InviterName.'</a>';
 	}
 
 ?>
 				<li>Invited by: <?=$Invited?></li>
 				<li>Invites: <?
-				$DB->query("SELECT count(InviterID) FROM invites WHERE InviterID = '$UserID'");
+				$DB->query("
+					SELECT count(InviterID)
+					FROM invites
+					WHERE InviterID = '$UserID'");
 				list($Pending) = $DB->next_record();
 				if ($DisableInvites) {
 					echo 'X';
@@ -485,13 +514,19 @@ if (check_perms('users_view_invites')) {
 }
 
 if (!isset($SupportFor)) {
-	$DB->query("SELECT SupportFor FROM users_info WHERE UserID = ".$LoggedUser['ID']);
+	$DB->query("
+		SELECT SupportFor
+		FROM users_info
+		WHERE UserID = ".$LoggedUser['ID']);
 	list($SupportFor) = $DB->next_record();
 }
 if ($Override = check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
 	?>
-		<li <?=($Override === 2 || $SupportFor ? 'class="paranoia_override"' : '')?>>Clients: <?
-		$DB->query("SELECT DISTINCT useragent FROM xbt_files_users WHERE uid = ".$UserID);
+		<li<?=(($Override === 2 || $SupportFor) ? ' class="paranoia_override"' : '')?>>Clients: <?
+		$DB->query("
+			SELECT DISTINCT useragent
+			FROM xbt_files_users
+			WHERE uid = $UserID");
 		$Clients = $DB->collect(0);
 		echo implode('; ', $Clients);
 		?></li>
@@ -506,21 +541,21 @@ include(SERVER_ROOT.'/sections/user/community_stats.php');
 	</div>
 	<div class="main_column">
 <?
-if ($RatioWatchEnds!='0000-00-00 00:00:00'
+if ($RatioWatchEnds != '0000-00-00 00:00:00'
 		&& (time() < strtotime($RatioWatchEnds))
-		&& ($Downloaded*$RequiredRatio)>$Uploaded
+		&& ($Downloaded * $RequiredRatio) > $Uploaded
 		) {
 ?>
 		<div class="box">
 			<div class="head">Ratio watch</div>
-			<div class="pad">This user is currently on ratio watch and must upload <?=Format::get_size(($Downloaded*$RequiredRatio)-$Uploaded)?> in the next <?=time_diff($RatioWatchEnds)?>, or their leeching privileges will be revoked. Amount downloaded while on ratio watch: <?=Format::get_size($Downloaded-$RatioWatchDownload)?></div>
+			<div class="pad">This user is currently on ratio watch and must upload <?=Format::get_size(($Downloaded * $RequiredRatio) - $Uploaded)?> in the next <?=time_diff($RatioWatchEnds)?>, or their leeching privileges will be revoked. Amount downloaded while on ratio watch: <?=Format::get_size($Downloaded - $RatioWatchDownload)?></div>
 		</div>
 <? } ?>
 		<div class="box">
 			<div class="head">
 				<span style="float: left;">Profile<? if ($CustomTitle) { ?>&nbsp;-&nbsp;</span>
 				<span class="user_title"><? echo html_entity_decode($DisplayCustomTitle); } ?></span>
-				<span style="float: right;"><?=(!empty($Badges) ? "$Badges&nbsp;&nbsp;" : '')?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
+				<span style="float: right;"><?=(!empty($Badges) ? "$Badges&nbsp;&nbsp;" : '')?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
 			</div>
 			<div class="pad" id="profilediv">
 <?	if (!$Info) { ?>
@@ -872,7 +907,10 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 
 // Displays a table of forum warnings viewable only to Forum Moderators
 if ($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
-	$DB->query("SELECT Comment FROM users_warnings_forums WHERE UserID = '$UserID'");
+	$DB->query("
+		SELECT Comment
+		FROM users_warnings_forums
+		WHERE UserID = '$UserID'");
 	list($ForumWarnings) = $DB->next_record();
 	if ($DB->record_count() > 0) {
 ?>

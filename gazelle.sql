@@ -290,6 +290,15 @@ CREATE TABLE `featured_albums` (
   `Ended` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `featured_merch` (
+  `ProductID` int(10) NOT NULL DEFAULT '0',
+  `Title` varchar(35) NOT NULL DEFAULT '',
+  `Image` varchar(255) NOT NULL DEFAULT '',
+  `Started` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Ended` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `ArtistID` int(10) unsigned DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `forums` (
   `ID` int(6) unsigned NOT NULL AUTO_INCREMENT,
   `CategoryID` tinyint(2) NOT NULL DEFAULT '0',
@@ -444,6 +453,15 @@ CREATE TABLE `ip_bans` (
   UNIQUE KEY `FromIP_2` (`FromIP`,`ToIP`),
   KEY `ToIP` (`ToIP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `label_aliases` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `BadLabel` varchar(100) NOT NULL,
+  `AliasLabel` varchar(100) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `BadLabel` (`BadLabel`),
+  KEY `AliasLabel` (`AliasLabel`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `lastfm_users` (
   `ID` int(10) unsigned NOT NULL,

@@ -233,14 +233,19 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 	$Cache->delete_value('enabled_'.$UserID);
 
 	if ($_POST['LogOut']) {
-		$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
+		$DB->query("
+			SELECT SessionID
+			FROM users_sessions
+			WHERE UserID='$UserID'");
 		while (list($SessionID) = $DB->next_record()) {
 			$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 		}
 		$Cache->delete_value('users_sessions_'.$UserID);
 
 
-		$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
+		$DB->query("
+			DELETE FROM users_sessions
+			WHERE UserID='$UserID'");
 
 	}
 }
@@ -288,7 +293,11 @@ if ($Classes[$Class]['Level'] != $Cur['Class'] && (
 	$LightUpdates['PermissionID'] = $Class;
 	$DeleteKeys = true;
 
-	$DB->query("SELECT DISTINCT DisplayStaff FROM permissions WHERE ID = $Class OR ID = ".$ClassLevels[$Cur['Class']]['ID']);
+	$DB->query("
+		SELECT DISTINCT DisplayStaff
+		FROM permissions
+		WHERE ID = $Class
+			OR ID = ".$ClassLevels[$Cur['Class']]['ID']);
 	if ($DB->record_count() == 2) {
 		if ($Classes[$Class]['Level'] < $Cur['Class']) {
 			$SupportFor = '';
@@ -427,7 +436,10 @@ if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('user
 	Misc::send_pm($UserID, 0, 'Your warning has been extended', "Your warning has been extended by $ExtendWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
 
 	$UpdateSet[] = "Warned=Warned + INTERVAL $ExtendWarning WEEK";
-	$DB->query("SELECT Warned + INTERVAL $ExtendWarning WEEK FROM users_info WHERE UserID='$UserID'");
+	$DB->query("
+		SELECT Warned + INTERVAL $ExtendWarning WEEK
+		FROM users_info
+		WHERE UserID='$UserID'");
 	list($WarnedUntil) = $DB->next_record();
 	$Msg = "warning extended by $ExtendWarning $Weeks to $WarnedUntil";
 	if ($WarnReason) {
@@ -440,7 +452,10 @@ if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('user
 	$Weeks = 'week' . (($ReduceWarning == 1) ? '' : 's');
 	Misc::send_pm($UserID, 0, 'Your warning has been reduced', "Your warning has been reduced by $ReduceWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
 	$UpdateSet[] = "Warned=Warned - INTERVAL $ReduceWarning WEEK";
-	$DB->query("SELECT Warned - INTERVAL $ReduceWarning WEEK FROM users_info WHERE UserID='$UserID'");
+	$DB->query("
+		SELECT Warned - INTERVAL $ReduceWarning WEEK
+		FROM users_info
+		WHERE UserID='$UserID'");
 	list($WarnedUntil) = $DB->next_record();
 	$Msg = "warning reduced by $ReduceWarning $Weeks to $WarnedUntil";
 	if ($WarnReason) {
@@ -648,7 +663,10 @@ Please visit us soon so we can help you resolve this matter.");
 }
 
 if ($MergeStatsFrom && check_perms('users_edit_ratio')) {
-	$DB->query("SELECT ID, Uploaded, Downloaded FROM users_main WHERE Username LIKE '".$MergeStatsFrom."'");
+	$DB->query("
+		SELECT ID, Uploaded, Downloaded
+		FROM users_main
+		WHERE Username LIKE '$MergeStatsFrom'");
 	if ($DB->record_count() > 0) {
 		list($MergeID, $MergeUploaded, $MergeDownloaded) = $DB->next_record();
 		$DB->query("
@@ -657,11 +675,11 @@ if ($MergeStatsFrom && check_perms('users_edit_ratio')) {
 			SET
 				um.Uploaded = 0,
 				um.Downloaded = 0,
-				ui.AdminComment = CONCAT('".sqltime()." - Stats (Uploaded: ".Format::get_size($MergeUploaded).", Downloaded: ".Format::get_size($MergeDownloaded).", Ratio: ".Format::get_ratio($MergeUploaded, $MergeDownloaded).") merged into https://".SSL_SITE_URL."/user.php?id=".$UserID." (".$Cur['Username'].") by ".$LoggedUser['Username']."\n\n', ui.AdminComment)
+				ui.AdminComment = CONCAT('".sqltime()." - Stats (Uploaded: ".Format::get_size($MergeUploaded).", Downloaded: ".Format::get_size($MergeDownloaded).", Ratio: ".Format::get_ratio($MergeUploaded, $MergeDownloaded).") merged into https://".SSL_SITE_URL."/user.php?id=$UserID (".$Cur['Username'].") by ".$LoggedUser['Username']."\n\n', ui.AdminComment)
 			WHERE ID = ".$MergeID);
 		$UpdateSet[] = "Uploaded = Uploaded + '$MergeUploaded'";
 		$UpdateSet[] = "Downloaded = Downloaded + '$MergeDownloaded'";
-		$EditSummary[] = "stats merged from https://".SSL_SITE_URL."/user.php?id=".$MergeID." (".$MergeStatsFrom.") (previous stats: Uploaded: ".Format::get_size($Cur['Uploaded']).", Downloaded: ".Format::get_size($Cur['Downloaded']).", Ratio: ".Format::get_ratio($Cur['Uploaded'], $Cur['Downloaded']).")";
+		$EditSummary[] = "stats merged from https://".SSL_SITE_URL."/user.php?id=$MergeID ($MergeStatsFrom) (previous stats: Uploaded: ".Format::get_size($Cur['Uploaded']).", Downloaded: ".Format::get_size($Cur['Downloaded']).", Ratio: ".Format::get_ratio($Cur['Uploaded'], $Cur['Downloaded']).")";
 		$Cache->delete_value('users_stats_'.$UserID);
 		$Cache->delete_value('users_stats_'.$MergeID);
 	}
@@ -676,14 +694,19 @@ if ($Pass && check_perms('users_edit_password')) {
 	$Cache->delete_value('user_stats_'.$UserID);
 	$Cache->delete_value('enabled_'.$UserID);
 
-	$DB->query("SELECT SessionID FROM users_sessions WHERE UserID='$UserID'");
+	$DB->query("
+		SELECT SessionID
+		FROM users_sessions
+		WHERE UserID='$UserID'");
 	while (list($SessionID) = $DB->next_record()) {
 		$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 	}
 	$Cache->delete_value('users_sessions_'.$UserID);
 
 
-	$DB->query("DELETE FROM users_sessions WHERE UserID='$UserID'");
+	$DB->query("
+		DELETE FROM users_sessions
+		WHERE UserID = '$UserID'");
 
 }
 

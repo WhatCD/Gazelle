@@ -30,6 +30,8 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=tokens">Manage freeleech tokens</a></td></tr>
 			<tr><td><a href="tools.php?action=official_tags">Official tags manager</a></td></tr>
 			<tr><td><a href="tools.php?action=tag_aliases">Tag aliases</a></td></tr>
+<?	} if (check_perms('users_mod') || $LoggedUser['ExtraClasses'][DELTA_TEAM]) { ?>
+			<tr><td><a href="tools.php?action=label_aliases">Label aliases</a></td></tr>
 <?	} ?>
 		</table>
 	</div>

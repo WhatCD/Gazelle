@@ -11,8 +11,8 @@ include(SERVER_ROOT."/classes/permissions_form.php");
 
 list($UserID, $Username, $PermissionID) = array_values(Users::user_info($_REQUEST['userid']));
 
-$DB->query("SELECT
-		u.CustomPermissions
+$DB->query("
+	SELECT u.CustomPermissions
 	FROM users_main AS u
 	WHERE u.ID='$UserID'");
 
@@ -40,7 +40,10 @@ if (isset($_POST['action'])) {
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
 	$Cache->update_row(false, array('CustomPermissions' => $Delta));
 	$Cache->commit_transaction(0);
-	$DB->query("UPDATE users_main SET CustomPermissions='".db_string(serialize($Delta))."' WHERE ID='$UserID'");
+	$DB->query("
+		UPDATE users_main
+		SET CustomPermissions = '".db_string(serialize($Delta))."'
+		WHERE ID = '$UserID'");
 } elseif (!empty($Customs)) {
 	$Delta = unserialize($Customs);
 }
@@ -50,15 +53,15 @@ $MaxCollages = $Customs['MaxCollages'] + $Delta['MaxCollages'];
 
 function display_perm($Key,$Title) {
 	global $Defaults, $Permissions;
-	$Perm='<input id="default_'.$Key.'" type="checkbox" disabled="disabled"';
+	$Perm = '<input id="default_'.$Key.'" type="checkbox" disabled="disabled"';
 	if (isset($Defaults[$Key]) && $Defaults[$Key]) {
-		$Perm.=' checked="checked"';
+		$Perm.= ' checked="checked"';
 	}
-	$Perm.=' /><input type="checkbox" name="perm_'.$Key.'" id="'.$Key.'" value="1"';
+	$Perm.= ' /><input type="checkbox" name="perm_'.$Key.'" id="'.$Key.'" value="1"';
 	if (isset($Permissions[$Key]) && $Permissions[$Key]) {
-		$Perm.=' checked="checked"';
+		$Perm.= ' checked="checked"';
 	}
-	$Perm.=' /> <label for="'.$Key.'">'.$Title.'</label><br />';
+	$Perm.= ' /> <label for="'.$Key.'">'.$Title.'</label><br />';
 	echo $Perm;
 }
 
@@ -82,7 +85,7 @@ function reset() {
 	</div>
 </div>
 <div class="box pad">
-	Before using permissions, please understand that it allows you to both add and remove access to specific features. If you think that to add access to a feature, you need to uncheck everything else, <strong>YOU ARE WRONG</strong>. The checkmarks on the left, which are grayed out, are the standard permissions granted by their class (and donor/artist status), any changes you make to the right side will overwrite this. It's not complicated, and if you screw up, click the defaults link at the top. It will reset the user to their respective features granted by class, then you can check or uncheck the one or two things you want to change. <strong>DO NOT UNCHECK EVERYTHING.</strong> If you need further clarification, ask a developer before using this tool.
+	Before using permissions, please understand that it allows you to both add and remove access to specific features. If you think that to add access to a feature, you need to uncheck everything else, <strong>YOU ARE WRONG</strong>. The checkmarks on the left, which are grayed out, are the standard permissions granted by their class (and donor/artist status). Any changes you make to the right side will overwrite this. It's not complicated, and if you screw up, click the defaults link at the top. It will reset the user to their respective features granted by class, then you can check or uncheck the one or two things you want to change. <strong>DO NOT UNCHECK EVERYTHING.</strong> If you need further clarification, ask a developer before using this tool.
 </div>
 <br />
 

@@ -1,6 +1,9 @@
 <?
 //Include Last.fm in the user sidebar only if a Last.fm username is specified.
-$DB->query("SELECT username FROM lastfm_users WHERE ID = '$UserID'");
+$DB->query("
+	SELECT username
+	FROM lastfm_users
+	WHERE ID = '$UserID'");
 if ($DB->record_count()) {
 	list($LastFMUsername) = $DB->next_record();
 	$LastFMInfo = LastFM::get_user_info($LastFMUsername);

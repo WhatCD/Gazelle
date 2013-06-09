@@ -27,12 +27,13 @@ if (isset($_POST['session'])) {
 
 $UserSessions = $Cache->get_value('users_sessions_'.$UserID);
 if (!is_array($UserSessions)) {
-	$DB->query("SELECT
-		SessionID,
-		Browser,
-		OperatingSystem,
-		IP,
-		LastUpdate
+	$DB->query("
+		SELECT
+			SessionID,
+			Browser,
+			OperatingSystem,
+			IP,
+			LastUpdate
 		FROM users_sessions
 		WHERE UserID='$UserID'
 		ORDER BY LastUpdate DESC");

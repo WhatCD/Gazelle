@@ -138,7 +138,10 @@ function dupe_comments($GroupID, $Comments) {
 		error(403);
 	}
 
-	$DB->query("SELECT SHA1(Comments) AS CommentHash FROM dupe_groups WHERE ID = $GroupID");
+	$DB->query("
+		SELECT SHA1(Comments) AS CommentHash
+		FROM dupe_groups
+		WHERE ID = $GroupID");
 	list($OldCommentHash) = $DB->next_record();
 	if ($OldCommentHash != sha1($Comments)) {
 		$AdminComment = sqltime()." - Linked accounts updated: Comments updated by ".$LoggedUser['Username'];
