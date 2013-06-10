@@ -49,6 +49,9 @@ if (isset($_GET['pp'])) {
 
 // Thread information, constant across all pages
 $ThreadInfo = get_thread_info($ThreadID, true, true, true);
+if ($ThreadInfo == NULL) {
+	json_die('failure', 'no such thread exists');
+}
 $ForumID = $ThreadInfo['ForumID'];
 
 // Make sure they're allowed to look at the page
@@ -127,7 +130,7 @@ if ($_GET['updatelastread'] != '0') {
 	}
 }
 
-//Handle subscriptions
+// Handle subscriptions
 if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
 	$DB->query("
 		SELECT TopicID

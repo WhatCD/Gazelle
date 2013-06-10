@@ -9,12 +9,10 @@ $PostID = (int) $_POST['postid'];
 $UserID = (int) $_POST['userid'];
 $Key = (int) $_POST['key'];
 $UserInfo = Users::user_info($UserID);
-$DB -> query("
-	SELECT
-		ac.Body,
-		ac.AddedTime
+$DB->query("
+	SELECT ac.Body, ac.AddedTime
 	FROM artist_comments AS ac
-	WHERE ac.ID='" . db_string($PostID) . "'");
+	WHERE ac.ID = '" . db_string($PostID) . "'");
 list($PostBody) = $DB -> next_record();
 
 View::show_header('Warn User');

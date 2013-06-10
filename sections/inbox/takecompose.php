@@ -11,9 +11,6 @@ if (!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$_POST['toid']])) {
 }
 
 
-
-
-
 if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 	$ConvID = $_POST['convid'];
 	$Subject = '';
@@ -23,7 +20,11 @@ if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 			$Err = 'A recipient does not exist.';
 		}
 	}
-	$DB->query("SELECT UserID FROM pm_conversations_users WHERE UserID='$LoggedUser[ID]' AND ConvID='$ConvID'");
+	$DB->query("
+		SELECT UserID
+		FROM pm_conversations_users
+		WHERE UserID = '$LoggedUser[ID]'
+			AND ConvID = '$ConvID'");
 	if ($DB->record_count() == 0) {
 		error(403);
 	}
@@ -36,12 +37,12 @@ if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 	}
 	$Subject = trim($_POST['subject']);
 	if (empty($Subject)) {
-		$Err = "You can't send a message without a subject.";
+		$Err = 'You cannot send a message without a subject.';
 	}
 }
 $Body = trim($_POST['body']);
 if ($Body === '' || $Body === false) {
-	$Err = "You can't send a message without a body.";
+	$Err = 'You cannot send a message without a body.';
 }
 
 if (!empty($Err)) {
@@ -54,7 +55,6 @@ if (!empty($Err)) {
 }
 
 $ConvID = Misc::send_pm($ToID, $LoggedUser['ID'], $Subject, $Body, $ConvID);
-
 
 
 header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));

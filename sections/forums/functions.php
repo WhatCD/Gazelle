@@ -1,5 +1,5 @@
 <?
-function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
+function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false, $ApiCall = false) {
 	global $DB, $Cache;
 	if ((!$ThreadInfo = $Cache->get_value('thread_'.$ThreadID.'_info')) || !isset($ThreadInfo['OP'])) {
 		$DB->query("
@@ -19,7 +19,11 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 			WHERE t.ID = '$ThreadID'
 			GROUP BY fp.TopicID");
 		if ($DB->record_count() == 0) {
-			error(404);
+			if (!$ApiCall) {
+				error(404);
+			} else {
+				return NULL;
+			}
 		}
 		$ThreadInfo = $DB->next_record(MYSQLI_ASSOC, false);
 		if ($ThreadInfo['StickyPostID']) {

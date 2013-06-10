@@ -319,7 +319,7 @@ if ($CollageCovers != 0) { ?>
 <?		if ($NumGroups > $CollageCovers) { ?>
 		<div class="linkbox pager" style="clear: left;" id="pageslinksdiv">
 			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.page(0, this); return false;">&lt;&lt; First</a> | </span>
-			<span id="prevpage" class="invisible"><a href="#" id="prevpage"  class="pageslink" onclick="collageShow.prevPage(); return false;">&lt; Prev</a> | </span>
+			<span id="prevpage" class="invisible"><a href="#" id="prevpage" class="pageslink" onclick="collageShow.prevPage(); return false;">&lt; Prev</a> | </span>
 <?			for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
 			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? ' selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><?=($CollageCovers * $i + 1)?>-<?=min($NumGroups, $CollageCovers * ($i + 1))?></a><?=(($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : '')?></span>
 <?			} ?>
