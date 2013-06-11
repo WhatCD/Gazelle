@@ -56,29 +56,41 @@ if (!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
 
 // Setting default search options
 if (!empty($_GET['setdefault'])) {
-	$UnsetList = array('page','setdefault');
-	$UnsetRegexp = '/(&|^)('.implode('|',$UnsetList).')=.*?(&|$)/i';
+	$UnsetList = array('page', 'setdefault');
+	$UnsetRegexp = '/(&|^)('.implode('|', $UnsetList).')=.*?(&|$)/i';
 
-	$DB->query("SELECT SiteOptions FROM users_info WHERE UserID='".db_string($LoggedUser['ID'])."'");
-	list($SiteOptions)=$DB->next_record(MYSQLI_NUM, false);
+	$DB->query("
+		SELECT SiteOptions
+		FROM users_info
+		WHERE UserID='".db_string($LoggedUser['ID'])."'");
+	list($SiteOptions) = $DB->next_record(MYSQLI_NUM, false);
 	if (!empty($SiteOptions)) {
 		$SiteOptions = unserialize($SiteOptions);
 	} else {
 		$SiteOptions = array();
 	}
-	$SiteOptions['DefaultSearch'] = preg_replace($UnsetRegexp,'',$_SERVER['QUERY_STRING']);
-	$DB->query("UPDATE users_info SET SiteOptions='".db_string(serialize($SiteOptions))."' WHERE UserID='".db_string($LoggedUser['ID'])."'");
+	$SiteOptions['DefaultSearch'] = preg_replace($UnsetRegexp, '', $_SERVER['QUERY_STRING']);
+	$DB->query("
+		UPDATE users_info
+		SET SiteOptions='".db_string(serialize($SiteOptions))."'
+		WHERE UserID='".db_string($LoggedUser['ID'])."'");
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
 	$Cache->update_row(false, array('DefaultSearch'=>$SiteOptions['DefaultSearch']));
 	$Cache->commit_transaction(0);
 
 // Clearing default search options
 } elseif (!empty($_GET['cleardefault'])) {
-	$DB->query("SELECT SiteOptions FROM users_info WHERE UserID='".db_string($LoggedUser['ID'])."'");
-	list($SiteOptions)=$DB->next_record(MYSQLI_NUM, false);
-	$SiteOptions=unserialize($SiteOptions);
-	$SiteOptions['DefaultSearch']='';
-	$DB->query("UPDATE users_info SET SiteOptions='".db_string(serialize($SiteOptions))."' WHERE UserID='".db_string($LoggedUser['ID'])."'");
+	$DB->query("
+		SELECT SiteOptions
+		FROM users_info
+		WHERE UserID='".db_string($LoggedUser['ID'])."'");
+	list($SiteOptions) = $DB->next_record(MYSQLI_NUM, false);
+	$SiteOptions = unserialize($SiteOptions);
+	$SiteOptions['DefaultSearch'] = '';
+	$DB->query("
+		UPDATE users_info
+		SET SiteOptions='".db_string(serialize($SiteOptions))."'
+		WHERE UserID='".db_string($LoggedUser['ID'])."'");
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
 	$Cache->update_row(false, array('DefaultSearch'=>''));
 	$Cache->commit_transaction(0);
@@ -146,7 +158,7 @@ if (!empty($_GET['order_way']) && $_GET['order_way'] == 'asc') {
 
 /** Start preparation of property arrays **/
 array_pop($Bitrates); // remove 'other'
-$SearchBitrates = array_merge($Bitrates, array('v0','v1','v2','24bit'));
+$SearchBitrates = array_merge($Bitrates, array('v0', 'v1', 'v2', '24bit'));
 
 foreach ($SearchBitrates as $ID=>$Val) {
 	$SearchBitrates[$ID] = strtolower($Val);
@@ -237,7 +249,7 @@ foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 //Simple search
 if (!empty($_GET['searchstr'])) {
 	$SearchString = trim($_GET['searchstr']);
-	$Words = explode(' ',strtolower($SearchString));
+	$Words = explode(' ', strtolower($SearchString));
 	if (!empty($Words)) {
 		$FilterBitrates = $FilterFormats = array();
 		$BasicSearch = array('include' => array(), 'exclude' => array());
@@ -250,7 +262,7 @@ if (!empty($_GET['searchstr'])) {
 			if ($Word[0] == '!' && strlen($Word) >= 2) {
 				if ($Word == '!100%') {
 					$_GET['haslog'] = '-1';
-				} elseif (strpos($Word,'!',1) === false) {
+				} elseif (strpos($Word, '!', 1) === false) {
 					$BasicSearch['exclude'][] = $Word;
 				} else {
 					$BasicSearch['include'][] = $Word;
@@ -279,7 +291,7 @@ if (!empty($_GET['searchstr'])) {
 		}
 		if (!empty($BasicSearch['exclude'])) {
 			foreach ($BasicSearch['exclude'] as $Word) {
-				$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word,1));
+				$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word, 1));
 			}
 		}
 		if (!empty($FilterBitrates)) {
@@ -309,7 +321,10 @@ if (!empty($SearchWords['taglist'])) {
 	//Get tag aliases.
 	$TagAliases = $Cache->get_value('tag_aliases_search');
 	if (!$TagAliases) {
-		$DB->query("SELECT ID,BadTag,AliasTag FROM tag_aliases ORDER BY BadTag");
+		$DB->query("
+			SELECT ID, BadTag, AliasTag
+			FROM tag_aliases
+			ORDER BY BadTag");
 		$TagAliases = $DB->to_array();
 		//Unify tag aliases to be in_this_format as tags not in.this.format
 		array_walk_recursive($TagAliases, create_function('&$val', '$val = preg_replace("/\./","_", $val);'));
@@ -400,7 +415,7 @@ foreach ($SearchWords as $Search => $Words) {
 	}
 	if (!empty($Words['exclude'])) {
 		foreach ($Words['exclude'] as $Word) {
-			$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word,1));
+			$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word, 1));
 		}
 	}
 	if (!empty($QueryParts)) {
@@ -451,7 +466,7 @@ if (isset($_GET['haslog']) && $_GET['haslog'] !== '') {
 		$Filtered = true;
 	}
 }
-foreach (array('hascue','scene','vanityhouse','releasetype') as $Search) {
+foreach (array('hascue', 'scene', 'vanityhouse', 'releasetype') as $Search) {
 	if (isset($_GET[$Search]) && $_GET[$Search] !== '') {
 		$SphQL->where($Search, $_GET[$Search]);
 		// Release type is group specific
@@ -459,6 +474,7 @@ foreach (array('hascue','scene','vanityhouse','releasetype') as $Search) {
 			$SphQLTor->where($Search, $_GET[$Search]);
 		}
 		if ($_GET[$Search] !== 0) {
+			//TODO: Clean up this hack
 			// Hack! Deleted torrents may show up if we set to true unconditionally. Hope no one notices
 			$Filtered = true;
 		}

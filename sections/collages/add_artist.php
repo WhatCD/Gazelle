@@ -65,8 +65,7 @@ if ($MaxGroupsPerUser > 0) {
 }
 
 if ($_REQUEST['action'] == 'add_artist') {
-	$URLRegex = '/^https?:\/\/(www\.|ssl\.)?'.preg_quote(NONSSL_SITE_URL, '/').'\/artist\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
-	$Val->SetFields('url', '1','regex','The URL must be a link to a artist on the site.',array('regex'=>$URLRegex));
+	$Val->SetFields('url', '1','regex','The URL must be a link to a artist on the site.',array('regex' => '/^'.ARTIST_REGEX.'/i'));
 	$Err = $Val->ValidateForm($_POST);
 
 	if ($Err) {
@@ -76,9 +75,8 @@ if ($_REQUEST['action'] == 'add_artist') {
 	$URL = $_POST['url'];
 
 	// Get artist ID
-	$URLRegex = '/artist\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
-	preg_match($URLRegex, $URL, $Matches);
-	$ArtistID = $Matches[2];
+	preg_match('/^'.ARTIST_REGEX.'/i', $URL, $Matches);
+	$ArtistID = $Matches[4];
 	if (!$ArtistID || (int) $ArtistID == 0) {
 		error(404);
 	}
@@ -91,8 +89,6 @@ if ($_REQUEST['action'] == 'add_artist') {
 
 	add_artist($CollageID, $ArtistID);
 } else {
-	$URLRegex = '/^https?:\/\/(www\.|ssl\.)?'.NONSSL_SITE_URL.'\/artist\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
-
 	$URLs = explode("\n",$_REQUEST['urls']);
 	$ArtistIDs = array();
 	$Err = '';
@@ -115,9 +111,9 @@ if ($_REQUEST['action'] == 'add_artist') {
 
 	foreach ($URLs as $URL) {
 		$Matches = array();
-		if (preg_match($URLRegex, $URL, $Matches)) {
-			$ArtistIDs[] = $Matches[3];
-			$ArtistID = $Matches[3];
+		if (preg_match('/^'.ARTIST_REGEX.'/i', $URL, $Matches)) {
+			$ArtistIDs[] = $Matches[4];
+			$ArtistID = $Matches[4];
 		} else {
 			$Err = "One of the entered URLs ($URL) does not correspond to an artist on the site.";
 			break;

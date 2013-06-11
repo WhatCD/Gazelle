@@ -67,7 +67,7 @@ if (!empty($_GET['search'])) {
 	}
 }
 $sql .= (($Section == 'sentbox') ? ' cu.InSentbox' : ' cu.InInbox');
-$sql .="='1'";
+$sql .= "='1'";
 
 $sql .="
 	GROUP BY c.ID
@@ -80,7 +80,7 @@ $DB->set_query_id($Results);
 $Count = $DB->record_count();
 
 $Pages = Format::get_pages($Page, $NumResults, MESSAGES_PER_PAGE, 9);
-echo $Pages;
+echo "\t\t$Pages\n";
 ?>
 	</div>
 
@@ -136,17 +136,20 @@ echo $Pages;
 				<tr class="<?=$RowClass?>">
 					<td class="center"><input type="checkbox" name="messages[]=" value="<?=$ConvID?>" /></td>
 					<td>
-<?			if ($Unread) {
+<?			echo "\t\t\t\t\t\t"; // for proper indentation of HTML
+			if ($Unread) {
 				echo '<strong>';
 			}
 			if ($Sticky) {
 				echo 'Sticky: ';
 			}
+			echo "\n";
 ?>
 						<a href="inbox.php?action=viewconv&amp;id=<?=$ConvID?>"><?=$Subject?></a>
 <?
+			echo "\t\t\t\t\t\t"; // for proper indentation of HTML
 			if ($Unread) {
-				echo '</strong>';
+				echo "</strong>\n";
 			} ?>
 					</td>
 					<td><?=Users::format_username($SenderID, true, true, true, true)?></td>
@@ -164,7 +167,9 @@ echo $Pages;
 		</form>
 <? } ?>
 	</div>
-	<div class="linkbox"><?=$Pages?></div>
+	<div class="linkbox">
+<? echo "\t\t$Pages\n"; ?>
+	</div>
 </div>
 <?
 View::show_footer();

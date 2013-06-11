@@ -10,12 +10,18 @@ if (isset($_REQUEST['addtokens'])) {
 	if (!is_number($Tokens) || ($Tokens < 0)) {
 		error('Please enter a valid number of tokens.');
 	}
-	$sql = "UPDATE users_main SET FLTokens = FLTokens + $Tokens WHERE Enabled = '1'";
+	$sql = "
+		UPDATE users_main
+		SET FLTokens = FLTokens + $Tokens
+		WHERE Enabled = '1'";
 	if (!isset($_REQUEST['leechdisabled'])) {
 		$sql .= " AND can_leech = 1";
 	}
 	$DB->query($sql);
-	$sql = "SELECT ID FROM users_main WHERE Enabled = '1'";
+	$sql = "
+		SELECT ID
+		FROM users_main
+		WHERE Enabled = '1'";
 	if (!isset($_REQUEST['leechdisabled'])) {
 		$sql .= " AND can_leech = 1";
 	}
@@ -39,9 +45,15 @@ if (isset($_REQUEST['addtokens'])) {
 	} else {
 		$Where = "WHERE Enabled = '1' OR FLTokens > $Tokens";
 	}
-	$DB->query("SELECT ID FROM users_main $Where");
+	$DB->query("
+		SELECT ID
+		FROM users_main
+		$Where");
 	$Users = $DB->to_array();
-	$DB->query("UPDATE users_main SET FLTokens = $Tokens $Where");
+	$DB->query("
+		UPDATE users_main
+		SET FLTokens = $Tokens
+		$Where");
 
 	foreach ($Users as $UserID) {
 		list($UserID) = $UserID;

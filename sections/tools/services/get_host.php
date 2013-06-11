@@ -14,7 +14,7 @@ if (!check_perms('users_view_ips')) {
 $Octets = explode('.', $_GET['ip']);
 if (
 	empty($_GET['ip']) ||
-	!preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $_GET['ip']) ||
+	!preg_match('/'.IP_REGEX.'/', $_GET['ip']) ||
 	$Octets[0] < 0 ||
 	$Octets[0] > 255 ||
 	$Octets[1] < 0 ||

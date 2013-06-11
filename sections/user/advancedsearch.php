@@ -4,11 +4,11 @@
  * Best viewed with a wide screen monitor							  *
  **********************************************************************/
 if (!empty($_GET['search'])) {
-	if (preg_match("/^".IP_REGEX."$/", $_GET['search'])) {
+	if (preg_match('/^'.IP_REGEX.'$/', $_GET['search'])) {
 		$_GET['ip'] = $_GET['search'];
-	} elseif (preg_match("/^".EMAIL_REGEX."$/i", $_GET['search'])) {
+	} elseif (preg_match('/^'.EMAIL_REGEX.'$/i', $_GET['search'])) {
 		$_GET['email'] = $_GET['search'];
-	} elseif (preg_match('/^[a-z0-9_?]{1,20}$/iD',$_GET['search'])) {
+	} elseif (preg_match(USERNAME_REGEX,$_GET['search'])) {
 		$DB->query("
 			SELECT ID
 			FROM users_main

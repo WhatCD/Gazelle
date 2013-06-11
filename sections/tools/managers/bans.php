@@ -64,7 +64,7 @@ if (!empty($_REQUEST['notes'])) {
 	$sql .= "WHERE Reason LIKE '%".db_string($_REQUEST['notes'])."%' ";
 }
 
-if (!empty($_REQUEST['ip']) && preg_match('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $_REQUEST['ip'])) {
+if (!empty($_REQUEST['ip']) && preg_match('/'.IP_REGEX.'/', $_REQUEST['ip'])) {
 	if (!empty($_REQUEST['notes'])) {
 		$sql .= "AND '".Tools::ip_to_unsigned($_REQUEST['ip'])."' BETWEEN FromIP AND ToIP ";
 	} else {

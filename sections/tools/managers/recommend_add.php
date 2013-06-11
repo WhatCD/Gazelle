@@ -12,7 +12,7 @@ $URL = trim($_POST['url']);
 // Make sure the URL they entered is on our site, and is a link to a torrent
 $URLRegex = '/^https?:\/\/(www\.|ssl\.)?'.NONSSL_SITE_URL.'\/torrents\.php\?id=([0-9]+)$/i';
 $Val->SetFields('url',
-			'1','regex','The URL must be a link to a torrent on the site.',array('regex'=>$URLRegex));
+			'1','regex','The URL must be a link to a torrent on the site.',array('regex' => '/^'.TORRENT_GROUP_REGEX.'/i'));
 $Err = $Val->ValidateForm($_POST); // Validate the form
 
 if ($Err) { // if something didn't validate
@@ -22,9 +22,8 @@ if ($Err) { // if something didn't validate
 }
 
 // Get torrent ID
-$URLRegex = '/torrents\.php\?id=([0-9]+)$/i';
-preg_match($URLRegex, $URL, $Matches);
-$GroupID = $Matches[1];
+preg_match('/^'.TORRENT_GROUP_REGEX.'/i', $URL, $Matches);
+$GroupID = $Matches[4];
 
 if (empty($GroupID) || !is_number($GroupID)) {
 	 error(404);

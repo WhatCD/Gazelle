@@ -19,20 +19,32 @@ if (empty($NewArtistName) && (!$NewArtistID || !is_number($NewArtistID))) {
 	error('Please enter a valid artist ID number or a valid artist name.');
 }
 
-$DB->query("SELECT Name FROM artists_group WHERE ArtistID = $ArtistID LIMIT 1");
+$DB->query("
+	SELECT Name
+	FROM artists_group
+	WHERE ArtistID = $ArtistID
+	LIMIT 1");
 if (!(list($ArtistName) = $DB->next_record(MYSQLI_NUM, false))) {
 	error('An error has occured.');
 }
 
 if ($NewArtistID > 0) {
 	// Make sure that's a real artist ID number, and grab the name
-	$DB->query("SELECT Name FROM artists_group WHERE ArtistID = $NewArtistID LIMIT 1");
+	$DB->query("
+		SELECT Name
+		FROM artists_group
+		WHERE ArtistID = $NewArtistID
+		LIMIT 1");
 	if (!(list($NewArtistName) = $DB->next_record())) {
 		error('Please enter a valid artist ID number.');
 	}
 } else {
 	// Didn't give an ID, so try to grab based on the name
-	$DB->query("SELECT ArtistID FROM artists_alias WHERE Name = '".db_string($NewArtistName)."' LIMIT 1");
+	$DB->query("
+		SELECT ArtistID
+		FROM artists_alias
+		WHERE Name = '".db_string($NewArtistName)."'
+		LIMIT 1");
 	if (!(list($NewArtistID) = $DB->next_record())) {
 		error('No artist by that name was found.');
 	}
@@ -57,17 +69,26 @@ if (isset($_POST['confirm'])) {
 	$Collages = $DB->collect('CollageID');
 
 	// And the info to avoid double-listing an artist if it and the target are on the same group
-	$DB->query("SELECT DISTINCT GroupID FROM torrents_artists WHERE ArtistID = $NewArtistID");
+	$DB->query("
+		SELECT DISTINCT GroupID
+		FROM torrents_artists
+		WHERE ArtistID = $NewArtistID");
 	$NewArtistGroups = $DB->collect('GroupID');
 	$NewArtistGroups[] = '0';
 	$NewArtistGroups = implode(',',$NewArtistGroups);
 
-	$DB->query("SELECT DISTINCT RequestID FROM requests_artists WHERE ArtistID = $NewArtistID");
+	$DB->query("
+		SELECT DISTINCT RequestID
+		FROM requests_artists
+		WHERE ArtistID = $NewArtistID");
 	$NewArtistRequests = $DB->collect('RequestID');
 	$NewArtistRequests[] = '0';
 	$NewArtistRequests = implode(',',$NewArtistRequests);
 
-	$DB->query("SELECT DISTINCT UserID from bookmarks_artists WHERE ArtistID = $NewArtistID");
+	$DB->query("
+		SELECT DISTINCT UserID
+		FROM bookmarks_artists
+		WHERE ArtistID = $NewArtistID");
 	$NewArtistBookmarks = $DB->collect('UserID');
 	$NewArtistBookmarks[] = '0';
 	$NewArtistBookmarks = implode(',',$NewArtistBookmarks);

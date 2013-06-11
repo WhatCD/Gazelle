@@ -1,6 +1,5 @@
-<?
+<?php
 authorize();
-
 
 if (empty($_POST['toid'])) {
 	error(404);
@@ -9,7 +8,6 @@ if (empty($_POST['toid'])) {
 if (!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$_POST['toid']])) {
 	error(403);
 }
-
 
 if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 	$ConvID = $_POST['convid'];

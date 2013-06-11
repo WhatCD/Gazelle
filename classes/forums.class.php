@@ -29,7 +29,7 @@ class Forums {
 			$Level = 0;
 			foreach ($Matches as $M) {
 				if ($M[0] != '[/quote]') {
-					if ($Level == 0 && isset($M[1]) && strlen($M[1]) > 0 && preg_match('/^[a-z0-9_?]{1,20}$/iD', $M[1])) {
+					if ($Level == 0 && isset($M[1]) && strlen($M[1]) > 0 && preg_match(USERNAME_REGEX, $M[1])) {
 						$Usernames[] = preg_replace('/(^[.,]*)|([.,]*$)/', '', $M[1]); // wut?
 					}
 					++$Level;

@@ -215,7 +215,7 @@ $Results = $DB->to_array();
 		SELECT
 			r.ResolverID,
 			um.Username,
-			COUNT(r.ID) AS Count,
+			COUNT(r.ID) AS Count
 		FROM reportsv2 AS r
 			LEFT JOIN users_main AS um ON r.ResolverID=um.ID
 		WHERE r.Status = 'InProgress'

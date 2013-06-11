@@ -32,7 +32,7 @@ if (!empty($_REQUEST['confirm'])) {
 	}
 
 } elseif (OPEN_REGISTRATION || !empty($_REQUEST['invite'])) {
-	$Val->SetFields('username', true, 'regex', 'You did not enter a valid username.', array('regex'=>'/^[a-z0-9_?]{1,20}$/iD'));
+	$Val->SetFields('username', true, 'regex', 'You did not enter a valid username.', array('regex' => USERNAME_REGEX));
 	$Val->SetFields('email', true, 'email', 'You did not enter a valid email address.');
 	$Val->SetFields('password', true, 'regex', 'A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol', array('regex'=>'/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
 	$Val->SetFields('confirm_password', true, 'compare', 'Your passwords do not match.', array('comparefield'=>'password'));

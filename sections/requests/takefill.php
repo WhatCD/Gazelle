@@ -14,22 +14,15 @@ if (!empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {
 	$TorrentID = $_GET['torrentid'];
 } else {
 	if (empty($_POST['link'])) {
-		$Err = 'You forgot to supply a link to the filling torrent';
+		error('You forgot to supply a link to the filling torrent');
 	} else {
 		$Link = $_POST['link'];
-		if (preg_match('/'.TORRENT_REGEX.'/i', $Link, $Matches) < 1) {
-			$Err = 'Your link didn\'t seem to be a valid torrent link';
+		if (!preg_match('/'.TORRENT_REGEX.'/i', $Link, $Matches)) {
+			error('Your link didn\'t seem to be a valid torrent link');
 		} else {
-			$TorrentID = $Matches[0];
+			$TorrentID = $Matches[4];
 		}
 	}
-
-	if (!empty($Err)) {
-		error($Err);
-	}
-
-	preg_match("/torrentid=([0-9]+)/i", $Link, $Matches);
-	$TorrentID = $Matches[1];
 	if (!$TorrentID || !is_number($TorrentID)) {
 		error(404);
 	}

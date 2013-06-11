@@ -119,7 +119,7 @@ class VALIDATE {
 						$MinLength = 10;
 					}
 
-					if (!preg_match('/^(https?):\/\/([a-z0-9\-\_]+\.)+([a-z]{1,5}[^\.])(\/[^<>]+)*$/i', $ValidateVar)) {
+					if (!preg_match('/^'.URL_REGEX.'$/i', $ValidateVar)) {
 						return $Field['ErrorMessage'];
 					} elseif (strlen($ValidateVar) > $MaxLength) {
 						return $Field['ErrorMessage'];
@@ -139,7 +139,7 @@ class VALIDATE {
 						$MinLength = 1;
 					}
 
-					if (preg_match('/[^a-z0-9_\-?]/i', $ValidateVar)) {
+					if (!preg_match('/^'.USERNAME_REGEX.'$/i', $ValidateVar)) {
 						return $Field['ErrorMessage'];
 					} elseif (strlen($ValidateVar) > $MaxLength) {
 						return $Field['ErrorMessage'];

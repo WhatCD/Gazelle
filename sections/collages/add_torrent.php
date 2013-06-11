@@ -65,8 +65,7 @@ if ($MaxGroupsPerUser > 0) {
 }
 
 if ($_REQUEST['action'] == 'add_torrent') {
-	$URLRegex = '/^https?:\/\/(www\.|ssl\.)?'.NONSSL_SITE_URL.'\/torrents\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
-	$Val->SetFields('url', '1','regex','The URL must be a link to a torrent on the site.',array('regex'=>$URLRegex));
+	$Val->SetFields('url', '1','regex','The URL must be a link to a torrent on the site.',array('regex' => '/^'.TORRENT_GROUP_REGEX.'/i'));
 	$Err = $Val->ValidateForm($_POST);
 
 	if ($Err) {
@@ -76,9 +75,8 @@ if ($_REQUEST['action'] == 'add_torrent') {
 	$URL = $_POST['url'];
 
 	// Get torrent ID
-	$URLRegex = '/torrents\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
-	preg_match($URLRegex, $URL, $Matches);
-	$TorrentID = $Matches[2];
+	preg_match('/^'.TORRENT_GROUP_REGEX.'/i', $URL, $Matches);
+	$TorrentID = $Matches[4];
 	if (!$TorrentID || (int)$TorrentID == 0) {
 		error(404);
 	}
@@ -91,8 +89,6 @@ if ($_REQUEST['action'] == 'add_torrent') {
 
 	add_torrent($CollageID, $GroupID);
 } else {
-	$URLRegex = '/^https?:\/\/(www\.|ssl\.)?'.NONSSL_SITE_URL.'\/torrents\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
-
 	$URLs = explode("\n",$_REQUEST['urls']);
 	$GroupIDs = array();
 	$Err = '';
@@ -115,9 +111,9 @@ if ($_REQUEST['action'] == 'add_torrent') {
 
 	foreach ($URLs as $URL) {
 		$Matches = array();
-		if (preg_match($URLRegex, $URL, $Matches)) {
-			$GroupIDs[] = $Matches[3];
-			$GroupID = $Matches[3];
+		if (preg_match('/^'.TORRENT_GROUP_REGEX.'/i', $URL, $Matches)) {
+			$GroupIDs[] = $Matches[4];
+			$GroupID = $Matches[4];
 		} else {
 			$Err = "One of the entered URLs ($URL) does not correspond to a torrent on the site.";
 			break;

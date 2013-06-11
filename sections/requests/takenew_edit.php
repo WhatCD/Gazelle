@@ -177,9 +177,8 @@ if ($CategoryName == "Music") {
 	// GroupID
 	if (!empty($_POST['groupid'])) {
 		$GroupID = trim($_POST['groupid']);
-		$URLRegex = '/^https?:\/\/(www\.|ssl\.)?'.SSL_SITE_URL.'\/torrents\.php\?(page=[0-9]+&)?id=([0-9]+)/i';
-		if (preg_match($URLRegex, $GroupID, $Matches)) {
-			$GroupID = $Matches[3];
+		if (preg_match('/^'.TORRENT_GROUP_REGEX.'/i', $GroupID, $Matches)) {
+			$GroupID = $Matches[4];
 		}
 		if (is_number($GroupID)) {
 			$DB->query("SELECT 1 FROM torrents_group WHERE ID = '$GroupID' AND CategoryID = 1");
