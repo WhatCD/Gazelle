@@ -151,7 +151,6 @@ if (!empty($GroupIDs)) {
 		$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
 	}
 }
-
 View::show_header('My notifications', 'notifications');
 
 ?>

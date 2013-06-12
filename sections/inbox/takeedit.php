@@ -42,5 +42,5 @@ if (isset($_POST['delete'])) {
 		$Cache->increment('inbox_new_'.$UserID);
 	}
 }
-header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));
+header('Location: ' . Inbox::get_inbox_link());
 ?>

@@ -7,7 +7,7 @@ replace */
 
 if (!isset($_POST['messages']) || !is_array($_POST['messages'])) {
 	error('You forgot to select messages to delete.');
-	header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));
+	header('Location: ' . Inbox::get_inbox_link());
 	die();
 }
 
@@ -52,5 +52,5 @@ if (isset($_POST['delete'])) {
 }
 $Cache->delete_value('inbox_new_'.$UserID);
 
-header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));
+header('Location: ' . Inbox::get_inbox_link());
 ?>

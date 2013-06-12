@@ -36,7 +36,6 @@ $ForumID = (int)$_POST['forumid'];
 $Page = (int)$_POST['page'];
 
 
-
 if ($Locked == 1) {
 
 	$DB->query("DELETE FROM forums_last_read_topics WHERE TopicID='$TopicID'");

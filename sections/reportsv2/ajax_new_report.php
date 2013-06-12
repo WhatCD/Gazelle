@@ -13,7 +13,6 @@ include(SERVER_ROOT.'/classes/text.class.php');
 $Text = NEW TEXT;
 
 
-
 $DB->query("
 	SELECT
 		r.ID,
@@ -76,7 +75,6 @@ $DB->query("
 		if ($DB->record_count() < 1) {
 			die();
 		}
-
 
 		list($ReportID, $ReporterID, $ReporterName, $TorrentID, $Type, $UserComment, $ResolverID, $ResolverName, $Status, $ReportedTime, $LastChangeTime,
 			$ModComment, $Tracks, $Images, $ExtraIDs, $Links, $LogMessage, $GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
@@ -253,7 +251,6 @@ $DB->query("
 				$First = true;
 				$Extras = explode(' ', $ExtraIDs);
 				foreach ($Extras as $ExtraID) {
-
 						$DB->query("
 								SELECT
 									tg.Name,

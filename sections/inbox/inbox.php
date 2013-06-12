@@ -1,6 +1,5 @@
 <?php
 
-
 $UserID = $LoggedUser['ID'];
 
 
@@ -21,11 +20,10 @@ View::show_header('Inbox');
 	<h2><?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?></h2>
 	<div class="linkbox">
 <?
-
 if ($Section == 'inbox') { ?>
-		<a href="<?=Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst'], 'sentbox'); ?>" class="brackets">Sentbox</a>
+		<a href="<?=Inbox::get_inbox_link('sentbox'); ?>" class="brackets">Sentbox</a>
 <? } elseif ($Section == 'sentbox') { ?>
-		<a href="<?=Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']); ?>" class="brackets">Inbox</a>
+		<a href="<?=Inbox::get_inbox_link(); ?>" class="brackets">Inbox</a>
 <? }
 
 ?>
@@ -94,6 +92,17 @@ echo "\t\t$Pages\n";
 				<input type="radio" name="searchtype" value="user"<?=(empty($_GET['searchtype']) || $_GET['searchtype'] == 'user' ? ' checked="checked"' : '')?> /> User
 				<input type="radio" name="searchtype" value="subject"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'subject' ? ' checked="checked"' : '')?> /> Subject
 				<input type="radio" name="searchtype" value="message"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'message' ? ' checked="checked"' : '')?> /> Message
+				<span style="float: right;">
+<?			// provide a temporary toggle for sorting PMs
+			$ToggleTitle = 'Temporary toggle switch for sorting PMs. To permanently change the sorting behavior, edit the setting in your profile.';
+			$BaseURL = 'inbox.php';
+
+			if ($_GET['sort'] == 'unread') { ?>
+					<a href="<?=$BaseURL?>" class="brackets" title="<?=$ToggleTitle?>">List latest first</a>
+<?			} else { ?>
+					<a href="<?=$BaseURL?>?sort=unread" class="brackets" title="<?=$ToggleTitle?>">List unread first</a>
+<?			} ?>
+				</span>
 				<br />
 				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section == 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"
 						onfocus="if (this.value == 'Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>') this.value='';"
@@ -136,7 +145,8 @@ echo "\t\t$Pages\n";
 				<tr class="<?=$RowClass?>">
 					<td class="center"><input type="checkbox" name="messages[]=" value="<?=$ConvID?>" /></td>
 					<td>
-<?			echo "\t\t\t\t\t\t"; // for proper indentation of HTML
+<?
+			echo "\t\t\t\t\t\t"; // for proper indentation of HTML
 			if ($Unread) {
 				echo '<strong>';
 			}

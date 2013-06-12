@@ -6,7 +6,6 @@ if (!is_number($UserID)) {
 
 global $Cache;
 
-
 $DB->query("
 	SELECT
 		m.Username,
@@ -550,7 +549,7 @@ list($ArtistsAdded) = $DB->next_record();
 				</td>
 			</tr>
 			<tr>
-				<td/>
+				<td />
 				<td>
 					<p class="min_padding">A strong password is between 8 and 40 characters long</p>
 					<p class="min_padding">Contains at least 1 lowercase and uppercase letter</p>

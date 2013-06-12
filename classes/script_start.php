@@ -357,7 +357,6 @@ if (isset($LoginCookie)) {
 
 	// IP changed
 
-
 	if ($LoggedUser['IP'] != $_SERVER['REMOTE_ADDR'] && !check_perms('site_disable_ip_history')) {
 
 		if (Tools::site_ban_ip($_SERVER['REMOTE_ADDR'])) {
@@ -425,7 +424,6 @@ function logout() {
 	setcookie('keeplogged', '', time() - 60 * 60 * 24 * 365, '/', '', false);
 	setcookie('session', '', time() - 60 * 60 * 24 * 365, '/', '', false);
 	if ($SessionID) {
-
 
 		$DB->query("
 			DELETE FROM users_sessions

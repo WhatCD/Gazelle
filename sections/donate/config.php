@@ -1,6 +1,5 @@
 <?
 
-
 define('PAYPAL_ADDRESS','');
 
 define('PAYPAL_CURRENCY','EUR');

@@ -52,7 +52,6 @@ if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
 		FROM torrents");
 	list($TotalSnatches, $TotalTorrents) = $DB->next_record(); // This is the total number of snatches for torrents that still exist
 
-
 	$DB->query("SELECT COUNT(uid) FROM xbt_snatched");
 	list($TotalOverallSnatches) = $DB->next_record();
 

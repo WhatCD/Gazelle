@@ -60,7 +60,6 @@ if (!$ClassDistribution = $Cache->get_value('class_distribution')) {
 if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 	include_once(SERVER_ROOT.'/classes/charts.class.php');
 
-
 	$DB->query("
 		SELECT OperatingSystem, COUNT(UserID) AS Users
 		FROM users_sessions
@@ -83,7 +82,6 @@ if (!$PlatformDistribution = $Cache->get_value('platform_distribution')) {
 if (!$BrowserDistribution = $Cache->get_value('browser_distribution')) {
 	include_once(SERVER_ROOT.'/classes/charts.class.php');
 
-	
 	$DB->query("
 		SELECT Browser, COUNT(UserID) AS Users
 		FROM users_sessions

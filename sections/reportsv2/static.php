@@ -122,7 +122,6 @@ if (!$ID) {
 }
 
 
-
 $DB->query("
 	SELECT
 		SQL_CALC_FOUND_ROWS
@@ -225,7 +224,6 @@ if (count($Reports) == 0) {
 <?
 } else {
 	foreach ($Reports as $Report) {
-
 
 		list($ReportID, $ReporterID, $ReporterName, $TorrentID, $Type, $UserComment, $ResolverID, $ResolverName, $Status, $ReportedTime, $LastChangeTime,
 			$ModComment, $Tracks, $Images, $ExtraIDs, $Links, $LogMessage, $GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
@@ -412,7 +410,6 @@ if (count($Reports) == 0) {
 					$First = true;
 					$Extras = explode(' ', $ExtraIDs);
 					foreach ($Extras as $ExtraID) {
-
 						$DB->query("
 							SELECT
 								tg.Name,

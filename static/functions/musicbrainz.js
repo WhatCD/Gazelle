@@ -120,7 +120,7 @@ function showReleaseGroups(xml) {
 		var $score = $(this).attr("ext:score");
 		var $releaseId = $(this).attr("id");
 		var $result =   $artist + " - " + $title + " [Type: " + $type + ", Score: " + $score + "]"
-		$("<a href='#null'>" + $result + "<p/>").attr("id", $releaseId).appendTo("#results1");
+		$("<a href='#null'>" + $result + "<p />").attr("id", $releaseId).appendTo("#results1");
 	});
 }
 
@@ -133,9 +133,9 @@ function showReleases(xml) {
 	$year_original = $date_release_group.substring(0,4);
 	$release_type = $(xml).find("release-group").attr("type");
 	$release_group_id = $(xml).find("release-group").attr("id");
-	jQuery('#popup_title').html("Choose Release " + "<a href='https://musicbrainz.org/release-group/"
-			+ $release_group_id + "' target='_new' class='brackets'>View on MusicBrainz</a>");
-	jQuery('#popup_back').html("<a href='#null' id='back' class='brackets'>Go back</a>");
+	jQuery('#popup_title').html("Choose Release " + '<a href="https://musicbrainz.org/release-group/'
+			+ $release_group_id + '" target="_new" class="brackets">View on MusicBrainz</a>');
+	jQuery('#popup_back').html('<a href="#null" id="back" class="brackets">Go back</a>');
 
 	$(xml).find("release").each(function() {
 		var $release_id = $(this).attr("id");
@@ -154,9 +154,9 @@ function showReleases(xml) {
 			});
 		});
 		var $result =  $title + " [Year: " + $year + ", Format: " + $format + ", Tracks: " + $tracks + ", Country: " + $country + "]";
-		$("<a href='#null'>" + $result +  "</a>").attr("id", $release_id).appendTo("#results2");
+		$('<a href="#null">' + $result + "</a>").attr("id", $release_id).appendTo("#results2");
 
-		$("<a href='https://musicbrainz.org/release/" + $release_id +"' target='_new' class='brackets'>View on MusicBrainz</a>" + "<p/>").attr("id", "mb").appendTo("#results2");
+		$('<a href="https://musicbrainz.org/release/' + $release_id +'" target="_new" class="brackets">View on MusicBrainz</a>' + "<p />").attr("id", "mb").appendTo("#results2");
 	});
 
 	parseTags(xml);
@@ -236,7 +236,7 @@ function populateForm(xml) {
 			$country_text +
 			$barcode_text +
 			"Tracks: " + $track_count + "\n" + "\n" +
-			"Track List:" + "\n";
+			"Track list:" + "\n";
 	for (var i = 0; i < $track_titles.length; i++) {
 		$description = $description + "[#]" + $track_titles[i] + "\n";
 	};

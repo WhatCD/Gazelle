@@ -51,7 +51,6 @@ class Users {
 		if (empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia']) || empty($UserInfo['Class'])) {
 			$OldQueryID = $DB->get_query_id();
 
-
 			$DB->query("
 				SELECT
 					m.ID,
@@ -122,7 +121,6 @@ class Users {
 		global $DB, $Cache;
 
 		$HeavyInfo = $Cache->get_value('user_info_heavy_'.$UserID);
-
 		if (empty($HeavyInfo)) {
 
 			$DB->query("

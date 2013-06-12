@@ -51,7 +51,6 @@ if (!empty($PermittedForums)) {
 $sql .= ')';
 if ($ShowUnread) {
 
-
 	$sql .= '
 		AND IF(l.PostID IS NULL OR (t.IsLocked = \'1\' && t.IsSticky = \'0\'), t.LastPostID, l.PostID) < t.LastPostID';
 	$sql .= ' OR (t.AuthorID != '.$LoggedUser['ID'].' AND l.PostID IS NULL)';

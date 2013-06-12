@@ -671,6 +671,7 @@ foreach ($Results as $Result) {
 			'groupId' => (int) $GroupID,
 			'groupName' => $GroupName,
 			'artist' => $DisplayName,
+			'cover' => $GroupInfo['WikiImage'],
 			'tags' => $TagList,
 			'bookmarked' => in_array($GroupID, $Bookmarks),
 			'vanityHouse' => $GroupVanityHouse == '1',

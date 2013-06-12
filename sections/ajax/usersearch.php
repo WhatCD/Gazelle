@@ -23,7 +23,8 @@ if (isset($_GET['username'])) {
 			Enabled,
 			PermissionID,
 			Donor,
-			Warned
+			Warned,
+			Avatar
 		FROM users_main AS um
 			JOIN users_info AS ui ON ui.UserID=um.ID
 		WHERE Username LIKE '%".db_string($_GET['username'])."%'
@@ -37,7 +38,7 @@ if (isset($_GET['username'])) {
 
 $JsonUsers = array();
 foreach ($Results as $Result) {
-	list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned) = $Result;
+	list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned, $Avatar) = $Result;
 
 	$JsonUsers[] = array(
 		'userId' => (int) $UserID,
@@ -45,7 +46,8 @@ foreach ($Results as $Result) {
 		'donor' => $Donor == 1,
 		'warned' => ($Warned != '0000-00-00 00:00:00'),
 		'enabled' => ($Enabled == 2 ? false : true),
-		'class' => Users::make_class_string($PermissionID)
+		'class' => Users::make_class_string($PermissionID),
+		'avatar' => $Avatar
 	);
 }
 

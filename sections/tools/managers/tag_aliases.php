@@ -51,7 +51,7 @@ if (check_perms('users_mod')) {
 		<td>Submit</td>
 <?	} ?>
 	</tr>
-	<tr/>
+	<tr />
 	<tr>
 		<form class="add_form" name="aliases" method="post" action="">
 			<input type="hidden" name="newalias" value="1" />

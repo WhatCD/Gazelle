@@ -39,7 +39,7 @@ if ($DB->record_count() == 0) {
 		SET ForwardedTo='$ReceiverID'
 		WHERE ConvID='$ConvID' AND UserID='$UserID'");
 	$Cache->delete_value('inbox_new_'.$ReceiverID);
-	header('Location: ' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']));
+	header('Location: ' . Inbox::get_inbox_link());
 } else {
 	error("$StaffIDs[$ReceiverID] already has this conversation in their inbox.");
 	header('Location: inbox.php?action=viewconv&id='.$ConvID);

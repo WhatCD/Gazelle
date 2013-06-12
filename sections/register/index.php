@@ -103,7 +103,6 @@ if (!empty($_REQUEST['confirm'])) {
 
 			$IPcc = Tools::geoip($_SERVER['REMOTE_ADDR']);
 
-			
 			$DB->query("
 				INSERT INTO users_main
 					(Username, Email, PassHash, torrent_pass, IP, PermissionID, Enabled, Invites, Uploaded, ipcc)

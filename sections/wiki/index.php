@@ -5,7 +5,6 @@ include(SERVER_ROOT.'/classes/alias.class.php');
 $Alias = new ALIAS;
 
 
-
 define('INDEX_ARTICLE', '1');
 
 

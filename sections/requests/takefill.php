@@ -47,7 +47,6 @@ $DB->query("
 	WHERE t.ID = $TorrentID
 	LIMIT 1");
 
-
 if ($DB->record_count() < 1) {
 	error(404);
 }
@@ -69,7 +68,6 @@ if (!empty($_POST['user']) && check_perms('site_moderate_requests')) {
 if (time_ago($UploadTime) < 3600 && $UploaderID != $FillerID && !check_perms('site_moderate_requests')) {
 	$Err = 'There is a one hour grace period for new uploads to allow the torrent\'s uploader to fill the request.';
 }
-
 
 
 $DB->query("

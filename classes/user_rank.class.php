@@ -86,7 +86,6 @@ class USER_RANK {
 					ORDER BY Posts;";
 				break;
 			case 'bounty':
-
 				$Query = "
 					SELECT SUM(rv.Bounty) AS Bounty
 					FROM users_main AS um

@@ -5,7 +5,6 @@ if (!$TorrentID || !is_number($TorrentID)) {
 }
 
 
-
 $DB->query("
 	SELECT
 		t.UserID,
@@ -19,7 +18,6 @@ $DB->query("
 if ($DB->record_count() < 1) {
 	error('Torrent already deleted.');
 }
-
 
 
 list($UserID, $Time, $Snatches) = $DB->next_record();

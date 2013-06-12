@@ -187,7 +187,6 @@ class Tools {
 			}
 			$Cache->delete_value('users_sessions_'.$UserID);
 
-
 			$DB->query("
 				DELETE FROM users_sessions
 				WHERE UserID='$UserID'");

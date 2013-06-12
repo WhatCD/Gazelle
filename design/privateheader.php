@@ -159,7 +159,7 @@ if ($NewSubscriptions === false) {
 	$Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
 } ?>
 		<ul id="userinfo_minor"<?=($NewSubscriptions ? ' class="highlite"' : '')?>>
-			<li id="nav_inbox"<?=Format::add_class($PageID, array('inbox'), 'active', true)?>><a onmousedown="Stats('inbox');" href="<?=Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']); ?>">Inbox</a></li>
+			<li id="nav_inbox"<?=Format::add_class($PageID, array('inbox'), 'active', true)?>><a onmousedown="Stats('inbox');" href="<?=Inbox::get_inbox_link(); ?>">Inbox</a></li>
 			<li id="nav_staffinbox"<?=Format::add_class($PageID, array('staffpm'), 'active', true)?>><a onmousedown="Stats('staffpm');" href="staffpm.php">Staff Inbox</a></li>
 			<li id="nav_uploaded"<?=Format::add_class($PageID, array('torrents',false,'uploaded'), 'active', true, 'userid')?>><a onmousedown="Stats('uploads');" href="torrents.php?type=uploaded&amp;userid=<?=$LoggedUser['ID']?>">Uploads</a></li>
 			<li id="nav_bookmarks"<?=Format::add_class($PageID, array('bookmarks'), 'active', true)?>><a onmousedown="Stats('bookmarks');" href="bookmarks.php?type=torrents">Bookmarks</a></li>
@@ -328,7 +328,7 @@ if ($NewMessages === false) {
 }
 
 if ($NewMessages > 0) {
-	$Alerts[] = '<a href="' . Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']) . "\">You have $NewMessages".(($NewMessages > 1) ? ' new messages' : ' new message').'</a>';
+	$Alerts[] = '<a href="' . Inbox::get_inbox_link() . "\">You have $NewMessages".(($NewMessages > 1) ? ' new messages' : ' new message').'</a>';
 }
 
 if ($LoggedUser['RatioWatch']) {
@@ -519,7 +519,7 @@ if (!empty($Alerts) || !empty($ModBar)) {
 						onblur="if (this.value == '') this.value='Artists';"
 						value="Artists" type="text" name="artistname" size="17"
 					/>
-					<ul id="artistcomplete" style="visibility: hidden;"><li/></ul>
+					<ul id="artistcomplete" style="visibility: hidden;"><li /></ul>
 				</form>
 			</li>
 			<li id="searchbar_requests">

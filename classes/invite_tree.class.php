@@ -215,7 +215,6 @@ class INVITE_TREE {
 			echo '; the total amount downloaded was '.Format::get_size($TopLevelDownload);
 			echo '; and the total ratio is '.Format::get_ratio_html($TopLevelUpload, $TopLevelDownload).'. ';
 
-
 			echo 'These numbers include the stats of paranoid users and will be factored into the invitation giving script.</p>';
 
 			if ($ParanoidCount) {

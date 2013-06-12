@@ -92,8 +92,6 @@ $LightUpdates = array();
 
 // Get user info from the database
 
-
-
 $DB->query("
 	SELECT
 		m.Username,
@@ -241,7 +239,6 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 			$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 		}
 		$Cache->delete_value('users_sessions_'.$UserID);
-
 
 		$DB->query("
 			DELETE FROM users_sessions
@@ -702,7 +699,6 @@ if ($Pass && check_perms('users_edit_password')) {
 		$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
 	}
 	$Cache->delete_value('users_sessions_'.$UserID);
-
 
 	$DB->query("
 		DELETE FROM users_sessions

@@ -371,7 +371,6 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 	$AgoMins = time_minus(60 * 30);
 	$AgoDays = time_minus(3600 * 24 * 30);
 
-	
 	$SessionQuery = $DB->query("
 			SELECT UserID, SessionID
 			FROM users_sessions
@@ -1305,7 +1304,6 @@ if ($BiWeek != next_biweek() || $_GET['runbiweek']) {
 
 	if ($BiWeek == 8) {
 		$DB->query('TRUNCATE TABLE top_snatchers;');
-		
 		$DB->query("
 			INSERT INTO top_snatchers (UserID)
 			SELECT uid

@@ -1,6 +1,5 @@
 <?
 
-
 	$FeaturedMerchURL = '';
 
 	$FeaturedMerch = $Cache->get_value('featured_merch');

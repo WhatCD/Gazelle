@@ -17,7 +17,6 @@ $DonorPerms = Permissions::get_permissions(DONOR);
 
 View::show_header('Donate');
 
-
 ?>
 <!-- Donate -->
 <div class="thin">

@@ -8,7 +8,6 @@ if (!$ConvID || !is_number($ConvID)) {
 }
 
 
-
 $UserID = $LoggedUser['ID'];
 $DB->query("
 	SELECT InInbox, InSentbox
@@ -19,7 +18,6 @@ if ($DB->record_count() == 0) {
 	error(403);
 }
 list($InInbox, $InSentbox) = $DB->next_record();
-
 
 
 
@@ -57,7 +55,6 @@ $Users[0]['UserStr'] = 'System'; // in case it's a message from the system
 $Users[0]['Username'] = 'System';
 
 
-
 if ($UnRead == '1') {
 
 	$DB->query("
@@ -81,15 +78,18 @@ $DB->query("
 <div class="thin">
 	<h2><?=$Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')' : '')?></h2>
 	<div class="linkbox">
-		<a href="<?=Inbox::get_inbox_link($LoggedUser['ListUnreadPMsFirst']); ?>" class="brackets">Back to inbox</a>
+		<a href="<?=Inbox::get_inbox_link(); ?>" class="brackets">Back to inbox</a>
 	</div>
 <?
 
 while (list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) { ?>
 	<div class="box vertical_space">
-		<div class="head">
-			<strong><?=$Users[(int)$SenderID]['UserStr']?></strong> <?=time_diff($SentDate)?> - <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Users[(int)$SenderID]['Username']?>');" class="brackets">Quote</a>
-		</div>
+        <div class="head" style="overflow: hidden;">
+            <div style="float: left;">
+                 <strong><?=$Users[(int)$SenderID]['UserStr']?></strong> <?=time_diff($SentDate)?> - <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Users[(int)$SenderID]['Username']?>');" class="brackets">Quote</a>
+            </div>
+            <div style="float: right;"><a href="#">&uarr;</a> <a href="#messageform">&darr;</a></div>
+        </div>
 		<div class="body" id="message<?=$MessageID?>">
 			<?=$Text->full_format($Body)?>
 		</div>

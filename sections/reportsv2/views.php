@@ -210,7 +210,6 @@ $Results = $DB->to_array();
 	</td>
 	<td style="vertical-align: top;">
 <?
-
 	$DB->query("
 		SELECT
 			r.ResolverID,

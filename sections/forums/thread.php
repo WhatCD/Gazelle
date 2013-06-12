@@ -114,7 +114,6 @@ if ($_GET['updatelastread'] != '0') {
 
 	//Handle last read
 
-
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
 
 		$DB->query("
@@ -290,7 +289,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?			}
 			if ($Votes[0] > 0) {
 ?>
-				<li>(Blank) (<?=number_format((float)($Votes[0] / $TotalVotes * 100), 2)?>%)</li>
+				<li><?=($UserResponse == '0' ? '&raquo; ' : '')?>(Blank) (<?=number_format((float)($Votes[0] / $TotalVotes * 100), 2)?>%)</li>
 				<li class="graph">
 					<span class="left_poll"></span>
 					<span class="center_poll" style="width: <?=round(($Votes[0] / $MaxVotes) * 750)?>px;"></span>
@@ -341,7 +340,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 					 <a href="forums.php?action=delete_poll_option&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>" class="brackets">X</a>
 </li>
 <?			} ?>
-				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0">Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float) $Votes[0] / $TotalVotes) * 100, 2)?>%)</li>
+				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0"><?=($UserResponse == '0' ? '&raquo; ' : '')?>Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float) $Votes[0] / $TotalVotes) * 100, 2)?>%)</li>
 			</ul>
 <?
 			if ($ForumID == STAFF_FORUM) {

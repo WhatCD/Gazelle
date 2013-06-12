@@ -98,7 +98,6 @@ View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbco
 					</td>
 				</tr>
 <? 
-
 if (check_perms('forums_polls_create')) {
 ?>
 				<script type="text/javascript">//<![CDATA[
