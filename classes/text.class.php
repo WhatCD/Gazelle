@@ -722,12 +722,12 @@ class TEXT {
 					$this->NoImg++; // No images inside quote tags
 					$this->InQuotes++;
 					if ($this->InQuotes == $this->NestsBeforeHide) { //Put quotes that are nested beyond the specified limit in [hide] tags.
-					    $Str.='<strong>Older quotes</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
-					    $Str.='<blockquote class="hidden spoiler">';
+						$Str.='<strong>Older quotes</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
+						$Str.='<blockquote class="hidden spoiler">';
 					}
 					if (!empty($Block['Attr'])) {
 						$Exploded = explode('|', $this->to_html($Block['Attr']));
-						if (isset($Exploded[1]) && is_numeric($Exploded[1]))  {
+						if (isset($Exploded[1]) && is_numeric($Exploded[1])) {
 							$PostID = trim($Exploded[1]);
 							$Str.='<a href="forums.php?action=viewthread&amp;postid='.$PostID.'" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
@@ -737,7 +737,7 @@ class TEXT {
 					}
 					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
 					if ($this->InQuotes == $this->NestsBeforeHide) { //Close quote the deeply nested quote [hide].
-					    $Str.='</blockquote><br />'; // Ensure new line after quote train hiding
+						$Str.='</blockquote><br />'; // Ensure new line after quote train hiding
 					}
 					$this->NoImg--;
 					$this->InQuotes--;

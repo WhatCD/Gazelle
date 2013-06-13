@@ -127,24 +127,24 @@ class ImageTools {
 	 * Cleans up imgur URL if it already has a modifier attached to the end of it.
 	 */
 	private static function clean_imgur_url($Url) {
-	   $Extension = pathinfo($Url, PATHINFO_EXTENSION);
-	   $Full = preg_replace('/\.[^.]*$/', '', $Url);
-	   $Base = substr($Full, 0, strrpos($Full, '/'));
-	   $Path = substr($Full, strrpos($Full, '/') + 1);
-	   if (strlen($Path) == 6) {
-		   $Last = $Path[strlen($Path) - 1];
-		   if ($Last == 'm' || $Last == 'l' || $Last == 's' || $Last == 'h' || $Last == 'b') {
-			   $Path = substr($Path, 0, -1);
-		   }
-	   }
-	   return $Base . '/' . $Path . '.' . $Extension;
+		$Extension = pathinfo($Url, PATHINFO_EXTENSION);
+		$Full = preg_replace('/\.[^.]*$/', '', $Url);
+		$Base = substr($Full, 0, strrpos($Full, '/'));
+		$Path = substr($Full, strrpos($Full, '/') + 1);
+		if (strlen($Path) == 6) {
+			$Last = $Path[strlen($Path) - 1];
+			if ($Last == 'm' || $Last == 'l' || $Last == 's' || $Last == 'h' || $Last == 'b') {
+				$Path = substr($Path, 0, -1);
+			}
+		}
+		return "$Base/$Path.$Extension";
 	}
 
 	/**
 	 * Replaces the extension.
 	 */
 	private static function replace_extension($String, $Extension) {
-	   return preg_replace('/\.[^.]*$/', $Extension, $String);
+		return preg_replace('/\.[^.]*$/', $Extension, $String);
 	}
 
 	/**

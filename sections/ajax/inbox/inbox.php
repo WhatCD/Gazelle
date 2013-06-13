@@ -35,7 +35,8 @@ $sql = "
 		um.Username,
 		ui.Donor,
 		ui.Warned,
-		um.Enabled,";
+		um.Enabled,
+		ui.Avatar,";
 $sql .= ($Section == 'sentbox')? ' cu.SentDate ' : ' cu.ReceivedDate ';
 $sql .= "AS Date
 	FROM pm_conversations AS c
@@ -81,7 +82,7 @@ if (empty($CurURL)) {
 $Pages = Format::get_pages($Page, $NumResults, MESSAGES_PER_PAGE, 9);
 
 $JsonMessages = array();
-while (list($ConvID, $Subject, $Unread, $Sticky, $ForwardedID, $ForwardedName, $SenderID, $Username, $Donor, $Warned, $Enabled, $Date) = $DB->next_record()) {
+while (list($ConvID, $Subject, $Unread, $Sticky, $ForwardedID, $ForwardedName, $SenderID, $Username, $Donor, $Warned, $Enabled, $Avatar, $Date) = $DB->next_record()) {
 	$JsonMessage = array(
 		'convId' => (int) $ConvID,
 		'subject' => $Subject,
@@ -91,6 +92,7 @@ while (list($ConvID, $Subject, $Unread, $Sticky, $ForwardedID, $ForwardedName, $
 		'forwardedName' => $ForwardedName,
 		'senderId' => (int) $SenderID,
 		'username' => $Username,
+		'avatar' => $Avatar,
 		'donor' => $Donor == 1,
 		'warned' => $Warned == 1,
 		'enabled' => ($Enabled == 2 ? false : true),

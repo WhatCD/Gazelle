@@ -200,6 +200,6 @@ $CaptchaBGs=array('captcha1.png','captcha2.png','captcha3.png','captcha4.png','c
 // Special characters, and what they should be converted to
 // Used for torrent searching
 $SpecialChars = array(
-        '&' => 'and'
+		'&' => 'and'
 );
 ?>

@@ -15,7 +15,7 @@ View::show_header('Ratio Requirements');
 			<li>To maintain <strong>leeching privileges</strong>, your ratio must remain above a minimum value. This minimum value is your <strong>required ratio</strong>.</li>
 			<li>If your ratio falls below your required ratio, you will be given two weeks to raise your ratio back above your required ratio. During this period, you are on <strong>ratio watch</strong>.
 			</li>
-			<li>If you fail to raise your ratio above your required required ratio in the allotted time, your leeching privileges will be revoked. You will be unable to download more data. Your account will remain enabled.
+			<li>If you fail to raise your ratio above your required ratio in the allotted time, your leeching privileges will be revoked. You will be unable to download more data. Your account will remain enabled.
 			</li>
 		</ul>
 		<br />

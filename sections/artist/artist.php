@@ -510,7 +510,7 @@ if (check_perms('site_torrents_notify')) {
 <?	} ?>
 			<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>" class="brackets">View history</a>
 			<a href="artist.php?id=<?=$ArtistID?>#info" class="brackets">Info</a>
-<?	if (defined(LASTFM_API_KEY)) { ?>
+<?	if (defined('LASTFM_API_KEY')) { ?>
 			<a href="artist.php?id=<?=$ArtistID?>#concerts" class="brackets">Concerts</a>
 <?	} ?>
 			<a href="artist.php?id=<?=$ArtistID?>#artistcomments" class="brackets">Comments</a>
@@ -933,7 +933,7 @@ function require(file, callback) {
 			</div>
 			<div id="body" class="body"><?=$Text->full_format($Body)?></div>
 		</div>
-<?	if (defined(LASTFM_API_KEY)) {
+<?	if (defined('LASTFM_API_KEY')) {
 		include(SERVER_ROOT.'/sections/artist/concerts.php');
 	} ?>
 <?php

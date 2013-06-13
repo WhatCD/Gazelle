@@ -119,8 +119,8 @@ function showReleaseGroups(xml) {
 		var $type = $(this).attr("type");
 		var $score = $(this).attr("ext:score");
 		var $releaseId = $(this).attr("id");
-		var $result =   $artist + " - " + $title + " [Type: " + $type + ", Score: " + $score + "]"
-		$("<a href='#null'>" + $result + "<p />").attr("id", $releaseId).appendTo("#results1");
+		var $result = $artist + " - " + $title + " [Type: " + $type + ", Score: " + $score + "]"
+		$('<a href="#null">' + $result + "<p />").attr("id", $releaseId).appendTo("#results1");
 	});
 }
 
@@ -153,7 +153,7 @@ function showReleases(xml) {
 				});
 			});
 		});
-		var $result =  $title + " [Year: " + $year + ", Format: " + $format + ", Tracks: " + $tracks + ", Country: " + $country + "]";
+		var $result = $title + " [Year: " + $year + ", Format: " + $format + ", Tracks: " + $tracks + ", Country: " + $country + "]";
 		$('<a href="#null">' + $result + "</a>").attr("id", $release_id).appendTo("#results2");
 
 		$('<a href="https://musicbrainz.org/release/' + $release_id +'" target="_new" class="brackets">View on MusicBrainz</a>' + "<p />").attr("id", "mb").appendTo("#results2");
@@ -169,7 +169,7 @@ function showReleases(xml) {
 function parseTags(xml) {
 	$tags = "";
 	$(xml).find("tag").each(function() {
-		$tag =  cleanTag($(this).find("name").text());
+		$tag = cleanTag($(this).find("name").text());
 		if (isValidTag($tag)) {
 			$tags += "," + $tag;
 		}
@@ -225,11 +225,11 @@ function populateForm(xml) {
 	}
 	var $country_text = "";
 	if ($country.length > 0) {
-		$country_text =  "Country: " + $country + "\n";
+		$country_text = "Country: " + $country + "\n";
 	}
 	var $barcode_text = "";
 	if ($barcode.length > 0) {
-		$barcode_text =  "Barcode: " + $barcode + "\n";
+		$barcode_text = "Barcode: " + $barcode + "\n";
 	}
 	var $description = $amazon_link +
 		"[url=https://musicbrainz.org/release-group/" + $release_group_id + "]MusicBrainz[/url]" + "\n" + "\n" +

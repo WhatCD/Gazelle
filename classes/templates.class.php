@@ -35,9 +35,9 @@ class TEMPLATE {
 	}
 
 	function get() {
-	   $RESULT = '';
-	   $TMPVAR = '';
-	   for ($i = 0; $i < sizeof($this->file); $i++) {
+		$RESULT = '';
+		$TMPVAR = '';
+		for ($i = 0; $i < sizeof($this->file); $i++) {
 			$TMPVAR = $this->file[$i];
 			foreach ($this->vars as $k=>$v) {
 				if ($v[1] != '' && $v[0] == '') {

@@ -469,8 +469,8 @@ function show() {
 		} ?>
 <? if ($this->NewTorrent) { ?>
 		<tr>
-		   <td class="label">Multi-format uploader:</td>
-		   <td><input type="button" value="+" id="add_format" /><input type="button" style="display: none;" value="-" id="remove_format" /></td>
+			<td class="label">Multi-format uploader:</td>
+			<td><input type="button" value="+" id="add_format" /><input type="button" style="display: none;" value="-" id="remove_format" /></td>
 		</tr>
 		<tr id="placeholder_row_top"></tr>
 		<tr id="placeholder_row_bottom"></tr>
@@ -479,7 +479,7 @@ function show() {
 				<td class="label">Vanity House:</td>
 				<td>
 					<label><input type="checkbox" id="vanity_house" name="vanity_house"<? if ($Torrent['GroupID']) { echo ' disabled="disabled"'; } ?><? if ($Torrent['VanityHouse']) { echo ' checked="checked"';} ?> />
-					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release.  Checking this will also automatically add the group as a recommendation.
+					Check this only if you are submitting your own work or submitting on behalf of the artist, and this is intended to be a Vanity House release. Checking this will also automatically add the group as a recommendation.
 					</label>
 				</td>
 			</tr>

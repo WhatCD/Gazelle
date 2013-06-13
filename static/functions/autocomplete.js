@@ -120,9 +120,9 @@ var autocomp = {
 			return;
 		}
 
-		ajax.get(this.id+'.php?action=autocomplete&name='+this.input.value,function(jstr) {
+		ajax.get(this.id + '.php?action=autocomplete&name=' + this.input.value, function(jstr) {
 			var data = json.decode(jstr);
-			autocomp.cache[autocomp.id+data[0]] = data;
+			autocomp.cache[autocomp.id + data[0]] = data;
 			autocomp.display(data);
 		});
 	},
@@ -138,13 +138,13 @@ var autocomp = {
 				autocomp.highlight(this.i);
 			});
 			listener.set(li,'click',function(e) {
-			    var location = autocomp.id + '.php?id='+this.artistid;
-			    if (e.button == 0) {
-			        window.open(location, '_self');
-			    } else if (e.button == 1) {
-			        var win = window.open(location, '_blank');
+				var location = autocomp.id + '.php?id=' + this.artistid;
+				if (e.button == 0) {
+					window.open(location, '_self');
+				} else if (e.button == 1) {
+					var win = window.open(location, '_blank');
 					win.focus();
-			    }
+				}
 			});
 			this.list.appendChild(li);
 		}

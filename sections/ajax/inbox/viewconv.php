@@ -55,9 +55,12 @@ while (list($PMUserID, $Username) = $DB->next_record()) {
 	$PMUserID = (int)$PMUserID;
 	$Users[$PMUserID]['UserStr'] = Users::format_username($PMUserID, true, true, true, true);
 	$Users[$PMUserID]['Username'] = $Username;
+	$UserInfo = Users::user_info($PMUserID);
+	$Users[$PMUserID]['Avatar'] = $UserInfo['Avatar'];
 }
 $Users[0]['UserStr'] = 'System'; // in case it's a message from the system
 $Users[0]['Username'] = 'System';
+$Users[0]['Avatar'] = '';
 
 
 
@@ -86,6 +89,7 @@ while (list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) {
 		'senderId' => (int) $SenderID,
 		'senderName' => $Users[(int)$SenderID]['Username'],
 		'sentDate' => $SentDate,
+		'avatar' => $Users[(int)$SenderID]['Avatar'],
 		'bbBody' => $Body,
 		'body' => $Text->full_format($Body)
 	);
