@@ -385,7 +385,9 @@ foreach ($ZIPOptions as $Option) {
 <? if (!empty($TopArtists)) { ?>
 				<li>Artists: <?=number_format(count($TopArtists))?></li>
 <? } ?>
+				<li>Subscribers: <?=number_format(count($Subscribers))?></li>
 				<li>Built by <?=number_format(count($Users))?> user<?=(count($Users) > 1 ? 's' : '')?></li>
+				<li>Last updated: <?=time_diff($Updated)?></li>
 			</ul>
 		</div>
 		<div class="box box_tags">

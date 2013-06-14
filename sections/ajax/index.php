@@ -13,7 +13,7 @@ enforce_login();
 /*	AJAX_LIMIT = array(x,y) = 'x' requests every 'y' seconds.
 	e.g. array(5,10) = 5 requests every 10 seconds	*/
 $AJAX_LIMIT = array(5,10);
-$Limited_Pages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup');
+$Limited_Pages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup','news_ajax');
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -143,6 +143,9 @@ switch ($_GET['action']) {
 		break;
 	case 'get_friends':
 		require(SERVER_ROOT . '/sections/ajax/get_friends.php');
+		break;
+	case 'news_ajax':
+		require(SERVER_ROOT . '/sections/ajax/news_ajax.php');
 		break;
 	default:
 		// If they're screwing around with the query string

@@ -154,13 +154,6 @@ CREATE TABLE `bookmarks_torrents` (
   KEY `GroupID` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `changelog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `time` datetime DEFAULT NULL,
-  `message` text COLLATE utf8_swedish_ci,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
-
 CREATE TABLE `collages` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL DEFAULT '',

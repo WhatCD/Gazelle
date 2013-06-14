@@ -2,6 +2,7 @@
 include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT(true);
 
+$NewsCount = 5;
 if (!$News = $Cache->get_value('news')) {
 	$DB->query("
 		SELECT
@@ -11,7 +12,7 @@ if (!$News = $Cache->get_value('news')) {
 			Time
 		FROM news
 		ORDER BY Time DESC
-		LIMIT 5");
+		LIMIT " . $NewsCount);
 	$News = $DB->to_array(false, MYSQLI_NUM, false);
 	$Cache->cache_value('news', $News, 3600 * 24 * 30);
 	$Cache->cache_value('news_latest_id', $News[0][0], 0);
@@ -25,7 +26,7 @@ if ($LoggedUser['LastReadNews'] != $News[0][0]) {
 	$LoggedUser['LastReadNews'] = $News[0][0];
 }
 
-View::show_header('News','bbcode');
+View::show_header('News','bbcode,jquery,news_ajax');
 ?>
 <div class="thin">
 	<div class="sidebar">
@@ -439,18 +440,20 @@ foreach ($News as $NewsItem) {
 <?	if (check_perms('admin_manage_news')) { ?>
 				- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>" class="brackets">Edit</a>
 <?	} ?>
+			<span style="float: right;"><a href="#" onclick="$('#newsbody<?=$NewsID?>').toggle(); this.innerHTML=(this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>
 			</div>
-			<div class="pad"><?=$Text->full_format($Body)?></div>
+
+			<div id="newsbody<?=$NewsID?>" class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
 <?
-	if (++$Count > 4) {
+	if (++$Count > ($NewsCount-1)) {
 		break;
 	}
 }
 ?>
 		<div id="more_news" class="box">
 			<div class="head">
-				<em>For older news posts, <a href="forums.php?action=viewforum&amp;forumid=19">click here</a>.</em>
+				<em><span><a href="#" onclick="news_ajax(event, 3, <?=$NewsCount?>, <?= check_perms('admin_manage_news') ? 1 : 0; ?>); return false;">Click to load more news<noscript> (requires Javascript)</noscript></a>. </span>To browse old news posts, <a href="forums.php?action=viewforum&amp;forumid=19">click here</a>.</em>
 			</div>
 		</div>
 	</div>

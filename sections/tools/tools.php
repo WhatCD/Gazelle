@@ -33,6 +33,7 @@ View::show_header('Staff Tools');
 <?	} if (check_perms('users_mod') || $LoggedUser['ExtraClasses'][DELTA_TEAM]) { ?>
 			<tr><td><a href="tools.php?action=label_aliases">Label aliases</a></td></tr>
 <?	} ?>
+
 		</table>
 	</div>
 	<div class="permission_container">

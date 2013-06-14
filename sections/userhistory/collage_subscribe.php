@@ -25,3 +25,4 @@ if (($Key = array_search($CollageID, $UserSubscriptions)) !== false) {
 }
 $Cache->replace_value('collage_subs_user_'.$LoggedUser['ID'], $UserSubscriptions, 0);
 $Cache->delete_value('collage_subs_user_new_'.$LoggedUser['ID']);
+$Cache->delete_value('collage_'.$CollageID);
