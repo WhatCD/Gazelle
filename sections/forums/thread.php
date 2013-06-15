@@ -375,7 +375,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 <?		} ?>
 						<li>
 							<br />
-							<input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; Show the results!</label><br />
+							<input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank&#8202;&mdash;&#8202;Show the results!</label><br />
 						</li>
 					</ul>
 <?		if ($ForumID == STAFF_FORUM) { ?>

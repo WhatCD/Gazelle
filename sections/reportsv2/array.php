@@ -717,7 +717,7 @@ Your torrent was reported because it contained a freely available application.'
 					'upload' => '0',
 					'warn' => '1',
 					'delete' => '1',
-					'pm' => '[rule]4.1.4[/rule]. Release descriptions for applications must contain good information about the application. You should either have a small description of the program (either taken from its web site or from an NFO file) or a link to the information -- but ideally both. Torrents missing this information will be deleted when reported.
+					'pm' => '[rule]4.1.4[/rule]. Release descriptions for applications must contain good information about the application. You should either have a small description of the program (either taken from its web site or from an NFO file) or a link to the information&#8202;&mdash;&#8202;but ideally both. Torrents missing this information will be deleted when reported.
 Your torrent was reported because it lacked adequate release information.'
 				)
 			),

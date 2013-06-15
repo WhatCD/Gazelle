@@ -262,7 +262,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 						</select>
 						<input type="text" id="tags" name="tags" size="45" value="<?=(!empty($Tags) ? display_str($Tags) : '')?>" />
 						<br />
-						Tags should be comma-separated, and you should use a period (".") to separate words inside a tag &mdash; e.g. "<strong class="important_text_alt">hip.hop</strong>".
+						Tags should be comma-separated, and you should use a period (".") to separate words inside a tag&#8202;&mdash;&#8202;e.g. "<strong class="important_text_alt">hip.hop</strong>".
 						<br /><br />
 						There is a list of official tags to the left of the text box. Please use these tags instead of "unofficial" tags (e.g. use the official "<strong class="important_text_alt">drum.and.bass</strong>" tag, instead of an unofficial "<strong class="important_text">dnb</strong>" tag.).
 					</td>

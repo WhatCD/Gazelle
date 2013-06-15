@@ -25,7 +25,7 @@ View::show_header('Ratio Requirements');
 			<li>Your required ratio represents the minimum ratio you must maintain to avoid ratio watch. You can view your required ratio in the site header after the word &#39;required,&#39; or in the &#39;stats&#39; section of your user profile.
 			</li>
 			<li>Your required ratio is unique; each person&#39;s required ratio is calculated for their account specifically.</li>
-			<li>Your required ratio is calculated using (1) the total amount of data you&#39;ve downloaded and (2) the total number of torrents you&#39;re seeding. The seeding total is not limited to snatched torrents (completed downloads)&mdash;the total includes, but is not limited to, your uploaded torrents.
+			<li>Your required ratio is calculated using (1) the total amount of data you&#39;ve downloaded and (2) the total number of torrents you&#39;re seeding. The seeding total is not limited to snatched torrents (completed downloads)&#8202;&mdash;&#8202;the total includes, but is not limited to, your uploaded torrents.
 			</li>
 			<li>The required ratio system lowers your required ratio when you seed a greater number of torrents. The more torrents you seed, the lower your required ratio will be. The lower your required ratio is, the less likely it is that you&#39;ll enter ratio watch.
 			</li>

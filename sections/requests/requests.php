@@ -654,9 +654,9 @@ foreach ($Categories as $CatKey => $CatName) {
 			</td>
 			<td>
 <?			if ($IsFilled) { ?>
-			<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a>
+				<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a>
 <?			} else { ?>
-			--
+				&mdash;
 <?			} ?>
 			</td>
 			<td>

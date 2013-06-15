@@ -39,7 +39,7 @@ View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbco
 			<div class="pad" id="threadpoll">
 				<p><strong id="pollquestion"></strong></p>
 				<div id="pollanswers"></div>
-				<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; show the results!</label><br /><br />
+				<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank&#8202;&mdash;&#8202;Show the results!</label><br /><br />
 				<input type="button" style="float: left;" value="Vote" />
 			</div>
 		</div>

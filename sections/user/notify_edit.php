@@ -118,7 +118,7 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 				<td class="label"><strong>One of these artists</strong></td>
 				<td>
 					<textarea name="artists<?=$i?>" style="width: 100%;" rows="5"><?=display_str($N['Artists'])?></textarea>
-					<p class="min_padding">Comma-separated list &mdash; e.g. <em>Pink Floyd, Led Zeppelin, Neil Young</em></p>
+					<p class="min_padding">Comma-separated list&#8202;&mdash;&#8202;e.g. <em>Pink Floyd, Led Zeppelin, Neil Young</em></p>
 					<input type="checkbox" name="excludeva<?=$i?>" id="excludeva_<?=$N['ID']?>"<? if ($N['ExcludeVA'] == '1') { echo ' checked="checked"';} ?> />
 					<label for="excludeva_<?=$N['ID']?>">Exclude Various Artists releases</label>
 				</td>
@@ -134,14 +134,14 @@ foreach ($Notifications as $N) { // $N stands for Notifications
 				<td class="label"><strong>At least one of these tags</strong></td>
 				<td>
 					<textarea name="tags<?=$i?>" style="width: 100%;" rows="2"><?=display_str($N['Tags'])?></textarea>
-					<p class="min_padding">Comma-separated list &mdash; e.g. <em>rock, jazz, pop</em></p>
+					<p class="min_padding">Comma-separated list&#8202;&mdash;&#8202;e.g. <em>rock, jazz, pop</em></p>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>None of these tags</strong></td>
 				<td>
 					<textarea name="nottags<?=$i?>" style="width: 100%;" rows="2"><?=display_str($N['NotTags'])?></textarea>
-					<p class="min_padding">Comma-separated list &mdash; e.g. <em>rock, jazz, pop</em></p>
+					<p class="min_padding">Comma-separated list&#8202;&mdash;&#8202;e.g. <em>rock, jazz, pop</em></p>
 				</td>
 			</tr>
 			<tr>

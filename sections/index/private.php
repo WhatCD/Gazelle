@@ -22,7 +22,10 @@ if ($LoggedUser['LastReadNews'] != $News[0][0]) {
 	$Cache->begin_transaction('user_info_heavy_'.$UserID);
 	$Cache->update_row(false, array('LastReadNews' => $News[0][0]));
 	$Cache->commit_transaction(0);
-	$DB->query("UPDATE users_info SET LastReadNews = '".$News[0][0]."' WHERE UserID = ".$UserID);
+	$DB->query("
+		UPDATE users_info
+		SET LastReadNews = '".$News[0][0]."'
+		WHERE UserID = $UserID");
 	$LoggedUser['LastReadNews'] = $News[0][0];
 }
 
@@ -38,7 +41,9 @@ if (check_perms('users_mod')) {
 ?>
 
 		<div class="box">
-			<div class="head colhead_dark"><strong><a href="staffblog.php">Latest staff blog posts</a></strong></div>
+			<div class="head colhead_dark">
+				<strong><a href="staffblog.php">Latest staff blog posts</a></strong>
+			</div>
 <?
 if (($Blog = $Cache->get_value('staff_blog')) === false) {
 	$DB->query("
@@ -55,7 +60,10 @@ if (($Blog = $Cache->get_value('staff_blog')) === false) {
 	$Cache->cache_value('staff_blog', $Blog, 1209600);
 }
 if (($SBlogReadTime = $Cache->get_value('staff_blog_read_'.$LoggedUser['ID'])) === false) {
-	$DB->query("SELECT Time FROM staff_blog_visits WHERE UserID = ".$LoggedUser['ID']);
+	$DB->query("
+		SELECT Time
+		FROM staff_blog_visits
+		WHERE UserID = ".$LoggedUser['ID']);
 	if (list($SBlogReadTime) = $DB->next_record()) {
 		$SBlogReadTime = strtotime($SBlogReadTime);
 	} else {
@@ -90,18 +98,20 @@ for ($i = 0; $i < $Limit; $i++) {
 			<div class="head colhead_dark"><strong><a href="blog.php">Latest blog posts</a></strong></div>
 <?
 if (($Blog = $Cache->get_value('blog')) === false) {
-	$DB->query("SELECT
-		b.ID,
-		um.Username,
-		b.Title,
-		b.Body,
-		b.Time,
-		b.ThreadID
-		FROM blog AS b LEFT JOIN users_main AS um ON b.UserID=um.ID
+	$DB->query("
+		SELECT
+			b.ID,
+			um.Username,
+			b.Title,
+			b.Body,
+			b.Time,
+			b.ThreadID
+		FROM blog AS b
+			LEFT JOIN users_main AS um ON b.UserID=um.ID
 		ORDER BY Time DESC
 		LIMIT 20");
 	$Blog = $DB->to_array();
-	$Cache->cache_value('blog',$Blog,1209600);
+	$Cache->cache_value('blog', $Blog, 1209600);
 }
 ?>
 			<ul class="stats nobullet">
@@ -198,11 +208,16 @@ if (($PerfectCount = $Cache->get_value('stats_perfect_count')) === false) {
 //End Torrent Stats
 
 if (($RequestStats = $Cache->get_value('stats_requests')) === false) {
-	$DB->query("SELECT COUNT(ID) FROM requests");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM requests");
 	list($RequestCount) = $DB->next_record();
-	$DB->query("SELECT COUNT(ID) FROM requests WHERE FillerID > 0");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM requests
+		WHERE FillerID > 0");
 	list($FilledCount) = $DB->next_record();
-	$Cache->cache_value('stats_requests',array($RequestCount,$FilledCount),11280);
+	$Cache->cache_value('stats_requests', array($RequestCount, $FilledCount), 11280);
 } else {
 	list($RequestCount,$FilledCount) = $RequestStats;
 }
@@ -261,20 +276,20 @@ if (($TopicID = $Cache->get_value('polls_featured')) === false) {
 		ORDER BY Featured DESC
 		LIMIT 1");
 	list($TopicID) = $DB->next_record();
-	$Cache->cache_value('polls_featured',$TopicID,0);
+	$Cache->cache_value('polls_featured', $TopicID, 0);
 }
 if ($TopicID) {
 	if (($Poll = $Cache->get_value('polls_'.$TopicID)) === false) {
 		$DB->query("
 			SELECT Question, Answers, Featured, Closed
 			FROM forums_polls
-			WHERE TopicID='$TopicID'");
+			WHERE TopicID = '$TopicID'");
 		list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 		$Answers = unserialize($Answers);
 		$DB->query("
 			SELECT Vote, COUNT(UserID)
 			FROM forums_polls_votes
-			WHERE TopicID='$TopicID'
+			WHERE TopicID = '$TopicID'
 				AND Vote != '0'
 			GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
@@ -290,9 +305,9 @@ if ($TopicID) {
 				$Votes[$i] = 0;
 			}
 		}
-		$Cache->cache_value('polls_'.$TopicID, array($Question,$Answers,$Votes,$Featured,$Closed), 0);
+		$Cache->cache_value('polls_'.$TopicID, array($Question, $Answers, $Votes, $Featured, $Closed), 0);
 	} else {
-		list($Question,$Answers,$Votes,$Featured,$Closed) = $Poll;
+		list($Question, $Answers, $Votes, $Featured, $Closed) = $Poll;
 	}
 
 	if (!empty($Votes)) {
@@ -328,7 +343,7 @@ if ($TopicID) {
 				$Ratio = 0;
 				$Percent = 0;
 			}
-?>					<li><?=display_str($Answers[$i])?> (<?=number_format($Percent * 100,2)?>%)</li>
+?>					<li><?=display_str($Answers[$i])?> (<?=number_format($Percent * 100, 2)?>%)</li>
 					<li class="graph">
 						<span class="left_poll"></span>
 						<span class="center_poll" style="width: <?=round($Ratio * 140)?>px;"></span>
@@ -348,7 +363,7 @@ if ($TopicID) {
 					<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />
 					<label for="answer_<?=$i?>"><?=display_str($Answers[$i])?></label><br />
 <? 		} ?>
-					<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank &mdash; Show the results!</label><br /><br />
+					<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank&#8202;&mdash;&#8202;Show the results!</label><br /><br />
 					<input type="button" onclick="ajax.post('index.php','poll',function(response) {$('#poll_container').raw().innerHTML = response});" value="Vote" />
 				</form>
 				</div>
@@ -381,10 +396,10 @@ if (!is_array($Recommend) || !is_array($Recommend_artists)) {
 		ORDER BY tr.Time DESC
 		LIMIT 10");
 	$Recommend = $DB->to_array();
-	$Cache->cache_value('recommend',$Recommend,1209600);
+	$Cache->cache_value('recommend', $Recommend, 1209600);
 
 	$Recommend_artists = Artists::get_artists($DB->collect('GroupID'));
-	$Cache->cache_value('recommend_artists',$Recommend_artists,1209600);
+	$Cache->cache_value('recommend_artists', $Recommend_artists, 1209600);
 }
 
 if (count($Recommend) >= 4) {
@@ -393,7 +408,7 @@ $Cache->increment('usage_index');
 	<div class="box" id="recommended">
 		<div class="head colhead_dark">
 			<strong>Latest Vanity House additions</strong>
-			<a href="#" onclick="$('#vanityhouse').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Show</a>
+			<a href="#" onclick="$('#vanityhouse').toggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Show</a>
 		</div>
 
 		<table class="torrent_table hidden" id="vanityhouse">
@@ -446,14 +461,14 @@ foreach ($News as $NewsItem) {
 			<div id="newsbody<?=$NewsID?>" class="pad"><?=$Text->full_format($Body)?></div>
 		</div>
 <?
-	if (++$Count > ($NewsCount-1)) {
+	if (++$Count > ($NewsCount - 1)) {
 		break;
 	}
 }
 ?>
 		<div id="more_news" class="box">
 			<div class="head">
-				<em><span><a href="#" onclick="news_ajax(event, 3, <?=$NewsCount?>, <?= check_perms('admin_manage_news') ? 1 : 0; ?>); return false;">Click to load more news<noscript> (requires Javascript)</noscript></a>. </span>To browse old news posts, <a href="forums.php?action=viewforum&amp;forumid=19">click here</a>.</em>
+				<em><span><a href="#" onclick="news_ajax(event, 3, <?=$NewsCount?>, <?= check_perms('admin_manage_news') ? 1 : 0; ?>); return false;">Click to load more news<noscript> (requires JavaScript)</noscript></a>.</span> To browse old news posts, <a href="forums.php?action=viewforum&amp;forumid=19">click here</a>.</em>
 			</div>
 		</div>
 	</div>
