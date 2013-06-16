@@ -155,11 +155,11 @@ CREATE TABLE `bookmarks_torrents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `changelog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `time` datetime DEFAULT NULL,
-  `message` text COLLATE utf8_swedish_ci,
-  `author` varchar(30) COLLATE utf8_swedish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Message` text COLLATE utf8_swedish_ci NOT NULL,
+  `Author` varchar(30) COLLATE utf8_swedish_ci NOT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `collages` (

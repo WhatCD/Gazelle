@@ -102,6 +102,22 @@ switch ($_GET['feed']) {
 			}
 		}
 		break;
+	case 'feed_changelog':
+		$Feed->channel('Gazelle Change Log', 'RSS feed for Gazelle\'s changelog.');
+		if (!$Changelog = $Cache->get_value('changelog')) {
+			require(SERVER_ROOT.'/classes/mysql.class.php');
+			require(SERVER_ROOT.'/classes/misc.class.php');
+
+			$DB = NEW DB_MYSQL;
+			$DB->query("SELECT Message, Author, Date(Time) FROM changelog ORDER BY Time DESC LIMIT 20");
+			$Changelog = $DB->to_array();
+			$Cache->cache_value('changelog', $Changelog, 86400);
+		}
+		foreach ($Changelog as $Change) {
+			list($Message, $Author, $Date) = $Change;
+			echo $Feed->item($Date . " by " . $Author, $Message, 'tools.php?action=change_log', SITE_NAME.' Staff','','',$Date);
+		}
+		break;
 	case 'torrents_all':
 		$Feed->channel('All Torrents', 'RSS feed for all new torrent uploads.');
 		$Feed->retrieve('torrents_all',$_GET['authkey'],$_GET['passkey']);

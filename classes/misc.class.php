@@ -448,6 +448,26 @@ class Misc {
 	}
 
 	/**
+	 * Searches for a key/value pair in an array.
+	 *
+	 * @return array of results
+	 */
+	public static function search_array($Array, $Key, $Value) {
+		$Results = array();
+		if (is_array($Array))
+		{
+			if (isset($Array[$Key]) && $Array[$Key] == $Value) {
+				$Results[] = $Array;
+			}
+
+			foreach ($Array as $subarray) {
+				$Results = array_merge($Results, self::search_array($subarray, $Key, $Value));
+			}
+		}
+		return $Results;
+	}
+
+	/**
 	 * Check for a : in the beginning of a torrent meta data string
 	 * to see if it's stored in the old base64-encoded format
 	 *

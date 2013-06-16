@@ -171,6 +171,7 @@ select {
 
 .main_column .pad,
 .sidebar .pad,
+.box2 .pad,
 #blog .pad {
 	padding: 10px !important;
 }
@@ -1131,6 +1132,7 @@ tr.torrent .bookmark > a:after {
 
 .sidebar .box .head,
 .main_column .box .head,
+.box2 .head,
 #blog .box .head {
 	background-color: #f0f0f0;
 	padding: 10px !important;
@@ -1150,7 +1152,8 @@ tr.torrent .bookmark > a:after {
 
 .sidebar .box,
 .main_column .box:not(.forum_post),
-#blog .box {
+#blog .box,
+.box2 {
 	background-color: #f5f5f5;
 	border: 1px solid #dcdcdc;
 	margin: 0 0 20px 0;
@@ -2043,4 +2046,12 @@ tr.torrent .bookmark > a:after {
 	background: url(https://what.cd/static/common/noartwork/music.png) no-repeat top left;
 	background-size: 90px;
 	color: transparent;
+}
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
 }

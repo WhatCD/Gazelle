@@ -502,7 +502,7 @@ ul.collage_images li a:hover img {
 	width: 100% !important;
 }
 
-table[width="100%"],.box,.torrent_table,#log_table,#request_table,#collages,.forum_index,table.border,.linkbox+table,form#messageform table ,.main_column table ,form[action="user.php"] table,table.staff,#userhistory table {
+table[width="100%"],.box,.box2,.torrent_table,#log_table,#request_table,#collages,.forum_index,table.border,.linkbox+table,form#messageform table ,.main_column table ,form[action="user.php"] table,table.staff,#userhistory table {
 	margin-bottom: 20px;
 	padding: 10px;
 	background: #fff;
@@ -1337,3 +1337,11 @@ form.manage_form[name=friends] .left input[type=submit] {
 .group_image + .group_info { margin: 0; padding: 0 5px; display: table-cell; vertical-align: middle; height: 90px; }
 #torrents .group_image + .group_info { width: 450px; }
 #top10 .group_image + .group_info { width: 585px; }
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
+}

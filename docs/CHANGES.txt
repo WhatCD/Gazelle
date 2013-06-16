@@ -1,5 +1,11 @@
 CHANGELOG
 
+2013-06-15 by Ajax
+Adding &amp;artistreleases=1 to artist api url will display only releases by the current artist
+
+2013-06-15 by Ajax
+Added artist and extended artist information to torrent groups in artist json output
+
 2013-06-14 by eth
 Adds option to load news posts using ajax
 

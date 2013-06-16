@@ -364,6 +364,13 @@ p.min_padding {
 	border: 1px solid #65430F;
 }
 
+.box2 {
+	font-size: 8pt;
+	background-color: #DCB881;
+	border: 1px solid #65430F;
+	margin-bottom: 10px;
+}
+
 .pad h3, .pad h4, .padbox h3, .padbox h4 {
 	margin-top: 0px;
 	padding-top: 0px;
@@ -808,4 +815,12 @@ ul .invitetree {
 
 .brackets:before, .brackets:after {
 	color: #492802;
+}
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
 }

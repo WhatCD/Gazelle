@@ -166,7 +166,8 @@ select {
 }
 
 .main_column .pad,
-.sidebar .pad {
+.sidebar .pad,
+.box2 .pad {
 	padding: 10px !important;
 }
 
@@ -511,7 +512,8 @@ margin-left:20px;
 	z-index:3;
 }
 
-#content .box h2 {
+#content .box h2,
+#content .box2 h2 {
 	background: none;
 	margin: 0;
 	padding: 0;
@@ -988,14 +990,16 @@ strong.quoteheader{color: #878787;}
 }
 
 .sidebar .box .head,
-.main_column .box .head {
+.main_column .box .head,
+.box2 .head {
 	background-color: #212121;
 	padding: 10px !important;
 	border-bottom: 1px solid #1a1a1a;
 }
 
 .sidebar .box,
-.main_column .box {
+.main_column .box,
+.box2 {
 	background-color: #212121;
 	border: 1px solid #1a1a1a;
 	margin: 0 0 20px 0;
@@ -2000,3 +2004,11 @@ tr.torrent .bookmark > a:after { content:""; }
 .group_image + .group_info { margin: 0; padding: 0 5px; display: table-cell; vertical-align: middle; height: 90px; }
 #torrents .group_image + .group_info { width: 450px; }
 #top10 .group_image + .group_info { width: 585px; }
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
+}

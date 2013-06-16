@@ -376,6 +376,13 @@ p.min_padding {
 	border: 1px solid #666666;
 }
 
+.box2 {
+	margin-bottom: 10px;
+	font-size: 8pt;
+	background-color: #EAEAEA;
+	border: 1px solid #666666;
+}
+
 .pad h3, .pad h4, .padbox h3, .padbox h4 {
 	margin-top: 0px;
 	padding-top: 0px;
@@ -783,4 +790,12 @@ tr.torrent .bookmark > a:before {
 }
 tr.torrent .bookmark > a:after {
 	color: black;
+}
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
 }

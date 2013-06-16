@@ -353,6 +353,13 @@ p.min_padding {
 	border: 1px solid #666666;
 }
 
+.box2 {
+	font-size: 8pt;
+	background-color: #EAEAEA;
+	border: 1px solid #666666;
+	margin-bottom: 10px;
+}
+
 .pad h3, .pad h4, .padbox h3, .padbox h4 {
 	margin-top: 0px;
 	padding-top: 0px;
@@ -735,4 +742,12 @@ ul .invitetree {
 	padding: 0px;
 	z-index:1002;
 	overflow: auto;
+}
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
 }

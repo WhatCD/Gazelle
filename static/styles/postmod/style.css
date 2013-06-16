@@ -96,7 +96,8 @@ h1 a:hover, h2 a:hover, h3 a:hover {
 	text-decoration: underline;
 }
 
-.box h1, .box h2, .box h3, .box h4 {
+.box h1, .box h2, .box h3, .box h4
+.box2 h1, .box2 h2, .box2 h3, .box2 h4 {
 	color: #000;
 }
 
@@ -522,6 +523,12 @@ p.min_padding {
 .box {
 	font-size: 10pt;
 	background-color: #F7F6F2;
+}
+
+.box2 {
+	font-size: 10pt;
+	background-color: #F7F6F2;
+	margin-bottom: 10px;
 }
 
 .pad h3, .pad h4, .padbox h3, .padbox h4 {
@@ -1067,4 +1074,12 @@ tr.torrent .bookmark > a:after {
 
 #userinfo_username .brackets:after {
 	content: "]";
+}
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
 }

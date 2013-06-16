@@ -7,6 +7,10 @@ function compare($X, $Y) {
 include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
+if (!empty($_GET['artistreleases'])) {
+	$OnlyArtistReleases = true;
+}
+
 if ($_GET['id'] && $_GET['artistname']) {
 	json_die("failure", "bad parameters");
 }
@@ -169,6 +173,24 @@ $Tags = array();
 foreach ($TorrentList as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));
 
+	foreach($Artists as &$Artist) {
+		$Artist['id'] = (int) $Artist['id'];
+		$Artist['aliasid'] = (int) $Artist['aliasid'];
+	}
+
+	foreach($ExtendedArtists as &$ArtistGroup) {
+		foreach($ArtistGroup as &$Artist) {
+			$Artist['id'] = (int) $Artist['id'];
+			$Artist['aliasid'] = (int) $Artist['aliasid'];
+
+		}
+	}
+
+	$Found = Misc::search_array($Artists, 'id', $ArtistID);
+	if (isset($OnlyArtistReleases) && empty($Found)) {
+		continue;
+	}
+
 	$GroupVanityHouse = $Importances[$GroupID]['VanityHouse'];
 
 	$TagList = explode(' ',str_replace('_','.',$TagList));
@@ -224,7 +246,10 @@ foreach ($TorrentList as $GroupID => $Group) {
 		'wikiImage' => $WikiImage,
 		'groupVanityHouse' => $GroupVanityHouse == 1,
 		'hasBookmarked' => Bookmarks::has_bookmarked('torrent', $GroupID),
-		'torrent' => $InnerTorrents
+		'artists' => $Artists,
+		'extendedArtists' => $ExtendedArtists,
+		'torrent' => $InnerTorrents,
+
 	);
 }
 

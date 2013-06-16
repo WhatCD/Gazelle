@@ -404,12 +404,12 @@ textarea {
 * html .main_column {
 	overflow-x:hidden;
 	}
-.box {
+.box, .box2 {
 	border-bottom:1px solid #eee;
 	margin-bottom:20px;
 	padding-bottom:20px;
 	}
-.box:last-child {
+.box:last-child, .box2:last-child {
 	border-bottom:0;
 	}
 .head strong {
@@ -777,4 +777,16 @@ tr.torrent .bookmark > a:after { content: ""; }
 .top10_quantity_links .brackets:before,
 .top10_quantity_links .brackets:after {
 	color: #666;
+}
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
+}
+
+.field_div#cl_message {
+	margin-bottom: 0px;
 }

@@ -18,7 +18,7 @@ input#file, input[type="file"]{color:#000}
 textarea#quickpost{margin:0; padding:0}
 
 /* GENERAL */
-.box, #content table tr td{background: #373737; margin-bottom: 15px;}
+.box, .box2, #content table tr td{background: #373737; margin-bottom: 15px;}
 .pad{padding: 10px;}
 
 .sidebar .box{position:relative}
@@ -554,3 +554,11 @@ tr.torrent .bookmark > a:after { content: ""; }
 .group_image + .group_info { margin: 0; padding: 0 5px; display: table-cell; vertical-align: middle; height: 90px; }
 #torrents .group_image + .group_info { width: 520px; }
 #top10 .group_image + .group_info { width: 585px; }
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.edit_changelog textarea {
+	width: 600px;
+}
