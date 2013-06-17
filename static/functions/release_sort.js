@@ -1,7 +1,7 @@
-//Couldn't use an associative array because javascript sorting is stupid http://dev-answers.blogspot.com/2012/03/javascript-object-keys-being-sorted-in.html
+//Couldn't use an associative array because JavaScript sorting is stupid http://dev-answers.blogspot.com/2012/03/javascript-object-keys-being-sorted-in.html
 
 jQuery(document).ready(function ($) {
-	var serialize =  function () {
+	var serialize = function () {
 		var a = [];
 		$('#sortable input').each(function () {
 			a.push($(this).attr('id'));

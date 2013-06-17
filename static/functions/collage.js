@@ -65,10 +65,10 @@ var collageShow = {
 		lists = $('.collage_images').objects;
 		i = lists.length;
 		while (i--) {
-			$(lists[i]).hide();
+			$(lists[i]).ghide();
 		}
 
-		$(ul).show();
+		$(ul).gshow();
 		if (s) {
 			$(s).remove_class('selected');
 		}
@@ -84,13 +84,13 @@ var collageShow = {
 		}
 		last  = Math.min(first + 4, this.max);
 		for (i = 0; i < first; i++) {
-			$('#pagelink' + i).hide();
+			$('#pagelink' + i).ghide();
 		}
 		for (i = first; i <= last; i++) {
-			$('#pagelink' + i).show();
+			$('#pagelink' + i).gshow();
 		}
 		for (i = last + 1; i <= this.max; i++) {
-			$('#pagelink' + i).hide();
+			$('#pagelink' + i).ghide();
 		}
 
 		// Toggle the first, prev, next, and last links
@@ -117,9 +117,9 @@ var collageShow = {
 
 		// Toggle the bar
 		if ((last == this.max) && (this.pg != this.max)) {
-			$('#nextbar').show();
+			$('#nextbar').gshow();
 		} else {
-			$('#nextbar').hide();
+			$('#nextbar').ghide();
 		}
 	},
 	nextPage:function() {

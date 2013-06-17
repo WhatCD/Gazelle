@@ -3,14 +3,14 @@
 function Quick_Preview() {
 	$('#buttons').raw().innerHTML = "<input type=\"button\" value=\"Editor\" onclick=\"Quick_Edit();\" /><input type=\"submit\" value=\"Send Message\" />";
 	ajax.post("ajax.php?action=preview","messageform", function(response) {
-		$('#quickpost').hide();
+		$('#quickpost').ghide();
 		$('#preview').raw().innerHTML = response;
-		$('#preview').show();
+		$('#preview').gshow();
 	});
 }
 
 function Quick_Edit() {
 	$('#buttons').raw().innerHTML = "<input type=\"button\" value=\"Preview\" onclick=\"Quick_Preview();\" /><input type=\"submit\" value=\"Send Message\" />";
-	$('#preview').hide();
-	$('#quickpost').show();
+	$('#preview').ghide();
+	$('#quickpost').gshow();
 }

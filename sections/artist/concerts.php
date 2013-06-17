@@ -26,7 +26,7 @@ $Concerts .= ob_get_clean();
 <div class="box">
 	<div id="concerts" class="head">
 		<a href="#">&uarr;</a>&nbsp;<strong>Upcoming concerts</strong>
-		<a href="#" class="brackets" onclick="$('#concertsbody').toggle(); return false;">Toggle</a>
+		<a href="#" class="brackets" onclick="$('#concertsbody').gtoggle(); return false;">Toggle</a>
 	</div>
 	<div id="concertsbody"<?=$Hidden ? ' class="hidden"' : '' ?>>
 	<?=$Concerts?>

@@ -41,7 +41,7 @@ View::show_header("IP address history for $Username");
 ?>
 <script type="text/javascript">//<![CDATA[
 function ShowIPs(rowname) {
-	$('tr[name="'+rowname+'"]').toggle();
+	$('tr[name="'+rowname+'"]').gtoggle();
 
 }
 function Ban(ip, id, elemID) {
@@ -169,8 +169,8 @@ $Pages = Format::get_pages($Page, $NumResults, IPS_PER_PAGE, 9);
 	<table id="iphistory">
 		<tr class="colhead">
 			<td>IP address</td>
-			<td>Started <a href="#" onclick="$('#iphistory td:nth-child(2), #iphistory td:nth-child(4)').hide(); $('#iphistory td:nth-child(3), #iphistory td:nth-child(5)').show(); return false;" class="brackets">Toggle</a></td>
-			<td class="hidden">Started <a href="#" onclick="$('#iphistory td:nth-child(2), #iphistory td:nth-child(4)').show(); $('#iphistory td:nth-child(3), #iphistory td:nth-child(5)').hide(); return false;" class="brackets">Toggle</a></td>
+			<td>Started <a href="#" onclick="$('#iphistory td:nth-child(2), #iphistory td:nth-child(4)').ghide(); $('#iphistory td:nth-child(3), #iphistory td:nth-child(5)').gshow(); return false;" class="brackets">Toggle</a></td>
+			<td class="hidden">Started <a href="#" onclick="$('#iphistory td:nth-child(2), #iphistory td:nth-child(4)').gshow(); $('#iphistory td:nth-child(3), #iphistory td:nth-child(5)').ghide(); return false;" class="brackets">Toggle</a></td>
 			<td>Ended</td>
 			<td class="hidden">Ended</td>
 			<td>Elapsed</td>

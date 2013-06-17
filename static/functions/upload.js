@@ -8,9 +8,9 @@ function Categories() {
 
 function Remaster() {
 	if ($('#remaster').raw().checked) {
-		$('#remaster_true').show();
+		$('#remaster_true').gshow();
 	} else {
-		$('#remaster_true').hide();
+		$('#remaster_true').ghide();
 	}
 
 }
@@ -22,11 +22,11 @@ function Format() {
 				$('#bitrate').raw()[i].selected = true;
 			}
 		}
-		$('#upload_logs').show();
-		$('#other_bitrate_span').hide();
+		$('#upload_logs').gshow();
+		$('#other_bitrate_span').ghide();
 	} else {
 		$('#bitrate').raw()[0].selected = true;
-		$('#upload_logs').hide();
+		$('#upload_logs').ghide();
 	}
 
  	if ($('#format').raw().options[$('#format').raw().selectedIndex].value == 'AAC') {
@@ -39,9 +39,9 @@ function Format() {
 function Bitrate() {
 	$('#other_bitrate').raw().value = '';
 	if ($('#bitrate').raw().options[$('#bitrate').raw().selectedIndex].value == 'Other') {
-		$('#other_bitrate_span').show();
+		$('#other_bitrate_span').gshow();
 	} else {
-		$('#other_bitrate_span').hide();
+		$('#other_bitrate_span').ghide();
 	}
 }
 
@@ -251,9 +251,9 @@ function RemoveArtistField() {
 
 function CheckVA () {
 	if ($('#artist').raw().value.toLowerCase().trim().match(/^(va|various(\sa|a)rtis(t|ts)|various)$/)) {
-		$('#vawarning').show();
+		$('#vawarning').gshow();
 	} else {
-		$('#vawarning').hide();
+		$('#vawarning').ghide();
 	}
 }
 
@@ -264,15 +264,15 @@ function CheckYear() {
 	}
 	var x = $('#year').raw();
 	if (x.value < 1982 && x.value != '' && media != "old" && !$('#unknown').raw().checked) {
-		$('#yearwarning').show();
+		$('#yearwarning').gshow();
 		$('#remaster').raw().checked = true;
-		$('#remaster_true').show();
+		$('#remaster_true').gshow();
 	} else if ($('#unknown').raw().checked) {
 		$('#remaster').raw().checked = true;
-		$('#yearwarning').hide();
-		$('#remaster_true').show();
+		$('#yearwarning').ghide();
+		$('#remaster_true').gshow();
 	} else {
-		$('#yearwarning').hide();
+		$('#yearwarning').ghide();
 	}
 }
 

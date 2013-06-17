@@ -177,10 +177,25 @@ util.fn = util.prototype = {
 	show: function () {
 		return this.remove_class('hidden');
 	},
+	gshow: function () {
+		return this.remove_class('hidden');
+	},
 	hide: function (force) {
 		return this.add_class('hidden', force);
 	},
+	ghide: function (force) {
+		return this.add_class('hidden', force);
+	},
 	toggle: function (force) {
+		//Should we interate and invert all entries, or just go by the first?
+		if (!in_array('hidden', this.objects[0].className.split(' '))) {
+			this.add_class('hidden', force);
+		} else {
+			this.remove_class('hidden');
+		}
+		return this;
+	},
+	gtoggle: function (force) {
 		//Should we interate and invert all entries, or just go by the first?
 		if (!in_array('hidden', this.objects[0].className.split(' '))) {
 			this.add_class('hidden', force);

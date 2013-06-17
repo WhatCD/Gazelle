@@ -116,6 +116,17 @@ echo $Val->GenerateJS('userform');
 					<p>This is an experimental feature, and some stylesheets will have display issues.</p>
 				</td>
 			</tr>
+<?	if (check_perms('users_mod')) { ?>
+			<tr>
+				<td class="label"><strong>Profile stats</strong></td>
+				<td>
+					<label>
+						<input type="checkbox" name="autoload_comm_stats" <?Format::selected('AutoloadCommStats', 1, 'checked', $SiteOptions);?>>
+						Automatically fetch the snatch and peer stats on profile pages.
+					</label>
+				</td>
+			</tr>
+<?	} ?>
 			<tr class="colhead_dark">
 				<td colspan="2">
 					<strong>Torrent options</strong>
@@ -528,7 +539,7 @@ list($ArtistsAdded) = $DB->next_record();
 			</tr>
 			<tr>
 				<td></td>
-				<td><a href="#" id="preview_paranoia" class="brackets">Preview paranoia</a><noscript> (Requires Javascript)</noscript></td>
+				<td><a href="#" id="preview_paranoia" class="brackets">Preview paranoia</a><noscript> (Requires JavaScript)</noscript></td>
 			</tr>
 			<tr class="colhead_dark">
 				<td colspan="2">

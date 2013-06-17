@@ -2,7 +2,7 @@
 View::show_header('Create a collage');
 
 if (!check_perms('site_collages_renamepersonal')) {
-	$ChangeJS = " onchange=\"if ( this.options[this.selectedIndex].value == '0') { $('#namebox').hide(); $('#personal').show(); } else { $('#namebox').show(); $('#personal').hide(); }\"";
+	$ChangeJS = " onchange=\"if ( this.options[this.selectedIndex].value == '0') { $('#namebox').ghide(); $('#personal').gshow(); } else { $('#namebox').gshow(); $('#personal').ghide(); }\"";
 }
 
 $Name = $_REQUEST['name'];

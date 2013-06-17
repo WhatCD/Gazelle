@@ -1,7 +1,10 @@
 CHANGELOG
 
+2013-06-16 by porkpie
+Require a click and an ajax call to view some of the stats on profile pages
+
 2013-06-15 by Ajax
-Adding &amp;artistreleases=1 to artist api url will display only releases by the current artist
+Adding &artistreleases=1 to artist api url will display only releases by the current artist
 
 2013-06-15 by Ajax
 Added artist and extended artist information to torrent groups in artist json output

@@ -857,7 +857,7 @@ if ($x % 7 != 0) { // Padding
 		<table class="layout cat_list" width="100%">
 			<tr>
 				<td class="label">
-					<a class="brackets" href="#" onclick="$('#taglist').toggle(); if (this.innerHTML=='View tags') {this.innerHTML='Hide tags';} else {this.innerHTML='View tags';}; return false;"><?=((empty($LoggedUser['ShowTags'])) ? 'View tags' : 'Hide tags')?></a>
+					<a class="brackets" href="#" onclick="$('#taglist').gtoggle(); if (this.innerHTML=='View tags') {this.innerHTML='Hide tags';} else {this.innerHTML='View tags';}; return false;"><?=((empty($LoggedUser['ShowTags'])) ? 'View tags' : 'Hide tags')?></a>
 				</td>
 			</tr>
 		</table>

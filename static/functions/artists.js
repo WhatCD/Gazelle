@@ -2,50 +2,52 @@ var dragObjects = null;
 var dragObjectPlaceholder = null;
 
 function editOrdering() {
-	$('#editlayout').hide();
-	$('#releasetypes').hide();
-	$('#linkbox').hide();
-	$('.sidebar').hide();
-	$('.main_column > .box').hide(); // Artist info
-	$('.main_column > #requests').hide();
+	$('#editlayout').ghide();
+	$('#releasetypes').ghide();
+	$('#linkbox').ghide();
+	$('.sidebar').ghide();
+	$('.main_column > .box').ghide(); // Artist info
+	$('.main_column > #requests').ghide();
 
-	$('#savelayout').show();
-	$('#emptylinkbox').show();
-	$('#torrents_allopenclose').show();
+	$('#savelayout').gshow();
+	$('#emptylinkbox').gshow();
+	$('#torrents_allopenclose').gshow();
 
 	dragObjects = new Array();
 
 	var elems = $('#torrents_tables table').objects;
-	for(i in elems) {
+	for (i in elems) {
 		var elemID = elems[i].id;
 		if (elemID == undefined) {
 			continue;
 		}
 		if (elemID.indexOf('torrents_') == 0) {
-			$('#'+elemID).show();
+			$('#' + elemID).gshow();
 			dragObjects[elemID] = new dragObject(elemID, elemID+'_handle', startDrag, moveDrag, endDrag);
 			var classes = elems[i].className.split(' ');
-			for(var j=0; classes.length; j++) {
+			for (var j = 0; classes.length; j++) {
 				if (classes[j].indexOf('releases_') == 0) {
-					$('.'+classes[j].replace('_table', '')).hide();
-					$('.artist_editcol').show();
-					$('.artist_normalcol').hide();
+					$('.'+classes[j].replace('_table', '')).ghide();
+					$('.artist_editcol').gshow();
+					$('.artist_normalcol').ghide();
 					break;
 				}
 			}
 		}
 	}
 
-	for(i in dragObjects) { dragObjects[i].StartListening(); }
+	for (i in dragObjects) {
+		dragObjects[i].StartListening();
+	}
 }
 
 function saveOrdering() {
-	$('#savelayout').hide();
-	$('#savinglayout').show();
+	$('#savelayout').ghide();
+	$('#savinglayout').gshow();
 
 	var elems = $('#torrents_tables table').objects;
 	var releaseTypes = "{";
-	for(i in elems) {
+	for (i in elems) {
 		var elemID = elems[i].id;
 		var releaseType = null;
 		if (elemID == undefined) {
@@ -87,7 +89,7 @@ function saveOrderingCallback(response) {
 
 	//Ordering in linkbox
 	var prevOrderedLink = null;
-	for(releaseType in releaseTypes) {
+	for (releaseType in releaseTypes) {
 		var elem = $('#torrents_' + releaseType + '_anchorlink').raw();
 		if (elem == undefined) {
 			continue;
@@ -102,7 +104,7 @@ function saveOrderingCallback(response) {
 
 	//Now let's return to the non editing layout.
 	var elems = $('#torrents_tables table').objects;
-	for(i in elems) {
+	for (i in elems) {
 		var elemID = elems[i].id;
 		if (elemID == undefined) {
 			continue;
@@ -110,45 +112,45 @@ function saveOrderingCallback(response) {
 		if (elemID.indexOf('torrents_') == 0) {
 			var classes = elems[i].className.split(' ');
 			var empty = false;
-			for(var j=0; classes.length; j++) {
+			for (var j = 0; classes.length; j++) {
 				if (classes[j] == null) {
 					break;
 				}
 				if (classes[j].indexOf('releases_') == 0) {
-					$('.artist_editcol').hide();
-					$('.artist_normalcol').show();
+					$('.artist_editcol').ghide();
+					$('.artist_normalcol').gshow();
 				}
 				if (classes[j].indexOf('empty') == 0) {
 					empty = true;
 				}
 			}
 			if (empty) {
-				$('#'+elemID).hide();
+				$('#' + elemID).ghide();
 			}
 		}
 	}
 
-	for(i in dragObjects) {
+	for (i in dragObjects) {
 		dragObjects[i].StopListening();
 	}
 	dragObjects	= null;
 
-	$('#savinglayout').hide();
-	$('#emptylinkbox').hide();
-	$('#torrents_allopenclose').hide();
+	$('#savinglayout').ghide();
+	$('#emptylinkbox').ghide();
+	$('#torrents_allopenclose').ghide();
 
-	$('#editlayout').show();
-	$('#releasetypes').show();
-	$('#linkbox').show();
-	$('.sidebar').show();
-	$('.main_column > .box').show(); // Artist info
-	$('.main_column > #requests').show();
+	$('#editlayout').gshow();
+	$('#releasetypes').gshow();
+	$('#linkbox').gshow();
+	$('.sidebar').gshow();
+	$('.main_column > .box').gshow(); // Artist info
+	$('.main_column > #requests').gshow();
 }
 
 function setDefaultShow(id, show) {
 	if (id == 'all') {
 		var elems = $('#torrents_tables table').objects;
-		for(i in elems) {
+		for (i in elems) {
 			var elemID = elems[i].id;
 			var releaseType = null;
 			if (elemID == undefined) {
@@ -156,7 +158,7 @@ function setDefaultShow(id, show) {
 			}
 			if (elemID.indexOf('torrents_') == 0) {
 				var classes = elems[i].className.split(' ');
-				for(var j=0; classes.length; j++) {
+				for (var j = 0; classes.length; j++) {
 					if (classes[j] == null) {
 						break;
 					}
@@ -168,25 +170,25 @@ function setDefaultShow(id, show) {
 			setDefaultShow(releaseType, show);
 		}
 	} else if (show) {
-		$('#releases_'+id+'_openlink').hide();
-		$('#releases_'+id+'_closedlink').show();
+		$('#releases_'+id+'_openlink').ghide();
+		$('#releases_'+id+'_closedlink').gshow();
 		$('#releases_'+id+'_defaultopen').raw().checked = 'checked';
 	} else {
-		$('#releases_'+id+'_openlink').show();
-		$('#releases_'+id+'_closedlink').hide();
+		$('#releases_'+id+'_openlink').gshow();
+		$('#releases_'+id+'_closedlink').ghide();
 		$('#releases_'+id+'_defaultopen').raw().checked = '';
 	}
 }
 
 function setShow(id, show) {
 	if (show) {
-		$('#releases_'+id+'_viewlink').hide();
-		$('#releases_'+id+'_hidelink').show();
-		$('.releases_'+id).show();
+		$('#releases_'+id+'_viewlink').ghide();
+		$('#releases_'+id+'_hidelink').gshow();
+		$('.releases_'+id).gshow();
 	} else {
-		$('#releases_'+id+'_viewlink').show();
-		$('#releases_'+id+'_hidelink').hide();
-		$('.releases_'+id).hide();
+		$('#releases_'+id+'_viewlink').gshow();
+		$('#releases_'+id+'_hidelink').ghide();
+		$('.releases_'+id).ghide();
 	}
 }
 
@@ -215,7 +217,7 @@ function moveDrag(element) {
 		var bestItem = 'END';
 		elems = element.parentNode.childNodes;
 
-		for(var i=0; i < elems.length; i++) {
+		for (var i = 0; i < elems.length; i++) {
 			elem = elems[i];
 			if (elem == element || elem.nodeName != 'TABLE') {
 				continue;

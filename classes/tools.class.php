@@ -98,7 +98,7 @@ class Tools {
 	 * Gets an hostname using AJAX
 	 *
 	 * @param $IP the IP to fetch
-	 * @return a span with javascript code
+	 * @return a span with JavaScript code
 	 */
 	public static function get_host_by_ajax($IP) {
 		static $ID = 0;

@@ -9,10 +9,12 @@ if ($_POST['submit'] == 'Delete') { //Delete
 	if (!is_number($_POST['id']) || $_POST['id'] == '') {
 		error(0);
 	}
-	$DB->query('DELETE FROM do_not_upload WHERE ID='.$_POST['id']);
+	$DB->query('
+		DELETE FROM do_not_upload
+		WHERE ID = '.$_POST['id']);
 } else { //Edit & Create, Shared Validation
-	$Val->SetFields('name', '1','string','The name must be set, and has a max length of 40 characters', array('maxlength'=>40, 'minlength'=>1));
-	$Val->SetFields('comment', '0','string','The description has a max length of 255 characters', array('maxlength'=>255));
+	$Val->SetFields('name', '1', 'string', 'The name must be set, has a maximum length of 100 characters, and has a minimum length of 5 characters.', array('maxlength' => 100, 'minlength' => 5));
+	$Val->SetFields('comment', '0', 'string', 'The description has a maximum length of 255 characters.', array('maxlength' => 255));
 	$Err = $Val->ValidateForm($_POST); // Validate the form
 	if ($Err) {
 		error($Err);
@@ -28,15 +30,17 @@ if ($_POST['submit'] == 'Delete') { //Delete
 		$DB->query("
 			UPDATE do_not_upload
 			SET
-				Name='$P[name]',
-				Comment='$P[comment]',
-				UserID='$LoggedUser[ID]',
-				Time='".sqltime()."'
-			WHERE ID='$P[id]'");
+				Name = '$P[name]',
+				Comment = '$P[comment]',
+				UserID = '$LoggedUser[ID]',
+				Time = '".sqltime()."'
+			WHERE ID = '$P[id]'");
 	} else { //Create
-		$DB->query("INSERT INTO do_not_upload
-			(Name, Comment, UserID, Time) VALUES
-			('$P[name]','$P[comment]','$LoggedUser[ID]','".sqltime()."')");
+		$DB->query("
+			INSERT INTO do_not_upload
+				(Name, Comment, UserID, Time)
+			VALUES
+				('$P[name]','$P[comment]','$LoggedUser[ID]','".sqltime()."')");
 	}
 }
 

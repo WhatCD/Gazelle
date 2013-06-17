@@ -228,12 +228,12 @@ if (!empty($UsedReleases)) { ?>
 		}
 
 		if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['SortHide']) && array_key_exists($ReleaseType, $LoggedUser['SortHide']) && $LoggedUser['SortHide'][$ReleaseType] == 1)) {
-			$ToggleStr = " onclick=\"$('.releases_$ReleaseID').show(); return true;\"";
+			$ToggleStr = " onclick=\"$('.releases_$ReleaseID').gshow(); return true;\"";
 		} else {
 			$ToggleStr = '';
 		}
 ?>
-		<a href="#torrents_<?=str_replace(" ", "_", strtolower($ReleaseTypes[$ReleaseID]))?>" class="brackets"<?=$ToggleStr?>><?=$DisplayName?></a>
+		<a href="#torrents_<?=str_replace(' ', '_', strtolower($ReleaseTypes[$ReleaseID]))?>" class="brackets"<?=$ToggleStr?>><?=$DisplayName?></a>
 <?
 	}
 	if ($NumRequests > 0) {
@@ -323,7 +323,7 @@ foreach ($Importances as $Group) {
 			<table class="torrent_table grouped release_table" id="torrents_<?=$ReleaseTypeLabel?>">
 				<tr class="colhead_dark">
 					<td class="small"><!-- expand/collapse --></td>
-					<td width="70%"><a href="#">&uarr;</a>&nbsp;<strong><?=$DisplayName?></strong> (<a href="#" onclick="$('.releases_<?=$ReleaseType?>').toggle(true);return false;">View</a>)</td>
+					<td width="70%"><a href="#">&uarr;</a>&nbsp;<strong><?=$DisplayName?></strong> (<a href="#" onclick="$('.releases_<?=$ReleaseType?>').gtoggle(true); return false;">View</a>)</td>
 					<td>Size</td>
 					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
 					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
@@ -717,7 +717,7 @@ if (!is_array($Collages)) {
 			AND Deleted='0'
 			AND CategoryID = '7'");
 	$Collages = $DB->to_array();
-	$Cache->cache_value('artists_collages_'.$ArtistID, $Collages, 3600*6);
+	$Cache->cache_value('artists_collages_'.$ArtistID, $Collages, 3600 * 6);
 }
 if (count($Collages) > 0) {
 	if (count($Collages) > MAX_COLLAGES) {
@@ -725,7 +725,7 @@ if (count($Collages) > 0) {
 		$Range = range(0,count($Collages) - 1);
 		shuffle($Range);
 		$Indices = array_slice($Range, 0, MAX_COLLAGES);
-		$SeeAll = ' <a href="#" onclick="$(\'.collage_rows\').toggle(); return false;">(See all)</a>';
+		$SeeAll = ' <a href="#" onclick="$(\'.collage_rows\').gtoggle(); return false;">(See all)</a>';
 	} else {
 		$Indices = range(0, count($Collages)-1);
 		$SeeAll = '';
@@ -929,7 +929,7 @@ function require(file, callback) {
 			<div id="info" class="head">
 				<a href="#">&uarr;</a>&nbsp;
 				<strong>Artist info</strong>
-				<a href="#" class="brackets" onclick="$('#body').toggle(); return false;">Toggle</a>
+				<a href="#" class="brackets" onclick="$('#body').gtoggle(); return false;">Toggle</a>
 			</div>
 			<div id="body" class="body"><?=$Text->full_format($Body)?></div>
 		</div>

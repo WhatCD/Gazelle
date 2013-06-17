@@ -314,7 +314,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_perf').toggle();return false;" class="brackets">View</a> Performance stats:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_perf').gtoggle(); return false;" class="brackets">View</a> Performance stats:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_perf" class="debug_table hidden" width="100%">
@@ -339,7 +339,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_include').toggle();return false;" class="brackets">View</a> <?=number_format(count($Includes))?> Includes:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_include').gtoggle(); return false;" class="brackets">View</a> <?=number_format(count($Includes))?> Includes:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_include" class="debug_table hidden" width="100%">
@@ -363,7 +363,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_classes').toggle();return false;" class="brackets">View</a> Classes:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_classes').gtoggle(); return false;" class="brackets">View</a> Classes:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_classes" class="debug_table hidden" width="100%">
@@ -380,7 +380,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_extensions').toggle();return false;" class="brackets">View</a> Extensions:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_extensions').gtoggle(); return false;" class="brackets">View</a> Extensions:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_extensions" class="debug_table hidden" width="100%">
@@ -403,7 +403,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_flags').toggle();return false;" class="brackets">View</a> Flags:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_flags').gtoggle(); return false;" class="brackets">View</a> Flags:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_flags" class="debug_table hidden" width="100%">
@@ -441,7 +441,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_constants').toggle();return false;" class="brackets">View</a> Constants:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_constants').gtoggle(); return false;" class="brackets">View</a> Constants:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_constants" class="debug_table hidden" width="100%">
@@ -469,14 +469,14 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_cache').toggle();return false;" class="brackets">View</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_cache').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_cache" class="debug_table hidden" width="100%">
 <? 		foreach ($CacheKeys as $Key) { ?>
 		<tr>
 			<td align="left" class="debug_info debug_cache_key">
-				<a href="#" onclick="$('#debug_cache_<?=$Key?>').toggle(); return false;"><?=display_str($Key)?></a>
+				<a href="#" onclick="$('#debug_cache_<?=$Key?>').gtoggle(); return false;"><?=display_str($Key)?></a>
 			</td>
 			<td align="left" class="debug_data debug_cache_data">
 				<pre id="debug_cache_<?=$Key?>" class="hidden"><?=display_str(print_r($Cache->get_value($Key, true), true))?></pre>
@@ -497,7 +497,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_error').toggle();return false;" class="brackets">View</a> <?=number_format(count($Errors))?> Errors:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_error').gtoggle(); return false;" class="brackets">View</a> <?=number_format(count($Errors))?> Errors:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_error" class="debug_table hidden" width="100%">
@@ -536,7 +536,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_database').toggle();return false;" class="brackets">View</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_database').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_database" class="debug_table hidden" width="100%">
@@ -571,7 +571,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_sphinx').toggle();return false;" class="brackets">View</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_sphinx').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_sphinx" class="debug_table hidden" width="100%">
@@ -603,7 +603,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_loggedvars').toggle();return false;" class="brackets">View</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$('#debug_loggedvars').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_loggedvars" class="debug_table hidden" width="100%">
@@ -614,7 +614,7 @@ class DEBUG {
 ?>
 		<tr>
 			<td align="left" class="debug_info debug_loggedvars_name">
-				<a href="#" onclick="$('#debug_loggedvars_<?=$ID?>').toggle(); return false;"><?=display_str($Key)?></a> (<?=$Size . ($Size == 1 ? ' element' : ' elements')?>)
+				<a href="#" onclick="$('#debug_loggedvars_<?=$ID?>').gtoggle(); return false;"><?=display_str($Key)?></a> (<?=$Size . ($Size == 1 ? ' element' : ' elements')?>)
 				<div><?=$Data['bt']['path'].':'.$Data['bt']['line'];?></div>
 			</td>
 			<td class="debug_data debug_loggedvars_data" align="left">

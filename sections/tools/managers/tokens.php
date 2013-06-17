@@ -90,8 +90,8 @@ if (isset($_REQUEST['addtokens'])) {
 		<input type="hidden" name="action" value="tokens" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		Tokens to set: <input type="text" name="numtokens" size="5" style="text-align: right;" value="0" /><br /><br />
-		<span id="droptokens" class=""><label for="onlydrop">Only affect users with at least this many tokens: </label><input type="checkbox" id="onlydrop" name="onlydrop" value="1" onchange="$('#disabled').toggle();return true;" /></span><br />
-		<span id="disabled" class=""><label for="leechdisabled">Also add tokens (as needed) to leech disabled users: </label><input type="checkbox" id="leechdisabled" name="leechdisabled" value="1" onchange="$('#droptokens').toggle();return true;" /></span><br /><br />
+		<span id="droptokens" class=""><label for="onlydrop">Only affect users with at least this many tokens: </label><input type="checkbox" id="onlydrop" name="onlydrop" value="1" onchange="$('#disabled').gtoggle(); return true;" /></span><br />
+		<span id="disabled" class=""><label for="leechdisabled">Also add tokens (as needed) to leech disabled users: </label><input type="checkbox" id="leechdisabled" name="leechdisabled" value="1" onchange="$('#droptokens').gtoggle(); return true;" /></span><br /><br />
 		<input type="submit" name="cleartokens" value="Set token total" />
 	</form>
 </div>

@@ -8,17 +8,20 @@ if (strtotime($BannedUntil) < time() && !$BanID) {
 <?
 
 	if (!empty($BannedUntil) && $BannedUntil != '0000-00-00 00:00:00') {
-		$DB->query("UPDATE login_attempts SET BannedUntil='0000-00-00 00:00:00', Attempts='0' WHERE ID='".db_string($AttemptID)."'");
+		$DB->query("
+			UPDATE login_attempts
+			SET BannedUntil='0000-00-00 00:00:00', Attempts='0'
+			WHERE ID='".db_string($AttemptID)."'");
 		$Attempts = 0;
 	}
 	if (isset($Err)) {
 ?>
 	<span class="warning"><?=$Err?><br /><br /></span>
-<? } ?>
-<? if ($Attempts > 0) { ?>
+<?	} ?>
+<?	if ($Attempts > 0) { ?>
 	You have <span class="info"><?=(6 - $Attempts)?></span> attempts remaining.<br /><br />
 	<strong>WARNING:</strong> You will be banned for 6 hours after your login attempts run out!<br /><br />
-<? } ?>
+<?	} ?>
 	<table class="layout">
 		<tr>
 			<td>Username&nbsp;</td>
@@ -43,7 +46,7 @@ if (strtotime($BannedUntil) < time() && !$BanID) {
 	if ($BanID) {
 ?>
 	<span class="warning">Your IP address is banned indefinitely.</span>
-<? } else { ?>
+<?	} else { ?>
 	<span class="warning">You are banned from logging in for another <?=time_diff($BannedUntil)?>.</span>
 <?
 	}
@@ -53,14 +56,15 @@ if ($Attempts > 0) {
 ?>
 	<br /><br />
 	Lost your password? <a href="login.php?act=recover">Recover it here!</a>
-<? } ?>
+<?
+} ?>
 <script type="text/javascript" src="static/functions/detect_mobile.js"></script>
 <script type="text/javascript">
-cookie.set('cookie_test',1,1);
+cookie.set('cookie_test', 1, 1);
 if (cookie.get('cookie_test') != null) {
 	cookie.del('cookie_test');
 } else {
-	$('#no-cookies').show();
+	$('#no-cookies').gshow();
 }
 </script>
 <? View::show_footer(); ?>

@@ -311,7 +311,7 @@ while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB-
 				<?=Format::cut_string($Title, 80); ?>
 <?	}
 	if ($Type == 'body') { ?>
-				<a href="#" onclick="$('#post_<?=$PostID?>_text').toggle(); return false;">(show)</a> <span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if (!empty($PostID)) { echo '&amp;postid='.$PostID.'#post'.$PostID; } ?>"></a></span>
+				<a href="#" onclick="$('#post_<?=$PostID?>_text').gtoggle(); return false;">(show)</a> <span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if (!empty($PostID)) { echo '&amp;postid='.$PostID.'#post'.$PostID; } ?>"></a></span>
 <?	} ?>
 			</td>
 			<td>

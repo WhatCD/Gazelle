@@ -9,7 +9,7 @@
 	Example usage 1:
 	ajax.handle = function () {
 		$('#preview' + postid).raw().innerHTML = ajax.response;
-		$('#editbox' + postid).hide();
+		$('#editbox' + postid).ghide();
 	}
 	ajax.post("ajax.php?action=preview","#form-id" + postid);
 

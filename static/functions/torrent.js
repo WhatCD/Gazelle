@@ -1,16 +1,16 @@
 function ChangeCategory(catid) {
 	if (catid == 1) {
-		$('#split_releasetype').show();
-		$('#split_artist').show();
-		$('#split_year').show();
+		$('#split_releasetype').gshow();
+		$('#split_artist').gshow();
+		$('#split_year').gshow();
 	} else if (catid == 4 || catid == 6) {
-		$('#split_releasetype').hide();
-		$('#split_year').show();
-		$('#split_artist').hide();
+		$('#split_releasetype').ghide();
+		$('#split_year').gshow();
+		$('#split_artist').ghide();
 	} else {
-		$('#split_releasetype').hide();
-		$('#split_artist').hide();
-		$('#split_year').hide();
+		$('#split_releasetype').ghide();
+		$('#split_artist').ghide();
+		$('#split_year').ghide();
 	}
 }
 
@@ -25,8 +25,8 @@ function ArtistManager() {
 	if (!(ArtistList = $('#artist_list').raw())) {
 		return false;
 	} else if ($('#artistmanager').raw()) {
-		$('#artistmanager').toggle();
-		$('#artist_list').toggle();
+		$('#artistmanager').gtoggle();
+		$('#artist_list').gtoggle();
 	} else {
 		MainArtistCount = 0;
 		var elArtistManager = document.createElement('div');
@@ -156,7 +156,7 @@ function ArtistManager() {
 		elArtistForm.appendChild(elSubmitDiv);
 		elArtistManager.appendChild(elArtistForm);
 		ArtistList.parentNode.appendChild(elArtistManager);
-		$('#artist_list').hide();
+		$('#artist_list').ghide();
 	}
 }
 
@@ -267,10 +267,10 @@ function DownVoteGroup(groupid, authkey) {
 			}
 		}
 	);
-	$('#vote_message').hide();
-	$('#unvote_message').show();
-	$('#upvoted').hide();
-	$('#downvoted').show();
+	$('#vote_message').ghide();
+	$('#unvote_message').gshow();
+	$('#upvoted').ghide();
+	$('#downvoted').gshow();
 	voteLock = false;
 }
 
@@ -289,10 +289,10 @@ function UpVoteGroup(groupid, authkey) {
 			}
 		}
 	);
-	$('#vote_message').hide();
-	$('#unvote_message').show();
-	$('#upvoted').show();
-	$('#downvoted').hide();
+	$('#vote_message').ghide();
+	$('#unvote_message').gshow();
+	$('#upvoted').gshow();
+	$('#downvoted').ghide();
 	voteLock = false;
 }
 
@@ -312,9 +312,9 @@ function UnvoteGroup(groupid, authkey) {
 			}
 		}
 	);
-	$('#vote_message').show();
-	$('#unvote_message').hide();
-	$('#upvoted').hide();
-	$('#downvoted').hide();
+	$('#vote_message').gshow();
+	$('#unvote_message').ghide();
+	$('#upvoted').ghide();
+	$('#downvoted').ghide();
 	voteLock = false;
 }

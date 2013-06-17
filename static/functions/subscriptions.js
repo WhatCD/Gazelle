@@ -20,7 +20,7 @@ function Collapse() {
 	var collapseLink = $('#collapselink').raw();
 	var hide = (collapseLink.innerHTML.substr(0,1) == 'H' ? 1 : 0);
 	if ($('.row').results() > 0) {
-		$('.row').toggle();
+		$('.row').gtoggle();
 	}
 	if (hide) {
 		collapseLink.innerHTML = 'Show post bodies';

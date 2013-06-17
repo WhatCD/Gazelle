@@ -38,7 +38,7 @@ function Edit_Form(post,key) {
 	postid = post;
 	//If no edit is already going underway or a previous edit was finished, make the necessary dom changes.
 	if (!$('#editbox' + postid).objects[0] || $('#editbox' + postid + '.hidden').objects[0]) {
-		$('#reply_box').hide();
+		$('#reply_box').ghide();
 		if (location.href.match(/torrents\.php/) ||
 				location.href.match(/artist\.php/)) {
 			boxWidth="50";
@@ -74,7 +74,7 @@ function Edit_Form(post,key) {
 function Cancel_Edit(postid) {
 	var answer = confirm("Are you sure you want to cancel?");
 	if (answer) {
-		$('#reply_box').show();
+		$('#reply_box').gshow();
 		$('#bar' + postid).raw().innerHTML = $('#bar' + postid).raw().oldbar;
 		$('#content' + postid).raw().innerHTML = $('#bar' + postid).raw().cancel;
 	}
@@ -84,48 +84,48 @@ function Preview_Edit(postid) {
 	$('#bar' + postid).raw().innerHTML = "<input type=\"button\" value=\"Editor\" onclick=\"Cancel_Preview(" + postid + ");\" /><input type=\"button\" value=\"Post\" onclick=\"Save_Edit(" + postid + ")\" /><input type=\"button\" value=\"Cancel\" onclick=\"Cancel_Edit(" + postid + ");\" />";
 	ajax.post("ajax.php?action=preview","form" + postid, function(response) {
 		$('#preview' + postid).raw().innerHTML = response;
-		$('#editbox' + postid).hide();
+		$('#editbox' + postid).ghide();
 	});
 }
 
 function Cancel_Preview(postid) {
 	$('#bar' + postid).raw().innerHTML = "<input type=\"button\" value=\"Preview\" onclick=\"Preview_Edit(" + postid + ");\" /><input type=\"button\" value=\"Post\" onclick=\"Save_Edit(" + postid + ")\" /><input type=\"button\" value=\"Cancel\" onclick=\"Cancel_Edit(" + postid + ");\" />";
 	$('#preview' + postid).raw().innerHTML = "";
-	$('#editbox' + postid).show();
+	$('#editbox' + postid).gshow();
 }
 
 function Save_Edit(postid) {
-	$('#reply_box').show();
+	$('#reply_box').gshow();
 	if (location.href.match(/forums\.php/)) {
 		ajax.post("forums.php?action=takeedit","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "<a href=\"reports.php?action=report&amp;type=post&amp;id="+postid+"\" class=\"brackets\">Report</a>&nbsp;<a href=\"#\">&uarr;</a>";
 			$('#preview' + postid).raw().innerHTML = response;
-			$('#editbox' + postid).hide();
-			$('#pmbox' + postid).hide();
+			$('#editbox' + postid).ghide();
+			$('#pmbox' + postid).ghide();
 		});
 	} else if (location.href.match(/collages?\.php/)) {
 		ajax.post("collages.php?action=takeedit_comment","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "";
 			$('#preview' + postid).raw().innerHTML = response;
-			$('#editbox' + postid).hide();
+			$('#editbox' + postid).ghide();
 		});
 	} else if (location.href.match(/requests\.php/)) {
 		ajax.post("requests.php?action=takeedit_comment","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "";
 			$('#preview' + postid).raw().innerHTML = response;
-			$('#editbox' + postid).hide();
+			$('#editbox' + postid).ghide();
 		});
 	} else if (location.href.match(/artist\.php/)) {
 		ajax.post("artist.php?action=takeedit_post","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "";
 			$('#preview' + postid).raw().innerHTML = response;
-			$('#editbox' + postid).hide();
+			$('#editbox' + postid).ghide();
 		});
 	} else {
 		ajax.post("torrents.php?action=takeedit_post","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "";
 			$('#preview' + postid).raw().innerHTML = response;
-			$('#editbox' + postid).hide();
+			$('#editbox' + postid).ghide();
 		});
 	}
 }
@@ -135,23 +135,23 @@ function Delete(post) {
 	if (confirm('Are you sure you wish to delete this post?') == true) {
 		if (location.href.match(/forums\.php/)) {
 			ajax.get("forums.php?action=delete&auth=" + authkey + "&postid=" + postid, function () {
-				$('#post' + postid).hide();
+				$('#post' + postid).ghide();
 			});
 		} else if (location.href.match(/collages?\.php/)) {
 			ajax.get("collages.php?action=delete_comment&auth=" + authkey + "&postid=" + postid, function () {
-				$('#post' + postid).hide();
+				$('#post' + postid).ghide();
 			});
 		} else if (location.href.match(/requests\.php/)) {
 			ajax.get("requests.php?action=delete_comment&auth=" + authkey + "&postid=" + postid, function () {
-				$('#post' + postid).hide();
+				$('#post' + postid).ghide();
 			});
 		} else if (location.href.match(/artist\.php/)) {
 			ajax.get("artist.php?action=delete_comment&auth="+authkey+ "&postid=" + postid, function () {
-				$('#post' + postid).hide();
+				$('#post' + postid).ghide();
 			});
 		} else {
 			ajax.get("torrents.php?action=delete_post&auth=" + authkey + "&postid=" + postid, function () {
-				$('#post' + postid).hide();
+				$('#post' + postid).ghide();
 			});
 		}
 	}
@@ -162,9 +162,9 @@ function Quick_Preview() {
 	$('#post_preview').raw().value = "Make changes";
 	$('#post_preview').raw().preview = true;
 	ajax.post("ajax.php?action=preview","quickpostform", function(response) {
-		$('#quickreplypreview').show();
+		$('#quickreplypreview').gshow();
 		$('#contentpreview').raw().innerHTML = response;
-		$('#quickreplytext').hide();
+		$('#quickreplytext').ghide();
 	});
 }
 
@@ -172,13 +172,13 @@ function Quick_Edit() {
 	var quickreplybuttons;
 	$('#post_preview').raw().value = "Preview";
 	$('#post_preview').raw().preview = false;
-	$('#quickreplypreview').hide();
-	$('#quickreplytext').show();
+	$('#quickreplypreview').ghide();
+	$('#quickreplytext').gshow();
 }
 
 function Newthread_Preview(mode) {
-	$('#newthreadpreviewbutton').toggle();
-	$('#newthreadeditbutton').toggle();
+	$('#newthreadpreviewbutton').gtoggle();
+	$('#newthreadeditbutton').gtoggle();
 	if (mode) { // Preview
 		ajax.post("ajax.php?action=preview","newthreadform", function(response) {
 			$('#contentpreview').raw().innerHTML = response;
@@ -205,11 +205,11 @@ function Newthread_Preview(mode) {
 				$('#pollanswers').raw().appendChild(document.createElement('br'));
 			}
 			if ($('#pollanswers').raw().children.length > 4) {
-				$('#pollpreview').show();
+				$('#pollpreview').gshow();
 			}
 		}
 	} else { // Back to editor
-		$('#pollpreview').hide();
+		$('#pollpreview').ghide();
 		$('#newthreadtitle').raw().innerHTML = 'New Topic';
 		var pollanswers = $('#pollanswers').raw();
 		if (pollanswers) {
@@ -218,9 +218,9 @@ function Newthread_Preview(mode) {
 			pollanswers.parentNode.replaceChild(el, pollanswers);
 		}
 	}
-	$('#newthreadtext').toggle();
-	$('#newthreadpreview').toggle();
-	$('#subscribediv').toggle();
+	$('#newthreadtext').gtoggle();
+	$('#newthreadpreview').gtoggle();
+	$('#subscribediv').gtoggle();
 }
 
 function LoadEdit(type, post, depth) {

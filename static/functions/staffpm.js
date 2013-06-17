@@ -3,7 +3,7 @@ function SetMessage() {
 
 	ajax.get("?action=get_response&plain=1&id=" + id, function (data) {
 		$('#quickpost').raw().value = data;
-		$('#common_answers').hide();
+		$('#common_answers').ghide();
 	});
 }
 
@@ -32,8 +32,8 @@ function SaveMessage(id) {
 			} else {
 				document.getElementById(ajax_message).textContent = 'Something went wrong.';
 			}
-			$('#' + ajax_message).show();
-			var t = setTimeout("$('#" + ajax_message + "').hide()", 2000);
+			$('#' + ajax_message).gshow();
+			var t = setTimeout("$('#" + ajax_message + "').ghide()", 2000);
 		}
 	);
 }
@@ -46,14 +46,14 @@ function DeleteMessage(id) {
 	ToPost['id'] = id;
 
 	ajax.post("?action=delete_response", ToPost, function (data) {
-		$(div).hide();
+		$(div).ghide();
 		if (data == '1') {
 			document.getElementById(ajax_message).textContent = 'Response successfully deleted.';
 		} else {
 			document.getElementById(ajax_message).textContent = 'Something went wrong.';
 		}
-		$('#'+ajax_message).show();
-		var t = setTimeout("$('#" + ajax_message + "').hide()", 2000);
+		$('#'+ajax_message).gshow();
+		var t = setTimeout("$('#" + ajax_message + "').ghide()", 2000);
 	});
 }
 
@@ -68,8 +68,8 @@ function Assign() {
 		} else {
 			document.getElementById('ajax_message').textContent = 'Something went wrong.';
 		}
-		$('#ajax_message').show();
-		var t = setTimeout("$('#ajax_message').hide()", 2000);
+		$('#ajax_message').gshow();
+		var t = setTimeout("$('#ajax_message').ghide()", 2000);
 	});
 }
 
@@ -80,12 +80,12 @@ function PreviewResponse(id) {
 		ToPost['message'] = document.getElementById('response_message_'+id).value;
 		ajax.post('?action=preview', ToPost, function (data) {
 			document.getElementById('response_div_'+id).innerHTML = data;
-			$(div).toggle();
-			$('#response_message_'+id).toggle();
+			$(div).gtoggle();
+			$('#response_message_'+id).gtoggle();
 		});
 	} else {
-		$(div).toggle();
-		$('#response_message_'+id).toggle();
+		$(div).gtoggle();
+		$('#response_message_'+id).gtoggle();
 	}
 }
 
@@ -95,13 +95,13 @@ function PreviewMessage() {
 		ToPost['message'] = document.getElementById('quickpost').value;
 		ajax.post('?action=preview', ToPost, function (data) {
 			document.getElementById('preview').innerHTML = data;
-			$('#preview').toggle();
-			$('#quickpost').toggle();
+			$('#preview').gtoggle();
+			$('#quickpost').gtoggle();
 			$('#previewbtn').raw().value = "Edit";
 		});
 	} else {
-		$('#preview').toggle();
-		$('#quickpost').toggle();
+		$('#preview').gtoggle();
+		$('#quickpost').gtoggle();
 		$('#previewbtn').raw().value = "Preview";
 	}
 }

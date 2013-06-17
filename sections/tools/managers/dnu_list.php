@@ -28,7 +28,7 @@ $DB->query("
 			<input type="hidden" name="action" value="dnu_alter" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<td>
-				<input type="text" name="name" size="30" />
+				<input type="text" name="name" size="40" />
 			</td>
 			<td colspan="2">
 				<input type="text" name="comment" size="60" />
@@ -51,7 +51,7 @@ $DB->query("
 				<input type="hidden" name="action" value="dnu_alter" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="id" value="<?=$ID?>" />
-				<input type="text" name="name" value="<?=display_str($Name)?>" size="30" />
+				<input type="text" name="name" value="<?=display_str($Name)?>" size="40" />
 			</td>
 			<td>
 				<input type="text" name="comment" value="<?=display_str($Comment)?>" size="60" />

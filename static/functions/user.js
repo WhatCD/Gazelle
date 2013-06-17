@@ -1,7 +1,7 @@
 function ChangeTo(to) {
 	if (to == "text") {
-		$('#admincommentlinks').hide();
-		$('#admincomment').show();
+		$('#admincommentlinks').ghide();
+		$('#admincomment').gshow();
 		resize('admincomment');
 		var buttons = document.getElementsByName('admincommentbutton');
 		for (var i = 0; i < buttons.length; i++) {
@@ -10,8 +10,8 @@ function ChangeTo(to) {
 	} else if (to == "links") {
 		ajax.post("ajax.php?action=preview","form", function(response) {
 			$('#admincommentlinks').raw().innerHTML = response;
-			$('#admincomment').hide();
-			$('#admincommentlinks').show();
+			$('#admincomment').ghide();
+			$('#admincommentlinks').gshow();
 			var buttons = document.getElementsByName('admincommentbutton');
 			for (var i = 0; i < buttons.length; i++) {
 				buttons[i].setAttribute('onclick',"ChangeTo('text'); return false;");
@@ -138,10 +138,10 @@ addDOMLoadEvent(AlterParanoia);
 
 function ToggleWarningAdjust(selector) {
 	if (selector.options[selector.selectedIndex].value == '---') {
-		$('#ReduceWarningTR').show();
+		$('#ReduceWarningTR').gshow();
 		$('#ReduceWarning').raw().disabled = false;
 	} else {
-		$('#ReduceWarningTR').hide();
+		$('#ReduceWarningTR').ghide();
 		$('#ReduceWarning').raw().disabled = true;
 	}
 }
@@ -150,9 +150,9 @@ addDOMLoadEvent(ToggleIdenticons);
 function ToggleIdenticons() {
 	var selected = $('#disableavatars').raw().selectedIndex;
 	if (selected == 2 || selected == 3) {
-		$('#identicons').show();
+		$('#identicons').gshow();
 	} else {
-		$('#identicons').hide();
+		$('#identicons').ghide();
 	}
 }
 
@@ -172,4 +172,50 @@ function togglePassKey(key) {
 		$('#passkey').raw().innerHTML = 'View';
 	}
 
+}
+
+function commStats(userid) {
+	$('.user_commstats').html('Loading...');
+	ajax.get('ajax.php?action=community_stats&userid=' + userid, function(JSONresponse) {
+		var response = JSON.parse(JSONresponse) || false;
+		if (!response || response.status == 'failure') {
+			$('.user_commstats').html('An error occured');
+			return;
+		}
+		displayCommStats(response.response);
+	});
+}
+
+function displayCommStats(stats) {
+	var baseid = '#user_commstats_';
+	for (x in stats) {
+		if (stats[x] === false) {
+			continue;
+		}
+		switch (x) {
+			case 'leeching':
+				$(baseid + x).html(stats[x]);
+				break;
+			case 'seeding':
+				$(baseid + x).html(stats[x]);
+				break;
+			case 'downloaded':
+				$(baseid + x).html(stats[x]);
+				break;
+			case 'snatched':
+				$(baseid + x).html(stats[x]);
+				break;
+			case 'usnatched':
+				$(baseid + x).html('(' + stats[x] + ')');
+				break;
+			case 'udownloaded':
+				$(baseid + x).html('(' + stats[x] + ')');
+				break;
+			case 'seedingperc':
+				if (stats[x] !== -1) {
+					$(baseid + x).html('(' + stats[x] + '%)');
+				}
+				break;
+		}
+	}
 }

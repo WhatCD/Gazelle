@@ -39,7 +39,7 @@ View::show_header("Tracker IP history for $Username");
 ?>
 <script type="text/javascript">
 function ShowIPs(rowname) {
-	$('tr[name="'+rowname+'"]').toggle();
+	$('tr[name="'+rowname+'"]').gtoggle();
 }
 </script>
 <?

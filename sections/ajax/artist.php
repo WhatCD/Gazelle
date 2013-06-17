@@ -154,16 +154,16 @@ foreach ($TorrentList as $GroupID=>$Group) {
 }
 
 if (!empty($GuestAlbums)) {
-	$ReleaseTypes[1024] = "Guest Appearance";
+	$ReleaseTypes[1024] = 'Guest Appearance';
 }
 if (!empty($RemixerAlbums)) {
-	$ReleaseTypes[1023] = "Remixed By";
+	$ReleaseTypes[1023] = 'Remixed By';
 }
 if (!empty($ComposerAlbums)) {
-	$ReleaseTypes[1022] = "Composition";
+	$ReleaseTypes[1022] = 'Composition';
 }
 if (!empty($ProducerAlbums)) {
-	$ReleaseTypes[1021] = "Produced By";
+	$ReleaseTypes[1021] = 'Produced By';
 }
 
 reset($TorrentList);
@@ -173,13 +173,13 @@ $Tags = array();
 foreach ($TorrentList as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));
 
-	foreach($Artists as &$Artist) {
+	foreach ($Artists as &$Artist) {
 		$Artist['id'] = (int) $Artist['id'];
 		$Artist['aliasid'] = (int) $Artist['aliasid'];
 	}
 
-	foreach($ExtendedArtists as &$ArtistGroup) {
-		foreach($ArtistGroup as &$Artist) {
+	foreach ($ExtendedArtists as &$ArtistGroup) {
+		foreach ($ArtistGroup as &$Artist) {
 			$Artist['id'] = (int) $Artist['id'];
 			$Artist['aliasid'] = (int) $Artist['aliasid'];
 

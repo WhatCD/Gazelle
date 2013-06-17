@@ -255,7 +255,7 @@ if ($Old) {
 		ob_end_clean();
 ?>
 		<tr class="rowa">
-			<td><?=display_str($Record['Email'])?><?=(($MatchCount > 0) ? ' <a href="#" onclick="$(\'#matches_'.$j.'\').toggle();return false;">('.$MatchCount.')</a>' : '')?></td>
+			<td><?=display_str($Record['Email'])?><?=(($MatchCount > 0) ? ' <a href="#" onclick="$(\'#matches_'.$j.'\').gtoggle(); return false;">('.$MatchCount.')</a>' : '')?></td>
 			<td><?=time_diff($Record['StartTime'])?></td>
 			<td><?=time_diff($Record['EndTime'])?></td>
 			<td><?=time_diff($Record['ElapsedTime'])?></td>
@@ -312,7 +312,7 @@ if ($OldMatches) {
 }
 ?>
 		<tr class="rowa">
-			<td><?=display_str($Invite['Email'])?><?=(($MatchCount > 0) ? ' <a href="#" onclick="$(\'#matches_invite\').toggle();return false;">('.$MatchCount.')</a>' : '')?></td>
+			<td><?=display_str($Invite['Email'])?><?=(($MatchCount > 0) ? ' <a href="#" onclick="$(\'#matches_invite\').gtoggle(); return false;">('.$MatchCount.')</a>' : '')?></td>
 			<td>Never</td>
 			<td><?=time_diff($Invite['EndTime'])?></td>
 			<td><?=time_diff($Invite['AccountAge'])?></td>

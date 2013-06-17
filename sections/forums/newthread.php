@@ -35,7 +35,7 @@ View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbco
 		</div>
 <?	if (check_perms('forums_polls_create')) { ?>
 		<div class="box thin clear hidden" id="pollpreview">
-			<div class="head colhead_dark"><strong>Poll</strong> <a href="#" onclick="$('#threadpoll').toggle();return false;" class="brackets">View</a></div>
+			<div class="head colhead_dark"><strong>Poll</strong> <a href="#" onclick="$('#threadpoll').gtoggle(); return false;" class="brackets">View</a></div>
 			<div class="pad" id="threadpoll">
 				<p><strong id="pollquestion"></strong></p>
 				<div id="pollanswers"></div>
@@ -135,7 +135,7 @@ if (check_perms('forums_polls_create')) {
 				<tr>
 					<td colspan="2" class="center">
 						<strong>Poll Settings</strong>
-						<a href="#" onclick="$('#poll_question, #poll_answers').toggle();return false;" class="brackets">View</a>
+						<a href="#" onclick="$('#poll_question, #poll_answers').gtoggle(); return false;" class="brackets">View</a>
 					</td>
 				</tr>
 				<tr id="poll_question" class="hidden">

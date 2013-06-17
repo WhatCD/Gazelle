@@ -85,7 +85,7 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name']);
 <? if (check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')) { ?>
 		<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>" class="brackets">New thread</a>
 <? } ?>
-		<a href="#" onclick="$('#searchforum').toggle(); this.innerHTML = (this.innerHTML == 'Search this forum' ? 'Hide search' : 'Search this forum'); return false;" class="brackets">Search this forum</a>
+		<a href="#" onclick="$('#searchforum').gtoggle(); this.innerHTML = (this.innerHTML == 'Search this forum' ? 'Hide search' : 'Search this forum'); return false;" class="brackets">Search this forum</a>
 		<div id="searchforum" class="hidden center">
 			<div style="display: inline-block;">
 				<h3>Search this forum:</h3>

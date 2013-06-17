@@ -857,7 +857,7 @@ if (!$GenreTags) {
 $x = 0;
 foreach ($GenreTags as $Tag) :
 ?>
-				<td width="12.5%"><a href="#" onclick="add_tag('<?=$Tag?>');return false;"><?=$Tag?></a></td>
+				<td width="12.5%"><a href="#" onclick="add_tag('<?=$Tag?>'); return false;"><?=$Tag?></a></td>
 <?
 	$x++;
 	if ($x % 7 == 0) {
@@ -876,7 +876,7 @@ if ($x % 7 != 0) { // Padding
 		</table>
 		<table class="layout cat_list" width="100%">
 			<tr>
-				<td class="label"><a href="#" onclick="$('#taglist').toggle();return false;" class="brackets">View tags</a></td>
+				<td class="label"><a href="#" onclick="$('#taglist').gtoggle(); return false;" class="brackets">View tags</a></td>
 			</tr>
 		</table>
 		<div class="submit">
@@ -991,7 +991,7 @@ if ($x % 7 != 0) { // Padding
 			}
 ?>
 	<tr class="group">
-		<td class="center"><div title="<?=$ActionTitle?>" id="showimg_<?=$GroupID?>" class="<?=$ActionURL?>_torrents"><a href="#" class="show_torrents_link" onclick="$('.groupid_<?=$GroupID?>').toggle(); return false;"></a></div></td>
+		<td class="center"><div title="<?=$ActionTitle?>" id="showimg_<?=$GroupID?>" class="<?=$ActionURL?>_torrents"><a href="#" class="show_torrents_link" onclick="$('.groupid_<?=$GroupID?>').gtoggle(); return false;"></a></div></td>
 		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td colspan="2" class="big_info">
 <?

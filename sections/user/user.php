@@ -554,7 +554,7 @@ if ($RatioWatchEnds != '0000-00-00 00:00:00'
 			<div class="head">
 				<span style="float: left;">Profile<? if ($CustomTitle) { ?>&nbsp;-&nbsp;</span>
 				<span class="user_title"><? echo html_entity_decode($DisplayCustomTitle); } ?></span>
-				<span style="float: right;"><?=(!empty($Badges) ? "$Badges&nbsp;&nbsp;" : '')?><a href="#" onclick="$('#profilediv').toggle(); this.innerHTML=(this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
+				<span style="float: right;"><?=(!empty($Badges) ? "$Badges&nbsp;&nbsp;" : '')?><a href="#" onclick="$('#profilediv').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
 			</div>
 			<div class="pad" id="profilediv">
 <?	if (!$Info) { ?>
@@ -568,9 +568,9 @@ if ($RatioWatchEnds != '0000-00-00 00:00:00'
 			</div>
 		</div>
 <?
-if ($Snatched > 4 && check_paranoia_here('snatched')) {
+if (check_paranoia_here('snatched')) {
 	$RecentSnatches = $Cache->get_value('recent_snatches_'.$UserID);
-	if (!is_array($RecentSnatches)) {
+	if ($RecentSnatches === false) {
 		$DB->query("
 			SELECT
 				g.ID,
@@ -593,6 +593,7 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 		}
 		$Cache->cache_value('recent_snatches_'.$UserID, $RecentSnatches, 0); //inf cache
 	}
+	if (!empty($RecentSnatches)) {
 ?>
 	<table class="layout recent" id="recent_snatches" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
@@ -609,14 +610,12 @@ if ($Snatched > 4 && check_paranoia_here('snatched')) {
 		</tr>
 	</table>
 <?
+	}
 }
 
-if (!isset($Uploads)) {
-	$Uploads = 0;
-}
-if ($Uploads > 4 && check_paranoia_here('uploads')) {
+if (check_paranoia_here('uploads')) {
 	$RecentUploads = $Cache->get_value('recent_uploads_'.$UserID);
-	if (!is_array($RecentUploads)) {
+	if ($RecentUploads === false) {
 		$DB->query("
 			SELECT
 				g.ID,
@@ -637,6 +636,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 		}
 		$Cache->cache_value('recent_uploads_'.$UserID, $RecentUploads, 0); //inf cache
 	}
+	if (!empty($RecentUploads)) {
 ?>
 	<table class="layout recent" id="recent_uploads" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
@@ -653,6 +653,7 @@ if ($Uploads > 4 && check_paranoia_here('uploads')) {
 		</tr>
 	</table>
 <?
+	}
 }
 
 $DB->query("
@@ -684,7 +685,7 @@ foreach ($Collages as $CollageInfo) {
 					<a href="#collage<?=$CollageID?>_box" class="brackets anchor">#</a> <?=display_str($CName)?> - <a href="collages.php?id=<?=$CollageID?>" class="brackets">See full</a>
 				</span>
 				<span style="float: right;">
-					<a href="#" onclick="$('#collage<?=$CollageID?>_box .images').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets"><?=$FirstCol ? 'Hide' : 'Show' ?></a>
+					<a href="#" onclick="$('#collage<?=$CollageID?>_box .images').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets"><?=$FirstCol ? 'Hide' : 'Show' ?></a>
 				</span>
 			</td>
 		</tr>
@@ -721,7 +722,7 @@ if ((check_perms('users_view_invites')) && $Invited > 0) {
 ?>
 		<div class="box" id="invitetree_box">
 			<div class="head">
-				<a href="#invitetree_box" class="brackets anchor">#</a> Invite tree <a href="#" onclick="$('#invitetree').toggle();return false;" class="brackets">View</a>
+				<a href="#invitetree_box" class="brackets anchor">#</a> Invite tree <a href="#" onclick="$('#invitetree').gtoggle(); return false;" class="brackets">View</a>
 			</div>
 			<div id="invitetree" class="hidden">
 				<? $Tree->make_tree(); ?>
@@ -754,7 +755,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 ?>
 		<div class="box" id="requests_box">
 			<div class="head">
-				<a href="#requests_box" class="brackets anchor">#</a> Requests <a href="#" onclick="$('#requests').toggle();return false;" class="brackets">View</a>
+				<a href="#requests_box" class="brackets anchor">#</a> Requests <a href="#" onclick="$('#requests').gtoggle(); return false;" class="brackets">View</a>
 			</div>
 			<div id="requests" class="request_table hidden">
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
@@ -857,7 +858,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 ?>
 		<div class="box" id="staffpms_box">
 			<div class="head">
-				<a href="#staffpms_box" class="brackets anchor">#</a> Staff PMs <a href="#" onclick="$('#staffpms').toggle();return false;" class="brackets">View</a>
+				<a href="#staffpms_box" class="brackets anchor">#</a> Staff PMs <a href="#" onclick="$('#staffpms').gtoggle(); return false;" class="brackets">View</a>
 			</div>
 			<table width="100%" class="message_table hidden" id="staffpms">
 				<tr class="colhead">
@@ -900,9 +901,6 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 		</div>
 <?	}
 }
-?>
-<br />
-<?
 
 // Displays a table of forum warnings viewable only to Forum Moderators
 if ($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
@@ -919,7 +917,6 @@ if ($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
 		<div id="forumwarningslinks" class="AdminComment box" style="width: 98%;"><?=$Text->full_format($ForumWarnings)?></div>
 	</div>
 </div>
-<br />
 <?
 	}
 }
@@ -929,11 +926,11 @@ if (check_perms('users_mod', $Class)) { ?>
 		<input type="hidden" name="userid" value="<?=$UserID?>" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 
-		<div class="box" id="staff_notes_box">
+		<div class="box box2" id="staff_notes_box">
 			<div class="head">
 				<a href="#staff_notes_box" class="brackets anchor">#</a> Staff notes
 				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;" class="brackets">Edit</a>
-				<a href="#" onclick="$('#staffnotes').toggle(); return false;" class="brackets">Toggle</a>
+				<a href="#" onclick="$('#staffnotes').gtoggle(); return false;" class="brackets">Toggle</a>
 			</div>
 			<div id="staffnotes" class="pad">
 				<input type="hidden" name="comment_hash" value="<?=$CommentHash?>" />
@@ -1129,7 +1126,7 @@ if (check_perms('users_mod', $Class)) { ?>
 				</td>
 			</tr>
 <?	} ?>
-		</table><br />
+		</table>
 
 <?	if (check_perms('users_warn')) { ?>
 		<table class="layout" id="warn_user_box">
@@ -1190,7 +1187,7 @@ if (check_perms('users_mod', $Class)) { ?>
 				</td>
 			</tr>
 <?	} ?>
-		</table><br />
+		</table>
 		<table class="layout" id="user_privs_box">
 			<tr class="colhead">
 				<td colspan="2">
@@ -1279,7 +1276,7 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 
 <?	} ?>
-		</table><br />
+		</table>
 <?	if (check_perms('users_logout')) { ?>
 		<table class="layout" id="session_box">
 			<tr class="colhead">

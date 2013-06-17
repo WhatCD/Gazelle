@@ -176,7 +176,7 @@ View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &l
 		<div class="center">
 			<a href="reports.php?action=report&amp;type=thread&amp;id=<?=$ThreadID?>" class="brackets">Report thread</a>
 			<a href="#" onclick="Subscribe(<?=$ThreadID?>);return false;" id="subscribelink<?=$ThreadID?>" class="brackets"><?=(in_array($ThreadID, $UserSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
-			<a href="#" onclick="$('#searchthread').toggle(); this.innerHTML = (this.innerHTML == 'Search this thread' ? 'Hide search' : 'Search this thread'); return false;" class="brackets">Search this thread</a>
+			<a href="#" onclick="$('#searchthread').gtoggle(); this.innerHTML = (this.innerHTML == 'Search this thread' ? 'Hide search' : 'Search this thread'); return false;" class="brackets">Search this thread</a>
 		</div>
 		<div id="searchthread" class="hidden center">
 			<div style="display: inline-block;">
@@ -264,7 +264,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 
 ?>
 	<div class="box thin clear">
-		<div class="head colhead_dark"><strong>Poll<? if ($Closed) { echo ' [Closed]'; } ?><? if ($Featured && $Featured !== '0000-00-00 00:00:00') { echo ' [Featured]'; } ?></strong> <a href="#" onclick="$('#threadpoll').toggle();log_hit();return false;" class="brackets">View</a></div>
+		<div class="head colhead_dark"><strong>Poll<? if ($Closed) { echo ' [Closed]'; } ?><? if ($Featured && $Featured !== '0000-00-00 00:00:00') { echo ' [Featured]'; } ?></strong> <a href="#" onclick="$('#threadpoll').gtoggle(); log_hit(); return false;" class="brackets">View</a></div>
 		<div class="pad<? if (/*$LastRead !== null || */$ThreadInfo['IsLocked']) { echo ' hidden'; } ?>" id="threadpoll">
 			<p><strong><?=display_str($Question)?></strong></p>
 <?	if ($UserResponse !== null || $Closed || $ThreadInfo['IsLocked'] || !check_forumperm($ForumID)) { ?>

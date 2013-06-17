@@ -661,7 +661,7 @@ foreach ($TorrentList as $Torrent) {
 <?	}?>
 						| <a href="torrents.php?torrentid=<?=$TorrentID ?>" title="Permalink">PL</a>
 					]</span>
-					&raquo; <a href="#" onclick="$('#torrent_<?=$TorrentID?>').toggle(); return false;"><?=$ExtraInfo; ?></a>
+					&raquo; <a href="#" onclick="$('#torrent_<?=$TorrentID?>').gtoggle(); return false;"><?=$ExtraInfo; ?></a>
 				</td>
 				<td class="nobr"><?=Format::get_size($Size)?></td>
 				<td><?=number_format($Snatched)?></td>
@@ -724,7 +724,7 @@ if (empty($LoggedUser['DisableRequests']) && count($Requests) > 0) {
 	$i = 0;
 ?>
 		<div class="box">
-			<div class="head"><span style="font-weight: bold;">Requests (<?=number_format(count($Requests))?>)</span> <a href="#" style="float: right;" onclick="$('#requests').toggle(); this.innerHTML=(this.innerHTML=='Hide'?'Show':'Hide'); return false;" class="brackets">Show</a></div>
+			<div class="head"><span style="font-weight: bold;">Requests (<?=number_format(count($Requests))?>)</span> <a href="#" style="float: right;" onclick="$('#requests').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Show</a></div>
 			<table id="requests" class="request_table hidden">
 				<tr class="colhead">
 					<td>Format / Bitrate / Media</td>
@@ -780,7 +780,7 @@ if (count($Collages) > 0) {
 		$Range = range(0, count($Collages) - 1);
 		shuffle($Range);
 		$Indices = array_slice($Range, 0, MAX_COLLAGES);
-		$SeeAll = ' <a href="#" onclick="$(\'.collage_rows\').toggle(); return false;">(See all)</a>';
+		$SeeAll = ' <a href="#" onclick="$(\'.collage_rows\').gtoggle(); return false;">(See all)</a>';
 	} else {
 		$Indices = range(0, count($Collages) - 1);
 		$SeeAll = '';
@@ -831,7 +831,7 @@ if (count($PersonalCollages) > 0) {
 		$Range = range(0,count($PersonalCollages) - 1);
 		shuffle($Range);
 		$Indices = array_slice($Range, 0, MAX_PERS_COLLAGES);
-		$SeeAll = ' <a href="#" onclick="$(\'.personal_rows\').toggle(); return false;">(See all)</a>';
+		$SeeAll = ' <a href="#" onclick="$(\'.personal_rows\').gtoggle(); return false;">(See all)</a>';
 	} else {
 		$Indices = range(0, count($PersonalCollages) - 1);
 		$SeeAll = '';

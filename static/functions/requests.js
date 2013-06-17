@@ -122,32 +122,32 @@ function RemoveArtistField() {
 function Categories() {
 	var cat = $('#categories').raw().options[$('#categories').raw().selectedIndex].value;
 	if (cat == "Music") {
-		$('#artist_tr').show();
-		$('#releasetypes_tr').show();
-		$('#formats_tr').show();
-		$('#bitrates_tr').show();
-		$('#media_tr').show();
+		$('#artist_tr').gshow();
+		$('#releasetypes_tr').gshow();
+		$('#formats_tr').gshow();
+		$('#bitrates_tr').gshow();
+		$('#media_tr').gshow();
 		ToggleLogCue();
-		$('#year_tr').show();
-		$('#cataloguenumber_tr').show();
+		$('#year_tr').gshow();
+		$('#cataloguenumber_tr').gshow();
 	} else if (cat == "Audiobooks" || cat == "Comedy") {
-		$('#year_tr').show();
-		$('#artist_tr').hide();
-		$('#releasetypes_tr').hide();
-		$('#formats_tr').hide();
-		$('#bitrates_tr').hide();
-		$('#media_tr').hide();
-		$('#logcue_tr').hide();
-		$('#cataloguenumber_tr').hide();
+		$('#year_tr').gshow();
+		$('#artist_tr').ghide();
+		$('#releasetypes_tr').ghide();
+		$('#formats_tr').ghide();
+		$('#bitrates_tr').ghide();
+		$('#media_tr').ghide();
+		$('#logcue_tr').ghide();
+		$('#cataloguenumber_tr').ghide();
 	} else {
-		$('#artist_tr').hide();
-		$('#releasetypes_tr').hide();
-		$('#formats_tr').hide();
-		$('#bitrates_tr').hide();
-		$('#media_tr').hide();
-		$('#logcue_tr').hide();
-		$('#year_tr').hide();
-		$('#cataloguenumber_tr').hide();
+		$('#artist_tr').ghide();
+		$('#releasetypes_tr').ghide();
+		$('#formats_tr').ghide();
+		$('#bitrates_tr').ghide();
+		$('#media_tr').ghide();
+		$('#logcue_tr').ghide();
+		$('#year_tr').ghide();
+		$('#cataloguenumber_tr').ghide();
 	}
 }
 
@@ -184,17 +184,17 @@ function ToggleLogCue() {
 	}
 
 	if (flac) {
-		$('#logcue_tr').show();
+		$('#logcue_tr').gshow();
 	} else {
-		$('#logcue_tr').hide();
+		$('#logcue_tr').ghide();
 	}
 	ToggleLogScore();
 }
 
 function ToggleLogScore() {
 	if ($('#needlog').raw().checked) {
-		$('#minlogscore_span').show();
+		$('#minlogscore_span').gshow();
 	} else {
-		$('#minlogscore_span').hide();
+		$('#minlogscore_span').ghide();
 	}
 }
