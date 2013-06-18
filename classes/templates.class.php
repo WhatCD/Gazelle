@@ -2,7 +2,7 @@
 // Example :
 // $TPL = new TEMPLATE;
 // $TPL->open('inv.tpl');
-// $TPL->set('ADDRESS1',$TPL->str_align(57,$UADDRESS1,'l',' '));
+// $TPL->set('ADDRESS1', $TPL->str_align(57, $UADDRESS1, 'l', ' '));
 // $TPL->get();
 
 class TEMPLATE {

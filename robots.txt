@@ -2,9 +2,4 @@ User-agent: *
 Allow: /index.php
 Allow: /login.php
 Allow: /register.php
-#<skip>
-Allow: /what-network/
-Allow: /gazelle/
-Sitemap: https://what.cd/sitemap.xml
-#</skip>
 Disallow: /

@@ -178,9 +178,9 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				<div class="torrent_info"><?=$ExtraInfo?></div>
 				<div class="tags"><?=$TorrentTags->format()?></div>
 			</td>
-			<td><strong <?=isset($Edition['Formats']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
-			<td><strong <?=isset($Edition['Formats']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
-			<td><strong <?=isset($Edition['Formats']['320']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
+			<td><?=isset($Edition['Formats']['V2 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=isset($Edition['Formats']['V0 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=isset($Edition['Formats']['320']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
 		</tr>
 <?
 		}

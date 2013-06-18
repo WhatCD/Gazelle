@@ -277,7 +277,7 @@ class TORRENT extends BENCODE_DICT {
 				$FileSize = $File->Val['length'];
 				$TotalSize += $FileSize;
 
-				$FileName = ltrim(implode('/',$File->Val[$PathKey]->Val), '/');
+				$FileName = ltrim(implode('/', $File->Val[$PathKey]->Val), '/');
 				$FileSizes[] = $FileSize;
 				$FileNames[] = $FileName;
 			}

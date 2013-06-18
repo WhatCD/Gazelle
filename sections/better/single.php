@@ -1,18 +1,19 @@
 <?
 if (($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
-	$DB->query("SELECT
-					t.ID AS TorrentID,
-					t.GroupID AS GroupID
-				FROM xbt_files_users AS	x
-					JOIN torrents AS t ON t.ID=x.fid
-				WHERE t.Format='FLAC'
-				GROUP BY x.fid
-				HAVING COUNT(x.uid) = 1
-				ORDER BY t.LogScore DESC, t.Time ASC
-				LIMIT 30");
+	$DB->query("
+		SELECT
+			t.ID AS TorrentID,
+			t.GroupID AS GroupID
+		FROM xbt_files_users AS	x
+			JOIN torrents AS t ON t.ID=x.fid
+		WHERE t.Format='FLAC'
+		GROUP BY x.fid
+		HAVING COUNT(x.uid) = 1
+		ORDER BY t.LogScore DESC, t.Time ASC
+		LIMIT 30");
 
 	$GroupIDs = $DB->to_array('GroupID');
-	$Cache->cache_value('better_single_groupids', $GroupIDs, 30*60);
+	$Cache->cache_value('better_single_groupids', $GroupIDs, 30 * 60);
 }
 
 $Results = Torrents::get_groups(array_keys($GroupIDs));
@@ -42,17 +43,17 @@ foreach ($Results as $GroupID => $Group) {
 	}
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 
-	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
+	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
 	if ($GroupYear > 0) {
-		$DisplayName.=" [$GroupYear]";
+		$DisplayName .= " [$GroupYear]";
 	}
 	if ($ReleaseType > 0) {
-		$DisplayName.=" [".$ReleaseTypes[$ReleaseType]."]";
+		$DisplayName .= " [".$ReleaseTypes[$ReleaseType]."]";
 	}
 
 	$ExtraInfo = Torrents::torrent_info($Torrents[$FlacID]);
 	if ($ExtraInfo) {
-		$DisplayName.=' - '.$ExtraInfo;
+		$DisplayName .= ' - '.$ExtraInfo;
 	}
 ?>
 		<tr class="torrent torrent_row<?=$Torrents[$FlacID]['IsSnatched'] ? ' snatched_torrent' : ''?>">

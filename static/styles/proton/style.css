@@ -2043,7 +2043,7 @@ tr.torrent .bookmark > a:after {
 }
 
 .group_image img {
-	background: url(https://what.cd/static/common/noartwork/music.png) no-repeat top left;
+	background: url(static/common/noartwork/music.png) no-repeat top left;
 	background-size: 90px;
 	color: transparent;
 }

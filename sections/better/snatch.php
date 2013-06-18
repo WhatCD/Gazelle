@@ -19,7 +19,8 @@ if (!empty($_GET['filter']) && $_GET['filter'] == 'seeding') {
 }
 
 // Get list of FLAC snatches
-$DB->query("SELECT t.GroupID, x.fid
+$DB->query("
+	SELECT t.GroupID, x.fid
 	FROM ".($SeedingOnly ? 'xbt_files_users' : 'xbt_snatched')." AS x
 		JOIN torrents AS t ON t.ID=x.fid
 		JOIN torrents_group AS tg ON tg.ID = t.GroupID
@@ -27,7 +28,8 @@ $DB->query("SELECT t.GroupID, x.fid
 		AND ((t.LogScore = '100' AND t.Media = 'CD')
 			OR t.Media != 'CD')
 		AND tg.CategoryID = 1
-		AND x.uid='$UserID'" . ($SeedingOnly ? ' AND x.active = 1 AND x.remaining = 0' : ''));
+		AND x.uid='$UserID'" .
+		($SeedingOnly ? ' AND x.active = 1 AND x.remaining = 0' : ''));
 
 $SnatchedTorrentIDs = array_fill_keys($DB->collect('fid'), true);
 $SnatchedGroupIDs = array_unique($DB->collect('GroupID'));
@@ -41,19 +43,26 @@ if (count($SnatchedGroupIDs) == 0) {
 }
 // Create hash table
 
-$DB->query("CREATE TEMPORARY TABLE temp_sections_better_snatch
-	SELECT t.GroupID,
-	GROUP_CONCAT(t.Encoding SEPARATOR ' ') AS EncodingList,
-	CRC32(CONCAT_WS(' ', Media, Remasteryear, Remastertitle,
-		Remasterrecordlabel, Remastercataloguenumber)) AS RemIdent
+$DB->query("
+	CREATE TEMPORARY TABLE temp_sections_better_snatch
+	SELECT
+		t.GroupID,
+		GROUP_CONCAT(t.Encoding SEPARATOR ' ') AS EncodingList,
+		CRC32(CONCAT_WS(
+			' ', Media, Remasteryear, Remastertitle,
+			Remasterrecordlabel, Remastercataloguenumber)
+		) AS RemIdent
 	FROM torrents AS t
-	WHERE t.GroupID IN(".implode(',',$SnatchedGroupIDs).") AND t.Format IN ('FLAC', 'MP3')
+	WHERE t.GroupID IN(".implode(',', $SnatchedGroupIDs).")
+		AND t.Format IN ('FLAC', 'MP3')
 	GROUP BY t.GroupID, RemIdent");
 
 //$DB->query('SELECT * FROM t');
 
-$DB->query("SELECT GroupID FROM temp_sections_better_snatch
-		WHERE EncodingList NOT LIKE '%V0 (VBR)%'
+$DB->query("
+	SELECT GroupID
+	FROM temp_sections_better_snatch
+	WHERE EncodingList NOT LIKE '%V0 (VBR)%'
 		OR EncodingList NOT LIKE '%V2 (VBR)%'
 		OR EncodingList NOT LIKE '%320%'");
 
@@ -218,9 +227,9 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				<div class="torrent_info"><?=$ExtraInfo?></div>
 				<div class="tags"><?=$TorrentTags->format()?></div>
 			</td>
-			<td><strong <?=isset($Edition['Formats']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
-			<td><strong <?=isset($Edition['Formats']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
-			<td><strong <?=isset($Edition['Formats']['320']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
+			<td><?=isset($Edition['Formats']['V2 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=isset($Edition['Formats']['V0 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=isset($Edition['Formats']['320']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
 		</tr>
 <?
 	}

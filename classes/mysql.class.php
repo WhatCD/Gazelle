@@ -248,7 +248,7 @@ class DB_MYSQL {
 
 	function query_unb($Query) {
 		$this->connect();
-		mysqli_real_query($this->LinkID,$Query);
+		mysqli_real_query($this->LinkID, $Query);
 	}
 
 	function inserted_id() {
@@ -257,9 +257,9 @@ class DB_MYSQL {
 		}
 	}
 
-	function next_record($Type=MYSQLI_BOTH, $Escape = true) { // $Escape can be true, false, or an array of keys to not escape
+	function next_record($Type = MYSQLI_BOTH, $Escape = true) { // $Escape can be true, false, or an array of keys to not escape
 		if ($this->LinkID) {
-			$this->Record = mysqli_fetch_array($this->QueryID,$Type);
+			$this->Record = mysqli_fetch_array($this->QueryID, $Type);
 			$this->Row++;
 			if (!is_array($this->Record)) {
 				$this->QueryID = false;
@@ -302,7 +302,7 @@ class DB_MYSQL {
 			trigger_error('Attempted to escape array.');
 			return '';
 		}
-		return mysqli_real_escape_string($this->LinkID,$Str);
+		return mysqli_real_escape_string($this->LinkID, $Str);
 	}
 
 	// Creates an array from a result set
@@ -310,7 +310,7 @@ class DB_MYSQL {
 	// Otherwise, use an integer
 	function to_array($Key = false, $Type = MYSQLI_BOTH, $Escape = true) {
 		$Return = array();
-		while ($Row = mysqli_fetch_array($this->QueryID,$Type)) {
+		while ($Row = mysqli_fetch_array($this->QueryID, $Type)) {
 			if ($Escape !== false) {
 				$Row = Misc::display_array($Row, $Escape);
 			}

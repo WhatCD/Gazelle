@@ -72,7 +72,7 @@ class ARTISTS_SIMILAR extends ARTIST{
 				continue;
 			}
 			$this->Artists[$ArtistID] = new ARTIST($ArtistID, $Name);
-			$this->Similar[$ArtistID] = array('ID'=>$ArtistID,'Score'=>$Score);
+			$this->Similar[$ArtistID] = array('ID' => $ArtistID, 'Score' => $Score);
 			$this->TotalScore += $Score;
 			$ArtistIDs[] = $ArtistID;
 		}
@@ -86,8 +86,8 @@ class ARTISTS_SIMILAR extends ARTIST{
 				JOIN artists_similar AS s2 ON s1.SimilarID=s2.SimilarID AND s1.ArtistID!=s2.ArtistID
 				JOIN artists_similar_scores AS ass ON ass.SimilarID=s1.SimilarID
 				JOIN artists_group AS a ON a.ArtistID=s2.ArtistID
-			WHERE s1.ArtistID IN(".implode(',',$ArtistIDs).')
-				AND s2.ArtistID IN('.implode(',',$ArtistIDs).')');
+			WHERE s1.ArtistID IN(".implode(',', $ArtistIDs).')
+				AND s2.ArtistID IN('.implode(',', $ArtistIDs).')');
 
 		// Build into array
 		while (list($Artist1ID, $Artist2ID) = $DB->next_record()) {

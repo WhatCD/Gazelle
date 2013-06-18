@@ -1,7 +1,7 @@
 <?
 //Useful: http://www.robtex.com/cnet/
 $AllowedProxies = array(
-	//Opera Turbo (may include opera owned IPs that aren't used for Turbo, but shouldn't run much risk of exploitation)
+	//Opera Turbo (may include Opera-owned IP addresses that aren't used for Turbo, but shouldn't run much risk of exploitation)
 	'64.255.180.*', //Norway
 	'64.255.164.*', //Norway
 	'80.239.242.*', //Poland
@@ -15,16 +15,16 @@ $AllowedProxies = array(
 
 function proxyCheck($IP) {
 	global $AllowedProxies;
-	for ($i=0,$il=count($AllowedProxies);$i<$il;++$i) {
+	for ($i = 0, $il = count($AllowedProxies); $i < $il; ++$i) {
 		//based on the wildcard principle it should never be shorter
 		if (strlen($IP) < strlen($AllowedProxies[$i])) {
 			continue;
 		}
 
 		//since we're matching bit for bit iterating from the start
-		for ($j=0,$jl=strlen($IP);$j<$jl;++$j) {
+		for ($j = 0, $jl = strlen($IP); $j < $jl; ++$j) {
 			//completed iteration and no inequality
-			if ($j == $jl-1 && $IP[$j] === $AllowedProxies[$i][$j]) {
+			if ($j == $jl - 1 && $IP[$j] === $AllowedProxies[$i][$j]) {
 				return true;
 			}
 

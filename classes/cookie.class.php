@@ -12,7 +12,7 @@ $Cookie->get(); is user provided and untrustworthy
 /*
 interface COOKIE_INTERFACE {
 	public function get($Key);
-	public function set($Key,$Value,$Seconds,$LimitAccess);
+	public function set($Key, $Value, $Seconds, $LimitAccess);
 	public function del($Key);
 
 	public function flush();
@@ -31,12 +31,12 @@ class COOKIE /*implements COOKIE_INTERFACE*/ {
 	}
 
 	//Pass the 4th optional param as false to allow JS access to the cookie
-	public function set($Key,$Value,$Seconds = 86400,$LimitAccess = SELF::LIMIT_ACCESS) {
-		setcookie(SELF::PREFIX.$Key,$Value,time()+$Seconds,'/',SITE_URL,$_SERVER['SERVER_PORT'] === '443',$LimitAccess,false);
+	public function set($Key, $Value, $Seconds = 86400, $LimitAccess = SELF::LIMIT_ACCESS) {
+		setcookie(SELF::PREFIX.$Key, $Value, time() + $Seconds, '/', SITE_URL, $_SERVER['SERVER_PORT'] === '443', $LimitAccess, false);
 	}
 
 	public function del($Key) {
-		setcookie(SELF::PREFIX.$Key,'',time()-24*3600); //3600 vs 1 second to account for potential clock desyncs
+		setcookie(SELF::PREFIX.$Key, '', time() - 24 * 3600); //3600 vs 1 second to account for potential clock desyncs
 	}
 
 	public function flush() {

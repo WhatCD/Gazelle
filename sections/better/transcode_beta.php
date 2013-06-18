@@ -324,9 +324,9 @@ if ($ResultCount == 0) {
 				<div class="torrent_info"><?=$Edition['EditionName']?></div>
 				<div class="tags"><?=$TorrentTags->format('better.php?action=transcode&tags=')?></div>
 			</td>
-			<td><strong <?=(isset($Edition['MP3s']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO')?></strong></td>
-			<td><strong <?=(isset($Edition['MP3s']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO')?></strong></td>
-			<td><strong <?=(isset($Edition['MP3s']['320']) ? 'class="important_text_alt">YES' : 'class="important_text">NO')?></strong></td>
+			<td><?=(isset($Edition['MP3s']['V2 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>')?></td>
+			<td><?=(isset($Edition['MP3s']['V0 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>')?></td>
+			<td><?=(isset($Edition['MP3s']['320']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>')?></td>
 		</tr>
 <?
 		}

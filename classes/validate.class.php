@@ -6,9 +6,9 @@ Finish the GenerateJS stuff
 //-----------------------------------*/
 
 class VALIDATE {
-	var $Fields=array();
+	var $Fields = array();
 
-	function SetFields($FieldName,$Required,$FieldType,$ErrorMessage,$Options=array()) {
+	function SetFields($FieldName, $Required, $FieldType, $ErrorMessage, $Options = array()) {
 		$this->Fields[$FieldName]['Type'] = strtolower($FieldType);
 		$this->Fields[$FieldName]['Required'] = $Required;
 		$this->Fields[$FieldName]['ErrorMessage'] = $ErrorMessage;
@@ -153,7 +153,7 @@ class VALIDATE {
 					}
 
 				} elseif ($Field['Type'] == 'compare') {
-					if ($ValidateArray[$Field['CompareField']]!=$ValidateVar) {
+					if ($ValidateArray[$Field['CompareField']] != $ValidateVar) {
 						return $Field['ErrorMessage'];
 					}
 

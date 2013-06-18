@@ -580,7 +580,7 @@ if ($DisableIRC != $Cur['DisableIRC'] && check_perms('users_disable_any')) {
 	$EditSummary[] = "IRC status changed";
 	$HeavyUpdates['DisableIRC'] = $DisableIRC;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your IRC privileges have been disabled', "Your IRC privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN." on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]. This loss of privileges does not affect the ability to join and talk to staff in #what.cd-disabled.");
+		Misc::send_pm($UserID, 0, 'Your IRC privileges have been disabled', "Your IRC privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN." on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]. This loss of privileges does not affect the ability to join and talk to staff in ".BOT_DISABLED_CHAN.'.');
 	}
 }
 
@@ -589,7 +589,7 @@ if ($DisableRequests != $Cur['DisableRequests'] && check_perms('users_disable_an
 	$EditSummary[] = "request status changed";
 	$HeavyUpdates['DisableRequests'] = $DisableRequests;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your request privileges have been disabled', "Your request privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN." on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]. This loss of privileges does not affect the ability to join and talk to staff in #what.cd-disabled.");
+		Misc::send_pm($UserID, 0, 'Your request privileges have been disabled', "Your request privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN." on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]. This loss of privileges does not affect the ability to join and talk to staff in ".BOT_DISABLED_CHAN.'.');
 	}
 }
 

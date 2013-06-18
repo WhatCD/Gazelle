@@ -169,8 +169,8 @@ class Tools {
 				i.BanDate='".sqltime()."',
 				i.BanReason='$BanReason',
 				i.RatioWatchDownload=".($BanReason == 2 ? 'm.Downloaded' : "'0'")."
-			WHERE m.ID IN(".implode(',',$UserIDs).") ");
-		$Cache->decrement('stats_user_count',$DB->affected_rows());
+			WHERE m.ID IN(".implode(',', $UserIDs).') ');
+		$Cache->decrement('stats_user_count', $DB->affected_rows());
 		foreach ($UserIDs as $UserID) {
 			$Cache->delete_value('enabled_'.$UserID);
 			$Cache->delete_value('user_info_'.$UserID);
@@ -197,7 +197,7 @@ class Tools {
 		$DB->query("
 			SELECT torrent_pass
 			FROM users_main
-			WHERE ID in (".implode(', ',$UserIDs).')');
+			WHERE ID in (".implode(', ', $UserIDs).')');
 		$PassKeys = $DB->collect('torrent_pass');
 		$Concat = '';
 		foreach ($PassKeys as $PassKey) {

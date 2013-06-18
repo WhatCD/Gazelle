@@ -26,7 +26,7 @@ function Quote(post, user, link) {
 		if ($('#quickpost').raw().value !== '') {
 			$('#quickpost').raw().value = $('#quickpost').raw().value + "\n\n";
 		}
-		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote="+username + (link == true ? "|" + post : "") + "]" +
+		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote=" + username + (link == true ? "|" + post : "") + "]" +
 			//response.replace(/(img|aud)(\]|=)/ig,'url$2').replace(/\[url\=(https?:\/\/[^\s\[\]<>"\'()]+?)\]\[url\](.+?)\[\/url\]\[\/url\]/gi, "[url]$1[/url]")
 			html_entity_decode(response)
 		+ "[/quote]";
@@ -41,9 +41,9 @@ function Edit_Form(post,key) {
 		$('#reply_box').ghide();
 		if (location.href.match(/torrents\.php/) ||
 				location.href.match(/artist\.php/)) {
-			boxWidth="50";
+			boxWidth = "50";
 		} else {
-			boxWidth="80";
+			boxWidth = "80";
 		}
 		postuserid = $('#post' + postid + ' strong a').raw().getAttribute('href').split('=')[1]
 		/*	jQuery isnt enabled on comments, artist comments, or basically anywhere but thread.php
@@ -52,13 +52,13 @@ function Edit_Form(post,key) {
 		postuserid = jQuery('#post' + postid + ' strong a').attr('href').split('=')[1];
 		*/
 		if (postuserid != userid) {
-			pmbox = '<span id="pmbox'+postid+'">PM user on edit? <input type="checkbox" name="pm" value="1" /></span>';
+			pmbox = '<span id="pmbox' + postid + '"><label>PM user on edit? <input type="checkbox" name="pm" value="1" /></label></span>';
 		} else {
 			pmbox = '';
 		};
 		$('#bar' + postid).raw().cancel = $('#content' + postid).raw().innerHTML;
 		$('#bar' + postid).raw().oldbar = $('#bar' + postid).raw().innerHTML;
-		$('#content' + postid).raw().innerHTML = "<div id=\"preview" + postid + "\"></div><form id=\"form" + postid + "\" method=\"post\" action=\"\">"+pmbox+"<input type=\"hidden\" name=\"auth\" value=\"" + authkey + "\" /><input type=\"hidden\" name=\"key\" value=\"" + key + "\" /><input type=\"hidden\" name=\"post\" value=\"" + postid + "\" /><textarea id=\"editbox" + postid + "\" onkeyup=\"resize('editbox" + postid + "');\" name=\"body\" cols=\""+boxWidth+"\" rows=\"10\"></textarea></form>";
+		$('#content' + postid).raw().innerHTML = "<div id=\"preview" + postid + "\"></div><form id=\"form" + postid + "\" method=\"post\" action=\"\">" + pmbox + "<input type=\"hidden\" name=\"auth\" value=\"" + authkey + "\" /><input type=\"hidden\" name=\"key\" value=\"" + key + "\" /><input type=\"hidden\" name=\"post\" value=\"" + postid + "\" /><textarea id=\"editbox" + postid + "\" onkeyup=\"resize('editbox" + postid + "');\" name=\"body\" cols=\"" + boxWidth + "\" rows=\"10\"></textarea></form>";
 		$('#bar' + postid).raw().innerHTML = '<input type="button" value="Preview" onclick="Preview_Edit(' + postid + ');" /><input type="button" value="Post" onclick="Save_Edit(' + postid + ')" /><input type="button" value="Cancel" onclick="Cancel_Edit(' + postid + ');" />';
 	}
 	/* If it's the initial edit, fetch the post content to be edited.
@@ -161,7 +161,7 @@ function Quick_Preview() {
 	var quickreplybuttons;
 	$('#post_preview').raw().value = "Make changes";
 	$('#post_preview').raw().preview = true;
-	ajax.post("ajax.php?action=preview","quickpostform", function(response) {
+	ajax.post("ajax.php?action=preview", "quickpostform", function(response) {
 		$('#quickreplypreview').gshow();
 		$('#contentpreview').raw().innerHTML = response;
 		$('#quickreplytext').ghide();
@@ -180,7 +180,7 @@ function Newthread_Preview(mode) {
 	$('#newthreadpreviewbutton').gtoggle();
 	$('#newthreadeditbutton').gtoggle();
 	if (mode) { // Preview
-		ajax.post("ajax.php?action=preview","newthreadform", function(response) {
+		ajax.post("ajax.php?action=preview", "newthreadform", function(response) {
 			$('#contentpreview').raw().innerHTML = response;
 		});
 		$('#newthreadtitle').raw().innerHTML = $('#title').raw().value;

@@ -184,13 +184,13 @@ class Users {
 			foreach ($PermIDs AS $PermID) {
 				$Perms = Permissions::get_permissions($PermID);
 				if (!empty($Perms['PermittedForums'])) {
-					$PermittedForums = array_merge($PermittedForums, array_map('trim', explode(',',$Perms['PermittedForums'])));
+					$PermittedForums = array_merge($PermittedForums, array_map('trim', explode(',', $Perms['PermittedForums'])));
 				}
 			}
 			$Perms = Permissions::get_permissions($HeavyInfo['PermissionID']);
 			unset($HeavyInfo['PermissionID']);
 			if (!empty($Perms['PermittedForums'])) {
-				$PermittedForums = array_merge($PermittedForums, array_map('trim', explode(',',$Perms['PermittedForums'])));
+				$PermittedForums = array_merge($PermittedForums, array_map('trim', explode(',', $Perms['PermittedForums'])));
 			}
 
 			if (!empty($PermittedForums) || !empty($RestrictedForums)) {

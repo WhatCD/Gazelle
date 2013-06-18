@@ -132,7 +132,7 @@ class TEXT {
 		$Str = preg_replace('/'.$URLPrefix.'\s+/i', '$1', $Str);
 		$Str = preg_replace('/(?<!'.$URLPrefix.')http(s)?:\/\//i', '$1[inlineurl]http$2://', $Str);
 		// For anonym.to and archive.org links, remove any [inlineurl] in the middle of the link
-		$callback = create_function('$matches', 'return str_replace("[inlineurl]","",$matches[0]);');
+		$callback = create_function('$matches', 'return str_replace("[inlineurl]", "", $matches[0]);');
 		$Str = preg_replace_callback('/(?<=\[inlineurl\]|'.$URLPrefix.')(\S*\[inlineurl\]\S*)/m', $callback, $Str);
 
 		if ($this->TOC) {
@@ -647,11 +647,11 @@ class TEXT {
 								$Group = $Groups['matches'][$Matches[2]];
 								$Str .= Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$Matches[2].'">'.$Group['Name'].'</a>';
 							} else {
-								$Str .= '[torrent]'.str_replace('[inlineurl]','',$Block['Val']).'[/torrent]';
+								$Str .= '[torrent]'.str_replace('[inlineurl]', '', $Block['Val']).'[/torrent]';
 							}
 						}
 					} else {
-						$Str .= '[torrent]'.str_replace('[inlineurl]','',$Block['Val']).'[/torrent]';
+						$Str .= '[torrent]'.str_replace('[inlineurl]', '', $Block['Val']).'[/torrent]';
 					}
 					break;
 				case 'wiki':

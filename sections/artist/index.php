@@ -268,7 +268,10 @@ if (!empty($_POST['action'])) {
 
 	} elseif (!empty($_GET['artistname'])) {
 		$NameSearch = str_replace('\\', '\\\\', trim($_GET['artistname']));
-		$DB->query("SELECT ArtistID, Name FROM artists_alias WHERE Name LIKE '" . db_string($NameSearch) . "'");
+		$DB->query("
+			SELECT ArtistID, Name
+			FROM artists_alias
+			WHERE Name LIKE '" . db_string($NameSearch) . "'");
 		if ($DB->record_count() == 0) {
 			if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) {
 				header('Location: torrents.php?action=advanced&artistname=' . urlencode($_GET['artistname']));

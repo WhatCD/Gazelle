@@ -49,7 +49,7 @@ class Artists {
 				ORDER BY ta.GroupID ASC,
 					ta.Importance ASC,
 					aa.Name ASC;");
-			while (list($GroupID,$ArtistID,$ArtistName,$ArtistImportance,$AliasID) = $DB->next_record(MYSQLI_BOTH, false)) {
+			while (list($GroupID, $ArtistID, $ArtistName, $ArtistImportance, $AliasID) = $DB->next_record(MYSQLI_BOTH, false)) {
 				$Results[$GroupID][$ArtistImportance][] = array('id' => $ArtistID, 'name' => $ArtistName, 'aliasid' => $AliasID);
 				$New[$GroupID][$ArtistImportance][] = array('id' => $ArtistID, 'name' => $ArtistName, 'aliasid' => $AliasID);
 			}

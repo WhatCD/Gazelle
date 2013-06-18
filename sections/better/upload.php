@@ -13,15 +13,15 @@ $Encodings = array('V0 (VBR)', 'V2 (VBR)', '320');
 $EncodingKeys = array_fill_keys($Encodings, true);
 
 // Get list of FLAC uploads
-$DB->query("SELECT t.GroupID, t.ID
+$DB->query("
+	SELECT t.GroupID, t.ID
 	FROM torrents AS t
-	JOIN torrents_group AS tg ON tg.ID = t.GroupID
-	WHERE
-	t.Format='FLAC'
-	AND ((t.LogScore = '100' AND t.Media = 'CD')
-		OR t.Media != 'CD')
-	AND tg.CategoryID = 1
-	AND t.UserID='$UserID'");
+		JOIN torrents_group AS tg ON tg.ID = t.GroupID
+	WHERE t.Format='FLAC'
+		AND ((t.LogScore = '100' AND t.Media = 'CD')
+			OR t.Media != 'CD')
+		AND tg.CategoryID = 1
+		AND t.UserID = '$UserID'");
 
 $UploadedTorrentIDs = array_fill_keys($DB->collect('ID'), true);
 $UploadedGroupIDs = $DB->collect('GroupID');
@@ -31,17 +31,24 @@ if (count($UploadedGroupIDs) == 0) {
 }
 
 // Create hash table
-$DB->query("CREATE TEMPORARY TABLE temp_sections_better_upload
-	SELECT t.GroupID,
-	GROUP_CONCAT(t.Encoding SEPARATOR ' ') AS EncodingList,
-	CRC32(CONCAT_WS(' ', Media, Remasteryear, Remastertitle,
-		Remasterrecordlabel, Remastercataloguenumber)) AS RemIdent
+$DB->query("
+	CREATE TEMPORARY TABLE temp_sections_better_upload
+	SELECT
+		t.GroupID,
+		GROUP_CONCAT(t.Encoding SEPARATOR ' ') AS EncodingList,
+		CRC32(CONCAT_WS(
+			' ', Media, Remasteryear, Remastertitle,
+			Remasterrecordlabel, Remastercataloguenumber)
+		) AS RemIdent
 	FROM torrents AS t
-	WHERE t.GroupID IN(".implode(',',$UploadedGroupIDs).") AND t.Format IN ('FLAC', 'MP3')
+	WHERE t.GroupID IN(".implode(',', $UploadedGroupIDs).")
+		AND t.Format IN ('FLAC', 'MP3')
 	GROUP BY t.GroupID, RemIdent");
 
-$DB->query("SELECT GroupID FROM temp_sections_better_upload
-		WHERE EncodingList NOT LIKE '%V0 (VBR)%'
+$DB->query("
+	SELECT GroupID
+	FROM temp_sections_better_upload
+	WHERE EncodingList NOT LIKE '%V0 (VBR)%'
 		OR EncodingList NOT LIKE '%V2 (VBR)%'
 		OR EncodingList NOT LIKE '%320%'");
 
@@ -197,9 +204,9 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				<div class="torrent_info"><?=$ExtraInfo?></div>
 				<div class="tags"><?=$TorrentTags->format()?></div>
 			</td>
-			<td><strong <?=isset($Edition['Formats']['V2 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
-			<td><strong <?=isset($Edition['Formats']['V0 (VBR)']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
-			<td><strong <?=isset($Edition['Formats']['320']) ? 'class="important_text_alt">YES' : 'class="important_text">NO'?></strong></td>
+			<td><?=isset($Edition['Formats']['V2 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=isset($Edition['Formats']['V0 (VBR)']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
+			<td><?=isset($Edition['Formats']['320']) ? '<strong class="important_text_alt">YES</strong>' : '<strong class="important_text">NO</strong>'?></td>
 		</tr>
 <?
 	}

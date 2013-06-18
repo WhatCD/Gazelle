@@ -213,7 +213,7 @@ class Torrents {
 	 * @param boolean $Hidden Currently does fuck all. TODO: Fix that.
 	 */
 	public static function write_group_log($GroupID, $TorrentID, $UserID, $Message, $Hidden) {
-		global $DB,$Time;
+		global $DB, $Time;
 		$DB->query("
 			INSERT INTO group_log
 				(GroupID, TorrentID, UserID, Info, Time, Hidden)
@@ -371,7 +371,7 @@ class Torrents {
 			$DB->query("
 				UPDATE collages
 				SET NumTorrents=NumTorrents-1
-				WHERE ID IN (".implode(', ',$CollageIDs).')');
+				WHERE ID IN (".implode(', ', $CollageIDs).')');
 			$DB->query("
 				DELETE FROM collages_torrents
 				WHERE GroupID='$GroupID'");
@@ -659,7 +659,7 @@ class Torrents {
 			$EditionInfo = array();
 			if (!empty($Data['RemasterYear'])) { $EditionInfo[] = $Data['RemasterYear']; }
 			if (!empty($Data['RemasterTitle'])) { $EditionInfo[] = $Data['RemasterTitle']; }
-			if (count($EditionInfo)) { $Info[] = implode(' ',$EditionInfo); }
+			if (count($EditionInfo)) { $Info[] = implode(' ', $EditionInfo); }
 		}
 		if ($Data['IsSnatched']) { $Info[] = Format::torrent_label('Snatched!'); }
 		if ($Data['FreeTorrent'] == '1') { $Info[] = Format::torrent_label('Freeleech!'); }

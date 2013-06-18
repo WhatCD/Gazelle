@@ -1,8 +1,13 @@
 <?php
 
 if (check_perms('admin_reports') && !empty($_GET['remove']) && is_number($_GET['remove'])) {
-	$DB->query("DELETE FROM torrents_bad_tags WHERE TorrentID = ".$_GET['remove']);
-	$DB->query("SELECT GroupID FROM torrents WHERE ID = ".$_GET['remove']);
+	$DB->query("
+		DELETE FROM torrents_bad_tags
+		WHERE TorrentID = ".$_GET['remove']);
+	$DB->query("
+		SELECT GroupID
+		FROM torrents
+		WHERE ID = ".$_GET['remove']);
 	list($GroupID) = $DB->next_record();
 	$Cache->delete_value('torrents_details_'.$GroupID);
 }
@@ -62,17 +67,17 @@ foreach ($TorrentsInfo as $TorrentID => $Info) {
 	} else {
 		$DisplayName = '';
 	}
-	$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'#torrent'.$TorrentID.'" title="View Torrent">'.$GroupName.'</a>';
+	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'#torrent'.$TorrentID.'" title="View Torrent">'.$GroupName.'</a>';
 	if ($GroupYear > 0) {
-		$DisplayName.=" [$GroupYear]";
+		$DisplayName .= " [$GroupYear]";
 	}
 	if ($ReleaseType > 0) {
-		$DisplayName.=' ['.$ReleaseTypes[$ReleaseType].']';
+		$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 	}
 
 	$ExtraInfo = Torrents::torrent_info($Torrents[$TorrentID]);
 	if ($ExtraInfo) {
-		$DisplayName.=' - '.$ExtraInfo;
+		$DisplayName .= ' - '.$ExtraInfo;
 	}
 ?>
 		<tr class="torrent torrent_row<?=$Torrents[$TorrentID]['IsSnatched'] ? ' snatched_torrent' : ''?>">

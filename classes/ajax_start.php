@@ -14,7 +14,7 @@ if (isset($_COOKIE['session'])) {
 	$LoginCookie = $Enc->decrypt($_COOKIE['session']);
 }
 if (isset($LoginCookie)) {
-	list($SessionID, $UserID) = explode("|~|",$Enc->decrypt($LoginCookie));
+	list($SessionID, $UserID) = explode("|~|", $Enc->decrypt($LoginCookie));
 
 	if (!$UserID || !$SessionID) {
 		die('Not logged in!');
@@ -49,8 +49,8 @@ function is_number($Str) {
 function display_str($Str) {
 	if ($Str != '') {
 		$Str = make_utf8($Str);
-		$Str = mb_convert_encoding($Str,'HTML-ENTITIES','UTF-8');
-		$Str = preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m","&amp;",$Str);
+		$Str = mb_convert_encoding($Str, 'HTML-ENTITIES', 'UTF-8');
+		$Str = preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m", '&amp;', $Str);
 
 		$Replace = array(
 			"'",'"',"<",">",
@@ -62,7 +62,7 @@ function display_str($Str) {
 			'&#8364;','&#8218;','&#402;','&#8222;','&#8230;','&#8224;','&#8225;','&#710;','&#8240;','&#352;','&#8249;','&#338;','&#381;','&#8216;','&#8217;','&#8220;','&#8221;','&#8226;','&#8211;','&#8212;','&#732;','&#8482;','&#353;','&#8250;','&#339;','&#382;','&#376;'
 		);
 
-		$Str = str_replace($Replace,$With,$Str);
+		$Str = str_replace($Replace, $With, $Str);
 	}
 	return $Str;
 }

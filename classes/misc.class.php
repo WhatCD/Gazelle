@@ -193,7 +193,7 @@ class Misc {
 			WHERE ID = '$TopicID'");
 
 		// Bump this topic to head of the cache
-		list($Forum,,,$Stickies) = $Cache->get_value('forums_'.$ForumID);
+		list($Forum,,, $Stickies) = $Cache->get_value('forums_'.$ForumID);
 		if (!empty($Forum)) {
 			if (count($Forum) == TOPICS_PER_PAGE && $Stickies < TOPICS_PER_PAGE) {
 				array_pop($Forum);
@@ -407,7 +407,7 @@ class Misc {
 	 * @param string $Message the message to write.
 	 */
 	public static function write_log($Message) {
-		global $DB,$Time;
+		global $DB, $Time;
 		$DB->query("
 			INSERT INTO log (Message, Time)
 			VALUES ('" . db_string($Message) . "', '" . sqltime() . "')");
@@ -423,7 +423,7 @@ class Misc {
 	public static function sanitize_tag($Str) {
 		$Str = strtolower($Str);
 		$Str = preg_replace('/[^a-z0-9.]/', '', $Str);
-		$Str = preg_replace('/(^[.,]*)|([.,]*$)/','',$Str);
+		$Str = preg_replace('/(^[.,]*)|([.,]*$)/', '', $Str);
 		$Str = htmlspecialchars($Str);
 		$Str = db_string(trim($Str));
 		return $Str;

@@ -27,7 +27,7 @@ var isMobile = {
 if (isMobile.Android()) {
 	if (!hasCookie(ANDROID_COOKIE_NAME)) {
 		setCookie(ANDROID_COOKIE_NAME, true, 365);
-		var result = confirm("An Android App is available for What.CD, would you like to download it?");
+		var result = confirm("An Android app is available for What.CD. Would you like to download it?");
 		if (result == true) {
 			window.location = ANDROID_APP_URL;
 		}
@@ -35,7 +35,7 @@ if (isMobile.Android()) {
 } else if (isMobile.NotAndroid()) {
 	if (!hasCookie(OTHER_COOKIE_NAME)) {
 		setCookie(OTHER_COOKIE_NAME, true, 365);
-		var result = confirm("A mobile version of What.CD is available, would you like to use it?");
+		var result = confirm("A mobile version of What.CD is available. Would you like to use it?");
 		if (result == true) {
 			window.location = MOBILE_SITE_URL;
 		}

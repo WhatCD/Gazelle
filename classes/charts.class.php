@@ -30,7 +30,7 @@ class GOOGLE_CHARTS {
 	}
 
 	public function title($Title, $Color = '', $Size = '') {
-		$this->URL .= '&amp;chtt='.str_replace(array(' ',"\n"), array('+','|'), $Title);
+		$this->URL .= '&amp;chtt='.str_replace(array(' ', "\n"), array('+', '|'), $Title);
 		if (!empty($Color)) {
 			$this->URL .= '&amp;chts='.$Color;
 		}

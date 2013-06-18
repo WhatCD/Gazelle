@@ -352,7 +352,7 @@ class Format {
 	 * @return Number of bytes it represents, e.g. (123.45 * 1024)
 	 */
 	public static function get_bytes($Size) {
-		list($Value,$Unit) = sscanf($Size, "%f%s");
+		list($Value, $Unit) = sscanf($Size, "%f%s");
 		$Unit = ltrim($Unit);
 		if (empty($Unit)) {
 			return $Value ? round($Value) : 0;
@@ -487,7 +487,7 @@ class Format {
 				$Encoding = 'UTF-8';
 			}
 			if (empty($Encoding)) {
-				$Encoding = mb_detect_encoding($Str,'UTF-8, ISO-8859-1');
+				$Encoding = mb_detect_encoding($Str, 'UTF-8, ISO-8859-1');
 			}
 			if (empty($Encoding)) {
 				$Encoding = 'ISO-8859-1';
@@ -495,7 +495,7 @@ class Format {
 			if ($Encoding == 'UTF-8') {
 				return $Str;
 			} else {
-				return @mb_convert_encoding($Str,'UTF-8',$Encoding);
+				return @mb_convert_encoding($Str, 'UTF-8', $Encoding);
 			}
 		}
 	}

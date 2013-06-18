@@ -76,7 +76,7 @@ abstract class IRC_BOT {
 
 	public function get_channel() {
 		preg_match('/.+ PRIVMSG ([^:]+) :.+/', $this->Data, $Channel);
-		if (preg_match('/#.+/',$Channel[1])) {
+		if (preg_match('/#.+/', $Channel[1])) {
 			return $Channel[1];
 		} else {
 			return false;
@@ -100,7 +100,7 @@ abstract class IRC_BOT {
 
 	protected function get_word($Select=1) {
 		preg_match('/:.+ PRIVMSG [^:]+ :(.+)/', $this->Data, $Word);
-		$Word = split(' ',$Word[1]);
+		$Word = split(' ', $Word[1]);
 		return trim($Word[$Select]);
 	}
 
@@ -131,7 +131,7 @@ abstract class IRC_BOT {
 	/*
 	This function uses blacklisted_ip, which is no longer in RC2.
 	You can probably find it in old RC1 code kicking aronud if you need it.
-	protected function ip_check($IP,$Gline=false,$Channel=BOT_REPORT_CHAN) {
+	protected function ip_check($IP, $Gline = false, $Channel = BOT_REPORT_CHAN) {
 		global $Cache, $DB;
 		if (blacklisted_ip($IP)) {
 			$this->send_to($Channel, 'TOR IP Detected: '.$IP);
@@ -148,7 +148,7 @@ abstract class IRC_BOT {
 	}*/
 
 	protected function listen() {
-		global $Cache,$DB;
+		global $Cache, $DB;
 		$Cache->InternalCache = false;
 		stream_set_timeout($this->Socket, 10000000000);
 		while ($this->State == 1) {
@@ -163,7 +163,7 @@ abstract class IRC_BOT {
 				}
 
 				if ($this->Whois !== false) {
-					$Exp = explode(' ',$this->Data);
+					$Exp = explode(' ', $this->Data);
 					if ($Exp[1] == '307') {
 						$this->Identified[$this->Whois] = 1;
 						$this->send_to($this->LastChan, "$this->Whois correctly identified as a real person!");
@@ -185,7 +185,7 @@ abstract class IRC_BOT {
 					}
 				}
 
-				if (preg_match("/:([^!]+)![^\s]* PART #what.cd-disabled/", $this->Data, $Nick)) {
+				if (preg_match("/:([^!]+)![^\s]* PART ".BOT_DISABLED_CHAN.'/', $this->Data, $Nick)) {
 					if (isset($this->DisabledUsers[$Nick[1]])) {
 						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[1] . "'");
 						$Cache->increment_value('num_disablees', -1);
@@ -193,7 +193,7 @@ abstract class IRC_BOT {
 					}
 				}
 
-				if (preg_match("/:([^!]+)![^\s]* KICK #what.cd-disabled.* /", $this->Data, $Nick)) {
+				if (preg_match("/:([^!]+)![^\s]* KICK ".BOT_DISABLED_CHAN.'.* /', $this->Data, $Nick)) {
 					$Nick = explode(" ", $Nick[0]);
 					if (isset($this->DisabledUsers[$Nick[3]])) {
 						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[3] . "'");
@@ -210,11 +210,11 @@ abstract class IRC_BOT {
 					$this->send_raw('PONG :'.$Ping[1]);
 				}
 
-				if (preg_match('/.*PRIVMSG #.*/',$this->Data)) {
+				if (preg_match('/.*PRIVMSG #.*/', $this->Data)) {
 					$this->channel_events();
 				}
 
-				if (preg_match("/.* PRIVMSG ".BOT_NICK." .*/",$this->Data)) {
+				if (preg_match("/.* PRIVMSG ".BOT_NICK." .*/", $this->Data)) {
 					$this->query_events();
 				}
 			}

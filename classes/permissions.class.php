@@ -6,13 +6,14 @@ class Permissions {
 	 * @param string PermissionName
 	 * @param string $MinClass Return false if the user's class level is below this.
 	 */
-	public static function check_perms($PermissionName,$MinClass = 0) {
+	public static function check_perms($PermissionName, $MinClass = 0) {
 		global $LoggedUser;
 		return (
 			isset($LoggedUser['Permissions'][$PermissionName])
 			&& $LoggedUser['Permissions'][$PermissionName]
-			&& ($LoggedUser['Class']>=$MinClass
-				|| $LoggedUser['EffectiveClass']>=$MinClass)) ? true : false;
+			&& ($LoggedUser['Class'] >= $MinClass
+				|| $LoggedUser['EffectiveClass'] >= $MinClass)
+			) ? true : false;
 	}
 
 	/**

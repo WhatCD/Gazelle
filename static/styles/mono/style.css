@@ -1,5 +1,5 @@
 /*
-Mono What.cd Stylesheet
+Mono What.CD Stylesheet
 
 Author:  Callum Jefferies (callumj)
 Contact: callum.jefferies@gmail.com
@@ -16,7 +16,7 @@ All icons Copyright (c) Callum Jefferies 2011
 body {
 	padding: 120px 20px 60px 20px;
 	background: #eee !important;
-	font: 9pt/14pt 'Lucida Grande',Helvetica,Arial,sans-serif;
+	font: 9pt/14pt 'Lucida Grande', Helvetica, Arial, sans-serif;
 }
 
 table {
@@ -38,7 +38,7 @@ a:hover {
 }
 
 h1,h2,h3 {
-	font-family: Helvetica,Arial,sans-serif;
+	font-family: Helvetica, Arial, sans-serif;
 	font-weight: bold;
 	color: #444 !important;
 }

@@ -103,31 +103,10 @@ switch ($_REQUEST['action']) {
 	case 'create_personal':
 		if (!check_perms('site_collages_personal')) {
 			error(403);
+		} else {
+			Collages::create_personal_collage();
 		}
-
-		$DB->query("
-			SELECT
-				COUNT(ID)
-			FROM collages
-			WHERE UserID='$LoggedUser[ID]'
-				AND CategoryID='0'
-				AND Deleted='0'");
-		list($CollageCount) = $DB->next_record();
-
-		if ($CollageCount >= $LoggedUser['Permissions']['MaxCollages']) {
-			list($CollageID) = $DB->next_record();
-			header('Location: collage.php?id='.$CollageID);
-			die();
-		}
-		$NameStr = ($CollageCount > 0)?" no. " . ($CollageCount + 1):'';
-		$DB->query("
-			INSERT INTO collages
-				(Name, Description, CategoryID, UserID)
-			VALUES
-				('$LoggedUser[Username]\'s personal collage$NameStr', 'Personal collage for $LoggedUser[Username]. The first 5 albums will appear on his or her [url=https:\/\/".SSL_SITE_URL."\/user.php?id=$LoggedUser[ID]]profile[\/url].', '0', $LoggedUser[ID])");
-		$CollageID = $DB->inserted_id();
-		header('Location: collage.php?id='.$CollageID);
-		die();
+		break;
 
 	default:
 		if (!empty($_GET['id'])) {
