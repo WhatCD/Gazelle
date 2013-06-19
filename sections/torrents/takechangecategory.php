@@ -26,12 +26,19 @@ switch ($Categories[$NewCategoryID-1]) {
 			error(0);
 		}
 		$SearchText = "$ArtistName $Title $Year";
-		$DB->query("SELECT ArtistID, AliasID, Redirect, Name FROM artists_alias WHERE Name LIKE '$ArtistName'");
+		$DB->query("
+			SELECT ArtistID, AliasID, Redirect, Name
+			FROM artists_alias
+			WHERE Name LIKE '$ArtistName'");
 		if ($DB->record_count() == 0) {
 			$Redirect = 0;
-			$DB->query("INSERT INTO artists_group (Name) VALUES ('$ArtistName')");
+			$DB->query("
+				INSERT INTO artists_group (Name)
+				VALUES ('$ArtistName')");
 			$ArtistID = $DB->inserted_id();
-			$DB->query("INSERT INTO artists_alias (ArtistID, Name) VALUES ('$ArtistID', '$ArtistName')");
+			$DB->query("
+				INSERT INTO artists_alias (ArtistID, Name)
+				VALUES ('$ArtistID', '$ArtistName')");
 			$AliasID = $DB->inserted_id();
 		} else {
 			list($ArtistID, $AliasID, $Redirect, $ArtistName) = $DB->next_record();
@@ -40,15 +47,18 @@ switch ($Categories[$NewCategoryID-1]) {
 			}
 		}
 
-		$DB->query("INSERT INTO torrents_group
-			(ArtistID, NumArtists, CategoryID, Name, Year, ReleaseType, Time, WikiBody, WikiImage, SearchText)
+		$DB->query("
+			INSERT INTO torrents_group
+				(ArtistID, NumArtists, CategoryID, Name, Year, ReleaseType, Time, WikiBody, WikiImage, SearchText)
 			VALUES
-			($ArtistID, '1', '1', '$Title', '$Year', '$ReleaseType', '".sqltime()."', '', '', '$SearchText')");
+				($ArtistID, '1', '1', '$Title', '$Year', '$ReleaseType', '".sqltime()."', '', '', '$SearchText')");
 		$GroupID = $DB->inserted_id();
 
-		$DB->query("INSERT INTO torrents_artists
-			(GroupID, ArtistID, AliasID, Importance, UserID) VALUES
-			('$GroupID', '$ArtistID', '$AliasID', '1', '$LoggedUser[ID]')");
+		$DB->query("
+			INSERT INTO torrents_artists
+				(GroupID, ArtistID, AliasID, Importance, UserID)
+			VALUES
+				('$GroupID', '$ArtistID', '$AliasID', '1', '$LoggedUser[ID]')");
 		break;
 	case 'Audiobooks':
 	case 'Comedy':
@@ -57,10 +67,11 @@ switch ($Categories[$NewCategoryID-1]) {
 			error(0);
 		}
 		$SearchText = "$Title $Year";
-		$DB->query("INSERT INTO torrents_group
-			(CategoryID, Name, Year, Time, WikiBody, WikiImage, SearchText)
+		$DB->query("
+			INSERT INTO torrents_group
+				(CategoryID, Name, Year, Time, WikiBody, WikiImage, SearchText)
 			VALUES
-			($NewCategoryID, '$Title', '$Year', '".sqltime()."', '', '', '$SearchText')");
+				($NewCategoryID, '$Title', '$Year', '".sqltime()."', '', '', '$SearchText')");
 		$GroupID = $DB->inserted_id();
 		break;
 	case 'Applications':
@@ -68,35 +79,46 @@ switch ($Categories[$NewCategoryID-1]) {
 	case 'E-Books':
 	case 'E-Learning Videos':
 		$SearchText = $Title;
-		$DB->query("INSERT INTO torrents_group
-			(CategoryID, Name, Time, WikiBody, WikiImage, SearchText)
+		$DB->query("
+			INSERT INTO torrents_group
+				(CategoryID, Name, Time, WikiBody, WikiImage, SearchText)
 			VALUES
-			($NewCategoryID, '$Title', '".sqltime()."', '', '', '$SearchText')");
+				($NewCategoryID, '$Title', '".sqltime()."', '', '', '$SearchText')");
 		$GroupID = $DB->inserted_id();
 		break;
 }
 
-$DB->query("UPDATE torrents SET
-	GroupID='$GroupID'
-	WHERE ID='$TorrentID'");
+$DB->query("
+	UPDATE torrents
+	SET GroupID = '$GroupID'
+	WHERE ID = '$TorrentID'");
 
 // Delete old group if needed
-$DB->query("SELECT ID FROM torrents WHERE GroupID='$OldGroupID'");
+$DB->query("
+	SELECT ID
+	FROM torrents
+	WHERE GroupID = '$OldGroupID'");
 if ($DB->record_count() == 0) {
-	$DB->query("UPDATE torrents_comments SET GroupID='$GroupID' WHERE GroupID='$OldGroupID'");
+	$DB->query("
+		UPDATE torrents_comments
+		SET GroupID = '$GroupID'
+		WHERE GroupID = '$OldGroupID'");
 	Torrents::delete_group($OldGroupID);
-	$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_0');
+	$Cache->delete_value("torrent_comments_{$GroupID}_catalogue_0");
 } else {
 	Torrents::update_hash($OldGroupID);
 }
 
 Torrents::update_hash($GroupID);
 
-$Cache->delete_value('torrent_download_'.$TorrentID);
+$Cache->delete_value("torrent_download_$TorrentID");
 
 Misc::write_log("Torrent $TorrentID was edited by $LoggedUser[Username]");
 Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "merged from group $OldGroupID", 0);
-$DB->query("UPDATE group_log SET GroupID = $GroupID WHERE GroupID = $OldGroupID");
+$DB->query("
+	UPDATE group_log
+	SET GroupID = $GroupID
+	WHERE GroupID = $OldGroupID");
 
 header("Location: torrents.php?id=$GroupID");
 ?>

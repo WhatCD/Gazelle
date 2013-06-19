@@ -27,7 +27,11 @@ if (!empty($Groups['matches'][$GroupID])) {
 			<td>Info</td>
 		</tr>
 <?
-	$Log = $DB->query("SELECT TorrentID, UserID, Info, Time FROM group_log WHERE GroupID = ".$GroupID." ORDER BY Time DESC");
+	$Log = $DB->query("
+			SELECT TorrentID, UserID, Info, Time
+			FROM group_log
+			WHERE GroupID = $GroupID
+			ORDER BY Time DESC");
 	$LogEntries = $DB->to_array(false, MYSQL_NUM);
 	foreach ($LogEntries AS $LogEntry) {
 		list($TorrentID, $UserID, $Info, $Time) = $LogEntry;
@@ -36,7 +40,10 @@ if (!empty($Groups['matches'][$GroupID])) {
 			<td><?=$Time?></td>
 <?
 			if ($TorrentID != 0) {
-				$DB->query("SELECT Media, Format, Encoding FROM torrents WHERE ID=".$TorrentID);
+				$DB->query("
+					SELECT Media, Format, Encoding
+					FROM torrents
+					WHERE ID = $TorrentID");
 				list($Media, $Format, $Encoding) = $DB->next_record();
 				if ($DB->record_count() == 0) { ?>
 					<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a> (Deleted)</td><?

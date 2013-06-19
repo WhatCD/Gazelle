@@ -129,6 +129,10 @@ ul.thin li {
 	padding: 1em 0;
 }
 
+#footer a {
+	color: #DDDDDD;
+}
+
 #logo {
 	width: 15%;
 	height: 75px;

@@ -10,7 +10,7 @@ class Tracker {
 	 * @param array $Updates An associative array of key->value pairs to send to the tracker
 	 * @param boolean $ToIRC Sends a message to the channel #tracker with the GET URL.
 	 */
-	function update_tracker($Action, $Updates, $ToIRC = false) {
+	public static function update_tracker($Action, $Updates, $ToIRC = false) {
 		global $Cache;
 		//Build request
 		$Get = '/update?action='.$Action;

@@ -2,11 +2,11 @@
 
 define('PREFIX', 'percentiles_'); // Prefix for memcache keys, to make life easier
 
-class USER_RANK {
+class UserRank {
 
 	// Returns a 101 row array (101 percentiles - 0 - 100), with the minimum value for that percentile as the value for each row
 	// BTW - ingenious
-	function build_table($MemKey, $Query) {
+	private static function build_table($MemKey, $Query) {
 		global $Cache, $DB;
 
 		$DB->query("
@@ -40,7 +40,7 @@ class USER_RANK {
 		return $Table;
 	}
 
-	function table_query($TableName) {
+	private static function table_query($TableName) {
 		switch ($TableName) {
 			case 'uploaded':
 				$Query =  "
@@ -109,7 +109,7 @@ class USER_RANK {
 		return $Query;
 	}
 
-	function get_rank($TableName, $Value) {
+	public static function get_rank($TableName, $Value) {
 		if ($Value == 0) {
 			return 0;
 		}
@@ -123,7 +123,7 @@ class USER_RANK {
 				return false;
 			} else {
 				$Cache->cache_value(PREFIX.$TableName."_lock", '1', 300);
-				$Table = $this->build_table(PREFIX.$TableName, $this->table_query($TableName));
+				$Table = self::build_table(PREFIX.$TableName, self::table_query($TableName));
 				$Cache->delete_value(PREFIX.$TableName."_lock");
 			}
 		}
@@ -138,7 +138,7 @@ class USER_RANK {
 		return 100; // 100th percentile
 	}
 
-	function overall_score($Uploaded, $Downloaded, $Uploads, $Requests, $Posts, $Bounty, $Artists, $Ratio) {
+	public static function overall_score($Uploaded, $Downloaded, $Uploads, $Requests, $Posts, $Bounty, $Artists, $Ratio) {
 		// We can do this all in 1 line, but it's easier to read this way
 		if ($Ratio > 1) {
 			$Ratio = 1;

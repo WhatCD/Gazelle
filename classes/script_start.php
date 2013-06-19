@@ -174,6 +174,9 @@ spl_autoload_register(function ($ClassName) {
 		case 'Tracker':
 			$FileName = 'tracker.class';
 			break;
+		case 'UserRank':
+			$FileName = 'user_rank.class';
+			break;
 		case 'Users':
 			$FileName = 'users.class';
 			break;

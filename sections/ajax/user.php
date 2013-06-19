@@ -130,37 +130,34 @@ if (check_paranoia_here('artistsadded')) {
 }
 
 // Do the ranks.
-include(SERVER_ROOT.'/classes/user_rank.class.php');
-$Rank = new USER_RANK;
-
 if (check_paranoia_here('uploaded')) {
-	$UploadedRank = $Rank->get_rank('uploaded', $Uploaded);
+	$UploadedRank = UserRank::get_rank('uploaded', $Uploaded);
 } else {
 	$UploadedRank = null;
 }
 if (check_paranoia_here('downloaded')) {
-	$DownloadedRank = $Rank->get_rank('downloaded', $Downloaded);
+	$DownloadedRank = UserRank::get_rank('downloaded', $Downloaded);
 } else {
 	$DownloadedRank = null;
 }
 if (check_paranoia_here('uploads+')) {
-	$UploadsRank = $Rank->get_rank('uploads', $Uploads);
+	$UploadsRank = UserRank::get_rank('uploads', $Uploads);
 } else {
 	$UploadsRank = null;
 }
 if (check_paranoia_here('requestsfilled_count')) {
-	$RequestRank = $Rank->get_rank('requests', $RequestsFilled);
+	$RequestRank = UserRank::get_rank('requests', $RequestsFilled);
 } else {
 	$RequestRank = null;
 }
-$PostRank = $Rank->get_rank('posts', $ForumPosts);
+$PostRank = UserRank::get_rank('posts', $ForumPosts);
 if (check_paranoia_here('requestsvoted_bounty')) {
-	$BountyRank = $Rank->get_rank('bounty', $TotalSpent);
+	$BountyRank = UserRank::get_rank('bounty', $TotalSpent);
 } else {
 	$BountyRank = null;
 }
 if (check_paranoia_here('artistsadded')) {
-	$ArtistsRank = $Rank->get_rank('artists', $ArtistsAdded);
+	$ArtistsRank = UserRank::get_rank('artists', $ArtistsAdded);
 } else {
 	$ArtistsRank = null;
 }
@@ -173,7 +170,7 @@ if ($Downloaded == 0) {
 	$Ratio = round($Uploaded / $Downloaded, 2);
 }
 if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfilled_count', 'requestsvoted_bounty', 'artistsadded'))) {
-	$OverallRank = floor($Rank->overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio));
+	$OverallRank = floor(UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsRank, $RequestRank, $PostRank, $BountyRank, $ArtistsRank, $Ratio));
 } else {
 	$OverallRank = null;
 }

@@ -19,28 +19,30 @@ if (!is_number($GroupID) || !$GroupID) {
 }
 
 // Get the artist name and the body of the last revision
-$DB->query("SELECT
-	tg.Name,
-	wt.Image,
-	wt.Body,
-	tg.WikiImage,
-	tg.WikiBody,
-	tg.Year,
-	tg.RecordLabel,
-	tg.CatalogueNumber,
-	tg.ReleaseType,
-	tg.CategoryID,
-	tg.VanityHouse
+$DB->query("
+	SELECT
+		tg.Name,
+		wt.Image,
+		wt.Body,
+		tg.WikiImage,
+		tg.WikiBody,
+		tg.Year,
+		tg.RecordLabel,
+		tg.CatalogueNumber,
+		tg.ReleaseType,
+		tg.CategoryID,
+		tg.VanityHouse
 	FROM torrents_group AS tg
-	LEFT JOIN wiki_torrents AS wt ON wt.RevisionID=tg.RevisionID
-	WHERE tg.ID='$GroupID'");
+		LEFT JOIN wiki_torrents AS wt ON wt.RevisionID = tg.RevisionID
+	WHERE tg.ID = '$GroupID'");
 if ($DB->record_count() == 0) {
 	error(404);
 }
 list($Name, $Image, $Body, $WikiImage, $WikiBody, $Year, $RecordLabel, $CatalogueNumber, $ReleaseType, $CategoryID, $VanityHouse) = $DB->next_record();
 
 if (!$Body) {
-	$Body = $WikiBody; $Image = $WikiImage;
+	$Body = $WikiBody;
+	$Image = $WikiImage;
 }
 
 View::show_header('Edit torrent group');
@@ -69,9 +71,13 @@ View::show_header('Edit torrent group');
 				</select>
 <?		if (check_perms('torrents_edit_vanityhouse')) { ?>
 				<br />
-				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1" <?=($VanityHouse ? 'checked="checked" ' : '')?>/></h3>
-<?		}
-	} ?>
+				<h3>
+					<label>Vanity House: <input type="checkbox" name="vanity_house" value="1" <?=($VanityHouse ? 'checked="checked" ' : '')?>/></label>
+				</h3>
+<?
+		}
+	}
+?>
 				<h3>Edit summary</h3>
 				<input type="text" name="summary" size="92" /><br />
 				<div style="text-align: center;">
@@ -80,7 +86,11 @@ View::show_header('Edit torrent group');
 			</div>
 		</form>
 	</div>
-<?	$DB->query("SELECT UserID FROM torrents WHERE GroupID = ".$GroupID);
+<?
+	$DB->query("
+		SELECT UserID
+		FROM torrents
+		WHERE GroupID = $GroupID");
 	//Users can edit the group info if they've uploaded a torrent to the group or have torrents_edit
 	if (in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?>
 	<h3>Non-wiki group editing</h3>
@@ -111,7 +121,7 @@ View::show_header('Edit torrent group');
 						<input type="text" name="catalogue_number" size="40" value="<?=$CatalogueNumber?>" />
 					</td>
 				</tr>
-<? if (check_perms('torrents_freeleech')) { ?>
+<?	if (check_perms('torrents_freeleech')) { ?>
 				<tr>
 					<td class="label">Torrent <strong>group</strong> leech status</td>
 					<td>
@@ -120,14 +130,14 @@ View::show_header('Edit torrent group');
 						<input type="checkbox" id="neutralleech" name="neutralleech" /><label for="neutralleech"> Neutral Leech</label>
 						 because
 						<select name="freeleechtype">
-<?		$FL = array("N/A", "Staff Pick", "Perma-FL", "Vanity House");
+<?		$FL = array('N/A', 'Staff Pick', 'Perma-FL', 'Vanity House');
 		foreach ($FL as $Key => $FLType) { ?>
 							<option value="<?=$Key?>"<?=($Key == $Torrent['FreeLeechType'] ? ' selected="selected"' : '')?>><?=$FLType?></option>
 <?		} ?>
 						</select>
 					</td>
 				</tr>
-<? } ?>
+<?	} ?>
 			</table>
 			<input type="submit" value="Edit" />
 		</form>
@@ -147,7 +157,6 @@ View::show_header('Edit torrent group');
 				<div style="text-align: center;">
 					<input type="submit" value="Rename" />
 				</div>
-
 			</div>
 		</form>
 	</div>
@@ -163,7 +172,6 @@ View::show_header('Edit torrent group');
 				<div style="text-align: center;">
 					<input type="submit" value="Merge" />
 				</div>
-
 			</div>
 		</form>
 	</div>

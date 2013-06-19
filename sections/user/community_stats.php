@@ -175,7 +175,7 @@ list($PerfectFLACs) = $DB->next_record();
 	if ($Override = check_paranoia_here('seeding+')) {
 ?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Seeding:
-					<span class="user_commstats" id="user_commstats_seeding"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Stats</a></span>
+					<span class="user_commstats" id="user_commstats_seeding"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Show stats</a></span>
 <?
 		if ($AOverride = check_paranoia_here('seeding')) {
 			if ($Override = check_paranoia_here('snatched')) {
@@ -194,10 +194,10 @@ list($PerfectFLACs) = $DB->next_record();
 	}
 	if ($Override = check_paranoia_here('leeching+')) {
 ?>
-				<li<?=$Override === 2 ? ' class="paranoia_override"' : ''?>>Leeching:
-					<span class="user_commstats" id="user_commstats_leeching"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Stats</a></span>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Leeching:
+					<span class="user_commstats" id="user_commstats_leeching"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Show stats</a></span>
 <?		if ($Override = check_paranoia_here('leeching')) { ?>
-					<a href="torrents.php?type=leeching&amp;userid=<?=$UserID?>" class="brackets<?=$Override === 2 ? ' paranoia_override' : ''?>" title="View">View</a>
+					<a href="torrents.php?type=leeching&amp;userid=<?=$UserID?>" class="brackets<?=($Override === 2 ? ' paranoia_override' : '')?>" title="View">View</a>
 <?
 		}
 		if ($DisableLeech == 0 && check_perms('users_view_ips')) {
@@ -209,9 +209,9 @@ list($PerfectFLACs) = $DB->next_record();
 	}
 	if ($Override = check_paranoia_here('snatched+')) { ?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Snatched:
-					<span class="user_commstats" id="user_commstats_snatched"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Stats</a></span>
+					<span class="user_commstats" id="user_commstats_snatched"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Show stats</a></span>
 <?		if ($Override = check_perms('site_view_torrent_snatchlist', $Class)) { ?>
-					<span id="user_commstats_usnatched"<?=$Override === 2 ? ' class="paranoia_override"' : ''?>></span>
+					<span id="user_commstats_usnatched"<?=($Override === 2 ? ' class="paranoia_override"' : '')?>></span>
 <?		}
 	}
 	if ($Override = check_paranoia_here('snatched')) { ?>
@@ -224,7 +224,7 @@ list($PerfectFLACs) = $DB->next_record();
 	if (check_perms('site_view_torrent_snatchlist', $Class)) {
 ?>
 				<li>Downloaded:
-					<span class="user_commstats" id="user_commstats_downloaded"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Stats</a></span>
+					<span class="user_commstats" id="user_commstats_downloaded"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Show stats</a></span>
 					<span id="user_commstats_udownloaded"></span>
 					<a href="torrents.php?type=downloaded&amp;userid=<?=$UserID?>" class="brackets" title="View">View</a>
 				</li>

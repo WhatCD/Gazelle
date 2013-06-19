@@ -10,22 +10,28 @@ if (!$GroupID || !is_number($GroupID)) {
 }
 
 if (empty($NewName)) {
-	error('Albums must have a name');
+	error('Torrent groups must have a name');
 }
 
 if (!check_perms('torrents_edit')) {
 	error(403);
 }
 
-$DB->query("SELECT Name FROM torrents_group WHERE ID = ".$GroupID);
+$DB->query("
+	SELECT Name
+	FROM torrents_group
+	WHERE ID = $GroupID");
 list($OldName) = $DB->next_record(MYSQLI_NUM, false);
 
-$DB->query("UPDATE torrents_group SET Name='".db_string($NewName)."' WHERE ID='$GroupID'");
-$Cache->delete_value('torrents_details_'.$GroupID);
+$DB->query("
+	UPDATE torrents_group
+	SET Name = '".db_string($NewName)."'
+	WHERE ID = '$GroupID'");
+$Cache->delete_value("torrents_details_$GroupID");
 
 Torrents::update_hash($GroupID);
 
-Misc::write_log("Torrent Group ".$GroupID." (".$OldName.") was renamed to '".$NewName."' by ".$LoggedUser['Username']);
-Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "renamed to ".$NewName." from ".$OldName, 0);
+Misc::write_log("Torrent Group $GroupID ($OldName) was renamed to \"$NewName\" by ".$LoggedUser['Username']);
+Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "renamed to \"$NewName\" from $OldName", 0);
 
-header('Location: torrents.php?id='.$GroupID);
+header("Location: torrents.php?id=$GroupID");
