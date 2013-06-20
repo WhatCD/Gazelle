@@ -16,11 +16,11 @@ if (!is_number($ArtistID)) {
 	error(0);
 }
 
-include(SERVER_ROOT.'/classes/wiki.class.php'); // Wiki class
-$Wiki = new WIKI('wiki_artists', $ArtistID, "artist.php?id=$ArtistID");
-
 // Get the artist name and the body of the last revision
-$DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
+$DB->query("
+	SELECT Name
+	FROM artists_group
+	WHERE ArtistID = '$ArtistID'");
 list($Name) = $DB->next_record(MYSQLI_NUM, true);
 
 View::show_header("Revision history for $Name"); // Set title
@@ -32,7 +32,8 @@ View::show_header("Revision history for $Name"); // Set title
 		<h2>Revision history for <a href="artist.php?id=<?=$ArtistID?>"><?=$Name?></a></h2>
 	</div>
 <?
-$Wiki->revision_history(); // the wiki class takes over from here
+// the Wiki class takes over from here
+Wiki::revision_history('wiki_artists', $ArtistID, "artist.php?id=$ArtistID");
 ?>
 </div>
 <?

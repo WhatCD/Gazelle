@@ -31,10 +31,11 @@ if (check_paranoia_here('seeding+') || check_paranoia_here('leeching+')) {
 		GROUP BY Type");
 	$PeerCount = $DB->to_array(0, MYSQLI_NUM, false);
 	if (check_paranoia('seeding+')) {
-		$CommStats['seeding'] = isset($PeerCount['Seeding']) ? $PeerCount['Seeding'][1] : 0;
+		$Seeding = isset($PeerCount['Seeding']) ? $PeerCount['Seeding'][1] : 0;
+		$CommStats['seeding'] = number_format($Seeding);
 	}
 	if (check_paranoia('leeching+')) {
-		$CommStats['leeching'] = isset($PeerCount['Leeching']) ? $PeerCount['Leeching'][1] : 0;
+		$CommStats['leeching'] = isset($PeerCount['Leeching']) ? number_format($PeerCount['Leeching'][1]) : 0;
 	}
 }
 if (check_paranoia_here('snatched+')) {
@@ -44,12 +45,12 @@ if (check_paranoia_here('snatched+')) {
 			INNER JOIN torrents AS t ON t.ID=x.fid
 		WHERE x.uid = '$UserID'");
 	list($Snatched, $UniqueSnatched) = $DB->next_record(MYSQLI_NUM, false);
-	$CommStats['snatched'] = $Snatched;
+	$CommStats['snatched'] = number_format($Snatched);
 	if (check_perms('site_view_torrent_snatchlist', $User['Class'])) {
-		$CommStats['usnatched'] = $UniqueSnatched;
+		$CommStats['usnatched'] = number_format($UniqueSnatched);
 	}
-	if (check_paranoia_here('seeding') && check_paranoia_here('snatched')) {
-		$CommStats['seedingperc'] = $UniqueSnatched > 0 ? 100 * min(1, round($CommStats['seeding'] / $UniqueSnatched, 2)) : -1;
+	if (check_paranoia_here('seeding') && check_paranoia_here('snatched') && $UniqueSnatched > 0) {
+		$CommStats['seedingperc'] = 100 * min(1, round($Seeding / $UniqueSnatched, 2));
 	}
 }
 if (check_perms('site_view_torrent_snatchlist', $Class)) {
@@ -59,16 +60,8 @@ if (check_perms('site_view_torrent_snatchlist', $Class)) {
 			JOIN torrents AS t ON t.ID=ud.TorrentID
 		WHERE ud.UserID='$UserID'");
 	list($NumDownloads, $UniqueDownloads) = $DB->next_record(MYSQLI_NUM, false);
-	$CommStats['downloaded'] = $NumDownloads;
-	$CommStats['udownloaded'] = $UniqueDownloads;
+	$CommStats['downloaded'] = number_format($NumDownloads);
+	$CommStats['udownloaded'] = number_format($UniqueDownloads);
 }
-
-$CommStats['leeching'] = number_format($CommStats['leeching']);
-$CommStats['seeding'] = number_format($CommStats['seeding']);
-$CommStats['snatched'] = number_format($CommStats['snatched']);
-$CommStats['usnatched'] = number_format($CommStats['usnatched']);
-$CommStats['downloaded'] = number_format($CommStats['downloaded']);
-$CommStats['udownloaded'] = number_format($CommStats['udownloaded']);
-$CommStats['seedingperc'] = number_format($CommStats['seedingperc']);
 
 json_die('success', $CommStats);

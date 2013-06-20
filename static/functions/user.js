@@ -212,9 +212,7 @@ function displayCommStats(stats) {
 				$(baseid + x).html('(' + stats[x] + ')');
 				break;
 			case 'seedingperc':
-				if (stats[x] !== -1) {
-					$(baseid + x).html('(' + stats[x] + '%)');
-				}
+				$(baseid + x).html('(' + stats[x] + '%)');
 				break;
 		}
 	}

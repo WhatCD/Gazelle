@@ -1,15 +1,15 @@
 <?
 /************************************************************************
-||------------|| Edit artist wiki page ||------------------------------||
+||------------|| Edit torrent group wiki page ||-----------------------||
 
 This page is the page that is displayed when someone feels like editing
-an artist's wiki page.
+a torrent group's wiki page.
 
-It is called when $_GET['action'] == 'edit'. $_GET['artistid'] is the
-ID of the artist, and must be set.
+It is called when $_GET['action'] == 'edit'. $_GET['groupid'] is the
+ID of the torrent group and must be set.
 
-The page inserts a new revision into the wiki_artists table, and clears
-the cache for the artist page.
+The page inserts a new revision into the wiki_torrents table, and clears
+the cache for the torrent group page.
 
 ************************************************************************/
 
@@ -18,7 +18,7 @@ if (!is_number($GroupID) || !$GroupID) {
 	error(0);
 }
 
-// Get the artist name and the body of the last revision
+// Get the torrent group name and the body of the last revision
 $DB->query("
 	SELECT
 		tg.Name,
@@ -59,9 +59,9 @@ View::show_header('Edit torrent group');
 				<input type="hidden" name="action" value="takegroupedit" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-				<h3>Image</h3>
+				<h3>Image:</h3>
 				<input type="text" name="image" size="92" value="<?=$Image?>" /><br />
-				<h3>Description</h3>
+				<h3>Torrent group description:</h3>
 				<textarea name="body" cols="91" rows="20"><?=$Body?></textarea><br />
 <?	if ($CategoryID == 1) { ?>
 				<select id="releasetype" name="releasetype">
@@ -78,7 +78,7 @@ View::show_header('Edit torrent group');
 		}
 	}
 ?>
-				<h3>Edit summary</h3>
+				<h3>Edit summary:</h3>
 				<input type="text" name="summary" size="92" /><br />
 				<div style="text-align: center;">
 					<input type="submit" value="Submit" />
@@ -93,7 +93,7 @@ View::show_header('Edit torrent group');
 		WHERE GroupID = $GroupID");
 	//Users can edit the group info if they've uploaded a torrent to the group or have torrents_edit
 	if (in_array($LoggedUser['ID'], $DB->collect('UserID')) || check_perms('torrents_edit')) { ?>
-	<h3>Non-wiki group editing</h3>
+	<h3>Non-wiki torrent group editing</h3>
 	<div class="box pad">
 		<form class="edit_form" name="torrent_group" action="torrents.php" method="post">
 			<input type="hidden" name="action" value="nonwikiedit" />
@@ -146,7 +146,7 @@ View::show_header('Edit torrent group');
 	}
 	if (check_perms('torrents_edit')) {
 ?>
-	<h3>Rename (won't merge)</h3>
+	<h3>Rename (will not merge)</h3>
 	<div class="box pad">
 		<form class="rename_form" name="torrent_group" action="torrents.php" method="post">
 			<div>
@@ -167,7 +167,7 @@ View::show_header('Edit torrent group');
 				<input type="hidden" name="action" value="merge" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-				<h3>Target Group ID</h3>
+				<h3>Target torrent group ID</h3>
 				<input type="text" name="targetgroupid" size="10" />
 				<div style="text-align: center;">
 					<input type="submit" value="Merge" />

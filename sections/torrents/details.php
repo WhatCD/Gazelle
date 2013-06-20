@@ -163,7 +163,7 @@ $Index = 0;
 <div id="covers">
 <div id="cover_div_<?=$Index?>" class="pad">
 <?	if ($WikiImage != '') { ?>
-			<p align="center"><img width="100%" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=ImageTools::process($WikiImage)?>',220);" /></p>
+			<p align="center"><img width="100%" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=ImageTools::process($WikiImage)?>', 220);" /></p>
 <?	} else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID - 1]?>" alt="<?=$Categories[$GroupCategoryID - 1]?>" title="<?=$Categories[$GroupCategoryID - 1]?>" width="220" height="220" border="0" /></p>
 <?
@@ -188,7 +188,7 @@ $Index++;
 					<li>
 						<?=$Summary?>
 						<?=(check_perms('users_mod') ? ' added by ' . Users::format_username($AddedBy, false, false, false, false, false) : '')?>
-						<span class="remove remove_cover_art"><a href="#" onclick="ajax.get('torrents.php?action=remove_cover_art&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;id=<?=$ImageID?>&amp;groupid=<?=$GroupID?>');this.parentNode.parentNode.parentNode.style.display = 'none';this.parentNode.parentNode.parentNode.previousElementSibling.style.display = 'none';" class="brackets" title="Remove Image">X</a></span>
+						<span class="remove remove_cover_art"><a href="#" onclick="ajax.get('torrents.php?action=remove_cover_art&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;id=<?=$ImageID?>&amp;groupid=<?=$GroupID?>'); this.parentNode.parentNode.parentNode.style.display = 'none'; this.parentNode.parentNode.parentNode.previousElementSibling.style.display = 'none';" class="brackets" title="Remove Image">X</a></span>
 					</li>
 				</ul>
 			</div>
@@ -244,8 +244,8 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 					$AliasID = $Artist['id'];
 				}
 ?>
-				(<?=$AliasID?>)&nbsp;
-					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
+				(<span title="Artist alias ID"><?=$AliasID?></span>)&nbsp;
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4'); this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
 <?			} ?>
 				</li>
 <?		}
@@ -257,14 +257,19 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 				<li class="artists_dj">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if (check_perms('torrents_edit')) {
-				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+				$DB->query("
+					SELECT AliasID
+					FROM artists_alias
+					WHERE ArtistID = ".$Artist['id']."
+						AND ArtistID != AliasID
+						AND Name = '".db_string($Artist['name'])."'");
 					list($AliasID) = $DB->next_record();
 					if (empty($AliasID)) {
 						$AliasID = $Artist['id'];
 					}
 ?>
-				(<?=$AliasID?>)&nbsp;
-					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=6');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
+				(<span title="Artist alias ID"><?=$AliasID?></span>)&nbsp;
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=6'); this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
 <?			} ?>
 				</li>
 <?
@@ -285,8 +290,8 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 				$AliasID = $Artist['id'];
 			}
 ?>
-			(<?=$AliasID?>)&nbsp;
-				<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=1');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
+			(<span title="Artist alias ID"><?=$AliasID?></span>)&nbsp;
+				<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=1'); this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
 <?		} ?>
 				</li>
 <?
@@ -298,14 +303,19 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 				<li class="artist_guest">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if (check_perms('torrents_edit')) {
-				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+				$DB->query("
+					SELECT AliasID
+					FROM artists_alias
+					WHERE ArtistID = ".$Artist['id']."
+						AND ArtistID != AliasID
+						AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
 					$AliasID = $Artist['id'];
 				}
 ?>
-				(<?=$AliasID?>)&nbsp;
-					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=2');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
+				(<span title="Artist alias ID"><?=$AliasID?></span>)&nbsp;
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=2'); this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
 <?			} ?>
 				</li>
 <?
@@ -318,14 +328,19 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 				<li class="artists_conductors">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if (check_perms('torrents_edit')) {
-				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+				$DB->query("
+					SELECT AliasID
+					FROM artists_alias
+					WHERE ArtistID = ".$Artist['id']."
+						AND ArtistID != AliasID
+						AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
 					$AliasID = $Artist['id'];
 				}
 ?>
-				(<?=$AliasID?>)&nbsp;
-					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=5');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove conductor">X</a></span>
+				(<span title="Artist alias ID"><?=$AliasID?></span>)&nbsp;
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=5'); this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove conductor">X</a></span>
 <?			} ?>
 				</li>
 <?
@@ -338,14 +353,19 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 				<li class="artists_remix">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
 <?			if (check_perms('torrents_edit')) {
-				$DB->query("SELECT AliasID FROM artists_alias WHERE ArtistID = ".$Artist['id']." AND ArtistID != AliasID AND Name = '".db_string($Artist['name'])."'");
+				$DB->query("
+					SELECT AliasID
+					FROM artists_alias
+					WHERE ArtistID = ".$Artist['id']."
+						AND ArtistID != AliasID
+						AND Name = '".db_string($Artist['name'])."'");
 				list($AliasID) = $DB->next_record();
 				if (empty($AliasID)) {
 					$AliasID = $Artist['id'];
 				}
 ?>
-				(<?=$AliasID?>)&nbsp;
-					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=3');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
+				(<span title="Artist alias ID"><?=$AliasID?></span>)&nbsp;
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=3'); this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
 <?			} ?>
 				</li>
 <?
@@ -357,20 +377,21 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 				<li class="artists_producer">
 					<?=Artists::display_artist($Artist).' &lrm;'?>
-<?			if (check_perms('torrents_edit')) {
-					$DB->query("
-						SELECT AliasID
-						FROM artists_alias
-						WHERE ArtistID = ".$Artist['id']."
-							AND ArtistID != AliasID
-							AND Name = '".db_string($Artist['name'])."'");
-					list($AliasID) = $DB->next_record();
-					if (empty($AliasID)) {
-						$AliasID = $Artist['id'];
-					}
+<?
+			if (check_perms('torrents_edit')) {
+				$DB->query("
+					SELECT AliasID
+					FROM artists_alias
+					WHERE ArtistID = ".$Artist['id']."
+						AND ArtistID != AliasID
+						AND Name = '".db_string($Artist['name'])."'");
+				list($AliasID) = $DB->next_record();
+				if (empty($AliasID)) {
+					$AliasID = $Artist['id'];
+				}
 ?>
-				(<?=$AliasID?>)&nbsp;
-					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=7');this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove producer">X</a></span>
+				(<span title="Artist alias ID"><?=$AliasID?></span>)&nbsp;
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=7'); this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove producer">X</a></span>
 <?			} ?>
 				</li>
 <?

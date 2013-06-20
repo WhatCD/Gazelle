@@ -1,5 +1,5 @@
 <?
-class USER_AGENT {
+class UserAgent {
 	var $Browsers = array(
 		//Less popular
 		'Shiira'			=> 'Shiira',
@@ -110,11 +110,11 @@ class USER_AGENT {
 		'mac'				=> 'Mac OS X'
 	);
 
-	public function operating_system(&$UserAgentString) {
+	public static function operating_system(&$UserAgentString) {
 		if (empty($UserAgentString)) {
 			return 'Hidden';
 		}
-		foreach ($this->OperatingSystems as $String => $OperatingSystem) {
+		foreach ($OperatingSystems as $String => $OperatingSystem) {
 			if (stripos($UserAgentString, $String) !== false) {
 				return $OperatingSystem;
 			}
@@ -122,7 +122,7 @@ class USER_AGENT {
 		return 'Unknown';
 	}
 
-	public function mobile(&$UserAgentString) {
+	public static function mobile(&$UserAgentString) {
 		if (strpos($UserAgentString, 'iPad')) {
 			return false;
 		}
@@ -134,18 +134,18 @@ class USER_AGENT {
 		return false;
 	}
 
-	public function browser(&$UserAgentString) {
+	public static function browser(&$UserAgentString) {
 		if (empty($UserAgentString)) {
 			return 'Hidden';
 		}
 		$Return = 'Unknown';
-		foreach ($this->Browsers as $String => $Browser) {
+		foreach ($Browsers as $String => $Browser) {
 			if (strpos($UserAgentString, $String) !== false) {
 				$Return = $Browser;
 				break;
 			}
 		}
-		if ($this->mobile($UserAgentString)) {
+		if (self::mobile($UserAgentString)) {
 			$Return .= ' Mobile';
 		}
 		return $Return;

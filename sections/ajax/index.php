@@ -13,12 +13,15 @@ enforce_login();
 /*	AJAX_LIMIT = array(x,y) = 'x' requests every 'y' seconds.
 	e.g. array(5,10) = 5 requests every 10 seconds	*/
 $AJAX_LIMIT = array(5,10);
-$Limited_Pages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup','news_ajax');
-
+$LimitedPages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup','news_ajax');
+// These users aren't rate limited.
+$UserExceptions = array(
+		
+		);
+$UserID = $LoggedUser['ID'];
 header('Content-Type: application/json; charset=utf-8');
-
 //	Enforce rate limiting everywhere except info.php
-if (isset($_GET['action']) && in_array($_GET['action'],$Limited_Pages)) {
+if (!in_array($UserID, $UserExceptions) && isset($_GET['action']) && in_array($_GET['action'],$LimitedPages)) {
 	if (!$userrequests = $Cache->get_value('ajax_requests_'.$UserID)) {
 		$userrequests = 0;
 		$Cache->cache_value('ajax_requests_'.$UserID,'0',$AJAX_LIMIT[1]);

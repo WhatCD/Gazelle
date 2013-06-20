@@ -30,30 +30,21 @@ do a JOIN.
 
 ########################################################################*/
 
-class WIKI {
-	var $Table = '';
-	var $PageID = 0;
-	var $BaseURL = '';
-	function WIKI($Table, $PageID, $BaseURL = '') {
-		$this->Table = $Table;
-		$this->PageID = $PageID;
-		$this->BaseURL = $BaseURL;
-	}
+class Wiki {
 
-	function revision_history() {
+	public static function revision_history($Table = '', $PageID = 0, $BaseURL = '') {
 		global $DB;
 
-		$BaseURL = $this->BaseURL;
 		$DB->query("
 			SELECT
 				RevisionID,
 				Summary,
 				Time,
 				UserID
-			FROM ".$this->Table." AS wiki
-			WHERE wiki.PageID = ".$this->PageID."
+			FROM $Table AS wiki
+			WHERE wiki.PageID = $PageID
 			ORDER BY RevisionID DESC");
-//----------------------------------------------- ?>
+?>
 	<table cellpadding="6" cellspacing="1" border="0" width="100%" class="border">
 		<tr class="colhead">
 			<td>Revision</td>
@@ -61,11 +52,11 @@ class WIKI {
 			<td>User</td>
 			<td>Summary</td>
 		</tr>
-<? //-----------------------------------------
+<?
 		$Row = 'a';
 		while (list($RevisionID, $Summary, $Time, $UserID, $Username) = $DB->next_record()) {
 			$Row = (($Row == 'a') ? 'b' : 'a');
-//------------------------------------------------------ ?>
+?>
 		<tr class="row<?=$Row?>">
 			<td>
 				<?= "<a href=\"$BaseURL&amp;revisionid=$RevisionID\">#$RevisionID</a>" ?>
@@ -80,12 +71,9 @@ class WIKI {
 				<?=($Summary ? $Summary : '(empty)')?>
 			</td>
 		</tr>
-<? //---------------------------------------------------
-		}
-//-------------------------------------------- ?>
+<?		} // while ?>
 	</table>
 <?
-
-	}
+	} // function
 } // class
 ?>

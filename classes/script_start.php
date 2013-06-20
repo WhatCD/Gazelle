@@ -63,7 +63,6 @@ require(SERVER_ROOT.'/classes/debug.class.php'); //Require the debug class
 require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
 require(SERVER_ROOT.'/classes/cache.class.php'); //Require the caching class
 require(SERVER_ROOT.'/classes/encrypt.class.php'); //Require the encryption class
-require(SERVER_ROOT.'/classes/useragent.class.php'); //Require the useragent class
 require(SERVER_ROOT.'/classes/time.class.php'); //Require the time class
 require(SERVER_ROOT.'/classes/search.class.php'); //Require the searching class
 require(SERVER_ROOT.'/classes/paranoia.class.php'); //Require the paranoia check_paranoia function
@@ -77,13 +76,12 @@ $Debug->set_flag('Debug constructed');
 $DB = new DB_MYSQL;
 $Cache = new CACHE($MemcachedServers);
 $Enc = new CRYPT;
-$UA = new USER_AGENT;
 $SS = new SPHINX_SEARCH;
 
 // Autoload classes.
 
 spl_autoload_register(function ($ClassName) {
-	$FileName='';
+	$FileName = '';
 	switch ($ClassName) {
 		case 'Artists':
 			$FileName = 'artists.class';
@@ -174,6 +172,9 @@ spl_autoload_register(function ($ClassName) {
 		case 'Tracker':
 			$FileName = 'tracker.class';
 			break;
+		case 'UserAgent':
+			$FileName = 'useragent.class';
+			break;
 		case 'UserRank':
 			$FileName = 'user_rank.class';
 			break;
@@ -185,6 +186,9 @@ spl_autoload_register(function ($ClassName) {
 			break;
 		case 'Votes':
 			$FileName = 'votes.class';
+			break;
+		case 'Wiki':
+			$FileName = 'wiki.class';
 			break;
 		case 'Zip':
 			$FileName = 'zip.class';
@@ -198,9 +202,9 @@ spl_autoload_register(function ($ClassName) {
 
 //Begin browser identification
 
-$Browser = $UA->browser($_SERVER['HTTP_USER_AGENT']);
-$OperatingSystem = $UA->operating_system($_SERVER['HTTP_USER_AGENT']);
-//$Mobile = $UA->mobile($_SERVER['HTTP_USER_AGENT']);
+$Browser = UserAgent::browser($_SERVER['HTTP_USER_AGENT']);
+$OperatingSystem = UserAgent::operating_system($_SERVER['HTTP_USER_AGENT']);
+//$Mobile = UserAgent::mobile($_SERVER['HTTP_USER_AGENT']);
 $Mobile = in_array($_SERVER['HTTP_HOST'], array('m.'.NONSSL_SITE_URL, 'm.'.NONSSL_SITE_URL));
 
 

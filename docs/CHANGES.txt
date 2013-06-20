@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-06-19 by alderaan
+UI revisions on the artist and torrent group edit pages, with the most significant changes occurring in the artist aliases section%
+
 2013-06-16 by porkpie
 Require a click and an ajax call to view some of the stats on profile pages
 

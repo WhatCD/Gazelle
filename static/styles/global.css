@@ -302,13 +302,11 @@ ul.votedalbums li {
 }
 
 tr.torrent .bookmark>a:before {
-	content: "[ ";
 	text-decoration: none;
 	font-weight: normal;
 }
 
 tr.torrent .bookmark>a:after {
-	content: " ]";
 	text-decoration: none;
 	font-weight: normal;
 }

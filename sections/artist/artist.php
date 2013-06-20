@@ -21,13 +21,13 @@ if (!is_number($ArtistID)) {
 
 
 if (!empty($_GET['revisionid'])) { // if they're viewing an old revision
-	$RevisionID=$_GET['revisionid'];
+	$RevisionID = $_GET['revisionid'];
 	if (!is_number($RevisionID)) {
 		error(0);
 	}
-	$Data = $Cache->get_value("artist_$ArtistID"."_revision_$RevisionID", true);
+	$Data = $Cache->get_value("artist_{$ArtistID}_revision_$RevisionID", true);
 } else { // viewing the live version
-	$Data = $Cache->get_value('artist_'.$ArtistID, true);
+	$Data = $Cache->get_value("artist_$ArtistID", true);
 	$RevisionID = false;
 }
 
@@ -42,8 +42,8 @@ if ($Data) {
 				wiki.body,
 				a.VanityHouse
 			FROM wiki_artists AS wiki
-				LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
-			WHERE wiki.RevisionID='$RevisionID' ";
+				LEFT JOIN artists_group AS a ON wiki.RevisionID = a.RevisionID
+			WHERE wiki.RevisionID = '$RevisionID' ";
 	} else {
 		$sql = "
 			SELECT
@@ -52,10 +52,11 @@ if ($Data) {
 				wiki.body,
 				a.VanityHouse
 			FROM artists_group AS a
-				LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID=a.RevisionID
-			WHERE a.ArtistID='$ArtistID' ";
+				LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID = a.RevisionID
+			WHERE a.ArtistID = '$ArtistID' ";
 	}
-	$sql .= " GROUP BY a.ArtistID";
+	$sql .= "
+			GROUP BY a.ArtistID";
 	$DB->query($sql);
 
 	if ($DB->record_count() == 0) {
@@ -73,7 +74,7 @@ ob_start();
 // Requests
 $Requests = array();
 if (empty($LoggedUser['DisableRequests'])) {
-	$Requests = $Cache->get_value('artists_requests_'.$ArtistID);
+	$Requests = $Cache->get_value("artists_requests_$ArtistID");
 	if (!is_array($Requests)) {
 		$DB->query("
 			SELECT
@@ -85,9 +86,9 @@ if (empty($LoggedUser['DisableRequests'])) {
 				COUNT(rv.UserID) AS Votes,
 				SUM(rv.Bounty) AS Bounty
 			FROM requests AS r
-				LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-				LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
-			WHERE ra.ArtistID = ".$ArtistID."
+				LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID
+				LEFT JOIN requests_artists AS ra ON r.ID = ra.RequestID
+			WHERE ra.ArtistID = $ArtistID
 				AND r.TorrentID = 0
 			GROUP BY r.ID
 			ORDER BY Votes DESC");
@@ -97,23 +98,23 @@ if (empty($LoggedUser['DisableRequests'])) {
 		} else {
 			$Requests = array();
 		}
-		$Cache->cache_value('artists_requests_'.$ArtistID, $Requests);
+		$Cache->cache_value("artists_requests_$ArtistID", $Requests);
 	}
 }
 $NumRequests = count($Requests);
 
 
-if (($Importances = $Cache->get_value('artist_groups_'.$ArtistID)) === false) {
+if (($Importances = $Cache->get_value("artist_groups_$ArtistID")) === false) {
 	$DB->query("
 		SELECT
 			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
 		FROM torrents_artists AS ta
-			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-		WHERE ta.ArtistID='$ArtistID'
+			JOIN torrents_group AS tg ON tg.ID = ta.GroupID
+		WHERE ta.ArtistID = '$ArtistID'
 		ORDER BY tg.Year DESC, tg.Name DESC");
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
-	$Cache->cache_value('artist_groups_'.$ArtistID, $Importances, 0);
+	$Cache->cache_value("artist_groups_$ArtistID", $Importances, 0);
 } else {
 	$GroupIDs = array();
 	foreach ($Importances as $Group) {
@@ -173,16 +174,16 @@ foreach ($Importances as $ID => $Group) {
 }
 
 if (!empty($GuestAlbums)) {
-	$ReleaseTypes[1024] = "Guest Appearance";
+	$ReleaseTypes[1024] = 'Guest Appearance';
 }
 if (!empty($RemixerAlbums)) {
-	$ReleaseTypes[1023] = "Remixed By";
+	$ReleaseTypes[1023] = 'Remixed By';
 }
 if (!empty($ComposerAlbums)) {
-	$ReleaseTypes[1022] = "Composition";
+	$ReleaseTypes[1022] = 'Composition';
 }
 if (!empty($ProducerAlbums)) {
-	$ReleaseTypes[1021] = "Produced By";
+	$ReleaseTypes[1021] = 'Produced By';
 }
 
 //Custom sorting for releases
@@ -200,9 +201,9 @@ if (count($SortOrder) != count($ReleaseTypes)) {
 }
 uasort($Importances, function ($A, $B) use ($SortOrder) {
 	if ($SortOrder[$A['ReleaseType']] == $SortOrder[$B['ReleaseType']]) {
-		return $A['Sort'] < $B['Sort'] ? -1 : 1;
+		return (($A['Sort'] < $B['Sort']) ? -1 : 1);
 	}
-	return $SortOrder[$A['ReleaseType']] < $SortOrder[$B['ReleaseType']] ? -1 : 1;
+	return (($SortOrder[$A['ReleaseType']] < $SortOrder[$B['ReleaseType']]) ? -1 : 1);
 });
 // Sort the anchors at the top of the page the same way as release types
 $UsedReleases = array_flip(array_intersect_key($SortOrder, $UsedReleases));
@@ -213,17 +214,17 @@ if (!empty($UsedReleases)) { ?>
 <?
 	foreach ($UsedReleases as $ReleaseID) {
 		switch ($ReleaseTypes[$ReleaseID]) {
-			case "Remix" :
-				$DisplayName = "Remixes";
+			case 'Remix':
+				$DisplayName = 'Remixes';
 				break;
-			case "Anthology" :
-				$DisplayName = "Anthologies";
+			case 'Anthology':
+				$DisplayName = 'Anthologies';
 				break;
-			case "DJ Mix" :
-				$DisplayName = "DJ Mixes";
+			case 'DJ Mix':
+				$DisplayName = 'DJ Mixes';
 				break;
-			default :
-				$DisplayName = $ReleaseTypes[$ReleaseID]."s";
+			default:
+				$DisplayName = $ReleaseTypes[$ReleaseID].'s';
 				break;
 		}
 
@@ -262,9 +263,9 @@ foreach ($TorrentList as $GroupID => $Group) {
 		$Torrent['Leechers'] = (int)$Torrent['Leechers'];
 		$Torrent['Snatched'] = (int)$Torrent['Snatched'];
 
-		$NumSeeders+=$Torrent['Seeders'];
-		$NumLeechers+=$Torrent['Leechers'];
-		$NumSnatches+=$Torrent['Snatched'];
+		$NumSeeders += $Torrent['Seeders'];
+		$NumLeechers += $Torrent['Leechers'];
+		$NumSnatches += $Torrent['Snatched'];
 	}
 }
 
@@ -302,21 +303,21 @@ foreach ($Importances as $Group) {
 
 	if ($ReleaseType != $LastReleaseType) {
 		switch ($ReleaseTypes[$ReleaseType]) {
-			case "Remix" :
-				$DisplayName = "Remixes";
+			case 'Remix':
+				$DisplayName = 'Remixes';
 				break;
-			case "Anthology" :
-				$DisplayName = "Anthologies";
+			case 'Anthology':
+				$DisplayName = 'Anthologies';
 				break;
-			case "DJ Mix" :
-				$DisplayName = "DJ Mixes";
+			case 'DJ Mix':
+				$DisplayName = 'DJ Mixes';
 				break;
-			default :
-				$DisplayName = $ReleaseTypes[$ReleaseType]."s";
+			default:
+				$DisplayName = $ReleaseTypes[$ReleaseType].'s';
 				break;
 		}
 
-		$ReleaseTypeLabel = strtolower(str_replace(' ','_',$ReleaseTypes[$ReleaseType]));
+		$ReleaseTypeLabel = strtolower(str_replace(' ', '_', $ReleaseTypes[$ReleaseType]));
 		if ($OpenTable) { ?>
 		</table>
 <?		} ?>
@@ -334,7 +335,7 @@ foreach ($Importances as $Group) {
 	}
 
 
-	$DisplayName ='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+	$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
 	if (check_perms('users_mod') || check_perms('torrents_fix_ghosts')) {
 		$DisplayName .= ' <a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'" class="brackets" title="Fix ghost DB entry">Fix</a>';
 	}
@@ -370,14 +371,14 @@ foreach ($Importances as $Group) {
 	}
 
 	if ($GroupYear > 0) {
-		$DisplayName = $GroupYear. ' - '.$DisplayName;
+		$DisplayName = "$GroupYear - $DisplayName";
 	}
 
 	if ($GroupVanityHouse) {
 		$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
 	}
 
-	$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
+	$SnatchedGroupClass = ($GroupFlags['IsSnatched'] ? ' snatched_group' : '');
 ?>
 			<tr class="releases_<?=$ReleaseType?> group discog<?=$SnatchedGroupClass . $HideDiscog?>">
 				<td class="center">
@@ -386,19 +387,19 @@ foreach ($Importances as $Group) {
 					</div>
 				</td>
 				<td colspan="5" class="big_info">
-<? if ($LoggedUser['CoverArt']) : ?>
+<?	if ($LoggedUser['CoverArt']) : ?>
 					<div class="group_image float_left clear">
 						<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 					</div>
-<? endif; ?>
+<?	endif; ?>
 					<div class="group_info clear">
 						<strong><?=$DisplayName?></strong>
 						<? if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
-							echo " <a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent',$GroupID,'Bookmark');return false;\">Unbookmark</a>";
+							echo "<a style=\"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent', $GroupID, 'Bookmark'); return false;\">Unbookmark</a>";
 						} else {
-							echo " <a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent',$GroupID,'Unbookmark');return false;\">Bookmark</a>";
+							echo "<a style=\"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent', $GroupID, 'Unbookmark'); return false;\">Bookmark</a>";
 						} ?>
-						<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>
+						<?Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']);?>
 						<div class="tags"><?=$TorrentTags->format('torrents.php?taglist=', $Name)?></div>
 					</div>
 				</td>
@@ -417,11 +418,12 @@ foreach ($Importances as $Group) {
 		if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 			$FirstUnknown = !isset($FirstUnknown);
 		}
-		$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
+		$SnatchedTorrentClass = ($Torrent['IsSnatched'] ? ' snatched_torrent' : '');
 
 		if ($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
 			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] !=
-			$LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
+			$LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia
+			) {
 
 			$EditionID++;
 
@@ -458,7 +460,8 @@ foreach ($Importances as $Group) {
 if (!empty($TorrentList)) { ?>
 			</table>
 		</div>
-<? }
+<?
+}
 
 $TorrentDisplayList = ob_get_clean();
 
@@ -470,22 +473,26 @@ View::show_header($Name, 'browse,requests,bbcode,comments,voting,jquery,recommen
 	<div class="header">
 		<h2><?=display_str($Name)?><? if ($RevisionID) { ?> (Revision #<?=$RevisionID?>)<? } if ($VanityHouseArtist) { ?> [Vanity House] <? } ?></h2>
 		<div class="linkbox">
-<? if (check_perms('site_submit_requests')) { ?>
+<?	if (check_perms('site_submit_requests')) { ?>
 			<a href="requests.php?action=new&amp;artistid=<?=$ArtistID?>" class="brackets">Add request</a>
-<? }
+<?
+	}
 
 if (check_perms('site_torrents_notify')) {
 	if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === false) {
-		$DB->query("SELECT ID, Artists FROM users_notify_filters WHERE UserID='$LoggedUser[ID]' AND Label='Artist notifications' LIMIT 1");
+		$DB->query("
+			SELECT ID, Artists
+			FROM users_notify_filters
+			WHERE UserID = '$LoggedUser[ID]'
+				AND Label = 'Artist notifications'
+			LIMIT 1");
 		$Notify = $DB->next_record(MYSQLI_ASSOC, false);
 		$Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
 	}
 	if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
 ?>
 			<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
-<?
-	} else {
-?>
+<?	} else { ?>
 			<a href="artist.php?action=notifyremove&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Do not notify of new uploads</a>
 <?
 	}
@@ -493,15 +500,10 @@ if (check_perms('site_torrents_notify')) {
 
 	if (Bookmarks::has_bookmarked('artist', $ArtistID)) {
 ?>
-			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
-
-<?
-	} else {
-?>
-			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>,'Remove bookmark');return false;" class="brackets">Bookmark</a>
-<?
-	}
-?>
+			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>, 'Bookmark'); return false;" class="brackets">Remove bookmark</a>
+<?	} else { ?>
+			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>, 'Remove bookmark'); return false;" class="brackets">Bookmark</a>
+<?	} ?>
 <!--	<a href="#" id="recommend" class="brackets">Recommend</a> -->
 <?
 	if (check_perms('site_edit_wiki')) {
@@ -509,6 +511,9 @@ if (check_perms('site_torrents_notify')) {
 			<a href="artist.php?action=edit&amp;artistid=<?=$ArtistID?>" class="brackets">Edit</a>
 <?	} ?>
 			<a href="artist.php?action=history&amp;artistid=<?=$ArtistID?>" class="brackets">View history</a>
+<?	if ($RevisionID && check_perms('site_edit_wiki')) { ?>
+			<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Revert to this revision</a>
+<?	} ?>
 			<a href="artist.php?id=<?=$ArtistID?>#info" class="brackets">Info</a>
 <?	if (defined('LASTFM_API_KEY')) { ?>
 			<a href="artist.php?id=<?=$ArtistID?>#concerts" class="brackets">Concerts</a>
@@ -516,11 +521,6 @@ if (check_perms('site_torrents_notify')) {
 			<a href="artist.php?id=<?=$ArtistID?>#artistcomments" class="brackets">Comments</a>
 <?	if (check_perms('site_delete_artist') && check_perms('torrents_delete')) { ?>
 			<a href="artist.php?action=delete&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Delete</a>
-<?	}
-
-	if ($RevisionID && check_perms('site_edit_wiki')) {
-?>
-			<a href="artist.php?action=revert&amp;artistid=<?=$ArtistID?>&amp;revisionid=<?=$RevisionID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Revert to this revision</a>
 <?	} ?>
 		</div>
 	</div>
@@ -530,7 +530,7 @@ if (check_perms('site_torrents_notify')) {
 		<div class="box box_image">
 			<div class="head"><strong><?=$Name?></strong></div>
 			<div style="text-align: center; padding: 10px 0px;">
-				<img style="max-width: 220px;" src="<?=ImageTools::process($Image, true)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>',220);" />
+				<img style="max-width: 220px;" src="<?=ImageTools::process($Image, true)?>" alt="<?=$Name?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>', 220);" />
 			</div>
 		</div>
 <?	} ?>

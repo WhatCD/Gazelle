@@ -23,11 +23,11 @@ $DB->query("
 		Body,
 		VanityHouse
 	FROM artists_group AS a
-		LEFT JOIN wiki_artists ON wiki_artists.RevisionID=a.RevisionID
-	WHERE a.ArtistID='$ArtistID'");
+		LEFT JOIN wiki_artists ON wiki_artists.RevisionID = a.RevisionID
+	WHERE a.ArtistID = '$ArtistID'");
 
 if ($DB->record_count() < 1) {
-	error("Cannot find the artist with the ID ".$ArtistID.': See the <a href="log.php?search=Artist+'.$ArtistID.'">log</a>.');
+	error("Cannot find an artist with the ID {$ArtistID}: See the <a href=\"log.php?search=Artist+$ArtistID\">site log</a>.");
 }
 
 list($Name, $Image, $Body, $VanityHouse) = $DB->next_record(MYSQLI_NUM, true);
@@ -45,12 +45,14 @@ View::show_header('Edit artist');
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
 			<div>
-				<h3>Image</h3>
+				<h3>Image:</h3>
 				<input type="text" name="image" size="92" value="<?=$Image?>" /><br />
-				<h3>Artist info</h3>
+				<h3>Artist information:</h3>
 				<textarea name="body" cols="91" rows="20"><?=$Body?></textarea> <br />
-				<h3>Vanity House <input type="checkbox" name="vanity_house" value="1"<?=(check_perms('artist_edit_vanityhouse') ? '' : ' disabled="disabled"' )?><?=($VanityHouse ? ' checked="checked"' : '')?> /></h3>
-				<h3>Edit summary</h3>
+				<h3>
+					<label>Vanity House: <input type="checkbox" name="vanity_house" value="1"<?=(check_perms('artist_edit_vanityhouse') ? '' : ' disabled="disabled"' )?><?=($VanityHouse ? ' checked="checked"' : '')?> /></label>
+				</h3>
+				<h3>Edit summary:</h3>
 				<input type="text" name="summary" size="92" /><br />
 				<div style="text-align: center;">
 					<input type="submit" value="Submit" />
@@ -59,7 +61,7 @@ View::show_header('Edit artist');
 		</form>
 	</div>
 <? if (check_perms('torrents_edit')) { ?>
-	<h2>Rename</h2>
+	<h2>Rename this artist</h2>
 	<div class="box pad">
 		<form class="rename_form" name="artist" action="artist.php" method="post">
 			<input type="hidden" name="action" value="rename" />
@@ -70,7 +72,6 @@ View::show_header('Edit artist');
 				<div style="text-align: center;">
 					<input type="submit" value="Rename" />
 				</div>
-
 			</div>
 		</form>
 	</div>
@@ -82,7 +83,7 @@ View::show_header('Edit artist');
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
 			<div>
-				<em>Merges this artist (<?=$Name?>) into the artist specified below (without redirection), so that "<?=$Name?>" (and its aliases) will appear as a non-redirecting alias of the artist entered in the text box below.</em><br /><br />
+				<p>Merges this artist ("<?=$Name?>") into the artist specified below (without redirection), so that ("<?=$Name?>") and its aliases will appear as a non-redirecting alias of the artist entered in the text box below.</p><br />
 				<div style="text-align: center;">
 					<label for="newartistid">Artist ID:</label>&nbsp;<input type="text" id="newartistid" name="newartistid" size="40" value="" /><br />
 					<strong>OR</strong><br />
@@ -94,41 +95,59 @@ View::show_header('Edit artist');
 		</form>
 	</div>
 
-	<h2>Aliases</h2>
+	<h2>Artist aliases</h2>
 	<div class="box pad">
-		<ul>
+		<h3>List of existing artist aliases</h3>
+		<div class="pad">
+			<ul>
 
 <?
-	$DB->query("SELECT AliasID, Name, UserID, Redirect FROM artists_alias WHERE ArtistID='$ArtistID'");
+	$DB->query("
+		SELECT AliasID, Name, UserID, Redirect
+		FROM artists_alias
+		WHERE ArtistID = '$ArtistID'");
 	while (list($AliasID, $AliasName, $User, $Redirect) = $DB->next_record(MYSQLI_NUM, true)) {
 		if ($AliasName == $Name) {
 			$DefaultRedirectID = $AliasID;
 		}
 ?>
-			<li>
-				<span title="Alias ID"><?=$AliasID?></span>. <span title="Alias name"><?=$AliasName?></span>
+				<li>
+					<span title="Alias ID"><?=$AliasID?></span>. <span title="Alias name"><?=$AliasName?></span>
 <?		if ($User) { ?>
-				<a href="user.php?id=<?=$User?>" title="Alias creator" class="brackets">User</a>
+					<a href="user.php?id=<?=$User?>" title="Alias creator" class="brackets">User</a>
 <?		}
 		if ($Redirect) { ?>
-				(writes redirect to <span title="Target alias ID"><?=$Redirect?></span>)
+					(writes redirect to <span title="Target alias ID"><?=$Redirect?></span>)
 <?		} ?>
-				<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Delete this alias" class="brackets">X</a>
-			</li>
+					<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Delete this alias" class="brackets">X</a>
+				</li>
 <?	}
 ?>
-		</ul>
-		<form class="add_form" name="aliases" action="artist.php" method="post">
-			<input type="hidden" name="action" value="add_alias" />
-			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-			<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
-			<h3>Name:</h3>
-			<input type="text" name="name" size="40" value="<?=$Name?>" /><br />
-			<h3>Writes redirect to (enter an Alias ID; leave blank or enter "0" for no redirect):</h3>
-			<input type="text" name="redirect" size="40" value="<?=$DefaultRedirectID?>" /><br />
-			<em>This redirects artist names as they are written (e.g. when new torrents are uploaded or artists added). All uses of this new alias will be redirected to the alias ID you enter here. Use for common misspellings, etc.</em><br />
-			<input type="submit" value="Add alias" />
-		</form>
+			</ul>
+		</div>
+		<br />
+		<h3>Add a new artist alias</h3>
+		<div class="pad">
+			<p>This redirects artist names as they are written (e.g. when new torrents are uploaded or artists added). All uses of this new alias will be redirected to the alias ID you enter here. Use for common misspellings, inclusion of diacritical marks, etc.</p>
+			<form class="add_form" name="aliases" action="artist.php" method="post">
+				<input type="hidden" name="action" value="add_alias" />
+				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+				<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
+				<div class="field_div">
+					<span class="label"><strong>Name:</strong></span>
+					<br />
+					<input type="text" name="name" size="40" value="<?=$Name?>" />
+				</div>
+				<div class="field_div">
+					<span class="label"><strong>Writes redirect to (enter an Alias ID; leave blank or enter "0" for no redirect):</strong></span>
+					<br />
+					<input type="text" name="redirect" size="40" value="<?=$DefaultRedirectID?>" /><br />
+				</div>
+				<div class="submit_div">
+					<input type="submit" value="Add alias" />
+				</div>
+			</form>
+		</div>
 	</div>
 <? } ?>
 </div>
