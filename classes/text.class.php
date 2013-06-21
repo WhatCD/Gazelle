@@ -604,38 +604,38 @@ class TEXT {
 		$Str = '';
 		foreach ($Array as $Block) {
 			if (is_string($Block)) {
-				$Str.=$this->smileys($Block);
+				$Str .= $this->smileys($Block);
 				continue;
 			}
 			if ($this->Levels < $this->MaximumNests) {
 			switch ($Block['Type']) {
 				case 'b':
-					$Str.='<strong>'.$this->to_html($Block['Val']).'</strong>';
+					$Str .= '<strong>'.$this->to_html($Block['Val']).'</strong>';
 					break;
 				case 'u':
-					$Str.='<span style="text-decoration: underline;">'.$this->to_html($Block['Val']).'</span>';
+					$Str .= '<span style="text-decoration: underline;">'.$this->to_html($Block['Val']).'</span>';
 					break;
 				case 'i':
-					$Str.='<span style="font-style: italic;">'.$this->to_html($Block['Val'])."</span>";
+					$Str .= '<span style="font-style: italic;">'.$this->to_html($Block['Val'])."</span>";
 					break;
 				case 's':
-					$Str.='<span style="text-decoration: line-through;">'.$this->to_html($Block['Val']).'</span>';
+					$Str .= '<span style="text-decoration: line-through;">'.$this->to_html($Block['Val']).'</span>';
 					break;
 				case 'important':
-					$Str.='<strong class="important_text">'.$this->to_html($Block['Val']).'</strong>';
+					$Str .= '<strong class="important_text">'.$this->to_html($Block['Val']).'</strong>';
 					break;
 				case 'user':
-					$Str.='<a href="user.php?action=search&amp;search='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
+					$Str .= '<a href="user.php?action=search&amp;search='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'artist':
-					$Str.='<a href="artist.php?artistname='.urlencode(Format::undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
+					$Str .= '<a href="artist.php?artistname='.urlencode(Format::undisplay_str($Block['Val'])).'">'.$Block['Val'].'</a>';
 					break;
 				case 'rule':
 					$Rule = trim(strtolower($Block['Val']));
 					if ($Rule[0] != 'r' && $Rule[0] != 'h') {
 						$Rule = 'r'.$Rule;
 					}
-					$Str.='<a href="rules.php?p=upload#'.urlencode(Format::undisplay_str($Rule)).'">'.preg_replace('/[aA-zZ]/', '', $Block['Val']).'</a>';
+					$Str .= '<a href="rules.php?p=upload#'.urlencode(Format::undisplay_str($Rule)).'">'.preg_replace('/[aA-zZ]/', '', $Block['Val']).'</a>';
 					break;
 				case 'torrent':
 					$Pattern = '/('.NONSSL_SITE_URL.'\/torrents\.php.*[\?&]id=)?(\d+)($|&|\#).*/i';
@@ -655,43 +655,43 @@ class TEXT {
 					}
 					break;
 				case 'wiki':
-					$Str.='<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
+					$Str .= '<a href="wiki.php?action=article&amp;name='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
 					break;
 				case 'tex':
-					$Str.='<img style="vertical-align: middle;" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'], 'UTF-8', 'HTML-ENTITIES')).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="'.$Block['Val'].'" />';
+					$Str .= '<img style="vertical-align: middle;" src="'.STATIC_SERVER.'blank.gif" onload="if (this.src.substr(this.src.length-9,this.src.length) == \'blank.gif\') { this.src = \'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl='.urlencode(mb_convert_encoding($Block['Val'], 'UTF-8', 'HTML-ENTITIES')).'&amp;chco=\' + hexify(getComputedStyle(this.parentNode,null).color); }" alt="'.$Block['Val'].'" />';
 					break;
 				case 'plain':
-					$Str.=$Block['Val'];
+					$Str .= $Block['Val'];
 					break;
 				case 'pre':
-					$Str.='<pre>'.$Block['Val'].'</pre>';
+					$Str .= '<pre>'.$Block['Val'].'</pre>';
 					break;
 				case 'code':
-					$Str.='<code>'.$Block['Val'].'</code>';
+					$Str .= '<code>'.$Block['Val'].'</code>';
 					break;
 				case 'list':
-					$Str.='<'.$Block['ListType'].'>';
+					$Str .= '<'.$Block['ListType'].'>';
 					foreach ($Block['Val'] as $Line) {
 
-						$Str.='<li>'.$this->to_html($Line).'</li>';
+						$Str .= '<li>'.$this->to_html($Line).'</li>';
 					}
-					$Str.='</'.$Block['ListType'].'>';
+					$Str .= '</'.$Block['ListType'].'>';
 					break;
 				case 'align':
 					$ValidAttribs = array('left', 'center', 'right');
 					if (!in_array($Block['Attr'], $ValidAttribs)) {
-						$Str.='[align='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/align]';
+						$Str .= '[align='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/align]';
 					} else {
-						$Str.='<div style="text-align: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</div>';
+						$Str .= '<div style="text-align: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</div>';
 					}
 					break;
 				case 'color':
 				case 'colour':
 					$ValidAttribs = array('aqua', 'black', 'blue', 'fuchsia', 'green', 'grey', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow');
 					if (!in_array($Block['Attr'], $ValidAttribs) && !preg_match('/^#[0-9a-f]{6}$/', $Block['Attr'])) {
-						$Str.='[color='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/color]';
+						$Str .= '[color='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/color]';
 					} else {
-						$Str.='<span style="color: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</span>';
+						$Str .= '<span style="color: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</span>';
 					}
 					break;
 				case 'headline':
@@ -713,81 +713,81 @@ class TEXT {
 				case 'size':
 					$ValidAttribs = array('1','2','3','4','5','6','7','8','9','10');
 					if (!in_array($Block['Attr'], $ValidAttribs)) {
-						$Str.='[size='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/size]';
+						$Str .= '[size='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/size]';
 					} else {
-						$Str.='<span class="size'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
+						$Str .= '<span class="size'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
 					}
 					break;
 				case 'quote':
 					$this->NoImg++; // No images inside quote tags
 					$this->InQuotes++;
 					if ($this->InQuotes == $this->NestsBeforeHide) { //Put quotes that are nested beyond the specified limit in [hide] tags.
-						$Str.='<strong>Older quotes</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
-						$Str.='<blockquote class="hidden spoiler">';
+						$Str .= '<strong>Older quotes</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
+						$Str .= '<blockquote class="hidden spoiler">';
 					}
 					if (!empty($Block['Attr'])) {
 						$Exploded = explode('|', $this->to_html($Block['Attr']));
 						if (isset($Exploded[1]) && is_numeric($Exploded[1])) {
 							$PostID = trim($Exploded[1]);
-							$Str.='<a href="forums.php?action=viewthread&amp;postid='.$PostID.'" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
+							$Str .= '<a href="forums.php?action=viewthread&amp;postid='.$PostID.'" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
 						else {
-							$Str.='<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
+							$Str .= '<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
 						}
 					}
-					$Str.='<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
+					$Str .= '<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
 					if ($this->InQuotes == $this->NestsBeforeHide) { //Close quote the deeply nested quote [hide].
-						$Str.='</blockquote><br />'; // Ensure new line after quote train hiding
+						$Str .= '</blockquote><br />'; // Ensure new line after quote train hiding
 					}
 					$this->NoImg--;
 					$this->InQuotes--;
 					break;
 				case 'hide':
-					$Str.='<strong>'.(($Block['Attr']) ? $Block['Attr'] : 'Hidden text').'</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
-					$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
+					$Str .= '<strong>'.(($Block['Attr']) ? $Block['Attr'] : 'Hidden text').'</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
+					$Str .= '<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
 					break;
 				case 'mature':
 					global $LoggedUser;
 					if ($LoggedUser['EnableMatureContent']) {
 						if (!empty($Block['Attr'])) {
-							$Str.='<strong class="mature" style="font-size: 1.2em;">Mature content:</strong><strong> ' . $Block['Attr'] . '</strong><br /> <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
-							$Str.='<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
+							$Str .= '<strong class="mature" style="font-size: 1.2em;">Mature content:</strong><strong> ' . $Block['Attr'] . '</strong><br /> <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
+							$Str .= '<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
 						}
 						else {
-							$Str.='<strong>Use of the [mature] tag requires a description.</strong> The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post. Misleading descriptions will be penalized. For further information on our mature content policies, please refer to this <a href="wiki.php?action=article&amp;id=1063">wiki</a>.';
+							$Str .= '<strong>Use of the [mature] tag requires a description.</strong> The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post. Misleading descriptions will be penalized. For further information on our mature content policies, please refer to this <a href="wiki.php?action=article&amp;id=1063">wiki</a>.';
 						}
 					}
 					else {
-						$Str.='<span class="mature_blocked" style="font-style: italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content</a> has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
+						$Str .= '<span class="mature_blocked" style="font-style: italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content</a> has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
 					}
 					break;
 				case 'img':
 					if ($this->NoImg > 0 && $this->valid_url($Block['Val'])) {
-						$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (image)';
+						$Str .= '<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (image)';
 						break;
 					}
 					if (!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
-						$Str.='[img]'.$Block['Val'].'[/img]';
+						$Str .= '[img]'.$Block['Val'].'[/img]';
 					} else {
 						$LocalURL = $this->local_url($Block['Val']);
 						if ($LocalURL) {
-							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$LocalURL.'" />';
+							$Str .= '<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$LocalURL.'" />';
 						} else {
-							$Str.='<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.ImageTools::process($Block['Val']).'" />';
+							$Str .= '<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.ImageTools::process($Block['Val']).'" />';
 						}
 					}
 					break;
 
 				case 'aud':
 					if ($this->NoImg > 0 && $this->valid_url($Block['Val'])) {
-						$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (audio)';
+						$Str .= '<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (audio)';
 						break;
 					}
 					if (!$this->valid_url($Block['Val'], '\.(mp3|ogg|wav)')) {
-						$Str.='[aud]'.$Block['Val'].'[/aud]';
+						$Str .= '[aud]'.$Block['Val'].'[/aud]';
 					} else {
 						//TODO: Proxy this for staff?
-						$Str.='<audio controls="controls" src="'.$Block['Val'].'"><a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a></audio>';
+						$Str .= '<audio controls="controls" src="'.$Block['Val'].'"><a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a></audio>';
 					}
 					break;
 
@@ -802,14 +802,14 @@ class TEXT {
 					}
 
 					if (!$this->valid_url($Block['Attr'])) {
-						$Str.='[url='.$Block['Attr'].']'.$Block['Val'].'[/url]';
+						$Str .= '[url='.$Block['Attr'].']'.$Block['Val'].'[/url]';
 					} else {
 						$LocalURL = $this->local_url($Block['Attr']);
 						if ($LocalURL) {
 							if ($NoName) { $Block['Val'] = substr($LocalURL,1); }
-							$Str.='<a href="'.$LocalURL.'">'.$Block['Val'].'</a>';
+							$Str .= '<a href="'.$LocalURL.'">'.$Block['Val'].'</a>';
 						} else {
-							$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Val'].'</a>';
+							$Str .= '<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Val'].'</a>';
 						}
 					}
 					break;
@@ -818,15 +818,15 @@ class TEXT {
 					if (!$this->valid_url($Block['Attr'], '', true)) {
 						$Array = $this->parse($Block['Attr']);
 						$Block['Attr'] = $Array;
-						$Str.=$this->to_html($Block['Attr']);
+						$Str .= $this->to_html($Block['Attr']);
 					}
 
 					else {
 						$LocalURL = $this->local_url($Block['Attr']);
 						if ($LocalURL) {
-							$Str.='<a href="'.$LocalURL.'">'.substr($LocalURL,1).'</a>';
+							$Str .= '<a href="'.$LocalURL.'">'.substr($LocalURL,1).'</a>';
 						} else {
-							$Str.='<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Attr'].'</a>';
+							$Str .= '<a rel="noreferrer" target="_blank" href="'.$Block['Attr'].'">'.$Block['Attr'].'</a>';
 						}
 					}
 
@@ -843,7 +843,7 @@ class TEXT {
 		$Str = '';
 		foreach ($Array as $Block) {
 			if (is_string($Block)) {
-				$Str.=$Block;
+				$Str .= $Block;
 				continue;
 			}
 			switch ($Block['Type']) {
@@ -858,7 +858,7 @@ class TEXT {
 				case 'quote':
 				case 'align':
 
-					$Str.=$this->raw_text($Block['Val']);
+					$Str .= $this->raw_text($Block['Val']);
 					break;
 				case 'tex': //since this will never strip cleanly, just remove it
 					break;
@@ -869,11 +869,11 @@ class TEXT {
 				case 'code':
 				case 'aud':
 				case 'img':
-					$Str.=$Block['Val'];
+					$Str .= $Block['Val'];
 					break;
 				case 'list':
 					foreach ($Block['Val'] as $Line) {
-						$Str.=$Block['Tag'].$this->raw_text($Line);
+						$Str .= $Block['Tag'].$this->raw_text($Line);
 					}
 					break;
 
@@ -885,17 +885,17 @@ class TEXT {
 						$Block['Val'] = $this->raw_text($Block['Val']);
 					}
 
-					$Str.=$Block['Val'];
+					$Str .= $Block['Val'];
 					break;
 
 				case 'inlineurl':
 					if (!$this->valid_url($Block['Attr'], '', true)) {
 						$Array = $this->parse($Block['Attr']);
 						$Block['Attr'] = $Array;
-						$Str.=$this->raw_text($Block['Attr']);
+						$Str .= $this->raw_text($Block['Attr']);
 					}
 					else {
-						$Str.=$Block['Attr'];
+						$Str .= $Block['Attr'];
 					}
 
 					break;

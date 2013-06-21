@@ -723,6 +723,12 @@ CREATE TABLE `schedule` (
   `NextBiWeekly` int(2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `sphinx_a` (
+  `gid` int(11) DEFAULT NULL,
+  `aname` text CHARACTER SET utf8 COLLATE utf8_bin,
+  KEY `gid` (`gid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+
 CREATE TABLE `sphinx_delta` (
   `ID` int(10) NOT NULL,
   `GroupID` int(11) NOT NULL DEFAULT '0',
@@ -861,6 +867,46 @@ CREATE TABLE `sphinx_requests_delta` (
   KEY `TimeFilled` (`TimeFilled`),
   KEY `LastVote` (`LastVote`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `sphinx_t` (
+  `id` int(11) NOT NULL,
+  `gid` int(11) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `size` bigint(20) DEFAULT NULL,
+  `snatched` int(11) DEFAULT NULL,
+  `seeders` int(11) DEFAULT NULL,
+  `leechers` int(11) DEFAULT NULL,
+  `time` int(11) DEFAULT NULL,
+  `logscore` smallint(6) DEFAULT NULL,
+  `scene` tinyint(4) DEFAULT NULL,
+  `haslog` tinyint(4) DEFAULT NULL,
+  `hascue` tinyint(4) DEFAULT NULL,
+  `freetorrent` tinyint(4) DEFAULT NULL,
+  `media` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `format` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `encoding` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `remyear` smallint(6) DEFAULT NULL,
+  `remtitle` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `remrlabel` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `remcnumber` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `filelist` mediumtext CHARACTER SET utf8 COLLATE utf8_bin,
+  `remident` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `gid_remident` (`gid`,`remident`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+
+CREATE TABLE `sphinx_tg` (
+  `id` int(11) NOT NULL,
+  `name` varchar(300) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `tags` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `year` smallint(6) DEFAULT NULL,
+  `rlabel` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `cnumber` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `catid` smallint(6) DEFAULT NULL,
+  `reltype` smallint(6) DEFAULT NULL,
+  `vanityhouse` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
 CREATE TABLE `staff_blog` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
