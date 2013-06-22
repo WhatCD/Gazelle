@@ -127,9 +127,8 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $e
 			<div class="head"><strong>Cover</strong></div>
 <?
 	if (!empty($Image)) {
-		$Image = ImageTools::process($Image, true);
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=$Image?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=$Image?>',220);" /></p>
+			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($Image, true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>',220);" /></p>
 <?	} else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
 <?	} ?>

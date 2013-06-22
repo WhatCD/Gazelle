@@ -22,7 +22,7 @@ $DB->query("
 			Time
 		FROM news
 		ORDER BY Time DESC
-		LIMIT " . $Offset . "," . $Count);
+		LIMIT $Offset, $Count");
 $News = $DB->to_array(false, MYSQLI_NUM, false);
 
 $NewsResponse = array();

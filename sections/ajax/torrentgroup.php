@@ -47,33 +47,33 @@ if ($TorrentDetails['CategoryID'] == 0) {
 $JsonMusicInfo = array();
 if ($CategoryName == 'Music') {
 	$JsonMusicInfo = array(
-		'composers' => $ArtistForm[4] == null ? array() : pullmediainfo($ArtistForm[4]),
-		'dj' => $ArtistForm[6] == null ? array() : pullmediainfo($ArtistForm[6]),
-		'artists' => $ArtistForm[1] == null ? array() : pullmediainfo($ArtistForm[1]),
-		'with' => $ArtistForm[2] == null ? array() : pullmediainfo($ArtistForm[2]),
-		'conductor' => $ArtistForm[5] == null ? array() : pullmediainfo($ArtistForm[5]),
-		'remixedBy' => $ArtistForm[3] == null ? array() : pullmediainfo($ArtistForm[3]),
-		'producer' => $ArtistForm[7] == null ? array() : pullmediainfo($ArtistForm[7])
+		'composers' => ($ArtistForm[4] == null) ? array() : pullmediainfo($ArtistForm[4]),
+		'dj'        => ($ArtistForm[6] == null) ? array() : pullmediainfo($ArtistForm[6]),
+		'artists'   => ($ArtistForm[1] == null) ? array() : pullmediainfo($ArtistForm[1]),
+		'with'      => ($ArtistForm[2] == null) ? array() : pullmediainfo($ArtistForm[2]),
+		'conductor' => ($ArtistForm[5] == null) ? array() : pullmediainfo($ArtistForm[5]),
+		'remixedBy' => ($ArtistForm[3] == null) ? array() : pullmediainfo($ArtistForm[3]),
+		'producer'  => ($ArtistForm[7] == null) ? array() : pullmediainfo($ArtistForm[7])
 	);
 } else {
 	$JsonMusicInfo = NULL;
 }
 
 $JsonTorrentDetails = array(
-	'wikiBody' => $Text->full_format($TorrentDetails['WikiBody']),
-	'wikiImage' => $TorrentDetails['WikiImage'],
-	'id' => (int) $TorrentDetails['ID'],
-	'name' => $TorrentDetails['Name'],
-	'year' => (int) $TorrentDetails['Year'],
-	'recordLabel' => $TorrentDetails['RecordLabel'],
+	'wikiBody'        => $Text->full_format($TorrentDetails['WikiBody']),
+	'wikiImage'       => $TorrentDetails['WikiImage'],
+	'id'              => (int) $TorrentDetails['ID'],
+	'name'            => $TorrentDetails['Name'],
+	'year'            => (int) $TorrentDetails['Year'],
+	'recordLabel'     => $TorrentDetails['RecordLabel'],
 	'catalogueNumber' => $TorrentDetails['CatalogueNumber'],
-	'releaseType' => (int) $TorrentDetails['ReleaseType'],
-	'categoryId' => (int) $TorrentDetails['CategoryID'],
-	'categoryName' => $CategoryName,
-	'time' => $TorrentDetails['Time'],
-	'vanityHouse' => $TorrentDetails['VanityHouse'] == 1,
-	'isBookmarked' => Bookmarks::has_bookmarked('torrent', $GroupID),
-	'musicInfo' => $JsonMusicInfo
+	'releaseType'     => (int) $TorrentDetails['ReleaseType'],
+	'categoryId'      => (int) $TorrentDetails['CategoryID'],
+	'categoryName'    => $CategoryName,
+	'time'            => $TorrentDetails['Time'],
+	'vanityHouse'     => ($TorrentDetails['VanityHouse'] == 1),
+	'isBookmarked'    => Bookmarks::has_bookmarked('torrent', $GroupID),
+	'musicInfo'       => $JsonMusicInfo
 );
 
 $JsonTorrentList = array();
@@ -93,32 +93,32 @@ foreach ($TorrentList as $Torrent) {
 		$Torrent['Reported'] = false;
 	}
 	$JsonTorrentList[] = array(
-		'id' => (int) $Torrent['ID'],
-		'media' => $Torrent['Media'],
-		'format' => $Torrent['Format'],
-		'encoding' => $Torrent['Encoding'],
-		'remastered' => $Torrent['Remastered'] == 1,
-		'remasterYear' => (int) $Torrent['RemasterYear'],
-		'remasterTitle' => $Torrent['RemasterTitle'],
-		'remasterRecordLabel' => $Torrent['RemasterRecordLabel'],
+		'id'                      => (int) $Torrent['ID'],
+		'media'                   => $Torrent['Media'],
+		'format'                  => $Torrent['Format'],
+		'encoding'                => $Torrent['Encoding'],
+		'remastered'              => ($Torrent['Remastered'] == 1),
+		'remasterYear'            => (int) $Torrent['RemasterYear'],
+		'remasterTitle'           => $Torrent['RemasterTitle'],
+		'remasterRecordLabel'     => $Torrent['RemasterRecordLabel'],
 		'remasterCatalogueNumber' => $Torrent['RemasterCatalogueNumber'],
-		'scene' => $Torrent['Scene'] == 1,
-		'hasLog' => $Torrent['HasLog'] == 1,
-		'hasCue' => $Torrent['HasCue'] == 1,
-		'logScore' => (int) $Torrent['LogScore'],
-		'fileCount' => (int) $Torrent['FileCount'],
-		'size' => (int) $Torrent['Size'],
-		'seeders' => (int) $Torrent['Seeders'],
-		'leechers' => (int) $Torrent['Leechers'],
-		'snatched' => (int) $Torrent['Snatched'],
-		'freeTorrent' => $Torrent['FreeTorrent'] == 1,
-		'reported' => $Torrent['Reported'],
-		'time' => $Torrent['Time'],
+		'scene'       => ($Torrent['Scene'] == 1),
+		'hasLog'      => ($Torrent['HasLog'] == 1),
+		'hasCue'      => ($Torrent['HasCue'] == 1),
+		'logScore'    => (int) $Torrent['LogScore'],
+		'fileCount'   => (int) $Torrent['FileCount'],
+		'size'        => (int) $Torrent['Size'],
+		'seeders'     => (int) $Torrent['Seeders'],
+		'leechers'    => (int) $Torrent['Leechers'],
+		'snatched'    => (int) $Torrent['Snatched'],
+		'freeTorrent' => ($Torrent['FreeTorrent'] == 1),
+		'reported'    => $Torrent['Reported'],
+		'time'        => $Torrent['Time'],
 		'description' => $Torrent['Description'],
-		'fileList' => $FileList,
-		'filePath' => $Torrent['FilePath'],
-		'userId' => (int) $Torrent['UserID'],
-		'username' => $Userinfo['Username']
+		'fileList'    => $FileList,
+		'filePath'    => $Torrent['FilePath'],
+		'userId'      => (int) $Torrent['UserID'],
+		'username'    => $Userinfo['Username']
 	);
 }
 
