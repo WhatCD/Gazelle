@@ -94,9 +94,9 @@ View::show_header('View request: '.$FullName, 'comments,requests,bbcode,jquery')
 			<a href="requests.php?action=delete&amp;id=<?=$RequestID?>" class="brackets">Delete</a>
 <?	}
 	if (Bookmarks::has_bookmarked('request', $RequestID)) { ?>
-			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
+			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Unbookmark('request', <?=$RequestID?>, 'Bookmark'); return false;" class="brackets">Remove bookmark</a>
 <?	} else { ?>
-			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>,'Remove bookmark');return false;" class="brackets">Bookmark</a>
+			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>, 'Remove bookmark'); return false;" class="brackets">Bookmark</a>
 <?	} ?>
 			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>" class="brackets">Report request</a>
 <?	if (!$IsFilled) { ?>
@@ -107,15 +107,15 @@ View::show_header('View request: '.$FullName, 'comments,requests,bbcode,jquery')
 <? } ?>
 
 <?
-//create a search URL to WorldCat and google based on title
+// Create a search URL to WorldCat and Google based on title
 $encoded_title = urlencode(preg_replace("/\([^\)]+\)/", '', $Title));
 $encoded_artist = substr(str_replace('&amp;', 'and', $ArtistName), 0, -3);
 $encoded_artist = str_ireplace('Performed By', '', $encoded_artist);
 $encoded_artist = preg_replace("/\([^\)]+\)/", '', $encoded_artist);
 $encoded_artist = urlencode($encoded_artist);
 
-$worldcat_url = "http://worldcat.org/search?q=" . "$encoded_artist $encoded_title";
-$google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $encoded_title";
+$worldcat_url = 'https://www.worldcat.org/search?qt=worldcat_org_all&amp;q=' . "$encoded_artist%20$encoded_title";
+$google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist%20$encoded_title";
 ?>
 			<a href="<? echo $worldcat_url; ?>" class="brackets">Find in library</a>
 			<a href="<? echo $google_url; ?>" class="brackets">Find in stores</a>
@@ -128,7 +128,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $e
 <?
 	if (!empty($Image)) {
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($Image, true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>',220);" /></p>
+			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($Image, true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>', 220);" /></p>
 <?	} else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
 <?	} ?>
@@ -333,9 +333,9 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $e
 		$OCLCs = explode(',', $OCLC);
 		for ($i = 0; $i < count($OCLCs); $i++) {
 			if (!empty($Worldcat)) {
-				$Worldcat .= ', <a href="http://www.worldcat.org/oclc/'.$OCLCs[$i].'">'.$OCLCs[$i].'</a>';
+				$Worldcat .= ', <a href="https://www.worldcat.org/oclc/'.$OCLCs[$i].'">'.$OCLCs[$i].'</a>';
 			} else {
-				$Worldcat = '<a href="http://www.worldcat.org/oclc/'.$OCLCs[$i].'">'.$OCLCs[$i].'</a>';
+				$Worldcat = '<a href="https://www.worldcat.org/oclc/'.$OCLCs[$i].'">'.$OCLCs[$i].'</a>';
 			}
 		}
 	}
@@ -354,7 +354,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $e
 ?>
 			<tr>
 				<td class="label">Torrent group</td>
-				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></td>
+				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></a></td>
 			</tr>
 <?	} ?>
 			<tr>
@@ -381,8 +381,8 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $e
 				<td>
 					<input type="text" id="amount_box" size="8" onchange="Calculate();" />
 					<select id="unit" name="unit" onchange="Calculate();">
-						<option value='mb'>MB</option>
-						<option value='gb'>GB</option>
+						<option value="mb">MB</option>
+						<option value="gb">GB</option>
 					</select>
 					<input type="button" value="Preview" onclick="Calculate();" />
 					<strong><?=($RequestTax * 100)?>% of this is deducted as tax by the system.</strong>
@@ -421,7 +421,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $e
 			<tr>
 				<td class="label">Filled</td>
 				<td>
-					<strong><a href="torrents.php?<?=(strtotime($TimeFilled)<$TimeCompare?'id=':'torrentid=').$TorrentID?>">Yes</a></strong>,
+					<strong><a href="torrents.php?<?=(strtotime($TimeFilled) < $TimeCompare ? 'id=' : 'torrentid=').$TorrentID?>">Yes</a></strong>,
 					by user <?=Users::format_username($FillerID, false, false, false)?>
 <?		if ($LoggedUser['ID'] == $RequestorID || $LoggedUser['ID'] == $FillerID || check_perms('site_moderate_requests')) { ?>
 						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>" class="brackets">Unfill</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning.
@@ -437,7 +437,7 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $e
 							<input type="hidden" name="action" value="takefill" />
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 							<input type="hidden" name="requestid" value="<?=$RequestID?>" />
-							<input type="text" size="50" name="link" <?=(!empty($Link) ? "value='$Link' " : '')?>/>
+							<input type="text" size="50" name="link"<?=(!empty($Link) ? " value=\"$Link\"" : '')?> />
 							<strong>Should be the permalink (PL) to the torrent (e.g. https://<?=SSL_SITE_URL?>/torrents.php?torrentid=xxxx).</strong>
 							<br />
 							<br />
@@ -464,7 +464,11 @@ $google_url = "https://www.google.com/search?&tbm=shop&q=" . "$encoded_artist $e
 $Results = Requests::get_comment_count($RequestID);
 
 if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
-	$DB->query("SELECT COUNT(ID) FROM requests_comments WHERE RequestID = $RequestID AND ID <= $_GET[postid]");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM requests_comments
+		WHERE RequestID = $RequestID
+			AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
 	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $PostNum);
 } else {
@@ -508,7 +512,7 @@ foreach ($Thread as $Key => $Post) {
 				by <strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
 <?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>', '<?=$Key?>');" class="brackets">Edit</a>
 <?	}
 	if (check_perms('site_moderate_forums')) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>

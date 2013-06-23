@@ -22,7 +22,7 @@ $DB->query("
 		p.Level AS Class
 	FROM users_main AS m
 		JOIN users_info AS i ON i.UserID = m.ID
-		LEFT JOIN permissions AS p ON p.ID=m.PermissionID
+		LEFT JOIN permissions AS p ON p.ID = m.PermissionID
 	WHERE m.ID = '".db_string($UserID)."'");
 list($Username, $Email, $IRCKey, $Paranoia, $Info, $Avatar, $Country, $StyleID, $StyleURL, $SiteOptions, $UnseededAlerts, $Class) = $DB->next_record(MYSQLI_NUM, array(3, 9));
 
@@ -58,7 +58,7 @@ if ($SiteOptions) {
 	$SiteOptions = array();
 }
 
-View::show_header($Username.' > Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery,preview_paranoia,bbcode');
+View::show_header($Username.' &gt; Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery,preview_paranoia,bbcode');
 
 
 
@@ -121,7 +121,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Profile stats</strong></td>
 				<td>
 					<label>
-						<input type="checkbox" name="autoload_comm_stats" <?Format::selected('AutoloadCommStats', 1, 'checked', $SiteOptions);?>>
+						<input type="checkbox" name="autoload_comm_stats"<?Format::selected('AutoloadCommStats', 1, 'checked', $SiteOptions);?> />
 						Automatically fetch the snatch and peer stats on profile pages.
 					</label>
 				</td>
@@ -136,33 +136,60 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Default search type</strong></td>
 				<td>
-					<select name="searchtype" id="searchtype">
-						<option value="0"<? if ($SiteOptions['SearchType'] == 0) { ?> selected="selected"<? } ?>>Simple</option>
-						<option value="1"<? if ($SiteOptions['SearchType'] == 1) { ?> selected="selected"<? } ?>>Advanced</option>
-					</select>
+					<ul class="options_list nobullet">
+						<li>
+							<input type="radio" name="searchtype" id="search_type_simple" value="0" <? if ($SiteOptions['SearchType'] == 0) { ?>checked="checked" <? } ?>/>
+							<label for="search_type_simple">Simple</label>
+						</li>
+						<li>
+							<input type="radio" name="searchtype" id="search_type_advanced" value="1" <? if ($SiteOptions['SearchType'] == 1) { ?>checked="checked" <? } ?>/>
+							<label for="search_type_advanced">Advanced</label>
+						</li>
+					</ul>
 				</td>
 			</tr>
 <?	} ?>
 			<tr>
 				<td class="label"><strong>Torrent grouping</strong></td>
 				<td>
-					<select name="disablegrouping" id="disablegrouping">
-						<option value="0"<? if ($SiteOptions['DisableGrouping2'] == 0) { ?> selected="selected"<? } ?>>Group torrents by default</option>
-						<option value="1"<? if ($SiteOptions['DisableGrouping2'] == 1) { ?> selected="selected"<? } ?>>DO NOT group torrents by default</option>
-					</select>&nbsp;
-					<select name="torrentgrouping" id="torrentgrouping">
-						<option value="0"<? if ($SiteOptions['TorrentGrouping'] == 0) { ?> selected="selected"<? } ?>>Groups are open by default</option>
-						<option value="1"<? if ($SiteOptions['TorrentGrouping'] == 1) { ?> selected="selected"<? } ?>>Groups are closed by default</option>
-					</select>
+					<ul class="options_list nobullet">
+						<li>
+							<div class="field_div">
+								<input type="checkbox" name="disablegrouping" id="disablegrouping"<?Format::selected('DisableGrouping2', 0, 'checked', $SiteOptions);?> />
+								<label for="disablegrouping">Group torrents by default</label>
+							</div>
+						</li>
+						<li>
+							<div class="field_div">
+								<p>By default, torrent groups are:</p>
+								<ul class="options_list nobullet">
+									<li>
+										<input type="radio" name="torrentgrouping" id="torrent_grouping_open" value="0" <? if ($SiteOptions['TorrentGrouping'] == 0) { ?>checked="checked" <? } ?>/>
+										<label for="torrent_grouping_open">Open</label>
+									</li>
+									<li>
+										<input type="radio" name="torrentgrouping" id="torrent_grouping_closed" value="1" <? if ($SiteOptions['TorrentGrouping'] == 1) { ?>checked="checked" <? } ?>/>
+										<label for="torrent_grouping_closed">Closed</label>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Discography view</strong></td>
+				<td class="label"><strong>Default discography view</strong></td>
 				<td>
-					<select name="discogview" id="discogview">
-						<option value="0"<? if ($SiteOptions['DiscogView'] == 0) { ?> selected="selected"<? } ?>>Open by default</option>
-						<option value="1"<? if ($SiteOptions['DiscogView'] == 1) { ?> selected="selected"<? } ?>>Closed by default</option>
-					</select>
+					<ul class="options_list nobullet">
+						<li>
+							<input type="radio" name="discogview" id="discog_view_open" value="0" <? if ($SiteOptions['DiscogView'] == 0) { ?>checked="checked" <? } ?>/>
+							<label for="discog_view_open">Open</label>
+						</li>
+						<li>
+							<input type="radio" name="discogview" id="discog_view_closed" value="1" <? if ($SiteOptions['DiscogView'] == 1) { ?>checked="checked" <? } ?>/>
+							<label for="discog_view_closed">Closed</label>
+						</li>
+					</ul>
 				</td>
 			</tr>
 			<tr>
@@ -229,17 +256,28 @@ echo $Val->GenerateJS('userform');
 					</select>
 				</td>
 			</tr>
+			<!-- <strip> -->
+			<? if(check_perms("users_mod")) { ?>
+			<tr>
+				<td class="label"><strong>TehConnection integration</strong></td>
+				<td>
+					<input type="checkbox" name="films" id="films" <?=!isset($SiteOptions['Films']) || $SiteOptions['Films'] == true ? "checked='checked'" : ""?>/>
+					<label for="films">Show movie posters and link to TehConnection on movie soundtracks</label>
+				</td>
+			</tr>
+			<? } ?>
+			<!-- </strip> -->
 			<tr>
 				<td class="label"><strong>Torrent search</strong></td>
 				<td>
 					<ul class="options_list nobullet">
 						<li>
 							<input type="checkbox" name="showtfilter" id="showtfilter"<?=(!isset($SiteOptions['ShowTorFilter']) || $SiteOptions['ShowTorFilter'] ? ' checked="checked"' : '')?>/>
-							<label for="showtfilter">Show filter</label>
+							<label for="showtfilter">Show filter controls</label>
 						</li>
 						<li>
-							<input type="checkbox" name="showtags" id="showtags"<?Format::selected("ShowTags", 1, "checked", $SiteOptions);?>/>
-							<label for="showtags">Show tag list</label>
+							<input type="checkbox" name="showtags" id="showtags"<?Format::selected('ShowTags', 1, 'checked', $SiteOptions);?>/>
+							<label for="showtags">Show filters for official tags</label>
 						</li>
 					</ul>
 				</td>
@@ -337,7 +375,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label"><strong>Quote notifications</strong></td>
 				<td>
 					<input type="checkbox" name="notifyquotes" id="notifyquotes"<? if (!empty($SiteOptions['NotifyOnQuote'])) { ?> checked="checked"<? } ?> />
-					<label for="notifyquotes">Notifications when someone quotes you in the forum</label>
+					<label for="notifyquotes">Receive notifications when someone quotes you in the forum</label>
 				</td>
 			</tr>
 			<tr>
@@ -368,7 +406,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Last.fm username</strong></td>
 				<td><input type="text" size="50" name="lastfm_username" id="lastfm_username" value="<?=display_str($LastFMUsername)?>" />
-					<p class="min_padding">Your Last.fm username. Will be used to display Last.fm information on your profile which can be seen by other users.</p>
+					<p class="min_padding">Used to display Last.fm information on your profile which can be seen by other users.</p>
 				</td>
 			</tr>
 			<tr>
@@ -581,7 +619,7 @@ list($ArtistsAdded) = $DB->next_record();
 			</tr>
 			<tr>
 				<td colspan="2" class="right">
-					<input type="submit" value="Save Profile" />
+					<input type="submit" value="Save profile" />
 				</td>
 			</tr>
 		</table>

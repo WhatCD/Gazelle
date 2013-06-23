@@ -165,11 +165,20 @@ Use C99-style "// ..." comments for single-line comments.
 
 		5. USER INTERFACE
 
-All buttons shall use sentence case.
+All button labels shall use sentence case.
 
 All table headings shall use sentence case.
 
-All text-based buttons shall use the "brackets" CSS class
+All text-based buttons shall use the "brackets" CSS class.
+
+Use common sense for design-related code. Microsoft's UI design guidelines
+explain when certain form input controls should be used over others to
+provide a familiar and intuitive interface. Refer to the following links
+for the most likely issues to encounter in web design:
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa511452.aspx
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa511453.aspx
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa511488.aspx
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa511494.aspx
 
 
 		6. EXAMPLES

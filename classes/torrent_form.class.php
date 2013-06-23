@@ -290,10 +290,10 @@ function show() {
 			<tr id="year_tr">
 				<td class="label">
 					<span id="year_label_not_remaster"<? if ($IsRemaster) { echo ' class="hidden"';} ?>>Year:</span>
-					<span id="year_label_remaster"<? if (!$IsRemaster) { echo ' class="hidden"';} ?>>Year of original release</span>
+					<span id="year_label_remaster"<? if (!$IsRemaster) { echo ' class="hidden"';} ?>>Year of original release:</span>
 				</td>
 				<td>
-					<p id="yearwarning" class="hidden">You have entered a year for a release which predates the medium's availability. You will need to change the year and enter additional edition information. If this information cannot be provided, check the &quot;Unknown Release&quot; checkbox below</p>
+					<p id="yearwarning" class="hidden">You have entered a year for a release which predates the medium's availability. You will need to change the year and enter additional edition information. If this information cannot be provided, check the &quot;Unknown Release&quot; check box below.</p>
 					<input type="text" id="year" name="year" size="5" value="<?=display_str($Torrent['Year']) ?>"<?=$this->Disabled?> onblur="CheckYear();" /> This is the year of the original release.
 				</td>
 			</tr>
@@ -305,7 +305,8 @@ function show() {
 				<td class="label">Catalogue number (optional):</td>
 				<td>
 					<input type="text" id="catalogue_number" name="catalogue_number" size="40" value="<?=display_str($Torrent['CatalogueNumber']) ?>"<?=$this->Disabled?> />
-					Please double check the record label and catalogue number when using MusicBrainz. See <a href="wiki.php?action=article&amp;id=688" target="_blank">this guide</a> for more details.
+					<br />
+					Please double-check the record label and catalogue number when using MusicBrainz. See <a href="wiki.php?action=article&amp;id=688" target="_blank">this guide</a> for more details.
 				</td>
 			</tr>
 			<tr id="releasetype_tr">
@@ -324,7 +325,7 @@ function show() {
 				echo ">$Val</option>\n";
 			}
 ?>
-					</select> Please take the time to fill this out properly. Need help? Try reading <a href="wiki.php?action=article&amp;id=202" target="_blank">this wiki article</a> or searching <a href="http://musicbrainz.org/search.html" target="_blank">MusicBrainz</a>.
+					</select> Please take the time to fill this out properly. Need help? Try reading <a href="wiki.php?action=article&amp;id=202" target="_blank">this wiki article</a> or searching <a href="https://musicbrainz.org/search" target="_blank">MusicBrainz</a>.
 				</td>
 			</tr>
 <?		} ?>

@@ -152,6 +152,7 @@ spl_autoload_register(function ($ClassName) {
 		case 'Tags':
 			$FileName = 'tags.class';
 			break;
+		
 		case 'TEXTAREA_PREVIEW':
 			$FileName = 'textarea_preview.class';
 			break;

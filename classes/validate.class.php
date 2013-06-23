@@ -73,10 +73,10 @@ class VALIDATE {
 
 					$Match = '0-9';
 					if (isset($Field['AllowPeriod'])) {
-						$Match.='.';
+						$Match .= '.';
 					}
 					if (isset($Field['AllowComma'])) {
-						$Match.=',';
+						$Match .= ',';
 					}
 
 					if (preg_match('/[^'.$Match.']/', $ValidateVar) || strlen($ValidateVar) < 1) {
@@ -172,124 +172,127 @@ class VALIDATE {
 	} // function
 
 	function GenerateJS($FormID) {
-		$ReturnJS="<script type=\"text/javascript\" language=\"javascript\">\r\n";
-		$ReturnJS.="//<![CDATA[\r\n";
-		$ReturnJS.="function formVal() {\r\n";
-		$ReturnJS.="	clearErrors('".$FormID."');\r\n";
+		$ReturnJS = "<script type=\"text/javascript\" language=\"javascript\">\r\n";
+		$ReturnJS .= "//<![CDATA[\r\n";
+		$ReturnJS .= "function formVal() {\r\n";
+		$ReturnJS .= "	clearErrors('$FormID');\r\n";
 
 		reset($this->Fields);
 		foreach ($this->Fields as $FieldKey => $Field) {
 			if ($Field['Type'] == 'string') {
-				$ValItem='	if ($(\'#'.$FieldKey.'\').raw().value==""';
+				$ValItem = '	if ($(\'#'.$FieldKey.'\').raw().value == ""';
 				if (!empty($Field['MaxLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length>'.$Field['MaxLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length > '.$Field['MaxLength'];
 				} else {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length>255';
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length > 255';
 				}
 				if (!empty($Field['MinLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length<'.$Field['MinLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length < '.$Field['MinLength'];
 				}
-				$ValItem.=') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$ValItem .= ') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 
 			} elseif ($Field['Type'] == 'number') {
-				$Match='0-9';
+				$Match = '0-9';
 				if (!empty($Field['AllowPeriod'])) {
-					$Match.='.';
+					$Match .= '.';
 				}
 				if (!empty($Field['AllowComma'])) {
-					$Match.=',';
+					$Match .= ',';
 				}
 
-				$ValItem='	if ($(\'#'.$FieldKey.'\').raw().value.match(/[^'.$Match.']/) || $(\'#'.$FieldKey.'\').raw().value.length<1';
+				$ValItem = '	if ($(\'#'.$FieldKey.'\').raw().value.match(/[^'.$Match.']/) || $(\'#'.$FieldKey.'\').raw().value.length < 1';
 				if (!empty($Field['MaxLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value/1>'.$Field['MaxLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value/1 > '.$Field['MaxLength'];
 				}
 				if (!empty($Field['MinLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value/1<'.$Field['MinLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value/1 < '.$Field['MinLength'];
 				}
-				$ValItem.=') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$ValItem .= ') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 
 			} elseif ($Field['Type'] == 'email') {
-				$ValItem='	if (!validEmail($(\'#'.$FieldKey.'\').raw().value)';
+				$ValItem = '	if (!validEmail($(\'#'.$FieldKey.'\').raw().value)';
 				if (!empty($Field['MaxLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length>'.$Field['MaxLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length > '.$Field['MaxLength'];
 				} else {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length>255';
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length > 255';
 				}
 				if (!empty($Field['MinLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length<'.$Field['MinLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length < '.$Field['MinLength'];
 				} else {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length<6';
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length < 6';
 				}
-				$ValItem.=') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$ValItem .= ') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 
 			} elseif ($Field['Type'] == 'link') {
-				$ValItem='	if (!validLink($(\'#'.$FieldKey.'\').raw().value)';
+				$ValItem = '	if (!validLink($(\'#'.$FieldKey.'\').raw().value)';
 				if (!empty($Field['MaxLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length>'.$Field['MaxLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length > '.$Field['MaxLength'];
 				} else {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length>255';
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length > 255';
 				}
 				if (!empty($Field['MinLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length<'.$Field['MinLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length < '.$Field['MinLength'];
 				} else {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length<10';
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length < 10';
 				}
-				$ValItem.=') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$ValItem .= ') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 
 			} elseif ($Field['Type'] == 'username') {
 				$ValItem = '	if ($(\'#'.$FieldKey.'\').raw().value.match(/[^a-zA-Z0-9_\-]/)';
 				if (!empty($Field['MaxLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length>'.$Field['MaxLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length > '.$Field['MaxLength'];
 				}
 				if (!empty($Field['MinLength'])) {
-					$ValItem.=' || $(\'#'.$FieldKey.'\').raw().value.length<'.$Field['MinLength'];
+					$ValItem .= ' || $(\'#'.$FieldKey.'\').raw().value.length < '.$Field['MinLength'];
 				}
-				$ValItem.=') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$ValItem .= ') { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 
 			} elseif ($Field['Type'] == 'regex') {
-				$ValItem='	if (!$(\'#'.$FieldKey.'\').raw().value.match('.$Field['Regex'].')) { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$ValItem = '	if (!$(\'#'.$FieldKey.'\').raw().value.match('.$Field['Regex'].')) { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 
 			} elseif ($Field['Type'] == 'date') {
 				$DisplayError = $FieldKey.'month';
 				if (isset($Field['MinLength']) && $Field['MinLength'] == 3) {
-					$Day = '$(\'#'.$FieldKey.'day\').raw().value'; $DisplayError.=",".$FieldKey."day";
+					$Day = '$(\'#'.$FieldKey.'day\').raw().value';
+					$DisplayError .= ",{$FieldKey}day";
 				} else {
 					$Day = '1';
 				}
-				$DisplayError.=",".$FieldKey."year";
-				$ValItemHold='	if (!validDate($(\'#'.$FieldKey.'month\').raw().value+\'/\'+'.$Day.'+\'/\'+$(\'#'.$FieldKey.'year\').raw().value)) { return showError(\''.$DisplayError.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$DisplayError .= ",{$FieldKey}year";
+				$ValItemHold = '	if (!validDate($(\'#'.$FieldKey.'month\').raw().value+\'/\'+'.$Day.'+\'/\'+$(\'#'.$FieldKey.'year\').raw().value)) { return showError(\''.$DisplayError.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 
 				if (empty($Field['Required'])) {
-					$ValItem='	if ($(\'#'.$FieldKey.'month\').raw().value!=""';
-					if (isset($Field['MinLength']) && $Field['MinLength'] == 3) { $ValItem.=' || $(\'#'.$FieldKey.'day\').raw().value!=""'; }
-					$ValItem.=' || $(\'#'.$FieldKey.'year\').raw().value!="") {'."\r\n";
-					$ValItem.=$ValItemHold;
-					$ValItem.="	}\r\n";
+					$ValItem = '	if ($(\'#'.$FieldKey.'month\').raw().value != ""';
+					if (isset($Field['MinLength']) && $Field['MinLength'] == 3) {
+						$ValItem .= ' || $(\'#'.$FieldKey.'day\').raw().value != ""';
+					}
+					$ValItem .= ' || $(\'#'.$FieldKey.'year\').raw().value != "") {'."\r\n";
+					$ValItem .= $ValItemHold;
+					$ValItem .= "	}\r\n";
 				} else {
-					$ValItem.=$ValItemHold;
+					$ValItem .= $ValItemHold;
 				}
 
 			} elseif ($Field['Type'] == 'checkbox') {
-				$ValItem='	if (!$(\'#'.$FieldKey.'\').checked) { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$ValItem = '	if (!$(\'#'.$FieldKey.'\').checked) { return showError(\''.$FieldKey.'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 
 			} elseif ($Field['Type'] == 'compare') {
-				$ValItem='	if ($(\'#'.$FieldKey.'\').raw().value!=$(\'#'.$Field['CompareField'].'\').raw().value) { return showError(\''.$FieldKey.','.$Field['CompareField'].'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
+				$ValItem = '	if ($(\'#'.$FieldKey.'\').raw().value!=$(\'#'.$Field['CompareField'].'\').raw().value) { return showError(\''.$FieldKey.','.$Field['CompareField'].'\',\''.$Field['ErrorMessage'].'\'); }'."\r\n";
 			}
 
 			if (empty($Field['Required']) && $Field['Type'] != 'date') {
-				$ReturnJS.='	if ($(\'#'.$FieldKey.'\').raw().value!="") {'."\r\n	";
-				$ReturnJS.=$ValItem;
-				$ReturnJS.="	}\r\n";
+				$ReturnJS .= '	if ($(\'#'.$FieldKey.'\').raw().value!="") {'."\r\n	";
+				$ReturnJS .= $ValItem;
+				$ReturnJS .= "	}\r\n";
 			} else {
-				$ReturnJS.=$ValItem;
+				$ReturnJS .= $ValItem;
 			}
-			$ValItem='';
+			$ValItem = '';
 		}
 
-		$ReturnJS.="}\r\n";
-		$ReturnJS.="//]]>\r\n";
-		$ReturnJS.="</script>\r\n";
+		$ReturnJS .= "}\r\n";
+		$ReturnJS .= "//]]>\r\n";
+		$ReturnJS .= "</script>\r\n";
 		return $ReturnJS;
 	}
 }

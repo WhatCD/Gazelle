@@ -1,5 +1,5 @@
 /**
- * Allows the user to populate upload form using musicbrainz.
+ * Allows the user to populate upload form using MusicBrainz.
  * Popup display code based on example found here http://yensdesign.com/2008/09/how-to-create-a-stunning-and-smooth-popup-using-jquery/
  *
  * @author Gwindow
@@ -40,12 +40,14 @@ $(document).ready(function() {
 			var $album_encoded = encodeURIComponent($album);
 			$.ajax({
 				type: "GET",
-				url : "http://www.musicbrainz.org/ws/2/release-group/?query=artist:%22" + $artist_encoded + "%22%20AND%20releasegroup:%22" + $album_encoded + "%22",
+				url : "https://musicbrainz.org/ws/2/release-group/?query=artist:%22" + $artist_encoded + "%22%20AND%20releasegroup:%22" + $album_encoded + "%22",
 				dataType: "xml",
 				success: showReleaseGroups
 			});
 
-		} else { alert("Please fill out artist and/or album fields.");}
+		} else {
+			alert("Please fill out artist and/or album fields.");
+		}
 	});
 
 	$("#results1").click(function(event) {
@@ -109,7 +111,7 @@ function showReleaseGroups(xml) {
 	if ($count == 0 ) {
 		alert("Could not find on MusicBrainz");
 	} else {
-		jQuery('#popup_title').text("Choose Release Group");
+		jQuery('#popup_title').text("Choose release group");
 		openPopup();
 	}
 
@@ -133,7 +135,7 @@ function showReleases(xml) {
 	$year_original = $date_release_group.substring(0,4);
 	$release_type = $(xml).find("release-group").attr("type");
 	$release_group_id = $(xml).find("release-group").attr("id");
-	jQuery('#popup_title').html("Choose Release " + '<a href="https://musicbrainz.org/release-group/'
+	jQuery('#popup_title').html("Choose release " + '<a href="https://musicbrainz.org/release-group/'
 			+ $release_group_id + '" target="_new" class="brackets">View on MusicBrainz</a>');
 	jQuery('#popup_back').html('<a href="#null" id="back" class="brackets">Go back</a>');
 
@@ -221,7 +223,7 @@ function populateForm(xml) {
 
 	var $amazon_link = "";
 	if ($asin.length > 0) {
-		$amazin_link = "[url=http://amazon.com/exec/obidos/ASIN/" + $asin + "]Amazon[/url]" + "\n";
+		$amazon_link = "[url=http://www.amazon.com/exec/obidos/ASIN/" + $asin + "]Amazon[/url]" + "\n";
 	}
 	var $country_text = "";
 	if ($country.length > 0) {

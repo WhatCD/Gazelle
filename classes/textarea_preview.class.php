@@ -121,7 +121,7 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER {
 	 * Flag for preview output
 	 * @var bool $preview
 	 */
-	 private $preview = false;
+	private $preview = false;
 
 	/**
 	 * String table

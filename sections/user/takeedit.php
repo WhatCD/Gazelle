@@ -15,30 +15,30 @@ if (!$U) {
 
 $Permissions = Permissions::get_permissions($U['PermissionID']);
 if ($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Permissions['Class'])) {
-	send_irc("PRIVMSG ".ADMIN_CHAN." :User ".$LoggedUser['Username']." (https://".SSL_SITE_URL."/user.php?id=".$LoggedUser['ID'].") just tried to edit the profile of https://".SSL_SITE_URL."/user.php?id=".$_REQUEST['userid']);
+	send_irc('PRIVMSG '.ADMIN_CHAN.' :User '.$LoggedUser['Username'].' (https://'.SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].') just tried to edit the profile of https://'.SSL_SITE_URL.'/user.php?id='.$_REQUEST['userid']);
 	error(403);
 }
 
-$Val->SetFields('stylesheet',1,"number","You forgot to select a stylesheet.");
-$Val->SetFields('styleurl',0,"regex","You did not enter a valid stylesheet url.",array('regex'=>'/^https?:\/\/(localhost(:[0-9]{2,5})?|[0-9]{1,3}(\.[0-9]{1,3}){3}|([a-zA-Z0-9\-\_]+\.)+([a-zA-Z]{1,5}[^\.]))(:[0-9]{2,5})?(\/[^<>]+)+\.css$/i'));
-$Val->SetFields('disablegrouping',1,"number","You forgot to select your torrent grouping option.",array('minlength'=>0,'maxlength'=>1));
-$Val->SetFields('torrentgrouping',1,"number","You forgot to select your torrent grouping option.",array('minlength'=>0,'maxlength'=>1));
-$Val->SetFields('discogview',1,"number","You forgot to select your discography view option.",array('minlength'=>0,'maxlength'=>1));
-$Val->SetFields('postsperpage',1,"number","You forgot to select your posts per page option.",array('inarray'=>array(25,50,100)));
-//$Val->SetFields('hidecollage',1,"number","You forgot to select your collage option.",array('minlength'=>0,'maxlength'=>1));
-$Val->SetFields('collagecovers',1,"number","You forgot to select your collage option.");
-$Val->SetFields('avatar',0,"regex","You did not enter a valid avatar url.",array('regex'=>"/^".IMAGE_REGEX."$/i"));
-$Val->SetFields('email',1,"email","You did not enter a valid email address.");
-$Val->SetFields('irckey',0,"string","You did not enter a valid IRCKey, must be between 6 and 32 characters long.",array('minlength'=>6,'maxlength'=>32));
-$Val->SetFields('cur_pass',0,"string","You did not enter a valid password, must be at least 6 characters long.",array('minlength'=>6,'maxlength'=>150));
-$Val->SetFields('new_pass_1',0,"regex","You did not enter a valid password. A strong password is between 8 and 40 characters long contains at least 1 lowercase and uppercase letter, contains at least a number or symbol",array('regex'=>'/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
-$Val->SetFields('new_pass_2',1,"compare","Your passwords do not match.",array('comparefield'=>'new_pass_1'));
+$Val->SetFields('stylesheet', 1, "number", "You forgot to select a stylesheet.");
+$Val->SetFields('styleurl', 0, "regex", "You did not enter a valid stylesheet URL.", array('regex' => '/^https?:\/\/(localhost(:[0-9]{2,5})?|[0-9]{1,3}(\.[0-9]{1,3}){3}|([a-zA-Z0-9\-\_]+\.)+([a-zA-Z]{1,5}[^\.]))(:[0-9]{2,5})?(\/[^<>]+)+\.css$/i'));
+// The next two are commented out because the drop-down menus were replaced with a check box and radio buttons
+//$Val->SetFields('disablegrouping', 0, "number", "You forgot to select your torrent grouping option.");
+//$Val->SetFields('torrentgrouping', 0, "number", "You forgot to select your torrent grouping option.");
+$Val->SetFields('discogview', 1, "number", "You forgot to select your discography view option.", array('minlength' => 0, 'maxlength' => 1));
+$Val->SetFields('postsperpage', 1, "number", "You forgot to select your posts per page option.", array('inarray' => array(25, 50, 100)));
+//$Val->SetFields('hidecollage', 1, "number", "You forgot to select your collage option.", array('minlength' => 0, 'maxlength' => 1));
+$Val->SetFields('collagecovers', 1, "number", "You forgot to select your collage option.");
+$Val->SetFields('avatar', 0, "regex", "You did not enter a valid avatar URL.", array('regex' => "/^".IMAGE_REGEX."$/i"));
+$Val->SetFields('email', 1, "email", "You did not enter a valid email address.");
+$Val->SetFields('irckey', 0, "string", "You did not enter a valid IRCKey. An IRCKey must be between 6 and 32 characters long.", array('minlength' => 6, 'maxlength' => 32));
+$Val->SetFields('cur_pass', 0, "string", "You did not enter a valid password. Passwords must be at least 6 characters long.", array('minlength' => 6, 'maxlength' => 150));
+$Val->SetFields('new_pass_1', 0, "regex", "You did not enter a valid password. A strong password is between 8 and 40 characters long contains at least 1 lowercase and uppercase letter, contains at least a number or symbol", array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
+$Val->SetFields('new_pass_2', 1, "compare", "Your passwords do not match.", array('comparefield' => 'new_pass_1'));
 if (check_perms('site_advanced_search')) {
-	$Val->SetFields('searchtype',1,"number","You forgot to select your default search preference.",array('minlength'=>0,'maxlength'=>1));
+	$Val->SetFields('searchtype', 1, "number", "You forgot to select your default search preference.", array('minlength' => 0, 'maxlength' => 1));
 }
 
 $Err = $Val->ValidateForm($_POST);
-
 if ($Err) {
 	error($Err);
 	header('Location: user.php?action=edit&userid='.$UserID);
@@ -183,7 +183,7 @@ if (!$Err && ($_POST['cur_pass'] || $_POST['new_pass_1'] || $_POST['new_pass_2']
 }
 
 if ($LoggedUser['DisableAvatar'] && $_POST['avatar'] != $U['Avatar']) {
-	$Err = 'Your avatar rights have been removed.';
+	$Err = 'Your avatar privileges have been revoked.';
 }
 
 if ($Err) {
@@ -195,7 +195,7 @@ if ($Err) {
 if (!empty($LoggedUser['DefaultSearch'])) {
 	$Options['DefaultSearch'] = $LoggedUser['DefaultSearch'];
 }
-$Options['DisableGrouping2']    = (!empty($_POST['disablegrouping']) ? 1 : 0);
+$Options['DisableGrouping2']    = (!empty($_POST['disablegrouping']) ? 0 : 1);
 $Options['TorrentGrouping']     = (!empty($_POST['torrentgrouping']) ? 1 : 0);
 $Options['DiscogView']          = (!empty($_POST['discogview']) ? 1 : 0);
 $Options['PostsPerPage']        = (int) $_POST['postsperpage'];
@@ -216,6 +216,7 @@ $Options['ListUnreadPMsFirst']  = (!empty($_POST['list_unread_pms_first']) ? 1 :
 $Options['ShowSnatched']        = (!empty($_POST['showsnatched']) ? 1 : 0);
 $Options['DisableAutoSave']     = (!empty($_POST['disableautosave']) ? 1 : 0);
 $Options['NoVoteLinks']         = (!empty($_POST['novotelinks']) ? 1 : 0);
+
 $Options['CoverArt']            = (int) !empty($_POST['coverart']);
 $Options['ShowExtraCovers']     = (int) !empty($_POST['show_extra_covers']);
 

@@ -36,9 +36,9 @@ if (!empty($_REQUEST['confirm'])) {
 	$Val->SetFields('email', true, 'email', 'You did not enter a valid email address.');
 	$Val->SetFields('password', true, 'regex', 'A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol', array('regex'=>'/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
 	$Val->SetFields('confirm_password', true, 'compare', 'Your passwords do not match.', array('comparefield'=>'password'));
-	$Val->SetFields('readrules', true, 'checkbox', 'You did not check the box that says you will read the rules.');
-	$Val->SetFields('readwiki', true, 'checkbox', 'You did not check the box that says you will read the wiki.');
-	$Val->SetFields('agereq', true, 'checkbox', 'You did not check the box that says you are 13 years of age or older.');
+	$Val->SetFields('readrules', true, 'checkbox', 'You did not select the box that says you will read the rules.');
+	$Val->SetFields('readwiki', true, 'checkbox', 'You did not select the box that says you will read the wiki.');
+	$Val->SetFields('agereq', true, 'checkbox', 'You did not select the box that says you are 13 years of age or older.');
 	//$Val->SetFields('captcha', true, 'string', 'You did not enter a captcha code.', array('minlength' => 6, 'maxlength' => 6));
 
 	if (!empty($_POST['submit'])) {
