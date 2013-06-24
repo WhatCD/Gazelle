@@ -1,6 +1,6 @@
 <?
 class UserAgent {
-	var $Browsers = array(
+	static private $Browsers = array(
 		//Less popular
 		'Shiira'			=> 'Shiira',
 		'Songbird'			=> 'Songbird',
@@ -15,7 +15,7 @@ class UserAgent {
 		'Links'				=> 'Links',
 		'libcurl'			=> 'cURL',
 		'midori'			=> 'Midori',
-		'Blackberry'		=> 'Blackberry Browser',
+		'Blackberry'		=> 'BlackBerry Browser',
 		//Big names
 		'Firefox'			=> 'Firefox',
 		'Chrome'			=> 'Chrome',
@@ -43,7 +43,7 @@ class UserAgent {
 		*/
 	);
 
-	var $OperatingSystems = array(
+	static private $OperatingSystems = array(
 		//Mobile
 		'SymbianOS'			=> 'Symbian',
 		'blackberry'		=> 'BlackBerry',
@@ -123,12 +123,12 @@ class UserAgent {
 	}
 
 	public static function mobile(&$UserAgentString) {
-		if (strpos($UserAgentString, 'iPad')) {
+		if (strpos($UserAgentString, 'iPad') !== false) {
 			return false;
 		}
 
-		//Mobi catches Mobile
-		if (/*strpos($UserAgentString, 'Mobile') || */strpos($UserAgentString, 'Device') || strpos($UserAgentString, 'Mobi') || strpos($UserAgentString, 'Mini') || strpos($UserAgentString, 'webOS')) {
+		// "Mobi" catches "Mobile" too
+		if (strpos($UserAgentString, 'Device') || strpos($UserAgentString, 'Mobi') || strpos($UserAgentString, 'Mini') || strpos($UserAgentString, 'webOS')) {
 			return true;
 		}
 		return false;

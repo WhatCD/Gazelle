@@ -105,11 +105,11 @@ if ($CategoryName == 'Music') {
 	}*/
 
 	//WEB has no ripping log. Ditto Vinyl - Actually ditto everything but CD
-	//$WEBOverride = ((strpos($MediaList, 'WEB') !== false) && $Media == "WEB");
-	//$VinylOverride = ((strpos($MediaList, 'Vinyl') !== false) && $Media == "Vinyl");
+	//$WEBOverride = (strpos($MediaList, 'WEB') !== false && $Media == "WEB");
+	//$VinylOverride = (strpos($MediaList, 'Vinyl') !== false && $Media == "Vinyl");
 	//if ($Format == 'FLAC' && $LogCue && !$WEBOverride && !$VinylOverride) {
 	if ($Format == 'FLAC' && $LogCue && $Media == 'CD') {
-		if (strpos($LogCue, 'Log') && !$HasLog) {
+		if (strpos($LogCue, 'Log') !== false && !$HasLog) {
 			$Err = 'This request requires a log.';
 		}
 
@@ -117,11 +117,11 @@ if ($CategoryName == 'Music') {
 		 * Removed due to rule 2.2.15.6 rendering some requests unfillable
 		 */
 
-		//if (strpos($LogCue, "Cue") && !$HasCue) {
-		//	$Err = "This request requires a cue.";
+		//if (strpos($LogCue, 'Cue') !== false && !$HasCue) {
+		//	$Err = 'This request requires a cue.';
 		//}
 
-		if (strpos($LogCue, '%')) {
+		if (strpos($LogCue, '%') !== false) {
 			preg_match('/\d+/', $LogCue, $Matches);
 			if ((int) $LogScore < (int) $Matches[0]) {
 				$Err = 'This torrent\'s log score is too low.';
@@ -130,19 +130,20 @@ if ($CategoryName == 'Music') {
 	}
 
 	if ($BitrateList === 'Other') {
-		if ($Bitrate === 'Lossless' || $Bitrate === 'APS (VBR)' || $Bitrate === 'V2 (VBR)' || $Bitrate === 'V1 (VBR)' || $Bitrate === '256' || $Bitrate === 'APX (VBR)' || $Bitrate === 'V0 (VBR)' || $Bitrate === 'q8.x (VBR)' || $Bitrate === '320' || $Bitrate === '24bit Lossless')
+		if ($Bitrate === 'Lossless' || $Bitrate === 'APS (VBR)' || $Bitrate === 'V2 (VBR)' || $Bitrate === 'V1 (VBR)' || $Bitrate === '256' || $Bitrate === 'APX (VBR)' || $Bitrate === 'V0 (VBR)' || $Bitrate === 'q8.x (VBR)' || $Bitrate === '320' || $Bitrate === '24bit Lossless') {
 			$Err = "$Bitrate is not an allowed bitrate for this request.";
+		}
 	} elseif ($BitrateList && $BitrateList != 'Any') {
 		if (strpos($BitrateList, $Bitrate) === false) {
 			$Err = "$Bitrate is not an allowed bitrate for this request.";
 		}
 	}
-	if ($FormatList && $FormatList != "Any") {
+	if ($FormatList && $FormatList != 'Any') {
 		if (strpos($FormatList, $Format) === false) {
 			$Err = "$Format is not an allowed format for this request.";
 		}
 	}
-	if ($MediaList && $MediaList != "Any") {
+	if ($MediaList && $MediaList != 'Any') {
 		if (strpos($MediaList, $Media) === false) {
 			$Err = "$Media is not allowed media for this request.";
 		}
@@ -170,7 +171,10 @@ if ($CategoryName == 'Music') {
 	$FullName = $Title;
 }
 
-$DB->query("SELECT UserID FROM requests_votes WHERE RequestID = $RequestID");
+$DB->query("
+	SELECT UserID
+	FROM requests_votes
+	WHERE RequestID = $RequestID");
 $UserIDs = $DB->to_array();
 foreach ($UserIDs as $User) {
 	list($VoterID) = $User;
@@ -196,13 +200,16 @@ if ($GroupID) {
 
 
 
-$DB->query("SELECT ArtistID FROM requests_artists WHERE RequestID = $RequestID");
+$DB->query("
+	SELECT ArtistID
+	FROM requests_artists
+	WHERE RequestID = $RequestID");
 $ArtistIDs = $DB->to_array();
 foreach ($ArtistIDs as $ArtistID) {
 	$Cache->delete_value("artists_requests_$ArtistID");
 }
 
-$SS->UpdateAttributes('requests', array('torrentid','fillerid'), array($RequestID => array((int)$TorrentID,(int)$FillerID)));
+$SS->UpdateAttributes('requests', array('torrentid', 'fillerid'), array($RequestID => array((int)$TorrentID, (int)$FillerID)));
 Requests::update_sphinx_requests($RequestID);
 
 header('Location: requests.php?action=view&id='.$RequestID);

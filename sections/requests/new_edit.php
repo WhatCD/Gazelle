@@ -38,7 +38,7 @@ if (!$NewRequest) {
 		$NeedCue = (strpos($LogCue, 'Cue') !== false);
 		$NeedLog = (strpos($LogCue, 'Log') !== false);
 		if ($NeedLog) {
-			if (strpos($LogCue, '%')) {
+			if (strpos($LogCue, '%') !== false) {
 				preg_match('/\d+/', $LogCue, $Matches);
 				$MinLogScore = (int) $Matches[0];
 			}
@@ -116,8 +116,8 @@ if ($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 			GROUP_CONCAT(t.Name SEPARATOR ', '),
 			tg.CategoryID
 		FROM torrents_group AS tg
-			JOIN torrents_tags AS tt ON tt.GroupID=tg.ID
-			JOIN tags AS t ON t.ID=tt.TagID
+			JOIN torrents_tags AS tt ON tt.GroupID = tg.ID
+			JOIN tags AS t ON t.ID = tt.TagID
 		WHERE tg.ID = ".$_GET['groupid']);
 	if (list($Title, $Year, $ReleaseType, $Image, $Tags, $CategoryID) = $DB->next_record()) {
 		$GroupID = trim($_REQUEST['groupid']);
@@ -248,7 +248,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 		$DB->query('
 			SELECT Name
 			FROM tags
-			WHERE TagType=\'genre\'
+			WHERE TagType = \'genre\'
 			ORDER BY Name');
 		$GenreTags = $DB->collect('Name');
 		$Cache->cache_value('genre_tags', $GenreTags, 3600 * 6);
@@ -257,7 +257,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 						<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;" >
 							<option>---</option>
 <?	foreach (Misc::display_array($GenreTags) as $Genre) { ?>
-							<option value="<?=$Genre ?>"><?=$Genre ?></option>
+							<option value="<?=$Genre?>"><?=$Genre?></option>
 <?	} ?>
 						</select>
 						<input type="text" id="tags" name="tags" size="45" value="<?=(!empty($Tags) ? display_str($Tags) : '')?>" />
@@ -356,7 +356,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 					<td class="label">Torrent group</td>
 					<td>
 						<a href="torrents.php?id=<?=$GroupID?>">https://<?=SSL_SITE_URL?>/torrents.php?id=<?=$GroupID?></a><br />
-						This request <?=($NewRequest?'will be':'is')?> associated with the above torrent group.
+						This request <?=($NewRequest ? 'will be' : 'is')?> associated with the above torrent group.
 <?		if (!$NewRequest) { 	?>
 						If this is incorrect, please <a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">report this request</a> so that staff can fix it.
 <? 		}	?>
@@ -385,7 +385,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 						<input type="hidden" id="current_downloaded" value="<?=$LoggedUser['BytesDownloaded']?>" />
 						If you add the entered <strong><span id="new_bounty">100.00 MB</span></strong> of bounty, your new stats will be: <br />
 						Uploaded: <span id="new_uploaded"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span>
-						Ratio: <span id="new_ratio"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'],$LoggedUser['BytesDownloaded'])?></span>
+						Ratio: <span id="new_ratio"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'], $LoggedUser['BytesDownloaded'])?></span>
 					</td>
 				</tr>
 				<tr>

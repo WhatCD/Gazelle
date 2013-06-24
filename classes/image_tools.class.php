@@ -64,7 +64,8 @@ class ImageTools {
 	 */
 	public static function blacklisted($Url, $ShowError = true) {
 		foreach (self::$Blacklist as &$Value) {
-			if (stripos($Url, $Value)) {
+			$Blacklisted = stripos($Url, $Value);
+			if ($Blacklisted !== false) {
 				$ParsedUrl = parse_url($Url);
 				if ($ShowError) {
 					error($ParsedUrl['host'] . ' is not an allowed image host. Please use a different host.');
@@ -92,7 +93,7 @@ class ImageTools {
 	 */
 	private static function valid_extension($Ext) {
 //		return @self::$Extensions[$Ext] === true;
-		return !empty(self::$Extensions[$Ext]) && self::$Extensions[$Ext] === true;
+		return !empty(self::$Extensions[$Ext]) && (self::$Extensions[$Ext] === true);
 	}
 
 	/**

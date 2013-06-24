@@ -256,17 +256,7 @@ echo $Val->GenerateJS('userform');
 					</select>
 				</td>
 			</tr>
-			<!-- <strip> -->
-			<? if(check_perms("users_mod")) { ?>
-			<tr>
-				<td class="label"><strong>TehConnection integration</strong></td>
-				<td>
-					<input type="checkbox" name="films" id="films" <?=!isset($SiteOptions['Films']) || $SiteOptions['Films'] == true ? "checked='checked'" : ""?>/>
-					<label for="films">Show movie posters and link to TehConnection on movie soundtracks</label>
-				</td>
-			</tr>
-			<? } ?>
-			<!-- </strip> -->
+
 			<tr>
 				<td class="label"><strong>Torrent search</strong></td>
 				<td>

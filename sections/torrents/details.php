@@ -218,7 +218,6 @@ $Index++;
 
 	</div>
 <?
-
 if ($Categories[$GroupCategoryID - 1] == 'Music') {
 	$ShownWith = false;
 ?>

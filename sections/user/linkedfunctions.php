@@ -214,7 +214,7 @@ function user_dupes_table($UserID) {
 		$DupeInfo = Users::user_info($DupeID);
 ?>
 					<td align="left"><?=Users::format_username($DupeID, true, true, true, true)?>
-						<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');" class="brackets">x</a>
+						<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');" class="brackets" title="Remove linked account">X</a>
 					</td>
 <?
 		if ($i == 5) {
@@ -238,12 +238,14 @@ function user_dupes_table($UserID) {
 							<div id="editdupecomments" class="<?=($DupeCount ? 'hidden' : '')?>">
 								<textarea name="dupecomments" onkeyup="resize('dupecommentsbox');" id="dupecommentsbox" cols="65" rows="5" style="width: 98%;"><?=display_str($Comments)?></textarea>
 							</div>
-							<span style="float: right; font-style: italic;"><a href="#" onclick="$('#dupecomments').gtoggle(); $('#editdupecomments').gtoggle(); resize('dupecommentsbox'); return false;" class="brackets">Edit linked account comments</a></span>
+							<span style="float: right;"><a href="#" onclick="$('#dupecomments').gtoggle(); $('#editdupecomments').gtoggle(); resize('dupecommentsbox'); return false;" class="brackets">Edit linked account comments</a></span>
 						</td>
 					</tr>
 				</table>
 				<div class="pad hidden linkedaccounts">
-					<label for="target">Link this user with: </label><input type="text" name="target" id="target" /><input type="submit" value="Update" id="submitlink" />
+					<label for="target">Link this user with: </label>
+					<input type="text" name="target" id="target" />
+					<input type="submit" value="Update" id="submitlink" />
 				</div>
 			</div>
 		</form>

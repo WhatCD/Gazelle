@@ -44,7 +44,7 @@ $DB->query("
 		inviter.username
 	FROM users_main AS m
 		JOIN users_info AS i ON i.UserID = m.ID
-		LEFT JOIN permissions AS p ON p.ID=m.PermissionID
+		LEFT JOIN permissions AS p ON p.ID = m.PermissionID
 		LEFT JOIN users_main AS inviter ON i.Inviter = inviter.ID
 		LEFT JOIN forums_posts AS posts ON posts.AuthorID = m.ID
 	WHERE m.ID = $UserID
@@ -54,7 +54,7 @@ if ($DB->record_count() == 0) { // If user doesn't exist
 	json_die("failure", "no such user");
 }
 
-list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9,11));
+list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9, 11));
 
 $Paranoia = unserialize($Paranoia);
 if (!is_array($Paranoia)) {
@@ -63,7 +63,7 @@ if (!is_array($Paranoia)) {
 $ParanoiaLevel = 0;
 foreach ($Paranoia as $P) {
 	$ParanoiaLevel++;
-	if (strpos($P, '+')) {
+	if (strpos($P, '+') !== false) {
 		$ParanoiaLevel++;
 	}
 }
@@ -81,8 +81,8 @@ $Friend = false;
 $DB->query("
 	SELECT FriendID
 	FROM friends
-	WHERE UserID='$LoggedUser[ID]'
-		AND FriendID='$UserID'");
+	WHERE UserID = '$LoggedUser[ID]'
+		AND FriendID = '$UserID'");
 if ($DB->record_count() != 0) {
 	$Friend = true;
 }
@@ -91,7 +91,7 @@ if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requests
 	$DB->query("
 		SELECT COUNT(DISTINCT r.ID), SUM(rv.Bounty)
 		FROM requests AS r
-			LEFT JOIN requests_votes AS rv ON r.ID=rv.RequestID
+			LEFT JOIN requests_votes AS rv ON r.ID = rv.RequestID
 		WHERE r.FillerID = $UserID");
 	list($RequestsFilled, $TotalBounty) = $DB->next_record();
 	$DB->query("
@@ -103,7 +103,7 @@ if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requests
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM torrents
-		WHERE UserID='$UserID'");
+		WHERE UserID = '$UserID'");
 	list($Uploads) = $DB->next_record();
 } else {
 	$RequestsVoted = 0;
@@ -113,7 +113,7 @@ if (check_paranoia_here('uploads+')) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM torrents
-		WHERE UserID='$UserID'");
+		WHERE UserID = '$UserID'");
 	list($Uploads) = $DB->next_record();
 } else {
 	$Uploads = null;
@@ -180,8 +180,8 @@ if (check_paranoia_here(array('snatched', 'snatched+'))) {
 $DB->query("
 	SELECT COUNT(x.uid), COUNT(DISTINCT x.fid)
 	FROM xbt_snatched AS x
-		INNER JOIN torrents AS t ON t.ID=x.fid
-	WHERE x.uid='$UserID'");
+		INNER JOIN torrents AS t ON t.ID = x.fid
+	WHERE x.uid = '$UserID'");
 list($Snatched, $UniqueSnatched) = $DB->next_record();
 }
 
@@ -189,7 +189,7 @@ if (check_paranoia_here(array('torrentcomments', 'torrentcomments+'))) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM torrents_comments
-		WHERE AuthorID='$UserID'");
+		WHERE AuthorID = '$UserID'");
 	list($NumComments) = $DB->next_record();
 }
 
@@ -197,8 +197,8 @@ if (check_paranoia_here(array('collages', 'collages+'))) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM collages
-		WHERE Deleted='0'
-			AND UserID='$UserID'");
+		WHERE Deleted = '0'
+			AND UserID = '$UserID'");
 	list($NumCollages) = $DB->next_record();
 }
 
@@ -207,8 +207,8 @@ if (check_paranoia_here(array('collagecontribs', 'collagecontribs+'))) {
 		SELECT COUNT(DISTINCT CollageID)
 		FROM collages_torrents AS ct
 			JOIN collages ON CollageID = ID
-		WHERE Deleted='0'
-			AND ct.UserID='$UserID'");
+		WHERE Deleted = '0'
+			AND ct.UserID = '$UserID'");
 	list($NumCollageContribs) = $DB->next_record();
 }
 
@@ -243,9 +243,9 @@ if (check_paranoia_here('seeding+')) {
 	$DB->query("
 		SELECT COUNT(x.uid)
 		FROM xbt_files_users AS x
-			INNER JOIN torrents AS t ON t.ID=x.fid
-		WHERE x.uid='$UserID'
-			AND x.remaining=0");
+			INNER JOIN torrents AS t ON t.ID = x.fid
+		WHERE x.uid = '$UserID'
+			AND x.remaining = 0");
 	list($Seeding) = $DB->next_record();
 }
 
@@ -253,9 +253,9 @@ if (check_paranoia_here('leeching+')) {
 	$DB->query("
 		SELECT COUNT(x.uid)
 		FROM xbt_files_users AS x
-			INNER JOIN torrents AS t ON t.ID=x.fid
-		WHERE x.uid='$UserID'
-			AND x.remaining>0");
+			INNER JOIN torrents AS t ON t.ID = x.fid
+		WHERE x.uid = '$UserID'
+			AND x.remaining > 0");
 	list($Leeching) = $DB->next_record();
 }
 
@@ -263,7 +263,7 @@ if (check_paranoia_here('invitedcount')) {
 	$DB->query("
 		SELECT COUNT(UserID)
 		FROM users_info
-		WHERE Inviter='$UserID'");
+		WHERE Inviter = '$UserID'");
 	list($Invited) = $DB->next_record();
 }
 
@@ -352,4 +352,3 @@ json_die("success", array(
 	)
 ));
 ?>
-

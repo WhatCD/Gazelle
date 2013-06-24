@@ -4,7 +4,7 @@ if (!$UserCount = $Cache->get_value('stats_user_count')) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM users_main
-		WHERE Enabled='1'");
+		WHERE Enabled = '1'");
 	list($UserCount) = $DB->next_record();
 	$Cache->cache_value('stats_user_count', $UserCount, 0);
 }
@@ -20,11 +20,17 @@ $DB->query("
 	WHERE ID = $UserID");
 list($CanLeech) = $DB->next_record();
 
-if ($LoggedUser['RatioWatch'] ||
-	!$CanLeech ||
-	$LoggedUser['DisableInvites'] == '1'||
-	$LoggedUser['Invites'] == 0 && !check_perms('site_send_unlimited_invites') ||
-	($UserCount >= USER_LIMIT && USER_LIMIT != 0 && !check_perms('site_can_invite_always'))) {
+if ($LoggedUser['RatioWatch']
+	|| !$CanLeech
+	|| $LoggedUser['DisableInvites'] == '1'
+	|| $LoggedUser['Invites'] == 0
+	&& !check_perms('site_send_unlimited_invites')
+	|| (
+		$UserCount >= USER_LIMIT
+		&& USER_LIMIT != 0
+		&& !check_perms('site_can_invite_always')
+		)
+	) {
 		error(403);
 }
 
@@ -35,7 +41,7 @@ $SiteURL = SSL_SITE_URL;
 $InviteExpires = time_plus(60 * 60 * 24 * 3); // 3 days
 
 //MultiInvite
-if (strpos($Email, '|') && check_perms('site_send_unlimited_invites')) {
+if (strpos($Email, '|') !== false && check_perms('site_send_unlimited_invites')) {
 	$Emails = explode('|', $Email);
 } else {
 	$Emails = array($Email);
@@ -87,14 +93,14 @@ EOT;
 	if (!check_perms('site_send_unlimited_invites')) {
 		$DB->query("
 			UPDATE users_main
-			SET Invites=GREATEST(Invites,1)-1
-			WHERE ID='$LoggedUser[ID]'");
+			SET Invites = GREATEST(Invites, 1) - 1
+			WHERE ID = '$LoggedUser[ID]'");
 		$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
-		$Cache->update_row(false, array('Invites'=>'-1'));
+		$Cache->update_row(false, array('Invites' => '-1'));
 		$Cache->commit_transaction(0);
 	}
 
-	Misc::send_email($CurEmail, 'You have been invited to '.SITE_NAME, $Message,'noreply');
+	Misc::send_email($CurEmail, 'You have been invited to '.SITE_NAME, $Message, 'noreply');
 
 
 }

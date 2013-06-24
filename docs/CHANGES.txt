@@ -1,5 +1,12 @@
 CHANGELOG
 
+2013-06-24 by Ajax
+Added user recents to API. ajax.php?action=user_recents&userid=<ID>&limit=<LIMIT> the limit defaults to 15 if empty and maxes out at 50
+
+2013-06-23 by alderaan
+The "Torrent options" section when editing user profiles now follows Microsoft's UI design guidelines, which has been adopted as something we will try to follow in the future. For an overview of what this generally entails, refer to this example document:
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa511452.aspx
+
 2013-06-19 by alderaan
 UI revisions on the artist and torrent group edit pages, with the most significant changes occurring in the artist aliases section%
 

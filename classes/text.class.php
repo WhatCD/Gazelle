@@ -212,10 +212,10 @@ class TEXT {
 		if (empty($URLInfo['port']) && preg_match('/(\S+\.)*'.NONSSL_SITE_URL.'/', $Host)) {
 			$URL = $URLInfo['path'];
 			if (!empty($URLInfo['query'])) {
-				$URL.='?'.$URLInfo['query'];
+				$URL .= '?'.$URLInfo['query'];
 			}
 			if (!empty($URLInfo['fragment'])) {
-				$URL.='#'.$URLInfo['fragment'];
+				$URL .= '#'.$URLInfo['fragment'];
 			}
 			return $URL;
 		} else {
@@ -376,9 +376,9 @@ class TEXT {
 
 				$InOpenRegex = '/\[('.$TagName.')';
 				if ($MaxAttribs > 0) {
-					$InOpenRegex.="(=[^\n'\"\[\]]+)?";
+					$InOpenRegex .= "(=[^\n'\"\[\]]+)?";
 				}
-				$InOpenRegex.='\]/i';
+				$InOpenRegex .= '\]/i';
 
 
 				// Every time we find an internal open tag of the same type, search for the next close tag
@@ -460,7 +460,7 @@ class TEXT {
 				case 'pre':
 				case 'code':
 				case 'plain':
-					$Block = strtr($Block, array('[inlineurl]'=>''));
+					$Block = strtr($Block, array('[inlineurl]' => ''));
 
 					$Callback = function ($matches) {
 						$n = $matches[2];

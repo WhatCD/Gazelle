@@ -216,7 +216,6 @@ $Options['ListUnreadPMsFirst']  = (!empty($_POST['list_unread_pms_first']) ? 1 :
 $Options['ShowSnatched']        = (!empty($_POST['showsnatched']) ? 1 : 0);
 $Options['DisableAutoSave']     = (!empty($_POST['disableautosave']) ? 1 : 0);
 $Options['NoVoteLinks']         = (!empty($_POST['novotelinks']) ? 1 : 0);
-
 $Options['CoverArt']            = (int) !empty($_POST['coverart']);
 $Options['ShowExtraCovers']     = (int) !empty($_POST['show_extra_covers']);
 
