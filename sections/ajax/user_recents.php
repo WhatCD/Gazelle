@@ -11,19 +11,19 @@ if (empty($Limit)) {
 $Results = array();
 if (check_paranoia_here('snatched')) {
 	$DB->query("
-			SELECT
-				g.ID,
-				g.Name,
-				g.WikiImage
-			FROM xbt_snatched AS s
+		SELECT
+			g.ID,
+			g.Name,
+			g.WikiImage
+		FROM xbt_snatched AS s
 			INNER JOIN torrents AS t ON t.ID = s.fid
 			INNER JOIN torrents_group AS g ON t.GroupID = g.ID
-			WHERE s.uid = '$UserID'
+		WHERE s.uid = '$UserID'
 			AND g.CategoryID = '1'
 			AND g.WikiImage != ''
-			GROUP BY g.ID
-			ORDER BY s.tstamp DESC
-			LIMIT $Limit");
+		GROUP BY g.ID
+		ORDER BY s.tstamp DESC
+		LIMIT $Limit");
 	$RecentSnatches = $DB->to_array(false, MYSQLI_ASSOC);
 	$Artists = Artists::get_artists($DB->collect('ID'));
 	foreach ($RecentSnatches as $Key => $SnatchInfo) {
@@ -38,18 +38,18 @@ if (check_paranoia_here('snatched')) {
 
 if (check_paranoia_here('uploads')) {
 	$DB->query("
-			SELECT
-				g.ID,
-				g.Name,
-				g.WikiImage
-			FROM torrents_group AS g
+		SELECT
+			g.ID,
+			g.Name,
+			g.WikiImage
+		FROM torrents_group AS g
 			INNER JOIN torrents AS t ON t.GroupID = g.ID
-			WHERE t.UserID = '$UserID'
+		WHERE t.UserID = '$UserID'
 			AND g.CategoryID = '1'
 			AND g.WikiImage != ''
-			GROUP BY g.ID
-			ORDER BY t.Time DESC
-			LIMIT $Limit");
+		GROUP BY g.ID
+		ORDER BY t.Time DESC
+		LIMIT $Limit");
 	$RecentUploads = $DB->to_array(false, MYSQLI_ASSOC);
 	$Artists = Artists::get_artists($DB->collect('ID'));
 	foreach ($RecentUploads as $Key => $UploadInfo) {

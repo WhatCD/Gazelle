@@ -115,12 +115,12 @@ if (!empty($_REQUEST['confirm'])) {
 			// User created, delete invite. If things break after this point, then it's better to have a broken account to fix than a 'free' invite floating around that can be reused
 			$DB->query("
 				DELETE FROM invites
-				WHERE InviteKey='".db_string($_REQUEST['invite'])."'");
+				WHERE InviteKey = '".db_string($_REQUEST['invite'])."'");
 
 			$DB->query("
 				SELECT ID
 				FROM stylesheets
-				WHERE `Default`='1'");
+				WHERE `Default` = '1'");
 			list($StyleID) = $DB->next_record();
 			$AuthKey = Users::make_secret();
 
@@ -128,15 +128,13 @@ if (!empty($_REQUEST['confirm'])) {
 				INSERT INTO users_info
 					(UserID, StyleID, AuthKey, Inviter, JoinDate)
 				VALUES
-					('$UserID','$StyleID','".db_string($AuthKey)."', '$InviterID', '".sqltime()."')");
+					('$UserID', '$StyleID', '".db_string($AuthKey)."', '$InviterID', '".sqltime()."')");
 
 			$DB->query("
 				INSERT INTO users_history_ips
 					(UserID, IP, StartTime)
 				VALUES
 					('$UserID', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."')");
-
-
 
 
 			$DB->query("
@@ -161,7 +159,7 @@ if (!empty($_REQUEST['confirm'])) {
 				$DB->query("
 					SELECT TreePosition, TreeID, TreeLevel
 					FROM invite_tree
-					WHERE UserID='$InviterID'");
+					WHERE UserID = '$InviterID'");
 				list($InviterTreePosition, $TreeID, $TreeLevel) = $DB->next_record();
 
 				// If the inviter doesn't have an invite tree
@@ -213,7 +211,9 @@ if (!empty($_REQUEST['confirm'])) {
 							('$UserID', '$InviterID', '$TreePosition', '$TreeID', '$TreeLevel')");
 				}
 			} else { // No inviter (open registration)
-				$DB->query("SELECT MAX(TreeID) FROM invite_tree");
+				$DB->query("
+					SELECT MAX(TreeID)
+					FROM invite_tree");
 				list($TreeID) = $DB->next_record();
 				$TreeID++;
 				$InviterID = 0;
@@ -225,10 +225,10 @@ if (!empty($_REQUEST['confirm'])) {
 			$TPL = NEW TEMPLATE;
 			$TPL->open(SERVER_ROOT.'/templates/new_registration.tpl');
 
-			$TPL->set('Username',$_REQUEST['username']);
-			$TPL->set('TorrentKey',$torrent_pass);
-			$TPL->set('SITE_NAME',SITE_NAME);
-			$TPL->set('SITE_URL',SITE_URL);
+			$TPL->set('Username', $_REQUEST['username']);
+			$TPL->set('TorrentKey', $torrent_pass);
+			$TPL->set('SITE_NAME', SITE_NAME);
+			$TPL->set('SITE_URL', SITE_URL);
 
 			Misc::send_email($_REQUEST['email'],'New account confirmation at '.SITE_NAME,$TPL->get(),'noreply');
 			Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
@@ -241,7 +241,7 @@ if (!empty($_REQUEST['confirm'])) {
 		$DB->query("
 			SELECT InviteKey
 			FROM invites
-			WHERE InviteKey='".db_string($_GET['invite'])."'");
+			WHERE InviteKey = '".db_string($_GET['invite'])."'");
 		if ($DB->record_count() == 0) {
 			error('Invite not found!');
 		}

@@ -164,7 +164,7 @@ if ($_POST['id'.$FormID] && is_number($_POST['id'.$FormID])) {
 		SET
 			Artists='$ArtistList',
 			ExcludeVA='$ExcludeVA',
-			NewGroupsOnly='$NewGrsoupsOnly',
+			NewGroupsOnly='$NewGroupsOnly',
 			Tags='$TagList',
 			NotTags='$NotTagList',
 			ReleaseTypes='$ReleaseTypeList',

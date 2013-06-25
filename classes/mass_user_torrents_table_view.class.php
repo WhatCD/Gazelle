@@ -242,7 +242,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 	 * @param string $VanityHouse
 	 * @return string $DisplayName
 	 */
-	static public function display_name (array &$ExtendedArtists, array &$Artists, $VanityHouse) {
+	public static function display_name (array &$ExtendedArtists, array &$Artists, $VanityHouse) {
 		$DisplayName = '';
 		if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4])
 				|| !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {

@@ -296,7 +296,7 @@ Your torrent was reported because it contained transcoded audio files.'
 				'reason' => '10',
 				'title' => 'Low Bitrate',
 				'report_messages' => array(
-					"Please tell us the actual bitrate, and the software used to check."
+					"Please tell us the actual bitrate and the software used to check."
 				),
 				'report_fields' => array(
 					'track' => '0'
@@ -444,9 +444,9 @@ Your torrent was reported because it contained a disallowed format.'
 				'reason' => '9',
 				'title' => 'Inaccurate Bitrate',
 				'report_messages' => array(
-					"Please tell us the actual bitrate, and the software used to check.",
-					"If the correct bitrate would make this torrent a duplicate, please report it as a dupe, and include the mislabeling in 'Comments'.",
-					"If the correct bitrate would result in this torrent trumping another, please report it as a trump, and include the mislabeling in 'Comments'."
+					"Please tell us the actual bitrate and the software used to check.",
+					"If the correct bitrate would make this torrent a duplicate, please report it as a dupe, and describe the mislabeling in \"Comments\".",
+					"If the correct bitrate would result in this torrent trumping another, please report it as a trump, and describe the mislabeling in \"Comments\"."
 				),
 				'report_fields' => array(
 					'track' => '0'
@@ -781,7 +781,7 @@ Your torrent was reported because it contained a hacking tool.'
 				'reason' => '-1',
 				'title' => 'Contains Virus',
 				'report_messages' => array(
-					'Please include as much information as possible to verify the report. Please also double check that your virus scanner is not incorrectly identifying a keygen or crack as a virus.',
+					'Please include as much information as possible to verify the report. Please also double-check that your virus scanner is not incorrectly identifying a keygen or crack as a virus.',
 				),
 				'report_fields' => array(
 					'link' => '0'

@@ -8,19 +8,19 @@ class TEXTAREA_PREVIEW_SUPER {
 	 * @static
 	 * @var int $Textareas Total number of textareas created
 	 */
-	static protected $Textareas = 0;
+	protected static $Textareas = 0;
 
 	/**
 	 * @static
 	 * @var array $_ID Array of textarea IDs
 	 */
-	static protected $_ID = array();
+	protected static $_ID = array();
 
 	/**
 	 * @static
 	 * @var bool For use in JavaScript method
 	 */
-	static private $Exectuted = false;
+	private static $Exectuted = false;
 
 	/**
 	 * This method should only run once with $all as true and should be placed
@@ -36,7 +36,7 @@ class TEXTAREA_PREVIEW_SUPER {
 	 * @example <pre><?php TEXT_PREVIEW::JavaScript(); ?></pre>
 	 * @return void
 	 */
-	static public function JavaScript ($all = true) {
+	public static function JavaScript ($all = true) {
 		if (self::$Textareas === 0) {
 			return;
 		}
@@ -56,7 +56,7 @@ class TEXTAREA_PREVIEW_SUPER {
 	 * @static
 	 * @return void
 	 */
-	static private function iterator () {
+	private static function iterator () {
 		$script = array();
 		for ($i = 0; $i < self::$Textareas; $i++) {
 			if (isset(self::$_ID[$i]) && is_string(self::$_ID[$i])) {

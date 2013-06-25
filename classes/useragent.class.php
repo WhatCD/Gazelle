@@ -1,6 +1,6 @@
 <?
 class UserAgent {
-	static private $Browsers = array(
+	private static $Browsers = array(
 		//Less popular
 		'Shiira'			=> 'Shiira',
 		'Songbird'			=> 'Songbird',
@@ -43,7 +43,7 @@ class UserAgent {
 		*/
 	);
 
-	static private $OperatingSystems = array(
+	private static $OperatingSystems = array(
 		//Mobile
 		'SymbianOS'			=> 'Symbian',
 		'blackberry'		=> 'BlackBerry',
@@ -114,7 +114,7 @@ class UserAgent {
 		if (empty($UserAgentString)) {
 			return 'Hidden';
 		}
-		foreach ($OperatingSystems as $String => $OperatingSystem) {
+		foreach (self::$OperatingSystems as $String => $OperatingSystem) {
 			if (stripos($UserAgentString, $String) !== false) {
 				return $OperatingSystem;
 			}
@@ -139,7 +139,7 @@ class UserAgent {
 			return 'Hidden';
 		}
 		$Return = 'Unknown';
-		foreach ($Browsers as $String => $Browser) {
+		foreach (self::$Browsers as $String => $Browser) {
 			if (strpos($UserAgentString, $String) !== false) {
 				$Return = $Browser;
 				break;

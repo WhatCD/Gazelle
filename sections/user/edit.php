@@ -256,7 +256,6 @@ echo $Val->GenerateJS('userform');
 					</select>
 				</td>
 			</tr>
-
 			<tr>
 				<td class="label"><strong>Torrent search</strong></td>
 				<td>
@@ -421,7 +420,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label">&nbsp;</td>
 				<td>
 					<p><span class="warning">Note: Paranoia has nothing to do with your security on this site; the only thing affected by this setting is other users' ability to see your site activity and taste in music.</span></p>
-					<p>Select the elements <strong>you want to show</strong> on your profile. For example, if you check "Show count" for "Snatched", users will be able to see how many torrents you have snatched. If you check "Show list", they will be able to see the full list of torrents you have snatched.</p>
+					<p>Select the elements <strong>you want to show</strong> on your profile. For example, if you select "Show count" for "Snatched", users will be able to see how many torrents you have snatched. If you select "Show list", they will be able to see the full list of torrents you have snatched.</p>
 					<p><span class="warning">Some information will still be available in the site log.</span></p>
 				</td>
 			</tr>

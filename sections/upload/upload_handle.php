@@ -922,8 +922,6 @@ if ($Properties['Media']) {
 $SQL .= "AND ((NewGroupsOnly = '0' ";
 // Or this is the first torrent in the group to match the formatbitrate filter
 $SQL .= ") OR ( NewGroupsOnly = '1' ";
-// Investigate the following line...
-$SQL .= ") OR ( NewGroupsOnly = '' ";
 // Test the filter doesn't match any previous formatbitrate in the group
 foreach ($UsedFormatBitrates as $UsedFormatBitrate) {
 	$FormatReq = "(Formats LIKE '%|".db_string($UsedFormatBitrate['format'])."|%' OR Formats = '') ";
