@@ -27,8 +27,13 @@ function check_name($Name) {
 	if (preg_match('/INCOMPLETE~\*/i', $Name)) {
 		forbidden_error($Name);
 	}
-	if (preg_match('/[:?]/', $Name, $Matches)) {
-		character_error($Matches[0]);
+	// Disallow the following characters, which are invalid in NTFS on Windows systems.
+	//   : ? / < > \ * | "
+	$AllBlockedChars = ' : ? / < > \ * | " ';
+	// Only the following characters need to be escaped:
+	//   \ - ^ ]
+	if (preg_match('/[\/\\:?<>*|"]*/', $Name, $Matches)) {
+		character_error($Matches[0], $AllBlockedChars);
 	}
 }
 
@@ -38,8 +43,7 @@ function check_extensions($Type, $Name) {
 		if (!isset($MusicExtensions[get_file_extension($Name)])) {
 			invalid_error($Name);
 		}
-	}
-	elseif ($Type == 'Comics') {
+	} elseif ($Type == 'Comics') {
 		if (!isset($ComicsExtensions[get_file_extension($Name)])) {
 			invalid_error($Name);
 		}
@@ -60,7 +64,7 @@ function forbidden_error($Name) {
 	$Err = 'The torrent contained one or more forbidden files (' . display_str($Name) . ')';
 }
 
-function character_error($Character) {
+function character_error($Character, $AllBlockedChars) {
 	global $Err;
-	$Err = "One or more of the files in the torrent has a name that contains the forbidden character '$Character'. Please rename the files as necessary and recreate the torrent.";
+	$Err = "One or more of the files in the torrent has a name that contains the forbidden character '$Character'. Please rename the files as necessary and recreate the torrent.\n\nNote: The complete list of characters that are disallowed are shown below:\n\n\t$AllBlockedChars";
 }

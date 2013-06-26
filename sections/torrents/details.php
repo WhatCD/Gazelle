@@ -689,7 +689,7 @@ foreach ($TorrentList as $Torrent) {
 				<td><?=number_format($Seeders)?></td>
 				<td><?=number_format($Leechers)?></td>
 			</tr>
-			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> torrentdetails pad <? if (!isset($_GET['torrentid']) || $_GET['torrentid']!=$TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
+			<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> torrentdetails pad <? if (!isset($_GET['torrentid']) || $_GET['torrentid'] != $TorrentID) { ?>hidden<? } ?>" id="torrent_<?=$TorrentID; ?>">
 				<td colspan="5">
 					<div id="release_<?=$TorrentID?>" class="no_overflow">
 						<blockquote>
@@ -702,7 +702,7 @@ foreach ($TorrentList as $Torrent) {
 <?		}
 	}
 
-	if (($Seeders === 0 &&$LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) || check_perms('users_mod')) { ?>
+	if (($Seeders === 0 && $LastActive != '0000-00-00 00:00:00' && time() - strtotime($LastActive) >= 345678 && time() - strtotime($LastReseedRequest) >= 864000) || check_perms('users_mod')) { ?>
 						<br /><a href="torrents.php?action=reseed&amp;torrentid=<?=$TorrentID?>&amp;groupid=<?=$GroupID?>" class="brackets">Request re-seed</a>
 <?	}
 
@@ -715,14 +715,14 @@ foreach ($TorrentList as $Torrent) {
 					</div>
 <?	} ?>
 					<div class="linkbox">
-						<a href="#" class="brackets" onclick="show_peers('<?=$TorrentID?>', 0);return false;">View peer list</a>
+						<a href="#" class="brackets" onclick="show_peers('<?=$TorrentID?>', 0); return false;">View peer list</a>
 <?	if (check_perms('site_view_torrent_snatchlist')) { ?>
-						<a href="#" class="brackets" onclick="show_downloads('<?=$TorrentID?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
-						<a href="#" class="brackets" onclick="show_snatches('<?=$TorrentID?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
+						<a href="#" class="brackets" onclick="show_downloads('<?=$TorrentID?>', 0); return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
+						<a href="#" class="brackets" onclick="show_snatches('<?=$TorrentID?>', 0); return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
 <?	}?>
-						<a href="#" class="brackets" onclick="show_files('<?=$TorrentID?>');return false;">View file list</a>
+						<a href="#" class="brackets" onclick="show_files('<?=$TorrentID?>'); return false;">View file list</a>
 <?	if ($Reported) { ?>
-						<a href="#" class="brackets" onclick="show_reported('<?=$TorrentID?>');return false;">View report information</a>
+						<a href="#" class="brackets" onclick="show_reported('<?=$TorrentID?>'); return false;">View report information</a>
 <?	} ?>
 					</div>
 					<div id="peers_<?=$TorrentID?>" class="hidden"></div>
@@ -783,15 +783,15 @@ if (empty($LoggedUser['DisableRequests']) && count($Requests) > 0) {
 		</div>
 <?
 }
-$Collages = $Cache->get_value('torrent_collages_'.$GroupID);
+$Collages = $Cache->get_value("torrent_collages_$GroupID");
 if (!is_array($Collages)) {
 	$DB->query("
 		SELECT c.Name, c.NumTorrents, c.ID
 		FROM collages AS c
-			JOIN collages_torrents AS ct ON ct.CollageID=c.ID
-		WHERE ct.GroupID='$GroupID'
-			AND Deleted='0'
-			AND CategoryID!='0'");
+			JOIN collages_torrents AS ct ON ct.CollageID = c.ID
+		WHERE ct.GroupID = '$GroupID'
+			AND Deleted = '0'
+			AND CategoryID != '0'");
 	$Collages = $DB->to_array();
 	$Cache->cache_value('torrent_collages_'.$GroupID, $Collages, 3600 * 6);
 }
@@ -833,17 +833,17 @@ if (count($Collages) > 0) {
 <?
 }
 
-$PersonalCollages = $Cache->get_value('torrent_collages_personal_'.$GroupID);
+$PersonalCollages = $Cache->get_value("torrent_collages_personal_$GroupID");
 if (!is_array($PersonalCollages)) {
 	$DB->query("
 		SELECT c.Name, c.NumTorrents, c.ID
 		FROM collages AS c
-			JOIN collages_torrents AS ct ON ct.CollageID=c.ID
-		WHERE ct.GroupID='$GroupID'
-			AND Deleted='0'
-			AND CategoryID='0'");
+			JOIN collages_torrents AS ct ON ct.CollageID = c.ID
+		WHERE ct.GroupID = '$GroupID'
+			AND Deleted = '0'
+			AND CategoryID = '0'");
 	$PersonalCollages = $DB->to_array(false, MYSQLI_NUM);
-	$Cache->cache_value('torrent_collages_personal_'.$GroupID, $PersonalCollages, 3600 * 6);
+	$Cache->cache_value("torrent_collages_personal_$GroupID", $PersonalCollages, 3600 * 6);
 }
 
 if (count($PersonalCollages) > 0) {
@@ -894,14 +894,14 @@ include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 // --- Comments ---
 
 // gets the amount of comments for this group
-$Results = $Cache->get_value('torrent_comments_'.$GroupID);
+$Results = $Cache->get_value("torrent_comments_$GroupID");
 if ($Results === false) {
 	$DB->query("
 		SELECT COUNT(c.ID)
 		FROM torrents_comments as c
 		WHERE c.GroupID = '$GroupID'");
 	list($Results) = $DB->next_record();
-	$Cache->cache_value('torrent_comments_'.$GroupID, $Results, 0);
+	$Cache->cache_value("torrent_comments_$GroupID", $Results, 0);
 }
 
 if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
@@ -911,9 +911,9 @@ if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_C
 		WHERE GroupID = $GroupID
 			AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
-	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$PostNum);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $PostNum);
 } else {
-	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE,$Results);
+	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $Results);
 }
 
 //Get the cache catalogue
@@ -923,7 +923,7 @@ $CatalogueLimit = $CatalogueID * THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 //---------- Get some data to start processing
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-$Catalogue = $Cache->get_value('torrent_comments_'.$GroupID.'_catalogue_'.$CatalogueID);
+$Catalogue = $Cache->get_value("torrent_comments_{$GroupID}_catalogue_$CatalogueID");
 if ($Catalogue === false) {
 	$DB->query("
 		SELECT
@@ -935,12 +935,12 @@ if ($Catalogue === false) {
 			c.EditedTime,
 			u.Username
 		FROM torrents_comments as c
-			LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
+			LEFT JOIN users_main AS u ON u.ID = c.EditedUserID
 		WHERE c.GroupID = '$GroupID'
 		ORDER BY c.ID
 		LIMIT $CatalogueLimit");
-	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
-	$Cache->cache_value('torrent_comments_'.$GroupID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
+	$Catalogue = $DB->to_array(false, MYSQLI_ASSOC);
+	$Cache->cache_value("torrent_comments_{$GroupID}_catalogue_$CatalogueID", $Catalogue, 0);
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
@@ -969,9 +969,9 @@ foreach ($Thread as $Key => $Post) {
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<div style="float: left;"><a class="post_id" href="torrents.php?id=<?=$GroupID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
-				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
+				- <a href="#quickpost" onclick="Quote('<?=$PostID?>', '<?=$Username?>');" class="brackets">Quote</a>
 <? 	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>', '<?=$Key?>');" class="brackets">Edit</a>
 <? 	}
 	if (check_perms('site_moderate_forums')) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
@@ -1015,7 +1015,7 @@ foreach ($Thread as $Key => $Post) {
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('torrents', <?=$PostID?>, 1); return false;">&laquo;</a>
 <? 		} ?>
 				Last edited by
-				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime, 2, true, true)?>
 <?	} ?>
 			</div>
 		</td>

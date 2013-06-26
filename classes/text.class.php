@@ -915,9 +915,13 @@ class TEXT {
 }
 /*
 
-//Uncomment this part to test the class via command line:
-function display_str($Str) {return $Str;}
-function check_perms($Perm) {return true;}
+// Uncomment this part to test the class via command line:
+function display_str($Str) {
+	return $Str;
+}
+function check_perms($Perm) {
+	return true;
+}
 $Str = "hello
 [pre]http://anonym.to/?http://whatshirts.portmerch.com/
 ====hi====

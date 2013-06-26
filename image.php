@@ -1,8 +1,8 @@
 <?
 /*-- Image Start Class ---------------------------------*/
 /*------------------------------------------------------*/
-/* Simplified version of script_start, used for the	 */
-/* sitewide image proxy.								*/
+/* Simplified version of script_start, used for the     */
+/* sitewide image proxy.                                */
 /*------------------------------------------------------*/
 /********************************************************/
 error_reporting(E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR);
@@ -12,29 +12,29 @@ if (isset($_SERVER['http_if_modified_since'])) {
 	die();
 }
 
-header('Expires: '.date('D, d-M-Y H:i:s \U\T\C',time() + 3600 * 24 * 120)); //120 days
-header('Last-Modified: '.date('D, d-M-Y H:i:s \U\T\C',time()));
+header('Expires: '.date('D, d-M-Y H:i:s \U\T\C', time() + 3600 * 24 * 120)); // 120 days
+header('Last-Modified: '.date('D, d-M-Y H:i:s \U\T\C', time()));
 
-require('classes/config.php'); //The config contains all site wide configuration information as well as memcached rules
+require('classes/config.php'); // The config contains all site wide configuration information as well as memcached rules
 
 if (!extension_loaded('gd')) {
 	error('nogd');
 }
 
-require(SERVER_ROOT.'/classes/cache.class.php'); //Require the caching class
-require(SERVER_ROOT.'/classes/encrypt.class.php'); //Require the encryption class
+require(SERVER_ROOT.'/classes/cache.class.php'); // Require the caching class
+require(SERVER_ROOT.'/classes/encrypt.class.php'); // Require the encryption class
 require(SERVER_ROOT.'/classes/regex.php');
 
-$Cache = NEW CACHE($MemcachedServers); //Load the caching class
-$Enc = NEW CRYPT; //Load the encryption class
+$Cache = NEW CACHE($MemcachedServers); // Load the caching class
+$Enc = NEW CRYPT; // Load the encryption class
 
 if (isset($_COOKIE['session'])) {
-	$LoginCookie=$Enc->decrypt($_COOKIE['session']);
+	$LoginCookie = $Enc->decrypt($_COOKIE['session']);
 }
 if (isset($LoginCookie)) {
-	list($SessionID, $UserID) = explode("|~|",$Enc->decrypt($LoginCookie));
+	list($SessionID, $UserID) = explode('|~|', $Enc->decrypt($LoginCookie));
 	$UserID = (int)$UserID;
-	$UserInfo = $Cache->get_value('user_info_'.$UserID);
+	$UserInfo = $Cache->get_value("user_info_$UserID");
 	$Permissions = $Cache->get_value('perm_'.$UserInfo['PermissionID']);
 }
 
@@ -55,7 +55,7 @@ function invisible($Image) {
 	}
 	$TotalAlpha = 0;
 	for ($i = 0; $i < $Count; ++$i) {
-		$Color = imagecolorsforindex($Image,$i);
+		$Color = imagecolorsforindex($Image, $i);
 		$TotalAlpha += $Color['alpha'];
 	}
 	return (($TotalAlpha/$Count) == 127) ? true : false;
@@ -77,19 +77,19 @@ function verysmall($Image) {
 }
 
 function image_type($Data) {
-	if (!strncmp($Data,'GIF',3)) {
+	if (!strncmp($Data, 'GIF', 3)) {
 		return 'gif';
 	}
-	if (!strncmp($Data,pack('H*','89504E47'),4)) {
+	if (!strncmp($Data, pack('H*', '89504E47'), 4)) {
 		return 'png';
 	}
-	if (!strncmp($Data,pack('H*','FFD8'),2)) {
+	if (!strncmp($Data, pack('H*', 'FFD8'), 2)) {
 		return 'jpeg';
 	}
-	if (!strncmp($Data,'BM',2)) {
+	if (!strncmp($Data, 'BM', 2)) {
 		return 'bmp';
 	}
-	if (!strncmp($Data,'II',2) || !strncmp($Data,'MM',2)) {
+	if (!strncmp($Data, 'II', 2) || !strncmp($Data, 'MM', 2)) {
 		return 'tiff';
 	}
 }
@@ -108,10 +108,12 @@ function image_height($Type, $Data) {
 			$Str []= "Started 4, + ".$Block['Length'];
 			while ($Data != '') { // iterate through the blocks until we find the start of frame marker (FFC0)
 				$Block = unpack('CBlock/CType/nLength', $Data); // Get info about the block
-				if ($Block['Block'] != '255') { break; } // We should be at the start of a new block
+				if ($Block['Block'] != '255') { // We should be at the start of a new block
+					break;
+				}
 				if ($Block['Type'] != '192') { // C0
 					$Data = substr($Data, $Block['Length'] + 2); // Next block
-					$Str []= "Started ".$i.", + ".($Block['Length'] + 2);
+					$Str []= "Started $i, + ".($Block['Length'] + 2);
 					$i += ($Block['Length'] + 2);
 				} else { // We're at the FFC0 block
 					$Data = substr($Data, 5); // Skip FF C0 Length(2) precision(1)
@@ -150,31 +152,31 @@ function send_pm($ToID, $FromID, $Subject, $Body, $ConvID = '') {
 			INSERT INTO pm_conversations_users
 				(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead)
 			VALUES
-				('$ToID', '$ConvID', '1','0','".sqltime()."', '".sqltime()."', '1')");
+				('$ToID', '$ConvID', '1', '0', '".sqltime()."', '".sqltime()."', '1')");
 		if ($FromID != 0) {
 			$DB->query("
 				INSERT INTO pm_conversations_users
 					(UserID, ConvID, InInbox, InSentbox, SentDate, ReceivedDate, UnRead)
 				VALUES
-					('$FromID', '$ConvID', '0','1','".sqltime()."', '".sqltime()."', '0')");
+					('$FromID', '$ConvID', '0', '1', '".sqltime()."', '".sqltime()."', '0')");
 		}
 	} else {
 		$DB->query("
 			UPDATE pm_conversations_users
 			SET
-				InInbox='1',
-				UnRead='1',
-				ReceivedDate='".sqltime()."'
-			WHERE UserID='$ToID'
-				AND ConvID='$ConvID'");
+				InInbox = '1',
+				UnRead = '1',
+				ReceivedDate = '".sqltime()."'
+			WHERE UserID = '$ToID'
+				AND ConvID = '$ConvID'");
 
 		$DB->query("
 			UPDATE pm_conversations_users
 			SET
-				InSentbox='1',
-				SentDate='".sqltime()."'
-			WHERE UserID='$FromID'
-				AND ConvID='$ConvID'");
+				InSentbox = '1',
+				SentDate = '".sqltime()."'
+			WHERE UserID = '$FromID'
+				AND ConvID = '$ConvID'");
 	}
 	$DB->query("
 		INSERT INTO pm_messages
@@ -186,20 +188,20 @@ function send_pm($ToID, $FromID, $Subject, $Body, $ConvID = '') {
 	/*$DB->query("
 		SELECT UnRead
 		FROM pm_conversations_users
-		WHERE ConvID='$ConvID'
-			AND UserID='$ToID'");
+		WHERE ConvID = '$ConvID'
+			AND UserID = '$ToID'");
 	*/
 	$DB->query("
 		SELECT COUNT(ConvID)
 		FROM pm_conversations_users
 		WHERE UnRead = '1'
-			AND UserID='$ToID'
+			AND UserID = '$ToID'
 			AND InInbox = '1'");
 	list($UnRead) = $DB->next_record(MYSQLI_BOTH, FALSE);
-	$Cache->cache_value('inbox_new_'.$ToID, $UnRead);
+	$Cache->cache_value("inbox_new_$ToID", $UnRead);
 
 	//if ($UnRead == 0) {
-	//	$Cache->increment('inbox_new_'.$ToID);
+	//	$Cache->increment("inbox_new_$ToID");
 	//}
 	return $ConvID;
 }
@@ -216,20 +218,26 @@ function display_str($Str) {
 	}
 	if ($Str != '' && !is_number($Str)) {
 		$Str = make_utf8($Str);
-		$Str = mb_convert_encoding($Str,"HTML-ENTITIES","UTF-8");
-		$Str = preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m","&amp;",$Str);
+		$Str = mb_convert_encoding($Str, 'HTML-ENTITIES', 'UTF-8');
+		$Str = preg_replace("/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,5};)/m", '&amp;', $Str);
 
 		$Replace = array(
 			"'",'"',"<",">",
-			'&#128;','&#130;','&#131;','&#132;','&#133;','&#134;','&#135;','&#136;','&#137;','&#138;','&#139;','&#140;','&#142;','&#145;','&#146;','&#147;','&#148;','&#149;','&#150;','&#151;','&#152;','&#153;','&#154;','&#155;','&#156;','&#158;','&#159;'
+			'&#128;','&#130;','&#131;','&#132;','&#133;','&#134;','&#135;','&#136;',
+			'&#137;','&#138;','&#139;','&#140;','&#142;','&#145;','&#146;','&#147;',
+			'&#148;','&#149;','&#150;','&#151;','&#152;','&#153;','&#154;','&#155;',
+			'&#156;','&#158;','&#159;'
 		);
 
 		$With = array(
 			'&#39;','&quot;','&lt;','&gt;',
-			'&#8364;','&#8218;','&#402;','&#8222;','&#8230;','&#8224;','&#8225;','&#710;','&#8240;','&#352;','&#8249;','&#338;','&#381;','&#8216;','&#8217;','&#8220;','&#8221;','&#8226;','&#8211;','&#8212;','&#732;','&#8482;','&#353;','&#8250;','&#339;','&#382;','&#376;'
+			'&#8364;','&#8218;','&#402;','&#8222;','&#8230;','&#8224;','&#8225;','&#710;',
+			'&#8240;','&#352;','&#8249;','&#338;','&#381;','&#8216;','&#8217;','&#8220;',
+			'&#8221;','&#8226;','&#8211;','&#8212;','&#732;','&#8482;','&#353;','&#8250;',
+			'&#339;','&#382;','&#376;'
 		);
 
-		$Str = str_replace($Replace,$With,$Str);
+		$Str = str_replace($Replace, $With, $Str);
 	}
 	return $Str;
 }

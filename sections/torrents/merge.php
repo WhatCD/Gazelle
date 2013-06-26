@@ -111,6 +111,8 @@ if (empty($_POST['confirm'])) {
 		$DB->query("DELETE FROM collages_torrents WHERE GroupID='$OldGroupID' AND CollageID='$CollageID'");
 		$Cache->delete_value('collage_'.$CollageID);
 	}
+	$Cache->delete_value('torrent_collages_'.$NewGroupID);
+	$Cache->delete_value('torrent_collages_personal_'.$NewGroupID);
 
 	//Requests
 	$DB->query("SELECT ID FROM requests WHERE GroupID='$OldGroupID'");

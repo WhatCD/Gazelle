@@ -82,7 +82,7 @@ function send_irc($Raw) {
  * @param boolean $Ajax If true, the header/footer won't be shown, just the description.
  * @param string $Log If true, the user is given a link to search $Log in the site log.
  */
-function error($Error, $Ajax=false, $Log=false) {
+function error($Error, $Ajax = false, $Log = false) {
 	global $Debug;
 	require(SERVER_ROOT.'/sections/error/index.php');
 	$Debug->profile();

@@ -35,9 +35,10 @@ $Name .= Artists::display_artists(array('1' => $Artists), false, true);
 $Name .= $GroupName;
 
 $DB->query("
-	SELECT uid, tstamp
+	SELECT uid, MAX(tstamp) AS tstamp
 	FROM xbt_snatched
 	WHERE fid='$TorrentID'
+	GROUP BY uid
 	ORDER BY tstamp DESC
 	LIMIT 10");
 if ($DB->record_count() > 0) {
