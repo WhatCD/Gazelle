@@ -20,7 +20,7 @@ if ($ConvID = (int)$_GET['id']) {
 		$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
 	}
 
-	View::show_header('Staff PM', 'staffpm,bbcode,jquery');
+	View::show_header('Staff PM', 'staffpm,bbcode');
 
 	$UserInfo = Users::user_info($UserID);
 	$UserStr = Users::format_username($UserID, true, true, true, true);

@@ -122,7 +122,7 @@ if ($StickyPostID == $PostID) {
 $ThisCatalogue = floor((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 $LastCatalogue = floor((POSTS_PER_PAGE * $Pages - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-	$Cache->delete('thread_'.$TopicID.'_catalogue_'.$i);
+	$Cache->delete_value('thread_'.$TopicID.'_catalogue_'.$i);
 }
 
 $Cache->begin_transaction('thread_'.$TopicID.'_info');
@@ -133,5 +133,5 @@ $Cache->begin_transaction('forums_list');
 $Cache->update_row($ForumID, $UpdateArrayForums);
 $Cache->commit_transaction();
 
-$Cache->delete('forums_'.$ForumID);
+$Cache->delete_value('forums_'.$ForumID);
 ?>

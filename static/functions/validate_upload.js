@@ -1,4 +1,4 @@
-(function ($) {
+(function () {
 	$(document).ready(function () {
 		// Upload button is clicked
 		$("#post").click(function(e) {
@@ -25,4 +25,4 @@
 			}
 		}
 	});
-})(jQuery);
+})();

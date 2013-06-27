@@ -10,7 +10,7 @@ if ($Edit > $LoggedUser['EffectiveClass']) {
 	error('You do not have access to edit this article.');
 }
 
-View::show_header('Edit '.$Title, 'jquery');
+View::show_header('Edit '.$Title);
 ?>
 <div class="thin">
 	<div class="box pad">

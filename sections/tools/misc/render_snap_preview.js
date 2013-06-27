@@ -31,7 +31,7 @@ page.open('preview.html', function () {
 	}
 	page.viewportSize = {
 		width: 1200,
-		height: 1000
+		height: 800
 	};
 	// Save files to static
 	fs.changeWorkingDirectory(rootPath + '/' + staticPath + '/stylespreview');
@@ -48,23 +48,11 @@ page.open('preview.html', function () {
 		console.log(JSON.stringify(returnStatus));
 		phantom.exit();
 	}
-	page.viewportSize = {
-		width: 600,
-		height: 500
-	};
-	page.zoomFactor = 0.5;
-	page.render('thumb_' + system.args[3] + '.png');
-	if (!fs.isFile('thumb_' + system.args[3] + '.png')) {
-		// Failed to store thumbnail image.
-		returnStatus.status = -6;
-		console.log(JSON.stringify(returnStatus));
-		phantom.exit();
-	}
 	// Remove temp files
 	fs.changeWorkingDirectory(rootPath + '/' + staticPath + 'styles/' + system.args[3] + '/');
 	if (!fs.isFile('preview.html') || !fs.isWritable('preview.html')) {
 		// Can't find temp file to remove. Are the paths correct?
-		returnStatus.status = -7;
+		returnStatus.status = -6;
 		console.log(JSON.stringify(returnStatus));
 		phantom.exit();
 	}

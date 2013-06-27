@@ -6,7 +6,10 @@
 // the data to the database and the torrent to the disk.						//
 //******************************************************************************//
 
-ini_set('upload_max_filesize', 2097152);
+// Maximum allowed size for uploaded files.
+// http://php.net/upload-max-filesize
+ini_set('upload_max_filesize', 2097152); // 2 Mibibytes
+
 ini_set('max_file_uploads', 100);
 define(MAX_FILENAME_LENGTH, 180);
 include(SERVER_ROOT.'/classes/validate.class.php');
@@ -389,6 +392,7 @@ $HasCue = 0;
 $TmpFileList = array();
 $TooLongPaths = array();
 $DirName = (isset($Tor->Dec['info']['files']) ? Format::make_utf8($Tor->get_name()) : '');
+check_name($DirName); // check the folder name against the blacklist
 foreach ($FileList as $File) {
 	list($Size, $Name) = $File;
 	// add +log to encoding
@@ -663,6 +667,10 @@ $TorrentID = $DB->inserted_id();
 
 Tracker::update_tracker('add_torrent', array('id' => $TorrentID, 'info_hash' => rawurlencode($InfoHash), 'freetorrent' => $T['FreeLeech']));
 $Debug->set_flag('upload: ocelot updated');
+
+// Prevent deletion of this torrent until the rest of the upload process is done
+// (expire the key after 10 minutes to prevent locking it for too long in case there's a fatal error below)
+$Cache->cache_value('torrent_'.$TorrentID.'_lock', true, 600);
 
 //******************************************************************************//
 //--------------- Write torrent file -------------------------------------------//
@@ -1032,4 +1040,7 @@ if ($Type == 'Comics') {
 }
 
 // Clear Cache
-$Cache->delete('torrents_details_'.$GroupID);
+$Cache->delete_value('torrents_details_'.$GroupID);
+
+// Allow deletion of this torrent now
+$Cache->delete_value('torrent_'.$TorrentID.'_lock');

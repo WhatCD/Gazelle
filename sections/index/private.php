@@ -29,7 +29,7 @@ if ($LoggedUser['LastReadNews'] != $News[0][0]) {
 	$LoggedUser['LastReadNews'] = $News[0][0];
 }
 
-View::show_header('News','bbcode,jquery,news_ajax');
+View::show_header('News','bbcode,news_ajax');
 ?>
 <div class="thin">
 	<div class="sidebar">

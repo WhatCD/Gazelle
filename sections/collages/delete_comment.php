@@ -36,6 +36,6 @@ $Cache->increment_value('collage_comments_'.$CollageID, -1);
 $ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 $LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-	$Cache->delete('collage_comments_'.$CollageID.'_catalogue_'.$i);
+	$Cache->delete_value('collage_comments_'.$CollageID.'_catalogue_'.$i);
 }
 ?>

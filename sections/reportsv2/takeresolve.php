@@ -58,6 +58,11 @@ if (!isset($CategoryID)) {
 $TorrentID = $Escaped['torrentid'];
 $RawName = $Escaped['raw_name'];
 
+if (isset($Escaped['delete']) && $Cache->get_value('torrent_'.$TorrentID.'_lock')) {
+	echo 'You requested to delete the torrent '.$TorrentID.', but this is currently not possible because the upload process is still running. Please try again later.';
+	die();
+}
+
 if (($Escaped['resolve_type'] == "manual" || $Escaped['resolve_type'] == "dismiss" ) && $Report) {
 	if ($Escaped['comment']) {
 		$Comment = $Escaped['comment'];

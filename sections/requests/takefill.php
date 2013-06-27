@@ -133,20 +133,14 @@ if ($CategoryName == 'Music') {
 		if ($Bitrate === 'Lossless' || $Bitrate === 'APS (VBR)' || $Bitrate === 'V2 (VBR)' || $Bitrate === 'V1 (VBR)' || $Bitrate === '256' || $Bitrate === 'APX (VBR)' || $Bitrate === 'V0 (VBR)' || $Bitrate === 'q8.x (VBR)' || $Bitrate === '320' || $Bitrate === '24bit Lossless') {
 			$Err = "$Bitrate is not an allowed bitrate for this request.";
 		}
-	} elseif ($BitrateList && $BitrateList != 'Any') {
-		if (strpos($BitrateList, $Bitrate) === false) {
-			$Err = "$Bitrate is not an allowed bitrate for this request.";
-		}
+	} elseif ($BitrateList && $BitrateList != 'Any' && !Misc::search_joined_string($BitrateList, $Bitrate)) {
+		$Err = "$Bitrate is not an allowed bitrate for this request.";
 	}
-	if ($FormatList && $FormatList != 'Any') {
-		if (strpos($FormatList, $Format) === false) {
-			$Err = "$Format is not an allowed format for this request.";
-		}
+	if ($FormatList && $FormatList != 'Any' && !Misc::search_joined_string($FormatList, $Format)) {
+		$Err = "$Format is not an allowed format for this request.";
 	}
-	if ($MediaList && $MediaList != 'Any') {
-		if (strpos($MediaList, $Media) === false) {
-			$Err = "$Media is not allowed media for this request.";
-		}
+	if ($MediaList && $MediaList != 'Any' && !Misc::search_joined_string($MediaList, $Media)) {
+		$Err = "$Media is not allowed media for this request.";
 	}
 }
 

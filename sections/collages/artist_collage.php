@@ -90,7 +90,7 @@ for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) {
 	$CollagePages[] = $CollagePage;
 }
 
-View::show_header($Name,'browse,collage,bbcode,voting,jquery,recommend');
+View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 
 ?>
 <div class="thin">

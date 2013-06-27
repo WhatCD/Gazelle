@@ -58,7 +58,7 @@ if ($SiteOptions) {
 	$SiteOptions = array();
 }
 
-View::show_header($Username.' &gt; Settings','user,jquery,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery,preview_paranoia,bbcode');
+View::show_header($Username.' &gt; Settings','user,jquery-ui,release_sort,password_validate,validate,push_settings,cssgallery,preview_paranoia,bbcode');
 
 
 

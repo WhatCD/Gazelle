@@ -145,7 +145,7 @@ if ($CategoryName == "Music") {
 	}
 
 	//$Bitrates[1] = FLAC
-	if (!empty($FormatArray) && in_array(1, $FormatArray)) {
+	if (!empty($FormatArray) && in_array(array_search('FLAC', $Formats), $FormatArray)) {
 		$NeedLog = empty($_POST['needlog']) ? false : true;
 		if ($NeedLog) {
 			if ($_POST['minlogscore']) {
@@ -159,7 +159,7 @@ if ($CategoryName == "Music") {
 		}
 		$NeedCue = empty($_POST['needcue']) ? false : true;
 		//FLAC was picked, require either Lossless or 24 bit Lossless
-		if (!$AllBitrates && !in_array(8, $BitrateArray) && !in_array(9, $BitrateArray)) {
+		if (!$AllBitrates && !in_array(array_search('Lossless', $Bitrates), $BitrateArray) && !in_array(array_search('24bit Lossless', $Bitrates), $BitrateArray)) {
 			$Err = 'You selected FLAC as a format but no possible bitrate to fill it (Lossless or 24bit Lossless)';
 		}
 

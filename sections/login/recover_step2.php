@@ -1,8 +1,8 @@
 <?
-View::show_header('Recover Password','validate');
+View::show_header('Recover Password');
 echo $Validate->GenerateJS('recoverform');
 ?>
-<script src="<?=(STATIC_SERVER)?>functions/jquery.js" type="text/javascript"></script>
+<script src="<?=(STATIC_SERVER)?>functions/validate.js" type="text/javascript"></script>
 <script src="<?=(STATIC_SERVER)?>functions/password_validate.js" type="text/javascript"></script>
 <form class="auth_form" name="recovery" id="recoverform" method="post" action="" onsubmit="return formVal();">
 	<input type="hidden" name="key" value="<?=display_str($_REQUEST['key'])?>" />

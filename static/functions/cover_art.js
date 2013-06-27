@@ -1,4 +1,4 @@
-(function ($) {
+(function () {
 	var show_all = false;
 	var current;
 	$(document).ready(function() {
@@ -45,7 +45,7 @@
 				$(this).text("Show all");
 				$("#covers div").each(function() {
 					if ($(this).attr("class") != "head") {
-						if($(this).attr("id") != current) {
+						if ($(this).attr("id") != current) {
 							$(this).hide();
 						}
 						$(".next_cover").show();
@@ -57,4 +57,4 @@
 
 		});
 	});
-}(jQuery));
+})();

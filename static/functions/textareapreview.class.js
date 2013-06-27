@@ -1,5 +1,5 @@
 var TextareaPreview;
-jQuery(document).ready(function ($) {
+$(document).ready(function () {
 	'use strict';
 	TextareaPreview = function (id, textarea_id) {
 		if (!isNaN(+id)) {

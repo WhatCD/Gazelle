@@ -8,7 +8,7 @@
  */
 
 
-(function($) {
+(function() {
 //global variables
 var $year_release_group;
 var $release_type;
@@ -426,4 +426,4 @@ function loadCSS() {
 	$link = null;
 }
 
-} ) ( jQuery );
+})();

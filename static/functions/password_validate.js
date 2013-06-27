@@ -3,7 +3,7 @@
 * Validates passwords to make sure they are powerful
 **/
 
-(function($) {
+(function() {
 var CLEAR = 0;
 var WEAK = 1;
 var STRONG = 3;
@@ -192,5 +192,5 @@ function isUserPage() {
 	return window.location.pathname.indexOf(USER_PATH) != -1;
 }
 
-} ) ( jQuery );
+})();
 

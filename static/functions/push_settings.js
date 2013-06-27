@@ -1,4 +1,4 @@
-(function ($) {
+(function() {
 	var PUSHOVER = 5;
 	var TOASTY = 4;
 	$(document).ready(function() {
@@ -21,4 +21,4 @@
 			}
 		});
 	});
-}(jQuery));
+})();

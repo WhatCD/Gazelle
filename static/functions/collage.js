@@ -62,11 +62,7 @@ var collageShow = {
 			}
 		}
 
-		lists = $('.collage_images').objects;
-		i = lists.length;
-		while (i--) {
-			$(lists[i]).ghide();
-		}
+		$('.collage_images').ghide();
 
 		$(ul).gshow();
 		if (s) {

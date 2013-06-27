@@ -96,7 +96,7 @@ if (!$CoverArt) {
 
 
 // Start output
-View::show_header($Title,'jquery,browse,comments,torrent,bbcode,recommend,cover_art');
+View::show_header($Title,'browse,comments,torrent,bbcode,recommend,cover_art');
 ?>
 <div class="thin">
 	<div class="header">

@@ -24,7 +24,7 @@ list($Username) = $DB->next_record();
 if (!$Username) {
 	error(404);
 }
-View::show_header('Compose', 'inbox,bbcode,jquery,jquery.validate,form_validate');
+View::show_header('Compose', 'inbox,bbcode,jquery.validate,form_validate');
 ?>
 <div class="thin">
 	<div class="header">

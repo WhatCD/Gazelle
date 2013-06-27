@@ -7,10 +7,10 @@ function clearItem(torrentId) {
 function clearSelected(filterId) {
 	var checkBoxes, checkedBoxes = [];
 	if (filterId) {
-		var filterForm = $('#notificationform_'+filterId).raw();
-		checkBoxes = $('.notify_box_'+filterId, filterForm).objects;
+		var filterForm = $('#notificationform_'+filterId);
+		checkBoxes = $('.notify_box_'+filterId, filterForm);
 	} else {
-		checkBoxes = $('.notify_box').objects;
+		checkBoxes = $('.notify_box');
 	}
 	for (var i = checkBoxes.length - 1; i >= 0; i--) {
 		if (checkBoxes[i].checked) {
@@ -25,10 +25,10 @@ function clearSelected(filterId) {
 }
 
 function toggleBoxes(filterId, value) {
-	var filterForm = $('#notificationform_'+filterId).raw();
-	var checkBoxes = $('.notify_box_'+filterId, filterForm).objects;
+	var filterForm = $('#notificationform_'+filterId);
+	var checkBoxes = $('.notify_box_'+filterId, filterForm);
 	for (var i = checkBoxes.length - 1; i >= 0; i--) {
-		checkBoxes[i].checked = value;
+		$(checkBoxes[i]).prop('checked', value);
 	}
 }
 

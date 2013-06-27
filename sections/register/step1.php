@@ -1,8 +1,8 @@
 <?
-View::show_header('Register','validate');
+View::show_header('Register');
 echo $Val->GenerateJS('registerform');
 ?>
-<script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
+<script src="<?=STATIC_SERVER?>functions/validate.js" type="text/javascript"></script>
 <script src="<?=STATIC_SERVER?>functions/password_validate.js" type="text/javascript"></script>
 <form class="create_form" name="user" id="registerform" method="post" action="" onsubmit="return formVal();">
 <div style="width: 500px;">

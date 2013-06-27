@@ -119,8 +119,8 @@ function Bookmark(type, id, newName) {
 	if (window.location.pathname.indexOf('top10.php') != -1 || window.location.search.indexOf('?action=notify') != -1) {
 		var oldName = $('#bookmarklink_' + type + '_' + id).raw().innerHTML;
 		ajax.get("bookmarks.php?action=add&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
-			var bookmarklinks = $('#bookmarklink_' + type + '_' + id).objects;
-			for (var i = 0; i < bookmarklinks.length; i++) {
+			var bookmarklinks = $('#bookmarklink_' + type + '_' + id);
+			for (var i = 0; i < bookmarklinks.results(); i++) {
 				$(bookmarklinks[i].parentNode.parentNode.parentNode).add_class('bookmarked');
 				bookmarklinks[i].onclick = function() { Unbookmark(type, id, oldName); return false; };
 				bookmarklinks[i].innerHTML = newName;
@@ -148,8 +148,8 @@ function Unbookmark(type, id, newName) {
 	} else if (window.location.pathname.indexOf('top10.php') != -1  || window.location.search.indexOf('?action=notify') != -1) {
 		var oldName = $('#bookmarklink_' + type + '_' + id).raw().innerHTML;
 		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
-			var bookmarklinks = $('#bookmarklink_' + type + '_' + id).objects;
-			for (var i = 0; i < bookmarklinks.length; i++) {
+			var bookmarklinks = $('#bookmarklink_' + type + '_' + id);
+			for (var i = 0; i < bookmarklinks.results(); i++) {
 				$(bookmarklinks[i].parentNode.parentNode.parentNode).remove_class('bookmarked');
 				bookmarklinks[i].onclick = function() { Bookmark(type, id, oldName); return false; };
 				bookmarklinks[i].innerHTML = newName;

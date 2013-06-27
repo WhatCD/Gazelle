@@ -10,7 +10,7 @@
 //**********************************************************************//
 
 ini_set('max_file_uploads','100');
-View::show_header('Upload','upload,jquery,validate_upload,valid_tags,musicbrainz,multiformat_uploader');
+View::show_header('Upload','upload,validate_upload,valid_tags,musicbrainz,multiformat_uploader');
 
 if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	$DB->query('
@@ -124,10 +124,11 @@ $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
 		list($Name, $Comment, $Updated) = $BadUpload;
 ?>
 		<tr>
-			<td><?=$Text->full_format($Name)?>
+			<td>
+				<?=$Text->full_format($Name) . "\n" ?>
 <?		if ($TimeDiff < strtotime($Updated)) { ?>
-				 <strong class="important_text">(New!)</strong>
-		<? } ?>
+				<strong class="important_text">(New!)</strong>
+<?		} ?>
 			</td>
 			<td><?=$Text->full_format($Comment)?></td>
 		</tr>

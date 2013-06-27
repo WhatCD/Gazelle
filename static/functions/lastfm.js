@@ -1,5 +1,4 @@
-
-(function ($) {
+(function() {
 	var username;
 	// How many entries to show per category before expanding
 	var initialCount = 3;
@@ -14,7 +13,7 @@
 	var flag = 0;
 	$(document).ready(function () {
 		// Avoid conflicting with other jQuery instances (userscripts et al).
-		$.noConflict();
+//		$.noConflict(); // Why is this needed?
 		// Fetch the username (appended from php) to base all get requests on.
 		username = $('#lastfm_username').text();
 		var div = $('#lastfm_stats');
@@ -356,4 +355,4 @@
 		});
 	}
 
-})(jQuery);
+})();

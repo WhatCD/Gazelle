@@ -25,7 +25,40 @@ var listener = {
 
 // http://www.thefutureoftheweb.com/blog/adddomloadevent
 // retrieved 2010-08-12
-var addDOMLoadEvent=(function(){var e=[],t,s,n,i,o,d=document,w=window,r='readyState',c='onreadystatechange',x=function(){n=1;clearInterval(t);while(i=e.shift())i();if(s)s[c]=''};return function(f){if(n)return f();if(!e[0]){d.addEventListener&&d.addEventListener("DOMContentLoaded",x,false);/*@cc_on@*//*@if(@_win32)d.write("<script id=__ie_onload defer src=//0><\/scr"+"ipt>");s=d.getElementById("__ie_onload");s[c]=function(){s[r]=="complete"&&x()};/*@end@*/if(/WebKit/i.test(navigator.userAgent))t=setInterval(function(){/loaded|complete/.test(d[r])&&x()},10);o=w.onload;w.onload=function(){x();o&&o()}}e.push(f)}})();
+var addDOMLoadEvent = (
+	function() {
+		var e = [], t, s, n, i, o, d = document, w = window, r = 'readyState', c = 'onreadystatechange',
+			x = function() {
+					n = 1;
+					clearInterval(t);
+					while (i = e.shift()) {
+						i();
+					}
+					if (s) {
+						s[c] = ''
+					}
+				};
+		return function(f) {
+				if (n) {
+					return f();
+				}
+				if (!e[0]) {
+					d.addEventListener && d.addEventListener("DOMContentLoaded", x, false);
+					/*@cc_on@*//*@if(@_win32)d.write("<script id=__ie_onload defer src=//0><\/scr"+"ipt>");s=d.getElementById("__ie_onload");s[c]=function(){s[r]=="complete"&&x()};/*@end@*/
+					if (/WebKit/i.test(navigator.userAgent))
+						t = setInterval(function() {
+								/loaded|complete/.test(d[r]) && x()
+								}, 10);
+						o = w.onload;
+						w.onload = function() {
+								x();
+								o && o()
+								}
+				}
+				e.push(f)
+				}
+	}
+)();
 
 //PHP ports
 function isset(variable) {
@@ -56,7 +89,7 @@ function get_size(size) {
 		size = size / 1024;
 	}
 	var ext;
-	switch(steps) {
+	switch (steps) {
 		case 1: ext = ' B';
 				break;
 		case 1: ext = ' KB';
@@ -111,7 +144,7 @@ function ratio(dividend, divisor, color) {
 	if (color) {
 		var col = get_ratio_color(rat);
 		if (col) {
-			rat = '<span class="'+col+'">'+rat+'</span>';
+			rat = '<span class="' + col + '">' + rat + '</span>';
 		}
 	}
 	return rat;
@@ -161,43 +194,19 @@ var util = function (selector, context) {
 	return new util.fn.init(selector, context);
 }
 
-util.fn = util.prototype = {
-	objects: new Array(),
-	init: function (selector, context) {
-		if (typeof(selector) == 'object') {
-			this.objects[0] = selector;
-		} else {
-			this.objects = Sizzle(selector, context);
-		}
-		return this;
-	},
+jQuery.extend(jQuery.prototype, {
 	results: function () {
-		return this.objects.length;
-	},
-	show: function () {
-		return this.remove_class('hidden');
+		return this.size();
 	},
 	gshow: function () {
 		return this.remove_class('hidden');
 	},
-	hide: function (force) {
-		return this.add_class('hidden', force);
-	},
 	ghide: function (force) {
 		return this.add_class('hidden', force);
 	},
-	toggle: function (force) {
-		//Should we interate and invert all entries, or just go by the first?
-		if (!in_array('hidden', this.objects[0].className.split(' '))) {
-			this.add_class('hidden', force);
-		} else {
-			this.remove_class('hidden');
-		}
-		return this;
-	},
 	gtoggle: function (force) {
 		//Should we interate and invert all entries, or just go by the first?
-		if (!in_array('hidden', this.objects[0].className.split(' '))) {
+		if (!in_array('hidden', this[0].className.split(' '))) {
 			this.add_class('hidden', force);
 		} else {
 			this.remove_class('hidden');
@@ -205,8 +214,8 @@ util.fn = util.prototype = {
 		return this;
 	},
 	listen: function (event, callback) {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			var object = this.objects[i];
+		for (var i=0,il=this.size();i<il;i++) {
+			var object = this[i];
 			if (document.addEventListener) {
 				object.addEventListener(event, callback, false);
 			} else {
@@ -215,27 +224,9 @@ util.fn = util.prototype = {
 		}
 		return this;
 	},
-	unbind: function (event, callback) {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			var object = this.objects[i];
-			if (document.addEventListener) {
-				object.removeEventListener(event, callback, false);
-			} else {
-				object.detachEvent('on' + event, callback);
-			}
-		}
-		return this;
-	},
-	remove: function () {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			var object = this.objects[i];
-			object.parentNode.removeChild(object);
-		}
-		return this;
-	},
 	add_class: function (class_name, force) {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			var object = this.objects[i];
+		for (var i=0,il=this.size();i<il;i++) {
+			var object = this[i];
 			if (object.className === '') {
 				object.className = class_name;
 			} else if (force || !in_array(class_name, object.className.split(' '))) {
@@ -245,8 +236,8 @@ util.fn = util.prototype = {
 		return this;
 	},
 	remove_class: function (class_name) {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			var object = this.objects[i];
+		for (var i=0,il=this.size();i<il;i++) {
+			var object = this[i];
 			var classes = object.className.split(' ');
 			var result = array_search(class_name, classes);
 			if (result !== false) {
@@ -257,8 +248,8 @@ util.fn = util.prototype = {
 		return this;
 	},
 	has_class: function(class_name) {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			var object = this.objects[i];
+		for (var i=0,il=this.size();i<il;i++) {
+			var object = this[i];
 			var classes = object.className.split(' ');
 			if (array_search(class_name, classes)) {
 				return true;
@@ -267,8 +258,8 @@ util.fn = util.prototype = {
 		return false;
 	},
 	toggle_class: function(class_name) {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			var object = this.objects[i];
+		for (var i=0,il=this.size();i<il;i++) {
+			var object = this[i];
 			var classes = object.className.split(' ');
 			var result = array_search(class_name, classes);
 			if (result !== false) {
@@ -285,22 +276,16 @@ util.fn = util.prototype = {
 		return this;
 	},
 	disable : function () {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			this.objects[i].disabled = true;
+		for (var i=0,il=this.size();i<il;i++) {
+			this[i].disabled = true;
 		}
 		return this;
 	},
 	enable : function () {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			if (this.objects[i].disabled == true) {
-				this.objects[i].disabled = false;
+		for (var i=0,il=this.size();i<il;i++) {
+			if (this[i].disabled == true) {
+				this[i].disabled = false;
 			}
-		}
-		return this;
-	},
-	html : function (html) {
-		for (var i = 0, il = this.objects.length; i < il; i++) {
-			this.objects[i].innerHTML = html;
 		}
 		return this;
 	},
@@ -308,10 +293,10 @@ util.fn = util.prototype = {
 		if (number === undefined) {
 			number = 0;
 		}
-		return this.objects[number];
+		return this[number];
 	},
 	nextElementSibling: function () {
-		var here = this.objects[0];
+		var here = this[0];
 		if (here.nextElementSibling) {
 			return $(here.nextElementSibling);
 		}
@@ -321,7 +306,7 @@ util.fn = util.prototype = {
 		return $(here);
 	},
 	previousElementSibling: function () {
-		var here = this.objects[0];
+		var here = this[0];
 		if (here.previousElementSibling) {
 			return $(here.previousElementSibling);
 		}
@@ -330,7 +315,4 @@ util.fn = util.prototype = {
 		} while (here.nodeType != 1);
 		return $(here);
 	}
-}
-
-util.fn.init.prototype = util.fn;
-var $ = util;
+});

@@ -101,7 +101,7 @@ if (isset($_POST['delete'])) {
 				LastPostTime='$NewLastAddedTime'
 			WHERE ID='$ForumID'");
 
-		$Cache->delete('thread_'.$TopicID);
+		$Cache->delete_value('thread_'.$TopicID);
 
 
 		$Cache->begin_transaction('forums_list');

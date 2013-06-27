@@ -468,6 +468,18 @@ class Misc {
 	}
 
 	/**
+	 * Search for $Needle in the string $Haystack which is a list of values separated by $Separator.
+	 * @param string $Haystack
+	 * @param string $Needle
+	 * @param string $Separator
+	 * @param boolean $Strict
+	 * @return boolean
+	 */
+	public static function search_joined_string($Haystack, $Needle, $Separator = '|', $Strict = true) {
+		return (array_search($Needle, explode($Separator, $Haystack), $Strict) !== false);
+	}
+
+	/**
 	 * Check for a : in the beginning of a torrent meta data string
 	 * to see if it's stored in the old base64-encoded format
 	 *

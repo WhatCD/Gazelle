@@ -210,11 +210,11 @@ if (!isset($_REQUEST['action'])) {
 			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-				$Cache->delete('request_comments_'.$RequestID.'_catalogue_'.$i);
+				$Cache->delete_value('request_comments_'.$RequestID.'_catalogue_'.$i);
 			}
 
 			// Delete thread info cache (eg. number of pages)
-			$Cache->delete('request_comments_'.$GroupID);
+			$Cache->delete_value('request_comments_'.$GroupID);
 		break;
 		case 'warn' :
 			include(SERVER_ROOT.'/sections/requests/warn.php');

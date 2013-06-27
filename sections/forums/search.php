@@ -86,7 +86,7 @@ if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
 }
 
 // Let's hope we got some results - start printing out the content.
-View::show_header('Forums &gt; Search', 'bbcode,jquery,forum_search');
+View::show_header('Forums &gt; Search', 'bbcode,forum_search');
 ?>
 <div class="thin">
 	<div class="header">

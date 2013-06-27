@@ -19,6 +19,10 @@ if ($DB->record_count() < 1) {
 	error('Torrent already deleted.');
 }
 
+if ($Cache->get_value('torrent_'.$TorrentID.'_lock')) {
+	error('Torrent cannot be deleted because the upload process is not completed yet. Please try again later.');
+}
+
 
 list($UserID, $Time, $Snatches) = $DB->next_record();
 

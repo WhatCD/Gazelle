@@ -27,12 +27,20 @@ function check_name($Name) {
 	if (preg_match('/INCOMPLETE~\*/i', $Name)) {
 		forbidden_error($Name);
 	}
-	// Disallow the following characters, which are invalid in NTFS on Windows systems.
-	//   : ? / < > \ * | "
-	$AllBlockedChars = ' : ? / < > \ * | " ';
-	// Only the following characters need to be escaped:
-	//   \ - ^ ]
-	if (preg_match('/[\/\\:?<>*|"]*/', $Name, $Matches)) {
+
+	/*
+	 * These characters are invalid in NTFS on Windows systems:
+	 *		: ? / < > \ * | "
+	 *
+	 * TODO: Add "/" to the blacklist. Adding "/" to the blacklist causes problems with nested dirs, apparently.
+	 *
+	 * Only the following characters need to be escaped (see the link below):
+	 *		\ - ^ ]
+	 *
+	 * http://www.php.net/manual/en/regexp.reference.character-classes.php
+	 */
+	$AllBlockedChars = ' : ? < > \ * | " ';
+	if (preg_match('/[\\:?<>*|"]/', $Name, $Matches)) {
 		character_error($Matches[0], $AllBlockedChars);
 	}
 }
@@ -66,5 +74,5 @@ function forbidden_error($Name) {
 
 function character_error($Character, $AllBlockedChars) {
 	global $Err;
-	$Err = "One or more of the files in the torrent has a name that contains the forbidden character '$Character'. Please rename the files as necessary and recreate the torrent.\n\nNote: The complete list of characters that are disallowed are shown below:\n\n\t$AllBlockedChars";
+	$Err = "One or more of the files or folders in the torrent has a name that contains the forbidden character '$Character'. Please rename the files as necessary and recreate the torrent.<br /><br />\nNote: The complete list of characters that are disallowed are shown below:<br />\n\t\t$AllBlockedChars";
 }

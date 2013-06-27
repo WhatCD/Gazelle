@@ -1,4 +1,4 @@
-(function($) {
+(function() {
 
 var LIMIT = 10;
 var artistId, artistName;
@@ -101,4 +101,4 @@ function createCloud() {
 	}
 }
 
-} ) ( jQuery );
+})();

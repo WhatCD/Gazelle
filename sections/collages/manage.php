@@ -1,47 +1,40 @@
-<?php
+<?
+$CollageID = $_GET['collageid'];
+if (!is_number($CollageID)) {
+	error(0);
+}
 
-	$CollageID = $_GET['collageid'];
-	if (!is_number($CollageID)) {
-		error(0);
-	}
+$DB->query("SELECT Name, UserID, CategoryID FROM collages WHERE ID='$CollageID'");
+list($Name, $UserID, $CategoryID) = $DB->next_record();
+if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
+	error(403);
+}
+$DB->query("
+	SELECT
+		ct.GroupID,
+		um.ID,
+		um.Username,
+		ct.Sort,
+		tg.CatalogueNumber
+	FROM collages_torrents AS ct
+		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
+		LEFT JOIN users_main AS um ON um.ID=ct.UserID
+	WHERE ct.CollageID='$CollageID'
+	ORDER BY ct.Sort");
 
-	$DB->query("SELECT Name, UserID, CategoryID FROM collages WHERE ID='$CollageID'");
-	list($Name, $UserID, $CategoryID) = $DB->next_record();
-	if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
-		error(403);
-	}
-	$DB->query("
-		SELECT
-			ct.GroupID,
-			um.ID,
-			um.Username,
-			ct.Sort,
-			tg.CatalogueNumber
-		FROM collages_torrents AS ct
-			JOIN torrents_group AS tg ON tg.ID=ct.GroupID
-			LEFT JOIN users_main AS um ON um.ID=ct.UserID
-		WHERE ct.CollageID='$CollageID'
-		ORDER BY ct.Sort");
+$GroupIDs = $DB->collect('GroupID');
 
-	$GroupIDs = $DB->collect('GroupID');
+$CollageDataList = $DB->to_array('GroupID', MYSQLI_ASSOC);
+if (count($GroupIDs) > 0) {
+	$TorrentList = Torrents::get_groups($GroupIDs);
+	$TorrentList = $TorrentList['matches'];
+} else {
+	$TorrentList = array();
+}
 
-	$CollageDataList = $DB->to_array('GroupID', MYSQLI_ASSOC);
-	if (count($GroupIDs) > 0) {
-		$TorrentList = Torrents::get_groups($GroupIDs);
-		$TorrentList = $TorrentList['matches'];
-	} else {
-		$TorrentList = array();
-	}
-
-	View::show_header('Manage collage '.$Name);
+View::show_header('Manage collage '.$Name, 'jquery-ui,jquery.tablesorter.min,sort');
 
 ?>
-
-<script src="static/functions/jquery.js" type="text/javascript"></script>
-<script type="text/javascript">$.noConflict();</script>
-<script src="static/functions/jquery-ui.js" type="text/javascript"></script>
-<script src="static/functions/jquery.tablesorter.min.js" type="text/javascript"></script>
-<script src="static/functions/sort.js" type="text/javascript"></script>
 <div class="thin">
 	<div class="header">
 		<h2>Manage collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>

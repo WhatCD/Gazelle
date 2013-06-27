@@ -68,7 +68,7 @@ if (isset($LoggedUser['Notify'])) {
 }
 ?>
 
-	<script src="<?=STATIC_SERVER?>functions/sizzle.js" type="text/javascript"></script>
+	<script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
 	<script src="<?=STATIC_SERVER?>functions/script_start.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/script_start.js')?>" type="text/javascript"></script>
 	<script src="<?=STATIC_SERVER?>functions/ajax.class.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/ajax.class.js')?>" type="text/javascript"></script>
 	<script type="text/javascript">//<![CDATA[
@@ -86,12 +86,6 @@ foreach ($Scripts as $Script) {
 ?>
 	<script src="<?=STATIC_SERVER?>functions/<?=$Script?>.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/'.$Script.'.js')?>" type="text/javascript"></script>
 <?
-	if ($Script == 'jquery') { ?>
-	<script type="text/javascript">
-		$.noConflict();
-	</script>
-<?
-	}
 }
 if ($Mobile) { ?>
 	<script src="<?=STATIC_SERVER?>styles/mobile/style.js" type="text/javascript"></script>

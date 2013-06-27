@@ -1,11 +1,9 @@
-(function ($) {
-	$(document).ready(function() {
-		$(".forum_category").click(function(e) {
-			var id = this.id;
-			var isChecked = $(this).text() != "Check all";
-			isChecked ? $(this).text("Check all") : $(this).text("Uncheck all");
-			$("input[data-category='" + id + "']").attr("checked", !isChecked);
-			e.preventDefault();
-		});
+$(document).ready(function() {
+	$(".forum_category").click(function(e) {
+		var id = this.id;
+		var isChecked = $(this).text() != "Check all";
+		isChecked ? $(this).text("Check all") : $(this).text("Uncheck all");
+		$("input[data-category='" + id + "']").attr("checked", !isChecked);
+		e.preventDefault();
 	});
-}(jQuery));
+});

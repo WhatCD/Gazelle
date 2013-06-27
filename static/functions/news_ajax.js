@@ -4,11 +4,7 @@ function news_ajax(event, count, offset, privileged) {
 	 * count - Number of news items to fetch.
 	 * offset - Database offset for fetching news.
 	 * privilege - Gotta check your privilege (used to show/hide [Edit] on news).
-	 *
-	 * This function isn't wrapped in jQuery, be sure we use it
-	 * instead of the mix-mashed Gazelle $ function.
 	 */
-	var $ = jQuery.noConflict();
 	// Unbind onclick to avoid spamclicks.
 	$(event.target).attr('onclick', 'return false;');
 	// Fetch news data, check for errors etc.

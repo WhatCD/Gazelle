@@ -1,5 +1,5 @@
 var sortableTable;
-jQuery(document).ready(function ($) {
+$(document).ready(function () {
 
 	$.tablesorter.addParser({
 		id: 'relative_time',

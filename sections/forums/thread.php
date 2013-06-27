@@ -164,7 +164,7 @@ if ($QuoteNotificationsCount > 0) {
 */
 
 // Start printing
-View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &lt; Forums','comments,subscriptions,bbcode,jquery');
+View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &lt; Forums','comments,subscriptions,bbcode');
 ?>
 <div class="thin">
 	<h2>

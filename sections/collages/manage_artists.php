@@ -29,15 +29,10 @@ $DB->query("
 $Artists = $DB->to_array('ArtistID', MYSQLI_ASSOC);
 
 
-View::show_header('Manage collage '.$Name);
+View::show_header('Manage collage '.$Name, 'jquery-ui,jquery.tablesorter.min,sort');
 
 ?>
 
-<script src="static/functions/jquery.js" type="text/javascript"></script>
-<script type="text/javascript">$.noConflict();</script>
-<script src="static/functions/jquery-ui.js" type="text/javascript"></script>
-<script src="static/functions/jquery.tablesorter.min.js" type="text/javascript"></script>
-<script src="static/functions/sort.js" type="text/javascript"></script>
 <div class="thin">
 	<div class="header">
 		<h2>Manage collage <a href="collages.php?id=<?=$CollageID?>"><?=$Name?></a></h2>

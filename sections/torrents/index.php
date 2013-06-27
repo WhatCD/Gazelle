@@ -336,11 +336,11 @@ if (!empty($_REQUEST['action'])) {
 			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-				$Cache->delete('torrent_comments_'.$GroupID.'_catalogue_'.$i);
+				$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_'.$i);
 			}
 
 			// Delete thread info cache (eg. number of pages)
-			$Cache->delete('torrent_comments_'.$GroupID);
+			$Cache->delete_value('torrent_comments_'.$GroupID);
 
 			break;
 		case 'regen_filelist' :

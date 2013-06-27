@@ -47,6 +47,7 @@ class TORRENT_FORM {
 	function head() {
 		global $LoggedUser;
 ?>
+
 <div class="thin">
 <?		if ($this->NewTorrent) { ?>
 	<p style="text-align: center;">
@@ -55,7 +56,7 @@ class TORRENT_FORM {
 	</p>
 <?		}
 		if ($this->Error) {
-			echo '<p style="color: red; text-align: center;">'.$this->Error.'</p>';
+			echo "\t".'<p style="color: red; text-align: center;">'.$this->Error."</p>\n";
 		}
 ?>
 	<form class="create_form" name="torrent" action="" enctype="multipart/form-data" method="post" id="upload_table" onsubmit="$('#post').raw().disabled = 'disabled'">

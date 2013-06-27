@@ -66,7 +66,7 @@ if ($UnRead == '1') {
 	$Cache->decrement('inbox_new_'.$UserID);
 }
 
-View::show_header('View conversation '.$Subject, 'comments,inbox,bbcode,jquery,jquery.validate,form_validate');
+View::show_header('View conversation '.$Subject, 'comments,inbox,bbcode,jquery.validate,form_validate');
 
 // Get messages
 $DB->query("

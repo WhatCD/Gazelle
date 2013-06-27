@@ -1,4 +1,4 @@
-(function($) {
+(function() {
 	var sent = new Array();
 	var loaded = false;
 	var type;
@@ -69,4 +69,4 @@
 			});
 		}
 	}
-}(jQuery));
+})();

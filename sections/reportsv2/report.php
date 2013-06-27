@@ -65,7 +65,7 @@ if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	}
 }
 
-View::show_header('Report', 'reportsv2,jquery,browse,torrent,bbcode,recommend');
+View::show_header('Report', 'reportsv2,browse,torrent,bbcode,recommend');
 ?>
 
 <div class="thin">

@@ -145,11 +145,11 @@ if (!empty($_POST['action'])) {
 			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-				$Cache->delete('artist_comments_' . $ArtistID . '_catalogue_' . $i);
+				$Cache->delete_value('artist_comments_' . $ArtistID . '_catalogue_' . $i);
 			}
 
 			// Delete thread info cache (eg. number of pages)
-			$Cache->delete('artist_comments_' . $ArtistID);
+			$Cache->delete_value('artist_comments_' . $ArtistID);
 
 			break;
 

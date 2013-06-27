@@ -1,5 +1,5 @@
 <?
-View::show_header('Create an article', 'jquery');
+View::show_header('Create an article');
 ?>
 <div class="thin">
 	<div class="box pad">

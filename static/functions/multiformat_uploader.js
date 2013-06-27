@@ -1,4 +1,4 @@
-(function ($) {
+(function() {
 	var count = 1;
 	var MAX_EXTRAS = 5;
 	var FORMATS = [ 'MP3', 'FLAC', 'AAC', 'AC3', 'DTS' ];
@@ -114,4 +114,4 @@
 
 	}
 
-})(jQuery);
+})();

@@ -467,7 +467,7 @@ $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
-View::show_header($Name, 'browse,requests,bbcode,comments,voting,jquery,recommend');
+View::show_header($Name, 'browse,requests,bbcode,comments,voting,recommend');
 ?>
 <div class="thin">
 	<div class="header">
@@ -855,7 +855,7 @@ if ($NumSimilar > 0) {
 			<div id="flipper_head" class="head">
 				<a href="#">&uarr;</a>&nbsp;
 				<strong id="flipper_title">Similar artist map</strong>
-				<a id="flip_to" class="brackets" href="#null" onclick="flipView();">Switch to cloud</a>
+				<a id="flip_to" class="brackets" href="#" onclick="flipView(); return false;">Switch to cloud</a>
 			</div>
 			<div id="flip_view_1" style="display: block; width: <?=(WIDTH)?>px; height: <?=(HEIGHT)?>px; position: relative; background-image: url(static/similar/<?=($ArtistID)?>.png?t=<?=(time())?>);">
 <?
@@ -884,10 +884,8 @@ function flipView() {
 		document.getElementById('flip_to').innerHTML = 'Switch to map';
 
 		if (!cloudLoaded) {
-			require("static/functions/jquery.js", function () {
-				require("static/functions/tagcanvas.js", function () {
-					require("static/functions/artist_cloud.js", function () {
-					});
+			require("static/functions/tagcanvas.js", function () {
+				require("static/functions/artist_cloud.js", function () {
 				});
 			});
 			cloudLoaded = true;

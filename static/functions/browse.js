@@ -1,13 +1,13 @@
 function show_peers (TorrentID, Page) {
 	if (Page > 0) {
-		ajax.get('torrents.php?action=peerlist&page='+Page+'&torrentid=' + TorrentID,function(response) {
-			$('#peers_' + TorrentID).gshow().raw().innerHTML=response;
+		ajax.get('torrents.php?action=peerlist&page=' + Page + '&torrentid=' + TorrentID, function(response) {
+			$('#peers_' + TorrentID).gshow().raw().innerHTML = response;
 		});
 	} else {
 		if ($('#peers_' + TorrentID).raw().innerHTML === '') {
 			$('#peers_' + TorrentID).gshow().raw().innerHTML = '<h4>Loading...</h4>';
-			ajax.get('torrents.php?action=peerlist&torrentid=' + TorrentID,function(response) {
-				$('#peers_' + TorrentID).gshow().raw().innerHTML=response;
+			ajax.get('torrents.php?action=peerlist&torrentid=' + TorrentID, function(response) {
+				$('#peers_' + TorrentID).gshow().raw().innerHTML = response;
 			});
 		} else {
 			$('#peers_' + TorrentID).gtoggle();
@@ -21,14 +21,14 @@ function show_peers (TorrentID, Page) {
 
 function show_snatches (TorrentID, Page) {
 	if (Page > 0) {
-		ajax.get('torrents.php?action=snatchlist&page='+Page+'&torrentid=' + TorrentID,function(response) {
-			$('#snatches_' + TorrentID).gshow().raw().innerHTML=response;
+		ajax.get('torrents.php?action=snatchlist&page=' + Page + '&torrentid=' + TorrentID, function(response) {
+			$('#snatches_' + TorrentID).gshow().raw().innerHTML = response;
 		});
 	} else {
 		if ($('#snatches_' + TorrentID).raw().innerHTML === '') {
 			$('#snatches_' + TorrentID).gshow().raw().innerHTML = '<h4>Loading...</h4>';
-			ajax.get('torrents.php?action=snatchlist&torrentid=' + TorrentID,function(response) {
-				$('#snatches_' + TorrentID).gshow().raw().innerHTML=response;
+			ajax.get('torrents.php?action=snatchlist&torrentid=' + TorrentID, function(response) {
+				$('#snatches_' + TorrentID).gshow().raw().innerHTML = response;
 			});
 		} else {
 			$('#snatches_' + TorrentID).gtoggle();
@@ -42,14 +42,14 @@ function show_snatches (TorrentID, Page) {
 
 function show_downloads (TorrentID, Page) {
 	if (Page > 0) {
-		ajax.get('torrents.php?action=downloadlist&page='+Page+'&torrentid=' + TorrentID,function(response) {
-			$('#downloads_' + TorrentID).gshow().raw().innerHTML=response;
+		ajax.get('torrents.php?action=downloadlist&page=' + Page + '&torrentid=' + TorrentID, function(response) {
+			$('#downloads_' + TorrentID).gshow().raw().innerHTML = response;
 		});
 	} else {
 		if ($('#downloads_' + TorrentID).raw().innerHTML === '') {
 			$('#downloads_' + TorrentID).gshow().raw().innerHTML = '<h4>Loading...</h4>';
-			ajax.get('torrents.php?action=downloadlist&torrentid=' + TorrentID,function(response) {
-				$('#downloads_' + TorrentID).raw().innerHTML=response;
+			ajax.get('torrents.php?action=downloadlist&torrentid=' + TorrentID, function(response) {
+				$('#downloads_' + TorrentID).raw().innerHTML = response;
 			});
 		} else {
 			$('#downloads_' + TorrentID).gtoggle();
@@ -101,7 +101,7 @@ function toggle_group(groupid, link, event) {
 		if (row.has_class('colhead')) {
 			continue;
 		}
-		var relevantRow = row.has_class('group') ? $(group_rows[i+1]) : row;
+		var relevantRow = row.has_class('group') ? $(group_rows[i + 1]) : row;
 		if (allGroups || relevantRow.has_class('groupid_' + groupid)) {
 			row = $(group_rows[i]); // idk why we need this :S
 			if (row.has_class('group')) {
@@ -169,7 +169,8 @@ function toggleTorrentSearch(mode) {
 		var link = $('#ft_toggle').raw();
 		$('#ft_container').gtoggle();
 		link.innerHTML = link.textContent == 'Hide' ? 'Show' : 'Hide';
-	} if (mode == 'basic') {
+	}
+	if (mode == 'basic') {
 		$('.fti_advanced').disable();
 		$('.fti_basic').enable();
 		$('.ftr_advanced').ghide(true);
@@ -246,7 +247,7 @@ function addCoverField() {
 	x.appendChild(summary);
 	coverFieldCount++;
 
-	if(!hasCoverAddButton) {
+	if (!hasCoverAddButton) {
 		x = $('#add_covers_form').raw();
 		field = document.createElement("input");
 		field.type = "submit";
@@ -263,8 +264,8 @@ function ToggleEditionRows() {
 }
 
 function check_private(TorrentID) {
-	$('#checkprivate-'+TorrentID).raw().innerHTML = "Checking...";
+	$('#checkprivate-' + TorrentID).raw().innerHTML = "Checking...";
 	ajax.get('ajax.php?action=checkprivate&torrentid=' + TorrentID,function(response) {
-		$('#checkprivate-'+TorrentID).raw().innerHTML = response;
+		$('#checkprivate-' + TorrentID).raw().innerHTML = response;
 	});
 }

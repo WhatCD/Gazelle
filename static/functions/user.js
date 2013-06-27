@@ -157,7 +157,7 @@ function ToggleIdenticons() {
 }
 
 function userform_submit() {
-	if (jQuery('#resetpasskey').is(':checked')) {
+	if ($('#resetpasskey').is(':checked')) {
 		if (!confirm('Are you sure you want to reset your passkey?')) {
 			return false;
 		}

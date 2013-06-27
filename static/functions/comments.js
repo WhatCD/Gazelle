@@ -37,7 +37,7 @@ function Quote(post, user, link) {
 function Edit_Form(post,key) {
 	postid = post;
 	//If no edit is already going underway or a previous edit was finished, make the necessary dom changes.
-	if (!$('#editbox' + postid).objects[0] || $('#editbox' + postid + '.hidden').objects[0]) {
+	if (!$('#editbox' + postid).results() || $('#editbox' + postid + '.hidden').results()) {
 		$('#reply_box').ghide();
 		if (location.href.match(/torrents\.php/) ||
 				location.href.match(/artist\.php/)) {
@@ -45,12 +45,7 @@ function Edit_Form(post,key) {
 		} else {
 			boxWidth = "80";
 		}
-		postuserid = $('#post' + postid + ' strong a').raw().getAttribute('href').split('=')[1]
-		/*	jQuery isnt enabled on comments, artist comments, or basically anywhere but thread.php
-			Re-enable this clause as soon as hateradio's "bye sizzle" changes go into effect, changing
-			the jQuery object to $ (which will, then, be jQuery rather than sizzle)
-		postuserid = jQuery('#post' + postid + ' strong a').attr('href').split('=')[1];
-		*/
+		postuserid = $('#post' + postid + ' strong a').attr('href').split('=')[1];
 		if (postuserid != userid) {
 			pmbox = '<span id="pmbox' + postid + '"><label>PM user on edit? <input type="checkbox" name="pm" value="1" /></label></span>';
 		} else {
@@ -315,7 +310,7 @@ StoreText.prototype = {
 		sessionStorage.setItem(this.key, this.field.value);
 	},
 	autosave : function () {
-		jQuery(this.field).on(this.getInputEvent(), jQuery.proxy(this.save, this));
+		$(this.field).on(this.getInputEvent(), $.proxy(this.save, this));
 	},
 	getInputEvent : function () {
 		var e;
@@ -329,6 +324,6 @@ StoreText.prototype = {
 		return e;
 	},
 	clearForm : function () {
-		jQuery(this.form).submit(jQuery.proxy(this.remove, this));
+		$(this.form).submit($.proxy(this.remove, this));
 	}
 };

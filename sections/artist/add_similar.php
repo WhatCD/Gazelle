@@ -40,10 +40,10 @@ if (!empty($Artist2ID)) { // artist was found in the database
 		$DB->query("INSERT INTO artists_similar_votes (SimilarID, UserID, way) VALUES ('$SimilarID', '$UserID', 'up')");
 	}
 
-	$Cache->delete('artist_'.$Artist1ID); // Delete artist cache
-	$Cache->delete('artist_'.$Artist2ID); // Delete artist cache
-	$Cache->delete('similar_positions_'.$Artist1ID); // Delete artist's similar map cache
-	$Cache->delete('similar_positions_'.$Artist2ID); // Delete artist's similar map cache
+	$Cache->delete_value('artist_'.$Artist1ID); // Delete artist cache
+	$Cache->delete_value('artist_'.$Artist2ID); // Delete artist cache
+	$Cache->delete_value('similar_positions_'.$Artist1ID); // Delete artist's similar map cache
+	$Cache->delete_value('similar_positions_'.$Artist2ID); // Delete artist's similar map cache
 }
 
 

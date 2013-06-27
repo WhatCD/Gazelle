@@ -46,7 +46,7 @@ $DB->query("SELECT Name FROM collages WHERE ID='$CollageID'");
 list($Name) = $DB->next_record();
 
 // Start printing
-View::show_header('Comments for collage '.$Name, 'comments,bbcode,jquery');
+View::show_header('Comments for collage '.$Name, 'comments,bbcode');
 ?>
 <div class="thin">
 	<div class="header">

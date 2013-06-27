@@ -38,7 +38,7 @@ if ($DB->record_count()) {
 	$ThisCatalogue = floor((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 	$LastCatalogue = floor((POSTS_PER_PAGE * $Pages - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 	for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-		$Cache->delete('thread_'.$ThreadID.'_catalogue_'.$i);
+		$Cache->delete_value('thread_'.$ThreadID.'_catalogue_'.$i);
 	}
 }
 

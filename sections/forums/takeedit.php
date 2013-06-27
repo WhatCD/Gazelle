@@ -90,7 +90,7 @@ $CatalogueID = floor((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) / THREAD_CATALOGU
 $Cache->begin_transaction('thread_'.$TopicID.'_catalogue_'.$CatalogueID);
 if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 	$Cache->cancel_transaction();
-	$Cache->delete('thread_'.$TopicID.'_catalogue_'.$CatalogueID); //just clear the cache for would be cache-screwer-uppers
+	$Cache->delete_value('thread_'.$TopicID.'_catalogue_'.$CatalogueID); //just clear the cache for would be cache-screwer-uppers
 } else {
 	$Cache->update_row($Key, array(
 			'ID'=>$Cache->MemcacheDBArray[$Key]['ID'],

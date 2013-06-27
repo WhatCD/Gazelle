@@ -174,7 +174,7 @@ $Badges = (($Donor) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/sy
 $Badges .= (($Warned != '0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" />' : '');
 $Badges .= (($Enabled == '1' || $Enabled == '0' || !$Enabled) ? '' : '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" />');
 
-View::show_header($Username, 'user,bbcode,requests,jquery,lastfm');
+View::show_header($Username, 'user,bbcode,requests,lastfm');
 
 ?>
 <div class="thin">

@@ -6,6 +6,10 @@ if (!$TorrentID || !is_number($TorrentID)) {
 	error(404);
 }
 
+if ($Cache->get_value('torrent_'.$TorrentID.'_lock')) {
+	error('Torrent cannot be deleted because the upload process is not completed yet. Please try again later.');
+}
+
 $DB->query("SELECT
 	t.UserID,
 	t.GroupID,

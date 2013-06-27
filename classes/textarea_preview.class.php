@@ -26,8 +26,7 @@ class TEXTAREA_PREVIEW_SUPER {
 	 * This method should only run once with $all as true and should be placed
 	 * in the header or footer.
 	 *
-	 * If $all is true, it includes TextareaPreview and jQuery with noConflict()
-	 * for use with Sizzle.
+	 * If $all is true, it includes TextareaPreview and jQuery
 	 *
 	 * jQuery is required for this to work, include it in the headers.
 	 *
@@ -56,7 +55,7 @@ class TEXTAREA_PREVIEW_SUPER {
 	 * @static
 	 * @return void
 	 */
-	private static function iterator () {
+	private static function iterator() {
 		$script = array();
 		for ($i = 0; $i < self::$Textareas; $i++) {
 			if (isset(self::$_ID[$i]) && is_string(self::$_ID[$i])) {
@@ -148,7 +147,7 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER {
 	 *
 	 * It's important to have the right IDs as they make the JS function properly.
 	 */
-	public function __construct ($Name, $ID = '', $Value = '', $Cols = 50, $Rows = 10,
+	public function __construct($Name, $ID = '', $Value = '', $Cols = 50, $Rows = 10,
 		$Preview = true, $Buttons = true, $Buffer = false,
 		array $ExtraAttributes = array()
 	) {
@@ -189,7 +188,7 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER {
 	 * Outputs the divs required for previewing the AJAX content
 	 * Will only output once
 	 */
-	public function preview () {
+	public function preview() {
 		if (!$this->preview) {
 			View::parse('generic/textarea/preview.phtml', array('ID' => $this->id));
 		}
@@ -200,14 +199,14 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER {
 	 * Outputs the preview and edit buttons
 	 * Can be called many times to place buttons in different areas
 	 */
-	public function buttons () {
+	public function buttons() {
 		View::parse('generic/textarea/buttons.phtml', array('ID' => $this->id));
 	}
 
 	/**
 	 * Returns the textarea's numeric ID.
 	 */
-	public function getID () {
+	public function getID() {
 		return $this->id;
 	}
 
@@ -215,7 +214,7 @@ class TEXTAREA_PREVIEW extends TEXTAREA_PREVIEW_SUPER {
 	 * Returns textarea string when buffer is enabled in the constructor
 	 * @return string
 	 */
-	public function getBuffer () {
+	public function getBuffer() {
 		return $this->buffer;
 	}
 }

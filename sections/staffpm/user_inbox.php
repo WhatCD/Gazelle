@@ -2,7 +2,7 @@
 
 include(SERVER_ROOT.'/sections/staffpm/functions.php');
 
-View::show_header('Staff PMs', 'staffpm,jquery');
+View::show_header('Staff PMs', 'staffpm');
 
 // Get messages
 $StaffPMs = $DB->query("

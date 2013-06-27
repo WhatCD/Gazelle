@@ -1,4 +1,4 @@
-(function($){
+(function() {
 	// Used to get user ID from URL.
 	function getURLParameter(name) {
 		return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
@@ -41,4 +41,4 @@
 			window.open('user.php?id=' + encodeURIComponent(userId) + '&preview=1&paranoia=' + encodeURIComponent(paranoiaString), '_blank');
 		});
 	});
-})(jQuery);
+})();

@@ -47,7 +47,7 @@ if ($_POST['submit'] == 'Delete') {
 	}
 }
 
-$Cache->delete('whitelisted_clients');
+$Cache->delete_value('whitelisted_clients');
 
 // Go back
 header('Location: tools.php?action=whitelist')
