@@ -19,7 +19,10 @@ if (!$_GET['post'] || !is_number($_GET['post'])) {
 $PostID = $_GET['post'];
 
 // Mainly
-$DB->query("SELECT Body FROM collages_comments WHERE ID='$PostID'");
+$DB->query("
+	SELECT Body
+	FROM collages_comments
+	WHERE ID = '$PostID'");
 list($Body) = $DB->next_record(MYSQLI_NUM);
 
 // This gets sent to the browser, which echoes it wherever

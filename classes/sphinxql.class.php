@@ -64,7 +64,7 @@ class Sphinxql extends mysqli {
 	/**
 	 * Connect the Sphinxql object to the Sphinx server
 	 */
-	public function connect() {
+	public function sphconnect() {
 		if (!$this->Connected) {
 			global $Debug;
 			$Debug->set_flag('Connecting to Sphinx server '.$this->Ident);

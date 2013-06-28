@@ -8,9 +8,9 @@ $DB->query("
 		um.ID,
 		um.Username
 	FROM collages_torrents AS ct
-		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
-		LEFT JOIN users_main AS um ON um.ID=ct.UserID
-	WHERE ct.CollageID='$CollageID'
+		JOIN torrents_group AS tg ON tg.ID = ct.GroupID
+		LEFT JOIN users_main AS um ON um.ID = ct.UserID
+	WHERE ct.CollageID = '$CollageID'
 	ORDER BY ct.Sort");
 
 $GroupIDs = $DB->collect('GroupID');
@@ -56,7 +56,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 	if ($CountArtists) {
 		foreach ($CountArtists as $Artist) {
 			if (!isset($TopArtists[$Artist['id']])) {
-				$TopArtists[$Artist['id']] = array('name'=>$Artist['name'], 'count'=>1);
+				$TopArtists[$Artist['id']] = array('name' => $Artist['name'], 'count' => 1);
 			} else {
 				$TopArtists[$Artist['id']]['count']++;
 			}
@@ -65,23 +65,23 @@ foreach ($TorrentList as $GroupID => $Group) {
 
 	if ($Username) {
 		if (!isset($Users[$UserID])) {
-			$Users[$UserID] = array('name'=>$Username, 'count'=>1);
+			$Users[$UserID] = array('name' => $Username, 'count' => 1);
 		} else {
 			$Users[$UserID]['count']++;
 		}
 	}
 
-	$DisplayName = $Number.' - ';
+	$DisplayName = "$Number - ";
 
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
 			$DisplayName .= Artists::display_artists($ExtendedArtists);
 	} elseif (count($GroupArtists) > 0) {
-			$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists));
+			$DisplayName .= Artists::display_artists(array('1' => $GroupArtists));
 	}
 
-	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+	$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 	if ($GroupYear > 0) {
 		$DisplayName = "$DisplayName [$GroupYear]";
 	}
@@ -109,9 +109,9 @@ foreach ($TorrentList as $GroupID => $Group) {
 					<strong><?=$DisplayName?></strong>
 					<? // PHP start tag is indented for proper formatting of generated HTML
 					if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
-						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent',$GroupID,'Bookmark');return false;\">Unbookmark</a>";
+						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent', $GroupID, 'Bookmark'); return false;\">Unbookmark</a>";
 					} else {
-						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent',$GroupID,'Unbookmark');return false;\">Bookmark</a>";
+						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent', $GroupID, 'Unbookmark'); return false;\">Bookmark</a>";
 					}
 					echo "\n";
 					echo Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
@@ -173,7 +173,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 
 		list($TorrentID, $Torrent) = each($Torrents);
 
-		$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+		$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 
 		if ($Torrent['IsSnatched']) {
 			$DisplayName .= ' ' . Format::torrent_label('Snatched!');
@@ -228,7 +228,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 	}
 	$DisplayName .= $GroupName;
 	if ($GroupYear > 0) {
-		$DisplayName = $DisplayName. " [$GroupYear]";
+		$DisplayName = "$DisplayName [$GroupYear]";
 	}
 ?>
 				<li class="image_group_<?=$GroupID?>">
@@ -270,7 +270,7 @@ for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) {
 	$CollagePages[] = $CollagePage;
 }
 
-View::show_header($Name,'browse,collage,bbcode,voting,recommend');
+View::show_header($Name, 'browse,collage,bbcode,voting,recommend');
 ?>
 <div class="thin">
 	<div class="header">
@@ -282,7 +282,7 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 <?	} ?>
 			<br /><br />
 <?	if (check_perms('site_collages_subscribe')) { ?>
-			<a href="#" id="subscribelink<?=$CollageID?>" class="brackets" onclick="CollageSubscribe(<?=$CollageID?>);return false;"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
+			<a href="#" id="subscribelink<?=$CollageID?>" class="brackets" onclick="CollageSubscribe(<?=$CollageID?>); return false;"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
 <?	}
 	if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
 			<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>" class="brackets">Edit description</a>
@@ -291,9 +291,9 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 <?	}
 	if (Bookmarks::has_bookmarked('collage', $CollageID)) {
 ?>
-			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>,'Bookmark');return false;">Remove bookmark</a>
+			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>, 'Bookmark'); return false;">Remove bookmark</a>
 <?	} else { ?>
-			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>,'Remove bookmark');return false;">Bookmark</a>
+			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>, 'Remove bookmark'); return false;">Bookmark</a>
 <?	}
 ?>
 <!-- <a href="#" id="recommend" class="brackets">Recommend</a> -->
@@ -339,7 +339,7 @@ if (check_perms('zip_downloader')) {
 					<li id="list<?=$ListItem?>">
 						<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 						<span class="float_left"><?=$ZIPOptions[$ListItem]['2']?></span>
-						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" class="float_right brackets">X</a></span>
+						<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>'); return false;" class="float_right brackets">X</a></span>
 						<br style="clear: all;" />
 					</li>
 <? } ?>
@@ -358,10 +358,11 @@ foreach ($ZIPOptions as $Option) {
 					</optgroup>
 <?		} ?>
 					<optgroup label="<?=$ZIPGroups[$GroupID]?>">
-<?		$OpenGroup = true;
+<?
+		$OpenGroup = true;
 	}
 ?>
-						<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID,$ZIPList)) { echo ' disabled="disabled"'; }?>><?=$OptName?></option>
+						<option id="opt<?=$GroupID.$OptionID?>" value="<?=$GroupID.$OptionID?>"<? if (in_array($GroupID.$OptionID, $ZIPList)) { echo ' disabled="disabled"'; }?>><?=$OptName?></option>
 <?
 }
 ?>
@@ -444,16 +445,19 @@ foreach ($Users as $ID => $User) {
 		</div>
 <? if (check_perms('site_collages_manage') && !$PreventAdditions) { ?>
 		<div class="box box_addtorrent">
-			<div class="head"><strong>Add torrent</strong><span class="float_right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add' ? 'Individual add' : 'Batch add'); return false;" class="brackets">Batch add</a></span></div>
+			<div class="head"><strong>Add torrent group</strong><span class="float_right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add' ? 'Individual add' : 'Batch add'); return false;" class="brackets">Batch add</a></span></div>
 			<div class="pad add_torrent_container">
 				<form class="add_form" name="torrent" action="collages.php" method="post">
 					<input type="hidden" name="action" value="add_torrent" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
-					<input type="text" size="20" name="url" />
-					<input type="submit" value="+" />
-					<br />
-					<span style="font-style: italic;">Enter the URL of a torrent on the site.</span>
+					<div class="field_div">
+						<input type="text" size="20" name="url" />
+					</div>
+					<div class="submit_div">
+						<input type="submit" value="Add" />
+					</div>
+					<span style="font-style: italic;">Enter the URL of a torrent group on the site.</span>
 				</form>
 			</div>
 			<div class="pad hidden add_torrent_container">
@@ -461,10 +465,13 @@ foreach ($Users as $ID => $User) {
 					<input type="hidden" name="action" value="add_torrent_batch" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
-					<textarea name="urls" rows="5" cols="25" style="white-space: nowrap;"></textarea><br />
-					<input type="submit" value="Add" />
-					<br />
-					<span style="font-style: italic;">Enter the URLs of torrents on the site, one per line.</span>
+					<div class="field_div">
+						<textarea name="urls" rows="5" cols="25" style="white-space: nowrap;"></textarea>
+					</div>
+					<div class="submit_div">
+						<input type="submit" value="Add" />
+					</div>
+					<span style="font-style: italic;">Enter the URLs of torrent groups on the site, one per line.</span>
 				</form>
 			</div>
 		</div>
@@ -480,8 +487,8 @@ if (empty($CommentList)) {
 			um.Username,
 			cc.Time
 		FROM collages_comments AS cc
-			LEFT JOIN users_main AS um ON um.ID=cc.UserID
-		WHERE CollageID='$CollageID'
+			LEFT JOIN users_main AS um ON um.ID = cc.UserID
+		WHERE CollageID = '$CollageID'
 		ORDER BY ID DESC
 		LIMIT 15");
 	$CommentList = $DB->to_array(false, MYSQLI_NUM);
@@ -508,14 +515,17 @@ if (!$LoggedUser['DisablePosting']) {
 ?>
 		<div class="box box_addcomment">
 			<div class="head"><strong>Add comment</strong></div>
-			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled=true;" action="collages.php" method="post">
+			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled = true;" action="collages.php" method="post">
 				<input type="hidden" name="action" value="add_comment" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="collageid" value="<?=$CollageID?>" />
 				<div class="pad">
-					<textarea name="body" cols="24" rows="5"></textarea>
-					<br />
-					<input type="submit" id="submit_button" value="Add comment" />
+					<div class="field_div">
+						<textarea name="body" cols="24" rows="5"></textarea>
+					</div>
+					<div class="submit_div">
+						<input type="submit" id="submit_button" value="Add comment" />
+					</div>
 				</div>
 			</form>
 		</div>

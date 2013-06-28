@@ -4,7 +4,10 @@ if (!is_number($CollageID)) {
 	error(0);
 }
 
-$DB->query("SELECT Name, UserID, CategoryID FROM collages WHERE ID='$CollageID'");
+$DB->query("
+	SELECT Name, UserID, CategoryID
+	FROM collages
+	WHERE ID = '$CollageID'");
 list($Name, $UserID, $CategoryID) = $DB->next_record();
 if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
 	error(403);
@@ -17,9 +20,9 @@ $DB->query("
 		ct.Sort,
 		tg.CatalogueNumber
 	FROM collages_torrents AS ct
-		JOIN torrents_group AS tg ON tg.ID=ct.GroupID
-		LEFT JOIN users_main AS um ON um.ID=ct.UserID
-	WHERE ct.CollageID='$CollageID'
+		JOIN torrents_group AS tg ON tg.ID = ct.GroupID
+		LEFT JOIN users_main AS um ON um.ID = ct.UserID
+	WHERE ct.CollageID = '$CollageID'
 	ORDER BY ct.Sort");
 
 $GroupIDs = $DB->collect('GroupID');
@@ -32,7 +35,7 @@ if (count($GroupIDs) > 0) {
 	$TorrentList = array();
 }
 
-View::show_header('Manage collage '.$Name, 'jquery-ui,jquery.tablesorter.min,sort');
+View::show_header("Manage collage: $Name", 'jquery-ui,jquery.tablesorter.min,sort');
 
 ?>
 <div class="thin">
@@ -63,10 +66,10 @@ View::show_header('Manage collage '.$Name, 'jquery-ui,jquery.tablesorter.min,sor
 			<tr class="colhead">
 				<th style="width: 7%;">Order</th>
 				<th style="width: 1%;"><span><abbr title="Current rank">#</abbr></span></th>
-				<th style="width: 7%;"><span>Cat #</span></th>
+				<th style="width: 7%;"><span>Cat.&nbsp;#</span></th>
 				<th style="width: 1%;"><span>Year</span></th>
 				<th style="width: 15%;"><span>Artist</span></th>
-				<th><span>Torrent</span></th>
+				<th><span>Torrent group</span></th>
 				<th style="width: 1%;"><span>User</span></th>
 				<th style="width: 1%; text-align: right;" class="nobr"><span><abbr title="Modify an individual row.">Tweak</abbr></span></th>
 			</tr>
@@ -87,15 +90,15 @@ View::show_header('Manage collage '.$Name, 'jquery-ui,jquery.tablesorter.min,sor
 			unset($ExtendedArtists[3]);
 			$DisplayName .= Artists::display_artists($ExtendedArtists, true, false);
 		} elseif (count($Artists) > 0) {
-			$DisplayName .= Artists::display_artists(array('1'=>$Artists), true, false);
+			$DisplayName .= Artists::display_artists(array('1' => $Artists), true, false);
 		}
-		$TorrentLink = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+		$TorrentLink = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
 		$GroupYear = $GroupYear > 0 ? $GroupYear : '';
 		if ($GroupVanityHouse) {
 			$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
 		}
 
-		$AltCSS = $Number % 2 === 0 ? 'rowa' : 'rowb';
+		$AltCSS = ($Number % 2 === 0) ? 'rowa' : 'rowb';
 ?>
 			<tr class="drag <?=$AltCSS?>" id="li_<?=$GroupID?>">
 				<form class="manage_form" name="collage" action="collages.php" method="post">

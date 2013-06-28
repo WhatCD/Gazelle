@@ -282,7 +282,7 @@ class SphinxqlQuery {
 		if (!$this->QueryString) {
 			return false;
 		}
-		$this->Sphinxql->connect();
+		$this->Sphinxql->sphconnect();
 		$Result = $this->Sphinxql->query($this->QueryString);
 		if ($Result === false) {
 			$Errno = $this->Sphinxql->errno;

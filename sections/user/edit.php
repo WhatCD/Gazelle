@@ -152,29 +152,23 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Torrent grouping</strong></td>
 				<td>
-					<ul class="options_list nobullet">
-						<li>
-							<div class="field_div">
-								<input type="checkbox" name="disablegrouping" id="disablegrouping"<?Format::selected('DisableGrouping2', 0, 'checked', $SiteOptions);?> />
-								<label for="disablegrouping">Group torrents by default</label>
-							</div>
-						</li>
-						<li>
-							<div class="field_div">
-								<p>By default, torrent groups are:</p>
-								<ul class="options_list nobullet">
-									<li>
-										<input type="radio" name="torrentgrouping" id="torrent_grouping_open" value="0" <? if ($SiteOptions['TorrentGrouping'] == 0) { ?>checked="checked" <? } ?>/>
-										<label for="torrent_grouping_open">Open</label>
-									</li>
-									<li>
-										<input type="radio" name="torrentgrouping" id="torrent_grouping_closed" value="1" <? if ($SiteOptions['TorrentGrouping'] == 1) { ?>checked="checked" <? } ?>/>
-										<label for="torrent_grouping_closed">Closed</label>
-									</li>
-								</ul>
-							</div>
-						</li>
-					</ul>
+					<div class="option_group">
+						<input type="checkbox" name="disablegrouping" id="disablegrouping"<?Format::selected('DisableGrouping2', 0, 'checked', $SiteOptions);?> />
+						<label for="disablegrouping">Group torrents by default</label>
+					</div>
+					<div class="option_group">
+						<p>By default, torrent groups are:</p>
+						<ul class="options_list nobullet">
+							<li>
+								<input type="radio" name="torrentgrouping" id="torrent_grouping_open" value="0" <? if ($SiteOptions['TorrentGrouping'] == 0) { ?>checked="checked" <? } ?>/>
+								<label for="torrent_grouping_open">Open</label>
+							</li>
+							<li>
+								<input type="radio" name="torrentgrouping" id="torrent_grouping_closed" value="1" <? if ($SiteOptions['TorrentGrouping'] == 1) { ?>checked="checked" <? } ?>/>
+								<label for="torrent_grouping_closed">Closed</label>
+							</li>
+						</ul>
+					</div>
 				</td>
 			</tr>
 			<tr>

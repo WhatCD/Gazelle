@@ -214,7 +214,7 @@ jQuery.extend(jQuery.prototype, {
 		return this;
 	},
 	listen: function (event, callback) {
-		for (var i=0,il=this.size();i<il;i++) {
+		for (var i = 0, il = this.size(); i < il; i++) {
 			var object = this[i];
 			if (document.addEventListener) {
 				object.addEventListener(event, callback, false);
@@ -225,7 +225,7 @@ jQuery.extend(jQuery.prototype, {
 		return this;
 	},
 	add_class: function (class_name, force) {
-		for (var i=0,il=this.size();i<il;i++) {
+		for (var i = 0, il = this.size(); i < il; i++) {
 			var object = this[i];
 			if (object.className === '') {
 				object.className = class_name;
@@ -236,7 +236,7 @@ jQuery.extend(jQuery.prototype, {
 		return this;
 	},
 	remove_class: function (class_name) {
-		for (var i=0,il=this.size();i<il;i++) {
+		for (var i = 0, il = this.size(); i < il; i++) {
 			var object = this[i];
 			var classes = object.className.split(' ');
 			var result = array_search(class_name, classes);
@@ -248,7 +248,7 @@ jQuery.extend(jQuery.prototype, {
 		return this;
 	},
 	has_class: function(class_name) {
-		for (var i=0,il=this.size();i<il;i++) {
+		for (var i = 0, il = this.size(); i < il; i++) {
 			var object = this[i];
 			var classes = object.className.split(' ');
 			if (array_search(class_name, classes)) {
@@ -258,7 +258,7 @@ jQuery.extend(jQuery.prototype, {
 		return false;
 	},
 	toggle_class: function(class_name) {
-		for (var i=0,il=this.size();i<il;i++) {
+		for (var i = 0, il = this.size(); i < il; i++) {
 			var object = this[i];
 			var classes = object.className.split(' ');
 			var result = array_search(class_name, classes);
@@ -276,13 +276,13 @@ jQuery.extend(jQuery.prototype, {
 		return this;
 	},
 	disable : function () {
-		for (var i=0,il=this.size();i<il;i++) {
+		for (var i = 0, il = this.size(); i < il; i++) {
 			this[i].disabled = true;
 		}
 		return this;
 	},
 	enable : function () {
-		for (var i=0,il=this.size();i<il;i++) {
+		for (var i = 0, il = this.size(); i < il; i++) {
 			if (this[i].disabled == true) {
 				this[i].disabled = false;
 			}

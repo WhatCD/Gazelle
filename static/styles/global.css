@@ -494,3 +494,9 @@ tr.torrent .bookmark>a:after {
 	font-size: 85%;
 	font-weight: normal;
 }
+.option_group {
+	margin-bottom: 10px;
+}
+.option_group:last-child {
+	margin-bottom: 0px;
+}

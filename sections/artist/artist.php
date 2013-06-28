@@ -707,17 +707,17 @@ if (empty($SimilarArray)) {
 
 echo $TorrentDisplayList;
 
-$Collages = $Cache->get_value('artists_collages_'.$ArtistID);
+$Collages = $Cache->get_value("artists_collages_$ArtistID");
 if (!is_array($Collages)) {
 	$DB->query("
 		SELECT c.Name, c.NumTorrents, c.ID
 		FROM collages AS c
-			JOIN collages_artists AS ca ON ca.CollageID=c.ID
-		WHERE ca.ArtistID='$ArtistID'
-			AND Deleted='0'
+			JOIN collages_artists AS ca ON ca.CollageID = c.ID
+		WHERE ca.ArtistID = '$ArtistID'
+			AND Deleted = '0'
 			AND CategoryID = '7'");
 	$Collages = $DB->to_array();
-	$Cache->cache_value('artists_collages_'.$ArtistID, $Collages, 3600 * 6);
+	$Cache->cache_value("artists_collages_$ArtistID", $Collages, 3600 * 6);
 }
 if (count($Collages) > 0) {
 	if (count($Collages) > MAX_COLLAGES) {
@@ -733,7 +733,7 @@ if (count($Collages) > 0) {
 ?>
 	<table class="collage_table" id="collages">
 		<tr class="colhead">
-			<td width="85%"><a href="#">&uarr;</a>&nbsp;This artists is in <?=number_format(count($Collages))?> collage<?=((count($Collages) > 1) ? 's' : '')?><?=$SeeAll?></td>
+			<td width="85%"><a href="#">&uarr;</a>&nbsp;This artist is in <?=number_format(count($Collages))?> collage<?=((count($Collages) > 1) ? 's' : '')?><?=$SeeAll?></td>
 			<td># artists</td>
 		</tr>
 		<?	foreach ($Indices as $i) {
@@ -785,11 +785,11 @@ if ($NumRequests > 0) {
 			if ($CategoryName == 'Music') {
 				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
+				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
-				$FullName = "<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
 			} else {
-				$FullName ="<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title</a>";
+				$FullName ="<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
 			}
 
 			$Row = ($Row == 'a') ? 'b' : 'a';
@@ -797,7 +797,7 @@ if ($NumRequests > 0) {
 			$Tags = Requests::get_tags($RequestID);
 			$ReqTagList = array();
 			foreach ($Tags as $TagID => $TagName) {
-				$ReqTagList[] = "<a href=\"requests.php?tags=".$TagName.'">'.display_str($TagName).'</a>';
+				$ReqTagList[] = "<a href=\"requests.php?tags=$TagName\">".display_str($TagName).'</a>';
 			}
 			$ReqTagList = implode(', ', $ReqTagList);
 ?>
@@ -828,7 +828,7 @@ if ($NumRequests > 0) {
 // Similar artist map
 
 if ($NumSimilar > 0) {
-	if ($SimilarData = $Cache->get_value('similar_positions_'.$ArtistID)) {
+	if ($SimilarData = $Cache->get_value("similar_positions_$ArtistID")) {
 		$Similar = new ARTISTS_SIMILAR($ArtistID, $Name);
 		$Similar->load_data($SimilarData);
 		if (!(current($Similar->Artists)->NameLength)) {
@@ -848,7 +848,7 @@ if ($NumSimilar > 0) {
 
 		$SimilarData = $Similar->dump_data();
 
-		$Cache->cache_value('similar_positions_'.$ArtistID, $SimilarData, 3600 * 24);
+		$Cache->cache_value("similar_positions_$ArtistID", $SimilarData, 3600 * 24);
 	}
 ?>
 		<div id="similar_artist_map" class="box">
@@ -878,8 +878,8 @@ function flipView() {
 	var state = document.getElementById('flip_view_1').style.display == 'block';
 
 	if (state) {
-		document.getElementById('flip_view_1').style.display='none';
-		document.getElementById('flip_view_2').style.display='block';
+		document.getElementById('flip_view_1').style.display = 'none';
+		document.getElementById('flip_view_2').style.display = 'block';
 		document.getElementById('flipper_title').innerHTML = 'Similar artist cloud';
 		document.getElementById('flip_to').innerHTML = 'Switch to map';
 
@@ -892,8 +892,8 @@ function flipView() {
 		}
 	}
 	else {
-		document.getElementById('flip_view_1').style.display='block';
-		document.getElementById('flip_view_2').style.display='none';
+		document.getElementById('flip_view_1').style.display = 'block';
+		document.getElementById('flip_view_2').style.display = 'none';
 		document.getElementById('flipper_title').innerHTML = 'Similar artist map';
 		document.getElementById('flip_to').innerHTML = 'Switch to cloud';
 	}
@@ -968,7 +968,7 @@ $CatalogueLimit = $CatalogueID * THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 //---------- Get some data to start processing
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-$Catalogue = $Cache->get_value('artist_comments_'.$ArtistID.'_catalogue_'.$CatalogueID);
+$Catalogue = $Cache->get_value("artist_comments_{$ArtistID}_catalogue_$CatalogueID");
 if ($Catalogue === false) {
 	$DB->query("
 		SELECT
@@ -980,12 +980,12 @@ if ($Catalogue === false) {
 			c.EditedTime,
 			u.Username
 		FROM artist_comments as c
-			LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
+			LEFT JOIN users_main AS u ON u.ID = c.EditedUserID
 		WHERE c.ArtistID = '$ArtistID'
 		ORDER BY c.ID
 		LIMIT $CatalogueLimit");
 	$Catalogue = $DB->to_array(false, MYSQLI_ASSOC);
-	$Cache->cache_value('artist_comments_'.$ArtistID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
+	$Cache->cache_value("artist_comments_{$ArtistID}_catalogue_$CatalogueID", $Catalogue, 0);
 }
 
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
@@ -1019,14 +1019,16 @@ foreach ($Thread as $Key => $Post) {
 				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
 <?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
-<?	}
+<?
+	}
 	if (check_perms('site_moderate_forums')) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
 <?	} ?>
 			</div>
 			<div id="bar<?=$PostID?>" style="float: right;">
 				<a href="reports.php?action=report&amp;type=artist_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
-<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
+<?
+	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);
 		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
 ?>
@@ -1038,7 +1040,8 @@ foreach ($Thread as $Key => $Post) {
 					<input type="hidden" name="key" value="<?=$Key?>" />
 				</form>
 				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
-<?		}
+<?
+		}
 	}
 ?>
 				&nbsp;
@@ -1062,7 +1065,7 @@ foreach ($Thread as $Key => $Post) {
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('artist', <?=$PostID?>, 1); return false;">&laquo;</a>
 <? 		} ?>
 				Last edited by
-				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime, 2, true, true)?>
 <?	} ?>
 			</div>
 		</td>

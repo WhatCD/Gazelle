@@ -7,8 +7,8 @@ function clearItem(torrentId) {
 function clearSelected(filterId) {
 	var checkBoxes, checkedBoxes = [];
 	if (filterId) {
-		var filterForm = $('#notificationform_'+filterId);
-		checkBoxes = $('.notify_box_'+filterId, filterForm);
+		var filterForm = $('#notificationform_' + filterId);
+		checkBoxes = $('.notify_box_' + filterId, filterForm);
 	} else {
 		checkBoxes = $('.notify_box');
 	}
@@ -25,8 +25,8 @@ function clearSelected(filterId) {
 }
 
 function toggleBoxes(filterId, value) {
-	var filterForm = $('#notificationform_'+filterId);
-	var checkBoxes = $('.notify_box_'+filterId, filterForm);
+	var filterForm = $('#notificationform_' + filterId);
+	var checkBoxes = $('.notify_box_' + filterId, filterForm);
 	for (var i = checkBoxes.length - 1; i >= 0; i--) {
 		$(checkBoxes[i]).prop('checked', value);
 	}

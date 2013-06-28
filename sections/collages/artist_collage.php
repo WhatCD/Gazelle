@@ -175,9 +175,12 @@ foreach ($Users as $ID => $User) {
 					<input type="hidden" name="action" value="add_artist" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
-					<input type="text" size="20" name="url" />
-					<input type="submit" value="+" />
-					<br />
+					<div class="field_div">
+						<input type="text" size="20" name="url" />
+					</div>
+					<div class="submit_div">
+						<input type="submit" value="Add" />
+					</div>
 					<span style="font-style: italic;">Enter the URL of an artist on the site.</span>
 				</form>
 			</div>
@@ -186,9 +189,12 @@ foreach ($Users as $ID => $User) {
 					<input type="hidden" name="action" value="add_artist_batch" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
-					<textarea name="urls" rows="5" cols="25" style="white-space: nowrap;"></textarea><br />
-					<input type="submit" value="Add" />
-					<br />
+					<div class="field_div">
+						<textarea name="urls" rows="5" cols="25" style="white-space: nowrap;"></textarea>
+					</div>
+					<div class="submit_div">
+						<input type="submit" value="Add" />
+					</div>
 					<span style="font-style: italic;">Enter the URLs of artists on the site, one per line.</span>
 				</form>
 			</div>
@@ -205,8 +211,8 @@ if (empty($CommentList)) {
 			um.Username,
 			cc.Time
 		FROM collages_comments AS cc
-			LEFT JOIN users_main AS um ON um.ID=cc.UserID
-		WHERE CollageID='$CollageID'
+			LEFT JOIN users_main AS um ON um.ID = cc.UserID
+		WHERE CollageID = '$CollageID'
 		ORDER BY ID DESC
 		LIMIT 15");
 	$CommentList = $DB->to_array(false, MYSQLI_NUM);
@@ -233,14 +239,17 @@ if (!$LoggedUser['DisablePosting']) {
 ?>
 		<div class="box box_addcomment">
 			<div class="head"><strong>Add comment</strong></div>
-			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled=true;" action="collages.php" method="post">
+			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled = true;" action="collages.php" method="post">
 				<input type="hidden" name="action" value="add_comment" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="collageid" value="<?=$CollageID?>" />
 				<div class="pad">
-					<textarea name="body" cols="24" rows="5"></textarea>
-					<br />
-					<input type="submit" id="submit_button" value="Add comment" />
+					<div class="field_div">
+						<textarea name="body" cols="24" rows="5"></textarea>
+					</div>
+					<div class="submit_div">
+						<input type="submit" id="submit_button" value="Add comment" />
+					</div>
 				</div>
 			</form>
 		</div>
