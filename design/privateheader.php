@@ -200,10 +200,10 @@ if ($LoggedUser['NotifyOnQuote']) {
 			FROM users_notify_quoted AS q
 				LEFT JOIN forums_topics AS t ON t.ID = q.PageID
 				LEFT JOIN forums AS f ON f.ID = t.ForumID
-			WHERE q.UserID=$LoggedUser[ID]
-				AND q.UnRead=1
+			WHERE q.UserID = $LoggedUser[ID]
+				AND q.UnRead = 1
 				AND q.Page = 'forums'
-				AND ((f.MinClassRead<='$LoggedUser[Class]'";
+				AND ((f.MinClassRead <= '$LoggedUser[Class]'";
 		if (!empty($RestrictedForums)) {
 			$sql .= " AND f.ID NOT IN ('$RestrictedForums')";
 		}
@@ -299,7 +299,7 @@ if ($NewStaffPMs === false) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM staff_pm_conversations
-		WHERE UserID='".$LoggedUser['ID']."'
+		WHERE UserID = '".$LoggedUser['ID']."'
 			AND Unread = '1'");
 	list($NewStaffPMs) = $DB->next_record();
 	$Cache->cache_value('staff_pm_new_'.$LoggedUser['ID'], $NewStaffPMs, 0);
@@ -315,7 +315,7 @@ if ($NewMessages === false) {
 	$DB->query("
 		SELECT COUNT(UnRead)
 		FROM pm_conversations_users
-		WHERE UserID='".$LoggedUser['ID']."'
+		WHERE UserID = '".$LoggedUser['ID']."'
 			AND UnRead = '1'
 			AND InInbox = '1'");
 	list($NewMessages) = $DB->next_record();
@@ -338,12 +338,16 @@ if (check_perms('site_torrents_notify')) {
 		$DB->query("
 			SELECT COUNT(UserID)
 			FROM users_notify_torrents
-			WHERE UserID='$LoggedUser[ID]'
-				AND UnRead='1'");
+			WHERE UserID = '$LoggedUser[ID]'
+				AND UnRead = '1'");
 		list($NewNotifications) = $DB->next_record();
 		/* if ($NewNotifications && !check_perms('site_torrents_notify')) {
-			$DB->query("DELETE FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]'");
-			$DB->query("DELETE FROM users_notify_filters WHERE UserID='$LoggedUser[ID]'");
+			$DB->query("
+				DELETE FROM users_notify_torrents
+				WHERE UserID = '$LoggedUser[ID]'");
+			$DB->query("
+				DELETE FROM users_notify_filters
+				WHERE UserID = '$LoggedUser[ID]'");
 		} */
 		$Cache->cache_value('notifications_new_'.$LoggedUser['ID'], $NewNotifications, 0);
 	}
@@ -381,17 +385,17 @@ if (check_perms('users_mod') || $LoggedUser['PermissionID'] == FORUM_MOD) {
 			$DB->query("
 				SELECT COUNT(ID)
 				FROM staff_pm_conversations
-				WHERE Status='Unanswered'
-					AND (AssignedToUser=".$LoggedUser['ID']."
-						OR (Level >= ".max(700,$Classes[MOD]['Level'])."
-							AND Level <=".$LoggedUser['Class']."))");
+				WHERE Status = 'Unanswered'
+					AND (AssignedToUser = ".$LoggedUser['ID']."
+						OR (Level >= ".max(700, $Classes[MOD]['Level'])."
+							AND Level <= ".$LoggedUser['Class']."))");
 		}
 		if ($LoggedUser['PermissionID'] == FORUM_MOD) {
 			$DB->query("
 				SELECT COUNT(ID)
 				FROM staff_pm_conversations
 				WHERE Status='Unanswered'
-					AND (AssignedToUser=".$LoggedUser['ID']."
+					AND (AssignedToUser = ".$LoggedUser['ID']."
 						OR Level = '". $Classes[FORUM_MOD]['Level'] . "')");
 		}
 		list($NumStaffPMs) = $DB->next_record();
@@ -409,7 +413,7 @@ if (check_perms('admin_reports')) {
 		$DB->query("
 			SELECT COUNT(ID)
 			FROM reportsv2
-			WHERE Status='New'");
+			WHERE Status = 'New'");
 		list($NumTorrentReports) = $DB->next_record();
 		$Cache->cache_value('num_torrent_reportsv2', $NumTorrentReports, 0);
 	}
@@ -422,7 +426,7 @@ if (check_perms('admin_reports')) {
 		$DB->query("
 			SELECT COUNT(ID)
 			FROM reports
-			WHERE Status='New'");
+			WHERE Status = 'New'");
 		list($NumOtherReports) = $DB->next_record();
 		$Cache->cache_value('num_other_reports', $NumOtherReports, 0);
 	}
@@ -436,7 +440,7 @@ if (check_perms('admin_reports')) {
 		$DB->query("
 			SELECT COUNT(ID)
 			FROM reports
-			WHERE Status='New'
+			WHERE Status = 'New'
 				AND Type = 'request_update'");
 		list($NumUpdateReports) = $DB->next_record();
 		$Cache->cache_value('num_update_reports', $NumUpdateReports, 0);
@@ -451,7 +455,7 @@ if (check_perms('admin_reports')) {
 		$DB->query("
 			SELECT COUNT(ID)
 			FROM reports
-			WHERE Status='New'
+			WHERE Status = 'New'
 				AND Type IN('artist_comment', 'collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment')");
 		list($NumForumReports) = $DB->next_record();
 		$Cache->cache_value('num_forum_reports', $NumForumReports, 0);
@@ -471,7 +475,7 @@ if (!empty($Alerts) || !empty($ModBar)) {
 		<div class="alertbar"><?=$Alert?></div>
 <?		}
 		if (!empty($ModBar)) { ?>
-		<div class="alertbar blend"><?=implode(' | ',$ModBar)?></div>
+		<div class="alertbar blend"><?=implode(' | ', $ModBar)?></div>
 <?		} ?>
 	</div>
 <?
