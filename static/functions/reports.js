@@ -11,7 +11,10 @@ function toggleNotes(id) {
 function saveNotes(id) {
 	var notes = $('#notes_' + id).raw().value;
 	notes = notes.replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '<br />');
-	ajax.get('reports.php?action=add_notes&id=' + id + '&notes=' + notes, function (response) {
+	var post = new Array();
+	post['id'] = id;
+	post['notes'] = notes;
+	ajax.post('reports.php?action=add_notes', post, function (response) {
 		if (JSON.parse(response)['status'] != 'success') {
 			alert("Error, could not save notes");
 		}
@@ -20,7 +23,9 @@ function saveNotes(id) {
 }
 
 function claim(id) {
-	ajax.get('reports.php?action=claim&id=' + id, function (response) {
+	var post = new Array();
+	post['id'] = id;
+	ajax.post('reports.php?action=claim', post, function (response) {
 		var json = JSON.parse(response);
 		if (json['status'] == 'failure') {
 			alert("Error, could not claim.");
@@ -36,7 +41,10 @@ function claim(id) {
 }
 
 function unClaim(id) {
-	ajax.get('reports.php?action=unclaim&remove=1&id=' + id, function (response) {
+	var post = new Array();
+	post['id'] = id;
+	post['remove'] = '1';
+	ajax.post('reports.php?action=unclaim', post, function (response) {
 		var json = JSON.parse(response);
 		if (json['status'] == 'success') {
 			$('#claimed_' + id).raw().innerHTML = '<a href="#" id="claim_' + id + '" onclick="claim(' + id + '); return false;" class="brackets">Claim</a>';

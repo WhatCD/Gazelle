@@ -1,157 +1,32 @@
-/*
-Spent hours debugging opera, turns out they reserve the global variable autocomplete. Bitches.
-*/
-"use strict";
-var autocomp = {
-	id: "",
-	value: "",
-	artistid: null,
-	timer: null,
-	input: null,
-	list: null,
-	pos: -1,
-	cache: [],
-	start: function (id) {
-		this.id = id;
-		this.cache[id] = ["",[],[],[]];
-		this.input = document.getElementById(id + "search");
-		this.list = document.getElementById(id + "complete");
-		listener.set(document.body,'click',function() {
-			autocomp.value = autocomp.input.value;
-			autocomp.end();
+var ARTIST_AUTOCOMPLETE_URL = 'artist.php?action=autocomplete';
+var TAGS_AUTOCOMPLETE_URL = 'torrents.php?action=autocomplete_tags';
+
+$(document).ready(function() {
+	var url = new URL();
+
+	$('#artistsearch').autocomplete({
+		serviceUrl : ARTIST_AUTOCOMPLETE_URL,
+		onSelect : function(suggestion) {
+			window.location = 'artist.php?id=' + suggestion['data'];
+		},
+	});
+
+	if (url.path == 'torrents' || url.path == 'upload' || url.path == 'artist') {
+		$("#artist").autocomplete({
+			serviceUrl : ARTIST_AUTOCOMPLETE_URL
 		});
-	},
-	end: function () {
-		//this.input.value = this.value;
-		this.artistid = null;
-		this.highlight(-1);
-		this.list.style.visibility = 'hidden';
-		clearTimeout(this.timer);
-	},
-	keyup: function (e) {
-		clearTimeout(this.timer);
-		var key = (window.event) ? window.event.keyCode : e.keyCode;
-		switch (key) {
-			case 27: //esc
-				break;
-			case 8: //backspace
-				this.artistid = null;
-				this.list.style.visibility = 'hidden';
-				this.timer = setTimeout("autocomp.get('" + escape(this.input.value) + "');",500);
-				break;
-			case 38: //up
-			case 40: //down
-				this.highlight(key);
-				if (this.pos !== -1) {
-					this.artistid = this.list.children[this.pos].artistid;
-					this.input.value = this.list.children[this.pos].textContent || this.list.children[this.pos].value;
-				}
-				break;
-			case 13:
-				if (this.artistid != null) {
-					window.location = this.id + '.php?id='+this.artistid;
-				}
-				return 0;
-			default:
-				this.artistid = null;
-				this.timer = setTimeout("autocomp.get('" + escape(this.input.value) + "');",300);
-				return 1;
-		}
-		return 0;
-	},
-	keydown: function (e) {
-		switch ((window.event)?window.event.keyCode:e.keyCode) {
-			case 9: //tab
-				this.value = this.input.value;
-			case 27: //esc
-				this.end();
-				break;
-			case 38:
-				e.preventDefault();
-				break;
-			case 13: //enter
-				return 0;
-		}
-		return 1;
-	},
-	highlight: function(change) {
-		//No highlights on no list
-		if (this.list.children.length === 0) {
-			return;
-		}
-
-		//Show me the
-		this.list.style.visibility = 'visible';
-
-		//Remove the previous highlight
-		if (this.pos !== -1) {
-			this.list.children[this.pos].className = "";
-		}
-
-		//Change position
-		if (change === 40) {
-			++this.pos;
-		} else if (change === 38) {
-			--this.pos;
-		} else {
-			this.pos = change;
-		}
-
-		//Wrap arounds
-		if (this.pos >= this.list.children.length) {
-			this.pos = -1;
-		} else if (this.pos < -1) {
-			this.pos = this.list.children.length - 1;
-		}
-
-		if (this.pos !== -1) {
-			this.list.children[this.pos].className = "highlight";
-		} else {
-			this.artistid = null;
-			this.input.value = this.value;
-		}
-	},
-	get: function (value) {
-		this.pos = -1;
-		this.value = unescape(value);
-
-		if (typeof this.cache[this.id + value] === 'object') {
-			this.display(this.cache[this.id + value]);
-			return;
-		}
-
-		ajax.get(this.id + '.php?action=autocomplete&name=' + this.input.value, function(jstr) {
-			var data = json.decode(jstr);
-			autocomp.cache[autocomp.id + data[0]] = data;
-			autocomp.display(data);
+		$("#artistsimilar").autocomplete({
+			serviceUrl : ARTIST_AUTOCOMPLETE_URL
 		});
-	},
-	display: function (data) {
-		var i, il, li;
-		this.list.innerHTML = '';
-		for (i = 0, il = data[1].length; i < il; ++i) {
-			li = document.createElement('li');
-			li.innerHTML = data[1][i];
-			li.i = i;
-			li.artistid = data[3][i];
-			listener.set(li,'mouseover',function() {
-				autocomp.highlight(this.i);
-			});
-			listener.set(li,'click',function(e) {
-				var location = autocomp.id + '.php?id=' + this.artistid;
-				if (e.button == 0) {
-					window.open(location, '_self');
-				} else if (e.button == 1) {
-					var win = window.open(location, '_blank');
-					win.focus();
-				}
-			});
-			this.list.appendChild(li);
-		}
-		if (i > 0) {
-			this.list.style.visibility = 'visible';
-		} else {
-			this.list.style.visibility = 'hidden';
-		}
 	}
-};
+	if (url.path == 'torrents' || url.path == 'upload' || url.path == 'collages' || url.path == 'requests' || url.path == 'top10' || (url.path == 'requests' && url.query['action'] == 'new')) {
+		$("#tags").autocomplete({
+			serviceUrl : TAGS_AUTOCOMPLETE_URL,
+			delimiter: ','
+		});
+		$("#tagname").autocomplete({
+			serviceUrl : TAGS_AUTOCOMPLETE_URL,
+		});
+	}
+	
+});

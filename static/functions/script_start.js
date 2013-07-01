@@ -194,6 +194,22 @@ var util = function (selector, context) {
 	return new util.fn.init(selector, context);
 }
 
+function URL() {
+	var path = window.location.pathname.split('/');
+	var path = path[path.length - 1].split(".")[0];
+	var splitted = window.location.search.substr(1).split("&");
+	var query = {};
+	for (var i = 0; i < splitted.length; i++) {
+		var q = splitted[i].split("=");
+		query[q[0]] = q[1];
+	};
+	
+	var response = new Array();
+	response['path'] = path;
+	response['query'] = query;
+	return response;
+}
+
 jQuery.extend(jQuery.prototype, {
 	results: function () {
 		return this.size();

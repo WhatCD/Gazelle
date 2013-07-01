@@ -409,7 +409,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 						<input type="hidden" name="action" value="add_alias" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-						<input type="text" name="aliasname[]" size="17" />
+						<input type="text" id="artist" name="aliasname[]" size="17" />
 						<select name="importance[]">
 							<option value="1">Main</option>
 							<option value="2">Guest</option>
@@ -490,7 +490,7 @@ if (empty($LoggedUser['DisableTagging'])) {
 					<input type="hidden" name="action" value="add_tag" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-					<input type="text" name="tagname" size="20" />
+					<input type="text" name="tagname" id="tagname" size="20" />
 					<input type="submit" value="+" />
 				</form>
 				<br /><br />

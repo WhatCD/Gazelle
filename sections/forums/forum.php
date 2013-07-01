@@ -45,7 +45,7 @@ if (!isset($Forum) || !is_array($Forum)) {
 			t.LastPostAuthorID
 		FROM forums_topics AS t
 		WHERE t.ForumID = '$ForumID'
-		ORDER BY t.IsSticky DESC, t.LastPostTime DESC
+		ORDER BY t.Ranking = 0, t.Ranking ASC, t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
 	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
 

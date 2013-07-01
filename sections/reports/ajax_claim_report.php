@@ -1,6 +1,6 @@
 <?php
 
-if (!check_perms('site_moderate_forums') || empty($_GET['id'])) {
+if (!check_perms('site_moderate_forums') || empty($_POST['id'])) {
 	print
 		json_encode(
 			array(
@@ -10,7 +10,7 @@ if (!check_perms('site_moderate_forums') || empty($_GET['id'])) {
 	die();
 }
 
-$ID = (int)$_GET['id'];
+$ID = (int)$_POST['id'];
 $DB->query("SELECT ClaimerID FROM reports WHERE ID = '$ID'");
 list($ClaimerID) = $DB->next_record();
 if ($ClaimerID) {

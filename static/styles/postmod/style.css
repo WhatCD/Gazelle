@@ -1083,3 +1083,6 @@ tr.torrent .bookmark > a:after {
 .edit_changelog textarea {
 	width: 600px;
 }
+.autocomplete-suggestions { background: #111; }
+.autocomplete-selected { background: #444; }
+

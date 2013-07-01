@@ -1,5 +1,11 @@
 CHANGELOG
 
+2013-07-01 by Ajax
+Moved autocomplete logic to jquery plugin, introduced artist autocompletes on rest of site
+
+2013-06-30 by Ajax
+Give custom ordering to stickied threads
+
 2013-06-24 by Ajax
 Added user recents to API. ajax.php?action=user_recents&userid=<ID>&limit=<LIMIT> the limit defaults to 15 if empty and maxes out at 50
 

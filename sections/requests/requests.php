@@ -389,7 +389,7 @@ View::show_header($Title, 'requests');
 			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td>
-					<input type="text" name="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />&nbsp;
+					<input type="text" name="tags" id="tags" size="60" value="<?= (!empty($TagNames) ? display_str(implode(', ', $TagNames)) : '') ?>" />&nbsp;
 					<input type="radio" name="tags_type" id="tags_type0" value="0"<? Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 					<input type="radio" name="tags_type" id="tags_type1" value="1"<? Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 				</td>

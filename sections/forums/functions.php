@@ -12,7 +12,8 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false, $Ap
 				t.LastPostAuthorID,
 				ISNULL(p.TopicID) AS NoPoll,
 				t.StickyPostID,
-				t.AuthorID as OP
+				t.AuthorID as OP,
+				t.Ranking
 			FROM forums_topics AS t
 				JOIN forums_posts AS fp ON fp.TopicID = t.ID
 				LEFT JOIN forums_polls AS p ON p.TopicID=t.ID

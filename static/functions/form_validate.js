@@ -1,14 +1,7 @@
 $(document).ready(function() {
-	var parts = window.location.pathname.split('/');
-	var page = parts[parts.length - 1].split(".")[0];
-	var splitted = window.location.search.substr(1).split("&");
-	var query = {};
-	for (var i = 0; i < splitted.length; i++) {
-		var q = splitted[i].split("=");
-		query[q[0]] = q[1];
-	};
-
-	switch (page) {
+	var url = new URL();
+	var query = url.query;
+	switch (url.path ) {
 		case "forums":
 			if (query['action'] == "new") {
 				$("#newthreadform").validate();

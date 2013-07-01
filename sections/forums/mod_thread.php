@@ -30,6 +30,12 @@ authorize();
 $TopicID = (int)$_POST['threadid'];
 $Sticky = (isset($_POST['sticky'])) ? 1 : 0;
 $Locked = (isset($_POST['locked'])) ? 1 : 0;
+$Ranking = (int) $_POST['ranking'];
+if(!$Sticky && $Ranking > 0) {
+	$Ranking = 0;
+} elseif(0 > $Ranking) {
+	error("Ranking cannot be a negative value");
+}
 $Title = db_string($_POST['title']);
 $RawTitle = $_POST['title'];
 $ForumID = (int)$_POST['forumid'];
@@ -131,6 +137,7 @@ if (isset($_POST['delete'])) {
 	$Cache->begin_transaction('thread_'.$TopicID.'_info');
 	$UpdateArray = array(
 		'IsSticky' => $Sticky,
+		'Ranking' => $Ranking,
 		'IsLocked' => $Locked,
 		'Title' => Format::cut_string($RawTitle, 150, 1, 0),
 		'ForumID' => $ForumID
@@ -142,6 +149,7 @@ if (isset($_POST['delete'])) {
 		UPDATE forums_topics
 		SET
 			IsSticky = '$Sticky',
+			Ranking = '$Ranking',
 			IsLocked = '$Locked',
 			Title = '$Title',
 			ForumID ='$ForumID'
@@ -178,14 +186,15 @@ if (isset($_POST['delete'])) {
 						JOIN forums_topics AS tt ON pp.TopicID=tt.ID
 					WHERE tt.ForumID='$OldForumID'),
 				t.IsLocked,
-				t.IsSticky
+				t.IsSticky,
+				t.Ranking
 			FROM forums_topics AS t
 				JOIN forums_posts AS p ON p.ID=t.LastPostID
 				LEFT JOIN users_main AS um ON um.ID=p.AuthorID
 			WHERE t.ForumID='$OldForumID'
 			ORDER BY t.LastPostID DESC
 			LIMIT 1");
-		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts, $NewLocked, $NewSticky) = $DB->next_record(MYSQLI_NUM, false);
+		list($NewLastTopic, $NewLastPostID, $NewLastTitle, $NewLastAuthorID, $NewLastAuthorName, $NewLastAddedTime, $NumPosts, $NewLocked, $NewSticky, $NewRanking) = $DB->next_record(MYSQLI_NUM, false);
 
 		$DB->query("
 			UPDATE forums
@@ -208,7 +217,8 @@ if (isset($_POST['delete'])) {
 			'LastPostTime' => $NewLastAddedTime,
 			'Title' => $NewLastTitle,
 			'IsLocked' => $NewLocked,
-			'IsSticky' => $NewSticky
+			'IsSticky' => $NewSticky,
+			'Ranking' => $NewRanking
 			);
 
 
@@ -268,7 +278,8 @@ if (isset($_POST['delete'])) {
 			$UpdateArray = array(
 				'Title' => $RawTitle,
 				'IsLocked' => $Locked,
-				'IsSticky' => $Sticky
+				'IsSticky' => $Sticky,
+				'Ranking' => $Ranking
 			);
 			$Cache->begin_transaction('forums_list');
 			$Cache->update_row($ForumID, $UpdateArray);
@@ -286,5 +297,4 @@ if (isset($_POST['delete'])) {
 		$Cache->delete_value('polls_'.$TopicID);
 	}
 	header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.$Page);
-
 }

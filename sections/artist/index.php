@@ -98,6 +98,9 @@ if (!empty($_POST['action'])) {
 	}
 } elseif (!empty($_GET['action'])) {
 	switch ($_GET['action']) {
+		case 'autocomplete':
+			require('sections/artist/autocomplete.php');
+			break;
 		case 'get_post':
 			if (!$_GET['post'] || !is_number($_GET['post'])) {
 				error(0);

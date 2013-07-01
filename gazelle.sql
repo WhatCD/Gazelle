@@ -391,6 +391,7 @@ CREATE TABLE `forums_topics` (
   `LastPostTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `LastPostAuthorID` int(10) NOT NULL,
   `StickyPostID` int(10) NOT NULL DEFAULT '0',
+  `Ranking` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `AuthorID` (`AuthorID`),
   KEY `ForumID` (`ForumID`),

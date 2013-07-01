@@ -1,12 +1,7 @@
 <?
-header('Content-type: application/x-suggestions+json');
-require('classes/ajax_start.php');
+header('Content-Type: application/json; charset=utf-8');
 
-if (empty($_GET['name'])) {
-	die('["",[],[],[]]');
-}
-
-$FullName = rawurldecode($_GET['name']);
+$FullName = rawurldecode($_GET['query']);
 
 $MaxKeySize = 4;
 if (strtolower(substr($FullName,0,4)) == 'the ') {
@@ -16,23 +11,19 @@ $KeySize = min($MaxKeySize,max(1,strlen($FullName)));
 
 $Letters = strtolower(substr($FullName,0,$KeySize));
 $AutoSuggest = $Cache->get('autocomplete_artist_'.$KeySize.'_'.$Letters);
-if (!is_array($AutoSuggest)) {
-	if (!isset($DB) || !is_object($DB)) {
-		require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
-		$DB = NEW DB_MYSQL; //Load the database wrapper
-	}
+
+if (!$AutoSuggest) {
 	$Limit = (($KeySize === $MaxKeySize) ? 250 : 10);
 	$DB->query("
 		SELECT
 			a.ArtistID,
-			a.Name,
-			SUM(t.Snatched) AS Snatches
+			a.Name
 		FROM artists_group AS a
 			INNER JOIN torrents_artists AS ta ON ta.ArtistID=a.ArtistID
 			INNER JOIN torrents AS t ON t.GroupID=ta.GroupID
 		WHERE a.Name LIKE '".db_string(str_replace('\\','\\\\',$Letters),true)."%'
 		GROUP BY ta.ArtistID
-		ORDER BY Snatches DESC
+		ORDER BY t.Snatched DESC
 		LIMIT $Limit");
 	$AutoSuggest = $DB->to_array(false,MYSQLI_NUM,false);
 	$Cache->cache_value('autocomplete_artist_'.$KeySize.'_'.$Letters,$AutoSuggest,1800 + 7200 * ($MaxKeySize - $KeySize)); // Can't cache things for too long in case names are edited
@@ -40,17 +31,16 @@ if (!is_array($AutoSuggest)) {
 
 $Matched = 0;
 $Suggestions = array();
-$Snatches = array();
 $ArtistIDs = array();
+$Response = array();
+$Response['query'] = $FullName;
 foreach ($AutoSuggest as $Suggestion) {
-	list($ID,$Name, $Snatch) = $Suggestion;
-	if (stripos($Name,$FullName) === 0) {
-		$Suggestions[] = display_str($Name);
-		$Snatches[] = number_format($Snatch).' snatches';
-		$ArtistIDs[] = $ID;
+	list($ID, $Name) = $Suggestion;
+	if (stripos($Name, $FullName) === 0) {
+		$Response['suggestions'][] = array('value' => display_str($Name), 'data' => $ID);
 		if (++$Matched > 9) {
 			break;
 		}
 	}
 }
-echo json_encode(array(display_str($FullName),$Suggestions,$Snatches,$ArtistIDs));
+echo json_encode($Response);

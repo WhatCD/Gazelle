@@ -214,7 +214,7 @@ function AddArtistField() {
 	}
 	var ArtistField = document.createElement("input");
 	ArtistField.type = "text";
-	ArtistField.id = "artist";
+	ArtistField.id = "artist_" + ArtistCount;
 	ArtistField.name = "artists[]";
 	ArtistField.size = 45;
 
@@ -223,7 +223,7 @@ function AddArtistField() {
 	ImportanceField.name = "importance[]";
 	ImportanceField.options[0] = new Option("Main", "1");
 	ImportanceField.options[1] = new Option("Guest", "2");
-	ImportanceField.options[2] = new Option("Composer", "4");
+	ImportanceField.options[2] = new Option("Composer	", "4");
 	ImportanceField.options[3] = new Option("Conductor", "5");
 	ImportanceField.options[4] = new Option("DJ / Compiler", "6");
 	ImportanceField.options[5] = new Option("Remixer", "3");
@@ -234,6 +234,13 @@ function AddArtistField() {
 	x.appendChild(ArtistField);
 	x.appendChild(document.createTextNode('\n'));
 	x.appendChild(ImportanceField);
+	
+	$(ArtistField).live('focus', function() {
+		$(ArtistField).autocomplete({
+			serviceUrl : 'artist.php?action=autocomplete'
+		});
+	});
+
 	ArtistCount++;
 }
 

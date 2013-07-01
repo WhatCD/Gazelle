@@ -381,6 +381,9 @@ if (!empty($_REQUEST['action'])) {
 		case 'remove_cover_art':
 			include(SERVER_ROOT.'/sections/torrents/remove_cover_art.php');
 			break;
+		case 'autocomplete_tags':
+			include(SERVER_ROOT.'/sections/torrents/autocomplete_tags.php');
+			break;
 		default:
 			enforce_login();
 

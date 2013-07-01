@@ -5,62 +5,115 @@ $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title><?=display_str($PageTitle)?></title>
-	<meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link rel="shortcut icon" href="favicon.ico" />
-	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<?=SITE_NAME?> Torrents" href="opensearch.php?type=torrents" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<?=SITE_NAME?> Artists" href="opensearch.php?type=artists" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<?=SITE_NAME?> Requests" href="opensearch.php?type=requests" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<?=SITE_NAME?> Forums" href="opensearch.php?type=forums" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<?=SITE_NAME?> Log" href="opensearch.php?type=log" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<?=SITE_NAME?> Users" href="opensearch.php?type=users" />
-	<link rel="search" type="application/opensearchdescription+xml" title="<?=SITE_NAME?> Wiki" href="opensearch.php?type=wiki" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=feed_news&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - News" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=feed_blog&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Blog" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=feed_changelog&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Gazelle Change Log" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_notify_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - P.T.N." />
+<title><?=display_str($PageTitle)?></title>
+<meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="search" type="application/opensearchdescription+xml"
+	title="<?=SITE_NAME?> Torrents" href="opensearch.php?type=torrents" />
+<link rel="search" type="application/opensearchdescription+xml"
+	title="<?=SITE_NAME?> Artists" href="opensearch.php?type=artists" />
+<link rel="search" type="application/opensearchdescription+xml"
+	title="<?=SITE_NAME?> Requests" href="opensearch.php?type=requests" />
+<link rel="search" type="application/opensearchdescription+xml"
+	title="<?=SITE_NAME?> Forums" href="opensearch.php?type=forums" />
+<link rel="search" type="application/opensearchdescription+xml"
+	title="<?=SITE_NAME?> Log" href="opensearch.php?type=log" />
+<link rel="search" type="application/opensearchdescription+xml"
+	title="<?=SITE_NAME?> Users" href="opensearch.php?type=users" />
+<link rel="search" type="application/opensearchdescription+xml"
+	title="<?=SITE_NAME?> Wiki" href="opensearch.php?type=wiki" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=feed_news&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - News" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=feed_blog&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Blog" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=feed_changelog&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Gazelle Change Log" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_notify_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - P.T.N." />
 <?
 if (isset($LoggedUser['Notify'])) {
 	foreach ($LoggedUser['Notify'] as $Filter) {
 		list($FilterID, $FilterName) = $Filter;
 ?>
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_notify_<?=$FilterID?>_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode($FilterName)?>" title="<?=SITE_NAME?> - <?=display_str($FilterName)?>" />
+	<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_notify_<?=$FilterID?>_<?=$LoggedUser['torrent_pass']?>&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;name=<?=urlencode($FilterName)?>"
+	title="<?=SITE_NAME?> - <?=display_str($FilterName)?>" />
 <?
 	}
 }
 ?>
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_all&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - All Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_music&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Music Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_apps&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Application Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_ebooks&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - E-Book Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_abooks&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Audiobooks Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_evids&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - E-Learning Video Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_comedy&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Comedy Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_comics&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Comic Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_mp3&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - MP3 Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_flac&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - FLAC Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_vinyl&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Vinyl Sourced Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_lossless&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - Lossless Torrents" />
-	<link rel="alternate" type="application/rss+xml" href="feeds.php?feed=torrents_lossless24&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" title="<?=SITE_NAME?> - 24bit Lossless Torrents" />
+	<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_all&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - All Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_music&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Music Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_apps&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Application Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_ebooks&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - E-Book Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_abooks&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Audiobooks Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_evids&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - E-Learning Video Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_comedy&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Comedy Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_comics&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Comic Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_mp3&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - MP3 Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_flac&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - FLAC Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_vinyl&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Vinyl Sourced Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_lossless&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - Lossless Torrents" />
+<link rel="alternate" type="application/rss+xml"
+	href="feeds.php?feed=torrents_lossless24&amp;user=<?=$LoggedUser['ID']?>&amp;auth=<?=$LoggedUser['RSS_Auth']?>&amp;passkey=<?=$LoggedUser['torrent_pass']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>"
+	title="<?=SITE_NAME?> - 24bit Lossless Torrents" />
 
-	<link href="<?=STATIC_SERVER?>styles/global.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/global.css')?>" rel="stylesheet" type="text/css" />
+<link
+	href="<?=STATIC_SERVER?>styles/global.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/global.css')?>"
+	rel="stylesheet" type="text/css" />
 <? if ($Mobile) { ?>
-	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0, user-scalable=no;" />
-	<link href="<?=STATIC_SERVER ?>styles/mobile/style.css" rel="stylesheet" type="text/css" />
+	<meta name="viewport"
+	content="width=device-width; initial-scale=1.0; maximum-scale=1.0, user-scalable=no;" />
+<link href="<?=STATIC_SERVER ?>styles/mobile/style.css" rel="stylesheet"
+	type="text/css" />
 <?
 } else {
 	if (empty($LoggedUser['StyleURL'])) {
 ?>
-	<link href="<?=STATIC_SERVER?>styles/<?=$LoggedUser['StyleName']?>/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/'.$LoggedUser['StyleName'].'/style.css')?>" title="<?=$LoggedUser['StyleName']?>" rel="stylesheet" type="text/css" media="screen" />
+	<link
+	href="<?=STATIC_SERVER?>styles/<?=$LoggedUser['StyleName']?>/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/'.$LoggedUser['StyleName'].'/style.css')?>"
+	title="<?=$LoggedUser['StyleName']?>" rel="stylesheet" type="text/css"
+	media="screen" />
 <?	} else { ?>
-	<link href="<?=$LoggedUser['StyleURL']?>" title="External CSS" rel="stylesheet" type="text/css" media="screen" />
+	<link href="<?=$LoggedUser['StyleURL']?>" title="External CSS"
+	rel="stylesheet" type="text/css" media="screen" />
 <?
 	}
 	if ($LoggedUser['UseOpenDyslexic']) {
 		// load the OpenDyslexic font ?>
-	<link rel="stylesheet" href="<?=STATIC_SERVER?>styles/opendyslexic/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/opendyslexic/style.css')?>" type="text/css" charset="utf-8" />
+	<link rel="stylesheet"
+	href="<?=STATIC_SERVER?>styles/opendyslexic/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/opendyslexic/style.css')?>"
+	type="text/css" charset="utf-8" />
 
 <!--<link href="<?=STATIC_SERVER?>styles/opendyslexic/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/opendyslexic/style.css')?>" title="OpenDyslexic" rel="stylesheet" type="text/css" media="screen" />-->
 <?
@@ -68,14 +121,26 @@ if (isset($LoggedUser['Notify'])) {
 }
 ?>
 
-	<script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
-	<script src="<?=STATIC_SERVER?>functions/script_start.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/script_start.js')?>" type="text/javascript"></script>
-	<script src="<?=STATIC_SERVER?>functions/ajax.class.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/ajax.class.js')?>" type="text/javascript"></script>
-	<script type="text/javascript">//<![CDATA[
+	<script src="<?=STATIC_SERVER?>functions/jquery.js"
+	type="text/javascript"></script>
+<script
+	src="<?=STATIC_SERVER?>functions/script_start.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/script_start.js')?>"
+	type="text/javascript"></script>
+<script
+	src="<?=STATIC_SERVER?>functions/ajax.class.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/ajax.class.js')?>"
+	type="text/javascript"></script>
+<script type="text/javascript">//<![CDATA[
 		var authkey = "<?=$LoggedUser['AuthKey']?>";
 		var userid = <?=$LoggedUser['ID']?>;
 	//]]></script>
-	<script src="<?=STATIC_SERVER?>functions/global.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/global.js')?>" type="text/javascript"></script>
+<script
+	src="<?=STATIC_SERVER?>functions/global.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/global.js')?>"
+	type="text/javascript"></script>
+<script src="<?=STATIC_SERVER?>functions/jquery.autocomplete.js"
+	type="text/javascript"></script>
+<script src="<?=STATIC_SERVER?>functions/autocomplete.js"
+	type="text/javascript"></script>
+
 <?
 
 $Scripts = explode(',', $JSIncludes);
@@ -84,29 +149,41 @@ foreach ($Scripts as $Script) {
 		continue;
 	}
 ?>
-	<script src="<?=STATIC_SERVER?>functions/<?=$Script?>.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/'.$Script.'.js')?>" type="text/javascript"></script>
+	<script
+	src="<?=STATIC_SERVER?>functions/<?=$Script?>.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/'.$Script.'.js')?>"
+	type="text/javascript"></script>
 <?
 }
 if ($Mobile) { ?>
-	<script src="<?=STATIC_SERVER?>styles/mobile/style.js" type="text/javascript"></script>
+	<script src="<?=STATIC_SERVER?>styles/mobile/style.js"
+	type="text/javascript"></script>
 <?
 }
 ?>
 </head>
 <body id="<?=$Document == 'collages' ? 'collage' : $Document?>">
-<div id="wrapper">
-<h1 class="hidden"><?=SITE_NAME?></h1>
+	<div id="wrapper">
+		<h1 class="hidden"><?=SITE_NAME?></h1>
 
-<div id="header">
-	<div id="logo"><a href="index.php"></a></div>
-	<div id="userinfo">
-		<ul id="userinfo_username">
-			<li id="nav_userinfo"<?=Format::add_class($PageID, array('user',false,false), 'active', true, 'id')?>><a href="user.php?id=<?=$LoggedUser['ID']?>" class="username"><?=$LoggedUser['Username']?></a></li>
-			<li id="nav_useredit" class="brackets<?=Format::add_class($PageID, array('user','edit'), 'active', false)?>"><a href="user.php?action=edit&amp;userid=<?=$LoggedUser['ID']?>">Edit</a></li>
-			<li id="nav_logout" class="brackets"><a href="logout.php?auth=<?=$LoggedUser['AuthKey']?>">Logout</a></li>
-		</ul>
-		<ul id="userinfo_major">
-			<li id="nav_upload" class="brackets<?=Format::add_class($PageID, array('upload'), 'active', false)?>"><a href="upload.php">Upload</a></li>
+		<div id="header">
+			<div id="logo">
+				<a href="index.php"></a>
+			</div>
+			<div id="userinfo">
+				<ul id="userinfo_username">
+					<li id="nav_userinfo"
+						<?=Format::add_class($PageID, array('user',false,false), 'active', true, 'id')?>><a
+						href="user.php?id=<?=$LoggedUser['ID']?>" class="username"><?=$LoggedUser['Username']?></a></li>
+					<li id="nav_useredit"
+						class="brackets<?=Format::add_class($PageID, array('user','edit'), 'active', false)?>"><a
+						href="user.php?action=edit&amp;userid=<?=$LoggedUser['ID']?>">Edit</a></li>
+					<li id="nav_logout" class="brackets"><a
+						href="logout.php?auth=<?=$LoggedUser['AuthKey']?>">Logout</a></li>
+				</ul>
+				<ul id="userinfo_major">
+					<li id="nav_upload"
+						class="brackets<?=Format::add_class($PageID, array('upload'), 'active', false)?>"><a
+						href="upload.php">Upload</a></li>
 <?
 if (check_perms('site_send_unlimited_invites')) {
 	$Invites = ' (∞)';
@@ -116,19 +193,33 @@ if (check_perms('site_send_unlimited_invites')) {
 	$Invites = '';
 }
 ?>
-			<li id="nav_invite" class="brackets<?=Format::add_class($PageID, array('user','invite'), 'active', false)?>"><a href="user.php?action=invite">Invite<?=$Invites?></a></li>
-			<li id="nav_donate" class="brackets<?=Format::add_class($PageID, array('donate'), 'active', false)?>"><a href="donate.php">Donate</a></li>
-
-		</ul>
-		<ul id="userinfo_stats">
-			<li id="stats_seeding"><a href="torrents.php?type=seeding&amp;userid=<?=$LoggedUser['ID']?>">Up</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesUploaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span></li>
-			<li id="stats_leeching"><a href="torrents.php?type=leeching&amp;userid=<?=$LoggedUser['ID']?>">Down</a>: <span class="stat" title="<?=Format::get_size($LoggedUser['BytesDownloaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesDownloaded'])?></span></li>
-			<li id="stats_ratio">Ratio: <span class="stat"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'], $LoggedUser['BytesDownloaded'])?></span></li>
+			<li id="nav_invite"
+						class="brackets<?=Format::add_class($PageID, array('user','invite'), 'active', false)?>"><a
+						href="user.php?action=invite">Invite<?=$Invites?></a></li>
+					<li id="nav_donate"
+						class="brackets<?=Format::add_class($PageID, array('donate'), 'active', false)?>"><a
+						href="donate.php">Donate</a></li>
+					
+				</ul>
+				<ul id="userinfo_stats">
+					<li id="stats_seeding"><a
+						href="torrents.php?type=seeding&amp;userid=<?=$LoggedUser['ID']?>">Up</a>:
+						<span class="stat"
+						title="<?=Format::get_size($LoggedUser['BytesUploaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span></li>
+					<li id="stats_leeching"><a
+						href="torrents.php?type=leeching&amp;userid=<?=$LoggedUser['ID']?>">Down</a>:
+						<span class="stat"
+						title="<?=Format::get_size($LoggedUser['BytesDownloaded'], 5)?>"><?=Format::get_size($LoggedUser['BytesDownloaded'])?></span></li>
+					<li id="stats_ratio">Ratio: <span class="stat"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'], $LoggedUser['BytesDownloaded'])?></span></li>
 <?	if (!empty($LoggedUser['RequiredRatio'])) { ?>
-			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span class="stat" title="<?=number_format($LoggedUser['RequiredRatio'], 5)?>"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
+			<li id="stats_required"><a href="rules.php?p=ratio">Required</a>: <span
+						class="stat"
+						title="<?=number_format($LoggedUser['RequiredRatio'], 5)?>"><?=number_format($LoggedUser['RequiredRatio'], 2)?></span></li>
 <?	}
 	if ($LoggedUser['FLTokens'] > 0) { ?>
-			<li id="fl_tokens"><a href="wiki.php?action=article&amp;id=754">Tokens</a>: <span class="stat"><a href="userhistory.php?action=token_history&amp;userid=<?=$LoggedUser['ID']?>"><?=$LoggedUser['FLTokens']?></a></span></li>
+			<li id="fl_tokens"><a href="wiki.php?action=article&amp;id=754">Tokens</a>:
+						<span class="stat"><a
+							href="userhistory.php?action=token_history&amp;userid=<?=$LoggedUser['ID']?>"><?=$LoggedUser['FLTokens']?></a></span></li>
 <?	} ?>
 		</ul>
 <?
@@ -153,34 +244,77 @@ if ($NewSubscriptions === false) {
 	list($NewSubscriptions) = $DB->next_record();
 	$Cache->cache_value('subscriptions_user_new_'.$LoggedUser['ID'], $NewSubscriptions, 0);
 } ?>
-		<ul id="userinfo_minor"<?=($NewSubscriptions ? ' class="highlite"' : '')?>>
-			<li id="nav_inbox"<?=Format::add_class($PageID, array('inbox'), 'active', true)?>><a onmousedown="Stats('inbox');" href="<?=Inbox::get_inbox_link(); ?>">Inbox</a></li>
-			<li id="nav_staffinbox"<?=Format::add_class($PageID, array('staffpm'), 'active', true)?>><a onmousedown="Stats('staffpm');" href="staffpm.php">Staff Inbox</a></li>
-			<li id="nav_uploaded"<?=Format::add_class($PageID, array('torrents',false,'uploaded'), 'active', true, 'userid')?>><a onmousedown="Stats('uploads');" href="torrents.php?type=uploaded&amp;userid=<?=$LoggedUser['ID']?>">Uploads</a></li>
-			<li id="nav_bookmarks"<?=Format::add_class($PageID, array('bookmarks'), 'active', true)?>><a onmousedown="Stats('bookmarks');" href="bookmarks.php?type=torrents">Bookmarks</a></li>
+		<ul id="userinfo_minor"
+					<?=($NewSubscriptions ? ' class="highlite"' : '')?>>
+					<li id="nav_inbox"
+						<?=Format::add_class($PageID, array('inbox'), 'active', true)?>><a
+						onmousedown="Stats('inbox');"
+						href="<?=Inbox::get_inbox_link(); ?>">Inbox</a></li>
+					<li id="nav_staffinbox"
+						<?=Format::add_class($PageID, array('staffpm'), 'active', true)?>><a
+						onmousedown="Stats('staffpm');" href="staffpm.php">Staff Inbox</a></li>
+					<li id="nav_uploaded"
+						<?=Format::add_class($PageID, array('torrents',false,'uploaded'), 'active', true, 'userid')?>><a
+						onmousedown="Stats('uploads');"
+						href="torrents.php?type=uploaded&amp;userid=<?=$LoggedUser['ID']?>">Uploads</a></li>
+					<li id="nav_bookmarks"
+						<?=Format::add_class($PageID, array('bookmarks'), 'active', true)?>><a
+						onmousedown="Stats('bookmarks');"
+						href="bookmarks.php?type=torrents">Bookmarks</a></li>
 <? if (check_perms('site_torrents_notify')) { ?>
-			<li id="nav_notifications" <?=Format::add_class($PageID, array(array('torrents','notify'),array('user','notify')), 'active', true, 'userid')?>><a onmousedown="Stats('notifications');" href="user.php?action=notify">Notifications</a></li>
+			<li id="nav_notifications"
+						<?=Format::add_class($PageID, array(array('torrents','notify'),array('user','notify')), 'active', true, 'userid')?>><a
+						onmousedown="Stats('notifications');"
+						href="user.php?action=notify">Notifications</a></li>
 <? } ?>
-			<li id="nav_subscriptions"<?=Format::add_class($PageID, array('userhistory','subscriptions'), 'active', true)?>><a onmousedown="Stats('subscriptions');" href="userhistory.php?action=subscriptions"<?=($NewSubscriptions ? ' class="new-subscriptions"' : '')?>>Subscriptions</a></li>
-			<li id="nav_comments"<?=Format::add_class($PageID, array('comments'), 'active', true, 'userid')?>><a onmousedown="Stats('comments');" href="comments.php">Comments</a></li>
-			<li id="nav_friends"<?=Format::add_class($PageID, array('friends'), 'active', true)?>><a onmousedown="Stats('friends');" href="friends.php">Friends</a></li>
-		</ul>
-	</div>
-	<div id="menu">
-		<h4 class="hidden">Site Menu</h4>
-		<ul>
-			<li id="nav_index"<?=Format::add_class($PageID, array('index'), 'active', true)?>><a href="index.php">Home</a></li>
-			<li id="nav_torrents"<?=Format::add_class($PageID, array('torrents',false,false), 'active', true)?>><a href="torrents.php">Torrents</a></li>
-			<li id="nav_collages"<?=Format::add_class($PageID, array('collages'), 'active', true)?>><a href="collages.php">Collages</a></li>
-			<li id="nav_requests"<?=Format::add_class($PageID, array('requests'), 'active', true)?>><a href="requests.php">Requests</a></li>
-			<li id="nav_forums"<?=Format::add_class($PageID, array('forums'), 'active', true)?>><a href="forums.php">Forums</a></li>
-			<li id="nav_irc"<?=Format::add_class($PageID, array('chat'), 'active', true)?>><a href="chat.php">IRC</a></li>
-			<li id="nav_top10"<?=Format::add_class($PageID, array('top10'), 'active', true)?>><a href="top10.php">Top 10</a></li>
-			<li id="nav_rules"<?=Format::add_class($PageID, array('rules'), 'active', true)?>><a href="rules.php">Rules</a></li>
-			<li id="nav_wiki"<?=Format::add_class($PageID, array('wiki'), 'active', true)?>><a href="wiki.php">Wiki</a></li>
-			<li id="nav_staff"<?=Format::add_class($PageID, array('staff'), 'active', true)?>><a href="staff.php">Staff</a></li>
-		</ul>
-	</div>
+			<li id="nav_subscriptions"
+						<?=Format::add_class($PageID, array('userhistory','subscriptions'), 'active', true)?>><a
+						onmousedown="Stats('subscriptions');"
+						href="userhistory.php?action=subscriptions"
+						<?=($NewSubscriptions ? ' class="new-subscriptions"' : '')?>>Subscriptions</a></li>
+					<li id="nav_comments"
+						<?=Format::add_class($PageID, array('comments'), 'active', true, 'userid')?>><a
+						onmousedown="Stats('comments');" href="comments.php">Comments</a></li>
+					<li id="nav_friends"
+						<?=Format::add_class($PageID, array('friends'), 'active', true)?>><a
+						onmousedown="Stats('friends');" href="friends.php">Friends</a></li>
+				</ul>
+			</div>
+			<div id="menu">
+				<h4 class="hidden">Site Menu</h4>
+				<ul>
+					<li id="nav_index"
+						<?=Format::add_class($PageID, array('index'), 'active', true)?>><a
+						href="index.php">Home</a></li>
+					<li id="nav_torrents"
+						<?=Format::add_class($PageID, array('torrents',false,false), 'active', true)?>><a
+						href="torrents.php">Torrents</a></li>
+					<li id="nav_collages"
+						<?=Format::add_class($PageID, array('collages'), 'active', true)?>><a
+						href="collages.php">Collages</a></li>
+					<li id="nav_requests"
+						<?=Format::add_class($PageID, array('requests'), 'active', true)?>><a
+						href="requests.php">Requests</a></li>
+					<li id="nav_forums"
+						<?=Format::add_class($PageID, array('forums'), 'active', true)?>><a
+						href="forums.php">Forums</a></li>
+					<li id="nav_irc"
+						<?=Format::add_class($PageID, array('chat'), 'active', true)?>><a
+						href="chat.php">IRC</a></li>
+					<li id="nav_top10"
+						<?=Format::add_class($PageID, array('top10'), 'active', true)?>><a
+						href="top10.php">Top 10</a></li>
+					<li id="nav_rules"
+						<?=Format::add_class($PageID, array('rules'), 'active', true)?>><a
+						href="rules.php">Rules</a></li>
+					<li id="nav_wiki"
+						<?=Format::add_class($PageID, array('wiki'), 'active', true)?>><a
+						href="wiki.php">Wiki</a></li>
+					<li id="nav_staff"
+						<?=Format::add_class($PageID, array('staff'), 'active', true)?>><a
+						href="staff.php">Staff</a></li>
+				</ul>
+			</div>
 <?
 //Start handling alert bars
 $Alerts = array();
@@ -485,67 +619,50 @@ if (!empty($Alerts) || !empty($ModBar)) {
 
 ?>
 	<div id="searchbars">
-		<ul>
-			<li id="searchbar_torrents">
-				<span class="hidden">Torrents: </span>
-				<form class="search_form" name="torrents" action="torrents.php" method="get">
+				<ul>
+					<li id="searchbar_torrents"><span class="hidden">Torrents: </span>
+						<form class="search_form" name="torrents" action="torrents.php"
+							method="get">
 <? if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
 					<input type="hidden" name="action" value="advanced" />
 <? } ?>
-					<input
-						id="torrentssearch"
-						accesskey="t"
-						spellcheck="false"
-						onfocus="if (this.value == 'Torrents') this.value='';"
-						onblur="if (this.value == '') this.value='Torrents';"
-<? if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
-						value="Torrents" type="text" name="groupname" size="17"
-<? } else { ?>
-						value="Torrents" type="text" name="searchstr" size="17"
-<? } ?>
-					/>
-				</form>
-			</li>
-			<li id="searchbar_artists">
-				<span class="hidden">Artist: </span>
-				<form class="search_form" name="artists" action="artist.php" method="get">
-					<script type="text/javascript" src="static/functions/autocomplete.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/autocomplete.js')?>"></script>
-					<input id="artistsearch"
-						onkeyup="autocomp.keyup(event);"
-						onkeydown="autocomp.keydown(event);"
-						accesskey="a" spellcheck="false" autocomplete="off"
-						onfocus="if (this.value == 'Artists') this.value=''; autocomp.start('artist');"
-						onblur="if (this.value == '') this.value='Artists';"
-						value="Artists" type="text" name="artistname" size="17"
-					/>
-					<ul id="artistcomplete" style="visibility: hidden;"><li /></ul>
-				</form>
-			</li>
-			<li id="searchbar_requests">
-				<span class="hidden">Requests: </span>
-				<form class="search_form" name="requests" action="requests.php" method="get">
-					<input
-						id="requestssearch"
-						spellcheck="false"
-						onfocus="if (this.value == 'Requests') this.value='';"
-						onblur="if (this.value == '') this.value='Requests';"
-						value="Requests" type="text" name="search" size="17"
-					/>
-				</form>
-			</li>
-			<li id="searchbar_forums">
-				<span class="hidden">Forums: </span>
-				<form class="search_form" name="forums" action="forums.php" method="get">
-					<input value="search" type="hidden" name="action" />
-					<input
-						id="forumssearch"
-						onfocus="if (this.value == 'Forums') this.value='';"
-						onblur="if (this.value == '') this.value='Forums';"
-						value="Forums" type="text" name="search" size="17"
-					/>
-				</form>
-			</li>
-<!--
+					<input id="torrentssearch" accesskey="t" spellcheck="false"
+								onfocus="if (this.value == 'Torrents') this.value='';"
+								onblur="if (this.value == '') this.value='Torrents';"
+								<? if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
+								value="Torrents" type="text" name="groupname" size="17"
+								<? } else { ?> value="Torrents" type="text" name="searchstr"
+								size="17" <? } ?> />
+						</form></li>
+					<li id="searchbar_artists"><span class="hidden">Artist: </span>
+						<form class="search_form" name="artists" action="artist.php"
+							method="get">
+							<input id="artistsearch"
+								accesskey="a"
+								spellcheck="false" autocomplete="off"
+								onfocus="if (this.value == 'Artists') this.value='';"
+								onblur="if (this.value == '') this.value='Artists';"
+								value="Artists" type="text" name="artistname" size="17" />
+						</form>
+						</li>
+					<li id="searchbar_requests"><span class="hidden">Requests: </span>
+						<form class="search_form" name="requests" action="requests.php"
+							method="get">
+							<input id="requestssearch" spellcheck="false"
+								onfocus="if (this.value == 'Requests') this.value='';"
+								onblur="if (this.value == '') this.value='Requests';"
+								value="Requests" type="text" name="search" size="17" />
+						</form></li>
+					<li id="searchbar_forums"><span class="hidden">Forums: </span>
+						<form class="search_form" name="forums" action="forums.php"
+							method="get">
+							<input value="search" type="hidden" name="action" /> <input
+								id="forumssearch"
+								onfocus="if (this.value == 'Forums') this.value='';"
+								onblur="if (this.value == '') this.value='Forums';"
+								value="Forums" type="text" name="search" size="17" />
+						</form></li>
+					<!--
 			<li id="searchbar_wiki">
 				<span class="hidden">Wiki: </span>
 				<form class="search_form" name="wiki" action="wiki.php" method="get">
@@ -558,30 +675,23 @@ if (!empty($Alerts) || !empty($ModBar)) {
 				</form>
 			</li>
 -->
-			<li id="searchbar_log">
-				<span class="hidden">Log: </span>
-				<form class="search_form" name="log" action="log.php" method="get">
-					<input
-						id="logsearch"
-						onfocus="if (this.value == 'Log') this.value='';"
-						onblur="if (this.value == '') this.value='Log';"
-						value="Log" type="text" name="search" size="17"
-					/>
-				</form>
-			</li>
-			<li id="searchbar_users">
-				<span class="hidden">Users: </span>
-				<form class="search_form" name="users" action="user.php" method="get">
-					<input type="hidden" name="action" value="search" />
-					<input
-						id="userssearch"
-						onfocus="if (this.value == 'Users') this.value='';"
-						onblur="if (this.value == '') this.value='Users';"
-						value="Users" type="text" name="search" size="20"
-					/>
-				</form>
-			</li>
-		</ul>
-	</div>
-</div>
-<div id="content">
+					<li id="searchbar_log"><span class="hidden">Log: </span>
+						<form class="search_form" name="log" action="log.php" method="get">
+							<input id="logsearch"
+								onfocus="if (this.value == 'Log') this.value='';"
+								onblur="if (this.value == '') this.value='Log';" value="Log"
+								type="text" name="search" size="17" />
+						</form></li>
+					<li id="searchbar_users"><span class="hidden">Users: </span>
+						<form class="search_form" name="users" action="user.php"
+							method="get">
+							<input type="hidden" name="action" value="search" /> <input
+								id="userssearch"
+								onfocus="if (this.value == 'Users') this.value='';"
+								onblur="if (this.value == '') this.value='Users';" value="Users"
+								type="text" name="search" size="20" />
+						</form></li>
+				</ul>
+			</div>
+		</div>
+		<div id="content">

@@ -2012,3 +2012,7 @@ tr.torrent .bookmark > a:after { content:""; }
 .edit_changelog textarea {
 	width: 600px;
 }
+.autocomplete-suggestions { background: #3f3f3f; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; cursor: pointer; color: #ffffff; }
+
+

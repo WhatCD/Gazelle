@@ -550,7 +550,13 @@ if (check_perms('site_moderate_forums')) {
 			<tr>
 				<td class="label">Sticky</td>
 				<td>
-					<input type="checkbox" name="sticky"<? if ($ThreadInfo['IsSticky']) { echo ' checked="checked"'; } ?> tabindex="2" />
+					<input type="checkbox" onclick="$('#ranking_row').gtoggle();" name="sticky"<? if ($ThreadInfo['IsSticky']) { echo ' checked="checked"'; } ?> tabindex="2" />
+				</td>
+			</tr>
+			<tr id="ranking_row" <?=!$ThreadInfo['IsSticky'] ? 'class="hidden"' : ''?>>
+				<td class="label">Ranking</td>
+				<td>
+					<input type="text" name="ranking" value="<?=$ThreadInfo['Ranking']?>" tabindex="2" />
 				</td>
 			</tr>
 			<tr>

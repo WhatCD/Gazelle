@@ -193,9 +193,10 @@ if (!empty($LoggedUser['SortHide'])) {
 	$SortOrder = $ReleaseTypes;
 }
 // If the $SortOrder array doesn't have all release types, put the missing ones at the end
-if (count($SortOrder) != count($ReleaseTypes)) {
+$MissingTypes = array_diff_key($ReleaseTypes, $SortOrder);
+if (!empty($MissingTypes)) {
 	$MaxOrder = max($SortOrder);
-	foreach (array_keys(array_diff_key($ReleaseTypes, $SortOrder)) as $Missing) {
+	foreach (array_keys($MissingTypes) as $Missing) {
 		$SortOrder[$Missing] = ++$MaxOrder;
 	}
 }
