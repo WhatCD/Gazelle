@@ -37,7 +37,7 @@ $Response['query'] = $FullName;
 foreach ($AutoSuggest as $Suggestion) {
 	list($ID, $Name) = $Suggestion;
 	if (stripos($Name, $FullName) === 0) {
-		$Response['suggestions'][] = array('value' => display_str($Name), 'data' => $ID);
+		$Response['suggestions'][] = array('value' => $Name, 'data' => $ID);
 		if (++$Matched > 9) {
 			break;
 		}

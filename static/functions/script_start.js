@@ -203,7 +203,7 @@ function URL() {
 		var q = splitted[i].split("=");
 		query[q[0]] = q[1];
 	};
-	
+
 	var response = new Array();
 	response['path'] = path;
 	response['query'] = query;

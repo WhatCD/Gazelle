@@ -13,7 +13,7 @@ class DEBUG {
 	private $LoggedVars = array();
 
 	public function profile($Automatic = '') {
-		global $ScriptStartTime;
+		global $ScriptStartTime, $DB;
 		$Reason = array();
 
 		if (!empty($Automatic)) {
@@ -38,6 +38,18 @@ class DEBUG {
 		$Ram = memory_get_usage(true);
 		if ($Ram > MAX_MEMORY && !defined('MEMORY_EXCEPTION')) {
 			$Reason[] = Format::get_size($Ram).' RAM used';
+		}
+
+		$DB->warnings(); // see comment in MYSQL::query
+		$Queries = $this->get_queries();
+		$DBWarningCount = 0;
+		foreach ($Queries as $Query) {
+			if (!empty($Query[2])) {
+				$DBWarningCount += count($Query[2]);
+			}
+		}
+		if ($DBWarningCount) {
+			$Reason[] = $DBWarningCount . ' DB warning(s)';
 		}
 
 		if (isset($_REQUEST['profile'])) {
@@ -477,6 +489,7 @@ class DEBUG {
 		<tr>
 			<td align="left" class="debug_info debug_cache_key">
 				<a href="#" onclick="$('#debug_cache_<?=$Key?>').gtoggle(); return false;"><?=display_str($Key)?></a>
+				<a href="tools.php?action=clear_cache&amp;key=<?=$Key?>&amp;type=clear" target="_blank" class="brackets">Clear this cache key</a>
 			</td>
 			<td align="left" class="debug_data debug_cache_data">
 				<pre id="debug_cache_<?=$Key?>" class="hidden"><?=display_str(print_r($Cache->get_value($Key, true), true))?></pre>
@@ -542,11 +555,13 @@ class DEBUG {
 	<table id="debug_database" class="debug_table hidden" width="100%">
 <?
 		foreach ($Queries as $Query) {
-			list($SQL, $Time) = $Query;
+			list($SQL, $Time, $Warnings) = $Query;
+			$Warnings = implode('<br />', $Warnings);
 ?>
 		<tr valign="top">
 			<td class="debug_data debug_query_data"><div><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str($SQL)))?></div></td>
 			<td class="rowa debug_info debug_query_time" style="width: 130px;" align="left"><?=number_format($Time, 5)?> ms</td>
+			<td class="rowa debug_info debug_query_warnings"><?=$Warnings?></td>
 		</tr>
 <?
 		}

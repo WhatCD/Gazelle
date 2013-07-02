@@ -16,7 +16,7 @@ $StaffPMs = $DB->query("
 		Date,
 		Unread
 	FROM staff_pm_conversations
-	WHERE UserID=".$LoggedUser['ID']."
+	WHERE UserID = ".$LoggedUser['ID']."
 	ORDER BY Status, Date DESC"
 );
 

@@ -61,7 +61,10 @@ $Text = new TEXT;
 <?
 
 // List common responses
-$DB->query("SELECT ID, Message, Name FROM staff_pm_responses ORDER BY ID DESC");
+$DB->query("
+	SELECT ID, Message, Name
+	FROM staff_pm_responses
+	ORDER BY ID DESC");
 while (list($ID, $Message, $Name) = $DB->next_record()) {
 
 ?>
@@ -88,9 +91,7 @@ while (list($ID, $Message, $Name) = $DB->next_record()) {
 			</form>
 		</div>
 <?
-
 }
-
 ?>
 	</div>
 </div>

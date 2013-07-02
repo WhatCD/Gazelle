@@ -204,6 +204,19 @@ class DB_MYSQL {
 
 	function query($Query, $AutoHandle = 1) {
 		global $LoggedUser, $Debug;
+		/*
+		 * If there was a previous query, we store the warnings. We cannot do
+		 * this immediately after mysqli_query because mysqli_insert_id will
+		 * break otherwise due to mysqli_get_warnings sending a SHOW WARNINGS;
+		 * query. When sending a query, however, we're sure that we won't call
+		 * mysqli_insert_id (or any similar function, for that matter) later on,
+		 * so we can safely get the warnings without breaking things.
+		 * Note that this means that we have to call $this->warnings manually
+		 * for the last query!
+		 */
+		if ($this->QueryID) {
+			$this->warnings();
+		}
 		$QueryStartTime = microtime(true);
 		$this->connect();
 		// In the event of a MySQL deadlock, we sleep allowing MySQL time to unlock, then attempt again for a maximum of 5 tries
@@ -218,7 +231,7 @@ class DB_MYSQL {
 			sleep($i * rand(2, 5)); // Wait longer as attempts increase
 		}
 		$QueryEndTime = microtime(true);
-		$this->Queries[] = array(display_str($Query), ($QueryEndTime - $QueryStartTime) * 1000);
+		$this->Queries[] = array(display_str($Query), ($QueryEndTime - $QueryStartTime) * 1000, null);
 		$this->Time += ($QueryEndTime-$QueryStartTime) * 1000;
 
 		if (!$this->QueryID) {
@@ -232,8 +245,8 @@ class DB_MYSQL {
 			}
 		}
 
-		$QueryType = substr($Query,0, 6);
 		/*
+		$QueryType = substr($Query,0, 6);
 		if ($QueryType == 'DELETE' || $QueryType == 'UPDATE') {
 			if ($this->affected_rows() > 50) {
 				$Debug->analysis($this->affected_rows().' rows altered:', $Query, 3600 * 24);
@@ -363,6 +376,25 @@ class DB_MYSQL {
 	function beginning() {
 		mysqli_data_seek($this->QueryID, 0);
 		$this->Row = 0;
+	}
+
+	/**
+	 * This function determines whether the last query caused warning messages
+	 * and stores them in $this->Queries.
+	 */
+	function warnings() {
+		$Warnings = array();
+		if (mysqli_warning_count($this->LinkID)) {
+			$e = mysqli_get_warnings($this->LinkID);
+			do {
+				if ($e->errno == 1592) {
+					// 1592: Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT.
+					continue;
+				}
+				$Warnings[] = 'Code ' . $e->errno . ': ' . display_str($e->message);
+			} while ($e->next());
+		}
+		$this->Queries[count($this->Queries) - 1][2] = $Warnings;
 	}
 }
 ?>

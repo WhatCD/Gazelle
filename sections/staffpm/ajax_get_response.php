@@ -19,7 +19,10 @@ if (!$IsFLS) {
 }
 
 if ($ID = (int)$_GET['id']) {
-	$DB->query("SELECT Message FROM staff_pm_responses WHERE ID=$ID");
+	$DB->query("
+		SELECT Message
+		FROM staff_pm_responses
+		WHERE ID = $ID");
 	list($Message) = $DB->next_record();
 	if ($_GET['plain'] == 1) {
 		echo $Message;
@@ -30,7 +33,7 @@ if ($ID = (int)$_GET['id']) {
 	}
 
 } else {
-	// No id
+	// No ID
 	echo '-1';
 }
 ?>

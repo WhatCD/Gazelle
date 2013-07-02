@@ -1,6 +1,6 @@
 <?
 class GOOGLE_CHARTS {
-	protected $URL = 'http://chart.apis.google.com/chart';
+	protected $URL = 'https://chart.googleapis.com/chart';
 	protected $Labels = array();
 	protected $Data = array();
 	protected $Options = array();

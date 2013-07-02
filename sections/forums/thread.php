@@ -20,7 +20,10 @@ if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 	if (isset($_GET['topicid']) && is_number($_GET['topicid'])) {
 		$ThreadID = $_GET['topicid'];
 	} elseif (isset($_GET['postid']) && is_number($_GET['postid'])) {
-		$DB->query("SELECT TopicID FROM forums_posts WHERE ID = $_GET[postid]");
+		$DB->query("
+			SELECT TopicID
+			FROM forums_posts
+			WHERE ID = $_GET[postid]");
 		list($ThreadID) = $DB->next_record();
 		if ($ThreadID) {
 			header("Location: forums.php?action=viewthread&threadid=$ThreadID&postid=$_GET[postid]#post$_GET[postid]");
@@ -80,10 +83,10 @@ list($Page, $Limit) = Format::page_limit($PerPage, min($ThreadInfo['Posts'],$Pos
 if (($Page - 1) * $PerPage > $ThreadInfo['Posts']) {
 	$Page = ceil($ThreadInfo['Posts'] / $PerPage);
 }
-list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page,$PerPage,THREAD_CATALOGUE);
+list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page, $PerPage, THREAD_CATALOGUE);
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-if (!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
+if (!$Catalogue = $Cache->get_value("thread_{$ThreadID}_catalogue_$CatalogueID")) {
 	$DB->query("
 		SELECT
 			p.ID,
@@ -98,12 +101,12 @@ if (!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$Catalogue
 		WHERE p.TopicID = '$ThreadID'
 			AND p.ID != '".$ThreadInfo['StickyPostID']."'
 		LIMIT $CatalogueLimit");
-	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
+	$Catalogue = $DB->to_array(false, MYSQLI_ASSOC);
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
-		$Cache->cache_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
+		$Cache->cache_value("thread_{$ThreadID}_catalogue_$CatalogueID", $Catalogue, 0);
 	}
 }
-$Thread = Format::catalogue_select($Catalogue,$Page,$PerPage,THREAD_CATALOGUE);
+$Thread = Format::catalogue_select($Catalogue, $Page, $PerPage, THREAD_CATALOGUE);
 if ($_GET['updatelastread'] != '0') {
 	$LastPost = end($Thread);
 	$LastPost = $LastPost['ID'];
@@ -119,23 +122,26 @@ if ($_GET['updatelastread'] != '0') {
 		$DB->query("
 			SELECT PostID
 			FROM forums_last_read_topics
-			WHERE UserID='$LoggedUser[ID]'
-				AND TopicID='$ThreadID'");
+			WHERE UserID = '$LoggedUser[ID]'
+				AND TopicID = '$ThreadID'");
 		list($LastRead) = $DB->next_record();
 		if ($LastRead < $LastPost) {
 			$DB->query("
 				INSERT INTO forums_last_read_topics (UserID, TopicID, PostID)
 				VALUES ('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
-				ON DUPLICATE KEY UPDATE PostID='$LastPost'");
+				ON DUPLICATE KEY UPDATE PostID = '$LastPost'");
 		}
 	}
 }
 
 //Handle subscriptions
 if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
-	$DB->query("SELECT TopicID FROM users_subscriptions WHERE UserID = '$LoggedUser[ID]'");
+	$DB->query("
+		SELECT TopicID
+		FROM users_subscriptions
+		WHERE UserID = '$LoggedUser[ID]'");
 	$UserSubscriptions = $DB->collect(0);
-	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
+	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'], $UserSubscriptions,0);
 }
 
 if (empty($UserSubscriptions)) {
@@ -210,17 +216,17 @@ echo $Pages;
 	</div>
 <?
 if ($ThreadInfo['NoPoll'] == 0) {
-	if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('polls_'.$ThreadID)) {
+	if (!list($Question, $Answers, $Votes, $Featured, $Closed) = $Cache->get_value("polls_$ThreadID")) {
 		$DB->query("
 			SELECT Question, Answers, Featured, Closed
 			FROM forums_polls
-			WHERE TopicID='$ThreadID'");
+			WHERE TopicID = '$ThreadID'");
 		list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 		$Answers = unserialize($Answers);
 		$DB->query("
 			SELECT Vote, COUNT(UserID)
 			FROM forums_polls_votes
-			WHERE TopicID='$ThreadID'
+			WHERE TopicID = '$ThreadID'
 			GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
 
@@ -235,7 +241,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				$Votes[$i] = 0;
 			}
 		}
-		$Cache->cache_value('polls_'.$ThreadID, array($Question, $Answers, $Votes, $Featured, $Closed), 0);
+		$Cache->cache_value("polls_$ThreadID", array($Question, $Answers, $Votes, $Featured, $Closed), 0);
 	}
 
 	if (!empty($Votes)) {
@@ -251,8 +257,8 @@ if ($ThreadInfo['NoPoll'] == 0) {
 	$DB->query("
 		SELECT Vote
 		FROM forums_polls_votes
-		WHERE UserID='".$LoggedUser['ID']."'
-			AND TopicID='$ThreadID'");
+		WHERE UserID = '".$LoggedUser['ID']."'
+			AND TopicID = '$ThreadID'");
 	list($UserResponse) = $DB->next_record();
 	if (!empty($UserResponse) && $UserResponse != 0) {
 		$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
@@ -280,7 +286,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 					$Percent = 0;
 				}
 ?>
-					<li><?=display_str($Answer)?> (<?=number_format($Percent * 100,2)?>%)</li>
+					<li><?=display_str($Answer)?> (<?=number_format($Percent * 100, 2)?>%)</li>
 					<li class="graph">
 						<span class="left_poll"></span>
 						<span class="center_poll" style="width: <?=round($Ratio * 750)?>px;"></span>
@@ -316,7 +322,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 					GROUP_CONCAT(um.Username SEPARATOR ', ')
 				FROM users_main AS um
 					LEFT JOIN forums_polls_votes AS fpv ON um.ID = fpv.UserID
-				WHERE TopicID = ".$ThreadID."
+				WHERE TopicID = $ThreadID
 				GROUP BY fpv.Vote");
 
 			$StaffVotesTmp = $DB->to_array();
@@ -553,7 +559,7 @@ if (check_perms('site_moderate_forums')) {
 					<input type="checkbox" onclick="$('#ranking_row').gtoggle();" name="sticky"<? if ($ThreadInfo['IsSticky']) { echo ' checked="checked"'; } ?> tabindex="2" />
 				</td>
 			</tr>
-			<tr id="ranking_row" <?=!$ThreadInfo['IsSticky'] ? 'class="hidden"' : ''?>>
+			<tr id="ranking_row"<?=!$ThreadInfo['IsSticky'] ? ' class="hidden"' : ''?>>
 				<td class="label">Ranking</td>
 				<td>
 					<input type="text" name="ranking" value="<?=$ThreadInfo['Ranking']?>" tabindex="2" />

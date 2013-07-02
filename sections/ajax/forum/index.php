@@ -5,14 +5,15 @@
 if (!empty($LoggedUser['DisableForums'])) {
 	print json_encode(array('status' => 'failure'));
 	die();
-}
-else {
+} else {
 	include(SERVER_ROOT.'/sections/forums/functions.php');
 	// Replace the old hard-coded forum categories
 	unset($ForumCats);
 	$ForumCats = $Cache->get_value('forums_categories');
 	if ($ForumCats === false) {
-		$DB->query("SELECT ID, Name FROM forums_categories");
+		$DB->query("
+			SELECT ID, Name
+			FROM forums_categories");
 		$ForumCats = array();
 		while (list($ID, $Name) = $DB->next_record()) {
 			$ForumCats[$ID] = $Name;
@@ -83,7 +84,7 @@ else {
 // Uses class CACHE
 function get_forum_info($ForumID) {
 	global $DB, $Cache;
-	$Forum = $Cache->get_value('ForumInfo_'.$ForumID);
+	$Forum = $Cache->get_value("ForumInfo_$ForumID");
 	if (!$Forum) {
 		$DB->query("
 			SELECT
@@ -93,8 +94,8 @@ function get_forum_info($ForumID) {
 				MinClassCreate,
 				COUNT(forums_topics.ID) AS Topics
 			FROM forums
-				LEFT JOIN forums_topics ON forums_topics.ForumID=forums.ID
-			WHERE forums.ID='$ForumID'
+				LEFT JOIN forums_topics ON forums_topics.ForumID = forums.ID
+			WHERE forums.ID = '$ForumID'
 			GROUP BY ForumID");
 		if ($DB->record_count() == 0) {
 			return false;
@@ -102,7 +103,7 @@ function get_forum_info($ForumID) {
 		// Makes an array, with $Forum['Name'], etc.
 		$Forum = $DB->next_record(MYSQLI_ASSOC);
 
-		$Cache->cache_value('ForumInfo_'.$ForumID, $Forum, 86400); // Cache for a day
+		$Cache->cache_value("ForumInfo_$ForumID", $Forum, 86400); // Cache for a day
 	}
 	return $Forum;
 }

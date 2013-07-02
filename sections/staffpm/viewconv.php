@@ -4,9 +4,10 @@ $Text = new TEXT;
 
 if ($ConvID = (int)$_GET['id']) {
 	// Get conversation info
-	$DB->query("SELECT Subject, UserID, Level, AssignedToUser, Unread, Status FROM staff_pm_conversations WHERE ID=$ConvID");
-	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
-	$DB->query("SELECT Subject, UserID, Level, AssignedToUser, Unread, Status FROM staff_pm_conversations WHERE ID=$ConvID");
+	$DB->query("
+		SELECT Subject, UserID, Level, AssignedToUser, Unread, Status
+		FROM staff_pm_conversations
+		WHERE ID = $ConvID");
 	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
 
 	if (!(($UserID == $LoggedUser['ID']) || ($AssignedToUser == $LoggedUser['ID']) || (($Level > 0 && $Level <= $LoggedUser['EffectiveClass']) || ($Level == 0 && $IsFLS)))) {
@@ -15,7 +16,10 @@ if ($ConvID = (int)$_GET['id']) {
 	}
 	// User is trying to view their own unread conversation, set it to read
 	if ($UserID == $LoggedUser['ID'] && $Unread) {
-		$DB->query("UPDATE staff_pm_conversations SET Unread=false WHERE ID=$ConvID");
+		$DB->query("
+			UPDATE staff_pm_conversations
+			SET Unread = false
+			WHERE ID = $ConvID");
 		// Clear cache for user
 		$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
 	}
@@ -65,7 +69,7 @@ if ($ConvID = (int)$_GET['id']) {
 	$StaffPMs = $DB->query("
 		SELECT UserID, SentDate, Message, ID
 		FROM staff_pm_messages
-		WHERE ConvID=$ConvID");
+		WHERE ConvID = $ConvID");
 
 	while (list($UserID, $SentDate, $Message, $MessageID) = $DB->next_record()) {
 		// Set user string
@@ -115,7 +119,9 @@ if ($ConvID = (int)$_GET['id']) {
 					<option id="first_common_response">Select a message</option>
 <?
 		// List common responses
-		$DB->query("SELECT ID, Name FROM staff_pm_responses");
+		$DB->query("
+			SELECT ID, Name
+			FROM staff_pm_responses");
 		while (list($ID, $Name) = $DB->next_record()) {
 ?>
 					<option value="<?=$ID?>"><?=$Name?></option>
@@ -172,8 +178,8 @@ if ($ConvID = (int)$_GET['id']) {
 				m.ID,
 				m.Username
 			FROM permissions as p
-				JOIN users_main as m ON m.PermissionID=p.ID
-			WHERE p.DisplayStaff='1'
+				JOIN users_main as m ON m.PermissionID = p.ID
+			WHERE p.DisplayStaff = '1'
 			ORDER BY p.Level DESC, m.Username ASC"
 		);
 		while (list($ID, $Name) = $DB->next_record()) {
@@ -191,9 +197,10 @@ if ($ConvID = (int)$_GET['id']) {
 				m.ID,
 				m.Username
 			FROM users_info as i
-				JOIN users_main as m ON m.ID=i.UserID
-				JOIN permissions as p ON p.ID=m.PermissionID
-			WHERE p.DisplayStaff!='1' AND i.SupportFor!=''
+				JOIN users_main as m ON m.ID = i.UserID
+				JOIN permissions as p ON p.ID = m.PermissionID
+			WHERE p.DisplayStaff != '1'
+				AND i.SupportFor != ''
 			ORDER BY m.Username ASC
 		");
 		while (list($ID, $Name) = $DB->next_record()) {

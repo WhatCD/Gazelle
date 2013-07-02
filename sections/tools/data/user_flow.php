@@ -115,11 +115,11 @@ View::show_header('User Flow');
 $DB->set_query_id($RS);
 ?>
 <div class="thin">
-<? if (!isset($_GET['page'])) { ?>
+<?	if (!isset($_GET['page'])) { ?>
 	<div class="box pad">
-		<img src="http://chart.apis.google.com/chart?cht=lc&amp;chs=820x160&amp;chco=000D99,99000D&amp;chg=0,-1,1,1&amp;chxt=y,x&amp;chxs=0,h&amp;chxl=1:|<?=implode('|',$Labels)?>&amp;chxr=0,0,<?=$Max?>&amp;chd=t:<?=implode(',',$InFlow)?>|<?=implode(',',$OutFlow)?>&amp;chls=2,4,0&amp;chdl=New+Registrations|Disabled+Users&amp;chf=bg,s,FFFFFF00" alt="User Flow vs. Time" />
+		<img src="https://chart.googleapis.com/chart?cht=lc&amp;chs=820x160&amp;chco=000D99,99000D&amp;chg=0,-1,1,1&amp;chxt=y,x&amp;chxs=0,h&amp;chxl=1:|<?=implode('|', $Labels)?>&amp;chxr=0,0,<?=$Max?>&amp;chd=t:<?=implode(',', $InFlow)?>|<?=implode(',', $OutFlow)?>&amp;chls=2,4,0&amp;chdl=New+Registrations|Disabled+Users&amp;chf=bg,s,FFFFFF00" alt="User Flow vs. Time" />
 	</div>
-<? } ?>
+<?	} ?>
 	<div class="linkbox">
 <?
 $Pages = Format::get_pages($Page, $Results, DAYS_PER_PAGE, 11);

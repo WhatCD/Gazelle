@@ -828,4 +828,7 @@ ul .invitetree {
 .edit_changelog textarea {
 	width: 600px;
 }
-.autocomplete-suggestions { background: #F1E6CC; }
+
+.autocomplete-suggestions {
+	background: #F1E6CC;
+}

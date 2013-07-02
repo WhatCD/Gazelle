@@ -5,12 +5,18 @@ if ($IDs = $_POST['id']) {
 		$ID = (int)$ID;
 
 		// Check if conversation belongs to user
-		$DB->query("SELECT UserID, AssignedToUser FROM staff_pm_conversations WHERE ID=$ID");
+		$DB->query("
+			SELECT UserID, AssignedToUser
+			FROM staff_pm_conversations
+			WHERE ID = $ID");
 		list($UserID, $AssignedToUser) = $DB->next_record();
 
 		if ($UserID == $LoggedUser['ID'] || $DisplayStaff == '1' || $UserID == $AssignedToUser) {
 			// Conversation belongs to user or user is staff, queue query
-			$Queries[] = "UPDATE staff_pm_conversations SET Status='Resolved', ResolverID=".$LoggedUser['ID']." WHERE ID=$ID";
+			$Queries[] = "
+				UPDATE staff_pm_conversations
+				SET Status = 'Resolved', ResolverID = ".$LoggedUser['ID']."
+				WHERE ID = $ID";
 		} else {
 			// Trying to run disallowed query
 			error(403);
@@ -29,7 +35,7 @@ if ($IDs = $_POST['id']) {
 	header("Location: staffpm.php");
 
 } else {
-	// No id
+	// No ID
 	header("Location: staffpm.php");
 }
 ?>

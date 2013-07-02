@@ -23,7 +23,10 @@ if ($Message = db_string($_POST['message'])) {
 
 	} elseif ($ConvID = (int)$_POST['convid']) {
 		// Check if conversation belongs to user
-		$DB->query("SELECT UserID, AssignedToUser FROM staff_pm_conversations WHERE ID=$ConvID");
+		$DB->query("
+			SELECT UserID, AssignedToUser
+			FROM staff_pm_conversations
+			WHERE ID = $ConvID");
 		list($UserID, $AssignedToUser) = $DB->next_record();
 
 		if ($UserID == $LoggedUser['ID'] || $IsFLS || $UserID == $AssignedToUser) {
@@ -40,19 +43,19 @@ if ($Message = db_string($_POST['message'])) {
 				// FLS/Staff
 				$DB->query("
 					UPDATE staff_pm_conversations
-					SET Date='".sqltime()."', Unread=true, Status='Open'
-					WHERE ID=$ConvID");
+					SET Date = '".sqltime()."', Unread = true, Status = 'Open'
+					WHERE ID = $ConvID");
 				$Cache->delete_value('num_staff_pms_'.$LoggedUser['ID']);
 			} else {
 				// User
 				$DB->query("
 					UPDATE staff_pm_conversations
-					SET Date='".sqltime()."', Unread=true, Status='Unanswered'
-					WHERE ID=$ConvID");
+					SET Date = '".sqltime()."', Unread = true, Status = 'Unanswered'
+					WHERE ID = $ConvID");
 			}
 
 			// Clear cache for user
-			$Cache->delete_value('staff_pm_new_'.$UserID);
+			$Cache->delete_value("staff_pm_new_$UserID");
 			$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
 
 			header("Location: staffpm.php?action=viewconv&id=$ConvID");

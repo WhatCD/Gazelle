@@ -6,38 +6,55 @@ $View = display_str($_GET['view']);
 $UserLevel = $LoggedUser['EffectiveClass'];
 
 // Setup for current view mode
-$SortStr = 'IF(AssignedToUser = '.$LoggedUser['ID'].',0,1) ASC, ';
+$SortStr = 'IF(AssignedToUser = '.$LoggedUser['ID'].', 0, 1) ASC, ';
 switch ($View) {
 	case 'unanswered':
 		$ViewString = 'Unanswered';
-		$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+		$WhereCondition = "
+			WHERE (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
+				AND Status = 'Unanswered'";
 		break;
 	case 'open':
 		$ViewString = 'All open';
-		$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status IN ('Open', 'Unanswered')";
+		$WhereCondition = "
+			WHERE (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
+				AND Status IN ('Open', 'Unanswered')";
 		$SortStr = '';
 		break;
 	case 'resolved':
 		$ViewString = 'Resolved';
-		$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Resolved'";
+		$WhereCondition = "
+			WHERE (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
+				AND Status = 'Resolved'";
 		$SortStr = '';
 		break;
 	case 'my':
 		$ViewString = 'My unanswered';
-		$WhereCondition = "WHERE (Level = $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+		$WhereCondition = "
+			WHERE (Level = $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
+				AND Status = 'Unanswered'";
 		break;
 	default:
 		if ($UserLevel >= 700) {
 			$ViewString = 'My unanswered';
-			$WhereCondition = "WHERE ((Level >= ".max($Classes[MOD]['Level'],700)." AND Level <= $UserLevel) OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+			$WhereCondition = "
+				WHERE (
+						(Level >= ".max($Classes[MOD]['Level'], 700)." AND Level <= $UserLevel)
+						OR AssignedToUser = '".$LoggedUser['ID']."'
+					)
+					AND Status = 'Unanswered'";
 		} elseif ($UserLevel == 650) {
 			// Forum Mods
 			$ViewString = 'My unanswered';
-			$WhereCondition = "WHERE (Level = $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+			$WhereCondition = "
+				WHERE (Level = $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
+					AND Status = 'Unanswered'";
 		} else {
 			// FLS
 			$ViewString = 'Unanswered';
-			$WhereCondition = "WHERE (Level <= $UserLevel OR AssignedToUser='".$LoggedUser['ID']."') AND Status='Unanswered'";
+			$WhereCondition = "
+				WHERE (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
+					AND Status = 'Unanswered'";
 		}
 		break;
 }
@@ -148,7 +165,9 @@ else:
 			// Assigned to class
 			$Assigned = ($Level == 0) ? 'First Line Support' : $ClassLevels[$Level]['Name'];
 			// No + on Sysops
-			if ($Assigned != 'Sysop') { $Assigned .= "+"; }
+			if ($Assigned != 'Sysop') {
+				$Assigned .= '+';
+			}
 
 		} else {
 			// Assigned to user

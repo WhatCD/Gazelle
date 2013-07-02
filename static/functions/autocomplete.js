@@ -28,5 +28,5 @@ $(document).ready(function() {
 			serviceUrl : TAGS_AUTOCOMPLETE_URL,
 		});
 	}
-	
+
 });

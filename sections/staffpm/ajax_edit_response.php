@@ -1,14 +1,14 @@
 <?
 enforce_login();
 // Get user level
-$DB->query("
+$DB->query('
 	SELECT
 		i.SupportFor,
 		p.DisplayStaff
 	FROM users_info as i
 	JOIN users_main as m ON m.ID = i.UserID
 	JOIN permissions as p ON p.ID = m.PermissionID
-	WHERE i.UserID = ".$LoggedUser['ID']
+	WHERE i.UserID = '.$LoggedUser['ID']
 );
 list($SupportFor, $DisplayStaff) = $DB->next_record();
 
@@ -22,22 +22,32 @@ if (($Message = db_string($_POST['message'])) && ($Name = db_string($_POST['name
 	if (is_numeric($ID)) {
 		if ($ID == 0) {
 			// Create new response
-			$DB->query("INSERT INTO staff_pm_responses (Message, Name) VALUES ('$Message', '$Name')");
+			$DB->query("
+				INSERT INTO staff_pm_responses (Message, Name)
+				VALUES ('$Message', '$Name')");
 			echo '1';
 		} else {
-			$DB->query("SELECT * FROM staff_pm_responses WHERE ID=$ID");
+			$DB->query("
+				SELECT *
+				FROM staff_pm_responses
+				WHERE ID = $ID");
 			if ($DB->record_count() != 0) {
 				// Edit response
-				$DB->query("UPDATE staff_pm_responses SET Message='$Message', Name='$Name' WHERE ID=$ID");
+				$DB->query("
+					UPDATE staff_pm_responses
+					SET Message = '$Message', Name = '$Name'
+					WHERE ID = $ID");
 				echo '2';
 			} else {
 				// Create new response
-				$DB->query("INSERT INTO staff_pm_responses (Message, Name) VALUES ('$Message', '$Name')");
+				$DB->query("
+					INSERT INTO staff_pm_responses (Message, Name)
+					VALUES ('$Message', '$Name')");
 				echo '1';
 			}
 		}
 	} else {
-		// No id
+		// No ID
 		echo '-2';
 	}
 

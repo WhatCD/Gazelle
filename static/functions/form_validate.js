@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	var url = new URL();
 	var query = url.query;
-	switch (url.path ) {
+	switch (url.path) {
 		case "forums":
 			if (query['action'] == "new") {
 				$("#newthreadform").validate();

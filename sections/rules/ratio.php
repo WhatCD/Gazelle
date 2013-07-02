@@ -109,7 +109,7 @@ View::show_header('Ratio Requirements');
 		<br />
 
 		<div style="text-align: center;"><img style="vertical-align: middle;" src="static/blank.gif"
-											onload="if (this.src.substr(this.src.length-9,this.src.length) == 'blank.gif') { this.src = 'http://chart.apis.google.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=%5Ctextrm%7B%28maximum+required+ratio%29+%2A+%281-%5Cfrac%7Bseeding%7D%7Bsnatched%7D%29%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode,null).color); }" />
+											onload="if (this.src.substr(this.src.length - 9, this.src.length) == 'blank.gif') { this.src = 'https://chart.googleapis.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=%5Ctextrm%7B%28maximum+required+ratio%29+%2A+%281-%5Cfrac%7Bseeding%7D%7Bsnatched%7D%29%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode, null).color); }" />
 		</div>
 		<br />
 		<br />

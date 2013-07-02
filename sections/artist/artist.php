@@ -939,7 +939,7 @@ function require(file, callback) {
 // --- Comments ---
 
 // gets the amount of comments for this group
-$Results = $Cache->get_value('artist_comments_'.$ArtistID);
+$Results = $Cache->get_value("artist_comments_$ArtistID");
 if ($Results === false) {
 	$DB->query("
 		SELECT
@@ -947,7 +947,7 @@ if ($Results === false) {
 		FROM artist_comments as c
 		WHERE c.ArtistID = '$ArtistID'");
 	list($Results) = $DB->next_record();
-	$Cache->cache_value('artist_comments_'.$ArtistID, $Results, 0);
+	$Cache->cache_value("artist_comments_$ArtistID", $Results, 0);
 }
 
 if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {

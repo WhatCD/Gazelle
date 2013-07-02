@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-07-01 by alderaan
+Serve Google Charts API images over HTTPS
+
 2013-07-01 by Ajax
 Moved autocomplete logic to jquery plugin, introduced artist autocompletes on rest of site
 

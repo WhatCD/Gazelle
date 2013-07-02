@@ -150,17 +150,17 @@ if (in_array($ThreadID, $UserSubscriptions)) {
 
 $JsonPoll = array();
 if ($ThreadInfo['NoPoll'] == 0) {
-	if (!list($Question, $Answers, $Votes, $Featured, $Closed) = $Cache->get_value('polls_'.$ThreadID)) {
+	if (!list($Question, $Answers, $Votes, $Featured, $Closed) = $Cache->get_value("polls_$ThreadID")) {
 		$DB->query("
 			SELECT Question, Answers, Featured, Closed
 			FROM forums_polls
-			WHERE TopicID='$ThreadID'");
+			WHERE TopicID = '$ThreadID'");
 		list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 		$Answers = unserialize($Answers);
 		$DB->query("
 			SELECT Vote, COUNT(UserID)
 			FROM forums_polls_votes
-			WHERE TopicID='$ThreadID'
+			WHERE TopicID = '$ThreadID'
 			GROUP BY Vote");
 		$VoteArray = $DB->to_array(false, MYSQLI_NUM);
 
@@ -175,7 +175,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 				$Votes[$i] = 0;
 			}
 		}
-		$Cache->cache_value('polls_'.$ThreadID, array($Question, $Answers, $Votes, $Featured, $Closed), 0);
+		$Cache->cache_value("polls_$ThreadID", array($Question, $Answers, $Votes, $Featured, $Closed), 0);
 	}
 
 	if (!empty($Votes)) {
@@ -191,8 +191,8 @@ if ($ThreadInfo['NoPoll'] == 0) {
 	$DB->query("
 		SELECT Vote
 		FROM forums_polls_votes
-		WHERE UserID='".$LoggedUser['ID']."'
-			AND TopicID='$ThreadID'");
+		WHERE UserID = '".$LoggedUser['ID']."'
+			AND TopicID = '$ThreadID'");
 	list($UserResponse) = $DB->next_record();
 	if (!empty($UserResponse) && $UserResponse != 0) {
 		$Answers[$UserResponse] = '&raquo; '.$Answers[$UserResponse];
