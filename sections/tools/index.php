@@ -132,10 +132,11 @@ switch ($_REQUEST['action']) {
 			error(403);
 		}
 		if (is_number($_POST['newsid'])) {
-			$DB->query("UPDATE news
-						SET Title='".db_string($_POST['title'])."',
-							Body='".db_string($_POST['body'])."'
-						WHERE ID='".db_string($_POST['newsid'])."'");
+			$DB->query("
+				UPDATE news
+				SET Title = '".db_string($_POST['title'])."',
+					Body = '".db_string($_POST['body'])."'
+				WHERE ID = '".db_string($_POST['newsid'])."'");
 			$Cache->delete_value('news');
 			$Cache->delete_value('feed_news');
 		}
@@ -148,7 +149,9 @@ switch ($_REQUEST['action']) {
 		}
 		if (is_number($_GET['id'])) {
 			authorize();
-			$DB->query("DELETE FROM news WHERE ID='".db_string($_GET['id'])."'");
+			$DB->query("
+				DELETE FROM news
+				WHERE ID = '".db_string($_GET['id'])."'");
 			$Cache->delete_value('news');
 			$Cache->delete_value('feed_news');
 
@@ -166,8 +169,9 @@ switch ($_REQUEST['action']) {
 			error(403);
 		}
 
-		$DB->query("INSERT INTO news (UserID, Title, Body, Time)
-					VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."')");
+		$DB->query("
+			INSERT INTO news (UserID, Title, Body, Time)
+			VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', '".sqltime()."')");
 
 
 
@@ -202,18 +206,19 @@ switch ($_REQUEST['action']) {
 		}
 
 		if (!empty($_REQUEST['id'])) {
-			$Val->SetFields('name',true,'string','You did not enter a valid name for this permission set.');
-			$Val->SetFields('level',true,'number','You did not enter a valid level for this permission set.');
-			$Val->SetFields('maxcollages',true,'number','You did not enter a valid number of personal collages.');
-			//$Val->SetFields('test',true,'number','You did not enter a valid level for this permission set.');
+			$Val->SetFields('name', true, 'string', 'You did not enter a valid name for this permission set.');
+			$Val->SetFields('level', true, 'number', 'You did not enter a valid level for this permission set.');
+			$Val->SetFields('maxcollages', true, 'number', 'You did not enter a valid number of personal collages.');
+			//$Val->SetFields('test', true, 'number', 'You did not enter a valid level for this permission set.');
 
 			if (is_numeric($_REQUEST['id'])) {
-				$DB->query("SELECT p.ID, p.Name, p.Level, p.Secondary, p.PermittedForums, p.Values, p.DisplayStaff, COUNT(u.ID)
-							FROM permissions AS p
-								LEFT JOIN users_main AS u ON u.PermissionID=p.ID
-							WHERE p.ID='".db_string($_REQUEST['id'])."'
-							GROUP BY p.ID");
-				list($ID,$Name,$Level,$Secondary,$Forums,$Values,$DisplayStaff,$UserCount)=$DB->next_record(MYSQLI_NUM, array(5));
+				$DB->query("
+					SELECT p.ID, p.Name, p.Level, p.Secondary, p.PermittedForums, p.Values, p.DisplayStaff, COUNT(u.ID)
+					FROM permissions AS p
+						LEFT JOIN users_main AS u ON u.PermissionID = p.ID
+					WHERE p.ID = '".db_string($_REQUEST['id'])."'
+					GROUP BY p.ID");
+				list($ID, $Name, $Level, $Secondary, $Forums, $Values, $DisplayStaff, $UserCount) = $DB->next_record(MYSQLI_NUM, array(5));
 
 				if ($Level > $LoggedUser['EffectiveClass'] || $_REQUEST['level'] > $LoggedUser['EffectiveClass']) {
 					error(403);
@@ -225,7 +230,10 @@ switch ($_REQUEST['action']) {
 				$Err = $Val->ValidateForm($_POST);
 
 				if (!is_numeric($_REQUEST['id'])) {
-					$DB->query("SELECT ID FROM permissions WHERE Level='".db_string($_REQUEST['level'])."'");
+					$DB->query("
+						SELECT ID
+						FROM permissions
+						WHERE Level = '".db_string($_REQUEST['level'])."'");
 					list($DupeCheck)=$DB->next_record();
 
 					if ($DupeCheck) {
@@ -233,10 +241,10 @@ switch ($_REQUEST['action']) {
 					}
 				}
 
-				$Values=array();
+				$Values = array();
 				foreach ($_REQUEST as $Key => $Perms) {
-					if (substr($Key,0,5) == 'perm_') {
-						$Values[substr($Key,5)] = (int)$Perms;
+					if (substr($Key, 0, 5) == 'perm_') {
+						$Values[substr($Key, 5)] = (int)$Perms;
 					}
 				}
 
@@ -250,7 +258,7 @@ switch ($_REQUEST['action']) {
 				if (!$Err) {
 					if (!is_numeric($_REQUEST['id'])) {
 						$DB->query("
-							INSERT INTO permissions (Level,Name,Secondary,PermittedForums,`Values`,DisplayStaff)
+							INSERT INTO permissions (Level, Name, Secondary, PermittedForums, `Values`, DisplayStaff)
 							VALUES ('".db_string($Level)."',
 									'".db_string($Name)."',
 									$Secondary,
@@ -260,13 +268,13 @@ switch ($_REQUEST['action']) {
 					} else {
 						$DB->query("
 							UPDATE permissions
-							SET Level='".db_string($Level)."',
-								Name='".db_string($Name)."',
-								Secondary=$Secondary,
-								PermittedForums='".db_string($Forums)."',
-								`Values`='".db_string(serialize($Values))."',
-								DisplayStaff='".db_string($DisplayStaff)."'
-							WHERE ID='".db_string($_REQUEST['id'])."'");
+							SET Level = '".db_string($Level)."',
+								Name = '".db_string($Name)."',
+								Secondary = $Secondary,
+								PermittedForums = '".db_string($Forums)."',
+								`Values` = '".db_string(serialize($Values))."',
+								DisplayStaff = '".db_string($DisplayStaff)."'
+							WHERE ID = '".db_string($_REQUEST['id'])."'");
 						$Cache->delete_value('perm_'.$_REQUEST['id']);
 						if ($Secondary) {
 							$DB->query("
@@ -274,7 +282,7 @@ switch ($_REQUEST['action']) {
 								FROM users_levels
 								WHERE PermissionID = ".db_string($_REQUEST['id']));
 							while ($UserID = $DB->next_record()) {
-								$Cache->delete_value('user_info_heavy_'.$UserID);
+								$Cache->delete_value("user_info_heavy_$UserID");
 							}
 						}
 					}
@@ -288,19 +296,32 @@ switch ($_REQUEST['action']) {
 
 		} else {
 			if (!empty($_REQUEST['removeid'])) {
-				$DB->query("DELETE FROM permissions WHERE ID='".db_string($_REQUEST['removeid'])."'");
-				$DB->query("SELECT UserID FROM users_levels WHERE PermissionID='".db_string($_REQUEST['removeid'])."'");
+				$DB->query("
+					DELETE FROM permissions
+					WHERE ID = '".db_string($_REQUEST['removeid'])."'");
+				$DB->query("
+					SELECT UserID
+					FROM users_levels
+					WHERE PermissionID = '".db_string($_REQUEST['removeid'])."'");
 				while (list($UserID) = $DB->next_record()) {
-					$Cache->delete_value('user_info_'.$UserID);
-					$Cache->delete_value('user_info_heavy_'.$UserID);
+					$Cache->delete_value("user_info_$UserID");
+					$Cache->delete_value("user_info_heavy_$UserID");
 				}
-				$DB->query("DELETE FROM users_levels WHERE PermissionID='".db_string($_REQUEST['removeid'])."'");
-				$DB->query("SELECT ID FROM users_main WHERE PermissionID='".db_string($_REQUEST['removeid'])."'");
+				$DB->query("
+					DELETE FROM users_levels
+					WHERE PermissionID = '".db_string($_REQUEST['removeid'])."'");
+				$DB->query("
+					SELECT ID
+					FROM users_main
+					WHERE PermissionID = '".db_string($_REQUEST['removeid'])."'");
 				while (list($UserID) = $DB->next_record()) {
-					$Cache->delete_value('user_info_'.$UserID);
-					$Cache->delete_value('user_info_heavy_'.$UserID);
+					$Cache->delete_value("user_info_$UserID");
+					$Cache->delete_value("user_info_heavy_$UserID");
 				}
-				$DB->query("UPDATE users_main SET PermissionID='".USER."' WHERE PermissionID='".db_string($_REQUEST['removeid'])."'");
+				$DB->query("
+					UPDATE users_main
+					SET PermissionID = '".USER."'
+					WHERE PermissionID = '".db_string($_REQUEST['removeid'])."'");
 
 				$Cache->delete_value('classes');
 			}
@@ -311,7 +332,7 @@ switch ($_REQUEST['action']) {
 		break;
 
 	case 'ip_ban':
-		//TODO: Clean up db table ip_bans.
+		//TODO: Clean up DB table ip_bans.
 		include("managers/bans.php");
 		break;
 	case 'quick_ban':
@@ -395,6 +416,10 @@ switch ($_REQUEST['action']) {
 
 	case 'analysis':
 		include('misc/analysis.php');
+		break;
+
+	case 'process_info':
+		include('misc/process_info.php');
 		break;
 
 	case 'rerender_gallery':

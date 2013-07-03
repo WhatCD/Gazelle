@@ -234,12 +234,14 @@ function AddArtistField() {
 	x.appendChild(ArtistField);
 	x.appendChild(document.createTextNode('\n'));
 	x.appendChild(ImportanceField);
-	
-	$(ArtistField).live('focus', function() {
-		$(ArtistField).autocomplete({
-			serviceUrl : 'artist.php?action=autocomplete'
+
+	if ($("#artist").data("gazelle-autocomplete")) {
+		$(ArtistField).live('focus', function() {
+			$(ArtistField).autocomplete({
+				serviceUrl : 'artist.php?action=autocomplete'
+			});
 		});
-	});
+	}
 
 	ArtistCount++;
 }

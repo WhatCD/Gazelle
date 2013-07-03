@@ -260,7 +260,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 							<option value="<?=$Genre?>"><?=$Genre?></option>
 <?	} ?>
 						</select>
-						<input type="text" id="tags" name="tags" size="45" value="<?=(!empty($Tags) ? display_str($Tags) : '')?>" />
+						<input type="text" id="tags" name="tags" size="45" value="<?=(!empty($Tags) ? display_str($Tags) : '')?>" <? Users::has_autocomplete_enabled('other'); ?>/>
 						<br />
 						Tags should be comma-separated, and you should use a period (".") to separate words inside a tag&#8202;&mdash;&#8202;e.g. "<strong class="important_text_alt">hip.hop</strong>".
 						<br /><br />

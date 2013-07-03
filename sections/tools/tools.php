@@ -76,6 +76,7 @@ View::show_header('Staff Tools');
 <?	} if (check_perms('users_view_ips')) { ?>
 			<tr><td><a href="tools.php?action=dupe_ips">Duplicate IP addresses</a></td></tr>
 <?	} if (check_perms('site_debug')) { ?>
+			<tr><td><a href="tools.php?action=process_info">PHP processes</a></td></tr>
 			<tr><td><a href="tools.php?action=sandbox1">Sandbox (1)</a></td></tr>
 			<tr><td><a href="tools.php?action=sandbox2">Sandbox (2)</a></td></tr>
 			<tr><td><a href="tools.php?action=sandbox3">Sandbox (3)</a></td></tr>

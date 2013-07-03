@@ -266,6 +266,16 @@ echo $Val->GenerateJS('userform');
 				</td>
 			</tr>
 			<tr>
+				<td class="label"><strong>Auto Complete</strong></td>
+				<td>
+					<select name="autocomplete">
+						<option value="0" <? if (empty($SiteOptions['AutoComplete'])) { ?> selected="selected" <? } ?>>Everywhere</option>
+						<option value="2" <? if ($SiteOptions['AutoComplete'] === 2) { ?>selected="selected" <? } ?>>Searches Only</option>
+						<option value="1" <? if ($SiteOptions['AutoComplete'] === 1) { ?>selected="selected" <? } ?>>Disable</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
 				<td class="label"><strong>Voting links</strong></td>
 				<td>
 					<input type="checkbox" name="novotelinks" id="novotelinks" <? if (!empty($SiteOptions['NoVoteLinks'])) { ?>checked="checked" <? } ?>/>

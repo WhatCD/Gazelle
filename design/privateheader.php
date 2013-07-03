@@ -637,7 +637,7 @@ if (!empty($Alerts) || !empty($ModBar)) {
 					<li id="searchbar_artists"><span class="hidden">Artist: </span>
 						<form class="search_form" name="artists" action="artist.php"
 							method="get">
-							<input id="artistsearch"
+							<input id="artistsearch" <? Users::has_autocomplete_enabled('search'); ?>
 								accesskey="a"
 								spellcheck="false" autocomplete="off"
 								onfocus="if (this.value == 'Artists') this.value='';"

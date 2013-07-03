@@ -482,6 +482,12 @@ if (!preg_match('/^[a-z0-9]+$/i', $Document)) {
 	error(404);
 }
 
+$Cache->cache_value('php_' . getmypid(), array(
+	'start' => sqltime(),
+	'document' => $Document,
+	'query' => $_SERVER['QUERY_STRING'],
+	'get' => $_GET,
+	'post' => $_POST), 600);
 require(SERVER_ROOT.'/sections/'.$Document.'/index.php');
 $Debug->set_flag('completed module execution');
 

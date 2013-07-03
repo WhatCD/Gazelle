@@ -222,11 +222,13 @@ function AddArtistField() {
 	Importance.name = "importance[]";
 	Importance.innerHTML = '<option value="1">Main</option><option value="2">Guest</option><option value="4">Composer</option><option value="5">Conductor</option><option value="6">DJ / Compiler</option><option value="3">Remixer</option><option value="7">Producer</option>';
 	x.appendChild(Importance);
-	$(ArtistField).live('focus', function() {
-		$(ArtistField).autocomplete({
-			serviceUrl : 'artist.php?action=autocomplete'
+	if ($("#artist").data("gazelle-autocomplete")) {
+		$(ArtistField).live('focus', function() {
+			$(ArtistField).autocomplete({
+				serviceUrl : 'artist.php?action=autocomplete'
+			});
 		});
-	});
+	}
 	ArtistFieldCount++;
 }
 

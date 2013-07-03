@@ -520,3 +520,14 @@ tr.torrent .bookmark>a:after {
 	font-weight: normal;
 	color: #3399FF;
 }
+
+.process_info {
+	table-layout: fixed;
+	width: 100%;
+}
+.process_info_pid {
+	width: 70px;
+}
+.process_info_data {
+	overflow: auto;
+}
