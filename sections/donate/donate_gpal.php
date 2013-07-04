@@ -8,7 +8,10 @@ if ($LoggedUser['RatioWatch']) {
 }
 
 if (!$UserCount = $Cache->get_value('stats_user_count')) {
-	$DB->query("SELECT COUNT(ID) FROM users_main WHERE Enabled='1'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM users_main
+		WHERE Enabled = '1'");
 	list($UserCount) = $DB->next_record();
 	$Cache->cache_value('stats_user_count', $UserCount, 0); //inf cache
 }
@@ -28,7 +31,7 @@ View::show_header('Donate');
 		<form class="donate_form" name="test_paypal" method="post" action="donate.php">
 			<input type="hidden" name="action" value="ipn" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-			<?=PAYPAL_SYMBOL?> <input type="text" name="mc_gross" value="<?=number_format(PAYPAL_MINIMUM,2)?>" />
+			<?=PAYPAL_SYMBOL?> <input type="text" name="mc_gross" value="<?=number_format(PAYPAL_MINIMUM, 2)?>" />
 			<input type="hidden" name="custom" value="<?=$LoggedUser['ID']?>" />
 			<input type="hidden" name="payment_status" value="Completed" />
 			<input type="hidden" name="mc_fee" value="0.45" />

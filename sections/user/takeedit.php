@@ -218,7 +218,7 @@ $Options['DisableAutoSave']     = (!empty($_POST['disableautosave']) ? 1 : 0);
 $Options['NoVoteLinks']         = (!empty($_POST['novotelinks']) ? 1 : 0);
 $Options['CoverArt']            = (int) !empty($_POST['coverart']);
 $Options['ShowExtraCovers']     = (int) !empty($_POST['show_extra_covers']);
-$Options['AutoComplete']     	= (int) $_POST['autocomplete'];
+$Options['AutoComplete']        = (int) $_POST['autocomplete'];
 
 if (isset($LoggedUser['DisableFreeTorrentTop10'])) {
 	$Options['DisableFreeTorrentTop10'] = $LoggedUser['DisableFreeTorrentTop10'];

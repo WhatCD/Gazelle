@@ -696,7 +696,7 @@ if (empty($SimilarArray)) {
 						<input type="hidden" name="action" value="add_similar" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
-						<input type="text" autocomplete="off" id="artistsimilar" name="artistname" size="20" <? Users::has_autocomplete_enabled('other'); ?>/>
+						<input type="text" autocomplete="off" id="artistsimilar" name="artistname" size="20"<? Users::has_autocomplete_enabled('other'); ?> />
 						<input type="submit" value="+" />
 					</form>
 				</li>

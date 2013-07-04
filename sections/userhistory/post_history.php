@@ -26,7 +26,7 @@ list($Page, $Limit) = Format::page_limit($PerPage);
 $UserInfo = Users::user_info($UserID);
 extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', 'Title', 'Avatar', 'Donor', 'Warned'))));
 
-View::show_header('Post history for '.$Username,'subscriptions,comments,bbcode');
+View::show_header("Post history for $Username", 'subscriptions,comments,bbcode');
 
 if ($LoggedUser['CustomForums']) {
 	unset($LoggedUser['CustomForums']['']);
@@ -44,40 +44,40 @@ if ($ShowGrouped) {
 		FROM forums_posts AS p
 			LEFT JOIN forums_topics AS t ON t.ID = p.TopicID';
 	if ($ShowUnread) {
-		$sql.='
+		$sql .= '
 			LEFT JOIN forums_last_read_topics AS l ON l.TopicID = t.ID AND l.UserID = '.$LoggedUser['ID'];
 	}
-	$sql .= '
+	$sql .= "
 			LEFT JOIN forums AS f ON f.ID = t.ForumID
-		WHERE p.AuthorID = '.$UserID.'
-			AND ((f.MinClassRead <= '.$LoggedUser['Class'];
+		WHERE p.AuthorID = $UserID
+			AND ((f.MinClassRead <= ".$LoggedUser['Class'];
 	if (!empty($RestrictedForums)) {
-		$sql.='
-			AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+		$sql .= "
+			AND f.ID NOT IN ('$RestrictedForums')";
 	}
 	$sql .= ')';
 	if (!empty($PermittedForums)) {
-		$sql.='
-			OR f.ID IN (\''.$PermittedForums.'\')';
+		$sql .= "
+			OR f.ID IN ('$PermittedForums')";
 	}
 	$sql .= ')';
 	if ($ShowUnread) {
 		$sql .= '
-			AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\')
-			AND (l.PostID<t.LastPostID OR l.PostID IS NULL))';
+			AND ((t.IsLocked = \'0\' OR t.IsSticky = \'1\')
+			AND (l.PostID < t.LastPostID OR l.PostID IS NULL))';
 	}
-	$sql .= '
+	$sql .= "
 		GROUP BY t.ID
 		ORDER BY p.ID DESC
-		LIMIT '.$Limit;
+		LIMIT $Limit";
 	$PostIDs = $DB->query($sql);
-	$DB->query("SELECT FOUND_ROWS()");
+	$DB->query('SELECT FOUND_ROWS()');
 	list($Results) = $DB->next_record();
 
 	if ($Results > $PerPage * ($Page - 1)) {
 		$DB->set_query_id($PostIDs);
 		$PostIDs = $DB->collect('ID');
-		$sql = '
+		$sql = "
 			SELECT
 				p.ID,
 				p.AddedTime,
@@ -97,16 +97,21 @@ if ($ShowGrouped) {
 				LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
 				JOIN forums_topics AS t ON t.ID = p.TopicID
 				JOIN forums AS f ON f.ID = t.ForumID
-				LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
-			WHERE p.ID IN ('.implode(',',$PostIDs).')
+				LEFT JOIN forums_last_read_topics AS l ON l.UserID = $UserID
+						AND l.TopicID = t.ID
+			WHERE p.ID IN (".implode(',', $PostIDs).')
 			ORDER BY p.ID DESC';
 		$Posts = $DB->query($sql);
 	}
 } else {
 	$sql = '
-		SELECT SQL_CALC_FOUND_ROWS';
+		SELECT
+			SQL_CALC_FOUND_ROWS';
 	if ($ShowGrouped) {
-		$sql.=' * FROM (SELECT';
+		$sql .= '
+			*
+		FROM (
+			SELECT';
 	}
 	$sql .= '
 			p.ID,
@@ -122,7 +127,7 @@ if ($ShowGrouped) {
 		$sql .= '
 			l.PostID AS LastRead,';
 	}
-	$sql .= '
+	$sql .= "
 			t.IsLocked,
 			t.IsSticky
 		FROM forums_posts as p
@@ -131,26 +136,27 @@ if ($ShowGrouped) {
 			LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
 			JOIN forums_topics AS t ON t.ID = p.TopicID
 			JOIN forums AS f ON f.ID = t.ForumID
-			LEFT JOIN forums_last_read_topics AS l ON l.UserID = '.$UserID.' AND l.TopicID = t.ID
-		WHERE p.AuthorID = '.$UserID.'
-			AND ((f.MinClassRead <= '.$LoggedUser['Class'];
+			LEFT JOIN forums_last_read_topics AS l ON l.UserID = $UserID
+					AND l.TopicID = t.ID
+		WHERE p.AuthorID = $UserID
+			AND ((f.MinClassRead <= ".$LoggedUser['Class'];
 
 	if (!empty($RestrictedForums)) {
-		$sql.='
-			AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+		$sql .= "
+			AND f.ID NOT IN ('$RestrictedForums')";
 	}
 	$sql .= ')';
 
 	if (!empty($PermittedForums)) {
-		$sql.='
-			OR f.ID IN (\''.$PermittedForums.'\')';
+		$sql .= "
+			OR f.ID IN ('$PermittedForums')";
 	}
 	$sql .= ')';
 
 	if ($ShowUnread) {
-		$sql.='
-			AND (	(t.IsLocked=\'0\' OR t.IsSticky=\'1\')
-					AND (l.PostID<t.LastPostID OR l.PostID IS NULL)
+		$sql .= '
+			AND (	(t.IsLocked = \'0\' OR t.IsSticky = \'1\')
+					AND (l.PostID < t.LastPostID OR l.PostID IS NULL)
 				) ';
 	}
 
@@ -158,16 +164,16 @@ if ($ShowGrouped) {
 		ORDER BY p.ID DESC';
 
 	if ($ShowGrouped) {
-		$sql.='
-		) AS sub
+		$sql .= '
+			) AS sub
 		GROUP BY TopicID
 		ORDER BY ID DESC';
 	}
 
-	$sql.=' LIMIT '.$Limit;
+	$sql .= " LIMIT $Limit";
 	$Posts = $DB->query($sql);
 
-	$DB->query("SELECT FOUND_ROWS()");
+	$DB->query('SELECT FOUND_ROWS()');
 	list($Results) = $DB->next_record();
 
 	$DB->set_query_id($Posts);
@@ -194,9 +200,12 @@ if ($ShowGrouped) {
 <?
 if ($ViewingOwn) {
 	if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
-		$DB->query("SELECT TopicID FROM users_subscriptions WHERE UserID = '$LoggedUser[ID]'");
+		$DB->query("
+			SELECT TopicID
+			FROM users_subscriptions
+			WHERE UserID = '$LoggedUser[ID]'");
 		$UserSubscriptions = $DB->collect(0);
-		$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'],$UserSubscriptions,0);
+		$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'], $UserSubscriptions, 0);
 		$DB->set_query_id($Posts);
 	}
 

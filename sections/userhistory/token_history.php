@@ -37,14 +37,17 @@ if (isset($_GET['expire'])) {
 	if (!is_number($UserID) || !is_number($TorrentID)) {
 		error(403);
 	}
-	$DB->query("SELECT info_hash FROM torrents where ID = $TorrentID");
+	$DB->query("
+		SELECT info_hash
+		FROM torrents
+		WHERE ID = $TorrentID");
 	if (list($InfoHash) = $DB->next_record(MYSQLI_NUM, FALSE)) {
 		$DB->query("
 			UPDATE users_freeleeches
-			SET Expired=TRUE
-			WHERE UserID=$UserID
-				AND TorrentID=$TorrentID");
-		$Cache->delete_value('users_tokens_'.$UserID);
+			SET Expired = TRUE
+			WHERE UserID = $UserID
+				AND TorrentID = $TorrentID");
+		$Cache->delete_value("users_tokens_$UserID");
 		Tracker::update_tracker('remove_token', array('info_hash' => rawurlencode($InfoHash), 'userid' => $UserID));
 	}
 	header("Location: userhistory.php?action=token_history&userid=$UserID");
@@ -74,7 +77,7 @@ $DB->query("
 	LIMIT $Limit");
 $Tokens = $DB->to_array();
 
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 $Pages = Format::get_pages($Page, $NumResults, 25);
 
@@ -90,7 +93,7 @@ $Pages = Format::get_pages($Page, $NumResults, 25);
 		<td>Expired</td>
 <? if (check_perms('users_mod')) { ?>
 		<td>Downloaded</td>
-		<td>Tokens Used</td>
+		<td>Tokens used</td>
 <? } ?>
 	</tr>
 <?
@@ -109,20 +112,21 @@ foreach ($Tokens as $Token) {
 		$Name = $ArtistName.$Name;
 	}
 	if ($Format && $Encoding) {
-		$Name.=" [$Format / $Encoding]";
+		$Name .= " [$Format / $Encoding]";
 	}
 ?>
 	<tr class="<?=($i ? 'rowa' : 'rowb')?>">
 		<td><?=$Name?></td>
 		<td><?=time_diff($Time)?></td>
-		<td><?=($Expired ? 'Yes' : 'No')?><?=(check_perms('users_mod') && !$Expired)?" <a href=\"userhistory.php?action=token_history&amp;expire=1&amp;userid=$UserID&amp;torrentid=$TorrentID\">(expire)</a>":''?>
+		<td><?=($Expired ? 'Yes' : 'No')?><?=(check_perms('users_mod') && !$Expired) ? " <a href=\"userhistory.php?action=token_history&amp;expire=1&amp;userid=$UserID&amp;torrentid=$TorrentID\">(expire)</a>" : ''; ?>
 		</td>
 <?	if (check_perms('users_mod')) { ?>
 		<td><?=Format::get_size($Downloaded)?></td>
 		<td><?=$Uses?></td>
 <?	} ?>
 	</tr>
-<? }
+<?
+}
 ?>
 </table>
 <div class="linkbox"><?=$Pages?></div>

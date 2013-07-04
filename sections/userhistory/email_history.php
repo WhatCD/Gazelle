@@ -19,8 +19,8 @@ if (!is_number($UserID)) {
 $DB->query("
 	SELECT ui.JoinDate, p.Level AS Class
 	FROM users_main AS um
-		JOIN users_info AS ui ON um.ID=ui.UserID
-		JOIN permissions AS p ON p.ID=um.PermissionID
+		JOIN users_info AS ui ON um.ID = ui.UserID
+		JOIN permissions AS p ON p.ID = um.PermissionID
 	WHERE um.ID = $UserID");
 list($Joined, $Class) = $DB->next_record();
 
@@ -30,7 +30,10 @@ if (!check_perms('users_view_email', $Class)) {
 
 $UsersOnly = $_GET['usersonly'];
 
-$DB->query("SELECT Username FROM users_main WHERE ID = ".$UserID);
+$DB->query("
+	SELECT Username
+	FROM users_main
+	WHERE ID = $UserID");
 list($Username)= $DB->next_record();
 View::show_header("Email history for $Username");
 
@@ -44,7 +47,8 @@ if ($UsersOnly == 1) {
 		FROM users_main AS u
 			LEFT JOIN users_main AS u2 ON u2.Email = u.Email AND u2.ID != '$UserID'
 			LEFT JOIN geoip_country AS c ON INET_ATON(u.IP) BETWEEN c.StartIP AND c.EndIP
-		WHERE u.ID='$UserID' AND u2.ID > 0
+		WHERE u.ID = '$UserID'
+			AND u2.ID > 0
 		UNION
 		SELECT
 			h.Email,
@@ -52,9 +56,11 @@ if ($UsersOnly == 1) {
 			h.IP,
 			c.Code
 		FROM users_history_emails AS h
-			LEFT JOIN users_history_emails AS h2 ON h2.email=h.email and h2.UserID != '$UserID'
+			LEFT JOIN users_history_emails AS h2 ON h2.email = h.email and h2.UserID != '$UserID'
 			LEFT JOIN geoip_country AS c ON INET_ATON(h.IP) BETWEEN c.StartIP AND c.EndIP
-		WHERE h.UserID='$UserID' AND h2.UserID>0"/*AND Time != '0000-00-00 00:00:00'*/."
+		WHERE h.UserID = '$UserID'
+			AND h2.UserID > 0"
+			/*AND Time != '0000-00-00 00:00:00'*/."
 		ORDER BY Time DESC");
 } else {
 	$DB->query("
@@ -65,7 +71,7 @@ if ($UsersOnly == 1) {
 			c.Code
 		FROM users_main AS u
 			LEFT JOIN geoip_country AS c ON INET_ATON(u.IP) BETWEEN c.StartIP AND c.EndIP
-		WHERE u.ID='$UserID'
+		WHERE u.ID = '$UserID'
 		UNION
 		SELECT
 			h.Email,
@@ -74,7 +80,8 @@ if ($UsersOnly == 1) {
 			c.Code
 		FROM users_history_emails AS h
 			LEFT JOIN geoip_country AS c ON INET_ATON(h.IP) BETWEEN c.StartIP AND c.EndIP
-		WHERE UserID='$UserID' "/*AND Time != '0000-00-00 00:00:00'*/."
+		WHERE UserID = '$UserID' "
+			/*AND Time != '0000-00-00 00:00:00'*/."
 		ORDER BY Time DESC");
 }
 $History = $DB->to_array();
@@ -124,8 +131,12 @@ foreach ($History as $Key => $Values) {
 		<td />
 		<td><?=time_diff($Time)?></td>
 		<td><?=display_str($IP)?></td>
-<? $UserURL = "https://".SSL_SITE_URL."/user.php?id=$UserID2";
-			$DB->query("SELECT Enabled FROM users_main WHERE ID = ".$UserID2);
+<?
+			$UserURL = 'https://'.SSL_SITE_URL."/user.php?id=$UserID2";
+			$DB->query("
+				SELECT Enabled
+				FROM users_main
+				WHERE ID = $UserID2");
 			list($Enabled) = $DB->next_record();
 			$DB->set_query_id($ueQuery);
 ?>

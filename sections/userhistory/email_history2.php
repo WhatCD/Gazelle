@@ -20,8 +20,8 @@ $DB->query("
 		ui.JoinDate,
 		p.Level AS Class
 	FROM users_main AS um
-		JOIN users_info AS ui ON um.ID=ui.UserID
-		JOIN permissions AS p ON p.ID=um.PermissionID
+		JOIN users_info AS ui ON um.ID = ui.UserID
+		JOIN permissions AS p ON p.ID = um.PermissionID
 	WHERE um.ID = $UserID");
 list($Joined, $Class) = $DB->next_record();
 
@@ -31,7 +31,10 @@ if (!check_perms('users_view_email', $Class)) {
 
 $UsersOnly = $_GET['usersonly'];
 
-$DB->query("SELECT Username FROM users_main WHERE ID = ".$UserID);
+$DB->query("
+	SELECT Username
+	FROM users_main
+	WHERE ID = $UserID");
 list($Username)= $DB->next_record();
 View::show_header("Email history for $Username");
 
@@ -49,10 +52,11 @@ $DB->query("
 		GROUP_CONCAT(i.Donor SEPARATOR '|') AS UsersDonor,
 		GROUP_CONCAT(i.Warned SEPARATOR '|') AS UsersWarned
 	FROM users_main AS m
-		LEFT JOIN users_history_emails AS h ON h.Email=m.Email AND h.UserID != m.ID
-		LEFT JOIN users_main AS m2 ON m2.ID=h.UserID
-		LEFT JOIN users_info AS i ON i.UserID=h.UserID
-	WHERE m.ID='$UserID'"
+		LEFT JOIN users_history_emails AS h ON h.Email = m.Email
+				AND h.UserID != m.ID
+		LEFT JOIN users_main AS m2 ON m2.ID = h.UserID
+		LEFT JOIN users_info AS i ON i.UserID = h.UserID
+	WHERE m.ID = '$UserID'"
 );
 $CurrentEmail = array_shift($DB->to_array());
 
@@ -70,10 +74,11 @@ $DB->query("
 		i2.Donor AS UsersDonor,
 		i2.Warned AS UsersWarned
 	FROM users_history_emails AS h2
-		LEFT JOIN users_history_emails AS h3 ON h3.Email=h2.Email AND h3.UserID != h2.UserID
-		LEFT JOIN users_main AS m3 ON m3.ID=h3.UserID
-		LEFT JOIN users_info AS i2 ON i2.UserID=h3.UserID
-	WHERE h2.UserID='$UserID'
+		LEFT JOIN users_history_emails AS h3 ON h3.Email = h2.Email
+				AND h3.UserID != h2.UserID
+		LEFT JOIN users_main AS m3 ON m3.ID = h3.UserID
+		LEFT JOIN users_info AS i2 ON i2.UserID = h3.UserID
+	WHERE h2.UserID = '$UserID'
 	ORDER BY Time DESC"
 );
 $History = $DB->to_array();
@@ -107,7 +112,9 @@ if (count($History) == 1) {
 	$Invite['EndTime'] = $Joined;
 	$Invite['AccountAge'] = date(time() + time() - strtotime($Joined)); // Same as EndTime but without ' ago'
 	$Invite['IP'] = $History[0]['IP'];
-	if ($Current['StartTime'] == '0000-00-00 00:00:00') { $Current['StartTime'] = $Joined; }
+	if ($Current['StartTime'] == '0000-00-00 00:00:00') {
+		$Current['StartTime'] = $Joined;
+	}
 } else {
 	foreach ($History as $Key => $Val) {
 		if ($History[$Key + 1]['Time'] == '0000-00-00 00:00:00' && $Val['Time'] != '0000-00-00 00:00:00') {
@@ -281,12 +288,12 @@ if ($Old) {
 			<td>Start</td>
 			<td>End</td>
 			<td>Age of account</td>
-			<td>Signup IP</td>
+			<td>Registration IP address</td>
 		</tr>
 <?
 // Matches on invite email
 if ($OldMatches) {
-	$i=0;
+	$i = 0;
 	ob_start();
 	foreach ($OldMatches as $Match) {
 		if ($Match['Email'] == $Invite['Email']) {

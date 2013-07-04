@@ -409,7 +409,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 						<input type="hidden" name="action" value="add_alias" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-						<input type="text" id="artist" name="aliasname[]" size="17" <? Users::has_autocomplete_enabled('other'); ?>/>
+						<input type="text" id="artist" name="aliasname[]" size="17"<? Users::has_autocomplete_enabled('other'); ?> />
 						<select name="importance[]">
 							<option value="1">Main</option>
 							<option value="2">Guest</option>
@@ -490,7 +490,7 @@ if (empty($LoggedUser['DisableTagging'])) {
 					<input type="hidden" name="action" value="add_tag" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="groupid" value="<?=$GroupID?>" />
-					<input type="text" name="tagname" id="tagname" size="20" <? Users::has_autocomplete_enabled('other'); ?> />
+					<input type="text" name="tagname" id="tagname" size="20"<? Users::has_autocomplete_enabled('other'); ?> />
 					<input type="submit" value="+" />
 				</form>
 				<br /><br />
@@ -546,7 +546,8 @@ foreach ($TorrentList as $Torrent) {
 	unset($ReportedTimes);
 	$Reports = $Cache->get_value('reports_torrent_'.$TorrentID);
 	if ($Reports === false) {
-		$DB->query("SELECT r.ID,
+		$DB->query("
+			SELECT r.ID,
 				r.ReporterID,
 				r.Type,
 				r.UserComment,
@@ -556,12 +557,12 @@ foreach ($TorrentList as $Torrent) {
 				AND Type != 'edited'
 				AND Status != 'Resolved'");
 		$Reports = $DB->to_array();
-		$Cache->cache_value('reports_torrent_'.$TorrentID, $Reports, 0);
+		$Cache->cache_value("reports_torrent_$TorrentID", $Reports, 0);
 	}
 	if (count($Reports) > 0) {
 		$Reported = true;
 		include(SERVER_ROOT.'/sections/reportsv2/array.php');
-		$ReportInfo = '<table class="reportinfo_table"><tr class="colhead_dark" style="font-weight: bold;"><td>This torrent has '.count($Reports).' active '.(count($Reports) > 1 ? "reports" : "report").':</td></tr>';
+		$ReportInfo = "\n<table class=\"reportinfo_table\">\n\t<tr class=\"colhead_dark\" style=\"font-weight: bold;\">\n\t\t<td>This torrent has ".count($Reports).' active '.(count($Reports) > 1 ? 'reports' : 'report').":</td>\n\t</tr>";
 
 		foreach ($Reports as $Report) {
 			list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
@@ -577,10 +578,10 @@ foreach ($TorrentList as $Torrent) {
 				//There was a type but it wasn't an option!
 				$ReportType = $Types['master']['other'];
 			}
-			$ReportInfo .= "<tr><td>".(check_perms('admin_reports') ? "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$ReportID\">reported it</a> " : 'Someone reported it ') . time_diff($ReportedTime, 2, true, true) . ' for the reason "' . $ReportType['title'] . '":';
-			$ReportInfo .= "<blockquote>".$Text->full_format($ReportReason)."</blockquote></td></tr>";
+			$ReportInfo .= "\n\t<tr>\n\t\t<td>".(check_perms('admin_reports') ? "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$ReportID\">reported it</a> " : 'Someone reported it ') . time_diff($ReportedTime, 2, true, true) . ' for the reason "' . $ReportType['title'] . '":';
+			$ReportInfo .= "\n<blockquote>".$Text->full_format($ReportReason)."</blockquote>\n\t\t</td>\n\t</tr>";
 		}
-		$ReportInfo .= "</table>";
+		$ReportInfo .= "\n</table>";
 	}
 
 	$CanEdit = (check_perms('torrents_edit') || (($UserID == $LoggedUser['ID'] && !$LoggedUser['DisableWiki']) && !($Remastered && !$RemasterYear)));
@@ -589,7 +590,7 @@ foreach ($TorrentList as $Torrent) {
 	$FileTable = '
 	<table class="filelist_table">
 		<tr class="colhead_dark"><td>
-			<div class="filelist_title" style="float: left;">File Name' . $RegenLink . '</div>
+			<div class="filelist_title" style="float: left;">File name' . $RegenLink . '</div>
 			<div class="filelist_path" style="float: right;">' . ($FilePath ? "/$FilePath/" : '') . '</div>
 		</td><td>
 			<strong>Size</strong>
@@ -733,7 +734,7 @@ foreach ($TorrentList as $Torrent) {
 					<div id="reported_<?=$TorrentID?>" class="hidden"><?=$ReportInfo?></div>
 <?	}
 	if (!empty($Description)) {
-			echo '<blockquote>'.$Text->full_format($Description).'</blockquote>';}
+			echo "\n<blockquote>".$Text->full_format($Description).'</blockquote>';}
 ?>
 				</td>
 			</tr>

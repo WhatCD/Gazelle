@@ -4,7 +4,10 @@ enforce_login();
 
 //Include the header
 if (!$UserCount = $Cache->get_value('stats_user_count')) {
-	$DB->query("SELECT COUNT(ID) FROM users_main WHERE Enabled='1'");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM users_main
+		WHERE Enabled = '1'");
 	list($UserCount) = $DB->next_record();
 	$Cache->cache_value('stats_user_count', $UserCount, 0); //inf cache
 }

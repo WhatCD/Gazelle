@@ -52,15 +52,20 @@ if (!empty($_GET['date'])) {
 
 	if (empty($_GET['datetype']) || $_GET['datetype'] == 'day') {
 		$Type = 'day';
-		$Where = "WHERE th.Date BETWEEN '".$SQLTime."' AND '".$SQLTime."' + INTERVAL 24 HOUR AND Type='Daily'";
+		$Where = "
+			WHERE th.Date BETWEEN '$SQLTime' AND '$SQLTime' + INTERVAL 24 HOUR
+				AND Type = 'Daily'";
 	} else {
 		$Type = 'week';
-		$Where = "WHERE th.Date BETWEEN '".$SQLTime."' - AND '".$SQLTime."' + INTERVAL 7 DAY' AND Type='Weekly'";
+		$Where = "
+			WHERE th.Date BETWEEN '$SQLTime' - AND '$SQLTime' + INTERVAL 7 DAY
+				AND Type = 'Weekly'";
 	}
 
-	$Details = $Cache->get_value('top10_history_'.$SQLTime);
+	$Details = $Cache->get_value("top10_history_$SQLTime");
 	if ($Details === false) {
-		$DB->query("SELECT
+		$DB->query("
+			SELECT
 				tht.Rank,
 				tht.TitleString,
 				tht.TagString,
@@ -83,12 +88,12 @@ if (!empty($_GET['date'])) {
 				LEFT JOIN top10_history_torrents AS tht ON tht.HistoryID = th.ID
 				LEFT JOIN torrents AS t ON t.ID = tht.TorrentID
 				LEFT JOIN torrents_group AS g ON g.ID = t.GroupID
-			".$Where."
+			$Where
 			ORDER BY tht.Rank ASC");
 
 		$Details = $DB->to_array();
 
-		$Cache->cache_value('top10_history_'.$SQLTime, $Details, 3600*24);
+		$Cache->cache_value("top10_history_$SQLTime", $Details, 3600 * 24);
 	}
 ?>
 
@@ -103,16 +108,16 @@ if (!empty($_GET['date'])) {
 	</tr>
 <?
 	foreach ($Details as $Detail) :
-		list($Rank, $TitleString, $TagString, $TorrentID, $GroupID,$GroupName,$GroupCategoryID,$TorrentTags,
-			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
-			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data) = $Detail;
+		list($Rank, $TitleString, $TagString, $TorrentID, $GroupID, $GroupName, $GroupCategoryID, $TorrentTags,
+			$Format, $Encoding, $Media, $Scene, $HasLog, $HasCue, $LogScore, $Year, $GroupYear,
+			$RemasterTitle, $Snatched, $Seeders, $Leechers, $Data) = $Detail;
 
 		// highlight every other row
 		$Highlight = ($Rank % 2 ? 'a' : 'b');
 
 		if ($GroupID) :
-			//Group still exists
-			$DisplayName='';
+			// Group still exists
+			$DisplayName = '';
 
 			$Artists = Artists::get_artist($GroupID);
 
@@ -123,43 +128,43 @@ if (!empty($_GET['date'])) {
 			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\">$GroupName</a>";
 
 			if ($GroupCategoryID == 1 && $GroupYear > 0) {
-				$DisplayName.= " [$GroupYear]";
+				$DisplayName .= " [$GroupYear]";
 			}
 
 			// append extra info to torrent title
 			$ExtraInfo = '';
 			$AddExtra = '';
 			if ($Format) {
-				$ExtraInfo.= $Format;
+				$ExtraInfo .= $Format;
 				$AddExtra = ' / ';
 			}
 			if ($Encoding) {
-				$ExtraInfo.= $AddExtra.$Encoding;
+				$ExtraInfo .= $AddExtra.$Encoding;
 				$AddExtra = ' / ';
 			}
 			//"FLAC / Lossless / Log (100%) / Cue / CD";
 			if ($HasLog) {
-				$ExtraInfo.= "$AddExtra Log ($LogScore".'%)';
+				$ExtraInfo .= "$AddExtra Log ($LogScore%)";
 				$AddExtra = ' / ';
 			}
 			if ($HasCue) {
-				$ExtraInfo.= $AddExtra.'Cue';
+				$ExtraInfo .= "{$AddExtra}Cue";
 				$AddExtra = ' / ';
 			}
 			if ($Media) {
-				$ExtraInfo.= $AddExtra.$Media;
+				$ExtraInfo .= $AddExtra.$Media;
 				$AddExtra = ' / ';
 			}
 			if ($Scene) {
-				$ExtraInfo.= $AddExtra.'Scene';
+				$ExtraInfo .= "{$AddExtra}Scene";
 				$AddExtra = ' / ';
 			}
 			if ($Year > 0) {
-				$ExtraInfo.= $AddExtra.$Year;
+				$ExtraInfo .= $AddExtra.$Year;
 				$AddExtra = ' ';
 			}
 			if ($RemasterTitle) {
-				$ExtraInfo.= $AddExtra.$RemasterTitle;
+				$ExtraInfo .= $AddExtra.$RemasterTitle;
 			}
 			if ($ExtraInfo != '') {
 				$ExtraInfo = "- [$ExtraInfo]";
@@ -168,7 +173,7 @@ if (!empty($_GET['date'])) {
 			$DisplayName .= $ExtraInfo;
 			$TorrentTags = new Tags($TorrentTags);
 		else:
-			$DisplayName = $TitleString.' (Deleted)';
+			$DisplayName = "$TitleString (Deleted)";
 			$TorrentTags = new Tags($TagString);
 		endif;
 

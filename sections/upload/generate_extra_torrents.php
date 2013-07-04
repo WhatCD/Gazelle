@@ -42,16 +42,24 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 	$ThisInsert['TotalSize'] = $ExtraTotalSize;
 
 	$Debug->set_flag('upload: torrent decoded');
-	$DB->query("SELECT ID FROM torrents WHERE info_hash='" . db_string($ThisInsert['InfoHash']) . "'");
+	$DB->query("
+		SELECT ID
+		FROM torrents
+		WHERE info_hash = '" . db_string($ThisInsert['InfoHash']) . "'");
 	if ($DB->record_count() > 0) {
 		list($ExtraID) = $DB->next_record();
-		$DB->query('SELECT TorrentID FROM torrents_files WHERE TorrentID = ' . $ExtraID);
+		$DB->query("
+			SELECT TorrentID
+			FROM torrents_files
+			WHERE TorrentID = $ExtraID");
 		if ($DB->record_count() > 0) {
-			$Err = '<a href="torrents.php?torrentid=' . $ExtraID . '">The exact same torrent file already exists on the site!</a>';
+			$Err = "<a href=\"torrents.php?torrentid=$ExtraID\">The exact same torrent file already exists on the site!</a>";
 		} else {
 			//One of the lost torrents.
-			$DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($ExtraID, '$ThisInsert[TorEnc]')");
-			$Err = "<a href=\"torrents.php?torrentid=$ExtraID\">Thank you for fixing this torrent</a>";
+			$DB->query("
+				INSERT INTO torrents_files (TorrentID, File)
+				VALUES ($ExtraID, '$ThisInsert[TorEnc]')");
+			$Err = "<a href=\"torrents.php?torrentid=$ExtraID\">Thank you for fixing this torrent.</a>";
 		}
 	}
 }

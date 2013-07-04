@@ -18,16 +18,16 @@ include(SERVER_ROOT . '/sections/reports/array.php');
 View::show_header('Reports', 'bbcode,reports');
 
 if ($_GET['id'] && is_number($_GET['id'])) {
-	$View = "Single report";
-	$Where = "r.ID = " . $_GET['id'];
+	$View = 'Single report';
+	$Where = 'r.ID = ' . $_GET['id'];
 } else if (empty($_GET['view'])) {
-	$View = "New";
-	$Where = "Status='New'";
+	$View = 'New';
+	$Where = "Status = 'New'";
 } else {
 	$View = $_GET['view'];
 	switch ($_GET['view']) {
 		case 'old' :
-			$Where = "Status='Resolved'";
+			$Where = "Status = 'Resolved'";
 			break;
 		default :
 			error(404);
@@ -60,7 +60,7 @@ $Reports = $DB->query("
 		r.Notes,
 		r.ResolverID
 	FROM reports AS r
-		JOIN users_main AS um ON r.UserID=um.ID
+		JOIN users_main AS um ON r.UserID = um.ID
 	WHERE $Where
 	ORDER BY ReportedTime DESC
 	LIMIT $Limit");
@@ -93,7 +93,7 @@ $DB->set_query_id($Reports);
 <?
 	while (list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $Reason, $Status, $ClaimerID, $Notes, $ResolverID) = $DB->next_record()) {
 		$Type = $Types[$Short];
-		$Reference = "reports.php?id=" . $ReportID . "#report" . $ReportID;
+		$Reference = "reports.php?id=$ReportID#report$ReportID";
 		?>
 		<div id="report_<?=$ReportID?>">
 			<table cellpadding="5" id="report_<?=$ReportID?>">
@@ -108,8 +108,11 @@ $DB->set_query_id($Reports);
 					<td class="center" colspan="2">
 						<strong>
 <?							switch ($Short) {
-								case "user" :
-									$DB->query("SELECT Username FROM users_main WHERE ID=" . $ThingID);
+								case 'user':
+									$DB->query("
+										SELECT Username
+										FROM users_main
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No user with the reported ID found';
 									} else {
@@ -117,9 +120,12 @@ $DB->set_query_id($Reports);
 										echo "<a href=\"user.php?id=$ThingID\">" . display_str($Username) . '</a>';
 									}
 									break;
-								case "request" :
-								case "request_update" :
-									$DB->query("SELECT Title FROM requests WHERE ID=" . $ThingID);
+								case 'request':
+								case 'request_update':
+									$DB->query("
+										SELECT Title
+										FROM requests
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No request with the reported ID found';
 									} else {
@@ -127,8 +133,11 @@ $DB->set_query_id($Reports);
 										echo "<a href=\"requests.php?action=view&amp;id=$ThingID\">" . display_str($Name) . '</a>';
 									}
 									break;
-								case "collage" :
-									$DB->query("SELECT Name FROM collages WHERE ID=" . $ThingID);
+								case 'collage':
+									$DB->query("
+										SELECT Name
+										FROM collages
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No collage with the reported ID found';
 									} else {
@@ -136,8 +145,11 @@ $DB->set_query_id($Reports);
 										echo "<a href=\"collages.php?id=$ThingID\">" . display_str($Name) . '</a>';
 									}
 									break;
-								case "thread" :
-									$DB->query("SELECT Title FROM forums_topics WHERE ID=" . $ThingID);
+								case 'thread':
+									$DB->query("
+										SELECT Title
+										FROM forums_topics
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No forum thread with the reported ID found';
 									} else {
@@ -145,7 +157,7 @@ $DB->set_query_id($Reports);
 										echo "<a href=\"forums.php?action=viewthread&amp;threadid=$ThingID\">" . display_str($Title) . '</a>';
 									}
 									break;
-								case "post" :
+								case 'post':
 									if (isset($LoggedUser['PostsPerPage'])) {
 										$PerPage = $LoggedUser['PostsPerPage'];
 									} else {
@@ -159,18 +171,18 @@ $DB->set_query_id($Reports);
 											(	SELECT COUNT(ID)
 												FROM forums_posts
 												WHERE forums_posts.TopicID = p.TopicID
-													AND forums_posts.ID<=p.ID
+													AND forums_posts.ID <= p.ID
 											) AS PostNum
 										FROM forums_posts AS p
-										WHERE ID=$ThingID");
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No forum post with the reported ID found';
 									} else {
 										list($PostID, $Body, $TopicID, $PostNum) = $DB->next_record();
-										echo "<a href=\"forums.php?action=viewthread&amp;threadid=" . $TopicID . "&amp;post=" . $PostNum . "#post" . $PostID . "\">FORUM POST</a>";
+										echo "<a href=\"forums.php?action=viewthread&amp;threadid=$TopicID&amp;post=$PostNum#post$PostID\">FORUM POST</a>";
 									}
 									break;
-								case "requests_comment" :
+								case 'requests_comment':
 									$DB->query("
 										SELECT
 											rc.RequestID,
@@ -181,16 +193,16 @@ $DB->set_query_id($Reports);
 													AND requests_comments.RequestID = rc.RequestID
 											) AS CommentNum
 										FROM requests_comments AS rc
-										WHERE ID=$ThingID");
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No request comment with the reported ID found';
 									} else {
 										list($RequestID, $Body, $PostNum) = $DB->next_record();
 										$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-										echo "<a href=\"requests.php?action=view&amp;id=" . $RequestID . "&amp;page=" . $PageNum . "#post" . $ThingID . "\">REQUEST COMMENT</a>";
+										echo "<a href=\"requests.php?action=view&amp;id=$RequestID&amp;page=$PageNum#post$ThingID\">REQUEST COMMENT</a>";
 									}
 									break;
-								case "torrents_comment" :
+								case 'torrents_comment':
 									$DB->query("
 										SELECT
 											tc.GroupID,
@@ -201,16 +213,16 @@ $DB->set_query_id($Reports);
 													AND torrents_comments.GroupID = tc.GroupID
 											) AS CommentNum
 										FROM torrents_comments AS tc
-										WHERE ID=$ThingID");
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No torrent comment with the reported ID found';
 									} else {
 										list($GroupID, $Body, $PostNum) = $DB->next_record();
 										$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-										echo "<a href=\"torrents.php?id=" . $GroupID . "&amp;page=" . $PageNum . "#post" . $ThingID . "\">TORRENT COMMENT</a>";
+										echo "<a href=\"torrents.php?id=$GroupID&amp;page=$PageNum#post$ThingID\">TORRENT COMMENT</a>";
 									}
 									break;
-								case "artist_comment" :
+								case 'artist_comment':
 									$DB->query("
 										SELECT
 											ac.ArtistID,
@@ -221,17 +233,17 @@ $DB->set_query_id($Reports);
 													AND artist_comments.ArtistID = ac.ArtistID
 											) AS CommentNum
 										FROM artist_comments AS ac
-										WHERE ID=$ThingID");
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No comment with the reported ID found';
 									} else {
 										list($ArtistID, $Body, $PostNum) = $DB->next_record();
 										$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-										echo "<a href=\"artist.php?id=" . $ArtistID . "&amp;page=" . $PageNum . "#post" . $ThingID . "\">ARTIST COMMENT</a>";
+										echo "<a href=\"artist.php?id=$ArtistID&amp;page=$PageNum#post$ThingID\">ARTIST COMMENT</a>";
 									}
 									break;
 
-								case "collages_comment" :
+								case 'collages_comment':
 									$DB->query("
 										SELECT
 											cc.CollageID,
@@ -242,14 +254,14 @@ $DB->set_query_id($Reports);
 													AND collages_comments.CollageID = cc.CollageID
 											) AS CommentNum
 										FROM collages_comments AS cc
-										WHERE ID=$ThingID");
+										WHERE ID = $ThingID");
 									if ($DB->record_count() < 1) {
 										echo 'No collage comment with the reported ID found';
 									} else {
 										list($CollageID, $Body, $PostNum) = $DB->next_record();
 										$PerPage = POSTS_PER_PAGE;
 										$PageNum = ceil($PostNum / $PerPage);
-										echo "<a href=\"collage.php?action=comments&amp;collageid=" . $CollageID . "&amp;page=" . $PageNum . "#post" . $ThingID . "\">COLLAGE COMMENT</a>";
+										echo "<a href=\"collage.php?action=comments&amp;collageid=$CollageID&amp;page=$PageNum#post$ThingID\">COLLAGE COMMENT</a>";
 									}
 									break;
 							}
@@ -272,7 +284,7 @@ $DB->set_query_id($Reports);
 						&nbsp;&nbsp;
 						<a href="#" onclick="toggleNotes(<?=$ReportID?>); return false;" class="brackets">Toggle notes</a>
 
-						<div id="notes_div_<?=$ReportID?>" style="display: <?=empty($Notes) ? "none" : "block"?>;">
+						<div id="notes_div_<?=$ReportID?>" style="display: <?=empty($Notes) ? 'none' : 'block'; ?>;">
 							<textarea cols="50" rows="3" id="notes_<?=$ReportID?>"><?=$Notes?></textarea>
 							<br />
 							<input type="submit" onclick="saveNotes(<?=$ReportID?>)" value="Save" />
@@ -289,9 +301,10 @@ $DB->set_query_id($Reports);
 						</form>
 					</td>
 				</tr>
-<?			} else {
+<?
+			} else {
 				$ResolverInfo = Users::user_info($ResolverID);
-			?>
+?>
 				<tr>
 					<td colspan="2">
 						Resolved by <a href="users.php?id=<?=$ResolverID?>"><?=$ResolverInfo['Username']?></a>

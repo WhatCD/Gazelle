@@ -4,16 +4,16 @@
 // Bear this in mind when you try to use script_start functions.
 
 if (!check_perms('site_proxy_images')) {
-	error('forbidden');
+	img_error('forbidden');
 }
 $URL = isset($_GET['i']) ? htmlspecialchars_decode($_GET['i']) : null;
 
 if (!extension_loaded('openssl') && strtoupper($URL[4]) == 'S') {
-	error('badprotocol');
+	img_error('badprotocol');
 }
 
 if (!preg_match('/^'.IMAGE_REGEX.'/is',$URL,$Matches)) {
-	error('invalid');
+	img_error('invalid');
 }
 
 if (isset($_GET['c'])) {
@@ -24,16 +24,16 @@ if (!isset($Data) || !$Data) {
 	$Cached = false;
 	$Data = @file_get_contents($URL,0,stream_context_create(array('http'=>array('timeout'=>15))));
 	if (!$Data || empty($Data)) {
-		error('timeout');
+		img_error('timeout');
 	}
 	$Type = image_type($Data);
 	if ($Type && function_exists('imagecreatefrom'.$Type)) {
 		$Image = imagecreatefromstring($Data);
 		if (invisible($Image)) {
-			error('invisible');
+			img_error('invisible');
 		}
 		if (verysmall($Image)) {
-			error('small');
+			img_error('small');
 		}
 	}
 
@@ -60,8 +60,6 @@ if (isset($_GET['avatar'])) {
 		if (strlen($Data2) > 256 * 1024 || image_height($Type, $Data2) > 400) {
 			require_once(SERVER_ROOT.'/classes/mysql.class.php');
 			require_once(SERVER_ROOT.'/classes/time.class.php'); //Require the time class
-
-			$DB = new DB_MYSQL;
 			$DBURL = db_string($URL);
 
 			// Reset avatar, add mod note
@@ -76,7 +74,7 @@ if (isset($_GET['avatar'])) {
 
 			// Send PM
 
-			send_pm($UserID,0,"Your avatar has been automatically reset","The following avatar rules have been in effect for months now:
+			Misc::send_pm($UserID,0,"Your avatar has been automatically reset","The following avatar rules have been in effect for months now:
 
 [b]Avatars must not exceed 256 kB or be vertically longer than 400px. [/b]
 
@@ -90,7 +88,7 @@ Your avatar at $DBURL has been found to exceed these rules. As such, it has been
 /*
 TODO: solve this properly for photoshop output images which prepend shit to the image file. skip it or strip it
 if (!isset($Type)) {
-	error('timeout');
+	img_error('timeout');
 }
 */
 if (isset($Type)) {

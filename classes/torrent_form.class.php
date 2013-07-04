@@ -199,7 +199,7 @@ class TORRENT_FORM {
 				foreach ($Torrent['Artists'] as $Importance => $Artists) {
 					foreach ($Artists as $Artist) {
 ?>
-					<input type="text" id="artist" name="artists[]" size="45" value="<?=display_str($Artist['name']) ?>" onblur="CheckVA();" <? Users::has_autocomplete_enabled('other'); ?> <?=$this->Disabled?> />
+					<input type="text" id="artist" name="artists[]" size="45" value="<?=display_str($Artist['name']) ?>" onblur="CheckVA();"<? Users::has_autocomplete_enabled('other'); ?><?=$this->Disabled?> />
 					<select id="importance" name="importance[]"<?=$this->Disabled?>>
 						<option value="1"<?=($Importance == '1' ? ' selected="selected"' : '')?>>Main</option>
 						<option value="2"<?=($Importance == '2' ? ' selected="selected"' : '')?>>Guest</option>
@@ -220,7 +220,7 @@ class TORRENT_FORM {
 				}
 			} else {
 ?>
-					<input type="text" id="artist" name="artists[]" size="45" onblur="CheckVA();" <? Users::has_autocomplete_enabled('other'); ?> <?=$this->Disabled?> />
+					<input type="text" id="artist" name="artists[]" size="45" onblur="CheckVA();"<? Users::has_autocomplete_enabled('other'); ?><?=$this->Disabled?> />
 					<select id="importance" name="importance[]"<?=$this->Disabled?>>
 						<option value="1">Main</option>
 						<option value="2">Guest</option>
@@ -586,9 +586,9 @@ function show() {
 <?				} ?>
 					</select>
 <?			} ?>
-					<input type="text" id="tags" name="tags" size="40" value="<?=display_str($Torrent['TagList']) ?>" <? Users::has_autocomplete_enabled('other'); ?> <?=$this->Disabled?> />
+					<input type="text" id="tags" name="tags" size="40" value="<?=display_str($Torrent['TagList']) ?>"<? Users::has_autocomplete_enabled('other'); ?><?=$this->Disabled?> />
 					<br />
-			<? Rules::display_site_tag_rules(true) // indent the opening PHP tag with 3 tabs for proper HTML generation ?>
+<? Rules::display_site_tag_rules(true); ?>
 				</td>
 			</tr>
 			<tr>
@@ -694,7 +694,7 @@ function show() {
 			<tr>
 				<td class="label">Tags:</td>
 				<td>
-					<input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>" <? Users::has_autocomplete_enabled('other'); ?> />
+					<input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>"<? Users::has_autocomplete_enabled('other'); ?> />
 				</td>
 			</tr>
 			<tr>
@@ -736,7 +736,7 @@ function show() {
 			</tr>
 			<tr>
 				<td class="label">Tags:</td>
-				<td><input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>" <? Users::has_autocomplete_enabled('other'); ?>/></td>
+				<td><input type="text" id="tags" name="tags" size="60" value="<?=display_str($Torrent['TagList']) ?>"<? Users::has_autocomplete_enabled('other'); ?> /></td>
 			</tr>
 			<tr>
 				<td class="label">Image (optional):</td>

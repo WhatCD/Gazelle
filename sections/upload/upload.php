@@ -9,8 +9,8 @@
 // called again.														//
 //**********************************************************************//
 
-ini_set('max_file_uploads','100');
-View::show_header('Upload','upload,validate_upload,valid_tags,musicbrainz,multiformat_uploader');
+ini_set('max_file_uploads', '100');
+View::show_header('Upload', 'upload,validate_upload,valid_tags,musicbrainz,multiformat_uploader');
 
 if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
 	$DB->query('
@@ -27,7 +27,7 @@ if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid']
 			tg.VanityHouse
 		FROM torrents_group AS tg
 			LEFT JOIN torrents AS t ON t.GroupID = tg.ID
-		WHERE tg.ID='.$_GET['groupid'].'
+		WHERE tg.ID = '.$_GET['groupid'].'
 		GROUP BY tg.ID');
 	if ($DB->record_count()) {
 		list($Properties) = $DB->to_array(false, MYSQLI_BOTH);
@@ -39,8 +39,8 @@ if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid']
 			SELECT
 				GROUP_CONCAT(tags.Name SEPARATOR ', ') AS TagList
 			FROM torrents_tags AS tt
-				JOIN tags ON tags.ID=tt.TagID
-			WHERE tt.GroupID='$_GET[groupid]'");
+				JOIN tags ON tags.ID = tt.TagID
+			WHERE tt.GroupID = '$_GET[groupid]'");
 
 		list($Properties['TagList']) = $DB->next_record();
 	} else {
@@ -61,9 +61,9 @@ if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid']
 			r.ReleaseType,
 			r.Image
 		FROM requests AS r
-		WHERE r.ID='.$_GET['requestid']);
+		WHERE r.ID = '.$_GET['requestid']);
 
-	list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
+	list($Properties) = $DB->to_array(false, MYSQLI_BOTH);
 	$UploadForm = $Categories[$Properties['CategoryID'] - 1];
 	$Properties['CategoryName'] = $Categories[$Properties['CategoryID'] - 1];
 	$Properties['Artists'] = Requests::get_artists($_GET['requestid']);
@@ -84,7 +84,11 @@ if (!isset($Text)) {
 
 $GenreTags = $Cache->get_value('genre_tags');
 if (!$GenreTags) {
-	$DB->query("SELECT Name FROM tags WHERE TagType='genre' ORDER BY Name");
+	$DB->query("
+		SELECT Name
+		FROM tags
+		WHERE TagType = 'genre'
+		ORDER BY Name");
 	$GenreTags = $DB->collect('Name');
 	$Cache->cache_value('genre_tags', $GenreTags, 3600 * 6);
 }
@@ -100,7 +104,7 @@ $DNU = $DB->to_array();
 list($Name, $Comment, $Updated) = reset($DNU);
 reset($DNU);
 $DB->query("
-	SELECT IF(MAX(t.Time) < '$Updated' OR MAX(t.Time) IS NULL,1,0)
+	SELECT IF(MAX(t.Time) < '$Updated' OR MAX(t.Time) IS NULL, 1, 0)
 	FROM torrents AS t
 	WHERE UserID = ".$LoggedUser['ID']);
 list($NewDNU) = $DB->next_record();
@@ -110,9 +114,9 @@ $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
 	<h3 id="dnu_header">Do not upload</h3>
 	<p><?=$NewDNU ? '<strong class="important_text">' : '' ?>Last updated: <?=time_diff($Updated)?><?=$NewDNU ? '</strong>' : '' ?></p>
 	<p>The following releases are currently forbidden from being uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comment.
-<? if ($HideDNU) { ?>
+<?	if ($HideDNU) { ?>
 	<span id="showdnu"><a href="#" onclick="$('#dnulist').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Show</a></span>
-<? } ?>
+<?	} ?>
 	</p>
 	<table id="dnulist" class="<?=($HideDNU ? 'hidden' : '')?>">
 		<tr class="colhead">

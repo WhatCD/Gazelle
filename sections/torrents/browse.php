@@ -21,7 +21,7 @@
 
 $ErrorPage = true;
 
-define('EXPLAIN_HACK',false);
+define('EXPLAIN_HACK', false);
 
 if (EXPLAIN_HACK) {
 	$SCFR = '';
@@ -39,62 +39,62 @@ function build_search($SearchStr, $Field, $Exact = false, $SQLWhere = '', $FullT
 	}
 
 	if (!$Exact) {
-		if ($FullText && preg_match('/[^a-zA-Z0-9 ]/i',$SearchStr)) {
+		if ($FullText && preg_match('/[^a-zA-Z0-9 ]/i', $SearchStr)) {
 			$FullText = 0;
 		}
 
 		$SearchLength = strlen(trim($SearchStr));
-		$SearchStr = preg_replace('/\s\s+/',' ',trim($SearchStr));
-		$SearchStr = preg_replace_callback('/"(([^"])*)"/','quotes',$SearchStr);
-		$SearchStr = explode(' ',$SearchStr);
+		$SearchStr = preg_replace('/\s\s+/', ' ', trim($SearchStr));
+		$SearchStr = preg_replace_callback('/"(([^"])*)"/', 'quotes', $SearchStr);
+		$SearchStr = explode(' ', $SearchStr);
 
 		$FilterString = '(.+?)';
 		foreach ($SearchStr as $SearchVal) {
 			if (trim($SearchVal) != '') {
 				$SearchVal = trim($SearchVal);
-				$SearchVal = str_replace('{{SPACE}}',' ',$SearchVal);
+				$SearchVal = str_replace('{{SPACE}}', ' ', $SearchVal);
 
 				// Choose between fulltext or LIKE based off length of the string
 				if ($FullText && strlen($SearchVal) > 2) {
 					if ($SQLWhere != '') {
-						$SQLWhere.= ' AND ';
+						$SQLWhere .= ' AND ';
 					}
-					if (substr($SearchVal,0,1) == '-') {
-						$SQLWhere.="MATCH ($Field) AGAINST ('".db_string($SearchVal)."' IN BOOLEAN MODE)";
+					if (substr($SearchVal, 0, 1) == '-') {
+						$SQLWhere .= "MATCH ($Field) AGAINST ('".db_string($SearchVal)."' IN BOOLEAN MODE)";
 					} else {
-						$SQLWhere.="MATCH ($Field) AGAINST ('".db_string($SearchVal)."')";
+						$SQLWhere .= "MATCH ($Field) AGAINST ('".db_string($SearchVal)."')";
 					}
 				} else {
 					if ($SQLWhere != '') {
-						$SQLWhere.= ' AND ';
+						$SQLWhere .= ' AND ';
 					}
 					if (substr($SearchVal,0,1) == '-') {
-						$SQLWhere.=$Field." NOT LIKE '%".db_string(substr($SearchVal,1))."%'";
+						$SQLWhere .= "$Field NOT LIKE '%".db_string(substr($SearchVal,1))."%'";
 					} else {
-						$SQLWhere.=$Field." LIKE '%".db_string($SearchVal)."%'";
+						$SQLWhere .= "$Field LIKE '%".db_string($SearchVal)."%'";
 					}
 				}
-				$FilterString.="($SearchVal)(.+?)";
+				$FilterString .= "($SearchVal)(.+?)";
 			}
 		}
 	} else {
 		if ($SQLWhere != '') {
-			$SQLWhere.= ' AND ';
+			$SQLWhere .= ' AND ';
 		}
-		$SQLWhere.= $Field." LIKE '".db_string($SearchStr)."'";
-		$FilterString.= "(.+?)($SearchStr)(.+?)";
+		$SQLWhere .= "$Field LIKE '".db_string($SearchStr)."'";
+		$FilterString .= "(.+?)($SearchStr)(.+?)";
 	}
 	$Search = 1;
 	$FilterString = "/$FilterString/si";
 	if ($SQLWhere != '' && $AddWhere) {
-		$SQLWhere = 'WHERE '.$SQLWhere;
+		$SQLWhere = "WHERE $SQLWhere";
 	}
 	return $SQLWhere;
 }
 
 function quotes($Str) {
 	$Str = str_replace(' ', '{{SPACE}}', trim($Str[1]));
-	return ' '.$Str.' ';
+	return " $Str ";
 }
 
 // The "order by x" links on columns headers
@@ -110,7 +110,7 @@ function header_link($SortKey, $DefaultWay = 'DESC') {
 		$NewWay = $DefaultWay;
 	}
 
-	return 'torrents.php?order_way='.$NewWay.'&amp;order_by='.$SortKey.'&amp;'.Format::get_url(array('order_way','order_by'));
+	return "torrents.php?order_way=$NewWay&amp;order_by=$SortKey&amp;" . Format::get_url(array('order_way', 'order_by'));
 }
 
 // Setting default search options
@@ -118,29 +118,41 @@ if ($_GET['setdefault']) {
 	$UnsetList[] = '/(&?page\=.+?&?)/i';
 	$UnsetList[] = '/(&?setdefault\=.+?&?)/i';
 
-	$DB->query("SELECT SiteOptions FROM users_info WHERE UserID='".db_string($LoggedUser['ID'])."'");
+	$DB->query("
+		SELECT SiteOptions
+		FROM users_info
+		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
 	list($SiteOptions) = $DB->next_record(MYSQLI_NUM, true);
 	$SiteOptions = unserialize($SiteOptions);
-	$SiteOptions['DefaultSearch'] = preg_replace($UnsetList,'',$_SERVER['QUERY_STRING']);
-	$DB->query("UPDATE users_info SET SiteOptions='".db_string(serialize($SiteOptions))."' WHERE UserID='".db_string($LoggedUser['ID'])."'");
-	$Cache->begin_transaction('user_info_heavy_'.$UserID);
-	$Cache->update_row(false, array('DefaultSearch'=>preg_replace($UnsetList,'',$_SERVER['QUERY_STRING'])));
+	$SiteOptions['DefaultSearch'] = preg_replace($UnsetList, '', $_SERVER['QUERY_STRING']);
+	$DB->query("
+		UPDATE users_info
+		SET SiteOptions = '".db_string(serialize($SiteOptions))."'
+		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
+	$Cache->begin_transaction("user_info_heavy_$UserID");
+	$Cache->update_row(false, array('DefaultSearch' => preg_replace($UnsetList, '', $_SERVER['QUERY_STRING'])));
 	$Cache->commit_transaction(0);
 
 // Clearing default search options
 } elseif ($_GET['cleardefault']) {
-	$DB->query("SELECT SiteOptions FROM users_info WHERE UserID='".db_string($LoggedUser['ID'])."'");
+	$DB->query("
+		SELECT SiteOptions
+		FROM users_info
+		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
 	list($SiteOptions) = $DB->next_record(MYSQLI_NUM, true);
 	$SiteOptions = unserialize($SiteOptions);
 	$SiteOptions['DefaultSearch'] = '';
-	$DB->query("UPDATE users_info SET SiteOptions='".db_string(serialize($SiteOptions))."' WHERE UserID='".db_string($LoggedUser['ID'])."'");
-	$Cache->begin_transaction('user_info_heavy_'.$UserID);
-	$Cache->update_row(false, array('DefaultSearch'=>''));
+	$DB->query("
+		UPDATE users_info
+		SET SiteOptions = '".db_string(serialize($SiteOptions))."'
+		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
+	$Cache->begin_transaction("user_info_heavy_$UserID");
+	$Cache->update_row(false, array('DefaultSearch' => ''));
 	$Cache->commit_transaction(0);
 
 // Use default search options
 } elseif (!$_SERVER['QUERY_STRING'] && $LoggedUser['DefaultSearch']) {
-	parse_str($LoggedUser['DefaultSearch'],$_GET);
+	parse_str($LoggedUser['DefaultSearch'], $_GET);
 }
 
 // If a user is hammering the search page (either via a <script type="text/javascript">, or just general zeal)
@@ -157,38 +169,38 @@ $OrderWay = 'DESC'; // We also order descending by default
 
 list($Page, $Limit) = Format::page_limit(TORRENTS_PER_PAGE);
 
-if (preg_match('/^s[1-7]$/',$_GET['order_by'])) {
+if (preg_match('/^s[1-7]$/', $_GET['order_by'])) {
 	$OrderBy = strtolower($_GET['order_by']);
 }
-if (in_array(strtolower($_GET['order_way']),array('desc','asc'))) {
+if (in_array(strtolower($_GET['order_way']), array('desc', 'asc'))) {
 	$OrderWay = strtoupper($_GET['order_way']);
 }
 
 // Uploaded, seeding, leeching, snatched lists
 if ($_GET['userid'] && is_number($_GET['userid'])) {
-	$UserID=ceil($_GET['userid']);
+	$UserID = ceil($_GET['userid']);
 
 	$DB->query("
 		SELECT m.Paranoia, p.Level
 		FROM users_main AS m
-			JOIN permissions AS p ON p.ID=m.PermissionID
-		WHERE ID='$UserID'");
+			JOIN permissions AS p ON p.ID = m.PermissionID
+		WHERE ID = '$UserID'");
 	list($Paranoia, $UserClass) = $DB->next_record();
 
-	$TorrentWhere='';
-	$TorrentJoin='';
+	$TorrentWhere = '';
+	$TorrentJoin = '';
 	if ($_GET['type'] == 'uploaded') {
 		if (!check_paranoia('uploads', $Paranoia, $UserClass, $UserID)) {
 			error(403);
 		}
-		$TorrentWhere = "WHERE t.UserID='".$UserID."'";
+		$TorrentWhere = "WHERE t.UserID = '$UserID'";
 		$Title = 'Uploaded Torrents';
 
 	} elseif ($_GET['type'] == 'seeding') {
 		if (!check_paranoia('seeding', $Paranoia, $UserClass, $UserID)) {
 			error(403);
 		}
-		$TorrentJoin = "JOIN xbt_files_users AS xfu ON xfu.fid=t.ID AND xfu.uid='$UserID' AND xfu.remaining=0";
+		$TorrentJoin = "JOIN xbt_files_users AS xfu ON xfu.fid = t.ID AND xfu.uid = '$UserID' AND xfu.remaining = 0";
 		$Title = 'Seeding Torrents';
 		$TimeField = 'xfu.mtime';
 		$TimeLabel = 'Seeding Time';
@@ -197,7 +209,7 @@ if ($_GET['userid'] && is_number($_GET['userid'])) {
 		if (!check_paranoia('leeching', $Paranoia, $UserClass, $UserID)) {
 			error(403);
 		}
-		$TorrentJoin = "JOIN xbt_files_users AS xfu ON xfu.fid=t.ID AND xfu.uid='$UserID' AND xfu.remaining>0";
+		$TorrentJoin = "JOIN xbt_files_users AS xfu ON xfu.fid = t.ID AND xfu.uid = '$UserID' AND xfu.remaining > 0";
 		$Title = 'Leeching Torrents';
 		$TimeField = 'xfu.mtime';
 		$TimeLabel = 'Leeching Time';
@@ -206,7 +218,7 @@ if ($_GET['userid'] && is_number($_GET['userid'])) {
 		if (!check_paranoia('snatched', $Paranoia, $UserClass, $UserID)) {
 			error(403);
 		}
-		$TorrentJoin = "JOIN xbt_snatched AS xs ON xs.fid=t.ID AND xs.uid='$UserID'";
+		$TorrentJoin = "JOIN xbt_snatched AS xs ON xs.fid = t.ID AND xs.uid = '$UserID'";
 		$Title = 'Snatched Torrents';
 		$TimeField = 'xs.tstamp';
 		$TimeLabel = 'Snatched Time';
@@ -232,7 +244,7 @@ if (($LoggedUser['DisableGrouping'] && !$_GET['enablegrouping']) || $_GET['disab
 if ((strtolower($_GET['action']) == 'advanced' || ($LoggedUser['SearchType'] && strtolower($_GET['action']) != 'basic')) && check_perms('site_advanced_search')) {
 	$TorrentSpecifics = 0; // How many options are we searching by? (Disabled grouping only)
 	if ($DisableGrouping) {
-		foreach ($_GET as $SearchType=>$SearchStr) {
+		foreach ($_GET as $SearchType => $SearchStr) {
 			switch ($SearchType) {
 				case 'bitrate':
 				case 'format':
@@ -259,177 +271,177 @@ if ((strtolower($_GET['action']) == 'advanced' || ($LoggedUser['SearchType'] && 
 			$TorrentJoin .= '
 				LEFT JOIN torrents_artists AS ta ON g.ID = ta.GroupID
 				LEFT JOIN artists AS a ON ta.ArtistID = a.ID';
-			$TorrentWhere = build_search($_GET['artistname'],'a.Name',$_GET['exactartist'],$TorrentWhere);
+			$TorrentWhere = build_search($_GET['artistname'], 'a.Name', $_GET['exactartist'], $TorrentWhere);
 	}
 
 	if ($_GET['torrentname'] != '') {
 		if (!$DisableGrouping) {
-			$GroupWhere = build_search($_GET['torrentname'],'GroupName',$_GET['exacttorrent'],$GroupWhere);
+			$GroupWhere = build_search($_GET['torrentname'], 'GroupName', $_GET['exacttorrent'], $GroupWhere);
 		} else {
-			$TorrentWhere = build_search($_GET['torrentname'],'g.Name',$_GET['exacttorrent'],$TorrentWhere);
+			$TorrentWhere = build_search($_GET['torrentname'], 'g.Name', $_GET['exacttorrent'], $TorrentWhere);
 		}
 	}
 
 	if ($_GET['remastertitle'] != '') {
 		$RemasterTitle = $_GET['remastertitle'];
 		if ($_GET['exactremaster']) {
-			$RemasterTitle = '%'.$RemasterTitle.'%';
+			$RemasterTitle = "%$RemasterTitle%";
 		}
-		$GroupWhere = build_search($RemasterTitle,'RemasterTitleList',$_GET['exactremaster'],$GroupWhere,0,$RemasterRegEx);
+		$GroupWhere = build_search($RemasterTitle, 'RemasterTitleList', $_GET['exactremaster'], $GroupWhere, 0, $RemasterRegEx);
 		if ($TorrentSpecifics > 0) {
-			$TorrentWhere = build_search($_GET['remastertitle'],'t.RemasterTitle',$_GET['exactremaster'],$TorrentWhere);
+			$TorrentWhere = build_search($_GET['remastertitle'], 't.RemasterTitle', $_GET['exactremaster'], $TorrentWhere);
 		}
 	}
 
 	if ($_GET['year'] != '' && is_numeric($_GET['year'])) {
 		if (!$DisableGrouping) {
 			if ($GroupWhere == '') {
-				$GroupWhere='WHERE ';
+				$GroupWhere = 'WHERE ';
 			} else {
-				$GroupWhere.= ' AND ';
+				$GroupWhere .= ' AND ';
 			}
-			$GroupWhere.="GroupYear='".db_string($_GET['year'])."'";
+			$GroupWhere .= "GroupYear = '".db_string($_GET['year'])."'";
 		} else {
 			if ($TorrentWhere == '') {
 				$TorrentWhere = 'WHERE ';
 			} else {
-				$TorrentWhere.= ' AND ';
+				$TorrentWhere .= ' AND ';
 			}
-			$TorrentWhere.="g.Year='".db_string($_GET['year'])."'";
+			$TorrentWhere .= "g.Year = '".db_string($_GET['year'])."'";
 		}
 	}
 
 	if ($_GET['bitrate'] != '') {
-		if (in_array($_GET['bitrate'],$Bitrates)) {
+		if (in_array($_GET['bitrate'], $Bitrates)) {
 			if ($_GET['bitrate'] == 'Other') {
 				if ($_GET['other_bitrate'] != '') {
-					$GroupWhere=build_search(db_string($_GET['other_bitrate']),'EncodingList',false,$GroupWhere);
+					$GroupWhere = build_search(db_string($_GET['other_bitrate']), 'EncodingList', false, $GroupWhere);
 					if ($TorrentSpecifics > 0) {
 						if ($TorrentWhere == '') {
 							$TorrentWhere = 'WHERE ';
 						} else {
-							$TorrentWhere.= ' AND ';
+							$TorrentWhere .= ' AND ';
 						}
 					}
-					$TorrentWhere.="t.Encoding LIKE '%".db_string($_GET['other_bitrate'])."%'";
+					$TorrentWhere .= "t.Encoding LIKE '%".db_string($_GET['other_bitrate'])."%'";
 				}
 			} else {
-				$GroupWhere = build_search(db_string($_GET['bitrate']),'EncodingList',false,$GroupWhere);
+				$GroupWhere = build_search(db_string($_GET['bitrate']), 'EncodingList', false, $GroupWhere);
 				if ($TorrentSpecifics > 0) {
 					if ($TorrentWhere == '') {
 						$TorrentWhere = 'WHERE ';
 					} else {
-						$TorrentWhere.= ' AND ';
+						$TorrentWhere .= ' AND ';
 					}
-					$TorrentWhere.="t.Encoding LIKE '".db_string($_GET['bitrate'])."'";
+					$TorrentWhere .= "t.Encoding LIKE '".db_string($_GET['bitrate'])."'";
 				}
 			}
 		}
 	}
 
-	if ($_GET['format'] != '' && in_array($_GET['format'],$Formats)) {
-		$GroupWhere = build_search('%'.$_GET['format'].'%','FormatList',f,$GroupWhere);
+	if ($_GET['format'] != '' && in_array($_GET['format'], $Formats)) {
+		$GroupWhere = build_search('%'.$_GET['format'].'%', 'FormatList', false, $GroupWhere);
 		if ($TorrentSpecifics > 0) {
 			if ($TorrentWhere == '') {
 				$TorrentWhere = 'WHERE ';
 			} else {
-				$TorrentWhere.= ' AND ';
+				$TorrentWhere .= ' AND ';
 			}
-			$TorrentWhere.="t.Format='".db_string($_GET['format'])."'";
+			$TorrentWhere .= "t.Format = '".db_string($_GET['format'])."'";
 		}
 	}
 
-	if ($_GET['media'] != '' && in_array($_GET['media'],$Media)) {
-		$GroupWhere = build_search('%'.$_GET['media'].'%','MediaList',false,$GroupWhere);
+	if ($_GET['media'] != '' && in_array($_GET['media'], $Media)) {
+		$GroupWhere = build_search('%'.$_GET['media'].'%', 'MediaList', false, $GroupWhere);
 		if ($TorrentSpecifics > 0) {
 			if ($TorrentWhere == '') {
 				$TorrentWhere = 'WHERE ';
 			} else {
-				$TorrentWhere.= ' AND ';
+				$TorrentWhere .= ' AND ';
 			}
-			$TorrentWhere.="t.Media='".db_string($_GET['media'])."'";
+			$TorrentWhere .= "t.Media = '".db_string($_GET['media'])."'";
 		}
 	}
 
 	if ($_GET['filelist'] != '') {
-		$TorrentWhere = build_search('%'.$_GET['filelist'].'%','t.FileList',true,$TorrentWhere);
+		$TorrentWhere = build_search('%'.$_GET['filelist'].'%', 't.FileList', true, $TorrentWhere);
 	}
 
 	if ($_GET['haslog'] != '') {
 		$HasLog = ceil($_GET['haslog']);
 		if ($_GET['haslog'] == '100' || $_GET['haslog'] == '-100') {
-			$GroupWhere = build_search($_GET['haslog'],'LogScoreList',false,$GroupWhere);
+			$GroupWhere = build_search($_GET['haslog'], 'LogScoreList', false, $GroupWhere);
 			$HasLog = 1;
 		}
 
-		$GroupWhere = build_search('%'.$HasLog.'%','LogList',true,$GroupWhere);
+		$GroupWhere = build_search('%'.$HasLog.'%', 'LogList', true, $GroupWhere);
 		if ($TorrentSpecifics > 0) {
 			if ($_GET['haslog'] == '100' || $_GET['haslog'] == '-100') {
 				if ($TorrentWhere == '') {
 					$TorrentWhere = 'WHERE ';
 				} else {
-					$TorrentWhere.= ' AND ';
+					$TorrentWhere .= ' AND ';
 				}
 				if ($_GET['haslog'] == '-100') {
-					$TorrentWhere.= "t.LogScore!='100'";
+					$TorrentWhere .= "t.LogScore != '100'";
 				} else {
-					$TorrentWhere.= "t.LogScore='100'";
+					$TorrentWhere .= "t.LogScore = '100'";
 				}
 			}
 			if ($TorrentWhere == '') {
 				$TorrentWhere = 'WHERE ';
 			} else {
-				$TorrentWhere.= ' AND ';
+				$TorrentWhere .= ' AND ';
 			}
-			$TorrentWhere.= "t.HasLog='$HasLog'";
+			$TorrentWhere .= "t.HasLog = '$HasLog'";
 		}
 	}
 
 	if ($_GET['hascue'] != '') {
-		$GroupWhere = build_search('%'.$_GET['hascue'].'%','CueList',true,$GroupWhere);
+		$GroupWhere = build_search('%'.$_GET['hascue'].'%', 'CueList', true, $GroupWhere);
 		if ($TorrentSpecifics > 0) {
 			if ($TorrentWhere == '') {
 				$TorrentWhere = 'WHERE ';
 			} else {
-				$TorrentWhere.= ' AND ';
+				$TorrentWhere .= ' AND ';
 			}
-			$TorrentWhere.= "t.HasCue='".ceil($_GET['hascue'])."'";
+			$TorrentWhere .= "t.HasCue = '".ceil($_GET['hascue'])."'";
 		}
 	}
 
 	if ($_GET['scene'] != '') {
-		$GroupWhere = build_search('%'.$_GET['scene'].'%','SceneList',true,$GroupWhere);
+		$GroupWhere = build_search('%'.$_GET['scene'].'%', 'SceneList', true, $GroupWhere);
 		if ($TorrentSpecifics > 0) {
 			if ($TorrentWhere == '') {
 				$TorrentWhere = 'WHERE ';
 			} else {
-				$TorrentWhere.= ' AND ';
+				$TorrentWhere .= ' AND ';
 			}
-			$TorrentWhere.= "t.Scene='".ceil($_GET['scene'])."'";
+			$TorrentWhere .= "t.Scene = '".ceil($_GET['scene'])."'";
 		}
 	}
 
 	if ($_GET['freeleech'] != '') {
-		$GroupWhere = build_search('%'.$_GET['freeleech'].'%','FreeTorrentList',true,$GroupWhere);
+		$GroupWhere = build_search('%'.$_GET['freeleech'].'%', 'FreeTorrentList', true, $GroupWhere);
 		if ($TorrentSpecifics > 0) {
 			if ($TorrentWhere == '') {
 				$TorrentWhere = 'WHERE ';
 			} else {
-				$TorrentWhere.= ' AND ';
+				$TorrentWhere .= ' AND ';
 			}
-			$TorrentWhere.= "t.FreeTorrent='".ceil($_GET['freeleech'])."'";
+			$TorrentWhere .= "t.FreeTorrent = '".ceil($_GET['freeleech'])."'";
 		}
 	}
 
 	if ($_GET['remastered'] != '') {
-		$GroupWhere = build_search('%'.$_GET['remastered'].'%','RemasterList',true,$GroupWhere);
+		$GroupWhere = build_search('%'.$_GET['remastered'].'%', 'RemasterList', true, $GroupWhere);
 		if ($TorrentSpecifics > 0) {
 			if ($TorrentWhere == '') {
 				$TorrentWhere = 'WHERE ';
 			} else {
-				$TorrentWhere.= ' AND ';
+				$TorrentWhere .= ' AND ';
 			}
-			$TorrentWhere.= "t.Remastered='".ceil($_GET['remastered'])."'";
+			$TorrentWhere .= "t.Remastered = '".ceil($_GET['remastered'])."'";
 		}
 	}
 
@@ -437,12 +449,12 @@ if ((strtolower($_GET['action']) == 'advanced' || ($LoggedUser['SearchType'] && 
 	// Basic search
 	if ($_GET['searchstr'] != '') {
 		// Change special characters into 'normal' characters
-		$SearchStr = strtr($_GET['searchstr'],$SpecialChars);
+		$SearchStr = strtr($_GET['searchstr'], $SpecialChars);
 
 		if (!$DisableGrouping) {
-			$GroupWhere = build_search($SearchStr,'SearchText',false,$GroupWhere,1);
+			$GroupWhere = build_search($SearchStr, 'SearchText', false, $GroupWhere, 1);
 		} else {
-			$TorrentWhere = build_search($SearchStr,'g.SearchText',false,$TorrentWhere);
+			$TorrentWhere = build_search($SearchStr, 'g.SearchText', false, $TorrentWhere);
 		}
 	}
 }
@@ -455,26 +467,26 @@ if (isset($_GET['searchtags']) && $_GET['searchtags'] != '') {
 		$TagField = 'h.TagList';
 	}
 
-	$Tags = explode(',',$_GET['searchtags']);
+	$Tags = explode(',', $_GET['searchtags']);
 	foreach ($Tags as $Key => $Tag) :
 		if (trim($Tag) != '') {
 			if ($TagSearch != '') {
 				if ($_GET['tags_type']) {
-					$TagSearch.= ' AND ';
+					$TagSearch .= ' AND ';
 				} else {
-					$TagSearch.= ' OR ';
+					$TagSearch .= ' OR ';
 				}
 			}
-			$Tag = trim(str_replace('.','_',$Tag));
+			$Tag = trim(str_replace('.', '_', $Tag));
 			if (!$DisableGrouping) {
 				// Fulltext
-				$TagSearch.= " MATCH ($TagField) AGAINST ('".db_string($Tag)."'";
-				if (substr($Tag,0,1) == '-') {
-					$TagSearch.=' IN BOOLEAN MODE';
+				$TagSearch .= " MATCH ($TagField) AGAINST ('".db_string($Tag)."'";
+				if (substr($Tag, 0, 1) == '-') {
+					$TagSearch .=' IN BOOLEAN MODE';
 				}
-				$TagSearch.= ')';
+				$TagSearch .= ')';
 			} else {
-				$TagSearch.=$TagField." LIKE '%".db_string($Tag)."%'";
+				$TagSearch .= "$TagField LIKE '%".db_string($Tag)."%'";
 			}
 		}
 	endforeach;
@@ -508,25 +520,25 @@ if ($_GET['filter_cat'] != '') {
 
 	foreach ($_GET['filter_cat'] as $CatKey => $CatVal) {
 		if ($CatFilter != '') {
-			$CatFilter.= ' OR ';
+			$CatFilter .= ' OR ';
 		}
-		$CatFilter.=$CategoryField."='".db_string(ceil($CatKey))."'";
+		$CatFilter .= "$CategoryField = '".db_string(ceil($CatKey))."'";
 	}
 
 	if ($DisableGrouping) {
 		if ($TorrentWhere == '') {
 			$TorrentWhere = 'WHERE ';
 		} else {
-			$TorrentWhere.= ' AND ';
+			$TorrentWhere .= ' AND ';
 		}
-		$TorrentWhere.= "($CatFilter)";
+		$TorrentWhere .= "($CatFilter)";
 	} else {
 		if ($GroupWhere == '') {
 			$GroupWhere = 'WHERE ';
 		} else {
-			$GroupWhere.= ' AND ';
+			$GroupWhere .= ' AND ';
 		}
-		$GroupWhere.="($CatFilter)";
+		$GroupWhere .= "($CatFilter)";
 	}
 }
 
@@ -542,50 +554,66 @@ if (!is_array($TorrentCache)) {
 			if ($GroupWhere == '') {
 				$GroupWhere = 'WHERE ';
 			} else {
-				$GroupWhere.= ' AND ';
+				$GroupWhere .= ' AND ';
 			}
-			$GroupWhere.= "(SELECT t.GroupID FROM torrents AS t $TorrentWhere AND t.GroupID=h.GroupID LIMIT 1)";
+			$GroupWhere .= "
+				(
+					SELECT t.GroupID
+					FROM torrents AS t
+					$TorrentWhere
+						AND t.GroupID = h.GroupID
+					LIMIT 1
+				)";
 		}
-		$DB->query("SELECT $SCFR
-						h.GroupID,
-						h.GroupName,
-						h.GroupYear AS s2,
-						h.GroupCategoryID,
-						h.GroupTime AS s3,
-						h.MaxTorrentSize AS s4,
-						h.TotalSnatches AS s5,
-						h.TotalSeeders AS s6,
-						h.TotalLeechers AS s7,
-						h.TorrentIDList,
-						h.TagList,
-						h.MediaList,
-						h.FormatList,
-						h.EncodingList,
-						h.YearList,
-						h.RemasterList,
-						h.RemasterTitleList,
-						h.SceneList,
-						h.LogList,
-						h.CueList,
-						h.LogScoreList,
-						h.FileCountList,
-						h.FreeTorrentList,
-						h.SizeList,
-						h.LeechersList,
-						h.SeedersList,
-						h.SnatchedList,
-						h.TimeList,
-						h.SearchText AS s1
-					FROM torrent_hash AS h
-					$TorrentJoin
-					$GroupWhere
-					ORDER BY $OrderBy $OrderWay
-					LIMIT $Limit");
+		$DB->query("
+			SELECT $SCFR
+				h.GroupID,
+				h.GroupName,
+				h.GroupYear AS s2,
+				h.GroupCategoryID,
+				h.GroupTime AS s3,
+				h.MaxTorrentSize AS s4,
+				h.TotalSnatches AS s5,
+				h.TotalSeeders AS s6,
+				h.TotalLeechers AS s7,
+				h.TorrentIDList,
+				h.TagList,
+				h.MediaList,
+				h.FormatList,
+				h.EncodingList,
+				h.YearList,
+				h.RemasterList,
+				h.RemasterTitleList,
+				h.SceneList,
+				h.LogList,
+				h.CueList,
+				h.LogScoreList,
+				h.FileCountList,
+				h.FreeTorrentList,
+				h.SizeList,
+				h.LeechersList,
+				h.SeedersList,
+				h.SnatchedList,
+				h.TimeList,
+				h.SearchText AS s1
+			FROM torrent_hash AS h
+				$TorrentJoin
+			$GroupWhere
+			ORDER BY $OrderBy $OrderWay
+			LIMIT $Limit");
 
 		$TorrentList=$DB->to_array();
 		if (EXPLAIN_HACK) {
-			$DB->query("EXPLAIN SELECT NULL FROM (SELECT NULL FROM torrent_hash AS h $TorrentJoin $GroupWhere) AS Count");
-			list($Null,$Null,$Null,$Null,$Null,$Null,$Null,$Null,$TorrentCount)=$DB->next_record();
+			$DB->query("
+				EXPLAIN
+				SELECT NULL
+				FROM (
+					SELECT NULL
+					FROM torrent_hash AS h
+						$TorrentJoin
+					$GroupWhere
+				) AS Count");
+			list($Null, $Null, $Null, $Null, $Null, $Null, $Null, $Null, $TorrentCount) = $DB->next_record();
 		} else {
 			$DB->query('SELECT FOUND_ROWS()');
 			list($TorrentCount) = $DB->next_record();
@@ -595,42 +623,51 @@ if (!is_array($TorrentCache)) {
 		if (!$TimeField) {
 			$TimeField = 't.Time';
 		}
-		$DB->query("SELECT $SCFR
-						g.ID,
-						g.Name,
-						g.Year AS s2,
-						g.CategoryID,
-						$TimeField AS s3,
-						t.Size AS s4,
-						t.Snatched AS s5,
-						t.Seeders AS s6,
-						t.Leechers AS s7,
-						t.ID,
-						g.TagList,
-						t.Media,
-						t.Format,
-						t.Encoding,
-						t.RemasterYear,
-						t.Remastered,
-						t.RemasterTitle,
-						t.Scene,
-						t.HasLog,
-						t.HasCue,
-						t.LogScore,
-						t.FileCount,
-						t.FreeTorrent,
-						g.SearchText AS s1
-					FROM torrents AS t
-						INNER JOIN torrents_group AS g ON g.ID=t.GroupID
-					$TorrentJoin
-					$TorrentWhere
-					ORDER BY $OrderBy $OrderWay
-					LIMIT $Limit");
+		$DB->query("
+			SELECT $SCFR
+				g.ID,
+				g.Name,
+				g.Year AS s2,
+				g.CategoryID,
+				$TimeField AS s3,
+				t.Size AS s4,
+				t.Snatched AS s5,
+				t.Seeders AS s6,
+				t.Leechers AS s7,
+				t.ID,
+				g.TagList,
+				t.Media,
+				t.Format,
+				t.Encoding,
+				t.RemasterYear,
+				t.Remastered,
+				t.RemasterTitle,
+				t.Scene,
+				t.HasLog,
+				t.HasCue,
+				t.LogScore,
+				t.FileCount,
+				t.FreeTorrent,
+				g.SearchText AS s1
+			FROM torrents AS t
+				INNER JOIN torrents_group AS g ON g.ID = t.GroupID
+			$TorrentJoin
+			$TorrentWhere
+			ORDER BY $OrderBy $OrderWay
+			LIMIT $Limit");
 
 		$TorrentList = $DB->to_array();
 		if (EXPLAIN_HACK) {
-			$DB->query("EXPLAIN SELECT NULL FROM (SELECT NULL FROM torrent_hash AS h $TorrentJoin $GroupWhere) AS Count");
-			list($Null,$Null,$Null,$Null,$Null,$Null,$Null,$Null,$TorrentCount)=$DB->next_record();
+			$DB->query("
+				EXPLAIN
+				SELECT NULL
+				FROM (
+					SELECT NULL
+					FROM torrent_hash AS h
+						$TorrentJoin
+					$GroupWhere
+				) AS Count");
+			list($Null, $Null, $Null, $Null, $Null, $Null, $Null, $Null, $TorrentCount) = $DB->next_record();
 		} else {
 			$DB->query('SELECT FOUND_ROWS()');
 			list($TorrentCount) = $DB->next_record();
@@ -639,7 +676,10 @@ if (!is_array($TorrentCache)) {
 
 	if ($UserID) {
 		// Get the username, so we can display the title as "<user>'s snatched torrents", etc
-		$DB->query("SELECT Username FROM users_main WHERE ID='".db_string($UserID)."'");
+		$DB->query("
+			SELECT Username
+			FROM users_main
+			WHERE ID = '".db_string($UserID)."'");
 		list($TitleUser) = $DB->next_record();
 	}
 } else {
@@ -663,7 +703,7 @@ if ($Title) {
 	$Title = 'Browse Torrents';
 }
 
-View::show_header($Title,'browse');
+View::show_header($Title, 'browse');
 ?>
 <form name="filter" method="get" action="">
 <?	if ($UserID) { ?>
@@ -798,7 +838,7 @@ View::show_header($Title,'browse');
 			</tr>
 			<tr>
 				<td class="label">Order by:</td>
-				<td colspan="<?=($AdvancedSearch) ? '3' : '1' ?>">
+				<td colspan="<?=$AdvancedSearch ? '3' : '1'; ?>">
 					<select name="order_by" style="width: auto;">
 						<option value="s1"<? if ($OrderBy == 's1') { ?> selected="selected"<? } ?>>Name</option>
 						<option value="s2"<? if ($OrderBy == 's2') { ?> selected="selected"<? } ?>>Year</option>
@@ -849,7 +889,11 @@ endforeach;
 <?
 $GenreTags = $Cache->get_value('genre_tags');
 if (!$GenreTags) {
-	$DB->query('SELECT Name FROM tags WHERE TagType=\'genre\' ORDER BY Name');
+	$DB->query('
+		SELECT Name
+		FROM tags
+		WHERE TagType = \'genre\'
+		ORDER BY Name');
 	$GenreTags = $DB->collect('Name');
 	$Cache->cache_value('genre_tags', $GenreTags, 3600 * 6);
 }
@@ -869,7 +913,7 @@ foreach ($GenreTags as $Tag) :
 endforeach;
 if ($x % 7 != 0) { // Padding
 ?>
-				<td colspan="<?=7 - ($x % 7) ?>"> </td>
+				<td colspan="<?= 7 - ($x % 7); ?>"> </td>
 <?
 } ?>
 			</tr>
@@ -930,25 +974,28 @@ if ($x % 7 != 0) { // Padding
 	}
 	$Artists = Artists::get_artists($GroupIDs);
 	foreach ($TorrentList as $Key => $Properties) {
-		list($GroupID,$GroupName,$GroupYear,$GroupCategoryID,$GroupTime,$MaxSize,$TotalSnatched,$TotalSeeders,$TotalLeechers,$TorrentsID,$TagsList,$TorrentsMedia,$TorrentsFormat,$TorrentsEncoding,$TorrentsYear,$TorrentsRemastered,$TorrentsRemasterTitle,$TorrentsScene,$TorrentsLog,$TorrentsCue,$TorrentsLogScores,$TorrentsFileCount,$TorrentsFreeTorrent,$TorrentsSize,$TorrentsLeechers,$TorrentsSeeders,$TorrentsSnatched,$TorrentsTime) = $Properties;
-		$Torrents['id']		= explode('|',$TorrentsID);
-		$Torrents['media']	= explode('|',$TorrentsMedia);
-		$Torrents['format']	= explode('|',$TorrentsFormat);
-		$Torrents['encoding']	= explode('|',$TorrentsEncoding);
-		$Torrents['year']	= explode('|',$TorrentsYear);
-		$Torrents['remastered']	= explode('|',$TorrentsRemastered);
-		$Torrents['remastertitle'] = explode('|',$TorrentsRemasterTitle);
-		$Torrents['scene']	= explode('|',$TorrentsScene);
-		$Torrents['log']	= explode('|',$TorrentsLog);
-		$Torrents['cue']	= explode('|',$TorrentsCue);
-		$Torrents['score'] 	= explode('|',$TorrentsLogScores);
-		$Torrents['filecount']	= explode('|',$TorrentsFileCount);
-		$Torrents['size']	= explode('|',$TorrentsSize);
-		$Torrents['leechers']	= explode('|',$TorrentsLeechers);
-		$Torrents['seeders']	= explode('|',$TorrentsSeeders);
-		$Torrents['snatched']	= explode('|',$TorrentsSnatched);
-		$Torrents['freetorrent'] = explode('|',$TorrentsFreeTorrent);
-		$Torrents['time']	= explode('|',$TorrentsTime);
+		list($GroupID, $GroupName, $GroupYear, $GroupCategoryID, $GroupTime, $MaxSize, $TotalSnatched, $TotalSeeders, $TotalLeechers,
+			$TorrentsID, $TagsList, $TorrentsMedia, $TorrentsFormat, $TorrentsEncoding, $TorrentsYear, $TorrentsRemastered,
+			$TorrentsRemasterTitle, $TorrentsScene, $TorrentsLog, $TorrentsCue, $TorrentsLogScores, $TorrentsFileCount, $TorrentsFreeTorrent,
+			$TorrentsSize, $TorrentsLeechers, $TorrentsSeeders, $TorrentsSnatched, $TorrentsTime) = $Properties;
+		$Torrents['id']            = explode('|', $TorrentsID);
+		$Torrents['media']         = explode('|', $TorrentsMedia);
+		$Torrents['format']        = explode('|', $TorrentsFormat);
+		$Torrents['encoding']      = explode('|', $TorrentsEncoding);
+		$Torrents['year']          = explode('|', $TorrentsYear);
+		$Torrents['remastered']    = explode('|', $TorrentsRemastered);
+		$Torrents['remastertitle'] = explode('|', $TorrentsRemasterTitle);
+		$Torrents['scene']         = explode('|', $TorrentsScene);
+		$Torrents['log']           = explode('|', $TorrentsLog);
+		$Torrents['cue']           = explode('|', $TorrentsCue);
+		$Torrents['score']         = explode('|', $TorrentsLogScores);
+		$Torrents['filecount']     = explode('|', $TorrentsFileCount);
+		$Torrents['size']          = explode('|', $TorrentsSize);
+		$Torrents['leechers']      = explode('|', $TorrentsLeechers);
+		$Torrents['seeders']       = explode('|', $TorrentsSeeders);
+		$Torrents['snatched']      = explode('|', $TorrentsSnatched);
+		$Torrents['freetorrent']   = explode('|', $TorrentsFreeTorrent);
+		$Torrents['time']          = explode('|', $TorrentsTime);
 
 		if (!$DisableGrouping) {
 			// Since these fields are surrounded by |s, we get extra elements added to the arrays
@@ -985,9 +1032,9 @@ if ($x % 7 != 0) { // Padding
 		$DisplayName = Artists::display_artists($Artists[$GroupID]);
 		if ((count($Torrents['id']) > 1 || $GroupCategoryID == 1) && !$DisableGrouping) {
 			// These torrents are in a group
-			$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
 			if ($GroupYear > 0) {
-				$DisplayName.=" [$GroupYear]";
+				$DisplayName .= " [$GroupYear]";
 			}
 ?>
 	<tr class="group">
@@ -1062,7 +1109,7 @@ if ($LoggedUser['CoverArt']) : ?>
 					$Continue = false;
 					$RemasterParts = explode(' ', $_GET['remastertitle']);
 					foreach ($RemasterParts as $RemasterPart) {
-						if (stripos($Torrents['remastertitle'][$Key],$RemasterPart) === false) {
+						if (stripos($Torrents['remastertitle'][$Key], $RemasterPart) === false) {
 							$Continue = true;
 						}
 					}
@@ -1075,45 +1122,45 @@ if ($LoggedUser['CoverArt']) : ?>
 				$AddExtra = '';
 
 				if ($Torrents['format'][$Key]) {
-					$ExtraInfo.=$Torrents['format'][$Key];
+					$ExtraInfo .= $Torrents['format'][$Key];
 					$AddExtra = ' / ';
 				}
 				if ($Torrents['encoding'][$Key]) {
-					$ExtraInfo.=$AddExtra.$Torrents['encoding'][$Key];
+					$ExtraInfo .= $AddExtra.$Torrents['encoding'][$Key];
 					$AddExtra = ' / ';
 				}
 				if ($Torrents['log'][$Key] == '1') {
-					$ExtraInfo.=$AddExtra.'Log';
+					$ExtraInfo .= $AddExtra.'Log';
 					$AddExtra = ' / ';
 					if ($Torrents['score'][$Key]) {
-						$ExtraInfo.=' ('.$Torrents['score'][$Key].'%) ';
+						$ExtraInfo .= ' ('.$Torrents['score'][$Key].'%) ';
 					}
 				}
 				if ($Torrents['cue'][$Key] == '1') {
-					$ExtraInfo.=$AddExtra.'Cue';
+					$ExtraInfo .= "{$AddExtra}Cue";
 					$AddExtra = ' / ';
 				}
 				if ($Torrents['media'][$Key]) {
-					$ExtraInfo.=$AddExtra.$Torrents['media'][$Key];
+					$ExtraInfo .= $AddExtra.$Torrents['media'][$Key];
 					$AddExtra = ' / ';
 				}
 				if ($Torrents['scene'][$Key] == '1') {
-					$ExtraInfo.=$AddExtra.'Scene';
+					$ExtraInfo .= "{$AddExtra}Scene";
 					$AddExtra = ' / ';
 				}
 				if (trim($Torrents['remastertitle'][$Key])) {
-					$ExtraInfo.=$AddExtra.$Torrents['remastertitle'][$Key];
+					$ExtraInfo .= $AddExtra.$Torrents['remastertitle'][$Key];
 					$AddExtra = ' - ';
 				} elseif ($Torrents['remastered'][$Key] == '1') {
-					$ExtraInfo.=$AddExtra.'Remastered';
+					$ExtraInfo .= "{$AddExtra}Remastered";
 					$AddExtra = ' - ';
 				}
 				if ($Torrents['year'][$Key] > '0') {
-					$ExtraInfo.=$AddExtra.$Torrents['year'][$Key];
+					$ExtraInfo .= $AddExtra.$Torrents['year'][$Key];
 					$AddExtra = ' / ';
 				}
 				if ($Torrents['freetorrent'][$Key] == '1') {
-					$ExtraInfo.=$AddExtra. Format::torrent_label('Freeleech!');
+					$ExtraInfo .= $AddExtra. Format::torrent_label('Freeleech!');
 					$AddExtra = ' / ';
 				}
 ?>
@@ -1137,61 +1184,61 @@ if ($LoggedUser['CoverArt']) : ?>
 		} else {
 			// Either grouping is disabled, or we're viewing a type that does not require grouping
 			if ($GroupCategoryID == 1) {
-				$DisplayName.='<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Torrents['id'][0].'" title="View Torrent">'.$GroupName.'</a>';
+				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Torrents['id'][0].'" title="View Torrent">'.$GroupName.'</a>';
 			} else {
-				$DisplayName.='<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
 			}
 
 			$ExtraInfo = '';
 			$AddExtra = '';
 
 			if ($Torrents['format'][0]) {
-				$ExtraInfo.=$Torrents['format'][0];
-				$AddExtra=' / ';
+				$ExtraInfo .= $Torrents['format'][0];
+				$AddExtra = ' / ';
 			}
 			if ($Torrents['encoding'][0]) {
-				$ExtraInfo.=$AddExtra.$Torrents['encoding'][0];
-				$AddExtra=' / ';
+				$ExtraInfo .= $AddExtra.$Torrents['encoding'][0];
+				$AddExtra = ' / ';
 			}
 			if ($Torrents['log'][0] == '1') {
-				$ExtraInfo.=$AddExtra.'Log';
+				$ExtraInfo .= "{$AddExtra}Log";
 				$AddExtra = ' / ';
 			}
 			if ($Torrents['score'][0]) {
-				$ExtraInfo.=' ('.$Torrents['score'][0].'%) ';
+				$ExtraInfo .= ' ('.$Torrents['score'][0].'%) ';
 			}
 			if ($Torrents['cue'][0] == '1') {
-				$ExtraInfo.=$AddExtra.'Cue';
+				$ExtraInfo .= "{$AddExtra}Cue";
 				$AddExtra = ' / ';
 			}
 			if ($Torrents['media'][0]) {
-				$ExtraInfo.=$AddExtra.$Torrents['media'][0];
+				$ExtraInfo .= $AddExtra.$Torrents['media'][0];
 				$AddExtra = ' / ';
 			}
 			if ($Torrents['scene'][0] == '1') {
-				$ExtraInfo.=$AddExtra.'Scene';
+				$ExtraInfo .= "{$AddExtra}Scene";
 				$AddExtra = ' / ';
 			}
 			if (trim($Torrents['remastertitle'][0])) {
-				$ExtraInfo.=$AddExtra.$Torrents['remastertitle'][0];
+				$ExtraInfo .= $AddExtra.$Torrents['remastertitle'][0];
 				$AddExtra = ' - ';
 			} elseif ($Torrents['remastered'][0] == '1') {
-				$ExtraInfo.=$AddExtra.'Remastered';
+				$ExtraInfo .= "{$AddExtra}Remastered";
 				$AddExtra = ' - ';
 			}
 			if ($Torrents['year'][0] > '0') {
-				$ExtraInfo.=$AddExtra.$Torrents['year'][0];
+				$ExtraInfo .= $AddExtra.$Torrents['year'][0];
 				$AddExtra = ' / ';
 			}
 			if ($Torrents['freetorrent'][0] == '1') {
-				$ExtraInfo.=$AddExtra. Format::torrent_label('Freeleech!');
+				$ExtraInfo .= $AddExtra. Format::torrent_label('Freeleech!');
 				$AddExtra = ' / ';
 			}
 			if ($ExtraInfo != '') {
 				$ExtraInfo = "[$ExtraInfo]";
 			}
 			if ($GroupYear > 0) {
-				$ExtraInfo.=" [$GroupYear]";
+				$ExtraInfo .= " [$GroupYear]";
 			}
 
 			if (!isset($TimeField) || $TimeField == 't.Time') {
@@ -1229,23 +1276,24 @@ if ($LoggedUser['CoverArt']) : ?>
 ?>
 </table>
 <?	} else {
-$DB->query("SELECT
-			tags.Name,
-			((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
-			FROM xbt_snatched AS s
-				INNER JOIN torrents AS t ON t.ID=s.fid
-				INNER JOIN torrents_group AS g ON t.GroupID=g.ID
-				INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
-				INNER JOIN tags ON tags.ID=tt.TagID
-			WHERE s.uid='$LoggedUser[ID]'
-				AND tt.TagID != '13679'
-				AND tt.TagID != '4820'
-				AND tt.TagID != '2838'
-				AND g.CategoryID='1'
-				AND tags.Uses > '10'
-			GROUP BY tt.TagID
-			ORDER BY Score DESC
-			LIMIT 8");
+$DB->query("
+	SELECT
+		tags.Name,
+		((COUNT(tags.Name) - 2) * (SUM(tt.PositiveVotes) - SUM(tt.NegativeVotes))) / (tags.Uses * 0.8) AS Score
+	FROM xbt_snatched AS s
+		INNER JOIN torrents AS t ON t.ID = s.fid
+		INNER JOIN torrents_group AS g ON t.GroupID = g.ID
+		INNER JOIN torrents_tags AS tt ON tt.GroupID = g.ID
+		INNER JOIN tags ON tags.ID = tt.TagID
+	WHERE s.uid = '$LoggedUser[ID]'
+		AND tt.TagID != '13679'
+		AND tt.TagID != '4820'
+		AND tt.TagID != '2838'
+		AND g.CategoryID = '1'
+		AND tags.Uses > '10'
+	GROUP BY tt.TagID
+	ORDER BY Score DESC
+	LIMIT 8");
 ?>
 <div class="box pad" align="center">
 	<h2>Your search did not match anything.</h2>

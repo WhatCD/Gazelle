@@ -25,13 +25,18 @@ include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 
 // The "order by x" links on columns headers
-function header_link($SortKey,$DefaultWay="desc") {
-	global $OrderBy,$OrderWay;
-	if ($SortKey==$OrderBy) {
-		if ($OrderWay=="desc") { $NewWay="asc"; }
-		else { $NewWay="desc"; }
-	} else { $NewWay=$DefaultWay; }
-	return "torrents.php?order_way=".$NewWay."&amp;order_by=".$SortKey."&amp;".Format::get_url(array('order_way','order_by'));
+function header_link($SortKey, $DefaultWay = 'desc') {
+	global $OrderBy, $OrderWay;
+	if ($SortKey == $OrderBy) {
+		if ($OrderWay == 'desc') {
+			$NewWay = 'asc';
+		} else {
+			$NewWay = 'desc';
+		}
+	} else {
+		$NewWay = $DefaultWay;
+	}
+	return "torrents.php?order_way=$NewWay&amp;order_by=$SortKey&amp;".Format::get_url(array('order_way', 'order_by'));
 }
 
 /** Start default parameters and validation **/
@@ -44,11 +49,14 @@ if (!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
 
 	// Search by infohash
 	if ($InfoHash = is_valid_torrenthash($InfoHash)) {
-		$InfoHash = db_string(pack("H*", $InfoHash));
-		$DB->query("SELECT ID,GroupID FROM torrents WHERE info_hash='$InfoHash'");
+		$InfoHash = db_string(pack('H*', $InfoHash));
+		$DB->query("
+			SELECT ID, GroupID
+			FROM torrents
+			WHERE info_hash = '$InfoHash'");
 		if ($DB->record_count() > 0) {
 			list($ID, $GroupID) = $DB->next_record();
-			header('Location: torrents.php?id='.$GroupID.'&torrentid='.$ID);
+			header("Location: torrents.php?id=$GroupID&torrentid=$ID");
 			die();
 		}
 	}
@@ -62,7 +70,7 @@ if (!empty($_GET['setdefault'])) {
 	$DB->query("
 		SELECT SiteOptions
 		FROM users_info
-		WHERE UserID='".db_string($LoggedUser['ID'])."'");
+		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
 	list($SiteOptions) = $DB->next_record(MYSQLI_NUM, false);
 	if (!empty($SiteOptions)) {
 		$SiteOptions = unserialize($SiteOptions);
@@ -72,10 +80,10 @@ if (!empty($_GET['setdefault'])) {
 	$SiteOptions['DefaultSearch'] = preg_replace($UnsetRegexp, '', $_SERVER['QUERY_STRING']);
 	$DB->query("
 		UPDATE users_info
-		SET SiteOptions='".db_string(serialize($SiteOptions))."'
-		WHERE UserID='".db_string($LoggedUser['ID'])."'");
-	$Cache->begin_transaction('user_info_heavy_'.$UserID);
-	$Cache->update_row(false, array('DefaultSearch'=>$SiteOptions['DefaultSearch']));
+		SET SiteOptions = '".db_string(serialize($SiteOptions))."'
+		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
+	$Cache->begin_transaction("user_info_heavy_$UserID");
+	$Cache->update_row(false, array('DefaultSearch' => $SiteOptions['DefaultSearch']));
 	$Cache->commit_transaction(0);
 
 // Clearing default search options
@@ -83,16 +91,16 @@ if (!empty($_GET['setdefault'])) {
 	$DB->query("
 		SELECT SiteOptions
 		FROM users_info
-		WHERE UserID='".db_string($LoggedUser['ID'])."'");
+		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
 	list($SiteOptions) = $DB->next_record(MYSQLI_NUM, false);
 	$SiteOptions = unserialize($SiteOptions);
 	$SiteOptions['DefaultSearch'] = '';
 	$DB->query("
 		UPDATE users_info
-		SET SiteOptions='".db_string(serialize($SiteOptions))."'
-		WHERE UserID='".db_string($LoggedUser['ID'])."'");
-	$Cache->begin_transaction('user_info_heavy_'.$UserID);
-	$Cache->update_row(false, array('DefaultSearch'=>''));
+		SET SiteOptions = '".db_string(serialize($SiteOptions))."'
+		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
+	$Cache->begin_transaction("user_info_heavy_$UserID");
+	$Cache->update_row(false, array('DefaultSearch' => ''));
 	$Cache->commit_transaction(0);
 
 // Use default search options
@@ -100,10 +108,10 @@ if (!empty($_GET['setdefault'])) {
 	if (!empty($LoggedUser['DefaultSearch'])) {
 		if (!empty($_GET['page'])) {
 			$Page = $_GET['page'];
-			parse_str($LoggedUser['DefaultSearch'],$_GET);
+			parse_str($LoggedUser['DefaultSearch'], $_GET);
 			$_GET['page'] = $Page;
 		} else {
-			parse_str($LoggedUser['DefaultSearch'],$_GET);
+			parse_str($LoggedUser['DefaultSearch'], $_GET);
 		}
 	}
 }
@@ -124,6 +132,7 @@ if (isset($_GET['group_results']) && $_GET['group_results']) {
 		'leechers' => array('sumleechers', 'leechers'),
 		'snatched' => array('sumsnatched', 'snatched'),
 		'random' => false);
+
 	$AggregateExp = array(
 		'maxsize' => 'MAX(size) AS maxsize',
 		'sumseeders' => 'SUM(seeders) AS sumseeders',
@@ -195,7 +204,7 @@ $SphQLTor->select('id, groupid')->from('torrents, delta');
 $Filtered = false;
 $EnableNegation = false; // Sphinx needs at least one positive search condition to support the NOT operator
 
-// Filelist searches makes use of the proximity operator to ensure that all keywords match the same file
+// File list searches make use of the proximity operator to ensure that all keywords match the same file
 if (!empty($_GET['filelist'])) {
 	$SearchString = trim($_GET['filelist']);
 	if ($SearchString != '') {
@@ -208,7 +217,7 @@ if (!empty($_GET['filelist'])) {
 }
 
 // Collect all entered search terms to find out whether to enable the NOT operator
-$GroupFields = array('artistname','groupname', 'recordlabel', 'cataloguenumber', 'taglist');
+$GroupFields = array('artistname', 'groupname', 'recordlabel', 'cataloguenumber', 'taglist');
 $TorrentFields = array('remastertitle', 'remasteryear', 'remasterrecordlabel', 'remastercataloguenumber', 'encoding', 'format', 'media');
 $SearchWords = array();
 foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
@@ -231,7 +240,7 @@ foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 					continue;
 				}
 				if ($Word[0] == '!' && strlen($Word) >= 2) {
-					if (strpos($Word,'!',1) === false) {
+					if (strpos($Word, '!', 1) === false) {
 						$SearchWords[$Search]['exclude'][] = $Word;
 					} else {
 						$SearchWords[$Search]['include'][] = $Word;
@@ -321,10 +330,10 @@ if (!empty($SearchWords['taglist'])) {
 	//Get tag aliases.
 	$TagAliases = $Cache->get_value('tag_aliases_search');
 	if (!$TagAliases) {
-		$DB->query("
+		$DB->query('
 			SELECT ID, BadTag, AliasTag
 			FROM tag_aliases
-			ORDER BY BadTag");
+			ORDER BY BadTag');
 		$TagAliases = $DB->to_array();
 		//Unify tag aliases to be in_this_format as tags not in.this.format
 		array_walk_recursive($TagAliases, create_function('&$val', '$val = preg_replace("/\./","_", $val);'));
@@ -361,7 +370,7 @@ if (!empty($SearchWords['taglist'])) {
 	//Only keep unique entries after unifying tag standard
 	$Tags['include'] = array_unique($Tags['include']);
 	$Tags['exclude'] = array_unique($Tags['exclude']);
-	$TagListString = implode(", ", array_merge($Tags['include'], $Tags['exclude']));
+	$TagListString = implode(', ', array_merge($Tags['include'], $Tags['exclude']));
 	if (!$EnableNegation && !empty($Tags['exclude'])) {
 		$Tags['include'] = array_merge($Tags['include'], $Tags['exclude']);
 		unset($Tags['exclude']);
@@ -520,7 +529,7 @@ if (!$Filtered) {
 if (isset($Random) && $GroupResults) {
 	// ORDER BY RAND() can't be used together with GROUP BY, so we need some special tactics
 	$Page = 1;
-	$SphQL->limit(0, 5*TORRENTS_PER_PAGE, 5*TORRENTS_PER_PAGE);
+	$SphQL->limit(0, 5 * TORRENTS_PER_PAGE, 5 * TORRENTS_PER_PAGE);
 	$SphQLResult = $SphQL->query();
 	$TotalCount = $SphQLResult->get_meta('total_found');
 	$Results = $SphQLResult->to_array('groupid');
@@ -548,7 +557,7 @@ if (isset($Random) && $GroupResults) {
 		if (check_perms('site_search_many')) {
 			$Page = $_GET['page'];
 		} else {
-			$Page = min(SPHINX_MAX_MATCHES/TORRENTS_PER_PAGE, $_GET['page']);
+			$Page = min(SPHINX_MAX_MATCHES / TORRENTS_PER_PAGE, $_GET['page']);
 		}
 		$Offset = ($Page - 1) * TORRENTS_PER_PAGE;
 		$SphQL->limit($Offset, TORRENTS_PER_PAGE, $Offset + TORRENTS_PER_PAGE);
@@ -608,7 +617,7 @@ if ($AdvancedSearch) {
 }
 
 
-View::show_header('Browse Torrents','browse');
+View::show_header('Browse Torrents', 'browse');
 
 ?>
 <div class="thin widethin">
@@ -660,11 +669,11 @@ View::show_header('Browse Torrents','browse');
 				</td>
 			</tr>
 			<tr id="edition_expand" class="ftr_advanced<?=$HideAdvanced?>">
-				<td colspan="4" class="center ft_edition_expand"><a href="#" class="brackets" onclick="ToggleEditionRows();return false;">Click here to toggle searching for specific remaster information</a></td>
+				<td colspan="4" class="center ft_edition_expand"><a href="#" class="brackets" onclick="ToggleEditionRows(); return false;">Click here to toggle searching for specific remaster information</a></td>
 			</tr>
 <?
-if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', true) == "" &&
-	Format::form('remasterrecordlabel', true) == "" && Format::form('remastercataloguenumber', true) == "") {
+if (Format::form('remastertitle', true) == '' && Format::form('remasteryear', true) == '' &&
+	Format::form('remasterrecordlabel', true) == '' && Format::form('remastercataloguenumber', true) == '') {
 		$Hidden = ' hidden';
 } else {
 	$Hidden = '';
@@ -715,13 +724,13 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 					<select name="media" class="ft_media fti_advanced">
 						<option value="">Media</option>
 <?	foreach ($Media as $MediaName) { ?>
-						<option value="<?=display_str($MediaName); ?>"<?Format::selected('media',$MediaName)?>><?=display_str($MediaName); ?></option>
+						<option value="<?=display_str($MediaName); ?>"<?Format::selected('media', $MediaName)?>><?=display_str($MediaName); ?></option>
 <?	} ?>
 					</select>
 					<select name="releasetype" class="ft_releasetype fti_advanced">
 						<option value="">Release type</option>
 <?	foreach ($ReleaseTypes as $ID=>$Type) { ?>
-						<option value="<?=display_str($ID); ?>"<?Format::selected('releasetype',$ID)?>><?=display_str($Type); ?></option>
+						<option value="<?=display_str($ID); ?>"<?Format::selected('releasetype', $ID)?>><?=display_str($Type); ?></option>
 <?	} ?>
 					</select>
 				</td>
@@ -731,32 +740,32 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 				<td class="nobr ft_misc" colspan="3">
 					<select name="haslog" class="ft_haslog fti_advanced">
 						<option value="">Has Log</option>
-						<option value="1"<?Format::selected('haslog','1')?>>Yes</option>
-						<option value="0"<?Format::selected('haslog','0')?>>No</option>
-						<option value="100"<?Format::selected('haslog','100')?>>100% only</option>
-						<option value="-1"<?Format::selected('haslog','-1')?>>&lt;100%/Unscored</option>
+						<option value="1"<?Format::selected('haslog', '1')?>>Yes</option>
+						<option value="0"<?Format::selected('haslog', '0')?>>No</option>
+						<option value="100"<?Format::selected('haslog', '100')?>>100% only</option>
+						<option value="-1"<?Format::selected('haslog', '-1')?>>&lt;100%/Unscored</option>
 					</select>
 					<select name="hascue" class="ft_hascue fti_advanced">
 						<option value="">Has Cue</option>
-						<option value="1"<?Format::selected('hascue',1)?>>Yes</option>
-						<option value="0"<?Format::selected('hascue',0)?>>No</option>
+						<option value="1"<?Format::selected('hascue', 1)?>>Yes</option>
+						<option value="0"<?Format::selected('hascue', 0)?>>No</option>
 					</select>
 					<select name="scene" class="ft_scene fti_advanced">
 						<option value="">Scene</option>
-						<option value="1"<?Format::selected('scene',1)?>>Yes</option>
-						<option value="0"<?Format::selected('scene',0)?>>No</option>
+						<option value="1"<?Format::selected('scene', 1)?>>Yes</option>
+						<option value="0"<?Format::selected('scene', 0)?>>No</option>
 					</select>
 					<select name="vanityhouse" class="ft_vanityhouse fti_advanced">
 						<option value="">Vanity House</option>
-						<option value="1"<?Format::selected('vanityhouse',1)?>>Yes</option>
-						<option value="0"<?Format::selected('vanityhouse',0)?>>No</option>
+						<option value="1"<?Format::selected('vanityhouse', 1)?>>Yes</option>
+						<option value="0"<?Format::selected('vanityhouse', 0)?>>No</option>
 					</select>
 					<select name="freetorrent" class="ft_freetorrent fti_advanced">
 						<option value="">Leech Status</option>
-						<option value="1"<?Format::selected('freetorrent',1)?>>Freeleech</option>
-						<option value="2"<?Format::selected('freetorrent',2)?>>Neutral Leech</option>
-						<option value="3"<?Format::selected('freetorrent',3)?>>Either</option>
-						<option value="0"<?Format::selected('freetorrent',0)?>>Normal</option>
+						<option value="1"<?Format::selected('freetorrent', 1)?>>Freeleech</option>
+						<option value="2"<?Format::selected('freetorrent', 2)?>>Neutral Leech</option>
+						<option value="3"<?Format::selected('freetorrent', 3)?>>Either</option>
+						<option value="0"<?Format::selected('freetorrent', 0)?>>Normal</option>
 					</select>
 				</td>
 			</tr>
@@ -769,26 +778,26 @@ if (Format::form('remastertitle', true) == "" && Format::form('remasteryear', tr
 			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td colspan="3" class="ft_taglist">
-					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_','.',display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
-					<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
-					<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
+					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_', '.', display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
+					<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type', 0, 'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
+					<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type', 1, 'checked')?> /><label for="tags_type1"> All</label>
 				</td>
 			</tr>
 			<tr id="order">
 				<td class="label">Order by:</td>
 				<td colspan="3" class="ft_order">
 					<select name="order_by" style="width: auto;" class="ft_order_by">
-						<option value="time"<?Format::selected('order_by','time')?>>Time added</option>
-						<option value="year"<?Format::selected('order_by','year')?>>Year</option>
-						<option value="size"<?Format::selected('order_by','size')?>>Size</option>
-						<option value="snatched"<?Format::selected('order_by','snatched')?>>Snatched</option>
-						<option value="seeders"<?Format::selected('order_by','seeders')?>>Seeders</option>
-						<option value="leechers"<?Format::selected('order_by','leechers')?>>Leechers</option>
-						<option value="random"<?Format::selected('order_by','random')?>>Random</option>
+						<option value="time"<?Format::selected('order_by', 'time')?>>Time added</option>
+						<option value="year"<?Format::selected('order_by', 'year')?>>Year</option>
+						<option value="size"<?Format::selected('order_by', 'size')?>>Size</option>
+						<option value="snatched"<?Format::selected('order_by', 'snatched')?>>Snatched</option>
+						<option value="seeders"<?Format::selected('order_by', 'seeders')?>>Seeders</option>
+						<option value="leechers"<?Format::selected('order_by', 'leechers')?>>Leechers</option>
+						<option value="random"<?Format::selected('order_by', 'random')?>>Random</option>
 					</select>
 					<select name="order_way" class="ft_order_way">
-						<option value="desc"<?Format::selected('order_way','desc')?>>Descending</option>
-						<option value="asc"<?Format::selected('order_way','asc')?>>Ascending</option>
+						<option value="desc"<?Format::selected('order_way', 'desc')?>>Descending</option>
+						<option value="asc"<?Format::selected('order_way', 'asc')?>>Ascending</option>
 					</select>
 				</td>
 			</tr>
@@ -830,7 +839,11 @@ foreach ($Categories as $CatKey => $CatName) {
 <?
 $GenreTags = $Cache->get_value('genre_tags');
 if (!$GenreTags) {
-	$DB->query('SELECT Name FROM tags WHERE TagType=\'genre\' ORDER BY Name');
+	$DB->query('
+		SELECT Name
+		FROM tags
+		WHERE TagType = \'genre\'
+		ORDER BY Name');
 	$GenreTags = $DB->collect('Name');
 	$Cache->cache_value('genre_tags', $GenreTags, 3600 * 6);
 }
@@ -857,7 +870,7 @@ if ($x % 7 != 0) { // Padding
 		<table class="layout cat_list" width="100%">
 			<tr>
 				<td class="label">
-					<a class="brackets" href="#" onclick="$('#taglist').gtoggle(); if (this.innerHTML=='View tags') {this.innerHTML='Hide tags';} else {this.innerHTML='View tags';}; return false;"><?=((empty($LoggedUser['ShowTags'])) ? 'View tags' : 'Hide tags')?></a>
+					<a class="brackets" href="#" onclick="$('#taglist').gtoggle(); if (this.innerHTML == 'View tags') { this.innerHTML = 'Hide tags'; } else { this.innerHTML = 'View tags'; }; return false;"><?=((empty($LoggedUser['ShowTags'])) ? 'View tags' : 'Hide tags')?></a>
 				</td>
 			</tr>
 		</table>
@@ -866,7 +879,7 @@ if ($x % 7 != 0) { // Padding
 			<input type="submit" value="Filter torrents" />
 			<input type="hidden" name="action" id="ft_type" value="<?=($AdvancedSearch ? 'advanced' : 'basic')?>" />
 			<input type="hidden" name="searchsubmit" value="1" />
-			<input type="button" value="Reset" onclick="location.href='torrents.php<? if (isset($_GET['action']) && $_GET['action'] == 'advanced') { ?>?action=advanced<? } ?>'" />
+			<input type="button" value="Reset" onclick="location.href = 'torrents.php<? if (isset($_GET['action']) && $_GET['action'] == 'advanced') { ?>?action=advanced<? } ?>'" />
 			&nbsp;&nbsp;
 <?	if ($Filtered) { ?>
 			<input type="submit" name="setdefault" value="Make default" />
@@ -883,23 +896,24 @@ if ($x % 7 != 0) { // Padding
 </form>
 <?
 if ($TorrentCount == 0) {
-	$DB->query("SELECT
-	tags.Name,
-	((COUNT(tags.Name)-2)*(SUM(tt.PositiveVotes)-SUM(tt.NegativeVotes)))/(tags.Uses*0.8) AS Score
-	FROM xbt_snatched AS s
-		INNER JOIN torrents AS t ON t.ID=s.fid
-		INNER JOIN torrents_group AS g ON t.GroupID=g.ID
-		INNER JOIN torrents_tags AS tt ON tt.GroupID=g.ID
-		INNER JOIN tags ON tags.ID=tt.TagID
-	WHERE s.uid='$LoggedUser[ID]'
-		AND tt.TagID != '13679'
-		AND tt.TagID != '4820'
-		AND tt.TagID != '2838'
-		AND g.CategoryID='1'
-		AND tags.Uses > '10'
-	GROUP BY tt.TagID
-	ORDER BY Score DESC
-	LIMIT 8");
+	$DB->query("
+		SELECT
+			tags.Name,
+			((COUNT(tags.Name) - 2) * (SUM(tt.PositiveVotes) - SUM(tt.NegativeVotes))) / (tags.Uses * 0.8) AS Score
+		FROM xbt_snatched AS s
+			INNER JOIN torrents AS t ON t.ID = s.fid
+			INNER JOIN torrents_group AS g ON t.GroupID = g.ID
+			INNER JOIN torrents_tags AS tt ON tt.GroupID = g.ID
+			INNER JOIN tags ON tags.ID = tt.TagID
+		WHERE s.uid = '$LoggedUser[ID]'
+			AND tt.TagID != '13679'
+			AND tt.TagID != '4820'
+			AND tt.TagID != '2838'
+			AND g.CategoryID = '1'
+			AND tags.Uses > '10'
+		GROUP BY tt.TagID
+		ORDER BY Score DESC
+		LIMIT 8");
 ?>
 <div class="box pad" align="center">
 	<h2>Your search did not match anything.</h2>
@@ -992,7 +1006,7 @@ foreach ($Results as $Result) {
 
 	if ($GroupResults && (count($Torrents) > 1 || isset($GroupedCategories[$CategoryID - 1]))) {
 		// These torrents are in a group
-		$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+		$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 		if ($GroupYear > 0) {
 			$DisplayName .= " [$GroupYear]";
 		}
@@ -1112,7 +1126,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		// Viewing a type that does not require grouping
 
 		list($TorrentID, $Data) = each($Torrents);
-		$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'#torrent'.$TorrentID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+		$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 		if (isset($GroupedCategories[$CategoryID - 1])) {
 			if ($GroupYear) {
 				$DisplayName .= " [$GroupYear]";

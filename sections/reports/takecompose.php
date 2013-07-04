@@ -20,7 +20,11 @@ if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 			$Err = 'A recipient does not exist.';
 		}
 	}
-	$DB->query("SELECT UserID FROM pm_conversations_users WHERE UserID='$LoggedUser[ID]' AND ConvID='$ConvID'");
+	$DB->query("
+		SELECT UserID
+		FROM pm_conversations_users
+		WHERE UserID = '$LoggedUser[ID]'
+			AND ConvID = '$ConvID'");
 	if ($DB->record_count() == 0) {
 		error(403);
 	}

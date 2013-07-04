@@ -35,7 +35,7 @@ if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
 	$DB->query("
 		SELECT SUM(Uploaded), SUM(Downloaded), COUNT(ID)
 		FROM users_main
-		WHERE Enabled='1'");
+		WHERE Enabled = '1'");
 	list($TotalUpload, $TotalDownload, $NumUsers) = $DB->next_record();
 	$DB->query("
 		SELECT SUM(Bounty)
@@ -44,21 +44,29 @@ if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
 	$DB->query("
 		SELECT SUM(rv.Bounty)
 		FROM requests_votes AS rv
-			JOIN requests AS r ON r.ID=rv.RequestID
-		WHERE TorrentID>0");
+			JOIN requests AS r ON r.ID = rv.RequestID
+		WHERE TorrentID > 0");
 	list($AvailableBounty) = $DB->next_record();
 	$DB->query("
 		SELECT SUM(Snatched), COUNT(ID)
 		FROM torrents");
 	list($TotalSnatches, $TotalTorrents) = $DB->next_record(); // This is the total number of snatches for torrents that still exist
 
-	$DB->query("SELECT COUNT(uid) FROM xbt_snatched");
+	$DB->query("
+		SELECT COUNT(uid)
+		FROM xbt_snatched");
 	list($TotalOverallSnatches) = $DB->next_record();
 
 	if (($PeerStats = $Cache->get_value('stats_peers')) === false) {
-		$DB->query("SELECT COUNT(fid) FROM xbt_files_users WHERE remaining=0");
+		$DB->query("
+			SELECT COUNT(fid)
+			FROM xbt_files_users
+			WHERE remaining = 0");
 		list($TotalSeeders) = $DB->next_record();
-		$DB->query("SELECT COUNT(fid) FROM xbt_files_users WHERE remaining>0");
+		$DB->query("
+			SELECT COUNT(fid)
+			FROM xbt_files_users
+			WHERE remaining > 0");
 		list($TotalLeechers) = $DB->next_record();
 	} else {
 		list($TotalLeechers,$TotalSeeders) = $PeerStats;
@@ -67,19 +75,21 @@ if (!$EconomicStats = $Cache->get_value('new_economic_stats')) {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM users_main
-		WHERE (		SELECT COUNT(uid)
-					FROM xbt_files_users
-					WHERE uid=users_main.ID)>0");
+		WHERE (
+				SELECT COUNT(uid)
+				FROM xbt_files_users
+				WHERE uid = users_main.ID
+				) > 0");
 	list($TotalPeerUsers) = $DB->next_record();
 	$Cache->cache_value('new_economic_stats',
-				array($TotalUpload,$TotalDownload,$NumUsers,$TotalBounty,
-					$AvailableBounty,$TotalSnatches,$TotalTorrents,
-					$TotalOverallSnatches,$TotalSeeders,$TotalPeers,
+				array($TotalUpload, $TotalDownload, $NumUsers, $TotalBounty,
+					$AvailableBounty, $TotalSnatches, $TotalTorrents,
+					$TotalOverallSnatches, $TotalSeeders, $TotalPeers,
 					$TotalPeerUsers), 3600);
 } else {
-	list($TotalUpload,$TotalDownload,$NumUsers,$TotalBounty,$AvailableBounty,
-		$TotalSnatches,$TotalTorrents,$TotalOverallSnatches,$TotalSeeders,
-		$TotalPeers,$TotalPeerUsers) = $EconomicStats;
+	list($TotalUpload, $TotalDownload, $NumUsers, $TotalBounty, $AvailableBounty,
+		$TotalSnatches, $TotalTorrents, $TotalOverallSnatches, $TotalSeeders,
+		$TotalPeers, $TotalPeerUsers) = $EconomicStats;
 }
 
 $TotalLeechers = $TotalPeers - $TotalSeeders;
@@ -111,10 +121,10 @@ $TotalLeechers = $TotalPeers - $TotalSeeders;
 			<ul class="stats nobullet">
 				<li><strong>Total seeders: </strong><?=number_format($TotalSeeders)?></li>
 				<li><strong>Total leechers: </strong><?=number_format($TotalLeechers)?></li>
-				<li><strong>Total peers: </strong><?=number_format($TotalSeeders+$TotalLeechers)?></li>
+				<li><strong>Total peers: </strong><?=number_format($TotalSeeders + $TotalLeechers)?></li>
 				<li><strong>Total snatches: </strong><?=number_format($TotalOverallSnatches)?></li>
-				<li><strong>Seeder/leecher ratio: </strong><?=Format::get_ratio_html($TotalSeeders,$TotalLeechers)?></li>
-				<li><strong>Seeder/snatch ratio: </strong><?=Format::get_ratio_html($TotalSeeders,$TotalOverallSnatches)?></li>
+				<li><strong>Seeder/leecher ratio: </strong><?=Format::get_ratio_html($TotalSeeders, $TotalLeechers)?></li>
+				<li><strong>Seeder/snatch ratio: </strong><?=Format::get_ratio_html($TotalSeeders, $TotalOverallSnatches)?></li>
 				<br />
 				<li><strong>Mean seeders per torrent: </strong><?=number_format($TotalSeeders / $TotalTorrents, 2)?></li>
 				<li><strong>Mean leechers per torrent: </strong><?=number_format($TotalLeechers / $TotalTorrents, 2)?></li>

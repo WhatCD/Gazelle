@@ -269,11 +269,11 @@ class Users {
 
 	/**
 	 * Generates a check list of release types, ordered by the user or default
-	 * @global array $SiteOptions
+	 * @param array $SiteOptions
 	 * @param boolean $Default Returns the default list if true
 	 */
-	public static function release_order ($Default = false) {
-		global $SiteOptions, $ReleaseTypes;
+	public static function release_order(&$SiteOptions, $Default = false) {
+		global $ReleaseTypes;
 
 		$RT = $ReleaseTypes + array(
 			1024 => 'Guest Appearance',
@@ -286,6 +286,12 @@ class Users {
 			$Defaults = !empty($SiteOptions['HideTypes']);
 		} else {
 			$Sort =& $SiteOptions['SortHide'];
+			$MissingTypes = array_diff_key($ReleaseTypes, $Sort);
+			if (!empty($MissingTypes)) {
+				foreach (array_keys($MissingTypes) as $Missing) {
+					$Sort[$Missing] = 0;
+				}
+			}
 		}
 
 		foreach ($Sort as $Key => $Val) {
@@ -312,9 +318,9 @@ class Users {
 	 * Returns the default order for the sort list in a JS-friendly string
 	 * @return string
 	 */
-	public static function release_order_default_js () {
+	public static function release_order_default_js(&$SiteOptions) {
 		ob_start();
-		self::release_order(true);
+		self::release_order($SiteOptions, true);
 		$HTML = ob_get_contents();
 		ob_end_clean();
 		return json_encode($HTML);
@@ -627,7 +633,7 @@ class Users {
 	 * 0 - Enabled everywhere (default), 1 - Disabled, 2 - Searches only
 	 *
 	 * @param string $Type the type of the input.
-	 * @param boolean $Output echo out html
+	 * @param boolean $Output echo out HTML
 	 * @return boolean
 	 */
 	public static function has_autocomplete_enabled($Type, $Output = true) {
@@ -635,9 +641,8 @@ class Users {
 		$Enabled = false;
 		if (empty($LoggedUser['AutoComplete'])) {
 			$Enabled = true;
-		}
-		elseif ($LoggedUser['AutoComplete'] !== 1) {
-			switch($Type) {
+		} elseif ($LoggedUser['AutoComplete'] !== 1) {
+			switch ($Type) {
 				case 'search':
 					if ($LoggedUser['AutoComplete'] == 2) {
 						$Enabled = true;
@@ -651,7 +656,7 @@ class Users {
 			}
 		}
 		if ($Enabled && $Output) {
-			echo 'data-gazelle-autocomplete="true"';
+			echo ' data-gazelle-autocomplete="true"';
 		}
 		return $Enabled;
 	}

@@ -15,19 +15,32 @@ if (isset($_POST['doit'])) {
 		}
 		$OldTagIDs = implode(', ', $OldTagIDs);
 
-		$DB->query("UPDATE tags SET TagType = 'other' WHERE ID IN ($OldTagIDs)");
+		$DB->query("
+			UPDATE tags
+			SET TagType = 'other'
+			WHERE ID IN ($OldTagIDs)");
 	}
 
 	if ($_POST['newtag']) {
 		$TagName = Misc::sanitize_tag($_POST['newtag']);
 
-		$DB->query("SELECT t.ID FROM tags AS t WHERE t.Name LIKE '".$TagName."'");
+		$DB->query("
+			SELECT t.ID
+			FROM tags AS t
+			WHERE t.Name LIKE '$TagName'");
 		list($TagID) = $DB->next_record();
 
 		if ($TagID) {
-			$DB->query("UPDATE tags SET TagType = 'genre' WHERE ID = $TagID");
+			$DB->query("
+				UPDATE tags
+				SET TagType = 'genre'
+				WHERE ID = $TagID");
 		} else { // Tag doesn't exist yet - create tag
-			$DB->query("INSERT INTO tags (Name, UserID, TagType, Uses) VALUES ('".$TagName."', ".$LoggedUser['ID'].", 'genre', 0)");
+			$DB->query("
+				INSERT INTO tags
+					(Name, UserID, TagType, Uses)
+				VALUES
+					('$TagName', ".$LoggedUser['ID'].", 'genre', 0)");
 			$TagID = $DB->inserted_id();
 		}
 	}
@@ -62,7 +75,11 @@ View::show_header('Official Tags Manager');
 				</tr>
 <?
 $i = 0;
-$DB->query("SELECT ID, Name, Uses FROM tags WHERE TagType='genre' ORDER BY Name ASC");
+$DB->query("
+	SELECT ID, Name, Uses
+	FROM tags
+	WHERE TagType = 'genre'
+	ORDER BY Name ASC");
 $TagCount = $DB->record_count();
 $Tags = $DB->to_array();
 for ($i = 0; $i < $TagCount / 3; $i++) {

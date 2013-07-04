@@ -1,5 +1,11 @@
 CHANGELOG
 
+2013-07-04 by Ajax
+added collages to api
+
+2013-07-03 by Ajax
+Option to enable/disable autocomplete in user profile settings.
+
 2013-07-01 by alderaan
 Serve Google Charts API images over HTTPS
 

@@ -8,10 +8,10 @@ function js_pages($Action, $TorrentID, $NumResults, $CurrentPage) {
 		if ($i == $CurrentPage) {
 			$PageLinks[] = $i;
 		} else {
-			$PageLinks[] = '<a href="#" onclick="'.$Action.'('.$TorrentID.', '.$i.')">'.$i.'</a>';
+			$PageLinks[] = "<a href=\"#\" onclick=\"$Action($TorrentID, $i)\">$i</a>";
 		}
 	}
-	return implode(' | ',$PageLinks);
+	return implode(' | ', $PageLinks);
 }
 
 // This gets used in a few places
@@ -194,33 +194,36 @@ if (!empty($_REQUEST['action'])) {
 			$DB->query("
 				SELECT
 					CEIL((
-						SELECT COUNT(ID)+1
+						SELECT COUNT(ID) + 1
 						FROM torrents_comments AS tc
-						WHERE tc.GroupID='".db_string($GroupID)."')/".TORRENT_COMMENTS_PER_PAGE."
-					) AS Pages");
+						WHERE tc.GroupID = '".db_string($GroupID)."'
+						) / ".TORRENT_COMMENTS_PER_PAGE.'
+					) AS Pages');
 			list($Pages) = $DB->next_record();
 
 			$DB->query("
-				INSERT INTO torrents_comments (GroupID,AuthorID,AddedTime,Body)
-				VALUES ('".db_string($GroupID)."', '".db_string($LoggedUser['ID'])."','".sqltime()."','".db_string($_POST['body'])."')");
+				INSERT INTO torrents_comments
+					(GroupID, AuthorID, AddedTime, Body)
+				VALUES
+					('".db_string($GroupID)."', '".db_string($LoggedUser['ID'])."', '".sqltime()."', '".db_string($_POST['body'])."')");
 			$PostID = $DB->inserted_id();
 
 			$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
-			$Cache->begin_transaction('torrent_comments_'.$GroupID.'_catalogue_'.$CatalogueID);
+			$Cache->begin_transaction("torrent_comments_{$GroupID}_catalogue_$CatalogueID");
 			$Post = array(
-				'ID'=>$PostID,
-				'AuthorID'=>$LoggedUser['ID'],
-				'AddedTime'=>sqltime(),
-				'Body'=>$_POST['body'],
-				'EditedUserID'=>0,
-				'EditedTime'=>'0000-00-00 00:00:00',
-				'Username'=>''
+				'ID' => $PostID,
+				'AuthorID' => $LoggedUser['ID'],
+				'AddedTime' => sqltime(),
+				'Body' => $_POST['body'],
+				'EditedUserID' => 0,
+				'EditedTime' => '0000-00-00 00:00:00',
+				'Username' => ''
 				);
 			$Cache->insert('', $Post);
 			$Cache->commit_transaction(0);
-			$Cache->increment('torrent_comments_'.$GroupID);
+			$Cache->increment("torrent_comments_$GroupID");
 
-			header('Location: torrents.php?id='.$GroupID.'&page='.$Pages);
+			header("Location: torrents.php?id=$GroupID&page=$Pages");
 			break;
 
 		case 'get_post':
@@ -228,7 +231,10 @@ if (!empty($_REQUEST['action'])) {
 			if (!$_GET['post'] || !is_number($_GET['post'])) {
 				error(0);
 			}
-			$DB->query("SELECT Body FROM torrents_comments WHERE ID='".db_string($_GET['post'])."'");
+			$DB->query("
+				SELECT Body
+				FROM torrents_comments
+				WHERE ID = '".db_string($_GET['post'])."'");
 			list($Body) = $DB->next_record(MYSQLI_NUM);
 
 			echo trim($Body);
@@ -254,8 +260,8 @@ if (!empty($_REQUEST['action'])) {
 					tc.GroupID,
 					tc.AddedTime
 				FROM torrents_comments AS tc
-				WHERE tc.ID='".db_string($_POST['post'])."'");
-			list($OldBody, $AuthorID,$GroupID,$AddedTime) = $DB->next_record();
+				WHERE tc.ID = '".db_string($_POST['post'])."'");
+			list($OldBody, $AuthorID, $GroupID, $AddedTime) = $DB->next_record();
 
 			$DB->query("
 				SELECT ceil(COUNT(ID) / ".TORRENT_COMMENTS_PER_PAGE.") AS Page
@@ -278,25 +284,28 @@ if (!empty($_REQUEST['action'])) {
 					Body = '".db_string($_POST['body'])."',
 					EditedUserID = '".db_string($LoggedUser['ID'])."',
 					EditedTime = '".sqltime()."'
-				WHERE ID='".db_string($_POST['post'])."'");
+				WHERE ID = '".db_string($_POST['post'])."'");
 
 			// Update the cache
 			$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
-			$Cache->begin_transaction('torrent_comments_'.$GroupID.'_catalogue_'.$CatalogueID);
+			$Cache->begin_transaction("torrent_comments_{$GroupID}_catalogue_$CatalogueID");
 
 			$Cache->update_row($_POST['key'], array(
-				'ID'=>$_POST['post'],
-				'AuthorID'=>$AuthorID,
-				'AddedTime'=>$AddedTime,
-				'Body'=>$_POST['body'],
-				'EditedUserID'=>db_string($LoggedUser['ID']),
-				'EditedTime'=>sqltime(),
-				'Username'=>$LoggedUser['Username']
+				'ID' => $_POST['post'],
+				'AuthorID' => $AuthorID,
+				'AddedTime' => $AddedTime,
+				'Body' => $_POST['body'],
+				'EditedUserID' => db_string($LoggedUser['ID']),
+				'EditedTime' => sqltime(),
+				'Username' => $LoggedUser['Username']
 			));
 			$Cache->commit_transaction(0);
 
-			$DB->query("INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
-									VALUES ('torrents', ".db_string($_POST['post']).", ".db_string($LoggedUser['ID']).", '".sqltime()."', '".db_string($OldBody)."')");
+			$DB->query("
+				INSERT INTO comments_edits
+					(Page, PostID, EditUser, EditTime, Body)
+				VALUES
+					('torrents', ".db_string($_POST['post']).", ".db_string($LoggedUser['ID']).", '".sqltime()."', '".db_string($OldBody)."')");
 
 			// This gets sent to the browser, which echoes it in place of the old body
 			echo $Text->full_format($_POST['body']);
@@ -317,33 +326,39 @@ if (!empty($_REQUEST['action'])) {
 			}
 
 			// Get topicid, forumid, number of pages
-			$DB->query("SELECT
-				GroupID,
-				CEIL(COUNT(tc.ID)/".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
-				CEIL(SUM(IF(tc.ID<=".$_GET['postid'].",1,0))/".TORRENT_COMMENTS_PER_PAGE.") AS Page
+			$DB->query("
+				SELECT
+					GroupID,
+					CEIL(COUNT(tc.ID) / ".TORRENT_COMMENTS_PER_PAGE.") AS Pages,
+					CEIL(SUM(IF(tc.ID <= ".$_GET['postid'].", 1, 0)) / ".TORRENT_COMMENTS_PER_PAGE.") AS Page
 				FROM torrents_comments AS tc
-				WHERE tc.GroupID=(SELECT GroupID FROM torrents_comments WHERE ID=".$_GET['postid'].")
-				GROUP BY tc.GroupID");
+				WHERE tc.GroupID =
+						(SELECT GroupID
+						FROM torrents_comments
+						WHERE ID = ".$_GET['postid'].')
+				GROUP BY tc.GroupID');
 			list($GroupID, $Pages, $Page) = $DB->next_record();
 
 			// $Pages = number of pages in the thread
 			// $Page = which page the post is on
 			// These are set for cache clearing.
 
-			$DB->query("DELETE FROM torrents_comments WHERE ID='".db_string($_GET['postid'])."'");
+			$DB->query("
+				DELETE FROM torrents_comments
+				WHERE ID = '".db_string($_GET['postid'])."'");
 
 			//We need to clear all subsequential catalogues as they've all been bumped with the absence of this post
 			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-				$Cache->delete_value('torrent_comments_'.$GroupID.'_catalogue_'.$i);
+				$Cache->delete_value("torrent_comments_{$GroupID}_catalogue_$i");
 			}
 
-			// Delete thread info cache (eg. number of pages)
-			$Cache->delete_value('torrent_comments_'.$GroupID);
+			// Delete thread info cache (e.g. number of pages)
+			$Cache->delete_value("torrent_comments_$GroupID");
 
 			break;
-		case 'regen_filelist' :
+		case 'regen_filelist':
 			if (check_perms('users_mod') && !empty($_GET['torrentid']) && is_number($_GET['torrentid'])) {
 				Torrents::regenerate_filelist($_GET['torrentid']);
 				header('Location: torrents.php?torrentid='.$_GET['torrentid']);
@@ -352,9 +367,12 @@ if (!empty($_REQUEST['action'])) {
 				error(403);
 			}
 			break;
-		case 'fix_group' :
+		case 'fix_group':
 			if ((check_perms('users_mod') || check_perms('torrents_fix_ghosts')) && authorize() && !empty($_GET['groupid']) && is_number($_GET['groupid'])) {
-				$DB->query("SELECT COUNT(ID) FROM torrents WHERE GroupID = ".$_GET['groupid']);
+				$DB->query('
+					SELECT COUNT(ID)
+					FROM torrents
+					WHERE GroupID = '.$_GET['groupid']);
 				list($Count) = $DB->next_record();
 				if ($Count == 0) {
 					Torrents::delete_group($_GET['groupid']);
@@ -369,10 +387,10 @@ if (!empty($_REQUEST['action'])) {
 				error(403);
 			}
 			break;
-		case 'warn' :
+		case 'warn':
 			include(SERVER_ROOT.'/sections/torrents/warn.php');
 			break;
-		case 'take_warn' :
+		case 'take_warn':
 			include(SERVER_ROOT.'/sections/torrents/take_warn.php');
 			break;
 		case 'add_cover_art':
@@ -390,10 +408,13 @@ if (!empty($_REQUEST['action'])) {
 			if (!empty($_GET['id'])) {
 				include(SERVER_ROOT.'/sections/torrents/details.php');
 			} elseif (isset($_GET['torrentid']) && is_number($_GET['torrentid'])) {
-				$DB->query("SELECT GroupID FROM torrents WHERE ID=".$_GET['torrentid']);
+				$DB->query('
+					SELECT GroupID
+					FROM torrents
+					WHERE ID = '.$_GET['torrentid']);
 				list($GroupID) = $DB->next_record();
 				if ($GroupID) {
-					header("Location: torrents.php?id=".$GroupID."&torrentid=".$_GET['torrentid']);
+					header("Location: torrents.php?id=$GroupID&torrentid=".$_GET['torrentid']);
 				}
 			} else {
 				include(SERVER_ROOT.'/sections/torrents/browse2.php');
@@ -406,26 +427,31 @@ if (!empty($_REQUEST['action'])) {
 	if (!empty($_GET['id'])) {
 		include(SERVER_ROOT.'/sections/torrents/details.php');
 	} elseif (isset($_GET['torrentid']) && is_number($_GET['torrentid'])) {
-		$DB->query("SELECT GroupID FROM torrents WHERE ID=".$_GET['torrentid']);
+		$DB->query("
+			SELECT GroupID
+			FROM torrents
+			WHERE ID = ".$_GET['torrentid']);
 		list($GroupID) = $DB->next_record();
 		if ($GroupID) {
-			header("Location: torrents.php?id=".$GroupID."&torrentid=".$_GET['torrentid']."#torrent".$_GET['torrentid']);
+			header("Location: torrents.php?id=$GroupID&torrentid=".$_GET['torrentid'].'#torrent'.$_GET['torrentid']);
 		} else {
 			header("Location: log.php?search=Torrent+$_GET[torrentid]");
 		}
 	} elseif (!empty($_GET['type'])) {
 		include(SERVER_ROOT.'/sections/torrents/user.php');
 	} elseif (!empty($_GET['groupname']) && !empty($_GET['forward'])) {
-		$DB->query("SELECT ID FROM torrents_group WHERE Name LIKE '".db_string($_GET['groupname'])."'");
+		$DB->query("
+			SELECT ID
+			FROM torrents_group
+			WHERE Name LIKE '".db_string($_GET['groupname'])."'");
 		list($GroupID) = $DB->next_record();
 		if ($GroupID) {
-			header("Location: torrents.php?id=".$GroupID);
+			header("Location: torrents.php?id=$GroupID");
 		} else {
 			include(SERVER_ROOT.'/sections/torrents/browse2.php');
 		}
 	} else {
 		include(SERVER_ROOT.'/sections/torrents/browse2.php');
 	}
-
 }
 ?>

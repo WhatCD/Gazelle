@@ -4,7 +4,10 @@ if (!check_perms('admin_whitelist')) {
 }
 
 View::show_header('Whitelist Management');
-$DB->query('SELECT id, vstring, peer_id FROM xbt_client_whitelist ORDER BY peer_id ASC');
+$DB->query('
+	SELECT id, vstring, peer_id
+	FROM xbt_client_whitelist
+	ORDER BY peer_id ASC');
 ?>
 <div class="header">
 	<h2>Allowed Clients</h2>

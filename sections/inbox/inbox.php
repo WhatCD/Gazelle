@@ -84,7 +84,7 @@ echo "\t\t$Pages\n";
 
 	<div class="box pad">
 <? if ($Count == 0 && empty($_GET['search'])) { ?>
-	<h2>Your <?=(($Section == 'sentbox') ? 'sentbox' : 'inbox')?> is currently empty</h2>
+	<h2>Your <?=(($Section == 'sentbox') ? 'sentbox' : 'inbox')?> is empty.</h2>
 <? } else { ?>
 		<form class="search_form" name="<?=(($Section == 'sentbox') ? 'sentbox' : 'inbox')?>" action="inbox.php" method="get" id="searchbox">
 			<div>

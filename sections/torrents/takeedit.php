@@ -61,7 +61,7 @@ if ($_POST['album_desc']) {
 }
 if (check_perms('torrents_freeleech')) {
 	$Free = (int)$_POST['freeleech'];
-	if (!in_array($Free, array(0,1,2))) {
+	if (!in_array($Free, array(0, 1, 2))) {
 		error(404);
 	}
 	$Properties['FreeLeech'] = $Free;
@@ -70,7 +70,7 @@ if (check_perms('torrents_freeleech')) {
 		$FreeType = 0;
 	} else {
 		$FreeType = (int)$_POST['freeleechtype'];
-		if (!in_array($Free, array(0,1,2,3))) {
+		if (!in_array($Free, array(0, 1, 2, 3))) {
 			error(404);
 		}
 	}
@@ -80,7 +80,10 @@ if (check_perms('torrents_freeleech')) {
 //******************************************************************************//
 //--------------- Validate data in edit form -----------------------------------//
 
-$DB->query('SELECT UserID, Remastered, RemasterYear, FreeTorrent FROM torrents WHERE ID='.$TorrentID);
+$DB->query("
+	SELECT UserID, Remastered, RemasterYear, FreeTorrent
+	FROM torrents
+	WHERE ID = $TorrentID");
 if ($DB->record_count() == 0) {
 	error(404);
 }
@@ -254,12 +257,15 @@ foreach ($Properties as $Key => $Value) {
 //--------------- Start database stuff -----------------------------------------//
 
 $DBTorVals = array();
-$DB->query("SELECT Media, Format, Encoding, RemasterYear, Remastered, RemasterTItle, RemasterRecordLabel, RemasterCatalogueNumber, Scene, Description FROM torrents WHERE ID = ".$TorrentID);
+$DB->query("
+	SELECT Media, Format, Encoding, RemasterYear, Remastered, RemasterTItle, RemasterRecordLabel, RemasterCatalogueNumber, Scene, Description
+	FROM torrents
+	WHERE ID = $TorrentID");
 $DBTorVals = $DB->to_array(false, MYSQLI_ASSOC);
 $DBTorVals = $DBTorVals[0];
-$LogDetails = "";
+$LogDetails = '';
 foreach ($DBTorVals as $Key => $Value) {
-	$Value = "'".$Value."'";
+	$Value = "'$Value'";
 	if ($Value != $T[$Key]) {
 		if (!isset($T[$Key])) {
 			continue;
@@ -267,166 +273,245 @@ foreach ($DBTorVals as $Key => $Value) {
 		if ((empty($Value) && empty($T[$Key])) || ($Value == "'0'" && $T[$Key] == "''")) {
 			continue;
 		}
-		if ($LogDetails == "") {
-			$LogDetails = $Key.": ".$Value." -> ".$T[$Key];
+		if ($LogDetails == '') {
+			$LogDetails = "$Key: $Value -> ".$T[$Key];
 		} else {
-			$LogDetails = $LogDetails.", ".$Key.": ".$Value." -> ".$T[$Key];
+			$LogDetails = "$LogDetails, $Key: $Value -> ".$T[$Key];
 		}
 	}
 }
 
 // Update info for the torrent
 $SQL = "
-	UPDATE torrents SET
-		Media=$T[Media],
-		Format=$T[Format],
-		Encoding=$T[Encoding],
-		RemasterYear=$T[RemasterYear],
-		Remastered=$T[Remastered],
-		RemasterTitle=$T[RemasterTitle],
-		RemasterRecordLabel=$T[RemasterRecordLabel],
-		RemasterCatalogueNumber=$T[RemasterCatalogueNumber],
-		Scene=$T[Scene],
-		Description=$T[TorrentDescription],";
+	UPDATE torrents
+	SET
+		Media = $T[Media],
+		Format = $T[Format],
+		Encoding = $T[Encoding],
+		RemasterYear = $T[RemasterYear],
+		Remastered = $T[Remastered],
+		RemasterTitle = $T[RemasterTitle],
+		RemasterRecordLabel = $T[RemasterRecordLabel],
+		RemasterCatalogueNumber = $T[RemasterCatalogueNumber],
+		Scene = $T[Scene],
+		Description = $T[TorrentDescription],";
 
 if (check_perms('torrents_freeleech')) {
-	$SQL .= "FreeTorrent=$T[FreeLeech],";
-	$SQL .= "FreeLeechType=$T[FreeLeechType],";
+	$SQL .= "FreeTorrent = $T[FreeLeech],";
+	$SQL .= "FreeLeechType = $T[FreeLeechType],";
 }
 
 if (check_perms('users_mod')) {
 	if ($T[Format] != "'FLAC'") {
 		$SQL .= "
-					HasLog='0',
-					HasCue='0',
-			";
+			HasLog = '0',
+			HasCue = '0',";
 	} else {
 		$SQL .= "
-			HasLog=$T[HasLog],
-			HasCue=$T[HasCue],
-		";
+			HasLog = $T[HasLog],
+			HasCue = $T[HasCue],";
 	}
 
-	$DB->query("SELECT TorrentID FROM torrents_bad_tags WHERE TorrentID='$TorrentID'");
+	$DB->query("
+		SELECT TorrentID
+		FROM torrents_bad_tags
+		WHERE TorrentID = '$TorrentID'");
 	list($btID) = $DB->next_record();
 
 	if (!$btID && $Properties['BadTags']) {
-		$DB->query("INSERT INTO torrents_bad_tags VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+		$DB->query("
+			INSERT INTO torrents_bad_tags
+			VALUES ($TorrentID, $LoggedUser[ID], '".sqltime()."')");
 	}
 	if ($btID && !$Properties['BadTags']) {
-		$DB->query("DELETE FROM torrents_bad_tags WHERE TorrentID='$TorrentID'");
+		$DB->query("
+			DELETE FROM torrents_bad_tags
+			WHERE TorrentID = '$TorrentID'");
 	}
 
-	$DB->query("SELECT TorrentID FROM torrents_bad_folders WHERE TorrentID='$TorrentID'");
+	$DB->query("
+		SELECT TorrentID
+		FROM torrents_bad_folders
+		WHERE TorrentID = '$TorrentID'");
 	list($bfID) = $DB->next_record();
 
 	if (!$bfID && $Properties['BadFolders']) {
-		$DB->query("INSERT INTO torrents_bad_folders VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+		$DB->query("
+			INSERT INTO torrents_bad_folders
+			VALUES ($TorrentID, $LoggedUser[ID], '".sqltime()."')");
 	}
 	if ($bfID && !$Properties['BadFolders']) {
-		$DB->query("DELETE FROM torrents_bad_folders WHERE TorrentID='$TorrentID'");
+		$DB->query("
+			DELETE FROM torrents_bad_folders
+			WHERE TorrentID = '$TorrentID'");
 	}
 
-	$DB->query("SELECT TorrentID FROM torrents_bad_files WHERE TorrentID='$TorrentID'");
+	$DB->query("
+		SELECT TorrentID
+		FROM torrents_bad_files
+		WHERE TorrentID = '$TorrentID'");
 	list($bfiID) = $DB->next_record();
 
 	if (!$bfiID && $Properties['BadFiles']) {
-		$DB->query("INSERT INTO torrents_bad_files VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+		$DB->query("
+			INSERT INTO torrents_bad_files
+			VALUES ($TorrentID, $LoggedUser[ID], '".sqltime()."')");
 	}
 	if ($bfiID && !$Properties['BadFiles']) {
-		$DB->query("DELETE FROM torrents_bad_files WHERE TorrentID='$TorrentID'");
+		$DB->query("
+			DELETE FROM torrents_bad_files
+			WHERE TorrentID = '$TorrentID'");
 	}
 
-	$DB->query("SELECT TorrentID FROM library_contest WHERE TorrentID='$TorrentID'");
+	$DB->query("
+		SELECT TorrentID
+		FROM library_contest
+		WHERE TorrentID = '$TorrentID'");
 	list($lbID) = $DB->next_record();
 	if (!$lbID && $Properties['LibraryUpload'] && $Properties['LibraryPoints'] > 0) {
-		$DB->query("SELECT UserID FROM torrents WHERE ID = ".$TorrentID);
+		$DB->query("
+			SELECT UserID
+			FROM torrents
+			WHERE ID = $TorrentID");
 		list($UploaderID) = $DB->next_record();
-		$DB->query("INSERT INTO library_contest VALUES ($UploaderID, $TorrentID, $Properties[LibraryPoints])");
+		$DB->query("
+			INSERT INTO library_contest
+			VALUES ($UploaderID, $TorrentID, $Properties[LibraryPoints])");
 	}
 	if ($lbID && !$Properties['LibraryUpload']) {
-		$DB->query("DELETE FROM library_contest WHERE TorrentID='$TorrentID'");
+		$DB->query("
+			DELETE FROM library_contest
+			WHERE TorrentID = '$TorrentID'");
 	}
 
-	$DB->query("SELECT TorrentID FROM torrents_cassette_approved WHERE TorrentID='$TorrentID'");
+	$DB->query("
+		SELECT TorrentID
+		FROM torrents_cassette_approved
+		WHERE TorrentID = '$TorrentID'");
 	list($caID) = $DB->next_record();
 
 	if (!$caID && $Properties['CassetteApproved']) {
-		$DB->query("INSERT INTO torrents_cassette_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+		$DB->query("
+			INSERT INTO torrents_cassette_approved
+			VALUES ($TorrentID, $LoggedUser[ID], '".sqltime()."')");
 	}
 	if ($caID && !$Properties['CassetteApproved']) {
-		$DB->query("DELETE FROM torrents_cassette_approved WHERE TorrentID='$TorrentID'");
+		$DB->query("
+			DELETE FROM torrents_cassette_approved
+			WHERE TorrentID = '$TorrentID'");
 	}
 
-	$DB->query("SELECT TorrentID FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
+	$DB->query("
+		SELECT TorrentID
+		FROM torrents_lossymaster_approved
+		WHERE TorrentID = '$TorrentID'");
 	list($lmaID) = $DB->next_record();
 
 	if (!$lmaID && $Properties['LossymasterApproved']) {
-		$DB->query("INSERT INTO torrents_lossymaster_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+		$DB->query("
+			INSERT INTO torrents_lossymaster_approved
+			VALUES ($TorrentID, $LoggedUser[ID], '".sqltime()."')");
 	}
 	if ($lmaID && !$Properties['LossymasterApproved']) {
-		$DB->query("DELETE FROM torrents_lossymaster_approved WHERE TorrentID='$TorrentID'");
+		$DB->query("
+			DELETE FROM torrents_lossymaster_approved
+			WHERE TorrentID = '$TorrentID'");
 	}
 
-	$DB->query("SELECT TorrentID FROM torrents_lossyweb_approved WHERE TorrentID='$TorrentID'");
+	$DB->query("
+		SELECT TorrentID
+		FROM torrents_lossyweb_approved
+		WHERE TorrentID = '$TorrentID'");
 	list($lwID) = $DB->next_record();
 	if (!$lwID && $Properties['LossywebApproved']) {
-		$DB->query("INSERT INTO torrents_lossyweb_approved VALUES($TorrentID, $LoggedUser[ID], '".sqltime()."')");
+		$DB->query("
+			INSERT INTO torrents_lossyweb_approved
+			VALUES ($TorrentID, $LoggedUser[ID], '".sqltime()."')");
 	}
 	if ($lwID && !$Properties['LossywebApproved']) {
-		$DB->query("DELETE FROM torrents_lossyweb_approved WHERE TorrentID='$TorrentID'");
+		$DB->query("
+			DELETE FROM torrents_lossyweb_approved
+			WHERE TorrentID = '$TorrentID'");
 	}
 }
 
 $SQL .= "
-	flags='2'
-	WHERE ID=$TorrentID
-";
+		flags = '2'
+	WHERE ID = $TorrentID";
 $DB->query($SQL);
 
 if (check_perms('torrents_freeleech') && $Properties['FreeLeech'] != $CurFreeLeech) {
 	Torrents::freeleech_torrents($TorrentID, $Properties['FreeLeech'], $Properties['FreeLeechType']);
 }
 
-$DB->query("SELECT GroupID, Time FROM torrents WHERE ID='$TorrentID'");
+$DB->query("
+	SELECT GroupID, Time
+	FROM torrents
+	WHERE ID = '$TorrentID'");
 list($GroupID, $Time) = $DB->next_record();
 
 // Competition
-if (strtotime($Time)>1241352173) {
+if (strtotime($Time) > 1241352173) {
 	if ($_POST['log_score'] == '100') {
-		$DB->query("INSERT IGNORE into users_points (GroupID, UserID, Points) VALUES ('$GroupID', '$UserID', '1')");
+		$DB->query("
+			INSERT IGNORE into users_points (GroupID, UserID, Points)
+			VALUES ('$GroupID', '$UserID', '1')");
 	}
 }
 // End competiton
 
-$DB->query("SELECT LogScore FROM torrents WHERE ID = ".$TorrentID);
+$DB->query("
+	SELECT LogScore
+	FROM torrents
+	WHERE ID = $TorrentID");
 list($LogScore) = $DB->next_record();
 if ($Properties['Trumpable'] == 1 && $LogScore == 100) {
-	$DB->query("UPDATE torrents SET LogScore = 99 WHERE ID = ".$TorrentID);
+	$DB->query("
+		UPDATE torrents
+		SET LogScore = 99
+		WHERE ID = $TorrentID");
 	$Results = array();
-	$Results[] = "The original uploader has chosen to allow this log to be deducted one point for using EAC v0.95., -1 point [1]";
+	$Results[] = 'The original uploader has chosen to allow this log to be deducted one point for using EAC v0.95., -1 point [1]';
 	$Details = db_string(serialize($Results));
-	$DB->query("UPDATE torrents_logs_new SET Score = 99, Details = '".$Details."' WHERE TorrentID = ".$TorrentID);
+	$DB->query("
+		UPDATE torrents_logs_new
+		SET Score = 99, Details = '$Details'
+		WHERE TorrentID = $TorrentID");
 }
 
-$DB->query("SELECT Enabled FROM users_main WHERE ID =".$UserID);
+$DB->query("
+	SELECT Enabled
+	FROM users_main
+	WHERE ID = $UserID");
 list($Enabled) = $DB->next_record();
 if ($Properties['Trumpable'] == 0 && $LogScore == 99 && $Enabled == 1 && strtotime($Time) < 1284422400) {
-	$DB->query("SELECT Log FROM torrents_logs_new WHERE TorrentID = ".$TorrentID);
+	$DB->query("
+		SELECT Log
+		FROM torrents_logs_new
+		WHERE TorrentID = $TorrentID");
 	list($Log) = $DB->next_record();
-	if (strpos($Log, "EAC extraction") === 0) {
-		$DB->query("UPDATE torrents SET LogScore = 100 WHERE ID = ".$TorrentID);
-		$DB->query("UPDATE torrents_logs_new SET Score = 100, Details = '' WHERE TorrentID = ".$TorrentID);
+	if (strpos($Log, 'EAC extraction') === 0) {
+		$DB->query("
+			UPDATE torrents
+			SET LogScore = 100
+			WHERE ID = $TorrentID");
+		$DB->query("
+			UPDATE torrents_logs_new
+			SET Score = 100, Details = ''
+			WHERE TorrentID = $TorrentID");
 	}
 }
 
-$DB->query("SELECT Name FROM torrents_group WHERE ID=$GroupID");
+$DB->query("
+	SELECT Name
+	FROM torrents_group
+	WHERE ID = $GroupID");
 list($Name) = $DB->next_record(MYSQLI_NUM, false);
 
-Misc::write_log("Torrent $TorrentID ($Name) in group $GroupID was edited by ".$LoggedUser['Username']." (".$LogDetails.")"); // TODO: this is probably broken
+Misc::write_log("Torrent $TorrentID ($Name) in group $GroupID was edited by ".$LoggedUser['Username']." ($LogDetails)"); // TODO: this is probably broken
 Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], $LogDetails, 0);
-$Cache->delete_value('torrents_details_'.$GroupID);
-$Cache->delete_value('torrent_download_'.$TorrentID);
+$Cache->delete_value("torrents_details_$GroupID");
+$Cache->delete_value("torrent_download_$TorrentID");
 
 Torrents::update_hash($GroupID);
 // All done!

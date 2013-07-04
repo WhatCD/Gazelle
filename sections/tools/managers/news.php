@@ -6,7 +6,7 @@ if (!check_perms('admin_manage_news')) {
 
 include(SERVER_ROOT.'/classes/text.class.php');
 $Text = new TEXT;
-View::show_header('Manage news','bbcode');
+View::show_header('Manage news', 'bbcode');
 
 switch ($_GET['action']) {
 	case 'takeeditnews':
@@ -16,7 +16,10 @@ switch ($_GET['action']) {
 		if (is_number($_POST['newsid'])) {
 			authorize();
 
-			$DB->query("UPDATE news SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."' WHERE ID='".db_string($_POST['newsid'])."'");
+			$DB->query("
+				UPDATE news
+				SET Title = '".db_string($_POST['title'])."', Body = '".db_string($_POST['body'])."'
+				WHERE ID = '".db_string($_POST['newsid'])."'");
 			$Cache->delete_value('news');
 			$Cache->delete_value('feed_news');
 		}
@@ -25,7 +28,10 @@ switch ($_GET['action']) {
 	case 'editnews':
 		if (is_number($_GET['id'])) {
 			$NewsID = $_GET['id'];
-			$DB->query("SELECT Title, Body FROM news WHERE ID=$NewsID");
+			$DB->query("
+				SELECT Title, Body
+				FROM news
+				WHERE ID = $NewsID");
 			list($Title, $Body) = $DB->next_record();
 		}
 }

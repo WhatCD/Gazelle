@@ -18,15 +18,15 @@ if (!empty($_REQUEST['confirm'])) {
 	$DB->query("
 		SELECT ID
 		FROM users_main
-		WHERE torrent_pass='".db_string($_REQUEST['confirm'])."'
-			AND Enabled='0'");
+		WHERE torrent_pass = '".db_string($_REQUEST['confirm'])."'
+			AND Enabled = '0'");
 	list($UserID) = $DB->next_record();
 
 	if ($UserID) {
 		$DB->query("
 			UPDATE users_main
-			SET Enabled='1'
-			WHERE ID='$UserID'");
+			SET Enabled = '1'
+			WHERE ID = '$UserID'");
 		$Cache->increment('stats_user_count');
 		include('step2.php');
 	}
@@ -35,7 +35,7 @@ if (!empty($_REQUEST['confirm'])) {
 	$Val->SetFields('username', true, 'regex', 'You did not enter a valid username.', array('regex' => USERNAME_REGEX));
 	$Val->SetFields('email', true, 'email', 'You did not enter a valid email address.');
 	$Val->SetFields('password', true, 'regex', 'A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol', array('regex'=>'/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
-	$Val->SetFields('confirm_password', true, 'compare', 'Your passwords do not match.', array('comparefield'=>'password'));
+	$Val->SetFields('confirm_password', true, 'compare', 'Your passwords do not match.', array('comparefield' => 'password'));
 	$Val->SetFields('readrules', true, 'checkbox', 'You did not select the box that says you will read the rules.');
 	$Val->SetFields('readwiki', true, 'checkbox', 'You did not select the box that says you will read the wiki.');
 	$Val->SetFields('agereq', true, 'checkbox', 'You did not select the box that says you are 13 years of age or older.');
@@ -70,7 +70,7 @@ if (!empty($_REQUEST['confirm'])) {
 				$DB->query("
 					SELECT InviterID, Email
 					FROM invites
-					WHERE InviteKey='".db_string($_REQUEST['invite'])."'");
+					WHERE InviteKey = '".db_string($_REQUEST['invite'])."'");
 				if ($DB->record_count() == 0) {
 					$Err = 'Invite does not exist.';
 					$InviterID = 0;
@@ -107,10 +107,10 @@ if (!empty($_REQUEST['confirm'])) {
 				INSERT INTO users_main
 					(Username, Email, PassHash, torrent_pass, IP, PermissionID, Enabled, Invites, Uploaded, ipcc)
 				VALUES
-					('".db_string(trim($_POST['username']))."','".db_string($_POST['email'])."','".db_string(Users::make_crypt_hash($_POST['password']))."','".db_string($torrent_pass)."','".db_string($_SERVER['REMOTE_ADDR'])."','$Class','$Enabled','".STARTING_INVITES."', '524288000', '$IPcc')");
+					('".db_string(trim($_POST['username']))."', '".db_string($_POST['email'])."', '".db_string(Users::make_crypt_hash($_POST['password']))."', '".db_string($torrent_pass)."', '".db_string($_SERVER['REMOTE_ADDR'])."', '$Class', '$Enabled', '".STARTING_INVITES."', '524288000', '$IPcc')");
 
 			$UserID = $DB->inserted_id();
-			
+
 
 			// User created, delete invite. If things break after this point, then it's better to have a broken account to fix than a 'free' invite floating around that can be reused
 			$DB->query("
@@ -165,7 +165,9 @@ if (!empty($_REQUEST['confirm'])) {
 				// If the inviter doesn't have an invite tree
 				// Note: This should never happen unless you've transferred from another database, like What.CD did
 				if ($DB->record_count() == 0) {
-					$DB->query("SELECT MAX(TreeID)+1 FROM invite_tree");
+					$DB->query("
+						SELECT MAX(TreeID) + 1
+						FROM invite_tree");
 					list($TreeID) = $DB->next_record();
 
 					$DB->query("
@@ -230,7 +232,7 @@ if (!empty($_REQUEST['confirm'])) {
 			$TPL->set('SITE_NAME', SITE_NAME);
 			$TPL->set('SITE_URL', SITE_URL);
 
-			Misc::send_email($_REQUEST['email'],'New account confirmation at '.SITE_NAME,$TPL->get(),'noreply');
+			Misc::send_email($_REQUEST['email'], 'New account confirmation at '.SITE_NAME, $TPL->get(), 'noreply');
 			Tracker::update_tracker('add_user', array('id' => $UserID, 'passkey' => $torrent_pass));
 			$Sent = 1;
 

@@ -18,7 +18,10 @@ function btc_balance() {
 function btc_address($UserID, $GenAddress = false) {
 	global $DB;
 	$UserID = (int)$UserID;
-	$DB->query("SELECT BitcoinAddress FROM users_info WHERE UserID = '$UserID'");
+	$DB->query("
+		SELECT BitcoinAddress
+		FROM users_info
+		WHERE UserID = '$UserID'");
 	list($Addr) = $DB->next_record();
 
 	if (!empty($Addr)) {

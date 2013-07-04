@@ -469,6 +469,9 @@ switch ($_REQUEST['action']) {
 			error(403);
 		}
 		break;
+	case 'bbcode_sandbox':
+		include('misc/bbcode_sandbox.php');
+		break;
 
 	default:
 		include(SERVER_ROOT.'/sections/tools/tools.php');

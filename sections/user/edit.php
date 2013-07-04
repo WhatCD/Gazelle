@@ -201,11 +201,11 @@ echo $Val->GenerateJS('userform');
 					<div id="sortable_container" style="display: none;">
 						<a href="#" id="reset_sortable" class="brackets">Reset to default</a>
 						<ul class="sortable_list" id="sortable">
-<?Users::release_order()?>
+<?Users::release_order($SiteOptions)?>
 						</ul>
 						<p><small>Note: Checked items will be hidden.</small></p>
 						<script type="text/javascript" id="sortable_default">//<![CDATA[
-							var sortable_list_default = <?=Users::release_order_default_js()?>;
+							var sortable_list_default = <?=Users::release_order_default_js($SiteOptions)?>;
 							//]]>
 						</script>
 					</div>
@@ -255,37 +255,37 @@ echo $Val->GenerateJS('userform');
 				<td>
 					<ul class="options_list nobullet">
 						<li>
-							<input type="checkbox" name="showtfilter" id="showtfilter"<?=(!isset($SiteOptions['ShowTorFilter']) || $SiteOptions['ShowTorFilter'] ? ' checked="checked"' : '')?>/>
+							<input type="checkbox" name="showtfilter" id="showtfilter"<?=(!isset($SiteOptions['ShowTorFilter']) || $SiteOptions['ShowTorFilter'] ? ' checked="checked"' : '')?> />
 							<label for="showtfilter">Show filter controls</label>
 						</li>
 						<li>
-							<input type="checkbox" name="showtags" id="showtags"<?Format::selected('ShowTags', 1, 'checked', $SiteOptions);?>/>
+							<input type="checkbox" name="showtags" id="showtags"<? Format::selected('ShowTags', 1, 'checked', $SiteOptions); ?>/>
 							<label for="showtags">Show filters for official tags</label>
 						</li>
 					</ul>
 				</td>
 			</tr>
 			<tr>
-				<td class="label"><strong>Auto Complete</strong></td>
+				<td class="label"><strong>Auto completion</strong></td>
 				<td>
 					<select name="autocomplete">
-						<option value="0" <? if (empty($SiteOptions['AutoComplete'])) { ?> selected="selected" <? } ?>>Everywhere</option>
-						<option value="2" <? if ($SiteOptions['AutoComplete'] === 2) { ?>selected="selected" <? } ?>>Searches Only</option>
-						<option value="1" <? if ($SiteOptions['AutoComplete'] === 1) { ?>selected="selected" <? } ?>>Disable</option>
+						<option value="0"<? if (empty($SiteOptions['AutoComplete'])) { ?> selected="selected"<? } ?>>Everywhere</option>
+						<option value="2"<? if ($SiteOptions['AutoComplete'] === 2) { ?> selected="selected"<? } ?>>Searches only</option>
+						<option value="1"<? if ($SiteOptions['AutoComplete'] === 1) { ?> selected="selected"<? } ?>>Disable</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Voting links</strong></td>
 				<td>
-					<input type="checkbox" name="novotelinks" id="novotelinks" <? if (!empty($SiteOptions['NoVoteLinks'])) { ?>checked="checked" <? } ?>/>
+					<input type="checkbox" name="novotelinks" id="novotelinks"<? if (!empty($SiteOptions['NoVoteLinks'])) { ?> checked="checked"<? } ?> />
 					<label for="novotelinks">Disable voting links on artist pages, collages, and snatched lists</label>
 				</td>
 			</tr>
 			<tr>
 				<td class="label"><strong>Download torrents as text files</strong></td>
 				<td>
-					<input type="checkbox" name="downloadalt" id="downloadalt" <? if ($DownloadAlt) { ?>checked="checked" <? } ?>/>
+					<input type="checkbox" name="downloadalt" id="downloadalt"<? if ($DownloadAlt) { ?> checked="checked"<? } ?> />
 					<label for="downloadalt">For users whose ISP blocks the downloading of torrent files</label>
 				</td>
 			</tr>
@@ -348,7 +348,7 @@ echo $Val->GenerateJS('userform');
 			<tr>
 				<td class="label"><strong>Auto-save text</strong></td>
 				<td>
-					<input type="checkbox" name="disableautosave" id="disableautosave" <? if (!empty($SiteOptions['DisableAutoSave'])) { ?>checked="checked" <? } ?>/>
+					<input type="checkbox" name="disableautosave" id="disableautosave"<? if (!empty($SiteOptions['DisableAutoSave'])) { ?> checked="checked"<? } ?> />
 					<label for="disableautosave">Disable reply text from being saved automatically when changing pages in a thread</label>
 				</td>
 			</tr>

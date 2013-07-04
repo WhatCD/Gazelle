@@ -180,7 +180,7 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 				<tr id="tagfilter">
 					<td class="label">Tags (comma-separated):</td>
 					<td>
-						<input type="text" id="tags" name="tags" size="70" value="<?=(!empty($_GET['tags']) ? display_str($_GET['tags']) : '')?> <? Users::has_autocomplete_enabled('other'); ?>" />&nbsp;
+						<input type="text" id="tags" name="tags" size="70" value="<?=(!empty($_GET['tags']) ? display_str($_GET['tags']) : '')?>"<? Users::has_autocomplete_enabled('other'); ?> />&nbsp;
 						<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type',0,'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 						<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type',1,'checked')?> /><label for="tags_type1"> All</label>
 					</td>

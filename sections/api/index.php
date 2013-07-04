@@ -14,7 +14,7 @@ if (
 	empty($_GET['key']) ||
 	!is_number($_GET['uid']) ||
 	!is_number($_GET['aid']) ||
-	!in_array($_GET['req'],$Available,true)
+	!in_array($_GET['req'], $Available, true)
 ) {
 	error('invalid');
 }
@@ -23,15 +23,19 @@ if (
 $AppID = $_GET['aid'];
 $UserID = $_GET['uid'];
 
-$App = $Cache->get_value('api_apps_'.$AppID);
+$App = $Cache->get_value("api_apps_$AppID");
 if (!is_array($App)) {
 	if (!isset($DB)) {
 		require(SERVER_ROOT.'/classes/mysql.class.php');
 		$DB = new DB_MYSQL;
 	}
-	$DB->query("SELECT Token, Name FROM api_applications WHERE ID='$AppID' LIMIT 1");
-	$App = $DB->to_array(false,MYSQLI_ASSOC);
-	$Cache->cache_value('api_apps_'.$AppID, $App, 0);
+	$DB->query("
+		SELECT Token, Name
+		FROM api_applications
+		WHERE ID = '$AppID'
+		LIMIT 1");
+	$App = $DB->to_array(false, MYSQLI_ASSOC);
+	$Cache->cache_value("api_apps_$AppID", $App, 0);
 }
 $App = $App[0];
 
@@ -41,7 +45,7 @@ if ($_GET['req'] === 'access_request') {
 		error('invalid');
 	}
 } else {
-	$User = $Cache->get_value('api_users_'.$UserID);
+	$User = $Cache->get_value("api_users_$UserID");
 	if (!is_array($User)) {
 		if (!isset($DB)) {
 			require(SERVER_ROOT.'/classes/mysql.class.php');
@@ -50,14 +54,14 @@ if ($_GET['req'] === 'access_request') {
 		$DB->query("
 			SELECT AppID, Token, State, Time, Access
 			FROM api_users
-			WHERE UserID='$UserID'
+			WHERE UserID = '$UserID'
 			LIMIT 1"); //int, no db_string
-		$User = $DB->to_array('AppID',MYSQLI_ASSOC);
-		$Cache->cache_value('api_users_'.$UserID, $User, 0);
+		$User = $DB->to_array('AppID', MYSQLI_ASSOC);
+		$Cache->cache_value("api_users_$UserID", $User, 0);
 	}
 	$User = $User[$AppID];
 
-	if (md5($User['Token'].$App['Token']) !== $_GET['key']) {
+	if (md5($User['Token'] . $App['Token']) !== $_GET['key']) {
 		error('invalid');
 	}
 }

@@ -25,8 +25,8 @@ $DB->query("
 	SELECT um.Username,
 		p.Level AS Class
 	FROM users_main AS um
-		LEFT JOIN permissions AS p ON p.ID=um.PermissionID
-	WHERE um.ID = ".$UserID);
+		LEFT JOIN permissions AS p ON p.ID = um.PermissionID
+	WHERE um.ID = $UserID");
 list($Username, $Class) = $DB->next_record();
 
 if (!check_perms('users_view_ips', $Class)) {
@@ -35,7 +35,7 @@ if (!check_perms('users_view_ips', $Class)) {
 
 $UsersOnly = $_GET['usersonly'];
 
-View::show_header("Tracker IP history for $Username");
+View::show_header("Tracker IP address history for $Username");
 ?>
 <script type="text/javascript">
 function ShowIPs(rowname) {
@@ -53,7 +53,7 @@ $TrackerIps = $DB->query("
 	ORDER BY tstamp DESC
 	LIMIT $Limit");
 
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($TrackerIps);
 

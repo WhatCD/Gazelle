@@ -17,16 +17,16 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 	if ($RevisionID || !is_array($TorrentCache) || isset($OutdatedCache)) {
 		// Fetch the group details
 
-		$SQL = "SELECT ";
+		$SQL = 'SELECT ';
 
 		if (!$RevisionID) {
-			$SQL .= "
+			$SQL .= '
 				g.WikiBody,
-				g.WikiImage, ";
+				g.WikiImage, ';
 		} else {
-			$SQL .= "
+			$SQL .= '
 				w.Body,
-				w.Image, ";
+				w.Image, ';
 		}
 
 		$SQL .= "
@@ -45,16 +45,17 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 				GROUP_CONCAT(tt.PositiveVotes SEPARATOR '|'),
 				GROUP_CONCAT(tt.NegativeVotes SEPARATOR '|')
 			FROM torrents_group AS g
-				LEFT JOIN torrents_tags AS tt ON tt.GroupID=g.ID
-				LEFT JOIN tags ON tags.ID=tt.TagID";
+				LEFT JOIN torrents_tags AS tt ON tt.GroupID = g.ID
+				LEFT JOIN tags ON tags.ID = tt.TagID";
 
 		if ($RevisionID) {
 			$SQL .= "
-				LEFT JOIN wiki_torrents AS w ON w.PageID='".db_string($GroupID)."' AND w.RevisionID='".db_string($RevisionID)."' ";
+				LEFT JOIN wiki_torrents AS w ON w.PageID = '".db_string($GroupID)."'
+						AND w.RevisionID = '".db_string($RevisionID)."' ";
 		}
 
 		$SQL .= "
-			WHERE g.ID='".db_string($GroupID)."'
+			WHERE g.ID = '".db_string($GroupID)."'
 			GROUP BY NULL";
 
 		$DB->query($SQL);
@@ -100,14 +101,14 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 				tln.TorrentID AS LogInDB,
 				t.ID AS HasFile
 			FROM torrents AS t
-				LEFT JOIN torrents_bad_tags AS tbt ON tbt.TorrentID=t.ID
-				LEFT JOIN torrents_bad_folders AS tbf on tbf.TorrentID=t.ID
-				LEFT JOIN torrents_bad_files AS tfi on tfi.TorrentID=t.ID
-				LEFT JOIN torrents_cassette_approved AS ca on ca.TorrentID=t.ID
-				LEFT JOIN torrents_lossymaster_approved AS lma on lma.TorrentID=t.ID
-				LEFT JOIN torrents_lossyweb_approved AS lwa on lwa.TorrentID=t.ID
-				LEFT JOIN torrents_logs_new AS tln ON tln.TorrentID=t.ID
-			WHERE t.GroupID='".db_string($GroupID)."'
+				LEFT JOIN torrents_bad_tags AS tbt ON tbt.TorrentID = t.ID
+				LEFT JOIN torrents_bad_folders AS tbf on tbf.TorrentID = t.ID
+				LEFT JOIN torrents_bad_files AS tfi on tfi.TorrentID = t.ID
+				LEFT JOIN torrents_cassette_approved AS ca on ca.TorrentID = t.ID
+				LEFT JOIN torrents_lossymaster_approved AS lma on lma.TorrentID = t.ID
+				LEFT JOIN torrents_lossyweb_approved AS lwa on lwa.TorrentID = t.ID
+				LEFT JOIN torrents_logs_new AS tln ON tln.TorrentID = t.ID
+			WHERE t.GroupID = '".db_string($GroupID)."'
 			GROUP BY t.ID
 			ORDER BY t.Remastered ASC,
 				(t.RemasterYear != 0) DESC,
@@ -122,7 +123,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 
 		$TorrentList = $DB->to_array('ID', MYSQLI_ASSOC);
 		if (count($TorrentList) == 0 && $ApiCall == false) {
-			header("Location: log.php?search=".(empty($_GET['torrentid']) ? "Group+$GroupID" : "Torrent+$_GET[torrentid]"));
+			header('Location: log.php?search='.(empty($_GET['torrentid']) ? "Group+$GroupID" : "Torrent+$_GET[torrentid]"));
 			die();
 		} else if (count($TorrentList) == 0 && $ApiCall == true) {
 			return NULL;
@@ -134,7 +135,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 		}
 		// Store it all in cache
 		if (!$RevisionID) {
-			$Cache->cache_value('torrents_details_'.$GroupID, array($TorrentDetails, $TorrentList), $CacheTime);
+			$Cache->cache_value("torrents_details_$GroupID", array($TorrentDetails, $TorrentList), $CacheTime);
 		}
 	} else { // If we're reading from cache
 		$TorrentDetails = $TorrentCache[0];
@@ -188,7 +189,10 @@ function is_valid_torrenthash($Str) {
 
 function torrenthash_to_torrentid($Str) {
 	global $Cache, $DB;
-	$DB->query("SELECT t.ID FROM torrents AS t WHERE HEX(t.info_hash)='".db_string($Str)."'");
+	$DB->query("
+		SELECT t.ID
+		FROM torrents AS t
+		WHERE HEX(t.info_hash) = '".db_string($Str)."'");
 	$TorrentID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
 	if ($TorrentID) {
 		return $TorrentID;
@@ -198,7 +202,10 @@ function torrenthash_to_torrentid($Str) {
 
 function torrenthash_to_groupid($Str) {
 	global $Cache, $DB;
-	$DB->query("SELECT t.GroupID FROM torrents AS t WHERE HEX(t.info_hash)='".db_string($Str)."'");
+	$DB->query("
+		SELECT t.GroupID
+		FROM torrents AS t
+		WHERE HEX(t.info_hash) = '".db_string($Str)."'");
 	$GroupID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
 	if ($GroupID) {
 		return $GroupID;
@@ -208,7 +215,10 @@ function torrenthash_to_groupid($Str) {
 
 function torrentid_to_groupid($TorrentID) {
 	global $Cache, $DB;
-	$DB->query("SELECT t.GroupID FROM torrents AS t WHERE t.ID='".db_string($TorrentID)."'");
+	$DB->query("
+		SELECT t.GroupID
+		FROM torrents AS t
+		WHERE t.ID = '".db_string($TorrentID)."'");
 	$GroupID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
 	if ($GroupID) {
 		return $GroupID;
@@ -219,7 +229,14 @@ function torrentid_to_groupid($TorrentID) {
 //After adjusting / deleting logs, recalculate the score for the torrent.
 function set_torrent_logscore($TorrentID) {
 	global $DB;
-	$DB->query("UPDATE torrents SET LogScore = (SELECT FLOOR(AVG(Score)) FROM torrents_logs_new WHERE TorrentID = ".$TorrentID.") WHERE ID = ".$TorrentID);
+	$DB->query("
+		UPDATE torrents
+		SET LogScore = (
+				SELECT FLOOR(AVG(Score))
+				FROM torrents_logs_new
+				WHERE TorrentID = $TorrentID
+				)
+		WHERE ID = $TorrentID");
 }
 
 function get_group_requests($GroupID) {
@@ -228,11 +245,15 @@ function get_group_requests($GroupID) {
 	}
 	global $DB, $Cache;
 
-	$Requests = $Cache->get_value('requests_group_'.$GroupID);
+	$Requests = $Cache->get_value("requests_group_$GroupID");
 	if ($Requests === false) {
-		$DB->query("SELECT ID FROM requests WHERE GroupID = $GroupID AND TimeFilled = '0000-00-00 00:00:00'");
+		$DB->query("
+			SELECT ID
+			FROM requests
+			WHERE GroupID = $GroupID
+				AND TimeFilled = '0000-00-00 00:00:00'");
 		$Requests = $DB->collect('ID');
-		$Cache->cache_value('requests_group_'.$GroupID, $Requests, 0);
+		$Cache->cache_value("requests_group_$GroupID", $Requests, 0);
 	}
 	$Requests = Requests::get_requests($Requests);
 	return $Requests['matches'];
@@ -241,7 +262,7 @@ function get_group_requests($GroupID) {
 //Used to get reports info on a unison cache in both browsing pages and torrent pages.
 function get_reports($TorrentID) {
 	global $Cache, $DB;
-	$Reports = $Cache->get_value('reports_torrent_' . $TorrentID);
+	$Reports = $Cache->get_value("reports_torrent_$TorrentID");
 	if ($Reports === false) {
 		$DB->query("
 			SELECT
@@ -255,7 +276,7 @@ function get_reports($TorrentID) {
 				AND Type != 'edited'
 				AND Status != 'Resolved'");
 		$Reports = $DB->to_array();
-		$Cache->cache_value('reports_torrent_' . $TorrentID, $Reports, 0);
+		$Cache->cache_value("reports_torrent_$TorrentID", $Reports, 0);
 	}
 	return $Reports;
 }
@@ -264,7 +285,7 @@ function get_reports($TorrentID) {
 function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $GroupCategoryID, $ReleaseType, $TorrentList, $Types, $Text, $Username, $ReportedTimes) {
 
 	function filelist($Str) {
-		return '</td><td>' . Format::get_size($Str[1]) . '</td></tr>';
+		return "</td>\n<td>" . Format::get_size($Str[1]) . "</td>\n</tr>";
 	}
 
 	$LastRemasterYear = '-';
@@ -295,7 +316,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 
 	$Reported = false;
 	unset($ReportedTimes);
-	$Reports = $Cache->get_value('reports_torrent_' . $TorrentID);
+	$Reports = $Cache->get_value("reports_torrent_$TorrentID");
 	if ($Reports === false) {
 		$DB->query("
 			SELECT
@@ -309,31 +330,31 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 				AND Type != 'edited'
 				AND Status != 'Resolved'");
 		$Reports = $DB->to_array();
-		$Cache->cache_value('reports_torrent_' . $TorrentID, $Reports, 0);
+		$Cache->cache_value("reports_torrent_$TorrentID", $Reports, 0);
 	}
 	if (count($Reports) > 0) {
 		$Reported = true;
 		include(SERVER_ROOT . '/sections/reportsv2/array.php');
-		$ReportInfo = '<table><tr class="colhead_dark" style="font-weight: bold;"><td>This torrent has ' . count($Reports) . ' active ' . (count($Reports) > 1 ? 'reports' : 'report') . ':</td></tr>';
+		$ReportInfo = "\n<table>\n\t<tr class=\"colhead_dark\" style=\"font-weight: bold;\">\n\t\t<td>This torrent has " . count($Reports) . ' active ' . (count($Reports) > 1 ? 'reports' : 'report') . ":</td>\n\t</tr>";
 
 		foreach ($Reports as $Report) {
-		list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
+			list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
 
-		$Reporter = Users::user_info($ReporterID);
-		$ReporterName = $Reporter['Username'];
+			$Reporter = Users::user_info($ReporterID);
+			$ReporterName = $Reporter['Username'];
 
-		if (array_key_exists($ReportType, $Types[$GroupCategoryID])) {
-			$ReportType = $Types[$GroupCategoryID][$ReportType];
-		} else if (array_key_exists($ReportType, $Types['master'])) {
-			$ReportType = $Types['master'][$ReportType];
-		} else {
-			//There was a type but it wasn't an option!
-			$ReportType = $Types['master']['other'];
+			if (array_key_exists($ReportType, $Types[$GroupCategoryID])) {
+				$ReportType = $Types[$GroupCategoryID][$ReportType];
+			} else if (array_key_exists($ReportType, $Types['master'])) {
+				$ReportType = $Types['master'][$ReportType];
+			} else {
+				//There was a type but it wasn't an option!
+				$ReportType = $Types['master']['other'];
+			}
+			$ReportInfo .= "\n\t<tr>\n\t\t<td>" . (check_perms('admin_reports') ? "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$ReportID\">reported it</a> " : 'Someone reported it ') . time_diff($ReportedTime, 2, true, true) . ' for the reason "' . $ReportType['title'] . '":';
+			$ReportInfo .= "\n\t\t\t<blockquote>" . $Text->full_format($ReportReason) . "</blockquote>\n\t\t</td>\n\t</tr>";
 		}
-		$ReportInfo .= '<tr><td>' . (check_perms('admin_reports') ? "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$ReportID\">reported it</a> " : 'Someone reported it ') . time_diff($ReportedTime, 2, true, true) . ' for the reason "' . $ReportType['title'] . '":';
-		$ReportInfo .= '<blockquote>' . $Text->full_format($ReportReason) . '</blockquote></td></tr>';
-		}
-		$ReportInfo .= '</table>';
+		$ReportInfo .= "\n</table>";
 	}
 
 	$CanEdit = (check_perms('torrents_edit') || (($UserID == $LoggedUser['ID'] && !$LoggedUser['DisableWiki']) && !($Remastered && !$RemasterYear)));
@@ -377,26 +398,26 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 	$TorrentUploader = $Username; // Save this for "Uploaded by:" below
 	// similar to Torrents::torrent_info()
 	if ($Format) {
-		$ExtraInfo.=display_str($Format);
+		$ExtraInfo .= display_str($Format);
 		$AddExtra = ' / ';
 	}
 	if ($Encoding) {
-		$ExtraInfo.=$AddExtra . display_str($Encoding);
+		$ExtraInfo .= $AddExtra . display_str($Encoding);
 		$AddExtra = ' / ';
 	}
 	if ($HasLog) {
-		$ExtraInfo.=$AddExtra . 'Log';
+		$ExtraInfo .= "{$AddExtra}Log";
 		$AddExtra = ' / ';
 	}
 	if ($HasLog && $LogInDB) {
-		$ExtraInfo.=' (' . (int) $LogScore . '%)';
+		$ExtraInfo .= ' (' . (int) $LogScore . '%)';
 	}
 	if ($HasCue) {
-		$ExtraInfo.=$AddExtra . 'Cue';
+		$ExtraInfo .= "{$AddExtra}Cue";
 		$AddExtra = ' / ';
 	}
 	if ($Scene) {
-		$ExtraInfo.=$AddExtra . 'Scene';
+		$ExtraInfo .= "{$AddExtra}Scene";
 		$AddExtra = ' / ';
 	}
 	if (!$ExtraInfo) {
@@ -404,47 +425,47 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 		$AddExtra = ' / ';
 	}
 	if ($IsSnatched) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Snatched!');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Snatched!');
 		$AddExtra = ' / ';
 	}
 	if ($FreeTorrent == '1') {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Freeleech!');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Freeleech!');
 		$AddExtra = ' / ';
 	}
 	if ($FreeTorrent == '2') {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Neutral Leech!');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Neutral Leech!');
 		$AddExtra = ' / ';
 	}
 	if ($PersonalFL) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Personal Freeleech!');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Personal Freeleech!');
 		$AddExtra = ' / ';
 	}
 	if ($Reported) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Reported');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Reported');
 		$AddExtra = ' / ';
 	}
 	if (!empty($BadTags)) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Bad Tags');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Bad Tags');
 		$AddExtra = ' / ';
 	}
 	if (!empty($BadFolders)) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Bad Folders');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Bad Folders');
 		$AddExtra = ' / ';
 	}
 	if (!empty($CassetteApproved)) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Cassette Approved');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Cassette Approved');
 		$AddExtra = ' / ';
 	}
 	if (!empty($LossymasterApproved)) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Lossy Master Approved');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Lossy Master Approved');
 		$AddExtra = ' / ';
 	}
 	if (!empty($LossywebApproved)) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Lossy WEB Approved');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Lossy WEB Approved');
 		$AddExtra = ' / ';
 	}
 	if (!empty($BadFiles)) {
-		$ExtraInfo.=$AddExtra . Format::torrent_label('Bad File Names');
+		$ExtraInfo .= $AddExtra . Format::torrent_label('Bad File Names');
 		$AddExtra = ' / ';
 	}
 
@@ -459,7 +480,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 		$EditionID++;
 ?>
 				<tr class="releases_<?=($ReleaseType)?> groupid_<?=($GroupID)?> edition group_torrent">
-					<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=($GroupID)?>, <?=($EditionID)?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?= Torrents::edition_string($Torrent, $TorrentDetails) ?></strong></td>
+					<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=($GroupID)?>, <?=($EditionID)?>, this, event);" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?= Torrents::edition_string($Torrent, $TorrentDetails) ?></strong></td>
 				</tr>
 <?
 	}
@@ -512,14 +533,14 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 						</div>
 <?	} ?>
 						<div class="linkbox">
-							<a href="#" class="brackets" onclick="show_peers('<?=($TorrentID)?>', 0);return false;">View peer list</a>
+							<a href="#" class="brackets" onclick="show_peers('<?=($TorrentID)?>', 0); return false;">View peer list</a>
 <?	if (check_perms('site_view_torrent_snatchlist')) { ?>
-							<a href="#" class="brackets" onclick="show_downloads('<?=($TorrentID)?>', 0);return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
-							<a href="#" class="brackets" onclick="show_snatches('<?=($TorrentID)?>', 0);return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
+							<a href="#" class="brackets" onclick="show_downloads('<?=($TorrentID)?>', 0); return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
+							<a href="#" class="brackets" onclick="show_snatches('<?=($TorrentID)?>', 0); return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
 <?	} ?>
-							<a href="#" class="brackets" onclick="show_files('<?=($TorrentID)?>');return false;">View file list</a>
+							<a href="#" class="brackets" onclick="show_files('<?=($TorrentID)?>'); return false;">View file list</a>
 <?	if ($Reported) { ?>
-							<a href="#" class="brackets" onclick="show_reported('<?=($TorrentID)?>');return false;">View report information</a>
+							<a href="#" class="brackets" onclick="show_reported('<?=($TorrentID)?>'); return false;">View report information</a>
 <?	} ?>
 						</div>
 						<div id="peers_<?=($TorrentID)?>" class="hidden"></div>
@@ -530,7 +551,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 						<div id="reported_<?=($TorrentID)?>" class="hidden"><?=($ReportInfo)?></div>
 <?	}
 	if (!empty($Description)) {
-		echo '<blockquote>' . $Text->full_format($Description) . '</blockquote>';
+		echo "\n\t\t\t\t\t\t<blockquote>" . $Text->full_format($Description) . '</blockquote>';
 	} ?>
 					</td>
 				</tr>

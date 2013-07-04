@@ -22,8 +22,8 @@ $DB->query("
 		um.Username,
 		p.Level AS Class
 	FROM users_main AS um
-		LEFT JOIN permissions AS p ON p.ID=um.PermissionID
-	WHERE um.ID = ".$UserID);
+		LEFT JOIN permissions AS p ON p.ID = um.PermissionID
+	WHERE um.ID = $UserID");
 list($Username, $Class) = $DB->next_record();
 
 if (!check_perms('users_view_ips', $Class)) {
@@ -41,7 +41,7 @@ View::show_header("IP address history for $Username");
 ?>
 <script type="text/javascript">//<![CDATA[
 function ShowIPs(rowname) {
-	$('tr[name="'+rowname+'"]').gtoggle();
+	$('tr[name="' + rowname + '"]').gtoggle();
 
 }
 function Ban(ip, id, elemID) {
@@ -49,16 +49,16 @@ function Ban(ip, id, elemID) {
 	if (notes != null && notes.length > 0) {
 		var xmlhttp;
 		if (window.XMLHttpRequest) {
-			xmlhttp=new XMLHttpRequest();
+			xmlhttp = new XMLHttpRequest();
 		} else {
-			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 		}
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				document.getElementById(elemID).innerHTML = "<strong>[Banned]</strong>";
 			}
 		}
-		xmlhttp.open("GET","tools.php?action=quick_ban&perform=create&ip=" + ip + "&notes=" + notes,true);
+		xmlhttp.open("GET", "tools.php?action=quick_ban&perform=create&ip=" + ip + "&notes=" + notes, true);
 		xmlhttp.send();
 	}
 
@@ -67,17 +67,17 @@ function Ban(ip, id, elemID) {
 function UnBan(ip, id, elemID) {
 		var xmlhttp;
 		if (window.XMLHttpRequest) {
-			xmlhttp=new XMLHttpRequest();
+			xmlhttp = new XMLHttpRequest();
 		} else {
-			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 		}
-		xmlhttp.onreadystatechange=function() {
+		xmlhttp.onreadystatechange = function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				document.getElementById(elemID).innerHTML = "Ban";
 				document.getElementById(elemID).onclick = function() { Ban(ip, id, elemID); return false; };
 			}
 		}
-		xmlhttp.open("GET","tools.php?action=quick_ban&perform=delete&id=" + id + "&ip=" + ip,true);
+		xmlhttp.open("GET","tools.php?action=quick_ban&perform=delete&id=" + id + "&ip=" + ip, true);
 		xmlhttp.send();
 }
 */
@@ -101,11 +101,11 @@ if ($UsersOnly == 1) {
 			GROUP_CONCAT(ui2.Donor SEPARATOR '|'),
 			GROUP_CONCAT(ui2.Warned SEPARATOR '|')
 		FROM users_history_ips AS h1
-			LEFT JOIN users_history_ips AS h2 ON h2.IP=h1.IP AND h2.UserID!=$UserID
-			LEFT JOIN users_main AS um2 ON um2.ID=h2.UserID
-			LEFT JOIN users_info AS ui2 ON ui2.UserID=h2.UserID
-		WHERE h1.UserID='$UserID'
-			AND h2.UserID>0 $SearchIPQuery
+			LEFT JOIN users_history_ips AS h2 ON h2.IP = h1.IP AND h2.UserID != $UserID
+			LEFT JOIN users_main AS um2 ON um2.ID = h2.UserID
+			LEFT JOIN users_info AS ui2 ON ui2.UserID = h2.UserID
+		WHERE h1.UserID = '$UserID'
+			AND h2.UserID > 0 $SearchIPQuery
 		GROUP BY h1.IP, h1.StartTime
 		ORDER BY h1.StartTime DESC
 		LIMIT $Limit");
@@ -124,15 +124,15 @@ if ($UsersOnly == 1) {
 			GROUP_CONCAT(ui2.Donor SEPARATOR '|'),
 			GROUP_CONCAT(ui2.Warned SEPARATOR '|')
 		FROM users_history_ips AS h1
-			LEFT JOIN users_history_ips AS h2 ON h2.IP=h1.IP AND h2.UserID!=$UserID
-			LEFT JOIN users_main AS um2 ON um2.ID=h2.UserID
-			LEFT JOIN users_info AS ui2 ON ui2.UserID=h2.UserID
-		WHERE h1.UserID='$UserID' $SearchIPQuery
+			LEFT JOIN users_history_ips AS h2 ON h2.IP = h1.IP AND h2.UserID != $UserID
+			LEFT JOIN users_main AS um2 ON um2.ID = h2.UserID
+			LEFT JOIN users_info AS ui2 ON ui2.UserID = h2.UserID
+		WHERE h1.UserID = '$UserID' $SearchIPQuery
 		GROUP BY h1.IP, h1.StartTime
 		ORDER BY h1.StartTime DESC
 		LIMIT $Limit");
 }
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 $DB->set_query_id($RS);
 
@@ -204,7 +204,11 @@ foreach ($Results as $Index => $Result) {
 				<?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)<?
 	if ($CanManageIPBans) {
 		if (!isset($IPs[$IP])) {
-			$sql = "SELECT ID, FromIP, ToIP FROM ip_bans WHERE '".Tools::ip_to_unsigned($IP)."' BETWEEN FromIP AND ToIP LIMIT 1";
+			$sql = "
+				SELECT ID, FromIP, ToIP
+				FROM ip_bans
+				WHERE '".Tools::ip_to_unsigned($IP)."' BETWEEN FromIP AND ToIP
+				LIMIT 1";
 			$DB->query($sql);
 
 			if ($DB->record_count() > 0) {
@@ -215,7 +219,7 @@ foreach ($Results as $Index => $Result) {
 			} else {
 				$IPs[$IP] = false;
 ?>
-				<a id="<?=$counter?>" href="#" onclick="Ban('<?=$IP?>', '<?=$ID?>', '<?=$counter?>'); this.onclick=null;return false;" class="brackets">Ban</a>
+				<a id="<?=$counter?>" href="#" onclick="Ban('<?=$IP?>', '<?=$ID?>', '<?=$counter?>'); this.onclick = null; return false;" class="brackets">Ban</a>
 <?
 			}
 			$counter++;

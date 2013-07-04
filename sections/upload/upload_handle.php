@@ -581,7 +581,7 @@ if (!$GroupID) {
 			foreach ($Artists as $Num => $Artist) {
 				$DB->query("
 					INSERT IGNORE INTO torrents_artists (GroupID, ArtistID, AliasID, UserID, Importance)
-					VALUES ($GroupID, ".$Artist['id'].", ".$Artist['aliasid'].", ".$LoggedUser['ID'].", '$Importance')");
+					VALUES ($GroupID, ".$Artist['id'].', '.$Artist['aliasid'].', '.$LoggedUser['ID'].", '$Importance')");
 				$Cache->increment('stats_album_count');
 			}
 		}
@@ -591,13 +591,16 @@ if (!$GroupID) {
 } else {
 	$DB->query("
 		UPDATE torrents_group
-		SET Time='".sqltime()."'
-		WHERE ID=$GroupID");
-	$Cache->delete_value('torrent_group_'.$GroupID);
-	$Cache->delete_value('torrents_details_'.$GroupID);
-	$Cache->delete_value('detail_files_'.$GroupID);
+		SET Time = '".sqltime()."'
+		WHERE ID = $GroupID");
+	$Cache->delete_value("torrent_group_$GroupID");
+	$Cache->delete_value("torrents_details_$GroupID");
+	$Cache->delete_value("detail_files_$GroupID");
 	if ($Type == 'Music') {
-		$DB->query("SELECT ReleaseType FROM torrents_group WHERE ID='$GroupID'");
+		$DB->query("
+			SELECT ReleaseType
+			FROM torrents_group
+			WHERE ID = '$GroupID'");
 		list($Properties['ReleaseType']) = $DB->next_record();
 	}
 }
@@ -614,8 +617,8 @@ if (!$NoRevision) {
 	// Revision ID
 	$DB->query("
 		UPDATE torrents_group
-		SET RevisionID='$RevisionID'
-		WHERE ID=$GroupID");
+		SET RevisionID = '$RevisionID'
+		WHERE ID = $GroupID");
 }
 
 // Tags
@@ -630,7 +633,7 @@ if (!$Properties['GroupID']) {
 					(Name, UserID)
 				VALUES
 					('$Tag', $LoggedUser[ID])
-				ON DUPLICATE KEY UPDATE Uses=Uses+1;
+				ON DUPLICATE KEY UPDATE Uses = Uses + 1;
 			");
 			$TagID = $DB->inserted_id();
 
@@ -639,7 +642,7 @@ if (!$Properties['GroupID']) {
 					(TagID, GroupID, UserID, PositiveVotes)
 				VALUES
 					($TagID, $GroupID, $LoggedUser[ID], 10)
-				ON DUPLICATE KEY UPDATE PositiveVotes=PositiveVotes+1;
+				ON DUPLICATE KEY UPDATE PositiveVotes = PositiveVotes + 1;
 			");
 		}
 	}
@@ -654,8 +657,8 @@ $DB->query("
 	INSERT INTO torrents
 		(GroupID, UserID, Media, Format, Encoding,
 		Remastered, RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
-		Scene, HasLog, HasCue, info_hash, FileCount, FileList, FilePath, Size, Time,
-		Description, LogScore, FreeTorrent, FreeLeechType)
+		Scene, HasLog, HasCue, info_hash, FileCount, FileList, FilePath,
+		Size, Time, Description, LogScore, FreeTorrent, FreeLeechType)
 	VALUES
 		($GroupID, $LoggedUser[ID], $T[Media], $T[Format], $T[Encoding], " .
 		"$T[Remastered], $T[RemasterYear], $T[RemasterTitle], $T[RemasterRecordLabel], $T[RemasterCatalogueNumber], " .
@@ -670,7 +673,7 @@ $Debug->set_flag('upload: ocelot updated');
 
 // Prevent deletion of this torrent until the rest of the upload process is done
 // (expire the key after 10 minutes to prevent locking it for too long in case there's a fatal error below)
-$Cache->cache_value('torrent_'.$TorrentID.'_lock', true, 600);
+$Cache->cache_value("torrent_{$TorrentID}_lock", true, 600);
 
 //******************************************************************************//
 //--------------- Write torrent file -------------------------------------------//
@@ -678,7 +681,7 @@ $Cache->cache_value('torrent_'.$TorrentID.'_lock', true, 600);
 $DB->query("
 	INSERT INTO torrents_files (TorrentID, File)
 	VALUES ($TorrentID, '$TorEnc')");
-Misc::write_log("Torrent $TorrentID ($LogName) (".number_format($TotalSize / (1024 * 1024), 2)." MB) was uploaded by " . $LoggedUser['Username']);
+Misc::write_log("Torrent $TorrentID ($LogName) (".number_format($TotalSize / (1024 * 1024), 2).' MB) was uploaded by ' . $LoggedUser['Username']);
 Torrents::write_group_log($GroupID, $TorrentID, $LoggedUser['ID'], 'uploaded ('.number_format($TotalSize / (1024 * 1024), 2).' MB)', 0);
 
 Torrents::update_hash($GroupID);
@@ -722,8 +725,8 @@ if (trim($Properties['Image']) != '') {
 			if (count($RecentUploads) == 5) {
 				array_pop($RecentUploads);
 			}
-			array_unshift($RecentUploads, array('ID'=>$GroupID, 'Name'=>trim($Properties['Title']), 'Artist'=>Artists::display_artists($ArtistForm, false, true), 'WikiImage'=>trim($Properties['Image'])));
-			$Cache->cache_value('recent_uploads_'.$UserID, $RecentUploads, 0);
+			array_unshift($RecentUploads, array('ID' => $GroupID, 'Name' => trim($Properties['Title']), 'Artist' => Artists::display_artists($ArtistForm, false, true), 'WikiImage' => trim($Properties['Image'])));
+			$Cache->cache_value("recent_uploads_$UserID", $RecentUploads, 0);
 		} while (0);
 	}
 }
@@ -732,8 +735,10 @@ if (trim($Properties['Image']) != '') {
 //--------------- Contest ------------------------------------------------------//
 if ($Properties['LibraryImage'] != '') {
 	$DB->query("
-		INSERT INTO reportsv2 (ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, Track, Image, ExtraID, Link)
-		VALUES (0, $TorrentID, 'library', '".db_string(($Properties['MultiDisc'] ? 'Multi-disc' : ''))."', 'New', '".sqltime()."', '', '".db_string($Properties['LibraryImage'])."', '', '')");
+		INSERT INTO reportsv2
+			(ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, Track, Image, ExtraID, Link)
+		VALUES
+			(0, $TorrentID, 'library', '".db_string(($Properties['MultiDisc'] ? 'Multi-disc' : ''))."', 'New', '".sqltime()."', '', '".db_string($Properties['LibraryImage'])."', '', '')");
 }
 
 //******************************************************************************//
@@ -778,7 +783,7 @@ if ($Type == 'Music') {
 		$Announce .= ' ['.$ReleaseTypes[$Properties['ReleaseType']].']';
 	}
 	$Announce .= ' - ';
-	$Announce .= trim($Properties['Format'])." / ".trim($Properties['Bitrate']);
+	$Announce .= trim($Properties['Format']).' / '.trim($Properties['Bitrate']);
 	if ($HasLog == 1) {
 		$Announce .= ' / Log';
 	}
@@ -798,7 +803,7 @@ if ($Type == 'Music') {
 }
 $Title = $Announce;
 
-$AnnounceSSL = $Announce . " - https://".SSL_SITE_URL."/torrents.php?id=$GroupID / https://".SSL_SITE_URL."/torrents.php?action=download&id=$TorrentID";
+$AnnounceSSL = "$Announce - https://".SSL_SITE_URL."/torrents.php?id=$GroupID / https://".SSL_SITE_URL."/torrents.php?action=download&id=$TorrentID";
 $Announce .= " - https://".SSL_SITE_URL."/torrents.php?id=$GroupID / https://".SSL_SITE_URL."/torrents.php?action=download&id=$TorrentID";
 
 $AnnounceSSL .= ' - '.trim($Properties['TagList']);
@@ -844,8 +849,8 @@ $Item = $Feed->item($Title, $Text->strip_bbcode($Body), 'torrents.php?action=dow
 $SQL = "
 	SELECT unf.ID, unf.UserID, torrent_pass
 	FROM users_notify_filters AS unf
-		JOIN users_main AS um ON um.ID=unf.UserID
-	WHERE um.Enabled='1'";
+		JOIN users_main AS um ON um.ID = unf.UserID
+	WHERE um.Enabled = '1'";
 if (empty($ArtistsUnescaped)) {
 	$ArtistsUnescaped = $ArtistForm;
 }
@@ -855,50 +860,49 @@ if (!empty($ArtistsUnescaped)) {
 	foreach ($ArtistsUnescaped as $Importance => $Artists) {
 		foreach ($Artists as $Artist) {
 			if ($Importance == 1 || $Importance == 4 || $Importance == 5 || $Importance == 6) {
-				$ArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\','\\\\',$Artist['name']), true)."|%'";
+				$ArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\', '\\\\', $Artist['name']), true)."|%'";
 			} else {
-				$GuestArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\','\\\\',$Artist['name']), true)."|%'";
+				$GuestArtistNameList[] = "Artists LIKE '%|".db_string(str_replace('\\', '\\\\', $Artist['name']), true)."|%'";
 			}
 		}
 	}
 	// Don't add notification if >2 main artists or if tracked artist isn't a main artist
 	if (count($ArtistNameList) > 2 || $Artist['name'] == 'Various Artists') {
-		$SQL.= " AND (ExcludeVA='0' AND (";
-		$SQL.= implode(" OR ", array_merge($ArtistNameList,$GuestArtistNameList));
-		$SQL.= " OR Artists='')) AND (";
+		$SQL .= " AND (ExcludeVA = '0' AND (";
+		$SQL .= implode(' OR ', array_merge($ArtistNameList, $GuestArtistNameList));
+		$SQL .= " OR Artists = '')) AND (";
 	} else {
-		$SQL.= " AND (";
+		$SQL .= " AND (";
 		if (!empty($GuestArtistNameList)) {
-			$SQL.= "(ExcludeVA='0' AND (";
-			$SQL.= implode(" OR ", $GuestArtistNameList);
-			$SQL.= ")) OR ";
+			$SQL .= "(ExcludeVA = '0' AND (";
+			$SQL .= implode(' OR ', $GuestArtistNameList);
+			$SQL .= ')) OR ';
 		}
-		$SQL.= implode(" OR ", $ArtistNameList);
-		$SQL.= " OR Artists='') AND (";
+		$SQL .= implode(' OR ', $ArtistNameList);
+		$SQL .= " OR Artists = '') AND (";
 	}
 } else {
-	$SQL.="AND (Artists='') AND (";
+	$SQL .= "AND (Artists = '') AND (";
 }
-
 
 reset($Tags);
 $TagSQL = array();
 $NotTagSQL = array();
 foreach ($Tags as $Tag) {
-	$TagSQL[]=" Tags LIKE '%|".db_string(trim($Tag))."|%' ";
-	$NotTagSQL[]=" NotTags LIKE '%|".db_string(trim($Tag))."|%' ";
+	$TagSQL[] = " Tags LIKE '%|".db_string(trim($Tag))."|%' ";
+	$NotTagSQL[] = " NotTags LIKE '%|".db_string(trim($Tag))."|%' ";
 }
-$TagSQL[]="Tags=''";
-$SQL.=implode(' OR ', $TagSQL);
+$TagSQL[] = "Tags = ''";
+$SQL .= implode(' OR ', $TagSQL);
 
-$SQL.= ") AND !(".implode(' OR ', $NotTagSQL).")";
+$SQL .= ") AND !(".implode(' OR ', $NotTagSQL).')';
 
-$SQL.=" AND (Categories LIKE '%|".db_string(trim($Type))."|%' OR Categories='') ";
+$SQL .= " AND (Categories LIKE '%|".db_string(trim($Type))."|%' OR Categories = '') ";
 
 if ($Properties['ReleaseType']) {
-	$SQL.=" AND (ReleaseTypes LIKE '%|".db_string(trim($ReleaseTypes[$Properties['ReleaseType']]))."|%' OR ReleaseTypes='') ";
+	$SQL .= " AND (ReleaseTypes LIKE '%|".db_string(trim($ReleaseTypes[$Properties['ReleaseType']]))."|%' OR ReleaseTypes = '') ";
 } else {
-	$SQL.=" AND (ReleaseTypes='') ";
+	$SQL .= " AND (ReleaseTypes = '') ";
 }
 
 /*
@@ -909,21 +913,21 @@ if ($Properties['ReleaseType']) {
 
 
 if ($Properties['Format']) {
-	$SQL.=" AND (Formats LIKE '%|".db_string(trim($Properties['Format']))."|%' OR Formats='') ";
+	$SQL .= " AND (Formats LIKE '%|".db_string(trim($Properties['Format']))."|%' OR Formats = '') ";
 } else {
-	$SQL.=" AND (Formats='') ";
+	$SQL .= " AND (Formats = '') ";
 }
 
 if ($_POST['bitrate']) {
-	$SQL.=" AND (Encodings LIKE '%|".db_string(trim($_POST['bitrate']))."|%' OR Encodings='') ";
+	$SQL .= " AND (Encodings LIKE '%|".db_string(trim($_POST['bitrate']))."|%' OR Encodings = '') ";
 } else {
-	$SQL.=" AND (Encodings='') ";
+	$SQL .= " AND (Encodings = '') ";
 }
 
 if ($Properties['Media']) {
-	$SQL.=" AND (Media LIKE '%|".db_string(trim($Properties['Media']))."|%' OR Media='') ";
+	$SQL .= " AND (Media LIKE '%|".db_string(trim($Properties['Media']))."|%' OR Media = '') ";
 } else {
-	$SQL.=" AND (Media='') ";
+	$SQL .= " AND (Media = '') ";
 }
 
 // Either they aren't using NewGroupsOnly
@@ -941,28 +945,31 @@ $SQL .= '))';
 
 
 if ($Properties['Year'] && $Properties['RemasterYear']) {
-	$SQL.=" AND (('".db_string(trim($Properties['Year']))."' BETWEEN FromYear AND ToYear)
+	$SQL .= " AND (('".db_string(trim($Properties['Year']))."' BETWEEN FromYear AND ToYear)
 			OR ('".db_string(trim($Properties['RemasterYear']))."' BETWEEN FromYear AND ToYear)
-			OR (FromYear=0 AND ToYear=0)) ";
+			OR (FromYear = 0 AND ToYear = 0)) ";
 } elseif ($Properties['Year'] || $Properties['RemasterYear']) {
-	$SQL.=" AND (('".db_string(trim(Max($Properties['Year'],$Properties['RemasterYear'])))."' BETWEEN FromYear AND ToYear)
-			OR (FromYear=0 AND ToYear=0)) ";
+	$SQL .= " AND (('".db_string(trim(Max($Properties['Year'],$Properties['RemasterYear'])))."' BETWEEN FromYear AND ToYear)
+			OR (FromYear = 0 AND ToYear = 0)) ";
 } else {
-	$SQL.=" AND (FromYear=0 AND ToYear=0) ";
+	$SQL .= " AND (FromYear = 0 AND ToYear = 0) ";
 }
-$SQL.=" AND UserID != '".$LoggedUser['ID']."' ";
+$SQL .= " AND UserID != '".$LoggedUser['ID']."' ";
 
-$DB->query("SELECT Paranoia FROM users_main WHERE ID = $LoggedUser[ID]");
+$DB->query("
+	SELECT Paranoia
+	FROM users_main
+	WHERE ID = $LoggedUser[ID]");
 list($Paranoia) = $DB->next_record();
 $Paranoia = unserialize($Paranoia);
 if (!is_array($Paranoia)) {
 	$Paranoia = array();
 }
 if (!in_array('notifications', $Paranoia)) {
-	$SQL.=" AND (Users LIKE '%|".$LoggedUser['ID']."|%' OR Users = '') ";
+	$SQL .= " AND (Users LIKE '%|".$LoggedUser['ID']."|%' OR Users = '') ";
 }
 
-$SQL.=" AND UserID != '".$LoggedUser['ID']."' ";
+$SQL .= " AND UserID != '".$LoggedUser['ID']."' ";
 $DB->query($SQL);
 $Debug->set_flag('upload: notification query finished');
 
@@ -976,17 +983,17 @@ if ($DB->record_count() > 0) {
 	$Rows = array();
 	foreach ($UserArray as $User) {
 		list($FilterID, $UserID, $Passkey) = $User;
-		$Rows[]="('$UserID', '$GroupID', '$TorrentID', '$FilterID')";
-		$Feed->populate('torrents_notify_'.$Passkey,$Item);
-		$Cache->delete_value('notifications_new_'.$UserID);
+		$Rows[] = "('$UserID', '$GroupID', '$TorrentID', '$FilterID')";
+		$Feed->populate("torrents_notify_$Passkey", $Item);
+		$Cache->delete_value("notifications_new_$UserID");
 	}
-	$InsertSQL.=implode(',', $Rows);
+	$InsertSQL .= implode(',', $Rows);
 	$DB->query($InsertSQL);
 	$Debug->set_flag('upload: notification inserts finished');
 
 	foreach ($FilterArray as $Filter) {
 		list($FilterID, $UserID, $Passkey) = $Filter;
-		$Feed->populate('torrents_notify_'.$FilterID.'_'.$Passkey,$Item);
+		$Feed->populate("torrents_notify_{$FilterID}_$Passkey", $Item);
 	}
 }
 
@@ -997,50 +1004,50 @@ $DB->query("
 		JOIN bookmarks_torrents AS b ON b.UserID = u.ID
 	WHERE b.GroupID = $GroupID");
 while (list($UserID, $Passkey) = $DB->next_record()) {
-	$Feed->populate('torrents_bookmarks_t_'.$Passkey, $Item);
+	$Feed->populate("torrents_bookmarks_t_$Passkey", $Item);
 }
 
-$Feed->populate('torrents_all',$Item);
+$Feed->populate('torrents_all', $Item);
 $Debug->set_flag('upload: notifications handled');
 if ($Type == 'Music') {
-	$Feed->populate('torrents_music',$Item);
+	$Feed->populate('torrents_music', $Item);
 	if ($Properties['Media'] == 'Vinyl') {
-		$Feed->populate('torrents_vinyl',$Item);
+		$Feed->populate('torrents_vinyl', $Item);
 	}
 	if ($Properties['Bitrate'] == 'Lossless') {
-		$Feed->populate('torrents_lossless',$Item);
+		$Feed->populate('torrents_lossless', $Item);
 	}
 	if ($Properties['Bitrate'] == '24bit Lossless') {
-		$Feed->populate('torrents_lossless24',$Item);
+		$Feed->populate('torrents_lossless24', $Item);
 	}
 	if ($Properties['Format'] == 'MP3') {
-		$Feed->populate('torrents_mp3',$Item);
+		$Feed->populate('torrents_mp3', $Item);
 	}
 	if ($Properties['Format'] == 'FLAC') {
-		$Feed->populate('torrents_flac',$Item);
+		$Feed->populate('torrents_flac', $Item);
 	}
 }
 if ($Type == 'Applications') {
-	$Feed->populate('torrents_apps',$Item);
+	$Feed->populate('torrents_apps', $Item);
 }
 if ($Type == 'E-Books') {
-	$Feed->populate('torrents_ebooks',$Item);
+	$Feed->populate('torrents_ebooks', $Item);
 }
 if ($Type == 'Audiobooks') {
-	$Feed->populate('torrents_abooks',$Item);
+	$Feed->populate('torrents_abooks', $Item);
 }
 if ($Type == 'E-Learning Videos') {
-	$Feed->populate('torrents_evids',$Item);
+	$Feed->populate('torrents_evids', $Item);
 }
 if ($Type == 'Comedy') {
-	$Feed->populate('torrents_comedy',$Item);
+	$Feed->populate('torrents_comedy', $Item);
 }
 if ($Type == 'Comics') {
-	$Feed->populate('torrents_comics',$Item);
+	$Feed->populate('torrents_comics', $Item);
 }
 
-// Clear Cache
-$Cache->delete_value('torrents_details_'.$GroupID);
+// Clear cache
+$Cache->delete_value("torrents_details_$GroupID");
 
 // Allow deletion of this torrent now
-$Cache->delete_value('torrent_'.$TorrentID.'_lock');
+$Cache->delete_value("torrent_{$TorrentID}_lock");

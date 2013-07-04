@@ -16,7 +16,7 @@ $ID = $_POST['id'];
 if ($Short == 'request_update') {
 	if (empty($_POST['year']) || !is_number($_POST['year'])) {
 		error('Year must be specified.');
-		header('Location: reports.php?action=report&type=request_update&id='.$ID);
+		header("Location: reports.php?action=report&type=request_update&id=$ID");
 		die();
 	}
 	$Reason = '[b]Year[/b]: '.$_POST['year'].".\n\n";
@@ -28,20 +28,20 @@ if ($Short == 'request_update') {
 }
 
 switch ($Short) {
-	case 'request' :
-	case 'request_update' :
-		$Link = 'requests.php?action=view&id='.$ID;
+	case 'request':
+	case 'request_update':
+		$Link = "requests.php?action=view&id=$ID";
 		break;
-	case 'user' :
-		$Link = 'user.php?id='.$ID;
+	case 'user':
+		$Link = "user.php?id=$ID";
 		break;
-	case 'collage' :
-		$Link = 'collages.php?id='.$ID;
+	case 'collage':
+		$Link = "collages.php?id=$ID";
 		break;
-	case 'thread' :
-		$Link = 'forums.php?action=viewthread&threadid='.$ID;
+	case 'thread':
+		$Link = "forums.php?action=viewthread&threadid=$ID";
 		break;
-	case 'post' :
+	case 'post':
 		$DB->query("
 			SELECT
 				p.ID,
@@ -49,14 +49,14 @@ switch ($Short) {
 				(	SELECT COUNT(ID)
 					FROM forums_posts
 					WHERE forums_posts.TopicID = p.TopicID
-						AND forums_posts.ID<=p.ID
+						AND forums_posts.ID <= p.ID
 				) AS PostNum
 			FROM forums_posts AS p
-			WHERE ID=".$ID);
-		list($PostID,$TopicID,$PostNum) = $DB->next_record();
-		$Link = 'forums.php?action=viewthread&threadid='.$TopicID.'&post='.$PostNum.'#post'.$PostID;
+			WHERE ID = $ID");
+		list($PostID, $TopicID, $PostNum) = $DB->next_record();
+		$Link = "forums.php?action=viewthread&threadid=$TopicID&post=$PostNum#post$PostID";
 		break;
-	case 'requests_comment' :
+	case 'requests_comment':
 		$DB->query("
 			SELECT
 				rc.RequestID,
@@ -67,12 +67,12 @@ switch ($Short) {
 						AND requests_comments.RequestID = rc.RequestID
 				) AS CommentNum
 			FROM requests_comments AS rc
-			WHERE ID=".$ID);
+			WHERE ID = $ID");
 		list($RequestID, $Body, $PostNum) = $DB->next_record();
 		$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-		$Link = 'requests.php?action=view&id='.$RequestID.'&page='.$PageNum.'#post'.$ID;
+		$Link = "requests.php?action=view&id=$RequestID&page=$PageNum#post$ID";
 		break;
-	case 'torrents_comment' :
+	case 'torrents_comment':
 		$DB->query("
 			SELECT
 				tc.GroupID,
@@ -83,12 +83,12 @@ switch ($Short) {
 						AND torrents_comments.GroupID = tc.GroupID
 				) AS CommentNum
 			FROM torrents_comments AS tc
-			WHERE ID=".$ID);
+			WHERE ID = $ID");
 		list($GroupID, $Body, $PostNum) = $DB->next_record();
 		$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-		$Link = 'torrents.php?id='.$GroupID.'&page='.$PageNum.'#post'.$ID;
+		$Link = "torrents.php?id=$GroupID&page=$PageNum#post$ID";
 		break;
-	case 'artist_comment' :
+	case 'artist_comment':
 		$DB->query("
 			SELECT
 				ac.ArtistID,
@@ -99,12 +99,12 @@ switch ($Short) {
 						AND artist_comments.ArtistID = ac.ArtistID
 				) AS CommentNum
 			FROM artist_comments AS ac
-			WHERE ID=".$ID);
+			WHERE ID = $ID");
 		list($ArtistID, $Body, $PostNum) = $DB->next_record();
 		$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-		$Link = 'artist.php?id='.$ArtistID.'&page='.$PageNum.'#post'.$ID;
+		$Link = "artist.php?id=$ArtistID&page=$PageNum#post$ID";
 		break;
-	case 'collages_comment' :
+	case 'collages_comment':
 		$DB->query("
 			SELECT
 				cc.CollageID,
@@ -115,11 +115,11 @@ switch ($Short) {
 						AND collages_comments.CollageID = cc.CollageID
 				) AS CommentNum
 			FROM collages_comments AS cc
-			WHERE ID=".$ID);
+			WHERE ID = $ID");
 		list($CollageID, $Body, $PostNum) = $DB->next_record();
 		$PerPage = POSTS_PER_PAGE;
 		$PageNum = ceil($PostNum / $PerPage);
-		$Link = 'collage.php?action=comments&collageid='.$CollageID.'&page='.$PageNum.'#post'.$ID;
+		$Link = "collage.php?action=comments&collageid=$CollageID&page=$PageNum#post$ID";
 		break;
 }
 
@@ -147,5 +147,5 @@ foreach ($Channels as $Channel) {
 
 $Cache->delete_value('num_other_reports');
 
-header('Location: '.$Link);
+header("Location: $Link");
 ?>

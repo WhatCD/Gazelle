@@ -9,11 +9,11 @@ function class_list($Selected = 0) {
 
 		$Name = $Class['Name'];
 		$Level = $Class['Level'];
-		$Return.='<option value="'.$Level.'"';
+		$Return .= "<option value=\"$Level\"";
 		if ($Selected == $Level) {
-			$Return.=' selected="selected"';
+			$Return .= ' selected="selected"';
 		}
-		$Return.='>'.Format::cut_string($Name, 20, 1).'</option>'."\n";
+		$Return .= '>'.Format::cut_string($Name, 20, 1)."</option>\n";
 	}
 	reset($Classes);
 	return $Return;
@@ -24,14 +24,19 @@ if (!check_perms('admin_manage_forums')) {
 }
 
 View::show_header('Forum Management');
-$DB->query('SELECT ID, Name FROM forums ORDER BY Sort');
+$DB->query('
+	SELECT ID, Name
+	FROM forums
+	ORDER BY Sort');
 $ForumArray = $DB->to_array(); // used for generating the 'parent' drop down list
 
 // Replace the old hard-coded forum categories
 unset($ForumCats);
 $ForumCats = $Cache->get_value('forums_categories');
 if ($ForumCats === false) {
-	$DB->query('SELECT ID, Name FROM forums_categories');
+	$DB->query('
+		SELECT ID, Name
+		FROM forums_categories');
 	$ForumCats = array();
 	while (list($ID, $Name) = $DB->next_record()) {
 		$ForumCats[$ID] = $Name;
@@ -55,7 +60,7 @@ $DB->query('
 	ORDER BY CategoryID, Sort ASC');
 ?>
 <div class="header">
-	<script type="text/javacript">document.getElementByID('content').style.overflow='visible';</script>
+	<script type="text/javacript">document.getElementByID('content').style.overflow = 'visible';</script>
 	<h2>Forum control panel</h2>
 </div>
 <table width="100%">
@@ -67,8 +72,8 @@ $DB->query('
 		<td>Min class read</td>
 		<td>Min class write</td>
 		<td>Min class create</td>
-		<td>Autolock</td>
-		<td>Autolock weeks</td>
+		<td>Auto-lock</td>
+		<td>Auto-lock weeks</td>
 		<td>Submit</td>
 	</tr>
 <?
@@ -86,7 +91,7 @@ while (list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinCla
 <?	reset($ForumCats);
 	foreach ($ForumCats as $CurCat => $CatName) {
 ?>
-					<option value="<?=$CurCat?>" <? if ($CurCat == $CategoryID) { echo ' selected="selected"'; } ?>><?=$CatName?></option>
+					<option value="<?=$CurCat?>"<? if ($CurCat == $CategoryID) { echo ' selected="selected"'; } ?>><?=$CatName?></option>
 <?	} ?>
 				</select>
 			</td>

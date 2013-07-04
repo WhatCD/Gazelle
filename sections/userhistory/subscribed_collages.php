@@ -23,8 +23,8 @@ if (!$ShowAll) {
 		FROM collages AS c
 			JOIN users_collage_subs AS s ON s.CollageID = c.ID
 			JOIN collages_torrents AS ct ON ct.CollageID = c.ID
-		WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
-			AND ct.AddedOn>s.LastVisit
+		WHERE s.UserID = $LoggedUser[ID] AND c.Deleted = '0'
+			AND ct.AddedOn > s.LastVisit
 		GROUP BY c.ID";
 } else {
 	$sql = "
@@ -36,7 +36,7 @@ if (!$ShowAll) {
 		FROM collages AS c
 			JOIN users_collage_subs AS s ON s.CollageID = c.ID
 			LEFT JOIN collages_torrents AS ct ON ct.CollageID = c.ID
-		WHERE s.UserID=$LoggedUser[ID] AND c.Deleted='0'
+		WHERE s.UserID = $LoggedUser[ID] AND c.Deleted = '0'
 		GROUP BY c.ID";
 }
 
@@ -82,10 +82,12 @@ if (!$NumResults) {
 		unset($TorrentTable);
 
 		list($CollageID, $CollageName, $CollageSize, $LastVisit) = $Collage;
-		$RS = $DB->query("SELECT GroupID FROM collages_torrents
-				WHERE CollageID=$CollageID
-					AND AddedOn>'" . db_string($LastVisit) . "'
-				ORDER BY AddedOn");
+		$RS = $DB->query("
+			SELECT GroupID
+			FROM collages_torrents
+			WHERE CollageID = $CollageID
+				AND AddedOn > '" . db_string($LastVisit) . "'
+			ORDER BY AddedOn");
 		$NewTorrentCount = $DB->record_count();
 		//$NewTorrents = $DB->to_array();
 		//$Artists = Artists::get_artists($GroupID);
@@ -104,7 +106,7 @@ if (!$NumResults) {
 	//	foreach ($NewTorrents as $TorrentGroup) {
 	//		list($GroupID, $GroupName, $GroupYear, $ReleaseType, $RecordLabel, $CatalogueNumber, $WikiImage) = $TorrentGroup;
 	//		$DisplayName = Artists::display_artists($Artists[$GroupID]);
-	//		$AltName=$GroupName;
+	//		$AltName = $GroupName;
 		foreach ($TorrentList as $GroupID => $Group) {
 			extract(Torrents::array_group($Group));
 
@@ -117,11 +119,11 @@ if (!$NumResults) {
 				unset($ExtendedArtists[3]);
 				$DisplayName .= Artists::display_artists($ExtendedArtists);
 			} elseif (count($Artists) > 0) {
-				$DisplayName .= Artists::display_artists(array('1'=>$Artists));
+				$DisplayName .= Artists::display_artists(array('1' => $Artists));
 			}
-			$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
 			if ($GroupYear > 0) {
-				$DisplayName = $DisplayName. " [$GroupYear]";
+				$DisplayName = "$DisplayName [$GroupYear]";
 			}
 			if ($GroupVanityHouse) {
 				$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
@@ -168,8 +170,13 @@ if (!$NumResults) {
 					}
 					$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
 
-					if ($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
-					$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
+					if ($Torrent['RemasterTitle'] != $LastRemasterTitle
+						|| $Torrent['RemasterYear'] != $LastRemasterYear
+						|| $Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel
+						|| $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber
+						|| $FirstUnknown
+						|| $Torrent['Media'] != $LastMedia
+					) {
 						$EditionID++;
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition<?=$SnatchedGroupClass?> hidden">
@@ -202,13 +209,13 @@ if (!$NumResults) {
 
 				list($TorrentID, $Torrent) = each($Torrents);
 
-				$DisplayName = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+				$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
 
 				if ($Torrent['IsSnatched']) {
-					$DisplayName .=' ' . Format::torrent_label('Snatched!');
+					$DisplayName .= ' ' . Format::torrent_label('Snatched!');
 				}
 				if (!empty($Torrent['FreeTorrent'])) {
-					$DisplayName .=' ' . Format::torrent_label('Freeleech!');
+					$DisplayName .= ' ' . Format::torrent_label('Freeleech!');
 				}
 				$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
 ?>
@@ -257,20 +264,21 @@ if (!$NumResults) {
 		</tr>
 	</table>
 	<!--</div>-->
-	<table class="torrent_table<?=$ShowAll?' hidden':''?>" id="discog_table_<?=$CollageID?>">
-			<tr class="colhead">
-				<td width="1%"><!-- expand/collapse --></td>
-				<td width="70%"><strong>Torrents</strong></td>
-				<td>Size</td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
-			</tr>
+	<table class="torrent_table<?=$ShowAll ? ' hidden' : ''?>" id="discog_table_<?=$CollageID?>">
+		<tr class="colhead">
+			<td width="1%"><!-- expand/collapse --></td>
+			<td width="70%"><strong>Torrents</strong></td>
+			<td>Size</td>
+			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
+			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
+			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+		</tr>
 <?=$TorrentTable?>
-		</table>
-<?	} // foreach () ?>
+	</table>
 <?
-} // else -- if (empty($NumResults)) ?>
+	} // foreach ()
+} // else -- if (empty($NumResults))
+?>
 </div>
 <?
 

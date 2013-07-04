@@ -5,6 +5,34 @@ NOTE: The standards defined in this document will likely differ from
 what is actually seen in the Gazelle code. This document is the first
 step in properly enforcing coding standards throughout the project.
 
+# Table of Contents
+
+1. FILE FORMATTING
+2. CODE STYLING
+    1. Code styling for PHP and JavaScript
+    2. Code styling for CSS
+    3. Code styling for SQL
+3. NAMING CONVENTIONS
+    1. Function names
+    2. Variable names
+    3. Class names
+    4. SQL names
+    5. Miscellaneous names
+4. COMMENTS
+5. USER INTERFACE
+6. EXAMPLES
+    1. PHP examples
+    2. CSS examples
+    3. SQL examples
+
+
+This document contains the coding standards for Gazelle.
+This document is a work-in-progress and is subject to change.
+
+NOTE: The standards defined in this document will likely differ from
+what is actually seen in the Gazelle code. This document is the first
+step in properly enforcing coding standards throughout the project.
+
 
 == TABLE OF CONTENTS ==
 
@@ -27,7 +55,7 @@ step in properly enforcing coding standards throughout the project.
 6.3		SQL examples
 
 
-		1. FILE FORMATTING
+# FILE FORMATTING
 
 Tabs shall always be used for indentation.
 
@@ -41,22 +69,22 @@ File names for PHP, CSS, and JavaScript files shall be all lowercase and
 use underscores instead of spaces.
 
 
-		2. CODE STYLING
+# CODE STYLING
 
-	2.1 Code styling for PHP and JavaScript
+## Code styling for PHP and JavaScript
 
 All statement blocks, including functions, shall have the opening brace
 at the end of the same line with a space before the brace. The astute
 reader will note that this is K&R style with the exception of functions.
 
-There shall be a space between a control structure statement (e.g. if,
-elseif, for) and the following parenthesis.
+There shall be a space between a control structure statement (e.g. `if`,
+`elseif`, `for`) and the following parenthesis.
 
 There shall be a space around conditional operators.
 
 When using ternary operators, spaces shall be used around the operators.
 
-For conditional blocks, "elseif" is to be used instead of "else if".
+For conditional blocks, `elseif` is to be used instead of `else if`.
 
 In loops and conditional blocks, there shall be braces even if there is
 only one statement.
@@ -64,7 +92,7 @@ only one statement.
 In loops and conditional blocks, the statement(s) shall be placed on the
 following lines.
 
-When opening a PHP statement, "<?" shall be used instead of "<?php".
+When opening a PHP statement, `<?` shall be used instead of `<?php`.
 
 Switch cases in index files shall not contain substantial code. The use
 of include statements is acceptable.
@@ -72,11 +100,11 @@ of include statements is acceptable.
 When building strings in PHP, single quotes shall be used when not
 printing a variable.
 
-When declaring JavaScript variables, "var" shall always be used.
+When declaring JavaScript variables, `var` shall always be used.
 
-	2.2 Code styling for CSS
+## Code styling for CSS
 
-"property: value;" pairs shall be separated by a space, and the value
+`property: value;` pairs shall be separated by a space, and the value
 shall be followed by a semi-colon.
 
 Multiple, related CSS selectors with the same declarations shall appear
@@ -85,7 +113,7 @@ on multiple lines to improve readability.
 The opening brace shall be on the same line as the last related
 selector with a space between the selector and the brace.
 
-	2.3 Code styling for SQL
+## Code styling for SQL
 
 Long SQL queries shall be separated on multiple lines.
 
@@ -96,169 +124,167 @@ part of a JOIN or other complex statement.
 
 Use indents as appropriate to aid readability.
 
-The SQL keywords JOIN, RIGHT JOIN, LEFT JOIN must be indented once from
-the SELECT statement.
+The SQL keywords `JOIN`, `RIGHT JOIN`, `LEFT JOIN` must be indented once from
+the `SELECT` statement.
 
-The SQL keyword AND must be indented once from the WHILE (and similar)
+The SQL keyword `AND` must be indented once from the `WHILE` (and similar)
 statements.
 
-The "not equal to" operator "!=" must be used instead of the alternative
-operator "<>".
+The "not equal to" operator `!=` must be used instead of the alternative
+operator `<>`.
 
 
-		3. NAMING CONVENTIONS
+# NAMING CONVENTIONS
 
 Function, variable, and class names shall always be descriptive.
 
-	3.1 Function names
+## Function names
 
-PHP function names shall be written in lowercase_with_underscores.
+PHP function names shall be written in `lowercase_with_underscores`.
 
-JavaScript function names shall be written in camelCase with a leading
+JavaScript function names shall be written in `camelCase` with a leading
 lowercase letter.
 
-	3.2 Variable names
+## Variable names
 
-PHP variable names shall be written in CamelCase with a leading
+PHP variable names shall be written in `CamelCase` with a leading
 uppercase letter.
 
-JavaScript global-scope variables shall be written in camelCase with a
+JavaScript global-scope variables shall be written in `camelCase` with a
 leading lowercase letter.
 
 JavaScript local-scope variables shall be written in
-lowercase_with_underscores.
+`lowercase_with_underscores`.
 
-	3.3 Class names
+## Class names
 
-PHP class names shall be written in CamelCase with a leading uppercase
+PHP class names shall be written in `CamelCase` with a leading uppercase
 letter.
 
-PHP class constants shall be written in CamelCase with a leading
+PHP class constants shall be written in `CamelCase` with a leading
 uppercase letter.
 
-	3.4 SQL names
+## SQL names
 
 All SQL keywords shall be written in all UPPERCASE.
 
-All SQL table names shall be written in lowercase_with_underscores.
+All SQL table names shall be written in `lowercase_with_underscores`.
 
-All SQL column names shall be written in CamelCase with a leading
+All SQL column names shall be written in `CamelCase` with a leading
 uppercase letter.
 
-All automatically-incremented ID columns shall be named "ID", while the
-other columns for ID numbers shall have names like RequestID, TorrentID,
+All automatically-incremented ID columns shall be named `ID`, while the
+other columns for Identification numbers shall have names like `RequestID`, `TorrentID`,
 etc.
 
-	3.5 Miscellaneous names
+## Miscellaneous names
 
-PHP global constants shall be written in ALL_CAPS.
+PHP global constants shall be written in `ALL_CAPS`.
 
-PHP constants true, false, and null shall be written in all lowercase.
-
-
-		4. COMMENTS
-
-Use C89-style "/* ... */" comments for multi-line comments.
-
-Use C99-style "// ..." comments for single-line comments.
+PHP constants `true`, `false`, and `null` shall be written in all lowercase.
 
 
-		5. USER INTERFACE
+# COMMENTS
+
+Use C89-style `/* ... */` comments for multi-line comments.
+
+Use C99-style `// ...` comments for single-line comments.
+
+
+# USER INTERFACE
 
 All button labels shall use sentence case.
 
 All table headings shall use sentence case.
 
-All text-based buttons shall use the "brackets" CSS class.
+All text-based buttons shall use the `brackets` CSS class.
 
 Use common sense for design-related code. Microsoft's UI design guidelines
 explain when certain form input controls should be used over others to
 provide a familiar and intuitive interface. Refer to the following links
 for the most likely issues to encounter in web design:
-http://msdn.microsoft.com/en-us/library/windows/desktop/aa511452.aspx
-http://msdn.microsoft.com/en-us/library/windows/desktop/aa511453.aspx
-http://msdn.microsoft.com/en-us/library/windows/desktop/aa511488.aspx
-http://msdn.microsoft.com/en-us/library/windows/desktop/aa511494.aspx
+
+* http://msdn.microsoft.com/en-us/library/windows/desktop/aa511452.aspx
+* http://msdn.microsoft.com/en-us/library/windows/desktop/aa511453.aspx
+* http://msdn.microsoft.com/en-us/library/windows/desktop/aa511488.aspx
+* http://msdn.microsoft.com/en-us/library/windows/desktop/aa511494.aspx
 
 
-		6. EXAMPLES
+# EXAMPLES
 
-	6.1 PHP examples
+## PHP examples
 
-if ($Foo >= 0) {
-	$SomeString = "this is a string $DiffString with more text";
-} elseif ($Foo == 0) {
-	// other things happen
-} else {
-	// more magic
-}
+	if ($Foo >= 0) {
+		$SomeString = "this is a string $DiffString with more text";
+	} elseif ($Foo == 0) {
+		// other things happen
+	} else {
+		// more magic
+	}
 
-function works_magic($Foo, $Bar) {
-	return $Foo;
-}
+	function works_magic($Foo, $Bar) {
+		return $Foo;
+	}
 
-echo ($Foo == true ? 'foo is true' : 'foo is false');
+	echo ($Foo == true ? 'foo is true' : 'foo is false');
 
-if ($Foo == true) {
-	// magic happens
-}
+	if ($Foo == true) {
+		// magic happens
+	}
 
-/*
- * This is a good, multi-line comment.
- *
- * Please comment your code!
- */
+	/*
+	 * This is a good, multi-line comment.
+	 *
+	 * Please comment your code!
+	 */
 
-// This is a good, single-line comment.
-
-
-	6.2 CSS examples
-
-<a href="foobar.php" style="font-weight: bold;">link text</a>
-
-.spellcheck {
-	margin: 10px 0;
-	font-size: 1.25em;
-	font-weight: bold;
-}
-
-.linkbox .brackets:before,
-.linkbox .brackets:after,
-.top10_quantity_links .brackets:before,
-.top10_quantity_links .brackets:after {
-	color: #757575;
-}
+	// This is a good, single-line comment.
 
 
-	6.3 SQL examples
+## CSS examples
 
-SELECT
-	r.ID, e.EditionID, r.Title, r.Year, r.CatalogueNumber,
-	l.Name AS Label, r.LabelID, r.Image, r.MusicBrainzID
-FROM releases AS r
-	JOIN editions AS e ON e.ReleaseID = r.ID
-	LEFT JOIN labels AS l ON l.ID = r.LabelID
-WHERE r.ID IN ($ReleaseIDsSQL)
-ORDER BY e.EditionID, r.Year ASC
+    <a href="foobar.php" style="font-weight: bold;">link text</a>
 
+	.spellcheck {
+		margin: 10px 0;
+		font-size: 1.25em;
+		font-weight: bold;
+	}
 
-SELECT SQL_CALC_FOUND_ROWS c.ID, c.Subject, cu.Unread, cu.Sticky,
-	cu.ForwardedTo, cu2.UserID, cu.ReceivedDate AS Date
-FROM pm_conversations AS c
-	LEFT JOIN pm_conversations_users AS cu ON cu.ConvID = c.ID
-		AND cu.UserID = '1'
-	LEFT JOIN pm_conversations_users AS cu2 ON cu2.ConvID = c.ID
-		AND cu2.UserID != '1'
-		AND cu2.ForwardedTo = 0
-	LEFT JOIN users_main AS um ON um.ID = cu2.UserID
-WHERE um.Username LIKE 'test'
-	AND cu.InInbox = '1'
-GROUP BY c.ID
-ORDER BY cu.Sticky, Date DESC
-LIMIT 25
+	.linkbox .brackets:before,
+	.linkbox .brackets:after,
+	.top10_quantity_links .brackets:before,
+	.top10_quantity_links .brackets:after {
+		color: #757575;
+	}
 
 
-SELECT RequestID AS ID, UserID FROM bookmarks_requests
+# SQL examples
+
+	SELECT
+		r.ID, e.EditionID, r.Title, r.Year, r.CatalogueNumber,
+		l.Name AS Label, r.LabelID, r.Image, r.MusicBrainzID
+	FROM releases AS r
+		JOIN editions AS e ON e.ReleaseID = r.ID
+		LEFT JOIN labels AS l ON l.ID = r.LabelID
+	WHERE r.ID IN ($ReleaseIDsSQL)
+	ORDER BY e.EditionID, r.Year ASC
 
 
-EOF
+	SELECT SQL_CALC_FOUND_ROWS c.ID, c.Subject, cu.Unread, cu.Sticky,
+		cu.ForwardedTo, cu2.UserID, cu.ReceivedDate AS Date
+	FROM pm_conversations AS c
+		LEFT JOIN pm_conversations_users AS cu ON cu.ConvID = c.ID
+			AND cu.UserID = '1'
+		LEFT JOIN pm_conversations_users AS cu2 ON cu2.ConvID = c.ID
+			AND cu2.UserID != '1'
+			AND cu2.ForwardedTo = 0
+		LEFT JOIN users_main AS um ON um.ID = cu2.UserID
+	WHERE um.Username LIKE 'test'
+		AND cu.InInbox = '1'
+	GROUP BY c.ID
+	ORDER BY cu.Sticky, Date DESC
+	LIMIT 25
+
+
+	SELECT RequestID AS ID, UserID FROM bookmarks_requests

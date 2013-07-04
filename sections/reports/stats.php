@@ -18,14 +18,15 @@ View::show_header('Other reports stats');
 	<table class="layout">
 <?
 if (check_perms('admin_reports')) :
-$DB->query("SELECT um.Username,
-				COUNT(r.ID) AS Reports
-			FROM reports AS r
-				JOIN users_main AS um ON um.ID=r.ResolverID
-			WHERE r.ReportedTime > '2009-08-21 22:39:41'
-				AND r.ReportedTime > NOW() - INTERVAL 24 HOUR
-			GROUP BY r.ResolverID
-			ORDER BY Reports DESC");
+$DB->query("
+	SELECT um.Username,
+		COUNT(r.ID) AS Reports
+	FROM reports AS r
+		JOIN users_main AS um ON um.ID = r.ResolverID
+	WHERE r.ReportedTime > '2009-08-21 22:39:41'
+		AND r.ReportedTime > NOW() - INTERVAL 24 HOUR
+	GROUP BY r.ResolverID
+	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<tr>
@@ -36,7 +37,8 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
 			</tr>
-<?	foreach ($Results as $Result) {
+<?
+	foreach ($Results as $Result) {
 		list($Username, $Reports) = $Result;
 ?>
 			<tr>
@@ -49,14 +51,15 @@ $Results = $DB->to_array();
 		</tr>
 		<tr>
 <?
-$DB->query("SELECT um.Username,
-				COUNT(r.ID) AS Reports
-			FROM reports AS r
-				JOIN users_main AS um ON um.ID=r.ResolverID
-			WHERE r.ReportedTime > '2009-08-21 22:39:41'
-				AND r.ReportedTime > NOW() - INTERVAL 1 WEEK
-			GROUP BY r.ResolverID
-			ORDER BY Reports DESC");
+$DB->query("
+	SELECT um.Username,
+		COUNT(r.ID) AS Reports
+	FROM reports AS r
+		JOIN users_main AS um ON um.ID = r.ResolverID
+	WHERE r.ReportedTime > '2009-08-21 22:39:41'
+		AND r.ReportedTime > NOW() - INTERVAL 1 WEEK
+	GROUP BY r.ResolverID
+	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<td class="label"><strong>Reports resolved in the last week</strong></td>
@@ -66,7 +69,8 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
 			</tr>
-<?	foreach ($Results as $Result) {
+<?
+	foreach ($Results as $Result) {
 		list($Username, $Reports) = $Result;
 ?>
 			<tr>
@@ -79,14 +83,15 @@ $Results = $DB->to_array();
 		</tr>
 		<tr>
 <?
-$DB->query("SELECT um.Username,
-				COUNT(r.ID) AS Reports
-			FROM reports AS r
-				JOIN users_main AS um ON um.ID=r.ResolverID
-			WHERE r.ReportedTime > '2009-08-21 22:39:41'
-				AND r.ReportedTime > NOW() - INTERVAL 1 MONTH
-			GROUP BY r.ResolverID
-			ORDER BY Reports DESC");
+$DB->query("
+	SELECT um.Username,
+		COUNT(r.ID) AS Reports
+	FROM reports AS r
+		JOIN users_main AS um ON um.ID = r.ResolverID
+	WHERE r.ReportedTime > '2009-08-21 22:39:41'
+		AND r.ReportedTime > NOW() - INTERVAL 1 MONTH
+	GROUP BY r.ResolverID
+	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<td class="label"><strong>Reports resolved in the last month</strong></td>
@@ -96,7 +101,8 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
 			</tr>
-<?	foreach ($Results as $Result) {
+<?
+	foreach ($Results as $Result) {
 		list($Username, $Reports) = $Result;
 ?>
 			<tr>
@@ -109,12 +115,13 @@ $Results = $DB->to_array();
 		</tr>
 		<tr>
 <?
-$DB->query("SELECT um.Username,
-				COUNT(r.ID) AS Reports
-			FROM reports AS r
-				JOIN users_main AS um ON um.ID=r.ResolverID
-			GROUP BY r.ResolverID
-			ORDER BY Reports DESC");
+$DB->query("
+	SELECT um.Username,
+		COUNT(r.ID) AS Reports
+	FROM reports AS r
+		JOIN users_main AS um ON um.ID = r.ResolverID
+	GROUP BY r.ResolverID
+	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
 		<td class="label"><strong>Reports resolved since "other" reports (2009-08-21)</strong></td>
@@ -124,7 +131,8 @@ $Results = $DB->to_array();
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
 			</tr>
-<?	foreach ($Results as $Result) {
+<?
+	foreach ($Results as $Result) {
 		list($Username, $Reports) = $Result;
 ?>
 			<tr>
@@ -138,14 +146,15 @@ $Results = $DB->to_array();
 <? endif; ?>
 		<tr>
 <?
-			$DB->query("SELECT u.Username,
-							count(LastPostAuthorID) as Trashed
-						FROM forums_topics as f
-						LEFT JOIN users_main as u on u.id = LastPostAuthorID
-						WHERE ForumID = 12
-						GROUP BY LastPostAuthorID
-						ORDER BY Trashed DESC
-						LIMIT 30;");
+			$DB->query("
+				SELECT u.Username,
+					count(LastPostAuthorID) as Trashed
+				FROM forums_topics as f
+					LEFT JOIN users_main as u on u.id = LastPostAuthorID
+				WHERE ForumID = 12
+				GROUP BY LastPostAuthorID
+				ORDER BY Trashed DESC
+				LIMIT 30");
 				$Results = $DB->to_array();
 				?>
 			<td class="label"><strong>Threads trashed since the beginning of time</strong></td>
@@ -166,7 +175,8 @@ $Results = $DB->to_array();
 						<td><?=$Username?></td>
 						<td><?=number_format($Trashed)?></td>
 					</tr>
-<?					$i++;
+<?
+					$i++;
 				} ?>
 					</table>
 				</td>

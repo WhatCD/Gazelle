@@ -8,7 +8,9 @@ if (!check_perms('site_manage_recommendations')) {
 	error(403);
 }
 
-$DB->query('SELECT GroupID FROM torrents_recommended');
+$DB->query('
+	SELECT GroupID
+	FROM torrents_recommended');
 $ToNL = $DB->next_record();
 Torrents::freeleech_groups($ToNL, 2, 3);
 ?>
