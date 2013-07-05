@@ -218,5 +218,8 @@ $Cache->begin_transaction('thread_'.$TopicID.'_info');
 $Cache->update_row(false, array('Posts' => '+1', 'LastPostAuthorID' => $LoggedUser['ID']));
 $Cache->commit_transaction(0);
 
-header('Location: forums.php?action=viewthread&threadid='.$TopicID);
+
+
+
+header("Location: forums.php?action=viewthread&threadid=$TopicID");
 die();

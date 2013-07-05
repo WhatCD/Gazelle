@@ -28,7 +28,7 @@ if ($Data) {
 			MaxGroupsPerUser,
 			Subscribers
 		FROM collages
-		WHERE ID='$CollageID'";
+		WHERE ID = '$CollageID'";
 	$DB->query($sql);
 
 	if ($DB->record_count() == 0) {

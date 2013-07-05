@@ -270,5 +270,6 @@ if ($DB->record_count() > 0) {
 	}
 }
 Forums::quote_notify($Body, $PostID, 'forums', $TopicID);
+
 header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.ceil($ThreadInfo['Posts'] / $PerPage));
 die();

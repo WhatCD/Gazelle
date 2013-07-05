@@ -11,11 +11,11 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 		HasLog, HasCue, info_hash, FileCount, FileList, FilePath, Size, Time,
 		Description, LogScore, FreeTorrent, FreeLeechType)
 	VALUES
-		($GroupID, $LoggedUser[ID], $T[Media], '$ExtraTorrent[Format]', '$ExtraTorrent[Encoding]', " .
-		"$T[Remastered], $T[RemasterYear], $T[RemasterTitle], $T[RemasterRecordLabel], $T[RemasterCatalogueNumber], " .
-		"$ExtraHasLog, $ExtraHasCue, '".db_string($ExtraTorrent['InfoHash'])."', $ExtraTorrent[NumFiles], " .
-		"'$ExtraTorrent[FileString]', '$ExtraTorrent[FilePath]', $ExtraTorrent[TotalSize], '".sqltime()."', " .
-		"'$ExtraTorrent[TorrentDescription]', $LogScore, '$T[FreeLeech]', '$T[FreeLeechType]')");
+		($GroupID, $LoggedUser[ID], $T[Media], '$ExtraTorrent[Format]', '$ExtraTorrent[Encoding]',
+		$T[Remastered], $T[RemasterYear], $T[RemasterTitle], $T[RemasterRecordLabel], $T[RemasterCatalogueNumber],
+		$ExtraHasLog, $ExtraHasCue, '".db_string($ExtraTorrent['InfoHash'])."', $ExtraTorrent[NumFiles],
+		'$ExtraTorrent[FileString]', '$ExtraTorrent[FilePath]', $ExtraTorrent[TotalSize], '".sqltime()."',
+		'$ExtraTorrent[TorrentDescription]', $LogScore, '$T[FreeLeech]', '$T[FreeLeechType]')");
 
 	$Cache->increment('stats_torrent_count');
 	$ExtraTorrentID = $DB->inserted_id();
@@ -27,14 +27,18 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 	//******************************************************************************//
 	//--------------- Write torrent file -------------------------------------------//
 
-	$DB->query("INSERT INTO torrents_files (TorrentID, File) VALUES ($ExtraTorrentID, '$ExtraTorrent[TorEnc]')");
+	$DB->query("
+		INSERT INTO torrents_files
+			(TorrentID, File)
+		VALUES
+			($ExtraTorrentID, '$ExtraTorrent[TorEnc]')");
 
-	Misc::write_log("Torrent $ExtraTorrentID ($LogName) (" . number_format($ExtraTorrent['TotalSize'] / (1024 * 1024), 2) . " MB) was uploaded by " . $LoggedUser['Username']);
-	Torrents::write_group_log($GroupID, $ExtraTorrentID, $LoggedUser['ID'], "uploaded (" . number_format($ExtraTorrent['TotalSize'] / (1024 * 1024), 2) . " MB)", 0);
+	Misc::write_log("Torrent $ExtraTorrentID ($LogName) (" . number_format($ExtraTorrent['TotalSize'] / (1024 * 1024), 2) . ' MB) was uploaded by ' . $LoggedUser['Username']);
+	Torrents::write_group_log($GroupID, $ExtraTorrentID, $LoggedUser['ID'], 'uploaded (' . number_format($ExtraTorrent['TotalSize'] / (1024 * 1024), 2) . ' MB)', 0);
 
 	Torrents::update_hash($GroupID);
 
-	//IRC
+	// IRC
 	$Announce = '';
 	$Announce .= Artists::display_artists($ArtistForm, false);
 	$Announce .= trim($Properties['Title']) . ' ';

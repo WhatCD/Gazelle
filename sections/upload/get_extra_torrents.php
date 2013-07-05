@@ -6,8 +6,8 @@ $DupeNames[] = $_FILES['file_input']['name'];
 
 if (isset($_POST['extra_format']) && isset($_POST['extra_bitrate'])) {
 	for ($i = 1; $i <= 5; $i++) {
-		if (isset($_FILES['extra_file_' . $i])) {
-			$ExtraFile = $_FILES['extra_file_' . $i];
+		if (isset($_FILES["extra_file_$i"])) {
+			$ExtraFile = $_FILES["extra_file_$i"];
 			$ExtraTorrentName = $ExtraFile['tmp_name'];
 			if (!is_uploaded_file($ExtraTorrentName) || !filesize($ExtraTorrentName)) {
 				$Err = 'No extra torrent file uploaded, or file is empty.';

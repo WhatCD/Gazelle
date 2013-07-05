@@ -328,7 +328,7 @@ if ($Err) { // Show the upload form, with the data the user entered
 	die();
 }
 
-// Strip out amazon's padding
+// Strip out Amazon's padding
 $AmazonReg = '/(http:\/\/ecx.images-amazon.com\/images\/.+)(\._.*_\.jpg)/i';
 $Matches = array();
 if (preg_match($RegX, $Properties['Image'], $Matches)) {
@@ -342,7 +342,7 @@ ImageTools::blacklisted($Properties['Image']);
 // Shorten and escape $Properties for database input
 $T = array();
 foreach ($Properties as $Key => $Value) {
-	$T[$Key]="'".db_string(trim($Value))."'";
+	$T[$Key] = "'".db_string(trim($Value))."'";
 	if (!$T[$Key]) {
 		$T[$Key] = NULL;
 	}
@@ -362,13 +362,13 @@ $InfoHash = pack('H*', $Tor->info_hash());
 $DB->query("
 	SELECT ID
 	FROM torrents
-	WHERE info_hash='".db_string($InfoHash)."'");
+	WHERE info_hash = '".db_string($InfoHash)."'");
 if ($DB->record_count() > 0) {
 	list($ID) = $DB->next_record();
 	$DB->query("
 		SELECT TorrentID
 		FROM torrents_files
-		WHERE TorrentID = ".$ID);
+		WHERE TorrentID = $ID");
 	if ($DB->record_count() > 0) {
 		$Err = '<a href="torrents.php?torrentid='.$ID.'">The exact same torrent file already exists on the site!</a>';
 	} else {
@@ -381,7 +381,7 @@ if ($DB->record_count() > 0) {
 }
 
 if (isset($Tor->Dec['encrypted_files'])) {
-	$Err = 'This torrent contains an encrypted file list which is not supported here';
+	$Err = 'This torrent contains an encrypted file list which is not supported here.';
 }
 
 // File list and size
@@ -436,7 +436,10 @@ if (!empty($Err)) { // Show the upload form, with the data the user entered
 $Body = $Properties['GroupDescription'];
 
 // Trickery
-if (!preg_match("/^".IMAGE_REGEX."$/i", $Properties['Image'])) { $Properties['Image'] = ''; $T['Image'] = "''"; }
+if (!preg_match('/^'.IMAGE_REGEX.'$/i', $Properties['Image'])) {
+	$Properties['Image'] = '';
+	$T['Image'] = "''";
+}
 
 if ($Type == 'Music') {
 	// Does it belong in a group?
@@ -480,7 +483,7 @@ if ($Type == 'Music') {
 						tg.WikiBody,
 						tg.RevisionID
 					FROM torrents_group AS tg
-						LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID
+						LEFT JOIN torrents_artists AS ta ON ta.GroupID = tg.ID
 						LEFT JOIN artists_group AS ag ON ta.ArtistID = ag.ArtistID
 					WHERE ag.Name = '".db_string($Artist['name'])."'
 						AND tg.Name = ".$T['Title']."
@@ -660,10 +663,10 @@ $DB->query("
 		Scene, HasLog, HasCue, info_hash, FileCount, FileList, FilePath,
 		Size, Time, Description, LogScore, FreeTorrent, FreeLeechType)
 	VALUES
-		($GroupID, $LoggedUser[ID], $T[Media], $T[Format], $T[Encoding], " .
-		"$T[Remastered], $T[RemasterYear], $T[RemasterTitle], $T[RemasterRecordLabel], $T[RemasterCatalogueNumber], " .
-		"$T[Scene], '$HasLog', '$HasCue', '".db_string($InfoHash)."', $NumFiles, '$FileString', '$FilePath', " .
-		"$TotalSize, '".sqltime()."', $T[TorrentDescription], $LogScore, '$T[FreeLeech]', '$T[FreeLeechType]')");
+		($GroupID, $LoggedUser[ID], $T[Media], $T[Format], $T[Encoding],
+		$T[Remastered], $T[RemasterYear], $T[RemasterTitle], $T[RemasterRecordLabel], $T[RemasterCatalogueNumber],
+		$T[Scene], '$HasLog', '$HasCue', '".db_string($InfoHash)."', $NumFiles, '$FileString', '$FilePath',
+		$TotalSize, '".sqltime()."', $T[TorrentDescription], $LogScore, '$T[FreeLeech]', '$T[FreeLeechType]')");
 
 $Cache->increment('stats_torrent_count');
 $TorrentID = $DB->inserted_id();
@@ -712,7 +715,7 @@ if (!empty($LogScores) && $HasLog) {
 //--------------- Stupid Recent Uploads ----------------------------------------//
 
 if (trim($Properties['Image']) != '') {
-	$RecentUploads = $Cache->get_value('recent_uploads_'.$UserID);
+	$RecentUploads = $Cache->get_value("recent_uploads_$UserID");
 	if (is_array($RecentUploads)) {
 		do {
 			foreach ($RecentUploads as $Item) {
