@@ -147,9 +147,9 @@ if ($CurEmail != $_POST['email']) {
 		$ChangerIP = db_string($LoggedUser['IP']);
 		$DB->query("
 			UPDATE users_history_emails
-			SET Time='".sqltime()."'
-			WHERE UserID='$UserID'
-				AND Time='0000-00-00 00:00:00'");
+			SET Time = '".sqltime()."'
+			WHERE UserID = '$UserID'
+				AND Time = '0000-00-00 00:00:00'");
 		$DB->query("
 			INSERT INTO users_history_emails
 				(UserID, Email, Time, IP)
@@ -158,7 +158,7 @@ if ($CurEmail != $_POST['email']) {
 
 	} else {
 		error($Err);
-		header('Location: user.php?action=edit&userid='.$UserID);
+		header("Location: user.php?action=edit&userid=$UserID");
 		die();
 	}
 
@@ -170,7 +170,7 @@ if (!$Err && ($_POST['cur_pass'] || $_POST['new_pass_1'] || $_POST['new_pass_2']
 	$DB->query("
 		SELECT PassHash, Secret
 		FROM users_main
-		WHERE ID='".db_string($UserID)."'");
+		WHERE ID = '".db_string($UserID)."'");
 	list($PassHash, $Secret) = $DB->next_record();
 
 	if (Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
@@ -188,7 +188,7 @@ if ($LoggedUser['DisableAvatar'] && $_POST['avatar'] != $U['Avatar']) {
 
 if ($Err) {
 	error($Err);
-	header('Location: user.php?action=edit&userid='.$UserID);
+	header("Location: user.php?action=edit&userid=$UserID");
 	die();
 }
 
@@ -256,7 +256,7 @@ $DB->query("
 	SELECT username
 	FROM lastfm_users
 	WHERE ID = '$UserID'");
-if ($DB->record_count() > 0) {
+if ($DB->has_results()) {
 	list($OldLastFMUsername) = $DB->next_record();
 	if ($OldLastFMUsername != $LastFMUsername) {
 		if (empty($LastFMUsername)) {

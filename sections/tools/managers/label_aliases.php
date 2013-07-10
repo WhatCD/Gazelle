@@ -21,7 +21,7 @@ if (!empty($LabelID)) {
 		SELECT name
 		FROM labels
 		WHERE ID = '$LabelID'");
-	if ($DB->record_count()) {
+	if ($DB->has_results()) {
 		list($LabelName) = $DB->next_record();
 	}
 	$LabelNameSQL = " WHERE AliasLabel = '$LabelName'";

@@ -7,7 +7,7 @@ $DB->query("
 	FROM invites
 	WHERE InviteKey='$InviteKey'");
 list($UserID) = $DB->next_record();
-if ($DB->record_count() == 0 || $UserID != $LoggedUser['ID']) {
+if (!$DB->has_results() || $UserID != $LoggedUser['ID']) {
 	error(404);
 }
 

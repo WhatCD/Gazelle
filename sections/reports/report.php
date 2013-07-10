@@ -20,7 +20,7 @@ switch ($Short) {
 			SELECT Username
 			FROM users_main
 			WHERE ID = $ID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			error(404);
 		}
 		list($Username) = $DB->next_record();
@@ -32,7 +32,7 @@ switch ($Short) {
 			SELECT Title, Description, TorrentID, CategoryID, Year
 			FROM requests
 			WHERE ID = $ID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			error(404);
 		}
 		list($Name, $Desc, $Filled, $CategoryID, $Year) = $DB->next_record();
@@ -46,7 +46,7 @@ switch ($Short) {
 			SELECT Title, Description, TorrentID
 			FROM requests
 			WHERE ID = $ID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			error(404);
 		}
 		list($Name, $Desc, $Filled) = $DB->next_record();
@@ -57,7 +57,7 @@ switch ($Short) {
 			SELECT Name, Description
 			FROM collages
 			WHERE ID = $ID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			error(404);
 		}
 		list($Name, $Desc) = $DB->next_record();
@@ -69,7 +69,7 @@ switch ($Short) {
 			FROM forums_topics AS ft
 				JOIN users_main AS um ON um.ID = ft.AuthorID
 			WHERE ft.ID = $ID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			error(404);
 		}
 		list($Title, $ForumID, $Username) = $DB->next_record();
@@ -91,7 +91,7 @@ switch ($Short) {
 			FROM forums_posts AS fp
 				JOIN users_main AS um ON um.ID = fp.AuthorID
 			WHERE fp.ID = $ID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			error(404);
 		}
 		list($Body, $TopicID, $Username) = $DB->next_record();
@@ -127,7 +127,7 @@ switch ($Short) {
 			FROM $Table AS $Short
 				JOIN users_main AS um ON um.ID = $Short.$Column
 			WHERE $Short.ID = $ID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			error(404);
 		}
 		list($Body, $Username) = $DB->next_record();

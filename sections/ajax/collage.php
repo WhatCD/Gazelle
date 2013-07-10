@@ -31,7 +31,7 @@ if ($Data) {
 		WHERE ID = '$CollageID'";
 	$DB->query($sql);
 
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		json_die("failure");
 	}
 

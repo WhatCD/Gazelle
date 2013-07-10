@@ -26,7 +26,7 @@ $DB->query("
 	INSERT INTO group_log
 		(GroupID, UserID, Time, Info)
 	VALUES
-		('$GroupID', ".$LoggedUser['ID'].", '".sqltime()."', '".db_string("Additional Cover \"$Summary - $Image\" removed from group")."')");
+		('$GroupID', ".$LoggedUser['ID'].", '".sqltime()."', '".db_string("Additional cover \"$Summary - $Image\" removed from group")."')");
 
 $Cache->delete_value("torrents_cover_art_$GroupID");
 header('Location: '.$_SERVER['HTTP_REFERER']);

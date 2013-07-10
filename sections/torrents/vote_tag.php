@@ -18,7 +18,7 @@ $DB->query("
 		AND GroupID = '$GroupID'
 		AND UserID = '$UserID'
 		AND Way = '$Way'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	if ($Way == 'down') {
 		$Change = 'NegativeVotes = NegativeVotes + 1';
 	} else {

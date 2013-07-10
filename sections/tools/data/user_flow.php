@@ -21,24 +21,24 @@ if (!isset($_GET['page'])) {
 			LIMIT 1, 12");
 		$TimelineOut = array_reverse($DB->to_array());
 		foreach ($TimelineIn as $Month) {
-			list($Label,$Amount) = $Month;
+			list($Label, $Amount) = $Month;
 			if ($Amount > $Max) {
 				$Max = $Amount;
 			}
 		}
 		foreach ($TimelineOut as $Month) {
-			list($Label,$Amount) = $Month;
+			list($Label, $Amount) = $Month;
 			if ($Amount > $Max) {
 				$Max = $Amount;
 			}
 		}
 		foreach ($TimelineIn as $Month) {
-			list($Label,$Amount) = $Month;
+			list($Label, $Amount) = $Month;
 			$Labels[] = $Label;
 			$InFlow[] = number_format(($Amount / $Max) * 100, 4);
 		}
 		foreach ($TimelineOut as $Month) {
-			list($Label,$Amount) = $Month;
+			list($Label, $Amount) = $Month;
 			$OutFlow[] = number_format(($Amount / $Max) * 100, 4);
 		}
 		$Cache->cache_value('users_timeline', array($Labels, $InFlow, $OutFlow, $Max), mktime(0, 0, 0, date('n') + 1, 2));

@@ -30,7 +30,7 @@ $DB->query("
 		LEFT JOIN users_levels AS l ON l.PermissionID = p.ID
 	GROUP BY p.ID
 	ORDER BY p.Secondary ASC, p.Level ASC");
-if ($DB->record_count()) {
+if ($DB->has_results()) {
 ?>
 	<table width="100%">
 		<tr class="colhead">

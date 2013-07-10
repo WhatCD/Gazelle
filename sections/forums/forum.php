@@ -132,7 +132,7 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name']);
 			FROM subscribed_forums
 			WHERE ForumID='$ForumID'
 				AND SubscriberID='$LoggedUser[ID]'");
-		if ($DB->record_count() == 0) { ?>
+		if (!$DB->has_results()) { ?>
 			<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Subscribe to forum</a>
 <?		} else { ?>
 			<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Unsubscribe from forum</a>

@@ -16,15 +16,15 @@ $DB->query("
 	SELECT
 		TopicID,
 		ForumID,
-		CEIL(COUNT(p.ID)/".POSTS_PER_PAGE.") AS Pages,
-		CEIL(SUM(IF(p.ID<='$PostID',1,0))/".POSTS_PER_PAGE.") AS Page,
+		CEIL(COUNT(p.ID) / ".POSTS_PER_PAGE.") AS Pages,
+		CEIL(SUM(IF(p.ID <= '$PostID', 1, 0)) / ".POSTS_PER_PAGE.") AS Page,
 		StickyPostID
 	FROM forums_posts AS p
-		JOIN forums_topics AS t ON t.ID=p.TopicID
-	WHERE p.TopicID=(
+		JOIN forums_topics AS t ON t.ID = p.TopicID
+	WHERE p.TopicID = (
 			SELECT TopicID
 			FROM forums_posts
-			WHERE ID='$PostID'
+			WHERE ID = '$PostID'
 			)
 	GROUP BY t.ID");
 list($TopicID, $ForumID, $Pages, $Page, $StickyPostID) = $DB->next_record();
@@ -33,30 +33,35 @@ list($TopicID, $ForumID, $Pages, $Page, $StickyPostID) = $DB->next_record();
 // $Page = which page the post is on
 // These are set for cache clearing.
 
-$DB->query("DELETE FROM forums_posts WHERE ID='$PostID'");
+$DB->query("
+	DELETE FROM forums_posts
+	WHERE ID = '$PostID'");
 
-$DB->query("SELECT MAX(ID) FROM forums_posts WHERE TopicID='$TopicID'");
+$DB->query("
+	SELECT MAX(ID)
+	FROM forums_posts
+	WHERE TopicID = '$TopicID'");
 list($LastID) = $DB->next_record();
 $DB->query("
 	UPDATE forums AS f, forums_topics AS t
-	SET f.NumPosts=f.NumPosts-1, t.NumPosts=t.NumPosts-1
-	WHERE f.ID='$ForumID'
-		AND t.ID='$TopicID'");
+	SET f.NumPosts = f.NumPosts - 1, t.NumPosts = t.NumPosts - 1
+	WHERE f.ID = '$ForumID'
+		AND t.ID = '$TopicID'");
 
 if ($LastID < $PostID) { // Last post in a topic was removed
 	$DB->query("
 		SELECT p.AuthorID, u.Username, p.AddedTime
 		FROM forums_posts AS p
 			LEFT JOIN users_main AS u ON u.ID = p.AuthorID
-		WHERE p.ID='$LastID'");
+		WHERE p.ID = '$LastID'");
 	list($LastAuthorID, $LastAuthorName, $LastTime) = $DB->next_record();
 	$DB->query("
 		UPDATE forums_topics
 		SET
-			LastPostID='$LastID',
-			LastPostAuthorID='$LastAuthorID',
-			LastPostTime='$LastTime'
-		WHERE ID='$TopicID'");
+			LastPostID = '$LastID',
+			LastPostAuthorID = '$LastAuthorID',
+			LastPostTime = '$LastTime'
+		WHERE ID = '$TopicID'");
 	$DB->query("
 		SELECT
 			t.ID,
@@ -67,7 +72,7 @@ if ($LastID < $PostID) { // Last post in a topic was removed
 			u.Username
 		FROM forums_topics AS t
 			LEFT JOIN users_main AS u ON u.ID = t.LastPostAuthorID
-		WHERE ForumID='$ForumID'
+		WHERE ForumID = '$ForumID'
 			AND t.ID != '$TopicID'
 		ORDER BY LastPostID DESC
 		LIMIT 1");
@@ -77,12 +82,12 @@ if ($LastID < $PostID) { // Last post in a topic was removed
 		$DB->query("
 			UPDATE forums
 			SET
-				LastPostTopicID='$LastTopicID',
-				LastPostID='$LastTopicPostID',
-				LastPostAuthorID='$LastTopicAuthorID',
-				LastPostTime='$LastTopicPostTime'
-			WHERE ID='$ForumID'
-				AND LastPostTopicID='$TopicID'");
+				LastPostTopicID = '$LastTopicID',
+				LastPostID = '$LastTopicPostID',
+				LastPostAuthorID = '$LastTopicAuthorID',
+				LastPostTime = '$LastTopicPostTime'
+			WHERE ID = '$ForumID'
+				AND LastPostTopicID = '$TopicID'");
 		$UpdateArrayForums = array(
 			'NumPosts' => '-1',
 			'LastPostID' => $LastTopicPostID,
@@ -94,11 +99,11 @@ if ($LastID < $PostID) { // Last post in a topic was removed
 		$DB->query("
 			UPDATE forums
 			SET
-				LastPostID='$LastID',
-				LastPostAuthorID='$LastAuthorID',
-				LastPostTime='$LastTime'
-			WHERE ID='$ForumID'
-				AND LastPostTopicID='$TopicID'");
+				LastPostID = '$LastID',
+				LastPostAuthorID = '$LastAuthorID',
+				LastPostTime = '$LastTime'
+			WHERE ID = '$ForumID'
+				AND LastPostTopicID = '$TopicID'");
 		$UpdateArrayForums = array(
 			'NumPosts' => '-1',
 			'LastPostID' => $LastID,
@@ -122,10 +127,10 @@ if ($StickyPostID == $PostID) {
 $ThisCatalogue = floor((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 $LastCatalogue = floor((POSTS_PER_PAGE * $Pages - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-	$Cache->delete_value('thread_'.$TopicID.'_catalogue_'.$i);
+	$Cache->delete_value("thread_$TopicID"."_catalogue_$i");
 }
 
-$Cache->begin_transaction('thread_'.$TopicID.'_info');
+$Cache->begin_transaction("thread_$TopicID".'_info');
 $Cache->update_row(false, $UpdateArrayThread);
 $Cache->commit_transaction();
 
@@ -133,5 +138,5 @@ $Cache->begin_transaction('forums_list');
 $Cache->update_row($ForumID, $UpdateArrayForums);
 $Cache->commit_transaction();
 
-$Cache->delete_value('forums_'.$ForumID);
+$Cache->delete_value("forums_$ForumID");
 ?>

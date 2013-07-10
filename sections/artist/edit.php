@@ -26,7 +26,7 @@ $DB->query("
 		LEFT JOIN wiki_artists ON wiki_artists.RevisionID = a.RevisionID
 	WHERE a.ArtistID = '$ArtistID'");
 
-if ($DB->record_count() < 1) {
+if (!$DB->has_results()) {
 	error("Cannot find an artist with the ID {$ArtistID}: See the <a href=\"log.php?search=Artist+$ArtistID\">site log</a>.");
 }
 

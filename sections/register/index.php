@@ -71,7 +71,7 @@ if (!empty($_REQUEST['confirm'])) {
 					SELECT InviterID, Email
 					FROM invites
 					WHERE InviteKey = '".db_string($_REQUEST['invite'])."'");
-				if ($DB->record_count() == 0) {
+				if (!$DB->has_results()) {
 					$Err = 'Invite does not exist.';
 					$InviterID = 0;
 				} else {
@@ -164,7 +164,7 @@ if (!empty($_REQUEST['confirm'])) {
 
 				// If the inviter doesn't have an invite tree
 				// Note: This should never happen unless you've transferred from another database, like What.CD did
-				if ($DB->record_count() == 0) {
+				if (!$DB->has_results()) {
 					$DB->query("
 						SELECT MAX(TreeID) + 1
 						FROM invite_tree");
@@ -244,7 +244,7 @@ if (!empty($_REQUEST['confirm'])) {
 			SELECT InviteKey
 			FROM invites
 			WHERE InviteKey = '".db_string($_GET['invite'])."'");
-		if ($DB->record_count() == 0) {
+		if (!$DB->has_results()) {
 			error('Invite not found!');
 		}
 	}

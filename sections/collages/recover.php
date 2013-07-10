@@ -11,7 +11,7 @@ if ($_POST['collage_id'] && is_number($_POST['collage_id'])) {
 		SELECT Name
 		FROM collages
 		WHERE ID = $CollageID");
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		error('Collage is completely deleted');
 	} else {
 		$DB->query("

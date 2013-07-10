@@ -2,7 +2,10 @@
 enforce_login();
 View::show_header('IRC');
 
-$DB->query("SELECT IRCKey FROM users_main WHERE ID = $LoggedUser[ID]");
+$DB->query("
+	SELECT IRCKey
+	FROM users_main
+	WHERE ID = $LoggedUser[ID]");
 list($IRCKey) = $DB->next_record();
 
 if (empty($IRCKey)) {

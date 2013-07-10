@@ -80,7 +80,7 @@ if (check_perms('users_mod')) { // Person viewing is a staff member
 		WHERE m.ID = '$UserID'
 		GROUP BY AuthorID");
 
-	if ($DB->record_count() == 0) { // If user doesn't exist
+	if (!$DB->has_results()) { // If user doesn't exist
 		header("Location: log.php?search=User+".$UserID);
 	}
 
@@ -121,7 +121,7 @@ if (check_perms('users_mod')) { // Person viewing is a staff member
 		WHERE m.ID = $UserID
 		GROUP BY AuthorID");
 
-	if ($DB->record_count() == 0) { // If user doesn't exist
+	if (!$DB->has_results()) { // If user doesn't exist
 		header("Location: log.php?search=User+".$UserID);
 	}
 
@@ -188,7 +188,7 @@ View::show_header($Username, 'user,bbcode,requests,lastfm');
 		FROM friends
 		WHERE UserID = '$LoggedUser[ID]'
 			AND FriendID = '$UserID'");
-	if ($DB->record_count() == 0) { ?>
+	if (!$DB->has_results()) { ?>
 		<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Add to friends</a>
 <?	} ?>
 		<a href="reports.php?action=report&amp;type=user&amp;id=<?=$UserID?>" class="brackets">Report user</a>
@@ -495,7 +495,7 @@ if (check_perms('users_view_invites')) {
 				<li>Invited by: <?=$Invited?></li>
 				<li>Invites: <?
 				$DB->query("
-					SELECT count(InviterID)
+					SELECT COUNT(InviterID)
 					FROM invites
 					WHERE InviterID = '$UserID'");
 				list($Pending) = $DB->next_record();
@@ -747,7 +747,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
 
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 		$Requests = $DB->to_array();
 ?>
 		<div class="box" id="requests_box">
@@ -850,7 +850,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 		WHERE UserID = $UserID
 			AND (Level <= $UserLevel OR AssignedToUser = '".$LoggedUser['ID']."')
 		ORDER BY Date DESC");
-	if ($DB->record_count()) {
+	if ($DB->has_results()) {
 		$StaffPMs = $DB->to_array();
 ?>
 		<div class="box" id="staffpms_box">
@@ -906,7 +906,7 @@ if ($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
 		FROM users_warnings_forums
 		WHERE UserID = '$UserID'");
 	list($ForumWarnings) = $DB->next_record();
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 ?>
 <div class="box">
 	<div class="head">Forum warnings</div>

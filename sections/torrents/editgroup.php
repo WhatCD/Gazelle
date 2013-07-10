@@ -35,7 +35,7 @@ $DB->query("
 	FROM torrents_group AS tg
 		LEFT JOIN wiki_torrents AS wt ON wt.RevisionID = tg.RevisionID
 	WHERE tg.ID = '$GroupID'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	error(404);
 }
 list($Name, $Image, $Body, $WikiImage, $WikiBody, $Year, $RecordLabel, $CatalogueNumber, $ReleaseType, $CategoryID, $VanityHouse) = $DB->next_record();

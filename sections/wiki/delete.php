@@ -9,7 +9,7 @@ $DB->query("
 	FROM wiki_articles
 	WHERE ID = $ID");
 
-if ($DB->record_count() < 1) {
+if (!$DB->has_results()) {
 	error(404);
 }
 

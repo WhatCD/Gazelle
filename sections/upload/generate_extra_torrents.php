@@ -46,13 +46,13 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 		SELECT ID
 		FROM torrents
 		WHERE info_hash = '" . db_string($ThisInsert['InfoHash']) . "'");
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 		list($ExtraID) = $DB->next_record();
 		$DB->query("
 			SELECT TorrentID
 			FROM torrents_files
 			WHERE TorrentID = $ExtraID");
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			$Err = "<a href=\"torrents.php?torrentid=$ExtraID\">The exact same torrent file already exists on the site!</a>";
 		} else {
 			//One of the lost torrents.

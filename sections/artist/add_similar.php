@@ -36,7 +36,7 @@ if (!empty($Artist2ID)) { // artist was found in the database
 	}
 
 	$DB->query("SELECT SimilarID FROM artists_similar_votes WHERE SimilarID='$SimilarID' AND UserID='$UserID' AND Way='up'");
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		$DB->query("INSERT INTO artists_similar_votes (SimilarID, UserID, way) VALUES ('$SimilarID', '$UserID', 'up')");
 	}
 

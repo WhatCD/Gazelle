@@ -13,13 +13,13 @@
  * @returns void, prints output
  */
 function comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorID, $AddedTime, $EditedTime) {
-	global $Text,$HeavyInfo;
+	global $Text, $HeavyInfo;
 	$UserInfo = Users::user_info($UserID);
 	$postheader = 'by <strong>' . Users::format_username($UserID, true, true, true, true, false) . '</strong> '
 	. time_diff($AddedTime) . $postheader;
 
 ?>
-	<table class="forum_post box vertical_margin<?=$noavatar ? ' noavatar' : '' ?>" id="post<?=$PostID?>">
+	<table class="forum_post box vertical_margin<?=$noavatar ? ' noavatar' : ''; ?>" id="post<?=$PostID?>">
 		<colgroup>
 <?	if (Users::has_avatars_enabled()) { ?>
 			<col class="col_avatar" />
@@ -27,7 +27,7 @@ function comment_body($UserID, $PostID, $postheader, $permalink, $Body, $EditorI
 			<col class="col_post_body" />
 		</colgroup>
 		<tr class="colhead_dark">
-			<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1 ?>">
+			<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1; ?>">
 				<span style="float: left;"><a href="<?=$permalink ?>">#<?=$PostID?></a>
 					<?=$postheader ?>
 				</span>

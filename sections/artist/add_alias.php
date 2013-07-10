@@ -32,7 +32,7 @@ $DB->query("
 	SELECT AliasID, ArtistID, Name, Redirect
 	FROM artists_alias
 	WHERE Name = '".$DBAliasName."'");
-if ($DB->record_count()) {
+if ($DB->has_results()) {
 	while (list($CloneAliasID, $CloneArtistID, $CloneAliasName, $CloneRedirect) = $DB->next_record(MYSQLI_NUM, false)) {
 		if (!strcasecmp($CloneAliasName, $AliasName)) {
 			break;
@@ -57,7 +57,7 @@ if ($DB->record_count()) {
 if (!$CloneAliasID) {
 	if ($Redirect) {
 		$DB->query("SELECT ArtistID, Redirect FROM artists_alias WHERE AliasID = $Redirect");
-		if (!$DB->record_count()) {
+		if (!$DB->has_results()) {
 			error('Cannot redirect to a nonexistent artist alias.');
 		}
 		list($FoundArtistID, $FoundRedirect) = $DB->next_record();

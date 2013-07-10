@@ -19,7 +19,7 @@ function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false, $Ap
 				LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
 			WHERE t.ID = '$ThreadID'
 			GROUP BY fp.TopicID");
-		if ($DB->record_count() == 0) {
+		if (!$DB->has_results()) {
 			if (!$ApiCall) {
 				error(404);
 			} else {
@@ -84,7 +84,7 @@ function get_forum_info($ForumID) {
 				LEFT JOIN forums_topics ON forums_topics.ForumID=forums.ID
 			WHERE forums.ID='$ForumID'
 			GROUP BY ForumID");
-		if ($DB->record_count() == 0) {
+		if (!$DB->has_results()) {
 			return false;
 		}
 		// Makes an array, with $Forum['Name'], etc.

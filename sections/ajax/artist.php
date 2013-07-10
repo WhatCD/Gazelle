@@ -23,7 +23,10 @@ if ($ArtistID && !is_number($ArtistID)) {
 if (empty($ArtistID)) {
 	if (!empty($_GET['artistname'])) {
 		$Name = db_string(trim($_GET['artistname']));
-		$DB->query("SELECT ArtistID FROM artists_alias WHERE Name LIKE '$Name'");
+		$DB->query("
+			SELECT ArtistID
+			FROM artists_alias
+			WHERE Name LIKE '$Name'");
 		if (!(list($ArtistID) = $DB->next_record(MYSQLI_NUM, false))) {
 			json_die("failure");
 		}
@@ -32,13 +35,13 @@ if (empty($ArtistID)) {
 }
 
 if (!empty($_GET['revisionid'])) { // if they're viewing an old revision
-	$RevisionID=$_GET['revisionid'];
+	$RevisionID = $_GET['revisionid'];
 	if (!is_number($RevisionID)) {
 		error(0);
 	}
 	$Data = $Cache->get_value("artist_$ArtistID"."_revision_$RevisionID");
 } else { // viewing the live version
-	$Data = $Cache->get_value('artist_'.$ArtistID);
+	$Data = $Cache->get_value("artist_$ArtistID");
 	$RevisionID = false;
 }
 if ($Data) {
@@ -52,8 +55,8 @@ if ($Data) {
 				wiki.body,
 				a.VanityHouse
 			FROM wiki_artists AS wiki
-				LEFT JOIN artists_group AS a ON wiki.RevisionID=a.RevisionID
-			WHERE wiki.RevisionID='$RevisionID' ";
+				LEFT JOIN artists_group AS a ON wiki.RevisionID = a.RevisionID
+			WHERE wiki.RevisionID = '$RevisionID' ";
 	} else {
 		$sql = "
 			SELECT
@@ -62,13 +65,13 @@ if ($Data) {
 				wiki.body,
 				a.VanityHouse
 			FROM artists_group AS a
-				LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID=a.RevisionID
-			WHERE a.ArtistID='$ArtistID' ";
+				LEFT JOIN wiki_artists AS wiki ON wiki.RevisionID = a.RevisionID
+			WHERE a.ArtistID = '$ArtistID' ";
 	}
 	$sql .= " GROUP BY a.ArtistID";
 	$DB->query($sql);
 
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		json_die("failure");
 	}
 
@@ -76,7 +79,7 @@ if ($Data) {
 }
 
 // Requests
-$Requests = $Cache->get_value('artists_requests_'.$ArtistID);
+$Requests = $Cache->get_value("artists_requests_$ArtistID");
 if (!is_array($Requests)) {
 	$DB->query("
 		SELECT
@@ -88,33 +91,33 @@ if (!is_array($Requests)) {
 			COUNT(rv.UserID) AS Votes,
 			SUM(rv.Bounty) AS Bounty
 		FROM requests AS r
-			LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
-			LEFT JOIN requests_artists AS ra ON r.ID=ra.RequestID
-		WHERE ra.ArtistID = ".$ArtistID."
+			LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID
+			LEFT JOIN requests_artists AS ra ON r.ID = ra.RequestID
+		WHERE ra.ArtistID = $ArtistID
 			AND r.TorrentID = 0
 		GROUP BY r.ID
 		ORDER BY Votes DESC");
 
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 		$Requests = $DB->to_array();
 	} else {
 		$Requests = array();
 	}
-	$Cache->cache_value('artists_requests_'.$ArtistID, $Requests);
+	$Cache->cache_value("artists_requests_$ArtistID", $Requests);
 }
 $NumRequests = count($Requests);
 
-if (($Importances = $Cache->get_value('artist_groups_'.$ArtistID)) === false) {
+if (($Importances = $Cache->get_value("artist_groups_$ArtistID")) === false) {
 	$DB->query("
 		SELECT
 			DISTINCTROW ta.GroupID, ta.Importance, tg.VanityHouse, tg.Year
 		FROM torrents_artists AS ta
-			JOIN torrents_group AS tg ON tg.ID=ta.GroupID
-		WHERE ta.ArtistID='$ArtistID'
+			JOIN torrents_group AS tg ON tg.ID = ta.GroupID
+		WHERE ta.ArtistID = '$ArtistID'
 		ORDER BY tg.Year DESC, tg.Name DESC");
 	$GroupIDs = $DB->collect('GroupID');
 	$Importances = $DB->to_array(false, MYSQLI_BOTH, false);
-	$Cache->cache_value('artist_groups_'.$ArtistID, $Importances, 0);
+	$Cache->cache_value("artist_groups_$ArtistID", $Importances, 0);
 } else {
 	$GroupIDs = array();
 	foreach ($Importances as $Group) {
@@ -122,7 +125,7 @@ if (($Importances = $Cache->get_value('artist_groups_'.$ArtistID)) === false) {
 	}
 }
 if (count($GroupIDs) > 0) {
-	$TorrentList = Torrents::get_groups($GroupIDs, true,true);
+	$TorrentList = Torrents::get_groups($GroupIDs, true, true);
 	$TorrentList = $TorrentList['matches'];
 } else {
 	$TorrentList = array();
@@ -182,7 +185,6 @@ foreach ($TorrentList as $GroupID => $Group) {
 		foreach ($ArtistGroup as &$Artist) {
 			$Artist['id'] = (int) $Artist['id'];
 			$Artist['aliasid'] = (int) $Artist['aliasid'];
-
 		}
 	}
 
@@ -193,12 +195,12 @@ foreach ($TorrentList as $GroupID => $Group) {
 
 	$GroupVanityHouse = $Importances[$GroupID]['VanityHouse'];
 
-	$TagList = explode(' ',str_replace('_','.',$TagList));
+	$TagList = explode(' ',str_replace('_', '.', $TagList));
 
 	// $Tags array is for the sidebar on the right
 	foreach ($TagList as $Tag) {
 		if (!isset($Tags[$Tag])) {
-			$Tags[$Tag] = array('name'=>$Tag, 'count'=>1);
+			$Tags[$Tag] = array('name' => $Tag, 'count' => 1);
 		} else {
 			$Tags[$Tag]['count']++;
 		}
@@ -262,10 +264,10 @@ if (empty($SimilarArray)) {
 			ass.Score,
 			ass.SimilarID
 		FROM artists_similar AS s1
-			JOIN artists_similar AS s2 ON s1.SimilarID=s2.SimilarID AND s1.ArtistID!=s2.ArtistID
-			JOIN artists_similar_scores AS ass ON ass.SimilarID=s1.SimilarID
-			JOIN artists_group AS a ON a.ArtistID=s2.ArtistID
-		WHERE s1.ArtistID='$ArtistID'
+			JOIN artists_similar AS s2 ON s1.SimilarID = s2.SimilarID AND s1.ArtistID != s2.ArtistID
+			JOIN artists_similar_scores AS ass ON ass.SimilarID = s1.SimilarID
+			JOIN artists_group AS a ON a.ArtistID = s2.ArtistID
+		WHERE s1.ArtistID = '$ArtistID'
 		ORDER BY ass.Score DESC
 		LIMIT 30
 	");
@@ -309,11 +311,16 @@ foreach ($Requests as $Request) {
 $notificationsEnabled = false;
 if (check_perms('site_torrents_notify')) {
 	if (($Notify = $Cache->get_value('notify_artists_'.$LoggedUser['ID'])) === false) {
-		$DB->query("SELECT ID, Artists FROM users_notify_filters WHERE UserID='$LoggedUser[ID]' AND Label='Artist notifications' LIMIT 1");
+		$DB->query("
+			SELECT ID, Artists
+			FROM users_notify_filters
+			WHERE UserID = '$LoggedUser[ID]'
+				AND Label = 'Artist notifications'
+			LIMIT 1");
 		$Notify = $DB->next_record(MYSQLI_ASSOC, false);
 		$Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
 	}
-	if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
+	if (stripos($Notify['Artists'], "|$Name|") === false) {
 		$notificationsEnabled = false;
 	} else {
 		$notificationsEnabled = true;
@@ -325,7 +332,7 @@ if (check_perms('site_torrents_notify')) {
 if ($RevisionID) {
 	$Key = "artist_$ArtistID"."_revision_$RevisionID";
 } else {
-	$Key = 'artist_'.$ArtistID;
+	$Key = "artist_$ArtistID";
 }
 
 $Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), array(), $VanityHouseArtist));

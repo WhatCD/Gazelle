@@ -15,7 +15,7 @@ $DB->query("
 	WHERE t.ID=$TorrentID
 	GROUP BY t.UserID");
 
-if ($DB->record_count() < 1) {
+if (!$DB->has_results()) {
 	error('Torrent already deleted.');
 }
 
@@ -118,7 +118,7 @@ if (check_perms('admin_reports')) {
 				LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
 			WHERE t.ID=".$TorrentID);
 
-	if ($DB->record_count() < 1) {
+	if (!$DB->has_results()) {
 		die();
 	}
 	list($GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
@@ -189,7 +189,7 @@ if (check_perms('admin_reports')) {
 					LEFT JOIN torrents AS t ON t.ID=r.TorrentID
 				WHERE r.Status != 'Resolved'
 					AND t.GroupID=$GroupID");
-			$GroupOthers = ($DB->record_count());
+			$GroupOthers = ($DB->has_results());
 
 			if ($GroupOthers > 0) { ?>
 						<div style="text-align: right;">
@@ -203,7 +203,7 @@ if (check_perms('admin_reports')) {
 					JOIN torrents AS t ON t.ID=r.TorrentID
 				WHERE r.Status != 'Resolved'
 					AND t.UserID=$UploaderID");
-			$UploaderOthers = ($DB->record_count());
+			$UploaderOthers = ($DB->has_results());
 
 			if ($UploaderOthers > 0) { ?>
 						<div style="text-align: right;">
@@ -219,7 +219,7 @@ if (check_perms('admin_reports')) {
 				FROM requests AS req
 					JOIN users_main AS um ON um.ID=req.FillerID
 				AND req.TorrentID=$TorrentID");
-			$Requests = ($DB->record_count());
+			$Requests = ($DB->has_results());
 			if ($Requests > 0) {
 				while (list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 		?>

@@ -151,7 +151,7 @@ $DB->query("
 	SELECT CollageID
 	FROM collages_torrents
 	WHERE GroupID = '$GroupID'");
-if ($DB->record_count() > 0) {
+if ($DB->has_results()) {
 	while (list($CollageID) = $DB->next_record()) {
 		$Cache->delete_value('collage_'.$CollageID);
 	}
@@ -185,7 +185,7 @@ $DB->query("
 	SELECT ID
 	FROM torrents
 	WHERE GroupID = $GroupID");
-if ($DB->record_count()) {
+if ($DB->has_results()) {
 	$TorrentIDs = implode(',', $DB->collect('ID'));
 	$DB->query("
 		SELECT DISTINCT uid

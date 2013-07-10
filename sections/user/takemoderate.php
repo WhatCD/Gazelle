@@ -135,7 +135,7 @@ $DB->query("
 	WHERE m.ID = $UserID
 	GROUP BY m.ID");
 
-if (!$DB->record_count()) { // If user doesn't exist
+if (!$DB->has_results()) { // If user doesn't exist
 	header("Location: log.php?search=User+$UserID");
 }
 
@@ -322,7 +322,7 @@ if ($Classes[$Class]['Level'] != $Cur['Class']
 		FROM permissions
 		WHERE ID = $Class
 			OR ID = ".$ClassLevels[$Cur['Class']]['ID']);
-	if ($DB->record_count() == 2) {
+	if ($DB->record_count() === 2) {
 		if ($Classes[$Class]['Level'] < $Cur['Class']) {
 			$SupportFor = '';
 		}
@@ -693,7 +693,7 @@ if ($MergeStatsFrom && check_perms('users_edit_ratio')) {
 		SELECT ID, Uploaded, Downloaded
 		FROM users_main
 		WHERE Username LIKE '$MergeStatsFrom'");
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 		list($MergeID, $MergeUploaded, $MergeDownloaded) = $DB->next_record();
 		$DB->query("
 			UPDATE users_main AS um

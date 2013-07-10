@@ -29,7 +29,7 @@ if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid']
 			LEFT JOIN torrents AS t ON t.GroupID = tg.ID
 		WHERE tg.ID = '.$_GET['groupid'].'
 		GROUP BY tg.ID');
-	if ($DB->record_count()) {
+	if ($DB->has_results()) {
 		list($Properties) = $DB->to_array(false, MYSQLI_BOTH);
 		$UploadForm = $Categories[$Properties['CategoryID'] - 1];
 		$Properties['CategoryName'] = $Categories[$Properties['CategoryID'] - 1];

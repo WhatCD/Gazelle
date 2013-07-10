@@ -30,7 +30,7 @@ switch ($Categories[$NewCategoryID-1]) {
 			SELECT ArtistID, AliasID, Redirect, Name
 			FROM artists_alias
 			WHERE Name LIKE '$ArtistName'");
-		if ($DB->record_count() == 0) {
+		if (!$DB->has_results()) {
 			$Redirect = 0;
 			$DB->query("
 				INSERT INTO artists_group (Name)
@@ -98,7 +98,7 @@ $DB->query("
 	SELECT ID
 	FROM torrents
 	WHERE GroupID = '$OldGroupID'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	$DB->query("
 		UPDATE torrents_comments
 		SET GroupID = '$GroupID'

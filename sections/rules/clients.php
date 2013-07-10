@@ -2,9 +2,13 @@
 View::show_header('Client Rules');
 
 if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
-	$DB->query('SELECT vstring FROM xbt_client_whitelist WHERE vstring NOT LIKE \'//%\' ORDER BY vstring ASC');
-	$WhitelistedClients = $DB->to_array(false,MYSQLI_NUM,false);
-	$Cache->cache_value('whitelisted_clients',$WhitelistedClients,604800);
+	$DB->query('
+		SELECT vstring
+		FROM xbt_client_whitelist
+		WHERE vstring NOT LIKE \'//%\'
+		ORDER BY vstring ASC');
+	$WhitelistedClients = $DB->to_array(false, MYSQLI_NUM, false);
+	$Cache->cache_value('whitelisted_clients', $WhitelistedClients, 604800);
 }
 ?>
 	<div class="thin">
@@ -21,7 +25,7 @@ if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 <?
 	$Row = 'a';
 	foreach ($WhitelistedClients as $Client) {
-		//list($ClientName,$Notes) = $Client;
+		//list($ClientName, $Notes) = $Client;
 		list($ClientName) = $Client;
 		$Row = ($Row == 'a') ? 'b' : 'a';
 ?>

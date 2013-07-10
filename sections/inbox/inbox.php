@@ -44,12 +44,12 @@ $sql = "
 $sql .= (($Section == 'sentbox') ? ' cu.SentDate ' : ' cu.ReceivedDate ');
 $sql .= "AS Date
 	FROM pm_conversations AS c
-		LEFT JOIN pm_conversations_users AS cu ON cu.ConvID=c.ID AND cu.UserID='$UserID'
-		LEFT JOIN pm_conversations_users AS cu2 ON cu2.ConvID=c.ID AND cu2.UserID!='$UserID' AND cu2.ForwardedTo=0
-		LEFT JOIN users_main AS um ON um.ID=cu2.UserID";
+		LEFT JOIN pm_conversations_users AS cu ON cu.ConvID = c.ID AND cu.UserID = '$UserID'
+		LEFT JOIN pm_conversations_users AS cu2 ON cu2.ConvID = c.ID AND cu2.UserID != '$UserID' AND cu2.ForwardedTo = 0
+		LEFT JOIN users_main AS um ON um.ID = cu2.UserID";
 
 if (!empty($_GET['search']) && $_GET['searchtype'] == 'message') {
-	$sql .=	' JOIN pm_messages AS m ON c.ID=m.ConvID';
+	$sql .=	' JOIN pm_messages AS m ON c.ID = m.ConvID';
 }
 $sql .= ' WHERE ';
 if (!empty($_GET['search'])) {
@@ -65,9 +65,9 @@ if (!empty($_GET['search'])) {
 	}
 }
 $sql .= (($Section == 'sentbox') ? ' cu.InSentbox' : ' cu.InInbox');
-$sql .= "='1'";
+$sql .= " = '1'";
 
-$sql .="
+$sql .= "
 	GROUP BY c.ID
 	ORDER BY cu.Sticky, $Sort
 	LIMIT $Limit";
@@ -105,8 +105,8 @@ echo "\t\t$Pages\n";
 				</span>
 				<br />
 				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section == 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"
-						onfocus="if (this.value == 'Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>') this.value='';"
-						onblur="if (this.value == '') this.value='Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>';"
+						onfocus="if (this.value == 'Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>') { this.value = ''; }"
+						onblur="if (this.value == '') { this.value = 'Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>'; }"
 				/>
 			</div>
 		</form>
@@ -119,7 +119,7 @@ echo "\t\t$Pages\n";
 
 			<table class="message_table checkboxes">
 				<tr class="colhead">
-					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>
+					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform', this);" /></td>
 					<td width="50%">Subject</td>
 					<td><?=(($Section == 'sentbox') ? 'Receiver' : 'Sender')?></td>
 					<td>Date</td>

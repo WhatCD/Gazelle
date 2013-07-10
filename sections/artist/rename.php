@@ -34,7 +34,7 @@ if (!check_perms('torrents_edit')) {
 }
 
 $DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	error(404);
 }
 list($OldName) = $DB->next_record(MYSQLI_NUM, false);

@@ -40,7 +40,7 @@ include(SERVER_ROOT.'/sections/log/sphinx.php');
 		</tr>
 <?	if ($QueryStatus) { ?>
 	<tr class="nobr"><td colspan="2">Search request failed (<?=$QueryError?>).</td></tr>
-<?	} elseif ($DB->record_count() == 0) { ?>
+<?	} elseif (!$DB->has_results()) { ?>
 	<tr class="nobr"><td colspan="2">Nothing found!</td></tr>
 <?
 	}

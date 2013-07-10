@@ -23,9 +23,12 @@ $DB->query("
 	FROM $Table
 	WHERE UserID='$LoggedUser[ID]'
 		AND $Col='".db_string($_GET['id'])."'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	if ($Type === 'torrent') {
-		$DB->query('SELECT MAX(Sort) FROM `bookmarks_torrents` WHERE UserID =' . $LoggedUser['ID']);
+		$DB->query('
+			SELECT MAX(Sort)
+			FROM `bookmarks_torrents`
+			WHERE UserID = ' . $LoggedUser['ID']);
 		list($Sort) = $DB->next_record();
 		if (!$Sort) $Sort = 0;
 		$Sort += 1;
@@ -47,7 +50,7 @@ if ($DB->record_count() == 0) {
 			FROM torrents_group
 			WHERE ID = '$GroupID'");
 		list($GroupTitle, $Year, $Body, $TagList) = $DB->next_record();
-		$TagList = str_replace('_','.',$TagList);
+		$TagList = str_replace('_', '.', $TagList);
 
 		$DB->query("
 			SELECT ID, Format, Encoding, HasLog, HasCue, LogScore, Media, Scene, FreeTorrent, UserID
@@ -58,25 +61,25 @@ if ($DB->record_count() == 0) {
 			$Title = $GroupTitle;
 			list($TorrentID, $Format, $Bitrate, $HasLog, $HasCue, $LogScore, $Media, $Scene, $Freeleech, $UploaderID) = $Torrent;
 			$Title .= " [$Year] - ";
-			$Title .= $Format." / ".$Bitrate;
+			$Title .= "$Format / $Bitrate";
 			if ($HasLog == "'1'") {
-				$Title .= " / Log";
+				$Title .= ' / Log';
 			}
 			if ($HasLog) {
-				$Title .= " / ".$LogScore.'%';
+				$Title .= " / $LogScore%";
 			}
 			if ($HasCue == "'1'") {
-				$Title .= " / Cue";
+				$Title .= ' / Cue';
 			}
-			$Title .= " / ".trim($Media);
+			$Title .= ' / '.trim($Media);
 			if ($Scene == '1') {
-				$Title .= " / Scene";
+				$Title .= ' / Scene';
 			}
 			if ($Freeleech == '1') {
-				$Title .= " / Freeleech!";
+				$Title .= ' / Freeleech!';
 			}
 			if ($Freeleech == '2') {
-				$Title .= " / Neutral leech!";
+				$Title .= ' / Neutral leech!';
 			}
 
 			$UploaderInfo = Users::user_info($UploaderID);
@@ -84,12 +87,15 @@ if ($DB->record_count() == 0) {
 								$Text->strip_bbcode($Body),
 								'torrents.php?action=download&amp;authkey=[[AUTHKEY]]&amp;torrent_pass=[[PASSKEY]]&amp;id='.$TorrentID,
 								$UploaderInfo['Username'],
-								'torrents.php?id='.$GroupID,
+								"torrents.php?id=$GroupID",
 								trim($TagList));
 			$Feed->populate('torrents_bookmarks_t_'.$LoggedUser['torrent_pass'], $Item);
 		}
 	} elseif ($Type == 'request') {
-		$DB->query("SELECT UserID FROM $Table WHERE $Col='".db_string($_GET['id'])."'");
+		$DB->query("
+			SELECT UserID
+			FROM $Table
+			WHERE $Col = '".db_string($_GET['id'])."'");
 		$Bookmarkers = $DB->collect('UserID');
 		$SS->UpdateAttributes('requests requests_delta', array('bookmarker'), array($_GET['id'] => array($Bookmarkers)), true);
 	}

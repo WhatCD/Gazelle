@@ -23,7 +23,7 @@ if (isset($_POST['convid']) && is_number($_POST['convid'])) {
 		FROM pm_conversations_users
 		WHERE UserID = '$LoggedUser[ID]'
 			AND ConvID = '$ConvID'");
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		error(403);
 	}
 } else {

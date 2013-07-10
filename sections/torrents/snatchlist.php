@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($_GET['torrentid']) || !is_number($_GET['torrentid']) || !check_perms('site_view_torrent_snatchlist')) {
 	error(404);
 }
@@ -18,12 +18,12 @@ $Result = $DB->query("
 					xs.uid,
 					xs.tstamp
 				FROM xbt_snatched AS xs
-				WHERE xs.fid='$TorrentID'
+				WHERE xs.fid = '$TorrentID'
 				ORDER BY xs.tstamp DESC
 				LIMIT $Limit");
 $Results = $DB->to_array('uid', MYSQLI_ASSOC);
 
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 
 ?>

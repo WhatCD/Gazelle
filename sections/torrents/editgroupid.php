@@ -27,7 +27,7 @@ if (empty($_POST['confirm'])) {
 		SELECT Name
 		FROM torrents_group
 		WHERE ID = $OldGroupID");
-	if ($DB->record_count() < 1) {
+	if (!$DB->has_results()) {
 		//Trying to move to an empty group? I think not!
 		set_message('That group does not exist!');
 		header('Location: '.$_SERVER['HTTP_REFERER']);

@@ -9,7 +9,7 @@ if (isset($LoggedUser['PostsPerPage'])) {
 $TopicIDs = array();
 foreach ($Forums as $Forum) {
 	if (!empty($Forum['LastPostTopicID'])) {
-		$TopicIDs[]=$Forum['LastPostTopicID'];
+		$TopicIDs[] = $Forum['LastPostTopicID'];
 	}
 }
 
@@ -23,11 +23,11 @@ if (!empty($TopicIDs)) {
 					SELECT COUNT(ID)
 					FROM forums_posts
 					WHERE forums_posts.TopicID = l.TopicID
-						AND forums_posts.ID<=l.PostID
-				)/$PerPage) AS Page
+						AND forums_posts.ID <= l.PostID
+				) / $PerPage) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN(".implode(',',$TopicIDs).")
-			AND UserID='$LoggedUser[ID]'");
+		WHERE TopicID IN(".implode(',', $TopicIDs).")
+			AND UserID = '$LoggedUser[ID]'");
 	$LastRead = $DB->to_array('TopicID', MYSQLI_ASSOC);
 } else {
 	$LastRead = array();
@@ -43,7 +43,10 @@ View::show_header('Forums');
 $Row = 'a';
 $LastCategoryID = 0;
 $OpenTable = false;
-$DB->query("SELECT RestrictedForums FROM users_info WHERE UserID = ".$LoggedUser['ID']);
+$DB->query('
+	SELECT RestrictedForums
+	FROM users_info
+	WHERE UserID = '.$LoggedUser['ID']);
 list($RestrictedForums) = $DB->next_record();
 $RestrictedForums = explode(',', $RestrictedForums);
 $PermittedForums = array_keys($LoggedUser['PermittedForums']);
@@ -52,7 +55,7 @@ foreach ($Forums as $Forum) {
 	if ($LoggedUser['CustomForums'][$ForumID] != 1 && ($MinRead > $LoggedUser['Class'] || array_search($ForumID, $RestrictedForums) !== false)) {
 		continue;
 	}
-	$Row = (($Row == 'a') ? 'b' : 'a');
+	$Row = (($Row === 'a') ? 'b' : 'a');
 	$ForumDescription = display_str($ForumDescription);
 
 	if ($CategoryID != $LastCategoryID) {

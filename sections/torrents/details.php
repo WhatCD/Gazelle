@@ -89,7 +89,7 @@ if (!$CoverArt) {
 		ORDER BY Time ASC");
 	$CoverArt = array();
 	$CoverArt = $DB->to_array();
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 		$Cache->cache_value('torrents_cover_art_' . $GroupID, $CoverArt, 0);
 	}
 }

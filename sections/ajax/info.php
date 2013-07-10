@@ -13,8 +13,12 @@ if ($LoggedUser['BytesUploaded'] == 0 && $LoggedUser['BytesDownloaded'] == 0) {
 $MyNews = $LoggedUser['LastReadNews'];
 $CurrentNews = $Cache->get_value('news_latest_id');
 if ($CurrentNews === false) {
-	$DB->query("SELECT ID FROM news ORDER BY Time DESC LIMIT 1");
-	if ($DB->record_count() == 1) {
+	$DB->query("
+		SELECT ID
+		FROM news
+		ORDER BY Time DESC
+		LIMIT 1");
+	if ($DB->record_count() === 1) {
 		list($CurrentNews) = $DB->next_record();
 	} else {
 		$CurrentNews = -1;
@@ -24,7 +28,12 @@ if ($CurrentNews === false) {
 
 $NewMessages = $Cache->get_value('inbox_new_' . $LoggedUser['ID']);
 if ($NewMessages === false) {
-	$DB->query("SELECT COUNT(UnRead) FROM pm_conversations_users WHERE UserID='" . $LoggedUser['ID'] . "' AND UnRead = '1' AND InInbox = '1'");
+	$DB->query("
+		SELECT COUNT(UnRead)
+		FROM pm_conversations_users
+		WHERE UserID = '" . $LoggedUser['ID'] . "'
+			AND UnRead = '1'
+			AND InInbox = '1'");
 	list($NewMessages) = $DB->next_record();
 	$Cache->cache_value('inbox_new_' . $LoggedUser['ID'], $NewMessages, 0);
 }
@@ -32,7 +41,11 @@ if ($NewMessages === false) {
 if (check_perms('site_torrents_notify')) {
 	$NewNotifications = $Cache->get_value('notifications_new_' . $LoggedUser['ID']);
 	if ($NewNotifications === false) {
-		$DB->query("SELECT COUNT(UserID) FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]' AND UnRead='1'");
+		$DB->query("
+			SELECT COUNT(UserID)
+			FROM users_notify_torrents
+			WHERE UserID = '$LoggedUser[ID]'
+				AND UnRead = '1'");
 		list($NewNotifications) = $DB->next_record();
 		/* if ($NewNotifications && !check_perms('site_torrents_notify')) {
 				$DB->query("DELETE FROM users_notify_torrents WHERE UserID='$LoggedUser[ID]'");
@@ -46,8 +59,12 @@ if (check_perms('site_torrents_notify')) {
 $MyNews = $LoggedUser['LastReadNews'];
 $CurrentNews = $Cache->get_value('news_latest_id');
 if ($CurrentNews === false) {
-	$DB->query("SELECT ID FROM news ORDER BY Time DESC LIMIT 1");
-	if ($DB->record_count() == 1) {
+	$DB->query("
+		SELECT ID
+		FROM news
+		ORDER BY Time DESC
+		LIMIT 1");
+	if ($DB->record_count() === 1) {
 		list($CurrentNews) = $DB->next_record();
 	} else {
 		$CurrentNews = -1;
@@ -59,8 +76,13 @@ if ($CurrentNews === false) {
 $MyBlog = $LoggedUser['LastReadBlog'];
 $CurrentBlog = $Cache->get_value('blog_latest_id');
 if ($CurrentBlog === false) {
-	$DB->query("SELECT ID FROM blog WHERE Important = 1 ORDER BY Time DESC LIMIT 1");
-	if ($DB->record_count() == 1) {
+	$DB->query("
+		SELECT ID
+		FROM blog
+		WHERE Important = 1
+		ORDER BY Time DESC
+		LIMIT 1");
+	if ($DB->record_count() === 1) {
 		list($CurrentBlog) = $DB->next_record();
 	} else {
 		$CurrentBlog = -1;

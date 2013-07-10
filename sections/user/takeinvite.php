@@ -62,7 +62,7 @@ foreach ($Emails as $CurEmail) {
 		FROM invites
 		WHERE InviterID = ".$LoggedUser['ID']."
 			AND Email LIKE '$CurEmail'");
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 		error('You already have a pending invite to that address!');
 		header('Location: user.php?action=invite');
 		die();

@@ -15,7 +15,7 @@ if ($P['category'] > 0 || check_perms('site_collages_renamepersonal')) {
 	$P['name'] = db_string($name);
 	$DB->query("SELECT ID FROM collages WHERE Name='".$P['name']."'");
 	$i = 2;
-	while ($DB->record_count() != 0) {
+	while ($DB->has_results()) {
 		$P['name'] = db_string($name." no. $i");
 		$DB->query("SELECT ID FROM collages WHERE Name='".$P['name']."'");
 		$i++;
@@ -37,7 +37,7 @@ if ($P['category'] == '0') {
 
 if (!$Err) {
 	$DB->query("SELECT ID,Deleted FROM collages WHERE Name='$P[name]'");
-	if ($DB->record_count()) {
+	if ($DB->has_results()) {
 		list($ID, $Deleted) = $DB->next_record();
 		if ($Deleted) {
 			$Err = "That collection already exists but needs to be recovered; please <a href=\"staffpm.php\">contact</a> the staff team!";

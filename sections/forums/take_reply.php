@@ -142,33 +142,33 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$DB->query("
 		UPDATE forums_topics
 		SET
-			NumPosts = NumPosts+1,
+			NumPosts = NumPosts + 1,
 			LastPostID = '$PostID',
 			LastPostAuthorID = '".$LoggedUser['ID']."',
 			LastPostTime = '$SQLTime'
 		WHERE ID = '$TopicID'");
 
-	//if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
+	// if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
 	if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 		list($Forum,,,$Stickies) = $Forum;
 
-		//if the topic is already on this page
+		// if the topic is already on this page
 		if (array_key_exists($TopicID, $Forum)) {
 			$Thread = $Forum[$TopicID];
 			unset($Forum[$TopicID]);
-			$Thread['NumPosts'] = $Thread['NumPosts'] + 1; //Increment post count
-			$Thread['LastPostID'] = $PostID; //Set postid for read/unread
-			$Thread['LastPostTime'] = $SQLTime; //Time of last post
-			$Thread['LastPostAuthorID'] = $LoggedUser['ID']; //Last poster id
-			$Part2 = array($TopicID=>$Thread); //Bumped thread
+			$Thread['NumPosts'] = $Thread['NumPosts'] + 1; // Increment post count
+			$Thread['LastPostID'] = $PostID; // Set post ID for read/unread
+			$Thread['LastPostTime'] = $SQLTime; // Time of last post
+			$Thread['LastPostAuthorID'] = $LoggedUser['ID']; // Last poster ID
+			$Part2 = array($TopicID => $Thread); // Bumped thread
 
-		//if we're bumping from an older page
+		// if we're bumping from an older page
 		} else {
-			//Remove the last thread from the index
+			// Remove the last thread from the index
 			if (count($Forum) == TOPICS_PER_PAGE && $Stickies < TOPICS_PER_PAGE) {
 				array_pop($Forum);
 			}
-			//Never know if we get a page full of stickies...
+			// Never know if we get a page full of stickies...
 			if ($Stickies < TOPICS_PER_PAGE || $ThreadInfo['IsSticky'] == 1) {
 				//Pull the data for the thread we're bumping
 				$DB->query("
@@ -216,7 +216,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 		} else {
 			$Forum = $Part1 + $Part2 + $Part3; //Merge it
 		}
-		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
+		$Cache->cache_value("forums_$ForumID", array($Forum, '', 0, $Stickies), 0);
 
 		//Update the forum root
 		$Cache->begin_transaction('forums_list');
@@ -241,7 +241,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$CatalogueID = floor((POSTS_PER_PAGE * ceil($ThreadInfo['Posts'] / POSTS_PER_PAGE) - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 
 	//Insert the post into the thread catalogue (block of 500 posts)
-	$Cache->begin_transaction('thread_'.$TopicID.'_catalogue_'.$CatalogueID);
+	$Cache->begin_transaction("thread_$TopicID"."_catalogue_$CatalogueID");
 	$Cache->insert('', array(
 		'ID'=>$PostID,
 		'AuthorID'=>$LoggedUser['ID'],
@@ -254,22 +254,25 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$Cache->commit_transaction(0);
 
 	//Update the thread info
-	$Cache->begin_transaction('thread_'.$TopicID.'_info');
-	$Cache->update_row(false, array('Posts'=>'+1', 'LastPostAuthorID'=>$LoggedUser['ID']));
+	$Cache->begin_transaction("thread_$TopicID".'_info');
+	$Cache->update_row(false, array('Posts' => '+1', 'LastPostAuthorID' => $LoggedUser['ID']));
 	$Cache->commit_transaction(0);
 
 	//Increment this now to make sure we redirect to the correct page
 	$ThreadInfo['Posts']++;
 }
 
-$DB->query("SELECT UserID FROM users_subscriptions WHERE TopicID = ".$TopicID);
-if ($DB->record_count() > 0) {
+$DB->query("
+	SELECT UserID
+	FROM users_subscriptions
+	WHERE TopicID = $TopicID");
+if ($DB->has_results()) {
 	$Subscribers = $DB->collect('UserID');
 	foreach ($Subscribers as $Subscriber) {
-		$Cache->delete_value('subscriptions_user_new_'.$Subscriber);
+		$Cache->delete_value("subscriptions_user_new_$Subscriber");
 	}
 }
 Forums::quote_notify($Body, $PostID, 'forums', $TopicID);
 
-header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.ceil($ThreadInfo['Posts'] / $PerPage));
+header("Location: forums.php?action=viewthread&threadid=$TopicID&page=".ceil($ThreadInfo['Posts'] / $PerPage));
 die();

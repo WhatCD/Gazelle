@@ -7,7 +7,7 @@ $DB->query("
 	FROM bad_passwords
 	WHERE Password='$Password'");
 
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	$IsGoodPassword = true;
 }
 

@@ -36,7 +36,7 @@ list($OldBody, $AuthorID, $CollageID, $PostNum) = $DB->next_record();
 if ($UserID != $AuthorID && !check_perms('site_moderate_forums')) {
 	die('Permission denied');
 }
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	die('Post not found!');
 }
 

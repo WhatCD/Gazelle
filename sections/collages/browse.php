@@ -142,28 +142,32 @@ if (!empty($_GET['userid'])) {
 }
 
 if (!empty($Categories)) {
-	$SQL.=" AND CategoryID IN(".db_string(implode(',',$Categories)).")";
+	$SQL .= " AND CategoryID IN(".db_string(implode(',', $Categories)).')';
 }
 
 if ($_GET['action'] == 'mine') {
 	$SQL = $BaseSQL;
-	$SQL .= " AND c.UserID='".$LoggedUser['ID']."' AND c.CategoryID=0";
+	$SQL .= "
+		AND c.UserID = '".$LoggedUser['ID']."'
+		AND c.CategoryID = 0";
 }
 
-$SQL.=" ORDER BY $Order $Way LIMIT $Limit ";
+$SQL .= "
+	ORDER BY $Order $Way
+	LIMIT $Limit";
 $DB->query($SQL);
 $Collages = $DB->to_array();
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 
-View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
+View::show_header(($BookmarkView) ? 'Your bookmarked collages' : 'Browse collages');
 ?>
 <div class="thin">
 	<div class="header">
 <? if ($BookmarkView) { ?>
 		<h2>Your bookmarked collages</h2>
 <? } else { ?>
-		<h2>Browse collages<?=(!empty($UserLink) ? (isset($CollageIDs) ? ' with contributions by '.$UserLink : ' started by '.$UserLink) : '')?></h2>
+		<h2>Browse collages<?=(!empty($UserLink) ? (isset($CollageIDs) ? " with contributions by $UserLink" : " started by $UserLink") : '')?></h2>
 <? } ?>
 	</div>
 <? if (!$BookmarkView) { ?>
@@ -232,7 +236,12 @@ View::show_header(($BookmarkView)?'Your bookmarked collages':'Browse collages');
 <?		}
 		if (check_perms('site_collages_personal')) {
 
-			$DB->query("SELECT ID FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
+			$DB->query("
+				SELECT ID
+				FROM collages
+				WHERE UserID = '$LoggedUser[ID]'
+					AND CategoryID = '0'
+					AND Deleted = '0'");
 			$CollageCount = $DB->record_count();
 
 			if ($CollageCount == 1) {
@@ -300,7 +309,7 @@ foreach ($Collages as $Collage) {
 
 	//Print results
 ?>
-	<tr class="row<?=$Row?><?=($BookmarkView) ? ' bookmark_'.$ID : ''?>">
+	<tr class="row<?=$Row?><?=($BookmarkView) ? " bookmark_$ID" : ''; ?>">
 		<td>
 			<a href="collages.php?action=search&amp;cats[<?=(int)$CategoryID?>]=1"><?=$CollageCats[(int)$CategoryID]?></a>
 		</td>
@@ -308,7 +317,7 @@ foreach ($Collages as $Collage) {
 			<a href="collages.php?id=<?=$ID?>"><?=$Name?></a>
 <?	if ($BookmarkView) { ?>
 			<span style="float: right;">
-				<a href="#" onclick="Unbookmark('collage', <?=$ID?>,'');return false;" class="brackets">Remove bookmark</a>
+				<a href="#" onclick="Unbookmark('collage', <?=$ID?>, ''); return false;" class="brackets">Remove bookmark</a>
 			</span>
 <?	} ?>
 			<div class="tags"><?=$TorrentTags->format('collages.php?action=search&amp;tags=')?></div>

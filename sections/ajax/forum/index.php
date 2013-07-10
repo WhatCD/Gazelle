@@ -97,7 +97,7 @@ function get_forum_info($ForumID) {
 				LEFT JOIN forums_topics ON forums_topics.ForumID = forums.ID
 			WHERE forums.ID = '$ForumID'
 			GROUP BY ForumID");
-		if ($DB->record_count() == 0) {
+		if (!$DB->has_results()) {
 			return false;
 		}
 		// Makes an array, with $Forum['Name'], etc.

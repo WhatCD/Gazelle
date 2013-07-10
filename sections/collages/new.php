@@ -29,8 +29,8 @@ if (!empty($Error)) { ?>
 			<tr id="collagename">
 				<td class="label"><strong>Name</strong></td>
 				<td>
-					<input type="text"<?=$NoName ? ' class="hidden"' : '' ?> name="name" size="60" id="namebox" value="<?=display_str($Name)?>" />
-					<span id="personal"<?=$NoName ? '' : ' class="hidden"' ?> style="font-style: oblique;"><strong><?=$LoggedUser['Username']?>'s personal collage</strong></span>
+					<input type="text"<?=$NoName ? ' class="hidden"' : ''; ?> name="name" size="60" id="namebox" value="<?=display_str($Name)?>" />
+					<span id="personal"<?=$NoName ? '' : ' class="hidden"'; ?> style="font-style: oblique;"><strong><?=$LoggedUser['Username']?>'s personal collage</strong></span>
 				</td>
 			</tr>
 			<tr>
@@ -40,12 +40,17 @@ if (!empty($Error)) { ?>
 <?
 array_shift($CollageCats);
 
-foreach ($CollageCats as $CatID=>$CatName) : ?>
+foreach ($CollageCats as $CatID=>$CatName) { ?>
 						<option value="<?=$CatID + 1 ?>"<?=(($CatID + 1 == $Category) ? ' selected="selected"' : '')?>><?=$CatName?></option>
 <?
-endforeach;
+}
 
-$DB->query("SELECT COUNT(ID) FROM collages WHERE UserID='$LoggedUser[ID]' AND CategoryID='0' AND Deleted='0'");
+$DB->query("
+	SELECT COUNT(ID)
+	FROM collages
+	WHERE UserID = '$LoggedUser[ID]'
+		AND CategoryID = '0'
+		AND Deleted = '0'");
 list($CollageCount) = $DB->next_record();
 if (($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
 						<option value="0"<?=(($Category === '0') ? ' selected="selected"' : '')?>>Personal</option>

@@ -113,7 +113,7 @@ $DB->set_query_id($Reports);
 										SELECT Username
 										FROM users_main
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No user with the reported ID found';
 									} else {
 										list($Username) = $DB->next_record();
@@ -126,7 +126,7 @@ $DB->set_query_id($Reports);
 										SELECT Title
 										FROM requests
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No request with the reported ID found';
 									} else {
 										list($Name) = $DB->next_record();
@@ -138,7 +138,7 @@ $DB->set_query_id($Reports);
 										SELECT Name
 										FROM collages
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No collage with the reported ID found';
 									} else {
 										list($Name) = $DB->next_record();
@@ -150,7 +150,7 @@ $DB->set_query_id($Reports);
 										SELECT Title
 										FROM forums_topics
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No forum thread with the reported ID found';
 									} else {
 										list($Title) = $DB->next_record();
@@ -175,7 +175,7 @@ $DB->set_query_id($Reports);
 											) AS PostNum
 										FROM forums_posts AS p
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No forum post with the reported ID found';
 									} else {
 										list($PostID, $Body, $TopicID, $PostNum) = $DB->next_record();
@@ -194,7 +194,7 @@ $DB->set_query_id($Reports);
 											) AS CommentNum
 										FROM requests_comments AS rc
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No request comment with the reported ID found';
 									} else {
 										list($RequestID, $Body, $PostNum) = $DB->next_record();
@@ -214,7 +214,7 @@ $DB->set_query_id($Reports);
 											) AS CommentNum
 										FROM torrents_comments AS tc
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No torrent comment with the reported ID found';
 									} else {
 										list($GroupID, $Body, $PostNum) = $DB->next_record();
@@ -234,7 +234,7 @@ $DB->set_query_id($Reports);
 											) AS CommentNum
 										FROM artist_comments AS ac
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No comment with the reported ID found';
 									} else {
 										list($ArtistID, $Body, $PostNum) = $DB->next_record();
@@ -255,7 +255,7 @@ $DB->set_query_id($Reports);
 											) AS CommentNum
 										FROM collages_comments AS cc
 										WHERE ID = $ThingID");
-									if ($DB->record_count() < 1) {
+									if (!$DB->has_results()) {
 										echo 'No collage comment with the reported ID found';
 									} else {
 										list($CollageID, $Body, $PostNum) = $DB->next_record();

@@ -298,6 +298,14 @@ class DB_MYSQL {
 		}
 	}
 
+	/*
+	 * returns true if the query exists and there were records found
+	 * returns false if the query does not exist or if there were 0 records returned
+	 */
+	function has_results() {
+		return ($this->QueryID && $this->record_count() !== 0);
+	}
+
 	function affected_rows() {
 		if ($this->LinkID) {
 			return mysqli_affected_rows($this->LinkID);

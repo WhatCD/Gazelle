@@ -16,7 +16,7 @@ $DB->query("
 	FROM pm_conversations_users
 	WHERE UserID='$UserID'
 		AND ConvID='$ConvID'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }

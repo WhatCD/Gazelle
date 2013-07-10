@@ -22,7 +22,7 @@ function link_users($UserID, $TargetID) {
 		SELECT 1
 		FROM users_main
 		WHERE ID IN ($UserID, $TargetID)");
-	if ($DB->record_count() != 2) {
+	if ($DB->record_count() !== 2) {
 		error(403);
 	}
 

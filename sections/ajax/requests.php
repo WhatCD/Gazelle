@@ -110,7 +110,7 @@ if (empty($_GET['tags_type']) && !empty($Tags)) {
 
 if (!empty($_GET['filter_cat'])) {
 	$CategoryArray = array_keys($_GET['filter_cat']);
-	if (count($CategoryArray) != count($Categories)) {
+	if (count($CategoryArray) !== count($Categories)) {
 		foreach ($CategoryArray as $Key => $Index) {
 			if (!isset($Categories[$Index - 1])) {
 				unset($CategoryArray[$Key]);
@@ -124,7 +124,7 @@ if (!empty($_GET['filter_cat'])) {
 
 if (!empty($_GET['releases'])) {
 	$ReleaseArray = $_GET['releases'];
-	if (count($ReleaseArray) != count($ReleaseTypes)) {
+	if (count($ReleaseArray) !== count($ReleaseTypes)) {
 		foreach ($ReleaseArray as $Index => $Value) {
 			if (!isset($ReleaseTypes[$Value])) {
 				unset($ReleaseArray[$Index]);
@@ -139,7 +139,7 @@ if (!empty($_GET['releases'])) {
 
 if (!empty($_GET['formats'])) {
 	$FormatArray = $_GET['formats'];
-	if (count($FormatArray) != count($Formats)) {
+	if (count($FormatArray) !== count($Formats)) {
 		$FormatNameArray = array();
 		foreach ($FormatArray as $Index => $MasterIndex) {
 			if (isset($Formats[$MasterIndex])) {
@@ -155,7 +155,7 @@ if (!empty($_GET['formats'])) {
 
 if (!empty($_GET['media'])) {
 	$MediaArray = $_GET['media'];
-	if (count($MediaArray) != count($Media)) {
+	if (count($MediaArray) !== count($Media)) {
 		$MediaNameArray = array();
 		foreach ($MediaArray as $Index => $MasterIndex) {
 			if (isset($Media[$MasterIndex])) {
@@ -171,7 +171,7 @@ if (!empty($_GET['media'])) {
 
 if (!empty($_GET['bitrates'])) {
 	$BitrateArray = $_GET['bitrates'];
-	if (count($BitrateArray) != count($Bitrates)) {
+	if (count($BitrateArray) !== count($Bitrates)) {
 		$BitrateNameArray = array();
 		foreach ($BitrateArray as $Index => $MasterIndex) {
 			if (isset($Bitrates[$MasterIndex])) {
@@ -230,25 +230,25 @@ if (empty($_GET['order'])) {
 }
 
 switch ($CurrentOrder) {
-	case 'votes' :
+	case 'votes':
 		$OrderBy = 'Votes';
 		break;
-	case 'bounty' :
+	case 'bounty':
 		$OrderBy = 'Bounty';
 		break;
-	case 'created' :
+	case 'created':
 		$OrderBy = 'TimeAdded';
 		break;
-	case 'lastvote' :
+	case 'lastvote':
 		$OrderBy = 'LastVote';
 		break;
-	case 'filled' :
+	case 'filled':
 		$OrderBy = 'TimeFilled';
 		break;
-	case 'year' :
+	case 'year':
 		$OrderBy = 'Year';
 		break;
-	default :
+	default:
 		$OrderBy = 'TimeAdded';
 		break;
 }
@@ -256,7 +256,7 @@ switch ($CurrentOrder) {
 $SS->SetSortMode($Way, $OrderBy);
 
 if (count($Queries) > 0) {
-	$Query = implode(' ',$Queries);
+	$Query = implode(' ', $Queries);
 } else {
 	$Query = '';
 }

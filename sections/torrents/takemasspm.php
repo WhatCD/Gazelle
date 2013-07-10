@@ -46,7 +46,7 @@ $DB->query("
 	FROM xbt_snatched
 	WHERE fid = $TorrentID");
 
-if ($DB->record_count() > 0) {
+if ($DB->has_results()) {
 	// Save this because send_pm uses $DB to run its own query... Oops...
 	$Snatchers = $DB->to_array();
 	foreach ($Snatchers as $UserID) {

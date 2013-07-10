@@ -5,7 +5,7 @@ if (!function_exists('imagettftext')) {
 
 function get_font() {
 	global $CaptchaFonts;
-	return SERVER_ROOT.'/classes/fonts/'.$CaptchaFonts[mt_rand(0,count($CaptchaFonts)-1)];
+	return SERVER_ROOT.'/classes/fonts/'.$CaptchaFonts[mt_rand(0, count($CaptchaFonts) - 1)];
 }
 
 function make_captcha_img() {
@@ -19,27 +19,27 @@ function make_captcha_img() {
 	$CaptchaString = '';
 
 	for ($i = 0; $i < $Length; $i++) {
-		$CaptchaString.=$Chars[mt_rand(0,strlen($Chars) - 1)];
+		$CaptchaString .= $Chars[mt_rand(0,strlen($Chars) - 1)];
 	}
 
 	for ($x = 0; $x < $Length; $x++) {
-		$FontDisplay[$x]['size'] = mt_rand(24,32);
-		$FontDisplay[$x]['top'] = mt_rand($FontDisplay[$x]['size'] + 5,$ImageHeight - ($FontDisplay[$x]['size'] / 2));
-		$FontDisplay[$x]['angle'] = mt_rand(-30,30);
+		$FontDisplay[$x]['size'] = mt_rand(24, 32);
+		$FontDisplay[$x]['top'] = mt_rand($FontDisplay[$x]['size'] + 5, $ImageHeight - ($FontDisplay[$x]['size'] / 2));
+		$FontDisplay[$x]['angle'] = mt_rand(-30, 30);
 		$FontDisplay[$x]['font'] = get_font();
 	}
 
-	$Img = imagecreatetruecolor($ImageWidth,$ImageHeight);
-	$BGImg = imagecreatefrompng(SERVER_ROOT.'/captcha/'.$CaptchaBGs[mt_rand(0,count($CaptchaBGs) - 1)]);
-	imagecopymerge($Img,$BGImg,0,0,0,0,300,75,50);
+	$Img = imagecreatetruecolor($ImageWidth, $ImageHeight);
+	$BGImg = imagecreatefrompng(SERVER_ROOT.'/captcha/'.$CaptchaBGs[mt_rand(0, count($CaptchaBGs) - 1)]);
+	imagecopymerge($Img, $BGImg, 0, 0, 0, 0, 300, 75, 50);
 
-	$ForeColor = imagecolorallocatealpha($Img,255,255,255,65);
+	$ForeColor = imagecolorallocatealpha($Img, 255, 255, 255, 65);
 
 	for ($i = 0; $i < strlen($CaptchaString); $i++) {
 		$CharX = (($ImageWidth / $Length) * ($i + 1)) - (($ImageWidth / $Length) * 0.75);
-		imagettftext($Img,$FontDisplay[$i]['size'],$FontDisplay[$i]['angle'],$CharX,
-						$FontDisplay[$i]['top'],$ForeColor,
-						$FontDisplay[$i]['font'],$CaptchaString[$i]
+		imagettftext($Img,$FontDisplay[$i]['size'], $FontDisplay[$i]['angle'], $CharX,
+						$FontDisplay[$i]['top'], $ForeColor,
+						$FontDisplay[$i]['font'], $CaptchaString[$i]
 					);
 	}
 

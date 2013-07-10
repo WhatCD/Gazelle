@@ -19,8 +19,8 @@ if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	$DB->query("
 		SELECT tg.CategoryID, t.GroupID
 		FROM torrents_group AS tg
-			LEFT JOIN torrents AS t ON t.GroupID=tg.ID
-		WHERE t.ID=" . $_GET['id']);
+			LEFT JOIN torrents AS t ON t.GroupID = tg.ID
+		WHERE t.ID = " . $_GET['id']);
 	list($CategoryID, $GroupID) = $DB->next_record();
 	$Artists = Artists::get_artist($GroupID);
 	$TorrentCache = get_group_info($GroupID, true, $RevisionID);
@@ -46,22 +46,22 @@ if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	//Get the artist name, group name etc.
 	$Artists = Artists::get_artist($GroupID);
 	if ($Artists) {
-		$DisplayName = '<span dir="ltr">' . Artists::display_artists($Artists, true) . '<a href="torrents.php?torrentid=' . $TorrentID . '">' .$DisplayName . '</a></span>';
+		$DisplayName = '<span dir="ltr">' . Artists::display_artists($Artists, true) . "<a href=\"torrents.php?torrentid=$TorrentID\">$DisplayName</a></span>";
 		$AltName = display_str(Artists::display_artists($Artists, false)) . $AltName;
 		$Title = $AltName;
 	}
 	if ($GroupYear > 0) {
-		$DisplayName.= " [$GroupYear]";
-		$AltName.= " [$GroupYear]";
-		$Title.= " [$GroupYear]";
+		$DisplayName .= " [$GroupYear]";
+		$AltName .= " [$GroupYear]";
+		$Title .= " [$GroupYear]";
 	}
 	if ($GroupVanityHouse) {
-		$DisplayName.=' [Vanity House]';
-		$AltName.=' [Vanity House]';
+		$DisplayName .=' [Vanity House]';
+		$AltName .=' [Vanity House]';
 	}
 	if ($GroupCategoryID == 1) {
-		$DisplayName.=' [' . $ReleaseTypes[$ReleaseType] . ']';
-		$AltName.=' [' . $ReleaseTypes[$ReleaseType] . ']';
+		$DisplayName .=' [' . $ReleaseTypes[$ReleaseType] . ']';
+		$AltName .=' [' . $ReleaseTypes[$ReleaseType] . ']';
 	}
 }
 

@@ -221,7 +221,7 @@ class Requests {
 					LEFT JOIN users_main AS u ON u.ID=rv.UserID
 				WHERE rv.RequestID = $RequestID
 				ORDER BY rv.Bounty DESC");
-			if ($DB->record_count() < 1) {
+			if (!$DB->has_results()) {
 				error(0);
 			} else {
 				$Votes = $DB->to_array();

@@ -32,7 +32,10 @@ if (isset($_GET['search'])) {
 // Searching for posts by a specific user
 if (!empty($_GET['user'])) {
 	$User = trim($_GET['user']);
-	$DB->query("SELECT ID FROM users_main WHERE Username='".db_string($User)."'");
+	$DB->query("
+		SELECT ID
+		FROM users_main
+		WHERE Username = '".db_string($User)."'");
 	list($AuthorID) = $DB->next_record();
 	if ($AuthorID === null) {
 		$AuthorID = 0;
@@ -254,21 +257,21 @@ if ($Type == 'body') {
 			JOIN forums AS f ON f.ID=t.ForumID
 		WHERE ((f.MinClassRead<='$LoggedUser[Class]'";
 	if (!empty($RestrictedForums)) {
-		$sql.=" AND f.ID NOT IN ('".$RestrictedForums."')";
+		$sql .= " AND f.ID NOT IN ('$RestrictedForums')";
 	}
 	$sql .= ')';
 	if (!empty($PermittedForums)) {
-		$sql.=' OR f.ID IN (\''.$PermittedForums.'\')';
+		$sql .= " OR f.ID IN ('$PermittedForums')";
 	}
 	$sql .= ') AND ';
 	$sql .= "t.Title LIKE '%";
 	$sql .= implode("%' AND t.Title LIKE '%", $Words);
 	$sql .= "%' ";
 	if (isset($SearchForums)) {
-		$sql.=" AND f.ID IN ($SearchForums)";
+		$sql .= " AND f.ID IN ($SearchForums)";
 	}
 	if (isset($AuthorID)) {
-		$sql.=" AND t.AuthorID='$AuthorID' ";
+		$sql .= " AND t.AuthorID = '$AuthorID' ";
 	}
 	$sql .= "
 		ORDER BY t.LastPostTime DESC
@@ -291,13 +294,13 @@ echo $Pages;
 		<td><?=((!empty($ThreadID)) ? 'Post begins' : 'Topic')?></td>
 		<td>Time</td>
 	</tr>
-<? if ($DB->record_count() == 0) { ?>
+<? if (!$DB->has_results()) { ?>
 		<tr><td colspan="3">Nothing found<?=((isset($AuthorID) && $AuthorID == 0) ? ' (unknown username)' : '')?>!</td></tr>
 <? }
 
 $Row = 'a'; // For the pretty colours
 while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB->next_record()) {
-	$Row = (($Row == 'a') ? 'b' : 'a');
+	$Row = (($Row === 'a') ? 'b' : 'a');
 	// Print results
 ?>
 		<tr class="row<?=$Row?>">
@@ -311,7 +314,7 @@ while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB-
 				<?=Format::cut_string($Title, 80); ?>
 <?	}
 	if ($Type == 'body') { ?>
-				<a href="#" onclick="$('#post_<?=$PostID?>_text').gtoggle(); return false;">(show)</a> <span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if (!empty($PostID)) { echo '&amp;postid='.$PostID.'#post'.$PostID; } ?>"></a></span>
+				<a href="#" onclick="$('#post_<?=$PostID?>_text').gtoggle(); return false;">(show)</a> <span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if (!empty($PostID)) { echo "&amp;postid=$PostID#post$PostID"; } ?>"></a></span>
 <?	} ?>
 			</td>
 			<td>

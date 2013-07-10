@@ -17,7 +17,7 @@ $DB->query("
 		AND InInbox='1'
 		AND (ForwardedTo=0 OR ForwardedTo=UserID)
 		AND ConvID='$ConvID'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	error(403);
 }
 
@@ -28,7 +28,7 @@ $DB->query("
 		AND (ForwardedTo = 0 OR ForwardedTo = UserID)
 		AND InInbox='1'
 		AND ConvID='$ConvID'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	$DB->query("
 		INSERT IGNORE INTO pm_conversations_users
 			(UserID, ConvID, InInbox, InSentbox, ReceivedDate)

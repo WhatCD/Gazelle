@@ -13,7 +13,7 @@ if (!is_number($GroupID) || !$GroupID) {
 
 //Delete cached tag used for undos
 if (isset($_POST['undo'])) {
-	$Cache->delete_value('deleted_tags_'.$GroupID.'_'.$LoggedUser['ID']);
+	$Cache->delete_value("deleted_tags_$GroupID".'_'.$LoggedUser['ID']);
 }
 
 $Tags = explode(',', $_POST['tagname']);
@@ -38,10 +38,10 @@ foreach ($Tags as $TagName) {
 			$DB->query("
 				SELECT TagID
 				FROM torrents_tags_votes
-				WHERE GroupID='$GroupID'
-					AND TagID='$TagID'
-					AND UserID='$UserID'");
-			if ($DB->record_count() != 0) { // User has already voted on this tag, and is trying hax to make the rating go up
+				WHERE GroupID = '$GroupID'
+					AND TagID = '$TagID'
+					AND UserID = '$UserID'");
+			if ($DB->has_results()) { // User has already voted on this tag, and is trying hax to make the rating go up
 				header('Location: '.$_SERVER['HTTP_REFERER']);
 				die();
 			}
@@ -52,18 +52,21 @@ foreach ($Tags as $TagName) {
 				(TagID, GroupID, PositiveVotes, UserID)
 			VALUES
 				('$TagID', '$GroupID', '3', '$UserID')
-			ON DUPLICATE KEY UPDATE PositiveVotes=PositiveVotes+2");
+			ON DUPLICATE KEY UPDATE PositiveVotes = PositiveVotes + 2");
 
 		$DB->query("
-			INSERT INTO torrents_tags_votes (GroupID, TagID, UserID, Way)
-			VALUES ('$GroupID', '$TagID', '$UserID', 'up')");
+			INSERT INTO torrents_tags_votes
+				(GroupID, TagID, UserID, Way)
+			VALUES
+				('$GroupID', '$TagID', '$UserID', 'up')");
 
 		$DB->query("
-			INSERT INTO group_log (GroupID, UserID, Time, Info)
-			VALUES ('$GroupID',".$LoggedUser['ID'].",'".sqltime()."','".db_string('Tag "'.$TagName.'" added to group')."')");
+			INSERT INTO group_log
+				(GroupID, UserID, Time, Info)
+			VALUES
+				('$GroupID', ".$LoggedUser['ID'].", '".sqltime()."', '".db_string("Tag \"$TagName\" added to group")."')");
 	}
 }
-
 
 Torrents::update_hash($GroupID); // Delete torrent group cache
 header('Location: '.$_SERVER['HTTP_REFERER']);

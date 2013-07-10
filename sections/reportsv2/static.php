@@ -37,85 +37,107 @@ if (isset($_GET['id'])) {
 	$ID = '';
 }
 
-$Order = "ORDER BY r.ReportedTime ASC";
+$Order = 'ORDER BY r.ReportedTime ASC';
 
 if (!$ID) {
 	switch ($View) {
-		case 'resolved' :
+		case 'resolved':
 			$Title = 'All the old smelly reports';
 			$Where = "WHERE r.Status = 'Resolved'";
 			$Order = 'ORDER BY r.LastChangeTime DESC';
 			break;
-		case 'unauto' :
+		case 'unauto':
 			$Title = 'New reports, not auto assigned!';
 			$Where = "WHERE r.Status = 'New'";
 			break;
-		default :
+		default:
 			error(404);
 			break;
 	}
 } else {
 	switch ($View) {
-		case 'staff' :
-			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
+		case 'staff':
+			$DB->query("
+				SELECT Username
+				FROM users_main
+				WHERE ID = $ID");
 			list($Username) = $DB->next_record();
 			if ($Username) {
-				$Title = $Username."'s in-progress reports";
+				$Title = "$Username's in-progress reports";
 			} else {
-				$Title = $ID."'s in-progress reports";
+				$Title = "$ID's in-progress reports";
 			}
-			$Where = "WHERE r.Status = 'InProgress' AND r.ResolverID = ".$ID;
+			$Where = "
+				WHERE r.Status = 'InProgress'
+					AND r.ResolverID = $ID";
 			break;
-		case 'resolver' :
-			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
+		case 'resolver':
+			$DB->query("
+				SELECT Username
+				FROM users_main
+				WHERE ID = $ID");
 			list($Username) = $DB->next_record();
 			if ($Username) {
-				$Title = $Username."'s resolved reports";
+				$Title = "$Username's resolved reports";
 			} else {
-				$Title = $ID."'s resolved reports";
+				$Title = "$ID's resolved reports";
 			}
-			$Where = "WHERE r.Status = 'Resolved' AND r.ResolverID = ".$ID;
+			$Where = "
+				WHERE r.Status = 'Resolved'
+					AND r.ResolverID = $ID";
 			$Order = 'ORDER BY r.LastChangeTime DESC';
 			break;
-		case 'group' :
+		case 'group':
 			$Title = "Unresolved reports for the group $ID";
-			$Where = "WHERE r.Status != 'Resolved' AND tg.ID = ".$ID;
+			$Where = "
+				WHERE r.Status != 'Resolved'
+					AND tg.ID = $ID";
 			break;
-		case 'torrent' :
-			$Title = 'All reports for the torrent '.$ID;
-			$Where = 'WHERE r.TorrentID = '.$ID;
+		case 'torrent':
+			$Title = "All reports for the torrent $ID";
+			$Where = "WHERE r.TorrentID = $ID";
 			break;
-		case 'report' :
-			$Title = 'Viewing resolution of report '.$ID;
-			$Where = 'WHERE r.ID = '.$ID;
+		case 'report':
+			$Title = "Viewing resolution of report $ID";
+			$Where = "WHERE r.ID = $ID";
 			break;
-		case 'reporter' :
-			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
+		case 'reporter':
+			$DB->query("
+				SELECT Username
+				FROM users_main
+				WHERE ID = $ID");
 			list($Username) = $DB->next_record();
 			if ($Username) {
-				$Title = 'All torrents reported by '.$Username;
+				$Title = "All torrents reported by $Username";
 			} else {
-				$Title = 'All torrents reported by user '.$ID;
+				$Title = "All torrents reported by user $ID";
 			}
-			$Where = 'WHERE r.ReporterID = '.$ID;
+			$Where = "WHERE r.ReporterID = $ID";
 			$Order = 'ORDER BY r.ReportedTime DESC';
 			break;
-		case 'uploader' :
-			$DB->query("SELECT Username FROM users_main WHERE ID=".$ID);
+		case 'uploader':
+			$DB->query("
+				SELECT Username
+				FROM users_main
+				WHERE ID = $ID");
 			list($Username) = $DB->next_record();
 			if ($Username) {
-				$Title = 'All reports for torrents uploaded by '.$Username;
+				$Title = "All reports for torrents uploaded by $Username";
 			} else {
-				$Title = 'All reports for torrents uploaded by user '.$ID;
+				$Title = "All reports for torrents uploaded by user $ID";
 			}
-			$Where = "WHERE r.Status != 'Resolved' AND t.UserID = ".$ID;
+			$Where = "
+				WHERE r.Status != 'Resolved'
+					AND t.UserID = $ID";
 			break;
 		case 'type':
 			$Title = 'All new reports for the chosen type';
-			$Where = "WHERE r.Status = 'New' AND r.Type = '".$ID."'";
+			$Where = "
+				WHERE r.Status = 'New'
+					AND r.Type = '$ID'";
 			break;
 			break;
-		default :
+		default:
 			error(404);
 			break;
 	}
@@ -170,13 +192,13 @@ $DB->query("
 		t.UserID AS UploaderID,
 		uploader.Username
 	FROM reportsv2 AS r
-		LEFT JOIN torrents AS t ON t.ID=r.TorrentID
-		LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-		LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-		LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-		LEFT JOIN users_main AS resolver ON resolver.ID=r.ResolverID
-		LEFT JOIN users_main AS reporter ON reporter.ID=r.ReporterID
-		LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
+		LEFT JOIN torrents AS t ON t.ID = r.TorrentID
+		LEFT JOIN torrents_group AS tg ON tg.ID = t.GroupID
+		LEFT JOIN torrents_artists AS ta ON ta.GroupID = tg.ID AND ta.Importance = '1'
+		LEFT JOIN artists_alias AS aa ON aa.AliasID = ta.AliasID
+		LEFT JOIN users_main AS resolver ON resolver.ID = r.ResolverID
+		LEFT JOIN users_main AS reporter ON reporter.ID = r.ReporterID
+		LEFT JOIN users_main AS uploader ON uploader.ID = t.UserID
 	$Where
 	GROUP BY r.ID
 	$Order
@@ -227,17 +249,17 @@ if (count($Reports) == 0) {
 
 		list($ReportID, $ReporterID, $ReporterName, $TorrentID, $Type, $UserComment, $ResolverID, $ResolverName, $Status, $ReportedTime, $LastChangeTime,
 			$ModComment, $Tracks, $Images, $ExtraIDs, $Links, $LogMessage, $GroupName, $GroupID, $ArtistID, $ArtistName, $Year, $CategoryID, $Time, $Remastered, $RemasterTitle,
-			$RemasterYear, $Media, $Format, $Encoding, $Size, $HasCue, $HasLog, $LogScore, $UploaderID, $UploaderName) = Misc::display_array($Report, array("ModComment"));
+			$RemasterYear, $Media, $Format, $Encoding, $Size, $HasCue, $HasLog, $LogScore, $UploaderID, $UploaderName) = Misc::display_array($Report, array('ModComment'));
 
 		if (!$GroupID && $Status != 'Resolved') {
 			//Torrent already deleted
 			$DB->query("
 				UPDATE reportsv2
 				SET
-					Status='Resolved',
-					LastChangeTime='".sqltime()."',
-					ModComment='Report already dealt with (torrent deleted)'
-				WHERE ID=".$ReportID);
+					Status = 'Resolved',
+					LastChangeTime = '".sqltime()."',
+					ModComment = 'Report already dealt with (torrent deleted)'
+				WHERE ID = $ReportID");
 			$Cache->decrement('num_torrent_reportsv2');
 ?>
 	<div id="report<?=$ReportID?>">
@@ -256,7 +278,7 @@ if (count($Reports) == 0) {
 			} else {
 				if (array_key_exists($Type, $Types[$CategoryID])) {
 					$ReportType = $Types[$CategoryID][$Type];
-				} elseif (array_key_exists($Type,$Types['master'])) {
+				} elseif (array_key_exists($Type, $Types['master'])) {
 					$ReportType = $Types['master'][$Type];
 				} else {
 					//There was a type but it wasn't an option!
@@ -323,11 +345,12 @@ if (count($Reports) == 0) {
 								<div style="text-align: right;">was reported by <a href="user.php?id=<?=$ReporterID?>"><?=$ReporterName?></a> <?=time_diff($ReportedTime)?> for the reason: <strong><?=$ReportType['title']?></strong></div>
 <?				if ($Status != 'Resolved') {
 
-					$DB->query("SELECT r.ID
-								FROM reportsv2 AS r
-									LEFT JOIN torrents AS t ON t.ID=r.TorrentID
-								WHERE r.Status != 'Resolved'
-								AND t.GroupID=$GroupID");
+					$DB->query("
+						SELECT r.ID
+						FROM reportsv2 AS r
+							LEFT JOIN torrents AS t ON t.ID = r.TorrentID
+						WHERE r.Status != 'Resolved'
+							AND t.GroupID = $GroupID");
 					$GroupOthers = ($DB->record_count() - 1);
 
 					if ($GroupOthers > 0) { ?>
@@ -336,11 +359,12 @@ if (count($Reports) == 0) {
 								</div>
 <?					}
 
-					$DB->query("SELECT t.UserID
-								FROM reportsv2 AS r
-									JOIN torrents AS t ON t.ID=r.TorrentID
-								WHERE r.Status != 'Resolved'
-									AND t.UserID=$UploaderID");
+					$DB->query("
+						SELECT t.UserID
+						FROM reportsv2 AS r
+							JOIN torrents AS t ON t.ID = r.TorrentID
+						WHERE r.Status != 'Resolved'
+							AND t.UserID = $UploaderID");
 					$UploaderOthers = ($DB->record_count() - 1);
 
 					if ($UploaderOthers > 0) { ?>
@@ -349,18 +373,19 @@ if (count($Reports) == 0) {
 								</div>
 <?					}
 
-					$DB->query("SELECT DISTINCT req.ID,
-									req.FillerID,
-									um.Username,
-									req.TimeFilled
-								FROM requests AS req
-									LEFT JOIN torrents AS t ON t.ID=req.TorrentID
-									LEFT JOIN reportsv2 AS rep ON rep.TorrentID=t.ID
-									JOIN users_main AS um ON um.ID=req.FillerID
-								WHERE rep.Status != 'Resolved'
-									AND req.TimeFilled > '2010-03-04 02:31:49'
-									AND req.TorrentID = $TorrentID");
-					$Requests = ($DB->record_count());
+					$DB->query("
+						SELECT DISTINCT req.ID,
+							req.FillerID,
+							um.Username,
+							req.TimeFilled
+						FROM requests AS req
+							LEFT JOIN torrents AS t ON t.ID = req.TorrentID
+							LEFT JOIN reportsv2 AS rep ON rep.TorrentID = t.ID
+							JOIN users_main AS um ON um.ID = req.FillerID
+						WHERE rep.Status != 'Resolved'
+							AND req.TimeFilled > '2010-03-04 02:31:49'
+							AND req.TorrentID = $TorrentID");
+					$Requests = ($DB->has_results());
 					if ($Requests > 0) {
 						while (list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 				?>
@@ -439,11 +464,11 @@ if (count($Reports) == 0) {
 								t.UserID AS UploaderID,
 								uploader.Username
 							FROM torrents AS t
-								LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-								LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-								LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-								LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
-							WHERE t.ID='$ExtraID'
+								LEFT JOIN torrents_group AS tg ON tg.ID = t.GroupID
+								LEFT JOIN torrents_artists AS ta ON ta.GroupID = tg.ID AND ta.Importance = '1'
+								LEFT JOIN artists_alias AS aa ON aa.AliasID = ta.AliasID
+								LEFT JOIN users_main AS uploader ON uploader.ID = t.UserID
+							WHERE t.ID = '$ExtraID'
 							GROUP BY tg.ID");
 
 						list($ExtraGroupName, $ExtraGroupID, $ExtraArtistID, $ExtraArtistName, $ExtraYear, $ExtraTime, $ExtraRemastered, $ExtraRemasterTitle,
@@ -481,7 +506,7 @@ if (count($Reports) == 0) {
 					$Images = explode(' ', $Images);
 					foreach ($Images as $Image) {
 			?>
-								<img style="max-width: 200px;" onclick="lightbox.init(this,200);" src="<?=ImageTools::process($Image)?>" alt="Relevant image" />
+								<img style="max-width: 200px;" onclick="lightbox.init(this, 200);" src="<?=ImageTools::process($Image)?>" alt="Relevant image" />
 <?
 					} ?>
 							</td>
@@ -506,7 +531,7 @@ if (count($Reports) == 0) {
 							<td class="label">Report comment:</td>
 							<td colspan="3">
 								<input type="text" name="comment" id="comment<?=$ReportID?>" size="45" value="<?=$ModComment?>" />
-								<input type="button" value="Update now" onclick="UpdateComment(<?=$ReportID?>)" />
+								<input type="button" value="Update now" onclick="UpdateComment(<?=$ReportID?>);" />
 							</td>
 						</tr>
 						<tr>
@@ -514,7 +539,7 @@ if (count($Reports) == 0) {
 								<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve</a>
 							</td>
 							<td colspan="3">
-								<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>)">
+								<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>);">
 <?
 		$TypeList = $Types['master'] + $Types[$CategoryID];
 		$Priorities = array();
@@ -550,7 +575,7 @@ if (count($Reports) == 0) {
 									</span>
 									&nbsp;&nbsp;
 									<span title="Update resolve type">
-										<input type="button" name="update_resolve" id="update_resolve<?=$ReportID?>" value="Update now" onclick="UpdateResolve(<?=$ReportID?>)" />
+										<input type="button" name="update_resolve" id="update_resolve<?=$ReportID?>" value="Update now" onclick="UpdateResolve(<?=$ReportID?>);" />
 									</span>
 								</span>
 								</td>
@@ -567,7 +592,7 @@ if (count($Reports) == 0) {
 								<span title="Uploader: Appended to the regular message unless using &quot;Send now&quot;. Reporter: Must be used with &quot;Send now&quot;.">
 									<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 								</span>
-								<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>)" />
+								<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>);" />
 							</td>
 						</tr>
 						<tr>
@@ -577,7 +602,7 @@ if (count($Reports) == 0) {
 											$Extras = explode(' ', $ExtraIDs);
 											$Value = '';
 											foreach ($Extras as $ExtraID) {
-												$Value .= 'https://'.SSL_SITE_URL.'/torrents.php?torrentid='.$ExtraID.' ';
+												$Value .= 'https://'.SSL_SITE_URL."/torrents.php?torrentid=$ExtraID ";
 											}
 											echo 'value="'.trim($Value).'"';
 										} ?>/>
@@ -638,10 +663,10 @@ if (count($Reports) == 0) {
 				<br />
 			</div>
 			<script type="text/javascript">//<![CDATA[
-			Load('<?=$ReportID?>');
+				Load('<?=$ReportID?>');
 			//]]>
 			</script>
-		<?
+<?
 		}
 	}
 }

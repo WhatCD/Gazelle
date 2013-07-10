@@ -5,7 +5,12 @@ if (!check_perms('users_mod')) {
 	error(403);
 }
 
-$DB->query("INSERT INTO staff_blog_visits (UserID, Time) VALUES (".$LoggedUser['ID'].", NOW()) ON DUPLICATE KEY UPDATE Time=NOW()");
+$DB->query("
+	INSERT INTO staff_blog_visits
+		(UserID, Time)
+	VALUES
+		(".$LoggedUser['ID'].", NOW())
+	ON DUPLICATE KEY UPDATE Time = NOW()");
 $Cache->delete_value('staff_blog_read_'.$LoggedUser['ID']);
 
 define('ANNOUNCEMENT_FORUM_ID', 19);
@@ -21,7 +26,10 @@ if (check_perms('admin_manage_blog')) {
 					error("Please enter a title.");
 				}
 				if (is_number($_POST['blogid'])) {
-					$DB->query("UPDATE staff_blog SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."' WHERE ID='".db_string($_POST['blogid'])."'");
+					$DB->query("
+						UPDATE staff_blog
+						SET Title = '".db_string($_POST['title'])."', Body = '".db_string($_POST['body'])."'
+						WHERE ID = '".db_string($_POST['blogid'])."'");
 					$Cache->delete_value('staff_blog');
 					$Cache->delete_value('staff_feed_blog');
 				}
@@ -30,14 +38,19 @@ if (check_perms('admin_manage_blog')) {
 			case 'editblog':
 				if (is_number($_GET['id'])) {
 					$BlogID = $_GET['id'];
-					$DB->query("SELECT Title, Body FROM staff_blog WHERE ID=$BlogID");
+					$DB->query("
+						SELECT Title, Body
+						FROM staff_blog
+						WHERE ID = $BlogID");
 					list($Title, $Body, $ThreadID) = $DB->next_record();
 				}
 				break;
 			case 'deleteblog':
 				if (is_number($_GET['id'])) {
 					authorize();
-					$DB->query("DELETE FROM staff_blog WHERE ID='".db_string($_GET['id'])."'");
+					$DB->query("
+						DELETE FROM staff_blog
+						WHERE ID = '".db_string($_GET['id'])."'");
 					$Cache->delete_value('staff_blog');
 					$Cache->delete_value('staff_feed_blog');
 				}
@@ -52,7 +65,11 @@ if (check_perms('admin_manage_blog')) {
 				$Title = db_string($_POST['title']);
 				$Body = db_string($_POST['body']);
 
-				$DB->query("INSERT INTO staff_blog (UserID, Title, Body, Time) VALUES ('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', NOW())");
+				$DB->query("
+					INSERT INTO staff_blog
+						(UserID, Title, Body, Time)
+					VALUES
+						('$LoggedUser[ID]', '".db_string($_POST['title'])."', '".db_string($_POST['body'])."', NOW())");
 				$Cache->delete_value('staff_blog');
 				$Cache->delete_value('staff_blog_latest_time');
 
@@ -98,13 +115,15 @@ if (check_perms('admin_manage_blog')) {
 <div class="thin">
 <?
 if (($Blog = $Cache->get_value('staff_blog')) === false) {
-	$DB->query("SELECT
-		b.ID,
-		um.Username,
-		b.Title,
-		b.Body,
-		b.Time
-		FROM staff_blog AS b LEFT JOIN users_main AS um ON b.UserID=um.ID
+	$DB->query("
+		SELECT
+			b.ID,
+			um.Username,
+			b.Title,
+			b.Body,
+			b.Time
+		FROM staff_blog AS b
+			LEFT JOIN users_main AS um ON b.UserID = um.ID
 		ORDER BY Time DESC");
 	$Blog = $DB->to_array(false, MYSQLI_NUM);
 	$Cache->cache_value('staff_blog', $Blog, 1209600);
@@ -119,7 +138,7 @@ foreach ($Blog as $BlogItem) {
 					<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <?=$Author?>
 <?			if (check_perms('admin_manage_blog')) { ?>
 					- <a href="staffblog.php?action=editblog&amp;id=<?=$BlogID?>" class="brackets">Edit</a>
-					<a href="staffblog.php?action=deleteblog&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Do you want to delete this?')" class="brackets">Delete</a>
+					<a href="staffblog.php?action=deleteblog&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Do you want to delete this?');" class="brackets">Delete</a>
 <?			} ?>
 				</div>
 				<div class="pad">

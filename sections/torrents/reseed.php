@@ -41,7 +41,7 @@ $DB->query("
 	GROUP BY uid
 	ORDER BY tstamp DESC
 	LIMIT 10");
-if ($DB->record_count() > 0) {
+if ($DB->has_results()) {
 	$Users = $DB->to_array();
 	foreach ($Users as $User) {
 		$UserID = $User['uid'];
@@ -50,7 +50,7 @@ if ($DB->record_count() > 0) {
 			SELECT UserID
 			FROM top_snatchers
 			WHERE UserID='$UserID'");
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			continue;
 		}
 

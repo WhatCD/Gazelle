@@ -72,7 +72,7 @@ $DB->query("
 	ORDER BY ReportedTime ASC
 	LIMIT 1");
 
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			die();
 		}
 
@@ -202,7 +202,7 @@ $DB->query("
 						WHERE rep.Status != 'Resolved'
 							AND req.TimeFilled > '2010-03-04 02:31:49'
 							AND req.TorrentID=$TorrentID");
-				$Requests = ($DB->record_count());
+				$Requests = ($DB->has_results());
 				if ($Requests > 0) {
 					while (list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 			?>

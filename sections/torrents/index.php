@@ -273,7 +273,7 @@ if (!empty($_REQUEST['action'])) {
 			if ($LoggedUser['ID'] != $AuthorID && !check_perms('site_moderate_forums')) {
 				error(404);
 			}
-			if ($DB->record_count() == 0) {
+			if (!$DB->has_results()) {
 				error(404);
 			}
 

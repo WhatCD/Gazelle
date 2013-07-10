@@ -46,7 +46,7 @@ class Users {
 	 */
 	public static function user_info($UserID) {
 		global $DB, $Cache, $Classes, $SSL;
-		$UserInfo = $Cache->get_value('user_info_'.$UserID);
+		$UserInfo = $Cache->get_value("user_info_$UserID");
 		// the !isset($UserInfo['Paranoia']) can be removed after a transition period
 		if (empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia']) || empty($UserInfo['Class'])) {
 			$OldQueryID = $DB->get_query_id();
@@ -67,12 +67,23 @@ class Users {
 					m.Visible,
 					GROUP_CONCAT(ul.PermissionID SEPARATOR ',') AS Levels
 				FROM users_main AS m
-					INNER JOIN users_info AS i ON i.UserID=m.ID
+					INNER JOIN users_info AS i ON i.UserID = m.ID
 					LEFT JOIN users_levels AS ul ON ul.UserID = m.ID
-				WHERE m.ID='$UserID'
+				WHERE m.ID = '$UserID'
 				GROUP BY m.ID");
-			if ($DB->record_count() == 0) { // Deleted user, maybe?
-				$UserInfo = array('ID'=>'','Username'=>'','PermissionID'=>0,'Artist'=>false,'Donor'=>false,'Warned'=>'0000-00-00 00:00:00','Avatar'=>'','Enabled'=>0,'Title'=>'', 'CatchupTime'=>0, 'Visible'=>'1');
+			if (!$DB->has_results()) { // Deleted user, maybe?
+				$UserInfo = array(
+						'ID' => '',
+						'Username' => '',
+						'PermissionID' => 0,
+						'Artist' => false,
+						'Donor' => false,
+						'Warned' => '0000-00-00 00:00:00',
+						'Avatar' => '',
+						'Enabled' => 0,
+						'Title' => '',
+						'CatchupTime' => 0,
+						'Visible' => '1');
 
 			} else {
 				$UserInfo = $DB->next_record(MYSQLI_ASSOC, array('Paranoia', 'Title'));
@@ -98,12 +109,12 @@ class Users {
 			}
 			$UserInfo['EffectiveClass'] = $EffectiveClass;
 
-			$Cache->cache_value('user_info_'.$UserID, $UserInfo, 2592000);
+			$Cache->cache_value("user_info_$UserID", $UserInfo, 2592000);
 			$DB->set_query_id($OldQueryID);
 		}
 		if (strtotime($UserInfo['Warned']) < time()) {
 			$UserInfo['Warned'] = '0000-00-00 00:00:00';
-			$Cache->cache_value('user_info_'.$UserID, $UserInfo, 2592000);
+			$Cache->cache_value("user_info_$UserID", $UserInfo, 2592000);
 		}
 
 		return $UserInfo;
@@ -120,7 +131,7 @@ class Users {
 	public static function user_heavy_info($UserID) {
 		global $DB, $Cache;
 
-		$HeavyInfo = $Cache->get_value('user_info_heavy_'.$UserID);
+		$HeavyInfo = $Cache->get_value("user_info_heavy_$UserID");
 		if (empty($HeavyInfo)) {
 
 			$DB->query("
@@ -153,8 +164,8 @@ class Users {
 					m.FLTokens,
 					m.PermissionID
 				FROM users_main AS m
-					INNER JOIN users_info AS i ON i.UserID=m.ID
-				WHERE m.ID='$UserID'");
+					INNER JOIN users_info AS i ON i.UserID = m.ID
+				WHERE m.ID = '$UserID'");
 			$HeavyInfo = $DB->next_record(MYSQLI_ASSOC, array('CustomPermissions', 'SiteOptions'));
 
 			if (!empty($HeavyInfo['CustomPermissions'])) {
@@ -214,7 +225,7 @@ class Users {
 			}
 			unset($HeavyInfo['SiteOptions']);
 
-			$Cache->cache_value('user_info_heavy_'.$UserID, $HeavyInfo, 0);
+			$Cache->cache_value("user_info_heavy_$UserID", $HeavyInfo, 0);
 		}
 		return $HeavyInfo;
 	}
@@ -257,7 +268,7 @@ class Users {
 			WHERE UserID = $UserID");
 
 		// Update cache
-		$Cache->cache_value('user_info_heavy_'.$UserID, $HeavyInfo, 0);
+		$Cache->cache_value("user_info_heavy_$UserID", $HeavyInfo, 0);
 
 		// Update $LoggedUser if the options are changed for the current
 		if ($LoggedUser['ID'] == $UserID) {
@@ -302,7 +313,7 @@ class Users {
 				$Val = (isset($RT[$Key]) ? $RT[$Key] : 'Error');
 			}
 
-			$ID = $Key . '_' . (int) !!$Checked;
+			$ID = "$Key_" . (int) !!$Checked;
 
 							// The HTML is indented this far for proper indentation in the generated HTML
 							// on user.php?action=edit
@@ -530,17 +541,17 @@ class Users {
 
 		$UserID = (int) $UserID;
 
-		if (($Data = $Cache->get_value('bookmarks_group_ids_' . $UserID))) {
+		if (($Data = $Cache->get_value("bookmarks_group_ids_$UserID"))) {
 			list($GroupIDs, $BookmarkData) = $Data;
 		} else {
 			$DB->query("
 				SELECT GroupID, Sort, `Time`
 				FROM bookmarks_torrents
-				WHERE UserID=$UserID
+				WHERE UserID = $UserID
 				ORDER BY Sort, `Time` ASC");
 			$GroupIDs = $DB->collect('GroupID');
 			$BookmarkData = $DB->to_array('GroupID', MYSQLI_ASSOC);
-			$Cache->cache_value('bookmarks_group_ids_' . $UserID,
+			$Cache->cache_value("bookmarks_group_ids_$UserID",
 				array($GroupIDs, $BookmarkData), 3600);
 		}
 
@@ -559,7 +570,7 @@ class Users {
 	 * @param string $ReturnHTML
 	 * @return string
 	 */
-	public static function show_avatar($Avatar, $Username, $Setting, $Size=150, $ReturnHTML = True) {
+	public static function show_avatar($Avatar, $Username, $Setting, $Size = 150, $ReturnHTML = True) {
 		global $LoggedUser;
 		$Avatar = ImageTools::process($Avatar);
 		// case 1 is avatars disabled

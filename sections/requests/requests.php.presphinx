@@ -190,11 +190,11 @@ switch ($CurrentOrder) {
 		$OrderBy = "r.ID";
 		break;
 }
-$OrderBy = $OrderBy." ".$CurrentSort;
+$OrderBy = "$OrderBy $CurrentSort";
 
 $Matcher = 'AND';
 if (count($Wheres)) {
-	$Where = 'WHERE ('.implode(") ".$Matcher." (", $Wheres).")";
+	$Where = 'WHERE ('.implode(") $Matcher (", $Wheres).')';
 } else {
 	$Where = '';
 }
@@ -206,31 +206,32 @@ if (count($ExtraJoins)) {
 }
 
 // Build SQL query
-$DB->query("SELECT
-				SQL_CALC_FOUND_ROWS
-				r.ID,
-				r.CategoryID,
-				r.Title,
-				r.Year,
-				SUM(rv.Bounty) AS Bounty,
-				COUNT(rv.UserID) AS Votes,
-				r.FillerID,
-				filler.Username,
-				r.TorrentID,
-				r.TimeFilled,
-				r.UserID,
-				u.Username,
-				r.TimeAdded,
-				r.LastVote
-			FROM requests AS r
-				LEFT JOIN users_main AS u ON u.ID=r.UserID
-				LEFT JOIN users_main AS filler ON filler.ID = FillerID
-				LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID "
-				.$ExtraJoin." "
-				.$Where."
-			GROUP BY r.ID
-			ORDER BY ".$OrderBy."
-			LIMIT ".$Limit);
+$DB->query("
+	SELECT
+		SQL_CALC_FOUND_ROWS
+		r.ID,
+		r.CategoryID,
+		r.Title,
+		r.Year,
+		SUM(rv.Bounty) AS Bounty,
+		COUNT(rv.UserID) AS Votes,
+		r.FillerID,
+		filler.Username,
+		r.TorrentID,
+		r.TimeFilled,
+		r.UserID,
+		u.Username,
+		r.TimeAdded,
+		r.LastVote
+	FROM requests AS r
+		LEFT JOIN users_main AS u ON u.ID = r.UserID
+		LEFT JOIN users_main AS filler ON filler.ID = FillerID
+		LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID
+		$ExtraJoin
+	$Where
+	GROUP BY r.ID
+	ORDER BY $OrderBy
+	LIMIT $Limit");
 
 $Requests = $DB->to_array();
 

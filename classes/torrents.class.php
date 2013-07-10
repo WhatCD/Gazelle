@@ -366,7 +366,7 @@ class Torrents {
 			SELECT CollageID
 			FROM collages_torrents
 			WHERE GroupID = '$GroupID'");
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			$CollageIDs = $DB->collect('CollageID');
 			$DB->query("
 				UPDATE collages
@@ -484,7 +484,7 @@ class Torrents {
 			SELECT Score
 			FROM torrents_votes
 			WHERE GroupID = $GroupID");
-		if ($DB->record_count()) {
+		if ($DB->has_results()) {
 			list($VoteScore) = $DB->next_record();
 		} else {
 			$VoteScore = 0;
@@ -498,7 +498,7 @@ class Torrents {
 			WHERE ta.GroupID = $GroupID
 				AND ta.Importance IN ('1', '4', '5', '6')
 			GROUP BY ta.GroupID");
-		if ($DB->record_count()) {
+		if ($DB->has_results()) {
 			list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
 		} else {
 			$ArtistName = '';
@@ -566,7 +566,7 @@ class Torrents {
 				JOIN torrents AS t ON t.ID = tf.TorrentID
 				JOIN torrents_group AS tg ON tg.ID = t.GroupID
 			WHERE tf.TorrentID = $TorrentID");
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			list($GroupID, $Contents) = $DB->next_record(MYSQLI_NUM, false);
 			if (Misc::is_new_torrent($Contents)) {
 				$Tor = new BencodeTorrent($Contents);
@@ -764,7 +764,7 @@ class Torrents {
 			SELECT ID
 			FROM torrents
 			WHERE GroupID IN ('.implode(', ', $GroupIDs).')');
-		if ($DB->record_count()) {
+		if ($DB->has_results()) {
 			$TorrentIDs = $DB->collect('ID');
 			Torrents::freeleech_torrents($TorrentIDs, $FreeNeutral, $FreeLeechType);
 		}

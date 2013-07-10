@@ -18,8 +18,8 @@ $DB->query("
 		u.Uploaded,
 		r.GroupID
 	FROM requests AS r
-		LEFT JOIN users_main AS u ON u.ID=FillerID
-	WHERE r.ID= ".$RequestID);
+		LEFT JOIN users_main AS u ON u.ID = FillerID
+	WHERE r.ID = $RequestID");
 list($CategoryID, $UserID, $FillerID, $Title, $Uploaded, $GroupID) = $DB->next_record();
 
 if ((($LoggedUser['ID'] != $UserID && $LoggedUser['ID'] != $FillerID) && !check_perms('site_moderate_requests')) || $FillerID == 0) {
@@ -33,7 +33,7 @@ $DB->query("
 		FillerID = 0,
 		TimeFilled = '0000-00-00 00:00:00',
 		Visible = 1
-	WHERE ID = ".$RequestID);
+	WHERE ID = $RequestID");
 
 $CategoryName = $Categories[$CategoryID - 1];
 
@@ -49,14 +49,23 @@ $RequestVotes = Requests::get_votes_array($RequestID);
 
 if ($RequestVotes['TotalBounty'] > $Uploaded) {
 	// If we can't take it all out of upload, zero that out and add whatever is left as download.
-	$DB->query('UPDATE users_main SET Uploaded = 0 WHERE ID = '.$FillerID);
-	$DB->query('UPDATE users_main SET Downloaded = Downloaded + '.($RequestVotes['TotalBounty'] - $Uploaded).' WHERE ID = '.$FillerID);
+	$DB->query("
+		UPDATE users_main
+		SET Uploaded = 0
+		WHERE ID = $FillerID");
+	$DB->query('
+		UPDATE users_main
+		SET Downloaded = Downloaded + '.($RequestVotes['TotalBounty'] - $Uploaded)."
+		WHERE ID = $FillerID");
 } else {
-	$DB->query('UPDATE users_main SET Uploaded = Uploaded - '.$RequestVotes['TotalBounty'].' WHERE ID = '.$FillerID);
+	$DB->query('
+		UPDATE users_main
+		SET Uploaded = Uploaded - '.$RequestVotes['TotalBounty']."
+		WHERE ID = $FillerID");
 }
 Misc::send_pm($FillerID, 0, 'A request you filled has been unfilled', "The request \"[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=$RequestID]".$FullName."[/url]\" was unfilled by [url=https://".SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].']'.$LoggedUser['Username'].'[/url] for the reason: '.$_POST['reason']."\n\nIf you feel like this request was unjustly unfilled, please [url=https://".SSL_SITE_URL."/reports.php?action=report&amp;type=request&amp;id=$RequestID]report the request[/url] and explain why this request should not have been unfilled.");
 
-$Cache->delete_value('user_stats_'.$FillerID);
+$Cache->delete_value("user_stats_$FillerID");
 
 if ($UserID != $LoggedUser['ID']) {
 	Misc::send_pm($UserID, 0, 'A request you created has been unfilled', "The request \"[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=$RequestID]".$FullName."[/url]\" was unfilled by [url=https://".SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].']'.$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']);
@@ -64,10 +73,10 @@ if ($UserID != $LoggedUser['ID']) {
 
 Misc::write_log("Request $RequestID ($FullName), with a ".Format::get_size($RequestVotes['TotalBounty']).' bounty, was unfilled by user '.$LoggedUser['ID'].' ('.$LoggedUser['Username'].') for the reason: '.$_POST['reason']);
 
-$Cache->delete_value('request_'.$RequestID);
-$Cache->delete_value('request_artists_'.$RequestID);
+$Cache->delete_value("request_$RequestID");
+$Cache->delete_value("request_artists_$RequestID");
 if ($GroupID) {
-	$Cache->delete_value('requests_group_'.$GroupID);
+	$Cache->delete_value("requests_group_$GroupID");
 }
 
 Requests::update_sphinx_requests($RequestID);
@@ -81,5 +90,5 @@ if (!empty($ArtistForm)) {
 }
 
 
-header('Location: requests.php?action=view&id='.$RequestID);
+header("Location: requests.php?action=view&id=$RequestID");
 ?>

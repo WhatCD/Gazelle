@@ -11,7 +11,7 @@ $DB->query("
 	FROM users_main AS m
 	WHERE m.CustomPermissions != ''
 		AND m.CustomPermissions != 'a:0:{}'");
-if ($DB->record_count()) {
+if ($DB->has_results()) {
 ?>
 	<table width="100%">
 		<tr class="colhead">

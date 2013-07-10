@@ -172,7 +172,7 @@ class TORRENT_FORM {
 					RemasterRecordLabel DESC,
 					RemasterCatalogueNumber DESC");
 
-			if ($DB->record_count() > 0) {
+			if ($DB->has_results()) {
 				$GroupRemasters = $DB->to_array(false, MYSQLI_BOTH, false);
 			}
 		}

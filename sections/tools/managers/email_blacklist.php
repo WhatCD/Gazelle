@@ -18,7 +18,7 @@ $DB->query("
 	ORDER BY eb.Time DESC
 	LIMIT $Limit");
 $Results = $DB->to_array(false, MYSQLI_ASSOC, false);
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list ($NumResults) = $DB->next_record();
 ?>
 <div class="header">

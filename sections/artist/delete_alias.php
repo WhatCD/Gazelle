@@ -16,7 +16,7 @@ $DB->query("
 		JOIN artists_alias AS aa2 ON aa.ArtistID=aa2.ArtistID
 	WHERE aa.AliasID=".$AliasID);
 
-if ($DB->record_count() == 1) {
+if ($DB->record_count() === 1) {
 	//This is the last alias on the artist
 	error("That alias is the last alias for that artist; removing it would cause bad things to happen.");
 }
@@ -25,7 +25,7 @@ $DB->query("
 	SELECT GroupID
 	FROM torrents_artists
 	WHERE AliasID='$AliasID'");
-if ($DB->record_count() > 0) {
+if ($DB->has_results()) {
 	list($GroupID) = $DB->next_record();
 	if ($GroupID != 0) {
 		error("That alias still has the group (<a href=\"torrents.php?id=$GroupID\">$GroupID</a>) attached. Fix that first.");

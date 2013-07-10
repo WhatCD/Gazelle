@@ -28,7 +28,7 @@ $DB->query("
 	FROM torrents_group AS tg
 		JOIN torrents AS t ON t.GroupID=tg.ID
 	WHERE t.ID = ".$TorrentID);
-if ($DB->record_count() < 1) {
+if (!$DB->has_results()) {
 	$Err = 'No torrent with that ID exists!';
 } else {
 	list($CategoryID) = $DB->next_record();
@@ -69,7 +69,7 @@ $DB->query("
 	WHERE TorrentID=$TorrentID
 		AND ReporterID=".db_string($LoggedUser['ID'])."
 		AND ReportedTime > '".time_minus(3)."'");
-if ($DB->record_count() > 0) {
+if ($DB->has_results()) {
 	die();
 }
 

@@ -22,13 +22,13 @@ if (!empty($_GET['filter']) && $_GET['filter'] == 'seeding') {
 $DB->query("
 	SELECT t.GroupID, x.fid
 	FROM ".($SeedingOnly ? 'xbt_files_users' : 'xbt_snatched')." AS x
-		JOIN torrents AS t ON t.ID=x.fid
+		JOIN torrents AS t ON t.ID = x.fid
 		JOIN torrents_group AS tg ON tg.ID = t.GroupID
-	WHERE t.Format='FLAC'
+	WHERE t.Format = 'FLAC'
 		AND ((t.LogScore = '100' AND t.Media = 'CD')
 			OR t.Media != 'CD')
 		AND tg.CategoryID = 1
-		AND x.uid='$UserID'" .
+		AND x.uid = '$UserID'" .
 		($SeedingOnly ? ' AND x.active = 1 AND x.remaining = 0' : ''));
 
 $SnatchedTorrentIDs = array_fill_keys($DB->collect('fid'), true);
@@ -57,8 +57,10 @@ $DB->query("
 		AND t.Format IN ('FLAC', 'MP3')
 	GROUP BY t.GroupID, RemIdent");
 
-//$DB->query('SELECT * FROM t');
-
+/*$DB->query('
+	SELECT *
+	FROM t');
+*/
 $DB->query("
 	SELECT GroupID
 	FROM temp_sections_better_snatch
@@ -131,7 +133,7 @@ foreach ($TorrentGroups as $Editions) {
 		foreach ($Encodings as $Encoding) {
 			if (!isset($Edition['Formats'][$Encoding])) {
 				++$edition_miss;
-				++$Counter['miss_'.$Encoding];
+				++$Counter["miss_$Encoding"];
 			}
 		}
 		$Counter['miss_total'] += $edition_miss;
@@ -194,7 +196,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 			$DisplayName .= " [$GroupYear]";
 		}
 		if ($ReleaseType > 0) {
-			$DisplayName .= " [".$ReleaseTypes[$ReleaseType]."]";
+			$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 		}
 		$DisplayName .= ' ['.$Edition['Medium'].']';
 

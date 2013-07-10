@@ -70,7 +70,7 @@ $DB->query("SELECT Name FROM artists_group WHERE ArtistID='$ArtistID'");
 list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
 
 $DB->query("SELECT GroupID, Importance FROM torrents_artists WHERE ArtistID='$ArtistID'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	error(404);
 }
 $Releases = $DB->to_array('GroupID', MYSQLI_ASSOC, false);

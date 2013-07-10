@@ -52,7 +52,7 @@ if (empty($_POST['confirm'])) {
 		SELECT ArtistID, AliasID, Redirect, Name
 		FROM artists_alias
 		WHERE Name = '$ArtistName'");
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		$Redirect = 0;
 		$DB->query("
 			INSERT INTO artists_group (Name)
@@ -92,7 +92,7 @@ if (empty($_POST['confirm'])) {
 		SELECT ID
 		FROM torrents
 		WHERE GroupID = '$OldGroupID'");
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		Torrents::delete_group($OldGroupID);
 	} else {
 		Torrents::update_hash($OldGroupID);

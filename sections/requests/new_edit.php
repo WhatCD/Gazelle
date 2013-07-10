@@ -383,8 +383,9 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 						<input type="hidden" id="amount" name="amount" value="<?=(!empty($Bounty) ? $Bounty : '100')?>" />
 						<input type="hidden" id="current_uploaded" value="<?=$LoggedUser['BytesUploaded']?>" />
 						<input type="hidden" id="current_downloaded" value="<?=$LoggedUser['BytesDownloaded']?>" />
+						Bounty after tax: <strong><span id="bounty_after_tax">90.00 MB</span></strong><br />
 						If you add the entered <strong><span id="new_bounty">100.00 MB</span></strong> of bounty, your new stats will be: <br />
-						Uploaded: <span id="new_uploaded"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span>
+						Uploaded: <span id="new_uploaded"><?=Format::get_size($LoggedUser['BytesUploaded'])?></span><br />
 						Ratio: <span id="new_ratio"><?=Format::get_ratio_html($LoggedUser['BytesUploaded'], $LoggedUser['BytesDownloaded'])?></span>
 					</td>
 				</tr>
@@ -402,7 +403,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 <?	} ?>
 			</table>
 		</form>
-		<script type="text/javascript">ToggleLogCue(); <?=$NewRequest ? "Calculate();" : '' ?></script>
+		<script type="text/javascript">ToggleLogCue();<?=$NewRequest ? " Calculate();" : '' ?></script>
 		<script type="text/javascript">Categories();</script>
 	</div>
 </div>

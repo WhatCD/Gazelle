@@ -64,7 +64,7 @@ if (check_perms('admin_manage_blog')) {
 						SELECT ForumID
 						FROM forums_topics
 						WHERE ID = $ThreadID");
-					if ($DB->record_count() < 1) {
+					if (!$DB->has_results()) {
 						error('No such thread exists!');
 						header('Location: blog.php');
 					}
@@ -135,7 +135,8 @@ if (check_perms('admin_manage_blog')) {
 <div class="thin">
 <?
 if (!$Blog = $Cache->get_value('blog')) {
-	$DB->query("SELECT
+	$DB->query("
+		SELECT
 			b.ID,
 			um.Username,
 			b.Title,
@@ -143,18 +144,21 @@ if (!$Blog = $Cache->get_value('blog')) {
 			b.Time,
 			b.ThreadID
 		FROM blog AS b
-			LEFT JOIN users_main AS um ON b.UserID=um.ID
+			LEFT JOIN users_main AS um ON b.UserID = um.ID
 		ORDER BY Time DESC
 		LIMIT 20");
 	$Blog = $DB->to_array();
-	$Cache->cache_value('Blog',$Blog,1209600);
+	$Cache->cache_value('Blog', $Blog, 1209600);
 }
 
 if ($LoggedUser['LastReadBlog'] < $Blog[0][0]) {
 	$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
 	$Cache->update_row(false, array('LastReadBlog' => $Blog[0][0]));
 	$Cache->commit_transaction(0);
-	$DB->query("UPDATE users_info SET LastReadBlog = '".$Blog[0][0]."' WHERE UserID = ".$LoggedUser['ID']);
+	$DB->query("
+		UPDATE users_info
+		SET LastReadBlog = '".$Blog[0][0]."'
+		WHERE UserID = ".$LoggedUser['ID']);
 	$LoggedUser['LastReadBlog'] = $Blog[0][0];
 }
 
@@ -176,7 +180,8 @@ foreach ($Blog as $BlogItem) {
 					<em><a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>">Discuss this post here</a></em>
 <?				if (check_perms('admin_manage_blog')) { ?>
 					<a href="blog.php?action=deadthread&amp;id=<?=$BlogID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Remove link</a>
-<?				}
+<?
+				}
 			} ?>
 				</div>
 			</div>

@@ -43,11 +43,11 @@ $DB->query("
 		tg.CategoryID,
 		IF(t.Remastered = '1', t.RemasterCatalogueNumber, tg.CatalogueNumber)
 	FROM torrents AS t
-		LEFT JOIN torrents_group AS tg ON t.GroupID=tg.ID
+		LEFT JOIN torrents_group AS tg ON t.GroupID = tg.ID
 	WHERE t.ID = $TorrentID
 	LIMIT 1");
 
-if ($DB->record_count() < 1) {
+if (!$DB->has_results()) {
 	error(404);
 }
 list($UploaderID, $UploadTime, $TorrentReleaseType, $Bitrate, $Format, $Media, $HasLog, $HasCue, $LogScore, $TorrentCategoryID, $TorrentCatalogueNumber) = $DB->next_record();
@@ -57,8 +57,11 @@ $FillerUsername = $LoggedUser['Username'];
 
 if (!empty($_POST['user']) && check_perms('site_moderate_requests')) {
 	$FillerUsername = $_POST['user'];
-	$DB->query("SELECT ID FROM users_main WHERE Username LIKE '".db_string($FillerUsername)."'");
-	if ($DB->record_count() < 1) {
+	$DB->query("
+		SELECT ID
+		FROM users_main
+		WHERE Username LIKE '".db_string($FillerUsername)."'");
+	if (!$DB->has_results()) {
 		$Err = 'No such user to fill for!';
 	} else {
 		list($FillerID) = $DB->next_record();
@@ -83,7 +86,7 @@ $DB->query("
 		MediaList,
 		LogCue
 	FROM requests
-	WHERE ID = ".$RequestID);
+	WHERE ID = $RequestID");
 list($Title, $RequesterID, $OldTorrentID, $RequestCategoryID, $RequestReleaseType, $RequestCatalogueNumber, $BitrateList, $FormatList, $MediaList, $LogCue) = $DB->next_record();
 
 

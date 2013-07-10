@@ -363,13 +363,13 @@ $DB->query("
 	SELECT ID
 	FROM torrents
 	WHERE info_hash = '".db_string($InfoHash)."'");
-if ($DB->record_count() > 0) {
+if ($DB->has_results()) {
 	list($ID) = $DB->next_record();
 	$DB->query("
 		SELECT TorrentID
 		FROM torrents_files
 		WHERE TorrentID = $ID");
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 		$Err = '<a href="torrents.php?torrentid='.$ID.'">The exact same torrent file already exists on the site!</a>';
 	} else {
 		// A lost torrent
@@ -456,7 +456,7 @@ if ($Type == 'Music') {
 				tg.TagList
 			FROM torrents_group AS tg
 			WHERE tg.id = ".$Properties['GroupID']);
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			// Don't escape tg.Name. It's written directly to the log table
 			list($GroupID, $WikiImage, $WikiBody, $RevisionID, $Properties['Title'], $Properties['Year'], $Properties['ReleaseType'], $Properties['TagList']) = $DB->next_record(MYSQLI_NUM, array(4));
 			$Properties['TagList'] = str_replace(array(' ', '.', '_'), array(', ', '.', '.'), $Properties['TagList']);
@@ -490,7 +490,7 @@ if ($Type == 'Music') {
 						AND tg.ReleaseType = ".$T['ReleaseType']."
 						AND tg.Year = ".$T['Year']);
 
-				if ($DB->record_count() > 0) {
+				if ($DB->has_results()) {
 					list($GroupID, $WikiImage, $WikiBody, $RevisionID) = $DB->next_record();
 					if (!$Properties['Image'] && $WikiImage) {
 						$Properties['Image'] = $WikiImage;
@@ -516,7 +516,7 @@ if ($Type == 'Music') {
 							aa.Redirect
 						FROM artists_alias AS aa
 						WHERE aa.Name = '".db_string($Artist['name'])."'");
-					if ($DB->record_count() > 0) {
+					if ($DB->has_results()) {
 						while (list($ArtistID, $AliasID, $AliasName, $Redirect) = $DB->next_record(MYSQLI_NUM, false)) {
 							if (!strcasecmp($Artist['name'], $AliasName)) {
 								if ($Redirect) {
@@ -701,7 +701,8 @@ if ($Type == 'Music') {
 
 if (!empty($LogScores) && $HasLog) {
 	$LogQuery = '
-		INSERT INTO torrents_logs_new (TorrentID, Log, Details, NotEnglish, Score, Revision, Adjusted, AdjustedBy, AdjustmentReason)
+		INSERT INTO torrents_logs_new
+			(TorrentID, Log, Details, NotEnglish, Score, Revision, Adjusted, AdjustedBy, AdjustmentReason)
 		VALUES (';
 	foreach ($LogScores as $LogKey => $LogScore) {
 		$LogScores[$LogKey] = "$TorrentID, $LogScore, 1, 0, 0, NULL";
@@ -725,10 +726,14 @@ if (trim($Properties['Image']) != '') {
 			}
 
 			// Only reached if no matching GroupIDs in the cache already.
-			if (count($RecentUploads) == 5) {
+			if (count($RecentUploads) === 5) {
 				array_pop($RecentUploads);
 			}
-			array_unshift($RecentUploads, array('ID' => $GroupID, 'Name' => trim($Properties['Title']), 'Artist' => Artists::display_artists($ArtistForm, false, true), 'WikiImage' => trim($Properties['Image'])));
+			array_unshift($RecentUploads, array(
+						'ID' => $GroupID,
+						'Name' => trim($Properties['Title']),
+						'Artist' => Artists::display_artists($ArtistForm, false, true),
+						'WikiImage' => trim($Properties['Image'])));
 			$Cache->cache_value("recent_uploads_$UserID", $RecentUploads, 0);
 		} while (0);
 	}
@@ -976,7 +981,7 @@ $SQL .= " AND UserID != '".$LoggedUser['ID']."' ";
 $DB->query($SQL);
 $Debug->set_flag('upload: notification query finished');
 
-if ($DB->record_count() > 0) {
+if ($DB->has_results()) {
 	$UserArray = $DB->to_array('UserID');
 	$FilterArray = $DB->to_array('ID');
 

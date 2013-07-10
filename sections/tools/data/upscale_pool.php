@@ -37,7 +37,7 @@ $DB->query("
 list($TotalDisabled) = $DB->next_record();
 $DB->set_query_id($RS);
 
-if ($DB->record_count()) {
+if ($DB->has_results()) {
 ?>
 	<div class="box pad">
 		<p>There are currently <?=number_format($Results)?> users queued by the system and <?=number_format($TotalDisabled)?> already disabled.</p>

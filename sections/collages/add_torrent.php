@@ -20,7 +20,7 @@ function add_torrent($CollageID, $GroupID) {
 		FROM collages_torrents
 		WHERE CollageID = '$CollageID'
 			AND GroupID = '$GroupID'");
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		$DB->query("
 			INSERT IGNORE INTO collages_torrents
 				(CollageID, GroupID, UserID, Sort, AddedOn)
@@ -147,7 +147,7 @@ if ($_REQUEST['action'] == 'add_torrent') {
 			SELECT ID
 			FROM torrents_group
 			WHERE ID = '$GroupID'");
-		if (!$DB->record_count()) {
+		if (!$DB->has_results()) {
 			$Err = "One of the entered URLs ($URL) does not correspond to a torrent group on the site.";
 			break;
 		}

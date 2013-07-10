@@ -35,9 +35,9 @@ $DB->query("
 		m.LastAccess,
 		i.Avatar
 	FROM friends AS f
-		JOIN users_main AS m ON f.FriendID=m.ID
-		JOIN users_info AS i ON f.FriendID=i.UserID
-	WHERE f.UserID='$UserID'
+		JOIN users_main AS m ON f.FriendID = m.ID
+		JOIN users_info AS i ON f.FriendID = i.UserID
+	WHERE f.UserID = '$UserID'
 	ORDER BY Username
 	LIMIT $Limit");
 $Friends = $DB->to_array(false, MYSQLI_BOTH, array(6, 'Paranoia'));

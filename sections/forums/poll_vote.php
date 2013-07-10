@@ -26,7 +26,7 @@ if (!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
 			LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
 		WHERE t.ID = '$TopicID'
 		GROUP BY fp.TopicID");
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		die();
 	}
 	$ThreadInfo = $DB->next_record(MYSQLI_ASSOC);

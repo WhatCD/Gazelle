@@ -1,4 +1,4 @@
-<?
+<?php
 
 /*-- TODO ---------------------------//
 Add the JavaScript validation into the display page using the class
@@ -37,10 +37,10 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 				m.ipcc,
 				i.ResetExpires
 			FROM users_main AS m
-				INNER JOIN users_info AS i ON i.UserID=m.ID
-			WHERE i.ResetKey='".db_string($_REQUEST['key'])."'
+				INNER JOIN users_info AS i ON i.UserID = m.ID
+			WHERE i.ResetKey = '".db_string($_REQUEST['key'])."'
 				AND i.ResetKey != ''
-				AND m.Enabled='1'");
+				AND m.Enabled = '1'");
 		list($UserID, $Email, $Country, $Expires) = $DB->next_record();
 
 		if ($UserID && strtotime($Expires) > time()) {
@@ -59,11 +59,11 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 							users_main AS m,
 							users_info AS i
 						SET
-							m.PassHash='".db_string(Users::make_crypt_hash($_REQUEST['password']))."',
-							i.ResetKey='',
-							i.ResetExpires='0000-00-00 00:00:00'
-						WHERE m.ID='".db_string($UserID)."'
-							AND i.UserID=m.ID");
+							m.PassHash = '".db_string(Users::make_crypt_hash($_REQUEST['password']))."',
+							i.ResetKey = '',
+							i.ResetExpires = '0000-00-00 00:00:00'
+						WHERE m.ID = '".db_string($UserID)."'
+							AND i.UserID = m.ID");
 					$Reset = true; // Past tense form of "to reset", meaning that password has now been reset
 
 
@@ -81,9 +81,9 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 				// If his key has expired, clear all the reset information
 				$DB->query("
 					UPDATE users_info
-					SET ResetKey='',
-						ResetExpires='0000-00-00 00:00:00'
-					WHERE UserID='$UserID'");
+					SET ResetKey = '',
+						ResetExpires = '0000-00-00 00:00:00'
+					WHERE UserID = '$UserID'");
 				$_SESSION['reseterr'] = 'The link you were given has expired.'; // Error message to display on form
 			}
 			// Show him the first form (enter email address)
@@ -137,17 +137,17 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 					$Sent = 1; // If $Sent is 1, recover_step1.php displays a success message
 
 					//Log out all of the users current sessions
-					$Cache->delete_value('user_info_'.$UserID);
-					$Cache->delete_value('user_info_heavy_'.$UserID);
-					$Cache->delete_value('user_stats_'.$UserID);
-					$Cache->delete_value('enabled_'.$UserID);
+					$Cache->delete_value("user_info_$UserID");
+					$Cache->delete_value("user_info_heavy_$UserID");
+					$Cache->delete_value("user_stats_$UserID");
+					$Cache->delete_value("enabled_$UserID");
 
 					$DB->query("
 						SELECT SessionID
 						FROM users_sessions
-						WHERE UserID='$UserID'");
+						WHERE UserID = '$UserID'");
 					while (list($SessionID) = $DB->next_record()) {
-						$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
+						$Cache->delete_value("session_$UserID"."_$SessionID");
 					}
 					$DB->query("
 						UPDATE users_sessions
@@ -199,29 +199,35 @@ else {
 				$DB->query("
 					UPDATE login_attempts
 					SET
-						LastAttempt='".sqltime()."',
-						Attempts='".db_string($Attempts)."',
-						BannedUntil='".db_string($BannedUntil)."',
-						Bans=Bans+1
-					WHERE ID='".db_string($AttemptID)."'");
+						LastAttempt = '".sqltime()."',
+						Attempts = '".db_string($Attempts)."',
+						BannedUntil = '".db_string($BannedUntil)."',
+						Bans = Bans + 1
+					WHERE ID = '".db_string($AttemptID)."'");
 
 				if ($Bans > 9) { // Automated bruteforce prevention
-					$DB->query("SELECT Reason FROM ip_bans WHERE ".$IP." BETWEEN FromIP AND ToIP");
-					if ($DB->record_count() > 0) {
+					$DB->query("
+						SELECT Reason
+						FROM ip_bans
+						WHERE $IP BETWEEN FromIP AND ToIP");
+					if ($DB->has_results()) {
 						//Ban exists already, only add new entry if not for same reason
 						list($Reason) = $DB->next_record(MYSQLI_BOTH, false);
 						if ($Reason != 'Automated ban per >60 failed login attempts') {
 							$DB->query("
 								UPDATE ip_bans
 								SET Reason = CONCAT('Automated ban per >60 failed login attempts AND ', Reason)
-								WHERE FromIP = $IP AND ToIP = $IP");
+								WHERE FromIP = $IP
+									AND ToIP = $IP");
 						}
 					} else {
 						//No ban
 						$DB->query("
-							INSERT IGNORE INTO ip_bans (FromIP, ToIP, Reason)
-							VALUES ('$IP','$IP', 'Automated ban per >60 failed login attempts')");
-						$Cache->delete_value('ip_bans_'.$IPA);
+							INSERT IGNORE INTO ip_bans
+								(FromIP, ToIP, Reason)
+							VALUES
+								('$IP','$IP', 'Automated ban per >60 failed login attempts')");
+						$Cache->delete_value("ip_bans_$IPA");
 					}
 				}
 			} else {
@@ -229,16 +235,18 @@ else {
 				$DB->query("
 					UPDATE login_attempts
 					SET
-						LastAttempt='".sqltime()."',
-						Attempts='".db_string($Attempts)."',
-						BannedUntil='0000-00-00 00:00:00'
-					WHERE ID='".db_string($AttemptID)."'");
+						LastAttempt = '".sqltime()."',
+						Attempts = '".db_string($Attempts)."',
+						BannedUntil = '0000-00-00 00:00:00'
+					WHERE ID = '".db_string($AttemptID)."'");
 			}
 		} else { // User has not attempted to log in recently
 			$Attempts = 1;
 			$DB->query("
-				INSERT INTO login_attempts (UserID,IP,LastAttempt,Attempts)
-				VALUES ('".db_string($UserID)."','".db_string($IPStr)."','".sqltime()."',1)");
+				INSERT INTO login_attempts
+					(UserID, IP, LastAttempt, Attempts)
+				VALUES
+					('".db_string($UserID)."', '".db_string($IPStr)."', '".sqltime()."', 1)");
 		}
 	} // end log_attempt function
 
@@ -261,7 +269,7 @@ else {
 					Secret,
 					Enabled
 				FROM users_main
-				WHERE Username='".db_string($_POST['username'])."'
+				WHERE Username = '".db_string($_POST['username'])."'
 					AND Username != ''");
 			list($UserID, $PermissionID, $CustomPermissions, $PassHash, $Secret, $Enabled) = $DB->next_record(MYSQLI_NUM, array(2));
 			if (strtotime($BannedUntil) < time()) {
@@ -300,33 +308,33 @@ else {
 							INSERT INTO users_sessions
 								(UserID, SessionID, KeepLogged, Browser, OperatingSystem, IP, LastUpdate, FullUA)
 							VALUES
-								('$UserID', '".db_string($SessionID)."', '$KeepLogged', '$Browser','$OperatingSystem', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."', '".db_string($_SERVER['HTTP_USER_AGENT'])."')");
+								('$UserID', '".db_string($SessionID)."', '$KeepLogged', '$Browser', '$OperatingSystem', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."', '".db_string($_SERVER['HTTP_USER_AGENT'])."')");
 
-						$Cache->begin_transaction('users_sessions_'.$UserID);
-						$Cache->insert_front($SessionID,array(
-								'SessionID'=>$SessionID,
-								'Browser'=>$Browser,
-								'OperatingSystem'=>$OperatingSystem,
-								'IP'=>$_SERVER['REMOTE_ADDR'],
-								'LastUpdate'=>sqltime()
+						$Cache->begin_transaction("users_sessions_$UserID");
+						$Cache->insert_front($SessionID, array(
+								'SessionID' => $SessionID,
+								'Browser' => $Browser,
+								'OperatingSystem' => $OperatingSystem,
+								'IP' => $_SERVER['REMOTE_ADDR'],
+								'LastUpdate' => sqltime()
 								));
 						$Cache->commit_transaction(0);
 
 						$Sql = "
 							UPDATE users_main
 							SET
-								LastLogin='".sqltime()."',
-								LastAccess='".sqltime()."'";
+								LastLogin = '".sqltime()."',
+								LastAccess = '".sqltime()."'";
 
 						$Sql .= "
-							WHERE ID='".db_string($UserID)."'";
+							WHERE ID = '".db_string($UserID)."'";
 
 						$DB->query($Sql);
 
 						if (!empty($_COOKIE['redirect'])) {
 							$URL = $_COOKIE['redirect'];
 							setcookie('redirect', '', time() - 60 * 60 * 24, '/', '', false);
-							header('Location: '.$URL);
+							header("Location: $URL");
 							die();
 						} else {
 							header('Location: index.php');

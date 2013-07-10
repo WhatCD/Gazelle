@@ -34,14 +34,14 @@ class Votes {
 			return array();
 		}
 
-		$UserVotes = $Cache->get_value('voted_albums_'.$UserID);
+		$UserVotes = $Cache->get_value("voted_albums_$UserID");
 		if ($UserVotes === false) {
-			$DB->query('
+			$DB->query("
 				SELECT GroupID, Type
 				FROM users_votes
-				WHERE UserID='.$UserID);
+				WHERE UserID = $UserID");
 			$UserVotes = $DB->to_array('GroupID', MYSQL_ASSOC, false);
-			$Cache->cache_value('voted_albums_'.$UserID, $UserVotes);
+			$Cache->cache_value("voted_albums_$UserID", $UserVotes);
 		}
 		return $UserVotes;
 	}
@@ -56,18 +56,18 @@ class Votes {
 	public static function get_group_votes($GroupID) {
 		global $DB, $Cache;
 
-		$GroupVotes = $Cache->get_value('votes_'.$GroupID);
+		$GroupVotes = $Cache->get_value("votes_$GroupID");
 		if ($GroupVotes === false) {
 			$DB->query("
 				SELECT Ups AS Ups, Total AS Total
 				FROM torrents_votes
 				WHERE GroupID = $GroupID");
-			if ($DB->record_count() == 0) {
+			if (!$DB->has_results()) {
 				$GroupVotes = array('Ups' => 0, 'Total' => 0);
 			} else {
 				$GroupVotes = $DB->next_record(MYSQLI_ASSOC, false);
 			}
-			$Cache->cache_value('votes_'.$GroupID, $GroupVotes, 259200); // 3 days
+			$Cache->cache_value("votes_$GroupID", $GroupVotes, 259200); // 3 days
 		}
 		return $GroupVotes;
 	}
@@ -215,11 +215,11 @@ class Votes {
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query("
+			$DB->query('
 				SELECT GroupID
 				FROM torrents_votes
 				ORDER BY Score DESC
-				LIMIT 100");
+				LIMIT 100');
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
@@ -246,7 +246,7 @@ class Votes {
 			return false;
 		}
 
-		$Rankings = $Cache->get_value('voting_ranks_year_'.$Year);
+		$Rankings = $Cache->get_value("voting_ranks_year_$Year");
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
@@ -260,7 +260,7 @@ class Votes {
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
-			$Cache->cache_value('voting_ranks_year_'.$Year , $Rankings, 259200); // 3 days
+			$Cache->cache_value("voting_ranks_year_$Year", $Rankings, 259200); // 3 days
 		}
 
 		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);
@@ -287,7 +287,7 @@ class Votes {
 		// First year of the decade
 		$Year = $Year - ($Year % 10);
 
-		$Rankings = $Cache->get_value('voting_ranks_decade_'.$Year);
+		$Rankings = $Cache->get_value("voting_ranks_decade_$Year");
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
@@ -302,7 +302,7 @@ class Votes {
 			while (list($GID) = $DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
-			$Cache->cache_value('voting_ranks_decade_'.$Year , $Rankings, 259200); // 3 days
+			$Cache->cache_value("voting_ranks_decade_$Year", $Rankings, 259200); // 3 days
 		}
 
 		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);

@@ -14,7 +14,7 @@
 			JOIN users_info AS u ON u.UserID = c.UserID
 		WHERE ID = $ConvID");
 	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status, $Donor) = $DB->next_record();
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		error(404);
 	}
 

@@ -148,7 +148,7 @@ class Misc {
 			SELECT Username
 			FROM users_main
 			WHERE ID=".$AuthorID);
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			return -2;
 		}
 		list($AuthorName) = $DB->next_record();
@@ -393,7 +393,7 @@ class Misc {
 			FROM tag_aliases
 			WHERE BadTag = '$BadTag'
 			LIMIT 1");
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			list($AliasTag) = $DB->next_record();
 			return $AliasTag;
 		}

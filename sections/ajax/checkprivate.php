@@ -11,8 +11,8 @@ if (!is_number($TorrentID)) {
 $DB->query("
 	SELECT File
 	FROM torrents_files
-	WHERE TorrentID='$TorrentID'");
-if ($DB->record_count() == 0) {
+	WHERE TorrentID = '$TorrentID'");
+if (!$DB->has_results()) {
 	echo('Torrent not found.');
 	die();
 }

@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	error(404);
 }
@@ -8,14 +8,17 @@ if ($Action != 'unfill' && $Action != 'delete') {
 	error(404);
 }
 
-$DB->query("SELECT UserID, FillerID FROM requests WHERE ID = ".$_GET['id']);
+$DB->query("
+	SELECT UserID, FillerID
+	FROM requests
+	WHERE ID = ".$_GET['id']);
 list($RequestorID, $FillerID) = $DB->next_record();
 
 if ($Action == 'unfill') {
 	if ($LoggedUser['ID'] != $RequestorID && $LoggedUser['ID'] != $FillerID && !check_perms('site_moderate_requests')) {
 		error(403);
 	}
-} elseif ($Action == "delete") {
+} elseif ($Action == 'delete') {
 	if ($LoggedUser['ID'] != $RequestorID && !check_perms('site_moderate_requests')) {
 		error(403);
 	}

@@ -17,17 +17,34 @@ gc_enable();
 
 $Cache->InternalCache = false; // We don't want PHP to cache all results internally
 $DB->query("TRUNCATE TABLE torrents_peerlists_compare");
-$DB->query("INSERT INTO torrents_peerlists_compare
-	SELECT ID, GroupID, Seeders, Leechers, Snatched FROM torrents
-	ON DUPLICATE KEY UPDATE Seeders=VALUES(Seeders), Leechers=VALUES(Leechers), Snatches=VALUES(Snatches)");
-$DB->query("CREATE TEMPORARY TABLE tpc_temp
-	(TorrentID int, GroupID int, Seeders int, Leechers int, Snatched int,
-	PRIMARY KEY (GroupID,TorrentID))");
-$DB->query("INSERT INTO tpc_temp SELECT t2.* FROM torrents_peerlists t1 JOIN torrents_peerlists_compare t2 USING(TorrentID)
-	WHERE t1.Seeders != t2.Seeders OR t1.Leechers != t2.Leechers OR t1.Snatches != t2.Snatches");
+$DB->query("
+	INSERT INTO torrents_peerlists_compare
+	SELECT ID, GroupID, Seeders, Leechers, Snatched
+	FROM torrents
+	ON DUPLICATE KEY UPDATE
+		Seeders = VALUES(Seeders),
+		Leechers = VALUES(Leechers),
+		Snatches = VALUES(Snatches)");
+$DB->query("
+	CREATE TEMPORARY TABLE tpc_temp
+		(TorrentID int, GroupID int, Seeders int, Leechers int, Snatched int,
+	PRIMARY KEY (GroupID, TorrentID))");
+$DB->query("
+	INSERT INTO tpc_temp
+	SELECT t2.*
+	FROM torrents_peerlists t1
+		JOIN torrents_peerlists_compare t2
+	USING(TorrentID)
+	WHERE t1.Seeders != t2.Seeders
+		OR t1.Leechers != t2.Leechers
+		OR t1.Snatches != t2.Snatches");
 
 $StepSize = 30000;
-$DB->query("SELECT * FROM tpc_temp ORDER BY GroupID ASC, TorrentID ASC LIMIT $StepSize");
+$DB->query("
+	SELECT *
+	FROM tpc_temp
+	ORDER BY GroupID ASC, TorrentID ASC
+	LIMIT $StepSize");
 
 $RowNum = 0;
 $LastGroupID = 0;
@@ -35,7 +52,7 @@ $UpdatedKeys = $UncachedGroups = 0;
 list($TorrentID, $GroupID, $Seeders, $Leechers, $Snatches) = $DB->next_record(MYSQLI_NUM, false);
 while ($TorrentID) {
 	if ($LastGroupID != $GroupID) {
-		$CachedData = $Cache->get_value('torrent_group_'.$GroupID);
+		$CachedData = $Cache->get_value("torrent_group_$GroupID");
 		if ($CachedData !== false) {
 			if (isset($CachedData['ver']) && $CachedData['ver'] == CACHE::GROUP_VERSION) {
 				$CachedStats = &$CachedData['d']['Torrents'];
@@ -56,23 +73,31 @@ while ($TorrentID) {
 			unset($OldValues);
 		}
 		if (!($RowNum % $StepSize)) {
-			$DB->query("SELECT * FROM tpc_temp WHERE GroupID > $GroupID OR (GroupID = $GroupID AND TorrentID > $TorrentID)
-				ORDER BY GroupID ASC, TorrentID ASC LIMIT $StepSize");
+			$DB->query("
+				SELECT *
+				FROM tpc_temp
+				WHERE GroupID > $GroupID
+					OR (GroupID = $GroupID AND TorrentID > $TorrentID)
+				ORDER BY GroupID ASC, TorrentID ASC
+				LIMIT $StepSize");
 		}
 		$LastGroupID = $GroupID;
 		list($TorrentID, $GroupID, $Seeders, $Leechers, $Snatches) = $DB->next_record(MYSQLI_NUM, false);
 	}
 	if ($Changed) {
-		$Cache->cache_value('torrent_group_'.$LastGroupID, $CachedData, 0);
+		$Cache->cache_value("torrent_group_$LastGroupID", $CachedData, 0);
 		unset($CachedStats);
 		$UpdatedKeys++;
 		$Changed = false;
 	}
 }
-printf("Updated %d keys, skipped %d keys in %.6fs (%d kB memory)\n", $UpdatedKeys, $UncachedGroups, microtime(true)-$ScriptStartTime, memory_get_usage(true)>>10);
+printf("Updated %d keys, skipped %d keys in %.6fs (%d kB memory)\n", $UpdatedKeys, $UncachedGroups, microtime(true) - $ScriptStartTime, memory_get_usage(true) >> 10);
 
 $DB->query("TRUNCATE TABLE torrents_peerlists");
-$DB->query("INSERT INTO torrents_peerlists SELECT * FROM torrents_peerlists_compare");
+$DB->query("
+	INSERT INTO torrents_peerlists
+	SELECT *
+	FROM torrents_peerlists_compare");
 
 if (check_perms('admin_schedule')) {
 	echo '<pre>';

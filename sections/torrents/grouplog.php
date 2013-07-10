@@ -45,7 +45,7 @@ if (!empty($Groups['matches'][$GroupID])) {
 					FROM torrents
 					WHERE ID = $TorrentID");
 				list($Media, $Format, $Encoding) = $DB->next_record();
-				if ($DB->record_count() == 0) { ?>
+				if (!$DB->has_results()) { ?>
 					<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a> (Deleted)</td><?
 				} elseif ($Media == '') { ?>
 					<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a></td><?

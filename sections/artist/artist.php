@@ -59,7 +59,7 @@ if ($Data) {
 			GROUP BY a.ArtistID";
 	$DB->query($sql);
 
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		error(404);
 	}
 
@@ -93,7 +93,7 @@ if (empty($LoggedUser['DisableRequests'])) {
 			GROUP BY r.ID
 			ORDER BY Votes DESC");
 
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			$Requests = $DB->to_array();
 		} else {
 			$Requests = array();
@@ -553,10 +553,10 @@ if (check_perms('site_torrents_notify')) {
 
 if (check_perms('zip_downloader')) {
 	if (isset($LoggedUser['Collector'])) {
-		list($ZIPList,$ZIPPrefs) = $LoggedUser['Collector'];
-		$ZIPList = explode(':',$ZIPList);
+		list($ZIPList, $ZIPPrefs) = $LoggedUser['Collector'];
+		$ZIPList = explode(':', $ZIPList);
 	} else {
-		$ZIPList = array('00','11');
+		$ZIPList = array('00', '11');
 		$ZIPPrefs = 1;
 	}
 ?>
@@ -572,7 +572,7 @@ if (check_perms('zip_downloader')) {
 						<li id="list<?=$ListItem?>">
 							<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 							<span style="float: left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-							<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>');return false;" style="float: right;" class="brackets" title="Remove format from the Collector">X</a></span>
+							<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>'); return false;" style="float: right;" class="brackets" title="Remove format from the Collector">X</a></span>
 							<br style="clear: all;" />
 						</li>
 <? } ?>
@@ -583,7 +583,7 @@ $OpenGroup = false;
 $LastGroupID = -1;
 
 foreach ($ZIPOptions as $Option) {
-	list($GroupID,$OptionID,$OptName) = $Option;
+	list($GroupID, $OptionID, $OptName) = $Option;
 
 	if ($GroupID != $LastGroupID) {
 		$LastGroupID = $GroupID;

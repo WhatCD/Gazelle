@@ -42,7 +42,7 @@ if (!isset($_POST['type'])) {
 foreach ($ReportType['report_fields'] as $Field => $Value) {
 	if ($Value == '1') {
 		if (empty($_POST[$Field])) {
-			$Err = "You are missing a required field (".$Field.") for a ".$ReportType['title']." report.";
+			$Err = "You are missing a required field ($Field) for a ".$ReportType['title'].' report.';
 		}
 	}
 }
@@ -54,7 +54,7 @@ if (!empty($_POST['sitelink'])) {
 			$Err = "The extra permalinks you gave included the link to the torrent you're reporting!";
 		}
 	} else {
-		$Err = "The permalink was incorrect. It should look like https://".SSL_SITE_URL."/torrents.php?torrentid=12345";
+		$Err = 'The permalink was incorrect. It should look like https://'.SSL_SITE_URL.'/torrents.php?torrentid=12345';
 	}
 } else {
 	$ExtraIDs = '';
@@ -86,7 +86,7 @@ if (!empty($_POST['track'])) {
 	if (preg_match('/([0-9]+( [0-9]+)*)|All/is', $_POST['track'], $Matches)) {
 		$Tracks = $Matches[0];
 	} else {
-		$Err = 'Tracks should be given in a space separated list of numbers (no other characters)';
+		$Err = 'Tracks should be given in a space-separated list of numbers with no other characters.';
 	}
 } else {
 	$Tracks = '';
@@ -98,8 +98,11 @@ if (!empty($_POST['extra'])) {
 	$Err = 'As useful as blank reports are, could you be a tiny bit more helpful? (Leave a comment)';
 }
 
-$DB->query("SELECT ID FROM torrents WHERE ID=".$TorrentID);
-if ($DB->record_count() < 1) {
+$DB->query("
+	SELECT ID
+	FROM torrents
+	WHERE ID = $TorrentID");
+if (!$DB->has_results()) {
 	$Err = "A torrent with that ID doesn't exist!";
 }
 
@@ -109,22 +112,28 @@ if (!empty($Err)) {
 	die();
 }
 
-$DB->query("SELECT ID FROM reportsv2 WHERE TorrentID=".$TorrentID." AND ReporterID=".db_string($LoggedUser['ID'])." AND ReportedTime > '".time_minus(3)."'");
-if ($DB->record_count() > 0) {
-	header('Location: torrents.php?torrentid='.$TorrentID);
+$DB->query("
+	SELECT ID
+	FROM reportsv2
+	WHERE TorrentID = $TorrentID
+		AND ReporterID = ".db_string($LoggedUser['ID'])."
+		AND ReportedTime > '".time_minus(3)."'");
+if ($DB->has_results()) {
+	header("Location: torrents.php?torrentid=$TorrentID");
 	die();
 }
 
-$DB->query("INSERT INTO reportsv2
-			(ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, Track, Image, ExtraID, Link)
-			VALUES
-			(".db_string($LoggedUser['ID']).", $TorrentID, '".db_string($Type)."', '$Extra', 'New', '".sqltime()."', '".db_string($Tracks)."', '".db_string($Images)."', '".db_string($ExtraIDs)."', '".db_string($Links)."')");
+$DB->query("
+	INSERT INTO reportsv2
+		(ReporterID, TorrentID, Type, UserComment, Status, ReportedTime, Track, Image, ExtraID, Link)
+	VALUES
+		(".db_string($LoggedUser['ID']).", $TorrentID, '".db_string($Type)."', '$Extra', 'New', '".sqltime()."', '".db_string($Tracks)."', '".db_string($Images)."', '".db_string($ExtraIDs)."', '".db_string($Links)."')");
 
 $ReportID = $DB->inserted_id();
 
 
-$Cache->delete_value('reports_torrent_'.$TorrentID);
+$Cache->delete_value("reports_torrent_$TorrentID");
 
 $Cache->increment('num_torrent_reportsv2');
-header('Location: torrents.php?torrentid='.$TorrentID);
+header("Location: torrents.php?torrentid=$TorrentID");
 ?>

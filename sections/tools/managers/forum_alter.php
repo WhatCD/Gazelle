@@ -38,7 +38,7 @@ if ($_POST['submit'] == 'Delete') { //Delete
 			SELECT MinClassRead
 			FROM forums
 			WHERE ID = ' . $P['id']);
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			error(404);
 		} else {
 			list($MinClassRead) = $DB->next_record();

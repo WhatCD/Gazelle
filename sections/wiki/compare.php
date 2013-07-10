@@ -1,8 +1,8 @@
 <?
 //Diff function by Leto of StC.
 function diff($OldText, $NewText) {
-	$LineArrayOld = explode("\n",$OldText);
-	$LineArrayNew = explode("\n",$NewText);
+	$LineArrayOld = explode("\n", $OldText);
+	$LineArrayNew = explode("\n", $NewText);
 	$LineOffset = 0;
 	$Result = array();
 
@@ -13,7 +13,7 @@ function diff($OldText, $NewText) {
 		}
 		$Found = -1;
 
-		while ($Key<count($LineArrayNew)) {
+		while ($Key < count($LineArrayNew)) {
 			if ($OldString != $LineArrayNew[$Key]) {
 				$Key++;
 			} elseif ($OldString == $LineArrayNew[$Key]) {
@@ -39,7 +39,7 @@ function diff($OldText, $NewText) {
 				}
 				$Result[] = '<span class="line_moved">&rarr; '.$OldString.'</span><br />';
 			}
-				$LineOffset = $Found-$OldLine;
+				$LineOffset = $Found - $OldLine;
 		}
 	}
 	if (count($LineArrayNew) > count($LineArrayOld) + $LineOffset) {
@@ -61,9 +61,9 @@ function get_body($ID, $Rev) {
 		$DB->query("
 			SELECT Body
 			FROM wiki_revisions
-			WHERE ID='$ID'
-				AND Revision='$Rev'");
-		if (!$DB->record_count()) {
+			WHERE ID = '$ID'
+				AND Revision = '$Rev'");
+		if (!$DB->has_results()) {
 			error(404);
 		}
 		list($Str) = $DB->next_record();
@@ -71,15 +71,16 @@ function get_body($ID, $Rev) {
 	return $Str;
 }
 
-if (
-	!isset($_GET['old']) ||
-	!isset($_GET['new']) ||
-	!isset($_GET['id']) ||
-	!is_number($_GET['old']) ||
-	!is_number($_GET['new']) ||
-	!is_number($_GET['id']) ||
-	$_GET['old'] > $_GET['new']
-) { error(0); }
+if (!isset($_GET['old'])
+	|| !isset($_GET['new'])
+	|| !isset($_GET['id'])
+	|| !is_number($_GET['old'])
+	|| !is_number($_GET['new'])
+	|| !is_number($_GET['id'])
+	|| $_GET['old'] > $_GET['new']
+) {
+	error(0);
+}
 
 $ArticleID = $_GET['id'];
 

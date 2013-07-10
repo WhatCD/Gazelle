@@ -31,7 +31,7 @@ if (($Message = db_string($_POST['message'])) && ($Name = db_string($_POST['name
 				SELECT *
 				FROM staff_pm_responses
 				WHERE ID = $ID");
-			if ($DB->record_count() != 0) {
+			if ($DB->has_results()) {
 				// Edit response
 				$DB->query("
 					UPDATE staff_pm_responses

@@ -20,7 +20,7 @@ $DB->query("
 	SELECT CategoryID, Name
 	FROM torrents_group
 	WHERE ID = '$NewGroupID'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	error('Target group does not exist.');
 }
 list($CategoryID, $NewName) = $DB->next_record();

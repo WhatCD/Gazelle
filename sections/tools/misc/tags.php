@@ -76,7 +76,7 @@ if (isset($_GET['tag']) || isset($_GET['replace'])) {
 			FROM tags
 			WHERE Name = '$Tag'
 			LIMIT 1;");
-		if ($DB->record_count() == 0) {
+		if (!$DB->has_results()) {
 			echo "
 				<div class=\"box pad center\">
 					<strong>Error:</strong> No such tag found: $Tag
@@ -93,7 +93,7 @@ if (isset($_GET['tag']) || isset($_GET['replace'])) {
 			FROM tags
 			WHERE Name = '$Replacement'
 			LIMIT 1;");
-		if ($DB->record_count() == 0 ) {
+		if (!$DB->has_results() ) {
 			$Mode = MODE_RENAME;
 		} else {
 			$Mode = MODE_MERGE;
@@ -156,7 +156,7 @@ if (isset($_GET['tag']) || isset($_GET['replace'])) {
 				SELECT GroupID
 				FROM torrents_tags
 				WHERE TagID = $ReplacementID;");
-			if ($DB->record_count() > 0 ) {
+			if ($DB->has_results() ) {
 				$Query = "
 					DELETE FROM torrents_tags
 					WHERE TagID = $TagID
@@ -181,7 +181,7 @@ if (isset($_GET['tag']) || isset($_GET['replace'])) {
 				SELECT ArtistID
 				FROM artists_tags
 				WHERE TagID = $ReplacementID;");
-			if ($DB->record_count() > 0 ) {
+			if ($DB->has_results() ) {
 				$Query = "
 					DELETE FROM artists_tags
 					WHERE TagID = $TagID
@@ -206,7 +206,7 @@ if (isset($_GET['tag']) || isset($_GET['replace'])) {
 				SELECT RequestID
 				FROM requests_tags
 				WHERE TagID = $ReplacementID;");
-			if ($DB->record_count() > 0) {
+			if ($DB->has_results()) {
 				$Query = "
 					DELETE FROM requests_tags
 					WHERE TagID = $TagID

@@ -15,7 +15,8 @@ if (isset($_REQUEST['addtokens'])) {
 		SET FLTokens = FLTokens + $Tokens
 		WHERE Enabled = '1'";
 	if (!isset($_REQUEST['leechdisabled'])) {
-		$sql .= " AND can_leech = 1";
+		$sql .= "
+			AND can_leech = 1";
 	}
 	$DB->query($sql);
 	$sql = "
@@ -23,11 +24,12 @@ if (isset($_REQUEST['addtokens'])) {
 		FROM users_main
 		WHERE Enabled = '1'";
 	if (!isset($_REQUEST['leechdisabled'])) {
-		$sql .= " AND can_leech = 1";
+		$sql .= "
+			AND can_leech = 1";
 	}
 	$DB->query($sql);
 	while (list($UserID) = $DB->next_record()) {
-		$Cache->delete_value('user_info_heavy_'.$UserID);
+		$Cache->delete_value("user_info_heavy_$UserID");
 	}
 	$message = '<strong>' . number_format($Tokens) . 'freeleech tokens added to all enabled users' . (!isset($_REQUEST['leechdisabled']) ? ' with enabled leeching privs' : '') . '.</strong><br /><br />';
 } elseif (isset($_REQUEST['cleartokens'])) {
@@ -57,7 +59,7 @@ if (isset($_REQUEST['addtokens'])) {
 
 	foreach ($Users as $UserID) {
 		list($UserID) = $UserID;
-		$Cache->delete_value('user_info_heavy_'.$UserID);
+		$Cache->delete_value("user_info_heavy_$UserID");
 	}
 
 	$where = '';

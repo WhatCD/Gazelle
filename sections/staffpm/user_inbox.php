@@ -35,7 +35,7 @@ $StaffPMs = $DB->query("
 	<div class="box pad" id="inbox">
 <?
 
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	// No messages
 ?>
 		<h2>No messages</h2>

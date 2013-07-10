@@ -21,7 +21,7 @@ $DB->query("
 	WHERE f.UserID = '$LoggedUser[ID]'
 		AND f.FriendID = '$FriendID'");
 
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	echo json_encode(array("status" => "error", "response" => "Not on friend list."));
 	die();
 }

@@ -226,7 +226,7 @@ class Tools {
 			FROM users_info
 			WHERE UserID=$UserID
 				AND Warned != '0000-00-00 00:00:00'");
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			//User was already warned, appending new warning to old.
 			list($OldDate) = $DB->next_record();
 			$NewExpDate = date('Y-m-d H:i:s', strtotime($OldDate) + $Duration);

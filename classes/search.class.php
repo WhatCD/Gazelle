@@ -53,11 +53,11 @@ class SPHINX_SEARCH extends SphinxClient {
 		$Filters = array();
 		foreach ($this->Filters as $Name => $Values) {
 			foreach ($Values as $Value) {
-				$Filters[] = $Name." - ".$Value;
+				$Filters[] = "$Name - $Value";
 			}
 		}
 
-		$this->Queries[] = array('Params: '.$Query.' Filters: '.implode(", ", $Filters).' Indicies: '.$this->Index,($QueryEndTime - $QueryStartTime) * 1000);
+		$this->Queries[] = array("Params: $Query Filters: ".implode(', ', $Filters).' Indicies: '.$this->Index, ($QueryEndTime - $QueryStartTime) * 1000);
 		$this->Time += ($QueryEndTime - $QueryStartTime) * 1000;
 
 		if ($Result === false) {
@@ -65,7 +65,7 @@ class SPHINX_SEARCH extends SphinxClient {
 				send_irc('PRIVMSG '.ADMIN_CHAN.' :!dev Connection to searchd failed');
 				$Cache->cache_value('sphinx_crash_reported', 1, 3600);
 			}
-			send_irc('PRIVMSG '.LAB_CHAN.' :Search for "'.$Query.'" ('.str_replace("\n",'',print_r($this->Filters, true)).') failed: '.$this->GetLastError());
+			send_irc('PRIVMSG '.LAB_CHAN." :Search for \"$Query\" (".str_replace("\n", '', print_r($this->Filters, true)).') failed: '.$this->GetLastError());
 		}
 
 		$this->TotalResults = $Result['total_found'];
@@ -89,7 +89,7 @@ class SPHINX_SEARCH extends SphinxClient {
 		foreach ($MatchIDs as $Match) {
 			$Matches[$Match] = $Matches[$Match]['attrs'];
 			if (!empty($CachePrefix)) {
-				$Data = $Cache->get_value($CachePrefix.'_'.$Match);
+				$Data = $Cache->get_value($CachePrefix."_$Match");
 				if ($Data == false) {
 					$NotFound[] = $Match;
 					continue;
@@ -128,7 +128,7 @@ class SPHINX_SEARCH extends SphinxClient {
 				}
 			}
 		} else {
-			$Matches = array('matches'=>$Matches,'notfound'=>$NotFound);
+			$Matches = array('matches' => $Matches, 'notfound' => $NotFound);
 		}
 
 		return $Matches;
@@ -157,7 +157,7 @@ class SPHINX_SEARCH extends SphinxClient {
 	}
 
 	function set_filter_range($Name, $Min, $Max, $Exclude) {
-		$this->Filters[$Name] = array($Min.'-'.$Max);
+		$this->Filters[$Name] = array("$Min-$Max");
 		$this->SetFilterRange($Name, $Min, $Max, $Exclude);
 	}
 

@@ -30,7 +30,7 @@ class UserRank {
 		$DB->query("
 			SELECT MIN(Val)
 			FROM temp_stats
-			GROUP BY CEIL(ID/(".(int)$UserCount."/100));");
+			GROUP BY CEIL(ID / (".(int)$UserCount." / 100));");
 
 		$Table = $DB->to_array();
 
@@ -46,7 +46,7 @@ class UserRank {
 				$Query =  "
 					SELECT Uploaded
 					FROM users_main
-					WHERE Enabled='1'
+					WHERE Enabled = '1'
 						AND Uploaded > 0
 					ORDER BY Uploaded;";
 				break;
@@ -54,7 +54,7 @@ class UserRank {
 				$Query =  "
 					SELECT Downloaded
 					FROM users_main
-					WHERE Enabled='1'
+					WHERE Enabled = '1'
 						AND Downloaded > 0
 					ORDER BY Downloaded;";
 				break;
@@ -62,8 +62,8 @@ class UserRank {
 				$Query = "
 					SELECT COUNT(t.ID) AS Uploads
 					FROM users_main AS um
-						JOIN torrents AS t ON t.UserID=um.ID
-					WHERE um.Enabled='1'
+						JOIN torrents AS t ON t.UserID = um.ID
+					WHERE um.Enabled = '1'
 					GROUP BY um.ID
 					ORDER BY Uploads;";
 				break;
@@ -71,8 +71,8 @@ class UserRank {
 				$Query = "
 					SELECT COUNT(r.ID) AS Requests
 					FROM users_main AS um
-						JOIN requests AS r ON r.FillerID=um.ID
-					WHERE um.Enabled='1'
+						JOIN requests AS r ON r.FillerID = um.ID
+					WHERE um.Enabled = '1'
 					GROUP BY um.ID
 					ORDER BY Requests;";
 				break;
@@ -80,8 +80,8 @@ class UserRank {
 				$Query = "
 					SELECT COUNT(p.ID) AS Posts
 					FROM users_main AS um
-						JOIN forums_posts AS p ON p.AuthorID=um.ID
-					WHERE um.Enabled='1'
+						JOIN forums_posts AS p ON p.AuthorID = um.ID
+					WHERE um.Enabled = '1'
 					GROUP BY um.ID
 					ORDER BY Posts;";
 				break;
@@ -89,17 +89,16 @@ class UserRank {
 				$Query = "
 					SELECT SUM(rv.Bounty) AS Bounty
 					FROM users_main AS um
-						JOIN requests_votes AS rv ON rv.UserID=um.ID
-					WHERE um.Enabled='1'
-					GROUP BY um.ID
+						JOIN requests_votes AS rv ON rv.UserID = um.ID
+					WHERE um.Enabled = '1' " .
+					"GROUP BY um.ID
 					ORDER BY Bounty;";
-
 				break;
 			case 'artists':
 				$Query = "
 					SELECT COUNT(ta.ArtistID) AS Artists
 					FROM torrents_artists AS ta
-						JOIN torrents_group AS tg ON tg.ID=ta.GroupID
+						JOIN torrents_group AS tg ON tg.ID = ta.GroupID
 						JOIN torrents AS t ON t.GroupID = tg.ID
 					WHERE t.UserID != ta.UserID
 					GROUP BY tg.ID
@@ -118,13 +117,13 @@ class UserRank {
 		$Table = $Cache->get_value(PREFIX.$TableName);
 		if (!$Table) {
 			//Cache lock!
-			$Lock = $Cache->get_value(PREFIX.$TableName."_lock");
+			$Lock = $Cache->get_value(PREFIX.$TableName.'_lock');
 			if ($Lock) {
 				return false;
 			} else {
-				$Cache->cache_value(PREFIX.$TableName."_lock", '1', 300);
+				$Cache->cache_value(PREFIX.$TableName.'_lock', '1', 300);
 				$Table = self::build_table(PREFIX.$TableName, self::table_query($TableName));
-				$Cache->delete_value(PREFIX.$TableName."_lock");
+				$Cache->delete_value(PREFIX.$TableName.'_lock');
 			}
 		}
 		$LastPercentile = 0;

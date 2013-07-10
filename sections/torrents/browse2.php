@@ -54,7 +54,7 @@ if (!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
 			SELECT ID, GroupID
 			FROM torrents
 			WHERE info_hash = '$InfoHash'");
-		if ($DB->record_count() > 0) {
+		if ($DB->has_results()) {
 			list($ID, $GroupID) = $DB->next_record();
 			header("Location: torrents.php?id=$GroupID&torrentid=$ID");
 			die();

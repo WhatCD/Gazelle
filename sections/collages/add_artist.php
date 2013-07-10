@@ -21,7 +21,7 @@ function add_artist($CollageID, $ArtistID) {
 		FROM collages_artists
 		WHERE CollageID = '$CollageID'
 			AND ArtistID = '$ArtistID'");
-	if ($DB->record_count() == 0) {
+	if (!$DB->has_results()) {
 		$DB->query("
 			INSERT IGNORE INTO collages_artists
 				(CollageID, ArtistID, UserID, Sort, AddedOn)
@@ -147,7 +147,7 @@ if ($_REQUEST['action'] == 'add_artist') {
 			SELECT ArtistID
 			FROM artists_group
 			WHERE ArtistID = '$ArtistID'");
-		if (!$DB->record_count()) {
+		if (!$DB->has_results()) {
 			$Err = "One of the entered URLs ($URL) does not correspond to an artist on the site.";
 			break;
 		}

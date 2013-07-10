@@ -1,4 +1,4 @@
-<?
+<?php
 /*-- Script Start Class --------------------------------*/
 /*------------------------------------------------------*/
 /* This isnt really a class but a way to tie other      */
@@ -194,9 +194,9 @@ spl_autoload_register(function ($ClassName) {
 			$FileName = 'zip.class';
 			break;
 		default:
-			die("Couldn't import class " . $ClassName);
+			die("Couldn't import class $ClassName");
 	}
-	require_once(SERVER_ROOT.'/classes/' . $FileName . '.php');
+	require_once(SERVER_ROOT . "/classes/$FileName.php");
 });
 
 
@@ -227,7 +227,7 @@ if (isset($_COOKIE['session'])) {
 	$LoginCookie = $Enc->decrypt($_COOKIE['session']);
 }
 if (isset($LoginCookie)) {
-	list($SessionID, $LoggedUser['ID']) = explode("|~|", $Enc->decrypt($LoginCookie));
+	list($SessionID, $LoggedUser['ID']) = explode('|~|', $Enc->decrypt($LoginCookie));
 	$LoggedUser['ID'] = (int)$LoggedUser['ID'];
 
 	$UserID = $LoggedUser['ID']; //TODO: UserID should not be LoggedUser
@@ -236,7 +236,7 @@ if (isset($LoginCookie)) {
 		logout();
 	}
 
-	$UserSessions = $Cache->get_value('users_sessions_'.$UserID);
+	$UserSessions = $Cache->get_value("users_sessions_$UserID");
 	if (!is_array($UserSessions)) {
 		$DB->query("
 			SELECT
@@ -246,11 +246,11 @@ if (isset($LoginCookie)) {
 				IP,
 				LastUpdate
 			FROM users_sessions
-			WHERE UserID='$UserID'
+			WHERE UserID = '$UserID'
 				AND Active = 1
 			ORDER BY LastUpdate DESC");
 		$UserSessions = $DB->to_array('SessionID',MYSQLI_ASSOC);
-		$Cache->cache_value('users_sessions_'.$UserID, $UserSessions, 0);
+		$Cache->cache_value("users_sessions_$UserID", $UserSessions, 0);
 	}
 
 	if (!array_key_exists($SessionID, $UserSessions)) {
@@ -263,7 +263,7 @@ if (isset($LoginCookie)) {
 		$DB->query("
 			SELECT Enabled
 			FROM users_main
-			WHERE ID='$LoggedUser[ID]'");
+			WHERE ID = '$LoggedUser[ID]'");
 		list($Enabled) = $DB->next_record();
 		$Cache->cache_value('enabled_'.$LoggedUser['ID'], $Enabled, 0);
 	}
@@ -278,7 +278,7 @@ if (isset($LoginCookie)) {
 		$DB->query("
 			SELECT Uploaded AS BytesUploaded, Downloaded AS BytesDownloaded, RequiredRatio
 			FROM users_main
-			WHERE ID='$LoggedUser[ID]'");
+			WHERE ID = '$LoggedUser[ID]'");
 		$UserStats = $DB->next_record(MYSQLI_ASSOC);
 		$Cache->cache_value('user_stats_'.$LoggedUser['ID'], $UserStats, 3600);
 	}
@@ -293,13 +293,13 @@ if (isset($LoginCookie)) {
 	// Create LoggedUser array
 	$LoggedUser = array_merge($HeavyInfo, $LightInfo, $Permissions, $UserStats);
 
-	$LoggedUser['RSS_Auth']=md5($LoggedUser['ID'].RSS_HASH.$LoggedUser['torrent_pass']);
+	$LoggedUser['RSS_Auth'] = md5($LoggedUser['ID'] . RSS_HASH . $LoggedUser['torrent_pass']);
 
 	// $LoggedUser['RatioWatch'] as a bool to disable things for users on Ratio Watch
 	$LoggedUser['RatioWatch'] = (
-		$LoggedUser['RatioWatchEnds'] != '0000-00-00 00:00:00' &&
-		time() < strtotime($LoggedUser['RatioWatchEnds']) &&
-		($LoggedUser['BytesDownloaded'] * $LoggedUser['RequiredRatio']) > $LoggedUser['BytesUploaded']
+		$LoggedUser['RatioWatchEnds'] != '0000-00-00 00:00:00'
+		&& time() < strtotime($LoggedUser['RatioWatchEnds'])
+		&& ($LoggedUser['BytesDownloaded'] * $LoggedUser['RequiredRatio']) > $LoggedUser['BytesUploaded']
 	);
 	if (!isset($LoggedUser['ID'])) {
 		$Debug->log_var($LightInfo, 'LightInfo');
@@ -315,31 +315,33 @@ if (isset($LoginCookie)) {
 	$Cache->CanClear = check_perms('admin_clear_cache');
 
 	// Because we <3 our staff
-	if (check_perms('site_disable_ip_history')) { $_SERVER['REMOTE_ADDR'] = '127.0.0.1'; }
+	if (check_perms('site_disable_ip_history')) {
+		$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+	}
 
 	// Update LastUpdate every 10 minutes
 	if (strtotime($UserSessions[$SessionID]['LastUpdate']) + 600 < time()) {
 		$DB->query("
 			UPDATE users_main
-			SET LastAccess='".sqltime()."'
-			WHERE ID='$LoggedUser[ID]'");
+			SET LastAccess = '".sqltime()."'
+			WHERE ID = '$LoggedUser[ID]'");
 		$DB->query("
 			UPDATE users_sessions
 			SET
-				IP='".$_SERVER['REMOTE_ADDR']."',
-				Browser='$Browser',
-				OperatingSystem='$OperatingSystem',
-				LastUpdate='".sqltime()."'
-			WHERE UserID='$LoggedUser[ID]'
-				AND SessionID='".db_string($SessionID)."'");
-		$Cache->begin_transaction('users_sessions_'.$UserID);
+				IP = '".$_SERVER['REMOTE_ADDR']."',
+				Browser = '$Browser',
+				OperatingSystem = '$OperatingSystem',
+				LastUpdate = '".sqltime()."'
+			WHERE UserID = '$LoggedUser[ID]'
+				AND SessionID = '".db_string($SessionID)."'");
+		$Cache->begin_transaction("users_sessions_$UserID");
 		$Cache->delete_row($SessionID);
 		$Cache->insert_front($SessionID,array(
-				'SessionID'=>$SessionID,
-				'Browser'=>$Browser,
-				'OperatingSystem'=>$OperatingSystem,
-				'IP'=>$_SERVER['REMOTE_ADDR'],
-				'LastUpdate'=>sqltime()
+				'SessionID' => $SessionID,
+				'Browser' => $Browser,
+				'OperatingSystem' => $OperatingSystem,
+				'IP' => $_SERVER['REMOTE_ADDR'],
+				'LastUpdate' => sqltime()
 				));
 		$Cache->commit_transaction(0);
 	}
@@ -351,7 +353,7 @@ if (isset($LoginCookie)) {
 			$DB->query("
 				SELECT ID, Label
 				FROM users_notify_filters
-				WHERE UserID='$LoggedUser[ID]'");
+				WHERE UserID = '$LoggedUser[ID]'");
 			$LoggedUser['Notify'] = $DB->to_array('ID');
 			$Cache->cache_value('notify_filters_'.$LoggedUser['ID'], $LoggedUser['Notify'], 2592000);
 		}
@@ -374,10 +376,10 @@ if (isset($LoginCookie)) {
 		$NewIP = db_string($_SERVER['REMOTE_ADDR']);
 		$DB->query("
 			UPDATE users_history_ips
-			SET EndTime='".sqltime()."'
+			SET EndTime = '".sqltime()."'
 			WHERE EndTime IS NULL
-				AND UserID='$LoggedUser[ID]'
-				AND IP='$CurIP'");
+				AND UserID = '$LoggedUser[ID]'
+				AND IP = '$CurIP'");
 		$DB->query("
 			INSERT IGNORE INTO users_history_ips
 				(UserID, IP, StartTime)
@@ -387,8 +389,8 @@ if (isset($LoginCookie)) {
 		$ipcc = Tools::geoip($NewIP);
 		$DB->query("
 			UPDATE users_main
-			SET IP='$NewIP', ipcc='$ipcc'
-			WHERE ID='$LoggedUser[ID]'");
+			SET IP = '$NewIP', ipcc = '$ipcc'
+			WHERE ID = '$LoggedUser[ID]'");
 		$Cache->begin_transaction('user_info_heavy_'.$LoggedUser['ID']);
 		$Cache->update_row(false, array('IP' => $_SERVER['REMOTE_ADDR']));
 		$Cache->commit_transaction(0);
@@ -403,7 +405,7 @@ if (isset($LoginCookie)) {
 		$DB->query('
 			SELECT
 				ID,
-				LOWER(REPLACE(Name," ","_")) AS Name,
+				LOWER(REPLACE(Name, " ", "_")) AS Name,
 				Name AS ProperName
 			FROM stylesheets');
 		$Stylesheets = $DB->to_array('ID', MYSQLI_BOTH);
@@ -434,8 +436,8 @@ function logout() {
 
 		$DB->query("
 			DELETE FROM users_sessions
-			WHERE UserID='$LoggedUser[ID]'
-				AND SessionID='".db_string($SessionID)."'");
+			WHERE UserID = '$LoggedUser[ID]'
+				AND SessionID = '".db_string($SessionID)."'");
 
 		$Cache->begin_transaction('users_sessions_'.$LoggedUser['ID']);
 		$Cache->delete_row($SessionID);

@@ -17,7 +17,7 @@ $DB->query("
 	WHERE SimilarID='$SimilarID'
 		AND UserID='$UserID'
 		AND Way='$Way'");
-if ($DB->record_count() == 0) {
+if (!$DB->has_results()) {
 	if ($Way == 'down') {
 		$Score = 'Score-100';
 	} elseif ($Way == 'up') {

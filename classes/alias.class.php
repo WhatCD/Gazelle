@@ -63,7 +63,7 @@ class ALIAS {
 					LEFT JOIN users_main AS u ON u.ID=w.Author
 				WHERE w.ID='$ArticleID'
 				GROUP BY w.ID");
-			if (!$DB->record_count() && $Error) {
+			if (!$DB->has_results() && $Error) {
 				error(404);
 			}
 			$Contents = $DB->to_array();

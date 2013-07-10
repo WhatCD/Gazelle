@@ -24,7 +24,7 @@ if ($Data) {
 	list($K, list($Name, $Description, , , $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers)) = each($Data);
 } else {
 	$DB->query("SELECT Name, Description, UserID, Deleted, CategoryID, Locked, MaxGroups, MaxGroupsPerUser, Updated, Subscribers FROM collages WHERE ID='$CollageID'");
-	if ($DB->record_count() > 0) {
+	if ($DB->has_results()) {
 		list($Name, $Description, $CreatorID, $Deleted, $CollageCategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers) = $DB->next_record();
 		$TorrentList = '';
 		$CollageList = '';

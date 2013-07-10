@@ -62,7 +62,7 @@ class ARTISTS_SIMILAR extends ARTIST{
 			ORDER BY ass.Score DESC
 			LIMIT 14");
 
-		if ($DB->record_count() == 0) {
+		if (!$DB->has_results()) {
 			return;
 		}
 

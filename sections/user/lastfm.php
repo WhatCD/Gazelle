@@ -4,7 +4,7 @@ $DB->query("
 	SELECT username
 	FROM lastfm_users
 	WHERE ID = '$UserID'");
-if ($DB->record_count()) {
+if ($DB->has_results()) {
 	list($LastFMUsername) = $DB->next_record();
 	$LastFMInfo = LastFM::get_user_info($LastFMUsername);
 	//Hand everything else over to JS (gets data via the username in an id-d div) to allow faster page loading.

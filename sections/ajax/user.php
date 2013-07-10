@@ -50,7 +50,7 @@ $DB->query("
 	WHERE m.ID = $UserID
 	GROUP BY AuthorID");
 
-if ($DB->record_count() == 0) { // If user doesn't exist
+if (!$DB->has_results()) { // If user doesn't exist
 	json_die("failure", "no such user");
 }
 
@@ -83,7 +83,7 @@ $DB->query("
 	FROM friends
 	WHERE UserID = '$LoggedUser[ID]'
 		AND FriendID = '$UserID'");
-if ($DB->record_count() != 0) {
+if ($DB->has_results()) {
 	$Friend = true;
 }
 

@@ -41,7 +41,7 @@ class INVITE_TREE {
 				AND TreePosition > $TreePosition
 			ORDER BY TreePosition ASC
 			LIMIT 1");
-		if ($DB->record_count()) {
+		if ($DB->has_results()) {
 			list($MaxPosition) = $DB->next_record(MYSQLI_NUM, false);
 		} else {
 			$MaxPosition = false;

@@ -21,7 +21,7 @@ $DB->query("
 	WHERE TopicID=$ThreadID
 	GROUP BY TopicID");
 
-if ($DB->record_count()) {
+if ($DB->has_results()) {
 	list($Pages,$Page) = $DB->next_record();
 	if ($Delete) {
 		$DB->query("

@@ -16,7 +16,7 @@ $DB->query("
 		CategoryID,
 		GroupID
 	FROM requests
-	WHERE ID = ".$RequestID);
+	WHERE ID = $RequestID");
 list($UserID, $Title, $CategoryID, $GroupID) = $DB->next_record();
 
 if ($LoggedUser['ID'] != $UserID && !check_perms('site_moderate_requests')) {
@@ -40,23 +40,28 @@ if ($CategoryName == 'Music') {
 $DB->query("DELETE FROM requests WHERE ID='$RequestID'");
 $DB->query("DELETE FROM requests_votes WHERE RequestID='$RequestID'");
 $DB->query("DELETE FROM requests_tags WHERE RequestID='$RequestID'");
-$DB->query("SELECT ArtistID FROM requests_artists WHERE RequestID = ".$RequestID);
+$DB->query("
+	SELECT ArtistID
+	FROM requests_artists
+	WHERE RequestID = $RequestID");
 $RequestArtists = $DB->to_array();
 foreach ($RequestArtists as $RequestArtist) {
-	$Cache->delete_value('artists_requests_'.$RequestArtist);
+	$Cache->delete_value("artists_requests_$RequestArtist");
 }
-$DB->query("DELETE FROM requests_artists WHERE RequestID='$RequestID'");
+$DB->query("
+	DELETE FROM requests_artists
+	WHERE RequestID = '$RequestID'");
 
 if ($UserID != $LoggedUser['ID']) {
-	Misc::send_pm($UserID, 0, 'A request you created has been deleted', "The request '$FullName' was deleted by [url=https://".SSL_SITE_URL."/user.php?id=".$LoggedUser['ID'].']'.$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']);
+	Misc::send_pm($UserID, 0, 'A request you created has been deleted', "The request \"$FullName\" was deleted by [url=https://".SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].']'.$LoggedUser['Username'].'[/url] for the reason: '.$_POST['reason']);
 }
 
 Misc::write_log("Request $RequestID ($FullName) was deleted by user ".$LoggedUser['ID'].' ('.$LoggedUser['Username'].') for the reason: '.$_POST['reason']);
 
-$Cache->delete_value('request_'.$RequestID);
-$Cache->delete_value('request_votes_'.$RequestID);
+$Cache->delete_value("request_$RequestID");
+$Cache->delete_value("request_votes_$RequestID");
 if ($GroupID) {
-	$Cache->delete_value('requests_group_'.$GroupID);
+	$Cache->delete_value("requests_group_$GroupID");
 }
 Requests::update_sphinx_requests($RequestID);
 

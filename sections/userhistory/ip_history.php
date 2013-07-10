@@ -211,7 +211,7 @@ foreach ($Results as $Index => $Result) {
 				LIMIT 1";
 			$DB->query($sql);
 
-			if ($DB->record_count() > 0) {
+			if ($DB->has_results()) {
 				$IPs[$IP] = true;
 ?>
 				<strong>[Banned]</strong>

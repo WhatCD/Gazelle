@@ -52,20 +52,22 @@ if (!empty($_POST['action'])) {
 			$DB->query("
 				SELECT
 					CEIL((
-						SELECT COUNT(ID)+1
+						SELECT COUNT(ID) + 1
 						FROM artist_comments AS ac
-						WHERE ac.ArtistID='" . db_string($ArtistID) . "'
-						)/" . TORRENT_COMMENTS_PER_PAGE . "
+						WHERE ac.ArtistID = '" . db_string($ArtistID) . "'
+						) / " . TORRENT_COMMENTS_PER_PAGE . "
 					) AS Pages");
 			list($Pages) = $DB->next_record();
 
 			$DB->query("
-				INSERT INTO artist_comments (ArtistID,AuthorID,AddedTime,Body)
-				VALUES ('" . db_string($ArtistID) . "', '" . db_string($LoggedUser['ID']) . "','" . sqltime() . "','" . db_string($_POST['body']) . "')");
+				INSERT INTO artist_comments
+					(ArtistID, AuthorID, AddedTime, Body)
+				VALUES
+					('" . db_string($ArtistID) . "', '" . db_string($LoggedUser['ID']) . "', '" . sqltime() . "', '" . db_string($_POST['body']) . "')");
 			$PostID = $DB->inserted_id();
 
 			$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
-			$Cache->begin_transaction('artist_comments_' . $ArtistID . '_catalogue_' . $CatalogueID);
+			$Cache->begin_transaction("artist_comments_$ArtistID" . "_catalogue_$CatalogueID");
 			$Post = array(
 				'ID' => $PostID,
 				'AuthorID' => $LoggedUser['ID'],
@@ -77,9 +79,9 @@ if (!empty($_POST['action'])) {
 			);
 			$Cache->insert('', $Post);
 			$Cache->commit_transaction(0);
-			$Cache->increment('artist_comments_' . $ArtistID);
+			$Cache->increment("artist_comments_$ArtistID");
 
-			header('Location: artist.php?id=' . $ArtistID . '&page=' . $Pages);
+			header("Location: artist.php?id=$ArtistID&page=$Pages");
 			break;
 		case 'warn' :
 			include(SERVER_ROOT . '/sections/artist/warn.php');
@@ -105,7 +107,10 @@ if (!empty($_POST['action'])) {
 			if (!$_GET['post'] || !is_number($_GET['post'])) {
 				error(0);
 			}
-			$DB->query("SELECT Body FROM artist_comments WHERE ID='" . db_string($_GET['post']) . "'");
+			$DB->query("
+				SELECT Body
+				FROM artist_comments
+				WHERE ID = '" . db_string($_GET['post']) . "'");
 			list($Body) = $DB->next_record(MYSQLI_NUM);
 			echo trim($Body);
 			break;
@@ -124,35 +129,37 @@ if (!empty($_POST['action'])) {
 			}
 
 			// Get topicid, forumid, number of pages
-			$DB->query("
+			$DB->query('
 				SELECT
 					ArtistID,
-					CEIL(COUNT(ac.ID)/" . TORRENT_COMMENTS_PER_PAGE . ") AS Pages,
-					CEIL(SUM(IF(ac.ID<=" . $_GET['postid'] . ",1,0))/" . TORRENT_COMMENTS_PER_PAGE . ") AS Page
+					CEIL(COUNT(ac.ID) / ' . TORRENT_COMMENTS_PER_PAGE . ') AS Pages,
+					CEIL(SUM(IF(ac.ID <= ' . $_GET['postid'] . ', 1, 0)) / ' . TORRENT_COMMENTS_PER_PAGE . ') AS Page
 				FROM artist_comments AS ac
-				WHERE ac.ArtistID=(
+				WHERE ac.ArtistID = (
 						SELECT ArtistID
 						FROM artist_comments
-						WHERE ID=" . $_GET['postid'] . "
+						WHERE ID = ' . $_GET['postid'] . '
 						)
-				GROUP BY ac.ArtistID");
+				GROUP BY ac.ArtistID');
 			list($ArtistID, $Pages, $Page) = $DB->next_record();
 
 			// $Pages = number of pages in the thread
 			// $Page = which page the post is on
 			// These are set for cache clearing.
 
-			$DB->query("DELETE FROM artist_comments WHERE ID='" . db_string($_GET['postid']) . "'");
+			$DB->query("
+				DELETE FROM artist_comments
+				WHERE ID = '" . db_string($_GET['postid']) . "'");
 
 			//We need to clear all subsequential catalogues as they've all been bumped with the absence of this post
 			$ThisCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			$LastCatalogue = floor((TORRENT_COMMENTS_PER_PAGE * $Pages - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
 			for ($i = $ThisCatalogue; $i <= $LastCatalogue; $i++) {
-				$Cache->delete_value('artist_comments_' . $ArtistID . '_catalogue_' . $i);
+				$Cache->delete_value("artist_comments_$ArtistID" . "_catalogue_$i");
 			}
 
 			// Delete thread info cache (eg. number of pages)
-			$Cache->delete_value('artist_comments_' . $ArtistID);
+			$Cache->delete_value("artist_comments_$ArtistID");
 
 			break;
 
@@ -175,7 +182,7 @@ if (!empty($_POST['action'])) {
 					ac.ArtistID,
 					ac.AddedTime
 				FROM artist_comments AS ac
-				WHERE ac.ID='" . db_string($_POST['post']) . "'");
+				WHERE ac.ID = '" . db_string($_POST['post']) . "'");
 			list($OldBody, $AuthorID, $ArtistID, $AddedTime) = $DB->next_record();
 
 			$DB->query("
@@ -188,7 +195,7 @@ if (!empty($_POST['action'])) {
 			if ($LoggedUser['ID'] != $AuthorID && !check_perms('site_moderate_forums')) {
 				error(404);
 			}
-			if ($DB->record_count() == 0) {
+			if (!$DB->has_results()) {
 				error(404);
 			}
 
@@ -199,11 +206,11 @@ if (!empty($_POST['action'])) {
 					Body = '" . db_string($_POST['body']) . "',
 					EditedUserID = '" . db_string($LoggedUser['ID']) . "',
 					EditedTime = '" . sqltime() . "'
-				WHERE ID='" . db_string($_POST['post']) . "'");
+				WHERE ID = '" . db_string($_POST['post']) . "'");
 
 			// Update the cache
 			$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
-			$Cache->begin_transaction('artist_comments_' . $ArtistID . '_catalogue_' . $CatalogueID);
+			$Cache->begin_transaction("artist_comments_$ArtistID" . "_catalogue_$CatalogueID");
 
 			$Cache->update_row($_POST['key'], array(
 				'ID' => $_POST['post'],
@@ -217,8 +224,10 @@ if (!empty($_POST['action'])) {
 			$Cache->commit_transaction(0);
 
 			$DB->query("
-				INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
-				VALUES ('artist', " . db_string($_POST['post']) . ", " . db_string($LoggedUser['ID']) . ", '" . sqltime() . "', '" . db_string($OldBody) . "')");
+				INSERT INTO comments_edits
+					(Page, PostID, EditUser, EditTime, Body)
+				VALUES
+					('artist', " . db_string($_POST['post']) . ", " . db_string($LoggedUser['ID']) . ", '" . sqltime() . "', '" . db_string($OldBody) . "')");
 
 			// This gets sent to the browser, which echoes it in place of the old body
 			echo $Text->full_format($_POST['body']);
@@ -275,7 +284,7 @@ if (!empty($_POST['action'])) {
 			SELECT ArtistID, Name
 			FROM artists_alias
 			WHERE Name LIKE '" . db_string($NameSearch) . "'");
-		if ($DB->record_count() == 0) {
+		if (!$DB->has_results()) {
 			if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) {
 				header('Location: torrents.php?action=advanced&artistname=' . urlencode($_GET['artistname']));
 			} else {
@@ -284,17 +293,17 @@ if (!empty($_POST['action'])) {
 			die();
 		}
 		list($FirstID, $Name) = $DB->next_record(MYSQLI_NUM, false);
-		if ($DB->record_count() == 1 || !strcasecmp($Name, $NameSearch)) {
-			header('Location: artist.php?id=' . $FirstID);
+		if ($DB->record_count() === 1 || !strcasecmp($Name, $NameSearch)) {
+			header("Location: artist.php?id=$FirstID");
 			die();
 		}
 		while (list($ID, $Name) = $DB->next_record(MYSQLI_NUM, false)) {
 			if (!strcasecmp($Name, $NameSearch)) {
-				header('Location: artist.php?id=' . $ID);
+				header("Location: artist.php?id=$ID");
 				die();
 			}
 		}
-		header('Location: artist.php?id=' . $FirstID);
+		header("Location: artist.php?id=$FirstID");
 		die();
 	} else {
 		header('Location: torrents.php');

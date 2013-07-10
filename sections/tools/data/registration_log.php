@@ -83,7 +83,7 @@ $DB->set_query_id($QueryID);
 </form>
 
 <?
-if ($DB->record_count()) {
+if ($DB->has_results()) {
 ?>
 	<div class="linkbox">
 <?
@@ -108,7 +108,7 @@ if ($DB->record_count()) {
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?><br /><?=Users::format_username($InviterID, true, true, true, true)?></td>
-			<td><?=Format::get_ratio_html($Uploaded,$Downloaded)?><br /><?=Format::get_ratio_html($InviterUploaded,$InviterDownloaded)?></td>
+			<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?><br /><?=Format::get_ratio_html($InviterUploaded, $InviterDownloaded)?></td>
 			<td>
 				<span style="float: left;"><?=display_str($Email)?></span>
 				<span style="float: right;"><a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a></span><br />

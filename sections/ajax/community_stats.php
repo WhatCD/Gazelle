@@ -23,11 +23,11 @@ function check_paranoia_here($Setting) {
 
 if (check_paranoia_here('seeding+') || check_paranoia_here('leeching+')) {
 	$DB->query("
-		SELECT IF(remaining=0,'Seeding','Leeching') AS Type, COUNT(x.uid)
+		SELECT IF(remaining = 0, 'Seeding', 'Leeching') AS Type, COUNT(x.uid)
 		FROM xbt_files_users AS x
-			INNER JOIN torrents AS t ON t.ID=x.fid
-		WHERE x.uid='$UserID'
-			AND x.active=1
+			INNER JOIN torrents AS t ON t.ID = x.fid
+		WHERE x.uid = '$UserID'
+			AND x.active = 1
 		GROUP BY Type");
 	$PeerCount = $DB->to_array(0, MYSQLI_NUM, false);
 	if (check_paranoia('seeding+')) {
@@ -42,7 +42,7 @@ if (check_paranoia_here('snatched+')) {
 	$DB->query("
 		SELECT COUNT(x.uid), COUNT(DISTINCT x.fid)
 		FROM xbt_snatched AS x
-			INNER JOIN torrents AS t ON t.ID=x.fid
+			INNER JOIN torrents AS t ON t.ID = x.fid
 		WHERE x.uid = '$UserID'");
 	list($Snatched, $UniqueSnatched) = $DB->next_record(MYSQLI_NUM, false);
 	$CommStats['snatched'] = number_format($Snatched);
@@ -57,8 +57,8 @@ if (check_perms('site_view_torrent_snatchlist', $Class)) {
 	$DB->query("
 		SELECT COUNT(ud.UserID), COUNT(DISTINCT ud.TorrentID)
 		FROM users_downloads AS ud
-			JOIN torrents AS t ON t.ID=ud.TorrentID
-		WHERE ud.UserID='$UserID'");
+			JOIN torrents AS t ON t.ID = ud.TorrentID
+		WHERE ud.UserID = '$UserID'");
 	list($NumDownloads, $UniqueDownloads) = $DB->next_record(MYSQLI_NUM, false);
 	$CommStats['downloaded'] = number_format($NumDownloads);
 	$CommStats['udownloaded'] = number_format($UniqueDownloads);

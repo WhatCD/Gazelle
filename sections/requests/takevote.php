@@ -23,7 +23,10 @@ if (empty($_GET['amount']) || !is_number($_GET['amount']) || $_GET['amount'] < $
 
 $Bounty = ($Amount * (1 - $RequestTax));
 
-$DB->query('SELECT TorrentID FROM requests WHERE ID='.$RequestID);
+$DB->query("
+	SELECT TorrentID
+	FROM requests
+	WHERE ID = $RequestID");
 list($Filled) = $DB->next_record();
 
 if ($LoggedUser['BytesUploaded'] >= $Amount && $Filled == 0) {
@@ -41,16 +44,19 @@ if ($LoggedUser['BytesUploaded'] >= $Amount && $Filled == 0) {
 				UPDATE requests_votes
 				SET Bounty = (Bounty + $Bounty)
 				WHERE UserID = ".$LoggedUser['ID']."
-					AND RequestID = ".$RequestID);
+					AND RequestID = $RequestID");
 		echo 'dupe';
 	}
 
 
 
-	$DB->query("UPDATE requests SET LastVote = NOW() WHERE ID = ".$RequestID);
+	$DB->query("
+		UPDATE requests
+		SET LastVote = NOW()
+		WHERE ID = $RequestID");
 
-	$Cache->delete_value('request_'.$RequestID);
-	$Cache->delete_value('request_votes_'.$RequestID);
+	$Cache->delete_value("request_$RequestID");
+	$Cache->delete_value("request_votes_$RequestID");
 
 	$ArtistForm = Requests::get_artists($RequestID);
 	foreach ($ArtistForm as $Importance) {
@@ -60,7 +66,10 @@ if ($LoggedUser['BytesUploaded'] >= $Amount && $Filled == 0) {
 	}
 
 	// Subtract amount from user
-	$DB->query("UPDATE users_main SET Uploaded = (Uploaded - $Amount) WHERE ID = ".$LoggedUser['ID']);
+	$DB->query("
+		UPDATE users_main
+		SET Uploaded = (Uploaded - $Amount)
+		WHERE ID = ".$LoggedUser['ID']);
 	$Cache->delete_value('user_stats_'.$LoggedUser['ID']);
 
 	Requests::update_sphinx_requests($RequestID);

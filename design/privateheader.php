@@ -364,7 +364,7 @@ if ($CurrentNews === false) {
 		FROM news
 		ORDER BY Time DESC
 		LIMIT 1");
-	if ($DB->record_count() == 1) {
+	if ($DB->record_count() === 1) {
 		list($CurrentNews) = $DB->next_record();
 	} else {
 		$CurrentNews = -1;
@@ -385,7 +385,7 @@ if ($CurrentBlog === false) {
 		WHERE Important = 1
 		ORDER BY Time DESC
 		LIMIT 1");
-	if ($DB->record_count() == 1) {
+	if ($DB->record_count() === 1) {
 		list($CurrentBlog) = $DB->next_record();
 	} else {
 		$CurrentBlog = -1;

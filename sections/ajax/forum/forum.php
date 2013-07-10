@@ -89,7 +89,7 @@ foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
 
 $Pages = Format::get_pages($Page, $Forums[$ForumID]['NumTopics'], TOPICS_PER_PAGE, 9);
 
-if (count($Forum) == 0) {
+if (count($Forum) === 0) {
 	print
 		json_encode(
 			array(
@@ -100,18 +100,18 @@ if (count($Forum) == 0) {
 		);
 } else {
 	// forums_last_read_topics is a record of the last post a user read in a topic, and what page that was on
-	$DB->query('
+	$DB->query("
 		SELECT
 			l.TopicID,
 			l.PostID,
 			CEIL((	SELECT COUNT(ID)
 					FROM forums_posts
 					WHERE forums_posts.TopicID = l.TopicID
-						AND forums_posts.ID <= l.PostID) / '.$PerPage.'
+						AND forums_posts.ID <= l.PostID) / $PerPage
 				) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN('.implode(', ', array_keys($Forum)).')
-			AND UserID=\''.$LoggedUser['ID'].'\'');
+		WHERE TopicID IN(".implode(', ', array_keys($Forum)).')
+			AND UserID = \''.$LoggedUser['ID'].'\'');
 
 	// Turns the result set into a multi-dimensional array, with
 	// forums_last_read_topics.TopicID as the key.

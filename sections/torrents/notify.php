@@ -47,7 +47,14 @@ function header_link($SortKey, $DefaultWay = 'desc') {
 	}
 	return "?action=notify&amp;order_way=$NewWay&amp;order_by=$SortKey&amp;".Format::get_url(array('page', 'order_way', 'order_by'));
 }
-$UserID = $LoggedUser['ID'];
+//Perhaps this should be a feature at some point
+if (check_perms('users_mod') && !empty($_GET['userid']) && is_number($_GET['userid']) && $_GET['userid'] != $LoggedUser['ID']) {
+	$UserID = $_GET['userid'];
+	$Sneaky = true;
+} else {
+	$Sneaky = false;
+	$UserID = $LoggedUser['ID'];
+}
 
 // Sorting by release year requires joining torrents_group, which is slow. Using a temporary table
 // makes it speedy enough as long as there aren't too many records to create
@@ -80,8 +87,8 @@ if ($OrderTbl == 'tg') {
 			: ''));
 	$DB->query("
 		UPDATE temp_notify_torrents AS tnt
-			JOIN torrents_group AS tg ON tnt.GroupID=tg.ID
-		SET tnt.Year=tg.Year");
+			JOIN torrents_group AS tg ON tnt.GroupID = tg.ID
+		SET tnt.Year = tg.Year");
 
 	$DB->query("
 		SELECT TorrentID, GroupID, UnRead, FilterID
@@ -99,14 +106,14 @@ if ($OrderTbl == 'tg') {
 			t.GroupID
 		FROM users_notify_torrents AS unt
 			JOIN torrents AS t ON t.ID = unt.TorrentID
-		WHERE unt.UserID=$UserID".
+		WHERE unt.UserID = $UserID".
 		($FilterID
-			? " AND unt.FilterID=$FilterID"
+			? " AND unt.FilterID = $FilterID"
 			: '')."
 		ORDER BY $OrderCol $OrderWay
 		LIMIT $Limit");
 	$Results = $DB->to_array(false, MYSQLI_ASSOC, false);
-	$DB->query("SELECT FOUND_ROWS()");
+	$DB->query('SELECT FOUND_ROWS()');
 	list($TorrentCount) = $DB->next_record();
 }
 
@@ -145,29 +152,31 @@ if (!empty($GroupIDs)) {
 		//Clear before header but after query so as to not have the alert bar on this page load
 		$DB->query("
 			UPDATE users_notify_torrents
-			SET UnRead='0'
-			WHERE UserID=".$LoggedUser['ID'].'
+			SET UnRead = '0'
+			WHERE UserID = ".$LoggedUser['ID'].'
 				AND TorrentID IN ('.implode(',', $UnReadIDs).')');
 		$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
 	}
 }
-View::show_header('My notifications', 'notifications');
-
+if ($Sneaky) {
+	$UserInfo = Users::user_info($UserID);
+	View::show_header($UserInfo['Username'].'\'s notifications', 'notifications');
+} else {
+	View::show_header('My notifications', 'notifications');
+}
 ?>
 <div class="thin widethin">
 <div class="header">
 	<h2>Latest notifications</h2>
 </div>
 <div class="linkbox">
-<? if ($FilterID) { ?>
-	<a href="torrents.php?action=notify" class="brackets">View all</a>&nbsp;&nbsp;&nbsp;
-<? } else { ?>
-	<a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all</a>&nbsp;&nbsp;&nbsp;
-	<a href="javascript:SuperGroupClear()" class="brackets">Clear selected</a>&nbsp;&nbsp;&nbsp;
+<?	if ($FilterID) { ?>
+	<a href="torrents.php?action=notify<?=($Sneaky ? "&amp;userid=$UserID" : '')?>" class="brackets">View all</a>&nbsp;&nbsp;&nbsp;
+<?	} elseif (!$Sneaky) { ?>
+	<a href="torrents.php?action=notify_clear&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all old</a>&nbsp;&nbsp;&nbsp;
+	<a href="#" onclick="clearSelected(); return false;" class="brackets">Clear selected</a>&nbsp;&nbsp;&nbsp;
 	<a href="torrents.php?action=notify_catchup&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;
-<? }
-
-?>
+<?	} ?>
 	<a href="user.php?action=notify" class="brackets">Edit filters</a>&nbsp;&nbsp;&nbsp;
 </div>
 <? if ($TorrentCount > NOTIFICATIONS_PER_PAGE) { ?>
@@ -202,15 +211,19 @@ if (empty($Results)) {
 ?>
 <div class="header">
 	<h3>
-		Matches for <?=$FilterResults['FilterLabel'] !== false
-				? '<a href="torrents.php?action=notify&amp;filterid='.$FilterID.'">'.$FilterResults['FilterLabel'].'</a>'
-				: 'unknown filter['.$FilterID.']'?>
+<?		if ($FilterResults['FilterLabel'] !== false) { ?>
+		Matches for <a href="torrents.php?action=notify&amp;filterid=<?=$FilterID.($Sneaky ? "&amp;userid=$UserID" : '')?>"><?=$FilterResults['FilterLabel']?></a>
+<?		} else { ?>
+		Matches for unknown filter[<?=$FilterID?>]
+<?		} ?>
 	</h3>
 </div>
 <div class="linkbox notify_filter_links">
-	<a href="javascript:GroupClear($('#notificationform_<?=$FilterID?>').raw())" class="brackets">Clear selected in filter</a>
+<?		if (!$Sneaky) { ?>
+	<a href="#" onclick="clearSelected(<?=$FilterID?>); return false;" class="brackets">Clear selected in filter</a>
 	<a href="torrents.php?action=notify_clear_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Clear all old in filter</a>
 	<a href="torrents.php?action=notify_catchup_filter&amp;filterid=<?=$FilterID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Mark all in filter as read</a>
+<?		} ?>
 </div>
 <form class="manage_form" name="torrents" id="notificationform_<?=$FilterID?>" action="">
 <table class="torrent_table cats checkboxes border">
@@ -286,8 +299,11 @@ if (empty($Results)) {
 					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?			if (Torrents::can_use_token($TorrentInfo)) { ?>
 					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
-<?			} ?>
-					| <a href="#" onclick="clearItem(<?=$TorrentID?>);return false;" title="Remove from notifications list">CL</a>
+<?
+			}
+			if (!$Sneaky) { ?>
+					| <a href="#" onclick="clearItem(<?=$TorrentID?>); return false;" title="Remove from notifications list">CL</a>
+<?			} ?> ]
 				</span>
 				<strong><?=$DisplayName?></strong>
 				<div class="torrent_info">
@@ -295,13 +311,13 @@ if (empty($Results)) {
 					<? if ($Result['UnRead']) {
 					echo '<strong class="new">New!</strong>';
 					} ?>
-								<span class="bookmark" style="float: right;">
-<?				if (Bookmarks::has_bookmarked("torrent", $GroupID)) { ?>
-					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+					<span class="bookmark" style="float: right;">
+<?				if (Bookmarks::has_bookmarked('torrent', $GroupID)) { ?>
+						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
 <?				} else { ?>
-					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
 <?				} ?>
-				</span>
+					</span>
 				</div>
 				<div class="tags"><?=$TorrentTags->format()?></div>
 			</div>

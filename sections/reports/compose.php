@@ -44,7 +44,7 @@ switch ($Type) {
 			SELECT Username
 			FROM users_main
 			WHERE ID=$ThingID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			$Error = 'No user with the reported ID found';
 		} else {
 			list($Username) = $DB->next_record();
@@ -58,7 +58,7 @@ switch ($Type) {
 			SELECT Title
 			FROM requests
 			WHERE ID=$ThingID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			$Error = 'No request with the reported ID found';
 		} else {
 			list($Name) = $DB->next_record();
@@ -71,7 +71,7 @@ switch ($Type) {
 			SELECT Name
 			FROM collages
 			WHERE ID=$ThingID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			$Error = 'No collage with the reported ID found';
 		} else {
 			list($Name) = $DB->next_record();
@@ -84,7 +84,7 @@ switch ($Type) {
 			SELECT Title
 			FROM forums_topics
 			WHERE ID=$ThingID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			$Error = 'No forum thread with the reported ID found';
 		} else {
 			list($Title) = $DB->next_record();
@@ -110,7 +110,7 @@ switch ($Type) {
 				) AS PostNum
 			FROM forums_posts AS p
 			WHERE ID=$ThingID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			$Error = 'No forum post with the reported ID found';
 		} else {
 			list($PostID, $Body, $TopicID, $PostNum) = $DB->next_record();
@@ -130,7 +130,7 @@ switch ($Type) {
 				) AS CommentNum
 			FROM requests_comments AS rc
 			WHERE ID=$ThingID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			$Error = 'No request comment with the reported ID found';
 		} else {
 			list($RequestID, $Body, $PostNum) = $DB->next_record();
@@ -151,7 +151,7 @@ switch ($Type) {
 				) AS CommentNum
 			FROM torrents_comments AS tc
 			WHERE ID=$ThingID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			$Error = 'No torrent comment with the reported ID found';
 		} else {
 			list($GroupID, $Body, $PostNum) = $DB->next_record();
@@ -172,7 +172,7 @@ switch ($Type) {
 				) AS CommentNum
 			FROM collages_comments AS cc
 			WHERE ID=$ThingID");
-		if ($DB->record_count() < 1) {
+		if (!$DB->has_results()) {
 			$Error = 'No collage comment with the reported ID found';
 		} else {
 			list($CollageID, $Body, $PostNum) = $DB->next_record();
