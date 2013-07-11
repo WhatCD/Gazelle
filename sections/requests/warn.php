@@ -16,7 +16,7 @@ $DB->query("
 		rc.RequestID,
 		rc.AddedTime
 	FROM requests_comments AS rc
-	WHERE rc.ID='$PostID'");
+	WHERE rc.ID = '$PostID'");
 list($PostBody) = $DB -> next_record();
 
 View::show_header('Warn User');
@@ -27,7 +27,7 @@ View::show_header('Warn User');
 		<h2>Warning <a href="user.php?id=<?=$UserID?>"><?=$UserInfo['Username']?></a></h2>
 	</div>
 	<div class="thin box pad">
-		<form class="create_form" name="warning" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
+		<form class="create_form" name="warning" action="" onsubmit="quickpostform.submit_button.disabled = true;" method="post">
 			<input type="hidden" name="groupid" value="<?=$GroupID?>" />
 			<input type="hidden" name="postid" value="<?=$PostID?>" />
 			<input type="hidden" name="userid" value="<?=$UserID?>" />

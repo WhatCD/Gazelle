@@ -22,8 +22,8 @@ $DB->query("
 	WHERE r.ID = $RequestID");
 list($CategoryID, $UserID, $FillerID, $Title, $Uploaded, $GroupID) = $DB->next_record();
 
-if ((($LoggedUser['ID'] != $UserID && $LoggedUser['ID'] != $FillerID) && !check_perms('site_moderate_requests')) || $FillerID == 0) {
-		error(403);
+if ((($LoggedUser['ID'] !== $UserID && $LoggedUser['ID'] !== $FillerID) && !check_perms('site_moderate_requests')) || $FillerID === '0') {
+	error(403);
 }
 
 // Unfill
@@ -37,7 +37,7 @@ $DB->query("
 
 $CategoryName = $Categories[$CategoryID - 1];
 
-if ($CategoryName == 'Music') {
+if ($CategoryName === 'Music') {
 	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$FullName = $ArtistName.$Title;
@@ -67,7 +67,7 @@ Misc::send_pm($FillerID, 0, 'A request you filled has been unfilled', "The reque
 
 $Cache->delete_value("user_stats_$FillerID");
 
-if ($UserID != $LoggedUser['ID']) {
+if ($UserID !== $LoggedUser['ID']) {
 	Misc::send_pm($UserID, 0, 'A request you created has been unfilled', "The request \"[url=https://".SSL_SITE_URL."/requests.php?action=view&amp;id=$RequestID]".$FullName."[/url]\" was unfilled by [url=https://".SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].']'.$LoggedUser['Username']."[/url] for the reason: ".$_POST['reason']);
 }
 

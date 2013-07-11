@@ -26,7 +26,7 @@ if ($LoggedUser['ID'] != $UserID && !check_perms('site_moderate_requests')) {
 $CategoryName = $Categories[$CategoryID - 1];
 
 //Do we need to get artists?
-if ($CategoryName == 'Music') {
+if ($CategoryName === 'Music') {
 	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$FullName = $ArtistName.$Title;
@@ -37,9 +37,9 @@ if ($CategoryName == 'Music') {
 
 
 // Delete request, votes and tags
-$DB->query("DELETE FROM requests WHERE ID='$RequestID'");
-$DB->query("DELETE FROM requests_votes WHERE RequestID='$RequestID'");
-$DB->query("DELETE FROM requests_tags WHERE RequestID='$RequestID'");
+$DB->query("DELETE FROM requests WHERE ID = '$RequestID'");
+$DB->query("DELETE FROM requests_votes WHERE RequestID = '$RequestID'");
+$DB->query("DELETE FROM requests_tags WHERE RequestID = '$RequestID'");
 $DB->query("
 	SELECT ArtistID
 	FROM requests_artists

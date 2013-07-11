@@ -30,20 +30,20 @@ list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryI
 $IsFilled = !empty($TorrentID);
 $CanVote = (empty($TorrentID) && check_perms('site_vote'));
 
-if ($CategoryID == 0) {
+if ($CategoryID === '0') {
 	$CategoryName = 'Unknown';
 } else {
 	$CategoryName = $Categories[$CategoryID - 1];
 }
 
 //Do we need to get artists?
-if ($CategoryName == 'Music') {
+if ($CategoryName === 'Music') {
 	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
 	if ($IsFilled) {
-		$DisplayLink = $ArtistLink."<a href=\"torrents.php?torrentid=$TorrentID\">$Title</a> [$Year]";
+		$DisplayLink = "$ArtistLink<a href=\"torrents.php?torrentid=$TorrentID\">$Title</a> [$Year]";
 	} else {
 		$DisplayLink = $ArtistLink.$Title." [$Year]";
 	}
@@ -65,7 +65,7 @@ if ($CategoryName == 'Music') {
 		$ReleaseName = $ReleaseTypes[$ReleaseType];
 	}
 
-} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
+} elseif ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
 	$FullName = "$Title [$Year]";
 	$DisplayLink = "$Title [$Year]";
 } else {
@@ -76,11 +76,11 @@ if ($CategoryName == 'Music') {
 //Votes time
 $RequestVotes = Requests::get_votes_array($RequestID);
 $VoteCount = count($RequestVotes['Voters']);
-$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0)));
-$UserCanEdit = (!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2);
+$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID === '0') || ($CategoryName === 'Music' && $Year === '0')));
+$UserCanEdit = (!$IsFilled && $LoggedUser['ID'] === $RequestorID && $VoteCount < 2);
 $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
-View::show_header('View request: '.$FullName, 'comments,requests,bbcode');
+View::show_header("View request: $FullName", 'comments,requests,bbcode');
 
 ?>
 <div class="thin">
@@ -102,7 +102,7 @@ View::show_header('View request: '.$FullName, 'comments,requests,bbcode');
 <?	if (!$IsFilled) { ?>
 			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID ? "&amp;groupid=$GroupID" : '')?>" class="brackets">Upload request</a>
 <?	}
-	if (!$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0))) { ?>
+	if (!$IsFilled && (($CategoryID === '0') || ($CategoryName === 'Music' && $Year === '0'))) { ?>
 			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>" class="brackets">Request update</a>
 <? } ?>
 
@@ -122,38 +122,36 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 		</div>
 	</div>
 	<div class="sidebar">
-<? if ($CategoryID != 0) { ?>
+<?	if ($CategoryID !== '0') { ?>
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
 <?
-	if (!empty($Image)) {
+		if (!empty($Image)) {
 ?>
 			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($Image, true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>', 220);" /></p>
-<?	} else { ?>
+<?		} else { ?>
 			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
-<?	} ?>
+<?		} ?>
 		</div>
-<? }
-	if ($CategoryName == 'Music') { ?>
+<?
+	}
+	if ($CategoryName === 'Music') { ?>
 		<div class="box box_artists">
 			<div class="head"><strong>Artists</strong></div>
 			<ul class="stats nobullet">
-<?
-		if (!empty($ArtistForm[4]) && count($ArtistForm[4]) > 0) {
-?>
+<?		if (!empty($ArtistForm[4]) && count($ArtistForm[4]) > 0) { ?>
 				<li class="artists_composer"><strong>Composers:</strong></li>
-<?			foreach ($ArtistForm[4] as $Artist) {
-?>
+<?			foreach ($ArtistForm[4] as $Artist) { ?>
 				<li class="artists_composer">
 					<?=Artists::display_artist($Artist)?>
 				</li>
-<?			}
+<?
+			}
 		}
 		if (!empty($ArtistForm[6]) && count($ArtistForm[6]) > 0) {
 ?>
 				<li class="artists_dj"><strong>DJ / Compiler:</strong></li>
-<?			foreach ($ArtistForm[6] as $Artist) {
-?>
+<?			foreach ($ArtistForm[6] as $Artist) { ?>
 				<li class="artists_dj">
 					<?=Artists::display_artist($Artist)?>
 				</li>
@@ -170,32 +168,32 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 				<li class="artists_main">
 					<?=Artists::display_artist($Artist)?>
 				</li>
-<?		}
+<?
+		}
 		if (!empty($ArtistForm[2]) && count($ArtistForm[2]) > 0) {
 ?>
 				<li class="artists_with"><strong>With:</strong></li>
-<?			foreach ($ArtistForm[2] as $Artist) {
-?>
+<?			foreach ($ArtistForm[2] as $Artist) { ?>
 				<li class="artists_with">
 					<?=Artists::display_artist($Artist)?>
 				</li>
-<?			}
+<?
+			}
 		}
 		if (!empty($ArtistForm[5]) && count($ArtistForm[5]) > 0) {
 ?>
 				<li class="artists_conductor"><strong>Conducted by:</strong></li>
-<?			foreach ($ArtistForm[5] as $Artist) {
-?>
+<?			foreach ($ArtistForm[5] as $Artist) { ?>
 				<li class="artist_guest">
 					<?=Artists::display_artist($Artist)?>
 				</li>
-<?			}
+<?
+			}
 		}
 		if (!empty($ArtistForm[3]) && count($ArtistForm[3]) > 0) {
 ?>
 				<li class="artists_remix"><strong>Remixed by:</strong></li>
-<?			foreach ($ArtistForm[3] as $Artist) {
-?>
+<?			foreach ($ArtistForm[3] as $Artist) { ?>
 				<li class="artists_remix">
 					<?=Artists::display_artist($Artist)?>
 				</li>
@@ -205,8 +203,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 		if (!empty($ArtistForm[7]) && count($ArtistForm[7]) > 0) {
 ?>
 				<li class="artists_producer"><strong>Produced by:</strong></li>
-<?			foreach ($ArtistForm[7] as $Artist) {
-?>
+<?			foreach ($ArtistForm[7] as $Artist) { ?>
 				<li class="artists_remix">
 					<?=Artists::display_artist($Artist)?>
 				</li>
@@ -231,12 +228,13 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 		<div class="box box_votes">
 			<div class="head"><strong>Top contributors</strong></div>
 			<table class="layout">
-<?	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
+<?
+	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 	$ViewerVote = false;
 	for ($i = 0; $i < $VoteMax; $i++) {
 		$User = array_shift($RequestVotes['Voters']);
 		$Boldify = false;
-		if ($User['UserID'] == $LoggedUser['ID']) {
+		if ($User['UserID'] === $LoggedUser['ID']) {
 			$ViewerVote = true;
 			$Boldify = true;
 		}
@@ -253,7 +251,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 	reset($RequestVotes['Voters']);
 	if (!$ViewerVote) {
 		foreach ($RequestVotes['Voters'] as $User) {
-			if ($User['UserID'] == $LoggedUser['ID']) { ?>
+			if ($User['UserID'] === $LoggedUser['ID']) { ?>
 				<tr>
 					<td>
 						<a href="user.php?id=<?=$User['UserID']?>"><strong><?=display_str($User['Username'])?></strong></a>
@@ -277,7 +275,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 					<?=time_diff($TimeAdded)?> by <strong><?=Users::format_username($RequestorID, false, false, false)?></strong>
 				</td>
 			</tr>
-<?	if ($CategoryName == 'Music') {
+<?	if ($CategoryName === 'Music') {
 		if (!empty($RecordLabel)) { ?>
 			<tr>
 				<td class="label">Record label</td>
@@ -329,7 +327,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 	}
 	$Worldcat = '';
 	$OCLC = str_replace(' ', '', $OCLC);
-	if ($OCLC != '') {
+	if ($OCLC !== '') {
 		$OCLCs = explode(',', $OCLC);
 		for ($i = 0; $i < count($OCLCs); $i++) {
 			if (!empty($Worldcat)) {
@@ -410,7 +408,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 					</form>
 				</td>
 			</tr>
-<? } ?>
+<?	} ?>
 			<tr id="bounty">
 				<td class="label">Bounty</td>
 				<td id="formatted_bounty"><?=Format::get_size($RequestVotes['TotalBounty'])?></td>
@@ -424,7 +422,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 				<td>
 					<strong><a href="torrents.php?<?=(strtotime($TimeFilled) < $TimeCompare ? 'id=' : 'torrentid=').$TorrentID?>">Yes</a></strong>,
 					by user <?=Users::format_username($FillerID, false, false, false)?>
-<?		if ($LoggedUser['ID'] == $RequestorID || $LoggedUser['ID'] == $FillerID || check_perms('site_moderate_requests')) { ?>
+<?		if ($LoggedUser['ID'] === $RequestorID || $LoggedUser['ID'] === $FillerID || check_perms('site_moderate_requests')) { ?>
 						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>" class="brackets">Unfill</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning.
 <?		} ?>
 				</td>

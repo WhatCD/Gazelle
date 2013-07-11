@@ -5,11 +5,11 @@
 authorize();
 
 
-if ($_POST['action'] != 'takenew' && $_POST['action'] != 'takeedit') {
+if ($_POST['action'] !== 'takenew' && $_POST['action'] !== 'takeedit') {
 	error(0);
 }
 
-$NewRequest = ($_POST['action'] == 'takenew');
+$NewRequest = ($_POST['action'] === 'takenew');
 
 if (!$NewRequest) {
 	$ReturnEdit = true;
@@ -40,8 +40,8 @@ if ($NewRequest) {
 
 	$CategoryName = $Categories[$CategoryID - 1];
 
-	$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0)));
-	$CanEdit = ((!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
+	$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID === '0') || ($CategoryName === 'Music' && $Year === '0')));
+	$CanEdit = ((!$IsFilled && $LoggedUser['ID'] === $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
 	if (!$CanEdit) {
 		error(403);
@@ -103,7 +103,7 @@ if (empty($_POST['description'])) {
 	$Description = trim($_POST['description']);
 }
 
-if ($CategoryName == "Music") {
+if ($CategoryName === 'Music') {
 	if (empty($_POST['artists'])) {
 		$Err = 'You did not enter any artists.';
 	} else {
@@ -117,7 +117,7 @@ if ($CategoryName == "Music") {
 
 	$ReleaseType = $_POST['releasetype'];
 
-	if (empty($_POST['all_formats']) && count($_POST['formats']) != count($Formats)) {
+	if (empty($_POST['all_formats']) && count($_POST['formats']) !== count($Formats)) {
 		$FormatArray = $_POST['formats'];
 		if (count($FormatArray) < 1) {
 			$Err = 'You must require at least one format';
@@ -126,7 +126,7 @@ if ($CategoryName == "Music") {
 		$AllFormats = true;
 	}
 
-	if (empty($_POST['all_bitrates']) && count($_POST['bitrates']) != count($Bitrates)) {
+	if (empty($_POST['all_bitrates']) && count($_POST['bitrates']) !== count($Bitrates)) {
 		$BitrateArray = $_POST['bitrates'];
 		if (count($BitrateArray) < 1) {
 			$Err = 'You must require at least one bitrate';
@@ -135,7 +135,7 @@ if ($CategoryName == "Music") {
 		$AllBitrates = true;
 	}
 
-	if (empty($_POST['all_media']) && count($_POST['media']) != count($Media)) {
+	if (empty($_POST['all_media']) && count($_POST['media']) !== count($Media)) {
 		$MediaArray = $_POST['media'];
 		if (count($MediaArray) < 1) {
 			$Err = 'You must require at least one medium.';
@@ -192,7 +192,7 @@ if ($CategoryName == "Music") {
 		} else {
 			$Err = 'The torrent group, if entered, must correspond to a music torrent group on the site.';
 		}
-	} elseif ($_POST['groupid'] == '0') {
+	} elseif ($_POST['groupid'] === '0') {
 		$GroupID = 0;
 	}
 
@@ -214,7 +214,7 @@ if ($CategoryName == "Music") {
 	}
 }
 
-if ($CategoryName == 'Music' || $CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
+if ($CategoryName === 'Music' || $CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
 	if (empty($_POST['year'])) {
 		$Err = 'You forgot to enter the year!';
 	} else {
@@ -234,7 +234,7 @@ if (!empty($_POST['oclc'])) {
 
 
 //For refilling on error
-if ($CategoryName == 'Music') {
+if ($CategoryName === 'Music') {
 	$MainArtistCount = 0;
 	$ArtistNames = array();
 	$ArtistForm = array(
@@ -243,10 +243,10 @@ if ($CategoryName == 'Music') {
 		3 => array()
 	);
 	for ($i = 0, $il = count($Artists); $i < $il; $i++) {
-		if (trim($Artists[$i]) != '') {
+		if (trim($Artists[$i]) !== '') {
 			if (!in_array($Artists[$i], $ArtistNames)) {
 				$ArtistForm[$Importance[$i]][] = array('name' => trim($Artists[$i]));
-				if (in_array($Importance[$i], array(1,4,5,6))) {
+				if (in_array($Importance[$i], array(1, 4, 5, 6))) {
 					$MainArtistCount++;
 				}
 				$ArtistNames[] = trim($Artists[$i]);
@@ -263,14 +263,14 @@ if ($CategoryName == 'Music') {
 
 if (!empty($Err)) {
 	error($Err);
-	$Div = $_POST['unit'] == 'mb' ? 1024 * 1024 : 1024 * 1024 * 1024;
+	$Div = $_POST['unit'] === 'mb' ? 1024 * 1024 : 1024 * 1024 * 1024;
 	$Bounty /= $Div;
 	include(SERVER_ROOT.'/sections/requests/new_edit.php');
 	die();
 }
 
 //Databasify the input
-if ($CategoryName == 'Music') {
+if ($CategoryName === 'Music') {
 	if (empty($AllBitrates)) {
 		foreach ($BitrateArray as $Index => $MasterIndex) {
 			if (array_key_exists($Index, $Bitrates)) {
@@ -325,7 +325,7 @@ if ($CategoryName == 'Music') {
 		}
 	}
 	if ($NeedCue) {
-		if ($LogCue != '') {
+		if ($LogCue !== '') {
 			$LogCue .= ' + Cue';
 		} else {
 			$LogCue = 'Cue';
@@ -334,7 +334,7 @@ if ($CategoryName == 'Music') {
 }
 
 //Query time!
-if ($CategoryName == 'Music') {
+if ($CategoryName === 'Music') {
 	if ($NewRequest) {
 		$DB->query('
 			INSERT INTO requests (
@@ -363,7 +363,7 @@ if ($CategoryName == 'Music') {
 				LogCue = '$LogCue',
 				GroupID = '$GroupID',
 				OCLC = '".db_string($OCLC)."'
-			WHERE ID = ".$RequestID);
+			WHERE ID = $RequestID");
 
 		// We need to be able to delete artists / tags
 		$DB->query("
@@ -489,7 +489,7 @@ if ($CategoryName == 'Music') {
 			WHERE RequestID = $RequestID");
 	}
 
-	if ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
+	if ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
 		//These types require a year field.
 		if ($NewRequest) {
 			$DB->query("INSERT INTO requests (
@@ -577,7 +577,7 @@ if ($NewRequest) {
 
 
 
-	if ($CategoryName == 'Music') {
+	if ($CategoryName === 'Music') {
 		$Announce = "\"$Title\" - ".Artists::display_artists($ArtistForm, false, false).' https://'.SSL_SITE_URL."/requests.php?action=view&id=$RequestID - ".implode(' ', $Tags);
 	} else {
 		$Announce = "\"$Title\" - https://".SSL_SITE_URL."/requests.php?action=view&id=$RequestID - ".implode(' ', $Tags);

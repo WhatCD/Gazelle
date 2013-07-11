@@ -175,7 +175,9 @@ class DB_MYSQL {
 	function halt($Msg) {
 		global $LoggedUser, $Cache, $Debug, $argv;
 		$DBError = 'MySQL: '.strval($Msg).' SQL error: '.strval($this->Errno).' ('.strval($this->Error).')';
-		if ($this->Errno == 1194) { send_irc('PRIVMSG '.ADMIN_CHAN.' :'.$this->Error); }
+		if ($this->Errno == 1194) {
+			send_irc('PRIVMSG '.ADMIN_CHAN.' :'.$this->Error);
+		}
 		/*if ($this->Errno == 1194) {
 			preg_match("Table '(\S+)' is marked as crashed and should be repaired", $this->Error, $Matches);
 		} */
@@ -232,22 +234,22 @@ class DB_MYSQL {
 		}
 		$QueryEndTime = microtime(true);
 		$this->Queries[] = array(display_str($Query), ($QueryEndTime - $QueryStartTime) * 1000, null);
-		$this->Time += ($QueryEndTime-$QueryStartTime) * 1000;
+		$this->Time += ($QueryEndTime - $QueryStartTime) * 1000;
 
 		if (!$this->QueryID) {
 			$this->Errno = mysqli_errno($this->LinkID);
 			$this->Error = mysqli_error($this->LinkID);
 
 			if ($AutoHandle) {
-				$this->halt('Invalid Query: '.$Query);
+				$this->halt("Invalid Query: $Query");
 			} else {
 				return $this->Errno;
 			}
 		}
 
 		/*
-		$QueryType = substr($Query,0, 6);
-		if ($QueryType == 'DELETE' || $QueryType == 'UPDATE') {
+		$QueryType = substr($Query, 0, 6);
+		if ($QueryType === 'DELETE' || $QueryType === 'UPDATE') {
 			if ($this->affected_rows() > 50) {
 				$Debug->analysis($this->affected_rows().' rows altered:', $Query, 3600 * 24);
 			}

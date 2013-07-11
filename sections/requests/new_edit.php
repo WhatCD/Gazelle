@@ -7,7 +7,7 @@
  */
 
 
-$NewRequest = ($_GET['action'] == 'new' ? true : false);
+$NewRequest = ($_GET['action'] === 'new' ? true : false);
 
 if (!$NewRequest) {
 	$RequestID = $_GET['id'];
@@ -47,14 +47,14 @@ if (!$NewRequest) {
 		$IsFilled = !empty($TorrentID);
 		$CategoryName = $Categories[$CategoryID - 1];
 
-		$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID == 0) || ($CategoryName == 'Music' && $Year == 0)));
-		$CanEdit = ((!$IsFilled && $LoggedUser['ID'] == $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
+		$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID === '0') || ($CategoryName === 'Music' && $Year === '0')));
+		$CanEdit = ((!$IsFilled && $LoggedUser['ID'] === $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
 		if (!$CanEdit) {
 			error(403);
 		}
 
-		if ($CategoryName == 'Music') {
+		if ($CategoryName === 'Music') {
 			$ArtistForm = Requests::get_artists($RequestID);
 
 			$BitrateArray = array();
@@ -153,7 +153,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 					<td>
 						<select id="categories" name="type" onchange="Categories()">
 <?		foreach (Misc::display_array($Categories) as $Cat) { ?>
-							<option value="<?=$Cat?>"<?=(!empty($CategoryName) && ($CategoryName == $Cat) ? ' selected="selected"' : '')?>><?=$Cat?></option>
+							<option value="<?=$Cat?>"<?=(!empty($CategoryName) && ($CategoryName === $Cat) ? ' selected="selected"' : '')?>><?=$Cat?></option>
 <?		} ?>
 						</select>
 					</td>
@@ -171,15 +171,15 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 ?>
 						<input type="text" id="artist" name="artists[]" size="45" value="<?=display_str($Artist['name']) ?>" />
 						<select id="importance" name="importance[]" >
-							<option value="1"<?=($Importance == '1' ? ' selected="selected"' : '')?>>Main</option>
-							<option value="2"<?=($Importance == '2' ? ' selected="selected"' : '')?>>Guest</option>
-							<option value="4"<?=($Importance == '4' ? ' selected="selected"' : '')?>>Composer</option>
-							<option value="5"<?=($Importance == '5' ? ' selected="selected"' : '')?>>Conductor</option>
-							<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
-							<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
-							<option value="7"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
+							<option value="1"<?=($Importance === '1' ? ' selected="selected"' : '')?>>Main</option>
+							<option value="2"<?=($Importance === '2' ? ' selected="selected"' : '')?>>Guest</option>
+							<option value="4"<?=($Importance === '4' ? ' selected="selected"' : '')?>>Composer</option>
+							<option value="5"<?=($Importance === '5' ? ' selected="selected"' : '')?>>Conductor</option>
+							<option value="6"<?=($Importance === '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
+							<option value="3"<?=($Importance === '3' ? ' selected="selected"' : '')?>>Remixer</option>
+							<option value="7"<?=($Importance === '7' ? ' selected="selected"' : '')?>>Producer</option>
 						</select>
-						<? if ($First) { ?><a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a><? } $First = false; ?>
+						<? if ($First) { ?><a href="#" onclick="AddArtistField(); return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField(); return false;" class="brackets">&minus;</a><? } $First = false; ?>
 						<br />
 <?				}
 			}
@@ -286,10 +286,10 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 				<tr id="formats_tr">
 					<td class="label">Allowed formats</td>
 					<td>
-						<input type="checkbox" name="all_formats" id="toggle_formats" onchange="Toggle('formats', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($FormatArray) && (count($FormatArray) == count($Formats)) ? ' checked="checked"' : '')?> /><label for="toggle_formats"> All</label>
+						<input type="checkbox" name="all_formats" id="toggle_formats" onchange="Toggle('formats', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($FormatArray) && (count($FormatArray) === count($Formats)) ? ' checked="checked"' : '')?> /><label for="toggle_formats"> All</label>
 						<span style="float: right;"><strong>NB: You cannot require a log or cue unless FLAC is an allowed format</strong></span>
 <?		foreach ($Formats as $Key => $Val) {
-			if ($Key % 8 == 0) {
+			if ($Key % 8 === 0) {
 				echo '<br />';
 			} ?>
 						<input type="checkbox" name="formats[]" value="<?=$Key?>" onchange="ToggleLogCue(); if (!this.checked) { $('#toggle_formats').raw().checked = false; }" id="format_<?=$Key?>"
@@ -300,9 +300,9 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 				<tr id="bitrates_tr">
 					<td class="label">Allowed bitrates</td>
 					<td>
-						<input type="checkbox" name="all_bitrates" id="toggle_bitrates" onchange="Toggle('bitrates', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($BitrateArray) && (count($BitrateArray) == count($Bitrates)) ? ' checked="checked"' : '')?> /><label for="toggle_bitrates"> All</label>
+						<input type="checkbox" name="all_bitrates" id="toggle_bitrates" onchange="Toggle('bitrates', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($BitrateArray) && (count($BitrateArray) === count($Bitrates)) ? ' checked="checked"' : '')?> /><label for="toggle_bitrates"> All</label>
 <?		foreach ($Bitrates as $Key => $Val) {
-			if ($Key % 8 == 0) {
+			if ($Key % 8 === 0) {
 				echo '<br />';
 			} ?>
 						<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
@@ -314,9 +314,9 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 				<tr id="media_tr">
 					<td class="label">Allowed media</td>
 					<td>
-						<input type="checkbox" name="all_media" id="toggle_media" onchange="Toggle('media', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($MediaArray) && (count($MediaArray) == count($Media)) ? ' checked="checked"' : '')?> /><label for="toggle_media"> All</label>
+						<input type="checkbox" name="all_media" id="toggle_media" onchange="Toggle('media', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($MediaArray) && (count($MediaArray) === count($Media)) ? ' checked="checked"' : '')?> /><label for="toggle_media"> All</label>
 <?		foreach ($Media as $Key => $Val) {
-			if ($Key % 8 == 0) {
+			if ($Key % 8 === 0) {
 				echo '<br />';
 			} ?>
 						<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"
@@ -350,14 +350,13 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 						If this request matches a torrent group <span style="font-weight: bold;">already existing</span> on the site, please indicate that here.
 					</td>
 				</tr>
-<?	} elseif ($GroupID && ($CategoryID == 1)) {
-?>
+<?	} elseif ($GroupID && ($CategoryID == 1)) { ?>
 				<tr>
 					<td class="label">Torrent group</td>
 					<td>
 						<a href="torrents.php?id=<?=$GroupID?>">https://<?=SSL_SITE_URL?>/torrents.php?id=<?=$GroupID?></a><br />
 						This request <?=($NewRequest ? 'will be' : 'is')?> associated with the above torrent group.
-<?		if (!$NewRequest) { 	?>
+<?		if (!$NewRequest) {	?>
 						If this is incorrect, please <a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">report this request</a> so that staff can fix it.
 <? 		}	?>
 						<input type="hidden" name="groupid" value="<?=$GroupID?>" />
@@ -370,8 +369,8 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 					<td>
 						<input type="text" id="amount_box" size="8" value="<?=(!empty($Bounty) ? $Bounty : '100')?>" onchange="Calculate();" />
 						<select id="unit" name="unit" onchange="Calculate();">
-							<option value="mb"<?=(!empty($_POST['unit']) && $_POST['unit'] == 'mb' ? ' selected="selected"' : '') ?>>MB</option>
-							<option value="gb"<?=(!empty($_POST['unit']) && $_POST['unit'] == 'gb' ? ' selected="selected"' : '') ?>>GB</option>
+							<option value="mb"<?=(!empty($_POST['unit']) && $_POST['unit'] === 'mb' ? ' selected="selected"' : '') ?>>MB</option>
+							<option value="gb"<?=(!empty($_POST['unit']) && $_POST['unit'] === 'gb' ? ' selected="selected"' : '') ?>>GB</option>
 						</select>
 						<input type="button" value="Preview" onclick="Calculate();" />
 						<strong><?=($RequestTax * 100)?>% of this is deducted as tax by the system.</strong>

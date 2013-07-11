@@ -138,7 +138,7 @@ if (!isset($_REQUEST['action'])) {
 					AND ID <= $_POST[post]");
 			list($Page) = $DB->next_record();
 
-			if ($LoggedUser['ID'] != $AuthorID && !check_perms('site_moderate_forums')) {
+			if ($LoggedUser['ID'] !== $AuthorID && !check_perms('site_moderate_forums')) {
 				error(404);
 			}
 			if (!$DB->has_results()) {

@@ -68,7 +68,7 @@ if (!empty($_POST['user']) && check_perms('site_moderate_requests')) {
 	}
 }
 
-if (time_ago($UploadTime) < 3600 && $UploaderID != $FillerID && !check_perms('site_moderate_requests')) {
+if (time_ago($UploadTime) < 3600 && $UploaderID !== $FillerID && !check_perms('site_moderate_requests')) {
 	$Err = 'There is a one hour grace period for new uploads to allow the torrent\'s uploader to fill the request.';
 }
 
@@ -93,25 +93,25 @@ list($Title, $RequesterID, $OldTorrentID, $RequestCategoryID, $RequestReleaseTyp
 if (!empty($OldTorrentID)) {
 	$Err = 'This request has already been filled.';
 }
-if ($RequestCategoryID != 0 && $TorrentCategoryID != $RequestCategoryID) {
+if ($RequestCategoryID !== '0' && $TorrentCategoryID !== $RequestCategoryID) {
 	$Err = 'This torrent is of a different category than the request. If the request is actually miscategorized, please contact staff.';
 }
 
 $CategoryName = $Categories[$RequestCategoryID - 1];
 
-if ($CategoryName == 'Music') {
+if ($CategoryName === 'Music') {
 	//Commenting out as it's causing some issues with some users being unable to fill, unsure what it is, etc
 	/*if ($RequestCatalogueNumber) {
-		if ($TorrentCatalogueNumber != $RequestCatalogueNumber) {
+		if ($TorrentCatalogueNumber !== $RequestCatalogueNumber) {
 			$Err = "This request requires the catalogue number $RequestCatalogueNumber";
 		}
 	}*/
 
 	//WEB has no ripping log. Ditto Vinyl - Actually ditto everything but CD
-	//$WEBOverride = (strpos($MediaList, 'WEB') !== false && $Media == "WEB");
-	//$VinylOverride = (strpos($MediaList, 'Vinyl') !== false && $Media == "Vinyl");
-	//if ($Format == 'FLAC' && $LogCue && !$WEBOverride && !$VinylOverride) {
-	if ($Format == 'FLAC' && $LogCue && $Media == 'CD') {
+	//$WEBOverride = (strpos($MediaList, 'WEB') !== false && $Media === 'WEB');
+	//$VinylOverride = (strpos($MediaList, 'Vinyl') !== false && $Media === 'Vinyl');
+	//if ($Format === 'FLAC' && $LogCue && !$WEBOverride && !$VinylOverride) {
+	if ($Format === 'FLAC' && $LogCue && $Media === 'CD') {
 		if (strpos($LogCue, 'Log') !== false && !$HasLog) {
 			$Err = 'This request requires a log.';
 		}
@@ -160,7 +160,7 @@ $DB->query("
 		TimeFilled = '".sqltime()."'
 	WHERE ID = $RequestID");
 
-if ($CategoryName == 'Music') {
+if ($CategoryName === 'Music') {
 	$ArtistForm = Requests::get_artists($RequestID);
 	$ArtistName = Artists::display_artists($ArtistForm, false, true);
 	$FullName = $ArtistName.$Title;
@@ -189,10 +189,10 @@ $DB->query("
 
 
 
-$Cache->delete_value('user_stats_'.$FillerID);
-$Cache->delete_value('request_'.$RequestID);
+$Cache->delete_value("user_stats_$FillerID");
+$Cache->delete_value("request_$RequestID");
 if ($GroupID) {
-	$Cache->delete_value('requests_group_'.$GroupID);
+	$Cache->delete_value("requests_group_$GroupID");
 }
 
 
@@ -209,5 +209,5 @@ foreach ($ArtistIDs as $ArtistID) {
 $SS->UpdateAttributes('requests', array('torrentid', 'fillerid'), array($RequestID => array((int)$TorrentID, (int)$FillerID)));
 Requests::update_sphinx_requests($RequestID);
 
-header('Location: requests.php?action=view&id='.$RequestID);
+header("Location: requests.php?action=view&id=$RequestID");
 ?>

@@ -22,7 +22,7 @@ class Requests {
 				UNIX_TIMESTAMP(TimeFilled) AS TimeFilled, Visible,
 				COUNT(rv.UserID) AS Votes, SUM(rv.Bounty) >> 10 AS Bounty
 			FROM requests AS r
-				LEFT JOIN requests_votes AS rv ON rv.RequestID=r.ID
+				LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID
 			WHERE ID = $RequestID
 			GROUP BY r.ID");
 
@@ -31,13 +31,13 @@ class Requests {
 			SET ArtistList = (
 					SELECT GROUP_CONCAT(aa.Name SEPARATOR ' ')
 					FROM requests_artists AS ra
-						JOIN artists_alias AS aa ON aa.AliasID=ra.AliasID
+						JOIN artists_alias AS aa ON aa.AliasID = ra.AliasID
 					WHERE ra.RequestID = $RequestID
 					GROUP BY NULL
 					)
 			WHERE ID = $RequestID");
 
-		$Cache->delete_value('requests_'.$RequestID);
+		$Cache->delete_value("requests_$RequestID");
 	}
 
 
@@ -62,14 +62,14 @@ class Requests {
 		$NotFound = array_flip($RequestIDs);
 
 		foreach ($RequestIDs as $RequestID) {
-			$Data = $Cache->get_value('request_'.$RequestID);
+			$Data = $Cache->get_value("request_$RequestID");
 			if (!empty($Data)) {
 				unset($NotFound[$RequestID]);
 				$Found[$RequestID] = $Data;
 			}
 		}
 
-		$IDs = implode(',',array_flip($NotFound));
+		$IDs = implode(',', array_flip($NotFound));
 
 		/*
 			Don't change without ensuring you change everything else that uses get_requests()
@@ -102,8 +102,8 @@ class Requests {
 					r.GroupID,
 					r.OCLC
 				FROM requests AS r
-					LEFT JOIN users_main AS u ON u.ID=r.UserID
-					LEFT JOIN users_main AS filler ON filler.ID=FillerID AND FillerID!=0
+					LEFT JOIN users_main AS u ON u.ID = r.UserID
+					LEFT JOIN users_main AS filler ON filler.ID = FillerID AND FillerID != 0
 				WHERE r.ID IN ($IDs)
 				ORDER BY ID");
 
@@ -117,28 +117,28 @@ class Requests {
 		}
 
 		if ($Return) { // If we're interested in the data, and not just caching it
-			$Matches = array('matches'=>$Found, 'notfound'=>array_flip($NotFound));
+			$Matches = array('matches' => $Found, 'notfound' => array_flip($NotFound));
 			return $Matches;
 		}
 	}
 
 	public static function get_comment_count($RequestID) {
 		global $Cache, $DB;
-		$NumComments = $Cache->get_value('request_comments_'.$RequestID);
+		$NumComments = $Cache->get_value("request_comments_$RequestID");
 		if ($NumComments === false) {
 			$DB->query("
 				SELECT COUNT(ID)
 				FROM requests_comments
 				WHERE RequestID = '$RequestID'");
 			list($NumComments) = $DB->next_record();
-			$Cache->cache_value('request_comments_'.$RequestID, $NumComments, 0);
+			$Cache->cache_value("request_comments_$RequestID", $NumComments, 0);
 		}
 		return $NumComments;
 	}
 
 	public static function get_comment_catalogue($RequestID, $CatalogueID) {
 		global $Cache, $DB;
-		$Catalogue = $Cache->get_value('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID);
+		$Catalogue = $Cache->get_value("request_comments_$RequestID"."_catalogue_$CatalogueID");
 		if ($Catalogue === false) {
 			$CatalogueLimit = $CatalogueID * THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
 			$DB->query("
@@ -151,19 +151,19 @@ class Requests {
 					c.EditedTime,
 					u.Username
 				FROM requests_comments as c
-					LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
+					LEFT JOIN users_main AS u ON u.ID = c.EditedUserID
 				WHERE c.RequestID = '$RequestID'
 				ORDER BY c.ID
 				LIMIT $CatalogueLimit");
-			$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
-			$Cache->cache_value('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
+			$Catalogue = $DB->to_array(false, MYSQLI_ASSOC);
+			$Cache->cache_value("request_comments_$RequestID"."_catalogue_$CatalogueID", $Catalogue, 0);
 		}
 		return $Catalogue;
 	}
 
 	public static function get_artists($RequestID) {
 		global $Cache, $DB;
-		$Artists = $Cache->get_value('request_artists_'.$RequestID);
+		$Artists = $Cache->get_value("request_artists_$RequestID");
 		if (is_array($Artists)) {
 			$Results = $Artists;
 		} else {
@@ -183,7 +183,7 @@ class Requests {
 				list($ArtistID, $ArtistName, $ArtistImportance) = $ArtistRow;
 				$Results[$ArtistImportance][] = array('id' => $ArtistID, 'name' => $ArtistName);
 			}
-			$Cache->cache_value('request_artists_'.$RequestID, $Results);
+			$Cache->cache_value("request_artists_$RequestID", $Results);
 		}
 		return $Results;
 	}
@@ -195,14 +195,14 @@ class Requests {
 				rt.TagID,
 				t.Name
 			FROM requests_tags AS rt
-				JOIN tags AS t ON rt.TagID=t.ID
+				JOIN tags AS t ON rt.TagID = t.ID
 			WHERE rt.RequestID = $RequestID
 			ORDER BY rt.TagID ASC");
 		$Tags = $DB->to_array();
 		$Results = array();
 		foreach ($Tags as $TagsRow) {
 			list($TagID, $TagName) = $TagsRow;
-			$Results[$TagID]= $TagName;
+			$Results[$TagID] = $TagName;
 		}
 		return $Results;
 	}
@@ -210,7 +210,7 @@ class Requests {
 	public static function get_votes_array($RequestID) {
 		global $Cache, $DB;
 
-		$RequestVotes = $Cache->get_value('request_votes_'.$RequestID);
+		$RequestVotes = $Cache->get_value("request_votes_$RequestID");
 		if (!is_array($RequestVotes)) {
 			$DB->query("
 				SELECT
@@ -218,7 +218,7 @@ class Requests {
 					rv.Bounty,
 					u.Username
 				FROM requests_votes as rv
-					LEFT JOIN users_main AS u ON u.ID=rv.UserID
+					LEFT JOIN users_main AS u ON u.ID = rv.UserID
 				WHERE rv.RequestID = $RequestID
 				ORDER BY rv.Bounty DESC");
 			if (!$DB->has_results()) {
@@ -236,7 +236,7 @@ class Requests {
 				}
 
 				$RequestVotes['Voters'] = $VotesArray;
-				$Cache->cache_value('request_votes_'.$RequestID, $RequestVotes);
+				$Cache->cache_value("request_votes_$RequestID", $RequestVotes);
 			}
 		}
 		return $RequestVotes;

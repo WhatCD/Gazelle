@@ -15,7 +15,7 @@ if (!empty($_GET['search'])) {
 	}
 }
 
-$TagMatcher = (!empty($_GET['tagmatcher']) && $_GET['tagmatcher'] == "any") ? "any" : "all";
+$TagMatcher = (!empty($_GET['tagmatcher']) && $_GET['tagmatcher'] === 'any') ? 'any' : 'all';
 
 if (!empty($_GET['tags'])) {
 	$Tags = explode(',', $_GET['tags']);
@@ -27,7 +27,7 @@ if (!empty($_GET['tags'])) {
 		}
 	}
 
-	if ($TagMatcher == "any") {
+	if ($TagMatcher === 'any') {
 		$ExtraJoins[] = "LEFT JOIN requests_tags AS rt ON r.ID=rt.RequestID";
 		$ExtraJoins[] = "LEFT JOIN tags AS t ON t.ID=rt.TagID";
 		$Wheres[] = "t.Name IN ('".implode("', '", $TagNames)."')";
@@ -47,10 +47,10 @@ if (!empty($_GET['filter_cat'])) {
 
 if (!empty($_GET['releases'])) {
 	$ReleaseArray = $_GET['releases'];
-	if (count($ReleaseArray) != count($ReleaseTypes)) {
+	if (count($ReleaseArray) !== count($ReleaseTypes)) {
 		foreach ($ReleaseArray as $Index => $Value) {
 			if (is_number($Value)) {
-				$Wheres[] = "r.ReleaseType = ".$Value;
+				$Wheres[] = "r.ReleaseType = $Value";
 			} else {
 				error(0);
 			}
@@ -60,7 +60,7 @@ if (!empty($_GET['releases'])) {
 
 if (!empty($_GET['formats'])) {
 	$FormatArray = $_GET['formats'];
-	if (count($FormatArray) != count($Formats)) {
+	if (count($FormatArray) !== count($Formats)) {
 		$FormatNameArray = array();
 		foreach ($FormatArray as $Index => $MasterIndex) {
 			if (array_key_exists($Index, $Formats)) {
@@ -78,7 +78,7 @@ if (!empty($_GET['formats'])) {
 
 if (!empty($_GET['media'])) {
 	$MediaArray = $_GET['media'];
-	if (count($MediaArray) != count($Media)) {
+	if (count($MediaArray) !== count($Media)) {
 		$MediaNameArray = array();
 		foreach ($MediaArray as $Index => $MasterIndex) {
 			if (array_key_exists($Index, $Media)) {
@@ -96,7 +96,7 @@ if (!empty($_GET['media'])) {
 
 if (!empty($_GET['bitrates'])) {
 	$BitrateArray = $_GET['bitrates'];
-	if (count($BitrateArray) != count($Bitrates)) {
+	if (count($BitrateArray) !== count($Bitrates)) {
 		$BitrateNameArray = array();
 		foreach ($BitrateArray as $Index => $MasterIndex) {
 			if (array_key_exists($Index, $Bitrates)) {
@@ -148,9 +148,9 @@ if (empty($_GET['order'])) {
 } else {
 	if (in_array($_GET['order'], $OrderWays)) {
 		$CurrentOrder = $_GET['order'];
-		if ($_GET['sort'] == 'asc' || $_GET['sort'] == 'desc') {
+		if ($_GET['sort'] === 'asc' || $_GET['sort'] === 'desc') {
 			$CurrentSort = $_GET['sort'];
-			$NewSort = ($_GET['sort'] == 'asc' ? 'desc' : 'asc');
+			$NewSort = ($_GET['sort'] === 'asc') ? 'desc' : 'asc';
 		} else {
 			error(404);
 		}
@@ -162,31 +162,31 @@ if (empty($_GET['order'])) {
 $CurrentURL = get_url(array('order', 'sort'));
 
 switch ($CurrentOrder) {
-	case 'name' :
+	case 'name':
 		$OrderBy = "r.Title";
 		break;
-	case 'votes' :
+	case 'votes':
 		$OrderBy = "Votes";
 		break;
-	case 'bounty' :
+	case 'bounty':
 		$OrderBy = "Bounty";
 		break;
-	case 'filler' :
+	case 'filler':
 		$OrderBy = "r.FillerID";
 		break;
-	case 'requestor' :
+	case 'requestor':
 		$OrderBy = "r.UserID";
 		break;
-	case 'created' :
+	case 'created':
 		$OrderBy = "r.ID";
 		break;
-	case 'lastvote' :
+	case 'lastvote':
 		$OrderBy = "r.LastVote";
 		break;
-	case 'filled' :
+	case 'filled':
 		$OrderBy = "r.TimeFilled";
 		break;
-	default :
+	default:
 		$OrderBy = "r.ID";
 		break;
 }
@@ -239,9 +239,6 @@ $DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 $PageLinks = get_pages($Page, $Results, REQUESTS_PER_PAGE, 11);
 
-
-
-
 show_header($Title, 'requests');
 
 ?>
@@ -272,8 +269,8 @@ show_header($Title, 'requests');
 					<td class="label">Tags (comma-separated):</td>
 					<td>
 						<input type="text" name="tags" size="60" value="<?=display_str(implode(', ', $TagNames))?>" />
-						<input type="radio" name="tagmatcher" value="any"<?=((empty($TagMatcher) || $TagMatcher == 'any') ? ' checked="checked"' : '') ?> />Any &nbsp;
-						<input type="radio" name="tagmatcher" value="all"<?=((!empty($TagMatcher) && $TagMatcher == 'all') ? ' checked="checked"' : '') ?> />All
+						<input type="radio" name="tagmatcher" value="any"<?=((empty($TagMatcher) || $TagMatcher === 'any') ? ' checked="checked"' : '') ?> />Any &nbsp;
+						<input type="radio" name="tagmatcher" value="all"<?=((!empty($TagMatcher) && $TagMatcher === 'all') ? ' checked="checked"' : '') ?> />All
 					</td>
 				</tr>
 
@@ -298,7 +295,7 @@ show_header($Title, 'requests');
 $x = 1;
 reset($Categories);
 foreach ($Categories as $CatKey => $CatName) {
-	if ($x % 8 == 0 || $x == 1) {
+	if ($x % 8 === 0 || $x === 1) {
 ?>
 					<tr class="cat_list">
 <?	} ?>
@@ -306,9 +303,7 @@ foreach ($Categories as $CatKey => $CatName) {
 							<input type="checkbox" name="filter_cat[<?=($CatKey+1)?>]" id="cat_<?=($CatKey+1)?>" value="1"<? if (isset($_GET['filter_cat'][$CatKey + 1])) { ?> checked="checked"<? } ?> />
 							<label for="cat_<?=($CatKey + 1)?>"><?=$CatName?></label>
 						</td>
-<?
-	if ($x % 7 == 0) {
-?>
+<?	if ($x % 7 === 0) { ?>
 					</tr>
 <?
 	}
@@ -321,13 +316,17 @@ foreach ($Categories as $CatKey => $CatName) {
 					<td class="label">Release Types</td>
 					<td>
 						<input type="checkbox" id="toggle_releases" onchange="Toggle('releases');" /> Toggle All
-<?		$i = 0;
+<?
+		$i = 0;
 		foreach ($ReleaseTypes as $Key => $Val) {
-			if ($i % 8 == 0) echo "<br />";?>
+			if ($i % 8 === 0) {
+				echo "<br />";
+			} ?>
 						<input type="checkbox" name="releases[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($ReleaseArray) && in_array($Key, $ReleaseArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
-<?			$i++;
+<?
+			$i++;
 		} ?>
 					</td>
 				</tr>
@@ -335,8 +334,11 @@ foreach ($Categories as $CatKey => $CatName) {
 					<td class="label">Formats</td>
 					<td>
 						<input type="checkbox" id="toggle_formats" onchange="Toggle('formats');" /> Toggle All
-<?		foreach ($Formats as $Key => $Val) {
-			if ($Key % 8 == 0) echo "<br />";?>
+<?
+		foreach ($Formats as $Key => $Val) {
+			if ($Key % 8 === 0) {
+				echo "<br />";
+			} ?>
 						<input type="checkbox" name="formats[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
@@ -347,8 +349,11 @@ foreach ($Categories as $CatKey => $CatName) {
 					<td class="label">Bitrates</td>
 					<td>
 						<input type="checkbox" id="toggle_bitrates" onchange="Toggle('bitrates');" /> Toggle All
-<?		foreach ($Bitrates as $Key => $Val) {
-			if ($Key % 8 == 0) echo "<br />";?>
+<?
+		foreach ($Bitrates as $Key => $Val) {
+			if ($Key % 8 === 0) {
+				echo "<br />";
+			} ?>
 						<input type="checkbox" name="bitrates[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
@@ -359,8 +364,11 @@ foreach ($Categories as $CatKey => $CatName) {
 					<td class="label">Media</td>
 					<td>
 						<input type="checkbox" id="toggle_media" onchange="Toggle('media');" /> Toggle All
-<?		foreach ($Media as $Key => $Val) {
-			if ($Key % 8 == 0) echo "<br />";?>
+<?
+		foreach ($Media as $Key => $Val) {
+			if ($Key % 8 === 0) {
+				echo "<br />";
+			} ?>
 						<input type="checkbox" name="media[]" value="<?=$Key?>"
 							<?=(((!$Submitted) || !empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
 						/> <?=$Val?>
@@ -381,26 +389,26 @@ foreach ($Categories as $CatKey => $CatName) {
 	<table id="request_table" class="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;">
-				<a href="requests.php?order=name&amp;sort=<?=(($CurrentOrder == 'name') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Request name</strong></a>
+				<a href="requests.php?order=name&amp;sort=<?=(($CurrentOrder === 'name') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Request name</strong></a>
 			</td>
 			<td>
-				<strong><a href="requests.php?order=votes&amp;sort=<?=(($CurrentOrder == 'votes') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>">Vote (20MB)</a></strong></td>
+				<strong><a href="requests.php?order=votes&amp;sort=<?=(($CurrentOrder === 'votes') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>">Vote (20MB)</a></strong></td>
 			<td>
-				<a href="requests.php?order=bounty&amp;sort=<?=(($CurrentOrder == 'bounty') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Bounty</strong></a>
+				<a href="requests.php?order=bounty&amp;sort=<?=(($CurrentOrder === 'bounty') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Bounty</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=filled&amp;sort=<?=(($CurrentOrder == 'filled') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Filled</strong></a>
+				<a href="requests.php?order=filled&amp;sort=<?=(($CurrentOrder === 'filled') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Filled</strong></a>
 			<td>
-				<a href="requests.php?order=filler&amp;sort=<?=(($CurrentOrder == 'filler') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Filled by</strong></a>
+				<a href="requests.php?order=filler&amp;sort=<?=(($CurrentOrder === 'filler') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Filled by</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=requestor&amp;sort=<?=(($CurrentOrder == 'requestor') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Requested by</strong></a>
+				<a href="requests.php?order=requestor&amp;sort=<?=(($CurrentOrder === 'requestor') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Requested by</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=created&amp;sort=<?=(($CurrentOrder == 'created') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
+				<a href="requests.php?order=created&amp;sort=<?=(($CurrentOrder === 'created') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
 			</td>
 			<td>
-				<a href="requests.php?order=lastvote&amp;sort=<?=(($CurrentOrder == 'lastvote') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Last vote</strong></a>
+				<a href="requests.php?order=lastvote&amp;sort=<?=(($CurrentOrder === 'lastvote') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Last vote</strong></a>
 			</td>
 		</tr>
 
@@ -410,7 +418,8 @@ foreach ($Categories as $CatKey => $CatName) {
 				Nothing found!
 			</td>
 		</tr>
-<?	} else {
+<?
+	} else {
 		$Row = 'a';
 		foreach ($Requests as $Request) {
 			list($RequestID, $CategoryID, $Title, $Year, $Bounty, $Votes, $FillerID, $FillerName, $TorrentID, $TimeFilled, $RequestorID, $RequestorName, $TimeAdded, $LastVote) = $Request;
@@ -418,17 +427,17 @@ foreach ($Categories as $CatKey => $CatName) {
 			$CategoryName = $Categories[$CategoryID - 1];
 			$IsFilled = ($TorrentID != 0);
 
-			if ($CategoryName == "Music") {
+			if ($CategoryName === 'Music') {
 				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
-			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
+				$FullName = "$ArtistLink<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
+			} elseif ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
 				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
 			} else {
-				$FullName ="<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
 			}
 
-			$Row = (($Row == 'a') ? 'b' : 'a');
+			$Row = (($Row === 'a') ? 'b' : 'a');
 
 			$Tags = Requests::get_tags($RequestID);
 ?>
@@ -448,7 +457,8 @@ foreach ($Categories as $CatKey => $CatName) {
 			</td>
 			<td>
 				<?=$Votes?>
-<?		 	if (!$IsFilled && check_perms('site_vote')) { ?>
+<?
+			if (!$IsFilled && check_perms('site_vote')) { ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				&nbsp;&nbsp; <a href="javascript:Vote()" class="brackets"><strong>+</strong></a>
 <?			} ?>
