@@ -23,7 +23,11 @@ if (!is_number($CollageID)) {
 $NumComments = Collages::get_comment_count($CollageID);
 
 if (isset($_GET['postid']) && is_number($_GET['postid']) && $NumComments > TORRENT_COMMENTS_PER_PAGE) {
-	$DB->query("SELECT COUNT(ID) FROM collages_comments WHERE CollageID = $CollageID AND ID <= $_GET[postid]");
+	$DB->query("
+		SELECT COUNT(ID)
+		FROM collages_comments
+		WHERE CollageID = $CollageID
+			AND ID <= $_GET[postid]");
 	list($PostNum) = $DB->next_record();
 	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $PostNum);
 } else {
@@ -42,11 +46,14 @@ $Catalogue = Collages::get_comment_catalogue($CollageID, $CatalogueID);
 //This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
 $Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
 
-$DB->query("SELECT Name FROM collages WHERE ID='$CollageID'");
+$DB->query("
+	SELECT Name
+	FROM collages
+	WHERE ID = '$CollageID'");
 list($Name) = $DB->next_record();
 
 // Start printing
-View::show_header('Comments for collage '.$Name, 'comments,bbcode');
+View::show_header("Comments for collage $Name", 'comments,bbcode');
 ?>
 <div class="thin">
 	<div class="header">
@@ -80,7 +87,7 @@ foreach ($Thread as $Post) {
 			<span style="float: left;"><a href="#post<?=$PostID?>">#<?=$PostID?></a>
 				<?=Users::format_username($AuthorID, true, true, true, true, true)?> <?=time_diff($AddedTime)?>
 <? if (!$ThreadInfo['IsLocked']) { ?>				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a><? }
-if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>');" class="brackets">Edit</a><? }
+if ($AuthorID === $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>');" class="brackets">Edit</a><? }
 if (check_perms('site_moderate_forums')) { ?>				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a> <? } ?>
 			</span>
 			<span id="bar<?=$PostID?>" style="float: right;">
@@ -102,7 +109,8 @@ if (check_perms('site_moderate_forums')) { ?>				- <a href="#post<?=$PostID?>" o
 		</td>
 	</tr>
 </table>
-<?	}
+<?
+	}
 if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 	if ($ThreadInfo['MinClassWrite'] <= $LoggedUser['Class'] && !$LoggedUser['DisablePosting']) {
 

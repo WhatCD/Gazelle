@@ -38,9 +38,10 @@ $RS = "
 		i.Donor,
 		i.Warned,
 		i.JoinDate,
-		(	SELECT COUNT(h1.UserID)
+		(
+			SELECT COUNT(h1.UserID)
 			FROM users_history_ips AS h1
-			WHERE h1.IP=m.IP
+			WHERE h1.IP = m.IP
 		) AS Uses,
 		im.ID,
 		im.IP,
@@ -54,12 +55,13 @@ $RS = "
 		ii.Donor,
 		ii.Warned,
 		ii.JoinDate,
-		(	SELECT COUNT(h2.UserID)
+		(
+			SELECT COUNT(h2.UserID)
 			FROM users_history_ips AS h2
-			WHERE h2.IP=im.IP
+			WHERE h2.IP = im.IP
 		) AS InviterUses
 	FROM users_main AS m
-		LEFT JOIN users_info AS i ON i.UserID=m.ID
+		LEFT JOIN users_info AS i ON i.UserID = m.ID
 		LEFT JOIN users_main AS im ON i.Inviter = im.ID
 		LEFT JOIN users_info AS ii ON i.Inviter = ii.UserID
 	WHERE";
@@ -68,9 +70,11 @@ if ($DateSearch) {
 } else {
 	$RS .= " i.JoinDate > '".time_minus(3600 * 24 * 3)."'";
 }
-$RS .= " ORDER BY i.Joindate DESC LIMIT $Limit";
+$RS .= "
+	ORDER BY i.Joindate DESC
+	LIMIT $Limit";
 $QueryID = $DB->query($RS);
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 $DB->set_query_id($QueryID);
 ?>
@@ -104,7 +108,7 @@ if ($DB->has_results()) {
 		</tr>
 <?
 	while (list($UserID, $IP, $IPCC, $Email, $Username, $PermissionID, $Uploaded, $Downloaded, $Enabled, $Donor, $Warned, $Joined, $Uses, $InviterID, $InviterIP, $InviterIPCC, $InviterEmail, $InviterUsername, $InviterPermissionID, $InviterUploaded, $InviterDownloaded, $InviterEnabled, $InviterDonor, $InviterWarned, $InviterJoined, $InviterUses) = $DB->next_record()) {
-	$Row = ($IP == $InviterIP) ? 'a' : 'b';
+	$Row = $IP === $InviterIP ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?><br /><?=Users::format_username($InviterID, true, true, true, true)?></td>

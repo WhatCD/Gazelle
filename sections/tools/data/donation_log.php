@@ -28,7 +28,7 @@ $sql .= "
 $DB->query($sql);
 $Donations = $DB->to_array(false,MYSQLI_NUM);
 
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 
 if (empty($_GET['search']) && !isset($_GET['page']) && !$DonationTimeline = $Cache->get_value('donation_timeline')) {
@@ -40,7 +40,7 @@ if (empty($_GET['search']) && !isset($_GET['page']) && !$DonationTimeline = $Cac
 		ORDER BY Time DESC
 		LIMIT 1, 18");
 	$Timeline = array_reverse($DB->to_array());
-	$Area = new AREA_GRAPH(880, 160, array('Break'=>1));
+	$Area = new AREA_GRAPH(880, 160, array('Break' => 1));
 	foreach ($Timeline as $Entry) {
 		list($Label, $Amount) = $Entry;
 		$Area->add($Label, $Amount);
@@ -51,7 +51,7 @@ if (empty($_GET['search']) && !isset($_GET['page']) && !$DonationTimeline = $Cac
 	$Area->lines(2);
 	$Area->generate();
 	$DonationTimeline = $Area->url();
-	$Cache->cache_value('donation_timeline',$DonationTimeline,mktime(0,0,0,date('n') + 1, 2));
+	$Cache->cache_value('donation_timeline', $DonationTimeline, mktime(0, 0, 0, date('n') + 1, 2));
 }
 
 View::show_header('Donation log');

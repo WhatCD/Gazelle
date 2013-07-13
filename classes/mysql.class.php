@@ -294,6 +294,10 @@ class DB_MYSQL {
 		}
 	}
 
+	/*
+	 * returns an integer with the number of rows found
+	 * returns a string if the number of rows found exceeds MAXINT
+	 */
 	function record_count() {
 		if ($this->QueryID) {
 			return mysqli_num_rows($this->QueryID);

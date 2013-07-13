@@ -19,7 +19,10 @@ if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 	if (isset($_GET['topicid']) && is_number($_GET['topicid'])) {
 		$ThreadID = $_GET['topicid'];
 	} elseif (isset($_GET['postid']) && is_number($_GET['postid'])) {
-		$DB->query("SELECT TopicID FROM forums_posts WHERE ID = $_GET[postid]");
+		$DB->query("
+			SELECT TopicID
+			FROM forums_posts
+			WHERE ID = $_GET[postid]");
 		list($ThreadID) = $DB->next_record();
 		if ($ThreadID) {
 			//Redirect postid to threadid when necessary.
@@ -84,7 +87,7 @@ if (($Page - 1) * $PerPage > $ThreadInfo['Posts']) {
 list($CatalogueID,$CatalogueLimit) = Format::catalogue_limit($Page, $PerPage, THREAD_CATALOGUE);
 
 // Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-if (!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID)) {
+if (!$Catalogue = $Cache->get_value("thread_$ThreadID"."_catalogue_$CatalogueID")) {
 	$DB->query("
 		SELECT
 			p.ID,
@@ -97,14 +100,14 @@ if (!$Catalogue = $Cache->get_value('thread_'.$ThreadID.'_catalogue_'.$Catalogue
 		WHERE p.TopicID = '$ThreadID'
 			AND p.ID != '".$ThreadInfo['StickyPostID']."'
 		LIMIT $CatalogueLimit");
-	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
+	$Catalogue = $DB->to_array(false, MYSQLI_ASSOC);
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
-		$Cache->cache_value('thread_'.$ThreadID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
+		$Cache->cache_value("thread_$ThreadID"."_catalogue_$CatalogueID", $Catalogue, 0);
 	}
 }
 $Thread = Format::catalogue_select($Catalogue, $Page, $PerPage, THREAD_CATALOGUE);
 
-if ($_GET['updatelastread'] != '0') {
+if ($_GET['updatelastread'] !== '0') {
 	$LastPost = end($Thread);
 	$LastPost = $LastPost['ID'];
 	reset($Thread);
@@ -116,8 +119,8 @@ if ($_GET['updatelastread'] != '0') {
 		$DB->query("
 			SELECT PostID
 			FROM forums_last_read_topics
-			WHERE UserID='$LoggedUser[ID]'
-				AND TopicID='$ThreadID'");
+			WHERE UserID = '$LoggedUser[ID]'
+				AND TopicID = '$ThreadID'");
 		list($LastRead) = $DB->next_record();
 		if ($LastRead < $LastPost) {
 			$DB->query("
@@ -125,7 +128,7 @@ if ($_GET['updatelastread'] != '0') {
 					(UserID, TopicID, PostID)
 				VALUES
 					('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
-				ON DUPLICATE KEY UPDATE PostID='$LastPost'");
+				ON DUPLICATE KEY UPDATE PostID = '$LastPost'");
 		}
 	}
 }
@@ -260,11 +263,11 @@ foreach ($Thread as $Key => $Post) {
 			'authorId' => (int) $AuthorID,
 			'authorName' => $Username,
 			'paranoia' => $Paranoia,
-			'artist' => ($Artist == 1),
-			'donor' => ($Donor == 1),
-			'warned' => ($Warned != '0000-00-00 00:00:00'),
+			'artist' => ($Artist === '1'),
+			'donor' => ($Donor === '1'),
+			'warned' => ($Warned !== '0000-00-00 00:00:00'),
 			'avatar' => $Avatar,
-			'enabled' => (($Enabled == 2) ? false : true),
+			'enabled' => (($Enabled === '2') ? false : true),
 			'userTitle' => $UserTitle
 		),
 

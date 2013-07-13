@@ -5,14 +5,12 @@ $ID = (int) $_POST['id'];
 $Note = $_POST['note'];
 
 if (empty($FriendID) || empty($Type) || empty($ID)) {
-	echo json_encode(array("status" => "error", "response" => "Error."));
+	echo json_encode(array('status' => 'error', 'response' => 'Error.'));
 	die();
 }
 // Make sure the recipient is on your friends list and not some random dude.
 $DB->query("
-	SELECT
-		f.FriendID,
-		u.Username
+	SELECT f.FriendID, u.Username
 	FROM friends AS f
 		RIGHT JOIN users_enable_recommendations AS r
 			ON r.ID = f.FriendID AND r.Enable = 1
@@ -22,7 +20,7 @@ $DB->query("
 		AND f.FriendID = '$FriendID'");
 
 if (!$DB->has_results()) {
-	echo json_encode(array("status" => "error", "response" => "Not on friend list."));
+	echo json_encode(array('status' => 'error', 'response' => 'Not on friend list.'));
 	die();
 }
 
@@ -33,27 +31,35 @@ $Link = '';
 $Article = 'a';
 switch ($Type) {
 	case 'torrent':
-		$Link = "torrents.php?id=".$ID;
-		$DB->query("SELECT Name FROM torrents_group WHERE ID = '$ID'");
+		$Link = "torrents.php?id=$ID";
+		$DB->query("
+			SELECT Name
+			FROM torrents_group
+			WHERE ID = '$ID'");
 		break;
 	case 'artist':
-		$Article = "an";
-		$Link = "artist.php?id=".$ID;
-		$DB->query("SELECT Name FROM artists_group WHERE ArtistID = '$ID'");
+		$Article = 'an';
+		$Link = "artist.php?id=$ID";
+		$DB->query("
+			SELECT Name
+			FROM artists_group
+			WHERE ArtistID = '$ID'");
 		break;
 	case 'collage':
-		$Link = "collages.php?id=".$ID;
-		$DB->query("SELECT Name FROM collages WHERE ID = '$ID'");
+		$Link = "collages.php?id=$ID";
+		$DB->query("
+			SELECT Name
+			FROM collages
+			WHERE ID = '$ID'");
 		break;
 }
 list($Name) = $DB->next_record();
-$Subject = $LoggedUser['Username'] . " recommended you $Article " . $Type . "!";
-$Body = $LoggedUser['Username'] . " recommended you the ".$Type." [url=https://".SSL_SITE_URL."/$Link]$Name".'[/url].';
+$Subject = $LoggedUser['Username'] . " recommended you $Article $Type!";
+$Body = $LoggedUser['Username'] . " recommended you the $Type [url=https://".SSL_SITE_URL."/$Link]$Name".'[/url].';
 if (!empty($Note)) {
-	$Body = $Body . "\n\n". $Note;
+	$Body = "$Body\n\n$Note";
 }
 
 Misc::send_pm($FriendID, $LoggedUser['ID'], $Subject, $Body);
-echo json_encode(array("status" => "success", "response" => "Sent!"));
+echo json_encode(array('status' => 'success', 'response' => 'Sent!'));
 die();
-

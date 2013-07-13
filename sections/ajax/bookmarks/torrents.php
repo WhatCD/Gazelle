@@ -16,7 +16,10 @@ if (!empty($_GET['userid'])) {
 	if (!is_number($UserID)) {
 		error(404);
 	}
-	$DB->query("SELECT Username FROM users_main WHERE ID='$UserID'");
+	$DB->query("
+		SELECT Username
+		FROM users_main
+		WHERE ID = '$UserID'");
 	list($Username) = $DB->next_record();
 } else {
 	$UserID = $LoggedUser['ID'];

@@ -5,32 +5,35 @@ if (!empty($_GET['userid'])) {
 		error(403);
 	}
 	$UserID = $_GET['userid'];
-	$Sneaky = ($UserID != $LoggedUser['ID']);
+	$Sneaky = ($UserID !== $LoggedUser['ID']);
 	if (!is_number($UserID)) {
 		error(404);
 	}
-	$DB->query("SELECT Username FROM users_main WHERE ID='$UserID'");
+	$DB->query("
+		SELECT Username
+		FROM users_main
+		WHERE ID = '$UserID'");
 	list($Username) = $DB->next_record();
 } else {
 	$UserID = $LoggedUser['ID'];
 }
 
-$Sneaky = ($UserID != $LoggedUser['ID']);
+$Sneaky = ($UserID !== $LoggedUser['ID']);
 
 //$ArtistList = Bookmarks::all_bookmarks('artist', $UserID);
 
-$DB->query('
+$DB->query("
 	SELECT ag.ArtistID, ag.Name
 	FROM bookmarks_artists AS ba
 		INNER JOIN artists_group AS ag ON ba.ArtistID = ag.ArtistID
-	WHERE ba.UserID = '.$UserID.'
-	ORDER BY ag.Name');
+	WHERE ba.UserID = $UserID
+	ORDER BY ag.Name");
 
 $ArtistList = $DB->to_array();
 
 $Title = ($Sneaky) ? "$Username's bookmarked artists" : 'Your bookmarked artists';
 
-View::show_header($Title,'browse');
+View::show_header($Title, 'browse');
 
 ?>
 <div class="thin">
@@ -59,7 +62,7 @@ View::show_header($Title,'browse');
 <?
 $Row = 'a';
 foreach ($ArtistList as $Artist) {
-	$Row = ($Row == 'a') ? 'b' : 'a';
+	$Row = ($Row === 'a') ? 'b' : 'a';
 	list($ArtistID, $Name) = $Artist;
 ?>
 		<tr class="row<?=$Row?> bookmark_<?=$ArtistID?>">
@@ -72,13 +75,13 @@ foreach ($ArtistList as $Artist) {
 			$DB->query("
 				SELECT ID, Artists
 				FROM users_notify_filters
-				WHERE UserID='$LoggedUser[ID]'
-					AND Label='Artist notifications'
+				WHERE UserID = '$LoggedUser[ID]'
+					AND Label = 'Artist notifications'
 				LIMIT 1");
 			$Notify = $DB->next_record(MYSQLI_ASSOC);
 			$Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
 		}
-		if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
+		if (stripos($Notify['Artists'], "|$Name|") === false) {
 ?>
 					<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
 <?
@@ -89,7 +92,7 @@ foreach ($ArtistList as $Artist) {
 		}
 	}
 ?>
-					<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>,'Bookmark');return false;" class="brackets">Remove bookmark</a>
+					<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Unbookmark('artist', <?=$ArtistID?>, 'Bookmark'); return false;" class="brackets">Remove bookmark</a>
 				</span>
 			</td>
 		</tr>

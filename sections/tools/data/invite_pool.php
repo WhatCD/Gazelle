@@ -9,7 +9,9 @@ list($Page, $Limit) = Format::page_limit(INVITES_PER_PAGE);
 if (!empty($_POST['invitekey']) && check_perms('users_edit_invites')) {
 	authorize();
 
-	$DB->query("DELETE FROM invites WHERE InviteKey='".db_string($_POST['invitekey'])."'");
+	$DB->query("
+		DELETE FROM invites
+		WHERE InviteKey = '".db_string($_POST['invitekey'])."'");
 }
 
 if (!empty($_GET['search'])) {
@@ -29,12 +31,15 @@ $sql = "
 	FROM invites as i
 		JOIN users_main AS um ON um.ID = i.InviterID ";
 if ($Search) {
-	$sql .= "WHERE i.Email LIKE '%$Search%' ";
+	$sql .= "
+	WHERE i.Email LIKE '%$Search%' ";
 }
-$sql .= "ORDER BY i.Expires DESC LIMIT $Limit";
+$sql .= "
+	ORDER BY i.Expires DESC
+	LIMIT $Limit";
 $RS = $DB->query($sql);
 
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 
 $DB->set_query_id($RS);
@@ -78,7 +83,7 @@ $DB->set_query_id($RS);
 <?
 	$Row = 'b';
 	while (list($UserID, $IP, $InviteKey, $Expires, $Email) = $DB->next_record()) {
-		$Row = ($Row == 'b') ? 'a' : 'b';
+		$Row = $Row === 'b' ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>

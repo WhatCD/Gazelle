@@ -4,12 +4,15 @@ if (!is_number($CollageID)) {
 	error(0);
 }
 
-$DB->query("SELECT Name, UserID, CategoryID FROM collages WHERE ID='$CollageID'");
+$DB->query("
+	SELECT Name, UserID, CategoryID
+	FROM collages
+	WHERE ID = '$CollageID'");
 list($Name, $UserID, $CategoryID) = $DB->next_record();
-if ($CategoryID == 0 && $UserID != $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
+if ($CategoryID === '0' && $UserID !== $LoggedUser['ID'] && !check_perms('site_collages_delete')) {
 	error(403);
 }
-if ($CategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
+if ($CategoryID !== array_search(ARTIST_COLLAGE, $CollageCats)) {
 	error(403);
 }
 
@@ -21,15 +24,15 @@ $DB->query("
 		um.Username,
 		ca.Sort
 	FROM collages_artists AS ca
-		JOIN artists_group AS ag ON ag.ArtistID=ca.ArtistID
-		LEFT JOIN users_main AS um ON um.ID=ca.UserID
-	WHERE ca.CollageID='$CollageID'
+		JOIN artists_group AS ag ON ag.ArtistID = ca.ArtistID
+		LEFT JOIN users_main AS um ON um.ID = ca.UserID
+	WHERE ca.CollageID = '$CollageID'
 	ORDER BY ca.Sort");
 
 $Artists = $DB->to_array('ArtistID', MYSQLI_ASSOC);
 
 
-View::show_header('Manage collage '.$Name, 'jquery-ui,jquery.tablesorter.min,sort');
+View::show_header("Manage collage $Name", 'jquery-ui,jquery.tablesorter.min,sort');
 
 ?>
 
@@ -54,7 +57,7 @@ View::show_header('Manage collage '.$Name, 'jquery-ui,jquery.tablesorter.min,sor
 	</table>
 
 	<div class="drag_drop_save hidden">
-		<input type="button" name="submit" value="Save All Changes" title="Save your changes." class="save_sortable_collage" />
+		<input type="button" name="submit" value="Save All Changes" title="Save your changes" class="save_sortable_collage" />
 	</div>
 	<table id="manage_collage_table">
 		<thead>
@@ -68,7 +71,6 @@ View::show_header('Manage collage '.$Name, 'jquery-ui,jquery.tablesorter.min,sor
 		</thead>
 	<tbody>
 <?
-
 	$Number = 0;
 	foreach ($Artists as $Artist) {
 		$Number++;

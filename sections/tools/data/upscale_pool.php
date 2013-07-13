@@ -22,12 +22,12 @@ $RS = $DB->query("
 		i.RatioWatchDownload,
 		m.RequiredRatio
 	FROM users_main AS m
-		LEFT JOIN users_info AS i ON i.UserID=m.ID
+		LEFT JOIN users_info AS i ON i.UserID = m.ID
 	WHERE i.RatioWatchEnds != '0000-00-00 00:00:00'
 		AND m.Enabled = '1'
 	ORDER BY i.RatioWatchEnds ASC
 	LIMIT $Limit");
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 $DB->query("
 	SELECT COUNT(UserID)
@@ -63,7 +63,7 @@ if ($DB->has_results()) {
 		</tr>
 <?
 	while (list($UserID, $Username, $Uploaded, $Downloaded, $PermissionID, $Enabled, $Donor, $Warned, $Joined, $RatioWatchEnds, $RatioWatchDownload, $RequiredRatio) = $DB->next_record()) {
-	$Row = ($Row == 'b') ? 'a' : 'b';
+	$Row = $Row === 'b' ? 'a' : 'b';
 
 ?>
 		<tr class="row<?=$Row?>">
@@ -74,7 +74,7 @@ if ($DB->has_results()) {
 			<td><?=number_format($RequiredRatio, 2)?></td>
 			<td><? if (($Downloaded * $RequiredRatio) > $Uploaded) { echo Format::get_size(($Downloaded * $RequiredRatio) - $Uploaded);} ?></td>
 			<td><?=Format::get_size($Downloaded - $RatioWatchDownload)?></td>
-			<td><?=time_diff($Joined,2)?></td>
+			<td><?=time_diff($Joined, 2)?></td>
 			<td><?=time_diff($RatioWatchEnds)?></td>
 			<td><?//time_diff(strtotime($Joined), strtotime($RatioWatchEnds))?></td>
 		</tr>
@@ -83,8 +83,11 @@ if ($DB->has_results()) {
 	<div class="linkbox">
 <?	echo $Pages; ?>
 	</div>
-<?	} else { ?>
+<?
+} else { ?>
 	<h2 align="center">There are currently no users on ratio watch.</h2>
-<?	}
+<?
+}
+
 View::show_footer();
 ?>

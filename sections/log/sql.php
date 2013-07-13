@@ -21,9 +21,9 @@ if ($Search) {
 }
 if (!check_perms('site_view_full_log')) {
 	if ($Search) {
-		$sql.=' AND ';
+		$sql .= ' AND ';
 	} else {
-		$sql.=' WHERE ';
+		$sql .= ' WHERE ';
 	}
 	$sql .= " Time>'".time_minus(3600 * 24 * 28)."' ";
 }
@@ -33,7 +33,7 @@ $sql .= "
 	LIMIT $Limit";
 
 $Log = $DB->query($sql);
-$DB->query("SELECT FOUND_ROWS()");
+$DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 $TotalMatches = $NumResults;
 $DB->set_query_id($Log);
