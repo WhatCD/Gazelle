@@ -455,10 +455,8 @@ foreach ($Thread as $Key => $Post) {
 			<div style="float: left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
 				<?=Users::format_username($AuthorID, true, true, true, true, true)?>
 				<?=time_diff($AddedTime,2)?>
-<?	if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) { ?>
-				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);" class="brackets">Quote</a>
-<?	}
-	if ((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write') && $AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums')) { ?>
+				- <a href="#quickpost" id="quote_<?=$PostID?>" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);" class="brackets">Quote</a>
+<?	if ((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write') && $AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums')) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
 <?	}
 	if (check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?>

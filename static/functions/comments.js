@@ -19,19 +19,42 @@ function Quote(post, user) {
 	Quote(post, user, false)
 }
 
+var original_post;
 function Quote(post, user, link) {
 	username = user;
 	postid = post;
-	ajax.get("?action=get_post&post=" + postid, function(response) {
-		if ($('#quickpost').raw().value !== '') {
-			$('#quickpost').raw().value = $('#quickpost').raw().value + "\n\n";
+	if(!$('#reply_box').length) {
+		if ($("#quote_" + postid).text() == "Quote") {
+			original_post = $("#content" + postid).html();
+			$("#quote_" + postid).text("Unquote");
+			$.ajax({
+				type : "POST",
+				url: "ajax.php?action=raw_bbcode",
+				dataType: "json",
+				data : {
+					"postid" : postid
+				}
+			}).done(function(response) {
+				$("#content" + postid).html(response['response']['body']);
+				select_all($("#content" + postid).get(0));
+			});
+		} else {
+			document.getSelection().removeAllRanges();
+			$("#content" + postid).html(original_post);
+			$("#quote_" + postid).text("Quote");
 		}
-		$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote=" + username + (link == true ? "|" + post : "") + "]" +
-			//response.replace(/(img|aud)(\]|=)/ig,'url$2').replace(/\[url\=(https?:\/\/[^\s\[\]<>"\'()]+?)\]\[url\](.+?)\[\/url\]\[\/url\]/gi, "[url]$1[/url]")
-			html_entity_decode(response)
-		+ "[/quote]";
-		resize('quickpost');
-	});
+	} else {
+		ajax.get("?action=get_post&post=" + postid, function(response) {
+			if ($('#quickpost').raw().value !== '') {
+				$('#quickpost').raw().value = $('#quickpost').raw().value + "\n\n";
+			}
+			$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote=" + username + (link == true ? "|" + post : "") + "]" +
+				//response.replace(/(img|aud)(\]|=)/ig,'url$2').replace(/\[url\=(https?:\/\/[^\s\[\]<>"\'()]+?)\]\[url\](.+?)\[\/url\]\[\/url\]/gi, "[url]$1[/url]")
+				html_entity_decode(response)
+			+ "[/quote]";
+			resize('quickpost');
+		});
+	}
 }
 
 function Edit_Form(post,key) {

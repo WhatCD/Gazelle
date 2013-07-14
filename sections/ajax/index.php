@@ -13,7 +13,7 @@ enforce_login();
 /*	AJAX_LIMIT = array(x,y) = 'x' requests every 'y' seconds.
 	e.g. array(5,10) = 5 requests every 10 seconds	*/
 $AJAX_LIMIT = array(5,10);
-$LimitedPages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup','news_ajax','user_recents', 'collage');
+$LimitedPages = array('tcomments','user','forum','top10','browse','usersearch','requests','artist','inbox','subscriptions','bookmarks','announcements','notifications','request','better','similar_artists','userhistory','votefavorite','wiki','torrentgroup','news_ajax','user_recents', 'collage', 'raw_bbcode');
 
 // These users aren't rate limited.
 // This array should contain user IDs.
@@ -160,6 +160,9 @@ switch ($_GET['action']) {
 		break;
 	case 'collage':
 		require(SERVER_ROOT . '/sections/ajax/collage.php');
+		break;
+	case 'raw_bbcode':
+		require(SERVER_ROOT . '/sections/ajax/raw_bbcode.php');
 		break;
 	default:
 		// If they're screwing around with the query string

@@ -94,3 +94,48 @@ function get_forum_info($ForumID) {
 	}
 	return $Forum;
 }
+
+function get_forums() {
+	global $DB, $Cache;
+	if (!$Forums = $Cache->get_value('forums_list')) {
+	$DB->query('
+		SELECT
+			f.ID,
+			f.CategoryID,
+			f.Name,
+			f.Description,
+			f.MinClassRead,
+			f.MinClassWrite,
+			f.MinClassCreate,
+			f.NumTopics,
+			f.NumPosts,
+			f.LastPostID,
+			f.LastPostAuthorID,
+			f.LastPostTopicID,
+			f.LastPostTime,
+			COUNT(sr.ThreadID) AS SpecificRules,
+			t.Title,
+			t.IsLocked,
+			t.IsSticky
+		FROM forums AS f
+			JOIN forums_categories AS fc ON fc.ID = f.CategoryID
+			LEFT JOIN forums_topics as t ON t.ID = f.LastPostTopicID
+			LEFT JOIN forums_specific_rules AS sr ON sr.ForumID = f.ID
+		GROUP BY f.ID
+		ORDER BY fc.Sort, fc.Name, f.CategoryID, f.Sort');
+	$Forums = $DB->to_array('ID', MYSQLI_ASSOC, false);
+	foreach ($Forums as $ForumID => $Forum) {
+		if (count($Forum['SpecificRules'])) {
+			$DB->query("
+				SELECT ThreadID
+				FROM forums_specific_rules
+				WHERE ForumID = $ForumID");
+			$ThreadIDs = $DB->collect('ThreadID');
+			$Forums[$ForumID]['SpecificRules'] = $ThreadIDs;
+		}
+	}
+	unset($ForumID, $Forum);
+	$Cache->cache_value('forums_list', $Forums, 0); //Inf cache.
+	}
+	return $Forums;
+}

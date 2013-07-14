@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-07-13 by draculesti
+Ability to quote locked and trashed threads
+
 2013-07-08 by alderaan
 Add "has_results()" function for MySQL class to replace "record_count() === 0" conditional checks
 
