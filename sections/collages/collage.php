@@ -61,7 +61,7 @@ if (empty($CollageSubscriptions)) {
 	$CollageSubscriptions = array();
 }
 
-if (in_array($CollageID, $CollageSubscriptions)) {
+if (in_array($CollageID, $CollagepSubscriptions)) {
 	$Cache->delete_value('collage_subs_user_new_'.$LoggedUser['ID']);
 }
 $DB->query("
@@ -70,7 +70,7 @@ $DB->query("
 	WHERE UserID = ".$LoggedUser['ID']."
 		AND CollageID = $CollageID");
 
-if ($CollageCategoryID === array_search(ARTIST_COLLAGE, $CollageCats)) {
+if ($CollageCategoryID == array_search(ARTIST_COLLAGE, $CollageCats)) {
 	include(SERVER_ROOT.'/sections/collages/artist_collage.php');
 } else {
 	include(SERVER_ROOT.'/sections/collages/torrent_collage.php');

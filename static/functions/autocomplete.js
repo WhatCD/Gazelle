@@ -11,7 +11,7 @@ $(document).ready(function() {
 		},
 	});
 
-	if (url.path == 'torrents' || url.path == 'upload' || url.path == 'artist' || (url.path == 'requests' && url.query['action'] == 'new')) {
+	if (url.path == 'torrents' || url.path == 'upload' || url.path == 'artist' || (url.path == 'requests' && url.query['action'] == 'new') || url.path == 'collages') {
 		$("#artist" + SELECTOR).autocomplete({
 			serviceUrl : ARTIST_AUTOCOMPLETE_URL
 		});

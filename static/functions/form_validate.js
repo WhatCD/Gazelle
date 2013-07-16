@@ -22,6 +22,11 @@ $(document).ready(function() {
 				$("#filter_form").validate();
 			}
 			break;
+		case "requests":
+			if (query['action'] == "new") {
+				$("#request_form").preventDoubleSubmission();
+			}
+			break;
 		default:
 			break;
 	}

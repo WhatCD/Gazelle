@@ -124,7 +124,7 @@ if ($NewRequest && !empty($_GET['artistid']) && is_number($_GET['artistid'])) {
 	}
 }
 
-View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'requests');
+View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'requests,form_validate');
 ?>
 <div class="thin">
 	<div class="header">
