@@ -12,7 +12,7 @@ if (!empty($_GET['userid']) && is_number($_GET['userid'])) {
 $Encodings = array('V0 (VBR)', 'V2 (VBR)', '320');
 $EncodingKeys = array_fill_keys($Encodings, true);
 
-if (!empty($_GET['filter']) && $_GET['filter'] == 'seeding') {
+if (!empty($_GET['filter']) && $_GET['filter'] === 'seeding') {
 	$SeedingOnly = true;
 } else {
 	$SeedingOnly = false;
@@ -38,7 +38,7 @@ if (count($SnatchedGroupIDs) > 1000) {
 	$SnatchedGroupIDs = array_slice($SnatchedGroupIDs, 0, 1000);
 }
 
-if (count($SnatchedGroupIDs) == 0) {
+if (count($SnatchedGroupIDs) === 0) {
 	error(($SeedingOnly ? "You aren't seeding any perfect FLACs!" : "You haven't snatched any perfect FLACs!"));
 }
 // Create hash table
@@ -70,7 +70,7 @@ $DB->query("
 
 $GroupIDs = array_fill_keys($DB->collect('GroupID'), true);
 
-if (count($GroupIDs) == 0) {
+if (count($GroupIDs) === 0) {
 	error('No results found');
 }
 
@@ -188,7 +188,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 	}
 	$TorrentTags = new Tags($GroupInfo['TagList']);
 	foreach ($Editions as $RemIdent => $Edition) {
-		if (!$Edition['FlacID'] || count($Edition['Formats']) == 3) {
+		if (!$Edition['FlacID'] || count($Edition['Formats']) === 3) {
 			continue;
 		}
 		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" title="View Torrent">'.$GroupName.'</a>';

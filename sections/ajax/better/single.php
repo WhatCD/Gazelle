@@ -5,8 +5,8 @@ if (($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
 			t.ID AS TorrentID,
 			t.GroupID AS GroupID
 		FROM xbt_files_users AS x
-			JOIN torrents AS t ON t.ID=x.fid
-		WHERE t.Format='FLAC'
+			JOIN torrents AS t ON t.ID = x.fid
+		WHERE t.Format = 'FLAC'
 		GROUP BY x.fid
 		HAVING COUNT(x.uid) = 1
 		ORDER BY t.LogScore DESC, t.Time ASC
@@ -21,7 +21,7 @@ $Results = Torrents::get_groups(array_keys($GroupIDs));
 $Results = $Results['matches'];
 
 $JsonResults = array();
-foreach ($Results as $GroupID=>$Group) {
+foreach ($Results as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 

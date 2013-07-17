@@ -98,7 +98,7 @@ abstract class IRC_BOT {
 		return trim($Host[1]);
 	}
 
-	protected function get_word($Select=1) {
+	protected function get_word($Select = 1) {
 		preg_match('/:.+ PRIVMSG [^:]+ :(.+)/', $this->Data, $Word);
 		$Word = split(' ', $Word[1]);
 		return trim($Word[$Select]);
@@ -111,7 +111,7 @@ abstract class IRC_BOT {
 
 	protected function send_raw($Text) {
 		if (!feof($this->Socket)) {
-			fwrite($this->Socket, $Text."\n");
+			fwrite($this->Socket, "$Text\n");
 		} elseif (!$this->Connecting) {
 			$this->Connecting = true;
 			sleep(120);
@@ -179,7 +179,9 @@ abstract class IRC_BOT {
 						unset($this->Identified[$Nick[1]]);
 					}
 					if (isset($this->DisabledUsers[$Nick[1]])) {
-						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[1] . "'");
+						$DB->query("
+							DELETE FROM disable_list
+							WHERE Nick = '$Nick[1]'");
 						$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[1]]);
 					}
@@ -187,16 +189,20 @@ abstract class IRC_BOT {
 
 				if (preg_match("/:([^!]+)![^\s]* PART ".BOT_DISABLED_CHAN.'/', $this->Data, $Nick)) {
 					if (isset($this->DisabledUsers[$Nick[1]])) {
-						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[1] . "'");
+						$DB->query("
+							DELETE FROM disable_list
+							WHERE Nick = '$Nick[1]'");
 						$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[1]]);
 					}
 				}
 
 				if (preg_match("/:([^!]+)![^\s]* KICK ".BOT_DISABLED_CHAN.'.* /', $this->Data, $Nick)) {
-					$Nick = explode(" ", $Nick[0]);
+					$Nick = explode(' ', $Nick[0]);
 					if (isset($this->DisabledUsers[$Nick[3]])) {
-						$DB->query("DELETE FROM disable_list WHERE Nick = '" . $Nick[3] . "'");
+						$DB->query("
+							DELETE FROM disable_list
+							WHERE Nick = '$Nick[3]'");
 						$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[3]]);
 					}
@@ -214,7 +220,7 @@ abstract class IRC_BOT {
 					$this->channel_events();
 				}
 
-				if (preg_match("/.* PRIVMSG ".BOT_NICK." .*/", $this->Data)) {
+				if (preg_match('/.* PRIVMSG '.BOT_NICK.' .*/', $this->Data)) {
 					$this->query_events();
 				}
 			}

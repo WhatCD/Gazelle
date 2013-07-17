@@ -46,7 +46,7 @@ function make_concert_link($Event) {
 ?>
 	<form class="hidden" action="" id="concert<?=$Event['id']?>" method="post">
 		<input type="hidden" name="action" value="concert_thread" />
-		<input type="hidden" name="concert_title" value="<?='[Concert] ' . display_str($Name) . ' - ' . $ConcertTitle?>" />
+		<input type="hidden" name="concert_title" value="<?='[Concert] ' . display_str($Name) . " - $ConcertTitle"?>" />
 		<input type="hidden" name="concert_id" value="<?=$Event['id']?>" />
 		<input type="hidden" name="concert_template" value="<?=get_concert_post_template($Name, $Event)?>" />
 	</form>
@@ -82,11 +82,11 @@ function get_concert_post_template($Artist, $Event) {
 		}
 		$Website = '[b]Web site:[/b] ' . $Url;
 	}
-	if (isset($Event['artists']['artist']) && (count($Event['artists']['artist']) == 1 && strtolower($Event['artists']['artist'][1]) == strtolower($Artist))) {
+	if (isset($Event['artists']['artist']) && (count($Event['artists']['artist']) === 1 && strtolower($Event['artists']['artist'][1]) == strtolower($Artist))) {
 		$i = 0;
 		$j = count($Event['artists']['artist']) - 1;
 		foreach ($Event['artists']['artist'] as $WithArtist) {
-			if ($i == $j) {
+			if ($i === $j) {
 				$With .= " and [artist]" . $WithArtist . "[/artist]";
 			} elseif ($i == 0) {
 				$With .= "[artist]" . $WithArtist . "[/artist]";
@@ -97,13 +97,13 @@ function get_concert_post_template($Artist, $Event) {
 		}
 	}
 	return "[align=center][size=6][artist]" . $Artist . "[/artist] at " . $EventTitle . "[/size]
-[size=4]" . $With . "
+[size=4]$With
 [b]" . get_date_post($Event['startDate']) . "[/b][/size]
 
-[size=3]" . $Location . "[/align]
+[size=3]$Location" . "[/align]
 
-" . $Directions . "
-" . $Website . "
+$Directions
+$Website
 [b]Last.fm Listing:[/b] [url=" . $Event['venue']['url'] . "]Visit Last.fm[/url]
 
 [align=center]. . . . . . . . . .[/align]";

@@ -125,13 +125,13 @@ View::show_header("Opcode Stats");
 		<td>Hits</td>
 	</tr>
 <?
-if (count($CachedScripts) == 0) { // Uh-oh, try again.
+if (count($CachedScripts) === 0) { // Uh-oh, try again.
 	echo '<tr><td colspan="5">No scripts cached.</td></tr>';
 }
 $Row = 'a'; // For the pretty colours
 foreach ($CachedScripts as $Script) {
 	list($FilePath, $Modified, $Size, $Reloads, $Uses, $Hits) = array_values($Script);
-	$Row = ($Row == 'a') ? 'b' : 'a';
+	$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=$FilePath?></td>

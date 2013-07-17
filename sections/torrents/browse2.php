@@ -104,7 +104,7 @@ if (!empty($_GET['setdefault'])) {
 	$Cache->commit_transaction(0);
 
 // Use default search options
-} elseif (empty($_SERVER['QUERY_STRING']) || (count($_GET) == 1 && isset($_GET['page']))) {
+} elseif (empty($_SERVER['QUERY_STRING']) || (count($_GET) === 1 && isset($_GET['page']))) {
 	if (!empty($LoggedUser['DefaultSearch'])) {
 		if (!empty($_GET['page'])) {
 			$Page = $_GET['page'];
@@ -438,7 +438,7 @@ foreach ($SearchWords as $Search => $Words) {
 if (!empty($_GET['year'])) {
 	$Years = explode('-', $_GET['year']);
 	if (is_number($Years[0]) || (empty($Years[0]) && !empty($Years[1]) && is_number($Years[1]))) {
-		if (count($Years) == 1) {
+		if (count($Years) === 1) {
 			$SphQL->where('year', (int)$Years[0]);
 			$SphQLTor->where('year', (int)$Years[0]);
 		} else {
@@ -455,7 +455,7 @@ if (!empty($_GET['year'])) {
 }
 
 if (isset($_GET['haslog']) && $_GET['haslog'] !== '') {
-	if ($_GET['haslog'] == 100) {
+	if ($_GET['haslog'] === '100') {
 		$SphQL->where('logscore', 100);
 		$SphQLTor->where('logscore', 100);
 		$Filtered = true;
@@ -879,7 +879,7 @@ if ($x % 7 != 0) { // Padding
 			<input type="submit" value="Filter torrents" />
 			<input type="hidden" name="action" id="ft_type" value="<?=($AdvancedSearch ? 'advanced' : 'basic')?>" />
 			<input type="hidden" name="searchsubmit" value="1" />
-			<input type="button" value="Reset" onclick="location.href = 'torrents.php<? if (isset($_GET['action']) && $_GET['action'] == 'advanced') { ?>?action=advanced<? } ?>'" />
+			<input type="button" value="Reset" onclick="location.href = 'torrents.php<? if (isset($_GET['action']) && $_GET['action'] === 'advanced') { ?>?action=advanced<? } ?>'" />
 			&nbsp;&nbsp;
 <?	if ($Filtered) { ?>
 			<input type="submit" name="setdefault" value="Make default" />

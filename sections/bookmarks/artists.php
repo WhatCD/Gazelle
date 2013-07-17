@@ -47,7 +47,7 @@ View::show_header($Title, 'browse');
 		</div>
 	</div>
 	<div class="box pad" align="center">
-<? if (count($ArtistList) == 0) { ?>
+<? if (count($ArtistList) === 0) { ?>
 		<br /><h2>You have not bookmarked any artists.</h2>
 	</div>
 </div><!--content-->
@@ -62,7 +62,7 @@ View::show_header($Title, 'browse');
 <?
 $Row = 'a';
 foreach ($ArtistList as $Artist) {
-	$Row = ($Row === 'a') ? 'b' : 'a';
+	$Row = $Row === 'a' ? 'b' : 'a';
 	list($ArtistID, $Name) = $Artist;
 ?>
 		<tr class="row<?=$Row?> bookmark_<?=$ArtistID?>">

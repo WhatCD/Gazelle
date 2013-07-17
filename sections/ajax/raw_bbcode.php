@@ -9,11 +9,9 @@ if (empty($PostID)) {
 }
 
 $DB->query("
-	SELECT
-        t.ForumID, p.Body
+	SELECT t.ForumID, p.Body
 	FROM forums_posts AS p
-	JOIN forums_topics AS t
-	ON p.TopicID = t.ID
+		JOIN forums_topics AS t ON p.TopicID = t.ID
 	WHERE p.ID = '$PostID'");
 
 if (!$DB->has_results()) {

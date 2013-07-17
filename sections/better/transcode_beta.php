@@ -39,7 +39,7 @@ function transcode_init_sphql() {
 	if (in_array($_GET['target'], array('v0', 'v2', '320'))) {
 		// V0/V2/320 is missing
 		$SphQL->where_match('!'.$_GET['target'], 'encoding', false);
-	} elseif ($_GET['target'] == 'all') {
+	} elseif ($_GET['target'] === 'all') {
 		// all transcodes are missing
 		$SphQL->where_match('!(v0 | v2 | 320)', 'encoding', false);
 	} else {
@@ -129,7 +129,7 @@ $Groups = array();
 $ResultCount = 0;
 if (in_array($_GET['filter'], array('all', 'uploaded'))) {
 	$SphQL = transcode_init_sphql();
-	if ($_GET['filter'] == 'uploaded') {
+	if ($_GET['filter'] === 'uploaded') {
 		$SphQL->where('uploader', $UserID);
 	}
 
@@ -145,14 +145,14 @@ if (in_array($_GET['filter'], array('all', 'uploaded'))) {
 	// Read all snatched/seeding torrents
 	$DB->query("
 		SELECT t.GroupID, x.fid
-		FROM ".($_GET['filter'] == 'seeding' ? 'xbt_files_users' : 'xbt_snatched')." AS x
+		FROM ".($_GET['filter'] === 'seeding' ? 'xbt_files_users' : 'xbt_snatched')." AS x
 			JOIN torrents AS t ON t.ID=x.fid
 			JOIN torrents_group AS tg ON tg.ID = t.GroupID
 		WHERE t.Format='FLAC'
 			AND (t.LogScore = '100' OR t.Media != 'CD')
 			AND tg.CategoryID = 1
-			AND x.uid='$UserID'
-			".($_GET['filter'] == 'seeding' ? 'AND x.active=1 AND x.Remaining=0' : ''));
+			AND x.uid = '$UserID'
+			".($_GET['filter'] === 'seeding' ? 'AND x.active=1 AND x.Remaining=0' : ''));
 	$Debug->set_flag('SELECTed ' . $_GET['filter'] . ' torrents');
 	$Snatched = $DB->to_array();
 	$Debug->set_flag('Received data from DB');
@@ -179,12 +179,12 @@ if (in_array($_GET['filter'], array('all', 'uploaded'))) {
 						break;
 					}
 				}
-				if (!$EditionSnatched || count($Edition['MP3s']) == 3) {
+				if (!$EditionSnatched || count($Edition['MP3s']) === 3) {
 					unset($GroupsTmp[$GroupID]['Editions'][$RemIdent]);
 				}
 			}
 			$ResultCount += count($GroupsTmp[$GroupID]['Editions']);
-			if (count($GroupsTmp[$GroupID]['Editions']) == 0) {
+			if (count($GroupsTmp[$GroupID]['Editions']) === 0) {
 				unset($GroupsTmp[$GroupID]);
 			}
 		}
@@ -203,10 +203,10 @@ $Counter = array(
 );
 foreach ($Groups as $GroupID => $Group) {
 	foreach ($Group['Editions'] as $RemIdent => $Edition) {
-		if (count($Edition['FlacIDs']) == 0 //no FLAC in this group
-				|| (!empty($Edition['MP3s']) && $_GET['target'] == 'all') //at least one transcode present when we only wanted groups containing no transcodes at all
+		if (count($Edition['FlacIDs']) === 0 //no FLAC in this group
+				|| (!empty($Edition['MP3s']) && $_GET['target'] === 'all') //at least one transcode present when we only wanted groups containing no transcodes at all
 				|| isset($Edition['MP3s'][$Encodings[$_GET['target']]]) //the transcode we asked for is already there
-				|| count($Edition['MP3s']) == 3) //all 3 transcodes are there already (this can happen due to the caching of Sphinx's better_transcode table)
+				|| count($Edition['MP3s']) === 3) //all 3 transcodes are there already (this can happen due to the caching of Sphinx's better_transcode table)
 		{
 			$Debug->log_var($Edition, 'Skipping '.$RemIdent);
 			unset($Groups[$GroupID]['Editions'][$RemIdent]);

@@ -163,7 +163,7 @@ $EnableNegation = false; // Sphinx needs at least one positive search condition 
 // Filelist searches makes use of the proximity operator to ensure that all keywords match the same file
 if (!empty($_GET['filelist'])) {
 	$SearchString = trim($_GET['filelist']);
-	if ($SearchString != '') {
+	if ($SearchString !== '') {
 		$SearchString = '"'.Sphinxql::escape_string($_GET['filelist']).'"~20';
 		$SphQL->where_match($SearchString, 'filelist', false);
 		$SphQLTor->where_match($SearchString, 'filelist', false);
@@ -181,7 +181,7 @@ foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 			'remastercataloguenumber', 'encoding', 'format', 'media') as $Search) {
 	if (!empty($_GET[$Search])) {
 		$SearchString = trim($_GET[$Search]);
-		if ($SearchString != '') {
+		if ($SearchString !== '') {
 			$SearchWords[$Search] = array('include' => array(), 'exclude' => array());
 			if ($Search == 'taglist') {
 				$SearchString = strtr($SearchString, '.', '_');
@@ -198,7 +198,7 @@ foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 						$SearchWords[$Search]['include'][] = $Word;
 						$EnableNegation = true;
 					}
-				} elseif ($Word != '') {
+				} elseif ($Word !== '') {
 					$SearchWords[$Search]['include'][] = $Word;
 					$EnableNegation = true;
 				}
@@ -231,9 +231,9 @@ if (!empty($_GET['searchstr'])) {
 			} elseif (in_array($Word, $SearchFormats)) {
 				$FilterFormats[] = $Word;
 				$EnableNegation = true;
-			} elseif ($Word == '100%') {
+			} elseif ($Word === '100%') {
 				$_GET['haslog'] = '100';
-			} elseif ($Word != '') {
+			} elseif ($Word !== '') {
 				$BasicSearch['include'][] = $Word;
 				$EnableNegation = true;
 			}
@@ -290,7 +290,7 @@ if (!empty($SearchWords['taglist'])) {
 
 	$QueryParts = array();
 	// 'All' tags
-	if (!isset($_GET['tags_type']) || $_GET['tags_type'] == 1) {
+	if (!isset($_GET['tags_type']) || $_GET['tags_type'] === '1') {
 		$_GET['tags_type'] = '1';
 		$Tags = array_merge($Tags['include'], $Tags['exclude']);
 		if (!empty($Tags)) {
@@ -310,8 +310,7 @@ if (!empty($SearchWords['taglist'])) {
 		$Filtered = true;
 	}
 	unset($SearchWords['taglist']);
-}
-elseif (!isset($_GET['tags_type'])) {
+} elseif (!isset($_GET['tags_type'])) {
 	$_GET['tags_type'] = '1';
 }
 
@@ -357,7 +356,7 @@ if (!empty($_GET['year'])) {
 }
 
 if (isset($_GET['haslog']) && $_GET['haslog'] !== '') {
-	if ($_GET['haslog'] == 100) {
+	if ($_GET['haslog'] === '100') {
 		$SphQL->where('logscore', 100);
 		$SphQLTor->where('logscore', 100);
 		$Filtered = true;

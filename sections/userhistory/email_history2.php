@@ -35,7 +35,7 @@ $DB->query("
 	SELECT Username
 	FROM users_main
 	WHERE ID = $UserID");
-list($Username)= $DB->next_record();
+list($Username) = $DB->next_record();
 View::show_header("Email history for $Username");
 
 // Get current email (and matches)
@@ -91,13 +91,13 @@ $Current['IP'] = $History[(count($History) - 1)]['IP'];
 
 // Matches for current email
 if ($CurrentEmail['Usernames'] != '') {
-	$UserIDs=explode('|', $CurrentEmail['UserIDs']);
-	$Usernames=explode('|', $CurrentEmail['Usernames']);
-	$UsersEnabled=explode('|', $CurrentEmail['UsersEnabled']);
-	$UsersDonor=explode('|', $CurrentEmail['UsersDonor']);
-	$UsersWarned=explode('|', $CurrentEmail['UsersWarned']);
-	$UserSetTimes=explode('|', $CurrentEmail['UserSetTimes']);
-	$UserIPs=explode('|', $CurrentEmail['UserIPs']);
+	$UserIDs = explode('|', $CurrentEmail['UserIDs']);
+	$Usernames = explode('|', $CurrentEmail['Usernames']);
+	$UsersEnabled = explode('|', $CurrentEmail['UsersEnabled']);
+	$UsersDonor = explode('|', $CurrentEmail['UsersDonor']);
+	$UsersWarned = explode('|', $CurrentEmail['UsersWarned']);
+	$UserSetTimes = explode('|', $CurrentEmail['UserSetTimes']);
+	$UserIPs = explode('|', $CurrentEmail['UserIPs']);
 
 	foreach ($UserIDs as $Key => $Val) {
 		$CurrentMatches[$Key]['Username'] = '&nbsp;&nbsp;&#187;&nbsp;'.Users::format_username($Val, true, true, true);
@@ -107,7 +107,7 @@ if ($CurrentEmail['Usernames'] != '') {
 }
 
 // Email history records
-if (count($History) == 1) {
+if (count($History) === 1) {
 	$Invite['Email'] = $History[0]['Email'];
 	$Invite['EndTime'] = $Joined;
 	$Invite['AccountAge'] = date(time() + time() - strtotime($Joined)); // Same as EndTime but without ' ago'
@@ -229,14 +229,14 @@ if ($Old) {
 			<td>Set from IP</td>
 		</tr>
 <?
-	$j=0;
+	$j = 0;
 	// Old email
 	foreach ($Old as $Record) {
 		++$j;
 
 		// Matches on old email
 		ob_start();
-		$i=0;
+		$i = 0;
 		foreach ($OldMatches as $Match) {
 			if ($Match['Email'] == $Record['Email']) {
 				++$i;

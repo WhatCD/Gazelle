@@ -41,7 +41,7 @@ class DEBUG {
 		}
 
 		$DB->warnings(); // see comment in MYSQL::query
-		$Queries = $this->get_queries();
+		/*$Queries = $this->get_queries();
 		$DBWarningCount = 0;
 		foreach ($Queries as $Query) {
 			if (!empty($Query[2])) {
@@ -50,7 +50,7 @@ class DEBUG {
 		}
 		if ($DBWarningCount) {
 			$Reason[] = $DBWarningCount . ' DB warning(s)';
-		}
+		}*/
 
 		if (isset($_REQUEST['profile'])) {
 			global $LoggedUser;

@@ -29,7 +29,7 @@ list($Page, $Limit) = Format::page_limit(TOPICS_PER_PAGE);
 // Caching anything beyond the first page of any given forum is just wasting ram
 // users are more likely to search then to browse to page 2
 if ($Page == 1) {
-	list($Forum,,,$Stickies) = $Cache->get_value('forums_'.$ForumID);
+	list($Forum,,,$Stickies) = $Cache->get_value("forums_$ForumID");
 }
 if (!isset($Forum) || !is_array($Forum)) {
 	$DB->query("
@@ -47,16 +47,16 @@ if (!isset($Forum) || !is_array($Forum)) {
 		WHERE t.ForumID = '$ForumID'
 		ORDER BY t.Ranking = 0, t.Ranking ASC, t.IsSticky DESC, t.LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
-	$Forum = $DB->to_array('ID',MYSQLI_ASSOC, false);
+	$Forum = $DB->to_array('ID', MYSQLI_ASSOC, false);
 
 	if ($Page == 1) {
 		$DB->query("
 			SELECT COUNT(ID)
 			FROM forums_topics
-			WHERE ForumID='$ForumID'
-				AND IsSticky='1'");
+			WHERE ForumID = '$ForumID'
+				AND IsSticky = '1'");
 		list($Stickies) = $DB->next_record();
-		$Cache->cache_value('forums_'.$ForumID, array($Forum,'',0,$Stickies), 0);
+		$Cache->cache_value("forums_$ForumID", array($Forum, '', 0, $Stickies), 0);
 	}
 }
 
@@ -173,7 +173,7 @@ echo $Pages;
 		</tr>
 <?
 // Check that we have content to process
-if (count($Forum) == 0) {
+if (count($Forum) === 0) {
 ?>
 		<tr>
 			<td colspan="4">
@@ -183,18 +183,20 @@ if (count($Forum) == 0) {
 <?
 } else {
 	// forums_last_read_topics is a record of the last post a user read in a topic, and what page that was on
-	$DB->query('
+	$DB->query("
 		SELECT
 			l.TopicID,
 			l.PostID,
-			CEIL((	SELECT COUNT(ID)
+			CEIL((
+					SELECT COUNT(ID)
 					FROM forums_posts
 					WHERE forums_posts.TopicID = l.TopicID
-						AND forums_posts.ID<=l.PostID)/'.$PerPage.'
-				) AS Page
+						AND forums_posts.ID <= l.PostID
+				) / $PerPage
+			) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN('.implode(', ', array_keys($Forum)).')
-			AND UserID=\''.$LoggedUser['ID'].'\'');
+		WHERE TopicID IN(".implode(', ', array_keys($Forum)).')
+			AND UserID = \''.$LoggedUser['ID'].'\'');
 
 	// Turns the result set into a multi-dimensional array, with
 	// forums_last_read_topics.TopicID as the key.
@@ -207,13 +209,13 @@ if (count($Forum) == 0) {
 	$Row = 'a';
 	foreach ($Forum as $Topic) {
 		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
-		$Row = (($Row == 'a') ? 'b' : 'a');
-			// Build list of page links
+		$Row = $Row === 'a' ? 'b' : 'a';
+		// Build list of page links
 		// Only do this if there is more than one page
 		$PageLinks = array();
 		$ShownEllipses = false;
 		$PagesText = '';
-		$TopicPages = ceil($PostCount/$PerPage);
+		$TopicPages = ceil($PostCount / $PerPage);
 
 		if ($TopicPages > 1) {
 			$PagesText = ' (';
@@ -225,10 +227,10 @@ if (count($Forum) == 0) {
 					}
 					continue;
 				}
-				$PageLinks[] = '<a href="forums.php?action=viewthread&amp;threadid='.$TopicID.'&amp;page='.$i.'">'.$i.'</a>';
+				$PageLinks[] = "<a href=\"forums.php?action=viewthread&amp;threadid=$TopicID&amp;page=$i\">$i</a>";
 			}
-			$PagesText.=implode(' ', $PageLinks);
-			$PagesText.=')';
+			$PagesText .= implode(' ', $PageLinks);
+			$PagesText .= ')';
 		}
 
 		// handle read/unread posts - the reason we can't cache the whole page
@@ -266,7 +268,7 @@ if (count($Forum) == 0) {
 			</span>
 <?		} ?>
 			<span style="float: right;" class="last_poster">
-				by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime,1)?>
+				by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime, 1)?>
 			</span>
 		</td>
 		<td><?=number_format($PostCount - 1)?></td>

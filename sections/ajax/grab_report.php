@@ -9,12 +9,12 @@ if (!is_number($_GET['id'])) {
 
 $DB->query("
 	UPDATE reportsv2
-	SET Status='New'
-	WHERE ID=".$_GET['id']."
+	SET Status = 'New'
+	WHERE ID = ".$_GET['id']."
 		AND Status != 'Resolved'");
 if ($DB->affected_rows() > 0) {
 		//Win
 } else {
-		echo 'You just tried to grab a resolved or non-existent report!';
+		echo 'You just tried to grab a resolved or nonexistent report!';
 }
 ?>

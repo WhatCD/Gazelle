@@ -432,20 +432,21 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 				<td class="label" valign="top">Fill request</td>
 				<td>
 					<form class="edit_form" name="request" action="" method="post">
-						<div>
+						<div class="field_div">
 							<input type="hidden" name="action" value="takefill" />
 							<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 							<input type="hidden" name="requestid" value="<?=$RequestID?>" />
 							<input type="text" size="50" name="link"<?=(!empty($Link) ? " value=\"$Link\"" : '')?> />
+							<br />
 							<strong>Should be the permalink (PL) to the torrent (e.g. https://<?=SSL_SITE_URL?>/torrents.php?torrentid=xxxx).</strong>
-							<br />
-							<br />
-<?						if (check_perms('site_moderate_requests')) { ?>
+						</div>
+<?					if (check_perms('site_moderate_requests')) { ?>
+						<div class="field_div">
 							For user: <input type="text" size="25" name="user"<?=(!empty($FillerUsername) ? " value=\"$FillerUsername\"" : '')?> />
-							<br />
-<?						} ?>
+						</div>
+<?					} ?>
+						<div class="submit_div">
 							<input type="submit" value="Fill request" />
-							<br />
 						</div>
 					</form>
 				</td>

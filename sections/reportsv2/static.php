@@ -28,7 +28,7 @@ if (isset($_GET['view'])) {
 }
 
 if (isset($_GET['id'])) {
-	if (!is_number($_GET['id']) && $View != 'type') {
+	if (!is_number($_GET['id']) && $View !== 'type') {
 		error(404);
 	} else {
 		$ID = db_string($_GET['id']);
@@ -218,11 +218,11 @@ View::show_header('Reports V2!', 'reportsv2,bbcode');
 <?	include('header.php'); ?>
 </div>
 <div class="buttonbox thin center">
-<?	if ($View != 'resolved') { ?>
+<?	if ($View !== 'resolved') { ?>
 		<span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-resolve" /></span>
 		<span title="Assigns all of the reports on the page to you!"><input type="button" onclick="Grab();" value="Claim all" /></span>
 <?	}
-	if ($View == 'staff' && $LoggedUser['ID'] == $ID) { ?>
+	if ($View === 'staff' && $LoggedUser['ID'] == $ID) { ?>
 		| <span title="Unclaim all of the reports currently displayed"><input type="button" onclick="GiveBack();" value="Unclaim all" /></span>
 <?	} ?>
 </div>
@@ -232,7 +232,7 @@ View::show_header('Reports V2!', 'reportsv2,bbcode');
 </div>
 <div id="all_reports" style="width: 80%; margin-left: auto; margin-right: auto;">
 <?
-if (count($Reports) == 0) {
+if (count($Reports) === 0) {
 ?>
 	<div>
 		<table class="layout">
@@ -406,7 +406,8 @@ if (count($Reports) == 0) {
 								<?=str_replace(' ', ', ', $Tracks)?>
 							</td>
 						</tr>
-<?				}
+<?
+				}
 
 				if ($Links) { ?>
 						<tr>
@@ -420,8 +421,7 @@ if (count($Reports) == 0) {
 							$Link = $local_url;
 						} ?>
 								<a href="<?=$Link?>"><?=$Link?></a>
-<?
-					} ?>
+<?					} ?>
 							</td>
 						</tr>
 <?
@@ -507,8 +507,7 @@ if (count($Reports) == 0) {
 					foreach ($Images as $Image) {
 			?>
 								<img style="max-width: 200px;" onclick="lightbox.init(this, 200);" src="<?=ImageTools::process($Image)?>" alt="Relevant image" />
-<?
-					} ?>
+<?					} ?>
 							</td>
 						</tr>
 <?
@@ -562,11 +561,9 @@ if (count($Reports) == 0) {
 									<span title="Warning length in weeks">
 										<strong>Warning</strong>
 										<select name="warning" id="warning<?=$ReportID?>">
-<?
-		for ($i = 0; $i < 9; $i++) { ?>
+<?		for ($i = 0; $i < 9; $i++) { ?>
 										<option value="<?=$i?>"><?=$i?></option>
-<?
-		} ?>
+<?		} ?>
 										</select>
 									</span>
 									<span title="Remove upload privileges?">

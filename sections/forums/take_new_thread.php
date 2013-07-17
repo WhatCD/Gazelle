@@ -144,15 +144,15 @@ if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forum
 			(TopicID, Question, Answers)
 		VALUES
 			('$TopicID', '".db_string($Question)."', '".db_string(serialize($Answers))."')");
-	$Cache->cache_value('polls_'.$TopicID, array($Question, $Answers, $Votes, '0000-00-00 00:00:00', '0'), 0);
+	$Cache->cache_value("polls_$TopicID", array($Question, $Answers, $Votes, '0000-00-00 00:00:00', '0'), 0);
 
 	if ($ForumID == STAFF_FORUM) {
-		send_irc('PRIVMSG '.ADMIN_CHAN.' :!mod Poll created by '.$LoggedUser['Username'].": \"$Question\" https://".SSL_SITE_URL.'/forums.php?action=viewthread&threadid='.$TopicID);
+		send_irc('PRIVMSG '.ADMIN_CHAN.' :!mod Poll created by '.$LoggedUser['Username'].": \"$Question\" https://".SSL_SITE_URL."/forums.php?action=viewthread&threadid=$TopicID");
 	}
 }
 
 // if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
-if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
+if ($Forum = $Cache->get_value("forums_$ForumID")) {
 	list($Forum,,,$Stickies) = $Forum;
 
 	// Remove the last thread from the index
@@ -181,7 +181,7 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 	)); // Bumped
 	$Forum = $Part1 + $Part2 + $Part3;
 
-	$Cache->cache_value('forums_'.$ForumID, array($Forum, '', 0, $Stickies), 0);
+	$Cache->cache_value("forums_$ForumID", array($Forum, '', 0, $Stickies), 0);
 
 	// Update the forum root
 	$Cache->begin_transaction('forums_list');
@@ -202,7 +202,7 @@ if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
 	$Cache->delete_value('forums_list');
 }
 
-$Cache->begin_transaction('thread_'.$TopicID.'_catalogue_0');
+$Cache->begin_transaction("thread_$TopicID".'_catalogue_0');
 $Post = array(
 	'ID' => $PostID,
 	'AuthorID' => $LoggedUser['ID'],
@@ -214,11 +214,9 @@ $Post = array(
 $Cache->insert('', $Post);
 $Cache->commit_transaction(0);
 
-$Cache->begin_transaction('thread_'.$TopicID.'_info');
+$Cache->begin_transaction("thread_$TopicID".'_info');
 $Cache->update_row(false, array('Posts' => '+1', 'LastPostAuthorID' => $LoggedUser['ID']));
 $Cache->commit_transaction(0);
-
-
 
 
 header("Location: forums.php?action=viewthread&threadid=$TopicID");

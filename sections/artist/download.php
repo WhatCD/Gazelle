@@ -54,7 +54,7 @@ if (
 	|| !is_number($_REQUEST['preference'])
 	|| !is_number($_REQUEST['artistid'])
 	|| $_REQUEST['preference'] > 2
-	|| count($_REQUEST['list']) == 0
+	|| count($_REQUEST['list']) === 0
 ) {
 	error(0);
 }

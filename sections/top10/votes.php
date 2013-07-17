@@ -10,11 +10,11 @@ if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Limit = 25;
 
 	if ($_GET['tags']) {
-		$Tags = explode(',', str_replace(".","_",trim($_GET['tags'])));
+		$Tags = explode(',', str_replace('.', '_', trim($_GET['tags'])));
 		foreach ($Tags as $Tag) {
 			$Tag = preg_replace('/[^a-z0-9_]/', '', $Tag);
 			if ($Tag != '') {
-				$Where[]="g.TagList REGEXP '[[:<:]]".db_string($Tag)."[[:>:]]'";
+				$Where[] = "g.TagList REGEXP '[[:<:]]".db_string($Tag)."[[:>:]]'";
 			}
 		}
 	}
@@ -35,7 +35,7 @@ if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 }
 $Filtered = !empty($Where);
 
-if ($_GET['anyall'] == 'any' && !empty($Where)) {
+if ($_GET['anyall'] === 'any' && !empty($Where)) {
 	$Where = '('.implode(' OR ', $Where).')';
 } else {
 	$Where = implode(' AND ', $Where);
@@ -45,15 +45,21 @@ $WhereSum = (empty($Where)) ? '' : md5($Where);
 // Unlike the other top 10s, this query just gets some raw stats
 // We'll need to do some fancy-pants stuff to translate it into
 // BPCI scores before getting the torrent data
-$Query = 'SELECT v.GroupID, v.Ups, v.Total, v.Score
-			FROM torrents_votes AS v';
+$Query = '
+	SELECT v.GroupID, v.Ups, v.Total, v.Score
+	FROM torrents_votes AS v';
 if (!empty($Where)) {
-	$Query .= " JOIN torrents_group AS g ON g.ID = v.GroupID
-				WHERE $Where AND ";
+	$Query .= "
+		JOIN torrents_group AS g ON g.ID = v.GroupID
+	WHERE $Where AND ";
 } else {
-	$Query .= ' WHERE ';
+	$Query .= '
+	WHERE ';
 }
-$Query .= "Score > 0 ORDER BY Score DESC LIMIT $Limit";
+$Query .= "
+		Score > 0
+	ORDER BY Score DESC
+	LIMIT $Limit";
 
 $TopVotes = $Cache->get_value('top10votes_'.$Limit.$WhereSum);
 if ($TopVotes === false) {
@@ -73,14 +79,14 @@ if ($TopVotes === false) {
 			$TopVotes[$GroupID]['Score'] = $Data[$GroupID]['Score'];
 		}
 
-		$Cache->cache_value('top10votes_'.$Limit.$WhereSum,$TopVotes,60*30);
+		$Cache->cache_value('top10votes_'.$Limit.$WhereSum, $TopVotes, 60 * 30);
 		$Cache->clear_query_lock('top10votes');
 	} else {
 		$TopVotes = false;
 	}
 }
 
-View::show_header('Top '.$Limit.' Voted Groups','browse,voting');
+View::show_header("Top $Limit Voted Groups",'browse,voting');
 ?>
 <div class="thin">
 	<div class="header">
@@ -103,8 +109,8 @@ if (check_perms('site_advanced_top10')) { ?>
 				<td class="label">Tags (comma-separated):</td>
 				<td class="ft_taglist">
 					<input type="text" name="tags" size="75" value="<? if (!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />&nbsp;
-					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall'] != 'any' ? ' checked="checked"' : '')?> /><label for="rdoAll"> All</label>&nbsp;&nbsp;
-					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall'] == 'any' ? ' checked="checked"' : '')?> /><label for="rdoAny"> Any</label>
+					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall'] !== 'any' ? ' checked="checked"' : '')?> /><label for="rdoAll"> All</label>&nbsp;&nbsp;
+					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall'] === 'any' ? ' checked="checked"' : '')?> /><label for="rdoAny"> Any</label>
 				</td>
 			</tr>
 			<tr id="yearfilter">
@@ -127,7 +133,7 @@ if (check_perms('site_advanced_top10')) { ?>
 
 $Bookmarks = Bookmarks::all_bookmarks('torrent');
 ?>
-	<h3>Top <?=$Limit.' '.$Caption?>
+	<h3>Top <?="$Limit $Caption"?>
 <?
 if (empty($_GET['advanced'])) { ?>
 		<small class="top10_quantity_links">
@@ -205,7 +211,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 				<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 					<td class="center">
 						<div title="View" id="showimg_<?=$GroupID?>" class="show_torrents">
-							<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
+							<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event);" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
 						</div>
 					</td>
 					<td class="center">
@@ -221,9 +227,9 @@ foreach ($TopVotes as $GroupID => $Group) {
 
 							<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
 <?		if ($IsBookmarked) { ?>
-							<span class="bookmark" style="float: right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
+							<span class="bookmark" style="float: right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Unbookmark</a></span>
 <?		} else { ?>
-							<span class="bookmark" style="float: right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
+							<span class="bookmark" style="float: right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets add_bookmark" title="Add bookmark" onclick="Bookmark('torrent', <?=$GroupID?>, 'Unbookmark'); return false;">Bookmark</a></span>
 <?		} ?>
 							<div class="tags"><?=$TorrentTags->format()?></div>
 
@@ -258,7 +264,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 				$EditionID++;
 ?>
 		<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass?> hidden">
-			<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
+			<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event);" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
 		</tr>
 <?
 			}
@@ -325,9 +331,9 @@ foreach ($TopVotes as $GroupID => $Group) {
 <?		} ?>
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
 <?		if ($IsBookmarked) { ?>
-						| <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+						| <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Unbookmark</a>
 <?		} else { ?>
-						| <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+						| <a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent', <?=$GroupID?>, 'Unbookmark'); return false;">Bookmark</a>
 <?		} ?>
 						]
 					</span>
@@ -342,7 +348,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 		</tr>
 <?
 	endif;
-	$TorrentTable.=ob_get_clean();
+	$TorrentTable .= ob_get_clean();
 }
 ?>
 <table class="torrent_table grouping cats" id="discog_table">
@@ -361,7 +367,7 @@ if ($TorrentList === false) { ?>
 		<td colspan="7" class="center">Server is busy processing another top list request. Please try again in a minute.</td>
 	</tr>
 <?
-} elseif (count($TopVotes) == 0) { ?>
+} elseif (count($TopVotes) === 0) { ?>
 	<tr>
 		<td colspan="7" class="center">No torrents were found that meet your criteria.</td>
 	</tr>

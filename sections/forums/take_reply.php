@@ -149,7 +149,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 		WHERE ID = '$TopicID'");
 
 	// if cache exists modify it, if not, then it will be correct when selected next, and we can skip this block
-	if ($Forum = $Cache->get_value('forums_'.$ForumID)) {
+	if ($Forum = $Cache->get_value("forums_$ForumID")) {
 		list($Forum,,,$Stickies) = $Forum;
 
 		// if the topic is already on this page
@@ -179,8 +179,8 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 						f.NumPosts,
 						ISNULL(p.TopicID) AS NoPoll
 					FROM forums_topics AS f
-						LEFT JOIN forums_polls AS p ON p.TopicID=f.ID
-					WHERE f.ID ='$TopicID'");
+						LEFT JOIN forums_polls AS p ON p.TopicID = f.ID
+					WHERE f.ID = '$TopicID'");
 				list($AuthorID,$IsLocked,$IsSticky,$NumPosts,$NoPoll) = $DB->next_record();
 				$Part2 = array($TopicID => array(
 					'ID' => $TopicID,

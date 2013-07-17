@@ -3,17 +3,15 @@ if (!isset($_GET['type']) || !is_number($_GET['type']) || $_GET['type'] > 3) {
 	error(0);
 }
 
-$Options = array('v0','v2','320');
+$Options = array('v0', 'v2', '320');
 $Encodings = array('V0 (VBR)', 'V2 (VBR)', '320');
 $EncodingKeys = array_fill_keys($Encodings, true);
 
-if ($_GET['type'] == 3) {
+if ($_GET['type'] === '3') {
 	$List = "!(v0 | v2 | 320)";
 } else {
 	$List = '!'.$Options[$_GET['type']];
-	if ($_GET['type'] == 0) {
-		$_GET['type'] = '0';
-	} else {
+	if ($_GET['type'] !== '0') {
 		$_GET['type'] = display_str($_GET['type']);
 	}
 }
@@ -99,15 +97,15 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 	}
 
 	$TagList = array();
-	$TagList = explode(' ',str_replace('_','.',$GroupInfo['TagList']));
+	$TagList = explode(' ', str_replace('_', '.', $GroupInfo['TagList']));
 	$TorrentTags = array();
 	foreach ($TagList as $Tag) {
-		$TorrentTags[] = '<a href="torrents.php?taglist='.$Tag.'">'.$Tag.'</a>';
+		$TorrentTags[] = "<a href=\"torrents.php?taglist=$Tag\">$Tag</a>";
 	}
 	$TorrentTags = implode(', ', $TorrentTags);
 	foreach ($Editions as $RemIdent => $Edition) {
 		if (!$Edition['FlacID']
-				|| !empty($Edition['Formats']) && $_GET['type'] == 3
+				|| !empty($Edition['Formats']) && $_GET['type'] === '3'
 				|| $Edition['Formats'][$Encodings[$_GET['type']]] == true) {
 			continue;
 		}

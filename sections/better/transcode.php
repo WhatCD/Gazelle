@@ -3,17 +3,15 @@ if (!isset($_GET['type']) || !is_number($_GET['type']) || $_GET['type'] > 3) {
 	error(0);
 }
 
-$Options = array('v0','v2','320');
+$Options = array('v0', 'v2', '320');
 $Encodings = array('V0 (VBR)', 'V2 (VBR)', '320');
 $EncodingKeys = array_fill_keys($Encodings, true);
 
-if ($_GET['type'] == 3) {
+if ($_GET['type'] === '3') {
 	$List = "!(v0 | v2 | 320)";
 } else {
 	$List = '!'.$Options[$_GET['type']];
-	if ($_GET['type'] == 0) {
-		$_GET['type'] = '0';
-	} else {
+	if ($_GET['type'] !== '0') {
 		$_GET['type'] = display_str($_GET['type']);
 	}
 }
@@ -131,9 +129,9 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 	$TorrentTags = new Tags($GroupInfo['TagList']);
 	foreach ($Editions as $RemIdent => $Edition) {
 		if (!$Edition['FlacID'] //no FLAC in this group
-				|| !empty($Edition['Formats']) && $_GET['type'] == 3 //at least one transcode present when we only wanted groups containing no transcodes at all (type 3)
+				|| !empty($Edition['Formats']) && $_GET['type'] === '3' //at least one transcode present when we only wanted groups containing no transcodes at all (type 3)
 				|| $Edition['Formats'][$Encodings[$_GET['type']]] == true //the transcode we asked for is already there
-				|| count($Edition['Formats']) == 3) //all 3 transcodes are there already (this can happen due to the caching of Sphinx's better_transcode table)
+				|| count($Edition['Formats']) === 3) //all 3 transcodes are there already (this can happen due to the caching of Sphinx's better_transcode table)
 		{
 			$Debug->log_var($Edition, 'Skipping '.$RemIdent);
 			continue;

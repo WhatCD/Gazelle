@@ -26,7 +26,7 @@ $DB->query("
 $UploadedTorrentIDs = array_fill_keys($DB->collect('ID'), true);
 $UploadedGroupIDs = $DB->collect('GroupID');
 
-if (count($UploadedGroupIDs) == 0) {
+if (count($UploadedGroupIDs) === 0) {
 	error("You haven't uploaded any perfect FLACs!");
 }
 
@@ -54,7 +54,7 @@ $DB->query("
 
 $GroupIDs = array_fill_keys($DB->collect('GroupID'), true);
 
-if (count($GroupIDs) == 0) {
+if (count($GroupIDs) === 0) {
 	error('No results found.');
 }
 
@@ -163,7 +163,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 	}
 	$TorrentTags = new Tags($TagList);
 	foreach ($Editions as $RemIdent => $Edition) {
-		if (!$Edition['FlacID'] || count($Edition['Formats']) == 3) {
+		if (!$Edition['FlacID'] || count($Edition['Formats']) === 3) {
 			continue;
 		}
 		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" title="View Torrent">'.$GroupName.'</a>';

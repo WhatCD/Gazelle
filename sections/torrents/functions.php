@@ -2,7 +2,7 @@
 function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProperties = true, $ApiCall = false) {
 	global $Cache, $DB;
 	if (!$RevisionID) {
-		$TorrentCache = $Cache->get_value('torrents_details_'.$GroupID);
+		$TorrentCache = $Cache->get_value("torrents_details_$GroupID");
 
 		// This block can be used to test if the cached data predates structure changes
 		if (isset($TorrentCache[0][0])) {
@@ -122,10 +122,10 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 				t.ID");
 
 		$TorrentList = $DB->to_array('ID', MYSQLI_ASSOC);
-		if (count($TorrentList) == 0 && $ApiCall == false) {
+		if (count($TorrentList) === 0 && $ApiCall == false) {
 			header('Location: log.php?search='.(empty($_GET['torrentid']) ? "Group+$GroupID" : "Torrent+$_GET[torrentid]"));
 			die();
-		} else if (count($TorrentList) == 0 && $ApiCall == true) {
+		} else if (count($TorrentList) === 0 && $ApiCall == true) {
 			return NULL;
 		}
 		if (in_array(0, $DB->collect('Seeders'))) {

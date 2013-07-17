@@ -151,7 +151,7 @@ if ($CategoryID == '1' && $Image != '') {
 				'Artist' => $Artists,
 				'WikiImage' => $Image);
 		if (!in_array($Snatch, $RecentSnatches)) {
-			if (count($RecentSnatches) == 5) {
+			if (count($RecentSnatches) === 5) {
 				array_pop($RecentSnatches);
 			}
 			array_unshift($RecentSnatches, $Snatch);

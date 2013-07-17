@@ -1,5 +1,6 @@
 var username;
 var postid;
+var url = new URL();
 
 function QuoteJump(event, post) {
 	var button = event.button;
@@ -23,7 +24,9 @@ var original_post;
 function Quote(post, user, link) {
 	username = user;
 	postid = post;
-	if(!$('#reply_box').length) {
+
+	// check if reply_box element exists and that user is in the forums
+	if(!$('#reply_box').length && url.path == "forums") {
 		if ($("#quote_" + postid).text() == "Quote") {
 			original_post = $("#content" + postid).html();
 			$("#quote_" + postid).text("Unquote");
