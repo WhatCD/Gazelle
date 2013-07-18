@@ -81,7 +81,7 @@ if (check_perms('admin_manage_blog')) {
 	}
 	View::show_header('Staff Blog','bbcode');
 	?>
-		<div class="box thin">
+		<div class="box box2 thin">
 			<div class="head">
 				<?=((empty($_GET['action'])) ? 'Create a staff blog post' : 'Edit staff blog post')?>
 				<span style="float: right;">
@@ -95,18 +95,20 @@ if (check_perms('admin_manage_blog')) {
 <?		if (!empty($_GET['action']) && $_GET['action'] == 'editblog') { ?>
 					<input type="hidden" name="blogid" value="<?=$BlogID; ?>" />
 <?		} ?>
-					<h3>Title</h3>
-					<input type="text" name="title" size="95"<? if (!empty($Title)) { echo ' value="'.display_str($Title).'"'; } ?> /><br />
-					<h3>Body</h3>
-					<textarea name="body" cols="95" rows="15"><? if (!empty($Body)) { echo display_str($Body); } ?></textarea> <br />
-					<br /><br />
-					<div class="center">
+					<div class="field_div">
+						<h3>Title</h3>
+						<input type="text" name="title" size="95"<? if (!empty($Title)) { echo ' value="'.display_str($Title).'"'; } ?> />
+					</div>
+					<div class="field_div">
+						<h3>Body</h3>
+						<textarea name="body" cols="95" rows="15"><? if (!empty($Body)) { echo display_str($Body); } ?></textarea> <br />
+					</div>
+					<div class="submit_div center">
 						<input type="submit" value="<?=((!isset($_GET['action'])) ? 'Create blog post' : 'Edit blog post') ?>" />
 					</div>
 				</div>
 			</form>
 		</div>
-		<br />
 <?
 } else {
 	View::show_header('Staff Blog','bbcode');
@@ -133,7 +135,7 @@ foreach ($Blog as $BlogItem) {
 	list($BlogID, $Author, $Title, $Body, $BlogTime) = $BlogItem;
 	$BlogTime = strtotime($BlogTime);
 ?>
-			<div id="blog<?=$BlogID?>" class="box">
+			<div id="blog<?=$BlogID?>" class="box box2">
 				<div class="head">
 					<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <?=$Author?>
 <?			if (check_perms('admin_manage_blog')) { ?>
@@ -145,7 +147,6 @@ foreach ($Blog as $BlogItem) {
 					<?=$Text->full_format($Body)?>
 				</div>
 			</div>
-		<br />
 <?
 }
 ?>

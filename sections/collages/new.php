@@ -64,7 +64,7 @@ if (($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('
 						<li><strong>Discography</strong> - A collage containing all the releases of an artist, which can be useful for keeping track of side projects.</li>
 						<li><strong>Label</strong> - A collage containing all the releases of a particular record label.</li>
 						<li><strong>Staff picks</strong> - A listing of recommendations picked by the staff on special occasions.</li>
-						<li><strong>Charts</strong> - Contains all the releases that comprise a certain type of chart (e.g. Billboard Top 100, Pitchfork Top 100, What.CD Top 10, etc.).</li>
+						<li><strong>Charts</strong> - Contains all the releases that comprise a certain type of chart (e.g. Billboard Top 100, Pitchfork Top 100, <?=SITE_NAME?> Top 10, etc.).</li>
 <?
 	if (($CollageCount < $LoggedUser['Permissions']['MaxCollages']) && check_perms('site_collages_personal')) { ?>
 						<li><strong>Personal</strong> - You can put whatever you want here. It is your own personal collage.</li>

@@ -889,8 +889,10 @@ Your torrent was reported because it contained a video that has no relevance to 
 					'upload' => '0',
 					'warn' => '1',
 					'delete' => '1',
-					'pm' => '[rule]3.3[/rule]. No radio talk shows or podcasts are allowed. What.CD is primarily a music site, and those recordings do not belong in any torrent category.
+
+					'pm' => '[rule]3.3[/rule]. No radio talk shows or podcasts are allowed. Those recordings do not belong in any torrent category.
 Your torrent was reported because it contained audio files sourced from a talk show or podcast.'
+
 				)
 			)
 		),

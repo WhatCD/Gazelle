@@ -3,7 +3,7 @@ if (!isset($argv)) {
 	die('CLI Only.');
 }
 
-define('SERVER', 'irc.what.cd');
+define('SERVER', BOT_SERVER);
 define('PORT', 6667);
 define('NICK', 'RawBot');
 define('WATCH', '#raw-input');

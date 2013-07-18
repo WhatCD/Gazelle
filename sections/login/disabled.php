@@ -42,7 +42,7 @@ Please use your <?=SITE_NAME?> username.
 	$Nick = $_POST['username'];
 	$Nick = preg_replace('/[^a-zA-Z0-9\[\]\\`\^\{\}\|_]/', '', $Nick);
 	if (strlen($Nick) == 0) {
-		$Nick = 'WhatGuest????';
+		$Nick = SITE_NAME.'Guest????';
 	} else {
 		if (is_numeric(substr($Nick, 0, 1))) {
 			$Nick = '_' . $Nick;
@@ -59,7 +59,7 @@ Please use your <?=SITE_NAME?> username.
 		</div>
 		<applet codebase="static/irc/" code="IRCApplet.class" archive="irc.jar,sbox.jar" width="800" height="600" align="center">
 			<param name="nick" value="<?=($Nick)?>" />
-			<param name="alternatenick" value="WhatGuest????" />
+			<param name="alternatenick" value="<?=SITE_NAME?>Guest????" />
 			<param name="name" value="Java IRC User" />
 			<param name="host" value="<?=(BOT_SERVER)?>" />
 			<param name="multiserver" value="false" />

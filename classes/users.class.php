@@ -297,7 +297,7 @@ class Users {
 			$Defaults = !empty($SiteOptions['HideTypes']);
 		} else {
 			$Sort =& $SiteOptions['SortHide'];
-			$MissingTypes = array_diff_key($ReleaseTypes, $Sort);
+			$MissingTypes = array_diff_key($RT, $Sort);
 			if (!empty($MissingTypes)) {
 				foreach (array_keys($MissingTypes) as $Missing) {
 					$Sort[$Missing] = 0;
@@ -309,11 +309,14 @@ class Users {
 			if (isset($Defaults)) {
 				$Checked = ($Defaults && isset($SiteOptions['HideTypes'][$Key]) ? ' checked="checked"' : '');
 			} else {
+				if (!isset($RT[$Key])) {
+					continue;
+				}
 				$Checked = ($Val ? ' checked="checked"' : '');
-				$Val = (isset($RT[$Key]) ? $RT[$Key] : 'Error');
+				$Val = $RT[$Key];
 			}
 
-			$ID = "$Key_" . (int) !!$Checked;
+			$ID = $Key . '_' . (int) !!$Checked;
 
 							// The HTML is indented this far for proper indentation in the generated HTML
 							// on user.php?action=edit
