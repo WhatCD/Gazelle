@@ -2,12 +2,12 @@
 if ($Message = db_string($_POST['message'])) {
 	if ($Subject = db_string($_POST['subject'])) {
 		// New staff PM conversation
-		$Level = db_string($_POST['level']);
+		assert_numbers($_POST, array('level'), 'Invalid recipient');
 		$DB->query("
 			INSERT INTO staff_pm_conversations
 				(Subject, Status, Level, UserID, Date)
 			VALUES
-				('$Subject', 'Unanswered', $Level, ".$LoggedUser['ID'].", '".sqltime()."')"
+				('$Subject', 'Unanswered', $_POST[level], $LoggedUser[ID], '".sqltime()."')"
 		);
 
 		// New message
@@ -16,7 +16,7 @@ if ($Message = db_string($_POST['message'])) {
 			INSERT INTO staff_pm_messages
 				(UserID, SentDate, Message, ConvID)
 			VALUES
-				(".$LoggedUser['ID'].", '".sqltime()."', '$Message', $ConvID)"
+				($LoggedUser[ID], '".sqltime()."', '$Message', $ConvID)"
 		);
 
 		header('Location: staffpm.php');

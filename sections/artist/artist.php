@@ -135,35 +135,42 @@ if (!empty($TorrentList)) {
 <?
 }
 
-//Get list of used release types
+// Deal with torrents without release types, which can end up here
+// if they're uploaded with a non-grouping category id
+$UnknownRT = array_search('Unknown', $ReleaseTypes);
+if ($UnknownRT === false) {
+	$UnknownRT = 1025;
+	$ReleaseTypes[$UnknownRT] = 'Unknown';
+}
+
+// Get list of used release types
 $UsedReleases = array();
 foreach ($Importances as $ID => $Group) {
 	switch ($Importances[$ID]['Importance']) {
 		case '2':
 			$Importances[$ID]['ReleaseType'] = 1024;
-			//$TorrentList[$GroupID]['ReleaseType'] = 1024;
 			$GuestAlbums = true;
 			break;
 
 		case '3':
 			$Importances[$ID]['ReleaseType'] = 1023;
-			//$TorrentList[$GroupID]['ReleaseType'] = 1023;
 			$RemixerAlbums = true;
 			break;
 
 		case '4':
 			$Importances[$ID]['ReleaseType'] = 1022;
-			//$TorrentList[$GroupID]['ReleaseType'] = 1022;
 			$ComposerAlbums = true;
 			break;
 
 		case '7':
 			$Importances[$ID]['ReleaseType'] = 1021;
-			//$TorrentList[$GroupID]['ReleaseType'] = 1021;
 			$ProducerAlbums = true;
 			break;
 
 		default:
+			if (!isset($ReleaseTypes[$TorrentList[$Group['GroupID']]['ReleaseType']])) {
+				$TorrentList[$Group['GroupID']]['ReleaseType'] = $UnknownRT;
+			}
 			$Importances[$ID]['ReleaseType'] = $TorrentList[$Group['GroupID']]['ReleaseType'];
 	}
 

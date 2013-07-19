@@ -51,7 +51,7 @@ if (isset($_POST['featured']) && $CategoryID == 0 && (($LoggedUser['ID'] == $Use
 	$DB->query("
 		UPDATE collages
 		SET Featured = 0
-		WHERE CategoryID = 0 \
+		WHERE CategoryID = 0
 			AND UserID = $UserID");
 	$Updates[] = 'Featured = 1';
 }

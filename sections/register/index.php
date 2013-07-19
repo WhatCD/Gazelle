@@ -66,7 +66,7 @@ if (!empty($_REQUEST['confirm'])) {
 				$_REQUEST['username'] = '';
 			}
 
-			if ($_POST['invite']) {
+			if ($_REQUEST['invite']) {
 				$DB->query("
 					SELECT InviterID, Email
 					FROM invites
