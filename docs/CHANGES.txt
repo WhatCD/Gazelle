@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-07-23 by draculesti
+New mod button to generate random user passwords
+
 2013-07-13 by draculesti
 Ability to quote locked and trashed threads
 

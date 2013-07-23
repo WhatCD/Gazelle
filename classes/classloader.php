@@ -26,8 +26,6 @@ spl_autoload_register(function ($ClassName) {
 		case 'Forums':
 			$FileName = 'forums.class';
 			break;
-		case 'ForumsView':
-			$FileName = 'forumsview.class';
 		case 'Forum':
 			$FileName = 'forum.class';
 			break;

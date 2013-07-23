@@ -217,3 +217,15 @@ function displayCommStats(stats) {
 		}
 	}
 }
+
+$(document).ready(function() {
+	$("#random_password").click(function() {
+		var length = 15,
+			charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=<>?",
+			password = "";
+		for (var i = 0, n = charset.length; i < length; ++i) {
+			password += charset.charAt(Math.floor(Math.random() * n));
+		}
+		$('#change_password').val(password);
+	});
+});
