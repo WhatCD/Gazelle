@@ -26,14 +26,14 @@ function Quote(post, user, link) {
 	postid = post;
 
 	// check if reply_box element exists and that user is in the forums
-	if(!$('#reply_box').length && url.path == "forums") {
+	if (!$('#reply_box').length && url.path == "forums") {
 		if ($("#quote_" + postid).text() == "Quote") {
 			original_post = $("#content" + postid).html();
 			$("#quote_" + postid).text("Unquote");
 			$.ajax({
 				type : "POST",
-				url: "ajax.php?action=raw_bbcode",
-				dataType: "json",
+				url : "ajax.php?action=raw_bbcode",
+				dataType : "json",
 				data : {
 					"postid" : postid
 				}
@@ -65,8 +65,8 @@ function Edit_Form(post,key) {
 	//If no edit is already going underway or a previous edit was finished, make the necessary dom changes.
 	if (!$('#editbox' + postid).results() || $('#editbox' + postid + '.hidden').results()) {
 		$('#reply_box').ghide();
-		if (location.href.match(/torrents\.php/) ||
-				location.href.match(/artist\.php/)) {
+		if (location.href.match(/torrents\.php/)
+				|| location.href.match(/artist\.php/)) {
 			boxWidth = "50";
 		} else {
 			boxWidth = "80";

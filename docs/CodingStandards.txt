@@ -62,7 +62,7 @@ Tabs shall always be used for indentation.
 Files shall be encoded in ASCII.
 
 Files shall always use Unix-style line endings (LF). The program dos2unix
-will take care of this for you if you have files that use Windows-style
+will take care of this for you, if you have files that use Windows-style
 line endings (CR+LF) or old Mac-style line endings (CR).
 
 File names for PHP, CSS, and JavaScript files shall be all lowercase and
@@ -78,13 +78,13 @@ at the end of the same line with a space before the brace. The astute
 reader will note that this is K&R style with the exception of functions.
 
 There shall be a space between a control structure statement (e.g. `if`,
-`elseif`, `for`) and the following parenthesis.
+`elseif` in PHP, `for`) and the following parenthesis.
 
 There shall be a space around conditional operators.
 
 When using ternary operators, spaces shall be used around the operators.
 
-For conditional blocks, `elseif` is to be used instead of `else if`.
+For PHP conditional blocks, `elseif` is to be used instead of `else if`.
 
 In loops and conditional blocks, there shall be braces even if there is
 only one statement.
@@ -101,6 +101,9 @@ When building strings in PHP, single quotes shall be used when not
 printing a variable.
 
 When declaring JavaScript variables, `var` shall always be used.
+
+When manually type casting, whitespace should not be used between the
+cast operator and the variable.
 
 ## Code styling for CSS
 

@@ -24,16 +24,17 @@ if (PHP_INT_SIZE === 4) {
 /**
  * Check that some given variables (usually in _GET or _POST) are numbers
  *
- * @param array $Base Array that's supposed to contain all keys to check
+ * @param array $Base array that's supposed to contain all keys to check
  * @param array $Keys list of keys to check
  * @param mixed $Error error code or string to pass to the error() function if a key isn't numeric
  */
 function assert_numbers(&$Base, $Keys, $Error = 0) {
+	// make sure both arguments are arrays
 	if (!is_array($Base) || !is_array($Keys)) {
 		return;
 	}
 	foreach ($Keys as $Key) {
-		if (empty($Base[$Key]) || !is_number($Base[$Key])) {
+		if (!isset($Base[$Key]) || !is_number($Base[$Key])) {
 			error($Error);
 		}
 	}

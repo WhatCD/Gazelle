@@ -136,7 +136,7 @@ if (!empty($TorrentList)) {
 }
 
 // Deal with torrents without release types, which can end up here
-// if they're uploaded with a non-grouping category id
+// if they're uploaded with a non-grouping category ID
 $UnknownRT = array_search('Unknown', $ReleaseTypes);
 if ($UnknownRT === false) {
 	$UnknownRT = 1025;

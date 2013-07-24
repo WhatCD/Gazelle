@@ -2,7 +2,7 @@
 
 include(SERVER_ROOT . "/sections/forums/functions.php");
 
-$PostID = (int) $_POST['postid'];
+$PostID = (int)$_POST['postid'];
 
 if (empty($PostID)) {
 	json_die("error", "empty postid");

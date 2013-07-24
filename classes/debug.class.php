@@ -105,7 +105,7 @@ class DEBUG {
 
 	public function log_var($Var, $VarName = false) {
 		$BackTrace = debug_backtrace();
-		$ID = uniqid();
+		$ID = Users::make_secret(5);
 		if (!$VarName) {
 			$VarName = $ID;
 		}

@@ -141,4 +141,3 @@ function select_all(el) {
         textRange.select();
     }
 }
-

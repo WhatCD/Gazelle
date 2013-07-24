@@ -76,35 +76,35 @@ $RS = $DB->query("
 					DATE_FORMAT(JoinDate, '%Y-%m-%d') AS Date,
 					COUNT(UserID) AS Flow
 				FROM users_info
-			 	WHERE JoinDate != '0000-00-00 00:00:00'
+				WHERE JoinDate != '0000-00-00 00:00:00'
 				GROUP BY Date
 			) AS j
 			LEFT JOIN (
 				SELECT
 					DATE_FORMAT(BanDate, '%Y-%m-%d') AS Date,
-				 	COUNT(UserID) AS Flow
-			 	FROM users_info
-			 	WHERE BanDate != '0000-00-00 00:00:00'
-				 	AND BanReason = '1'
-			 	GROUP BY Date
+					COUNT(UserID) AS Flow
+				FROM users_info
+				WHERE BanDate != '0000-00-00 00:00:00'
+					AND BanReason = '1'
+				GROUP BY Date
 			) AS m ON j.Date = m.Date
 			LEFT JOIN (
 				SELECT
 					DATE_FORMAT(BanDate, '%Y-%m-%d') AS Date,
-				 	COUNT(UserID) AS Flow
+					COUNT(UserID) AS Flow
 				FROM users_info
 				WHERE BanDate != '0000-00-00 00:00:00'
-				 	AND BanReason = '2'
-			 	GROUP BY Date
+					AND BanReason = '2'
+				GROUP BY Date
 			) AS r ON j.Date = r.Date
 			LEFT JOIN (
 				SELECT
 					DATE_FORMAT(BanDate, '%Y-%m-%d') AS Date,
-				 	COUNT(UserID) AS Flow
-			 	FROM users_info
-			 	WHERE BanDate != '0000-00-00 00:00:00'
-				 	AND BanReason = '3'
-			 	GROUP BY Date
+					COUNT(UserID) AS Flow
+				FROM users_info
+				WHERE BanDate != '0000-00-00 00:00:00'
+					AND BanReason = '3'
+				GROUP BY Date
 			) AS i ON j.Date = i.Date
 		ORDER BY j.Date DESC
 		LIMIT $Limit");

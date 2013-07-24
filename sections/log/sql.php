@@ -7,7 +7,7 @@ if (!empty($_GET['search'])) {
 	$Search = false;
 }
 $Words = explode(' ', $Search);
-$sql = '
+$SQL = '
 	SELECT
 		SQL_CALC_FOUND_ROWS
 		ID,
@@ -15,24 +15,24 @@ $sql = '
 		Time
 	FROM log ';
 if ($Search) {
-	$sql .= "WHERE Message LIKE '%";
-	$sql .= implode("%' AND Message LIKE '%", $Words);
-	$sql .= "%' ";
+	$SQL .= "WHERE Message LIKE '%";
+	$SQL .= implode("%' AND Message LIKE '%", $Words);
+	$SQL .= "%' ";
 }
 if (!check_perms('site_view_full_log')) {
 	if ($Search) {
-		$sql .= ' AND ';
+		$SQL .= ' AND ';
 	} else {
-		$sql .= ' WHERE ';
+		$SQL .= ' WHERE ';
 	}
-	$sql .= " Time>'".time_minus(3600 * 24 * 28)."' ";
+	$SQL .= " Time>'".time_minus(3600 * 24 * 28)."' ";
 }
 
-$sql .= "
+$SQL .= "
 	ORDER BY ID DESC
 	LIMIT $Limit";
 
-$Log = $DB->query($sql);
+$Log = $DB->query($SQL);
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 $TotalMatches = $NumResults;

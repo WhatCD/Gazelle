@@ -45,47 +45,47 @@ $ViewingOwn = ($UserID === $LoggedUser['ID']);
 $ShowUnread = ($ViewingOwn && (!isset($_GET['showunread']) || !!$_GET['showunread']));
 $ShowGrouped = ($ViewingOwn && (!isset($_GET['group']) || !!$_GET['group']));
 if ($ShowGrouped) {
-	$sql = '
+	$SQL = '
 		SELECT
-				SQL_CALC_FOUND_ROWS
-				MAX(p.ID) AS ID
+			SQL_CALC_FOUND_ROWS
+			MAX(p.ID) AS ID
 		FROM forums_posts AS p
 			LEFT JOIN forums_topics AS t ON t.ID = p.TopicID';
 	if ($ShowUnread) {
-		$sql.='
+		$SQL .= '
 			LEFT JOIN forums_last_read_topics AS l ON l.TopicID = t.ID AND l.UserID = '.$LoggedUser['ID'];
 	}
-	$sql .= '
+	$SQL .= '
 			LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = '.$UserID.'
 			AND ((f.MinClassRead <= '.$LoggedUser['Class'];
 	if (!empty($RestrictedForums)) {
-		$sql.='
-			AND f.ID NOT IN (\''.$RestrictedForums.'\')';
+		$SQL .= "
+			AND f.ID NOT IN ('$RestrictedForums')";
 	}
-	$sql .= ')';
+	$SQL .= ')';
 	if (!empty($PermittedForums)) {
-		$sql.='
-			OR f.ID IN (\''.$PermittedForums.'\')';
+		$SQL .= "
+			OR f.ID IN ('$PermittedForums')";
 	}
-	$sql .= ')';
+	$SQL .= ')';
 	if ($ShowUnread) {
-		$sql .= '
-			AND ((t.IsLocked=\'0\' OR t.IsSticky=\'1\')
-			AND (l.PostID<t.LastPostID OR l.PostID IS NULL))';
+		$SQL .= '
+			AND ((t.IsLocked = \'0\' OR t.IsSticky = \'1\')
+			AND (l.PostID < t.LastPostID OR l.PostID IS NULL))';
 	}
-	$sql .= "
+	$SQL .= "
 		GROUP BY t.ID
 		ORDER BY p.ID DESC
 		LIMIT $Limit";
-	$PostIDs = $DB->query($sql);
+	$PostIDs = $DB->query($SQL);
 	$DB->query('SELECT FOUND_ROWS()');
 	list($Results) = $DB->next_record();
 
 	if ($Results > $PerPage * ($Page - 1)) {
 		$DB->set_query_id($PostIDs);
 		$PostIDs = $DB->collect('ID');
-		$sql = "
+		$SQL = "
 			SELECT
 				p.ID,
 				p.AddedTime,
@@ -108,19 +108,19 @@ if ($ShowGrouped) {
 				LEFT JOIN forums_last_read_topics AS l ON l.UserID = $UserID AND l.TopicID = t.ID
 			WHERE p.ID IN (".implode(',', $PostIDs).')
 			ORDER BY p.ID DESC';
-		$Posts = $DB->query($sql);
+		$Posts = $DB->query($SQL);
 	}
 } else {
-	$sql = '
+	$SQL = '
 		SELECT
 			SQL_CALC_FOUND_ROWS';
 	if ($ShowGrouped) {
-		$sql .= '
+		$SQL .= '
 			*
 		FROM (
 			SELECT';
 	}
-	$sql .= '
+	$SQL .= '
 				p.ID,
 				p.AddedTime,
 				p.Body,
@@ -131,10 +131,10 @@ if ($ShowGrouped) {
 				t.Title,
 				t.LastPostID,';
 	if ($UserID === $LoggedUser['ID']) {
-		$sql .= '
+		$SQL .= '
 				l.PostID AS LastRead,';
 	}
-	$sql .= "
+	$SQL .= "
 				t.IsLocked,
 				t.IsSticky
 			FROM forums_posts as p
@@ -148,39 +148,39 @@ if ($ShowGrouped) {
 				AND ((f.MinClassRead <= ".$LoggedUser['Class'];
 
 	if (!empty($RestrictedForums)) {
-		$sql .= "
+		$SQL .= "
 					AND f.ID NOT IN ('$RestrictedForums')";
 	}
-	$sql .= '
+	$SQL .= '
 					)';
 
 	if (!empty($PermittedForums)) {
-		$sql .= "
+		$SQL .= "
 					OR f.ID IN ('$PermittedForums')";
 	}
-	$sql .= '
+	$SQL .= '
 				)';
 
 	if ($ShowUnread) {
-		$sql .= '
+		$SQL .= '
 				AND ((t.IsLocked = \'0\' OR t.IsSticky = \'1\')
 					AND (l.PostID < t.LastPostID OR l.PostID IS NULL)
 				) ';
 	}
 
-	$sql .= '
+	$SQL .= '
 			ORDER BY p.ID DESC';
 
 	if ($ShowGrouped) {
-		$sql .= '
+		$SQL .= '
 		) AS sub
 		GROUP BY TopicID
 		ORDER BY ID DESC';
 	}
 
-	$sql .= "
+	$SQL .= "
 		LIMIT $Limit";
-	$Posts = $DB->query($sql);
+	$Posts = $DB->query($SQL);
 
 	$DB->query('SELECT FOUND_ROWS()');
 	list($Results) = $DB->next_record();

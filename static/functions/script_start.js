@@ -212,7 +212,7 @@ function URL() {
 
 // jQuery plugin to prevent double submission of forms
 jQuery.fn.preventDoubleSubmission = function() {
-	$(this).bind('submit',function(e){
+	$(this).bind('submit', function(e){
 		var $form = $(this);
 
 		if ($form.data('submitted') === true) {
@@ -275,7 +275,7 @@ jQuery.extend(jQuery.prototype, {
 			var classes = object.className.split(' ');
 			var result = array_search(class_name, classes);
 			if (result !== false) {
-				classes.splice(result,1);
+				classes.splice(result, 1);
 				object.className = classes.join(' ');
 			}
 		}
@@ -297,7 +297,7 @@ jQuery.extend(jQuery.prototype, {
 			var classes = object.className.split(' ');
 			var result = array_search(class_name, classes);
 			if (result !== false) {
-				classes.splice(result,1);
+				classes.splice(result, 1);
 				object.className = classes.join(' ');
 			} else {
 				if (object.className === '') {

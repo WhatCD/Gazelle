@@ -623,25 +623,25 @@ if (!empty($Alerts) || !empty($ModBar)) {
 					<li id="searchbar_torrents"><span class="hidden">Torrents: </span>
 						<form class="search_form" name="torrents" action="torrents.php"
 							method="get">
-<? if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
+<?	if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
 					<input type="hidden" name="action" value="advanced" />
-<? } ?>
+<?	} ?>
 					<input id="torrentssearch" accesskey="t" spellcheck="false"
-								onfocus="if (this.value == 'Torrents') this.value='';"
-								onblur="if (this.value == '') this.value='Torrents';"
-								<? if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
+								onfocus="if (this.value == 'Torrents') this.value = '';"
+								onblur="if (this.value == '') this.value = 'Torrents';"
+<?							if (isset($LoggedUser['SearchType']) && $LoggedUser['SearchType']) { // Advanced search ?>
 								value="Torrents" type="text" name="groupname" size="17"
-								<? } else { ?> value="Torrents" type="text" name="searchstr"
+<?							} else { ?> value="Torrents" type="text" name="searchstr"
 								size="17" <? } ?> />
 						</form></li>
 					<li id="searchbar_artists"><span class="hidden">Artist: </span>
 						<form class="search_form" name="artists" action="artist.php"
 							method="get">
-							<input id="artistsearch"<? Users::has_autocomplete_enabled('search'); ?>
-								accesskey="a"
+							<input id="artistsearch"<? Users::has_autocomplete_enabled('search');
+								?> accesskey="a"
 								spellcheck="false" autocomplete="off"
-								onfocus="if (this.value == 'Artists') this.value='';"
-								onblur="if (this.value == '') this.value='Artists';"
+								onfocus="if (this.value == 'Artists') this.value = '';"
+								onblur="if (this.value == '') this.value = 'Artists';"
 								value="Artists" type="text" name="artistname" size="17" />
 						</form>
 						</li>
@@ -649,8 +649,8 @@ if (!empty($Alerts) || !empty($ModBar)) {
 						<form class="search_form" name="requests" action="requests.php"
 							method="get">
 							<input id="requestssearch" spellcheck="false"
-								onfocus="if (this.value == 'Requests') this.value='';"
-								onblur="if (this.value == '') this.value='Requests';"
+								onfocus="if (this.value == 'Requests') this.value = '';"
+								onblur="if (this.value == '') this.value = 'Requests';"
 								value="Requests" type="text" name="search" size="17" />
 						</form></li>
 					<li id="searchbar_forums"><span class="hidden">Forums: </span>
@@ -658,28 +658,27 @@ if (!empty($Alerts) || !empty($ModBar)) {
 							method="get">
 							<input value="search" type="hidden" name="action" /> <input
 								id="forumssearch"
-								onfocus="if (this.value == 'Forums') this.value='';"
-								onblur="if (this.value == '') this.value='Forums';"
+								onfocus="if (this.value == 'Forums') this.value = '';"
+								onblur="if (this.value == '') this.value = 'Forums';"
 								value="Forums" type="text" name="search" size="17" />
 						</form></li>
-					<!--
-			<li id="searchbar_wiki">
-				<span class="hidden">Wiki: </span>
-				<form class="search_form" name="wiki" action="wiki.php" method="get">
-					<input type="hidden" name="action" value="search" />
-					<input
-						onfocus="if (this.value == 'Wiki') this.value='';"
-						onblur="if (this.value == '') this.value='Wiki';"
-						value="Wiki" type="text" name="search" size="17"
-					/>
-				</form>
-			</li>
+<!--
+					<li id="searchbar_wiki"><span class="hidden">Wiki: </span>
+						<form class="search_form" name="wiki" action="wiki.php" method="get">
+							<input type="hidden" name="action" value="search" />
+							<input
+								onfocus="if (this.value == 'Wiki') this.value = '';"
+								onblur="if (this.value == '') this.value = 'Wiki';"
+								value="Wiki" type="text" name="search" size="17"
+							/>
+						</form>
+					</li>
 -->
 					<li id="searchbar_log"><span class="hidden">Log: </span>
 						<form class="search_form" name="log" action="log.php" method="get">
 							<input id="logsearch"
-								onfocus="if (this.value == 'Log') this.value='';"
-								onblur="if (this.value == '') this.value='Log';" value="Log"
+								onfocus="if (this.value == 'Log') this.value = '';"
+								onblur="if (this.value == '') this.value = 'Log';" value="Log"
 								type="text" name="search" size="17" />
 						</form></li>
 					<li id="searchbar_users"><span class="hidden">Users: </span>
@@ -687,8 +686,8 @@ if (!empty($Alerts) || !empty($ModBar)) {
 							method="get">
 							<input type="hidden" name="action" value="search" /> <input
 								id="userssearch"
-								onfocus="if (this.value == 'Users') this.value='';"
-								onblur="if (this.value == '') this.value='Users';" value="Users"
+								onfocus="if (this.value == 'Users') this.value = '';"
+								onblur="if (this.value == '') this.value = 'Users';" value="Users"
 								type="text" name="search" size="20" />
 						</form></li>
 				</ul>
