@@ -531,3 +531,19 @@ tr.torrent .bookmark>a:after {
 .process_info_data {
 	overflow: auto;
 }
+
+#invite_extra_box {
+	align: middle;
+	width: 300px;
+	height: 100px;
+}
+
+#invite_extra_box input {
+	float: right;
+	display: inline;
+}
+
+#invite_extra_box label {
+	width: 250px;
+	display: block;
+}

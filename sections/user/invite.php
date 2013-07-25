@@ -95,7 +95,12 @@ $DB->query("
 
 $Invited = $DB->to_array();
 
-View::show_header('Invites');
+$JSIncludes = "";
+if (check_perms('users_mod') || check_perms('admin_advanced_user_search')) {
+	$JSIncludes = "invites";
+}
+
+View::show_header('Invites', $JSIncludes);
 ?>
 <div class="thin">
 	<div class="header">
@@ -150,9 +155,33 @@ if (!$Sneaky
 						<input type="submit" value="Invite" />
 					</td>
 				</tr>
-			</table>
 		</form>
+				<!--<strip> -->
+<?				if (check_perms('users_mod') || check_perms('admin_advanced_user_search')) { ?>
+					<tr>
+						<td class="label">Username:</td>
+						<td><input type="text" id="username"/></td>
+					</tr>
+					<tr>
+						<td class="label">Email:</td>
+						<td><input type="text" id="email"/></td>
+					</tr>
+					<tr>
+						<td class="label">IP:</td>
+						<td>
+							<input type="text" id="ip"/>
+							<a class="brackets" href="#" id="lookup">Lookup</a>
+						</td>
+					</tr>
+<?				} ?>
+				<!--</strip> -->
+			</table>
 	</div>
+
+<!--<strip> -->
+<table id="results"></table>
+<!--</strip> -->
+
 <?
 } elseif (!empty($LoggedUser['DisableInvites'])) { ?>
 	<div class="box pad" style="text-align: center;">
