@@ -1251,7 +1251,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 				INSERT INTO top10_history_torrents
 					(HistoryID, Rank, TorrentID, TitleString, TagString)
 				VALUES
-					($HistoryID, $i, $TorrentID, ".db_string($TitleString)."', '".db_string($TagString)."')");
+					($HistoryID, $i, $TorrentID, '" . db_string($TitleString) . "', '" . db_string($TagString) . "')");
 			$i++;
 		endforeach;
 
