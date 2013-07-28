@@ -724,6 +724,19 @@ CREATE TABLE `schedule` (
   `NextBiWeekly` int(2) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+CREATE TABLE `site_history` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `Title` varchar(255) DEFAULT NULL,
+  `Url` varchar(255) NOT NULL DEFAULT '',
+  `Category` tinyint(2) DEFAULT NULL,
+  `SubCategory` tinyint(2) DEFAULT NULL,
+  `Tags` mediumtext,
+  `AddedBy` int(10) DEFAULT NULL,
+  `Date` datetime DEFAULT NULL,
+  `Body` mediumtext,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `sphinx_a` (
   `gid` int(11) DEFAULT NULL,
   `aname` text CHARACTER SET utf8 COLLATE utf8_bin,

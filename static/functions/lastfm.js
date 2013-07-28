@@ -28,16 +28,16 @@
 		// Attach to document as lastfm_expand links are added dynamically when fetching the data.
 		$(document).on('click', "#lastfm_expand", function () {
 			// Make hidden entries visible and remove the expand button.
-			if ( $(this).attr("href") == "#sharedartists" ) {
+			if ($(this).attr("href") == "#sharedartists") {
 				sharedArtists = sharedArtists.replace(/\ class="hidden"/g,"");
 				sharedArtists = sharedArtists.replace(/<li>\[<a\ href=\"#sharedartists.*\]<\/li>/,"");
-			} else if ( $(this).attr("href") == "#topartists" ) {
+			} else if ($(this).attr("href") == "#topartists") {
 				topArtists = topArtists.replace(/\ class="hidden"/g,"");
 				topArtists = topArtists.replace(/<li>\[<a\ href=\"#topartists.*\]<\/li>/,"");
-			} else if ( $(this).attr("href") == "#topalbums" ) {
+			} else if ($(this).attr("href") == "#topalbums") {
 				topAlbums = topAlbums.replace(/\ class="hidden"/g,"");
 				topAlbums = topAlbums.replace(/<li>\[<a\ href=\"#topalbums.*\]<\/li>/,"");
-			} else if ( $(this).attr("href") == "#toptracks" ) {
+			} else if ($(this).attr("href") == "#toptracks") {
 				topTracks = topTracks.replace(/\ class="hidden"/g,"");
 				topTracks = topTracks.replace(/<li>\[<a\ href=\"#toptracks.*\]<\/li>/,"");
 			}
@@ -98,7 +98,7 @@
 		html += '<li id="lastfm_loading">Loading...</li>';
 		div.html(html);
 		// If the data isn't expanded hide most of the info.
-		if ( expanded == false ) {
+		if (expanded == false) {
 			$("#lastfm_stats").children(":not(.lastfm_essential)").addClass("hidden");
 			$("#lastfm_reload_container").addClass("hidden");
 		} else {
@@ -128,12 +128,12 @@
 			//Own profile, don't show tasteometer and shared artists.
 			tasteometer = " ";
 			sharedArtists = " ";
-		} else {
+		} else if (username) {
 			$.get('user.php?action=lastfm_compare&username=' + username, function (response) {
 				// Two separate elements are received from one Last.fm API call.
 				var tasteometerHtml = "";
 				var sharedArtistsHtml = "";
-				if ( response ) {
+				if (response && response != "false") {
 					json = JSON.parse(response);
 					if (json != null && json['error']) {
 						console.log("Tasteometer: " + json['message']);
@@ -156,7 +156,7 @@
 							compatibility = "Unknown";
 							tasteometerHtml += compatibility;
 						} else {
-							if  (compatibility < 50) {
+							if (compatibility < 50) {
 								background = 'rgb(255, '+Math.floor(255*compatibility/50)+', 0)'
 							} else {
 								background = 'rgb('+Math.floor((1-(compatibility-50)/50)*255)+', 255, 0)'
@@ -173,11 +173,13 @@
 						if (j['artists']['matches'] != 0) {
 							sharedArtistsHtml += '<li>Shared artists:</li><li><ul class="nobullet">';
 							var k = initialCount;
-							if (a.length < 3) k = a.length;
-								for (var i = 0; i < k; i++) {
-									sharedArtistsHtml += '<li><a href="artist.php?artistname=' + escapeAmpUrl(a[i]['name']) + '">' + escapeHtml(a[i]['name']) + '</a></li>'
-								}
-							if ( a.length > 3 ) {
+							if (a.length < 3) {
+								k = a.length;
+							}
+							for (var i = 0; i < k; i++) {
+								sharedArtistsHtml += '<li><a href="artist.php?artistname=' + escapeAmpUrl(a[i]['name']) + '">' + escapeHtml(a[i]['name']) + '</a></li>'
+							}
+							if (a.length > 3) {
 								for (i = 3; i < a.length; i++) {
 									sharedArtistsHtml += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(a[i]['name']) + '">' + escapeHtml(a[i]['name']) + '</a></li>'
 								}
@@ -203,9 +205,12 @@
 	}
 
 	function getLastPlayedTrack(div) {
+		if (!username) {
+			return;
+		}
 		$.get('user.php?action=lastfm_last_played_track&username=' + username, function (response) {
 			var html = "";
-			if ( response ) {
+			if (response && response != "false") {
 				var json = JSON.parse(response);
 				if (json != null && json['error']) {
 					console.log("Last played track: " + json['message']);
@@ -216,7 +221,9 @@
 					lastPlayedTrack = " ";
 				} else {
 					// Fix Last.fm API returning more than one entry despite limit on certain conditions.
-					if ( typeof(json[0]) === "object" ) json = json[0];
+					if (typeof(json[0]) === "object") {
+						json = json[0];
+					}
 					html += '<li class="lastfm_essential">Last played: ';
 					html += '<a href="artist.php?artistname=' + escapeAmpUrl(json['artist']['#text']) + '">' + escapeHtml(json['artist']['#text']) + '</a> - <a href="torrents.php?artistname=' + escapeAmpUrl(json['artist']['#text']) +'&filelist=' + escapeAmpUrl(json['name']) + '">' + escapeHtml(json['name']) + '</a>';
 					html += "</li>";
@@ -230,9 +237,12 @@
 	}
 
 	function getTopArtists(div) {
+		if (!username) {
+			return;
+		}
 		$.get('user.php?action=lastfm_top_artists&username=' + username, function (response) {
 			var html;
-			if ( response ) {
+			if (response && response != "false") {
 				var json = JSON.parse(response);
 				if (json != null && json['error']) {
 					console.log("Top artists: " + json['message']);
@@ -240,7 +250,7 @@
 				} else if (json == null) {
 					console.log("Error: json == null");
 					topArtists = " ";
-				} else if ( json['topartists']['total']==0 ) {
+				} else if (json['topartists']['total'] == 0) {
 					// No top artists for the specified user, possibly a new Last.fm account.
 					// Allow removing the loading message regardless.
 					topArtists = " ";
@@ -250,15 +260,17 @@
 					var j = json['topartists']['artist'];
 					html += '<ul class="nobullet">';
 					var k = initialCount;
-					if (j.length < 3) k = j.length;
+					if (j.length < 3) {
+						k = j.length;
+					}
 					for (var i = 0; i < k; i++) {
 						html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
 					}
-					if ( j.length > 3 ) {
+					if (j.length > 3) {
 						for (i = 3; i < j.length; i++) {
 							html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
 						}
-						html+= '<li><a href="#topartists" id="lastfm_expand" onclick="return false" class="brackets">Expand</a></li>'
+						html += '<li><a href="#topartists" id="lastfm_expand" onclick="return false" class="brackets">Expand</a></li>'
 					}
 					html += '</ul>';
 					html += "</li>";
@@ -272,9 +284,12 @@
 	}
 
 	function getTopAlbums(div) {
+		if (!username) {
+			return;
+		}
 		$.get('user.php?action=lastfm_top_albums&username=' + username, function (response) {
 			var html;
-			if ( response ) {
+			if (response && response != "false") {
 				var json = JSON.parse(response);
 				if (json != null && json['error']) {
 					console.log("Top albums: " + json['message']);
@@ -282,7 +297,7 @@
 				} else if (json == null) {
 					console.log("Error: json == null");
 					topAlbums = " ";
-				} else if ( json['topalbums']['total']==0 ) {
+				} else if (json['topalbums']['total'] == 0) {
 					// No top artists for the specified user, possibly a new Last.fm account.
 					// Allow removing the loading message regardless.
 					topAlbums = " ";
@@ -292,11 +307,13 @@
 					html += "<li>";
 					html += '<ul class="nobullet">';
 					var k = initialCount;
-					if (j.length < 3) k = j.length;
+					if (j.length < 3) {
+						k = j.length;
+					}
 					for (var i = 0; i < k; i++) {
 						html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
 					}
-					if ( j.length>3 ) {
+					if (j.length > 3) {
 						for (i = 3; i < j.length; i++) {
 							html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?searchstr=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
 						}
@@ -314,9 +331,12 @@
 	}
 
 	function getTopTracks(div) {
+		if (!username) {
+			return;
+		}
 		$.get('user.php?action=lastfm_top_tracks&username=' + username, function (response) {
 			var html;
-			if ( response ) {
+			if (response && response != "false") {
 				var json = JSON.parse(response);
 				if (json != null && json['error']) {
 					console.log("Toptracks: " + json['message']);
@@ -324,7 +344,7 @@
 				} else if (json == null) {
 					console.log("Error: json == null");
 					topTracks = " ";
-				} else if ( json['toptracks']['total']==0 ) {
+				} else if (json['toptracks']['total'] == 0) {
 					// No top artists for the specified user, possibly a new Last.fm account.
 					// Allow removing the loading message regardless.
 					topTracks = " ";
@@ -334,11 +354,13 @@
 					var j = json['toptracks']['track'];
 					html += '<ul class="nobullet">';
 					var k = initialCount;
-					if (j.length < 3) k = j.length;
+					if (j.length < 3) {
+						k = j.length;
+					}
 					for (var i = 0; i < k; i++) {
 						html += '<li><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '&filelist=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
 					}
-					if ( j.length>3 ) {
+					if (j.length > 3) {
 						for (i = 3; i < j.length; i++) {
 							html += '<li class="hidden"><a href="artist.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '">' + escapeHtml(j[i]['artist']['name']) + '</a> - <a href="torrents.php?artistname=' + escapeAmpUrl(j[i]['artist']['name']) + '&filelist=' + escapeAmpUrl(j[i]['name']) + '">' + escapeHtml(j[i]['name']) + '</a></li>'
 						}

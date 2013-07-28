@@ -156,31 +156,11 @@ if (!$Sneaky
 					</td>
 				</tr>
 		</form>
-				<!--<strip> -->
-<?				if (check_perms('users_mod') || check_perms('admin_advanced_user_search')) { ?>
-					<tr>
-						<td class="label">Username:</td>
-						<td><input type="text" id="username"/></td>
-					</tr>
-					<tr>
-						<td class="label">Email:</td>
-						<td><input type="text" id="email"/></td>
-					</tr>
-					<tr>
-						<td class="label">IP:</td>
-						<td>
-							<input type="text" id="ip"/>
-							<a class="brackets" href="#" id="lookup">Lookup</a>
-						</td>
-					</tr>
-<?				} ?>
-				<!--</strip> -->
+				
 			</table>
 	</div>
 
-<!--<strip> -->
-<table id="results"></table>
-<!--</strip> -->
+
 
 <?
 } elseif (!empty($LoggedUser['DisableInvites'])) { ?>

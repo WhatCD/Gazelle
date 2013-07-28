@@ -27,6 +27,11 @@ $(document).ready(function() {
 				$("#request_form").preventDoubleSubmission();
 			}
 			break;
+		case "sitehistory":
+			if (query['action'] == "edit") {
+				$("#event_form").validate();
+			}
+			break;
 		default:
 			break;
 	}
