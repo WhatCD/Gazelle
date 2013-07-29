@@ -13,6 +13,7 @@
  * @return string $Row
  */
 function make_staff_row($Row, $ID, $Paranoia, $Class, $LastAccess, $Remark = '', $HiddenBy = 'Hidden by user') {
+	$Text = new Text;
 	$Row = ($Row == 'a') ? 'b' : 'a';
 
 	echo "\t\t\t<tr class=\"row$Row\">
@@ -27,9 +28,9 @@ function make_staff_row($Row, $ID, $Paranoia, $Class, $LastAccess, $Remark = '',
 						echo "$HiddenBy";
 					}
 	echo "\n\t\t\t\t</td>
-				<td class=\"nobr\">
-					$Remark
-				</td>
+				<td class=\"nobr\">"
+					. $Text->full_format($Remark) .
+				"</td>
 			</tr>\n"; // the "\n" is needed for pretty HTML
 	// the foreach loop that calls this function needs to know the new value of $Row
 	return $Row;

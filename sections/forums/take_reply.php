@@ -42,7 +42,7 @@ if ($_POST['body'] === '' || !isset($_POST['body'])) {
 
 $Body = $_POST['body'];
 
-if ($LoggedUser['DisablePosting']) {
+if (!empty($LoggedUser['DisablePosting'])) {
 	error('Your posting privileges have been removed');
 }
 
@@ -71,8 +71,8 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$DB->query("
 		SELECT ID, Body
 		FROM forums_posts
-		WHERE TopicID='$TopicID'
-			AND AuthorID='".$LoggedUser['ID']."'
+		WHERE TopicID = '$TopicID'
+			AND AuthorID = '".$LoggedUser['ID']."'
 		ORDER BY ID DESC
 		LIMIT 1");
 	list($PostID, $OldBody) = $DB->next_record(MYSQLI_NUM, false);
@@ -81,15 +81,17 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$DB->query("
 		UPDATE forums_posts
 		SET
-			Body = CONCAT(Body,'"."\n\n".db_string($Body)."'),
+			Body = CONCAT(Body,'\n\n".db_string($Body)."'),
 			EditedUserID = '".$LoggedUser['ID']."',
 			EditedTime = '$SQLTime'
-		WHERE ID='$PostID'");
+		WHERE ID = '$PostID'");
 
 	//Store edit history
 	$DB->query("
-		INSERT INTO comments_edits (Page, PostID, EditUser, EditTime, Body)
-		VALUES ('forums', $PostID, ".$LoggedUser['ID'].", '$SQLTime', '".db_string($OldBody)."')");
+		INSERT INTO comments_edits
+			(Page, PostID, EditUser, EditTime, Body)
+		VALUES
+			('forums', $PostID, ".$LoggedUser['ID'].", '$SQLTime', '".db_string($OldBody)."')");
 	$Cache->delete_value("forums_edits_$PostID");
 
 	//Get the catalogue it is in
@@ -105,16 +107,16 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 		$ThreadInfo['StickyPost']['Body'] .= "\n\n$Body";
 		$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];
 		$ThreadInfo['StickyPost']['EditedTime'] = $SQLTime;
-		$Cache->cache_value('thread_'.$TopicID.'_info', $ThreadInfo, 0);
+		$Cache->cache_value("thread_$TopicID".'_info', $ThreadInfo, 0);
 	}
 
 	//Edit the post in the cache
-	$Cache->begin_transaction('thread_'.$TopicID.'_catalogue_'.$CatalogueID);
+	$Cache->begin_transaction("thread_$TopicID"."_catalogue_$CatalogueID");
 	$Cache->update_row($Key, array(
-			'Body'=>$Cache->MemcacheDBArray[$Key]['Body']."\n\n".$Body,
-			'EditedUserID'=>$LoggedUser['ID'],
-			'EditedTime'=>$SQLTime,
-			'Username'=>$LoggedUser['Username']
+			'Body' => $Cache->MemcacheDBArray[$Key]['Body']."\n\n$Body",
+			'EditedUserID' => $LoggedUser['ID'],
+			'EditedTime' => $SQLTime,
+			'Username' => $LoggedUser['Username']
 			));
 	$Cache->commit_transaction(0);
 
@@ -131,7 +133,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$DB->query("
 		UPDATE forums
 		SET
-			NumPosts = NumPosts+1,
+			NumPosts = NumPosts + 1,
 			LastPostID = '$PostID',
 			LastPostAuthorID = '".$LoggedUser['ID']."',
 			LastPostTopicID = '$TopicID',
@@ -181,7 +183,7 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 					FROM forums_topics AS f
 						LEFT JOIN forums_polls AS p ON p.TopicID = f.ID
 					WHERE f.ID = '$TopicID'");
-				list($AuthorID,$IsLocked,$IsSticky,$NumPosts,$NoPoll) = $DB->next_record();
+				list($AuthorID, $IsLocked, $IsSticky, $NumPosts, $NoPoll) = $DB->next_record();
 				$Part2 = array($TopicID => array(
 					'ID' => $TopicID,
 					'Title' => $ThreadInfo['Title'],

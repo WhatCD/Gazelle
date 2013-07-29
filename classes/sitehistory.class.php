@@ -2,7 +2,7 @@
 
 class SiteHistory {
 	private static $Categories = array(1 => "Code", "Event", "Milestone", "Policy", "Release", "Staff Change");
-	private static $SubCategories = array(1 => "Announcement", "Blog Post", "Change Log", "Forum Post", "Wiki");
+	private static $SubCategories = array(1 => "Announcement", "Blog Post", "Change Log", "Forum Post", "Wiki", "Other", "External Source");
 	private static $Tags = array(
 								"api",
 								"celebration",
@@ -10,6 +10,7 @@ class SiteHistory {
 								"class.secondary",
 								"collage",
 								"community",
+								"conclusion",
 								"contest",
 								"design",
 								"donate",
@@ -39,6 +40,7 @@ class SiteHistory {
 								"picks.staff",
 								"promotion",
 								"ratio",
+								"record",
 								"report",
 								"request",
 								"requirement",
@@ -46,6 +48,7 @@ class SiteHistory {
 								"rippy",
 								"search",
 								"settings",
+								"start",
 								"stats",
 								"store",
 								"stylesheet",

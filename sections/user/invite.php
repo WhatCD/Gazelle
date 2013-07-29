@@ -156,7 +156,7 @@ if (!$Sneaky
 					</td>
 				</tr>
 		</form>
-				
+
 			</table>
 	</div>
 
@@ -189,7 +189,7 @@ if (!empty($Pending)) {
 	$Row = 'a';
 	foreach ($Pending as $Invite) {
 		list($InviteKey, $Email, $Expires) = $Invite;
-		$Row = (($Row == 'a') ? 'b' : 'a');
+		$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 			<tr class="row<?=$Row?>">
 				<td><?=display_str($Email)?></td>
@@ -219,7 +219,7 @@ if (!empty($Pending)) {
 	$Row = 'a';
 	foreach ($Invited as $User) {
 		list($ID, $Email, $Uploaded, $Downloaded, $JoinDate, $LastAccess) = $User;
-		$Row = (($Row == 'a') ? 'b' : 'a');
+		$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 			<tr class="row<?=$Row?>">
 				<td><?=Users::format_username($ID, true, true, true, true)?></td>
