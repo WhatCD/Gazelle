@@ -135,7 +135,8 @@ class Torrents {
 			foreach ($Artists as $GroupID => $Data) {
 				if (array_key_exists(1, $Data) || array_key_exists(4, $Data) || array_key_exists(6, $Data)) {
 					$Found[$GroupID]['Artists'] = isset($Data[1]) ? $Data[1] : null; // Only use main artists (legacy)
-					for ($i = 1; $i <= 6; $i++) {
+					// TODO: find a better solution than this crap / rewrite the artist system
+					for ($i = 1; $i <= 7; $i++) {
 						$Found[$GroupID]['ExtendedArtists'][$i] = isset($Data[$i]) ? $Data[$i] : null;
 					}
 				}

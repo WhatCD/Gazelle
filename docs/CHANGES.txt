@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-07-30 by Y
+Collage API additions. 
+
 2013-07-23 by draculesti
 New mod button to generate random user passwords
 
