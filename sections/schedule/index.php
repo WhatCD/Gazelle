@@ -770,7 +770,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 			UPDATE users_info AS i
 				JOIN users_main AS m ON m.ID = i.UserID
 			SET	m.can_leech = '0',
-				i.AdminComment = CONCAT('$sqltime - Leeching ability disabled by ratio watch system - required ratio: ', m.RequiredRatio,'', i.AdminComment)
+				i.AdminComment = CONCAT('$sqltime - Leeching ability disabled by ratio watch system - required ratio: ', m.RequiredRatio, '\n\n', i.AdminComment)
 			WHERE m.ID IN(".implode(',', $UserIDs).')');
 
 
