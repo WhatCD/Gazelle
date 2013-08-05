@@ -6,6 +6,20 @@ if (!check_perms('users_view_email')) {
 list ($Page, $Limit) = Format::page_limit(EMAILS_PER_PAGE);
 
 View::show_header('Manage email blacklist');
+$Where = "";
+if (!empty($_POST['email'])) {
+	$Email = db_string($_POST['email']);
+	$Where .= " WHERE eb.Email LIKE '%$Email%'";
+}
+if (!empty($_POST['comment'])) {
+	$Comment = db_string($_POST['comment']);
+	if (!empty($Where)) {
+		$Where .= " AND";
+	} else {
+		$Where .= " WHERE";
+	}
+	$Where .= " eb.Comment LIKE '%$Comment%'";
+}
 $DB->query("
 	SELECT
 		SQL_CALC_FOUND_ROWS
@@ -15,6 +29,7 @@ $DB->query("
 		eb.Email,
 		eb.Comment
 	FROM email_blacklist AS eb
+	$Where
 	ORDER BY eb.Time DESC
 	LIMIT $Limit");
 $Results = $DB->to_array(false, MYSQLI_ASSOC, false);
@@ -24,6 +39,13 @@ list ($NumResults) = $DB->next_record();
 <div class="header">
 	<h2>Email Blacklist</h2>
 </div>
+<br />
+<form action="tools.php" method="POST">
+	<input type="hidden" name="action" value="email_blacklist" />
+	<input type="text" name="email" size="30" placeholder="Email"/>
+	<input type="text" name="comment" size="60" placeholder="Comment"/>
+	<input type="submit" value="Search" />
+</form>
 <div class="linkbox pager">
 	<br />
 	<?
