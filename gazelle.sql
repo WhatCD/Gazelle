@@ -252,6 +252,7 @@ CREATE TABLE `do_not_upload` (
   `Comment` varchar(255) COLLATE utf8_bin NOT NULL,
   `UserID` int(10) NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Sequence` mediumint(8) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `Time` (`Time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

@@ -99,7 +99,7 @@ $DB->query('
 		d.Comment,
 		d.Time
 	FROM do_not_upload as d
-	ORDER BY d.Time DESC');
+	ORDER BY d.Sequence');
 $DNU = $DB->to_array();
 list($Name, $Comment, $Updated) = reset($DNU);
 reset($DNU);

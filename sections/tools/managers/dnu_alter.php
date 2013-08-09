@@ -5,7 +5,14 @@ if (!check_perms('admin_dnu')) {
 
 authorize();
 
-if ($_POST['submit'] == 'Delete') { //Delete
+if($_POST['submit'] == 'Reorder') { // Reorder
+    foreach ($_POST['item'] as $Position => $Item) {
+    	$Position = db_string($Position);
+    	$Item = db_string($Item);
+        $DB->query('UPDATE `do_not_upload` SET `Sequence` = ' . $Position . ' WHERE `id` = '.  $Item);
+    }
+
+} else if ($_POST['submit'] == 'Delete') { //Delete
 	if (!is_number($_POST['id']) || $_POST['id'] == '') {
 		error(0);
 	}
@@ -38,9 +45,9 @@ if ($_POST['submit'] == 'Delete') { //Delete
 	} else { //Create
 		$DB->query("
 			INSERT INTO do_not_upload
-				(Name, Comment, UserID, Time)
+				(Name, Comment, UserID, Time, Sequence)
 			VALUES
-				('$P[name]','$P[comment]','$LoggedUser[ID]','".sqltime()."')");
+				('$P[name]','$P[comment]','$LoggedUser[ID]','".sqltime()."', 9999)");
 	}
 }
 

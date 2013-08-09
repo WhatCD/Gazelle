@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-08-08 by Squiffy
+Drag and Drop ordering on the Do Not Upload page in toolbox
+
 2013-08-05 by Ajax
 Search email blacklist
 
