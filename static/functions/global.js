@@ -1,13 +1,16 @@
-function toggleChecks(formElem,masterElem) {
-	if (masterElem.checked) {
-		checked = true;
+/**
+ * Check or uncheck checkboxes in formElem
+ * If masterElem is false, toggle each box, otherwise use masterElem's status on all boxes
+ * If elemSelector is false, act on all checkboxes in formElem
+ */
+function toggleChecks(formElem, masterElem, elemSelector) {
+	elemSelector = elemSelector || 'input:checkbox';
+	if (masterElem) {
+		$('#'+formElem+' '+elemSelector).prop('checked', masterElem.checked);
 	} else {
-		checked = false;
-	}
-	for (s = 0; s < $('#'+formElem).raw().elements.length; s++) {
-		if ($('#'+formElem).raw().elements[s].type == "checkbox") {
-			$('#'+formElem).raw().elements[s].checked=checked;
-		}
+		$('#'+formElem+' '+elemSelector).each(function() {
+			this.checked = !this.checked;
+		})
 	}
 }
 

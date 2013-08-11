@@ -228,7 +228,7 @@ if (empty($Results)) {
 <form class="manage_form" name="torrents" id="notificationform_<?=$FilterID?>" action="">
 <table class="torrent_table cats checkboxes border">
 	<tr class="colhead">
-		<td style="text-align: center;"><input type="checkbox" name="toggle" onclick="toggleBoxes(<?=$FilterID?>, this.checked)" /></td>
+		<td style="text-align: center;"><input type="checkbox" name="toggle" onclick="toggleChecks('notificationform_<?=$FilterID?>', this, '.notify_box')" /></td>
 		<td class="small cats_col"></td>
 		<td style="width: 100%;">Name<?=$TorrentCount <= NOTIFICATIONS_MAX_SLOWSORT ? ' / <a href="'.header_link('year').'">Year</a>' : ''?></td>
 		<td>Files</td>
