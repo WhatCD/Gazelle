@@ -86,7 +86,7 @@ foreach ($TorrentList as $Torrent) {
 	unset($File);
 	$FileList = implode('|||', $FileList);
 	$Userinfo = Users::user_info($Torrent['UserID']);
-	$Reports = get_reports($Torrent['ID']);
+	$Reports = Torrents::get_reports($Torrent['ID']);
 	if (count($Reports) > 0) {
 		$Torrent['Reported'] = true;
 	} else {

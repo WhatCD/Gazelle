@@ -1071,7 +1071,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 
 			//Get report info for each torrent, use the cache if available, if not, add to it.
 			$Reported = false;
-			$Reports = get_reports($TorrentID);
+			$Reports = Torrents::get_reports($TorrentID);
 			if (count($Reports) > 0) {
 				$Reported = true;
 			}

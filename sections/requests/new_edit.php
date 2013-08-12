@@ -171,13 +171,13 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 ?>
 						<input type="text" id="artist" name="artists[]" <? Users::has_autocomplete_enabled('other'); ?> size="45" value="<?=display_str($Artist['name']) ?>" />
 						<select id="importance" name="importance[]" >
-							<option value="1"<?=($Importance === '1' ? ' selected="selected"' : '')?>>Main</option>
-							<option value="2"<?=($Importance === '2' ? ' selected="selected"' : '')?>>Guest</option>
-							<option value="4"<?=($Importance === '4' ? ' selected="selected"' : '')?>>Composer</option>
-							<option value="5"<?=($Importance === '5' ? ' selected="selected"' : '')?>>Conductor</option>
-							<option value="6"<?=($Importance === '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
-							<option value="3"<?=($Importance === '3' ? ' selected="selected"' : '')?>>Remixer</option>
-							<option value="7"<?=($Importance === '7' ? ' selected="selected"' : '')?>>Producer</option>
+							<option value="1"<?=($Importance == '1' ? ' selected="selected"' : '')?>>Main</option>
+							<option value="2"<?=($Importance == '2' ? ' selected="selected"' : '')?>>Guest</option>
+							<option value="4"<?=($Importance == '4' ? ' selected="selected"' : '')?>>Composer</option>
+							<option value="5"<?=($Importance == '5' ? ' selected="selected"' : '')?>>Conductor</option>
+							<option value="6"<?=($Importance == '6' ? ' selected="selected"' : '')?>>DJ / Compiler</option>
+							<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
+							<option value="7"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
 						</select>
 						<? if ($First) { ?><a href="#" onclick="AddArtistField(); return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField(); return false;" class="brackets">&minus;</a><? } $First = false; ?>
 						<br />

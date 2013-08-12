@@ -105,7 +105,7 @@ if ($CollageCategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
 					'leechers'                => (int)$Torrent['Leechers'],
 					'snatched'                => (int)$Torrent['Snatched'],
 					'freeTorrent'             => ($Torrent['FreeTorrent'] == 1),
-					'reported'                => $Torrent['Reported'],
+					'reported'                => (count(Torrents::get_reports((int)$Torrent['ID'])) > 0),
 					'time'                    => $Torrent['Time']
 				);
 			}

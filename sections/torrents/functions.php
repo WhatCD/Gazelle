@@ -259,28 +259,6 @@ function get_group_requests($GroupID) {
 	return $Requests['matches'];
 }
 
-//Used to get reports info on a unison cache in both browsing pages and torrent pages.
-function get_reports($TorrentID) {
-	global $Cache, $DB;
-	$Reports = $Cache->get_value("reports_torrent_$TorrentID");
-	if ($Reports === false) {
-		$DB->query("
-			SELECT
-				r.ID,
-				r.ReporterID,
-				r.Type,
-				r.UserComment,
-				r.ReportedTime
-			FROM reportsv2 AS r
-			WHERE TorrentID = $TorrentID
-				AND Type != 'edited'
-				AND Status != 'Resolved'");
-		$Reports = $DB->to_array();
-		$Cache->cache_value("reports_torrent_$TorrentID", $Reports, 0);
-	}
-	return $Reports;
-}
-
 //Used by both sections/torrents/details.php and sections/reportsv2/report.php
 function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $GroupCategoryID, $ReleaseType, $TorrentList, $Types, $Text, $Username, $ReportedTimes) {
 

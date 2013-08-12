@@ -538,7 +538,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 
 		//Get report info, use the cache if available, if not, add to it.
 		$Reported = false;
-		$Reports = get_reports($TorrentID);
+		$Reports = Torrents::get_reports($TorrentID);
 		if (count($Reports) > 0) {
 			$Reported = true;
 		}

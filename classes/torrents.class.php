@@ -932,5 +932,26 @@ class Torrents {
 		}
 		return $EditionName;
 	}
+
+	//Used to get reports info on a unison cache in both browsing pages and torrent pages.
+	public static function get_reports($TorrentID) {
+		$Reports = G::$Cache->get_value("reports_torrent_$TorrentID");
+		if ($Reports === false) {
+			G::$DB->query("
+				SELECT
+					r.ID,
+					r.ReporterID,
+					r.Type,
+					r.UserComment,
+					r.ReportedTime
+				FROM reportsv2 AS r
+				WHERE TorrentID = $TorrentID
+					AND Type != 'edited'
+					AND Status != 'Resolved'");
+			$Reports = G::$DB->to_array();
+			G::$Cache->cache_value("reports_torrent_$TorrentID", $Reports, 0);
+		}
+		return $Reports;
+	}
 }
 ?>
