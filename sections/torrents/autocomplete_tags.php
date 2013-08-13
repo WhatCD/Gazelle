@@ -24,10 +24,11 @@ if (!$AutoSuggest) {
 }
 
 $Matched = 0;
-$Suggestions = array();
 $ArtistIDs = array();
-$Response = array();
-$Response['query'] = $FullName;
+$Response = array(
+	'query' => $FullName,
+	'suggestions' => array()
+);
 foreach ($AutoSuggest as $Suggestion) {
 	list($Name) = $Suggestion;
 	if (stripos($Name, $FullName) === 0) {

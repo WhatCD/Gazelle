@@ -29,6 +29,9 @@ abstract class IRC_BOT {
 	public $Restart = 0; //Die by default
 
 	public function __construct() {
+		if (isset($_SERVER['HOME']) && is_dir($_SERVER['HOME']) && getcwd() != $_SERVER['HOME']) {
+			chdir($_SERVER['HOME']);
+		}
 		//ini_set('memory_limit', '12M');
 		restore_error_handler(); //Avoid PHP error logging
 		set_time_limit(0);

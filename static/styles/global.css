@@ -547,3 +547,7 @@ tr.torrent .bookmark>a:after {
 	width: 250px;
 	display: block;
 }
+
+.setting_description p {
+	margin-top: 1em;
+}

@@ -24,7 +24,6 @@ switch ($Type) {
 	case 'artists':
 ?>
 	<Url type="text/html" method="get" template="http<?=($SSL?'s':'')?>://<?=SITE_URL?>/artist.php?artistname={searchTerms}"></Url>
-	<Url type="application/x-suggestions+json" template="http<?=($SSL?'s':'')?>://<?=SITE_URL?>/artist.php?action=autocomplete&amp;name={searchTerms}" />
 	<moz:SearchForm>http<?=($SSL?'s':'')?>://<?=SITE_URL?>/torrents.php?action=advanced</moz:SearchForm>
 <?
 		break;
