@@ -24,18 +24,11 @@ $UserID = $LoggedUser['ID'];
 header('Content-Type: application/json; charset=utf-8');
 //	Enforce rate limiting everywhere except info.php
 if (!in_array($UserID, $UserExceptions) && isset($_GET['action']) && in_array($_GET['action'], $LimitedPages)) {
-	if (!$userrequests = $Cache->get_value('ajax_requests_'.$UserID)) {
-		$userrequests = 0;
+	if (!$UserRequests = $Cache->get_value('ajax_requests_'.$UserID)) {
+		$UserRequests = 0;
 		$Cache->cache_value('ajax_requests_'.$UserID, '0', $AJAX_LIMIT[1]);
 	}
-	if ($userrequests > $AJAX_LIMIT[0]) {
-		print json_encode(
-			array(
-				'status' => 'failure',
-				'response' => 'Rate limit exceeded.'
-				)
-			);
-
+	if ($UserRequests > $AJAX_LIMIT[0]) {
 		json_die("failure", "rate limit exceeded");
 	} else {
 		$Cache->increment_value('ajax_requests_'.$UserID);
