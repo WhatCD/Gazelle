@@ -8,7 +8,7 @@ This class handles encryption and decryption, that's all folks.
 |*************************************************************************/
 
 if (!extension_loaded('mcrypt')) {
-	error('Mcrypt Extension not loaded.');
+	die('Mcrypt Extension not loaded.');
 }
 
 class CRYPT {

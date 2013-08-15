@@ -139,7 +139,7 @@ class VALIDATE {
 						$MinLength = 1;
 					}
 
-					if (!preg_match('/^'.USERNAME_REGEX.'$/i', $ValidateVar)) {
+					if (!preg_match(USERNAME_REGEX, $ValidateVar)) {
 						return $Field['ErrorMessage'];
 					} elseif (strlen($ValidateVar) > $MaxLength) {
 						return $Field['ErrorMessage'];

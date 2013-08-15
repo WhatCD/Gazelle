@@ -1442,7 +1442,7 @@ CREATE TABLE `users_info` (
   `ResetExpires` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `JoinDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Inviter` int(10) DEFAULT NULL,
-  `BitcoinAddress` tinytext,
+  `BitcoinAddress` varchar(34) DEFAULT NULL,
   `WarnedTimes` int(2) NOT NULL DEFAULT '0',
   `DisableAvatar` enum('0','1') NOT NULL DEFAULT '0',
   `DisableInvites` enum('0','1') NOT NULL DEFAULT '0',
@@ -1478,7 +1478,6 @@ CREATE TABLE `users_info` (
   KEY `RatioWatchEnds` (`RatioWatchEnds`),
   KEY `RatioWatchDownload` (`RatioWatchDownload`),
   KEY `BitcoinAddress` (`BitcoinAddress`(4)),
-  KEY `BitcoinAddress_2` (`BitcoinAddress`(4)),
   KEY `AuthKey` (`AuthKey`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
