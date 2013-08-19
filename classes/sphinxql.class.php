@@ -65,17 +65,26 @@ class Sphinxql extends mysqli {
 	 * Connect the Sphinxql object to the Sphinx server
 	 */
 	public function sphconnect() {
-		if (!$this->Connected) {
-			global $Debug;
-			$Debug->set_flag('Connecting to Sphinx server '.$this->Ident);
+		if ($this->Connected || $this->connect_errno) {
+			return;
+		}
+		global $Debug;
+		$Debug->set_flag("Connecting to Sphinx server $this->Ident");
+		for ($Attempt = 0; $Attempt < 3; $Attempt++) {
 			parent::__construct($this->Server, '', '', '', $this->Port, $this->Socket);
-			if ($this->connect_error) {
-				$Errno = $this->connect_errno;
-				$Error = $this->connect_error;
-				$this->error("Connection failed. ".strval($Errno)." (".strval($Error).")");
+			if (!$this->connect_errno) {
+				$this->Connected = true;
+				break;
 			}
-			$Debug->set_flag('Connected to Sphinx server '.$this->Ident);
-			$this->Connected = true;
+			sleep(1);
+		}
+		if ($this->connect_errno) {
+			$Errno = $this->connect_errno;
+			$Error = $this->connect_error;
+			$this->error("Connection failed. (".strval($Errno).": ".strval($Error).")");
+			$Debug->set_flag("Could not connect to Sphinx server $this->Ident. (".strval($Errno).": ".strval($Error).")");
+		} else {
+			$Debug->set_flag("Connected to Sphinx server $this->Ident");
 		}
 	}
 
