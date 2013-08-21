@@ -5,11 +5,17 @@
 /**
  * Return true if the given string is numeric.
  *
- * @param string $Str
- * @return true if $Str numeric
+ * @param mixed $Str
+ * @return bool
  */
 if (PHP_INT_SIZE === 4) {
 	function is_number($Str) {
+		if ($Str === null || $Str === '') {
+			return false;
+		}
+		if (is_int($Str)) {
+			return true;
+		}
 		if ($Str[0] == '-' || $Str[0] == '+') { // Leading plus/minus signs are ok
 			$Str[0] = 0;
 		}
