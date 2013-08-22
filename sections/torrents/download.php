@@ -183,4 +183,4 @@ header('Content-disposition: attachment; filename="'.$FileName.'"');
 
 echo TorrentsDL::get_file($Contents, ANNOUNCE_URL."/$TorrentPass/announce");
 
-define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);
+define('SKIP_NO_CACHE_HEADERS', 1);

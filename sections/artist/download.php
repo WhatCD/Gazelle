@@ -180,5 +180,5 @@ if (!isset($LoggedUser['Collector']) || $LoggedUser['Collector'] != $Settings) {
 	Users::update_site_options($LoggedUser['ID'], array('Collector' => $Settings));
 }
 
-define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);
+define('SKIP_NO_CACHE_HEADERS', 1);
 ?>

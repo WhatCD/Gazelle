@@ -2,8 +2,8 @@
 // Functions and headers needed by the image proxy
 error_reporting(E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR);
 
-if (isset($_SERVER['http_if_modified_since'])) {
-	header("Status: 304 Not Modified");
+if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+	header("HTTP/1.1 304 Not Modified");
 	die();
 }
 
@@ -97,5 +97,6 @@ function image_height($Type, $Data) {
 	}
 }
 
+define('SKIP_NO_CACHE_HEADERS', 1);
 require('classes/script_start.php'); // script_start contains all we need and includes sections/image/index.php
 ?>

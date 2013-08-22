@@ -173,8 +173,9 @@ $Badges = (($Donor) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/sy
 
 $Badges .= (($Warned != '0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" />' : '');
 $Badges .= (($Enabled == '1' || $Enabled == '0' || !$Enabled) ? '' : '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" />');
+<<<<<<< HEAD
 
-View::show_header($Username, 'user,bbcode,requests,lastfm');
+View::show_header($Username, 'user,bbcode,requests,lastfm,info_paster');
 
 ?>
 <div class="thin">
@@ -242,27 +243,27 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 		<div class="box box_info box_userinfo_stats">
 			<div class="head colhead_dark">Stats</div>
 			<ul class="stats nobullet">
-				<li>Joined: <?=$JoinedDate?></li>
+				<li id="ustats_joined">Joined: <?=$JoinedDate?></li>
 <?	if (($Override = check_paranoia_here('lastseen'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Last seen: <?=$LastAccess?></li>
+				<li id="ustats_last"<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Last seen: <?=$LastAccess?></li>
 <?	}
 	if (($Override = check_paranoia_here('uploaded'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
+				<li id="ustats_upload"<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
 <?	}
 	if (($Override = check_paranoia_here('downloaded'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
+				<li id="ustats_download"<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
 <?	}
 	if (($Override = check_paranoia_here('ratio'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
+				<li id="ustats_ratio"<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
 <?	}
 	if (($Override = check_paranoia_here('requiredratio')) && isset($RequiredRatio)) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
+				<li id="ustats_required" <?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Required ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
 <?	}
 	if ($OwnProfile || ($Override = check_paranoia_here(false)) || check_perms('users_mod')) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
+				<li id="ustats_tokens"<?=($Override === 2 ? ' class="paranoia_override"' : '')?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
 <?	}
 	if (($OwnProfile || check_perms('users_mod')) && $Warned != '0000-00-00 00:00:00') { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Warning expires in: <?=time_diff((date('Y-m-d H:i', strtotime($Warned))))?></li>
+				<li id="ustats_warning"<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Warning expires in: <?=time_diff((date('Y-m-d H:i', strtotime($Warned))))?></li>
 <?	} ?>
 			</ul>
 		</div>
@@ -344,26 +345,26 @@ $OverallRank = UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsR
 			<div class="head colhead_dark">Percentile rankings (hover for values)</div>
 			<ul class="stats nobullet">
 <? if (($Override = check_paranoia_here('uploaded'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
+				<li id="percent_up"<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
 <? } ?>
 <? if (($Override = check_paranoia_here('downloaded'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
+				<li id="percent_down"<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
 <? } ?>
 <? if (($Override = check_paranoia_here('uploads+'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($Uploads)?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
+				<li id="percent_torrup"<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($Uploads)?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
 <? } ?>
 <? if (($Override = check_paranoia_here('requestsfilled_count'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($RequestsFilled)?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
+				<li id="percent_fill"<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($RequestsFilled)?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
 <? } ?>
 <? if (($Override = check_paranoia_here('requestsvoted_bounty'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
+				<li id="percent_spent"<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
 <? } ?>
-				<li title="<?=number_format($ForumPosts)?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
+				<li id="percent_posts"title="<?=number_format($ForumPosts)?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
 <? if (($Override = check_paranoia_here('artistsadded'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($ArtistsAdded)?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
+				<li id="percent_artists"<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($ArtistsAdded)?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
 <? } ?>
 <? if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfilled_count', 'requestsvoted_bounty', 'artistsadded'))) { ?>
-				<li><strong>Overall rank: <?=$OverallRank === false ? 'Server busy' : number_format($OverallRank)?></strong></li>
+				<li id="percent_overall"><strong>Overall rank: <?=$OverallRank === false ? 'Server busy' : number_format($OverallRank)?></strong></li>
 <? } ?>
 			</ul>
 		</div>
@@ -406,26 +407,26 @@ $OverallRank = UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsR
 		<div class="head colhead_dark">History</div>
 		<ul class="stats nobullet">
 <?	if (check_perms('users_view_email', $Class)) { ?>
-			<li>Emails: <?=number_format($EmailChanges)?> <a href="userhistory.php?action=email2&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" class="brackets">Legacy view</a></li>
+			<li id="hist_emails">Emails: <?=number_format($EmailChanges)?> <a href="userhistory.php?action=email2&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" class="brackets">Legacy view</a></li>
 <?
 	}
 	if (check_perms('users_view_ips', $Class)) {
 ?>
-			<li>IPs: <?=number_format($IPChanges)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View users</a></li>
+			<li id="hist_ips">IPs: <?=number_format($IPChanges)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View users</a></li>
 <?		if (check_perms('users_view_ips', $Class) && check_perms('users_mod', $Class)) { ?>
-			<li>Tracker IPs: <?=number_format($TrackerIPs)?> <a href="userhistory.php?action=tracker_ips&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+			<li id="hist_trackips">Tracker IPs: <?=number_format($TrackerIPs)?> <a href="userhistory.php?action=tracker_ips&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?		} ?>
 <?
 	}
 	if (check_perms('users_view_keys', $Class)) {
 ?>
-			<li>Passkeys: <?=number_format($PasskeyChanges)?> <a href="userhistory.php?action=passkeys&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+			<li id="hist_passkey">Passkeys: <?=number_format($PasskeyChanges)?> <a href="userhistory.php?action=passkeys&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?
 	}
 	if (check_perms('users_mod', $Class)) {
 ?>
-			<li>Passwords: <?=number_format($PasswordChanges)?> <a href="userhistory.php?action=passwords&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
-			<li>Stats: N/A <a href="userhistory.php?action=stats&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+			<li id="hist_passwords">Passwords: <?=number_format($PasswordChanges)?> <a href="userhistory.php?action=passwords&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+			<li id="hist_stats">Stats: N/A <a href="userhistory.php?action=stats&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?
 
 	}
@@ -436,7 +437,7 @@ $OverallRank = UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsR
 		<div class="box box_info box_userinfo_personal">
 			<div class="head colhead_dark">Personal</div>
 			<ul class="stats nobullet">
-				<li>Class: <?=$ClassLevels[$Class]['Name']?></li>
+				<li id="personal_class">Class: <?=$ClassLevels[$Class]['Name']?></li>
 <?
 $UserInfo = Users::user_info($UserID);
 if (!empty($UserInfo['ExtraClasses'])) {
@@ -464,9 +465,9 @@ if ($ParanoiaLevel == 0) {
 	$ParanoiaLevelText = 'Very high';
 }
 ?>
-				<li>Paranoia level: <span title="<?=$ParanoiaLevel?>"><?=$ParanoiaLevelText?></span></li>
+				<li id="personal_paranoia">Paranoia level: <span title="<?=$ParanoiaLevel?>"><?=$ParanoiaLevelText?></span></li>
 <?	if (check_perms('users_view_email', $Class) || $OwnProfile) { ?>
-				<li>Email: <a href="mailto:<?=display_str($Email)?>"><?=display_str($Email)?></a>
+				<li id="personal_email">Email: <a href="mailto:<?=display_str($Email)?>"><?=display_str($Email)?></a>
 <?		if (check_perms('users_view_email', $Class)) { ?>
 					<a href="user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a>
 <?		} ?>
@@ -475,14 +476,14 @@ if ($ParanoiaLevel == 0) {
 
 if (check_perms('users_view_ips', $Class)) {
 ?>
-				<li>IP: <?=Tools::display_ip($IP)?></li>
-				<li>Host: <?=Tools::get_host_by_ajax($IP)?></li>
+				<li id="personal_ip">IP: <?=Tools::display_ip($IP)?></li>
+				<li id="personal_host">Host: <?=Tools::get_host_by_ajax($IP)?></li>
 <?
 }
 
 if (check_perms('users_view_keys', $Class) || $OwnProfile) {
 ?>
-				<li>Passkey: <a href="#" id="passkey" onclick="togglePassKey('<?=display_str($torrent_pass)?>'); return false;" class="brackets">View</a></li>
+				<li id="personal_passkey">Passkey: <a href="#" id="passkey" onclick="togglePassKey('<?=display_str($torrent_pass)?>'); return false;" class="brackets">View</a></li>
 <? }
 if (check_perms('users_view_invites')) {
 	if (!$InviterID) {
@@ -492,8 +493,8 @@ if (check_perms('users_view_invites')) {
 	}
 
 ?>
-				<li>Invited by: <?=$Invited?></li>
-				<li>Invites: <?
+				<li id="personal_inviter">Invited by: <?=$Invited?></li>
+				<li id="personal_invites">Invites: <?
 				$DB->query("
 					SELECT COUNT(InviterID)
 					FROM invites
@@ -518,7 +519,7 @@ if (!isset($SupportFor)) {
 }
 if ($Override = check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
 	?>
-		<li<?=(($Override === 2 || $SupportFor) ? ' class="paranoia_override"' : '')?>>Clients: <?
+		<li id="personal_clients"<?=(($Override === 2 || $SupportFor) ? ' class="paranoia_override"' : '')?>>Clients: <?
 		$DB->query("
 			SELECT DISTINCT useragent
 			FROM xbt_files_users
@@ -1306,6 +1307,12 @@ if (check_perms('users_mod', $Class)) { ?>
 				</td>
 			</tr>
 
+			<tr>
+				<td class="label">Broadcast to #fbi:</td>
+				<td>
+					<button type="button" id="paster">Paste info</button>
+				</td>
+			</tr>
 			<tr>
 				<td align="right" colspan="2">
 					<input type="submit" value="Save changes" />

@@ -22,7 +22,7 @@ foreach ($ExtraTorrents as $ExtraTorrent) {
 	foreach ($ExtraFileList as $ExtraFile) {
 		list($ExtraSize, $ExtraName) = $ExtraFile;
 
-		check_file($ExtraType, $ExtraName);
+		check_file($Type, $ExtraName);
 
 		// Make sure the file name is not too long
 		if (mb_strlen($ExtraName, 'UTF-8') + mb_strlen($ExtraDirName, 'UTF-8') + 1 > MAX_FILENAME_LENGTH) {

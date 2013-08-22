@@ -380,7 +380,7 @@ upon hit rather than being browser cached for changing content.
 
 Old versions of Internet Explorer choke when downloading binary files over HTTPS with disabled cache.
 Define the following constant in files that handle file downloads */
-if (!defined('IE_WORKAROUND_NO_CACHE_HEADERS')) {
+if (!defined('SKIP_NO_CACHE_HEADERS')) {
 	header('Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0');
 	header('Pragma: no-cache');
 }

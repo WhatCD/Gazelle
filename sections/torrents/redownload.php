@@ -88,4 +88,4 @@ while (list($Downloads, $GroupIDs) = $Collector->get_downloads('TorrentID')) {
 }
 $Collector->finalize(false);
 
-define('IE_WORKAROUND_NO_CACHE_HEADERS', 1);
+define('SKIP_NO_CACHE_HEADERS', 1);
