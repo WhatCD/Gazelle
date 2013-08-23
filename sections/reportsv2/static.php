@@ -535,7 +535,7 @@ if (count($Reports) === 0) {
 						</tr>
 						<tr>
 							<td class="label">
-								<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve</a>
+								<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve:</a>
 							</td>
 							<td colspan="3">
 								<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>);">
@@ -566,7 +566,7 @@ if (count($Reports) === 0) {
 <?		} ?>
 										</select>
 									</span>
-									<span title="Remove upload privileges?">
+									<span>
 										<label for="upload<?=$ReportID?>"><strong>Remove upload privileges</strong></label>
 										<input type="checkbox" name="upload" id="upload<?=$ReportID?>" />
 									</span>

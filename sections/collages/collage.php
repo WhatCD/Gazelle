@@ -61,7 +61,7 @@ if (empty($CollageSubscriptions)) {
 	$CollageSubscriptions = array();
 }
 
-if (in_array($CollageID, $CollagepSubscriptions)) {
+if (in_array($CollageID, $CollageSubscriptions)) {
 	$Cache->delete_value('collage_subs_user_new_'.$LoggedUser['ID']);
 }
 $DB->query("

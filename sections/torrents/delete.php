@@ -11,8 +11,8 @@ $DB->query("
 		t.Time,
 		COUNT(x.uid)
 	FROM torrents AS t
-		LEFT JOIN xbt_snatched AS x ON x.fid=t.ID
-	WHERE t.ID=$TorrentID
+		LEFT JOIN xbt_snatched AS x ON x.fid = t.ID
+	WHERE t.ID = $TorrentID
 	GROUP BY t.UserID");
 
 if (!$DB->has_results()) {
@@ -112,11 +112,11 @@ if (check_perms('admin_reports')) {
 				t.UserID AS UploaderID,
 				uploader.Username
 			FROM torrents AS t
-				LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-				LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-				LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-				LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
-			WHERE t.ID=".$TorrentID);
+				LEFT JOIN torrents_group AS tg ON tg.ID = t.GroupID
+				LEFT JOIN torrents_artists AS ta ON ta.GroupID = tg.ID AND ta.Importance = '1'
+				LEFT JOIN artists_alias AS aa ON aa.AliasID = ta.AliasID
+				LEFT JOIN users_main AS uploader ON uploader.ID = t.UserID
+			WHERE t.ID = $TorrentID");
 
 	if (!$DB->has_results()) {
 		die();
@@ -186,9 +186,9 @@ if (check_perms('admin_reports')) {
 <?			$DB->query("
 				SELECT r.ID
 				FROM reportsv2 AS r
-					LEFT JOIN torrents AS t ON t.ID=r.TorrentID
+					LEFT JOIN torrents AS t ON t.ID = r.TorrentID
 				WHERE r.Status != 'Resolved'
-					AND t.GroupID=$GroupID");
+					AND t.GroupID = $GroupID");
 			$GroupOthers = ($DB->has_results());
 
 			if ($GroupOthers > 0) { ?>
@@ -200,9 +200,9 @@ if (check_perms('admin_reports')) {
 			$DB->query("
 				SELECT t.UserID
 				FROM reportsv2 AS r
-					JOIN torrents AS t ON t.ID=r.TorrentID
+					JOIN torrents AS t ON t.ID = r.TorrentID
 				WHERE r.Status != 'Resolved'
-					AND t.UserID=$UploaderID");
+					AND t.UserID = $UploaderID");
 			$UploaderOthers = ($DB->has_results());
 
 			if ($UploaderOthers > 0) { ?>
@@ -217,14 +217,14 @@ if (check_perms('admin_reports')) {
 					um.Username,
 					req.TimeFilled
 				FROM requests AS req
-					JOIN users_main AS um ON um.ID=req.FillerID
-				AND req.TorrentID=$TorrentID");
+					JOIN users_main AS um ON um.ID = req.FillerID
+				AND req.TorrentID = $TorrentID");
 			$Requests = ($DB->has_results());
 			if ($Requests > 0) {
 				while (list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 		?>
 						<div style="text-align: right;">
-								<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=viewrequest&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?>
+							<strong class="important_text"><a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a> used this torrent to fill <a href="requests.php?action=viewrequest&amp;id=<?=$RequestID?>">this request</a> <?=time_diff($FilledTime)?></strong>
 						</div>
 <?				}
 			}
@@ -235,10 +235,10 @@ if (check_perms('admin_reports')) {
 <?				// END REPORTED STUFF :|: BEGIN MOD STUFF ?>
 				<tr>
 					<td class="label">
-						<a href="javascript:Load('<?=$ReportID?>')">Resolve</a>
+						<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve:</a>
 					</td>
 					<td colspan="3">
-						<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>)">
+						<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>);">
 <?
 $TypeList = $Types['master'] + $Types[$CategoryID];
 $Priorities = array();
@@ -256,8 +256,8 @@ foreach ($TypeList as $IType => $Data) {
 						</select>
 						<span id="options<?=$ReportID?>">
 							<span title="Delete torrent?">
-								<strong>Delete</strong>
-								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete'] ? ' checked="checked"' : '')?> />
+								<label><strong>Delete</strong>
+								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete'] ? ' checked="checked"' : '')?> /></label>
 							</span>
 							<span title="Warning length in weeks">
 								<strong>Warning</strong>
@@ -267,20 +267,20 @@ foreach ($TypeList as $IType => $Data) {
 <?	} ?>
 								</select>
 							</span>
-							<span title="Remove upload privileges?">
-								<strong>Upload</strong>
-								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload'] ? ' checked="checked"' : '')?> />
+							<span>
+								<label><strong>Remove upload privileges</strong>
+								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload'] ? ' checked="checked"' : '')?> /></label>
 							</span>
 						</span>
 					</td>
 				</tr>
 				<tr>
-					<td class="label">PM uploader</td>
+					<td class="label">PM uploader:</td>
 					<td colspan="3">
-						<span title="Appended to the regular message unless using &quot;Send Now&quot;.">
+						<span title="Appended to the regular message unless using &quot;Send now&quot;.">
 							<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 						</span>
-						<input type="button" value="Send Now" onclick="SendPM(<?=$ReportID?>)" />
+						<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>);" />
 					</td>
 				</tr>
 				<tr>

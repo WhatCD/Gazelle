@@ -55,7 +55,7 @@ if ($Search != '') {
 	$SQL .= "%' ";
 }
 
-$SQL.= "
+$SQL .= "
 	ORDER BY $Order $Way
 	LIMIT $Limit ";
 $RS = $DB->query($SQL);
@@ -81,16 +81,16 @@ $DB->set_query_id($RS);
 			</div>
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
-					<td class="label"><strong>Search for:</strong></td>
+					<td class="label"><label for="search"><strong>Search for:</strong></label></td>
 					<td colspan="3">
-						<input type="text" name="search" size="70" value="<?=display_str($_GET['search'])?>" />
+						<input type="text" name="search" id="search" size="70" value="<?=display_str($_GET['search'])?>" />
 					</td>
 				</tr>
 				<tr>
 					<td class="label"><strong>Search in:</strong></td>
 					<td>
-						<input type="radio" name="type" value="Title" <? if ($Type == 'w.Title') { echo 'checked="checked" '; } ?>/> Title
-						<input type="radio" name="type" value="Body" <? if ($Type == 'w.Body') { echo 'checked="checked" '; } ?>/> Body
+						<label><input type="radio" name="type" value="Title" <? if ($Type == 'w.Title') { echo 'checked="checked" '; } ?>/> Title</label>
+						<label><input type="radio" name="type" value="Body" <? if ($Type == 'w.Body') { echo 'checked="checked" '; } ?>/> Body</label>
 					</td>
 					<td class="label"><strong>Order by:</strong></td>
 					<td>
@@ -115,7 +115,8 @@ $DB->set_query_id($RS);
 		</form>
 	</div>
 	<br />
-<?	$Pages = Format::get_pages($Page, $NumResults, ARTICLES_PER_PAGE);
+<?
+	$Pages = Format::get_pages($Page, $NumResults, ARTICLES_PER_PAGE);
 	if ($Pages) { ?>
 	<div class="linkbox pager"><?=($Pages)?></div>
 <?	} ?>
@@ -125,13 +126,13 @@ $DB->set_query_id($RS);
 		<td>Last updated on</td>
 		<td>Last edited by</td>
 	</tr>
-<? while (list($ID, $Title, $Date, $UserID) = $DB->next_record()) { ?>
+<?	while (list($ID, $Title, $Date, $UserID) = $DB->next_record()) { ?>
 	<tr>
 		<td><a href="wiki.php?action=article&amp;id=<?=$ID?>"><?=$Title?></a></td>
 		<td><?=$Date?></td>
 		<td><?=Users::format_username($UserID, false, false, false)?></td>
 	</tr>
-<? } ?>
+<?	} ?>
 </table>
 	<div class="linkbox"><?=$Pages?></div>
 </div>

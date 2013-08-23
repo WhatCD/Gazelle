@@ -173,7 +173,6 @@ $Badges = (($Donor) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/sy
 
 $Badges .= (($Warned != '0000-00-00 00:00:00') ? '<img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" />' : '');
 $Badges .= (($Enabled == '1' || $Enabled == '0' || !$Enabled) ? '' : '<img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" />');
-<<<<<<< HEAD
 
 View::show_header($Username, 'user,bbcode,requests,lastfm,info_paster');
 
@@ -1306,13 +1305,13 @@ if (check_perms('users_mod', $Class)) { ?>
 					<textarea rows="1" cols="50" name="Reason" id="Reason" onkeyup="resize('Reason');"></textarea>
 				</td>
 			</tr>
-
 			<tr>
-				<td class="label">Broadcast to #fbi:</td>
+				<td class="label">Paste user stats:</td>
 				<td>
-					<button type="button" id="paster">Paste info</button>
+					<button type="button" id="paster">Paste</button>
 				</td>
 			</tr>
+
 			<tr>
 				<td align="right" colspan="2">
 					<input type="submit" value="Save changes" />

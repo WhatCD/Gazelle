@@ -60,13 +60,13 @@ $DB->query("
 		t.UserID AS UploaderID,
 		uploader.Username
 	FROM reportsv2 AS r
-		LEFT JOIN torrents AS t ON t.ID=r.TorrentID
-		LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-		LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-		LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-		LEFT JOIN users_main AS resolver ON resolver.ID=r.ResolverID
-		LEFT JOIN users_main AS reporter ON reporter.ID=r.ReporterID
-		LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
+		LEFT JOIN torrents AS t ON t.ID = r.TorrentID
+		LEFT JOIN torrents_group AS tg ON tg.ID = t.GroupID
+		LEFT JOIN torrents_artists AS ta ON ta.GroupID = tg.ID AND ta.Importance = '1'
+		LEFT JOIN artists_alias AS aa ON aa.AliasID = ta.AliasID
+		LEFT JOIN users_main AS resolver ON resolver.ID = r.ResolverID
+		LEFT JOIN users_main AS reporter ON reporter.ID = r.ReporterID
+		LEFT JOIN users_main AS uploader ON uploader.ID = t.UserID
 	WHERE r.Status = 'New'
 	GROUP BY r.ID
 	ORDER BY ReportedTime ASC
@@ -85,10 +85,10 @@ $DB->query("
 			$DB->query("
 				UPDATE reportsv2
 				SET
-					Status='Resolved',
-					LastChangeTime='".sqltime()."',
-					ModComment='Report already dealt with (torrent deleted)'
-				WHERE ID=".$ReportID);
+					Status = 'Resolved',
+					LastChangeTime = '".sqltime()."',
+					ModComment = 'Report already dealt with (torrent deleted)'
+				WHERE ID = $ReportID");
 ?>
 	<div>
 		<table class="layout">
@@ -104,9 +104,9 @@ $DB->query("
 		}
 		$DB->query("
 			UPDATE reportsv2
-			SET Status='InProgress',
-				ResolverID=".$LoggedUser['ID']."
-			WHERE ID=".$ReportID);
+			SET Status = 'InProgress',
+				ResolverID = ".$LoggedUser['ID']."
+			WHERE ID = $ReportID");
 
 		if (array_key_exists($Type, $Types[$CategoryID])) {
 			$ReportType = $Types[$CategoryID][$Type];
@@ -167,9 +167,9 @@ $DB->query("
 <?				$DB->query("
 						SELECT r.ID
 						FROM reportsv2 AS r
-							LEFT JOIN torrents AS t ON t.ID=r.TorrentID
+							LEFT JOIN torrents AS t ON t.ID = r.TorrentID
 						WHERE r.Status != 'Resolved'
-							AND t.GroupID=$GroupID");
+							AND t.GroupID = $GroupID");
 				$GroupOthers = ($DB->record_count() - 1);
 
 				if ($GroupOthers > 0) { ?>
@@ -179,9 +179,9 @@ $DB->query("
 <?				$DB->query("
 						SELECT t.UserID
 						FROM reportsv2 AS r
-							JOIN torrents AS t ON t.ID=r.TorrentID
+							JOIN torrents AS t ON t.ID = r.TorrentID
 						WHERE r.Status != 'Resolved'
-							AND t.UserID=$UploaderID");
+							AND t.UserID = $UploaderID");
 				$UploaderOthers = ($DB->record_count() - 1);
 
 				if ($UploaderOthers > 0) { ?>
@@ -196,13 +196,13 @@ $DB->query("
 							um.Username,
 							req.TimeFilled
 						FROM requests AS req
-							LEFT JOIN torrents AS t ON t.ID=req.TorrentID
-							LEFT JOIN reportsv2 AS rep ON rep.TorrentID=t.ID
-							JOIN users_main AS um ON um.ID=req.FillerID
+							LEFT JOIN torrents AS t ON t.ID = req.TorrentID
+							LEFT JOIN reportsv2 AS rep ON rep.TorrentID = t.ID
+							JOIN users_main AS um ON um.ID = req.FillerID
 						WHERE rep.Status != 'Resolved'
 							AND req.TimeFilled > '2010-03-04 02:31:49'
-							AND req.TorrentID=$TorrentID");
-				$Requests = ($DB->has_results());
+							AND req.TorrentID = $TorrentID");
+				$Requests = $DB->has_results();
 				if ($Requests > 0) {
 					while (list($RequestID, $FillerID, $FillerName, $FilledTime) = $DB->next_record()) {
 			?>
@@ -220,7 +220,7 @@ $DB->query("
 					<tr>
 						<td class="label">Relevant tracks:</td>
 						<td colspan="3">
-							<?=str_replace(" ", ", ", $Tracks)?>
+							<?=str_replace(' ', ', ', $Tracks)?>
 						</td>
 					</tr>
 <?			}
@@ -230,7 +230,7 @@ $DB->query("
 						<td class="label">Relevant links:</td>
 						<td colspan="3">
 <?
-				$Links = explode(" ", $Links);
+				$Links = explode(' ', $Links);
 				foreach ($Links as $Link) {
 
 					if ($local_url = $Text->local_url($Link)) {
@@ -280,11 +280,11 @@ $DB->query("
 									t.UserID AS UploaderID,
 									uploader.Username
 								FROM torrents AS t
-									LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-									LEFT JOIN torrents_artists AS ta ON ta.GroupID=tg.ID AND ta.Importance='1'
-									LEFT JOIN artists_alias AS aa ON aa.AliasID=ta.AliasID
-									LEFT JOIN users_main AS uploader ON uploader.ID=t.UserID
-								WHERE t.ID='$ExtraID'
+									LEFT JOIN torrents_group AS tg ON tg.ID = t.GroupID
+									LEFT JOIN torrents_artists AS ta ON ta.GroupID = tg.ID AND ta.Importance = '1'
+									LEFT JOIN artists_alias AS aa ON aa.AliasID = ta.AliasID
+									LEFT JOIN users_main AS uploader ON uploader.ID = t.UserID
+								WHERE t.ID = '$ExtraID'
 								GROUP BY tg.ID");
 
 						list($ExtraGroupName, $ExtraGroupID, $ExtraArtistID, $ExtraArtistName, $ExtraYear, $ExtraTime, $ExtraRemastered, $ExtraRemasterTitle,
@@ -319,10 +319,10 @@ $DB->query("
 						<td class="label">Relevant images:</td>
 						<td colspan="3">
 <?
-				$Images = explode(" ", $Images);
+				$Images = explode(' ', $Images);
 				foreach ($Images as $Image) {
 		?>
-							<img style="max-width: 200px;" onclick="lightbox.init(this,200);" src="<?=ImageTools::process($Image)?>" alt="Relevant image" />
+							<img style="max-width: 200px;" onclick="lightbox.init(this, 200);" src="<?=ImageTools::process($Image)?>" alt="Relevant image" />
 <?
 				} ?>
 						</td>
@@ -338,15 +338,15 @@ $DB->query("
 						<td class="label">Report comment:</td>
 						<td colspan="3">
 							<input type="text" name="comment" id="comment<?=$ReportID?>" size="45" value="<?=$ModComment?>" />
-							<input type="button" value="Update now" onclick="UpdateComment(<?=$ReportID?>)" />
+							<input type="button" value="Update now" onclick="UpdateComment(<?=$ReportID?>);" />
 						</td>
 					</tr>
 					<tr>
 						<td class="label">
-							<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve</a>
+							<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve:</a>
 						</td>
 						<td colspan="3">
-							<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>)">
+							<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>);">
 <?
 	$TypeList = $Types['master'] + $Types[$CategoryID];
 	$Priorities = array();
@@ -370,22 +370,18 @@ $DB->query("
 								<span title="Warning length in weeks">
 									<strong>Warning</strong>
 									<select name="warning" id="warning<?=$ReportID?>">
-<?
-	for ($i = 0; $i < 9; $i++) {
-?>
+<?	for ($i = 0; $i < 9; $i++) { ?>
 										<option value="<?=$i?>"><?=$i?></option>
-<?
-	}
-?>
+<?	} ?>
 									</select>
 								</span>
-								<span title="Remove upload privileges?">
+								<span>
 									<label for="upload<?=$ReportID?>"><strong>Remove upload privileges</strong></label>
 									<input type="checkbox" name="upload" id="upload<?=$ReportID?>" />
 								</span>
 								&nbsp;&nbsp;
 								<span title="Update resolve type">
-									<input type="button" name="update_resolve" id="update_resolve<?=$ReportID?>" value="Update now" onclick="UpdateResolve(<?=$ReportID?>)" />
+									<input type="button" name="update_resolve" id="update_resolve<?=$ReportID?>" value="Update now" onclick="UpdateResolve(<?=$ReportID?>);" />
 								</span>
 							</span>
 						</td>
@@ -402,7 +398,7 @@ $DB->query("
 							<span title="Uploader: Appended to the regular message unless using &quot;Send now&quot;. Reporter: Must be used with &quot;Send now&quot;.">
 								<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 							</span>
-							<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>)" />
+							<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>);" />
 						</td>
 					</tr>
 					<tr>
@@ -437,6 +433,6 @@ $DB->query("
 			<br />
 		</div>
 		<script type="text/javascript">//<![CDATA[
-		Load('<?=$ReportID?>');
+			Load('<?=$ReportID?>');
 		//]]>
 		</script>
