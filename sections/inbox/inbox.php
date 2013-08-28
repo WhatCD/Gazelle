@@ -168,7 +168,9 @@ echo "\t\t$Pages\n";
 					<td><?=(($ForwardedID && $ForwardedID != $LoggedUser['ID']) ? Users::format_username($ForwardedID, false, false, false) : '')?></td>
 <?			} ?>
 				</tr>
-<?		}
+<?
+		$DB->set_query_id($Results);
+		}
 	} ?>
 			</table>
 			<input type="submit" name="read" value="Mark as read" />&nbsp;

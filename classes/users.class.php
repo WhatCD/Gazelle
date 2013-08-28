@@ -6,17 +6,19 @@ class Users {
 	 * @return array ($Classes, $ClassLevels)
 	 */
 	public static function get_classes() {
-		global $Cache, $DB, $Debug;
+		global $Debug;
 		// Get permissions
-		list($Classes, $ClassLevels) = $Cache->get_value('classes');
+		list($Classes, $ClassLevels) = G::$Cache->get_value('classes');
 		if (!$Classes || !$ClassLevels) {
-			$DB->query('
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query('
 				SELECT ID, Name, Level, Secondary
 				FROM permissions
 				ORDER BY Level');
-			$Classes = $DB->to_array('ID');
-			$ClassLevels = $DB->to_array('Level');
-			$Cache->cache_value('classes', array($Classes, $ClassLevels), 0);
+			$Classes = G::$DB->to_array('ID');
+			$ClassLevels = G::$DB->to_array('Level');
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value('classes', array($Classes, $ClassLevels), 0);
 		}
 		$Debug->set_flag('Loaded permissions');
 
@@ -45,13 +47,12 @@ class Users {
 	 *	int EffectiveClass - the highest level of their main and secondary classes
 	 */
 	public static function user_info($UserID) {
-		global $DB, $Cache, $Classes, $SSL;
-		$UserInfo = $Cache->get_value("user_info_$UserID");
+		global $Classes, $SSL;
+		$UserInfo = G::$Cache->get_value("user_info_$UserID");
 		// the !isset($UserInfo['Paranoia']) can be removed after a transition period
 		if (empty($UserInfo) || empty($UserInfo['ID']) || !isset($UserInfo['Paranoia']) || empty($UserInfo['Class'])) {
-			$OldQueryID = $DB->get_query_id();
-
-			$DB->query("
+			$OldQueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT
 					m.ID,
 					m.Username,
@@ -71,11 +72,12 @@ class Users {
 					LEFT JOIN users_levels AS ul ON ul.UserID = m.ID
 				WHERE m.ID = '$UserID'
 				GROUP BY m.ID");
-			if (!$DB->has_results()) { // Deleted user, maybe?
+			if (!G::$DB->has_results()) { // Deleted user, maybe?
 				$UserInfo = array(
-						'ID' => '',
+						'ID' => $UserID,
 						'Username' => '',
 						'PermissionID' => 0,
+						'Paranoia' => array(),
 						'Artist' => false,
 						'Donor' => false,
 						'Warned' => '0000-00-00 00:00:00',
@@ -83,10 +85,10 @@ class Users {
 						'Enabled' => 0,
 						'Title' => '',
 						'CatchupTime' => 0,
-						'Visible' => '1');
-
+						'Visible' => '1',
+						'Levels' => '');
 			} else {
-				$UserInfo = $DB->next_record(MYSQLI_ASSOC, array('Paranoia', 'Title'));
+				$UserInfo = G::$DB->next_record(MYSQLI_ASSOC, array('Paranoia', 'Title'));
 				$UserInfo['CatchupTime'] = strtotime($UserInfo['CatchupTime']);
 				$UserInfo['Paranoia'] = unserialize($UserInfo['Paranoia']);
 				if ($UserInfo['Paranoia'] === false) {
@@ -109,12 +111,12 @@ class Users {
 			}
 			$UserInfo['EffectiveClass'] = $EffectiveClass;
 
-			$Cache->cache_value("user_info_$UserID", $UserInfo, 2592000);
-			$DB->set_query_id($OldQueryID);
+			G::$Cache->cache_value("user_info_$UserID", $UserInfo, 2592000);
+			G::$DB->set_query_id($OldQueryID);
 		}
 		if (strtotime($UserInfo['Warned']) < time()) {
 			$UserInfo['Warned'] = '0000-00-00 00:00:00';
-			$Cache->cache_value("user_info_$UserID", $UserInfo, 2592000);
+			G::$Cache->cache_value("user_info_$UserID", $UserInfo, 2592000);
 		}
 
 		return $UserInfo;
@@ -129,12 +131,12 @@ class Users {
 	 *		Just read the goddamn code, I don't have time to comment this shit.
 	 */
 	public static function user_heavy_info($UserID) {
-		global $DB, $Cache;
 
-		$HeavyInfo = $Cache->get_value("user_info_heavy_$UserID");
+		$HeavyInfo = G::$Cache->get_value("user_info_heavy_$UserID");
 		if (empty($HeavyInfo)) {
 
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT
 					m.Invites,
 					m.torrent_pass,
@@ -154,7 +156,7 @@ class Users {
 					i.DisablePM,
 					i.DisableRequests,
 					i.DisableForums,
-					i.DisableTagging,
+					i.DisableTagging," . "
 					i.SiteOptions,
 					i.DownloadAlt,
 					i.LastReadNews,
@@ -166,7 +168,7 @@ class Users {
 				FROM users_main AS m
 					INNER JOIN users_info AS i ON i.UserID = m.ID
 				WHERE m.ID = '$UserID'");
-			$HeavyInfo = $DB->next_record(MYSQLI_ASSOC, array('CustomPermissions', 'SiteOptions'));
+			$HeavyInfo = G::$DB->next_record(MYSQLI_ASSOC, array('CustomPermissions', 'SiteOptions'));
 
 			if (!empty($HeavyInfo['CustomPermissions'])) {
 				$HeavyInfo['CustomPermissions'] = unserialize($HeavyInfo['CustomPermissions']);
@@ -187,11 +189,11 @@ class Users {
 			}
 			unset($HeavyInfo['PermittedForums']);
 
-			$DB->query("
+			G::$DB->query("
 				SELECT PermissionID
 				FROM users_levels
 				WHERE UserID = $UserID");
-			$PermIDs = $DB->collect('PermissionID');
+			$PermIDs = G::$DB->collect('PermissionID');
 			foreach ($PermIDs AS $PermID) {
 				$Perms = Permissions::get_permissions($PermID);
 				if (!empty($Perms['PermittedForums'])) {
@@ -225,7 +227,9 @@ class Users {
 			}
 			unset($HeavyInfo['SiteOptions']);
 
-			$Cache->cache_value("user_info_heavy_$UserID", $HeavyInfo, 0);
+			G::$DB->set_query_id($QueryID);
+
+			G::$Cache->cache_value("user_info_heavy_$UserID", $HeavyInfo, 0);
 		}
 		return $HeavyInfo;
 	}
@@ -244,14 +248,15 @@ class Users {
 		if (empty($NewOptions)) {
 			return false;
 		}
-		global $DB, $Cache, $LoggedUser;
+
+		$QueryID = G::$DB->get_query_id();
 
 		// Get SiteOptions
-		$DB->query("
+		G::$DB->query("
 			SELECT SiteOptions
 			FROM users_info
 			WHERE UserID = $UserID");
-		list($SiteOptions) = $DB->next_record(MYSQLI_NUM, false);
+		list($SiteOptions) = G::$DB->next_record(MYSQLI_NUM, false);
 		$SiteOptions = unserialize($SiteOptions);
 
 		// Get HeavyInfo
@@ -262,18 +267,19 @@ class Users {
 		$HeavyInfo = array_merge($HeavyInfo, $NewOptions);
 
 		// Update DB
-		$DB->query("
+		G::$DB->query("
 			UPDATE users_info
 			SET SiteOptions = '".db_string(serialize($SiteOptions))."'
 			WHERE UserID = $UserID");
+		G::$DB->set_query_id($QueryID);
 
 		// Update cache
-		$Cache->cache_value("user_info_heavy_$UserID", $HeavyInfo, 0);
+		G::$Cache->cache_value("user_info_heavy_$UserID", $HeavyInfo, 0);
 
-		// Update $LoggedUser if the options are changed for the current
-		if ($LoggedUser['ID'] == $UserID) {
-			$LoggedUser = array_merge($LoggedUser, $NewOptions);
-			$LoggedUser['ID'] = $UserID; // We don't want to allow userid switching
+		// Update G::$LoggedUser if the options are changed for the current
+		if (G::$LoggedUser['ID'] == $UserID) {
+			G::$LoggedUser = array_merge(G::$LoggedUser, $NewOptions);
+			G::$LoggedUser['ID'] = $UserID; // We don't want to allow userid switching
 		}
 		return true;
 	}
@@ -448,8 +454,8 @@ class Users {
 	 * @param boolean $Title whether or not to show the title
 	 * @return HTML formatted username
 	 */
-	public static function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled = true, $Class = false, $Title = false) {
-		global $Classes, $LoggedUser;
+	public static function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled = true, $Class = false, $Title = false, $IsDonorForum = false) {
+		global $Classes;
 
 		// This array is a hack that should be made less retarded, but whatevs
 		// 						  PermID => ShortForm
@@ -467,28 +473,58 @@ class Users {
 
 		$Str = '';
 
+		$Username = $UserInfo['Username'];
+		$Paranoia = $UserInfo['Paranoia'];
+		$ShowDonorIcon = !in_array('hide_donor_heart', $Paranoia);
+
+		if ($IsDonorForum) {
+			list($Prefix, $Suffix, $HasComma) = Donations::get_titles($UserID);
+			$Username = "$Prefix $Username" . ($HasComma ? ', ' : ' ') . "$Suffix ";
+		}
+
 		if ($Title) {
-			$Str .= '<strong><a href="user.php?id='.$UserID.'">'.$UserInfo['Username'].'</a></strong>';
+			$Str .= "<strong><a href=\"user.php?id=$UserID\">$Username</a></strong>";
 		} else {
-			$Str .= '<a href="user.php?id='.$UserID.'">'.$UserInfo['Username'].'</a>';
+			$Str .= "<a href=\"user.php?id=$UserID\">$Username</a>";
 		}
-
 		if ($Badges) {
-			$Str .= ($UserInfo['Donor'] == 1) ? '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>' : '';
+			$DonorRank = Donations::get_rank($UserID);
+			$SpecialRank = Donations::get_special_rank($UserID);
+			if ($DonorRank >= 2 && $ShowDonorIcon) {
+				$DonorRewards = Donations::get_rewards($UserID);
+				$IconText = $DonorRewards['IconMouseOverText'];
+				$IconLink = 'donate.php';
+				$IconImage = 'donor.png';
+				$DonorRank = $DonorRank == 5 ? ($DonorRank - 1) : $DonorRank;
+				if ($DonorRank >= MAX_RANK || $SpecialRank >= MAX_SPECIAL_RANK) {
+					$IconLink = !empty($DonorRewards['CustomIconLink']) ? $DonorRewards['CustomIconLink'] : 'donate.php';
+					if ($SpecialRank >= MAX_SPECIAL_RANK)  {
+						$DonorHeart = 6;
+					} else {
+						$DonorHeart = 5;
+					}
+					$IconImage = !empty($DonorRewards['CustomIcon']) ? ImageTools::process($DonorRewards['CustomIcon']) : STATIC_SERVER . "common/symbols/donor_$DonorHeart" . '.png';
+				}
+				else {
+					$IconImage = STATIC_SERVER . "common/symbols/donor_$DonorRank" . '.png';
+				}
+
+				$Str .= "<a href=\"$IconLink\"><img class=\"donor_icon\" src=\"$IconImage\" alt=\"$IconText\" title=\"$IconText\" /></a>";
+			} elseif (($DonorRank ==  1 || $UserInfo['Donor'] == 1) && $ShowDonorIcon) {
+				$Str .= '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>';
+			}
 		}
 
-		$Str .= (($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"'
+		$Str .= ($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"'
 					. '><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned'
-					. ($LoggedUser['ID'] === $UserID ? ' - Expires ' . date('Y-m-d H:i', strtotime($UserInfo['Warned'])) : '')
-					. '" /></a>' : '');
-		$Str .= (($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '');
+					. (G::$LoggedUser['ID'] === $UserID ? ' - Expires ' . date('Y-m-d H:i', strtotime($UserInfo['Warned'])) : '')
+					. '" /></a>' : '';
+		$Str .= ($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '';
 
 		if ($Badges) {
 			$ClassesDisplay = array();
-			foreach ($SecondaryClasses as $PermID => $PermHTML) {
-				if ($UserInfo['ExtraClasses'][$PermID]) {
-					$ClassesDisplay[] = '<span class="secondary_class" title="'.$Classes[$PermID]['Name'].'">'.$PermHTML.'</span>';
-				}
+			foreach (array_intersect_key($SecondaryClasses, $UserInfo['ExtraClasses']) as $PermID => $PermShort) {
+				$ClassesDisplay[] = '<span class="secondary_class" title="'.$Classes[$PermID]['Name'].'">'.$PermShort.'</span>';
 			}
 			if (!empty($ClassesDisplay)) {
 				$Str .= '&nbsp;'.implode('&nbsp;', $ClassesDisplay);
@@ -532,29 +568,26 @@ class Users {
 	}
 
 	/**
-	 * Returns an array with User Bookmark data: group ids, collage data, torrent data
-	 * @global CACHE $Cache
-	 * @global DB_MYSQL $DB
+	 * Returns an array with User Bookmark data: group IDs, collage data, torrent data
 	 * @param string|int $UserID
 	 * @return array Group IDs, Bookmark Data, Torrent List
 	 */
-	public static function get_bookmarks ($UserID)
-	{
-		global $Cache, $DB;
-
+	public static function get_bookmarks($UserID) {
 		$UserID = (int) $UserID;
 
-		if (($Data = $Cache->get_value("bookmarks_group_ids_$UserID"))) {
+		if (($Data = G::$Cache->get_value("bookmarks_group_ids_$UserID"))) {
 			list($GroupIDs, $BookmarkData) = $Data;
 		} else {
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT GroupID, Sort, `Time`
 				FROM bookmarks_torrents
 				WHERE UserID = $UserID
 				ORDER BY Sort, `Time` ASC");
-			$GroupIDs = $DB->collect('GroupID');
-			$BookmarkData = $DB->to_array('GroupID', MYSQLI_ASSOC);
-			$Cache->cache_value("bookmarks_group_ids_$UserID",
+			$GroupIDs = G::$DB->collect('GroupID');
+			$BookmarkData = G::$DB->to_array('GroupID', MYSQLI_ASSOC);
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value("bookmarks_group_ids_$UserID",
 				array($GroupIDs, $BookmarkData), 3600);
 		}
 
@@ -573,23 +606,39 @@ class Users {
 	 * @param string $ReturnHTML
 	 * @return string
 	 */
-	public static function show_avatar($Avatar, $Username, $Setting, $Size = 150, $ReturnHTML = True) {
-		global $LoggedUser;
+	public static function show_avatar($Avatar, $UserID, $Username, $Setting, $Size = 150, $ReturnHTML = True) {
 		$Avatar = ImageTools::process($Avatar);
+		$Style = 'style="max-height: 400px;"';
+		$AvatarMouseOverText = '';
+		$SecondAvatar = '';
+		$Class = 'class="double_avatar"';
+		$EnabledRewards = Donations::get_enabled_rewards($UserID);
+
+		if ($EnabledRewards['HasAvatarMouseOverText']) {
+			$Rewards = Donations::get_rewards($UserID);
+			$AvatarMouseOverText = $Rewards['AvatarMouseOverText'];
+		}
+		if (!empty($AvatarMouseOverText)) {
+			$AvatarMouseOverText =  "title=\"$AvatarMouseOverText\" alt=\"$AvatarMouseOverText\"";
+		}
+		if ($EnabledRewards['HasSecondAvatar'] && !empty($Rewards['SecondAvatar'])) {
+			$SecondAvatar = 'data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar']) . '"';
+		}
 		// case 1 is avatars disabled
 		switch ($Setting) {
 			case 0:
 				if (!empty($Avatar)) {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"$Username avatar\" />" : $Avatar);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class />" : $Avatar);
 				} else {
 					$URL = STATIC_SERVER.'common/avatars/default.png';
-					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL);
+					//TODO: what is the $JS variable for? why is it unassigned?
+					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $JS />" : $URL);
 				}
 				break;
 			case 2:
-				$ShowAvatar = True;
+				$ShowAvatar = true;
 			case 3:
-				switch ($LoggedUser['Identicons']) {
+				switch (G::$LoggedUser['Identicons']) {
 					case 0:
 						$Type = 'identicon';
 						break;
@@ -604,15 +653,15 @@ class Users {
 						break;
 					case 4:
 						$Type = '1';
-						$Robot = True;
+						$Robot = true;
 						break;
 					case 5:
 						$Type = '2';
-						$Robot = True;
+						$Robot = true;
 						break;
 					case 6:
 						$Type = '3';
-						$Robot = True;
+						$Robot = true;
 						break;
 					default:
 						$Type = 'identicon';
@@ -623,15 +672,15 @@ class Users {
 				} else {
 					$URL = 'https://robohash.org/'.md5($Username)."?set=set$Type&amp;size={$Size}x$Size";
 				}
-				if ($ShowAvatar == True && !empty($Avatar)) {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"$Username avatar\" />" : $Avatar);
+				if ($ShowAvatar == true && !empty($Avatar)) {
+					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class/>" : $Avatar);
 				} else {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class/>" : $URL);
 				}
 				break;
 			default:
 				$URL = STATIC_SERVER.'common/avatars/default.png';
-				$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" style=\"max-height: 400px;\" alt=\"Default avatar\" />" : $URL);
+				$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class/>" : $URL);
 		}
 		return $ToReturn;
 	}
@@ -651,19 +700,18 @@ class Users {
 	 * @return boolean
 	 */
 	public static function has_autocomplete_enabled($Type, $Output = true) {
-		global $LoggedUser;
 		$Enabled = false;
-		if (empty($LoggedUser['AutoComplete'])) {
+		if (empty(G::$LoggedUser['AutoComplete'])) {
 			$Enabled = true;
-		} elseif ($LoggedUser['AutoComplete'] !== 1) {
+		} elseif (G::$LoggedUser['AutoComplete'] !== 1) {
 			switch ($Type) {
 				case 'search':
-					if ($LoggedUser['AutoComplete'] == 2) {
+					if (G::$LoggedUser['AutoComplete'] == 2) {
 						$Enabled = true;
 					}
 					break;
 				case 'other':
-					if ($LoggedUser['AutoComplete'] != 2) {
+					if (G::$LoggedUser['AutoComplete'] != 2) {
 						$Enabled = true;
 					}
 					break;

@@ -271,7 +271,7 @@ if (empty($Results)) {
 					$DisplayName .= " [$GroupInfo[Year]]";
 				}
 				if ($GroupInfo['ReleaseType'] > 0) {
-					$DisplayName.= ' ['.$ReleaseTypes[$GroupInfo['ReleaseType']].']';
+					$DisplayName .= ' ['.$ReleaseTypes[$GroupInfo['ReleaseType']].']';
 				}
 			}
 
@@ -289,20 +289,20 @@ if (empty($Results)) {
 		<td style="text-align: center;"><input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" /></td>
 		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>"class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td class="big_info">
-<? if ($LoggedUser['CoverArt']) : ?>
+<? if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
 				<? ImageTools::cover_thumb($GroupInfo['WikiImage'], $GroupCategoryID) ?>
 			</div>
-<? endif; ?>
+<? } ?>
 			<div class="group_info clear">
 				<span>
 					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?			if (Torrents::can_use_token($TorrentInfo)) { ?>
-					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?
 			}
 			if (!$Sneaky) { ?>
-					| <a href="#" onclick="clearItem(<?=$TorrentID?>); return false;" title="Remove from notifications list">CL</a>
+					| <a href="#" onclick="clearItem(<?=$TorrentID?>); return false;" class="tooltip" title="Remove from notifications list">CL</a>
 <?			} ?> ]
 				</span>
 				<strong><?=$DisplayName?></strong>
@@ -313,9 +313,9 @@ if (empty($Results)) {
 					} ?>
 					<span class="bookmark" style="float: right;">
 <?				if (Bookmarks::has_bookmarked('torrent', $GroupID)) { ?>
-						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a>
+						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
 <?				} else { ?>
-						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a>
+						<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
 <?				} ?>
 					</span>
 				</div>

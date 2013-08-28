@@ -21,12 +21,16 @@
 ?>
 	<p>Site and design &copy; <?=date('Y')?> <?=SITE_NAME?></p>
 <?	if (!empty($LastActive)) { ?>
-	<p><a href="user.php?action=sessions" title="Manage sessions">Last activity <?=time_diff($LastActive['LastUpdate'])?> from <?=$LastActive['IP']?>.</a></p>
+	<p>
+		<a href="user.php?action=sessions">
+			<span class="tooltip" title="Manage sessions">Last activity </span><?=time_diff($LastActive['LastUpdate'])?><span class="tooltip" title="Manage sessions"> from <?=$LastActive['IP']?>.</span>
+		</a>
+	</p>
 <?	} ?>
 	<p>
 		<strong>Time:</strong> <?=number_format(((microtime(true) - $ScriptStartTime) * 1000), 5)?> ms
 		<strong>Used:</strong> <?=Format::get_size(memory_get_usage(true))?>
-		<strong>Load:</strong> <?=number_format($Load[0], 2).' '.number_format($Load[1], 2).' '.number_format($Load[2],2)?>
+		<strong>Load:</strong> <?=number_format($Load[0], 2).' '.number_format($Load[1], 2).' '.number_format($Load[2], 2)?>
 		<strong>Date:</strong> <?=date('M d Y, H:i')?>
 
 	</p>

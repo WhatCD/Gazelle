@@ -33,9 +33,9 @@ do a JOIN.
 class Wiki {
 
 	public static function revision_history($Table = '', $PageID = 0, $BaseURL = '') {
-		global $DB;
+		$QueryID = G::$DB->get_query_id();
 
-		$DB->query("
+		G::$DB->query("
 			SELECT
 				RevisionID,
 				Summary,
@@ -54,7 +54,7 @@ class Wiki {
 		</tr>
 <?
 		$Row = 'a';
-		while (list($RevisionID, $Summary, $Time, $UserID, $Username) = $DB->next_record()) {
+		while (list($RevisionID, $Summary, $Time, $UserID, $Username) = G::$DB->next_record()) {
 			$Row = (($Row == 'a') ? 'b' : 'a');
 ?>
 		<tr class="row<?=$Row?>">
@@ -74,6 +74,7 @@ class Wiki {
 <?		} // while ?>
 	</table>
 <?
+		G::$DB->set_query_id($QueryID);
 	} // function
 } // class
 ?>

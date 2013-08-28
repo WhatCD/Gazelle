@@ -69,7 +69,7 @@ class Bookmarks {
 
 	/**
 	 * Fetch all bookmarks of a certain type for a user.
-	 * If UserID is false than defaults to $LoggedUser['ID']
+	 * If UserID is false than defaults to G::$LoggedUser['ID']
 	 *
 	 * @param string $Type
 	 *        	type of bookmarks to fetch
@@ -78,19 +78,20 @@ class Bookmarks {
 	 * @return array the bookmarks
 	 */
 	public static function all_bookmarks($Type, $UserID = false) {
-		global $DB, $Cache, $LoggedUser;
 		if ($UserID === false) {
-			$UserID = $LoggedUser['ID'];
+			$UserID = G::$LoggedUser['ID'];
 		}
 		$CacheKey = 'bookmarks_' . $Type . '_' . $UserID;
-		if (($Bookmarks = $Cache->get_value($CacheKey)) === false) {
+		if (($Bookmarks = G::$Cache->get_value($CacheKey)) === false) {
 			list ($Table, $Col) = self::bookmark_schema($Type);
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT $Col
 				FROM $Table
 				WHERE UserID = '$UserID'");
-			$Bookmarks = $DB->collect($Col);
-			$Cache->cache_value($CacheKey, $Bookmarks, 0);
+			$Bookmarks = G::$DB->collect($Col);
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value($CacheKey, $Bookmarks, 0);
 		}
 		return $Bookmarks;
 	}

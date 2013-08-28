@@ -55,7 +55,7 @@ list($OldBody, $AuthorID, $TopicID, $IsLocked, $ForumID, $MinClassWrite, $Page) 
 
 // Make sure they aren't trying to edit posts they shouldn't
 // We use die() here instead of error() because whatever we spit out is displayed to the user in the box where his forum post is
-if (!check_forumperm($ForumID, 'Write') || ($IsLocked && !check_perms('site_moderate_forums'))) {
+if (!Forums::check_forumperm($ForumID, 'Write') || ($IsLocked && !check_perms('site_moderate_forums'))) {
 	error('Either the thread is locked, or you lack the permission to edit this post.', true);
 }
 if ($UserID != $AuthorID && !check_perms('site_moderate_forums')) {
@@ -103,7 +103,7 @@ if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 			));
 	$Cache->commit_transaction(3600 * 24 * 5);
 }
-$ThreadInfo = get_thread_info($TopicID);
+$ThreadInfo = Forums::get_thread_info($TopicID);
 if ($ThreadInfo['StickyPostID'] == $PostID) {
 	$ThreadInfo['StickyPost']['Body'] = $Body;
 	$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];

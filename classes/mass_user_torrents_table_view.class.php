@@ -37,22 +37,10 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 	private $TorrentList;
 
 	/**
-	 * Ref. to $LoggedUser
-	 * @var array $LoggedUser
-	 */
-	private $LoggedUser;
-
-	/**
 	 * Ref. to $CollageDataList
 	 * @var array $CollageDataList
 	 */
 	private $CollageDataList;
-
-	/**
-	 * The UserID
-	 * @var int $UserID
-	 */
-	private $UserID;
 
 	/**
 	 * Counter for number of groups
@@ -64,21 +52,14 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 	 * When creating a new instance of this class, TorrentList and
 	 * CollageDataList must be passed. Additionally, a heading can be added.
 	 *
-	 * @global int|string $UserID
-	 * @global array $LoggedUser
 	 * @param array $TorrentList
 	 * @param array $CollageDataList
 	 * @param string $EditType
 	 * @param string $Heading
 	 */
 	public function __construct (array &$TorrentList, array &$CollageDataList, $EditType, $Heading = null) {
-		global $UserID, $LoggedUser;
-
 		$this->set_heading($Heading);
 		$this->set_edit_type($EditType);
-
-		$this->UserID = (int) $UserID;
-		$this->LoggedUser = &$LoggedUser;
 
 		$this->TorrentList = $TorrentList;
 		$this->CollageDataList = $CollageDataList;
@@ -116,7 +97,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 	 * form, table, etc.
 	 */
 	public function header () {
-		if ($this->HasTorrents) :
+		if ($this->HasTorrents) {
 ?>
 
 <div class="thin">
@@ -134,14 +115,13 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 				<li>Click and drag any row to change its order.</li>
 				<li>Double-click on a row to check it.</li>
 			</ul>
-			<noscript><ul><li><strong class="important_text">Enable JavaScript!</strong></li></ul></noscript>
 			</td>
 		</tr>
 	</table>
 
 	<form action="bookmarks.php" method="post" id="drag_drop_collage_form">
 
-<? $this->buttons(); ?>
+<?			$this->buttons(); ?>
 
 		<table id="manage_collage_table">
 			<thead>
@@ -157,31 +137,31 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 			</thead>
 			<tbody>
 <?
-		endif;
+		}
 	}
 
 	/**
 	 * Closes header code
 	 */
 	public function footer () {
-		if ($this->HasTorrents) :
+		if ($this->HasTorrents) {
 ?>
 
 			</tbody>
 		</table>
 
-<? $this->buttons(); ?>
+<?			$this->buttons(); ?>
 
 		<div>
 			<input type="hidden" name="action" value="mass_edit" />
 			<input type="hidden" name="type" value="<?=display_str($this->EditType)?>" />
-			<input type="hidden" name="auth" value="<?=$this->LoggedUser['AuthKey']?>" />
+			<input type="hidden" name="auth" value="<?=G::$LoggedUser['AuthKey']?>" />
 		</div>
 	</form>
 </div>
 
 <?
-		endif;
+		}
 	}
 
 	/**

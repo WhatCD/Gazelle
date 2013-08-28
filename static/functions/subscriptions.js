@@ -16,6 +16,17 @@ function Subscribe(topicid) {
 	});
 }
 
+function SubscribeComments(page, pageid) {
+	ajax.get('userhistory.php?action=comments_subscribe&page=' + page + '&pageid=' + pageid + '&auth=' + authkey, function() {
+		var subscribeLink = $("#subscribelink_" + page + pageid).raw();
+		if(subscribeLink) {
+			subscribeLink.firstChild.nodeValue = subscribeLink.firstChild.nodeValue.charAt(0) == 'U'
+				? "Subscribe"
+				: "Unsubscribe";
+		}
+	});
+}
+
 function Collapse() {
 	var collapseLink = $('#collapselink').raw();
 	var hide = (collapseLink.innerHTML.substr(0,1) == 'H' ? 1 : 0);

@@ -2,72 +2,66 @@
 class Votes {
 	/**
 	 * Generate voting links for torrent pages, etc.
-	 * @global $LoggedUser
 	 * @param $GroupID
 	 * @param $Vote The pre-existing vote, if it exists 'Up'|'Down'
 	 */
 	public static function vote_link($GroupID, $Vote = '') {
-		global $LoggedUser;
-		if (!$LoggedUser['NoVoteLinks'] && check_perms('site_album_votes')) { ?>
+		if (!G::$LoggedUser['NoVoteLinks'] && check_perms('site_album_votes')) { ?>
 			<span class="votespan brackets" style="white-space: nowrap;">
 				Vote:
-				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" title="Upvote">↑</a>
-				<span class="voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote)) ? ' hidden' : '')?>" title="Upvoted">↑</span>
-				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" title="Downvote">↓</a>
-				<span class="voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up' || empty($Vote)) ? ' hidden' : '')?>" title="Downvoted">↓</span>
-				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=$LoggedUser['AuthKey']?>'); return false;" class="small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote) ? ' hidden' : '')?>" title="Clear your vote">x</a>
+				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=G::$LoggedUser['AuthKey']?>'); return false;" class="tooltip small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" title="Upvote">↑</a>
+				<span class="tooltip voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote)) ? ' hidden' : '')?>" title="Upvoted">↑</span>
+				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=G::$LoggedUser['AuthKey']?>'); return false;" class="tooltip small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" title="Downvote">↓</a>
+				<span class="tooltip voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up' || empty($Vote)) ? ' hidden' : '')?>" title="Downvoted">↓</span>
+				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=G::$LoggedUser['AuthKey']?>'); return false;" class="tooltip small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote) ? ' hidden' : '')?>" title="Clear your vote">x</a>
 			</span>
 <?		}
 	}
 
 	/**
 	 * Returns an array with User Vote data: GroupID and vote type
-	 * @global CACHE $Cache
-	 * @global DB_MYSQL $DB
 	 * @param string|int $UserID
 	 * @return array GroupID=>(GroupID, 'Up'|'Down')
 	 */
 	public static function get_user_votes($UserID) {
-		global $DB, $Cache;
-
 		if ((int)$UserID == 0) {
 			return array();
 		}
 
-		$UserVotes = $Cache->get_value("voted_albums_$UserID");
+		$UserVotes = G::$Cache->get_value("voted_albums_$UserID");
 		if ($UserVotes === false) {
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT GroupID, Type
 				FROM users_votes
 				WHERE UserID = $UserID");
-			$UserVotes = $DB->to_array('GroupID', MYSQL_ASSOC, false);
-			$Cache->cache_value("voted_albums_$UserID", $UserVotes);
+			$UserVotes = G::$DB->to_array('GroupID', MYSQL_ASSOC, false);
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value("voted_albums_$UserID", $UserVotes);
 		}
 		return $UserVotes;
 	}
 
 	/**
 	 * Returns an array with torrent group vote data
-	 * @global CACHE $Cache
-	 * @global DB_MYSQL $DB
 	 * @param string|int $GroupID
 	 * @return array (Upvotes, Total Votes)
 	 */
 	public static function get_group_votes($GroupID) {
-		global $DB, $Cache;
-
-		$GroupVotes = $Cache->get_value("votes_$GroupID");
+		$GroupVotes = G::$Cache->get_value("votes_$GroupID");
 		if ($GroupVotes === false) {
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT Ups AS Ups, Total AS Total
 				FROM torrents_votes
 				WHERE GroupID = $GroupID");
-			if (!$DB->has_results()) {
+			if (!G::$DB->has_results()) {
 				$GroupVotes = array('Ups' => 0, 'Total' => 0);
 			} else {
-				$GroupVotes = $DB->next_record(MYSQLI_ASSOC, false);
+				$GroupVotes = G::$DB->next_record(MYSQLI_ASSOC, false);
 			}
-			$Cache->cache_value("votes_$GroupID", $GroupVotes, 259200); // 3 days
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value("votes_$GroupID", $GroupVotes, 259200); // 3 days
 		}
 		return $GroupVotes;
 	}
@@ -198,32 +192,30 @@ class Votes {
 
 	/**
 	 * Gets where this album ranks overall.
-	 * @global CACHE $Cache
-	 * @global DB_MYSQL $DB
 	 * @param int $GroupID GroupID of the album
 	 * @return int Rank
 	 */
 	public static function get_rank_all($GroupID) {
-		global $Cache, $DB;
-
 		$GroupID = (int)$GroupID;
 		if ($GroupID <= 0) {
 			return false;
 		}
 
-		$Rankings = $Cache->get_value('voting_ranks_overall');
+		$Rankings = G::$Cache->get_value('voting_ranks_overall');
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query('
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query('
 				SELECT GroupID
 				FROM torrents_votes
 				ORDER BY Score DESC
 				LIMIT 100');
-			while (list($GID) = $DB->next_record()) {
+			while (list($GID) = G::$DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
-			$Cache->cache_value('voting_ranks_overall', $Rankings, 259200); // 3 days
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value('voting_ranks_overall', $Rankings, 259200); // 3 days
 		}
 
 		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);
@@ -231,36 +223,34 @@ class Votes {
 
 	/**
 	 * Gets where this album ranks in its year.
-	 * @global CACHE $Cache
-	 * @global DB_MYSQL $DB
 	 * @param int $GroupID GroupID of the album
 	 * @param int $Year Year it was released
 	 * @return int Rank for its year
 	 */
 	public static function get_rank_year($GroupID, $Year) {
-		global $Cache, $DB;
-
 		$GroupID = (int)$GroupID;
 		$Year = (int)$Year;
 		if ($GroupID <= 0 || $Year <= 0) {
 			return false;
 		}
 
-		$Rankings = $Cache->get_value("voting_ranks_year_$Year");
+		$Rankings = G::$Cache->get_value("voting_ranks_year_$Year");
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT GroupID
 				FROM torrents_votes  AS v
 					JOIN torrents_group AS g ON g.ID = v.GroupID
 				WHERE g.Year = $Year
 				ORDER BY Score DESC
 				LIMIT 100");
-			while (list($GID) = $DB->next_record()) {
+			while (list($GID) = G::$DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
-			$Cache->cache_value("voting_ranks_year_$Year", $Rankings, 259200); // 3 days
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value("voting_ranks_year_$Year", $Rankings, 259200); // 3 days
 		}
 
 		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);
@@ -268,30 +258,26 @@ class Votes {
 
 	/**
 	 * Gets where this album ranks in its decade.
-	 * @global CACHE $Cache
-	 * @global DB_MYSQL $DB
 	 * @param int $GroupID GroupID of the album
 	 * @param int $Year Year it was released
 	 * @return int Rank for its year
 	 */
 	public static function get_rank_decade($GroupID, $Year) {
-		global $Cache, $DB;
-
 		$GroupID = (int)$GroupID;
 		$Year = (int)$Year;
-		$Year = (int)$Year;
-		if ((int)$GroupID <= 0 || (int)$Year <= 0) {
+		if ($GroupID <= 0 || $Year <= 0) {
 			return false;
 		}
 
 		// First year of the decade
 		$Year = $Year - ($Year % 10);
 
-		$Rankings = $Cache->get_value("voting_ranks_decade_$Year");
+		$Rankings = G::$Cache->get_value("voting_ranks_decade_$Year");
 		if ($Rankings === false) {
 			$Rankings = array();
 			$i = 0;
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT GroupID
 				FROM torrents_votes  AS v
 					JOIN torrents_group AS g ON g.ID = v.GroupID
@@ -299,10 +285,11 @@ class Votes {
 					  AND g.CategoryID = 1
 				ORDER BY Score DESC
 				LIMIT 100");
-			while (list($GID) = $DB->next_record()) {
+			while (list($GID) = G::$DB->next_record()) {
 				$Rankings[$GID] = ++$i;
 			}
-			$Cache->cache_value("voting_ranks_decade_$Year", $Rankings, 259200); // 3 days
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value("voting_ranks_decade_$Year", $Rankings, 259200); // 3 days
 		}
 
 		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);

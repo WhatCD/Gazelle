@@ -18,7 +18,7 @@ $DB->query("
 list($Type) = $DB->next_record();
 if (!check_perms('admin_reports')) {
 	if (check_perms('site_moderate_forums')) {
-		if (!in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
+		if (!in_array($Type, array('comment', 'post', 'thread'))) {
 			error($Type);
 		}
 	} elseif (check_perms('project_team')) {
@@ -42,7 +42,7 @@ if ($Type == 'request_update') {
 	$Cache->decrement('num_update_reports');
 }
 
-if (in_array($Type, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
+if (in_array($Type, array('comment', 'post', 'thread'))) {
 	$Channels[] = '#forumreports';
 	$Cache->decrement('num_forum_reports');
 }

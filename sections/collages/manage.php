@@ -57,13 +57,12 @@ View::show_header("Manage collage: $Name", 'jquery-ui,jquery.tablesorter.min,sor
 				<li>Press "Save All Changes" when you are finished sorting.</li>
 				<li>Press "Edit" or "Remove" to simply modify one entry.</li>
 			</ul>
-			<noscript><ul><li><strong class="important_text">Note: Enable JavaScript!</strong></li></ul></noscript>
 			</td>
 		</tr>
 	</table>
 
 	<div class="drag_drop_save hidden">
-		<input type="button" name="submit" value="Save All Changes" title="Save your changes." class="save_sortable_collage" />
+		<input type="button" name="submit" value="Save All Changes" class="save_sortable_collage" />
 	</div>
 	<table id="manage_collage_table">
 		<thead>
@@ -129,7 +128,7 @@ View::show_header("Manage collage: $Name", 'jquery-ui,jquery.tablesorter.min,sor
 		</tbody>
 	</table>
 	<div class="drag_drop_save hidden">
-		<input type="button" name="submit" value="Save All Changes" title="Save your changes." class="save_sortable_collage" />
+		<input type="button" name="submit" value="Save All Changes" class="save_sortable_collage" />
 	</div>
 	<form class="dragdrop_form hidden" name="collage" action="collages.php" method="post" id="drag_drop_collage_form">
 		<div>

@@ -468,7 +468,7 @@ if (isset($_GET['searchtags']) && $_GET['searchtags'] != '') {
 	}
 
 	$Tags = explode(',', $_GET['searchtags']);
-	foreach ($Tags as $Key => $Tag) :
+	foreach ($Tags as $Key => $Tag) {
 		if (trim($Tag) != '') {
 			if ($TagSearch != '') {
 				if ($_GET['tags_type']) {
@@ -489,7 +489,7 @@ if (isset($_GET['searchtags']) && $_GET['searchtags'] != '') {
 				$TagSearch .= "$TagField LIKE '%".db_string($Tag)."%'";
 			}
 		}
-	endforeach;
+	} //foreach
 
 	if ($TagSearch != '') {
 		if ($DisableGrouping) {
@@ -722,7 +722,7 @@ View::show_header($Title, 'browse');
 	<div class="box pad">
 		<table class="layout">
 <?	$AdvancedSearch = false;
-	if ((strtolower($_GET['action']) == 'advanced' || ($LoggedUser['SearchType'] && strtolower($_GET['action']) != 'basic')) && check_perms('site_advanced_search')) :
+	if ((strtolower($_GET['action']) == 'advanced' || ($LoggedUser['SearchType'] && strtolower($_GET['action']) != 'basic')) && check_perms('site_advanced_search')) {
 		$AdvancedSearch = true;
 ?>
 			<tr>
@@ -817,7 +817,7 @@ View::show_header($Title, 'browse');
 					</select>
 				</td>
 			</tr>
-<?	else: ?>
+<?	} else { //if ((strtolower($_GET['action']) == 'advanced' || ($LoggedUser['SearchType'] && strtolower($_GET['action']) != 'basic')) && check_perms('site_advanced_search')) ?>
 			<tr>
 				<td class="label">Search terms:</td>
 				<td colspan="3">
@@ -827,11 +827,11 @@ View::show_header($Title, 'browse');
 <?		} ?>
 				</td>
 			</tr>
-<?	endif; ?>
+<?	} //if ((strtolower($_GET['action']) == 'advanced' || ($LoggedUser['SearchType'] && strtolower($_GET['action']) != 'basic')) && check_perms('site_advanced_search')) ?>
 			<tr>
 				<td class="label">Tags (comma-separated):</td>
 				<td colspan="3">
-					<input type="text" size="40" id="tags" name="searchtags" class="inputtext smaller" title="Use -tag to exclude tag" value="<?=display_str($_GET['searchtags'])?>" />&nbsp;
+					<input type="text" size="40" id="tags" name="searchtags" class="tooltip inputtext smaller" title="Use -tag to exclude tag" value="<?=display_str($_GET['searchtags'])?>" />&nbsp;
 					<input type="radio" name="tags_type" id="tags_type0" value="0"<? if ($_GET['tags_type'] == 0) { ?> checked="checked"<? } ?> /> <label for="tags_type0">Any</label>&nbsp;&nbsp;
 					<input type="radio" name="tags_type" id="tags_type1" value="1"<? if ($_GET['tags_type'] == 1) { ?> checked="checked"<? } ?> /> <label for="tags_type1">All</label>
 				</td>
@@ -866,7 +866,7 @@ View::show_header($Title, 'browse');
 <?
 $x = 1;
 reset($Categories);
-foreach ($Categories as $CatKey => $CatName) :
+foreach ($Categories as $CatKey => $CatName) {
 	if ($x % 8 == 0 || $x == 1) {
 ?>
 			<tr>
@@ -875,13 +875,12 @@ foreach ($Categories as $CatKey => $CatName) :
 					<input type="checkbox" name="filter_cat[<?=($CatKey + 1)?>]" id="cat_<?=($CatKey + 1)?>" value="1"<? if (isset($_GET['filter_cat'][$CatKey + 1])) { ?> checked="checked"<? } ?> />
 					<label for="cat_<?=($CatKey + 1)?>"><?=$CatName?></label>
 				</td>
-<?
-	if ($x % 7 == 0) {
-?>
+<?	if ($x % 7 == 0) { ?>
 			</tr>
-<?	}
+<?
+	}
 	$x++;
-endforeach;
+}
 ?>
 		</table>
 		<table class="layout cat_list<? if (!$LoggedUser['ShowTags']) { ?> hidden<? } ?>" id="taglist">
@@ -899,7 +898,7 @@ if (!$GenreTags) {
 }
 
 $x = 0;
-foreach ($GenreTags as $Tag) :
+foreach ($GenreTags as $Tag) {
 ?>
 				<td width="12.5%"><a href="#" onclick="add_tag('<?=$Tag?>'); return false;"><?=$Tag?></a></td>
 <?
@@ -910,7 +909,7 @@ foreach ($GenreTags as $Tag) :
 			<tr>
 <?
 	}
-endforeach;
+} //foreach
 if ($x % 7 != 0) { // Padding
 ?>
 				<td colspan="<?= 7 - ($x % 7); ?>"> </td>
@@ -930,7 +929,8 @@ if ($x % 7 != 0) { // Padding
 			&nbsp;&nbsp;
 <?	if (isset($TorrentWhere) || isset($GroupWhere) || $OrderBy != 's3' || $OrderWay != 'DESC') { ?>
 			<input type="submit" name="setdefault" value="Make default" />
-<?	}
+<?
+	}
 	if ($LoggedUser['DefaultSearch']) {
 ?>
 			<input type="submit" name="cleardefault" value="Clear default" />
@@ -948,7 +948,7 @@ if ($x % 7 != 0) { // Padding
 		<td class="small"></td>
 <?	} ?>
 		<td class="small cats_col"></td>
-		<td width="100%"><a href="<?=header_link('s1','ASC')?>">Name</a> / <a href="<?=header_link('s2')?>">Year</a></td>
+		<td width="100%"><a href="<?=header_link('s1', 'ASC')?>">Name</a> / <a href="<?=header_link('s2')?>">Year</a></td>
 		<td>Files</td>
 		<td><a href="<?=header_link('s3')?>"><?=$TimeLabel?></a></td>
 		<td><a href="<?=header_link('s4')?>">Size</a></td>
@@ -1032,7 +1032,7 @@ if ($x % 7 != 0) { // Padding
 		$DisplayName = Artists::display_artists($Artists[$GroupID]);
 		if ((count($Torrents['id']) > 1 || $GroupCategoryID == 1) && !$DisableGrouping) {
 			// These torrents are in a group
-			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 			if ($GroupYear > 0) {
 				$DisplayName .= " [$GroupYear]";
 			}
@@ -1044,28 +1044,29 @@ if ($x % 7 != 0) { // Padding
 <?
 // Image cover art requires WikiImage
 /*
-if ($LoggedUser['CoverArt']) : ?>
+if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
-				<? ImageTools::cover_thumb('', $GroupCategoryID - 1) ?>
+				<?=ImageTools::cover_thumb('', $GroupCategoryID - 1) ?>
 			</div>
-<? endif;
+<?
+}
 */
 ?>
 			<div class="group_info clear">
 				<?=$DisplayName?>
-				<span style="float: right;"><a href="#showimg_<?=$GroupID?>" onclick="Bookmark(<?=$GroupID?>);this.innerHTML='Bookmarked';return false;" class="brackets">Bookmark</a></span>
+				<span style="float: right;"><a href="#showimg_<?=$GroupID?>" onclick="Bookmark(<?=$GroupID?>); this.innerHTML = 'Bookmarked'; return false;" class="brackets">Bookmark</a></span>
 				<div class="tags"><?=$TorrentTags->format('torrents.php?searchtags=')?></div>
 			</div>
 		</td>
-		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
-		<td class="nobr"><?=Format::get_size($MaxSize)?> (Max)</td>
-		<td><?=number_format($TotalSnatched)?></td>
-		<td<?=($TotalSeeders == 0) ? ' class="r00"' : ''?>><?=number_format($TotalSeeders)?></td>
-		<td><?=number_format($TotalLeechers)?></td>
+		<td class="nobr"><?=time_diff($GroupTime, 1)?></td>
+		<td class="number_column nobr"><?=Format::get_size($MaxSize)?> (Max)</td>
+		<td class="number_column"><?=number_format($TotalSnatched)?></td>
+		<td class="number_column<?=($TotalSeeders == 0) ? ' r00' : ''?>"><?=number_format($TotalSeeders)?></td>
+		<td class="number_column"><?=number_format($TotalLeechers)?></td>
 	</tr>
 <?
 			$Row = 'a';
-			foreach ($Torrents['id'] as $Key => $Val) :
+			foreach ($Torrents['id'] as $Key => $Val) {
 				// All of the individual torrents in the group
 
 				// If they're using the advanced search and have chosen enabled grouping, we just skip the torrents that don't check out
@@ -1173,20 +1174,20 @@ if ($LoggedUser['CoverArt']) : ?>
 			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$Val?>"><?=$ExtraInfo?></a>
 		</td>
 		<td><?=$Torrents['filecount'][$Key]?></td>
-		<td class="nobr"><?=time_diff($Torrents['time'][$Key],1)?></td>
-		<td class="nobr"><?=Format::get_size($Torrents['size'][$Key])?></td>
-		<td><?=number_format($Torrents['snatched'][$Key])?></td>
-		<td<?=($Torrents['seeders'][$Key] == 0) ? ' class="r00"' : ''?>><?=number_format($Torrents['seeders'][$Key])?></td>
-		<td><?=number_format($Torrents['leechers'][$Key])?></td>
+		<td class="nobr"><?=time_diff($Torrents['time'][$Key], 1)?></td>
+		<td class="number_column nobr"><?=Format::get_size($Torrents['size'][$Key])?></td>
+		<td class="number_column"><?=number_format($Torrents['snatched'][$Key])?></td>
+		<td class="number_column<?=($Torrents['seeders'][$Key] == 0) ? ' r00' : ''?>"><?=number_format($Torrents['seeders'][$Key])?></td>
+		<td class="number_column"><?=number_format($Torrents['leechers'][$Key])?></td>
 	</tr>
 <?
-			endforeach;
+			} //foreach ($Torrents['id'] as $Key => $Val)
 		} else {
 			// Either grouping is disabled, or we're viewing a type that does not require grouping
 			if ($GroupCategoryID == 1) {
-				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Torrents['id'][0].'" title="View Torrent">'.$GroupName.'</a>';
+				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Torrents['id'][0].'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 			} else {
-				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$GroupName.'</a>';
+				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 			}
 
 			$ExtraInfo = '';
@@ -1251,11 +1252,11 @@ if ($LoggedUser['CoverArt']) : ?>
 <?			} ?>
 		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td class="big_info">
-<? /* if ($LoggedUser['CoverArt']) : ?>
+<? /* if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
 				<? ImageTools::cover_thumb('', $GroupCategoryID - 1) ?>
 			</div>
-<? endif; */ ?>
+<? } */ ?>
 			<div class="group_info">
 				<span>[ <a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][0].$DownloadString?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> | <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][0]?>" title="Report">RP</a> ]</span>
 				<?=$DisplayName?>
@@ -1264,11 +1265,11 @@ if ($LoggedUser['CoverArt']) : ?>
 			</div>
 		</td>
 		<td><?=$Torrents['filecount'][0]?></td>
-		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
-		<td class="nobr"><?=Format::get_size($Torrents['size'][0])?></td>
-		<td><?=number_format($TotalSnatched)?></td>
-		<td<?=($TotalSeeders == 0) ? ' class="r00"' : ''?>><?=number_format($TotalSeeders)?></td>
-		<td><?=number_format($TotalLeechers)?></td>
+		<td class="nobr"><?=time_diff($GroupTime, 1)?></td>
+		<td class="number_column nobr"><?=Format::get_size($Torrents['size'][0])?></td>
+		<td class="number_column"><?=number_format($TotalSnatched)?></td>
+		<td class="number_column<?=($TotalSeeders == 0) ? ' r00' : ''?>"><?=number_format($TotalSeeders)?></td>
+		<td class="number_column"><?=number_format($TotalLeechers)?></td>
 	</tr>
 <?
 		}

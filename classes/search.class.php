@@ -45,7 +45,6 @@ class SPHINX_SEARCH extends SphinxClient {
 	****************************************************************/
 
 	function search($Query = '', $CachePrefix = '', $CacheLength = 0, $ReturnData = array(), $SQL = '', $IDColumn = 'ID') {
-		global $Cache, $DB;
 		$QueryStartTime = microtime(true);
 		$Result = $this->Query($Query, $this->Index);
 		$QueryEndTime = microtime(true);
@@ -61,9 +60,9 @@ class SPHINX_SEARCH extends SphinxClient {
 		$this->Time += ($QueryEndTime - $QueryStartTime) * 1000;
 
 		if ($Result === false) {
-			if ($this->_connerror && !$Cache->get_value('sphinx_crash_reported')) {
+			if ($this->_connerror && !G::$Cache->get_value('sphinx_crash_reported')) {
 				send_irc('PRIVMSG '.ADMIN_CHAN.' :!dev Connection to searchd failed');
-				$Cache->cache_value('sphinx_crash_reported', 1, 3600);
+				G::$Cache->cache_value('sphinx_crash_reported', 1, 3600);
 			}
 			send_irc('PRIVMSG '.LAB_CHAN." :Search for \"$Query\" (".str_replace("\n", '', print_r($this->Filters, true)).') failed: '.$this->GetLastError());
 		}
@@ -89,7 +88,7 @@ class SPHINX_SEARCH extends SphinxClient {
 		foreach ($MatchIDs as $Match) {
 			$Matches[$Match] = $Matches[$Match]['attrs'];
 			if (!empty($CachePrefix)) {
-				$Data = $Cache->get_value($CachePrefix."_$Match");
+				$Data = G::$Cache->get_value($CachePrefix."_$Match");
 				if ($Data == false) {
 					$NotFound[] = $Match;
 					continue;
@@ -121,11 +120,13 @@ class SPHINX_SEARCH extends SphinxClient {
 
 		if ($SQL != '') {
 			if (!empty($NotFound)) {
-				$DB->query(str_replace('%ids', implode(',', $NotFound), $SQL));
-				while ($Data = $DB->next_record(MYSQLI_ASSOC)) {
+				$QueryID = G::$DB->get_query_id();
+				G::$DB->query(str_replace('%ids', implode(',', $NotFound), $SQL));
+				while ($Data = G::$DB->next_record(MYSQLI_ASSOC)) {
 					$Matches[$Data[$IDColumn]] = array_merge($Matches[$Data[$IDColumn]], $Data);
-					$Cache->cache_value($CachePrefix.'_'.$Data[$IDColumn], $Data, $CacheLength);
+					G::$Cache->cache_value($CachePrefix.'_'.$Data[$IDColumn], $Data, $CacheLength);
 				}
+				G::$DB->set_query_id($QueryID);
 			}
 		} else {
 			$Matches = array('matches' => $Matches, 'notfound' => $NotFound);

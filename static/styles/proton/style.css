@@ -1712,7 +1712,7 @@ h3 {
 }
 
 #userinfo_username .brackets {
-	padding: 0 8px;
+	padding: 0 0 0 9px;
 }
 
 #userinfo_major .brackets {
@@ -2054,4 +2054,9 @@ tr.torrent .bookmark > a:after {
 
 .edit_changelog textarea {
 	width: 600px;
+}
+
+div[class~=tooltipster-base] {
+	background-color: #F5F5F5;
+	color: #575757;
 }

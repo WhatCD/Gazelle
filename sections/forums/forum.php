@@ -16,6 +16,9 @@ if (!is_number($ForumID)) {
 	error(0);
 }
 
+$IsDonorForum = $ForumID == DONOR_FORUM ? true : false;
+$Tooltip = $ForumID == DONOR_FORUM ? "tooltip_gold" : "tooltip";
+
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {
@@ -72,17 +75,17 @@ if (!check_perms('site_moderate_forums')) {
 
 
 $ForumName = display_str($Forums[$ForumID]['Name']);
-if ($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRead'] > $LoggedUser['Class']) {
+if (!Forums::check_forumperm($ForumID)) {
 	error(403);
 }
 
 // Start printing
-View::show_header('Forums &gt; '. $Forums[$ForumID]['Name']);
+View::show_header('Forums &gt; '. $Forums[$ForumID]['Name'], '', $IsDonorForum ? 'donor' : '');
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <?=$ForumName?></h2>
 	<div class="linkbox">
-<? if (check_forumperm($ForumID, 'Write') && check_forumperm($ForumID, 'Create')) { ?>
+<? if (Forums::check_forumperm($ForumID, 'Write') && Forums::check_forumperm($ForumID, 'Create')) { ?>
 		<a href="forums.php?action=new&amp;forumid=<?=$ForumID?>" class="brackets">New thread</a>
 <? } ?>
 		<a href="#" onclick="$('#searchforum').gtoggle(); this.innerHTML = (this.innerHTML == 'Search this forum' ? 'Hide search' : 'Search this forum'); return false;" class="brackets">Search this forum</a>
@@ -122,25 +125,6 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name']);
 				<br />
 			</div>
 		</div>
-
-
-<?
-/*
-	if (check_perms('users_mod')) {
-		$DB->query("
-			SELECT ForumID
-			FROM subscribed_forums
-			WHERE ForumID='$ForumID'
-				AND SubscriberID='$LoggedUser[ID]'");
-		if (!$DB->has_results()) { ?>
-			<a href="forums.php?action=forum_subscribe&amp;perform=add&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Subscribe to forum</a>
-<?		} else { ?>
-			<a href="forums.php?action=forum_subscribe&amp;perform=remove&amp;forumid=<?=$ForumID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Unsubscribe from forum</a>
-<?		}
-	}
- */
-?>
-
 	</div>
 <?	if (check_perms('site_moderate_forums')) { ?>
 	<div class="linkbox">
@@ -151,7 +135,7 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name']);
 	<div class="linkbox">
 			<strong>Forum Specific Rules</strong>
 <?		foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
-			$Thread = get_thread_info($ThreadIDs);
+			$Thread = Forums::get_thread_info($ThreadIDs);
 ?>
 		<br />
 		<a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadIDs?>" class="brackets"><?=display_str($Thread['Title'])?></a>
@@ -247,7 +231,7 @@ if (count($Forum) === 0) {
 		}
 ?>
 	<tr class="row<?=$Row?>">
-		<td class="<?=$Read?>" title="<?=ucwords(str_replace('_', ' ', $Read))?>"></td>
+		<td class="<?=$Read?> <?=$Tooltip?>" title="<?=ucwords(str_replace('_', ' ', $Read))?>"></td>
 		<td>
 			<span style="float: left;" class="last_topic">
 <?
@@ -258,21 +242,21 @@ if (count($Forum) === 0) {
 
 ?>
 				<strong>
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=$Title?>"><?=Format::cut_string($DisplayTitle, $TopicLength) ?></a>
+					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" class="tooltip" data-title-plain="<?=$Title?>"><?=Format::cut_string($DisplayTitle, $TopicLength) ?></a>
 				</strong>
 				<?=$PagesText?>
 			</span>
 <?		if (!empty($LastRead[$TopicID])) { ?>
-			<span style="float: left;" class="last_read" title="Jump to last read">
+			<span style="float: left;" class="<?=$Tooltip?> last_read" title="Jump to last read">
 				<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>&amp;page=<?=$LastRead[$TopicID]['Page']?>#post<?=$LastRead[$TopicID]['PostID']?>"></a>
 			</span>
 <?		} ?>
 			<span style="float: right;" class="last_poster">
-				by <?=Users::format_username($LastAuthorID, false, false, false)?> <?=time_diff($LastTime, 1)?>
+				by <?=Users::format_username($LastAuthorID, false, false, false, false, false, $IsDonorForum)?> <?=time_diff($LastTime,1)?>
 			</span>
 		</td>
-		<td><?=number_format($PostCount - 1)?></td>
-		<td><?=Users::format_username($AuthorID, false, false, false)?></td>
+		<td class="number_column"><?=number_format($PostCount - 1)?></td>
+		<td><?=Users::format_username($AuthorID, false, false, false, false, false, $IsDonorForum)?></td>
 	</tr>
 <?	}
 } ?>

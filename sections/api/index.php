@@ -8,13 +8,13 @@ $Available = array(
 );
 
 if (
-	empty($_GET['req']) ||
-	empty($_GET['uid']) ||
-	empty($_GET['aid']) ||
-	empty($_GET['key']) ||
-	!is_number($_GET['uid']) ||
-	!is_number($_GET['aid']) ||
-	!in_array($_GET['req'], $Available, true)
+	empty($_GET['req'])
+	|| empty($_GET['uid'])
+	|| empty($_GET['aid'])
+	|| empty($_GET['key'])
+	|| !is_number($_GET['uid'])
+	|| !is_number($_GET['aid'])
+	|| !in_array($_GET['req'], $Available, true)
 ) {
 	error('invalid');
 }

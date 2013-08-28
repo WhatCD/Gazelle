@@ -51,9 +51,12 @@ while (list($ID, $Message, $LogTime) = $DB->next_record()) {
 	$Message = '';
 	$Color = $Colon = false;
 	for ($i = 0, $PartCount = sizeof($MessageParts); $i < $PartCount; $i++) {
-		if ((strpos($MessageParts[$i], 'https://'.SSL_SITE_URL) === 0 && $Offset = strlen('https://'.SSL_SITE_URL.'/')) ||
-				(strpos($MessageParts[$i], 'http://'.NONSSL_SITE_URL) === 0 && $Offset = strlen('http://'.NONSSL_SITE_URL.'/'))) {
-			$MessageParts[$i] = '<a href="'.substr($MessageParts[$i], $Offset).'">'.substr($MessageParts[$i], $Offset).'</a>';
+		if ((strpos($MessageParts[$i], 'https://'.SSL_SITE_URL) === 0
+				&& $Offset = strlen('https://'.SSL_SITE_URL.'/'))
+			|| (strpos($MessageParts[$i], 'http://'.NONSSL_SITE_URL) === 0
+				&& $Offset = strlen('http://'.NONSSL_SITE_URL.'/'))
+			) {
+				$MessageParts[$i] = '<a href="'.substr($MessageParts[$i], $Offset).'">'.substr($MessageParts[$i], $Offset).'</a>';
 		}
 		switch ($MessageParts[$i]) {
 			case 'Torrent':

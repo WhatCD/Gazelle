@@ -11,7 +11,6 @@ class Tracker {
 	 * @param boolean $ToIRC Sends a message to the channel #tracker with the GET URL.
 	 */
 	public static function update_tracker($Action, $Updates, $ToIRC = false) {
-		global $Cache;
 		//Build request
 		$Get = '/update?action='.$Action;
 		foreach ($Updates as $Key => $Value) {
@@ -62,9 +61,9 @@ class Tracker {
 
 		if ($Return != "success") {
 			send_irc("PRIVMSG #tracker :{$Attempts} {$Err} {$Get}");
-			if ($Cache->get_value('ocelot_error_reported') === false) {
+			if (G::$Cache->get_value('ocelot_error_reported') === false) {
 				send_irc("PRIVMSG ".ADMIN_CHAN." :Failed to update ocelot: ".$Err." : ".$Get);
-				$Cache->cache_value('ocelot_error_reported', true, 3600);
+				G::$Cache->cache_value('ocelot_error_reported', true, 3600);
 			}
 		}
 		return ($Return == "success");

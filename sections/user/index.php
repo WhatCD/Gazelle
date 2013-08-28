@@ -73,9 +73,6 @@ switch ($_REQUEST['action']) {
 	case 'moderate':
 		include('takemoderate.php');
 		break;
-	case 'user_subscribe':
-		include('subscribe.php');
-		break;
 	case 'clearcache':
 		if (!check_perms('admin_clear_cache') || !check_perms('users_override_paranoia')) {
 			error(403);
@@ -121,6 +118,10 @@ switch ($_REQUEST['action']) {
 		if (isset($_GET['username']) && isset($_GET['uid'])) {
 			echo LastFM::clear_cache($_GET['username'],$_GET['uid']);
 		}
+		break;
+	case 'take_donate':
+		break;
+	case 'take_update_rank':
 		break;
 	default:
 		if (isset($_REQUEST['id'])) {

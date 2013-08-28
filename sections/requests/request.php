@@ -80,7 +80,7 @@ $ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID ==
 $UserCanEdit = (!$IsFilled && $LoggedUser['ID'] === $RequestorID && $VoteCount < 2);
 $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
-View::show_header("View request: $FullName", 'comments,requests,bbcode');
+View::show_header("View request: $FullName", 'comments,requests,bbcode,subscriptions');
 
 ?>
 <div class="thin">
@@ -98,6 +98,7 @@ View::show_header("View request: $FullName", 'comments,requests,bbcode');
 <?	} else { ?>
 			<a href="#" id="bookmarklink_request_<?=$RequestID?>" onclick="Bookmark('request', <?=$RequestID?>, 'Remove bookmark'); return false;" class="brackets">Bookmark</a>
 <?	} ?>
+			<a href="#" id="subscribelink_requests<?=$RequestID?>" class="brackets" onclick="SubscribeComments('requests',<?=$RequestID?>);return false;"><?=Subscriptions::has_subscribed_comments('requests', $RequestID) !== false ? 'Unsubscribe' : 'Subscribe'?></a>
 			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>" class="brackets">Report request</a>
 <?	if (!$IsFilled) { ?>
 			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID ? "&amp;groupid=$GroupID" : '')?>" class="brackets">Upload request</a>
@@ -226,7 +227,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 			</ul>
 		</div>
 		<div class="box box_votes">
-			<div class="head"><strong>Top contributors</strong></div>
+			<div class="head"><strong>Top Contributors</strong></div>
 			<table class="layout">
 <?
 	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
@@ -243,7 +244,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 					<td>
 						<a href="user.php?id=<?=$User['UserID']?>"><?=($Boldify ? '<strong>' : '')?><?=display_str($User['Username'])?><?=($Boldify ? '</strong>' : '')?></a>
 					</td>
-					<td>
+					<td class="number_column">
 						<?=($Boldify ? '<strong>' : '')?><?=Format::get_size($User['Bounty'])?><?=($Boldify ? '</strong>' : '')?>
 					</td>
 				</tr>
@@ -256,7 +257,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 					<td>
 						<a href="user.php?id=<?=$User['UserID']?>"><strong><?=display_str($User['Username'])?></strong></a>
 					</td>
-					<td>
+					<td class="number_column">
 						<strong><?=Format::get_size($User['Bounty'])?></strong>
 					</td>
 				</tr>
@@ -375,7 +376,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 <?	}
 	if ($CanVote) { ?>
 			<tr id="voting">
-				<td class="label" title="These units are in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Custom vote (MB)</td>
+				<td class="label tooltip" title="These units are in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Custom vote (MB)</td>
 				<td>
 					<input type="text" id="amount_box" size="8" onchange="Calculate();" />
 					<select id="unit" name="unit" onchange="Calculate();">
@@ -461,107 +462,19 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 		</table>
 <?
 
-$Results = Requests::get_comment_count($RequestID);
+list($NumComments, $Page, $Thread, $LastRead) = Comments::load('requests', $RequestID);
 
-if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
-	$DB->query("
-		SELECT COUNT(ID)
-		FROM requests_comments
-		WHERE RequestID = $RequestID
-			AND ID <= $_GET[postid]");
-	list($PostNum) = $DB->next_record();
-	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $PostNum);
-} else {
-	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $Results);
-}
-
-//Get the cache catalogue
-$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
-
-//---------- Get some data to start processing
-
-// Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-$Catalogue = Requests::get_comment_catalogue($RequestID, $CatalogueID);
-
-//This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
 ?>
 	<div class="linkbox"><a name="comments"></a>
 <?
-$Pages = Format::get_pages($Page, $Results, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
+$Pages = Format::get_pages($Page, $NumComments, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 echo $Pages;
 ?>
 	</div>
 <?
 
 //---------- Begin printing
-foreach ($Thread as $Key => $Post) {
-	list($PostID, $AuthorID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
-?>
-<table class="forum_post box vertical_margin<?=(!Users::has_avatars_enabled() ? ' noavatar' : '')?>" id="post<?=$PostID?>">
-	<colgroup>
-<?	if (Users::has_avatars_enabled()) { ?>
-		<col class="col_avatar" />
-<? 	} ?>
-		<col class="col_post_body" />
-	</colgroup>
-	<tr class="colhead_dark">
-		<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
-			<div style="float: left;"><a href="#post<?=$PostID?>">#<?=$PostID?></a>
-				by <strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
-				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
-<?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>', '<?=$Key?>');" class="brackets">Edit</a>
-<?	}
-	if (check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
-<?	} ?>
-			</div>
-			<div id="bar<?=$PostID?>" style="float: right;">
-				<a href="reports.php?action=report&amp;type=requests_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
-<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
-		$AuthorInfo = Users::user_info($AuthorID);
-		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
-?>
-				<form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
-					<input type="hidden" name="action" value="warn" />
-					<input type="hidden" name="groupid" value="<?=$RequestID?>" />
-					<input type="hidden" name="postid" value="<?=$PostID?>" />
-					<input type="hidden" name="userid" value="<?=$AuthorID?>" />
-					<input type="hidden" name="key" value="<?=$Key?>" />
-				</form>
-				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
-<?		}
-	}
-?>
-				<a href="#">&uarr;</a>
-			</div>
-		</td>
-	</tr>
-	<tr>
-<?	if (Users::has_avatars_enabled()) { ?>
-		<td class="avatar" valign="top">
-		<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
-		</td>
-<?	} ?>
-		<td class="body" valign="top">
-			<div id="content<?=$PostID?>">
-<?=$Text->full_format($Body)?>
-<?	if ($EditedUserID) { ?>
-				<br />
-				<br />
-<?		if (check_perms('site_moderate_forums')) { ?>
-				<a href="#content<?=$PostID?>" onclick="LoadEdit('requests', <?=$PostID?>, 1); return false;">&laquo;</a>
-<? 		} ?>
-				Last edited by
-				<?=Users::format_username($EditedUserID, false, false, false)?> <?=time_diff($EditedTime, 2, true, true)?>
-<?	} ?>
-			</div>
-		</td>
-	</tr>
-</table>
-<?	}
+CommentsView::render_comments($Thread, $LastRead, "requests.php?action=view&id=$RequestID");
 
 if ($Pages) { ?>
 	<div class="linkbox pager"><?=$Pages?></div>
@@ -569,8 +482,12 @@ if ($Pages) { ?>
 }
 
 	View::parse('generic/reply/quickreply.php', array(
-			'InputName' => 'requestid',
-			'InputID' => $RequestID));
+		'InputName' => 'pageid',
+		'InputID' => $RequestID,
+		'Action' => 'comments.php?page=requests',
+		'InputAction' => 'take_post',
+		'SubscribeBox' => true
+	));
 ?>
 	</div>
 </div>

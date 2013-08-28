@@ -13,8 +13,8 @@ class View {
 	 *                    the page. ONLY PUT THE RELATIVE LOCATION WITHOUT '.js'
 	 *                    example: 'somefile,somedir/somefile'
 	 */
-	public static function show_header($PageTitle = '', $JSIncludes = '') {
-		global $Document, $Cache, $DB, $LoggedUser, $Mobile, $Classes;
+	public static function show_header($PageTitle = '', $JSIncludes = '', $CSSIncludes = '') {
+		global $Document, $Mobile, $Classes;
 
 		if ($PageTitle != '') {
 			$PageTitle .= ' :: ';
@@ -26,7 +26,7 @@ class View {
 			empty($_REQUEST['type']) ? false : $_REQUEST['type'] // Type
 		);
 
-		if (!is_array($LoggedUser) || empty($LoggedUser['ID'])) {
+		if (!is_array(G::$LoggedUser) || empty(G::$LoggedUser['ID'])) {
 			require(SERVER_ROOT.'/design/publicheader.php');
 		} else {
 			require(SERVER_ROOT.'/design/privateheader.php');
@@ -42,8 +42,8 @@ class View {
 	 *                 ['disclaimer'] = [boolean] (False) Displays the disclaimer in the footer
 	 */
 	public static function show_footer ($Options = array()) {
-		global $ScriptStartTime, $LoggedUser, $Cache, $DB, $SessionID, $UserSessions, $Debug, $Time;
-		if (!is_array($LoggedUser)) {
+		global $ScriptStartTime, $SessionID, $UserSessions, $Debug, $Time;
+		if (!is_array(G::$LoggedUser)) {
 			require(SERVER_ROOT.'/design/publicfooter.php');
 		} else {
 			require(SERVER_ROOT.'/design/privatefooter.php');

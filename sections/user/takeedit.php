@@ -6,7 +6,7 @@ if (!is_number($UserID)) {
 	error(404);
 }
 
-//For the entire of this page we should in general be using $UserID not $LoggedUser['ID'] and $U[] not $LoggedUser[]
+//For this entire page, we should generally be using $UserID not $LoggedUser['ID'] and $U[] not $LoggedUser[]
 $U = Users::user_info($UserID);
 
 if (!$U) {
@@ -30,9 +30,9 @@ $Val->SetFields('postsperpage', 1, "number", "You forgot to select your posts pe
 $Val->SetFields('collagecovers', 1, "number", "You forgot to select your collage option.");
 $Val->SetFields('avatar', 0, "regex", "You did not enter a valid avatar URL.", array('regex' => "/^".IMAGE_REGEX."$/i"));
 $Val->SetFields('email', 1, "email", "You did not enter a valid email address.");
-$Val->SetFields('irckey', 0, "string", "You did not enter a valid IRCKey. An IRCKey must be between 6 and 32 characters long.", array('minlength' => 6, 'maxlength' => 32));
+$Val->SetFields('irckey', 0, "string", "You did not enter a valid IRC key. An IRC key must be between 6 and 32 characters long.", array('minlength' => 6, 'maxlength' => 32));
 $Val->SetFields('cur_pass', 0, "string", "You did not enter a valid password. Passwords must be at least 6 characters long.", array('minlength' => 6, 'maxlength' => 150));
-$Val->SetFields('new_pass_1', 0, "regex", "You did not enter a valid password. A strong password is between 8 and 40 characters long contains at least 1 lowercase and uppercase letter, contains at least a number or symbol", array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
+$Val->SetFields('new_pass_1', 0, "regex", "You did not enter a valid password. A strong password is between 8 and 40 characters long, contains at least 1 lowercase and uppercase letter, and contains at least a number or symbol.", array('regex' => '/(?=^.{8,}$)(?=.*[^a-zA-Z])(?=.*[A-Z])(?=.*[a-z]).*$/'));
 $Val->SetFields('new_pass_2', 1, "compare", "Your passwords do not match.", array('comparefield' => 'new_pass_1'));
 if (check_perms('site_advanced_search')) {
 	$Val->SetFields('searchtype', 1, "number", "You forgot to select your default search preference.", array('minlength' => 0, 'maxlength' => 1));
@@ -41,7 +41,7 @@ if (check_perms('site_advanced_search')) {
 $Err = $Val->ValidateForm($_POST);
 if ($Err) {
 	error($Err);
-	header('Location: user.php?action=edit&userid='.$UserID);
+	header("Location: user.php?action=edit&userid=$UserID");
 	die();
 }
 
@@ -73,31 +73,31 @@ if (isset($_POST['p_snatched_c']) && isset($_POST['p_seeding_c']) && isset($_POS
 $StatsShown = 0;
 $Stats = array('downloaded', 'uploaded', 'ratio');
 foreach ($Stats as $S) {
-	if (isset($_POST['p_'.$S])) {
+	if (isset($_POST["p_$S"])) {
 		$StatsShown++;
 	}
 }
 
 if ($StatsShown == 2) {
 	foreach ($Stats as $S) {
-		$_POST['p_'.$S] = 'on';
+		$_POST["p_$S"] = 'on';
 	}
 }
 
 $Paranoia = array();
 $Checkboxes = array('downloaded', 'uploaded', 'ratio', 'lastseen', 'requiredratio', 'invitedcount', 'artistsadded', 'notifications');
 foreach ($Checkboxes as $C) {
-	if (!isset($_POST['p_'.$C])) {
+	if (!isset($_POST["p_$C"])) {
 		$Paranoia[] = $C;
 	}
 }
 
 $SimpleSelects = array('torrentcomments', 'collages', 'collagecontribs', 'uploads', 'uniquegroups', 'perfectflacs', 'seeding', 'leeching', 'snatched');
 foreach ($SimpleSelects as $S) {
-	if (!isset($_POST['p_'.$S.'_c']) && !isset($_POST['p_'.$S.'_l'])) {
+	if (!isset($_POST["p_$S".'_c']) && !isset($_POST["p_$S".'_l'])) {
 		// Very paranoid - don't show count or list
-		$Paranoia[] = $S . '+';
-	} elseif (!isset($_POST['p_'.$S.'_l'])) {
+		$Paranoia[] = "$S+";
+	} elseif (!isset($_POST["p_$S".'_l'])) {
 		// A little paranoid - show count, don't show list
 		$Paranoia[] = $S;
 	}
@@ -105,20 +105,31 @@ foreach ($SimpleSelects as $S) {
 
 $Bounties = array('requestsfilled', 'requestsvoted');
 foreach ($Bounties as $B) {
-	if (isset($_POST['p_'.$B.'_list'])) {
-		$_POST['p_'.$B.'_count'] = 'on';
-		$_POST['p_'.$B.'_bounty'] = 'on';
+	if (isset($_POST["p_$B".'_list'])) {
+		$_POST["p_$B".'_count'] = 'on';
+		$_POST["p_$B".'_bounty'] = 'on';
 	}
-	if (!isset($_POST['p_'.$B.'_list'])) {
+	if (!isset($_POST["p_$B".'_list'])) {
 		$Paranoia[] = $B.'_list';
 	}
-	if (!isset($_POST['p_'.$B.'_count'])) {
+	if (!isset($_POST["p_$B".'_count'])) {
 		$Paranoia[] = $B.'_count';
 	}
-	if (!isset($_POST['p_'.$B.'_bounty'])) {
+	if (!isset($_POST["p_$B".'_bounty'])) {
 		$Paranoia[] = $B.'_bounty';
 	}
 }
+
+if (!isset($_POST['p_donor_heart'])) {
+	$Paranoia[] = 'hide_donor_heart';
+}
+
+if (isset($_POST['p_donor_stats'])) {
+	Donations::show_stats($UserID);
+} else {
+	Donations::hide_stats($UserID);
+}
+
 // End building $Paranoia
 
 
@@ -126,14 +137,14 @@ foreach ($Bounties as $B) {
 $DB->query("
 	SELECT Email
 	FROM users_main
-	WHERE ID=".$UserID);
+	WHERE ID = $UserID");
 list($CurEmail) = $DB->next_record();
 if ($CurEmail != $_POST['email']) {
 	if (!check_perms('users_edit_profiles')) { // Non-admins have to authenticate to change email
 		$DB->query("
 			SELECT PassHash, Secret
 			FROM users_main
-			WHERE ID='".db_string($UserID)."'");
+			WHERE ID = '".db_string($UserID)."'");
 		list($PassHash,$Secret)=$DB->next_record();
 		if (!Users::check_password($_POST['cur_pass'], $PassHash, $Secret)) {
 			$Err = 'You did not enter the correct password.';
@@ -198,7 +209,7 @@ if (!empty($LoggedUser['DefaultSearch'])) {
 $Options['DisableGrouping2']    = (!empty($_POST['disablegrouping']) ? 0 : 1);
 $Options['TorrentGrouping']     = (!empty($_POST['torrentgrouping']) ? 1 : 0);
 $Options['DiscogView']          = (!empty($_POST['discogview']) ? 1 : 0);
-$Options['PostsPerPage']        = (int) $_POST['postsperpage'];
+$Options['PostsPerPage']        = (int)$_POST['postsperpage'];
 //$Options['HideCollage']         = (!empty($_POST['hidecollage']) ? 1 : 0);
 $Options['CollageCovers']       = (empty($_POST['collagecovers']) ? 0 : $_POST['collagecovers']);
 $Options['ShowTorFilter']       = (empty($_POST['showtfilter']) ? 0 : 1);
@@ -207,18 +218,19 @@ $Options['AutoSubscribe']       = (!empty($_POST['autosubscribe']) ? 1 : 0);
 $Options['DisableSmileys']      = (!empty($_POST['disablesmileys']) ? 1 : 0);
 $Options['EnableMatureContent'] = (!empty($_POST['enablematurecontent']) ? 1 : 0);
 $Options['UseOpenDyslexic']     = (!empty($_POST['useopendyslexic']) ? 1 : 0);
+$Options['Tooltipster']         = (!empty($_POST['usetooltipster']) ? 1 : 0);
 $Options['AutoloadCommStats']   = (check_perms('users_mod') && !empty($_POST['autoload_comm_stats']) ? 1 : 0);
 $Options['DisableAvatars']      = db_string($_POST['disableavatars']);
-$Options['Identicons']          = (!empty($_POST['identicons']) ? (int) $_POST['identicons'] : 0);
+$Options['Identicons']          = (!empty($_POST['identicons']) ? (int)$_POST['identicons'] : 0);
 $Options['DisablePMAvatars']    = (!empty($_POST['disablepmavatars']) ? 1 : 0);
-$Options['NotifyOnQuote']       = (!empty($_POST['notifyquotes']) ? 1 : 0);
+$Options['NotifyOnQuote']       = (!empty($_POST['notifications_Quotes_popup']) ? 1 : 0);
 $Options['ListUnreadPMsFirst']  = (!empty($_POST['list_unread_pms_first']) ? 1 : 0);
 $Options['ShowSnatched']        = (!empty($_POST['showsnatched']) ? 1 : 0);
 $Options['DisableAutoSave']     = (!empty($_POST['disableautosave']) ? 1 : 0);
 $Options['NoVoteLinks']         = (!empty($_POST['novotelinks']) ? 1 : 0);
-$Options['CoverArt']            = (int) !empty($_POST['coverart']);
-$Options['ShowExtraCovers']     = (int) !empty($_POST['show_extra_covers']);
-$Options['AutoComplete']        = (int) $_POST['autocomplete'];
+$Options['CoverArt']            = (int)!empty($_POST['coverart']);
+$Options['ShowExtraCovers']     = (int)!empty($_POST['show_extra_covers']);
+$Options['AutoComplete']        = (int)$_POST['autocomplete'];
 
 if (isset($LoggedUser['DisableFreeTorrentTop10'])) {
 	$Options['DisableFreeTorrentTop10'] = $LoggedUser['DisableFreeTorrentTop10'];
@@ -276,20 +288,23 @@ if ($DB->has_results()) {
 		VALUES ('$UserID', '$LastFMUsername')");
 }
 
+
+Donations::update_rewards($UserID);
+NotificationsManager::save_settings($UserID);
+
 // Information on how the user likes to download torrents is stored in cache
 if ($DownloadAlt != $LoggedUser['DownloadAlt']) {
 	$Cache->delete_value('user_'.$LoggedUser['torrent_pass']);
 }
 
-$Cache->begin_transaction('user_info_'.$UserID);
+$Cache->begin_transaction("user_info_$UserID");
 $Cache->update_row(false, array(
 		'Avatar'=>$_POST['avatar'],
 		'Paranoia'=>$Paranoia
-
 ));
 $Cache->commit_transaction(0);
 
-$Cache->begin_transaction('user_info_heavy_'.$UserID);
+$Cache->begin_transaction("user_info_heavy_$UserID");
 $Cache->update_row(false, array(
 		'StyleID'=>$_POST['stylesheet'],
 		'StyleURL'=>$_POST['styleurl'],
@@ -302,24 +317,25 @@ $Cache->commit_transaction(0);
 
 $SQL = "
 	UPDATE users_main AS m
-		JOIN users_info AS i ON m.ID=i.UserID
+		JOIN users_info AS i ON m.ID = i.UserID
 	SET
-		i.StyleID='".db_string($_POST['stylesheet'])."',
-		i.StyleURL='".db_string($_POST['styleurl'])."',
-		i.Avatar='".db_string($_POST['avatar'])."',
-		i.SiteOptions='".db_string(serialize($Options))."',
+		i.StyleID = '".db_string($_POST['stylesheet'])."',
+		i.StyleURL = '".db_string($_POST['styleurl'])."',
+		i.Avatar = '".db_string($_POST['avatar'])."',
+		i.SiteOptions = '".db_string(serialize($Options))."',
 		i.NotifyOnQuote = '".db_string($Options['NotifyOnQuote'])."',
-		i.Info='".db_string($_POST['info'])."',
-		i.DownloadAlt='$DownloadAlt',
-		i.UnseededAlerts='$UnseededAlerts',
-		m.Email='".db_string($_POST['email'])."',
-		m.IRCKey='".db_string($_POST['irckey'])."',
-		m.Paranoia='".db_string(serialize($Paranoia))."'";
+		i.Info = '".db_string($_POST['info'])."',
+		i.InfoTitle = '".db_string($_POST['profile_title'])."',
+		i.DownloadAlt = '$DownloadAlt',
+		i.UnseededAlerts = '$UnseededAlerts',
+		m.Email = '".db_string($_POST['email'])."',
+		m.IRCKey = '".db_string($_POST['irckey'])."',
+		m.Paranoia = '".db_string(serialize($Paranoia))."'";
 
 if ($ResetPassword) {
 	$ChangerIP = db_string($LoggedUser['IP']);
 	$PassHash = Users::make_crypt_hash($_POST['new_pass_1']);
-	$SQL.= ",m.PassHash='".db_string($PassHash)."'";
+	$SQL.= ",m.PassHash = '".db_string($PassHash)."'";
 	$DB->query("
 		INSERT INTO users_history_passwords
 			(UserID, ChangerIP, ChangeTime)
@@ -334,27 +350,27 @@ if (isset($_POST['resetpasskey'])) {
 	$OldPassKey = db_string($UserInfo['torrent_pass']);
 	$NewPassKey = db_string(Users::make_secret());
 	$ChangerIP = db_string($LoggedUser['IP']);
-	$SQL.=",m.torrent_pass='$NewPassKey'";
+	$SQL .= ",m.torrent_pass='$NewPassKey'";
 	$DB->query("
 		INSERT INTO users_history_passkeys
 			(UserID, OldPassKey, NewPassKey, ChangerIP, ChangeTime)
 		VALUES
 			('$UserID', '$OldPassKey', '$NewPassKey', '$ChangerIP', '".sqltime()."')");
-	$Cache->begin_transaction('user_info_heavy_'.$UserID);
-	$Cache->update_row(false, array('torrent_pass'=>$NewPassKey));
+	$Cache->begin_transaction("user_info_heavy_$UserID");
+	$Cache->update_row(false, array('torrent_pass' => $NewPassKey));
 	$Cache->commit_transaction(0);
-	$Cache->delete_value('user_'.$OldPassKey);
+	$Cache->delete_value("user_$OldPassKey");
 
 	Tracker::update_tracker('change_passkey', array('oldpasskey' => $OldPassKey, 'newpasskey' => $NewPassKey));
 }
 
-$SQL.="WHERE m.ID='".db_string($UserID)."'";
+$SQL .= "WHERE m.ID='".db_string($UserID)."'";
 $DB->query($SQL);
 
 if ($ResetPassword) {
 	logout();
 }
 
-header('Location: user.php?action=edit&userid='.$UserID);
+header("Location: user.php?action=edit&userid=$UserID");
 
 ?>

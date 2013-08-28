@@ -40,7 +40,7 @@ if (!check_perms('admin_reports')) {
 		$Where .= " AND Type = 'request_update'";
 	}
 	if (check_perms('site_moderate_forums')) {
-		$Where .= " AND Type IN('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment', 'torrent_comments', 'artist_comment')";
+		$Where .= " AND Type IN('comment', 'post', 'thread')";
 	}
 
 }
@@ -182,86 +182,15 @@ $DB->set_query_id($Reports);
 										echo "<a href=\"forums.php?action=viewthread&amp;threadid=$TopicID&amp;post=$PostNum#post$PostID\">FORUM POST</a>";
 									}
 									break;
-								case 'requests_comment':
+								case 'comment':
 									$DB->query("
-										SELECT
-											rc.RequestID,
-											rc.Body,
-											(	SELECT COUNT(ID)
-												FROM requests_comments
-												WHERE ID <= $ThingID
-													AND requests_comments.RequestID = rc.RequestID
-											) AS CommentNum
-										FROM requests_comments AS rc
-										WHERE ID = $ThingID");
-									if (!$DB->has_results()) {
-										echo 'No request comment with the reported ID found';
-									} else {
-										list($RequestID, $Body, $PostNum) = $DB->next_record();
-										$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-										echo "<a href=\"requests.php?action=view&amp;id=$RequestID&amp;page=$PageNum#post$ThingID\">REQUEST COMMENT</a>";
-									}
-									break;
-								case 'torrents_comment':
-									$DB->query("
-										SELECT
-											tc.GroupID,
-											tc.Body,
-											(	SELECT COUNT(ID)
-												FROM torrents_comments
-												WHERE ID <= $ThingID
-													AND torrents_comments.GroupID = tc.GroupID
-											) AS CommentNum
-										FROM torrents_comments AS tc
-										WHERE ID = $ThingID");
-									if (!$DB->has_results()) {
-										echo 'No torrent comment with the reported ID found';
-									} else {
-										list($GroupID, $Body, $PostNum) = $DB->next_record();
-										$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-										echo "<a href=\"torrents.php?id=$GroupID&amp;page=$PageNum#post$ThingID\">TORRENT COMMENT</a>";
-									}
-									break;
-								case 'artist_comment':
-									$DB->query("
-										SELECT
-											ac.ArtistID,
-											ac.Body,
-											(	SELECT COUNT(ID)
-												FROM artist_comments
-												WHERE ID <= $ThingID
-													AND artist_comments.ArtistID = ac.ArtistID
-											) AS CommentNum
-										FROM artist_comments AS ac
+										SELECT 1
+										FROM comments AS c
 										WHERE ID = $ThingID");
 									if (!$DB->has_results()) {
 										echo 'No comment with the reported ID found';
 									} else {
-										list($ArtistID, $Body, $PostNum) = $DB->next_record();
-										$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-										echo "<a href=\"artist.php?id=$ArtistID&amp;page=$PageNum#post$ThingID\">ARTIST COMMENT</a>";
-									}
-									break;
-
-								case 'collages_comment':
-									$DB->query("
-										SELECT
-											cc.CollageID,
-											cc.Body,
-											(	SELECT COUNT(ID)
-												FROM collages_comments
-												WHERE ID <= $ThingID
-													AND collages_comments.CollageID = cc.CollageID
-											) AS CommentNum
-										FROM collages_comments AS cc
-										WHERE ID = $ThingID");
-									if (!$DB->has_results()) {
-										echo 'No collage comment with the reported ID found';
-									} else {
-										list($CollageID, $Body, $PostNum) = $DB->next_record();
-										$PerPage = POSTS_PER_PAGE;
-										$PageNum = ceil($PostNum / $PerPage);
-										echo "<a href=\"collage.php?action=comments&amp;collageid=$CollageID&amp;page=$PageNum#post$ThingID\">COLLAGE COMMENT</a>";
+										echo "<a href=\"comments.php?action=jump&amp;postid=$ThingID\">COMMENT</a>";
 									}
 									break;
 							}

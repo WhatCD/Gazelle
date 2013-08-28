@@ -56,6 +56,7 @@ View::show_header("Top $Limit Torrents");
 			<a href="top10.php?type=users" class="brackets">Users</a>
 			<a href="top10.php?type=tags" class="brackets">Tags</a>
 			<a href="top10.php?type=votes" class="brackets">Favorites</a>
+			<a href="top10.php?type=donors" class="brackets">Donors</a>
 		</div>
 	</div>
 <?
@@ -390,9 +391,9 @@ View::show_footer();
 
 // generate a table based on data from most recent query to $DB
 function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
-	global $LoggedUser,$Categories,$ReleaseTypes,$GroupBy;
+	global $LoggedUser, $Categories, $ReleaseTypes, $GroupBy;
 ?>
-		<h3>Top <?=$Limit.' '.$Caption?>
+		<h3>Top <?="$Limit $Caption"?>
 <?	if (empty($_GET['advanced'])) { ?>
 		<small class="top10_quantity_links">
 <?
@@ -458,10 +459,10 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 	}
 	$Artists = Artists::get_artists($GroupIDs);
 
-	foreach ($Details as $Detail) :
-		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$WikiImage,$TagsList,
-			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
-			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType,$Size) = $Detail;
+	foreach ($Details as $Detail) {
+		list($TorrentID, $GroupID, $GroupName, $GroupCategoryID, $WikiImage, $TagsList,
+			$Format, $Encoding, $Media, $Scene, $HasLog, $HasCue, $LogScore, $Year, $GroupYear,
+			$RemasterTitle, $Snatched, $Seeders, $Leechers, $Data, $ReleaseType, $Size) = $Detail;
 
 		$IsBookmarked = Bookmarks::has_bookmarked('torrent', $GroupID);
 		$IsSnatched = Torrents::has_snatched($TorrentID);
@@ -478,13 +479,13 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			$DisplayName = Artists::display_artists($Artists[$GroupID], true, true);
 		}
 
-		$DisplayName.= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+		$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 
 		if ($GroupCategoryID == 1 && $GroupYear > 0) {
-			$DisplayName.= " [$GroupYear]";
+			$DisplayName .= " [$GroupYear]";
 		}
 		if ($GroupCategoryID == 1 && $ReleaseType > 0) {
-			$DisplayName.= ' ['.$ReleaseTypes[$ReleaseType].']';
+			$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';
 		}
 
 		// append extra info to torrent title
@@ -492,42 +493,42 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		$AddExtra = '';
 		if (empty($GroupBy)) {
 			if ($Format) {
-				$ExtraInfo.= $Format;
+				$ExtraInfo .= $Format;
 				$AddExtra = ' / ';
 			}
 			if ($Encoding) {
-				$ExtraInfo.= $AddExtra.$Encoding;
+				$ExtraInfo .= $AddExtra.$Encoding;
 				$AddExtra = ' / ';
 			}
 			// "FLAC / Lossless / Log (100%) / Cue / CD";
 			if ($HasLog) {
-				$ExtraInfo.= $AddExtra.'Log ('.$LogScore.'%)';
+				$ExtraInfo .= $AddExtra.'Log ('.$LogScore.'%)';
 				$AddExtra = ' / ';
 			}
 			if ($HasCue) {
-				$ExtraInfo.= $AddExtra.'Cue';
+				$ExtraInfo .= $AddExtra.'Cue';
 				$AddExtra = ' / ';
 			}
 			if ($Media) {
-				$ExtraInfo.= $AddExtra.$Media;
+				$ExtraInfo .= $AddExtra.$Media;
 				$AddExtra = ' / ';
 			}
 			if ($Scene) {
-				$ExtraInfo.= $AddExtra.'Scene';
+				$ExtraInfo .= $AddExtra.'Scene';
 				$AddExtra = ' / ';
 			}
 			if ($Year > 0) {
-				$ExtraInfo.= $AddExtra.$Year;
+				$ExtraInfo .= $AddExtra.$Year;
 				$AddExtra = ' ';
 			}
 			if ($RemasterTitle) {
-				$ExtraInfo.= $AddExtra.$RemasterTitle;
+				$ExtraInfo .= $AddExtra.$RemasterTitle;
 			}
 			if ($IsSnatched) {
 				if ($GroupCategoryID == 1) {
 					$ExtraInfo .= ' / ';
 				}
-				$ExtraInfo.= Format::torrent_label('Snatched!');
+				$ExtraInfo .= Format::torrent_label('Snatched!');
 			}
 			if ($ExtraInfo != '') {
 				$ExtraInfo = "- [$ExtraInfo]";
@@ -549,37 +550,37 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		<td style="padding: 8px; text-align: center;"><strong><?=$Rank?></strong></td>
 		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td class="big_info">
-<?		if ($LoggedUser['CoverArt']) : ?>
+<?		if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
 				<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 			</div>
-<?		endif; ?>
+<?		} ?>
 			<div class="group_info clear">
 
 				<span><a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a></span>
 
-				<strong><?=$DisplayName?></strong> <?=$ExtraInfo?><? if ($Reported) { ?> - <strong class="torrent_label tl_reported" title="Reported">Reported</strong><? } ?>
+				<strong><?=$DisplayName?></strong> <?=$ExtraInfo?><? if ($Reported) { ?> - <strong class="torrent_label tl_reported">Reported</strong><? } ?>
 				<span class="bookmark" style="float: right;">
 <?
 		if ($IsBookmarked) {
 ?>
-					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Unbookmark</a>
+					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
 <?		} else { ?>
-					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" title="Add bookmark" onclick="Bookmark('torrent', <?=$GroupID?>, 'Unbookmark'); return false;">Bookmark</a>
+					<a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
 <?		} ?>
 				</span>
 				<div class="tags"><?=$TorrentTags->format()?></div>
 			</div>
 		</td>
-		<td style="text-align: right;" class="nobr"><?=Format::get_size($Size)?></td>
-		<td style="text-align: right;" class="nobr"><?=Format::get_size($Data)?></td>
-		<td style="text-align: right;"><?=number_format((double) $Snatched)?></td>
-		<td style="text-align: right;"><?=number_format((double) $Seeders)?></td>
-		<td style="text-align: right;"><?=number_format((double) $Leechers)?></td>
-		<td style="text-align: right;"><?=number_format($Seeders + $Leechers)?></td>
+		<td class="number_column nobr"><?=Format::get_size($Size)?></td>
+		<td class="number_column nobr"><?=Format::get_size($Data)?></td>
+		<td class="number_column"><?=number_format((double)$Snatched)?></td>
+		<td class="number_column"><?=number_format((double)$Seeders)?></td>
+		<td class="number_column"><?=number_format((double)$Leechers)?></td>
+		<td class="number_column"><?=number_format($Seeders + $Leechers)?></td>
 	</tr>
 <?
-	endforeach;
+	} //foreach ($Details as $Detail)
 ?>
 	</table><br />
 <?

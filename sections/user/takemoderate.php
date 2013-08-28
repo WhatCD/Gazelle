@@ -123,6 +123,7 @@ $DB->query("
 		DisableWiki,
 		DisablePM,
 		DisableIRC,
+		DisableRequests,
 		m.RequiredRatio,
 		m.FLTokens,
 		i.RatioWatchEnds,
@@ -151,7 +152,11 @@ if (!check_perms('users_mod', $Cur['Class'])) {
 	die();
 }
 
-// Gotten user info
+if (!empty($_POST['donor_points_submit']) && isset($_POST['donation_value']) && isset($_POST['donation_currency'])) {
+	Donations::regular_donate($UserID, $_POST['donation_value'], "Add Points", $_POST['donation_reason'], $_POST['donation_currency']);
+} elseif(!empty($_POST['donor_values_submit'])) {
+	Donations::update_rank($UserID, $_POST['donor_rank'], $_POST['total_donor_rank'], $_POST['reason']);
+}
 
 
 // If we're deleting the user, we can ignore all the other crap
@@ -618,7 +623,7 @@ if ($DisableRequests != $Cur['DisableRequests'] && check_perms('users_disable_an
 	$EditSummary[] = 'request status changed';
 	$HeavyUpdates['DisableRequests'] = $DisableRequests;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your request privileges have been disabled', "Your request privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://'.SSL_SITE_URL.'/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]. This loss of privileges does not affect the ability to join and talk to staff in '.BOT_DISABLED_CHAN.'.');
+		Misc::send_pm($UserID, 0, 'Your request privileges have been disabled', "Your request privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://'.SSL_SITE_URL.'/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 }
 

@@ -81,6 +81,10 @@ $SS = new SPHINX_SEARCH;
 // Autoload classes.
 require(SERVER_ROOT.'/classes/classloader.php');
 
+// Note: G::initialize is called twice.
+// This is necessary as the code inbetween (initialization of $LoggedUser) makes use of G::$DB and G::$Cache.
+// TODO: remove one of the calls once we're moving everything into that class
+G::initialize();
 
 //Begin browser identification
 
@@ -310,24 +314,24 @@ $Debug->set_flag('start function definitions');
  * Log out the current session
  */
 function logout() {
-	global $SessionID, $LoggedUser, $DB, $Cache;
+	global $SessionID;
 	setcookie('session', '', time() - 60 * 60 * 24 * 365, '/', '', false);
 	setcookie('keeplogged', '', time() - 60 * 60 * 24 * 365, '/', '', false);
 	setcookie('session', '', time() - 60 * 60 * 24 * 365, '/', '', false);
 	if ($SessionID) {
 
-		$DB->query("
+		G::$DB->query("
 			DELETE FROM users_sessions
-			WHERE UserID = '$LoggedUser[ID]'
+			WHERE UserID = '" . G::$LoggedUser['ID'] . "'
 				AND SessionID = '".db_string($SessionID)."'");
 
-		$Cache->begin_transaction('users_sessions_'.$LoggedUser['ID']);
-		$Cache->delete_row($SessionID);
-		$Cache->commit_transaction(0);
+		G::$Cache->begin_transaction('users_sessions_' . G::$LoggedUser['ID']);
+		G::$Cache->delete_row($SessionID);
+		G::$Cache->commit_transaction(0);
 	}
-	$Cache->delete_value('user_info_'.$LoggedUser['ID']);
-	$Cache->delete_value('user_stats_'.$LoggedUser['ID']);
-	$Cache->delete_value('user_info_heavy_'.$LoggedUser['ID']);
+	G::$Cache->delete_value('user_info_' . G::$LoggedUser['ID']);
+	G::$Cache->delete_value('user_stats_' . G::$LoggedUser['ID']);
+	G::$Cache->delete_value('user_info_heavy_' . G::$LoggedUser['ID']);
 
 	header('Location: login.php');
 
@@ -335,8 +339,8 @@ function logout() {
 }
 
 function enforce_login() {
-	global $SessionID, $LoggedUser;
-	if (!$SessionID || !$LoggedUser) {
+	global $SessionID;
+	if (!$SessionID || !G::$LoggedUser) {
 		setcookie('redirect', $_SERVER['REQUEST_URI'], time() + 60 * 30, '/', '', false);
 		logout();
 	}
@@ -350,9 +354,8 @@ function enforce_login() {
  * @return authorisation status. Prints an error message to LAB_CHAN on IRC on failure.
  */
 function authorize($Ajax = false) {
-	global $LoggedUser;
-	if (empty($_REQUEST['auth']) || $_REQUEST['auth'] != $LoggedUser['AuthKey']) {
-		send_irc("PRIVMSG ".LAB_CHAN." :".$LoggedUser['Username']." just failed authorize on ".$_SERVER['REQUEST_URI']." coming from ".$_SERVER['HTTP_REFERER']);
+	if (empty($_REQUEST['auth']) || $_REQUEST['auth'] != G::$LoggedUser['AuthKey']) {
+		send_irc("PRIVMSG ".LAB_CHAN." :".G::$LoggedUser['Username']." just failed authorize on ".$_SERVER['REQUEST_URI']." coming from ".$_SERVER['HTTP_REFERER']);
 		error('Invalid authorization key. Go back, refresh, and try again.', $Ajax);
 		return false;
 	}

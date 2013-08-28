@@ -30,7 +30,7 @@ $DB->query("
 list($Body, $ForumID) = $DB->next_record(MYSQLI_NUM);
 
 // Is the user allowed to view the post?
-if (!check_forumperm($ForumID)) {
+if (!Forums::check_forumperm($ForumID)) {
 	error(0);
 }
 

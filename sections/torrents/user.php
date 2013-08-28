@@ -409,7 +409,7 @@ $Pages = Format::get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
 				<tr>
 					<td class="label"><strong>Tags:</strong></td>
 					<td>
-						<input type="text" name="tags" size="60" title="Use !tag to exclude tag" value="<?Format::form('tags')?>" />&nbsp;
+						<input type="text" name="tags" size="60" class="tooltip" title="Use !tag to exclude tag" value="<?Format::form('tags')?>" />&nbsp;
 						<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type', 0, 'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 						<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type', 1, 'checked')?> /><label for="tags_type1"> All</label>
 					</td>
@@ -513,7 +513,7 @@ foreach ($Categories as $CatKey => $CatName) {
 
 		$ExtraInfo = Torrents::torrent_info($Torrent);
 		if ($ExtraInfo) {
-			$DisplayName .= ' - '.$ExtraInfo;
+			$DisplayName .= " - $ExtraInfo";
 		}
 ?>
 		<tr class="torrent torrent_row<?=($Torrent['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupFlags['IsSnatched'] ? ' snatched_group' : '')?>">
@@ -521,26 +521,26 @@ foreach ($Categories as $CatKey => $CatName) {
 				<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 			</td>
 			<td class="big_info">
-<?	if ($LoggedUser['CoverArt']) : ?>
+<?	if ($LoggedUser['CoverArt']) { ?>
 				<div class="group_image float_left clear">
 					<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 				</div>
-<?	endif; ?>
+<?	} ?>
 				<div class="group_info clear">
 					<span class="torrent_links_block">
 						[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 					</span>
 					<? echo "$DisplayName\n"; ?>
-<?					Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']); ?>
+<?					Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
 					<div class="tags"><?=$TorrentTags->format('torrents.php?type='.$Action.'&amp;userid='.$UserID.'&amp;tags=')?></div>
 				</div>
 			</td>
 			<td class="nobr"><?=time_diff($Time, 1)?></td>
-			<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-			<td><?=number_format($Torrent['Snatched'])?></td>
-			<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
-			<td><?=number_format($Torrent['Leechers'])?></td>
+			<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
+			<td class="number_column"><?=number_format($Torrent['Snatched'])?></td>
+			<td class="number_column<?=(($Torrent['Seeders'] == 0) ? ' r00' : '')?>"><?=number_format($Torrent['Seeders'])?></td>
+			<td class="number_column"><?=number_format($Torrent['Leechers'])?></td>
 		</tr>
 <?		}?>
 	</table>

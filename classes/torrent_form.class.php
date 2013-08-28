@@ -45,14 +45,13 @@ class TORRENT_FORM {
 	}
 
 	function head() {
-		global $LoggedUser;
 ?>
 
 <div class="thin">
 <?		if ($this->NewTorrent) { ?>
 	<p style="text-align: center;">
 		Your personal announce URL is:<br />
-		<input type="text" value="<?= ANNOUNCE_URL.'/'.$LoggedUser['torrent_pass'].'/announce'?>" size="71" onclick="this.select()" readonly="readonly" />
+		<input type="text" value="<?= ANNOUNCE_URL . '/' . G::$LoggedUser['torrent_pass'] . '/announce'?>" size="71" onclick="this.select()" readonly="readonly" />
 	</p>
 <?		}
 		if ($this->Error) {
@@ -62,7 +61,7 @@ class TORRENT_FORM {
 	<form class="create_form" name="torrent" action="" enctype="multipart/form-data" method="post" id="upload_table" onsubmit="$('#post').raw().disabled = 'disabled'">
 		<div>
 			<input type="hidden" name="submit" value="true" />
-			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+			<input type="hidden" name="auth" value="<?=G::$LoggedUser['AuthKey']?>" />
 <?		if (!$this->NewTorrent) { ?>
 			<input type="hidden" name="action" value="takeedit" />
 			<input type="hidden" name="torrentid" value="<?=display_str($this->TorrentID)?>" />
@@ -150,13 +149,13 @@ class TORRENT_FORM {
 
 
 	function music_form($GenreTags) {
+		$QueryID = G::$DB->get_query_id();
 		$Torrent = $this->Torrent;
 		$IsRemaster = !empty($Torrent['Remastered']);
 		$UnknownRelease = !$this->NewTorrent && $IsRemaster && !$Torrent['RemasterYear'];
 
 		if ($Torrent['GroupID']) {
-			global $DB;
-			$DB->query('
+			G::$DB->query('
 				SELECT
 					ID,
 					RemasterYear,
@@ -172,12 +171,11 @@ class TORRENT_FORM {
 					RemasterRecordLabel DESC,
 					RemasterCatalogueNumber DESC");
 
-			if ($DB->has_results()) {
-				$GroupRemasters = $DB->to_array(false, MYSQLI_BOTH, false);
+			if (G::$DB->has_results()) {
+				$GroupRemasters = G::$DB->to_array(false, MYSQLI_BOTH, false);
 			}
 		}
 
-		global $DB;
 		$HasLog = $Torrent['HasLog'];
 		$HasCue = $Torrent['HasCue'];
 		$BadTags = $Torrent['BadTags'];
@@ -244,7 +242,7 @@ class TORRENT_FORM {
 				</td>
 			</tr>
 			<tr id="musicbrainz_tr">
-				<td class="label" title="Click the &quot;Find Info&quot; button to automatically fill out parts of the upload form by selecting an entry in MusicBrainz">MusicBrainz:</td>
+				<td class="label tooltip" title="Click the &quot;Find Info&quot; button to automatically fill out parts of the upload form by selecting an entry in MusicBrainz">MusicBrainz:</td>
 				<td><input type="button" value="Find Info" id="musicbrainz_button" /></td>
 			</tr>
 			<div id="musicbrainz_popup">
@@ -336,7 +334,7 @@ function show() {
 					<input type="checkbox" id="remaster" name="remaster"<? if ($IsRemaster) { echo ' checked="checked"';} ?> onclick="Remaster();<? if ($this->NewTorrent) { ?> CheckYear();<? } ?>" />
 					<label for="remaster">Check this box if this torrent is a different release to the original, for example a limited or country specific edition or a release that includes additional bonus tracks or is a bonus disc.</label>
 					<div id="remaster_true"<? if (!$IsRemaster) { echo ' class="hidden"';} ?>>
-<?	if (check_perms('edit_unknowns') || $LoggedUser['ID'] == $Torrent['UserID']) { ?>
+<?	if (check_perms('edit_unknowns') || G::$LoggedUser['ID'] == $Torrent['UserID']) { ?>
 						<br />
 						<input type="checkbox" id="unknown" name="unknown"<? if ($UnknownRelease) { echo ' checked="checked"';} ?> onclick="<? if ($this->NewTorrent) { ?> CheckYear();<? } ?>ToggleUnknown();" /> <label for="unknown">Unknown Release</label>
 <?	} ?>
@@ -509,16 +507,15 @@ function show() {
 					<input type="checkbox" id="flac_log" name="flac_log"<? if ($HasLog) { echo ' checked="checked"';} ?> /> <label for="flac_log">Check this box if the torrent has, or should have, a log file.</label><br />
 					<input type="checkbox" id="flac_cue" name="flac_cue"<? if ($HasCue) { echo ' checked="checked"';} ?> /> <label for="flac_cue">Check this box if the torrent has, or should have, a cue file.</label><br />
 <?		}
-		global $LoggedUser;
-		if ((check_perms('users_mod') || $LoggedUser['ID'] == $Torrent['UserID']) && ($Torrent['LogScore'] == 100 || $Torrent['LogScore'] == 99)) {
+		if ((check_perms('users_mod') || G::$LoggedUser['ID'] == $Torrent['UserID']) && ($Torrent['LogScore'] == 100 || $Torrent['LogScore'] == 99)) {
 
-			$DB->query('
+			G::$DB->query('
 				SELECT LogID
 				FROM torrents_logs_new
 				WHERE TorrentID = '.$this->TorrentID."
 					AND Log LIKE 'EAC extraction logfile%'
 					AND (Adjusted = '0' OR Adjusted = '')");
-			list($LogID) = $DB->next_record();
+			list($LogID) = G::$DB->next_record();
 			if ($LogID) {
 				if (!check_perms('users_mod')) { ?>
 			<tr>
@@ -613,12 +610,13 @@ function show() {
 		</table>
 <?
 
-//	For AJAX requests (e.g. when changing the type from Music to Applications),
-//	we don't need to include all scripts, but we do need to include the code
-//	that generates previews. It will have to be eval'd after an AJAX request.
-	if ($_SERVER['SCRIPT_NAME'] === '/ajax.php')
-		TEXTAREA_PREVIEW::JavaScript(false);
+		//	For AJAX requests (e.g. when changing the type from Music to Applications),
+		//	we don't need to include all scripts, but we do need to include the code
+		//	that generates previews. It will have to be eval'd after an AJAX request.
+		if ($_SERVER['SCRIPT_NAME'] === '/ajax.php')
+			TEXTAREA_PREVIEW::JavaScript(false);
 
+		G::$DB->set_query_id($QueryID);
 	}//function music_form
 
 
@@ -718,7 +716,7 @@ function show() {
 			</tr>
 		</table>
 <?
-	TEXTAREA_PREVIEW::JavaScript(false);
+		TEXTAREA_PREVIEW::JavaScript(false);
 	}//function audiobook_form
 
 

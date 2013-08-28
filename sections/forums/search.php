@@ -8,12 +8,6 @@ $Text = new TEXT;
 
 list($Page, $Limit) = Format::page_limit(POSTS_PER_PAGE);
 
-if ($LoggedUser['CustomForums']) {
-	unset($LoggedUser['CustomForums']['']);
-	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
-}
-
 if ((isset($_GET['type']) && $_GET['type'] == 'body')) {
 	$Type = 'body';
 } else {
@@ -69,15 +63,7 @@ if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
 		FROM forums_topics AS t
 			JOIN forums AS f ON f.ID=t.ForumID
 		WHERE t.ID=$ThreadID
-			AND ((f.MinClassRead <= '$LoggedUser[Class]'";
-	if (!empty($RestrictedForums)) {
-		$SQL .= " AND f.ID NOT IN ('$RestrictedForums')";
-	}
-	$SQL .= ')';
-	if (!empty($PermittedForums)) {
-		$SQL .= " OR f.ID IN ('$PermittedForums')";
-	}
-	$SQL .= ')';
+			AND " . Forums::user_forums_sql();
 	$DB->query($SQL);
 	if (list($Title) = $DB->next_record()) {
 		$Title = " &gt; <a href=\"forums.php?action=viewthread&amp;threadid=$ThreadID\">$Title</a>";
@@ -127,7 +113,7 @@ if (empty($ThreadID)) { ?>
 	$Columns = 0;
 	$i = 0;
 	foreach ($Forums as $Forum) {
-		if (!check_forumperm($Forum['ID'])) {
+		if (!Forums::check_forumperm($Forum['ID'])) {
 			continue;
 		}
 
@@ -209,15 +195,7 @@ if ($Type == 'body') {
 		FROM forums_posts AS p
 			JOIN forums_topics AS t ON t.ID=p.TopicID
 			JOIN forums AS f ON f.ID=t.ForumID
-		WHERE ((f.MinClassRead<='$LoggedUser[Class]'";
-	if (!empty($RestrictedForums)) {
-		$sql.=" AND f.ID NOT IN ('".$RestrictedForums."')";
-	}
-	$sql .= ')';
-	if (!empty($PermittedForums)) {
-		$sql.=' OR f.ID IN (\''.$PermittedForums.'\')';
-	}
-	$sql .= ') AND ';
+		WHERE " . Forums::user_forums_sql() . ' AND ';
 
 	//In tests, this is significantly faster than LOCATE
 	$sql .= "p.Body LIKE '%";
@@ -255,15 +233,7 @@ if ($Type == 'body') {
 			''
 		FROM forums_topics AS t
 			JOIN forums AS f ON f.ID=t.ForumID
-		WHERE ((f.MinClassRead<='$LoggedUser[Class]'";
-	if (!empty($RestrictedForums)) {
-		$sql .= " AND f.ID NOT IN ('$RestrictedForums')";
-	}
-	$sql .= ')';
-	if (!empty($PermittedForums)) {
-		$sql .= " OR f.ID IN ('$PermittedForums')";
-	}
-	$sql .= ') AND ';
+		WHERE " . Forums::user_forums_sql() . ' AND ';
 	$sql .= "t.Title LIKE '%";
 	$sql .= implode("%' AND t.Title LIKE '%", $Words);
 	$sql .= "%' ";
@@ -300,7 +270,7 @@ echo $Pages;
 
 $Row = 'a'; // For the pretty colours
 while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB->next_record()) {
-	$Row = (($Row === 'a') ? 'b' : 'a');
+	$Row = $Row === 'a' ? 'b' : 'a';
 	// Print results
 ?>
 		<tr class="row<?=$Row?>">
@@ -312,17 +282,17 @@ while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB-
 				<a href="forums.php?action=viewthread&amp;threadid=<?=$ID?>"><?=Format::cut_string($Title, 80); ?></a>
 <?	} else { ?>
 				<?=Format::cut_string($Title, 80); ?>
-<?	}
+<?
+	}
 	if ($Type == 'body') { ?>
-				<a href="#" onclick="$('#post_<?=$PostID?>_text').gtoggle(); return false;">(show)</a> <span style="float: right;" class="last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if (!empty($PostID)) { echo "&amp;postid=$PostID#post$PostID"; } ?>"></a></span>
+				<a href="#" onclick="$('#post_<?=$PostID?>_text').gtoggle(); return false;">(Show)</a> <span style="float: right;" class="tooltip last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if (!empty($PostID)) { echo "&amp;postid=$PostID#post$PostID"; } ?>"></a></span>
 <?	} ?>
 			</td>
 			<td>
 				<?=time_diff($LastTime)?>
 			</td>
 		</tr>
-<?
-	if ($Type == 'body') { ?>
+<?	if ($Type == 'body') { ?>
 		<tr class="row<?=$Row?> hidden" id="post_<?=$PostID?>_text">
 			<td colspan="3"><?=$Text->full_format($Body)?></td>
 		</tr>

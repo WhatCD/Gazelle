@@ -1,16 +1,16 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
-CREATE DATABASE gazelle;
+CREATE DATABASE gazelle CHARACTER SET utf8 COLLATE utf8_swedish_ci;
 
 USE gazelle;
 
 CREATE TABLE `api_applications` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `UserID` int(10) NOT NULL,
-  `Token` char(32) COLLATE utf8_bin NOT NULL,
-  `Name` varchar(50) COLLATE utf8_bin NOT NULL,
+  `Token` char(32) NOT NULL,
+  `Name` varchar(50) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `api_users` (
   `UserID` int(10) NOT NULL,
@@ -21,42 +21,42 @@ CREATE TABLE `api_users` (
   `Access` text,
   PRIMARY KEY (`UserID`,`AppID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artist_comments` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `ArtistID` int(10) NOT NULL,
   `AuthorID` int(10) NOT NULL,
   `AddedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Body` mediumtext COLLATE utf8_bin,
+  `Body` mediumtext,
   `EditedUserID` int(10) DEFAULT NULL,
   `EditedTime` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `TopicID` (`ArtistID`),
   KEY `AuthorID` (`AuthorID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artists_alias` (
   `AliasID` int(10) NOT NULL AUTO_INCREMENT,
   `ArtistID` int(10) NOT NULL,
-  `Name` varchar(200) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
+  `Name` varchar(200) DEFAULT NULL,
   `Redirect` int(10) NOT NULL DEFAULT '0',
   `UserID` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`AliasID`),
   KEY `ArtistID` (`ArtistID`),
   KEY `Name` (`Name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artists_group` (
   `ArtistID` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(200) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
+  `Name` varchar(200) DEFAULT NULL,
   `RevisionID` int(12) DEFAULT NULL,
   `VanityHouse` tinyint(1) DEFAULT '0',
   `LastCommentID` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ArtistID`),
   KEY `Name` (`Name`),
   KEY `RevisionID` (`RevisionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artists_last_read_comments` (
   `UserID` int(10) NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE `artists_last_read_comments` (
   `CommentID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`ArtistID`),
   KEY `ArtistID` (`ArtistID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artists_similar` (
   `ArtistID` int(10) NOT NULL DEFAULT '0',
@@ -72,21 +72,21 @@ CREATE TABLE `artists_similar` (
   PRIMARY KEY (`ArtistID`,`SimilarID`),
   KEY `ArtistID` (`ArtistID`),
   KEY `SimilarID` (`SimilarID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artists_similar_scores` (
   `SimilarID` int(12) NOT NULL AUTO_INCREMENT,
   `Score` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`SimilarID`),
   KEY `Score` (`Score`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artists_similar_votes` (
   `SimilarID` int(12) NOT NULL,
   `UserID` int(10) NOT NULL,
-  `Way` enum('up','down') COLLATE utf8_bin NOT NULL DEFAULT 'up',
+  `Way` enum('up','down') NOT NULL DEFAULT 'up',
   PRIMARY KEY (`SimilarID`,`UserID`,`Way`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artists_tags` (
   `TagID` int(10) NOT NULL DEFAULT '0',
@@ -100,25 +100,25 @@ CREATE TABLE `artists_tags` (
   KEY `PositiveVotes` (`PositiveVotes`),
   KEY `NegativeVotes` (`NegativeVotes`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `bad_passwords` (
-  `Password` char(32) COLLATE utf8_swedish_ci NOT NULL,
+  `Password` char(32) NOT NULL,
   PRIMARY KEY (`Password`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `blog` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UserID` int(10) unsigned NOT NULL,
-  `Title` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Body` text COLLATE utf8_bin NOT NULL,
+  `Title` varchar(255) NOT NULL,
+  `Body` text NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ThreadID` int(10) unsigned DEFAULT NULL,
   `Important` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `UserID` (`UserID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `bookmarks_artists` (
   `UserID` int(10) NOT NULL,
@@ -126,7 +126,7 @@ CREATE TABLE `bookmarks_artists` (
   `Time` datetime NOT NULL,
   KEY `UserID` (`UserID`),
   KEY `ArtistID` (`ArtistID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `bookmarks_collages` (
   `UserID` int(10) NOT NULL,
@@ -134,7 +134,7 @@ CREATE TABLE `bookmarks_collages` (
   `Time` datetime NOT NULL,
   KEY `UserID` (`UserID`),
   KEY `CollageID` (`CollageID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `bookmarks_requests` (
   `UserID` int(10) NOT NULL,
@@ -142,7 +142,7 @@ CREATE TABLE `bookmarks_requests` (
   `Time` datetime NOT NULL,
   KEY `UserID` (`UserID`),
   KEY `RequestID` (`RequestID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `bookmarks_torrents` (
   `UserID` int(10) NOT NULL,
@@ -152,26 +152,39 @@ CREATE TABLE `bookmarks_torrents` (
   UNIQUE KEY `groups_users` (`GroupID`,`UserID`),
   KEY `UserID` (`UserID`),
   KEY `GroupID` (`GroupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `calendar` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `Title` varchar(255) DEFAULT NULL,
+  `Body` mediumtext,
+  `Category` tinyint(1) DEFAULT NULL,
+  `StartDate` datetime DEFAULT NULL,
+  `EndDate` datetime DEFAULT NULL,
+  `AddedBy` int(10) DEFAULT NULL,
+  `Importance` tinyint(1) DEFAULT NULL,
+  `Team` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `changelog` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Message` text COLLATE utf8_swedish_ci NOT NULL,
-  `Author` varchar(30) COLLATE utf8_swedish_ci NOT NULL,
+  `Message` text NOT NULL,
+  `Author` varchar(30) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `collages` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(100) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL DEFAULT '',
-  `Description` text COLLATE utf8_bin NOT NULL,
+  `Name` varchar(100) NOT NULL DEFAULT '',
+  `Description` text NOT NULL,
   `UserID` int(10) NOT NULL DEFAULT '0',
   `NumTorrents` int(4) NOT NULL DEFAULT '0',
-  `Deleted` enum('0','1') COLLATE utf8_bin DEFAULT '0',
-  `Locked` enum('0','1') COLLATE utf8_bin NOT NULL DEFAULT '0',
+  `Deleted` enum('0','1') DEFAULT '0',
+  `Locked` enum('0','1') NOT NULL DEFAULT '0',
   `CategoryID` int(2) NOT NULL DEFAULT '1',
-  `TagList` varchar(500) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `TagList` varchar(500) NOT NULL DEFAULT '',
   `MaxGroups` int(10) NOT NULL DEFAULT '0',
   `MaxGroupsPerUser` int(10) NOT NULL DEFAULT '0',
   `Featured` tinyint(4) NOT NULL DEFAULT '0',
@@ -181,7 +194,7 @@ CREATE TABLE `collages` (
   UNIQUE KEY `Name` (`Name`),
   KEY `UserID` (`UserID`),
   KEY `CategoryID` (`CategoryID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `collages_artists` (
   `CollageID` int(10) NOT NULL,
@@ -192,18 +205,18 @@ CREATE TABLE `collages_artists` (
   PRIMARY KEY (`CollageID`,`ArtistID`),
   KEY `UserID` (`UserID`),
   KEY `Sort` (`Sort`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `collages_comments` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `CollageID` int(10) NOT NULL,
-  `Body` mediumtext COLLATE utf8_bin NOT NULL,
+  `Body` mediumtext NOT NULL,
   `UserID` int(10) NOT NULL DEFAULT '0',
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `CollageID` (`CollageID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `collages_torrents` (
   `CollageID` int(10) NOT NULL,
@@ -214,17 +227,41 @@ CREATE TABLE `collages_torrents` (
   PRIMARY KEY (`CollageID`,`GroupID`),
   KEY `UserID` (`UserID`),
   KEY `Sort` (`Sort`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `comments` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `Page` enum('artist','collages','requests','torrents') NOT NULL,
+  `PageID` int(10) NOT NULL,
+  `AuthorID` int(10) NOT NULL,
+  `AddedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Body` mediumtext,
+  `EditedUserID` int(10) DEFAULT NULL,
+  `EditedTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `Page` (`Page`,`PageID`),
+  KEY `AuthorID` (`AuthorID`)
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `comments_edits` (
-  `Page` enum('forums','collages','requests','torrents') DEFAULT NULL,
+  `Page` enum('forums','artist','collages','requests','torrents') DEFAULT NULL,
   `PostID` int(10) DEFAULT NULL,
   `EditUser` int(10) DEFAULT NULL,
   `EditTime` datetime DEFAULT NULL,
   `Body` mediumtext,
   KEY `EditUser` (`EditUser`),
   KEY `PostHistory` (`Page`,`PostID`,`EditTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `comments_edits_tmp` (
+  `Page` enum('forums','artist','collages','requests','torrents') DEFAULT NULL,
+  `PostID` int(10) DEFAULT NULL,
+  `EditUser` int(10) DEFAULT NULL,
+  `EditTime` datetime DEFAULT NULL,
+  `Body` mediumtext,
+  KEY `EditUser` (`EditUser`),
+  KEY `PostHistory` (`Page`,`PostID`,`EditTime`)
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `concerts` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -233,7 +270,7 @@ CREATE TABLE `concerts` (
   PRIMARY KEY (`ID`),
   KEY `ConcertID` (`ConcertID`),
   KEY `TopicID` (`TopicID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `cover_art` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -244,43 +281,74 @@ CREATE TABLE `cover_art` (
   `Time` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `GroupID` (`GroupID`,`Image`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `do_not_upload` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Comment` varchar(255) COLLATE utf8_bin NOT NULL,
+  `Name` varchar(255) NOT NULL,
+  `Comment` varchar(255) NOT NULL,
   `UserID` int(10) NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Sequence` mediumint(8) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `donations` (
   `UserID` int(10) NOT NULL,
   `Amount` decimal(6,2) NOT NULL,
-  `Email` varchar(255) COLLATE utf8_bin NOT NULL,
+  `Email` varchar(255) NOT NULL,
   `Time` datetime NOT NULL,
-  `Currency` varchar(5) COLLATE utf8_bin NOT NULL DEFAULT 'USD',
+  `Currency` varchar(5) NOT NULL DEFAULT 'USD',
+  `Source` varchar(30) NOT NULL DEFAULT '',
+  `Reason` mediumtext NOT NULL,
+  `Rank` int(10) DEFAULT '0',
+  `AddedBy` int(10) DEFAULT '0',
+  `TotalRank` int(10) DEFAULT '0',
   KEY `UserID` (`UserID`),
   KEY `Time` (`Time`),
   KEY `Amount` (`Amount`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `donor_forum_usernames` (
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `Prefix` varchar(30) NOT NULL DEFAULT '',
+  `Suffix` varchar(30) NOT NULL DEFAULT '',
+  `UseComma` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `donor_rewards` (
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `IconMouseOverText` varchar(200) NOT NULL DEFAULT '',
+  `AvatarMouseOverText` varchar(200) NOT NULL DEFAULT '',
+  `CustomIcon` varchar(200) NOT NULL DEFAULT '',
+  `SecondAvatar` varchar(200) NOT NULL DEFAULT '',
+  `CustomIconLink` varchar(200) NOT NULL DEFAULT '',
+  `ProfileInfo1` text NOT NULL,
+  `ProfileInfo2` text NOT NULL,
+  `ProfileInfo3` text NOT NULL,
+  `ProfileInfo4` text NOT NULL,
+  `ProfileInfoTitle1` varchar(255) NOT NULL,
+  `ProfileInfoTitle2` varchar(255) NOT NULL,
+  `ProfileInfoTitle3` varchar(255) NOT NULL,
+  `ProfileInfoTitle4` varchar(255) NOT NULL,
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `drives` (
   `DriveID` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) COLLATE utf8_bin NOT NULL,
-  `Offset` varchar(10) COLLATE utf8_bin NOT NULL,
+  `Name` varchar(50) NOT NULL,
+  `Offset` varchar(10) NOT NULL,
   PRIMARY KEY (`DriveID`),
   KEY `Name` (`Name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `dupe_groups` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `Comments` text COLLATE utf8_bin,
+  `Comments` text,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `email_blacklist` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -289,7 +357,7 @@ CREATE TABLE `email_blacklist` (
   `Time` datetime NOT NULL,
   `Comment` text NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `featured_albums` (
   `GroupID` int(10) NOT NULL DEFAULT '0',
@@ -297,7 +365,7 @@ CREATE TABLE `featured_albums` (
   `Title` varchar(35) NOT NULL DEFAULT '',
   `Started` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Ended` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `featured_merch` (
   `ProductID` int(10) NOT NULL DEFAULT '0',
@@ -306,14 +374,14 @@ CREATE TABLE `featured_merch` (
   `Started` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Ended` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ArtistID` int(10) unsigned DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `forums` (
   `ID` int(6) unsigned NOT NULL AUTO_INCREMENT,
   `CategoryID` tinyint(2) NOT NULL DEFAULT '0',
   `Sort` int(6) unsigned NOT NULL,
-  `Name` varchar(40) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `Description` varchar(255) COLLATE utf8_bin DEFAULT '',
+  `Name` varchar(40) NOT NULL DEFAULT '',
+  `Description` varchar(255) DEFAULT '',
   `MinClassRead` int(4) NOT NULL DEFAULT '0',
   `MinClassWrite` int(4) NOT NULL DEFAULT '0',
   `MinClassCreate` int(4) NOT NULL DEFAULT '0',
@@ -323,20 +391,20 @@ CREATE TABLE `forums` (
   `LastPostAuthorID` int(10) NOT NULL DEFAULT '0',
   `LastPostTopicID` int(10) NOT NULL DEFAULT '0',
   `LastPostTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `AutoLock` enum('0','1') COLLATE utf8_bin DEFAULT '1',
+  `AutoLock` enum('0','1') DEFAULT '1',
   `AutoLockWeeks` int(3) unsigned NOT NULL DEFAULT '4',
   PRIMARY KEY (`ID`),
   KEY `Sort` (`Sort`),
   KEY `MinClassRead` (`MinClassRead`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `forums_categories` (
   `ID` tinyint(2) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(40) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `Name` varchar(40) NOT NULL DEFAULT '',
   `Sort` int(6) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `Sort` (`Sort`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `forums_last_read_topics` (
   `UserID` int(10) NOT NULL,
@@ -344,48 +412,48 @@ CREATE TABLE `forums_last_read_topics` (
   `PostID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`TopicID`),
   KEY `TopicID` (`TopicID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `forums_polls` (
   `TopicID` int(10) unsigned NOT NULL,
-  `Question` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Answers` text COLLATE utf8_bin NOT NULL,
+  `Question` varchar(255) NOT NULL,
+  `Answers` text NOT NULL,
   `Featured` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Closed` enum('0','1') COLLATE utf8_bin NOT NULL DEFAULT '0',
+  `Closed` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`TopicID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `forums_polls_votes` (
   `TopicID` int(10) unsigned NOT NULL,
   `UserID` int(10) unsigned NOT NULL,
   `Vote` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`TopicID`,`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `forums_posts` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `TopicID` int(10) NOT NULL,
   `AuthorID` int(10) NOT NULL,
   `AddedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Body` mediumtext COLLATE utf8_swedish_ci,
+  `Body` mediumtext,
   `EditedUserID` int(10) DEFAULT NULL,
   `EditedTime` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `TopicID` (`TopicID`),
   KEY `AuthorID` (`AuthorID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `forums_specific_rules` (
   `ForumID` int(6) unsigned DEFAULT NULL,
   `ThreadID` int(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `forums_topics` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `Title` varchar(150) COLLATE utf8_swedish_ci NOT NULL,
+  `Title` varchar(150) NOT NULL,
   `AuthorID` int(10) NOT NULL,
-  `IsLocked` enum('0','1') COLLATE utf8_swedish_ci NOT NULL DEFAULT '0',
-  `IsSticky` enum('0','1') COLLATE utf8_swedish_ci NOT NULL DEFAULT '0',
+  `IsLocked` enum('0','1') NOT NULL DEFAULT '0',
+  `IsSticky` enum('0','1') NOT NULL DEFAULT '0',
   `ForumID` int(3) NOT NULL,
   `NumPosts` int(10) NOT NULL DEFAULT '0',
   `LastPostID` int(10) NOT NULL,
@@ -399,37 +467,37 @@ CREATE TABLE `forums_topics` (
   KEY `IsSticky` (`IsSticky`),
   KEY `LastPostID` (`LastPostID`),
   KEY `Title` (`Title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `friends` (
   `UserID` int(10) unsigned NOT NULL,
   `FriendID` int(10) unsigned NOT NULL,
-  `Comment` text COLLATE utf8_bin NOT NULL,
+  `Comment` text NOT NULL,
   PRIMARY KEY (`UserID`,`FriendID`),
   KEY `UserID` (`UserID`),
   KEY `FriendID` (`FriendID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `geoip_country` (
   `StartIP` int(11) unsigned NOT NULL,
   `EndIP` int(11) unsigned NOT NULL,
   `Code` varchar(2) NOT NULL,
   PRIMARY KEY (`StartIP`,`EndIP`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `group_log` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `GroupID` int(10) NOT NULL,
   `TorrentID` int(10) NOT NULL,
   `UserID` int(10) NOT NULL DEFAULT '0',
-  `Info` mediumtext COLLATE utf8_bin,
+  `Info` mediumtext,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Hidden` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `GroupID` (`GroupID`),
   KEY `TorrentID` (`TorrentID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `invite_tree` (
   `UserID` int(10) NOT NULL DEFAULT '0',
@@ -442,17 +510,17 @@ CREATE TABLE `invite_tree` (
   KEY `TreePosition` (`TreePosition`),
   KEY `TreeID` (`TreeID`),
   KEY `TreeLevel` (`TreeLevel`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `invites` (
   `InviterID` int(10) NOT NULL DEFAULT '0',
-  `InviteKey` char(32) COLLATE utf8_bin NOT NULL,
-  `Email` varchar(255) COLLATE utf8_bin NOT NULL,
+  `InviteKey` char(32) NOT NULL,
+  `Email` varchar(255) NOT NULL,
   `Expires` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`InviteKey`),
   KEY `Expires` (`Expires`),
   KEY `InviterID` (`InviterID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `ip_bans` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -462,7 +530,7 @@ CREATE TABLE `ip_bans` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `FromIP_2` (`FromIP`,`ToIP`),
   KEY `ToIP` (`ToIP`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `label_aliases` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -471,33 +539,33 @@ CREATE TABLE `label_aliases` (
   PRIMARY KEY (`ID`),
   KEY `BadLabel` (`BadLabel`),
   KEY `AliasLabel` (`AliasLabel`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `lastfm_users` (
   `ID` int(10) unsigned NOT NULL,
   `Username` varchar(20) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `library_contest` (
   `UserID` int(10) NOT NULL,
   `TorrentID` int(10) NOT NULL,
   `Points` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`UserID`,`TorrentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `log` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `Message` varchar(400) COLLATE utf8_swedish_ci NOT NULL,
+  `Message` varchar(400) NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `login_attempts` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UserID` int(10) unsigned NOT NULL,
-  `IP` varchar(15) COLLATE utf8_bin NOT NULL,
+  `IP` varchar(15) NOT NULL,
   `LastAttempt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Attempts` int(10) unsigned NOT NULL,
   `BannedUntil` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -505,25 +573,25 @@ CREATE TABLE `login_attempts` (
   PRIMARY KEY (`ID`),
   KEY `UserID` (`UserID`),
   KEY `IP` (`IP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `new_info_hashes` (
   `TorrentID` int(11) NOT NULL,
   `InfoHash` binary(20) DEFAULT NULL,
   PRIMARY KEY (`TorrentID`),
   KEY `InfoHash` (`InfoHash`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `news` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UserID` int(10) unsigned NOT NULL,
-  `Title` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Body` text COLLATE utf8_bin NOT NULL,
+  `Title` varchar(255) NOT NULL,
+  `Body` text NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `UserID` (`UserID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `ocelot_query_times` (
   `buffer` enum('users','torrents','snatches','peers') NOT NULL,
@@ -532,36 +600,36 @@ CREATE TABLE `ocelot_query_times` (
   `querylength` int(11) NOT NULL,
   `timespent` int(11) NOT NULL,
   UNIQUE KEY `starttime` (`starttime`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `permissions` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Level` int(10) unsigned NOT NULL,
-  `Name` varchar(25) CHARACTER SET latin1 NOT NULL,
-  `Values` text CHARACTER SET latin1 NOT NULL,
-  `DisplayStaff` enum('0','1') CHARACTER SET latin1 NOT NULL DEFAULT '0',
-  `PermittedForums` varchar(150) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `Name` varchar(25) NOT NULL,
+  `Values` text NOT NULL,
+  `DisplayStaff` enum('0','1') NOT NULL DEFAULT '0',
+  `PermittedForums` varchar(150) NOT NULL DEFAULT '',
   `Secondary` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Level` (`Level`),
   KEY `DisplayStaff` (`DisplayStaff`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `pm_conversations` (
   `ID` int(12) NOT NULL AUTO_INCREMENT,
-  `Subject` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `Subject` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `pm_conversations_users` (
   `UserID` int(10) NOT NULL DEFAULT '0',
   `ConvID` int(12) NOT NULL DEFAULT '0',
-  `InInbox` enum('1','0') COLLATE utf8_bin NOT NULL,
-  `InSentbox` enum('1','0') COLLATE utf8_bin NOT NULL,
+  `InInbox` enum('1','0') NOT NULL,
+  `InSentbox` enum('1','0') NOT NULL,
   `SentDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ReceivedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `UnRead` enum('1','0') COLLATE utf8_bin NOT NULL DEFAULT '1',
-  `Sticky` enum('1','0') COLLATE utf8_bin NOT NULL DEFAULT '0',
+  `UnRead` enum('1','0') NOT NULL DEFAULT '1',
+  `Sticky` enum('1','0') NOT NULL DEFAULT '0',
   `ForwardedTo` int(12) NOT NULL DEFAULT '0',
   PRIMARY KEY (`UserID`,`ConvID`),
   KEY `InInbox` (`InInbox`),
@@ -572,43 +640,56 @@ CREATE TABLE `pm_conversations_users` (
   KEY `ReceivedDate` (`ReceivedDate`),
   KEY `Sticky` (`Sticky`),
   KEY `ForwardedTo` (`ForwardedTo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `pm_messages` (
   `ID` int(12) NOT NULL AUTO_INCREMENT,
   `ConvID` int(12) NOT NULL DEFAULT '0',
   `SentDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `SenderID` int(10) NOT NULL DEFAULT '0',
-  `Body` text COLLATE utf8_bin,
+  `Body` text,
   PRIMARY KEY (`ID`),
   KEY `ConvID` (`ConvID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `pre_log` (
+  `Hash` varchar(32) NOT NULL,
+  `Category` varchar(12) NOT NULL,
+  `Name` varchar(255) NOT NULL,
+  `Group` varchar(50) NOT NULL,
+  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Nuke` enum('0','1') NOT NULL DEFAULT '0',
+  `Genre` varchar(50) DEFAULT NULL,
+  `Files` int(4) NOT NULL DEFAULT '0',
+  `Size` bigint(12) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`Hash`)
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `push_notifications_usage` (
   `PushService` varchar(10) NOT NULL,
   `TimesUsed` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`PushService`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `reports` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UserID` int(10) unsigned NOT NULL DEFAULT '0',
   `ThingID` int(10) unsigned NOT NULL DEFAULT '0',
-  `Type` varchar(30) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
-  `Comment` text COLLATE utf8_bin,
+  `Type` varchar(30) DEFAULT NULL,
+  `Comment` text,
   `ResolverID` int(10) unsigned NOT NULL DEFAULT '0',
-  `Status` enum('New','InProgress','Resolved') COLLATE utf8_bin DEFAULT 'New',
+  `Status` enum('New','InProgress','Resolved') DEFAULT 'New',
   `ResolvedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ReportedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Reason` text COLLATE utf8_bin NOT NULL,
+  `Reason` text NOT NULL,
   `ClaimerID` int(10) unsigned NOT NULL DEFAULT '0',
-  `Notes` text COLLATE utf8_bin NOT NULL,
+  `Notes` text NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `Status` (`Status`),
   KEY `Type` (`Type`),
   KEY `ResolvedTime` (`ResolvedTime`),
   KEY `ResolverID` (`ResolverID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `reports_email_blacklist` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -617,11 +698,11 @@ CREATE TABLE `reports_email_blacklist` (
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Checked` tinyint(4) NOT NULL DEFAULT '0',
   `ResolverID` int(10) DEFAULT '0',
-  `Email` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `Email` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`ID`),
   KEY `Time` (`Time`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `reportsv2` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -645,7 +726,7 @@ CREATE TABLE `reportsv2` (
   KEY `LastChangeTime` (`LastChangeTime`),
   KEY `TorrentID` (`TorrentID`),
   KEY `ResolverID` (`ResolverID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `requests` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -653,23 +734,23 @@ CREATE TABLE `requests` (
   `TimeAdded` datetime NOT NULL,
   `LastVote` datetime DEFAULT NULL,
   `CategoryID` int(3) NOT NULL,
-  `Title` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `Title` varchar(255) DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
-  `Image` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `Description` text COLLATE utf8_bin NOT NULL,
+  `Image` varchar(255) DEFAULT NULL,
+  `Description` text NOT NULL,
   `ReleaseType` tinyint(2) DEFAULT NULL,
-  `CatalogueNumber` varchar(50) COLLATE utf8_bin NOT NULL,
-  `BitrateList` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `FormatList` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `MediaList` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `LogCue` varchar(20) COLLATE utf8_bin DEFAULT NULL,
+  `CatalogueNumber` varchar(50) NOT NULL,
+  `BitrateList` varchar(255) DEFAULT NULL,
+  `FormatList` varchar(255) DEFAULT NULL,
+  `MediaList` varchar(255) DEFAULT NULL,
+  `LogCue` varchar(20) DEFAULT NULL,
   `FillerID` int(10) unsigned NOT NULL DEFAULT '0',
   `TorrentID` int(10) unsigned NOT NULL DEFAULT '0',
   `TimeFilled` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Visible` binary(1) NOT NULL DEFAULT '1',
-  `RecordLabel` varchar(80) COLLATE utf8_bin DEFAULT NULL,
+  `RecordLabel` varchar(80) DEFAULT NULL,
   `GroupID` int(10) DEFAULT NULL,
-  `OCLC` varchar(55) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `OCLC` varchar(55) NOT NULL DEFAULT '',
   PRIMARY KEY (`ID`),
   KEY `Userid` (`UserID`),
   KEY `Name` (`Title`),
@@ -680,15 +761,15 @@ CREATE TABLE `requests` (
   KEY `TimeFilled` (`TimeFilled`),
   KEY `LastVote` (`LastVote`),
   KEY `GroupID` (`GroupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `requests_artists` (
   `RequestID` int(10) unsigned NOT NULL,
   `ArtistID` int(10) NOT NULL,
   `AliasID` int(10) NOT NULL,
-  `Importance` enum('1','2','3','4','5','6','7') COLLATE utf8_bin DEFAULT NULL,
+  `Importance` enum('1','2','3','4','5','6','7') DEFAULT NULL,
   PRIMARY KEY (`RequestID`,`AliasID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `requests_comments` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -699,7 +780,7 @@ CREATE TABLE `requests_comments` (
   `EditedUserID` int(10) DEFAULT NULL,
   `EditedTime` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `requests_tags` (
   `TagID` int(10) NOT NULL DEFAULT '0',
@@ -707,7 +788,7 @@ CREATE TABLE `requests_tags` (
   PRIMARY KEY (`TagID`,`RequestID`),
   KEY `TagID` (`TagID`),
   KEY `RequestID` (`RequestID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `requests_votes` (
   `RequestID` int(10) NOT NULL DEFAULT '0',
@@ -717,13 +798,13 @@ CREATE TABLE `requests_votes` (
   KEY `RequestID` (`RequestID`),
   KEY `UserID` (`UserID`),
   KEY `Bounty` (`Bounty`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `schedule` (
   `NextHour` int(2) NOT NULL DEFAULT '0',
   `NextDay` int(2) NOT NULL DEFAULT '0',
   `NextBiWeekly` int(2) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `site_history` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -736,13 +817,13 @@ CREATE TABLE `site_history` (
   `Date` datetime DEFAULT NULL,
   `Body` mediumtext,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `sphinx_a` (
   `gid` int(11) DEFAULT NULL,
-  `aname` text CHARACTER SET utf8 COLLATE utf8_bin,
+  `aname` text,
   KEY `gid` (`gid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `sphinx_delta` (
   `ID` int(10) NOT NULL,
@@ -777,7 +858,7 @@ CREATE TABLE `sphinx_delta` (
   `VoteScore` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `GroupID` (`GroupID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `sphinx_hash` (
   `ID` int(10) NOT NULL,
@@ -809,13 +890,13 @@ CREATE TABLE `sphinx_hash` (
   `RemasterCatalogueNumber` varchar(50) DEFAULT NULL,
   `FileList` mediumtext,
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `sphinx_index_last_id` (
-  `Type` varchar(16) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `Type` varchar(16) NOT NULL DEFAULT '',
   `ID` int(11) DEFAULT NULL,
   PRIMARY KEY (`Type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `sphinx_requests` (
   `ID` int(10) unsigned NOT NULL,
@@ -848,7 +929,7 @@ CREATE TABLE `sphinx_requests` (
   KEY `Year` (`Year`),
   KEY `TimeFilled` (`TimeFilled`),
   KEY `LastVote` (`LastVote`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `sphinx_requests_delta` (
   `ID` int(10) unsigned NOT NULL,
@@ -881,7 +962,7 @@ CREATE TABLE `sphinx_requests_delta` (
   KEY `Year` (`Year`),
   KEY `TimeFilled` (`TimeFilled`),
   KEY `LastVote` (`LastVote`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `sphinx_t` (
   `id` int(11) NOT NULL,
@@ -897,49 +978,49 @@ CREATE TABLE `sphinx_t` (
   `haslog` tinyint(4) DEFAULT NULL,
   `hascue` tinyint(4) DEFAULT NULL,
   `freetorrent` tinyint(4) DEFAULT NULL,
-  `media` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `format` varchar(15) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `encoding` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `media` varchar(15) DEFAULT NULL,
+  `format` varchar(15) DEFAULT NULL,
+  `encoding` varchar(30) DEFAULT NULL,
   `remyear` smallint(6) DEFAULT NULL,
-  `remtitle` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `remrlabel` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `remcnumber` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `filelist` mediumtext CHARACTER SET utf8 COLLATE utf8_bin,
+  `remtitle` varchar(80) DEFAULT NULL,
+  `remrlabel` varchar(80) DEFAULT NULL,
+  `remcnumber` varchar(80) DEFAULT NULL,
+  `filelist` mediumtext,
   `remident` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `gid_remident` (`gid`,`remident`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `sphinx_tg` (
   `id` int(11) NOT NULL,
-  `name` varchar(300) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `tags` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `name` varchar(300) DEFAULT NULL,
+  `tags` varchar(500) DEFAULT NULL,
   `year` smallint(6) DEFAULT NULL,
-  `rlabel` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
-  `cnumber` varchar(80) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `rlabel` varchar(80) DEFAULT NULL,
+  `cnumber` varchar(80) DEFAULT NULL,
   `catid` smallint(6) DEFAULT NULL,
   `reltype` smallint(6) DEFAULT NULL,
   `vanityhouse` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `staff_blog` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UserID` int(10) unsigned NOT NULL,
-  `Title` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Body` text COLLATE utf8_bin NOT NULL,
+  `Title` varchar(255) NOT NULL,
+  `Body` text NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `UserID` (`UserID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `staff_blog_visits` (
   `UserID` int(10) unsigned NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   UNIQUE KEY `UserID` (`UserID`),
   CONSTRAINT `staff_blog_visits_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `staff_pm_conversations` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -952,7 +1033,7 @@ CREATE TABLE `staff_pm_conversations` (
   `Unread` tinyint(1) DEFAULT NULL,
   `ResolverID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `staff_pm_messages` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
@@ -961,48 +1042,48 @@ CREATE TABLE `staff_pm_messages` (
   `Message` text,
   `ConvID` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `staff_pm_responses` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Message` text,
   `Name` text,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `stylesheets` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `Name` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Description` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Default` enum('0','1') COLLATE utf8_bin NOT NULL DEFAULT '0',
+  `Name` varchar(255) NOT NULL,
+  `Description` varchar(255) NOT NULL,
+  `Default` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `subscribed_forums` (
   `ForumID` int(10) NOT NULL,
   `UserID` int(10) NOT NULL,
   PRIMARY KEY (`ForumID`,`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `subscribed_users` (
   `UserID` int(10) NOT NULL,
   `SubscriberID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`SubscriberID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `tag_aliases` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `BadTag` varchar(30) COLLATE utf8_bin DEFAULT NULL,
-  `AliasTag` varchar(30) COLLATE utf8_bin DEFAULT NULL,
+  `BadTag` varchar(30) DEFAULT NULL,
+  `AliasTag` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `BadTag` (`BadTag`),
   KEY `AliasTag` (`AliasTag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `tags` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(100) COLLATE utf8_bin DEFAULT NULL,
-  `TagType` enum('genre','other') COLLATE utf8_bin NOT NULL DEFAULT 'other',
+  `Name` varchar(100) DEFAULT NULL,
+  `TagType` enum('genre','other') NOT NULL DEFAULT 'other',
   `Uses` int(12) NOT NULL DEFAULT '1',
   `UserID` int(10) DEFAULT NULL,
   PRIMARY KEY (`ID`),
@@ -1010,20 +1091,20 @@ CREATE TABLE `tags` (
   KEY `TagType` (`TagType`),
   KEY `Uses` (`Uses`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `temp_torrents_files` (
   `TorrentID` int(10) NOT NULL,
   `File` mediumblob NOT NULL,
   PRIMARY KEY (`TorrentID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `top10_history` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Type` enum('Daily','Weekly') DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `top10_history_torrents` (
   `HistoryID` int(10) NOT NULL DEFAULT '0',
@@ -1031,12 +1112,12 @@ CREATE TABLE `top10_history_torrents` (
   `TorrentID` int(10) NOT NULL DEFAULT '0',
   `TitleString` varchar(150) NOT NULL DEFAULT '',
   `TagString` varchar(100) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `top_snatchers` (
   `UserID` int(10) unsigned NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -1084,11 +1165,9 @@ CREATE TABLE `torrents` (
   `mtime` int(11) NOT NULL,
   `ctime` int(11) NOT NULL,
   `balance` bigint(20) NOT NULL DEFAULT '0',
-  `LastLogged` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `pid` int(5) NOT NULL DEFAULT '0',
   `LastReseedRequest` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ExtendedGrace` enum('0','1') NOT NULL DEFAULT '0',
-  `Tasted` enum('0','1') NOT NULL DEFAULT '0',
   `TranscodedFrom` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `InfoHash` (`info_hash`(40)),
@@ -1106,62 +1185,61 @@ CREATE TABLE `torrents` (
   KEY `last_action` (`last_action`),
   KEY `Time` (`Time`),
   KEY `flags` (`flags`),
-  KEY `LastLogged` (`LastLogged`),
   KEY `FreeTorrent` (`FreeTorrent`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_artists` (
   `GroupID` int(10) NOT NULL,
   `ArtistID` int(10) NOT NULL,
   `AliasID` int(10) NOT NULL,
   `UserID` int(10) unsigned NOT NULL DEFAULT '0',
-  `Importance` enum('1','2','3','4','5','6','7') COLLATE utf8_bin NOT NULL DEFAULT '1',
+  `Importance` enum('1','2','3','4','5','6','7') NOT NULL DEFAULT '1',
   PRIMARY KEY (`GroupID`,`ArtistID`,`Importance`),
   KEY `ArtistID` (`ArtistID`),
   KEY `AliasID` (`AliasID`),
   KEY `Importance` (`Importance`),
   KEY `GroupID` (`GroupID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_bad_files` (
   `TorrentID` int(11) NOT NULL DEFAULT '0',
   `UserID` int(11) NOT NULL DEFAULT '0',
   `TimeAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_bad_folders` (
   `TorrentID` int(11) NOT NULL,
   `UserID` int(11) NOT NULL,
   `TimeAdded` datetime NOT NULL,
   PRIMARY KEY (`TorrentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_bad_tags` (
   `TorrentID` int(10) NOT NULL DEFAULT '0',
   `UserID` int(10) NOT NULL DEFAULT '0',
   `TimeAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `TimeAdded` (`TimeAdded`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_balance_history` (
   `TorrentID` int(10) NOT NULL,
   `GroupID` int(10) NOT NULL,
   `balance` bigint(20) NOT NULL,
   `Time` datetime NOT NULL,
-  `Last` enum('0','1','2') COLLATE utf8_bin DEFAULT '0',
+  `Last` enum('0','1','2') DEFAULT '0',
   UNIQUE KEY `TorrentID_2` (`TorrentID`,`Time`),
   UNIQUE KEY `TorrentID_3` (`TorrentID`,`balance`),
   KEY `TorrentID` (`TorrentID`),
   KEY `Time` (`Time`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `torrents_cassette_approved` (
   `TorrentID` int(10) NOT NULL DEFAULT '0',
   `UserID` int(10) NOT NULL DEFAULT '0',
   `TimeAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `TimeAdded` (`TimeAdded`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_comments` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
@@ -1169,36 +1247,36 @@ CREATE TABLE `torrents_comments` (
   `TorrentID` int(10) unsigned NOT NULL,
   `AuthorID` int(10) NOT NULL,
   `AddedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Body` mediumtext COLLATE utf8_bin,
+  `Body` mediumtext,
   `EditedUserID` int(10) DEFAULT NULL,
   `EditedTime` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `TopicID` (`GroupID`),
   KEY `AuthorID` (`AuthorID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_files` (
   `TorrentID` int(10) NOT NULL,
   `File` mediumblob NOT NULL,
   PRIMARY KEY (`TorrentID`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `torrents_group` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `ArtistID` int(10) DEFAULT NULL,
   `NumArtists` int(3) NOT NULL DEFAULT '0',
   `CategoryID` int(3) DEFAULT NULL,
-  `Name` varchar(300) COLLATE utf8_bin DEFAULT NULL,
+  `Name` varchar(300) DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
-  `CatalogueNumber` varchar(80) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `RecordLabel` varchar(80) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `CatalogueNumber` varchar(80) NOT NULL DEFAULT '',
+  `RecordLabel` varchar(80) NOT NULL DEFAULT '',
   `ReleaseType` tinyint(2) DEFAULT '21',
-  `TagList` varchar(500) COLLATE utf8_bin NOT NULL,
+  `TagList` varchar(500) NOT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `RevisionID` int(12) DEFAULT NULL,
-  `WikiBody` text COLLATE utf8_bin NOT NULL,
-  `WikiImage` varchar(255) COLLATE utf8_bin NOT NULL,
-  `SearchText` varchar(500) COLLATE utf8_bin NOT NULL,
+  `WikiBody` text NOT NULL,
+  `WikiImage` varchar(255) NOT NULL,
+  `SearchText` varchar(500) NOT NULL,
   `VanityHouse` tinyint(1) DEFAULT '0',
   `LastCommentID` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
@@ -1208,7 +1286,7 @@ CREATE TABLE `torrents_group` (
   KEY `Year` (`Year`),
   KEY `Time` (`Time`),
   KEY `RevisionID` (`RevisionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_last_read_comments` (
   `UserID` int(10) NOT NULL,
@@ -1216,7 +1294,7 @@ CREATE TABLE `torrents_last_read_comments` (
   `CommentID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`GroupID`),
   KEY `GroupID` (`GroupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_logs_new` (
   `LogID` int(10) NOT NULL AUTO_INCREMENT,
@@ -1231,21 +1309,21 @@ CREATE TABLE `torrents_logs_new` (
   `AdjustmentReason` text,
   PRIMARY KEY (`LogID`),
   KEY `TorrentID` (`TorrentID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_lossymaster_approved` (
   `TorrentID` int(10) NOT NULL DEFAULT '0',
   `UserID` int(10) NOT NULL DEFAULT '0',
   `TimeAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `TimeAdded` (`TimeAdded`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_lossyweb_approved` (
   `TorrentID` int(10) NOT NULL DEFAULT '0',
   `UserID` int(10) NOT NULL DEFAULT '0',
   `TimeAdded` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   KEY `TimeAdded` (`TimeAdded`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_peerlists` (
   `TorrentID` int(11) NOT NULL,
@@ -1256,7 +1334,7 @@ CREATE TABLE `torrents_peerlists` (
   PRIMARY KEY (`TorrentID`),
   KEY `GroupID` (`GroupID`),
   KEY `Stats` (`TorrentID`,`Seeders`,`Leechers`,`Snatches`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `torrents_peerlists_compare` (
   `TorrentID` int(11) NOT NULL,
@@ -1267,7 +1345,7 @@ CREATE TABLE `torrents_peerlists_compare` (
   PRIMARY KEY (`TorrentID`),
   KEY `GroupID` (`GroupID`),
   KEY `Stats` (`TorrentID`,`Seeders`,`Leechers`,`Snatches`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `torrents_recommended` (
   `GroupID` int(10) NOT NULL,
@@ -1275,7 +1353,7 @@ CREATE TABLE `torrents_recommended` (
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`GroupID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_tags` (
   `TagID` int(10) NOT NULL DEFAULT '0',
@@ -1289,15 +1367,15 @@ CREATE TABLE `torrents_tags` (
   KEY `PositiveVotes` (`PositiveVotes`),
   KEY `NegativeVotes` (`NegativeVotes`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_tags_votes` (
   `GroupID` int(10) NOT NULL,
   `TagID` int(10) NOT NULL,
   `UserID` int(10) NOT NULL,
-  `Way` enum('up','down') COLLATE utf8_bin NOT NULL DEFAULT 'up',
+  `Way` enum('up','down') NOT NULL DEFAULT 'up',
   PRIMARY KEY (`GroupID`,`TagID`,`UserID`,`Way`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_votes` (
   `GroupID` int(10) NOT NULL,
@@ -1307,14 +1385,14 @@ CREATE TABLE `torrents_votes` (
   PRIMARY KEY (`GroupID`),
   KEY `Score` (`Score`),
   CONSTRAINT `torrents_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_artists_comments_subscriptions` (
   `UserID` int(10) NOT NULL,
   `ArtistID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`ArtistID`),
   KEY `ArtistID` (`ArtistID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_collage_subs` (
   `UserID` int(10) NOT NULL,
@@ -1322,23 +1400,34 @@ CREATE TABLE `users_collage_subs` (
   `LastVisit` datetime DEFAULT NULL,
   PRIMARY KEY (`UserID`,`CollageID`),
   KEY `CollageID` (`CollageID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_comments_last_read` (
   `UserID` int(10) NOT NULL,
-  `Page` enum('artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `Page` enum('artist','collages','requests','torrents') NOT NULL,
   `PageID` int(10) NOT NULL,
   `PostID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`Page`,`PageID`),
   KEY `Page` (`Page`,`PageID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_comments_subscriptions` (
   `UserID` int(10) NOT NULL,
   `GroupID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`GroupID`),
   KEY `GroupID` (`GroupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `users_donor_ranks` (
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `Rank` tinyint(2) NOT NULL DEFAULT '0',
+  `DonationTime` datetime DEFAULT NULL,
+  `Hidden` tinyint(2) NOT NULL DEFAULT '0',
+  `TotalRank` int(10) NOT NULL DEFAULT '0',
+  `SpecialRank` tinyint(2) DEFAULT '0',
+  `InvitesRecievedRank` tinyint(4) DEFAULT '0',
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_downloads` (
   `UserID` int(10) NOT NULL,
@@ -1347,7 +1436,7 @@ CREATE TABLE `users_downloads` (
   PRIMARY KEY (`UserID`,`TorrentID`,`Time`),
   KEY `TorrentID` (`TorrentID`),
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_dupes` (
   `GroupID` int(10) unsigned NOT NULL,
@@ -1356,14 +1445,14 @@ CREATE TABLE `users_dupes` (
   KEY `GroupID` (`GroupID`),
   CONSTRAINT `users_dupes_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `users_dupes_ibfk_2` FOREIGN KEY (`GroupID`) REFERENCES `dupe_groups` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_enable_recommendations` (
   `ID` int(10) NOT NULL,
   `Enable` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Enable` (`Enable`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_freeleeches` (
   `UserID` int(10) NOT NULL,
@@ -1374,12 +1463,12 @@ CREATE TABLE `users_freeleeches` (
   `Uses` int(10) NOT NULL DEFAULT '1',
   PRIMARY KEY (`UserID`,`TorrentID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_geodistribution` (
   `Code` varchar(2) NOT NULL,
   `Users` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_history_emails` (
   `UserID` int(10) NOT NULL,
@@ -1387,7 +1476,7 @@ CREATE TABLE `users_history_emails` (
   `Time` datetime DEFAULT NULL,
   `IP` varchar(15) DEFAULT NULL,
   KEY `UserID` (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_history_ips` (
   `UserID` int(10) NOT NULL,
@@ -1399,7 +1488,7 @@ CREATE TABLE `users_history_ips` (
   KEY `IP` (`IP`),
   KEY `StartTime` (`StartTime`),
   KEY `EndTime` (`EndTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_history_passkeys` (
   `UserID` int(10) NOT NULL,
@@ -1407,14 +1496,14 @@ CREATE TABLE `users_history_passkeys` (
   `NewPassKey` varchar(32) DEFAULT NULL,
   `ChangeTime` datetime DEFAULT NULL,
   `ChangerIP` varchar(15) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_history_passwords` (
   `UserID` int(10) NOT NULL,
   `ChangeTime` datetime DEFAULT NULL,
   `ChangerIP` varchar(15) DEFAULT NULL,
   KEY `User_Time` (`UserID`,`ChangeTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_info` (
   `UserID` int(10) unsigned NOT NULL,
@@ -1468,6 +1557,7 @@ CREATE TABLE `users_info` (
   `LastReadBlog` int(10) NOT NULL DEFAULT '0',
   `TorrentsCommentsCatchupTime` datetime DEFAULT NULL,
   `ArtistsCommentsCatchupTime` datetime DEFAULT NULL,
+  `InfoTitle` varchar(255) NOT NULL,
   UNIQUE KEY `UserID` (`UserID`),
   KEY `SupportFor` (`SupportFor`),
   KEY `DisableInvites` (`DisableInvites`),
@@ -1479,14 +1569,146 @@ CREATE TABLE `users_info` (
   KEY `RatioWatchDownload` (`RatioWatchDownload`),
   KEY `BitcoinAddress` (`BitcoinAddress`(4)),
   KEY `AuthKey` (`AuthKey`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `users_info_bak` (
+  `UserID` int(10) unsigned NOT NULL,
+  `StyleID` int(10) unsigned NOT NULL,
+  `StyleURL` varchar(255) DEFAULT NULL,
+  `Info` text NOT NULL,
+  `Avatar` varchar(255) NOT NULL,
+  `Country` int(10) unsigned NOT NULL,
+  `AdminComment` text NOT NULL,
+  `SiteOptions` text NOT NULL,
+  `ViewAvatars` enum('0','1') NOT NULL DEFAULT '1',
+  `Donor` enum('0','1') NOT NULL DEFAULT '0',
+  `Artist` enum('0','1') NOT NULL DEFAULT '0',
+  `DownloadAlt` enum('0','1') NOT NULL DEFAULT '0',
+  `Warned` datetime NOT NULL,
+  `MessagesPerPage` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `DeletePMs` enum('0','1') NOT NULL DEFAULT '1',
+  `SaveSentPMs` enum('0','1') NOT NULL DEFAULT '0',
+  `SupportFor` varchar(255) NOT NULL,
+  `TorrentGrouping` enum('0','1','2') NOT NULL COMMENT '0=Open,1=Closed,2=Off',
+  `ShowTags` enum('0','1') NOT NULL DEFAULT '1',
+  `NotifyOnQuote` enum('0','1','2') NOT NULL DEFAULT '0',
+  `AuthKey` varchar(32) NOT NULL,
+  `ResetKey` varchar(32) NOT NULL,
+  `ResetExpires` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `JoinDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Inviter` int(10) DEFAULT NULL,
+  `BitcoinAddress` varchar(34) DEFAULT NULL,
+  `WarnedTimes` int(2) NOT NULL DEFAULT '0',
+  `DisableAvatar` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableInvites` enum('0','1') NOT NULL DEFAULT '0',
+  `DisablePosting` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableForums` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableIRC` enum('0','1') DEFAULT '0',
+  `DisableTagging` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableUpload` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableWiki` enum('0','1') NOT NULL DEFAULT '0',
+  `DisablePM` enum('0','1') NOT NULL DEFAULT '0',
+  `RatioWatchEnds` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `RatioWatchDownload` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `RatioWatchTimes` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `BanDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `BanReason` enum('0','1','2','3','4') NOT NULL DEFAULT '0',
+  `CatchupTime` datetime DEFAULT NULL,
+  `LastReadNews` int(10) NOT NULL DEFAULT '0',
+  `HideCountryChanges` enum('0','1') NOT NULL DEFAULT '0',
+  `RestrictedForums` varchar(150) NOT NULL DEFAULT '',
+  `DisableRequests` enum('0','1') NOT NULL DEFAULT '0',
+  `PermittedForums` varchar(150) NOT NULL DEFAULT '',
+  `UnseededAlerts` enum('0','1') NOT NULL DEFAULT '0',
+  `LastReadBlog` int(10) NOT NULL DEFAULT '0',
+  `TorrentsCommentsCatchupTime` datetime DEFAULT NULL,
+  `ArtistsCommentsCatchupTime` datetime DEFAULT NULL,
+  `InfoTitle` varchar(255) NOT NULL,
+  UNIQUE KEY `UserID` (`UserID`),
+  KEY `SupportFor` (`SupportFor`),
+  KEY `DisableInvites` (`DisableInvites`),
+  KEY `Donor` (`Donor`),
+  KEY `Warned` (`Warned`),
+  KEY `JoinDate` (`JoinDate`),
+  KEY `Inviter` (`Inviter`),
+  KEY `RatioWatchEnds` (`RatioWatchEnds`),
+  KEY `RatioWatchDownload` (`RatioWatchDownload`),
+  KEY `BitcoinAddress` (`BitcoinAddress`(4)),
+  KEY `AuthKey` (`AuthKey`)
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `users_info_tmp` (
+  `UserID` int(10) unsigned NOT NULL,
+  `StyleID` int(10) unsigned NOT NULL,
+  `StyleURL` varchar(255) DEFAULT NULL,
+  `Info` text NOT NULL,
+  `Avatar` varchar(255) NOT NULL,
+  `Country` int(10) unsigned NOT NULL,
+  `AdminComment` text NOT NULL,
+  `SiteOptions` text NOT NULL,
+  `ViewAvatars` enum('0','1') NOT NULL DEFAULT '1',
+  `Donor` enum('0','1') NOT NULL DEFAULT '0',
+  `Artist` enum('0','1') NOT NULL DEFAULT '0',
+  `DownloadAlt` enum('0','1') NOT NULL DEFAULT '0',
+  `Warned` datetime NOT NULL,
+  `MessagesPerPage` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `DeletePMs` enum('0','1') NOT NULL DEFAULT '1',
+  `SaveSentPMs` enum('0','1') NOT NULL DEFAULT '0',
+  `SupportFor` varchar(255) NOT NULL,
+  `TorrentGrouping` enum('0','1','2') NOT NULL COMMENT '0=Open,1=Closed,2=Off',
+  `ShowTags` enum('0','1') NOT NULL DEFAULT '1',
+  `NotifyOnQuote` enum('0','1','2') NOT NULL DEFAULT '0',
+  `AuthKey` varchar(32) NOT NULL,
+  `ResetKey` varchar(32) NOT NULL,
+  `ResetExpires` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `JoinDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `Inviter` int(10) DEFAULT NULL,
+  `BitcoinAddress` varchar(34) DEFAULT NULL,
+  `WarnedTimes` int(2) NOT NULL DEFAULT '0',
+  `DisableAvatar` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableInvites` enum('0','1') NOT NULL DEFAULT '0',
+  `DisablePosting` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableForums` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableIRC` enum('0','1') DEFAULT '0',
+  `DisableTagging` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableUpload` enum('0','1') NOT NULL DEFAULT '0',
+  `DisableWiki` enum('0','1') NOT NULL DEFAULT '0',
+  `DisablePM` enum('0','1') NOT NULL DEFAULT '0',
+  `RatioWatchEnds` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `RatioWatchDownload` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `RatioWatchTimes` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `BanDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `BanReason` enum('0','1','2','3','4') NOT NULL DEFAULT '0',
+  `CatchupTime` datetime DEFAULT NULL,
+  `LastReadNews` int(10) NOT NULL DEFAULT '0',
+  `HideCountryChanges` enum('0','1') NOT NULL DEFAULT '0',
+  `RestrictedForums` varchar(150) NOT NULL DEFAULT '',
+  `DisableRequests` enum('0','1') NOT NULL DEFAULT '0',
+  `PermittedForums` varchar(150) NOT NULL DEFAULT '',
+  `UnseededAlerts` enum('0','1') NOT NULL DEFAULT '0',
+  `LastReadBlog` int(10) NOT NULL DEFAULT '0',
+  `TorrentsCommentsCatchupTime` datetime DEFAULT NULL,
+  `ArtistsCommentsCatchupTime` datetime DEFAULT NULL,
+  `InfoTitle` varchar(255) NOT NULL,
+  UNIQUE KEY `UserID` (`UserID`),
+  KEY `SupportFor` (`SupportFor`),
+  KEY `DisableInvites` (`DisableInvites`),
+  KEY `Donor` (`Donor`),
+  KEY `Warned` (`Warned`),
+  KEY `JoinDate` (`JoinDate`),
+  KEY `Inviter` (`Inviter`),
+  KEY `RatioWatchEnds` (`RatioWatchEnds`),
+  KEY `RatioWatchDownload` (`RatioWatchDownload`),
+  KEY `BitcoinAddress` (`BitcoinAddress`(4)),
+  KEY `AuthKey` (`AuthKey`)
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_levels` (
   `UserID` int(10) unsigned NOT NULL,
   `PermissionID` int(10) unsigned NOT NULL,
   PRIMARY KEY (`UserID`,`PermissionID`),
   KEY `PermissionID` (`PermissionID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_main` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1542,7 +1764,25 @@ CREATE TABLE `users_main` (
   KEY `torrent_pass` (`torrent_pass`),
   KEY `RequiredRatio` (`RequiredRatio`),
   KEY `cc_index` (`ipcc`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `users_notifications_settings` (
+  `UserID` int(10) NOT NULL DEFAULT '0',
+  `Inbox` tinyint(1) DEFAULT '1',
+  `StaffPM` tinyint(1) DEFAULT '1',
+  `News` tinyint(1) DEFAULT '1',
+  `Blog` tinyint(1) DEFAULT '1',
+  `Torrents` tinyint(1) DEFAULT '1',
+  `Collages` tinyint(1) DEFAULT '1',
+  `Quotes` tinyint(1) DEFAULT '1',
+  `Subscriptions` tinyint(1) DEFAULT '1',
+  `SiteAlerts` tinyint(1) DEFAULT '1',
+  `RequestAlerts` tinyint(1) DEFAULT '1',
+  `CollageAlerts` tinyint(1) DEFAULT '1',
+  `TorrentAlerts` tinyint(1) DEFAULT '1',
+  `ForumAlerts` tinyint(1) DEFAULT '1',
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_notify_filters` (
   `ID` int(12) NOT NULL AUTO_INCREMENT,
@@ -1566,18 +1806,18 @@ CREATE TABLE `users_notify_filters` (
   KEY `UserID` (`UserID`),
   KEY `FromYear` (`FromYear`),
   KEY `ToYear` (`ToYear`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_notify_quoted` (
   `UserID` int(10) NOT NULL,
   `QuoterID` int(10) NOT NULL,
-  `Page` enum('forums','artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `Page` enum('forums','artist','collages','requests','torrents') NOT NULL,
   `PageID` int(10) NOT NULL,
   `PostID` int(10) NOT NULL,
   `UnRead` tinyint(1) NOT NULL DEFAULT '1',
   `Date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`UserID`,`Page`,`PostID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_notify_torrents` (
   `UserID` int(10) NOT NULL,
@@ -1588,7 +1828,7 @@ CREATE TABLE `users_notify_torrents` (
   PRIMARY KEY (`UserID`,`TorrentID`),
   KEY `TorrentID` (`TorrentID`),
   KEY `UserID_Unread` (`UserID`,`UnRead`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_points` (
   `UserID` int(10) NOT NULL,
@@ -1597,7 +1837,7 @@ CREATE TABLE `users_points` (
   PRIMARY KEY (`UserID`,`GroupID`),
   KEY `UserID` (`UserID`),
   KEY `GroupID` (`GroupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_points_requests` (
   `UserID` int(10) NOT NULL,
@@ -1606,14 +1846,14 @@ CREATE TABLE `users_points_requests` (
   PRIMARY KEY (`RequestID`),
   KEY `UserID` (`UserID`),
   KEY `RequestID` (`RequestID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_push_notifications` (
   `UserID` int(10) NOT NULL,
   `PushService` tinyint(1) NOT NULL DEFAULT '0',
   `PushOptions` text NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM CHARSET utf8;
 
 CREATE TABLE `users_sessions` (
   `UserID` int(10) NOT NULL,
@@ -1630,20 +1870,20 @@ CREATE TABLE `users_sessions` (
   KEY `LastUpdate` (`LastUpdate`),
   KEY `Active` (`Active`),
   KEY `ActiveAgeKeep` (`Active`,`LastUpdate`,`KeepLogged`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_subscriptions` (
   `UserID` int(10) NOT NULL,
   `TopicID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`TopicID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_subscriptions_comments` (
   `UserID` int(10) NOT NULL,
-  `Page` enum('artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `Page` enum('artist','collages','requests','torrents') NOT NULL,
   `PageID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`Page`,`PageID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_torrent_history` (
   `UserID` int(10) unsigned NOT NULL,
@@ -1651,19 +1891,19 @@ CREATE TABLE `users_torrent_history` (
   `Date` int(8) unsigned NOT NULL,
   `Time` int(11) unsigned NOT NULL DEFAULT '0',
   `LastTime` int(11) unsigned NOT NULL DEFAULT '0',
-  `Finished` enum('1','0') COLLATE utf8_bin NOT NULL DEFAULT '1',
+  `Finished` enum('1','0') NOT NULL DEFAULT '1',
   `Weight` bigint(20) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`UserID`,`NumTorrents`,`Date`),
   KEY `Finished` (`Finished`),
   KEY `Date` (`Date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_torrent_history_snatch` (
   `UserID` int(10) unsigned NOT NULL,
   `NumSnatches` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`UserID`),
   KEY `NumSnatches` (`NumSnatches`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_torrent_history_temp` (
   `UserID` int(10) unsigned NOT NULL,
@@ -1671,7 +1911,7 @@ CREATE TABLE `users_torrent_history_temp` (
   `SumTime` bigint(20) unsigned NOT NULL DEFAULT '0',
   `SeedingAvg` int(6) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_votes` (
   `UserID` int(10) unsigned NOT NULL,
@@ -1685,46 +1925,46 @@ CREATE TABLE `users_votes` (
   KEY `Time` (`Time`),
   CONSTRAINT `users_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `users_votes_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_warnings_forums` (
   `UserID` int(10) unsigned NOT NULL,
   `Comment` text NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `wiki_aliases` (
   `Alias` varchar(50) NOT NULL,
   `UserID` int(10) NOT NULL,
   `ArticleID` int(10) DEFAULT NULL,
   PRIMARY KEY (`Alias`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `wiki_articles` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Revision` int(10) NOT NULL DEFAULT '1',
-  `Title` varchar(100) COLLATE utf8_swedish_ci DEFAULT NULL,
-  `Body` mediumtext COLLATE utf8_swedish_ci,
+  `Title` varchar(100) DEFAULT NULL,
+  `Body` mediumtext,
   `MinClassRead` int(4) DEFAULT NULL,
   `MinClassEdit` int(4) DEFAULT NULL,
   `Date` datetime DEFAULT NULL,
   `Author` int(10) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `wiki_artists` (
   `RevisionID` int(12) NOT NULL AUTO_INCREMENT,
   `PageID` int(10) NOT NULL DEFAULT '0',
-  `Body` text COLLATE utf8_bin,
+  `Body` text,
   `UserID` int(10) NOT NULL DEFAULT '0',
-  `Summary` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `Summary` varchar(100) DEFAULT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Image` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `Image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`RevisionID`),
   KEY `PageID` (`PageID`),
   KEY `UserID` (`UserID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `wiki_revisions` (
   `ID` int(10) NOT NULL,
@@ -1734,21 +1974,21 @@ CREATE TABLE `wiki_revisions` (
   `Date` datetime DEFAULT NULL,
   `Author` int(10) DEFAULT NULL,
   KEY `ID_Revision` (`ID`,`Revision`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `wiki_torrents` (
   `RevisionID` int(12) NOT NULL AUTO_INCREMENT,
   `PageID` int(10) NOT NULL DEFAULT '0',
-  `Body` text COLLATE utf8_bin,
+  `Body` text,
   `UserID` int(10) NOT NULL DEFAULT '0',
-  `Summary` varchar(100) COLLATE utf8_bin DEFAULT NULL,
+  `Summary` varchar(100) DEFAULT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Image` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `Image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`RevisionID`),
   KEY `PageID` (`PageID`),
   KEY `UserID` (`UserID`),
   KEY `Time` (`Time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `xbt_client_whitelist` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1756,7 +1996,7 @@ CREATE TABLE `xbt_client_whitelist` (
   `vstring` varchar(200) DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `peer_id` (`peer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `xbt_files_users` (
   `uid` int(11) NOT NULL,
@@ -1781,7 +2021,7 @@ CREATE TABLE `xbt_files_users` (
   KEY `fid_idx` (`fid`),
   KEY `mtime_idx` (`mtime`),
   KEY `uid_active` (`uid`,`active`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `xbt_snatched` (
   `uid` int(11) NOT NULL DEFAULT '0',
@@ -1791,7 +2031,7 @@ CREATE TABLE `xbt_snatched` (
   KEY `fid` (`fid`),
   KEY `uid` (`uid`),
   KEY `tstamp` (`tstamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `binomial_ci`(p int, n int) RETURNS float
     DETERMINISTIC

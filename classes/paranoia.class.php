@@ -46,7 +46,7 @@ define("PARANOIA_ALLOWED", 1);
 define("PARANOIA_OVERRIDDEN", 2);
 
 function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
-	global $LoggedUser, $Classes;
+	global $Classes;
 	if ($Property == false) {
 		return false;
 	}
@@ -63,7 +63,7 @@ function check_paranoia($Property, $Paranoia, $UserClass, $UserID = false) {
 		}
 		return $all;
 	} else {
-		if (($UserID !== false) && ($LoggedUser['ID'] == $UserID)) {
+		if (($UserID !== false) && (G::$LoggedUser['ID'] == $UserID)) {
 			return PARANOIA_ALLOWED;
 		}
 

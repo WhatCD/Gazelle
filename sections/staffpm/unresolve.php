@@ -7,8 +7,11 @@ if ($ID = (int)($_GET['id'])) {
 		WHERE ID = $ID");
 	list($UserID, $Level, $AssignedToUser) = $DB->next_record();
 
-	if ($UserID == $LoggedUser['ID'] || ($IsFLS && $Level == 0) ||
-		$AssignedToUser == $LoggedUser['ID'] || ($IsStaff && $Level <= $LoggedUser['EffectiveClass'])) {
+	if ($UserID == $LoggedUser['ID']
+		|| ($IsFLS && $Level == 0)
+		|| $AssignedToUser == $LoggedUser['ID']
+		|| ($IsStaff && $Level <= $LoggedUser['EffectiveClass'])
+		) {
 		/*if ($Level != 0 && $IsStaff == false) {
 			error(403);
 		}*/

@@ -33,21 +33,17 @@ while (list($GroupID) = $DB->next_record()) {
 }
 
 //Personal collages have CategoryID 0
-if ($CategoryID === '0') {
-	$DB->query("
-		DELETE FROM collages
-		WHERE ID = '$CollageID'");
-	$DB->query("
-		DELETE FROM collages_torrents
-		WHERE CollageID = '$CollageID'");
-	$DB->query("
-		DELETE FROM collages_comments
-		WHERE CollageID = '$CollageID'");
+if ($CategoryID == 0) {
+	$DB->query("DELETE FROM collages WHERE ID = '$CollageID'");
+	$DB->query("DELETE FROM collages_torrents WHERE CollageID = '$CollageID'");
+	Comments::delete_page('collages', $CollageID);
 } else {
 	$DB->query("
 		UPDATE collages
 		SET Deleted = '1'
 		WHERE ID = '$CollageID'");
+	Subscriptions::flush_subscriptions('collages', $CollageID);
+	Subscriptions::flush_quote_notifications('collages', $CollageID);
 }
 
 Misc::write_log("Collage $CollageID ($Name) was deleted by ".$LoggedUser['Username'].": $Reason");

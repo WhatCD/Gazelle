@@ -225,13 +225,35 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="button" id="previewbtn" value="Preview" class="hidden button_preview_<?=$TextPrev->getID()?>" title="Preview text" />
 					<input type="submit" value="Send message" />
 <?	} else { ?>
-					<input type="button" value="Unresolve" onclick="location.href='staffpm.php?action=unresolve&amp;id=<?=$ConvID?>';" />
+				<input type="button" value="Unresolve" onclick="location.href='staffpm.php?action=unresolve&amp;id=<?=$ConvID?>';" />
 <?	}
 	if (check_perms('users_give_donor')) { ?>
 					<br />
-					<input type="button" value="Make Donor" onclick="location.href='staffpm.php?action=make_donor&amp;id=<?=$ConvID?>';" />
+					<input type="button" value="Make Donor" onclick="$('#make_donor_form').gtoggle(); return false;" />
 <?	} ?>
 				</form>
+<?	if (check_perms('users_give_donor')) { ?>
+				<div id="make_donor_form" class="hidden">
+					<form action="staffpm.php" method="POST">
+						<input type="hidden" name="action" value="make_donor" />
+						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+						<input type="hidden" name="id" value="<?=$ConvID?>" />
+						<strong>Amount: </strong>
+						<input type="text" name="donation_amount" onkeypress="return isNumberKey(event)" />
+						<br />
+						<strong>Reason: </strong>
+						<input type="text" name="donation_reason" />
+						<br />
+						<select name="donation_source">
+							<option value="Flattr">Flattr</option>
+						</select>
+						<select name="donation_currency">
+							<option value="EUR">EUR</option>
+						</select>
+						<input type="submit" value="Submit"/>
+					</form>
+				</div>
+<?	} ?>
 			</div>
 		</div>
 	</div>

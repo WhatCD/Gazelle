@@ -7,35 +7,37 @@ class UserRank {
 	// Returns a 101 row array (101 percentiles - 0 - 100), with the minimum value for that percentile as the value for each row
 	// BTW - ingenious
 	private static function build_table($MemKey, $Query) {
-		global $Cache, $DB;
+		$QueryID = G::$DB->get_query_id();
 
-		$DB->query("
+		G::$DB->query("
 			DROP TEMPORARY TABLE IF EXISTS temp_stats");
 
-		$DB->query("
+		G::$DB->query("
 			CREATE TEMPORARY TABLE temp_stats (
 				ID int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 				Val bigint(20) NOT NULL
 			);");
 
-		$DB->query("
+		G::$DB->query("
 			INSERT INTO temp_stats (Val) ".
 			$Query);
 
-		$DB->query("
+		G::$DB->query("
 			SELECT COUNT(ID)
 			FROM temp_stats");
-		list($UserCount) = $DB->next_record();
+		list($UserCount) = G::$DB->next_record();
 
-		$DB->query("
+		G::$DB->query("
 			SELECT MIN(Val)
 			FROM temp_stats
 			GROUP BY CEIL(ID / (".(int)$UserCount." / 100));");
 
-		$Table = $DB->to_array();
+		$Table = G::$DB->to_array();
+
+		G::$DB->set_query_id($QueryID);
 
 		// Give a little variation to the cache length, so all the tables don't expire at the same time
-		$Cache->cache_value($MemKey, $Table, 3600 * 24 * rand(800, 1000) * 0.001);
+		G::$Cache->cache_value($MemKey, $Table, 3600 * 24 * rand(800, 1000) * 0.001);
 
 		return $Table;
 	}
@@ -112,18 +114,17 @@ class UserRank {
 		if ($Value == 0) {
 			return 0;
 		}
-		global $Cache, $DB;
 
-		$Table = $Cache->get_value(PREFIX.$TableName);
+		$Table = G::$Cache->get_value(PREFIX.$TableName);
 		if (!$Table) {
 			//Cache lock!
-			$Lock = $Cache->get_value(PREFIX.$TableName.'_lock');
+			$Lock = G::$Cache->get_value(PREFIX.$TableName.'_lock');
 			if ($Lock) {
 				return false;
 			} else {
-				$Cache->cache_value(PREFIX.$TableName.'_lock', '1', 300);
+				G::$Cache->cache_value(PREFIX.$TableName.'_lock', '1', 300);
 				$Table = self::build_table(PREFIX.$TableName, self::table_query($TableName));
-				$Cache->delete_value(PREFIX.$TableName.'_lock');
+				G::$Cache->delete_value(PREFIX.$TableName.'_lock');
 			}
 		}
 		$LastPercentile = 0;

@@ -103,7 +103,7 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 <?	} ?>
 			<br /><br />
 <?	if (check_perms('site_collages_subscribe')) { ?>
-			<a href="#" id="subscribelink<?=$CollageID?>" class="brackets" onclick="CollageSubscribe(<?=$CollageID?>);return false;"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
+			<a href="#" id="subscribelink<?=$CollageID?>" class="brackets" onclick="CollageSubscribe(<?=$CollageID?>); return false;"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
 <?	}
 	if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
 			<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>" class="brackets">Edit description</a>
@@ -112,9 +112,9 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 <?	}
 	if (Bookmarks::has_bookmarked('collage', $CollageID)) {
 ?>
-			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>,'Bookmark');return false;">Remove bookmark</a>
+			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>, 'Bookmark'); return false;">Remove bookmark</a>
 <?	} else { ?>
-			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>,'Remove bookmark');return false;">Bookmark</a>
+			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>, 'Remove bookmark'); return false;">Bookmark</a>
 <?	}
 ?>
 <!-- <a href="#" id="recommend" class="brackets">Recommend</a> -->
@@ -205,15 +205,16 @@ foreach ($Users as $ID => $User) {
 if (empty($CommentList)) {
 	$DB->query("
 		SELECT
-			cc.ID,
-			cc.Body,
-			cc.UserID,
+			c.ID,
+			c.Body,
+			c.AuthorID,
 			um.Username,
-			cc.Time
-		FROM collages_comments AS cc
-			LEFT JOIN users_main AS um ON um.ID = cc.UserID
-		WHERE CollageID = '$CollageID'
-		ORDER BY ID DESC
+			c.AddedTime
+		FROM comments AS c
+			LEFT JOIN users_main AS um ON um.ID = c.AuthorID
+		WHERE c.Page = 'collages'
+			AND c.PageID = $CollageID
+		ORDER BY c.ID DESC
 		LIMIT 15");
 	$CommentList = $DB->to_array(false, MYSQLI_NUM);
 }
@@ -239,10 +240,11 @@ if (!$LoggedUser['DisablePosting']) {
 ?>
 		<div class="box box_addcomment">
 			<div class="head"><strong>Add comment</strong></div>
-			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled = true;" action="collages.php" method="post">
-				<input type="hidden" name="action" value="add_comment" />
+			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled = true;" action="comments.php" method="post">
+				<input type="hidden" name="action" value="take_post" />
+				<input type="hidden" name="page" value="collages" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				<input type="hidden" name="collageid" value="<?=$CollageID?>" />
+				<input type="hidden" name="pageid" value="<?=$CollageID?>" />
 				<div class="pad">
 					<div class="field_div">
 						<textarea name="body" cols="24" rows="5"></textarea>

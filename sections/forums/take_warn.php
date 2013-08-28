@@ -84,7 +84,7 @@ if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 						'Username' => $LoggedUser['Username']));
 	$Cache->commit_transaction(3600 * 24 * 5);
 }
-$ThreadInfo = get_thread_info($TopicID);
+$ThreadInfo = Forums::get_thread_info($TopicID);
 if ($ThreadInfo['StickyPostID'] == $PostID) {
 	$ThreadInfo['StickyPost']['Body'] = $Body;
 	$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];

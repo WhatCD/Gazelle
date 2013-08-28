@@ -6,23 +6,25 @@ class ALIAS {
 
 	//Alternative approach with potential.
 	function flush() {
-		global $Cache, $DB;
-		$DB->query("
+		$QueryID = G::$DB->get_query_id();
+		G::$DB->query("
 			SELECT Alias, ArticleID
 			FROM wiki_aliases");
-		$Aliases = $DB->to_array('Alias');
-		$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
+		$Aliases = G::$DB->to_array('Alias');
+		G::$DB->set_query_id($QueryID);
+		G::$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
 	}
 
 	function to_id($Alias) {
-		global $Cache, $DB;
-		$Aliases = $Cache->get_value('wiki_aliases');
+		$Aliases = G::$Cache->get_value('wiki_aliases');
 		if (!$Aliases) {
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT Alias, ArticleID
 				FROM wiki_aliases");
-			$Aliases = $DB->to_array('Alias');
-			$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
+			$Aliases = G::$DB->to_array('Alias');
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
 		}
 		return $Aliases[$this->convert($Alias)]['ArticleID'];
 	}
@@ -32,21 +34,20 @@ class ALIAS {
 	}
 
 	function to_id($Alias) {
-		global $DB;
 		$Alias = $this->convert($Alias);
-		$DB->query("
+		G::$DB->query("
 			SELECT ArticleID
 			FROM wiki_aliases
 			WHERE Alias LIKE '$Alias'");
-		list($ArticleID) = $DB->next_record();
+		list($ArticleID) = G::$DB->next_record();
 		return $ArticleID;
 	}
 */
 	function article($ArticleID, $Error = true) {
-		global $Cache, $DB;
-		$Contents = $Cache->get_value('wiki_article_'.$ArticleID);
+		$Contents = G::$Cache->get_value('wiki_article_'.$ArticleID);
 		if (!$Contents) {
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT
 					w.Revision,
 					w.Title,
@@ -63,11 +64,12 @@ class ALIAS {
 					LEFT JOIN users_main AS u ON u.ID=w.Author
 				WHERE w.ID='$ArticleID'
 				GROUP BY w.ID");
-			if (!$DB->has_results() && $Error) {
+			if (!G::$DB->has_results() && $Error) {
 				error(404);
 			}
-			$Contents = $DB->to_array();
-			$Cache->cache_value('wiki_article_'.$ArticleID, $Contents, 3600 * 24 * 14); // 2 weeks
+			$Contents = G::$DB->to_array();
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value('wiki_article_'.$ArticleID, $Contents, 3600 * 24 * 14); // 2 weeks
 		}
 		return $Contents;
 	}

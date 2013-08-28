@@ -50,7 +50,7 @@ list($Results) = $DB->next_record();
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>Friends list</h2>
+		<h2>Friends List</h2>
 	</div>
 	<div class="linkbox">
 <?
@@ -92,7 +92,7 @@ foreach ($Friends as $Friend) {
 		<tr>
 <?	if (Users::has_avatars_enabled()) { ?>
 			<td class="col_avatar avatar" valign="top">
-				<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
+				<?=Users::show_avatar($Avatar, $FriendID, $Username, $HeavyInfo['DisableAvatars'])?>
 			</td>
 <?	} ?>
 			<td valign="top">

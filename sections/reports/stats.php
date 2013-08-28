@@ -17,7 +17,7 @@ View::show_header('Other reports stats');
 <div class="box pad thin" style="padding: 0px 0px 0px 20px; margin-left: auto; margin-right: auto;">
 	<table class="layout">
 <?
-if (check_perms('admin_reports')) :
+if (check_perms('admin_reports')) {
 $DB->query("
 	SELECT um.Username,
 		COUNT(r.ID) AS Reports
@@ -43,7 +43,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><?=$Username?></td>
-				<td><?=number_format($Reports)?></td>
+				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
 <?	} ?>
 		</table>
@@ -75,7 +75,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><?=$Username?></td>
-				<td><?=number_format($Reports)?></td>
+				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
 <?	} ?>
 		</table>
@@ -107,7 +107,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><?=$Username?></td>
-				<td><?=number_format($Reports)?></td>
+				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
 <?	} ?>
 		</table>
@@ -137,13 +137,14 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><?=$Username?></td>
-				<td><?=number_format($Reports)?></td>
+				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
 <?	} ?>
 		</table>
 		</td>
 		</tr>
-<? endif; ?>
+<?
+} //if (check_perms('admin_reports')) ?>
 		<tr>
 <?
 			$DB->query("
@@ -173,7 +174,7 @@ $Results = $DB->to_array();
 					<tr>
 						<td><?=$i?></td>
 						<td><?=$Username?></td>
-						<td><?=number_format($Trashed)?></td>
+						<td class="number_column"><?=number_format($Trashed)?></td>
 					</tr>
 <?
 					$i++;

@@ -13,7 +13,7 @@ class DEBUG {
 	private $LoggedVars = array();
 
 	public function profile($Automatic = '') {
-		global $ScriptStartTime, $DB;
+		global $ScriptStartTime;
 		$Reason = array();
 
 		if (!empty($Automatic)) {
@@ -40,7 +40,7 @@ class DEBUG {
 			$Reason[] = Format::get_size($Ram).' RAM used';
 		}
 
-		$DB->warnings(); // see comment in MYSQL::query
+		G::$DB->warnings(); // see comment in MYSQL::query
 		/*$Queries = $this->get_queries();
 		$DBWarningCount = 0;
 		foreach ($Queries as $Query) {
@@ -53,8 +53,7 @@ class DEBUG {
 		}*/
 
 		if (isset($_REQUEST['profile'])) {
-			global $LoggedUser;
-			$Reason[] = 'Requested by '.$LoggedUser['Username'];
+			$Reason[] = 'Requested by ' . G::$LoggedUser['Username'];
 		}
 
 		$this->Perf['Memory usage'] = (($Ram>>10) / 1024).' MB';
@@ -70,12 +69,12 @@ class DEBUG {
 	}
 
 	public function analysis($Message, $Report = '', $Time = 43200) {
-		global $Cache, $Document;
+		global $Document;
 		if (empty($Report)) {
 			$Report = $Message;
 		}
 		$Identifier = Users::make_secret(5);
-		$Cache->cache_value(
+		G::$Cache->cache_value(
 			'analysis_'.$Identifier,
 			array(
 				'url' => $_SERVER['REQUEST_URI'],
@@ -269,13 +268,11 @@ class DEBUG {
 	}
 
 	public function get_cache_time() {
-		global $Cache;
-		return $Cache->Time;
+		return G::$Cache->Time;
 	}
 
 	public function get_cache_keys() {
-		global $Cache;
-		return array_keys($Cache->CacheHits);
+		return array_keys(G::$Cache->CacheHits);
 	}
 
 	public function get_sphinx_queries() {
@@ -301,13 +298,11 @@ class DEBUG {
 	}
 
 	public function get_queries() {
-		global $DB;
-		return $DB->Queries;
+		return G::$DB->Queries;
 	}
 
 	public function get_query_time() {
-		global $DB;
-		return $DB->Time;
+		return G::$DB->Time;
 	}
 
 	public function get_logged_vars() {
@@ -467,7 +462,6 @@ class DEBUG {
 	}
 
 	public function cache_table($CacheKeys = false) {
-		global $Cache;
 		$Header = 'Cache keys';
 		if (!is_array($CacheKeys)) {
 			$CacheKeys = $this->get_cache_keys();
@@ -492,7 +486,7 @@ class DEBUG {
 				<a href="tools.php?action=clear_cache&amp;key=<?=$Key?>&amp;type=clear" target="_blank" class="brackets">Clear this cache key</a>
 			</td>
 			<td align="left" class="debug_data debug_cache_data">
-				<pre id="debug_cache_<?=$Key?>" class="hidden"><?=display_str(print_r($Cache->get_value($Key, true), true))?></pre>
+				<pre id="debug_cache_<?=$Key?>" class="hidden"><?=display_str(print_r(G::$Cache->get_value($Key, true), true))?></pre>
 			</td>
 		</tr>
 <?		} ?>

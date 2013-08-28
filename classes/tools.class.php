@@ -6,18 +6,20 @@ class Tools {
 	 * @param string $IP
 	 */
 	public static function site_ban_ip($IP) {
-		global $DB, $Cache, $Debug;
+		global $Debug;
 		$A = substr($IP, 0, strcspn($IP, '.'));
 		$IPNum = Tools::ip_to_unsigned($IP);
-		$IPBans = $Cache->get_value('ip_bans_'.$A);
+		$IPBans = G::$Cache->get_value('ip_bans_'.$A);
 		if (!is_array($IPBans)) {
 			$SQL = sprintf("
 				SELECT ID, FromIP, ToIP
 				FROM ip_bans
 				WHERE FromIP BETWEEN %d << 24 AND (%d << 24) - 1", $A, $A + 1);
-			$DB->query($SQL);
-			$IPBans = $DB->to_array(0, MYSQLI_NUM);
-			$Cache->cache_value('ip_bans_'.$A, $IPBans, 0);
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query($SQL);
+			$IPBans = G::$DB->to_array(0, MYSQLI_NUM);
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value('ip_bans_'.$A, $IPBans, 0);
 		}
 		$Debug->log_var($IPBans, 'IP bans for class '.$A);
 		foreach ($IPBans as $Index => $IPBan) {
@@ -59,16 +61,17 @@ class Tools {
 		if (!$Long || $Long == 2130706433) { // No need to check cc for 127.0.0.1
 			return false;
 		}
-		global $DB;
-		$DB->query("
+		$QueryID = G::$DB->get_query_id();
+		G::$DB->query("
 			SELECT EndIP, Code
 			FROM geoip_country
 			WHERE $Long >= StartIP
 			ORDER BY StartIP DESC
 			LIMIT 1");
-		if ((!list($EndIP, $Country) = $DB->next_record()) || $EndIP < $Long) {
+		if ((!list($EndIP, $Country) = G::$DB->next_record()) || $EndIP < $Long) {
 			$Country = '?';
 		}
+		G::$DB->set_query_id($QueryID);
 		$IPs[$IP] = $Country;
 		return $Country;
 	}
@@ -115,7 +118,7 @@ class Tools {
 	 * @return string the host.
 	 */
 	public static function lookup_ip($IP) {
-		//TODO: use the $Cache
+		//TODO: use the G::$Cache
 		$Output = explode(' ',shell_exec('host -W 1 '.escapeshellarg($IP)));
 		if (count($Output) == 1 && empty($Output[0])) {
 			//No output at all implies the command failed
@@ -145,7 +148,7 @@ class Tools {
 	public static function get_country_code_by_ajax($IP) {
 		static $ID = 0;
 		++$ID;
-		return '<span id="cc_'.$ID.'">Resolving CC...<script type="text/javascript">ajax.get(\'tools.php?action=get_cc&ip='.$IP.'\',function(cc) {$(\'#cc_'.$ID.'\').raw().innerHTML=cc;});</script></span>';
+		return '<span id="cc_'.$ID.'">Resolving CC...<script type="text/javascript">ajax.get(\'tools.php?action=get_cc&ip='.$IP.'\', function(cc) {$(\'#cc_'.$ID.'\').raw().innerHTML = cc;});</script></span>';
 	}
 
 
@@ -156,11 +159,11 @@ class Tools {
 	 * @param BanReason 0 - Unknown, 1 - Manual, 2 - Ratio, 3 - Inactive, 4 - Unused.
 	 */
 	public static function disable_users($UserIDs, $AdminComment, $BanReason = 1) {
-		global $Cache, $DB;
+		$QueryID = G::$DB->get_query_id();
 		if (!is_array($UserIDs)) {
 			$UserIDs = array($UserIDs);
 		}
-		$DB->query("
+		G::$DB->query("
 			UPDATE users_info AS i
 				JOIN users_main AS m ON m.ID=i.UserID
 			SET m.Enabled='2',
@@ -170,35 +173,35 @@ class Tools {
 				i.BanReason='$BanReason',
 				i.RatioWatchDownload=".($BanReason == 2 ? 'm.Downloaded' : "'0'")."
 			WHERE m.ID IN(".implode(',', $UserIDs).') ');
-		$Cache->decrement('stats_user_count', $DB->affected_rows());
+		G::$Cache->decrement('stats_user_count', G::$DB->affected_rows());
 		foreach ($UserIDs as $UserID) {
-			$Cache->delete_value('enabled_'.$UserID);
-			$Cache->delete_value('user_info_'.$UserID);
-			$Cache->delete_value('user_info_heavy_'.$UserID);
-			$Cache->delete_value('user_stats_'.$UserID);
+			G::$Cache->delete_value("enabled_$UserID");
+			G::$Cache->delete_value("user_info_$UserID");
+			G::$Cache->delete_value("user_info_heavy_$UserID");
+			G::$Cache->delete_value("user_stats_$UserID");
 
-			$DB->query("
+			G::$DB->query("
 				SELECT SessionID
 				FROM users_sessions
-				WHERE UserID='$UserID'
+				WHERE UserID = '$UserID'
 					AND Active = 1");
-			while (list($SessionID) = $DB->next_record()) {
-				$Cache->delete_value('session_'.$UserID.'_'.$SessionID);
+			while (list($SessionID) = G::$DB->next_record()) {
+				G::$Cache->delete_value("session_$UserID"."_$SessionID");
 			}
-			$Cache->delete_value('users_sessions_'.$UserID);
+			G::$Cache->delete_value("users_sessions_$UserID");
 
-			$DB->query("
+			G::$DB->query("
 				DELETE FROM users_sessions
-				WHERE UserID='$UserID'");
+				WHERE UserID = '$UserID'");
 
 		}
 
 		// Remove the users from the tracker.
-		$DB->query("
+		G::$DB->query('
 			SELECT torrent_pass
 			FROM users_main
-			WHERE ID in (".implode(', ', $UserIDs).')');
-		$PassKeys = $DB->collect('torrent_pass');
+			WHERE ID in ('.implode(', ', $UserIDs).')');
+		$PassKeys = G::$DB->collect('torrent_pass');
 		$Concat = '';
 		foreach ($PassKeys as $PassKey) {
 			if (strlen($Concat) > 3950) { // Ocelot's read buffer is 4 KiB and anything exceeding it is truncated
@@ -209,6 +212,7 @@ class Tools {
 			}
 		}
 		Tracker::update_tracker('remove_users', array('passkeys' => $Concat));
+		G::$DB->set_query_id($QueryID);
 	}
 
 	/**
@@ -219,49 +223,51 @@ class Tools {
 	 * @param string $reason
 	 */
 	public static function warn_user($UserID, $Duration, $Reason) {
-		global $LoggedUser, $DB, $Cache, $Time;
+		global $Time;
 
-		$DB->query("
+		$QueryID = G::$DB->get_query_id();
+		G::$DB->query("
 			SELECT Warned
 			FROM users_info
-			WHERE UserID=$UserID
+			WHERE UserID = $UserID
 				AND Warned != '0000-00-00 00:00:00'");
-		if ($DB->has_results()) {
+		if (G::$DB->has_results()) {
 			//User was already warned, appending new warning to old.
-			list($OldDate) = $DB->next_record();
+			list($OldDate) = G::$DB->next_record();
 			$NewExpDate = date('Y-m-d H:i:s', strtotime($OldDate) + $Duration);
 
 			Misc::send_pm($UserID, 0,
 				'You have received multiple warnings.',
-				"When you received your latest warning (set to expire on ".date('Y-m-d', (time() + $Duration)).'), you already had a different warning (set to expire on '.date('Y-m-d', strtotime($OldDate)).").\n\n Due to this collision, your warning status will now expire at ".$NewExpDate.'.');
+				"When you received your latest warning (set to expire on ".date('Y-m-d', (time() + $Duration)).'), you already had a different warning (set to expire on '.date('Y-m-d', strtotime($OldDate)).").\n\n Due to this collision, your warning status will now expire at $NewExpDate.");
 
-			$AdminComment = date('Y-m-d').' - Warning (Clash) extended to expire at '.$NewExpDate.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
+			$AdminComment = date('Y-m-d')." - Warning (Clash) extended to expire at $NewExpDate by " . G::$LoggedUser['Username'] . "\nReason: $Reason\n\n";
 
-			$DB->query('
+			G::$DB->query('
 				UPDATE users_info
 				SET
-					Warned=\''.db_string($NewExpDate).'\',
-					WarnedTimes=WarnedTimes+1,
-					AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
-				WHERE UserID=\''.db_string($UserID).'\'');
+					Warned = \''.db_string($NewExpDate).'\',
+					WarnedTimes = WarnedTimes + 1,
+					AdminComment = CONCAT(\''.db_string($AdminComment).'\', AdminComment)
+				WHERE UserID = \''.db_string($UserID).'\'');
 		} else {
 			//Not changing, user was not already warned
 			$WarnTime = time_plus($Duration);
 
-			$Cache->begin_transaction('user_info_'.$UserID);
-			$Cache->update_row(false, array('Warned' => $WarnTime));
-			$Cache->commit_transaction(0);
+			G::$Cache->begin_transaction("user_info_$UserID");
+			G::$Cache->update_row(false, array('Warned' => $WarnTime));
+			G::$Cache->commit_transaction(0);
 
-			$AdminComment = date('Y-m-d').' - Warned until '.$WarnTime.' by '.$LoggedUser['Username']."\nReason: $Reason\n\n";
+			$AdminComment = date('Y-m-d')." - Warned until $WarnTime by " . G::$LoggedUser['Username'] . "\nReason: $Reason\n\n";
 
-			$DB->query('
+			G::$DB->query('
 				UPDATE users_info
 				SET
-					Warned=\''.db_string($WarnTime).'\',
-					WarnedTimes=WarnedTimes+1,
-					AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
-				WHERE UserID=\''.db_string($UserID).'\'');
+					Warned = \''.db_string($WarnTime).'\',
+					WarnedTimes = WarnedTimes + 1,
+					AdminComment = CONCAT(\''.db_string($AdminComment).'\',AdminComment)
+				WHERE UserID = \''.db_string($UserID).'\'');
 		}
+		G::$DB->set_query_id($QueryID);
 	}
 
 	/**
@@ -270,11 +276,12 @@ class Tools {
 	 * @param unknown $AdminComment Comment to update with
 	 */
 	public static function update_user_notes($UserID, $AdminComment) {
-		global $DB;
-		$DB->query('
+		$QueryID = G::$DB->get_query_id();
+		G::$DB->query('
 			UPDATE users_info
-			SET AdminComment=CONCAT(\''.db_string($AdminComment).'\',AdminComment)
-			WHERE UserID=\''.db_string($UserID).'\'');
+			SET AdminComment = CONCAT(\''.db_string($AdminComment).'\',AdminComment)
+			WHERE UserID = \''.db_string($UserID).'\'');
+		G::$DB->set_query_id($QueryID);
 	}
 }
 ?>

@@ -69,9 +69,9 @@ $(document).ready(function () {
 			});
 		},
 		tableSorter : function () {
-			var obj =  { 0: { sorter : false }, 6: { sorter : false } };
+			var obj = { 0: { sorter : false }, 6: { sorter : false } };
 			if (this.check.length !== 0) {
-				obj[5] = { sorter :  'relative_time' };
+				obj[5] = { sorter : 'relative_time' };
 			}
 			this.container.tablesorter({
 				cssHeader : 'headerSort',
@@ -87,11 +87,11 @@ $(document).ready(function () {
 			sortableTable.counter();
 		},
 		noteToggle : function () {
-			var span = $('<a href="#" title="Toggle Note">(Hide)</a>').click(function (e) {
+			var span = $('<a href="#" class="brackets" title="Toggle note">Hide</a>').click(function (e) {
 				e.preventDefault();
 				$('#drag_drop_textnote > :first-child').toggle();
 				var $this = $(this);
-				$this.text($this.text() === '(Hide)' ? '(Show)' : '(Hide)');
+				$this.text($this.text() === 'Hide' ? 'Show' : 'Hide');
 			});
 			$('#sorting_head').append(' ', span);
 		},

@@ -40,15 +40,18 @@ class CACHE extends Memcache {
 	protected $InTransaction = false;
 	public $Time = 0;
 	private $PersistentKeys = array(
-		'stats_*',
-		'percentiles_*',
-		'top10tor_*',
+		'ajax_requests_*',
 		'query_lock_*',
+		'stats_*',
+		'top10tor_*',
 		'top10votes_*',
-//		'similar_albums_*',
 		'users_snatched_*',
-		'ajax_requests_*'
+
+		// Cache-based features
+		'global_notification',
+		'notifications_one_reads_*',
 	);
+	private $ClearedKeys = array();
 
 	public $CanClear = false;
 	public $InternalCache = true;
@@ -110,21 +113,27 @@ class CACHE extends Memcache {
 				// Because of this, not user cache data will require a secondary pageload following the clearcache to update
 				if (count($this->CacheHits) > 0) {
 					foreach (array_keys($this->CacheHits) as $HitKey) {
-						if (!Misc::in_array_partial($HitKey, $this->PersistentKeys)) {
+						if (!isset($this->ClearedKeys[$HitKey]) && !Misc::in_array_partial($HitKey, $this->PersistentKeys)) {
 							$this->delete($HitKey);
 							unset($this->CacheHits[$HitKey]);
+							$this->ClearedKeys[$HitKey] = true;
 						}
 					}
 				}
+				if (!isset($this->ClearedKeys[$Key])) {
+					$this->delete($Key);
+					$this->ClearedKeys[$Key] = true;
+					$this->Time += (microtime(true) - $StartTime) * 1000;
+					return false;
+				}
+			} elseif (!isset($this->ClearedKeys[$Key]) && $_GET['clearcache'] == $Key) {
 				$this->delete($Key);
+				$this->ClearedKeys[$Key] = true;
 				$this->Time += (microtime(true) - $StartTime) * 1000;
 				return false;
-			} elseif ($_GET['clearcache'] == $Key) {
-				$this->delete($Key);
-				$this->Time += (microtime(true) - $StartTime) * 1000;
-				return false;
-			} elseif (in_array($_GET['clearcache'], $this->CacheHits)) {
+			} elseif (!isset($this->ClearedKeys[$_GET['clearcache']]) && in_array($_GET['clearcache'], $this->CacheHits)) {
 				unset($this->CacheHits[$_GET['clearcache']]);
+				$this->ClearedKeys[$_GET['clearcache']] = true;
 				$this->delete($_GET['clearcache']);
 			}
 		}

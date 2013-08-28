@@ -106,7 +106,9 @@ if (!$DB->has_results()) {
 	// Close table and multiresolve form
 ?>
 			</table>
-			<input type="submit" value="Resolve selected" />
+			<div class="submit_div">
+				<input type="submit" value="Resolve selected" />
+			</div>
 		</form>
 <?
 }

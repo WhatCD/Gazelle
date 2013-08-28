@@ -1199,7 +1199,7 @@ div.permission_container>table {
 	width: 100%;
 }
 
-div.pad ul,div.body ul,table.torrent_table blockquote>ul,div.pad ol,div.body ol {
+div.pad ul,div.body ul,table.torrent_table blockquote>ul,div.pad ol,div.body ol,.setting_description ul {
 	padding-left: 15px;
 }
 
@@ -1344,4 +1344,35 @@ form.manage_form[name=friends] .left input[type=submit] {
 
 .edit_changelog textarea {
 	width: 600px;
+}
+
+div[class~=tooltipster-base] {
+	background-color: #FFFFFF;
+	border-color: #ABABAB;
+	color: #565656;
+}
+
+#settings_sections h2 {
+	font-size: 12pt;
+}
+
+#settings_sections input {
+	max-width: 100%;
+}
+
+table[width="100%"].user_options {
+	margin-bottom: 20px;
+}
+
+.user_options .label {
+	width: 200px;
+}
+
+.user_options .box {
+	width: auto;
+}
+
+.user_options .textarea_wrap textarea {
+	width: 400px;
+	max-width: 100%;
 }

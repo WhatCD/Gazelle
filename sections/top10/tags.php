@@ -20,6 +20,7 @@ View::show_header('Top 10 Tags');
 			<a href="top10.php?type=users" class="brackets">Users</a>
 			<a href="top10.php?type=tags" class="brackets"><strong>Tags</strong></a>
 			<a href="top10.php?type=votes" class="brackets">Favorites</a>
+			<a href="top10.php?type=donors" class="brackets">Donors</a>
 		</div>
 	</div>
 
@@ -96,7 +97,7 @@ View::show_footer();
 exit;
 
 // generate a table based on data from most recent query to $DB
-function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true, $RequestsTable = false) {
+function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes = true, $RequestsTable = false) {
 	if ($RequestsTable) {
 		$URLString = 'requests.php?tags=';
 	} else {
@@ -156,10 +157,10 @@ function generate_tag_table($Caption, $Tag, $Details, $Limit, $ShowVotes=true, $
 	<tr class="row<?=$Highlight?>">
 		<td class="center"><?=$Rank?></td>
 		<td><a href="<?=$URLString?><?=$Detail['Name']?>"><?=$Detail['Name']?></a></td>
-		<td style="text-align: right;"><?=number_format($Detail['Uses'])?></td>
+		<td class="number_column"><?=number_format($Detail['Uses'])?></td>
 <?		if ($ShowVotes) { ?>
-		<td style="text-align: right;"><?=number_format($Detail['PosVotes'])?></td>
-		<td style="text-align: right;"><?=number_format($Detail['NegVotes'])?></td>
+		<td class="number_column"><?=number_format($Detail['PosVotes'])?></td>
+		<td class="number_column"><?=number_format($Detail['NegVotes'])?></td>
 <?		} ?>
 	</tr>
 <?

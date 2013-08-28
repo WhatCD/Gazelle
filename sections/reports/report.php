@@ -112,21 +112,12 @@ switch ($Short) {
 		}
 		break;
 
-	case 'requests_comment':
-	case 'torrents_comment':
-	case 'artist_comment':
-	case 'collages_comment':
-		$Table = "{$Short}s";
-		if ($Short == 'collages_comment') {
-			$Column = 'UserID';
-		} else {
-			$Column = 'AuthorID';
-		}
+	case 'comment':
 		$DB->query("
-			SELECT $Short.Body, um.Username
-			FROM $Table AS $Short
-				JOIN users_main AS um ON um.ID = $Short.$Column
-			WHERE $Short.ID = $ID");
+			SELECT c.Body, um.Username
+			FROM comments AS c
+				JOIN users_main AS um ON um.ID = c.AuthorID
+			WHERE c.ID = $ID");
 		if (!$DB->has_results()) {
 			error(404);
 		}
@@ -280,10 +271,7 @@ switch ($Short) {
 	</table>
 <?
 		break;
-	case 'requests_comment':
-	case 'torrents_comment':
-	case 'artist_comment':
-	case 'collages_comment':
+	case 'comment':
 ?>
 	<p>You are reporting the <?=$Types[$Short]['title']?>:</p>
 	<table>

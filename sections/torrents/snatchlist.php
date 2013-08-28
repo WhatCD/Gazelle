@@ -13,21 +13,21 @@ if (!empty($_GET['page']) && is_number($_GET['page'])) {
 }
 
 $Result = $DB->query("
-				SELECT
-					SQL_CALC_FOUND_ROWS
-					xs.uid,
-					xs.tstamp
-				FROM xbt_snatched AS xs
-				WHERE xs.fid = '$TorrentID'
-				ORDER BY xs.tstamp DESC
-				LIMIT $Limit");
+			SELECT
+				SQL_CALC_FOUND_ROWS
+				xs.uid,
+				xs.tstamp
+			FROM xbt_snatched AS xs
+			WHERE xs.fid = '$TorrentID'
+			ORDER BY xs.tstamp DESC
+			LIMIT $Limit");
 $Results = $DB->to_array('uid', MYSQLI_ASSOC);
 
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 
 ?>
-<h4 title="List of users that have reported a snatch to the tracker">List of Snatchers</h4>
+<h4 class="tooltip" title="List of users that have reported a snatch to the tracker">List of Snatchers</h4>
 
 <? if ($NumResults > 100) { ?>
 <div class="linkbox"><?=js_pages('show_snatches', $_GET['torrentid'], $NumResults, $Page)?></div>

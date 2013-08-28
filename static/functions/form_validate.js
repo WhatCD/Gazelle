@@ -32,6 +32,11 @@ $(document).ready(function() {
 				$("#event_form").validate();
 			}
 			break;
+		case "tools":
+			if (query['action'] == "calendar") {
+				$("#event_form").validate();
+			}
+			break;
 		default:
 			break;
 	}

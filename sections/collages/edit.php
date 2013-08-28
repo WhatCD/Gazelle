@@ -73,7 +73,7 @@ if ($CategoryID > 0 || check_perms('site_collages_delete')) { ?>
 			</tr>
 <?	if ($CategoryID == 0) { // CategoryID == 0 is for "personal" collages ?>
 			<tr>
-				<td class="label"><span title="A &quot;featured&quot; personal collage will be listed first on your profile, along with a preview of the included torrents.">Featured</span></td>
+				<td class="label"><span class="tooltip" title="A &quot;featured&quot; personal collage will be listed first on your profile, along with a preview of the included torrents.">Featured</span></td>
 				<td><input type="checkbox" name="featured"<?=($Featured ? ' checked="checked"' : '')?> /></td>
 			</tr>
 <?

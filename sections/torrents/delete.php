@@ -255,11 +255,11 @@ foreach ($TypeList as $IType => $Data) {
 ?>
 						</select>
 						<span id="options<?=$ReportID?>">
-							<span title="Delete torrent?">
-								<label><strong>Delete</strong>
-								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete'] ? ' checked="checked"' : '')?> /></label>
+							<span class="tooltip" title="Delete torrent?">
+								<strong>Delete</strong>
+								<input type="checkbox" name="delete" id="delete<?=$ReportID?>"<?=($ReportType['resolve_options']['delete'] ? ' checked="checked"' : '')?> />
 							</span>
-							<span title="Warning length in weeks">
+							<span class="tooltip" title="Warning length in weeks">
 								<strong>Warning</strong>
 								<select name="warning" id="warning<?=$ReportID?>">
 <?	for ($i = 0; $i < 9; $i++) { ?>
@@ -267,9 +267,9 @@ foreach ($TypeList as $IType => $Data) {
 <?	} ?>
 								</select>
 							</span>
-							<span>
-								<label><strong>Remove upload privileges</strong>
-								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload'] ? ' checked="checked"' : '')?> /></label>
+							<span class="tooltip" title="Remove upload privileges?">
+								<strong>Upload</strong>
+								<input type="checkbox" name="upload" id="upload<?=$ReportID?>"<?=($ReportType['resolve_options']['upload'] ? ' checked="checked"' : '')?> />
 							</span>
 						</span>
 					</td>
@@ -277,10 +277,10 @@ foreach ($TypeList as $IType => $Data) {
 				<tr>
 					<td class="label">PM uploader:</td>
 					<td colspan="3">
-						<span title="Appended to the regular message unless using &quot;Send now&quot;.">
+						<span class="tooltip" title="Appended to the regular message unless using &quot;Send Now&quot;.">
 							<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 						</span>
-						<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>);" />
+						<input type="button" value="Send Now" onclick="SendPM(<?=$ReportID?>);" />
 					</td>
 				</tr>
 				<tr>

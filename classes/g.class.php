@@ -8,6 +8,6 @@ class G {
 		global $DB, $Cache, $LoggedUser;
 		self::$DB = $DB;
 		self::$Cache = $Cache;
-		self::$LoggedUser = $LoggedUser;
+		self::$LoggedUser =& $LoggedUser;
 	}
 }

@@ -133,15 +133,8 @@ if ($_GET['updatelastread'] !== '0') {
 	}
 }
 
-// Handle subscriptions
-if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
-	$DB->query("
-		SELECT TopicID
-		FROM users_subscriptions
-		WHERE UserID = '$LoggedUser[ID]'");
-	$UserSubscriptions = $DB->collect(0);
-	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'], $UserSubscriptions, 0);
-}
+//Handle subscriptions
+$UserSubscriptions = Subscriptions::get_subscriptions();
 
 if (empty($UserSubscriptions)) {
 	$UserSubscriptions = array();

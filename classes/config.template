@@ -127,6 +127,16 @@ define('LAB_CHAN', '#');
 define('STATUS_CHAN', '#');
 
 // Miscellaneous values
+define('RANK_ONE_COST', 5);
+define('RANK_TWO_COST', 10);
+define('RANK_THREE_COST', 15);
+define('RANK_FOUR_COST', 20);
+define('RANK_FIVE_COST', 30);
+define('MAX_RANK', 6);
+define('MAX_EXTRA_RANK', 8);
+define('DONOR_FORUM_RANK', 6);
+define('DONOR_FORUM', 70);
+define('MAX_SPECIAL_RANK', 3);
 
 $ForumsRevealVoters = array();
 $ForumsDoublePost = array();

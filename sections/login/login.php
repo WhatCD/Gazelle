@@ -1,6 +1,6 @@
 <? View::show_header('Login'); ?>
 	<span id="no-cookies" class="hidden warning">You appear to have cookies disabled.<br /><br /></span>
-	<noscript><span class="warning">You appear to have JavaScript disabled.</span><br /><br /></noscript>
+	<noscript><span class="warning"><?=SITE_NAME?> requires JavaScript to function properly. Please enable JavaScript in your browser.</span><br /><br /></noscript>
 <?
 if (strtotime($BannedUntil) < time() && !$BanID) {
 ?>
@@ -10,8 +10,8 @@ if (strtotime($BannedUntil) < time() && !$BanID) {
 	if (!empty($BannedUntil) && $BannedUntil != '0000-00-00 00:00:00') {
 		$DB->query("
 			UPDATE login_attempts
-			SET BannedUntil='0000-00-00 00:00:00', Attempts='0'
-			WHERE ID='".db_string($AttemptID)."'");
+			SET BannedUntil = '0000-00-00 00:00:00', Attempts = '0'
+			WHERE ID = '".db_string($AttemptID)."'");
 		$Attempts = 0;
 	}
 	if (isset($Err)) {
@@ -25,19 +25,23 @@ if (strtotime($BannedUntil) < time() && !$BanID) {
 	<table class="layout">
 		<tr>
 			<td>Username&nbsp;</td>
-			<td colspan="2"><input type="text" name="username" id="username" class="inputtext" required="required" maxlength="20" pattern="[A-Za-z0-9_?]{1,20}" autofocus="autofocus" /></td>
+			<td colspan="2">
+				<input type="text" name="username" id="username" class="inputtext" required="required" maxlength="20" pattern="[A-Za-z0-9_?]{1,20}" autofocus="autofocus" />
+			</td>
 		</tr>
 		<tr>
 			<td>Password&nbsp;</td>
-			<td colspan="2"><input type="password" name="password" id="password" class="inputtext" required="required" maxlength="100" pattern=".{6,100}" /></td>
+			<td colspan="2">
+				<input type="password" name="password" id="password" class="inputtext" required="required" maxlength="100" pattern=".{6,100}" />
+			</td>
 		</tr>
 		<tr>
 			<td></td>
 			<td>
-				<input type="checkbox" id="keeplogged" name="keeplogged" value="1"<? if (isset($_REQUEST['keeplogged']) && $_REQUEST['keeplogged']) { ?> checked="checked"<? } ?> />
+				<input type="checkbox" id="keeplogged" name="keeplogged" value="1"<?=(isset($_REQUEST['keeplogged']) && $_REQUEST['keeplogged']) ? ' checked="checked"' : ''?> />
 				<label for="keeplogged">Remember me</label>
 			</td>
-			<td><input type="submit" name="login" value="Login" class="submit" /></td>
+			<td><input type="submit" name="login" value="Log in" class="submit" /></td>
 		</tr>
 	</table>
 	</form>

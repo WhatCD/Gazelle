@@ -47,22 +47,19 @@ if (!empty($LoggedUser['DisablePosting'])) {
 }
 
 $TopicID = $_POST['thread'];
-$ThreadInfo = get_thread_info($TopicID);
+$ThreadInfo = Forums::get_thread_info($TopicID);
 $ForumID = $ThreadInfo['ForumID'];
 $SQLTime = sqltime();
 
-if (!check_forumperm($ForumID)) {
+if (!Forums::check_forumperm($ForumID)) {
 	error(403);
 }
-if (!check_forumperm($ForumID, 'Write') || $LoggedUser['DisablePosting'] || $ThreadInfo['IsLocked'] == '1' && !check_perms('site_moderate_forums')) {
+if (!Forums::check_forumperm($ForumID, 'Write') || $LoggedUser['DisablePosting'] || $ThreadInfo['IsLocked'] == '1' && !check_perms('site_moderate_forums')) {
 	error(403);
 }
 
-if (isset($_POST['subscribe'])) {
-	$DB->query("
-		INSERT IGNORE INTO users_subscriptions
-		VALUES ($LoggedUser[ID], '".db_string($TopicID)."')");
-	$Cache->delete_value('subscriptions_user_'.$LoggedUser['ID']);
+if (isset($_POST['subscribe']) && Subscriptions::has_subscribed($TopicID) === false) {
+	Subscriptions::subscribe($TopicID);
 }
 
 //Now lets handle the special case of merging posts, we can skip bumping the thread and all that fun
@@ -264,17 +261,8 @@ if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID'] && ((!check_perms('site
 	$ThreadInfo['Posts']++;
 }
 
-$DB->query("
-	SELECT UserID
-	FROM users_subscriptions
-	WHERE TopicID = $TopicID");
-if ($DB->has_results()) {
-	$Subscribers = $DB->collect('UserID');
-	foreach ($Subscribers as $Subscriber) {
-		$Cache->delete_value("subscriptions_user_new_$Subscriber");
-	}
-}
-Forums::quote_notify($Body, $PostID, 'forums', $TopicID);
+Subscriptions::flush_subscriptions('forums', $TopicID);
+Subscriptions::quote_notify($Body, $PostID, 'forums', $TopicID);
 
 header("Location: forums.php?action=viewthread&threadid=$TopicID&page=".ceil($ThreadInfo['Posts'] / $PerPage));
 die();

@@ -15,11 +15,11 @@ $Text = new TEXT;
 		<h2>Staff PMs - Manage common responses</h2>
 		<div class="linkbox">
 <? 	if ($IsStaff) { ?>
-			<a href="staffpm.php" class="brackets">My unanswered</a>
+			<a href="staffpm.php" class="brackets">View your unanswered</a>
 <? 	} ?>
-			<a href="staffpm.php?view=unanswered" class="brackets">All unanswered</a>
-			<a href="staffpm.php?view=open" class="brackets">Open</a>
-			<a href="staffpm.php?view=resolved" class="brackets">Resolved</a>
+			<a href="staffpm.php?view=unanswered" class="brackets">View all unanswered</a>
+			<a href="staffpm.php?view=open" class="brackets">View unresolved</a>
+			<a href="staffpm.php?view=resolved" class="brackets">View resolved</a>
 <?	if ($ConvID = (int)$_GET['convid']) { ?>
 			<a href="staffpm.php?action=viewconv&amp;id=<?=$ConvID?>" class="brackets">Back to conversation</a>
 <?	} ?>
@@ -38,14 +38,14 @@ $Text = new TEXT;
 			<form class="send_form" name="response" id="response_form_0" action="">
 				<div class="head">
 					<strong>Name:</strong>
-					<input onfocus="if (this.value == 'New name') this.value='';"
-						onblur="if (this.value == '') this.value='New name';"
+					<input onfocus="if (this.value == 'New name') { this.value = ''; }"
+						onblur="if (this.value == '') { this.value = 'New name'; }"
 						type="text" id="response_name_0" size="87" value="New name"
 					/>
 				</div>
 				<div class="pad">
-					<textarea onfocus="if (this.value == 'New message') this.value='';"
-						onblur="if (this.value == '') this.value='New message';"
+					<textarea onfocus="if (this.value == 'New message') { this.value = ''; }"
+						onblur="if (this.value == '') { this.value = 'New message'; }"
 						rows="10" cols="87"
 						id="response_message_0">New message</textarea>
 					<br />

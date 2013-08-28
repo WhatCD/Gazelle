@@ -13,13 +13,13 @@ $ForumID = $_GET['forumid'];
 if (!is_number($ForumID)) {
 	error(404);
 }
-$Forum = get_forum_info($ForumID);
+$Forum = Forums::get_forum_info($ForumID);
 if ($Forum === false) {
 	error(404);
 }
 
 
-if (!check_forumperm($ForumID, 'Write') || !check_forumperm($ForumID, 'Create')) {
+if(!Forums::check_forumperm($ForumID, 'Write') || !Forums::check_forumperm($ForumID, 'Create')) {
 	error(403);
 }
 View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbcode,jquery.validate,form_validate');
@@ -67,7 +67,7 @@ View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbco
 			<tr>
 <?	if (Users::has_avatars_enabled()) { ?>
 				<td class="avatar" valign="top">
-					<?=Users::show_avatar($LoggedUser['Avatar'], $LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
+					<?=Users::show_avatar($LoggedUser['Avatar'], $LoggedUser['ID'], $LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
 				</td>
 <?	} ?>
 				<td class="body" valign="top">

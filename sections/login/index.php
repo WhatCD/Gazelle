@@ -10,7 +10,7 @@ if (!empty($LoggedUser['ID'])) {
 }
 
 if (BLOCK_OPERA_MINI && isset($_SERVER['HTTP_X_OPERAMINI_PHONE'])) {
-	error('Opera Mini is banned, please use another browser.');
+	error('Opera Mini is banned. Please use another browser.');
 }
 
 // Check if IP is banned
@@ -18,7 +18,7 @@ if (Tools::site_ban_ip($_SERVER['REMOTE_ADDR'])) {
 	error('Your IP address has been banned.');
 }
 
-require(SERVER_ROOT."/classes/validate.class.php");
+require(SERVER_ROOT.'/classes/validate.class.php');
 $Validate = NEW VALIDATE;
 
 if (array_key_exists('action', $_GET) && $_GET['action'] == 'disabled') {
@@ -297,10 +297,11 @@ else {
 						// Because we <3 our staff
 						$Permissions = Permissions::get_permissions($PermissionID);
 						$CustomPermissions = unserialize($CustomPermissions);
-						if (
-							isset($Permissions['Permissions']['site_disable_ip_history']) ||
-							isset($CustomPermissions['site_disable_ip_history'])
-						) { $_SERVER['REMOTE_ADDR'] = '127.0.0.1'; }
+						if (isset($Permissions['Permissions']['site_disable_ip_history'])
+							|| isset($CustomPermissions['site_disable_ip_history'])
+						) {
+							$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+						}
 
 
 
@@ -324,9 +325,7 @@ else {
 							UPDATE users_main
 							SET
 								LastLogin = '".sqltime()."',
-								LastAccess = '".sqltime()."'";
-
-						$Sql .= "
+								LastAccess = '".sqltime()."'
 							WHERE ID = '".db_string($UserID)."'";
 
 						$DB->query($Sql);

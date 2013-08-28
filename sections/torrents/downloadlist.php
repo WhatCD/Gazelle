@@ -12,15 +12,13 @@ if (!empty($_GET['page']) && is_number($_GET['page'])) {
 	$Limit = 100;
 }
 
-
-
 $DB->query("
 	SELECT
 		SQL_CALC_FOUND_ROWS
 		ud.UserID,
 		ud.Time
 	FROM users_downloads AS ud
-	WHERE ud.TorrentID='$TorrentID'
+	WHERE ud.TorrentID = '$TorrentID'
 	ORDER BY ud.Time DESC
 	LIMIT $Limit");
 $UserIDs = $DB->collect('UserID');
@@ -30,26 +28,24 @@ $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 
 if (count($UserIDs) > 0) {
-	$UserIDs = implode(',',$UserIDs);
+	$UserIDs = implode(',', $UserIDs);
 	$DB->query("
 		SELECT uid
 		FROM xbt_snatched
-		WHERE fid='$TorrentID'
+		WHERE fid = '$TorrentID'
 			AND uid IN($UserIDs)");
 	$Snatched = $DB->to_array('uid');
 
 	$DB->query("
 		SELECT uid
 		FROM xbt_files_users
-		WHERE fid='$TorrentID'
-			AND Remaining=0
+		WHERE fid = '$TorrentID'
+			AND Remaining = 0
 			AND uid IN($UserIDs)");
 	$Seeding = $DB->to_array('uid');
 }
-
-
 ?>
-<h4 title="List of users that have clicked the &quot;DL&quot; button">List of Downloaders</h4>
+<h4 class="tooltip" title="List of users that have clicked the &quot;DL&quot; button">List of Downloaders</h4>
 <? if ($NumResults > 100) { ?>
 <div class="linkbox"><?=js_pages('show_downloads', $_GET['torrentid'], $NumResults, $Page)?></div>
 <? } ?>
@@ -63,7 +59,6 @@ if (count($UserIDs) > 0) {
 	</tr>
 	<tr>
 <?
-
 $i = 0;
 
 foreach ($Results as $ID=>$Data) {

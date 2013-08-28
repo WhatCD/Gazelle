@@ -53,6 +53,7 @@ class Format {
 					$CutDesc = implode(' ', $DescArr);
 				}
 				if ($ShowDots) {
+					//TODO: should we replace the three dots with an ellipsis character?
 					$CutDesc .= '...';
 				}
 			} else {
@@ -123,7 +124,7 @@ class Format {
 	 * Returns ratio
 	 * @param int $Dividend
 	 * @param int $Divisor
-	 * @param int $Decimal floor to n decimals (e.g. Subtract .005 to floor to 2 decimals)
+	 * @param int $Decimal floor to n decimals (e.g. subtract .005 to floor to 2 decimals)
 	 * @return boolean|string
 	 */
 	public function get_ratio ($Dividend, $Divisor, $Decimal = 2) {
@@ -170,7 +171,7 @@ class Format {
 	 * @param $DefaultResult Optional, which result's page we want if no page is specified
 	 * If this parameter is not specified, we will default to page 1
 	 *
-	 * @return array(int,string) What page we are on, and what to use in the LIMIT section of a query
+	 * @return array(int, string) What page we are on, and what to use in the LIMIT section of a query
 	 * e.g. "SELECT [...] LIMIT $Limit;"
 	 */
 	public static function page_limit($PerPage, $DefaultResult = 1) {
@@ -188,7 +189,7 @@ class Format {
 			if ($Page <= 0) {
 				$Page = 1;
 			}
-			$Limit = $PerPage * $Page - $PerPage . ', ' . $PerPage;
+			$Limit = $PerPage * $Page - $PerPage . ", $PerPage";
 		}
 		return array($Page, $Limit);
 	}
@@ -196,8 +197,8 @@ class Format {
 	// A9 magic. Some other poor soul can write the phpdoc.
 	// For data stored in memcached catalogues (giant arrays), e.g. forum threads
 	public static function catalogue_limit($Page, $PerPage, $CatalogueSize = 500) {
-		$CatalogueID = floor(($PerPage * $Page - $PerPage) / $CatalogueSize);;
-		$CatalogueLimit = ($CatalogueID * $CatalogueSize).', '.$CatalogueSize;
+		$CatalogueID = floor(($PerPage * $Page - $PerPage) / $CatalogueSize);
+		$CatalogueLimit = ($CatalogueID * $CatalogueSize).", $CatalogueSize";
 		return array($CatalogueID, $CatalogueLimit);
 	}
 
@@ -224,7 +225,7 @@ class Format {
 	 */
 	public static function get_pages($StartPage, $TotalRecords, $ItemsPerPage, $ShowPages = 11, $Anchor = '') {
 		global $Document, $Method, $Mobile;
-		$Location = $Document.'.php';
+		$Location = "$Document.php";
 		$StartPage = ceil($StartPage);
 		$TotalPages = 0;
 		if ($TotalRecords > 0) {
@@ -253,37 +254,37 @@ class Format {
 
 			$StartPosition = max($StartPosition, 1);
 
-			$QueryString = self::get_url(array('page','post'));
+			$QueryString = self::get_url(array('page', 'post'));
 			if ($QueryString != '') {
-				$QueryString = '&amp;'.$QueryString;
+				$QueryString = "&amp;$QueryString";
 			}
 
 			$Pages = '';
 
 			if ($StartPage > 1) {
-				$Pages .= '<a href="'.$Location.'?page=1'.$QueryString.$Anchor.'"><strong>&lt;&lt; First</strong></a> ';
-				$Pages .= '<a href="'.$Location.'?page='.($StartPage - 1).$QueryString.$Anchor.'" class="pager_prev"><strong>&lt; Prev</strong></a> | ';
+				$Pages .= "<a href=\"$Location?page=1$QueryString$Anchor\"><strong>&lt;&lt; First</strong></a> ";
+				$Pages .= "<a href=\"$Location?page=".($StartPage - 1).$QueryString.$Anchor.'" class="pager_prev"><strong>&lt; Prev</strong></a> | ';
 			}
 			//End change
 
 			if (!$Mobile) {
 				for ($i = $StartPosition; $i <= $StopPage; $i++) {
 					if ($i != $StartPage) {
-						$Pages .= '<a href="'.$Location.'?page='.$i.$QueryString.$Anchor.'">';
+						$Pages .= "<a href=\"$Location?page=$i$QueryString$Anchor\">";
 					}
-					$Pages .= "<strong>";
+					$Pages .= '<strong>';
 					if ($i * $ItemsPerPage > $TotalRecords) {
-						$Pages .= ((($i - 1) * $ItemsPerPage) + 1).'-'.($TotalRecords);
+						$Pages .= ((($i - 1) * $ItemsPerPage) + 1)."-$TotalRecords";
 					} else {
 						$Pages .= ((($i - 1) * $ItemsPerPage) + 1).'-'.($i * $ItemsPerPage);
 					}
 
 					$Pages .= '</strong>';
 					if ($i != $StartPage) {
-						$Pages.='</a>';
+						$Pages .= '</a>';
 					}
 					if ($i < $StopPage) {
-						$Pages.=' | ';
+						$Pages .= ' | ';
 					}
 				}
 			} else {
@@ -291,8 +292,8 @@ class Format {
 			}
 
 			if ($StartPage && $StartPage < $TotalPages) {
-				$Pages .= ' | <a href="'.$Location.'?page='.($StartPage + 1).$QueryString.$Anchor.'" class="pager_next"><strong>Next &gt;</strong></a> ';
-				$Pages .= '<a href="'.$Location.'?page='.$TotalPages.$QueryString.$Anchor.'"><strong> Last &gt;&gt;</strong></a>';
+				$Pages .= " | <a href=\"$Location?page=".($StartPage + 1).$QueryString.$Anchor.'" class="pager_next"><strong>Next &gt;</strong></a> ';
+				$Pages .= "<a href=\"$Location?page=$TotalPages$QueryString$Anchor\"><strong> Last &gt;&gt;</strong></a>";
 			}
 		}
 		if ($TotalPages > 1) {
@@ -303,14 +304,16 @@ class Format {
 
 	/**
 	 * Format a size in bytes as a human readable string in KiB/MiB/...
+	 *		Note: KiB, MiB, etc. are the IEC units, which are in base 2.
+	 *			KB, MB are the SI units, which are in base 10.
 	 *
 	 * @param int $Size
 	 * @param int $Levels Number of decimal places. Defaults to 2, unless the size >= 1TB, in which case it defaults to 4.
 	 * @return string formatted number.
 	 */
 	public static function get_size($Size, $Levels = 2) {
-		$Units = array(' B',' KB',' MB',' GB',' TB',' PB',' EB',' ZB',' YB');
-		$Size = (double) $Size;
+		$Units = array(' B', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB');
+		$Size = (double)$Size;
 		for ($Steps = 0; abs($Size) >= 1024; $Size /= 1024, $Steps++) {
 		}
 		if (func_num_args() == 1 && $Steps >= 4) {
@@ -334,13 +337,13 @@ class Format {
 		}
 		switch ($Steps) {
 			case 0: return round($Number); break;
-			case 1: return round($Number,2).'k'; break;
-			case 2: return round($Number,2).'M'; break;
-			case 3: return round($Number,2).'G'; break;
-			case 4: return round($Number,2).'T'; break;
-			case 5: return round($Number,2).'P'; break;
+			case 1: return round($Number, 2).'k'; break;
+			case 2: return round($Number, 2).'M'; break;
+			case 3: return round($Number, 2).'G'; break;
+			case 4: return round($Number, 2).'T'; break;
+			case 5: return round($Number, 2).'P'; break;
 			default:
-				return round($Number,2).'E + '.$Steps*3;
+				return round($Number, 2).'E + '.$Steps * 3;
 		}
 	}
 
@@ -413,7 +416,7 @@ class Format {
 		}
 		if (isset($Array[$Name]) && $Array[$Name] !== '') {
 			if ($Array[$Name] == $Value) {
-				echo ' '.$Attribute.'="'.$Attribute.'"';
+				echo " $Attribute=\"$Attribute\"";
 			}
 		}
 	}
@@ -428,13 +431,12 @@ class Format {
 	 *                 2-dimensional array: At least one array must be identical to $Target
 	 * @param string $ClassName CSS class name to return
 	 * @param bool $AddAttribute Whether to include the "class" attribute in the output
-	 * @param string $UserIDKey Key in _REQUEST for a user id parameter, which if given will be compared to $LoggedUser[ID]
+	 * @param string $UserIDKey Key in _REQUEST for a user ID parameter, which if given will be compared to G::$LoggedUser[ID]
 	 *
 	 * @return class name on match, otherwise an empty string
 	 */
 	public static function add_class($Target, $Tests, $ClassName, $AddAttribute, $UserIDKey = false) {
-		global $LoggedUser;
-		if ($UserIDKey && isset($_REQUEST[$UserIDKey]) && $LoggedUser['ID'] != $_REQUEST[$UserIDKey]) {
+		if ($UserIDKey && isset($_REQUEST[$UserIDKey]) && G::$LoggedUser['ID'] != $_REQUEST[$UserIDKey]) {
 			return '';
 		}
 		$Pass = true;
@@ -469,7 +471,7 @@ class Format {
 			return '';
 		}
 		if ($AddAttribute) {
-			return ' class="'.$ClassName.'"';
+			return " class=\"$ClassName\"";
 		}
 		return " $ClassName";
 	}
@@ -508,14 +510,14 @@ class Format {
 	 */
 	public static function is_utf8($Str) {
 		return preg_match('%^(?:
-			[\x09\x0A\x0D\x20-\x7E]			 // ASCII
-			| [\xC2-\xDF][\x80-\xBF]			// non-overlong 2-byte
-			| \xE0[\xA0-\xBF][\x80-\xBF]		// excluding overlongs
-			| [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2} // straight 3-byte
-			| \xED[\x80-\x9F][\x80-\xBF]		// excluding surrogates
-			| \xF0[\x90-\xBF][\x80-\xBF]{2}	 // planes 1-3
-			| [\xF1-\xF3][\x80-\xBF]{3}		 // planes 4-15
-			| \xF4[\x80-\x8F][\x80-\xBF]{2}	 // plane 16
+			[\x09\x0A\x0D\x20-\x7E]              // ASCII
+			| [\xC2-\xDF][\x80-\xBF]             // non-overlong 2-byte
+			| \xE0[\xA0-\xBF][\x80-\xBF]         // excluding overlongs
+			| [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  // straight 3-byte
+			| \xED[\x80-\x9F][\x80-\xBF]         // excluding surrogates
+			| \xF0[\x90-\xBF][\x80-\xBF]{2}      // planes 1-3
+			| [\xF1-\xF3][\x80-\xBF]{3}          // planes 4-15
+			| \xF4[\x80-\x8F][\x80-\xBF]{2}      // plane 16
 			)*$%xs', $Str
 		);
 	}

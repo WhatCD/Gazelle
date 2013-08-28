@@ -46,11 +46,14 @@ $DB->query("
 		JOIN users_main AS um ON um.ID=pm.SenderID
 	WHERE pm.ConvID='$ConvID'");
 
-while (list($PMUserID, $Username) = $DB->next_record()) {
-	$PMUserID = (int)$PMUserID;
+$ConverstionParticipants = $DB->to_array();
+
+foreach($ConverstionParticipants as $Participant) {
+	$PMUserID = (int) $Participant['ID'];
 	$Users[$PMUserID]['UserStr'] = Users::format_username($PMUserID, true, true, true, true);
-	$Users[$PMUserID]['Username'] = $Username;
+	$Users[$PMUserID]['Username'] = $Participant['Username'];
 }
+
 $Users[0]['UserStr'] = 'System'; // in case it's a message from the system
 $Users[0]['Username'] = 'System';
 

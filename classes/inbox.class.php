@@ -9,9 +9,8 @@ class Inbox {
 	 * @return string - the URL to a user's inbox
 	 */
 	public static function get_inbox_link($WhichBox = 'inbox') {
-		global $LoggedUser;
 
-		$ListFirst = $LoggedUser['ListUnreadPMsFirst'];
+		$ListFirst = G::$LoggedUser['ListUnreadPMsFirst'];
 
 		if ($WhichBox == 'inbox') {
 			if ($ListFirst) {

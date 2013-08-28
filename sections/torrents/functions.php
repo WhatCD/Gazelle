@@ -342,7 +342,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 	<table class="filelist_table">
 		<tr class="colhead_dark">
 			<td>
-				<div class="filelist_title" style="float: left;">File name' . $RegenLink . '</div>
+				<div class="filelist_title" style="float: left;">File Names' . $RegenLink . '</div>
 				<div class="filelist_path" style="float: right;">' . ($FilePath ? "/$FilePath/" : '') . '</div>
 			</td>
 			<td>
@@ -358,13 +358,13 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 			$Name = str_replace(' ', '&nbsp;', substr($Name, 0, $Spaces)) . substr($Name, $Spaces);
 		}
 		$FileSize = substr($File, $NameEnd + 3, -3);
-		$FileTable .= sprintf("\n<tr><td>%s</td><td>%s</td></tr>", $Name, Format::get_size($FileSize));
+		$FileTable .= sprintf("\n<tr><td>%s</td><td class=\"number_column\">%s</td></tr>", $Name, Format::get_size($FileSize));
 		}
 	} else {
 		$FileListSplit = explode("\n", $FileList);
 		foreach ($FileListSplit as $File) {
 		$FileInfo = Torrents::filelist_get_file($File);
-		$FileTable .= sprintf("\n<tr><td>%s</td><td>%s</td></tr>", $FileInfo['name'], Format::get_size($FileInfo['size']));
+		$FileTable .= sprintf("\n<tr><td>%s</td><td class=\"number_column\">%s</td></tr>", $FileInfo['name'], Format::get_size($FileInfo['size']));
 		}
 	}
 	$FileTable .= '
@@ -458,7 +458,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 		$EditionID++;
 ?>
 				<tr class="releases_<?=($ReleaseType)?> groupid_<?=($GroupID)?> edition group_torrent">
-					<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=($GroupID)?>, <?=($EditionID)?>, this, event);" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?= Torrents::edition_string($Torrent, $TorrentDetails) ?></strong></td>
+					<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=($GroupID)?>, <?=($EditionID)?>, this, event);" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?= Torrents::edition_string($Torrent, $TorrentDetails) ?></strong></td>
 				</tr>
 <?
 	}
@@ -472,7 +472,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 					<td>
 						<span>[ <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>" title="Download"><?=($HasFile ? 'DL' : 'Missing')?></a>
 <?	if (Torrents::can_use_token($Torrent)) { ?>
-							| <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+							| <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?	} ?>
 							| <a href="reportsv2.php?action=report&amp;id=<?=($TorrentID)?>" title="Report">RP</a>
 <?	if ($CanEdit) { ?>
@@ -485,10 +485,10 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 						]</span>
 						&raquo; <a href="#" onclick="$('#torrent_<?=($TorrentID)?>').gtoggle(); return false;"><?=($ExtraInfo)?></a>
 					</td>
-					<td class="nobr"><?=(Format::get_size($Size))?></td>
-					<td><?=(number_format($Snatched))?></td>
-					<td><?=(number_format($Seeders))?></td>
-					<td><?=(number_format($Leechers))?></td>
+					<td class="number_column nobr"><?=(Format::get_size($Size))?></td>
+					<td class="number_column"><?=(number_format($Snatched))?></td>
+					<td class="number_column"><?=(number_format($Seeders))?></td>
+					<td class="number_column"><?=(number_format($Leechers))?></td>
 				</tr>
 				<tr class="releases_<?=($ReleaseType)?> groupid_<?=($GroupID)?> edition_<?=($EditionID)?> torrentdetails pad<? if (!isset($_GET['torrentid']) || $_GET['torrentid'] != $TorrentID) { ?> hidden<? } ?>" id="torrent_<?=($TorrentID)?>">
 					<td colspan="5">
@@ -513,8 +513,8 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 						<div class="linkbox">
 							<a href="#" class="brackets" onclick="show_peers('<?=($TorrentID)?>', 0); return false;">View peer list</a>
 <?	if (check_perms('site_view_torrent_snatchlist')) { ?>
-							<a href="#" class="brackets" onclick="show_downloads('<?=($TorrentID)?>', 0); return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
-							<a href="#" class="brackets" onclick="show_snatches('<?=($TorrentID)?>', 0); return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
+							<a href="#" class="brackets" onclick="show_downloads('<?=($TorrentID)?>', 0); return false;" class="tooltip" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
+							<a href="#" class="brackets" onclick="show_snatches('<?=($TorrentID)?>', 0); return false;" class="tooltip" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
 <?	} ?>
 							<a href="#" class="brackets" onclick="show_files('<?=($TorrentID)?>'); return false;">View file list</a>
 <?	if ($Reported) { ?>

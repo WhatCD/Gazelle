@@ -832,3 +832,12 @@ ul .invitetree {
 .autocomplete-suggestions {
 	background: #F1E6CC;
 }
+
+div[class~=tooltipster-base] {
+	background-color: #DCB881;
+	border-color: #65430F;
+	color: #492802;
+}
+
+div[class~=tooltipster-content] > a {
+}

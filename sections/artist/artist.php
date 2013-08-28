@@ -9,7 +9,7 @@ function compare($X, $Y) {
 include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
-// Similar artist map
+// Similar Artist Map
 include(SERVER_ROOT.'/classes/artists_similar.class.php');
 
 $UserVotes = Votes::get_user_votes($LoggedUser['ID']);
@@ -343,9 +343,9 @@ foreach ($Importances as $Group) {
 	}
 
 
-	$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
+	$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 	if (check_perms('users_mod') || check_perms('torrents_fix_ghosts')) {
-		$DisplayName .= ' <a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'" class="brackets" title="Fix ghost DB entry">Fix</a>';
+		$DisplayName .= ' <a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'" class="brackets tooltip" title="Fix ghost DB entry">Fix</a>';
 	}
 
 
@@ -390,22 +390,22 @@ foreach ($Importances as $Group) {
 ?>
 			<tr class="releases_<?=$ReleaseType?> group discog<?=$SnatchedGroupClass . $HideDiscog?>">
 				<td class="center">
-					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups in this release type."></a>
+					<div id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
+						<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event);" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups in this release type."></a>
 					</div>
 				</td>
 				<td colspan="5" class="big_info">
-<?	if ($LoggedUser['CoverArt']) : ?>
+<?	if ($LoggedUser['CoverArt']) { ?>
 					<div class="group_image float_left clear">
 						<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 					</div>
-<?	endif; ?>
+<?	} ?>
 					<div class="group_info clear">
 						<strong><?=$DisplayName?></strong>
 						<? if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
-							echo "<a style=\"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent', $GroupID, 'Bookmark'); return false;\">Unbookmark</a>";
+							echo "<a style=\"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" onclick=\"Unbookmark('torrent', $GroupID, 'Bookmark'); return false;\">Remove bookmark</a>";
 						} else {
-							echo "<a style=\"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent', $GroupID, 'Unbookmark'); return false;\">Bookmark</a>";
+							echo "<a style=\"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" onclick=\"Bookmark('torrent', $GroupID, 'Remove bookmark'); return false;\">Bookmark</a>";
 						} ?>
 						<?Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']);?>
 						<div class="tags"><?=$TorrentTags->format('torrents.php?taglist=', $Name)?></div>
@@ -428,16 +428,19 @@ foreach ($Importances as $Group) {
 		}
 		$SnatchedTorrentClass = ($Torrent['IsSnatched'] ? ' snatched_torrent' : '');
 
-		if ($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
-			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] !=
-			$LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia
+		if ($Torrent['RemasterTitle'] != $LastRemasterTitle
+			|| $Torrent['RemasterYear'] != $LastRemasterYear
+			|| $Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel
+			|| $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber
+			|| $FirstUnknown
+			|| $Torrent['Media'] != $LastMedia
 			) {
 
 			$EditionID++;
 
 ?>
 	<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent discog<?=$SnatchedGroupClass . $HideDiscog . $HideTorrents?>">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $TorrentList[$Group['GroupID']])?></strong></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event);" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $TorrentList[$Group['GroupID']])?></strong></td>
 	</tr>
 <?
 		}
@@ -452,15 +455,15 @@ foreach ($Importances as $Group) {
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>
 <?		if (Torrents::can_use_token($Torrent)) { ?>
-						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?		} ?> ]
 			</span>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
-		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
-		<td><?=number_format($Torrent['Leechers'])?></td>
+		<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Snatched'])?></td>
+		<td class="number_column<?=(($Torrent['Seeders'] == 0) ? ' r00' : '')?>"><?=number_format($Torrent['Seeders'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
 	}
@@ -475,7 +478,7 @@ $TorrentDisplayList = ob_get_clean();
 
 //----------------- End building list and getting stats
 
-View::show_header($Name, 'browse,requests,bbcode,comments,voting,recommend');
+View::show_header($Name, 'browse,requests,bbcode,comments,voting,recommend,subscriptions');
 ?>
 <div class="thin">
 	<div class="header">
@@ -497,7 +500,7 @@ if (check_perms('site_torrents_notify')) {
 		$Notify = $DB->next_record(MYSQLI_ASSOC, false);
 		$Cache->cache_value('notify_artists_'.$LoggedUser['ID'], $Notify, 0);
 	}
-	if (stripos($Notify['Artists'], '|'.$Name.'|') === false) {
+	if (stripos($Notify['Artists'], "|$Name|") === false) {
 ?>
 			<a href="artist.php?action=notify&amp;artistid=<?=$ArtistID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Notify of new uploads</a>
 <?	} else { ?>
@@ -512,6 +515,7 @@ if (check_perms('site_torrents_notify')) {
 <?	} else { ?>
 			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>, 'Remove bookmark'); return false;" class="brackets">Bookmark</a>
 <?	} ?>
+			<a href="#" id="subscribelink_artist<?=$ArtistID?>" class="brackets" onclick="SubscribeComments('artist',<?=$ArtistID?>);return false;"><?=Subscriptions::has_subscribed_comments('artist', $ArtistID) !== false ? 'Unsubscribe' : 'Subscribe'?></a>
 <!--	<a href="#" id="recommend" class="brackets">Recommend</a> -->
 <?
 	if (check_perms('site_edit_wiki')) {
@@ -544,7 +548,7 @@ if (check_perms('site_torrents_notify')) {
 <?	} ?>
 
 		<div class="box box_search">
-			<div class="head"><strong>Search file lists</strong></div>
+			<div class="head"><strong>File Lists Search</strong></div>
 			<ul class="nobullet">
 				<li>
 					<form class="search_form" name="filelists" action="torrents.php">
@@ -617,17 +621,15 @@ foreach ($ZIPOptions as $Option) {
 				</form>
 			</div>
 		</div>
-<? } ?>
+<?
+} //if (check_perms('zip_downloader')) ?>
 		<div class="box box_tags">
 			<div class="head"><strong>Tags</strong></div>
 			<ul class="stats nobullet">
-<?
-			Tags::format_top(50, "torrents.php?taglist=", $Name);
-?>
+<?			Tags::format_top(50, 'torrents.php?taglist=', $Name); ?>
 			</ul>
 		</div>
 <?
-
 // Stats
 ?>
 		<div class="box box_info box_statistics_artist">
@@ -651,10 +653,10 @@ if (empty($SimilarArray)) {
 			ass.Score,
 			ass.SimilarID
 		FROM artists_similar AS s1
-			JOIN artists_similar AS s2 ON s1.SimilarID=s2.SimilarID AND s1.ArtistID!=s2.ArtistID
-			JOIN artists_similar_scores AS ass ON ass.SimilarID=s1.SimilarID
-			JOIN artists_group AS a ON a.ArtistID=s2.ArtistID
-		WHERE s1.ArtistID='$ArtistID'
+			JOIN artists_similar AS s2 ON s1.SimilarID = s2.SimilarID AND s1.ArtistID != s2.ArtistID
+			JOIN artists_similar_scores AS ass ON ass.SimilarID = s1.SimilarID
+			JOIN artists_group AS a ON a.ArtistID = s2.ArtistID
+		WHERE s1.ArtistID = '$ArtistID'
 		ORDER BY ass.Score DESC
 		LIMIT 30
 	");
@@ -663,12 +665,12 @@ if (empty($SimilarArray)) {
 }
 ?>
 		<div class="box box_artists">
-			<div class="head"><strong>Similar artists</strong></div>
+			<div class="head"><strong>Similar Artists</strong></div>
 			<ul class="stats nobullet">
-<?
-	if ($NumSimilar == 0) { ?>
+<?	if ($NumSimilar == 0) { ?>
 				<li><span style="font-style: italic;">None found</span></li>
-<?	}
+<?
+	}
 	$First = true;
 	foreach ($SimilarArray as $SimilarArtist) {
 		list($Artist2ID, $Artist2Name, $Score, $SimilarID) = $SimilarArtist;
@@ -678,16 +680,16 @@ if (empty($SimilarArray)) {
 			$First = false;
 		}
 
-		$FontSize = (ceil((((($Score - 2) / $Max - 2) * 4)))) + 8;
+		$FontSize = (ceil(((($Score - 2) / $Max - 2) * 4))) + 8;
 
 ?>
 				<li>
 					<span title="<?=$Score?>"><a href="artist.php?id=<?=$Artist2ID?>" style="float: left; display: block;"><?=$Artist2Name?></a></span>
 					<div style="float: right; display: block; letter-spacing: -1px;">
-						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar." class="brackets">&minus;</a>
-						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar." class="brackets">+</a>
+						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" class="tooltip" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar." class="brackets">&minus;</a>
+						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" class="tooltip" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar." class="brackets">+</a>
 <?		if (check_perms('site_delete_tag')) { ?>
-						<span class="remove remove_artist"><a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Remove this similar artist" class="brackets">X</a></span>
+						<span class="remove remove_artist"><a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="tooltip" title="Remove this similar artist" class="brackets">X</a></span>
 <?		} ?>
 					</div>
 					<br style="clear: both;" />
@@ -744,23 +746,25 @@ if (count($Collages) > 0) {
 			<td width="85%"><a href="#">&uarr;</a>&nbsp;This artist is in <?=number_format(count($Collages))?> collage<?=((count($Collages) > 1) ? 's' : '')?><?=$SeeAll?></td>
 			<td># artists</td>
 		</tr>
-		<?	foreach ($Indices as $i) {
+<?
+			foreach ($Indices as $i) {
 				list($CollageName, $CollageArtists, $CollageID) = $Collages[$i];
 				unset($Collages[$i]);
-		?>
+?>
 					<tr>
 						<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
 						<td><?=number_format($CollageArtists)?></td>
 					</tr>
-		<?	}
+<?
+			}
 			foreach ($Collages as $Collage) {
 				list($CollageName, $CollageArtists, $CollageID) = $Collage;
-		?>
+?>
 					<tr class="collage_rows hidden">
 						<td><a href="collages.php?id=<?=$CollageID?>"><?=$CollageName?></a></td>
 						<td><?=number_format($CollageArtists)?></td>
 					</tr>
-		<?	} ?>
+<?			} ?>
 	</table>
 <?
 }
@@ -797,10 +801,10 @@ if ($NumRequests > 0) {
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
 				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
 			} else {
-				$FullName ="<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
 			}
 
-			$Row = ($Row == 'a') ? 'b' : 'a';
+			$Row = $Row === 'a' ? 'b' : 'a';
 
 			$Tags = Requests::get_tags($RequestID);
 			$ReqTagList = array();
@@ -833,7 +837,7 @@ if ($NumRequests > 0) {
 <?
 }
 
-// Similar artist map
+// Similar Artist Map
 
 if ($NumSimilar > 0) {
 	if ($SimilarData = $Cache->get_value("similar_positions_$ArtistID")) {
@@ -862,7 +866,7 @@ if ($NumSimilar > 0) {
 		<div id="similar_artist_map" class="box">
 			<div id="flipper_head" class="head">
 				<a href="#">&uarr;</a>&nbsp;
-				<strong id="flipper_title">Similar artist map</strong>
+				<strong id="flipper_title">Similar Artist Map</strong>
 				<a id="flip_to" class="brackets" href="#" onclick="flipView(); return false;">Switch to cloud</a>
 			</div>
 			<div id="flip_view_1" style="display: block; width: <?=(WIDTH)?>px; height: <?=(HEIGHT)?>px; position: relative; background-image: url(static/similar/<?=($ArtistID)?>.png?t=<?=(time())?>);">
@@ -871,7 +875,7 @@ if ($NumSimilar > 0) {
 ?>
 			</div>
 		<div id="flip_view_2" style="display: none; width: <?=WIDTH?>px; height: <?=HEIGHT?>px;">
-			<canvas width="<?=(WIDTH)?>px" height="<?=(HEIGHT - 20)?>px" id="similarArtistsCanvas"></canvas>
+			<canvas width="<?=WIDTH?>px" height="<?=(HEIGHT - 20)?>px" id="similarArtistsCanvas"></canvas>
 			<div id="artistTags" style="display: none;">
 				<ul><li></li></ul>
 			</div>
@@ -888,7 +892,7 @@ function flipView() {
 	if (state) {
 		document.getElementById('flip_view_1').style.display = 'none';
 		document.getElementById('flip_view_2').style.display = 'block';
-		document.getElementById('flipper_title').innerHTML = 'Similar artist cloud';
+		document.getElementById('flipper_title').innerHTML = 'Similar Artist Cloud';
 		document.getElementById('flip_to').innerHTML = 'Switch to map';
 
 		if (!cloudLoaded) {
@@ -902,7 +906,7 @@ function flipView() {
 	else {
 		document.getElementById('flip_view_1').style.display = 'block';
 		document.getElementById('flip_view_2').style.display = 'none';
-		document.getElementById('flipper_title').innerHTML = 'Similar artist map';
+		document.getElementById('flipper_title').innerHTML = 'Similar Artist Map';
 		document.getElementById('flip_to').innerHTML = 'Switch to cloud';
 	}
 }
@@ -939,154 +943,37 @@ function require(file, callback) {
 			</div>
 			<div id="body" class="body"><?=$Text->full_format($Body)?></div>
 		</div>
-<?	if (defined('LASTFM_API_KEY')) {
-		include(SERVER_ROOT.'/sections/artist/concerts.php');
-	} ?>
-<?php
+<?
+if (defined('LASTFM_API_KEY')) {
+	include(SERVER_ROOT.'/sections/artist/concerts.php');
+}
+
 // --- Comments ---
 
-// gets the amount of comments for this group
-$Results = $Cache->get_value("artist_comments_$ArtistID");
-if ($Results === false) {
-	$DB->query("
-		SELECT
-			COUNT(c.ID)
-		FROM artist_comments as c
-		WHERE c.ArtistID = '$ArtistID'");
-	list($Results) = $DB->next_record();
-	$Cache->cache_value("artist_comments_$ArtistID", $Results, 0);
-}
+list($NumComments, $Page, $Thread, $LastRead) = Comments::load('artist', $ArtistID);
+$Pages = Format::get_pages($Page, $NumComments, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 
-if (isset($_GET['postid']) && is_number($_GET['postid']) && $Results > TORRENT_COMMENTS_PER_PAGE) {
-	$DB->query("
-		SELECT COUNT(ID)
-		FROM artist_comments
-		WHERE ArtistID = $ArtistID
-			AND ID <= $_GET[postid]");
-	list($PostNum) = $DB->next_record();
-	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $PostNum);
-} else {
-	list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $Results);
-}
-
-//Get the cache catalogue
-$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
-$CatalogueLimit = $CatalogueID * THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
-
-//---------- Get some data to start processing
-
-// Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-$Catalogue = $Cache->get_value("artist_comments_{$ArtistID}_catalogue_$CatalogueID");
-if ($Catalogue === false) {
-	$DB->query("
-		SELECT
-			c.ID,
-			c.AuthorID,
-			c.AddedTime,
-			c.Body,
-			c.EditedUserID,
-			c.EditedTime,
-			u.Username
-		FROM artist_comments as c
-			LEFT JOIN users_main AS u ON u.ID = c.EditedUserID
-		WHERE c.ArtistID = '$ArtistID'
-		ORDER BY c.ID
-		LIMIT $CatalogueLimit");
-	$Catalogue = $DB->to_array(false, MYSQLI_ASSOC);
-	$Cache->cache_value("artist_comments_{$ArtistID}_catalogue_$CatalogueID", $Catalogue, 0);
-}
-
-//This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
 ?>
 	<div id="artistcomments" class="linkbox">
 		<a name="comments"></a>
-<?
-$Pages = Format::get_pages($Page, $Results, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
-echo $Pages;
-?>
+		<?=$Pages?>
 	</div>
 <?
 
 //---------- Begin printing
-foreach ($Thread as $Key => $Post) {
-	list($PostID, $AuthorID, $AddedTime, $CommentBody, $EditedUserID, $EditedTime, $EditedUsername) = array_values($Post);
-	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
+CommentsView::render_comments($Thread, $LastRead, "artist.php?id=$ArtistID");
 ?>
-<table class="forum_post box vertical_margin<?=(!Users::has_avatars_enabled() ? ' noavatar' : '')?>" id="post<?=$PostID?>">
-	<colgroup>
-<?	if (Users::has_avatars_enabled()) { ?>
-		<col class="col_avatar" />
-<? 	} ?>
-		<col class="col_post_body" />
-	</colgroup>
-	<tr class="colhead_dark">
-		<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
-			<div style="float: left;"><a class="post_id" href="artist.php?id=<?=$ArtistID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
-				<strong><?=Users::format_username($AuthorID, true, true, true, true)?></strong> <?=time_diff($AddedTime)?>
-				- <a href="#quickpost" onclick="Quote('<?=$PostID?>','<?=$Username?>');" class="brackets">Quote</a>
-<?	if ($AuthorID == $LoggedUser['ID'] || check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
-<?
-	}
-	if (check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
-<?	} ?>
-			</div>
-			<div id="bar<?=$PostID?>" style="float: right;">
-				<a href="reports.php?action=report&amp;type=artist_comment&amp;id=<?=$PostID?>" class="brackets">Report</a>
-<?
-	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
-		$AuthorInfo = Users::user_info($AuthorID);
-		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
-?>
-				<form class="manage_form hidden" name="user" id="warn<?=$PostID?>" action="" method="post">
-					<input type="hidden" name="action" value="warn" />
-					<input type="hidden" name="artistid" value="<?=$ArtistID?>" />
-					<input type="hidden" name="postid" value="<?=$PostID?>" />
-					<input type="hidden" name="userid" value="<?=$AuthorID?>" />
-					<input type="hidden" name="key" value="<?=$Key?>" />
-				</form>
-				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
-<?
-		}
-	}
-?>
-				&nbsp;
-				<a href="#">&uarr;</a>
-			</div>
-		</td>
-	</tr>
-	<tr>
-<?	if (Users::has_avatars_enabled()) { ?>
-		<td class="avatar" valign="top">
-		<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
-		</td>
-<?	} ?>
-		<td class="body" valign="top">
-			<div id="content<?=$PostID?>">
-<?=$Text->full_format($CommentBody)?>
-<?	if ($EditedUserID) { ?>
-				<br />
-				<br />
-<?		if (check_perms('site_admin_forums')) { ?>
-				<a href="#content<?=$PostID?>" onclick="LoadEdit('artist', <?=$PostID?>, 1); return false;">&laquo;</a>
-<? 		} ?>
-				Last edited by
-				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime, 2, true, true)?>
-<?	} ?>
-			</div>
-		</td>
-	</tr>
-</table>
-<? } ?>
 		<div class="linkbox">
-		<?=($Pages)?>
+			<?=($Pages)?>
 		</div>
 <?
 	View::parse('generic/reply/quickreply.php', array(
-			'InputName' => 'artistid',
-			'InputID' => $ArtistID));
+		'InputName' => 'pageid',
+		'InputID' => $ArtistID,
+		'Action' => 'comments.php?page=artist',
+		'InputAction' => 'take_post',
+		'SubscribeBox' => true
+	));
 ?>
 	</div>
 </div>
@@ -1099,7 +986,7 @@ View::show_footer();
 if ($RevisionID) {
 	$Key = "artist_$ArtistID" . "_revision_$RevisionID";
 } else {
-	$Key = 'artist_' . $ArtistID;
+	$Key = "artist_$ArtistID";
 }
 
 $Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), array(), $VanityHouseArtist));

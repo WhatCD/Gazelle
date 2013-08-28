@@ -95,7 +95,7 @@ set_query_id($ResultSet)
 	This class can only hold one result set at a time. Using set_query_id allows
 	you to set the result set that the class is using to the result set in
 	$ResultSet. This result set should have been obtained earlier by using
-	$DB-query().
+	$DB->query().
 
 	Example:
 
@@ -173,7 +173,7 @@ class DB_MYSQL {
 	}
 
 	function halt($Msg) {
-		global $LoggedUser, $Cache, $Debug, $argv;
+		global $Debug, $argv;
 		$DBError = 'MySQL: '.strval($Msg).' SQL error: '.strval($this->Errno).' ('.strval($this->Error).')';
 		if ($this->Errno == 1194) {
 			send_irc('PRIVMSG '.ADMIN_CHAN.' :'.$this->Error);
@@ -205,7 +205,7 @@ class DB_MYSQL {
 	}
 
 	function query($Query, $AutoHandle = 1) {
-		global $LoggedUser, $Debug;
+		global $Debug;
 		/*
 		 * If there was a previous query, we store the warnings. We cannot do
 		 * this immediately after mysqli_query because mysqli_insert_id will

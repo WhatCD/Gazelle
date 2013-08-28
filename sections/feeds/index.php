@@ -4,15 +4,15 @@
 // Bear this in mind when you try to use script_start functions.
 
 if (
-	empty($_GET['feed']) ||
-	empty($_GET['authkey']) ||
-	empty($_GET['auth']) ||
-	empty($_GET['passkey']) ||
-	empty($_GET['user']) ||
-	!is_number($_GET['user']) ||
-	strlen($_GET['authkey']) != 32 ||
-	strlen($_GET['passkey']) != 32 ||
-	strlen($_GET['auth']) != 32
+	empty($_GET['feed'])
+	|| empty($_GET['authkey'])
+	|| empty($_GET['auth'])
+	|| empty($_GET['passkey'])
+	|| empty($_GET['user'])
+	|| !is_number($_GET['user'])
+	|| strlen($_GET['authkey']) != 32
+	|| strlen($_GET['passkey']) != 32
+	|| strlen($_GET['auth']) != 32
 ) {
 	$Feed->open_feed();
 	$Feed->channel('Blocked', 'RSS feed.');

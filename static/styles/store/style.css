@@ -1,0 +1,92 @@
+/*
+	Mosaic - Sliding Boxes and Captions jQuery Plugin
+	Version 1.0.1
+	www.buildinternet.com/project/mosaic
+
+	By Sam Dunn / One Mighty Roar (www.onemightyroar.com)
+	Released under MIT License / GPL License
+	*/
+
+* {
+	margin:0;
+	padding:0;
+	border:none;
+	outline:none;
+}
+
+/*General Mosaic Styles*/
+.mosaic-block {
+	display: inline-block;
+	position:relative;
+	overflow:hidden;
+	width:250px;
+	height:250px;
+	margin:10px;
+	text-align: left;
+}
+
+.mosaic-backdrop {
+	display:none;
+}
+
+.mosaic-backdrop img {
+	height: 250px;
+}
+
+.mosaic-overlay {
+	display:none;
+	z-index:5;
+	position:absolute;
+	width: 246px;
+	margin-left: 2px;
+	height:100%;
+	background:#111;
+	text-shadow: none;
+}
+
+.bar2 .mosaic-overlay {
+	bottom:-80px;
+	height:100px;
+	opacity:0.8;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	filter:alpha(opacity=80);
+}
+
+.bar2 .mosaic-overlay:hover {
+	opacity:0.8;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	filter:alpha(opacity=80);
+}
+
+.details {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.details .details_header {
+	color: #F5F5F5;
+	font-size: 150%;
+	line-height: 20px;
+}
+.details .details_body {
+	color: #F5F5F5;
+	font-size: 120%;
+	line-height: 16px;
+}
+/*** End Animation Styles ***/
+
+.item_form_table td {
+	text-align : left;
+}
+
+.store_table {
+	text-align: center;
+	margin: 0px 30px;
+}
+
+#banner {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}

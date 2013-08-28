@@ -343,7 +343,7 @@ $DB->query("
 					</tr>
 					<tr>
 						<td class="label">
-							<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve:</a>
+							<a href="javascript:Load('<?=$ReportID?>')" class="tooltip" title="Click here to reset the resolution options to their default values.">Resolve</a>
 						</td>
 						<td colspan="3">
 							<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>);">
@@ -362,12 +362,12 @@ $DB->query("
 							</select>
 							<span id="options<?=$ReportID?>">
 <?	if (check_perms('users_mod')) { ?>
-								<span title="Delete torrent?">
+								<span class="tooltip" title="Delete torrent?">
 									<label for="delete<?=$ReportID?>"><strong>Delete</strong></label>
 									<input type="checkbox" name="delete" id="delete<?=$ReportID?>" />
 								</span>
 <?	} ?>
-								<span title="Warning length in weeks">
+								<span class="tooltip" title="Warning length in weeks">
 									<strong>Warning</strong>
 									<select name="warning" id="warning<?=$ReportID?>">
 <?	for ($i = 0; $i < 9; $i++) { ?>
@@ -375,19 +375,19 @@ $DB->query("
 <?	} ?>
 									</select>
 								</span>
-								<span>
+								<span class="tooltip" title="Remove upload privileges?">
 									<label for="upload<?=$ReportID?>"><strong>Remove upload privileges</strong></label>
 									<input type="checkbox" name="upload" id="upload<?=$ReportID?>" />
 								</span>
 								&nbsp;&nbsp;
-								<span title="Update resolve type">
+								<span class="tooltip" title="Update resolve type">
 									<input type="button" name="update_resolve" id="update_resolve<?=$ReportID?>" value="Update now" onclick="UpdateResolve(<?=$ReportID?>);" />
 								</span>
 							</span>
 						</td>
 					</tr>
 					<tr>
-						<td class="label">
+						<td class="label tooltip" title="Uploader: Appended to the regular message unless using &quot;Send now&quot;. Reporter: Must be used with &quot;Send now&quot;.">
 							PM
 							<select name="pm_type" id="pm_type<?=$ReportID?>">
 								<option value="Uploader">Uploader</option>
@@ -395,9 +395,7 @@ $DB->query("
 							</select>:
 						</td>
 						<td colspan="3">
-							<span title="Uploader: Appended to the regular message unless using &quot;Send now&quot;. Reporter: Must be used with &quot;Send now&quot;.">
-								<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
-							</span>
+							<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 							<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>);" />
 						</td>
 					</tr>
@@ -408,7 +406,7 @@ $DB->query("
 										$Extras = explode(' ', $ExtraIDs);
 										$Value = '';
 										foreach ($Extras as $ExtraID) {
-											$Value .= 'https://'.SSL_SITE_URL.'/torrents.php?torrentid='.$ExtraID.' ';
+											$Value .= 'https://'.SSL_SITE_URL."/torrents.php?torrentid=$ExtraID ";
 										}
 										echo ' value="'.trim($Value).'"';
 									} ?> />

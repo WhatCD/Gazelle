@@ -474,8 +474,8 @@ td.colhead, .colhead td, .colhead th {
 
 .colhead .sign, .colhead_dark .sign {
 	padding: 0px 8px 0px 8px;
-	vertical-align:middle;
-	text-align:center;
+	vertical-align: middle;
+	text-align: center;
 	font-size: 12pt;
 	font-weight: bold;
 }
@@ -525,7 +525,7 @@ table.slice {
 }
 
 .hidden {
-	display:none;
+	display: none;
 }
 
 
@@ -568,13 +568,13 @@ ul.poll li.graph {
 }
 
 .filter_torrents {
-	width:750px;
-	margin:auto;
+	width: 750px;
+	margin: auto;
 }
 
 .filter_torrents .submit {
-	text-align:right;
-	padding-top:5px;
+	text-align: right;
+	padding-top: 5px;
 }
 
 #content form.search_form + .torrent_table {
@@ -582,34 +582,34 @@ ul.poll li.graph {
 }
 
 .cat_list tr td {
-	border:none;
+	border: none;
 }
 
 .torrent_table tr {
-	vertical-align:top;
+	vertical-align: top;
 }
 
 .torrent_table tr.torrent, .torrent_table tr.group {
-	font-weight:bold;
+	font-weight: bold;
 }
 
 .torrent_table tr.group {
-	background-color:#cfcfcf;
+	background-color: #cfcfcf;
 }
 .torrent_table tr.group_torrent {
-	background-color:#fafafa;
+	background-color: #fafafa;
 }
 .torrent_table tr.torrent {
-	background-color:#ddd;
+	background-color: #ddd;
 }
 
 .torrent_table div.tags {
-	font-weight:normal;
+	font-weight: normal;
 }
 
 .torrent_table tr .center {
-	vertical-align:middle;
-	text-align:center;
+	vertical-align: middle;
+	text-align: center;
 }
 
 .group_torrent span {
@@ -617,12 +617,12 @@ ul.poll li.graph {
 }
 
 .torrent span {
-	font-weight:normal;
-	float:right;
+	font-weight: normal;
+	float: right;
 }
 
 .nobr {
-	white-space:nowrap;
+	white-space: nowrap;
 }
 
 /* Layout (Forums) */
@@ -659,7 +659,7 @@ td.avatar {
 }
 
 table.forum_post td.body {
-	width:690px;
+	width: 690px;
 }
 
 blockquote {
@@ -679,30 +679,30 @@ tr.unreadpm {
 /* Layout (Permission Page) */
 
 .permission_head {
-	width:400px;
-	margin-left:auto;
-	margin-right:auto;
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .permissions {
-	width:930px;
-	margin-left:auto;
-	margin-right:auto;
+	width: 930px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .permission_container {
-	float:left;
-	width:300px;
-	padding:5px;
+	float: left;
+	width: 300px;
+	padding: 5px;
 }
 .permission_container input {
-	margin:0px 3px 5px 0px;
-	vertical-align:top;
+	margin: 0px 3px 5px 0px;
+	vertical-align: top;
 }
 
 .submit_container {
-	clear:both;
-	text-align:right;
+	clear: both;
+	text-align: right;
 }
 
 /* Layout (Invite tree) */
@@ -798,4 +798,8 @@ tr.torrent .bookmark > a:after {
 
 .edit_changelog textarea {
 	width: 600px;
+}
+
+div[class~=tooltipster-content] > a {
+	color: #AAAAAA;
 }

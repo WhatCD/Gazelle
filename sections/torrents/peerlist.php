@@ -44,8 +44,8 @@ $DB->set_query_id($Result);
 		<td>User</td>
 		<td>Active</td>
 		<td>Connectable</td>
-		<td>Up</td>
-		<td>%</td>
+		<td class="number_column">Up</td>
+		<td class="number_column">%</td>
 		<td>Client</td>
 	</tr>
 <?
@@ -53,10 +53,10 @@ while (list($PeerUserID, $Size, $Active, $Connectable, $Uploaded, $Remaining, $U
 ?>
 	<tr>
 		<td><?=Users::format_username($PeerUserID, false, false, false)?></td>
-		<td><?= ($Active) ? '<span style="color: green;">Yes</span>' : '<span style="color: red;">No</span>' ?></td>
+		<td><?=($Active) ? '<span style="color: green;">Yes</span>' : '<span style="color: red;">No</span>' ?></td>
 		<td><?= ($Connectable) ? '<span style="color: green;">Yes</span>' : '<span style="color: red;">No</span>' ?></td>
-		<td><?=Format::get_size($Uploaded) ?></td>
-		<td><?=number_format(($Size - $Remaining) / $Size * 100, 2)?></td>
+		<td class="number_column"><?=Format::get_size($Uploaded) ?></td>
+		<td class="number_column"><?=number_format(($Size - $Remaining) / $Size * 100, 2)?></td>
 		<td><?=display_str($UserAgent)?></td>
 	</tr>
 <?

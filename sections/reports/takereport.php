@@ -56,70 +56,8 @@ switch ($Short) {
 		list($PostID, $TopicID, $PostNum) = $DB->next_record();
 		$Link = "forums.php?action=viewthread&threadid=$TopicID&post=$PostNum#post$PostID";
 		break;
-	case 'requests_comment':
-		$DB->query("
-			SELECT
-				rc.RequestID,
-				rc.Body,
-				(	SELECT COUNT(ID)
-					FROM requests_comments
-					WHERE ID <= $ID
-						AND requests_comments.RequestID = rc.RequestID
-				) AS CommentNum
-			FROM requests_comments AS rc
-			WHERE ID = $ID");
-		list($RequestID, $Body, $PostNum) = $DB->next_record();
-		$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-		$Link = "requests.php?action=view&id=$RequestID&page=$PageNum#post$ID";
-		break;
-	case 'torrents_comment':
-		$DB->query("
-			SELECT
-				tc.GroupID,
-				tc.Body,
-				(	SELECT COUNT(ID)
-					FROM torrents_comments
-					WHERE ID <= $ID
-						AND torrents_comments.GroupID = tc.GroupID
-				) AS CommentNum
-			FROM torrents_comments AS tc
-			WHERE ID = $ID");
-		list($GroupID, $Body, $PostNum) = $DB->next_record();
-		$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-		$Link = "torrents.php?id=$GroupID&page=$PageNum#post$ID";
-		break;
-	case 'artist_comment':
-		$DB->query("
-			SELECT
-				ac.ArtistID,
-				ac.Body,
-				(	SELECT COUNT(ID)
-					FROM artist_comments
-					WHERE ID <= $ID
-						AND artist_comments.ArtistID = ac.ArtistID
-				) AS CommentNum
-			FROM artist_comments AS ac
-			WHERE ID = $ID");
-		list($ArtistID, $Body, $PostNum) = $DB->next_record();
-		$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-		$Link = "artist.php?id=$ArtistID&page=$PageNum#post$ID";
-		break;
-	case 'collages_comment':
-		$DB->query("
-			SELECT
-				cc.CollageID,
-				cc.Body,
-				(	SELECT COUNT(ID)
-					FROM collages_comments
-					WHERE ID <= $ID
-						AND collages_comments.CollageID = cc.CollageID
-				) AS CommentNum
-			FROM collages_comments AS cc
-			WHERE ID = $ID");
-		list($CollageID, $Body, $PostNum) = $DB->next_record();
-		$PerPage = POSTS_PER_PAGE;
-		$PageNum = ceil($PostNum / $PerPage);
-		$Link = "collage.php?action=comments&collageid=$CollageID&page=$PageNum#post$ID";
+	case 'comment':
+		$Link = "comments.php?action=jump&postid=$ID";
 		break;
 }
 
@@ -136,7 +74,7 @@ if ($Short == 'request_update') {
 	$Channels[] = '#requestedits';
 	$Cache->increment('num_update_reports');
 }
-if (in_array($Short, array('collages_comment', 'post', 'requests_comment', 'thread', 'torrents_comment'))) {
+if (in_array($Short, array('comment', 'post', 'thread'))) {
 	$Channels[] = '#forumreports';
 
 }

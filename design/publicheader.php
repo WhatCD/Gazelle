@@ -1,7 +1,6 @@
 <?
-global $LoggedUser, $Languages, $SSL;
+global $LoggedUser, $SSL;
 define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -26,7 +25,6 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 <? if ($Mobile) { ?>
 	<script src="<?=STATIC_SERVER?>styles/mobile/style.js?v=<?=filemtime(SERVER_ROOT.'/static/mobile/style.js')?>" type="text/javascript"></script>
 <? }
-
 ?>
 </head>
 <body>
@@ -44,4 +42,4 @@ define('FOOTER_FILE',SERVER_ROOT.'/design/publicfooter.php');
 <? } ?>
 				</ul>
 			</div>
-
+<?

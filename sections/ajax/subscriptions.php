@@ -17,12 +17,6 @@ if (isset($LoggedUser['PostsPerPage'])) {
 }
 list($Page, $Limit) = Format::page_limit($PerPage);
 
-if ($LoggedUser['CustomForums']) {
-	unset($LoggedUser['CustomForums']['']);
-	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
-}
-
 $ShowUnread = (!isset($_GET['showunread']) && !isset($HeavyInfo['SubscriptionsUnread']) || isset($HeavyInfo['SubscriptionsUnread']) && !!$HeavyInfo['SubscriptionsUnread'] || isset($_GET['showunread']) && !!$_GET['showunread']);
 $ShowCollapsed = (!isset($_GET['collapse']) && !isset($HeavyInfo['SubscriptionsCollapse']) || isset($HeavyInfo['SubscriptionsCollapse']) && !!$HeavyInfo['SubscriptionsCollapse'] || isset($_GET['collapse']) && !!$_GET['collapse']);
 $sql = '
@@ -36,15 +30,7 @@ $sql = '
 		LEFT JOIN forums_last_read_topics AS l ON p.TopicID = l.TopicID AND l.UserID = s.UserID
 	WHERE s.UserID = '.$LoggedUser['ID'].'
 		AND p.ID <= IFNULL(l.PostID,t.LastPostID)
-		AND ((f.MinClassRead <= '.$LoggedUser['Class'];
-if (!empty($RestrictedForums)) {
-	$sql.=" AND f.ID NOT IN ('$RestrictedForums')";
-}
-$sql .= ')';
-if (!empty($PermittedForums)) {
-	$sql.=" OR f.ID IN ('$PermittedForums')";
-}
-$sql .= ')';
+		AND ' . Forums::user_forums_sql();
 if ($ShowUnread) {
 	$sql .= '
 		AND IF(l.PostID IS NULL OR (t.IsLocked = \'1\' && t.IsSticky = \'0\'), t.LastPostID, l.PostID) < t.LastPostID';

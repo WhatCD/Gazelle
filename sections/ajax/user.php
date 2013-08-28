@@ -35,7 +35,6 @@ $DB->query("
 		i.JoinDate,
 		i.Info,
 		i.Avatar,
-		i.Country,
 		i.Donor,
 		i.Warned,
 		COUNT(posts.id) AS ForumPosts,
@@ -54,7 +53,7 @@ if (!$DB->has_results()) { // If user doesn't exist
 	json_die("failure", "no such user");
 }
 
-list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Country, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9, 11));
+list($Username, $Email, $LastAccess, $IP, $Class, $Uploaded, $Downloaded, $RequiredRatio, $Enabled, $Paranoia, $Invites, $CustomTitle, $torrent_pass, $DisableLeech, $JoinDate, $Info, $Avatar, $Donor, $Warned, $ForumPosts, $InviterID, $DisableInvites, $InviterName, $RatioWatchEnds, $RatioWatchDownload) = $DB->next_record(MYSQLI_NUM, array(9, 11));
 
 $Paranoia = unserialize($Paranoia);
 if (!is_array($Paranoia)) {
@@ -188,8 +187,9 @@ list($Snatched, $UniqueSnatched) = $DB->next_record();
 if (check_paranoia_here(array('torrentcomments', 'torrentcomments+'))) {
 	$DB->query("
 		SELECT COUNT(ID)
-		FROM torrents_comments
-		WHERE AuthorID = '$UserID'");
+		FROM comments
+		WHERE Page = 'torrents'
+			AND AuthorID = '$UserID'");
 	list($NumComments) = $DB->next_record();
 }
 
@@ -274,6 +274,11 @@ if (!$OwnProfile) {
 // Run through some paranoia stuff to decide what we can send out.
 if (!check_paranoia_here('lastseen')) {
 	$LastAccess = '';
+}
+if (check_paranoia_here('ratio')) {
+	$Ratio = Format::get_ratio($Uploaded, $Downloaded, 5);
+} else {
+	$Ratio = null;
 }
 if (!check_paranoia_here('uploaded')) {
 	$Uploaded = null;

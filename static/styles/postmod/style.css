@@ -22,10 +22,11 @@ html {
 }
 
 body {
-	background: #000;
+	background: #000 url('images/wood.jpg') no-repeat fixed;
 	font-family: Helvetica, Arial, sans-serif;
 	font-size: 9pt;
 	color: #EEE;
+	background-size:cover;
 }
 
 .forum_post pre {
@@ -140,7 +141,6 @@ ul.thin li { margin:0px 0px; padding:0px; }
 /* Layout (Every page) */
 #wrapper {
 	padding: 0 0 0 0;
-	background: #000 url('images/wood.jpg') 50% 0 no-repeat fixed;
 }
 #header {
 	width: 950px;
@@ -513,7 +513,7 @@ p.min_padding {
 }
 
 .sidebar .pad {
-    padding: 10px;
+	padding: 10px;
 }
 
 .vertical_space {
@@ -1089,4 +1089,18 @@ tr.torrent .bookmark > a:after {
 }
 .autocomplete-selected {
 	background: #444;
+}
+
+div[class~=tooltipster-base] {
+	background-color: #ECECEC;
+	color: #444;
+}
+
+div[class~=tooltipster-content] > a {
+	color: #0A84AF;
+
+}
+
+#settings_sections #submit, #settings_sections #settings_search {
+	margin: 3px 0;
 }

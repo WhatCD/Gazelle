@@ -99,10 +99,12 @@ $DB->query("
 	FROM torrents
 	WHERE GroupID = '$OldGroupID'");
 if (!$DB->has_results()) {
+	// TODO: votes etc.
 	$DB->query("
-		UPDATE torrents_comments
-		SET GroupID = '$GroupID'
-		WHERE GroupID = '$OldGroupID'");
+		UPDATE comments
+		SET PageID = '$GroupID'
+		WHERE Page = 'torrents'
+			AND PageID = '$OldGroupID'");
 	Torrents::delete_group($OldGroupID);
 	$Cache->delete_value("torrent_comments_{$GroupID}_catalogue_0");
 } else {

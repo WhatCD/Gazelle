@@ -22,10 +22,22 @@
  *
  * Globals are required as this template is included within a
  * function scope.
- */
-	global $LoggedUser, $HeavyInfo, $UserSubscriptions, $ThreadInfo, $ForumsDoublePost;
+ *
+ * To add a "Subscribe" box for non-forum pages (like artist/collage/...
+ * comments), add a key 'SubscribeBox' to the array passed to View::parse.
+ * Example:
 
-	if ($LoggedUser['DisablePosting']) {
+		View::parse('generic/reply/quickreply.php', array(
+			'InputTitle' => 'Post comment',
+			'InputName' => 'groupid',
+			'InputID' => $GroupID,
+			'TextareaCols' => 65,
+			'SubscribeBox' => true
+		));
+ */
+	global $HeavyInfo, $UserSubscriptions, $ThreadInfo, $ForumsDoublePost, $Document;
+
+	if (G::$LoggedUser['DisablePosting']) {
 		return;
 	}
 	if (!isset($TextareaCols)) {
@@ -39,6 +51,9 @@
 	}
 	if (!isset($InputTitle)) {
 		$InputTitle = 'Post comment';
+	}
+	if (!isset($Action)) {
+		$Action = '';
 	}
 
 	// TODO: Remove inline styles
@@ -69,7 +84,7 @@
 						<tr class="colhead_dark">
 							<td colspan="<?=(Users::has_avatars_enabled() ? 2 : 1)?>">
 								<div style="float: left;"><a href="#quickreplypreview">#XXXXXX</a>
-									by <strong><?=Users::format_username($LoggedUser['ID'], true, true, true, true)?></strong> Just now
+									by <strong><?=Users::format_username(G::$LoggedUser['ID'], true, true, true, true)?></strong> Just now
 								</div>
 								<div style="float: right;">
 									<a href="#quickreplypreview" class="brackets">Report</a>
@@ -81,7 +96,7 @@
 						<tr>
 					<?	if (Users::has_avatars_enabled()) { ?>
 							<td class="avatar" valign="top">
-							<?=Users::show_avatar($LoggedUser['Avatar'], $LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
+							<?=Users::show_avatar(G::$LoggedUser['Avatar'], G::$LoggedUser['ID'], G::$LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
 							</td>
 					<?	} ?>
 							<td class="body" valign="top">
@@ -91,9 +106,9 @@
 							</td>
 						</tr>
 					</table>
-					<form class="send_form center" name="reply" id="quickpostform" action="" method="post"<? if (!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?>>
+					<form class="send_form center" name="reply" id="quickpostform" action="<?=$Action?>" method="post"<? if (!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?>>
 						<input type="hidden" name="action" value="<?=$InputAction?>" />
-						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+						<input type="hidden" name="auth" value="<?=G::$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="<?=$InputName?>" value="<?=$InputID?>" />
 						<div id="quickreplytext">
 <?
@@ -103,15 +118,20 @@
 						</div>
 						<div class="preview_submit">
 <?
+	if (isset($SubscribeBox) && !isset($ForumID) && Subscriptions::has_subscribed_comments($Document, $InputID) === false) { ?>
+							<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe']) ? ' checked="checked"' : ''?> tabindex="2" />
+							<label for="subscribebox">Subscribe</label>
+<?
+	}
 	// Forum thread logic
 	// This might use some more abstraction
-	if ($ForumID) { ?>
-<?		if (!in_array($InputID, $UserSubscriptions)) { ?>
+	if (isset($ForumID)) {
+		if (!Subscriptions::has_subscribed($InputID)) { ?>
 							<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe']) ? ' checked="checked"' : ''?> tabindex="2" />
 							<label for="subscribebox">Subscribe</label>
 <?
 		}
-		if ($ThreadInfo['LastPostAuthorID'] == $LoggedUser['ID']
+		if ($ThreadInfo['LastPostAuthorID'] == G::$LoggedUser['ID']
 			&& (check_perms('site_forums_double_post')
 				|| in_array($ForumID, $ForumsDoublePost))
 		) {
@@ -119,7 +139,7 @@
 							<input id="mergebox" type="checkbox" name="merge" tabindex="2" />
 							<label for="mergebox">Merge</label>
 <?		}
-		if (!$LoggedUser['DisableAutoSave']) { ?>
+		if (!G::$LoggedUser['DisableAutoSave']) { ?>
 							<script type="application/javascript">var storedTempTextarea = new StoreText('quickpost', 'quickpostform', <?=$InputID?>);</script>
 <? 		}
 	}

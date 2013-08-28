@@ -7,12 +7,11 @@ class Permissions {
 	 * @param string $MinClass Return false if the user's class level is below this.
 	 */
 	public static function check_perms($PermissionName, $MinClass = 0) {
-		global $LoggedUser;
 		return (
-			isset($LoggedUser['Permissions'][$PermissionName])
-			&& $LoggedUser['Permissions'][$PermissionName]
-			&& ($LoggedUser['Class'] >= $MinClass
-				|| $LoggedUser['EffectiveClass'] >= $MinClass)
+			isset(G::$LoggedUser['Permissions'][$PermissionName])
+			&& G::$LoggedUser['Permissions'][$PermissionName]
+			&& (G::$LoggedUser['Class'] >= $MinClass
+				|| G::$LoggedUser['EffectiveClass'] >= $MinClass)
 			) ? true : false;
 	}
 
@@ -23,16 +22,17 @@ class Permissions {
 	 * @return array permissions
 	 */
 	public static function get_permissions($PermissionID) {
-		global $DB, $Cache;
-		$Permission = $Cache->get_value('perm_'.$PermissionID);
+		$Permission = G::$Cache->get_value('perm_'.$PermissionID);
 		if (empty($Permission)) {
-			$DB->query("
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
 				SELECT p.Level AS Class, p.Values as Permissions, p.Secondary, p.PermittedForums
 				FROM permissions AS p
 				WHERE ID='$PermissionID'");
-			$Permission = $DB->next_record(MYSQLI_ASSOC, array('Permissions'));
+			$Permission = G::$DB->next_record(MYSQLI_ASSOC, array('Permissions'));
+			G::$DB->set_query_id($QueryID);
 			$Permission['Permissions'] = unserialize($Permission['Permissions']);
-			$Cache->cache_value('perm_'.$PermissionID, $Permission, 2592000);
+			G::$Cache->cache_value('perm_'.$PermissionID, $Permission, 2592000);
 		}
 		return $Permission;
 	}
@@ -47,17 +47,18 @@ class Permissions {
 	 * @return array Mapping of PermissionName=>bool/int
 	 */
 	public static function get_permissions_for_user($UserID, $CustomPermissions = false) {
-		global $DB;
 
 		$UserInfo = Users::user_info($UserID);
 
 		// Fetch custom permissions if they weren't passed in.
 		if ($CustomPermissions === false) {
-			$DB->query('
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query('
 				SELECT um.CustomPermissions
 				FROM users_main AS um
 				WHERE um.ID = '.((int)$UserID));
-			list($CustomPermissions) = $DB->next_record(MYSQLI_NUM, false);
+			list($CustomPermissions) = G::$DB->next_record(MYSQLI_NUM, false);
+			G::$DB->set_query_id($QueryID);
 		}
 
 		if (!empty($CustomPermissions) && !is_array($CustomPermissions)) {
@@ -89,10 +90,12 @@ class Permissions {
 			$DonorPerms = array('Permissions' => array());
 		}
 
+		$DonorCollages = self::get_personal_collages($UserID, $Permissions['Permissions']['users_mod']);
+
 		$MaxCollages = $Permissions['Permissions']['MaxCollages']
 				+ $BonusCollages
 				+ $CustomPerms['MaxCollages']
-				+ $DonorPerms['Permissions']['MaxCollages'];
+				+ $DonorCollages;
 
 		//Combine the permissions
 		return array_merge(
@@ -101,6 +104,40 @@ class Permissions {
 				$CustomPerms,
 				$DonorPerms['Permissions'],
 				array('MaxCollages' => $MaxCollages));
+	}
+
+	private static function get_personal_collages($UserID, $HasAll) {
+		$QueryID = G::$DB->get_query_id();
+		if (!$HasAll) {
+			$SpecialRank = G::$Cache->get_value("donor_special_rank_$UserID");
+			if ($SpecialRank === false) {
+				G::$DB->query("SELECT SpecialRank FROM users_donor_ranks WHERE UserID = '$UserID'");
+				list($SpecialRank) = G::$DB->next_record();
+				$HasAll = $SpecialRank == MAX_SPECIAL_RANK ? true : false;
+				G::$Cache->cache_value("donor_special_rank_$UserID", $SpecialRank, 0);
+			}
+		} else {
+			G::$Cache->cache_value("donor_special_rank_$UserID", MAX_SPECIAL_RANK, 0);
+		}
+
+		if ($HasAll) {
+			$Collages = 5;
+		} else {
+			$Collages = 0;
+			$Rank = G::$Cache->get_value("donor_rank_$UserID");
+			if ($Rank === false) {
+				G::$DB->query("SELECT Rank FROM users_donor_ranks WHERE UserID = '$UserID'");
+				list($Rank) = G::$DB->next_record();
+				G::$Cache->cache_value("donor_rank_$UserID", $Rank, 0);
+			}
+
+			$Rank = min($Rank, 5);
+			for ($i = 1; $i <= $Rank; $i++) {
+				$Collages++;
+			}
+		}
+		G::$DB->set_query_id($QueryID);
+		return $Collages;
 	}
 }
 ?>

@@ -307,7 +307,7 @@ echo $Pages;
 $Row = 'a'; // For the pretty colours
 foreach ($Collages as $Collage) {
 	list($ID, $Name, $NumTorrents, $TagList, $CategoryID, $UserID, $Subscribers, $Updated) = $Collage;
-	$Row = ($Row === 'a') ? 'b' : 'a';
+	$Row = $Row === 'a' ? 'b' : 'a';
 	$TorrentTags = new Tags($TagList);
 
 	//Print results
@@ -325,8 +325,8 @@ foreach ($Collages as $Collage) {
 <?	} ?>
 			<div class="tags"><?=$TorrentTags->format('collages.php?action=search&amp;tags=')?></div>
 		</td>
-		<td><?=number_format((int)$NumTorrents)?></td>
-		<td><?=number_format((int)$Subscribers)?></td>
+		<td class="number_column"><?=number_format((int)$NumTorrents)?></td>
+		<td class="number_column"><?=number_format((int)$Subscribers)?></td>
 		<td><?=time_diff($Updated)?></td>
 		<td><?=Users::format_username($UserID, false, false, false)?></td>
 	</tr>

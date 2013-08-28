@@ -62,69 +62,69 @@ function time_diff($TimeStamp, $Levels = 2, $Span = true, $Lowercase = false) {
 
 	if ($Years > 0 && $Levels > 0) {
 		if ($Years > 1) {
-			$Return .= $Years.' years';
+			$Return .= "$Years years";
 		} else {
-			$Return .= $Years.' year';
+			$Return .= "$Years year";
 		}
 		$Levels--;
 	}
 
 	if ($Months > 0 && $Levels > 0) {
 		if ($Return != '') {
-			$Return.=', ';
+			$Return .= ', ';
 		}
 		if ($Months > 1) {
-			$Return.=$Months.' months';
+			$Return .= "$Months months";
 		} else {
-			$Return.=$Months.' month';
+			$Return .= "$Months month";
 		}
 		$Levels--;
 	}
 
 	if ($Weeks > 0 && $Levels > 0) {
 		if ($Return != '') {
-			$Return.=', ';
+			$Return .= ', ';
 		}
-		if ($Weeks>1) {
-			$Return.=$Weeks.' weeks';
+		if ($Weeks > 1) {
+			$Return .= "$Weeks weeks";
 		} else {
-			$Return.=$Weeks.' week';
+			$Return .= "$Weeks week";
 		}
 		$Levels--;
 	}
 
 	if ($Days > 0 && $Levels > 0) {
 		if ($Return != '') {
-			$Return.=', ';
+			$Return .= ', ';
 		}
 		if ($Days > 1) {
-			$Return.=$Days.' days';
+			$Return .= "$Days days";
 		} else {
-			$Return.=$Days.' day';
+			$Return .= "$Days day";
 		}
 		$Levels--;
 	}
 
 	if ($Hours > 0 && $Levels > 0) {
 		if ($Return != '') {
-			$Return.=', ';
+			$Return .= ', ';
 		}
 		if ($Hours > 1) {
-			$Return.=$Hours.' hours';
+			$Return .= "$Hours hours";
 		} else {
-			$Return.=$Hours.' hour';
+			$Return .= "$Hours hour";
 		}
 		$Levels--;
 	}
 
 	if ($Minutes > 0 && $Levels > 0) {
 		if ($Return != '') {
-			$Return.=' and ';
+			$Return .= ' and ';
 		}
 		if ($Minutes > 1) {
-			$Return.=$Minutes.' mins';
+			$Return .= "$Minutes mins";
 		} else {
-			$Return.=$Minutes.' min';
+			$Return .= "$Minutes min";
 		}
 		$Levels--;
 	}
@@ -140,7 +140,7 @@ function time_diff($TimeStamp, $Levels = 2, $Span = true, $Lowercase = false) {
 	}
 
 	if ($Span) {
-		return '<span class="time" title="'.date('M d Y, H:i', $TimeStamp).'">'.$Return.'</span>';
+		return '<span class="time tooltip" title="'.date('M d Y, H:i', $TimeStamp).'">'.$Return.'</span>';
 	} else {
 		return $Return;
 	}

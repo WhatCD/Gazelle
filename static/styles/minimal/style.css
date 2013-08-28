@@ -29,7 +29,9 @@ textarea#quickpost{margin:0; padding:0}
 .rowb td{background-color:#232323}
 .min_padding{padding:0}
 .head, .colhead, #user table tr td.center strong{background:#454545 !important; padding:5px 7px; border:1px solid #757575 !important}
-.label{width:15%}
+.label {
+	width: 150px;
+}
 
 /* wrapper */
 #wrapper{width: 980px; margin: 0 auto;}

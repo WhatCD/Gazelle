@@ -135,6 +135,8 @@ if (!empty($_REQUEST['confirm'])) {
 					(UserID, IP, StartTime)
 				VALUES
 					('$UserID', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."')");
+			$DB->query("INSERT INTO users_notifications_settings (UserID) VALUES ('$UserID')");
+
 
 
 			$DB->query("

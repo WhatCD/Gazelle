@@ -16,7 +16,7 @@ class SiteHistoryView {
 		$Categories = SiteHistory::get_categories();
 		$SubCategories = SiteHistory::get_sub_categories();
 		$CanEdit = check_perms('users_mod') ;
-		foreach($Events as $Event) { ?>
+		foreach ($Events as $Event) { ?>
 			<div class="box">
 				<div class="head colhead_dark">
 					<div class="title">
@@ -51,8 +51,8 @@ class SiteHistoryView {
 	private static function render_tags($Tags) {
 		$Tags = explode(',', $Tags);
 		natcasesort($Tags);
-		$FormattedTags = "";
-		foreach($Tags as $Tag) {
+		$FormattedTags = '';
+		foreach ($Tags as $Tag) {
 			$FormattedTags .= "<a href='sitehistory.php?action=search&amp;tags=". $Tag . "'>" . $Tag . "</a>, ";
 		}
 		echo rtrim($FormattedTags, ', ');
@@ -87,7 +87,7 @@ class SiteHistoryView {
 						<select name="category" id="category">
 						<option value="0">Choose a category</option>
 <?						$Categories = SiteHistory::get_categories();
-						foreach($Categories as $Key => $Value) { ?>
+						foreach ($Categories as $Key => $Value) { ?>
 							<option <?=$Key == $Event['Category'] ? 'selected="selected"' : ''?> value="<?=$Key?>"><?=$Value?></option>
 <?						} ?>
 						</select>
@@ -95,7 +95,7 @@ class SiteHistoryView {
 						<select name="subcategory">
 						<option value="0">Choose a subcategory</option>
 <?						$SubCategories = SiteHistory::get_sub_categories();
-						foreach($SubCategories as $Key => $Value) { ?>
+						foreach ($SubCategories as $Key => $Value) { ?>
 							<option <?=$Key == $Event['SubCategory'] ? 'selected="selected"' : ''?> value="<?=$Key?>"><?=$Value?></option>
 <?						} ?>
 						</select>
@@ -143,7 +143,7 @@ class SiteHistoryView {
 						<select id="category" name="category" class="required">
 							<option value="0">Choose a category</option>
 <?							$Categories = SiteHistory::get_categories();
-							foreach($Categories as $Key => $Value) { ?>
+							foreach ($Categories as $Key => $Value) { ?>
 								<option <?=$Key == $Event['Category'] ? 'selected="selected"' : ''?> value="<?=$Key?>"><?=$Value?></option>
 <?							} ?>
 						</select>
@@ -155,7 +155,7 @@ class SiteHistoryView {
 						<select id="category" name="sub_category" class="required">
 							<option value="0">Choose a subcategory</option>
 <?							$SubCategories = SiteHistory::get_sub_categories();
-							foreach($SubCategories as $Key => $Value) { ?>
+							foreach ($SubCategories as $Key => $Value) { ?>
 								<option <?=$Key == $Event['SubCategory'] ? 'selected="selected"' : ''?> value="<?=$Key?>"><?=$Value?></option>
 <?							} ?>
 						</select>
@@ -168,7 +168,7 @@ class SiteHistoryView {
 						<select id="tag_list">
 							<option>Choose tags</option>
 <?							$Tags = SiteHistory::get_tags();
-							foreach($Tags as $Tag) { ?>
+							foreach ($Tags as $Tag) { ?>
 								<option><?=$Tag?></option>
 <?							} ?>
 						</select>

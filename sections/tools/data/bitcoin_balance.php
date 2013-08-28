@@ -3,19 +3,17 @@ if (!check_perms('admin_donor_log')) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/sections/donate/config.php');
-
 View::show_header('Bitcoin donation balance');
 
-$Balance = btc_balance() . ' BTC';
-$BitcoinAddresses = btc_received();
-
+$Balance = DonationsBitcoin::get_balance() . ' BTC';
+$BitcoinAddresses = DonationsBitcoin::get_received();
 $Debug->log_var($BitcoinAddresses, 'Bitcoin addresses');
-$DB->query("
+
+$UserQ = $DB->query("
 	SELECT i.UserID, i.BitcoinAddress
 	FROM users_info AS i
 		JOIN users_main AS m ON m.ID = i.UserID
-	WHERE BitcoinAddress IS NOT NULL
+	WHERE BitcoinAddress != ''
 	ORDER BY m.Username ASC");
 ?>
 <div class="thin">
@@ -40,6 +38,7 @@ while (list($UserID, $BitcoinAddress) = $DB->next_record(MYSQLI_NUM, false)) {
 		<td><?=$BitcoinAddresses[$BitcoinAddress]?> BTC</td>
 	</tr>
 <?
+	$DB->set_query_id($UserQ);
 }
 ?>
 	</table>

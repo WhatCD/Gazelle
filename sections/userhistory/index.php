@@ -49,6 +49,9 @@ if ($_GET['action']) {
 		case 'thread_subscribe':
 			require('thread_subscribe.php');
 			break;
+		case 'comments_subscribe':
+			require('comments_subscribe.php');
+			break;
 		case 'catchup':
 			require('catchup.php');
 			break;

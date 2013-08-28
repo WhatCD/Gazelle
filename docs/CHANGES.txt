@@ -1,5 +1,26 @@
 CHANGELOG
 
+2013-08-28 by porkpie
+Add an option for the styled tooltips
+
+2013-08-25 by Y
+Comment subscriptions, quote notifications and quote linking
+
+2013-08-24 by Ajax
+Notifications Manager class and noty.js library to provide popup notifications 
+
+2013-08-24 by Ajax
+Redesigned user settings page
+
+2013-08-24 by Ajax
+Tooltipster library added for tooltips
+
+2013-08-24 by Ajax
+Calendar in Staff Toolbox
+
+2013-08-24 by Ajax
+Donor Rank system and rewrite of all donation code
+
 2013-08-08 by Squiffy
 Drag and Drop ordering on the Do Not Upload page in toolbox
 

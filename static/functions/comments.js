@@ -4,15 +4,41 @@ var url = new URL();
 
 function QuoteJump(event, post) {
 	var button = event.button;
+	var url, pattern;
+	if (isNaN(post.charAt(0))) {
+		switch (post.charAt(0)) {
+			case 'a': // artist comment
+				url = 'artist';
+				break;
+			case 't': // torrent comment
+				url = 'torrents';
+				break;
+			case 'c': // collage comment
+				url = 'collages';
+				break;
+			case 'r': // request comment
+				url = 'requests';
+				break;
+			default:
+				return;
+		}
+		pattern = new RegExp(url + '\.php');
+		post = post.substr(1);
+		url = 'comments.php?action=jump&postid=' + post;
+	} else {
+		// forum post
+		url = 'forums.php?action=viewthread&postid=' + post;
+		pattern = /forums\.php/;
+	}
 	var hash = "#post" + post;
 	if (button == 0) {
-		if ($(hash).raw() != null) {
+		if ($(hash).raw() != null && location.href.match(pattern)) {
 			window.location.hash = hash;
 		} else {
-			window.open("forums.php?action=viewthread&postid="+post, '_self');
+			window.open(url, '_self');
 		}
 	} else if (button == 1) {
-		window.open("forums.php?action=viewthread&postid="+post, '_window');
+		window.open(url, '_window');
 	}
 }
 
@@ -47,11 +73,37 @@ function Quote(post, user, link) {
 			$("#quote_" + postid).text("Quote");
 		}
 	} else {
-		ajax.get("?action=get_post&post=" + postid, function(response) {
+		var target = '';
+		var requrl = '';
+		if (url.path == "inbox") {
+			requrl = 'inbox.php?action=get_post&post=' + post;
+		} else {
+			requrl = 'comments.php?action=get&postid=' + post;
+		}
+		if (link == true) {
+			if (url.path == "artist") {
+				// artist comment
+				target = 'a';
+			} else if (url.path == "torrents") {
+				// torrent comment
+				target = 't';
+			} else if (url.path == "collages") {
+				// collage comment
+				target = 'c';
+			} else if (url.path == "requests") {
+				// request comment
+				target = 'r';
+			} else {
+				// forum post
+				requrl = 'forums.php?action=get_post&post=' + post;
+			}
+			target += post;
+		}
+		ajax.get(requrl, function(response) {
 			if ($('#quickpost').raw().value !== '') {
 				$('#quickpost').raw().value = $('#quickpost').raw().value + "\n\n";
 			}
-			$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote=" + username + (link == true ? "|" + post : "") + "]" +
+			$('#quickpost').raw().value = $('#quickpost').raw().value + "[quote=" + username + (link == true ? "|" + target : "") + "]" +
 				//response.replace(/(img|aud)(\]|=)/ig,'url$2').replace(/\[url\=(https?:\/\/[^\s\[\]<>"\'()]+?)\]\[url\](.+?)\[\/url\]\[\/url\]/gi, "[url]$1[/url]")
 				html_entity_decode(response)
 			+ "[/quote]";
@@ -62,6 +114,7 @@ function Quote(post, user, link) {
 
 function Edit_Form(post,key) {
 	postid = post;
+	var boxWidth, postuserid, pmbox, inputname;
 	//If no edit is already going underway or a previous edit was finished, make the necessary dom changes.
 	if (!$('#editbox' + postid).results() || $('#editbox' + postid + '.hidden').results()) {
 		$('#reply_box').ghide();
@@ -77,19 +130,31 @@ function Edit_Form(post,key) {
 		} else {
 			pmbox = '';
 		};
+		if (location.href.match(/forums\.php/)) {
+			inputname = "post";
+		} else {
+			inputname = "postid";
+		}
 		$('#bar' + postid).raw().cancel = $('#content' + postid).raw().innerHTML;
 		$('#bar' + postid).raw().oldbar = $('#bar' + postid).raw().innerHTML;
-		$('#content' + postid).raw().innerHTML = "<div id=\"preview" + postid + "\"></div><form id=\"form" + postid + "\" method=\"post\" action=\"\">" + pmbox + "<input type=\"hidden\" name=\"auth\" value=\"" + authkey + "\" /><input type=\"hidden\" name=\"key\" value=\"" + key + "\" /><input type=\"hidden\" name=\"post\" value=\"" + postid + "\" /><textarea id=\"editbox" + postid + "\" onkeyup=\"resize('editbox" + postid + "');\" name=\"body\" cols=\"" + boxWidth + "\" rows=\"10\"></textarea></form>";
+		$('#content' + postid).raw().innerHTML = "<div id=\"preview" + postid + "\"></div><form id=\"form" + postid + "\" method=\"post\" action=\"\">" + pmbox + "<input type=\"hidden\" name=\"auth\" value=\"" + authkey + "\" /><input type=\"hidden\" name=\"key\" value=\"" + key + "\" /><input type=\"hidden\" name=\"" + inputname + "\" value=\"" + postid + "\" /><textarea id=\"editbox" + postid + "\" onkeyup=\"resize('editbox" + postid + "');\" name=\"body\" cols=\"" + boxWidth + "\" rows=\"10\"></textarea></form>";
 		$('#bar' + postid).raw().innerHTML = '<input type="button" value="Preview" onclick="Preview_Edit(' + postid + ');" /><input type="button" value="Post" onclick="Save_Edit(' + postid + ')" /><input type="button" value="Cancel" onclick="Cancel_Edit(' + postid + ');" />';
 	}
 	/* If it's the initial edit, fetch the post content to be edited.
 	 * If editing is already underway and edit is pressed again, reset the post
 	 * (keeps current functionality, move into brackets to stop from happening).
 	 */
-	ajax.get("?action=get_post&post=" + postid, function(response) {
-		$('#editbox' + postid).raw().value = html_entity_decode(response);
-		resize('editbox' + postid);
-	});
+	if (location.href.match(/forums\.php/)) {
+		ajax.get("?action=get_post&post=" + postid, function(response) {
+			$('#editbox' + postid).raw().value = html_entity_decode(response);
+			resize('editbox' + postid);
+		});
+	} else {
+		ajax.get("comments.php?action=get&postid=" + postid, function(response) {
+			$('#editbox' + postid).raw().value = html_entity_decode(response);
+			resize('editbox' + postid);
+		});
+	}
 }
 
 function Cancel_Edit(postid) {
@@ -124,26 +189,8 @@ function Save_Edit(postid) {
 			$('#editbox' + postid).ghide();
 			$('#pmbox' + postid).ghide();
 		});
-	} else if (location.href.match(/collages?\.php/)) {
-		ajax.post("collages.php?action=takeedit_comment","form" + postid, function (response) {
-			$('#bar' + postid).raw().innerHTML = "";
-			$('#preview' + postid).raw().innerHTML = response;
-			$('#editbox' + postid).ghide();
-		});
-	} else if (location.href.match(/requests\.php/)) {
-		ajax.post("requests.php?action=takeedit_comment","form" + postid, function (response) {
-			$('#bar' + postid).raw().innerHTML = "";
-			$('#preview' + postid).raw().innerHTML = response;
-			$('#editbox' + postid).ghide();
-		});
-	} else if (location.href.match(/artist\.php/)) {
-		ajax.post("artist.php?action=takeedit_post","form" + postid, function (response) {
-			$('#bar' + postid).raw().innerHTML = "";
-			$('#preview' + postid).raw().innerHTML = response;
-			$('#editbox' + postid).ghide();
-		});
 	} else {
-		ajax.post("torrents.php?action=takeedit_post","form" + postid, function (response) {
+		ajax.post("comments.php?action=take_edit","form" + postid, function (response) {
 			$('#bar' + postid).raw().innerHTML = "";
 			$('#preview' + postid).raw().innerHTML = response;
 			$('#editbox' + postid).ghide();
@@ -158,20 +205,8 @@ function Delete(post) {
 			ajax.get("forums.php?action=delete&auth=" + authkey + "&postid=" + postid, function () {
 				$('#post' + postid).ghide();
 			});
-		} else if (location.href.match(/collages?\.php/)) {
-			ajax.get("collages.php?action=delete_comment&auth=" + authkey + "&postid=" + postid, function () {
-				$('#post' + postid).ghide();
-			});
-		} else if (location.href.match(/requests\.php/)) {
-			ajax.get("requests.php?action=delete_comment&auth=" + authkey + "&postid=" + postid, function () {
-				$('#post' + postid).ghide();
-			});
-		} else if (location.href.match(/artist\.php/)) {
-			ajax.get("artist.php?action=delete_comment&auth="+authkey+ "&postid=" + postid, function () {
-				$('#post' + postid).ghide();
-			});
 		} else {
-			ajax.get("torrents.php?action=delete_post&auth=" + authkey + "&postid=" + postid, function () {
+			ajax.get("comments.php?action=take_delete&auth=" + authkey + "&postid=" + postid, function () {
 				$('#post' + postid).ghide();
 			});
 		}
@@ -353,3 +388,30 @@ StoreText.prototype = {
 		$(this.form).submit($.proxy(this.remove, this));
 	}
 };
+
+$(document).ready(function() {
+	var fadeSpeed = 300;
+	var avatars = new Array();
+	$(".double_avatar").each(function() {
+		if ($(this).data("gazelle-second-avatar")) {
+			var secondAvatar = $(this).data("gazelle-second-avatar");
+			var originalAvatar = $(this).attr("src");
+			if ($.inArray(secondAvatar, avatars) == -1) {
+				avatars.push(secondAvatar);
+				image = new Image();
+				image.src = secondAvatar;
+			}
+			$(this).mouseover(function() {
+				$(this).fadeOut(fadeSpeed, function() {
+					$(this).attr("src", secondAvatar);
+				}).fadeIn(fadeSpeed);
+			});
+			$(this).mouseout(function() {
+				$(this).fadeOut(fadeSpeed, function() {
+					$(this).attr("src", originalAvatar);
+				}).fadeIn(fadeSpeed);
+			});
+		}
+
+	});
+});

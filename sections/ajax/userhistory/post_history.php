@@ -36,11 +36,6 @@ list($Page, $Limit) = Format::page_limit($PerPage);
 $UserInfo = Users::user_info($UserID);
 extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', 'Title', 'Avatar', 'Donor', 'Warned'))));
 
-if ($LoggedUser['CustomForums']) {
-	unset($LoggedUser['CustomForums']['']);
-	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
-}
 $ViewingOwn = ($UserID === $LoggedUser['ID']);
 $ShowUnread = ($ViewingOwn && (!isset($_GET['showunread']) || !!$_GET['showunread']));
 $ShowGrouped = ($ViewingOwn && (!isset($_GET['group']) || !!$_GET['group']));
@@ -58,17 +53,7 @@ if ($ShowGrouped) {
 	$SQL .= '
 			LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = '.$UserID.'
-			AND ((f.MinClassRead <= '.$LoggedUser['Class'];
-	if (!empty($RestrictedForums)) {
-		$SQL .= "
-			AND f.ID NOT IN ('$RestrictedForums')";
-	}
-	$SQL .= ')';
-	if (!empty($PermittedForums)) {
-		$SQL .= "
-			OR f.ID IN ('$PermittedForums')";
-	}
-	$SQL .= ')';
+			AND ' . Forums::user_forums_sql();
 	if ($ShowUnread) {
 		$SQL .= '
 			AND ((t.IsLocked = \'0\' OR t.IsSticky = \'1\')
@@ -145,21 +130,7 @@ if ($ShowGrouped) {
 				JOIN forums AS f ON f.ID = t.ForumID
 				LEFT JOIN forums_last_read_topics AS l ON l.UserID = $UserID AND l.TopicID = t.ID
 			WHERE p.AuthorID = $UserID
-				AND ((f.MinClassRead <= ".$LoggedUser['Class'];
-
-	if (!empty($RestrictedForums)) {
-		$SQL .= "
-					AND f.ID NOT IN ('$RestrictedForums')";
-	}
-	$SQL .= '
-					)';
-
-	if (!empty($PermittedForums)) {
-		$SQL .= "
-					OR f.ID IN ('$PermittedForums')";
-	}
-	$SQL .= '
-				)';
+				AND " . Forums::user_forums_sql();
 
 	if ($ShowUnread) {
 		$SQL .= '

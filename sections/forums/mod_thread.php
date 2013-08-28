@@ -10,6 +10,7 @@ threads will linger with the 'Moved' flag until they're knocked off
 the front page.
 
 \*********************************************************************/
+define("TRASH_FORUM_ID", 12);
 
 // Quick SQL injection check
 if (!is_number($_POST['threadid'])) {
@@ -40,6 +41,7 @@ $Title = db_string($_POST['title']);
 $RawTitle = $_POST['title'];
 $ForumID = (int)$_POST['forumid'];
 $Page = (int)$_POST['page'];
+$Action = "";
 
 
 if ($Locked == 1) {
@@ -53,13 +55,14 @@ $DB->query("
 	SELECT
 		t.ForumID,
 		f.MinClassWrite,
-		COUNT(p.ID) AS Posts
+		COUNT(p.ID) AS Posts,
+		t.AuthorID
 	FROM forums_topics AS t
 		LEFT JOIN forums_posts AS p ON p.TopicID = t.ID
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
 	WHERE t.ID = '$TopicID'
 	GROUP BY p.TopicID");
-list($OldForumID, $MinClassWrite, $Posts) = $DB->next_record();
+list($OldForumID, $MinClassWrite, $Posts, $ThreadAuthorID) = $DB->next_record();
 
 if ($MinClassWrite > $LoggedUser['Class']) {
 	error(403);
@@ -134,11 +137,17 @@ if (isset($_POST['delete'])) {
 		$Cache->commit_transaction(0);
 		$Cache->delete_value("thread_{$TopicID}_info");
 
+		// subscriptions
+		Subscriptions::move_subscriptions('forums', $TopicID, null);
+
+		// quote notifications
+		Subscriptions::flush_quote_notifications('forums', $TopicID);
+		$DB->query("DELETE FROM users_notify_quoted WHERE Page = 'forums' AND PageID = '".$TopicID."'");
+
 		header('Location: forums.php?action=viewforum&forumid='.$ForumID);
 	} else {
 		error(403);
 	}
-
 } else { // If we're just editing it
 
 	$Cache->begin_transaction("thread_{$TopicID}_info");
@@ -283,6 +292,10 @@ if (isset($_POST['delete'])) {
 		$Cache->update_row($ForumID, $UpdateArray);
 
 		$Cache->commit_transaction(0);
+
+		if ($ForumID == TRASH_FORUM_ID) {
+			$Action = "trashing";
+		}
 	} else { // Editing
 		$DB->query("
 			SELECT LastPostTopicID
@@ -313,6 +326,24 @@ if (isset($_POST['delete'])) {
 			SET Closed = '0'
 			WHERE TopicID = '$TopicID'");
 		$Cache->delete_value("polls_$TopicID");
+	}
+	if (isset($Action)) {
+		switch ($Action) {
+			case "implementing":
+				$Notification = "Your suggestion '$NewLastTitle' has been implemented";
+				break;
+			case "rejecting":
+				$Notification = "Your suggestion '$NewLastTitle' has been rejected";
+				break;
+			case "trashing":
+				$Notification = "Your thread '$NewLastTitle' has been trashed";
+				break;
+			default:
+				break;
+		}
+		if (isset($Notification)) {
+			NotificationsManager::notify_user($ThreadAuthorID, NotificationsManager::FORUMALERTS, $Notification, 'forums.php?action=viewthread&threadid='.$TopicID);
+		}
 	}
 	header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.$Page);
 }

@@ -200,6 +200,12 @@ switch ($_REQUEST['action']) {
 	case 'change_log':
 		include('managers/change_log.php');
 		break;
+	case 'global_notification':
+		include('managers/global_notification.php');
+		break;
+	case 'take_global_notification':
+		include('managers/take_global_notification.php');
+		break;
 	case 'permissions':
 		if (!check_perms('admin_manage_permissions')) {
 			error(403);
@@ -348,6 +354,9 @@ switch ($_REQUEST['action']) {
 		break;
 
 
+	case 'donor_rewards':
+		include('data/donor_rewards.php');
+		break;
 	case 'upscale_pool':
 		include('data/upscale_pool.php');
 		break;
@@ -472,7 +481,15 @@ switch ($_REQUEST['action']) {
 	case 'bbcode_sandbox':
 		include('misc/bbcode_sandbox.php');
 		break;
-
+	case 'calendar':
+		include('managers/calendar.php');
+		break;
+	case 'get_calendar_event':
+		include('managers/ajax_get_calendar_event.php');
+		break;
+	case 'take_calendar_event':
+		include('managers/ajax_take_calendar_event.php');
+		break;
 	default:
 		include(SERVER_ROOT.'/sections/tools/tools.php');
 }

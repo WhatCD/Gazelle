@@ -380,7 +380,7 @@ if (!empty($SearchWords['taglist'])) {
 	}
 	if (!empty($Tags['exclude'])) {
 		foreach ($Tags['exclude'] as &$Tag) {
-			$Tag = '!'.Sphinxql::escape_string(substr($Tag,1));
+			$Tag = '!'.Sphinxql::escape_string(substr($Tag, 1));
 		}
 	}
 
@@ -672,9 +672,12 @@ View::show_header('Browse Torrents', 'browse');
 				<td colspan="4" class="center ft_edition_expand"><a href="#" class="brackets" onclick="ToggleEditionRows(); return false;">Click here to toggle searching for specific remaster information</a></td>
 			</tr>
 <?
-if (Format::form('remastertitle', true) == '' && Format::form('remasteryear', true) == '' &&
-	Format::form('remasterrecordlabel', true) == '' && Format::form('remastercataloguenumber', true) == '') {
-		$Hidden = ' hidden';
+if (Format::form('remastertitle', true) == ''
+	&& Format::form('remasteryear', true) == ''
+	&& Format::form('remasterrecordlabel', true) == ''
+	&& Format::form('remastercataloguenumber', true) == ''
+) {
+	$Hidden = ' hidden';
 } else {
 	$Hidden = '';
 }
@@ -778,7 +781,7 @@ if (Format::form('remastertitle', true) == '' && Format::form('remasteryear', tr
 			<tr id="tagfilter">
 				<td class="label">Tags (comma-separated):</td>
 				<td colspan="3" class="ft_taglist">
-					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_', '.', display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
+					<input type="text" size="40" id="tags" name="taglist" class="tooltip inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_', '.', display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
 					<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type', 0, 'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 					<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type', 1, 'checked')?> /><label for="tags_type1"> All</label>
 				</td>
@@ -1020,8 +1023,8 @@ foreach ($Results as $Result) {
 $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
 ?>
 		<td class="center">
-			<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-				<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
+			<div id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
+				<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
 			</div>
 		</td>
 		<td class="center cats_col">
@@ -1029,27 +1032,27 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			</div>
 		</td>
 		<td colspan="2" class="big_info">
-<?	if ($LoggedUser['CoverArt']) : ?>
+<?	if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
 				<? ImageTools::cover_thumb($GroupInfo['WikiImage'], $GroupInfo['CategoryID']) ?>
 			</div>
-<?	endif; ?>
+<?	} ?>
 			<div class="group_info clear">
 				<?=$DisplayName?>
 <?	if (in_array($GroupID, $Bookmarks)) { ?>
-				<span class="remove_bookmark float_right"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" title="Remove bookmark" onclick="Unbookmark('torrent',<?=$GroupID?>,'Bookmark');return false;">Unbookmark</a></span>
+				<span class="remove_bookmark float_right"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a></span>
 <?	} else { ?>
-				<span class="add_bookmark float_right"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" title="Add bookmark" onclick="Bookmark('torrent',<?=$GroupID?>,'Unbookmark');return false;">Bookmark</a></span>
+				<span class="add_bookmark float_right"><a href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a></span>
 <?	} ?>
 				<br />
 				<div class="tags"><?=$TorrentTags->format('torrents.php?'.$Action.'&amp;taglist=')?></div>
 			</div>
 		</td>
-		<td class="nobr"><?=time_diff($GroupTime,1)?></td>
-		<td class="nobr"><?=Format::get_size($MaxSize)?> (Max)</td>
-		<td><?=number_format($TotalSnatched)?></td>
-		<td<?=(($TotalSeeders == 0) ? ' class="r00"' : '')?>><?=number_format($TotalSeeders)?></td>
-		<td><?=number_format($TotalLeechers)?></td>
+		<td class="nobr"><?=time_diff($GroupTime, 1)?></td>
+		<td class="number_column nobr"><?=Format::get_size($MaxSize)?> (Max)</td>
+		<td class="number_column"><?=number_format($TotalSnatched)?></td>
+		<td class="number_column<?=(($TotalSeeders == 0) ? ' r00' : '')?>"><?=number_format($TotalSeeders)?></td>
+		<td class="number_column"><?=number_format($TotalLeechers)?></td>
 	</tr>
 <?
 		$LastRemasterYear = '-';
@@ -1092,7 +1095,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
-		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Data, $GroupInfo)?></strong></td>
+		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Data, $GroupInfo)?></strong></td>
 	</tr>
 <?
 			}
@@ -1107,18 +1110,18 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Data['HasFile'] ? 'DL' : 'Missing'?></a>
 <?			if (Torrents::can_use_token($Data)) { ?>
-				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?			} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
-			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Data)?><? if ($Reported) { ?> / <strong class="torrent_label tl_reported" title="Reported">Reported</strong><? } ?></a>
+			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Data)?><? if ($Reported) { ?> / <strong class="torrent_label tl_reported">Reported</strong><? } ?></a>
 		</td>
 		<td><?=$Data['FileCount']?></td>
 		<td class="nobr"><?=time_diff($Data['Time'], 1)?></td>
-		<td class="nobr"><?=Format::get_size($Data['Size'])?></td>
-		<td><?=number_format($Data['Snatched'])?></td>
-		<td<?=($Data['Seeders'] == 0) ? ' class="r00"' : ''?>><?=number_format($Data['Seeders'])?></td>
-		<td><?=number_format($Data['Leechers'])?></td>
+		<td class="number_column nobr"><?=Format::get_size($Data['Size'])?></td>
+		<td class="number_column"><?=number_format($Data['Snatched'])?></td>
+		<td class="number_column<?=($Data['Seeders'] == 0) ? ' r00' : ''?>"><?=number_format($Data['Seeders'])?></td>
+		<td class="number_column"><?=number_format($Data['Leechers'])?></td>
 	</tr>
 <?
 		}
@@ -1150,30 +1153,30 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 			<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($CategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 		</td>
 		<td class="big_info">
-<?		if ($LoggedUser['CoverArt']) : ?>
+<?		if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
-				<? ImageTools::cover_thumb($GroupInfo['WikiImage'], $CategoryID) ?>
+				<?=ImageTools::cover_thumb($GroupInfo['WikiImage'], $CategoryID) ?>
 			</div>
-<?		endif; ?>
+<?		} ?>
 			<div class="group_info clear">
 				<span>
 					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Data)) { ?>
-					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?		} ?>
 					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 				</span>
 				<?=$DisplayName?>
 				<div class="torrent_info"><?=$ExtraInfo?></div>
-				<div class="tags"><?=$TorrentTags->format('torrents.php?'.$Action.'&amp;taglist=')?></div>
+				<div class="tags"><?=$TorrentTags->format("torrents.php?$Action&amp;taglist=")?></div>
 			</div>
 		</td>
 		<td><?=$Data['FileCount']?></td>
-		<td class="nobr"><?=time_diff($Data['Time'],1)?></td>
-		<td class="nobr"><?=Format::get_size($Data['Size'])?></td>
-		<td><?=number_format($Data['Snatched'])?></td>
-		<td<?=($Data['Seeders'] == 0) ? ' class="r00"' : ''?>><?=number_format($Data['Seeders'])?></td>
-		<td><?=number_format($Data['Leechers'])?></td>
+		<td class="nobr"><?=time_diff($Data['Time'], 1)?></td>
+		<td class="number_column nobr"><?=Format::get_size($Data['Size'])?></td>
+		<td class="number_column"><?=number_format($Data['Snatched'])?></td>
+		<td class="number_column<?=($Data['Seeders'] == 0) ? ' r00' : ''?>"><?=number_format($Data['Seeders'])?></td>
+		<td class="number_column"><?=number_format($Data['Leechers'])?></td>
 	</tr>
 <?
 	}

@@ -19,21 +19,22 @@ class INVITE_TREE {
 	}
 
 	function make_tree() {
+		$QueryID = G::$DB->get_query_id();
+
 		$UserID = $this->UserID;
-		global $DB;
 ?>
 		<div class="invitetree pad">
 <?
-		$DB->query("
+		G::$DB->query("
 			SELECT TreePosition, TreeID, TreeLevel
 			FROM invite_tree
 			WHERE UserID = $UserID");
-		list($TreePosition, $TreeID, $TreeLevel) = $DB->next_record(MYSQLI_NUM, false);
+		list($TreePosition, $TreeID, $TreeLevel) = G::$DB->next_record(MYSQLI_NUM, false);
 
 		if (!$TreeID) {
 			return;
 		}
-		$DB->query("
+		G::$DB->query("
 			SELECT TreePosition
 			FROM invite_tree
 			WHERE TreeID = $TreeID
@@ -41,12 +42,12 @@ class INVITE_TREE {
 				AND TreePosition > $TreePosition
 			ORDER BY TreePosition ASC
 			LIMIT 1");
-		if ($DB->has_results()) {
-			list($MaxPosition) = $DB->next_record(MYSQLI_NUM, false);
+		if (G::$DB->has_results()) {
+			list($MaxPosition) = G::$DB->next_record(MYSQLI_NUM, false);
 		} else {
 			$MaxPosition = false;
 		}
-		$TreeQuery = $DB->query("
+		$TreeQuery = G::$DB->query("
 			SELECT
 				it.UserID,
 				Enabled,
@@ -90,7 +91,7 @@ class INVITE_TREE {
 
 		// We store this in an output buffer, so we can show the summary at the top without having to loop through twice
 		ob_start();
-		while (list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = $DB->next_record()) {
+		while (list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = G::$DB->next_record()) {
 
 			// Do stats
 			$Count++;
@@ -146,7 +147,7 @@ class INVITE_TREE {
 ?>
 
 <?			$PreviousTreeLevel = $TreeLevel;
-			$DB->set_query_id($TreeQuery);
+			G::$DB->set_query_id($TreeQuery);
 		}
 
 		$Tree = ob_get_clean();
@@ -235,6 +236,7 @@ class INVITE_TREE {
 		<?=$Tree?>
 		</div>
 <?
+		G::$DB->set_query_id($QueryID);
 	}
 }
 ?>

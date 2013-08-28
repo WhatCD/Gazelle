@@ -6,8 +6,8 @@ $(document).ready(function () {
 		$('.preview_wrapper').removeClass('selected');
 		radiobutton.parent().parent().addClass('selected');
 	}
-	// If an overlay is clicked, select the right item in the drop-down and clear the custom CSS field
-	$('div.preview_image').click(function() {
+	// If the input is clicked, redirect it to the overlay click event
+	$('input[name="stylesheet_gallery"]').change(function() {
 		$('.preview_wrapper').removeClass('selected');
 		var parent = $(this).parent();
 		parent.addClass('selected');
@@ -15,10 +15,6 @@ $(document).ready(function () {
 		radiobutton.prop('checked', true);
 		$('select#stylesheet').val(radiobutton.attr('value'));
 		$('input#styleurl').val('');
-	})
-	// If the input is clicked, redirect it to the overlay click event
-	$('input[name="stylesheet_gallery"]').change(function() {
-		$(this).parent().parent().find('div.preview_image').click();
 	})
 	// If the drop-down is changed, select the appropriate item in gallery, clear the custom CSS field
 	$('select#stylesheet').change(function() {

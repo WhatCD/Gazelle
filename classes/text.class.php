@@ -727,9 +727,10 @@ class TEXT {
 					}
 					if (!empty($Block['Attr'])) {
 						$Exploded = explode('|', $this->to_html($Block['Attr']));
-						if (isset($Exploded[1]) && is_numeric($Exploded[1])) {
+						if (isset($Exploded[1]) && (is_numeric($Exploded[1]) || (in_array($Exploded[1][0], array('a', 't', 'c', 'r')) && is_numeric(substr($Exploded[1], 1))))) {
+							// the part after | is either a number or starts with a, t, c or r, followed by a number (forum post, artist comment, torrent comment, collage comment or request comment, respectively)
 							$PostID = trim($Exploded[1]);
-							$Str .= '<a href="forums.php?action=viewthread&amp;postid='.$PostID.'" onclick="QuoteJump(event, '.$PostID.'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
+							$Str .= '<a href="#" onclick="QuoteJump(event, \''.$PostID.'\'); return false;"><strong class="quoteheader">'.$Exploded[0].'</strong> wrote: </a>';
 						}
 						else {
 							$Str .= '<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
@@ -747,8 +748,7 @@ class TEXT {
 					$Str .= '<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
 					break;
 				case 'mature':
-					global $LoggedUser;
-					if ($LoggedUser['EnableMatureContent']) {
+					if (G::$LoggedUser['EnableMatureContent']) {
 						if (!empty($Block['Attr'])) {
 							$Str .= '<strong class="mature" style="font-size: 1.2em;">Mature content:</strong><strong> ' . $Block['Attr'] . '</strong><br /> <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
 							$Str .= '<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
@@ -758,7 +758,7 @@ class TEXT {
 						}
 					}
 					else {
-						$Str .= '<span class="mature_blocked" style="font-style: italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content</a> has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . $LoggedUser['ID'] . '">settings</a>.</span>';
+						$Str .= '<span class="mature_blocked" style="font-style: italic;"><a href="wiki.php?action=article&amp;id=1063">Mature content</a> has been blocked. You can choose to view mature content by editing your <a href="user.php?action=edit&amp;userid=' . G::$LoggedUser['ID'] . '">settings</a>.</span>';
 					}
 					break;
 				case 'img':
@@ -905,8 +905,7 @@ class TEXT {
 	}
 
 	private function smileys ($Str) {
-		global $LoggedUser;
-		if (!empty($LoggedUser['DisableSmileys'])) {
+		if (!empty(G::$LoggedUser['DisableSmileys'])) {
 			return $Str;
 		}
 		$Str = strtr($Str, $this->Smileys);

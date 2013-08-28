@@ -104,8 +104,7 @@ while (list($GroupID) = $DB->next_record()) {
 $DB->query("
 	UPDATE torrents
 	SET FreeTorrent = '0',
-		FreeLeechType = '0',
-		flags = '2'
+		FreeLeechType = '0'
 	WHERE FreeTorrent = '1'
 		AND FreeLeechType = '3'
 		AND Time < '$TimeMinus'");
@@ -482,7 +481,6 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 		$Message = 'You have downloaded more then 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://' . SSL_SITE_URL . '/wiki.php?action=article&amp;id=110';
 		foreach ($Users as $TorrentPass => $UserID) {
 			Misc::send_pm($UserID, 0, $Subject, $Message);
-			send_irc('PRIVMSG #reports :!leechdisabled Downloaded 10 GB+ on Ratio Watch. https://' . SSL_SITE_URL . "/user.php?id=$UserID");
 			Tracker::update_tracker('update_user', array('passkey' => $TorrentPass, 'can_leech' => '0'));
 		}
 
@@ -932,15 +930,6 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 	//------------- Delete dead torrents ------------------------------------//
 
 	sleep(10);
-	//remove dead torrents that were never announced to -- XBTT will not delete those with a pid of 0, only those that belong to them (valid pids)
-	
-	$DB->query("
-		DELETE FROM torrents
-		WHERE flags = 1
-			AND pid = 0");
-	sleep(10);
-	
-
 
 	$i = 0;
 	$DB->query("
@@ -1186,7 +1175,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 		}
 
 		$i = 1;
-		foreach ($Top10 as $Torrent) :
+		foreach ($Top10 as $Torrent) {
 			list($TorrentID, $GroupID, $GroupName, $GroupCategoryID, $TorrentTags,
 				$Format, $Encoding, $Media, $Scene, $HasLog, $HasCue, $LogScore, $Year, $GroupYear,
 				$RemasterTitle, $Snatched, $Seeders, $Leechers, $Data) = $Torrent;
@@ -1202,7 +1191,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 			$DisplayName .= $GroupName;
 
 			if ($GroupCategoryID == 1 && $GroupYear > 0) {
-				$DisplayName.= " [$GroupYear]";
+				$DisplayName .= " [$GroupYear]";
 			}
 
 			// append extra info to torrent title
@@ -1254,7 +1243,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 				VALUES
 					($HistoryID, $i, $TorrentID, '" . db_string($TitleString) . "', '" . db_string($TagString) . "')");
 			$i++;
-		endforeach;
+		} //foreach ($Top10 as $Torrent)
 
 		// Send warnings to uploaders of torrents that will be deleted this week
 		$DB->query("
@@ -1306,6 +1295,8 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 		WHERE Date < NOW() - INTERVAL 1 MONTH
 			AND Status = 'Open'
 			AND AssignedToUser IS NULL");
+
+	Donations::schedule();
 
 }
 /*************************************************************************\

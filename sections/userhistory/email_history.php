@@ -123,12 +123,12 @@ foreach ($History as $Key => $Values) {
 							ue.IP
 						FROM users_history_emails AS ue, users_main
 						WHERE ue.Email = '".db_string($Values['Email'])."'
-							AND UserID != ".$UserID."
+							AND UserID != $UserID
 							AND ID = UserID");
 		while (list($UserID2, $Time, $IP) = $DB->next_record()) { ?>
 	</tr>
 	<tr>
-		<td />
+		<td></td>
 		<td><?=time_diff($Time)?></td>
 		<td><?=display_str($IP)?></td>
 <?

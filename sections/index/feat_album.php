@@ -9,7 +9,7 @@ if ($FeaturedAlbum === false) {
 			fa.ThreadID,
 			fa.Title
 		FROM featured_albums AS fa
-			JOIN torrents_group AS tg ON tg.ID=fa.GroupID
+			JOIN torrents_group AS tg ON tg.ID = fa.GroupID
 		WHERE Ended = 0');
 	$FeaturedAlbum = $DB->next_record();
 	$Cache->cache_value('featured_album', $FeaturedAlbum, 0);

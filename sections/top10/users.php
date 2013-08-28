@@ -20,6 +20,7 @@ View::show_header('Top 10 Users');
 			<a href="top10.php?type=users" class="brackets"><strong>Users</strong></a>
 			<a href="top10.php?type=tags" class="brackets">Tags</a>
 			<a href="top10.php?type=votes" class="brackets">Favorites</a>
+			<a href="top10.php?type=donors" class="brackets">Donors</a>
 		</div>
 	</div>
 <?
@@ -154,17 +155,15 @@ function generate_user_table($Caption, $Tag, $Details, $Limit) {
 	<tr class="row<?=$Highlight?>">
 		<td class="center"><?=$Rank?></td>
 		<td><?=Users::format_username($Detail['ID'], false, false, false)?></td>
-		<td style="text-align: right;"><?=Format::get_size($Detail['Uploaded'])?></td>
-		<td style="text-align: right;" title="Upload speed is reported in base 2 in bytes per second, not bits per second."><?=Format::get_size($Detail['UpSpeed'])?>/s</td>
-		<td style="text-align: right;"><?=Format::get_size($Detail['Downloaded'])?></td>
-		<td style="text-align: right;" title="Download speed is reported in base 2 in bytes per second, not bits per second."><?=Format::get_size($Detail['DownSpeed'])?>/s</td>
-		<td style="text-align: right;"><?=number_format($Detail['NumUploads'])?></td>
-		<td style="text-align: right;"><?=Format::get_ratio_html($Detail['Uploaded'], $Detail['Downloaded'])?></td>
-		<td style="text-align: right;"><?=time_diff($Detail['JoinDate'])?></td>
+		<td class="number_column"><?=Format::get_size($Detail['Uploaded'])?></td>
+		<td class="number_column tooltip" title="Upload speed is reported in base 2 in bytes per second, not bits per second."><?=Format::get_size($Detail['UpSpeed'])?>/s</td>
+		<td class="number_column"><?=Format::get_size($Detail['Downloaded'])?></td>
+		<td class="number_column tooltip" title="Download speed is reported in base 2 in bytes per second, not bits per second."><?=Format::get_size($Detail['DownSpeed'])?>/s</td>
+		<td class="number_column"><?=number_format($Detail['NumUploads'])?></td>
+		<td class="number_column"><?=Format::get_ratio_html($Detail['Uploaded'], $Detail['Downloaded'])?></td>
+		<td class="number_column"><?=time_diff($Detail['JoinDate'])?></td>
 	</tr>
-<?
-	}
-?>
+<?	} ?>
 </table><br />
 <?
 }

@@ -219,11 +219,11 @@ View::show_header('Reports V2!', 'reportsv2,bbcode');
 </div>
 <div class="buttonbox thin center">
 <?	if ($View !== 'resolved') { ?>
-		<span title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-resolve" /></span>
-		<span title="Assigns all of the reports on the page to you!"><input type="button" onclick="Grab();" value="Claim all" /></span>
+		<span class="tooltip" title="Resolves *all* checked reports with their respective resolutions"><input type="button" onclick="MultiResolve();" value="Multi-resolve" /></span>
+		<span class="tooltip" title="Assigns all of the reports on the page to you!"><input type="button" onclick="Grab();" value="Claim all" /></span>
 <?	}
 	if ($View === 'staff' && $LoggedUser['ID'] == $ID) { ?>
-		| <span title="Unclaim all of the reports currently displayed"><input type="button" onclick="GiveBack();" value="Unclaim all" /></span>
+		| <span class="tooltip" title="Unclaim all of the reports currently displayed"><input type="button" onclick="GiveBack();" value="Unclaim all" /></span>
 <?	} ?>
 </div>
 <br />
@@ -535,7 +535,7 @@ if (count($Reports) === 0) {
 						</tr>
 						<tr>
 							<td class="label">
-								<a href="javascript:Load('<?=$ReportID?>')" title="Click here to reset the resolution options to their default values.">Resolve:</a>
+								<a href="javascript:Load('<?=$ReportID?>')" class="tooltip" title="Click here to reset the resolution options to their default values.">Resolve</a>
 							</td>
 							<td colspan="3">
 								<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>);">
@@ -553,12 +553,12 @@ if (count($Reports) === 0) {
 								</select>
 								<span id="options<?=$ReportID?>">
 <?	if (check_perms('users_mod')) { ?>
-									<span title="Delete torrent?">
+									<span class="tooltip" title="Delete torrent?">
 										<label for="delete<?=$ReportID?>"><strong>Delete</strong></label>
 										<input type="checkbox" name="delete" id="delete<?=$ReportID?>" />
 									</span>
 <?	} ?>
-									<span title="Warning length in weeks">
+									<span class="tooltip" title="Warning length in weeks">
 										<strong>Warning</strong>
 										<select name="warning" id="warning<?=$ReportID?>">
 <?		for ($i = 0; $i < 9; $i++) { ?>
@@ -566,19 +566,19 @@ if (count($Reports) === 0) {
 <?		} ?>
 										</select>
 									</span>
-									<span>
+									<span class="tooltip" title="Remove upload privileges?">
 										<label for="upload<?=$ReportID?>"><strong>Remove upload privileges</strong></label>
 										<input type="checkbox" name="upload" id="upload<?=$ReportID?>" />
 									</span>
 									&nbsp;&nbsp;
-									<span title="Update resolve type">
+									<span class="tooltip" title="Update resolve type">
 										<input type="button" name="update_resolve" id="update_resolve<?=$ReportID?>" value="Update now" onclick="UpdateResolve(<?=$ReportID?>);" />
 									</span>
 								</span>
 								</td>
 						</tr>
 						<tr>
-							<td class="label">
+							<td class="label tooltip" title="Uploader: Appended to the regular message unless using &quot;Send now&quot;. Reporter: Must be used with &quot;Send now&quot;.">
 								PM
 								<select name="pm_type" id="pm_type<?=$ReportID?>">
 									<option value="Uploader">Uploader</option>
@@ -586,9 +586,7 @@ if (count($Reports) === 0) {
 								</select>:
 							</td>
 							<td colspan="3">
-								<span title="Uploader: Appended to the regular message unless using &quot;Send now&quot;. Reporter: Must be used with &quot;Send now&quot;.">
-									<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
-								</span>
+								<textarea name="uploader_pm" id="uploader_pm<?=$ReportID?>" cols="50" rows="1"></textarea>
 								<input type="button" value="Send now" onclick="SendPM(<?=$ReportID?>);" />
 							</td>
 						</tr>

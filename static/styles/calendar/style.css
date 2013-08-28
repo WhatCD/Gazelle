@@ -1,0 +1,58 @@
+table.calendar {
+	border-left:1px solid #999;
+	margin-top: 10px;
+}
+
+td.calendar-day {
+	min-height:80px;
+	font-size:11px;
+	position:relative;
+}
+
+td.calendar-day:hover {
+	background:#eceff5;
+}
+
+td.calendar-day-np {
+	background:#eee;
+	min-height:80px;
+}
+
+td.calendar-day-head {
+	background:#ccc;
+	font-weight:700;
+	text-align:center;
+	width:120px;
+	border-bottom:1px solid #999;
+	border-top:1px solid #999;
+	border-right:1px solid #999;
+	padding:5px;
+}
+
+div.day-number {
+	background:#999;
+	color:#fff;
+	font-weight:700;
+	float:right;
+	width:20px;
+	text-align:center;
+	margin:-5px -5px 0 0;
+	padding:2px;
+	cursor: pointer;
+}
+
+td.calendar-day,td.calendar-day-np {
+	width:120px;
+	border-bottom:1px solid #999;
+	border-right:1px solid #999;
+	padding:5px;
+	height:60px;
+}
+
+* html div.calendar-day,* html div.calendar-day-np {
+	height:80px;
+}
+
+.event_form_table #body {
+	width: 250px !important;
+}

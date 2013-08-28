@@ -1,5 +1,4 @@
 <?
-
 $RequestTax = 0.1;
 
 // Minimum and default amount of upload to remove from the user when they vote.
@@ -17,7 +16,7 @@ if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	json_die("failure");
 }
 
-$RequestID = $_GET['id'];
+$RequestID = (int)$_GET['id'];
 
 //First things first, lets get the data for the request.
 
@@ -92,47 +91,7 @@ for ($i = 0; $i < $VoteMax; $i++) {
 }
 reset($RequestVotes['Voters']);
 
-$Results = $Cache->get_value('request_comments_'.$RequestID);
-if ($Results === false) {
-	$DB->query("
-		SELECT COUNT(c.ID)
-		FROM requests_comments as c
-		WHERE c.RequestID = '$RequestID'");
-	list($Results) = $DB->next_record();
-	$Cache->cache_value('request_comments_'.$RequestID, $Results, 0);
-}
-
-list($Page, $Limit) = Format::page_limit(TORRENT_COMMENTS_PER_PAGE, $Results);
-
-// Get the cache catalogue
-$CatalogueID = floor((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) / THREAD_CATALOGUE);
-$CatalogueLimit = $CatalogueID * THREAD_CATALOGUE . ', ' . THREAD_CATALOGUE;
-
-//---------- Get some data to start processing
-
-// Cache catalogue from which the page is selected, allows block caches and future ability to specify posts per page
-$Catalogue = $Cache->get_value('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID);
-if ($Catalogue === false) {
-	$DB->query("
-			SELECT
-				c.ID,
-				c.AuthorID,
-				c.AddedTime,
-				c.Body,
-				c.EditedUserID,
-				c.EditedTime,
-				u.Username
-			FROM requests_comments as c
-				LEFT JOIN users_main AS u ON u.ID=c.EditedUserID
-			WHERE c.RequestID = '$RequestID'
-			ORDER BY c.ID
-			LIMIT $CatalogueLimit");
-	$Catalogue = $DB->to_array(false,MYSQLI_ASSOC);
-	$Cache->cache_value('request_comments_'.$RequestID.'_catalogue_'.$CatalogueID, $Catalogue, 0);
-}
-
-//This is a hybrid to reduce the catalogue down to the page elements: We use the page limit % catalogue
-$Thread = array_slice($Catalogue, ((TORRENT_COMMENTS_PER_PAGE * $Page - TORRENT_COMMENTS_PER_PAGE) % THREAD_CATALOGUE), TORRENT_COMMENTS_PER_PAGE, true);
+list($NumComments, $Page, $Thread) = Comments::load('requests', $RequestID, false);
 
 $JsonRequestComments = array();
 foreach ($Thread as $Key => $Post) {
@@ -197,7 +156,7 @@ json_die("success", array(
 	'tags' => $JsonTags,
 	'comments' => $JsonRequestComments,
 	'commentPage' => (int) $Page,
-	'commentPages' => (int) ceil($Results / TORRENT_COMMENTS_PER_PAGE),
+	'commentPages' => (int) ceil($NumComments / TORRENT_COMMENTS_PER_PAGE),
 	'recordLabel' => $RecordLabel,
 	'oclc' => $OCLC
 ));

@@ -121,7 +121,7 @@ if (!$NumResults) {
 			} elseif (count($Artists) > 0) {
 				$DisplayName .= Artists::display_artists(array('1' => $Artists));
 			}
-			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 			if ($GroupYear > 0) {
 				$DisplayName = "$DisplayName [$GroupYear]";
 			}
@@ -137,16 +137,16 @@ if (!$NumResults) {
 ?>
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$CollageID?><?=$GroupID?>">
 				<td class="center">
-					<div title="View" id="showimg_<?=$CollageID?><?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$CollageID?><?=$GroupID?>, this, event)" title="Collapse this group"></a>
+					<div id="showimg_<?=$CollageID?><?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
+						<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$CollageID?><?=$GroupID?>, this, event);" title="Expand this group. Hold &quot;Ctrl&quot; while clicking to expand all groups on this page."></a>
 					</div>
 				</td>
 				<td colspan="5" class="big_info">
-<? if ($LoggedUser['CoverArt']) : ?>
+<? if ($LoggedUser['CoverArt']) { ?>
 					<div class="group_image float_left clear">
 						<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 					</div>
-<? endif; ?>
+<? } ?>
 					<div class="group_info clear">
 						<strong><?=$DisplayName?></strong>
 						<div class="tags"><?=$TorrentTags->format()?></tags>
@@ -180,7 +180,7 @@ if (!$NumResults) {
 						$EditionID++;
 ?>
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition<?=$SnatchedGroupClass?> hidden">
-		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
+		<td colspan="6" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$CollageID?><?=$GroupID?>, <?=$EditionID?>, this, event);" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
 	</tr>
 <?
 					}
@@ -197,10 +197,10 @@ if (!$NumResults) {
 			</span>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
-		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : '' ?>><?=number_format($Torrent['Seeders'])?></td>
-		<td><?=number_format($Torrent['Leechers'])?></td>
+		<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Snatched'])?></td>
+		<td class="number_column<?=($Torrent['Seeders'] == 0) ? ' r00' : ''?>"><?=number_format($Torrent['Seeders'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
 				}
@@ -209,7 +209,7 @@ if (!$NumResults) {
 
 				list($TorrentID, $Torrent) = each($Torrents);
 
-				$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
+				$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 
 				if ($Torrent['IsSnatched']) {
 					$DisplayName .= ' ' . Format::torrent_label('Snatched!');
@@ -226,11 +226,11 @@ if (!$NumResults) {
 			</div>
 		</td>
 		<td class="big_info">
-<? if ($LoggedUser['CoverArt']) : ?>
+<? if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
 				<? ImageTools::cover_thumb($WikiImage, $GroupCategoryID) ?>
 			</div>
-<? endif; ?>
+<? } ?>
 			<div class="group_info clear">
 				<span>
 					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
@@ -240,14 +240,14 @@ if (!$NumResults) {
 				<div class="tags"><?=$TorrentTags->format()?></div>
 			</div>
 		</td>
-		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=($Torrent['Seeders'] == 0) ? ' class="r00"' : '' ?>><?=number_format($Torrent['Seeders'])?></td>
-		<td><?=number_format($Torrent['Leechers'])?></td>
+		<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Snatched'])?></td>
+		<td class="number_column<?=($Torrent['Seeders'] == 0) ? ' r00' : ''?>"><?=number_format($Torrent['Seeders'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
 			}
-			$TorrentTable.=ob_get_clean();
+			$TorrentTable .= ob_get_clean();
 		} ?>
 	<!-- I hate that proton is making me do it like this -->
 	<!--<div class="head colhead_dark" style="margin-top: 8px;">-->

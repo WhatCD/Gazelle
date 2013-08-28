@@ -13,7 +13,7 @@ if ($CanEdit && isset($_POST['perform'])) {
 			INSERT INTO changelog (Message, Author, Time)
 			VALUES ('$Message', '$Author', NOW())");
 		$ID = $DB->inserted_id();
-		SiteHistory::add_event(sqltime(), "Changelog $ID", "tools.php?action=change_log", 1, 3, "", $Message, $LoggedUser['ID']);
+	//	SiteHistory::add_event(sqltime(), "Changelog $ID", "tools.php?action=change_log", 1, 3, "", $Message, $LoggedUser['ID']);
 
 	}
 	if ($_POST['perform'] == 'remove' && !empty($_POST['change_id'])) {

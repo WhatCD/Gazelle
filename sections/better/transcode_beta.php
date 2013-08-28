@@ -304,7 +304,7 @@ if ($ResultCount == 0) {
 		foreach ($Group['Editions'] as $RemIdent => $Edition) {
 			// TODO: point to the correct FLAC (?)
 			$FlacID = array_search(true, $Edition['FlacIDs']);
-			$DisplayName = $ArtistNames . "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$FlacID#torrent$FlacID\" title=\"View Torrent\">$GroupName</a>";
+			$DisplayName = $ArtistNames . "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$FlacID#torrent$FlacID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 			if ($GroupYear > 0) {
 				$DisplayName .= " [$GroupYear]";
 			}

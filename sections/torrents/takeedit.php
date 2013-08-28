@@ -276,8 +276,7 @@ $SQL = "
 		RemasterTitle = $T[RemasterTitle],
 		RemasterRecordLabel = $T[RemasterRecordLabel],
 		RemasterCatalogueNumber = $T[RemasterCatalogueNumber],
-		Scene = $T[Scene],
-		Description = $T[TorrentDescription],";
+		Scene = $T[Scene],";
 
 if (check_perms('torrents_freeleech')) {
 	$SQL .= "FreeTorrent = $T[FreeLeech],";
@@ -419,7 +418,7 @@ if (check_perms('users_mod')) {
 }
 
 $SQL .= "
-		flags = '2'
+		Description = $T[TorrentDescription]
 	WHERE ID = $TorrentID";
 $DB->query($SQL);
 

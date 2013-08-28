@@ -1,14 +1,7 @@
-<?php
+<?
 /*
-User topic subscription page
+User subscription page
 */
-
-if (!empty($LoggedUser['DisableForums'])) {
-	error(403);
-}
-
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
 
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
@@ -17,104 +10,114 @@ if (isset($LoggedUser['PostsPerPage'])) {
 }
 list($Page, $Limit) = Format::page_limit($PerPage);
 
-View::show_header('Subscribed topics','subscriptions,bbcode');
-
-if ($LoggedUser['CustomForums']) {
-	unset($LoggedUser['CustomForums']['']);
-	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
-}
+View::show_header('Subscriptions','subscriptions,bbcode');
 
 $ShowUnread = (!isset($_GET['showunread']) && !isset($HeavyInfo['SubscriptionsUnread']) || isset($HeavyInfo['SubscriptionsUnread']) && !!$HeavyInfo['SubscriptionsUnread'] || isset($_GET['showunread']) && !!$_GET['showunread']);
 $ShowCollapsed = (!isset($_GET['collapse']) && !isset($HeavyInfo['SubscriptionsCollapse']) || isset($HeavyInfo['SubscriptionsCollapse']) && !!$HeavyInfo['SubscriptionsCollapse'] || isset($_GET['collapse']) && !!$_GET['collapse']);
-$sql = '
-	SELECT
+
+// The monster sql query:
+/*
+ * Fields:
+ * Page (artist, collages, requests, torrents or forums)
+ * PageID (ArtistID, CollageID, RequestID, GroupID, TopicID)
+ * PostID (of the last read post)
+ * ForumID
+ * ForumName
+ * Name (for artists and collages; carries the topic title for forum subscriptions)
+ * LastPost (PostID of the last post)
+ * LastPostTime
+ * LastReadBody
+ * LastReadEditedTime
+ * LastReadUserID
+ * LastReadUsername
+ * LastReadAvatar
+ * LastReadEditedUserID
+ */
+$DB->query("
+	(SELECT
 		SQL_CALC_FOUND_ROWS
-		MAX(p.ID) AS ID
-	FROM (	SELECT TopicID
-			FROM users_subscriptions
-			WHERE UserID = '.$LoggedUser['ID'].'
-		) AS s
-		LEFT JOIN forums_last_read_topics AS l ON s.TopicID = l.TopicID AND l.UserID = '.$LoggedUser['ID'].'
-		JOIN forums_topics AS t ON t.ID = s.TopicID
-		JOIN forums_posts AS p ON t.ID = p.TopicID
-		JOIN forums AS f ON f.ID = t.ForumID
-	WHERE p.ID <= IFNULL(l.PostID,t.LastPostID)
-		AND ((f.MinClassRead <= '.$LoggedUser['Class'];
-if (!empty($RestrictedForums)) {
-	$sql.=' AND f.ID NOT IN (\''.$RestrictedForums.'\')';
-}
-$sql .= ')';
-if (!empty($PermittedForums)) {
-	$sql.=' OR f.ID IN (\''.$PermittedForums.'\')';
-}
-$sql .= ')';
-if ($ShowUnread) {
-
-	$sql .= '
-		AND IF(l.PostID IS NULL OR (t.IsLocked = \'1\' && t.IsSticky = \'0\'), t.LastPostID, l.PostID) < t.LastPostID';
-	$sql .= ' OR (t.AuthorID != '.$LoggedUser['ID'].' AND l.PostID IS NULL)';
-
-}
-$sql .= '
-	GROUP BY t.ID
-	ORDER BY t.LastPostID DESC
-	LIMIT '.$Limit;
-$PostIDs = $DB->query($sql);
+		s.Page,
+		s.PageID,
+		lr.PostID,
+		null AS ForumID,
+		null AS ForumName,
+		IF(s.Page = 'artist', a.Name, co.Name) AS Name,
+		c.ID AS LastPost,
+		c.AddedTime AS LastPostTime,
+		c_lr.Body AS LastReadBody,
+		c_lr.EditedTime AS LastReadEditedTime,
+		um.ID AS LastReadUserID,
+		um.Username AS LastReadUsername,
+		ui.Avatar AS LastReadAvatar,
+		c_lr.EditedUserID AS LastReadEditedUserID
+	FROM users_subscriptions_comments AS s
+		LEFT JOIN users_comments_last_read AS lr ON lr.UserID = $LoggedUser[ID] AND lr.Page = s.Page AND lr.PageID = s.PageID
+		LEFT JOIN artists_group AS a ON s.Page = 'artist' AND a.ArtistID = s.PageID
+		LEFT JOIN collages AS co ON s.Page = 'collages' AND co.ID = s.PageID
+		LEFT JOIN comments AS c ON c.ID = (SELECT MAX(ID) FROM comments WHERE Page = s.Page AND PageID = s.PageID)
+		LEFT JOIN comments AS c_lr ON c_lr.ID = lr.PostID
+		LEFT JOIN users_main AS um ON um.ID = c_lr.AuthorID
+		LEFT JOIN users_info AS ui ON ui.UserID = um.ID
+	WHERE s.UserID = $LoggedUser[ID] AND s.Page IN ('artist', 'collages', 'requests', 'torrents') AND (s.Page != 'collages' OR co.Deleted = '0')" . ($ShowUnread ? ' AND c.ID > IF(lr.PostID IS NULL, 0, lr.PostID)' : '') . "
+	GROUP BY s.PageID)
+	UNION ALL
+	(SELECT 'forums', s.TopicID, lr.PostID, f.ID, f.Name, t.Title, p.ID, p.AddedTime, p_lr.Body, p_lr.EditedTime, um.ID, um.Username, ui.Avatar, p_lr.EditedUserID
+	FROM users_subscriptions AS s
+		LEFT JOIN forums_last_read_topics AS lr ON lr.UserID = $LoggedUser[ID] AND s.TopicID = lr.TopicID
+		LEFT JOIN forums_topics AS t ON t.ID = s.TopicID
+		LEFT JOIN forums AS f ON f.ID = t.ForumID
+		LEFT JOIN forums_posts AS p ON p.ID = (SELECT MAX(ID) FROM forums_posts WHERE TopicID = s.TopicID)
+		LEFT JOIN forums_posts AS p_lr ON p_lr.ID = lr.PostID
+		LEFT JOIN users_main AS um ON um.ID = p_lr.AuthorID
+		LEFT JOIN users_info AS ui ON ui.UserID = um.ID
+	WHERE s.UserID = $LoggedUser[ID]" .
+		($ShowUnread ? " AND p.ID > IF(t.IsLocked = '1' AND t.IsSticky = '0'" . ", p.ID, IF(lr.PostID IS NULL, 0, lr.PostID))" : '') .
+		' AND ' . Forums::user_forums_sql() . "
+	GROUP BY t.ID)
+	ORDER BY LastPostTime DESC
+	LIMIT $Limit");
+$Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 
-if ($NumResults > $PerPage * ($Page - 1)) {
-	$DB->set_query_id($PostIDs);
-	$PostIDs = $DB->collect('ID');
-	$sql = '
-		SELECT
-			f.ID AS ForumID,
-			f.Name AS ForumName,
-			p.TopicID,
-			t.Title,
-			p.Body,
-			t.LastPostID,
-			t.IsLocked,
-			t.IsSticky,
-			p.ID,
-			um.ID,
-			um.Username,
-			ui.Avatar,
-			p.EditedUserID,
-			p.EditedTime,
-			ed.Username AS EditedUsername
-		FROM forums_posts AS p
-			LEFT JOIN forums_topics AS t ON t.ID = p.TopicID
-			LEFT JOIN forums AS f ON f.ID = t.ForumID
-			LEFT JOIN users_main AS um ON um.ID = p.AuthorID
-			LEFT JOIN users_info AS ui ON ui.UserID = um.ID
-			LEFT JOIN users_main AS ed ON ed.ID = um.ID
-		WHERE p.ID IN ('.implode(',',$PostIDs).')
-		ORDER BY f.Name ASC, t.LastPostID DESC';
-	$DB->query($sql);
+$Debug->log_var($Results, 'Results');
+
+$TorrentGroups = $Requests = array();
+foreach ($Results as $Result) {
+	if ($Result['Page'] == 'torrents') {
+		$TorrentGroups[] = $Result['PageID'];
+	} elseif ($Result['Page'] == 'requests') {
+		$Requests[] = $Result['PageID'];
+	}
 }
+
+$TorrentGroups = Torrents::get_groups($TorrentGroups, true, true, false);
+$Requests = Requests::get_requests($Requests);
+
+include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
+$Text = new TEXT;
+
 ?>
 <div class="thin">
 	<div class="header">
-		<h2><?='Subscribed topics'.($ShowUnread ? ' with unread posts' : '')?></h2>
+		<h2>Subscriptions<?=$ShowUnread ? ' with unread posts' . ($NumResults ? ' (' . $NumResults . ' new)' : '') : ''?></h2>
 
 		<div class="linkbox">
 <?
 if (!$ShowUnread) {
 ?>
 			<br /><br />
-			<a href="userhistory.php?action=subscriptions&amp;showunread=1" class="brackets">Only display topics with unread replies</a>&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=subscriptions&amp;showunread=1" class="brackets">Only display subscriptions with unread replies</a>&nbsp;&nbsp;&nbsp;
 <?
 } else {
 ?>
 			<br /><br />
-			<a href="userhistory.php?action=subscriptions&amp;showunread=0" class="brackets">Show all subscribed topics</a>&nbsp;&nbsp;&nbsp;
+			<a href="userhistory.php?action=subscriptions&amp;showunread=0" class="brackets">Show all subscriptions</a>&nbsp;&nbsp;&nbsp;
 <?
 }
 if ($NumResults) {
 ?>
-			<a href="#" onclick="Collapse();return false;" id="collapselink" class="brackets"><?=$ShowCollapsed ? 'Show' : 'Hide' ?> post bodies</a>&nbsp;&nbsp;&nbsp;
+			<a href="#" onclick="Collapse(); return false;" id="collapselink" class="brackets"><?=$ShowCollapsed ? 'Show' : 'Hide' ?> post bodies</a>&nbsp;&nbsp;&nbsp;
 <?
 }
 ?>
@@ -127,7 +130,7 @@ if ($NumResults) {
 if (!$NumResults) {
 ?>
 	<div class="center">
-		No subscribed topics<?=$ShowUnread ? ' with unread posts' : '' ?>
+		No subscriptions<?=$ShowUnread ? ' with unread posts' : ''?>
 	</div>
 <?
 } else {
@@ -139,58 +142,100 @@ if (!$NumResults) {
 ?>
 	</div>
 <?
-	while (list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()) {
+	foreach ($Results as $Result) {
+		switch ($Result['Page']) {
+			case 'artist':
+				$Links = 'Artist: <a href="artist.php?id=' . $Result['PageID'] . '">' . display_str($Result['Name']) . '</a>';
+				$JumpLink = 'artist.php?id=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+				break;
+			case 'collages':
+				$Links = 'Collage: <a href="collages.php?id=' . $Result['PageID'] . '">' . display_str($Result['Name']) . '</a>';
+				$JumpLink = 'collages.php?id=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+				break;
+			case 'requests':
+				if (!isset($Requests['matches'][$Result['PageID']])) {
+					error(0);
+				}
+				list(,,,,, $CategoryID, $Title, $Year,,,,,,,,,,,,) = $Requests['matches'][$Result['PageID']];
+
+				$CategoryName = $Categories[$CategoryID - 1];
+
+				$Links = 'Request: ';
+				if($CategoryName == "Music" || $CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
+					$Links .= ($CategoryName == 'Music' ? Artists::display_artists(Requests::get_artists($Result['PageID'])) : '') . '<a href="requests.php?action=view&amp;id=' . $Result['PageID'] . '" dir="ltr">' . $Title . " [" . $Year . "]</a>";
+				} else {
+					$Links .= '<a href="requests.php?action=view&amp;id=' . $Result['PageID'] . '">' . $Title . "</a>";
+				}
+				$JumpLink = 'requests.php?action=view&amp;id=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+				break;
+			case 'torrents':
+				if (!isset($TorrentGroups['matches'][$Result['PageID']])) {
+					error(0);
+				}
+				$GroupInfo = $TorrentGroups['matches'][$Result['PageID']];
+				$Links = 'Torrent: ' . Artists::display_artists($GroupInfo['ExtendedArtists']) . '<a href="torrents.php?id=' . $GroupInfo['ID'] . '" dir="ltr">' . $GroupInfo['Name'] . '</a>';
+				if($GroupInfo['Year'] > 0) {
+					$Links .= " [" . $GroupInfo['Year'] . "]";
+				}
+				if ($GroupInfo['ReleaseType'] > 0) {
+					$Links .= " [" . $ReleaseTypes[$GroupInfo['ReleaseType']] . "]";
+				}
+				$JumpLink = 'torrents.php?id=' . $GroupInfo['ID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+				break;
+			case 'forums':
+				$Links = 'Forums: <a href="forums.php?action=viewforum&amp;forumid=' . $Result['ForumID'] . '">' . display_str($Result['ForumName']) . '</a> &gt; ' .
+					'<a href="forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '" title="' . display_str($Result['Name']) . '">' . Format::cut_string($Result['Name'], 75) . '</a>';
+				$JumpLink = 'forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+				break;
+			default:
+				error(0);
+		}
 ?>
-	<table class="forum_post box vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : '' ?>">
-		<colgroup>
-<?		if (Users::has_avatars_enabled()) { ?>
-			<col class="col_avatar" />
-<? 		} ?>
-			<col class="col_post_body" />
-		</colgroup>
-		<tr class="colhead_dark">
+	<table class="forum_post box vertical_margin<?=(!Users::has_avatars_enabled() ? ' noavatar' : '')?>">
+		<tr class="colhead_dark notify_<?=$Result['Page']?>">
 			<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1 ?>">
-				<span style="float: left;">
-					<a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$ForumName?></a> &gt;
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>" title="<?=display_str($ThreadTitle)?>"><?=Format::cut_string($ThreadTitle, 75)?></a>
-<?		if ($PostID < $LastPostID && !$Locked) { ?>
-					<span class="new">(New!)</span>
+				<span style="float:left;">
+					<?=$Links . ($Result['PostID'] < $Result['LastPost'] ? ' <span class="new">(New!)</span>' : '')?>
+				</span>
+				<span style="float: left;" class="tooltip last_read" title="Jump to last read">
+					<a href="<?=$JumpLink?>"></a>
+				</span>
+<?		if ($Result['Page'] == 'forums') { ?>
+				<span id="bar<?=$Result['PostID'] ?>" style="float:right;">
+					<a href="#" onclick="Subscribe(<?=$Result['PageID']?>); return false;" id="subscribelink<?=$Result['PageID']?>" class="brackets">Unsubscribe</a>
+<?		} else { ?>
+				<span id="bar_<?=$Result['Page'] . $Result['PostID'] ?>" style="float:right;">
+					<a href="#" onclick="SubscribeComments('<?=$Result['Page']?>', <?=$Result['PageID']?>); return false;" id="subscribelink_<?=$Result['Page'] . $Result['PageID']?>" class="brackets">Unsubscribe</a>
 <?		} ?>
-				</span>
-				<span style="float: left;" class="last_read" title="Jump to last read">
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID.($PostID ? '&amp;postid='.$PostID.'#post'.$PostID : '')?>"></a>
-				</span>
-				<span id="bar<?=$PostID ?>" style="float: right;">
-					<a href="#" onclick="Subscribe(<?=$TopicID?>);return false;" id="subscribelink<?=$TopicID?>" class="brackets">Unsubscribe</a>
 					&nbsp;
 					<a href="#">&uarr;</a>
 				</span>
 			</td>
 		</tr>
+<?		if (!empty($Result['LastReadBody'])) { // if a user is subscribed to a topic/comments but hasn't accessed the site ever, LastReadBody will be null - in this case we don't display a post. ?>
 		<tr class="row<?=$ShowCollapsed ? ' hidden' : '' ?>">
-<?		if (Users::has_avatars_enabled()) { ?>
+<?			if (Users::has_avatars_enabled()) { ?>
 			<td class="avatar" valign="top">
-				<?=Users::show_avatar($AuthorAvatar, $AuthorName, $HeavyInfo['DisableAvatars'])?>
+				<?=Users::show_avatar($Result['LastReadAvatar'], $Result['LastReadUsername'], $HeavyInfo['DisableAvatars'])?>
 			</td>
-<?		} ?>
+<?			} ?>
 			<td class="body" valign="top">
 				<div class="content3">
-					<?=$Text->full_format($Body) ?>
-<?		if ($EditedUserID) { ?>
+					<?=$Text->full_format($Result['LastReadBody']) ?>
+<?			if ($Result['LastReadEditedUserID']) { ?>
 					<br /><br />
-					Last edited by
-					<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime)?>
-<?		} ?>
+					Last edited by <?=Users::format_username($Result['LastReadEditedUserID'], false, false, false) ?> <?=time_diff($Result['LastReadEditedTime'])?>
+<?			} ?>
 				</div>
 			</td>
 		</tr>
+<?		} ?>
 	</table>
-	<? } // while (list(...)) ?>
+<?	} ?>
 	<div class="linkbox">
 <?=$Pages?>
 	</div>
-<? } // else -- if (empty($NumResults)) ?>
+<? }?>
 </div>
 <?
 View::show_footer();
-?>

@@ -118,7 +118,7 @@ $DB->set_query_id($Bans);
 <table width="100%">
 	<tr class="colhead">
 		<td colspan="2">
-			<span title="The IP addresses specified are &#42;inclusive&#42;. The left box is the beginning of the IP address range, and the right box is the end of the IP address range.">Range</span>
+			<span class="tooltip" title="The IP addresses specified are &#42;inclusive&#42;. The left box is the beginning of the IP address range, and the right box is the end of the IP address range.">Range</span>
 		</td>
 		<td>Notes</td>
 		<td>Submit</td>
@@ -142,7 +142,7 @@ $DB->set_query_id($Bans);
 <?
 $Row = 'a';
 while (list($ID, $Start, $End, $Reason) = $DB->next_record()) {
-	$Row = ($Row === 'a' ? 'b' : 'a');
+	$Row = $Row === 'a' ? 'b' : 'a';
 	$Start = long2ip($Start);
 	$End = long2ip($End);
 ?>

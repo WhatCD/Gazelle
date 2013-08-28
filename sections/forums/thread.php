@@ -11,6 +11,7 @@ Things to expect in $_GET:
 
 //---------- Things to sort out before it can start printing/generating content
 
+
 include(SERVER_ROOT.'/classes/text.class.php');
 
 $Text = new TEXT(true);
@@ -47,13 +48,15 @@ if (isset($LoggedUser['PostsPerPage'])) {
 //---------- Get some data to start processing
 
 // Thread information, constant across all pages
-$ThreadInfo = get_thread_info($ThreadID, true, true);
+$ThreadInfo = Forums::get_thread_info($ThreadID, true, true);
 $ForumID = $ThreadInfo['ForumID'];
+
+$IsDonorForum = $ForumID == DONOR_FORUM ? true : false;
+
 // Make sure they're allowed to look at the page
-if (!check_forumperm($ForumID)) {
+if (!Forums::check_forumperm($ForumID)) {
 	error(403);
 }
-
 //Escape strings for later display
 $ThreadTitle = display_str($ThreadInfo['Title']);
 $ForumName = display_str($Forums[$ForumID]['Name']);
@@ -107,42 +110,34 @@ if (!$Catalogue = $Cache->get_value("thread_{$ThreadID}_catalogue_$CatalogueID")
 	}
 }
 $Thread = Format::catalogue_select($Catalogue, $Page, $PerPage, THREAD_CATALOGUE);
-if ($_GET['updatelastread'] != '0') {
-	$LastPost = end($Thread);
-	$LastPost = $LastPost['ID'];
-	reset($Thread);
-	if ($ThreadInfo['Posts'] <= $PerPage * $Page && $ThreadInfo['StickyPostID'] > $LastPost) {
-		$LastPost = $ThreadInfo['StickyPostID'];
-	}
+$LastPost = end($Thread);
+$LastPost = $LastPost['ID'];
+$FirstPost = reset($Thread);
+$FirstPost = $FirstPost['ID'];
+if ($ThreadInfo['Posts'] <= $PerPage*$Page && $ThreadInfo['StickyPostID'] > $LastPost) {
+	$LastPost = $ThreadInfo['StickyPostID'];
+}
 
-	//Handle last read
+//Handle last read
 
-	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
+if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
 
+	$DB->query("
+		SELECT PostID
+		FROM forums_last_read_topics
+		WHERE UserID = '$LoggedUser[ID]'
+			AND TopicID = '$ThreadID'");
+	list($LastRead) = $DB->next_record();
+	if ($LastRead < $LastPost) {
 		$DB->query("
-			SELECT PostID
-			FROM forums_last_read_topics
-			WHERE UserID = '$LoggedUser[ID]'
-				AND TopicID = '$ThreadID'");
-		list($LastRead) = $DB->next_record();
-		if ($LastRead < $LastPost) {
-			$DB->query("
-				INSERT INTO forums_last_read_topics (UserID, TopicID, PostID)
-				VALUES ('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
-				ON DUPLICATE KEY UPDATE PostID = '$LastPost'");
-		}
+			INSERT INTO forums_last_read_topics (UserID, TopicID, PostID)
+			VALUES ('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
+			ON DUPLICATE KEY UPDATE PostID='$LastPost'");
 	}
 }
 
 //Handle subscriptions
-if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
-	$DB->query("
-		SELECT TopicID
-		FROM users_subscriptions
-		WHERE UserID = '$LoggedUser[ID]'");
-	$UserSubscriptions = $DB->collect(0);
-	$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'], $UserSubscriptions,0);
-}
+$UserSubscriptions = Subscriptions::get_subscriptions();
 
 if (empty($UserSubscriptions)) {
 	$UserSubscriptions = array();
@@ -158,7 +153,9 @@ $DB->query("
 	SET UnRead = false
 	WHERE UserID = '$LoggedUser[ID]'
 		AND Page = 'forums'
-		AND PageID = '$ThreadID'");
+		AND PageID = '$ThreadID'
+		AND PostID >= '$FirstPost'
+		AND PostID <= '$LastPost'");
 $Cache->delete_value('notify_quoted_' . $LoggedUser['ID']);
 /*
 $QuoteNotificationsCount = $Cache->get_value('notify_quoted_' . $LoggedUser['ID']);
@@ -170,7 +167,7 @@ if ($QuoteNotificationsCount > 0) {
 */
 
 // Start printing
-View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &lt; Forums','comments,subscriptions,bbcode');
+View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &lt; Forums','comments,subscriptions,bbcode', $IsDonorForum ? 'donor' : '');
 ?>
 <div class="thin">
 	<h2>
@@ -273,7 +270,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 		<div class="head colhead_dark"><strong>Poll<? if ($Closed) { echo ' [Closed]'; } ?><? if ($Featured && $Featured !== '0000-00-00 00:00:00') { echo ' [Featured]'; } ?></strong> <a href="#" onclick="$('#threadpoll').gtoggle(); log_hit(); return false;" class="brackets">View</a></div>
 		<div class="pad<? if (/*$LastRead !== null || */$ThreadInfo['IsLocked']) { echo ' hidden'; } ?>" id="threadpoll">
 			<p><strong><?=display_str($Question)?></strong></p>
-<?	if ($UserResponse !== null || $Closed || $ThreadInfo['IsLocked'] || !check_forumperm($ForumID)) { ?>
+<?	if ($UserResponse !== null || $Closed || $ThreadInfo['IsLocked'] || !Forums::check_forumperm($ForumID)) { ?>
 			<ul class="poll nobullet">
 <?
 		if (!$RevealVoters) {
@@ -453,10 +450,10 @@ foreach ($Thread as $Key => $Post) {
 	<tr class="colhead_dark">
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<div style="float: left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
-				<?=Users::format_username($AuthorID, true, true, true, true, true)?>
+				<?=Users::format_username($AuthorID, true, true, true, true, true, $IsDonorForum)?>
 				<?=time_diff($AddedTime,2)?>
 				- <a href="#quickpost" id="quote_<?=$PostID?>" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);" class="brackets">Quote</a>
-<?	if ((!$ThreadInfo['IsLocked'] && check_forumperm($ForumID, 'Write') && $AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums')) { ?>
+<?	if ((!$ThreadInfo['IsLocked'] && Forums::check_forumperm($ForumID, 'Write') && $AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums')) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
 <?	}
 	if (check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?>
@@ -498,7 +495,7 @@ foreach ($Thread as $Key => $Post) {
 	<tr>
 <?	if (Users::has_avatars_enabled()) { ?>
 		<td class="avatar" valign="top">
-		<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
+		<?=Users::show_avatar($Avatar, $AuthorID, $Username, $HeavyInfo['DisableAvatars'], 150, true)?>
 		</td>
 <?	} ?>
 		<td class="body" valign="top"<? if (!Users::has_avatars_enabled()) { echo ' colspan="2"'; } ?>>
@@ -511,7 +508,7 @@ foreach ($Thread as $Key => $Post) {
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a>
 <?		} ?>
 				Last edited by
-				<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=Users::format_username($EditedUserID, false, false, false, false, false, $IsDonorForum) ?> <?=time_diff($EditedTime,2,true,true)?>
 <?	} ?>
 			</div>
 		</td>
@@ -528,7 +525,7 @@ foreach ($Thread as $Key => $Post) {
 </div>
 <?
 if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
-	if (check_forumperm($ForumID, 'Write') && !$LoggedUser['DisablePosting']) {
+	if (Forums::check_forumperm($ForumID, 'Write') && !$LoggedUser['DisablePosting']) {
 		View::parse('generic/reply/quickreply.php', array(
 			'InputTitle' => 'Post reply',
 			'InputName' => 'thread',

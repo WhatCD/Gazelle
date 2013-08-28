@@ -503,7 +503,7 @@ margin-left:20px;
 	margin: 10px 0 10px 0;
 }
 
-#content h2:first-child {
+.header h2:first-child {
 	background: #252525 url('images/content_repeat-x.png') repeat-x;
 	margin: -20px -20px -1px -20px !important;
 	padding: 13px 20px 10px 20px;
@@ -2022,4 +2022,14 @@ tr.torrent .bookmark > a:after { content:""; }
 	overflow: hidden;
 	cursor: pointer;
 	color: #ffffff;
+}
+
+div[class~=tooltipster-base] {
+	background-color: #1E1E1E;
+	border-color: #A0A0A0;
+	color: #878787;
+}
+
+div[class~=tooltipster-content] > a {
+	color: #007DC6;
 }

@@ -98,8 +98,8 @@ foreach ($TorrentList as $GroupID => $Group) {
 ?>
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 				<td class="center">
-					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
+					<div id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
+						<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
 					</div>
 				</td>
 				<td class="center">
@@ -109,9 +109,9 @@ foreach ($TorrentList as $GroupID => $Group) {
 					<strong><?=$DisplayName?></strong>
 					<? // PHP start tag is indented for proper formatting of generated HTML
 					if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
-						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" title=\"Unbookmark\" onclick=\"Unbookmark('torrent', $GroupID, 'Bookmark'); return false;\">Unbookmark</a>";
+						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" onclick=\"Unbookmark('torrent', $GroupID, 'Bookmark'); return false;\">Remove bookmark</a>";
 					} else {
-						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" title=\"Bookmark\" onclick=\"Bookmark('torrent', $GroupID, 'Unbookmark'); return false;\">Bookmark</a>";
+						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" onclick=\"Bookmark('torrent', $GroupID, 'Remove bookmark'); return false;\">Bookmark</a>";
 					}
 					echo "\n";
 					echo Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
@@ -135,12 +135,17 @@ foreach ($TorrentList as $GroupID => $Group) {
 			}
 			$SnatchedTorrentClass = ($Torrent['IsSnatched'] ? ' snatched_torrent' : '');
 
-			if ($Torrent['RemasterTitle'] != $LastRemasterTitle || $Torrent['RemasterYear'] != $LastRemasterYear ||
-			$Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel || $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber || $FirstUnknown || $Torrent['Media'] != $LastMedia) {
+			if ($Torrent['RemasterTitle'] != $LastRemasterTitle
+				|| $Torrent['RemasterYear'] != $LastRemasterYear
+				|| $Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel
+				|| $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber
+				|| $FirstUnknown
+				|| $Torrent['Media'] != $LastMedia
+			) {
 				$EditionID++;
 ?>
 			<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
-				<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
+				<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
 			</tr>
 <?
 			}
@@ -155,16 +160,16 @@ foreach ($TorrentList as $GroupID => $Group) {
 					<span class="brackets">
 						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?			if (Torrents::can_use_token($Torrent)) { ?>
-						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?			} ?>
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
 					</span>
 					&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 				</td>
-				<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-				<td><?=number_format($Torrent['Snatched'])?></td>
-				<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
-				<td><?=number_format($Torrent['Leechers'])?></td>
+				<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
+				<td class="number_column"><?=number_format($Torrent['Snatched'])?></td>
+				<td class="number_column<?=(($Torrent['Seeders'] == 0) ? ' r00' : '')?>"><?=number_format($Torrent['Seeders'])?></td>
+				<td class="number_column"><?=number_format($Torrent['Leechers'])?></td>
 			</tr>
 <?
 		}
@@ -197,7 +202,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 					<span class="brackets">
 						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Torrent)) { ?>
-						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?		} ?>
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
 					</span>
@@ -205,14 +210,14 @@ foreach ($TorrentList as $GroupID => $Group) {
 <?			Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
 					<div class="tags"><?=$TorrentTags->format()?></div>
 				</td>
-				<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-				<td><?=number_format($Torrent['Snatched'])?></td>
-				<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
-				<td><?=number_format($Torrent['Leechers'])?></td>
+				<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
+				<td class="number_column"><?=number_format($Torrent['Snatched'])?></td>
+				<td class="number_column<?=(($Torrent['Seeders'] == 0) ? ' r00' : '')?>"><?=number_format($Torrent['Seeders'])?></td>
+				<td class="number_column"><?=number_format($Torrent['Leechers'])?></td>
 			</tr>
 <?
 	}
-	$TorrentTable.= ob_get_clean();
+	$TorrentTable .= ob_get_clean();
 
 	// Album art
 
@@ -481,15 +486,15 @@ foreach ($Users as $ID => $User) {
 if (empty($CommentList)) {
 	$DB->query("
 		SELECT
-			cc.ID,
-			cc.Body,
-			cc.UserID,
+			c.ID,
+			c.Body,
+			c.AuthorID,
 			um.Username,
-			cc.Time
-		FROM collages_comments AS cc
-			LEFT JOIN users_main AS um ON um.ID = cc.UserID
-		WHERE CollageID = '$CollageID'
-		ORDER BY ID DESC
+			c.AddedTime
+		FROM comments AS c
+			LEFT JOIN users_main AS um ON um.ID = c.AuthorID
+		WHERE c.Page = 'collages' AND c.PageID = $CollageID
+		ORDER BY c.ID DESC
 		LIMIT 15");
 	$CommentList = $DB->to_array(false, MYSQLI_NUM);
 }
@@ -515,10 +520,11 @@ if (!$LoggedUser['DisablePosting']) {
 ?>
 		<div class="box box_addcomment">
 			<div class="head"><strong>Add comment</strong></div>
-			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled = true;" action="collages.php" method="post">
-				<input type="hidden" name="action" value="add_comment" />
+			<form class="send_form" name="comment" id="quickpostform" onsubmit="quickpostform.submit_button.disabled = true;" action="comments.php" method="post">
+				<input type="hidden" name="action" value="take_post" />
+				<input type="hidden" name="page" value="collages" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				<input type="hidden" name="collageid" value="<?=$CollageID?>" />
+				<input type="hidden" name="pageid" value="<?=$CollageID?>" />
 				<div class="pad">
 					<div class="field_div">
 						<textarea name="body" cols="24" rows="5"></textarea>

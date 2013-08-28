@@ -1,67 +1,46 @@
-<?php
-
+<?
 enforce_login();
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
+// fix old links
+if ($_REQUEST['action'] == 'artists') {
+	$_REQUEST['action'] = 'artist';
+} elseif ($_REQUEST['action'] == 'my_torrents') {
+	$_REQUEST['action'] = 'torrents';
+	$_REQUEST['type'] = 'uploaded';
+}
 
-require(SERVER_ROOT.'/sections/comments/post.php'); // Post formatting function.
-
-$action = '';
+$Action = '';
 if (!empty($_REQUEST['action'])) {
-	$action = $_REQUEST['action'];
+	$Action = $_REQUEST['action'];
 }
 
-/**
- * Getting a userid if applicable
- */
-if (isset($_GET['id'])) {
-	$UserID = $_GET['id'];
-	if (!is_number($UserID)) {
-		error(404);
-	}
-
-	$UserInfo = Users::user_info($UserID);
-
-	$Username = $UserInfo['Username'];
-	if ($LoggedUser['ID'] == $UserID) {
-		$Self = true;
-	} else {
-		$Self = false;
-	}
-	$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
-	$UserClass = $Perms['Class'];
-	if (!check_paranoia('torrentcomments', $UserInfo['Paranoia'], $UserClass, $UserID))
-		error(403);
-} else {
-	$UserID = $LoggedUser['ID'];
-	$Username = $LoggedUser['Username'];
-	$Self = true;
-}
-
-/**
- * Posts per page limit stuff
- */
-if (isset($LoggedUser['PostsPerPage'])) {
-	$PerPage = $LoggedUser['PostsPerPage'];
-} else {
-	$PerPage = POSTS_PER_PAGE;
-}
-list($Page, $Limit) = Format::page_limit($PerPage);
-
-switch ($action) {
-	case 'requests':
-		require (SERVER_ROOT.'/sections/comments/requestcomments.php');
+switch ($Action) {
+	case 'take_post':
+		require SERVER_ROOT . '/sections/comments/take_post.php';
 		break;
-	case 'artists':
-		require (SERVER_ROOT.'/sections/comments/artistcomments.php');
+	case 'take_edit':
+		require SERVER_ROOT . '/sections/comments/take_edit.php';
 		break;
+	case 'take_delete':
+		require SERVER_ROOT . '/sections/comments/take_delete.php';
+		break;
+	case 'warn':
+		require SERVER_ROOT . '/sections/comments/warn.php';
+		break;
+	case 'take_warn':
+		require SERVER_ROOT . '/sections/comments/take_warn.php';
+		break;
+	case 'get':
+		require SERVER_ROOT . '/sections/comments/get.php';
+		break;
+	case 'jump':
+		require SERVER_ROOT . '/sections/comments/jump.php';
+		break;
+	case 'artist':
 	case 'collages':
-		require (SERVER_ROOT.'/sections/comments/collagecomments.php');
-		break;
+	case 'requests':
 	case 'torrents':
-	case 'my_torrents':
 	default:
-		require(SERVER_ROOT.'/sections/comments/torrentcomments.php');
+		require SERVER_ROOT . '/sections/comments/comments.php';
 		break;
 }

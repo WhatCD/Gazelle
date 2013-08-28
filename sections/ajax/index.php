@@ -157,6 +157,12 @@ switch ($_GET['action']) {
 	case 'raw_bbcode':
 		require(SERVER_ROOT . '/sections/ajax/raw_bbcode.php');
 		break;
+	case 'get_user_notifications':
+		require(SERVER_ROOT . '/sections/ajax/get_user_notifications.php');
+		break;
+	case 'clear_user_notification':
+		require(SERVER_ROOT . '/sections/ajax/clear_user_notification.php');
+		break;
 	default:
 		// If they're screwing around with the query string
 		json_die("failure");

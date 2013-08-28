@@ -118,68 +118,16 @@ switch ($Type) {
 			$Subject = 'Forum Post Report: Post ID #'.display_str($PostID);
 		}
 		break;
-	case 'requests_comment':
+	case 'comment':
 		$DB->query("
-			SELECT
-				rc.RequestID,
-				rc.Body,
-				(	SELECT COUNT(ID)
-					FROM requests_comments
-					WHERE ID <= $ThingID
-						AND requests_comments.RequestID = rc.RequestID
-				) AS CommentNum
-			FROM requests_comments AS rc
-			WHERE ID=$ThingID");
+			SELECT 1
+			FROM comments AS c
+			WHERE ID = $ThingID");
 		if (!$DB->has_results()) {
-			$Error = 'No request comment with the reported ID found';
+			$Error = 'No comment with the reported ID found';
 		} else {
-			list($RequestID, $Body, $PostNum) = $DB->next_record();
-			$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-			$TypeLink = 'this [url=https://'.SSL_SITE_URL."/requests.php?action=view&amp;id=$RequestID&amp;page=$PageNum#post$ThingID]request comment[/url]";
-			$Subject = 'Request Comment Report: ID #'.display_str($ThingID);
-		}
-		break;
-	case 'torrents_comment':
-		$DB->query("
-			SELECT
-				tc.GroupID,
-				tc.Body,
-				(	SELECT COUNT(ID)
-					FROM torrents_comments
-					WHERE ID <= $ThingID
-						AND torrents_comments.GroupID = tc.GroupID
-				) AS CommentNum
-			FROM torrents_comments AS tc
-			WHERE ID=$ThingID");
-		if (!$DB->has_results()) {
-			$Error = 'No torrent comment with the reported ID found';
-		} else {
-			list($GroupID, $Body, $PostNum) = $DB->next_record();
-			$PageNum = ceil($PostNum / TORRENT_COMMENTS_PER_PAGE);
-			$TypeLink = 'this [url=https://'.SSL_SITE_URL."/torrents.php?id=$GroupID&amp;page=$PageNum#post$ThingID]torrent comment[/url]";
-			$Subject = 'Torrent Comment Report: ID #'.display_str($ThingID);
-		}
-		break;
-	case 'collages_comment':
-		$DB->query("
-			SELECT
-				cc.CollageID,
-				cc.Body,
-				(	SELECT COUNT(ID)
-					FROM collages_comments
-					WHERE ID <= $ThingID
-						AND collages_comments.CollageID = cc.CollageID
-				) AS CommentNum
-			FROM collages_comments AS cc
-			WHERE ID=$ThingID");
-		if (!$DB->has_results()) {
-			$Error = 'No collage comment with the reported ID found';
-		} else {
-			list($CollageID, $Body, $PostNum) = $DB->next_record();
-			$PerPage = POSTS_PER_PAGE;
-			$PageNum = ceil($PostNum / $PerPage);
-			$TypeLink = 'this [url=https://'.SSL_SITE_URL."/collage.php?action=comments&amp;collageid=$CollageID&amp;page=$PageNum#post$ThingID]collage comment[/url]";
-			$Subject = 'Collage Comment Report: ID #'.display_str($ThingID);
+			$TypeLink = '[url=https://'.SSL_SITE_URL."/comments.php?action=jump&amp;postid=$ThingID]this comment[/url]";
+			$Subject = 'Comment Report: ID #'.display_str($ThingID);
 		}
 		break;
 	default:

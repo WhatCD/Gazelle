@@ -27,9 +27,9 @@ if (isset($_POST['Username'])) {
 		//Create the account
 		$DB->query("
 			INSERT INTO users_main
-				(Username, Email, PassHash, torrent_pass, Enabled, PermissionID, Language)
+				(Username, Email, PassHash, torrent_pass, Enabled, PermissionID)
 			VALUES
-				('".db_string($Username)."', '".db_string($Email)."', '".db_string(Users::make_crypt_hash($Password))."', '".db_string($torrent_pass)."', '1', '".USER."', 'en')");
+				('".db_string($Username)."', '".db_string($Email)."', '".db_string(Users::make_crypt_hash($Password))."', '".db_string($torrent_pass)."', '1', '".USER."')");
 
 		//Increment site user count
 		$Cache->increment('stats_user_count');
@@ -54,6 +54,9 @@ if (isset($_POST['Username'])) {
 				(UserID, StyleID, AuthKey, JoinDate)
 			VALUES
 				('".db_string($UserID)."', '".db_string($StyleID)."', '".db_string($AuthKey)."', '".sqltime()."')");
+
+		// Give the notification settings
+		$DB->query("INSERT INTO users_notifications_settings (UserID) VALUES ('$UserID')");
 
 		//Redirect to users profile
 		header ("Location: user.php?id=$UserID");

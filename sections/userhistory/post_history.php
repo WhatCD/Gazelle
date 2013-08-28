@@ -28,11 +28,6 @@ extract(array_intersect_key($UserInfo, array_flip(array('Username', 'Enabled', '
 
 View::show_header("Post history for $Username", 'subscriptions,comments,bbcode');
 
-if ($LoggedUser['CustomForums']) {
-	unset($LoggedUser['CustomForums']['']);
-	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
-}
 $ViewingOwn = ($UserID == $LoggedUser['ID']);
 $ShowUnread = ($ViewingOwn && (!isset($_GET['showunread']) || !!$_GET['showunread']));
 $ShowGrouped = ($ViewingOwn && (!isset($_GET['group']) || !!$_GET['group']));
@@ -50,17 +45,7 @@ if ($ShowGrouped) {
 	$sql .= "
 			LEFT JOIN forums AS f ON f.ID = t.ForumID
 		WHERE p.AuthorID = $UserID
-			AND ((f.MinClassRead <= ".$LoggedUser['Class'];
-	if (!empty($RestrictedForums)) {
-		$sql .= "
-			AND f.ID NOT IN ('$RestrictedForums')";
-	}
-	$sql .= ')';
-	if (!empty($PermittedForums)) {
-		$sql .= "
-			OR f.ID IN ('$PermittedForums')";
-	}
-	$sql .= ')';
+			AND " . Forums::user_forums_sql();
 	if ($ShowUnread) {
 		$sql .= '
 			AND ((t.IsLocked = \'0\' OR t.IsSticky = \'1\')
@@ -136,22 +121,9 @@ if ($ShowGrouped) {
 			LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
 			JOIN forums_topics AS t ON t.ID = p.TopicID
 			JOIN forums AS f ON f.ID = t.ForumID
-			LEFT JOIN forums_last_read_topics AS l ON l.UserID = $UserID
-					AND l.TopicID = t.ID
+			LEFT JOIN forums_last_read_topics AS l ON l.UserID = $UserID AND l.TopicID = t.ID
 		WHERE p.AuthorID = $UserID
-			AND ((f.MinClassRead <= ".$LoggedUser['Class'];
-
-	if (!empty($RestrictedForums)) {
-		$sql .= "
-			AND f.ID NOT IN ('$RestrictedForums')";
-	}
-	$sql .= ')';
-
-	if (!empty($PermittedForums)) {
-		$sql .= "
-			OR f.ID IN ('$PermittedForums')";
-	}
-	$sql .= ')';
+			AND " . Forums::user_forums_sql();
 
 	if ($ShowUnread) {
 		$sql .= '
@@ -199,15 +171,7 @@ if ($ShowGrouped) {
 			<br /><br />
 <?
 if ($ViewingOwn) {
-	if (($UserSubscriptions = $Cache->get_value('subscriptions_user_'.$LoggedUser['ID'])) === false) {
-		$DB->query("
-			SELECT TopicID
-			FROM users_subscriptions
-			WHERE UserID = '$LoggedUser[ID]'");
-		$UserSubscriptions = $DB->collect(0);
-		$Cache->cache_value('subscriptions_user_'.$LoggedUser['ID'], $UserSubscriptions, 0);
-		$DB->set_query_id($Posts);
-	}
+	$UserSubscriptions = Subscriptions::get_subscriptions();
 
 	if (!$ShowUnread) {
 		if ($ShowGrouped) { ?>
@@ -251,6 +215,7 @@ if (empty($Results)) {
 ?>
 	</div>
 <?
+	$QueryID = $DB->get_query_id();
 	while (list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername, $TopicID, $ThreadTitle, $LastPostID, $LastRead, $Locked, $Sticky) = $DB->next_record()) {
 ?>
 	<table class="forum_post vertical_margin<?=!Users::has_avatars_enabled() ? ' noavatar' : '' ?>" id="post<?=$PostID ?>">
@@ -274,7 +239,7 @@ if (empty($Results)) {
 ?>
 				</span>
 <?			if (!empty($LastRead)) { ?>
-				<span style="float: left;" class="last_read" title="Jump to last read">
+				<span style="float: left;" class="tooltip last_read" title="Jump to last read">
 					<a href="forums.php?action=viewthread&amp;threadid=<?=$TopicID?>&amp;postid=<?=$LastRead?>#post<?=$LastRead?>"></a>
 				</span>
 <?			}
@@ -285,7 +250,7 @@ if (empty($Results)) {
 ?>
 				<span id="bar<?=$PostID ?>" style="float: right;">
 <? 		if ($ViewingOwn && !in_array($TopicID, $UserSubscriptions)) { ?>
-					<a href="#" onclick="Subscribe(<?=$TopicID?>);$('.subscribelink<?=$TopicID?>').remove();return false;" class="brackets subscribelink<?=$TopicID?>">Subscribe</a>
+					<a href="#" onclick="Subscribe(<?=$TopicID?>); $('.subscribelink<?=$TopicID?>').remove(); return false;" class="brackets subscribelink<?=$TopicID?>">Subscribe</a>
 					&nbsp;
 <? 		} ?>
 					<a href="#">&uarr;</a>
@@ -298,7 +263,7 @@ if (empty($Results)) {
 		<tr>
 <?	if (Users::has_avatars_enabled()) { ?>
 			<td class="avatar" valign="top">
-				<?=Users::show_avatar($Avatar, $Username, $HeavyInfo['DisableAvatars'])?>
+				<?=Users::show_avatar($Avatar, $UserID, $Username, $HeavyInfo['DisableAvatars'])?>
 			</td>
 <?	} ?>
 			<td class="body" valign="top">
@@ -308,16 +273,16 @@ if (empty($Results)) {
 					<br />
 					<br />
 <?				if (check_perms('site_moderate_forums')) { ?>
-					<a href="#content<?=$PostID?>" onclick="LoadEdit(<?=$PostID?>, 1)">&laquo;</a>
+					<a href="#content<?=$PostID?>" onclick="LoadEdit(<?=$PostID?>, 1);">&laquo;</a>
 <? 				} ?>
 					Last edited by
-					<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime,2,true,true)?>
+					<?=Users::format_username($EditedUserID, false, false, false) ?> <?=time_diff($EditedTime, 2, true, true)?>
 <?			} ?>
 				</div>
 			</td>
 		</tr>
-<?
-		}
+<?		}
+	$DB->set_query_id($QueryID);
 ?>
 	</table>
 <? 	} ?>

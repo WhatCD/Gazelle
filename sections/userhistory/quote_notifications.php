@@ -10,43 +10,61 @@ if ($_GET['showall']) {
 
 if ($_GET['catchup']) {
 	$DB->query("UPDATE users_notify_quoted SET UnRead = '0' WHERE UserID = '$LoggedUser[ID]'");
+	$Cache->delete_value('notify_quoted_' . $LoggedUser['ID']);
+	header('Location: userhistory.php?action=quote_notifications');
+	die();
 }
 
-list($Page, $Limit) = Format::page_limit(TOPICS_PER_PAGE);
-
-if ($LoggedUser['CustomForums']) {
-	unset($LoggedUser['CustomForums']['']);
-	$RestrictedForums = implode("','", array_keys($LoggedUser['CustomForums'], 0));
-	$PermittedForums = implode("','", array_keys($LoggedUser['CustomForums'], 1));
+if (isset($LoggedUser['PostsPerPage'])) {
+	$PerPage = $LoggedUser['PostsPerPage'];
+} else {
+	$PerPage = POSTS_PER_PAGE;
 }
+list($Page, $Limit) = Format::page_limit($PerPage);
+
+// Get $Limit last quote notifications
+// We deal with the information about torrents and requests later on...
 $sql = "
 	SELECT
 		SQL_CALC_FOUND_ROWS
-		f.ID as ForumID,
-		f.Name as ForumName,
-		t.Title,
+		q.Page,
 		q.PageID,
 		q.PostID,
-		q.QuoterID
+		q.QuoterID,
+		q.Date,
+		q.UnRead,
+		f.ID as ForumID,
+		f.Name as ForumName,
+		t.Title as ForumTitle,
+		a.Name as ArtistName,
+		c.Name as CollageName
 	FROM users_notify_quoted AS q
 		LEFT JOIN forums_topics AS t ON t.ID = q.PageID
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
+		LEFT JOIN artists_group AS a ON a.ArtistID = q.PageID
+		LEFT JOIN collages AS c ON c.ID = q.PageID
 	WHERE q.UserID = $LoggedUser[ID]
-		AND q.Page = 'forums'
-		AND ((f.MinClassRead <= '$LoggedUser[Class]'";
-
-if (!empty($RestrictedForums)) {
-	$sql .= ' AND f.ID NOT IN (\'' . $RestrictedForums . '\')';
-}
-$sql .= ')';
-if (!empty($PermittedForums)) {
-	$sql .= ' OR f.ID IN (\'' . $PermittedForums . '\')';
-}
-$sql .= ") $UnreadSQL ORDER BY q.Date DESC LIMIT $Limit";
+		AND (q.Page != 'forums' OR " . Forums::user_forums_sql() . ")
+		AND (q.Page != 'collages' OR c.Deleted = '0')
+		$UnreadSQL
+	ORDER BY q.Date DESC
+	LIMIT $Limit";
 $DB->query($sql);
 $Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
+
+$TorrentGroups = $Requests =  array();
+foreach ($Results as $Result) {
+	if ($Result['Page'] == 'torrents') {
+		$TorrentGroups[] = $Result['PageID'];
+	} elseif ($Result['Page'] == 'requests') {
+		$Requests[] = $Result['PageID'];
+	}
+}
+
+$TorrentGroups = Torrents::get_groups($TorrentGroups, true, true, false);
+$Requests = Requests::get_requests($Requests);
 
 //Start printing page
 View::show_header('Quote Notifications');
@@ -59,46 +77,93 @@ View::show_header('Quote Notifications');
 		</h2>
 		<div class="linkbox pager">
 			<br />
-<?		if ($UnreadSQL) { ?>
+<? if ($UnreadSQL) { ?>
 			<a href="userhistory.php?action=quote_notifications&amp;showall=1" class="brackets">Show all quotes</a>&nbsp;&nbsp;&nbsp;
-<?		} else { ?>
+<? } else { ?>
 			<a href="userhistory.php?action=quote_notifications" class="brackets">Show unread quotes</a>&nbsp;&nbsp;&nbsp;
-<?		} ?>
+<? } ?>
 			<a href="userhistory.php?action=subscriptions" class="brackets">Show subscriptions</a>&nbsp;&nbsp;&nbsp;
 			<a href="userhistory.php?action=quote_notifications&amp;catchup=1" class="brackets">Catch up</a>&nbsp;&nbsp;&nbsp;
-			<br /> <br />
+			<br /><br />
 <?
 			$Pages = Format::get_pages($Page, $NumResults, TOPICS_PER_PAGE, 9);
 			echo $Pages;
 			?>
 		</div>
 	</div>
-<?
-	if (!$NumResults) { ?>
+<? if (!$NumResults) { ?>
 	<div class="center">No<?=($UnreadSQL ? ' new' : '')?> quotes.</div>
-<?	} ?>
+<? } ?>
 	<br />
 <?
-	foreach ($Results as $Result) {
-	?>
+foreach ($Results as $Result) {
+	switch ($Result['Page']) {
+		case 'forums':
+			$Links = 'Forums: <a href="forums.php?action=viewforum&amp;forumid=' . $Result['ForumID'] . '">' . display_str($Result['ForumName']) . '</a> &gt; ' .
+					'<a href="forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '" title="' . display_str($Result['ForumTitle']) . '">' . Format::cut_string($Result['ForumTitle'], 75) . '</a>';
+			$JumpLink = 'forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+			break;
+		case 'artist':
+			$Links = 'Artist: <a href="artist.php?id=' . $Result['PageID'] . '">' . display_str($Result['ArtistName']) . '</a>';
+			$JumpLink = 'artist.php?id=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+			break;
+		case 'collages':
+			$Links = 'Collage: <a href="collages.php?id=' . $Result['PageID'] . '">' . display_str($Result['CollageName']) . '</a>';
+			$JumpLink = 'collages.php?action=comments&amp;collageid=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+			break;
+		case 'requests':
+			if (!isset($Requests['matches'][$Result['PageID']])) {
+				error(0);
+			}
+			list(,,,,, $CategoryID, $Title, $Year,,,,,,,,,,,,) = $Requests['matches'][$Result['PageID']];
+
+			$CategoryName = $Categories[$CategoryID - 1];
+
+			$Links = 'Request: ';
+			if($CategoryName == "Music") {
+				$Links .= Artists::display_artists(Requests::get_artists($Result['PageID'])) . '<a href="requests.php?action=view&amp;id=' . $Result['PageID'] . '" dir="ltr">' . $Title . " [" . $Year . "]</a>";
+			} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
+				$Links .= '<a href="requests.php?action=view&amp;id=' . $Result['PageID'] . '" dir="ltr">' . $Title . " [" . $Year . "]</a>";
+			} else {
+				$Links .= '<a href="requests.php?action=view&amp;id=' . $Result['PageID'] . '">' . $Title . "</a>";
+			}
+			$JumpLink = 'requests.php?action=view&amp;id=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+			break;
+		case 'torrents':
+			if (!isset($TorrentGroups['matches'][$Result['PageID']])) {
+				error(0);
+			}
+			$GroupInfo = $TorrentGroups['matches'][$Result['PageID']];
+			$Links = 'Torrent: ' . Artists::display_artists($GroupInfo['ExtendedArtists']) . '<a href="torrents.php?id=' . $GroupInfo['ID'] . '" dir="ltr">' . $GroupInfo['Name'] . '</a>';
+			if($GroupInfo['Year'] > 0) {
+				$Links .= " [" . $GroupInfo['Year'] . "]";
+			}
+			if ($GroupInfo['ReleaseType'] > 0) {
+				$Links .= " [" . $ReleaseTypes[$GroupInfo['ReleaseType']] . "]";
+			}
+			$JumpLink = 'torrents.php?id=' . $GroupInfo['ID'] . '&postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+			break;
+		default:
+			error(0);
+	}
+?>
 	<table class="forum_post box vertical_margin noavatar">
-		<tr class="colhead_dark">
+		<tr class="colhead_dark notify_<?=$Result['Page']?>">
 			<td colspan="2">
 				<span style="float: left;">
-					<a href="forums.php?action=viewforum&amp;forumid=<?=$Result['ForumID'] ?>"><?=$Result['ForumName'] ?></a>
-					&gt;
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$Result['PageID'] ?>" title="<?=display_str($Result['Title']) ?>"><?=Format::cut_string($Result['Title'], 75) ?></a>
-					&gt; Quoted by <?=Users::format_username($Result['QuoterID'], false, false, false, false) ?>
+					<?=$Links?>
+					&gt; Quoted by <?=Users::format_username($Result['QuoterID'], false, false, false, false) . ' ' . time_diff($Result['Date']) ?>
+					<?=($Result['UnRead'] ? ' <span class="new">(New!)</span>' : '')?>
 				</span>
-				<span style="float: left;" class="last_read" title="Jump to quote">
-					<a href="forums.php?action=viewthread&amp;threadid=<?=$Result['PageID'].($Result['PostID'] ? '&amp;postid=' . $Result['PostID'].'#post'.$Result['PostID'] : '') ?>"></a>
+				<span style="float: left;" class="tooltip last_read" title="Jump to quote">
+					<a href="<?=$JumpLink?>"></a>
 				</span>
-				<span id="bar<?=$Result['PostID'] ?>" style="float: right;">
+				<span style="float: right;">
 					<a href="#">&uarr;</a>
 				</span>
 			</td>
 		</tr>
 	</table>
-<?	} ?>
+<? } ?>
 </div>
 <? View::show_footer(); ?>

@@ -29,8 +29,6 @@ $DB->query("
 		t.Scene,
 		t.FreeTorrent,
 		t.FreeLeechType,
-		t.Dupable,
-		t.DupeReason,
 		t.Description AS TorrentDescription,
 		tg.CategoryID,
 		tg.Name AS Title,

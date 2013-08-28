@@ -38,15 +38,6 @@ $Types = array(
 				"<strong>If you are reporting this request to get it updated to the new requests system, please go back and click '[Request update]'</strong>."
 			)
 		),
-		"requests_comment" => array(
-			"title" => "Request Comment",
-			"guidelines" => array(
-				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken, such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",
-				"We encourage all users to use this feature when they see a rules violation of any form.",
-				"This will get quicker action than PMing a staff member will.",
-				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting comments, not replying to them."
-			)
-		),
 		"thread" => array(
 			"title" => "Forum Thread",
 			"guidelines" => array(
@@ -79,26 +70,8 @@ $Types = array(
 				"In your report description below, please be specific and include as much information as possible that will help our staff resolve the issue."
 			)
 		),
-		"collages_comment" => array(
-			"title" => "Collage Comment",
-			"guidelines" => array(
-				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken, such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",
-				"We encourage all users to use this feature when they see a rules violation of any form.",
-				"This will get quicker action than PMing a staff member will.",
-				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting comments, not replying to them."
-			)
-		),
-		"torrents_comment" => array(
-			"title" => "Torrent Comment",
-			"guidelines" => array(
-				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken, such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",
-				"We encourage all users to use this feature when they see a rules violation of any form.",
-				"This will get quicker action than PMing a staff member will.",
-				"Please restrict the use of this feature to reporting rules violations, and remember, this is for reporting comments, not replying to them."
-			)
-		),
-		"artist_comment" => array(
-			"title" => "Artist Comment",
+		"comment" => array(
+			"title" => "Comment",
 			"guidelines" => array(
 				"The report comment option is specifically for reporting when the <a href=\"rules.php?p=chat\">chat rules</a> have been broken, such as posts containing racism, offensive language, flaming, pornography, and other rules violations.",
 				"We encourage all users to use this feature when they see a rules violation of any form.",

@@ -1,5 +1,4 @@
 <?
-//TODO: Developer, add resend last donation when available AND add missing headers to Test IPN
 enforce_login();
 
 //Include the header
@@ -15,90 +14,37 @@ if (!$UserCount = $Cache->get_value('stats_user_count')) {
 $DonorPerms = Permissions::get_permissions(DONOR);
 
 View::show_header('Donate');
-
 ?>
-<!-- Donate -->
 <div class="thin">
-<? if (check_perms('site_debug')) { ?>
-	<div class="header">
-		<h2>Test IPN</h2>
-	</div>
-	<div class="box pad">
-		<form class="donate_form" name="test_paypal" method="post" action="donate.php">
-			<input type="hidden" name="action" value="ipn" />
-			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-			<?=PAYPAL_SYMBOL?> <input type="text" name="mc_gross" value="<?=number_format(PAYPAL_MINIMUM,2)?>" />
-			<input type="hidden" name="custom" value="<?=$LoggedUser['ID']?>" />
-			<input type="hidden" name="payment_status" value="Completed" />
-			<input type="hidden" name="mc_fee" value="0.45" />
-			<input type="hidden" name="business" value="<?=PAYPAL_ADDRESS?>" />
-			<input type="hidden" name="txn_id" value="0" />
-			<input type="hidden" name="payment_type" value="instant" />
-			<input type="text" name="payer_email" value="<?=$LoggedUser['Username']?>@<?=NONSSL_SITE_URL?>" />
-			<input type="hidden" name="mc_currency" value="<?=PAYPAL_CURRENCY?>" />
-			<input name="test" type="submit" value="Donate" />
-		</form>
-	</div>
-<?
-}
-?>
-	<div class="header">
-		<h2>Donate</h2>
-	</div>
-	<div class="box pad" style="padding: 10px 10px 10px 20px;">
-		<p>We accept donations to cover the costs associated with running the site and tracker. These costs come from the rental and purchase of the hardware the site runs on (servers, components, etc.), in addition to operating expenses (bandwidth, power, etc.).</p>
-		<p>Because we do not have any advertisements or sponsorships and this service is provided free of charge, we are entirely reliant upon user donations. If you are financially able, please consider making a donation to help us pay the bills!</p>
-		<p>We currently only accept one payment method: PayPal. Because of the fees they charge, there is a <strong>minimum donation amount of <?=PAYPAL_SYMBOL?> <?=PAYPAL_MINIMUM?></strong> (Please note, this is only a minimum amount and we greatly appreciate any extra you can afford.).</p>
-		<p>You don't have to be a PayPal member to make a donation, you can simply donate with your credit or debit card. If you do not have a credit or debit card, you should be able to donate from your bank account, but you will need to make an account with them to do this.</p>
-		<form class="donate_form" name="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-			<input type="hidden" name="rm" value="2" />
-			<input type="hidden" name="cmd" value="_donations" />
-			<input type="hidden" name="business" value="<?=PAYPAL_ADDRESS?>" />
-			<input type="hidden" name="return" value="https://<?=SSL_SITE_URL?>/donate.php?action=complete" />
-			<input type="hidden" name="cancel_return" value="https://<?=SSL_SITE_URL?>/donate.php?action=cancel" />
-			<input type="hidden" name="notify_url" value="https://<?=SSL_SITE_URL?>/donate.php?action=ipn" />
-			<input type="hidden" name="item_name" value="Donation" />
-			<input type="hidden" name="amount" value="" />
-			<input type="hidden" name="custom" value="<?=$LoggedUser['ID']?>" />
-			<input type="hidden" name="no_shipping" value="0" />
-			<input type="hidden" name="no_note" value="1" />
-			<input type="hidden" name="currency_code" value="<?=PAYPAL_CURRENCY?>" />
-			<input type="hidden" name="tax" value="0" />
-			<input type="hidden" name="bn" value="PP-DonationsBF" />
-			<input type="submit" value="PayPal Donate" />
-		</form>
+	<span class="donation_info_title">Why donate?</span>
+	<div class="box pad donation_info">
+		<?=SITE_NAME?> has no advertisements, is not sponsored, and provides its services free of charge. For these reasons, <?=SITE_NAME?>'s financial obligations can only be met with the help of voluntary user donations. Supporting <?=SITE_NAME?> is and will always remain voluntary. If you are financially able, help pay <?=SITE_NAME?>'s bills by donating. <?=SITE_NAME?>'s survival is up to you.<br>
+		<br>
+		<?=SITE_NAME?> uses all voluntary donations to cover the costs of running the site, tracker, and IRC network. These costs represent the hardware the site runs on (e.g., servers, upgrades, fixes, etc.), and recurring operating expenses (e.g., hosting, bandwidth, power, etc.).<br>
+		<br>
+		Please note that <?=SITE_NAME?> is a nonprofit organization. No staff member or other individual responsible for the site's operation personally profits from user donations. As a donor, your financial support is exclusively applied to operating costs. When you donate you aren't paying the <?=SITE_NAME?> Staff, purchasing upload credit, or buying the ability to download. When you donate you are paying <?=SITE_NAME?>'s bills. <br>
+		<br>
+		<?=SITE_NAME?>'s Donor Rank system is currently available to all credited donors. This system provides donors with perks. Some of these perks are cosmetic (e.g., a donor icon added to your account), some are one-time benefits (e.g., additional invites), and others modify specific site options (e.g., additional profile information boxes, or personal collages). Please see the <a href="/forums.php?action=viewthread&amp;threadid=178640">Donor Rank System FAQ Document</a> for more information about these benefits.
 	</div>
 
-	<h3>What you will receive for a 5&euro; or 0.1 BTC minimum donation</h3>
-	<div class="box pad" style="padding: 10px 10px 10px 20px;">
-		<ul>
-<?
-if ($LoggedUser['Donor']) { ?>
-			<li>Even more love! (You will not get multiple hearts.)</li>
-			<li>A warmer, fuzzier feeling than before!</li>
-<?
-} else { ?>
-			<li>Our eternal love, as represented by the <img src="<?=STATIC_SERVER?>common/symbols/donor.png" alt="Donor" /> you get next to your name.</li>
-<?
-	if (USER_LIMIT != 0 && $UserCount >= USER_LIMIT && !check_perms('site_can_invite_always') && !isset($DonorPerms['site_can_invite_always'])) {
-?>
-			<li class="warning">Note: Because the user limit has been reached, you will be unable to use the invites received until a later date.</li>
-<?	} ?>
-			<li>A warm fuzzy feeling.</li>
-<?
-} ?>
-		</ul>
-		<p>Please be aware that by making a donation you aren't purchasing donor status or invites. You are helping us pay the bills and cover the costs of running the site. We are doing our best to give our love back to donors, but sometimes it might take more than 48 hours. Feel free to contact us by sending us a <a href="staffpm.php">Staff PM</a> regarding any matter. We will answer as quickly as possible.</p>
+	<span class="donation_info_title">What you will receive for donating</span>
+	<div class="box pad donation_info">
+		Any donation or contribution option listed above gives you the opportunity to receive Donor Points. After acquiring your first Donor Point, your account will unlock Donor Rank #1. This rank will last forever, and you'll receive the following perks upon unlocking it:<br>
+		<br>
+		<ul><li>Our eternal love, as represented by the red heart you get next to your name</li><li><a href="/wiki.php?action=article&amp;id=8">Inactivity</a> timer immunity</li><li>Access to the <a href="/user.php?action=notify">notifications system</a></li><li>Two <a href="/user.php?action=invite">invites</a></li><li><a href="/collages.php">Collage</a> creation privileges</li><li>Personal collage creation privileges</li><li>One additional personal collage</li><li>A warm, fuzzy feeling</li></ul><br>
+		There are a number of additional perks waiting for you when you unlock additional Donor Ranks. View the FAQ or infographic below for more information about these perks.<br>
+		<br>
+		<div style="text-align: center;">[<a href="/forums.php?action=viewthread&amp;threadid=178640">View Donor Rank System FAQ Document</a>]<br>
+		<br>
+		[<a rel="noreferrer" target="_blank" href="static/common/banners/donorinfographic.jpg">View Donor Rank Perks Infographic</a>]<br>
+		(Last Updated: July 2013)</div><br>
+		<br>
+		Be reminded that when you make a donation, you aren't "purchasing" Donor Ranks, invites, or any <?=SITE_NAME?>-specific benefit. When donating, you are helping <?=SITE_NAME?> pay its bills, and your donation should be made in this spirit. The <?=SITE_NAME?> Staff does its best to recognize <?=SITE_NAME?>'s financial supporters in a fair and fun way, but all Donor Perks are subject to change or cancellation at any time, without notice.
 	</div>
-	<h3>What you will <strong>not</strong> receive</h3>
-	<div class="box pad" style="padding: 10px 10px 10px 20px;">
-		<ul>
-<?	if ($LoggedUser['Donor']) { ?>
-			<li>2 more invitations; these are one time only.</li>
-<?	} ?>
-			<li>Immunity from the rules.</li>
-			<li>Additional upload credit.</li>
-		</ul>
+
+	<span class="donation_info_title">What you won't receive for donating</span>
+	<div class="box pad donation_info">
+		<ul><li>Immunity from the rules</li><li>Additional upload credit</li></ul>
 	</div>
 </div>
 <!-- END Donate -->

@@ -62,8 +62,8 @@ View::show_header($Title,'wiki,bbcode');
 			<form class="search_form" name="articles" action="wiki.php" method="get">
 				<input type="hidden" name="action" value="search" />
 				<input
-					onfocus="if (this.value == 'Search articles') this.value='';"
-					onblur="if (this.value == '') this.value='Search articles';"
+					onfocus="if (this.value == 'Search articles') { this.value = ''; }"
+					onblur="if (this.value == '') { this.value = 'Search articles'; }"
 					value="Search articles" type="text" name="search" size="20"
 				/>
 				<input value="Search" type="submit" class="hidden" />
@@ -104,7 +104,7 @@ View::show_header($Title,'wiki,bbcode');
 		$i = 0;
 		foreach ($AliasArray as $AliasItem) {
 ?>
-						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem,20,1)?></a><? if (check_perms('admin_manage_wiki')) { ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>');return false;" class="brackets" title="Delete alias">X</a> <a href="user.php?id=<?=$UserArray[$i]?>" class="brackets" title="View user">U</a><? } ?></li>
+						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem, 20, 1)?></a><? if (check_perms('admin_manage_wiki')) { ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>'); return false;" class="brackets tooltip" title="Delete alias">X</a> <a href="user.php?id=<?=$UserArray[$i]?>" class="brackets tooltip" title="View user">U</a><? } ?></li>
 <?			$i++;
 		}
 	}

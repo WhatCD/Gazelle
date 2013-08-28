@@ -6,23 +6,8 @@ if (!empty($LoggedUser['DisableForums'])) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/sections/forums/functions.php');
-
-// Replace the old hard-coded forum categories
-unset($ForumCats);
-$ForumCats = $Cache->get_value('forums_categories');
-if ($ForumCats === false) {
-	$DB->query('
-		SELECT ID, Name
-		FROM forums_categories');
-	$ForumCats = array();
-	while (list($ID, $Name) = $DB->next_record()) {
-		$ForumCats[$ID] = $Name;
-	}
-	$Cache->cache_value('forums_categories', $ForumCats, 0); //Inf cache.
-}
-
-$Forums = get_forums();
+$Forums = Forums::get_forums();
+$ForumCats = Forums::get_forum_categories();
 
 if (!empty($_POST['action'])) {
 	switch ($_POST['action']) {
@@ -107,9 +92,6 @@ if (!empty($_POST['action'])) {
 			break;
 		case 'warn':
 			require(SERVER_ROOT.'/sections/forums/warn.php');
-			break;
-		case 'forum_subscribe':
-			include('subscribe.php');
 			break;
 		default:
 			error(404);

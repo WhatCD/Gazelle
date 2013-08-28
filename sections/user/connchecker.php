@@ -2,18 +2,18 @@
 //TODO: Move to somewhere more appropriate, doesn't really belong under users, tools maybe but we don't have that page publicly accessible.
 
 if (isset($_GET['ip']) && isset($_GET['port'])) {
-	$Octets = explode(".", $_GET['ip']);
+	$Octets = explode('.', $_GET['ip']);
 	if (
-		empty($_GET['ip']) ||
-		!preg_match('/'.IP_REGEX.'/', $_GET['ip']) ||
-		$Octets[0] < 0 ||
-		$Octets[0] > 255 ||
-		$Octets[1] < 0 ||
-		$Octets[1] > 255 ||
-		$Octets[2] < 0 ||
-		$Octets[2] > 255 ||
-		$Octets[3] < 0 ||
-		$Octets[3] > 255 ||
+		empty($_GET['ip'])
+		|| !preg_match('/'.IP_REGEX.'/', $_GET['ip'])
+		|| $Octets[0] < 0
+		|| $Octets[0] > 255
+		|| $Octets[1] < 0
+		|| $Octets[1] > 255
+		|| $Octets[2] < 0
+		|| $Octets[2] > 255
+		|| $Octets[3] < 0
+		|| $Octets[3] > 255
 		/*
 		 * Per RFC 1918, the following CIDR blocks should never be found on the public Internet.
 		 *		10.0.0.0/8
@@ -23,10 +23,10 @@ if (isset($_GET['ip']) && isset($_GET['port'])) {
 		 * Per RFC 3330, the block 127.0.0.0/8 should never appear on any network.
 		 *
 		 */
-		$Octets[0] == 127 ||
-		$Octets[0] == 10 ||
-		($Octets[0] == 172 && ((16 <= $Octets[1]) && ($Octets[1] <= 31))) ||
-		($Octets[0] == 192 && $Octets[1] == 168)
+		|| $Octets[0] == 127
+		|| $Octets[0] == 10
+		|| ($Octets[0] == 172 && ((16 <= $Octets[1]) && ($Octets[1] <= 31)))
+		|| ($Octets[0] == 192 && $Octets[1] == 168)
 	) {
 		die('Invalid IPv4 address');
 	}

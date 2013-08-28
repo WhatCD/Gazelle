@@ -17,7 +17,7 @@ if (!empty($_GET['filter']) && $_GET['filter'] == 'all') {
 	$Join = '';
 	$All = true;
 } else {
-	$Join = "JOIN xbt_snatched as x ON x.fid=tbt.TorrentID AND x.uid = ".$LoggedUser['ID'];
+	$Join = "JOIN xbt_snatched as x ON x.fid = tbt.TorrentID AND x.uid = ".$LoggedUser['ID'];
 	$All = false;
 }
 
@@ -67,7 +67,7 @@ foreach ($TorrentsInfo as $TorrentID => $Info) {
 	} else {
 		$DisplayName = '';
 	}
-	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'#torrent'.$TorrentID.'" title="View Torrent">'.$GroupName.'</a>';
+	$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 	if ($GroupYear > 0) {
 		$DisplayName .= " [$GroupYear]";
 	}

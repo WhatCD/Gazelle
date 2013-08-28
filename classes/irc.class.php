@@ -2,7 +2,6 @@
 class IRC_DB extends DB_MYSQL {
 	function halt($Msg) {
 		global $Bot;
-		global $DB;
 		$Bot->send_to($Bot->get_channel(),'The database is currently unavailable; try again later.');
 	}
 }
@@ -135,7 +134,6 @@ abstract class IRC_BOT {
 	This function uses blacklisted_ip, which is no longer in RC2.
 	You can probably find it in old RC1 code kicking aronud if you need it.
 	protected function ip_check($IP, $Gline = false, $Channel = BOT_REPORT_CHAN) {
-		global $Cache, $DB;
 		if (blacklisted_ip($IP)) {
 			$this->send_to($Channel, 'TOR IP Detected: '.$IP);
 			if ($Gline) {
@@ -151,8 +149,7 @@ abstract class IRC_BOT {
 	}*/
 
 	protected function listen() {
-		global $Cache, $DB;
-		$Cache->InternalCache = false;
+		G::$Cache->InternalCache = false;
 		stream_set_timeout($this->Socket, 10000000000);
 		while ($this->State == 1) {
 			if ($this->Data = fgets($this->Socket, 256)) {
@@ -182,20 +179,20 @@ abstract class IRC_BOT {
 						unset($this->Identified[$Nick[1]]);
 					}
 					if (isset($this->DisabledUsers[$Nick[1]])) {
-						$DB->query("
+						G::$DB->query("
 							DELETE FROM disable_list
 							WHERE Nick = '$Nick[1]'");
-						$Cache->increment_value('num_disablees', -1);
+						G::$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[1]]);
 					}
 				}
 
 				if (preg_match("/:([^!]+)![^\s]* PART ".BOT_DISABLED_CHAN.'/', $this->Data, $Nick)) {
 					if (isset($this->DisabledUsers[$Nick[1]])) {
-						$DB->query("
+						G::$DB->query("
 							DELETE FROM disable_list
 							WHERE Nick = '$Nick[1]'");
-						$Cache->increment_value('num_disablees', -1);
+						G::$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[1]]);
 					}
 				}
@@ -203,10 +200,10 @@ abstract class IRC_BOT {
 				if (preg_match("/:([^!]+)![^\s]* KICK ".BOT_DISABLED_CHAN.'.* /', $this->Data, $Nick)) {
 					$Nick = explode(' ', $Nick[0]);
 					if (isset($this->DisabledUsers[$Nick[3]])) {
-						$DB->query("
+						G::$DB->query("
 							DELETE FROM disable_list
 							WHERE Nick = '$Nick[3]'");
-						$Cache->increment_value('num_disablees', -1);
+						G::$Cache->increment_value('num_disablees', -1);
 						unset($this->DisabledUsers[$Nick[3]]);
 					}
 				}
@@ -232,8 +229,8 @@ abstract class IRC_BOT {
 				$this->listener_events();
 			}
 
-			$DB->LinkID = false;
-			$DB->Queries = array();
+			G::$DB->LinkID = false;
+			G::$DB->Queries = array();
 			usleep(5000);
 		}
 	}

@@ -34,7 +34,11 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=label_aliases">Label aliases</a></td></tr>
 <?	} if (check_perms('users_mod')) { ?>
 			<tr><td><a href="tools.php?action=change_log">Change log</a></td></tr>
-<?	} ?>
+<?	} if (check_perms('users_mod')) { ?>
+			<tr><td><a href="tools.php?action=global_notification">Global Notification</a></td></tr>
+<?	} if (Calendar::can_view()) { ?>
+			<tr><td><a href="tools.php?action=calendar">Calendar</a></td></tr>
+<?  } ?>
 		</table>
 	</div>
 	<div class="permission_container">
@@ -57,6 +61,7 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=service_stats">Service stats</a></td></tr>
 <?	} if (check_perms('admin_manage_permissions')) { ?>
 			<tr><td><a href="tools.php?action=special_users">Special users</a></td></tr>
+			<tr><td><a href="tools.php?action=donor_rewards">Donor Rewards</a></td></tr>
 <?	} ?>
 		</table>
 	</div>

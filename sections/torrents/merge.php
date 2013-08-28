@@ -124,20 +124,9 @@ if (empty($_POST['confirm'])) {
 		UPDATE wiki_torrents
 		SET PageID = '$NewGroupID'
 		WHERE PageID = '$GroupID'");
-	$DB->query("
-		UPDATE torrents_comments
-		SET GroupID = '$NewGroupID'
-		WHERE GroupID = '$GroupID'");
 
-	Torrents::delete_group($GroupID);
-
-	Torrents::write_group_log($NewGroupID, 0, $LoggedUser['ID'], "Merged Group $GroupID ($Name) to $NewGroupID ($NewName)", 0);
-	$DB->query("
-		UPDATE group_log
-		SET GroupID = $NewGroupID
-		WHERE GroupID = $GroupID");
-
-	$GroupID = $NewGroupID;
+	//Comments
+	Comments::merge('torrents', $OldGroupID, $NewGroupID);
 
 	//Collages
 	$DB->query("
@@ -167,11 +156,22 @@ if (empty($_POST['confirm'])) {
 	$Requests = $DB->collect('ID');
 	$DB->query("
 		UPDATE requests
-		SET GroupID = 'NewGroupID'
+		SET GroupID = '$NewGroupID'
 		WHERE GroupID = '$OldGroupID'");
 	foreach ($Requests as $RequestID) {
 		$Cache->delete_value("request_$RequestID");
 	}
+	$Cache->delete_value('requests_group_'.$NewGroupID);
+
+	Torrents::delete_group($GroupID);
+
+	Torrents::write_group_log($NewGroupID, 0, $LoggedUser['ID'], "Merged Group $GroupID ($Name) to $NewGroupID ($NewName)", 0);
+	$DB->query("
+		UPDATE group_log
+		SET GroupID = $NewGroupID
+		WHERE GroupID = $GroupID");
+
+	$GroupID = $NewGroupID;
 
 	$DB->query("
 		SELECT ID
@@ -181,8 +181,6 @@ if (empty($_POST['confirm'])) {
 		$Cache->delete_value("torrent_download_$TorrentID");
 	}
 	$Cache->delete_value("torrents_details_$GroupID");
-	$Cache->delete_value("torrent_comments_{$GroupID}_catalogue_0");
-	$Cache->delete_value("torrent_comments_$GroupID");
 	$Cache->delete_value("groups_artists_$GroupID");
 	Torrents::update_hash($GroupID);
 

@@ -218,6 +218,8 @@ if (!$TargetAliasID || $TargetAliasID == $OldAliasID) {
 				Requests::update_sphinx_requests($RequestID);
 			}
 		}
+
+		Comments::merge('artist', $ArtistID, $TargetArtistID);
 	}
 }
 

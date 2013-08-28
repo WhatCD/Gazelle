@@ -53,7 +53,7 @@ if (!empty($Groups['matches'][$GroupID])) {
 					<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a> (<?=$Format?>/<?=$Encoding?>/<?=$Media?>)</td>
 <?				}
 			} else { ?>
-				<td />
+				<td></td>
 <?			}	?>
 			<td><?=Users::format_username($UserID, false, false, false)?></td>
 			<td><?=$Info?></td>

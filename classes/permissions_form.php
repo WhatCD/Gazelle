@@ -229,7 +229,6 @@ function permissions_form() { ?>
 					<? display_perm('edit_unknowns', 'Can edit unknown release information.'); ?>
 					<? display_perm('torrents_edit_vanityhouse', 'Can mark groups as part of Vanity House.'); ?>
 					<? display_perm('artist_edit_vanityhouse', 'Can mark artists as part of Vanity House.'); ?>
-					<? display_perm('site_add_logs', 'Can add logs to torrents after upload'); ?>
 					<? display_perm('torrents_hide_dnu', 'Hide the Do Not Upload list by default.'); ?>
 					<? display_perm('torrents_fix_ghosts', 'Can fix ghost groups on artist pages.'); ?>
 				</td>

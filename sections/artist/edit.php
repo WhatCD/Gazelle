@@ -112,14 +112,14 @@ View::show_header('Edit artist');
 		}
 ?>
 				<li>
-					<span title="Alias ID"><?=$AliasID?></span>. <span title="Alias name"><?=$AliasName?></span>
+					<span class="tooltip" title="Alias ID"><?=$AliasID?></span>. <span class="tooltip" title="Alias name"><?=$AliasName?></span>
 <?		if ($User) { ?>
-					<a href="user.php?id=<?=$User?>" title="Alias creator" class="brackets">User</a>
+					<a href="user.php?id=<?=$User?>" title="Alias creator" class="brackets tooltip">User</a>
 <?		}
 		if ($Redirect) { ?>
-					(writes redirect to <span title="Target alias ID"><?=$Redirect?></span>)
+					(writes redirect to <span class="tooltip" title="Target alias ID"><?=$Redirect?></span>)
 <?		} ?>
-					<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Delete this alias" class="brackets">X</a>
+					<a href="artist.php?action=delete_alias&amp;aliasid=<?=$AliasID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Delete this alias" class="brackets tooltip">X</a>
 				</li>
 <?	}
 ?>

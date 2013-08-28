@@ -99,7 +99,7 @@ if (!empty($_GET['date'])) {
 
 	<br />
 	<div class="pad box">
-		<h3>Top 10 for <?=($Type == 'day' ? $Date : 'the first week after '.$Date)?></h3>
+		<h3>Top 10 for <?=($Type == 'day' ? $Date : "the first week after $Date")?></h3>
 	<table class="torrent_table cats numbering border">
 	<tr class="colhead">
 		<td class="center" style="width: 15px;"></td>
@@ -107,7 +107,7 @@ if (!empty($_GET['date'])) {
 		<td><strong>Name</strong></td>
 	</tr>
 <?
-	foreach ($Details as $Detail) :
+	foreach ($Details as $Detail) {
 		list($Rank, $TitleString, $TagString, $TorrentID, $GroupID, $GroupName, $GroupCategoryID, $TorrentTags,
 			$Format, $Encoding, $Media, $Scene, $HasLog, $HasCue, $LogScore, $Year, $GroupYear,
 			$RemasterTitle, $Snatched, $Seeders, $Leechers, $Data) = $Detail;
@@ -115,7 +115,7 @@ if (!empty($_GET['date'])) {
 		// highlight every other row
 		$Highlight = ($Rank % 2 ? 'a' : 'b');
 
-		if ($GroupID) :
+		if ($GroupID) {
 			// Group still exists
 			$DisplayName = '';
 
@@ -125,7 +125,7 @@ if (!empty($_GET['date'])) {
 				$DisplayName = Artists::display_artists($Artists, true, true);
 			}
 
-			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\">$GroupName</a>";
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 
 			if ($GroupCategoryID == 1 && $GroupYear > 0) {
 				$DisplayName .= " [$GroupYear]";
@@ -172,10 +172,10 @@ if (!empty($_GET['date'])) {
 
 			$DisplayName .= $ExtraInfo;
 			$TorrentTags = new Tags($TorrentTags);
-		else:
+		} else {
 			$DisplayName = "$TitleString (Deleted)";
 			$TorrentTags = new Tags($TagString);
-		endif;
+		} // if ($GroupID)
 
 ?>
 	<tr class="group_torrent row<?=$Highlight?>">
@@ -188,7 +188,7 @@ if (!empty($_GET['date'])) {
 		</td>
 	</tr>
 <?
-	endforeach;
+	} //foreach ($Details as $Detail)
 ?>
 	</table><br />
 </div>

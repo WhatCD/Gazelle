@@ -54,8 +54,8 @@ if ($Depth != 0) {
 		case 'torrents' :
 			$DB->query("
 				SELECT Body
-				FROM {$Type}_comments
-				WHERE ID = $PostID");
+				FROM comments
+				WHERE Page = '$Type' AND ID = $PostID");
 			list($Body) = $DB->next_record();
 			break;
 	}

@@ -53,7 +53,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
-				<td><?=number_format($Reports)?></td>
+				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -82,7 +82,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
-				<td><?=number_format($Reports)?></td>
+				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -111,7 +111,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
-				<td><?=number_format($Reports)?></td>
+				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -139,7 +139,7 @@ $Results = $DB->to_array();
 ?>
 			<tr>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
-				<td><?=number_format($Reports)?></td>
+				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
 <? } ?>
 		</table>
@@ -234,7 +234,7 @@ $Results = $DB->to_array();
 				<td>
 					<a href="reportsv2.php?view=staff&amp;id=<?=$Array['ResolverID']?>"><?=display_str($Array['Username'])?>'s reports</a>
 				</td>
-				<td><?=number_format($Array['Count'])?></td>
+				<td class="number_column"><?=number_format($Array['Count'])?></td>
 			</tr>
 <?
 		} ?>
@@ -271,7 +271,7 @@ $Results = $DB->to_array();
 				<td>
 					<a href="reportsv2.php?view=type&amp;id=<?=display_str($Array['Type'])?>"><?=display_str($Title)?></a>
 				</td>
-				<td>
+				<td class="number_column">
 					<?=number_format($Array['Count'])?>
 				</td>
 			</tr>

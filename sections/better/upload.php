@@ -166,7 +166,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		if (!$Edition['FlacID'] || count($Edition['Formats']) === 3) {
 			continue;
 		}
-		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" title="View Torrent">'.$GroupName.'</a>';
+		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
 		if ($GroupYear > 0) {
 			$DisplayName .= " [$GroupYear]";
 		}

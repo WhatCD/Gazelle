@@ -199,7 +199,6 @@ div#AddArtists a {
 	z-index: 25;
 	display: block;
 	position: fixed;
-	background: transparent url('../rippy/rippy.png') no-repeat bottom center;
 	color: black;
 	text-align: center;
 	width: 190px;
@@ -217,6 +216,10 @@ div#AddArtists a {
 	right: 0px;
 }
 
+td.label {
+	vertical-align: top;
+}
+
 span.rbt {
 	display: block;
 	padding: 8px 0 0;
@@ -226,7 +229,7 @@ span.rbt {
 span.rbm {
 	display: block;
 	background: url('../rippy/rippy_middle.gif') repeat bottom;
-	padding: 2px;
+	padding: 0 5px;
 }
 
 span.rbb {
@@ -382,6 +385,7 @@ tr.torrent .bookmark>a:after {
 
 .brackets {
 	text-indent: 0px;
+	white-space: nowrap;
 }
 
 .votespan.brackets:before {
@@ -470,24 +474,25 @@ tr.torrent .bookmark>a:after {
 	overflow: hidden;
 	margin-top: 10px;
 }
-.preview_wrapper{
+.preview_wrapper {
 	position: relative;
 	display: inline-block;
 	width: 29%;
 	height: 120px;
 	margin: 0 10px;
+}
+.preview_image {
+	display: block;
+	height: 80px;
+	cursor: pointer;
 	overflow: hidden;
 }
-.preview_image{
-	display: block;
+.preview_image img {
 	width: 100%;
-	height: 80px;
-	background-size: 100% auto !important;
-	cursor: pointer;
 }
 .preview_name {
 	text-align: center;
-	margin-top: 10px;
+	margin-top: 5px;
 }
 
 .anchor {
@@ -532,22 +537,61 @@ tr.torrent .bookmark>a:after {
 	overflow: auto;
 }
 
-#invite_extra_box {
-	align: middle;
-	width: 300px;
-	height: 100px;
+.setting_description>* {
+        margin: 1em 0 0 0;
 }
 
-#invite_extra_box input {
-	float: right;
-	display: inline;
+.settings_sidebar {
+	min-height: 385px;
 }
 
-#invite_extra_box label {
-	width: 250px;
+#settings_sections {
+	position: absolute;
+}
+
+#settings_sections.fixed {
+	position: fixed;
+	top: 0px;
+}
+
+#settings_sections #submit, #settings_sections #settings_search {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	width: 100%;
+}
+
+#settings_sections h2 {
+	text-align: left;
+}
+
+.donor_icon {
+	margin-left: 2px;
+	width: 15px;
+	height: 13px;
+}
+
+.donation_info {
+	padding: 10px 10px 10px 20px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 20px;
+}
+
+.donation_info_title {
 	display: block;
+	font-size: 1.75em;
+	-webkit-margin-before: 1em;
+	-webkit-margin-after: 1em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+	margin: 10px 0;
 }
 
-.setting_description p {
-	margin-top: 1em;
+.number_column {
+	text-align: right;
+}
+
+.wide_input_text {
+	width: 95%;
 }

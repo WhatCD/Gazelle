@@ -51,7 +51,7 @@ View::show_header("Service Stats");
 				<td><?=number_format($MemStats['total_items'])?></span></td>
 			</tr>
 			<tr>
-				<td<? if ($MemStats['bytes'] / $MemStats['limit_maxbytes'] > 0.85) { echo ' class="invalid" title="Evictions begin when storage exceeds 85%" '; } ?>>Cache Storage:</td>
+				<td<? if ($MemStats['bytes'] / $MemStats['limit_maxbytes'] > 0.85) { echo ' class="tooltip invalid" title="Evictions begin when storage exceeds 85%" '; } ?>>Cache Storage:</td>
 				<td><?=Format::get_size($MemStats['bytes'])?> <span style="float: right;">(<?=number_format(($MemStats['bytes'] / $MemStats['limit_maxbytes']) * 100, 3);?>%)</span></td>
 			</tr>
 			<tr><td colspan="2"></td></tr>
@@ -122,7 +122,7 @@ View::show_header("Service Stats");
 			</tr>
 			<tr><td colspan="2"><strong>CAS/Update (Success)</strong></td></tr>
 			<tr>
-				<td<? if ($MemStats['cas_hits'] > 0 && $MemStats['cas_hits'] / ($MemStats['cas_hits'] + $MemStats['cas_misses']) < 0.7) { echo ' class="invalid" title="More than 30% of the issued CAS commands were unnecessarily wasting time and resources." '; } elseif ($MemStats['cas_hits'] == 0) { echo ' class="notice" title="Disable CAS with the -C parameter and save resources since it is not used." '; } ?>>Cache:</td>
+				<td<? if ($MemStats['cas_hits'] > 0 && $MemStats['cas_hits'] / ($MemStats['cas_hits'] + $MemStats['cas_misses']) < 0.7) { echo ' class="tooltip invalid" title="More than 30% of the issued CAS commands were unnecessarily wasting time and resources." '; } elseif ($MemStats['cas_hits'] == 0) { echo ' class="tooltip notice" title="Disable CAS with the -C parameter and save resources since it is not used." '; } ?>>Cache:</td>
 				<td><?=number_format($MemStats['cas_hits'])?> <span style="float: right;">(<? if ($MemStats['cas_hits'] > 0) { echo number_format(($MemStats['cas_hits'] / ($MemStats['cas_hits'] + $MemStats['cas_misses'])) * 100, 3); } else { echo '0.000'; } ?>%)</span></td>
 			</tr>
 			<tr>
@@ -131,7 +131,7 @@ View::show_header("Service Stats");
 			</tr>
 			<tr><td colspan="2"><strong>Deletes (Success)</strong></td></tr>
 			<tr>
-				<td<? if ($MemStats['delete_hits'] / ($MemStats['delete_hits']+$MemStats['delete_misses']) < 0.7) { echo ' class="invalid" title="More than 30% of the issued delete commands were unnecessary wasting time and resources." '; } ?>>Cache:</td>
+				<td<? if ($MemStats['delete_hits'] / ($MemStats['delete_hits']+$MemStats['delete_misses']) < 0.7) { echo ' class="tooltip invalid" title="More than 30% of the issued delete commands were unnecessary wasting time and resources." '; } ?>>Cache:</td>
 				<td><?=number_format($MemStats['delete_hits'])?> <span style="float: right;">(<?=number_format(($MemStats['delete_hits'] / ($MemStats['delete_hits'] + $MemStats['delete_misses'])) * 100, 3);?>%)</span></td>
 			</tr>
 			<tr>
@@ -141,7 +141,7 @@ View::show_header("Service Stats");
 			<tr><td colspan="2"></td></tr>
 			<tr><td colspan="2"><strong>Special</strong></td></tr>
 			<tr>
-				<td<? if ($MemStats['cmd_flush'] > $MemStats['uptime'] / 7 * 24 * 3600) { echo ' class="invalid" title="Flushing the cache on a regular basis defeats the benefits of it, look into using cache transactions, or deletes instead of global flushing where possible." '; } ?>>Cache Flushes:</td>
+				<td<? if ($MemStats['cmd_flush'] > $MemStats['uptime'] / 7 * 24 * 3600) { echo ' class="tooltip invalid" title="Flushing the cache on a regular basis defeats the benefits of it, look into using cache transactions, or deletes instead of global flushing where possible." '; } ?>>Cache Flushes:</td>
 				<td><?=number_format($MemStats['cmd_flush'])?></td>
 			</tr>
 			<tr>
@@ -149,7 +149,7 @@ View::show_header("Service Stats");
 				<td><?=number_format($MemStats['evictions'])?></td>
 			</tr>
 			<tr>
-				<td<? if ($DBStats['Slow_queries']['Value'] > $DBStats['Questions']['Value'] / 7500) { echo ' class="invalid" title="1/7500 queries is allowed to be slow to minimize performance impact." '; } ?>>Database Slow:</td>
+				<td<? if ($DBStats['Slow_queries']['Value'] > $DBStats['Questions']['Value'] / 7500) { echo ' class="tooltip invalid" title="1/7500 queries is allowed to be slow to minimize performance impact." '; } ?>>Database Slow:</td>
 				<td><?=number_format($DBStats['Slow_queries']['Value'])?></td>
 			</tr>
 			<tr><td colspan="2"></td></tr>

@@ -199,15 +199,30 @@ function URL() {
 	var path = path[path.length - 1].split(".")[0];
 	var splitted = window.location.search.substr(1).split("&");
 	var query = {};
+	var length = 0;
 	for (var i = 0; i < splitted.length; i++) {
 		var q = splitted[i].split("=");
-		query[q[0]] = q[1];
+		if(q != "") {
+			query[q[0]] = q[1];
+			length++;
+		}
 	};
-
+	query['length'] = length;
 	var response = new Array();
 	response['path'] = path;
 	response['query'] = query;
 	return response;
+}
+
+function isNumberKey(e) {
+	var charCode = (e.which) ? e.which : e.keyCode
+	if (charCode == 46) {
+		return true;
+	}
+	if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+		return false;
+	}
+	return true;
 }
 
 // jQuery plugin to prevent double submission of forms
@@ -228,7 +243,7 @@ jQuery.fn.preventDoubleSubmission = function() {
 	return this;
 };
 
-jQuery.extend(jQuery.prototype, {
+$.fn.extend({
 	results: function () {
 		return this.size();
 	},
@@ -348,5 +363,12 @@ jQuery.extend(jQuery.prototype, {
 			here = here.nextSibling;
 		} while (here.nodeType != 1);
 		return $(here);
+	},
+	updateTooltip: function(tooltip) {
+		if ($.fn.tooltipster) {
+			$(this).tooltipster('update', tooltip);
+		} else {
+			$(this).attr('title', tooltip);
+		}
 	}
 });

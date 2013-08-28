@@ -642,7 +642,7 @@ foreach ($Categories as $CatKey => $CatName) {
 				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 <?			} ?>
 			</td>
-			<td class="nobr">
+			<td class="number_column nobr">
 				<?=Format::get_size($RequestVotes['TotalBounty'])?>
 			</td>
 			<td>

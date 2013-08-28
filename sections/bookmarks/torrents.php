@@ -82,8 +82,8 @@ foreach ($TorrentList as $GroupID => $Group) {
 ?>
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 				<td class="center">
-					<div title="View" id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event);" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collape all groups on this page."></a>
+					<div id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
+						<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event);" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collape all groups on this page."></a>
 					</div>
 				</td>
 				<td class="center">
@@ -93,7 +93,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 					<strong><?=$DisplayName?></strong>
 					<span style="text-align: right;" class="float_right">
 <?		if (!$Sneaky) { ?>
-						<a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a>
+						<a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, ''); return false;">Remove bookmark</a>
 						<br />
 <?		} ?>
 						<?=time_diff($AddedTime);?>
@@ -129,7 +129,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 				$EditionID++;
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] === 1 ? ' hidden' : '')?>">
-		<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
+		<td colspan="7" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Torrent, $Group)?></strong></td>
 	</tr>
 <?
 			}
@@ -143,16 +143,16 @@ foreach ($TorrentList as $GroupID => $Group) {
 		<td colspan="3">
 			<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?			if (Torrents::can_use_token($Torrent)) { ?>
-			| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+			| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?			} ?>
 			| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
-		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
-		<td><?=number_format($Torrent['Leechers'])?></td>
+		<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Snatched'])?></td>
+		<td class="number_column<?=(($Torrent['Seeders'] == 0) ? ' r00' : '')?>"><?=number_format($Torrent['Seeders'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
 		}
@@ -185,22 +185,22 @@ foreach ($TorrentList as $GroupID => $Group) {
 			<span>
 				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Torrent)) { ?>
-				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
+				| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
 <?		} ?>
 				| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
 			</span>
 			<strong><?=$DisplayName?></strong>
 			<div class="tags"><?=$TorrentTags->format()?></div>
 <?		if (!$Sneaky) { ?>
-			<span class="float_right float_clear"><a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" title="Remove bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, '');return false;">Unbookmark</a></span>
+			<span class="float_right float_clear"><a href="#group_<?=$GroupID?>" class="brackets remove_bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, ''); return false;">Remove bookmark</a></span>
 <?		} ?>
 			<span class="float_right float_clear"><?=time_diff($AddedTime);?></span>
 
 		</td>
-		<td class="nobr"><?=Format::get_size($Torrent['Size'])?></td>
-		<td><?=number_format($Torrent['Snatched'])?></td>
-		<td<?=(($Torrent['Seeders'] == 0) ? ' class="r00"' : '')?>><?=number_format($Torrent['Seeders'])?></td>
-		<td><?=number_format($Torrent['Leechers'])?></td>
+		<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Snatched'])?></td>
+		<td class="number_column<?=(($Torrent['Seeders'] == 0) ? ' r00' : '')?>"><?=number_format($Torrent['Seeders'])?></td>
+		<td class="number_column"><?=number_format($Torrent['Leechers'])?></td>
 	</tr>
 <?
 	}

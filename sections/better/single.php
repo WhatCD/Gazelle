@@ -43,7 +43,7 @@ foreach ($Results as $GroupID => $Group) {
 	}
 	$FlacID = $GroupIDs[$GroupID]['TorrentID'];
 
-	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$FlacID.'" title="View Torrent">'.$GroupName.'</a>';
+	$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$FlacID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
 	if ($GroupYear > 0) {
 		$DisplayName .= " [$GroupYear]";
 	}

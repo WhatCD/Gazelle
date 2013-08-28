@@ -105,8 +105,17 @@ function toggle_group(groupid, link, event) {
 		if (allGroups || relevantRow.has_class('groupid_' + groupid)) {
 			row = $(group_rows[i]); // idk why we need this :S
 			if (row.has_class('group')) {
-				$('a.show_torrents_link', row.raw()).raw().title = (showing) ? 'Collapse this group. Hold "Ctrl" while clicking to collapse all groups/editions in this section.' : 'Expand this group. Hold "Ctrl" while clicking to expand all groups/editions in this section.';
-				$('a.show_torrents_link', row.raw()).raw().parentNode.className = (showing) ? 'hide_torrents' : 'show_torrents';
+				var section;
+				if (location.pathname.search('/artist.php$') !== -1) {
+					section = 'in this release type.';
+				} else {
+					section = 'on this page.';
+				}
+				var tooltip = showing
+					? 'Collapse this group. Hold "Ctrl" while clicking to collapse all groups '+section
+					: 'Expand this group. Hold "Ctrl" while clicking to expand all groups '+section;
+				$('a.show_torrents_link', row).updateTooltip(tooltip);
+				$('a.show_torrents_link', row).raw().parentNode.className = (showing) ? 'hide_torrents' : 'show_torrents';
 			} else {
 				if (showing) {
 					// show the row depending on whether the edition it's in is collapsed or not
@@ -145,8 +154,11 @@ function toggle_edition(groupid, editionid, lnk, event) {
 	for (var i = 0; i < group_rows.results(); i++) {
 		var row = $(group_rows.raw(i));
 		if (row.has_class('edition') && (allEditions || row.raw(0) == clickedRow)) {
-			$('a', row.raw()).raw().innerHTML = (showing) ? '&minus;' : '+';
-			$('a', row.raw()).raw().title = (showing) ? 'Collapse this edition. Hold "Ctrl" to collapse all editions in this torrent group.' : 'Expand this edition. Hold "Ctrl" to expand all editions in this torrent group.';
+			var tooltip = showing
+				? 'Collapse this edition. Hold "Ctrl" while clicking to collapse all editions in this torrent group.'
+				: 'Expand this edition. Hold "Ctrl" while clicking to expand all editions in this torrent group.';
+			$('a', row).raw().innerHTML = (showing) ? '&minus;' : '+';
+			$('a', row).updateTooltip(tooltip);
 			continue;
 		}
 		if (allEditions || row.has_class('edition_' + editionid)) {
