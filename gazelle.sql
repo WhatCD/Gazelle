@@ -283,6 +283,13 @@ CREATE TABLE `cover_art` (
   UNIQUE KEY `GroupID` (`GroupID`,`Image`)
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `currency_conversion_rates` (
+  `Currency` char(3) NOT NULL,
+  `Rate` decimal(9,4) DEFAULT NULL,
+  `Time` datetime DEFAULT NULL,
+  PRIMARY KEY (`Currency`)
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `do_not_upload` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) NOT NULL,
@@ -308,6 +315,12 @@ CREATE TABLE `donations` (
   KEY `UserID` (`UserID`),
   KEY `Time` (`Time`),
   KEY `Amount` (`Amount`)
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `donations_bitcoin` (
+  `BitcoinAddress` varchar(34) NOT NULL,
+  `Amount` decimal(24,8) NOT NULL,
+  KEY `BitcoinAddress` (`BitcoinAddress`,`Amount`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `donor_forum_usernames` (

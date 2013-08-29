@@ -18,10 +18,11 @@ class UserAgent {
 		'Blackberry'		=> 'BlackBerry Browser',
 		//Big names
 		'Firefox'			=> 'Firefox',
+		'OPR'				=> 'Opera Blink', # Opera 15+ (the version running Blink)
+		'Opera'				=> 'Opera',
 		'Chrome'			=> 'Chrome',
 		'Safari'			=> 'Safari',
-		'Opera'				=> 'Opera',
-		//Put chrome frame above IE
+		//Put Chrome Frame above IE
 		'chromeframe'		=> 'Chrome Frame',
 		'x-clock'			=> 'Chrome Frame',
 		'MSIE'				=> 'Internet Explorer',
