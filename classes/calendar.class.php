@@ -90,13 +90,13 @@ class Calendar {
 		$StartDate = db_string($StartDate);
 		$EndDate = db_string($EndDate);
 
-		$QueryID = G::$DB->get_query_id();
+	//	$QueryID = G::$DB->get_query_id();
 		G::$DB->query("
 						INSERT INTO calendar
 							(Title, Body, Category, Importance, Team, StartDate, EndDate, AddedBy)
 						VALUES
-							('$Title', '$Body', '$Category', '$Importance', '$Team' '$StartDate', '$EndDate', '$UserID')");
-		G::$DB->set_query_id($QueryID);
+							('$Title', '$Body', '$Category', '$Importance', '$Team', '$StartDate', '$EndDate', '$UserID')");
+	//	G::$DB->set_query_id($QueryID);
 	}
 
 	public static function update_event($ID, $Title, $Body, $Category, $Importance, $Team, $StartDate, $EndDate = null) {
