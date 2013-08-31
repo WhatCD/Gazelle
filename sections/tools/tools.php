@@ -46,7 +46,8 @@ View::show_header('Staff Tools');
 			<tr class="colhead"><td>Data</td></tr>
 <?	if (check_perms('admin_donor_log')) { ?>
 			<tr><td><a href="tools.php?action=donation_log">Donation log</a></td></tr>
-			<tr><td><a href="tools.php?action=bitcoin_balance">Bitcoin donation balance</a></td></tr>
+			<tr><td><a href="tools.php?action=bitcoin_balance">Bitcoin donations (balance)</a></td></tr>
+			<tr><td><a href="tools.php?action=bitcoin_unproc">Bitcoin donations (unprocessed)</a></td></tr>
 <?	} if (check_perms('users_view_ips') && check_perms('users_view_email')) { ?>
 			<tr><td><a href="tools.php?action=registration_log">Registration log</a></td></tr>
 <?	} if (check_perms('users_view_invites')) { ?>

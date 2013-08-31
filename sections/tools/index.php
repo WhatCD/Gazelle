@@ -353,6 +353,13 @@ switch ($_REQUEST['action']) {
 		include('data/donation_log.php');
 		break;
 
+	case 'bitcoin_unproc':
+		include('data/bitcoin_unproc.php');
+		break;
+
+	case 'bitcoin_balance':
+		include('data/bitcoin_balance.php');
+		break;
 
 	case 'donor_rewards':
 		include('data/donor_rewards.php');

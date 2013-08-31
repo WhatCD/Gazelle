@@ -67,7 +67,7 @@ foreach ($Forums as $Forum) {
 <? } else { ?>
 		<td>
 			<span style="float: left;" class="last_topic">
-				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>" class="tooltip" data-title-plain="<?=$LastTopic?>"><?=display_str(Format::cut_string($LastTopic, 50, 1))?></a>
+				<a href="forums.php?action=viewthread&amp;threadid=<?=$LastTopicID?>" class="tooltip" data-title-plain="<?=display_str($LastTopic)?>"><?=display_str(Format::cut_string($LastTopic, 50, 1))?></a>
 			</span>
 <? if (!empty($LastRead[$LastTopicID])) { ?>
 			<span style="float: left;" class="<?=$Tooltip?> last_read" title="Jump to last read">
