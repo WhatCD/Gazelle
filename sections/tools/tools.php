@@ -38,7 +38,10 @@ View::show_header('Staff Tools');
 			<tr><td><a href="tools.php?action=global_notification">Global Notification</a></td></tr>
 <?	} if (Calendar::can_view()) { ?>
 			<tr><td><a href="tools.php?action=calendar">Calendar</a></td></tr>
-<?  } ?>
+<?  } if (check_perms('users_mod')) { ?>
+			<tr><td><a href="tools.php?action=mass_pm">Mass PM</a></td></tr>
+<?	} ?>
+
 		</table>
 	</div>
 	<div class="permission_container">

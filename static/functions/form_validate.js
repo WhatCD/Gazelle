@@ -36,6 +36,9 @@ $(document).ready(function() {
 			if (query['action'] == "calendar") {
 				$("#event_form").validate();
 			}
+			if (query['action'] == "mass_pm") {
+				$("#messageform").validate();
+			}
 			break;
 		default:
 			break;

@@ -180,6 +180,7 @@
             that.el.on('blur.autocomplete', function () { that.onBlur(); });
             that.el.on('focus.autocomplete', function () { that.fixPosition(); });
             that.el.on('change.autocomplete', function (e) { that.onKeyUp(e); });
+            that.el.on('paste.autocomplete', function () { that.onPaste(); });
         },
 
         onBlur: function () {
@@ -355,13 +356,30 @@
                 that.findBestHint();
                 if (that.options.deferRequestBy > 0) {
                     // Defer lookup in case when value changes very quickly:
-                    that.onChangeInterval = setInterval(function () {
+                    that.onChangeInterval = setTimeout(function () {
                         that.onValueChange();
                     }, that.options.deferRequestBy);
                 } else {
                     that.onValueChange();
                 }
             }
+        },
+
+        onPaste: function () {
+            var that = this;
+
+            if (that.disabled) {
+                return;
+            }
+
+            clearInterval(that.onChangeInterval);
+
+            setTimeout(function () {
+                if (that.currentValue !== that.el.val()) {
+                    that.findBestHint();
+                    that.onValueChange();
+                }
+            }, 100);
         },
 
         onValueChange: function () {

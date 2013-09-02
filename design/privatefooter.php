@@ -28,10 +28,10 @@
 	</p>
 <?	} ?>
 	<p>
-		<strong>Time:</strong> <?=number_format(((microtime(true) - $ScriptStartTime) * 1000), 5)?> ms
-		<strong>Used:</strong> <?=Format::get_size(memory_get_usage(true))?>
-		<strong>Load:</strong> <?=number_format($Load[0], 2).' '.number_format($Load[1], 2).' '.number_format($Load[2], 2)?>
-		<strong>Date:</strong> <?=date('M d Y, H:i')?>
+		<strong>Time:</strong> <span><?=number_format(((microtime(true) - $ScriptStartTime) * 1000), 5)?> ms</span>
+		<strong>Used:</strong> <span><?=Format::get_size(memory_get_usage(true))?></span>
+		<strong>Load:</strong> <span><?=number_format($Load[0], 2).' '.number_format($Load[1], 2).' '.number_format($Load[2], 2)?></span>
+		<strong>Date:</strong> <span><?=date('M d Y, H:i')?></span>
 
 	</p>
 	</div>

@@ -497,6 +497,12 @@ switch ($_REQUEST['action']) {
 	case 'take_calendar_event':
 		include('managers/ajax_take_calendar_event.php');
 		break;
+	case 'mass_pm':
+		include('managers/mass_pm.php');
+		break;
+	case 'take_mass_pm':
+		include('managers/take_mass_pm.php');
+		break;
 	default:
 		include(SERVER_ROOT.'/sections/tools/tools.php');
 }

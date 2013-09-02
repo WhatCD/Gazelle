@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-09-01 by Ajax
+Tool for staff to send mass PMs to primary and secondary classes
+
 2013-08-28 by porkpie
 Add an option for the styled tooltips
 
