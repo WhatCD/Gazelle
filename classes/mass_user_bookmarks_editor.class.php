@@ -10,7 +10,6 @@
  */
 class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR {
 	public function __construct ($Table = 'bookmarks_torrents') {
-		parent::__construct();
 		$this->set_table($Table);
 	}
 

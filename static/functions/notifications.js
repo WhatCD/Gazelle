@@ -23,3 +23,21 @@ function clearSelected(filterId) {
 			}
 		});
 }
+
+$(document).ready(function () {
+	var notifyBoxes = $('.notify_box');
+	notifyBoxes.keydown(function(e) {
+		var nextBox, index = notifyBoxes.index($(this));
+		if (index > 0 && e.which === 75) { // K
+			nextBox = notifyBoxes.get(index-1);
+		} else if (index < notifyBoxes.size()-1 && e.which === 74) { // J
+			nextBox = notifyBoxes.get(index+1);
+		} else if (e.which === 88) {
+			$(this).prop('checked', !$(this).prop('checked'));
+		}
+		if (nextBox) {
+			nextBox.focus();
+			$(window).scrollTop($(nextBox).position()['top']-$(window).height()/4);
+		}
+	});
+});
