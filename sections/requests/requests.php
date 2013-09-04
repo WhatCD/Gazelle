@@ -423,7 +423,7 @@ reset($Categories);
 foreach ($Categories as $CatKey => $CatName) {
 	if ($x % 8 === 0 || $x === 1) {
 ?>
-				<tr class="cat_list">
+				<tr>
 <?	} ?>
 					<td>
 						<input type="checkbox" name="filter_cat[<?=($CatKey + 1) ?>]" id="cat_<?=($CatKey + 1) ?>" value="1"<? if (isset($_GET['filter_cat'][$CatKey + 1])) { ?> checked="checked"<? } ?> />

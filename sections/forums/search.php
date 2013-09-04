@@ -136,7 +136,7 @@ if (empty($ThreadID)) { ?>
 			$i++;
 ?>
 			<tr>
-				<td colspan="5">
+				<td colspan="5" class="forum_cat">
 					<strong><?=$ForumCats[$Forum['CategoryID']]?></strong>
 					<a href="#" class="brackets forum_category" id="forum_category_<?=$i?>">Check all</a>
 				</td>
