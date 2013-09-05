@@ -106,7 +106,7 @@ if (($Blog = $Cache->get_value('blog')) === false) {
 			b.Time,
 			b.ThreadID
 		FROM blog AS b
-			LEFT JOIN users_main AS um ON b.UserID=um.ID
+			LEFT JOIN users_main AS um ON b.UserID = um.ID
 		ORDER BY Time DESC
 		LIMIT 20");
 	$Blog = $DB->to_array();
@@ -478,7 +478,7 @@ foreach ($News as $NewsItem) {
 <?	if (check_perms('admin_manage_news')) { ?>
 				- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>" class="brackets">Edit</a>
 <?	} ?>
-			<span style="float: right;"><a href="#" onclick="$('#newsbody<?=$NewsID?>').gtoggle(); this.innerHTML=(this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>
+			<span style="float: right;"><a href="#" onclick="$('#newsbody<?=$NewsID?>').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>
 			</div>
 
 			<div id="newsbody<?=$NewsID?>" class="pad"><?=$Text->full_format($Body)?></div>
@@ -542,5 +542,6 @@ function contest() {
 			</div>
 		</div>
 	<!-- END contest Section -->
-<? } // contest()
+<?
+} // contest()
 ?>

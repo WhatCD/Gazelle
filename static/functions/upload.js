@@ -1,6 +1,7 @@
 function Categories() {
 	ajax.get('ajax.php?action=upload_section&categoryid=' + $('#categories').raw().value, function (response) {
 		$('#dynamic_form').raw().innerHTML = response;
+		initMultiButtons();
 		// Evaluate the code that generates previews.
 		eval($('#dynamic_form script.preview_code').html());
 	});

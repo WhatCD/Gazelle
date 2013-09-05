@@ -20,17 +20,9 @@ $OldDonations = G::$DB->to_pair(0, 1, false);
 	<div class="box2">
 		<div class="pad">Do not process these donations manually! The bitcoin parser <em>will</em> get them sooner or later (poke a developer if something seems broken).</div>
 	</div>
-	<table class="border" width="100%">
-		<tr class="colhead">
-			<td>Bitcoin address</td>
-			<td>User</td>
-			<td>Unprocessed amount</td>
-			<td>Total amount</td>
-			<td>Donor rank</td>
-			<td>Special rank</td>
-		</tr>
 <?
 $NewDonations = array();
+$TotalUnproc = 0;
 foreach ($AllDonations as $Address => $Amount) {
 	if (isset($OldDonations[$Address])) {
 		if ($Amount == $OldDonations[$Address]) { // Direct comparison should be fine as everything comes from bitcoind
@@ -41,8 +33,20 @@ foreach ($AllDonations as $Address => $Amount) {
 		// so let's just round this off to satoshis and pray that we're on a 64 bit system
 		$Amount = round($Amount - $OldDonations[$Address], 8);
 	}
+	$TotalUnproc += $Amount;
 	$NewDonations[$Address] = $Amount;
 }
+?>
+	<table class="border" width="100%">
+		<tr class="colhead">
+			<td>Bitcoin address</td>
+			<td>User</td>
+			<td>Unprocessed amount (<?=$TotalUnproc ?: '0'?>)</td>
+			<td>Total amount</td>
+			<td>Donor rank</td>
+			<td>Special rank</td>
+		</tr>
+<?
 if (!empty($NewDonations)) {
 	foreach(DonationsBitcoin::get_userids(array_keys($NewDonations)) as $Address => $UserID) {
 ?>

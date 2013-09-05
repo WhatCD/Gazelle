@@ -48,17 +48,17 @@ $DB->query("
 		lma.TorrentID AS LossymasterApproved,
 		lwa.TorrentID AS LossywebApproved
 	FROM torrents AS t
-		LEFT JOIN torrents_group AS tg ON tg.ID=t.GroupID
-		LEFT JOIN artists_group AS ag ON ag.ArtistID=tg.ArtistID
-		LEFT JOIN torrents_bad_tags AS bt ON bt.TorrentID=t.ID
-		LEFT JOIN torrents_bad_folders AS bf ON bf.TorrentID=t.ID
-		LEFT JOIN torrents_bad_files AS bfi ON bfi.TorrentID=t.ID
-		LEFT JOIN torrents_cassette_approved AS ca ON ca.TorrentID=t.ID
-		LEFT JOIN torrents_lossymaster_approved AS lma ON lma.TorrentID=t.ID
-		LEFT JOIN torrents_lossyweb_approved AS lwa ON lwa.TorrentID=t.id
-	WHERE t.ID='$TorrentID'");
+		LEFT JOIN torrents_group AS tg ON tg.ID = t.GroupID
+		LEFT JOIN artists_group AS ag ON ag.ArtistID = tg.ArtistID
+		LEFT JOIN torrents_bad_tags AS bt ON bt.TorrentID = t.ID
+		LEFT JOIN torrents_bad_folders AS bf ON bf.TorrentID = t.ID
+		LEFT JOIN torrents_bad_files AS bfi ON bfi.TorrentID = t.ID
+		LEFT JOIN torrents_cassette_approved AS ca ON ca.TorrentID = t.ID
+		LEFT JOIN torrents_lossymaster_approved AS lma ON lma.TorrentID = t.ID
+		LEFT JOIN torrents_lossyweb_approved AS lwa ON lwa.TorrentID = t.id
+	WHERE t.ID = '$TorrentID'");
 
-list($Properties) = $DB->to_array(false,MYSQLI_BOTH);
+list($Properties) = $DB->to_array(false, MYSQLI_BOTH);
 if (!$Properties) {
 	error(404);
 }
@@ -69,8 +69,7 @@ if (($LoggedUser['ID'] != $Properties['UserID'] && !check_perms('torrents_edit')
 	error(403);
 }
 
-View::show_header('Edit torrent', 'upload');
-
+View::show_header('Edit torrent', 'upload,torrent');
 
 if (!($Properties['Remastered'] && !$Properties['RemasterYear']) || check_perms('edit_unknowns')) {
 	$TorrentForm = new TORRENT_FORM($Properties, $Err, false);

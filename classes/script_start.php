@@ -295,7 +295,7 @@ if (isset($LoginCookie)) {
 				Name AS ProperName
 			FROM stylesheets');
 		$Stylesheets = $DB->to_array('ID', MYSQLI_BOTH);
-		$Cache->cache_value('stylesheets', $Stylesheets, 600);
+		$Cache->cache_value('stylesheets', $Stylesheets, 0);
 	}
 
 	//A9 TODO: Clean up this messy solution

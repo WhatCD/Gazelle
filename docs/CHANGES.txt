@@ -1,5 +1,11 @@
 CHANGELOG
 
+2013-09-05 by porkpie
+Fix multi-format uploader when switching from "Music" to something else, then back to "Music"
+
+2013-09-05 by alderaan
+Fix missing category change JavaScript code on torrent edit page in public Gazelle
+
 2013-09-01 by Ajax
 Tool for staff to send mass PMs to primary and secondary classes
 

@@ -148,23 +148,18 @@ if (in_array($ThreadID, $UserSubscriptions)) {
 }
 
 
-$DB->query("
-	UPDATE users_notify_quoted
-	SET UnRead = false
-	WHERE UserID = '$LoggedUser[ID]'
-		AND Page = 'forums'
-		AND PageID = '$ThreadID'
-		AND PostID >= '$FirstPost'
-		AND PostID <= '$LastPost'");
-$Cache->delete_value('notify_quoted_' . $LoggedUser['ID']);
-/*
 $QuoteNotificationsCount = $Cache->get_value('notify_quoted_' . $LoggedUser['ID']);
-if ($QuoteNotificationsCount > 0) {
-	$Cache->cache_value('notify_quoted_' . $LoggedUser['ID'], $QuoteNotificationsCount - 1, 0);
-} else {
+if ($QuoteNotificationsCount === false || $QuoteNotificationsCount > 0) {
+	$DB->query("
+		UPDATE users_notify_quoted
+		SET UnRead = false
+		WHERE UserID = '$LoggedUser[ID]'
+			AND Page = 'forums'
+			AND PageID = '$ThreadID'
+			AND PostID >= '$FirstPost'
+			AND PostID <= '$LastPost'");
 	$Cache->delete_value('notify_quoted_' . $LoggedUser['ID']);
 }
-*/
 
 // Start printing
 View::show_header($ThreadInfo['Title'] . ' &lt; '.$Forums[$ForumID]['Name'].' &lt; Forums','comments,subscriptions,bbcode', $IsDonorForum ? 'donor' : '');

@@ -165,7 +165,6 @@ $TorrentForm->foot();
 <script type="text/javascript">
 	Format();
 	Bitrate();
-	Media();
 </script>
 <?
 View::show_footer();

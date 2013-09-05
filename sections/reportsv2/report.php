@@ -56,12 +56,12 @@ if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 		$Title .= " [$GroupYear]";
 	}
 	if ($GroupVanityHouse) {
-		$DisplayName .=' [Vanity House]';
-		$AltName .=' [Vanity House]';
+		$DisplayName .= ' [Vanity House]';
+		$AltName .= ' [Vanity House]';
 	}
 	if ($GroupCategoryID == 1) {
-		$DisplayName .=' [' . $ReleaseTypes[$ReleaseType] . ']';
-		$AltName .=' [' . $ReleaseTypes[$ReleaseType] . ']';
+		$DisplayName .= ' [' . $ReleaseTypes[$ReleaseType] . ']';
+		$AltName .= ' [' . $ReleaseTypes[$ReleaseType] . ']';
 	}
 }
 

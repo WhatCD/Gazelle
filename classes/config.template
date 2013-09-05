@@ -142,6 +142,7 @@ $ForumsRevealVoters = array();
 $ForumsDoublePost = array();
 
 $Categories = array('Music', 'Applications', 'E-Books', 'Audiobooks', 'E-Learning Videos', 'Comedy', 'Comics');
+$GroupedCategories = array_intersect(array('Music'), $Categories);
 $CategoryIcons = array('music.png', 'apps.png', 'ebook.png', 'audiobook.png', 'elearning.png', 'comedy.png', 'comics.png');
 
 $Formats = array('MP3', 'FLAC', 'Ogg Vorbis', 'AAC', 'AC3', 'DTS');
