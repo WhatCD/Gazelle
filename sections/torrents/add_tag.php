@@ -52,7 +52,8 @@ foreach ($Tags as $TagName) {
 				(TagID, GroupID, PositiveVotes, UserID)
 			VALUES
 				('$TagID', '$GroupID', '3', '$UserID')
-			ON DUPLICATE KEY UPDATE PositiveVotes = PositiveVotes + 2");
+			ON DUPLICATE KEY UPDATE
+				PositiveVotes = PositiveVotes + 2");
 
 		$DB->query("
 			INSERT INTO torrents_tags_votes

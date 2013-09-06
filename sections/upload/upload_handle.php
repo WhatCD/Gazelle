@@ -33,7 +33,7 @@ define('QUERY_EXCEPTION',true); // Shut up debugging
 // This is used if the form doesn't validate, and when the time comes to enter	//
 // it into the database.														//
 
-$Properties=array();
+$Properties = array();
 $Type = $Categories[(int)$_POST['type']];
 $TypeID = $_POST['type'] + 1;
 $Properties['CategoryName'] = $Type;
@@ -89,7 +89,7 @@ $RequestID = $_POST['requestid'];
 //******************************************************************************//
 //--------------- Validate data in upload form ---------------------------------//
 
-$Validate->SetFields('type','1','inarray','Please select a valid type.', array('inarray'=>array_keys($Categories)));
+$Validate->SetFields('type', '1', 'inarray', 'Please select a valid type.', array('inarray'=>array_keys($Categories)));
 switch ($Type) {
 	case 'Music':
 		if (!$_POST['groupid']) {
@@ -314,7 +314,7 @@ if (empty($Properties['GroupID']) && empty($ArtistForm) && $Type == 'Music') {
 			JOIN artists_alias AS aa ON ta.AliasID = aa.AliasID
 		WHERE ta.GroupID = ".$Properties['GroupID']."
 		ORDER BY ta.Importance ASC, aa.Name ASC;");
-	while (list($ArtistID,$ArtistName,$ArtistImportance) = $DB->next_record(MYSQLI_BOTH, false)) {
+	while (list($ArtistID, $ArtistName, $ArtistImportance) = $DB->next_record(MYSQLI_BOTH, false)) {
 		$ArtistForm[$ArtistImportance][] = array('id' => $ArtistID, 'name' => display_str($ArtistName));
 		$ArtistsUnescaped[$ArtistImportance][] = array('name' => $ArtistName);
 	}
@@ -636,7 +636,8 @@ if (!$Properties['GroupID']) {
 					(Name, UserID)
 				VALUES
 					('$Tag', $LoggedUser[ID])
-				ON DUPLICATE KEY UPDATE Uses = Uses + 1;
+				ON DUPLICATE KEY UPDATE
+					Uses = Uses + 1;
 			");
 			$TagID = $DB->inserted_id();
 
@@ -645,7 +646,8 @@ if (!$Properties['GroupID']) {
 					(TagID, GroupID, UserID, PositiveVotes)
 				VALUES
 					($TagID, $GroupID, $LoggedUser[ID], 10)
-				ON DUPLICATE KEY UPDATE PositiveVotes = PositiveVotes + 1;
+				ON DUPLICATE KEY UPDATE
+					PositiveVotes = PositiveVotes + 1;
 			");
 		}
 	}

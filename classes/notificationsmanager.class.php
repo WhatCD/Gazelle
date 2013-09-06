@@ -583,8 +583,8 @@ class NotificationsManager {
 					SELECT '" . G::$LoggedUser['ID'] . "', ID, LastPostID
 					FROM forums_topics
 					WHERE ID IN (".implode(',', $UserSubscriptions).')
-				ON DUPLICATE KEY
-					UPDATE PostID = LastPostID');
+				ON DUPLICATE KEY UPDATE
+					PostID = LastPostID');
 		}
 		G::$Cache->delete_value('subscriptions_user_new_' . G::$LoggedUser['ID']);
 		G::$DB->set_query_id($QueryID);

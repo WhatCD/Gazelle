@@ -9,7 +9,7 @@ class DonationsView {
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Value</td>
+				<td class="label">Value:</td>
 				<td>
 					<input type="text" name="donation_value" onkeypress="return isNumberKey(event);" />
 					<select name="donation_currency">
@@ -20,7 +20,7 @@ class DonationsView {
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Reason</td>
+				<td class="label">Reason:</td>
 				<td><input type="text" class="wide_input_text" name="donation_reason" /></td>
 			</tr>
 			<tr>
@@ -37,15 +37,15 @@ class DonationsView {
 				</td>
 			</tr>
 			<tr>
-				<td class="label tooltip" title="Active points determine a user's Donor Rank and do expire.">Active points</td>
+				<td class="label tooltip" title="Active points determine a user's Donor Rank and do expire.">Active points:</td>
 				<td><input type="text" name="donor_rank" onkeypress="return isNumberKey(event);" value="<?=Donations::get_rank($UserID)?>" /></td>
 			</tr>
 			<tr>
-				<td class="label tooltip" title="Total points represent a user's overall total and never expire. Total points determines a user's Special Rank and Donor Leaderboard placement.">Total points</td>
+				<td class="label tooltip" title="Total points represent a user's overall total and never expire. Total points determines a user's Special Rank and Donor Leaderboard placement.">Total points:</td>
 				<td><input type="text" name="total_donor_rank" onkeypress="return isNumberKey(event);" value="<?=Donations::get_total_rank($UserID)?>" /></td>
 			</tr>
 			<tr>
-				<td class="label">Reason</td>
+				<td class="label">Reason:</td>
 				<td><input type="text" class="wide_input_text" name="reason" /></td>
 			</tr>
 			<tr>

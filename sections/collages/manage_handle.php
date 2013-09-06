@@ -53,7 +53,8 @@ if ($_POST['submit'] === 'Remove') {
 				(GroupID, Sort, CollageID)
 			VALUES
 				' . implode(', ', $SQL) . '
-			ON DUPLICATE KEY UPDATE Sort = VALUES (Sort)';
+			ON DUPLICATE KEY UPDATE
+				Sort = VALUES (Sort)';
 
 		$DB->query($SQL);
 	}

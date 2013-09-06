@@ -9,7 +9,7 @@
  *
  */
 class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR {
-	public function __construct ($Table = 'bookmarks_torrents') {
+	public function __construct($Table = 'bookmarks_torrents') {
 		$this->set_table($Table);
 	}
 
@@ -20,10 +20,11 @@ class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR {
 	 *
 	 * @param string $sql
 	 */
-	protected function query_and_clear_cache ($sql) {
+	protected function query_and_clear_cache($sql) {
 		$QueryID = G::$DB->get_query_id();
-		if (is_string($sql) && G::$DB->query($sql))
+		if (is_string($sql) && G::$DB->query($sql)) {
 			G::$Cache->delete_value('bookmarks_group_ids_' . G::$LoggedUser['ID']);
+		}
 		G::$DB->set_query_id($QueryID);
 	}
 
@@ -32,15 +33,19 @@ class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR {
 	 *
 	 * Uses an IN() to match multiple items in one query.
 	 */
-	public function mass_remove () {
+	public function mass_remove() {
 		$SQL = array();
 		foreach ($_POST['remove'] as $GroupID => $K) {
-			if (is_number($GroupID))
+			if (is_number($GroupID)) {
 				$SQL[] = sprintf('%d', $GroupID);
+			}
 		}
 
 		if (!empty($SQL)) {
-			$SQL = sprintf('DELETE FROM %s WHERE UserID = %d AND GroupID IN (%s)',
+			$SQL = sprintf('
+					DELETE FROM %s
+					WHERE UserID = %d
+						AND GroupID IN (%s)',
 				$this->Table,
 				G::$LoggedUser['ID'],
 				implode(', ', $SQL)
@@ -52,18 +57,24 @@ class MASS_USER_BOOKMARKS_EDITOR extends MASS_USER_TORRENTS_EDITOR {
 	/**
 	 * Uses $_POST['sort'] values to update the DB.
 	 */
-	public function mass_update () {
+	public function mass_update() {
 		$SQL = array();
 		foreach ($_POST['sort'] as $GroupID => $Sort) {
-			if (is_number($Sort) && is_number($GroupID))
+			if (is_number($Sort) && is_number($GroupID)) {
 				$SQL[] = sprintf('(%d, %d, %d)', $GroupID, $Sort, G::$LoggedUser['ID']);
+			}
 		}
 
 		if (!empty($SQL)) {
-			$SQL = sprintf('INSERT INTO %s (GroupID, Sort, UserID) VALUES %s
-				ON DUPLICATE KEY UPDATE Sort = VALUES (Sort)',
-					$this->Table,
-					implode(', ', $SQL));
+			$SQL = sprintf('
+					INSERT INTO %s
+						(GroupID, Sort, UserID)
+					VALUES
+						%s
+					ON DUPLICATE KEY UPDATE
+						Sort = VALUES (Sort)',
+				$this->Table,
+				implode(', ', $SQL));
 			$this->query_and_clear_cache($SQL);
 		}
 	}

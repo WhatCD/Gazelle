@@ -257,8 +257,8 @@ unset($Options['ArtistNoRedirect']);
 unset($Options['ShowQueryList']);
 unset($Options['ShowCacheList']);
 
-$DownloadAlt = (isset($_POST['downloadalt'])) ? 1 : 0;
-$UnseededAlerts = (isset($_POST['unseededalerts'])) ? 1 : 0;
+$DownloadAlt = isset($_POST['downloadalt']) ? 1 : 0;
+$UnseededAlerts = isset($_POST['unseededalerts']) ? 1 : 0;
 
 
 

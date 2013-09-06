@@ -207,14 +207,17 @@ class TORRENT_FORM {
 						<option value="3"<?=($Importance == '3' ? ' selected="selected"' : '')?>>Remixer</option>
 						<option value="7"<?=($Importance == '7' ? ' selected="selected"' : '')?>>Producer</option>
 					</select>
-<?				if ($FirstArtist) {
-					if (!$this->DisabledFlag) { ?>
+<?
+						if ($FirstArtist) {
+							if (!$this->DisabledFlag) { ?>
 					<a href="javascript:AddArtistField()" class="brackets">+</a> <a href="javascript:RemoveArtistField()" class="brackets">&minus;</a>
-<?					}
-					$FirstArtist = false;
-				}	?>
+<?
+							}
+							$FirstArtist = false;
+						}	?>
 					<br />
-<?					}
+<?
+					}
 				}
 			} else {
 ?>
@@ -228,7 +231,7 @@ class TORRENT_FORM {
 						<option value="3">Remixer</option>
 						<option value="7">Producer</option>
 					</select>
-					<a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a>
+					<a href="#" onclick="AddArtistField(); return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField(); return false;" class="brackets">&minus;</a>
 <?
 			}
 ?>
@@ -273,15 +276,15 @@ if (document.getElementById("categories").disabled == false) {
 }
 
 function hide() {
-	document.getElementById("musicbrainz_tr").style.display="none";
-	document.getElementById("musicbrainz_popup").style.display="none";
-	document.getElementById("popup_background").style.display="none";
+	document.getElementById("musicbrainz_tr").style.display = "none";
+	document.getElementById("musicbrainz_popup").style.display = "none";
+	document.getElementById("popup_background").style.display = "none";
 }
 
 function show() {
-	document.getElementById("musicbrainz_tr").style.display="";
-	document.getElementById("musicbrainz_popup").style.display="";
-	document.getElementById("popup_background").style.display="";
+	document.getElementById("musicbrainz_tr").style.display = "";
+	document.getElementById("musicbrainz_popup").style.display = "";
+	document.getElementById("popup_background").style.display = "";
 }
 //]]>
 </script>
@@ -331,17 +334,17 @@ function show() {
 			<tr>
 				<td class="label">Edition information:</td>
 				<td>
-					<input type="checkbox" id="remaster" name="remaster"<? if ($IsRemaster) { echo ' checked="checked"';} ?> onclick="Remaster();<? if ($this->NewTorrent) { ?> CheckYear();<? } ?>" />
+					<input type="checkbox" id="remaster" name="remaster"<? if ($IsRemaster) { echo ' checked="checked"'; } ?> onclick="Remaster();<? if ($this->NewTorrent) { ?> CheckYear();<? } ?>" />
 					<label for="remaster">Check this box if this torrent is a different release to the original, for example a limited or country specific edition or a release that includes additional bonus tracks or is a bonus disc.</label>
 					<div id="remaster_true"<? if (!$IsRemaster) { echo ' class="hidden"';} ?>>
 <?	if (check_perms('edit_unknowns') || G::$LoggedUser['ID'] == $Torrent['UserID']) { ?>
 						<br />
-						<input type="checkbox" id="unknown" name="unknown"<? if ($UnknownRelease) { echo ' checked="checked"';} ?> onclick="<? if ($this->NewTorrent) { ?> CheckYear();<? } ?>ToggleUnknown();" /> <label for="unknown">Unknown Release</label>
+						<input type="checkbox" id="unknown" name="unknown"<? if ($UnknownRelease) { echo ' checked="checked"'; } ?> onclick="<? if ($this->NewTorrent) { ?>CheckYear(); <? } ?>ToggleUnknown();" /> <label for="unknown">Unknown Release</label>
 <?	} ?>
 						<br /><br />
 <?	if (!empty($GroupRemasters)) { ?>
 						<input type="hidden" id="json_remasters" value="<?=display_str(json_encode($GroupRemasters))?>" />
-						<select id="groupremasters" name="groupremasters" onchange="GroupRemaster()"<? if ($UnknownRelease) { echo ' disabled="disabled"';} ?>>
+						<select id="groupremasters" name="groupremasters" onchange="GroupRemaster()"<? if ($UnknownRelease) { echo ' disabled="disabled"'; } ?>>
 							<option value="">-------</option>
 <?
 	$LastLine = '';
@@ -454,8 +457,7 @@ function show() {
 					</span>
 				</td>
 			</tr>
-<?
-		if ($this->NewTorrent) { ?>
+<?		if ($this->NewTorrent) { ?>
 			<tr id="upload_logs" class="hidden">
 				<td class="label">
 					Log files:
@@ -466,8 +468,8 @@ function show() {
 				</td>
 			</tr>
 <?
-		} ?>
-<? if ($this->NewTorrent) { ?>
+		}
+ if ($this->NewTorrent) { ?>
 		<tr>
 			<td class="label">Multi-format uploader:</td>
 			<td><input type="button" value="+" id="add_format" /><input type="button" style="display: none;" value="-" id="remove_format" /></td>

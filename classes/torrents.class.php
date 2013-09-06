@@ -546,7 +546,8 @@ class Torrents {
 				GROUP BY ta.GroupID
 			) AS artists
 				JOIN torrents USING(GroupID)
-			ON DUPLICATE KEY UPDATE ArtistName = VALUES(ArtistName)");
+			ON DUPLICATE KEY UPDATE
+				ArtistName = VALUES(ArtistName)");
 */
 		G::$Cache->delete_value("torrents_details_$GroupID");
 		G::$Cache->delete_value("torrent_group_$GroupID");

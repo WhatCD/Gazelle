@@ -10,7 +10,8 @@ $DB->query("
 		(UserID, Time)
 	VALUES
 		(".$LoggedUser['ID'].", NOW())
-	ON DUPLICATE KEY UPDATE Time = NOW()");
+	ON DUPLICATE KEY UPDATE
+		Time = NOW()");
 $Cache->delete_value('staff_blog_read_'.$LoggedUser['ID']);
 
 define('ANNOUNCEMENT_FORUM_ID', 19);

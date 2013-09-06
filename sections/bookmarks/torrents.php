@@ -346,7 +346,7 @@ if ($CollageCovers !== 0) { ?>
 			<tr class="colhead_dark">
 				<td><!-- expand/collapse --></td>
 				<td><!-- Category --></td>
-				<td width="70%"><strong>Torrents</strong> (<a href="#" onclick="return false;">View</a>)</td>
+				<td width="70%"><strong>Torrents</strong></td>
 				<td>Size</td>
 				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
 				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>

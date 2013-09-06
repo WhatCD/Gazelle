@@ -130,9 +130,12 @@ if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
 	list($LastRead) = $DB->next_record();
 	if ($LastRead < $LastPost) {
 		$DB->query("
-			INSERT INTO forums_last_read_topics (UserID, TopicID, PostID)
-			VALUES ('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
-			ON DUPLICATE KEY UPDATE PostID='$LastPost'");
+			INSERT INTO forums_last_read_topics
+				(UserID, TopicID, PostID)
+			VALUES
+				('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
+			ON DUPLICATE KEY UPDATE
+				PostID = '$LastPost'");
 	}
 }
 

@@ -550,7 +550,8 @@ foreach ($Tags as $Index => $Tag) {
 			(Name, UserID)
 		VALUES
 			('$Tag', ".$LoggedUser['ID'].")
-		ON DUPLICATE KEY UPDATE Uses = Uses + 1");
+		ON DUPLICATE KEY UPDATE
+			Uses = Uses + 1");
 
 	$TagID = $DB->inserted_id();
 

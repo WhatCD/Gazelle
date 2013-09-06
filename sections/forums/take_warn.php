@@ -8,9 +8,9 @@ $Reason = $_POST['reason'];
 $PrivateMessage = $_POST['privatemessage'];
 $Body = $_POST['body'];
 $Length = $_POST['length'];
-$PostID = (int) $_POST['postid'];
-$UserID = (int) $_POST['userid'];
-$Key = (int) $_POST['key'];
+$PostID = (int)$_POST['postid'];
+$UserID = (int)$_POST['userid'];
+$Key = (int)$_POST['key'];
 $SQLTime = sqltime();
 
 $UserInfo = Users::user_info($UserID);
@@ -36,9 +36,12 @@ if ($Length != 'verbal') {
 }
 
 $DB->query("
-	INSERT INTO users_warnings_forums (UserID, Comment)
-	VALUES('$UserID', '" . db_string($AdminComment) . "')
-	ON DUPLICATE KEY UPDATE Comment = CONCAT('" . db_string($AdminComment) . "', Comment)");
+	INSERT INTO users_warnings_forums
+		(UserID, Comment)
+	VALUES
+		('$UserID', '" . db_string($AdminComment) . "')
+	ON DUPLICATE KEY UPDATE
+		Comment = CONCAT('" . db_string($AdminComment) . "', Comment)");
 Misc::send_pm($UserID, $LoggedUser['ID'], $Subject, $PrivateMessage);
 
 //edit the post
@@ -55,8 +58,8 @@ $DB->query("
 		. ") AS Page
 	FROM forums_posts as p
 		JOIN forums_topics as t on p.TopicID = t.ID
-		JOIN forums as f ON t.ForumID=f.ID
-	WHERE p.ID='$PostID'");
+		JOIN forums as f ON t.ForumID = f.ID
+	WHERE p.ID = '$PostID'");
 list($OldBody, $AuthorID, $TopicID, $ForumID, $Page) = $DB->next_record();
 
 // Perform the update
@@ -65,7 +68,7 @@ $DB->query("
 	SET Body = '" . db_string($Body) . "',
 		EditedUserID = '$UserID',
 		EditedTime = '$SQLTime'
-	WHERE ID='$PostID'");
+	WHERE ID = '$PostID'");
 
 $CatalogueID = floor((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 $Cache->begin_transaction('thread_' . $TopicID . '_catalogue_' . $CatalogueID);

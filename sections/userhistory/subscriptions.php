@@ -192,6 +192,12 @@ if (!$NumResults) {
 		}
 ?>
 	<table class="forum_post box vertical_margin<?=(!Users::has_avatars_enabled() ? ' noavatar' : '')?>">
+		<colgroup>
+<?		if (Users::has_avatars_enabled()) { ?>
+			<col class="col_avatar" />
+<?		} ?>
+			<col class="col_post_body" />
+		</colgroup>
 		<tr class="colhead_dark notify_<?=$Result['Page']?>">
 			<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1 ?>">
 				<span style="float:left;">

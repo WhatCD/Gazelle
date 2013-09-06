@@ -154,7 +154,7 @@ class Misc {
 		G::$DB->query("
 			SELECT Username
 			FROM users_main
-			WHERE ID=".$AuthorID);
+			WHERE ID = $AuthorID");
 		if (!G::$DB->has_results()) {
 			G::$DB->set_query_id($QueryID);
 			return -2;
@@ -183,8 +183,8 @@ class Misc {
 		G::$DB->query("
 			UPDATE forums
 			SET
-				NumPosts  = NumPosts+1,
-				NumTopics = NumTopics+1,
+				NumPosts  = NumPosts + 1,
+				NumTopics = NumTopics + 1,
 				LastPostID = '$PostID',
 				LastPostAuthorID = '$AuthorID',
 				LastPostTopicID = '$TopicID',
@@ -194,14 +194,14 @@ class Misc {
 		G::$DB->query("
 			UPDATE forums_topics
 			SET
-				NumPosts = NumPosts+1,
+				NumPosts = NumPosts + 1,
 				LastPostID = '$PostID',
 				LastPostAuthorID = '$AuthorID',
 				LastPostTime = '".sqltime()."'
 			WHERE ID = '$TopicID'");
 
 		// Bump this topic to head of the cache
-		list($Forum,,, $Stickies) = G::$Cache->get_value('forums_'.$ForumID);
+		list($Forum,,, $Stickies) = G::$Cache->get_value("forums_$ForumID");
 		if (!empty($Forum)) {
 			if (count($Forum) == TOPICS_PER_PAGE && $Stickies < TOPICS_PER_PAGE) {
 				array_pop($Forum);
@@ -236,7 +236,7 @@ class Misc {
 			if (is_null($Part1)) { $Part1 = array(); }
 			if (is_null($Part3)) { $Part3 = array(); }
 			$Forum = $Part1 + $Part2 + $Part3;
-			G::$Cache->cache_value('forums_'.$ForumID, array($Forum, '', 0, $Stickies), 0);
+			G::$Cache->cache_value("forums_$ForumID", array($Forum, '', 0, $Stickies), 0);
 		}
 
 		//Update the forum root

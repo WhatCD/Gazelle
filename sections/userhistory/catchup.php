@@ -7,7 +7,8 @@ if (!empty($UserSubscriptions)) {
 			SELECT '$LoggedUser[ID]', ID, LastPostID
 			FROM forums_topics
 			WHERE ID IN (".implode(',', $UserSubscriptions).')
-		ON DUPLICATE KEY UPDATE PostID = LastPostID');
+		ON DUPLICATE KEY UPDATE
+			PostID = LastPostID');
 }
 $DB->query("
 	INSERT INTO users_comments_last_read (UserID, Page, PageID, PostID)
@@ -18,9 +19,16 @@ $DB->query("
 			s.PageID,
 			IFNULL(c.ID, 0) AS LastPostID
 		FROM users_subscriptions_comments AS s
-			LEFT JOIN comments AS c ON c.Page = s.Page AND c.ID = (SELECT MAX(ID) FROM comments WHERE Page = s.Page AND PageID = s.PageID)
+			LEFT JOIN comments AS c ON c.Page = s.Page
+				AND c.ID = (
+						SELECT MAX(ID)
+						FROM comments
+						WHERE Page = s.Page
+							AND PageID = s.PageID
+						)
 	) AS t
-	ON DUPLICATE KEY UPDATE PostID = LastPostID");
+	ON DUPLICATE KEY UPDATE
+		PostID = LastPostID");
 $Cache->delete_value('subscriptions_user_new_'.$LoggedUser['ID']);
 header('Location: userhistory.php?action=subscriptions');
 ?>

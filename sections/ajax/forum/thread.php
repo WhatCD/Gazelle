@@ -128,7 +128,8 @@ if ($_GET['updatelastread'] !== '0') {
 					(UserID, TopicID, PostID)
 				VALUES
 					('$LoggedUser[ID]', '$ThreadID', '".db_string($LastPost)."')
-				ON DUPLICATE KEY UPDATE PostID = '$LastPost'");
+				ON DUPLICATE KEY UPDATE
+					PostID = '$LastPost'");
 		}
 	}
 }
