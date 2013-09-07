@@ -47,7 +47,7 @@ class Donations {
 		$UserID = (int) $UserID;
 		$QueryID = G::$DB->get_query_id();
 
-		G::$DB->query("SELECT 1 FROM users_main WHERE ID = '$UserID'");
+		G::$DB->query("SELECT 1 FROM users_main WHERE ID = '$UserID' LIMIT 1");
 		if (G::$DB->has_results()) {
 			G::$Cache->InternalCache = false;
 			foreach($Args as &$Arg) {
@@ -202,6 +202,7 @@ class Donations {
 
 		DonationsBitcoin::find_new_donations();
 		//self::expire_ranks();
+		self::get_new_conversion_rates();
 	}
 
 	public static function expire_ranks() {
@@ -649,19 +650,8 @@ class Donations {
 	public static function btc_to_euro($Amount) {
 		$Rate = G::$Cache->get_value('btc_rate');
 		if (empty($Rate)) {
-			if ($Response = file_get_contents(BTC_API_URL)) {
-				$Response = json_decode($Response, true);
-				if (isset($Response['EUR'])) {
-					$Rate = round($Response['EUR']['24h'], 4); // We don't need good precision
-					self::set_stored_conversion_rate('BTC', $Rate);
-					$CacheTime = 86400; // Cache fresh value for 24 hours;
-				}
-			}
-			if (empty($Rate)) {
-				$Rate = self::get_stored_conversion_rate('BTC');
-				$CacheTime = 3600; // Cache old value for 1 hour;
-			}
-			G::$Cache->cache_value('btc_rate', $Rate, $CacheTime);
+			$Rate = self::get_stored_conversion_rate('BTC');
+			G::$Cache->cache_value('btc_rate', $Rate, 86400);
 		}
 		return $Rate * $Amount;
 	}
@@ -669,30 +659,8 @@ class Donations {
 	public static function usd_to_euro($Amount) {
 		$Rate = G::$Cache->get_value('usd_rate');
 		if (empty($Rate)) {
-			if ($Response = file_get_contents(USD_API_URL)) {
-				// Valid JSON isn't returned so we make it valid.
-				$Replace = array(
-					'lhs' => '"lhs"',
-					'rhs' => '"rhs"',
-					'error' => '"error"',
-					'icc' => '"icc"'
-				);
-
-				$Response = str_replace(array_keys($Replace), array_values($Replace), $Response);
-				$Response = json_decode($Response, true);
-				if (isset($Response['rhs'])) {
-					// The response is in format "# Euroes", extracts the numbers.
-					$Rate = preg_split("/[\s,]+/", $Response['rhs']);
-					$Rate = round($Rate[0], 4); // We don't need good precision
-					self::set_stored_conversion_rate('USD', $Rate);
-					$CacheTime = 86400; // Cache fresh value for 24 hours;
-				}
-			}
-			if (empty($Rate)) {
-				$Rate = self::get_stored_conversion_rate('USD');
-				$CacheTime = 3600; // Cache old value for 1 hour;
-			}
-			G::$Cache->cache_value('usd_rate', $Rate, $CacheTime);
+			$Rate = self::get_stored_conversion_rate('USD');
+			G::$Cache->cache_value('usd_rate', $Rate, 86400);
 		}
 		return $Rate * $Amount;
 	}
@@ -715,7 +683,41 @@ class Donations {
 				(Currency, Rate, Time)
 			VALUES
 				('$Currency', $Rate, NOW())");
+		if ($Currency == 'USD') {
+			$KeyName = 'usd_rate';
+		} elseif ($Currency == 'BTC') {
+			$KeyName = 'btc_rate';
+		}
+		G::$Cache->cache_value($KeyName, $Rate, 86400);
 		G::$DB->set_query_id($QueryID);
+	}
+
+	private static function get_new_conversion_rates() {
+		if ($BTC = file_get_contents(BTC_API_URL)) {
+			$BTC = json_decode($BTC, true);
+			if (isset($BTC['EUR'])) {
+				$Rate = round($BTC['EUR']['24h'], 4); // We don't need good precision
+				self::set_stored_conversion_rate('BTC', $Rate);
+			}
+		}
+		if ($USD = file_get_contents(USD_API_URL)) {
+			// Valid JSON isn't returned so we make it valid.
+			$Replace = array(
+				'lhs' => '"lhs"',
+				'rhs' => '"rhs"',
+				'error' => '"error"',
+				'icc' => '"icc"'
+			);
+
+			$USD = str_replace(array_keys($Replace), array_values($Replace), $USD);
+			$USD = json_decode($USD, true);
+			if (isset($USD['rhs'])) {
+				// The response is in format "# Euroes", extracts the numbers.
+				$Rate = preg_split("/[\s,]+/", $USD['rhs']);
+				$Rate = round($Rate[0], 4); // We don't need good precision
+				self::set_stored_conversion_rate('USD', $Rate);
+			}
+		}
 	}
 
 	public static function get_forum_description() {
