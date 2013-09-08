@@ -73,19 +73,15 @@ if (($SBlogReadTime = $Cache->get_value('staff_blog_read_'.$LoggedUser['ID'])) =
 ?>
 			<ul class="stats nobullet">
 <?
-if (count($Blog) < 5) {
-	$Limit = count($Blog);
-} else {
-	$Limit = 5;
-}
-for ($i = 0; $i < $Limit; $i++) {
-	list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $Blog[$i];
+$End = min(count($Blog), 5);
+for ($i = 0; $i < $End; $i++) {
+	list($BlogID, $Author, $Title, $Body, $BlogTime) = $Blog[$i];
 	$BlogTime = strtotime($BlogTime);
 ?>
 				<li>
-					<?=($SBlogReadTime < $BlogTime) ? '<strong>' : ''?><?=($i + 1)?>.
+					<?=$SBlogReadTime < $BlogTime ? '<strong>' : ''?><?=($i + 1)?>.
 					<a href="staffblog.php#blog<?=$BlogID?>"><?=$Title?></a>
-					<?=($SBlogReadTime < $BlogTime)?'</strong>':''?>
+					<?=$SBlogReadTime < $BlogTime ? '</strong>' : ''?>
 				</li>
 <?
 }

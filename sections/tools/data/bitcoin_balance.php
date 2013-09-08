@@ -28,7 +28,7 @@ $UserQ = $DB->query("
 	</tr>
 <?
 while (list($UserID, $BitcoinAddress) = $DB->next_record(MYSQLI_NUM, false)) {
-	if (!$BitcoinAddresses[$BitcoinAddress]) {
+	if (!isset($BitcoinAddresses[$BitcoinAddress])) {
 		continue;
 	}
 ?>

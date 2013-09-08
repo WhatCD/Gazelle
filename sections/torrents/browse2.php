@@ -139,6 +139,7 @@ if (isset($_GET['group_results']) && $_GET['group_results']) {
 		'sumleechers' => 'SUM(leechers) AS sumleechers',
 		'sumsnatched' => 'SUM(snatched) AS sumsnatched');
 } else {
+	$GroupResults = false;
 	$SortOrders = array(
 		'year' => 'year',
 		'time' => 'id',
@@ -208,7 +209,7 @@ $EnableNegation = false; // Sphinx needs at least one positive search condition 
 if (!empty($_GET['filelist'])) {
 	$SearchString = trim($_GET['filelist']);
 	if ($SearchString != '') {
-		$SearchString = '"'.Sphinxql::escape_string($_GET['filelist']).'"~20';
+		$SearchString = '"'.Sphinxql::sph_escape_string($_GET['filelist']).'"~20';
 		$SphQL->where_match($SearchString, 'filelist', false);
 		$SphQLTor->where_match($SearchString, 'filelist', false);
 		$EnableNegation = true;
@@ -296,11 +297,11 @@ if (!empty($_GET['searchstr'])) {
 		}
 		$QueryParts = array();
 		foreach ($BasicSearch['include'] as $Word) {
-			$QueryParts[] = Sphinxql::escape_string($Word);
+			$QueryParts[] = Sphinxql::sph_escape_string($Word);
 		}
 		if (!empty($BasicSearch['exclude'])) {
 			foreach ($BasicSearch['exclude'] as $Word) {
-				$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word, 1));
+				$QueryParts[] = '!'.Sphinxql::sph_escape_string(substr($Word, 1));
 			}
 		}
 		if (!empty($FilterBitrates)) {
@@ -376,11 +377,11 @@ if (!empty($SearchWords['taglist'])) {
 		unset($Tags['exclude']);
 	}
 	foreach ($Tags['include'] as &$Tag) {
-		$Tag = Sphinxql::escape_string($Tag);
+		$Tag = Sphinxql::sph_escape_string($Tag);
 	}
 	if (!empty($Tags['exclude'])) {
 		foreach ($Tags['exclude'] as &$Tag) {
-			$Tag = '!'.Sphinxql::escape_string(substr($Tag, 1));
+			$Tag = '!'.Sphinxql::sph_escape_string(substr($Tag, 1));
 		}
 	}
 
@@ -405,12 +406,16 @@ if (!empty($SearchWords['taglist'])) {
 	}
 	if (!empty($QueryParts)) {
 		$SphQL->where_match(implode(' ', $QueryParts), 'taglist', false);
+		$SphQLTor->where_match(implode(' ', $QueryParts), 'taglist', false);
 		$Filtered = true;
 	}
 	unset($SearchWords['taglist']);
 }
 elseif (!isset($_GET['tags_type'])) {
 	$_GET['tags_type'] = '1';
+}
+if (!isset($TagListString)) {
+	$TagListString = "";
 }
 
 foreach ($SearchWords as $Search => $Words) {
@@ -420,11 +425,11 @@ foreach ($SearchWords as $Search => $Words) {
 		unset($Words['exclude']);
 	}
 	foreach ($Words['include'] as $Word) {
-		$QueryParts[] = Sphinxql::escape_string($Word);
+		$QueryParts[] = Sphinxql::sph_escape_string($Word);
 	}
 	if (!empty($Words['exclude'])) {
 		foreach ($Words['exclude'] as $Word) {
-			$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word, 1));
+			$QueryParts[] = '!'.Sphinxql::sph_escape_string(substr($Word, 1));
 		}
 	}
 	if (!empty($QueryParts)) {
@@ -490,7 +495,7 @@ foreach (array('hascue', 'scene', 'vanityhouse', 'releasetype') as $Search) {
 	}
 }
 
-if (!empty($_GET['freetorrent']) || $_GET['freetorrent'] === '0') {
+if (isset($_GET['freetorrent'])) {
 	switch ($_GET['freetorrent']) {
 		case 0: // Only normal freeleech
 			$SphQL->where('freetorrent', 0);
@@ -1013,7 +1018,7 @@ foreach ($Results as $Result) {
 		if ($GroupYear > 0) {
 			$DisplayName .= " [$GroupYear]";
 		}
-		if ($GroupVanityHouse) {
+		if ($GroupInfo['VanityHouse']) {
 			$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
 		}
 		$DisplayName .= ' ['.$ReleaseTypes[$ReleaseType].']';

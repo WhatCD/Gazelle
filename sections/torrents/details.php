@@ -284,9 +284,9 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 <?
 		}
 	}
-	if ((count($Artists[6]) > 0) && (count($Artists[1]) > 0)) {
+	if (!empty($Artists[6]) && !empty($Artists[1])) {
 		print '				<li class="artists_main"><strong class="artists_label">Artists:</strong></li>';
-	} elseif ((count($Artists[4]) > 0) && (count($Artists[1]) > 0)) {
+	} elseif (!empty($Artists[6]) && !empty($Artists[1])) {
 		print '				<li class="artists_main"><strong class="artists_label">Performers:</strong></li>';
 	}
 	foreach ($Artists[1] as $Artist) {
@@ -629,8 +629,6 @@ foreach ($TorrentList as $Torrent) {
 
 	$ExtraInfo = ''; // String that contains information on the torrent (e.g. format and encoding)
 	$AddExtra = ''; // Separator between torrent properties
-
-	$TorrentUploader = $Username; // Save this for "Uploaded by:" below
 
 	// similar to Torrents::torrent_info()
 	if ($Format) { $ExtraInfo.=display_str($Format); $AddExtra=' / '; }

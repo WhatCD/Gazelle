@@ -148,7 +148,7 @@ if (!empty($Categories)) {
 	$SQL .= " AND CategoryID IN(".db_string(implode(',', $Categories)).')';
 }
 
-if ($_GET['action'] === 'mine') {
+if (isset($_GET['action']) && $_GET['action'] === 'mine') {
 	$SQL = $BaseSQL;
 	$SQL .= "
 		AND c.UserID = '".$LoggedUser['ID']."'

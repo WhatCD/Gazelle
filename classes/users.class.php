@@ -631,8 +631,7 @@ class Users {
 					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class />" : $Avatar);
 				} else {
 					$URL = STATIC_SERVER.'common/avatars/default.png';
-					//TODO: what is the $JS variable for? why is it unassigned?
-					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $JS />" : $URL);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar />" : $URL);
 				}
 				break;
 			case 2:

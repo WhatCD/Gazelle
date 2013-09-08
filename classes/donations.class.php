@@ -289,7 +289,7 @@ class Donations {
 
 	public static function is_mod($UserID) {
 		$Permissions = Permissions::get_permissions_for_user($UserID);
-		return $Permissions['users_mod'];
+		return isset($Permissions['users_mod']) && $Permissions['users_mod'];
 	}
 
 
@@ -376,9 +376,21 @@ class Donations {
 		$SpecialRank = self::get_special_rank($UserID);
 		$HasAll = $SpecialRank == 3;
 
-		if ($Rank >= 1 || $HasAll) {
+		$Rewards = array(
+			'HasAvatarMouseOverText' => false,
+			'HasCustomDonorIcon' => false,
+			'HasDonorForum' => false,
+			'HasDonorIconLink' => false,
+			'HasDonorIconMouseOverText' => false,
+			'HasProfileInfo1' => false,
+			'HasProfileInfo2' => false,
+			'HasProfileInfo3' => false,
+			'HasProfileInfo4' => false,
+			'HasSecondAvatar' => false);
 
-		}
+//		if ($Rank >= 1 || $HasAll) {
+//
+//		}
 		if ($Rank >= 2 || $HasAll) {
 			$Rewards["HasDonorIconMouseOverText"] = true;
 			$Rewards["HasProfileInfo1"] = true;

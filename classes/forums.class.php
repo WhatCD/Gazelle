@@ -12,9 +12,10 @@ class Forums {
 	 * @return array holding thread information.
 	 */
 	public static function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
-		if ((!$ThreadInfo = G::$Cache->get_value('thread_' . $ThreadID . '_info')) || !isset($ThreadInfo['OP'])) {
+		if ((!$ThreadInfo = G::$Cache->get_value('thread_' . $ThreadID . '_info')) || !isset($ThreadInfo['Ranking'])) {
 			$QueryID = G::$DB->get_query_id();
-			G::$DB->query("SELECT
+			G::$DB->query(
+				"SELECT
 					t.Title,
 					t.ForumID,
 					t.IsLocked,
@@ -23,10 +24,11 @@ class Forums {
 					t.LastPostAuthorID,
 					ISNULL(p.TopicID) AS NoPoll,
 					t.StickyPostID,
-					t.AuthorID as OP
+					t.AuthorID as OP,
+					t.Ranking
 					FROM forums_topics AS t
-					JOIN forums_posts AS fp ON fp.TopicID = t.ID
-					LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
+						JOIN forums_posts AS fp ON fp.TopicID = t.ID
+						LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
 					WHERE t.ID = '$ThreadID'
 					GROUP BY fp.TopicID");
 			if (G::$DB->record_count() == 0) {
@@ -35,17 +37,19 @@ class Forums {
 			$ThreadInfo = G::$DB->next_record(MYSQLI_ASSOC, false);
 			if ($ThreadInfo['StickyPostID']) {
 				$ThreadInfo['Posts']--;
-				G::$DB->query("SELECT
-									p.ID,
-									p.AuthorID,
-									p.AddedTime,
-									p.Body,
-									p.EditedUserID,
-									p.EditedTime,
-									ed.Username
-									FROM forums_posts as p
-									LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
-									WHERE p.TopicID = '$ThreadID' AND p.ID = '" . $ThreadInfo['StickyPostID'] . "'");
+				G::$DB->query(
+					"SELECT
+						p.ID,
+						p.AuthorID,
+						p.AddedTime,
+						p.Body,
+						p.EditedUserID,
+						p.EditedTime,
+						ed.Username
+						FROM forums_posts as p
+							LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
+						WHERE p.TopicID = '$ThreadID'
+							AND p.ID = '" . $ThreadInfo['StickyPostID'] . "'");
 				list ($ThreadInfo['StickyPost']) = G::$DB->to_array(false, MYSQLI_ASSOC);
 			}
 			G::$DB->set_query_id($QueryID);
@@ -69,7 +73,7 @@ class Forums {
 	 */
 	public static function check_forumperm($ForumID, $Perm = 'Read') {
 		$Forums = self::get_forums();
-		if (G::$LoggedUser['CustomForums'][$ForumID] == 1) {
+		if (isset(G::$LoggedUser['CustomForums'][$ForumID]) && G::$LoggedUser['CustomForums'][$ForumID] == 1) {
 			return true;
 		}
 		if ($ForumID == DONOR_FORUM && Donations::has_donor_forum(G::$LoggedUser['ID'])) {

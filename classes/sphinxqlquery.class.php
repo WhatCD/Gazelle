@@ -116,7 +116,7 @@ class SphinxqlQuery {
 			$Field = "@$Field ";
 		}
 		if ($Escape === true) {
-			$this->Expressions[] = "$Field".Sphinxql::escape_string($Expr);
+			$this->Expressions[] = "$Field".Sphinxql::sph_escape_string($Expr);
 		} else {
 			$this->Expressions[] = $Field.$Expr;
 		}
@@ -282,13 +282,15 @@ class SphinxqlQuery {
 		if (!$this->QueryString) {
 			return false;
 		}
-		$this->Sphinxql->sphconnect();
+		$this->Sphinxql->sph_connect();
 		$Result = $this->Sphinxql->query($this->QueryString);
 		if ($Result === false) {
 			$Errno = $this->Sphinxql->errno;
 			$Error = $this->Sphinxql->error;
 			$this->error("Query returned error $Errno ($Error).\n$this->QueryString");
 		} else {
+			$Errno = 0;
+			$Error = '';
 			$Meta = $GetMeta ? $this->get_meta() : null;
 		}
 		return new SphinxqlResult($Result, $Meta, $Errno, $Error);

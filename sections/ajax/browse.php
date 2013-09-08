@@ -164,7 +164,7 @@ $EnableNegation = false; // Sphinx needs at least one positive search condition 
 if (!empty($_GET['filelist'])) {
 	$SearchString = trim($_GET['filelist']);
 	if ($SearchString !== '') {
-		$SearchString = '"'.Sphinxql::escape_string($_GET['filelist']).'"~20';
+		$SearchString = '"'.Sphinxql::sph_escape_string($_GET['filelist']).'"~20';
 		$SphQL->where_match($SearchString, 'filelist', false);
 		$SphQLTor->where_match($SearchString, 'filelist', false);
 		$EnableNegation = true;
@@ -244,11 +244,11 @@ if (!empty($_GET['searchstr'])) {
 		}
 		$QueryParts = array();
 		foreach ($BasicSearch['include'] as $Word) {
-			$QueryParts[] = Sphinxql::escape_string($Word);
+			$QueryParts[] = Sphinxql::sph_escape_string($Word);
 		}
 		if (!empty($BasicSearch['exclude'])) {
 			foreach ($BasicSearch['exclude'] as $Word) {
-				$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word, 1));
+				$QueryParts[] = '!'.Sphinxql::sph_escape_string(substr($Word, 1));
 			}
 		}
 		if (!empty($FilterBitrates)) {
@@ -280,11 +280,11 @@ if (!empty($SearchWords['taglist'])) {
 		unset($Tags['exclude']);
 	}
 	foreach ($Tags['include'] as &$Tag) {
-		$Tag = Sphinxql::escape_string($Tag);
+		$Tag = Sphinxql::sph_escape_string($Tag);
 	}
 	if (!empty($Tags['exclude'])) {
 		foreach ($Tags['exclude'] as &$Tag) {
-			$Tag = '!'.Sphinxql::escape_string(substr($Tag, 1));
+			$Tag = '!'.Sphinxql::sph_escape_string(substr($Tag, 1));
 		}
 	}
 
@@ -307,6 +307,7 @@ if (!empty($SearchWords['taglist'])) {
 	}
 	if (!empty($QueryParts)) {
 		$SphQL->where_match(implode(' ', $QueryParts), 'taglist', false);
+		$SphQLTor->where_match(implode(' ', $QueryParts), 'taglist', false);
 		$Filtered = true;
 	}
 	unset($SearchWords['taglist']);
@@ -321,11 +322,11 @@ foreach ($SearchWords as $Search => $Words) {
 		unset($Words['exclude']);
 	}
 	foreach ($Words['include'] as $Word) {
-		$QueryParts[] = Sphinxql::escape_string($Word);
+		$QueryParts[] = Sphinxql::sph_escape_string($Word);
 	}
 	if (!empty($Words['exclude'])) {
 		foreach ($Words['exclude'] as $Word) {
-			$QueryParts[] = '!'.Sphinxql::escape_string(substr($Word, 1));
+			$QueryParts[] = '!'.Sphinxql::sph_escape_string(substr($Word, 1));
 		}
 	}
 	if (!empty($QueryParts)) {
@@ -390,7 +391,7 @@ foreach (array('hascue', 'scene', 'vanityhouse', 'releasetype') as $Search) {
 	}
 }
 
-if (!empty($_GET['freetorrent'])) {
+if (isset($_GET['freetorrent'])) {
 	switch ($_GET['freetorrent']) {
 		case 0: // Only normal freeleech
 			$SphQL->where('freetorrent', 0);
@@ -677,7 +678,7 @@ foreach ($Results as $Result) {
 				'logScore' => (int) $Data['LogScore'],
 				'hasCue' => $Data['HasCue'] == '1',
 				'scene' => $Data['Scene'] == '1',
-				'vanityHouse' => $Data['VanityHouse'] == '1',
+				'vanityHouse' => $GroupInfo['VanityHouse'] == '1',
 				'fileCount' => (int) $Data['FileCount'],
 				'time' => $Data['Time'],
 				'size' => (int) $Data['Size'],
@@ -699,7 +700,7 @@ foreach ($Results as $Result) {
 			'cover' => $GroupInfo['WikiImage'],
 			'tags' => $TagList,
 			'bookmarked' => in_array($GroupID, $Bookmarks),
-			'vanityHouse' => $GroupVanityHouse == '1',
+			'vanityHouse' => $GroupInfo['VanityHouse'] == '1',
 			'groupYear' => (int) $GroupYear,
 			'releaseType' => $ReleaseTypes[$ReleaseType],
 			'groupTime' => (string) $GroupTime,

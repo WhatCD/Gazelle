@@ -77,10 +77,8 @@ class Permissions {
 			$BonusPerms = array_merge($BonusPerms, $ClassPerms['Permissions']);
 		}
 
-		if (!empty($CustomPermissions)) {
-			$CustomPerms = $CustomPermissions;
-		} else {
-			$CustomPerms = array();
+		if (empty($CustomPermissions)) {
+			$CustomPermissions = array();
 		}
 
 		// This is legacy donor cruft
@@ -90,18 +88,20 @@ class Permissions {
 			$DonorPerms = array('Permissions' => array());
 		}
 
-		$DonorCollages = self::get_personal_collages($UserID, $Permissions['Permissions']['users_mod']);
+		$IsMod = isset($Permissions['Permissions']['users_mod']) && $Permissions['Permissions']['users_mod'];
+		$DonorCollages = self::get_personal_collages($UserID, $IsMod);
 
-		$MaxCollages = $Permissions['Permissions']['MaxCollages']
-				+ $BonusCollages
-				+ $CustomPerms['MaxCollages']
-				+ $DonorCollages;
+		$MaxCollages = $Permissions['Permissions']['MaxCollages'] + $BonusCollages + $DonorCollages;
+
+		if (isset($CustomPermissions['MaxCollages'])) {
+			$MaxCollages += $CustomPermissions['MaxCollages'];
+		}
 
 		//Combine the permissions
 		return array_merge(
 				$Permissions['Permissions'],
 				$BonusPerms,
-				$CustomPerms,
+				$CustomPermissions,
 				$DonorPerms['Permissions'],
 				array('MaxCollages' => $MaxCollages));
 	}

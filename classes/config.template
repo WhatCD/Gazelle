@@ -25,7 +25,7 @@ define('SQLLOGIN', '');//The MySQL login
 define('SQLPASS', ''); //The MySQL password
 define('SQLDB', 'gazelle'); //The MySQL database to use
 define('SQLPORT', 3306); //The MySQL port to connect on
-define('SQLSOCK', '/var/run/mysqld/mysql.sock');
+define('SQLSOCK', '/var/run/mysqld/mysqld.sock');
 
 // Memcached details
 $MemcachedServers = array(
@@ -58,12 +58,13 @@ if (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 80) {
 // Site settings
 if (PHP_VERSION_ID < 50307) {
 	die("PHP version 5.3.7 or later is highly recommended for gazelle's password hashing methods.".
-		" Uncomment line ".__LINE__." in file ".__FILE__." if you want to continue to use this version.");
+		" Comment out line ".__LINE__." in file ".__FILE__." if you want to continue to use this version.");
 	define('CRYPT_HASH_PREFIX', '$2a$07$'); // Crypt salt prefix for hash settings. See http://php.net/crypt for details
 } else {
 	define('CRYPT_HASH_PREFIX', '$2y$07$');
 }
 define('DEBUG_MODE', false); //Set to false if you dont want everyone to see debug information, can be overriden with 'site_debug'
+define('DEBUG_WARNINGS', true); //Set to true if you want to see PHP warnings in the footer
 define('OPEN_REGISTRATION', true); //Set to false to disable open regirstration, true to allow anyone to register
 define('USER_LIMIT', 5000); //The maximum number of users the site can have, 0 for no limit
 define('STARTING_INVITES', 0); //# of invites to give to newly registered users
@@ -149,7 +150,7 @@ $Formats = array('MP3', 'FLAC', 'Ogg Vorbis', 'AAC', 'AC3', 'DTS');
 $Bitrates = array('192', 'APS (VBR)', 'V2 (VBR)', 'V1 (VBR)', '256', 'APX (VBR)', 'V0 (VBR)', 'q8.x (VBR)', '320', 'Lossless', '24bit Lossless', 'Other');
 $Media = array('CD', 'DVD', 'Vinyl', 'Soundboard', 'SACD', 'DAT', 'Cassette', 'WEB');
 
-$CollageCats = array(0=>'Personal', 1=>'Theme', 2=>'Genre introduction', 3=>'Discography', 4=>'Label', 5=>'Staff picks', 6=>'Charts');
+$CollageCats = array(0=>'Personal', 1=>'Theme', 2=>'Genre introduction', 3=>'Discography', 4=>'Label', 5=>'Staff picks', 6=>'Charts', 7=>'Artists');
 
 $ReleaseTypes = array(1=>'Album', 3=>'Soundtrack', 5=>'EP', 6=>'Anthology', 7=>'Compilation', 9=>'Single', 11=>'Live album', 13=>'Remix', 14=>'Bootleg', 15=>'Interview', 16=>'Mixtape', 21=>'Unknown');
 //$ForumCats = array(1=>'Site', 5=>'Community', 10=>'Help', 8=>'Music', 20=>'Trash'); //No longer needed

@@ -1,12 +1,12 @@
 INSTALLATION NOTES
-1. Set up MySQL and memcached. We run memcached with the command:
-	memcached -d -m 5120 -s /var/run/memcached.sock -a 0777 -t16 -C -u root
-	This gives it 5 gigs of RAM; you probably want to set that a bit lower!
+1. Set up MySQL and memcached. memcached can be started with the command:
+	memcached -d -m 5120 -s /var/run/memcached.sock -a 0777 -t4 -C -u nobody
+	This starts 4 threads and gives it 5 gigs of RAM
 2. Run gazelle.sql (preferably as root) to create the database, the table, and the default data.
 3. Install Sphinx - we recommend you use the included sphinx.conf. You can copy this to
     /etc/sphinx/sphinx.conf. You need to fill in the details of the SQL server though!
 
-    You might also need to create the /var/data/sphinx folder.
+    You might also need to create the /var/lib/sphinx folder.
 
 	For documentation, read http://www.sphinxsearch.com/docs/current.html
 
@@ -21,10 +21,10 @@ the peerupdate (all groups are cached, but the peer counts change often,
 so peerupdate is a script to update them), and the two Sphinx indices.
 These are our cron jobs. SCHEDULE_KEY is the same as in classes/config.php:
 
-0,15,30,45 *    *       *       *       /usr/local/bin/php /var/www/vhosts/what/schedule.php SCHEDULE_KEY >> /root/schedule.log
-10,25,40,55 *  *        *       *       /usr/local/bin/php /var/www/vhosts/what/peerupdate.php SCHEDULE_KEY >> /root/peerupdate.log
-*       *       *       *       *       /usr/local/bin/indexer -c /etc/sphinx/sphinx.conf --rotate delta
-5       0,12    *       *       *       /usr/local/bin/indexer -c /etc/sphinx/sphinx.conf --rotate --all
+0,15,30,45 *    *       *       *       /usr/bin/php /var/www/vhosts/what/schedule.php SCHEDULE_KEY >> /root/schedule.log
+10,25,40,55 *  *        *       *       /usr/bin/php /var/www/vhosts/what/peerupdate.php SCHEDULE_KEY >> /root/peerupdate.log
+*       *       *       *       *       /usr/bin/indexer -c /etc/sphinx/sphinx.conf --rotate delta requests_delta log_delta >/dev/null
+5       0,12    *       *       *       /usr/bin/indexer -c /etc/sphinx/sphinx.conf --rotate --all >>/root/sphinx-indexer.log
 
 7. You're probably going to want IP geolocation information, so first you need to fill in the geoip_country tables by visiting /tools.php?action=update_geoip
 	After that finishes parsing information from MaxMind, you may want to map users to countries by running:

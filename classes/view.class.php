@@ -41,7 +41,7 @@ class View {
 	 *	               Here is a list of parameters that work in the $Options array:
 	 *                 ['disclaimer'] = [boolean] (False) Displays the disclaimer in the footer
 	 */
-	public static function show_footer ($Options = array()) {
+	public static function show_footer($Options = array()) {
 		global $ScriptStartTime, $SessionID, $UserSessions, $Debug, $Time;
 		if (!is_array(G::$LoggedUser)) {
 			require(SERVER_ROOT.'/design/publicfooter.php');
@@ -65,7 +65,7 @@ class View {
 	 * @param string $TemplateName The name of the template, in underscore_format
 	 * @param array $Args the arguments passed to the template.
 	 */
-	public static function render_template ($TemplateName, $Args) {
+	public static function render_template($TemplateName, $Args) {
 		static $LoadedTemplates; // Keep track of templates we've already loaded.
 		$ClassName = '';
 		if (isset($LoadedTemplates[$TemplateName])) {
@@ -113,7 +113,7 @@ class View {
 	 *  echo $SavedTemplate; // Output the buffer
 	 * </pre>
 	 */
-	public static function parse ($TemplateFile, array $Variables = null, $Buffer = false) {
+	public static function parse($TemplateFile, array $Variables = array(), $Buffer = false) {
 		$Template = self::IncludePath . $TemplateFile;
 		if (file_exists($Template)) {
 			extract($Variables);

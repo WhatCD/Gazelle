@@ -56,13 +56,17 @@ class Tags {
 	 *				E.g., compilations and soundtracks are skipped, so false
 	 */
 	public function __construct($TagList, $Merge = true) {
-		$this->Tags = array_filter(explode(' ', str_replace('_', '.', $TagList)));
+		if ($TagList) {
+			$this->Tags = array_filter(explode(' ', str_replace('_', '.', $TagList)));
 
-		if ($Merge) {
-			self::$All = array_merge(self::$All, $this->Tags);
+			if ($Merge) {
+				self::$All = array_merge(self::$All, $this->Tags);
+			}
+
+			$this->Primary = $this->Tags[0];
+		} else {
+			$this->Tags = array();
 		}
-
-		$this->Primary = $this->Tags[0];
 	}
 
 	/**

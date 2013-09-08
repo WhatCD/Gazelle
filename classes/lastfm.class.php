@@ -93,6 +93,11 @@ class LastFM {
 		return $Response;
 	}
 
+	public static function get_artist_chart($Username, $From = '', $To = '') {
+		$Response = self::lastfm_request("user.getWeeklyArtistChart", array("user" => $Username));
+		$Response = json_encode($Response);
+	}
+
 	public static function clear_cache($Username, $Uid) {
 		$Response = G::$Cache->get_value('lastfm_clear_cache_' . G::$LoggedUser['ID'] . '_' . $_GET['id']);
 		if (empty($Response)) {

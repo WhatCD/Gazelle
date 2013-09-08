@@ -26,7 +26,7 @@ class Sphinxql extends mysqli {
 		$this->Server = $Server;
 		$this->Port = $Port;
 		$this->Socket = $Socket;
-		$this->Ident = $this->get_ident($Server, $Port, $Socket);
+		$this->Ident = self::get_ident($Server, $Port, $Socket);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class Sphinxql extends mysqli {
 	 * @param string $Socket Unix socket address, overrides $Server:$Port
 	 * @return identification string
 	 */
-	private function get_ident($Server, $Port, $Socket) {
+	private static function get_ident($Server, $Port, $Socket) {
 		if ($Socket) {
 			return $Socket;
 		} else {
@@ -64,7 +64,7 @@ class Sphinxql extends mysqli {
 	/**
 	 * Connect the Sphinxql object to the Sphinx server
 	 */
-	public function sphconnect() {
+	public function sph_connect() {
 		if ($this->Connected || $this->connect_errno) {
 			return;
 		}
@@ -114,7 +114,7 @@ class Sphinxql extends mysqli {
 	 * @param string $String string to escape
 	 * @return escaped string
 	 */
-	public function escape_string($String) {
+	public static function sph_escape_string($String) {
 		return strtr($String, array(
 			'('=>'\\\\(',
 			')'=>'\\\\)',
@@ -141,8 +141,8 @@ class Sphinxql extends mysqli {
 	 * @param string $QueryString query text
 	 * @param param $QueryProcessTime time building and processing the query
 	 */
-	public function register_query($QueryString, $QueryProcessTime) {
-		Sphinxql::$Queries[] = array($QueryString, $QueryProcessTime);
-		Sphinxql::$Time += $QueryProcessTime;
+	public static function register_query($QueryString, $QueryProcessTime) {
+		self::$Queries[] = array($QueryString, $QueryProcessTime);
+		self::$Time += $QueryProcessTime;
 	}
 }

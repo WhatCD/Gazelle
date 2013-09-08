@@ -236,7 +236,7 @@ if (!empty($UsedReleases)) { ?>
 				break;
 		}
 
-		if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['SortHide']) && array_key_exists($ReleaseType, $LoggedUser['SortHide']) && $LoggedUser['SortHide'][$ReleaseType] == 1)) {
+		if (!empty($LoggedUser['DiscogView']) || (isset($LoggedUser['SortHide'][$ReleaseID]) && $LoggedUser['SortHide'][$ReleaseID] == 1)) {
 			$ToggleStr = " onclick=\"$('.releases_$ReleaseID').gshow(); return true;\"";
 		} else {
 			$ToggleStr = '';
@@ -402,12 +402,14 @@ foreach ($Importances as $Group) {
 <?	} ?>
 					<div class="group_info clear">
 						<strong><?=$DisplayName?></strong>
-						<? if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
-							echo "<a style=\"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" onclick=\"Unbookmark('torrent', $GroupID, 'Bookmark'); return false;\">Remove bookmark</a>";
-						} else {
-							echo "<a style=\"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" onclick=\"Bookmark('torrent', $GroupID, 'Remove bookmark'); return false;\">Bookmark</a>";
-						} ?>
-						<?Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']);?>
+<?	if (Bookmarks::has_bookmarked('torrent', $GroupID)) { ?>
+						<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
+<?	} else { ?>
+						<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
+<?	}
+	$VoteType = isset($UserVotes[$GroupID]['Type']) ? $UserVotes[$GroupID]['Type'] : '';
+	Votes::vote_link($GroupID, $VoteType);
+?>
 						<div class="tags"><?=$TorrentTags->format('torrents.php?taglist=', $Name)?></div>
 					</div>
 				</td>
@@ -432,7 +434,7 @@ foreach ($Importances as $Group) {
 			|| $Torrent['RemasterYear'] != $LastRemasterYear
 			|| $Torrent['RemasterRecordLabel'] != $LastRemasterRecordLabel
 			|| $Torrent['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber
-			|| $FirstUnknown
+			|| isset($FirstUnknown) && $FirstUnknown
 			|| $Torrent['Media'] != $LastMedia
 			) {
 

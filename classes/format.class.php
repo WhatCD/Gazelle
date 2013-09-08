@@ -127,7 +127,7 @@ class Format {
 	 * @param int $Decimal floor to n decimals (e.g. subtract .005 to floor to 2 decimals)
 	 * @return boolean|string
 	 */
-	public function get_ratio ($Dividend, $Divisor, $Decimal = 2) {
+	public static function get_ratio($Dividend, $Divisor, $Decimal = 2) {
 		if ($Divisor == 0 && $Dividend == 0) {
 			return false;
 		}

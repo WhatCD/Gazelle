@@ -203,12 +203,9 @@ class DEBUG {
 		$File = str_replace(SERVER_ROOT, '', $File);
 		$Error = str_replace(SERVER_ROOT, '', $Error);
 
-		/*
-		//Hiding "session_start(): Server 10.10.0.1 (tcp 11211) failed with: No route to host (113)" errors
-		if ($Call != "session_start") {
+		if (defined('DEBUG_WARNINGS')) {
 			$this->Errors[] = array($Error, $File.':'.$Line, $Call, $Args);
 		}
-		*/
 		return true;
 	}
 

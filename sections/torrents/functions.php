@@ -3,16 +3,6 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 	global $Cache, $DB;
 	if (!$RevisionID) {
 		$TorrentCache = $Cache->get_value("torrents_details_$GroupID");
-
-		// This block can be used to test if the cached data predates structure changes
-		if (isset($TorrentCache[0][0])) {
-			$OutdatedCache = true;
-		} else {
-			$Torrent = current($TorrentCache[1]);
-			if (!isset($Torrent['InfoHash'])) {
-				$OutdatedCache = true;
-			}
-		}
 	}
 	if ($RevisionID || !is_array($TorrentCache) || isset($OutdatedCache)) {
 		// Fetch the group details

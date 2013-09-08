@@ -80,7 +80,7 @@ function inverse_ncdf($p) {
 }
 
 // Confidence level for binomial scoring.  Just compute this once.
-define(Z_VAL, inverse_ncdf(1-(1-.95)/2));
+define('Z_VAL', inverse_ncdf(1-(1-.95)/2));
 
 // Implementation of the algorithm described at http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 function binomial_score($Ups, $Total) {
