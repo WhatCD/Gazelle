@@ -538,7 +538,7 @@ tr.torrent .bookmark>a:after {
 }
 
 .setting_description>* {
-        margin: 1em 0 0 0;
+    margin: 1em 0 0 0;
 }
 
 .settings_sidebar {
@@ -594,4 +594,11 @@ tr.torrent .bookmark>a:after {
 
 .wide_input_text {
 	width: 95%;
+}
+
+.top_artist_list li {
+	margin-left: 25px;
+	margin-bottom: 5px;
+	list-style-type: decimal;
+	font-size: 150%;
 }

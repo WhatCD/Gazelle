@@ -51,13 +51,7 @@ View::show_header("Top $Limit Torrents");
 <div class="thin">
 	<div class="header">
 		<h2>Top <?=$Limit?> Torrents</h2>
-		<div class="linkbox">
-			<a href="top10.php?type=torrents" class="brackets"><strong>Torrents</strong></a>
-			<a href="top10.php?type=users" class="brackets">Users</a>
-			<a href="top10.php?type=tags" class="brackets">Tags</a>
-			<a href="top10.php?type=votes" class="brackets">Favorites</a>
-			<a href="top10.php?type=donors" class="brackets">Donors</a>
-		</div>
+		<? Top10View::render_linkbox("torrents"); ?>
 	</div>
 <?
 

@@ -203,7 +203,7 @@ class DEBUG {
 		$File = str_replace(SERVER_ROOT, '', $File);
 		$Error = str_replace(SERVER_ROOT, '', $Error);
 
-		if (defined('DEBUG_WARNINGS')) {
+		if (DEBUG_WARNINGS) {
 			$this->Errors[] = array($Error, $File.':'.$Line, $Call, $Args);
 		}
 		return true;

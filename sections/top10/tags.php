@@ -15,13 +15,7 @@ View::show_header('Top 10 Tags');
 <div class="thin">
 	<div class="header">
 		<h2>Top 10 Tags</h2>
-		<div class="linkbox">
-			<a href="top10.php?type=torrents" class="brackets">Torrents</a>
-			<a href="top10.php?type=users" class="brackets">Users</a>
-			<a href="top10.php?type=tags" class="brackets"><strong>Tags</strong></a>
-			<a href="top10.php?type=votes" class="brackets">Favorites</a>
-			<a href="top10.php?type=donors" class="brackets">Donors</a>
-		</div>
+		<? Top10View::render_linkbox("tags"); ?>
 	</div>
 
 <?

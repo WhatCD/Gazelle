@@ -32,6 +32,9 @@ if (empty($_GET['type']) || $_GET['type'] == 'torrents') {
 		case 'donors' :
 			include(SERVER_ROOT.'/sections/top10/donors.php');
 			break;
+		case 'artists':
+			include(SERVER_ROOT.'/sections/top10/artists.php');
+			break;
 		default :
 			error(404);
 			break;

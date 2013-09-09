@@ -22,6 +22,12 @@ $(document).ready(function() {
 		maxWidth: 400
 	});
 
+	$('.tooltip_image').tooltipster({
+		delay: tooltip_delay,
+		updateAnimation: false,
+		fixedWidth: 252
+	});
+
 	$('.tooltip_gold').tooltipster({
 		delay: tooltip_delay,
 		maxWidth: 400,

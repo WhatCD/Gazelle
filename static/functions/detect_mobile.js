@@ -1,7 +1,7 @@
 var ANDROID_COOKIE_NAME = "mobile_checked_android";
 var OTHER_COOKIE_NAME = "mobile_checked_other";
 var MOBILE_SITE_URL = "https://m.what.cd/";
-var ANDROID_APP_URL = "http://bit.ly/git_wa_stable";
+var ANDROID_APP_URL = "http://bit.ly/whatandroid";
 
 var isMobile = {
 	Android: function() {

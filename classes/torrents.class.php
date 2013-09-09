@@ -899,7 +899,7 @@ class Torrents {
 				}
 				G::$DB->set_query_id($QueryID);
 				for ($i = 0; $i < $Buckets; $i++) {
-					if ($Updated[$i]) {
+					if (isset($Updated[$i])) {
 						G::$Cache->cache_value("users_snatched_{$UserID}_$i", $SnatchedTorrents[$i], 0);
 					}
 				}

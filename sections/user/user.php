@@ -185,7 +185,7 @@ function check_paranoia_here($Setting) {
 $P = $UserInfo['Paranoia'];
 $ShowDonorIcon = !in_array('hide_donor_heart', $P);
 
-View::show_header($Username, 'user,bbcode,requests,lastfm,comments,info_paster');
+View::show_header($Username, "jquery.imagesloaded,jquery.wookmark,user,bbcode,requests,lastfm,comments,info_paster", "tiles");
 
 ?>
 <div class="thin">
@@ -723,6 +723,33 @@ foreach ($Collages as $CollageInfo) {
 <?
 	$FirstCol = false;
 }
+?>
+<? if (!empty($LastFMUsername) && check_perms("users_mod")) {
+	$TopArtists = json_decode(LastFM::get_top_artists($LastFMUsername, 15), true);
+	$TopArtists = $TopArtists['topartists']['artist'];
+	?>
+	<table class="layout recent" id="top_artists" cellpadding="0" cellspacing="0" border="0">
+		<tr class="colhead">
+			<td colspan="5">
+				<a href="#top_artists" class="brackets anchor">#</a> Top Artists
+			</td>
+		</tr>
+		<tr>
+<?		for ($i = 0; $i < 5; $i++) {
+			$Name = $TopArtists[$i]['name'];
+			$Image = $TopArtists[$i]['image'][2]['#text'];
+			$Url = "artist.php?artistname=" . $Name;
+			?>
+			<td>
+				<a href="<?=$Url?>" title="<?=$Name?>">
+					<img src="<?=ImageTools::process($Image, true)?>" alt="<?=$RU['Name']?>" width="107" />
+				</a>
+			</td>
+<?		} ?>
+		</tr>
+	</table>
+<? }
+
 
 
 // Linked accounts

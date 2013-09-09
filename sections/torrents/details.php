@@ -286,7 +286,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 	}
 	if (!empty($Artists[6]) && !empty($Artists[1])) {
 		print '				<li class="artists_main"><strong class="artists_label">Artists:</strong></li>';
-	} elseif (!empty($Artists[6]) && !empty($Artists[1])) {
+	} elseif (!empty($Artists[4]) && !empty($Artists[1])) {
 		print '				<li class="artists_main"><strong class="artists_label">Performers:</strong></li>';
 	}
 	foreach ($Artists[1] as $Artist) {

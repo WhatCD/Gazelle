@@ -1,12 +1,12 @@
 
-#tiles_container {
+.tiles_container {
   position: relative;
 }
 
 /**
  * Grid container
  */
- #tiles {
+ .tiles {
   list-style-type: none;
   position: relative; /** Needed to ensure items are laid out relative to this container **/
   margin: 0;
@@ -16,7 +16,7 @@
 /**
  * Grid items
  */
- #tiles li {
+ .tiles li {
   background-color: #ffffff;
   border: 1px solid #dedede;
   border-radius: 2px;
@@ -27,19 +27,23 @@
   padding: 4px;
 }
 
-#tiles li.inactive {
+.tiles li.inactive {
   visibility: hidden;
   opacity: 0;
 }
 
-#tiles li img {
+.tiles li img {
   display: block;
+}
+
+.large_tile {
+  max-width: 252px;
 }
 
 /**
  * Grid item text
  */
- #tiles li p {
+ .tiles li p {
   color: #666;
   font-size: 12px;
   margin: 7px 0 0 7px;

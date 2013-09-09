@@ -93,9 +93,34 @@ class LastFM {
 		return $Response;
 	}
 
-	public static function get_artist_chart($Username, $From = '', $To = '') {
-		$Response = self::lastfm_request("user.getWeeklyArtistChart", array("user" => $Username));
-		$Response = json_encode($Response);
+	public static function get_user_artist_chart($Username, $From = '', $To = '') {
+		$Response = G::$Cache->get_value("lastfm_artist_chart_$Username");
+		if (empty($Response)) {
+			$Response = self::lastfm_request("user.getWeeklyArtistChart", array("user" => $Username));
+			$Response = json_encode($Response);
+			G::$Cache->cache_value("lastfm_artist_chart_$Username", $Response, 86400);
+		}
+		return $Response;
+	}
+
+	public static function get_weekly_artists($Limit = 100) {
+		$Response = G::$Cache->get_value("lastfm_top_artists");
+		if (empty($Response)) {
+			$Response = self::lastfm_request("chart.getTopArtists", array("limit" => $Limit));
+			$Response = json_encode($Response);
+			G::$Cache->cache_value("lastfm_top_artists", $Response, 86400);
+		}
+		return $Response;
+	}
+
+	public static function get_hyped_artists($Limit = 100) {
+		$Response = G::$Cache->get_value("lastfm_hyped_artists");
+		if (empty($Response)) {
+			$Response = self::lastfm_request("chart.getHypedArtists", array("limit" => $Limit));
+			$Response = json_encode($Response);
+			G::$Cache->cache_value("lastfm_hyped_artists", $Response, 86400);
+		}
+		return $Response;
 	}
 
 	public static function clear_cache($Username, $Uid) {

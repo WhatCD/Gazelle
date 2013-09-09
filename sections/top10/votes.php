@@ -91,13 +91,7 @@ View::show_header("Top $Limit Voted Groups",'browse,voting');
 <div class="thin">
 	<div class="header">
 		<h2>Top <?=$Limit?> Voted Groups</h2>
-		<div class="linkbox">
-			<a href="top10.php?type=torrents" class="brackets">Torrents</a>
-			<a href="top10.php?type=users" class="brackets">Users</a>
-			<a href="top10.php?type=tags" class="brackets">Tags</a>
-			<a href="top10.php?type=votes" class="brackets"><strong>Favorites</strong></a>
-			<a href="top10.php?type=donors" class="brackets">Donors</a>
-		</div>
+		<? Top10View::render_linkbox("votes"); ?>
 	</div>
 <?
 
