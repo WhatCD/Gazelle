@@ -16,7 +16,7 @@ $View = in_array($View, array('tiles', 'list')) ? $View : 'tiles';
 
 switch ($Category) {
 	case 'all_time':
-		$Artists = Top10::get_top_artists($Limit);
+		$Artists = LastFM::get_site_top_artists($Limit);
 		break;
 	case 'weekly':
 		$Artists = json_decode(LastFM::get_weekly_artists($Limit), true)['artists']['artist'];

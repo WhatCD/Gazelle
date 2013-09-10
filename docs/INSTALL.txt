@@ -11,7 +11,7 @@ INSTALLATION NOTES
 	For documentation, read http://www.sphinxsearch.com/docs/current.html
 
 	After you've installed sphinx, create the indices:
-	/usr/local/bin/indexer -c /etc/sphinx/sphinx.conf --all
+	/usr/bin/indexer -c /etc/sphinx/sphinx.conf --all
 
 4. Move classes/config.template to classes/config.php. Edit the config.php as needed.
 	We use http://grc.com/passwords.html for our passwords - you'll be generating a lot of these.

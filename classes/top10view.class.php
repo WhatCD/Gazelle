@@ -41,7 +41,7 @@ class Top10View {
 	public static function render_artist_tile($Artist, $Category) {
 		switch ($Category) {
 			case 'all_time':
-				self::render_tile("artist.php?id=", $Artist['id'], $Artist['Image']);
+				self::render_tile("artist.php?artistname", $Artist['Name'], $Artist['Image']);
 				break;
 			case 'weekly':
 			case 'hyped':

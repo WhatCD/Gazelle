@@ -104,24 +104,26 @@ class LastFM {
 	}
 
 	public static function get_weekly_artists($Limit = 100) {
-		$Response = G::$Cache->get_value("lastfm_top_artists");
+		$Response = G::$Cache->get_value("lastfm_top_artists_$Limit");
 		if (empty($Response)) {
 			$Response = self::lastfm_request("chart.getTopArtists", array("limit" => $Limit));
 			$Response = json_encode($Response);
-			G::$Cache->cache_value("lastfm_top_artists", $Response, 86400);
+			G::$Cache->cache_value("lastfm_top_artists_$Limit", $Response, 86400);
 		}
 		return $Response;
 	}
 
 	public static function get_hyped_artists($Limit = 100) {
-		$Response = G::$Cache->get_value("lastfm_hyped_artists");
+		$Response = G::$Cache->get_value("lastfm_hyped_artists_$Limit");
 		if (empty($Response)) {
 			$Response = self::lastfm_request("chart.getHypedArtists", array("limit" => $Limit));
 			$Response = json_encode($Response);
-			G::$Cache->cache_value("lastfm_hyped_artists", $Response, 86400);
+			G::$Cache->cache_value("lastfm_hyped_artists_$Limit", $Response, 86400);
 		}
 		return $Response;
 	}
+
+	
 
 	public static function clear_cache($Username, $Uid) {
 		$Response = G::$Cache->get_value('lastfm_clear_cache_' . G::$LoggedUser['ID'] . '_' . $_GET['id']);
