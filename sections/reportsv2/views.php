@@ -226,7 +226,7 @@ $Results = $DB->to_array();
 		<table>
 			<tr class="colhead">
 				<td>Staff member</td>
-				<td>Current count</td>
+				<td>Current Count</td>
 			</tr>
 <?
 		foreach ($Staff as $Array) {	?>
@@ -255,7 +255,7 @@ $Results = $DB->to_array();
 		<table>
 			<tr class="colhead">
 				<td>Type</td>
-				<td>Current count</td>
+				<td>Current Count</td>
 			</tr>
 <?
 		foreach ($Current as $Array) {

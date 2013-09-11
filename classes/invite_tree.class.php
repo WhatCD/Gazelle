@@ -91,7 +91,7 @@ class INVITE_TREE {
 
 		// We store this in an output buffer, so we can show the summary at the top without having to loop through twice
 		ob_start();
-		while (list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = G::$DB->next_record()) {
+		while (list($ID, $Enabled, $Class, $Donor, $Uploaded, $Downloaded, $Paranoia, $TreePosition, $TreeLevel) = G::$DB->next_record(MYSQLI_NUM, false)) {
 
 			// Do stats
 			$Count++;
@@ -127,6 +127,7 @@ class INVITE_TREE {
 			} else {
 				echo "\t</li>\n<li>";
 			}
+			$UserClass = $Classes[$Class]['Level'];
 ?>
 				<strong><?=Users::format_username($ID, true, true, ($Enabled != 2 ? false : true), true)?></strong>
 <?
@@ -141,7 +142,7 @@ class INVITE_TREE {
 			} else {
 				$ParanoidCount++;
 ?>
-				&nbsp;Paranoia: <strong><?=number_format($Paranoia) ?></strong>
+				&nbsp;Hidden
 <?
 			}
 ?>

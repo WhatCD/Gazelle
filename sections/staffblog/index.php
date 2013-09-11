@@ -86,7 +86,7 @@ if (check_perms('admin_manage_blog')) {
 			<div class="head">
 				<?=((empty($_GET['action'])) ? 'Create a staff blog post' : 'Edit staff blog post')?>
 				<span style="float: right;">
-					<a href="#" onclick="$('#postform').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="bracket"><?=(($_REQUEST['action'] != 'editblog') ? 'Show' : 'Hide')?></a>
+					<a href="#" onclick="$('#postform').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets"><?=(($_REQUEST['action'] != 'editblog') ? 'Show' : 'Hide')?></a>
 				</span>
 			</div>
 			<form class="<?=((empty($_GET['action'])) ? 'create_form' : 'edit_form')?>" name="blog_post" action="staffblog.php" method="post">

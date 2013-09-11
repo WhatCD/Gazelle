@@ -98,7 +98,7 @@ View::show_header('Report', 'reportsv2,browse,torrent,bbcode,recommend');
 			<input type="hidden" name="categoryid" value="<?=$CategoryID?>" />
 		</div>
 
-		<h3>Report information</h3>
+		<h3>Report Information</h3>
 		<div class="box pad">
 			<table class="layout">
 				<tr>

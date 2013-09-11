@@ -3,13 +3,11 @@
 include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
 $Text = new TEXT;
 
-include(SERVER_ROOT.'/sections/requests/functions.php');
-
 if (empty($_GET['id']) || !is_numeric($_GET['id']) || (!empty($_GET['preview']) && !is_numeric($_GET['preview']))) {
 	error(404);
 }
 $UserID = $_GET['id'];
-$Preview = $_GET['preview'];
+$Preview = isset($_GET['preview']) ? $_GET['preview'] : 0;
 if ($UserID == $LoggedUser['ID']) {
 	$OwnProfile = true;
 	if ($Preview == 1) {
@@ -181,9 +179,6 @@ function check_paranoia_here($Setting) {
 		return check_paranoia($Setting, $Paranoia, $Class, $UserID);
 	}
 }
-
-$P = $UserInfo['Paranoia'];
-$ShowDonorIcon = !in_array('hide_donor_heart', $P);
 
 View::show_header($Username, "jquery.imagesloaded,jquery.wookmark,user,bbcode,requests,lastfm,comments,info_paster", "tiles");
 
@@ -807,7 +802,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 				<table cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 					<tr class="colhead_dark">
 						<td style="width: 48%;">
-							<strong>Request name</strong>
+							<strong>Request Name</strong>
 						</td>
 						<td>
 							<strong>Vote</strong>
@@ -882,7 +877,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 	}
 }
 
-$IsFLS = $LoggedUser['ExtraClasses'][41];
+$IsFLS = isset($LoggedUser['ExtraClasses'][FLS_TEAM]);
 if (check_perms('users_mod', $Class) || $IsFLS) {
 	$UserLevel = $LoggedUser['EffectiveClass'];
 	$DB->query("
@@ -915,7 +910,7 @@ if (check_perms('users_mod', $Class) || $IsFLS) {
 				</tr>
 <?
 		foreach ($StaffPMs as $StaffPM) {
-			list($ID, $Subject, $Status, $Level, $AssignedTo, $Date, $ResolverID) = $StaffPM;
+			list($ID, $Subject, $Status, $Level, $AssignedToUser, $Date, $ResolverID) = $StaffPM;
 			// Get assigned
 			if ($AssignedToUser == '') {
 				// Assigned to class

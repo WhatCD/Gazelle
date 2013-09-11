@@ -4,7 +4,7 @@
 	<table width="100%">
 		<tr class="colhead">
 			<td style="width: 150px;">Category</td>
-			<td style="width: 400px;">Additional information</td>
+			<td style="width: 400px;">Additional Information</td>
 		</tr>
 		<tr class="rowb">
 			<td class="nobr">

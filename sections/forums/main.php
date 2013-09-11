@@ -18,7 +18,7 @@ foreach ($Forums as $Forum) {
 	if ($ForumID == DONOR_FORUM) {
 		$ForumDescription = Donations::get_forum_description();
 	}
-	$Tooltip = $ForumID == DONOR_FORUM ? 'tooltip_gold' : 'tooltip'; 
+	$Tooltip = $ForumID == DONOR_FORUM ? 'tooltip_gold' : 'tooltip';
 	$Row = $Row === 'a' ? 'b' : 'a';
 	$ForumDescription = display_str($ForumDescription);
 
@@ -33,7 +33,7 @@ foreach ($Forums as $Forum) {
 		<tr class="colhead">
 			<td style="width: 2%;"></td>
 			<td style="width: 25%;">Forum</td>
-			<td>Last post</td>
+			<td>Last Post</td>
 			<td style="width: 7%;">Topics</td>
 			<td style="width: 7%;">Posts</td>
 		</tr>

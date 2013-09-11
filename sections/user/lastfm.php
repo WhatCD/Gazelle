@@ -21,7 +21,7 @@ if ($DB->has_results()) {
 				<a href="#" id="lastfm_expand" onclick="return false" class="brackets">Show more info</a>
 <?
 				//Append the reload stats button only if allowed on the current user page.
-				$Response = $Cache->get_value('lastfm_clear_cache_' . $LoggedUser . '_' . $_GET['id']);
+				$Response = $Cache->get_value("lastfm_clear_cache_$UserID");
 				if (empty($Response)) {
 ?>
 				<span id="lastfm_reload_container">

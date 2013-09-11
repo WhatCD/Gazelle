@@ -688,10 +688,10 @@ if (empty($SimilarArray)) {
 				<li>
 					<span title="<?=$Score?>"><a href="artist.php?id=<?=$Artist2ID?>" style="float: left; display: block;"><?=$Artist2Name?></a></span>
 					<div style="float: right; display: block; letter-spacing: -1px;">
-						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" style="font-family: monospace;" class="tooltip" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar." class="brackets">&minus;</a>
-						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" style="font-family: monospace;" class="tooltip" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar." class="brackets">+</a>
+						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=down" class="tooltip brackets" title="Vote down this similar artist. Use this when you feel that the two artists are not all that similar.">&minus;</a>
+						<a href="artist.php?action=vote_similar&amp;artistid=<?=$ArtistID?>&amp;similarid=<?=$SimilarID?>&amp;way=up" class="tooltip brackets" title="Vote up this similar artist. Use this when you feel that the two artists are quite similar.">+</a>
 <?		if (check_perms('site_delete_tag')) { ?>
-						<span class="remove remove_artist"><a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="tooltip" title="Remove this similar artist" class="brackets">X</a></span>
+						<span class="remove remove_artist"><a href="artist.php?action=delete_similar&amp;similarid=<?=$SimilarID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="tooltip brackets" title="Remove this similar artist">X</a></span>
 <?		} ?>
 					</div>
 					<br style="clear: both;" />
@@ -778,7 +778,7 @@ if ($NumRequests > 0) {
 		<tr class="colhead_dark">
 			<td style="width: 48%;">
 				<a href="#">&uarr;</a>&nbsp;
-				<strong>Request name</strong>
+				<strong>Request Name</strong>
 			</td>
 			<td>
 				<strong>Vote</strong>
@@ -940,7 +940,7 @@ function require(file, callback) {
 		<div class="box">
 			<div id="info" class="head">
 				<a href="#">&uarr;</a>&nbsp;
-				<strong>Artist info</strong>
+				<strong>Artist Information</strong>
 				<a href="#" class="brackets" onclick="$('#body').gtoggle(); return false;">Toggle</a>
 			</div>
 			<div id="body" class="body"><?=$Text->full_format($Body)?></div>

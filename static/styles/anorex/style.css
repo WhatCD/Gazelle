@@ -817,6 +817,10 @@ ul .invitetree {
 	font-weight: bold;
 }
 
+.brackets {
+	font-weight: normal;
+}
+
 .brackets:before, .brackets:after {
 	color: #492802;
 }

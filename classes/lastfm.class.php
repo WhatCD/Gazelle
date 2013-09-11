@@ -125,11 +125,11 @@ class LastFM {
 
 	
 
-	public static function clear_cache($Username, $Uid) {
-		$Response = G::$Cache->get_value('lastfm_clear_cache_' . G::$LoggedUser['ID'] . '_' . $_GET['id']);
+	public static function clear_cache($Username, $UserID) {
+		$Response = G::$Cache->get_value("lastfm_clear_cache_$UserID");
 		if (empty($Response)) {
 			// Prevent clearing the cache on the same uid page for the next 10 minutes.
-			$Response = G::$Cache->cache_value('lastfm_clear_cache_' . G::$LoggedUser['ID'] . "_$Uid", $Username, 600);
+			G::$Cache->cache_value("lastfm_clear_cache_$UserID", 1, 600);
 			G::$Cache->delete_value("lastfm_user_info_$Username");
 			G::$Cache->delete_value("lastfm_last_played_track_$Username");
 			G::$Cache->delete_value("lastfm_top_artists_$Username");
@@ -139,7 +139,7 @@ class LastFM {
 			G::$DB->query("
 				SELECT username
 				FROM lastfm_users
-				WHERE ID = '" . G::$LoggedUser['ID'] . "'");
+				WHERE ID = " . G::$LoggedUser['ID']);
 			if (G::$DB->has_results()) {
 				list($Username2) = G::$DB->next_record();
 				//Make sure the usernames are in the correct order to avoid dupe cache keys.
@@ -148,7 +148,7 @@ class LastFM {
 					$Username = $Username2;
 					$Username2 = $Temp;
 				}
-				G::$Cache->delete_value("lastfm_compare_$Username" . "_$Username2");
+				G::$Cache->delete_value("lastfm_compare_{$Username}_$Username2");
 			}
 			G::$DB->set_query_id($QueryID);
 		}

@@ -12,7 +12,7 @@ View::show_header('Better');
 		<table width="100%">
 			<tr class="colhead">
 				<td style="width: 150px;">Method</td>
-				<td style="width: 400px;">Additional information</td>
+				<td style="width: 400px;">Additional Information</td>
 			</tr>
 			<tr class="rowb">
 				<td class="nobr">

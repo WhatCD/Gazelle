@@ -523,7 +523,7 @@ foreach ($Categories as $CatKey => $CatName) {
 	<table id="request_table" class="request_table border" cellpadding="6" cellspacing="1" border="0" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;" class="nobr">
-				<strong>Request name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder === 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
+				<strong>Request Name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder === 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
 			</td>
 			<td class="nobr">
 				<a href="?order=votes&amp;sort=<?=(($CurrentOrder === 'votes') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Votes</strong></a>

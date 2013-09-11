@@ -389,7 +389,7 @@ foreach ($Categories as $CatKey => $CatName) {
 	<table id="request_table" class="request_table" cellpadding="6" cellspacing="1" border="0" class="border" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;">
-				<a href="requests.php?order=name&amp;sort=<?=(($CurrentOrder === 'name') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Request name</strong></a>
+				<a href="requests.php?order=name&amp;sort=<?=(($CurrentOrder === 'name') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>"><strong>Request Name</strong></a>
 			</td>
 			<td>
 				<strong><a href="requests.php?order=votes&amp;sort=<?=(($CurrentOrder === 'votes') ? $NewSort : 'asc')?>&amp;<?=$CurrentURL ?>">Vote (20MB)</a></strong></td>
