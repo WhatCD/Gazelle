@@ -173,11 +173,8 @@ if (isset($LoginCookie)) {
 	$LightInfo = Users::user_info($LoggedUser['ID']);
 	$HeavyInfo = Users::user_heavy_info($LoggedUser['ID']);
 
-	// Get user permissions
-	$Permissions = Permissions::get_permissions($LightInfo['PermissionID']);
-
 	// Create LoggedUser array
-	$LoggedUser = array_merge($HeavyInfo, $LightInfo, $Permissions, $UserStats);
+	$LoggedUser = array_merge($HeavyInfo, $LightInfo, $UserStats);
 
 	$LoggedUser['RSS_Auth'] = md5($LoggedUser['ID'] . RSS_HASH . $LoggedUser['torrent_pass']);
 
@@ -187,15 +184,10 @@ if (isset($LoginCookie)) {
 		&& time() < strtotime($LoggedUser['RatioWatchEnds'])
 		&& ($LoggedUser['BytesDownloaded'] * $LoggedUser['RequiredRatio']) > $LoggedUser['BytesUploaded']
 	);
-	if (!isset($LoggedUser['ID'])) {
-		$Debug->log_var($LightInfo, 'LightInfo');
-		$Debug->log_var($HeavyInfo, 'HeavyInfo');
-		$Debug->log_var($Permissions, 'Permissions');
-		$Debug->log_var($UserStats, 'UserStats');
-	}
 
 	// Load in the permissions
 	$LoggedUser['Permissions'] = Permissions::get_permissions_for_user($LoggedUser['ID'], $LoggedUser['CustomPermissions']);
+	$LoggedUser['Permissions']['MaxCollages'] += Donations::get_personal_collages($LoggedUser['ID'], check_perms('users_mod'));
 
 	// Change necessary triggers in external components
 	$Cache->CanClear = check_perms('admin_clear_cache');

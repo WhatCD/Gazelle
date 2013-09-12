@@ -150,7 +150,7 @@ class DonationsView {
 <?			foreach ($DonationHistory as $Donation) { ?>
 					<tr class="row<?=$Row?>">
 						<td>
-							<?=$Donation['Source']?> (<?=Users::format_username($Donation['AddedBy'])?>)
+							<?=display_str($Donation['Source'])?> (<?=Users::format_username($Donation['AddedBy'])?>)
 						</td>
 						<td>
 							<?=$Donation['Time']?>
@@ -165,10 +165,10 @@ class DonationsView {
 							<?=$Donation['TotalRank']?>
 						</td>
 						<td>
-							<?=$Donation['Email']?>
+							<?=display_str($Donation['Email'])?>
 						</td>
 						<td>
-							<?=$Donation['Reason']?>
+							<?=display_str($Donation['Reason'])?>
 						</td>
 					</tr>
 <?

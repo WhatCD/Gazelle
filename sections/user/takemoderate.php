@@ -333,6 +333,7 @@ if ($Classes[$Class]['Level'] != $Cur['Class']
 		}
 		$ClearStaffIDCache = true;
 	}
+	$Cache->delete_value("donor_info_$UserID");
 }
 
 if ($Username != $Cur['Username'] && check_perms('users_edit_usernames', $Cur['Class'] - 1)) {

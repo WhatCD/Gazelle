@@ -47,7 +47,6 @@ class Permissions {
 	 * @return array Mapping of PermissionName=>bool/int
 	 */
 	public static function get_permissions_for_user($UserID, $CustomPermissions = false) {
-
 		$UserInfo = Users::user_info($UserID);
 
 		// Fetch custom permissions if they weren't passed in.
@@ -65,13 +64,13 @@ class Permissions {
 			$CustomPermissions = unserialize($CustomPermissions);
 		}
 
-		$Permissions = Permissions::get_permissions($UserInfo['PermissionID']);
+		$Permissions = self::get_permissions($UserInfo['PermissionID']);
 
 		// Manage 'special' inherited permissions
 		$BonusPerms = array();
 		$BonusCollages = 0;
 		foreach ($UserInfo['ExtraClasses'] as $PermID => $Value) {
-			$ClassPerms = Permissions::get_permissions($PermID);
+			$ClassPerms = self::get_permissions($PermID);
 			$BonusCollages += $ClassPerms['Permissions']['MaxCollages'];
 			unset($ClassPerms['Permissions']['MaxCollages']);
 			$BonusPerms = array_merge($BonusPerms, $ClassPerms['Permissions']);
@@ -83,61 +82,23 @@ class Permissions {
 
 		// This is legacy donor cruft
 		if ($UserInfo['Donor']) {
-			$DonorPerms = Permissions::get_permissions(DONOR);
+			$DonorPerms = self::get_permissions(DONOR);
 		} else {
 			$DonorPerms = array('Permissions' => array());
 		}
 
-		$IsMod = isset($Permissions['Permissions']['users_mod']) && $Permissions['Permissions']['users_mod'];
-		$DonorCollages = self::get_personal_collages($UserID, $IsMod);
-
-		$MaxCollages = $Permissions['Permissions']['MaxCollages'] + $BonusCollages + $DonorCollages;
-
+		$MaxCollages = $Permissions['Permissions']['MaxCollages'] + $BonusCollages;
 		if (isset($CustomPermissions['MaxCollages'])) {
 			$MaxCollages += $CustomPermissions['MaxCollages'];
 		}
+		$Permissions['MaxCollages'] = $MaxCollages;
 
 		//Combine the permissions
 		return array_merge(
 				$Permissions['Permissions'],
 				$BonusPerms,
 				$CustomPermissions,
-				$DonorPerms['Permissions'],
-				array('MaxCollages' => $MaxCollages));
-	}
-
-	private static function get_personal_collages($UserID, $HasAll) {
-		$QueryID = G::$DB->get_query_id();
-		if (!$HasAll) {
-			$SpecialRank = G::$Cache->get_value("donor_special_rank_$UserID");
-			if ($SpecialRank === false) {
-				G::$DB->query("SELECT SpecialRank FROM users_donor_ranks WHERE UserID = '$UserID'");
-				list($SpecialRank) = G::$DB->next_record();
-				$HasAll = $SpecialRank == MAX_SPECIAL_RANK ? true : false;
-				G::$Cache->cache_value("donor_special_rank_$UserID", $SpecialRank, 0);
-			}
-		} else {
-			G::$Cache->cache_value("donor_special_rank_$UserID", MAX_SPECIAL_RANK, 0);
-		}
-
-		if ($HasAll) {
-			$Collages = 5;
-		} else {
-			$Collages = 0;
-			$Rank = G::$Cache->get_value("donor_rank_$UserID");
-			if ($Rank === false) {
-				G::$DB->query("SELECT Rank FROM users_donor_ranks WHERE UserID = '$UserID'");
-				list($Rank) = G::$DB->next_record();
-				G::$Cache->cache_value("donor_rank_$UserID", $Rank, 0);
-			}
-
-			$Rank = min($Rank, 5);
-			for ($i = 1; $i <= $Rank; $i++) {
-				$Collages++;
-			}
-		}
-		G::$DB->set_query_id($QueryID);
-		return $Collages;
+				$DonorPerms['Permissions']);
 	}
 }
 ?>
