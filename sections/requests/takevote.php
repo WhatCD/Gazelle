@@ -79,7 +79,7 @@ if ($LoggedUser['BytesUploaded'] >= $Amount && $Filled === '0') {
 	while (list($UserID) = $DB->next_record()) {
 		$UserIDs[] = $UserID;
 	}
-	NotificationsManager::notify_users($UserIDs, NotificationsManager::$REQUESTALERTS, Format::get_size($Amount) . " of bounty has been added to a request you've voted on!", "requests.php?action=view&id=" . $RequestID);
+	NotificationsManager::notify_users($UserIDs, NotificationsManager::REQUESTALERTS, Format::get_size($Amount) . " of bounty has been added to a request you've voted on!", "requests.php?action=view&id=" . $RequestID);
 } elseif ($LoggedUser['BytesUploaded'] < $Amount) {
 	echo 'bankrupt';
 }

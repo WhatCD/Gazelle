@@ -89,13 +89,10 @@ if (!$NumResults) {
 				AND AddedOn > '" . db_string($LastVisit) . "'
 			ORDER BY AddedOn");
 		$NewTorrentCount = $DB->record_count();
-		//$NewTorrents = $DB->to_array();
-		//$Artists = Artists::get_artists($GroupID);
 
-		$GroupIDs = $DB->collect('GroupID');
+		$GroupIDs = $DB->collect('GroupID', false);
 		if (count($GroupIDs) > 0) {
 			$TorrentList = Torrents::get_groups($GroupIDs);
-			$TorrentList = $TorrentList['matches'];
 		} else {
 			$TorrentList = array();
 		}
@@ -103,10 +100,6 @@ if (!$NumResults) {
 		$Artists = Artists::get_artists($GroupIDs);
 		$Number = 0;
 
-	//	foreach ($NewTorrents as $TorrentGroup) {
-	//		list($GroupID, $GroupName, $GroupYear, $ReleaseType, $RecordLabel, $CatalogueNumber, $WikiImage) = $TorrentGroup;
-	//		$DisplayName = Artists::display_artists($Artists[$GroupID]);
-	//		$AltName = $GroupName;
 		foreach ($TorrentList as $GroupID => $Group) {
 			extract(Torrents::array_group($Group));
 

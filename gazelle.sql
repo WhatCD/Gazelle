@@ -474,12 +474,14 @@ CREATE TABLE `forums_topics` (
   `LastPostAuthorID` int(10) NOT NULL,
   `StickyPostID` int(10) NOT NULL DEFAULT '0',
   `Ranking` tinyint(2) DEFAULT '0',
+  `CreatedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`ID`),
   KEY `AuthorID` (`AuthorID`),
   KEY `ForumID` (`ForumID`),
   KEY `IsSticky` (`IsSticky`),
   KEY `LastPostID` (`LastPostID`),
-  KEY `Title` (`Title`)
+  KEY `Title` (`Title`),
+  KEY `CreatedTime` (`CreatedTime`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `friends` (

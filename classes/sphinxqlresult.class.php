@@ -32,6 +32,15 @@ class SphinxqlResult {
 	}
 
 	/**
+	 * Did the query find anything?
+	 *
+	 * @return bool results were found
+	 */
+	public function has_results() {
+		return $this->get_meta('total') > 0;
+	}
+
+	/**
 	 * Collect and return the specified key of all results as a list
 	 *
 	 * @param string $Key key containing the desired data

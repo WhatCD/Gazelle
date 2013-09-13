@@ -27,8 +27,7 @@ $DB->query("
 	WHERE ID='$TorrentID'");
 
 $Group = Torrents::get_groups(array($GroupID));
-$Group = array_pop($Group['matches']);
-extract(Torrents::array_group($Group));
+extract(Torrents::array_group($Group[$GroupID]));
 
 $Name = '';
 $Name .= Artists::display_artists(array('1' => $Artists), false, true);

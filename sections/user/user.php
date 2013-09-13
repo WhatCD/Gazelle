@@ -672,8 +672,9 @@ $DB->query("
 	WHERE UserID = '$UserID'
 		AND CategoryID = '0'
 		AND Deleted = '0'
-	ORDER BY Featured DESC, Name ASC");
-$Collages = $DB->to_array();
+	ORDER BY Featured DESC,
+		Name ASC");
+$Collages = $DB->to_array(false, MYSQLI_NUM, false);
 $FirstCol = true;
 foreach ($Collages as $CollageInfo) {
 	list($CollageID, $CName) = $CollageInfo;
@@ -686,7 +687,7 @@ foreach ($Collages as $CollageInfo) {
 		WHERE ct.CollageID = '$CollageID'
 		ORDER BY ct.Sort
 		LIMIT 5");
-	$Collage = $DB->to_array();
+	$Collage = $DB->to_array(false, MYSQLI_ASSOC, false);
 ?>
 	<table class="layout recent" id="collage<?=$CollageID?>_box" cellpadding="0" cellspacing="0" border="0">
 		<tr class="colhead">
@@ -701,9 +702,8 @@ foreach ($Collages as $CollageInfo) {
 		</tr>
 		<tr class="images<?=$FirstCol ? '' : ' hidden'?>">
 <?	foreach ($Collage as $C) {
-			$Group = Torrents::get_groups(array($C['GroupID']));
-			$Group = array_pop($Group['matches']);
-			extract(Torrents::array_group($Group));
+			$Group = Torrents::get_groups(array($C['GroupID']), true, true, false);
+			extract(Torrents::array_group($Group[$C['GroupID']]));
 
 			$Name = '';
 			$Name .= Artists::display_artists(array('1' => $Artists), false, true);
@@ -774,25 +774,17 @@ if (check_perms('users_mod')) {
 
 // Requests
 if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_list')) {
-	$DB->query("
-		SELECT
-			r.ID,
-			r.CategoryID,
-			r.Title,
-			r.Year,
-			r.TimeAdded,
-			COUNT(rv.UserID) AS Votes,
-			SUM(rv.Bounty) AS Bounty
-		FROM requests AS r
-			LEFT JOIN users_main AS u ON u.ID = UserID
-			LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID
-		WHERE r.UserID = $UserID
-			AND r.TorrentID = 0
-		GROUP BY r.ID
-		ORDER BY Votes DESC");
-
-	if ($DB->has_results()) {
-		$Requests = $DB->to_array();
+	$SphQL = new SphinxqlQuery();
+	$SphQLResult = $SphQL->select('id, votes, bounty')
+		->from('requests, requests_delta')
+		->where('userid', $UserID)
+		->where('torrentid', 0)
+		->order_by('votes', 'desc')
+		->order_by('bounty', 'desc')
+		->limit(0, 100, 100) // Limit to 100 requests
+		->query();
+	if ($SphQLResult->has_results()) {
+		$SphRequests = $SphQLResult->to_array('id', MYSQLI_ASSOC);
 ?>
 		<div class="box" id="requests_box">
 			<div class="head">
@@ -815,33 +807,25 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 						</td>
 					</tr>
 <?
-		foreach ($Requests as $Request) {
-			list($RequestID, $CategoryID, $Title, $Year, $TimeAdded, $Votes, $Bounty) = $Request;
-
-			$Request = Requests::get_requests(array($RequestID));
-			$Request = $Request['matches'][$RequestID];
-			if (empty($Request)) {
-				continue;
-			}
-
-			list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $ReleaseType,
-				$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
-
-			$CategoryName = $Categories[$CategoryID - 1];
+		$Row = 0;
+		$Requests = Requests::get_requests(array_keys($SphRequests));
+		foreach ($SphRequests as $RequestID => $SphRequest) {
+			$Request = $Requests[$RequestID];
+			$VotesCount = $SphRequest['votes'];
+			$Bounty = $SphRequest['bounty'] * 1024; // Sphinx stores bounty in kB
+			$CategoryName = $Categories[$Request['CategoryID'] - 1];
 
 			if ($CategoryName == 'Music') {
 				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-				$FullName = "$ArtistLink<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
+				$FullName = "$ArtistLink<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title] [$Request[Year]]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
-				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title] [$Request[Year]]</a>";
 			} else {
-				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title]</a>";
 			}
-
-			$Row = (empty($Row) || $Row == 'a') ? 'b' : 'a';
 ?>
-					<tr class="row<?=$Row?>">
+					<tr class="row<?=($Row++ & 1) ? 'a' : 'b'?>">
 						<td>
 							<?=$FullName ?>
 							<div class="tags">
@@ -853,11 +837,11 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 			}
 			$TagList = implode(', ', $TagList);
 ?>
-								<?=($TagList)?>
+								<?=$TagList?>
 							</div>
 						</td>
 						<td>
-							<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
+							<span id="vote_count_<?=$RequestID?>"><?=$VotesCount?></span>
 <?			if (check_perms('site_vote')) { ?>
 							&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets">+</a>
 <?			} ?>
@@ -866,7 +850,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 							<span id="bounty_<?=$RequestID?>"><?=Format::get_size($Bounty)?></span>
 						</td>
 						<td>
-							<?=time_diff($TimeAdded) ?>
+							<?=time_diff($Request['TimeAdded']) ?>
 						</td>
 					</tr>
 <?		} ?>

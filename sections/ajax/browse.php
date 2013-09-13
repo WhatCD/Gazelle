@@ -440,7 +440,7 @@ if (isset($Random) && $GroupResults) {
 		// Make sure we get TORRENTS_PER_PAGE results, or all of them if there are less than TORRENTS_PER_PAGE hits
 		$SphQL->where('groupid', $GroupIDs, true);
 		$SphQLResult = $SphQL->query();
-		if (!$SphQLResult->get_meta('total')) {
+		if (!$SphQLResult->has_results()) {
 			break;
 		}
 		$Results += $SphQLResult->to_array('groupid');
@@ -482,8 +482,6 @@ if (!check_perms('site_search_many') && $TorrentCount > SPHINX_MAX_MATCHES) {
 
 if ($TorrentCount) {
 	$Groups = Torrents::get_groups($GroupIDs);
-	$Groups = $Groups['matches'];
-
 	if (!empty($Groups) && $GroupResults) {
 		$TorrentIDs = array();
 		foreach ($Groups as $Group) {

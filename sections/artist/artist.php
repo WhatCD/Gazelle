@@ -94,7 +94,7 @@ if (empty($LoggedUser['DisableRequests'])) {
 			ORDER BY Votes DESC");
 
 		if ($DB->has_results()) {
-			$Requests = $DB->to_array();
+			$Requests = $DB->to_array('ID', MYSQLI_ASSOC, false);
 		} else {
 			$Requests = array();
 		}
@@ -123,7 +123,6 @@ if (($Importances = $Cache->get_value("artist_groups_$ArtistID")) === false) {
 }
 if (count($GroupIDs) > 0) {
 	$TorrentList = Torrents::get_groups($GroupIDs, true, true);
-	$TorrentList = $TorrentList['matches'];
 } else {
 	$TorrentList = array();
 }
@@ -791,47 +790,48 @@ if ($NumRequests > 0) {
 			</td>
 		</tr>
 <?
-	foreach ($Requests as $Request) {
-		list($RequestID, $CategoryID, $Title, $Year, $TimeAdded, $Votes, $Bounty) = $Request;
-
-			$CategoryName = $Categories[$CategoryID - 1];
-
+	$Tags = Requests::get_tags(array_keys($Requests));
+	$Row = 0;
+	foreach ($Requests as $RequestID => $Request) {
+			$CategoryName = $Categories[$Request['CategoryID'] - 1];
+			$Title = display_str($Request['Title']);
 			if ($CategoryName == 'Music') {
 				$ArtistForm = Requests::get_artists($RequestID);
 				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
+				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Request[Year]]</a>";
 			} elseif ($CategoryName == 'Audiobooks' || $CategoryName == 'Comedy') {
-				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Year]</a>";
+				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title [$Request[Year]]</a>";
 			} else {
 				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
 			}
 
-			$Row = $Row === 'a' ? 'b' : 'a';
-
-			$Tags = Requests::get_tags($RequestID);
-			$ReqTagList = array();
-			foreach ($Tags as $TagID => $TagName) {
-				$ReqTagList[] = "<a href=\"requests.php?tags=$TagName\">".display_str($TagName).'</a>';
+			if (!empty($Tags[$RequestID])) {
+				$ReqTagList = array();
+				foreach ($Tags[$RequestID] as $TagID => $TagName) {
+					$ReqTagList[] = "<a href=\"requests.php?tags=$TagName\">".display_str($TagName).'</a>';
+				}
+				$ReqTagList = implode(', ', $ReqTagList);
+			} else {
+				$ReqTagList = '';
 			}
-			$ReqTagList = implode(', ', $ReqTagList);
 ?>
-		<tr class="row<?=$Row?>">
+		<tr class="row<?=($Row++ & 1 ? 'a' : 'b')?>">
 			<td>
 				<?=$FullName?>
 				<div class="tags"><?=$ReqTagList?></div>
 			</td>
 			<td>
-				<span id="vote_count_<?=$RequestID?>"><?=$Votes?></span>
+				<span id="vote_count_<?=$RequestID?>"><?=$Request['Votes']?></span>
 <?		if (check_perms('site_vote')) { ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 <?		} ?>
 			</td>
 			<td>
-				<span id="bounty_<?=$RequestID?>"><?=Format::get_size($Bounty)?></span>
+				<span id="bounty_<?=$RequestID?>"><?=Format::get_size($Request['Bounty'])?></span>
 			</td>
 			<td>
-				<?=time_diff($TimeAdded)?>
+				<?=time_diff($Request['TimeAdded'])?>
 			</td>
 		</tr>
 <?	} ?>

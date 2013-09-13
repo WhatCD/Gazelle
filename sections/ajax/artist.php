@@ -79,31 +79,34 @@ if ($Data) {
 }
 
 // Requests
-$Requests = $Cache->get_value("artists_requests_$ArtistID");
-if (!is_array($Requests)) {
-	$DB->query("
-		SELECT
-			r.ID,
-			r.CategoryID,
-			r.Title,
-			r.Year,
-			r.TimeAdded,
-			COUNT(rv.UserID) AS Votes,
-			SUM(rv.Bounty) AS Bounty
-		FROM requests AS r
-			LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID
-			LEFT JOIN requests_artists AS ra ON r.ID = ra.RequestID
-		WHERE ra.ArtistID = $ArtistID
-			AND r.TorrentID = 0
-		GROUP BY r.ID
-		ORDER BY Votes DESC");
-
-	if ($DB->has_results()) {
-		$Requests = $DB->to_array();
-	} else {
-		$Requests = array();
+$Requests = array();
+if (empty($LoggedUser['DisableRequests'])) {
+	$Requests = $Cache->get_value("artists_requests_$ArtistID");
+	if (!is_array($Requests)) {
+		$DB->query("
+			SELECT
+				r.ID,
+				r.CategoryID,
+				r.Title,
+				r.Year,
+				r.TimeAdded,
+				COUNT(rv.UserID) AS Votes,
+				SUM(rv.Bounty) AS Bounty
+			FROM requests AS r
+				LEFT JOIN requests_votes AS rv ON rv.RequestID = r.ID
+				LEFT JOIN requests_artists AS ra ON r.ID = ra.RequestID
+			WHERE ra.ArtistID = $ArtistID
+				AND r.TorrentID = 0
+			GROUP BY r.ID
+			ORDER BY Votes DESC");
+	
+		if ($DB->has_results()) {
+			$Requests = $DB->to_array('ID', MYSQLI_ASSOC, false);
+		} else {
+			$Requests = array();
+		}
+		$Cache->cache_value("artists_requests_$ArtistID", $Requests);
 	}
-	$Cache->cache_value("artists_requests_$ArtistID", $Requests);
 }
 $NumRequests = count($Requests);
 
@@ -126,7 +129,6 @@ if (($Importances = $Cache->get_value("artist_groups_$ArtistID")) === false) {
 }
 if (count($GroupIDs) > 0) {
 	$TorrentList = Torrents::get_groups($GroupIDs, true, true);
-	$TorrentList = $TorrentList['matches'];
 } else {
 	$TorrentList = array();
 }
@@ -173,18 +175,19 @@ reset($TorrentList);
 
 $JsonTorrents = array();
 $Tags = array();
+$NumTorrents = $NumSeeders = $NumLeechers = $NumSnatches = 0;
 foreach ($TorrentList as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));
 
 	foreach ($Artists as &$Artist) {
-		$Artist['id'] = (int) $Artist['id'];
-		$Artist['aliasid'] = (int) $Artist['aliasid'];
+		$Artist['id'] = (int)$Artist['id'];
+		$Artist['aliasid'] = (int)$Artist['aliasid'];
 	}
 
 	foreach ($ExtendedArtists as &$ArtistGroup) {
 		foreach ($ArtistGroup as &$Artist) {
-			$Artist['id'] = (int) $Artist['id'];
-			$Artist['aliasid'] = (int) $Artist['aliasid'];
+			$Artist['id'] = (int)$Artist['id'];
+			$Artist['aliasid'] = (int)$Artist['aliasid'];
 		}
 	}
 
@@ -213,38 +216,38 @@ foreach ($TorrentList as $GroupID => $Group) {
 		$NumSnatches += $Torrent['Snatched'];
 
 		$InnerTorrents[] = array(
-			'id' => (int) $Torrent['ID'],
-			'groupId' => (int) $Torrent['GroupID'],
+			'id' => (int)$Torrent['ID'],
+			'groupId' => (int)$Torrent['GroupID'],
 			'media' => $Torrent['Media'],
 			'format' => $Torrent['Format'],
 			'encoding' => $Torrent['Encoding'],
-			'remasterYear' => (int) $Torrent['RemasterYear'],
+			'remasterYear' => (int)$Torrent['RemasterYear'],
 			'remastered' => $Torrent['Remastered'] == 1,
 			'remasterTitle' => $Torrent['RemasterTitle'],
 			'remasterRecordLabel' => $Torrent['RemasterRecordLabel'],
 			'scene' => $Torrent['Scene'] == 1,
 			'hasLog' => $Torrent['HasLog'] == 1,
 			'hasCue' => $Torrent['HasCue'] == 1,
-			'logScore' => (int) $Torrent['LogScore'],
-			'fileCount' => (int) $Torrent['FileCount'],
+			'logScore' => (int)$Torrent['LogScore'],
+			'fileCount' => (int)$Torrent['FileCount'],
 			'freeTorrent' => $Torrent['FreeTorrent'] == 1,
-			'size' => (int) $Torrent['Size'],
-			'leechers' => (int) $Torrent['Leechers'],
-			'seeders' => (int) $Torrent['Seeders'],
-			'snatched' => (int) $Torrent['Snatched'],
+			'size' => (int)$Torrent['Size'],
+			'leechers' => (int)$Torrent['Leechers'],
+			'seeders' => (int)$Torrent['Seeders'],
+			'snatched' => (int)$Torrent['Snatched'],
 			'time' => $Torrent['Time'],
-			'hasFile' => (int) $Torrent['HasFile']
+			'hasFile' => (int)$Torrent['HasFile']
 		);
 	}
 	$JsonTorrents[] = array(
-		'groupId' => (int) $GroupID,
+		'groupId' => (int)$GroupID,
 		'groupName' => $GroupName,
-		'groupYear' => (int) $GroupYear,
+		'groupYear' => (int)$GroupYear,
 		'groupRecordLabel' => $GroupRecordLabel,
 		'groupCatalogueNumber' => $GroupCatalogueNumber,
 		'groupCategoryID' => $GroupCategoryID,
 		'tags' => $TagList,
-		'releaseType' => (int) $ReleaseType,
+		'releaseType' => (int)$ReleaseType,
 		'wikiImage' => $WikiImage,
 		'groupVanityHouse' => $GroupVanityHouse == 1,
 		'hasBookmarked' => Bookmarks::has_bookmarked('torrent', $GroupID),
@@ -274,10 +277,10 @@ if (empty($SimilarArray)) {
 	$SimilarArray = $DB->to_array();
 	foreach ($SimilarArray as $Similar) {
 		$JsonSimilar[] = array(
-			'artistId' => (int) $Similar['ArtistID'],
+			'artistId' => (int)$Similar['ArtistID'],
 			'name' => $Similar['Name'],
-			'score' => (int) $Similar['Score'],
-			'similarId' => (int) $Similar['SimilarID']
+			'score' => (int)$Similar['Score'],
+			'similarId' => (int)$Similar['SimilarID']
 		);
 	}
 	$NumSimilar = count($SimilarArray);
@@ -285,25 +288,24 @@ if (empty($SimilarArray)) {
 	//If data already exists, use it
 	foreach ($SimilarArray as $Similar) {
 		$JsonSimilar[] = array(
-			'artistId' => (int) $Similar['ArtistID'],
+			'artistId' => (int)$Similar['ArtistID'],
 			'name' => $Similar['Name'],
-			'score' => (int) $Similar['Score'],
-			'similarId' => (int) $Similar['SimilarID']
+			'score' => (int)$Similar['Score'],
+			'similarId' => (int)$Similar['SimilarID']
 		);
 	}
 }
 
 $JsonRequests = array();
-foreach ($Requests as $Request) {
-	list($RequestID, $CategoryID, $Title, $Year, $TimeAdded, $Votes, $Bounty) = $Request;
+foreach ($Requests as $RequestID => $Request) {
 	$JsonRequests[] = array(
-		'requestId' => (int) $RequestID,
-		'categoryId' => (int) $CategoryID,
-		'title' => $Title,
-		'year' => (int) $Year,
-		'timeAdded' => $TimeAdded,
-		'votes' => (int) $Votes,
-		'bounty' => (int) $Bounty
+		'requestId' => (int)$RequestID,
+		'categoryId' => (int)$Request['CategoryID'],
+		'title' => $Request['Title'],
+		'year' => (int)$Request['Year'],
+		'timeAdded' => $Request['TimeAdded'],
+		'votes' => (int)$Request['Votes'],
+		'bounty' => (int)$Request['Bounty']
 	);
 }
 
@@ -340,7 +342,7 @@ $Data = array(array($Name, $Image, $Body, $NumSimilar, $SimilarArray, array(), a
 $Cache->cache_value($Key, $Data, 3600);
 
 json_die("success", array(
-	'id' => (int) $ArtistID,
+	'id' => (int)$ArtistID,
 	'name' => $Name,
 	'notificationsEnabled' => $notificationsEnabled,
 	'hasBookmarked' => Bookmarks::has_bookmarked('artist', $ArtistID),

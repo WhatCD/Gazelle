@@ -642,10 +642,11 @@ class TEXT {
 					$Matches = array();
 					if (preg_match($Pattern, $Block['Val'], $Matches)) {
 						if (isset($Matches[2])) {
-							$Groups = Torrents::get_groups(array($Matches[2]), true, true, false);
-							if (!empty($Groups['matches'][$Matches[2]])) {
-								$Group = $Groups['matches'][$Matches[2]];
-								$Str .= Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$Matches[2].'">'.$Group['Name'].'</a>';
+							$GroupID = $Matches[2];
+							$Groups = Torrents::get_groups(array($GroupID), true, true, false);
+							if ($Groups[$GroupID]) {
+								$Group = $Groups[$GroupID];
+								$Str .= Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';
 							} else {
 								$Str .= '[torrent]'.str_replace('[inlineurl]', '', $Block['Val']).'[/torrent]';
 							}

@@ -7,7 +7,7 @@
  */
 
 
-$NewRequest = ($_GET['action'] === 'new' ? true : false);
+$NewRequest = $_GET['action'] === 'new';
 
 if (!$NewRequest) {
 	$RequestID = $_GET['id'];
@@ -24,31 +24,37 @@ if ($NewRequest && ($LoggedUser['BytesUploaded'] < 250 * 1024 * 1024 || !check_p
 if (!$NewRequest) {
 	if (empty($ReturnEdit)) {
 
-		$Request = Requests::get_requests(array($RequestID));
-		$Request = $Request['matches'][$RequestID];
-		if (empty($Request)) {
+		$Request = Requests::get_request($RequestID);
+		if ($Request === false) {
 			error(404);
 		}
 
-		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
-			$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
+		// Define these variables to simplify _GET['groupid'] requests later on
+		$CategoryID = $Request['CategoryID'];
+		$Title = $Request['Title'];
+		$Year = $Request['Year'];
+		$Image = $Request['Image'];
+		$ReleaseType = $Request['ReleaseType'];
+		$GroupID = $Request['GroupID'];
+
 		$VoteArray = Requests::get_votes_array($RequestID);
 		$VoteCount = count($VoteArray['Voters']);
 
+		$LogCue = $Request['LogCue'];
 		$NeedCue = (strpos($LogCue, 'Cue') !== false);
 		$NeedLog = (strpos($LogCue, 'Log') !== false);
 		if ($NeedLog) {
 			if (strpos($LogCue, '%') !== false) {
 				preg_match('/\d+/', $LogCue, $Matches);
-				$MinLogScore = (int) $Matches[0];
+				$MinLogScore = (int)$Matches[0];
 			}
 		}
 
-		$IsFilled = !empty($TorrentID);
+		$IsFilled = !empty($Request['TorrentID']);
 		$CategoryName = $Categories[$CategoryID - 1];
 
-		$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID === '0') || ($CategoryName === 'Music' && $Year === '0')));
-		$CanEdit = ((!$IsFilled && $LoggedUser['ID'] === $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
+		$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && ($CategoryID === '0' || ($CategoryName === 'Music' && $Request['Year'] === '0')));
+		$CanEdit = ((!$IsFilled && $LoggedUser['ID'] === $Request['UserID'] && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
 		if (!$CanEdit) {
 			error(403);
@@ -58,29 +64,28 @@ if (!$NewRequest) {
 			$ArtistForm = Requests::get_artists($RequestID);
 
 			$BitrateArray = array();
-			if ($BitrateList == 'Any') {
+			if ($Request['BitrateList'] == 'Any') {
 				$BitrateArray = array_keys($Bitrates);
 			} else {
-				$BitrateArray = array_keys(array_intersect($Bitrates,explode('|', $BitrateList)));
+				$BitrateArray = array_keys(array_intersect($Bitrates, explode('|', $Request['BitrateList'])));
 			}
 
 			$FormatArray = array();
-			if ($FormatList == 'Any') {
+			if ($Request['FormatList'] == 'Any') {
 				$FormatArray = array_keys($Formats);
 			} else {
 				foreach ($Formats as $Key => $Val) {
-					if (strpos($FormatList, $Val) !== false) {
+					if (strpos($Request['FormatList'], $Val) !== false) {
 						$FormatArray[] = $Key;
 					}
 				}
 			}
 
-
 			$MediaArray = array();
-			if ($MediaList == 'Any') {
+			if ($Request['MediaList'] == 'Any') {
 				$MediaArray = array_keys($Media);
 			} else {
-				$MediaTemp = explode('|', $MediaList);
+				$MediaTemp = explode('|', $Request['MediaList']);
 				foreach ($Media as $Key => $Val) {
 					if (in_array($Val, $MediaTemp)) {
 						$MediaArray[] = $Key;
@@ -203,32 +208,32 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 				<tr>
 					<td class="label">Title</td>
 					<td>
-						<input type="text" name="title" size="45" value="<?=(!empty($Title) ? display_str($Title) : '')?>" />
+						<input type="text" name="title" size="45" value="<?=(!empty($Title) ? $Title : '')?>" />
 					</td>
 				</tr>
-				<tr id="cataloguenumber_tr">
+				<tr id="recordlabel_tr">
 					<td class="label">Record label</td>
 					<td>
-						<input type="text" name="recordlabel" size="45" value="<?=(!empty($RecordLabel) ? display_str($RecordLabel) : '')?>" />
+						<input type="text" name="recordlabel" size="45" value="<?=(!empty($Request['RecordLabel']) ? $Request['RecordLabel'] : '')?>" />
 					</td>
 				</tr>
 				<tr id="cataloguenumber_tr">
 					<td class="label">Catalogue number</td>
 					<td>
-						<input type="text" name="cataloguenumber" size="15" value="<?=(!empty($CatalogueNumber) ? display_str($CatalogueNumber) : '')?>" />
+						<input type="text" name="cataloguenumber" size="15" value="<?=(!empty($Request['CatalogueNumber']) ? $Request['CatalogueNumber'] : '')?>" />
 					</td>
 				</tr>
 				<tr id="oclc_tr">
 					<td class="label">WorldCat (OCLC) ID</td>
 					<td>
-						<input type="text" name="oclc" size="15" value="<?=(!empty($OCLC) ? display_str($OCLC) : '')?>" />
+						<input type="text" name="oclc" size="15" value="<?=(!empty($Request['OCLC']) ? $Request['OCLC'] : '')?>" />
 					</td>
 				</tr>
 <?	} ?>
 				<tr id="year_tr">
 					<td class="label">Year</td>
 					<td>
-						<input type="text" name="year" size="5" value="<?=(!empty($Year) ? display_str($Year) : '')?>" />
+						<input type="text" name="year" size="5" value="<?=(!empty($Year) ? $Year : '')?>" />
 					</td>
 				</tr>
 <?	if ($NewRequest || $CanEdit) { ?>
@@ -339,7 +344,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 				<tr>
 					<td class="label">Description</td>
 					<td>
-						<textarea name="description" cols="70" rows="7"><?=(!empty($Description) ? $Description : '')?></textarea> <br />
+						<textarea name="description" cols="70" rows="7"><?=(!empty($Request['Description']) ? $Request['Description'] : '')?></textarea> <br />
 					</td>
 				</tr>
 <?	if (check_perms('site_moderate_requests')) { ?>

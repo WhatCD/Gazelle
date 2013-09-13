@@ -15,7 +15,7 @@ if ($_GET['type'] === '3') {
 		$_GET['type'] = display_str($_GET['type']);
 	}
 }
-$SphQL = new SphinxQL_Query();
+$SphQL = new SphinxqlQuery();
 $SphQL->select('id, groupid')
 	->from('better_transcode')
 	->where('logscore', 100)
@@ -36,7 +36,6 @@ if ($TorrentCount == 0) {
 
 $Results = $SphQLResult->to_array('groupid');
 $Groups = Torrents::get_groups(array_keys($Results));
-$Groups = $Groups['matches'];
 
 $TorrentGroups = array();
 foreach ($Groups as $GroupID => $Group) {

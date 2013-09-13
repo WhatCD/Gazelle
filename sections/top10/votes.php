@@ -73,7 +73,7 @@ if ($TopVotes === false) {
 
 		$TopVotes = array();
 		foreach ($Results as $GroupID) {
-			$TopVotes[$GroupID] = $Groups['matches'][$GroupID];
+			$TopVotes[$GroupID] = $Groups[$GroupID];
 			$TopVotes[$GroupID]['Ups'] = $Data[$GroupID]['Ups'];
 			$TopVotes[$GroupID]['Total'] = $Data[$GroupID]['Total'];
 			$TopVotes[$GroupID]['Score'] = $Data[$GroupID]['Score'];

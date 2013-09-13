@@ -3,8 +3,7 @@ class Torrents {
 	const FilelistDelim = 0xF7; // Hex for &divide; Must be the same as phrase_boundary in sphinx.conf!
 
 	/*
-	 * Function to get data and torrents for an array of GroupIDs.
-	 * In places where the output from this is merged with sphinx filters, it will be in a different order.
+	 * Function to get data and torrents for an array of GroupIDs. Order of keys doesn't matter
 	 *
 	 * @param array $GroupIDs
 	 * @param boolean $Return if false, nothing is returned. For priming cache.
@@ -47,15 +46,13 @@ class Torrents {
 	 *	}
 	 */
 	public static function get_groups($GroupIDs, $Return = true, $GetArtists = true, $Torrents = true) {
-		global $Debug;
-
 		// Make sure there's something in $GroupIDs, otherwise the SQL
 		// will break
 		if (count($GroupIDs) == 0) {
-			return array('matches' => array(), 'notfound' => array());
+			return array();
 		}
 
-		$Found = $NotFound = array_flip($GroupIDs);
+		$Found = $NotFound = array_fill_keys($GroupIDs, false);
 		$Key = $Torrents ? 'torrent_group_' : 'torrent_group_light_';
 
 		foreach ($GroupIDs as $GroupID) {
@@ -66,7 +63,7 @@ class Torrents {
 			}
 		}
 
-		$IDs = implode(',', array_flip($NotFound));
+		$IDs = implode(',', array_keys($NotFound));
 
 		/*
 		Changing any of these attributes returned will cause very large, very dramatic site-wide chaos.
@@ -122,7 +119,6 @@ class Torrents {
 					G::$Cache->cache_value("torrent_group_light_$GroupID",
 							array('ver' => CACHE::GROUP_VERSION, 'd' => $GroupInfo), 0);
 				}
-
 			} else {
 				foreach ($Found as $Group) {
 					G::$Cache->cache_value('torrent_group_light_'.$Group['ID'], array('ver' => CACHE::GROUP_VERSION, 'd' => $Found[$Group['ID']]), 0);
@@ -137,6 +133,9 @@ class Torrents {
 
 		if ($Return) { // If we're interested in the data, and not just caching it
 			foreach ($Artists as $GroupID => $Data) {
+				if (!isset($Found[$GroupID])) {
+					continue;
+				}
 				if (array_key_exists(1, $Data) || array_key_exists(4, $Data) || array_key_exists(6, $Data)) {
 					$Found[$GroupID]['Artists'] = isset($Data[1]) ? $Data[1] : null; // Only use main artists (legacy)
 					// TODO: find a better solution than this crap / rewrite the artist system
@@ -157,10 +156,7 @@ class Torrents {
 					}
 				}
 			}
-
-			$Matches = array('matches' => $Found, 'notfound' => array_flip($NotFound));
-
-			return $Matches;
+			return $Found;
 		}
 	}
 
@@ -174,8 +170,7 @@ class Torrents {
 	 * @param array $Group torrent group
 	 * @return array Re-key'd array
 	 */
-	public static function array_group (array &$Group)
-	{
+	public static function array_group(array &$Group) {
 		return array(
 			'GroupID' => $Group['ID'],
 			'GroupName' => $Group['Name'],

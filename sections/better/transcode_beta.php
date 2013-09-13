@@ -138,7 +138,7 @@ if (in_array($_GET['filter'], array('all', 'uploaded'))) {
 	if ($ResultCount != 0) {
 		$Results = $SphQLResult->collect('groupid');
 		$Groups = Torrents::get_groups(array_values($Results));
-		$Groups = transcode_parse_groups($Groups['matches']);
+		$Groups = transcode_parse_groups($Groups);
 	}
 	unset($SphQL, $SphQLResult, $Results);
 } elseif (in_array($_GET['filter'], array('snatched', 'seeding'))) {
@@ -168,7 +168,7 @@ if (in_array($_GET['filter'], array('all', 'uploaded'))) {
 		$SphQLResult = $SphQL->query();
 		$ResultsTmp = $SphQLResult->collect('groupid');
 		$GroupsTmp = Torrents::get_groups(array_values($ResultsTmp));
-		$GroupsTmp = transcode_parse_groups($GroupsTmp['matches']);
+		$GroupsTmp = transcode_parse_groups($GroupsTmp);
 		// Since we're asking Sphinxql about groups and remidents, the result can/will contain different editions that are transcodable but weren't snatched, so let's filter them out
 		foreach ($GroupsTmp as $GroupID => $Group) {
 			foreach ($Group['Editions'] as $RemIdent => $Edition) {

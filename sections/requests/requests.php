@@ -1,72 +1,99 @@
 <?php
+$SphQL = new SphinxqlQuery();
+$SphQL->select('id, votes, bounty')->from('requests, requests_delta');
 
-$Queries = array();
+$SortOrders = array(
+	'votes' => 'votes',
+	'bounty' => 'bounty',
+	'lastvote' => 'lastvote',
+	'filled' => 'timefilled',
+	'year' => 'year',
+	'created' => 'timeadded',
+	'random' => false);
 
-$OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
-list($Page, $Limit) = Format::page_limit(REQUESTS_PER_PAGE);
+if (empty($_GET['order']) || !isset($SortOrders[$_GET['order']])) {
+	$_GET['order'] = 'created';
+}
+$OrderBy = $_GET['order'];
+
+if (!empty($_GET['sort']) && $_GET['sort'] == 'asc') {
+	$OrderWay = 'asc';
+} else {
+	$_GET['sort'] = 'desc';
+	$OrderWay = 'desc';
+}
+$NewSort = $_GET['sort'] === 'asc' ? 'desc' : 'asc';
+
+if ($OrderBy === 'random') {
+	$SphQL->order_by('RAND()', '');
+	unset($_GET['page']);
+} else {
+	$SphQL->order_by($SortOrders[$OrderBy], $OrderWay);
+}
+
 $Submitted = !empty($_GET['submit']);
 
 //Paranoia
-$UserInfo = Users::user_info((int)$_GET['userid']);
-$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
-$UserClass = $Perms['Class'];
-
+if (!empty($_GET['userid'])) {
+	if (!is_number($_GET['userid'])) {
+		error('User ID must be an integer');
+	}
+	$UserInfo = Users::user_info($_GET['userid']);
+	if (empty($UserInfo)) {
+		error('That user does not exist');
+	}
+	$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
+	$UserClass = $Perms['Class'];
+}
 $BookmarkView = false;
 
 if (empty($_GET['type'])) {
 	$Title = 'Requests';
 	if (!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
-		$SS->set_filter('visible', array(1));
+		$SphQL->where('visible', 1);
 	}
 } else {
 	switch ($_GET['type']) {
 		case 'created':
-			if (!empty($_GET['userid'])) {
-				if (is_number($_GET['userid'])) {
-					if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
-						error(403);
-					}
-					$Title = 'Requests created by ' . $UserInfo['Username'];
-					$SS->set_filter('userid', array($_GET['userid']));
-				} else {
-					error(404);
+			if (!empty($UserInfo)) {
+				if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $UserInfo['ID'])) {
+					error(403);
 				}
+				$Title = "Requests created by $UserInfo[Username]";
+				$SphQL->where('userid', $UserInfo['ID']);
 			} else {
 				$Title = 'My requests';
-				$SS->set_filter('userid', array($LoggedUser['ID']));
+				$SphQL->where('userid', $LoggedUser['ID']);
 			}
 			break;
 		case 'voted':
-			if (!empty($_GET['userid'])) {
-				if (is_number($_GET['userid'])) {
-					if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
-						error(403);
-					}
-					$Title = "Requests voted for by ".$UserInfo['Username'];
-					$SS->set_filter('voter', array($_GET['userid']));
-				} else {
-					error(404);
+			if (!empty($UserInfo)) {
+				if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $UserInfo['ID'])) {
+					error(403);
 				}
+				$Title = "Requests voted for by $UserInfo[Username]";
+				$SphQL->where('voter', $UserInfo['ID']);
 			} else {
-				$Title = "Requests I've voted on";
-				$SS->set_filter('voter', array($LoggedUser['ID']));
+				$Title = 'Requests I have voted on';
+				$SphQL->where('voter', $LoggedUser['ID']);
 			}
 			break;
 		case 'filled':
-			if (empty($_GET['userid']) || !is_number($_GET['userid'])) {
-				error(404);
-			} else {
-				if (!check_paranoia('requestsfilled_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
+			if (!empty($UserInfo)) {
+				if (!check_paranoia('requestsfilled_list', $UserInfo['Paranoia'], $Perms['Class'], $UserInfo['ID'])) {
 					error(403);
 				}
-				$Title = "Requests filled by ".$UserInfo['Username'];
-				$SS->set_filter('fillerid', array($_GET['userid']));
+				$Title = "Requests filled by $UserInfo[Username]";
+				$SphQL->where('fillerid', $UserInfo['ID']);
+			} else {
+				$Title = 'Requests I have filled';
+				$SphQL->where('fillerid', $LoggedUser['ID']);
 			}
 			break;
 		case 'bookmarks':
 			$Title = 'Your bookmarked requests';
 			$BookmarkView = true;
-			$SS->set_filter('bookmarker', array($LoggedUser['ID']));
+			$SphQL->where('bookmarker', $LoggedUser['ID']);
 			break;
 		default:
 			error(404);
@@ -74,7 +101,7 @@ if (empty($_GET['type'])) {
 }
 
 if ($Submitted && empty($_GET['show_filled'])) {
-	$SS->set_filter('torrentid', array(0));
+	$SphQL->where('torrentid', 0);
 }
 
 $EnableNegation = false; // Sphinx needs at least one positive search condition to support the NOT operator
@@ -85,16 +112,17 @@ if (!empty($_GET['formats'])) {
 		$FormatNameArray = array();
 		foreach ($FormatArray as $Index => $MasterIndex) {
 			if (isset($Formats[$MasterIndex])) {
-				$FormatNameArray[$Index] = '"'.strtr($Formats[$MasterIndex], '-.', '  ').'"';
+				$FormatNameArray[$Index] = '"' . strtr(Sphinxql::sph_escape_string($Formats[$MasterIndex]), '-.', '  ') . '"';
 			}
 		}
 		if (count($FormatNameArray) >= 1) {
 			$EnableNegation = true;
 			if (!empty($_GET['formats_strict'])) {
-				$Queries[] = '@formatlist ('.implode(' | ', $FormatNameArray).')';
+				$SearchString = '(' . implode(' | ', $FormatNameArray) . ')';
 			} else {
-				$Queries[] = '@formatlist (any | '.implode(' | ', $FormatNameArray).')';
+				$SearchString = '(any | ' . implode(' | ', $FormatNameArray) . ')';
 			}
+			$SphQL->where_match($SearchString, 'formatlist', false);
 		}
 	}
 }
@@ -105,17 +133,18 @@ if (!empty($_GET['media'])) {
 		$MediaNameArray = array();
 		foreach ($MediaArray as $Index => $MasterIndex) {
 			if (isset($Media[$MasterIndex])) {
-				$MediaNameArray[$Index] = '"'.strtr($Media[$MasterIndex], '-.', '  ').'"';
+				$MediaNameArray[$Index] = '"' . strtr(Sphinxql::sph_escape_string($Media[$MasterIndex]), '-.', '  ') . '"';
 			}
 		}
 
 		if (count($MediaNameArray) >= 1) {
 			$EnableNegation = true;
 			if (!empty($_GET['media_strict'])) {
-				$Queries[] = '@medialist ('.implode(' | ', $MediaNameArray).')';
+				$SearchString = '(' . implode(' | ', $MediaNameArray) . ')';
 			} else {
-				$Queries[] = '@medialist (any | '.implode(' | ', $MediaNameArray).')';
+				$SearchString = '(any | ' . implode(' | ', $MediaNameArray) . ')';
 			}
+			$SphQL->where_match($SearchString, 'medialist', false);
 		}
 	}
 }
@@ -126,17 +155,18 @@ if (!empty($_GET['bitrates'])) {
 		$BitrateNameArray = array();
 		foreach ($BitrateArray as $Index => $MasterIndex) {
 			if (isset($Bitrates[$MasterIndex])) {
-				$BitrateNameArray[$Index] = '"'.strtr($SS->EscapeString($Bitrates[$MasterIndex]), '-.', '  ').'"';
+				$BitrateNameArray[$Index] = '"' . strtr(Sphinxql::sph_escape_string($Bitrates[$MasterIndex]), '-.', '  ') . '"';
 			}
 		}
 
 		if (count($BitrateNameArray) >= 1) {
 			$EnableNegation = true;
 			if (!empty($_GET['bitrate_strict'])) {
-				$Queries[] = '@bitratelist ('.implode(' | ', $BitrateNameArray).')';
+				$SearchString = '(' . implode(' | ', $BitrateNameArray) . ')';
 			} else {
-				$Queries[] = '@bitratelist (any | '.implode(' | ', $BitrateNameArray).')';
+				$SearchString = '(any | ' . implode(' | ', $BitrateNameArray) . ')';
 			}
+			$SphQL->where_match($SearchString, 'bitratelist', false);
 		}
 	}
 }
@@ -170,29 +200,32 @@ if (!empty($_GET['search'])) {
 			unset($SearchWords['exclude']);
 		}
 		foreach ($SearchWords['include'] as $Word) {
-			$QueryParts[] = $SS->EscapeString($Word);
+			$QueryParts[] = Sphinxql::sph_escape_string($Word);
 		}
 		if (!empty($SearchWords['exclude'])) {
 			foreach ($SearchWords['exclude'] as $Word) {
-				$QueryParts[] = '!'.$SS->EscapeString(substr($Word, 1));
+				$QueryParts[] = '!' . Sphinxql::sph_escape_string(substr($Word, 1));
 			}
 		}
 		if (!empty($QueryParts)) {
-			$Queries[] = "@* ".implode(' ', $QueryParts);
+			$SearchString = implode(' ', $QueryParts);
+			$SphQL->where_match($SearchString, '*', false);
 		}
 	}
 }
 
+if (!isset($_GET['tags_type']) || $_GET['tags_type'] === '1') {
+	$TagType = 1;
+	$_GET['tags_type'] = '1';
+} else {
+	$TagType = 0;
+	$_GET['tags_type'] = '0';
+}
+
 if (!empty($_GET['tags'])) {
 	$Tags = explode(',', $_GET['tags']);
-	$TagNames = array();
-	if (!isset($_GET['tags_type']) || $_GET['tags_type'] === '1') {
-		$TagType = 1;
-		$_GET['tags_type'] = '1';
-	} else {
-		$TagType = 0;
-		$_GET['tags_type'] = '0';
-	}
+	$TagNames = $TagsExclude = array();
+	// Remove illegal characters from the given tag names
 	foreach ($Tags as $Tag) {
 		$Tag = ltrim($Tag);
 		$Exclude = ($Tag[0] === '!');
@@ -202,7 +235,7 @@ if (!empty($_GET['tags'])) {
 			$TagsExclude[$Tag] = $Exclude;
 		}
 	}
-	$AllNegative = !in_array(false, $TagsExclude);
+	$AllNegative = !in_array(false, $TagsExclude, true);
 	$Tags = Misc::get_tags($TagNames);
 
 	// Replace the ! characters that sanitize_tag removed
@@ -223,15 +256,14 @@ if (!empty($_GET['tags'])) {
 // 'All' tags
 if ($TagType === 1 && !empty($Tags)) {
 	foreach ($Tags as $TagID => $TagName) {
-		$SS->set_filter('tagid', array($TagID), $TagsExclude[$TagName]);
+		$SphQL->where('tagid', $TagID, $TagsExclude[$TagName]);
 	}
 } elseif (!empty($Tags)) {
-	$SS->set_filter('tagid', array_keys($Tags), $AllNegative);
+	$SphQL->where('tagid', array_keys($Tags), $AllNegative);
 }
 
 if (!empty($_GET['filter_cat'])) {
 	$CategoryArray = array_keys($_GET['filter_cat']);
-	$Debug->log_var(array($CategoryArray, $Categories));
 	if (count($CategoryArray) !== count($Categories)) {
 		foreach ($CategoryArray as $Key => $Index) {
 			if (!isset($Categories[$Index - 1])) {
@@ -239,7 +271,7 @@ if (!empty($_GET['filter_cat'])) {
 			}
 		}
 		if (count($CategoryArray) >= 1) {
-			$SS->set_filter('categoryid', $CategoryArray);
+			$SphQL->where('categoryid', $CategoryArray);
 		}
 	}
 }
@@ -253,14 +285,14 @@ if (!empty($_GET['releases'])) {
 			}
 		}
 		if (count($ReleaseArray) >= 1) {
-			$SS->set_filter('releasetype', $ReleaseArray);
+			$SphQL->where('releasetype', $ReleaseArray);
 		}
 	}
 }
 
 if (!empty($_GET['requestor']) && check_perms('site_see_old_requests')) {
 	if (is_number($_GET['requestor'])) {
-		$SS->set_filter('userid', array($_GET['requestor']));
+		$SphQL->where('userid', $_GET['requestor']);
 	} else {
 		error(404);
 	}
@@ -268,7 +300,7 @@ if (!empty($_GET['requestor']) && check_perms('site_see_old_requests')) {
 
 if (isset($_GET['year'])) {
 	if (is_number($_GET['year']) || $_GET['year'] === '0') {
-		$SS->set_filter('year', array($_GET['year']));
+		$SphQL->where('year', $_GET['year']);
 	} else {
 		error(404);
 	}
@@ -276,74 +308,29 @@ if (isset($_GET['year'])) {
 
 if (!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
 	$Page = $_GET['page'];
-	$SS->limit(($Page - 1) * REQUESTS_PER_PAGE, REQUESTS_PER_PAGE);
+	$Offset = ($Page - 1) * REQUESTS_PER_PAGE;
+	$SphQL->limit($Offset, REQUESTS_PER_PAGE, $Offset + REQUESTS_PER_PAGE);
 } else {
 	$Page = 1;
-	$SS->limit(0, REQUESTS_PER_PAGE);
+	$SphQL->limit(0, REQUESTS_PER_PAGE, REQUESTS_PER_PAGE);
 }
 
-if (empty($_GET['order'])) {
-	$CurrentOrder = 'created';
-	$CurrentSort = 'desc';
-	$Way = SPH_SORT_ATTR_DESC;
-	$NewSort = 'asc';
-} else {
-	if (in_array($_GET['order'], $OrderWays)) {
-		$CurrentOrder = $_GET['order'];
-		if ($_GET['sort'] === 'asc' || $_GET['sort'] === 'desc') {
-			$CurrentSort = $_GET['sort'];
-			$Way = ($CurrentSort === 'asc' ? SPH_SORT_ATTR_ASC : SPH_SORT_ATTR_DESC);
-			$NewSort = ($_GET['sort'] === 'asc' ? 'desc' : 'asc');
-		} else {
-			error(404);
+$SphQLResult = $SphQL->query();
+$NumResults = $SphQLResult->get_meta('total_found');
+if ($NumResults > 0) {
+	$SphRequests = $SphQLResult->to_array('id');
+	if ($OrderBy === 'random') {
+		$NumResults = count($SphRequests);
+	}
+	if ($NumResults > REQUESTS_PER_PAGE) {
+		if (($Page - 1) * REQUESTS_PER_PAGE > $NumResults) {
+			$Page = 0;
 		}
-	} else {
-		error(404);
+		$PageLinks = Format::get_pages($Page, $NumResults, REQUESTS_PER_PAGE);
 	}
 }
 
-switch ($CurrentOrder) {
-	case 'votes':
-		$OrderBy = 'Votes';
-		break;
-	case 'bounty':
-		$OrderBy = 'Bounty';
-		break;
-	case 'created':
-		$OrderBy = 'TimeAdded';
-		break;
-	case 'lastvote':
-		$OrderBy = 'LastVote';
-		break;
-	case 'filled':
-		$OrderBy = 'TimeFilled';
-		break;
-	case 'year':
-		$OrderBy = 'Year';
-		break;
-	default:
-		$OrderBy = 'TimeAdded';
-		break;
-}
-//print($Way); print($OrderBy); die();
-$SS->SetSortMode($Way, $OrderBy);
-
-if (count($Queries) > 0) {
-	$Query = implode(' ', $Queries);
-} else {
-	$Query = '';
-}
-
-$SS->set_index('requests requests_delta');
-$SphinxResults = $SS->search($Query, '', 0, array(), '', '');
-$NumResults = $SS->TotalResults;
-if ($NumResults && $NumResults < ($Page - 1) * REQUESTS_PER_PAGE + 1) {
-	$PageLinks = Format::get_pages(0, $NumResults, REQUESTS_PER_PAGE);
-} else {
-	$PageLinks = Format::get_pages($Page, $NumResults, REQUESTS_PER_PAGE);
-}
-
-$CurrentURL = Format::get_url(array('order', 'sort'));
+$CurrentURL = Format::get_url(array('order', 'sort', 'page'));
 View::show_header($Title, 'requests');
 
 ?>
@@ -372,7 +359,7 @@ View::show_header($Title, 'requests');
 <?	if ($BookmarkView) { ?>
 		<input type="hidden" name="action" value="view" />
 		<input type="hidden" name="type" value="requests" />
-<?	} else { ?>
+<?	} elseif (isset($_GET['type'])) { ?>
 		<input type="hidden" name="type" value="<?=$_GET['type']?>" />
 <?	} ?>
 		<input type="hidden" name="submit" value="true" />
@@ -444,16 +431,20 @@ foreach ($Categories as $CatKey => $CatName) {
 				<td class="label">Release types</td>
 				<td>
 					<input type="checkbox" id="toggle_releases" onchange="Toggle('releases', 0);"<?=(!$Submitted || !empty($ReleaseArray) && count($ReleaseArray) === count($ReleaseTypes) ? ' checked="checked"' : '') ?> /> <label for="toggle_releases">All</label>
-<?		$i = 0;
-		foreach ($ReleaseTypes as $Key => $Val) {
-			if ($i % 8 === 0) {
-				echo '<br />';
-			}	?>
+<?
+$i = 0;
+foreach ($ReleaseTypes as $Key => $Val) {
+	if ($i % 8 === 0) {
+		echo '<br />';
+	}
+?>
 					<input type="checkbox" name="releases[]" value="<?=$Key?>" id="release_<?=$Key?>"
-						<?=(((!$Submitted) || !empty($ReleaseArray) && in_array($Key, $ReleaseArray)) ? ' checked="checked" ' : '')?>
+						<?=(!$Submitted || (!empty($ReleaseArray) && in_array($Key, $ReleaseArray)) ? ' checked="checked" ' : '')?>
 					/> <label for="release_<?=$Key?>"><?=$Val?></label>
-<?			$i++;
-		} ?>
+<?
+	$i++;
+}
+?>
 				</td>
 			</tr>
 			<tr id="format_list">
@@ -463,14 +454,18 @@ foreach ($Categories as $CatKey => $CatName) {
 					<label for="toggle_formats">All</label>
 					<input type="checkbox" id="formats_strict" name="formats_strict"<?=(!empty($_GET['formats_strict']) ? ' checked="checked"' : '')?> />
 					<label for="formats_strict">Only specified</label>
-<?		foreach ($Formats as $Key => $Val) {
-			if ($Key % 8 === 0) {
-				echo '<br />';
-			}	?>
+<?
+foreach ($Formats as $Key => $Val) {
+	if ($Key % 8 === 0) {
+		echo '<br />';
+	}
+?>
 					<input type="checkbox" name="formats[]" value="<?=$Key?>" id="format_<?=$Key?>"
-						<?=(((!$Submitted) || !empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
+						<?=(!$Submitted || (!empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
 					/> <label for="format_<?=$Key?>"><?=$Val?></label>
-<?		} ?>
+<?
+}
+?>
 				</td>
 			</tr>
 			<tr id="bitrate_list">
@@ -480,14 +475,18 @@ foreach ($Categories as $CatKey => $CatName) {
 					<label for="toggle_bitrates">All</label>
 					<input type="checkbox" id="bitrate_strict" name="bitrate_strict"<?=(!empty($_GET['bitrate_strict']) ? ' checked="checked"' : '') ?> />
 					<label for="bitrate_strict">Only specified</label>
-<?		foreach ($Bitrates as $Key => $Val) {
-			if ($Key % 8 === 0) {
-				echo '<br />';
-			}	?>
+<?
+foreach ($Bitrates as $Key => $Val) {
+	if ($Key % 8 === 0) {
+		echo '<br />';
+	}
+?>
 					<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
-						<?=(((!$Submitted) || !empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
+						<?=(!$Submitted || (!empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
 					/> <label for="bitrate_<?=$Key?>"><?=$Val?></label>
-<?		} ?>
+<?
+}
+?>
 				</td>
 			</tr>
 			<tr id="media_list">
@@ -497,14 +496,18 @@ foreach ($Categories as $CatKey => $CatName) {
 					<label for="toggle_media">All</label>
 					<input type="checkbox" id="media_strict" name="media_strict"<?=(!empty($_GET['media_strict']) ? ' checked="checked"' : '')?> />
 					<label for="media_strict">Only specified</label>
-<?		foreach ($Media as $Key => $Val) {
-			if ($Key % 8 === 0) {
-				echo '<br />';
-			}	?>
+<?
+foreach ($Media as $Key => $Val) {
+	if ($Key % 8 === 0) {
+		echo '<br />';
+	}
+?>
 					<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"
-						<?=(((!$Submitted) || !empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
+						<?=(!$Submitted || (!empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
 					/> <label for="media_<?=$Key?>"><?=$Val?></label>
-<?		} ?>
+<?
+}
+?>
 				</td>
 			</tr>
 			<tr>
@@ -515,24 +518,24 @@ foreach ($Categories as $CatKey => $CatName) {
 		</table>
 	</form>
 
-<?		if ($NumResults) { ?>
+<? if (isset($PageLinks)) { ?>
 	<div class="linkbox">
 		<?=$PageLinks?>
 	</div>
-<?		} ?>
+<? } ?>
 	<table id="request_table" class="request_table border" cellpadding="6" cellspacing="1" border="0" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;" class="nobr">
-				<strong>Request Name</strong> / <a href="?order=year&amp;sort=<?=(($CurrentOrder === 'year') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Year</strong></a>
+				<strong>Request Name</strong> / <a href="?order=year&amp;sort=<?=($OrderBy === 'year' ? $NewSort : 'desc')?>&amp;<?=$CurrentURL?>"><strong>Year</strong></a>
 			</td>
 			<td class="nobr">
-				<a href="?order=votes&amp;sort=<?=(($CurrentOrder === 'votes') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Votes</strong></a>
+				<a href="?order=votes&amp;sort=<?=($OrderBy === 'votes' ? $NewSort : 'desc')?>&amp;<?=$CurrentURL?>"><strong>Votes</strong></a>
 			</td>
 			<td class="nobr">
-				<a href="?order=bounty&amp;sort=<?=(($CurrentOrder === 'bounty') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Bounty</strong></a>
+				<a href="?order=bounty&amp;sort=<?=($OrderBy === 'bounty' ? $NewSort : 'desc')?>&amp;<?=$CurrentURL?>"><strong>Bounty</strong></a>
 			</td>
 			<td class="nobr">
-				<a href="?order=filled&amp;sort=<?=(($CurrentOrder === 'filled') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Filled</strong></a>
+				<a href="?order=filled&amp;sort=<?=($OrderBy === 'filled' ? $NewSort : 'desc')?>&amp;<?=$CurrentURL?>"><strong>Filled</strong></a>
 			</td>
 			<td class="nobr">
 				<strong>Filled by</strong>
@@ -541,141 +544,112 @@ foreach ($Categories as $CatKey => $CatName) {
 				<strong>Requested by</strong>
 			</td>
 			<td class="nobr">
-				<a href="?order=created&amp;sort=<?=(($CurrentOrder === 'created') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Created</strong></a>
+				<a href="?order=created&amp;sort=<?=($OrderBy === 'created' ? $NewSort : 'desc')?>&amp;<?=$CurrentURL?>"><strong>Created</strong></a>
 			</td>
 			<td class="nobr">
-				<a href="?order=lastvote&amp;sort=<?=(($CurrentOrder === 'lastvote') ? $NewSort : 'desc')?>&amp;<?=$CurrentURL ?>"><strong>Last vote</strong></a>
+				<a href="?order=lastvote&amp;sort=<?=($OrderBy === 'lastvote' ? $NewSort : 'desc')?>&amp;<?=$CurrentURL?>"><strong>Last vote</strong></a>
 			</td>
 		</tr>
-<?	if ($NumResults == 0) { ?>
+<? if ($NumResults === 0) { ?>
 		<tr class="rowb">
 			<td colspan="8">
 				Nothing found!
 			</td>
 		</tr>
-<?	} elseif ($NumResults < ($Page - 1) * REQUESTS_PER_PAGE + 1) { ?>
+<? } elseif ($Page === 0) { ?>
 		<tr class="rowb">
 			<td colspan="8">
 				The requested page contains no matches!
 			</td>
 		</tr>
-<?	} else {
+<? } else {
+	$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
+	$Requests = Requests::get_requests(array_keys($SphRequests));
+	foreach ($SphRequests as $RequestID => $SphRequest) {
+		$Request = $Requests[$RequestID];
+		$Bounty = $SphRequest['bounty'] * 1024; // Sphinx stores bounty in kB
+		$VoteCount = $SphRequest['votes'];
 
-	//We don't use sphinxapi's default cache searcher, we use our own functions
-	if (!empty($SphinxResults['notfound'])) {
-		$SQLResults = Requests::get_requests($SphinxResults['notfound']);
-		if (is_array($SQLResults['notfound'])) {
-			//Something wasn't found in the db, remove it from results
-			reset($SQLResults['notfound']);
-			foreach ($SQLResults['notfound'] as $ID) {
-				unset($SQLResults['matches'][$ID]);
-				unset($SphinxResults['matches'][$ID]);
-			}
+		if ($Request['CategoryID'] == 0) {
+			$CategoryName = 'Unknown';
+		} else {
+			$CategoryName = $Categories[$Request['CategoryID'] - 1];
 		}
 
-		// Merge SQL results with memcached results
-		foreach ($SQLResults['matches'] as $ID => $SQLResult) {
-			$SphinxResults['matches'][$ID] = $SQLResult;
-
-			//$Requests['matches'][$ID] = array_merge($Requests['matches'][$ID], $SQLResult);
-			//We ksort because depending on the filter modes, we're given our data in an unpredictable order
-			//ksort($Requests['matches'][$ID]);
+		if ($Request['TorrentID'] != 0) {
+			$IsFilled = true;
+			$FillerInfo = Users::user_info($Request['FillerID']);
+		} else {
+			$IsFilled = false;
 		}
-	}
 
-	$Requests = $SphinxResults['matches'];
-
-		$Row = 'a';
-		$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
-		foreach ($Requests as $RequestID => $Request) {
-
-			//list($BitrateList, $CatalogueNumber, $CategoryID, $Description, $FillerID, $FormatList, $RequestID, $Image, $LogCue, $MediaList, $ReleaseType,
-			//	$Tags, $TimeAdded, $TimeFilled, $Title, $TorrentID, $RequestorID, $RequestorName, $Year, $RequestID, $Categoryid, $FillerID, $LastVote,
-			//	$ReleaseType, $TagIDs, $TimeAdded, $TimeFilled, $TorrentID, $RequestorID, $Voters) = array_values($Request);
-
-			list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
-				$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
-
-			$RequestVotes = Requests::get_votes_array($RequestID);
-
-			$VoteCount = count($RequestVotes['Voters']);
-
-			if ($CategoryID == 0) {
-				$CategoryName = 'Unknown';
-			} else {
-				$CategoryName = $Categories[$CategoryID - 1];
-			}
-
-			$IsFilled = ($TorrentID != 0);
-
-			if ($CategoryName === 'Music') {
-				$ArtistForm = Requests::get_artists($RequestID);
-				$ArtistLink = Artists::display_artists($ArtistForm, true, true);
-				$FullName = $ArtistLink."<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
-			} elseif ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
-				$FullName = "<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title [$Year]</a>";
-			} else {
-				$FullName ="<a href=\"requests.php?action=view&amp;id=".$RequestID."\">$Title</a>";
-			}
-
-			$Row = ($Row === 'a') ? 'b' : 'a';
-
-			$Tags = $Request['Tags'];
+		if ($CategoryName === 'Music') {
+			$ArtistForm = Requests::get_artists($RequestID);
+			$ArtistLink = Artists::display_artists($ArtistForm, true, true);
+			$FullName = "$ArtistLink<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title] [$Request[Year]]</a>";
+		} elseif ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
+			$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title] [$Request[Year]]</a>";
+		} else {
+			$FullName ="<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title]</a>";
+		}
+		$Tags = $Request['Tags'];
 ?>
-		<tr class="row<?=$Row?>">
+		<tr class="row<?=($i % 2 ? 'b' : 'a')?>">
 			<td>
 				<?=$FullName?>
 				<div class="tags">
 <?
-			$TagList = array();
-			foreach ($Tags as $TagID => $TagName) {
-				$TagList[] = '<a href="?tags='.$TagName.($BookmarkView ? '&amp;type=requests' : '').'\">'.display_str($TagName).'</a>';
-			}
-			$TagList = implode(', ', $TagList);
+		$TagList = array();
+		foreach ($Request['Tags'] as $TagID => $TagName) {
+			$TagList[] = '<a href="?tags=$TagName' . ($BookmarkView ? '&amp;type=requests' : '') . '">' . display_str($TagName) . '</a>';
+		}
+		$TagList = implode(', ', $TagList);
 ?>
 					<?=$TagList?>
 				</div>
 			</td>
 			<td class="nobr">
 				<span id="vote_count_<?=$RequestID?>"><?=number_format($VoteCount)?></span>
-<?		 	if (!$IsFilled && check_perms('site_vote')) { ?>
+<?	 	if (!$IsFilled && check_perms('site_vote')) { ?>
 				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
-<?			} ?>
+<?		} ?>
 			</td>
 			<td class="number_column nobr">
-				<?=Format::get_size($RequestVotes['TotalBounty'])?>
+				<?=Format::get_size($Bounty)?>
 			</td>
 			<td>
-<?			if ($IsFilled) { ?>
-				<a href="torrents.php?<?=(strtotime($TimeFilled) < $TimeCompare ? 'id=' : 'torrentid=').$TorrentID?>"><strong><?=time_diff($TimeFilled)?></strong></a>
-<?			} else { ?>
+<?		if ($IsFilled) { ?>
+				<a href="torrents.php?<?=(strtotime($Request['TimeFilled']) < $TimeCompare ? 'id=' : 'torrentid=') . $Request['TorrentID']?>"><strong><?=time_diff($Request['TimeFilled'])?></strong></a>
+<?		} else { ?>
 				<strong>No</strong>
-<?			} ?>
+<?		} ?>
 			</td>
 			<td>
-<?			if ($IsFilled) { ?>
-				<a href="user.php?id=<?=$FillerID?>"><?=$FillerName?></a>
-<?			} else { ?>
+<?		if ($IsFilled) { ?>
+				<a href="user.php?id=<?=$FillerInfo['ID']?>"><?=$FillerInfo['Username']?></a>
+<?		} else { ?>
 				&mdash;
-<?			} ?>
+<?		} ?>
 			</td>
 			<td>
-				<a href="user.php?id=<?=$RequestorID?>"><?=$RequestorName?></a>
+				<a href="user.php?id=<?=$Request['UserID']?>"><?=Users::format_username($Request['UserID'], false, false, false)?></a>
 			</td>
 			<td>
-				<?=time_diff($TimeAdded)?>
+				<?=time_diff($Request['TimeAdded'])?>
 			</td>
 			<td>
-				<?=time_diff($LastVote)?>
+				<?=time_diff($Request['LastVote'])?>
 			</td>
 		</tr>
 <?
-		} // while
-	} // else
+	} // foreach
+} // else
 ?>
 	</table>
+<? if (isset($PageLinks)) { ?>
 	<div class="linkbox">
 		<?=$PageLinks?>
 	</div>
+<? } ?>
 </div>
 <? View::show_footer(); ?>

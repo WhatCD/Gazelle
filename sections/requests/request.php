@@ -16,24 +16,19 @@ $RequestID = $_GET['id'];
 
 //First things first, lets get the data for the request.
 
-$Request = Requests::get_requests(array($RequestID));
-$Request = $Request['matches'][$RequestID];
-if (empty($Request)) {
+$Request = Requests::get_request($RequestID);
+if ($Request === false) {
 	error(404);
 }
 
-// If you change this line, make sure to do the same change to the corresponding line in sections/ajax/request.php
-list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel, $ReleaseType,
-	$BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
-
 //Convenience variables
-$IsFilled = !empty($TorrentID);
-$CanVote = (empty($TorrentID) && check_perms('site_vote'));
+$IsFilled = !empty($Request['TorrentID']);
+$CanVote = !$IsFilled && check_perms('site_vote');
 
-if ($CategoryID === '0') {
+if ($Request['CategoryID'] === '0') {
 	$CategoryName = 'Unknown';
 } else {
-	$CategoryName = $Categories[$CategoryID - 1];
+	$CategoryName = $Categories[$Request['CategoryID'] - 1];
 }
 
 //Do we need to get artists?
@@ -43,41 +38,40 @@ if ($CategoryName === 'Music') {
 	$ArtistLink = Artists::display_artists($ArtistForm, true, true);
 
 	if ($IsFilled) {
-		$DisplayLink = "$ArtistLink<a href=\"torrents.php?torrentid=$TorrentID\">$Title</a> [$Year]";
+		$DisplayLink = "$ArtistLink<a href=\"torrents.php?torrentid=$Request[TorrentID]\">$Request[Title]</a> [$Request[Year]]";
 	} else {
-		$DisplayLink = $ArtistLink.$Title." [$Year]";
+		$DisplayLink = $ArtistLink.$Request['Title']." [$Request[Year]]";
 	}
-	$FullName = $ArtistName.$Title." [$Year]";
+	$FullName = $ArtistName.$Request['Title']." [$Request[Year]]";
 
-	if ($BitrateList != '') {
-		$BitrateString = implode(', ', explode('|', $BitrateList));
-		$FormatString = implode(', ', explode('|', $FormatList));
-		$MediaString = implode(', ', explode('|', $MediaList));
+	if ($Request['BitrateList'] != '') {
+		$BitrateString = implode(', ', explode('|', $Request['BitrateList']));
+		$FormatString = implode(', ', explode('|', $Request['FormatList']));
+		$MediaString = implode(', ', explode('|', $Request['MediaList']));
 	} else {
 		$BitrateString = 'Unknown, please read the description.';
 		$FormatString = 'Unknown, please read the description.';
 		$MediaString = 'Unknown, please read the description.';
 	}
 
-	if (empty($ReleaseType)) {
+	if (empty($Request['ReleaseType'])) {
 		$ReleaseName = 'Unknown';
 	} else {
-		$ReleaseName = $ReleaseTypes[$ReleaseType];
+		$ReleaseName = $ReleaseTypes[$Request['ReleaseType']];
 	}
 
 } elseif ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
-	$FullName = "$Title [$Year]";
-	$DisplayLink = "$Title [$Year]";
+	$FullName = "$Request[Title] [$Request[Year]]";
+	$DisplayLink = "$Request[Title] [$Request[Year]]";
 } else {
-	$FullName = $Title;
-	$DisplayLink = $Title;
+	$FullName = $DisplayLink = $Request['Title'];
 }
 
 //Votes time
 $RequestVotes = Requests::get_votes_array($RequestID);
 $VoteCount = count($RequestVotes['Voters']);
-$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID === '0') || ($CategoryName === 'Music' && $Year === '0')));
-$UserCanEdit = (!$IsFilled && $LoggedUser['ID'] === $RequestorID && $VoteCount < 2);
+$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && ($Request['CategoryID'] === '0' || ($CategoryName === 'Music' && $Request['Year'] === '0')));
+$UserCanEdit = (!$IsFilled && $LoggedUser['ID'] === $Request['UserID'] && $VoteCount < 2);
 $CanEdit = ($UserCanEdit || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
 View::show_header("View request: $FullName", 'comments,requests,bbcode,subscriptions');
@@ -101,15 +95,15 @@ View::show_header("View request: $FullName", 'comments,requests,bbcode,subscript
 			<a href="#" id="subscribelink_requests<?=$RequestID?>" class="brackets" onclick="SubscribeComments('requests',<?=$RequestID?>);return false;"><?=Subscriptions::has_subscribed_comments('requests', $RequestID) !== false ? 'Unsubscribe' : 'Subscribe'?></a>
 			<a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>" class="brackets">Report request</a>
 <?	if (!$IsFilled) { ?>
-			<a href="upload.php?requestid=<?=$RequestID?><?=($GroupID ? "&amp;groupid=$GroupID" : '')?>" class="brackets">Upload request</a>
+			<a href="upload.php?requestid=<?=$RequestID?><?=($Request['GroupID'] ? "&amp;groupid=$Request[GroupID]" : '')?>" class="brackets">Upload request</a>
 <?	}
-	if (!$IsFilled && (($CategoryID === '0') || ($CategoryName === 'Music' && $Year === '0'))) { ?>
+	if (!$IsFilled && ($Request['CategoryID'] === '0' || ($CategoryName === 'Music' && $Request['Year'] === '0'))) { ?>
 			<a href="reports.php?action=report&amp;type=request_update&amp;id=<?=$RequestID?>" class="brackets">Request update</a>
 <? } ?>
 
 <?
 // Create a search URL to WorldCat and Google based on title
-$encoded_title = urlencode(preg_replace("/\([^\)]+\)/", '', $Title));
+$encoded_title = urlencode(preg_replace("/\([^\)]+\)/", '', $Request['Title']));
 $encoded_artist = substr(str_replace('&amp;', 'and', $ArtistName), 0, -3);
 $encoded_artist = str_ireplace('Performed By', '', $encoded_artist);
 $encoded_artist = preg_replace("/\([^\)]+\)/", '', $encoded_artist);
@@ -123,15 +117,15 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 		</div>
 	</div>
 	<div class="sidebar">
-<?	if ($CategoryID !== '0') { ?>
+<?	if ($Request['CategoryID'] !== '0') { ?>
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
 <?
-		if (!empty($Image)) {
+		if (!empty($Request['Image'])) {
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($Image, true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Image)?>', 220);" /></p>
+			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($Request['Image'], true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Request['Image'])?>', 220);" /></p>
 <?		} else { ?>
-			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$CategoryID - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
+			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$Request['CategoryID'] - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
 <?		} ?>
 		</div>
 <?
@@ -273,23 +267,23 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 			<tr>
 				<td class="label">Created</td>
 				<td>
-					<?=time_diff($TimeAdded)?> by <strong><?=Users::format_username($RequestorID, false, false, false)?></strong>
+					<?=time_diff($Request['TimeAdded'])?> by <strong><?=Users::format_username($Request['UserID'], false, false, false)?></strong>
 				</td>
 			</tr>
 <?	if ($CategoryName === 'Music') {
-		if (!empty($RecordLabel)) { ?>
+		if (!empty($Request['RecordLabel'])) { ?>
 			<tr>
 				<td class="label">Record label</td>
 				<td>
-					<?=$RecordLabel?>
+					<?=$Request['RecordLabel']?>
 				</td>
 			</tr>
 <?		}
-		if (!empty($CatalogueNumber)) { ?>
+		if (!empty($Request['CatalogueNumber'])) { ?>
 			<tr>
 				<td class="label">Catalogue number</td>
 				<td>
-					<?=$CatalogueNumber?>
+					<?=$Request['CatalogueNumber']?>
 				</td>
 			</tr>
 <?		} ?>
@@ -317,17 +311,17 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 					<?=$MediaString?>
 				</td>
 			</tr>
-<?		if (!empty($LogCue)) { ?>
+<?		if (!empty($Request['LogCue'])) { ?>
 			<tr>
 				<td class="label">Required CD FLAC only extras</td>
 				<td>
-					<?=$LogCue?>
+					<?=$Request['LogCue']?>
 				</td>
 			</tr>
 <?		}
 	}
 	$Worldcat = '';
-	$OCLC = str_replace(' ', '', $OCLC);
+	$OCLC = str_replace(' ', '', $Request['OCLC']);
 	if ($OCLC !== '') {
 		$OCLCs = explode(',', $OCLC);
 		for ($i = 0; $i < count($OCLCs); $i++) {
@@ -346,14 +340,11 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 			</td>
 		</tr>
 <? 	}
-	if ($GroupID) {
-		/*$Groups = Torrents::get_groups(array($GroupID), true, true, false);
-		$Group = $Groups['matches'][$GroupID];
-		$GroupLink = Artists::display_artists($Group['ExtendedArtists']).'<a href="torrents.php?id='.$GroupID.'">'.$Group['Name'].'</a>';*/
+	if ($Request['GroupID']) {
 ?>
 			<tr>
 				<td class="label">Torrent group</td>
-				<td><a href="torrents.php?id=<?=$GroupID?>">torrents.php?id=<?=$GroupID?></a></td>
+				<td><a href="torrents.php?id=<?=$Request['GroupID']?>">torrents.php?id=<?=$Request['GroupID']?></a></td>
 			</tr>
 <?	} ?>
 			<tr>
@@ -366,11 +357,11 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 <?	} ?>
 				</td>
 			</tr>
-<?	if ($LastVote > $TimeAdded) { ?>
+<?	if ($Request['LastVote'] > $Request['TimeAdded']) { ?>
 			<tr>
 				<td class="label">Last voted</td>
 				<td>
-					<?=time_diff($LastVote)?>
+					<?=time_diff($Request['LastVote'])?>
 				</td>
 			</tr>
 <?	}
@@ -421,9 +412,9 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 			<tr>
 				<td class="label">Filled</td>
 				<td>
-					<strong><a href="torrents.php?<?=(strtotime($TimeFilled) < $TimeCompare ? 'id=' : 'torrentid=').$TorrentID?>">Yes</a></strong>,
-					by user <?=Users::format_username($FillerID, false, false, false)?>
-<?		if ($LoggedUser['ID'] === $RequestorID || $LoggedUser['ID'] === $FillerID || check_perms('site_moderate_requests')) { ?>
+					<strong><a href="torrents.php?<?=(strtotime($Request['TimeFilled']) < $TimeCompare ? 'id=' : 'torrentid=') . $Request['TorrentID']?>">Yes</a></strong>,
+					by user <?=Users::format_username($Request['FillerID'], false, false, false)?>
+<?		if ($LoggedUser['ID'] == $Request['UserID'] || $LoggedUser['ID'] == $Request['FillerID'] || check_perms('site_moderate_requests')) { ?>
 						<strong><a href="requests.php?action=unfill&amp;id=<?=$RequestID?>" class="brackets">Unfill</a></strong> Unfilling a request without a valid, nontrivial reason will result in a warning.
 <?		} ?>
 				</td>
@@ -457,7 +448,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 				<td colspan="2" class="center"><strong>Description</strong></td>
 			</tr>
 			<tr>
-				<td colspan="2"><?=$Text->full_format($Description);?></td>
+				<td colspan="2"><?=$Text->full_format($Request['Description']);?></td>
 			</tr>
 		</table>
 <?

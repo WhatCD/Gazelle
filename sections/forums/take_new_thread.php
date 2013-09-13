@@ -57,9 +57,9 @@ if (!Forums::check_forumperm($ForumID, 'Write') || !Forums::check_forumperm($For
 
 $DB->query("
 	INSERT INTO forums_topics
-		(Title, AuthorID, ForumID, LastPostTime, LastPostAuthorID)
+		(Title, AuthorID, ForumID, LastPostTime, LastPostAuthorID, CreatedTime)
 	Values
-		('".db_string($Title)."', '".$LoggedUser['ID']."', '$ForumID', '".sqltime()."', '".$LoggedUser['ID']."')");
+		('".db_string($Title)."', '".$LoggedUser['ID']."', '$ForumID', '".sqltime()."', '".$LoggedUser['ID']."', '".sqltime()."')");
 $TopicID = $DB->inserted_id();
 
 $DB->query("

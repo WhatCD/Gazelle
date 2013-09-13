@@ -131,7 +131,6 @@ if (!empty($GroupIDs)) {
 	$GroupIDs = array_keys($GroupIDs);
 	$FilterIDs = array_keys($FilterIDs);
 	$TorrentGroups = Torrents::get_groups($GroupIDs);
-	$TorrentGroups = $TorrentGroups['matches'];
 
 	// Get the relevant filter labels
 	$DB->query('

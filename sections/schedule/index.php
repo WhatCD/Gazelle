@@ -61,12 +61,16 @@ $DB->query("
 	SELECT NextHour, NextDay, NextBiWeekly
 	FROM schedule");
 list($Hour, $Day, $BiWeek) = $DB->next_record();
+$NextHour = next_hour();
+$NextDay = next_day();
+$NextBiWeek = next_biweek();
+
 $DB->query("
 	UPDATE schedule
 	SET
-		NextHour = ".next_hour().",
-		NextDay = ".next_day().",
-		NextBiWeekly = ".next_biweek());
+		NextHour = $NextHour,
+		NextDay = $NextDay,
+		NextBiWeekly = $NextBiWeek");
 
 $NoDaily = isset($argv[2]) && $argv[2] == 'nodaily';
 
@@ -151,7 +155,7 @@ These functions are run every hour.
 \*************************************************************************/
 
 
-if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
+if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 	echo "Ran hourly functions\n";
 
 	//------------- Front page stats ----------------------------------------//
@@ -500,7 +504,7 @@ These functions are run in the first 15 minutes of every day.
 
 \*************************************************************************/
 
-if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
+if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	echo "Ran daily functions\n";
 	if ($Day % 2 == 0) { // If we should generate the drive database (at the end)
 		$GenerateDriveDB = true;
@@ -1306,7 +1310,7 @@ These functions are twice per month, on the 8th and the 22nd.
 
 \*************************************************************************/
 
-if ($BiWeek != next_biweek() || $_GET['runbiweek']) {
+if ($BiWeek != $NextBiWeek || $_GET['runbiweek']) {
 	echo "Ran bi-weekly functions\n";
 
 	//------------- Cycle auth keys -----------------------------------------//

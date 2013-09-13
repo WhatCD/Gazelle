@@ -272,16 +272,6 @@ class DEBUG {
 		return array_keys(G::$Cache->CacheHits);
 	}
 
-	public function get_sphinx_queries() {
-		global $SS;
-		return $SS->Queries;
-	}
-
-	public function get_sphinx_time() {
-		global $SS;
-		return $SS->Time;
-	}
-
 	public function get_sphinxql_queries() {
 		if (class_exists('Sphinxql')) {
 			return Sphinxql::$Queries;
@@ -564,11 +554,8 @@ class DEBUG {
 	public function sphinx_table($Queries = false) {
 		$Header = 'Searches';
 		if (!is_array($Queries)) {
-			$Queries = $this->get_sphinx_queries();
-			if ($QueriesQL = $this->get_sphinxql_queries()) {
-				$Queries = array_merge($Queries, $QueriesQL);
-			}
-			$Header .= ' ('.number_format($this->get_sphinx_time() + $this->get_sphinxql_time(), 5).' ms)';
+			$Queries = $this->get_sphinxql_queries();
+			$Header .= ' ('.number_format($this->get_sphinxql_time(), 5).' ms)';
 		}
 		if (empty($Queries)) {
 			return;

@@ -33,7 +33,6 @@ foreach ($TorrentsInfo as $Torrent) {
 	$GroupIDs[] = $Torrent['GroupID'];
 }
 $Results = Torrents::get_groups($GroupIDs);
-$Results = $Results['matches'];
 ?>
 <div class="header">
 <? if ($All) { ?>

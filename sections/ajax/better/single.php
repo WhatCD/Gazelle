@@ -18,8 +18,6 @@ if (($GroupIDs = $Cache->get_value('better_single_groupids')) === false) {
 
 $Results = Torrents::get_groups(array_keys($GroupIDs));
 
-$Results = $Results['matches'];
-
 $JsonResults = array();
 foreach ($Results as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));

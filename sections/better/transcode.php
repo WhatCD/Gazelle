@@ -36,9 +36,6 @@ if ($TorrentCount == 0) {
 
 $Results = $SphQLResult->to_array('groupid');
 $Groups = Torrents::get_groups(array_keys($Results));
-$Groups = $Groups['matches'];
-
-$Debug->log_var(true, 'Excluding '.$Encodings[$_GET['type']]);
 $TorrentGroups = array();
 foreach ($Groups as $GroupID => $Group) {
 	if (empty($Group['Torrents'])) {
@@ -78,7 +75,6 @@ foreach ($Groups as $GroupID => $Group) {
 		}
 	}
 }
-$Debug->log_var($TorrentGroups, 'Torrent groups');
 
 View::show_header('Transcode Search');
 ?>
@@ -133,7 +129,6 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 				|| $Edition['Formats'][$Encodings[$_GET['type']]] == true //the transcode we asked for is already there
 				|| count($Edition['Formats']) === 3) //all 3 transcodes are there already (this can happen due to the caching of Sphinx's better_transcode table)
 		{
-			$Debug->log_var($Edition, 'Skipping '.$RemIdent);
 			continue;
 		}
 		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';

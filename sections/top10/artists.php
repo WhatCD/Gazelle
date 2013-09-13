@@ -15,9 +15,7 @@ $View = isset($_GET['view']) ? ($_GET['view']) : 'tiles';
 $View = in_array($View, array('tiles', 'list')) ? $View : 'tiles';
 
 switch ($Category) {
-	case 'all_time':
-		$Artists = LastFM::get_site_top_artists($Limit);
-		break;
+	
 	case 'weekly':
 		$Artists = json_decode(LastFM::get_weekly_artists($Limit), true)['artists']['artist'];
 		break;

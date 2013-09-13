@@ -4,7 +4,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 	if (!$RevisionID) {
 		$TorrentCache = $Cache->get_value("torrents_details_$GroupID");
 	}
-	if ($RevisionID || !is_array($TorrentCache) || isset($OutdatedCache)) {
+	if ($RevisionID || !is_array($TorrentCache)) {
 		// Fetch the group details
 
 		$SQL = 'SELECT ';
@@ -245,8 +245,7 @@ function get_group_requests($GroupID) {
 		$Requests = $DB->collect('ID');
 		$Cache->cache_value("requests_group_$GroupID", $Requests, 0);
 	}
-	$Requests = Requests::get_requests($Requests);
-	return $Requests['matches'];
+	return Requests::get_requests($Requests);
 }
 
 //Used by both sections/torrents/details.php and sections/reportsv2/report.php

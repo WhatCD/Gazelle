@@ -89,6 +89,8 @@ if (!empty($ArtistForm)) {
 	}
 }
 
+$SphQL = new SphinxqlQuery();
+$SphQL->raw_query("UPDATE requests, requests_delta SET torrentid = 0, fillerid = 0 WHERE id = $RequestID", false);
 
 header("Location: requests.php?action=view&id=$RequestID");
 ?>

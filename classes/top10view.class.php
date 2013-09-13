@@ -19,7 +19,7 @@ class Top10View {
 		<div class="center">
 			<a href="top10.php?type=artists&amp;category=weekly&amp;view=<?=$View?>" class="brackets"><?=self::get_selected_link("Weekly", $Selected == "weekly")?></a>
 			<a href="top10.php?type=artists&amp;category=hyped&amp;view=<?=$View?>" class="brackets"><?=self::get_selected_link("Hyped", $Selected == "hyped")?></a>
-			<a href="top10.php?type=artists&amp;category=all_time&amp;view=<?=$View?>" class="brackets"><?=self::get_selected_link("All Time", $Selected == "all_time")?></a>
+			
 		</div>
 <?	}
 
@@ -40,9 +40,7 @@ class Top10View {
 
 	public static function render_artist_tile($Artist, $Category) {
 		switch ($Category) {
-			case 'all_time':
-				self::render_tile("artist.php?artistname", $Artist['Name'], $Artist['Image']);
-				break;
+			
 			case 'weekly':
 			case 'hyped':
 				self::render_tile("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);
@@ -65,9 +63,7 @@ class Top10View {
 
 	public static function render_artist_list($Artist, $Category) {
 		switch ($Category) {
-			case 'all_time':
-				self::render_list("artist.php?id=", $Artist['id'], $Artist['Image']);
-				break;
+			
 			case 'weekly':
 			case 'hyped':
 				self::render_list("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);

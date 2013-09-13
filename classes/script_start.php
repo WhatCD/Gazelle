@@ -64,7 +64,6 @@ require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
 require(SERVER_ROOT.'/classes/cache.class.php'); //Require the caching class
 require(SERVER_ROOT.'/classes/encrypt.class.php'); //Require the encryption class
 require(SERVER_ROOT.'/classes/time.class.php'); //Require the time class
-require(SERVER_ROOT.'/classes/search.class.php'); //Require the searching class
 require(SERVER_ROOT.'/classes/paranoia.class.php'); //Require the paranoia check_paranoia function
 require(SERVER_ROOT.'/classes/regex.php');
 require(SERVER_ROOT.'/classes/util.php');
@@ -76,7 +75,6 @@ $Debug->set_flag('Debug constructed');
 $DB = new DB_MYSQL;
 $Cache = new CACHE($MemcachedServers);
 $Enc = new CRYPT;
-$SS = new SPHINX_SEARCH;
 
 // Autoload classes.
 require(SERVER_ROOT.'/classes/classloader.php');

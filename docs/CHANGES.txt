@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-09-12 by porkpie
+Switch to SphinxQL for request searches
+
 2013-09-05 by porkpie
 Fix multi-format uploader when switching from "Music" to something else, then back to "Music"
 

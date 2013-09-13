@@ -86,7 +86,8 @@ class Users {
 						'Title' => '',
 						'CatchupTime' => 0,
 						'Visible' => '1',
-						'Levels' => '');
+						'Levels' => '',
+						'Class' => 0);
 			} else {
 				$UserInfo = G::$DB->next_record(MYSQLI_ASSOC, array('Paranoia', 'Title'));
 				$UserInfo['CatchupTime'] = strtotime($UserInfo['CatchupTime']);
@@ -94,10 +95,8 @@ class Users {
 				if ($UserInfo['Paranoia'] === false) {
 					$UserInfo['Paranoia'] = array();
 				}
+				$UserInfo['Class'] = $Classes[$UserInfo['PermissionID']]['Level'];
 			}
-
-
-			$UserInfo['Class'] = $Classes[$UserInfo['PermissionID']]['Level'];
 
 			if (!empty($UserInfo['Levels'])) {
 				$UserInfo['ExtraClasses'] = array_fill_keys(explode(',', $UserInfo['Levels']), 1);
@@ -105,7 +104,7 @@ class Users {
 				$UserInfo['ExtraClasses'] = array();
 			}
 			unset($UserInfo['Levels']);
-			$EffectiveClass = $Classes[$UserInfo['PermissionID']]['Level'];
+			$EffectiveClass = $UserInfo['Class'];
 			foreach ($UserInfo['ExtraClasses'] as $Class => $Val) {
 				$EffectiveClass = max($EffectiveClass, $Classes[$Class]['Level']);
 			}
@@ -466,7 +465,7 @@ class Users {
 			return 'System';
 		}
 
-		$UserInfo = Users::user_info($UserID);
+		$UserInfo = self::user_info($UserID);
 		if ($UserInfo['Username'] == '') {
 			return "Unknown [$UserID]";
 		}
@@ -489,29 +488,40 @@ class Users {
 		}
 		if ($Badges) {
 			$DonorRank = Donations::get_rank($UserID);
-			$SpecialRank = Donations::get_special_rank($UserID);
-			if ($DonorRank >= 2 && $ShowDonorIcon) {
-				$DonorRewards = Donations::get_rewards($UserID);
-				$IconText = $DonorRewards['IconMouseOverText'];
+			if ($DonorRank == 0 && $UserInfo['Donor'] == 1) {
+				$DonorRank = 1;
+			}
+			if ($ShowDonorIcon && $DonorRank > 0) {
 				$IconLink = 'donate.php';
 				$IconImage = 'donor.png';
-				$DonorRank = $DonorRank == 5 ? ($DonorRank - 1) : $DonorRank;
-				if ($DonorRank >= MAX_RANK || $SpecialRank >= MAX_SPECIAL_RANK) {
-					$IconLink = !empty($DonorRewards['CustomIconLink']) ? $DonorRewards['CustomIconLink'] : 'donate.php';
-					if ($SpecialRank >= MAX_SPECIAL_RANK)  {
+				$IconText = 'Donor';
+				$DonorHeart = $DonorRank;
+				$SpecialRank = Donations::get_special_rank($UserID);
+				$EnabledRewards = Donations::get_enabled_rewards($UserID);
+				$DonorRewards = Donations::get_rewards($UserID);
+				if ($EnabledRewards['HasDonorIconMouseOverText'] && !empty($DonorRewards['IconMouseOverText'])) {
+					$IconText = display_str($DonorRewards['IconMouseOverText']);
+				}
+				if ($EnabledRewards['HasDonorIconLink'] && !empty($DonorRewards['CustomIconLink'])) {
+					$IconLink = display_str($DonorRewards['CustomIconLink']);
+				}
+				if ($EnabledRewards['HasCustomDonorIcon'] && !empty($DonorRewards['CustomIcon'])) {
+					$IconImage = ImageTools::process($DonorRewards['CustomIcon']);
+				} else {
+					if ($SpecialRank === MAX_SPECIAL_RANK) {
 						$DonorHeart = 6;
-					} else {
+					} elseif ($DonorRank === 5) {
+						$DonorHeart = 4; // Two points between rank 4 and 5
+					} elseif ($DonorRank >= MAX_RANK) {
 						$DonorHeart = 5;
 					}
-					$IconImage = !empty($DonorRewards['CustomIcon']) ? ImageTools::process($DonorRewards['CustomIcon']) : STATIC_SERVER . "common/symbols/donor_$DonorHeart" . '.png';
+					if ($DonorHeart === 1) {
+						$IconImage = STATIC_SERVER . 'common/symbols/donor.png';
+					} else {
+						$IconImage = STATIC_SERVER . "common/symbols/donor_{$DonorHeart}.png";
+					}
 				}
-				else {
-					$IconImage = STATIC_SERVER . "common/symbols/donor_$DonorRank" . '.png';
-				}
-
 				$Str .= "<a href=\"$IconLink\"><img class=\"donor_icon\" src=\"$IconImage\" alt=\"$IconText\" title=\"$IconText\" /></a>";
-			} elseif (($DonorRank ==  1 || $UserInfo['Donor'] == 1) && $ShowDonorIcon) {
-				$Str .= '<a href="donate.php"><img src="'.STATIC_SERVER.'common/symbols/donor.png" alt="Donor" title="Donor" /></a>';
 			}
 		}
 
@@ -592,7 +602,6 @@ class Users {
 		}
 
 		$TorrentList = Torrents::get_groups($GroupIDs);
-		$TorrentList = (isset($TorrentList['matches']) ? $TorrentList['matches'] : array());
 
 		return array($GroupIDs, $BookmarkData, $TorrentList);
 	}

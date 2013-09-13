@@ -57,10 +57,6 @@ $DB->query("
 		AND t.Format IN ('FLAC', 'MP3')
 	GROUP BY t.GroupID, RemIdent");
 
-/*$DB->query('
-	SELECT *
-	FROM t');
-*/
 $DB->query("
 	SELECT GroupID
 	FROM temp_sections_better_snatch
@@ -75,8 +71,6 @@ if (count($GroupIDs) === 0) {
 }
 
 $Groups = Torrents::get_groups(array_keys($GroupIDs));
-$Groups = $Groups['matches'];
-
 $TorrentGroups = array();
 foreach ($Groups as $GroupID => $Group) {
 	if (empty($Group['Torrents'])) {

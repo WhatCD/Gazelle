@@ -17,45 +17,47 @@ list($Table, $Col) = Bookmarks::bookmark_schema($Type);
 if (!is_number($_GET['id'])) {
 	error(0);
 }
+$PageID = $_GET['id'];
 
 $DB->query("
 	SELECT UserID
 	FROM $Table
-	WHERE UserID='$LoggedUser[ID]'
-		AND $Col='".db_string($_GET['id'])."'");
+	WHERE UserID = '$LoggedUser[ID]'
+		AND $Col = $PageID");
 if (!$DB->has_results()) {
 	if ($Type === 'torrent') {
-		$DB->query('
+		$DB->query("
 			SELECT MAX(Sort)
 			FROM `bookmarks_torrents`
-			WHERE UserID = ' . $LoggedUser['ID']);
+			WHERE UserID = $LoggedUser[ID]");
 		list($Sort) = $DB->next_record();
-		if (!$Sort) $Sort = 0;
+		if (!$Sort) {
+			$Sort = 0;
+		}
 		$Sort += 1;
 		$DB->query("
 			INSERT IGNORE INTO $Table (UserID, $Col, Time, Sort)
-			VALUES ('$LoggedUser[ID]', '".db_string($_GET['id'])."', '".sqltime()."', $Sort)");
+			VALUES ('$LoggedUser[ID]', $PageID, '".sqltime()."', $Sort)");
 	} else {
 		$DB->query("
 			INSERT IGNORE INTO $Table (UserID, $Col, Time)
-			VALUES ('$LoggedUser[ID]', '".db_string($_GET['id'])."', '".sqltime()."')");
+			VALUES ('$LoggedUser[ID]', $PageID, '".sqltime()."')");
 	}
 	$Cache->delete_value('bookmarks_'.$Type.'_'.$LoggedUser['ID']);
 	if ($Type == 'torrent') {
-		$Cache->delete_value('bookmarks_group_ids_' . $UserID);
-		$GroupID = (int) $_GET['id'];
+		$Cache->delete_value("bookmarks_group_ids_$UserID");
 
 		$DB->query("
 			SELECT Name, Year, WikiBody, TagList
 			FROM torrents_group
-			WHERE ID = '$GroupID'");
+			WHERE ID = $PageID");
 		list($GroupTitle, $Year, $Body, $TagList) = $DB->next_record();
 		$TagList = str_replace('_', '.', $TagList);
 
 		$DB->query("
 			SELECT ID, Format, Encoding, HasLog, HasCue, LogScore, Media, Scene, FreeTorrent, UserID
 			FROM torrents
-			WHERE GroupID = '$GroupID'");
+			WHERE GroupID = $PageID");
 		// RSS feed stuff
 		while ($Torrent = $DB->next_record()) {
 			$Title = $GroupTitle;
@@ -87,7 +89,7 @@ if (!$DB->has_results()) {
 								$Text->strip_bbcode($Body),
 								'torrents.php?action=download&amp;authkey=[[AUTHKEY]]&amp;torrent_pass=[[PASSKEY]]&amp;id='.$TorrentID,
 								$UploaderInfo['Username'],
-								"torrents.php?id=$GroupID",
+								"torrents.php?id=$PageID",
 								trim($TagList));
 			$Feed->populate('torrents_bookmarks_t_'.$LoggedUser['torrent_pass'], $Item);
 		}
@@ -95,8 +97,15 @@ if (!$DB->has_results()) {
 		$DB->query("
 			SELECT UserID
 			FROM $Table
-			WHERE $Col = '".db_string($_GET['id'])."'");
-		$Bookmarkers = $DB->collect('UserID');
-		$SS->UpdateAttributes('requests requests_delta', array('bookmarker'), array($_GET['id'] => array($Bookmarkers)), true);
+			WHERE $Col = '".db_string($PageID)."'");
+		if ($DB->record_count() < 100) {
+			// Sphinx doesn't like huge MVA updates. Update sphinx_requests_delta
+			// and live with the <= 1 minute delay if we have more than 100 bookmarkers
+			$Bookmarkers = implode(',', $DB->collect('UserID'));
+			$SphQL = new SphinxqlQuery();
+			$SphQL->raw_query("UPDATE requests, requests_delta SET bookmarker = ($Bookmarkers) WHERE id = $PageID");
+		} else {
+			Requests::update_sphinx_requests($PageID);
+		}
 	}
 }

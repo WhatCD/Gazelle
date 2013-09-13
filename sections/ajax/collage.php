@@ -65,20 +65,19 @@ if ($CollageCategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
 		ORDER BY ct.Sort");
 	$GroupIDs = $DB->collect('GroupID');
 	$GroupList = Torrents::get_groups($GroupIDs);
-	$GroupList = $GroupList['matches'];
 	foreach ($GroupIDs as $GroupID) {
-		if (isset($GroupList[$GroupID])) {
+		if (!empty($GroupList[$GroupID])) {
 			$GroupDetails = Torrents::array_group($GroupList[$GroupID]);
 			if ($GroupDetails['GroupCategoryID'] > 0 && $Categories[$GroupDetails['GroupCategoryID'] - 1] == 'Music') {
 				$ArtistForm = $GroupDetails['ExtendedArtists'];
 				$JsonMusicInfo = array(
-					'composers' => ($ArtistForm[4] == null) ? array() : pullmediainfo($ArtistForm[4]),
-					'dj'        => ($ArtistForm[6] == null) ? array() : pullmediainfo($ArtistForm[6]),
-					'artists'   => ($ArtistForm[1] == null) ? array() : pullmediainfo($ArtistForm[1]),
-					'with'      => ($ArtistForm[2] == null) ? array() : pullmediainfo($ArtistForm[2]),
-					'conductor' => ($ArtistForm[5] == null) ? array() : pullmediainfo($ArtistForm[5]),
-					'remixedBy' => ($ArtistForm[3] == null) ? array() : pullmediainfo($ArtistForm[3]),
-					'producer'  => ($ArtistForm[7] == null) ? array() : pullmediainfo($ArtistForm[7])
+					'composers' => isset($ArtistForm[4]) ? pullmediainfo($ArtistForm[4]) : array(),
+					'dj'        => isset($ArtistForm[6]) ? pullmediainfo($ArtistForm[6]) : array(),
+					'artists'   => isset($ArtistForm[1]) ? pullmediainfo($ArtistForm[1]) : array(),
+					'with'      => isset($ArtistForm[2]) ? pullmediainfo($ArtistForm[2]) : array(),
+					'conductor' => isset($ArtistForm[5]) ? pullmediainfo($ArtistForm[5]) : array(),
+					'remixedBy' => isset($ArtistForm[3]) ? pullmediainfo($ArtistForm[3]) : array(),
+					'producer'  => isset($ArtistForm[7]) ? pullmediainfo($ArtistForm[7]) : array()
 				);
 			} else {
 				$JsonMusicInfo = null;

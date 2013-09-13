@@ -1,60 +1,99 @@
 <?php
+$SphQL = new SphinxqlQuery();
+$SphQL->select('id, votes, bounty')->from('requests, requests_delta');
 
-$Queries = array();
+$SortOrders = array(
+	'votes' => 'votes',
+	'bounty' => 'bounty',
+	'lastvote' => 'lastvote',
+	'filled' => 'timefilled',
+	'year' => 'year',
+	'created' => 'timeadded',
+	'random' => false);
 
-$OrderWays = array('year', 'votes', 'bounty', 'created', 'lastvote', 'filled');
-list($Page, $Limit) = Format::page_limit(REQUESTS_PER_PAGE);
+if (empty($_GET['order']) || !isset($SortOrders[$_GET['order']])) {
+	$_GET['order'] = 'created';
+}
+$OrderBy = $_GET['order'];
+
+if (!empty($_GET['sort']) && $_GET['sort'] == 'asc') {
+	$OrderWay = 'asc';
+} else {
+	$_GET['sort'] = 'desc';
+	$OrderWay = 'desc';
+}
+$NewSort = $_GET['sort'] === 'asc' ? 'desc' : 'asc';
+
+if ($OrderBy === 'random') {
+	$SphQL->order_by('RAND()', '');
+	unset($_GET['page']);
+} else {
+	$SphQL->order_by($SortOrders[$OrderBy], $OrderWay);
+}
+
 $Submitted = !empty($_GET['submit']);
 
 //Paranoia
-$UserInfo = Users::user_info((int)$_GET['userid']);
-$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
-$UserClass = $Perms['Class'];
-
+if (!empty($_GET['userid'])) {
+	if (!is_number($_GET['userid'])) {
+		json_die("failure");
+	}
+	$UserInfo = Users::user_info($_GET['userid']);
+	if (empty($UserInfo)) {
+		json_die("failure");
+	}
+	$Perms = Permissions::get_permissions($UserInfo['PermissionID']);
+	$UserClass = $Perms['Class'];
+}
 $BookmarkView = false;
 
 if (empty($_GET['type'])) {
 	$Title = 'Requests';
 	if (!check_perms('site_see_old_requests') || empty($_GET['showall'])) {
-		$SS->set_filter('visible', array(1));
+		$SphQL->where('visible', 1);
 	}
 } else {
 	switch ($_GET['type']) {
 		case 'created':
-			$Title = 'My requests';
-			$SS->set_filter('userid', array($LoggedUser['ID']));
-			break;
-		case 'voted':
-			if (!empty($_GET['userid'])) {
-				if (is_number($_GET['userid'])) {
-					if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
-						json_die("failure");
-					}
-					$Title = "Requests voted for by ".$UserInfo['Username'];
-					$SS->set_filter('voter', array($_GET['userid']));
-				} else {
+			if (!empty($UserInfo)) {
+				if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $UserInfo['ID'])) {
 					json_die("failure");
 				}
+				$Title = "Requests created by $UserInfo[Username]";
+				$SphQL->where('userid', $UserInfo['ID']);
 			} else {
-				$Title = "Requests I've voted on";
-				$SS->set_filter('voter', array($LoggedUser['ID']));
+				$Title = 'My requests';
+				$SphQL->where('userid', $LoggedUser['ID']);
+			}
+			break;
+		case 'voted':
+			if (!empty($UserInfo)) {
+				if (!check_paranoia('requestsvoted_list', $UserInfo['Paranoia'], $Perms['Class'], $UserInfo['ID'])) {
+					json_die("failure");
+				}
+				$Title = "Requests voted for by $UserInfo[Username]";
+				$SphQL->where('voter', $UserInfo['ID']);
+			} else {
+				$Title = 'Requests I have voted on';
+				$SphQL->where('voter', $LoggedUser['ID']);
 			}
 			break;
 		case 'filled':
-			if (empty($_GET['userid']) || !is_number($_GET['userid'])) {
-				json_die("failure");
-			} else {
-				if (!check_paranoia('requestsfilled_list', $UserInfo['Paranoia'], $Perms['Class'], $_GET['userid'])) {
+			if (!empty($UserInfo)) {
+				if (!check_paranoia('requestsfilled_list', $UserInfo['Paranoia'], $Perms['Class'], $UserInfo['ID'])) {
 					json_die("failure");
 				}
-				$Title = "Requests filled by ".$UserInfo['Username'];
-				$SS->set_filter('fillerid', array($_GET['userid']));
+				$Title = "Requests filled by $UserInfo[Username]";
+				$SphQL->where('fillerid', $UserInfo['ID']);
+			} else {
+				$Title = 'Requests I have filled';
+				$SphQL->where('fillerid', $LoggedUser['ID']);
 			}
 			break;
 		case 'bookmarks':
 			$Title = 'Your bookmarked requests';
 			$BookmarkView = true;
-			$SS->set_filter('bookmarker', array($LoggedUser['ID']));
+			$SphQL->where('bookmarker', $LoggedUser['ID']);
 			break;
 		default:
 			json_die("failure");
@@ -62,50 +101,164 @@ if (empty($_GET['type'])) {
 }
 
 if ($Submitted && empty($_GET['show_filled'])) {
-	$SS->set_filter('torrentid', array(0));
+	$SphQL->where('torrentid', 0);
+}
+
+$EnableNegation = false; // Sphinx needs at least one positive search condition to support the NOT operator
+
+if (!empty($_GET['formats'])) {
+	$FormatArray = $_GET['formats'];
+	if (count($FormatArray) !== count($Formats)) {
+		$FormatNameArray = array();
+		foreach ($FormatArray as $Index => $MasterIndex) {
+			if (isset($Formats[$MasterIndex])) {
+				$FormatNameArray[$Index] = '"' . strtr(Sphinxql::sph_escape_string($Formats[$MasterIndex]), '-.', '  ') . '"';
+			}
+		}
+		if (count($FormatNameArray) >= 1) {
+			$EnableNegation = true;
+			if (!empty($_GET['formats_strict'])) {
+				$SearchString = '(' . implode(' | ', $FormatNameArray) . ')';
+			} else {
+				$SearchString = '(any | ' . implode(' | ', $FormatNameArray) . ')';
+			}
+			$SphQL->where_match($SearchString, 'formatlist', false);
+		}
+	}
+}
+
+if (!empty($_GET['media'])) {
+	$MediaArray = $_GET['media'];
+	if (count($MediaArray) !== count($Media)) {
+		$MediaNameArray = array();
+		foreach ($MediaArray as $Index => $MasterIndex) {
+			if (isset($Media[$MasterIndex])) {
+				$MediaNameArray[$Index] = '"' . strtr(Sphinxql::sph_escape_string($Media[$MasterIndex]), '-.', '  ') . '"';
+			}
+		}
+
+		if (count($MediaNameArray) >= 1) {
+			$EnableNegation = true;
+			if (!empty($_GET['media_strict'])) {
+				$SearchString = '(' . implode(' | ', $MediaNameArray) . ')';
+			} else {
+				$SearchString = '(any | ' . implode(' | ', $MediaNameArray) . ')';
+			}
+			$SphQL->where_match($SearchString, 'medialist', false);
+		}
+	}
+}
+
+if (!empty($_GET['bitrates'])) {
+	$BitrateArray = $_GET['bitrates'];
+	if (count($BitrateArray) !== count($Bitrates)) {
+		$BitrateNameArray = array();
+		foreach ($BitrateArray as $Index => $MasterIndex) {
+			if (isset($Bitrates[$MasterIndex])) {
+				$BitrateNameArray[$Index] = '"' . strtr(Sphinxql::sph_escape_string($Bitrates[$MasterIndex]), '-.', '  ') . '"';
+			}
+		}
+
+		if (count($BitrateNameArray) >= 1) {
+			$EnableNegation = true;
+			if (!empty($_GET['bitrate_strict'])) {
+				$SearchString = '(' . implode(' | ', $BitrateNameArray) . ')';
+			} else {
+				$SearchString = '(any | ' . implode(' | ', $BitrateNameArray) . ')';
+			}
+			$SphQL->where_match($SearchString, 'bitratelist', false);
+		}
+	}
 }
 
 if (!empty($_GET['search'])) {
-	$Words = explode(' ', $_GET['search']);
-	foreach ($Words as $Key => &$Word) {
-		if ($Word[0] == '!' && strlen($Word) > 2) {
-			if (strpos($Word,'!',1) === false) {
-				$Word = '!'.$SS->EscapeString(substr($Word,1));
-			} else {
-				$Word = $SS->EscapeString($Word);
+	$SearchString = trim($_GET['search']);
+	if ($SearchString !== '') {
+		$SearchWords = array('include' => array(), 'exclude' => array());
+		$Words = explode(' ', $SearchString);
+		foreach ($Words as $Word) {
+			$Word = trim($Word);
+			// Skip isolated hyphens to enable "Artist - Title" searches
+			if ($Word === '-') {
+				continue;
 			}
-		} elseif (strlen($Word) >= 2) {
-			$Word = $SS->EscapeString($Word);
-		} else {
-			unset($Words[$Key]);
+			if ($Word[0] === '!' && strlen($Word) >= 2) {
+				if (strpos($Word, '!', 1) === false) {
+					$SearchWords['exclude'][] = $Word;
+				} else {
+					$SearchWords['include'][] = $Word;
+					$EnableNegation = true;
+				}
+			} elseif ($Word !== '') {
+				$SearchWords['include'][] = $Word;
+				$EnableNegation = true;
+			}
 		}
-	}
-	if (!empty($Words)) {
-		$Queries[] = "@* ".implode(' ', $Words);
+		$QueryParts = array();
+		if (!$EnableNegation && !empty($SearchWords['exclude'])) {
+			$SearchWords['include'] = array_merge($SearchWords['include'], $SearchWords['exclude']);
+			unset($SearchWords['exclude']);
+		}
+		foreach ($SearchWords['include'] as $Word) {
+			$QueryParts[] = Sphinxql::sph_escape_string($Word);
+		}
+		if (!empty($SearchWords['exclude'])) {
+			foreach ($SearchWords['exclude'] as $Word) {
+				$QueryParts[] = '!' . Sphinxql::sph_escape_string(substr($Word, 1));
+			}
+		}
+		if (!empty($QueryParts)) {
+			$SearchString = implode(' ', $QueryParts);
+			$SphQL->where_match($SearchString, '*', false);
+		}
 	}
 }
 
+if (!isset($_GET['tags_type']) || $_GET['tags_type'] === '1') {
+	$TagType = 1;
+	$_GET['tags_type'] = '1';
+} else {
+	$TagType = 0;
+	$_GET['tags_type'] = '0';
+}
 if (!empty($_GET['tags'])) {
 	$Tags = explode(',', $_GET['tags']);
-	$TagNames = array();
+	$TagNames = $TagsExclude = array();
+	// Remove illegal characters from the given tag names
 	foreach ($Tags as $Tag) {
+		$Tag = ltrim($Tag);
+		$Exclude = ($Tag[0] === '!');
 		$Tag = Misc::sanitize_tag($Tag);
 		if (!empty($Tag)) {
 			$TagNames[] = $Tag;
+			$TagsExclude[$Tag] = $Exclude;
 		}
 	}
+	$AllNegative = !in_array(false, $TagsExclude, true);
 	$Tags = Misc::get_tags($TagNames);
+
+	// Replace the ! characters that sanitize_tag removed
+	if ($TagType === 1 || $AllNegative) {
+		foreach ($TagNames as &$TagName) {
+			if ($TagsExclude[$TagName]) {
+				$TagName = "!$TagName";
+			}
+		}
+		unset($TagName);
+	}
+} elseif (!isset($_GET['tags_type']) || $_GET['tags_type'] !== '0') {
+	$_GET['tags_type'] = 1;
+} else {
+	$_GET['tags_type'] = 0;
 }
 
-if (empty($_GET['tags_type']) && !empty($Tags)) {
-	$_GET['tags_type'] = '0';
-	$SS->set_filter('tagid', array_keys($Tags));
-} elseif (!empty($Tags)) {
-	foreach (array_keys($Tags) as $Tag) {
-		$SS->set_filter('tagid', array($Tag));
+// 'All' tags
+if ($TagType === 1 && !empty($Tags)) {
+	foreach ($Tags as $TagID => $TagName) {
+		$SphQL->where('tagid', $TagID, $TagsExclude[$TagName]);
 	}
-} else {
-	$_GET['tags_type'] = '1';
+} elseif (!empty($Tags)) {
+	$SphQL->where('tagid', array_keys($Tags), $AllNegative);
 }
 
 if (!empty($_GET['filter_cat'])) {
@@ -117,7 +270,7 @@ if (!empty($_GET['filter_cat'])) {
 			}
 		}
 		if (count($CategoryArray) >= 1) {
-			$SS->set_filter('categoryid', $CategoryArray);
+			$SphQL->where('categoryid', $CategoryArray);
 		}
 	}
 }
@@ -130,164 +283,50 @@ if (!empty($_GET['releases'])) {
 				unset($ReleaseArray[$Index]);
 			}
 		}
-
 		if (count($ReleaseArray) >= 1) {
-			$SS->set_filter('releasetype', $ReleaseArray);
-		}
-	}
-}
-
-if (!empty($_GET['formats'])) {
-	$FormatArray = $_GET['formats'];
-	if (count($FormatArray) !== count($Formats)) {
-		$FormatNameArray = array();
-		foreach ($FormatArray as $Index => $MasterIndex) {
-			if (isset($Formats[$MasterIndex])) {
-				$FormatNameArray[$Index] = '"'.strtr($Formats[$MasterIndex], '-.', '  ').'"';
-			}
-		}
-
-		if (count($FormatNameArray) >= 1) {
-			$Queries[]='@formatlist (any | '.implode(' | ', $FormatNameArray).')';
-		}
-	}
-}
-
-if (!empty($_GET['media'])) {
-	$MediaArray = $_GET['media'];
-	if (count($MediaArray) !== count($Media)) {
-		$MediaNameArray = array();
-		foreach ($MediaArray as $Index => $MasterIndex) {
-			if (isset($Media[$MasterIndex])) {
-				$MediaNameArray[$Index] = '"'.strtr($Media[$MasterIndex], '-.', '  ').'"';
-			}
-		}
-
-		if (count($MediaNameArray) >= 1) {
-			$Queries[]='@medialist (any | '.implode(' | ', $MediaNameArray).')';
-		}
-	}
-}
-
-if (!empty($_GET['bitrates'])) {
-	$BitrateArray = $_GET['bitrates'];
-	if (count($BitrateArray) !== count($Bitrates)) {
-		$BitrateNameArray = array();
-		foreach ($BitrateArray as $Index => $MasterIndex) {
-			if (isset($Bitrates[$MasterIndex])) {
-				$BitrateNameArray[$Index] = '"'.strtr($SS->EscapeString($Bitrates[$MasterIndex]), '-.', '  ').'"';
-			}
-		}
-
-		if (count($BitrateNameArray) >= 1) {
-			$Queries[]='@bitratelist (any | '.implode(' | ', $BitrateNameArray).')';
+			$SphQL->where('releasetype', $ReleaseArray);
 		}
 	}
 }
 
 if (!empty($_GET['requestor']) && check_perms('site_see_old_requests')) {
 	if (is_number($_GET['requestor'])) {
-		$SS->set_filter('userid', array($_GET['requestor']));
+		$SphQL->where('userid', $_GET['requestor']);
 	} else {
-		json_die("failure");
+		error(404);
 	}
 }
 
 if (isset($_GET['year'])) {
-	if (is_number($_GET['year']) || $_GET['year'] == 0) {
-		$SS->set_filter('year', array($_GET['year']));
+	if (is_number($_GET['year']) || $_GET['year'] === '0') {
+		$SphQL->where('year', $_GET['year']);
 	} else {
-		json_die("failure");
+		error(404);
 	}
 }
 
 if (!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
 	$Page = $_GET['page'];
-	$SS->limit(($Page - 1) * REQUESTS_PER_PAGE, REQUESTS_PER_PAGE);
+	$Offset = ($Page - 1) * REQUESTS_PER_PAGE;
+	$SphQL->limit($Offset, REQUESTS_PER_PAGE, $Offset + REQUESTS_PER_PAGE);
 } else {
 	$Page = 1;
-	$SS->limit(0, REQUESTS_PER_PAGE);
+	$SphQL->limit(0, REQUESTS_PER_PAGE, REQUESTS_PER_PAGE);
 }
 
-if (empty($_GET['order'])) {
-	$CurrentOrder = 'created';
-	$CurrentSort = 'desc';
-	$Way = SPH_SORT_ATTR_DESC;
-	$NewSort = 'asc';
-} else {
-	if (in_array($_GET['order'], $OrderWays)) {
-		$CurrentOrder = $_GET['order'];
-		if ($_GET['sort'] == 'asc' || $_GET['sort'] == 'desc') {
-			$CurrentSort = $_GET['sort'];
-			$Way = ($CurrentSort == 'asc' ? SPH_SORT_ATTR_ASC : SPH_SORT_ATTR_DESC);
-			$NewSort = ($_GET['sort'] == 'asc' ? 'desc' : 'asc');
-		} else {
-			json_die("failure");
-		}
-	} else {
-		json_die("failure");
+$SphQLResult = $SphQL->query();
+$NumResults = (int)$SphQLResult->get_meta('total_found');
+if ($NumResults > 0) {
+	$SphRequests = $SphQLResult->to_array('id');
+	if ($OrderBy === 'random') {
+		$NumResults = count($RequestIDs);
 	}
-}
-
-switch ($CurrentOrder) {
-	case 'votes':
-		$OrderBy = 'Votes';
-		break;
-	case 'bounty':
-		$OrderBy = 'Bounty';
-		break;
-	case 'created':
-		$OrderBy = 'TimeAdded';
-		break;
-	case 'lastvote':
-		$OrderBy = 'LastVote';
-		break;
-	case 'filled':
-		$OrderBy = 'TimeFilled';
-		break;
-	case 'year':
-		$OrderBy = 'Year';
-		break;
-	default:
-		$OrderBy = 'TimeAdded';
-		break;
-}
-//print($Way); print($OrderBy); die();
-$SS->SetSortMode($Way, $OrderBy);
-
-if (count($Queries) > 0) {
-	$Query = implode(' ', $Queries);
-} else {
-	$Query = '';
-}
-
-$SS->set_index('requests requests_delta');
-$SphinxResults = $SS->search($Query, '', 0, array(), '', '');
-$NumResults = $SS->TotalResults;
-//We don't use sphinxapi's default cache searcher, we use our own functions
-
-if (!empty($SphinxResults['notfound'])) {
-	$SQLResults = Requests::get_requests($SphinxResults['notfound']);
-	if (is_array($SQLResults['notfound'])) {
-		//Something wasn't found in the db, remove it from results
-		reset($SQLResults['notfound']);
-		foreach ($SQLResults['notfound'] as $ID) {
-			unset($SQLResults['matches'][$ID]);
-			unset($SphinxResults['matches'][$ID]);
+	if ($NumResults > REQUESTS_PER_PAGE) {
+		if (($Page - 1) * REQUESTS_PER_PAGE > $NumResults) {
+			$Page = 0;
 		}
 	}
-
-	// Merge SQL results with memcached results
-	foreach ($SQLResults['matches'] as $ID => $SQLResult) {
-		$SphinxResults['matches'][$ID] = $SQLResult;
-
-		//$Requests['matches'][$ID] = array_merge($Requests['matches'][$ID], $SQLResult);
-		//We ksort because depending on the filter modes, we're given our data in an unpredictable order
-		//ksort($Requests['matches'][$ID]);
-	}
 }
-
-$Requests = $SphinxResults['matches'];
 
 if ($NumResults == 0) {
 	json_die("success", array(
@@ -298,23 +337,18 @@ if ($NumResults == 0) {
 } else {
 	$JsonResults = array();
 	$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
-	foreach ($Requests as $RequestID => $Request) {
+	$Requests = Requests::get_requests(array_keys($SphRequests));
+	foreach ($SphRequests as $RequestID => $SphRequest) {
+		$Request = $Requests[$RequestID];
+		$VoteCount = $SphRequest['votes'];
+		$Bounty = $SphRequest['bounty'] * 1024; // Sphinx stores bounty in kB
+		$Requestor = Users::user_info($Request['UserID']);
+		$Filler = $Request['FillerID'] ? Users::user_info($Request['FillerID']) : null;
 
-		//list($BitrateList, $CatalogueNumber, $CategoryID, $Description, $FillerID, $FormatList, $RequestID, $Image, $LogCue, $MediaList, $ReleaseType,
-		//	$Tags, $TimeAdded, $TimeFilled, $Title, $TorrentID, $RequestorID, $RequestorName, $Year, $RequestID, $Categoryid, $FillerID, $LastVote,
-		//	$ReleaseType, $TagIDs, $TimeAdded, $TimeFilled, $TorrentID, $RequestorID, $Voters) = array_values($Request);
-
-		list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber,
-			$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled) = $Request;
-
-		$RequestVotes = Requests::get_votes_array($RequestID);
-
-		$VoteCount = count($RequestVotes['Voters']);
-
-		if ($CategoryID == 0) {
+		if ($Request['CategoryID'] == 0) {
 			$CategoryName = 'Unknown';
 		} else {
-			$CategoryName = $Categories[$CategoryID - 1];
+			$CategoryName = $Categories[$Request['CategoryID'] - 1];
 		}
 
 		$JsonArtists = array();
@@ -326,33 +360,35 @@ if ($NumResults == 0) {
 		$Tags = $Request['Tags'];
 
 		$JsonResults[] = array(
-			'requestId' => (int) $RequestID,
-			'requestorId' => (int) $RequestorID,
-			'requestorName' => $RequestorName,
-			'timeAdded' => $TimeAdded,
-			'lastVote' => $LastVote,
-			'voteCount' => $VoteCount,
-			'bounty' => $RequestVotes['TotalBounty'],
-			'categoryId' => (int) $CategoryID,
+			'requestId' => (int)$RequestID,
+			'requestorId' => (int)$Requestor['ID'],
+			'requestorName' => $Requestor['Username'],
+			'timeAdded' => $Request['TimeAdded'],
+			'lastVote' => $Request['LastVote'],
+			'voteCount' => (int)$VoteCount,
+			'bounty' => (int)$Bounty,
+			'categoryId' => (int)$Request['CategoryID'],
 			'categoryName' => $CategoryName,
 			'artists' => $JsonArtists,
-			'title' => $Title,
-			'year' => (int) $Year,
-			'image' => $Image,
-			'description' => $Description,
-			'catalogueNumber' => $CatalogueNumber,
-			'releaseType' => $ReleaseType,
-			'bitrateList' => $BitrateList,
-			'formatList' => $FormatList,
-			'mediaList' => $MediaList,
-			'logCue' => $LogCue,
-			'isFilled' => ($TorrentID > 0),
-			'fillerId' => (int) $FillerID,
-			'fillerName' => $FillerName == 0 ? '' : $FillerName,
-			'torrentId' => (int) $TorrentID,
-			'timeFilled' => $TimeFilled == 0 ? '' : $TimeFilled
+			'title' => $Request['Title'],
+			'year' => (int)$Request['Year'],
+			'image' => $Request['Image'],
+			'description' => $Request['Description'],
+			'recordLabel' => $Request['RecordLabel'],
+			'catalogueNumber' => $Request['CatalogueNumber'],
+			'releaseType' => $ReleaseTypes[$Request['ReleaseType']],
+			'bitrateList' => $Request['BitrateList'],
+			'formatList' => $Request['FormatList'],
+			'mediaList' => $Request['MediaList'],
+			'logCue' => $Request['LogCue'],
+			'isFilled' => ($Request['TorrentID'] > 0),
+			'fillerId' => (int)$Request['FillerID'],
+			'fillerName' => $Filler ? $Filler['Username'] : '',
+			'torrentId' => (int)$Request['TorrentID'],
+			'timeFilled' => $Request['TimeFilled'] == 0 ? '' : $Request['TimeFilled']
 		);
 	}
+
 	json_die("success", array(
 		'currentPage' => intval($Page),
 		'pages' => ceil($NumResults / REQUESTS_PER_PAGE),

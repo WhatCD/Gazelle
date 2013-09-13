@@ -3,10 +3,10 @@
 include(SERVER_ROOT.'/sections/torrents/ranking_funcs.php');
 
 $Top10 = $Cache->get_value('similar_albums_'.$GroupID);
-if ($Top10 === False || isset($Top10[$GroupID])) {
+if ($Top10 === false || isset($Top10[$GroupID])) {
 
 	$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
-	if ($VotePairs === False || isset($VotePairs[$GroupID])) {
+	if ($VotePairs === false || isset($VotePairs[$GroupID])) {
 		$DB->query("
 			SELECT v.GroupID, SUM(IF(v.Type='Up',1,0)) AS Ups, COUNT(1) AS Total
 			FROM (	SELECT UserID
@@ -46,11 +46,11 @@ if (count($Top10) > 0) {
 
 	$Groups = Torrents::get_groups($Top10Groups, true, true, false);
 	$i = 0;
-	foreach ($Groups['matches'] as $MatchGroupID => $MatchGroup) {
+	foreach ($Groups as $MatchGroupID => $MatchGroup) {
 		$i++;
 		$Str = Artists::display_artists($MatchGroup['ExtendedArtists']).'<a href="torrents.php?id='.$MatchGroupID.'">'.$MatchGroup['Name'].'</a>';
 ?>
-			<tr class="votes_rows hidden <?=($i % 2 ? 'rowb' : 'rowa')?>">
+			<tr class="votes_rows hidden <?=($i & 1) ? 'rowb' : 'rowa'?>">
 				<td><span class="like_ranks"><?=$i?>.</span> <?=$Str?></td>
 			</tr>
 <?	} ?>

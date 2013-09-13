@@ -484,7 +484,6 @@ foreach ($Categories as $CatKey => $CatName) {
 			</td>
 		</tr>
 <?
-	$Results = $Results['matches'];
 	foreach ($TorrentsInfo as $TorrentID => $Info) {
 		list($GroupID, , $Time) = array_values($Info);
 

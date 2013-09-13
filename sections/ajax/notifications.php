@@ -30,13 +30,11 @@ list($TorrentCount) = $DB->next_record();
 
 if (count($GroupIDs)) {
 	$TorrentGroups = Torrents::get_groups($GroupIDs);
-	$TorrentGroups = $TorrentGroups['matches'];
-
 	$DB->query("
 		UPDATE users_notify_torrents
-		SET UnRead='0'
-		WHERE UserID=".$LoggedUser['ID']);
-	$Cache->delete_value('notifications_new_'.$LoggedUser['ID']);
+		SET UnRead = '0'
+		WHERE UserID = $LoggedUser[ID]");
+	$Cache->delete_value("notifications_new_$LoggedUser[ID]");
 }
 
 $DB->set_query_id($Results);

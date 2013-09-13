@@ -288,6 +288,7 @@ class SphinxqlQuery {
 			$Errno = $this->Sphinxql->errno;
 			$Error = $this->Sphinxql->error;
 			$this->error("Query returned error $Errno ($Error).\n$this->QueryString");
+			$Meta = null;
 		} else {
 			$Errno = 0;
 			$Error = '';

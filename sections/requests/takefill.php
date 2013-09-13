@@ -206,8 +206,9 @@ foreach ($ArtistIDs as $ArtistID) {
 	$Cache->delete_value("artists_requests_$ArtistID");
 }
 
-$SS->UpdateAttributes('requests', array('torrentid', 'fillerid'), array($RequestID => array((int)$TorrentID, (int)$FillerID)));
 Requests::update_sphinx_requests($RequestID);
+$SphQL = new SphinxqlQuery();
+$SphQL->raw_query("UPDATE requests, requests_delta SET torrentid = $TorrentID, fillerid = $FillerID WHERE id = $RequestID", false);
 
 header("Location: requests.php?action=view&id=$RequestID");
 ?>

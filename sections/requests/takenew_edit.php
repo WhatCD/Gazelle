@@ -25,23 +25,16 @@ if ($NewRequest) {
 		error(0);
 	}
 
-	$Request = Requests::get_requests(array($RequestID));
-	$Request = $Request['matches'][$RequestID];
-	if (empty($Request)) {
+	$Request = Requests::get_request($RequestID);
+	if ($Request === false) {
 		error(404);
 	}
-
-	list($RequestID, $RequestorID, $RequestorName, $TimeAdded, $LastVote, $CategoryID, $Title, $Year, $Image, $Description, $CatalogueNumber, $RecordLabel,
-		$ReleaseType, $BitrateList, $FormatList, $MediaList, $LogCue, $FillerID, $FillerName, $TorrentID, $TimeFilled, $GroupID, $OCLC) = $Request;
 	$VoteArray = Requests::get_votes_array($RequestID);
 	$VoteCount = count($VoteArray['Voters']);
-
-	$IsFilled = !empty($TorrentID);
-
-	$CategoryName = $Categories[$CategoryID - 1];
-
-	$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && (($CategoryID === '0') || ($CategoryName === 'Music' && $Year === '0')));
-	$CanEdit = ((!$IsFilled && $LoggedUser['ID'] === $RequestorID && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
+	$IsFilled = !empty($Request['TorrentID']);
+	$CategoryName = $Categories[$Request['CategoryID'] - 1];
+	$ProjectCanEdit = (check_perms('project_team') && !$IsFilled && ($Request['CategoryID'] === '0' || ($CategoryName === 'Music' && $Year === '0')));
+	$CanEdit = ((!$IsFilled && $LoggedUser['ID'] === $Request['UserID'] && $VoteCount < 2) || $ProjectCanEdit || check_perms('site_moderate_requests'));
 
 	if (!$CanEdit) {
 		error(403);
