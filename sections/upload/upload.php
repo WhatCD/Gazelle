@@ -67,7 +67,7 @@ if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid']
 	$UploadForm = $Categories[$Properties['CategoryID'] - 1];
 	$Properties['CategoryName'] = $Categories[$Properties['CategoryID'] - 1];
 	$Properties['Artists'] = Requests::get_artists($_GET['requestid']);
-	$Properties['TagList'] = implode(', ', Requests::get_tags($_GET['requestid']));
+	$Properties['TagList'] = implode(', ', Requests::get_tags($_GET['requestid'])[$_GET['requestid']]);
 }
 
 if (!empty($ArtistForm)) {

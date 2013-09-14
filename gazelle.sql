@@ -23,19 +23,6 @@ CREATE TABLE `api_users` (
   KEY `UserID` (`UserID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
-CREATE TABLE `artist_comments` (
-  `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `ArtistID` int(10) NOT NULL,
-  `AuthorID` int(10) NOT NULL,
-  `AddedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Body` mediumtext,
-  `EditedUserID` int(10) DEFAULT NULL,
-  `EditedTime` datetime DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `TopicID` (`ArtistID`),
-  KEY `AuthorID` (`AuthorID`)
-) ENGINE=InnoDB CHARSET utf8;
-
 CREATE TABLE `artists_alias` (
   `AliasID` int(10) NOT NULL AUTO_INCREMENT,
   `ArtistID` int(10) NOT NULL,
@@ -56,14 +43,6 @@ CREATE TABLE `artists_group` (
   PRIMARY KEY (`ArtistID`),
   KEY `Name` (`Name`),
   KEY `RevisionID` (`RevisionID`)
-) ENGINE=InnoDB CHARSET utf8;
-
-CREATE TABLE `artists_last_read_comments` (
-  `UserID` int(10) NOT NULL,
-  `ArtistID` int(10) NOT NULL,
-  `CommentID` int(10) NOT NULL,
-  PRIMARY KEY (`UserID`,`ArtistID`),
-  KEY `ArtistID` (`ArtistID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `artists_similar` (
@@ -205,17 +184,6 @@ CREATE TABLE `collages_artists` (
   PRIMARY KEY (`CollageID`,`ArtistID`),
   KEY `UserID` (`UserID`),
   KEY `Sort` (`Sort`)
-) ENGINE=InnoDB CHARSET utf8;
-
-CREATE TABLE `collages_comments` (
-  `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `CollageID` int(10) NOT NULL,
-  `Body` mediumtext NOT NULL,
-  `UserID` int(10) NOT NULL DEFAULT '0',
-  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`ID`),
-  KEY `CollageID` (`CollageID`),
-  KEY `UserID` (`UserID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `collages_torrents` (
@@ -667,19 +635,6 @@ CREATE TABLE `pm_messages` (
   KEY `ConvID` (`ConvID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
-CREATE TABLE `pre_log` (
-  `Hash` varchar(32) NOT NULL,
-  `Category` varchar(12) NOT NULL,
-  `Name` varchar(255) NOT NULL,
-  `Group` varchar(50) NOT NULL,
-  `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Nuke` enum('0','1') NOT NULL DEFAULT '0',
-  `Genre` varchar(50) DEFAULT NULL,
-  `Files` int(4) NOT NULL DEFAULT '0',
-  `Size` bigint(12) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`Hash`)
-) ENGINE=InnoDB CHARSET utf8;
-
 CREATE TABLE `push_notifications_usage` (
   `PushService` varchar(10) NOT NULL,
   `TimesUsed` int(10) NOT NULL DEFAULT '0',
@@ -784,17 +739,6 @@ CREATE TABLE `requests_artists` (
   `AliasID` int(10) NOT NULL,
   `Importance` enum('1','2','3','4','5','6','7') DEFAULT NULL,
   PRIMARY KEY (`RequestID`,`AliasID`)
-) ENGINE=InnoDB CHARSET utf8;
-
-CREATE TABLE `requests_comments` (
-  `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `RequestID` int(10) NOT NULL,
-  `AuthorID` int(10) NOT NULL,
-  `AddedTime` datetime DEFAULT NULL,
-  `Body` mediumtext,
-  `EditedUserID` int(10) DEFAULT NULL,
-  `EditedTime` datetime DEFAULT NULL,
-  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `requests_tags` (
@@ -1074,18 +1018,6 @@ CREATE TABLE `stylesheets` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
-CREATE TABLE `subscribed_forums` (
-  `ForumID` int(10) NOT NULL,
-  `UserID` int(10) NOT NULL,
-  PRIMARY KEY (`ForumID`,`UserID`)
-) ENGINE=InnoDB CHARSET utf8;
-
-CREATE TABLE `subscribed_users` (
-  `UserID` int(10) NOT NULL,
-  `SubscriberID` int(10) NOT NULL,
-  PRIMARY KEY (`UserID`,`SubscriberID`)
-) ENGINE=InnoDB CHARSET utf8;
-
 CREATE TABLE `tag_aliases` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `BadTag` varchar(30) DEFAULT NULL,
@@ -1151,7 +1083,6 @@ CREATE TABLE `torrents` (
   `HasCue` enum('0','1') NOT NULL DEFAULT '0',
   `LogScore` int(6) NOT NULL DEFAULT '0',
   `info_hash` blob NOT NULL,
-  `InfoHash` char(40) NOT NULL DEFAULT '',
   `FileCount` int(6) NOT NULL,
   `FileList` mediumtext NOT NULL,
   `FilePath` varchar(255) NOT NULL DEFAULT '',
@@ -1161,28 +1092,11 @@ CREATE TABLE `torrents` (
   `last_action` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `FreeTorrent` enum('0','1','2') NOT NULL DEFAULT '0',
   `FreeLeechType` enum('0','1','2','3') NOT NULL DEFAULT '0',
-  `Dupable` enum('0','1') NOT NULL DEFAULT '0',
-  `DupeReason` varchar(40) DEFAULT NULL,
   `Time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Anonymous` enum('0','1') NOT NULL DEFAULT '0',
   `Description` text,
   `Snatched` int(10) unsigned NOT NULL DEFAULT '0',
-  `completed` int(11) NOT NULL,
-  `announced_http` int(11) NOT NULL,
-  `announced_http_compact` int(11) NOT NULL,
-  `announced_http_no_peer_id` int(11) NOT NULL,
-  `announced_udp` int(11) NOT NULL,
-  `scraped_http` int(11) NOT NULL,
-  `scraped_udp` int(11) NOT NULL,
-  `started` int(11) NOT NULL,
-  `stopped` int(11) NOT NULL,
-  `flags` int(11) NOT NULL,
-  `mtime` int(11) NOT NULL,
-  `ctime` int(11) NOT NULL,
   `balance` bigint(20) NOT NULL DEFAULT '0',
-  `pid` int(5) NOT NULL DEFAULT '0',
   `LastReseedRequest` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `ExtendedGrace` enum('0','1') NOT NULL DEFAULT '0',
   `TranscodedFrom` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `InfoHash` (`info_hash`(40)),
@@ -1199,7 +1113,6 @@ CREATE TABLE `torrents` (
   KEY `Snatched` (`Snatched`),
   KEY `last_action` (`last_action`),
   KEY `Time` (`Time`),
-  KEY `flags` (`flags`),
   KEY `FreeTorrent` (`FreeTorrent`)
 ) ENGINE=InnoDB CHARSET utf8;
 
@@ -1256,20 +1169,6 @@ CREATE TABLE `torrents_cassette_approved` (
   KEY `TimeAdded` (`TimeAdded`)
 ) ENGINE=InnoDB CHARSET utf8;
 
-CREATE TABLE `torrents_comments` (
-  `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `GroupID` int(10) NOT NULL,
-  `TorrentID` int(10) unsigned NOT NULL,
-  `AuthorID` int(10) NOT NULL,
-  `AddedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `Body` mediumtext,
-  `EditedUserID` int(10) DEFAULT NULL,
-  `EditedTime` datetime DEFAULT NULL,
-  PRIMARY KEY (`ID`),
-  KEY `TopicID` (`GroupID`),
-  KEY `AuthorID` (`AuthorID`)
-) ENGINE=InnoDB CHARSET utf8;
-
 CREATE TABLE `torrents_files` (
   `TorrentID` int(10) NOT NULL,
   `File` mediumblob NOT NULL,
@@ -1301,14 +1200,6 @@ CREATE TABLE `torrents_group` (
   KEY `Year` (`Year`),
   KEY `Time` (`Time`),
   KEY `RevisionID` (`RevisionID`)
-) ENGINE=InnoDB CHARSET utf8;
-
-CREATE TABLE `torrents_last_read_comments` (
-  `UserID` int(10) NOT NULL,
-  `GroupID` int(10) NOT NULL,
-  `CommentID` int(10) NOT NULL,
-  PRIMARY KEY (`UserID`,`GroupID`),
-  KEY `GroupID` (`GroupID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_logs_new` (
@@ -1402,13 +1293,6 @@ CREATE TABLE `torrents_votes` (
   CONSTRAINT `torrents_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET utf8;
 
-CREATE TABLE `users_artists_comments_subscriptions` (
-  `UserID` int(10) NOT NULL,
-  `ArtistID` int(10) NOT NULL,
-  PRIMARY KEY (`UserID`,`ArtistID`),
-  KEY `ArtistID` (`ArtistID`)
-) ENGINE=InnoDB CHARSET utf8;
-
 CREATE TABLE `users_collage_subs` (
   `UserID` int(10) NOT NULL,
   `CollageID` int(10) NOT NULL,
@@ -1424,13 +1308,6 @@ CREATE TABLE `users_comments_last_read` (
   `PostID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`Page`,`PageID`),
   KEY `Page` (`Page`,`PageID`)
-) ENGINE=InnoDB CHARSET utf8;
-
-CREATE TABLE `users_comments_subscriptions` (
-  `UserID` int(10) NOT NULL,
-  `GroupID` int(10) NOT NULL,
-  PRIMARY KEY (`UserID`,`GroupID`),
-  KEY `GroupID` (`GroupID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_donor_ranks` (
@@ -1529,7 +1406,6 @@ CREATE TABLE `users_info` (
   `StyleURL` varchar(255) DEFAULT NULL,
   `Info` text NOT NULL,
   `Avatar` varchar(255) NOT NULL,
-  `Country` int(10) unsigned NOT NULL,
   `AdminComment` text NOT NULL,
   `SiteOptions` text NOT NULL,
   `ViewAvatars` enum('0','1') NOT NULL DEFAULT '1',
@@ -1537,9 +1413,6 @@ CREATE TABLE `users_info` (
   `Artist` enum('0','1') NOT NULL DEFAULT '0',
   `DownloadAlt` enum('0','1') NOT NULL DEFAULT '0',
   `Warned` datetime NOT NULL,
-  `MessagesPerPage` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `DeletePMs` enum('0','1') NOT NULL DEFAULT '1',
-  `SaveSentPMs` enum('0','1') NOT NULL DEFAULT '0',
   `SupportFor` varchar(255) NOT NULL,
   `TorrentGrouping` enum('0','1','2') NOT NULL COMMENT '0=Open,1=Closed,2=Off',
   `ShowTags` enum('0','1') NOT NULL DEFAULT '1',
@@ -1573,8 +1446,6 @@ CREATE TABLE `users_info` (
   `PermittedForums` varchar(150) NOT NULL DEFAULT '',
   `UnseededAlerts` enum('0','1') NOT NULL DEFAULT '0',
   `LastReadBlog` int(10) NOT NULL DEFAULT '0',
-  `TorrentsCommentsCatchupTime` datetime DEFAULT NULL,
-  `ArtistsCommentsCatchupTime` datetime DEFAULT NULL,
   `InfoTitle` varchar(255) NOT NULL,
   UNIQUE KEY `UserID` (`UserID`),
   KEY `SupportFor` (`SupportFor`),
@@ -1734,7 +1605,6 @@ CREATE TABLE `users_main` (
   `Email` varchar(255) NOT NULL,
   `PassHash` varchar(60) NOT NULL,
   `Secret` char(32) NOT NULL,
-  `TorrentKey` char(32) NOT NULL,
   `IRCKey` char(32) DEFAULT NULL,
   `LastLogin` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `LastAccess` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -1749,22 +1619,10 @@ CREATE TABLE `users_main` (
   `Invites` int(10) unsigned NOT NULL DEFAULT '0',
   `PermissionID` int(10) unsigned NOT NULL,
   `CustomPermissions` text,
-  `LastSeed` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `pass` blob NOT NULL COMMENT 'useless column',
   `can_leech` tinyint(4) NOT NULL DEFAULT '1',
-  `wait_time` int(11) NOT NULL,
-  `peers_limit` int(11) DEFAULT '1000',
-  `torrents_limit` int(11) DEFAULT '1000',
   `torrent_pass` char(32) NOT NULL,
-  `torrent_pass_secret` bigint(20) NOT NULL COMMENT 'useless column',
-  `fid_end` int(11) NOT NULL COMMENT 'useless column',
-  `name` char(8) NOT NULL COMMENT 'useless column',
-  `OldPassHash` char(32) DEFAULT NULL,
-  `Cursed` enum('1','0') NOT NULL DEFAULT '0',
-  `CookieID` varchar(32) DEFAULT NULL,
   `RequiredRatio` double(10,8) NOT NULL DEFAULT '0.00000000',
   `RequiredRatioWork` double(10,8) NOT NULL DEFAULT '0.00000000',
-  `Language` char(2) NOT NULL DEFAULT '',
   `ipcc` varchar(2) NOT NULL DEFAULT '',
   `FLTokens` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
@@ -1778,7 +1636,6 @@ CREATE TABLE `users_main` (
   KEY `Downloaded` (`Downloaded`),
   KEY `Enabled` (`Enabled`),
   KEY `Invites` (`Invites`),
-  KEY `Cursed` (`Cursed`),
   KEY `torrent_pass` (`torrent_pass`),
   KEY `RequiredRatio` (`RequiredRatio`),
   KEY `cc_index` (`ipcc`)

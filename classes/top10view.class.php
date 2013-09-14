@@ -54,7 +54,7 @@ class Top10View {
 		if (!empty($Image)) { ?>
 			<li>
 				<a href="<?=$Url?><?=$Name?>">
-					<img class="tooltip large_tile" title="<?=$Name?>" src="<?=$Image?>" />
+					<img class="tooltip large_tile" title="<?=$Name?>" src="<?=ImageTools::process($Image)?>" />
 				</a>
 			</li>
 <?		}
@@ -76,6 +76,7 @@ class Top10View {
 	private static function render_list($Url, $Name, $Image) {
 		if (!empty($Image)) {
 			$UseTooltipster = !isset(G::$LoggedUser['Tooltipster']) || G::$LoggedUser['Tooltipster'];
+			$Image = ImageTools::process($Image);
 			$Title = "title=\"<img class='large_tile' src='$Image'/>\"";
 			?>
 			<li>

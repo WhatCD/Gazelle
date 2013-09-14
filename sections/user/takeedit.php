@@ -287,7 +287,7 @@ if ($DB->has_results()) {
 		INSERT INTO lastfm_users (ID, Username)
 		VALUES ('$UserID', '$LastFMUsername')");
 }
-
+G::$Cache->delete_value("lastfm_username_$UserID");
 
 Donations::update_rewards($UserID);
 NotificationsManager::save_settings($UserID);

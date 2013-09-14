@@ -167,9 +167,9 @@ class Misc {
 
 		G::$DB->query("
 			INSERT INTO forums_topics
-				(Title, AuthorID, ForumID, LastPostTime, LastPostAuthorID)
+				(Title, AuthorID, ForumID, LastPostTime, LastPostAuthorID, CreatedTime)
 			VALUES
-				('$Title', '$AuthorID', '$ForumID', '".sqltime()."', '$AuthorID')");
+				('$Title', '$AuthorID', '$ForumID', '".sqltime()."', '$AuthorID', '".sqltime()."')");
 		$TopicID = G::$DB->inserted_id();
 		$Posts = 1;
 

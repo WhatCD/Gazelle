@@ -3,6 +3,21 @@
 define('LASTFM_API_URL', 'http://ws.audioscrobbler.com/2.0/?method=');
 class LastFM {
 
+	public static function get_lastfm_username($UserID) {
+		$Username = G::$Cache->get_value("lastfm_username_$UserID");
+		if ($Username === false) {
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
+				SELECT Username
+				FROM lastfm_users
+				WHERE ID = $UserID");
+			list($Username) = G::$DB->next_record();
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value("lastfm_username_$UserID", $Username, 0);
+		}
+		return $Username;
+	}
+
 	public static function get_artist_events($ArtistID, $Artist, $Limit = 15) {
 		$ArtistEvents = G::$Cache->get_value("artist_events_$ArtistID");
 		if (empty($ArtistEvents)) {

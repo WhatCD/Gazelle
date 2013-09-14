@@ -276,7 +276,10 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 		</div>
 <?
 // Last.fm statistics and comparability
-include(SERVER_ROOT.'/sections/user/lastfm.php');
+$LastFMUsername = LastFM::get_lastfm_username($UserID);
+if ($LastFMUsername)  {
+	LastFMView::render_sidebar($LastFMUsername, $UserID, $OwnProfile);
+}
 
 if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requestsfilled_bounty')) {
 	$DB->query("

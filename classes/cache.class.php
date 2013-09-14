@@ -102,12 +102,12 @@ class CACHE extends Memcache {
 		if (!$this->InternalCache) {
 			$NoCache = true;
 		}
-		$StartTime=microtime(true);
+		$StartTime = microtime(true);
 		if (empty($Key)) {
 			trigger_error('Cache retrieval failed for empty key');
 		}
 
-		if (isset($_GET['clearcache']) && $this->CanClear && !Misc::in_array_partial($Key, $this->PersistentKeys)) {
+		if (!empty($_GET['clearcache']) && $this->CanClear && !isset($this->ClearedKeys[$Key]) && !Misc::in_array_partial($Key, $this->PersistentKeys)) {
 			if ($_GET['clearcache'] === '1') {
 				// Because check_perms() isn't true until LoggedUser is pulled from the cache, we have to remove the entries loaded before the LoggedUser data
 				// Because of this, not user cache data will require a secondary pageload following the clearcache to update
@@ -120,15 +120,7 @@ class CACHE extends Memcache {
 						}
 					}
 				}
-				if (!isset($this->ClearedKeys[$Key])) {
-					$this->delete($Key);
-					$this->ClearedKeys[$Key] = true;
-					$this->Time += (microtime(true) - $StartTime) * 1000;
-					return false;
-				}
-			} elseif (!isset($this->ClearedKeys[$Key]) && $_GET['clearcache'] == $Key) {
 				$this->delete($Key);
-				$this->ClearedKeys[$Key] = true;
 				$this->Time += (microtime(true) - $StartTime) * 1000;
 				return false;
 			} elseif ($_GET['clearcache'] == $Key) {
@@ -137,16 +129,13 @@ class CACHE extends Memcache {
 				return false;
 			} elseif (substr($_GET['clearcache'], -1) === '*') {
 				$Prefix = substr($_GET['clearcache'], 0, -1);
-				if ($Prefix == substr($Key, 0, strlen($Prefix))) {
+				if ($Prefix === '' || $Prefix === substr($Key, 0, strlen($Prefix))) {
 					$this->delete($Key);
 					$this->Time += (microtime(true) - $StartTime) * 1000;
 					return false;
 				}
-			} elseif (!isset($this->ClearedKeys[$_GET['clearcache']]) && isset($this->CacheHits[$_GET['clearcache']])) {
-				unset($this->CacheHits[$_GET['clearcache']]);
-				$this->ClearedKeys[$_GET['clearcache']] = true;
-				$this->delete($_GET['clearcache']);
 			}
+			$this->ClearedKeys[$Key] = true;
 		}
 
 		// For cases like the forums, if a key is already loaded, grab the existing pointer
