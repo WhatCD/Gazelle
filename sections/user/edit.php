@@ -224,7 +224,7 @@ echo $Val->GenerateJS('userform');
 				<td class="label tooltip" title="Enabling torrent grouping will place multiple formats of the same torrent group together beneath a common header."><strong>Torrent grouping</strong></td>
 				<td>
 					<div class="option_group">
-						<input type="checkbox" name="disablegrouping" id="disablegrouping"<?Format::selected('DisableGrouping2', 0, 'checked', $SiteOptions);?> />
+						<input type="checkbox" name="disablegrouping" id="disablegrouping"<?=$SiteOptions['DisableGrouping2'] == 0 ? ' checked="checked"' : ''?> />
 						<label for="disablegrouping">Enable torrent grouping</label>
 					</div>
 				</td>

@@ -27,10 +27,10 @@ if (!is_number($_POST['categoryid'])) {
 
 if (!isset($_POST['type'])) {
 	error(404);
-} else if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
+} elseif (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	$Type = $_POST['type'];
 	$ReportType = $Types[$CategoryID][$Type];
-} else if (array_key_exists($_POST['type'],$Types['master'])) {
+} elseif (array_key_exists($_POST['type'], $Types['master'])) {
 	$Type = $_POST['type'];
 	$ReportType = $Types['master'][$Type];
 } else {

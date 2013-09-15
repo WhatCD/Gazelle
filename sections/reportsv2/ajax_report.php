@@ -13,7 +13,7 @@ $CategoryID = $_POST['categoryid'];
 
 if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	$ReportType = $Types[$CategoryID][$_POST['type']];
-} else if (array_key_exists($_POST['type'],$Types['master'])) {
+} elseif (array_key_exists($_POST['type'],$Types['master'])) {
 	$ReportType = $Types['master'][$_POST['type']];
 } else {
 	echo 'HAX IN REPORT TYPE';

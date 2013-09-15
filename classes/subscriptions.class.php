@@ -292,7 +292,7 @@ class Subscriptions {
 			G::$DB->query("DELETE FROM users_subscriptions WHERE TopicID = '$OldPageID'");
 			G::$DB->query("DELETE FROM forums_last_read_topics WHERE TopicID = $OldPageID");
 		} else {
-			if($NewPageID !== null) {
+			if ($NewPageID !== null) {
 				G::$DB->query("UPDATE IGNORE users_subscriptions_comments SET PageID = '$NewPageID' WHERE Page = '$Page' AND PageID = '$OldPageID'");
 				// last read handling
 				// 1) update all rows that have no key collisions (i.e. users that haven't previously read both pages or if there are only comments on one page)

@@ -10,13 +10,13 @@ class Requests {
 		G::$DB->query("
 			REPLACE INTO sphinx_requests_delta (
 				ID, UserID, TimeAdded, LastVote, CategoryID, Title,
-				Year, ReleaseType, CatalogueNumber, BitrateList,
+				Year, ReleaseType, CatalogueNumber, RecordLabel, BitrateList,
 				FormatList, MediaList, LogCue, FillerID, TorrentID,
 				TimeFilled, Visible, Votes, Bounty)
 			SELECT
 				ID, r.UserID, UNIX_TIMESTAMP(TimeAdded) AS TimeAdded,
-				UNIX_TIMESTAMP(LastVote) AS LastVote, CategoryID,
-				Title, Year, ReleaseType, CatalogueNumber, BitrateList,
+				UNIX_TIMESTAMP(LastVote) AS LastVote, CategoryID, Title,
+				Year, ReleaseType, CatalogueNumber, RecordLabel, BitrateList,
 				FormatList, MediaList, LogCue, FillerID, TorrentID,
 				UNIX_TIMESTAMP(TimeFilled) AS TimeFilled, Visible,
 				COUNT(rv.UserID) AS Votes, SUM(rv.Bounty) >> 10 AS Bounty

@@ -19,7 +19,7 @@ if ($Forum === false) {
 }
 
 
-if(!Forums::check_forumperm($ForumID, 'Write') || !Forums::check_forumperm($ForumID, 'Create')) {
+if (!Forums::check_forumperm($ForumID, 'Write') || !Forums::check_forumperm($ForumID, 'Create')) {
 	error(403);
 }
 View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbcode,jquery.validate,form_validate');

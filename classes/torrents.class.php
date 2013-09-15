@@ -512,38 +512,20 @@ class Torrents {
 		G::$DB->query("
 			REPLACE INTO sphinx_delta
 				(ID, GroupID, GroupName, TagList, Year, CategoryID, Time, ReleaseType, RecordLabel,
-				CatalogueNumber, VanityHouse, Size, Snatched, Seeders, Leechers, LogScore, Scene,
-				HasLog, HasCue, FreeTorrent, Media, Format, Encoding, RemasterYear, RemasterTitle,
+				CatalogueNumber, VanityHouse, Size, Snatched, Seeders, Leechers, LogScore, Scene, HasLog,
+				HasCue, FreeTorrent, Media, Format, Encoding, Description, RemasterYear, RemasterTitle,
 				RemasterRecordLabel, RemasterCatalogueNumber, FileList, VoteScore, ArtistName)
 			SELECT
 				t.ID, g.ID, Name, TagList, Year, CategoryID, UNIX_TIMESTAMP(t.Time), ReleaseType,
 				RecordLabel, CatalogueNumber, VanityHouse, Size >> 10 AS Size, Snatched, Seeders,
 				Leechers, LogScore, CAST(Scene AS CHAR), CAST(HasLog AS CHAR), CAST(HasCue AS CHAR),
-				CAST(FreeTorrent AS CHAR), Media, Format, Encoding,
+				CAST(FreeTorrent AS CHAR), Media, Format, Encoding, Description,
 				RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
 				REPLACE(FileList, '_', ' ') AS FileList, $VoteScore, '".db_string($ArtistName)."'
 			FROM torrents AS t
 				JOIN torrents_group AS g ON g.ID = t.GroupID
 			WHERE g.ID = $GroupID");
 
-/*		G::$DB->query("
-			INSERT INTO sphinx_delta
-				(ID, ArtistName)
-			SELECT torrents.ID, artists.ArtistName
-			FROM (
-				SELECT
-					GroupID,
-					GROUP_CONCAT(aa.Name separator ' ') AS ArtistName
-				FROM torrents_artists AS ta
-					JOIN artists_alias AS aa ON aa.AliasID = ta.AliasID
-				WHERE ta.GroupID = $GroupID
-					AND ta.Importance IN ('1', '4', '5', '6')
-				GROUP BY ta.GroupID
-			) AS artists
-				JOIN torrents USING(GroupID)
-			ON DUPLICATE KEY UPDATE
-				ArtistName = VALUES(ArtistName)");
-*/
 		G::$Cache->delete_value("torrents_details_$GroupID");
 		G::$Cache->delete_value("torrent_group_$GroupID");
 

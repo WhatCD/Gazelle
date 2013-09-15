@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-09-14 by Ajax
+Added date constrains to forum search
+
 2013-09-12 by porkpie
 Switch to SphinxQL for request searches
 

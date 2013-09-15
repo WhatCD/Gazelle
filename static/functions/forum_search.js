@@ -6,4 +6,11 @@ $(document).ready(function() {
 		$("input[data-category='" + id + "']").attr("checked", !isChecked);
 		e.preventDefault();
 	});
+
+	$("#type_body").click(function() {
+		$("#post_created_row").gshow();
+	});
+	$("#type_title").click(function() {
+		$("#post_created_row").ghide();
+	});
 });

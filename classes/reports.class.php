@@ -13,9 +13,9 @@ class Reports {
 			$RemasterDisplayString = ' &lt;';
 			if ($RemasterTitle != '' && $RemasterYear != '') {
 				$RemasterDisplayString .= "$RemasterTitle - $RemasterYear";
-			} else if ($RemasterTitle != '' && $RemasterYear == '') {
+			} elseif ($RemasterTitle != '' && $RemasterYear == '') {
 				$RemasterDisplayString .= $RemasterTitle;
-			} else if ($RemasterTitle == '' && $RemasterYear != '') {
+			} elseif ($RemasterTitle == '' && $RemasterYear != '') {
 				$RemasterDisplayString .= $RemasterYear;
 			}
 			$RemasterDisplayString .= '&gt;';

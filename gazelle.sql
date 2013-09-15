@@ -814,6 +814,7 @@ CREATE TABLE `sphinx_delta` (
   `RemasterRecordLabel` varchar(50) DEFAULT NULL,
   `RemasterCatalogueNumber` varchar(50) DEFAULT NULL,
   `FileList` mediumtext,
+  `Description` text,
   `VoteScore` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `GroupID` (`GroupID`)

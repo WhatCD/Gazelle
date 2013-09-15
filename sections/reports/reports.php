@@ -20,7 +20,7 @@ View::show_header('Reports', 'bbcode,reports');
 if ($_GET['id'] && is_number($_GET['id'])) {
 	$View = 'Single report';
 	$Where = 'r.ID = ' . $_GET['id'];
-} else if (empty($_GET['view'])) {
+} elseif (empty($_GET['view'])) {
 	$View = 'New';
 	$Where = "Status = 'New'";
 } else {
@@ -205,7 +205,7 @@ $DB->set_query_id($Reports);
 					<td colspan="2">
 <?					if ($ClaimerID == $LoggedUser['ID']) { ?>
 						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?> <a href="#" onclick="unClaim(<?=$ReportID?>); return false;" class="brackets">Unclaim</a></span>
-<?					} else if ($ClaimerID) { ?>
+<?					} elseif ($ClaimerID) { ?>
 						<span id="claimed_<?=$ReportID?>">Claimed by <?=Users::format_username($ClaimerID, false, false, false, false)?></span>
 <?					} else { ?>
 						<a href="#" id="claim_<?=$ReportID?>" onclick="claim(<?=$ReportID?>); return false;" class="brackets">Claim</a>

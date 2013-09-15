@@ -29,7 +29,7 @@ if (!is_number($_POST['categoryid']) || !is_number($TorrentID)) {
 
 if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	$ReportType = $Types[$CategoryID][$_POST['type']];
-} else if (array_key_exists($_POST['type'], $Types['master'])) {
+} elseif (array_key_exists($_POST['type'], $Types['master'])) {
 	$ReportType = $Types['master'][$_POST['type']];
 } else {
 	//There was a type but it wasn't an option!
@@ -39,7 +39,7 @@ if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 
 if (!isset($_POST['from_delete'])) {
 	$Report = true;
-} else if (!is_number($_POST['from_delete'])) {
+} elseif (!is_number($_POST['from_delete'])) {
 	echo 'Hax occured in from_delete';
 }
 
@@ -50,7 +50,7 @@ if ($Recipient == 'Uploader') {
 	} else {
 		$Message = "I am PMing you as you are the uploader of [url=https://".SSL_SITE_URL."/torrents.php?torrentid=$TorrentID]the above torrent[/url].\n\n$Message";
 	}
-} else if ($Recipient == 'Reporter') {
+} elseif ($Recipient == 'Reporter') {
 	$ToID = $_POST['reporterid'];
 	$Message = "You reported [url=https://".SSL_SITE_URL."/torrents.php?torrentid=$TorrentID]the above torrent[/url] for the reason ".$ReportType['title'].":\n[quote]".$_POST['report_reason']."[/quote]\n$Message";
 } else {

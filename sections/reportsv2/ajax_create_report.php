@@ -26,8 +26,8 @@ if (!is_number($_POST['torrentid'])) {
 $DB->query("
 	SELECT tg.CategoryID
 	FROM torrents_group AS tg
-		JOIN torrents AS t ON t.GroupID=tg.ID
-	WHERE t.ID = ".$TorrentID);
+		JOIN torrents AS t ON t.GroupID = tg.ID
+	WHERE t.ID = $TorrentID");
 if (!$DB->has_results()) {
 	$Err = 'No torrent with that ID exists!';
 } else {
@@ -37,10 +37,10 @@ if (!$DB->has_results()) {
 if (!isset($_POST['type'])) {
 	echo 'Missing Type';
 	die();
-} else if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
+} elseif (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	$Type = $_POST['type'];
 	$ReportType = $Types[$CategoryID][$Type];
-} else if (array_key_exists($_POST['type'],$Types['master'])) {
+} elseif (array_key_exists($_POST['type'], $Types['master'])) {
 	$Type = $_POST['type'];
 	$ReportType = $Types['master'][$Type];
 } else {
@@ -66,8 +66,8 @@ if (!empty($Err)) {
 $DB->query("
 	SELECT ID
 	FROM reportsv2
-	WHERE TorrentID=$TorrentID
-		AND ReporterID=".db_string($LoggedUser['ID'])."
+	WHERE TorrentID = $TorrentID
+		AND ReporterID = ".db_string($LoggedUser['ID'])."
 		AND ReportedTime > '".time_minus(3)."'");
 if ($DB->has_results()) {
 	die();
@@ -81,7 +81,7 @@ $DB->query("
 
 $ReportID = $DB->inserted_id();
 
-$Cache->delete_value('reports_torrent_'.$TorrentID);
+$Cache->delete_value("reports_torrent_$TorrentID");
 $Cache->increment('num_torrent_reportsv2');
 
 echo $ReportID;

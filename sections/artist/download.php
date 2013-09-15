@@ -165,9 +165,9 @@ while (list($Downloads, $GroupIDs) = $Collector->get_downloads('GroupID')) {
 		}
 		if ($Releases[$GroupID]['Importance'] == 1) {
 			$ReleaseTypeName = $ReleaseTypes[$Download['ReleaseType']];
-		} else if ($Releases[$GroupID]['Importance'] == 2) {
+		} elseif ($Releases[$GroupID]['Importance'] == 2) {
 			$ReleaseTypeName = 'Guest Appearance';
-		} else if ($Releases[$GroupID]['Importance'] == 3) {
+		} elseif ($Releases[$GroupID]['Importance'] == 3) {
 			$ReleaseTypeName = 'Remixed By';
 		}
 		$Collector->add_file($TorrentFile, $Download, $ReleaseTypeName);

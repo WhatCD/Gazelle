@@ -22,6 +22,39 @@ if (isset($_GET['search'])) {
 	$Search = '';
 }
 
+$ThreadAfterDate = db_string($_GET['thread_created_after']);
+$ThreadBeforeDate = db_string($_GET['thread_created_before']);
+$ThreadAfterDateDisplay = "";
+$ThreadBeforeDateDisplay = "";
+
+if (!empty($ThreadAfterDate) && !is_date($ThreadAfterDate)) {
+	error('Incorrect topic after date format');
+} elseif (!empty($ThreadAfterDate)) {
+	$ThreadAfterDateDisplay = "value='" . date('Y-m-d', strtotime($ThreadAfterDate)) . "'";
+}
+if (!empty($ThreadBeforeDate) && !is_date($ThreadBeforeDate)) {
+	error('Incorrect topic before date format');
+} elseif (!empty($ThreadBeforeDate)) {
+	$ThreadBeforeDateDisplay = "value='" . date('Y-m-d', strtotime($ThreadBeforeDate)) . "'";
+}
+
+$PostAfterDate = db_string($_GET['post_created_after']);
+$PostBeforeDate = db_string($_GET['post_created_before']);
+$PostAfterDateDisplay = "";
+$PostBeforeDateDisplay = "";
+
+if (!empty($PostAfterDate) && !is_date($PostAfterDate)) {
+	error('Incorrect post after date format');
+} elseif (!empty($PostAfterDate)) {
+	$PostAfterDateDisplay = "value='" . date('Y-m-d', strtotime($PostAfterDate)) . "'";
+}
+if (!empty($PostBeforeDate) && !is_date($PostBeforeDate)) {
+	error('Incorrect post before date format');
+} elseif (!empty($PostBeforeDate)) {
+	$PostBeforeDateDisplay = "value='" . date('Y-m-d', strtotime($PostBeforeDate)) . "'";
+}
+
+
 
 // Searching for posts by a specific user
 if (!empty($_GET['user'])) {
@@ -90,6 +123,21 @@ View::show_header('Forums &gt; Search', 'bbcode,forum_search');
 					<input type="text" name="search" size="70" value="<?=display_str($Search)?>" />
 				</td>
 			</tr>
+			<tr>
+				<td><strong>Username:</strong></td>
+				<td>
+					<input type="text" name="user" size="70" value="<?=display_str($User)?>" />
+				</td>
+			</tr>
+			<tr>
+				<td><strong>Topic created:</strong></td>
+				<td>
+					After:
+					<input type="date" name="thread_created_after" id="thread_created_after" <?=$ThreadAfterDateDisplay?>/>
+					Before:
+					<input type="date" name="thread_created_before" id="thread_created_before" <?=$ThreadBeforeDateDisplay?> />
+				</td>
+			</tr>
 <?
 if (empty($ThreadID)) { ?>
 			<tr>
@@ -99,6 +147,15 @@ if (empty($ThreadID)) { ?>
 					<label for="type_title">Titles</label>
 					<input type="radio" name="type" id="type_body" value="body" <? if ($Type == 'body') { echo 'checked="checked" '; } ?>/>
 					<label for="type_body">Post bodies</label>
+				</td>
+			</tr>
+			<tr id="post_created_row" <? if ($Type == 'title') { echo "class='hidden'"; } ?>>
+				<td><strong>Post created:</strong></td>
+				<td>
+					After:
+					<input type="date" name="post_created_after" id="post_created_after" <?=$PostAfterDateDisplay?>/>
+					Before:
+					<input type="date" name="post_created_before" id="post_created_before" <?=$PostBeforeDateDisplay?> />
 				</td>
 			</tr>
 			<tr>
@@ -162,12 +219,6 @@ if (empty($ThreadID)) { ?>
 					</td>
 				</tr>
 				<tr>
-					<td><strong>Username:</strong></td>
-					<td>
-						<input type="text" name="user" size="70" value="<?=display_str($User)?>" />
-					</td>
-				</tr>
-				<tr>
 					<td colspan="2" class="center">
 						<input type="submit" value="Search" />
 					</td>
@@ -182,7 +233,7 @@ $Words = explode(' ', db_string($Search));
 
 if ($Type == 'body') {
 
-	$sql = "
+	$SQL = "
 		SELECT
 			SQL_CALC_FOUND_ROWS
 			t.ID,
@@ -198,30 +249,42 @@ if ($Type == 'body') {
 		WHERE " . Forums::user_forums_sql() . ' AND ';
 
 	//In tests, this is significantly faster than LOCATE
-	$sql .= "p.Body LIKE '%";
-	$sql .= implode("%' AND p.Body LIKE '%", $Words);
-	$sql .= "%' ";
+	$SQL .= "p.Body LIKE '%";
+	$SQL .= implode("%' AND p.Body LIKE '%", $Words);
+	$SQL .= "%' ";
 
-	//$sql .= "LOCATE('";
-	//$sql .= implode("', p.Body) AND LOCATE('", $Words);
-	//$sql .= "', p.Body) ";
+	//$SQL .= "LOCATE('";
+	//$SQL .= implode("', p.Body) AND LOCATE('", $Words);
+	//$SQL .= "', p.Body) ";
 
 	if (isset($SearchForums)) {
-		$sql.=" AND f.ID IN ($SearchForums)";
+		$SQL.=" AND f.ID IN ($SearchForums)";
 	}
 	if (isset($AuthorID)) {
-		$sql.=" AND p.AuthorID='$AuthorID' ";
+		$SQL.=" AND p.AuthorID='$AuthorID' ";
 	}
 	if (!empty($ThreadID)) {
-		$sql.=" AND t.ID='$ThreadID' ";
+		$SQL.=" AND t.ID='$ThreadID' ";
+	}
+	if (!empty($ThreadAfterDate)) {
+		$SQL .= " AND t.CreatedTime >= '$ThreadAfterDate'";
+	}
+	if (!empty($ThreadBeforeDate)) {
+		$SQL .= " AND t.CreatedTime <= '$ThreadBeforeDate'";
+	}
+	if (!empty($PostAfterDate)) {
+		$SQL .= " AND p.AddedTime >= '$PostAfterDate'";
+	}
+	if (!empty($PostBeforeDate)) {
+		$SQL .= " AND p.AddedTime <= '$PostBeforeDate'";
 	}
 
-	$sql .= "
+	$SQL .= "
 		ORDER BY p.AddedTime DESC
 		LIMIT $Limit";
 
 } else {
-	$sql = "
+	$SQL = "
 		SELECT
 			SQL_CALC_FOUND_ROWS
 			t.ID,
@@ -230,26 +293,33 @@ if ($Type == 'body') {
 			f.Name,
 			t.LastPostTime,
 			'',
-			''
+			'',
+			t.CreatedTime
 		FROM forums_topics AS t
 			JOIN forums AS f ON f.ID=t.ForumID
 		WHERE " . Forums::user_forums_sql() . ' AND ';
-	$sql .= "t.Title LIKE '%";
-	$sql .= implode("%' AND t.Title LIKE '%", $Words);
-	$sql .= "%' ";
+	$SQL .= "t.Title LIKE '%";
+	$SQL .= implode("%' AND t.Title LIKE '%", $Words);
+	$SQL .= "%' ";
 	if (isset($SearchForums)) {
-		$sql .= " AND f.ID IN ($SearchForums)";
+		$SQL .= " AND f.ID IN ($SearchForums)";
 	}
 	if (isset($AuthorID)) {
-		$sql .= " AND t.AuthorID = '$AuthorID' ";
+		$SQL .= " AND t.AuthorID = '$AuthorID' ";
 	}
-	$sql .= "
+	if (!empty($ThreadAfterDate)) {
+		$SQL .= " AND t.CreatedTime >= '$ThreadAfterDate'";
+	}
+	if (!empty($ThreadBeforeDate)) {
+		$SQL .= " AND t.CreatedTime <= '$ThreadBeforeDate'";
+	}
+	$SQL .= "
 		ORDER BY t.LastPostTime DESC
 		LIMIT $Limit";
 }
 
 // Perform the query
-$Records = $DB->query($sql);
+$Records = $DB->query($SQL);
 $DB->query('SELECT FOUND_ROWS()');
 list($Results) = $DB->next_record();
 $DB->set_query_id($Records);
@@ -262,14 +332,15 @@ echo $Pages;
 	<tr class="colhead">
 		<td>Forum</td>
 		<td><?=((!empty($ThreadID)) ? 'Post begins' : 'Topic')?></td>
-		<td>Time</td>
+		<td>Topic creation time</td>
+		<td>Last post time</td>
 	</tr>
 <? if (!$DB->has_results()) { ?>
 		<tr><td colspan="3">Nothing found<?=((isset($AuthorID) && $AuthorID == 0) ? ' (unknown username)' : '')?>!</td></tr>
 <? }
 
 $Row = 'a'; // For the pretty colours
-while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB->next_record()) {
+while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body, $ThreadCreatedTime) = $DB->next_record()) {
 	$Row = $Row === 'a' ? 'b' : 'a';
 	// Print results
 ?>
@@ -287,6 +358,9 @@ while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body) = $DB-
 	if ($Type == 'body') { ?>
 				<a href="#" onclick="$('#post_<?=$PostID?>_text').gtoggle(); return false;">(Show)</a> <span style="float: right;" class="tooltip last_read" title="Jump to post"><a href="forums.php?action=viewthread&amp;threadid=<?=$ID?><? if (!empty($PostID)) { echo "&amp;postid=$PostID#post$PostID"; } ?>"></a></span>
 <?	} ?>
+			</td>
+			<td>
+				<?=time_diff($ThreadCreatedTime)?>
 			</td>
 			<td>
 				<?=time_diff($LastTime)?>

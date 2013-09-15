@@ -115,7 +115,7 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 		if (count($TorrentList) === 0 && $ApiCall == false) {
 			header('Location: log.php?search='.(empty($_GET['torrentid']) ? "Group+$GroupID" : "Torrent+$_GET[torrentid]"));
 			die();
-		} else if (count($TorrentList) === 0 && $ApiCall == true) {
+		} elseif (count($TorrentList) === 0 && $ApiCall == true) {
 			return NULL;
 		}
 		if (in_array(0, $DB->collect('Seeders'))) {
@@ -312,7 +312,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 
 			if (array_key_exists($ReportType, $Types[$GroupCategoryID])) {
 				$ReportType = $Types[$GroupCategoryID][$ReportType];
-			} else if (array_key_exists($ReportType, $Types['master'])) {
+			} elseif (array_key_exists($ReportType, $Types['master'])) {
 				$ReportType = $Types['master'][$ReportType];
 			} else {
 				//There was a type but it wasn't an option!

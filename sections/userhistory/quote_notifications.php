@@ -119,9 +119,9 @@ foreach ($Results as $Result) {
 			$Request = $Requests[$Result['PageID']];
 			$CategoryName = $Categories[$Request['CategoryID'] - 1];
 			$Links = 'Request: ';
-			if($CategoryName == "Music") {
+			if ($CategoryName == 'Music') {
 				$Links .= Artists::display_artists(Requests::get_artists($Result['PageID'])) . '<a href="requests.php?action=view&amp;id=' . $Result['PageID'] . '" dir="ltr">' . $Request['Title'] . " [" . $Request['Year'] . "]</a>";
-			} else if($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
+			} elseif ($CategoryName == "Audiobooks" || $CategoryName == "Comedy") {
 				$Links .= '<a href="requests.php?action=view&amp;id=' . $Result['PageID'] . '" dir="ltr">' . $Request['Title'] . " [" . $Request['Year'] . "]</a>";
 			} else {
 				$Links .= '<a href="requests.php?action=view&amp;id=' . $Result['PageID'] . '">' . $Request['Title'] . "</a>";
@@ -135,7 +135,7 @@ foreach ($Results as $Result) {
 			}
 			$GroupInfo = $TorrentGroups[$Result['PageID']];
 			$Links = 'Torrent: ' . Artists::display_artists($GroupInfo['ExtendedArtists']) . '<a href="torrents.php?id=' . $GroupInfo['ID'] . '" dir="ltr">' . $GroupInfo['Name'] . '</a>';
-			if($GroupInfo['Year'] > 0) {
+			if ($GroupInfo['Year'] > 0) {
 				$Links .= " [" . $GroupInfo['Year'] . "]";
 			}
 			if ($GroupInfo['ReleaseType'] > 0) {

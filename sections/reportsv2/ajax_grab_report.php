@@ -12,7 +12,13 @@ if (!check_perms('admin_reports')) {
 if (!is_number($_GET['id'])) {
 	die();
 }
-$DB->query("UPDATE reportsv2 SET Status='InProgress', ResolverID=".$LoggedUser['ID']." WHERE ID=".$_GET['id']);
+
+$DB->query("
+	UPDATE reportsv2
+	SET Status = 'InProgress',
+		ResolverID = " . $LoggedUser['ID'] . "
+	WHERE ID = " . $_GET['id']);
+
 if ($DB->affected_rows() == 0) {
 	echo '0';
 } else {

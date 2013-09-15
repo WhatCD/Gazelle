@@ -27,6 +27,14 @@ if (PHP_INT_SIZE === 4) {
 	}
 }
 
+function is_date($Date) {
+	list($Y, $M, $D) = explode('-', $Date);
+	if (checkdate($M, $D, $Y)) {
+		return true;
+	}
+	return false;
+}
+
 /**
  * Check that some given variables (usually in _GET or _POST) are numbers
  *

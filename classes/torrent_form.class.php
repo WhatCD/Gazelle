@@ -265,12 +265,10 @@ if (document.getElementById("categories").disabled == false) {
 		var useragent = navigator.userAgent;
 		var match = useragent.split('Version/');
 		var version = parseFloat(match[1]);
-			if (version >= 12.00) {
-				show();
-			}
-	}
-
-	else if (navigator.appName != 'Microsoft Internet Explorer') {
+		if (version >= 12.00) {
+			show();
+		}
+	} else if (navigator.appName != 'Microsoft Internet Explorer') {
 		show();
 	}
 }
