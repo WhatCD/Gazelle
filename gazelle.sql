@@ -928,27 +928,29 @@ CREATE TABLE `sphinx_t` (
   `id` int(11) NOT NULL,
   `gid` int(11) NOT NULL,
   `uid` int(11) NOT NULL,
-  `size` bigint(20) DEFAULT NULL,
-  `snatched` int(11) DEFAULT NULL,
-  `seeders` int(11) DEFAULT NULL,
-  `leechers` int(11) DEFAULT NULL,
-  `time` int(11) DEFAULT NULL,
-  `logscore` smallint(6) DEFAULT NULL,
-  `scene` tinyint(4) DEFAULT NULL,
-  `haslog` tinyint(4) DEFAULT NULL,
-  `hascue` tinyint(4) DEFAULT NULL,
-  `freetorrent` tinyint(4) DEFAULT NULL,
-  `media` varchar(15) DEFAULT NULL,
-  `format` varchar(15) DEFAULT NULL,
-  `encoding` varchar(30) DEFAULT NULL,
-  `remyear` smallint(6) DEFAULT NULL,
-  `remtitle` varchar(80) DEFAULT NULL,
-  `remrlabel` varchar(80) DEFAULT NULL,
-  `remcnumber` varchar(80) DEFAULT NULL,
+  `size` bigint(20) NOT NULL,
+  `snatched` int(11) NOT NULL,
+  `seeders` int(11) NOT NULL,
+  `leechers` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `logscore` smallint(6) NOT NULL,
+  `scene` tinyint(4) NOT NULL,
+  `haslog` tinyint(4) NOT NULL,
+  `hascue` tinyint(4) NOT NULL,
+  `freetorrent` tinyint(4) NOT NULL,
+  `media` varchar(15) NOT NULL,
+  `format` varchar(15) NOT NULL,
+  `encoding` varchar(30) NOT NULL,
+  `remyear` smallint(6) NOT NULL,
+  `remtitle` varchar(80) NOT NULL,
+  `remrlabel` varchar(80) NOT NULL,
+  `remcnumber` varchar(80) NOT NULL,
   `filelist` mediumtext,
-  `remident` int(10) unsigned DEFAULT NULL,
+  `remident` int(10) unsigned NOT NULL,
+  `description` text,
   PRIMARY KEY (`id`),
-  KEY `gid_remident` (`gid`,`remident`)
+  KEY `gid_remident` (`gid`,`remident`),
+  KEY `format` (`format`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `sphinx_tg` (
@@ -1322,7 +1324,8 @@ CREATE TABLE `users_donor_ranks` (
   PRIMARY KEY (`UserID`),
   KEY `DonationTime` (`DonationTime`),
   KEY `SpecialRank` (`SpecialRank`),
-  KEY `Rank` (`Rank`)
+  KEY `Rank` (`Rank`),
+  KEY `TotalRank` (`TotalRank`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_downloads` (

@@ -20,9 +20,7 @@
 *
 *************************************************************************/
 
-
 include(SERVER_ROOT.'/sections/torrents/functions.php');
-
 
 // The "order by x" links on columns headers
 function header_link($SortKey, $DefaultWay = 'desc') {
@@ -170,7 +168,7 @@ if (!empty($_GET['order_way']) && $_GET['order_way'] == 'asc') {
 array_pop($Bitrates); // remove 'other'
 $SearchBitrates = array_merge($Bitrates, array('v0', 'v1', 'v2', '24bit'));
 
-foreach ($SearchBitrates as $ID=>$Val) {
+foreach ($SearchBitrates as $ID => $Val) {
 	$SearchBitrates[$ID] = strtolower($Val);
 }
 foreach ($Formats as $ID => $Val) {
@@ -208,7 +206,7 @@ $EnableNegation = false; // Sphinx needs at least one positive search condition 
 // File list searches make use of the proximity operator to ensure that all keywords match the same file
 if (!empty($_GET['filelist'])) {
 	$SearchString = trim($_GET['filelist']);
-	if ($SearchString != '') {
+	if ($SearchString !== '') {
 		$SearchString = '"'.Sphinxql::sph_escape_string($_GET['filelist']).'"~20';
 		$SphQL->where_match($SearchString, 'filelist', false);
 		$SphQLTor->where_match($SearchString, 'filelist', false);
@@ -218,15 +216,13 @@ if (!empty($_GET['filelist'])) {
 }
 
 // Collect all entered search terms to find out whether to enable the NOT operator
-$GroupFields = array('artistname', 'groupname', 'recordlabel', 'cataloguenumber', 'taglist');
-$TorrentFields = array('remastertitle', 'remasteryear', 'remasterrecordlabel', 'remastercataloguenumber', 'encoding', 'format', 'media');
 $SearchWords = array();
 foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 			'taglist', 'remastertitle', 'remasteryear', 'remasterrecordlabel',
-			'remastercataloguenumber', 'encoding', 'format', 'media') as $Search) {
+			'remastercataloguenumber', 'encoding', 'format', 'media', 'description') as $Search) {
 	if (!empty($_GET[$Search])) {
 		$SearchString = trim($_GET[$Search]);
-		if ($SearchString != '') {
+		if ($SearchString !== '') {
 			$SearchWords[$Search] = array('include' => array(), 'exclude' => array());
 			if ($Search == 'taglist') {
 				$SearchString = strtr($SearchString, '.', '_');
@@ -237,17 +233,17 @@ foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 			foreach ($Words as $Word) {
 				$Word = trim($Word);
 				// Skip isolated hyphens to enable "Artist - Title" searches
-				if ($Word == '-') {
+				if ($Word === '-') {
 					continue;
 				}
-				if ($Word[0] == '!' && strlen($Word) >= 2) {
+				if ($Word[0] === '!' && strlen($Word) >= 2) {
 					if (strpos($Word, '!', 1) === false) {
 						$SearchWords[$Search]['exclude'][] = $Word;
 					} else {
 						$SearchWords[$Search]['include'][] = $Word;
 						$EnableNegation = true;
 					}
-				} elseif ($Word != '') {
+				} elseif ($Word !== '') {
 					$SearchWords[$Search]['include'][] = $Word;
 					$EnableNegation = true;
 				}
@@ -266,11 +262,11 @@ if (!empty($_GET['searchstr'])) {
 		foreach ($Words as $Word) {
 			$Word = trim($Word);
 			// Skip isolated hyphens to enable "Artist - Title" searches
-			if ($Word == '-') {
+			if ($Word === '-') {
 				continue;
 			}
-			if ($Word[0] == '!' && strlen($Word) >= 2) {
-				if ($Word == '!100%') {
+			if ($Word[0] === '!' && strlen($Word) >= 2) {
+				if ($Word === '!100%') {
 					$_GET['haslog'] = '-1';
 				} elseif (strpos($Word, '!', 1) === false) {
 					$BasicSearch['exclude'][] = $Word;
@@ -284,9 +280,9 @@ if (!empty($_GET['searchstr'])) {
 			} elseif (in_array($Word, $SearchFormats)) {
 				$FilterFormats[] = $Word;
 				$EnableNegation = true;
-			} elseif ($Word == '100%') {
+			} elseif ($Word === '100%') {
 				$_GET['haslog'] = '100';
-			} elseif ($Word != '') {
+			} elseif ($Word !== '') {
 				$BasicSearch['include'][] = $Word;
 				$EnableNegation = true;
 			}
@@ -327,18 +323,17 @@ if (!empty($_GET['searchstr'])) {
 
 // Tag list
 if (!empty($SearchWords['taglist'])) {
-	global $Cache, $DB;
-	//Get tag aliases.
+	// Get tag aliases.
 	$TagAliases = $Cache->get_value('tag_aliases_search');
-	if (!$TagAliases) {
+	if ($TagAliases === false) {
 		$DB->query('
 			SELECT ID, BadTag, AliasTag
 			FROM tag_aliases
 			ORDER BY BadTag');
-		$TagAliases = $DB->to_array();
-		//Unify tag aliases to be in_this_format as tags not in.this.format
+		$TagAliases = $DB->to_array(false, MYSQLI_ASSOC, false);
+		// Unify tag aliases to be in_this_format as tags not in.this.format
 		array_walk_recursive($TagAliases, create_function('&$val', '$val = preg_replace("/\./","_", $val);'));
-		//Clean up the array for smaller cache size
+		// Clean up the array for smaller cache size
 		foreach ($TagAliases as &$TagAlias) {
 			foreach (array_keys($TagAlias) as $Key) {
 				if (is_numeric($Key)) {
@@ -348,11 +343,11 @@ if (!empty($SearchWords['taglist'])) {
 		}
 		$Cache->cache_value('tag_aliases_search', $TagAliases, 3600 * 24 * 7); // cache for 7 days
 	}
-	//Get tags
+	// Get tags
 	$Tags = $SearchWords['taglist'];
-	//Replace bad tags with tag aliases
-	//In other news oh God I'm going to hell for all this preg_replace, but they're kept in two separate formats
-	for ($i = 0; $i < sizeof($Tags['include']) ; $i++) {
+	// Replace bad tags with tag aliases
+	$End = count($Tags['include']);
+	for ($i = 0; $i < $End; $i++) {
 		foreach ($TagAliases as $TagAlias) {
 			if ($Tags['include'][$i] === $TagAlias['BadTag']) {
 				$Tags['include'][$i] = $TagAlias['AliasTag'];
@@ -360,15 +355,16 @@ if (!empty($SearchWords['taglist'])) {
 			}
 		}
 	}
-	for ($i = 0; $i < sizeof($Tags['exclude']) ; $i++) {
+	$End = count($Tags['exclude']);
+	for ($i = 0; $i < $End; $i++) {
 		foreach ($TagAliases as $TagAlias) {
-			if (preg_replace('/^!/', '', $Tags['exclude'][$i]) === $TagAlias['BadTag']) {
+			if (substr($Tags['exclude'][$i], 1) === $TagAlias['BadTag']) {
 				$Tags['exclude'][$i] = '!'.$TagAlias['AliasTag'];
 				break;
 			}
 		}
 	}
-	//Only keep unique entries after unifying tag standard
+	// Only keep unique entries after unifying tag standard
 	$Tags['include'] = array_unique($Tags['include']);
 	$Tags['exclude'] = array_unique($Tags['exclude']);
 	$TagListString = implode(', ', array_merge($Tags['include'], $Tags['exclude']));
@@ -488,8 +484,8 @@ foreach (array('hascue', 'scene', 'vanityhouse', 'releasetype') as $Search) {
 			$SphQLTor->where($Search, $_GET[$Search]);
 		}
 		if ($_GET[$Search] !== 0) {
-			//TODO: Clean up this hack
-			// Hack! Deleted torrents may show up if we set to true unconditionally. Hope no one notices
+			// This condition is required because all attributes are 0
+			// for deleted torrents and we abuse that to detect them
 			$Filtered = true;
 		}
 	}
@@ -713,6 +709,12 @@ if (Format::form('remastertitle', true) == ''
 					<input type="text" spellcheck="false" size="40" name="filelist" class="inputtext fti_advanced" value="<?Format::form('filelist')?>" />
 				</td>
 			</tr>
+			<tr id="torrent_description" class="ftr_advanced<?=$HideAdvanced?>">
+				<td class="label"><span title="Search torrent descriptions (not group information)" class="tooltip">Torrent description:</span></td>
+				<td colspan="3" class="ft_description">
+					<input type="text" spellcheck="false" size="40" name="description" class="inputtext fti_advanced" value="<?Format::form('description')?>" />
+				</td>
+			</tr>
 			<tr id="rip_specifics" class="ftr_advanced<?=$HideAdvanced?>">
 				<td class="label">Rip specifics:</td>
 				<td class="nobr ft_ripspecifics" colspan="3">
@@ -782,9 +784,9 @@ if (Format::form('remastertitle', true) == ''
 				</td>
 			</tr>
 			<tr id="tagfilter">
-				<td class="label">Tags (comma-separated):</td>
+				<td class="label"><span title="Use !tag to exclude tag" class="tooltip">Tags (comma-separated):</span></td>
 				<td colspan="3" class="ft_taglist">
-					<input type="text" size="40" id="tags" name="taglist" class="tooltip inputtext smaller" title="Use !tag to exclude tag" value="<?=str_replace('_', '.', display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
+					<input type="text" size="40" id="tags" name="taglist" class="inputtext smaller" value="<?=str_replace('_', '.', display_str($TagListString)) /* Use aliased tags, not actual query string. */ ?>" />&nbsp;
 					<input type="radio" name="tags_type" id="tags_type0" value="0"<?Format::selected('tags_type', 0, 'checked')?> /><label for="tags_type0"> Any</label>&nbsp;&nbsp;
 					<input type="radio" name="tags_type" id="tags_type1" value="1"<?Format::selected('tags_type', 1, 'checked')?> /><label for="tags_type1"> All</label>
 				</td>

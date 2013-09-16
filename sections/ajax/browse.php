@@ -4,7 +4,7 @@ include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 // The "order by x" links on columns headers
 function header_link($SortKey, $DefaultWay = 'desc') {
-	global $OrderBy,$OrderWay;
+	global $OrderBy, $OrderWay;
 	if ($SortKey == $OrderBy) {
 		if ($OrderWay == 'desc') {
 			$NewWay = 'asc';
@@ -14,11 +14,32 @@ function header_link($SortKey, $DefaultWay = 'desc') {
 	} else {
 		$NewWay = $DefaultWay;
 	}
-
 	return "torrents.php?order_way=$NewWay&amp;order_by=$SortKey&amp;".Format::get_url(array('order_way', 'order_by'));
 }
 
 /** Start default parameters and validation **/
+if (!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
+	if (!empty($_GET['searchstr'])) {
+		$InfoHash = $_GET['searchstr'];
+	} else {
+		$InfoHash = $_GET['groupname'];
+	}
+
+	// Search by infohash
+	if ($InfoHash = is_valid_torrenthash($InfoHash)) {
+		$InfoHash = db_string(pack('H*', $InfoHash));
+		$DB->query("
+			SELECT ID, GroupID
+			FROM torrents
+			WHERE info_hash = '$InfoHash'");
+		if ($DB->has_results()) {
+			list($ID, $GroupID) = $DB->next_record();
+			header("Location: torrents.php?id=$GroupID&torrentid=$ID");
+			die();
+		}
+	}
+}
+
 // Setting default search options
 if (!empty($_GET['setdefault'])) {
 	$UnsetList = array('page', 'setdefault');
@@ -51,7 +72,7 @@ if (!empty($_GET['setdefault'])) {
 		WHERE UserID = '".db_string($LoggedUser['ID'])."'");
 	list($SiteOptions) = $DB->next_record(MYSQLI_NUM, false);
 	$SiteOptions = unserialize($SiteOptions);
-	$SiteOptions['DefaultSearch']='';
+	$SiteOptions['DefaultSearch'] = '';
 	$DB->query("
 		UPDATE users_info
 		SET SiteOptions = '".db_string(serialize($SiteOptions))."'
@@ -89,12 +110,14 @@ if (isset($_GET['group_results']) && $_GET['group_results']) {
 		'leechers' => array('sumleechers', 'leechers'),
 		'snatched' => array('sumsnatched', 'snatched'),
 		'random' => false);
+
 	$AggregateExp = array(
 		'maxsize' => 'MAX(size) AS maxsize',
 		'sumseeders' => 'SUM(seeders) AS sumseeders',
 		'sumleechers' => 'SUM(leechers) AS sumleechers',
 		'sumsnatched' => 'SUM(snatched) AS sumsnatched');
 } else {
+	$GroupResults = false;
 	$SortOrders = array(
 		'year' => 'year',
 		'time' => 'id',
@@ -160,7 +183,7 @@ $SphQLTor->select('id, groupid')->from('torrents, delta');
 $Filtered = false;
 $EnableNegation = false; // Sphinx needs at least one positive search condition to support the NOT operator
 
-// Filelist searches makes use of the proximity operator to ensure that all keywords match the same file
+// File list searches make use of the proximity operator to ensure that all keywords match the same file
 if (!empty($_GET['filelist'])) {
 	$SearchString = trim($_GET['filelist']);
 	if ($SearchString !== '') {
@@ -173,12 +196,10 @@ if (!empty($_GET['filelist'])) {
 }
 
 // Collect all entered search terms to find out whether to enable the NOT operator
-$GroupFields = array('artistname', 'groupname', 'recordlabel', 'cataloguenumber', 'taglist');
-$TorrentFields = array('remastertitle', 'remasteryear', 'remasterrecordlabel', 'remastercataloguenumber', 'encoding', 'format', 'media');
 $SearchWords = array();
 foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 			'taglist', 'remastertitle', 'remasteryear', 'remasterrecordlabel',
-			'remastercataloguenumber', 'encoding', 'format', 'media') as $Search) {
+			'remastercataloguenumber', 'encoding', 'format', 'media', 'description') as $Search) {
 	if (!empty($_GET[$Search])) {
 		$SearchString = trim($_GET[$Search]);
 		if ($SearchString !== '') {
@@ -191,7 +212,11 @@ foreach (array('artistname', 'groupname', 'recordlabel', 'cataloguenumber',
 			}
 			foreach ($Words as $Word) {
 				$Word = trim($Word);
-				if ($Word[0] == '!' && strlen($Word) >= 2) {
+				// Skip isolated hyphens to enable "Artist - Title" searches
+				if ($Word === '-') {
+					continue;
+				}
+				if ($Word[0] === '!' && strlen($Word) >= 2) {
 					if (strpos($Word, '!', 1) === false) {
 						$SearchWords[$Search]['exclude'][] = $Word;
 					} else {
@@ -216,8 +241,12 @@ if (!empty($_GET['searchstr'])) {
 		$BasicSearch = array('include' => array(), 'exclude' => array());
 		foreach ($Words as $Word) {
 			$Word = trim($Word);
-			if ($Word[0] == '!' && strlen($Word) >= 2) {
-				if ($Word == '!100%') {
+			// Skip isolated hyphens to enable "Artist - Title" searches
+			if ($Word === '-') {
+				continue;
+			}
+			if ($Word[0] === '!' && strlen($Word) >= 2) {
+				if ($Word === '!100%') {
 					$_GET['haslog'] = '-1';
 				} elseif (strpos($Word, '!', 1) === false) {
 					$BasicSearch['exclude'][] = $Word;
@@ -274,7 +303,51 @@ if (!empty($_GET['searchstr'])) {
 
 // Tag list
 if (!empty($SearchWords['taglist'])) {
+	//Get tag aliases.
+	$TagAliases = $Cache->get_value('tag_aliases_search');
+	if ($TagAliases === false) {
+		$DB->query('
+			SELECT ID, BadTag, AliasTag
+			FROM tag_aliases
+			ORDER BY BadTag');
+		$TagAliases = $DB->to_array(false, MYSQLI_ASSOC, false);
+		//Unify tag aliases to be in_this_format as tags not in.this.format
+		array_walk_recursive($TagAliases, create_function('&$val', '$val = preg_replace("/\./","_", $val);'));
+		//Clean up the array for smaller cache size
+		foreach ($TagAliases as &$TagAlias) {
+			foreach (array_keys($TagAlias) as $Key) {
+				if (is_numeric($Key)) {
+					unset($TagAlias[$Key]);
+				}
+			}
+		}
+		$Cache->cache_value('tag_aliases_search', $TagAliases, 3600 * 24 * 7); // cache for 7 days
+	}
+	//Get tags
 	$Tags = $SearchWords['taglist'];
+	//Replace bad tags with tag aliases
+	$End = count($Tags['include']);
+	for ($i = 0; $i < $End; $i++) {
+		foreach ($TagAliases as $TagAlias) {
+			if ($Tags['include'][$i] === $TagAlias['BadTag']) {
+				$Tags['include'][$i] = $TagAlias['AliasTag'];
+				break;
+			}
+		}
+	}
+	$End = count($Tags['exclude']);
+	for ($i = 0; $i < $End; $i++) {
+		foreach ($TagAliases as $TagAlias) {
+			if (substr($Tags['exclude'][$i], 1) === $TagAlias['BadTag']) {
+				$Tags['exclude'][$i] = '!'.$TagAlias['AliasTag'];
+				break;
+			}
+		}
+	}
+	//Only keep unique entries after unifying tag standard
+	$Tags['include'] = array_unique($Tags['include']);
+	$Tags['exclude'] = array_unique($Tags['exclude']);
+	$TagListString = implode(', ', array_merge($Tags['include'], $Tags['exclude']));
 	if (!$EnableNegation && !empty($Tags['exclude'])) {
 		$Tags['include'] = array_merge($Tags['include'], $Tags['exclude']);
 		unset($Tags['exclude']);
@@ -290,13 +363,15 @@ if (!empty($SearchWords['taglist'])) {
 
 	$QueryParts = array();
 	// 'All' tags
-	if (!isset($_GET['tags_type']) || $_GET['tags_type'] === '1') {
+	if (!isset($_GET['tags_type']) || $_GET['tags_type'] == 1) {
 		$_GET['tags_type'] = '1';
 		$Tags = array_merge($Tags['include'], $Tags['exclude']);
 		if (!empty($Tags)) {
 			$QueryParts[] = implode(' ', $Tags);
 		}
-	} else { // 'Any' tags
+	}
+	// 'Any' tags
+	else {
 		$_GET['tags_type'] = '0';
 		if (!empty($Tags['include'])) {
 			$QueryParts[] = '( '.implode(' | ', $Tags['include']).' )';
@@ -311,8 +386,12 @@ if (!empty($SearchWords['taglist'])) {
 		$Filtered = true;
 	}
 	unset($SearchWords['taglist']);
-} elseif (!isset($_GET['tags_type'])) {
+}
+elseif (!isset($_GET['tags_type'])) {
 	$_GET['tags_type'] = '1';
+}
+if (!isset($TagListString)) {
+	$TagListString = "";
 }
 
 foreach ($SearchWords as $Search => $Words) {
@@ -385,7 +464,8 @@ foreach (array('hascue', 'scene', 'vanityhouse', 'releasetype') as $Search) {
 			$SphQLTor->where($Search, $_GET[$Search]);
 		}
 		if ($_GET[$Search] !== 0) {
-			// Hack! Deleted torrents may show up if we set to true unconditionally. Hope no one notices
+			// This condition is required because all attributes are 0
+			// for deleted torrents and we abuse that to detect them
 			$Filtered = true;
 		}
 	}
@@ -457,7 +537,7 @@ if (isset($Random) && $GroupResults) {
 		if (check_perms('site_search_many')) {
 			$Page = $_GET['page'];
 		} else {
-			$Page = min(SPHINX_MAX_MATCHES/TORRENTS_PER_PAGE, $_GET['page']);
+			$Page = min(SPHINX_MAX_MATCHES / TORRENTS_PER_PAGE, $_GET['page']);
 		}
 		$Offset = ($Page - 1) * TORRENTS_PER_PAGE;
 		$SphQL->limit($Offset, TORRENTS_PER_PAGE, $Offset + TORRENTS_PER_PAGE);
@@ -482,6 +562,7 @@ if (!check_perms('site_search_many') && $TorrentCount > SPHINX_MAX_MATCHES) {
 
 if ($TorrentCount) {
 	$Groups = Torrents::get_groups($GroupIDs);
+
 	if (!empty($Groups) && $GroupResults) {
 		$TorrentIDs = array();
 		foreach ($Groups as $Group) {
@@ -489,11 +570,12 @@ if ($TorrentCount) {
 				$TorrentIDs = array_merge($TorrentIDs, array_keys($Group['Torrents']));
 			}
 		}
-
-		// Get a list of all torrent IDs that match the search query
-		$SphQLTor->where('id', $TorrentIDs)->limit(0, count($TorrentIDs), count($TorrentIDs));
-		$SphQLResultTor = $SphQLTor->query();
-		$TorrentIDs = array_fill_keys($SphQLResultTor->collect('id'), true);
+		if (!empty($TorrentIDs)) {
+			// Get a list of all torrent ids that match the search query
+			$SphQLTor->where('id', $TorrentIDs)->limit(0, count($TorrentIDs), count($TorrentIDs));
+			$SphQLResultTor = $SphQLTor->query();
+			$TorrentIDs = array_fill_keys($SphQLResultTor->collect('id'), true);
+		}
 	}
 }
 /** End run search query and collect results **/
