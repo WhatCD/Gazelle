@@ -52,28 +52,28 @@ if (empty($_GET['order'])) {
 }
 
 switch ($CurrentOrder) {
-	case 'username' :
+	case 'username':
 		$OrderBy = "um.Username";
 		break;
-	case 'email' :
+	case 'email':
 		$OrderBy = "um.Email";
 		break;
-	case 'joined' :
+	case 'joined':
 		$OrderBy = "ui.JoinDate";
 		break;
-	case 'lastseen' :
+	case 'lastseen':
 		$OrderBy = "um.LastAccess";
 		break;
-	case 'uploaded' :
+	case 'uploaded':
 		$OrderBy = "um.Uploaded";
 		break;
-	case 'downloaded' :
+	case 'downloaded':
 		$OrderBy = "um.Downloaded";
 		break;
-	case 'ratio' :
+	case 'ratio':
 		$OrderBy = "(um.Uploaded / um.Downloaded)";
 		break;
-	default :
+	default:
 		$OrderBy = "um.ID";
 		break;
 }
@@ -89,15 +89,15 @@ $DB->query("
 		JoinDate,
 		LastAccess
 	FROM users_main as um
-		LEFT JOIN users_info AS ui ON ui.UserID=um.ID
+		LEFT JOIN users_info AS ui ON ui.UserID = um.ID
 	WHERE ui.Inviter = '$UserID'
 	ORDER BY $OrderBy $CurrentSort");
 
 $Invited = $DB->to_array();
 
-$JSIncludes = "";
+$JSIncludes = '';
 if (check_perms('users_mod') || check_perms('admin_advanced_user_search')) {
-	$JSIncludes = "invites";
+	$JSIncludes = 'invites';
 }
 
 View::show_header('Invites', $JSIncludes);

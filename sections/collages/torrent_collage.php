@@ -384,7 +384,7 @@ foreach ($ZIPOptions as $Option) {
 		</div>
 <? } ?>
 		<div class="box box_info box_statistics_collage_torrents">
-			<div class="head"><strong>Stats</strong></div>
+			<div class="head"><strong>Statistics</strong></div>
 			<ul class="stats nobullet">
 				<li>Torrents: <?=number_format($NumGroups)?></li>
 <? if (!empty($TopArtists)) { ?>
@@ -396,7 +396,7 @@ foreach ($ZIPOptions as $Option) {
 			</ul>
 		</div>
 		<div class="box box_tags">
-			<div class="head"><strong>Top tags</strong></div>
+			<div class="head"><strong>Top Tags</strong></div>
 			<div class="pad">
 				<ol style="padding-left: 5px;">
 <?
@@ -405,30 +405,30 @@ foreach ($ZIPOptions as $Option) {
 				</ol>
 			</div>
 		</div>
-<? if (!empty($TopArtists)) { ?>
+<?	if (!empty($TopArtists)) { ?>
 		<div class="box box_artists">
-			<div class="head"><strong>Top artists</strong></div>
+			<div class="head"><strong>Top Artists</strong></div>
 			<div class="pad">
 				<ol style="padding-left: 5px;">
 <?
-uasort($TopArtists, 'compare');
-$i = 0;
-foreach ($TopArtists as $ID => $Artist) {
-	$i++;
-	if ($i > 10) {
-		break;
-	}
+		uasort($TopArtists, 'compare');
+		$i = 0;
+		foreach ($TopArtists as $ID => $Artist) {
+			$i++;
+			if ($i > 10) {
+				break;
+			}
 ?>
 					<li><a href="artist.php?id=<?=$ID?>"><?=$Artist['name']?></a> (<?=number_format($Artist['count'])?>)</li>
 <?
-}
+		}
 ?>
 				</ol>
 			</div>
 		</div>
-<? } ?>
+<?	} ?>
 		<div class="box box_contributors">
-			<div class="head"><strong>Top contributors</strong></div>
+			<div class="head"><strong>Top Contributors</strong></div>
 			<div class="pad">
 				<ol style="padding-left: 5px;">
 <?
@@ -492,7 +492,8 @@ if (empty($CommentList)) {
 			c.AddedTime
 		FROM comments AS c
 			LEFT JOIN users_main AS um ON um.ID = c.AuthorID
-		WHERE c.Page = 'collages' AND c.PageID = $CollageID
+		WHERE c.Page = 'collages'
+			AND c.PageID = $CollageID
 		ORDER BY c.ID DESC
 		LIMIT 15");
 	$CommentList = $DB->to_array(false, MYSQLI_NUM);
@@ -542,22 +543,23 @@ if (!$LoggedUser['DisablePosting']) {
 <?
 if ($CollageCovers != 0) { ?>
 		<div id="coverart" class="box">
-			<div class="head" id="coverhead"><strong>Cover art</strong></div>
+			<div class="head" id="coverhead"><strong>Cover Art</strong></div>
 			<ul class="collage_images" id="collage_page0">
 <?
 	$Page1 = array_slice($Collage, 0, $CollageCovers);
 	foreach ($Page1 as $Group) {
 		echo $Group;
-}?>
+	}
+?>
 			</ul>
 		</div>
-<?		if ($NumGroups > $CollageCovers) { ?>
+<?	if ($NumGroups > $CollageCovers) { ?>
 		<div class="linkbox pager" style="clear: left;" id="pageslinksdiv">
 			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.page(0, this); return false;"><strong>&lt;&lt; First</strong></a> | </span>
 			<span id="prevpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.prevPage(); return false;"><strong>&lt; Prev</strong></a> | </span>
-<?			for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
+<?		for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
 			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i == 0) ? 'selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><strong><?=$CollageCovers * $i + 1?>-<?=min($NumGroups, $CollageCovers * ($i + 1))?></strong></a><?=(($i != ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : '')?></span>
-<?			} ?>
+<?		} ?>
 			<span id="nextbar" class="<?=($NumGroups / $CollageCovers > 5) ? 'hidden' : ''?>"> | </span>
 			<span id="nextpage"><a href="#" class="pageslink" onclick="collageShow.nextPage(); return false;"><strong>Next &gt;</strong></a></span>
 			<span id="lastpage" class="<?=(ceil($NumGroups / $CollageCovers) == 2 ? 'invisible' : '')?>"> | <a href="#" class="pageslink" onclick="collageShow.page(<?=ceil($NumGroups / $CollageCovers) - 1?>, this); return false;"><strong>Last &gt;&gt;</strong></a></span>
@@ -565,7 +567,8 @@ if ($CollageCovers != 0) { ?>
 		<script type="text/javascript">//<![CDATA[
 			collageShow.init(<?=json_encode($CollagePages)?>);
 		//]]></script>
-<?		}
+<?
+	}
 } ?>
 		<table class="torrent_table grouping cats" id="discog_table">
 			<tr class="colhead_dark">
@@ -584,5 +587,5 @@ if ($CollageCovers != 0) { ?>
 <?
 View::show_footer();
 
-$Cache->cache_value('collage_'.$CollageID, array(array($Name, $Description, array(), array(), $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers)), 3600);
+$Cache->cache_value("collage_$CollageID", array(array($Name, $Description, array(), array(), $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers)), 3600);
 ?>
