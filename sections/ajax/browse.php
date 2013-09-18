@@ -2,44 +2,7 @@
 
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
-// The "order by x" links on columns headers
-function header_link($SortKey, $DefaultWay = 'desc') {
-	global $OrderBy, $OrderWay;
-	if ($SortKey == $OrderBy) {
-		if ($OrderWay == 'desc') {
-			$NewWay = 'asc';
-		} else {
-			$NewWay = 'desc';
-		}
-	} else {
-		$NewWay = $DefaultWay;
-	}
-	return "torrents.php?order_way=$NewWay&amp;order_by=$SortKey&amp;".Format::get_url(array('order_way', 'order_by'));
-}
-
 /** Start default parameters and validation **/
-if (!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
-	if (!empty($_GET['searchstr'])) {
-		$InfoHash = $_GET['searchstr'];
-	} else {
-		$InfoHash = $_GET['groupname'];
-	}
-
-	// Search by infohash
-	if ($InfoHash = is_valid_torrenthash($InfoHash)) {
-		$InfoHash = db_string(pack('H*', $InfoHash));
-		$DB->query("
-			SELECT ID, GroupID
-			FROM torrents
-			WHERE info_hash = '$InfoHash'");
-		if ($DB->has_results()) {
-			list($ID, $GroupID) = $DB->next_record();
-			header("Location: torrents.php?id=$GroupID&torrentid=$ID");
-			die();
-		}
-	}
-}
-
 // Setting default search options
 if (!empty($_GET['setdefault'])) {
 	$UnsetList = array('page', 'setdefault');
