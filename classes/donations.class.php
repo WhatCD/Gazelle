@@ -50,7 +50,7 @@ class Donations {
 		G::$DB->query("SELECT 1 FROM users_main WHERE ID = '$UserID' LIMIT 1");
 		if (G::$DB->has_results()) {
 			G::$Cache->InternalCache = false;
-			foreach($Args as &$Arg) {
+			foreach ($Args as &$Arg) {
 				$Arg = db_string($Arg);
 			}
 			extract($Args);

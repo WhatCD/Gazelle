@@ -29,7 +29,7 @@ class CalendarView {
 	private static function get_events_on($Day, $Events) {
 		// Linear search, Lol.
 		$Results = array();
-		foreach($Events as $Event) {
+		foreach ($Events as $Event) {
 			if ($Event['StartDay'] == $Day || ($Event['StartDay'] <= $Day && $Event['EndDay'] >= $Day)) {
 				$Results[] = $Event;
 			}
@@ -60,7 +60,7 @@ class CalendarView {
 ?>
 
 		<table class="calendar">
-<?			foreach(self::$Headings as $Heading) { ?>
+<?			foreach (self::$Headings as $Heading) { ?>
 				<td class="calendar-row calendar-heading">
 					<strong><?=$Heading?></strong>
 				</td>

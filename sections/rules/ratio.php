@@ -185,6 +185,7 @@ View::show_header('Ratio Requirements');
 		</ul>
 		<br />
 		<br />
+	</div>
 <? include('jump.php'); ?>
 	</div>
 	</div>

@@ -48,7 +48,7 @@ foreach ($AllDonations as $Address => $Amount) {
 		</tr>
 <?
 if (!empty($NewDonations)) {
-	foreach(DonationsBitcoin::get_userids(array_keys($NewDonations)) as $Address => $UserID) {
+	foreach (DonationsBitcoin::get_userids(array_keys($NewDonations)) as $Address => $UserID) {
 ?>
 		<tr>
 			<td><?=$Address?></td>

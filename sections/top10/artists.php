@@ -38,7 +38,7 @@ View::show_header("Top Artists", "jquery.imagesloaded,jquery.wookmark,top10", "t
 <?	if ($View == 'tiles') { ?>
 		<div class="tiles_container">
 			<ul class="tiles">
-<?				foreach($Artists as $Artist) {
+<?				foreach ($Artists as $Artist) {
 					Top10View::render_artist_tile($Artist, $Category);
 				} ?>
 			</ul>
@@ -46,7 +46,7 @@ View::show_header("Top Artists", "jquery.imagesloaded,jquery.wookmark,top10", "t
 <?	} else { ?>
 		<div class="list_container">
 			<ul class="top_artist_list">
-<?				foreach($Artists as $Artist) {
+<?				foreach ($Artists as $Artist) {
 					Top10View::render_artist_list($Artist, $Category);
 				} ?>
 			</ul>

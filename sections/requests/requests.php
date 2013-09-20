@@ -601,7 +601,7 @@ foreach ($Media as $Key => $Val) {
 <?
 		$TagList = array();
 		foreach ($Request['Tags'] as $TagID => $TagName) {
-			$TagList[] = '<a href="?tags=$TagName' . ($BookmarkView ? '&amp;type=requests' : '') . '">' . display_str($TagName) . '</a>';
+			$TagList[] = '<a href="?tags='.$TagName.($BookmarkView ? '&amp;type=requests' : '').'">'.display_str($TagName).'</a>';
 		}
 		$TagList = implode(', ', $TagList);
 ?>

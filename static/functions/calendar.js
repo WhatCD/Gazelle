@@ -1,16 +1,4 @@
 $(document).ready(function() {
-	$('.tooltip_interactive').tooltipster({
-		interactive: true,
-		interactiveTolerance: 500,
-		delay: 100,
-		maxWidth : 400
-	});
-
-	$('.tooltip').tooltipster({
-		delay: 100,
-		maxWidth : 400
-	});
-
 	var month = $("#month").val();
 	var year = $("#year").val();
 	$(".event_day, .day-number").click(function(e) {

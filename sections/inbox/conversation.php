@@ -12,8 +12,8 @@ $UserID = $LoggedUser['ID'];
 $DB->query("
 	SELECT InInbox, InSentbox
 	FROM pm_conversations_users
-	WHERE UserID='$UserID'
-		AND ConvID='$ConvID'");
+	WHERE UserID = '$UserID'
+		AND ConvID = '$ConvID'");
 if (!$DB->has_results()) {
 	error(403);
 }
@@ -34,21 +34,21 @@ $DB->query("
 		cu.UnRead,
 		cu.ForwardedTo
 	FROM pm_conversations AS c
-		JOIN pm_conversations_users AS cu ON c.ID=cu.ConvID
-	WHERE c.ID='$ConvID'
-		AND UserID='$UserID'");
+		JOIN pm_conversations_users AS cu ON c.ID = cu.ConvID
+	WHERE c.ID = '$ConvID'
+		AND UserID = '$UserID'");
 list($Subject, $Sticky, $UnRead, $ForwardedID) = $DB->next_record();
 
 
 $DB->query("
 	SELECT um.ID, Username
 	FROM pm_messages AS pm
-		JOIN users_main AS um ON um.ID=pm.SenderID
-	WHERE pm.ConvID='$ConvID'");
+		JOIN users_main AS um ON um.ID = pm.SenderID
+	WHERE pm.ConvID = '$ConvID'");
 
 $ConverstionParticipants = $DB->to_array();
 
-foreach($ConverstionParticipants as $Participant) {
+foreach ($ConverstionParticipants as $Participant) {
 	$PMUserID = (int) $Participant['ID'];
 	$Users[$PMUserID]['UserStr'] = Users::format_username($PMUserID, true, true, true, true);
 	$Users[$PMUserID]['Username'] = $Participant['Username'];
@@ -62,24 +62,24 @@ if ($UnRead == '1') {
 
 	$DB->query("
 		UPDATE pm_conversations_users
-		SET UnRead='0'
-		WHERE ConvID='$ConvID'
-			AND UserID='$UserID'");
+		SET UnRead = '0'
+		WHERE ConvID = '$ConvID'
+			AND UserID = '$UserID'");
 	// Clear the caches of the inbox and sentbox
-	$Cache->decrement('inbox_new_'.$UserID);
+	$Cache->decrement("inbox_new_$UserID");
 }
 
-View::show_header('View conversation '.$Subject, 'comments,inbox,bbcode,jquery.validate,form_validate');
+View::show_header("View conversation $Subject", 'comments,inbox,bbcode,jquery.validate,form_validate');
 
 // Get messages
 $DB->query("
 	SELECT SentDate, SenderID, Body, ID
 	FROM pm_messages AS m
-	WHERE ConvID='$ConvID'
+	WHERE ConvID = '$ConvID'
 	ORDER BY ID");
 ?>
 <div class="thin">
-	<h2><?=$Subject.($ForwardedID > 0 ? ' (Forwarded to '.$ForwardedName.')' : '')?></h2>
+	<h2><?=$Subject.($ForwardedID > 0 ? " (Forwarded to $ForwardedName)" : '')?></h2>
 	<div class="linkbox">
 		<a href="<?=Inbox::get_inbox_link(); ?>" class="brackets">Back to inbox</a>
 	</div>
@@ -102,9 +102,9 @@ while (list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) { ?>
 $DB->query("
 	SELECT UserID
 	FROM pm_conversations_users
-	WHERE UserID!='$LoggedUser[ID]'
-		AND ConvID='$ConvID'
-		AND (ForwardedTo=0 OR ForwardedTo=UserID)");
+	WHERE UserID != '$LoggedUser[ID]'
+		AND ConvID = '$ConvID'
+		AND (ForwardedTo = 0 OR ForwardedTo = UserID)");
 $ReceiverIDs = $DB->collect('UserID');
 
 
@@ -117,7 +117,7 @@ if (!empty($ReceiverIDs) && (empty($LoggedUser['DisablePM']) || array_intersect(
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="toid" value="<?=implode(',', $ReceiverIDs)?>" />
 			<input type="hidden" name="convid" value="<?=$ConvID?>" />
-			<textarea id="quickpost" class="required" name="body" cols="90" rows="10" onkeyup="resize('quickpost')"></textarea> <br />
+			<textarea id="quickpost" class="required" name="body" cols="90" rows="10" onkeyup="resize('quickpost');"></textarea> <br />
 			<div id="preview" class="box vertical_space body hidden"></div>
 			<div id="buttons" class="center">
 				<input type="button" value="Preview" onclick="Quick_Preview();" />

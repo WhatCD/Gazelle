@@ -1,6 +1,6 @@
 <?
 class Calendar {
-	public static $Categories = array(1 => "IRC Meeting", "IRC Brainstorm", "Poll Deadline", "Feature Release", "Blog Post", "Announcement", "Featured Album", "Product Release", "Staff Picks", "Forum Brainstorm", "Forum Discussion", "Promotion");
+	public static $Categories = array(1 => "IRC Meeting", "IRC Brainstorm", "Poll Deadline", "Feature Release", "Blog Post", "Announcement", "Featured Album", "Product Release", "Staff Picks", "Forum Brainstorm", "Forum Discussion", "Promotion", "Absence", "Task");
 	public static $Importances = array(1 => "Critical", "Important", "Average", "Meh");
 	public static $Colors = array(
 									"Critical" => "red",
@@ -36,8 +36,8 @@ class Calendar {
 			$Month = $Date['mon'];
 			$Year = $Date['year'];
 		}
-		$Month = (int) $Month;
-		$Year = (int) $Year;
+		$Month = (int)$Month;
+		$Year = (int)$Year;
 
 		$TeamsSQL = self::get_teams_query();
 
@@ -58,7 +58,7 @@ class Calendar {
 	}
 
 	public static function get_event($ID) {
-		$ID = (int) $ID;
+		$ID = (int)$ID;
 		if (empty($ID)) {
 			error("Invalid ID");
 		}
@@ -83,10 +83,10 @@ class Calendar {
 		}
 		$Title = db_string($Title);
 		$Body = db_string($Body);
-		$Category = (int) $Category;
-		$Importance = (int) $Importance;
-		$UserID = (int) $UserID;
-		$Team = (int) $Team;
+		$Category = (int)$Category;
+		$Importance = (int)$Importance;
+		$UserID = (int)$UserID;
+		$Team = (int)$Team;
 		$StartDate = db_string($StartDate);
 		$EndDate = db_string($EndDate);
 
@@ -97,18 +97,19 @@ class Calendar {
 						VALUES
 							('$Title', '$Body', '$Category', '$Importance', '$Team', '$StartDate', '$EndDate', '$UserID')");
 	//	G::$DB->set_query_id($QueryID);
+		send_irc("PRIVMSG " . ADMIN_CHAN . " :New calendar event created! Event: $Title; Starts: $StartDate; Ends: $EndDate.");
 	}
 
 	public static function update_event($ID, $Title, $Body, $Category, $Importance, $Team, $StartDate, $EndDate = null) {
 		if (!is_number($ID) || empty($Title) || empty($Body) || !is_number($Category) || !is_number($Importance) || !is_number($Team) || empty($StartDate)) {
 			error("Error updating event");
 		}
-		$ID = (int) $ID;
+		$ID = (int)$ID;
 		$Title = db_string($Title);
 		$Body = db_string($Body);
-		$Category = (int) $Category;
-		$Importance = (int) $Importance;
-		$Team = (int) $Team;
+		$Category = (int)$Category;
+		$Importance = (int)$Importance;
+		$Team = (int)$Team;
 		$StartDate = db_string($StartDate);
 		$EndDate = db_string($EndDate);
 		$QueryID = G::$DB->get_query_id();
@@ -128,7 +129,7 @@ class Calendar {
 	}
 
 	public static function remove_event($ID) {
-		$ID = (int) $ID;
+		$ID = (int)$ID;
 		if (!empty($ID)) {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("DELETE FROM calendar WHERE ID = '$ID'");
