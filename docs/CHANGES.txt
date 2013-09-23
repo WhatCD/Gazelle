@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-09-22 by Ajax
+Show tags on collage and bookmark tooltips
+
 2013-09-14 by Ajax
 Added date constrains to forum search
 

@@ -222,11 +222,12 @@ foreach ($TorrentList as $GroupID => $Group) {
 	if ($GroupYear > 0) {
 		$DisplayName = "$DisplayName [$GroupYear]";
 	}
+	$Tags = display_str($TorrentTags->format());
 ?>
 		<li class="image_group_<?=$GroupID?>">
 			<a href="torrents.php?id=<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
 <?	if ($WikiImage) { ?>
-				<img src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?>" width="117" />
+				<img class="tooltip_interactive" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?> <br /> <?=$Tags?>" width="117" />
 <?	} else { ?>
 				<div style="width: 107px; padding: 5px;"><?=$DisplayName?></div>
 <?	} ?>

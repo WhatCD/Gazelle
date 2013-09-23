@@ -54,7 +54,7 @@ foreach ($Artists as $Artist) {
 				<li class="image_group_<?=$Artist['ArtistID']?>">
 					<a href="artist.php?id=<?=$Artist['ArtistID']?>">
 <?		if ($Artist['Image']) { ?>
-						<img src="<?=ImageTools::process($Artist['Image'], true)?>" alt="<?=$Artist['Name']?>" title="<?=$Artist['Name']?>" width="118" />
+						<img class="tooltip" src="<?=ImageTools::process($Artist['Image'], true)?>" alt="<?=$Artist['Name']?>" title="<?=$Artist['Name']?>" width="118" />
 <?		} else { ?>
 						<span style="width: 107px; padding: 5px;"><?=$Artist['Name']?></span>
 <?		} ?>

@@ -49,7 +49,7 @@ if (check_paranoia_here('snatched+')) {
 	if (check_perms('site_view_torrent_snatchlist', $User['Class'])) {
 		$CommStats['usnatched'] = number_format($UniqueSnatched);
 	}
-	if (check_paranoia_here('seeding') && check_paranoia_here('snatched') && $UniqueSnatched > 0) {
+	if (check_paranoia_here('seeding+') && check_paranoia_here('snatched+') && $UniqueSnatched > 0) {
 		$CommStats['seedingperc'] = 100 * min(1, round($Seeding / $UniqueSnatched, 2));
 	}
 }
