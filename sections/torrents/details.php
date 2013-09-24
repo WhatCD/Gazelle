@@ -229,7 +229,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 ?>
 		<div class="box box_artists">
 			<div class="head"><strong>Artists</strong>
-			<?=(check_perms('torrents_edit')) ? '<span style="float: right;" class="edit_artists"><a onclick="ArtistManager(); return false;" href="#" class="brackets">Edit</a></span>' : ''?>
+			<?=check_perms('torrents_edit') ? '<span style="float: right;" class="edit_artists"><a onclick="ArtistManager(); return false;" href="#" class="brackets">Edit</a></span>' : ''?>
 			</div>
 			<ul class="stats nobullet" id="artist_list">
 <?
