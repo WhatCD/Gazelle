@@ -286,7 +286,7 @@ if (empty($Results)) {
 ?>
 	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '')?>" id="torrent<?=$TorrentID?>"<?=($MatchingArtistsText ? ' title="'.display_str($MatchingArtistsText).'"' : '')?>>
 		<td style="text-align: center;"><input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" tabindex="1" /></td>
-		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>"class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
+		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td class="big_info">
 <? if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">

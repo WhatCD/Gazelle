@@ -175,7 +175,8 @@ switch ($_REQUEST['action']) {
 
 
 
-		$Cache->cache_value('news_latest_id', $DB->inserted_id(), 0);
+		$Cache->delete_value('news_latest_id');
+		$Cache->delete_value('news_latest_title');
 		$Cache->delete_value('news');
 
 		header('Location: index.php');
