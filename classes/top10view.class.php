@@ -5,9 +5,7 @@ class Top10View {
 	public static function render_linkbox($Selected) { ?>
 		<div class="linkbox">
 			<a href="top10.php?type=torrents" class="brackets"><?=self::get_selected_link("Torrents", $Selected == "torrents")?></a>
-			<? if (check_perms("users_mod")) { ?>
 			<a href="top10.php?type=artists" class="brackets"><?=self::get_selected_link("Artists", $Selected == "artists")?></a>
-			<? } ?>
 			<a href="top10.php?type=users" class="brackets"><?=self::get_selected_link("Users", $Selected == "users")?></a>
 			<a href="top10.php?type=tags" class="brackets"><?=self::get_selected_link("Tags", $Selected == "tags")?></a>
 			<a href="top10.php?type=votes" class="brackets"><?=self::get_selected_link("Favorites", $Selected == "votes")?></a>

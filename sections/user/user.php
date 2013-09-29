@@ -617,7 +617,9 @@ if (check_paranoia_here('snatched')) {
 		<tr>
 <?		foreach ($RecentSnatches as $RS) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>"><img src="<?=ImageTools::process($RS['WikiImage'], true)?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>">
+					<img class="tooltip" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" src="<?=ImageTools::process($RS['WikiImage'], true)?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" />
+				</a>
 			</td>
 <?		} ?>
 		</tr>
@@ -660,7 +662,9 @@ if (check_paranoia_here('uploads')) {
 		<tr>
 <?		foreach ($RecentUploads as $RU) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RU['ID']?>" title="<?=$RU['Artist']?><?=$RU['Name']?>"><img src="<?=ImageTools::process($RU['WikiImage'], true)?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$RU['ID']?>">
+					<img class="tooltip" title="<?=$RU['Artist']?><?=$RU['Name']?>" src="<?=ImageTools::process($RU['WikiImage'], true)?>" alt="<?=$RU['Artist']?><?=$RU['Name']?>" width="107" />
+				</a>
 			</td>
 <?		} ?>
 		</tr>
@@ -713,7 +717,9 @@ foreach ($Collages as $CollageInfo) {
 			$Name .= $GroupName;
 ?>
 			<td>
-				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>"><img src="<?=ImageTools::process($C['WikiImage'], true)?>" alt="<?=$Name?>" width="107" /></a>
+				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>">
+					<img class="tooltip" title="<?=$Name?>"  src="<?=ImageTools::process($C['WikiImage'], true)?>" alt="<?=$Name?>" width="107" />
+				</a>
 			</td>
 <?	} ?>
 		</tr>
@@ -721,32 +727,6 @@ foreach ($Collages as $CollageInfo) {
 <?
 	$FirstCol = false;
 }
-?>
-<? if (!empty($LastFMUsername) && check_perms("users_mod")) {
-	$TopArtists = json_decode(LastFM::get_top_artists($LastFMUsername, 15), true);
-	$TopArtists = $TopArtists['topartists']['artist'];
-	?>
-	<table class="layout recent" id="top_artists" cellpadding="0" cellspacing="0" border="0">
-		<tr class="colhead">
-			<td colspan="5">
-				<a href="#top_artists" class="brackets anchor">#</a> Top Artists
-			</td>
-		</tr>
-		<tr>
-<?		for ($i = 0; $i < 5; $i++) {
-			$Name = $TopArtists[$i]['name'];
-			$Image = $TopArtists[$i]['image'][2]['#text'];
-			$Url = "artist.php?artistname=" . $Name;
-			?>
-			<td>
-				<a href="<?=$Url?>" title="<?=$Name?>">
-					<img src="<?=ImageTools::process($Image, true)?>" alt="<?=$RU['Name']?>" width="107" />
-				</a>
-			</td>
-<?		} ?>
-		</tr>
-	</table>
-<? }
 
 
 

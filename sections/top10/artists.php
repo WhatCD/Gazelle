@@ -1,12 +1,9 @@
 <?
-if (!check_perms("users_mod")) {
-	error(404);
-}
+define('LIMIT', 100);
 
 //$Limit = isset($_GET['limit']) ? intval($_GET['limit']) : 100;
 //$Limit = in_array($Limit, array(100, 250, 500)) ? $Limit : 100;
 
-$Limit = 100;
 
 $Category = isset($_GET['category']) ? ($_GET['category']) : 'weekly';
 $Category = in_array($Category, array('all_time', 'weekly', 'hyped')) ? $Category : 'weekly';
@@ -17,10 +14,10 @@ $View = in_array($View, array('tiles', 'list')) ? $View : 'tiles';
 switch ($Category) {
 	
 	case 'weekly':
-		$Artists = json_decode(LastFM::get_weekly_artists($Limit), true)['artists']['artist'];
+		$Artists = json_decode(LastFM::get_weekly_artists(LIMIT), true)['artists']['artist'];
 		break;
 	case 'hyped':
-		$Artists = json_decode(LastFM::get_hyped_artists($Limit), true)['artists']['artist'];
+		$Artists = json_decode(LastFM::get_hyped_artists(LIMIT), true)['artists']['artist'];
 		break;
 	default:
 		break;
@@ -30,7 +27,7 @@ View::show_header("Top Artists", "jquery.imagesloaded,jquery.wookmark,top10", "t
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>Top Artists</h2>
+		<h2>Top <?=LIMIT?> Artists</h2>
 		<? Top10View::render_linkbox("artists"); ?>
 	</div>
 	<? Top10View::render_artist_links($Category, $View); ?>

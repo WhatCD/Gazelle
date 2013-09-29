@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-09-28 by Ajax
+Added top artists data to top10 page using last.fm chart data
+
 2013-09-22 by Ajax
 Show tags on collage and bookmark tooltips
 

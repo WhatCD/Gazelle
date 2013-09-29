@@ -90,14 +90,14 @@ class Calendar {
 		$StartDate = db_string($StartDate);
 		$EndDate = db_string($EndDate);
 
-	//	$QueryID = G::$DB->get_query_id();
+		$QueryID = G::$DB->get_query_id();
 		G::$DB->query("
 						INSERT INTO calendar
 							(Title, Body, Category, Importance, Team, StartDate, EndDate, AddedBy)
 						VALUES
 							('$Title', '$Body', '$Category', '$Importance', '$Team', '$StartDate', '$EndDate', '$UserID')");
-	//	G::$DB->set_query_id($QueryID);
-		send_irc("PRIVMSG " . ADMIN_CHAN . " :New calendar event created! Event: $Title; Starts: $StartDate; Ends: $EndDate.");
+		G::$DB->set_query_id($QueryID);
+		send_irc("PRIVMSG " . ADMIN_CHAN . " :!mod New calendar event created! Event: $Title; Starts: $StartDate; Ends: $EndDate.");
 	}
 
 	public static function update_event($ID, $Title, $Body, $Category, $Importance, $Team, $StartDate, $EndDate = null) {
