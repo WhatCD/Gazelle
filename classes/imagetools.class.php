@@ -185,7 +185,7 @@ class ImageTools {
 		}
 
 		if (check_perms('site_proxy_images')) {
-		//	$ProcessedUrl = self::proxy_url($ProcessedUrl);
+			$ProcessedUrl = self::proxy_url($ProcessedUrl);
 		}
 
 		self::store($Url . ($Thumb ? '_thumb' : ''), $ProcessedUrl);
