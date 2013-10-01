@@ -1,5 +1,11 @@
 CHANGELOG
 
+2013-09-30 by alderaan
+Refactored backend code for staff toolbox
+
+2013-09-30 by alderaan
+Add function site_url() for printing the site's URL
+
 2013-09-28 by Ajax
 Added top artists data to top10 page using last.fm chart data
 

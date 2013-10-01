@@ -62,7 +62,7 @@ function display_perm($Key, $Title) {
 		$Perm .= ' checked="checked"';
 	}
 	$Perm .= " /> <label for=\"$Key\">$Title</label><br />";
-	echo $Perm;
+	echo "$Perm\n";
 }
 
 View::show_header("$Username &gt; Permissions");

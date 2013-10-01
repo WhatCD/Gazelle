@@ -129,10 +129,9 @@ function check_perms($PermissionName, $MinClass = 0) {
 	return Permissions::check_perms($PermissionName, $MinClass);
 }
 
-/*
- * Print json status result with an optional message and die.
+/**
+ * Print JSON status result with an optional message and die.
  */
-
 function json_die($Status, $Message) {
 	if ($Status == 'success' && $Message) {
 		print json_encode(array('status' => $Status, 'response' => $Message));
@@ -142,5 +141,14 @@ function json_die($Status, $Message) {
 		print json_encode(array('status' => $Status));
 	}
 	die();
+}
+
+/**
+ * Print the site's URL including the appropriate URI scheme, including the trailing slash
+ *
+ * @param bool $SSL - whether the URL should be crafted for HTTPS or regular HTTP
+ */
+function site_url($SSL = true) {
+	return $SSL ? 'https://' . SSL_SITE_URL . '/' : 'http://' . NONSSL_SITE_URL . '/';
 }
 ?>

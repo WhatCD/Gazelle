@@ -1,10 +1,12 @@
 <?
-function display_perm($Key,$Title) {
+function display_perm($Key, $Title) {
 	global $Values;
-	$Perm='<input type="checkbox" name="perm_'.$Key.'" id="'.$Key.'" value="1"';
-	if (!empty($Values[$Key])) { $Perm.=' checked="checked"'; }
-	$Perm.=' /> <label for="'.$Key.'">'.$Title.'</label><br />';
-	echo $Perm;
+	$Perm = "<input type=\"checkbox\" name=\"perm_$Key\" id=\"$Key\" value=\"1\"";
+	if (!empty($Values[$Key])) {
+		$Perm .= ' checked="checked"';
+	}
+	$Perm .= " /> <label for=\"$Key\">$Title</label><br />";
+	echo "$Perm\n";
 }
 
 View::show_header('Manage Permissions','validate');
