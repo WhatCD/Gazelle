@@ -17,13 +17,13 @@ if ($ConvID = (int)$_GET['convid']) {
 		if (!empty($_GET['to'])) {
 			$Level = 0;
 			switch ($_GET['to']) {
-				case 'forum' :
+				case 'forum':
 					$Level = 650;
 					break;
-				case 'staff' :
+				case 'staff':
 					$Level = 700;
 					break;
-				default :
+				default:
 					error(404);
 					break;
 			}

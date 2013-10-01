@@ -55,7 +55,7 @@ a img {
 	border-bottom: 1px solid #4f4f4f;
 }
 
-#site_debug {
+#wrapper>#site_debug {
 	padding: 20px 0 20px 0;
 	color: #a5a5a5;
 	text-align: left;
@@ -732,6 +732,17 @@ margin-left:20px;
 td.body {width:100%;}
 
 strong.quoteheader{color: #878787;}
+
+/* Toolbox */
+.permission_container {
+	float: left;
+	margin-left: 20px;
+	width: 286px;
+}
+
+.permission_container:first-child {
+	margin-left: 0;
+}
 
 /* TORRENTS */
 

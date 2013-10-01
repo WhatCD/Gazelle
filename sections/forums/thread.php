@@ -49,6 +49,9 @@ if (isset($LoggedUser['PostsPerPage'])) {
 
 // Thread information, constant across all pages
 $ThreadInfo = Forums::get_thread_info($ThreadID, true, true);
+if ($ThreadInfo === null) {
+	error(404);
+}
 $ForumID = $ThreadInfo['ForumID'];
 
 $IsDonorForum = $ForumID == DONOR_FORUM ? true : false;

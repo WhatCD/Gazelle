@@ -40,7 +40,7 @@ if ($Depth != 0) {
 } else {
 	//Not an edit, have to get from the original
 	switch ($Type) {
-		case 'forums' :
+		case 'forums':
 			//Get from normal forum stuffs
 			$DB->query("
 				SELECT Body
@@ -48,10 +48,10 @@ if ($Depth != 0) {
 				WHERE ID = $PostID");
 			list($Body) = $DB->next_record();
 			break;
-		case 'collages' :
-		case 'requests' :
-		case 'artist' :
-		case 'torrents' :
+		case 'collages':
+		case 'requests':
+		case 'artist':
+		case 'torrents':
 			$DB->query("
 				SELECT Body
 				FROM comments

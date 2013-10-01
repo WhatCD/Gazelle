@@ -180,7 +180,7 @@ class Artists {
 				case 2:
 					$link = Artists::display_artist($DJs[0], $MakeLink, $Escape).$ampersand.Artists::display_artist($DJs[1], $MakeLink, $Escape);
 					break;
-				default :
+				default:
 					$link = 'Various DJs';
 			}
 			return $link.($IncludeHyphen?' - ':'');

@@ -571,3 +571,12 @@ tr.torrent .bookmark > a:after { content: ""; }
 .autocomplete-selected {
 	background: #666;
 }
+
+.permission_container {
+	float: left;
+	margin-left: 20px;
+	width: 313px;
+}
+.permission_container:first-child {
+	margin-left: 0;
+}

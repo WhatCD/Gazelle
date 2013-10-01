@@ -1,5 +1,8 @@
 CHANGELOG
 
+2013-10-01 by alderaan
+In the staff toolbox, reorganized tools into more useful categories
+
 2013-09-30 by alderaan
 Refactored backend code for staff toolbox
 

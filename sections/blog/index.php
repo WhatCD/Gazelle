@@ -9,7 +9,7 @@ $Text = new TEXT;
 if (check_perms('admin_manage_blog')) {
 	if (!empty($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
-			case 'deadthread' :
+			case 'deadthread':
 				if (is_number($_GET['id'])) {
 					$DB->query("
 						UPDATE blog

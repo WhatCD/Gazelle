@@ -1281,7 +1281,12 @@ tr.torrent .bookmark > a:after {
 /* Toolbox */
 .permission_container {
 	float: left;
-	width: 33.3%;
+	margin-left: 20px;
+	width: 286px;
+}
+
+.permission_container:first-child {
+	margin-left: 0;
 }
 
 /* TORRENTS */

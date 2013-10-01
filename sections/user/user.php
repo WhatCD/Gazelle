@@ -440,10 +440,7 @@ $OverallRank = UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsR
 ?>
 			<li>Passwords: <?=number_format($PasswordChanges)?> <a href="userhistory.php?action=passwords&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 			<li>Stats: N/A <a href="userhistory.php?action=stats&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
-<?
-
-		}
-?>
+<?		} ?>
 		</ul>
 	</div>
 <?	} ?>
@@ -1308,12 +1305,11 @@ if (check_perms('users_mod', $Class)) { ?>
 				<td class="label">Log out:</td>
 				<td><input type="checkbox" name="LogOut" id="LogOut" /></td>
 			</tr>
-
 		</table>
 <?	} ?>
-<?			if (check_perms("users_mod")) {
-				DonationsView::render_mod_donations($UserID);
-			}
+<?	if (check_perms("users_mod")) {
+		DonationsView::render_mod_donations($UserID);
+	}
 ?>
 		<table class="layout" id="submit_box">
 			<tr class="colhead">

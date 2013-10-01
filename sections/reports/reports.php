@@ -26,10 +26,10 @@ if ($_GET['id'] && is_number($_GET['id'])) {
 } else {
 	$View = $_GET['view'];
 	switch ($_GET['view']) {
-		case 'old' :
+		case 'old':
 			$Where = "Status = 'Resolved'";
 			break;
-		default :
+		default:
 			error(404);
 			break;
 	}

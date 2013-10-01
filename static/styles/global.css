@@ -602,3 +602,7 @@ tr.torrent .bookmark>a:after {
 	list-style-type: decimal;
 	font-size: 150%;
 }
+
+.permission_subcontainer {
+	margin-bottom: 10px;
+}

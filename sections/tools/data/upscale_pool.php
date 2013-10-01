@@ -36,11 +36,15 @@ $DB->query("
 		AND BanReason = '2'");
 list($TotalDisabled) = $DB->next_record();
 $DB->set_query_id($RS);
-
+?>
+	<div class="header">
+		<h2>Upscale Pool</h2>
+	</div>
+<?
 if ($DB->has_results()) {
 ?>
-	<div class="box pad">
-		<p>There are currently <?=number_format($Results)?> users queued by the system and <?=number_format($TotalDisabled)?> already disabled.</p>
+	<div class="box pad thin">
+		<p>There are currently <?=number_format($Results)?> enabled users on Ratio Watch and <?=number_format($TotalDisabled)?> already disabled.</p>
 	</div>
 	<div class="linkbox">
 <?
@@ -51,14 +55,14 @@ if ($DB->has_results()) {
 	<table width="100%">
 		<tr class="colhead">
 			<td>User</td>
-			<td>Up</td>
-			<td>Down</td>
-			<td>Ratio</td>
-			<td>Required Ratio</td>
-			<td>Deficit</td>
-			<td>Gamble</td>
-			<td>Registered</td>
-			<td>Remaining</td>
+			<td class="number_column">Uploaded</td>
+			<td class="number_column">Downloaded</td>
+			<td class="number_column">Ratio</td>
+			<td class="number_column">Required Ratio</td>
+			<td class="number_column tooltip" title="How much the user needs to upload to meet his or her required ratio">Deficit</td>
+			<td class="number_column tooltip" title="How much the user has downloaded on Ratio Watch">Gamble</td>
+			<td>Registration Date</td>
+			<td class="tooltip" title="If the time shown here ends in &quot;ago&quot;, then this is how long the user has been on ratio watch and/or below his or her required ratio. If the time shown here does not end in &quot;ago&quot;, then this is the time until the two week Ratio Watch period expires.">Ratio Watch Ended/Ends</td>
 			<td>Lifespan</td>
 		</tr>
 <?
@@ -68,12 +72,12 @@ if ($DB->has_results()) {
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
-			<td><?=Format::get_size($Uploaded)?></td>
-			<td><?=Format::get_size($Downloaded)?></td>
-			<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
-			<td><?=number_format($RequiredRatio, 2)?></td>
-			<td><? if (($Downloaded * $RequiredRatio) > $Uploaded) { echo Format::get_size(($Downloaded * $RequiredRatio) - $Uploaded);} ?></td>
-			<td><?=Format::get_size($Downloaded - $RatioWatchDownload)?></td>
+			<td class="number_column"><?=Format::get_size($Uploaded)?></td>
+			<td class="number_column"><?=Format::get_size($Downloaded)?></td>
+			<td class="number_column"><?=Format::get_ratio_html($Uploaded, $Downloaded)?></td>
+			<td class="number_column"><?=number_format($RequiredRatio, 2)?></td>
+			<td class="number_column"><? if (($Downloaded * $RequiredRatio) > $Uploaded) { echo Format::get_size(($Downloaded * $RequiredRatio) - $Uploaded);} ?></td>
+			<td class="number_column"><?=Format::get_size($Downloaded - $RatioWatchDownload)?></td>
 			<td><?=time_diff($Joined, 2)?></td>
 			<td><?=time_diff($RatioWatchEnds)?></td>
 			<td><?//time_diff(strtotime($Joined), strtotime($RatioWatchEnds))?></td>

@@ -303,8 +303,6 @@ else {
 							$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 						}
 
-
-
 						$DB->query("
 							INSERT INTO users_sessions
 								(UserID, SessionID, KeepLogged, Browser, OperatingSystem, IP, LastUpdate, FullUA)

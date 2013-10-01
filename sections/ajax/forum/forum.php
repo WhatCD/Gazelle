@@ -80,7 +80,7 @@ if ($LoggedUser['CustomForums'][$ForumID] != 1 && $Forums[$ForumID]['MinClassRea
 $ForumName = display_str($Forums[$ForumID]['Name']);
 $JsonSpecificRules = array();
 foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
-	$Thread = get_thread_info($ThreadIDs);
+	$Thread = Forums::get_thread_info($ThreadIDs);
 	$JsonSpecificRules[] = array(
 		'threadId' => (int) $ThreadIDs,
 		'thread' => display_str($Thread['Title'])

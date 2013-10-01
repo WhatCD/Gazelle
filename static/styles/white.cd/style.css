@@ -815,3 +815,13 @@ div[class~=tooltipster-base] {
 .user_options .label {
 	width: 150px;
 }
+
+.permission_container {
+	float: left;
+	margin-left: 20px;
+	width: 303px;
+}
+
+.permission_container:first-child {
+	margin-left: 0;
+}

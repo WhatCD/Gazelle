@@ -48,6 +48,9 @@ if (!empty($LoggedUser['DisablePosting'])) {
 
 $TopicID = $_POST['thread'];
 $ThreadInfo = Forums::get_thread_info($TopicID);
+if ($ThreadInfo === null) {
+	error(404);
+}
 $ForumID = $ThreadInfo['ForumID'];
 $SQLTime = sqltime();
 

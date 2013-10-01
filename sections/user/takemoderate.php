@@ -308,8 +308,6 @@ if ($Logs095 !== 0) {
 	$EditSummary[] = 'EAC v0.95 logs rescored to '.$Logs095;
 }
 
-
-
 // Start building SQL query and edit summary
 if ($Classes[$Class]['Level'] != $Cur['Class']
 	&& (

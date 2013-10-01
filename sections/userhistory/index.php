@@ -64,7 +64,6 @@ if ($_GET['action']) {
 		case 'catchup_collages':
 			require('catchup_collages.php');
 			break;
-
 		case 'token_history':
 			require('token_history.php');
 			break;

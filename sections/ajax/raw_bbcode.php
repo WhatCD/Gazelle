@@ -1,7 +1,5 @@
 <?
 
-include(SERVER_ROOT . "/sections/forums/functions.php");
-
 $PostID = (int)$_POST['postid'];
 
 if (empty($PostID)) {
@@ -19,8 +17,7 @@ if (!$DB->has_results()) {
 }
 
 list($ForumID, $Body) = $DB->next_record();
-$Forums = get_forums();
-if (!check_forumperm($ForumID)) {
+if (!Forums::check_forumperm($ForumID)) {
 	json_die("error", "assholes");
 }
 

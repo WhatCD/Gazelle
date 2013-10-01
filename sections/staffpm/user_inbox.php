@@ -1,7 +1,5 @@
 <?
 
-include(SERVER_ROOT.'/sections/staffpm/functions.php');
-
 View::show_header('Staff PMs', 'staffpm');
 
 // Get messages

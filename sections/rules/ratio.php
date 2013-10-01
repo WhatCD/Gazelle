@@ -101,27 +101,27 @@ View::show_header('Ratio Requirements');
 				bracket. The maximum and minimum required ratios are also referred to as the <strong>0% seeded</strong> and <strong>100% seeded</strong> required ratios, respectively.
 			</li>
 			<li><strong>2: Determine the actual required ratio.</strong> Your actual required ratio will be a number that falls between the maximum and minimum required ratio values determined in the
-				previous step. To determine your actual required ratio, the system first uses the maximum required ratio (0% seeded) and multiplies it by the value [1 &minus; (seeding / snatched)]. Formatted
+				previous step. To determine your actual required ratio, the system first uses the maximum required ratio (0% seeded) and multiplies it by the value [1 &minus; (<var>seeding</var> / <var>snatched</var>)]. Formatted
 				differently, the calculation performed by the system looks like this:
+				<br />
+				<br />
+				<div style="text-align: center;">
+					<img style="vertical-align: middle;" src="static/blank.gif"
+							onload="if (this.src.substr(this.src.length - 9, this.src.length) == 'blank.gif') { this.src = 'https://chart.googleapis.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=%5Ctextrm%7B%28maximum+required+ratio%29+%2A+%281-%5Cfrac%7Bseeding%7D%7Bsnatched%7D%29%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode, null).color); }" />
+				</div>
+				<br />
+				<br />
+				<ul>
+					<li>In this formula, <var>snatched</var> is the number of non-deleted unique snatches you have made. If you snatch a torrent twice, it only counts once. If a snatched torrent is
+						deleted from the site, it is not counted at all.
+					</li>
+					<li>In this formula, <var>seeding</var> is the average number of torrents you&#39;ve seeded over a 72 hour period within the last week. If you&#39;ve seeded a torrent for less than
+						72 hours within the last week, it will not raise your seeding total. Please note that while it is possible to seed more torrents than you have snatched, the system effectively caps the
+						value at 100% of your snatched amount.
+					</li>
+				</ul>
 			</li>
-		</ul>
-		<br />
-		<br />
-
-		<div style="text-align: center;"><img style="vertical-align: middle;" src="static/blank.gif"
-											onload="if (this.src.substr(this.src.length - 9, this.src.length) == 'blank.gif') { this.src = 'https://chart.googleapis.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=%5Ctextrm%7B%28maximum+required+ratio%29+%2A+%281-%5Cfrac%7Bseeding%7D%7Bsnatched%7D%29%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode, null).color); }" />
-		</div>
-		<br />
-		<br />
-		<ul>
-			<li>In this formula, <strong>snatched</strong> is the number of non-deleted unique snatches you have made. If you snatch a torrent twice, it only counts once. If a snatched torrent is
-				deleted from the site, it is not counted at all.
-			</li>
-			<li>In this formula, <strong>seeding</strong> is the average number of torrents you&#39;ve seeded over a 72 hour period within the last week. If you&#39;ve seeded a torrent for less than
-				72 hours within the last week, it will not raise your seeding total. Please note that while it is possible to seed more torrents than you have snatched, the system effectively caps the
-				value at 100% of your snatched amount.
-			</li>
-			<li><strong>3: Round if necessary.</strong> The value determined in the previous step is rounded up to your minimum required ratio (100% seeded) if necessary. This step is required because
+			<li><strong>3: Round, if necessary.</strong> The value determined in the previous step is rounded up to your minimum required ratio (100% seeded) if necessary. This step is required because
 				most amount downloaded brackets have a minimum required ratio (100% seeded) greater than zero, and the value returned by the above calculation is zero when seeding equals snatched.
 			</li>
 		</ul>
@@ -147,7 +147,7 @@ View::show_header('Ratio Requirements');
 			<li>In this example, Rippy has downloaded 25 GB. Rippy falls into the 20&ndash;30 GB amount downloaded bracket in the table above. Rippy&#39;s maximum required ratio (0% seeded) is 0.30, and his minimum required ratio (100% seeded) is 0.05.
 			</li>
 			<li>In this example, Rippy has snatched 90 torrents, and is currently seeding 45 torrents.</li>
-			<li>To calculate Rippy&#39;s actual required ratio, we take his maximum required ratio (0% seeded), which is 0.30, and multiply it by [1 &minus; (seeding / snatched)] (which is 0.50). Written out:
+			<li>To calculate Rippy&#39;s actual required ratio, we take his maximum required ratio (0% seeded), which is 0.30, and multiply it by [1 &minus; (<var>seeding</var> / <var>snatched</var>)] (which is 0.50). Written out:
 				<samp>0.3 * [1 &minus; (45 / 90)] = 0.15</samp>
 			</li>
 			<li>The resulting required ratio is 0.15, which falls between the maximum required ratio of 0.30 and the minimum required ratio of 0.05 for his amount downloaded bracket.</li>

@@ -136,6 +136,9 @@ View::show_header('Forums &gt; '. $Forums[$ForumID]['Name'], '', $IsDonorForum ?
 			<strong>Forum Specific Rules</strong>
 <?		foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
 			$Thread = Forums::get_thread_info($ThreadIDs);
+			if ($Thread === null) {
+				error(404);
+			}
 ?>
 		<br />
 		<a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadIDs?>" class="brackets"><?=display_str($Thread['Title'])?></a>

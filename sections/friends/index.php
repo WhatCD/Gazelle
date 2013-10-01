@@ -24,7 +24,7 @@ if (!empty($_REQUEST['action'])) {
 		case 'Contact':
 			header('Location: inbox.php?action=compose&to='.$_POST['friendid']);
 			break;
-		default :
+		default:
 			error(404);
 	}
 } else {

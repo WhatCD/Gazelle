@@ -12,16 +12,16 @@ if (empty($_GET['type']) || $_GET['type'] == 'torrents') {
 	include(SERVER_ROOT.'/sections/ajax/top10/torrents.php');
 } else {
 	switch ($_GET['type']) {
-		case 'users' :
+		case 'users':
 			include(SERVER_ROOT.'/sections/ajax/top10/users.php');
 			break;
-		case 'tags' :
+		case 'tags':
 			include(SERVER_ROOT.'/sections/ajax/top10/tags.php');
 			break;
-		case 'history' :
+		case 'history':
 			include(SERVER_ROOT.'/sections/ajax/top10/history.php');
 			break;
-		default :
+		default:
 			print json_encode(array('status' => 'failure'));
 			break;
 	}

@@ -2,7 +2,8 @@
 if (!check_perms('users_mod')) {
 	error(403);
 }
-View::show_header('Unprocessed Bitcoin donations');
+$Title = "Unprocessed Bitcoin Donations";
+View::show_header($Title);
 
 // Find all donors
 $AllDonations = DonationsBitcoin::get_received();
@@ -13,12 +14,12 @@ $DB->query("
 	GROUP BY BitcoinAddress");
 $OldDonations = G::$DB->to_pair(0, 1, false);
 ?>
-<div id="thin">
+<div class="thin">
 	<div class="header">
-		<h2>Unprocessed Bitcoin donations</h2>
+		<h2><?=$Title?></h2>
 	</div>
 	<div class="box2">
-		<div class="pad">Do not process these donations manually! The bitcoin parser <em>will</em> get them sooner or later (poke a developer if something seems broken).</div>
+		<div class="pad"><strong>Do not process these donations manually!</strong> The Bitcoin parser <em>will</em> get them sooner or later (poke a developer if something seems broken).</div>
 	</div>
 <?
 $NewDonations = array();
@@ -39,12 +40,12 @@ foreach ($AllDonations as $Address => $Amount) {
 ?>
 	<table class="border" width="100%">
 		<tr class="colhead">
-			<td>Bitcoin address</td>
+			<td>Bitcoin Address</td>
 			<td>User</td>
-			<td>Unprocessed amount (<?=$TotalUnproc ?: '0'?>)</td>
-			<td>Total amount</td>
-			<td>Donor rank</td>
-			<td>Special rank</td>
+			<td>Unprocessed Amount (Total: <?=$TotalUnproc ?: '0'?>)</td>
+			<td>Total Amount</td>
+			<td>Donor Rank</td>
+			<td>Special Rank</td>
 		</tr>
 <?
 if (!empty($NewDonations)) {

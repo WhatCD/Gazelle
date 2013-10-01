@@ -80,6 +80,7 @@ if ($LoggedUser['BytesUploaded'] >= $Amount && $Filled === '0') {
 		$UserIDs[] = $UserID;
 	}
 	NotificationsManager::notify_users($UserIDs, NotificationsManager::REQUESTALERTS, Format::get_size($Amount) . " of bounty has been added to a request you've voted on!", "requests.php?action=view&id=" . $RequestID);
+
 } elseif ($LoggedUser['BytesUploaded'] < $Amount) {
 	echo 'bankrupt';
 }

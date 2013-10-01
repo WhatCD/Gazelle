@@ -17,25 +17,25 @@ if (empty($_GET['type']) || $_GET['type'] == 'torrents') {
 	include(SERVER_ROOT.'/sections/top10/torrents.php');
 } else {
 	switch ($_GET['type']) {
-		case 'users' :
+		case 'users':
 			include(SERVER_ROOT.'/sections/top10/users.php');
 			break;
-		case 'tags' :
+		case 'tags':
 			include(SERVER_ROOT.'/sections/top10/tags.php');
 			break;
-		case 'history' :
+		case 'history':
 			include(SERVER_ROOT.'/sections/top10/history.php');
 			break;
-		case 'votes' :
+		case 'votes':
 			include(SERVER_ROOT.'/sections/top10/votes.php');
 			break;
-		case 'donors' :
+		case 'donors':
 			include(SERVER_ROOT.'/sections/top10/donors.php');
 			break;
 		case 'artists':
 			include(SERVER_ROOT.'/sections/top10/artists.php');
 			break;
-		default :
+		default:
 			error(404);
 			break;
 	}

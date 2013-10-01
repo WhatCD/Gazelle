@@ -51,14 +51,14 @@ if (isset($_GET['pp'])) {
 //---------- Get some data to start processing
 
 // Thread information, constant across all pages
-$ThreadInfo = get_thread_info($ThreadID, true, true, true);
-if ($ThreadInfo == NULL) {
+$ThreadInfo = Forums::get_thread_info($ThreadID, true, true);
+if ($ThreadInfo === null) {
 	json_die('failure', 'no such thread exists');
 }
 $ForumID = $ThreadInfo['ForumID'];
 
 // Make sure they're allowed to look at the page
-if (!check_forumperm($ForumID)) {
+if (!Forums::check_forumperm($ForumID)) {
 	print json_encode(array('status' => 'failure'));
 	die();
 }

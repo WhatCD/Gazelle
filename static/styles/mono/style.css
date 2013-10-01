@@ -1195,7 +1195,7 @@ div.permission_container:nth-child(2) {
 	padding: 0px 2%;
 }
 
-div.permission_container>table {
+div.permission_container table.layout {
 	width: 100%;
 }
 

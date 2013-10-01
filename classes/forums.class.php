@@ -31,8 +31,9 @@ class Forums {
 						LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
 					WHERE t.ID = '$ThreadID'
 					GROUP BY fp.TopicID");
-			if (G::$DB->record_count() == 0) {
-				error(404);
+			if (!G::$DB->has_results()) {
+				G::$DB->set_query_id($QueryID);
+				return null;
 			}
 			$ThreadInfo = G::$DB->next_record(MYSQLI_ASSOC, false);
 			if ($ThreadInfo['StickyPostID']) {
@@ -108,7 +109,7 @@ class Forums {
 					LEFT JOIN forums_topics ON forums_topics.ForumID=forums.ID
 					WHERE forums.ID='$ForumID'
 					GROUP BY ForumID");
-			if (G::$DB->record_count() == 0) {
+			if (!G::$DB->has_results()) {
 				return false;
 			}
 			// Makes an array, with $Forum['Name'], etc.

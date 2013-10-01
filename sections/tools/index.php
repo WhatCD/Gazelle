@@ -10,11 +10,6 @@
  *****************************************************************/
 
 if (isset($argv[1])) {
-	if ($argv[1] == 'cli_sandbox') {
-		include('misc/cli_sandbox.php');
-		die();
-	}
-
 	$_REQUEST['action'] = $argv[1];
 } else {
 	if (empty($_REQUEST['action']) || ($_REQUEST['action'] != 'public_sandbox' && $_REQUEST['action'] != 'ocelot')) {
@@ -45,7 +40,7 @@ if (substr($_REQUEST['action'],0,16) == 'rerender_gallery' && !isset($argv[1])) 
 	}
 }
 
-include(SERVER_ROOT."/classes/validate.class.php");
+include(SERVER_ROOT.'/classes/validate.class.php');
 $Val = new VALIDATE;
 
 include(SERVER_ROOT.'/classes/feed.class.php');
@@ -60,71 +55,71 @@ switch ($_REQUEST['action']) {
 		break;
 	//Services
 	case 'get_host':
-		include('services/get_host.php');
+		include(SERVER_ROOT.'/sections/tools/services/get_host.php');
 		break;
 	case 'get_cc':
-		include('services/get_cc.php');
+		include(SERVER_ROOT.'/sections/tools/services/get_cc.php');
 		break;
 	//Managers
 	case 'forum':
-		include('managers/forum_list.php');
+		include(SERVER_ROOT.'/sections/tools/managers/forum_list.php');
 		break;
 
 	case 'forum_alter':
-		include('managers/forum_alter.php');
+		include(SERVER_ROOT.'/sections/tools/managers/forum_alter.php');
 		break;
 
 	case 'whitelist':
-		include('managers/whitelist_list.php');
+		include(SERVER_ROOT.'/sections/tools/managers/whitelist_list.php');
 		break;
 
 	case 'whitelist_alter':
-		include('managers/whitelist_alter.php');
+		include(SERVER_ROOT.'/sections/tools/managers/whitelist_alter.php');
 		break;
 
 	case 'login_watch':
-		include('managers/login_watch.php');
+		include(SERVER_ROOT.'/sections/tools/managers/login_watch.php');
 		break;
 
 	case 'recommend':
-		include('managers/recommend_list.php');
+		include(SERVER_ROOT.'/sections/tools/managers/recommend_list.php');
 		break;
 
 	case 'recommend_add':
-		include('managers/recommend_add.php');
+		include(SERVER_ROOT.'/sections/tools/managers/recommend_add.php');
 		break;
 
 	case 'recommend_alter':
-		include('managers/recommend_alter.php');
+		include(SERVER_ROOT.'/sections/tools/managers/recommend_alter.php');
 		break;
 
 	case 'recommend_restore':
-		include('managers/recommend_restore.php');
+		include(SERVER_ROOT.'/sections/tools/managers/recommend_restore.php');
 		break;
 
 	case 'email_blacklist':
-		include('managers/email_blacklist.php');
+		include(SERVER_ROOT.'/sections/tools/managers/email_blacklist.php');
 		break;
 
 	case 'email_blacklist_alter':
-		include('managers/email_blacklist_alter.php');
+		include(SERVER_ROOT.'/sections/tools/managers/email_blacklist_alter.php');
 		break;
 
 	case 'email_blacklist_search':
-		include('managers/email_blacklist_search.php');
+		include(SERVER_ROOT.'/sections/tools/managers/email_blacklist_search.php');
 		break;
 
 	case 'dnu':
-		include('managers/dnu_list.php');
+		include(SERVER_ROOT.'/sections/tools/managers/dnu_list.php');
 		break;
 
 	case 'dnu_alter':
-		include('managers/dnu_alter.php');
+		include(SERVER_ROOT.'/sections/tools/managers/dnu_alter.php');
 		break;
 
 	case 'editnews':
 	case 'news':
-		include('managers/news.php');
+		include(SERVER_ROOT.'/sections/tools/managers/news.php');
 		break;
 
 	case 'takeeditnews':
@@ -183,29 +178,29 @@ switch ($_REQUEST['action']) {
 		break;
 
 	case 'tokens':
-		include('managers/tokens.php');
+		include(SERVER_ROOT.'/sections/tools/managers/tokens.php');
 		break;
 	case 'ocelot':
-		include('managers/ocelot.php');
+		include(SERVER_ROOT.'/sections/tools/managers/ocelot.php');
 		break;
 	case 'official_tags':
-		include('managers/official_tags.php');
+		include(SERVER_ROOT.'/sections/tools/managers/official_tags.php');
 		break;
 
 	case 'tag_aliases':
-		include('managers/tag_aliases.php');
+		include(SERVER_ROOT.'/sections/tools/managers/tag_aliases.php');
 		break;
 	case 'label_aliases':
-		include('managers/label_aliases.php');
+		include(SERVER_ROOT.'/sections/tools/managers/label_aliases.php');
 		break;
 	case 'change_log':
-		include('managers/change_log.php');
+		include(SERVER_ROOT.'/sections/tools/managers/change_log.php');
 		break;
 	case 'global_notification':
-		include('managers/global_notification.php');
+		include(SERVER_ROOT.'/sections/tools/managers/global_notification.php');
 		break;
 	case 'take_global_notification':
-		include('managers/take_global_notification.php');
+		include(SERVER_ROOT.'/sections/tools/managers/take_global_notification.php');
 		break;
 	case 'permissions':
 		if (!check_perms('admin_manage_permissions')) {
@@ -299,7 +294,7 @@ switch ($_REQUEST['action']) {
 				}
 			}
 
-			include('managers/permissions_alter.php');
+			include(SERVER_ROOT.'/sections/tools/managers/permissions_alter.php');
 
 		} else {
 			if (!empty($_REQUEST['removeid'])) {
@@ -333,176 +328,172 @@ switch ($_REQUEST['action']) {
 				$Cache->delete_value('classes');
 			}
 
-			include('managers/permissions_list.php');
+			include(SERVER_ROOT.'/sections/tools/managers/permissions_list.php');
 		}
 
 		break;
 
 	case 'ip_ban':
 		//TODO: Clean up DB table ip_bans.
-		include("managers/bans.php");
+		include(SERVER_ROOT.'/sections/tools/managers/bans.php');
 		break;
 	case 'quick_ban':
-		include("misc/quick_ban.php");
+		include(SERVER_ROOT.'/sections/tools/misc/quick_ban.php');
 		break;
 	//Data
 	case 'registration_log':
-		include('data/registration_log.php');
+		include(SERVER_ROOT.'/sections/tools/data/registration_log.php');
 		break;
 
 	case 'donation_log':
-		include('data/donation_log.php');
+		include(SERVER_ROOT.'/sections/tools/data/donation_log.php');
 		break;
 
 	case 'bitcoin_unproc':
-		include('data/bitcoin_unproc.php');
+		include(SERVER_ROOT.'/sections/tools/data/bitcoin_unproc.php');
 		break;
 
 	case 'bitcoin_balance':
-		include('data/bitcoin_balance.php');
+		include(SERVER_ROOT.'/sections/tools/data/bitcoin_balance.php');
 		break;
 
 	case 'donor_rewards':
-		include('data/donor_rewards.php');
+		include(SERVER_ROOT.'/sections/tools/data/donor_rewards.php');
 		break;
 	case 'upscale_pool':
-		include('data/upscale_pool.php');
+		include(SERVER_ROOT.'/sections/tools/data/upscale_pool.php');
 		break;
 
 	case 'invite_pool':
-		include('data/invite_pool.php');
+		include(SERVER_ROOT.'/sections/tools/data/invite_pool.php');
 		break;
 
 	case 'torrent_stats':
-		include('data/torrent_stats.php');
+		include(SERVER_ROOT.'/sections/tools/data/torrent_stats.php');
 		break;
 
 	case 'user_flow':
-		include('data/user_flow.php');
+		include(SERVER_ROOT.'/sections/tools/data/user_flow.php');
 		break;
 
 	case 'economic_stats':
-		include('data/economic_stats.php');
-		break;
-
-	case 'opcode_stats':
-		include('data/opcode_stats.php');
+		include(SERVER_ROOT.'/sections/tools/data/economic_stats.php');
 		break;
 
 	case 'service_stats':
-		include('data/service_stats.php');
+		include(SERVER_ROOT.'/sections/tools/data/service_stats.php');
 		break;
 
 	case 'database_specifics':
-		include('data/database_specifics.php');
+		include(SERVER_ROOT.'/sections/tools/data/database_specifics.php');
 		break;
 
 	case 'special_users':
-		include('data/special_users.php');
+		include(SERVER_ROOT.'/sections/tools/data/special_users.php');
 		break;
 
 	case 'browser_support':
-		include('data/browser_support.php');
+		include(SERVER_ROOT.'/sections/tools/data/browser_support.php');
 		break;
 	//END Data
 
 	//Misc
 	case 'update_geoip':
-		include('misc/update_geoip.php');
+		include(SERVER_ROOT.'/sections/tools/misc/update_geoip.php');
 		break;
 
 	case 'dupe_ips':
-		include('misc/dupe_ip.php');
+		include(SERVER_ROOT.'/sections/tools/misc/dupe_ip.php');
 		break;
 
 	case 'clear_cache':
-		include('misc/clear_cache.php');
+		include(SERVER_ROOT.'/sections/tools/misc/clear_cache.php');
 		break;
 
 	case 'create_user':
-		include('misc/create_user.php');
+		include(SERVER_ROOT.'/sections/tools/misc/create_user.php');
 		break;
 
 	case 'manipulate_tree':
-		include('misc/manipulate_tree.php');
+		include(SERVER_ROOT.'/sections/tools/misc/manipulate_tree.php');
 		break;
 
 	case 'recommendations':
-		include('misc/recommendations.php');
+		include(SERVER_ROOT.'/sections/tools/misc/recommendations.php');
 		break;
 
 	case 'analysis':
-		include('misc/analysis.php');
+		include(SERVER_ROOT.'/sections/tools/misc/analysis.php');
 		break;
 
 	case 'process_info':
-		include('misc/process_info.php');
+		include(SERVER_ROOT.'/sections/tools/misc/process_info.php');
 		break;
 
 	case 'rerender_gallery':
-		include('misc/rerender_gallery.php');
+		include(SERVER_ROOT.'/sections/tools/misc/rerender_gallery.php');
 		break;
 
 	case 'sandbox1':
-		include('misc/sandbox1.php');
+		include(SERVER_ROOT.'/sections/tools/misc/sandbox1.php');
 		break;
 
 	case 'sandbox2':
-		include('misc/sandbox2.php');
+		include(SERVER_ROOT.'/sections/tools/misc/sandbox2.php');
 		break;
 
 	case 'sandbox3':
-		include('misc/sandbox3.php');
+		include(SERVER_ROOT.'/sections/tools/misc/sandbox3.php');
 		break;
 
 	case 'sandbox4':
-		include('misc/sandbox4.php');
+		include(SERVER_ROOT.'/sections/tools/misc/sandbox4.php');
 		break;
 
 	case 'sandbox5':
-		include('misc/sandbox5.php');
+		include(SERVER_ROOT.'/sections/tools/misc/sandbox5.php');
 		break;
 
 	case 'sandbox6':
-		include('misc/sandbox6.php');
+		include(SERVER_ROOT.'/sections/tools/misc/sandbox6.php');
 		break;
 
 	case 'sandbox7':
-		include('misc/sandbox7.php');
+		include(SERVER_ROOT.'/sections/tools/misc/sandbox7.php');
 		break;
 
 	case 'sandbox8':
-		include('misc/sandbox8.php');
+		include(SERVER_ROOT.'/sections/tools/misc/sandbox8.php');
 		break;
 
 	case 'public_sandbox':
-		include('misc/public_sandbox.php');
+		include(SERVER_ROOT.'/sections/tools/misc/public_sandbox.php');
 		break;
 
 	case 'mod_sandbox':
 		if (check_perms('users_mod')) {
-			include('misc/mod_sandbox.php');
+			include(SERVER_ROOT.'/sections/tools/misc/mod_sandbox.php');
 		} else {
 			error(403);
 		}
 		break;
 	case 'bbcode_sandbox':
-		include('misc/bbcode_sandbox.php');
+		include(SERVER_ROOT.'/sections/tools/misc/bbcode_sandbox.php');
 		break;
 	case 'calendar':
-		include('managers/calendar.php');
+		include(SERVER_ROOT.'/sections/tools/managers/calendar.php');
 		break;
 	case 'get_calendar_event':
-		include('managers/ajax_get_calendar_event.php');
+		include(SERVER_ROOT.'/sections/tools/managers/ajax_get_calendar_event.php');
 		break;
 	case 'take_calendar_event':
-		include('managers/ajax_take_calendar_event.php');
+		include(SERVER_ROOT.'/sections/tools/managers/ajax_take_calendar_event.php');
 		break;
 	case 'mass_pm':
-		include('managers/mass_pm.php');
+		include(SERVER_ROOT.'/sections/tools/managers/mass_pm.php');
 		break;
 	case 'take_mass_pm':
-		include('managers/take_mass_pm.php');
+		include(SERVER_ROOT.'/sections/tools/managers/take_mass_pm.php');
 		break;
 	default:
 		include(SERVER_ROOT.'/sections/tools/tools.php');
