@@ -3,7 +3,7 @@ authorize();
 if (!check_perms('users_give_donor')) {
 	error(403);
 }
-if (!is_number($_POST['id']) || !is_number($_POST['donation_amount']) || empty($_POST['donation_currency'])) {
+if (!is_number($_POST['id']) || !is_numeric($_POST['donation_amount']) || empty($_POST['donation_currency'])) {
 	error(404);
 }
 
