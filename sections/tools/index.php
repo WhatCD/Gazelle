@@ -346,19 +346,19 @@ switch ($_REQUEST['action']) {
 		break;
 
 	case 'donation_log':
-		include(SERVER_ROOT.'/sections/tools/data/donation_log.php');
+		include(SERVER_ROOT.'/sections/tools/finances/donation_log.php');
 		break;
 
 	case 'bitcoin_unproc':
-		include(SERVER_ROOT.'/sections/tools/data/bitcoin_unproc.php');
+		include(SERVER_ROOT.'/sections/tools/finances/bitcoin_unproc.php');
 		break;
 
 	case 'bitcoin_balance':
-		include(SERVER_ROOT.'/sections/tools/data/bitcoin_balance.php');
+		include(SERVER_ROOT.'/sections/tools/finances/bitcoin_balance.php');
 		break;
 
 	case 'donor_rewards':
-		include(SERVER_ROOT.'/sections/tools/data/donor_rewards.php');
+		include(SERVER_ROOT.'/sections/tools/finances/donor_rewards.php');
 		break;
 	case 'upscale_pool':
 		include(SERVER_ROOT.'/sections/tools/data/upscale_pool.php');
@@ -381,7 +381,7 @@ switch ($_REQUEST['action']) {
 		break;
 
 	case 'service_stats':
-		include(SERVER_ROOT.'/sections/tools/data/service_stats.php');
+		include(SERVER_ROOT.'/sections/tools/development/service_stats.php');
 		break;
 
 	case 'database_specifics':
@@ -399,7 +399,7 @@ switch ($_REQUEST['action']) {
 
 	//Misc
 	case 'update_geoip':
-		include(SERVER_ROOT.'/sections/tools/misc/update_geoip.php');
+		include(SERVER_ROOT.'/sections/tools/development/update_geoip.php');
 		break;
 
 	case 'dupe_ips':
@@ -407,7 +407,7 @@ switch ($_REQUEST['action']) {
 		break;
 
 	case 'clear_cache':
-		include(SERVER_ROOT.'/sections/tools/misc/clear_cache.php');
+		include(SERVER_ROOT.'/sections/tools/development/clear_cache.php');
 		break;
 
 	case 'create_user':
@@ -427,58 +427,58 @@ switch ($_REQUEST['action']) {
 		break;
 
 	case 'process_info':
-		include(SERVER_ROOT.'/sections/tools/misc/process_info.php');
+		include(SERVER_ROOT.'/sections/tools/development/process_info.php');
 		break;
 
 	case 'rerender_gallery':
-		include(SERVER_ROOT.'/sections/tools/misc/rerender_gallery.php');
+		include(SERVER_ROOT.'/sections/tools/development/rerender_gallery.php');
 		break;
 
 	case 'sandbox1':
-		include(SERVER_ROOT.'/sections/tools/misc/sandbox1.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/sandbox1.php');
 		break;
 
 	case 'sandbox2':
-		include(SERVER_ROOT.'/sections/tools/misc/sandbox2.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/sandbox2.php');
 		break;
 
 	case 'sandbox3':
-		include(SERVER_ROOT.'/sections/tools/misc/sandbox3.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/sandbox3.php');
 		break;
 
 	case 'sandbox4':
-		include(SERVER_ROOT.'/sections/tools/misc/sandbox4.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/sandbox4.php');
 		break;
 
 	case 'sandbox5':
-		include(SERVER_ROOT.'/sections/tools/misc/sandbox5.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/sandbox5.php');
 		break;
 
 	case 'sandbox6':
-		include(SERVER_ROOT.'/sections/tools/misc/sandbox6.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/sandbox6.php');
 		break;
 
 	case 'sandbox7':
-		include(SERVER_ROOT.'/sections/tools/misc/sandbox7.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/sandbox7.php');
 		break;
 
 	case 'sandbox8':
-		include(SERVER_ROOT.'/sections/tools/misc/sandbox8.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/sandbox8.php');
 		break;
 
 	case 'public_sandbox':
-		include(SERVER_ROOT.'/sections/tools/misc/public_sandbox.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/public_sandbox.php');
 		break;
 
 	case 'mod_sandbox':
 		if (check_perms('users_mod')) {
-			include(SERVER_ROOT.'/sections/tools/misc/mod_sandbox.php');
+			include(SERVER_ROOT.'/sections/tools/sandboxes/mod_sandbox.php');
 		} else {
 			error(403);
 		}
 		break;
 	case 'bbcode_sandbox':
-		include(SERVER_ROOT.'/sections/tools/misc/bbcode_sandbox.php');
+		include(SERVER_ROOT.'/sections/tools/sandboxes/bbcode_sandbox.php');
 		break;
 	case 'calendar':
 		include(SERVER_ROOT.'/sections/tools/managers/calendar.php');
