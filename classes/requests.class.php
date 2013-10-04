@@ -53,21 +53,23 @@ class Requests {
 	//
 	//In places where the output from this is merged with sphinx filters, it will be in a different order.
 	public static function get_requests($RequestIDs, $Return = true) {
-		// Make sure there's something in $RequestIDs, otherwise the SQL will break
-		if (count($RequestIDs) === 0) {
-			return array();
-		}
-
 		$Found = $NotFound = array_fill_keys($RequestIDs, false);
 		// Try to fetch the requests from the cache first.
-		foreach ($RequestIDs as $RequestID) {
+		foreach ($RequestIDs as $i => $RequestID) {
+			if (!is_number($RequestID)) {
+				unset($RequestIDs[$i], $Found[$GroupID], $NotFound[$GroupID]);
+				continue;
+			}
 			$Data = G::$Cache->get_value("request_$RequestID");
 			if (!empty($Data)) {
 				unset($NotFound[$RequestID]);
 				$Found[$RequestID] = $Data;
 			}
 		}
-
+		// Make sure there's something in $RequestIDs, otherwise the SQL will break
+		if (count($RequestIDs) === 0) {
+			return array();
+		}
 		$IDs = implode(',', array_keys($NotFound));
 
 		/*

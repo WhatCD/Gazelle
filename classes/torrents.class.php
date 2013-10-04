@@ -46,23 +46,24 @@ class Torrents {
 	 *	}
 	 */
 	public static function get_groups($GroupIDs, $Return = true, $GetArtists = true, $Torrents = true) {
-		// Make sure there's something in $GroupIDs, otherwise the SQL
-		// will break
-		if (count($GroupIDs) == 0) {
-			return array();
-		}
-
 		$Found = $NotFound = array_fill_keys($GroupIDs, false);
 		$Key = $Torrents ? 'torrent_group_' : 'torrent_group_light_';
 
-		foreach ($GroupIDs as $GroupID) {
+		foreach ($GroupIDs as $i => $GroupID) {
+			if (!is_number($GroupID)) {
+				unset($GroupIDs[$i], $Found[$GroupID], $NotFound[$GroupID]);
+				continue;
+			}
 			$Data = G::$Cache->get_value($Key.$GroupID, true);
-			if (!empty($Data) && (@$Data['ver'] == CACHE::GROUP_VERSION)) {
+			if (!empty($Data) && $Data['ver'] == CACHE::GROUP_VERSION) {
 				unset($NotFound[$GroupID]);
 				$Found[$GroupID] = $Data['d'];
 			}
 		}
-
+		// Make sure there's something in $GroupIDs, otherwise the SQL will break
+		if (count($GroupIDs) === 0) {
+			return array();
+		}
 		$IDs = implode(',', array_keys($NotFound));
 
 		/*
