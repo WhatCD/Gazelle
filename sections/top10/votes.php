@@ -160,9 +160,10 @@ $Number = 0;
 $NumGroups = 0;
 foreach ($TopVotes as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));
-	$Ups = $Group['Ups'];
-	$Total = $Group['Total'];
+	$UpVotes = $Group['Ups'];
+	$TotalVotes = $Group['Total'];
 	$Score = $Group['Score'];
+	$DownVotes = $TotalVotes - $UpVotes;
 
 	$IsBookmarked = in_array($GroupID, $Bookmarks);
 
@@ -209,7 +210,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 							<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event);" title="Expand this group. Hold &quot;Ctrl&quot; while clicking to expand all groups on this page."></a>
 						</div>
 					</td>
-					<td class="center">
+					<td class="center cats_col">
 						<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 					</td>
 					<td class="big_info">
@@ -230,7 +231,17 @@ foreach ($TopVotes as $GroupID => $Group) {
 
 						</div>
 					</td>
-					<td colspan="4" class="votes_info_td"><strong><?=number_format($Ups)?></strong> upvotes out of <strong><?=number_format($Total)?></strong> total (<span title="Score: <?=number_format($Score * 100, 4)?>">Score: <?=number_format($Score * 100)?></span>).</td>
+					<td colspan="4" class="votes_info_td">
+						<span style="white-space: nowrap;">
+							<span class="favoritecount_small tooltip" title="<?=$UpVotes . ($UpVotes == 1 ? ' upvote' : ' upvotes')?>"><span id="upvotes"><?=number_format($UpVotes)?></span> <span class="vote_album_up">&and;</span></span>
+							&nbsp; &nbsp;
+							<span class="favoritecount_small tooltip" title="<?=$DownVotes . ($DownVotes == 1 ? ' downvote' : ' downvotes')?>"><span id="downvotes"><?=number_format($DownVotes)?></span> <span class="vote_album_down">&or;</span></span>
+							&nbsp;
+							<span class="favoritecount_small" id="totalvotes"><?=number_format($TotalVotes)?></span> Total
+						</span>
+						<br />
+						<span class="tooltip_interactive" title="&lt;span style=&quot;font-weight: bold;&quot;&gt;Score: <?=number_format($Score * 100, 4)?>&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;This is the lower bound of the binomial confidence interval &lt;a href=&quot;wiki.php?action=article&amp;id=1037&quot;&gt;described here&lt;/a&gt; multiplied by 100.">Score: <span class="favoritecount_small"><?=number_format($Score * 100, 1)?></span></span>
+					</td>
 				</tr>
 <?
 		$LastRemasterYear = '-';
@@ -313,7 +324,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 ?>
 		<tr class="torrent torrent_row<?=$SnatchedTorrentClass . $SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 			<td></td>
-			<td class="center">
+			<td class="center cats_col">
 				<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
 				</div>
 			</td>
@@ -354,12 +365,12 @@ foreach ($TopVotes as $GroupID => $Group) {
 <table class="torrent_table grouping cats" id="discog_table">
 	<tr class="colhead_dark">
 		<td><!-- expand/collapse --></td>
-		<td><!-- Category --></td>
-		<td width="70%"><strong>Torrents</strong></td>
+		<td class="cats_col"><!-- category --></td>
+		<td width="70%">Torrents</td>
 		<td>Size</td>
-		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" class="tooltip" /></td>
+		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" class="tooltip" /></td>
+		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" class="tooltip" /></td>
 	</tr>
 <?
 if ($TorrentList === false) { ?>

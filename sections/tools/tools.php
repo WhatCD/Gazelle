@@ -39,6 +39,24 @@ View::show_header('Staff Tools');
 	<div class="permission_container">
 	<!-- begin left column -->
 <?
+	// begin Administration category
+	$ToolsHTML = "";
+	create_row("Client whitelist", "tools.php?action=whitelist", check_perms("admin_whitelist"));
+	create_row("Create user", "tools.php?action=create_user", check_perms("admin_create_users"));
+	create_row("Permissions manager", "tools.php?action=permissions", check_perms("admin_manage_permissions"));
+	create_row("Special users", "tools.php?action=special_users", check_perms("admin_manage_permissions"));
+
+	if ($ToolsHTML) {
+?>
+		<div class="permission_subcontainer">
+			<table class="layout">
+				<tr class="colhead"><td>Administration</td></tr>
+<?=				$ToolsHTML ?>
+			</table>
+		</div>
+<?
+	}
+
 	// begin Announcements category
 	$ToolsHTML = "";
 	create_row("Calendar", "tools.php?action=calendar", Calendar::can_view());
@@ -86,24 +104,6 @@ View::show_header('Staff Tools');
 		<div class="permission_subcontainer">
 			<table class="layout">
 				<tr class="colhead"><td>Finances</td></tr>
-<?=				$ToolsHTML ?>
-			</table>
-		</div>
-<?
-	}
-
-	// begin Administration category
-	$ToolsHTML = "";
-	create_row("Client whitelist", "tools.php?action=whitelist", check_perms("admin_whitelist"));
-	create_row("Create user", "tools.php?action=create_user", check_perms("admin_create_users"));
-	create_row("Permissions manager", "tools.php?action=permissions", check_perms("admin_manage_permissions"));
-	create_row("Special users", "tools.php?action=special_users", check_perms("admin_manage_permissions"));
-
-	if ($ToolsHTML) {
-?>
-		<div class="permission_subcontainer">
-			<table class="layout">
-				<tr class="colhead"><td>Administration</td></tr>
 <?=				$ToolsHTML ?>
 			</table>
 		</div>

@@ -298,6 +298,11 @@ span.secondary_class {
 	font-weight: bold;
 }
 
+.favoritecount_small {
+	font-size: 110%;
+	font-weight: bold;
+}
+
 ul.votedalbums li {
 	list-style: none;
 	list-style-type: none;
@@ -605,4 +610,14 @@ tr.torrent .bookmark>a:after {
 
 .permission_subcontainer {
 	margin-bottom: 10px;
+}
+
+.vote_tag_up, .vote_artist_up, .vote_album_up {
+	color: green;
+	font-weight: bolder;
+}
+
+.vote_tag_down, .vote_artist_down, .vote_album_down {
+	color: red;
+	font-weight: bolder;
 }

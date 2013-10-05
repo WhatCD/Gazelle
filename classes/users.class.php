@@ -629,6 +629,8 @@ class Users {
 		}
 		if (!empty($AvatarMouseOverText)) {
 			$AvatarMouseOverText =  "title=\"$AvatarMouseOverText\" alt=\"$AvatarMouseOverText\"";
+		} else {
+			$AvatarMouseOverText = "alt=\"\"";
 		}
 		if ($EnabledRewards['HasSecondAvatar'] && !empty($Rewards['SecondAvatar'])) {
 			$SecondAvatar = 'data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar']) . '"';

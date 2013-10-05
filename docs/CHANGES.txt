@@ -1,4 +1,10 @@
-CHANGELOG
+CHANGE LOG
+
+2013-10-05 by alderaan
+Similar Artists and torrent tag boxes, plus the mini up/downvote buttons on torrents when viewing an artist page, now use the same colored glyphs as the Album Votes box
+
+2013-10-05 by alderaan
+Enhanced Album Votes box to show downvotes, the binomial confidence interval score, and the percentage of positive votes. Vote counts now use a colored arrow glyph.
 
 2013-10-01 by alderaan
 In the staff toolbox, reorganized tools into more useful categories

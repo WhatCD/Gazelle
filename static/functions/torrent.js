@@ -259,10 +259,11 @@ function DownVoteGroup(groupid, authkey) {
 		return;
 	}
 	voteLock = true;
-	ajax.get('ajax.php?action=votefavorite&do=vote&groupid='+groupid+'&vote=down'+'&auth='+authkey, function (response) {
+	ajax.get('ajax.php?action=votefavorite&do=vote&groupid=' + groupid + '&vote=down' + '&auth=' + authkey, function (response) {
 			if (response == 'noaction') {
 				//No increment
 			} else if (response == 'success') {
+				$('#downvotes').raw().innerHTML = (parseInt($('#downvotes').raw().innerHTML)) + 1;
 				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) + 1;
 			}
 		}
@@ -279,7 +280,7 @@ function UpVoteGroup(groupid, authkey) {
 		return;
 	}
 	voteLock = true;
-	ajax.get('ajax.php?action=votefavorite&do=vote&groupid='+groupid+'&vote=up'+'&auth='+authkey, function (response) {
+	ajax.get('ajax.php?action=votefavorite&do=vote&groupid=' + groupid + '&vote=up' + '&auth=' + authkey, function (response) {
 			if (response == 'noaction') {
 				//No increment
 			} else if (response == 'success') {
@@ -301,11 +302,12 @@ function UnvoteGroup(groupid, authkey) {
 		return;
 	}
 	voteLock = true;
-	ajax.get('ajax.php?action=votefavorite&do=unvote&groupid='+groupid+'&auth='+authkey, function (response) {
+	ajax.get('ajax.php?action=votefavorite&do=unvote&groupid=' + groupid + '&auth=' + authkey, function (response) {
 			if (response == 'noaction') {
 				//No increment
 			} else if (response == 'success-down') {
 				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) - 1;
+				$('#downvotes').raw().innerHTML = (parseInt($('#downvotes').raw().innerHTML)) - 1;
 			} else if (response == 'success-up') {
 				$('#totalvotes').raw().innerHTML = (parseInt($('#totalvotes').raw().innerHTML)) - 1;
 				$('#upvotes').raw().innerHTML = (parseInt($('#upvotes').raw().innerHTML)) - 1;

@@ -414,13 +414,13 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 	<tr class="colhead">
 		<td class="center" style="width: 15px;"></td>
 		<td class="cats_col"></td>
-		<td><strong>Name</strong></td>
-		<td style="text-align: right;"><strong>Size</strong></td>
-		<td style="text-align: right;"><strong>Data</strong></td>
-		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
-		<td style="text-align: right;"><strong>Peers</strong></td>
+		<td>Name</td>
+		<td style="text-align: right;">Size</td>
+		<td style="text-align: right;">Data</td>
+		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" class="tooltip" /></td>
+		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" class="tooltip" /></td>
+		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" class="tooltip" /></td>
+		<td style="text-align: right;">Peers</td>
 	</tr>
 <?
 	// Server is already processing a top10 query. Starting another one will make things slow

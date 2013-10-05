@@ -9,10 +9,10 @@ class Votes {
 		if (!G::$LoggedUser['NoVoteLinks'] && check_perms('site_album_votes')) { ?>
 			<span class="votespan brackets" style="white-space: nowrap;">
 				Vote:
-				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=G::$LoggedUser['AuthKey']?>'); return false;" class="tooltip small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" title="Upvote">↑</a>
-				<span class="tooltip voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote)) ? ' hidden' : '')?>" title="Upvoted">↑</span>
-				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=G::$LoggedUser['AuthKey']?>'); return false;" class="tooltip small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" title="Downvote">↓</a>
-				<span class="tooltip voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up' || empty($Vote)) ? ' hidden' : '')?>" title="Downvoted">↓</span>
+				<a href="#" onclick="UpVoteGroup(<?=$GroupID?>, '<?=G::$LoggedUser['AuthKey']?>'); return false;" class="tooltip small_upvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" style="color: green; font-weight: bolder;" title="Upvote">&and;</a>
+				<span class="tooltip voted_type small_upvoted voted_up_<?=$GroupID?><?=(($Vote == 'Down' || empty($Vote)) ? ' hidden' : '')?>" style="color: green; font-weight: bolder;" title="Upvoted">&and;</span>
+				<a href="#" onclick="DownVoteGroup(<?=$GroupID?>, '<?=G::$LoggedUser['AuthKey']?>'); return false;" class="tooltip small_downvote vote_link_<?=$GroupID?><?=(!empty($Vote) ? ' hidden' : '')?>" style="color: red; font-weight: bolder;" title="Downvote">&or;</a>
+				<span class="tooltip voted_type small_downvoted voted_down_<?=$GroupID?><?=(($Vote == 'Up' || empty($Vote)) ? ' hidden' : '')?>" style="color: red; font-weight: bolder;" title="Downvoted">&or;</span>
 				<a href="#" onclick="UnvoteGroup(<?=$GroupID?>, '<?=G::$LoggedUser['AuthKey']?>'); return false;" class="tooltip small_clearvote vote_clear_<?=$GroupID?><?=(empty($Vote) ? ' hidden' : '')?>" title="Clear your vote">x</a>
 			</span>
 <?		}

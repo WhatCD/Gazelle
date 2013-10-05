@@ -468,14 +468,15 @@ td.colhead, .colhead td, .colhead th {
 
 .colhead .sign, .colhead_dark .sign {
 	padding: 0px 8px 0px 8px;
-	vertical-align:middle;
-	text-align:center;
+	vertical-align: middle;
+	text-align: center;
 	font-size: 12pt;
 	font-weight: bold;
 }
 
 .colhead_dark {
 	background: #b78234 url(images/woodnavcenter.png) repeat-x;
+	font-weight: bold;
 }
 
 td.label {
@@ -511,7 +512,7 @@ table.slice {
 }
 
 .hide {
-	display:none;
+	display: none;
 }
 
 /* Layout (home page) */
@@ -561,27 +562,27 @@ ul.poll li.graph {
 }
 
 .filter_torrents {
-	width:750px;
-	margin-left:auto;
-	margin-right:auto;
-	margin-bottom:15px;
+	width: 750px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 15px;
 }
 
 .filter_torrents .submit {
-	text-align:right;
-	padding-top:5px;
+	text-align: right;
+	padding-top: 5px;
 }
 
 .filter_torrents .inputtext {
-	width:400px;
+	width: 400px;
 }
 
 .filter_torrents .smaller {
-	width:300px;
+	width: 300px;
 }
 
 .filter_torrents .smallest {
-	width:50px;
+	width: 50px;
 }
 
 .filter_torrents option {

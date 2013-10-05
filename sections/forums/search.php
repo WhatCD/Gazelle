@@ -336,7 +336,7 @@ echo $Pages;
 		<td>Last post time</td>
 	</tr>
 <? if (!$DB->has_results()) { ?>
-		<tr><td colspan="3">Nothing found<?=((isset($AuthorID) && $AuthorID == 0) ? ' (unknown username)' : '')?>!</td></tr>
+		<tr><td colspan="4">Nothing found<?=((isset($AuthorID) && $AuthorID == 0) ? ' (unknown username)' : '')?>!</td></tr>
 <? }
 
 $Row = 'a'; // For the pretty colours
@@ -368,7 +368,7 @@ while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body, $Threa
 		</tr>
 <?	if ($Type == 'body') { ?>
 		<tr class="row<?=$Row?> hidden" id="post_<?=$PostID?>_text">
-			<td colspan="3"><?=$Text->full_format($Body)?></td>
+			<td colspan="4"><?=$Text->full_format($Body)?></td>
 		</tr>
 <?	}
 }
