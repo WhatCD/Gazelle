@@ -1,6 +1,12 @@
 <?
 class Votes {
 	/**
+	 * Confidence level for binomial scoring
+	 */
+	//const Z_VAL = 1.645211440143815; // p-value .95
+	const Z_VAL = 1.281728756502709; // p-value .90
+
+	/**
 	 * Generate voting links for torrent pages, etc.
 	 * @param $GroupID
 	 * @param $Vote The pre-existing vote, if it exists 'Up'|'Down'
@@ -158,17 +164,12 @@ class Votes {
 	 * @return float Ranking score
 	 */
 	public static function binomial_score($Ups, $Total) {
-		// Confidence level for binomial scoring (p-value .95)
-		//define(Z_VAL, 1.645211440143815);
-		// Confidence level for binomial scoring (p-value .90)
-		define(Z_VAL, 1.281728756502709);
-
 		if (($Total <= 0) || ($Ups < 0)) {
 			return 0;
 		}
 		$phat = $Ups / $Total;
-		$Numerator = ($phat + Z_VAL * Z_VAL / (2 * $Total) - Z_VAL * sqrt(($phat * (1 - $phat) + Z_VAL * Z_VAL / (4 * $Total)) / $Total));
-		$Denominator = (1 + Z_VAL * Z_VAL / $Total);
+		$Numerator = ($phat + self::Z_VAL * self::Z_VAL / (2 * $Total) - self::Z_VAL * sqrt(($phat * (1 - $phat) + self::Z_VAL * self::Z_VAL / (4 * $Total)) / $Total));
+		$Denominator = (1 + self::Z_VAL * self::Z_VAL / $Total);
 		return ($Numerator / $Denominator);
 	}
 

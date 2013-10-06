@@ -846,3 +846,19 @@ div[class~=tooltipster-base] {
 
 div[class~=tooltipster-content] > a {
 }
+
+.post_id {
+	font-weight: normal;
+}
+
+.vote_tag_up, .vote_artist_up, .vote_album_up {
+	color: green;
+}
+
+.vote_tag_down, .vote_artist_down, .vote_album_down {
+	color: red;
+}
+
+.colhead_dark .time {
+	font-weight: normal;
+}

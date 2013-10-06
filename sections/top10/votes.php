@@ -237,10 +237,14 @@ foreach ($TopVotes as $GroupID => $Group) {
 							&nbsp; &nbsp;
 							<span class="favoritecount_small tooltip" title="<?=$DownVotes . ($DownVotes == 1 ? ' downvote' : ' downvotes')?>"><span id="downvotes"><?=number_format($DownVotes)?></span> <span class="vote_album_down">&or;</span></span>
 							&nbsp;
-							<span class="favoritecount_small" id="totalvotes"><?=number_format($TotalVotes)?></span> Total
+							<span style="float: right;"><span class="favoritecount_small" id="totalvotes"><?=number_format($TotalVotes)?></span> Total</span>
 						</span>
 						<br />
-						<span class="tooltip_interactive" title="&lt;span style=&quot;font-weight: bold;&quot;&gt;Score: <?=number_format($Score * 100, 4)?>&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;This is the lower bound of the binomial confidence interval &lt;a href=&quot;wiki.php?action=article&amp;id=1037&quot;&gt;described here&lt;/a&gt; multiplied by 100.">Score: <span class="favoritecount_small"><?=number_format($Score * 100, 1)?></span></span>
+						<span style="white-space: nowrap;">
+							<span class="tooltip_interactive" title="&lt;span style=&quot;font-weight: bold;&quot;&gt;Score: <?=number_format($Score * 100, 4)?>&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;This is the lower bound of the binomial confidence interval &lt;a href=&quot;wiki.php?action=article&amp;id=1037&quot;&gt;described here&lt;/a&gt;, multiplied by 100." data-title-plain="Score: <?=number_format($Score * 100, 4)?>. This is the lower bound of the binomial confidence interval described in the Favorite Album Votes wiki article, multiplied by 100.">Score: <span class="favoritecount_small"><?=number_format($Score * 100, 1)?></span></span>
+							&nbsp; | &nbsp;
+							<span class="favoritecount_small"><?=number_format($UpVotes / $TotalVotes * 100, 1)?>%</span> positive
+						</span>
 					</td>
 				</tr>
 <?

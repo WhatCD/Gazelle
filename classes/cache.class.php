@@ -39,6 +39,7 @@ class CACHE extends Memcache {
 	public $MemcacheDBKey = '';
 	protected $InTransaction = false;
 	public $Time = 0;
+	private $Servers = array();
 	private $PersistentKeys = array(
 		'ajax_requests_*',
 		'query_lock_*',
@@ -57,6 +58,7 @@ class CACHE extends Memcache {
 	public $InternalCache = true;
 
 	function __construct($Servers) {
+		$this->Servers = $Servers;
 		foreach ($Servers as $Server) {
 			$this->addServer($Server['host'], $Server['port'], true, $Server['buckets']);
 		}
@@ -356,5 +358,18 @@ class CACHE extends Memcache {
 	 */
 	public function clear_query_lock($LockName) {
 		$this->delete_value('query_lock_'.$LockName);
+	}
+
+	/**
+	 * Get cache server status
+	 *
+	 * @return array (host => bool status, ...)
+	 */
+	public function server_status() {
+		$Status = array();
+		foreach ($this->Servers as $Server) {
+			$Status["$Server[host]:$Server[port]"] = $this->getServerStatus($Server['host'], $Server['port']);
+		}
+		return $Status;
 	}
 }

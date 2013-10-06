@@ -19,7 +19,7 @@ if ($Top10 === false || isset($Top10[$GroupID])) {
 			GROUP BY v.GroupID
 			HAVING Ups > 0");
 		$VotePairs = $DB->to_array('GroupID', MYSQL_ASSOC, false);
-		$Cache->cache_value('vote_pairs_'.$GroupID, $VotePairs);
+		$Cache->cache_value('vote_pairs_'.$GroupID, $VotePairs, 21600);
 	}
 
 	$GroupScores = array();
@@ -27,7 +27,7 @@ if ($Top10 === false || isset($Top10[$GroupID])) {
 		// Cutting out the junk should speed the sort significantly
 		$Score = binomial_score($RatingGroup['Ups'], $RatingGroup['Total']);
 		if ($Score > 0.3) {
-			$GroupScores[$RatingGroup['GroupID']] = binomial_score($RatingGroup['Ups'], $RatingGroup['Total']);
+			$GroupScores[$RatingGroup['GroupID']] = $Score;
 		}
 	}
 

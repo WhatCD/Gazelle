@@ -1104,3 +1104,11 @@ div[class~=tooltipster-content] > a {
 #settings_sections #submit, #settings_sections #settings_search {
 	margin: 3px 0;
 }
+
+.vote_tag_up, .vote_artist_up, .vote_album_up {
+	color: green;
+}
+
+.vote_tag_down, .vote_artist_down, .vote_album_down {
+	color: red;
+}

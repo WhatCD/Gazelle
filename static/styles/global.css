@@ -613,11 +613,9 @@ tr.torrent .bookmark>a:after {
 }
 
 .vote_tag_up, .vote_artist_up, .vote_album_up {
-	color: green;
 	font-weight: bolder;
 }
 
 .vote_tag_down, .vote_artist_down, .vote_album_down {
-	color: red;
 	font-weight: bolder;
 }

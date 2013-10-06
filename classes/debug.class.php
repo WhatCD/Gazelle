@@ -52,6 +52,13 @@ class DEBUG {
 			$Reason[] = $DBWarningCount . ' DB warning(s)';
 		}*/
 
+		$CacheStatus = G::$Cache->server_status();
+		if (in_array(0, $CacheStatus) && !G::$Cache->get_value('cache_fail_reported')) {
+			// Limit to max one report every 15 minutes to avoid massive debug spam
+			G::$Cache->cache_value('cache_fail_reported', true, 900);
+			$Reason[] = "Cache server error";
+		}
+
 		if (isset($_REQUEST['profile'])) {
 			$Reason[] = 'Requested by ' . G::$LoggedUser['Username'];
 		}
@@ -61,6 +68,7 @@ class DEBUG {
 		$this->Perf['CPU time'] = number_format($this->get_cpu_time() / 1000000, 3).' s';
 
 		if (isset($Reason[0])) {
+			$this->log_var($CacheStatus, 'Cache server status');
 			$this->analysis(implode(', ', $Reason));
 			return true;
 		}
@@ -308,7 +316,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_perf').gtoggle(); return false;" class="brackets">View</a> Performance stats:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_perf').gtoggle(); return false;" class="brackets">View</a> Performance stats:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_perf" class="debug_table hidden" width="100%">
@@ -333,7 +341,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_include').gtoggle(); return false;" class="brackets">View</a> <?=number_format(count($Includes))?> Includes:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_include').gtoggle(); return false;" class="brackets">View</a> <?=number_format(count($Includes))?> Includes:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_include" class="debug_table hidden" width="100%">
@@ -357,7 +365,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_classes').gtoggle(); return false;" class="brackets">View</a> Classes:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_classes').gtoggle(); return false;" class="brackets">View</a> Classes:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_classes" class="debug_table hidden" width="100%">
@@ -374,7 +382,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_extensions').gtoggle(); return false;" class="brackets">View</a> Extensions:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_extensions').gtoggle(); return false;" class="brackets">View</a> Extensions:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_extensions" class="debug_table hidden" width="100%">
@@ -397,7 +405,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_flags').gtoggle(); return false;" class="brackets">View</a> Flags:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_flags').gtoggle(); return false;" class="brackets">View</a> Flags:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_flags" class="debug_table hidden" width="100%">
@@ -435,7 +443,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_constants').gtoggle(); return false;" class="brackets">View</a> Constants:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_constants').gtoggle(); return false;" class="brackets">View</a> Constants:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_constants" class="debug_table hidden" width="100%">
@@ -462,7 +470,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_cache').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_cache').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_cache" class="debug_table hidden" width="100%">
@@ -491,7 +499,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_error').gtoggle(); return false;" class="brackets">View</a> <?=number_format(count($Errors))?> Errors:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_error').gtoggle(); return false;" class="brackets">View</a> <?=number_format(count($Errors))?> Errors:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_error" class="debug_table hidden" width="100%">
@@ -530,14 +538,16 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_database').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_database').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_database" class="debug_table hidden" width="100%">
 <?
 		foreach ($Queries as $Query) {
 			list($SQL, $Time, $Warnings) = $Query;
-			$Warnings = implode('<br />', $Warnings);
+			if ($Warnings !== null) {
+				$Warnings = implode('<br />', $Warnings);
+			}
 ?>
 		<tr valign="top">
 			<td class="debug_data debug_query_data"><div><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str($SQL)))?></div></td>
@@ -564,7 +574,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_sphinx').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_sphinx').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_sphinx" class="debug_table hidden" width="100%">
@@ -596,7 +606,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$('#debug_loggedvars').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_loggedvars').gtoggle(); return false;" class="brackets">View</a><?=$Header?></strong></td>
 		</tr>
 	</table>
 	<table id="debug_loggedvars" class="debug_table hidden" width="100%">

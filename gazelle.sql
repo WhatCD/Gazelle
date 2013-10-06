@@ -1799,9 +1799,9 @@ CREATE TABLE `users_votes` (
   `Time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`UserID`,`GroupID`),
   KEY `GroupID` (`GroupID`),
-  KEY `UserID` (`UserID`),
   KEY `Type` (`Type`),
   KEY `Time` (`Time`),
+  KEY `Vote` (`Type`,`GroupID`,`UserID`),
   CONSTRAINT `users_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE,
   CONSTRAINT `users_votes_ibfk_2` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET utf8;

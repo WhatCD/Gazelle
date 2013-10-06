@@ -84,7 +84,7 @@ if ($_REQUEST['do'] == 'vote') {
 				}
 			}
 		}
-		$Cache->cache_value("vote_pairs_$GroupID", $VotePairs);
+		$Cache->cache_value("vote_pairs_$GroupID", $VotePairs, 21600);
 	}
 
 	// Now do the paired votes keys for all of this guy's other votes
@@ -112,10 +112,9 @@ if ($_REQUEST['do'] == 'vote') {
 							'Total' => 1,
 							'Ups' => ($Type == 'Up') ? 1 : 0);
 			}
-			$Cache->cache_value("vote_pairs_$VGID", $VotePairs);
+			$Cache->cache_value("vote_pairs_$VGID", $VotePairs, 21600);
 		}
 	}
-
 
 	echo 'success';
 } elseif ($_REQUEST['do'] == 'unvote') {
@@ -152,13 +151,13 @@ if ($_REQUEST['do'] == 'vote') {
 	// First update this album's paired votes. If this keys is magically not set,
 	// our life just got a bit easier. We're only tracking paired votes on upvotes.
 	if ($Type == 'Up') {
-		$VotePairs = $Cache->get_value('vote_pairs_'.$GroupID, true);
+		$VotePairs = $Cache->get_value("vote_pairs_$GroupID", true);
 		if ($VotePairs !== false) {
 			foreach ($UserVotes as $Vote) {
 				if (isset($VotePairs[$Vote['GroupID']])) {
 					if ($VotePairs[$Vote['GroupID']]['Total'] == 0) {
 						// Something is screwy
-						$Cache->delete_value('vote_pairs_'.$GroupID);
+						$Cache->delete_value("vote_pairs_$GroupID");
 						continue;
 					}
 					$VotePairs[$Vote['GroupID']]['Total'] -= 1;
@@ -167,12 +166,12 @@ if ($_REQUEST['do'] == 'vote') {
 					}
 				} else {
 					// Something is screwy, kill the key and move on
-					$Cache->delete_value('vote_pairs_'.$GroupID);
+					$Cache->delete_value("vote_pairs_$GroupID");
 					break;
 				}
 			}
 		}
-		$Cache->cache_value('vote_pairs_'.$GroupID, $VotePairs);
+		$Cache->cache_value("vote_pairs_$GroupID", $VotePairs, 21600);
 	}
 
 	// Now do the paired votes keys for all of this guy's other votes
@@ -185,22 +184,22 @@ if ($_REQUEST['do'] == 'vote') {
 			continue;
 		}
 		// Again, if the cache key is not set, move along
-		$VotePairs = $Cache->get_value('vote_pairs_'.$VGID, true);
+		$VotePairs = $Cache->get_value("vote_pairs_$VGID", true);
 		if ($VotePairs !== false) {
 			if (isset($VotePairs[$GroupID])) {
 				if ($VotePairs[$GroupID]['Total'] == 0) {
 					// Something is screwy
-					$Cache->delete_value('vote_pairs_'.$VGID);
+					$Cache->delete_value("vote_pairs_$VGID");
 					continue;
 				}
 				$VotePairs[$GroupID]['Total'] -= 1;
 				if ($Type == 'Up') {
 					$VotePairs[$GroupID]['Ups'] -= 1;
 				}
-				$Cache->cache_value('vote_pairs_'.$VGID, $VotePairs);
+				$Cache->cache_value("vote_pairs_$VGID", $VotePairs, 21600);
 			} else {
 				// Something is screwy, kill the key and move on
-				$Cache->delete_value('vote_pairs_'.$VGID);
+				$Cache->delete_value("vote_pairs_$VGID");
 			}
 		}
 	}
