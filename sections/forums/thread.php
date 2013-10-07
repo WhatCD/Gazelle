@@ -335,24 +335,25 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			}
 ?>			<ul style="list-style: none;" id="poll_options">
 <?
-
 			foreach ($Answers as $i => $Answer) {
 ?>
 				<li>
-					<a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>"><?=display_str($Answer == '' ? 'Blank' : $Answer)?></a>
-					 - <?=$StaffVotes[$i]?>&nbsp;(<?=number_format(((float) $Votes[$i] / $TotalVotes) * 100, 2)?>%)
-					 <a href="forums.php?action=delete_poll_option&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $i?>" class="brackets">X</a>
-</li>
+					<a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int)$i?>"><?=display_str($Answer == '' ? 'Blank' : $Answer)?></a>
+					 - <?=$StaffVotes[$i]?>&nbsp;(<?=number_format(((float)$Votes[$i] / $TotalVotes) * 100, 2)?>%)
+					<a href="forums.php?action=delete_poll_option&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int)$i?>" class="brackets tooltip" title="Delete poll option">X</a>
+				</li>
 <?			} ?>
-				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0"><?=($UserResponse == '0' ? '&raquo; ' : '')?>Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float) $Votes[0] / $TotalVotes) * 100, 2)?>%)</li>
+				<li>
+					<a href="forums.php?action=change_vote&amp;threadid=<?=$ThreadID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=0"><?=($UserResponse == '0' ? '&raquo; ' : '')?>Blank</a> - <?=$StaffVotes[0]?>&nbsp;(<?=number_format(((float)$Votes[0] / $TotalVotes) * 100, 2)?>%)
+				</li>
 			</ul>
 <?
 			if ($ForumID == STAFF_FORUM) {
 ?>
 			<br />
-			<strong>Votes:</strong> <?=number_format($TotalVotes)?> / <?=$StaffCount ?>
+			<strong>Votes:</strong> <?=number_format($TotalVotes)?> / <?="$StaffCount\n"?>
 			<br />
-			<strong>Missing votes:</strong> <?=implode(", ", $StaffNames)?>
+			<strong>Missing votes:</strong> <?=implode(", ", $StaffNames); echo "\n";?>
 			<br /><br />
 <?
 			}
@@ -451,30 +452,35 @@ foreach ($Thread as $Key => $Post) {
 	<tr class="colhead_dark">
 		<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1?>">
 			<div style="float: left;"><a class="post_id" href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>#post<?=$PostID?>">#<?=$PostID?></a>
-				<?=Users::format_username($AuthorID, true, true, true, true, true, $IsDonorForum)?>
-				<?=time_diff($AddedTime,2)?>
-				- <a href="#quickpost" id="quote_<?=$PostID?>" onclick="Quote('<?=$PostID?>','<?=$Username?>', true);" class="brackets">Quote</a>
+				<?=Users::format_username($AuthorID, true, true, true, true, true, $IsDonorForum); echo "\n";?>
+				<?=time_diff($AddedTime, 2); echo "\n";?>
+				- <a href="#quickpost" id="quote_<?=$PostID?>" onclick="Quote('<?=$PostID?>', '<?=$Username?>', true);" class="brackets">Quote</a>
 <?	if ((!$ThreadInfo['IsLocked'] && Forums::check_forumperm($ForumID, 'Write') && $AuthorID == $LoggedUser['ID']) || check_perms('site_moderate_forums')) { ?>
-				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>','<?=$Key?>');" class="brackets">Edit</a>
-<?	}
+				- <a href="#post<?=$PostID?>" onclick="Edit_Form('<?=$PostID?>', '<?=$Key?>');" class="brackets">Edit</a>
+<?
+	}
 	if (check_perms('site_admin_forums') && $ThreadInfo['Posts'] > 1) { ?>
 				- <a href="#post<?=$PostID?>" onclick="Delete('<?=$PostID?>');" class="brackets">Delete</a>
-<?	}
+<?
+	}
 	if ($PostID == $ThreadInfo['StickyPostID']) { ?>
 				<strong><span class="sticky_post_label" class="brackets">Sticky</span></strong>
 <?		if (check_perms('site_moderate_forums')) { ?>
 				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">X</a>
-<?		}
+<?
+		}
 	} else {
 		if (check_perms('site_moderate_forums')) { ?>
 				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">&#x21d5;</a>
-<? 		}
+<?
+		}
 	}
 ?>
 			</div>
 			<div id="bar<?=$PostID?>" style="float: right;">
 				<a href="reports.php?action=report&amp;type=post&amp;id=<?=$PostID?>" class="brackets">Report</a>
-<?	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
+<?
+	if (check_perms('users_warn') && $AuthorID != $LoggedUser['ID']) {
 		$AuthorInfo = Users::user_info($AuthorID);
 		if ($LoggedUser['Class'] >= $AuthorInfo['Class']) {
 ?>

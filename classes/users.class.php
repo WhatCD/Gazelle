@@ -730,6 +730,9 @@ class Users {
 		if ($Enabled && $Output) {
 			echo ' data-gazelle-autocomplete="true"';
 		}
-		return $Enabled;
+		if (!$Output) {
+			// don't return a boolean if you're echoing HTML
+			return $Enabled;
+		}
 	}
 }

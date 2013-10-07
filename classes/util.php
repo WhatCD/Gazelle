@@ -111,10 +111,10 @@ function send_irc($Raw) {
  * @param string $Error Error type. Automatically supported:
  *	403, 404, 0 (invalid input), -1 (invalid request)
  *	If you use your own string for Error, it becomes the error description.
- * @param boolean $Ajax If true, the header/footer won't be shown, just the description.
+ * @param boolean $NoHTML If true, the header/footer won't be shown, just the description.
  * @param string $Log If true, the user is given a link to search $Log in the site log.
  */
-function error($Error, $Ajax = false, $Log = false) {
+function error($Error, $NoHTML = false, $Log = false) {
 	global $Debug;
 	require(SERVER_ROOT.'/sections/error/index.php');
 	$Debug->profile();

@@ -3,11 +3,12 @@
 class NotificationsManagerView {
 	private static $Settings;
 
-	public static function load_js() { ?>
-		<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/noty.js"></script>
-		<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/layouts/bottomRight.js"></script>
-		<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/themes/default.js"></script>
-		<script type="text/javascript" src="<?=STATIC_SERVER?>functions/user_notifications.js"></script>
+	public static function load_js() {
+?>
+	<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/noty.js"></script>
+	<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/layouts/bottomRight.js"></script>
+	<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/themes/default.js"></script>
+	<script type="text/javascript" src="<?=STATIC_SERVER?>functions/user_notifications.js"></script>
 <?
 	}
 
@@ -16,7 +17,7 @@ class NotificationsManagerView {
 		self::$Settings = $Settings;
 ?>
 		<tr>
-			<td class="label tooltip" title="Enabling this will give you a notification when a new sitewide news announcement is made.">
+			<td class="label">
 				<strong>News announcements</strong>
 			</td>
 			<td>
@@ -24,7 +25,7 @@ class NotificationsManagerView {
 			</td>
 		</tr>
 		<tr>
-			<td class="label tooltip" title="Enabling this will give you a notification when a new sitewide blog post is made.">
+			<td class="label">
 				<strong>Blog announcements</strong>
 			</td>
 			<td>
@@ -32,7 +33,7 @@ class NotificationsManagerView {
 			</td>
 		</tr>
 		<tr>
-			<td class="label tooltip" title="Enabling this will give you a notification when you receive a new private message.">
+			<td class="label">
 				<strong>Inbox messages</strong>
 			</td>
 			<td>
@@ -48,7 +49,7 @@ class NotificationsManagerView {
 			</td>
 		</tr>
 		<tr>
-			<td class="label tooltip" title="Enabling this will give you a notification when a thread you have subscribed to receives a new post.">
+			<td class="label">
 				<strong>Thread subscriptions</strong>
 			</td>
 			<td>
@@ -140,7 +141,7 @@ class NotificationsManagerView {
 		}
 		$IsChecked = $Checked == 1 || !isset($Checked) ? ' checked="checked"' : '';
 ?>
-			<input <?=$Both ? 'type="radio" value="1"' : 'type="checkbox"'?> name="notifications_<?=$Name?>_popup" id="notifications_<?=$Name?>_popup"<?=$IsChecked?> />
+			<input<?=$Both ? ' type="radio" value="1"' : ' type="checkbox"'?> name="notifications_<?=$Name?>_popup" id="notifications_<?=$Name?>_popup"<?=$IsChecked?> />
 			<label for="notifications_<?=$Name?>_popup">Pop-up</label>
 <?
 	}

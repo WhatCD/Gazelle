@@ -176,7 +176,7 @@ foreach ($Users as $ID => $User) {
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="collageid" value="<?=$CollageID?>" />
 					<div class="field_div">
-						<input type="text" id="artist" size="20" name="url" <? Users::has_autocomplete_enabled('other'); ?>/>
+						<input type="text" id="artist" size="20" name="url"<? Users::has_autocomplete_enabled('other'); ?> />
 					</div>
 					<div class="submit_div">
 						<input type="submit" value="Add" />

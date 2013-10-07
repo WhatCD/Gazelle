@@ -34,18 +34,18 @@ if (!is_number($TorrentID)) {
 	error(0);
 }
 
-/* uTorrent Remote redownloads .torrent files every fifteen minutes.
+/* uTorrent Remote and various scripts redownload .torrent files periodically.
 	To prevent this retardation from blowing bandwidth etc., let's block it
-	if he has downloaded the .torrent file twice before */
-if (strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== false) {
+	if the .torrent file has been downloaded four times before */
+if (strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Python-urllib') !== false) {
 	$DB->query("
 		SELECT 1
 		FROM users_downloads
 		WHERE UserID = $UserID
 			AND TorrentID = $TorrentID
-		LIMIT 3");
-	if ($DB->record_count() > 2) {
-		error('You have already downloaded this torrent file three times. If you need to download it again, please do so from your browser, not through μTorrent Remote.');
+		LIMIT 4");
+	if ($DB->record_count() === 4) {
+		error('You have already downloaded this torrent file four times. If you need to download it again, please do so from your browser.', true);
 		die();
 	}
 }

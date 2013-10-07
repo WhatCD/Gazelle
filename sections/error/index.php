@@ -46,7 +46,7 @@ if (!empty($_GET['e']) && in_array($_GET['e'],$Errors)) {
 		$Description .= ' <a href="log.php?search='.$Log.'">Search Log</a>';
 	}
 
-	if (empty($Ajax) && $Error != -1) {
+	if (empty($NoHTML) && $Error != -1) {
 		View::show_header($Title);
 ?>
 	<div class="thin">

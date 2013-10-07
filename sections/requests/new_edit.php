@@ -156,7 +156,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 						Type
 					</td>
 					<td>
-						<select id="categories" name="type" onchange="Categories()">
+						<select id="categories" name="type" onchange="Categories();">
 <?		foreach (Misc::display_array($Categories) as $Cat) { ?>
 							<option value="<?=$Cat?>"<?=(!empty($CategoryName) && ($CategoryName === $Cat) ? ' selected="selected"' : '')?>><?=$Cat?></option>
 <?		} ?>
@@ -168,14 +168,13 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 					<td id="artistfields">
 						<p id="vawarning" class="hidden">Please use the multiple artists feature rather than adding "Various Artists" as an artist; read <a href="wiki.php?action=article&amp;id=369">this</a> for more information.</p>
 <?
-
 		if (!empty($ArtistForm)) {
 			$First = true;
 			foreach ($ArtistForm as $Importance => $ArtistNames) {
 				foreach ($ArtistNames as $Artist) {
 ?>
-						<input type="text" id="artist" name="artists[]" <? Users::has_autocomplete_enabled('other'); ?> size="45" value="<?=display_str($Artist['name']) ?>" />
-						<select id="importance" name="importance[]" >
+						<input type="text" id="artist" name="artists[]"<? Users::has_autocomplete_enabled('other'); ?> size="45" value="<?=display_str($Artist['name']) ?>" />
+						<select id="importance" name="importance[]">
 							<option value="1"<?=($Importance == '1' ? ' selected="selected"' : '')?>>Main</option>
 							<option value="2"<?=($Importance == '2' ? ' selected="selected"' : '')?>>Guest</option>
 							<option value="4"<?=($Importance == '4' ? ' selected="selected"' : '')?>>Composer</option>
@@ -186,11 +185,12 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 						</select>
 						<? if ($First) { ?><a href="#" onclick="AddArtistField(); return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField(); return false;" class="brackets">&minus;</a><? } $First = false; ?>
 						<br />
-<?				}
+<?
+				}
 			}
 		} else {
-?>						<input type="text" id="artist" name="artists[]" <? Users::has_autocomplete_enabled('other'); ?>size="45" onblur="CheckVA();" />
-						<select id="importance" name="importance[]" >
+?>						<input type="text" id="artist" name="artists[]"<? Users::has_autocomplete_enabled('other'); ?> size="45" onblur="CheckVA();" />
+						<select id="importance" name="importance[]">
 							<option value="1">Main</option>
 							<option value="2">Guest</option>
 							<option value="4">Composer</option>
@@ -199,7 +199,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 							<option value="3">Remixer</option>
 							<option value="7">Producer</option>
 						</select>
-						<a href="#" onclick="AddArtistField();return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField();return false;" class="brackets">&minus;</a>
+						<a href="#" onclick="AddArtistField(); return false;" class="brackets">+</a> <a href="#" onclick="RemoveArtistField(); return false;" class="brackets">&minus;</a>
 <?
 		}
 ?>
@@ -259,7 +259,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 		$Cache->cache_value('genre_tags', $GenreTags, 3600 * 6);
 	}
 ?>
-						<select id="genre_tags" name="genre_tags" onchange="add_tag();return false;" >
+						<select id="genre_tags" name="genre_tags" onchange="add_tag(); return false;">
 							<option>---</option>
 <?	foreach (Misc::display_array($GenreTags) as $Genre) { ?>
 							<option value="<?=$Genre?>"><?=$Genre?></option>
@@ -281,7 +281,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 <?
 		foreach ($ReleaseTypes as $Key => $Val) {
 							//echo '<h1>'.$ReleaseType.'</h1>'; die();
-?>							<option value="<?=$Key?>"<?=(!empty($ReleaseType) ? ($Key == $ReleaseType ? ' selected="selected"' : '') : '') ?>><?=$Val?></option>
+?>							<option value="<?=$Key?>"<?=!empty($ReleaseType) ? ($Key == $ReleaseType ? ' selected="selected"' : '') : '' ?>><?=$Val?></option>
 <?
 		}
 ?>
@@ -291,7 +291,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 				<tr id="formats_tr">
 					<td class="label">Allowed formats</td>
 					<td>
-						<input type="checkbox" name="all_formats" id="toggle_formats" onchange="Toggle('formats', <?=($NewRequest ? 1 : 0)?>);"<?=(!empty($FormatArray) && (count($FormatArray) === count($Formats)) ? ' checked="checked"' : '')?> /><label for="toggle_formats"> All</label>
+						<input type="checkbox" name="all_formats" id="toggle_formats" onchange="Toggle('formats', <?=($NewRequest ? 1 : 0)?>);"<?=!empty($FormatArray) && (count($FormatArray) === count($Formats)) ? ' checked="checked"' : ''; ?> /><label for="toggle_formats"> All</label>
 						<span style="float: right;"><strong>NB: You cannot require a log or cue unless FLAC is an allowed format</strong></span>
 <?		foreach ($Formats as $Key => $Val) {
 			if ($Key % 8 === 0) {
