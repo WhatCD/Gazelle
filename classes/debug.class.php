@@ -371,7 +371,9 @@ class DEBUG {
 	<table id="debug_classes" class="debug_table hidden" width="100%">
 		<tr>
 			<td align="left">
-				<pre><? print_r($Classes) ?></pre>
+				<pre>
+<?					print_r($Classes); echo "\n"; ?>
+				</pre>
 			</td>
 		</tr>
 	</table>
@@ -388,7 +390,9 @@ class DEBUG {
 	<table id="debug_extensions" class="debug_table hidden" width="100%">
 		<tr>
 			<td align="left">
-				<pre><? print_r($this->get_extensions()) ?></pre>
+				<pre>
+<?					print_r($this->get_extensions()); echo "\n"; ?>
+				</pre>
 			</td>
 		</tr>
 	</table>
@@ -429,9 +433,7 @@ class DEBUG {
 <?			} ?>
 			<td align="left"><?=Format::get_size($Memory)?></td>
 		</tr>
-<?
-		}
-?>
+<?		} ?>
 	</table>
 <?
 	}
@@ -449,7 +451,9 @@ class DEBUG {
 	<table id="debug_constants" class="debug_table hidden" width="100%">
 		<tr>
 			<td align="left" class="debug_data debug_constants_data">
-				<pre><?=display_str(print_r($Constants, true))?></pre>
+				<pre>
+<?=					display_str(print_r($Constants, true)); echo "\n"; ?>
+				</pre>
 			</td>
 		</tr>
 	</table>
@@ -481,7 +485,9 @@ class DEBUG {
 				<a href="tools.php?action=clear_cache&amp;key=<?=$Key?>&amp;type=clear" target="_blank" class="brackets">Clear this cache key</a>
 			</td>
 			<td align="left" class="debug_data debug_cache_data">
-				<pre id="debug_cache_<?=$Key?>" class="hidden"><?=display_str(print_r(G::$Cache->get_value($Key, true), true))?></pre>
+				<pre id="debug_cache_<?=$Key?>" class="hidden">
+<?=					display_str(print_r(G::$Cache->get_value($Key, true), true)); echo "\n"; ?>
+				</pre>
 			</td>
 		</tr>
 <?		} ?>
@@ -518,9 +524,7 @@ class DEBUG {
 				<?=display_str($Location)?>
 			</td>
 		</tr>
-<?
-		}
-?>
+<?		} ?>
 	</table>
 <?
 	}
@@ -554,9 +558,7 @@ class DEBUG {
 			<td class="rowa debug_info debug_query_time" style="width: 130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 			<td class="rowa debug_info debug_query_warnings"><?=$Warnings?></td>
 		</tr>
-<?
-		}
-?>
+<?		} ?>
 	</table>
 <?
 	}
@@ -586,9 +588,7 @@ class DEBUG {
 			<td class="debug_data debug_sphinx_data"><pre><?=str_replace("\t", '	', $Params)?></pre></td>
 			<td class="rowa debug_info debug_sphinx_time" style="width: 130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 		</tr>
-<?
-		}
-?>
+<?		} ?>
 	</table>
 <?
 	}
@@ -621,7 +621,9 @@ class DEBUG {
 				<div><?=$Data['bt']['path'].':'.$Data['bt']['line'];?></div>
 			</td>
 			<td class="debug_data debug_loggedvars_data" align="left">
-				<pre id="debug_loggedvars_<?=$ID?>" class="hidden"><?=display_str(print_r($Data['data'], true));?></pre>
+				<pre id="debug_loggedvars_<?=$ID?>" class="hidden">
+<?=					display_str(print_r($Data['data'], true)); echo "\n"; ?>
+				</pre>
 			</td>
 		</tr>
 <?		} ?>
