@@ -24,11 +24,11 @@ $Owner = display_str($Owner);
 ?>
 <div class="header">
 	<h2>Reports v2 Information!</h2>
-	<? include('header.php'); ?>
+<?	include('header.php'); ?>
 </div>
 <br />
-<div class="box pad thin" style="padding: 0px 0px 0px 20px; width: 70%; margin-left: auto; margin-right: auto;">
-	<table class="layout"><tr><td style="width: 50%;">
+<div class="box pad thin reportsv2_views_container">
+	<table class="noborder"><tr><td class="noborder" style="width: 50%;">
 <?
 $DB->query("
 	SELECT
@@ -42,8 +42,8 @@ $DB->query("
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<strong>Reports resolved in the last 24 hours</strong>
-		<table class="border">
+		<h3>Reports resolved in the last 24 hours</h3>
+		<table class="border reportsv2_views_table">
 			<tr>
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
@@ -71,8 +71,8 @@ $DB->query("
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<strong>Reports resolved in the last week</strong>
-		<table class="border">
+		<h3>Reports resolved in the last week</h3>
+		<table class="border reportsv2_views_table">
 			<tr>
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
@@ -100,8 +100,8 @@ $DB->query("
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<strong>Reports resolved in the last month</strong>
-		<table class="border">
+		<h3>Reports resolved in the last month</h3>
+		<table class="border reportsv2_views_table">
 			<tr>
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
@@ -128,8 +128,8 @@ $DB->query("
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<strong>Reports resolved since Reports v2 (2009-07-27)</strong>
-		<table class="border">
+		<h3>Reports resolved since Reports v2 (2009-07-27)</h3>
+		<table class="border reportsv2_views_table">
 			<tr>
 				<td class="head colhead_dark">Username</td>
 				<td class="head colhead_dark">Reports</td>
@@ -208,7 +208,7 @@ $Results = $DB->to_array();
 		<br /><br />
 		<strong>For browsing anything more complicated than these, use the search feature.</strong>
 	</td>
-	<td style="vertical-align: top;">
+	<td class="noborder" style="vertical-align: top;">
 <?
 	$DB->query("
 		SELECT
@@ -222,10 +222,10 @@ $Results = $DB->to_array();
 
 	$Staff = $DB->to_array();
 ?>
-		<strong>Currently assigned reports by staff member</strong>
-		<table>
+		<h3>Currently assigned reports by staff member</h3>
+		<table class="border reportsv2_views_table">
 			<tr class="colhead">
-				<td>Staff member</td>
+				<td>Staff Member</td>
 				<td>Current Count</td>
 			</tr>
 <?
@@ -252,7 +252,7 @@ $Results = $DB->to_array();
 	$Current = $DB->to_array();
 	if (!empty($Current)) {
 ?>
-		<table>
+		<table class="border reportsv2_views_table">
 			<tr class="colhead">
 				<td>Type</td>
 				<td>Current Count</td>

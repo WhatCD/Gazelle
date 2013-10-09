@@ -825,3 +825,7 @@ div[class~=tooltipster-base] {
 .permission_container:first-child {
 	margin-left: 0;
 }
+
+.reportsv2_views_container {
+	width: 90%;
+}

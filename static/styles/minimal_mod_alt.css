@@ -1504,3 +1504,7 @@ ul.collage_images {
 .top10_quantity_links .brackets:after {
 	color: #F1F1F1;
 }
+
+.reportsv2_views_container {
+	width: 100%;
+}

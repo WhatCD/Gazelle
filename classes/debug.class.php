@@ -452,7 +452,7 @@ class DEBUG {
 		<tr>
 			<td align="left" class="debug_data debug_constants_data">
 				<pre>
-<?=					display_str(print_r($Constants, true)); echo "\n"; ?>
+<?=					display_str(print_r($Constants, true))?>
 				</pre>
 			</td>
 		</tr>
@@ -486,7 +486,7 @@ class DEBUG {
 			</td>
 			<td align="left" class="debug_data debug_cache_data">
 				<pre id="debug_cache_<?=$Key?>" class="hidden">
-<?=					display_str(print_r(G::$Cache->get_value($Key, true), true)); echo "\n"; ?>
+<?=					display_str(print_r(G::$Cache->get_value($Key, true), true))?>
 				</pre>
 			</td>
 		</tr>
@@ -622,7 +622,7 @@ class DEBUG {
 			</td>
 			<td class="debug_data debug_loggedvars_data" align="left">
 				<pre id="debug_loggedvars_<?=$ID?>" class="hidden">
-<?=					display_str(print_r($Data['data'], true)); echo "\n"; ?>
+<?=					display_str(print_r($Data['data'], true))?>
 				</pre>
 			</td>
 		</tr>

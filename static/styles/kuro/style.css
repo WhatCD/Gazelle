@@ -931,10 +931,14 @@ tr.torrent .bookmark > a:after { color:#999; }
 	font-weight: normal;
 }
 
-.vote_tag_up, .vote_artist_up, .vote_album_up {
+.vote_tag_up, .vote_artist_up, .vote_album_up, .small_upvote, .small_upvoted {
 	color: green;
 }
 
-.vote_tag_down, .vote_artist_down, .vote_album_down {
+.vote_tag_down, .vote_artist_down, .vote_album_down, .small_downvote, .small_downvoted {
 	color: red;
+}
+
+.reportsv2_views_container {
+	width: 100%;
 }
