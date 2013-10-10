@@ -2044,3 +2044,17 @@ div[class~=tooltipster-base] {
 div[class~=tooltipster-content] > a {
 	color: #007DC6;
 }
+
+/*
+Consistent .box and .pad
+TODO: Make these rules apply globally and add exceptions where needed
+*/
+#reportsv2 .box {
+	background-color: #212121;
+	border: 1px solid #1a1a1a;
+	margin: 0 0 20px 0;
+}
+
+#reportsv2 .pad {
+	padding: 10px !important;
+}

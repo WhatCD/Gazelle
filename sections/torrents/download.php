@@ -37,7 +37,7 @@ if (!is_number($TorrentID)) {
 /* uTorrent Remote and various scripts redownload .torrent files periodically.
 	To prevent this retardation from blowing bandwidth etc., let's block it
 	if the .torrent file has been downloaded four times before */
-if (strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Python-urllib') !== false) {
+if ((strpos($_SERVER['HTTP_USER_AGENT'], 'BTWebClient') !== false || strpos($_SERVER['HTTP_USER_AGENT'], 'Python-urllib') !== false)) {
 	$DB->query("
 		SELECT 1
 		FROM users_downloads

@@ -312,7 +312,7 @@ if ($DB->affected_rows() > 0 || !$Report) {
 
 	$Cache->delete_value("reports_torrent_$TorrentID");
 
-	//Now we've done everything, update the DB with values
+	// Now we've done everything, update the DB with values
 	if ($Report) {
 		$DB->query("
 			UPDATE reportsv2
@@ -323,16 +323,9 @@ if ($DB->affected_rows() > 0 || !$Report) {
 			WHERE ID = $ReportID");
 	}
 } else {
-	//Someone beat us to it. Inform the staffer.
+	// Someone beat us to it. Inform the staffer.
 ?>
-	<table class="layout" cellpadding="5">
-		<tr>
-			<td>
-				<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Somebody has already resolved this report</a>
-				<input type="button" value="Clear" onclick="ClearReport(<?=$ReportID?>);" />
-			</td>
-		</tr>
-	</table>
+<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Somebody has already resolved this report</a>
+<input type="button" value="Clear" onclick="ClearReport(<?=$ReportID?>);" />
 <?
 }
-?>

@@ -12,7 +12,6 @@ $View = isset($_GET['view']) ? ($_GET['view']) : 'tiles';
 $View = in_array($View, array('tiles', 'list')) ? $View : 'tiles';
 
 switch ($Category) {
-	
 	case 'weekly':
 		$Artists = json_decode(LastFM::get_weekly_artists(LIMIT), true)['artists']['artist'];
 		break;
@@ -28,14 +27,15 @@ View::show_header("Last.fm", "jquery.imagesloaded,jquery.wookmark,top10", "tiles
 <div class="thin">
 	<div class="header">
 		<h2>Last.fm</h2>
-		<? Top10View::render_linkbox("lastfm"); ?>
+<?		Top10View::render_linkbox("lastfm"); ?>
 	</div>
-	<? Top10View::render_artist_links($Category, $View); ?>
-	<? Top10View::render_artist_controls($Category, $View); ?>
+<?	Top10View::render_artist_links($Category, $View); ?>
+<?	Top10View::render_artist_controls($Category, $View); ?>
 <?	if ($View == 'tiles') { ?>
 		<div class="tiles_container">
 			<ul class="tiles">
-<?				foreach ($Artists as $Artist) {
+<?
+				foreach ($Artists as $Artist) {
 					Top10View::render_artist_tile($Artist, $Category);
 				} ?>
 			</ul>
@@ -43,7 +43,8 @@ View::show_header("Last.fm", "jquery.imagesloaded,jquery.wookmark,top10", "tiles
 <?	} else { ?>
 		<div class="list_container">
 			<ul class="top_artist_list">
-<?				foreach ($Artists as $Artist) {
+<?
+				foreach ($Artists as $Artist) {
 					Top10View::render_artist_list($Artist, $Category);
 				} ?>
 			</ul>

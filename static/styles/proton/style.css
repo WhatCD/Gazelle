@@ -2065,3 +2065,24 @@ div[class~=tooltipster-base] {
 	background-color: #F5F5F5;
 	color: #575757;
 }
+
+.reportsv2_views_table {
+	width: 90%;
+}
+
+/*
+Consistent .box and .pad
+TODO: Make these rules apply globally and add exceptions where needed
+*/
+#reportsv2 .box {
+	background-color: #f5f5f5;
+	border: 1px solid #dcdcdc;
+	margin: 0 0 20px 0;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#reportsv2 .pad {
+	padding: 10px !important;
+}

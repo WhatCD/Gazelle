@@ -629,3 +629,23 @@ tr.torrent .bookmark>a:after {
 	margin-right: auto;
 	padding: 10px 20px 20px 20px;
 }
+
+.noborder {
+	border: none;
+}
+
+.two_columns {
+	float: left;
+	width: 50%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+.field_div {
+	margin-bottom: 10px;
+}
+
+.field_div:last-of-type {
+	margin-bottom: 0;
+}

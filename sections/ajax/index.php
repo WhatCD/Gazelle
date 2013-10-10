@@ -47,12 +47,6 @@ switch ($_GET['action']) {
 	case 'torrent_info':
 		require('torrent_info.php');
 		break;
-	case 'giveback_report':
-		require('giveback_report.php');
-		break;
-	case 'grab_report':
-		require('grab_report.php');
-		break;
 	case 'stats':
 		require(SERVER_ROOT . '/sections/ajax/stats.php');
 		break;

@@ -6,51 +6,54 @@
 
 enforce_login();
 
-include('array.php');
+include(SERVER_ROOT.'/sections/reportsv2/array.php');
 
 if (isset($_REQUEST['action'])) {
 	switch ($_REQUEST['action']) {
 		case 'report':
-			include('report.php');
+			include(SERVER_ROOT.'/sections/reportsv2/report.php');
 			break;
 		case 'takereport':
-			include('takereport.php');
+			include(SERVER_ROOT.'/sections/reportsv2/takereport.php');
 			break;
 		case 'takeresolve':
-			include('takeresolve.php');
+			include(SERVER_ROOT.'/sections/reportsv2/takeresolve.php');
 			break;
 		case 'take_pm':
-			include('take_pm.php');
+			include(SERVER_ROOT.'/sections/reportsv2/take_pm.php');
 			break;
 		case 'search':
-			include('search.php');
+			include(SERVER_ROOT.'/sections/reportsv2/search.php');
 			break;
 		case 'new':
 			include(SERVER_ROOT.'/sections/reportsv2/reports.php');
 			break;
 		case 'ajax_new_report':
-			include('ajax_new_report.php');
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_new_report.php');
 			break;
 		case 'ajax_report':
-			include('ajax_report.php');
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_report.php');
 			break;
 		case 'ajax_change_resolve':
-			include('ajax_change_resolve.php');
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_change_resolve.php');
 			break;
 		case 'ajax_take_pm':
-			include('ajax_take_pm.php');
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_take_pm.php');
 			break;
 		case 'ajax_grab_report':
-			include('ajax_grab_report.php');
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_grab_report.php');
+			break;
+		case 'ajax_giveback_report':
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_giveback_report.php');
 			break;
 		case 'ajax_update_comment':
-			require('ajax_update_comment.php');
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_update_comment.php');
 			break;
 		case 'ajax_update_resolve':
-			require('ajax_update_resolve.php');
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_update_resolve.php');
 			break;
 		case 'ajax_create_report':
-			require('ajax_create_report.php');
+			include(SERVER_ROOT.'/sections/reportsv2/ajax_create_report.php');
 			break;
 	}
 } else {

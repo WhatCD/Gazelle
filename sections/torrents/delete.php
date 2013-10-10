@@ -46,8 +46,8 @@ if ($Snatches > 4 && !check_perms('torrents_delete')) { // Should this be torren
 
 View::show_header('Delete torrent', 'reportsv2');
 ?>
-<div class="thin center">
-	<div class="box" style="width: 600px; margin: 0px auto;">
+<div class="thin">
+	<div class="box box2" style="width: 600px; margin-left: auto; margin-right: auto;">
 		<div class="head colhead">
 			Delete torrent
 		</div>
@@ -56,18 +56,21 @@ View::show_header('Delete torrent', 'reportsv2');
 				<input type="hidden" name="action" value="takedelete" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="torrentid" value="<?=$TorrentID?>" />
-				<strong>Reason: </strong>
-				<select name="reason">
-					<option value="Dead">Dead</option>
-					<option value="Dupe">Dupe</option>
-					<option value="Trumped">Trumped</option>
-					<option value="Rules Broken">Rules broken</option>
-					<option value="" selected="selected">Other</option>
-				</select>
-				&nbsp;
-				<strong>Extra info: </strong>
-				<input type="text" name="extra" size="30" />
-				<input value="Delete" type="submit" />
+				<div class="field_div">
+					<strong>Reason: </strong>
+					<select name="reason">
+						<option value="Dead">Dead</option>
+						<option value="Dupe">Dupe</option>
+						<option value="Trumped">Trumped</option>
+						<option value="Rules Broken">Rules broken</option>
+						<option value="" selected="selected">Other</option>
+					</select>
+				</div>
+				<div class="field_div">
+					<strong>Extra info: </strong>
+					<input type="text" name="extra" size="30" />
+					<input value="Delete" type="submit" />
+				</div>
 			</form>
 		</div>
 	</div>
@@ -151,7 +154,7 @@ if (check_perms('admin_reports')) {
 		$BBName = "[url=artist.php?id=$ArtistID]".$ArtistName."[/url] - [url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : '')."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]{$RemasterDisplayString}[/url] " . ($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID](Log: {$LogScore}%)[/url]" : '').' ('.number_format($Size / (1024 * 1024), 2).' MB)';
 	}
 ?>
-	<div id="report<?=$ReportID?>">
+	<div id="report<?=$ReportID?>" class="report">
 		<form class="create_form" name="report" id="reportform_<?=$ReportID?>" action="reports.php" method="post">
 <?
 				/*
@@ -160,7 +163,6 @@ if (check_perms('admin_reports')) {
 			?>
 			<div>
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-				<input type="hidden" id="newreportid" name="newreportid" value="<?=$ReportID?>" />
 				<input type="hidden" id="reportid<?=$ReportID?>" name="reportid" value="<?=$ReportID?>" />
 				<input type="hidden" id="torrentid<?=$ReportID?>" name="torrentid" value="<?=$TorrentID?>" />
 				<input type="hidden" id="uploader<?=$ReportID?>" name="uploader" value="<?=$UploaderName?>" />
@@ -172,7 +174,7 @@ if (check_perms('admin_reports')) {
 				<input type="hidden" id="pm_type<?=$ReportID?>" name="pm_type" value="Uploader" />
 				<input type="hidden" id="from_delete<?=$ReportID?>" name="from_delete" value="<?=$GroupID?>" />
 			</div>
-			<table cellpadding="5" class="layout">
+			<table cellpadding="5" class="box layout">
 				<tr>
 					<td class="label">Torrent:</td>
 					<td colspan="3">

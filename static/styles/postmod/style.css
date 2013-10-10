@@ -523,6 +523,7 @@ p.min_padding {
 .box {
 	font-size: 10pt;
 	background-color: #F7F6F2;
+	margin-bottom: 10px;
 }
 
 .box2 {
@@ -538,12 +539,7 @@ p.min_padding {
 
 .sidebar {
 	float: right;
-	width: 250px;
-	height: 100%;
-}
-
-.sidebar .box {
-	margin: 0px 5px 10px 5px;
+	width: 245px;
 }
 
 .body {
@@ -551,11 +547,10 @@ p.min_padding {
 }
 
 .main_column {
-	margin: 0px 255px 10px 0px;
-	width: 590px;
+	width: 592px;
 }
 
-.main_column .box, .main_column table {
+.main_column table {
 	margin-bottom: 10px;
 }
 

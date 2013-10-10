@@ -826,6 +826,10 @@ div[class~=tooltipster-base] {
 	margin-left: 0;
 }
 
-.reportsv2_views_container {
-	width: 90%;
+.two_columns:first-of-type {
+	padding-right: 7px;
+}
+
+.two_columns:last-of-type {
+	padding-left: 7px;
 }

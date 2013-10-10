@@ -89,15 +89,10 @@ $DB->query("
 					LastChangeTime = '".sqltime()."',
 					ModComment = 'Report already dealt with (torrent deleted)'
 				WHERE ID = $ReportID");
+			$Cache->decrement('num_torrent_reportsv2');
 ?>
-	<div>
-		<table class="layout">
-			<tr>
-				<td class="center">
-					<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Report <?=$ReportID?></a> for torrent <?=$TorrentID?> (deleted) has been automatically resolved. <input type="button" value="Clear" onclick="ClearReport(<?=$ReportID?>);" />
-				</td>
-			</tr>
-		</table>
+	<div id="report<?=$ReportID?>" class="report box pad center" data-reportid="<?=$ReportID?>">
+		<a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Report <?=$ReportID?></a> for torrent <?=$TorrentID?> (deleted) has been automatically resolved. <input type="button" value="Clear" onclick="ClearReport(<?=$ReportID?>);" />
 	</div>
 <?
 			die();
@@ -133,7 +128,7 @@ $DB->query("
 			$BBName = "[url=artist.php?id=$ArtistID]".$ArtistName."[/url] - [url=torrents.php?id=$GroupID]$GroupName".($Year ? " ($Year)" : '')."[/url] [url=torrents.php?torrentid=$TorrentID][$Format/$Encoding/$Media]{$RemasterDisplayString}[/url] ".($HasCue ? ' (Cue)' : '').($HasLog ? " [url=torrents.php?action=viewlog&amp;torrentid=$TorrentID&amp;groupid=$GroupID](Log: {$LogScore}%)[/url]" : '').' ('.number_format($Size / (1024 * 1024), 2).' MB)';
 		}
 	?>
-		<div id="report<?=$ReportID?>">
+		<div id="report<?=$ReportID?>" class="report" data-reportid="<?=$ReportID?>">
 			<form class="edit_form" name="report" id="reportform_<?=$ReportID?>" action="reports.php" method="post">
 <?
 					/*
@@ -142,7 +137,6 @@ $DB->query("
 				?>
 				<div>
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					<input type="hidden" id="newreportid" name="newreportid" value="<?=$ReportID?>" />
 					<input type="hidden" id="reportid<?=$ReportID?>" name="reportid" value="<?=$ReportID?>" />
 					<input type="hidden" id="torrentid<?=$ReportID?>" name="torrentid" value="<?=$TorrentID?>" />
 					<input type="hidden" id="uploader<?=$ReportID?>" name="uploader" value="<?=$UploaderName?>" />
@@ -152,7 +146,7 @@ $DB->query("
 					<input type="hidden" id="type<?=$ReportID?>" name="type" value="<?=$Type?>" />
 					<input type="hidden" id="categoryid<?=$ReportID?>" name="categoryid" value="<?=$CategoryID?>" />
 				</div>
-				<table class="layout" cellpadding="5">
+				<table class="box layout" cellpadding="5">
 					<tr>
 						<td class="label"><a href="reportsv2.php?view=report&amp;id=<?=$ReportID?>">Reported</a> torrent:</td>
 						<td colspan="3">
@@ -428,9 +422,4 @@ $DB->query("
 					</tr>
 				</table>
 			</form>
-			<br />
 		</div>
-		<script type="text/javascript">//<![CDATA[
-			Load('<?=$ReportID?>');
-		//]]>
-		</script>

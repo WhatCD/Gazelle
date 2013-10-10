@@ -1,10 +1,10 @@
 <?
 if (!check_perms('admin_reports')) {
-	error(403);
+	die('403');
 }
 
 if (!is_number($_GET['id'])) {
-	error(0);
+	die();
 }
 
 $DB->query("

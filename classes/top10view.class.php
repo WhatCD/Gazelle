@@ -49,10 +49,12 @@ class Top10View {
 	}
 
 	private static function render_tile($Url, $Name, $Image) {
-		if (!empty($Image)) { ?>
+		if (!empty($Image)) {
+			$Name = htmlspecialchars($Name);
+			?>
 			<li>
 				<a href="<?=$Url?><?=$Name?>">
-					<img class="tooltip large_tile" title="<?=$Name?>" src="<?=ImageTools::process($Image)?>" />
+					<img class="tooltip large_tile" alt="<?=$Name?>" title="<?=$Name?>" src="<?=ImageTools::process($Image)?>" />
 				</a>
 			</li>
 <?		}
@@ -75,12 +77,11 @@ class Top10View {
 		if (!empty($Image)) {
 			$UseTooltipster = !isset(G::$LoggedUser['Tooltipster']) || G::$LoggedUser['Tooltipster'];
 			$Image = ImageTools::process($Image);
-			$Title = "title=\"<img class='large_tile' src='$Image'/>\"";
+			$Title = "title=\"&lt;img class=&quot;large_tile&quot; src=&quot;$Image&quot; alt=&quot;&quot; />\"";
+			$Name = htmlspecialchars($Name);
 			?>
 			<li>
-				<a class="tooltip_image" <?=$Title?> href="<?=$Url?><?=$Name?>">
-					<?=$Name?>
-				</a>
+				<a class="tooltip_image" <?=$Title?> href="<?=$Url?><?=$Name?>"><?=$Name?></a>
 			</li>
 <?		}
 	}

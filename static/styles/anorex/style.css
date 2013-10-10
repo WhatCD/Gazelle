@@ -366,6 +366,7 @@ p.min_padding {
 	font-size: 8pt;
 	background-color: #DCB881;
 	border: 1px solid #65430F;
+	margin-bottom: 10px;
 }
 
 .box2 {
@@ -382,12 +383,7 @@ p.min_padding {
 
 .sidebar {
 	float: right;
-	width: 250px;
-	height: 100%;
-}
-
-.sidebar .box {
-	margin: 0px 5px 10px 5px;
+	width: 245px;
 }
 
 #AddArtists input {
@@ -406,11 +402,10 @@ p.min_padding {
 }
 
 .main_column {
-	margin: 0px 255px 10px 0px;
-	width: 590px;
+	width: 592px;
 }
 
-.main_column .box, .main_column table {
+.main_column table {
 	margin-bottom: 10px;
 }
 
@@ -863,6 +858,6 @@ div[class~=tooltipster-content] > a {
 	font-weight: normal;
 }
 
-.reportsv2_views_container {
+.reportsv2_views_table {
 	width: 100%;
 }

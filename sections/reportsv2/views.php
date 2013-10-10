@@ -26,9 +26,8 @@ $Owner = display_str($Owner);
 	<h2>Reports v2 Information!</h2>
 <?	include('header.php'); ?>
 </div>
-<br />
-<div class="box pad thin reportsv2_views_container">
-	<table class="noborder"><tr><td class="noborder" style="width: 50%;">
+<div class="thin float_clear">
+	<div class="two_columns pad">
 <?
 $DB->query("
 	SELECT
@@ -43,10 +42,10 @@ $DB->query("
 $Results = $DB->to_array();
 ?>
 		<h3>Reports resolved in the last 24 hours</h3>
-		<table class="border reportsv2_views_table">
-			<tr>
-				<td class="head colhead_dark">Username</td>
-				<td class="head colhead_dark">Reports</td>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Reports</td>
 			</tr>
 <? foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
@@ -57,7 +56,6 @@ $Results = $DB->to_array();
 			</tr>
 <? } ?>
 		</table>
-		<br />
 <?
 $DB->query("
 	SELECT
@@ -72,10 +70,10 @@ $DB->query("
 $Results = $DB->to_array();
 ?>
 		<h3>Reports resolved in the last week</h3>
-		<table class="border reportsv2_views_table">
-			<tr>
-				<td class="head colhead_dark">Username</td>
-				<td class="head colhead_dark">Reports</td>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Reports</td>
 			</tr>
 <? foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
@@ -86,7 +84,6 @@ $Results = $DB->to_array();
 			</tr>
 <? } ?>
 		</table>
-		<br />
 <?
 $DB->query("
 	SELECT
@@ -101,10 +98,10 @@ $DB->query("
 $Results = $DB->to_array();
 ?>
 		<h3>Reports resolved in the last month</h3>
-		<table class="border reportsv2_views_table">
-			<tr>
-				<td class="head colhead_dark">Username</td>
-				<td class="head colhead_dark">Reports</td>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Reports</td>
 			</tr>
 <? foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
@@ -115,7 +112,6 @@ $Results = $DB->to_array();
 			</tr>
 <? } ?>
 		</table>
-		<br />
 <?
 $DB->query("
 	SELECT
@@ -129,10 +125,10 @@ $DB->query("
 $Results = $DB->to_array();
 ?>
 		<h3>Reports resolved since Reports v2 (2009-07-27)</h3>
-		<table class="border reportsv2_views_table">
-			<tr>
-				<td class="head colhead_dark">Username</td>
-				<td class="head colhead_dark">Reports</td>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Reports</td>
 			</tr>
 <? foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
@@ -143,72 +139,66 @@ $Results = $DB->to_array();
 			</tr>
 <? } ?>
 		</table>
-		<br />
 		<h3>Different view modes by person</h3>
-		<br />
-		<strong>By ID of torrent reported:</strong>
-		<ul>
-			<li>
-				Reports of torrents with ID = 1
-			</li>
-			<li>
-				<a href="reportsv2.php?view=torrent&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=torrent&amp;id=1</a>
-			</li>
-		</ul>
-		<br />
-		<strong>By group ID of torrent reported:</strong>
-		<ul>
-			<li>
-				Reports of torrents within the group with ID = 1
-			</li>
-			<li>
-				<a href="reportsv2.php?view=group&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=group&amp;id=1</a>
-			</li>
-		</ul>
-		<br />
-		<strong>By report ID:</strong>
-		<ul>
-			<li>
-				The report with ID = 1
-			</li>
-			<li>
-				<a href="reportsv2.php?view=report&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=report&amp;id=1</a>
-			</li>
-		</ul>
-		<br />
-		<strong>By reporter ID:</strong>
-		<ul>
-			<li>
-				Reports created by <?=$Owner?>
-			</li>
-			<li>
-				<a href="reportsv2.php?view=reporter&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=reporter&amp;id=<?=$OwnerID?></a>
-			</li>
-		</ul>
-		<br />
-		<strong>By uploader ID:</strong>
-		<ul>
-			<li>
-				Reports for torrents uploaded by <?=$Owner?>
-			</li>
-			<li>
-				<a href="reportsv2.php?view=uploader&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=uploader&amp;id=<?=$OwnerID?></a>
-			</li>
-		</ul>
-		<br />
-		<strong>By resolver ID:</strong>
-		<ul>
-			<li>
-				Reports for torrents resolved by <?=$Owner?>
-			</li>
-			<li>
-				<a href="reportsv2.php?view=resolver&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=resolver&amp;id=<?=$OwnerID?></a>
-			</li>
-		</ul>
-		<br /><br />
-		<strong>For browsing anything more complicated than these, use the search feature.</strong>
-	</td>
-	<td class="noborder" style="vertical-align: top;">
+		<div class="box pad">
+			<strong>By ID of torrent reported:</strong>
+			<ul>
+				<li>
+					Reports of torrents with ID = 1
+				</li>
+				<li>
+					<a href="reportsv2.php?view=torrent&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=torrent&amp;id=1</a>
+				</li>
+			</ul>
+			<strong>By group ID of torrent reported:</strong>
+			<ul>
+				<li>
+					Reports of torrents within the group with ID = 1
+				</li>
+				<li>
+					<a href="reportsv2.php?view=group&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=group&amp;id=1</a>
+				</li>
+			</ul>
+			<strong>By report ID:</strong>
+			<ul>
+				<li>
+					The report with ID = 1
+				</li>
+				<li>
+					<a href="reportsv2.php?view=report&amp;id=1">https://<?=SSL_SITE_URL?>/reportsv2.php?view=report&amp;id=1</a>
+				</li>
+			</ul>
+			<strong>By reporter ID:</strong>
+			<ul>
+				<li>
+					Reports created by <?=$Owner?>
+				</li>
+				<li>
+					<a href="reportsv2.php?view=reporter&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=reporter&amp;id=<?=$OwnerID?></a>
+				</li>
+			</ul>
+			<strong>By uploader ID:</strong>
+			<ul>
+				<li>
+					Reports for torrents uploaded by <?=$Owner?>
+				</li>
+				<li>
+					<a href="reportsv2.php?view=uploader&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=uploader&amp;id=<?=$OwnerID?></a>
+				</li>
+			</ul>
+			<strong>By resolver ID:</strong>
+			<ul>
+				<li>
+					Reports for torrents resolved by <?=$Owner?>
+				</li>
+				<li>
+					<a href="reportsv2.php?view=resolver&amp;id=<?=$OwnerID?>">https://<?=SSL_SITE_URL?>/reportsv2.php?view=resolver&amp;id=<?=$OwnerID?></a>
+				</li>
+			</ul>
+			<strong>For browsing anything more complicated than these, use the search feature.</strong>
+		</div>
+	</div>
+	<div class="two_columns pad">
 <?
 	$DB->query("
 		SELECT
@@ -223,10 +213,10 @@ $Results = $DB->to_array();
 	$Staff = $DB->to_array();
 ?>
 		<h3>Currently assigned reports by staff member</h3>
-		<table class="border reportsv2_views_table">
+		<table class="box border">
 			<tr class="colhead">
-				<td>Staff Member</td>
-				<td>Current Count</td>
+				<td class="colhead_dark">Staff Member</td>
+				<td class="colhead_dark number_column">Current Count</td>
 			</tr>
 <?
 		foreach ($Staff as $Array) {	?>
@@ -239,7 +229,6 @@ $Results = $DB->to_array();
 <?
 		} ?>
 		</table>
-		<br />
 		<h3>Different view modes by report type</h3>
 <?
 	$DB->query("
@@ -252,10 +241,10 @@ $Results = $DB->to_array();
 	$Current = $DB->to_array();
 	if (!empty($Current)) {
 ?>
-		<table class="border reportsv2_views_table">
+		<table class="box border">
 			<tr class="colhead">
-				<td>Type</td>
-				<td>Current Count</td>
+				<td class="colhead_dark">Type</td>
+				<td class="colhead_dark number_column">Current Count</td>
 			</tr>
 <?
 		foreach ($Current as $Array) {
@@ -280,7 +269,7 @@ $Results = $DB->to_array();
 	}
 ?>
 		</table>
-	</td></tr></table>
+	</div>
 </div>
 <?
 View::show_footer();

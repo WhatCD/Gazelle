@@ -1376,3 +1376,10 @@ table[width="100%"].user_options {
 	width: 400px;
 	max-width: 100%;
 }
+
+/*
+Consistent .box and .pad
+TODO: Make these rules apply globally and add exceptions where needed
+*/
+#reportsv2 .pad { padding: 10px !important; }
+#reportsv2 .box { margin-bottom: 10px; background-color: rgb(255,255,255); border: 1px solid #aaa; color: #777; }
