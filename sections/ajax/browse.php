@@ -154,7 +154,6 @@ if (!empty($_GET['filelist'])) {
 		$SphQL->where_match($SearchString, 'filelist', false);
 		$SphQLTor->where_match($SearchString, 'filelist', false);
 		$EnableNegation = true;
-		$Filtered = true;
 	}
 }
 
@@ -247,19 +246,16 @@ if (!empty($_GET['searchstr'])) {
 			$SearchString = implode(' ', $FilterBitrates);
 			$SphQL->where_match($SearchString, 'encoding', false);
 			$SphQLTor->where_match($SearchString, 'encoding', false);
-			$Filtered = true;
 		}
 		if (!empty($FilterFormats)) {
 			$SearchString = implode(' ', $FilterFormats);
 			$SphQL->where_match($SearchString, 'format', false);
 			$SphQLTor->where_match($SearchString, 'format', false);
-			$Filtered = true;
 		}
 		if (!empty($QueryParts)) {
 			$SearchString = implode(' ', $QueryParts);
 			$SphQL->where_match($SearchString, '(groupname,artistname,yearfulltext)', false);
 			$SphQLTor->where_match($SearchString, '(groupname,artistname,yearfulltext)', false);
-			$Filtered = true;
 		}
 	}
 }
@@ -346,7 +342,6 @@ if (!empty($SearchWords['taglist'])) {
 	if (!empty($QueryParts)) {
 		$SphQL->where_match(implode(' ', $QueryParts), 'taglist', false);
 		$SphQLTor->where_match(implode(' ', $QueryParts), 'taglist', false);
-		$Filtered = true;
 	}
 	unset($SearchWords['taglist']);
 }
@@ -375,7 +370,6 @@ foreach ($SearchWords as $Search => $Words) {
 		$SearchString = implode(' ', $QueryParts);
 		$SphQL->where_match($SearchString, $Search, false);
 		$SphQLTor->where_match($SearchString, $Search, false);
-		$Filtered = true;
 	}
 }
 
@@ -394,7 +388,6 @@ if (!empty($_GET['year'])) {
 			$SphQL->where_between('year', array((int)$Years[0], (int)$Years[1]));
 			$SphQLTor->where_between('year', array((int)$Years[0], (int)$Years[1]));
 		}
-		$Filtered = true;
 	}
 }
 
@@ -402,34 +395,27 @@ if (isset($_GET['haslog']) && $_GET['haslog'] !== '') {
 	if ($_GET['haslog'] === '100') {
 		$SphQL->where('logscore', 100);
 		$SphQLTor->where('logscore', 100);
-		$Filtered = true;
 	} elseif ($_GET['haslog'] < 0) {
 		// Exclude torrents with log score equal to 100
 		$SphQL->where('logscore', 100, true);
 		$SphQL->where('haslog', 1);
 		$SphQLTor->where('logscore', 100, true);
 		$SphQLTor->where('haslog', 1);
-		$Filtered = true;
 	} elseif ($_GET['haslog'] == 0) {
 		$SphQL->where('haslog', 0);
 		$SphQLTor->where('haslog', 0);
 	} else {
 		$SphQL->where('haslog', 1);
 		$SphQLTor->where('haslog', 1);
-		$Filtered = true;
 	}
 }
+
 foreach (array('hascue', 'scene', 'vanityhouse', 'releasetype') as $Search) {
 	if (isset($_GET[$Search]) && $_GET[$Search] !== '') {
 		$SphQL->where($Search, $_GET[$Search]);
 		// Release type is group specific
 		if ($Search != 'releasetype') {
 			$SphQLTor->where($Search, $_GET[$Search]);
-		}
-		if ($_GET[$Search] !== 0) {
-			// This condition is required because all attributes are 0
-			// for deleted torrents and we abuse that to detect them
-			$Filtered = true;
 		}
 	}
 }
@@ -439,33 +425,24 @@ if (isset($_GET['freetorrent']) && $_GET['freetorrent'] !== '') {
 		case 0: // Only normal freeleech
 			$SphQL->where('freetorrent', 0);
 			$SphQLTor->where('freetorrent', 0);
-			$Filtered = true;
 			break;
 		case 1: // Only free leech
 			$SphQL->where('freetorrent', 1);
 			$SphQLTor->where('freetorrent', 1);
-			$Filtered = true;
 			break;
 		case 2: // Only neutral leech
 			$SphQL->where('freetorrent', 2);
 			$SphQLTor->where('freetorrent', 2);
-			$Filtered = true;
 			break;
 		case 3: // Free or neutral leech
 			$SphQL->where('freetorrent', 0, true);
 			$SphQLTor->where('freetorrent', 0, true);
-			$Filtered = true;
 			break;
 	}
 }
 
 if (!empty($_GET['filter_cat'])) {
 	$SphQL->where('categoryid', array_keys($_GET['filter_cat']));
-	$Filtered = true;
-}
-
-if (!$Filtered) {
-	$SphQL->where('size', 0, true);
 }
 /** End building search query **/
 
@@ -494,7 +471,7 @@ if (isset($Random) && $GroupResults) {
 		$Results = array_slice($Results, 0, TORRENTS_PER_PAGE, true);
 	}
 	$GroupIDs = array_keys($Results);
-	$TorrentCount = count($Results);
+	$NumResults = count($Results);
 } else {
 	if (!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
 		if (check_perms('site_search_many')) {
@@ -509,7 +486,7 @@ if (isset($Random) && $GroupResults) {
 		$SphQL->limit(0, TORRENTS_PER_PAGE, TORRENTS_PER_PAGE);
 	}
 	$SphQLResult = $SphQL->query();
-	$TorrentCount = $SphQLResult->get_meta('total_found');
+	$NumResults = $SphQLResult->get_meta('total_found');
 	if ($GroupResults) {
 		$Results = $SphQLResult->to_array('groupid');
 		$GroupIDs = array_keys($Results);
@@ -519,11 +496,11 @@ if (isset($Random) && $GroupResults) {
 	}
 }
 
-if (!check_perms('site_search_many') && $TorrentCount > SPHINX_MAX_MATCHES) {
-	$TorrentCount = SPHINX_MAX_MATCHES;
+if (!check_perms('site_search_many') && $NumResults > SPHINX_MAX_MATCHES) {
+	$NumResults = SPHINX_MAX_MATCHES;
 }
 
-if ($TorrentCount) {
+if ($NumResults) {
 	$Groups = Torrents::get_groups($GroupIDs);
 
 	if (!empty($Groups) && $GroupResults) {
@@ -533,17 +510,18 @@ if ($TorrentCount) {
 				$TorrentIDs = array_merge($TorrentIDs, array_keys($Group['Torrents']));
 			}
 		}
-		if (!empty($TorrentIDs)) {
+		$TorrentCount = count($TorrentIDs);
+		if ($TorrentCount > 0) {
 			// Get a list of all torrent ids that match the search query
-			$SphQLTor->where('id', $TorrentIDs)->limit(0, count($TorrentIDs), count($TorrentIDs));
+			$SphQLTor->where('id', $TorrentIDs)->limit(0, $TorrentCount, $TorrentCount);
 			$SphQLResultTor = $SphQLTor->query();
-			$TorrentIDs = array_fill_keys($SphQLResultTor->collect('id'), true);
+			$TorrentIDs = $SphQLResultTor->to_pair('id', 'id'); // Because isset() is faster than in_array()
 		}
 	}
 }
 /** End run search query and collect results **/
 
-if ($TorrentCount == 0) {
+if ($NumResults == 0) {
 
 $DB->query("
 	SELECT
@@ -781,6 +759,6 @@ foreach ($Results as $Result) {
 
 json_die("success", array(
 	'currentPage' => intval($Page),
-	'pages' => ceil($TorrentCount / TORRENTS_PER_PAGE),
+	'pages' => ceil($NumResults / TORRENTS_PER_PAGE),
 	'results' => $JsonGroups
 ));

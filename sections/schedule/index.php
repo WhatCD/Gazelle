@@ -324,6 +324,7 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 					UPDATE users_info
 					SET AdminComment = CONCAT('".sqltime()." - Class changed to ".Users::make_class_string($L['To'])." by System\n\n', AdminComment)
 					WHERE UserID = $UserID");
+				Misc::send_pm($UserID, 0, 'You have been promoted to '.Users::make_class_string($L['To']), 'Congratulations on your promotion to '.Users::make_class_string($L['To'])."!\n\nTo read more about ".SITE_NAME."'s user classes, read [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
 			}
 			$DB->query("
 				UPDATE users_main
@@ -367,6 +368,7 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 					UPDATE users_info
 					SET AdminComment = CONCAT('".sqltime()." - Class changed to ".Users::make_class_string($L['From'])." by System\n\n', AdminComment)
 					WHERE UserID = $UserID");
+				Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string($L['From']), "You now only qualify for the \"".Users::make_class_string($L['From'])."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
 			}
 			$DB->query("
 				UPDATE users_main
@@ -865,6 +867,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$Cache->begin_transaction("user_info_$UserID");
 		$Cache->update_row(false, array('PermissionID' => MEMBER));
 		$Cache->commit_transaction(2592000);
+		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(MEMBER), "You now only meet the requirements for the \"".Users::make_class_string(MEMBER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
 	}
 	$DB->query('
 		UPDATE users_main
@@ -885,6 +888,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$Cache->begin_transaction("user_info_$UserID");
 		$Cache->update_row(false, array('PermissionID' => USER));
 		$Cache->commit_transaction(2592000);
+		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(USER), "You now only meet the requirements for the \"".Users::make_class_string(USER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
 	}
 	$DB->query('
 		UPDATE users_main

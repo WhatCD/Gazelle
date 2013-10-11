@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2013-10-10 by alderaan
+Users will receive a PM when they get promoted or demoted
+
 2013-10-05 by alderaan
 Similar Artists and torrent tag boxes, plus the mini up/downvote buttons on torrents when viewing an artist page, now use the same colored glyphs as the Album Votes box
 

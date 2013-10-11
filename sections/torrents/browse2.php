@@ -196,7 +196,7 @@ if ($OrderBy == 'random') {
 		->order_by($SortOrders[$OrderBy], $OrderWay);
 }
 $SphQL->from('torrents, delta');
-$SphQLTor->select('id, groupid')->from('torrents, delta');
+$SphQLTor->select('id')->from('torrents, delta');
 /** End query preparation **/
 
 /** Start building search query **/
@@ -459,23 +459,22 @@ if (isset($_GET['haslog']) && $_GET['haslog'] !== '') {
 	if ($_GET['haslog'] === '100') {
 		$SphQL->where('logscore', 100);
 		$SphQLTor->where('logscore', 100);
-		$Filtered = true;
 	} elseif ($_GET['haslog'] < 0) {
 		// Exclude torrents with log score equal to 100
 		$SphQL->where('logscore', 100, true);
 		$SphQL->where('haslog', 1);
 		$SphQLTor->where('logscore', 100, true);
 		$SphQLTor->where('haslog', 1);
-		$Filtered = true;
 	} elseif ($_GET['haslog'] == 0) {
 		$SphQL->where('haslog', 0);
 		$SphQLTor->where('haslog', 0);
 	} else {
 		$SphQL->where('haslog', 1);
 		$SphQLTor->where('haslog', 1);
-		$Filtered = true;
 	}
+	$Filtered = true;
 }
+
 foreach (array('hascue', 'scene', 'vanityhouse', 'releasetype') as $Search) {
 	if (isset($_GET[$Search]) && $_GET[$Search] !== '') {
 		$SphQL->where($Search, $_GET[$Search]);
@@ -483,11 +482,7 @@ foreach (array('hascue', 'scene', 'vanityhouse', 'releasetype') as $Search) {
 		if ($Search != 'releasetype') {
 			$SphQLTor->where($Search, $_GET[$Search]);
 		}
-		if ($_GET[$Search] !== 0) {
-			// This condition is required because all attributes are 0
-			// for deleted torrents and we abuse that to detect them
-			$Filtered = true;
-		}
+		$Filtered = true;
 	}
 }
 
@@ -513,16 +508,15 @@ if (isset($_GET['freetorrent']) && $_GET['freetorrent'] !== '') {
 			$SphQLTor->where('freetorrent', 0, true);
 			$Filtered = true;
 			break;
+		default:
+			unset($_GET['freetorrent']);
+			break;
 	}
 }
 
 if (!empty($_GET['filter_cat'])) {
 	$SphQL->where('categoryid', array_keys($_GET['filter_cat']));
 	$Filtered = true;
-}
-
-if (!$Filtered) {
-	$SphQL->where('size', 0, true);
 }
 /** End building search query **/
 
@@ -551,7 +545,7 @@ if (isset($Random) && $GroupResults) {
 		$Results = array_slice($Results, 0, TORRENTS_PER_PAGE, true);
 	}
 	$GroupIDs = array_keys($Results);
-	$TorrentCount = count($Results);
+	$NumResults = count($Results);
 } else {
 	if (!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
 		if (check_perms('site_search_many')) {
@@ -566,7 +560,7 @@ if (isset($Random) && $GroupResults) {
 		$SphQL->limit(0, TORRENTS_PER_PAGE, TORRENTS_PER_PAGE);
 	}
 	$SphQLResult = $SphQL->query();
-	$TorrentCount = $SphQLResult->get_meta('total_found');
+	$NumResults = $SphQLResult->get_meta('total_found');
 	if ($GroupResults) {
 		$Results = $SphQLResult->to_array('groupid');
 		$GroupIDs = array_keys($Results);
@@ -576,11 +570,11 @@ if (isset($Random) && $GroupResults) {
 	}
 }
 
-if (!check_perms('site_search_many') && $TorrentCount > SPHINX_MAX_MATCHES) {
-	$TorrentCount = SPHINX_MAX_MATCHES;
+if (!check_perms('site_search_many') && $NumResults > SPHINX_MAX_MATCHES) {
+	$NumResults = SPHINX_MAX_MATCHES;
 }
 
-if ($TorrentCount) {
+if ($NumResults) {
 	$Groups = Torrents::get_groups($GroupIDs);
 
 	if (!empty($Groups) && $GroupResults) {
@@ -590,11 +584,12 @@ if ($TorrentCount) {
 				$TorrentIDs = array_merge($TorrentIDs, array_keys($Group['Torrents']));
 			}
 		}
-		if (!empty($TorrentIDs)) {
+		$TorrentCount = count($TorrentIDs);
+		if ($TorrentCount > 0) {
 			// Get a list of all torrent ids that match the search query
-			$SphQLTor->where('id', $TorrentIDs)->limit(0, count($TorrentIDs), count($TorrentIDs));
+			$SphQLTor->where('id', $TorrentIDs)->limit(0, $TorrentCount, $TorrentCount);
 			$SphQLResultTor = $SphQLTor->query();
-			$TorrentIDs = array_fill_keys($SphQLResultTor->collect('id'), true);
+			$TorrentIDs = $SphQLResultTor->to_pair('id', 'id'); // Because isset() is faster than in_array()
 		}
 	}
 }
@@ -623,7 +618,7 @@ View::show_header('Browse Torrents', 'browse');
 <div class="header">
 	<h2>Torrents</h2>
 </div>
-<form class="search_form" name="torrents" method="get" action="">
+<form class="search_form" name="torrents" method="get" action="" onsubmit="$(this).disableUnset();">
 <div class="box filter_torrents">
 	<div class="head">
 		<strong>
@@ -883,7 +878,7 @@ if ($x % 7 != 0) { // Padding
 			</tr>
 		</table>
 		<div class="submit ft_submit">
-			<span style="float: left;"><?=number_format($TorrentCount)?> Results</span>
+			<span style="float: left;"><?=number_format($NumResults)?> Results</span>
 			<input type="submit" value="Filter torrents" />
 			<input type="hidden" name="action" id="ft_type" value="<?=($AdvancedSearch ? 'advanced' : 'basic')?>" />
 			<input type="hidden" name="searchsubmit" value="1" />
@@ -903,7 +898,7 @@ if ($x % 7 != 0) { // Padding
 </div>
 </form>
 <?
-if ($TorrentCount == 0) {
+if ($NumResults == 0) {
 	$DB->query("
 		SELECT
 			tags.Name,
@@ -933,9 +928,9 @@ if ($TorrentCount == 0) {
 View::show_footer();die();
 }
 
-if ($TorrentCount < ($Page - 1) * TORRENTS_PER_PAGE + 1) {
-	$LastPage = ceil($TorrentCount / TORRENTS_PER_PAGE);
-	$Pages = Format::get_pages(0, $TorrentCount, TORRENTS_PER_PAGE);
+if ($NumResults < ($Page - 1) * TORRENTS_PER_PAGE + 1) {
+	$LastPage = ceil($NumResults / TORRENTS_PER_PAGE);
+	$Pages = Format::get_pages(0, $NumResults, TORRENTS_PER_PAGE);
 ?>
 <div class="box pad" align="center">
 	<h2>The requested page contains no matches.</h2>
@@ -948,7 +943,7 @@ View::show_footer();die();
 }
 
 // List of pages
-$Pages = Format::get_pages($Page, $TorrentCount, TORRENTS_PER_PAGE);
+$Pages = Format::get_pages($Page, $NumResults, TORRENTS_PER_PAGE);
 
 $Bookmarks = Bookmarks::all_bookmarks('torrent');
 ?>

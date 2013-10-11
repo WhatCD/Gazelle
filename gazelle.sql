@@ -1461,7 +1461,8 @@ CREATE TABLE `users_info` (
   KEY `RatioWatchEnds` (`RatioWatchEnds`),
   KEY `RatioWatchDownload` (`RatioWatchDownload`),
   KEY `BitcoinAddress` (`BitcoinAddress`(4)),
-  KEY `AuthKey` (`AuthKey`)
+  KEY `AuthKey` (`AuthKey`),
+  KEY `ResetKey` (`ResetKey`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_info_bak` (

@@ -225,24 +225,6 @@ function isNumberKey(e) {
 	return true;
 }
 
-// jQuery plugin to prevent double submission of forms
-jQuery.fn.preventDoubleSubmission = function() {
-	$(this).bind('submit', function(e){
-		var $form = $(this);
-
-		if ($form.data('submitted') === true) {
-			// Previously submitted - don't submit again
-			e.preventDefault();
-		} else {
-			// Mark it so that the next submit can be ignored
-			$form.data('submitted', true);
-		}
-	});
-
-	// Keep chainability
-	return this;
-};
-
 $.fn.extend({
 	results: function () {
 		return this.size();
@@ -325,24 +307,18 @@ $.fn.extend({
 		return this;
 	},
 	disable : function () {
-		for (var i = 0, il = this.size(); i < il; i++) {
-			this[i].disabled = true;
-		}
+		$(this).prop('disabled', true);
 		return this;
 	},
 	enable : function () {
-		for (var i = 0, il = this.size(); i < il; i++) {
-			if (this[i].disabled == true) {
-				this[i].disabled = false;
-			}
-		}
+		$(this).prop('disabled', false);
 		return this;
 	},
 	raw: function (number) {
-		if (number === undefined) {
+		if (typeof number == 'undefined') {
 			number = 0;
 		}
-		return this[number];
+		return $(this).get(number);
 	},
 	nextElementSibling: function () {
 		var here = this[0];
@@ -370,5 +346,28 @@ $.fn.extend({
 		} else {
 			$(this).attr('title', tooltip);
 		}
+		return this;
+	},
+
+	// Disable unset form elements to allow search URLs cleanups
+	disableUnset: function() {
+		$('input[value=""]:text, select[value=""]', this).disable();
+		return this;
+	},
+
+	// Prevent double submission of forms
+	preventDoubleSubmission: function() {
+		$(this).submit(function(e) {
+			var $form = $(this);
+			if ($form.data('submitted') === true) {
+				// Previously submitted - don't submit again
+				e.preventDefault();
+			} else {
+				// Mark it so that the next submit can be ignored
+				$form.data('submitted', true);
+			}
+		});
+		// Keep chainability
+		return this;
 	}
 });

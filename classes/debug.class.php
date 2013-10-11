@@ -554,7 +554,7 @@ class DEBUG {
 			}
 ?>
 		<tr valign="top">
-			<td class="debug_data debug_query_data"><div><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str($SQL)))?></div></td>
+			<td class="debug_data debug_query_data"><div><?=str_replace("\t", '&nbsp;&nbsp;', nl2br(display_str(trim($SQL))))?></div></td>
 			<td class="rowa debug_info debug_query_time" style="width: 130px;" align="left"><?=number_format($Time, 5)?> ms</td>
 			<td class="rowa debug_info debug_query_warnings"><?=$Warnings?></td>
 		</tr>

@@ -170,13 +170,13 @@ list($PerfectFLACs) = $DB->next_record();
 ?>
 				<li id="comm_seeding"<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Seeding:
 					<span class="user_commstats" id="user_commstats_seeding"><a href="#" class="brackets" onclick="commStats(<?=$UserID?>); return false;">Show stats</a></span>
-<?
-		if ($AOverride = check_paranoia_here('seeding')) {
-			if ($Override = check_paranoia_here('snatched')) {
-?>
+<?		if ($Override = check_paranoia_here('snatched+')) { ?>
 					<span<?=($Override === 2 ? ' class="paranoia_override"' : '')?> id="user_commstats_seedingperc"></span>
-<?			} ?>
-					<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" class="brackets<?=($AOverride === 2 ? ' paranoia_override' : '')?>" title="View">View</a>
+<?
+		}
+		if ($Override = check_paranoia_here('seeding')) {
+?>
+					<a href="torrents.php?type=seeding&amp;userid=<?=$UserID?>" class="brackets<?=($Override === 2 ? ' paranoia_override' : '')?>" title="View">View</a>
 <?			if (check_perms('zip_downloader')) { ?>
 					<a href="torrents.php?action=redownload&amp;type=seeding&amp;userid=<?=$UserID?>" onclick="return confirm('If you no longer have the content, your ratio WILL be affected; be sure to check the size of all torrents before redownloading.');" class="brackets" title="Download">Download</a>
 <?

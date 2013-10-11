@@ -233,7 +233,7 @@ class DB_MYSQL {
 			sleep($i * rand(2, 5)); // Wait longer as attempts increase
 		}
 		$QueryEndTime = microtime(true);
-		$this->Queries[] = array(display_str($Query), ($QueryEndTime - $QueryStartTime) * 1000, null);
+		$this->Queries[] = array($Query, ($QueryEndTime - $QueryStartTime) * 1000, null);
 		$this->Time += ($QueryEndTime - $QueryStartTime) * 1000;
 
 		if (!$this->QueryID) {

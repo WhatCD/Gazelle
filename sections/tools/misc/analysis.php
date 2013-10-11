@@ -12,7 +12,7 @@ View::show_header('Case Analysis');
 <div class="header">
 	<h2>Case Analysis (<a href="<?=display_str($Analysis['url'])?>"><?=$_GET['case']?></a>)</h2>
 </div>
-<pre id="#debug_report"><?=display_str($Analysis['message'])?></pre>
+<pre id="debug_report"><?=display_str($Analysis['message'])?></pre>
 <?
 $Debug->perf_table($Analysis['perf']);
 $Debug->flag_table($Analysis['flags']);
