@@ -440,16 +440,22 @@ if (!empty($_GET['year'])) {
 	$Years = explode('-', $_GET['year']);
 	if (is_number($Years[0]) || (empty($Years[0]) && !empty($Years[1]) && is_number($Years[1]))) {
 		if (count($Years) === 1) {
-			$SphQL->where('year', (int)$Years[0]);
-			$SphQLTor->where('year', (int)$Years[0]);
+			$SphQL->where('year', $Years[0]);
+			$SphQLTor->where('year', $Years[0]);
 		} else {
-			if (empty($Years[1]) || !is_number($Years[1])) {
-				$Years[1] = PHP_INT_MAX;
-			} elseif ($Years[0] > $Years[1]) {
-				$Years = array_reverse($Years);
+			if (empty($Years[0])) {
+				$SphQL->where_lt('year', $Years[1], true);
+				$SphQLTor->where_lt('year', $Years[1], true);
+			} elseif (empty($Years[1]) || !is_number($Years[1])) {
+				$SphQL->where_gt('year', $Years[0], true);
+				$SphQLTor->where_gt('year', $Years[0], true);
+			} else {
+				if ($Years[0] > $Years[1]) {
+					$Years = array_reverse($Years);
+				}
+				$SphQL->where_between('year', array($Years[0], $Years[1]));
+				$SphQLTor->where_between('year', array($Years[0], $Years[1]));
 			}
-			$SphQL->where_between('year', array((int)$Years[0], (int)$Years[1]));
-			$SphQLTor->where_between('year', array((int)$Years[0], (int)$Years[1]));
 		}
 		$Filtered = true;
 	}
@@ -460,10 +466,10 @@ if (isset($_GET['haslog']) && $_GET['haslog'] !== '') {
 		$SphQL->where('logscore', 100);
 		$SphQLTor->where('logscore', 100);
 	} elseif ($_GET['haslog'] < 0) {
-		// Exclude torrents with log score equal to 100
-		$SphQL->where('logscore', 100, true);
+		// Look for torrents with log score < 100
+		$SphQL->where_lt('logscore', 100);
 		$SphQL->where('haslog', 1);
-		$SphQLTor->where('logscore', 100, true);
+		$SphQLTor->where_lt('logscore', 100);
 		$SphQLTor->where('haslog', 1);
 	} elseif ($_GET['haslog'] == 0) {
 		$SphQL->where('haslog', 0);

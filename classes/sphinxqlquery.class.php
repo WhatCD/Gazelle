@@ -2,6 +2,7 @@
 class SphinxqlQuery {
 	private $Sphinxql;
 
+	private $Errors;
 	private $Expressions;
 	private $Filters;
 	private $GroupBy;
@@ -48,7 +49,7 @@ class SphinxqlQuery {
 	}
 
 	/**
-	 * Add attribute filter. Calling this function multiple times results in boolean AND between each condition
+	 * Add attribute filter. Calling multiple filter functions results in boolean AND between each condition.
 	 *
 	 * @param string $Attribute attribute which the filter will apply to
 	 * @param mixed $Values scalar or array of numerical values. Array uses boolean OR in query condition
@@ -56,14 +57,16 @@ class SphinxqlQuery {
 	 * @return current Sphinxql query object
 	 */
 	public function where($Attribute, $Values, $Exclude = false) {
-		if (empty($Attribute) && empty($Values)) {
-			return false;
+		if (empty($Attribute) || !isset($Values)) {
+			$this->error("Attribute name and filter value are required.");
+			return $this;
 		}
 		$Filters = array();
 		if (is_array($Values)) {
 			foreach ($Values as $Value) {
 				if (!is_number($Value)) {
-					$this->error("Filters require numeric values");
+					$this->error("Filters only support numeric values.");
+					return $this;
 				}
 			}
 			if ($Exclude) {
@@ -73,7 +76,8 @@ class SphinxqlQuery {
 			}
 		} else {
 			if (!is_number($Values)) {
-				$this->error("Filters require numeric values");
+				$this->error("Filters only support numeric values.");
+				return $this;
 			}
 			if ($Exclude) {
 				$Filters[] = "$Attribute != $Values";
@@ -86,7 +90,41 @@ class SphinxqlQuery {
 	}
 
 	/**
-	 * Add attribute range filter. Calling this function multiple times results in boolean AND between each condition
+	 * Add attribute less-than filter. Calling multiple filter functions results in boolean AND between each condition.
+	 *
+	 * @param string $Attribute attribute which the filter will apply to
+	 * @param array $Value upper limit for matches
+	 * @param bool $Inclusive whether to use <= or <
+	 * @return current Sphinxql query object
+	 */
+	public function where_lt($Attribute, $Value, $Inclusive = false) {
+		if (empty($Attribute) || !isset($Value) || !is_number($Value)) {
+			$this->error("Attribute name is required and only numeric filters are supported.");
+			return $this;
+		}
+		$this->Filters[] = $Inclusive ? "$Attribute <= $Value" : "$Attribute < $Value";
+		return $this;
+	}
+
+	/**
+	 * Add attribute greater-than filter. Calling multiple filter functions results in boolean AND between each condition.
+	 *
+	 * @param string $Attribute attribute which the filter will apply to
+	 * @param array $Value lower limit for matches
+	 * @param bool $Inclusive whether to use >= or >
+	 * @return current Sphinxql query object
+	 */
+	public function where_gt($Attribute, $Value, $Inclusive = false) {
+		if (empty($Attribute) || !isset($Value) || !is_number($Value)) {
+			$this->error("Attribute name is required and only numeric filters are supported.");
+			return $this;
+		}
+		$this->Filters[] = $Inclusive ? "$Attribute >= $Value" : "$Attribute > $Value";
+		return $this;
+	}
+
+	/**
+	 * Add attribute range filter. Calling multiple filter functions results in boolean AND between each condition.
 	 *
 	 * @param string $Attribute attribute which the filter will apply to
 	 * @param array $Values pair of numerical values that defines the filter range
@@ -95,13 +133,14 @@ class SphinxqlQuery {
 	public function where_between($Attribute, $Values) {
 		if (empty($Attribute) || empty($Values) || count($Values) != 2 || !is_number($Values[0]) || !is_number($Values[1])) {
 			$this->error("Filter range requires array of two numerical boundaries as values.");
+			return $this;
 		}
 		$this->Filters[] = "$Attribute BETWEEN $Values[0] AND $Values[1]";
 		return $this;
 	}
 
 	/**
-	 * Add fulltext query expression. Calling this function multiple times results in boolean AND between each condition.
+	 * Add fulltext query expression. Calling multiple filter functions results in boolean AND between each condition.
 	 * Query expression is escaped automatically
 	 *
 	 * @param string $Expr query expression
@@ -218,6 +257,7 @@ class SphinxqlQuery {
 	private function build_query() {
 		if (!$this->Indexes) {
 			$this->error('Index name is required.');
+			return false;
 		}
 		$this->QueryString = "SELECT $this->Select\nFROM $this->Indexes";
 		if (!empty($this->Expressions)) {
@@ -253,6 +293,11 @@ class SphinxqlQuery {
 	public function query($GetMeta = true) {
 		$QueryStartTime = microtime(true);
 		$this->build_query();
+		if (count($this->Errors) > 0) {
+			$ErrorMsg = implode("\n", $this->Errors);
+			$this->Sphinxql->error("Query builder found errors:\n$ErrorMsg");
+			return new SphinxqlResult(null, null, 1, $ErrorMsg);
+		}
 		$QueryString = $this->QueryString;
 		$Result = $this->send_query($GetMeta);
 		$QueryProcessTime = (microtime(true) - $QueryStartTime)*1000;
@@ -287,7 +332,7 @@ class SphinxqlQuery {
 		if ($Result === false) {
 			$Errno = $this->Sphinxql->errno;
 			$Error = $this->Sphinxql->error;
-			$this->error("Query returned error $Errno ($Error).\n$this->QueryString");
+			$this->Sphinxql->error("Query returned error $Errno ($Error).\n$this->QueryString");
 			$Meta = null;
 		} else {
 			$Errno = 0;
@@ -301,6 +346,7 @@ class SphinxqlQuery {
 	 * Reset all query options and conditions
 	 */
 	public function reset() {
+		$this->Errors = array();
 		$this->Expressions = array();
 		$this->Filters = array();
 		$this->GroupBy = '';
@@ -323,9 +369,9 @@ class SphinxqlQuery {
 	}
 
 	/**
-	 * Wrapper for the current Sphinxql connection's error function
+	 * Store error messages
 	 */
-	private function error($Msg, $Halt = false) {
-		$this->Sphinxql->error($Msg, $Halt);
+	private function error($Msg) {
+		$this->Errors[] = $Msg;
 	}
 }
