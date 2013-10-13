@@ -416,33 +416,33 @@ $OverallRank = UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsR
 			list($EmailChanges) = $DB->next_record();
 		}
 ?>
-	<div class="box box_info box_userinfo_history">
-		<div class="head colhead_dark">History</div>
-		<ul class="stats nobullet">
+		<div class="box box_info box_userinfo_history">
+			<div class="head colhead_dark">History</div>
+			<ul class="stats nobullet">
 <?		if (check_perms('users_view_email', $Class)) { ?>
-			<li>Emails: <?=number_format($EmailChanges)?> <a href="userhistory.php?action=email2&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" class="brackets">Legacy view</a></li>
+				<li>Emails: <?=number_format($EmailChanges)?> <a href="userhistory.php?action=email2&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" class="brackets">Legacy view</a></li>
 <?
 		}
 		if (check_perms('users_view_ips', $Class)) {
 ?>
-			<li>IPs: <?=number_format($IPChanges)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View users</a></li>
+				<li>IPs: <?=number_format($IPChanges)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View</a>&nbsp;<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>&amp;usersonly=1" class="brackets">View users</a></li>
 <?			if (check_perms('users_view_ips', $Class) && check_perms('users_mod', $Class)) { ?>
-			<li>Tracker IPs: <?=number_format($TrackerIPs)?> <a href="userhistory.php?action=tracker_ips&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+				<li>Tracker IPs: <?=number_format($TrackerIPs)?> <a href="userhistory.php?action=tracker_ips&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?
 			}
 		}
 		if (check_perms('users_view_keys', $Class)) {
 ?>
-			<li>Passkeys: <?=number_format($PasskeyChanges)?> <a href="userhistory.php?action=passkeys&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+				<li>Passkeys: <?=number_format($PasskeyChanges)?> <a href="userhistory.php?action=passkeys&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?
 		}
 		if (check_perms('users_mod', $Class)) {
 ?>
-			<li>Passwords: <?=number_format($PasswordChanges)?> <a href="userhistory.php?action=passwords&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
-			<li>Stats: N/A <a href="userhistory.php?action=stats&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+				<li>Passwords: <?=number_format($PasswordChanges)?> <a href="userhistory.php?action=passwords&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
+				<li>Stats: N/A <a href="userhistory.php?action=stats&amp;userid=<?=$UserID?>" class="brackets">View</a></li>
 <?		} ?>
-		</ul>
-	</div>
+			</ul>
+		</div>
 <?	} ?>
 		<div class="box box_info box_userinfo_personal">
 			<div class="head colhead_dark">Personal</div>
@@ -529,8 +529,8 @@ if (!isset($SupportFor)) {
 	list($SupportFor) = $DB->next_record();
 }
 if ($Override = check_perms('users_mod') || $OwnProfile || !empty($SupportFor)) {
-	?>
-		<li<?=(($Override === 2 || $SupportFor) ? ' class="paranoia_override"' : '')?>>Clients: <?
+?>
+				<li<?=(($Override === 2 || $SupportFor) ? ' class="paranoia_override"' : '')?>>Clients: <?
 		$DB->query("
 			SELECT DISTINCT useragent
 			FROM xbt_files_users
@@ -576,7 +576,7 @@ if ($RatioWatchEnds != '0000-00-00 00:00:00'
 ?>
 			</div>
 		</div>
-	<? DonationsView::render_profile_rewards($EnabledRewards, $ProfileRewards); ?>
+<? DonationsView::render_profile_rewards($EnabledRewards, $ProfileRewards); ?>
 <?
 if (check_paranoia_here('snatched')) {
 	$RecentSnatches = $Cache->get_value("recent_snatches_$UserID");
@@ -742,7 +742,7 @@ if ((check_perms('users_view_invites')) && $Invited > 0) {
 				<a href="#invitetree_box" class="brackets anchor">#</a> Invite Tree <a href="#" onclick="$('#invitetree').gtoggle(); return false;" class="brackets">View</a>
 			</div>
 			<div id="invitetree" class="hidden">
-				<? $Tree->make_tree(); ?>
+<?				$Tree->make_tree(); ?>
 			</div>
 		</div>
 <?

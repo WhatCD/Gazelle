@@ -2,7 +2,8 @@
 
 class Top10View {
 
-	public static function render_linkbox($Selected) { ?>
+	public static function render_linkbox($Selected) {
+?>
 		<div class="linkbox">
 			<a href="top10.php?type=torrents" class="brackets"><?=self::get_selected_link("Torrents", $Selected == "torrents")?></a>
 			<a href="top10.php?type=lastfm" class="brackets"><?=self::get_selected_link("Last.fm", $Selected == "lastfm")?></a>
@@ -11,22 +12,27 @@ class Top10View {
 			<a href="top10.php?type=votes" class="brackets"><?=self::get_selected_link("Favorites", $Selected == "votes")?></a>
 			<a href="top10.php?type=donors" class="brackets"><?=self::get_selected_link("Donors", $Selected == "donors")?></a>
 		</div>
-<?	}
+<?
+	}
 
-	public static function render_artist_links($Selected, $View) { ?>
+	public static function render_artist_links($Selected, $View) {
+?>
 		<div class="center">
 			<a href="top10.php?type=lastfm&amp;category=weekly&amp;view=<?=$View?>" class="brackets tooltip" title="These are the artists with the most Last.fm listeners this week"><?=self::get_selected_link("Weekly Artists", $Selected == "weekly")?></a>
 			<a href="top10.php?type=lastfm&amp;category=hyped&amp;view=<?=$View?>" class="brackets tooltip" title="These are the the fastest rising artists on Last.fm this week"><?=self::get_selected_link("Hyped Artists", $Selected == "hyped")?></a>
-			
-		</div>
-<?	}
 
-	public static function render_artist_controls($Selected, $View) { ?>
+		</div>
+<?
+	}
+
+	public static function render_artist_controls($Selected, $View) {
+?>
 		<div class="center">
 			<a href="top10.php?type=lastfm&amp;category=<?=$Selected?>&amp;view=tiles" class="brackets"><?=self::get_selected_link("Tiles", $View == "tiles")?></a>
 			<a href="top10.php?type=lastfm&amp;category=<?=$Selected?>&amp;view=list" class="brackets"><?=self::get_selected_link("List", $View == "list")?></a>
 		</div>
-<?	}
+<?
+	}
 
 	private static function get_selected_link($String, $Selected) {
 		if ($Selected) {
@@ -38,7 +44,7 @@ class Top10View {
 
 	public static function render_artist_tile($Artist, $Category) {
 		switch ($Category) {
-			
+
 			case 'weekly':
 			case 'hyped':
 				self::render_tile("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);
@@ -50,20 +56,21 @@ class Top10View {
 
 	private static function render_tile($Url, $Name, $Image) {
 		if (!empty($Image)) {
-			$Name = htmlspecialchars($Name);
-			?>
+			$Name = display_str($Name);
+?>
 			<li>
 				<a href="<?=$Url?><?=$Name?>">
 					<img class="tooltip large_tile" alt="<?=$Name?>" title="<?=$Name?>" src="<?=ImageTools::process($Image)?>" />
 				</a>
 			</li>
-<?		}
+<?
+		}
 	}
 
 
 	public static function render_artist_list($Artist, $Category) {
 		switch ($Category) {
-			
+
 			case 'weekly':
 			case 'hyped':
 				self::render_list("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);
@@ -78,12 +85,13 @@ class Top10View {
 			$UseTooltipster = !isset(G::$LoggedUser['Tooltipster']) || G::$LoggedUser['Tooltipster'];
 			$Image = ImageTools::process($Image);
 			$Title = "title=\"&lt;img class=&quot;large_tile&quot; src=&quot;$Image&quot; alt=&quot;&quot; />\"";
-			$Name = htmlspecialchars($Name);
-			?>
+			$Name = display_str($Name);
+?>
 			<li>
 				<a class="tooltip_image" <?=$Title?> href="<?=$Url?><?=$Name?>"><?=$Name?></a>
 			</li>
-<?		}
+<?
+		}
 	}
 
 }

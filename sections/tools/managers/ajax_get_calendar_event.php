@@ -10,19 +10,19 @@ if ($_GET['id']) {
 	$Year = $_GET['year'];
 	$Month = $_GET['month'];
 	$Day = $_GET['day'];
-	if (10 > $Month) {
-		$Month = "0" . $Month;
+	if ($Month < 10) {
+		$Month = "0$Month";
 	}
-	if (10 > $Day) {
-		$Day = "0" . $Day;
+	if ($Day < 10) {
+		$Day = "0$Day";
 	}
-	$StartDate = $EndDate = $Year . "-" . $Month . "-" . $Day;
+	$StartDate = $EndDate = "$Year-$Month-$Day";
 }
 ?>
-<form id="event_form" name="event_form" method="POST">
+<form id="event_form" name="event_form" method="post" action="">
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 <?	if ($Event) { ?>
-		<input type="hidden" name="id" value="<?=$Event['ID']?>" />
+	<input type="hidden" name="id" value="<?=$Event['ID']?>" />
 <?	} ?>
 	<input type="hidden" name="action" value="take_calendar_event" />
 	<table class="event_form_table">
@@ -30,17 +30,19 @@ if ($_GET['id']) {
 		<tr>
 			<td class="label">Title:</td>
 			<td>
-				<input type="text" id="title" name="title" class="required" value="<?=$Event['Title']?>" >
+				<input type="text" id="title" name="title" class="required" value="<?=$Event['Title']?>" />
 			</td>
 		</tr>
 		<tr>
 			<td class="label">Category:</td>
 			<td>
 				<select id="category" name="category" class="required">
-<?					$Categories = Calendar::$Categories;
-					foreach ($Categories as $Key => $Value) { ?>
-						<option	value="<?=$Key?>" <?=$Key == $Event['Category'] ? "selected='selected'" : ""?>><?=$Value?></option>
-<?					} ?>
+<?
+	$Categories = Calendar::$Categories;
+	foreach ($Categories as $Key => $Value) {
+?>
+					<option	value="<?=$Key?>"<?=$Key == $Event['Category'] ? ' selected="selected"' : ''?>><?=$Value?></option>
+<?	} ?>
 				</select>
 			</td>
 		</tr>
@@ -48,10 +50,12 @@ if ($_GET['id']) {
 			<td class="label">Importance:</td>
 			<td>
 				<select id="importance" name="importance" class="required">
-<?					$Importances = Calendar::$Importances;
-					foreach ($Importances as $Key => $Value) { ?>
-						<option	value="<?=$Key?>" <?=$Key == $Event['Importance'] ? "selected='selected'" : ""?>><?=$Value?></option>
-<?					} ?>
+<?
+	$Importances = Calendar::$Importances;
+	foreach ($Importances as $Key => $Value) {
+?>
+					<option	value="<?=$Key?>"<?=$Key == $Event['Importance'] ? ' selected="selected"' : ''?>><?=$Value?></option>
+<?	} ?>
 				</select>
 			</td>
 		</tr>
@@ -59,33 +63,35 @@ if ($_GET['id']) {
 			<td class="label">Team:</td>
 			<td>
 				<select id="team" name="team" class="required">
-<?					$Teams = Calendar::$Teams;
-					foreach ($Teams as $Key => $Value) { ?>
-						<option	value="<?=$Key?>" <?=$Key == $Event['Team'] ? "selected='selected'" : ""?>><?=$Value?></option>
-<?					} ?>
+<?
+	$Teams = Calendar::$Teams;
+	foreach ($Teams as $Key => $Value) {
+?>
+					<option	value="<?=$Key?>"<?=$Key == $Event['Team'] ? ' selected="selected"' : ''?>><?=$Value?></option>
+<?	} ?>
 				</select>
 			</td>
 		</tr>
 		<tr>
-			<td class="label">Start Date:</td>
+			<td class="label">Start date:</td>
 			<td>
 				<input type="date" id="start_date" name="start_date" class="required"
-<?					if ($Event) { ?>
-						value="<?=date('Y-m-d', strtotime($Event['StartDate']))?>"
-<?					} else { ?>
-						value="<?=$StartDate?>"/>
-<?					} ?>
+<?	if ($Event) { ?>
+						value="<?=date('Y-m-d', strtotime($Event['StartDate']))?>" />
+<?	} else { ?>
+						value="<?=$StartDate?>" />
+<?	} ?>
 			</td>
 		</tr>
 		<tr>
-			<td class="label">End Date:</td>
+			<td class="label">End date:</td>
 			<td>
 				<input type="date" id="end_date" name="end_date" class="required"
-<?					if ($Event) { ?>
-						value="<?=date('Y-m-d', strtotime($Event['EndDate']))?>"
-<?					} else { ?>
-						value="<?=$EndDate?>"/>
-<?					} ?>
+<?	if ($Event) { ?>
+						value="<?=date('Y-m-d', strtotime($Event['EndDate']))?>" />
+<?	} else { ?>
+						value="<?=$EndDate?>" />
+<?	} ?>
 			</td>
 		</tr>
 		<tr>
@@ -100,20 +106,24 @@ if ($_GET['id']) {
 			</td>
 		</tr>
 		<tr>
-<?			if (check_perms("users_mod")) {
-				if ($Event) { ?>
-					<td>
-						<input type="submit" id="update" name="update" value="Update">
-					</td>
-					<td>
-						<input type="submit" id="delete" name="delete" value="Delete">
-					</td>
-<?				} else { ?>
-					<td>
-						<input type="submit" id="create" name="create" value="Create">
-					</td>
-<?				}
-			} ?>
+<?
+	if (check_perms('users_mod')) {
+		if ($Event) {
+?>
+			<td>
+				<input type="submit" id="update" name="update" value="Update" />
+			</td>
+			<td>
+				<input type="submit" id="delete" name="delete" value="Delete" />
+			</td>
+<?		} else { ?>
+			<td>
+				<input type="submit" id="create" name="create" value="Create" />
+			</td>
+<?
+		}
+	}
+?>
 		</tr>
 	</tr>
 </table>

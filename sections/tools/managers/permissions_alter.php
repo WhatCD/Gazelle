@@ -9,7 +9,7 @@ function display_perm($Key, $Title) {
 	echo "$Perm\n";
 }
 
-View::show_header('Manage Permissions','validate');
+View::show_header('Manage Permissions', 'validate');
 
 echo $Val->GenerateJS('permissionsform');
 ?>
@@ -24,19 +24,19 @@ echo $Val->GenerateJS('permissionsform');
 	<table class="permission_head layout">
 		<tr>
 			<td class="label">Permission name</td>
-			<td><input type="text" name="name" id="name" value="<?=(!empty($Name) ? display_str($Name) : '')?>" /></td>
+			<td><input type="text" name="name" id="name" value="<?=!empty($Name) ? display_str($Name) : ''?>" /></td>
 		</tr>
 		<tr>
 			<td class="label">Class level</td>
-			<td><input type="text" name="level" id="level" value="<?=(!empty($Level) ? display_str($Level) : '')?>" /></td>
+			<td><input type="text" name="level" id="level" value="<?=!empty($Level) ? display_str($Level) : ''?>" /></td>
 		</tr>
 		<tr>
 			<td class="label">Secondary class</td>
-			<td><input type="checkbox" name="secondary" value="1"<? if (!empty($Secondary)) { ?> checked="checked"<? } ?> /></td>
+			<td><input type="checkbox" name="secondary" value="1"<?=!empty($Secondary) ? ' checked="checked"' : ''?> /></td>
 		</tr>
 		<tr>
 			<td class="label">Show on staff page</td>
-			<td><input type="checkbox" name="displaystaff" value="1"<? if (!empty($DisplayStaff)) { ?> checked="checked"<? } ?> /></td>
+			<td><input type="checkbox" name="displaystaff" value="1"<?=!empty($DisplayStaff) ? ' checked="checked"' : ''?> /></td>
 		</tr>
 		<tr>
 			<td class="label">Maximum number of personal collages</td>

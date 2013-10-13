@@ -70,7 +70,7 @@ if (isset($_POST['changealias']) && is_number($_POST['aliasid'])) {
 	</tr>
 	<tr />
 	<tr>
-		<form method="post">
+		<form method="post" action="">
 			<input type="hidden" name="newalias" value="1" />
 			<td>
 				<input type="text" name="AliasLabel" />
@@ -90,9 +90,9 @@ $DB->query("
 	$LabelNameSQL
 	ORDER BY $OrderBy");
 while (list($ID, $BadLabel, $AliasLabel) = $DB->next_record()) {
-	?>
+?>
 	<tr>
-		<form method="post">
+		<form method="post" action="">
 			<input type="hidden" name="changealias" value="1" />
 			<input type="hidden" name="aliasid" value="<?=$ID?>" />
 			<td>
@@ -108,6 +108,7 @@ while (list($ID, $BadLabel, $AliasLabel) = $DB->next_record()) {
 		</form>
 	</tr>
 <?
-} ?>
+}
+?>
 </table>
 <? View::show_footer(); ?>

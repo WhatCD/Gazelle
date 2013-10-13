@@ -966,6 +966,14 @@ CREATE TABLE `sphinx_tg` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `staff_answers` (
+  `QuestionID` int(10) NOT NULL,
+  `UserID` int(10) NOT NULL,
+  `Answer` mediumtext,
+  `Date` datetime NOT NULL,
+  PRIMARY KEY (`QuestionID`,`UserID`)
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `staff_blog` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `UserID` int(10) unsigned NOT NULL,
@@ -1294,6 +1302,14 @@ CREATE TABLE `torrents_votes` (
   PRIMARY KEY (`GroupID`),
   KEY `Score` (`Score`),
   CONSTRAINT `torrents_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB CHARSET utf8;
+
+CREATE TABLE `user_questions` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `Question` mediumtext NOT NULL,
+  `UserID` int(10) NOT NULL,
+  `Date` datetime NOT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_collage_subs` (

@@ -138,8 +138,6 @@ class LastFM {
 		return $Response;
 	}
 
-	
-
 	public static function clear_cache($Username, $UserID) {
 		$Response = G::$Cache->get_value("lastfm_clear_cache_$UserID");
 		if (empty($Response)) {

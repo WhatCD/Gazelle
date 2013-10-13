@@ -40,18 +40,18 @@ list ($NumResults) = $DB->next_record();
 	<h2>Email Blacklist</h2>
 </div>
 <br />
-<form action="tools.php" method="POST">
+<form action="tools.php" method="post">
 	<input type="hidden" name="action" value="email_blacklist" />
-	<input type="text" name="email" size="30" placeholder="Email"/>
-	<input type="text" name="comment" size="60" placeholder="Comment"/>
+	<input type="text" name="email" size="30" placeholder="Email" />
+	<input type="text" name="comment" size="60" placeholder="Comment" />
 	<input type="submit" value="Search" />
 </form>
 <div class="linkbox pager">
 	<br />
-	<?
+<?
 	$Pages = Format::get_pages($Page, $NumResults, TOPICS_PER_PAGE, 9);
 	echo $Pages;
-	?>
+?>
 </div>
 <table>
 	<tr class="colhead">
@@ -73,9 +73,8 @@ list ($NumResults) = $DB->next_record();
 		</form>
 	</tr>
 <?
-
 	foreach ($Results as $Result) {
-		?>
+?>
 	<tr>
 		<form class="manage_form" name="email_blacklist" action="tools.php" method="post">
 			<td>

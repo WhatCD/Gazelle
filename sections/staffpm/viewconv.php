@@ -10,7 +10,10 @@ if ($ConvID = (int)$_GET['id']) {
 		WHERE ID = $ConvID");
 	list($Subject, $UserID, $Level, $AssignedToUser, $Unread, $Status) = $DB->next_record();
 
-	if (!(($UserID == $LoggedUser['ID']) || ($AssignedToUser == $LoggedUser['ID']) || (($Level > 0 && $Level <= $LoggedUser['EffectiveClass']) || ($Level == 0 && $IsFLS)))) {
+	if (!(($UserID == $LoggedUser['ID'])
+			|| ($AssignedToUser == $LoggedUser['ID'])
+			|| (($Level > 0 && $Level <= $LoggedUser['EffectiveClass']) || ($Level == 0 && $IsFLS))
+		)) {
 	// User is trying to view someone else's conversation
 		error(403);
 	}
@@ -93,7 +96,7 @@ if ($ConvID = (int)$_GET['id']) {
 				</strong>
 				<?=time_diff($SentDate, 2, true)?>
 <?		if ($Status != 'Resolved') { ?>
-				- <a href="#quickpost" onclick="Quote('<?=$MessageID?>','<?=$Username?>');" class="brackets">Quote</a>
+				- <a href="#quickpost" onclick="Quote('<?=$MessageID?>', '<?=$Username?>');" class="brackets">Quote</a>
 <?		} ?>
 			</div>
 			<div class="body"><?=$Text->full_format($Message)?></div>
@@ -128,15 +131,18 @@ if ($ConvID = (int)$_GET['id']) {
 <?		} ?>
 				</select>
 				<input type="button" value="Set message" onclick="SetMessage();" />
-				<input type="button" value="Create new / Edit" onclick="location.href='staffpm.php?action=responses&amp;convid=<?=$ConvID?>'" />
+				<input type="button" value="Create new / Edit" onclick="location.href='staffpm.php?action=responses&amp;convid=<?=$ConvID?>';" />
 			</div>
 		</div>
-<?	}
+<?
+	}
 
 	// Ajax assign response div
-	if ($IsStaff) { ?>
+	if ($IsStaff) {
+?>
 		<div id="ajax_message" class="hidden center alertbar"></div>
-<?	}
+<?
+	}
 
 	// Reply box and buttons
 ?>
@@ -168,8 +174,10 @@ if ($ConvID = (int)$_GET['id']) {
 				$Selected = ((!$AssignedToUser && ($Level == $Class['Level'])) ? ' selected="selected"' : '');
 ?>
 							<option value="class_<?=$Class['Level']?>"<?=$Selected?>><?=$Class['Name']?></option>
-<?			}
-		} ?>
+<?
+			}
+		}
+?>
 						</optgroup>
 						<optgroup label="Staff">
 <?		// Staff members
@@ -215,18 +223,20 @@ if ($ConvID = (int)$_GET['id']) {
 <?	} elseif ($IsFLS) {	// FLS assign button ?>
 					<input type="button" value="Assign to staff" onclick="location.href='staffpm.php?action=assign&amp;to=staff&amp;convid=<?=$ConvID?>';" />
 					<input type="button" value="Assign to forum staff" onclick="location.href='staffpm.php?action=assign&amp;to=forum&amp;convid=<?=$ConvID?>';" />
-<?	}
+<?
+	}
 
 	if ($Status != 'Resolved') { ?>
 					<input type="button" value="Resolve" onclick="location.href='staffpm.php?action=resolve&amp;id=<?=$ConvID?>';" />
-<?			if ($IsFLS) { //Moved by request ?>
+<?		if ($IsFLS) { //Moved by request ?>
 					<input type="button" value="Common answers" onclick="$('#common_answers').gtoggle();" />
-<?			} ?>
+<?		} ?>
 					<input type="button" id="previewbtn" value="Preview" class="hidden button_preview_<?=$TextPrev->getID()?>" title="Preview text" />
 					<input type="submit" value="Send message" />
 <?	} else { ?>
-				<input type="button" value="Unresolve" onclick="location.href='staffpm.php?action=unresolve&amp;id=<?=$ConvID?>';" />
-<?	}
+					<input type="button" value="Unresolve" onclick="location.href='staffpm.php?action=unresolve&amp;id=<?=$ConvID?>';" />
+<?
+	}
 	if (check_perms('users_give_donor')) { ?>
 					<br />
 					<input type="button" value="Make Donor" onclick="$('#make_donor_form').gtoggle(); return false;" />
@@ -234,12 +244,12 @@ if ($ConvID = (int)$_GET['id']) {
 				</form>
 <?	if (check_perms('users_give_donor')) { ?>
 				<div id="make_donor_form" class="hidden">
-					<form action="staffpm.php" method="POST">
+					<form action="staffpm.php" method="post">
 						<input type="hidden" name="action" value="make_donor" />
 						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="id" value="<?=$ConvID?>" />
 						<strong>Amount: </strong>
-						<input type="text" name="donation_amount" onkeypress="return isNumberKey(event)" />
+						<input type="text" name="donation_amount" onkeypress="return isNumberKey(event);" />
 						<br />
 						<strong>Reason: </strong>
 						<input type="text" name="donation_reason" />
@@ -250,7 +260,7 @@ if ($ConvID = (int)$_GET['id']) {
 						<select name="donation_currency">
 							<option value="EUR">EUR</option>
 						</select>
-						<input type="submit" value="Submit"/>
+						<input type="submit" value="Submit" />
 					</form>
 				</div>
 <?	} ?>

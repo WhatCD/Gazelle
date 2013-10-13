@@ -1,7 +1,8 @@
 <?
 
 class DonationsView {
-	public static function render_mod_donations($UserID) { ?>
+	public static function render_mod_donations($UserID) {
+?>
 		<table class="layout" id="donation_box">
 			<tr class="colhead">
 				<td colspan="2">
@@ -59,13 +60,15 @@ class DonationsView {
 
 	public static function render_donor_stats($UserID) {
 		$OwnProfile = G::$LoggedUser['ID'] == $UserID;
-		if (check_perms("users_mod") || $OwnProfile || Donations::is_visible($UserID)) { ?>
+		if (check_perms("users_mod") || $OwnProfile || Donations::is_visible($UserID)) {
+?>
 			<div class="box box_info box_userinfo_donor_stats">
 				<div class="head colhead_dark">Donor Statistics</div>
 				<ul class="stats nobullet">
 <?
 			if (Donations::is_donor($UserID)) {
-				if (check_perms('users_mod') || $OwnProfile) { ?>
+				if (check_perms('users_mod') || $OwnProfile) {
+?>
 					<li>
 						Total donor points: <?=Donations::get_total_rank($UserID)?>
 					</li>
@@ -96,16 +99,17 @@ class DonationsView {
 	public static function render_profile_rewards($EnabledRewards, $ProfileRewards) {
 		$Text = new Text;
 		for ($i = 1; $i <= 4; $i++) {
-			if (isset($EnabledRewards['HasProfileInfo' . $i]) && $ProfileRewards['ProfileInfo' . $i]) { ?>
-					<div class="box">
-						<div class="head" style="height: 13px;">
-							<span style="float: left;"><?=!empty($ProfileRewards['ProfileInfoTitle' . $i]) ? display_str($ProfileRewards['ProfileInfoTitle' . $i]) : "Extra Profile " . ($i + 1)?></span>
-							<span style="float: right;"><a href="#" onclick="$('#profilediv_<?=$i?>').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>
-						</div>
-						<div class="pad" id="profilediv_<?=$i?>">
-<?								echo $Text->full_format($ProfileRewards['ProfileInfo' . $i]); ?>
-						</div>
-					</div>
+			if (isset($EnabledRewards['HasProfileInfo' . $i]) && $ProfileRewards['ProfileInfo' . $i]) {
+?>
+			<div class="box">
+				<div class="head" style="height: 13px;">
+					<span style="float: left;"><?=!empty($ProfileRewards['ProfileInfoTitle' . $i]) ? display_str($ProfileRewards['ProfileInfoTitle' . $i]) : "Extra Profile " . ($i + 1)?></span>
+					<span style="float: right;"><a href="#" onclick="$('#profilediv_<?=$i?>').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>
+				</div>
+				<div class="pad" id="profilediv_<?=$i?>">
+<?					echo $Text->full_format($ProfileRewards['ProfileInfo' . $i]); ?>
+				</div>
+			</div>
 <?
 			}
 		}
@@ -147,7 +151,7 @@ class DonationsView {
 							<strong>Reason</strong>
 						</td>
 					</tr>
-<?			foreach ($DonationHistory as $Donation) { ?>
+<?		foreach ($DonationHistory as $Donation) { ?>
 					<tr class="row<?=$Row?>">
 						<td>
 							<?=display_str($Donation['Source'])?> (<?=Users::format_username($Donation['AddedBy'])?>)
@@ -172,8 +176,9 @@ class DonationsView {
 						</td>
 					</tr>
 <?
-				$Row = $Row == 'b' ? 'a' : 'b';
-			} ?>
+			$Row = $Row === 'b' ? 'a' : 'b';
+		}
+?>
 					</tbody>
 				</table>
 			</div>

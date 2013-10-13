@@ -48,21 +48,23 @@ View::show_header('Gazelle Change Log');
 	echo "\t\t$Pages\n";
 ?>
 	</div>
-<?		if ($CanEdit) { ?>
+<?	if ($CanEdit) { ?>
 	<div class="box box2 edit_changelog">
 		<div class="head">
 			<strong>Manually submit a new change to the change log</strong>
 		</div>
 		<div class="pad">
-			<form method="post">
+			<form method="post" action="">
 				<input type="hidden" name="perform" value="add" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<div class="field_div" id="cl_message">
-					<span class="label">Commit message:</span><br />
-					<textarea name="message" /></textarea>
+					<span class="label">Commit message:</span>
+					<br />
+					<textarea name="message" rows="2"></textarea>
 				</div>
 				<div class="field_div" id="cl_author">
-					<span class="label">Author:</span><br />
+					<span class="label">Author:</span>
+					<br />
 					<input type="text" name="author" value="<?=$LoggedUser['Username']?>" />
 				</div>
 				<div class="submit_div" id="cl_submit">
@@ -71,27 +73,29 @@ View::show_header('Gazelle Change Log');
 			</form>
 		</div>
 	</div>
-<?		}
+<?
+	}
 
-		foreach ($ChangeLog as $Change) { ?>
+	foreach ($ChangeLog as $Change) {
+?>
 	<div class="box box2">
 		<div class="head">
 			<span><?=$Change['Time']?> by <?=$Change['Author']?></span>
-<?				if ($CanEdit) { ?>
-				<span style="float: right;">
-					<form id="delete_<?=$Change['ID']?>" method="POST">
-						<input type="hidden" name="perform" value="remove" />
-						<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-						<input type="hidden" name="change_id" value="<?=$Change['ID']?>" />
-					</form>
+<?		if ($CanEdit) { ?>
+			<span style="float: right;">
+				<form id="delete_<?=$Change['ID']?>" method="post" action="">
+					<input type="hidden" name="perform" value="remove" />
+					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+					<input type="hidden" name="change_id" value="<?=$Change['ID']?>" />
+				</form>
 				<a href="#" onclick="$('#delete_<?=$Change['ID']?>').raw().submit(); return false;" class="brackets">Delete</a>
-				</span>
-<?				} ?>
+			</span>
+<?		} ?>
 		</div>
 		<div class="pad">
 			<?=$Change['Message']?>
 		</div>
 	</div>
-<?		} ?>
+<?	} ?>
 </div>
 <? View::show_footer(); ?>

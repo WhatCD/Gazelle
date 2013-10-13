@@ -59,12 +59,12 @@ class INVITE_TREE {
 				TreePosition,
 				TreeLevel
 			FROM invite_tree AS it
-				JOIN users_main AS um ON um.ID=it.UserID
-				JOIN users_info AS ui ON ui.UserID=it.UserID
-			WHERE TreeID=$TreeID
-				AND TreePosition>$TreePosition".
-				($MaxPosition ? " AND TreePosition<$MaxPosition" : '')."
-				AND TreeLevel>$TreeLevel
+				JOIN users_main AS um ON um.ID = it.UserID
+				JOIN users_info AS ui ON ui.UserID = it.UserID
+			WHERE TreeID = $TreeID
+				AND TreePosition > $TreePosition".
+				($MaxPosition ? " AND TreePosition < $MaxPosition" : '')."
+				AND TreeLevel > $TreeLevel
 			ORDER BY TreePosition");
 
 		$PreviousTreeLevel = $TreeLevel;
@@ -117,37 +117,38 @@ class INVITE_TREE {
 			// Manage tree depth
 			if ($TreeLevel > $PreviousTreeLevel) {
 				for ($i = 0; $i < $TreeLevel - $PreviousTreeLevel; $i++) {
-					echo "<ul class=\"invitetree\">\n\t<li>";
+					echo "\n\n<ul class=\"invitetree\">\n\t<li>\n";
 				}
 			} elseif ($TreeLevel < $PreviousTreeLevel) {
 				for ($i = 0; $i < $PreviousTreeLevel - $TreeLevel; $i++) {
-					echo "\t</li>\n</ul>";
+					echo "\t</li>\n</ul>\n";
 				}
-				echo "\t</li>\n<li>";
+				echo "\t</li>\n\t<li>\n";
 			} else {
-				echo "\t</li>\n<li>";
+				echo "\t</li>\n\t<li>\n";
 			}
 			$UserClass = $Classes[$Class]['Level'];
 ?>
-				<strong><?=Users::format_username($ID, true, true, ($Enabled != 2 ? false : true), true)?></strong>
+		<strong><?=Users::format_username($ID, true, true, ($Enabled != 2 ? false : true), true)?></strong>
 <?
 			if (check_paranoia(array('uploaded', 'downloaded'), $Paranoia, $UserClass)) {
 				$TotalUpload += $Uploaded;
 				$TotalDownload += $Downloaded;
 ?>
-				&nbsp;Uploaded: <strong><?=Format::get_size($Uploaded)?></strong>
-				&nbsp;Downloaded: <strong><?=Format::get_size($Downloaded)?></strong>
-				&nbsp;Ratio: <strong><?=Format::get_ratio_html($Uploaded, $Downloaded)?></strong>
+		&nbsp;Uploaded: <strong><?=Format::get_size($Uploaded)?></strong>
+		&nbsp;Downloaded: <strong><?=Format::get_size($Downloaded)?></strong>
+		&nbsp;Ratio: <strong><?=Format::get_ratio_html($Uploaded, $Downloaded)?></strong>
 <?
 			} else {
 				$ParanoidCount++;
 ?>
-				&nbsp;Hidden
+		&nbsp;Hidden
 <?
 			}
 ?>
 
-<?			$PreviousTreeLevel = $TreeLevel;
+<?
+			$PreviousTreeLevel = $TreeLevel;
 			G::$DB->set_query_id($TreeQuery);
 		}
 
@@ -158,7 +159,8 @@ class INVITE_TREE {
 
 		if ($Count) {
 
-?> 		<p style="font-weight: bold;">
+?>
+		<p style="font-weight: bold;">
 			This tree has <?=number_format($Count)?> entries, <?=number_format($Branches)?> branches, and a depth of <?=number_format($MaxTreeLevel - $OriginalTreeLevel)?>.
 			It has
 <?
@@ -175,7 +177,7 @@ class INVITE_TREE {
 						$LastClass.='s';
 					}
 				}
-				$LastClass = $ClassCount.' '.$LastClass.' (' . number_format(($ClassCount / $Count) * 100) . '%)';
+				$LastClass = "$ClassCount $LastClass (" . number_format(($ClassCount / $Count) * 100) . '%)';
 
 				$ClassStrings[] = $LastClass;
 			}
@@ -217,7 +219,7 @@ class INVITE_TREE {
 			echo '; the total amount downloaded was '.Format::get_size($TopLevelDownload);
 			echo '; and the total ratio is '.Format::get_ratio_html($TopLevelUpload, $TopLevelDownload).'. ';
 
-			echo 'These numbers include the stats of paranoid users and will be factored into the invitation giving script.</p>';
+			echo "These numbers include the stats of paranoid users and will be factored into the invitation giving script.\n\t\t</p>\n";
 
 			if ($ParanoidCount) {
 				echo '<p style="font-weight: bold;">';
@@ -233,8 +235,8 @@ class INVITE_TREE {
 			}
 		}
 ?>
-		<br />
-		<?=$Tree?>
+			<br />
+<?=			$Tree?>
 		</div>
 <?
 		G::$DB->set_query_id($QueryID);

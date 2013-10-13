@@ -1,8 +1,8 @@
 <?
 
 class CalendarView {
-	private static $Days = array('S','M','T','W','T','F','S');
-	private static $Headings = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+	private static $Days = array('S', 'M', 'T', 'W', 'T', 'F', 'S');
+	private static $Headings = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 	private static $Events;
 
 	public static function render_title($Month, $Year) {
@@ -18,13 +18,14 @@ class CalendarView {
 		}
 ?>
 		<h1 class="center">
-			<a href="tools.php?action=calendar&amp;month=<?=$PreviousMonth?>&amp;year=<?=$PreviousYear?>"><</a>
-			<?=date("F", mktime(0, 0, 0, $Month, 10)) . " " . $Year?>
-			<a href="tools.php?action=calendar&amp;month=<?=$NextMonth?>&amp;year=<?=$NextYear?>">></a>
+			<a href="tools.php?action=calendar&amp;month=<?=$PreviousMonth?>&amp;year=<?=$PreviousYear?>">&lt;</a>
+			<?=date("F", mktime(0, 0, 0, $Month, 10)) . " $Year"?>
+			<a href="tools.php?action=calendar&amp;month=<?=$NextMonth?>&amp;year=<?=$NextYear?>">&gt;</a>
 		</h1>
-		<input type="hidden" id="month" value="<?=$Month?>"/>
-		<input type="hidden" id="year" value="<?=$Year?>"/>
-<?	}
+		<input type="hidden" id="month" value="<?=$Month?>" />
+		<input type="hidden" id="year" value="<?=$Year?>" />
+<?
+	}
 
 	private static function get_events_on($Day, $Events) {
 		// Linear search, Lol.
@@ -46,10 +47,9 @@ class CalendarView {
 			$Tooltip = $Event['Title'] . " - " . Calendar::$Categories[$Event['Category']] . " - " . Calendar::$Importances[$Event['Importance']];
 ?>
 			<p><a href="#" class="event_day tooltip" title="<?=$Tooltip?>" data-gazelle-id="<?=$Event['ID']?>" style="color: <?=$Color?>;"><?=Format::cut_string($Event['Title'], 8, true)?></a></p>
-<?		}
+<?
+		}
 	}
-
-
 
 	public static function render_calendar($Month, $Year, $Events) {
 		$RunningDay = date('w',mktime(0, 0, 0, $Month, 1, $Year));
@@ -60,19 +60,23 @@ class CalendarView {
 ?>
 
 		<table class="calendar">
-<?			foreach (self::$Headings as $Heading) { ?>
+			<tr>
+<?		foreach (self::$Headings as $Heading) { ?>
 				<td class="calendar-row calendar-heading">
 					<strong><?=$Heading?></strong>
 				</td>
-<?			} ?>
+<?		} ?>
+			</tr>
 			<tr class="calendar-row">
 
-<?			for ($x = 0; $x < $RunningDay; $x++) { ?>
+<?		for ($x = 0; $x < $RunningDay; $x++) { ?>
 				<td class="calendar-day-np"></td>
-<?				$DaysThisWeek++;
-			}
+<?
+			$DaysThisWeek++;
+		}
 
-			for ($i = 1; $i <= $DaysInMonth; $i++) { ?>
+		for ($i = 1; $i <= $DaysInMonth; $i++) {
+?>
 				<td class="calendar-day">
 					<div class="day-events">
 <?						self::render_events_day($i, $Events); ?>
@@ -81,29 +85,32 @@ class CalendarView {
 						<?=$i?>
 					</div>
 				</td>
-<?				if ($RunningDay == 6) { ?>
-					</tr>
-<?					if (($DayCounter+1) != $DaysInMonth) { ?>
-						<tr class="calendar-row">
-<?					}
-					$RunningDay = -1;
-					$DaysThisWeek = 0;
+<?			if ($RunningDay == 6) { ?>
+			</tr>
+<?				if (($DayCounter + 1) != $DaysInMonth) { ?>
+			<tr class="calendar-row">
+<?
 				}
-				$DaysThisWeek++;
-				$RunningDay++;
-				$DayCounter++;
+				$RunningDay = -1;
+				$DaysThisWeek = 0;
 			}
+			$DaysThisWeek++;
+			$RunningDay++;
+			$DayCounter++;
+		}
 
-			if ($DaysThisWeek < 8) {
-				for ($x = 1; $x <= (8 - $DaysThisWeek); $x++) { ?>
-					<td class="calendar-day-np"></td>
-<?				}
+		if ($DaysThisWeek < 8) {
+			for ($x = 1; $x <= (8 - $DaysThisWeek); $x++) {
+?>
+				<td class="calendar-day-np"></td>
+<?
 			}
+		}
 ?>
 			</tr>
 
-			</table>
+		</table>
 <?
-			echo $Calendar;
-		}
+		echo $Calendar;
+	}
 }

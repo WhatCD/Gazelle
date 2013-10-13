@@ -48,7 +48,7 @@ View::show_header($Title);
 	</div>
 </div>
 
-<form action="" method="GET">
+<form action="" method="get">
 	<input type="hidden" name="action" value="donor_rewards" />
 	<strong>Username Search: </strong><input type="text" name="username" />
 </form>
@@ -69,40 +69,32 @@ View::show_header($Title);
 	foreach ($Users as $User) {
 		$UserInfo = Users::user_info($User['UserID']);
 		$Username = $UserInfo['Username'];
-		?>
+?>
 		<tr class="row<?=$Row?>">
-			<td>
-				<?=Users::format_username($User['UserID'], false, true, true, false, false, true)?>
-			</td>
-			<td>
-				<?=$User['Rank']?>
-			</td>
-			<td>
-				<?=$User['Hidden'] ? "Yes" : "No"?>
-			</td>
-			<td>
-				<?=time_diff($User['DonationTime'])?>
-			</td>
-			<td style="word-wrap: break-word">
+			<td><?=Users::format_username($User['UserID'], false, true, true, false, false, true)?></td>
+			<td><?=$User['Rank']?></td>
+			<td><?=$User['Hidden'] ? "Yes" : "No"?></td>
+			<td><?=time_diff($User['DonationTime'])?></td>
+			<td style="word-wrap: break-word;">
 				<?=$User['IconMouseOverText']?>
 			</td>
-			<td style="word-wrap: break-word">
-<?				if (!empty($User['CustomIcon'])) { ?>
-					<img src="<?=ImageTools::process($User['CustomIcon'])?>" width="15" height="13" />
-<?				} ?>
+			<td style="word-wrap: break-word;">
+<?		if (!empty($User['CustomIcon'])) { ?>
+				<img src="<?=ImageTools::process($User['CustomIcon'])?>" width="15" height="13" alt="" />
+<?		} ?>
 			</td
->			<td style="word-wrap: break-word">
+>			<td style="word-wrap: break-word;">
 				<?=$User['CustomIconLink']?>
 			</td>
-			<td style="word-wrap: break-word">
+			<td style="word-wrap: break-word;">
 				<?=$User['AvatarMouseOverText']?>
 			</td>
-			<td style="word-wrap: break-word">
+			<td style="word-wrap: break-word;">
 				<?=$User['SecondAvatar']?>
 			</td>
 		</tr>
 <?
-		$Row = $Row == 'b' ? 'a' : 'b';
+		$Row = $Row === 'b' ? 'a' : 'b';
 	} // foreach
 ?>
 	</table>
