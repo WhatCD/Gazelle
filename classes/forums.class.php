@@ -252,6 +252,21 @@ class Forums {
 	}
 
 	/**
+	 * Add a note to a topic.
+	 * @param int $TopicID
+	 * @param string $Note
+	 * @param int|null $UserID
+	 * @return boolean
+	 */
+	public static function add_topic_note($TopicID, $Note, $UserID = null) {
+		$UserID = $UserID ?: G::$LoggedUser['ID'];
+		$QueryID = G::$DB->get_query_id();
+		G::$DB->query("INSERT INTO forums_topic_notes (TopicID, AuthorID, AddedTime, Body) VALUES ($TopicID, $UserID, '" . sqltime() . "', '" . db_string($Note) . "')");
+		G::$DB->set_query_id($QueryID);
+		return (bool)G::$DB->affected_rows();
+	}
+
+	/**
 	 * Determine if a thread is unread
 	 * @param bool $Locked
 	 * @param bool $Sticky

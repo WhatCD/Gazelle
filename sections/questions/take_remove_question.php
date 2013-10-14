@@ -11,6 +11,8 @@ if (!is_number($ID)) {
 	error(404);
 }
 
-G::$DB->query("DELETE FROM user_questions WHERE ID = '$ID'");
+G::$DB->query("
+	DELETE FROM user_questions
+	WHERE ID = '$ID'");
 
 header("Location: questions.php");

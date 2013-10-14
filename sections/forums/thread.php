@@ -543,7 +543,31 @@ if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 	}
 }
 if (check_perms('site_moderate_forums')) {
+	G::$DB->query("SELECT ID, AuthorID, AddedTime, Body FROM forums_topic_notes WHERE TopicID = $ThreadID ORDER BY ID ASC");
+	$Notes = G::$DB->to_array();
 ?>
+	<br />
+	<h3 id="thread_notes">Thread notes</h3>
+	<form action="forums.php" method="post">
+		<input type="hidden" name="action" value="take_topic_notes" />
+		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
+		<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
+		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border">
+<?
+	foreach ($Notes as $Note) {
+?>
+			<tr><td><?=Users::format_username($Note['AuthorID'])?> (<?=time_diff($Note['AddedTime'], 2, true, true)?>)</td><td><?=$Text->full_format($Note['Body'])?></td></tr>
+<?
+	}
+?>
+			<tr>
+				<td colspan="2" class="center">
+					<div class="field_div textarea_wrap"><textarea id="topic_notes" name="body" cols="90" rows="3" onkeyup="resize('threadnotes')" style=" margin: 0px; width: 735px;"></textarea></div>
+					<input type="submit" value="Save" />
+				</td>
+			</tr>
+		</table>
+	</form>
 	<br />
 	<h3>Edit thread</h3>
 	<form class="edit_form" name="forum_thread" action="forums.php" method="post">
@@ -552,7 +576,6 @@ if (check_perms('site_moderate_forums')) {
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="threadid" value="<?=$ThreadID?>" />
 		<input type="hidden" name="page" value="<?=$Page?>" />
-		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		</div>
 		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border">
 			<tr>
@@ -618,6 +641,9 @@ if (check_perms('site_moderate_forums')) {
 			<tr>
 				<td colspan="2" class="center">
 					<input type="submit" value="Edit thread" tabindex="2" />
+					<span style="float: right;">
+						<input type="submit" name="trash" value="Trash" tabindex="2" />
+					</span>
 				</td>
 			</tr>
 

@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2013-10-13 by Y
+Added thread notes in forums
+
+2013-10-13 by Ajax
+Added "Ask the Staff" tool for users to ask staff random questions. 
+
 2013-10-10 by alderaan
 Users will receive a PM when they get promoted or demoted
 

@@ -11,7 +11,10 @@ if (!is_number($ID)) {
 	error(404);
 }
 
-$DB->query("SELECT ID, Question, UserID, Date FROM user_questions WHERE ID = '$ID'");
+$DB->query("
+	SELECT ID, Question, UserID, Date
+	FROM user_questions
+	WHERE ID = '$ID'");
 $Question = $DB->next_record();
 
 View::show_header("Ask the Staff");
@@ -24,7 +27,7 @@ View::show_header("Ask the Staff");
 	<div class="linkbox">
 		<a class="brackets" href="questions.php">View questions</a>
 		<a class="brackets" href="questions.php?action=answers">View staff answers</a>
-	</div>
+		<a class="brackets" href="questions.php?action=popular_questions">Popular questions</a>
 	<div class="box box2">
 		<div class="head">
 			<span>
@@ -37,7 +40,7 @@ View::show_header("Ask the Staff");
 		</div>
 	</div>
 	<div class="center box pad">
-		<form method="POST">
+		<form method="post">
 			<input type="hidden" name="action" value="take_answer_question" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="id" value="<?=$ID?>" />

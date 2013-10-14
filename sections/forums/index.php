@@ -32,6 +32,9 @@ if (!empty($_POST['action'])) {
 		case 'take_warn':
 			require(SERVER_ROOT.'/sections/forums/take_warn.php');
 			break;
+		case 'take_topic_notes':
+			require(SERVER_ROOT.'/sections/forums/take_topic_notes.php');
+			break;
 
 		default:
 			error(0);

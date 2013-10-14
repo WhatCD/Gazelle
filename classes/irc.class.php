@@ -122,7 +122,13 @@ abstract class IRC_BOT {
 	}
 
 	public function send_to($Channel, $Text) {
-		$this->send_raw("PRIVMSG $Channel :$Text");
+		// split the message up into <= 460 character strings and send each individually
+		// this is used to prevent messages from getting truncated
+		$Text = wordwrap($Text, 460, "\n", true);
+		$TextArray = explode("\n", $Text);
+		foreach ($TextArray as $Text) {
+			$this->send_raw("PRIVMSG $Channel :$Text");
+		}
 	}
 
 	protected function whois($Nick) {

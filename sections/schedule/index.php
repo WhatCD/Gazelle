@@ -926,6 +926,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			$Cache->commit_transaction(3600 * 24 * 30);
 			$Cache->expire_value("thread_$ID".'_catalogue_0', 3600 * 24 * 30);
 			$Cache->expire_value("thread_$ID".'_info', 3600 * 24 * 30);
+			Forums::add_topic_note($ID, 'Locked automatically by schedule', 0);
 		}
 
 		$ForumIDs = array_flip(array_flip($ForumIDs));

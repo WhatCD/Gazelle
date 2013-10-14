@@ -429,6 +429,17 @@ CREATE TABLE `forums_specific_rules` (
   `ThreadID` int(10) DEFAULT NULL
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `forums_topic_notes` (
+  `ID` int(10) NOT NULL AUTO_INCREMENT,
+  `TopicID` int(10) NOT NULL,
+  `AuthorID` int(10) NOT NULL,
+  `AddedTime` datetime NOT NULL,
+  `Body` mediumtext,
+  PRIMARY KEY (`ID`),
+  KEY `TopicID` (`TopicID`),
+  KEY `AuthorID` (`AuthorID`)
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `forums_topics` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `Title` varchar(150) NOT NULL,
@@ -992,6 +1003,12 @@ CREATE TABLE `staff_blog_visits` (
   CONSTRAINT `staff_blog_visits_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `users_main` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `staff_ignored_questions` (
+  `QuestionID` int(10) NOT NULL,
+  `UserID` int(10) NOT NULL,
+  PRIMARY KEY (`QuestionID`,`UserID`)
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `staff_pm_conversations` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Subject` text,
@@ -1309,7 +1326,8 @@ CREATE TABLE `user_questions` (
   `Question` mediumtext NOT NULL,
   `UserID` int(10) NOT NULL,
   `Date` datetime NOT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `Date` (`Date`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_collage_subs` (

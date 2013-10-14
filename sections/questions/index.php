@@ -35,6 +35,15 @@ if (!isset($_REQUEST['action'])) {
 		case 'view_answers':
 			include(SERVER_ROOT.'/sections/questions/view_answers.php');
 			break;
+		case 'popular_questions':
+			include(SERVER_ROOT.'/sections/questions/popular_questions.php');
+			break;
+		case 'ajax_get_answers':
+			include(SERVER_ROOT.'/sections/questions/ajax_get_answers.php');
+			break;
+		case 'take_ignore_question':
+			include(SERVER_ROOT.'/sections/questions/take_ignore_question.php');
+			break;
 		default:
 			error(404);
 			break;

@@ -28,11 +28,13 @@ if ($DB->has_results()) {
 			UPDATE forums_topics
 			SET StickyPostID = 0
 			WHERE ID = $ThreadID");
+		Forums::add_topic_note($ThreadID, "Post $PostID unstickied");
 	} else {
 		$DB->query("
 			UPDATE forums_topics
 			SET StickyPostID = $PostID
 			WHERE ID = $ThreadID");
+		Forums::add_topic_note($ThreadID, "Post $PostID stickied");
 	}
 	$Cache->delete_value('thread_'.$ThreadID.'_info');
 	$ThisCatalogue = floor((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) / THREAD_CATALOGUE);
