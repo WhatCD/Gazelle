@@ -89,6 +89,7 @@ define('DONOR',		'20');
 define('FLS_TEAM',	'21');
 define('POWER_TM',	'22');
 define('ELITE_TM',	'23');
+define('FORUM_MOD',	'28');
 
 // Pagination
 define('TORRENT_COMMENTS_PER_PAGE', 10);

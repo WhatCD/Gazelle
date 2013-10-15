@@ -339,17 +339,17 @@ class Misc {
 	 * @param boolean $AllowEmpty If set to true, a key that is in the request but blank will not throw an error.
 	 * @param int $Error The error code to throw if one of the keys isn't in the array.
 	 */
-	public static function assert_isset_request($Request, $Keys = NULL, $AllowEmpty = False, $Error = 0) {
+	public static function assert_isset_request($Request, $Keys = null, $AllowEmpty = false, $Error = 0) {
 		if (isset($Keys)) {
 			foreach ($Keys as $K) {
-				if (!isset($Request[$K]) || ($AllowEmpty == False && $Request[$K] == '')) {
+				if (!isset($Request[$K]) || ($AllowEmpty == false && $Request[$K] == '')) {
 					error($Error);
 					break;
 				}
 			}
 		} else {
 			foreach ($Request as $R) {
-				if (!isset($R) || ($AllowEmpty == False && $R == '')) {
+				if (!isset($R) || ($AllowEmpty == false && $R == '')) {
 					error($Error);
 					break;
 				}
@@ -367,7 +367,7 @@ class Misc {
 	public static function get_tags($TagNames) {
 		$TagIDs = array();
 		foreach ($TagNames as $Index => $TagName) {
-			$Tag = G::$Cache->get_value('tag_id_'.$TagName);
+			$Tag = G::$Cache->get_value("tag_id_$TagName");
 			if (is_array($Tag)) {
 				unset($TagNames[$Index]);
 				$TagIDs[$Tag['ID']] = $Tag['Name'];

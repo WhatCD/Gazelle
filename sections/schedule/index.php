@@ -295,7 +295,7 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 				WHERE PermissionID = ".$L['From']."
 					AND Warned = '0000-00-00 00:00:00'
 					AND Uploaded >= '$L[MinUpload]'
-					AND (Uploaded / Downloaded >='$L[MinRatio]' OR (Uploaded / Downloaded IS NULL))
+					AND (Uploaded / Downloaded >= '$L[MinRatio]' OR (Uploaded / Downloaded IS NULL))
 					AND JoinDate < '$L[MaxTime]'
 					AND (
 						SELECT COUNT(ID)

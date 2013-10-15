@@ -22,7 +22,7 @@ if ($Forum === false) {
 if (!Forums::check_forumperm($ForumID, 'Write') || !Forums::check_forumperm($ForumID, 'Create')) {
 	error(403);
 }
-View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic','comments,bbcode,jquery.validate,form_validate');
+View::show_header('Forums &gt; '.$Forum['Name'].' &gt; New Topic', 'comments,bbcode,jquery.validate,form_validate');
 ?>
 <div class="thin">
 	<h2><a href="forums.php">Forums</a> &gt; <a href="forums.php?action=viewforum&amp;forumid=<?=$ForumID?>"><?=$Forum['Name']?></a> &gt; <span id="newthreadtitle">New Topic</span></h2>

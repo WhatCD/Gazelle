@@ -43,7 +43,7 @@ function inverse_ncdf($p) {
 
 	//Define/list variables (doesn't really need a definition)
 	//$p (probability), $sigma (std. deviation), and $mu (mean) are user inputs
-	$q = NULL; $x = NULL; $y = NULL; $r = NULL;
+	$q = null; $x = null; $y = null; $r = null;
 
 	//Rational approximation for lower region.
 	if (0 < $p && $p < $p_low) {
@@ -72,7 +72,7 @@ function inverse_ncdf($p) {
 
 	//If 0 < p < 1, return a null value
 	else {
-		$x = NULL;
+		$x = null;
 	}
 
 	return $x;
@@ -80,7 +80,7 @@ function inverse_ncdf($p) {
 }
 
 // Confidence level for binomial scoring.  Just compute this once.
-define('Z_VAL', inverse_ncdf(1-(1-.95)/2));
+define('Z_VAL', inverse_ncdf(1 - (1 - 0.95) / 2));
 
 // Implementation of the algorithm described at http://www.evanmiller.org/how-not-to-sort-by-average-rating.html
 function binomial_score($Ups, $Total) {
@@ -88,6 +88,6 @@ function binomial_score($Ups, $Total) {
 		return 0;
 	}
 	$phat = $Ups/$Total;
-	return ($phat + Z_VAL*Z_VAL/(2*$Total) - Z_VAL*sqrt(($phat*(1-$phat)+Z_VAL*Z_VAL/(4*$Total))/$Total))/(1+Z_VAL*Z_VAL/$Total);
+	return ($phat + Z_VAL * Z_VAL / (2 * $Total) - Z_VAL * sqrt(($phat * (1 - $phat) + Z_VAL * Z_VAL / (4 * $Total)) / $Total)) / (1 + Z_VAL * Z_VAL / $Total);
 }
 ?>

@@ -1,16 +1,15 @@
-COPYRIGHTED AND PATENTED PENDING BY WHAT.CD INCORPORATED, DBA/AKA PROJECT
-GAZELLE
+COPYRIGHTED BY WHAT.CD INCORPORATED, DBA/AKA PROJECT GAZELLE
 
 END-USER LICENSE AGREEMENT
 
 The Gazelle Source Code (hereinafter referred to as the Software) is made
-publically available free of charge by Project Gazelle (sometimes a trade and
-business name for the legally consituted entity known as What.CD Incorporated,
-a Panamanian Corporation), copyright and patent pending owner (hereinafter
-referred to as the Licensor or Original Licensor) to anyone who wishes to use
-and/or share or distribute and/or change or modify it (hereinafter referred to
-as either the Licensee and/or End-User) FOR NONCOMMERCIAL PURPOSES ONLY under
-the following terms and conditions (hereinafter referred to as the "License"):
+publicly available free of charge by Project Gazelle (sometimes a trade and
+business name for the legally constituted entity known as What.CD Incorporated,
+a Panamanian Corporation), copyright owner (hereinafter referred to as the
+Licensor or Original Licensor) to anyone who wishes to use and/or share or
+distribute and/or change or modify it (hereinafter referred to as either the
+Licensee and/or End-User) FOR NONCOMMERCIAL PURPOSES ONLY under the following
+terms and conditions (hereinafter referred to as the "License"):
 
 Section 1.  You may copy and distribute verbatim copies of the Software's
 source code as you receive it, in any medium, provided that you conspicuously
@@ -82,7 +81,7 @@ Section 7:  NO WARRANTY
 
     7.1:  BECAUSE THE SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO
 WARRANTY FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT
-WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT/PATENT HOLDERS AND/OR OTHER
+WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER
 PARTIES PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
 EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS TO
@@ -92,7 +91,7 @@ CORRECTION.
 
 
     7.2:. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN
-WRITING WILL ANY COPYRIGHT/PATENT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY
+WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY
 AND/OR REDISTRIBUTE THE SOFTWARE AS PERMITTED ABOVE, BE LIABLE TO YOU FOR
 DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES
 ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT

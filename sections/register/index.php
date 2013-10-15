@@ -157,7 +157,7 @@ if (!empty($_REQUEST['confirm'])) {
 
 			// Manage invite trees, delete invite
 
-			if ($InviterID !== NULL) {
+			if ($InviterID !== null) {
 				$DB->query("
 					SELECT TreePosition, TreeID, TreeLevel
 					FROM invite_tree

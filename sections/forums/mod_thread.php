@@ -146,9 +146,12 @@ if (isset($_POST['delete'])) {
 
 	// quote notifications
 	Subscriptions::flush_quote_notifications('forums', $TopicID);
-	$DB->query("DELETE FROM users_notify_quoted WHERE Page = 'forums' AND PageID = '".$TopicID."'");
+	$DB->query("
+		DELETE FROM users_notify_quoted
+		WHERE Page = 'forums'
+			AND PageID = '$TopicID'");
 
-	header('Location: forums.php?action=viewforum&forumid='.$ForumID);
+	header("Location: forums.php?action=viewforum&forumid=$ForumID");
 } else { // If we're just editing it
 	$Action = 'editing';
 
@@ -374,10 +377,10 @@ if (isset($_POST['delete'])) {
 			break;
 	}
 	if (isset($Notification)) {
-		NotificationsManager::notify_user($ThreadAuthorID, NotificationsManager::FORUMALERTS, $Notification, 'forums.php?action=viewthread&threadid='.$TopicID);
+		NotificationsManager::notify_user($ThreadAuthorID, NotificationsManager::FORUMALERTS, $Notification, "forums.php?action=viewthread&threadid=$TopicID");
 	}
 	if (count($TopicNotes) > 0) {
 		Forums::add_topic_note($TopicID, implode("\n", $TopicNotes));
 	}
-	header('Location: forums.php?action=viewthread&threadid='.$TopicID.'&page='.$Page);
+	header("Location: forums.php?action=viewthread&threadid=$TopicID&page=$Page");
 }

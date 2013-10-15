@@ -62,7 +62,7 @@ function assert_numbers(&$Base, $Keys, $Error = 0) {
  * @return string escaped string.
  */
 function display_str($Str) {
-	if ($Str === NULL || $Str === false || is_array($Str)) {
+	if ($Str === null || $Str === false || is_array($Str)) {
 		return '';
 	}
 	if ($Str != '' && !is_number($Str)) {

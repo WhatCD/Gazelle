@@ -508,7 +508,7 @@ if (isset(G::$LoggedUser['SearchType']) && G::$LoggedUser['SearchType']) { // Ad
 							<input id="torrentssearch" accesskey="t" spellcheck="false"
 									onfocus="if (this.value == 'Torrents') { this.value = ''; }"
 									onblur="if (this.value == '') { this.value = 'Torrents'; }"
-									value="Torrents" type="text" name="<?=$UseAdvancedSearch ? 'groupname' : 'searchstr' ?>" size="17" />
+									value="Torrents" placeholder="Torrents" type="text" name="<?=$UseAdvancedSearch ? 'groupname' : 'searchstr' ?>" size="17" />
 						</form>
 					</li>
 					<li id="searchbar_artists">
@@ -519,7 +519,7 @@ if (isset(G::$LoggedUser['SearchType']) && G::$LoggedUser['SearchType']) { // Ad
 									spellcheck="false" autocomplete="off"
 									onfocus="if (this.value == 'Artists') { this.value = ''; }"
 									onblur="if (this.value == '') { this.value = 'Artists'; }"
-									value="Artists" type="text" name="artistname" size="17" />
+									value="Artists" placeholder="Artists" type="text" name="artistname" size="17" />
 						</form>
 					</li>
 					<li id="searchbar_requests">
@@ -528,7 +528,7 @@ if (isset(G::$LoggedUser['SearchType']) && G::$LoggedUser['SearchType']) { // Ad
 							<input id="requestssearch" spellcheck="false"
 									onfocus="if (this.value == 'Requests') { this.value = ''; }"
 									onblur="if (this.value == '') { this.value = 'Requests'; }"
-									value="Requests" type="text" name="search" size="17" />
+									value="Requests" placeholder="Requests" type="text" name="search" size="17" />
 						</form>
 					</li>
 					<li id="searchbar_forums">
@@ -538,7 +538,7 @@ if (isset(G::$LoggedUser['SearchType']) && G::$LoggedUser['SearchType']) { // Ad
 							<input id="forumssearch"
 									onfocus="if (this.value == 'Forums') { this.value = ''; }"
 									onblur="if (this.value == '') { this.value = 'Forums'; }"
-									value="Forums" type="text" name="search" size="17" />
+									value="Forums" placeholder="Forums" type="text" name="search" size="17" />
 						</form>
 					</li>
 <!--
@@ -549,7 +549,7 @@ if (isset(G::$LoggedUser['SearchType']) && G::$LoggedUser['SearchType']) { // Ad
 							<input
 									onfocus="if (this.value == 'Wiki') { this.value = ''; }"
 									onblur="if (this.value == '') { this.value = 'Wiki'; }"
-									value="Wiki" type="text" name="search" size="17" />
+									value="Wiki" placeholder="Wiki" type="text" name="search" size="17" />
 						</form>
 					</li>
 -->
@@ -559,7 +559,7 @@ if (isset(G::$LoggedUser['SearchType']) && G::$LoggedUser['SearchType']) { // Ad
 							<input id="logsearch"
 									onfocus="if (this.value == 'Log') { this.value = ''; }"
 									onblur="if (this.value == '') { this.value = 'Log'; }"
-									value="Log" type="text" name="search" size="17" />
+									value="Log" placeholder="Log" type="text" name="search" size="17" />
 						</form>
 					</li>
 					<li id="searchbar_users">
@@ -570,7 +570,7 @@ if (isset(G::$LoggedUser['SearchType']) && G::$LoggedUser['SearchType']) { // Ad
 									id="userssearch"
 									onfocus="if (this.value == 'Users') { this.value = ''; }"
 									onblur="if (this.value == '') { this.value = 'Users'; }"
-									value="Users" type="text" name="search" size="20" />
+									value="Users" placeholder="Users" type="text" name="search" size="20" />
 						</form>
 					</li>
 				</ul>

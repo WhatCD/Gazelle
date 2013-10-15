@@ -121,7 +121,7 @@ class Votes {
 
 		//Define/list variables (doesn't really need a definition)
 		//$p (probability), $sigma (std. deviation), and $mu (mean) are user inputs
-		$q = NULL; $x = NULL; $y = NULL; $r = NULL;
+		$q = null; $x = null; $y = null; $r = null;
 
 		//Rational approximation for lower region.
 		if (0 < $p && $p < $p_low) {
@@ -150,7 +150,7 @@ class Votes {
 
 		//If 0 < p < 1, return a null value
 		else {
-			$x = NULL;
+			$x = null;
 		}
 
 		return $x;
@@ -186,9 +186,10 @@ class Votes {
 			return false;
 		}
 
-		return array('overall'=>Votes::get_rank_all($GroupID),
-					 'year'   =>Votes::get_rank_year($GroupID, $Year),
-					 'decade' =>Votes::get_rank_decade($GroupID, $Year));
+		return array(
+				'overall' => Votes::get_rank_all($GroupID),
+				'year'    => Votes::get_rank_year($GroupID, $Year),
+				'decade'  => Votes::get_rank_decade($GroupID, $Year));
 	}
 
 	/**

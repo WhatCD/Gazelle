@@ -231,7 +231,7 @@ $T = array();
 foreach ($Properties as $Key => $Value) {
 	$T[$Key] = "'".db_string(trim($Value))."'";
 	if (!$T[$Key]) {
-		$T[$Key] = NULL;
+		$T[$Key] = null;
 	}
 }
 

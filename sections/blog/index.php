@@ -13,41 +13,47 @@ if (check_perms('admin_manage_blog')) {
 				if (is_number($_GET['id'])) {
 					$DB->query("
 						UPDATE blog
-						SET ThreadID=NULL
-						WHERE ID=".$_GET['id']);
+						SET ThreadID = NULL
+						WHERE ID = ".$_GET['id']);
 					$Cache->delete_value('blog');
 					$Cache->delete_value('feed_blog');
 				}
 				header('Location: blog.php');
 				break;
+
 			case 'takeeditblog':
 				authorize();
 				if (is_number($_POST['blogid']) && is_number($_POST['thread'])) {
 					$DB->query("
 						UPDATE blog
-						SET Title='".db_string($_POST['title'])."', Body='".db_string($_POST['body'])."', ThreadID=".$_POST['thread']."
-						WHERE ID='".db_string($_POST['blogid'])."'");
+						SET
+							Title = '".db_string($_POST['title'])."',
+							Body = '".db_string($_POST['body'])."',
+							ThreadID = ".$_POST['thread']."
+						WHERE ID = '".db_string($_POST['blogid'])."'");
 					$Cache->delete_value('blog');
 					$Cache->delete_value('feed_blog');
 				}
 				header('Location: blog.php');
 				break;
+
 			case 'editblog':
 				if (is_number($_GET['id'])) {
 					$BlogID = $_GET['id'];
 					$DB->query("
 						SELECT Title, Body, ThreadID
 						FROM blog
-						WHERE ID=$BlogID");
+						WHERE ID = $BlogID");
 					list($Title, $Body, $ThreadID) = $DB->next_record();
 				}
 				break;
+
 			case 'deleteblog':
 				if (is_number($_GET['id'])) {
 					authorize();
 					$DB->query("
 						DELETE FROM blog
-						WHERE ID='".db_string($_GET['id'])."'");
+						WHERE ID = '".db_string($_GET['id'])."'");
 					$Cache->delete_value('blog');
 					$Cache->delete_value('feed_blog');
 				}
@@ -76,13 +82,15 @@ if (check_perms('admin_manage_blog')) {
 				}
 
 				$DB->query("
-					INSERT INTO blog (UserID, Title, Body, Time, ThreadID, Important)
-					VALUES ('".$LoggedUser['ID']."',
-							'".db_string($_POST['title'])."',
-							'".db_string($_POST['body'])."',
-							'".sqltime()."',
-							$ThreadID,
-							'".(($_POST['important'] == '1') ? '1' : '0')."')");
+					INSERT INTO blog
+						(UserID, Title, Body, Time, ThreadID, Important)
+					VALUES
+						('".$LoggedUser['ID']."',
+						'".db_string($_POST['title'])."',
+						'".db_string($_POST['body'])."',
+						'".sqltime()."',
+						$ThreadID,
+						'".($_POST['important'] == '1' ? '1' : '0')."')");
 				$Cache->delete_value('blog');
 				if ($_POST['important'] == '1') {
 					$Cache->delete_value('blog_latest_id');
@@ -101,11 +109,11 @@ if (check_perms('admin_manage_blog')) {
 	?>
 		<div class="box thin">
 			<div class="head">
-				<?=((empty($_GET['action'])) ? 'Create a blog post' : 'Edit blog post')?>
+				<?=(empty($_GET['action']) ? 'Create a blog post' : 'Edit blog post')?>
 			</div>
-			<form class="<?=empty($_GET['action'])?'create_form':'edit_form'?>" name="blog_post" action="blog.php" method="post">
+			<form class="<?=empty($_GET['action']) ? 'create_form' : 'edit_form'?>" name="blog_post" action="blog.php" method="post">
 				<div class="pad">
-					<input type="hidden" name="action" value="<?=((empty($_GET['action'])) ? 'takenewblog' : 'takeeditblog')?>" />
+					<input type="hidden" name="action" value="<?=(empty($_GET['action']) ? 'takenewblog' : 'takeeditblog')?>" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 <?		if (!empty($_GET['action']) && $_GET['action'] == 'editblog') { ?>
 					<input type="hidden" name="blogid" value="<?=$BlogID; ?>" />
@@ -123,7 +131,7 @@ if (check_perms('admin_manage_blog')) {
 					<label for="subscribebox">Subscribe</label>
 
 					<div class="center">
-						<input type="submit" value="<?=((!isset($_GET['action'])) ? 'Create blog post' : 'Edit blog post') ?>" />
+						<input type="submit" value="<?=(!isset($_GET['action']) ? 'Create blog post' : 'Edit blog post') ?>" />
 					</div>
 				</div>
 			</form>

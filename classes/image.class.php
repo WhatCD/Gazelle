@@ -49,7 +49,7 @@ class IMAGE {
 		return imagettftext ($this->Image, $this->FontSize, $this->TextAngle, $x, $y, $Color, $this->Font, $Text);
 	}
 
-	function make_png($FileName = NULL) {
+	function make_png($FileName = null) {
 		return imagepng($this->Image, $FileName);
 	}
 

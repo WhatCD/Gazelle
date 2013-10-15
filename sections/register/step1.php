@@ -21,26 +21,26 @@ if (empty($Sent)) {
 		<tr valign="top">
 			<td align="right" style="width: 100px;">Username&nbsp;</td>
 			<td align="left">
-				<input type="text" name="username" id="username" class="inputtext" value="<?=(!empty($_REQUEST['username']) ? display_str($_REQUEST['username']) : '')?>" />
+				<input type="text" name="username" id="username" class="inputtext" placeholder="Username" value="<?=(!empty($_REQUEST['username']) ? display_str($_REQUEST['username']) : '')?>" />
 				<p>Use common sense when choosing your username. Offensive usernames will not be tolerated. <strong>Do not choose a username that can be associated with your real name.</strong> If you do so, we will not be changing it for you.</p>
 			</td>
 		</tr>
 		<tr valign="top">
 			<td align="right">Email&nbsp;</td>
 			<td align="left">
-				<input type="text" name="email" id="email" class="inputtext" value="<?=(!empty($_REQUEST['email']) ? display_str($_REQUEST['email']) : (!empty($InviteEmail) ? display_str($InviteEmail) : ''))?>" />
+				<input type="text" name="email" id="email" class="inputtext" placeholder="Email" value="<?=(!empty($_REQUEST['email']) ? display_str($_REQUEST['email']) : (!empty($InviteEmail) ? display_str($InviteEmail) : ''))?>" />
 			</td>
 		</tr>
 		<tr valign="top">
 			<td align="right">Password&nbsp;</td>
 			<td align="left">
-				<input type="password" name="password" id="new_pass_1" class="inputtext" /> <strong id="pass_strength"></strong>
+				<input type="password" name="password" id="new_pass_1" class="inputtext" placeholder="Password" /> <strong id="pass_strength"></strong>
 			</td>
 		</tr>
 		<tr valign="top">
 			<td align="right">Verify password&nbsp;</td>
 			<td align="left">
-				<input type="password" name="confirm_password" id="new_pass_2" class="inputtext" /> <strong id="pass_match"></strong>
+				<input type="password" name="confirm_password" id="new_pass_2" class="inputtext" placeholder="Verify password" /> <strong id="pass_match"></strong>
 				<p>A strong password is 8 characters or longer, contains at least 1 lowercase and uppercase letter, and contains at least a number or a symbol.</p>
 			</td>
 		</tr>
