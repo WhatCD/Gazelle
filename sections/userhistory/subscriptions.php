@@ -150,7 +150,7 @@ if (!$NumResults) {
 				break;
 			case 'collages':
 				$Links = 'Collage: <a href="collages.php?id=' . $Result['PageID'] . '">' . display_str($Result['Name']) . '</a>';
-				$JumpLink = 'collages.php?id=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
+				$JumpLink = 'collages.php?action=comments&collageid=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
 				break;
 			case 'requests':
 				if (!isset($Requests[$Result['PageID']])) {

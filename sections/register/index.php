@@ -11,7 +11,7 @@ if (isset($LoggedUser)) {
 
 include(SERVER_ROOT.'/classes/validate.class.php');
 
-$Val=NEW VALIDATE;
+$Val = NEW VALIDATE;
 
 if (!empty($_REQUEST['confirm'])) {
 	// Confirm registration
@@ -135,7 +135,11 @@ if (!empty($_REQUEST['confirm'])) {
 					(UserID, IP, StartTime)
 				VALUES
 					('$UserID', '".db_string($_SERVER['REMOTE_ADDR'])."', '".sqltime()."')");
-			$DB->query("INSERT INTO users_notifications_settings (UserID) VALUES ('$UserID')");
+			$DB->query("
+				INSERT INTO users_notifications_settings
+					(UserID)
+				VALUES
+					('$UserID')");
 
 
 

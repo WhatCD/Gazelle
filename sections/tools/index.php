@@ -154,6 +154,7 @@ switch ($_REQUEST['action']) {
 			$LatestNews = $Cache->get_value('news_latest_id');
 			if ($LatestNews !== false && $LatestNews == $_GET['id']) {
 				$Cache->delete_value('news_latest_id');
+				$Cache->delete_value('news_latest_title');
 			}
 		}
 		header('Location: index.php');

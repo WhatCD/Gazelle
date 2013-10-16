@@ -226,7 +226,7 @@ class NotificationsManager {
 		$MyNews = G::$LoggedUser['LastReadNews'];
 		$CurrentNews = G::$Cache->get_value('news_latest_id');
 		$Title = G::$Cache->get_value('news_latest_title');
-		if ($CurrentNews === false) {
+		if ($CurrentNews === false || $Title === false) {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query('
 				SELECT ID, Title

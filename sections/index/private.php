@@ -16,6 +16,7 @@ if (!$News = $Cache->get_value('news')) {
 	$News = $DB->to_array(false, MYSQLI_NUM, false);
 	$Cache->cache_value('news', $News, 3600 * 24 * 30);
 	$Cache->cache_value('news_latest_id', $News[0][0], 0);
+	$Cache->cache_value('news_latest_title', $News[0][1], 0);
 }
 
 if ($LoggedUser['LastReadNews'] != $News[0][0]) {
