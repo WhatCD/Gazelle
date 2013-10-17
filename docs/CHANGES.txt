@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2013-10-17 by porkpie
+Load notifications without an Ajax request
+
+2013-10-16 by alderaan
+Update OpenDyslexic font files and add OpenDyslexic Mono font
+
 2013-10-13 by Y
 Added thread notes in forums
 

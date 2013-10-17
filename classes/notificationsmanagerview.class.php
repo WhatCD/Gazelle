@@ -4,14 +4,18 @@ class NotificationsManagerView {
 	private static $Settings;
 
 	public static function load_js() {
+		$JSIncludes = array(
+			'noty/noty.js',
+			'noty/layouts/bottomRight.js',
+			'noty/themes/default.js',
+			'user_notifications.js');
+		foreach ($JSIncludes as $JSInclude) {
+			$Path = STATIC_SERVER."functions/$JSInclude";
 ?>
-	<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/noty.js"></script>
-	<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/layouts/bottomRight.js"></script>
-	<script type="text/javascript" src="<?=STATIC_SERVER?>functions/noty/themes/default.js"></script>
-	<script type="text/javascript" src="<?=STATIC_SERVER?>functions/user_notifications.js"></script>
+	<script src="<?=$Path?>?v=<?=filemtime(SERVER_ROOT."/$Path")?>" type="text/javascript"></script>
 <?
+		}
 	}
-
 
 	public static function render_settings($Settings) {
 		self::$Settings = $Settings;
@@ -126,27 +130,27 @@ class NotificationsManagerView {
 <? **/
 	}
 
-	/*
-	 * FIXME: The use of radio buttons with different "name" attributes is an ugly
-	 *		workaround for how NotificationsManager::save_settings() is coded.
-	 */
 	private static function render_checkbox($Name, $Both = false) {
 		$Checked = self::$Settings[$Name];
 		if ($Both) {
-			$IsChecked = $Checked == 2 ? ' checked="checked"' : '';
+			$IsChecked = $Checked == NotificationsManager::OPT_TRADITIONAL ? ' checked="checked"' : '';
 ?>
-			<input type="radio" value="1" name="notifications_<?=$Name?>_traditional" id="notifications_<?=$Name?>_traditional"<?=$IsChecked?> />
-			<label for="notifications_<?=$Name?>_traditional">Traditional</label>
+			<label>
+				<input type="checkbox" value="1" name="notifications_<?=$Name?>_traditional" id="notifications_<?=$Name?>_traditional"<?=$IsChecked?> />
+				Traditional
+			</label>
 <?
 		}
-		$IsChecked = $Checked == 1 || !isset($Checked) ? ' checked="checked"' : '';
+		$IsChecked = $Checked == NotificationsManager::OPT_POPUP || !isset($Checked) ? ' checked="checked"' : '';
 ?>
-			<input<?=$Both ? ' type="radio" value="1"' : ' type="checkbox"'?> name="notifications_<?=$Name?>_popup" id="notifications_<?=$Name?>_popup"<?=$IsChecked?> />
-			<label for="notifications_<?=$Name?>_popup">Pop-up</label>
+			<label>
+				<input type="checkbox" name="notifications_<?=$Name?>_popup" id="notifications_<?=$Name?>_popup"<?=$IsChecked?> />
+				Pop-up
+			</label>
 <?
 	}
 
 	public static function format_traditional($Contents) {
-		return '<a href="' . $Contents['url'] . '">' . $Contents['message'] . '</a>';
+		return "<a href=\"$Contents[url]\">$Contents[message]</a>";
 	}
 }

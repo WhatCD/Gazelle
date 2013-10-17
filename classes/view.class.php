@@ -42,7 +42,7 @@ class View {
 	 *                 ['disclaimer'] = [boolean] (False) Displays the disclaimer in the footer
 	 */
 	public static function show_footer($Options = array()) {
-		global $ScriptStartTime, $SessionID, $UserSessions, $Debug, $Time;
+		global $ScriptStartTime, $SessionID, $UserSessions, $Debug, $Time, $Mobile;
 		if (!is_array(G::$LoggedUser)) {
 			require(SERVER_ROOT.'/design/publicfooter.php');
 		} else {

@@ -1,98 +1,103 @@
 <?
 
 class NotificationsManager {
+	// Option types
+	const OPT_DISABLED = 0;
+	const OPT_POPUP = 1;
+	const OPT_TRADITIONAL = 2;
+
 	// Importances
-	const IMPORTANT = "information";
-	const CRITICAL = "error";
-	const WARNING = "warning";
-	const INFO = "confirmation";
+	const IMPORTANT = 'information';
+	const CRITICAL = 'error';
+	const WARNING = 'warning';
+	const INFO = 'confirmation';
 
 	public static $Importances = array(
-										"important" => "information",
-										"critical" => "error",
-										"warning" => "warning",
-										"info" => "confirmation");
+		'important' => self::IMPORTANT,
+		'critical' => self::CRITICAL,
+		'warning' => self::WARNING,
+		'info' => self::INFO);
 
 	// Types. These names must correspond to column names in users_notifications_settings
-	const NEWS = "News";
-	const BLOG = "Blog";
-	const STAFFBLOG = "StaffBlog";
-	const STAFFPM = "StaffPM";
-	const INBOX = "Inbox";
-	const QUOTES = "Quotes";
-	const SUBSCRIPTIONS = "Subscriptions";
-	const TORRENTS = "Torrents";
-	const COLLAGES = "Collages";
-	const SITEALERTS = "SiteAlerts";
-	const FORUMALERTS = "ForumAlerts";
-	const REQUESTALERTS = "RequestAlerts";
-	const COLLAGEALERTS = "CollageAlerts";
-	const TORRENTALERTS = "TorrentAlerts";
-	const GLOBALNOTICE = "Global";
-
+	const NEWS = 'News';
+	const BLOG = 'Blog';
+	const STAFFBLOG = 'StaffBlog';
+	const STAFFPM = 'StaffPM';
+	const INBOX = 'Inbox';
+	const QUOTES = 'Quotes';
+	const SUBSCRIPTIONS = 'Subscriptions';
+	const TORRENTS = 'Torrents';
+	const COLLAGES = 'Collages';
+	const SITEALERTS = 'SiteAlerts';
+	const FORUMALERTS = 'ForumAlerts';
+	const REQUESTALERTS = 'RequestAlerts';
+	const COLLAGEALERTS = 'CollageAlerts';
+	const TORRENTALERTS = 'TorrentAlerts';
+	const GLOBALNOTICE = 'Global';
 
 	public static $Types = array(
-								"News",
-								"Blog",
-								"StaffPM",
-								"Inbox",
-								"Quotes",
-								"Subscriptions",
-								"Torrents",
-								"Collages",
-								"SiteAlerts",
-								"ForumAlerts",
-								"RequestAlerts",
-								"CollageAlerts",
-								"TorrentAlerts");
+		'News',
+		'Blog',
+		'StaffPM',
+		'Inbox',
+		'Quotes',
+		'Subscriptions',
+		'Torrents',
+		'Collages',
+		'SiteAlerts',
+		'ForumAlerts',
+		'RequestAlerts',
+		'CollageAlerts',
+		'TorrentAlerts');
 
 	private $UserID;
 	private $Notifications;
 	private $Settings;
+	private $Skipped;
 
 	function __construct($UserID, $Skip = array(), $Load = true, $AutoSkip = true) {
 		$this->UserID = $UserID;
 		$this->Notifications = array();
 		$this->Settings = self::get_settings($UserID);
+		$this->Skipped = $Skip;
 		if ($AutoSkip) {
 			foreach ($this->Settings as $Key => $Value) {
 				// Skip disabled and traditional settings
-				if ($Value == 0 || $Value == 2) {
-					$Skip[] = $Key;
+				if ($Value == self::OPT_DISABLED || $Value == self::OPT_TRADITIONAL) {
+					$this->Skipped[$Key] = true;
 				}
 			}
 		}
 		if ($Load) {
 			$this->load_global_notification();
-			if (!in_array(self::NEWS, $Skip)) {
+			if (!isset($this->Skipped[self::NEWS])) {
 				$this->load_news();
 			}
-			if (!in_array(self::BLOG, $Skip)) {
+			if (!isset($this->Skipped[self::BLOG])) {
 				$this->load_blog();
 			}
-			// if (!in_array(self::STAFFBLOG, $Skip)) {
+			// if (!isset($this->Skipped[self::STAFFBLOG])) {
 			// 	$this->load_staff_blog();
 			// }
-			if (!in_array(self::STAFFPM, $Skip)) {
+			if (!isset($this->Skipped[self::STAFFPM])) {
 				$this->load_staff_pms();
 			}
-			if (!in_array(self::INBOX, $Skip)) {
+			if (!isset($this->Skipped[self::INBOX])) {
 				$this->load_inbox();
 			}
-			if (!in_array(self::TORRENTS, $Skip)) {
+			if (!isset($this->Skipped[self::TORRENTS])) {
 				$this->load_torrent_notifications();
 			}
-			if (!in_array(self::COLLAGES, $Skip)) {
+			if (!isset($this->Skipped[self::COLLAGES])) {
 				$this->load_collage_subscriptions();
 			}
-			if (!in_array(self::QUOTES, $Skip)) {
+			if (!isset($this->Skipped[self::QUOTES])) {
 				$this->load_quote_notifications();
 			}
-			if (!in_array(self::SUBSCRIPTIONS, $Skip)) {
+			if (!isset($this->Skipped[self::SUBSCRIPTIONS])) {
 				$this->load_subscriptions();
 			}
-			$this->load_one_reads();
-			
+			// $this->load_one_reads(); // The code that sets these notices is commented out.
 		}
 	}
 
@@ -106,7 +111,11 @@ class NotificationsManager {
 	}
 
 	private function create_notification($Type, $ID, $Message, $URL, $Importance) {
-		$this->Notifications[$Type] = array("contents" => array("id" => (int) $ID, "message" => $Message, "url" => $URL, "importance" => $Importance));
+		$this->Notifications[$Type] = array(
+			'id' => (int)$ID,
+			'message' => $Message,
+			'url' => $URL,
+			'importance' => $Importance);
 	}
 
 	public static function notify_user($UserID, $Type, $Message, $URL, $Importance) {
@@ -191,7 +200,7 @@ class NotificationsManager {
 		if ($GlobalNotification) {
 			$Read = G::$Cache->get_value('user_read_global_' . G::$LoggedUser['ID']);
 			if (!$Read) {
-				$this->create_notification(self::GLOBALNOTICE, null,  $GlobalNotification['Message'], $GlobalNotification['URL'], $GlobalNotification['Importance']);
+				$this->create_notification(self::GLOBALNOTICE, 0,  $GlobalNotification['Message'], $GlobalNotification['URL'], $GlobalNotification['Importance']);
 			}
 		}
 	}
@@ -304,7 +313,7 @@ class NotificationsManager {
 				G::$Cache->cache_value('staff_blog_latest_time', $LatestSBlogTime, 1209600);
 			}
 			if ($SBlogReadTime < $LatestSBlogTime) {
-				$this->create_notification(self::STAFFBLOG, '', 'New Staff Blog Post!', 'staffblog.php', self::IMPORTANT);
+				$this->create_notification(self::STAFFBLOG, 0, 'New Staff Blog Post!', 'staffblog.php', self::IMPORTANT);
 			}
 		}
 	}
@@ -325,7 +334,7 @@ class NotificationsManager {
 
 		if ($NewStaffPMs > 0) {
 			$Title = 'You have new ' . ($NewStaffPMs == 1 ? 'a' : $NewStaffPMs) . ' Staff PM' . ($NewStaffPMs > 1 ? 's' : '');
-			$this->create_notification(self::STAFFPM, '', $Title, 'staffpm.php', self::INFO);
+			$this->create_notification(self::STAFFPM, 0, $Title, 'staffpm.php', self::INFO);
 		}
 	}
 
@@ -346,7 +355,7 @@ class NotificationsManager {
 
 		if ($NewMessages > 0) {
 			$Title = 'You have ' . ($NewMessages == 1 ? 'a' : $NewMessages) . ' new message' . ($NewMessages > 1 ? 's' : '');
-			$this->create_notification(self::INBOX, '', $Title, Inbox::get_inbox_link(), self::INFO);
+			$this->create_notification(self::INBOX, 0, $Title, Inbox::get_inbox_link(), self::INFO);
 		}
 	}
 
@@ -367,7 +376,7 @@ class NotificationsManager {
 		}
 		if ($NewNotifications > 0) {
 			$Title = 'You have ' . ($NewNotifications == 1 ? 'a' : $NewNotifications) . ' new torrent notification' . ($NewNotifications > 1 ? 's' : '');
-			$this->create_notification(self::TORRENTS, '', $Title, 'torrents.php?action=notify', self::INFO);
+			$this->create_notification(self::TORRENTS, 0, $Title, 'torrents.php?action=notify', self::INFO);
 		}
 	}
 
@@ -390,7 +399,7 @@ class NotificationsManager {
 			}
 			if ($NewCollages > 0) {
 				$Title = 'You have ' . ($NewCollages == 1 ? 'a' : $NewCollages) . ' new collage update' . ($NewCollages > 1 ? 's' : '');
-				$this->create_notification(self::COLLAGES, '', $Title, 'userhistory.php?action=subscribed_collages', self::INFO);
+				$this->create_notification(self::COLLAGES, 0, $Title, 'userhistory.php?action=subscribed_collages', self::INFO);
 			}
 		}
 	}
@@ -400,7 +409,7 @@ class NotificationsManager {
 			$QuoteNotificationsCount = Subscriptions::has_new_quote_notifications();
 			if ($QuoteNotificationsCount > 0) {
 				$Title = 'New quote' . ($QuoteNotificationsCount > 1 ? 's' : '');
-				$this->create_notification(self::QUOTES, null, $Title, 'userhistory.php?action=quote_notifications', self::INFO);
+				$this->create_notification(self::QUOTES, 0, $Title, 'userhistory.php?action=quote_notifications', self::INFO);
 			}
 		}
 	}
@@ -409,11 +418,9 @@ class NotificationsManager {
 		$SubscriptionsCount = Subscriptions::has_new_subscriptions();
 		if ($SubscriptionsCount > 0) {
 			$Title = 'New subscription' . ($SubscriptionsCount > 1 ? 's' : '');
-			$this->create_notification(self::SUBSCRIPTIONS, null, $Title, 'userhistory.php?action=subscriptions', self::INFO);
+			$this->create_notification(self::SUBSCRIPTIONS, 0, $Title, 'userhistory.php?action=subscriptions', self::INFO);
 		}
 	}
-
-	
 
 	public static function clear_news($News) {
 		$QueryID = G::$DB->get_query_id();
@@ -590,6 +597,8 @@ class NotificationsManager {
 		G::$DB->set_query_id($QueryID);
 	}
 
+/*
+	// TODO: Figure out what these functions are supposed to do and fix them
 	public static function send_notification($UserID, $ID, $Type, $Message, $URL, $Importance = 'alert', $AutoExpire = false) {
 		$Notifications = G::$Cache->get_value("user_cache_notifications_$UserID");
 		if (empty($Notifications)) {
@@ -599,7 +608,6 @@ class NotificationsManager {
 		G::$Cache->cache_value("user_cache_notifications_$UserID", $Notifications, 0);
 	}
 
-
 	public static function clear_notification($UserID, $Index) {
 		$Notifications = G::$Cache->get_value("user_cache_notifications_$UserID");
 		if (count($Notifications)) {
@@ -608,6 +616,7 @@ class NotificationsManager {
 			G::$Cache->cache_value("user_cache_notifications_$UserID", $Notifications, 0);
 		}
 	}
+*/
 
 	public static function get_settings($UserID) {
 		$Results = G::$Cache->get_value("users_notifications_settings_$UserID");
@@ -630,15 +639,14 @@ class NotificationsManager {
 			$Settings = array_intersect_key($_POST, array_flip(preg_grep('/^notifications_/', array_keys($_POST))));
 		}
 		$Update = array();
-		$Types = self::$Types;
-		foreach ($Types as $Type) {
+		foreach (self::$Types as $Type) {
 			$Popup = array_key_exists("notifications_$Type" . '_popup', $Settings);
 			$Traditional = array_key_exists("notifications_$Type" . '_traditional', $Settings);
-			$Result = 0;
+			$Result = self::OPT_DISABLED;
 			if ($Popup) {
-				$Result = 1;
+				$Result = self::OPT_POPUP;
 			} elseif ($Traditional) {
-				$Result = 2;
+				$Result = self::OPT_TRADITIONAL;
 			}
 			$Update[] = "$Type = $Result";
 		}
@@ -654,6 +662,14 @@ class NotificationsManager {
 	}
 
 	public function is_traditional($Type) {
-		return $this->Settings[$Type] == 2;
+		return $this->Settings[$Type] == self::OPT_TRADITIONAL;
+	}
+
+	public function is_skipped($Type) {
+		return isset($this->Skipped[$Type]);
+	}
+
+	public function use_noty() {
+		return in_array(self::OPT_POPUP, $this->Settings);
 	}
 }

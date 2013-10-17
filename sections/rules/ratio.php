@@ -10,7 +10,7 @@ View::show_header('Ratio Requirements');
 		<br />
 		<strong>Ratio System Overview:</strong><br />
 		<ul>
-			<li>Your <strong>ratio</strong> is calculated by dividing the amount of data you&#39;ve uploaded by the amount of data you&#39;ve downloaded. You can view your ratio in the site header, or in the &#39;stats&#39; section of your user profile.
+			<li>Your <strong>ratio</strong> is calculated by dividing the amount of data you&apos;ve uploaded by the amount of data you&apos;ve downloaded. You can view your ratio in the site header or in the &quot;stats&quot; section of your user profile.
 			</li>
 			<li>To maintain <strong>leeching privileges</strong>, your ratio must remain above a minimum value. This minimum value is your <strong>required ratio</strong>.</li>
 			<li>If your ratio falls below your required ratio, you will be given two weeks to raise your ratio back above your required ratio. During this period, you are on <strong>ratio watch</strong>.
@@ -22,12 +22,12 @@ View::show_header('Ratio Requirements');
 		<br />
 		<strong>Required Ratio Overview:</strong><br />
 		<ul>
-			<li>Your required ratio represents the minimum ratio you must maintain to avoid ratio watch. You can view your required ratio in the site header after the word &#39;required,&#39; or in the &#39;stats&#39; section of your user profile.
+			<li>Your required ratio represents the minimum ratio you must maintain to avoid ratio watch. You can view your required ratio in the site header after the word &quot;required&quot; or in the &quot;stats&quot; section of your user profile.
 			</li>
-			<li>Your required ratio is unique; each person&#39;s required ratio is calculated for their account specifically.</li>
-			<li>Your required ratio is calculated using (1) the total amount of data you&#39;ve downloaded and (2) the total number of torrents you&#39;re seeding. The seeding total is not limited to snatched torrents (completed downloads)&#8202;&mdash;&#8202;the total includes, but is not limited to, your uploaded torrents.
+			<li>Your required ratio is unique; each person&apos;s required ratio is calculated for their account specifically.</li>
+			<li>Your required ratio is calculated using (1) the total amount of data you&apos;ve downloaded and (2) the total number of torrents you&apos;re seeding. The seeding total is not limited to snatched torrents (completed downloads)&#8202;&mdash;&#8202;the total includes, but is not limited to, your uploaded torrents.
 			</li>
-			<li>The required ratio system lowers your required ratio when you seed a greater number of torrents. The more torrents you seed, the lower your required ratio will be. The lower your required ratio is, the less likely it is that you&#39;ll enter ratio watch.
+			<li>The required ratio system lowers your required ratio when you seed a greater number of torrents. The more torrents you seed, the lower your required ratio will be. The lower your required ratio is, the less likely it is that you&apos;ll enter ratio watch.
 			</li>
 		</ul>
 		<br />
@@ -115,7 +115,7 @@ View::show_header('Ratio Requirements');
 					<li>In this formula, <var>snatched</var> is the number of non-deleted unique snatches you have made. If you snatch a torrent twice, it only counts once. If a snatched torrent is
 						deleted from the site, it is not counted at all.
 					</li>
-					<li>In this formula, <var>seeding</var> is the average number of torrents you&#39;ve seeded over a 72 hour period within the last week. If you&#39;ve seeded a torrent for less than
+					<li>In this formula, <var>seeding</var> is the average number of torrents you&apos;ve seeded over a 72 hour period within the last week. If you&apos;ve seeded a torrent for less than
 						72 hours within the last week, it will not raise your seeding total. Please note that while it is possible to seed more torrents than you have snatched, the system effectively caps the
 						value at 100% of your snatched amount.
 					</li>
@@ -132,7 +132,7 @@ View::show_header('Ratio Requirements');
 			<li>If you stop seeding for one week, your required ratio will become the maximum required ratio (0% seeded) for your amount downloaded bracket. Once you have resumed seeding for a 72 hour
 				period, your required ratio will decrease according to the above calculations.
 			</li>
-			<li>If your download total is less than 5 GB, you won&#39;t be eligible for ratio watch, and you will not need a required ratio. In this circumstance, your required ratio will be zero
+			<li>If your download total is less than 5 GB, you won&apos;t be eligible for ratio watch, and you will not need a required ratio. In this circumstance, your required ratio will be zero
 				regardless of your seeding percentage.
 			</li>
 			<li>If your download total is less than 20 GB and you are seeding a number of torrents equal to 100% of your snatches, your required ratio will be zero.</li>
@@ -144,14 +144,14 @@ View::show_header('Ratio Requirements');
 		<br />
 		<strong>Required Ratio Example:</strong><br />
 		<ul>
-			<li>In this example, Rippy has downloaded 25 GB. Rippy falls into the 20&ndash;30 GB amount downloaded bracket in the table above. Rippy&#39;s maximum required ratio (0% seeded) is 0.30, and his minimum required ratio (100% seeded) is 0.05.
+			<li>In this example, Rippy has downloaded 25 GB. Rippy falls into the 20&ndash;30 GB amount downloaded bracket in the table above. Rippy&apos;s maximum required ratio (0% seeded) is 0.30, and his minimum required ratio (100% seeded) is 0.05.
 			</li>
 			<li>In this example, Rippy has snatched 90 torrents, and is currently seeding 45 torrents.</li>
-			<li>To calculate Rippy&#39;s actual required ratio, we take his maximum required ratio (0% seeded), which is 0.30, and multiply it by [1 &minus; (<var>seeding</var> / <var>snatched</var>)] (which is 0.50). Written out:
-				<samp>0.3 * [1 &minus; (45 / 90)] = 0.15</samp>
+			<li>To calculate Rippy&apos;s actual required ratio, we take his maximum required ratio (0% seeded), which is 0.30, and multiply it by [1 &minus; (<var>seeding</var> / <var>snatched</var>)] (which is 0.50). Written out:
+				<samp>0.30 * [1 &minus; (45 / 90)] = 0.15</samp>
 			</li>
 			<li>The resulting required ratio is 0.15, which falls between the maximum required ratio of 0.30 and the minimum required ratio of 0.05 for his amount downloaded bracket.</li>
-			<li>If Rippy&#39;s on-site required ratio was listed as a value greater than the calculated value, this would be because he hadn&#39;t seeded those 45 torrents for a 72 hour period in the
+			<li>If Rippy&apos;s on-site required ratio was listed as a value greater than the calculated value, this would be because he hadn&apos;t seeded those 45 torrents for a 72 hour period in the
 				last week. In this case, the system would not be counting all 45 torrents as seeded.
 			</li>
 		</ul>
@@ -160,7 +160,7 @@ View::show_header('Ratio Requirements');
 		<strong>Ratio Watch Overview:</strong><br />
 		<ul>
 			<li>Everyone gets to download their first 5 GB before ratio watch eligibility begins.</li>
-			<li>If you&#39;ve downloaded more than 5 GB and your ratio does not meet or surpass your required ratio, you will be put on ratio watch and have <strong>two weeks</strong> to raise your
+			<li>If you&apos;ve downloaded more than 5 GB and your ratio does not meet or surpass your required ratio, you will be put on ratio watch and have <strong>two weeks</strong> to raise your
 				ratio above your required ratio.
 			</li>
 			<li>If you download 10 GB while on ratio watch, your leeching privileges will automatically be disabled.</li>

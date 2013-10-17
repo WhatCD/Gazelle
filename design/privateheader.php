@@ -147,7 +147,6 @@ foreach ($ExtraCSS as $CSS) {
 <? } ?>
 	<script src="<?=STATIC_SERVER?>functions/tooltipster_settings.js" type="text/javascript"></script>
 <?
-NotificationsManagerView::load_js();
 
 $Scripts = explode(',', $JSIncludes);
 foreach ($Scripts as $Script) {
@@ -163,6 +162,28 @@ foreach ($Scripts as $Script) {
 if ($Mobile) { ?>
 	<script src="<?=STATIC_SERVER?>styles/mobile/style.js" type="text/javascript"></script>
 <?
+}
+
+// Get notifications early to change menu items if needed
+global $NotificationSpans;
+$NotificationsManager = new NotificationsManager(G::$LoggedUser['ID']);
+$Notifications = $NotificationsManager->get_notifications();
+$UseNoty = $NotificationsManager->use_noty();
+$NewSubscriptions = false;
+$NotificationSpans = array();
+foreach ($Notifications as $Type => $Notification) {
+	if ($Type === NotificationsManager::SUBSCRIPTIONS) {
+		$NewSubscriptions = true;
+	}
+	if ($UseNoty) {
+		$NotificationSpans[] = "<span class=\"noty-notification\" style=\"display: none;\" data-noty-type=\"$Type\" data-noty-id=\"$Notification[id]\" data-noty-importance=\"$Notification[importance]\" data-noty-url=\"$Notification[url]\">$Notification[message]</span>";
+	}
+}
+if ($UseNoty && !empty($NotificationSpans)) {
+	NotificationsManagerView::load_js();
+}
+if ($NotificationsManager->is_skipped(NotificationsManager::SUBSCRIPTIONS)) {
+	$NewSubscriptions = Subscriptions::has_new_subscriptions();
 }
 ?>
 </head>
@@ -233,7 +254,7 @@ if (check_perms('site_send_unlimited_invites')) {
 					</li>
 <?	} ?>
 				</ul>
-				<ul id="userinfo_minor">
+				<ul id="userinfo_minor"<?=$NewSubscriptions ? ' class="highlite"' : ''?>>
 					<li id="nav_inbox"<?=
 						Format::add_class($PageID, array('inbox'), 'active', true)?>>
 						<a onmousedown="Stats('inbox');" href="<?=Inbox::get_inbox_link(); ?>">Inbox</a>
@@ -256,9 +277,11 @@ if (check_perms('site_send_unlimited_invites')) {
 						Format::add_class($PageID, array(array('torrents', 'notify'), array('user', 'notify')), 'active', true, 'userid')?>>
 						<a onmousedown="Stats('notifications');" href="user.php?action=notify">Notifications</a>
 					</li>
-<?	} ?>
-					<li id="nav_subscriptions"<?=
-						Format::add_class($PageID, array('userhistory', 'subscriptions'), 'active', true)?>>
+<?	}
+	$ClassNames = $NewSubscriptions ? 'new-subscriptions' : '';
+	$ClassNames = trim($ClassNames.Format::add_class($PageID, array('userhistory', 'subscriptions'), 'active', false));
+?>
+					<li id="nav_subscriptions"<?=$ClassNames ? " class=\"$ClassNames\"" : ''?>>
 						<a onmousedown="Stats('subscriptions');" href="userhistory.php?action=subscriptions">Subscriptions</a>
 					</li>
 					<li id="nav_comments"<?=
@@ -319,8 +342,6 @@ if (check_perms('site_send_unlimited_invites')) {
 $Alerts = array();
 $ModBar = array();
 
-$NotificationsManager = new NotificationsManager(G::$LoggedUser['ID'], false, false, false);
-
 // Staff blog
 if (check_perms('users_mod')) {
 	global $SBlogReadTime, $LatestSBlogTime;
@@ -358,7 +379,7 @@ if ($NotificationsManager->is_traditional(NotificationsManager::INBOX)) {
 	$NotificationsManager->load_inbox();
 	$NewMessages = $NotificationsManager->get_notifications()[NotificationsManager::INBOX];
 	if (isset($NewMessages)) {
-		$Alerts[] = NotificationsManagerView::format_traditional($NewMessages['contents']);
+		$Alerts[] = NotificationsManagerView::format_traditional($NewMessages);
 	}
 	$NotificationsManager->clear_notifications_array();
 }
@@ -374,7 +395,7 @@ if ($NotificationsManager->is_traditional(NotificationsManager::TORRENTS)) {
 	$NotificationsManager->load_torrent_notifications();
 	$NewTorrents = $NotificationsManager->get_notifications()[NotificationsManager::TORRENTS];
 	if (isset($NewTorrents)) {
-		$Alerts[] = NotificationsManagerView::format_traditional($NewTorrents['contents']);
+		$Alerts[] = NotificationsManagerView::format_traditional($NewTorrents);
 	}
 	$NotificationsManager->clear_notifications_array();
 }
@@ -488,8 +509,6 @@ if (!empty($Alerts) || !empty($ModBar)) { ?>
 <?
 }
 //Done handling alertbars
-
-
 
 if (isset(G::$LoggedUser['SearchType']) && G::$LoggedUser['SearchType']) { // Advanced search
 	$UseAdvancedSearch = true;

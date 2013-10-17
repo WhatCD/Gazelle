@@ -54,7 +54,14 @@ $Debug->vars_table();
 </div>
 <div id="lightbox" class="lightbox hidden"></div>
 <div id="curtain" class="curtain hidden"></div>
-
+<?
+global $NotificationSpans;
+if (!empty($NotificationSpans)) {
+	foreach ($NotificationSpans as $Notification) {
+		echo "$Notification\n";
+	}
+}
+?>
 <!-- Extra divs, for stylesheet developers to add imagery -->
 <div id="extra1"><span></span></div>
 <div id="extra2"><span></span></div>

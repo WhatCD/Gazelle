@@ -43,16 +43,16 @@ $(document).ready(function() {
 
 	// I'm sure there is a better way to do this but this will do for now.
 	$("#notifications_Inbox_traditional").click(function() {
-		$("#notifications_Inbox_popup").removeAttr('checked');
+		$("#notifications_Inbox_popup").prop('checked', false);
 	});
 	$("#notifications_Inbox_popup").click(function() {
-		$("#notifications_Inbox_traditional").removeAttr('checked');
+		$("#notifications_Inbox_traditional").prop('checked', false);
 	});
 	$("#notifications_Torrents_traditional").click(function() {
-		$("#notifications_Torrents_popup").removeAttr('checked');
+		$("#notifications_Torrents_popup").prop('checked', false);
 	});
 	$("#notifications_Torrents_popup").click(function() {
-		$("#notifications_Torrents_traditional").removeAttr('checked');
+		$("#notifications_Torrents_traditional").prop('checked', false);
 	});
 });
 

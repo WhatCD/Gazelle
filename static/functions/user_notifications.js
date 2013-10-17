@@ -1,43 +1,23 @@
-// This a global variable because other scripts need to use it
-var notifications;
-
 $(document).ready(function() {
-	var url = new URL();
-
-	$.ajax({
-		type: "GET",
-		url: "ajax.php?action=get_user_notifications" + (url.query.clearcache ? "&clearcache=" + url.query.clearcache : ""),
-		dataType: "json",
-		data: {
-			"skip" : getSkippedPage(url)
+	var skip = getSkippedPage();
+	$('.noty-notification').each(function() {
+		var $this = $(this);
+		var type = $this.data('noty-type'),
+			importance = $this.data('noty-importance'),
+			id = $this.data('noty-id'),
+			url = $this.data('noty-url');
+		if (type != skip) {
+			createNoty(type, id, $this.text(), url, importance);
 		}
-	}).done(function(results) {
-		notifications = results;
-		if (results['status'] == 'success') {
-			results = results['response'];
-			if (results) {
-				$.each(results, function(type, notification) {
-					if (type != "Rippy") {
-						createNoty(type, notification['contents']['id'], notification['contents']['message'], notification['contents']['url'], notification['contents']['importance']);
-						if (type == "Subscriptions") {
-							$("#userinfo_minor").addClass("highlite");
-							$("#nav_subscriptions").addClass("new-subscriptions");
-						}
-					}
-					else {
-						$.getScript("static/functions/rippy.js");
-					}
-				});
-			}
-		}
+		$this.remove();
 	});
 });
 
-function getSkippedPage(url) {
-	var skip = "";
+function getSkippedPage() {
+	var skip, url = new URL();
 	switch(url.path) {
 		case "inbox":
-			if (url.query.length == 0) {
+			if (url.query.length == 0 || (url.query.length == 1 && url.query.hasOwnProperty('sort'))) {
 				skip = "Inbox";
 			}
 			break;
@@ -79,7 +59,7 @@ function getSkippedPage(url) {
 }
 
 function createNoty(type, id, message, url, importance) {
-	var hidden = !url ? "hidden" : "";
+	var hideButtons = !url;
 	noty({
 		text: message,
 		type: importance,
@@ -94,7 +74,7 @@ function createNoty(type, id, message, url, importance) {
 		buttonElement : 'a',
 		buttons: [
 		{
-			addClass: 'brackets noty_button_view ' + hidden, text: 'View', href: url
+			addClass: 'brackets noty_button_view' + (hideButtons ? ' hidden' : ''), text: 'View', href: url
 		},
 		{
 			addClass: 'brackets noty_button_clear', text: 'Clear', onClick: function($noty) {
