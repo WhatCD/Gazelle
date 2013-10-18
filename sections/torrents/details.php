@@ -555,7 +555,7 @@ foreach ($TorrentList as $Torrent) {
 
 	$Reported = false;
 	unset($ReportedTimes);
-	$Reports = $Cache->get_value('reports_torrent_'.$TorrentID);
+	$Reports = $Cache->get_value("reports_torrent_$TorrentID");
 	if ($Reports === false) {
 		$DB->query("
 			SELECT r.ID,
@@ -573,7 +573,11 @@ foreach ($TorrentList as $Torrent) {
 	if (count($Reports) > 0) {
 		$Reported = true;
 		include(SERVER_ROOT.'/sections/reportsv2/array.php');
-		$ReportInfo = "\n<table class=\"reportinfo_table\">\n\t<tr class=\"colhead_dark\" style=\"font-weight: bold;\">\n\t\t<td>This torrent has ".count($Reports).' active '.(count($Reports) > 1 ? 'reports' : 'report').":</td>\n\t</tr>";
+		$ReportInfo = '
+		<table class="reportinfo_table">
+			<tr class="colhead_dark" style="font-weight: bold;">
+				<td>This torrent has '.count($Reports).' active '.(count($Reports) > 1 ? 'reports' : 'report').":</td>
+			</tr>";
 
 		foreach ($Reports as $Report) {
 			list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;

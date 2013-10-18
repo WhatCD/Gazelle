@@ -1,13 +1,12 @@
 $(document).ready(function() {
-	var open_responses =
 	$(".answer_link").click(function(e) {
 		e.preventDefault();
-		id = this.id;
+		var id = this.id;
 		$("#answer" + id).gtoggle();
 	});
 
 	$(".submit_button").click(function(e) {
-		id = this.id;
+		var id = this.id;
 		$.ajax({
 			type : "POST",
 			url : "questions.php?action=take_answer_question",
@@ -25,10 +24,13 @@ $(document).ready(function() {
 
 	$(".view_responses").click(function(e) {
 		e.preventDefault();
-		id = this.id;
-		if ($("#responses_for_" + id).length == 0) {
+		var id = this.id;
+		var respDiv = $("#responses_for_" + id);
+		if (respDiv.length == 0) {
+			respDiv = $('<div id="responses_for_' + id + '" style="display: none; margin-left: 20px;"></div>');
+			$("#question" + id).after(respDiv);
 			$.ajax({
-				type : "POST",
+				type : "GET",
 				url : "questions.php?action=ajax_get_answers",
 				dataType : "html",
 				data : {
@@ -36,10 +38,10 @@ $(document).ready(function() {
 					"userid" : $(this).data("gazelle-userid")
 				}
 			}).done(function(response) {
-				$("#question" + id).after(response);
+				respDiv.html(response).show();
 			});
 		} else {
-			$("#responses_for_" + id).remove();
+			respDiv.toggle();
 		}
 	});
 });

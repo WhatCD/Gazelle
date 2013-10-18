@@ -770,6 +770,14 @@ CREATE TABLE `requests_votes` (
   KEY `Bounty` (`Bounty`)
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `sacrifice` (
+  `UserID` int(10) NOT NULL,
+  `Time` datetime NOT NULL,
+  `Sacrifice1` text NOT NULL,
+  `Sacrifice2` text NOT NULL,
+  `IsValid` tinyint(4) NOT NULL
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `schedule` (
   `NextHour` int(2) NOT NULL DEFAULT '0',
   `NextDay` int(2) NOT NULL DEFAULT '0',
@@ -982,7 +990,8 @@ CREATE TABLE `staff_answers` (
   `UserID` int(10) NOT NULL,
   `Answer` mediumtext,
   `Date` datetime NOT NULL,
-  PRIMARY KEY (`QuestionID`,`UserID`)
+  PRIMARY KEY (`QuestionID`,`UserID`),
+  KEY `UserID` (`UserID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `staff_blog` (
@@ -1019,7 +1028,9 @@ CREATE TABLE `staff_pm_conversations` (
   `Date` datetime DEFAULT NULL,
   `Unread` tinyint(1) DEFAULT NULL,
   `ResolverID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `StatusAssigned` (`Status`,`AssignedToUser`),
+  KEY `StatusLevel` (`Status`,`Level`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `staff_pm_messages` (
