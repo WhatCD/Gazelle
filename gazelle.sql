@@ -770,14 +770,6 @@ CREATE TABLE `requests_votes` (
   KEY `Bounty` (`Bounty`)
 ) ENGINE=InnoDB CHARSET utf8;
 
-CREATE TABLE `sacrifice` (
-  `UserID` int(10) NOT NULL,
-  `Time` datetime NOT NULL,
-  `Sacrifice1` text NOT NULL,
-  `Sacrifice2` text NOT NULL,
-  `IsValid` tinyint(4) NOT NULL
-) ENGINE=InnoDB CHARSET utf8;
-
 CREATE TABLE `schedule` (
   `NextHour` int(2) NOT NULL DEFAULT '0',
   `NextDay` int(2) NOT NULL DEFAULT '0',

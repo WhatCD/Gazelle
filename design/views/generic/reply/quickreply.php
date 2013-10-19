@@ -94,11 +94,11 @@
 							</td>
 						</tr>
 						<tr>
-					<?	if (Users::has_avatars_enabled()) { ?>
+<?	if (Users::has_avatars_enabled()) { ?>
 							<td class="avatar" valign="top">
-							<?=Users::show_avatar(G::$LoggedUser['Avatar'], G::$LoggedUser['ID'], G::$LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
+								<?=Users::show_avatar(G::$LoggedUser['Avatar'], G::$LoggedUser['ID'], G::$LoggedUser['Username'], $HeavyInfo['DisableAvatars'])?>
 							</td>
-					<?	} ?>
+<?	} ?>
 							<td class="body" valign="top">
 								<div id="contentpreview" style="text-align: left;">
 									<div id="preview_<?=$ReplyText->getID()?>"></div>
@@ -106,7 +106,7 @@
 							</td>
 						</tr>
 					</table>
-					<form class="send_form center" name="reply" id="quickpostform" action="<?=$Action?>" method="post"<? if (!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled=true;" <? } ?>>
+					<form class="send_form center" name="reply" id="quickpostform" action="<?=$Action?>" method="post"<? if (!check_perms('users_mod')) { ?> onsubmit="quickpostform.submit_button.disabled = true;"<? } ?>>
 						<input type="hidden" name="action" value="<?=$InputAction?>" />
 						<input type="hidden" name="auth" value="<?=G::$LoggedUser['AuthKey']?>" />
 						<input type="hidden" name="<?=$InputName?>" value="<?=$InputID?>" />
@@ -118,7 +118,8 @@
 						</div>
 						<div class="preview_submit">
 <?
-	if (isset($SubscribeBox) && !isset($ForumID) && Subscriptions::has_subscribed_comments($Document, $InputID) === false) { ?>
+	if (isset($SubscribeBox) && !isset($ForumID) && Subscriptions::has_subscribed_comments($Document, $InputID) === false) {
+?>
 							<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe']) ? ' checked="checked"' : ''?> tabindex="2" />
 							<label for="subscribebox">Subscribe</label>
 <?
@@ -126,7 +127,8 @@
 	// Forum thread logic
 	// This might use some more abstraction
 	if (isset($ForumID)) {
-		if (!Subscriptions::has_subscribed($InputID)) { ?>
+		if (!Subscriptions::has_subscribed($InputID)) {
+?>
 							<input id="subscribebox" type="checkbox" name="subscribe"<?=!empty($HeavyInfo['AutoSubscribe']) ? ' checked="checked"' : ''?> tabindex="2" />
 							<label for="subscribebox">Subscribe</label>
 <?
@@ -138,10 +140,15 @@
 ?>
 							<input id="mergebox" type="checkbox" name="merge" tabindex="2" />
 							<label for="mergebox">Merge</label>
-<?		}
-		if (!G::$LoggedUser['DisableAutoSave']) { ?>
-							<script type="application/javascript">var storedTempTextarea = new StoreText('quickpost', 'quickpostform', <?=$InputID?>);</script>
-<? 		}
+<?
+		}
+		if (!G::$LoggedUser['DisableAutoSave']) {
+?>
+							<script type="application/javascript">
+								var storedTempTextarea = new StoreText('quickpost', 'quickpostform', <?=$InputID?>);
+							</script>
+<?
+		}
 	}
 ?>
 							<input type="button" value="Preview" class="hidden button_preview_<?=$ReplyText->getID()?>" title="Preview text" tabindex="1" />

@@ -18,13 +18,17 @@ $DB->query("
 			) AS Responses
 		FROM user_questions AS uq
 		WHERE uq.ID NOT IN
-			(
-				SELECT siq.QuestionID FROM staff_ignored_questions AS siq WHERE siq.UserID = '$LoggedUser[ID]'
-			)
-        AND uq.ID NOT IN
-        	(
-        		SELECT sq.QuestionID FROM staff_answers AS sq WHERE sq.UserID = '$LoggedUser[ID]'
-			)
+				(
+					SELECT siq.QuestionID
+					FROM staff_ignored_questions AS siq
+					WHERE siq.UserID = '$LoggedUser[ID]'
+				)
+			AND uq.ID NOT IN
+				(
+					SELECT sq.QuestionID
+					FROM staff_answers AS sq
+					WHERE sq.UserID = '$LoggedUser[ID]'
+				)
 		ORDER BY uq.Date DESC");
 $Questions = $DB->to_array();
 

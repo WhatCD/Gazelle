@@ -26,10 +26,12 @@ $ProfileRewards = Donations::get_profile_rewards($UserID);
 $AvatarMouseOverText = '';
 $SecondAvatar = '';
 if ($EnabledRewards['HasAvatarMouseOverText'] && !empty($Rewards['AvatarMouseOverText'])) {
-	$AvatarMouseOverText = "title=\"$Rewards[AvatarMouseOverText]\" alt=\"$Rewards[AvatarMouseOverText]\"";
+	$AvatarMouseOverText = " title=\"$Rewards[AvatarMouseOverText]\" alt=\"$Rewards[AvatarMouseOverText]\"";
+} else {
+	$AvatarMouseOverText = " alt=\"\"";
 }
 if ($EnabledRewards['HasSecondAvatar'] && !empty($Rewards['SecondAvatar'])) {
-	$SecondAvatar = 'data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar']) . '"';
+	$SecondAvatar = ' data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar']) . '"';
 }
 
 
@@ -187,7 +189,8 @@ View::show_header($Username, "jquery.imagesloaded,jquery.wookmark,user,bbcode,re
 	<h2><?=Users::format_username($UserID, true, true, true, false, true)?></h2>
 	<div class="linkbox">
 <?
-if (!$OwnProfile) { ?>
+if (!$OwnProfile) {
+?>
 		<a href="inbox.php?action=compose&amp;to=<?=$UserID?>" class="brackets">Send message</a>
 <?
 	$DB->query("
@@ -195,7 +198,8 @@ if (!$OwnProfile) { ?>
 		FROM friends
 		WHERE UserID = '$LoggedUser[ID]'
 			AND FriendID = '$UserID'");
-	if (!$DB->has_results()) { ?>
+	if (!$DB->has_results()) {
+?>
 		<a href="friends.php?action=add&amp;friendid=<?=$UserID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Add to friends</a>
 <?	} ?>
 		<a href="reports.php?action=report&amp;type=user&amp;id=<?=$UserID?>" class="brackets">Report user</a>
@@ -211,65 +215,88 @@ if (check_perms('users_edit_profiles', $Class) || $LoggedUser['ID'] == $UserID) 
 if (check_perms('users_view_invites', $Class)) {
 ?>
 		<a href="user.php?action=invite&amp;userid=<?=$UserID?>" class="brackets">Invites</a>
-<? }
+<?
+}
 if (check_perms('admin_manage_permissions', $Class)) {
 ?>
 		<a href="user.php?action=permissions&amp;userid=<?=$UserID?>" class="brackets">Permissions</a>
-<? }
+<?
+}
 if (check_perms('users_logout', $Class) && check_perms('users_view_ips', $Class)) {
 ?>
 		<a href="user.php?action=sessions&amp;userid=<?=$UserID?>" class="brackets">Sessions</a>
-<? }
+<?
+}
 if (check_perms('admin_reports')) {
 ?>
 		<a href="reportsv2.php?view=reporter&amp;id=<?=$UserID?>" class="brackets">Reports</a>
-<? }
+<?
+}
 if (check_perms('users_mod')) {
 ?>
 		<a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>" class="brackets">FL tokens</a>
-<? }
+<?
+}
 if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) {
 ?>
 		<a href="user.php?action=clearcache&amp;id=<?=$UserID?>" class="brackets">Clear cache</a>
-<? } ?>
+<?
+}
+?>
 	</div>
 
 	<div class="sidebar">
 <?
-	if ($Avatar && Users::has_avatars_enabled()) {
-		// TODO: use Users::show_avatar; why is display_str() used a few lines below (where avatar is displayed)?
-		if (check_perms('site_proxy_images') && !empty($Avatar)) {
-			$Avatar = 'http'.($SSL ? 's' : '').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($Avatar);
-		}
+if ($Avatar && Users::has_avatars_enabled()) {
+	// TODO: use Users::show_avatar; why is display_str() used a few lines below (where avatar is displayed)?
+	if (check_perms('site_proxy_images') && !empty($Avatar)) {
+		$Avatar = 'http'.($SSL ? 's' : '').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($Avatar);
+	}
 ?>
 		<div class="box box_image box_image_avatar">
 			<div class="head colhead_dark">Avatar</div>
-			<div align="center"><img class="avatar double_avatar" src="<?=display_str($Avatar)?>" width="150" style="max-height: 400px;" <?=$AvatarMouseOverText?> <?=$SecondAvatar?> /></div>
+			<div align="center">
+				<img class="avatar double_avatar" src="<?=display_str($Avatar)?>" width="150" style="max-height: 400px;"<?=$AvatarMouseOverText?><?=$SecondAvatar?> />
+			</div>
 		</div>
-<? } ?>
+<?
+}
+?>
 		<div class="box box_info box_userinfo_stats">
 			<div class="head colhead_dark">Statistics</div>
 			<ul class="stats nobullet">
 				<li>Joined: <?=$JoinedDate?></li>
 <?	if (($Override = check_paranoia_here('lastseen'))) { ?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Last seen: <?=$LastAccess?></li>
-<?	}
-	if (($Override = check_paranoia_here('uploaded'))) { ?>
+<?
+	}
+	if (($Override = check_paranoia_here('uploaded'))) {
+?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
-<?	}
-	if (($Override = check_paranoia_here('downloaded'))) { ?>
+<?
+	}
+	if (($Override = check_paranoia_here('downloaded'))) {
+?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
-<?	}
-	if (($Override = check_paranoia_here('ratio'))) { ?>
+<?
+	}
+	if (($Override = check_paranoia_here('ratio'))) {
+?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Ratio: <?=Format::get_ratio_html($Uploaded, $Downloaded)?></li>
-<?	}
-	if (($Override = check_paranoia_here('requiredratio')) && isset($RequiredRatio)) { ?>
+<?
+	}
+	if (($Override = check_paranoia_here('requiredratio')) && isset($RequiredRatio)) {
+?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Required Ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
-<?	}
-	if ($OwnProfile || ($Override = check_paranoia_here(false)) || check_perms('users_mod')) { ?>
+<?
+	}
+	if ($OwnProfile || ($Override = check_paranoia_here(false)) || check_perms('users_mod')) {
+?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>><a href="userhistory.php?action=token_history&amp;userid=<?=$UserID?>">Tokens</a>: <?=number_format($FLTokens)?></li>
-<?	}
-	if (($OwnProfile || check_perms('users_mod')) && $Warned != '0000-00-00 00:00:00') { ?>
+<?
+	}
+	if (($OwnProfile || check_perms('users_mod')) && $Warned != '0000-00-00 00:00:00') {
+?>
 				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Warning expires in: <?=time_diff((date('Y-m-d H:i', strtotime($Warned))))?></li>
 <?	} ?>
 			</ul>
@@ -1046,14 +1073,14 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_edit_ratio', $Class) || (check_perms('users_edit_own_ratio') && $UserID == $LoggedUser['ID'])) {
 ?>
 			<tr>
-				<td class="label tooltip" title="Upload amount in bytes. Also accepts e.g. +20GB or -35.6364MB on the end.">Uploaded:</span></td>
+				<td class="label tooltip" title="Upload amount in bytes. Also accepts e.g. +20GB or -35.6364MB on the end.">Uploaded:</td>
 				<td>
 					<input type="hidden" name="OldUploaded" value="<?=$Uploaded?>" />
 					<input type="text" size="20" name="Uploaded" value="<?=$Uploaded?>" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label tooltip" title="Download amount in bytes. Also accepts e.g. +20GB or -35.6364MB on the end.">Downloaded:</span></td>
+				<td class="label tooltip" title="Download amount in bytes. Also accepts e.g. +20GB or -35.6364MB on the end.">Downloaded:</td>
 				<td>
 					<input type="hidden" name="OldDownloaded" value="<?=$Downloaded?>" />
 					<input type="text" size="20" name="Downloaded" value="<?=$Downloaded?>" />
@@ -1077,7 +1104,7 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('users_edit_invites')) {
 ?>
 			<tr>
-				<td class="label tooltip" title="Number of invites">Invites:</span></td>
+				<td class="label tooltip" title="Number of invites">Invites:</td>
 				<td><input type="text" size="5" name="Invites" value="<?=$Invites?>" /></td>
 			</tr>
 <?
@@ -1086,7 +1113,7 @@ if (check_perms('users_mod', $Class)) { ?>
 	if (check_perms('admin_manage_fls') || (check_perms('users_mod') && $OwnProfile)) {
 ?>
 			<tr>
-				<td class="label tooltip" title="This is the message shown in the right-hand column on /staff.php">FLS/Staff remark:</span></td>
+				<td class="label tooltip" title="This is the message shown in the right-hand column on /staff.php">FLS/Staff remark:</td>
 				<td><input type="text" class="wide_input_text" name="SupportFor" value="<?=display_str($SupportFor)?>" /></td>
 			</tr>
 <?
@@ -1122,7 +1149,8 @@ if (check_perms('users_mod', $Class)) { ?>
 				</select>
 			</td>
 		</tr>
-<?	}
+<?
+	}
 
 	if (check_perms('users_edit_password')) {
 ?>
@@ -1189,7 +1217,7 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 <?		} ?>
 			<tr>
-				<td class="label tooltip" title="This message *will* be sent to the user in the warning PM!">Warning reason:</span></td>
+				<td class="label tooltip" title="This message *will* be sent to the user in the warning PM!">Warning reason:</td>
 				<td>
 					<input type="text" class="wide_input_text" name="WarnReason" />
 				</td>
@@ -1248,8 +1276,8 @@ if (check_perms('users_mod', $Class)) { ?>
 				</td>
 			</tr>
 
-<?		} ?>
 <?
+		}
 	}
 
 	if (check_perms('users_disable_any')) {
@@ -1276,13 +1304,13 @@ if (check_perms('users_mod', $Class)) { ?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label tooltip" title="Enter a comma-delimited list of forum IDs.">Restricted forums:</span></td>
+				<td class="label tooltip" title="Enter a comma-delimited list of forum IDs.">Restricted forums:</td>
 				<td>
 					<input type="text" class="wide_input_text" name="RestrictedForums" value="<?=display_str($RestrictedForums)?>" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label tooltip" title="Enter a comma-delimited list of forum IDs.">Extra forums:</span></td>
+				<td class="label tooltip" title="Enter a comma-delimited list of forum IDs.">Extra forums:</td>
 				<td>
 					<input type="text" class="wide_input_text" name="PermittedForums" value="<?=display_str($PermittedForums)?>" />
 				</td>
@@ -1306,8 +1334,9 @@ if (check_perms('users_mod', $Class)) { ?>
 				<td><input type="checkbox" name="LogOut" id="LogOut" /></td>
 			</tr>
 		</table>
-<?	} ?>
-<?	if (check_perms("users_mod")) {
+<?
+	}
+	if (check_perms('users_mod')) {
 		DonationsView::render_mod_donations($UserID);
 	}
 ?>
@@ -1318,9 +1347,9 @@ if (check_perms('users_mod', $Class)) { ?>
 				</td>
 			</tr>
 			<tr>
-				<td class="label tooltip" title="This message will be entered into staff notes only.">Reason:</span></td>
+				<td class="label tooltip" title="This message will be entered into staff notes only.">Reason:</td>
 				<td>
-					<textarea rows="1" class="wide_input_text" name="Reason" id="Reason" onkeyup="resize('Reason');"></textarea>
+					<textarea rows="1" cols="35" class="wide_input_text" name="Reason" id="Reason" onkeyup="resize('Reason');"></textarea>
 				</td>
 			</tr>
 			<tr>
@@ -1337,7 +1366,8 @@ if (check_perms('users_mod', $Class)) { ?>
 			</tr>
 		</table>
 		</form>
-<? }
+<?
+}
 ?>
 	</div>
 </div>

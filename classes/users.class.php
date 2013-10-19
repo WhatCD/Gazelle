@@ -630,19 +630,19 @@ class Users {
 		if (!empty($AvatarMouseOverText)) {
 			$AvatarMouseOverText =  "title=\"$AvatarMouseOverText\" alt=\"$AvatarMouseOverText\"";
 		} else {
-			$AvatarMouseOverText = "alt=\"\"";
+			$AvatarMouseOverText = "alt=\"$Username's avatar\"";
 		}
 		if ($EnabledRewards['HasSecondAvatar'] && !empty($Rewards['SecondAvatar'])) {
-			$SecondAvatar = 'data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar']) . '"';
+			$SecondAvatar = ' data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar']) . '"';
 		}
 		// case 1 is avatars disabled
 		switch ($Setting) {
 			case 0:
 				if (!empty($Avatar)) {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class />" : $Avatar);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class />" : $Avatar);
 				} else {
 					$URL = STATIC_SERVER.'common/avatars/default.png';
-					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar />" : $URL);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar />" : $URL);
 				}
 				break;
 			case 2:
@@ -683,14 +683,14 @@ class Users {
 					$URL = 'https://robohash.org/'.md5($Username)."?set=set$Type&amp;size={$Size}x$Size";
 				}
 				if ($ShowAvatar == true && !empty($Avatar)) {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class/>" : $Avatar);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class/>" : $Avatar);
 				} else {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class/>" : $URL);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class/>" : $URL);
 				}
 				break;
 			default:
 				$URL = STATIC_SERVER.'common/avatars/default.png';
-				$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText $SecondAvatar $Class/>" : $URL);
+				$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class/>" : $URL);
 		}
 		return $ToReturn;
 	}

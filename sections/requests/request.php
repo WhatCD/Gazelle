@@ -236,10 +236,10 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 ?>
 				<tr>
 					<td>
-						<a href="user.php?id=<?=$User['UserID']?>"><?=($Boldify ? '<strong>' : '')?><?=display_str($User['Username'])?><?=($Boldify ? '</strong>' : '')?></a>
+						<a href="user.php?id=<?=$User['UserID']?>"><?=($Boldify ? '<strong>' : '') . display_str($User['Username']) . ($Boldify ? '</strong>' : '')?></a>
 					</td>
 					<td class="number_column">
-						<?=($Boldify ? '<strong>' : '')?><?=Format::get_size($User['Bounty'])?><?=($Boldify ? '</strong>' : '')?>
+						<?=($Boldify ? '<strong>' : '') . Format::get_size($User['Bounty']) . ($Boldify ? "</strong>\n" : "\n")?>
 					</td>
 				</tr>
 <?	}
@@ -274,51 +274,38 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 		if (!empty($Request['RecordLabel'])) { ?>
 			<tr>
 				<td class="label">Record label</td>
-				<td>
-					<?=$Request['RecordLabel']?>
-				</td>
+				<td><?=$Request['RecordLabel']?></td>
 			</tr>
 <?		}
 		if (!empty($Request['CatalogueNumber'])) { ?>
 			<tr>
 				<td class="label">Catalogue number</td>
-				<td>
-					<?=$Request['CatalogueNumber']?>
-				</td>
+				<td><?=$Request['CatalogueNumber']?></td>
 			</tr>
 <?		} ?>
 			<tr>
 				<td class="label">Release type</td>
-				<td>
-					<?=$ReleaseName?>
-				</td>
+				<td><?=$ReleaseName?></td>
 			</tr>
 			<tr>
 				<td class="label">Acceptable bitrates</td>
-				<td>
-					<?=$BitrateString?>
-				</td>
+				<td><?=$BitrateString?></td>
 			</tr>
 			<tr>
 				<td class="label">Acceptable formats</td>
-				<td>
-					<?=$FormatString?>
-				</td>
+				<td><?=$FormatString?></td>
 			</tr>
 			<tr>
 				<td class="label">Acceptable media</td>
-				<td>
-					<?=$MediaString?>
-				</td>
+				<td><?=$MediaString?></td>
 			</tr>
 <?		if (!empty($Request['LogCue'])) { ?>
 			<tr>
 				<td class="label">Required CD FLAC only extras</td>
-				<td>
-					<?=$Request['LogCue']?>
-				</td>
+				<td><?=$Request['LogCue']?></td>
 			</tr>
-<?		}
+<?
+		}
 	}
 	$Worldcat = '';
 	$OCLC = str_replace(' ', '', $Request['OCLC']);
@@ -332,14 +319,14 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 			}
 		}
 	}
-	if (!empty($Worldcat)) { ?>
+	if (!empty($Worldcat)) {
+?>
 		<tr>
 			<td class="label">WorldCat (OCLC) ID</td>
-			<td>
-				<?=$Worldcat?>
-			</td>
+			<td><?=$Worldcat?></td>
 		</tr>
-<? 	}
+<?
+	}
 	if ($Request['GroupID']) {
 ?>
 			<tr>
@@ -360,12 +347,12 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 <?	if ($Request['LastVote'] > $Request['TimeAdded']) { ?>
 			<tr>
 				<td class="label">Last voted</td>
-				<td>
-					<?=time_diff($Request['LastVote'])?>
-				</td>
+				<td><?=time_diff($Request['LastVote'])?></td>
 			</tr>
-<?	}
-	if ($CanVote) { ?>
+<?
+	}
+	if ($CanVote) {
+?>
 			<tr id="voting">
 				<td class="label tooltip" title="These units are in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Custom vote (MB)</td>
 				<td>
@@ -432,11 +419,11 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 							<br />
 							<strong>Should be the permalink (PL) to the torrent (e.g. https://<?=SSL_SITE_URL?>/torrents.php?torrentid=xxxx).</strong>
 						</div>
-<?					if (check_perms('site_moderate_requests')) { ?>
+<?		if (check_perms('site_moderate_requests')) { ?>
 						<div class="field_div">
 							For user: <input type="text" size="25" name="user"<?=(!empty($FillerUsername) ? " value=\"$FillerUsername\"" : '')?> />
 						</div>
-<?					} ?>
+<?		} ?>
 						<div class="submit_div">
 							<input type="submit" value="Fill request" />
 						</div>
@@ -448,7 +435,9 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 				<td colspan="2" class="center"><strong>Description</strong></td>
 			</tr>
 			<tr>
-				<td colspan="2"><?=$Text->full_format($Request['Description']);?></td>
+				<td colspan="2">
+<?=					$Text->full_format($Request['Description']);?>
+				</td>
 			</tr>
 		</table>
 <?
@@ -465,20 +454,20 @@ echo $Pages;
 <?
 
 //---------- Begin printing
-CommentsView::render_comments($Thread, $LastRead, "requests.php?action=view&id=$RequestID");
+CommentsView::render_comments($Thread, $LastRead, "requests.php?action=view&amp;id=$RequestID");
 
 if ($Pages) { ?>
 	<div class="linkbox pager"><?=$Pages?></div>
 <?
 }
 
-	View::parse('generic/reply/quickreply.php', array(
-		'InputName' => 'pageid',
-		'InputID' => $RequestID,
-		'Action' => 'comments.php?page=requests',
-		'InputAction' => 'take_post',
-		'SubscribeBox' => true
-	));
+View::parse('generic/reply/quickreply.php', array(
+	'InputName' => 'pageid',
+	'InputID' => $RequestID,
+	'Action' => 'comments.php?page=requests',
+	'InputAction' => 'take_post',
+	'SubscribeBox' => true
+));
 ?>
 	</div>
 </div>

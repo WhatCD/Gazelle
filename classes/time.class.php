@@ -16,11 +16,11 @@ function time_ago($TimeStamp) {
 	return time() - $TimeStamp;
 }
 
+/*
+ * Returns a <span> by default but can optionally return the raw time
+ * difference in text (e.g. "16 hours and 28 minutes", "1 day, 18 hours").
+ */
 function time_diff($TimeStamp, $Levels = 2, $Span = true, $Lowercase = false) {
-	/*
-	Returns a <span> by default but can optionally return the raw time
-	difference in text (e.g. "16 hours and 28 minutes", "1 day, 18 hours").
-	*/
 	if (!is_number($TimeStamp)) { // Assume that $TimeStamp is SQL timestamp
 		if ($TimeStamp == '0000-00-00 00:00:00') {
 			return 'Never';

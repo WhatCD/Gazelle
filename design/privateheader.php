@@ -377,9 +377,9 @@ if (check_perms('users_mod')) {
 // Inbox
 if ($NotificationsManager->is_traditional(NotificationsManager::INBOX)) {
 	$NotificationsManager->load_inbox();
-	$NewMessages = $NotificationsManager->get_notifications()[NotificationsManager::INBOX];
-	if (isset($NewMessages)) {
-		$Alerts[] = NotificationsManagerView::format_traditional($NewMessages);
+	$NewMessages = $NotificationsManager->get_notifications();
+	if (isset($NewMessages[NotificationsManager::INBOX])) {
+		$Alerts[] = NotificationsManagerView::format_traditional($NewMessages[NotificationsManager::INBOX]);
 	}
 	$NotificationsManager->clear_notifications_array();
 }
@@ -393,9 +393,9 @@ if (G::$LoggedUser['RatioWatch']) {
 // Torrents
 if ($NotificationsManager->is_traditional(NotificationsManager::TORRENTS)) {
 	$NotificationsManager->load_torrent_notifications();
-	$NewTorrents = $NotificationsManager->get_notifications()[NotificationsManager::TORRENTS];
-	if (isset($NewTorrents)) {
-		$Alerts[] = NotificationsManagerView::format_traditional($NewTorrents);
+	$NewTorrents = $NotificationsManager->get_notifications();
+	if (isset($NewTorrents[NotificationsManager::TORRENTS])) {
+		$Alerts[] = NotificationsManagerView::format_traditional($NewTorrents[NotificationsManager::TORRENTS]);
 	}
 	$NotificationsManager->clear_notifications_array();
 }
