@@ -43,14 +43,16 @@ class Top10View {
 	}
 
 	public static function render_artist_tile($Artist, $Category) {
-		switch ($Category) {
+		if (self::is_valid_artist($Artist)) {
+			switch ($Category) {
 
-			case 'weekly':
-			case 'hyped':
-				self::render_tile("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);
-				break;
-			default:
-				break;
+				case 'weekly':
+				case 'hyped':
+					self::render_tile("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -69,14 +71,16 @@ class Top10View {
 
 
 	public static function render_artist_list($Artist, $Category) {
-		switch ($Category) {
-
-			case 'weekly':
-			case 'hyped':
-				self::render_list("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);
-				break;
-			default:
-				break;
+		if (self::is_valid_artist($Artist)) {
+			switch ($Category) {
+	
+				case 'weekly':
+				case 'hyped':
+					self::render_list("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -92,6 +96,10 @@ class Top10View {
 			</li>
 <?
 		}
+	}
+
+	private static function is_valid_artist($Artist) {
+		return $Artist['name'] != '[unknown]';
 	}
 
 }
