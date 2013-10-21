@@ -44,6 +44,12 @@ if (!isset($_REQUEST['action'])) {
 		case 'take_ignore_question':
 			include(SERVER_ROOT.'/sections/questions/take_ignore_question.php');
 			break;
+		case 'edit':
+			include(SERVER_ROOT.'/sections/questions/edit.php');
+			break;
+		case 'take_edit_answer':
+			include(SERVER_ROOT.'/sections/questions/take_edit_answer.php');
+			break;
 		default:
 			error(404);
 			break;

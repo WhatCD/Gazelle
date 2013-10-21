@@ -75,6 +75,9 @@ View::show_header($UserInfo['Username'] . "'s answers", "questions");
 					</form>
 					<a href="#" onclick="if (confirm('Are you sure?') == true) { $('#delete_<?=$Question['ID']?>').raw().submit(); } return false;" class="brackets">Delete</a>
 <?				} ?>
+<?				if ($LoggedUser['ID'] == $UserID) { ?>
+					<a href="questions.php?action=edit&amp;id=<?=$Question['ID']?>&amp;userid=<?=$UserID?>" class="brackets">Edit</a>
+<?				} ?>
 				</span>
 			</div>
 			<div class="pad">
