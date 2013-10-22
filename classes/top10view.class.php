@@ -45,7 +45,6 @@ class Top10View {
 	public static function render_artist_tile($Artist, $Category) {
 		if (self::is_valid_artist($Artist)) {
 			switch ($Category) {
-
 				case 'weekly':
 				case 'hyped':
 					self::render_tile("artist.php?artistname=", $Artist['name'], $Artist['image'][3]['#text']);

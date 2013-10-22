@@ -19,7 +19,6 @@ $Question = $DB->next_record();
 
 View::show_header("Ask the Staff");
 ?>
-
 <div class="thin">
 	<h2>
 		Answer Question
@@ -36,7 +35,7 @@ View::show_header("Ask the Staff");
 			</span>
 		</div>
 		<div class="pad">
-			<?=$Text->full_format($Question['Question'])?>
+<?=			$Text->full_format($Question['Question'])?>
 		</div>
 	</div>
 	<div class="center box pad">
@@ -51,6 +50,5 @@ View::show_header("Ask the Staff");
 		</form>
 	</div>
 </div>
-
 <?
 View::show_footer();

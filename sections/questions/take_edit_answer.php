@@ -9,6 +9,10 @@ if (empty($Answer) || !is_number($ID) || $UserID != $LoggedUser['ID']) {
 	error(403);
 }
 
-$DB->query("UPDATE staff_answers SET Answer = '$Answer' WHERE QuestionID = '$ID' AND UserID = '$UserID'");
+$DB->query("
+	UPDATE staff_answers
+	SET Answer = '$Answer'
+	WHERE QuestionID = '$ID'
+		AND UserID = '$UserID'");
 
 header("Location: questions.php?action=view_answers&userid=$UserID");

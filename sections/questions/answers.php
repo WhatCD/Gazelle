@@ -16,7 +16,6 @@ list($TotalQuestions) = $DB->next_record();
 
 View::show_header("Ask the Staff");
 ?>
-
 <div class="thin">
 	<div class="header">
 		<h2>Staff Answers</h2>
@@ -36,6 +35,5 @@ View::show_header("Ask the Staff");
 		</h2>
 <?	} ?>
 </div>
-
 <?
 View::show_footer();

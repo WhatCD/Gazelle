@@ -25,7 +25,6 @@ list($Answer) = $DB->next_record();
 
 View::show_header("Ask the Staff");
 ?>
-
 <div class="thin">
 	<h2>
 		Edit Answer
@@ -35,7 +34,7 @@ View::show_header("Ask the Staff");
 		<a class="brackets" href="questions.php?action=answers">View staff answers</a>
 		<a class="brackets" href="questions.php?action=popular_questions">Popular questions</a>
 	</div>
-	<form method="post" class="box box2 center">
+	<form method="post" class="box box2 center" action="">
 		<input type="hidden" name="action" value="take_edit_answer" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="id" value="<?=$ID?>" />
@@ -44,6 +43,5 @@ View::show_header("Ask the Staff");
 		<input type="submit" class="submit" value="Answer" />
 	</form>
 </div>
-
 <?
 View::show_footer();

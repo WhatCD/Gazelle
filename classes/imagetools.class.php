@@ -168,7 +168,7 @@ class ImageTools {
 		if (empty($Url)) {
 			return '';
 		}
-		if (($Found = self::get_stored($Url . ($Thumb ? '_thumb' : '')))) {
+		if ($Found = self::get_stored($Url . ($Thumb ? '_thumb' : ''))) {
 			return $Found;
 		}
 

@@ -29,7 +29,7 @@ function invisible($Image) {
 		$Color = imagecolorsforindex($Image, $i);
 		$TotalAlpha += $Color['alpha'];
 	}
-	return (($TotalAlpha/$Count) == 127) ? true : false;
+	return (($TotalAlpha / $Count) == 127) ? true : false;
 
 }
 

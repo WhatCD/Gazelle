@@ -1,6 +1,6 @@
 <?
 // Main image proxy page
-// The image proxy does not use script_start.php, its code instead resides entirely in image.php in the document root
+// The image proxy does not use script_start.php. Its code, instead, resides entirely in image.php in the document root
 // Bear this in mind when you try to use script_start functions.
 
 if (!check_perms('site_proxy_images')) {
@@ -12,22 +12,22 @@ if (!extension_loaded('openssl') && strtoupper($URL[4]) == 'S') {
 	img_error('badprotocol');
 }
 
-if (!preg_match('/^'.IMAGE_REGEX.'/is',$URL,$Matches)) {
+if (!preg_match('/^'.IMAGE_REGEX.'/is', $URL, $Matches)) {
 	img_error('invalid');
 }
 
 if (isset($_GET['c'])) {
-	list($Data,$Type) = $Cache->get_value('image_cache_'.md5($URL));
+	list($Data, $Type) = $Cache->get_value('image_cache_'.md5($URL));
 	$Cached = true;
 }
 if (!isset($Data) || !$Data) {
 	$Cached = false;
-	$Data = @file_get_contents($URL,0,stream_context_create(array('http'=>array('timeout'=>15))));
+	$Data = @file_get_contents($URL, 0, stream_context_create(array('http' => array('timeout' => 15))));
 	if (!$Data || empty($Data)) {
 		img_error('timeout');
 	}
 	$Type = image_type($Data);
-	if ($Type && function_exists('imagecreatefrom'.$Type)) {
+	if ($Type && function_exists("imagecreatefrom$Type")) {
 		$Image = imagecreatefromstring($Data);
 		if (invisible($Image)) {
 			img_error('invisible');
@@ -38,7 +38,7 @@ if (!isset($Data) || !$Data) {
 	}
 
 	if (isset($_GET['c']) && strlen($Data) < 262144) {
-		$Cache->cache_value('image_cache_'.md5($URL), array($Data,$Type), 3600 * 24 * 7);
+		$Cache->cache_value('image_cache_'.md5($URL), array($Data, $Type), 3600 * 24 * 7);
 	}
 }
 
@@ -53,7 +53,7 @@ if (isset($_GET['avatar'])) {
 	if (strlen($Data) > 256 * 1024 || $Height > 400) {
 		// Sometimes the cached image we have isn't the actual image
 		if ($Cached) {
-			$Data2 = @file_get_contents($URL,0,stream_context_create(array('http'=>array('timeout'=>15))));
+			$Data2 = @file_get_contents($URL, 0, stream_context_create(array('http' => array('timeout' => 15))));
 		} else {
 			$Data2 = $Data;
 		}
@@ -63,20 +63,22 @@ if (isset($_GET['avatar'])) {
 			$DBURL = db_string($URL);
 
 			// Reset avatar, add mod note
-			$UserInfo = $Cache->get_value('user_info_'.$UserID);
+			$UserInfo = $Cache->get_value("user_info_$UserID");
 			$UserInfo['Avatar'] = '';
-			$Cache->cache_value('user_info_'.$UserID, $UserInfo, 2592000);
+			$Cache->cache_value("user_info_$UserID", $UserInfo, 2592000);
 
 			$DB->query("
 				UPDATE users_info
-				SET Avatar='', AdminComment=CONCAT('".sqltime()." - Avatar reset automatically (Size: ".number_format((strlen($Data)) / 1024)." kB, Height: ".$Height."px). Used to be $DBURL\n\n', AdminComment)
-				WHERE UserID='$UserID'");
+				SET
+					Avatar = '',
+					AdminComment = CONCAT('".sqltime()." - Avatar reset automatically (Size: ".number_format((strlen($Data)) / 1024)." kB, Height: ".$Height."px). Used to be $DBURL\n\n', AdminComment)
+				WHERE UserID = '$UserID'");
 
 			// Send PM
 
-			Misc::send_pm($UserID,0,"Your avatar has been automatically reset","The following avatar rules have been in effect for months now:
+			Misc::send_pm($UserID, 0, "Your avatar has been automatically reset", SITE_NAME." has the following requirements for avatars:
 
-[b]Avatars must not exceed 256 kB or be vertically longer than 400px. [/b]
+[b]Avatars must not exceed 256 kB or be vertically longer than 400 px.[/b]
 
 Your avatar at $DBURL has been found to exceed these rules. As such, it has been automatically reset. You are welcome to reinstate your avatar once it has been resized down to an acceptable size.");
 
@@ -92,7 +94,7 @@ if (!isset($Type)) {
 }
 */
 if (isset($Type)) {
-	header('Content-type: image/'.$Type);
+	header("Content-type: image/$Type");
 }
 echo $Data;
 ?>

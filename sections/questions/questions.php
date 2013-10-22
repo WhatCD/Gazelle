@@ -40,13 +40,12 @@ list($TotalQuestions) = $DB->next_record();
 View::show_header("Ask the Staff", "questions");
 
 ?>
-
 <div class="thin">
 	<div class="header">
 		<h2>
 			User Questions
 			<span style="float: right;">
-					<?=$TotalQuestions?> questions asked, <?=count($Questions)?> left to answer
+				<?=$TotalQuestions?> questions asked, <?=count($Questions)?> left to answer
 			</span>
 		</h2>
 	</div>
@@ -66,14 +65,14 @@ View::show_header("Ask the Staff", "questions");
 					<a href="#" id="<?=$Question['ID']?>" class="view_responses brackets"><?=$Question['Responses'] == 1 ? ("View " . $Question['Responses'] . " response") : ("View " . $Question['Responses'] . " responses")?></a>
 					-
 <?				} ?>
-				<form class="hidden" id="delete_<?=$Question['ID']?>" method="post">
+				<form class="hidden" id="delete_<?=$Question['ID']?>" method="post" action="">
 					<input type="hidden" name="action" value="take_remove_question" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="question_id" value="<?=$Question['ID']?>" />
 				</form>
 				<a href="#" onclick="if (confirm('Are you sure?') == true) { $('#delete_<?=$Question['ID']?>').raw().submit(); } return false;" class="brackets">Delete</a>
 				-
-				<form class="hidden" id="ignore_<?=$Question['ID']?>" method="post">
+				<form class="hidden" id="ignore_<?=$Question['ID']?>" method="post" action="">
 					<input type="hidden" name="action" value="take_ignore_question" />
 					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 					<input type="hidden" name="question_id" value="<?=$Question['ID']?>" />
@@ -93,6 +92,5 @@ View::show_header("Ask the Staff", "questions");
 	</div>
 <?	} ?>
 </div>
-
 <?
 View::show_footer();
