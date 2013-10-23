@@ -17,7 +17,7 @@ if (!preg_match('/^'.IMAGE_REGEX.'/is', $URL, $Matches)) {
 }
 
 if (isset($_GET['c'])) {
-	list($Data, $Type) = $Cache->get_value('image_cache_'.md5($URL));
+	list($Data, $FileType) = $Cache->get_value('image_cache_'.md5($URL));
 	$Cached = true;
 }
 if (!isset($Data) || !$Data) {
@@ -26,8 +26,8 @@ if (!isset($Data) || !$Data) {
 	if (!$Data || empty($Data)) {
 		img_error('timeout');
 	}
-	$Type = image_type($Data);
-	if ($Type && function_exists("imagecreatefrom$Type")) {
+	$FileType = image_type($Data);
+	if ($FileType && function_exists("imagecreatefrom$FileType")) {
 		$Image = imagecreatefromstring($Data);
 		if (invisible($Image)) {
 			img_error('invisible');
@@ -38,63 +38,105 @@ if (!isset($Data) || !$Data) {
 	}
 
 	if (isset($_GET['c']) && strlen($Data) < 262144) {
-		$Cache->cache_value('image_cache_'.md5($URL), array($Data, $Type), 3600 * 24 * 7);
+		$Cache->cache_value('image_cache_'.md5($URL), array($Data, $FileType), 3600 * 24 * 7);
 	}
+}
+// Reset avatar, add mod note
+function reset_image($UserID, $Type, $AdminComment, $PrivMessage) {
+	if ($Type === 'avatar') {
+		$CacheKey = "user_info_$UserID";
+		$DBTable = 'users_info';
+		$DBColumn = "Avatar";
+		$PMSubject = 'Your avatar has been automatically reset';
+	} elseif ($Type === 'avatar2') {
+		$CacheKey = "donor_info_$UserID";
+		$DBTable = 'donor_rewards';
+		$DBColumn = "SecondAvatar";
+		$PMSubject = 'Your second avatar has been automatically reset';
+	} elseif ($Type === 'donoricon') {
+		$CacheKey = "donor_info_$UserID";
+		$DBTable = 'donor_rewards';
+		$DBColumn = "CustomIcon";
+		$PMSubject = 'Your donor icon has been automatically reset';
+	}
+
+	$UserInfo = G::$Cache->get_value($CacheKey, true);
+	if ($UserInfo !== false) {
+		if ($UserInfo[$DBColumn] === '') {
+			// This image has already been reset
+			return;
+		}
+		$UserInfo[$DBColumn] = '';
+		G::$Cache->cache_value($CacheKey, $UserInfo, 2592000); // cache for 30 days
+	}
+
+	// reset the avatar or donor icon URL
+	G::$DB->query("
+		UPDATE $DBTable
+		SET $DBColumn = ''
+		WHERE UserID = '$UserID'");
+
+	// write comment to staff notes
+	G::$DB->query("
+		UPDATE users_info
+		SET AdminComment = CONCAT('".sqltime().' - '.db_string($AdminComment)."\n\n', AdminComment)
+		WHERE UserID = '$UserID'");
+
+	// clear cache keys
+	G::$Cache->delete_value($CacheKey);
+
+	Misc::send_pm($UserID, 0, $PMSubject, $PrivMessage);
 }
 
 // Enforce avatar rules
-if (isset($_GET['avatar'])) {
-	if (!is_number($_GET['avatar'])) {
+if (isset($_GET['type']) && isset($_GET['userid'])) {
+	$ValidTypes = array('avatar', 'avatar2', 'donoricon');
+	if (!is_number($_GET['userid']) || !in_array($_GET['type'], $ValidTypes)) {
 		die();
 	}
-	$UserID = $_GET['avatar'];
+	$UserID = $_GET['userid'];
+	$Type = $_GET['type'];
 
-	$Height = image_height($Type, $Data);
-	if (strlen($Data) > 256 * 1024 || $Height > 400) {
+	if ($Type === 'avatar' || $Type === 'avatar2') {
+		$MaxFileSize = 256 * 1024; // 256 kB
+		$MaxImageHeight = 400; // pixels
+		$TypeName = $Type === 'avatar' ? 'avatar' : 'second avatar';
+	} elseif ($Type === 'donoricon') {
+		$MaxFileSize = 64 * 1024; // 64 kB
+		$MaxImageHeight = 100; // pixels
+		$TypeName = 'donor icon';
+	}
+
+	$Height = image_height($FileType, $Data);
+	if (strlen($Data) > $MaxFileSize || $Height > $MaxImageHeight) {
 		// Sometimes the cached image we have isn't the actual image
 		if ($Cached) {
 			$Data2 = @file_get_contents($URL, 0, stream_context_create(array('http' => array('timeout' => 15))));
 		} else {
 			$Data2 = $Data;
 		}
-		if (strlen($Data2) > 256 * 1024 || image_height($Type, $Data2) > 400) {
+
+		if (strlen($Data2) > $MaxFileSize || image_height($FileType, $Data2) > $MaxImageHeight) {
 			require_once(SERVER_ROOT.'/classes/mysql.class.php');
-			require_once(SERVER_ROOT.'/classes/time.class.php'); //Require the time class
+			require_once(SERVER_ROOT.'/classes/time.class.php');
 			$DBURL = db_string($URL);
-
-			// Reset avatar, add mod note
-			$UserInfo = $Cache->get_value("user_info_$UserID");
-			$UserInfo['Avatar'] = '';
-			$Cache->cache_value("user_info_$UserID", $UserInfo, 2592000);
-
-			$DB->query("
-				UPDATE users_info
-				SET
-					Avatar = '',
-					AdminComment = CONCAT('".sqltime()." - Avatar reset automatically (Size: ".number_format((strlen($Data)) / 1024)." kB, Height: ".$Height."px). Used to be $DBURL\n\n', AdminComment)
-				WHERE UserID = '$UserID'");
-
-			// Send PM
-
-			Misc::send_pm($UserID, 0, "Your avatar has been automatically reset", SITE_NAME." has the following requirements for avatars:
-
-[b]Avatars must not exceed 256 kB or be vertically longer than 400 px.[/b]
-
-Your avatar at $DBURL has been found to exceed these rules. As such, it has been automatically reset. You are welcome to reinstate your avatar once it has been resized down to an acceptable size.");
-
-
+			$AdminComment = ucfirst($TypeName)." reset automatically (Size: ".number_format((strlen($Data)) / 1024)." kB, Height: ".$Height."px). Used to be $DBURL";
+			$PrivMessage = SITE_NAME." has the following requirements for {$TypeName}s:\n\n".
+				"[b]".ucfirst($TypeName)."s must not exceed ".($MaxFileSize / 1024)." kB or be vertically longer than {$MaxImageHeight}px.[/b]\n\n".
+				"Your $TypeName at $DBURL has been found to exceed these rules. As such, it has been automatically reset. You are welcome to reinstate your $TypeName once it has been resized down to an acceptable size.";
+			reset_image($UserID, $Type, $AdminComment, $PrivMessage);
 		}
 	}
 }
 
 /*
 TODO: solve this properly for photoshop output images which prepend shit to the image file. skip it or strip it
-if (!isset($Type)) {
+if (!isset($FileType)) {
 	img_error('timeout');
 }
 */
-if (isset($Type)) {
-	header("Content-type: image/$Type");
+if (isset($FileType)) {
+	header("Content-type: image/$FileType");
 }
 echo $Data;
 ?>

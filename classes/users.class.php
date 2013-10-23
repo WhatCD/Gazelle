@@ -506,7 +506,7 @@ class Users {
 					$IconLink = display_str($DonorRewards['CustomIconLink']);
 				}
 				if ($EnabledRewards['HasCustomDonorIcon'] && !empty($DonorRewards['CustomIcon'])) {
-					$IconImage = ImageTools::process($DonorRewards['CustomIcon']);
+					$IconImage = ImageTools::process($DonorRewards['CustomIcon'], false, 'donoricon', $UserID);
 				} else {
 					if ($SpecialRank === MAX_SPECIAL_RANK) {
 						$DonorHeart = 6;
@@ -609,6 +609,7 @@ class Users {
 	/**
 	 * Generate HTML for a user's avatar or just return the avatar URL
 	 * @param unknown $Avatar
+	 * @param unknown $UserID
 	 * @param unknown $Username
 	 * @param unknown $Setting
 	 * @param number $Size
@@ -616,7 +617,7 @@ class Users {
 	 * @return string
 	 */
 	public static function show_avatar($Avatar, $UserID, $Username, $Setting, $Size = 150, $ReturnHTML = True) {
-		$Avatar = ImageTools::process($Avatar);
+		$Avatar = ImageTools::process($Avatar, false, 'avatar', $UserID);
 		$Style = 'style="max-height: 400px;"';
 		$AvatarMouseOverText = '';
 		$SecondAvatar = '';
@@ -633,7 +634,7 @@ class Users {
 			$AvatarMouseOverText = "alt=\"$Username's avatar\"";
 		}
 		if ($EnabledRewards['HasSecondAvatar'] && !empty($Rewards['SecondAvatar'])) {
-			$SecondAvatar = ' data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar']) . '"';
+			$SecondAvatar = ' data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar'], false, 'avatar2', $UserID) . '"';
 		}
 		// case 1 is avatars disabled
 		switch ($Setting) {

@@ -74,7 +74,11 @@ if ($LoggedUser['BytesUploaded'] >= $Amount && $Filled === '0') {
 
 	Requests::update_sphinx_requests($RequestID);
 	echo 'success';
-	$DB->query("SELECT UserID FROM requests_votes WHERE RequestID = '$RequestID' AND UserID != '$LoggedUser[ID]'");
+	$DB->query("
+		SELECT UserID
+		FROM requests_votes
+		WHERE RequestID = '$RequestID'
+			AND UserID != '$LoggedUser[ID]'");
 	$UserIDs = array();
 	while (list($UserID) = $DB->next_record()) {
 		$UserIDs[] = $UserID;

@@ -543,7 +543,11 @@ if (!$ThreadInfo['IsLocked'] || check_perms('site_moderate_forums')) {
 	}
 }
 if (check_perms('site_moderate_forums')) {
-	G::$DB->query("SELECT ID, AuthorID, AddedTime, Body FROM forums_topic_notes WHERE TopicID = $ThreadID ORDER BY ID ASC");
+	G::$DB->query("
+			SELECT ID, AuthorID, AddedTime, Body
+			FROM forums_topic_notes
+			WHERE TopicID = $ThreadID
+			ORDER BY ID ASC");
 	$Notes = G::$DB->to_array();
 ?>
 	<br />

@@ -2,7 +2,7 @@
 	<span id="no-cookies" class="hidden warning">You appear to have cookies disabled.<br /><br /></span>
 	<noscript><span class="warning"><?=SITE_NAME?> requires JavaScript to function properly. Please enable JavaScript in your browser.</span><br /><br /></noscript>
 <?
-if (strtotime($BannedUntil) < time() && !$BanID) {
+if (strtotime($BannedUntil) < time()) {
 ?>
 	<form class="auth_form" name="login" id="loginform" method="post" action="login.php">
 <?
@@ -47,13 +47,9 @@ if (strtotime($BannedUntil) < time() && !$BanID) {
 	</form>
 <?
 } else {
-	if ($BanID) {
 ?>
-	<span class="warning">Your IP address is banned indefinitely.</span>
-<?	} else { ?>
 	<span class="warning">You are banned from logging in for another <?=time_diff($BannedUntil)?>.</span>
 <?
-	}
 }
 
 if ($Attempts > 0) {

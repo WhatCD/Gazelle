@@ -26,7 +26,7 @@ $Validate = new VALIDATE;
 $Feed = new FEED;
 $Text = new TEXT;
 
-define('QUERY_EXCEPTION',true); // Shut up debugging
+define('QUERY_EXCEPTION', true); // Shut up debugging
 
 //******************************************************************************//
 //--------------- Set $Properties array ----------------------------------------//
@@ -38,9 +38,9 @@ $Type = $Categories[(int)$_POST['type']];
 $TypeID = $_POST['type'] + 1;
 $Properties['CategoryName'] = $Type;
 $Properties['Title'] = $_POST['title'];
-$Properties['Remastered'] = ((isset($_POST['remaster'])) ? 1 : 0);
+$Properties['Remastered'] = isset($_POST['remaster']) ? 1 : 0;
 if ($Properties['Remastered'] || isset($_POST['unknown'])) {
-	$Properties['UnknownRelease'] = ((isset($_POST['unknown'])) ? 1 : 0);
+	$Properties['UnknownRelease'] = isset($_POST['unknown']) ? 1 : 0;
 	$Properties['RemasterYear'] = $_POST['remaster_year'];
 	$Properties['RemasterTitle'] = $_POST['remaster_title'];
 	$Properties['RemasterRecordLabel'] = $_POST['remaster_record_label'];
@@ -57,7 +57,7 @@ $Properties['Year'] = $_POST['year'];
 $Properties['RecordLabel'] = $_POST['record_label'];
 $Properties['CatalogueNumber'] = $_POST['catalogue_number'];
 $Properties['ReleaseType'] = $_POST['releasetype'];
-$Properties['Scene'] = ((isset($_POST['scene'])) ? 1 : 0);
+$Properties['Scene'] = isset($_POST['scene']) ? 1 : 0;
 $Properties['Format'] = $_POST['format'];
 $Properties['Media'] = $_POST['media'];
 $Properties['Bitrate'] = $_POST['bitrate'];
@@ -89,7 +89,7 @@ $RequestID = $_POST['requestid'];
 //******************************************************************************//
 //--------------- Validate data in upload form ---------------------------------//
 
-$Validate->SetFields('type', '1', 'inarray', 'Please select a valid type.', array('inarray'=>array_keys($Categories)));
+$Validate->SetFields('type', '1', 'inarray', 'Please select a valid type.', array('inarray' => array_keys($Categories)));
 switch ($Type) {
 	case 'Music':
 		if (!$_POST['groupid']) {

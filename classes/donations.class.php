@@ -47,7 +47,11 @@ class Donations {
 		$UserID = (int)$UserID;
 		$QueryID = G::$DB->get_query_id();
 
-		G::$DB->query("SELECT 1 FROM users_main WHERE ID = '$UserID' LIMIT 1");
+		G::$DB->query("
+				SELECT 1
+				FROM users_main
+				WHERE ID = '$UserID'
+				LIMIT 1");
 		if (G::$DB->has_results()) {
 			G::$Cache->InternalCache = false;
 			foreach ($Args as &$Arg) {
@@ -67,7 +71,10 @@ class Donations {
 			}
 
 			// Legacy donor, should remove at some point
-			G::$DB->query("UPDATE users_info SET Donor = '1' WHERE UserID = '$UserID'");
+			G::$DB->query("
+					UPDATE users_info
+					SET Donor = '1'
+					WHERE UserID = '$UserID'");
 			// Give them the extra invite
 			$ExtraInvite = G::$DB->affected_rows();
 
@@ -126,14 +133,23 @@ class Donations {
 			self::calculate_special_rank($UserID);
 
 			// Hand out invites
-			G::$DB->query("SELECT InvitesRecievedRank FROM users_donor_ranks WHERE UserID = '$UserID'");
+			G::$DB->query("
+					SELECT InvitesRecievedRank
+					FROM users_donor_ranks
+					WHERE UserID = '$UserID'");
 			list($InvitesRecievedRank) = G::$DB->next_record();
 			$AdjustedRank = $Rank >= MAX_RANK ? (MAX_RANK - 1) : $Rank;
 			$InviteRank = $AdjustedRank - $InvitesRecievedRank;
 			if ($InviteRank > 0) {
 				$Invites = $ExtraInvite ? ($InviteRank + 1) : $InviteRank;
-				G::$DB->query("UPDATE users_main SET Invites = Invites + '$Invites' WHERE ID = $UserID");
-				G::$DB->query("UPDATE users_donor_ranks SET InvitesRecievedRank = '$AdjustedRank' WHERE UserID = '$UserID'");
+				G::$DB->query("
+						UPDATE users_main
+						SET Invites = Invites + '$Invites'
+						WHERE ID = $UserID");
+				G::$DB->query("
+						UPDATE users_donor_ranks
+						SET InvitesRecievedRank = '$AdjustedRank'
+						WHERE UserID = '$UserID'");
 			}
 
 			// Send them a thank you PM
@@ -189,7 +205,7 @@ class Donations {
 			// Make them special
 			G::$DB->query("
 				UPDATE users_donor_ranks
-					SET SpecialRank = '$SpecialRank'
+				SET SpecialRank = '$SpecialRank'
 				WHERE UserID = '$UserID'");
 			G::$Cache->delete_value("donor_info_$UserID");
 		}

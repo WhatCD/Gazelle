@@ -92,13 +92,11 @@ only one statement.
 In loops and conditional blocks, the statement(s) shall be placed on the
 following lines.
 
-When opening a PHP statement, `<?` shall be used instead of `<?php`.
+When opening a PHP statement, `<?` shall be used instead of `<?php`. In
+other words, use PHP's short tags.
 
 Switch cases in index files shall not contain substantial code. The use
 of include statements is acceptable.
-
-When building strings in PHP, single quotes shall be used when not
-printing a variable.
 
 When declaring JavaScript variables, `var` shall always be used.
 

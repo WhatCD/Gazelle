@@ -21,18 +21,7 @@ if ($UserID == $LoggedUser['ID']) {
 	$Preview = 0;
 }
 $EnabledRewards = Donations::get_enabled_rewards($UserID);
-$Rewards = Donations::get_rewards($UserID);
 $ProfileRewards = Donations::get_profile_rewards($UserID);
-$AvatarMouseOverText = '';
-$SecondAvatar = '';
-if ($EnabledRewards['HasAvatarMouseOverText'] && !empty($Rewards['AvatarMouseOverText'])) {
-	$AvatarMouseOverText = " title=\"$Rewards[AvatarMouseOverText]\" alt=\"$Rewards[AvatarMouseOverText]\"";
-} else {
-	$AvatarMouseOverText = " alt=\"\"";
-}
-if ($EnabledRewards['HasSecondAvatar'] && !empty($Rewards['SecondAvatar'])) {
-	$SecondAvatar = ' data-gazelle-second-avatar="' . ImageTools::process($Rewards['SecondAvatar']) . '"';
-}
 
 
 
@@ -248,15 +237,11 @@ if (check_perms('admin_clear_cache') && check_perms('users_override_paranoia')) 
 	<div class="sidebar">
 <?
 if ($Avatar && Users::has_avatars_enabled()) {
-	// TODO: use Users::show_avatar; why is display_str() used a few lines below (where avatar is displayed)?
-	if (check_perms('site_proxy_images') && !empty($Avatar)) {
-		$Avatar = 'http'.($SSL ? 's' : '').'://'.SITE_URL.'/image.php?c=1&amp;avatar='.$UserID.'&amp;i='.urlencode($Avatar);
-	}
 ?>
 		<div class="box box_image box_image_avatar">
 			<div class="head colhead_dark">Avatar</div>
 			<div align="center">
-				<img class="avatar double_avatar" src="<?=display_str($Avatar)?>" width="150" style="max-height: 400px;"<?=$AvatarMouseOverText?><?=$SecondAvatar?> />
+<?=				Users::show_avatar($Avatar, $UserID, $Username, $HeavyInfo['DisableAvatars'])?>
 			</div>
 		</div>
 <?
@@ -586,25 +571,29 @@ if ($RatioWatchEnds != '0000-00-00 00:00:00'
 			<div class="head">Ratio watch</div>
 			<div class="pad">This user is currently on ratio watch and must upload <?=Format::get_size(($Downloaded * $RequiredRatio) - $Uploaded)?> in the next <?=time_diff($RatioWatchEnds)?>, or their leeching privileges will be revoked. Amount downloaded while on ratio watch: <?=Format::get_size($Downloaded - $RatioWatchDownload)?></div>
 		</div>
-<? } ?>
+<?
+}
+?>
 		<div class="box">
 			<div class="head">
 				<?=!empty($InfoTitle) ? $InfoTitle : 'Profile';?>
 				<span style="float: right;"><a href="#" onclick="$('#profilediv').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
 			</div>
 			<div class="pad" id="profilediv">
-<?	if (!$Info) { ?>
+<?
+if (!$Info) {
+?>
 				This profile is currently empty.
 <?
-	} else {
-		echo $Text->full_format($Info);
-	}
-
+} else {
+	echo $Text->full_format($Info);
+}
 ?>
 			</div>
 		</div>
-<? DonationsView::render_profile_rewards($EnabledRewards, $ProfileRewards); ?>
 <?
+DonationsView::render_profile_rewards($EnabledRewards, $ProfileRewards);
+
 if (check_paranoia_here('snatched')) {
 	$RecentSnatches = $Cache->get_value("recent_snatches_$UserID");
 	if ($RecentSnatches === false) {
@@ -628,7 +617,7 @@ if (check_paranoia_here('snatched')) {
 		foreach ($RecentSnatches as $Key => $SnatchInfo) {
 			$RecentSnatches[$Key]['Artist'] = Artists::display_artists($Artists[$SnatchInfo['ID']], false, true);
 		}
-		$Cache->cache_value('recent_snatches_'.$UserID, $RecentSnatches, 0); //inf cache
+		$Cache->cache_value("recent_snatches_$UserID", $RecentSnatches, 0); //inf cache
 	}
 	if (!empty($RecentSnatches)) {
 ?>

@@ -350,7 +350,7 @@ if (isset($_POST['resetpasskey'])) {
 	$OldPassKey = db_string($UserInfo['torrent_pass']);
 	$NewPassKey = db_string(Users::make_secret());
 	$ChangerIP = db_string($LoggedUser['IP']);
-	$SQL .= ",m.torrent_pass='$NewPassKey'";
+	$SQL .= ",m.torrent_pass = '$NewPassKey'";
 	$DB->query("
 		INSERT INTO users_history_passkeys
 			(UserID, OldPassKey, NewPassKey, ChangerIP, ChangeTime)
@@ -364,7 +364,7 @@ if (isset($_POST['resetpasskey'])) {
 	Tracker::update_tracker('change_passkey', array('oldpasskey' => $OldPassKey, 'newpasskey' => $NewPassKey));
 }
 
-$SQL .= "WHERE m.ID='".db_string($UserID)."'";
+$SQL .= "WHERE m.ID = '".db_string($UserID)."'";
 $DB->query($SQL);
 
 if ($ResetPassword) {

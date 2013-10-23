@@ -49,6 +49,19 @@ class ImageTools {
 	);
 
 	/**
+	 * Array of user IDs whose avatars have been checked for size
+	 * @var array $CheckedAvatars
+	 */
+	private static $CheckedAvatars = array();
+	private static $CheckedAvatars2 = array();
+
+	/**
+	 * Array of user IDs whose donor icons have been checked for size
+	 * @var array $CheckedDonorIcons
+	 */
+	private static $CheckedDonorIcons = array();
+
+	/**
 	 * Checks from our list of valid hosts
 	 * @param string $Host Domain/host to check
 	 * @return boolean
@@ -151,23 +164,43 @@ class ImageTools {
 	/**
 	 * Create image proxy URL
 	 * @param string $Url image URL
+	 * @param bool/string $CheckSize - accepts one of false, "avatar", "avatar2", or "donoricon"
+	 * @param bool/string/number $UserID - user ID for avatars and donor icons
 	 * @return image proxy URL
 	 */
-	public static function proxy_url($Url) {
+	public static function proxy_url($Url, $CheckSize, $UserID, &$ExtraInfo) {
 		global $SSL;
-		return ($SSL ? 'https' : 'http') . '://' . SITE_URL . '/image.php?c=1&amp;i=' . urlencode($Url);
+
+		if ($UserID) {
+			$ExtraInfo = "&amp;userid=$UserID";
+			if ($CheckSize === 'avatar' && !isset(self::$CheckedAvatars[$UserID])) {
+				$ExtraInfo .= "&amp;type=$CheckSize";
+				self::$CheckedAvatars[$UserID] = true;
+			} elseif ($CheckSize === 'avatar2' && !isset(self::$CheckedAvatars2[$UserID])) {
+				$ExtraInfo .= "&amp;type=$CheckSize";
+				self::$CheckedAvatars2[$UserID] = true;
+			} elseif ($CheckSize === 'donoricon' && !isset(self::$CheckedDonorIcons[$UserID])) {
+				$ExtraInfo .= "&amp;type=$CheckSize";
+				self::$CheckedDonorIcons[$UserID] = true;
+			}
+		}
+
+		return ($SSL ? 'https' : 'http') . '://' . SITE_URL . "/image.php?c=1&amp;i=" . urlencode($Url);
 	}
 
 	/**
 	 * Determine the image URL. This takes care of the image proxy and thumbnailing.
 	 * @param string $Url
 	 * @param bool $Thumb
+	 * @param bool/string $CheckSize - accepts one of false, "avatar", "avatar2", or "donoricon"
+	 * @param bool/string/number $UserID - user ID for avatars and donor icons
 	 * @return string
 	 */
-	public static function process($Url, $Thumb = false) {
+	public static function process($Url, $Thumb = false, $CheckSize = false, $UserID = false) {
 		if (empty($Url)) {
 			return '';
 		}
+
 		if ($Found = self::get_stored($Url . ($Thumb ? '_thumb' : ''))) {
 			return $Found;
 		}
@@ -184,12 +217,12 @@ class ImageTools {
 			}
 		}
 
+		$ExtraInfo = '';
 		if (check_perms('site_proxy_images')) {
-			$ProcessedUrl = self::proxy_url($ProcessedUrl);
+			$ProcessedUrl = self::proxy_url($ProcessedUrl, $CheckSize, $UserID, $ExtraInfo);
 		}
-
 		self::store($Url . ($Thumb ? '_thumb' : ''), $ProcessedUrl);
-		return $ProcessedUrl;
+		return $ProcessedUrl . $ExtraInfo;
 	}
 
 	/**

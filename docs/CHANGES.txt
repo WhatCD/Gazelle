@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2013-10-22 by alderaan
+Second avatars and donor icons will now be automatically reset by the image proxy if they are too large
+
 2013-10-17 by porkpie
 Load notifications without an Ajax request
 

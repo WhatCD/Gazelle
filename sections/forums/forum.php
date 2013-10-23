@@ -29,8 +29,8 @@ list($Page, $Limit) = Format::page_limit(TOPICS_PER_PAGE);
 
 //---------- Get some data to start processing
 
-// Caching anything beyond the first page of any given forum is just wasting ram
-// users are more likely to search then to browse to page 2
+// Caching anything beyond the first page of any given forum is just wasting RAM.
+// Users are more likely to search than to browse to page 2.
 if ($Page == 1) {
 	list($Forum,,,$Stickies) = $Cache->get_value("forums_$ForumID");
 }

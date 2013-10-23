@@ -80,10 +80,10 @@ View::show_header($Title);
 			</td>
 			<td style="word-wrap: break-word;">
 <?		if (!empty($User['CustomIcon'])) { ?>
-				<img src="<?=ImageTools::process($User['CustomIcon'])?>" width="15" height="13" alt="" />
+				<img src="<?=ImageTools::process($User['CustomIcon'], false, 'donoricon', $User['UserID'])?>" width="15" height="13" alt="" />
 <?		} ?>
-			</td
->			<td style="word-wrap: break-word;">
+			</td>
+			<td style="word-wrap: break-word;">
 				<?=$User['CustomIconLink']?>
 			</td>
 			<td style="word-wrap: break-word;">

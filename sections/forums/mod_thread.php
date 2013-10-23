@@ -29,9 +29,9 @@ authorize();
 // Variables for database input
 
 $TopicID = (int)$_POST['threadid'];
-$Sticky = (isset($_POST['sticky'])) ? 1 : 0;
-$Locked = (isset($_POST['locked'])) ? 1 : 0;
-$Ranking = (int) $_POST['ranking'];
+$Sticky = isset($_POST['sticky']) ? 1 : 0;
+$Locked = isset($_POST['locked']) ? 1 : 0;
+$Ranking = (int)$_POST['ranking'];
 if (!$Sticky && $Ranking > 0) {
 	$Ranking = 0;
 } elseif (0 > $Ranking) {
@@ -120,7 +120,7 @@ if (isset($_POST['delete'])) {
 			LastPostID = '$NewLastPostID',
 			LastPostAuthorID = '$NewLastAuthorID',
 			LastPostTime = '$NewLastAddedTime'
-		WHERE ID='$ForumID'");
+		WHERE ID = '$ForumID'");
 
 	$Cache->delete_value("thread_$TopicID");
 
@@ -181,9 +181,12 @@ if (isset($_POST['delete'])) {
 			ForumID = '$ForumID'
 		WHERE ID = '$TopicID'");
 
+	// always clear cache when editing a thread.
+	// if a thread title, etc. is changed, this cache key must be cleared so the thread listing
+	//		properly shows the new thread title.
+	$Cache->delete_value("forums_$ForumID");
 
 	if ($ForumID != $OldForumID) { // If we're moving a thread, change the forum stats
-		$Cache->delete_value("forums_$ForumID");
 		$Cache->delete_value("forums_$OldForumID");
 
 		$DB->query("
@@ -270,7 +273,8 @@ if (isset($_POST['delete'])) {
 					SELECT COUNT(pp.ID)
 					FROM forums_posts AS pp
 						JOIN forums_topics AS tt ON pp.TopicID = tt.ID
-					WHERE tt.ForumID = '$ForumID')
+					WHERE tt.ForumID = '$ForumID'
+				)
 				FROM forums_topics AS t
 					JOIN forums_posts AS p ON p.ID = t.LastPostID
 					LEFT JOIN users_main AS um ON um.ID = p.AuthorID
@@ -346,7 +350,7 @@ if (isset($_POST['delete'])) {
 		case 'editing':
 			if ($OldTitle != $RawTitle) {
 				// title edited
-				$TopicNotes[] = "Title edited from '$OldTitle' to '$RawTitle'";
+				$TopicNotes[] = "Title edited from \"$OldTitle\" to \"$RawTitle\"";
 			}
 			if ($OldLocked != $Locked) {
 				if (!$OldLocked) {
@@ -363,7 +367,7 @@ if (isset($_POST['delete'])) {
 				}
 			}
 			if ($OldRanking != $Ranking) {
-				$TopicNotes[] = "Ranking changed from $OldRanking to $Ranking";
+				$TopicNotes[] = "Ranking changed from \"$OldRanking\" to \"$Ranking\"";
 			}
 			if ($ForumID != $OldForumID) {
 				$TopicNotes[] = "Moved from [url=https://" . SSL_SITE_URL . "/forums.php?action=viewforum&forumid=$OldForumID]${OldForumName}[/url] to [url=https://" . SSL_SITE_URL . "/forums.php?action=viewforum&forumid=$ForumID]${ForumName}[/url]";
@@ -371,7 +375,7 @@ if (isset($_POST['delete'])) {
 			break;
 		case 'trashing':
 			$TopicNotes[] = 'Trashed';
-			$Notification = "Your thread '$NewLastTitle' has been trashed";
+			$Notification = "Your thread \"$NewLastTitle\" has been trashed";
 			break;
 		default:
 			break;
