@@ -36,7 +36,7 @@ class Top10View {
 
 	private static function get_selected_link($String, $Selected) {
 		if ($Selected) {
-			return "<strong>" . $String . "</strong>";
+			return "<strong>$String</strong>";
 		} else {
 			return $String;
 		}
@@ -87,11 +87,11 @@ class Top10View {
 		if (!empty($Image)) {
 			$UseTooltipster = !isset(G::$LoggedUser['Tooltipster']) || G::$LoggedUser['Tooltipster'];
 			$Image = ImageTools::process($Image);
-			$Title = "title=\"&lt;img class=&quot;large_tile&quot; src=&quot;$Image&quot; alt=&quot;&quot; />\"";
+			$Title = "title=\"&lt;img class=&quot;large_tile&quot; src=&quot;$Image&quot; alt=&quot;&quot; /&gt;\"";
 			$Name = display_str($Name);
 ?>
 			<li>
-				<a class="tooltip_image" <?=$Title?> href="<?=$Url?><?=$Name?>"><?=$Name?></a>
+				<a class="tooltip_image" data-title-plain="<?=$Name?>" <?=$Title?> href="<?=$Url?><?=$Name?>"><?=$Name?></a>
 			</li>
 <?
 		}

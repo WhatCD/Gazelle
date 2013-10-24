@@ -1107,11 +1107,3 @@ div[class~=tooltipster-content] > a {
 .vote_tag_down, .vote_artist_down, .vote_album_down, .small_downvote, .small_downvoted {
 	color: red;
 }
-
-.reportsv2_views_table {
-	width: 100%;
-}
-
-.reportsv2_views_container {
-	width: 100%;
-}

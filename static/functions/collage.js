@@ -14,7 +14,7 @@ function Cancel() {
 	var e=document.getElementsByTagName("input");
 	for (i = 0; i < e.length; i++) {
 		if (e[i].type == "checkbox") {
-			e[i].checked=false;
+			e[i].checked = false;
 		}
 	}
 	document.getElementById("choices").raw().value = "";
@@ -46,13 +46,13 @@ var collageShow = {
 	createUL:function(data) {
 		var ul = document.createElement('ul');
 		$(ul).add_class('collage_images');
-		ul.id = 'collage_page'+this.pg;
+		ul.id = 'collage_page' + this.pg;
 		$(ul).html(data);
 		this.wrap.appendChild(ul);
 		return ul;
 	},
-	page:function(num,el) {
-		var ul = $('#collage_page'+num).raw(), s = this.selected(), covers, lists, i;
+	page:function(num, el) {
+		var ul = $('#collage_page' + num).raw(), s = this.selected(), covers, lists, i;
 		this.pg = num;
 
 		if (!ul) {
@@ -127,6 +127,6 @@ var collageShow = {
 		this.pager();
 	},
 	pager:function() {
-		this.page(this.pg,$('#pagelink'+this.pg).raw().firstChild);
+		this.page(this.pg, $('#pagelink' + this.pg).raw().firstChild);
 	}
 };

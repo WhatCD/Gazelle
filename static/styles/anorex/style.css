@@ -394,7 +394,7 @@ p.min_padding {
 	padding: 4px;
 	background: #b78234 url(images/woodnavcenter.png) repeat-x;
 	border-bottom: 1px solid #65430F;
-	font-weight:bold;
+	font-weight: bold;
 }
 
 .body {
@@ -858,6 +858,24 @@ div[class~=tooltipster-content] > a {
 	font-weight: normal;
 }
 
-.reportsv2_views_table {
-	width: 100%;
+/* get rid of extraneous padding in the Top Contributors box */
+#request_top_contrib {
+	border: none;
+}
+#request_top_contrib tr:first-child th {
+	border-top: 0;
+}
+#request_top_contrib tr:last-child td {
+	border-bottom: 0;
+}
+#request_top_contrib tr td:first-child,
+#request_top_contrib tr th:first-child,
+#request_top_contrib tr td:nth-child(2),
+#request_top_contrib tr th:nth-child(2) {
+	border-left: 0;
+	border-top: 0;
+}
+#request_top_contrib tr td:last-child,
+#request_top_contrib tr th:last-child {
+	border-right: 0;
 }

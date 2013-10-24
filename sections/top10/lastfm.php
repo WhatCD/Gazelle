@@ -5,10 +5,10 @@ define('LIMIT', 100);
 //$Limit = in_array($Limit, array(100, 250, 500)) ? $Limit : 100;
 
 
-$Category = isset($_GET['category']) ? ($_GET['category']) : 'weekly';
+$Category = isset($_GET['category']) ? $_GET['category'] : 'weekly';
 $Category = in_array($Category, array('all_time', 'weekly', 'hyped')) ? $Category : 'weekly';
 
-$View = isset($_GET['view']) ? ($_GET['view']) : 'tiles';
+$View = isset($_GET['view']) ? $_GET['view'] : 'tiles';
 $View = in_array($View, array('tiles', 'list')) ? $View : 'tiles';
 
 switch ($Category) {
@@ -35,18 +35,20 @@ View::show_header("Last.fm", "jquery.imagesloaded,jquery.wookmark,top10", "tiles
 		<div class="tiles_container">
 			<ul class="tiles">
 <?
-				foreach ($Artists as $Artist) {
-					Top10View::render_artist_tile($Artist, $Category);
-				} ?>
+		foreach ($Artists as $Artist) {
+				Top10View::render_artist_tile($Artist, $Category);
+		}
+?>
 			</ul>
 		</div>
 <?	} else { ?>
 		<div class="list_container">
 			<ul class="top_artist_list">
 <?
-				foreach ($Artists as $Artist) {
-					Top10View::render_artist_list($Artist, $Category);
-				} ?>
+		foreach ($Artists as $Artist) {
+				Top10View::render_artist_list($Artist, $Category);
+		}
+?>
 			</ul>
 		</div>
 <?	} ?>

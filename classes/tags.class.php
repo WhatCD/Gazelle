@@ -81,7 +81,7 @@ class Tags {
 	 * @param string $Primary
 	 */
 	public function set_primary($Primary) {
-		$this->Primary = (string) $Primary;
+		$this->Primary = (string)$Primary;
 	}
 
 	/**

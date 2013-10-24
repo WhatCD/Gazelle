@@ -1,5 +1,20 @@
 CHANGE LOG
 
+2013-10-24 by alderaan
+Layer Cake CSS now has a wider table of torrents on torrents.php
+
+2013-10-23 by alderaan
+Use less granular times and prevent word wrapping of datetimes in requests list
+
+2013-10-23 by alderaan
+When viewing the bookmarked requests page, don't show the requests search box if you have 0 bookmarked requests.
+
+2013-10-23 by alderaan
+On the bookmarked torrents page, if you have no bookmarked torrents with artists, display a message in "Top Artists" and always show "Artists: 0"
+
+2013-10-23 by alderaan
+Fix several bugs with unstyled tooltips (mostly caused by missing data-title-plain attributes)
+
 2013-10-22 by alderaan
 Second avatars and donor icons will now be automatically reset by the image proxy if they are too large
 

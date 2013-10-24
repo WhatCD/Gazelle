@@ -139,7 +139,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 			$LastRemasterCatalogueNumber = $Torrent['RemasterCatalogueNumber'];
 			$LastMedia = $Torrent['Media'];
 ?>
-<tr class="group_torrent torrent_row groupid_<?=$GroupID?> edition_<?=$EditionID?><?=$SnatchedTorrentClass . $SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] === 1 ? ' hidden' : '')?>">
+	<tr class="group_torrent torrent_row groupid_<?=$GroupID?> edition_<?=$EditionID?><?=$SnatchedTorrentClass . $SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] === 1 ? ' hidden' : '')?>">
 		<td colspan="3">
 			<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
 <?			if (Torrents::can_use_token($Torrent)) { ?>
@@ -223,11 +223,12 @@ foreach ($TorrentList as $GroupID => $Group) {
 		$DisplayName = "$DisplayName [$GroupYear]";
 	}
 	$Tags = display_str($TorrentTags->format());
+	$PlainTags = implode(', ', $TorrentTags->get_tags());
 ?>
 		<li class="image_group_<?=$GroupID?>">
 			<a href="torrents.php?id=<?=$GroupID?>" class="bookmark_<?=$GroupID?>">
 <?	if ($WikiImage) { ?>
-				<img class="tooltip_interactive" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?> <br /> <?=$Tags?>" width="117" />
+				<img class="tooltip_interactive" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?> <br /> <?=$Tags?>" data-title-plain="<?="$DisplayName ($PlainTags)"?>" width="118" />
 <?	} else { ?>
 				<div style="width: 107px; padding: 5px;"><?=$DisplayName?></div>
 <?	} ?>
@@ -280,13 +281,11 @@ View::show_header($Title, 'browse,collage');
 			<div class="head"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
 				<li>Torrents: <?=$NumGroups?></li>
-<? if (count($ArtistCount) > 0) { ?>
 				<li>Artists: <?=count($ArtistCount)?></li>
-<? } ?>
 			</ul>
 		</div>
 		<div class="box box_tags">
-			<div class="head"><strong>Top tags</strong></div>
+			<div class="head"><strong>Top Tags</strong></div>
 			<div class="pad">
 				<ol style="padding-left: 5px;">
 <? Tags::format_top(5) ?>
@@ -294,23 +293,30 @@ View::show_header($Title, 'browse,collage');
 			</div>
 		</div>
 		<div class="box box_artists">
-			<div class="head"><strong>Top artists</strong></div>
+			<div class="head"><strong>Top Artists</strong></div>
 			<div class="pad">
-				<ol style="padding-left: 5px;">
 <?
-uasort($ArtistCount, 'compare');
-$i = 0;
-foreach ($ArtistCount as $ID => $Artist) {
-	$i++;
-	if ($i > 10) {
-		break;
-	}
+	$Indent = "\t\t\t\t";
+	if (count($ArtistCount) > 0) {
+		echo "$Indent<ol style=\"padding-left: 5px;\">\n";
+		uasort($ArtistCount, 'compare');
+		$i = 0;
+		foreach ($ArtistCount as $ID => $Artist) {
+			$i++;
+			if ($i > 10) {
+				break;
+			}
 ?>
 					<li><a href="artist.php?id=<?=$ID?>"><?=display_str($Artist['name'])?></a> (<?=$Artist['count']?>)</li>
 <?
-}
+		}
+		echo "$Indent</ol>\n";
+	} else {
+		echo "$Indent<ul class=\"nobullet\" style=\"padding-left: 5px;\">\n";
+		echo "$Indent\t<li>There are no artists to display.</li>\n";
+		echo "$Indent</ul>\n";
+	}
 ?>
-				</ol>
 			</div>
 		</div>
 	</div>
@@ -324,16 +330,17 @@ if ($CollageCovers !== 0) { ?>
 	$Page1 = array_slice($Collage, 0, $CollageCovers);
 	foreach ($Page1 as $Group) {
 		echo $Group;
-} ?>
+	}
+?>
 			</ul>
 		</div>
-<?		if ($NumGroups > $CollageCovers) { ?>
+<?	if ($NumGroups > $CollageCovers) { ?>
 		<div class="linkbox pager" style="clear: left;" id="pageslinksdiv">
 			<span id="firstpage" class="invisible"><a href="#" class="pageslink" onclick="collageShow.page(0, this); return false;">&lt;&lt; First</a> | </span>
 			<span id="prevpage" class="invisible"><a href="#" id="prevpage" class="pageslink" onclick="collageShow.prevPage(); return false;">&lt; Prev</a> | </span>
-<?			for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
+<?		for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) { ?>
 			<span id="pagelink<?=$i?>" class="<?=(($i > 4) ? 'hidden' : '')?><?=(($i === 0) ? ' selected' : '')?>"><a href="#" class="pageslink" onclick="collageShow.page(<?=$i?>, this); return false;"><?=($CollageCovers * $i + 1)?>-<?=min($NumGroups, $CollageCovers * ($i + 1))?></a><?=(($i !== ceil($NumGroups / $CollageCovers) - 1) ? ' | ' : '')?></span>
-<?			} ?>
+<?		} ?>
 			<span id="nextbar" class="<?=(($NumGroups / $CollageCovers > 5) ? 'hidden' : '')?>"> | </span>
 			<span id="nextpage"><a href="#" class="pageslink" onclick="collageShow.nextPage(); return false;">Next &gt;</a></span>
 			<span id="lastpage" class="<?=(ceil($NumGroups / $CollageCovers) === 2 ? 'invisible' : '')?>"> | <a href="#" id="lastpage" class="pageslink" onclick="collageShow.page(<?=(ceil($NumGroups / $CollageCovers) - 1)?>, this); return false;">Last &gt;&gt;</a></span>
@@ -341,8 +348,10 @@ if ($CollageCovers !== 0) { ?>
 		<script type="text/javascript">
 			collageShow.init(<?=json_encode($CollagePages)?>);
 		</script>
-<?		}
-} ?>
+<?
+	}
+}
+?>
 		<table class="torrent_table grouping cats" id="torrent_table">
 			<tr class="colhead_dark">
 				<td><!-- expand/collapse --></td>

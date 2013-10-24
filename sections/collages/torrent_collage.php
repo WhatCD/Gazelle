@@ -235,11 +235,12 @@ foreach ($TorrentList as $GroupID => $Group) {
 		$DisplayName = "$DisplayName [$GroupYear]";
 	}
 	$Tags = display_str($TorrentTags->format());
+	$PlainTags = implode(', ', $TorrentTags->get_tags());
 ?>
 				<li class="image_group_<?=$GroupID?>">
 					<a href="torrents.php?id=<?=$GroupID?>">
 <?	if ($WikiImage) { ?>
-						<img class="tooltip_interactive" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?> <br /> <?=$Tags?>" width="118" />
+						<img class="tooltip_interactive" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$DisplayName?>" title="<?=$DisplayName?> <br /> <?=$Tags?>" data-title-plain="<?="$DisplayName ($PlainTags)"?>" width="118" />
 <?	} else { ?>
 						<span style="width: 107px; padding: 5px;"><?=$DisplayName?></span>
 <?	} ?>
@@ -254,7 +255,7 @@ if (!check_perms('site_collages_delete') && ($Locked || ($MaxGroups > 0 && $NumG
 }
 
 // Silly hack for people who are on the old setting
-$CollageCovers = (isset($LoggedUser['CollageCovers']) ? $LoggedUser['CollageCovers'] : 25 * (abs($LoggedUser['HideCollage'] - 1)));
+$CollageCovers = isset($LoggedUser['CollageCovers']) ? $LoggedUser['CollageCovers'] : 25 * (abs($LoggedUser['HideCollage'] - 1));
 $CollagePages = array();
 
 // Pad it out
@@ -263,7 +264,6 @@ if ($NumGroups > $CollageCovers) {
 		$Collage[] = '<li></li>';
 	}
 }
-
 
 for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) {
 	$Groups = array_slice($Collage, $i * $CollageCovers, $CollageCovers);
@@ -324,7 +324,7 @@ View::show_header($Name, 'browse,collage,bbcode,voting,recommend');
 <?
 if (check_perms('zip_downloader')) {
 	if (isset($LoggedUser['Collector'])) {
-		list($ZIPList,$ZIPPrefs) = $LoggedUser['Collector'];
+		list($ZIPList, $ZIPPrefs) = $LoggedUser['Collector'];
 		$ZIPList = explode(':', $ZIPList);
 	} else {
 		$ZIPList = array('00', '11');
@@ -354,7 +354,7 @@ $OpenGroup = false;
 $LastGroupID = -1;
 
 foreach ($ZIPOptions as $Option) {
-	list($GroupID,$OptionID,$OptName) = $Option;
+	list($GroupID, $OptionID, $OptName) = $Option;
 
 	if ($GroupID != $LastGroupID) {
 		$LastGroupID = $GroupID;

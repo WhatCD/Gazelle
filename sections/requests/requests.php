@@ -316,7 +316,7 @@ if (!empty($_GET['page']) && is_number($_GET['page']) && $_GET['page'] > 0) {
 }
 
 $SphQLResult = $SphQL->query();
-$NumResults = $SphQLResult->get_meta('total_found');
+$NumResults = (int)$SphQLResult->get_meta('total_found');
 if ($NumResults > 0) {
 	$SphRequests = $SphQLResult->to_array('id');
 	if ($OrderBy === 'random') {
@@ -355,17 +355,22 @@ View::show_header($Title, 'requests');
 		<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
 <?	} ?>
 	</div>
+<?	if ($BookmarkView && $NumResults === 0) { ?>
+	<div class="box pad" align="center">
+		<h2>You have not bookmarked any requests.</h2>
+	</div>
+<?	} else { ?>
 	<form class="search_form" name="requests" action="" method="get">
-<?	if ($BookmarkView) { ?>
+<?		if ($BookmarkView) { ?>
 		<input type="hidden" name="action" value="view" />
 		<input type="hidden" name="type" value="requests" />
-<?	} elseif (isset($_GET['type'])) { ?>
+<?		} elseif (isset($_GET['type'])) { ?>
 		<input type="hidden" name="type" value="<?=$_GET['type']?>" />
-<?	} ?>
+<?		} ?>
 		<input type="hidden" name="submit" value="true" />
-<?	if (!empty($_GET['userid']) && is_number($_GET['userid'])) { ?>
+<?		if (!empty($_GET['userid']) && is_number($_GET['userid'])) { ?>
 		<input type="hidden" name="userid" value="<?=$_GET['userid']?>" />
-<?	} ?>
+<?		} ?>
 		<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 			<tr id="search_terms">
 				<td class="label">Search terms:</td>
@@ -387,7 +392,7 @@ View::show_header($Title, 'requests');
 					<input type="checkbox" name="show_filled"<? if (!$Submitted || !empty($_GET['show_filled']) || (!$Submitted && !empty($_GET['type']) && $_GET['type'] === 'filled')) { ?> checked="checked"<? } ?> />
 				</td>
 			</tr>
-<?	if (check_perms('site_see_old_requests')) { ?>
+<?		if (check_perms('site_see_old_requests')) { ?>
 			<tr id="include_old">
 				<td class="label">Include old:</td>
 				<td>
@@ -401,29 +406,27 @@ View::show_header($Title, 'requests');
 					<input type="text" name="requester" size="75" value="<?=display_str($_GET['requester'])?>" />
 				</td>
 			</tr>
-<?	*/} ?>
+<?		*/} ?>
 		</table>
 		<table class="layout cat_list">
 <?
-$x = 1;
-reset($Categories);
-foreach ($Categories as $CatKey => $CatName) {
-	if ($x % 8 === 0 || $x === 1) {
+		$x = 1;
+		reset($Categories);
+		foreach ($Categories as $CatKey => $CatName) {
+			if ($x % 8 === 0 || $x === 1) {
 ?>
 				<tr>
-<?	} ?>
+<?			} ?>
 					<td>
 						<input type="checkbox" name="filter_cat[<?=($CatKey + 1) ?>]" id="cat_<?=($CatKey + 1) ?>" value="1"<? if (isset($_GET['filter_cat'][$CatKey + 1])) { ?> checked="checked"<? } ?> />
 						<label for="cat_<?=($CatKey + 1) ?>"><?=$CatName?></label>
 					</td>
-<?
-	if ($x % 7 === 0) {
-?>
+<?			if ($x % 7 === 0) { ?>
 				</tr>
 <?
-	}
-	$x++;
-}
+			}
+			$x++;
+		}
 ?>
 		</table>
 		<table class="layout">
@@ -432,18 +435,18 @@ foreach ($Categories as $CatKey => $CatName) {
 				<td>
 					<input type="checkbox" id="toggle_releases" onchange="Toggle('releases', 0);"<?=(!$Submitted || !empty($ReleaseArray) && count($ReleaseArray) === count($ReleaseTypes) ? ' checked="checked"' : '') ?> /> <label for="toggle_releases">All</label>
 <?
-$i = 0;
-foreach ($ReleaseTypes as $Key => $Val) {
-	if ($i % 8 === 0) {
-		echo '<br />';
-	}
+		$i = 0;
+		foreach ($ReleaseTypes as $Key => $Val) {
+			if ($i % 8 === 0) {
+				echo '<br />';
+			}
 ?>
 					<input type="checkbox" name="releases[]" value="<?=$Key?>" id="release_<?=$Key?>"
 						<?=(!$Submitted || (!empty($ReleaseArray) && in_array($Key, $ReleaseArray)) ? ' checked="checked" ' : '')?>
 					/> <label for="release_<?=$Key?>"><?=$Val?></label>
 <?
-	$i++;
-}
+			$i++;
+		}
 ?>
 				</td>
 			</tr>
@@ -455,17 +458,15 @@ foreach ($ReleaseTypes as $Key => $Val) {
 					<input type="checkbox" id="formats_strict" name="formats_strict"<?=(!empty($_GET['formats_strict']) ? ' checked="checked"' : '')?> />
 					<label for="formats_strict">Only specified</label>
 <?
-foreach ($Formats as $Key => $Val) {
-	if ($Key % 8 === 0) {
-		echo '<br />';
-	}
+		foreach ($Formats as $Key => $Val) {
+			if ($Key % 8 === 0) {
+				echo '<br />';
+			}
 ?>
 					<input type="checkbox" name="formats[]" value="<?=$Key?>" id="format_<?=$Key?>"
 						<?=(!$Submitted || (!empty($FormatArray) && in_array($Key, $FormatArray)) ? ' checked="checked" ' : '')?>
 					/> <label for="format_<?=$Key?>"><?=$Val?></label>
-<?
-}
-?>
+<?		} ?>
 				</td>
 			</tr>
 			<tr id="bitrate_list">
@@ -476,16 +477,16 @@ foreach ($Formats as $Key => $Val) {
 					<input type="checkbox" id="bitrate_strict" name="bitrate_strict"<?=(!empty($_GET['bitrate_strict']) ? ' checked="checked"' : '') ?> />
 					<label for="bitrate_strict">Only specified</label>
 <?
-foreach ($Bitrates as $Key => $Val) {
-	if ($Key % 8 === 0) {
-		echo '<br />';
-	}
+		foreach ($Bitrates as $Key => $Val) {
+			if ($Key % 8 === 0) {
+				echo '<br />';
+			}
 ?>
 					<input type="checkbox" name="bitrates[]" value="<?=$Key?>" id="bitrate_<?=$Key?>"
 						<?=(!$Submitted || (!empty($BitrateArray) && in_array($Key, $BitrateArray)) ? ' checked="checked" ' : '')?>
 					/> <label for="bitrate_<?=$Key?>"><?=$Val?></label>
 <?
-}
+		}
 ?>
 				</td>
 			</tr>
@@ -497,17 +498,15 @@ foreach ($Bitrates as $Key => $Val) {
 					<input type="checkbox" id="media_strict" name="media_strict"<?=(!empty($_GET['media_strict']) ? ' checked="checked"' : '')?> />
 					<label for="media_strict">Only specified</label>
 <?
-foreach ($Media as $Key => $Val) {
-	if ($Key % 8 === 0) {
-		echo '<br />';
-	}
+		foreach ($Media as $Key => $Val) {
+			if ($Key % 8 === 0) {
+				echo '<br />';
+			}
 ?>
 					<input type="checkbox" name="media[]" value="<?=$Key?>" id="media_<?=$Key?>"
 						<?=(!$Submitted || (!empty($MediaArray) && in_array($Key, $MediaArray)) ? ' checked="checked" ' : '')?>
 					/> <label for="media_<?=$Key?>"><?=$Val?></label>
-<?
-}
-?>
+<?		} ?>
 				</td>
 			</tr>
 			<tr>
@@ -517,12 +516,11 @@ foreach ($Media as $Key => $Val) {
 			</tr>
 		</table>
 	</form>
-
-<? if (isset($PageLinks)) { ?>
+<?		if (isset($PageLinks)) { ?>
 	<div class="linkbox">
-		<?=$PageLinks?>
+		<?=	$PageLinks?>
 	</div>
-<? } ?>
+<?		} ?>
 	<table id="request_table" class="request_table border" cellpadding="6" cellspacing="1" border="0" width="100%">
 		<tr class="colhead_dark">
 			<td style="width: 38%;" class="nobr">
@@ -550,19 +548,24 @@ foreach ($Media as $Key => $Val) {
 				<a href="?order=lastvote&amp;sort=<?=($OrderBy === 'lastvote' ? $NewSort : 'desc')?>&amp;<?=$CurrentURL?>"><strong>Last vote</strong></a>
 			</td>
 		</tr>
-<? if ($NumResults === 0) { ?>
+<?
+		if ($NumResults === 0) {
+			// not viewing bookmarks but no requests found
+?>
 		<tr class="rowb">
 			<td colspan="8">
 				Nothing found!
 			</td>
 		</tr>
-<? } elseif ($Page === 0) { ?>
+<?		} elseif ($Page === 0) { ?>
 		<tr class="rowb">
 			<td colspan="8">
 				The requested page contains no matches!
 			</td>
 		</tr>
-<? } else {
+<?
+		} else {
+
 	$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
 	$Requests = Requests::get_requests(array_keys($SphRequests));
 	foreach ($SphRequests as $RequestID => $SphRequest) {
@@ -590,7 +593,7 @@ foreach ($Media as $Key => $Val) {
 		} elseif ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
 			$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title] [$Request[Year]]</a>";
 		} else {
-			$FullName ="<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title]</a>";
+			$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title]</a>";
 		}
 		$Tags = $Request['Tags'];
 ?>
@@ -617,9 +620,9 @@ foreach ($Media as $Key => $Val) {
 			<td class="number_column nobr">
 				<?=Format::get_size($Bounty)?>
 			</td>
-			<td>
+			<td class="nobr">
 <?		if ($IsFilled) { ?>
-				<a href="torrents.php?<?=(strtotime($Request['TimeFilled']) < $TimeCompare ? 'id=' : 'torrentid=') . $Request['TorrentID']?>"><strong><?=time_diff($Request['TimeFilled'])?></strong></a>
+				<a href="torrents.php?<?=(strtotime($Request['TimeFilled']) < $TimeCompare ? 'id=' : 'torrentid=') . $Request['TorrentID']?>"><strong><?=time_diff($Request['TimeFilled'], 1)?></strong></a>
 <?		} else { ?>
 				<strong>No</strong>
 <?		} ?>
@@ -634,16 +637,17 @@ foreach ($Media as $Key => $Val) {
 			<td>
 				<a href="user.php?id=<?=$Request['UserID']?>"><?=Users::format_username($Request['UserID'], false, false, false)?></a>
 			</td>
-			<td>
-				<?=time_diff($Request['TimeAdded'])?>
+			<td class="nobr">
+				<?=time_diff($Request['TimeAdded'], 1)?>
 			</td>
-			<td>
-				<?=time_diff($Request['LastVote'])?>
+			<td class="nobr">
+				<?=time_diff($Request['LastVote'], 1)?>
 			</td>
 		</tr>
 <?
 	} // foreach
-} // else
+		} // else
+	} // if ($BookmarkView && $NumResults < 1)
 ?>
 	</table>
 <? if (isset($PageLinks)) { ?>

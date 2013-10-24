@@ -230,11 +230,11 @@ if (check_perms('site_send_unlimited_invites')) {
 				<ul id="userinfo_stats">
 					<li id="stats_seeding">
 						<a href="torrents.php?type=seeding&amp;userid=<?=G::$LoggedUser['ID']?>">Up</a>:
-						<span class="stat" title="<?=Format::get_size(G::$LoggedUser['BytesUploaded'], 5)?>"><?=Format::get_size(G::$LoggedUser['BytesUploaded'])?></span>
+						<span class="stat tooltip" title="<?=Format::get_size(G::$LoggedUser['BytesUploaded'], 5)?>"><?=Format::get_size(G::$LoggedUser['BytesUploaded'])?></span>
 					</li>
 					<li id="stats_leeching">
 						<a href="torrents.php?type=leeching&amp;userid=<?=G::$LoggedUser['ID']?>">Down</a>:
-						<span class="stat" title="<?=Format::get_size(G::$LoggedUser['BytesDownloaded'], 5)?>"><?=Format::get_size(G::$LoggedUser['BytesDownloaded'])?></span>
+						<span class="stat tooltip" title="<?=Format::get_size(G::$LoggedUser['BytesDownloaded'], 5)?>"><?=Format::get_size(G::$LoggedUser['BytesDownloaded'])?></span>
 					</li>
 					<li id="stats_ratio">
 						Ratio: <span class="stat"><?=Format::get_ratio_html(G::$LoggedUser['BytesUploaded'], G::$LoggedUser['BytesDownloaded'])?></span>
@@ -242,7 +242,7 @@ if (check_perms('site_send_unlimited_invites')) {
 <?	if (!empty(G::$LoggedUser['RequiredRatio'])) { ?>
 					<li id="stats_required">
 						<a href="rules.php?p=ratio">Required</a>:
-						<span class="stat" title="<?=number_format(G::$LoggedUser['RequiredRatio'], 5)?>"><?=number_format(G::$LoggedUser['RequiredRatio'], 2)?></span>
+						<span class="stat tooltip" title="<?=number_format(G::$LoggedUser['RequiredRatio'], 5)?>"><?=number_format(G::$LoggedUser['RequiredRatio'], 2)?></span>
 					</li>
 <?	}
 	if (G::$LoggedUser['FLTokens'] > 0) { ?>

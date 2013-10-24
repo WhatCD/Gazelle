@@ -5,7 +5,7 @@ if (!empty($_GET['userid'])) {
 		error(403);
 	}
 	$UserID = $_GET['userid'];
-	$Sneaky = ($UserID !== $LoggedUser['ID']);
+	$Sneaky = $UserID !== $LoggedUser['ID'];
 	if (!is_number($UserID)) {
 		error(404);
 	}
@@ -18,7 +18,7 @@ if (!empty($_GET['userid'])) {
 	$UserID = $LoggedUser['ID'];
 }
 
-$Sneaky = ($UserID !== $LoggedUser['ID']);
+$Sneaky = $UserID !== $LoggedUser['ID'];
 
 //$ArtistList = Bookmarks::all_bookmarks('artist', $UserID);
 
@@ -31,7 +31,7 @@ $DB->query("
 
 $ArtistList = $DB->to_array();
 
-$Title = ($Sneaky) ? "$Username's bookmarked artists" : 'Your bookmarked artists';
+$Title = $Sneaky ? "$Username's bookmarked artists" : 'Your bookmarked artists';
 
 View::show_header($Title, 'browse');
 
@@ -48,7 +48,7 @@ View::show_header($Title, 'browse');
 	</div>
 	<div class="box pad" align="center">
 <? if (count($ArtistList) === 0) { ?>
-		<br /><h2>You have not bookmarked any artists.</h2>
+		<h2>You have not bookmarked any artists.</h2>
 	</div>
 </div><!--content-->
 <?

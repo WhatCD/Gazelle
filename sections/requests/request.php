@@ -222,7 +222,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 		</div>
 		<div class="box box_votes">
 			<div class="head"><strong>Top Contributors</strong></div>
-			<table class="layout">
+			<table class="layout" id="request_top_contrib">
 <?
 	$VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 	$ViewerVote = false;
@@ -431,33 +431,30 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 				</td>
 			</tr>
 <?	} ?>
-			<tr>
-				<td colspan="2" class="center"><strong>Description</strong></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-<?=					$Text->full_format($Request['Description']);?>
-				</td>
-			</tr>
 		</table>
+		<div class="box2 box_request_desc">
+			<div class="head"><strong>Description</strong></div>
+			<div class="pad">
+<?=				$Text->full_format($Request['Description']);?>
+			</div>
+		</div>
 <?
-
 list($NumComments, $Page, $Thread, $LastRead) = Comments::load('requests', $RequestID);
-
 ?>
-	<div class="linkbox"><a name="comments"></a>
+		<div class="linkbox">
+			<a name="comments"></a>
 <?
 $Pages = Format::get_pages($Page, $NumComments, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 echo $Pages;
 ?>
-	</div>
+		</div>
 <?
 
 //---------- Begin printing
 CommentsView::render_comments($Thread, $LastRead, "requests.php?action=view&amp;id=$RequestID");
 
 if ($Pages) { ?>
-	<div class="linkbox pager"><?=$Pages?></div>
+		<div class="linkbox pager"><?=$Pages?></div>
 <?
 }
 

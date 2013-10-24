@@ -929,7 +929,3 @@ tr.torrent .bookmark > a:after { color:#999; }
 .vote_tag_down, .vote_artist_down, .vote_album_down, .small_downvote, .small_downvoted {
 	color: red;
 }
-
-.reportsv2_views_table {
-	width: 100%;
-}

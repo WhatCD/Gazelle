@@ -332,6 +332,11 @@ input.hidden {
 	margin: 0px auto;
 }
 
+.widethin { /* overriding the thin class on torrents.php */
+	width: 95% !important;
+	margin: 0px auto;
+}
+
 #userinfo_major .brackets:before {
 	font-weight: bold;
 }
@@ -442,7 +447,6 @@ table {
 }
 
 tr {
-	border: 1px solid #666666;
 	background-color: #EEE;
 }
 
@@ -795,6 +799,10 @@ tr.torrent .bookmark > a:after {
 	width: 600px;
 }
 
+.brackets {
+	font-weight: normal;
+}
+
 div[class~=tooltipster-content] > a {
 	color: #AAAAAA;
 }
@@ -811,6 +819,24 @@ div[class~=tooltipster-content] > a {
 	color: red;
 }
 
-.reportsv2_views_table {
-	width: 100%;
+/* get rid of extraneous padding in the Top Contributors box */
+#request_top_contrib {
+	border: none;
+}
+#request_top_contrib tr:first-child th {
+	border-top: 0;
+}
+#request_top_contrib tr:last-child td {
+	border-bottom: 0;
+}
+#request_top_contrib tr td:first-child,
+#request_top_contrib tr th:first-child,
+#request_top_contrib tr td:nth-child(2),
+#request_top_contrib tr th:nth-child(2) {
+	border-left: 0;
+	border-top: 0;
+}
+#request_top_contrib tr td:last-child,
+#request_top_contrib tr th:last-child {
+	border-right: 0;
 }
