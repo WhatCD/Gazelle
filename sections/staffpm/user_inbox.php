@@ -46,7 +46,7 @@ if (!$DB->has_results()) {
 			<h3>Open messages</h3>
 			<table class="message_table checkboxes">
 				<tr class="colhead">
-					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform',this)" /></td>
+					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform', this);" /></td>
 					<td width="50%">Subject</td>
 					<td>Date</td>
 					<td>Assigned to</td>
@@ -59,8 +59,8 @@ if (!$DB->has_results()) {
 		if ($Unread === '1') {
 			$RowClass = 'unreadpm';
 		} else {
-			$Row = (($Row === 'a') ? 'b' : 'a');
-			$RowClass = 'row'.$Row;
+			$Row = $Row === 'a' ? 'b' : 'a';
+			$RowClass = "row$Row";
 		}
 
 		if ($Status == 'Resolved') {

@@ -437,7 +437,7 @@ foreach ($Categories as $CatKey => $CatName) {
 				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Title</a>";
 			}
 
-			$Row = (($Row === 'a') ? 'b' : 'a');
+			$Row = $Row === 'a' ? 'b' : 'a';
 
 			$Tags = Requests::get_tags($RequestID);
 ?>

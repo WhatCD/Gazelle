@@ -553,7 +553,7 @@ class Format {
 		if (empty($class)) {
 			$class = self::find_torrent_label_class($text);
 		}
-		return sprintf('<strong class="torrent_label %1$s" title="%2$s">%2$s</strong>',
+		return sprintf('<strong class="torrent_label %1$s" title="%2$s" style="white-space: nowrap;">%2$s</strong>',
 				display_str($class), display_str($text));
 	}
 

@@ -274,6 +274,7 @@ View::show_header(($BookmarkView) ? 'Your bookmarked collages' : 'Browse collage
 <?		} ?>
 		<a href="collages.php?userid=<?=$LoggedUser['ID']?>" class="brackets">Collages you started</a>
 		<a href="collages.php?userid=<?=$LoggedUser['ID']?>&amp;contrib=1" class="brackets">Collages you contributed to</a>
+		<br /><br />
 <?	} else { ?>
 		<a href="bookmarks.php?type=torrents" class="brackets">Torrents</a>
 		<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
@@ -332,7 +333,7 @@ foreach ($Collages as $Collage) {
 		</td>
 		<td class="number_column"><?=number_format((int)$NumTorrents)?></td>
 		<td class="number_column"><?=number_format((int)$Subscribers)?></td>
-		<td><?=time_diff($Updated)?></td>
+		<td class="nobr"><?=time_diff($Updated)?></td>
 		<td><?=Users::format_username($UserID, false, false, false)?></td>
 	</tr>
 <?

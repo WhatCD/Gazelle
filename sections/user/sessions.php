@@ -17,7 +17,7 @@ if (isset($_POST['all'])) {
 		DELETE FROM users_sessions
 		WHERE UserID = '$UserID'
 			AND SessionID != '$SessionID'");
-	$Cache->delete_value('users_sessions_'.$UserID);
+	$Cache->delete_value("users_sessions_$UserID");
 }
 
 if (isset($_POST['session'])) {
@@ -27,7 +27,7 @@ if (isset($_POST['session'])) {
 		DELETE FROM users_sessions
 		WHERE UserID = '$UserID'
 			AND SessionID = '".db_string($_POST['session'])."'");
-	$Cache->delete_value('users_sessions_'.$UserID);
+	$Cache->delete_value("users_sessions_$UserID");
 }
 
 $UserSessions = $Cache->get_value('users_sessions_'.$UserID);
@@ -43,7 +43,7 @@ if (!is_array($UserSessions)) {
 		WHERE UserID = '$UserID'
 		ORDER BY LastUpdate DESC");
 	$UserSessions = $DB->to_array('SessionID', MYSQLI_ASSOC);
-	$Cache->cache_value('users_sessions_'.$UserID, $UserSessions, 0);
+	$Cache->cache_value("users_sessions_$UserID", $UserSessions, 0);
 }
 
 list($UserID, $Username) = array_values(Users::user_info($UserID));
@@ -57,10 +57,10 @@ View::show_header($Username.' &gt; Sessions');
 	<div class="box pad">
 		<table cellpadding="5" cellspacing="1" border="0" class="session_table border" width="100%">
 			<tr class="colhead">
-				<td><strong>IP address</strong></td>
+				<td class="nobr"><strong>IP address</strong></td>
 				<td><strong>Browser</strong></td>
 				<td><strong>Platform</strong></td>
-				<td><strong>Last activity</strong></td>
+				<td class="nobr"><strong>Last activity</strong></td>
 				<td>
 					<form class="manage_form" name="sessions" action="" method="post">
 						<input type="hidden" name="action" value="sessions" />
@@ -74,10 +74,10 @@ View::show_header($Username.' &gt; Sessions');
 	$Row = 'a';
 	foreach ($UserSessions as $Session) {
 		list($ThisSessionID, $Browser, $OperatingSystem, $IP, $LastUpdate) = array_values($Session);
-		$Row = ($Row == 'a') ? 'b' : 'a';
+		$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 			<tr class="row<?=$Row?>">
-				<td><?=$IP?></td>
+				<td class="nobr"><?=$IP?></td>
 				<td><?=$Browser?></td>
 				<td><?=$OperatingSystem?></td>
 				<td><?=time_diff($LastUpdate)?></td>

@@ -551,12 +551,12 @@ if (check_perms('site_moderate_forums')) {
 	$Notes = G::$DB->to_array();
 ?>
 	<br />
-	<h3 id="thread_notes">Thread notes</h3>
+	<h3 id="thread_notes">Thread notes</h3> <a href="#" onclick="$('#thread_notes_table').gtoggle(); return false;" class="brackets">Toggle</a>
 	<form action="forums.php" method="post">
 		<input type="hidden" name="action" value="take_topic_notes" />
 		<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		<input type="hidden" name="topicid" value="<?=$ThreadID?>" />
-		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border">
+		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border hidden" id="thread_notes_table">
 <?
 	foreach ($Notes as $Note) {
 ?>
@@ -566,7 +566,7 @@ if (check_perms('site_moderate_forums')) {
 ?>
 			<tr>
 				<td colspan="2" class="center">
-					<div class="field_div textarea_wrap"><textarea id="topic_notes" name="body" cols="90" rows="3" onkeyup="resize('threadnotes')" style=" margin: 0px; width: 735px;"></textarea></div>
+					<div class="field_div textarea_wrap"><textarea id="topic_notes" name="body" cols="90" rows="3" onkeyup="resize('threadnotes');" style=" margin: 0px; width: 735px;"></textarea></div>
 					<input type="submit" value="Save" />
 				</td>
 			</tr>

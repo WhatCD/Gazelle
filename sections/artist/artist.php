@@ -791,7 +791,7 @@ if ($NumRequests > 0) {
 		</tr>
 <?
 	$Tags = Requests::get_tags(array_keys($Requests));
-	$Row = 0;
+	$Row = 'b';
 	foreach ($Requests as $RequestID => $Request) {
 			$CategoryName = $Categories[$Request['CategoryID'] - 1];
 			$Title = display_str($Request['Title']);
@@ -815,7 +815,7 @@ if ($NumRequests > 0) {
 				$ReqTagList = '';
 			}
 ?>
-		<tr class="row<?=($Row++ & 1 ? 'a' : 'b')?>">
+		<tr class="row<?=($Row === 'b' ? 'a' : 'b')?>">
 			<td>
 				<?=$FullName?>
 				<div class="tags"><?=$ReqTagList?></div>

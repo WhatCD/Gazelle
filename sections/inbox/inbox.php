@@ -17,12 +17,12 @@ list($Page, $Limit) = Format::page_limit(MESSAGES_PER_PAGE);
 View::show_header('Inbox');
 ?>
 <div class="thin">
-	<h2><?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?></h2>
+	<h2><?=($Section === 'sentbox' ? 'Sentbox' : 'Inbox')?></h2>
 	<div class="linkbox">
 <?
-if ($Section == 'inbox') { ?>
+if ($Section === 'inbox') { ?>
 		<a href="<?=Inbox::get_inbox_link('sentbox'); ?>" class="brackets">Sentbox</a>
-<? } elseif ($Section == 'sentbox') { ?>
+<? } elseif ($Section === 'sentbox') { ?>
 		<a href="<?=Inbox::get_inbox_link(); ?>" class="brackets">Inbox</a>
 <? }
 
@@ -30,7 +30,7 @@ if ($Section == 'inbox') { ?>
 		<br /><br />
 <?
 
-$Sort = (empty($_GET['sort']) || $_GET['sort'] != 'unread' ? 'Date DESC' : "cu.Unread = '1' DESC, DATE DESC");
+$Sort = empty($_GET['sort']) || $_GET['sort'] != 'unread' ? 'Date DESC' : "cu.Unread = '1' DESC, DATE DESC";
 
 $sql = "
 	SELECT
@@ -41,7 +41,7 @@ $sql = "
 		cu.Sticky,
 		cu.ForwardedTo,
 		cu2.UserID,";
-$sql .= (($Section == 'sentbox') ? ' cu.SentDate ' : ' cu.ReceivedDate ');
+$sql .= $Section === 'sentbox' ? ' cu.SentDate ' : ' cu.ReceivedDate ';
 $sql .= "AS Date
 	FROM pm_conversations AS c
 		LEFT JOIN pm_conversations_users AS cu ON cu.ConvID = c.ID AND cu.UserID = '$UserID'
@@ -64,7 +64,7 @@ if (!empty($_GET['search'])) {
 		$sql .= "m.Body LIKE '%".implode("%' AND m.Body LIKE '%", $Words)."%' AND ";
 	}
 }
-$sql .= (($Section == 'sentbox') ? ' cu.InSentbox' : ' cu.InInbox');
+$sql .= $Section === 'sentbox' ? ' cu.InSentbox' : ' cu.InInbox';
 $sql .= " = '1'";
 
 $sql .= "
@@ -84,9 +84,9 @@ echo "\t\t$Pages\n";
 
 	<div class="box pad">
 <? if ($Count == 0 && empty($_GET['search'])) { ?>
-	<h2>Your <?=(($Section == 'sentbox') ? 'sentbox' : 'inbox')?> is empty.</h2>
+	<h2>Your <?=($Section === 'sentbox' ? 'sentbox' : 'inbox')?> is empty.</h2>
 <? } else { ?>
-		<form class="search_form" name="<?=(($Section == 'sentbox') ? 'sentbox' : 'inbox')?>" action="inbox.php" method="get" id="searchbox">
+		<form class="search_form" name="<?=($Section === 'sentbox' ? 'sentbox' : 'inbox')?>" action="inbox.php" method="get" id="searchbox">
 			<div>
 				<input type="hidden" name="action" value="<?=$Section?>" />
 				<input type="radio" name="searchtype" value="user"<?=(empty($_GET['searchtype']) || $_GET['searchtype'] == 'user' ? ' checked="checked"' : '')?> /> User
@@ -104,9 +104,9 @@ echo "\t\t$Pages\n";
 <?			} ?>
 				</span>
 				<br />
-				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section == 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"
-						onfocus="if (this.value == 'Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>') { this.value = ''; }"
-						onblur="if (this.value == '') { this.value = 'Search <?=(($Section == 'sentbox') ? 'Sentbox' : 'Inbox')?>'; }"
+				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section === 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"
+						onfocus="if (this.value == 'Search <?=($Section === 'sentbox' ? 'Sentbox' : 'Inbox')?>') { this.value = ''; }"
+						onblur="if (this.value == '') { this.value = 'Search <?=($Section === 'sentbox' ? 'Sentbox' : 'Inbox')?>'; }"
 				/>
 			</div>
 		</form>
@@ -121,7 +121,7 @@ echo "\t\t$Pages\n";
 				<tr class="colhead">
 					<td width="10"><input type="checkbox" onclick="toggleChecks('messageform', this);" /></td>
 					<td width="50%">Subject</td>
-					<td><?=(($Section == 'sentbox') ? 'Receiver' : 'Sender')?></td>
+					<td><?=($Section === 'sentbox' ? 'Receiver' : 'Sender')?></td>
 					<td>Date</td>
 <?		if (check_perms('users_mod')) { ?>
 					<td>Forwarded to</td>
@@ -138,8 +138,8 @@ echo "\t\t$Pages\n";
 			if ($Unread === '1') {
 				$RowClass = 'unreadpm';
 			} else {
-				$Row = (($Row === 'a') ? 'b' : 'a');
-				$RowClass = 'row'.$Row;
+				$Row = $Row === 'a' ? 'b' : 'a';
+				$RowClass = "row$Row";
 			}
 ?>
 				<tr class="<?=$RowClass?>">

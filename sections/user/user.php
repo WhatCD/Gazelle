@@ -803,7 +803,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 						</td>
 					</tr>
 <?
-		$Row = 0;
+		$Row = 'a';
 		$Requests = Requests::get_requests(array_keys($SphRequests));
 		foreach ($SphRequests as $RequestID => $SphRequest) {
 			$Request = $Requests[$RequestID];
@@ -821,7 +821,7 @@ if (empty($LoggedUser['DisableRequests']) && check_paranoia_here('requestsvoted_
 				$FullName = "<a href=\"requests.php?action=view&amp;id=$RequestID\">$Request[Title]</a>";
 			}
 ?>
-					<tr class="row<?=($Row++ & 1) ? 'a' : 'b'?>">
+					<tr class="row<?=$Row === 'b' ? 'a' : 'b'?>">
 						<td>
 							<?=$FullName ?>
 							<div class="tags">

@@ -27,12 +27,12 @@ if (!$WhitelistedClients = $Cache->get_value('whitelisted_clients')) {
 	foreach ($WhitelistedClients as $Client) {
 		//list($ClientName, $Notes) = $Client;
 		list($ClientName) = $Client;
-		$Row = ($Row == 'a') ? 'b' : 'a';
+		$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 			<tr class="row<?=$Row?>">
 				<td><?=$ClientName?></td>
 			</tr>
-<? } ?>
+<?	} ?>
 		</table>
 	</div>
 

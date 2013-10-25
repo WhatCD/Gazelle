@@ -108,7 +108,7 @@ $TotalIndexSize = 0;
 $Row = 'a';
 foreach ($Tables as $Table) {
 	list($Name,$Engine,,,$Rows,$RowSize,$DataSize,,$IndexSize) = $Table;
-	$Row = ($Row == 'a') ? 'b' : 'a';
+	$Row = $Row === 'a' ? 'b' : 'a';
 
 	$TotalRows += $Rows;
 	$TotalDataSize += $DataSize;

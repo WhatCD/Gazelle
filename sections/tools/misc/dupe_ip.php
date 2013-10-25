@@ -19,14 +19,16 @@ $RS = $DB->query("
 			i.Donor,
 			i.Warned,
 			i.JoinDate,
-			(	SELECT COUNT(DISTINCT h.UserID)
+			(
+				SELECT COUNT(DISTINCT h.UserID)
 				FROM users_history_ips AS h
 				WHERE h.IP = m.IP
 			) AS Uses
 		FROM users_main AS m
 			LEFT JOIN users_info AS i ON i.UserID = m.ID
 		WHERE
-			(	SELECT COUNT(DISTINCT h.UserID)
+			(
+				SELECT COUNT(DISTINCT h.UserID)
 				FROM users_history_ips AS h
 				WHERE h.IP = m.IP
 			) >= ".IP_OVERLAPS."
@@ -54,8 +56,9 @@ if ($DB->has_results()) {
 			<td>Registered</td>
 		</tr>
 <?
+	$Row = 'b';
 	while (list($UserID, $IP, $Username, $PermissionID, $Enabled, $Donor, $Warned, $Joined, $Uses) = $DB->next_record()) {
-	$Row = ($Row == 'b') ? 'a' : 'b';
+	$Row = $Row === 'b' ? 'a' : 'b';
 ?>
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>

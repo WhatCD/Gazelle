@@ -5,7 +5,9 @@ if (!check_perms('admin_login_watch')) {
 
 if (isset($_POST['submit']) && isset($_POST['id']) && $_POST['submit'] == 'Unban' && is_number($_POST['id'])) {
 	authorize();
-	$DB->query('DELETE FROM login_attempts WHERE ID='.$_POST['id']);
+	$DB->query('
+		DELETE FROM login_attempts
+		WHERE ID = '.$_POST['id']);
 }
 
 View::show_header('Login Watch');
@@ -41,7 +43,7 @@ $DB->query('
 <?
 $Row = 'b';
 while (list($ID, $IP, $UserID, $LastAttempt, $Attempts, $BannedUntil, $Bans) = $DB->next_record()) {
-	$Row = ($Row === 'a' ? 'b' : 'a');
+	$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 		<tr class="row<?=$Row?>">
 			<td>

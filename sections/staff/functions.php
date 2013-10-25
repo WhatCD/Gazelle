@@ -14,7 +14,7 @@
  */
 function make_staff_row($Row, $ID, $Paranoia, $Class, $LastAccess, $Remark = '', $HiddenBy = 'Hidden by user') {
 	$Text = new Text;
-	$Row = ($Row == 'a') ? 'b' : 'a';
+	$Row = $Row === 'a' ? 'b' : 'a';
 
 	echo "\t\t\t<tr class=\"row$Row\">
 				<td class=\"nobr\">

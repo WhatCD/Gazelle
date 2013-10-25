@@ -639,3 +639,8 @@ tr.torrent .bookmark>a:after {
 .field_div:last-of-type {
 	margin-bottom: 0;
 }
+
+.small_label {
+	text-align: right;
+	width: auto;
+}

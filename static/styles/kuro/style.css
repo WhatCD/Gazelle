@@ -929,3 +929,8 @@ tr.torrent .bookmark > a:after { color:#999; }
 .vote_tag_down, .vote_artist_down, .vote_album_down, .small_downvote, .small_downvoted {
 	color: red;
 }
+
+/* workaround for calendar display issue */
+div.sidebar #event_div {
+	margin-left: -232px;
+}

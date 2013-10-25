@@ -40,8 +40,13 @@ $Results = $DB->to_array();
 <?
 	foreach ($Results as $Result) {
 		list($Username, $Reports) = $Result;
+		if ($Username == $LoggedUser['Username']) {
+			$RowClass = ' class="rowa"';
+		} else {
+			$RowClass = '';
+		}
 ?>
-			<tr>
+			<tr<?=$RowClass?>>
 				<td><?=$Username?></td>
 				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
@@ -72,8 +77,13 @@ $Results = $DB->to_array();
 <?
 	foreach ($Results as $Result) {
 		list($Username, $Reports) = $Result;
+		if ($Username == $LoggedUser['Username']) {
+			$RowClass = ' class="rowa"';
+		} else {
+			$RowClass = '';
+		}
 ?>
-			<tr>
+			<tr<?=$RowClass?>>
 				<td><?=$Username?></td>
 				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
@@ -104,8 +114,13 @@ $Results = $DB->to_array();
 <?
 	foreach ($Results as $Result) {
 		list($Username, $Reports) = $Result;
+		if ($Username == $LoggedUser['Username']) {
+			$RowClass = ' class="rowa"';
+		} else {
+			$RowClass = '';
+		}
 ?>
-			<tr>
+			<tr<?=$RowClass?>>
 				<td><?=$Username?></td>
 				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
@@ -134,8 +149,13 @@ $Results = $DB->to_array();
 <?
 	foreach ($Results as $Result) {
 		list($Username, $Reports) = $Result;
+		if ($Username == $LoggedUser['Username']) {
+			$RowClass = ' class="rowa"';
+		} else {
+			$RowClass = '';
+		}
 ?>
-			<tr>
+			<tr<?=$RowClass?>>
 				<td><?=$Username?></td>
 				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
@@ -147,17 +167,17 @@ $Results = $DB->to_array();
 } //if (check_perms('admin_reports')) ?>
 		<tr>
 <?
-			$DB->query("
-				SELECT u.Username,
-					count(LastPostAuthorID) as Trashed
-				FROM forums_topics as f
-					LEFT JOIN users_main as u on u.id = LastPostAuthorID
-				WHERE ForumID = 12
-				GROUP BY LastPostAuthorID
-				ORDER BY Trashed DESC
-				LIMIT 30");
-				$Results = $DB->to_array();
-				?>
+	$DB->query("
+		SELECT u.Username,
+			COUNT(LastPostAuthorID) as Trashed
+		FROM forums_topics as f
+			LEFT JOIN users_main as u on u.id = LastPostAuthorID
+		WHERE ForumID = 12
+		GROUP BY LastPostAuthorID
+		ORDER BY Trashed DESC
+		LIMIT 30");
+	$Results = $DB->to_array();
+?>
 			<td class="label"><strong>Threads trashed since the beginning of time</strong></td>
 			<td>
 				<table style="width: 50%; margin-left: auto; margin-right: auto;" class="border">
@@ -167,22 +187,28 @@ $Results = $DB->to_array();
 						<td class="head colhead_dark">Trashed</td>
 					</tr>
 <?
-				$i = 1;
-				foreach ($Results as $Result) {
-					list($Username, $Trashed) = $Result;
-						?>
-					<tr>
+	$i = 1;
+	foreach ($Results as $Result) {
+		list($Username, $Trashed) = $Result;
+		if ($Username == $LoggedUser['Username']) {
+			$RowClass = ' class="rowa"';
+		} else {
+			$RowClass = '';
+		}
+?>
+					<tr<?=$RowClass?>>
 						<td><?=$i?></td>
 						<td><?=$Username?></td>
 						<td class="number_column"><?=number_format($Trashed)?></td>
 					</tr>
 <?
-					$i++;
-				} ?>
-					</table>
-				</td>
-			</tr>
-		</table>
+		$i++;
+	}
+?>
+				</table>
+			</td>
+		</tr>
+	</table>
 </div>
 <?
 View::show_footer();

@@ -79,7 +79,7 @@ $DB->query('
 <?
 $Row = 'b';
 while (list($ID, $CategoryID, $Sort, $Name, $Description, $MinClassRead, $MinClassWrite, $MinClassCreate, $AutoLock, $AutoLockWeeks) = $DB->next_record()) {
-	$Row = ($Row === 'a' ? 'b' : 'a');
+	$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 	<tr class="row<?=$Row?>">
 		<form class="manage_form" name="forums" action="" method="post">

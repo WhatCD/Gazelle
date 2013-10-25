@@ -22,7 +22,7 @@ $DB->query('
 <?
 $Row = 'b';
 while (list($ID, $Client, $Peer_ID) = $DB->next_record()) {
-	$Row = ($Row === 'a' ? 'b' : 'a');
+	$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 <form class="manage_form" name="clients" action="" method="post">
 	<input type="hidden" name="action" value="whitelist_alter" />

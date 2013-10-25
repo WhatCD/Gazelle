@@ -52,8 +52,8 @@ class CalendarView {
 	}
 
 	public static function render_calendar($Month, $Year, $Events) {
-		$RunningDay = date('w',mktime(0, 0, 0, $Month, 1, $Year));
-		$DaysInMonth = date('t',mktime(0 ,0 ,0, $Month, 1, $Year));
+		$RunningDay = date('w', mktime(0, 0, 0, $Month, 1, $Year));
+		$DaysInMonth = date('t', mktime(0 ,0 ,0, $Month, 1, $Year));
 		$DaysThisWeek = 1;
 		$DayCounter = 0;
 		$DatesArray = array();

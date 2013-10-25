@@ -28,13 +28,13 @@ if ($_GET['id']) {
 	<table class="event_form_table">
 	<tr>
 		<tr>
-			<td class="label">Title:</td>
+			<td class="label small_label">Title:</td>
 			<td>
 				<input type="text" id="title" name="title" class="required" value="<?=$Event['Title']?>" />
 			</td>
 		</tr>
 		<tr>
-			<td class="label">Category:</td>
+			<td class="label small_label">Category:</td>
 			<td>
 				<select id="category" name="category" class="required">
 <?
@@ -47,7 +47,7 @@ if ($_GET['id']) {
 			</td>
 		</tr>
 		<tr>
-			<td class="label">Importance:</td>
+			<td class="label small_label">Importance:</td>
 			<td>
 				<select id="importance" name="importance" class="required">
 <?
@@ -60,7 +60,7 @@ if ($_GET['id']) {
 			</td>
 		</tr>
 		<tr>
-			<td class="label">Team:</td>
+			<td class="label small_label">Team:</td>
 			<td>
 				<select id="team" name="team" class="required">
 <?
@@ -73,7 +73,7 @@ if ($_GET['id']) {
 			</td>
 		</tr>
 		<tr>
-			<td class="label">Start date:</td>
+			<td class="label small_label">Start date:</td>
 			<td>
 				<input type="date" id="start_date" name="start_date" class="required"
 <?	if ($Event) { ?>
@@ -84,7 +84,7 @@ if ($_GET['id']) {
 			</td>
 		</tr>
 		<tr>
-			<td class="label">End date:</td>
+			<td class="label small_label">End date:</td>
 			<td>
 				<input type="date" id="end_date" name="end_date" class="required"
 <?	if ($Event) { ?>
@@ -95,7 +95,7 @@ if ($_GET['id']) {
 			</td>
 		</tr>
 		<tr>
-			<td class="label">Created by:</td>
+			<td class="label small_label">Created by:</td>
 			<td>
 				<?=$Event ? Users::format_username($Event['AddedBy']) : Users::format_username($LoggedUser['ID'])?>
 			</td>

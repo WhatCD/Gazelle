@@ -879,3 +879,8 @@ div[class~=tooltipster-content] > a {
 #request_top_contrib tr th:last-child {
 	border-right: 0;
 }
+
+/* workaround for calendar display issue */
+div.sidebar #event_div {
+	margin-left: -232px;
+}

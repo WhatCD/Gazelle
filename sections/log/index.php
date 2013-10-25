@@ -188,7 +188,7 @@ while (list($ID, $Message, $LogTime) = $DB->next_record()) {
 				$Message = $Message.' '.$MessageParts[$i];
 		}
 	}
-	$Row = (($Row == 'a') ? 'b' : 'a');
+	$Row = $Row === 'a' ? 'b' : 'a';
 ?>
 		<tr class="row<?=$Row?>" id="log_<?=$ID?>">
 			<td class="nobr">
