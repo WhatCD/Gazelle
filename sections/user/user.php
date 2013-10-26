@@ -257,12 +257,12 @@ if ($Avatar && Users::has_avatars_enabled()) {
 	}
 	if (($Override = check_paranoia_here('uploaded'))) {
 ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
+				<li class="tooltip<?=($Override === 2 ? ' paranoia_override' : '')?>" title="<?=Format::get_size($Uploaded, 5)?>">Uploaded: <?=Format::get_size($Uploaded)?></li>
 <?
 	}
 	if (($Override = check_paranoia_here('downloaded'))) {
 ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
+				<li class="tooltip<?=($Override === 2 ? ' paranoia_override' : '')?>" title="<?=Format::get_size($Downloaded, 5)?>">Downloaded: <?=Format::get_size($Downloaded)?></li>
 <?
 	}
 	if (($Override = check_paranoia_here('ratio'))) {
@@ -365,27 +365,27 @@ $OverallRank = UserRank::overall_score($UploadedRank, $DownloadedRank, $UploadsR
 			<div class="head colhead_dark">Percentile Rankings (hover for values)</div>
 			<ul class="stats nobullet">
 <?	if (($Override = check_paranoia_here('uploaded'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
+				<li class="tooltip<?=($Override === 2 ? ' paranoia_override' : '')?>" title="<?=Format::get_size($Uploaded)?>">Data uploaded: <?=$UploadedRank === false ? 'Server busy' : number_format($UploadedRank)?></li>
 <?
 	}
 	if (($Override = check_paranoia_here('downloaded'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
+				<li class="tooltip<?=($Override === 2 ? ' paranoia_override' : '')?>" title="<?=Format::get_size($Downloaded)?>">Data downloaded: <?=$DownloadedRank === false ? 'Server busy' : number_format($DownloadedRank)?></li>
 <?
 	}
 	if (($Override = check_paranoia_here('uploads+'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($Uploads)?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
+				<li class="tooltip<?=($Override === 2 ? ' paranoia_override' : '')?>" title="<?=number_format($Uploads)?>">Torrents uploaded: <?=$UploadsRank === false ? 'Server busy' : number_format($UploadsRank)?></li>
 <?
 	}
 	if (($Override = check_paranoia_here('requestsfilled_count'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($RequestsFilled)?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
+				<li class="tooltip<?=($Override === 2 ? ' paranoia_override' : '')?>" title="<?=number_format($RequestsFilled)?>">Requests filled: <?=$RequestRank === false ? 'Server busy' : number_format($RequestRank)?></li>
 <?
 	}
 	if (($Override = check_paranoia_here('requestsvoted_bounty'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=Format::get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
+				<li class="tooltip<?=($Override === 2 ? ' paranoia_override' : '')?>" title="<?=Format::get_size($TotalSpent)?>">Bounty spent: <?=$BountyRank === false ? 'Server busy' : number_format($BountyRank)?></li>
 <?	} ?>
-				<li title="<?=number_format($ForumPosts)?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
+				<li class="tooltip" title="<?=number_format($ForumPosts)?>">Posts made: <?=$PostRank === false ? 'Server busy' : number_format($PostRank)?></li>
 <?	if (($Override = check_paranoia_here('artistsadded'))) { ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?> title="<?=number_format($ArtistsAdded)?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
+				<li class="tooltip<?=($Override === 2 ? ' paranoia_override' : '')?>" title="<?=number_format($ArtistsAdded)?>">Artists added: <?=$ArtistsRank === false ? 'Server busy' : number_format($ArtistsRank)?></li>
 <?
 	}
 	if (check_paranoia_here(array('uploaded', 'downloaded', 'uploads+', 'requestsfilled_count', 'requestsvoted_bounty', 'artistsadded'))) { ?>
@@ -487,11 +487,11 @@ if ($ParanoiaLevel == 0) {
 	$ParanoiaLevelText = 'Very high';
 }
 ?>
-				<li>Paranoia level: <span title="<?=$ParanoiaLevel?>"><?=$ParanoiaLevelText?></span></li>
+				<li>Paranoia level: <span class="tooltip" title="<?=$ParanoiaLevel?>"><?=$ParanoiaLevelText?></span></li>
 <?	if (check_perms('users_view_email', $Class) || $OwnProfile) { ?>
 				<li>Email: <a href="mailto:<?=display_str($Email)?>"><?=display_str($Email)?></a>
 <?		if (check_perms('users_view_email', $Class)) { ?>
-					<a href="user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a>
+					<a href="user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets tooltip">S</a>
 <?		} ?>
 				</li>
 <?	}
@@ -630,7 +630,7 @@ if (check_paranoia_here('snatched')) {
 		<tr>
 <?		foreach ($RecentSnatches as $RS) { ?>
 			<td>
-				<a href="torrents.php?id=<?=$RS['ID']?>" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>">
+				<a href="torrents.php?id=<?=$RS['ID']?>">
 					<img class="tooltip" title="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" src="<?=ImageTools::process($RS['WikiImage'], true)?>" alt="<?=display_str($RS['Artist'])?><?=display_str($RS['Name'])?>" width="107" />
 				</a>
 			</td>
@@ -730,8 +730,8 @@ foreach ($Collages as $CollageInfo) {
 			$Name .= $GroupName;
 ?>
 			<td>
-				<a href="torrents.php?id=<?=$GroupID?>" title="<?=$Name?>">
-					<img class="tooltip" title="<?=$Name?>"  src="<?=ImageTools::process($C['WikiImage'], true)?>" alt="<?=$Name?>" width="107" />
+				<a href="torrents.php?id=<?=$GroupID?>">
+					<img class="tooltip" title="<?=$Name?>" src="<?=ImageTools::process($C['WikiImage'], true)?>" alt="<?=$Name?>" width="107" />
 				</a>
 			</td>
 <?	} ?>

@@ -93,6 +93,16 @@ function toggle_group(groupid, link, event) {
 	var group_rows = clickedRow.parentNode.children;
 	var showing = $(clickedRow).nextElementSibling().has_class('hidden');
 	var allGroups = event.ctrlKey;
+
+	// for dealing with Mac OS X
+	// http://stackoverflow.com/a/3922353
+	var allGroupsMac = (
+				event.keyCode == 91 // WebKit (left apple)
+				|| event.keyCode == 93 // WebKit (right apple)
+				|| event.keyCode == 224 // Firefox
+				|| event.keyCode == 17 // Opera
+				) ? 91 : null;
+
 	for (var i = 0; i < group_rows.length; i++) {
 		var row = $(group_rows[i]);
 		if (row.has_class('colhead_dark')) {
@@ -102,7 +112,7 @@ function toggle_group(groupid, link, event) {
 			continue;
 		}
 		var relevantRow = row.has_class('group') ? $(group_rows[i + 1]) : row;
-		if (allGroups || relevantRow.has_class('groupid_' + groupid)) {
+		if (allGroups || allGroupsMac || relevantRow.has_class('groupid_' + groupid)) {
 			row = $(group_rows[i]); // idk why we need this :S
 			if (row.has_class('group')) {
 				var section;

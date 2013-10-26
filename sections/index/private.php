@@ -186,7 +186,7 @@ if (($TorrentCount = $Cache->get_value('stats_torrent_count')) === false) {
 		SELECT COUNT(ID)
 		FROM torrents");
 	list($TorrentCount) = $DB->next_record();
-	$Cache->cache_value('stats_torrent_count', $TorrentCount, 0); //inf cache
+	$Cache->cache_value('stats_torrent_count', $TorrentCount, 604800); // staggered 1 week cache
 }
 
 if (($AlbumCount = $Cache->get_value('stats_album_count')) === false) {
@@ -195,7 +195,7 @@ if (($AlbumCount = $Cache->get_value('stats_album_count')) === false) {
 		FROM torrents_group
 		WHERE CategoryID = '1'");
 	list($AlbumCount) = $DB->next_record();
-	$Cache->cache_value('stats_album_count', $AlbumCount, 0); //inf cache
+	$Cache->cache_value('stats_album_count', $AlbumCount, 604830); // staggered 1 week cache
 }
 
 if (($ArtistCount = $Cache->get_value('stats_artist_count')) === false) {
@@ -203,7 +203,7 @@ if (($ArtistCount = $Cache->get_value('stats_artist_count')) === false) {
 		SELECT COUNT(ArtistID)
 		FROM artists_group");
 	list($ArtistCount) = $DB->next_record();
-	$Cache->cache_value('stats_artist_count', $ArtistCount, 0); //inf cache
+	$Cache->cache_value('stats_artist_count', $ArtistCount, 604860); // staggered 1 week cache
 }
 
 if (($PerfectCount = $Cache->get_value('stats_perfect_count')) === false) {
@@ -217,7 +217,7 @@ if (($PerfectCount = $Cache->get_value('stats_perfect_count')) === false) {
 			OR (Media = 'Soundboard' AND Format = 'FLAC')
 			)");
 	list($PerfectCount) = $DB->next_record();
-	$Cache->cache_value('stats_perfect_count', $PerfectCount, 0); //inf cache
+	$Cache->cache_value('stats_perfect_count', $PerfectCount, 604890); // staggered 1 week cache
 }
 ?>
 				<li>Torrents: <?=number_format($TorrentCount)?></li>
@@ -265,7 +265,7 @@ if (($PeerStats = $Cache->get_value('stats_peers')) === false) {
 		$PeerCount = $DB->to_array(0, MYSQLI_NUM, false);
 		$SeederCount = $PeerCount['Seeding'][1] ?: 0;
 		$LeecherCount = $PeerCount['Leeching'][1] ?: 0;
-		$Cache->cache_value('stats_peers', array($LeecherCount, $SeederCount), 0);
+		$Cache->cache_value('stats_peers', array($LeecherCount, $SeederCount), 1209600); // 2 week cache
 		$Cache->delete_value('stats_peers_lock');
 	}
 } else {
@@ -299,7 +299,7 @@ if (($TopicID = $Cache->get_value('polls_featured')) === false) {
 	$Cache->cache_value('polls_featured', $TopicID, 0);
 }
 if ($TopicID) {
-	if (($Poll = $Cache->get_value('polls_'.$TopicID)) === false) {
+	if (($Poll = $Cache->get_value("polls_$TopicID")) === false) {
 		$DB->query("
 			SELECT Question, Answers, Featured, Closed
 			FROM forums_polls

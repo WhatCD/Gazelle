@@ -127,7 +127,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 			<thead>
 				<tr class="colhead">
 					<th style="width: 7%;">Order</th>
-					<th style="width: 1%;"><span><abbr title="Current order">#</abbr></span></th>
+					<th style="width: 1%;"><span><abbr class="tooltip" title="Current order">#</abbr></span></th>
 					<th style="width: 1%;"><span>Year</span></th>
 					<th style="width: 15%;"><span>Artist</span></th>
 					<th><span>Torrent</span></th>
@@ -179,7 +179,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 				$this->NumGroups++;
 
 				$DisplayName = self::display_name($ExtendedArtists, $Artists, $VanityHouse);
-				$TorrentLink = '<a href="torrents.php?id='.$GroupID.'" title="View Torrent">'.$Name.'</a>';
+				$TorrentLink = '<a href="torrents.php?id='.$GroupID.'" class="tooltip" title="View torrent">'.$Name.'</a>';
 				$Year = $Year > 0 ? $Year : '';
 				$DateAdded = date($Time);
 
@@ -232,7 +232,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 			$DisplayName = Artists::display_artists(array('1'=>$Artists), true, false);
 		}
 		if ($VanityHouse) {
-			$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+			$DisplayName .= ' [<abbr class="tooltip" title="This is a Vanity House release">VH</abbr>]';
 		}
 		return $DisplayName;
 	}
@@ -243,8 +243,8 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 	public function buttons () {
 ?>
 		<div class="drag_drop_save">
-			<input type="submit" name="update" value="Update Ranking" title="Save your rank." class="save_sortable_collage" />
-			<input type="submit" name="delete" value="Delete Checked" title="Remove items." class="save_sortable_collage" />
+			<input type="submit" name="update" value="Update ranking" title="Save your rank" class="tooltip save_sortable_collage" />
+			<input type="submit" name="delete" value="Delete checked" title="Remove items" class="tooltip save_sortable_collage" />
 		</div>
 <?
 	}

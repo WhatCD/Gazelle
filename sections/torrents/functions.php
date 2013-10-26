@@ -459,18 +459,18 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 		?>
 				<tr class="torrent_row releases_<?=($ReleaseType)?> groupid_<?=($GroupID)?> edition_<?=($EditionID)?> group_torrent<?=($IsSnatched ? ' snatched_torrent' : '')?>" style="font-weight: normal;" id="torrent<?=($TorrentID)?>">
 					<td>
-						<span>[ <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>" title="Download"><?=($HasFile ? 'DL' : 'Missing')?></a>
+						<span>[ <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>" class="tooltip" title="Download"><?=($HasFile ? 'DL' : 'Missing')?></a>
 <?	if (Torrents::can_use_token($Torrent)) { ?>
-							| <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
+							| <a href="torrents.php?action=download&amp;id=<?=($TorrentID)?>&amp;authkey=<?=($LoggedUser['AuthKey'])?>&amp;torrent_pass=<?=($LoggedUser['torrent_pass'])?>&amp;usetoken=1" class="tooltip" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?	} ?>
-							| <a href="reportsv2.php?action=report&amp;id=<?=($TorrentID)?>" title="Report">RP</a>
+							| <a href="reportsv2.php?action=report&amp;id=<?=($TorrentID)?>" class="tooltip" title="Report">RP</a>
 <?	if ($CanEdit) { ?>
-							| <a href="torrents.php?action=edit&amp;id=<?=($TorrentID)?>" title="Edit">ED</a>
+							| <a href="torrents.php?action=edit&amp;id=<?=($TorrentID)?>" class="tooltip" title="Edit">ED</a>
 <?	}
 	if (check_perms('torrents_delete') || $UserID == $LoggedUser['ID']) { ?>
-							| <a href="torrents.php?action=delete&amp;torrentid=<?=($TorrentID)?>" title="Remove">RM</a>
+							| <a href="torrents.php?action=delete&amp;torrentid=<?=($TorrentID)?>" class="tooltip" title="Remove">RM</a>
 <?	} ?>
-							| <a href="torrents.php?torrentid=<?=($TorrentID)?>" title="Permalink">PL</a>
+							| <a href="torrents.php?torrentid=<?=($TorrentID)?>" class="tooltip" title="Permalink">PL</a>
 						]</span>
 						&raquo; <a href="#" onclick="$('#torrent_<?=($TorrentID)?>').gtoggle(); return false;"><?=($ExtraInfo)?></a>
 					</td>
@@ -502,8 +502,8 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 						<div class="linkbox">
 							<a href="#" class="brackets" onclick="show_peers('<?=($TorrentID)?>', 0); return false;">View peer list</a>
 <?	if (check_perms('site_view_torrent_snatchlist')) { ?>
-							<a href="#" class="brackets" onclick="show_downloads('<?=($TorrentID)?>', 0); return false;" class="tooltip" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
-							<a href="#" class="brackets" onclick="show_snatches('<?=($TorrentID)?>', 0); return false;" class="tooltip" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
+							<a href="#" class="brackets tooltip" onclick="show_downloads('<?=($TorrentID)?>', 0); return false;" title="View the list of users that have clicked the &quot;DL&quot; button.">View download list</a>
+							<a href="#" class="brackets tooltip" onclick="show_snatches('<?=($TorrentID)?>', 0); return false;" title="View the list of users that have reported a snatch to the tracker.">View snatch list</a>
 <?	} ?>
 							<a href="#" class="brackets" onclick="show_files('<?=($TorrentID)?>'); return false;">View file list</a>
 <?	if ($Reported) { ?>

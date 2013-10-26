@@ -833,13 +833,11 @@ ul .invitetree {
 	background: #F1E6CC;
 }
 
-div[class~=tooltipster-base] {
+div[class~=tooltipster-base],
+div[class~=tooltipster-content] > a {
 	background-color: #DCB881;
 	border-color: #65430F;
 	color: #492802;
-}
-
-div[class~=tooltipster-content] > a {
 }
 
 .post_id {

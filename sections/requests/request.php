@@ -432,7 +432,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 			</tr>
 <?	} ?>
 		</table>
-		<div class="box2 box_request_desc">
+		<div class="box box2 box_request_desc">
 			<div class="head"><strong>Description</strong></div>
 			<div class="pad">
 <?=				$Text->full_format($Request['Description']);?>

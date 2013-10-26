@@ -131,7 +131,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		{
 			continue;
 		}
-		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" class="tooltip" title="View torrent" dir="ltr">'.$GroupName.'</a>';
 		if ($GroupYear > 0) {
 			$DisplayName .= " [$GroupYear]";
 		}
@@ -165,7 +165,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		<tr<?=$Edition['IsSnatched'] ? ' class="snatched_torrent"' : ''?>>
 			<td>
 				<span class="torrent_links_block">
-					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
+					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets tooltip">DL</a>
 				</span>
 				<?=$DisplayName?>
 				<div class="torrent_info"><?=$ExtraInfo?></div>

@@ -80,9 +80,9 @@ View::show_header('Report', 'reportsv2,browse,torrent,bbcode,recommend');
 			<tr class="colhead_dark">
 				<td width="80%"><strong>Reported torrent</strong></td>
 				<td><strong>Size</strong></td>
-				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" /></td>
+				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" /></td>
+				<td class="sign"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" /></td>
 			</tr>
 			<?
 			build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $GroupCategoryID, $ReleaseType, $TorrentList, $Types, $Text, $Username, $ReportedTimes);
@@ -104,7 +104,7 @@ View::show_header('Report', 'reportsv2,browse,torrent,bbcode,recommend');
 				<tr>
 					<td class="label">Reason:</td>
 					<td>
-						<select id="type" name="type" onchange="ChangeReportType()">
+						<select id="type" name="type" onchange="ChangeReportType();">
 <?
 				if (!empty($Types[$CategoryID])) {
 					$TypeList = $Types['master'] + $Types[$CategoryID];

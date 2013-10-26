@@ -304,7 +304,7 @@ if ($ResultCount == 0) {
 		foreach ($Group['Editions'] as $RemIdent => $Edition) {
 			// TODO: point to the correct FLAC (?)
 			$FlacID = array_search(true, $Edition['FlacIDs']);
-			$DisplayName = $ArtistNames . "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$FlacID#torrent$FlacID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+			$DisplayName = $ArtistNames . "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$FlacID#torrent$FlacID\" class=\"tooltip\" title=\"View torrent\" dir=\"ltr\">$GroupName</a>";
 			if ($GroupYear > 0) {
 				$DisplayName .= " [$GroupYear]";
 			}
@@ -318,7 +318,7 @@ if ($ResultCount == 0) {
 		<tr<?=($Edition['FLACIsSnatched'] ? ' class="snatched_torrent"' : '')?>>
 			<td>
 				<span class="torrent_links_block">
-					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
+					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets tooltip">DL</a>
 				</span>
 				<?=$DisplayName?>
 				<div class="torrent_info"><?=$Edition['EditionName']?></div>

@@ -54,6 +54,29 @@ if (!Forums::check_forumperm($ForumID, 'Write') || !Forums::check_forumperm($For
 	error(403);
 }
 
+if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forums_polls_create')) {
+	$NoPoll = 1;
+} else {
+	$NoPoll = 0;
+	$Question = trim($_POST['question']);
+	$Answers = array();
+	$Votes = array();
+
+	//This can cause polls to have answer IDs of 1 3 4 if the second box is empty
+	foreach ($_POST['answers'] as $i => $Answer) {
+		if ($Answer == '') {
+			continue;
+		}
+		$Answers[$i + 1] = $Answer;
+		$Votes[$i + 1] = 0;
+	}
+
+	if (count($Answers) < 2) {
+		error('You cannot create a poll with only one answer.');
+	} elseif (count($Answers) > 25) {
+		error('You cannot create a poll with greater than 25 answers.');
+	}
+}
 
 $DB->query("
 	INSERT INTO forums_topics
@@ -94,29 +117,7 @@ if (isset($_POST['subscribe'])) {
 	Subscriptions::subscribe($TopicID);
 }
 
-if (empty($_POST['question']) || empty($_POST['answers']) || !check_perms('forums_polls_create')) {
-	$NoPoll = 1;
-} else {
-	$NoPoll = 0;
-	$Question = trim($_POST['question']);
-	$Answers = array();
-	$Votes = array();
-
-	//This can cause polls to have answer IDs of 1 3 4 if the second box is empty
-	foreach ($_POST['answers'] as $i => $Answer) {
-		if ($Answer == '') {
-			continue;
-		}
-		$Answers[$i + 1] = $Answer;
-		$Votes[$i + 1] = 0;
-	}
-
-	if (count($Answers) < 2) {
-		error('You cannot create a poll with only one answer.');
-	} elseif (count($Answers) > 25) {
-		error('You cannot create a poll with greater than 25 answers.');
-	}
-
+if (!$NoPoll) { // god, I hate double negatives...
 	$DB->query("
 		INSERT INTO forums_polls
 			(TopicID, Question, Answers)

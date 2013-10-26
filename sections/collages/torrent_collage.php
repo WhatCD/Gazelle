@@ -80,12 +80,12 @@ foreach ($TorrentList as $GroupID => $Group) {
 			$DisplayName .= Artists::display_artists(array('1' => $GroupArtists));
 	}
 
-	$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+	$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\" dir=\"ltr\">$GroupName</a>";
 	if ($GroupYear > 0) {
 		$DisplayName = "$DisplayName [$GroupYear]";
 	}
 	if ($GroupVanityHouse) {
-		$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+		$DisplayName .= ' [<abbr class="tooltip" title="This is a Vanity House release">VH</abbr>]';
 	}
 	$SnatchedGroupClass = ($GroupFlags['IsSnatched'] ? ' snatched_group' : '');
 	// Start an output buffer, so we can store this output in $TorrentTable
@@ -98,11 +98,11 @@ foreach ($TorrentList as $GroupID => $Group) {
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 				<td class="center">
 					<div id="showimg_<?=$GroupID?>" class="<?=($ShowGroups ? 'hide' : 'show')?>_torrents">
-						<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event)" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
+						<a href="#" class="tooltip show_torrents_link" onclick="toggle_group(<?=$GroupID?>, this, event);" title="Collapse this group. Hold &quot;Ctrl&quot; while clicking to collapse all groups on this page."></a>
 					</div>
 				</td>
 				<td class="center">
-					<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
+					<div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 				</td>
 				<td colspan="5">
 					<strong><?=$DisplayName?></strong>
@@ -157,11 +157,11 @@ foreach ($TorrentList as $GroupID => $Group) {
 			<tr class="group_torrent torrent_row groupid_<?=$GroupID?> edition_<?=$EditionID?><?=$SnatchedTorrentClass . $SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
 				<td colspan="3">
 					<span class="brackets">
-						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download">DL</a>
 <?			if (Torrents::can_use_token($Torrent)) { ?>
-						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" class="tooltip" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?			} ?>
-						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
+						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" class="tooltip" title="Report">RP</a>
 					</span>
 					&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 				</td>
@@ -177,7 +177,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 
 		list($TorrentID, $Torrent) = each($Torrents);
 
-		$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+		$DisplayName = "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\" dir=\"ltr\">$GroupName</a>";
 
 		if ($Torrent['IsSnatched']) {
 			$DisplayName .= ' ' . Format::torrent_label('Snatched!');
@@ -194,16 +194,16 @@ foreach ($TorrentList as $GroupID => $Group) {
 			<tr class="torrent torrent_row<?=$SnatchedTorrentClass . $SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 				<td></td>
 				<td class="center">
-					<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
+					<div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
 					</div>
 				</td>
 				<td>
 					<span class="brackets">
-						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+						<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download">DL</a>
 <?		if (Torrents::can_use_token($Torrent)) { ?>
-						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" class="tooltip" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?>
-						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
+						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" class="tooltip" title="Report">RP</a>
 					</span>
 					<strong><?=$DisplayName?></strong>
 <?			Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
@@ -576,9 +576,9 @@ if ($CollageCovers != 0) { ?>
 				<td><!-- Category --></td>
 				<td width="70%"><strong>Torrents</strong></td>
 				<td>Size</td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" /></td>
+				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" /></td>
+				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" /></td>
 			</tr>
 <?=$TorrentTable?>
 		</table>

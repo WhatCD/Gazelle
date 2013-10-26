@@ -233,9 +233,9 @@ if (empty($Results)) {
 		<td>Files</td>
 		<td><a href="<?=header_link('time')?>">Time</a></td>
 		<td><a href="<?=header_link('size')?>">Size</a></td>
-		<td class="sign"><a href="<?=header_link('snatches')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" /></a></td>
-		<td class="sign"><a href="<?=header_link('seeders')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" /></a></td>
-		<td class="sign"><a href="<?=header_link('leechers')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" /></a></td>
+		<td class="sign"><a href="<?=header_link('snatches')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" /></a></td>
+		<td class="sign"><a href="<?=header_link('seeders')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" /></a></td>
+		<td class="sign"><a href="<?=header_link('leechers')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" /></a></td>
 	</tr>
 <?
 		unset($FilterResults['FilterLabel']);
@@ -262,7 +262,7 @@ if (empty($Results)) {
 				$MatchingArtistsText = (!empty($MatchingArtists) ? 'Caught by filter for '.implode(', ', $MatchingArtists) : '');
 				$DisplayName = Artists::display_artists($GroupInfo['ExtendedArtists'], true, true);
 			}
-			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID\" title=\"View Torrent\" dir=\"ltr\">" . $GroupInfo['Name'] . '</a>';
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID\" class=\"tooltip\" title=\"View torrent\" dir=\"ltr\">" . $GroupInfo['Name'] . '</a>';
 
 			$GroupCategoryID = $GroupInfo['CategoryID'];
 			if ($GroupCategoryID == 1) {
@@ -285,8 +285,12 @@ if (empty($Results)) {
 		// print row
 ?>
 	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '')?>" id="torrent<?=$TorrentID?>"<?=($MatchingArtistsText ? ' title="'.display_str($MatchingArtistsText).'"' : '')?>>
-		<td style="text-align: center;"><input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" tabindex="1" /></td>
-		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
+		<td style="text-align: center;">
+			<input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" tabindex="1" />
+		</td>
+		<td class="center cats_col">
+			<div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
+		</td>
 		<td class="big_info">
 <? if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
@@ -295,9 +299,9 @@ if (empty($Results)) {
 <? } ?>
 			<div class="group_info clear">
 				<span>
-					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
+					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download">DL</a>
 <?			if (Torrents::can_use_token($TorrentInfo)) { ?>
-					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
+					| <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" class="tooltip" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?
 			}
 			if (!$Sneaky) { ?>
@@ -322,11 +326,11 @@ if (empty($Results)) {
 			</div>
 		</td>
 		<td><?=$TorrentInfo['FileCount']?></td>
-		<td style="text-align: right;" class="nobr"><?=time_diff($TorrentInfo['Time'])?></td>
-		<td class="nobr" style="text-align: right;"><?=Format::get_size($TorrentInfo['Size'])?></td>
-		<td style="text-align: right;"><?=number_format($TorrentInfo['Snatched'])?></td>
-		<td style="text-align: right;"><?=number_format($TorrentInfo['Seeders'])?></td>
-		<td style="text-align: right;"><?=number_format($TorrentInfo['Leechers'])?></td>
+		<td class="number_column nobr"><?=time_diff($TorrentInfo['Time'])?></td>
+		<td class="number_column nobr"><?=Format::get_size($TorrentInfo['Size'])?></td>
+		<td class="number_column"><?=number_format($TorrentInfo['Snatched'])?></td>
+		<td class="number_column"><?=number_format($TorrentInfo['Seeders'])?></td>
+		<td class="number_column"><?=number_format($TorrentInfo['Leechers'])?></td>
 	</tr>
 <?
 		}

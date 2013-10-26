@@ -708,7 +708,8 @@ body#torrents {
 	padding: 5px 2px;
 	border-top: 1px solid #5F7187;
 }
-#torrent_table tr.group a[href ^="artist.php"], #torrent_table tr.group a[title ^="View Torrent"] {
+#torrent_table tr.group a[href ^="artist.php"], #torrent_table tr.group a[title ^="View torrent"],
+#torrent_table tr.group a[href ^="artist.php"], #torrent_table tr.group a[title ^="View torrent group"] {
 	font-size: 12pt;
 	font-weight: bold;
 }

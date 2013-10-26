@@ -333,16 +333,16 @@ foreach ($Importances as $Group) {
 					<td class="small"><!-- expand/collapse --></td>
 					<td width="70%"><a href="#">&uarr;</a>&nbsp;<strong><?=$DisplayName?></strong> (<a href="#" onclick="$('.releases_<?=$ReleaseType?>').gtoggle(true); return false;">View</a>)</td>
 					<td>Size</td>
-					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" /></td>
+					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" /></td>
+					<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" /></td>
 				</tr>
 <?		$OpenTable = true;
 		$LastReleaseType = $ReleaseType;
 	}
 
 
-	$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+	$DisplayName = "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\" dir=\"ltr\">$GroupName</a>";
 	if (check_perms('users_mod') || check_perms('torrents_fix_ghosts')) {
 		$DisplayName .= ' <a href="torrents.php?action=fix_group&amp;groupid='.$GroupID.'&amp;artistid='.$ArtistID.'&amp;auth='.$LoggedUser['AuthKey'].'" class="brackets tooltip" title="Fix ghost DB entry">Fix</a>';
 	}
@@ -382,7 +382,7 @@ foreach ($Importances as $Group) {
 	}
 
 	if ($GroupVanityHouse) {
-		$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+		$DisplayName .= ' [<abbr class="tooltip" title="This is a Vanity House release">VH</abbr>]';
 	}
 
 	$SnatchedGroupClass = ($GroupFlags['IsSnatched'] ? ' snatched_group' : '');
@@ -454,9 +454,9 @@ foreach ($Importances as $Group) {
 	<tr class="releases_<?=$ReleaseType?> torrent_row groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent discog<?=$SnatchedTorrentClass . $SnatchedGroupClass . $HideDiscog . $HideTorrents?>">
 		<td colspan="2">
 			<span>
-				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>
+				[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download"><?=$Torrent['HasFile'] ? 'DL' : 'Missing'?></a>
 <?		if (Torrents::can_use_token($Torrent)) { ?>
-						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" class="tooltip" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?		} ?> ]
 			</span>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
@@ -516,7 +516,7 @@ if (check_perms('site_torrents_notify')) {
 <?	} else { ?>
 			<a href="#" id="bookmarklink_artist_<?=$ArtistID?>" onclick="Bookmark('artist', <?=$ArtistID?>, 'Remove bookmark'); return false;" class="brackets">Bookmark</a>
 <?	} ?>
-			<a href="#" id="subscribelink_artist<?=$ArtistID?>" class="brackets" onclick="SubscribeComments('artist',<?=$ArtistID?>);return false;"><?=Subscriptions::has_subscribed_comments('artist', $ArtistID) !== false ? 'Unsubscribe' : 'Subscribe'?></a>
+			<a href="#" id="subscribelink_artist<?=$ArtistID?>" class="brackets" onclick="SubscribeComments('artist', <?=$ArtistID?>);return false;"><?=Subscriptions::has_subscribed_comments('artist', $ArtistID) !== false ? 'Unsubscribe' : 'Subscribe'?></a>
 <!--	<a href="#" id="recommend" class="brackets">Recommend</a> -->
 <?
 	if (check_perms('site_edit_wiki')) {
@@ -584,7 +584,7 @@ if (check_perms('zip_downloader')) {
 						<li id="list<?=$ListItem?>">
 							<input type="hidden" name="list[]" value="<?=$ListItem?>" />
 							<span style="float: left;"><?=$ZIPOptions[$ListItem]['2']?></span>
-							<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>'); return false;" style="float: right;" class="brackets" title="Remove format from the Collector">X</a></span>
+							<span class="remove remove_collector"><a href="#" onclick="remove_selection('<?=$ListItem?>'); return false;" style="float: right;" class="brackets tooltip" title="Remove format from the Collector">X</a></span>
 							<br style="clear: all;" />
 						</li>
 <? } ?>
@@ -779,10 +779,10 @@ if ($NumRequests > 0) {
 				<a href="#">&uarr;</a>&nbsp;
 				<strong>Request Name</strong>
 			</td>
-			<td>
+			<td class="nobr">
 				<strong>Vote</strong>
 			</td>
-			<td>
+			<td class="nobr">
 				<strong>Bounty</strong>
 			</td>
 			<td>
@@ -820,14 +820,14 @@ if ($NumRequests > 0) {
 				<?=$FullName?>
 				<div class="tags"><?=$ReqTagList?></div>
 			</td>
-			<td>
+			<td class="nobr">
 				<span id="vote_count_<?=$RequestID?>"><?=$Request['Votes']?></span>
 <?		if (check_perms('site_vote')) { ?>
 				<input type="hidden" id="auth" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				&nbsp;&nbsp; <a href="javascript:Vote(0, <?=$RequestID?>)" class="brackets"><strong>+</strong></a>
 <?		} ?>
 			</td>
-			<td>
+			<td class="nobr">
 				<span id="bounty_<?=$RequestID?>"><?=Format::get_size($Request['Bounty'])?></span>
 			</td>
 			<td>

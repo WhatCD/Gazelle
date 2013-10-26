@@ -114,12 +114,12 @@ if (!$NumResults) {
 			} elseif (count($Artists) > 0) {
 				$DisplayName .= Artists::display_artists(array('1' => $Artists));
 			}
-			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\" dir=\"ltr\">$GroupName</a>";
 			if ($GroupYear > 0) {
 				$DisplayName = "$DisplayName [$GroupYear]";
 			}
 			if ($GroupVanityHouse) {
-				$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+				$DisplayName .= ' [<abbr class="tooltip" title="This is a Vanity House release">VH</abbr>]';
 			}
 
 			$SnatchedGroupClass = $GroupFlags['IsSnatched'] ? ' snatched_group' : '';
@@ -186,7 +186,7 @@ if (!$NumResults) {
 	<tr class="group_torrent groupid_<?=$CollageID . $GroupID?> edition_<?=$EditionID?> hidden<?=$SnatchedTorrentClass . $SnatchedGroupClass?>">
 		<td colspan="2">
 			<span>
-				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
+				<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets tooltip">DL</a>
 			</span>
 			&nbsp;&nbsp;&raquo;&nbsp; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$TorrentID?>"><?=Torrents::torrent_info($Torrent)?></a>
 		</td>
@@ -202,7 +202,7 @@ if (!$NumResults) {
 
 				list($TorrentID, $Torrent) = each($Torrents);
 
-				$DisplayName = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+				$DisplayName = "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\" dir=\"ltr\">$GroupName</a>";
 
 				if ($Torrent['IsSnatched']) {
 					$DisplayName .= ' ' . Format::torrent_label('Snatched!');
@@ -215,7 +215,7 @@ if (!$NumResults) {
 	<tr class="torrent<?=$SnatchedTorrentClass?>" id="group_<?=$CollageID . $GroupID?>">
 		<td></td>
 		<td class="center">
-			<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
+			<div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>">
 			</div>
 		</td>
 		<td class="big_info">
@@ -226,8 +226,8 @@ if (!$NumResults) {
 <? } ?>
 			<div class="group_info clear">
 				<span>
-					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
+					[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download">DL</a>
+					| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" class="tooltip" title="Report">RP</a> ]
 				</span>
 				<strong><?=$DisplayName?></strong>
 				<div class="tags"><?=$TorrentTags->format()?></div>
@@ -262,9 +262,9 @@ if (!$NumResults) {
 			<td width="1%"><!-- expand/collapse --></td>
 			<td width="70%"><strong>Torrents</strong></td>
 			<td>Size</td>
-			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" /></td>
+			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" /></td>
+			<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" /></td>
 		</tr>
 <?=$TorrentTable?>
 	</table>

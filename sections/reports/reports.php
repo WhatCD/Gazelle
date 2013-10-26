@@ -94,8 +94,8 @@ $DB->set_query_id($Reports);
 	while (list($ReportID, $SnitchID, $SnitchName, $ThingID, $Short, $ReportedTime, $Reason, $Status, $ClaimerID, $Notes, $ResolverID) = $DB->next_record()) {
 		$Type = $Types[$Short];
 		$Reference = "reports.php?id=$ReportID#report$ReportID";
-		?>
-		<div id="report_<?=$ReportID?>">
+?>
+		<div id="report_<?=$ReportID?>" class="pending_report_v1">
 			<table cellpadding="5" id="report_<?=$ReportID?>">
 				<tr>
 					<td><strong><a href="<?=$Reference?>">Report #<?=$ReportID?></a></strong></td>

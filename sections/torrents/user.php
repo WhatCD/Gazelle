@@ -474,13 +474,19 @@ foreach ($Categories as $CatKey => $CatName) {
 			<td><a href="<?=header_link('Time')?>">Time</a></td>
 			<td><a href="<?=header_link('Size')?>">Size</a></td>
 			<td class="sign">
-				<a href="<?=header_link('Snatched')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" /></a>
+				<a href="<?=header_link('Snatched')?>">
+					<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" />
+				</a>
 			</td>
 			<td class="sign">
-				<a href="<?=header_link('Seeders')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" /></a>
+				<a href="<?=header_link('Seeders')?>">
+					<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" />
+				</a>
 			</td>
 			<td class="sign">
-				<a href="<?=header_link('Leechers')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" /></a>
+				<a href="<?=header_link('Leechers')?>">
+					<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" />
+				</a>
 			</td>
 		</tr>
 <?
@@ -502,12 +508,12 @@ foreach ($Categories as $CatKey => $CatName) {
 		} else {
 			$DisplayName = '';
 		}
-		$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+		$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$TorrentID.'" class="tooltip" title="View torrent" dir="ltr">'.$GroupName.'</a>';
 		if ($GroupYear > 0) {
 			$DisplayName .= " [$GroupYear]";
 		}
 		if ($GroupVanityHouse) {
-			$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+			$DisplayName .= ' [<abbr class="tooltip" title="This is a Vanity House release">VH</abbr>]';
 		}
 
 		$ExtraInfo = Torrents::torrent_info($Torrent);
@@ -517,7 +523,7 @@ foreach ($Categories as $CatKey => $CatName) {
 ?>
 		<tr class="torrent torrent_row<?=($Torrent['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupFlags['IsSnatched'] ? ' snatched_group' : '')?>">
 			<td class="center cats_col">
-				<div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
+				<div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
 			</td>
 			<td class="big_info">
 <?	if ($LoggedUser['CoverArt']) { ?>
@@ -527,8 +533,8 @@ foreach ($Categories as $CatKey => $CatName) {
 <?	} ?>
 				<div class="group_info clear">
 					<span class="torrent_links_block">
-						[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a> ]
+						[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download">DL</a>
+						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" class="tooltip" title="Report">RP</a> ]
 					</span>
 					<? echo "$DisplayName\n"; ?>
 <?					Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>

@@ -19,7 +19,7 @@ View::show_header('Top 10 Torrents history!');
 			<table class="layout">
 				<tr>
 					<td class="label">Date:</td>
-					<td><input type="text" id="date" name="date" value="<?=!empty($_GET['date']) ? display_str($_GET['date']) : 'YYYY-MM-DD'?>" onfocus="if ($('#date').raw().value == 'YYYY-MM-DD') $('#date').raw().value = ''" /></td>
+					<td><input type="text" id="date" name="date" value="<?=!empty($_GET['date']) ? display_str($_GET['date']) : 'YYYY-MM-DD'?>" onfocus="if ($('#date').raw().value == 'YYYY-MM-DD') { $('#date').raw().value = ''; }" /></td>
 				</tr>
 				<tr>
 					<td class="label">Type:</td>
@@ -119,7 +119,7 @@ if (!empty($_GET['date'])) {
 				$DisplayName = Artists::display_artists($Artists, true, true);
 			}
 
-			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" class=\"tooltip\" title=\"View torrent\" dir=\"ltr\">$GroupName</a>";
 
 			if ($GroupCategoryID == 1 && $GroupYear > 0) {
 				$DisplayName .= " [$GroupYear]";
@@ -174,9 +174,9 @@ if (!empty($_GET['date'])) {
 ?>
 	<tr class="group_torrent row<?=$Highlight?>">
 		<td style="padding: 8px; text-align: center;"><strong><?=$Rank?></strong></td>
-		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
+		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td>
-		<span><?=($GroupID ? '<a href="torrents.php?action=download&amp;id='.$TorrentID.'&amp;authkey='.$LoggedUser['AuthKey'].'&amp;torrent_pass='.$LoggedUser['torrent_pass'].' title="Download" class="brackets">DL</a>' : '(Deleted)')?></span>
+		<span><?=($GroupID ? '<a href="torrents.php?action=download&amp;id='.$TorrentID.'&amp;authkey='.$LoggedUser['AuthKey'].'&amp;torrent_pass='.$LoggedUser['torrent_pass'].' title="Download" class="brackets tooltip">DL</a>' : '(Deleted)')?></span>
 			<?=$DisplayName?>
 			<div class="tags"><?=$TorrentTags->format()?></div>
 		</td>

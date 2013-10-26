@@ -107,10 +107,10 @@ class Format {
 			return '--';
 		}
 		if ($Ratio === '∞') {
-			return '<span class="r99" title="Infinite">∞</span>';
+			return '<span class="tooltip r99" title="Infinite">∞</span>';
 		}
 		if ($Color) {
-			$Ratio = sprintf('<span class="%s" title="%s">%s</span>',
+			$Ratio = sprintf('<span class="tooltip %s" title="%s">%s</span>',
 				self::get_ratio_color($Ratio),
 				self::get_ratio($Dividend, $Divisor, 5),
 				$Ratio

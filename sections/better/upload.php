@@ -116,7 +116,7 @@ foreach ($TorrentGroups as $Editions) {
 		foreach ($Encodings as $Encoding) {
 			if (!isset($Edition['Formats'][$Encoding])) {
 				++$edition_miss;
-				++$Counter['miss_'.$Encoding];
+				++$Counter["miss_$Encoding"];
 			}
 		}
 		$Counter['miss_total'] += $edition_miss;
@@ -164,7 +164,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		if (!$Edition['FlacID'] || count($Edition['Formats']) === 3) {
 			continue;
 		}
-		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+		$DisplayName = $ArtistNames . '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Edition['FlacID'].'#torrent'.$Edition['FlacID'].'" class="tooltip" title="View torrent" dir="ltr">'.$GroupName.'</a>';
 		if ($GroupYear > 0) {
 			$DisplayName .= " [$GroupYear]";
 		}
@@ -196,7 +196,7 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		<tr class="torrent torrent_row<?=$Edition['IsSnatched'] ? ' snatched_torrent' : ''?>">
 			<td>
 				<span class="torrent_links_block">
-					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a>
+					<a href="torrents.php?action=download&amp;id=<?=$Edition['FlacID']?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets tooltip">DL</a>
 				</span>
 				<?=$DisplayName?>
 				<div class="torrent_info"><?=$ExtraInfo?></div>

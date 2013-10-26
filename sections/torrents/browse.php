@@ -925,7 +925,7 @@ if ($x % 7 != 0) { // Padding
 		<div class="submit">
 			<span style="float: left;"><?=number_format($TorrentCount)?> Results</span>
 			<input type="submit" value="Filter torrents" />
-			<input type="button" value="Reset" onclick="location.href='torrents.php<? if (isset($_GET['action']) && $_GET['action'] == 'advanced') { ?>?action=advanced<? } ?>'" />
+			<input type="button" value="Reset" onclick="location.href = 'torrents.php<? if (isset($_GET['action']) && $_GET['action'] == 'advanced') { ?>?action=advanced<? } ?>';" />
 			&nbsp;&nbsp;
 <?	if (isset($TorrentWhere) || isset($GroupWhere) || $OrderBy != 's3' || $OrderWay != 'DESC') { ?>
 			<input type="submit" name="setdefault" value="Make default" />
@@ -952,9 +952,21 @@ if ($x % 7 != 0) { // Padding
 		<td>Files</td>
 		<td><a href="<?=header_link('s3')?>"><?=$TimeLabel?></a></td>
 		<td><a href="<?=header_link('s4')?>">Size</a></td>
-		<td class="sign"><a href="<?=header_link('s5')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" /></a></td>
-		<td class="sign"><a href="<?=header_link('s6')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" /></a></td>
-		<td class="sign"><a href="<?=header_link('s7')?>"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" /></a></td>
+		<td class="sign">
+			<a href="<?=header_link('s5')?>">
+				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" />
+			</a>
+		</td>
+		<td class="sign">
+			<a href="<?=header_link('s6')?>">
+				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" />
+			</a>
+		</td>
+		<td class="sign">
+			<a href="<?=header_link('s7')?>">
+				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" />
+			</a>
+		</td>
 	</tr>
 <?
 	if ($LoggedUser['TorrentGrouping'] == 0) {
@@ -1032,14 +1044,14 @@ if ($x % 7 != 0) { // Padding
 		$DisplayName = Artists::display_artists($Artists[$GroupID]);
 		if ((count($Torrents['id']) > 1 || $GroupCategoryID == 1) && !$DisableGrouping) {
 			// These torrents are in a group
-			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\" dir=\"ltr\">$GroupName</a>";
 			if ($GroupYear > 0) {
 				$DisplayName .= " [$GroupYear]";
 			}
 ?>
 	<tr class="group">
-		<td class="center"><div title="<?=$ActionTitle?>" id="showimg_<?=$GroupID?>" class="<?=$ActionURL?>_torrents"><a href="#" class="show_torrents_link" onclick="$('.groupid_<?=$GroupID?>').gtoggle(); return false;"></a></div></td>
-		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
+		<td class="center"><div title="<?=$ActionTitle?>" id="showimg_<?=$GroupID?>" class="tooltip <?=$ActionURL?>_torrents"><a href="#" class="show_torrents_link" onclick="$('.groupid_<?=$GroupID?>').gtoggle(); return false;"></a></div></td>
+		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td colspan="2" class="big_info">
 <?
 // Image cover art requires WikiImage
@@ -1168,8 +1180,8 @@ if ($LoggedUser['CoverArt']) { ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> <?=$HideGroup?>">
 		<td colspan="3">
 			<span>
-				[ <a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][$Key]?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a>
-				| <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][$Key]?>" title="Report">RP</a> ]
+				[ <a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][$Key]?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download">DL</a>
+				| <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][$Key]?>" class="tooltip" title="Report">RP</a> ]
 			</span>
 			&raquo; <a href="torrents.php?id=<?=$GroupID?>&amp;torrentid=<?=$Val?>"><?=$ExtraInfo?></a>
 		</td>
@@ -1185,9 +1197,9 @@ if ($LoggedUser['CoverArt']) { ?>
 		} else {
 			// Either grouping is disabled, or we're viewing a type that does not require grouping
 			if ($GroupCategoryID == 1) {
-				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Torrents['id'][0].'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'&amp;torrentid='.$Torrents['id'][0].'" class="tooltip" title="View torrent" dir="ltr">'.$GroupName.'</a>';
 			} else {
-				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" title="View Torrent" dir="ltr">'.$GroupName.'</a>';
+				$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" class="tooltip" title="View torrent group" dir="ltr">'.$GroupName.'</a>';
 			}
 
 			$ExtraInfo = '';
@@ -1250,7 +1262,9 @@ if ($LoggedUser['CoverArt']) { ?>
 <?			if (!$DisableGrouping) { ?>
 		<td></td>
 <?			} ?>
-		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
+		<td class="center cats_col">
+			<div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div>
+		</td>
 		<td class="big_info">
 <? /* if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
@@ -1258,7 +1272,7 @@ if ($LoggedUser['CoverArt']) { ?>
 			</div>
 <? } */ ?>
 			<div class="group_info">
-				<span>[ <a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][0].$DownloadString?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download">DL</a> | <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][0]?>" title="Report">RP</a> ]</span>
+				<span>[ <a href="torrents.php?action=download&amp;id=<?=$Torrents['id'][0].$DownloadString?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download">DL</a> | <a href="reportsv2.php?action=report&amp;id=<?=$Torrents['id'][0]?>" class="tooltip" title="Report">RP</a> ]</span>
 				<?=$DisplayName?>
 				<?=$ExtraInfo?>
 				<div class="tags"><?=$TorrentTags->format()?></div>

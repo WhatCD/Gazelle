@@ -78,7 +78,7 @@ View::show_header('Gazelle Change Log');
 
 	foreach ($ChangeLog as $Change) {
 ?>
-	<div class="box box2">
+	<div class="box box2 change_log_entry">
 		<div class="head">
 			<span><?=$Change['Time']?> by <?=$Change['Author']?></span>
 <?		if ($CanEdit) { ?>

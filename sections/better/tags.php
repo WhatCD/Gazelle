@@ -66,7 +66,7 @@ foreach ($TorrentsInfo as $TorrentID => $Info) {
 	} else {
 		$DisplayName = '';
 	}
-	$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+	$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID#torrent$TorrentID\" class=\"tooltip\" title=\"View torrent\" dir=\"ltr\">$GroupName</a>";
 	if ($GroupYear > 0) {
 		$DisplayName .= " [$GroupYear]";
 	}
@@ -82,7 +82,7 @@ foreach ($TorrentsInfo as $TorrentID => $Info) {
 		<tr class="torrent torrent_row<?=$Torrents[$TorrentID]['IsSnatched'] ? ' snatched_torrent' : ''?>">
 			<td>
 				<span class="torrent_links_block">
-					<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets" title="Download torrent">DL</a>
+					<a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="brackets tooltip" title="Download">DL</a>
 				</span>
 				<?=$DisplayName?>
 <?	if (check_perms('admin_reports')) { ?>

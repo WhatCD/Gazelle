@@ -94,10 +94,10 @@ View::show_header("Manage collage: $Name", 'jquery-ui,jquery.tablesorter.min,sor
 		} elseif (count($Artists) > 0) {
 			$DisplayName .= Artists::display_artists(array('1' => $Artists), true, false);
 		}
-		$TorrentLink = "<a href=\"torrents.php?id=$GroupID\" title=\"View Torrent\">$GroupName</a>";
+		$TorrentLink = "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\">$GroupName</a>";
 		$GroupYear = $GroupYear > 0 ? $GroupYear : '';
 		if ($GroupVanityHouse) {
-			$DisplayName .= ' [<abbr title="This is a Vanity House release">VH</abbr>]';
+			$DisplayName .= ' [<abbr class="tooltip" title="This is a Vanity House release">VH</abbr>]';
 		}
 
 		$AltCSS = ($Number % 2 === 0) ? 'rowa' : 'rowb';

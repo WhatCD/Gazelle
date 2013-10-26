@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2013-10-26 by alderaan
+Added tooltip class to many HTML elements that were missing it
+
+2013-10-25 by alderaan
+Fix many display bugs in the unsupported/unofficial Eye Candy CSS.
+
 2013-10-24 by alderaan
 Layer Cake CSS now has a wider table of torrents on torrents.php
 

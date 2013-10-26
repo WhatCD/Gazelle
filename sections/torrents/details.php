@@ -517,9 +517,9 @@ if (empty($LoggedUser['DisableTagging'])) {
 			<tr class="colhead_dark">
 				<td width="80%"><strong>Torrents</strong></td>
 				<td><strong>Size</strong></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" /></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" /></td>
-				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" /></td>
+				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" /></td>
+				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" /></td>
+				<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" /></td>
 			</tr>
 <?
 function filelist($Str) {
@@ -696,7 +696,7 @@ foreach ($TorrentList as $Torrent) {
 
 ?>
 		<tr class="releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition group_torrent">
-			<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group." class="tooltip">&minus;</a> <?=Torrents::edition_string($Torrent, $TorrentDetails)?></strong></td>
+			<td colspan="5" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event);" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group." class="tooltip">&minus;</a> <?=Torrents::edition_string($Torrent, $TorrentDetails)?></strong></td>
 		</tr>
 <?
 	}
@@ -709,18 +709,18 @@ foreach ($TorrentList as $Torrent) {
 
 			<tr class="torrent_row releases_<?=$ReleaseType?> groupid_<?=$GroupID?> edition_<?=$EditionID?> group_torrent<?=($IsSnatched ? ' snatched_torrent' : '')?>" style="font-weight: normal;" id="torrent<?=$TorrentID?>">
 				<td>
-					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download"><?=($HasFile ? 'DL' : 'Missing')?></a>
+					<span>[ <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" class="tooltip" title="Download"><?=($HasFile ? 'DL' : 'Missing')?></a>
 <?	if (Torrents::can_use_token($Torrent)) { ?>
-						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');" class="tooltip">FL</a>
+						| <a href="torrents.php?action=download&amp;id=<?=$TorrentID ?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>&amp;usetoken=1" class="tooltip" title="Use a FL Token" onclick="return confirm('Are you sure you want to use a freeleech token here?');">FL</a>
 <?	} ?>
-						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" title="Report">RP</a>
+						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" class="tooltip" title="Report">RP</a>
 <?	if ($CanEdit) { ?>
-						| <a href="torrents.php?action=edit&amp;id=<?=$TorrentID ?>" title="Edit">ED</a>
+						| <a href="torrents.php?action=edit&amp;id=<?=$TorrentID ?>" class="tooltip" title="Edit">ED</a>
 <?	}
 	if (check_perms('torrents_delete') || $UserID == $LoggedUser['ID']) { ?>
-						| <a href="torrents.php?action=delete&amp;torrentid=<?=$TorrentID ?>" title="Remove">RM</a>
+						| <a href="torrents.php?action=delete&amp;torrentid=<?=$TorrentID ?>" class="tooltip" title="Remove">RM</a>
 <?	}?>
-						| <a href="torrents.php?torrentid=<?=$TorrentID ?>" title="Permalink">PL</a>
+						| <a href="torrents.php?torrentid=<?=$TorrentID ?>" class="tooltip" title="Permalink">PL</a>
 					]</span>
 					&raquo; <a href="#" onclick="$('#torrent_<?=$TorrentID?>').gtoggle(); return false;"><?=$ExtraInfo; ?></a>
 				</td>
@@ -785,7 +785,10 @@ if (empty($LoggedUser['DisableRequests']) && count($Requests) > 0) {
 	$i = 0;
 ?>
 		<div class="box">
-			<div class="head"><span style="font-weight: bold;">Requests (<?=number_format(count($Requests))?>)</span> <a href="#" style="float: right;" onclick="$('#requests').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Show</a></div>
+			<div class="head">
+				<span style="font-weight: bold;">Requests (<?=number_format(count($Requests))?>)</span>
+				<a href="#" style="float: right;" onclick="$('#requests').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Show</a>
+			</div>
 			<table id="requests" class="request_table hidden">
 				<tr class="colhead">
 					<td>Format / Bitrate / Media</td>

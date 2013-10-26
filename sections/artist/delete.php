@@ -35,7 +35,7 @@ $Count = $DB->record_count();
 if ($DB->has_results()) {
 ?>
 	<div class="thin">
-		There are still torrents that have <a href="artist.php?id=<?=$ArtistID?>" class="tooltip" title="View artist"><?=$Name?></a> as an artist.<br />
+		There are still torrents that have <a href="artist.php?id=<?=$ArtistID?>" class="tooltip" title="View artist" dir="ltr"><?=$Name?></a> as an artist.<br />
 		Please remove the artist from these torrents manually before attempting to delete.<br />
 		<div class="box pad">
 			<ul>
@@ -43,7 +43,7 @@ if ($DB->has_results()) {
 	while (list($GroupName, $GroupID) = $DB->next_record(MYSQLI_NUM, true)) {
 ?>
 				<li>
-					<a href="torrents.php?id=<?=$GroupID?>" title="View Torrent"><?=$GroupName?></a>
+					<a href="torrents.php?id=<?=$GroupID?>" class="tooltip" title="View torrent group" dir="ltr"><?=$GroupName?></a>
 				</li>
 <?
 	}
@@ -63,7 +63,7 @@ $Count += $DB->record_count();
 if ($DB->has_results()) {
 ?>
 	<div class="thin">
-		There are still requests that have <a href="artist.php?id=<?=$ArtistID?>" class="tooltip" title="View artist"><?=$Name?></a> as an artist.<br />
+		There are still requests that have <a href="artist.php?id=<?=$ArtistID?>" class="tooltip" title="View artist" dir="ltr"><?=$Name?></a> as an artist.<br />
 		Please remove the artist from these requests manually before attempting to delete.<br />
 		<div class="box pad">
 			<ul>
@@ -71,7 +71,7 @@ if ($DB->has_results()) {
 	while (list($RequestName, $RequestID) = $DB->next_record(MYSQLI_NUM, true)) {
 ?>
 				<li>
-					<a href="requests.php?action=view&amp;id=<?=$RequestID?>" title="View Torrent"><?=$RequestName?></a>
+					<a href="requests.php?action=view&amp;id=<?=$RequestID?>" class="tooltip" title="View request" dir="ltr"><?=$RequestName?></a>
 				</li>
 <?
 	}

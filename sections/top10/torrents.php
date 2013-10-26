@@ -7,7 +7,7 @@ if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 
 	if ($_GET['tags']) {
 		$TagWhere = array();
-		$Tags = explode(',', str_replace(".","_",trim($_GET['tags'])));
+		$Tags = explode(',', str_replace('.', '_', trim($_GET['tags'])));
 		foreach ($Tags as $Tag) {
 			$Tag = preg_replace('/[^a-z0-9_]/', '', $Tag);
 			if ($Tag != '') {
@@ -473,7 +473,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 			$DisplayName = Artists::display_artists($Artists[$GroupID], true, true);
 		}
 
-		$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" title=\"View Torrent\" dir=\"ltr\">$GroupName</a>";
+		$DisplayName .= "<a href=\"torrents.php?id=$GroupID&amp;torrentid=$TorrentID\" class=\"tooltip\" title=\"View torrent\" dir=\"ltr\">$GroupName</a>";
 
 		if ($GroupCategoryID == 1 && $GroupYear > 0) {
 			$DisplayName .= " [$GroupYear]";
@@ -542,7 +542,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 ?>
 	<tr class="torrent row<?=$Highlight . ($IsBookmarked ? ' bookmarked' : '') . ($IsSnatched ? ' snatched_torrent' : '')?>">
 		<td style="padding: 8px; text-align: center;"><strong><?=$Rank?></strong></td>
-		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="<?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
+		<td class="center cats_col"><div title="<?=$TorrentTags->title()?>" class="tooltip <?=Format::css_category($GroupCategoryID)?> <?=$TorrentTags->css_name()?>"></div></td>
 		<td class="big_info">
 <?		if ($LoggedUser['CoverArt']) { ?>
 			<div class="group_image float_left clear">
@@ -551,7 +551,7 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 <?		} ?>
 			<div class="group_info clear">
 
-				<span><a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets">DL</a></span>
+				<span><a href="torrents.php?action=download&amp;id=<?=$TorrentID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>&amp;torrent_pass=<?=$LoggedUser['torrent_pass']?>" title="Download" class="brackets tooltip">DL</a></span>
 
 				<strong><?=$DisplayName?></strong> <?=$ExtraInfo?><? if ($Reported) { ?> - <strong class="torrent_label tl_reported">Reported</strong><? } ?>
 				<span class="bookmark" style="float: right;">
