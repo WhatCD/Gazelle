@@ -280,6 +280,7 @@ View::show_header(($BookmarkView) ? 'Your bookmarked collages' : 'Browse collage
 		<a href="bookmarks.php?type=artists" class="brackets">Artists</a>
 		<a href="bookmarks.php?type=collages" class="brackets">Collages</a>
 		<a href="bookmarks.php?type=requests" class="brackets">Requests</a>
+		<br /><br />
 <?
 	}
 	$Pages = Format::get_pages($Page, $NumResults, COLLAGES_PER_PAGE, 9);
