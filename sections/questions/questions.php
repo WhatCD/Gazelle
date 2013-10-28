@@ -72,12 +72,7 @@ View::show_header("Ask the Staff", "questions");
 				</form>
 				<a href="#" onclick="if (confirm('Are you sure?') == true) { $('#delete_<?=$Question['ID']?>').raw().submit(); } return false;" class="brackets">Delete</a>
 				-
-				<form class="hidden" id="ignore_<?=$Question['ID']?>" method="post" action="">
-					<input type="hidden" name="action" value="take_ignore_question" />
-					<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
-					<input type="hidden" name="question_id" value="<?=$Question['ID']?>" />
-				</form>
-				<a href="#" onclick="if (confirm('Are you sure?') == true) { $('#ignore_<?=$Question['ID']?>').raw().submit(); } return false;" class="brackets">Ignore</a>
+				<a href="#" id="<?=$Question['ID']?>" class="brackets ignore_link">Ignore</a>
 				-
 				<a href="#" id="<?=$Question['ID']?>" class="answer_link brackets">Answer</a>
 			</span>

@@ -44,5 +44,22 @@ $(document).ready(function() {
 			respDiv.toggle();
 		}
 	});
+
+	$(".ignore_link").click(function(e) {
+		e.preventDefault();
+		var id = this.id;
+		$.ajax({
+			type : "POST",
+			url : "questions.php?action=take_ignore_question",
+			data : {
+				"auth" : authkey,
+				"id" : id
+			}
+		}).done(function() {
+			$("#question" + id).remove();
+			$("#answer" + id).remove();
+			$("#responses_for_" + id).remove();
+		});
+	});
 });
 
