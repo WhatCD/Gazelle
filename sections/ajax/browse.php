@@ -1,5 +1,4 @@
 <?
-
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 
 /** Start default parameters and validation **/
@@ -757,8 +756,10 @@ foreach ($Results as $Result) {
 	}
 }
 
-json_die("success", array(
-	'currentPage' => intval($Page),
-	'pages' => ceil($NumResults / TORRENTS_PER_PAGE),
-	'results' => $JsonGroups
-));
+echo json_encode(
+	array(
+		'status' => 'success',
+		'response' => array(
+			'currentPage' => intval($Page),
+			'pages' => ceil($NumResults / TORRENTS_PER_PAGE),
+			'results' => $JsonGroups)));

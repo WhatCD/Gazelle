@@ -482,7 +482,7 @@ foreach ($Users as $ID => $User) {
 <? } ?>
 		<h3>Comments</h3>
 <?
-if (empty($CommentList)) {
+if ($CommentList === null) {
 	$DB->query("
 		SELECT
 			c.ID,
@@ -586,6 +586,4 @@ if ($CollageCovers != 0) { ?>
 </div>
 <?
 View::show_footer();
-
-$Cache->cache_value("collage_$CollageID", array(array($Name, $Description, array(), array(), $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers)), 3600);
 ?>

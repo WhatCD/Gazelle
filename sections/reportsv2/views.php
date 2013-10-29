@@ -35,7 +35,7 @@ $DB->query("
 		um.Username,
 		COUNT(r.ID) AS Reports
 	FROM reportsv2 AS r
-		JOIN users_main AS um ON um.ID=r.ResolverID
+		JOIN users_main AS um ON um.ID = r.ResolverID
 	WHERE r.LastChangeTime > NOW() - INTERVAL 24 HOUR
 	GROUP BY r.ResolverID
 	ORDER BY Reports DESC");
@@ -47,14 +47,22 @@ $Results = $DB->to_array();
 				<td class="colhead_dark">Username</td>
 				<td class="colhead_dark number_column">Reports</td>
 			</tr>
-<? foreach ($Results as $Result) {
+<?
+foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
+	if ($Username == $LoggedUser['Username']) {
+		$RowClass = ' class="rowa"';
+	} else {
+		$RowClass = '';
+	}
 ?>
-			<tr>
+			<tr<?=$RowClass?>>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
 				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
-<? } ?>
+<?
+}
+?>
 		</table>
 <?
 $DB->query("
@@ -63,7 +71,7 @@ $DB->query("
 		um.Username,
 		COUNT(r.ID) AS Reports
 	FROM reportsv2 AS r
-		JOIN users_main AS um ON um.ID=r.ResolverID
+		JOIN users_main AS um ON um.ID = r.ResolverID
 	WHERE r.LastChangeTime > NOW() - INTERVAL 1 WEEK
 	GROUP BY r.ResolverID
 	ORDER BY Reports DESC");
@@ -75,14 +83,22 @@ $Results = $DB->to_array();
 				<td class="colhead_dark">Username</td>
 				<td class="colhead_dark number_column">Reports</td>
 			</tr>
-<? foreach ($Results as $Result) {
+<?
+foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
+	if ($Username == $LoggedUser['Username']) {
+		$RowClass = ' class="rowa"';
+	} else {
+		$RowClass = '';
+	}
 ?>
-			<tr>
+			<tr<?=$RowClass?>>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
 				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
-<? } ?>
+<?
+}
+?>
 		</table>
 <?
 $DB->query("
@@ -91,7 +107,7 @@ $DB->query("
 		um.Username,
 		COUNT(r.ID) AS Reports
 	FROM reportsv2 AS r
-		JOIN users_main AS um ON um.ID=r.ResolverID
+		JOIN users_main AS um ON um.ID = r.ResolverID
 	WHERE r.LastChangeTime > NOW() - INTERVAL 1 MONTH
 	GROUP BY r.ResolverID
 	ORDER BY Reports DESC");
@@ -103,14 +119,22 @@ $Results = $DB->to_array();
 				<td class="colhead_dark">Username</td>
 				<td class="colhead_dark number_column">Reports</td>
 			</tr>
-<? foreach ($Results as $Result) {
+<?
+foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
+	if ($Username == $LoggedUser['Username']) {
+		$RowClass = ' class="rowa"';
+	} else {
+		$RowClass = '';
+	}
 ?>
-			<tr>
+			<tr<?=$RowClass?>>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
 				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
-<? } ?>
+<?
+}
+?>
 		</table>
 <?
 $DB->query("
@@ -119,7 +143,7 @@ $DB->query("
 		um.Username,
 		COUNT(r.ID) AS Reports
 	FROM reportsv2 AS r
-		JOIN users_main AS um ON um.ID=r.ResolverID
+		JOIN users_main AS um ON um.ID = r.ResolverID
 	GROUP BY r.ResolverID
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
@@ -130,14 +154,22 @@ $Results = $DB->to_array();
 				<td class="colhead_dark">Username</td>
 				<td class="colhead_dark number_column">Reports</td>
 			</tr>
-<? foreach ($Results as $Result) {
+<?
+foreach ($Results as $Result) {
 	list($UserID, $Username, $Reports) = $Result;
+	if ($Username == $LoggedUser['Username']) {
+		$RowClass = ' class="rowa"';
+	} else {
+		$RowClass = '';
+	}
 ?>
-			<tr>
+			<tr<?=$RowClass?>>
 				<td><a href="reportsv2.php?view=resolver&amp;id=<?=$UserID?>"><?=$Username?></a></td>
 				<td class="number_column"><?=number_format($Reports)?></td>
 			</tr>
-<? } ?>
+<?
+}
+?>
 		</table>
 		<h3>Different view modes by person</h3>
 		<div class="box pad">
@@ -206,7 +238,7 @@ $Results = $DB->to_array();
 			um.Username,
 			COUNT(r.ID) AS Count
 		FROM reportsv2 AS r
-			LEFT JOIN users_main AS um ON r.ResolverID=um.ID
+			LEFT JOIN users_main AS um ON r.ResolverID = um.ID
 		WHERE r.Status = 'InProgress'
 		GROUP BY r.ResolverID");
 
@@ -219,15 +251,20 @@ $Results = $DB->to_array();
 				<td class="colhead_dark number_column">Current Count</td>
 			</tr>
 <?
-		foreach ($Staff as $Array) {	?>
-			<tr>
+	foreach ($Staff as $Array) {
+		if ($Array['Username'] == $LoggedUser['Username']) {
+			$RowClass = ' class="rowa"';
+		} else {
+			$RowClass = '';
+		}
+?>
+			<tr<?=$RowClass?>>
 				<td>
 					<a href="reportsv2.php?view=staff&amp;id=<?=$Array['ResolverID']?>"><?=display_str($Array['Username'])?>'s reports</a>
 				</td>
 				<td class="number_column"><?=number_format($Array['Count'])?></td>
 			</tr>
-<?
-		} ?>
+<?	} ?>
 		</table>
 		<h3>Different view modes by report type</h3>
 <?
@@ -236,7 +273,7 @@ $Results = $DB->to_array();
 			r.Type,
 			COUNT(r.ID) AS Count
 		FROM reportsv2 AS r
-		WHERE r.Status='New'
+		WHERE r.Status = 'New'
 		GROUP BY r.Type");
 	$Current = $DB->to_array();
 	if (!empty($Current)) {

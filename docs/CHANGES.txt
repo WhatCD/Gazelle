@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2013-10-28 by alderaan
+Collage API now returns subscriberCount and torrentGroupIDList
+
+2013-10-28 by alderaan
+Reports v1 stats page revamped. Now, looks very similar to the Reports v2 "Views" page.
+
 2013-10-26 by alderaan
 Added tooltip class to many HTML elements that were missing it
 

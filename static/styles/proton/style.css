@@ -764,7 +764,7 @@ table {
 	-moz-box-shadow: -4px 1px 8px rgba(187, 215, 235, 0.8);
 	box-shadow: -4px 1px 8px rgba(187, 215, 235, 0.8);
 	background-color: #F5F5F5;
-	word-break: break-word;
+	word-wrap: break-word;
 }
 
 .forum_post .body div {
@@ -2070,7 +2070,8 @@ div[class~=tooltipster-base] {
 Consistent .box and .pad
 TODO: Make these rules apply globally and add exceptions where needed
 */
-#reportsv2 .box {
+#reportsv2 .box,
+#reports .box {
 	background-color: #f5f5f5;
 	border: 1px solid #dcdcdc;
 	margin: 0 0 20px 0;
@@ -2079,6 +2080,7 @@ TODO: Make these rules apply globally and add exceptions where needed
 	border-radius: 4px;
 }
 
-#reportsv2 .pad {
+#reportsv2 .pad,
+#reports .pad {
 	padding: 10px !important;
 }

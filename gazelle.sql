@@ -1398,7 +1398,8 @@ CREATE TABLE `users_freeleeches` (
   `Downloaded` bigint(20) NOT NULL DEFAULT '0',
   `Uses` int(10) NOT NULL DEFAULT '1',
   PRIMARY KEY (`UserID`,`TorrentID`),
-  KEY `Time` (`Time`)
+  KEY `Time` (`Time`),
+  KEY `Expired_Time` (`Expired`,`Time`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_geodistribution` (

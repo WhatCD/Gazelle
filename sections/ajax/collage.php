@@ -15,9 +15,9 @@ if ($CollageID && !is_number($CollageID)) {
 $CacheKey = "collage_$CollageID";
 $Data = $Cache->get_value($CacheKey);
 if ($Data) {
-	list($K, list($Name, $Description, , , , $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser)) = each($Data);
+	list($K, list($Name, $Description,, $Subscribers, $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated)) = each($Data);
 } else {
-	$sql = "
+	$DB->query("
 		SELECT
 			Name,
 			Description,
@@ -29,14 +29,29 @@ if ($Data) {
 			MaxGroupsPerUser,
 			Subscribers
 		FROM collages
-		WHERE ID = '$CollageID'";
-	$DB->query($sql);
+		WHERE ID = '$CollageID'");
 
 	if (!$DB->has_results()) {
 		json_die("failure");
 	}
 
-	list($Name, $Description, $CreatorID, $Deleted, $CollageCategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser) = $DB->next_record();
+	list($Name, $Description, $CreatorID, $Deleted, $CollageCategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Subscribers) = $DB->next_record();
+}
+
+// Populate data that wasn't included in the cache
+if (is_null($TorrentGroups) || is_number($TorrentGroups)) {
+	$DB->query("
+		SELECT GroupID
+		FROM collages_torrents
+		WHERE CollageID = $CollageID");
+	$TorrentGroups = $DB->collect('GroupID');
+}
+if (is_null($Subscribers)) {
+	$DB->query("
+		SELECT Subscribers
+		FROM collages
+		WHERE ID = $CollageID");
+	list($Subscribers) = $DB->next_record();
 }
 
 $JSON = array(
@@ -50,7 +65,9 @@ $JSON = array(
 	'locked'              => (bool)$Locked,
 	'maxGroups'           => (int)$MaxGroups,
 	'maxGroupsPerUser'    => (int)$MaxGroupsPerUser,
-	'hasBookmarked'       => Bookmarks::has_bookmarked('collage', $CollageID)
+	'hasBookmarked'       => Bookmarks::has_bookmarked('collage', $CollageID),
+	'subscriberCount'     => (int)$Subscribers,
+	'torrentGroupIDList'  => $TorrentGroups
 );
 
 if ($CollageCategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
@@ -148,6 +165,6 @@ if ($CollageCategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
 	$JSON['artists'] = $Artists;
 }
 
-$Cache->cache_value($CacheKey, array(array($Name, $Description, array(), array(), array(), $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser)), 3600);
+$Cache->cache_value($CacheKey, array(array($Name, $Description, null, $Subscribers, $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser)), 3600);
 
 json_die("success", $JSON);

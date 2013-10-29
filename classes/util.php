@@ -55,6 +55,41 @@ function assert_numbers(&$Base, $Keys, $Error = 0) {
 }
 
 /**
+ * Return true, false or null, depending on the input value's "truthiness" or "non-truthiness"
+ *
+ * @param $Value the input value to check for truthiness
+ * @return true if $Value is "truthy", false if it is "non-truthy" or null if $Value was not
+ *         a bool-like value
+ */
+function is_bool_value($Value) {
+	if (is_bool($Value)) {
+		return $Value;
+	}
+	if (is_string($Value)) {
+		switch (strtolower($Value)) {
+			case 'true':
+			case 'yes':
+			case 'on':
+			case '1':
+				return true;
+			case 'false':
+			case 'no':
+			case 'off':
+			case '0':
+				return false;
+		}
+	}
+	if (is_numeric($Value)) {
+		if ($Value == 1) {
+			return true;
+		} elseif ($Value == 0) {
+			return false;
+		}
+	}
+	return null;
+}
+
+/**
  * HTML-escape a string for output.
  * This is preferable to htmlspecialchars because it doesn't screw up upon a double escape.
  *

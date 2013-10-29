@@ -14,8 +14,8 @@ View::show_header('Other reports stats');
 		<a href="reports.php?action=stats">Stats</a>
 	</div>
 </div>
-<div class="box pad thin" style="padding: 0px 0px 0px 20px; margin-left: auto; margin-right: auto;">
-	<table class="layout">
+<div class="thin float_clear">
+	<div class="two_columns pad">
 <?
 if (check_perms('admin_reports')) {
 $DB->query("
@@ -29,13 +29,11 @@ $DB->query("
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<tr>
-		<td class="label"><strong>Reports resolved in the last 24 hours</strong></td>
-		<td>
-		<table style="width: 50%; margin-left: auto; margin-right: auto;" class="border">
-			<tr>
-				<td class="head colhead_dark">Username</td>
-				<td class="head colhead_dark">Reports</td>
+		<h3><strong>Reports resolved in the last 24 hours</strong></h3>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Reports</td>
 			</tr>
 <?
 	foreach ($Results as $Result) {
@@ -52,9 +50,6 @@ $Results = $DB->to_array();
 			</tr>
 <?	} ?>
 		</table>
-		</td>
-		</tr>
-		<tr>
 <?
 $DB->query("
 	SELECT um.Username,
@@ -67,12 +62,11 @@ $DB->query("
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<td class="label"><strong>Reports resolved in the last week</strong></td>
-		<td>
-		<table style="width: 50%; margin-left: auto; margin-right: auto;" class="border">
-			<tr>
-				<td class="head colhead_dark">Username</td>
-				<td class="head colhead_dark">Reports</td>
+		<h3><strong>Reports resolved in the last week</strong></h3>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Reports</td>
 			</tr>
 <?
 	foreach ($Results as $Result) {
@@ -89,9 +83,6 @@ $Results = $DB->to_array();
 			</tr>
 <?	} ?>
 		</table>
-		</td>
-		</tr>
-		<tr>
 <?
 $DB->query("
 	SELECT um.Username,
@@ -104,12 +95,11 @@ $DB->query("
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<td class="label"><strong>Reports resolved in the last month</strong></td>
-		<td>
-		<table style="width: 50%; margin-left: auto; margin-right: auto;" class="border">
-			<tr>
-				<td class="head colhead_dark">Username</td>
-				<td class="head colhead_dark">Reports</td>
+		<h3><strong>Reports resolved in the last month</strong></h3>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Reports</td>
 			</tr>
 <?
 	foreach ($Results as $Result) {
@@ -126,9 +116,6 @@ $Results = $DB->to_array();
 			</tr>
 <?	} ?>
 		</table>
-		</td>
-		</tr>
-		<tr>
 <?
 $DB->query("
 	SELECT um.Username,
@@ -139,12 +126,11 @@ $DB->query("
 	ORDER BY Reports DESC");
 $Results = $DB->to_array();
 ?>
-		<td class="label"><strong>Reports resolved since "other" reports (2009-08-21)</strong></td>
-		<td>
-		<table style="width: 50%; margin-left: auto; margin-right: auto;" class="border">
-			<tr>
-				<td class="head colhead_dark">Username</td>
-				<td class="head colhead_dark">Reports</td>
+		<h3><strong>Reports resolved since "other" reports (2009-08-21)</strong></h3>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Reports</td>
 			</tr>
 <?
 	foreach ($Results as $Result) {
@@ -161,11 +147,10 @@ $Results = $DB->to_array();
 			</tr>
 <?	} ?>
 		</table>
-		</td>
-		</tr>
 <?
 } //if (check_perms('admin_reports')) ?>
-		<tr>
+	</div>
+	<div class="two_columns pad">
 <?
 	$DB->query("
 		SELECT u.Username,
@@ -178,14 +163,13 @@ $Results = $DB->to_array();
 		LIMIT 30");
 	$Results = $DB->to_array();
 ?>
-			<td class="label"><strong>Threads trashed since the beginning of time</strong></td>
-			<td>
-				<table style="width: 50%; margin-left: auto; margin-right: auto;" class="border">
-					<tr>
-						<td class="head colhead_dark">Place</td>
-						<td class="head colhead_dark">Username</td>
-						<td class="head colhead_dark">Trashed</td>
-					</tr>
+		<h3><strong>Threads trashed since the beginning of time</strong></h3>
+		<table class="box border">
+			<tr class="colhead">
+				<td class="colhead_dark number_column">Place</td>
+				<td class="colhead_dark">Username</td>
+				<td class="colhead_dark number_column">Trashed</td>
+			</tr>
 <?
 	$i = 1;
 	foreach ($Results as $Result) {
@@ -196,19 +180,17 @@ $Results = $DB->to_array();
 			$RowClass = '';
 		}
 ?>
-					<tr<?=$RowClass?>>
-						<td><?=$i?></td>
-						<td><?=$Username?></td>
-						<td class="number_column"><?=number_format($Trashed)?></td>
-					</tr>
+			<tr<?=$RowClass?>>
+				<td class="number_column"><?=$i?></td>
+				<td><?=$Username?></td>
+				<td class="number_column"><?=number_format($Trashed)?></td>
+			</tr>
 <?
 		$i++;
 	}
 ?>
-				</table>
-			</td>
-		</tr>
-	</table>
+		</table>
+	</div>
 </div>
 <?
 View::show_footer();

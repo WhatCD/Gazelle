@@ -194,7 +194,7 @@ input[type="submit"]:active, input[type="button"]:active {
 input[value="Upload torrent"], input[value="Upload torrents"] {
 	margin: 15px 0 0 0;
 	background-color: #2e2e2e;
-	color: a5cce9;
+	color: #a5cce9;
 	background-image: url('images/button.png');
 	border-top: 1px solid #323232;
 	border-left: 1px solid #323232;
@@ -2049,12 +2049,14 @@ div[class~=tooltipster-content] > a {
 Consistent .box and .pad
 TODO: Make these rules apply globally and add exceptions where needed
 */
-#reportsv2 .box {
+#reportsv2 .box,
+#reports .box {
 	background-color: #212121;
 	border: 1px solid #1a1a1a;
 	margin: 0 0 20px 0;
 }
 
-#reportsv2 .pad {
+#reportsv2 .pad,
+#reports .pad {
 	padding: 10px !important;
 }

@@ -8,7 +8,8 @@ View::show_header('Ratio Requirements');
 	</div>
 	<div class="box pad rule_summary">
 		<br />
-		<strong>Ratio System Overview:</strong><br />
+		<strong>Ratio System Overview:</strong>
+		<br />
 		<ul>
 			<li>Your <strong>ratio</strong> is calculated by dividing the amount of data you&apos;ve uploaded by the amount of data you&apos;ve downloaded. You can view your ratio in the site header or in the &quot;stats&quot; section of your user profile.
 			</li>
@@ -20,7 +21,8 @@ View::show_header('Ratio Requirements');
 		</ul>
 		<br />
 		<br />
-		<strong>Required Ratio Overview:</strong><br />
+		<strong>Required Ratio Overview:</strong>
+		<br />
 		<ul>
 			<li>Your required ratio represents the minimum ratio you must maintain to avoid ratio watch. You can view your required ratio in the site header after the word &quot;required&quot; or in the &quot;stats&quot; section of your user profile.
 			</li>
@@ -32,11 +34,13 @@ View::show_header('Ratio Requirements');
 		</ul>
 		<br />
 		<br />
-
-		<div style="text-align: center;"><strong>Required Ratio Table</strong><br /><br />
+		<div style="text-align: center;">
+			<strong>Required Ratio Table</strong>
+			<br />
+			<br />
 			<table class="ratio_table">
 				<tr class="colhead">
-					<td class="tooltip" title="These units are actually in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Amount Downloaded</span></td>
+					<td class="tooltip" title="These units are actually in base 2, not base 10. For example, there are 1,024 MB in 1 GB.">Amount Downloaded</td>
 					<td>Required Ratio (0% seeded)</td>
 					<td>Required Ratio (100% seeded)</td>
 				</tr>
@@ -94,19 +98,22 @@ View::show_header('Ratio Requirements');
 		</div>
 		<br />
 		<br />
-		<strong>Required Ratio Calculation:</strong><br />
+		<strong>Required Ratio Calculation:</strong>
+		<br />
 		<ul>
-			<li><strong>1: Determine the maximum and minimum possible values of your required ratio.</strong> Using the table above, determine your amount downloaded bracket from the first column.
+			<li>
+				<strong>1: Determine the maximum and minimum possible values of your required ratio.</strong> Using the table above, determine your amount downloaded bracket from the first column.
 				Next, locate the values in the adjacent columns. The second column lists the maximum required ratio for each bracket, and the third column lists the minimum required ratio for each
 				bracket. The maximum and minimum required ratios are also referred to as the <strong>0% seeded</strong> and <strong>100% seeded</strong> required ratios, respectively.
 			</li>
-			<li><strong>2: Determine the actual required ratio.</strong> Your actual required ratio will be a number that falls between the maximum and minimum required ratio values determined in the
+			<li>
+				<strong>2: Determine the actual required ratio.</strong> Your actual required ratio will be a number that falls between the maximum and minimum required ratio values determined in the
 				previous step. To determine your actual required ratio, the system first uses the maximum required ratio (0% seeded) and multiplies it by the value [1 &minus; (<var>seeding</var> / <var>snatched</var>)]. Formatted
 				differently, the calculation performed by the system looks like this:
 				<br />
 				<br />
 				<div style="text-align: center;">
-					<img style="vertical-align: middle;" src="static/blank.gif"
+					<img style="vertical-align: middle;" src="static/blank.gif" alt="required ratio = (maximum required ratio) * (1 - (seeding / snatched))"
 							onload="if (this.src.substr(this.src.length - 9, this.src.length) == 'blank.gif') { this.src = 'https://chart.googleapis.com/chart?cht=tx&amp;chf=bg,s,FFFFFF00&amp;chl=%5Ctextrm%7B%28maximum+required+ratio%29+%2A+%281-%5Cfrac%7Bseeding%7D%7Bsnatched%7D%29%7D&amp;chco=' + hexify(getComputedStyle(this.parentNode, null).color); }" />
 				</div>
 				<br />
@@ -127,7 +134,8 @@ View::show_header('Ratio Requirements');
 		</ul>
 		<br />
 		<br />
-		<strong>Required Ratio Details:</strong><br />
+		<strong>Required Ratio Details:</strong>
+		<br />
 		<ul>
 			<li>If you stop seeding for one week, your required ratio will become the maximum required ratio (0% seeded) for your amount downloaded bracket. Once you have resumed seeding for a 72 hour
 				period, your required ratio will decrease according to the above calculations.
@@ -142,7 +150,8 @@ View::show_header('Ratio Requirements');
 		</ul>
 		<br />
 		<br />
-		<strong>Required Ratio Example:</strong><br />
+		<strong>Required Ratio Example:</strong>
+		<br />
 		<ul>
 			<li>In this example, Rippy has downloaded 25 GB. Rippy falls into the 20&ndash;30 GB amount downloaded bracket in the table above. Rippy&apos;s maximum required ratio (0% seeded) is 0.30, and his minimum required ratio (100% seeded) is 0.05.
 			</li>
@@ -157,7 +166,8 @@ View::show_header('Ratio Requirements');
 		</ul>
 		<br />
 		<br />
-		<strong>Ratio Watch Overview:</strong><br />
+		<strong>Ratio Watch Overview:</strong>
+		<br />
 		<ul>
 			<li>Everyone gets to download their first 5 GB before ratio watch eligibility begins.</li>
 			<li>If you&apos;ve downloaded more than 5 GB and your ratio does not meet or surpass your required ratio, you will be put on ratio watch and have <strong>two weeks</strong> to raise your
@@ -171,7 +181,8 @@ View::show_header('Ratio Requirements');
 		</ul>
 		<br />
 		<br />
-		<strong>Leaving Ratio Watch:</strong><br />
+		<strong>Leaving Ratio Watch:</strong>
+		<br />
 		<ul>
 			<li>To leave ratio watch, you must either raise your ratio by uploading more, or lower your required ratio by seeding more. Your ratio must be equal to or above your required ratio in
 				order for ratio watch to end.
@@ -187,8 +198,7 @@ View::show_header('Ratio Requirements');
 		<br />
 	</div>
 <? include('jump.php'); ?>
-	</div>
-	</div>
+</div>
 <?
 	View::show_footer();
 ?>

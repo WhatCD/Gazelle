@@ -18,19 +18,29 @@ if (!is_number($CollageID)) {
 	error(0);
 }
 
-$Data = $Cache->get_value("collage_$CollageID");
+$CacheKey = "collage_$CollageID";
+$Data = $Cache->get_value($CacheKey);
 
 if ($Data) {
-	list($K, list($Name, $Description, , , $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers)) = each($Data);
+	list($K, list($Name, $Description, $NumGroups, , $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers)) = each($Data);
 } else {
 	$DB->query("
-		SELECT Name, Description, UserID, Deleted, CategoryID, Locked, MaxGroups, MaxGroupsPerUser, Updated, Subscribers
+		SELECT
+			Name,
+			Description,
+			UserID,
+			Deleted,
+			CategoryID,
+			Locked,
+			MaxGroups,
+			MaxGroupsPerUser,
+			Updated,
+			Subscribers
 		FROM collages
 		WHERE ID = '$CollageID'");
 	if ($DB->has_results()) {
 		list($Name, $Description, $CreatorID, $Deleted, $CollageCategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers) = $DB->next_record();
-		$TorrentList = '';
-		$CollageList = '';
+		$NumGroups = null;
 	} else {
 		$Deleted = '1';
 	}
@@ -75,4 +85,20 @@ if ((int)$CollageCategoryID === array_search(ARTIST_COLLAGE, $CollageCats)) {
 } else {
 	include(SERVER_ROOT.'/sections/collages/torrent_collage.php');
 }
+
+$Cache->cache_value($CacheKey, array(array(
+		$Name,
+		$Description,
+		(int)$NumGroups,
+		null,
+		$CommentList,
+		(bool)$Deleted,
+		(int)$CollageCategoryID,
+		(int)$CreatorID,
+		(bool)$Locked,
+		(int)$MaxGroups,
+		(int)$MaxGroupsPerUser,
+		(int)$Subscribers
+		)), 3600);
+
 

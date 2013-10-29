@@ -451,6 +451,7 @@ class Users {
 	 * @param boolean $IsEnabled -- TODO: Why the fuck do we need this?
 	 * @param boolean $Class whether or not to show the class
 	 * @param boolean $Title whether or not to show the title
+	 * @param boolean $IsDonorForum for displaying donor forum honorific prefixes and suffixes
 	 * @return HTML formatted username
 	 */
 	public static function format_username($UserID, $Badges = false, $IsWarned = true, $IsEnabled = true, $Class = false, $Title = false, $IsDonorForum = false) {
@@ -474,7 +475,7 @@ class Users {
 
 		$Username = $UserInfo['Username'];
 		$Paranoia = $UserInfo['Paranoia'];
-		$ShowDonorIcon = !in_array('hide_donor_heart', $Paranoia);
+		$ShowDonorIcon = (!in_array('hide_donor_heart', $Paranoia) || check_perms('users_override_paranoia', $UserInfo['Class']));
 
 		if ($IsDonorForum) {
 			list($Prefix, $Suffix, $HasComma) = Donations::get_titles($UserID);
