@@ -109,7 +109,7 @@ class TEXT {
 	 * @param bool $TOC When used, will enabled TOC
 	 */
 	public function __construct ($TOC = false) {
-		$this->TOC = (bool) $TOC;
+		$this->TOC = (boolean)$TOC;
 		foreach ($this->Smileys as $Key=>$Val) {
 			$this->Smileys[$Key] = '<img border="0" src="'.STATIC_SERVER.'common/smileys/'.$Val.'" alt="" />';
 		}
@@ -530,7 +530,7 @@ class TEXT {
 			$off = 0;
 
 			foreach ($this->Headlines as $t) {
-				$n = (int) $t[0];
+				$n = (int)$t[0];
 				if ($i === 0 && $n > 1) {
 					$off = $n - $level;
 				}

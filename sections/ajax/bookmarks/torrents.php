@@ -34,12 +34,12 @@ foreach ($TorrentList as $Torrent) {
 	$JsonTorrents = array();
 	foreach ($Torrent['Torrents'] as $GroupTorrents) {
 		$JsonTorrents[] = array(
-			'id' => (int) $GroupTorrents['ID'],
-			'groupId' => (int) $GroupTorrents['GroupID'],
+			'id' => (int)$GroupTorrents['ID'],
+			'groupId' => (int)$GroupTorrents['GroupID'],
 			'media' => $GroupTorrents['Media'],
 			'format' => $GroupTorrents['Format'],
 			'encoding' => $GroupTorrents['Encoding'],
-			'remasterYear' => (int) $GroupTorrents['RemasterYear'],
+			'remasterYear' => (int)$GroupTorrents['RemasterYear'],
 			'remastered' => $GroupTorrents['Remastered'] == 1,
 			'remasterTitle' => $GroupTorrents['RemasterTitle'],
 			'remasterRecordLabel' => $GroupTorrents['RemasterRecordLabel'],
@@ -47,21 +47,21 @@ foreach ($TorrentList as $Torrent) {
 			'scene' => $GroupTorrents['Scene'] == 1,
 			'hasLog' => $GroupTorrents['HasLog'] == 1,
 			'hasCue' => $GroupTorrents['HasCue'] == 1,
-			'logScore' => (float) $GroupTorrents['LogScore'],
-			'fileCount' => (int) $GroupTorrents['FileCount'],
+			'logScore' => (float)$GroupTorrents['LogScore'],
+			'fileCount' => (int)$GroupTorrents['FileCount'],
 			'freeTorrent' => $GroupTorrents['FreeTorrent'] == 1,
-			'size' => (float) $GroupTorrents['Size'],
-			'leechers' => (int) $GroupTorrents['Leechers'],
-			'seeders' => (int) $GroupTorrents['Seeders'],
-			'snatched' => (int) $GroupTorrents['Snatched'],
+			'size' => (float)$GroupTorrents['Size'],
+			'leechers' => (int)$GroupTorrents['Leechers'],
+			'seeders' => (int)$GroupTorrents['Seeders'],
+			'snatched' => (int)$GroupTorrents['Snatched'],
 			'time' => $GroupTorrents['Time'],
-			'hasFile' => (int) $GroupTorrents['HasFile']
+			'hasFile' => (int)$GroupTorrents['HasFile']
 		);
 	}
 	$JsonBookmarks[] = array(
-		'id' => (int) $Torrent['ID'],
+		'id' => (int)$Torrent['ID'],
 		'name' => $Torrent['Name'],
-		'year' => (int) $Torrent['Year'],
+		'year' => (int)$Torrent['Year'],
 		'recordLabel' => $Torrent['RecordLabel'],
 		'catalogueNumber' => $Torrent['CatalogueNumber'],
 		'tagList' => $Torrent['TagList'],

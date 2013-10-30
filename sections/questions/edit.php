@@ -23,7 +23,7 @@ if (!$DB->has_results()) {
 
 list($Answer) = $DB->next_record();
 
-View::show_header("Ask the Staff");
+View::show_header('Ask the Staff', 'bbcode');
 ?>
 <div class="thin">
 	<h2>

@@ -11,9 +11,9 @@ if (!check_perms('users_mod') && !$LoggedUser['ExtraClasses'][DELTA_TEAM]) {
 
 View::show_header('Label Aliases');
 
-$OrderBy = (($_GET['order'] == 'BadLabels') ? 'BadLabel' : 'AliasLabel');
+$OrderBy = $_GET['order'] === 'BadLabels' ? 'BadLabel' : 'AliasLabel';
 /*
-$LabelID = (int) $_GET['id'];
+$LabelID = (int)$_GET['id'];
 $LabelNameSQL = '';
 //TODO join with labels table to get label name
 if (!empty($LabelID)) {

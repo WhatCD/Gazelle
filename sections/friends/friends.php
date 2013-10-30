@@ -76,11 +76,15 @@ foreach ($Friends as $Friend) {
 				<span style="float: left;"><?=Users::format_username($FriendID, true, true, true, true)?>
 <?	if (check_paranoia('ratio', $Paranoia, $Class, $FriendID)) { ?>
 				&nbsp;Ratio: <strong><?=Format::get_ratio_html($Uploaded, $Downloaded)?></strong>
-<?	}
-	if (check_paranoia('uploaded', $Paranoia, $Class, $FriendID)) { ?>
+<?
+	}
+	if (check_paranoia('uploaded', $Paranoia, $Class, $FriendID)) {
+?>
 				&nbsp;Up: <strong><?=Format::get_size($Uploaded)?></strong>
-<?	}
-	if (check_paranoia('downloaded', $Paranoia, $Class, $FriendID)) { ?>
+<?
+	}
+	if (check_paranoia('downloaded', $Paranoia, $Class, $FriendID)) {
+?>
 				&nbsp;Down: <strong><?=Format::get_size($Downloaded)?></strong>
 <?	} ?>
 				</span>
@@ -96,14 +100,14 @@ foreach ($Friends as $Friend) {
 			</td>
 <?	} ?>
 			<td valign="top">
-					<input type="hidden" name="friendid" value="<?=$FriendID?>" />
+				<input type="hidden" name="friendid" value="<?=$FriendID?>" />
 
-					<textarea name="comment" rows="4" cols="65"><?=$Comment?></textarea>
-				</td>
-				<td class="left" valign="top">
-					<input type="submit" name="action" value="Update" /><br />
-					<input type="submit" name="action" value="Remove friend" /><br />
-					<input type="submit" name="action" value="Contact" /><br />
+				<textarea name="comment" rows="4" cols="65"><?=$Comment?></textarea>
+			</td>
+			<td class="left" valign="top">
+				<input type="submit" name="action" value="Update" /><br />
+				<input type="submit" name="action" value="Remove friend" /><br />
+				<input type="submit" name="action" value="Contact" /><br />
 			</td>
 		</tr>
 	</table>

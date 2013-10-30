@@ -48,13 +48,13 @@ $JsonBlog = array();
 for ($i = 0; $i < 5; $i++) {
 	list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $Blog[$i];
 	$JsonBlog[] = array(
-		'blogId' => (int) $BlogID,
+		'blogId' => (int)$BlogID,
 		'author' => $Author,
 		'title' => $Title,
 		'bbBody' => $Body,
 		'body' => $Text->full_format($Body),
 		'blogTime' => $BlogTime,
-		'threadId' => (int) $ThreadID
+		'threadId' => (int)$ThreadID
 	);
 }
 
@@ -67,7 +67,7 @@ foreach ($News as $NewsItem) {
 	}
 
 	$JsonAnnouncements[] = array(
-		'newsId' => (int) $NewsID,
+		'newsId' => (int)$NewsID,
 		'title' => $Title,
 		'bbBody' => $Body,
 		'body' => $Text->full_format($Body),

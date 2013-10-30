@@ -202,7 +202,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 	$JsonPoll['closed'] = ($Closed == 1);
 	$JsonPoll['featured'] = $Featured;
 	$JsonPoll['question'] = $Question;
-	$JsonPoll['maxVotes'] = (int) $MaxVotes;
+	$JsonPoll['maxVotes'] = (int)$MaxVotes;
 	$JsonPoll['totalVotes'] = $TotalVotes;
 	$JsonPollAnswers = array();
 
@@ -246,22 +246,22 @@ foreach ($Thread as $Key => $Post) {
 	list($AuthorID, $Username, $PermissionID, $Paranoia, $Artist, $Donor, $Warned, $Avatar, $Enabled, $UserTitle) = array_values(Users::user_info($AuthorID));
 	$UserInfo = Users::user_info($EditedUserID);
 	$JsonPosts[] = array(
-		'postId' => (int) $PostID,
+		'postId' => (int)$PostID,
 		'addedTime' => $AddedTime,
 		'bbBody' => $Body,
 		'body' => $Text->full_format($Body),
-		'editedUserId' => (int) $EditedUserID,
+		'editedUserId' => (int)$EditedUserID,
 		'editedTime' => $EditedTime,
 		'editedUsername' => $UserInfo['Username'],
 		'author' => array(
-			'authorId' => (int) $AuthorID,
+			'authorId' => (int)$AuthorID,
 			'authorName' => $Username,
 			'paranoia' => $Paranoia,
-			'artist' => ($Artist === '1'),
-			'donor' => ($Donor === '1'),
-			'warned' => ($Warned !== '0000-00-00 00:00:00'),
+			'artist' => $Artist === '1',
+			'donor' => $Donor === '1',
+			'warned' => $Warned !== '0000-00-00 00:00:00',
 			'avatar' => $Avatar,
-			'enabled' => (($Enabled === '2') ? false : true),
+			'enabled' => $Enabled === '2' ? false : true,
 			'userTitle' => $UserTitle
 		),
 
@@ -273,16 +273,16 @@ print
 		array(
 			'status' => 'success',
 			'response' => array(
-				'forumId' => (int) $ForumID,
+				'forumId' => (int)$ForumID,
 				'forumName' => $Forums[$ForumID]['Name'],
-				'threadId' => (int) $ThreadID,
+				'threadId' => (int)$ThreadID,
 				'threadTitle' => display_str($ThreadInfo['Title']),
 				'subscribed' => in_array($ThreadID, $UserSubscriptions),
-				'locked' => ($ThreadInfo['IsLocked'] == 1),
-				'sticky' => ($ThreadInfo['IsSticky'] == 1),
-				'currentPage' => (int) $Page,
+				'locked' => $ThreadInfo['IsLocked'] == 1,
+				'sticky' => $ThreadInfo['IsSticky'] == 1,
+				'currentPage' => (int)$Page,
 				'pages' => ceil($ThreadInfo['Posts'] / $PerPage),
-				'poll' => (empty($JsonPoll) ? null : $JsonPoll),
+				'poll' => empty($JsonPoll) ? null : $JsonPoll,
 				'posts' => $JsonPosts
 			)
 		)

@@ -27,20 +27,20 @@ foreach ($Results as $GroupID => $Group) {
 	if (count($Artists) > 0) {
 		foreach ($Artists as $Artist) {
 			$JsonArtists[] = array(
-				'id' => (int) $Artist['id'],
+				'id' => (int)$Artist['id'],
 				'name' => $Artist['name'],
-				'aliasId' => (int) $Artist['aliasid']
+				'aliasId' => (int)$Artist['aliasid']
 			);
 		}
 	}
 
 	$JsonResults[] = array(
-		'torrentId' => (int) $FlacID,
-		'groupId' => (int) $GroupID,
+		'torrentId' => (int)$FlacID,
+		'groupId' => (int)$GroupID,
 		'artist' => $JsonArtists,
 		'groupName' => $GroupName,
-		'groupYear' => (int) $GroupYear,
-		'downloadUrl' => 'torrents.php?action=download&id='.$FlacID.'&authkey='.$LoggedUser['AuthKey'].'&torrent_pass='.$LoggedUser['torrent_pass']
+		'groupYear' => (int)$GroupYear,
+		'downloadUrl' => "torrents.php?action=download&id=$FlacID&authkey=".$LoggedUser['AuthKey'].'&torrent_pass='.$LoggedUser['torrent_pass']
 	);
 }
 

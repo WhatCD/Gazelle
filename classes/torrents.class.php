@@ -1,6 +1,7 @@
 <?
 class Torrents {
-	const FilelistDelim = 0xF7; // Hex for &divide; Must be the same as phrase_boundary in sphinx.conf!
+	const FILELIST_DELIM = 0xF7; // Hex for &divide; Must be the same as phrase_boundary in sphinx.conf!
+	const SNATCHED_UPDATE_INTERVAL = 3600; // How often we want to update users' snatch lists
 
 	/*
 	 * Function to get data and torrents for an array of GroupIDs. Order of keys doesn't matter
@@ -149,11 +150,13 @@ class Torrents {
 				}
 			}
 			// Fetch all user specific torrent properties
-			foreach ($Found as &$Group) {
-				$Group['Flags'] = array('IsSnatched' => false);
-				if (!empty($Group['Torrents'])) {
-					foreach ($Group['Torrents'] as &$Torrent) {
-						self::torrent_properties($Torrent, $Group['Flags']);
+			if ($Torrents) {
+				foreach ($Found as &$Group) {
+					$Group['Flags'] = array('IsSnatched' => false);
+					if (!empty($Group['Torrents'])) {
+						foreach ($Group['Torrents'] as &$Torrent) {
+							self::torrent_properties($Torrent, $Group['Flags']);
+						}
 					}
 				}
 			}
@@ -588,7 +591,7 @@ class Torrents {
 		if (isset($FilelistDelimUTF8)) {
 			return $FilelistDelimUTF8;
 		}
-		return $FilelistDelimUTF8 = utf8_encode(chr(self::FilelistDelim));
+		return $FilelistDelimUTF8 = utf8_encode(chr(self::FILELIST_DELIM));
 	}
 
 	/**
@@ -837,7 +840,7 @@ class Torrents {
 			$CurTime = time();
 			// This bucket hasn't been checked before
 			$CurSnatchedTorrents = G::$Cache->get_value("users_snatched_{$UserID}_$BucketID", true);
-			if ($CurSnatchedTorrents === false || $CurTime - $LastUpdate > 1800) {
+			if ($CurSnatchedTorrents === false || $CurTime - $LastUpdate > self::SNATCHED_UPDATE_INTERVAL) {
 				$Updated = array();
 				$QueryID = G::$DB->get_query_id();
 				if ($CurSnatchedTorrents === false || $LastUpdate == 0) {

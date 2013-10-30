@@ -18,15 +18,15 @@ if ($UserInfo['Class'] > $LoggedUser['Class']) {
 	error(403);
 }
 
-$URL = 'https://' . SSL_SITE_URL . "/forums.php?action=viewthread&amp;postid=$PostID#post$PostID";
+$URL = site_url() . "forums.php?action=viewthread&amp;postid=$PostID#post$PostID";
 if ($Length != 'verbal') {
-	$Time = ((int) $Length) * (7 * 24 * 60 * 60);
-	Tools::warn_user($UserID, $Time, "$URL - " . $Reason);
+	$Time = ((int)$Length) * (7 * 24 * 60 * 60);
+	Tools::warn_user($UserID, $Time, "$URL - $Reason");
 	$Subject = 'You have received a warning';
 	$PrivateMessage = "You have received a $Length week warning for [url=$URL]this post[/url].\n\n" . $PrivateMessage;
 
 	$WarnTime = time_plus($Time);
-	$AdminComment = date('Y-m-d') . ' - Warned until ' . $WarnTime . ' by ' . $LoggedUser['Username'] . " for $URL \nReason: $Reason\n\n";
+	$AdminComment = date('Y-m-d') . " - Warned until $WarnTime by " . $LoggedUser['Username'] . " for $URL \nReason: $Reason\n\n";
 
 } else {
 	$Subject = 'You have received a verbal warning';
@@ -51,11 +51,14 @@ $DB->query("
 		p.AuthorID,
 		p.TopicID,
 		t.ForumID,
-		CEIL(	(SELECT COUNT(ID)
+		CEIL(
+			(
+				SELECT COUNT(ID)
 				FROM forums_posts
 				WHERE forums_posts.TopicID = p.TopicID
-					AND forums_posts.ID <= '$PostID')/" . POSTS_PER_PAGE
-		. ") AS Page
+					AND forums_posts.ID <= '$PostID'
+			) / " . POSTS_PER_PAGE . "
+		) AS Page
 	FROM forums_posts as p
 		JOIN forums_topics as t on p.TopicID = t.ID
 		JOIN forums as f ON t.ForumID = f.ID
@@ -71,10 +74,10 @@ $DB->query("
 	WHERE ID = '$PostID'");
 
 $CatalogueID = floor((POSTS_PER_PAGE * $Page - POSTS_PER_PAGE) / THREAD_CATALOGUE);
-$Cache->begin_transaction('thread_' . $TopicID . '_catalogue_' . $CatalogueID);
+$Cache->begin_transaction("thread_$TopicID" . "_catalogue_$CatalogueID");
 if ($Cache->MemcacheDBArray[$Key]['ID'] != $PostID) {
 	$Cache->cancel_transaction();
-	$Cache->delete_value('thread_' . $TopicID . '_catalogue_' . $CatalogueID);
+	$Cache->delete_value("thread_$TopicID" . "_catalogue_$CatalogueID");
 	//just clear the cache for would be cache-screwer-uppers
 } else {
 	$Cache->update_row($Key, array(
@@ -95,7 +98,7 @@ if ($ThreadInfo['StickyPostID'] == $PostID) {
 	$ThreadInfo['StickyPost']['Body'] = $Body;
 	$ThreadInfo['StickyPost']['EditedUserID'] = $LoggedUser['ID'];
 	$ThreadInfo['StickyPost']['EditedTime'] = $SQLTime;
-	$Cache->cache_value('thread_' . $TopicID . '_info', $ThreadInfo, 0);
+	$Cache->cache_value("thread_$TopicID" . '_info', $ThreadInfo, 0);
 }
 
 $DB->query("

@@ -377,7 +377,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 		$AddExtra = ' / ';
 	}
 	if ($HasLog && $LogInDB) {
-		$ExtraInfo .= ' (' . (int) $LogScore . '%)';
+		$ExtraInfo .= ' (' . (int)$LogScore . '%)';
 	}
 	if ($HasCue) {
 		$ExtraInfo .= "{$AddExtra}Cue";

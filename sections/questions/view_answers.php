@@ -38,7 +38,7 @@ G::$DB->query("
 
 $Questions = G::$DB->to_array();
 
-View::show_header($UserInfo['Username'] . "'s answers", "questions");
+View::show_header($UserInfo['Username'] . "'s answers", 'questions,bbcode');
 
 ?>
 <div class="thin">

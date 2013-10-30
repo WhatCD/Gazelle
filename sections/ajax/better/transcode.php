@@ -110,11 +110,11 @@ foreach ($TorrentGroups as $GroupID => $Editions) {
 		}
 
 		$JsonResults[] = array(
-			'torrentId' => (int) $Edition['FlacID'],
-			'groupId' => (int) $GroupID,
+			'torrentId' => (int)$Edition['FlacID'],
+			'groupId' => (int)$GroupID,
 			'artist' => $ArtistNames,
 			'groupName' => $GroupName,
-			'groupYear' => (int) $GroupYear,
+			'groupYear' => (int)$GroupYear,
 			'missingV2' => !isset($Edition['Formats']['V2 (VBR)']),
 			'missingV0' => !isset($Edition['Formats']['V0 (VBR)']),
 			'missing320' => !isset($Encodings['Formats']['320']),

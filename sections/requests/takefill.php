@@ -126,14 +126,23 @@ if ($CategoryName === 'Music') {
 
 		if (strpos($LogCue, '%') !== false) {
 			preg_match('/\d+/', $LogCue, $Matches);
-			if ((int) $LogScore < (int) $Matches[0]) {
+			if ((int)$LogScore < (int)$Matches[0]) {
 				$Err = 'This torrent\'s log score is too low.';
 			}
 		}
 	}
 
 	if ($BitrateList === 'Other') {
-		if ($Bitrate === 'Lossless' || $Bitrate === 'APS (VBR)' || $Bitrate === 'V2 (VBR)' || $Bitrate === 'V1 (VBR)' || $Bitrate === '256' || $Bitrate === 'APX (VBR)' || $Bitrate === 'V0 (VBR)' || $Bitrate === 'q8.x (VBR)' || $Bitrate === '320' || $Bitrate === '24bit Lossless') {
+		if ($Bitrate === 'Lossless'
+				|| $Bitrate === 'APS (VBR)'
+				|| $Bitrate === 'V2 (VBR)'
+				|| $Bitrate === 'V1 (VBR)'
+				|| $Bitrate === '256'
+				|| $Bitrate === 'APX (VBR)'
+				|| $Bitrate === 'V0 (VBR)'
+				|| $Bitrate === '320'
+				|| $Bitrate === '24bit Lossless'
+		) {
 			$Err = "$Bitrate is not an allowed bitrate for this request.";
 		}
 	} elseif ($BitrateList && $BitrateList != 'Any' && !Misc::search_joined_string($BitrateList, $Bitrate)) {

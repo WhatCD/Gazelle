@@ -666,7 +666,7 @@ foreach ($TorrentList as $Torrent) {
 	if ($Format) { $ExtraInfo.=display_str($Format); $AddExtra=' / '; }
 	if ($Encoding) { $ExtraInfo.=$AddExtra.display_str($Encoding); $AddExtra=' / '; }
 	if ($HasLog) { $ExtraInfo.=$AddExtra.'Log'; $AddExtra=' / '; }
-	if ($HasLog && $LogInDB) { $ExtraInfo.=' ('.(int) $LogScore.'%)'; }
+	if ($HasLog && $LogInDB) { $ExtraInfo.=' ('.(int)$LogScore.'%)'; }
 	if ($HasCue) { $ExtraInfo.=$AddExtra.'Cue'; $AddExtra=' / '; }
 	if ($Scene) { $ExtraInfo.=$AddExtra.'Scene'; $AddExtra=' / '; }
 	if (!$ExtraInfo) {

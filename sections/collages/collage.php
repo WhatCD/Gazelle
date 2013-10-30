@@ -100,5 +100,3 @@ $Cache->cache_value($CacheKey, array(array(
 		(int)$MaxGroupsPerUser,
 		(int)$Subscribers
 		)), 3600);
-
-

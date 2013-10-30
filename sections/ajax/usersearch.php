@@ -26,7 +26,7 @@ if (isset($_GET['username'])) {
 			Warned,
 			Avatar
 		FROM users_main AS um
-			JOIN users_info AS ui ON ui.UserID=um.ID
+			JOIN users_info AS ui ON ui.UserID = um.ID
 		WHERE Username LIKE '%".db_string($_GET['username'])."%'
 		ORDER BY Username
 		LIMIT $Limit");
@@ -41,7 +41,7 @@ foreach ($Results as $Result) {
 	list($UserID, $Username, $Enabled, $PermissionID, $Donor, $Warned, $Avatar) = $Result;
 
 	$JsonUsers[] = array(
-		'userId' => (int) $UserID,
+		'userId' => (int)$UserID,
 		'username' => $Username,
 		'donor' => $Donor == 1,
 		'warned' => ($Warned != '0000-00-00 00:00:00'),
@@ -52,7 +52,7 @@ foreach ($Results as $Result) {
 }
 
 json_die("success", array(
-	'currentPage' => (int) $Page,
+	'currentPage' => (int)$Page,
 	'pages' => ceil($NumResults / USERS_PER_PAGE),
 	'results' => $JsonUsers
 ));

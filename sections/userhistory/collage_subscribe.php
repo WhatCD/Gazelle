@@ -6,7 +6,7 @@ if (!is_number($_GET['collageid'])) {
 	error(0);
 }
 
-$CollageID = (int) $_GET['collageid'];
+$CollageID = (int)$_GET['collageid'];
 
 if (!$UserSubscriptions = $Cache->get_value('collage_subs_user_'.$LoggedUser['ID'])) {
 	$DB->query('

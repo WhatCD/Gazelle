@@ -81,9 +81,9 @@ $VoteMax = ($VoteCount < 5 ? $VoteCount : 5);
 for ($i = 0; $i < $VoteMax; $i++) {
 	$User = array_shift($RequestVotes['Voters']);
 	$JsonTopContributors[] = array(
-		'userId' => (int) $User['UserID'],
+		'userId' => (int)$User['UserID'],
 		'userName' => $User['Username'],
-		'bounty' => (int) $User['Bounty']
+		'bounty' => (int)$User['Bounty']
 	);
 }
 reset($RequestVotes['Voters']);

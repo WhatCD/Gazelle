@@ -158,7 +158,7 @@ class NotificationsManager {
 		$Type = db_string($Type);
 		$UserWhere = '';
 		if (isset($UserID)) {
-			$UserID = (int) $UserID;
+			$UserID = (int)$UserID;
 			$UserWhere = " AND UserID = '$UserID'";
 		}
 		$QueryID = G::$DB->get_query_id();

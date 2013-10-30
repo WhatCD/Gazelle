@@ -374,7 +374,7 @@ if (isset($_POST['delete'])) {
 			}
 			break;
 		case 'trashing':
-			$TopicNotes[] = 'Trashed';
+			$TopicNotes[] = "Trashed (moved from [url=https://" . SSL_SITE_URL . "/forums.php?action=viewforum&forumid=$OldForumID]${OldForumName}[/url] to [url=https://" . SSL_SITE_URL . "/forums.php?action=viewforum&forumid=$ForumID]${ForumName}[/url])";
 			$Notification = "Your thread \"$NewLastTitle\" has been trashed";
 			break;
 		default:

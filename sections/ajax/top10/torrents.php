@@ -77,57 +77,62 @@ if ($Details == 'all' || $Details == 'week') {
 }
 
 if ($Details == 'all' || $Details == 'overall') {
-	if (!$TopTorrentsActiveAllTime = $Cache->get_value('top10tor_overall_'.$Limit.$WhereSum)) {
+	if (!$TopTorrentsActiveAllTime = $Cache->get_value("top10tor_overall_$Limit$WhereSum")) {
 		// IMPORTANT NOTE - we use WHERE t.Seeders>500 in order to speed up this query. You should remove it!
 		$Query = $BaseQuery;
-		if (!empty($Where)) { $Query .= ' WHERE '.$Where; }
-		elseif ($Details=='all') { $Query .= " WHERE t.Seeders>500 "; }
+		if (!empty($Where)) {
+			$Query .= " WHERE $Where";
+		} elseif ($Details == 'all') {
+			$Query .= " WHERE t.Seeders > 500 ";
+		}
 		$Query .= "
 			ORDER BY (t.Seeders + t.Leechers) DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
 		$TopTorrentsActiveAllTime = $DB->to_array();
-		$Cache->cache_value('top10tor_overall_'.$Limit.$WhereSum,$TopTorrentsActiveAllTime,3600*6);
+		$Cache->cache_value("top10tor_overall_$Limit$WhereSum", $TopTorrentsActiveAllTime, 3600 * 6);
 	}
 	$OuterResults[] = generate_torrent_json('Most Active Torrents of All Time', 'overall', $TopTorrentsActiveAllTime, $Limit);
 }
 
 if (($Details == 'all' || $Details == 'snatched') && empty($Where)) {
-	if (!$TopTorrentsSnatched = $Cache->get_value('top10tor_snatched_'.$Limit.$WhereSum)) {
+	if (!$TopTorrentsSnatched = $Cache->get_value("top10tor_snatched_$Limit$WhereSum")) {
 		$Query = $BaseQuery;
 		$Query .= "
 			ORDER BY t.Snatched DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
 		$TopTorrentsSnatched = $DB->to_array();
-		$Cache->cache_value('top10tor_snatched_'.$Limit.$WhereSum,$TopTorrentsSnatched,3600*6);
+		$Cache->cache_value("top10tor_snatched_$Limit$WhereSum", $TopTorrentsSnatched, 3600 * 6);
 	}
 	$OuterResults[] = generate_torrent_json('Most Snatched Torrents', 'snatched', $TopTorrentsSnatched, $Limit);
 }
 
 if (($Details == 'all' || $Details == 'data') && empty($Where)) {
-	if (!$TopTorrentsTransferred = $Cache->get_value('top10tor_data_'.$Limit.$WhereSum)) {
+	if (!$TopTorrentsTransferred = $Cache->get_value("top10tor_data_$Limit$WhereSum")) {
 		// IMPORTANT NOTE - we use WHERE t.Snatched>100 in order to speed up this query. You should remove it!
 		$Query = $BaseQuery;
-		if ($Details=='all') { $Query .= " WHERE t.Snatched>100 "; }
+		if ($Details == 'all') {
+			$Query .= " WHERE t.Snatched > 100 ";
+		}
 		$Query .= "
 			ORDER BY Data DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
 		$TopTorrentsTransferred = $DB->to_array();
-		$Cache->cache_value('top10tor_data_'.$Limit.$WhereSum,$TopTorrentsTransferred,3600*6);
+		$Cache->cache_value("top10tor_data_$Limit$WhereSum", $TopTorrentsTransferred, 3600 * 6);
 	}
 	$OuterResults[] = generate_torrent_json('Most Data Transferred Torrents', 'data', $TopTorrentsTransferred, $Limit);
 }
 
 if (($Details == 'all' || $Details == 'seeded') && empty($Where)) {
-	if (!$TopTorrentsSeeded = $Cache->get_value('top10tor_seeded_'.$Limit.$WhereSum)) {
+	if (!$TopTorrentsSeeded = $Cache->get_value("top10tor_seeded_$Limit$WhereSum")) {
 		$Query = $BaseQuery."
 			ORDER BY t.Seeders DESC
 			LIMIT $Limit;";
 		$DB->query($Query);
 		$TopTorrentsSeeded = $DB->to_array();
-		$Cache->cache_value('top10tor_seeded_'.$Limit.$WhereSum,$TopTorrentsSeeded,3600*6);
+		$Cache->cache_value("top10tor_seeded_$Limit$WhereSum", $TopTorrentsSeeded, 3600 * 6);
 	}
 	$OuterResults[] = generate_torrent_json('Best Seeded Torrents', 'seeded', $TopTorrentsSeeded, $Limit);
 }
@@ -142,34 +147,34 @@ print
 
 
 function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
-	global $LoggedUser,$Categories;
+	global $LoggedUser, $Categories;
 	$results = array();
 	foreach ($Details as $Detail) {
-		list($TorrentID,$GroupID,$GroupName,$GroupCategoryID,$WikiImage,$TorrentTags,
-			$Format,$Encoding,$Media,$Scene,$HasLog,$HasCue,$LogScore,$Year,$GroupYear,
-			$RemasterTitle,$Snatched,$Seeders,$Leechers,$Data,$ReleaseType,$Size) = $Detail;
+		list($TorrentID, $GroupID, $GroupName, $GroupCategoryID, $WikiImage, $TorrentTags,
+			$Format, $Encoding, $Media, $Scene, $HasLog, $HasCue, $LogScore, $Year, $GroupYear,
+			$RemasterTitle, $Snatched, $Seeders, $Leechers, $Data, $ReleaseType, $Size) = $Detail;
 
 		$Artist = Artists::display_artists(Artists::get_artist($GroupID), false, true);
-		$TruncArtist = substr($Artist, 0, strlen($Artist)-3);
+		$TruncArtist = substr($Artist, 0, strlen($Artist) - 3);
 
 		$TagList = array();
 
 		if ($TorrentTags != '') {
-			$TorrentTags = explode(' ',$TorrentTags);
+			$TorrentTags = explode(' ', $TorrentTags);
 			foreach ($TorrentTags as $TagKey => $TagName) {
-				$TagName = str_replace('_','.',$TagName);
+				$TagName = str_replace('_', '.', $TagName);
 				$TagList[] = $TagName;
 			}
 		}
 
 		// Append to the existing array.
 		$results[] = array(
-			'torrentId' => (int) $TorrentID,
-			'groupId' => (int) $GroupID,
+			'torrentId' => (int)$TorrentID,
+			'groupId' => (int)$GroupID,
 			'artist' => $TruncArtist,
 			'groupName' => $GroupName,
-			'groupCategory' => (int) $GroupCategory,
-			'groupYear' => (int) $GroupYear,
+			'groupCategory' => (int)$GroupCategory,
+			'groupYear' => (int)$GroupYear,
 			'remasterTitle' => $RemasterTitle,
 			'format' => $Format,
 			'encoding' => $Encoding,
@@ -177,20 +182,20 @@ function generate_torrent_json($Caption, $Tag, $Details, $Limit) {
 			'hasCue' => $HasCue == 1,
 			'media' => $Media,
 			'scene' => $Scene == 1,
-			'year' => (int) $Year,
+			'year' => (int)$Year,
 			'tags' => $TagList,
-			'snatched' => (int) $Snatched,
-			'seeders' => (int) $Seeders,
-			'leechers' => (int) $Leechers,
-			'data' => (int) $Data,
-			'size' => (int) $Size,
+			'snatched' => (int)$Snatched,
+			'seeders' => (int)$Seeders,
+			'leechers' => (int)$Leechers,
+			'data' => (int)$Data,
+			'size' => (int)$Size,
 		);
 	}
 
 	return array(
 		'caption' => $Caption,
 		'tag' => $Tag,
-		'limit' => (int) $Limit,
+		'limit' => (int)$Limit,
 		'results' => $results
 		);
 }

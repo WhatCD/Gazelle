@@ -17,9 +17,9 @@ $Results = $DB->query("
 		FROM users_notify_torrents AS unt
 			JOIN torrents AS t ON t.ID = unt.TorrentID
 			LEFT JOIN users_notify_filters AS unf ON unf.ID = unt.FilterID
-		WHERE unt.UserID=$LoggedUser[ID]".
+		WHERE unt.UserID = $LoggedUser[ID]".
 		((!empty($_GET['filterid']) && is_number($_GET['filterid']))
-			? " AND unf.ID='$_GET[filterid]'"
+			? " AND unf.ID = '$_GET[filterid]'"
 			: '')."
 		ORDER BY TorrentID DESC
 		LIMIT $Limit");
@@ -70,28 +70,28 @@ foreach ($FilterGroups as $FilterID => $FilterResults) {
 		}
 
 		$JsonNotifications[] = array(
-			'torrentId' => (int) $TorrentID,
-			'groupId' => (int) $GroupID,
+			'torrentId' => (int)$TorrentID,
+			'groupId' => (int)$GroupID,
 			'groupName' => $GroupName,
-			'groupCategoryId' => (int) $GroupCategoryID,
+			'groupCategoryId' => (int)$GroupCategoryID,
 			'wikiImage' => $WikiImage,
 			'torrentTags' => $TagList,
-			'size' => (float) $TorrentInfo['Size'],
-			'fileCount' => (int) $TorrentInfo['FileCount'],
+			'size' => (float)$TorrentInfo['Size'],
+			'fileCount' => (int)$TorrentInfo['FileCount'],
 			'format' => $TorrentInfo['Format'],
 			'encoding' => $TorrentInfo['Encoding'],
 			'media' => $TorrentInfo['Media'],
 			'scene' => $TorrentInfo['Scene'] == 1,
-			'groupYear' => (int) $GroupYear,
-			'remasterYear' => (int) $TorrentInfo['RemasterYear'],
+			'groupYear' => (int)$GroupYear,
+			'remasterYear' => (int)$TorrentInfo['RemasterYear'],
 			'remasterTitle' => $TorrentInfo['RemasterTitle'],
-			'snatched' => (int) $TorrentInfo['Snatched'],
-			'seeders' => (int) $TorrentInfo['Seeders'],
-			'leechers' => (int) $TorrentInfo['Leechers'],
+			'snatched' => (int)$TorrentInfo['Snatched'],
+			'seeders' => (int)$TorrentInfo['Seeders'],
+			'leechers' => (int)$TorrentInfo['Leechers'],
 			'notificationTime' => $TorrentInfo['Time'],
 			'hasLog' => $TorrentInfo['HasLog'] == 1,
 			'hasCue' => $TorrentInfo['HasCue'] == 1,
-			'logScore' => (float) $TorrentInfo['LogScore'],
+			'logScore' => (float)$TorrentInfo['LogScore'],
 			'freeTorrent' => $TorrentInfo['FreeTorrent'] == 1,
 			'logInDb' => $TorrentInfo['HasLog'] == 1,
 			'unread' => $Result['UnRead'] == 1

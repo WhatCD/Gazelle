@@ -316,10 +316,10 @@ json_die("success", array(
 	'stats' => array(
 		'joinedDate' => $JoinDate,
 		'lastAccess' => $LastAccess,
-		'uploaded' => (($Uploaded == null) ? null : (int) $Uploaded),
-		'downloaded' => (($Downloaded == null) ? null : (int) $Downloaded),
+		'uploaded' => (($Uploaded == null) ? null : (int)$Uploaded),
+		'downloaded' => (($Downloaded == null) ? null : (int)$Downloaded),
 		'ratio' => $Ratio,
-		'requiredRatio' => (($RequiredRatio == null) ? null : (float) $RequiredRatio)
+		'requiredRatio' => (($RequiredRatio == null) ? null : (float)$RequiredRatio)
 	),
 	'ranks' => array(
 		'uploaded' => $UploadedRank,
@@ -341,19 +341,19 @@ json_die("success", array(
 		'passkey' => $torrent_pass
 	),
 	'community' => array(
-		'posts' => (int) $ForumPosts,
-		'torrentComments' => (int) $NumComments,
-		'collagesStarted' => (($NumCollages == null) ? null : (int) $NumCollages),
-		'collagesContrib' => (($NumCollageContribs == null) ? null : (int) $NumCollageContribs),
-		'requestsFilled' => (($RequestsFilled == null) ? null : (int) $RequestsFilled),
-		'requestsVoted' => (($RequestsVoted == null) ? null : (int) $RequestsVoted),
-		'perfectFlacs' => (($PerfectFLACs == null) ? null : (int) $PerfectFLACs),
-		'uploaded' => (($Uploads == null) ? null : (int) $Uploads),
-		'groups' => (($UniqueGroups == null) ? null : (int) $UniqueGroups),
-		'seeding' => (($Seeding == null) ? null : (int) $Seeding),
-		'leeching' => (($Leeching == null) ? null : (int) $Leeching),
-		'snatched' => (($Snatched == null) ? null : (int) $Snatched),
-		'invited' => (($Invited == null) ? null : (int) $Invited)
+		'posts' => (int)$ForumPosts,
+		'torrentComments' => (int)$NumComments,
+		'collagesStarted' => (($NumCollages == null) ? null : (int)$NumCollages),
+		'collagesContrib' => (($NumCollageContribs == null) ? null : (int)$NumCollageContribs),
+		'requestsFilled' => (($RequestsFilled == null) ? null : (int)$RequestsFilled),
+		'requestsVoted' => (($RequestsVoted == null) ? null : (int)$RequestsVoted),
+		'perfectFlacs' => (($PerfectFLACs == null) ? null : (int)$PerfectFLACs),
+		'uploaded' => (($Uploads == null) ? null : (int)$Uploads),
+		'groups' => (($UniqueGroups == null) ? null : (int)$UniqueGroups),
+		'seeding' => (($Seeding == null) ? null : (int)$Seeding),
+		'leeching' => (($Leeching == null) ? null : (int)$Leeching),
+		'snatched' => (($Snatched == null) ? null : (int)$Snatched),
+		'invited' => (($Invited == null) ? null : (int)$Invited)
 	)
 ));
 ?>

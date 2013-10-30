@@ -37,7 +37,7 @@ $DB->query("
 	FROM user_questions");
 list($TotalQuestions) = $DB->next_record();
 
-View::show_header("Ask the Staff", "questions");
+View::show_header('Ask the Staff', 'questions,bbcode');
 
 ?>
 <div class="thin">

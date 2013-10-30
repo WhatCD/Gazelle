@@ -162,17 +162,17 @@ if ($ShowGrouped) {
 $JsonResults = array();
 while (list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsername, $TopicID, $ThreadTitle, $LastPostID, $LastRead, $Locked, $Sticky) = $DB->next_record()) {
 	$JsonResults[] = array(
-		'postId' => (int) $PostID,
-		'topicId' => (int) $TopicID,
+		'postId' => (int)$PostID,
+		'topicId' => (int)$TopicID,
 		'threadTitle' => $ThreadTitle,
-		'lastPostId' => (int) $LastPostID,
-		'lastRead' => (int) $LastRead,
+		'lastPostId' => (int)$LastPostID,
+		'lastRead' => (int)$LastRead,
 		'locked' => $Locked === '1',
 		'sticky' => $Sticky === '1',
 		'addedTime' => $AddedTime,
 		'body' => $Text->full_format($Body),
 		'bbbody' => $Body,
-		'editedUserId' => (int) $EditedUserID,
+		'editedUserId' => (int)$EditedUserID,
 		'editedTime' => $EditedTime,
 		'editedUsername' => $EditedUsername
 		);
@@ -182,7 +182,7 @@ print json_encode(
 	array(
 		'status' => 'success',
 		'response' => array(
-			'currentPage' => (int) $Page,
+			'currentPage' => (int)$Page,
 			'pages' => ceil($Results / $PerPage),
 			'threads' => $JsonResults
 			)

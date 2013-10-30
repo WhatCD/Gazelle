@@ -145,7 +145,7 @@ echo $Pages;
 			<td><?=$Date?></td>
 			<td><?=number_format($Joined)?></td>
 			<td><?=number_format($Manual)?></td>
-			<td><?=number_format((double) $Ratio)?></td>
+			<td><?=number_format((float)$Ratio)?></td>
 			<td><?=number_format($Inactivity)?></td>
 			<td><?=number_format($TotalOut)?></td>
 			<td><?=number_format($TotalGrowth)?></td>

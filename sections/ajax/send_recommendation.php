@@ -1,7 +1,7 @@
 <?php
-$FriendID = (int) $_POST['friend'];
+$FriendID = (int)$_POST['friend'];
 $Type = $_POST['type'];
-$ID = (int) $_POST['id'];
+$ID = (int)$_POST['id'];
 $Note = $_POST['note'];
 
 if (empty($FriendID) || empty($Type) || empty($ID)) {

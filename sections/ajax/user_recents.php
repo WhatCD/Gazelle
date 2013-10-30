@@ -1,6 +1,6 @@
 <?
-$UserID = (int) $_GET['userid'];
-$Limit = (int) $_GET['limit'];
+$UserID = (int)$_GET['userid'];
+$Limit = (int)$_GET['limit'];
 
 if (empty($UserID) || $Limit > 50) {
 	json_die("failure", "bad parameters");
@@ -28,7 +28,7 @@ if (check_paranoia_here('snatched')) {
 	$Artists = Artists::get_artists($DB->collect('ID'));
 	foreach ($RecentSnatches as $Key => $SnatchInfo) {
 		$RecentSnatches[$Key]['artists'][] = $Artists[$SnatchInfo['ID']];
-		$RecentSnatches[$Key]['ID'] = (int) $RecentSnatches[$Key]['ID'];
+		$RecentSnatches[$Key]['ID'] = (int)$RecentSnatches[$Key]['ID'];
 
 	}
 	$Results['snatches'] = $RecentSnatches;
@@ -54,7 +54,7 @@ if (check_paranoia_here('uploads')) {
 	$Artists = Artists::get_artists($DB->collect('ID'));
 	foreach ($RecentUploads as $Key => $UploadInfo) {
 		$RecentUploads[$Key]['artists'][] = $Artists[$UploadInfo['ID']];
-		$RecentUploads[$Key]['ID'] = (int) $RecentUploads[$Key]['ID'];
+		$RecentUploads[$Key]['ID'] = (int)$RecentUploads[$Key]['ID'];
 
 	}
 	$Results['uploads'] = $RecentUploads;

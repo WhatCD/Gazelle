@@ -6,18 +6,18 @@ $CanEdit = check_perms('users_mod');
 
 if ($CanEdit && isset($_POST['perform'])) {
 	authorize();
-	if ($_POST['perform'] == 'add' && !empty($_POST['message'])) {
+	if ($_POST['perform'] === 'add' && !empty($_POST['message'])) {
 		$Message = db_string($_POST['message']);
 		$Author = db_string($_POST['author']);
 		$DB->query("
 			INSERT INTO changelog (Message, Author, Time)
 			VALUES ('$Message', '$Author', NOW())");
 		$ID = $DB->inserted_id();
-	//	SiteHistory::add_event(sqltime(), "Changelog $ID", "tools.php?action=change_log", 1, 3, "", $Message, $LoggedUser['ID']);
+	//	SiteHistory::add_event(sqltime(), "Change log $ID", "tools.php?action=change_log", 1, 3, "", $Message, $LoggedUser['ID']);
 
 	}
-	if ($_POST['perform'] == 'remove' && !empty($_POST['change_id'])) {
-		$ID = (int) $_POST['change_id'];
+	if ($_POST['perform'] === 'remove' && !empty($_POST['change_id'])) {
+		$ID = (int)$_POST['change_id'];
 		$DB->query("
 			DELETE FROM changelog
 			WHERE ID = '$ID'");

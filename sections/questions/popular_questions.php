@@ -20,7 +20,7 @@ G::$DB->query("
 
 $Questions = G::$DB->to_array();
 
-View::show_header("Popular Questions", "questions");
+View::show_header('Popular Questions', 'questions,bbcode');
 
 ?>
 <div class="thin">

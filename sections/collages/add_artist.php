@@ -98,7 +98,7 @@ if ($_REQUEST['action'] == 'add_artist') {
 	// Get artist ID
 	preg_match('/^'.ARTIST_REGEX.'/i', $URL, $Matches);
 	$ArtistID = $Matches[4];
-	if (!$ArtistID || (int) $ArtistID == 0) {
+	if (!$ArtistID || (int)$ArtistID === 0) {
 		error(404);
 	}
 
@@ -161,4 +161,4 @@ if ($_REQUEST['action'] == 'add_artist') {
 		add_artist($CollageID, $ArtistID);
 	}
 }
-header('Location: collages.php?id='.$CollageID);
+header("Location: collages.php?id=$CollageID");

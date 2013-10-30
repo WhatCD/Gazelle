@@ -17,7 +17,7 @@ $DB->query("
 	WHERE ID = '$ID'");
 $Question = $DB->next_record();
 
-View::show_header("Ask the Staff");
+View::show_header('Ask the Staff', 'bbcode');
 ?>
 <div class="thin">
 	<h2>

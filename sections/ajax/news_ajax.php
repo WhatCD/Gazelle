@@ -3,8 +3,8 @@
 //Don't allow bigger queries than specified below regardless of called function
 $SizeLimit = 10;
 
-$Count = (int) $_GET['count'];
-$Offset = (int) $_GET['offset'];
+$Count = (int)$_GET['count'];
+$Offset = (int)$_GET['offset'];
 
 if (!isset($_GET['count']) || !isset($_GET['offset']) || $Count <= 0 || $Offset < 0 || $Count > $SizeLimit) {
 	json_die('failure');

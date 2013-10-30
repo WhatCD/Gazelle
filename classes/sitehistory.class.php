@@ -69,10 +69,10 @@ class SiteHistory {
 		if (!$Results) {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
-						SELECT DISTINCT
-							YEAR(DATE) AS Year, MONTH(Date) AS Month, MONTHNAME(Date) AS MonthName
-						FROM site_history
-						ORDER BY Date DESC");
+					SELECT DISTINCT
+						YEAR(DATE) AS Year, MONTH(Date) AS Month, MONTHNAME(Date) AS MonthName
+					FROM site_history
+					ORDER BY Date DESC");
 			$Results = G::$DB->to_array();
 			G::$DB->set_query_id($QueryID);
 			G::$Cache->cache_value("site_history_months", $Results, 0);
@@ -84,11 +84,11 @@ class SiteHistory {
 		if (!empty($ID)) {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
-						SELECT
-							ID, Title, Url, Category, SubCategory, Tags, Body, AddedBy, Date
-						FROM site_history
-						WHERE ID = '$ID'
-						ORDER BY Date DESC");
+					SELECT
+						ID, Title, Url, Category, SubCategory, Tags, Body, AddedBy, Date
+					FROM site_history
+					WHERE ID = '$ID'
+					ORDER BY Date DESC");
 			$Event = G::$DB->next_record();
 			G::$DB->set_query_id($QueryID);
 			return $Event;
@@ -189,10 +189,10 @@ class SiteHistory {
 
 		$QueryID = G::$DB->get_query_id();
 		G::$DB->query("
-					INSERT INTO site_history
-						(Title, Url, Category, SubCategory, Tags, Body, AddedBy, Date)
-					VALUES
-						('$Title', '$Link', '$Category', '$SubCategory', '$Tags', '$Body', '$UserID', '$Date')");
+				INSERT INTO site_history
+					(Title, Url, Category, SubCategory, Tags, Body, AddedBy, Date)
+				VALUES
+					('$Title', '$Link', '$Category', '$SubCategory', '$Tags', '$Body', '$UserID', '$Date')");
 		G::$DB->set_query_id($QueryID);
 		G::$Cache->delete_value("site_history_months");
 	}
@@ -220,7 +220,7 @@ class SiteHistory {
 			}
 		}
 		$Body = db_string($Body);
-		$UserID = (int) $UserID;
+		$UserID = (int)$UserID;
 
 		if (empty($ID) || empty($Title) || empty($Category) || empty($SubCategory)) {
 			error("Error");
@@ -228,18 +228,17 @@ class SiteHistory {
 
 		$QueryID = G::$DB->get_query_id();
 		G::$DB->query("
-						UPDATE site_history
-						SET
-							Title = '$Title',
-							Url = '$Link',
-							Category = '$Category',
-							SubCategory = '$SubCategory',
-							Tags = '$Tags',
-							Body = '$Body',
-							AddedBy = '$UserID',
-							Date = '$Date'
-						WHERE
-							ID = '$ID'");
+				UPDATE site_history
+				SET
+					Title = '$Title',
+					Url = '$Link',
+					Category = '$Category',
+					SubCategory = '$SubCategory',
+					Tags = '$Tags',
+					Body = '$Body',
+					AddedBy = '$UserID',
+					Date = '$Date'
+				WHERE ID = '$ID'");
 		G::$DB->set_query_id($QueryID);
 		G::$Cache->delete_value("site_history_months");
 	}
@@ -249,7 +248,9 @@ class SiteHistory {
 			error(404);
 		}
 		$QueryID = G::$DB->get_query_id();
-		G::$DB->query("DELETE FROM site_history WHERE ID = '$ID'");
+		G::$DB->query("
+				DELETE FROM site_history
+				WHERE ID = '$ID'");
 		G::$DB->set_query_id($QueryID);
 		G::$Cache->delete_value("site_history_months");
 	}

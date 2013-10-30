@@ -321,7 +321,7 @@ class Users {
 				$Val = $RT[$Key];
 			}
 
-			$ID = $Key . '_' . (int) !!$Checked;
+			$ID = "$Key_" . (int)(!!$Checked);
 
 							// The HTML is indented this far for proper indentation in the generated HTML
 							// on user.php?action=edit
@@ -584,7 +584,7 @@ class Users {
 	 * @return array Group IDs, Bookmark Data, Torrent List
 	 */
 	public static function get_bookmarks($UserID) {
-		$UserID = (int) $UserID;
+		$UserID = (int)$UserID;
 
 		if (($Data = G::$Cache->get_value("bookmarks_group_ids_$UserID"))) {
 			list($GroupIDs, $BookmarkData) = $Data;

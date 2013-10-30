@@ -4,7 +4,7 @@ if (!check_perms('users_warn')) {
 	error(404);
 }
 Misc::assert_isset_request($_POST, array('postid', 'userid', 'key'));
-$PostID = (int) $_POST['postid'];
+$PostID = (int)$_POST['postid'];
 $UserID = (int)$_POST['userid'];
 $Key = (int)$_POST['key'];
 $UserInfo = Users::user_info($UserID);
@@ -22,7 +22,7 @@ View::show_header('Warn User');
 		<h2>Warning <a href="user.php?id=<?=$UserID?>"><?=$UserInfo['Username']?></a></h2>
 	</div>
 	<div class="thin box pad">
-		<form class="send_form" name="warning" action="" onsubmit="quickpostform.submit_button.disabled=true;" method="post">
+		<form class="send_form" name="warning" action="" onsubmit="quickpostform.submit_button.disabled = true;" method="post">
 			<input type="hidden" name="postid" value="<?=$PostID?>" />
 			<input type="hidden" name="userid" value="<?=$UserID?>" />
 			<input type="hidden" name="key" value="<?=$Key?>" />

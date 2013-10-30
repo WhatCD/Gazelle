@@ -1,7 +1,7 @@
 <?
 
 if (!isset($_POST['topicid']) || !is_number($_POST['topicid'])) {
-	error(0,true);
+	error(0, true);
 }
 $TopicID = $_POST['topicid'];
 
@@ -11,7 +11,7 @@ if (!empty($_POST['large'])) {
 	$Size = 140;
 }
 
-if (!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
+if (!$ThreadInfo = $Cache->get_value("thread_$TopicID".'_info')) {
 	$DB->query("
 		SELECT
 			t.Title,
@@ -23,7 +23,7 @@ if (!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
 			ISNULL(p.TopicID) AS NoPoll
 		FROM forums_topics AS t
 			JOIN forums_posts AS fp ON fp.TopicID = t.ID
-			LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
+			LEFT JOIN forums_polls AS p ON p.TopicID = t.ID
 		WHERE t.ID = '$TopicID'
 		GROUP BY fp.TopicID");
 	if (!$DB->has_results()) {
@@ -31,12 +31,12 @@ if (!$ThreadInfo = $Cache->get_value('thread_'.$TopicID.'_info')) {
 	}
 	$ThreadInfo = $DB->next_record(MYSQLI_ASSOC);
 	if (!$ThreadInfo['IsLocked'] || $ThreadInfo['IsSticky']) {
-		$Cache->cache_value('thread_'.$TopicID.'_info', $ThreadInfo, 0);
+		$Cache->cache_value("thread_$TopicID".'_info', $ThreadInfo, 0);
 	}
 }
 $ForumID = $ThreadInfo['ForumID'];
 
-if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('polls_'.$TopicID)) {
+if (!list($Question, $Answers, $Votes, $Featured, $Closed) = $Cache->get_value("polls_$TopicID")) {
 	$DB->query("
 		SELECT
 			Question,
@@ -44,7 +44,7 @@ if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('poll
 			Featured,
 			Closed
 		FROM forums_polls
-		WHERE TopicID='$TopicID'");
+		WHERE TopicID = '$TopicID'");
 	list($Question, $Answers, $Featured, $Closed) = $DB->next_record(MYSQLI_NUM, array(1));
 	$Answers = unserialize($Answers);
 	$DB->query("
@@ -66,7 +66,7 @@ if (!list($Question,$Answers,$Votes,$Featured,$Closed) = $Cache->get_value('poll
 			$Votes[$i] = 0;
 		}
 	}
-	$Cache->cache_value('polls_'.$TopicID, array($Question,$Answers,$Votes,$Featured,$Closed), 0);
+	$Cache->cache_value("polls_$TopicID", array($Question, $Answers, $Votes, $Featured, $Closed), 0);
 }
 
 
@@ -90,12 +90,12 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 	<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 	<input type="hidden" name="large" value="<?=display_str($_POST['large'])?>" />
 	<input type="hidden" name="topicid" value="<?=$TopicID?>" />
-<? for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
+<?	for ($i = 1, $il = count($Answers); $i <= $il; $i++) { ?>
 	<input type="radio" name="vote" id="answer_<?=$i?>" value="<?=$i?>" />
 	<label for="answer_<?=$i?>"><?=display_str($Answers[$i])?></label><br />
-<? } ?>
+<?	} ?>
 	<br /><input type="radio" name="vote" id="answer_0" value="0" /> <label for="answer_0">Blank&#8202;&mdash;&#8202;Show the results!</label><br /><br />
-	<input type="button" onclick="ajax.post('index.php','poll',function(response) { $('#poll_container').raw().innerHTML = response });" value="Vote" />
+	<input type="button" onclick="ajax.post('index.php', 'poll', function(response) { $('#poll_container').raw().innerHTML = response });" value="Vote" />
 </form>
 <?
 } else {
@@ -106,9 +106,13 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 	}
 
 	//Add our vote
-	$DB->query('INSERT IGNORE INTO forums_polls_votes (TopicID, UserID, Vote) VALUES ('.$TopicID.','.$LoggedUser['ID'].','.$Vote.')');
+	$DB->query("
+		INSERT IGNORE INTO forums_polls_votes
+			(TopicID, UserID, Vote)
+		VALUES
+			($TopicID, " . $LoggedUser['ID'] . ", $Vote)");
 	if ($DB->affected_rows() == 1 && $Vote != 0) {
-		$Cache->begin_transaction('polls_'.$TopicID);
+		$Cache->begin_transaction("polls_$TopicID");
 		$Cache->update_row(2, array($Vote => '+1'));
 		$Cache->commit_transaction(0);
 		$Votes[$Vote]++;
@@ -133,13 +137,14 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 					$Percent = 0;
 				}
 ?>
-					<li><?=display_str($Answers[$i])?> (<?=number_format($Percent * 100,2)?>%)</li>
+					<li><?=display_str($Answers[$i])?> (<?=number_format($Percent * 100, 2)?>%)</li>
 					<li class="graph">
 						<span class="left_poll"></span>
 						<span class="center_poll" style="width: <?=round($Ratio * $Size)?>px;"></span>
 						<span class="right_poll"></span>
 					</li>
-<?			}
+<?
+			}
 		} else {
 			//Staff forum, output voters, not percentages
 			$DB->query("
@@ -154,7 +159,7 @@ if (!isset($_POST['vote']) || !is_number($_POST['vote'])) {
 			foreach ($StaffVotes as $StaffVote) {
 				list($StaffString, $StaffVoted) = $StaffVote;
 ?>
-				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$TopicID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int) $StaffVoted?>"><?=display_str(empty($Answers[$StaffVoted]) ? 'Blank' : $Answers[$StaffVoted])?></a> - <?=$StaffString?></li>
+				<li><a href="forums.php?action=change_vote&amp;threadid=<?=$TopicID?>&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;vote=<?=(int)$StaffVoted?>"><?=display_str(empty($Answers[$StaffVoted]) ? 'Blank' : $Answers[$StaffVoted])?></a> - <?=$StaffString?></li>
 <?
 			}
 		}

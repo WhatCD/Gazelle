@@ -29,16 +29,16 @@ $sql = '
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
 		LEFT JOIN forums_last_read_topics AS l ON p.TopicID = l.TopicID AND l.UserID = s.UserID
 	WHERE s.UserID = '.$LoggedUser['ID'].'
-		AND p.ID <= IFNULL(l.PostID,t.LastPostID)
+		AND p.ID <= IFNULL(l.PostID, t.LastPostID)
 		AND ' . Forums::user_forums_sql();
 if ($ShowUnread) {
 	$sql .= '
 		AND IF(l.PostID IS NULL OR (t.IsLocked = \'1\' && t.IsSticky = \'0\'), t.LastPostID, l.PostID) < t.LastPostID';
 }
-$sql .= '
+$sql .= "
 	GROUP BY t.ID
 	ORDER BY t.LastPostID DESC
-	LIMIT '.$Limit;
+	LIMIT $Limit";
 $PostIDs = $DB->query($sql);
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
@@ -69,7 +69,7 @@ if ($NumResults > $PerPage * ($Page - 1)) {
 			LEFT JOIN users_main AS um ON um.ID = p.AuthorID
 			LEFT JOIN users_info AS ui ON ui.UserID = um.ID
 			LEFT JOIN users_main AS ed ON ed.ID = um.ID
-		WHERE p.ID IN ('.implode(',',$PostIDs).')
+		WHERE p.ID IN ('.implode(',', $PostIDs).')
 		ORDER BY f.Name ASC, t.LastPostID DESC';
 	$DB->query($sql);
 }
@@ -77,14 +77,14 @@ if ($NumResults > $PerPage * ($Page - 1)) {
 $JsonPosts = array();
 while (list($ForumID, $ForumName, $TopicID, $ThreadTitle, $Body, $LastPostID, $Locked, $Sticky, $PostID, $AuthorID, $AuthorName, $AuthorAvatar, $EditedUserID, $EditedTime, $EditedUsername) = $DB->next_record()) {
 	$JsonPost = array(
-		'forumId' => (int) $ForumID,
+		'forumId' => (int)$ForumID,
 		'forumName' => $ForumName,
-		'threadId' => (int) $TopicID,
+		'threadId' => (int)$TopicID,
 		'threadTitle' => $ThreadTitle,
-		'postId' => (int) $PostID,
-		'lastPostId' => (int) $LastPostID,
+		'postId' => (int)$PostID,
+		'lastPostId' => (int)$LastPostID,
 		'locked' => $Locked == 1,
-		'new' => ($PostID<$LastPostID && !$Locked)
+		'new' => ($PostID < $LastPostID && !$Locked)
 	);
 	$JsonPosts[] = $JsonPost;
 }

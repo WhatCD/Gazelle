@@ -36,7 +36,7 @@ if ($ConvID = (int)$_GET['id']) {
 	$OwnerName = $UserInfo['Username'];
 
 ?>
-<div id="thin">
+<div class="thin">
 	<div class="header">
 		<h2>Staff PM - <?=display_str($Subject)?></h2>
 		<div class="linkbox">
@@ -153,7 +153,9 @@ if ($ConvID = (int)$_GET['id']) {
 					<input type="hidden" name="action" value="takepost" />
 					<input type="hidden" name="convid" value="<?=$ConvID?>" id="convid" />
 <?
-					$TextPrev = new TEXTAREA_PREVIEW('message', 'quickpost', '', 90, 10, true, false);
+					if ($Status != 'Resolved') {
+						$TextPrev = new TEXTAREA_PREVIEW('message', 'quickpost', '', 90, 10, true, false);
+					}
 ?>
 					<br />
 <?

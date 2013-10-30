@@ -46,7 +46,7 @@ $JsonArtists = array();
 foreach ($ArtistList as $Artist) {
 	list($ArtistID, $Name) = $Artist;
 	$JsonArtists[] = array(
-		'artistId' => (int) $ArtistID,
+		'artistId' => (int)$ArtistID,
 		'artistName' => $Name
 	);
 }

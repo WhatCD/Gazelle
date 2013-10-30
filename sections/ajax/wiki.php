@@ -33,9 +33,9 @@ json_die("success", array(
 	'bbBody' => $Body,
 	'body' => $TextBody,
 	'aliases' => $Aliases,
-	'authorID' => (int) $AuthorID,
+	'authorID' => (int)$AuthorID,
 	'authorName' => $AuthorName,
 	'date' => $Date,
-	'revision' => (int) $Revision
+	'revision' => (int)$Revision
 ));
 ?>

@@ -82,7 +82,7 @@ $JsonSpecificRules = array();
 foreach ($Forums[$ForumID]['SpecificRules'] as $ThreadIDs) {
 	$Thread = Forums::get_thread_info($ThreadIDs);
 	$JsonSpecificRules[] = array(
-		'threadId' => (int) $ThreadIDs,
+		'threadId' => (int)$ThreadIDs,
 		'thread' => display_str($Thread['Title'])
 	);
 }
@@ -104,11 +104,14 @@ if (count($Forum) === 0) {
 		SELECT
 			l.TopicID,
 			l.PostID,
-			CEIL((	SELECT COUNT(ID)
+			CEIL(
+				(
+					SELECT COUNT(ID)
 					FROM forums_posts
 					WHERE forums_posts.TopicID = l.TopicID
-						AND forums_posts.ID <= l.PostID) / $PerPage
-				) AS Page
+						AND forums_posts.ID <= l.PostID
+				) / $PerPage
+			) AS Page
 		FROM forums_last_read_topics AS l
 		WHERE TopicID IN(".implode(', ', array_keys($Forum)).')
 			AND UserID = \''.$LoggedUser['ID'].'\'');
@@ -124,7 +127,10 @@ if (count($Forum) === 0) {
 		list($TopicID, $Title, $AuthorID, $Locked, $Sticky, $PostCount, $LastID, $LastTime, $LastAuthorID) = array_values($Topic);
 
 		// handle read/unread posts - the reason we can't cache the whole page
-		if ((!$Locked || $Sticky) && ((empty($LastRead[$TopicID]) || $LastRead[$TopicID]['PostID'] < $LastID) && strtotime($LastTime) > $LoggedUser['CatchupTime'])) {
+		if ((!$Locked || $Sticky)
+				&& ((empty($LastRead[$TopicID]) || $LastRead[$TopicID]['PostID'] < $LastID)
+					&& strtotime($LastTime) > $LoggedUser['CatchupTime'])
+		) {
 			$Read = 'unread';
 		} else {
 			$Read = 'read';
@@ -139,20 +145,20 @@ if (count($Forum) === 0) {
 		}
 
 		$JsonTopics[] = array(
-			'topicId' => (int) $TopicID,
+			'topicId' => (int)$TopicID,
 			'title' => display_str($Title),
-			'authorId' => (int) $AuthorID,
+			'authorId' => (int)$AuthorID,
 			'authorName' => $AuthorName,
-			'locked' => ($Locked == 1),
-			'sticky' => ($Sticky == 1),
-			'postCount' => (int) $PostCount,
-			'lastID' => (($LastID == null) ? 0 : (int) $LastID),
+			'locked' => $Locked == 1,
+			'sticky' => $Sticky == 1,
+			'postCount' => (int)$PostCount,
+			'lastID' => ($LastID == null) ? 0 : (int)$LastID,
 			'lastTime' => $LastTime,
-			'lastAuthorId' => (($LastAuthorID == null) ? 0 : (int) $LastAuthorID),
-			'lastAuthorName' => (($LastAuthorName == null) ? '' : $LastAuthorName),
-			'lastReadPage' => (($LastRead[$TopicID]['Page'] == null) ? 0 : (int) $LastRead[$TopicID]['Page']),
-			'lastReadPostId' => (($LastRead[$TopicID]['PostID'] == null) ? 0 : (int) $LastRead[$TopicID]['PostID']),
-			'read' => ($Read == 'read')
+			'lastAuthorId' => ($LastAuthorID == null) ? 0 : (int)$LastAuthorID,
+			'lastAuthorName' => ($LastAuthorName == null) ? '' : $LastAuthorName,
+			'lastReadPage' => ($LastRead[$TopicID]['Page'] == null) ? 0 : (int)$LastRead[$TopicID]['Page'],
+			'lastReadPostId' => ($LastRead[$TopicID]['PostID'] == null) ? 0 : (int)$LastRead[$TopicID]['PostID'],
+			'read' => $Read == 'read'
 		);
 	}
 
@@ -163,7 +169,7 @@ if (count($Forum) === 0) {
 				'response' => array(
 					'forumName' => $ForumName,
 					'specificRules' => $JsonSpecificRules,
-					'currentPage' => (int) $Page,
+					'currentPage' => (int)$Page,
 					'pages' => ceil($Forums[$ForumID]['NumTopics'] / TOPICS_PER_PAGE),
 					'threads' => $JsonTopics
 				)

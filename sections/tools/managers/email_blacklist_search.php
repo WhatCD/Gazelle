@@ -31,10 +31,10 @@ $Emails = array();
 if ($Count > 0) {
 	foreach ($EmailResults as $Email) {
 		$Emails[] = array(
-						'id' => (int) $Email['ID'],
+						'id' => (int)$Email['ID'],
 						'email' => $Email['Email'],
 						'comment' => $Email['Comment'],
-						'userid' => (int) $Email['UserID'],
+						'userid' => (int)$Email['UserID'],
 						'time' => $Email['Time']);
 	}
 }

@@ -1,8 +1,6 @@
 <?
-
-define('PREFIX', 'percentiles_'); // Prefix for memcache keys, to make life easier
-
 class UserRank {
+	const PREFIX = 'percentiles_'; // Prefix for memcache keys, to make life easier
 
 	// Returns a 101 row array (101 percentiles - 0 - 100), with the minimum value for that percentile as the value for each row
 	// BTW - ingenious
@@ -115,16 +113,16 @@ class UserRank {
 			return 0;
 		}
 
-		$Table = G::$Cache->get_value(PREFIX.$TableName);
+		$Table = G::$Cache->get_value(self::PREFIX.$TableName);
 		if (!$Table) {
 			//Cache lock!
-			$Lock = G::$Cache->get_value(PREFIX.$TableName.'_lock');
+			$Lock = G::$Cache->get_value(self::PREFIX.$TableName.'_lock');
 			if ($Lock) {
 				return false;
 			} else {
-				G::$Cache->cache_value(PREFIX.$TableName.'_lock', '1', 300);
-				$Table = self::build_table(PREFIX.$TableName, self::table_query($TableName));
-				G::$Cache->delete_value(PREFIX.$TableName.'_lock');
+				G::$Cache->cache_value(self::PREFIX.$TableName.'_lock', '1', 300);
+				$Table = self::build_table(self::PREFIX.$TableName, self::table_query($TableName));
+				G::$Cache->delete_value(self::PREFIX.$TableName.'_lock');
 			}
 		}
 		$LastPercentile = 0;

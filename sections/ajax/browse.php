@@ -592,18 +592,18 @@ foreach ($Results as $Result) {
 		$DisplayName = Artists::display_artists($ExtendedArtists, false, false, true);
 		foreach ($ExtendedArtists[1] as $Artist) {
 			$JsonArtists[] = array(
-							'id' => (int) $Artist['id'],
+							'id' => (int)$Artist['id'],
 							'name' => $Artist['name'],
-							'aliasid' => (int) $Artist['id']
+							'aliasid' => (int)$Artist['id']
 							);
 		}
 	} elseif (!empty($Artists)) {
-		$DisplayName = Artists::display_artists(array(1=>$Artists), false, false, true);
+		$DisplayName = Artists::display_artists(array(1 => $Artists), false, false, true);
 		foreach ($Artists as $Artist) {
 			$JsonArtists[] = array(
-							'id' => (int) $Artist['id'],
+							'id' => (int)$Artist['id'],
 							'name' => $Artist['name'],
-							'aliasid' => (int) $Artist['id']
+							'aliasid' => (int)$Artist['id']
 							);
 		}
 	} else {
@@ -684,27 +684,27 @@ foreach ($Results as $Result) {
 			$LastMedia = $Data['Media'];
 
 			$JsonTorrents[] = array(
-				'torrentId' => (int) $TorrentID,
-				'editionId' => (int) $EditionID,
+				'torrentId' => (int)$TorrentID,
+				'editionId' => (int)$EditionID,
 				'artists' => $JsonArtists,
 				'remastered' => $Data['Remastered'] == '1',
-				'remasterYear' => (int) $Data['RemasterYear'],
+				'remasterYear' => (int)$Data['RemasterYear'],
 				'remasterCatalogueNumber' => $Data['RemasterCatalogueNumber'],
 				'remasterTitle' => $Data['RemasterTitle'],
 				'media' => $Data['Media'],
 				'encoding' => $Data['Encoding'],
 				'format' => $Data['Format'],
 				'hasLog' => $Data['HasLog'] == '1',
-				'logScore' => (int) $Data['LogScore'],
+				'logScore' => (int)$Data['LogScore'],
 				'hasCue' => $Data['HasCue'] == '1',
 				'scene' => $Data['Scene'] == '1',
 				'vanityHouse' => $GroupInfo['VanityHouse'] == '1',
-				'fileCount' => (int) $Data['FileCount'],
+				'fileCount' => (int)$Data['FileCount'],
 				'time' => $Data['Time'],
-				'size' => (int) $Data['Size'],
-				'snatches' => (int) $Data['Snatched'],
-				'seeders' => (int) $Data['Seeders'],
-				'leechers' => (int) $Data['Leechers'],
+				'size' => (int)$Data['Size'],
+				'snatches' => (int)$Data['Snatched'],
+				'seeders' => (int)$Data['Seeders'],
+				'leechers' => (int)$Data['Leechers'],
 				'isFreeleech' => $Data['FreeTorrent'] == '1',
 				'isNeutralLeech' => $Data['FreeTorrent'] == '2',
 				'isPersonalFreeleech' => $Data['PersonalFL'],
@@ -714,20 +714,20 @@ foreach ($Results as $Result) {
 		}
 
 		$JsonGroups[] = array(
-			'groupId' => (int) $GroupID,
+			'groupId' => (int)$GroupID,
 			'groupName' => $GroupName,
 			'artist' => $DisplayName,
 			'cover' => $GroupInfo['WikiImage'],
 			'tags' => $TagList,
 			'bookmarked' => in_array($GroupID, $Bookmarks),
 			'vanityHouse' => $GroupInfo['VanityHouse'] == '1',
-			'groupYear' => (int) $GroupYear,
+			'groupYear' => (int)$GroupYear,
 			'releaseType' => $ReleaseTypes[$ReleaseType],
-			'groupTime' => (string) $GroupTime,
-			'maxSize' => (int) $MaxSize,
-			'totalSnatched' => (int) $TotalSnatched,
-			'totalSeeders' => (int) $TotalSeeders,
-			'totalLeechers' => (int) $TotalLeechers,
+			'groupTime' => (string)$GroupTime,
+			'maxSize' => (int)$MaxSize,
+			'totalSnatched' => (int)$TotalSnatched,
+			'totalSeeders' => (int)$TotalSeeders,
+			'totalLeechers' => (int)$TotalLeechers,
 			'torrents' => $JsonTorrents
 		);
 	} else {
@@ -736,17 +736,17 @@ foreach ($Results as $Result) {
 		list($TorrentID, $Data) = each($Torrents);
 
 		$JsonGroups[] = array(
-			'groupId' => (int) $GroupID,
+			'groupId' => (int)$GroupID,
 			'groupName' => $GroupName,
-			'torrentId' => (int) $TorrentID,
+			'torrentId' => (int)$TorrentID,
 			'tags' => $TagList,
 			'category' => $Categories[$CategoryID - 1],
-			'fileCount' => (int) $Data['FileCount'],
-			'groupTime' => (string) strtotime($Data['Time']),
-			'size' => (int) $Data['Size'],
-			'snatches' => (int) $Data['Snatched'],
-			'seeders' => (int) $Data['Seeders'],
-			'leechers' => (int) $Data['Leechers'],
+			'fileCount' => (int)$Data['FileCount'],
+			'groupTime' => (string)strtotime($Data['Time']),
+			'size' => (int)$Data['Size'],
+			'snatches' => (int)$Data['Snatched'],
+			'seeders' => (int)$Data['Seeders'],
+			'leechers' => (int)$Data['Leechers'],
 			'isFreeleech' => $Data['FreeTorrent'] == '1',
 			'isNeutralLeech' => $Data['FreeTorrent'] == '2',
 			'isPersonalFreeleech' => $Data['PersonalFL'],
