@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2013-10-31 by alderaan
+Renamed take*.php files in sections/requests/ (added underscores)
+
 2013-10-28 by alderaan
 Collage API now returns subscriberCount and torrentGroupIDList
 

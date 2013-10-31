@@ -325,6 +325,11 @@ CREATE TABLE `drives` (
   KEY `Name` (`Name`)
 ) ENGINE=InnoDB CHARSET utf8;
 
+CREATE TABLE `drone_warnings` (
+  `UserID` int(10) NOT NULL,
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB CHARSET utf8;
+
 CREATE TABLE `dupe_groups` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Comments` text,

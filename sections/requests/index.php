@@ -20,24 +20,24 @@ if (!isset($_REQUEST['action'])) {
 			include(SERVER_ROOT.'/sections/requests/new_edit.php');
 			break;
 		case 'takevote':
-			include(SERVER_ROOT.'/sections/requests/takevote.php');
+			include(SERVER_ROOT.'/sections/requests/take_vote.php');
 			break;
 		case 'takefill':
-			include(SERVER_ROOT.'/sections/requests/takefill.php');
+			include(SERVER_ROOT.'/sections/requests/take_fill.php');
 			break;
 		case 'takenew':
 		case 'takeedit':
-			include(SERVER_ROOT.'/sections/requests/takenew_edit.php');
+			include(SERVER_ROOT.'/sections/requests/take_new_edit.php');
 			break;
 		case 'delete':
 		case 'unfill':
 			include(SERVER_ROOT.'/sections/requests/interim.php');
 			break;
 		case 'takeunfill':
-			include(SERVER_ROOT.'/sections/requests/takeunfill.php');
+			include(SERVER_ROOT.'/sections/requests/take_unfill.php');
 			break;
 		case 'takedelete':
-			include(SERVER_ROOT.'/sections/requests/takedelete.php');
+			include(SERVER_ROOT.'/sections/requests/take_delete.php');
 			break;
 		case 'view':
 		case 'viewrequest':

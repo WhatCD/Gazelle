@@ -321,7 +321,7 @@ class Users {
 				$Val = $RT[$Key];
 			}
 
-			$ID = "$Key_" . (int)(!!$Checked);
+			$ID = $Key. '_' . (int)(!!$Checked);
 
 							// The HTML is indented this far for proper indentation in the generated HTML
 							// on user.php?action=edit
