@@ -19,7 +19,7 @@ $Escaped = db_array($_POST, array('log_message', 'admin_message', 'raw_name'));
 if (!isset($Escaped['from_delete'])) {
 	$Report = true;
 } elseif (!is_number($Escaped['from_delete'])) {
-	echo 'Hax occured in from_delete';
+	echo 'Hax occurred in from_delete';
 } else {
 	$Report = false;
 }
@@ -29,7 +29,7 @@ $PMMessage = $_POST['uploader_pm'];
 if (is_number($Escaped['reportid'])) {
 	$ReportID = $Escaped['reportid'];
 } else {
-	echo 'Hax occured in the reportid';
+	echo 'Hax occurred in the reportid';
 	die();
 }
 
@@ -39,19 +39,19 @@ if ($Escaped['pm_type'] != 'Uploader') {
 
 $UploaderID = (int)$Escaped['uploaderid'];
 if (!is_number($UploaderID)) {
-	echo 'Hax occuring on the uploaderid';
+	echo 'Hax occurring on the uploaderid';
 	die();
 }
 
 $Warning = (int)$Escaped['warning'];
 if (!is_number($Warning)) {
-	echo 'Hax occuring on the warning';
+	echo 'Hax occurring on the warning';
 	die();
 }
 
 $CategoryID = $Escaped['categoryid'];
 if (!isset($CategoryID)) {
-	echo 'Hax occuring on the categoryid';
+	echo 'Hax occurring on the categoryid';
 	die();
 }
 
@@ -278,34 +278,34 @@ if ($DB->affected_rows() > 0 || !$Report) {
 	//PM
 	if ($Escaped['uploader_pm'] || $Warning > 0 || isset($Escaped['delete']) || $SendPM) {
 		if (isset($Escaped['delete'])) {
-			$PM = '[url=https://'.SSL_SITE_URL."/torrents.php?torrentid=$TorrentID]Your above torrent[/url] was reported and has been deleted.\n\n";
+			$PM = '[url='.site_url()."/torrents.php?torrentid=$TorrentID]Your above torrent[/url] was reported and has been deleted.\n\n";
 		} else {
-			$PM = '[url=https://'.SSL_SITE_URL."/torrents.php?torrentid=$TorrentID]Your above torrent[/url] was reported but not deleted.\n\n";
+			$PM = '[url='.site_url()."/torrents.php?torrentid=$TorrentID]Your above torrent[/url] was reported but not deleted.\n\n";
 		}
 
 		$Preset = $ResolveType['resolve_options']['pm'];
 
 		if ($Preset != '') {
-			 $PM .= "Reason: $Preset";
+			 $PM .= "Reason: $Preset\n\n";
 		}
 
 		if ($Warning > 0) {
-			$PM .= "\nThis has resulted in a [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;id=218]$Warning week warning.[/url]\n";
+			$PM .= "This has resulted in a [url=".site_url()."/wiki.php?action=article&amp;id=218]$Warning week warning.[/url]\n\n";
 		}
 
 		if ($Upload) {
-			$PM .= 'This has '.($Warning > 0 ? 'also ' : '').'resulted in you losing your upload privileges.';
+			$PM .= 'This has '.($Warning > 0 ? 'also ' : '')."resulted in the loss of your upload privileges.\n\n";
 		}
 
 		if ($Log) {
-			$PM = "$PM\nLog Message: $Log\n";
+			$PM .= "Log Message: $Log\n\n";
 		}
 
 		if ($Escaped['uploader_pm']) {
-			$PM .= "\nMessage from ".$LoggedUser['Username'].": $PMMessage";
+			$PM .= "Message from ".$LoggedUser['Username'].": $PMMessage\n\n";
 		}
 
-		$PM .= "\n\nReport was handled by [user]".$LoggedUser['Username'].'[/user].';
+		$PM .= "Report was handled by [user]".$LoggedUser['Username'].'[/user].';
 
 		Misc::send_pm($UploaderID, 0, $Escaped['raw_name'], $PM);
 	}

@@ -6,7 +6,6 @@
 authorize();
 
 if (!check_perms('admin_reports')) {
-	echo 'HAX on premissions!';
 	die();
 }
 
@@ -21,7 +20,7 @@ if (isset($_POST['uploader_pm']) && $_POST['uploader_pm'] != '') {
 }
 
 if (!is_number($_POST['categoryid']) || !is_number($TorrentID)) {
-	echo 'HAX on categoryid!';
+	echo 'Hax on category ID!';
 	die();
 } else {
 	$CategoryID = $_POST['categoryid'];
@@ -33,14 +32,14 @@ if (array_key_exists($_POST['type'], $Types[$CategoryID])) {
 	$ReportType = $Types['master'][$_POST['type']];
 } else {
 	//There was a type but it wasn't an option!
-	echo 'HAX on section type';
+	echo 'Hax on section type';
 	die();
 }
 
 if (!isset($_POST['from_delete'])) {
 	$Report = true;
 } elseif (!is_number($_POST['from_delete'])) {
-	echo 'Hax occured in from_delete';
+	echo 'Hax occurred in from_delete';
 }
 
 if ($Recipient == 'Uploader') {
@@ -60,7 +59,7 @@ if ($Recipient == 'Uploader') {
 $Subject = $_POST['raw_name'];
 
 if (!is_number($ToID)) {
-	$Err = "Haxx occuring, non number present";
+	$Err = "Haxx occurring, non-number present";
 }
 
 if ($ToID == $LoggedUser['ID']) {

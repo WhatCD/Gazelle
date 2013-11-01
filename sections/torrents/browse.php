@@ -952,17 +952,17 @@ if ($x % 7 != 0) { // Padding
 		<td>Files</td>
 		<td><a href="<?=header_link('s3')?>"><?=$TimeLabel?></a></td>
 		<td><a href="<?=header_link('s4')?>">Size</a></td>
-		<td class="sign">
+		<td class="sign snatches">
 			<a href="<?=header_link('s5')?>">
 				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" />
 			</a>
 		</td>
-		<td class="sign">
+		<td class="sign seeders">
 			<a href="<?=header_link('s6')?>">
 				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" />
 			</a>
 		</td>
-		<td class="sign">
+		<td class="sign leechers">
 			<a href="<?=header_link('s7')?>">
 				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" />
 			</a>

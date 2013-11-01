@@ -5,20 +5,14 @@ if (!check_perms('site_collages_renamepersonal')) {
 	$ChangeJS = " onchange=\"if ( this.options[this.selectedIndex].value == '0') { $('#namebox').ghide(); $('#personal').gshow(); } else { $('#namebox').gshow(); $('#personal').ghide(); }\"";
 }
 
-$Name = $_REQUEST['name'];
-$Category = $_REQUEST['cat'];
-$Description = $_REQUEST['descr'];
-$Tags = $_REQUEST['tags'];
-$Error = $_REQUEST['err'];
-
 if (!check_perms('site_collages_renamepersonal') && $Category === '0') {
 	$NoName = true;
 }
 ?>
 <div class="thin">
 <?
-if (!empty($Error)) { ?>
-	<div class="save_message error"><?=$Error?></div>
+if (isset($Err)) { ?>
+	<div class="save_message error"><?=$Err?></div>
 	<br />
 <?
 } ?>

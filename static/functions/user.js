@@ -182,7 +182,7 @@ function commStats(userid) {
 	ajax.get('ajax.php?action=community_stats&userid=' + userid, function(JSONresponse) {
 		var response = JSON.parse(JSONresponse) || false;
 		if (!response || response.status == 'failure') {
-			$('.user_commstats').html('An error occured');
+			$('.user_commstats').html('An error occurred');
 			return;
 		}
 		displayCommStats(response.response);

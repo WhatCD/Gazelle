@@ -442,6 +442,8 @@ class Users {
 		return $Salt;
 	}
 
+
+
 	/**
 	 * Returns a username string for display
 	 *
@@ -475,7 +477,16 @@ class Users {
 
 		$Username = $UserInfo['Username'];
 		$Paranoia = $UserInfo['Paranoia'];
-		$ShowDonorIcon = (!in_array('hide_donor_heart', $Paranoia) || check_perms('users_override_paranoia', $UserInfo['Class']));
+
+		$MaxClassOverride = MOD;
+
+		if ($UserInfo['Class'] < $Classes[$MaxClassOverride]['Level']) {
+			$OverrideParanoia = check_perms('users_override_paranoia', $UserInfo['Class']);
+		} else {
+			// Don't override paranoia for mods who don't want to show their donor heart
+			$OverrideParanoia = false;
+		}
+		$ShowDonorIcon = (!in_array('hide_donor_heart', $Paranoia) || $OverrideParanoia);
 
 		if ($IsDonorForum) {
 			list($Prefix, $Suffix, $HasComma) = Donations::get_titles($UserID);
@@ -530,6 +541,7 @@ class Users {
 					. '><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned'
 					. (G::$LoggedUser['ID'] === $UserID ? ' - Expires ' . date('Y-m-d H:i', strtotime($UserInfo['Warned'])) : '')
 					. '" /></a>' : '';
+
 		$Str .= ($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '';
 
 		if ($Badges) {

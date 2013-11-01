@@ -25,7 +25,7 @@ $DB->query("
 	WHERE ArtistID = $ArtistID
 	LIMIT 1");
 if (!(list($ArtistName) = $DB->next_record(MYSQLI_NUM, false))) {
-	error('An error has occured.');
+	error('An error has occurred.');
 }
 
 if ($NewArtistID > 0) {
@@ -143,7 +143,7 @@ if (isset($_POST['confirm'])) {
 	}
 	if (!empty($Requests)) {
 		foreach ($Requests as $RequestID) {
-			$Cache->delete_value("request_artist_$RequestID");
+			$Cache->delete_value("request_artists_$RequestID");
 			Requests::update_sphinx_requests($RequestID);
 		}
 	}

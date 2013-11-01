@@ -17,13 +17,13 @@ if (!check_perms('site_edit_wiki')) {
 $UserID = $LoggedUser['ID'];
 $ArtistID = $_REQUEST['artistid'];
 if (check_perms('artist_edit_vanityhouse')) {
-	$VanityHouse = ( isset($_POST['vanity_house']) ? 1 : 0 );
+	$VanityHouse = isset($_POST['vanity_house']) ? 1 : 0 ;
 }
 
 
-if ($_GET['action'] == 'revert') { // if we're reverting to a previous revision
+if ($_GET['action'] === 'revert') { // if we're reverting to a previous revision
 	authorize();
-	$RevisionID=$_GET['revisionid'];
+	$RevisionID = $_GET['revisionid'];
 	if (!is_number($RevisionID)) {
 		error(0);
 	}
@@ -41,14 +41,16 @@ if ($_GET['action'] == 'revert') { // if we're reverting to a previous revision
 // Insert revision
 if (!$RevisionID) { // edit
 	$DB->query("
-		INSERT INTO wiki_artists (PageID, Body, Image, UserID, Summary, Time)
-		VALUES ('$ArtistID', '$Body', '$Image', '$UserID', '$Summary', '".sqltime()."')");
+		INSERT INTO wiki_artists
+			(PageID, Body, Image, UserID, Summary, Time)
+		VALUES
+			('$ArtistID', '$Body', '$Image', '$UserID', '$Summary', '".sqltime()."')");
 } else { // revert
 	$DB->query("
 		INSERT INTO wiki_artists (PageID, Body, Image, UserID, Summary, Time)
 		SELECT '$ArtistID', Body, Image, '$UserID', 'Reverted to revision $RevisionID', '".sqltime()."'
 		FROM wiki_artists
-		WHERE RevisionID='$RevisionID'");
+		WHERE RevisionID = '$RevisionID'");
 }
 
 $RevisionID = $DB->inserted_id();
@@ -57,11 +59,11 @@ $RevisionID = $DB->inserted_id();
 $DB->query("
 	UPDATE artists_group
 	SET
-		". (isset($VanityHouse) ? "VanityHouse='$VanityHouse'," : '') ."
-		RevisionID='$RevisionID'
-	WHERE ArtistID='$ArtistID'");
+		". (isset($VanityHouse) ? "VanityHouse = '$VanityHouse'," : '') ."
+		RevisionID = '$RevisionID'
+	WHERE ArtistID = '$ArtistID'");
 
 // There we go, all done!
-$Cache->delete_value('artist_'.$ArtistID); // Delete artist cache
-header('Location: artist.php?id='.$ArtistID);
+$Cache->delete_value("artist_$ArtistID"); // Delete artist cache
+header("Location: artist.php?id=$ArtistID");
 ?>

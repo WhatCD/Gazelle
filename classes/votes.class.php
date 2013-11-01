@@ -205,17 +205,13 @@ class Votes {
 
 		$Rankings = G::$Cache->get_value('voting_ranks_overall');
 		if ($Rankings === false) {
-			$Rankings = array();
-			$i = 0;
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query('
-				SELECT GroupID
+				SELECT GroupID, Score
 				FROM torrents_votes
 				ORDER BY Score DESC
 				LIMIT 100');
-			while (list($GID) = G::$DB->next_record()) {
-				$Rankings[$GID] = ++$i;
-			}
+			$Rankings = self::calc_ranks(G::$DB->to_pair(0, 1, false));
 			G::$DB->set_query_id($QueryID);
 			G::$Cache->cache_value('voting_ranks_overall', $Rankings, 259200); // 3 days
 		}
@@ -238,19 +234,15 @@ class Votes {
 
 		$Rankings = G::$Cache->get_value("voting_ranks_year_$Year");
 		if ($Rankings === false) {
-			$Rankings = array();
-			$i = 0;
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
-				SELECT GroupID
+				SELECT GroupID, Score
 				FROM torrents_votes  AS v
 					JOIN torrents_group AS g ON g.ID = v.GroupID
 				WHERE g.Year = $Year
 				ORDER BY Score DESC
 				LIMIT 100");
-			while (list($GID) = G::$DB->next_record()) {
-				$Rankings[$GID] = ++$i;
-			}
+			$Rankings = self::calc_ranks(G::$DB->to_pair(0, 1, false));
 			G::$DB->set_query_id($QueryID);
 			G::$Cache->cache_value("voting_ranks_year_$Year", $Rankings, 259200); // 3 days
 		}
@@ -276,25 +268,44 @@ class Votes {
 
 		$Rankings = G::$Cache->get_value("voting_ranks_decade_$Year");
 		if ($Rankings === false) {
-			$Rankings = array();
-			$i = 0;
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
-				SELECT GroupID
+				SELECT GroupID, Score
 				FROM torrents_votes  AS v
 					JOIN torrents_group AS g ON g.ID = v.GroupID
 				WHERE g.Year BETWEEN $Year AND " . ($Year + 9) . "
 					  AND g.CategoryID = 1
 				ORDER BY Score DESC
 				LIMIT 100");
-			while (list($GID) = G::$DB->next_record()) {
-				$Rankings[$GID] = ++$i;
-			}
+			$Rankings = self::calc_ranks(G::$DB->to_pair(0, 1, false));
 			G::$DB->set_query_id($QueryID);
 			G::$Cache->cache_value("voting_ranks_decade_$Year", $Rankings, 259200); // 3 days
 		}
 
 		return (isset($Rankings[$GroupID]) ? $Rankings[$GroupID] : false);
+	}
+
+	/**
+	 * Turn vote scores into vote ranks. This basically only sorts out tied ranks
+	 *
+	 * @param array $GroupScores array (<GroupID> => <Score>) ordered by Score
+	 * @return array (<GroupID> => <Rank>)
+	 */
+	public static function calc_ranks($GroupScores) {
+		$Rankings = array();
+		$PrevScore = $PrevRank = false;
+		$Rank = 1;
+		foreach ($GroupScores as $GroupID => $Score) {
+			if ($Score === $PrevScore) {
+				$Rankings[$GroupID] = $PrevRank;
+			} else {
+				$Rankings[$GroupID] = $Rank;
+				$PrevRank = $Rank;
+				$PrevScore = $Score;
+			}
+			$Rank++;
+		}
+		return $Rankings;
 	}
 }
 ?>

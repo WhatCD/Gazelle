@@ -9,14 +9,17 @@ if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 	$Details = 'all';
 	$Limit = 25;
 
-	if ($_GET['tags']) {
+	if (!empty($_GET['tags'])) {
+		$TagsAny = isset($_GET['anyall']) && $_GET['anyall'] === 'any';
 		$Tags = explode(',', str_replace('.', '_', trim($_GET['tags'])));
 		foreach ($Tags as $Tag) {
 			$Tag = preg_replace('/[^a-z0-9_]/', '', $Tag);
 			if ($Tag != '') {
-				$Where[] = "g.TagList REGEXP '[[:<:]]".db_string($Tag)."[[:>:]]'";
+				$TagWhere[] = "g.TagList REGEXP '[[:<:]]".db_string($Tag)."[[:>:]]'";
 			}
 		}
+		$Operator = $TagsAny ? ' OR ' : ' AND ';
+		$Where[] = '('.implode($Operator, $TagWhere).')';
 	}
 	$Year1 = (int)$_GET['year1'];
 	$Year2 = (int)$_GET['year2'];
@@ -35,9 +38,7 @@ if (!empty($_GET['advanced']) && check_perms('site_advanced_top10')) {
 }
 $Filtered = !empty($Where);
 
-if ($_GET['anyall'] === 'any' && !empty($Where)) {
-	$Where = '('.implode(' OR ', $Where).')';
-} else {
+if (!empty($Where)) {
 	$Where = implode(' AND ', $Where);
 }
 $WhereSum = (empty($Where)) ? '' : md5($Where);
@@ -66,17 +67,18 @@ if ($TopVotes === false) {
 	if ($Cache->get_query_lock('top10votes')) {
 		$DB->query($Query);
 
-		$Results = $DB->collect('GroupID');
-		$Data = $DB->to_array('GroupID');
+		$Results = $DB->to_array('GroupID', MYSQLI_ASSOC, false);
+		$Ranks = Votes::calc_ranks($DB->to_pair('GroupID', 'Score', false));
 
-		$Groups = Torrents::get_groups($Results);
+		$Groups = Torrents::get_groups(array_keys($Results));
 
 		$TopVotes = array();
-		foreach ($Results as $GroupID) {
+		foreach ($Results as $GroupID => $Votes) {
 			$TopVotes[$GroupID] = $Groups[$GroupID];
-			$TopVotes[$GroupID]['Ups'] = $Data[$GroupID]['Ups'];
-			$TopVotes[$GroupID]['Total'] = $Data[$GroupID]['Total'];
-			$TopVotes[$GroupID]['Score'] = $Data[$GroupID]['Score'];
+			$TopVotes[$GroupID]['Ups'] = $Votes['Ups'];
+			$TopVotes[$GroupID]['Total'] = $Votes['Total'];
+			$TopVotes[$GroupID]['Score'] = $Votes['Score'];
+			$TopVotes[$GroupID]['Rank'] = $Ranks[$GroupID];
 		}
 
 		$Cache->cache_value('top10votes_'.$Limit.$WhereSum, $TopVotes, 60 * 30);
@@ -85,7 +87,6 @@ if ($TopVotes === false) {
 		$TopVotes = false;
 	}
 }
-
 View::show_header("Top $Limit Voted Groups",'browse,voting');
 ?>
 <div class="thin">
@@ -104,8 +105,8 @@ if (check_perms('site_advanced_top10')) { ?>
 				<td class="label">Tags (comma-separated):</td>
 				<td class="ft_taglist">
 					<input type="text" name="tags" size="75" value="<? if (!empty($_GET['tags'])) { echo display_str($_GET['tags']);} ?>" />&nbsp;
-					<input type="radio" id="rdoAll" name="anyall" value="all"<?=($_GET['anyall'] !== 'any' ? ' checked="checked"' : '')?> /><label for="rdoAll"> All</label>&nbsp;&nbsp;
-					<input type="radio" id="rdoAny" name="anyall" value="any"<?=($_GET['anyall'] === 'any' ? ' checked="checked"' : '')?> /><label for="rdoAny"> Any</label>
+					<input type="radio" id="rdoAll" name="anyall" value="all"<?=(!isset($TagsAny) ? ' checked="checked"' : '')?> /><label for="rdoAll"> All</label>&nbsp;&nbsp;
+					<input type="radio" id="rdoAny" name="anyall" value="any"<?=(isset($TagsAny) ? ' checked="checked"' : '')?> /><label for="rdoAny"> Any</label>
 				</td>
 			</tr>
 			<tr id="yearfilter">
@@ -128,7 +129,7 @@ if (check_perms('site_advanced_top10')) { ?>
 
 $Bookmarks = Bookmarks::all_bookmarks('torrent');
 ?>
-	<h3>Top <?="$Limit $Caption"?>
+	<h3>Top <?=$Limit?>
 <?
 if (empty($_GET['advanced'])) { ?>
 		<small class="top10_quantity_links">
@@ -155,9 +156,8 @@ if (empty($_GET['advanced'])) { ?>
 	</h3>
 <?
 
-// This code was copy-pasted from collages and should die in a fire
 $Number = 0;
-$NumGroups = 0;
+$TorrentTable = '';
 foreach ($TopVotes as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));
 	$UpVotes = $Group['Ups'];
@@ -166,21 +166,17 @@ foreach ($TopVotes as $GroupID => $Group) {
 	$DownVotes = $TotalVotes - $UpVotes;
 
 	$IsBookmarked = in_array($GroupID, $Bookmarks);
-
-	// Handle stats and stuff
-	$Number++;
-	$NumGroups++;
+	$UserVote = isset($UserVotes[$GroupID]) ? $UserVotes[$GroupID]['Type'] : '';
 
 	$TorrentTags = new Tags($TagList);
-
-	$DisplayName = $Number.' - ';
+	$DisplayName = "$Group[Rank] - ";
 
 	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
 			unset($ExtendedArtists[2]);
 			unset($ExtendedArtists[3]);
 			$DisplayName .= Artists::display_artists($ExtendedArtists);
-	} elseif (count($GroupArtists) > 0) {
-			$DisplayName .= Artists::display_artists(array('1'=>$GroupArtists));
+	} elseif (count($Artists) > 0) {
+			$DisplayName .= Artists::display_artists(array('1' => $Artists));
 	}
 
 	$DisplayName .= '<a href="torrents.php?id='.$GroupID.'" class="tooltip" title="View torrent group" dir="ltr">'.$GroupName.'</a>';
@@ -221,7 +217,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 <?		} ?>
 						<div class="group_info clear">
 
-							<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID,$UserVotes[$GroupID]['Type']);?>-->
+							<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID, $UserVote);?>-->
 <?		if ($IsBookmarked) { ?>
 							<span class="bookmark" style="float: right;"><a href="#" class="bookmarklink_torrent_<?=$GroupID?> brackets remove_bookmark" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a></span>
 <?		} else { ?>
@@ -352,7 +348,7 @@ foreach ($TopVotes as $GroupID => $Group) {
 <?		} ?>
 						]
 					</span>
-					<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']);?>-->
+					<strong><?=$DisplayName?></strong> <!--<?Votes::vote_link($GroupID, $UserVote);?>-->
 					<div class="tags"><?=$TorrentTags->format()?></div>
 				</div>
 			</td>
@@ -372,12 +368,12 @@ foreach ($TopVotes as $GroupID => $Group) {
 		<td class="cats_col"><!-- category --></td>
 		<td width="70%">Torrents</td>
 		<td>Size</td>
-		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" class="tooltip" /></td>
-		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" class="tooltip" /></td>
-		<td class="sign"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" class="tooltip" /></td>
+		<td class="sign snatches"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/snatched.png" alt="Snatches" title="Snatches" class="tooltip" /></td>
+		<td class="sign seeders"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/seeders.png" alt="Seeders" title="Seeders" class="tooltip" /></td>
+		<td class="sign leechers"><img src="static/styles/<?=$LoggedUser['StyleName'] ?>/images/leechers.png" alt="Leechers" title="Leechers" class="tooltip" /></td>
 	</tr>
 <?
-if ($TorrentList === false) { ?>
+if ($TopVotes === false) { ?>
 	<tr>
 		<td colspan="7" class="center">Server is busy processing another top list request. Please try again in a minute.</td>
 	</tr>

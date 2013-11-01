@@ -31,7 +31,7 @@ $Val->SetFields('description', '1', 'string', 'The description must be at least 
 
 $Err = $Val->ValidateForm($_POST);
 
-if ($P['category'] === '0') {
+if (!$Err && $P['category'] === '0') {
 	$DB->query("
 		SELECT COUNT(ID)
 		FROM collages
@@ -68,13 +68,11 @@ if (!$Err) {
 }
 
 if ($Err) {
-	//error($Err);
-	$Err = urlencode($Err);
-	$Name = urlencode($_POST['name']);
-	$Category = urlencode($_POST['category']);
-	$Tags = urlencode($_POST['tags']);
-	$Description = urlencode($_POST['description']);
-	header("Location: collages.php?action=new&err=$Err&name=$Name&cat=$Category&tags=$Tags&descr=$Description");
+	$Name = $_POST['name'];
+	$Category = $_POST['category'];
+	$Tags = $_POST['tags'];
+	$Description = $_POST['description'];
+	include(SERVER_ROOT.'/sections/collages/new.php');
 	die();
 }
 

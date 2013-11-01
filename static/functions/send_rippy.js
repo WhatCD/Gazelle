@@ -31,6 +31,9 @@ function changeRippyImage() {
 		case 6:
 			image = "cassie.png";
 			break;
+		case 7:
+			image = "drone.png";
+			break;
 		default:
 			image = "rippy.png";
 			break;

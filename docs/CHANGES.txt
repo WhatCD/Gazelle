@@ -1,5 +1,14 @@
 CHANGE LOG
 
+2013-10-31 by porkpie
+Albums with the same vote score are tied on toplists
+
+2013-10-31 by alderaan
+Remove redundant sentences from and fix other issues with automatic PMs sent via Reports v2.
+
+2013-10-31 by alderaan
+Fix cache bug when making an artist into a non-redirecting alias of another artist (typo'd name of cache key)
+
 2013-10-31 by alderaan
 Renamed take*.php files in sections/requests/ (added underscores)
 

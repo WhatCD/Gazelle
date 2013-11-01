@@ -966,17 +966,17 @@ $Bookmarks = Bookmarks::all_bookmarks('torrent');
 		<td>Files</td>
 		<td><a href="<?=header_link('time')?>">Time</a></td>
 		<td><a href="<?=header_link('size')?>">Size</a></td>
-		<td class="sign">
+		<td class="sign snatches">
 			<a href="<?=header_link('snatched')?>">
 				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" class="tooltip" alt="Snatches" title="Snatches" />
 			</a>
 		</td>
-		<td class="sign">
+		<td class="sign seeders">
 			<a href="<?=header_link('seeders')?>">
 				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" class="tooltip" alt="Seeders" title="Seeders" />
 			</a>
 		</td>
-		<td class="sign">
+		<td class="sign leechers">
 			<a href="<?=header_link('leechers')?>">
 				<img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" />
 			</a>
