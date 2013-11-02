@@ -336,7 +336,7 @@ class Donations {
 					SecondAvatar
 				FROM donor_rewards
 				WHERE UserID = '$UserID'");
-			$Rewards = G::$DB->next_record(MYSQLI_ASSOC, false);
+			$Rewards = G::$DB->next_record(MYSQLI_ASSOC);
 			G::$DB->set_query_id($QueryID);
 
 			$DonorInfo = array(

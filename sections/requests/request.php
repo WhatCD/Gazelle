@@ -120,13 +120,17 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 <?	if ($Request['CategoryID'] !== '0') { ?>
 		<div class="box box_image box_image_albumart box_albumart"><!-- .box_albumart deprecated -->
 			<div class="head"><strong>Cover</strong></div>
+			<div id="covers">
+				<div class="pad">
 <?
 		if (!empty($Request['Image'])) {
 ?>
-			<p align="center"><img style="max-width: 220px;" src="<?=ImageTools::process($Request['Image'], true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Request['Image'])?>', 220);" /></p>
+					<p align="center"><img style="width: 100%;" src="<?=ImageTools::process($Request['Image'], true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Request['Image'])?>', 220);" /></p>
 <?		} else { ?>
-			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$Request['CategoryID'] - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" width="220" height="220" border="0" /></p>
+					<p align="center"><img style="width: 100%;" src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$Request['CategoryID'] - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" height="220" border="0" /></p>
 <?		} ?>
+				</div>
+			</div>
 		</div>
 <?
 	}

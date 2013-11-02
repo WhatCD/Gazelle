@@ -96,7 +96,6 @@ if (!empty($_POST['action'])) {
 		case 'warn':
 			require(SERVER_ROOT.'/sections/forums/warn.php');
 			break;
-
 		default:
 			error(404);
 	}

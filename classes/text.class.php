@@ -489,8 +489,8 @@ class TEXT {
 				case '#':
 				case '*':
 						$Array[$ArrayPos] = array('Type'=>'list');
-						$Array[$ArrayPos]['Val'] = explode('['.$TagName.']', $Block);
-						$Array[$ArrayPos]['ListType'] = ($TagName === '*' ? 'ul' : 'ol');
+						$Array[$ArrayPos]['Val'] = explode("[$TagName]", $Block);
+						$Array[$ArrayPos]['ListType'] = $TagName === '*' ? 'ul' : 'ol';
 						$Array[$ArrayPos]['Tag'] = $TagName;
 						foreach ($Array[$ArrayPos]['Val'] as $Key=>$Val) {
 							$Array[$ArrayPos]['Val'][$Key] = $this->parse(trim($Val));
@@ -574,11 +574,11 @@ class TEXT {
 			if ($Offset > 0) $List .= str_repeat('<li><ol>', $Offset - 2);
 
 			if ($ItemLevel > 1) {
-				$List .= ($i === 0 ? '<li>' : '');
-				$List .= ("\n<ol>\n");
+				$List .= $i === 0 ? '<li>' : '';
+				$List .= "\n<ol>\n";
 			}
 		} else {
-			$List .= ($i > 0 ? '</li>' : '<li>');
+			$List .= $i > 0 ? '</li>' : '<li>';
 		}
 	}
 
@@ -671,7 +671,7 @@ class TEXT {
 					$Str .= '<code>'.$Block['Val'].'</code>';
 					break;
 				case 'list':
-					$Str .= '<'.$Block['ListType'].'>';
+					$Str .= "<$Block[ListType] class=\"postlist\">";
 					foreach ($Block['Val'] as $Line) {
 
 						$Str .= '<li>'.$this->to_html($Line).'</li>';
@@ -712,7 +712,7 @@ class TEXT {
 					break;
 				case 'inlinesize':
 				case 'size':
-					$ValidAttribs = array('1','2','3','4','5','6','7','8','9','10');
+					$ValidAttribs = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
 					if (!in_array($Block['Attr'], $ValidAttribs)) {
 						$Str .= '[size='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/size]';
 					} else {

@@ -3,7 +3,7 @@ $(document).ready(function() {
 	if (!$.fn.tooltipster) {
 		$('.tooltip_interactive, .tooltip_image, .tooltip, .tooltip_gold').each(function() {
 			if ($(this).data('title-plain')) {
-				$(this).attr('title', $(this).data('title-plain'));
+				$(this).attr('title', $(this).data('title-plain')).removeData('title-plain');
 			}
 		});
 		return;

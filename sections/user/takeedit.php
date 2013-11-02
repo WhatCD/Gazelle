@@ -20,7 +20,7 @@ if ($UserID != $LoggedUser['ID'] && !check_perms('users_edit_profiles', $Permiss
 }
 
 $Val->SetFields('stylesheet', 1, "number", "You forgot to select a stylesheet.");
-$Val->SetFields('styleurl', 0, "regex", "You did not enter a valid stylesheet URL.", array('regex' => '/^https?:\/\/(localhost(:[0-9]{2,5})?|[0-9]{1,3}(\.[0-9]{1,3}){3}|([a-zA-Z0-9\-\_]+\.)+([a-zA-Z]{1,5}[^\.]))(:[0-9]{2,5})?(\/[^<>]+)+\.css$/i'));
+$Val->SetFields('styleurl', 0, "regex", "You did not enter a valid stylesheet URL.", array('regex' => '/^'.CSS_REGEX.'$/i'));
 // The next two are commented out because the drop-down menus were replaced with a check box and radio buttons
 //$Val->SetFields('disablegrouping', 0, "number", "You forgot to select your torrent grouping option.");
 //$Val->SetFields('torrentgrouping', 0, "number", "You forgot to select your torrent grouping option.");
@@ -299,16 +299,16 @@ if ($DownloadAlt != $LoggedUser['DownloadAlt']) {
 
 $Cache->begin_transaction("user_info_$UserID");
 $Cache->update_row(false, array(
-		'Avatar'=>$_POST['avatar'],
-		'Paranoia'=>$Paranoia
+		'Avatar' => display_str($_POST['avatar']),
+		'Paranoia' => $Paranoia
 ));
 $Cache->commit_transaction(0);
 
 $Cache->begin_transaction("user_info_heavy_$UserID");
 $Cache->update_row(false, array(
-		'StyleID'=>$_POST['stylesheet'],
-		'StyleURL'=>$_POST['styleurl'],
-		'DownloadAlt'=>$DownloadAlt
+		'StyleID' => $_POST['stylesheet'],
+		'StyleURL' => display_str($_POST['styleurl']),
+		'DownloadAlt' => $DownloadAlt
 		));
 $Cache->update_row(false, $Options);
 $Cache->commit_transaction(0);

@@ -293,7 +293,7 @@ foreach ($Results as $Result) {
 				}
 			}
 ?>
-			<tr>
+			<tr<?=$Title === 'Urgent' ? ' class="rowa" style="font-weight: bold;"' : ''?>>
 				<td>
 					<a href="reportsv2.php?view=type&amp;id=<?=display_str($Array['Type'])?>"><?=display_str($Title)?></a>
 				</td>

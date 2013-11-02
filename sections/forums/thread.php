@@ -493,7 +493,6 @@ foreach ($Thread as $Key => $Post) {
 				- <a href="#" onclick="$('#warn<?=$PostID?>').raw().submit(); return false;" class="brackets">Warn</a>
 <?		}
 	}
-
 ?>
 				&nbsp;
 				<a href="#">&uarr;</a>

@@ -126,10 +126,6 @@ function remove_selection(index) {
 	$('#opt' + index).raw().disabled='';
 }
 
-function Stats(stat) {
-	ajax.get("ajax.php?action=stats&stat=" + stat);
-}
-
 // Thank you http://stackoverflow.com/questions/4578398/selecting-all-text-within-a-div-on-a-single-left-click-with-javascript
 function select_all(el) {
     if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {

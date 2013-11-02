@@ -1,6 +1,7 @@
 <?
 define('FOOTER_FILE', SERVER_ROOT.'/design/privatefooter.php');
 $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
+$UseTooltipster = !isset(G::$LoggedUser['Tooltipster']) || G::$LoggedUser['Tooltipster'];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -83,9 +84,8 @@ if (isset(G::$LoggedUser['Notify'])) {
 	<link rel="stylesheet" type="text/css"
 			href="<?=STATIC_SERVER?>styles/global.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/global.css')?>" />
 <?
-$UseTooltipster = !isset(G::$LoggedUser['Tooltipster']) || G::$LoggedUser['Tooltipster'];
 if ($UseTooltipster) { ?>
-	<link rel="stylesheet" href="<?=STATIC_SERVER?>styles/tooltipster/style.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?=STATIC_SERVER?>styles/tooltipster/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/tooltipster/style.css')?>" type="text/css" media="screen" />
 <?
 }
 if ($Mobile) { ?>
@@ -106,51 +106,34 @@ if ($Mobile) { ?>
 ?>
 	<link rel="stylesheet" type="text/css" charset="utf-8"
 			href="<?=STATIC_SERVER?>styles/opendyslexic/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/opendyslexic/style.css')?>" />
-
-<!--
-	<link rel="stylesheet" type="text/css" media="screen" title="OpenDyslexic"
-			href="<?=STATIC_SERVER?>styles/opendyslexic/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/opendyslexic/style.css')?>" />
--->
 <?
 	}
 }
 $ExtraCSS = explode(',', $CSSIncludes);
 foreach ($ExtraCSS as $CSS) {
-	if (empty($CSS)) {
+	if (trim($CSS) == '') {
 		continue;
-	} ?>
-	<link rel="stylesheet" type="text/css" media="screen" href="<?=STATIC_SERVER?>styles/<?=$CSS?>/style.css" />
+	}
+?>
+	<link rel="stylesheet" type="text/css" media="screen" href="<?=STATIC_SERVER."styles/$CSS/style.css?v=".filemtime(SERVER_ROOT."/static/styles/$CSS/style.css")?>" />
 <?
 }
 ?>
-
-	<script src="<?=STATIC_SERVER?>functions/jquery.js" type="text/javascript"></script>
-	<script
-			src="<?=STATIC_SERVER?>functions/script_start.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/script_start.js')?>"
-			type="text/javascript"></script>
-	<script
-			src="<?=STATIC_SERVER?>functions/ajax.class.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/ajax.class.js')?>"
-			type="text/javascript"></script>
 	<script type="text/javascript">
 		//<![CDATA[
 		var authkey = "<?=G::$LoggedUser['AuthKey']?>";
 		var userid = <?=G::$LoggedUser['ID']?>;
 		//]]>
 	</script>
-	<script
-			src="<?=STATIC_SERVER?>functions/global.js?v=<?=filemtime(SERVER_ROOT.'/static/functions/global.js')?>"
-			type="text/javascript"></script>
-	<script src="<?=STATIC_SERVER?>functions/jquery.autocomplete.js" type="text/javascript"></script>
-	<script src="<?=STATIC_SERVER?>functions/autocomplete.js" type="text/javascript"></script>
-<? if ($UseTooltipster) { ?>
-	<script src="<?=STATIC_SERVER?>functions/tooltipster.js" type="text/javascript"></script>
-<? } ?>
-	<script src="<?=STATIC_SERVER?>functions/tooltipster_settings.js" type="text/javascript"></script>
 <?
 
-$Scripts = explode(',', $JSIncludes);
+$Scripts = array_merge(array('jquery', 'script_start', 'ajax.class', 'global', 'jquery.autocomplete', 'autocomplete'), explode(',', $JSIncludes));
+if ($UseTooltipster) {
+	$Scripts[] = 'tooltipster';
+}
+$Scripts[] = 'tooltipster_settings';
 foreach ($Scripts as $Script) {
-	if (empty($Script)) {
+	if (trim($Script) == '') {
 		continue;
 	}
 ?>
@@ -257,39 +240,38 @@ if (check_perms('site_send_unlimited_invites')) {
 				<ul id="userinfo_minor"<?=$NewSubscriptions ? ' class="highlite"' : ''?>>
 					<li id="nav_inbox"<?=
 						Format::add_class($PageID, array('inbox'), 'active', true)?>>
-						<a onmousedown="Stats('inbox');" href="<?=Inbox::get_inbox_link(); ?>">Inbox</a>
+						<a href="<?=Inbox::get_inbox_link(); ?>">Inbox</a>
 					</li>
 					<li id="nav_staffinbox"<?=
 						Format::add_class($PageID, array('staffpm'), 'active', true)?>>
-						<a onmousedown="Stats('staffpm');" href="staffpm.php">Staff Inbox</a>
+						<a href="staffpm.php">Staff Inbox</a>
 					</li>
 					<li id="nav_uploaded"<?=
 						Format::add_class($PageID, array('torrents', false, 'uploaded'), 'active', true, 'userid')?>>
-						<a onmousedown="Stats('uploads');"
-								href="torrents.php?type=uploaded&amp;userid=<?=G::$LoggedUser['ID']?>">Uploads</a>
+						<a href="torrents.php?type=uploaded&amp;userid=<?=G::$LoggedUser['ID']?>">Uploads</a>
 					</li>
 					<li id="nav_bookmarks"<?=
 						Format::add_class($PageID, array('bookmarks'), 'active', true)?>>
-						<a onmousedown="Stats('bookmarks');" href="bookmarks.php?type=torrents">Bookmarks</a>
+						<a href="bookmarks.php?type=torrents">Bookmarks</a>
 					</li>
 <?	if (check_perms('site_torrents_notify')) { ?>
 					<li id="nav_notifications"<?=
 						Format::add_class($PageID, array(array('torrents', 'notify'), array('user', 'notify')), 'active', true, 'userid')?>>
-						<a onmousedown="Stats('notifications');" href="user.php?action=notify">Notifications</a>
+						<a href="user.php?action=notify">Notifications</a>
 					</li>
 <?	}
 	$ClassNames = $NewSubscriptions ? 'new-subscriptions' : '';
 	$ClassNames = trim($ClassNames.Format::add_class($PageID, array('userhistory', 'subscriptions'), 'active', false));
 ?>
 					<li id="nav_subscriptions"<?=$ClassNames ? " class=\"$ClassNames\"" : ''?>>
-						<a onmousedown="Stats('subscriptions');" href="userhistory.php?action=subscriptions">Subscriptions</a>
+						<a href="userhistory.php?action=subscriptions">Subscriptions</a>
 					</li>
 					<li id="nav_comments"<?=
 						Format::add_class($PageID, array('comments'), 'active', true, 'userid')?>>
-						<a onmousedown="Stats('comments');" href="comments.php">Comments</a></li>
+						<a href="comments.php">Comments</a></li>
 					<li id="nav_friends"<?=
 						Format::add_class($PageID, array('friends'), 'active', true)?>>
-						<a onmousedown="Stats('friends');" href="friends.php">Friends</a></li>
+						<a href="friends.php">Friends</a></li>
 				</ul>
 			</div>
 			<div id="menu">
