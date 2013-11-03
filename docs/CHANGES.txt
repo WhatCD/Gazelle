@@ -1,6 +1,9 @@
 CHANGE LOG
 
 2013-11-02 by alderaan
+Significantly improve the usability and appearance of the debug class' list of cache keys
+
+2013-11-02 by alderaan
 Highlight "Urgent" reports in the Reports v2 system
 
 2013-10-31 by porkpie

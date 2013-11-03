@@ -398,7 +398,6 @@ textarea {
 .main_column {
 	display: inline;
 	float: left;
-	margin-right: 40px;
 	width: 653px;
 }
 * html .main_column {

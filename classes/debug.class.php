@@ -316,7 +316,7 @@ class DEBUG {
 ?>
 	<table class="layout" width="100%">
 		<tr>
-			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_perf').gtoggle(); return false;" class="brackets">View</a> Performance stats:</strong></td>
+			<td align="left"><strong><a href="#" onclick="$(this).parents('.layout').next('#debug_perf').gtoggle(); return false;" class="brackets">View</a> Performance Statistics:</strong></td>
 		</tr>
 	</table>
 	<table id="debug_perf" class="debug_table hidden" width="100%">
@@ -461,7 +461,7 @@ class DEBUG {
 	}
 
 	public function cache_table($CacheKeys = false) {
-		$Header = 'Cache keys';
+		$Header = 'Cache Keys';
 		if (!is_array($CacheKeys)) {
 			$CacheKeys = $this->get_cache_keys();
 			$Header .= ' ('.number_format($this->get_cache_time(), 5).' ms)';
@@ -480,9 +480,9 @@ class DEBUG {
 	<table id="debug_cache" class="debug_table hidden" width="100%">
 <? 		foreach ($CacheKeys as $Key) { ?>
 		<tr>
-			<td align="left" class="debug_info debug_cache_key">
+			<td class="label nobr debug_info debug_cache_key">
 				<a href="#" onclick="$('#debug_cache_<?=$Key?>').gtoggle(); return false;"><?=display_str($Key)?></a>
-				<a href="tools.php?action=clear_cache&amp;key=<?=$Key?>&amp;type=clear" target="_blank" class="brackets">Clear this cache key</a>
+				<a href="tools.php?action=clear_cache&amp;key=<?=$Key?>&amp;type=clear" target="_blank" class="brackets tooltip" title="Clear this cache key">Clear</a>
 			</td>
 			<td align="left" class="debug_data debug_cache_data">
 				<pre id="debug_cache_<?=$Key?>" class="hidden">
