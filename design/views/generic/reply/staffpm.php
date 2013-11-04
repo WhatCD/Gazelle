@@ -18,8 +18,8 @@
 					<option value="700">Staff</option>
 				</select>
 
-				<input type="button" value="Preview" class="hidden button_preview_<?=$TextPrev->getID()?>" title="Preview text" />
+				<input type="button" value="Preview" class="hidden button_preview_<?=$TextPrev->getID()?>" />
 				<input type="submit" value="Send message" />
-				<input type="button" value="Hide" onclick="$('#compose').gtoggle();return false;" />
+				<input type="button" value="Hide" onclick="$('#compose').gtoggle(); return false;" />
 			</form>
 		</div>

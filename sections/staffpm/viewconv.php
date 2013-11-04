@@ -233,7 +233,7 @@ if ($ConvID = (int)$_GET['id']) {
 <?		if ($IsFLS) { //Moved by request ?>
 					<input type="button" value="Common answers" onclick="$('#common_answers').gtoggle();" />
 <?		} ?>
-					<input type="button" id="previewbtn" value="Preview" class="hidden button_preview_<?=$TextPrev->getID()?>" title="Preview text" />
+					<input type="button" id="previewbtn" value="Preview" class="hidden button_preview_<?=$TextPrev->getID()?>" />
 					<input type="submit" value="Send message" />
 <?	} else { ?>
 					<input type="button" value="Unresolve" onclick="location.href='staffpm.php?action=unresolve&amp;id=<?=$ConvID?>';" />

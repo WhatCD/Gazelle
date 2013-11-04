@@ -335,7 +335,7 @@ tr.torrent .bookmark>a:after {
 
 .ui-state-highlight {
 	background: #007DC6 /*{bgColorHighlight}*/;
-	opacity : 0.15;
+	opacity: 0.15;
 	width: 50%;
 
 }
@@ -413,7 +413,7 @@ tr.torrent .bookmark>a:after {
 	content: "";
 }
 .group_image {
-	overflow:hidden;
+	overflow: hidden;
 }
 .float_left {
 	float: left;

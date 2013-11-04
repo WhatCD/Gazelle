@@ -111,8 +111,8 @@ h1,h2,h3,h4{
 }
 
 .nobr {
-	white-space:nowrap;
-	font-weight: normal ;
+	white-space: nowrap;
+	font-weight: normal;
 }
 
 .rowa td {

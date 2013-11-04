@@ -14,12 +14,10 @@ View::show_header($Title, 'bbcode_sandbox');
 	<br />
 	<div class="thin">
 		<table class="forum_post wrap_overflow box vertical_margin">
-			<tbody>
-				<tr>
-					<td class="body" id="preview">
-					</td>
-				</tr>
-			</tbody>
+			<tr>
+				<td class="body" id="preview">
+				</td>
+			</tr>
 		</table>
 	</div>
 </div>

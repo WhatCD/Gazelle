@@ -8,25 +8,25 @@
 	*/
 
 * {
-	margin:0;
-	padding:0;
-	border:none;
-	outline:none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	outline: none;
 }
 
 /*General Mosaic Styles*/
 .mosaic-block {
 	display: inline-block;
-	position:relative;
-	overflow:hidden;
-	width:250px;
-	height:250px;
-	margin:10px;
+	position: relative;
+	overflow: hidden;
+	width: 250px;
+	height: 250px;
+	margin: 10px;
 	text-align: left;
 }
 
 .mosaic-backdrop {
-	display:none;
+	display: none;
 }
 
 .mosaic-backdrop img {
@@ -34,28 +34,28 @@
 }
 
 .mosaic-overlay {
-	display:none;
-	z-index:5;
-	position:absolute;
+	display: none;
+	z-index: 5;
+	position: absolute;
 	width: 246px;
 	margin-left: 2px;
-	height:100%;
-	background:#111;
+	height: 100%;
+	background: #111;
 	text-shadow: none;
 }
 
 .bar2 .mosaic-overlay {
-	bottom:-80px;
-	height:100px;
-	opacity:0.8;
+	bottom: -80px;
+	height: 100px;
+	opacity: 0.8;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-	filter:alpha(opacity=80);
+	filter: alpha(opacity=80);
 }
 
 .bar2 .mosaic-overlay:hover {
-	opacity:0.8;
+	opacity: 0.8;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-	filter:alpha(opacity=80);
+	filter: alpha(opacity=80);
 }
 
 .details {
@@ -76,7 +76,7 @@
 /*** End Animation Styles ***/
 
 .item_form_table td {
-	text-align : left;
+	text-align: left;
 }
 
 .store_table {

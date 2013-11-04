@@ -119,9 +119,25 @@ textarea#quickpost{margin:0; padding:0}
 #userinfo_major>li:first-child + li + li>strong>a { background: transparent no-repeat url(/static/styles/minimal/images/minimal_mod_sprite.png) 0 -725px; }
 
 /* alerts */
-#alerts{position:absolute; top:75px; left:0px; z-index:1; font-weight:bold; font-size: 10px; color:#FFF; text-transform: uppercase;}
-.alertbar{height:11px; padding:3px; float:left; margin-right: 5px;}
-.alertbar a{color: #f60021;}
+#alerts {
+	position: absolute;
+	top: 75px;
+	left: 0px;
+	z-index: 1;
+	font-weight: bold;
+	font-size: 10px;
+	color: #FFF;
+	text-transform: uppercase;
+}
+.alertbar {
+	height: 11px;
+	padding: 3px;
+	float: left;
+	margin-right: 5px;
+}
+.alertbar a {
+	color: #f60021;
+}
 
 /* searchbars */
 #searchbars{margin:10px 210px 0 0px}
@@ -135,7 +151,7 @@ textarea#quickpost{margin:0; padding:0}
 	top: 1em;
 	left: 0;
 	z-index: 1000;
-	border : 1px solid #000;
+	border: 1px solid #000;
 	width: 12em;
 	margin-top: 12px;
 }
@@ -148,8 +164,12 @@ textarea#quickpost{margin:0; padding:0}
 	text-align: center;
 }
 /* TABLE BORDERS */
-table tr td{border:1px solid #757575}
-#user table tr td{border:0}
+table tr td {
+	border: 1px solid #757575;
+}
+#user table tr td {
+	border: 0;
+}
 
 /* content */
 #content{z-index:0; padding:0; margin:0; position:relative}

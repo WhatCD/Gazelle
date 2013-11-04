@@ -151,7 +151,7 @@
 		}
 	}
 ?>
-							<input type="button" value="Preview" class="hidden button_preview_<?=$ReplyText->getID()?>" title="Preview text" tabindex="1" />
+							<input type="button" value="Preview" class="hidden button_preview_<?=$ReplyText->getID()?>" tabindex="1" />
 							<input type="submit" value="Post reply" id="submit_button" tabindex="1" />
 						</div>
 					</form>

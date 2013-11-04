@@ -29,7 +29,8 @@ $(document).ready(function () {
 			this.el.preview
 				.on('dblclick.preview', $.proxy(this.toggle, this))
 				.addClass('text_preview')
-				.attr('title', 'Double click to edit.');
+				.addClass('tooltip')
+				.attr('title', 'Double-click to edit');
 
 			this.buttons.preview
 				.on('click.preview', $.proxy(this.get, this))
@@ -61,7 +62,7 @@ $(document).ready(function () {
 					&& this.el.textarea.val().length > 0) {
 				this.toggle();
 				if (this.last !== this.el.textarea.val()) {
-					this.el.preview.text('Loading . . .');
+					this.el.preview.text('Loading...');
 					this.last = this.el.textarea.val();
 					this.post();
 				}

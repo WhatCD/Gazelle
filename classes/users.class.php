@@ -312,12 +312,12 @@ class Users {
 
 		foreach ($Sort as $Key => $Val) {
 			if (isset($Defaults)) {
-				$Checked = ($Defaults && isset($SiteOptions['HideTypes'][$Key]) ? ' checked="checked"' : '');
+				$Checked = $Defaults && isset($SiteOptions['HideTypes'][$Key]) ? ' checked="checked"' : '';
 			} else {
 				if (!isset($RT[$Key])) {
 					continue;
 				}
-				$Checked = ($Val ? ' checked="checked"' : '');
+				$Checked = $Val ? ' checked="checked"' : '';
 				$Val = $RT[$Key];
 			}
 
@@ -529,15 +529,15 @@ class Users {
 						$IconImage = STATIC_SERVER . "common/symbols/donor_{$DonorHeart}.png";
 					}
 				}
-				$Str .= "<a href=\"$IconLink\"><img class=\"donor_icon\" src=\"$IconImage\" alt=\"$IconText\" title=\"$IconText\" /></a>";
+				$Str .= "<a href=\"$IconLink\"><img class=\"donor_icon tooltip\" src=\"$IconImage\" alt=\"$IconText\" title=\"$IconText\" /></a>";
 			}
 		}
 
 		$Str .= ($IsWarned && $UserInfo['Warned'] != '0000-00-00 00:00:00') ? '<a href="wiki.php?action=article&amp;id=218"'
 					. '><img src="'.STATIC_SERVER.'common/symbols/warned.png" alt="Warned" title="Warned'
 					. (G::$LoggedUser['ID'] === $UserID ? ' - Expires ' . date('Y-m-d H:i', strtotime($UserInfo['Warned'])) : '')
-					. '" /></a>' : '';
-		$Str .= ($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" /></a>' : '';
+					. '" class="tooltip" /></a>' : '';
+		$Str .= ($IsEnabled && $UserInfo['Enabled'] == 2) ? '<a href="rules.php"><img src="'.STATIC_SERVER.'common/symbols/disabled.png" alt="Banned" title="Be good, and you won\'t end up like this user" class="tooltip" /></a>' : '';
 
 		if ($Badges) {
 			$ClassesDisplay = array();
@@ -692,9 +692,9 @@ class Users {
 					$URL = 'https://robohash.org/'.md5($Username)."?set=set$Type&amp;size={$Size}x$Size";
 				}
 				if ($ShowAvatar == true && !empty($Avatar)) {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class/>" : $Avatar);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$Avatar\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class />" : $Avatar);
 				} else {
-					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class/>" : $URL);
+					$ToReturn = ($ReturnHTML ? "<img src=\"$URL\" width=\"$Size\" $Style $AvatarMouseOverText$SecondAvatar $Class />" : $URL);
 				}
 				break;
 			default:

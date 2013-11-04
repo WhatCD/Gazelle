@@ -466,12 +466,13 @@ foreach ($Thread as $Key => $Post) {
 	if ($PostID == $ThreadInfo['StickyPostID']) { ?>
 				<strong><span class="sticky_post_label" class="brackets">Sticky</span></strong>
 <?		if (check_perms('site_moderate_forums')) { ?>
-				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">X</a>
+				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;remove=true&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Unsticky this post" class="brackets tooltip">X</a>
 <?
 		}
 	} else {
-		if (check_perms('site_moderate_forums')) { ?>
-				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">&#x21d5;</a>
+		if (check_perms('site_moderate_forums')) {
+?>
+				- <a href="forums.php?action=sticky_post&amp;threadid=<?=$ThreadID?>&amp;postid=<?=$PostID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" title="Sticky this post" class="brackets tooltip">&#x21d5;</a>
 <?
 		}
 	}
@@ -515,7 +516,7 @@ foreach ($Thread as $Key => $Post) {
 				<a href="#content<?=$PostID?>" onclick="LoadEdit('forums', <?=$PostID?>, 1); return false;">&laquo;</a>
 <?		} ?>
 				Last edited by
-				<?=Users::format_username($EditedUserID, false, false, false, false, false, $IsDonorForum) ?> <?=time_diff($EditedTime,2,true,true)?>
+				<?=Users::format_username($EditedUserID, false, false, false, false, false, $IsDonorForum) ?> <?=time_diff($EditedTime, 2, true, true)?>
 <?	} ?>
 			</div>
 		</td>
