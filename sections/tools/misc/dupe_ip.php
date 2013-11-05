@@ -63,7 +63,7 @@ if ($DB->has_results()) {
 		<tr class="row<?=$Row?>">
 			<td><?=Users::format_username($UserID, true, true, true, true)?></td>
 			<td>
-				<span style="float: left;"><?=Tools::get_host_by_ajax($IP)." ($IP)"?></span><span style="float: right;"><a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets">S</a></span>
+				<span style="float: left;"><?=Tools::get_host_by_ajax($IP)." ($IP)"?></span><span style="float: right;"><a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets tooltip">H</a> <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets tooltip">S</a></span>
 			</td>
 			<td><?=display_str($Uses)?></td>
 			<td><?=time_diff($Joined)?></td>

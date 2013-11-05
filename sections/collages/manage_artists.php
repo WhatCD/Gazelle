@@ -62,10 +62,10 @@ View::show_header("Manage collage $Name", 'jquery-ui,jquery.tablesorter.min,sort
 		<thead>
 			<tr class="colhead">
 				<th style="width: 7%;">Order</th>
-				<th style="width: 1%;"><span><abbr title="Current rank">#</abbr></span></th>
+				<th style="width: 1%;"><span><abbr class="tooltip" title="Current rank">#</abbr></span></th>
 				<th style="text-align: left;"><span>Artist</span></th>
 				<th style="width: 7%;"><span>User</span></th>
-				<th style="width: 7%; text-align: right;" class="nobr"><span><abbr title="Modify an individual row.">Tweak</abbr></span></th>
+				<th style="width: 7%; text-align: right;" class="nobr"><span><abbr class="tooltip" title="Modify an individual row.">Tweak</abbr></span></th>
 			</tr>
 		</thead>
 	<tbody>

@@ -55,7 +55,7 @@ if (strtotime($BannedUntil) < time()) {
 if ($Attempts > 0) {
 ?>
 	<br /><br />
-	Lost your password? <a href="login.php?act=recover" title="Recover your password">Recover it here!</a>
+	Lost your password? <a href="login.php?act=recover" class="tooltip" title="Recover your password">Recover it here!</a>
 <?
 }
 ?>

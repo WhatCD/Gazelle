@@ -169,7 +169,7 @@ View::show_header($Title, 'browse,comments,torrent,bbcode,recommend,cover_art,su
 <?	if ($WikiImage != '') { ?>
 			<p align="center"><img width="100%" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=ImageTools::process($WikiImage)?>', 220);" /></p>
 <?	} else { ?>
-			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID - 1]?>" alt="<?=$Categories[$GroupCategoryID - 1]?>" title="<?=$Categories[$GroupCategoryID - 1]?>" width="220" height="220" border="0" /></p>
+			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID - 1]?>" alt="<?=$Categories[$GroupCategoryID - 1]?>" class="brackets tooltip" title="<?=$Categories[$GroupCategoryID - 1]?>" width="220" height="220" border="0" /></p>
 <?
 	}
 $Index++;
@@ -253,7 +253,7 @@ if ($Categories[$GroupCategoryID - 1] == 'Music') {
 				}
 ?>
 				(<span class="tooltip" title="Artist alias ID"><?=$AliasID?></span>)&nbsp;
-					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4'); this.parentNode.parentNode.style.display = 'none';" class="brackets" title="Remove artist">X</a></span>
+					<span class="remove remove_artist"><a href="javascript:void(0);" onclick="ajax.get('torrents.php?action=delete_alias&amp;auth=' + authkey + '&amp;groupid=<?=$GroupID?>&amp;artistid=<?=$Artist['id']?>&amp;importance=4'); this.parentNode.parentNode.style.display = 'none';" class="brackets tooltip" title="Remove artist">X</a></span>
 <?			} ?>
 				</li>
 <?

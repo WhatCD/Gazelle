@@ -20,8 +20,8 @@ $DB->query("
 		um.Username,
 		p.Level AS Class
 	FROM users_main AS um
-		LEFT JOIN permissions AS p ON p.ID=um.PermissionID
-	WHERE um.ID = ".$UserID);
+		LEFT JOIN permissions AS p ON p.ID = um.PermissionID
+	WHERE um.ID = $UserID");
 list($Username, $Class) = $DB->next_record();
 
 if (!check_perms('users_view_keys', $Class)) {
@@ -37,7 +37,7 @@ $DB->query("
 		ChangeTime,
 		ChangerIP
 	FROM users_history_passkeys
-	WHERE UserID=$UserID
+	WHERE UserID = $UserID
 	ORDER BY ChangeTime DESC");
 
 ?>
@@ -56,7 +56,7 @@ $DB->query("
 		<td><?=display_str($OldPassKey)?></td>
 		<td><?=display_str($NewPassKey)?></td>
 		<td><?=time_diff($ChangeTime)?></td>
-		<td><?=display_str($ChangerIP)?> <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" class="brackets" title="Search">S</a><br /><?=display_str(Tools::get_host_by_ip($ChangerIP))?></td>
+		<td><?=display_str($ChangerIP)?> <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($ChangerIP)?>" class="brackets tooltip" title="Search">S</a><br /><?=display_str(Tools::get_host_by_ip($ChangerIP))?></td>
 	</tr>
 <? } ?>
 </table>

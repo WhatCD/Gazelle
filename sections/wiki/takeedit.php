@@ -7,7 +7,7 @@ $Val = new VALIDATE;
 if (!is_number($_POST['id']) || $_POST['id'] == '') {
 	error(0);
 }
-$Val->SetFields('title', '1','string','The title must be between 3 and 100 characters',array('maxlength'=>100, 'minlength'=>3));
+$Val->SetFields('title', '1', 'string', 'The title must be between 3 and 100 characters', array('maxlength' => 100, 'minlength' => 3));
 $Err = $Val->ValidateForm($_POST);
 $ArticleID = $_POST['id'];
 
@@ -46,19 +46,27 @@ if ($MyRevision != $Revision) {
 	error('This article has already been modified from its original version.');
 }
 
-$DB->query("INSERT INTO wiki_revisions (ID, Revision, Title, Body, Date, Author) VALUES ('".db_string($ArticleID)."', '".db_string($Revision)."', '".db_string($Title)."', '".db_string($Body)."', '".db_string($Date)."', '".db_string($Author)."')");
-$SQL = "UPDATE wiki_articles SET
-			Revision='".db_string($Revision + 1)."',
-			Title='$P[title]',
-			Body='$P[body]',";
+$DB->query("
+	INSERT INTO wiki_revisions
+		(ID, Revision, Title, Body, Date, Author)
+	VALUES
+		('".db_string($ArticleID)."', '".db_string($Revision)."', '".db_string($Title)."', '".db_string($Body)."', '".db_string($Date)."', '".db_string($Author)."')");
+$SQL = "
+	UPDATE wiki_articles
+	SET
+		Revision = '".db_string($Revision + 1)."',
+		Title = '$P[title]',
+		Body = '$P[body]',";
 if ($Read && $Edit) {
-	$SQL .= "MinClassRead='$Read',
-			MinClassEdit='$Edit',";
+	$SQL .= "
+		MinClassRead = '$Read',
+		MinClassEdit = '$Edit',";
 }
-$SQL .= "Date='".sqltime()."',
-			Author='$LoggedUser[ID]'
-			WHERE ID='$P[id]'";
+$SQL .= "
+		Date = '".sqltime()."',
+		Author = '$LoggedUser[ID]'
+	WHERE ID = '$P[id]'";
 $DB->query($SQL);
-$Cache->delete_value('wiki_article_'.$ArticleID);
-header('Location: wiki.php?action=article&id='.$ArticleID);
+$Cache->delete_value("wiki_article_$ArticleID");
+header("Location: wiki.php?action=article&id=$ArticleID");
 ?>

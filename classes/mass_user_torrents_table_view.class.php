@@ -208,7 +208,7 @@ class MASS_USER_TORRENTS_TABLE_VIEW {
 						<td><?=$GroupYear ? trim($GroupYear) : ' '?></td>
 						<td><?=$DisplayName ? trim($DisplayName) : ' '?></td>
 						<td><?=$TorrentLink ? trim($TorrentLink) : ' '?></td>
-						<td class="nobr" title="<?=$DateAdded?>"><?=$DateAdded ? time_diff($DateAdded) : ' '?></td>
+						<td class="nobr tooltip" title="<?=$DateAdded?>"><?=$DateAdded ? time_diff($DateAdded) : ' '?></td>
 						<td class="center"><input type="checkbox" name="remove[<?=$GroupID?>]" value="" /></td>
 					</tr>
 <?

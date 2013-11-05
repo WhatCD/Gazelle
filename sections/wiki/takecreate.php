@@ -7,15 +7,15 @@ $P = db_array($_POST);
 include(SERVER_ROOT.'/classes/validate.class.php');
 $Val = new VALIDATE;
 
-$Val->SetFields('title', '1','string','The title must be between 3 and 100 characters',array('maxlength'=>100, 'minlength'=>3));
-//$Val->SetFields('alias', '1','string','Please include at least 1 alias, the entire string should be between 2 and 100 characters.',array('maxlength'=>100, 'minlength'=>2));
+$Val->SetFields('title', '1', 'string', 'The title must be between 3 and 100 characters', array('maxlength' => 100, 'minlength' => 3));
+//$Val->SetFields('alias', '1', 'string', 'Please include at least 1 alias, the entire string should be between 2 and 100 characters.', array('maxlength' => 100, 'minlength' => 2));
 $Err = $Val->ValidateForm($_POST);
 
 if (!$Err) {
 	$DB->query("
 		SELECT ID
 		FROM wiki_articles
-		WHERE Title='$P[title]'");
+		WHERE Title = '$P[title]'");
 	if ($DB->has_results()) {
 		list($ID) = $DB->next_record();
 		$Err = 'An article with that name already exists <a href="wiki.php?action=article&amp;id='.$ID.'">here</a>.';
@@ -73,6 +73,6 @@ $Alias->flush();
 
 Misc::write_log("Wiki article $ArticleID (".$_POST['title'].") was created by ".$LoggedUser['Username']);
 
-header('Location: wiki.php?action=article&id='.$ArticleID);
+header("Location: wiki.php?action=article&id=$ArticleID");
 
 ?>

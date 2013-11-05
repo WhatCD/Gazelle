@@ -54,7 +54,12 @@ $DB->query("
 		LEFT JOIN users_comments_last_read AS lr ON lr.UserID = $LoggedUser[ID] AND lr.Page = s.Page AND lr.PageID = s.PageID
 		LEFT JOIN artists_group AS a ON s.Page = 'artist' AND a.ArtistID = s.PageID
 		LEFT JOIN collages AS co ON s.Page = 'collages' AND co.ID = s.PageID
-		LEFT JOIN comments AS c ON c.ID = (SELECT MAX(ID) FROM comments WHERE Page = s.Page AND PageID = s.PageID)
+		LEFT JOIN comments AS c ON c.ID = (
+					SELECT MAX(ID)
+					FROM comments
+					WHERE Page = s.Page
+						AND PageID = s.PageID
+				)
 		LEFT JOIN comments AS c_lr ON c_lr.ID = lr.PostID
 		LEFT JOIN users_main AS um ON um.ID = c_lr.AuthorID
 		LEFT JOIN users_info AS ui ON ui.UserID = um.ID
@@ -66,7 +71,11 @@ $DB->query("
 		LEFT JOIN forums_last_read_topics AS lr ON lr.UserID = $LoggedUser[ID] AND s.TopicID = lr.TopicID
 		LEFT JOIN forums_topics AS t ON t.ID = s.TopicID
 		LEFT JOIN forums AS f ON f.ID = t.ForumID
-		LEFT JOIN forums_posts AS p ON p.ID = (SELECT MAX(ID) FROM forums_posts WHERE TopicID = s.TopicID)
+		LEFT JOIN forums_posts AS p ON p.ID = (
+					SELECT MAX(ID)
+					FROM forums_posts
+					WHERE TopicID = s.TopicID
+				)
 		LEFT JOIN forums_posts AS p_lr ON p_lr.ID = lr.PostID
 		LEFT JOIN users_main AS um ON um.ID = p_lr.AuthorID
 		LEFT JOIN users_info AS ui ON ui.UserID = um.ID
@@ -183,7 +192,7 @@ if (!$NumResults) {
 				break;
 			case 'forums':
 				$Links = 'Forums: <a href="forums.php?action=viewforum&amp;forumid=' . $Result['ForumID'] . '">' . display_str($Result['ForumName']) . '</a> &gt; ' .
-					'<a href="forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '" title="' . display_str($Result['Name']) . '">' . Format::cut_string($Result['Name'], 75) . '</a>';
+					'<a href="forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '" class="tooltip" title="' . display_str($Result['Name']) . '">' . Format::cut_string($Result['Name'], 75) . '</a>';
 				$JumpLink = 'forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
 				break;
 			default:

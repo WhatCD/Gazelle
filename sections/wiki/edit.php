@@ -26,7 +26,7 @@ View::show_header('Edit '.$Title);
 <?
 	$ReplyText = new TEXTAREA_PREVIEW('body', 'body', $Body, 91, 22, true, false);
 
-	if (check_perms('admin_manage_wiki')) { 
+	if (check_perms('admin_manage_wiki')) {
 ?>
 				<h3>Access</h3>
 				<p>There are some situations in which the viewing or editing of an article should be restricted to a certain class.</p>

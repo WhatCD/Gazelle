@@ -30,7 +30,7 @@ if ($Section === 'inbox') { ?>
 		<br /><br />
 <?
 
-$Sort = empty($_GET['sort']) || $_GET['sort'] != 'unread' ? 'Date DESC' : "cu.Unread = '1' DESC, DATE DESC";
+$Sort = empty($_GET['sort']) || $_GET['sort'] !== 'unread' ? 'Date DESC' : "cu.Unread = '1' DESC, DATE DESC";
 
 $sql = "
 	SELECT
@@ -48,18 +48,18 @@ $sql .= "AS Date
 		LEFT JOIN pm_conversations_users AS cu2 ON cu2.ConvID = c.ID AND cu2.UserID != '$UserID' AND cu2.ForwardedTo = 0
 		LEFT JOIN users_main AS um ON um.ID = cu2.UserID";
 
-if (!empty($_GET['search']) && $_GET['searchtype'] == 'message') {
+if (!empty($_GET['search']) && $_GET['searchtype'] === 'message') {
 	$sql .=	' JOIN pm_messages AS m ON c.ID = m.ConvID';
 }
 $sql .= ' WHERE ';
 if (!empty($_GET['search'])) {
 	$Search = db_string($_GET['search']);
-	if ($_GET['searchtype'] == 'user') {
+	if ($_GET['searchtype'] === 'user') {
 		$sql .= "um.Username LIKE '$Search' AND ";
-	} elseif ($_GET['searchtype'] == 'subject') {
+	} elseif ($_GET['searchtype'] === 'subject') {
 		$Words = explode(' ', $Search);
 		$sql .= "c.Subject LIKE '%".implode("%' AND c.Subject LIKE '%", $Words)."%' AND ";
-	} elseif ($_GET['searchtype'] == 'message') {
+	} elseif ($_GET['searchtype'] === 'message') {
 		$Words = explode(' ', $Search);
 		$sql .= "m.Body LIKE '%".implode("%' AND m.Body LIKE '%", $Words)."%' AND ";
 	}
@@ -94,14 +94,14 @@ echo "\t\t$Pages\n";
 				<input type="radio" name="searchtype" value="message"<?=(!empty($_GET['searchtype']) && $_GET['searchtype'] == 'message' ? ' checked="checked"' : '')?> /> Message
 				<span style="float: right;">
 <?			// provide a temporary toggle for sorting PMs
-			$ToggleTitle = 'Temporary toggle switch for sorting PMs. To permanently change the sorting behavior, edit the setting in your profile.';
-			$BaseURL = 'inbox.php';
+		$ToggleTitle = 'Temporary toggle switch for sorting PMs. To permanently change the sorting behavior, edit the setting in your profile.';
+		$BaseURL = 'inbox.php';
 
-			if ($_GET['sort'] == 'unread') { ?>
-					<a href="<?=$BaseURL?>" class="brackets" title="<?=$ToggleTitle?>">List latest first</a>
-<?			} else { ?>
-					<a href="<?=$BaseURL?>?sort=unread" class="brackets" title="<?=$ToggleTitle?>">List unread first</a>
-<?			} ?>
+		if ($_GET['sort'] === 'unread') { ?>
+					<a href="<?=$BaseURL?>" class="brackets tooltip" title="<?=$ToggleTitle?>">List latest first</a>
+<?		} else { ?>
+					<a href="<?=$BaseURL?>?sort=unread" class="brackets tooltip" title="<?=$ToggleTitle?>">List unread first</a>
+<?		} ?>
 				</span>
 				<br />
 				<input type="text" name="search" value="<?=(!empty($_GET['search']) ? display_str($_GET['search']) : 'Search '.($Section === 'sentbox' ? 'Sentbox' : 'Inbox'))?>" style="width: 98%;"

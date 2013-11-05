@@ -284,7 +284,7 @@ if (empty($Results)) {
 
 		// print row
 ?>
-	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '')?>" id="torrent<?=$TorrentID?>"<?=($MatchingArtistsText ? ' title="'.display_str($MatchingArtistsText).'"' : '')?>>
+	<tr class="torrent torrent_row<?=($TorrentInfo['IsSnatched'] ? ' snatched_torrent' : '') . ($GroupInfo['Flags']['IsSnatched'] ? ' snatched_group' : '') . ($MatchingArtistsText ? ' tooltip" title="'.display_str($MatchingArtistsText) : '')?>" id="torrent<?=$TorrentID?>">
 		<td style="text-align: center;">
 			<input type="checkbox" class="notify_box notify_box_<?=$FilterID?>" value="<?=$TorrentID?>" id="clear_<?=$TorrentID?>" tabindex="1" />
 		</td>

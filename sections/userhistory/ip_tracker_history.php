@@ -80,7 +80,7 @@ foreach ($Results as $Index => $Result) {
 	<tr class="rowa">
 		<td>
 			<?=$IP?> (<?=Tools::get_country_code_by_ajax($IP)?>)<br /><?=Tools::get_host_by_ajax($IP)?>
-			<a href="http://whatismyipaddress.com/ip/<?=display_str($IP)?>" class="brackets" title="Search WIMIA.com">WI</a>
+			<a href="http://whatismyipaddress.com/ip/<?=display_str($IP)?>" class="brackets tooltip" title="Search WIMIA.com">WI</a>
 		</td>
 		<td><a href="torrents.php?torrentid=<?=$TorrentID?>"><?=$TorrentID?></a></td>
 		<td><?=date('Y-m-d g:i:s', $Time)?></td>

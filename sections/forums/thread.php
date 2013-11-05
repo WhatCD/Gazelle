@@ -584,33 +584,33 @@ if (check_perms('site_moderate_forums')) {
 		</div>
 		<table cellpadding="6" cellspacing="1" border="0" width="100%" class="layout border">
 			<tr>
-				<td class="label">Sticky</td>
+				<td class="label"><label for="sticky_thread_checkbox">Sticky</label></td>
 				<td>
-					<input type="checkbox" onclick="$('#ranking_row').gtoggle();" name="sticky"<? if ($ThreadInfo['IsSticky']) { echo ' checked="checked"'; } ?> tabindex="2" />
+					<input type="checkbox" id="sticky_thread_checkbox" onclick="$('#ranking_row').gtoggle();" name="sticky"<? if ($ThreadInfo['IsSticky']) { echo ' checked="checked"'; } ?> tabindex="2" />
 				</td>
 			</tr>
 			<tr id="ranking_row"<?=!$ThreadInfo['IsSticky'] ? ' class="hidden"' : ''?>>
-				<td class="label">Ranking</td>
+				<td class="label"><label for="thread_ranking_textbox">Ranking</label></td>
 				<td>
-					<input type="text" name="ranking" value="<?=$ThreadInfo['Ranking']?>" tabindex="2" />
+					<input type="text" id="thread_ranking_textbox" name="ranking" value="<?=$ThreadInfo['Ranking']?>" tabindex="2" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Locked</td>
+				<td class="label"><label for="locked_thread_checkbox">Locked</label></td>
 				<td>
-					<input type="checkbox" name="locked"<? if ($ThreadInfo['IsLocked']) { echo ' checked="checked"'; } ?> tabindex="2" />
+					<input type="checkbox" id="locked_thread_checkbox" name="locked"<? if ($ThreadInfo['IsLocked']) { echo ' checked="checked"'; } ?> tabindex="2" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Title</td>
+				<td class="label"><label for="thread_title_textbox">Title</label></td>
 				<td>
-					<input type="text" name="title" style="width: 75%;" value="<?=display_str($ThreadInfo['Title'])?>" tabindex="2" />
+					<input type="text" id="thread_title_textbox" name="title" style="width: 75%;" value="<?=display_str($ThreadInfo['Title'])?>" tabindex="2" />
 				</td>
 			</tr>
 			<tr>
-				<td class="label">Move thread</td>
+				<td class="label"><label for="move_thread_selector">Move thread</label></td>
 				<td>
-					<select name="forumid" tabindex="2">
+					<select name="forumid" id="move_thread_selector" tabindex="2">
 <?
 	$OpenGroup = false;
 	$LastCategoryID = -1;
@@ -637,9 +637,9 @@ if (check_perms('site_moderate_forums')) {
 			</tr>
 <?	if (check_perms('site_admin_forums')) { ?>
 			<tr>
-				<td class="label">Delete thread</td>
+				<td class="label"><label for="delete_thread_checkbox">Delete thread</label></td>
 				<td>
-					<input type="checkbox" name="delete" tabindex="2" />
+					<input type="checkbox" id="delete_thread_checkbox" name="delete" tabindex="2" />
 				</td>
 			</tr>
 <?	} ?>

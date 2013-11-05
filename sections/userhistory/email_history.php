@@ -112,19 +112,19 @@ foreach ($History as $Key => $Values) {
 	<tr class="rowa">
 		<td><?=display_str($Values['Email'])?></td>
 		<td><?=time_diff($Values['Time'])?></td>
-		<td><?=display_str($Values['IP'])?> (<?=display_str($Values['Code'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Values['IP'])?>" class="brackets" title="Search">S</a></td>
+		<td><?=display_str($Values['IP'])?> (<?=display_str($Values['Code'])?>) <a href="user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($Values['IP'])?>" class="brackets tooltip" title="Search">S</a></td>
 <?
 	if ($UsersOnly == 1) {
 		$ueQuery = $DB->query("
-						SELECT
-							ue.UserID,
-							Username,
-							ue.Time,
-							ue.IP
-						FROM users_history_emails AS ue, users_main
-						WHERE ue.Email = '".db_string($Values['Email'])."'
-							AND UserID != $UserID
-							AND ID = UserID");
+					SELECT
+						ue.UserID,
+						Username,
+						ue.Time,
+						ue.IP
+					FROM users_history_emails AS ue, users_main
+					WHERE ue.Email = '".db_string($Values['Email'])."'
+						AND UserID != $UserID
+						AND ID = UserID");
 		while (list($UserID2, $Time, $IP) = $DB->next_record()) { ?>
 	</tr>
 	<tr>

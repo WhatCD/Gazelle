@@ -210,7 +210,7 @@ class TEXT {
 		// If for some reason your site does not require subdomains or contains a directory in the SITE_URL, revert to the line below.
 		//if ($Host == NONSSL_SITE_URL || $Host == SSL_SITE_URL || $Host == 'www.'.NONSSL_SITE_URL) {
 		if (empty($URLInfo['port']) && preg_match('/(\S+\.)*'.NONSSL_SITE_URL.'/', $Host)) {
-			$URL = $URLInfo['path'];
+			$URL = '/'.ltrim($URLInfo['path'], '/'); // Things break if the path starts with '//'
 			if (!empty($URLInfo['query'])) {
 				$URL .= '?'.$URLInfo['query'];
 			}

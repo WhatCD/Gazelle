@@ -278,9 +278,9 @@ if ($DB->affected_rows() > 0 || !$Report) {
 	//PM
 	if ($Escaped['uploader_pm'] || $Warning > 0 || isset($Escaped['delete']) || $SendPM) {
 		if (isset($Escaped['delete'])) {
-			$PM = '[url='.site_url()."/torrents.php?torrentid=$TorrentID]Your above torrent[/url] was reported and has been deleted.\n\n";
+			$PM = '[url='.site_url()."torrents.php?torrentid=$TorrentID]Your above torrent[/url] was reported and has been deleted.\n\n";
 		} else {
-			$PM = '[url='.site_url()."/torrents.php?torrentid=$TorrentID]Your above torrent[/url] was reported but not deleted.\n\n";
+			$PM = '[url='.site_url()."torrents.php?torrentid=$TorrentID]Your above torrent[/url] was reported but not deleted.\n\n";
 		}
 
 		$Preset = $ResolveType['resolve_options']['pm'];
@@ -290,7 +290,7 @@ if ($DB->affected_rows() > 0 || !$Report) {
 		}
 
 		if ($Warning > 0) {
-			$PM .= "This has resulted in a [url=".site_url()."/wiki.php?action=article&amp;id=218]$Warning week warning.[/url]\n\n";
+			$PM .= "This has resulted in a [url=".site_url()."wiki.php?action=article&amp;id=218]$Warning week warning.[/url]\n\n";
 		}
 
 		if ($Upload) {

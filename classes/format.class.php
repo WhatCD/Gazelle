@@ -525,15 +525,15 @@ class Format {
 	/**
 	 * Modified accessor for the $TorrentLabels array
 	 *
-	 * Converts $text to lowercase and strips non-word characters
+	 * Converts $Text to lowercase and strips non-word characters
 	 *
-	 * @param string $text Search string
+	 * @param string $Text Search string
 	 * @return string CSS class(es)
 	 */
-	public static function find_torrent_label_class ($text) {
-		$index = mb_eregi_replace('(?:[^\w\d\s]+)', '', strtolower($text));
-		if (isset(self::$TorrentLabels[$index])) {
-			return self::$TorrentLabels[$index];
+	public static function find_torrent_label_class($Text) {
+		$Index = mb_eregi_replace('(?:[^\w\d\s]+)', '', strtolower($Text));
+		if (isset(self::$TorrentLabels[$Index])) {
+			return self::$TorrentLabels[$Index];
 		} else {
 			return self::$TorrentLabels['default'];
 		}
@@ -543,18 +543,18 @@ class Format {
 	 * Creates a strong element that notes the torrent's state.
 	 * E.g.: snatched/freeleech/neutral leech/reported
 	 *
-	 * The CSS class is infered using find_torrent_label_class($text)
+	 * The CSS class is inferred using find_torrent_label_class($Text)
 	 *
-	 * @param string $text Display text
-	 * @param string $class Custom CSS class
-	 * @return string Strong element
+	 * @param string $Text Display text
+	 * @param string $Class Custom CSS class
+	 * @return string <strong> element
 	 */
-	public static function torrent_label ($text, $class = '') {
-		if (empty($class)) {
-			$class = self::find_torrent_label_class($text);
+	public static function torrent_label($Text, $Class = '') {
+		if (empty($Class)) {
+			$Class = self::find_torrent_label_class($Text);
 		}
-		return sprintf('<strong class="torrent_label %1$s" title="%2$s" style="white-space: nowrap;">%2$s</strong>',
-				display_str($class), display_str($text));
+		return sprintf('<strong class="torrent_label tooltip %1$s" title="%2$s" style="white-space: nowrap;">%2$s</strong>',
+				display_str($Class), display_str($Text));
 	}
 
 	/**
@@ -563,7 +563,7 @@ class Format {
 	 * @param int|string $CategoryID This number will be subtracted by one
 	 * @return string
 	 */
-	public static function css_category ($CategoryID = 1) {
+	public static function css_category($CategoryID = 1) {
 		global $Categories;
 		return 'cats_' . strtolower(str_replace(array('-', ' '), '',
 				$Categories[$CategoryID - 1]));

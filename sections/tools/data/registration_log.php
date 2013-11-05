@@ -115,15 +115,15 @@ if ($DB->has_results()) {
 			<td><?=Format::get_ratio_html($Uploaded, $Downloaded)?><br /><?=Format::get_ratio_html($InviterUploaded, $InviterDownloaded)?></td>
 			<td>
 				<span style="float: left;"><?=display_str($Email)?></span>
-				<span style="float: right;"><a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets">S</a></span><br />
+				<span style="float: right;"><a href="userhistory.php?action=email&amp;userid=<?=$UserID?>" title="History" class="brackets tooltip">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($Email)?>" title="Search" class="brackets tooltip">S</a></span><br />
 				<span style="float: left;"><?=display_str($InviterEmail)?></span>
-				<span style="float: right;"><a href="userhistory.php?action=email&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($InviterEmail)?>" title="Search" class="brackets">S</a></span><br />
+				<span style="float: right;"><a href="userhistory.php?action=email&amp;userid=<?=$InviterID?>" title="History" class="brackets tooltip">H</a> <a href="/user.php?action=search&amp;email_history=on&amp;email=<?=display_str($InviterEmail)?>" title="Search" class="brackets tooltip">S</a></span><br />
 			</td>
 			<td>
 				<span style="float: left;"><?=display_str($IP)?></span>
-				<span style="float: right;"><?=display_str($Uses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($IP)?>" title="WI" class="brackets">WI</a></span><br />
+				<span style="float: right;"><?=display_str($Uses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" title="History" class="brackets tooltip">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($IP)?>" title="Search" class="brackets tooltip">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($IP)?>" title="WI" class="brackets tooltip">WI</a></span><br />
 				<span style="float: left;"><?=display_str($InviterIP)?></span>
-				<span style="float: right;"><?=display_str($InviterUses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History" class="brackets">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search" class="brackets">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($InviterIP)?>" title="WI" class="brackets">WI</a></span><br />
+				<span style="float: right;"><?=display_str($InviterUses)?> <a href="userhistory.php?action=ips&amp;userid=<?=$InviterID?>" title="History" class="brackets tooltip">H</a> <a href="/user.php?action=search&amp;ip_history=on&amp;ip=<?=display_str($InviterIP)?>" title="Search" class="brackets tooltip">S</a> <a href="http://whatismyipaddress.com/ip/<?=display_str($InviterIP)?>" title="WI" class="brackets tooltip">WI</a></span><br />
 			</td>
 			<td>
 				<?=$IPCC?> <br />

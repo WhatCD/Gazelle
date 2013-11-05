@@ -542,7 +542,7 @@ class Users {
 		if ($Badges) {
 			$ClassesDisplay = array();
 			foreach (array_intersect_key($SecondaryClasses, $UserInfo['ExtraClasses']) as $PermID => $PermShort) {
-				$ClassesDisplay[] = '<span class="secondary_class" title="'.$Classes[$PermID]['Name'].'">'.$PermShort.'</span>';
+				$ClassesDisplay[] = '<span class="tooltip secondary_class" title="'.$Classes[$PermID]['Name'].'">'.$PermShort.'</span>';
 			}
 			if (!empty($ClassesDisplay)) {
 				$Str .= '&nbsp;'.implode('&nbsp;', $ClassesDisplay);

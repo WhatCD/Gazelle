@@ -127,7 +127,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 ?>
 					<p align="center"><img style="width: 100%;" src="<?=ImageTools::process($Request['Image'], true)?>" alt="<?=$FullName?>" onclick="lightbox.init('<?=ImageTools::process($Request['Image'])?>', 220);" /></p>
 <?		} else { ?>
-					<p align="center"><img style="width: 100%;" src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$Request['CategoryID'] - 1]?>" alt="<?=$CategoryName?>" title="<?=$CategoryName?>" height="220" border="0" /></p>
+					<p align="center"><img style="width: 100%;" src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$Request['CategoryID'] - 1]?>" alt="<?=$CategoryName?>" class="tooltip" title="<?=$CategoryName?>" height="220" border="0" /></p>
 <?		} ?>
 				</div>
 			</div>
