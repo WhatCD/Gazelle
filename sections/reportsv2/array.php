@@ -48,7 +48,7 @@ $Types = array(
 					'upload' => '0',
 					'warn' => '4',
 					'delete' => '1',
-					'pm' => '[rule]h1.2[/rule]. You have uploaded material that is currently forbidden. Items on the Do Not Upload (DNU) list (at the top of the [url='.site_url().'/upload.php]upload page[/url]) and in the [url='.site_url().'/rules.php?p=upload#h1.2]Specifically Banned[/url] portion of the uploading rules cannot be uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comments of the DNU list.
+					'pm' => '[rule]h1.2[/rule]. You have uploaded material that is currently forbidden. Items on the Do Not Upload (DNU) list (at the top of the [url='.site_url().'upload.php]upload page[/url]) and in the [url='.site_url().'rules.php?p=upload#h1.2]Specifically Banned[/url] portion of the uploading rules cannot be uploaded to the site. Do not upload them unless your torrent meets a condition specified in the comments of the DNU list.
 Your torrent was reported because it contained material from the DNU list or from the Specifically Banned section of the rules.'
 				)
 			),
@@ -364,7 +364,7 @@ Your torrent was reported because it contained a single-track rip instead of a r
 					'warn' => '0',
 					'delete' => '0',
 					'pm' => "[rule]2.3.16[/rule]. Properly tag your music files.
-The Uploading Rules require that all uploads be properly tagged. Your torrent has been marked as having bad tags. It is now listed on [url=".site_url()."/better.php]better.php[/url] and is eligible for trumping. You are of course free to fix this torrent yourself. Add or fix the required tags and upload the replacement torrent to the site. Then, report (RP) the older torrent using the category \"Tag Trump\" and indicate in the report comments that you have fixed the tags. Be sure to provide a link (PL) to the new replacement torrent."
+The Uploading Rules require that all uploads be properly tagged. Your torrent has been marked as having bad tags. It is now listed on [url=".site_url()."better.php]better.php[/url] and is eligible for trumping. You are of course free to fix this torrent yourself. Add or fix the required tags and upload the replacement torrent to the site. Then, report (RP) the older torrent using the category \"Tag Trump\" and indicate in the report comments that you have fixed the tags. Be sure to provide a link (PL) to the new replacement torrent."
 				)
 			),
 			'folders_bad' => array(
@@ -381,7 +381,7 @@ The Uploading Rules require that all uploads be properly tagged. Your torrent ha
 					'warn' => '0',
 					'delete' => '0',
 					'pm' => "[rule]2.3.2[/rule]. Name your directories with meaningful titles, such as \"Artist - Album (Year) - Format\".
-The Uploading Rules require that all uploads contain torrent directories with meaningful names. Your torrent has been marked as having a poorly named torrent directory. It is now listed on [url=".site_url()."/better.php]better.php[/url] and is eligible for trumping. You are of course free to fix this torrent yourself. Add or fix the folder/directory name(s) and upload the replacement torrent to the site. Then, report (RP) the older torrent using the category \"Folder Trump\" and indicate in the report comments that you have fixed the directory name(s). Be sure to provide a link (PL) to the new replacement torrent."
+The Uploading Rules require that all uploads contain torrent directories with meaningful names. Your torrent has been marked as having a poorly named torrent directory. It is now listed on [url=".site_url()."better.php]better.php[/url] and is eligible for trumping. You are of course free to fix this torrent yourself. Add or fix the folder/directory name(s) and upload the replacement torrent to the site. Then, report (RP) the older torrent using the category \"Folder Trump\" and indicate in the report comments that you have fixed the directory name(s). Be sure to provide a link (PL) to the new replacement torrent."
 				)
 			),
 			'wrong_format' => array(
@@ -582,7 +582,7 @@ Your torrent was reported because it was sourced from an audience recording.'
 					'pm' => '[rule]2.3.11[/rule]. File names must accurately reflect the song titles. You may not have file names like 01track.mp3, 02track.mp3, etc. Torrents containing files that are named with incorrect song titles can be trumped by properly labeled torrents. Also, torrents that are sourced from the scene but do not have the "Scene" label must comply with site naming rules (no release group names in the file names, no advertisements in the file names, etc.). If all the letters in the track titles are capitalized, the torrent is trumpable.
 
 [rule]2.3.13[/rule]. Track numbers are required in file names (e.g., "01 - TrackName.mp3"). If a torrent without track numbers in the file names is uploaded, then a torrent with the track numbers in the file names can take its place. When formatted properly, file names will sort in order by track number or playing order. Also see [rule]2.3.14[/rule].
-The Uploading Rules require that all uploads contain audio tracks with accurate file names. Your torrent has been marked as having incorrect or incomplete file names. It is now listed on [url='.site_url().'/better.php]better.php[/url] and is eligible for trumping. You are of course free to fix this torrent yourself. Add or fix the file names and upload the replacement torrent to the site. Then, report (RP) the older torrent using the category "Bad File Names Trump" and indicate in the report comments that you have fixed the file names. Be sure to provide a permalink (PL) to the new replacement torrent.'
+The Uploading Rules require that all uploads contain audio tracks with accurate file names. Your torrent has been marked as having incorrect or incomplete file names. It is now listed on [url='.site_url().'better.php]better.php[/url] and is eligible for trumping. You are of course free to fix this torrent yourself. Add or fix the file names and upload the replacement torrent to the site. Then, report (RP) the older torrent using the category "Bad File Names Trump" and indicate in the report comments that you have fixed the file names. Be sure to provide a permalink (PL) to the new replacement torrent.'
 				)
 			),
 			'cassette' => array(
@@ -600,7 +600,7 @@ The Uploading Rules require that all uploads contain audio tracks with accurate 
 					'warn' => '1',
 					'delete' => '1',
 					'pm' => '[rule]2.10.1[/rule]. Cassettes are allowed under strict conditions.
-[rule]2.10.1.1[/rule]. Releases available only on cassette may be uploaded under special strict conditions (see [url='.site_url().'/wiki.php?action=article&amp;id=593]this wiki[/url] for information on cassette ripping).
+[rule]2.10.1.1[/rule]. Releases available only on cassette may be uploaded under special strict conditions (see [url='.site_url().'wiki.php?action=article&amp;id=593]this wiki[/url] for information on cassette ripping).
 
 [rule]2.10.1.2[/rule]. Rips must be made from official cassette sources. Bootlegs are often from unofficial sources and may be deleted if they do not meet high quality audio standards (see rule [rule]2.10.8[/rule]).
 When uploading new cassette-sourced torrents, be sure to include in the release description evidence of its uniqueness in the form of discography information from a reputable source as well as pictures of the cassette you ripped.'
@@ -638,7 +638,7 @@ Your torrent was reported because one or more tracks contain encoding errors.'
 					'upload' => '0',
 					'warn' => '0',
 					'delete' => '0',
-					'pm' => '[rule]2.2.10.3[/rule]. A FLAC upload with an EAC or XLD rip log that scores 100% on the log checker replaces one with a lower score... . Note: A FLAC upload with a log that scores 95% for not defeating the audio cache may be rescored to 100% following the procedure outlined in [url='.site_url().'/wiki.php?action=article&amp;id=219]this wiki[/url].
+					'pm' => '[rule]2.2.10.3[/rule]. A FLAC upload with an EAC or XLD rip log that scores 100% on the log checker replaces one with a lower score... . Note: A FLAC upload with a log that scores 95% for not defeating the audio cache may be rescored to 100% following the procedure outlined in [url='.site_url().'wiki.php?action=article&amp;id=219]this wiki[/url].
 [rule]2.2.10.5[/rule]. XLD and EAC logs in languages other than English require a manual log checker score adjustment by staff.
 [rule]2.2.10.6.2[/rule]. If you created a CD range rip that has matching CRCs for test and copy, and where every track has an AccurateRip score of 2 or more, then you may submit your torrent for manual score adjustment.
 [rule]2.2.10.9.2[/rule]. If you find that an appended log has not been scored properly, please report the torrent and use the log rescore option.

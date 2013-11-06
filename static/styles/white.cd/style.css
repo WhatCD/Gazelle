@@ -179,7 +179,6 @@ a:hover {
 	display: inline;
 	float: left;
 	margin-right: 0;
-	width: 752px;
 }
 * html #menu {
 	overflow-x: hidden;
@@ -268,7 +267,7 @@ a:hover {
 	top: 0;
 }
 #menu {
-	left: 196px;
+	right: 0;
 	position: absolute;
 	top: 84px;
 	text-align: right;

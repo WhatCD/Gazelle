@@ -950,8 +950,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			t.ID,
 			t.GroupID,
 			tg.Name,
-			ag.Name,
-			t.last_action,
 			t.Format,
 			t.Encoding,
 			t.UserID,
@@ -959,26 +957,26 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			HEX(t.info_hash) AS InfoHash
 		FROM torrents AS t
 			JOIN torrents_group AS tg ON tg.ID = t.GroupID
-			LEFT JOIN artists_group AS ag ON ag.ArtistID = tg.ArtistID
-		WHERE t.last_action < '".time_minus(3600 * 24 * 28)."'
-			AND t.last_action != 0
-			OR t.Time < '".time_minus(3600 * 24 * 2)."'
-			AND t.last_action = 0");
-	$TorrentIDs = $DB->to_array();
-	echo 'Found '.count($TorrentIDs)." inactive torrents to be deleted.\n";
+		WHERE
+			(t.last_action < '".time_minus(3600 * 24 * 28)."' AND t.last_action != 0)
+			OR
+			(t.Time < '".time_minus(3600 * 24 * 2)."' AND t.last_action = 0)");
+	$Torrents = $DB->to_array();
+	echo 'Found '.count($Torrents)." inactive torrents to be deleted.\n";
 
-	$LogEntries = array();
+	$LogEntries = $DeleteNotes = array();
 
 	// Exceptions for inactivity deletion
 	$InactivityExceptionsMade = array(//UserID => expiry time of exception
 
 	);
-	foreach ($TorrentIDs as $TorrentID) {
-		list($ID, $GroupID, $Name, $ArtistName, $LastAction, $Format, $Encoding, $UserID, $Media, $InfoHash) = $TorrentID;
+	foreach ($Torrents as $Torrent) {
+		list($ID, $GroupID, $Name, $Format, $Encoding, $UserID, $Media, $InfoHash) = $Torrent;
 		if (array_key_exists($UserID, $InactivityExceptionsMade) && (time() < $InactivityExceptionsMade[$UserID])) {
 			// don't delete the torrent!
 			continue;
 		}
+		$ArtistName = Artists::display_artists(Artists::get_artist($GroupID), false, false, false);
 		if ($ArtistName) {
 			$Name = "$ArtistName - $Name";
 		}
@@ -1270,7 +1268,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			FROM torrents AS t
 				JOIN torrents_group AS tg ON tg.ID = t.GroupID
 				JOIN users_info AS u ON u.UserID = t.UserID
-				LEFT JOIN artists_group AS ag ON ag.ArtistID = tg.ArtistID
 			WHERE t.last_action < NOW() - INTERVAL 20 DAY
 				AND t.last_action != 0
 				AND u.UnseededAlerts = '1'

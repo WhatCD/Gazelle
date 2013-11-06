@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2013-11-06 by Y
+Add multi-key functionality to the cache clearing/viewing tool
+
 2013-11-02 by alderaan
 Significantly improve the usability and appearance of the debug class' list of cache keys
 
