@@ -396,7 +396,7 @@ View::show_header('Uploading Rules', 'rules');
 				<li id="r2.6.7"><a href="#h2.6"><strong>&uarr;_</strong></a> <a href="#r2.6.7">2.6.7.</a> <strong>Include lineage information for each soundboard recording (see <a href="#r2.3.10">2.3.10</a>).</strong>
 					<ul>
 						<li id="r2.6.7.1"><a href="#r2.6.7"><strong>&uarr;_</strong></a> <a href="#r2.6.7.1">2.6.7.1.</a> <strong>Lineage information for a soundboard recording is highly recommended.</strong> </li>
-						<li id="r2.6.7.2"><a href="#r2.6.7"><strong>&uarr;_</strong></a> <a href="#r2.6.7.2">2.6.7.2.</a> <strong>If a soundboard is uploaded without a lineage, and a lineage is later found that contains or more than one tape or CD-R generation, then the uploader will be warned and the torrent deleted.</strong></li>
+						<li id="r2.6.7.2"><a href="#r2.6.7"><strong>&uarr;_</strong></a> <a href="#r2.6.7.2">2.6.7.2.</a> <strong>If a soundboard is uploaded without a lineage, and a lineage is later found that contains more than one tape or CD-R generation, then the uploader will be warned and the torrent deleted.</strong></li>
 						<li id="r2.6.7.3"><a href="#r2.6.7"><strong>&uarr;_</strong></a> <a href="#r2.6.7.3">2.6.7.3.</a> <strong>No lineage editing or misrepresentation will be tolerated.</strong> Doing so will result in the loss of upload privileges. If you are unsure of a lineage, then do not provide it. Do NOT guess.</li>
 					</ul>
 				</li>

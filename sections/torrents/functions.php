@@ -283,45 +283,44 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 
 	$Reported = false;
 	unset($ReportedTimes);
-	$Reports = $Cache->get_value("reports_torrent_$TorrentID");
-	if ($Reports === false) {
-		$DB->query("
-			SELECT
-				r.ID,
-				r.ReporterID,
-				r.Type,
-				r.UserComment,
-				r.ReportedTime
-			FROM reportsv2 AS r
-			WHERE TorrentID = $TorrentID
-				AND Type != 'edited'
-				AND Status != 'Resolved'");
-		$Reports = $DB->to_array();
-		$Cache->cache_value("reports_torrent_$TorrentID", $Reports, 0);
-	}
-	if (count($Reports) > 0) {
+	$Reports = Torrents::get_reports($TorrentID);
+	$NumReports = count($Reports);
+
+	if ($NumReports > 0) {
 		$Reported = true;
-		include(SERVER_ROOT . '/sections/reportsv2/array.php');
-		$ReportInfo = "\n<table>\n\t<tr class=\"colhead_dark\" style=\"font-weight: bold;\">\n\t\t<td>This torrent has " . count($Reports) . ' active ' . (count($Reports) > 1 ? 'reports' : 'report') . ":</td>\n\t</tr>";
+		include(SERVER_ROOT.'/sections/reportsv2/array.php');
+		$ReportInfo = '
+		<table class="reportinfo_table">
+			<tr class="colhead_dark" style="font-weight: bold;">
+				<td>This torrent has '.$NumReports.' active '.($NumReports === 1 ? 'report' : 'reports').":</td>
+			</tr>";
 
 		foreach ($Reports as $Report) {
-			list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
+			if (check_perms('admin_reports')) {
+				$ReporterID = $Report['ReporterID'];
+				$Reporter = Users::user_info($ReporterID);
+				$ReporterName = $Reporter['Username'];
+				$ReportLinks = "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$Report[ID]\">reported it</a>";
+			} else {
+				$ReportLinks = 'Someone reported it';
+			}
 
-			$Reporter = Users::user_info($ReporterID);
-			$ReporterName = $Reporter['Username'];
-
-			if (array_key_exists($ReportType, $Types[$GroupCategoryID])) {
-				$ReportType = $Types[$GroupCategoryID][$ReportType];
-			} elseif (array_key_exists($ReportType, $Types['master'])) {
-				$ReportType = $Types['master'][$ReportType];
+			if (isset($Types[$GroupCategoryID][$Report['Type']])) {
+				$ReportType = $Types[$GroupCategoryID][$Report['Type']];
+			} elseif (isset($Types['master'][$Report['Type']])) {
+				$ReportType = $Types['master'][$Report['Type']];
 			} else {
 				//There was a type but it wasn't an option!
 				$ReportType = $Types['master']['other'];
 			}
-			$ReportInfo .= "\n\t<tr>\n\t\t<td>" . (check_perms('admin_reports') ? "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$ReportID\">reported it</a> " : 'Someone reported it ') . time_diff($ReportedTime, 2, true, true) . ' for the reason "' . $ReportType['title'] . '":';
-			$ReportInfo .= "\n\t\t\t<blockquote>" . $Text->full_format($ReportReason) . "</blockquote>\n\t\t</td>\n\t</tr>";
+			$ReportInfo .= "
+			<tr>
+				<td>$ReportLinks ".time_diff($Report['ReportedTime'], 2, true, true).' for the reason "'.$ReportType['title'].'":
+					<blockquote>'.$Text->full_format($Report['UserComment']).'</blockquote>
+				</td>
+			</tr>';
 		}
-		$ReportInfo .= "\n</table>";
+		$ReportInfo .= "\n\t\t</table>";
 	}
 
 	$CanEdit = (check_perms('torrents_edit') || (($UserID == $LoggedUser['ID'] && !$LoggedUser['DisableWiki']) && !($Remastered && !$RemasterYear)));

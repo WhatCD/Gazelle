@@ -555,40 +555,12 @@ foreach ($TorrentList as $Torrent) {
 
 	$Reported = false;
 	unset($ReportedTimes);
-	$Reports = $Cache->get_value("reports_torrent_$TorrentID");
-	if ($Reports === false) {
-		$DB->query("
-			SELECT
-				r.ID,
-				r.ReporterID,
-				r.Type,
-				r.UserComment,
-				r.ReportedTime
-			FROM reportsv2 AS r
-			WHERE TorrentID = $TorrentID
-				AND Status != 'Resolved'");
-		$Reports = $DB->to_array();
-		$Cache->cache_value("reports_torrent_$TorrentID", $Reports, 0);
-	}
+	$Reports = Torrents::get_reports($TorrentID);
+	$NumReports = count($Reports);
 
-	// used to see if we have any non-"edited log" reports to display
-	$NumNonEditedLogReports = 0;
-
-	foreach ($Reports as $Report) {
-		if ($Report['Type'] != 'edited') {
-			$NumNonEditedLogReports += 1;
-		}
-	}
-
-	/* for regular users, don't display the torrent reports table if there
-	 *		are 0 non-"edited log" reports.
-	 * always let staff (e.g. permission "admin_reports") view "edited
-	 *		log" reports.
-	 */
-	if ($NumNonEditedLogReports > 0 || (check_perms('admin_reports') && $Reports)) {
+	if ($NumReports > 0) {
 		$Reported = true;
 		include(SERVER_ROOT.'/sections/reportsv2/array.php');
-		$NumReports = check_perms('admin_reports') ? count($Reports) : $NumNonEditedLogReports;
 		$ReportInfo = '
 		<table class="reportinfo_table">
 			<tr class="colhead_dark" style="font-weight: bold;">
@@ -596,28 +568,27 @@ foreach ($TorrentList as $Torrent) {
 			</tr>";
 
 		foreach ($Reports as $Report) {
-			list($ReportID, $ReporterID, $ReportType, $ReportReason, $ReportedTime) = $Report;
-
-			$Reporter = Users::user_info($ReporterID);
-			$ReporterName = $Reporter['Username'];
-
-			if ($ReportType == 'edited' && !check_perms('admin_reports')) {
-				// Edited Log report and the viewing user does not have adequate permission
-				continue;
+			if (check_perms('admin_reports')) {
+				$ReporterID = $Report['ReporterID'];
+				$Reporter = Users::user_info($ReporterID);
+				$ReporterName = $Reporter['Username'];
+				$ReportLinks = "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$Report[ID]\">reported it</a>";
+			} else {
+				$ReportLinks = 'Someone reported it';
 			}
 
-			if (array_key_exists($ReportType, $Types[$GroupCategoryID])) {
-				$ReportType = $Types[$GroupCategoryID][$ReportType];
-			} elseif (array_key_exists($ReportType, $Types['master'])) {
-				$ReportType = $Types['master'][$ReportType];
+			if (isset($Types[$GroupCategoryID][$Report['Type']])) {
+				$ReportType = $Types[$GroupCategoryID][$Report['Type']];
+			} elseif (isset($Types['master'][$Report['Type']])) {
+				$ReportType = $Types['master'][$Report['Type']];
 			} else {
 				//There was a type but it wasn't an option!
 				$ReportType = $Types['master']['other'];
 			}
 			$ReportInfo .= "
 			<tr>
-				<td>".(check_perms('admin_reports') ? "<a href=\"user.php?id=$ReporterID\">$ReporterName</a> <a href=\"reportsv2.php?view=report&amp;id=$ReportID\">reported it</a> " : 'Someone reported it ') . time_diff($ReportedTime, 2, true, true) . ' for the reason "' . $ReportType['title'] . '":
-					<blockquote>'.$Text->full_format($ReportReason).'</blockquote>
+				<td>$ReportLinks ".time_diff($Report['ReportedTime'], 2, true, true).' for the reason "'.$ReportType['title'].'":
+					<blockquote>'.$Text->full_format($Report['UserComment']).'</blockquote>
 				</td>
 			</tr>';
 		}

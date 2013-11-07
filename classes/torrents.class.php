@@ -936,18 +936,26 @@ class Torrents {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
 				SELECT
-					r.ID,
-					r.ReporterID,
-					r.Type,
-					r.UserComment,
-					r.ReportedTime
-				FROM reportsv2 AS r
+					ID,
+					ReporterID,
+					Type,
+					UserComment,
+					ReportedTime
+				FROM reportsv2
 				WHERE TorrentID = $TorrentID
-					AND Type != 'edited'
 					AND Status != 'Resolved'");
-			$Reports = G::$DB->to_array();
+			$Reports = G::$DB->to_array(false, MYSQLI_ASSOC, false);
 			G::$DB->set_query_id($QueryID);
 			G::$Cache->cache_value("reports_torrent_$TorrentID", $Reports, 0);
+		}
+		if (!check_perms('admin_reports')) {
+			$Return = array();
+			foreach ($Reports as $Report) {
+				if ($Report['Type'] !== 'edited') {
+					$Return[] = $Report;
+				}
+			}
+			return $Return;
 		}
 		return $Reports;
 	}
