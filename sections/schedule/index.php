@@ -3,6 +3,12 @@ set_time_limit(50000);
 ob_end_flush();
 gc_enable();
 
+/*
+ * Use this if your version of pgrep does not support the '-c' option.
+ * The '-c' option requires procps-ng.
+ *
+ * $PCount = chop(shell_exec("/usr/bin/pgrep -f schedule.php | wc -l"));
+ */
 $PCount = chop(shell_exec("/usr/bin/pgrep -cf schedule.php"));
 if ($PCount > 3) {
 	// 3 because the cron job starts two processes and pgrep finds itself

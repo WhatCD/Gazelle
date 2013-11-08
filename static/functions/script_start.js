@@ -202,7 +202,7 @@ function URL() {
 	var length = 0;
 	for (var i = 0; i < splitted.length; i++) {
 		var q = splitted[i].split("=");
-		if(q != "") {
+		if (q != "") {
 			query[q[0]] = q[1];
 			length++;
 		}

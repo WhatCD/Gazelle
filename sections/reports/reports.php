@@ -95,7 +95,7 @@ $DB->set_query_id($Reports);
 		$Type = $Types[$Short];
 		$Reference = "reports.php?id=$ReportID#report$ReportID";
 ?>
-		<div id="report_<?=$ReportID?>" class="pending_report_v1">
+		<div id="report_<?=$ReportID?>" style="margin-bottom: 1em;" class="pending_report_v1">
 			<table cellpadding="5" id="report_<?=$ReportID?>">
 				<tr>
 					<td><strong><a href="<?=$Reference?>">Report #<?=$ReportID?></a></strong></td>
@@ -242,7 +242,6 @@ $DB->set_query_id($Reports);
 <?			} ?>
 			</table>
 		</div>
-		<br />
 <?
 		$DB->set_query_id($Reports);
 	}

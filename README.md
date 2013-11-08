@@ -9,6 +9,7 @@ Gazelle is a web framework geared towards private BitTorrent trackers. Although 
 * [PHP 5.4 or later](http://us.php.net/) (required)
 * [Memcached](http://memcached.org/) (required)
 * [Sphinx](http://sphinxsearch.com/) (required)
+* [procps-ng](http://sourceforge.net/projects/procps-ng/) (recommended)
 
 ## Changelog
 You may have noticed that commits in the repository do not have have descriptive messages. If you are looking for a change log of Gazelle it can be [viewed here](https://raw.github.com/WhatCD/Gazelle/master/docs/CHANGES.txt). The change log is generated daily and includes new additions or modifications to Gazelle's source.

@@ -211,7 +211,7 @@ if (check_perms('admin_manage_permissions', $Class)) {
 		<a href="user.php?action=permissions&amp;userid=<?=$UserID?>" class="brackets">Permissions</a>
 <?
 }
-if (check_perms('users_logout', $Class) && check_perms('users_view_ips', $Class)) {
+if (check_perms('users_view_ips', $Class)) {
 ?>
 		<a href="user.php?action=sessions&amp;userid=<?=$UserID?>" class="brackets">Sessions</a>
 <?

@@ -185,7 +185,7 @@ if (isset($LoginCookie)) {
 
 	// Load in the permissions
 	$LoggedUser['Permissions'] = Permissions::get_permissions_for_user($LoggedUser['ID'], $LoggedUser['CustomPermissions']);
-	$LoggedUser['Permissions']['MaxCollages'] += Donations::get_personal_collages($LoggedUser['ID'], check_perms('users_mod'));
+	$LoggedUser['Permissions']['MaxCollages'] += Donations::get_personal_collages($LoggedUser['ID']);
 
 	// Change necessary triggers in external components
 	$Cache->CanClear = check_perms('admin_clear_cache');

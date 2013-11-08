@@ -19,7 +19,7 @@ function Subscribe(topicid) {
 function SubscribeComments(page, pageid) {
 	ajax.get('userhistory.php?action=comments_subscribe&page=' + page + '&pageid=' + pageid + '&auth=' + authkey, function() {
 		var subscribeLink = $("#subscribelink_" + page + pageid).raw();
-		if(subscribeLink) {
+		if (subscribeLink) {
 			subscribeLink.firstChild.nodeValue = subscribeLink.firstChild.nodeValue.charAt(0) == 'U'
 				? "Subscribe"
 				: "Unsubscribe";

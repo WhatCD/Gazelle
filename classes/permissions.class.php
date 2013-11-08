@@ -83,22 +83,27 @@ class Permissions {
 		// This is legacy donor cruft
 		if ($UserInfo['Donor']) {
 			$DonorPerms = self::get_permissions(DONOR);
+			unset($DonorPerms['Permissions']['MaxCollages']);
 		} else {
 			$DonorPerms = array('Permissions' => array());
 		}
-
 		$MaxCollages = $Permissions['Permissions']['MaxCollages'] + $BonusCollages;
 		if (isset($CustomPermissions['MaxCollages'])) {
 			$MaxCollages += $CustomPermissions['MaxCollages'];
+			unset($CustomPermissions['MaxCollages']);
 		}
-		$Permissions['MaxCollages'] = $MaxCollages;
-
-		//Combine the permissions
+		$Permissions['Permissions']['MaxCollages'] = $MaxCollages;
+		// Combine the permissions
 		return array_merge(
 				$Permissions['Permissions'],
 				$BonusPerms,
 				$CustomPermissions,
 				$DonorPerms['Permissions']);
+	}
+
+	public static function is_mod($UserID) {
+		$Permissions = self::get_permissions_for_user($UserID);
+		return isset($Permissions['users_mod']) && $Permissions['users_mod'];
 	}
 }
 ?>

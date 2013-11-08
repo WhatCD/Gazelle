@@ -301,11 +301,6 @@ class Donations {
 		return self::get_rank($UserID) >= DONOR_FORUM_RANK || self::get_special_rank($UserID) >= MAX_SPECIAL_RANK;
 	}
 
-	public static function is_mod($UserID) {
-		$Permissions = Permissions::get_permissions_for_user($UserID);
-		return isset($Permissions['users_mod']) && $Permissions['users_mod'];
-	}
-
 	/**
 	 * Put all the common donor info in the same cache key to save some cache calls
 	 */
@@ -323,7 +318,7 @@ class Donations {
 			} else {
 				$Rank = $SpecialRank = $TotalRank = $DonationTime = 0;
 			}
-			if (self::is_mod($UserID)) {
+			if (Permissions::is_mod($UserID)) {
 				$Rank = MAX_EXTRA_RANK;
 				$SpecialRank = MAX_SPECIAL_RANK;
 			}
