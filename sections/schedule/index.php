@@ -990,7 +990,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			$Name .= ' ['.(empty($Media) ? '' : "$Media / ") . "$Format / $Encoding]";
 		}
 		Torrents::delete_torrent($ID, $GroupID);
-		$LogEntries[] = "Torrent $ID ($Name) (".strtoupper($InfoHash).") was deleted for inactivity (unseeded)";
+		$LogEntries[] = db_string("Torrent $ID ($Name) (".strtoupper($InfoHash).") was deleted for inactivity (unseeded)");
 
 		if (!array_key_exists($UserID, $DeleteNotes)) {
 			$DeleteNotes[$UserID] = array('Count' => 0, 'Msg' => '');

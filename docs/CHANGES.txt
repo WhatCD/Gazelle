@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2013-11-08 by alderaan
+Revised some of the Golden Rules for clarity
+
 2013-11-06 by Y
 Add multi-key functionality to the cache clearing/viewing tool
 

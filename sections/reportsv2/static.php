@@ -525,7 +525,7 @@ if (count($Reports) === 0) {
 				</tr>
 				<tr>
 					<td class="label">
-						<a href="javascript:Load('<?=$ReportID?>')" class="tooltip" title="Click here to reset the resolution options to their default values.">Resolve</a>
+						<a href="javascript:Load('<?=$ReportID?>')" class="tooltip" title="Click here to reset the resolution options to their default values.">Resolve</a>:
 					</td>
 					<td colspan="3">
 						<select name="resolve_type" id="resolve_type<?=$ReportID?>" onchange="ChangeResolve(<?=$ReportID?>);">
@@ -549,7 +549,7 @@ if (count($Reports) === 0) {
 							</span>
 <?				} ?>
 							<span class="tooltip" title="Warning length in weeks">
-								<strong>Warning</strong>
+								<label for="warning<?=$ReportID?>"><strong>Warning</strong></label>
 								<select name="warning" id="warning<?=$ReportID?>">
 <?				for ($i = 0; $i < 9; $i++) { ?>
 									<option value="<?=$i?>"><?=$i?></option>
