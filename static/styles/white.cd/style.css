@@ -482,14 +482,14 @@ table .time {
 table tr td.edition_info {
 	background: #f5f5f5;
 }
-#artist #content .linkbox:first-of-type {
+#artist .header .linkbox:first-of-type {
 	text-align: right;
 	position: absolute;
 	top: 0;
 	right: 0;
 	width: 300px;
 }
-#artist #content .linkbox:first-of-type a {
+#artist .header .linkbox:first-of-type a {
 	margin-right: 5px;
 }
 .r00,.r01,.r02,.r03,.r04,.r05 {
@@ -830,4 +830,49 @@ div[class~=tooltipster-base] {
 
 .two_columns:last-of-type {
 	padding-left: 7px;
+}
+
+.forum_post td img,
+#collage #reply_box img,
+#forums #reply_box img {
+	max-width: 740px;
+}
+
+#artistcomments img,
+#request_comments img,
+#torrent_comments img,
+#artistcomments #reply_box img,
+#request_comments #reply_box img,
+#torrent_comments #reply_box img {
+	max-width: 445px;
+}
+
+#artist_information img,
+.box_request_desc img,
+.profileinfo img,
+.news_post img,
+.torrent_description img,
+.wiki_article img {
+	max-width: 650px;
+}
+
+.torrentdetails img {
+	max-width: 590px;
+}
+
+.blog_post img,
+#inbox .body img,
+#inbox #preview img,
+#staffpm #reply_box img,
+#wiki .create_form img,
+#wiki .edit_form img {
+	max-width: 950px;
+}
+
+#userform img {
+	max-width: 515px;
+}
+
+#reportsv2 .manage_form img {
+	max-width: 532px;
 }

@@ -48,6 +48,21 @@ var collageShow = {
 		$(ul).add_class('collage_images');
 		ul.id = 'collage_page' + this.pg;
 		$(ul).html(data);
+		if ($.fn.tooltipster) {
+			$('.tooltip_interactive', ul).tooltipster({
+				interactive: true,
+				interactiveTolerance: 500,
+				delay: tooltip_delay,
+				updateAnimation: false,
+				maxWidth: 400
+			});
+		} else {
+			$('.tooltip_interactive', ul).each(function() {
+				if ($(this).data('title-plain')) {
+					$(this).attr('title', $(this).data('title-plain')).removeData('title-plain');
+				}
+			});
+		}
 		this.wrap.appendChild(ul);
 		return ul;
 	},

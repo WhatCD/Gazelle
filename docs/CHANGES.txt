@@ -1,5 +1,9 @@
 CHANGE LOG
 
+2013-11-09 by mcnellis
+Set image max-width explicitly for each stylesheet.
+Also added new classes for news_post, blog_post, wiki_article, torrent_comments, request_comments, artist information, and more
+
 2013-11-08 by alderaan
 Revised some of the Golden Rules for clarity
 

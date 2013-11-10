@@ -132,7 +132,7 @@ View::show_header($Title,'wiki,bbcode');
 <? } ?>
 	</div>
 	<div class="main_column">
-	<div class="box">
+	<div class="box wiki_article">
 		<div class="pad"><?=$TextBody?></div>
 	</div>
 	</div>

@@ -136,7 +136,7 @@ foreach ($Blog as $BlogItem) {
 	list($BlogID, $Author, $Title, $Body, $BlogTime) = $BlogItem;
 	$BlogTime = strtotime($BlogTime);
 ?>
-			<div id="blog<?=$BlogID?>" class="box box2">
+			<div id="blog<?=$BlogID?>" class="box box2 blog_post">
 				<div class="head">
 					<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <?=$Author?>
 <?			if (check_perms('admin_manage_blog')) { ?>

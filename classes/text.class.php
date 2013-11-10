@@ -775,9 +775,9 @@ class TEXT {
 					} else {
 						$LocalURL = $this->local_url($Block['Val']);
 						if ($LocalURL) {
-							$Str .= '<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.$LocalURL.'" />';
+							$Str .= '<img class="scale_image" onclick="lightbox.init(this, $(this).width());" alt="'.$Block['Val'].'" src="'.$LocalURL.'" />';
 						} else {
-							$Str .= '<img class="scale_image" onclick="lightbox.init(this,500);" alt="'.$Block['Val'].'" src="'.ImageTools::process($Block['Val']).'" />';
+							$Str .= '<img class="scale_image" onclick="lightbox.init(this, $(this).width());" alt="'.$Block['Val'].'" src="'.ImageTools::process($Block['Val']).'" />';
 						}
 					}
 					break;

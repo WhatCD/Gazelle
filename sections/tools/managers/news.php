@@ -73,7 +73,7 @@ $DB->query('
 	ORDER BY n.Time DESC');// LIMIT 20
 while (list($NewsID, $Title, $Body, $NewsTime) = $DB->next_record()) {
 ?>
-	<div class="box vertical_space">
+	<div class="box vertical_space news_post">
 		<div class="head">
 			<strong><?=display_str($Title) ?></strong> - posted <?=time_diff($NewsTime) ?>
 			- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>" class="brackets">Edit</a>

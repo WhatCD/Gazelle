@@ -2060,3 +2060,66 @@ TODO: Make these rules apply globally and add exceptions where needed
 #reports .pad {
 	padding: 10px !important;
 }
+
+.forum_post td img {
+	max-width: 685px;
+}
+
+#collage #reply_box img,
+#forums #reply_box img {
+	max-width: 685px;
+}
+
+#request_comments #reply_box img,
+#torrent_comments #reply_box img {
+	max-width: 403px;
+}
+
+#artistcomments #reply_box img {
+	max-width: 446px;
+}
+
+#torrent_comments img,
+#request_comments img {
+	max-width: 425px;
+}
+
+#artistcomments img {
+	max-width: 468px;
+}
+
+#artist_information img,
+.box_request_desc img,
+.news_post img,
+.torrent_description img,
+.wiki_article img {
+	max-width: 619px;
+}
+
+.torrentdetails img {
+	max-width: 590px;
+}
+
+.blog_post img,
+#wiki .create_form img,
+#wiki .edit_form img {
+	max-width: 900px;
+}
+
+#inbox .body img,
+#inbox #preview img,
+#staffpm #reply_box img {
+	max-width: 450px;
+}
+
+#userform img {
+	max-width: 512px;
+}
+
+.profileinfo img {
+	max-width: 618px;
+}
+
+#reportsv2 .manage_form img {
+	max-width: 602px;
+}

@@ -876,13 +876,13 @@ if ($NumSimilar > 0) {
 	$Similar->write_artists();
 ?>
 			</div>
-		<div id="flip_view_2" style="display: none; width: <?=WIDTH?>px; height: <?=HEIGHT?>px;">
-			<canvas width="<?=WIDTH?>px" height="<?=(HEIGHT - 20)?>px" id="similarArtistsCanvas"></canvas>
-			<div id="artistTags" style="display: none;">
-				<ul><li></li></ul>
+			<div id="flip_view_2" style="display: none; width: <?=WIDTH?>px; height: <?=HEIGHT?>px;">
+				<canvas width="<?=WIDTH?>px" height="<?=(HEIGHT - 20)?>px" id="similarArtistsCanvas"></canvas>
+				<div id="artistTags" style="display: none;">
+					<ul><li></li></ul>
+				</div>
+				<strong style="margin-left: 10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
 			</div>
-			<strong style="margin-left: 10px;"><a id="currentArtist" href="#null">Loading...</a></strong>
-		</div>
 		</div>
 
 <script type="text/javascript">//<![CDATA[
@@ -937,7 +937,7 @@ function require(file, callback) {
 </script>
 
 <? } // if $NumSimilar > 0 ?>
-		<div class="box">
+		<div id="artist_information" class="box">
 			<div id="info" class="head">
 				<a href="#">&uarr;</a>&nbsp;
 				<strong>Artist Information</strong>
@@ -956,10 +956,10 @@ list($NumComments, $Page, $Thread, $LastRead) = Comments::load('artist', $Artist
 $Pages = Format::get_pages($Page, $NumComments, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 
 ?>
-	<div id="artistcomments" class="linkbox">
-		<a name="comments"></a>
-		<?=$Pages?>
-	</div>
+	<div id="artistcomments">
+		<div class="linkbox"><a name="comments"></a>
+			<?=($Pages)?>
+		</div>
 <?
 
 //---------- Begin printing
@@ -977,6 +977,7 @@ CommentsView::render_comments($Thread, $LastRead, "artist.php?id=$ArtistID");
 		'SubscribeBox' => true
 	));
 ?>
+		</div>
 	</div>
 </div>
 <?

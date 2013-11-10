@@ -106,7 +106,7 @@ class DonationsView {
 					<span style="float: left;"><?=!empty($ProfileRewards['ProfileInfoTitle' . $i]) ? display_str($ProfileRewards['ProfileInfoTitle' . $i]) : "Extra Profile " . ($i + 1)?></span>
 					<span style="float: right;"><a href="#" onclick="$('#profilediv_<?=$i?>').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>
 				</div>
-				<div class="pad" id="profilediv_<?=$i?>">
+				<div class="pad profileinfo" id="profilediv_<?=$i?>">
 <?					echo $Text->full_format($ProfileRewards['ProfileInfo' . $i]); ?>
 				</div>
 			</div>

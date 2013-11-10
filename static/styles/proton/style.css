@@ -676,6 +676,8 @@ table {
 #inbox #preview {
 	padding: 20px;
 	background: transparent url('images/convo.png') 50% 0px no-repeat;
+	margin-left: 180px;
+	width: 471px;
 }
 
 #inbox table:not(.message_table) td {
@@ -1640,10 +1642,6 @@ ul.collage_images {
 	min-width: 60px;
 }
 
-#requests .scale_image {
-	max-width: 440px;
-}
-
 #quickreplybuttons {
 	margin-top: 5px;
 }
@@ -2083,4 +2081,62 @@ TODO: Make these rules apply globally and add exceptions where needed
 #reportsv2 .pad,
 #reports .pad {
 	padding: 10px !important;
+}
+
+.sidebar img {
+	max-width: 230px;
+}
+
+.forum_post td img {
+	max-width: 690px;
+}
+
+#collage #reply_box img,
+#forums #reply_box img {
+	max-width: 680px;
+}
+
+#artistcomments img,
+#request_comments img,
+#torrent_comments img {
+	max-width: 440px;
+}
+
+.blog_post img {
+	max-width: 885px;
+}
+
+#artist_information img,
+.box_request_desc img,
+.news_post img,
+.torrent_description img,
+.wiki_article img {
+	max-width: 625px;
+}
+
+.torrentdetails img {
+	max-width: 590px;
+}
+
+#wiki .create_form img,
+#wiki .edit_form img {
+	max-width: 908px;
+}
+
+#userform img {
+	max-width: 510px;
+}
+
+.profileinfo img {
+	max-width: 620px;
+}
+
+#inbox #preview img,
+#inbox .body img,
+#staffpm #reply_box img {
+	max-width: 450px;
+}
+
+#reportsv2 .manage_form img {
+	max-width: 600px;
 }

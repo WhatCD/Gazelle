@@ -173,7 +173,7 @@ if ($LoggedUser['LastReadBlog'] < $Blog[0][0]) {
 foreach ($Blog as $BlogItem) {
 	list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
 ?>
-	<div id="blog<?=$BlogID?>" class="box">
+	<div id="blog<?=$BlogID?>" class="box blog_post">
 		<div class="head">
 			<strong><?=$Title?></strong> - posted <?=time_diff($BlogTime);?> by <?=$Author?>
 <?	if (check_perms('admin_manage_blog')) { ?>

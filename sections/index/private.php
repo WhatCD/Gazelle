@@ -469,7 +469,7 @@ foreach ($News as $NewsItem) {
 		continue;
 	}
 ?>
-		<div id="news<?=$NewsID?>" class="box">
+		<div id="news<?=$NewsID?>" class="box news_post">
 			<div class="head">
 				<strong><?=$Text->full_format($Title)?></strong> <?=time_diff($NewsTime);?>
 <?	if (check_perms('admin_manage_news')) { ?>

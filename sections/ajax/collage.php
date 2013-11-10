@@ -1,21 +1,15 @@
 <?
 define('ARTIST_COLLAGE', 'Artists');
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
-if (empty($_GET['id'])) {
+if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	json_die("failure", "bad parameters");
 }
-
 $CollageID = $_GET['id'];
-if ($CollageID && !is_number($CollageID)) {
-	json_die("failure");
-}
+$Text = new TEXT;
 
 $CacheKey = "collage_$CollageID";
-$Data = $Cache->get_value($CacheKey);
-if ($Data) {
-	list($K, list($Name, $Description,, $Subscribers, $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated)) = each($Data);
+$CollageData = $Cache->get_value($CacheKey);
+if ($CollageData) {
+	list($Name, $Description, $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers) = $CollageData;
 } else {
 	$DB->query("
 		SELECT
@@ -27,32 +21,24 @@ if ($Data) {
 			Locked,
 			MaxGroups,
 			MaxGroupsPerUser,
+			Updated,
 			Subscribers
 		FROM collages
 		WHERE ID = '$CollageID'");
-
 	if (!$DB->has_results()) {
 		json_die("failure");
 	}
-
-	list($Name, $Description, $CreatorID, $Deleted, $CollageCategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Subscribers) = $DB->next_record();
+	list($Name, $Description, $CreatorID, $Deleted, $CollageCategoryID, $Locked, $MaxGroups, $MaxGroupsPerUser, $Updated, $Subscribers) = $DB->next_record(MYSQLI_NUM);
+	$CommentList = null;
+	$SetCache = true;
 }
 
-// Populate data that wasn't included in the cache
-if (is_null($TorrentGroups) || is_number($TorrentGroups)) {
-	$DB->query("
-		SELECT GroupID
-		FROM collages_torrents
-		WHERE CollageID = $CollageID");
-	$TorrentGroups = $DB->collect('GroupID');
-}
-if (is_null($Subscribers)) {
-	$DB->query("
-		SELECT Subscribers
-		FROM collages
-		WHERE ID = $CollageID");
-	list($Subscribers) = $DB->next_record();
-}
+// TODO: Cache this
+$DB->query("
+	SELECT GroupID
+	FROM collages_torrents
+	WHERE CollageID = $CollageID");
+$TorrentGroups = $DB->collect('GroupID');
 
 $JSON = array(
 	'id'                  => (int)$CollageID,
@@ -165,6 +151,20 @@ if ($CollageCategoryID != array_search(ARTIST_COLLAGE, $CollageCats)) {
 	$JSON['artists'] = $Artists;
 }
 
-$Cache->cache_value($CacheKey, array(array($Name, $Description, null, $Subscribers, $CommentList, $Deleted, $CollageCategoryID, $CreatorID, $Locked, $MaxGroups, $MaxGroupsPerUser)), 3600);
+if (isset($SetCache)) {
+	$CollageData = array(
+		$Name,
+		$Description,
+		$CommentList,
+		(bool)$Deleted,
+		(int)$CollageCategoryID,
+		(int)$CreatorID,
+		(bool)$Locked,
+		(int)$MaxGroups,
+		(int)$MaxGroupsPerUser,
+		$Updated,
+		(int)$Subscribers);
+	$Cache->cache_value($CacheKey, $CollageData, 3600);
+}
 
-json_die("success", $JSON);
+json_print("success", $JSON);

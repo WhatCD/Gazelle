@@ -183,18 +183,6 @@ div#AddArtists a {
 	width: 95%
 }
 
-.scale_image {
-	max-width: 500px;
-}
-
-#torrents .scale_image {
-	max-width: 400px;
-}
-
-.sidebar .scale_image {
-	max-width: 100%;
-}
-
 .rippywrap {
 	z-index: 25;
 	display: block;
@@ -643,4 +631,72 @@ tr.torrent .bookmark>a:after {
 .small_label {
 	text-align: right;
 	width: auto;
+}
+
+.scale_image {
+	max-width: 500px;
+}
+
+.sidebar img {
+	max-width: 220px;
+}
+
+.forum_post td img {
+	max-width: 675px;
+}
+
+#collage #reply_box img,
+#forums #reply_box img {
+	max-width: 650px;
+}
+
+#artistcomments #reply_box img,
+#request_comments #reply_box img,
+#torrent_comments #reply_box img {
+	max-width: 400px;
+}
+
+#artistcomments img,
+#request_comments img,
+#torrent_comments img {
+	max-width: 417px;
+}
+
+.blog_post img {
+	max-width: 825px;
+}
+
+#artist_information img,
+.box_request_desc img,
+.news_post img,
+.torrent_description img,
+.wiki_article img {
+	max-width: 570px;
+}
+
+.torrentdetails img {
+	max-width: 540px;
+}
+
+#inbox #preview img,
+#staffpm #reply_box img,
+#wiki .create_form img,
+#wiki .edit_form img {
+	max-width: 805px;
+}
+
+#inbox .body img {
+	max-width: 830px;
+}
+
+#userform img {
+	max-width: 490px;
+}
+
+.profileinfo img {
+	max-width: 565px;
+}
+
+#reportsv2 .manage_form img {
+	max-width: 616px;
 }

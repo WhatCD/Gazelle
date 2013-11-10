@@ -166,8 +166,17 @@ function check_perms($PermissionName, $MinClass = 0) {
 
 /**
  * Print JSON status result with an optional message and die.
+ * DO NOT USE THIS FUNCTION!
  */
 function json_die($Status, $Message) {
+	json_print($Status, $Message);
+	die();
+}
+
+/**
+ * Print JSON status result with an optional message.
+ */
+function json_print($Status, $Message) {
 	if ($Status == 'success' && $Message) {
 		print json_encode(array('status' => $Status, 'response' => $Message));
 	} elseif ($Message) {
@@ -175,7 +184,6 @@ function json_die($Status, $Message) {
 	} else {
 		print json_encode(array('status' => $Status));
 	}
-	die();
 }
 
 /**

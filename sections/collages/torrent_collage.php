@@ -1,47 +1,46 @@
 <?
+function compare($X, $Y) {
+	return($Y['count'] - $X['count']);
+}
+
 // Build the data for the collage and the torrent list
+// TODO: Cache this
 $DB->query("
 	SELECT
 		ct.GroupID,
-		tg.WikiImage,
-		tg.CategoryID,
-		um.ID,
-		um.Username
+		ct.UserID
 	FROM collages_torrents AS ct
 		JOIN torrents_group AS tg ON tg.ID = ct.GroupID
-		LEFT JOIN users_main AS um ON um.ID = ct.UserID
 	WHERE ct.CollageID = '$CollageID'
 	ORDER BY ct.Sort");
 
 $GroupIDs = $DB->collect('GroupID');
-$CollageDataList = $DB->to_array('GroupID', MYSQLI_ASSOC);
+$Contributors = $DB->to_pair('GroupID', 'UserID', false);
 if (count($GroupIDs) > 0) {
 	$TorrentList = Torrents::get_groups($GroupIDs);
+	$UserVotes = Votes::get_user_votes($LoggedUser['ID']);
 } else {
 	$TorrentList = array();
 }
-
 
 // Loop through the result set, building up $Collage and $TorrentTable
 // Then we print them.
 $Collage = array();
 $TorrentTable = '';
 
-$NumGroups = 0;
+$NumGroups = count($TorrentList);
 $NumGroupsByUser = 0;
 $TopArtists = array();
-$Users = array();
+$UserAdditions = array();
 $Number = 0;
 
 foreach ($TorrentList as $GroupID => $Group) {
 	extract(Torrents::array_group($Group));
-
-	list( , , , $UserID, $Username) = array_values($CollageDataList[$GroupID]);
+	$UserID = $Contributors[$GroupID];
 	$TorrentTags = new Tags($TagList);
 
 	// Handle stats and stuff
 	$Number++;
-	$NumGroups++;
 	if ($UserID == $LoggedUser['ID']) {
 		$NumGroupsByUser++;
 	}
@@ -62,13 +61,10 @@ foreach ($TorrentList as $GroupID => $Group) {
 		}
 	}
 
-	if ($Username) {
-		if (!isset($Users[$UserID])) {
-			$Users[$UserID] = array('name' => $Username, 'count' => 1);
-		} else {
-			$Users[$UserID]['count']++;
-		}
+	if (!isset($UserAdditions[$UserID])) {
+		$UserAdditions[$UserID] = 0;
 	}
+	$UserAdditions[$UserID]++;
 
 	$DisplayName = "$Number - ";
 
@@ -88,12 +84,13 @@ foreach ($TorrentList as $GroupID => $Group) {
 		$DisplayName .= ' [<abbr class="tooltip" title="This is a Vanity House release">VH</abbr>]';
 	}
 	$SnatchedGroupClass = ($GroupFlags['IsSnatched'] ? ' snatched_group' : '');
+	$UserVote = isset($UserVotes[$GroupID]) ? $UserVotes[$GroupID]['Type'] : '';
 	// Start an output buffer, so we can store this output in $TorrentTable
 	ob_start();
 
 	if (count($Torrents) > 1 || $GroupCategoryID == 1) {
-			// Grouped torrents
-			$ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
+		// Grouped torrents
+		$ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1);
 ?>
 			<tr class="group discog<?=$SnatchedGroupClass?>" id="group_<?=$GroupID?>">
 				<td class="center">
@@ -106,14 +103,14 @@ foreach ($TorrentList as $GroupID => $Group) {
 				</td>
 				<td colspan="5">
 					<strong><?=$DisplayName?></strong>
-					<? // PHP start tag is indented for proper formatting of generated HTML
-					if (Bookmarks::has_bookmarked('torrent', $GroupID)) {
-						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"remove_bookmark brackets\" onclick=\"Unbookmark('torrent', $GroupID, 'Bookmark'); return false;\">Remove bookmark</a>";
-					} else {
-						echo "<a style = \"float: right;\" href=\"#\" id=\"bookmarklink_torrent_$GroupID\" class=\"add_bookmark brackets\" onclick=\"Bookmark('torrent', $GroupID, 'Remove bookmark'); return false;\">Bookmark</a>";
-					}
-					echo "\n";
-					echo Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
+<?		if (Bookmarks::has_bookmarked('torrent', $GroupID)) { ?>
+						<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="remove_bookmark brackets" onclick="Unbookmark('torrent', <?=$GroupID?>, 'Bookmark'); return false;">Remove bookmark</a>
+<?		} else { ?>
+						<a style="float: right;" href="#" id="bookmarklink_torrent_<?=$GroupID?>" class="add_bookmark brackets" onclick="Bookmark('torrent', <?=$GroupID?>, 'Remove bookmark'); return false;">Bookmark</a>
+<?
+		}
+		Votes::vote_link($GroupID, $UserVote);
+?>
 					<div class="tags"><?=$TorrentTags->format()?></div>
 				</td>
 			</tr>
@@ -206,7 +203,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 						| <a href="reportsv2.php?action=report&amp;id=<?=$TorrentID?>" class="tooltip" title="Report">RP</a>
 					</span>
 					<strong><?=$DisplayName?></strong>
-<?			Votes::vote_link($GroupID, $UserVotes[$GroupID]['Type']); ?>
+<?		Votes::vote_link($GroupID, $UserVote); ?>
 					<div class="tags"><?=$TorrentTags->format()?></div>
 				</td>
 				<td class="number_column nobr"><?=Format::get_size($Torrent['Size'])?></td>
@@ -248,6 +245,12 @@ foreach ($TorrentList as $GroupID => $Group) {
 				</li>
 <?
 	$Collage[] = ob_get_clean();
+}
+
+if ($CollageCategoryID === '0' && !check_perms('site_collages_delete')) {
+	if (!check_perms('site_collages_personal') || $CreatorID !== $LoggedUser['ID']) {
+		$PreventAdditions = true;
+	}
 }
 
 if (!check_perms('site_collages_delete') && ($Locked || ($MaxGroups > 0 && $NumGroups >= $MaxGroups) || ($MaxGroupsPerUser > 0 && $NumGroupsByUser >= $MaxGroupsPerUser))) {
@@ -391,7 +394,7 @@ foreach ($ZIPOptions as $Option) {
 				<li>Artists: <?=number_format(count($TopArtists))?></li>
 <? } ?>
 				<li>Subscribers: <?=number_format((int)$Subscribers)?></li>
-				<li>Built by <?=number_format(count($Users))?> user<?=(count($Users) > 1 ? 's' : '')?></li>
+				<li>Built by <?=number_format(count($UserAdditions))?> user<?=(count($UserAdditions) > 1 ? 's' : '')?></li>
 				<li>Last updated: <?=time_diff($Updated)?></li>
 			</ul>
 		</div>
@@ -432,22 +435,22 @@ foreach ($ZIPOptions as $Option) {
 			<div class="pad">
 				<ol style="padding-left: 5px;">
 <?
-uasort($Users, 'compare');
+arsort($UserAdditions);
 $i = 0;
-foreach ($Users as $ID => $User) {
+foreach ($UserAdditions as $UserID => $Additions) {
 	$i++;
 	if ($i > 5) {
 		break;
 	}
 ?>
-					<li><?=Users::format_username($ID, false, false, false)?> (<?=number_format($User['count'])?>)</li>
+					<li><?=Users::format_username($UserID, false, false, false)?> (<?=number_format($Additions)?>)</li>
 <?
 }
 ?>
 				</ol>
 			</div>
 		</div>
-<? if (check_perms('site_collages_manage') && !$PreventAdditions) { ?>
+<? if (check_perms('site_collages_manage') && !isset($PreventAdditions)) { ?>
 		<div class="box box_addtorrent">
 			<div class="head"><strong>Add torrent group</strong><span class="float_right"><a href="#" onclick="$('.add_torrent_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add' ? 'Individual add' : 'Batch add'); return false;" class="brackets">Batch add</a></span></div>
 			<div class="pad add_torrent_container">

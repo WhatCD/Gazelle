@@ -147,7 +147,7 @@ if ($ConvID = (int)$_GET['id']) {
 	// Reply box and buttons
 ?>
 		<h3>Reply</h3>
-		<div class="box pad">
+		<div class="box pad" id="reply_box">
 			<div id="buttons" class="center">
 				<form class="manage_form" name="staff_messages" action="staffpm.php" method="post" id="messageform">
 					<input type="hidden" name="action" value="takepost" />

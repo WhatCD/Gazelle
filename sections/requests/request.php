@@ -445,6 +445,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 <?
 list($NumComments, $Page, $Thread, $LastRead) = Comments::load('requests', $RequestID);
 ?>
+	<div id="request_comments">
 		<div class="linkbox">
 			<a name="comments"></a>
 <?
@@ -470,6 +471,7 @@ View::parse('generic/reply/quickreply.php', array(
 	'SubscribeBox' => true
 ));
 ?>
+		</div>
 	</div>
 </div>
 <? View::show_footer(); ?>

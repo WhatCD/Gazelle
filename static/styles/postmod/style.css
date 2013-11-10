@@ -1112,3 +1112,16 @@ div[class~=tooltipster-content] > a {
 div.sidebar #event_div {
 	margin-left: -50px;
 }
+
+.sidebar img {
+	max-width: 225px;
+}
+
+.news_post img,
+.wiki_article img {
+	max-width: 565px;
+}
+
+#reportsv2 .manage_form img {
+	max-width: 622px;
+}

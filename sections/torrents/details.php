@@ -900,7 +900,7 @@ if (count($PersonalCollages) > 0) {
 // Matched Votes
 include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 ?>
-		<div class="box">
+		<div class="box torrent_description">
 			<div class="head"><a href="#">&uarr;</a>&nbsp;<strong><?=(!empty($ReleaseType) ? $ReleaseTypes[$ReleaseType].' info' : 'Info' )?></strong></div>
 			<div class="body"><? if ($WikiBody != '') { echo $WikiBody; } else { echo 'There is no information on this torrent.'; } ?></div>
 		</div>
@@ -910,6 +910,7 @@ include(SERVER_ROOT.'/sections/torrents/voter_picks.php');
 list($NumComments, $Page, $Thread, $LastRead) = Comments::load('torrents', $GroupID);
 $Pages = Format::get_pages($Page, $NumComments, TORRENT_COMMENTS_PER_PAGE, 9, '#comments');
 ?>
+	<div id="torrent_comments">
 		<div class="linkbox"><a name="comments"></a>
 			<?=$Pages?>
 		</div>
@@ -929,6 +930,7 @@ CommentsView::render_comments($Thread, $LastRead, "torrents.php?id=$GroupID");
 		'SubscribeBox' => true
 	));
 ?>
+		</div>
 	</div>
 </div>
 <? View::show_footer(); ?>

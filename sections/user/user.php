@@ -579,7 +579,7 @@ if ($RatioWatchEnds != '0000-00-00 00:00:00'
 				<?=!empty($InfoTitle) ? $InfoTitle : 'Profile';?>
 				<span style="float: right;"><a href="#" onclick="$('#profilediv').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>&nbsp;
 			</div>
-			<div class="pad" id="profilediv">
+			<div class="pad profileinfo" id="profilediv">
 <?
 if (!$Info) {
 ?>

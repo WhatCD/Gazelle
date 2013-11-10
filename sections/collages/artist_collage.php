@@ -1,15 +1,14 @@
 <?
+// TODO: Cache this
 $DB->query("
 	SELECT
 		ca.ArtistID,
 		ag.Name,
 		aw.Image,
-		um.ID AS UserID,
-		um.Username
+		ca.UserID
 	FROM collages_artists AS ca
 		JOIN artists_group AS ag ON ag.ArtistID=ca.ArtistID
 		LEFT JOIN wiki_artists AS aw ON aw.RevisionID = ag.RevisionID
-		LEFT JOIN users_main AS um ON um.ID=ca.UserID
 	WHERE ca.CollageID='$CollageID'
 	ORDER BY ca.Sort");
 
@@ -18,45 +17,40 @@ $Artists = $DB->to_array('ArtistID', MYSQLI_ASSOC);
 // Loop through the result set, building up $Collage and $TorrentTable
 // Then we print them.
 $Collage = array();
-$TorrentTable = '';
+$ArtistTable = '';
 
-$NumArtists = 0;
-$NumArtistsByUser = 0;
-$Users = array();
+$NumGroups = count($Artists);
+$NumGroupsByUser = 0;
+$UserAdditions = array();
 
 foreach ($Artists as $Artist) {
 	$UserID = $Artist['UserID'];
-	$Username = $Artist['Username'];
-	$NumArtists++;
 	if ($UserID == $LoggedUser['ID']) {
-		$NumArtistsByUser++;
+		$NumGroupsByUser++;
 	}
 
-	if ($Username) {
-		if (!isset($Users[$UserID])) {
-			$Users[$UserID] = array('name' => $Username, 'count' => 1);
-		} else {
-			$Users[$UserID]['count']++;
-		}
+	if (!isset($UserAdditions[$UserID])) {
+		$UserAdditions[$UserID] = 0;
 	}
+	$UserAdditions[$UserID]++;
 
 	ob_start();
-	?>
+?>
 			<tr>
 				<td><a href="artist.php?id=<?=$Artist['ArtistID']?>"><?=$Artist['Name']?></a></td>
 			</tr>
 <?
-	$ArtistTable.= ob_get_clean();
+	$ArtistTable .= ob_get_clean();
 
 	ob_start();
 	?>
 				<li class="image_group_<?=$Artist['ArtistID']?>">
 					<a href="artist.php?id=<?=$Artist['ArtistID']?>">
-<?		if ($Artist['Image']) { ?>
+<?	if ($Artist['Image']) { ?>
 						<img class="tooltip" src="<?=ImageTools::process($Artist['Image'], true)?>" alt="<?=$Artist['Name']?>" title="<?=$Artist['Name']?>" width="118" />
-<?		} else { ?>
+<?	} else { ?>
 						<span style="width: 107px; padding: 5px;"><?=$Artist['Name']?></span>
-<?		} ?>
+<?	} ?>
 					</a>
 				</li>
 <?
@@ -78,7 +72,6 @@ if ($NumGroups > $CollageCovers) {
 		$Collage[] = '<li></li>';
 	}
 }
-
 
 for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) {
 	$Groups = array_slice($Collage, $i * $CollageCovers, $CollageCovers);
@@ -109,15 +102,11 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 <?	} else { ?>
 			<span class="brackets">Locked</span>
 <?	}
-	if (Bookmarks::has_bookmarked('collage', $CollageID)) {
-?>
+	if (Bookmarks::has_bookmarked('collage', $CollageID)) { ?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>, 'Bookmark'); return false;">Remove bookmark</a>
 <?	} else { ?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>, 'Remove bookmark'); return false;">Bookmark</a>
 <?	}
-?>
-<!-- <a href="#" id="recommend" class="brackets">Recommend</a> -->
-<?
 	if (check_perms('site_collages_manage') && !$Locked) { ?>
 			<a href="collages.php?action=manage_artists&amp;collageid=<?=$CollageID?>" class="brackets">Manage artists</a>
 <?	} ?>
@@ -127,7 +116,6 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 <?	} ?>
 		</div>
 	</div>
-<? /* Misc::display_recommend($CollageID, "collage"); */ ?>
 	<div class="sidebar">
 		<div class="box box_category">
 			<div class="head"><strong>Category</strong></div>
@@ -140,9 +128,9 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 		<div class="box box_info box_statistics_collage_torrents">
 			<div class="head"><strong>Statistics</strong></div>
 			<ul class="stats nobullet">
-				<li>Artists: <?=number_format($NumArtists)?></li>
+				<li>Artists: <?=number_format($NumGroups)?></li>
 				<li>Subscribers: <?=number_format((int)$Subscribers)?></li>
-				<li>Built by <?=number_format(count($Users))?> user<?=(count($Users) > 1 ? 's' : '')?></li>
+				<li>Built by <?=number_format(count($UserAdditions))?> user<?=(count($UserAdditions) > 1 ? 's' : '')?></li>
 				<li>Last updated: <?=time_diff($Updated)?></li>
 			</ul>
 		</div>
@@ -151,22 +139,22 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 			<div class="pad">
 				<ol style="padding-left: 5px;">
 <?
-uasort($Users, 'compare');
+arsort($UserAdditions);
 $i = 0;
-foreach ($Users as $ID => $User) {
+foreach ($UserAdditions as $UserID => $Additions) {
 	$i++;
 	if ($i > 5) {
 		break;
 	}
 ?>
-					<li><?=Users::format_username($ID, false, false, false)?> (<?=number_format($User['count'])?>)</li>
+					<li><?=Users::format_username($UserID, false, false, false)?> (<?=number_format($Additions)?>)</li>
 <?
 }
 ?>
 				</ol>
 			</div>
 		</div>
-<? if (check_perms('site_collages_manage') && !$PreventAdditions) { ?>
+<? if (check_perms('site_collages_manage') && !isset($PreventAdditions)) { ?>
 		<div class="box box_addartist">
 			<div class="head"><strong>Add Artists</strong><span class="float_right"><a href="#" onclick="$('.add_artist_container').toggle_class('hidden'); this.innerHTML = (this.innerHTML == 'Batch add' ? 'Individual add' : 'Batch add'); return false;" class="brackets">Batch add</a></span></div>
 			<div class="pad add_artist_container">
