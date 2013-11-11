@@ -348,8 +348,6 @@ foreach ($Properties as $Key => $Value) {
 	}
 }
 
-$SearchText = db_string(trim($Properties['Artist']).' '.trim($Properties['Title']).' '.trim($Properties['Year']));
-
 
 //******************************************************************************//
 //--------------- Generate torrent file ----------------------------------------//
@@ -575,9 +573,9 @@ if (!$GroupID) {
 	// Create torrent group
 	$DB->query("
 		INSERT INTO torrents_group
-			(ArtistID, CategoryID, Name, Year, RecordLabel, CatalogueNumber, Time, WikiBody, WikiImage, SearchText, ReleaseType, VanityHouse)
+			(ArtistID, CategoryID, Name, Year, RecordLabel, CatalogueNumber, Time, WikiBody, WikiImage, ReleaseType, VanityHouse)
 		VALUES
-			(0, $TypeID, ".$T['Title'].", $T[Year], $T[RecordLabel], $T[CatalogueNumber], '".sqltime()."', '".db_string($Body)."', $T[Image], '$SearchText', $T[ReleaseType], $T[VanityHouse])");
+			(0, $TypeID, ".$T['Title'].", $T[Year], $T[RecordLabel], $T[CatalogueNumber], '".sqltime()."', '".db_string($Body)."', $T[Image], $T[ReleaseType], $T[VanityHouse])");
 	$GroupID = $DB->inserted_id();
 	if ($Type == 'Music') {
 		foreach ($ArtistForm as $Importance => $Artists) {

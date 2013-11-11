@@ -55,8 +55,8 @@ class Torrents {
 				unset($GroupIDs[$i], $Found[$GroupID], $NotFound[$GroupID]);
 				continue;
 			}
-			$Data = G::$Cache->get_value($Key.$GroupID, true);
-			if (!empty($Data) && $Data['ver'] == CACHE::GROUP_VERSION) {
+			$Data = G::$Cache->get_value($Key . $GroupID, true);
+			if (!empty($Data) && is_array($Data) && $Data['ver'] == CACHE::GROUP_VERSION) {
 				unset($NotFound[$GroupID]);
 				$Found[$GroupID] = $Data['d'];
 			}
@@ -65,7 +65,6 @@ class Torrents {
 		if (count($GroupIDs) === 0) {
 			return array();
 		}
-		$IDs = implode(',', array_keys($NotFound));
 
 		/*
 		Changing any of these attributes returned will cause very large, very dramatic site-wide chaos.
@@ -76,6 +75,8 @@ class Torrents {
 		*/
 
 		if (count($NotFound) > 0) {
+			$IDs = implode(',', array_keys($NotFound));
+			$NotFound = array();
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
 				SELECT
@@ -84,19 +85,11 @@ class Torrents {
 				WHERE g.ID IN ($IDs)");
 
 			while ($Group = G::$DB->next_record(MYSQLI_ASSOC, true)) {
-				unset($NotFound[$Group['ID']]);
-				$Found[$Group['ID']] = $Group;
-				$Found[$Group['ID']]['Torrents'] = array();
-				$Found[$Group['ID']]['Artists'] = array();
+				$NotFound[$Group['ID']] = $Group;
+				$NotFound[$Group['ID']]['Torrents'] = array();
+				$NotFound[$Group['ID']]['Artists'] = array();
 			}
 			G::$DB->set_query_id($QueryID);
-
-			// Orphan torrents. There shouldn't ever be any
-			if (count($NotFound) > 0) {
-				foreach (array_keys($NotFound) as $GroupID) {
-					unset($Found[$GroupID]);
-				}
-			}
 
 			if ($Torrents) {
 				$QueryID = G::$DB->get_query_id();
@@ -106,27 +99,25 @@ class Torrents {
 						RemasterRecordLabel, RemasterCatalogueNumber, Scene, HasLog, HasCue, LogScore,
 						FileCount, FreeTorrent, Size, Leechers, Seeders, Snatched, Time, ID AS HasFile
 					FROM torrents AS t
-					WHERE GroupID IN($IDs)
+					WHERE GroupID IN ($IDs)
 					ORDER BY GroupID, Remastered, (RemasterYear != 0) DESC, RemasterYear, RemasterTitle,
 							RemasterRecordLabel, RemasterCatalogueNumber, Media, Format, Encoding, ID");
 				while ($Torrent = G::$DB->next_record(MYSQLI_ASSOC, true)) {
-					$Found[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;
+					$NotFound[$Torrent['GroupID']]['Torrents'][$Torrent['ID']] = $Torrent;
 				}
 				G::$DB->set_query_id($QueryID);
-
-				// Cache it all
-				foreach ($Found as $GroupID => $GroupInfo) {
-					G::$Cache->cache_value("torrent_group_$GroupID",
-							array('ver' => CACHE::GROUP_VERSION, 'd' => $GroupInfo), 0);
-					G::$Cache->cache_value("torrent_group_light_$GroupID",
-							array('ver' => CACHE::GROUP_VERSION, 'd' => $GroupInfo), 0);
-				}
-			} else {
-				foreach ($Found as $Group) {
-					G::$Cache->cache_value('torrent_group_light_'.$Group['ID'], array('ver' => CACHE::GROUP_VERSION, 'd' => $Found[$Group['ID']]), 0);
-				}
 			}
+
+			foreach ($NotFound as $GroupID => $GroupInfo) {
+				G::$Cache->cache_value($Key . $GroupID, array('ver' => CACHE::GROUP_VERSION, 'd' => $GroupInfo), 0);
+			}
+
+			$Found = $NotFound + $Found;
 		}
+
+		// Filter out orphans (elements that are == false)
+		$Found = array_filter($Found);
+
 		if ($GetArtists) {
 			$Artists = Artists::get_artists($GroupIDs);
 		} else {

@@ -29,46 +29,49 @@ if (isset($Keys) && $_GET['type'] == 'clear') {
 	<div class="header">
 		<h2>Clear a cache key</h2>
 	</div>
-	<form class="manage_form" name="cache" method="get" action="">
-		<input type="hidden" name="action" value="clear_cache" />
-		<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
-			<tr>
-				<td>Key</td>
-				<td>
+	<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center">
+		<tr>
+			<td>Key</td>
+			<td>
+				<form class="manage_form" name="cache" method="get" action="">
+					<input type="hidden" name="action" value="clear_cache" />
 					<select name="type">
 						<option value="view">View</option>
 						<option value="clear">Clear</option>
 					</select>
 					<input type="text" name="key" id="key" class="inputtext" value="<?=(isset($_GET['key']) && $_GET['submit'] != 'Multi' ? display_str($_GET['key']) : '')?>" />
 					<input type="submit" name="submit" value="Single" class="submit" />
-				</td>
-			</tr>
-			<tr>
-				<td>Multi-key</td>
-				<td>
+				</form>
+			</td>
+		</tr>
+		<tr>
+			<td>Multi-key</td>
+			<td>
+				<form class="manage_form" name="cache" method="get" action="">
+					<input type="hidden" name="action" value="clear_cache" />
 					<select name="type">
 						<option value="view">View</option>
 						<option value="clear">Clear</option>
 					</select>
 					<textarea type="text" name="key" id="key" class="inputtext"><?=(isset($_GET['key']) && $_GET['submit'] == 'Multi' ? display_str($_GET['key']) : '')?></textarea>
 					<input type="submit" name="submit" value="Multi" class="submit" />
-				</td>
-			</tr>
+				</form>
+			</td>
+		</tr>
 <?
 if (isset($Keys) && $_GET['type'] == 'view') {
 	foreach ($Keys as $Key) {
 ?>
-			<tr>
-				<td><?=display_str($Key)?></td>
-				<td>
-					<pre><? var_dump($Cache->get_value($Key)); ?></pre>
-				</td>
-			</tr>
+		<tr>
+			<td><?=display_str($Key)?></td>
+			<td>
+				<pre><? var_dump($Cache->get_value($Key)); ?></pre>
+			</td>
+		</tr>
 <?
 	}
 }
 ?>
-		</table>
-	</form>
+	</table>
 <?
 View::show_footer();

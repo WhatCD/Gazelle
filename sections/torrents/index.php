@@ -228,7 +228,7 @@ if (!empty($_REQUEST['action'])) {
 					header("Location: torrents.php?id=$GroupID&torrentid=".$_GET['torrentid']);
 				}
 			} else {
-				include(SERVER_ROOT.'/sections/torrents/browse2.php');
+				include(SERVER_ROOT.'/sections/torrents/browse.php');
 			}
 			break;
 	}
@@ -259,10 +259,10 @@ if (!empty($_REQUEST['action'])) {
 		if ($GroupID) {
 			header("Location: torrents.php?id=$GroupID");
 		} else {
-			include(SERVER_ROOT.'/sections/torrents/browse2.php');
+			include(SERVER_ROOT.'/sections/torrents/browse.php');
 		}
 	} else {
-		include(SERVER_ROOT.'/sections/torrents/browse2.php');
+		include(SERVER_ROOT.'/sections/torrents/browse.php');
 	}
 }
 ?>

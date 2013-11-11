@@ -15,7 +15,6 @@ $TorrentID = $_POST['torrentid'];
 $ArtistName = db_string(trim($_POST['artist']));
 $Title = db_string(trim($_POST['title']));
 $Year = trim($_POST['year']);
-$SearchText = db_string(trim($_POST['artist']) . ' ' . trim($_POST['title']) . ' ' . trim($_POST['year']));
 
 if (!is_number($OldGroupID) || !is_number($TorrentID) || !is_number($Year) || !$OldGroupID || !$TorrentID || !$Year || empty($Title) || empty($ArtistName)) {
 	error(0);
@@ -71,9 +70,9 @@ if (empty($_POST['confirm'])) {
 
 	$DB->query("
 		INSERT INTO torrents_group
-			(ArtistID, NumArtists, CategoryID, Name, Year, Time, WikiBody, WikiImage, SearchText)
+			(ArtistID, CategoryID, Name, Year, Time, WikiBody, WikiImage)
 		VALUES
-			($ArtistID, '1', '1', '$Title', '$Year', '".sqltime()."', '', '', '$SearchText')");
+			($ArtistID, '1', '$Title', '$Year', '".sqltime()."', '', '')");
 	$GroupID = $DB->inserted_id();
 
 	$DB->query("

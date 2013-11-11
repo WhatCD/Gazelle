@@ -216,16 +216,6 @@ function toggleTorrentSearch(mode) {
 	return false;
 }
 
-// For /sections/torrents/browse.php (not browse2.php)
-function Bitrate() {
-	$('#other_bitrate').raw().value = '';
-	if ($('#bitrate').raw().options[$('#bitrate').raw().selectedIndex].value == 'Other') {
-		$('#other_bitrate_span').gshow();
-	} else {
-		$('#other_bitrate_span').ghide();
-	}
-}
-
 var ArtistFieldCount = 1;
 
 function AddArtistField() {

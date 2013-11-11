@@ -10,6 +10,15 @@ if (!is_number($GroupID) || !$GroupID) {
 	error(0);
 }
 
+$DB->query("
+	SELECT Name
+	FROM torrents_group
+	WHERE ID = $GroupID");
+if (!$DB->has_results()) {
+	error(404);
+}
+list($GroupName) = $DB->next_record(MYSQLI_NUM, false);
+
 $Changed = false;
 
 for ($i = 0; $i < count($AliasNames); $i++) {
@@ -47,12 +56,6 @@ for ($i = 0; $i < count($AliasNames); $i++) {
 
 		$DB->query("
 			SELECT Name
-			FROM torrents_group
-			WHERE ID = $GroupID");
-		list($GroupName) = $DB->next_record(MYSQLI_NUM, false);
-
-		$DB->query("
-			SELECT Name
 			FROM artists_group
 			WHERE ArtistID = $ArtistID");
 		list($ArtistName) = $DB->next_record(MYSQLI_NUM, false);
@@ -66,16 +69,6 @@ for ($i = 0; $i < count($AliasNames); $i++) {
 
 		if ($DB->affected_rows()) {
 			$Changed = true;
-			$DB->query("
-				INSERT INTO torrents_group (ID, NumArtists)
-					SELECT ta.GroupID, COUNT(ta.ArtistID)
-					FROM torrents_artists AS ta
-					WHERE ta.GroupID = '$GroupID'
-						AND ta.Importance = '1'
-					GROUP BY ta.GroupID
-				ON DUPLICATE KEY UPDATE
-				NumArtists = VALUES (NumArtists);");
-
 			Misc::write_log("Artist $ArtistID ($ArtistName) was added to the group $GroupID ($GroupName) as ".$ArtistTypes[$Importance].' by user '.$LoggedUser['ID'].' ('.$LoggedUser['Username'].')');
 			Torrents::write_group_log($GroupID, 0, $LoggedUser['ID'], "added artist $ArtistName as ".$ArtistTypes[$Importance], 0);
 		}

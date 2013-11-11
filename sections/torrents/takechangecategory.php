@@ -25,7 +25,6 @@ switch ($Categories[$NewCategoryID-1]) {
 		if (empty($Year) || empty($ArtistName) || !is_number($Year) || empty($ReleaseType) || !is_number($ReleaseType)) {
 			error(0);
 		}
-		$SearchText = "$ArtistName $Title $Year";
 		$DB->query("
 			SELECT ArtistID, AliasID, Redirect, Name
 			FROM artists_alias
@@ -49,9 +48,9 @@ switch ($Categories[$NewCategoryID-1]) {
 
 		$DB->query("
 			INSERT INTO torrents_group
-				(ArtistID, NumArtists, CategoryID, Name, Year, ReleaseType, Time, WikiBody, WikiImage, SearchText)
+				(ArtistID, CategoryID, Name, Year, ReleaseType, Time, WikiBody, WikiImage)
 			VALUES
-				($ArtistID, '1', '1', '$Title', '$Year', '$ReleaseType', '".sqltime()."', '', '', '$SearchText')");
+				($ArtistID, '1', '$Title', '$Year', '$ReleaseType', '".sqltime()."', '', '')");
 		$GroupID = $DB->inserted_id();
 
 		$DB->query("
@@ -66,24 +65,22 @@ switch ($Categories[$NewCategoryID-1]) {
 		if (empty($Year) || !is_number($Year)) {
 			error(0);
 		}
-		$SearchText = "$Title $Year";
 		$DB->query("
 			INSERT INTO torrents_group
-				(CategoryID, Name, Year, Time, WikiBody, WikiImage, SearchText)
+				(CategoryID, Name, Year, Time, WikiBody, WikiImage)
 			VALUES
-				($NewCategoryID, '$Title', '$Year', '".sqltime()."', '', '', '$SearchText')");
+				($NewCategoryID, '$Title', '$Year', '".sqltime()."', '', '')");
 		$GroupID = $DB->inserted_id();
 		break;
 	case 'Applications':
 	case 'Comics':
 	case 'E-Books':
 	case 'E-Learning Videos':
-		$SearchText = $Title;
 		$DB->query("
 			INSERT INTO torrents_group
-				(CategoryID, Name, Time, WikiBody, WikiImage, SearchText)
+				(CategoryID, Name, Time, WikiBody, WikiImage)
 			VALUES
-				($NewCategoryID, '$Title', '".sqltime()."', '', '', '$SearchText')");
+				($NewCategoryID, '$Title', '".sqltime()."', '', '')");
 		$GroupID = $DB->inserted_id();
 		break;
 }
