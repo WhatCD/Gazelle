@@ -23,26 +23,26 @@ $Class = (int)$_POST['Class'];
 $Username = db_string($_POST['Username']);
 $Title = db_string($_POST['Title']);
 $AdminComment = db_string($_POST['AdminComment']);
-$Donor = (isset($_POST['Donor'])) ? 1 : 0;
-$Artist = (isset($_POST['Artist'])) ? 1 : 0;
+$Donor = isset($_POST['Donor']) ? 1 : 0;
+$Artist = isset($_POST['Artist']) ? 1 : 0;
 $SecondaryClasses = isset($_POST['secondary_classes']) ? $_POST['secondary_classes'] : array();
 foreach ($SecondaryClasses as $i => $Val) {
 	if (!is_number($Val)) {
 		unset($SecondaryClasses[$i]);
 	}
 }
-$Visible = (isset($_POST['Visible'])) ? 1 : 0;
+$Visible = isset($_POST['Visible']) ? 1 : 0;
 $Invites = (int)$_POST['Invites'];
 $SupportFor = db_string($_POST['SupportFor']);
 $Pass = $_POST['ChangePassword'];
-$Warned = (isset($_POST['Warned'])) ? 1 : 0;
+$Warned = isset($_POST['Warned']) ? 1 : 0;
 $Logs095 = (int)$_POST['095logs'];
 if (isset($_POST['Uploaded']) && isset($_POST['Downloaded'])) {
-	$Uploaded = ($_POST['Uploaded'] == '' ? 0 : $_POST['Uploaded']);
+	$Uploaded = ($_POST['Uploaded'] === '' ? 0 : $_POST['Uploaded']);
 	if ($Arithmetic = strpbrk($Uploaded, '+-')) {
 		$Uploaded += max(-$Uploaded, Format::get_bytes($Arithmetic));
 	}
-	$Downloaded = ($_POST['Downloaded'] == '' ? 0 : $_POST['Downloaded']);
+	$Downloaded = ($_POST['Downloaded'] === '' ? 0 : $_POST['Downloaded']);
 	if ($Arithmetic = strpbrk($Downloaded, '+-')) {
 		$Downloaded += max(-$Downloaded, Format::get_bytes($Arithmetic));
 	}
@@ -60,25 +60,25 @@ $ExtendWarning = (int)$_POST['ExtendWarning'];
 $ReduceWarning = (int)$_POST['ReduceWarning'];
 $WarnReason = $_POST['WarnReason'];
 $UserReason = $_POST['UserReason'];
-$DisableAvatar = (isset($_POST['DisableAvatar'])) ? 1 : 0;
-$DisableInvites = (isset($_POST['DisableInvites'])) ? 1 : 0;
-$DisablePosting = (isset($_POST['DisablePosting'])) ? 1 : 0;
-$DisableForums = (isset($_POST['DisableForums'])) ? 1 : 0;
-$DisableTagging = (isset($_POST['DisableTagging'])) ? 1 : 0;
-$DisableUpload = (isset($_POST['DisableUpload'])) ? 1 : 0;
-$DisableWiki = (isset($_POST['DisableWiki'])) ? 1 : 0;
-$DisablePM = (isset($_POST['DisablePM'])) ? 1 : 0;
-$DisableIRC = (isset($_POST['DisableIRC'])) ? 1 : 0;
-$DisableRequests = (isset($_POST['DisableRequests'])) ? 1 : 0;
-$DisableLeech = (isset($_POST['DisableLeech'])) ? 0 : 1;
+$DisableAvatar = isset($_POST['DisableAvatar']) ? 1 : 0;
+$DisableInvites = isset($_POST['DisableInvites']) ? 1 : 0;
+$DisablePosting = isset($_POST['DisablePosting']) ? 1 : 0;
+$DisableForums = isset($_POST['DisableForums']) ? 1 : 0;
+$DisableTagging = isset($_POST['DisableTagging']) ? 1 : 0;
+$DisableUpload = isset($_POST['DisableUpload']) ? 1 : 0;
+$DisableWiki = isset($_POST['DisableWiki']) ? 1 : 0;
+$DisablePM = isset($_POST['DisablePM']) ? 1 : 0;
+$DisableIRC = isset($_POST['DisableIRC']) ? 1 : 0;
+$DisableRequests = isset($_POST['DisableRequests']) ? 1 : 0;
+$DisableLeech = isset($_POST['DisableLeech']) ? 0 : 1;
 
 $RestrictedForums = db_string(trim($_POST['RestrictedForums']));
 $PermittedForums = db_string(trim($_POST['PermittedForums']));
 $EnableUser = (int)$_POST['UserStatus'];
-$ResetRatioWatch = (isset($_POST['ResetRatioWatch'])) ? 1 : 0;
-$ResetPasskey = (isset($_POST['ResetPasskey'])) ? 1 : 0;
-$ResetAuthkey = (isset($_POST['ResetAuthkey'])) ? 1 : 0;
-$SendHackedMail = (isset($_POST['SendHackedMail'])) ? 1 : 0;
+$ResetRatioWatch = isset($_POST['ResetRatioWatch']) ? 1 : 0;
+$ResetPasskey = isset($_POST['ResetPasskey']) ? 1 : 0;
+$ResetAuthkey = isset($_POST['ResetAuthkey']) ? 1 : 0;
+$SendHackedMail = isset($_POST['SendHackedMail']) ? 1 : 0;
 if ($SendHackedMail && !empty($_POST['HackedEmail'])) {
 	$HackedEmail = $_POST['HackedEmail'];
 } else {
@@ -161,7 +161,7 @@ if (!empty($_POST['donor_points_submit']) && isset($_POST['donation_value']) && 
 
 // If we're deleting the user, we can ignore all the other crap
 
-if ($_POST['UserStatus'] == 'delete' && check_perms('users_delete_users')) {
+if ($_POST['UserStatus'] === 'delete' && check_perms('users_delete_users')) {
 	Misc::write_log("User account $UserID (".$Cur['Username'].") was deleted by ".$LoggedUser['Username']);
 	$DB->query("
 		DELETE FROM users_main
@@ -169,11 +169,11 @@ if ($_POST['UserStatus'] == 'delete' && check_perms('users_delete_users')) {
 	$DB->query("
 		DELETE FROM users_info
 		WHERE UserID = $UserID");
-	$Cache->delete_value('user_info_'.$UserID);
+	$Cache->delete_value("user_info_$UserID");
 
 	Tracker::update_tracker('remove_user', array('passkey' => $Cur['torrent_pass']));
 
-	header("Location: log.php?search=User+".$UserID);
+	header("Location: log.php?search=User+$UserID");
 	die();
 }
 
@@ -185,7 +185,7 @@ $EditSummary = array();
 if ($_POST['ResetRatioWatch'] && check_perms('users_edit_reset_keys')) {
 	$DB->query("
 		UPDATE users_info
-		SET RatioWatchEnds = '0000-00-00 00:00:00', RatioWatchDownload='0', RatioWatchTimes='0'
+		SET RatioWatchEnds = '0000-00-00 00:00:00', RatioWatchDownload = '0', RatioWatchTimes = '0'
 		WHERE UserID = '$UserID'");
 	$EditSummary[] = 'RatioWatch history reset';
 }
@@ -277,7 +277,7 @@ if (($_POST['ResetSession'] || $_POST['LogOut']) && check_perms('users_logout'))
 }
 
 if ($Logs095 !== 0) {
-	$TargetScore = (($Logs095 === 100) ? 99 : 100);
+	$TargetScore = $Logs095 === 100 ? 99 : 100;
 	$Logs = $DB->query("
 		SELECT DISTINCT TorrentID
 		FROM torrents_logs_new
@@ -305,7 +305,7 @@ if ($Logs095 !== 0) {
 			WHERE TorrentID = $TorrentID");
 		$DB->set_query_id($Logs);
 	}
-	$EditSummary[] = 'EAC v0.95 logs rescored to '.$Logs095;
+	$EditSummary[] = "EAC v0.95 logs rescored to $Logs095";
 }
 
 // Start building SQL query and edit summary
@@ -341,12 +341,12 @@ if ($Username != $Cur['Username'] && check_perms('users_edit_usernames', $Cur['C
 		WHERE Username = '$Username'");
 	if ($DB->next_record() > 0) {
 		list($UsedUsernameID) = $DB->next_record();
-		error('Username already in use by <a href="user.php?id='.$UsedUsernameID."\">$Username</a>");
-		header('Location: user.php?id='.$UserID);
+		error("Username already in use by <a href=\"user.php?id=$UsedUsernameID\">$Username</a>");
+		header("Location: user.php?id=$UserID");
 		die();
 	} elseif ($Username == '0' || $Username == '1') {
 		error('You cannot set a username of "0" or "1".');
-		header('Location: user.php?id='.$UserID);
+		header("Location: user.php?id=$UserID");
 		die();
 	} else {
 		$UpdateSet[] = "Username = '$Username'";
@@ -359,7 +359,7 @@ if ($Title != db_string($Cur['Title']) && check_perms('users_edit_titles')) {
 	// Using the unescaped value for the test to avoid confusion
 	if (strlen($_POST['Title']) > 1024) {
 		error("Custom titles have a maximum length of 1,024 characters.");
-		header("Location: user.php?id=".$UserID);
+		header("Location: user.php?id=$UserID");
 		die();
 	} else {
 		$UpdateSet[] = "Title = '$Title'";
@@ -446,12 +446,13 @@ if ($Invites != $Cur['Invites'] && check_perms('users_edit_invites')) {
 }
 
 if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('users_warn')) {
-	$Weeks = 'week' . (($WarnLength == 1) ? '' : 's');
-	Misc::send_pm($UserID, 0, 'You have received a warning', "You have been [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;id=218]warned for $WarnLength {$Weeks}[/url] by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
+	$Weeks = 'week' . $WarnLength === 1 ? '' : 's';
+	Misc::send_pm($UserID, 0, 'You have received a warning', "You have been [url=".site_url()."wiki.php?action=article&amp;id=218]warned for $WarnLength {$Weeks}[/url] by [user]".$LoggedUser['Username']."[/user]. The reason given was:
+[quote]{$WarnReason}[/quote]");
 	$UpdateSet[] = "Warned = '".sqltime()."' + INTERVAL $WarnLength WEEK";
 	$Msg = "warned for $WarnLength $Weeks";
 	if ($WarnReason) {
-		$Msg .= " for $WarnReason";
+		$Msg .= " for \"$WarnReason\"";
 	}
 	$EditSummary[] = db_string($Msg);
 	$LightUpdates['Warned'] = time_plus(3600 * 24 * 7 * $WarnLength);
@@ -462,8 +463,9 @@ if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('user
 	$LightUpdates['Warned'] = '0000-00-00 00:00:00';
 
 } elseif ($Warned == 1 && $ExtendWarning != '---' && check_perms('users_warn')) {
-	$Weeks = 'week' . (($ExtendWarning == 1) ? '' : 's');
-	Misc::send_pm($UserID, 0, 'Your warning has been extended', "Your warning has been extended by $ExtendWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
+	$Weeks = 'week' . $ExtendWarning === 1 ? '' : 's';
+	Misc::send_pm($UserID, 0, 'Your warning has been extended', "Your warning has been extended by $ExtendWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was:
+[quote]{$WarnReason}[/quote]");
 
 	$UpdateSet[] = "Warned = Warned + INTERVAL $ExtendWarning WEEK";
 	$DB->query("
@@ -473,14 +475,15 @@ if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('user
 	list($WarnedUntil) = $DB->next_record();
 	$Msg = "warning extended by $ExtendWarning $Weeks to $WarnedUntil";
 	if ($WarnReason) {
-		$Msg .= " for $WarnReason";
+		$Msg .= " for \"$WarnReason\"";
 	}
 	$EditSummary[] = db_string($Msg);
 	$LightUpdates['Warned'] = $WarnedUntil;
 
 } elseif ($Warned == 1 && $ExtendWarning == '---' && $ReduceWarning != '---' && check_perms('users_warn')) {
-	$Weeks = 'week' . (($ReduceWarning == 1) ? '' : 's');
-	Misc::send_pm($UserID, 0, 'Your warning has been reduced', "Your warning has been reduced by $ReduceWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was: $WarnReason");
+	$Weeks = 'week' . $ReduceWarning === 1 ? '' : 's';
+	Misc::send_pm($UserID, 0, 'Your warning has been reduced', "Your warning has been reduced by $ReduceWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was:
+[quote]{$WarnReason}[/quote]");
 	$UpdateSet[] = "Warned = Warned - INTERVAL $ReduceWarning WEEK";
 	$DB->query("
 		SELECT Warned - INTERVAL $ReduceWarning WEEK
@@ -489,7 +492,7 @@ if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('user
 	list($WarnedUntil) = $DB->next_record();
 	$Msg = "warning reduced by $ReduceWarning $Weeks to $WarnedUntil";
 	if ($WarnReason) {
-		$Msg .= " for $WarnReason";
+		$Msg .= " for \"$WarnReason\"";
 	}
 	$EditSummary[] = db_string($Msg);
 	$LightUpdates['Warned'] = $WarnedUntil;
@@ -497,7 +500,7 @@ if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('user
 
 if ($SupportFor != db_string($Cur['SupportFor']) && (check_perms('admin_manage_fls') || (check_perms('users_mod') && $UserID == $LoggedUser['ID']))) {
 	$UpdateSet[] = "SupportFor = '$SupportFor'";
-	$EditSummary[] = "First-Line Support status changed to $SupportFor";
+	$EditSummary[] = "First-Line Support status changed to \"$SupportFor\"";
 }
 
 if ($RestrictedForums != db_string($Cur['RestrictedForums']) && check_perms('users_mod')) {
@@ -525,7 +528,7 @@ if ($DisableAvatar != $Cur['DisableAvatar'] && check_perms('users_disable_any'))
 	$EditSummary[] = "avatar status changed";
 	$HeavyUpdates['DisableAvatar'] = $DisableAvatar;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your avatar privileges have been disabled', "Your avatar privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN." on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].");
+		Misc::send_pm($UserID, 0, 'Your avatar privileges have been disabled', "Your avatar privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 }
 
@@ -535,7 +538,7 @@ if ($DisableLeech != $Cur['can_leech'] && check_perms('users_disable_any')) {
 	$HeavyUpdates['DisableLeech'] = $DisableLeech;
 	$HeavyUpdates['CanLeech'] = $DisableLeech;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your leeching privileges have been disabled', "Your leeching privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://'.SSL_SITE_URL.'/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+		Misc::send_pm($UserID, 0, 'Your leeching privileges have been disabled', "Your leeching privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 	Tracker::update_tracker('update_user', array('passkey' => $Cur['torrent_pass'], 'can_leech' => $DisableLeech));
 }
@@ -545,7 +548,7 @@ if ($DisableInvites != $Cur['DisableInvites'] && check_perms('users_disable_any'
 	if ($DisableInvites == 1) {
 		//$UpdateSet[] = "Invites = '0'";
 		if (!empty($UserReason)) {
-			Misc::send_pm($UserID, 0, 'Your invite privileges have been disabled', "Your invite privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+			Misc::send_pm($UserID, 0, 'Your invite privileges have been disabled', "Your invite privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 		}
 	}
 	$EditSummary[] = 'invites status changed';
@@ -557,7 +560,7 @@ if ($DisablePosting != $Cur['DisablePosting'] && check_perms('users_disable_post
 	$EditSummary[] = 'posting status changed';
 	$HeavyUpdates['DisablePosting'] = $DisablePosting;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your forum posting privileges have been disabled', "Your forum posting privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+		Misc::send_pm($UserID, 0, 'Your forum posting privileges have been disabled', "Your forum posting privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 }
 
@@ -566,7 +569,7 @@ if ($DisableForums != $Cur['DisableForums'] && check_perms('users_disable_posts'
 	$EditSummary[] = 'forums status changed';
 	$HeavyUpdates['DisableForums'] = $DisableForums;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your forum privileges have been disabled', "Your forum privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+		Misc::send_pm($UserID, 0, 'Your forum privileges have been disabled', "Your forum privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 }
 
@@ -575,7 +578,7 @@ if ($DisableTagging != $Cur['DisableTagging'] && check_perms('users_disable_any'
 	$EditSummary[] = 'tagging status changed';
 	$HeavyUpdates['DisableTagging'] = $DisableTagging;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your tagging privileges have been disabled', "Your tagging privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+		Misc::send_pm($UserID, 0, 'Your tagging privileges have been disabled', "Your tagging privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 }
 
@@ -584,7 +587,7 @@ if ($DisableUpload != $Cur['DisableUpload'] && check_perms('users_disable_any'))
 	$EditSummary[] = 'upload status changed';
 	$HeavyUpdates['DisableUpload'] = $DisableUpload;
 	if ($DisableUpload == 1) {
-		Misc::send_pm($UserID, 0, 'Your upload privileges have been disabled', "Your upload privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://'.SSL_SITE_URL.'/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+		Misc::send_pm($UserID, 0, 'Your upload privileges have been disabled', "Your upload privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 }
 
@@ -594,7 +597,7 @@ if ($DisableWiki != $Cur['DisableWiki'] && check_perms('users_disable_any')) {
 	$HeavyUpdates['DisableWiki'] = $DisableWiki;
 	$HeavyUpdates['site_edit_wiki'] = 0;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your site editing privileges have been disabled', "Your site editing privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+		Misc::send_pm($UserID, 0, 'Your site editing privileges have been disabled', "Your site editing privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 
 }
@@ -604,7 +607,7 @@ if ($DisablePM != $Cur['DisablePM'] && check_perms('users_disable_any')) {
 	$EditSummary[] = 'PM status changed';
 	$HeavyUpdates['DisablePM'] = $DisablePM;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your PM privileges have been disabled', "Your PM privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://'.SSL_SITE_URL.'/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+		Misc::send_pm($UserID, 0, 'Your PM privileges have been disabled', "Your PM privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 }
 
@@ -613,7 +616,7 @@ if ($DisableIRC != $Cur['DisableIRC'] && check_perms('users_disable_any')) {
 	$EditSummary[] = 'IRC status changed';
 	$HeavyUpdates['DisableIRC'] = $DisableIRC;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your IRC privileges have been disabled', "Your IRC privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://'.SSL_SITE_URL.'/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]. This loss of privileges does not affect the ability to join and talk to staff in '.BOT_DISABLED_CHAN.'.');
+		Misc::send_pm($UserID, 0, 'Your IRC privileges have been disabled', "Your IRC privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url]. This loss of privileges does not affect the ability to join and talk to staff in '.BOT_DISABLED_CHAN.'.');
 	}
 }
 
@@ -622,7 +625,7 @@ if ($DisableRequests != $Cur['DisableRequests'] && check_perms('users_disable_an
 	$EditSummary[] = 'request status changed';
 	$HeavyUpdates['DisableRequests'] = $DisableRequests;
 	if (!empty($UserReason)) {
-		Misc::send_pm($UserID, 0, 'Your request privileges have been disabled', "Your request privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url=https://'.SSL_SITE_URL.'/wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
+		Misc::send_pm($UserID, 0, 'Your request privileges have been disabled', "Your request privileges have been disabled. The reason given was: $UserReason. If you would like to discuss this, please join ".BOT_DISABLED_CHAN.' on our IRC network. Instructions can be found [url='.site_url().'wiki.php?action=article&amp;name=IRC+-+How+to+join]here[/url].');
 	}
 }
 
@@ -680,11 +683,11 @@ if ($ResetAuthkey == 1 && check_perms('users_edit_reset_keys')) {
 
 if ($SendHackedMail && check_perms('users_disable_any')) {
 	$EditSummary[] = "hacked account email sent to $HackedEmail";
-	Misc::send_email($HackedEmail, 'Your '.SITE_NAME.' account', 'Your '.SITE_NAME.' account appears to have been compromised. As a security measure we have disabled your account. To resolve this please visit us on IRC.
+	Misc::send_email($HackedEmail, 'Your '.SITE_NAME.' account', 'Your '.SITE_NAME.' account appears to have been compromised. As a security measure, we have disabled your account. To resolve this, please visit us on IRC.
 
 This is the information to connect to our server:
 IRC Server: '.BOT_SERVER.'
-Port: '.BOT_PORT.' ('.BOT_PORT_SSL.' SSL)
+Port: '.BOT_PORT.' ('.BOT_PORT_SSL.' for SSL)
 
 Once you are connected to our server you will need to join our disabled users channel.
 Type: /join '.BOT_DISABLED_CHAN.'
@@ -705,11 +708,11 @@ if ($MergeStatsFrom && check_perms('users_edit_ratio')) {
 			SET
 				um.Uploaded = 0,
 				um.Downloaded = 0,
-				ui.AdminComment = CONCAT('".sqltime().' - Stats (Uploaded: '.Format::get_size($MergeUploaded).', Downloaded: '.Format::get_size($MergeDownloaded).', Ratio: '.Format::get_ratio($MergeUploaded, $MergeDownloaded).') merged into https://'.SSL_SITE_URL."/user.php?id=$UserID (".$Cur['Username'].') by '.$LoggedUser['Username']."\n\n', ui.AdminComment)
+				ui.AdminComment = CONCAT('".sqltime().' - Stats (Uploaded: '.Format::get_size($MergeUploaded).', Downloaded: '.Format::get_size($MergeDownloaded).', Ratio: '.Format::get_ratio($MergeUploaded, $MergeDownloaded).') merged into '.site_url()."user.php?id=$UserID (".$Cur['Username'].') by '.$LoggedUser['Username']."\n\n', ui.AdminComment)
 			WHERE ID = $MergeID");
 		$UpdateSet[] = "Uploaded = Uploaded + '$MergeUploaded'";
 		$UpdateSet[] = "Downloaded = Downloaded + '$MergeDownloaded'";
-		$EditSummary[] = 'stats merged from https://'.SSL_SITE_URL."/user.php?id=$MergeID ($MergeStatsFrom) (previous stats: Uploaded: ".Format::get_size($Cur['Uploaded']).', Downloaded: '.Format::get_size($Cur['Downloaded']).', Ratio: '.Format::get_ratio($Cur['Uploaded'], $Cur['Downloaded']).')';
+		$EditSummary[] = 'stats merged from '.site_url()."user.php?id=$MergeID ($MergeStatsFrom) (previous stats: Uploaded: ".Format::get_size($Cur['Uploaded']).', Downloaded: '.Format::get_size($Cur['Downloaded']).', Ratio: '.Format::get_ratio($Cur['Uploaded'], $Cur['Downloaded']).')';
 		$Cache->delete_value("users_stats_$UserID");
 		$Cache->delete_value("users_stats_$MergeID");
 	}

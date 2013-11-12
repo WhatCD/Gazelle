@@ -80,20 +80,20 @@ function generate_staff_query($StaffLevel) {
 	}
 
 	$SQL = "
-			SELECT
-				m.ID,
-				p.Level,
-				$PName
-				m.Username,
-				m.Paranoia,
-				m.LastAccess,
-				i.SupportFor
-			FROM users_main AS m
-				JOIN users_info AS i ON m.ID = i.UserID
-				JOIN permissions AS p ON p.ID = m.PermissionID
-			WHERE p.DisplayStaff = '1'
-				AND $PLevel
-			ORDER BY p.Level";
+		SELECT
+			m.ID,
+			p.Level,
+			$PName
+			m.Username,
+			m.Paranoia,
+			m.LastAccess,
+			i.SupportFor
+		FROM users_main AS m
+			JOIN users_info AS i ON m.ID = i.UserID
+			JOIN permissions AS p ON p.ID = m.PermissionID
+		WHERE p.DisplayStaff = '1'
+			AND $PLevel
+		ORDER BY p.Level";
 	if (check_perms('users_mod')) {
 		$SQL .= ', m.LastAccess ASC';
 	} else {

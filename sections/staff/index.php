@@ -22,7 +22,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 		</div>
 		<? View::parse('generic/reply/staffpm.php', array('Hidden' => true)); ?>
 		<br />
-		<h3>First-line Support</h3>
+		<h3 id="fls">First-Line Support</h3>
 		<p><strong>These users are not official staff members.</strong> They are users who have volunteered their time to help people in need. Please treat them with respect, and read <a href="wiki.php?action=article&amp;id=260">this</a> before contacting them.</p>
 		<table class="staff" width="100%">
 			<tr class="colhead">
@@ -43,7 +43,7 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 	<br />
 	<div class="box pad" style="padding: 0px 10px 10px 10px;">
 		<br />
-		<h3>Forum Moderators</h3>
+		<h3 id="forum_mods">Forum Moderators</h3>
 		<p>Forum Moderators are users who have been promoted to help moderate the forums. They can only help with forum-oriented questions.</p>
 		<table class="staff" width="100%">
 			<tr class="colhead">
@@ -78,7 +78,28 @@ list($FrontLineSupport, $ForumStaff, $Staff) = $SupportStaff;
 			}
 			$CurClass = $Class;
 			$CloseTable = true;
-			echo "\t\t<h3>".$ClassName."s</h3>\n";
+
+			$HTMLID = '';
+			switch ($ClassName) {
+				case 'Moderator':
+					$HTMLID = 'mods';
+					break;
+				case 'Developer':
+					$HTMLID = 'devs';
+					break;
+				case 'Lead Developer':
+					$HTMLID = 'lead_devs';
+					break;
+				case 'Administrator':
+					$HTMLID = 'admins';
+					break;
+				case 'Sysop':
+					$HTMLID = 'sysops';
+					break;
+				default:
+					$HTMLID = '';
+			}
+			echo "\t\t<h3 id=\"$HTMLID\">".$ClassName."s</h3>\n";
 ?>
 		<table class="staff" width="100%">
 			<tr class="colhead">

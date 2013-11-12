@@ -7,9 +7,9 @@ $DB->query("
 		aw.Image,
 		ca.UserID
 	FROM collages_artists AS ca
-		JOIN artists_group AS ag ON ag.ArtistID=ca.ArtistID
+		JOIN artists_group AS ag ON ag.ArtistID = ca.ArtistID
 		LEFT JOIN wiki_artists AS aw ON aw.RevisionID = ag.RevisionID
-	WHERE ca.CollageID='$CollageID'
+	WHERE ca.CollageID = '$CollageID'
 	ORDER BY ca.Sort");
 
 $Artists = $DB->to_array('ArtistID', MYSQLI_ASSOC);
@@ -82,7 +82,7 @@ for ($i = 0; $i < $NumGroups / $CollageCovers; $i++) {
 	$CollagePages[] = $CollagePage;
 }
 
-View::show_header($Name,'browse,collage,bbcode,voting,recommend');
+View::show_header($Name, 'browse,collage,bbcode,voting,recommend');
 
 ?>
 <div class="thin">
@@ -96,18 +96,24 @@ View::show_header($Name,'browse,collage,bbcode,voting,recommend');
 			<br /><br />
 <?	if (check_perms('site_collages_subscribe')) { ?>
 			<a href="#" id="subscribelink<?=$CollageID?>" class="brackets" onclick="CollageSubscribe(<?=$CollageID?>); return false;"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
-<?	}
-	if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
+<?
+	}
+	if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) {
+?>
 			<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>" class="brackets">Edit description</a>
 <?	} else { ?>
 			<span class="brackets">Locked</span>
-<?	}
-	if (Bookmarks::has_bookmarked('collage', $CollageID)) { ?>
+<?
+	}
+	if (Bookmarks::has_bookmarked('collage', $CollageID)) {
+?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>, 'Bookmark'); return false;">Remove bookmark</a>
 <?	} else { ?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>, 'Remove bookmark'); return false;">Bookmark</a>
-<?	}
-	if (check_perms('site_collages_manage') && !$Locked) { ?>
+<?
+	}
+	if (check_perms('site_collages_manage') && !$Locked) {
+?>
 			<a href="collages.php?action=manage_artists&amp;collageid=<?=$CollageID?>" class="brackets">Manage artists</a>
 <?	} ?>
 			<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>" class="brackets">Report collage</a>
@@ -248,7 +254,8 @@ if (!$LoggedUser['DisablePosting']) {
 	</div>
 	<div class="main_column">
 <?
-if ($CollageCovers != 0) { ?>
+if ($CollageCovers != 0) {
+?>
 		<div id="coverart" class="box">
 			<div class="head" id="coverhead"><strong>Cover Art</strong></div>
 			<ul class="collage_images" id="collage_page0">
@@ -276,7 +283,8 @@ if ($CollageCovers != 0) { ?>
 		//]]></script>
 <?
 	}
-} ?>
+}
+?>
 		<table class="artist_table grouping cats" id="discog_table">
 			<tr class="colhead_dark">
 				<td><strong>Artists</strong></td>

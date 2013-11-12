@@ -863,7 +863,7 @@ CREATE TABLE `sphinx_hash` (
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM CHARSET utf8;
 
-CREATE TABLE `sphinx_index_last_id` (
+CREATE TABLE `sphinx_index_last_pos` (
   `Type` varchar(16) NOT NULL DEFAULT '',
   `ID` int(11) DEFAULT NULL,
   PRIMARY KEY (`Type`)

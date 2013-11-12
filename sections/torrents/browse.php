@@ -858,7 +858,7 @@ if (!$GenreTags) {
 $x = 0;
 foreach ($GenreTags as $Tag) {
 ?>
-				<td width="12.5%"><a href="#" onclick="add_tag('<?=$Tag?>');return false;"><?=$Tag?></a></td>
+				<td width="12.5%"><a href="#" onclick="add_tag('<?=$Tag?>'); return false;"><?=$Tag?></a></td>
 <?
 	$x++;
 	if ($x % 7 == 0) {
@@ -877,7 +877,7 @@ if ($x % 7 != 0) { // Padding
 		<table class="layout cat_list" width="100%">
 			<tr>
 				<td class="label">
-					<a class="brackets" href="#" onclick="$('#taglist').gtoggle(); if (this.innerHTML == 'View tags') { this.innerHTML = 'Hide tags'; } else { this.innerHTML = 'View tags'; }; return false;"><?=((empty($LoggedUser['ShowTags'])) ? 'View tags' : 'Hide tags')?></a>
+					<a class="brackets" href="#" onclick="$('#taglist').gtoggle(); if (this.innerHTML == 'View tags') { this.innerHTML = 'Hide tags'; } else { this.innerHTML = 'View tags'; }; return false;"><?=(empty($LoggedUser['ShowTags']) ? 'View tags' : 'Hide tags')?></a>
 				</td>
 			</tr>
 		</table>
@@ -1014,7 +1014,11 @@ foreach ($Results as $Result) {
 
 	$TorrentTags = new Tags($GroupInfo['TagList']);
 
-	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+	if (!empty($ExtendedArtists[1])
+		|| !empty($ExtendedArtists[4])
+		|| !empty($ExtendedArtists[5])
+		|| !empty($ExtendedArtists[6])
+	) {
 		unset($ExtendedArtists[2]);
 		unset($ExtendedArtists[3]);
 		$DisplayName = Artists::display_artists($ExtendedArtists);
@@ -1067,7 +1071,7 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 		<td class="nobr"><?=time_diff($GroupTime, 1)?></td>
 		<td class="number_column nobr"><?=Format::get_size($MaxSize)?> (Max)</td>
 		<td class="number_column"><?=number_format($TotalSnatched)?></td>
-		<td class="number_column<?=(($TotalSeeders == 0) ? ' r00' : '')?>"><?=number_format($TotalSeeders)?></td>
+		<td class="number_column<?=($TotalSeeders == 0 ? ' r00' : '')?>"><?=number_format($TotalSeeders)?></td>
 		<td class="number_column"><?=number_format($TotalLeechers)?></td>
 	</tr>
 <?
@@ -1106,12 +1110,13 @@ $ShowGroups = !(!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGr
 						|| $Data['RemasterRecordLabel'] != $LastRemasterRecordLabel
 						|| $Data['RemasterCatalogueNumber'] != $LastRemasterCatalogueNumber)
 					|| $FirstUnknown
-					|| $Data['Media'] != $LastMedia) {
+					|| $Data['Media'] != $LastMedia
+			) {
 				$EditionID++;
 
 ?>
 	<tr class="group_torrent groupid_<?=$GroupID?> edition<?=$SnatchedGroupClass . (!empty($LoggedUser['TorrentGrouping']) && $LoggedUser['TorrentGrouping'] == 1 ? ' hidden' : '')?>">
-		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event)" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Data, $GroupInfo)?></strong></td>
+		<td colspan="9" class="edition_info"><strong><a href="#" onclick="toggle_edition(<?=$GroupID?>, <?=$EditionID?>, this, event);" class="tooltip" title="Collapse this edition. Hold &quot;Ctrl&quot; while clicking to collapse all editions in this torrent group.">&minus;</a> <?=Torrents::edition_string($Data, $GroupInfo)?></strong></td>
 	</tr>
 <?
 			}

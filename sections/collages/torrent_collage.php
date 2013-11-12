@@ -45,7 +45,11 @@ foreach ($TorrentList as $GroupID => $Group) {
 		$NumGroupsByUser++;
 	}
 
-	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5]) || !empty($ExtendedArtists[6])) {
+	if (!empty($ExtendedArtists[1])
+		|| !empty($ExtendedArtists[4])
+		|| !empty($ExtendedArtists[5])
+		|| !empty($ExtendedArtists[6])
+	) {
 		$CountArtists = array_merge((array)$ExtendedArtists[1], (array)$ExtendedArtists[4], (array)$ExtendedArtists[5], (array)$ExtendedArtists[6]);
 	} else {
 		$CountArtists = $GroupArtists;
@@ -68,12 +72,16 @@ foreach ($TorrentList as $GroupID => $Group) {
 
 	$DisplayName = "$Number - ";
 
-	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
-			unset($ExtendedArtists[2]);
-			unset($ExtendedArtists[3]);
-			$DisplayName .= Artists::display_artists($ExtendedArtists);
+	if (!empty($ExtendedArtists[1])
+		|| !empty($ExtendedArtists[4])
+		|| !empty($ExtendedArtists[5])
+		|| !empty($ExtendedArtists[6])
+	) {
+		unset($ExtendedArtists[2]);
+		unset($ExtendedArtists[3]);
+		$DisplayName .= Artists::display_artists($ExtendedArtists);
 	} elseif (count($GroupArtists) > 0) {
-			$DisplayName .= Artists::display_artists(array('1' => $GroupArtists));
+		$DisplayName .= Artists::display_artists(array('1' => $GroupArtists));
 	}
 
 	$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\" dir=\"ltr\">$GroupName</a>";
@@ -129,7 +137,7 @@ foreach ($TorrentList as $GroupID => $Group) {
 			if ($Torrent['Remastered'] && !$Torrent['RemasterYear']) {
 				$FirstUnknown = !isset($FirstUnknown);
 			}
-			$SnatchedTorrentClass = ($Torrent['IsSnatched'] ? ' snatched_torrent' : '');
+			$SnatchedTorrentClass = $Torrent['IsSnatched'] ? ' snatched_torrent' : '';
 
 			if ($Torrent['RemasterTitle'] != $LastRemasterTitle
 				|| $Torrent['RemasterYear'] != $LastRemasterYear
@@ -220,7 +228,11 @@ foreach ($TorrentList as $GroupID => $Group) {
 	ob_start();
 
 	$DisplayName = '';
-	if (!empty($ExtendedArtists[1]) || !empty($ExtendedArtists[4]) || !empty($ExtendedArtists[5])|| !empty($ExtendedArtists[6])) {
+	if (!empty($ExtendedArtists[1])
+		|| !empty($ExtendedArtists[4])
+		|| !empty($ExtendedArtists[5])
+		|| !empty($ExtendedArtists[6])
+	) {
 		unset($ExtendedArtists[2]);
 		unset($ExtendedArtists[3]);
 		$DisplayName .= Artists::display_artists($ExtendedArtists, false);
@@ -253,7 +265,13 @@ if ($CollageCategoryID === '0' && !check_perms('site_collages_delete')) {
 	}
 }
 
-if (!check_perms('site_collages_delete') && ($Locked || ($MaxGroups > 0 && $NumGroups >= $MaxGroups) || ($MaxGroupsPerUser > 0 && $NumGroupsByUser >= $MaxGroupsPerUser))) {
+if (!check_perms('site_collages_delete')
+	&& (
+		$Locked
+		|| ($MaxGroups > 0 && $NumGroups >= $MaxGroups)
+		|| ($MaxGroupsPerUser > 0 && $NumGroupsByUser >= $MaxGroupsPerUser)
+	)
+) {
 	$PreventAdditions = true;
 }
 
@@ -290,22 +308,25 @@ View::show_header($Name, 'browse,collage,bbcode,voting,recommend');
 			<br /><br />
 <?	if (check_perms('site_collages_subscribe')) { ?>
 			<a href="#" id="subscribelink<?=$CollageID?>" class="brackets" onclick="CollageSubscribe(<?=$CollageID?>); return false;"><?=(in_array($CollageID, $CollageSubscriptions) ? 'Unsubscribe' : 'Subscribe')?></a>
-<?	}
-	if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) { ?>
+<?
+	}
+	if (check_perms('site_collages_delete') || (check_perms('site_edit_wiki') && !$Locked)) {
+?>
 			<a href="collages.php?action=edit&amp;collageid=<?=$CollageID?>" class="brackets">Edit description</a>
 <?	} else { ?>
 			<span class="brackets">Locked</span>
-<?	}
+<?
+	}
 	if (Bookmarks::has_bookmarked('collage', $CollageID)) {
 ?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Unbookmark('collage', <?=$CollageID?>, 'Bookmark'); return false;">Remove bookmark</a>
 <?	} else { ?>
 			<a href="#" id="bookmarklink_collage_<?=$CollageID?>" class="brackets" onclick="Bookmark('collage', <?=$CollageID?>, 'Remove bookmark'); return false;">Bookmark</a>
-<?	}
-?>
+<?	} ?>
 <!-- <a href="#" id="recommend" class="brackets">Recommend</a> -->
 <?
-	if (check_perms('site_collages_manage') && !$Locked) { ?>
+	if (check_perms('site_collages_manage') && !$Locked) {
+?>
 			<a href="collages.php?action=manage&amp;collageid=<?=$CollageID?>" class="brackets">Manage torrents</a>
 <?	} ?>
 			<a href="reports.php?action=report&amp;type=collage&amp;id=<?=$CollageID?>" class="brackets">Report collage</a>
@@ -361,7 +382,8 @@ foreach ($ZIPOptions as $Option) {
 
 	if ($GroupID != $LastGroupID) {
 		$LastGroupID = $GroupID;
-		if ($OpenGroup) { ?>
+		if ($OpenGroup) {
+?>
 					</optgroup>
 <?		} ?>
 					<optgroup label="<?=$ZIPGroups[$GroupID]?>">
@@ -375,7 +397,7 @@ foreach ($ZIPOptions as $Option) {
 ?>
 					</optgroup>
 				</select>
-				<button type="button" onclick="add_selection()">+</button>
+				<button type="button" onclick="add_selection();">+</button>
 				<select name="preference" style="width: 210px;">
 					<option value="0"<? if ($ZIPPrefs == 0) { echo ' selected="selected"'; } ?>>Prefer Original</option>
 					<option value="1"<? if ($ZIPPrefs == 1) { echo ' selected="selected"'; } ?>>Prefer Best Seeded</option>
@@ -572,7 +594,8 @@ if ($CollageCovers != 0) { ?>
 		//]]></script>
 <?
 	}
-} ?>
+}
+?>
 		<table class="torrent_table grouping cats" id="discog_table">
 			<tr class="colhead_dark">
 				<td><!-- expand/collapse --></td>
