@@ -446,7 +446,7 @@ if ($Invites != $Cur['Invites'] && check_perms('users_edit_invites')) {
 }
 
 if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('users_warn')) {
-	$Weeks = 'week' . $WarnLength === 1 ? '' : 's';
+	$Weeks = 'week' . ($WarnLength === 1 ? '' : 's');
 	Misc::send_pm($UserID, 0, 'You have received a warning', "You have been [url=".site_url()."wiki.php?action=article&amp;id=218]warned for $WarnLength {$Weeks}[/url] by [user]".$LoggedUser['Username']."[/user]. The reason given was:
 [quote]{$WarnReason}[/quote]");
 	$UpdateSet[] = "Warned = '".sqltime()."' + INTERVAL $WarnLength WEEK";
@@ -463,7 +463,7 @@ if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('user
 	$LightUpdates['Warned'] = '0000-00-00 00:00:00';
 
 } elseif ($Warned == 1 && $ExtendWarning != '---' && check_perms('users_warn')) {
-	$Weeks = 'week' . $ExtendWarning === 1 ? '' : 's';
+	$Weeks = 'week' . ($ExtendWarning === 1 ? '' : 's');
 	Misc::send_pm($UserID, 0, 'Your warning has been extended', "Your warning has been extended by $ExtendWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was:
 [quote]{$WarnReason}[/quote]");
 
@@ -481,7 +481,7 @@ if ($Warned == 1 && $Cur['Warned'] == '0000-00-00 00:00:00' && check_perms('user
 	$LightUpdates['Warned'] = $WarnedUntil;
 
 } elseif ($Warned == 1 && $ExtendWarning == '---' && $ReduceWarning != '---' && check_perms('users_warn')) {
-	$Weeks = 'week' . $ReduceWarning === 1 ? '' : 's';
+	$Weeks = 'week' . ($ReduceWarning === 1 ? '' : 's');
 	Misc::send_pm($UserID, 0, 'Your warning has been reduced', "Your warning has been reduced by $ReduceWarning $Weeks by [user]".$LoggedUser['Username']."[/user]. The reason given was:
 [quote]{$WarnReason}[/quote]");
 	$UpdateSet[] = "Warned = Warned - INTERVAL $ReduceWarning WEEK";

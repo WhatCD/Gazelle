@@ -16,7 +16,6 @@ $DB->query("
 list($PostBody, $ForumID) = $DB -> next_record();
 View::show_header('Warn User');
 ?>
-
 <div class="thin">
 	<div class="header">
 		<h2>Warning <a href="user.php?id=<?=$UserID?>"><?=$UserInfo['Username']?></a></h2>
@@ -31,26 +30,27 @@ View::show_header('Warn User');
 				<tr>
 					<td class="label">Reason:</td>
 					<td>
-					<input type="text" name="reason" size="60" />
+						<input type="text" name="reason" size="60" />
 					</td>
 				</tr>
 				<tr>
 					<td class="label">Length:</td>
 					<td>
-					<select name="length">
-						<option value="verbal">Verbal</option>
-						<option value="1">1 week</option>
-						<option value="2">2 weeks</option>
-						<option value="4">4 weeks</option>
+						<select name="length">
+							<option value="verbal">Verbal</option>
+							<option value="1">1 week</option>
+							<option value="2">2 weeks</option>
+							<option value="4">4 weeks</option>
 <?					if (check_perms('users_mod')) { ?>
-						<option value="8">8 weeks</option>
+							<option value="8">8 weeks</option>
 <?					} ?>
-					</select></td>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<td class="label">Private message:</td>
 					<td>
-					<textarea id="message" style="width: 95%;" tabindex="1" onkeyup="resize('message');" name="privatemessage" cols="90" rows="4"></textarea>
+						<textarea id="message" style="width: 95%;" tabindex="1" onkeyup="resize('message');" name="privatemessage" cols="90" rows="4"></textarea>
 					</td>
 				</tr>
 				<tr>
