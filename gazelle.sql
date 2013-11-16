@@ -650,7 +650,7 @@ CREATE TABLE `push_notifications_usage` (
   `PushService` varchar(10) NOT NULL,
   `TimesUsed` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`PushService`)
-) ENGINE=MyISAM CHARSET utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `reports` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -1184,7 +1184,7 @@ CREATE TABLE `torrents_balance_history` (
   UNIQUE KEY `TorrentID_2` (`TorrentID`,`Time`),
   UNIQUE KEY `TorrentID_3` (`TorrentID`,`balance`),
   KEY `Time` (`Time`)
-) ENGINE=MyISAM CHARSET utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `torrents_cassette_approved` (
   `TorrentID` int(10) NOT NULL DEFAULT '0',
@@ -1202,7 +1202,6 @@ CREATE TABLE `torrents_files` (
 CREATE TABLE `torrents_group` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
   `ArtistID` int(10) DEFAULT NULL,
-  `NumArtists` int(3) NOT NULL DEFAULT '0',
   `CategoryID` int(3) DEFAULT NULL,
   `Name` varchar(300) DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
@@ -1214,9 +1213,7 @@ CREATE TABLE `torrents_group` (
   `RevisionID` int(12) DEFAULT NULL,
   `WikiBody` text NOT NULL,
   `WikiImage` varchar(255) NOT NULL,
-  `SearchText` varchar(500) NOT NULL,
   `VanityHouse` tinyint(1) DEFAULT '0',
-  `LastCommentID` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   KEY `ArtistID` (`ArtistID`),
   KEY `CategoryID` (`CategoryID`),
@@ -1542,7 +1539,8 @@ CREATE TABLE `users_main` (
   KEY `Invites` (`Invites`),
   KEY `torrent_pass` (`torrent_pass`),
   KEY `RequiredRatio` (`RequiredRatio`),
-  KEY `cc_index` (`ipcc`)
+  KEY `cc_index` (`ipcc`),
+  KEY `PermissionID` (`PermissionID`)
 ) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_notifications_settings` (
@@ -1632,7 +1630,7 @@ CREATE TABLE `users_push_notifications` (
   `PushService` tinyint(1) NOT NULL DEFAULT '0',
   `PushOptions` text NOT NULL,
   PRIMARY KEY (`UserID`)
-) ENGINE=MyISAM CHARSET utf8;
+) ENGINE=InnoDB CHARSET utf8;
 
 CREATE TABLE `users_sessions` (
   `UserID` int(10) NOT NULL,
@@ -1785,10 +1783,10 @@ CREATE TABLE `xbt_files_users` (
   `downloaded` bigint(20) NOT NULL,
   `remaining` bigint(20) NOT NULL,
   `uploaded` bigint(20) NOT NULL,
-  `upspeed` bigint(20) NOT NULL,
-  `downspeed` bigint(20) NOT NULL,
+  `upspeed` int(10) unsigned NOT NULL,
+  `downspeed` int(10) unsigned NOT NULL,
   `corrupt` bigint(20) NOT NULL DEFAULT '0',
-  `timespent` bigint(20) NOT NULL,
+  `timespent` int(10) unsigned NOT NULL,
   `useragent` varchar(51) NOT NULL,
   `connectable` tinyint(4) NOT NULL DEFAULT '1',
   `peer_id` binary(20) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',

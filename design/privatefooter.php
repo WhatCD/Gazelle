@@ -23,7 +23,7 @@
 <?	if (!empty($LastActive)) { ?>
 	<p>
 		<a href="user.php?action=sessions">
-			<span class="tooltip" title="Manage sessions">Last activity </span><?=time_diff($LastActive['LastUpdate'])?><span class="tooltip" title="Manage sessions"> from <?=$LastActive['IP']?>.</span>
+			<span class="tooltip" title="Manage sessions">Last activity: </span><?=time_diff($LastActive['LastUpdate'])?><span class="tooltip" title="Manage sessions"> from <?=$LastActive['IP']?>.</span>
 		</a>
 	</p>
 <?	} ?>
