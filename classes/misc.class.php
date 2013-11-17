@@ -207,9 +207,9 @@ class Misc {
 				array_pop($Forum);
 			}
 			G::$DB->query("
-				SELECT f.IsLocked, f.IsSticky, f.NumPosts
-				FROM forums_topics AS f
-				WHERE f.ID ='$TopicID'");
+				SELECT IsLocked, IsSticky, NumPosts
+				FROM forums_topics
+				WHERE ID ='$TopicID'");
 			list($IsLocked, $IsSticky, $NumPosts) = G::$DB->next_record();
 			$Part1 = array_slice($Forum, 0, $Stickies, true); //Stickys
 			$Part2 = array(

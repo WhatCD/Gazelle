@@ -25,16 +25,16 @@ if ($_POST['id']) {
 				t1.TreeID,
 				t1.TreeLevel,
 				(	SELECT
-					t2.TreePosition
+						t2.TreePosition
 					FROM invite_tree AS t2
-					WHERE TreeID=t1.TreeID
-						AND TreeLevel=t1.TreeLevel
-						AND t2.TreePosition>t1.TreePosition
-					ORDER BY TreePosition
+					WHERE t2.TreeID = t1.TreeID
+						AND t2.TreeLevel = t1.TreeLevel
+						AND t2.TreePosition > t1.TreePosition
+					ORDER BY t2.TreePosition
 					LIMIT 1
 				) AS MaxPosition
 			FROM invite_tree AS t1
-			WHERE t1.UserID=$UserID");
+			WHERE t1.UserID = $UserID");
 	list ($TreePosition, $TreeID, $TreeLevel, $MaxPosition) = $DB->next_record();
 	if (!$MaxPosition) {
 		$MaxPosition = 1000000;

@@ -37,18 +37,18 @@ if ($Page == 1) {
 if (!isset($Forum) || !is_array($Forum)) {
 	$DB->query("
 		SELECT
-			t.ID,
-			t.Title,
-			t.AuthorID,
-			t.IsLocked,
-			t.IsSticky,
-			t.NumPosts,
-			t.LastPostID,
-			t.LastPostTime,
-			t.LastPostAuthorID
-		FROM forums_topics AS t
-		WHERE t.ForumID = '$ForumID'
-		ORDER BY t.Ranking = 0, t.Ranking ASC, t.IsSticky DESC, t.LastPostTime DESC
+			ID,
+			Title,
+			AuthorID,
+			IsLocked,
+			IsSticky,
+			NumPosts,
+			LastPostID,
+			LastPostTime,
+			LastPostAuthorID
+		FROM forums_topics
+		WHERE ForumID = '$ForumID'
+		ORDER BY Ranking = 0, Ranking ASC, IsSticky DESC, LastPostTime DESC
 		LIMIT $Limit"); // Can be cached until someone makes a new post
 	$Forum = $DB->to_array('ID', MYSQLI_ASSOC, false);
 
@@ -175,15 +175,15 @@ if (count($Forum) === 0) {
 			l.TopicID,
 			l.PostID,
 			CEIL((
-					SELECT COUNT(ID)
-					FROM forums_posts
-					WHERE forums_posts.TopicID = l.TopicID
-						AND forums_posts.ID <= l.PostID
+					SELECT COUNT(p.ID)
+					FROM forums_posts AS p
+					WHERE p.TopicID = l.TopicID
+						AND p.ID <= l.PostID
 				) / $PerPage
 			) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN(".implode(', ', array_keys($Forum)).')
-			AND UserID = \''.$LoggedUser['ID'].'\'');
+		WHERE l.TopicID IN (".implode(', ', array_keys($Forum)).')
+			AND l.UserID = \''.$LoggedUser['ID'].'\'');
 
 	// Turns the result set into a multi-dimensional array, with
 	// forums_last_read_topics.TopicID as the key.

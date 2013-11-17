@@ -12,8 +12,8 @@ $DB->query("
 				d.Comment,
 				d.UserID,
 				d.Time
-			FROM do_not_upload as d
-			LEFT JOIN users_main AS um ON um.ID=d.UserID
+			FROM do_not_upload AS d
+				LEFT JOIN users_main AS um ON um.ID=d.UserID
 			ORDER BY d.Sequence");
 	?>
 	<div class="header">

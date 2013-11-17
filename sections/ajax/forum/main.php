@@ -20,13 +20,17 @@ if (!empty($TopicIDs)) {
 		SELECT
 			l.TopicID,
 			l.PostID,
-			CEIL((	SELECT COUNT(ID)
-					FROM forums_posts
-					WHERE forums_posts.TopicID = l.TopicID
-						AND forums_posts.ID <= l.PostID) / $PerPage) AS Page
+			CEIL(
+				(
+					SELECT COUNT(p.ID)
+					FROM forums_posts AS p
+					WHERE p.TopicID = l.TopicID
+						AND p.ID <= l.PostID
+				) / $PerPage
+			) AS Page
 		FROM forums_last_read_topics AS l
-		WHERE TopicID IN(".implode(',', $TopicIDs).")
-			AND UserID='$LoggedUser[ID]'");
+		WHERE l.TopicID IN(".implode(',', $TopicIDs).")
+			AND l.UserID='$LoggedUser[ID]'");
 	$LastRead = $DB->to_array('TopicID', MYSQLI_ASSOC);
 } else {
 	$LastRead = array();

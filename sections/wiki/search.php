@@ -11,15 +11,15 @@ list($Page, $Limit) = Format::page_limit(ARTICLES_PER_PAGE);
 
 $OrderVals = array('Title', 'Created', 'Edited');
 $WayVals = array('Ascending', 'Descending');
-$TypeTable = array('Title'=>'w.Title', 'Body'=>'w.Body');
-$OrderTable = array('Title'=>'w.Title', 'Created'=>'w.ID', 'Edited'=>'w.Date');
+$TypeTable = array('Title'=>'Title', 'Body'=>'Body');
+$OrderTable = array('Title'=>'Title', 'Created'=>'ID', 'Edited'=>'Date');
 $WayTable = array('Ascending'=>'ASC', 'Descending'=>'DESC');
 
 // What are we looking for? Let's make sure it isn't dangerous.
 $Search = db_string(trim($_GET['search']));
 
-if (!in_array($Type, array('w.Title', 'w.Body'))) {
-	$Type = 'w.Title';
+if (!in_array($Type, array('Title', 'Body'))) {
+	$Type = 'Title';
 }
 
 // Break search string down into individual words
@@ -27,7 +27,7 @@ $Words = explode(' ', $Search);
 
 $Type = $TypeTable[$_GET['type']];
 if (!$Type) {
-	$Type = 'w.Title';
+	$Type = 'Title';
 }
 
 $Order = $OrderTable[$_GET['order']];
@@ -43,12 +43,12 @@ if (!$Way) {
 $SQL = "
 	SELECT
 		SQL_CALC_FOUND_ROWS
-		w.ID,
-		w.Title,
-		w.Date,
-		w.Author
-	FROM wiki_articles AS w
-	WHERE w.MinClassRead <= '".$LoggedUser['EffectiveClass']."'";
+		ID,
+		Title,
+		Date,
+		Author
+	FROM wiki_articles
+	WHERE MinClassRead <= '".$LoggedUser['EffectiveClass']."'";
 if ($Search != '') {
 	$SQL .= " AND $Type LIKE '%";
 	$SQL .= implode("%' AND $Type LIKE '%", $Words);
@@ -89,8 +89,8 @@ $DB->set_query_id($RS);
 				<tr>
 					<td class="label"><strong>Search in:</strong></td>
 					<td>
-						<label><input type="radio" name="type" value="Title" <? if ($Type == 'w.Title') { echo 'checked="checked" '; } ?>/> Title</label>
-						<label><input type="radio" name="type" value="Body" <? if ($Type == 'w.Body') { echo 'checked="checked" '; } ?>/> Body</label>
+						<label><input type="radio" name="type" value="Title" <? if ($Type == 'Title') { echo 'checked="checked" '; } ?>/> Title</label>
+						<label><input type="radio" name="type" value="Body" <? if ($Type == 'Body') { echo 'checked="checked" '; } ?>/> Body</label>
 					</td>
 					<td class="label"><strong>Order by:</strong></td>
 					<td>

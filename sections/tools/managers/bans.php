@@ -58,7 +58,7 @@ $sql = "
 		FromIP,
 		ToIP,
 		Reason
-	FROM ip_bans AS i ";
+	FROM ip_bans ";
 
 if (!empty($_REQUEST['notes'])) {
 	$sql .= "WHERE Reason LIKE '%".db_string($_REQUEST['notes'])."%' ";

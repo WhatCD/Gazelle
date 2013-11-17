@@ -92,11 +92,11 @@ function get_group_info($GroupID, $Return = true, $RevisionID = 0, $PersonalProp
 				t.ID AS HasFile
 			FROM torrents AS t
 				LEFT JOIN torrents_bad_tags AS tbt ON tbt.TorrentID = t.ID
-				LEFT JOIN torrents_bad_folders AS tbf on tbf.TorrentID = t.ID
-				LEFT JOIN torrents_bad_files AS tfi on tfi.TorrentID = t.ID
-				LEFT JOIN torrents_cassette_approved AS ca on ca.TorrentID = t.ID
-				LEFT JOIN torrents_lossymaster_approved AS lma on lma.TorrentID = t.ID
-				LEFT JOIN torrents_lossyweb_approved AS lwa on lwa.TorrentID = t.ID
+				LEFT JOIN torrents_bad_folders AS tbf ON tbf.TorrentID = t.ID
+				LEFT JOIN torrents_bad_files AS tfi ON tfi.TorrentID = t.ID
+				LEFT JOIN torrents_cassette_approved AS ca ON ca.TorrentID = t.ID
+				LEFT JOIN torrents_lossymaster_approved AS lma ON lma.TorrentID = t.ID
+				LEFT JOIN torrents_lossyweb_approved AS lwa ON lwa.TorrentID = t.ID
 				LEFT JOIN torrents_logs_new AS tln ON tln.TorrentID = t.ID
 			WHERE t.GroupID = '".db_string($GroupID)."'
 			GROUP BY t.ID
@@ -180,9 +180,9 @@ function is_valid_torrenthash($Str) {
 function torrenthash_to_torrentid($Str) {
 	global $Cache, $DB;
 	$DB->query("
-		SELECT t.ID
-		FROM torrents AS t
-		WHERE HEX(t.info_hash) = '".db_string($Str)."'");
+		SELECT ID
+		FROM torrents
+		WHERE HEX(info_hash) = '".db_string($Str)."'");
 	$TorrentID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
 	if ($TorrentID) {
 		return $TorrentID;
@@ -193,9 +193,9 @@ function torrenthash_to_torrentid($Str) {
 function torrenthash_to_groupid($Str) {
 	global $Cache, $DB;
 	$DB->query("
-		SELECT t.GroupID
-		FROM torrents AS t
-		WHERE HEX(t.info_hash) = '".db_string($Str)."'");
+		SELECT GroupID
+		FROM torrents
+		WHERE HEX(info_hash) = '".db_string($Str)."'");
 	$GroupID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
 	if ($GroupID) {
 		return $GroupID;
@@ -206,9 +206,9 @@ function torrenthash_to_groupid($Str) {
 function torrentid_to_groupid($TorrentID) {
 	global $Cache, $DB;
 	$DB->query("
-		SELECT t.GroupID
-		FROM torrents AS t
-		WHERE t.ID = '".db_string($TorrentID)."'");
+		SELECT GroupID
+		FROM torrents
+		WHERE ID = '".db_string($TorrentID)."'");
 	$GroupID = (int)array_pop($DB->next_record(MYSQLI_ASSOC));
 	if ($GroupID) {
 		return $GroupID;

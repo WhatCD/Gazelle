@@ -32,8 +32,8 @@ $DB->query("
 $DB->query("
 	INSERT INTO tpc_temp
 	SELECT t2.*
-	FROM torrents_peerlists t1
-		JOIN torrents_peerlists_compare t2
+	FROM torrents_peerlists AS t1
+		JOIN torrents_peerlists_compare AS t2
 	USING(TorrentID)
 	WHERE t1.Seeders != t2.Seeders
 		OR t1.Leechers != t2.Leechers

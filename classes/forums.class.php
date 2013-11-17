@@ -47,7 +47,7 @@ class Forums {
 						p.EditedUserID,
 						p.EditedTime,
 						ed.Username
-						FROM forums_posts as p
+						FROM forums_posts AS p
 							LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
 						WHERE p.TopicID = '$ThreadID'
 							AND p.ID = '" . $ThreadInfo['StickyPostID'] . "'");
@@ -169,7 +169,7 @@ class Forums {
 					t.IsSticky AS Sticky
 				FROM forums AS f
 					JOIN forums_categories AS fc ON fc.ID = f.CategoryID
-					LEFT JOIN forums_topics as t ON t.ID = f.LastPostTopicID
+					LEFT JOIN forums_topics AS t ON t.ID = f.LastPostTopicID
 				GROUP BY f.ID
 				ORDER BY fc.Sort, fc.Name, f.CategoryID, f.Sort");
 			$Forums = G::$DB->to_array('ID', MYSQLI_ASSOC, false);
@@ -234,15 +234,15 @@ class Forums {
 					CEIL(
 						(
 							SELECT
-								COUNT(ID)
-							FROM forums_posts
-							WHERE forums_posts.TopicID = l.TopicID
-								AND forums_posts.ID<=l.PostID
+								COUNT(p.ID)
+							FROM forums_posts AS p
+							WHERE p.TopicID = l.TopicID
+								AND p.ID <= l.PostID
 						)/$PerPage
 					) AS Page
 				FROM forums_last_read_topics AS l
-				WHERE TopicID IN(" . implode(',', $TopicIDs) . ") AND
-					UserID='" . G::$LoggedUser['ID'] . "'");
+				WHERE l.TopicID IN(" . implode(',', $TopicIDs) . ") AND
+					l.UserID='" . G::$LoggedUser['ID'] . "'");
 			$LastRead = G::$DB->to_array('TopicID', MYSQLI_ASSOC);
 			G::$DB->set_query_id($QueryID);
 		} else {

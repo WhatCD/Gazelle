@@ -42,12 +42,12 @@ View::show_header("Revisions of ".$Title);
 <?
 $DB->query("
 	SELECT
-		w.Revision,
-		w.Title,
-		w.Author,
-		w.Date
-	FROM wiki_revisions AS w
-	WHERE w.ID='$ArticleID'
+		Revision,
+		Title,
+		Author,
+		Date
+	FROM wiki_revisions
+	WHERE ID = '$ArticleID'
 	ORDER BY Revision DESC");
 while (list($Revision, $Title, $AuthorID, $Date) = $DB->next_record()) { ?>
 			<tr>

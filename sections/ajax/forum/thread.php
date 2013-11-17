@@ -96,7 +96,7 @@ if (!$Catalogue = $Cache->get_value("thread_$ThreadID"."_catalogue_$CatalogueID"
 			p.Body,
 			p.EditedUserID,
 			p.EditedTime
-		FROM forums_posts as p
+		FROM forums_posts AS p
 		WHERE p.TopicID = '$ThreadID'
 			AND p.ID != '".$ThreadInfo['StickyPostID']."'
 		LIMIT $CatalogueLimit");

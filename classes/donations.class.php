@@ -627,7 +627,7 @@ class Donations {
 			SELECT Position
 			FROM (
 				SELECT d.UserID, @RowNum := @RowNum + 1 AS Position
-				FROM users_donor_ranks d
+				FROM users_donor_ranks AS d
 				ORDER BY TotalRank DESC
 			) l
 			WHERE UserID = '$UserID'");

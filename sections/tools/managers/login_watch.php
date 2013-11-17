@@ -14,16 +14,16 @@ View::show_header('Login Watch');
 
 $DB->query('
 	SELECT
-		l.ID,
-		l.IP,
-		l.UserID,
-		l.LastAttempt,
-		l.Attempts,
-		l.BannedUntil,
-		l.Bans
-	FROM login_attempts AS l
-	WHERE l.BannedUntil > "'.sqltime().'"
-	ORDER BY l.BannedUntil ASC');
+		ID,
+		IP,
+		UserID,
+		LastAttempt,
+		Attempts,
+		BannedUntil,
+		Bans
+	FROM login_attempts
+	WHERE BannedUntil > "'.sqltime().'"
+	ORDER BY BannedUntil ASC');
 ?>
 <div class="thin">
 	<div class="header">

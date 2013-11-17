@@ -12,9 +12,9 @@ include(SERVER_ROOT."/classes/permissions_form.php");
 list($UserID, $Username, $PermissionID) = array_values(Users::user_info($_REQUEST['userid']));
 
 $DB->query("
-	SELECT u.CustomPermissions
-	FROM users_main AS u
-	WHERE u.ID='$UserID'");
+	SELECT CustomPermissions
+	FROM users_main
+	WHERE ID='$UserID'");
 
 list($Customs)=$DB->next_record(MYSQLI_NUM, false);
 

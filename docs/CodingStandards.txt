@@ -120,6 +120,12 @@ Long SQL queries shall be separated on multiple lines.
 
 Short SQL queries may be on a single line.
 
+All SQL keywords shall be uppercase.
+
+Aliases shall be used to refer to any columns whenever multiple tables are
+joined in an SQL query. They shall be using the `tbl_name AS alias_name`
+syntax. No table aliases shall be used for single-table queries.
+
 The primary SQL keywords should be at the same indentation level unless
 part of a JOIN or other complex statement.
 
@@ -128,7 +134,7 @@ Use indents as appropriate to aid readability.
 The SQL keywords `JOIN`, `RIGHT JOIN`, `LEFT JOIN` must be indented once from
 the `SELECT` statement.
 
-The SQL keyword `AND` must be indented once from the `WHILE` (and similar)
+The SQL keyword `AND` must be indented once from the `WHERE` (and similar)
 statements.
 
 The "not equal to" operator `!=` must be used instead of the alternative

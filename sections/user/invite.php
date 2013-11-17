@@ -88,7 +88,7 @@ $DB->query("
 		Downloaded,
 		JoinDate,
 		LastAccess
-	FROM users_main as um
+	FROM users_main AS um
 		LEFT JOIN users_info AS ui ON ui.UserID = um.ID
 	WHERE ui.Inviter = '$UserID'
 	ORDER BY $OrderBy $CurrentSort");
@@ -144,7 +144,7 @@ if (!$Sneaky
 	</div>
 	<div class="box pad">
 		<form class="send_form" name="invite" action="user.php" method="post">
-			<input type="hidden" name="action" value="takeinvite" />
+			<input type="hidden" name="action" value="take_invite" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
@@ -194,7 +194,7 @@ if (!empty($Pending)) {
 			<tr class="row<?=$Row?>">
 				<td><?=display_str($Email)?></td>
 				<td><?=time_diff($Expires)?></td>
-				<td><a href="user.php?action=deleteinvite&amp;invite=<?=$InviteKey?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this invite?');">Delete invite</a></td>
+				<td><a href="user.php?action=delete_invite&amp;invite=<?=$InviteKey?>&amp;auth=<?=$LoggedUser['AuthKey']?>" onclick="return confirm('Are you sure you want to delete this invite?');">Delete invite</a></td>
 			</tr>
 <?	} ?>
 		</table>

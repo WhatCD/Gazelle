@@ -102,7 +102,7 @@ if (!$Catalogue = $Cache->get_value("thread_{$ThreadID}_catalogue_$CatalogueID")
 			p.EditedUserID,
 			p.EditedTime,
 			ed.Username
-		FROM forums_posts as p
+		FROM forums_posts AS p
 			LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
 		WHERE p.TopicID = '$ThreadID'
 			AND p.ID != '".$ThreadInfo['StickyPostID']."'

@@ -80,9 +80,9 @@ class Torrents {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
 				SELECT
-					g.ID, g.Name, g.Year, g.RecordLabel, g.CatalogueNumber, g.TagList, g.ReleaseType, g.VanityHouse, g.WikiImage, g.CategoryID
-				FROM torrents_group AS g
-				WHERE g.ID IN ($IDs)");
+					ID, Name, Year, RecordLabel, CatalogueNumber, TagList, ReleaseType, VanityHouse, WikiImage, CategoryID
+				FROM torrents_group
+				WHERE ID IN ($IDs)");
 
 			while ($Group = G::$DB->next_record(MYSQLI_ASSOC, true)) {
 				$NotFound[$Group['ID']] = $Group;
@@ -98,7 +98,7 @@ class Torrents {
 						ID, GroupID, Media, Format, Encoding, RemasterYear, Remastered, RemasterTitle,
 						RemasterRecordLabel, RemasterCatalogueNumber, Scene, HasLog, HasCue, LogScore,
 						FileCount, FreeTorrent, Size, Leechers, Seeders, Snatched, Time, ID AS HasFile
-					FROM torrents AS t
+					FROM torrents
 					WHERE GroupID IN ($IDs)
 					ORDER BY GroupID, Remastered, (RemasterYear != 0) DESC, RemasterYear, RemasterTitle,
 							RemasterRecordLabel, RemasterCatalogueNumber, Media, Format, Encoding, ID");
@@ -399,14 +399,14 @@ class Torrents {
 			// Get a count of how many groups or requests use the artist ID
 			G::$DB->query("
 				SELECT COUNT(ag.ArtistID)
-				FROM artists_group as ag
+				FROM artists_group AS ag
 					LEFT JOIN requests_artists AS ra ON ag.ArtistID = ra.ArtistID
 				WHERE ra.ArtistID IS NOT NULL
 					AND ag.ArtistID = '$ArtistID'");
 			list($ReqCount) = G::$DB->next_record();
 			G::$DB->query("
 				SELECT COUNT(ag.ArtistID)
-				FROM artists_group as ag
+				FROM artists_group AS ag
 					LEFT JOIN torrents_artists AS ta ON ag.ArtistID = ta.ArtistID
 				WHERE ta.ArtistID IS NOT NULL
 					AND ag.ArtistID = '$ArtistID'");

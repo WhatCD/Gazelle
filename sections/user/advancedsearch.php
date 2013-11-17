@@ -1,8 +1,4 @@
-<?php
-/**********************************************************************
- *>>>>>>>>>>>>>>>>>>>>>>>>>>> User search <<<<<<<<<<<<<<<<<<<<<<<<<<<<*
- * Best viewed with a wide screen monitor							  *
- **********************************************************************/
+<?
 if (!empty($_GET['search'])) {
 	if (preg_match('/^'.IP_REGEX.'$/', $_GET['search'])) {
 		$_GET['ip'] = $_GET['search'];
@@ -219,7 +215,7 @@ if (count($_GET)) {
 		} else {
 			$SQL .= "
 				(
-					SELECT COUNT(uid)
+					SELECT COUNT(xs.uid)
 					FROM xbt_snatched AS xs
 					WHERE xs.uid = um1.ID
 				) AS Snatches,";

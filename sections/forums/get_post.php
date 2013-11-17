@@ -24,8 +24,8 @@ $DB->query("
 	SELECT
 		p.Body,
 		t.ForumID
-	FROM forums_posts as p
-		JOIN forums_topics as t on p.TopicID = t.ID
+	FROM forums_posts AS p
+		JOIN forums_topics AS t ON p.TopicID = t.ID
 	WHERE p.ID='$PostID'");
 list($Body, $ForumID) = $DB->next_record(MYSQLI_NUM);
 

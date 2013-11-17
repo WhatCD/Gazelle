@@ -17,7 +17,7 @@ if (!empty($_GET['filter']) && $_GET['filter'] == 'all') {
 	$Join = '';
 	$All = true;
 } else {
-	$Join = "JOIN xbt_snatched as x ON x.fid = tbt.TorrentID AND x.uid = ".$LoggedUser['ID'];
+	$Join = "JOIN xbt_snatched AS x ON x.fid = tbt.TorrentID AND x.uid = ".$LoggedUser['ID'];
 	$All = false;
 }
 

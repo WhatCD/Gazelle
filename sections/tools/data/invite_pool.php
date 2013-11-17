@@ -28,7 +28,7 @@ $sql = "
 		i.InviteKey,
 		i.Expires,
 		i.Email
-	FROM invites as i
+	FROM invites AS i
 		JOIN users_main AS um ON um.ID = i.InviterID ";
 if ($Search) {
 	$sql .= "

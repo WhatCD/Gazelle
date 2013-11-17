@@ -56,7 +56,7 @@ $DownloadsQ = $DB->query("
 		IF(t.RemasterYear=0,tg.Year,t.RemasterYear) AS Year,
 		tg.Name,
 		t.Size
-	FROM torrents as t
+	FROM torrents AS t
 		JOIN torrents_group AS tg ON t.GroupID=tg.ID
 	$SQL
 	GROUP BY TorrentID");

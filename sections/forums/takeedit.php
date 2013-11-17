@@ -42,15 +42,15 @@ $DB->query("
 		t.ForumID,
 		f.MinClassWrite,
 		CEIL((
-			SELECT COUNT(ID)
-			FROM forums_posts
-			WHERE forums_posts.TopicID = p.TopicID
-				AND forums_posts.ID <= '$PostID'
+			SELECT COUNT(p2.ID)
+			FROM forums_posts AS p2
+			WHERE p2.TopicID = p.TopicID
+				AND p2.ID <= '$PostID'
 			) / ".POSTS_PER_PAGE."
 		) AS Page
-	FROM forums_posts as p
-		JOIN forums_topics as t on p.TopicID = t.ID
-		JOIN forums as f ON t.ForumID = f.ID
+	FROM forums_posts AS p
+		JOIN forums_topics AS t ON p.TopicID = t.ID
+		JOIN forums AS f ON t.ForumID = f.ID
 	WHERE p.ID = '$PostID'");
 list($OldBody, $AuthorID, $TopicID, $IsLocked, $ForumID, $MinClassWrite, $Page) = $DB->next_record();
 

@@ -84,7 +84,7 @@ if ($ShowGrouped) {
 				l.PostID AS LastRead,
 				t.IsLocked,
 				t.IsSticky
-			FROM forums_posts as p
+			FROM forums_posts AS p
 				LEFT JOIN users_main AS um ON um.ID = p.AuthorID
 				LEFT JOIN users_info AS ui ON ui.UserID = p.AuthorID
 				LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID
@@ -122,7 +122,7 @@ if ($ShowGrouped) {
 	$SQL .= "
 				t.IsLocked,
 				t.IsSticky
-			FROM forums_posts as p
+			FROM forums_posts AS p
 				LEFT JOIN users_main AS um ON um.ID = p.AuthorID
 				LEFT JOIN users_info AS ui ON ui.UserID = p.AuthorID
 				LEFT JOIN users_main AS ed ON ed.ID = p.EditedUserID

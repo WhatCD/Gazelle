@@ -12,14 +12,14 @@ View::show_header($Title);
 $sql = "
 	SELECT
 		SQL_CALC_FOUND_ROWS
-		w.ID,
-		w.Title,
-		w.Date,
-		w.Author
-	FROM wiki_articles AS w
-	WHERE w.MinClassRead <= '".$LoggedUser['EffectiveClass']."'";
+		ID,
+		Title,
+		Date,
+		Author
+	FROM wiki_articles
+	WHERE MinClassRead <= '".$LoggedUser['EffectiveClass']."'";
 if ($Letter !== '1') {
-	$sql .= " AND LEFT(w.Title,1) = '".db_string($Letter)."'";
+	$sql .= " AND LEFT(Title,1) = '".db_string($Letter)."'";
 } else {
 	$Letter = 'All';
 }

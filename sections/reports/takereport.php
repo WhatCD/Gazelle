@@ -46,13 +46,13 @@ switch ($Short) {
 			SELECT
 				p.ID,
 				p.TopicID,
-				(	SELECT COUNT(ID)
-					FROM forums_posts
-					WHERE forums_posts.TopicID = p.TopicID
-						AND forums_posts.ID <= p.ID
+				(	SELECT COUNT(p2.ID)
+					FROM forums_posts AS p2
+					WHERE p2.TopicID = p.TopicID
+						AND p2.ID <= p.ID
 				) AS PostNum
 			FROM forums_posts AS p
-			WHERE ID = $ID");
+			WHERE p.ID = $ID");
 		list($PostID, $TopicID, $PostNum) = $DB->next_record();
 		$Link = "forums.php?action=viewthread&threadid=$TopicID&post=$PostNum#post$PostID";
 		break;

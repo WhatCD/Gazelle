@@ -6,9 +6,9 @@ $DB->query("
 	SELECT
 		i.SupportFor,
 		p.DisplayStaff
-	FROM users_info as i
-	JOIN users_main as m ON m.ID = i.UserID
-	JOIN permissions as p ON p.ID = m.PermissionID
+	FROM users_info AS i
+		JOIN users_main AS m ON m.ID = i.UserID
+		JOIN permissions AS p ON p.ID = m.PermissionID
 	WHERE i.UserID = ".$LoggedUser['ID']
 );
 list($SupportFor, $DisplayStaff) = $DB->next_record();

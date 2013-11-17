@@ -13,8 +13,8 @@ $DB->query("
 			uq.Date,
 			(
 				SELECT COUNT(1)
-				FROM staff_answers
-				WHERE QuestionID = uq.ID
+				FROM staff_answers AS sa
+				WHERE sa.QuestionID = uq.ID
 			) AS Responses
 		FROM user_questions AS uq
 		WHERE uq.ID NOT IN

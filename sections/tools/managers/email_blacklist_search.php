@@ -12,13 +12,13 @@ else {
 
 $DB->query("
 	SELECT
-		eb.ID,
-		eb.UserID,
-		eb.Time,
-		eb.Email,
-		eb.Comment
-	FROM email_blacklist AS eb
-	WHERE eb.Email LIKE '%$Search%'");
+		ID,
+		UserID,
+		Time,
+		Email,
+		Comment
+	FROM email_blacklist
+	WHERE Email LIKE '%$Search%'");
 
 $EmailResults = $DB->to_array(false, MYSQLI_ASSOC, false);
 

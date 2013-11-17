@@ -41,8 +41,8 @@ class Wiki {
 				Summary,
 				Time,
 				UserID
-			FROM $Table AS wiki
-			WHERE wiki.PageID = $PageID
+			FROM $Table
+			WHERE PageID = $PageID
 			ORDER BY RevisionID DESC");
 ?>
 	<table cellpadding="6" cellspacing="1" border="0" width="100%" class="border">

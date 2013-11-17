@@ -270,11 +270,11 @@ foreach ($Results as $Result) {
 <?
 	$DB->query("
 		SELECT
-			r.Type,
-			COUNT(r.ID) AS Count
-		FROM reportsv2 AS r
-		WHERE r.Status = 'New'
-		GROUP BY r.Type");
+			Type,
+			COUNT(ID) AS Count
+		FROM reportsv2
+		WHERE Status = 'New'
+		GROUP BY Type");
 	$Current = $DB->to_array();
 	if (!empty($Current)) {
 ?>

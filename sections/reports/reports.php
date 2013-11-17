@@ -168,24 +168,25 @@ $DB->set_query_id($Reports);
 											p.ID,
 											p.Body,
 											p.TopicID,
-											(	SELECT COUNT(ID)
-												FROM forums_posts
-												WHERE forums_posts.TopicID = p.TopicID
-													AND forums_posts.ID <= p.ID
+											(
+												SELECT COUNT(p2.ID)
+												FROM forums_posts AS p2
+												WHERE p2.TopicID = p.TopicID
+													AND p2.ID <= p.ID
 											) AS PostNum
 										FROM forums_posts AS p
-										WHERE ID = $ThingID");
+										WHERE p.ID = $ThingID");
 									if (!$DB->has_results()) {
 										echo 'No forum post with the reported ID found';
 									} else {
 										list($PostID, $Body, $TopicID, $PostNum) = $DB->next_record();
-										echo "<a href=\"forums.php?action=viewthread&amp;threadid=$TopicID&amp;post=$PostNum#post$PostID\">FORUM POST</a>";
+										echo "<a href=\"forums.php?action=viewthread&amp;threadid=$TopicID&amp;post=$PostNum#post$PostID\">FORUM POST ID #$PostID</a>";
 									}
 									break;
 								case 'comment':
 									$DB->query("
 										SELECT 1
-										FROM comments AS c
+										FROM comments
 										WHERE ID = $ThingID");
 									if (!$DB->has_results()) {
 										echo 'No comment with the reported ID found';

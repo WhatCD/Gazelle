@@ -9,7 +9,7 @@ View::show_header('Manage email blacklist');
 $Where = "";
 if (!empty($_POST['email'])) {
 	$Email = db_string($_POST['email']);
-	$Where .= " WHERE eb.Email LIKE '%$Email%'";
+	$Where .= " WHERE Email LIKE '%$Email%'";
 }
 if (!empty($_POST['comment'])) {
 	$Comment = db_string($_POST['comment']);
@@ -18,19 +18,19 @@ if (!empty($_POST['comment'])) {
 	} else {
 		$Where .= " WHERE";
 	}
-	$Where .= " eb.Comment LIKE '%$Comment%'";
+	$Where .= " Comment LIKE '%$Comment%'";
 }
 $DB->query("
 	SELECT
 		SQL_CALC_FOUND_ROWS
-		eb.ID,
-		eb.UserID,
-		eb.Time,
-		eb.Email,
-		eb.Comment
-	FROM email_blacklist AS eb
+		ID,
+		UserID,
+		Time,
+		Email,
+		Comment
+	FROM email_blacklist
 	$Where
-	ORDER BY eb.Time DESC
+	ORDER BY Time DESC
 	LIMIT $Limit");
 $Results = $DB->to_array(false, MYSQLI_ASSOC, false);
 $DB->query('SELECT FOUND_ROWS()');

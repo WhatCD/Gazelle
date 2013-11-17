@@ -7,10 +7,10 @@ View::show_header('Special Users List');
 <div class="thin">
 <?
 $DB->query("
-	SELECT m.ID
-	FROM users_main AS m
-	WHERE m.CustomPermissions != ''
-		AND m.CustomPermissions != 'a:0:{}'");
+	SELECT ID
+	FROM users_main
+	WHERE CustomPermissions != ''
+		AND CustomPermissions != 'a:0:{}'");
 if ($DB->has_results()) {
 ?>
 	<table width="100%">

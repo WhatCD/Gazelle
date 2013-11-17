@@ -26,8 +26,8 @@ class Permissions {
 		if (empty($Permission)) {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
-				SELECT p.Level AS Class, p.Values as Permissions, p.Secondary, p.PermittedForums
-				FROM permissions AS p
+				SELECT Level AS Class, `Values` AS Permissions, Secondary, PermittedForums
+				FROM permissions
 				WHERE ID='$PermissionID'");
 			$Permission = G::$DB->next_record(MYSQLI_ASSOC, array('Permissions'));
 			G::$DB->set_query_id($QueryID);
@@ -53,9 +53,9 @@ class Permissions {
 		if ($CustomPermissions === false) {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query('
-				SELECT um.CustomPermissions
-				FROM users_main AS um
-				WHERE um.ID = '.((int)$UserID));
+				SELECT CustomPermissions
+				FROM users_main
+				WHERE ID = ' . (int)$UserID);
 			list($CustomPermissions) = G::$DB->next_record(MYSQLI_NUM, false);
 			G::$DB->set_query_id($QueryID);
 		}

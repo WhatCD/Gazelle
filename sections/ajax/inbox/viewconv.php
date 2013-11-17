@@ -75,7 +75,7 @@ if ($UnRead == '1') {
 // Get messages
 $DB->query("
 	SELECT SentDate, SenderID, Body, ID
-	FROM pm_messages AS m
+	FROM pm_messages
 	WHERE ConvID = '$ConvID'
 	ORDER BY ID");
 

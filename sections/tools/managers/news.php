@@ -65,12 +65,12 @@ switch ($_GET['action']) {
 <?
 $DB->query('
 	SELECT
-		n.ID,
-		n.Title,
-		n.Body,
-		n.Time
-	FROM news AS n
-	ORDER BY n.Time DESC');// LIMIT 20
+		ID,
+		Title,
+		Body,
+		Time
+	FROM news
+	ORDER BY Time DESC');// LIMIT 20
 while (list($NewsID, $Title, $Body, $NewsTime) = $DB->next_record()) {
 ?>
 	<div class="box vertical_space news_post">

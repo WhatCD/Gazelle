@@ -94,9 +94,9 @@ if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requests
 		WHERE r.FillerID = $UserID");
 	list($RequestsFilled, $TotalBounty) = $DB->next_record();
 	$DB->query("
-		SELECT COUNT(rv.RequestID), SUM(rv.Bounty)
-		FROM requests_votes AS rv
-		WHERE rv.UserID = $UserID");
+		SELECT COUNT(RequestID), SUM(Bounty)
+		FROM requests_votes
+		WHERE UserID = $UserID");
 	list($RequestsVoted, $TotalSpent) = $DB->next_record();
 
 	$DB->query("
@@ -120,9 +120,9 @@ if (check_paranoia_here('uploads+')) {
 
 if (check_paranoia_here('artistsadded')) {
 	$DB->query("
-		SELECT COUNT(ta.ArtistID)
-		FROM torrents_artists AS ta
-		WHERE ta.UserID = $UserID");
+		SELECT COUNT(ArtistID)
+		FROM torrents_artists
+		WHERE UserID = $UserID");
 	list($ArtistsAdded) = $DB->next_record();
 } else {
 	$ArtistsAdded = 0;
@@ -204,10 +204,10 @@ if (check_paranoia_here(array('collages', 'collages+'))) {
 
 if (check_paranoia_here(array('collagecontribs', 'collagecontribs+'))) {
 	$DB->query("
-		SELECT COUNT(DISTINCT CollageID)
+		SELECT COUNT(DISTINCT ct.CollageID)
 		FROM collages_torrents AS ct
-			JOIN collages ON CollageID = ID
-		WHERE Deleted = '0'
+			JOIN collages AS c ON ct.CollageID = c.ID
+		WHERE c.Deleted = '0'
 			AND ct.UserID = '$UserID'");
 	list($NumCollageContribs) = $DB->next_record();
 }

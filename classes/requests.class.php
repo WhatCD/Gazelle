@@ -205,7 +205,7 @@ class Requests {
 					rv.UserID,
 					rv.Bounty,
 					u.Username
-				FROM requests_votes as rv
+				FROM requests_votes AS rv
 					LEFT JOIN users_main AS u ON u.ID = rv.UserID
 				WHERE rv.RequestID = $RequestID
 				ORDER BY rv.Bounty DESC");

@@ -572,7 +572,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		INSERT INTO users_torrent_history_snatch (UserID, NumSnatches)
 		SELECT xs.uid, COUNT(DISTINCT xs.fid)
 		FROM xbt_snatched AS xs
-			JOIN torrents on torrents.ID = xs.fid
+			JOIN torrents AS t ON t.ID = xs.fid
 		GROUP BY xs.uid");
 
 	// Get the fraction of snatched torrents seeded for at least 72 hours this week
@@ -864,8 +864,8 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	//------------- Demote users --------------------------------------------//
 	sleep(10);
 	$DB->query('
-		SELECT um.ID
-		FROM users_main AS um
+		SELECT ID
+		FROM users_main
 		WHERE PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
 			AND Uploaded / Downloaded < 0.95
 			OR PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
@@ -889,8 +889,8 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	echo "demoted 2\n";
 
 	$DB->query('
-		SELECT um.ID
-		FROM users_main AS um
+		SELECT ID
+		FROM users_main
 		WHERE PermissionID IN('.MEMBER.', '.POWER.', '.ELITE.', '.TORRENT_MASTER.')
 			AND Uploaded / Downloaded < 0.65');
 	echo "demoted 3\n";
@@ -1363,7 +1363,7 @@ if ($BiWeek != $NextBiWeek || $_GET['runbiweek']) {
 	$DB->query("
 		SELECT ID
 		FROM users_main AS um
-			JOIN users_info AS ui on ui.UserID = um.ID
+			JOIN users_info AS ui ON ui.UserID = um.ID
 		WHERE um.Enabled = '1'
 			AND ui.DisableInvites = '0'
 			AND ((um.PermissionID = ".POWER."

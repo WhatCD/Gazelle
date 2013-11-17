@@ -52,16 +52,16 @@ if (empty($Properties) && !empty($_GET['groupid']) && is_number($_GET['groupid']
 } elseif (empty($Properties) && !empty($_GET['requestid']) && is_number($_GET['requestid'])) {
 	$DB->query('
 		SELECT
-			r.ID AS RequestID,
-			r.CategoryID,
-			r.Title AS Title,
-			r.Year,
-			r.RecordLabel,
-			r.CatalogueNumber,
-			r.ReleaseType,
-			r.Image
-		FROM requests AS r
-		WHERE r.ID = '.$_GET['requestid']);
+			ID AS RequestID,
+			CategoryID,
+			Title AS Title,
+			Year,
+			RecordLabel,
+			CatalogueNumber,
+			ReleaseType,
+			Image
+		FROM requests
+		WHERE ID = '.$_GET['requestid']);
 
 	list($Properties) = $DB->to_array(false, MYSQLI_BOTH);
 	$UploadForm = $Categories[$Properties['CategoryID'] - 1];
@@ -95,17 +95,17 @@ if (!$GenreTags) {
 
 $DB->query('
 	SELECT
-		d.Name,
-		d.Comment,
-		d.Time
-	FROM do_not_upload as d
-	ORDER BY d.Sequence');
+		Name,
+		Comment,
+		Time
+	FROM do_not_upload
+	ORDER BY Sequence');
 $DNU = $DB->to_array();
-list($Name, $Comment, $Updated) = reset($DNU);
-reset($DNU);
+$DB->query('SELECT MAX(Time) FROM do_not_upload');
+list($Updated) = $DB->next_record();
 $DB->query("
-	SELECT IF(MAX(t.Time) < '$Updated' OR MAX(t.Time) IS NULL, 1, 0)
-	FROM torrents AS t
+	SELECT IF(MAX(Time) IS NULL OR MAX(Time) < '$Updated', 1, 0)
+	FROM torrents
 	WHERE UserID = ".$LoggedUser['ID']);
 list($NewDNU) = $DB->next_record();
 $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;

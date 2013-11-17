@@ -42,8 +42,8 @@ switch ($_REQUEST['action']) {
 	case 'edit':
 		include('edit.php');
 		break;
-	case 'takeedit':
-		include('takeedit.php');
+	case 'take_edit':
+		include('take_edit.php');
 		break;
 	case 'invitetree':
 		include(SERVER_ROOT.'/sections/user/invitetree.php');
@@ -51,11 +51,11 @@ switch ($_REQUEST['action']) {
 	case 'invite':
 		include('invite.php');
 		break;
-	case 'takeinvite':
-		include('takeinvite.php');
+	case 'take_invite':
+		include('take_invite.php');
 		break;
-	case 'deleteinvite':
-		include('deleteinvite.php');
+	case 'delete_invite':
+		include('delete_invite.php');
 		break;
 	case 'sessions':
 		include('sessions.php');

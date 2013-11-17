@@ -391,12 +391,12 @@ if ($CategoryName === 'Music') {
 			//1. See if each artist given already exists and if it does, grab the ID.
 			$DB->query("
 				SELECT
-					aa.ArtistID,
-					aa.AliasID,
-					aa.Name,
-					aa.Redirect
-				FROM artists_alias AS aa
-				WHERE aa.Name = '".db_string($Artist['name'])."'");
+					ArtistID,
+					AliasID,
+					Name,
+					Redirect
+				FROM artists_alias
+				WHERE Name = '".db_string($Artist['name'])."'");
 
 			while (list($ArtistID, $AliasID, $AliasName, $Redirect) = $DB->next_record(MYSQLI_NUM, false)) {
 				if (!strcasecmp($Artist['name'], $AliasName)) {
@@ -457,14 +457,14 @@ if ($CategoryName === 'Music') {
 			//Get a count of how many groups or requests use the artist ID
 			$DB->query("
 				SELECT COUNT(ag.ArtistID)
-				FROM artists_group as ag
+				FROM artists_group AS ag
 					LEFT JOIN requests_artists AS ra ON ag.ArtistID = ra.ArtistID
 				WHERE ra.ArtistID IS NOT NULL
 					AND ag.ArtistID = '$ArtistID'");
 			list($ReqCount) = $DB->next_record();
 			$DB->query("
 				SELECT COUNT(ag.ArtistID)
-				FROM artists_group as ag
+				FROM artists_group AS ag
 					LEFT JOIN torrents_artists AS ta ON ag.ArtistID = ta.ArtistID
 				WHERE ta.ArtistID IS NOT NULL
 					AND ag.ArtistID = '$ArtistID'");

@@ -387,9 +387,9 @@ class NotificationsManager {
 					$QueryID = G::$DB->get_query_id();
 					G::$DB->query("
 						SELECT COUNT(DISTINCT s.CollageID)
-						FROM users_collage_subs as s
-							JOIN collages as c ON s.CollageID = c.ID
-							JOIN collages_torrents as ct on ct.CollageID = c.ID
+						FROM users_collage_subs AS s
+							JOIN collages AS c ON s.CollageID = c.ID
+							JOIN collages_torrents AS ct ON ct.CollageID = c.ID
 						WHERE s.UserID = " . G::$LoggedUser['ID'] . "
 							AND ct.AddedOn > s.LastVisit
 							AND c.Deleted = '0'");

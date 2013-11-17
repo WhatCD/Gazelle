@@ -444,16 +444,16 @@ if ($Type == 'Music') {
 	if ($Properties['GroupID']) {
 		$DB->query("
 			SELECT
-				tg.id,
-				tg.WikiImage,
-				tg.WikiBody,
-				tg.RevisionID,
-				tg.Name,
-				tg.Year,
-				tg.ReleaseType,
-				tg.TagList
-			FROM torrents_group AS tg
-			WHERE tg.id = ".$Properties['GroupID']);
+				ID,
+				WikiImage,
+				WikiBody,
+				RevisionID,
+				Name,
+				Year,
+				ReleaseType,
+				TagList
+			FROM torrents_group
+			WHERE id = ".$Properties['GroupID']);
 		if ($DB->has_results()) {
 			// Don't escape tg.Name. It's written directly to the log table
 			list($GroupID, $WikiImage, $WikiBody, $RevisionID, $Properties['Title'], $Properties['Year'], $Properties['ReleaseType'], $Properties['TagList']) = $DB->next_record(MYSQLI_NUM, array(4));
@@ -508,12 +508,12 @@ if ($Type == 'Music') {
 					// The album hasn't been uploaded. Try to get the artist IDs
 					$DB->query("
 						SELECT
-							aa.ArtistID,
-							aa.AliasID,
-							aa.Name,
-							aa.Redirect
-						FROM artists_alias AS aa
-						WHERE aa.Name = '".db_string($Artist['name'])."'");
+							ArtistID,
+							AliasID,
+							Name,
+							Redirect
+						FROM artists_alias
+						WHERE Name = '".db_string($Artist['name'])."'");
 					if ($DB->has_results()) {
 						while (list($ArtistID, $AliasID, $AliasName, $Redirect) = $DB->next_record(MYSQLI_NUM, false)) {
 							if (!strcasecmp($Artist['name'], $AliasName)) {

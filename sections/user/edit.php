@@ -127,7 +127,7 @@ echo $Val->GenerateJS('userform');
 	</div>
 	<div class="main_column">
 		<div>
-			<input type="hidden" name="action" value="takeedit" />
+			<input type="hidden" name="action" value="take_edit" />
 			<input type="hidden" name="userid" value="<?=$UserID?>" />
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 		</div>
@@ -739,9 +739,9 @@ list($Invited) = $DB->next_record();
 			</tr>
 <?
 $DB->query("
-	SELECT COUNT(ta.ArtistID)
-	FROM torrents_artists AS ta
-	WHERE ta.UserID = $UserID");
+	SELECT COUNT(ArtistID)
+	FROM torrents_artists
+	WHERE UserID = $UserID");
 list($ArtistsAdded) = $DB->next_record();
 ?>
 			<tr id="para_artistsadded_tr">

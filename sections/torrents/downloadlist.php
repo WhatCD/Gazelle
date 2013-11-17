@@ -15,11 +15,11 @@ if (!empty($_GET['page']) && is_number($_GET['page'])) {
 $DB->query("
 	SELECT
 		SQL_CALC_FOUND_ROWS
-		ud.UserID,
-		ud.Time
-	FROM users_downloads AS ud
-	WHERE ud.TorrentID = '$TorrentID'
-	ORDER BY ud.Time DESC
+		UserID,
+		Time
+	FROM users_downloads
+	WHERE TorrentID = '$TorrentID'
+	ORDER BY Time DESC
 	LIMIT $Limit");
 $UserIDs = $DB->collect('UserID');
 $Results = $DB->to_array('UserID', MYSQLI_ASSOC);

@@ -34,16 +34,16 @@ if (count($UploadedGroupIDs) === 0) {
 $DB->query("
 	CREATE TEMPORARY TABLE temp_sections_better_upload
 	SELECT
-		t.GroupID,
-		GROUP_CONCAT(t.Encoding SEPARATOR ' ') AS EncodingList,
+		GroupID,
+		GROUP_CONCAT(Encoding SEPARATOR ' ') AS EncodingList,
 		CRC32(CONCAT_WS(
 			' ', Media, Remasteryear, Remastertitle,
 			Remasterrecordlabel, Remastercataloguenumber)
 		) AS RemIdent
-	FROM torrents AS t
-	WHERE t.GroupID IN(".implode(',', $UploadedGroupIDs).")
-		AND t.Format IN ('FLAC', 'MP3')
-	GROUP BY t.GroupID, RemIdent");
+	FROM torrents
+	WHERE GroupID IN (".implode(',', $UploadedGroupIDs).")
+		AND Format IN ('FLAC', 'MP3')
+	GROUP BY GroupID, RemIdent");
 
 $DB->query("
 	SELECT GroupID

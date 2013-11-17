@@ -187,8 +187,8 @@ if ($ConvID = (int)$_GET['id']) {
 			SELECT
 				m.ID,
 				m.Username
-			FROM permissions as p
-				JOIN users_main as m ON m.PermissionID = p.ID
+			FROM permissions AS p
+				JOIN users_main AS m ON m.PermissionID = p.ID
 			WHERE p.DisplayStaff = '1'
 			ORDER BY p.Level DESC, m.Username ASC"
 		);
@@ -206,9 +206,9 @@ if ($ConvID = (int)$_GET['id']) {
 			SELECT
 				m.ID,
 				m.Username
-			FROM users_info as i
-				JOIN users_main as m ON m.ID = i.UserID
-				JOIN permissions as p ON p.ID = m.PermissionID
+			FROM users_info AS i
+				JOIN users_main AS m ON m.ID = i.UserID
+				JOIN permissions AS p ON p.ID = m.PermissionID
 			WHERE p.DisplayStaff != '1'
 				AND i.SupportFor != ''
 			ORDER BY m.Username ASC

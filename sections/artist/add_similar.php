@@ -14,9 +14,9 @@ if (empty($Artist2Name)) {
 }
 
 $DB->query("
-	SELECT ag.ArtistID
-	FROM artists_group AS ag
-	WHERE ag.Name LIKE '$Artist2Name'");
+	SELECT ArtistID
+	FROM artists_group
+	WHERE Name LIKE '$Artist2Name'");
 list($Artist2ID) = $DB->next_record();
 
 if (!empty($Artist2ID)) { // artist was found in the database
@@ -25,7 +25,7 @@ if (!empty($Artist2ID)) { // artist was found in the database
 	$DB->query("
 		SELECT s1.SimilarID
 		FROM artists_similar AS s1
-		JOIN artists_similar AS s2 ON s1.SimilarID = s2.SimilarID
+			JOIN artists_similar AS s2 ON s1.SimilarID = s2.SimilarID
 		WHERE s1.ArtistID = '$Artist1ID'
 			AND s2.ArtistID = '$Artist2ID'");
 	list($SimilarID) = $DB->next_record();

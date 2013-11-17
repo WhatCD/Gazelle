@@ -308,9 +308,9 @@ if (check_paranoia_here('requestsfilled_count') || check_paranoia_here('requests
 
 if (check_paranoia_here('requestsvoted_count') || check_paranoia_here('requestsvoted_bounty')) {
 	$DB->query("
-		SELECT COUNT(rv.RequestID), SUM(rv.Bounty)
-		FROM requests_votes AS rv
-		WHERE rv.UserID = $UserID");
+		SELECT COUNT(RequestID), SUM(Bounty)
+		FROM requests_votes
+		WHERE UserID = $UserID");
 	list($RequestsVoted, $TotalSpent) = $DB->next_record();
 	$DB->query("
 		SELECT COUNT(r.ID), SUM(rv.Bounty)
@@ -334,9 +334,9 @@ if (check_paranoia_here('uploads+')) {
 
 if (check_paranoia_here('artistsadded')) {
 	$DB->query("
-		SELECT COUNT(ta.ArtistID)
-		FROM torrents_artists AS ta
-		WHERE ta.UserID = $UserID");
+		SELECT COUNT(ArtistID)
+		FROM torrents_artists
+		WHERE UserID = $UserID");
 	list($ArtistsAdded) = $DB->next_record();
 } else {
 	$ArtistsAdded = 0;

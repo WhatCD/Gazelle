@@ -26,10 +26,10 @@ $Text = new TEXT;
 $Edits = $Cache->get_value($Type.'_edits_'.$PostID);
 if (!is_array($Edits)) {
 	$DB->query("
-		SELECT ce.EditUser, ce.EditTime, ce.Body
-		FROM comments_edits AS ce
+		SELECT EditUser, EditTime, Body
+		FROM comments_edits
 		WHERE Page = '$Type' AND PostID = $PostID
-		ORDER BY ce.EditTime DESC");
+		ORDER BY EditTime DESC");
 	$Edits = $DB->to_array();
 	$Cache->cache_value($Type.'_edits_'.$PostID, $Edits, 0);
 }

@@ -118,13 +118,13 @@ foreach ($History as $Key => $Values) {
 		$ueQuery = $DB->query("
 					SELECT
 						ue.UserID,
-						Username,
+						um.Username,
 						ue.Time,
 						ue.IP
-					FROM users_history_emails AS ue, users_main
+					FROM users_history_emails AS ue, users_main AS um
 					WHERE ue.Email = '".db_string($Values['Email'])."'
-						AND UserID != $UserID
-						AND ID = UserID");
+						AND ue.UserID != $UserID
+						AND um.ID = ue.UserID");
 		while (list($UserID2, $Time, $IP) = $DB->next_record()) { ?>
 	</tr>
 	<tr>

@@ -33,14 +33,14 @@ list($GroupName) = $DB->next_record(MYSQLI_NUM, false);
 // Get a count of how many groups or requests use this artist ID
 $DB->query("
 	SELECT ag.ArtistID
-	FROM artists_group as ag
+	FROM artists_group AS ag
 		LEFT JOIN requests_artists AS ra ON ag.ArtistID = ra.ArtistID
 	WHERE ra.ArtistID IS NOT NULL
 		AND ag.ArtistID = $ArtistID");
 $ReqCount = $DB->record_count();
 $DB->query("
 	SELECT ag.ArtistID
-	FROM artists_group as ag
+	FROM artists_group AS ag
 		LEFT JOIN torrents_artists AS ta ON ag.ArtistID = ta.ArtistID
 	WHERE ta.ArtistID IS NOT NULL
 		AND ag.ArtistID = $ArtistID");

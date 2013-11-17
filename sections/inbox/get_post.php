@@ -23,7 +23,7 @@ $PostID = $_GET['post'];
 $DB->query("
 	SELECT
 		m.Body
-	FROM pm_messages as m
+	FROM pm_messages AS m
 		JOIN pm_conversations_users AS u ON m.ConvID=u.ConvID
 	WHERE m.ID='$PostID'
 		AND u.UserID=".$LoggedUser['ID']);

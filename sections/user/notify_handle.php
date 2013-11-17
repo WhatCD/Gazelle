@@ -128,10 +128,10 @@ if ($_POST['users'.$FormID]) {
 	}
 
 	$DB->query("
-		SELECT m.ID, m.Paranoia
-		FROM users_main AS m
-		WHERE m.Username IN ('" . implode("', '", $EscapedUsernames) . "')
-			AND m.ID != $LoggedUser[ID]");
+		SELECT ID, Paranoia
+		FROM users_main
+		WHERE Username IN ('" . implode("', '", $EscapedUsernames) . "')
+			AND ID != $LoggedUser[ID]");
 	while (list($UserID, $Paranoia) = $DB->next_record()) {
 		$Paranoia = unserialize($Paranoia);
 		if (!in_array('notifications', $Paranoia)) {

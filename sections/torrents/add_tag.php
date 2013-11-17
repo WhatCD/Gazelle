@@ -24,9 +24,9 @@ foreach ($Tags as $TagName) {
 		$TagName = Misc::get_alias_tag($TagName);
 		// Check DB for tag matching name
 		$DB->query("
-			SELECT t.ID
-			FROM tags AS t
-			WHERE t.Name LIKE '$TagName'");
+			SELECT ID
+			FROM tags
+			WHERE Name LIKE '$TagName'");
 		list($TagID) = $DB->next_record();
 
 		if (!$TagID) { // Tag doesn't exist yet - create tag

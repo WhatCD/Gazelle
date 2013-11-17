@@ -23,7 +23,7 @@ $PostID = $_GET['post'];
 // the right level
 $DB->query("
 	SELECT m.Message, c.Level, c.UserID
-	FROM staff_pm_messages as m
+	FROM staff_pm_messages AS m
 		JOIN staff_pm_conversations AS c ON m.ConvID = c.ID
 	WHERE m.ID = '$PostID'");
 list($Message, $Level, $UserID) = $DB->next_record(MYSQLI_NUM);
