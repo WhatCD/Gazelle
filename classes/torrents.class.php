@@ -516,7 +516,7 @@ class Torrents {
 				Leechers, LogScore, CAST(Scene AS CHAR), CAST(HasLog AS CHAR), CAST(HasCue AS CHAR),
 				CAST(FreeTorrent AS CHAR), Media, Format, Encoding, Description,
 				RemasterYear, RemasterTitle, RemasterRecordLabel, RemasterCatalogueNumber,
-				REPLACE(FileList, '_', ' ') AS FileList, $VoteScore, '".db_string($ArtistName)."'
+				REPLACE(REPLACE(FileList, '_', ' '), '/', ' ') AS FileList, $VoteScore, '".db_string($ArtistName)."'
 			FROM torrents AS t
 				JOIN torrents_group AS g ON g.ID = t.GroupID
 			WHERE g.ID = $GroupID");
