@@ -24,7 +24,8 @@ if ($_POST['id']) {
 				t1.TreePosition,
 				t1.TreeID,
 				t1.TreeLevel,
-				(	SELECT
+				(
+					SELECT
 						t2.TreePosition
 					FROM invite_tree AS t2
 					WHERE t2.TreeID = t1.TreeID
@@ -46,10 +47,10 @@ if ($_POST['id']) {
 			SELECT
 				UserID
 			FROM invite_tree
-			WHERE TreeID=$TreeID
-				AND TreePosition>$TreePosition
-				AND TreePosition<$MaxPosition
-				AND TreeLevel>$TreeLevel
+			WHERE TreeID = $TreeID
+				AND TreePosition > $TreePosition
+				AND TreePosition < $MaxPosition
+				AND TreeLevel > $TreeLevel
 			ORDER BY TreePosition");
 	$BanList = array();
 
@@ -58,20 +59,18 @@ if ($_POST['id']) {
 	}
 
 	foreach ($BanList as $Key => $InviteeID) {
-		if ($_POST['perform'] == 'nothing') {
+		if ($_POST['perform'] === 'nothing') {
 			Tools::update_user_notes($InviteeID, $Comment . "\n\n");
 			$Msg = "Successfully commented on entire invite tree!";
-		}
-		elseif ($_POST['perform'] == 'disable') {
+		} elseif ($_POST['perform'] === 'disable') {
 			Tools::disable_users($InviteeID, $Comment);
 			$Msg = "Successfully banned entire invite tree!";
-		}
-		elseif ($_POST['perform'] == 'inviteprivs') { // DisableInvites =1
+		} elseif ($_POST['perform'] === 'inviteprivs') { // DisableInvites =1
 			Tools::update_user_notes($InviteeID, $Comment . "\n\n");
-			$DB->query("UPDATE
-					users_info
-					SET DisableInvites='1'
-					WHERE UserID='" . $InviteeID . "'");
+			$DB->query("
+				UPDATE users_info
+				SET DisableInvites = '1'
+				WHERE UserID = '$InviteeID'");
 			$Msg = "Successfully removed invite privileges from entire tree!";
 		}
 		else {

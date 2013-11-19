@@ -1,5 +1,5 @@
 <?
-//TODO: Redo html
+//TODO: Redo HTML
 if (!check_perms('admin_manage_permissions')) {
 	error(403);
 }
@@ -14,20 +14,20 @@ list($UserID, $Username, $PermissionID) = array_values(Users::user_info($_REQUES
 $DB->query("
 	SELECT CustomPermissions
 	FROM users_main
-	WHERE ID='$UserID'");
+	WHERE ID = '$UserID'");
 
-list($Customs)=$DB->next_record(MYSQLI_NUM, false);
+list($Customs) = $DB->next_record(MYSQLI_NUM, false);
 
 
 $Defaults = Permissions::get_permissions_for_user($UserID, array());
 
-$Delta=array();
+$Delta = array();
 if (isset($_POST['action'])) {
 	authorize();
 
 	foreach ($PermissionsArray as $Perm => $Explaination) {
-		$Setting = (isset($_POST['perm_'.$Perm])) ? 1 : 0;
-		$Default = (isset($Defaults[$Perm])) ? 1 : 0;
+		$Setting = isset($_POST["perm_$Perm"]) ? 1 : 0;
+		$Default = isset($Defaults[$Perm]) ? 1 : 0;
 		if ($Setting != $Default) {
 			$Delta[$Perm] = $Setting;
 		}
@@ -48,7 +48,7 @@ if (isset($_POST['action'])) {
 	$Delta = unserialize($Customs);
 }
 
-$Permissions = array_merge($Defaults,$Delta);
+$Permissions = array_merge($Defaults, $Delta);
 $MaxCollages = $Customs['MaxCollages'] + $Delta['MaxCollages'];
 
 function display_perm($Key, $Title) {

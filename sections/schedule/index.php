@@ -824,7 +824,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			AND ul.UserID IS NULL
 		GROUP BY um.ID");
 	while (list($Username, $Email) = $DB->next_record()) {
-		$Body = "Hi $Username, \n\nIt has been almost 4 months since you used your account at https://".SSL_SITE_URL.". This is an automated email to inform you that your account will be disabled in 10 days if you do not sign in. ";
+		$Body = "Hi $Username,\n\nIt has been almost 4 months since you used your account at ".site_url().". This is an automated email to inform you that your account will be disabled in 10 days if you do not sign in.";
 		Misc::send_email($Email, 'Your '.SITE_NAME.' account is about to be disabled', $Body);
 	}
 	$DB->query("
@@ -877,7 +877,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$Cache->begin_transaction("user_info_$UserID");
 		$Cache->update_row(false, array('PermissionID' => MEMBER));
 		$Cache->commit_transaction(2592000);
-		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(MEMBER), "You now only meet the requirements for the \"".Users::make_class_string(MEMBER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
+		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(MEMBER), "You now only meet the requirements for the \"".Users::make_class_string(MEMBER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=".site_url()."wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
 	}
 	$DB->query('
 		UPDATE users_main
@@ -898,7 +898,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$Cache->begin_transaction("user_info_$UserID");
 		$Cache->update_row(false, array('PermissionID' => USER));
 		$Cache->commit_transaction(2592000);
-		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(USER), "You now only meet the requirements for the \"".Users::make_class_string(USER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=https://".SSL_SITE_URL."/wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
+		Misc::send_pm($UserID, 0, 'You have been demoted to '.Users::make_class_string(USER), "You now only meet the requirements for the \"".Users::make_class_string(USER)."\" user class.\n\nTo read more about ".SITE_NAME."'s user classes, read [url=".site_url()."wiki.php?action=article&amp;name=userclasses]this wiki article[/url].");
 	}
 	$DB->query('
 		UPDATE users_main
@@ -924,7 +924,8 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$LockIDs = implode(',', $IDs);
 		$DB->query("
 			UPDATE forums_topics
-			SET IsLocked = '1' WHERE ID IN($LockIDs)");
+			SET IsLocked = '1'
+			WHERE ID IN($LockIDs)");
 		sleep(2);
 		$DB->query("
 			DELETE FROM forums_last_read_topics
@@ -1037,7 +1038,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			DELETE FROM artists_similar_votes
 			WHERE SimilarID IN($SimilarIDs)");
 	}
-
 
 
 	// Daily top 10 history.

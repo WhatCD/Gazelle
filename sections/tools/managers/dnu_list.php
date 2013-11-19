@@ -6,15 +6,15 @@ $Title = 'Manage the "Do Not Upload" list';
 
 View::show_header($Title, 'jquery-ui,dnu_list');
 $DB->query("
-			SELECT
-				d.ID,
-				d.Name,
-				d.Comment,
-				d.UserID,
-				d.Time
-			FROM do_not_upload AS d
-				LEFT JOIN users_main AS um ON um.ID=d.UserID
-			ORDER BY d.Sequence");
+	SELECT
+		d.ID,
+		d.Name,
+		d.Comment,
+		d.UserID,
+		d.Time
+	FROM do_not_upload AS d
+		LEFT JOIN users_main AS um ON um.ID = d.UserID
+	ORDER BY d.Sequence");
 	?>
 	<div class="header">
 		<h2><?=($Title)?></h2>
@@ -46,7 +46,7 @@ $DB->query("
 			<td>Submit</td>
 		</tr>
 		<tbody>
-			<?	while (list($ID, $Name, $Comment, $UserID, $DNUTime) = $DB->next_record()) { ?>
+<?	while (list($ID, $Name, $Comment, $UserID, $DNUTime) = $DB->next_record()) { ?>
 			<tr id="item_<?=$ID?>">
 				<form class="manage_form dnu" action="tools.php" method="post">
 					<td>
@@ -68,7 +68,7 @@ $DB->query("
 					</td>
 				</form>
 			</tr>
-			<?	} ?>
+<?	} ?>
 		</tbody>
 	</table>
-	<? View::show_footer(); ?>
+<? View::show_footer(); ?>

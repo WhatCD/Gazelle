@@ -14,8 +14,8 @@ class Forums {
 	public static function get_thread_info($ThreadID, $Return = true, $SelectiveCache = false) {
 		if ((!$ThreadInfo = G::$Cache->get_value('thread_' . $ThreadID . '_info')) || !isset($ThreadInfo['Ranking'])) {
 			$QueryID = G::$DB->get_query_id();
-			G::$DB->query(
-				"SELECT
+			G::$DB->query("
+				SELECT
 					t.Title,
 					t.ForumID,
 					t.IsLocked,
@@ -26,11 +26,11 @@ class Forums {
 					t.StickyPostID,
 					t.AuthorID as OP,
 					t.Ranking
-					FROM forums_topics AS t
-						JOIN forums_posts AS fp ON fp.TopicID = t.ID
-						LEFT JOIN forums_polls AS p ON p.TopicID=t.ID
-					WHERE t.ID = '$ThreadID'
-					GROUP BY fp.TopicID");
+				FROM forums_topics AS t
+					JOIN forums_posts AS fp ON fp.TopicID = t.ID
+					LEFT JOIN forums_polls AS p ON p.TopicID = t.ID
+				WHERE t.ID = '$ThreadID'
+				GROUP BY fp.TopicID");
 			if (!G::$DB->has_results()) {
 				G::$DB->set_query_id($QueryID);
 				return null;
@@ -96,19 +96,20 @@ class Forums {
 	 *        	the forum ID.
 	 */
 	public static function get_forum_info($ForumID) {
-		$Forum = G::$Cache->get_value('ForumInfo_' . $ForumID);
+		$Forum = G::$Cache->get_value("ForumInfo_$ForumID");
 		if (!$Forum) {
 			$QueryID = G::$DB->get_query_id();
-			G::$DB->query("SELECT
+			G::$DB->query("
+				SELECT
 					Name,
 					MinClassRead,
 					MinClassWrite,
 					MinClassCreate,
 					COUNT(forums_topics.ID) AS Topics
-					FROM forums
-					LEFT JOIN forums_topics ON forums_topics.ForumID=forums.ID
-					WHERE forums.ID='$ForumID'
-					GROUP BY ForumID");
+				FROM forums
+					LEFT JOIN forums_topics ON forums_topics.ForumID = forums.ID
+				WHERE forums.ID = '$ForumID'
+				GROUP BY ForumID");
 			if (!G::$DB->has_results()) {
 				return false;
 			}
@@ -117,7 +118,7 @@ class Forums {
 
 			G::$DB->set_query_id($QueryID);
 
-			G::$Cache->cache_value('ForumInfo_' . $ForumID, $Forum, 86400);
+			G::$Cache->cache_value("ForumInfo_$ForumID", $Forum, 86400);
 		}
 		return $Forum;
 	}
@@ -130,7 +131,9 @@ class Forums {
 		$ForumCats = G::$Cache->get_value('forums_categories');
 		if ($ForumCats === false) {
 			$QueryID = G::$DB->get_query_id();
-			G::$DB->query("SELECT ID, Name FROM forums_categories");
+			G::$DB->query("
+				SELECT ID, Name
+				FROM forums_categories");
 			$ForumCats = array();
 			while (list ($ID, $Name) = G::$DB->next_record()) {
 				$ForumCats[$ID] = $Name;
@@ -174,7 +177,9 @@ class Forums {
 				ORDER BY fc.Sort, fc.Name, f.CategoryID, f.Sort");
 			$Forums = G::$DB->to_array('ID', MYSQLI_ASSOC, false);
 
-			G::$DB->query("SELECT ForumID, ThreadID FROM forums_specific_rules");
+			G::$DB->query("
+				SELECT ForumID, ThreadID
+				FROM forums_specific_rules");
 			$SpecificRules = array();
 			while (list($ForumID, $ThreadID) = G::$DB->next_record(MYSQLI_NUM, false)) {
 				$SpecificRules[$ForumID][] = $ThreadID;
@@ -238,11 +243,11 @@ class Forums {
 							FROM forums_posts AS p
 							WHERE p.TopicID = l.TopicID
 								AND p.ID <= l.PostID
-						)/$PerPage
+						) / $PerPage
 					) AS Page
 				FROM forums_last_read_topics AS l
 				WHERE l.TopicID IN(" . implode(',', $TopicIDs) . ") AND
-					l.UserID='" . G::$LoggedUser['ID'] . "'");
+					l.UserID = '" . G::$LoggedUser['ID'] . "'");
 			$LastRead = G::$DB->to_array('TopicID', MYSQLI_ASSOC);
 			G::$DB->set_query_id($QueryID);
 		} else {
@@ -263,7 +268,11 @@ class Forums {
 			$UserID = G::$LoggedUser['ID'];
 		}
 		$QueryID = G::$DB->get_query_id();
-		G::$DB->query("INSERT INTO forums_topic_notes (TopicID, AuthorID, AddedTime, Body) VALUES ($TopicID, $UserID, '" . sqltime() . "', '" . db_string($Note) . "')");
+		G::$DB->query("
+			INSERT INTO forums_topic_notes
+				(TopicID, AuthorID, AddedTime, Body)
+			VALUES
+				($TopicID, $UserID, '" . sqltime() . "', '" . db_string($Note) . "')");
 		G::$DB->set_query_id($QueryID);
 		return (bool)G::$DB->affected_rows();
 	}

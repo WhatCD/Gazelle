@@ -23,21 +23,26 @@ if (empty($_GET['type'])) {
 			if (!check_paranoia('uploads', $User['Paranoia'], $UserClass, $UserID)) {
 				error(403);
 			}
-			$SQL = "WHERE t.UserID='$UserID'";
+			$SQL = "WHERE t.UserID = '$UserID'";
 			$Month = "t.Time";
 			break;
 		case 'snatches':
 			if (!check_paranoia('snatched', $User['Paranoia'], $UserClass, $UserID)) {
 				error(403);
 			}
-			$SQL = "JOIN xbt_snatched AS x ON t.ID=x.fid WHERE x.uid='$UserID'";
+			$SQL = "
+					JOIN xbt_snatched AS x ON t.ID = x.fid
+				WHERE x.uid = '$UserID'";
 			$Month = "FROM_UNIXTIME(x.tstamp)";
 			break;
 		case 'seeding':
 			if (!check_paranoia('seeding', $User['Paranoia'], $UserClass, $UserID)) {
 				error(403);
 			}
-			$SQL = "JOIN xbt_files_users AS xfu ON t.ID = xfu.fid WHERE xfu.uid='$UserID' AND xfu.remaining = 0";
+			$SQL = "
+					JOIN xbt_files_users AS xfu ON t.ID = xfu.fid
+				WHERE xfu.uid = '$UserID'
+					AND xfu.remaining = 0";
 			$Month = "FROM_UNIXTIME(xfu.mtime)";
 			break;
 		default:
@@ -48,16 +53,16 @@ if (empty($_GET['type'])) {
 $DownloadsQ = $DB->query("
 	SELECT
 		t.ID AS TorrentID,
-		DATE_FORMAT($Month,'%Y - %m') AS Month,
+		DATE_FORMAT($Month, '%Y - %m') AS Month,
 		t.GroupID,
 		t.Media,
 		t.Format,
 		t.Encoding,
-		IF(t.RemasterYear=0,tg.Year,t.RemasterYear) AS Year,
+		IF(t.RemasterYear = 0, tg.Year, t.RemasterYear) AS Year,
 		tg.Name,
 		t.Size
 	FROM torrents AS t
-		JOIN torrents_group AS tg ON t.GroupID=tg.ID
+		JOIN torrents_group AS tg ON t.GroupID = tg.ID
 	$SQL
 	GROUP BY TorrentID");
 

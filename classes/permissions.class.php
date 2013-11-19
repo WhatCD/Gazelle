@@ -22,17 +22,17 @@ class Permissions {
 	 * @return array permissions
 	 */
 	public static function get_permissions($PermissionID) {
-		$Permission = G::$Cache->get_value('perm_'.$PermissionID);
+		$Permission = G::$Cache->get_value("perm_$PermissionID");
 		if (empty($Permission)) {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
 				SELECT Level AS Class, `Values` AS Permissions, Secondary, PermittedForums
 				FROM permissions
-				WHERE ID='$PermissionID'");
+				WHERE ID = '$PermissionID'");
 			$Permission = G::$DB->next_record(MYSQLI_ASSOC, array('Permissions'));
 			G::$DB->set_query_id($QueryID);
 			$Permission['Permissions'] = unserialize($Permission['Permissions']);
-			G::$Cache->cache_value('perm_'.$PermissionID, $Permission, 2592000);
+			G::$Cache->cache_value("perm_$PermissionID", $Permission, 2592000);
 		}
 		return $Permission;
 	}

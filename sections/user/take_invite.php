@@ -37,7 +37,7 @@ if ($LoggedUser['RatioWatch']
 $Email = $_POST['email'];
 $Username = $LoggedUser['Username'];
 $SiteName = SITE_NAME;
-$SiteURL = SSL_SITE_URL;
+$SiteURL = site_url();
 $InviteExpires = time_plus(60 * 60 * 24 * 3); // 3 days
 
 //MultiInvite

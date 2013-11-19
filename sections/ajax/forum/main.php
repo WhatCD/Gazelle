@@ -30,7 +30,7 @@ if (!empty($TopicIDs)) {
 			) AS Page
 		FROM forums_last_read_topics AS l
 		WHERE l.TopicID IN(".implode(',', $TopicIDs).")
-			AND l.UserID='$LoggedUser[ID]'");
+			AND l.UserID = '$LoggedUser[ID]'");
 	$LastRead = $DB->to_array('TopicID', MYSQLI_ASSOC);
 } else {
 	$LastRead = array();
@@ -50,7 +50,7 @@ $JsonForums = array();
 foreach ($Forums as $Forum) {
 	list($ForumID, $CategoryID, $ForumName, $ForumDescription, $MinRead, $MinWrite, $MinCreate, $NumTopics, $NumPosts, $LastPostID, $LastAuthorID, $LastTopicID, $LastTime, $SpecificRules, $LastTopic, $Locked, $Sticky) = array_values($Forum);
 	if ($LoggedUser['CustomForums'][$ForumID] != 1
-			&& ($MinRead>$LoggedUser['Class']
+			&& ($MinRead > $LoggedUser['Class']
 			|| array_search($ForumID, $RestrictedForums) !== false)
 	) {
 		continue;

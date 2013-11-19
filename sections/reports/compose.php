@@ -17,7 +17,7 @@ if (!$ToID || !is_number($ToID)) {
 
 $ReportID = $_GET['reportid'];
 $Type = $_GET['type'];
-$ThingID= $_GET['thingid'];
+$ThingID = $_GET['thingid'];
 
 if (!$ReportID || !is_number($ReportID) || !$ThingID || !is_number($ThingID) || !$Type) {
 	error(403);
@@ -30,7 +30,7 @@ if (!empty($LoggedUser['DisablePM']) && !isset($StaffIDs[$ToID])) {
 $DB->query("
 	SELECT Username
 	FROM users_main
-	WHERE ID='$ToID'");
+	WHERE ID = '$ToID'");
 list($ComposeToUsername) = $DB->next_record();
 if (!$ComposeToUsername) {
 	error(404);
@@ -43,7 +43,7 @@ switch ($Type) {
 		$DB->query("
 			SELECT Username
 			FROM users_main
-			WHERE ID=$ThingID");
+			WHERE ID = $ThingID");
 		if (!$DB->has_results()) {
 			$Error = 'No user with the reported ID found';
 		} else {
@@ -57,12 +57,12 @@ switch ($Type) {
 		$DB->query("
 			SELECT Title
 			FROM requests
-			WHERE ID=$ThingID");
+			WHERE ID = $ThingID");
 		if (!$DB->has_results()) {
 			$Error = 'No request with the reported ID found';
 		} else {
 			list($Name) = $DB->next_record();
-			$TypeLink = 'the request [url=https://'.SSL_SITE_URL."/requests.php?action=view&amp;id=$ThingID]".display_str($Name).'[/url]';
+			$TypeLink = 'the request [url='.site_url()."requests.php?action=view&amp;id=$ThingID]".display_str($Name).'[/url]';
 			$Subject = 'Request Report: '.display_str($Name);
 		}
 		break;
@@ -70,12 +70,12 @@ switch ($Type) {
 		$DB->query("
 			SELECT Name
 			FROM collages
-			WHERE ID=$ThingID");
+			WHERE ID = $ThingID");
 		if (!$DB->has_results()) {
 			$Error = 'No collage with the reported ID found';
 		} else {
 			list($Name) = $DB->next_record();
-			$TypeLink = 'the collage [url=https://'.SSL_SITE_URL."/collage.php?id=$ThingID]".display_str($Name).'[/url]';
+			$TypeLink = 'the collage [url='.site_url()."collage.php?id=$ThingID]".display_str($Name).'[/url]';
 			$Subject = 'Collage Report: '.display_str($Name);
 		}
 		break;
@@ -83,12 +83,12 @@ switch ($Type) {
 		$DB->query("
 			SELECT Title
 			FROM forums_topics
-			WHERE ID=$ThingID");
+			WHERE ID = $ThingID");
 		if (!$DB->has_results()) {
 			$Error = 'No forum thread with the reported ID found';
 		} else {
 			list($Title) = $DB->next_record();
-			$TypeLink = 'the forum thread [url=https://'.SSL_SITE_URL."/forums.php?action=viewthread&amp;threadid=$ThingID]".display_str($Title).'[/url]';
+			$TypeLink = 'the forum thread [url='.site_url()."forums.php?action=viewthread&amp;threadid=$ThingID]".display_str($Title).'[/url]';
 			$Subject = 'Forum Thread Report: '.display_str($Title);
 		}
 		break;
@@ -103,7 +103,8 @@ switch ($Type) {
 				p.ID,
 				p.Body,
 				p.TopicID,
-				(	SELECT COUNT(p2.ID)
+				(
+					SELECT COUNT(p2.ID)
 					FROM forums_posts AS p2
 					WHERE p2.TopicID = p.TopicID
 						AND p2.ID <= p.ID
@@ -114,7 +115,7 @@ switch ($Type) {
 			$Error = 'No forum post with the reported ID found';
 		} else {
 			list($PostID, $Body, $TopicID, $PostNum) = $DB->next_record();
-			$TypeLink = 'this [url=https://'.SSL_SITE_URL."/forums.php?action=viewthread&amp;threadid=$TopicID&amp;post=$PostNum#post$PostID]forum post[/url]";
+			$TypeLink = 'this [url='.site_url()."forums.php?action=viewthread&amp;threadid=$TopicID&amp;post=$PostNum#post$PostID]forum post[/url]";
 			$Subject = 'Forum Post Report: Post ID #'.display_str($PostID);
 		}
 		break;
@@ -126,7 +127,7 @@ switch ($Type) {
 		if (!$DB->has_results()) {
 			$Error = 'No comment with the reported ID found';
 		} else {
-			$TypeLink = '[url=https://'.SSL_SITE_URL."/comments.php?action=jump&amp;postid=$ThingID]this comment[/url]";
+			$TypeLink = '[url='.site_url()."comments.php?action=jump&amp;postid=$ThingID]this comment[/url]";
 			$Subject = 'Comment Report: ID #'.display_str($ThingID);
 		}
 		break;

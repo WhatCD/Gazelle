@@ -26,7 +26,7 @@ $DB->query("
 		t.ForumID
 	FROM forums_posts AS p
 		JOIN forums_topics AS t ON p.TopicID = t.ID
-	WHERE p.ID='$PostID'");
+	WHERE p.ID = '$PostID'");
 list($Body, $ForumID) = $DB->next_record(MYSQLI_NUM);
 
 // Is the user allowed to view the post?
