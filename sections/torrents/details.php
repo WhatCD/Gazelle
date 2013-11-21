@@ -169,7 +169,7 @@ View::show_header($Title, 'browse,comments,torrent,bbcode,recommend,cover_art,su
 <?	if ($WikiImage != '') { ?>
 			<p align="center"><img width="100%" src="<?=ImageTools::process($WikiImage, true)?>" alt="<?=$AltName?>" onclick="lightbox.init('<?=ImageTools::process($WikiImage)?>', 220);" /></p>
 <?	} else { ?>
-			<p align="center"><img src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID - 1]?>" alt="<?=$Categories[$GroupCategoryID - 1]?>" class="brackets tooltip" title="<?=$Categories[$GroupCategoryID - 1]?>" width="220" height="220" border="0" /></p>
+			<p align="center"><img width="100%" src="<?=STATIC_SERVER?>common/noartwork/<?=$CategoryIcons[$GroupCategoryID - 1]?>" alt="<?=$Categories[$GroupCategoryID - 1]?>" class="brackets tooltip" title="<?=$Categories[$GroupCategoryID - 1]?>" height="220" border="0" /></p>
 <?
 	}
 $Index++;
