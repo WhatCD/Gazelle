@@ -8,7 +8,7 @@ $Debug = new DEBUG;
 $Cache = NEW CACHE($MemcachedServers); //Load the caching class
 $Enc = NEW CRYPT; //Load the encryption class
 
-$SSL = ($_SERVER['SERVER_PORT'] === '443');
+$SSL = $_SERVER['SERVER_PORT'] === '443';
 
 if (isset($_COOKIE['session'])) {
 	$LoginCookie = $Enc->decrypt($_COOKIE['session']);
@@ -20,15 +20,15 @@ if (isset($LoginCookie)) {
 		die('Not logged in!');
 	}
 
-	if (!$Enabled = $Cache->get_value('enabled_'.$UserID)) {
+	if (!$Enabled = $Cache->get_value("enabled_$UserID")) {
 		require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
-		$DB=NEW DB_MYSQL; //Load the database wrapper
+		$DB = NEW DB_MYSQL; //Load the database wrapper
 		$DB->query("
 			SELECT Enabled
 			FROM users_main
-			WHERE ID='$UserID'");
+			WHERE ID = '$UserID'");
 		list($Enabled) = $DB->next_record();
-		$Cache->cache_value('enabled_'.$UserID, $Enabled, 0);
+		$Cache->cache_value("enabled_$UserID", $Enabled, 0);
 	}
 } else {
 	die('Not logged in!');

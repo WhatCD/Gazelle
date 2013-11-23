@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2013-11-23 by alderaan
+Add a warning message when attempting to delete a personal collage
+
+2013-11-23 by alderaan
+Add collage recovery link to the Staff Toolbox
+
 2013-11-09 by mcnellis
 Set image max-width explicitly for each stylesheet.
 Also added new classes for news_post, blog_post, wiki_article, torrent_comments, request_comments, artist information, and more

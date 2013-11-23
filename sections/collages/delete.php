@@ -6,10 +6,10 @@ if (!is_number($CollageID) || !$CollageID) {
 }
 
 $DB->query("
-	SELECT Name, UserID
+	SELECT Name, CategoryID, UserID
 	FROM collages
 	WHERE ID = '$CollageID'");
-list($Name, $UserID) = $DB->next_record();
+list($Name, $CategoryID, $UserID) = $DB->next_record();
 
 if (!check_perms('site_collages_delete') && $UserID != $LoggedUser['ID']) {
 	error(403);
@@ -27,6 +27,15 @@ View::show_header('Delete collage');
 				<input type="hidden" name="action" value="take_delete" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<input type="hidden" name="collageid" value="<?=$CollageID?>" />
+<?
+if ($CategoryID == 0) {
+?>
+				<div class="alertbar" style="margin-bottom: 1em;">
+					<strong>Warning: This is a personal collage. If you delete this collage, it <em>cannot</em> be recovered!</strong>
+				</div>
+<?
+}
+?>
 				<div class="field_div">
 					<strong>Reason: </strong>
 					<input type="text" name="reason" size="40" />

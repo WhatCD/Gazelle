@@ -6,15 +6,6 @@ $Title = "Bitcoin Donation Balance";
 View::show_header($Title);
 
 $Balance = DonationsBitcoin::get_balance() . ' BTC';
-$BitcoinAddresses = DonationsBitcoin::get_received();
-$Debug->log_var($BitcoinAddresses, 'Bitcoin addresses');
-
-$UserQ = $DB->query("
-	SELECT i.UserID, i.BitcoinAddress
-	FROM users_info AS i
-		JOIN users_main AS m ON m.ID = i.UserID
-	WHERE BitcoinAddress != ''
-	ORDER BY m.Username ASC");
 ?>
 <div class="header">
 	<h2><?=$Title?></h2>
@@ -23,6 +14,20 @@ $UserQ = $DB->query("
 	<div class="header">
 		<h3><?=$Balance?></h3>
 	</div>
+<?
+if (empty($_GET['list'])) {
+?>
+	<a href="?action=<?=$_GET['action']?>&amp;list=1" class="brackets">Show donor list</a>
+<?
+} else {
+	$BitcoinAddresses = DonationsBitcoin::get_received();
+	$DB->query("
+		SELECT i.UserID, i.BitcoinAddress
+		FROM users_info AS i
+			JOIN users_main AS m ON m.ID = i.UserID
+		WHERE BitcoinAddress != ''
+		ORDER BY m.Username ASC");
+?>
 	<table>
 	<tr class="colhead">
 		<th>Username</th>
@@ -30,10 +35,10 @@ $UserQ = $DB->query("
 		<th>Amount</th>
 	</tr>
 <?
-while (list($UserID, $BitcoinAddress) = $DB->next_record(MYSQLI_NUM, false)) {
-	if (!isset($BitcoinAddresses[$BitcoinAddress])) {
-		continue;
-	}
+	while (list($UserID, $BitcoinAddress) = $DB->next_record(MYSQLI_NUM, false)) {
+		if (!isset($BitcoinAddresses[$BitcoinAddress])) {
+			continue;
+		}
 ?>
 	<tr>
 		<td><?=Users::format_username($UserID, true, false, false, false)?></td>
@@ -41,9 +46,11 @@ while (list($UserID, $BitcoinAddress) = $DB->next_record(MYSQLI_NUM, false)) {
 		<td><?=$BitcoinAddresses[$BitcoinAddress]?> BTC</td>
 	</tr>
 <?
-	$DB->set_query_id($UserQ);
-}
+	}
 ?>
 	</table>
+<?
+}
+?>
 </div>
 <? View::show_footer(); ?>

@@ -1,7 +1,6 @@
 <?
 authorize();
 
-
 $CollageID = $_POST['collageid'];
 if (!is_number($CollageID) || !$CollageID) {
 	error(404);
@@ -34,8 +33,12 @@ while (list($GroupID) = $DB->next_record()) {
 
 //Personal collages have CategoryID 0
 if ($CategoryID == 0) {
-	$DB->query("DELETE FROM collages WHERE ID = '$CollageID'");
-	$DB->query("DELETE FROM collages_torrents WHERE CollageID = '$CollageID'");
+	$DB->query("
+		DELETE FROM collages
+		WHERE ID = '$CollageID'");
+	$DB->query("
+		DELETE FROM collages_torrents
+		WHERE CollageID = '$CollageID'");
 	Comments::delete_page('collages', $CollageID);
 } else {
 	$DB->query("

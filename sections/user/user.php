@@ -175,7 +175,9 @@ View::show_header($Username, "jquery.imagesloaded,jquery.wookmark,user,bbcode,re
 
 ?>
 <div class="thin">
-	<h2><?=Users::format_username($UserID, true, true, true, false, true)?></h2>
+	<div class="header">
+		<h2><?=Users::format_username($UserID, true, true, true, false, true)?></h2>
+	</div>
 	<div class="linkbox">
 <?
 if (!$OwnProfile) {

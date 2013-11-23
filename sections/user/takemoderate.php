@@ -244,6 +244,7 @@ if ($_POST['ResetSnatchList'] && check_perms('users_edit_reset_keys')) {
 		DELETE FROM xbt_snatched
 		WHERE uid = '$UserID'");
 	$EditSummary[] = 'Snatch list cleared';
+	$Cache->delete_value("recent_snatches_$UserID");
 }
 
 if ($_POST['ResetDownloadList'] && check_perms('users_edit_reset_keys')) {

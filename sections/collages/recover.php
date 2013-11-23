@@ -35,7 +35,7 @@ View::show_header('Collage recovery!');
 				<input type="hidden" name="action" value="recover" />
 				<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 				<div class="field_div">
-					<strong>ID: </strong>
+					<strong>Collage ID: </strong>
 					<input type="text" name="collage_id" size="8" />
 				</div>
 				<div class="submit_div">
@@ -45,5 +45,5 @@ View::show_header('Collage recovery!');
 		</div>
 	</div>
 </div>
-<? View::show_footer();
-
+<?
+View::show_footer();

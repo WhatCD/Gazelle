@@ -133,7 +133,7 @@ pre {
 	display: none;
 }
 
-form textarea,form input {
+form textarea, form input {
 	max-width: 100%;
 }
 
@@ -152,7 +152,7 @@ strong.important_text_alt {
 	font-weight: bold;
 }
 
-.invalid,.warning,.error,.new {
+.invalid, .warning, .error, .new {
 	color: #ff0000;
 }
 
