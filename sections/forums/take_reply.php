@@ -43,7 +43,7 @@ if ($_POST['body'] === '' || !isset($_POST['body'])) {
 $Body = $_POST['body'];
 
 if (!empty($LoggedUser['DisablePosting'])) {
-	error('Your posting privileges have been removed');
+	error('Your posting privileges have been removed.');
 }
 
 $TopicID = $_POST['thread'];

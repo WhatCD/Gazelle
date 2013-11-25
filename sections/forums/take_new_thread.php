@@ -38,7 +38,7 @@ if (empty($_POST['body']) || empty($_POST['title'])) {
 $Body = $_POST['body'];
 
 if ($LoggedUser['DisablePosting']) {
-	error('Your posting privileges have been removed');
+	error('Your posting privileges have been removed.');
 }
 
 $Title = Format::cut_string(trim($_POST['title']), 150, 1, 0);

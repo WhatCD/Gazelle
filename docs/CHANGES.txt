@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2013-11-25 by alderaan
+Add a [Check private flag] button for torrents. Uncomment its HTML to use it. Note: Torrent files must be encoded in a certain way in the DB for this to work.
+
 2013-11-23 by alderaan
 Add a warning message when attempting to delete a personal collage
 

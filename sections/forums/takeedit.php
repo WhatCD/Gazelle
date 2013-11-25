@@ -24,6 +24,10 @@ if (!$_POST['post'] || !is_number($_POST['post']) || !is_number($_POST['key'])) 
 }
 // End injection check
 
+if ($LoggedUser['DisablePosting']) {
+	error('Your posting privileges have been removed.');
+}
+
 // Variables for database input
 $UserID = $LoggedUser['ID'];
 $Body = $_POST['body']; //Don't URL Decode

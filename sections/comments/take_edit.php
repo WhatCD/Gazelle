@@ -8,6 +8,10 @@ if (!isset($_POST['postid']) || !is_number($_POST['postid']) || !isset($_POST['b
 	error(0);
 }
 
+if ($LoggedUser['DisablePosting']) {
+	error('Your posting privileges have been removed.');
+}
+
 Comments::edit((int)$_POST['postid'], $_POST['body']);
 
 // This gets sent to the browser, which echoes it in place of the old body
