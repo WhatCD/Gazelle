@@ -152,12 +152,15 @@ $Results = $DB->to_array();
 	</div>
 	<div class="two_columns pad">
 <?
+
+	$TrashForumIDs = '12';
+
 	$DB->query("
 		SELECT u.Username,
 			COUNT(f.LastPostAuthorID) as Trashed
 		FROM forums_topics AS f
 			LEFT JOIN users_main AS u ON u.ID = f.LastPostAuthorID
-		WHERE f.ForumID = 12
+		WHERE f.ForumID IN ($TrashForumIDs)
 		GROUP BY f.LastPostAuthorID
 		ORDER BY Trashed DESC
 		LIMIT 30");
