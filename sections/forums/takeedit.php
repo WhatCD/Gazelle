@@ -75,10 +75,10 @@ if (!$DB->has_results()) {
 
 // Send a PM to the user to notify them of the edit
 if ($UserID != $AuthorID && $DoPM) {
-	$PMSubject = 'Your post #'.$PostID.' has been edited';
-	$PMurl = 'https://'.SSL_SITE_URL.'/forums.php?action=viewthread&postid='.$PostID.'#post'.$PostID;
-	$ProfLink = '[url=https://'.SSL_SITE_URL.'/user.php?id='.$UserID.']'.$LoggedUser['Username'].'[/url]';
-	$PMBody = 'One of your posts has been edited by '.$ProfLink.': [url]'.$PMurl.'[/url]';
+	$PMSubject = "Your post #$PostID has been edited";
+	$PMurl = site_url()."forums.php?action=viewthread&postid=$PostID#post$PostID";
+	$ProfLink = '[url='.site_url()."user.php?id=$UserID]".$LoggedUser['Username'].'[/url]';
+	$PMBody = "One of your posts has been edited by $ProfLink: [url]{$PMurl}[/url]";
 	Misc::send_pm($AuthorID, 0, $PMSubject, $PMBody);
 }
 

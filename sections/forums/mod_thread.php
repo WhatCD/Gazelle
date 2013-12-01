@@ -370,11 +370,11 @@ if (isset($_POST['delete'])) {
 				$TopicNotes[] = "Ranking changed from \"$OldRanking\" to \"$Ranking\"";
 			}
 			if ($ForumID != $OldForumID) {
-				$TopicNotes[] = "Moved from [url=https://" . SSL_SITE_URL . "/forums.php?action=viewforum&forumid=$OldForumID]${OldForumName}[/url] to [url=https://" . SSL_SITE_URL . "/forums.php?action=viewforum&forumid=$ForumID]${ForumName}[/url]";
+				$TopicNotes[] = "Moved from [url=" . site_url() . "forums.php?action=viewforum&forumid=$OldForumID]{$OldForumName}[/url] to [url=" . site_url() . "forums.php?action=viewforum&forumid=$ForumID]{$ForumName}[/url]";
 			}
 			break;
 		case 'trashing':
-			$TopicNotes[] = "Trashed (moved from [url=https://" . SSL_SITE_URL . "/forums.php?action=viewforum&forumid=$OldForumID]${OldForumName}[/url] to [url=https://" . SSL_SITE_URL . "/forums.php?action=viewforum&forumid=$ForumID]${ForumName}[/url])";
+			$TopicNotes[] = "Trashed (moved from [url=" . site_url() . "forums.php?action=viewforum&forumid=$OldForumID]{$OldForumName}[/url] to [url=" . site_url() . "forums.php?action=viewforum&forumid=$ForumID]{$ForumName}[/url])";
 			$Notification = "Your thread \"$NewLastTitle\" has been trashed";
 			break;
 		default:

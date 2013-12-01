@@ -8,11 +8,10 @@ $Text = new TEXT;
 
 list($Page, $Limit) = Format::page_limit(POSTS_PER_PAGE);
 
-if ((isset($_GET['type']) && $_GET['type'] == 'body')) {
+if (isset($_GET['type']) && $_GET['type'] === 'body') {
 	$Type = 'body';
 } else {
-	$Type='title';
-
+	$Type = 'title';
 }
 
 // What are we looking for? Let's make sure it isn't dangerous.
@@ -24,8 +23,8 @@ if (isset($_GET['search'])) {
 
 $ThreadAfterDate = db_string($_GET['thread_created_after']);
 $ThreadBeforeDate = db_string($_GET['thread_created_before']);
-$ThreadAfterDateDisplay = "";
-$ThreadBeforeDateDisplay = "";
+$ThreadAfterDateDisplay = '';
+$ThreadBeforeDateDisplay = '';
 
 if (!empty($ThreadAfterDate) && !is_date($ThreadAfterDate)) {
 	error('Incorrect topic after date format');
@@ -40,8 +39,8 @@ if (!empty($ThreadBeforeDate) && !is_date($ThreadBeforeDate)) {
 
 $PostAfterDate = db_string($_GET['post_created_after']);
 $PostBeforeDate = db_string($_GET['post_created_before']);
-$PostAfterDateDisplay = "";
-$PostBeforeDateDisplay = "";
+$PostAfterDateDisplay = '';
+$PostBeforeDateDisplay = '';
 
 if (!empty($PostAfterDate) && !is_date($PostAfterDate)) {
 	error('Incorrect post after date format');
@@ -139,7 +138,8 @@ View::show_header('Forums &gt; Search', 'bbcode,forum_search');
 				</td>
 			</tr>
 <?
-if (empty($ThreadID)) { ?>
+if (empty($ThreadID)) {
+?>
 			<tr>
 				<td><strong>Search in:</strong></td>
 				<td>
@@ -161,10 +161,11 @@ if (empty($ThreadID)) { ?>
 			<tr>
 				<td><strong>Forums:</strong></td>
 				<td>
-		<table class="cat_list layout">
+		<table id="forum_search_cat_list" class="cat_list layout">
 
 
-<?	// List of forums
+<?
+	// List of forums
 	$Open = false;
 	$LastCategoryID = -1;
 	$Columns = 0;

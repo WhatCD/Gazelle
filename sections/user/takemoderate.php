@@ -364,7 +364,7 @@ if ($Title != db_string($Cur['Title']) && check_perms('users_edit_titles')) {
 		die();
 	} else {
 		$UpdateSet[] = "Title = '$Title'";
-		$EditSummary[] = "title changed to $Title";
+		$EditSummary[] = "title changed to [code]{$Title}[/code]";
 		$LightUpdates['Title'] = $_POST['Title'];
 	}
 }

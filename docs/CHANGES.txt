@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2013-12-01 by alderaan
+Fix some CSS issues in the forum search category list for Anorex, Layer Cake, Kuro, and Whatnificent
+
+2013-11-30 by alderaan
+For staff notes, wrap custom titles in [code] BBcode tags
+
 2013-11-25 by alderaan
 Add a [Check private flag] button for torrents. Uncomment its HTML to use it. Note: Torrent files must be encoded in a certain way in the DB for this to work.
 

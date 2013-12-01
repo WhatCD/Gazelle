@@ -886,3 +886,7 @@ div.sidebar #event_div {
 ol {
 	margin-left: 1em;
 }
+
+#forum_search_cat_list {
+	border: none;
+}
