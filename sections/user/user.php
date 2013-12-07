@@ -469,7 +469,8 @@ if (!empty($UserInfo['ExtraClasses'])) {
 				<li>
 					<ul class="stats">
 <?
-	foreach ($UserInfo['ExtraClasses'] as $PermID => $Val) { ?>
+	foreach ($UserInfo['ExtraClasses'] as $PermID => $Val) {
+		?>
 						<li><?=$Classes[$PermID]['Name']?></li>
 <?	} ?>
 					</ul>

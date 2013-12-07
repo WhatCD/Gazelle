@@ -42,7 +42,7 @@ if (empty($Notify) && !$DB->has_results()) {
 	$Cache->delete_value('notify_artists_'.$LoggedUser['ID']);
 } else {
 	list($ID, $ArtistNames) = $DB->next_record(MYSQLI_NUM, FALSE);
-	if (stripos($ArtistNames, $ArtistAliases) === false) {
+	if (stripos($ArtistNames, "|$ArtistAliases|") === false) {
 		$ArtistNames .= "$ArtistAliases|";
 		$DB->query("
 			UPDATE users_notify_filters
