@@ -568,6 +568,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		WHERE NumTorrents = '0'");
 
 	// Get each user's amount of snatches of existing torrents
+	$DB->query("TRUNCATE TABLE users_torrent_history_snatch");
 	$DB->query("
 		INSERT INTO users_torrent_history_snatch (UserID, NumSnatches)
 		SELECT xs.uid, COUNT(DISTINCT xs.fid)

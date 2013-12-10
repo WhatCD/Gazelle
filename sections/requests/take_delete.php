@@ -53,6 +53,7 @@ foreach ($RequestArtists as $RequestArtist) {
 $DB->query("
 	DELETE FROM requests_artists
 	WHERE RequestID = '$RequestID'");
+$Cache->delete_value("request_artists_$RequestID");
 
 if ($UserID != $LoggedUser['ID']) {
 	Misc::send_pm($UserID, 0, 'A request you created has been deleted', "The request \"$FullName\" was deleted by [url=https://".SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].']'.$LoggedUser['Username'].'[/url] for the reason: '.$_POST['reason']);

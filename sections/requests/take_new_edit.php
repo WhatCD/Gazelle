@@ -480,15 +480,17 @@ if ($CategoryName === 'Music') {
 		$DB->query("
 			DELETE FROM requests_artists
 			WHERE RequestID = $RequestID");
+		$Cache->delete_value("request_artists_$RequestID");
 	}
 
 	if ($CategoryName === 'Audiobooks' || $CategoryName === 'Comedy') {
 		//These types require a year field.
 		if ($NewRequest) {
-			$DB->query("INSERT INTO requests (
-							UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, Visible, OCLC)
-						VALUES
-							(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', $CategoryID, '".db_string($Title)."', $Year, '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
+			$DB->query("
+				INSERT INTO requests (
+					UserID, TimeAdded, LastVote, CategoryID, Title, Year, Image, Description, Visible, OCLC)
+				VALUES
+					(".$LoggedUser['ID'].", '".sqltime()."', '".sqltime()."', $CategoryID, '".db_string($Title)."', $Year, '".db_string($Image)."', '".db_string($Description)."', '1', '".db_string($OCLC)."')");
 
 			$RequestID = $DB->inserted_id();
 

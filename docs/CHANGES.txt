@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2013-12-10 by alderaan
+Clear cache key "request_artists_$RequestID" in two missed places
+
+2013-12-10 by alderaan
+Refactor ignored log file name code (e.g. for "audiochecker.log" and friends)
+
 2013-12-01 by alderaan
 Fix some CSS issues in the forum search category list for Anorex, Layer Cake, Kuro, and Whatnificent
 

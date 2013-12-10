@@ -390,11 +390,12 @@ $HasCue = 0;
 $TmpFileList = array();
 $TooLongPaths = array();
 $DirName = (isset($Tor->Dec['info']['files']) ? Format::make_utf8($Tor->get_name()) : '');
+$IgnoredLogFileNames = array('audiochecker.log', 'sox.log');
 check_name($DirName); // check the folder name against the blacklist
 foreach ($FileList as $File) {
 	list($Size, $Name) = $File;
 	// add +log to encoding
-	if ($T['Encoding'] == "'Lossless'" && preg_match('/(?<!audiochecker)\.log$/i', $Name)) {
+	if ($T['Encoding'] == "'Lossless'" && !in_array($Name, $IgnoredLogFileNames)) {
 		$HasLog = 1;
 	}
 	// add +cue to encoding
