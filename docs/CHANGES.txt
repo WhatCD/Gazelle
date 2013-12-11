@@ -1,6 +1,9 @@
 CHANGE LOG
 
 2013-12-10 by alderaan
+Fix bug that would assign the "Log" flag to torrents that shouldn't have it
+
+2013-12-10 by alderaan
 Clear cache key "request_artists_$RequestID" in two missed places
 
 2013-12-10 by alderaan

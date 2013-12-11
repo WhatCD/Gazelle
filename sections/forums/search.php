@@ -243,7 +243,8 @@ if ($Type == 'body') {
 			f.Name,
 			p.AddedTime,
 			p.ID,
-			p.Body
+			p.Body,
+			t.CreatedTime
 		FROM forums_posts AS p
 			JOIN forums_topics AS t ON t.ID=p.TopicID
 			JOIN forums AS f ON f.ID=t.ForumID
