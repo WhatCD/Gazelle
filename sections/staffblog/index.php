@@ -15,8 +15,6 @@ $DB->query("
 $Cache->delete_value('staff_blog_read_'.$LoggedUser['ID']);
 
 define('ANNOUNCEMENT_FORUM_ID', 19);
-require(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
 
 if (check_perms('admin_manage_blog')) {
 	if (!empty($_REQUEST['action'])) {
@@ -145,7 +143,7 @@ foreach ($Blog as $BlogItem) {
 <?			} ?>
 				</div>
 				<div class="pad">
-					<?=$Text->full_format($Body)?>
+					<?=Text::full_format($Body)?>
 				</div>
 			</div>
 <?

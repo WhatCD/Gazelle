@@ -97,7 +97,6 @@ class DonationsView {
 	}
 
 	public static function render_profile_rewards($EnabledRewards, $ProfileRewards) {
-		$Text = new Text;
 		for ($i = 1; $i <= 4; $i++) {
 			if (isset($EnabledRewards['HasProfileInfo' . $i]) && $ProfileRewards['ProfileInfo' . $i]) {
 ?>
@@ -107,7 +106,7 @@ class DonationsView {
 					<span style="float: right;"><a href="#" onclick="$('#profilediv_<?=$i?>').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>
 				</div>
 				<div class="pad profileinfo" id="profilediv_<?=$i?>">
-<?					echo $Text->full_format($ProfileRewards['ProfileInfo' . $i]); ?>
+<?					echo Text::full_format($ProfileRewards['ProfileInfo' . $i]); ?>
 				</div>
 			</div>
 <?

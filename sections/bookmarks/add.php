@@ -1,6 +1,5 @@
 <?
 include(SERVER_ROOT.'/classes/feed.class.php'); // RSS feeds
-include(SERVER_ROOT.'/classes/text.class.php'); // strip_bbcode
 
 authorize();
 
@@ -8,7 +7,6 @@ if (!Bookmarks::can_bookmark($_GET['type'])) {
 	error(404);
 }
 $Feed = new FEED;
-$Text = new TEXT;
 
 $Type = $_GET['type'];
 
@@ -86,7 +84,7 @@ if (!$DB->has_results()) {
 
 			$UploaderInfo = Users::user_info($UploaderID);
 			$Item = $Feed->item($Title,
-								$Text->strip_bbcode($Body),
+								Text::strip_bbcode($Body),
 								'torrents.php?action=download&amp;authkey=[[AUTHKEY]]&amp;torrent_pass=[[PASSKEY]]&amp;id='.$TorrentID,
 								$UploaderInfo['Username'],
 								"torrents.php?id=$PageID",

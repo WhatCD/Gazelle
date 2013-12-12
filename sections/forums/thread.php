@@ -11,10 +11,8 @@ Things to expect in $_GET:
 
 //---------- Things to sort out before it can start printing/generating content
 
-
-include(SERVER_ROOT.'/classes/text.class.php');
-
-$Text = new TEXT(true);
+// Enable TOC
+Text::$TOC = true;
 
 // Check for lame SQL injection attempts
 if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
@@ -508,7 +506,7 @@ foreach ($Thread as $Key => $Post) {
 <?	} ?>
 		<td class="body" valign="top"<? if (!Users::has_avatars_enabled()) { echo ' colspan="2"'; } ?>>
 			<div id="content<?=$PostID?>">
-				<?=$Text->full_format($Body) ?>
+				<?=Text::full_format($Body) ?>
 <?	if ($EditedUserID) { ?>
 				<br />
 				<br />
@@ -561,7 +559,7 @@ if (check_perms('site_moderate_forums')) {
 <?
 	foreach ($Notes as $Note) {
 ?>
-			<tr><td><?=Users::format_username($Note['AuthorID'])?> (<?=time_diff($Note['AddedTime'], 2, true, true)?>)</td><td><?=$Text->full_format($Note['Body'])?></td></tr>
+			<tr><td><?=Users::format_username($Note['AuthorID'])?> (<?=time_diff($Note['AddedTime'], 2, true, true)?>)</td><td><?=Text::full_format($Note['Body'])?></td></tr>
 <?
 	}
 ?>

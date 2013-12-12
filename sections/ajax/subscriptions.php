@@ -7,9 +7,6 @@ if (!empty($LoggedUser['DisableForums'])) {
 	json_die('failure');
 }
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];
 } else {

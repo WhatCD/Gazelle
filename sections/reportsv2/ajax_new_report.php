@@ -9,9 +9,6 @@ if (!check_perms('admin_reports')) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = NEW TEXT;
-
 
 $DB->query("
 	SELECT
@@ -227,7 +224,7 @@ $DB->query("
 				$Links = explode(' ', $Links);
 				foreach ($Links as $Link) {
 
-					if ($local_url = $Text->local_url($Link)) {
+					if ($local_url = Text::local_url($Link)) {
 						$Link = $local_url;
 					} ?>
 							<a href="<?=$Link?>"><?=$Link?></a>
@@ -325,7 +322,7 @@ $DB->query("
 			} ?>
 					<tr>
 						<td class="label">User comment:</td>
-						<td colspan="3"><?=$Text->full_format($UserComment)?></td>
+						<td colspan="3"><?=Text::full_format($UserComment)?></td>
 					</tr>
 <?					// END REPORTED STUFF :|: BEGIN MOD STUFF ?>
 					<tr>

@@ -14,7 +14,6 @@ ini_set('max_file_uploads', 100);
 define(MAX_FILENAME_LENGTH, 180);
 include(SERVER_ROOT.'/classes/validate.class.php');
 include(SERVER_ROOT.'/classes/feed.class.php');
-include(SERVER_ROOT.'/classes/text.class.php');
 include(SERVER_ROOT.'/sections/torrents/functions.php');
 include(SERVER_ROOT.'/classes/file_checker.class.php');
 
@@ -24,7 +23,6 @@ authorize();
 
 $Validate = new VALIDATE;
 $Feed = new FEED;
-$Text = new TEXT;
 
 define('QUERY_EXCEPTION', true); // Shut up debugging
 
@@ -851,7 +849,7 @@ if (!$IsNewGroup) {
 }
 
 // For RSS
-$Item = $Feed->item($Title, $Text->strip_bbcode($Body), 'torrents.php?action=download&amp;authkey=[[AUTHKEY]]&amp;torrent_pass=[[PASSKEY]]&amp;id='.$TorrentID, $LoggedUser['Username'], 'torrents.php?id='.$GroupID, trim($Properties['TagList']));
+$Item = $Feed->item($Title, Text::strip_bbcode($Body), 'torrents.php?action=download&amp;authkey=[[AUTHKEY]]&amp;torrent_pass=[[PASSKEY]]&amp;id='.$TorrentID, $LoggedUser['Username'], 'torrents.php?id='.$GroupID, trim($Properties['TagList']));
 
 
 //Notifications

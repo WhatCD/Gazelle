@@ -1,6 +1,5 @@
 <?
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT(true);
+Text::$TOC = true;
 
 G::$DB->query("
 		SELECT
@@ -56,7 +55,7 @@ View::show_header('Popular Questions', 'questions,bbcode');
 				</span>
 			</div>
 			<div class="pad">
-<?=				$Text->full_format($Question['Question'])?>
+<?=				Text::full_format($Question['Question'])?>
 			</div>
 		</div>
 <?	} ?>

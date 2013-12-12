@@ -10,9 +10,6 @@ Things to expect in $_GET:
 
 //---------- Things to sort out before it can start printing/generating content
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 // Check for lame SQL injection attempts
 if (!is_number($_GET['collageid'])) {
 	error(0);

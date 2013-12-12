@@ -3,8 +3,6 @@ enforce_login();
 
 define('ANNOUNCEMENT_FORUM_ID', 19);
 View::show_header('Blog','bbcode');
-require(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
 
 if (check_perms('admin_manage_blog')) {
 	if (!empty($_REQUEST['action'])) {
@@ -182,7 +180,7 @@ foreach ($Blog as $BlogItem) {
 <?	} ?>
 		</div>
 		<div class="pad">
-					<?=$Text->full_format($Body)?>
+					<?=Text::full_format($Body)?>
 <?	if ($ThreadID) { ?>
 			<br /><br />
 			<em><a href="forums.php?action=viewthread&amp;threadid=<?=$ThreadID?>">Discuss this post here</a></em>

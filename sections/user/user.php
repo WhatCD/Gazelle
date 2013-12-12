@@ -1,8 +1,4 @@
 <?
-
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 if (empty($_GET['id']) || !is_numeric($_GET['id']) || (!empty($_GET['preview']) && !is_numeric($_GET['preview']))) {
 	error(404);
 }
@@ -589,7 +585,7 @@ if (!$Info) {
 				This profile is currently empty.
 <?
 } else {
-	echo $Text->full_format($Info);
+	echo Text::full_format($Info);
 }
 ?>
 			</div>
@@ -940,7 +936,7 @@ if ($LoggedUser['Class'] == 650 && check_perms('users_warn', $Class)) {
 <div class="box">
 	<div class="head">Forum warnings</div>
 	<div class="pad">
-		<div id="forumwarningslinks" class="AdminComment" style="width: 98%;"><?=$Text->full_format($ForumWarnings)?></div>
+		<div id="forumwarningslinks" class="AdminComment" style="width: 98%;"><?=Text::full_format($ForumWarnings)?></div>
 	</div>
 </div>
 <?
@@ -960,7 +956,7 @@ if (check_perms('users_mod', $Class)) { ?>
 			</div>
 			<div id="staffnotes" class="pad">
 				<input type="hidden" name="comment_hash" value="<?=$CommentHash?>" />
-				<div id="admincommentlinks" class="AdminComment" style="width: 98%;"><?=$Text->full_format($AdminComment)?></div>
+				<div id="admincommentlinks" class="AdminComment" style="width: 98%;"><?=Text::full_format($AdminComment)?></div>
 				<textarea id="admincomment" onkeyup="resize('admincomment');" class="AdminComment hidden" name="AdminComment" cols="65" rows="26" style="width: 98%;"><?=display_str($AdminComment)?></textarea>
 				<a href="#" name="admincommentbutton" onclick="ChangeTo('text'); return false;" class="brackets">Toggle edit</a>
 				<script type="text/javascript">

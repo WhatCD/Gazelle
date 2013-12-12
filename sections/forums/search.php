@@ -3,8 +3,6 @@
 /*
 Forums search result page
 */
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
 
 list($Page, $Limit) = Format::page_limit(POSTS_PER_PAGE);
 
@@ -370,7 +368,7 @@ while (list($ID, $Title, $ForumID, $ForumName, $LastTime, $PostID, $Body, $Threa
 		</tr>
 <?	if ($Type == 'body') { ?>
 		<tr class="row<?=$Row?> hidden" id="post_<?=$PostID?>_text">
-			<td colspan="4"><?=$Text->full_format($Body)?></td>
+			<td colspan="4"><?=Text::full_format($Body)?></td>
 		</tr>
 <?	}
 }

@@ -4,9 +4,6 @@ function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 if (!empty($_GET['artistreleases'])) {
 	$OnlyArtistReleases = true;
 }
@@ -347,7 +344,7 @@ json_die("success", array(
 	'notificationsEnabled' => $notificationsEnabled,
 	'hasBookmarked' => Bookmarks::has_bookmarked('artist', $ArtistID),
 	'image' => $Image,
-	'body' => $Text->full_format($Body),
+	'body' => Text::full_format($Body),
 	'vanityHouse' => $VanityHouseArtist == 1,
 	'tags' => array_values($Tags),
 	'similarArtists' => $JsonSimilar,

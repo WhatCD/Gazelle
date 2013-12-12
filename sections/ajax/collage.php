@@ -4,7 +4,6 @@ if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	json_die("failure", "bad parameters");
 }
 $CollageID = $_GET['id'];
-$Text = new TEXT;
 
 $CacheKey = "collage_$CollageID";
 $CollageData = $Cache->get_value($CacheKey);
@@ -43,7 +42,7 @@ $TorrentGroups = $DB->collect('GroupID');
 $JSON = array(
 	'id'                  => (int)$CollageID,
 	'name'                => $Name,
-	'description'         => $Text->full_format($Description),
+	'description'         => Text::full_format($Description),
 	'creatorID'           => (int)$CreatorID,
 	'deleted'             => (bool)$Deleted,
 	'collageCategoryID'   => (int)$CollageCategoryID,

@@ -1,7 +1,5 @@
 <?
-include(SERVER_ROOT . '/classes/text.class.php');
 include(SERVER_ROOT . '/classes/alias.class.php');
-$Text = new TEXT(true);
 $Alias = new ALIAS;
 
 
@@ -26,7 +24,8 @@ if ($Read > $LoggedUser['EffectiveClass']) {
 	json_die("failure", "higher user class required to view article");
 }
 
-$TextBody = $Text->full_format($Body, false);
+Text::$TOC = true;
+$TextBody = Text::full_format($Body, false);
 
 json_die("success", array(
 	'title' => $Title,
@@ -38,4 +37,3 @@ json_die("success", array(
 	'date' => $Date,
 	'revision' => (int)$Revision
 ));
-?>

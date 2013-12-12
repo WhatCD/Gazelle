@@ -13,9 +13,7 @@ if (!check_perms('admin_reports')) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/classes/text.class.php');
 include(SERVER_ROOT.'/classes/reports.class.php');
-$Text = NEW TEXT;
 
 define('REPORTS_PER_PAGE', '10');
 list($Page, $Limit) = Format::page_limit(REPORTS_PER_PAGE);
@@ -404,7 +402,7 @@ if (count($Reports) === 0) {
 				$Links = explode(' ', $Links);
 				foreach ($Links as $Link) {
 
-					if ($local_url = $Text->local_url($Link)) {
+					if ($local_url = Text::local_url($Link)) {
 						$Link = $local_url;
 					}
 ?>
@@ -504,7 +502,7 @@ if (count($Reports) === 0) {
 			} ?>
 				<tr>
 					<td class="label">User comment:</td>
-					<td colspan="3" class="wrap_overflow"><?=$Text->full_format($UserComment)?></td>
+					<td colspan="3" class="wrap_overflow"><?=Text::full_format($UserComment)?></td>
 				</tr>
 <?						// END REPORTED STUFF :|: BEGIN MOD STUFF
 			if ($Status == 'InProgress') { ?>

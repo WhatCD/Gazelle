@@ -1,8 +1,4 @@
 <?php
-
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
 	json_die("failure", "bad id parameter");
 }
@@ -312,7 +308,7 @@ json_die("success", array(
 	'username' => $Username,
 	'avatar' => $Avatar,
 	'isFriend' => $Friend,
-	'profileText' => $Text->full_format($Info),
+	'profileText' => Text::full_format($Info),
 	'stats' => array(
 		'joinedDate' => $JoinDate,
 		'lastAccess' => $LastAccess,

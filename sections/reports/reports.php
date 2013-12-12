@@ -7,8 +7,6 @@ if (!check_perms('admin_reports') && !check_perms('project_team') && !check_perm
 
 // Number of reports per page
 define('REPORTS_PER_PAGE', '10');
-include(SERVER_ROOT . '/classes/text.class.php');
-$Text = NEW TEXT;
 
 list($Page, $Limit) = Format::page_limit(REPORTS_PER_PAGE);
 
@@ -200,7 +198,7 @@ $DB->set_query_id($Reports);
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2"><?=$Text->full_format($Reason)?></td>
+					<td colspan="2"><?=Text::full_format($Reason)?></td>
 				</tr>
 				<tr>
 					<td colspan="2">

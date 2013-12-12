@@ -7,7 +7,6 @@ if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	error(0);
 }
 $CollageID = $_GET['id'];
-$Text = new TEXT;
 
 $CollageData = $Cache->get_value("collage_$CollageID");
 if ($CollageData) {

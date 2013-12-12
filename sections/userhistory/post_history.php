@@ -7,9 +7,6 @@ if (!empty($LoggedUser['DisableForums'])) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 $UserID = empty($_GET['userid']) ? $LoggedUser['ID'] : $_GET['userid'];
 if (!is_number($UserID)) {
 	error(0);
@@ -268,7 +265,7 @@ if (empty($Results)) {
 <?	} ?>
 			<td class="body" valign="top">
 				<div id="content<?=$PostID?>">
-					<?=$Text->full_format($Body)?>
+					<?=Text::full_format($Body)?>
 <?			if ($EditedUserID) { ?>
 					<br />
 					<br />

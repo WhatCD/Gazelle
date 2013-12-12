@@ -1,6 +1,4 @@
 <?
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
 
 if ($ConvID = (int)$_GET['id']) {
 	// Get conversation info
@@ -99,7 +97,7 @@ if ($ConvID = (int)$_GET['id']) {
 				- <a href="#quickpost" onclick="Quote('<?=$MessageID?>', '<?=$Username?>');" class="brackets">Quote</a>
 <?		} ?>
 			</div>
-			<div class="body"><?=$Text->full_format($Message)?></div>
+			<div class="body"><?=Text::full_format($Message)?></div>
 		</div>
 		<div align="center" style="display: none;"></div>
 <?

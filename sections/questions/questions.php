@@ -2,8 +2,7 @@
 if (!check_perms("users_mod")) {
 	error(404);
 }
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT(true);
+Text::$TOC = true;
 
 $DB->query("
 		SELECT
@@ -78,7 +77,7 @@ View::show_header('Ask the Staff', 'questions,bbcode');
 			</span>
 		</div>
 		<div class="pad">
-			<?=$Text->full_format($Question['Question'])?>
+			<?=Text::full_format($Question['Question'])?>
 		</div>
 	</div>
 	<div id="answer<?=$Question['ID']?>" class="hidden center box pad">

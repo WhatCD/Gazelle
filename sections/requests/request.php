@@ -4,10 +4,6 @@
  * This is the page that displays the request to the end user after being created.
  */
 
-include(SERVER_ROOT.'/classes/text.class.php');
-
-$Text = new TEXT;
-
 if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	error(0);
 }
@@ -439,7 +435,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 		<div class="box box2 box_request_desc">
 			<div class="head"><strong>Description</strong></div>
 			<div class="pad">
-<?=				$Text->full_format($Request['Description']);?>
+<?=				Text::full_format($Request['Description']);?>
 			</div>
 		</div>
 <?

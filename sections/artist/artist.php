@@ -6,9 +6,6 @@ function compare($X, $Y) {
 	return($Y['count'] - $X['count']);
 }
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 // Similar Artist Map
 include(SERVER_ROOT.'/classes/artists_similar.class.php');
 
@@ -943,7 +940,7 @@ function require(file, callback) {
 				<strong>Artist Information</strong>
 				<a href="#" class="brackets" onclick="$('#body').gtoggle(); return false;">Toggle</a>
 			</div>
-			<div id="body" class="body"><?=$Text->full_format($Body)?></div>
+			<div id="body" class="body"><?=Text::full_format($Body)?></div>
 		</div>
 <?
 if (defined('LASTFM_API_KEY')) {

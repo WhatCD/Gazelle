@@ -1,7 +1,4 @@
 <?
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
-
 if (!$News = $Cache->get_value('news')) {
 	$DB->query("
 		SELECT
@@ -52,7 +49,7 @@ for ($i = 0; $i < 5; $i++) {
 		'author' => $Author,
 		'title' => $Title,
 		'bbBody' => $Body,
-		'body' => $Text->full_format($Body),
+		'body' => Text::full_format($Body),
 		'blogTime' => $BlogTime,
 		'threadId' => (int)$ThreadID
 	);
@@ -70,7 +67,7 @@ foreach ($News as $NewsItem) {
 		'newsId' => (int)$NewsID,
 		'title' => $Title,
 		'bbBody' => $Body,
-		'body' => $Text->full_format($Body),
+		'body' => Text::full_format($Body),
 		'newsTime' => $NewsTime
 	);
 
@@ -83,5 +80,3 @@ json_die("success", array(
 	'announcements' => $JsonAnnouncements,
 	'blogPosts' => $JsonBlog
 ));
-
-?>

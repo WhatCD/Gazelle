@@ -77,11 +77,6 @@ if (!empty($ArtistForm)) {
 require(SERVER_ROOT.'/classes/torrent_form.class.php');
 $TorrentForm = new TORRENT_FORM($Properties, $Err);
 
-if (!isset($Text)) {
-	include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-	$Text = new TEXT;
-}
-
 $GenreTags = $Cache->get_value('genre_tags');
 if (!$GenreTags) {
 	$DB->query("
@@ -129,12 +124,12 @@ $HideDNU = check_perms('torrents_hide_dnu') && !$NewDNU;
 ?>
 		<tr>
 			<td>
-				<?=$Text->full_format($Name) . "\n" ?>
+				<?=Text::full_format($Name) . "\n" ?>
 <?		if ($TimeDiff < strtotime($Updated)) { ?>
 				<strong class="important_text">(New!)</strong>
 <?		} ?>
 			</td>
-			<td><?=$Text->full_format($Comment)?></td>
+			<td><?=Text::full_format($Comment)?></td>
 		</tr>
 <? } ?>
 	</table>

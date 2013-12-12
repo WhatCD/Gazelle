@@ -15,9 +15,6 @@ It will be accompanied with:
 
 \*********************************************************************/
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 // Quick SQL injection check
 if (!$_POST['post'] || !is_number($_POST['post']) || !is_number($_POST['key'])) {
 	error(0,true);
@@ -126,6 +123,6 @@ $DB->query("
 		('forums', $PostID, $UserID, '$SQLTime', '".db_string($OldBody)."')");
 $Cache->delete_value("forums_edits_$PostID");
 // This gets sent to the browser, which echoes it in place of the old body
-echo $Text->full_format($Body);
+echo Text::full_format($Body);
 ?>
 <br /><br />Last edited by <a href="user.php?id=<?=$LoggedUser['ID']?>"><?=$LoggedUser['Username']?></a> Just now

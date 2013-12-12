@@ -45,8 +45,6 @@ if (md5($User.RSS_HASH.$_GET['passkey']) != $_GET['auth'] || $Enabled != 1) {
 $Feed->open_feed();
 switch ($_GET['feed']) {
 	case 'feed_news':
-		include(SERVER_ROOT.'/classes/text.class.php');
-		$Text = new TEXT;
 		$Feed->channel('News', 'RSS feed for site news.');
 		if (!$News = $Cache->get_value('news')) {
 			require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
@@ -69,15 +67,13 @@ switch ($_GET['feed']) {
 			if (strtotime($NewsTime) >= time()) {
 				continue;
 			}
-			echo $Feed->item($Title, $Text->strip_bbcode($Body), "index.php#news$NewsID", SITE_NAME.' Staff', '', '', $NewsTime);
+			echo $Feed->item($Title, Text::strip_bbcode($Body), "index.php#news$NewsID", SITE_NAME.' Staff', '', '', $NewsTime);
 			if (++$Count > 4) {
 				break;
 			}
 		}
 		break;
 	case 'feed_blog':
-		include(SERVER_ROOT.'/classes/text.class.php');
-		$Text = new TEXT;
 		$Feed->channel('Blog', 'RSS feed for site blog.');
 		if (!$Blog = $Cache->get_value('blog')) {
 			require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
@@ -100,9 +96,9 @@ switch ($_GET['feed']) {
 		foreach ($Blog as $BlogItem) {
 			list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
 			if ($ThreadID) {
-				echo $Feed->item($Title, $Text->strip_bbcode($Body), 'forums.php?action=viewthread&amp;threadid='.$ThreadID, SITE_NAME.' Staff', '', '', $BlogTime);
+				echo $Feed->item($Title, Text::strip_bbcode($Body), 'forums.php?action=viewthread&amp;threadid='.$ThreadID, SITE_NAME.' Staff', '', '', $BlogTime);
 			} else {
-				echo $Feed->item($Title, $Text->strip_bbcode($Body), "blog.php#blog$BlogID", SITE_NAME.' Staff', '', '', $BlogTime);
+				echo $Feed->item($Title, Text::strip_bbcode($Body), "blog.php#blog$BlogID", SITE_NAME.' Staff', '', '', $BlogTime);
 			}
 		}
 		break;

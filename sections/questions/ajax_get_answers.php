@@ -3,7 +3,7 @@ $ID = (int)$_GET['id'];
 if (empty($ID)) {
 	die();
 }
-$Text = new TEXT(true);
+Text::$TOC = true;
 $UserID = (int)$_GET['userid'];
 $UserIDSQL = "";
 if (!empty($UserID)) {
@@ -27,7 +27,7 @@ foreach($Answers as $Answer) {
 			</span>
 		</div>
 		<div class="pad">
-<?=			$Text->full_format($Answer['Answer'])?>
+<?=			Text::full_format($Answer['Answer'])?>
 		</div>
 	</div>
 <?

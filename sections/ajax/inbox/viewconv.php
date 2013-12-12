@@ -1,7 +1,4 @@
 <?
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
-
 $ConvID = $_GET['id'];
 if (!$ConvID || !is_number($ConvID)) {
 	print json_encode(array('status' => 'failure'));
@@ -88,7 +85,7 @@ while (list($SentDate, $SenderID, $Body, $MessageID) = $DB->next_record()) {
 		'sentDate' => $SentDate,
 		'avatar' => $Users[(int)$SenderID]['Avatar'],
 		'bbBody' => $Body,
-		'body' => $Text->full_format($Body)
+		'body' => Text::full_format($Body)
 	);
 	$JsonMessages[] = $JsonMessage;
 }

@@ -6,9 +6,6 @@ if (!($IsFLS)) {
 
 View::show_header('Staff PMs', 'staffpm');
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 ?>
 <div class="thin">
 	<div class="header">
@@ -80,7 +77,7 @@ while (list($ID, $Message, $Name) = $DB->next_record()) {
 				</div>
 				<div class="pad">
 					<div class="box pad hidden" id="response_div_<?=$ID?>">
-						<?=$Text->full_format($Message)?>
+						<?=Text::full_format($Message)?>
 					</div>
 					<textarea rows="10" cols="87" id="response_message_<?=$ID?>" name="message"><?=display_str($Message)?></textarea>
 					<br />

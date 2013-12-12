@@ -1,9 +1,5 @@
 <?
-
 authorize();
-
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
 
 // Quick SQL injection check
 if (!$_REQUEST['groupid'] || !is_number($_REQUEST['groupid'])) {

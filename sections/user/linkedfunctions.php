@@ -1,8 +1,4 @@
 <?
-
-include_once(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-
-
 function link_users($UserID, $TargetID) {
 	global $DB, $LoggedUser;
 
@@ -127,7 +123,7 @@ function delete_dupegroup($GroupID) {
 }
 
 function dupe_comments($GroupID, $Comments) {
-	global $DB, $Text, $LoggedUser;
+	global $DB, $LoggedUser;
 
 	authorize();
 	if (!check_perms('users_mod')) {
@@ -167,7 +163,6 @@ function dupe_comments($GroupID, $Comments) {
 
 function user_dupes_table($UserID) {
 	global $DB, $LoggedUser;
-	$Text = new TEXT;
 
 	if (!check_perms('users_mod')) {
 		error(403);
@@ -234,7 +229,7 @@ function user_dupes_table($UserID) {
 					</tr>
 					<tr>
 						<td colspan="5" align="left">
-							<div id="dupecomments" class="<?=($DupeCount ? '' : 'hidden')?>"><?=$Text->full_format($Comments);?></div>
+							<div id="dupecomments" class="<?=($DupeCount ? '' : 'hidden')?>"><?=Text::full_format($Comments);?></div>
 							<div id="editdupecomments" class="<?=($DupeCount ? 'hidden' : '')?>">
 								<textarea name="dupecomments" onkeyup="resize('dupecommentsbox');" id="dupecommentsbox" cols="65" rows="5" style="width: 98%;"><?=display_str($Comments)?></textarea>
 							</div>

@@ -13,9 +13,6 @@
  *     If missing or invalid, this defaults to the comments one made
  */
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 // User ID
 if (isset($_GET['id']) && is_number($_GET['id'])) {
 	$UserID = (int)$_GET['id'];

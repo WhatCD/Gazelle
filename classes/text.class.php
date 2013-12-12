@@ -1,10 +1,17 @@
 <?
-class TEXT {
-	// tag=>max number of attributes
-	private $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'headline'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0, 'torrent'=>0, 'rule'=>0, 'mature'=>1,
+class Text {
+	/**
+	 * Array of valid tags; tag => max number of attributes
+	 * @var array $ValidTags
+	 */
+	private static $ValidTags = array('b'=>0, 'u'=>0, 'i'=>0, 's'=>0, '*'=>0, '#'=>0, 'artist'=>0, 'user'=>0, 'n'=>0, 'inlineurl'=>0, 'inlinesize'=>1, 'headline'=>1, 'align'=>1, 'color'=>1, 'colour'=>1, 'size'=>1, 'url'=>1, 'img'=>1, 'quote'=>1, 'pre'=>1, 'code'=>1, 'tex'=>0, 'hide'=>1, 'plain'=>0, 'important'=>0, 'torrent'=>0, 'rule'=>0, 'mature'=>1,
 	);
 
-	private $Smileys = array(
+	/**
+	 * Array of smilies; code => image file in STATIC_SERVER/common/smileys
+	 * @var array $Smileys
+	 */
+	private static $Smileys = array(
 		':angry:'			=> 'angry.gif',
 		':-D'				=> 'biggrin.gif',
 		':D'				=> 'biggrin.gif',
@@ -53,22 +60,40 @@ class TEXT {
 		':wub:'				=> 'wub.gif',
 	);
 
-	private $NoImg = 0; // If images should be turned into URLs
+	/**
+	 * Processed version of the $Smileys array, see {@link smileys}
+	 * @var array $ProcessedSmileys
+	 */
+	private static $ProcessedSmileys = array();
 
-	private $Levels = 0;
+	/**
+	 * Whether or not to turn images into URLs (used inside [quote] tags).
+	 * This is an integer reflecting the number of levels we're doing that
+	 * transition, i.e. images will only be displayed as images if $NoImg <= 0.
+	 * By setting this variable to a negative number you can delay the
+	 * transition to a deeper level of quotes.
+	 * @var int $NoImg
+	 */
+	private static $NoImg = 0;
+
+	/**
+	 * Internal counter for the level of recursion in to_html
+	 * @var int $Levels
+	 */
+	private static $Levels = 0;
 
 	/**
 	 * The maximum amount of nesting allowed (exclusive)
 	 * In reality n-1 nests are shown.
 	 * @var int $MaximumNests
 	 */
-	private $MaximumNests = 10;
+	private static $MaximumNests = 10;
 
 	/**
 	 * Used to detect and disable parsing (e.g. TOC) within quotes
 	 * @var int $InQuotes
 	 */
-	private $InQuotes = 0;
+	private static $InQuotes = 0;
 
 	/**
 	 * Used to [hide] quote trains starting with the specified depth (inclusive)
@@ -79,42 +104,31 @@ class TEXT {
 	 * effectively overrides this variable, if $MaximumNests is less than the value
 	 * of $NestsBeforeHide.
 	 */
-	private $NestsBeforeHide = 10;
+	private static $NestsBeforeHide = 10;
 
 	/**
 	 * Array of headlines for Table Of Contents (TOC)
 	 * @var array $HeadLines
 	 */
-	private $Headlines;
+	private static $Headlines;
 
 	/**
 	 * Counter for making headline URLs unique
 	 * @var int $HeadLines
 	 */
-	private $HeadlineID = 0;
+	private static $HeadlineID = 0;
 
 	/**
 	 * Depth
 	 * @var array $HeadlineLevels
 	 */
-	private $HeadlineLevels = array('1', '2', '3', '4');
+	private static $HeadlineLevels = array('1', '2', '3', '4');
 
 	/**
 	 * TOC enabler
 	 * @var bool $TOC
 	 */
-	private $TOC;
-
-	/**
-	 * @param bool $TOC When used, will enabled TOC
-	 */
-	public function __construct ($TOC = false) {
-		$this->TOC = (boolean)$TOC;
-		foreach ($this->Smileys as $Key=>$Val) {
-			$this->Smileys[$Key] = '<img border="0" src="'.STATIC_SERVER.'common/smileys/'.$Val.'" alt="" />';
-		}
-		reset($this->Smileys);
-	}
+	public static $TOC = false;
 
 	/**
 	 * Output BBCode as XHTML
@@ -123,9 +137,9 @@ class TEXT {
 	 * @param int $Min See {@link parse_toc}
 	 * @return string
 	 */
-	public function full_format ($Str, $OutputTOC = true, $Min = 3) {
+	public static function full_format($Str, $OutputTOC = true, $Min = 3) {
 		$Str = display_str($Str);
-		$this->Headlines = array();
+		self::$Headlines = array();
 
 		//Inline links
 		$URLPrefix = '(\[url\]|\[url\=|\[img\=|\[img\])';
@@ -135,7 +149,7 @@ class TEXT {
 		$callback = create_function('$matches', 'return str_replace("[inlineurl]", "", $matches[0]);');
 		$Str = preg_replace_callback('/(?<=\[inlineurl\]|'.$URLPrefix.')(\S*\[inlineurl\]\S*)/m', $callback, $Str);
 
-		if ($this->TOC) {
+		if (self::$TOC) {
 			$Str = preg_replace('/(\={5})([^=].*)\1/i', '[headline=4]$2[/headline]', $Str);
 			$Str = preg_replace('/(\={4})([^=].*)\1/i', '[headline=3]$2[/headline]', $Str);
 			$Str = preg_replace('/(\={3})([^=].*)\1/i', '[headline=2]$2[/headline]', $Str);
@@ -146,34 +160,26 @@ class TEXT {
 			$Str = preg_replace('/(\={2})([^=].*)\1/i', '[inlinesize=7]$2[/inlinesize]', $Str);
 		}
 
-		$Str = $this->parse($Str);
+		$HTML = nl2br(self::to_html(self::parse($Str)));
 
-		$HTML = $this->to_html($Str);
-
-		$HTML = nl2br($HTML);
-
-		if ($this->TOC && $OutputTOC)
-			$HTML = $this->parse_toc($Min) . $HTML;
+		if (self::$TOC && $OutputTOC) {
+			$HTML = self::parse_toc($Min) . $HTML;
+		}
 
 		return $HTML;
 	}
 
-	public function strip_bbcode ($Str) {
+	public static function strip_bbcode($Str) {
 		$Str = display_str($Str);
 
 		//Inline links
 		$Str = preg_replace('/(?<!(\[url\]|\[url\=|\[img\=|\[img\]))http(s)?:\/\//i', '$1[inlineurl]http$2://', $Str);
 
-		$Str = $this->parse($Str);
-
-		$Str = $this->raw_text($Str);
-
-		$Str = nl2br($Str);
-		return $Str;
+		return nl2br(self::raw_text(self::parse($Str)));
 	}
 
 
-	private function valid_url ($Str, $Extension = '', $Inline = false) {
+	private static function valid_url($Str, $Extension = '', $Inline = false) {
 		$Regex = '/^';
 		$Regex .= '(https?|ftps?|irc):\/\/'; // protocol
 		$Regex .= '(\w+(:\w+)?@)?'; // user:pass@
@@ -201,7 +207,7 @@ class TEXT {
 		return preg_match($Regex, $Str, $Matches);
 	}
 
-	public function local_url($Str) {
+	public static function local_url($Str) {
 		$URLInfo = parse_url($Str);
 		if (!$URLInfo) {
 			return false;
@@ -242,7 +248,7 @@ class TEXT {
 		1b) If the next tag isn't where the pointer is, write everything up to there to a text block.
 	2) See if it's a [[wiki-link]] or an ordinary tag, and get the tag name
 	3) If it's not a wiki link:
-		3a) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
+		3a) check it against the self::$ValidTags array to see if it's actually a tag and not [bullshit]
 			If it's [not a tag], just leave it as plaintext and move on
 		3b) Get the attribute, if it exists [name=attribute]
 	4) Move the pointer past the end of the tag
@@ -266,7 +272,7 @@ class TEXT {
 	7) Increment array pointer, start again (past the end of the [/close] tag)
 
 	*/
-	private function parse ($Str) {
+	private static function parse($Str) {
 		$i = 0; // Pointer to keep track of where we are in $Str
 		$Len = strlen($Str);
 		$Array = array();
@@ -303,15 +309,15 @@ class TEXT {
 				$WikiLink = false;
 				$TagName = strtolower(substr($Tag[2][0], 1));
 
-				//3a) check it against the $this->ValidTags array to see if it's actually a tag and not [bullshit]
-				if (!isset($this->ValidTags[$TagName])) {
+				//3a) check it against the self::$ValidTags array to see if it's actually a tag and not [bullshit]
+				if (!isset(self::$ValidTags[$TagName])) {
 					$Array[$ArrayPos] = substr($Str, $i, ($TagPos - $i) + strlen($Tag[0][0]));
 					$i = $TagPos + strlen($Tag[0][0]);
 					++$ArrayPos;
 					continue;
 				}
 
-				$MaxAttribs = $this->ValidTags[$TagName];
+				$MaxAttribs = self::$ValidTags[$TagName];
 
 				// 3b) Get the attribute, if it exists [name=attribute]
 				if (!empty($Tag[3][0])) {
@@ -424,11 +430,11 @@ class TEXT {
 					if (empty($Attrib)) { // [url]http://...[/url] - always set URL to attribute
 						$Array[$ArrayPos] = array('Type'=>'url', 'Attr'=>$Block, 'Val'=>'');
 					} else {
-						$Array[$ArrayPos] = array('Type'=>'url', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
+						$Array[$ArrayPos] = array('Type'=>'url', 'Attr'=>$Attrib, 'Val'=>self::parse($Block));
 					}
 					break;
 				case 'quote':
-					$Array[$ArrayPos] = array('Type'=>'quote', 'Attr'=>$this->Parse($Attrib), 'Val'=>$this->parse($Block));
+					$Array[$ArrayPos] = array('Type'=>'quote', 'Attr'=>self::parse($Attrib), 'Val'=>self::parse($Block));
 					break;
 				case 'img':
 				case 'image':
@@ -484,10 +490,10 @@ class TEXT {
 					$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>$Block);
 					break;
 				case 'hide':
-					$Array[$ArrayPos] = array('Type'=>'hide', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
+					$Array[$ArrayPos] = array('Type'=>'hide', 'Attr'=>$Attrib, 'Val'=>self::parse($Block));
 					break;
 				case 'mature':
-					$Array[$ArrayPos] = array('Type'=>'mature', 'Attr'=>$Attrib, 'Val'=>$this->parse($Block));
+					$Array[$ArrayPos] = array('Type'=>'mature', 'Attr'=>$Attrib, 'Val'=>self::parse($Block));
 					break;
 				case '#':
 				case '*':
@@ -496,7 +502,7 @@ class TEXT {
 						$Array[$ArrayPos]['ListType'] = $TagName === '*' ? 'ul' : 'ol';
 						$Array[$ArrayPos]['Tag'] = $TagName;
 						foreach ($Array[$ArrayPos]['Val'] as $Key=>$Val) {
-							$Array[$ArrayPos]['Val'][$Key] = $this->parse(trim($Val));
+							$Array[$ArrayPos]['Val'][$Key] = self::parse(trim($Val));
 						}
 					break;
 				case 'n':
@@ -509,7 +515,7 @@ class TEXT {
 
 						// Basic tags, like [b] or [size=5]
 
-						$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>$this->parse($Block));
+						$Array[$ArrayPos] = array('Type'=>$TagName, 'Val'=>self::parse($Block));
 						if (!empty($Attrib) && $MaxAttribs > 0) {
 							$Array[$ArrayPos]['Attr'] = strtolower($Attrib);
 						}
@@ -525,19 +531,19 @@ class TEXT {
 	 * Generates a navigation list for TOC
 	 * @param int $Min Minimum number of headlines required for a TOC list
 	 */
-	public function parse_toc ($Min = 3) {
-		if (count($this->Headlines) > $Min) {
+	public static function parse_toc ($Min = 3) {
+		if (count(self::$Headlines) > $Min) {
 			$list = '<ol class="navigation_list">';
 			$i = 0;
 			$level = 0;
 			$off = 0;
 
-			foreach ($this->Headlines as $t) {
+			foreach (self::$Headlines as $t) {
 				$n = (int)$t[0];
 				if ($i === 0 && $n > 1) {
 					$off = $n - $level;
 				}
-				$this->headline_level($n, $level, $list, $i, $off);
+				self::headline_level($n, $level, $list, $i, $off);
 				$list .= sprintf('<li><a href="#%2$s">%1$s</a>', $t[1], $t[2]);
 				$level = $t[0];
 				$off = 0;
@@ -568,7 +574,7 @@ class TEXT {
 	 * @param int $i Iterator digit
 	 * @param int $Offset If the list doesn't start at level 1
 	 */
-	private function headline_level (&$ItemLevel, &$Level, &$List, $i, &$Offset) {
+	private static function headline_level (&$ItemLevel, &$Level, &$List, $i, &$Offset) {
 		if ($ItemLevel < $Level) {
 			$diff = $Level - $ItemLevel;
 			$List .= '</li>' . str_repeat('</ol></li>', $diff);
@@ -585,9 +591,9 @@ class TEXT {
 		}
 	}
 
-	private function to_html ($Array) {
+	private static function to_html ($Array) {
 		global $SSL;
-		$this->Levels++;
+		self::$Levels++;
 		/*
 		 * Hax prevention
 		 * That's the original comment on this.
@@ -601,31 +607,31 @@ class TEXT {
 		 * tags should always be limiting ahead of this line.
 		 * (Larger than vs. smaller than.)
 		 */
-		if ($this->Levels > $this->MaximumNests) {
+		if (self::$Levels > self::$MaximumNests) {
 			return $Block['Val']; // Hax prevention, breaks upon exceeding nests.
 		}
 		$Str = '';
 		foreach ($Array as $Block) {
 			if (is_string($Block)) {
-				$Str .= $this->smileys($Block);
+				$Str .= self::smileys($Block);
 				continue;
 			}
-			if ($this->Levels < $this->MaximumNests) {
+			if (self::$Levels < self::$MaximumNests) {
 			switch ($Block['Type']) {
 				case 'b':
-					$Str .= '<strong>'.$this->to_html($Block['Val']).'</strong>';
+					$Str .= '<strong>'.self::to_html($Block['Val']).'</strong>';
 					break;
 				case 'u':
-					$Str .= '<span style="text-decoration: underline;">'.$this->to_html($Block['Val']).'</span>';
+					$Str .= '<span style="text-decoration: underline;">'.self::to_html($Block['Val']).'</span>';
 					break;
 				case 'i':
-					$Str .= '<span style="font-style: italic;">'.$this->to_html($Block['Val'])."</span>";
+					$Str .= '<span style="font-style: italic;">'.self::to_html($Block['Val'])."</span>";
 					break;
 				case 's':
-					$Str .= '<span style="text-decoration: line-through;">'.$this->to_html($Block['Val']).'</span>';
+					$Str .= '<span style="text-decoration: line-through;">'.self::to_html($Block['Val']).'</span>';
 					break;
 				case 'important':
-					$Str .= '<strong class="important_text">'.$this->to_html($Block['Val']).'</strong>';
+					$Str .= '<strong class="important_text">'.self::to_html($Block['Val']).'</strong>';
 					break;
 				case 'user':
 					$Str .= '<a href="user.php?action=search&amp;search='.urlencode($Block['Val']).'">'.$Block['Val'].'</a>';
@@ -677,60 +683,60 @@ class TEXT {
 					$Str .= "<$Block[ListType] class=\"postlist\">";
 					foreach ($Block['Val'] as $Line) {
 
-						$Str .= '<li>'.$this->to_html($Line).'</li>';
+						$Str .= '<li>'.self::to_html($Line).'</li>';
 					}
 					$Str .= '</'.$Block['ListType'].'>';
 					break;
 				case 'align':
 					$ValidAttribs = array('left', 'center', 'right');
 					if (!in_array($Block['Attr'], $ValidAttribs)) {
-						$Str .= '[align='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/align]';
+						$Str .= '[align='.$Block['Attr'].']'.self::to_html($Block['Val']).'[/align]';
 					} else {
-						$Str .= '<div style="text-align: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</div>';
+						$Str .= '<div style="text-align: '.$Block['Attr'].';">'.self::to_html($Block['Val']).'</div>';
 					}
 					break;
 				case 'color':
 				case 'colour':
 					$ValidAttribs = array('aqua', 'black', 'blue', 'fuchsia', 'green', 'grey', 'lime', 'maroon', 'navy', 'olive', 'purple', 'red', 'silver', 'teal', 'white', 'yellow');
 					if (!in_array($Block['Attr'], $ValidAttribs) && !preg_match('/^#[0-9a-f]{6}$/', $Block['Attr'])) {
-						$Str .= '[color='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/color]';
+						$Str .= '[color='.$Block['Attr'].']'.self::to_html($Block['Val']).'[/color]';
 					} else {
-						$Str .= '<span style="color: '.$Block['Attr'].';">'.$this->to_html($Block['Val']).'</span>';
+						$Str .= '<span style="color: '.$Block['Attr'].';">'.self::to_html($Block['Val']).'</span>';
 					}
 					break;
 				case 'headline':
-					$text = $this->to_html($Block['Val']);
-					$raw = $this->raw_text($Block['Val']);
-					if (!in_array($Block['Attr'], $this->HeadlineLevels)) {
+					$text = self::to_html($Block['Val']);
+					$raw = self::raw_text($Block['Val']);
+					if (!in_array($Block['Attr'], self::$HeadlineLevels)) {
 						$Str .= sprintf('%1$s%2$s%1$s', str_repeat('=', $Block['Attr'] + 1), $text);
 					} else {
-						$id = '_' . crc32($raw . $this->HeadlineID);
-						if ($this->InQuotes === 0) {
-							$this->Headlines[] = array($Block['Attr'], $raw, $id);
+						$id = '_' . crc32($raw . self::$HeadlineID);
+						if (self::$InQuotes === 0) {
+							self::$Headlines[] = array($Block['Attr'], $raw, $id);
 						}
 
 						$Str .= sprintf('<h%1$d id="%3$s">%2$s</h%1$d>', ($Block['Attr'] + 2), $text, $id);
-						$this->HeadlineID++;
+						self::$HeadlineID++;
 					}
 					break;
 				case 'inlinesize':
 				case 'size':
 					$ValidAttribs = array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');
 					if (!in_array($Block['Attr'], $ValidAttribs)) {
-						$Str .= '[size='.$Block['Attr'].']'.$this->to_html($Block['Val']).'[/size]';
+						$Str .= '[size='.$Block['Attr'].']'.self::to_html($Block['Val']).'[/size]';
 					} else {
-						$Str .= '<span class="size'.$Block['Attr'].'">'.$this->to_html($Block['Val']).'</span>';
+						$Str .= '<span class="size'.$Block['Attr'].'">'.self::to_html($Block['Val']).'</span>';
 					}
 					break;
 				case 'quote':
-					$this->NoImg++; // No images inside quote tags
-					$this->InQuotes++;
-					if ($this->InQuotes == $this->NestsBeforeHide) { //Put quotes that are nested beyond the specified limit in [hide] tags.
+					self::$NoImg++; // No images inside quote tags
+					self::$InQuotes++;
+					if (self::$InQuotes == self::$NestsBeforeHide) { //Put quotes that are nested beyond the specified limit in [hide] tags.
 						$Str .= '<strong>Older quotes</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
 						$Str .= '<blockquote class="hidden spoiler">';
 					}
 					if (!empty($Block['Attr'])) {
-						$Exploded = explode('|', $this->to_html($Block['Attr']));
+						$Exploded = explode('|', self::to_html($Block['Attr']));
 						if (isset($Exploded[1]) && (is_numeric($Exploded[1]) || (in_array($Exploded[1][0], array('a', 't', 'c', 'r')) && is_numeric(substr($Exploded[1], 1))))) {
 							// the part after | is either a number or starts with a, t, c or r, followed by a number (forum post, artist comment, torrent comment, collage comment or request comment, respectively)
 							$PostID = trim($Exploded[1]);
@@ -740,22 +746,22 @@ class TEXT {
 							$Str .= '<strong class="quoteheader">'.$Exploded[0].'</strong> wrote: ';
 						}
 					}
-					$Str .= '<blockquote>'.$this->to_html($Block['Val']).'</blockquote>';
-					if ($this->InQuotes == $this->NestsBeforeHide) { //Close quote the deeply nested quote [hide].
+					$Str .= '<blockquote>'.self::to_html($Block['Val']).'</blockquote>';
+					if (self::$InQuotes == self::$NestsBeforeHide) { //Close quote the deeply nested quote [hide].
 						$Str .= '</blockquote><br />'; // Ensure new line after quote train hiding
 					}
-					$this->NoImg--;
-					$this->InQuotes--;
+					self::$NoImg--;
+					self::$InQuotes--;
 					break;
 				case 'hide':
 					$Str .= '<strong>'.(($Block['Attr']) ? $Block['Attr'] : 'Hidden text').'</strong>: <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
-					$Str .= '<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
+					$Str .= '<blockquote class="hidden spoiler">'.self::to_html($Block['Val']).'</blockquote>';
 					break;
 				case 'mature':
 					if (G::$LoggedUser['EnableMatureContent']) {
 						if (!empty($Block['Attr'])) {
 							$Str .= '<strong class="mature" style="font-size: 1.2em;">Mature content:</strong><strong> ' . $Block['Attr'] . '</strong><br /> <a href="javascript:void(0);" onclick="BBCode.spoiler(this);">Show</a>';
-							$Str .= '<blockquote class="hidden spoiler">'.$this->to_html($Block['Val']).'</blockquote>';
+							$Str .= '<blockquote class="hidden spoiler">'.self::to_html($Block['Val']).'</blockquote>';
 						}
 						else {
 							$Str .= '<strong>Use of the [mature] tag requires a description.</strong> The correct format is as follows: <strong>[mature=description] ...content... [/mature]</strong>, where "description" is a mandatory description of the post. Misleading descriptions will be penalized. For further information on our mature content policies, please refer to this <a href="wiki.php?action=article&amp;id=1063">wiki</a>.';
@@ -766,14 +772,14 @@ class TEXT {
 					}
 					break;
 				case 'img':
-					if ($this->NoImg > 0 && $this->valid_url($Block['Val'])) {
+					if (self::$NoImg > 0 && self::valid_url($Block['Val'])) {
 						$Str .= '<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (image)';
 						break;
 					}
-					if (!$this->valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
+					if (!self::valid_url($Block['Val'], '\.(jpe?g|gif|png|bmp|tiff)')) {
 						$Str .= '[img]'.$Block['Val'].'[/img]';
 					} else {
-						$LocalURL = $this->local_url($Block['Val']);
+						$LocalURL = self::local_url($Block['Val']);
 						if ($LocalURL) {
 							$Str .= '<img class="scale_image" onclick="lightbox.init(this, $(this).width());" alt="'.$Block['Val'].'" src="'.$LocalURL.'" />';
 						} else {
@@ -783,11 +789,11 @@ class TEXT {
 					break;
 
 				case 'aud':
-					if ($this->NoImg > 0 && $this->valid_url($Block['Val'])) {
+					if (self::$NoImg > 0 && self::valid_url($Block['Val'])) {
 						$Str .= '<a rel="noreferrer" target="_blank" href="'.$Block['Val'].'">'.$Block['Val'].'</a> (audio)';
 						break;
 					}
-					if (!$this->valid_url($Block['Val'], '\.(mp3|ogg|wav)')) {
+					if (!self::valid_url($Block['Val'], '\.(mp3|ogg|wav)')) {
 						$Str .= '[aud]'.$Block['Val'].'[/aud]';
 					} else {
 						//TODO: Proxy this for staff?
@@ -801,14 +807,14 @@ class TEXT {
 						$Block['Val'] = $Block['Attr'];
 						$NoName = true; // If there isn't a Val for this
 					} else {
-						$Block['Val'] = $this->to_html($Block['Val']);
+						$Block['Val'] = self::to_html($Block['Val']);
 						$NoName = false;
 					}
 
-					if (!$this->valid_url($Block['Attr'])) {
+					if (!self::valid_url($Block['Attr'])) {
 						$Str .= '[url='.$Block['Attr'].']'.$Block['Val'].'[/url]';
 					} else {
-						$LocalURL = $this->local_url($Block['Attr']);
+						$LocalURL = self::local_url($Block['Attr']);
 						if ($LocalURL) {
 							if ($NoName) { $Block['Val'] = substr($LocalURL,1); }
 							$Str .= '<a href="'.$LocalURL.'">'.$Block['Val'].'</a>';
@@ -819,14 +825,14 @@ class TEXT {
 					break;
 
 				case 'inlineurl':
-					if (!$this->valid_url($Block['Attr'], '', true)) {
-						$Array = $this->parse($Block['Attr']);
+					if (!self::valid_url($Block['Attr'], '', true)) {
+						$Array = self::parse($Block['Attr']);
 						$Block['Attr'] = $Array;
-						$Str .= $this->to_html($Block['Attr']);
+						$Str .= self::to_html($Block['Attr']);
 					}
 
 					else {
-						$LocalURL = $this->local_url($Block['Attr']);
+						$LocalURL = self::local_url($Block['Attr']);
 						if ($LocalURL) {
 							$Str .= '<a href="'.$LocalURL.'">'.substr($LocalURL,1).'</a>';
 						} else {
@@ -839,11 +845,11 @@ class TEXT {
 			}
 		}
 		}
-		$this->Levels--;
+		self::$Levels--;
 		return $Str;
 	}
 
-	private function raw_text ($Array) {
+	private static function raw_text ($Array) {
 		$Str = '';
 		foreach ($Array as $Block) {
 			if (is_string($Block)) {
@@ -862,7 +868,7 @@ class TEXT {
 				case 'quote':
 				case 'align':
 
-					$Str .= $this->raw_text($Block['Val']);
+					$Str .= self::raw_text($Block['Val']);
 					break;
 				case 'tex': //since this will never strip cleanly, just remove it
 					break;
@@ -877,7 +883,7 @@ class TEXT {
 					break;
 				case 'list':
 					foreach ($Block['Val'] as $Line) {
-						$Str .= $Block['Tag'].$this->raw_text($Line);
+						$Str .= $Block['Tag'].self::raw_text($Line);
 					}
 					break;
 
@@ -886,17 +892,17 @@ class TEXT {
 					if (empty($Block['Val'])) {
 						$Block['Val'] = $Block['Attr'];
 					} else {
-						$Block['Val'] = $this->raw_text($Block['Val']);
+						$Block['Val'] = self::raw_text($Block['Val']);
 					}
 
 					$Str .= $Block['Val'];
 					break;
 
 				case 'inlineurl':
-					if (!$this->valid_url($Block['Attr'], '', true)) {
-						$Array = $this->parse($Block['Attr']);
+					if (!self::valid_url($Block['Attr'], '', true)) {
+						$Array = self::parse($Block['Attr']);
 						$Block['Attr'] = $Array;
-						$Str .= $this->raw_text($Block['Attr']);
+						$Str .= self::raw_text($Block['Attr']);
 					}
 					else {
 						$Str .= $Block['Attr'];
@@ -908,11 +914,17 @@ class TEXT {
 		return $Str;
 	}
 
-	private function smileys ($Str) {
+	private static function smileys($Str) {
 		if (!empty(G::$LoggedUser['DisableSmileys'])) {
 			return $Str;
 		}
-		$Str = strtr($Str, $this->Smileys);
+		if (count(self::$ProcessedSmileys) == 0 && count(self::$Smileys) > 0) {
+			foreach (self::$Smileys as $Key => $Val) {
+				self::$ProcessedSmileys[$Key] = '<img border="0" src="'.STATIC_SERVER.'common/smileys/'.$Val.'" alt="" />';
+			}
+			reset(self::$ProcessedSmileys);
+		}
+		$Str = strtr($Str, self::$ProcessedSmileys);
 		return $Str;
 	}
 }
@@ -932,7 +944,6 @@ $Str = "hello
 ==hi==[/pre]
 ====hi====
 hi";
-$Text = new TEXT;
-echo $Text->full_format($Str);
+echo Text::full_format($Str);
 echo "\n"
 */

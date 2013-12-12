@@ -1,7 +1,5 @@
 <?
 require(SERVER_ROOT.'/sections/torrents/functions.php');
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
 
 $GroupAllowed = array('WikiBody', 'WikiImage', 'ID', 'Name', 'Year', 'RecordLabel', 'CatalogueNumber', 'ReleaseType', 'CategoryID', 'Time', 'VanityHouse');
 $TorrentAllowed = array('ID', 'Media', 'Format', 'Encoding', 'Remastered', 'RemasterYear', 'RemasterTitle', 'RemasterRecordLabel', 'RemasterCatalogueNumber', 'Scene', 'HasLog', 'HasCue', 'LogScore', 'FileCount', 'Size', 'Seeders', 'Leechers', 'Snatched', 'FreeTorrent', 'Time', 'Description', 'FileList', 'FilePath', 'UserID', 'Username');
@@ -65,7 +63,7 @@ else {
 }
 
 $JsonTorrentDetails = array(
-	'wikiBody' => $Text->full_format($TorrentDetails['WikiBody']),
+	'wikiBody' => Text::full_format($TorrentDetails['WikiBody']),
 	'wikiImage' => $TorrentDetails['WikiImage'],
 	'id' => (int)$TorrentDetails['ID'],
 	'name' => $TorrentDetails['Name'],

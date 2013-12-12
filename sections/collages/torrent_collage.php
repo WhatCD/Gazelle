@@ -343,7 +343,7 @@ View::show_header($Name, 'browse,collage,bbcode,voting,recommend');
 		</div>
 		<div class="box box_description">
 			<div class="head"><strong>Description</strong></div>
-			<div class="pad"><?=$Text->full_format($Description)?></div>
+			<div class="pad"><?=Text::full_format($Description)?></div>
 		</div>
 <?
 if (check_perms('zip_downloader')) {
@@ -532,7 +532,7 @@ foreach ($CommentList as $Comment) {
 				<br />
 				<a href="reports.php?action=report&amp;type=collages_comment&amp;id=<?=$CommentID?>" class="brackets">Report</a>
 			</div>
-			<div class="pad"><?=$Text->full_format($Body)?></div>
+			<div class="pad"><?=Text::full_format($Body)?></div>
 		</div>
 <?
 }

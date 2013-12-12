@@ -15,11 +15,6 @@ if (!empty($LoggedUser['DisableForums'])) {
 	error_out('You do not have access to the forums!');
 }
 
-
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
-
 $UserID = empty($_GET['userid']) ? $LoggedUser['ID'] : $_GET['userid'];
 if (!is_number($UserID)) {
 	error_out('User does not exist!');
@@ -170,7 +165,7 @@ while (list($PostID, $AddedTime, $Body, $EditedUserID, $EditedTime, $EditedUsern
 		'locked' => $Locked === '1',
 		'sticky' => $Sticky === '1',
 		'addedTime' => $AddedTime,
-		'body' => $Text->full_format($Body),
+		'body' => Text::full_format($Body),
 		'bbbody' => $Body,
 		'editedUserId' => (int)$EditedUserID,
 		'editedTime' => $EditedTime,

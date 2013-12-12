@@ -249,7 +249,7 @@ function get_group_requests($GroupID) {
 }
 
 //Used by both sections/torrents/details.php and sections/reportsv2/report.php
-function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $GroupCategoryID, $ReleaseType, $TorrentList, $Types, $Text, $Username, $ReportedTimes) {
+function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $GroupCategoryID, $ReleaseType, $TorrentList, $Types, $Username, $ReportedTimes) {
 
 	function filelist($Str) {
 		return "</td>\n<td>" . Format::get_size($Str[1]) . "</td>\n</tr>";
@@ -316,7 +316,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 			$ReportInfo .= "
 			<tr>
 				<td>$ReportLinks ".time_diff($Report['ReportedTime'], 2, true, true).' for the reason "'.$ReportType['title'].'":
-					<blockquote>'.$Text->full_format($Report['UserComment']).'</blockquote>
+					<blockquote>'.Text::full_format($Report['UserComment']).'</blockquote>
 				</td>
 			</tr>';
 		}
@@ -517,7 +517,7 @@ function build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $G
 						<div id="reported_<?=($TorrentID)?>" class="hidden"><?=($ReportInfo)?></div>
 <?	}
 	if (!empty($Description)) {
-		echo "\n\t\t\t\t\t\t<blockquote>" . $Text->full_format($Description) . '</blockquote>';
+		echo "\n\t\t\t\t\t\t<blockquote>" . Text::full_format($Description) . '</blockquote>';
 	} ?>
 					</td>
 				</tr>

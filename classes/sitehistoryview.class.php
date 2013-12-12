@@ -14,7 +14,6 @@ class SiteHistoryView {
 	}
 
 	public static function render_events($Events) {
-		$Text = new Text;
 		$Categories = SiteHistory::get_categories();
 		$SubCategories = SiteHistory::get_sub_categories();
 		$CanEdit = check_perms('users_mod') ;
@@ -44,7 +43,7 @@ class SiteHistoryView {
 					</div>
 <?			if (!empty($Event['Body'])) { ?>
 					<div class="body">
-						<?=$Text->full_format($Event['Body'])?>
+						<?=Text::full_format($Event['Body'])?>
 					</div>
 <?			} ?>
 			</div>

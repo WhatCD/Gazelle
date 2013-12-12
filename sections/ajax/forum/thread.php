@@ -11,9 +11,6 @@ Things to expect in $_GET:
 
 //---------- Things to sort out before it can start printing/generating content
 
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
-
 // Check for lame SQL injection attempts
 if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 	if (isset($_GET['topicid']) && is_number($_GET['topicid'])) {
@@ -249,7 +246,7 @@ foreach ($Thread as $Key => $Post) {
 		'postId' => (int)$PostID,
 		'addedTime' => $AddedTime,
 		'bbBody' => $Body,
-		'body' => $Text->full_format($Body),
+		'body' => Text::full_format($Body),
 		'editedUserId' => (int)$EditedUserID,
 		'editedTime' => $EditedTime,
 		'editedUsername' => $UserInfo['Username'],

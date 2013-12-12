@@ -7,10 +7,6 @@ header('Access-Control-Allow-Origin: *');
 define('MAX_PERS_COLLAGES', 3); // How many personal collages should be shown by default
 define('MAX_COLLAGES', 5); // How many normal collages should be shown by default
 
-include(SERVER_ROOT.'/classes/text.class.php');
-
-$Text = NEW TEXT;
-
 $GroupID = ceil($_GET['id']);
 if (!empty($_GET['revisionid']) && is_number($_GET['revisionid'])) {
 	$RevisionID = $_GET['revisionid'];
@@ -32,7 +28,7 @@ list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear,
 $DisplayName = $GroupName;
 $AltName = $GroupName; // Goes in the alt text of the image
 $Title = $GroupName; // goes in <title>
-$WikiBody = $Text->full_format($WikiBody);
+$WikiBody = Text::full_format($WikiBody);
 
 $Artists = Artists::get_artist($GroupID);
 
@@ -588,7 +584,7 @@ foreach ($TorrentList as $Torrent) {
 			$ReportInfo .= "
 			<tr>
 				<td>$ReportLinks ".time_diff($Report['ReportedTime'], 2, true, true).' for the reason "'.$ReportType['title'].'":
-					<blockquote>'.$Text->full_format($Report['UserComment']).'</blockquote>
+					<blockquote>'.Text::full_format($Report['UserComment']).'</blockquote>
 				</td>
 			</tr>';
 		}
@@ -750,7 +746,7 @@ foreach ($TorrentList as $Torrent) {
 <?
 	}
 	if (!empty($Description)) {
-			echo "\n<blockquote>".$Text->full_format($Description).'</blockquote>';
+			echo "\n<blockquote>".Text::full_format($Description).'</blockquote>';
 	}
 ?>
 				</td>

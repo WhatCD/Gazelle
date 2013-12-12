@@ -4,8 +4,6 @@ if (!check_perms('admin_manage_news')) {
 	error(403);
 }
 
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
 View::show_header('Manage news', 'bbcode');
 
 switch ($_GET['action']) {
@@ -79,7 +77,7 @@ while (list($NewsID, $Title, $Body, $NewsTime) = $DB->next_record()) {
 			- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>" class="brackets">Edit</a>
 			<a href="tools.php?action=deletenews&amp;id=<?=$NewsID?>&amp;auth=<?=$LoggedUser['AuthKey']?>" class="brackets">Delete</a>
 		</div>
-		<div class="pad"><?=$Text->full_format($Body) ?></div>
+		<div class="pad"><?=Text::full_format($Body) ?></div>
 	</div>
 <? } ?>
 </div>

@@ -75,7 +75,8 @@ use underscores instead of spaces.
 
 All statement blocks, including functions, shall have the opening brace
 at the end of the same line with a space before the brace. The astute
-reader will note that this is K&R style with the exception of functions.
+reader will note that this is K&R style with the exception of the opening
+brace in function definitions.
 
 There shall be a space between a control structure statement (e.g. `if`,
 `elseif` in PHP, `for`) and the following parenthesis.

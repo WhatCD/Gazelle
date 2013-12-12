@@ -83,8 +83,6 @@ if (check_perms('admin_reports')) {
 	include(SERVER_ROOT.'/classes/reports.class.php');
 
 	require(SERVER_ROOT.'/sections/reportsv2/array.php');
-	require(SERVER_ROOT.'/classes/text.class.php');
-	$Text = NEW TEXT;
 	$ReportID = 0;
 	$DB->query("
 			SELECT

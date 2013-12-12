@@ -25,6 +25,7 @@ if (isset($Keys) && $_GET['type'] == 'clear') {
 	}
 	echo '<div class="save_message">Key(s) ' . implode(', ', array_map('display_str', $Keys)) . ' cleared!</div>';
 }
+$MultiKeyTooltip = 'Enter cache keys delimited by any amount of whitespace.';
 ?>
 	<div class="header">
 		<h2>Clear a cache key</h2>
@@ -44,7 +45,7 @@ if (isset($Keys) && $_GET['type'] == 'clear') {
 				</form>
 			</td>
 		</tr>
-		<tr>
+		<tr class="tooltip" title="<?=$MultiKeyTooltip?>">
 			<td>Multi-key</td>
 			<td>
 				<form class="manage_form" name="cache" method="get" action="">
@@ -58,8 +59,12 @@ if (isset($Keys) && $_GET['type'] == 'clear') {
 				</form>
 			</td>
 		</tr>
+	</table>
 <?
 if (isset($Keys) && $_GET['type'] == 'view') {
+?>
+	<table class="layout" cellpadding="2" cellspacing="1" border="0" align="center" style="margin-top: 1em;">
+<?
 	foreach ($Keys as $Key) {
 ?>
 		<tr>
@@ -68,10 +73,9 @@ if (isset($Keys) && $_GET['type'] == 'view') {
 				<pre><? var_dump($Cache->get_value($Key)); ?></pre>
 			</td>
 		</tr>
-<?
-	}
-}
-?>
+<?	} ?>
 	</table>
 <?
+}
+
 View::show_footer();

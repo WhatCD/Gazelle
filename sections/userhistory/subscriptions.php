@@ -103,9 +103,6 @@ foreach ($Results as $Result) {
 $TorrentGroups = Torrents::get_groups($TorrentGroups, true, true, false);
 $Requests = Requests::get_requests($Requests);
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
 ?>
 <div class="thin">
 	<div class="header">
@@ -235,7 +232,7 @@ if (!$NumResults) {
 <?			} ?>
 			<td class="body" valign="top">
 				<div class="content3">
-					<?=$Text->full_format($Result['LastReadBody']) ?>
+					<?=Text::full_format($Result['LastReadBody']) ?>
 <?			if ($Result['LastReadEditedUserID']) { ?>
 					<br /><br />
 					Last edited by <?=Users::format_username($Result['LastReadEditedUserID'], false, false, false) ?> <?=time_diff($Result['LastReadEditedTime'])?>

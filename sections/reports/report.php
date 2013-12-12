@@ -143,10 +143,6 @@ View::show_header('Report a '.$Type['title'], 'bbcode,jquery.validate,form_valid
 	</div>
 <?
 
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT;
-
-
 switch ($Short) {
 	case 'user':
 ?>
@@ -164,7 +160,7 @@ switch ($Short) {
 		</tr>
 		<tr>
 			<td><?=display_str($Name)?></td>
-			<td><?=$Text->full_format($Desc)?></td>
+			<td><?=Text::full_format($Desc)?></td>
 			<td><strong><?=($Filled == 0 ? 'No' : 'Yes')?></strong></td>
 		</tr>
 	</table>
@@ -220,7 +216,7 @@ switch ($Short) {
 		</tr>
 		<tr>
 			<td><?=display_str($Name)?></td>
-			<td><?=$Text->full_format($Desc)?></td>
+			<td><?=Text::full_format($Desc)?></td>
 			<td><strong><?=($Filled == 0 ? 'No' : 'Yes')?></strong></td>
 		</tr>
 	</table>
@@ -236,7 +232,7 @@ switch ($Short) {
 		</tr>
 		<tr>
 			<td><?=display_str($Name)?></td>
-			<td><?=$Text->full_format($Desc)?></td>
+			<td><?=Text::full_format($Desc)?></td>
 		</tr>
 	</table>
 <?
@@ -266,7 +262,7 @@ switch ($Short) {
 		</tr>
 		<tr>
 			<td><?=display_str($Username)?></td>
-			<td><?=$Text->full_format($Body)?></td>
+			<td><?=Text::full_format($Body)?></td>
 		</tr>
 	</table>
 <?
@@ -281,7 +277,7 @@ switch ($Short) {
 		</tr>
 		<tr>
 			<td><?=display_str($Username)?></td>
-			<td><?=$Text->full_format($Body)?></td>
+			<td><?=Text::full_format($Body)?></td>
 		</tr>
 	</table>
 <?

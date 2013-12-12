@@ -9,9 +9,6 @@ $MinimumVote = 20 * 1024 * 1024;
  * This is the page that displays the request to the end user after being created.
  */
 
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
-
 if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	json_die("failure");
 }
@@ -104,7 +101,7 @@ foreach ($Thread as $Key => $Post) {
 		'class' => Users::make_class_string($PermissionID),
 		'addedTime' => $AddedTime,
 		'avatar' => $Avatar,
-		'comment' => $Text->full_format($Body),
+		'comment' => Text::full_format($Body),
 		'editedUserId' => (int)$EditedUserID,
 		'editedUsername' => $EditedUsername,
 		'editedTime' => $EditedTime
@@ -135,7 +132,7 @@ json_die('success', array(
 	'year' => (int)$Request['Year'],
 	'image' => $Request['Image'],
 	'bbDescription' => $Request['Description'],
-	'description' => $Text->full_format($Request['Description']),
+	'description' => Text::full_format($Request['Description']),
 	'musicInfo' => $JsonMusicInfo,
 	'catalogueNumber' => $Request['CatalogueNumber'],
 	'releaseType' => (int)$Request['ReleaseType'],

@@ -1,6 +1,5 @@
 <?
-include(SERVER_ROOT.'/classes/text.class.php'); // Text formatting class
-$Text = new TEXT(true);
+Text::$TOC = true;
 
 if (!empty($_GET['id']) && is_number($_GET['id'])) { //Visiting article via ID
 	$ArticleID = $_GET['id'];
@@ -37,8 +36,8 @@ if ($Read > $LoggedUser['EffectiveClass']) {
 	error('You must be a higher user class to view this wiki article');
 }
 
-$TextBody = $Text->full_format($Body, false);
-$TOC = $Text->parse_toc(0);
+$TextBody = Text::full_format($Body, false);
+$TOC = Text::parse_toc(0);
 
 View::show_header($Title,'wiki,bbcode');
 ?>

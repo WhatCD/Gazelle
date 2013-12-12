@@ -1,5 +1,4 @@
-<?php
-
+<?
 //Don't allow bigger queries than specified below regardless of called function
 $SizeLimit = 10;
 
@@ -10,8 +9,7 @@ if (!isset($_GET['count']) || !isset($_GET['offset']) || $Count <= 0 || $Offset 
 	json_die('failure');
 }
 
-include(SERVER_ROOT . '/classes/text.class.php');
-$Text = new TEXT(true);
+Text::$TOC = true;
 
 global $DB;
 $DB->query("
@@ -32,9 +30,9 @@ foreach ($News as $NewsItem) {
 		$NewsResponse,
 		array(
 			$NewsID,
-			$Text->full_format($Title),
+			Text::full_format($Title),
 			time_diff($NewsTime),
-			$Text->full_format($Body)
+			Text::full_format($Body)
 		)
 	);
 }

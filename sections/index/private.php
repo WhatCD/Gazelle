@@ -1,6 +1,5 @@
 <?php
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT(true);
+Text::$TOC = true;
 
 $NewsCount = 5;
 if (!$News = $Cache->get_value('news')) {
@@ -471,14 +470,14 @@ foreach ($News as $NewsItem) {
 ?>
 		<div id="news<?=$NewsID?>" class="box news_post">
 			<div class="head">
-				<strong><?=$Text->full_format($Title)?></strong> <?=time_diff($NewsTime);?>
+				<strong><?=Text::full_format($Title)?></strong> <?=time_diff($NewsTime);?>
 <?	if (check_perms('admin_manage_news')) { ?>
 				- <a href="tools.php?action=editnews&amp;id=<?=$NewsID?>" class="brackets">Edit</a>
 <?	} ?>
 			<span style="float: right;"><a href="#" onclick="$('#newsbody<?=$NewsID?>').gtoggle(); this.innerHTML = (this.innerHTML == 'Hide' ? 'Show' : 'Hide'); return false;" class="brackets">Hide</a></span>
 			</div>
 
-			<div id="newsbody<?=$NewsID?>" class="pad"><?=$Text->full_format($Body)?></div>
+			<div id="newsbody<?=$NewsID?>" class="pad"><?=Text::full_format($Body)?></div>
 		</div>
 <?
 	if (++$Count > ($NewsCount - 1)) {

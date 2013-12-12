@@ -1,7 +1,7 @@
 <?
 $Campaign = 'forumaudio';
 if (!$Votes = $Cache->get_value("support_$Campaign")) {
-	$Votes = array(0,0);
+	$Votes = array(0, 0);
 }
 if (!isset($_GET['support'])) {
 ?>
@@ -9,7 +9,7 @@ if (!isset($_GET['support'])) {
 <ul>
 	<li><?=number_format($Votes[0])?> +</li>
 	<li><?=number_format($Votes[1])?> -</li>
-	<li><?=number_format(($Votes[0] / ($Votes[0] + $Votes[1])) * 100, 3)?> %</li>
+	<li><?=number_format(($Votes[0] / ($Votes[0] + $Votes[1])) * 100, 3)?>%</li>
 </ul>
 <?
 } elseif ($_GET['support'] === 'true') {
@@ -18,5 +18,4 @@ if (!isset($_GET['support'])) {
 	$Votes[1]++;
 }
 $Cache->cache_value("support_$Campaign", $Votes, 0);
-
 ?>

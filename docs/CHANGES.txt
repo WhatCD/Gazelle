@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2013-12-12 by Y
+Transform Text into a static class
+
 2013-12-10 by alderaan
 Fix bug that would assign the "Log" flag to torrents that shouldn't have it
 

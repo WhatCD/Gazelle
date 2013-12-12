@@ -5,9 +5,6 @@
  */
 
 include(SERVER_ROOT.'/sections/torrents/functions.php');
-include(SERVER_ROOT.'/classes/text.class.php');
-
-$Text = NEW TEXT;
 
 //If we're not coming from torrents.php, check we're being returned because of an error.
 if (!isset($_GET['id']) || !is_number($_GET['id'])) {
@@ -41,7 +38,7 @@ if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	$DisplayName = $GroupName;
 	$AltName = $GroupName; // Goes in the alt text of the image
 	$Title = $GroupName; // goes in <title>
-	$WikiBody = $Text->full_format($WikiBody);
+	$WikiBody = Text::full_format($WikiBody);
 
 	//Get the artist name, group name etc.
 	$Artists = Artists::get_artist($GroupID);
@@ -85,7 +82,7 @@ View::show_header('Report', 'reportsv2,browse,torrent,bbcode,recommend');
 				<td class="sign leechers"><img src="static/styles/<?=($LoggedUser['StyleName'])?>/images/leechers.png" class="tooltip" alt="Leechers" title="Leechers" /></td>
 			</tr>
 			<?
-			build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $GroupCategoryID, $ReleaseType, $TorrentList, $Types, $Text, $Username, $ReportedTimes);
+			build_torrents_table($Cache, $DB, $LoggedUser, $GroupID, $GroupName, $GroupCategoryID, $ReleaseType, $TorrentList, $Types, $Username, $ReportedTimes);
 			?>
 		</table>
 	</div>

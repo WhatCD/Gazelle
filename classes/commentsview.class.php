@@ -27,7 +27,6 @@ class CommentsView {
 	 * @todo Find a better way to pass the page (artist, collages, requests, torrents) to this function than extracting it from $Link
 	 */
 	function render_comment($AuthorID, $PostID, $Body, $AddedTime, $EditedUserID, $EditedTime, $Link, $Unread = false, $Header = '', $Tools = true) {
-		global $Text; // TODO: convert Text class to static and get rid of this crap
 		$UserInfo = Users::user_info($AuthorID);
 		$Header = '<strong>' . Users::format_username($AuthorID, true, true, true, true, false) . '</strong> ' . time_diff($AddedTime) . $Header;
 ?>
@@ -76,7 +75,7 @@ class CommentsView {
 <?		} ?>
 				<td class="body" valign="top">
 					<div id="content<?=$PostID?>">
-						<?=$Text->full_format($Body)?>
+						<?=Text::full_format($Body)?>
 <?		if ($EditedUserID) { ?>
 						<br />
 						<br />

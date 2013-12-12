@@ -1,7 +1,4 @@
 <?
-include(SERVER_ROOT.'/classes/text.class.php');
-$Text = new TEXT;
-
 if (empty($_GET['id']) || !is_number($_GET['id'])) {
 	json_die("failure");
 }
@@ -17,7 +14,7 @@ foreach ($Thread as $Key => $Post) {
 		'postId' => (int)$PostID,
 		'addedTime' => $AddedTime,
 		'bbBody' => $Body,
-		'body' => $Text->full_format($Body),
+		'body' => Text::full_format($Body),
 		'editedUserId' => (int)$EditedUserID,
 		'editedTime' => $EditedTime,
 		'editedUsername' => $EditedUsername,
