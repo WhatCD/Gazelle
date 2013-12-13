@@ -95,6 +95,7 @@ if (!empty($_POST['action'])) {
 		include (SERVER_ROOT . '/sections/artist/artist.php');
 
 	} elseif (!empty($_GET['artistname'])) {
+
 		$NameSearch = str_replace('\\', '\\\\', trim($_GET['artistname']));
 		$DB->query("
 			SELECT ArtistID, Name

@@ -173,6 +173,7 @@ if (!empty($_GET['bitrates'])) {
 
 if (!empty($_GET['search'])) {
 	$SearchString = trim($_GET['search']);
+
 	if ($SearchString !== '') {
 		$SearchWords = array('include' => array(), 'exclude' => array());
 		$Words = explode(' ', $SearchString);

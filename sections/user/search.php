@@ -47,6 +47,7 @@ if (isset($_GET['username'])) {
 	}
 
 }
+
 View::show_header('User search');
 ?>
 <div class="thin">

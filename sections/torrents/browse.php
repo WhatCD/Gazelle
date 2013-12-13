@@ -39,6 +39,7 @@ function header_link($SortKey, $DefaultWay = 'desc') {
 if (!empty($_GET['searchstr']) || !empty($_GET['groupname'])) {
 	if (!empty($_GET['searchstr'])) {
 		$InfoHash = $_GET['searchstr'];
+
 	} else {
 		$InfoHash = $_GET['groupname'];
 	}
