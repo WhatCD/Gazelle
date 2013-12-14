@@ -270,7 +270,7 @@ if ($Avatar && Users::has_avatars_enabled()) {
 	}
 	if (($Override = check_paranoia_here('requiredratio')) && isset($RequiredRatio)) {
 ?>
-				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Required Ratio: <?=number_format((double)$RequiredRatio, 2)?></li>
+				<li<?=($Override === 2 ? ' class="paranoia_override"' : '')?>>Required Ratio: <span class="tooltip" title="<?=number_format((double)$RequiredRatio, 5)?>"><?=number_format((double)$RequiredRatio, 2)?></span></li>
 <?
 	}
 	if ($OwnProfile || ($Override = check_paranoia_here(false)) || check_perms('users_mod')) {
