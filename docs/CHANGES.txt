@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2013-12-15 by Ajax
+Introduced datetime picker JS, changed date picker in forum search, added date and time validation functions. Also proving a point.
+
 2013-12-12 by Y
 Transform Text into a static class
 

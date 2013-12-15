@@ -21,37 +21,17 @@ if (isset($_GET['search'])) {
 
 $ThreadAfterDate = db_string($_GET['thread_created_after']);
 $ThreadBeforeDate = db_string($_GET['thread_created_before']);
-$ThreadAfterDateDisplay = '';
-$ThreadBeforeDateDisplay = '';
 
-if (!empty($ThreadAfterDate) && !is_date($ThreadAfterDate)) {
-	error('Incorrect topic after date format');
-} elseif (!empty($ThreadAfterDate)) {
-	$ThreadAfterDateDisplay = "value='" . date('Y-m-d', strtotime($ThreadAfterDate)) . "'";
-}
-if (!empty($ThreadBeforeDate) && !is_date($ThreadBeforeDate)) {
-	error('Incorrect topic before date format');
-} elseif (!empty($ThreadBeforeDate)) {
-	$ThreadBeforeDateDisplay = "value='" . date('Y-m-d', strtotime($ThreadBeforeDate)) . "'";
+if ((!empty($ThreadAfterDate) && !is_valid_date($ThreadAfterDate)) || (!empty($ThreadBeforeDate) && !is_valid_date($ThreadBeforeDate))) {
+	error("Incorrect topic created date");
 }
 
 $PostAfterDate = db_string($_GET['post_created_after']);
 $PostBeforeDate = db_string($_GET['post_created_before']);
-$PostAfterDateDisplay = '';
-$PostBeforeDateDisplay = '';
 
-if (!empty($PostAfterDate) && !is_date($PostAfterDate)) {
-	error('Incorrect post after date format');
-} elseif (!empty($PostAfterDate)) {
-	$PostAfterDateDisplay = "value='" . date('Y-m-d', strtotime($PostAfterDate)) . "'";
+if ((!empty($PostAfterDate) && !is_valid_date($PostAfterDate)) || (!empty($PostBeforeDate) && !is_valid_date($PostBeforeDate))) {
+	error("Incorrect post created date");
 }
-if (!empty($PostBeforeDate) && !is_date($PostBeforeDate)) {
-	error('Incorrect post before date format');
-} elseif (!empty($PostBeforeDate)) {
-	$PostBeforeDateDisplay = "value='" . date('Y-m-d', strtotime($PostBeforeDate)) . "'";
-}
-
-
 
 // Searching for posts by a specific user
 if (!empty($_GET['user'])) {
@@ -75,11 +55,11 @@ if (isset($_GET['forums']) && is_array($_GET['forums'])) {
 	$ForumArray = array();
 	foreach ($_GET['forums'] as $Forum) {
 		if (is_number($Forum)) {
-			$ForumArray[]=$Forum;
+			$ForumArray[] = $Forum;
 		}
 	}
 	if (count($ForumArray) > 0) {
-		$SearchForums = implode(', ',$ForumArray);
+		$SearchForums = implode(', ', $ForumArray);
 	}
 }
 
@@ -91,8 +71,8 @@ if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
 		SELECT
 			Title
 		FROM forums_topics AS t
-			JOIN forums AS f ON f.ID=t.ForumID
-		WHERE t.ID=$ThreadID
+			JOIN forums AS f ON f.ID = t.ForumID
+		WHERE t.ID = $ThreadID
 			AND " . Forums::user_forums_sql();
 	$DB->query($SQL);
 	if (list($Title) = $DB->next_record()) {
@@ -105,7 +85,7 @@ if (!empty($_GET['threadid']) && is_number($_GET['threadid'])) {
 }
 
 // Let's hope we got some results - start printing out the content.
-View::show_header('Forums &gt; Search', 'bbcode,forum_search');
+View::show_header('Forums &gt; Search', 'bbcode,forum_search,datetime_picker', 'datetime_picker');
 ?>
 <div class="thin">
 	<div class="header">
@@ -130,9 +110,9 @@ View::show_header('Forums &gt; Search', 'bbcode,forum_search');
 				<td><strong>Topic created:</strong></td>
 				<td>
 					After:
-					<input type="date" name="thread_created_after" id="thread_created_after" <?=$ThreadAfterDateDisplay?>/>
+					<input type="text" class="date_picker" name="thread_created_after" id="thread_created_after" value="<?=$ThreadAfterDate?>" />
 					Before:
-					<input type="date" name="thread_created_before" id="thread_created_before" <?=$ThreadBeforeDateDisplay?> />
+					<input type="text" class="date_picker" name="thread_created_before" id="thread_created_before" value="<?=$ThreadBeforeDate?>" />
 				</td>
 			</tr>
 <?
@@ -141,9 +121,9 @@ if (empty($ThreadID)) {
 			<tr>
 				<td><strong>Search in:</strong></td>
 				<td>
-					<input type="radio" name="type" id="type_title" value="title" <? if ($Type == 'title') { echo 'checked="checked" '; } ?>/>
+					<input type="radio" name="type" id="type_title" value="title"<? if ($Type == 'title') { echo ' checked="checked"'; } ?> />
 					<label for="type_title">Titles</label>
-					<input type="radio" name="type" id="type_body" value="body" <? if ($Type == 'body') { echo 'checked="checked" '; } ?>/>
+					<input type="radio" name="type" id="type_body" value="body"<? if ($Type == 'body') { echo ' checked="checked"'; } ?> />
 					<label for="type_body">Post bodies</label>
 				</td>
 			</tr>
@@ -151,9 +131,9 @@ if (empty($ThreadID)) {
 				<td><strong>Post created:</strong></td>
 				<td>
 					After:
-					<input type="date" name="post_created_after" id="post_created_after" <?=$PostAfterDateDisplay?>/>
+					<input type="text" class="date_picker" name="post_created_after" id="post_created_after" value="<?=$PostAfterDate?>" />
 					Before:
-					<input type="date" name="post_created_before" id="post_created_before" <?=$PostBeforeDateDisplay?> />
+					<input type="text" class="date_picker" name="post_created_before" id="post_created_before" value="<?=$PostBeforeDate?>" />
 				</td>
 			</tr>
 			<tr>

@@ -188,4 +188,18 @@ function validDate($DateString) {
 	list($Y, $M, $D) = $SplitDate;
 	return checkDate($M, $D, $Y);
 }
+
+function is_valid_date($Date) {
+	return is_valid_datetime($Date, 'Y-m-d');
+}
+
+function is_valid_time($Time) {
+	return is_valid_datetime($Time, 'H:i');
+}
+
+function is_valid_datetime($DateTime, $Format = 'Y-m-d H:i') {
+	$FormattedDateTime = DateTime::createFromFormat($Format, $DateTime);
+	return $FormattedDateTime && $FormattedDateTime->format($Format) == $DateTime;
+}
+
 ?>
