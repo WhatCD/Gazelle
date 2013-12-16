@@ -6,15 +6,19 @@ $(document).ready(function() {
 		$(".date_picker").datetimepicker({
 			timepicker: false,
 			format: dateFormat,
+			validateOnBlur: false
 		});
 		$(".datetime_picker").datetimepicker({
 			format: dateFormat,
-			step: timeStep
+			step: timeStep,
+			validateOnBlur: false
 		});
 		$(".time_picker").datetimepicker({
 			format: timeFormat,
 			datepicker: false,
-			step: timeStep
+			step: timeStep,
+			validateOnBlur: false
+
 		});
 	});
 });

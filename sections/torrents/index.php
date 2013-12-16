@@ -38,7 +38,10 @@ if (!empty($_REQUEST['action'])) {
 			enforce_login();
 			include(SERVER_ROOT.'/sections/torrents/takechangecategory.php');
 			break;
-
+		case 'grouplog':
+			enforce_login();
+			include(SERVER_ROOT.'/sections/torrents/grouplog.php');
+			break;
 		case 'takeedit':
 			enforce_login();
 			include(SERVER_ROOT.'/sections/torrents/takeedit.php');

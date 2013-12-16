@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2013-12-16 by alderaan
+Remove code to check for public torrents
+
+2013-12-16 by Ajax
+Un-strip the torrent group log from the torrents index file
+
 2013-12-15 by Ajax
 Introduced datetime picker JS, changed date picker in forum search, added date and time validation functions. Also proving a point.
 
