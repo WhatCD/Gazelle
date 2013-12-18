@@ -189,7 +189,10 @@ if (!$NumResults) {
 				break;
 			case 'forums':
 				$Links = 'Forums: <a href="forums.php?action=viewforum&amp;forumid=' . $Result['ForumID'] . '">' . display_str($Result['ForumName']) . '</a> &gt; ' .
-					'<a href="forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '" class="tooltip" title="' . display_str($Result['Name']) . '">' . Format::cut_string($Result['Name'], 75) . '</a>';
+					'<a href="forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] .
+						'" class="tooltip" title="' . display_str($Result['Name']) . '">' .
+						display_str(Format::cut_string($Result['Name'], 75)) .
+					'</a>';
 				$JumpLink = 'forums.php?action=viewthread&amp;threadid=' . $Result['PageID'] . '&amp;postid=' . $Result['PostID'] . '#post' . $Result['PostID'];
 				break;
 			default:
@@ -205,17 +208,17 @@ if (!$NumResults) {
 		</colgroup>
 		<tr class="colhead_dark notify_<?=$Result['Page']?>">
 			<td colspan="<?=Users::has_avatars_enabled() ? 2 : 1 ?>">
-				<span style="float:left;">
+				<span style="float: left;">
 					<?=$Links . ($Result['PostID'] < $Result['LastPost'] ? ' <span class="new">(New!)</span>' : '')?>
 				</span>
 				<span style="float: left;" class="tooltip last_read" title="Jump to last read">
 					<a href="<?=$JumpLink?>"></a>
 				</span>
 <?		if ($Result['Page'] == 'forums') { ?>
-				<span id="bar<?=$Result['PostID'] ?>" style="float:right;">
+				<span id="bar<?=$Result['PostID'] ?>" style="float: right;">
 					<a href="#" onclick="Subscribe(<?=$Result['PageID']?>); return false;" id="subscribelink<?=$Result['PageID']?>" class="brackets">Unsubscribe</a>
 <?		} else { ?>
-				<span id="bar_<?=$Result['Page'] . $Result['PostID'] ?>" style="float:right;">
+				<span id="bar_<?=$Result['Page'] . $Result['PostID'] ?>" style="float: right;">
 					<a href="#" onclick="SubscribeComments('<?=$Result['Page']?>', <?=$Result['PageID']?>); return false;" id="subscribelink_<?=$Result['Page'] . $Result['PageID']?>" class="brackets">Unsubscribe</a>
 <?		} ?>
 					&nbsp;
