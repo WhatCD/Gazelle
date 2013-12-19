@@ -497,6 +497,7 @@ switch ($_REQUEST['action']) {
 		include(SERVER_ROOT.'/sections/tools/managers/take_mass_pm.php');
 		break;
 	
+
 	default:
 		include(SERVER_ROOT.'/sections/tools/tools.php');
 }
