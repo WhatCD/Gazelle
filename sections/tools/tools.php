@@ -65,7 +65,6 @@ View::show_header('Staff Tools');
 	create_row("Mass PM", "tools.php?action=mass_pm", check_perms("users_mod"));
 	create_row("News post", "tools.php?action=news", check_perms("admin_manage_news"));
 	create_row("Vanity House additions", "tools.php?action=recommend", check_perms("site_recommend_own") || check_perms("site_manage_recommendations"));
-	
 
 	if ($ToolsHTML) {
 ?>
