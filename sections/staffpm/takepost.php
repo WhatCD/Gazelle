@@ -43,20 +43,24 @@ if ($Message = db_string($_POST['message'])) {
 				// FLS/Staff
 				$DB->query("
 					UPDATE staff_pm_conversations
-					SET Date = '".sqltime()."', Unread = true, Status = 'Open'
+					SET Date = '".sqltime()."',
+						Unread = true,
+						Status = 'Open'
 					WHERE ID = $ConvID");
-				$Cache->delete_value('num_staff_pms_'.$LoggedUser['ID']);
+				$Cache->delete_value("num_staff_pms_$LoggedUser[ID]");
 			} else {
 				// User
 				$DB->query("
 					UPDATE staff_pm_conversations
-					SET Date = '".sqltime()."', Unread = true, Status = 'Unanswered'
+					SET Date = '".sqltime()."',
+						Unread = true,
+						Status = 'Unanswered'
 					WHERE ID = $ConvID");
 			}
 
 			// Clear cache for user
 			$Cache->delete_value("staff_pm_new_$UserID");
-			$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
+			$Cache->delete_value("staff_pm_new_$LoggedUser[ID]");
 
 			header("Location: staffpm.php?action=viewconv&id=$ConvID");
 		} else {
@@ -71,11 +75,8 @@ if ($Message = db_string($_POST['message'])) {
 } elseif ($ConvID = (int)$_POST['convid']) {
 	// No message, but conversation ID
 	header("Location: staffpm.php?action=viewconv&id=$ConvID");
-
 } else {
 	// No message or conversation ID
 	header('Location: staffpm.php');
 }
-
-
 ?>

@@ -193,6 +193,12 @@ div#AddArtists a {
 	height: 180px;
 	bottom: 0px;
 	right: 0px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .rippywrap div.rippy {
@@ -202,7 +208,14 @@ div#AddArtists a {
 	position: fixed;
 	bottom: 0px;
 	right: 0px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
+
 
 td.label {
 	vertical-align: top;

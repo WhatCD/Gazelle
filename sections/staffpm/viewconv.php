@@ -22,7 +22,7 @@ if ($ConvID = (int)$_GET['id']) {
 			SET Unread = false
 			WHERE ID = $ConvID");
 		// Clear cache for user
-		$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
+		$Cache->delete_value("staff_pm_new_$LoggedUser[ID]");
 	}
 
 	View::show_header('Staff PM', 'staffpm,bbcode');

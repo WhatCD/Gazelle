@@ -1,5 +1,14 @@
 CHANGE LOG
 
+2013-12-23 by alderaan
+Clear "user_info_$UserID" for each user that gets disabled for having never logged in
+
+2013-12-23 by alderaan
+Clear "num_staff_pms_$UserID" cache key when reassigning a Staff PM
+
+2013-12-22 by Ajax
+Donor rank expiration
+
 2013-12-16 by alderaan
 Remove code to check for public torrents
 

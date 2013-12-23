@@ -84,13 +84,14 @@ class Donations {
 				$AdjustedRank = $Rank >= MAX_EXTRA_RANK ? MAX_EXTRA_RANK : $Rank;
 				G::$DB->query("
 					INSERT INTO users_donor_ranks
-						(UserID, Rank, TotalRank, DonationTime)
+						(UserID, Rank, TotalRank, DonationTime, RankExpirationTime)
 					VALUES
-						('$UserID', '$AdjustedRank', '$TotalRank', '$Date')
+						('$UserID', '$AdjustedRank', '$TotalRank', '$Date', '$Date')
 					ON DUPLICATE KEY UPDATE
 						Rank = '$AdjustedRank',
 						TotalRank = '$TotalRank',
-						DonationTime = '$Date'");
+						DonationTime = '$Date',
+						RankExpirationTime = '$Date'");
 			}
 			else {
 				// Donations from the store get donor points directly, no need to calculate them
@@ -114,13 +115,14 @@ class Donations {
 				}
 				G::$DB->query("
 					INSERT INTO users_donor_ranks
-						(UserID, Rank, TotalRank, DonationTime)
+						(UserID, Rank, TotalRank, DonationTime, RankExpirationTime)
 					VALUES
-						('$UserID', '$AdjustedRank', '$DonorPoints', '$Date')
+						('$UserID', '$AdjustedRank', '$DonorPoints', '$Date', '$Date')
 					ON DUPLICATE KEY UPDATE
 						Rank = '$AdjustedRank',
 						TotalRank = TotalRank + '$DonorPoints',
-						DonationTime = '$Date'");
+						DonationTime = '$Date',
+						RankExpirationTime = '$Date'");
 			}
 			// Donor cache key is outdated
 			G::$Cache->delete_value("donor_info_$UserID");
@@ -216,7 +218,7 @@ class Donations {
 		self::$IsSchedule = true;
 
 		DonationsBitcoin::find_new_donations();
-		//self::expire_ranks();
+		self::expire_ranks();
 		self::get_new_conversion_rates();
 	}
 
@@ -227,18 +229,20 @@ class Donations {
 			FROM users_donor_ranks
 			WHERE Rank > 1
 				AND SpecialRank != 3
-				AND DonationTime < NOW() - INTERVAL 32 DAY");
+				AND RankExpirationTime < NOW() - INTERVAL 32 DAY");
 
 		if (G::$DB->record_count() > 0) {
 			$UserIDs = array();
 			while (list($UserID, $Rank) = G::$DB->next_record()) {
 				G::$Cache->delete_value("donor_info_$UserID");
+				G::$Cache->delete_value("donor_title_$UserID");
+				G::$Cache->delete_value("donor_profile_rewards_$UserID");
 				$UserIDs[] = $UserID;
 			}
 			$In = implode(',', $UserIDs);
 			G::$DB->query("
 				UPDATE users_donor_ranks
-				SET Rank = Rank - IF(Rank = " . MAX_RANK . ", 2, 1)
+				SET Rank = Rank - IF(Rank = " . MAX_RANK . ", 2, 1), RankExpirationTime = NOW()
 				WHERE UserID IN ($In)");
 		}
 		G::$DB->set_query_id($QueryID);

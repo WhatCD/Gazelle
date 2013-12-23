@@ -22,7 +22,7 @@ if ($ID = (int)($_GET['id'])) {
 			SET Status = 'Unanswered'
 			WHERE ID = $ID");
 		// Clear cache for user
-		$Cache->delete_value('num_staff_pms_'.$LoggedUser['ID']);
+		$Cache->delete_value("num_staff_pms_$LoggedUser[ID]");
 
 		header('Location: staffpm.php');
 	} else {

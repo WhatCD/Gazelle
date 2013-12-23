@@ -11,10 +11,10 @@ if ($ID = (int)($_GET['id'])) {
 		// Conversation belongs to user or user is staff, resolve it
 		$DB->query("
 			UPDATE staff_pm_conversations
-			SET Status = 'Resolved', ResolverID = ".$LoggedUser['ID']."
+			SET Status = 'Resolved', ResolverID = $LoggedUser[ID]
 			WHERE ID = $ID");
-		$Cache->delete_value('staff_pm_new_'.$LoggedUser['ID']);
-		$Cache->delete_value('num_staff_pms_'.$LoggedUser['ID']);
+		$Cache->delete_value("staff_pm_new_$LoggedUser[ID]");
+		$Cache->delete_value("num_staff_pms_$LoggedUser[ID]");
 
 		header('Location: staffpm.php');
 	} else {

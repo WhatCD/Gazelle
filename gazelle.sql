@@ -1348,6 +1348,7 @@ CREATE TABLE `users_donor_ranks` (
   `TotalRank` int(10) NOT NULL DEFAULT '0',
   `SpecialRank` tinyint(2) DEFAULT '0',
   `InvitesRecievedRank` tinyint(4) DEFAULT '0',
+  `RankExpirationTime` datetime DEFAULT NULL,
   PRIMARY KEY (`UserID`),
   KEY `DonationTime` (`DonationTime`),
   KEY `SpecialRank` (`SpecialRank`),

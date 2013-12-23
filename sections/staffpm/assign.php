@@ -33,6 +33,7 @@ if ($ConvID = (int)$_GET['convid']) {
 				SET Status = 'Unanswered',
 					Level = $Level
 				WHERE ID = $ConvID");
+			$Cache->delete_value("num_staff_pms_$LoggedUser[ID]");
 			header('Location: staffpm.php');
 		} else {
 			error(404);
