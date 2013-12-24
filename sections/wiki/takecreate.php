@@ -54,25 +54,15 @@ $DB->query("
 
 $ArticleID = $DB->inserted_id();
 
-/*
-$NewAlias = $Alias->convert($_POST['alias']);
-if ($NewAlias != '') {
-	$DB->query("
-		INSERT INTO wiki_aliases (Alias, ArticleID)
-		VALUES ('$NewAlias', '$ArticleID')");
-}
-*/
-$TitleAlias = $Alias->convert($_POST['title']);
-if ($TitleAlias != $Alias) {
+$TitleAlias = Wiki::normalize_alias($_POST['title']);
+$Dupe = Wiki::alias_to_id($_POST['title']);
+if ($TitleAlias != '' && $Dupe === false) {
 	$DB->query("
 		INSERT INTO wiki_aliases (Alias, ArticleID)
 		VALUES ('".db_string($TitleAlias)."', '$ArticleID')");
+	Wiki::flush_aliases();
 }
-
-$Alias->flush();
 
 Misc::write_log("Wiki article $ArticleID (".$_POST['title'].") was created by ".$LoggedUser['Username']);
 
 header("Location: wiki.php?action=article&id=$ArticleID");
-
-?>

@@ -1,10 +1,11 @@
 <?
 Text::$TOC = true;
 
+$ArticleID = false;
 if (!empty($_GET['id']) && is_number($_GET['id'])) { //Visiting article via ID
-	$ArticleID = $_GET['id'];
+	$ArticleID = (int)$_GET['id'];
 } elseif ($_GET['name'] != '') { //Retrieve article ID via alias.
-	$ArticleID = $Alias->to_id($_GET['name']);
+	$ArticleID = Wiki::alias_to_id($_GET['name']);
 } else { //No ID, No Name
 	//error(404);
 	error('Unknown article ['.display_str($_GET['id']).']');
@@ -21,8 +22,7 @@ if (!$ArticleID) { //No article found
 		There is no article matching the name you requested.
 		<ul>
 			<li><a href="wiki.php?action=search&amp;search=<?=display_str($_GET['name'])?>">Search</a> for an article similar to this.</li>
-			<li><a href="wiki.php?action=link&amp;alias=<?=display_str($Alias->convert($_GET['name']))?>">Link</a> this to an existing article.</li>
-			<li><a href="wiki.php?action=create&amp;alias=<?=display_str($Alias->convert($_GET['name']))?>">Create</a> an article in its place.</li>
+			<li><a href="wiki.php?action=create&amp;alias=<?=display_str(Wiki::normalize_alias($_GET['name']))?>">Create</a> an article in its place.</li>
 		</ul>
 	</div>
 </div>
@@ -30,7 +30,8 @@ if (!$ArticleID) { //No article found
 	View::show_footer();
 	die();
 }
-$Article = $Alias->article($ArticleID);
+
+$Article = Wiki::get_article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName, $Aliases, $UserIDs) = array_shift($Article);
 if ($Read > $LoggedUser['EffectiveClass']) {
 	error('You must be a higher user class to view this wiki article');
@@ -46,9 +47,11 @@ View::show_header($Title,'wiki,bbcode');
 		<h2><?=$Title?></h2>
 		<div class="linkbox">
 			<a href="wiki.php?action=create" class="brackets">Create</a>
+<? if ($Edit <= $LoggedUser['EffectiveClass']) { ?>
 			<a href="wiki.php?action=edit&amp;id=<?=$ArticleID?>" class="brackets">Contribute</a>
 			<a href="wiki.php?action=revisions&amp;id=<?=$ArticleID?>" class="brackets">History</a>
-<? if (check_perms('admin_manage_wiki') && $_GET['id'] != '136') { ?>
+<? } ?>
+<? if (check_perms('admin_manage_wiki') && $_GET['id'] != INDEX_ARTICLE) { ?>
 			<a href="wiki.php?action=delete&amp;id=<?=$ArticleID?>&amp;authkey=<?=$LoggedUser['AuthKey']?>" class="brackets" onclick="return confirm('Are you sure you want to delete?\nYes, DELETE, not as in \'Oh hey, if this is wrong we can get someone to magically undelete it for us later\' it will be GONE.\nGiven this new information, do you still want to DELETE this article and all its revisions and all its alias\' and act like it never existed?')">Delete</a>
 <? } ?>
 			<!--<a href="reports.php?action=submit&amp;type=wiki&amp;article=<?=$ArticleID ?>" class="brackets">Report</a>-->
@@ -97,16 +100,17 @@ View::show_header($Title,'wiki,bbcode');
 				<li>
 					<strong>Aliases:</strong>
 					<ul>
-<?	if ($Aliases != $Title) {
-		$AliasArray = explode(',', $Aliases);
-		$UserArray = explode(',', $UserIDs);
-		$i = 0;
-		foreach ($AliasArray as $AliasItem) {
+<?
+if ($Aliases != $Title) {
+	$AliasArray = explode(',', $Aliases);
+	$UserArray = explode(',', $UserIDs);
+	$i = 0;
+	foreach ($AliasArray as $AliasItem) {
 ?>
 						<li id="alias_<?=$AliasItem?>"><a href="wiki.php?action=article&amp;name=<?=$AliasItem?>"><?=Format::cut_string($AliasItem, 20, 1)?></a><? if (check_perms('admin_manage_wiki')) { ?> <a href="#" onclick="Remove_Alias('<?=$AliasItem?>'); return false;" class="brackets tooltip" title="Delete alias">X</a> <a href="user.php?id=<?=$UserArray[$i]?>" class="brackets tooltip" title="View user">U</a><? } ?></li>
-<?			$i++;
-		}
+<?		$i++;
 	}
+}
 ?>
 					</ul>
 				</li>

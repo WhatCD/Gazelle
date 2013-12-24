@@ -1,80 +1,100 @@
 <?
-/*########################################################################
-##							 Wiki class									##
-##########################################################################
-
-Seeing as each page has to manage its wiki separately (for performance
-reasons - JOINs instead of multiple queries), this class is rather bare.
-
-The only useful function in here is revision_history(). It creates a
-table with the revision history for that particular wiki page.
-
-
-wiki.class depends on your wiki table being structured like this:
-
-+------------+--------------+------+-----+----------------------+-------+
-| Field		 | Type			| Null | Key | Default				| Extra |
-+------------+--------------+------+-----+----------------------+-------+
-| RevisionID | int(12)		| NO   | PRI | 0					|		|
-| PageID	 | int(10)		| NO   | MUL | 0					|		|
-| Body		 | text			| YES  |	 | NULL					|		|
-| UserID	 | int(10)		| NO   | MUL | 0					|		|
-| Summary	 | varchar(100) | YES  |	 | NULL					|		|
-| Time		 | datetime		| NO   | MUL | 0000-00-00 00:00:00  |		|
-+------------+--------------+------+-----+----------------------+-------+
-
-It is also recommended that you have a field in the main table for
-whatever the page is (e.g. details.php main table = torrents), so you can
-do a JOIN.
-
-
-########################################################################*/
-
 class Wiki {
+	/**
+	 * Normalize an alias
+	 * @param string $str
+	 * @return string
+	 */
+	public static function normalize_alias($str) {
+		return trim(substr(preg_replace('/[^a-z0-9]/', '', strtolower(htmlentities($str))), 0, 50));
+	}
 
-	public static function revision_history($Table = '', $PageID = 0, $BaseURL = '') {
-		$QueryID = G::$DB->get_query_id();
+	/**
+	 * Get all aliases in an associative array of Alias => ArticleID
+	 * @return array
+	 */
+	public static function get_aliases() {
+		$Aliases = G::$Cache->get_value('wiki_aliases');
+		if (!$Aliases) {
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
+				SELECT Alias, ArticleID
+				FROM wiki_aliases");
+			$Aliases = G::$DB->to_pair('Alias', 'ArticleID');
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value('wiki_aliases', $Aliases, 3600 * 24 * 14); // 2 weeks
+		}
+		return $Aliases;
+	}
 
-		G::$DB->query("
-			SELECT
-				RevisionID,
-				Summary,
-				Time,
-				UserID
-			FROM $Table
-			WHERE PageID = $PageID
-			ORDER BY RevisionID DESC");
-?>
-	<table cellpadding="6" cellspacing="1" border="0" width="100%" class="border">
-		<tr class="colhead">
-			<td>Revision</td>
-			<td>Date</td>
-			<td>User</td>
-			<td>Summary</td>
-		</tr>
-<?
-		$Row = 'a';
-		while (list($RevisionID, $Summary, $Time, $UserID, $Username) = G::$DB->next_record()) {
-			$Row = (($Row == 'a') ? 'b' : 'a');
-?>
-		<tr class="row<?=$Row?>">
-			<td>
-				<?= "<a href=\"$BaseURL&amp;revisionid=$RevisionID\">#$RevisionID</a>" ?>
-			</td>
-			<td>
-				<?=$Time?>
-			</td>
-			<td>
-				<?=Users::format_username($UserID, false, false, false)?>
-			</td>
-			<td>
-				<?=($Summary ? $Summary : '(empty)')?>
-			</td>
-		</tr>
-<?		} // while ?>
-	</table>
-<?
-		G::$DB->set_query_id($QueryID);
-	} // function
-} // class
-?>
+	/**
+	 * Flush the alias cache. Call this whenever you touch the wiki_aliases table.
+	 */
+	public static function flush_aliases() {
+		G::$Cache->delete_value('wiki_aliases');
+	}
+
+	/**
+	 * Get the ArticleID corresponding to an alias
+	 * @param string $Alias
+	 * @return int
+	 */
+	public static function alias_to_id($Alias) {
+		$Aliases = self::get_aliases();
+		$Alias = self::normalize_alias($Alias);
+		if (!isset($Aliases[$Alias])) {
+			return false;
+		} else {
+			return (int)$Aliases[$Alias];
+		}
+	}
+
+	/**
+	 * Get an article; returns false on error if $Error = false
+	 * @param int $ArticleID
+	 * @param bool $Error
+	 * @return array|bool
+	 */
+	public static function get_article($ArticleID, $Error = true) {
+		$Contents = G::$Cache->get_value('wiki_article_'.$ArticleID);
+		if (!$Contents) {
+			$QueryID = G::$DB->get_query_id();
+			G::$DB->query("
+				SELECT
+					w.Revision,
+					w.Title,
+					w.Body,
+					w.MinClassRead,
+					w.MinClassEdit,
+					w.Date,
+					w.Author,
+					u.Username,
+					GROUP_CONCAT(a.Alias),
+					GROUP_CONCAT(a.UserID)
+				FROM wiki_articles AS w
+					LEFT JOIN wiki_aliases AS a ON w.ID=a.ArticleID
+					LEFT JOIN users_main AS u ON u.ID=w.Author
+				WHERE w.ID='$ArticleID'
+				GROUP BY w.ID");
+			if (!G::$DB->has_results()) {
+				if ($Error) {
+					error(404);
+				} else {
+					return false;
+				}
+			}
+			$Contents = G::$DB->to_array();
+			G::$DB->set_query_id($QueryID);
+			G::$Cache->cache_value('wiki_article_'.$ArticleID, $Contents, 3600 * 24 * 14); // 2 weeks
+		}
+		return $Contents;
+	}
+
+	/**
+	 * Flush an article's cache. Call this whenever you edited a wiki article or its aliases.
+	 * @param int $ArticleID
+	 */
+	public static function flush_article($ArticleID) {
+		G::$Cache->delete_value('wiki_article_'.$ArticleID);
+	}
+}

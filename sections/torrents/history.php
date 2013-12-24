@@ -1,45 +1,27 @@
 <?
-/************************************************************************
-||------------|| Torrent group wiki history page ||--------------------||
-
-This page lists previous revisions of the torrent group page. It gets
-called if $_GET['action'] == 'history'.
-
-It also requires $_GET['groupid'].
-
-The Wiki class is used here to generate the page history.
-
-************************************************************************/
-
-$GroupID = $_GET['groupid'];
-if (!is_number($GroupID) || !$GroupID) {
+if (!isset($_GET['groupid']) || !is_number($_GET['groupid'])) {
 	error(0);
 }
+$GroupID = (int)$_GET['groupid'];
 
-// Get the torrent group name and the body of the last revision
 $DB->query("
 	SELECT Name
 	FROM torrents_group
-	WHERE ID = '$GroupID'");
-list($Name) = $DB->next_record();
-
-if (!$Name) {
+	WHERE ID = $GroupID");
+if (!$DB->has_results()) {
 	error(404);
 }
+list($Name) = $DB->next_record();
 
-View::show_header("Revision history for $Name"); // Set title
-
-// Start printing form
+View::show_header("Revision history for $Name");
 ?>
 <div class="thin">
 	<div class="header">
 		<h2>Revision history for <a href="torrents.php?id=<?=$GroupID?>"><?=$Name?></a></h2>
 	</div>
 <?
-// the Wiki class takes over from here
-Wiki::revision_history('wiki_torrents', $GroupID, "/torrents.php?id=$GroupID");
+RevisionHistoryView::render_revision_history(RevisionHistory::get_revision_history('torrents', $GroupID), "torrents.php?id=$GroupID");
 ?>
 </div>
 <?
 View::show_footer();
-?>

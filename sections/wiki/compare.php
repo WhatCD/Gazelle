@@ -82,11 +82,11 @@ if (!isset($_GET['old'])
 	error(0);
 }
 
-$ArticleID = $_GET['id'];
+$ArticleID = (int)$_GET['id'];
 
-$Article = $Alias->article($ArticleID);
+$Article = Wiki::get_article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Article);
-if ($Read > $LoggedUser['EffectiveClass']) {
+if ($Edit > $LoggedUser['EffectiveClass']) {
 	error(404);
 }
 

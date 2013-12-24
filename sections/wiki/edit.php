@@ -1,10 +1,10 @@
 <?
-if (!is_number($_GET['id']) || $_GET['id'] === '') {
+if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	error(404);
 }
-$ArticleID = $_GET['id'];
+$ArticleID = (int)$_GET['id'];
 
-$Article = $Alias->article($ArticleID);
+$Article = Wiki::get_article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $Author) = array_shift($Article);
 if ($Edit > $LoggedUser['EffectiveClass']) {
 	error('You do not have access to edit this article.');

@@ -2,9 +2,9 @@
 if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	error(404);
 }
-$ArticleID = $_GET['id'];
+$ArticleID = (int)$_GET['id'];
 
-$Latest = $Alias->article($ArticleID);
+$Latest = Wiki::get_article($ArticleID);
 list($Revision, $Title, $Body, $Read, $Edit, $Date, $AuthorID, $AuthorName) = array_shift($Latest);
 if ($Read > $LoggedUser['EffectiveClass']) {
 	error(404);

@@ -1,7 +1,15 @@
 <?
-$ID = $_GET['id'];
-if (!check_perms('admin_manage_wiki') || !is_number($ID) || ($ID == '136')) {
+if (!check_perms('admin_manage_wiki')) {
+	error(403);
+}
+
+if (!isset($_GET['id']) || !is_number($_GET['id'])) {
 	error(404);
+}
+$ID = (int)$_GET['id'];
+
+if ($ID == INDEX_ARTICLE) {
+	error('You cannot delete the main wiki article.');
 }
 
 $DB->query("
@@ -20,8 +28,7 @@ Misc::write_log("Wiki article $ID ($Title) was deleted by ".$LoggedUser['Usernam
 $DB->query("DELETE FROM wiki_articles WHERE ID = $ID");
 $DB->query("DELETE FROM wiki_aliases WHERE ArticleID = $ID");
 $DB->query("DELETE FROM wiki_revisions WHERE ID = $ID");
+Wiki::flush_aliases();
+Wiki::flush_article($ID);
 
-$Cache->delete_value('wiki_article_'.$ID);
 header("location: wiki.php");
-
-?>

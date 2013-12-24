@@ -1,16 +1,15 @@
 <?
 authorize();
 
-include(SERVER_ROOT.'/classes/validate.class.php');
-$Val = new VALIDATE;
-
-if (!is_number($_POST['id']) || $_POST['id'] == '') {
+if (!isset($_POST['id']) || !is_number($_POST['id'])) {
 	error(0);
 }
+$ArticleID = (int)$_POST['id'];
+
+include(SERVER_ROOT.'/classes/validate.class.php');
+$Val = new VALIDATE;
 $Val->SetFields('title', '1', 'string', 'The title must be between 3 and 100 characters', array('maxlength' => 100, 'minlength' => 3));
 $Err = $Val->ValidateForm($_POST);
-$ArticleID = $_POST['id'];
-
 if ($Err) {
 	error($Err);
 }
@@ -18,8 +17,8 @@ if ($Err) {
 $P = array();
 $P = db_array($_POST);
 
-$Article = $Alias->article($ArticleID);
-list($Revision, $Title, $Body, $CurRead, $CurEdit, $Date, $Author) = array_shift($Article);
+$Article = Wiki::get_article($ArticleID);
+list($OldRevision, $OldTitle, $OldBody, $CurRead, $CurEdit, $OldDate, $OldAuthor) = array_shift($Article);
 if ($CurEdit > $LoggedUser['EffectiveClass']) {
 	error(403);
 }
@@ -42,19 +41,22 @@ if (check_perms('admin_manage_wiki')) {
 }
 
 $MyRevision = $_POST['revision'];
-if ($MyRevision != $Revision) {
+if ($MyRevision != $OldRevision) {
 	error('This article has already been modified from its original version.');
 }
 
+// Store previous revision
 $DB->query("
 	INSERT INTO wiki_revisions
 		(ID, Revision, Title, Body, Date, Author)
 	VALUES
-		('".db_string($ArticleID)."', '".db_string($Revision)."', '".db_string($Title)."', '".db_string($Body)."', '".db_string($Date)."', '".db_string($Author)."')");
+		('".db_string($ArticleID)."', '".db_string($OldRevision)."', '".db_string($OldTitle)."', '".db_string($OldBody)."', '".db_string($OldDate)."', '".db_string($OldAuthor)."')");
+
+// Update wiki entry
 $SQL = "
 	UPDATE wiki_articles
 	SET
-		Revision = '".db_string($Revision + 1)."',
+		Revision = '".db_string($OldRevision + 1)."',
 		Title = '$P[title]',
 		Body = '$P[body]',";
 if ($Read && $Edit) {
@@ -67,6 +69,6 @@ $SQL .= "
 		Author = '$LoggedUser[ID]'
 	WHERE ID = '$P[id]'";
 $DB->query($SQL);
-$Cache->delete_value("wiki_article_$ArticleID");
+Wiki::flush_article($ArticleID);
+
 header("Location: wiki.php?action=article&id=$ArticleID");
-?>

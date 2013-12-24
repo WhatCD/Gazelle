@@ -1,8 +1,10 @@
 <?php
 if (empty($_GET['nojump'])) {
-	$ArticleID = $Alias->to_id($_GET['search']);
-	if ($ArticleID) { //Found Article
+	$ArticleID = Wiki::alias_to_id($_GET['search']);
+	if ($ArticleID) {
+		//Found the article!
 		header('Location: wiki.php?action=article&id='.$ArticleID);
+		die();
 	}
 }
 
@@ -70,7 +72,7 @@ $DB->set_query_id($RS);
 	<div class="header">
 		<h2>Search articles</h2>
 		<div class="linkbox">
-			<a href="wiki.php?action=create&amp;alias=<?=display_str($Alias->convert($_GET['search']))?>" class="brackets">Create an article</a> <a href="wiki.php?action=link&amp;alias=<?=display_str($Alias->convert($_GET['search']))?>" class="brackets">Link this search</a>
+			<a href="wiki.php?action=create&amp;alias=<?=display_str(Wiki::normalize_alias($_GET['search']))?>" class="brackets">Create an article</a>
 		</div>
 	</div>
 	<div>

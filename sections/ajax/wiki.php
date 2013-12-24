@@ -1,12 +1,8 @@
 <?
-include(SERVER_ROOT . '/classes/alias.class.php');
-$Alias = new ALIAS;
-
-
 if (!empty($_GET['id']) && is_number($_GET['id'])) { //Visiting article via ID
 	$ArticleID = $_GET['id'];
 } elseif ($_GET['name'] != '') { //Retrieve article ID via alias.
-	$ArticleID = $Alias->to_id($_GET['name']);
+	$ArticleID = Wiki::alias_to_id($_GET['name']);
 } else {
 	json_die("failure");
 }
@@ -14,7 +10,7 @@ if (!empty($_GET['id']) && is_number($_GET['id'])) { //Visiting article via ID
 if (!$ArticleID) { //No article found
 	json_die("failure", "article not found");
 }
-$Article = $Alias->article($ArticleID, false);
+$Article = Wiki::get_article($ArticleID, false);
 
 if (!$Article) {
 	json_die("failure", "article not found");

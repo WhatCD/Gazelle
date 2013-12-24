@@ -1,9 +1,6 @@
 <?
 enforce_login();
 
-include(SERVER_ROOT.'/classes/alias.class.php');
-$Alias = new ALIAS;
-
 
 define('INDEX_ARTICLE', '1');
 
@@ -40,13 +37,6 @@ if (!empty($_REQUEST['action'])) {
 				include('edit.php');
 			}
 			break;
-		case 'link':
-			if ($_POST['action']) {
-				include('takelink.php');
-			} else {
-				include('link.php');
-			}
-			break;
 		case 'delete':
 			if ($_POST['action']) {
 				include('takedelete.php');
@@ -59,9 +49,6 @@ if (!empty($_REQUEST['action'])) {
 			break;
 		case 'compare':
 			include('compare.php');
-			break;
-		case 'revert':
-			include('revert.php');
 			break;
 		case 'add_alias':
 			include('add_alias.php');
