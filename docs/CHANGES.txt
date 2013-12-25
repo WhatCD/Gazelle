@@ -1,5 +1,14 @@
 CHANGE LOG
 
+2013-12-25 by Ajax
+Custom date input for manual additions to the changelog
+
+2013-12-24 by Y
+Split the "Wiki" class (which has nothing to do with the wiki but deals with revisions on artist and torrent pages) into RevisionHistory + RevisionHistoryView
+
+2013-12-24 by Y
+New Wiki class that handles the stuff ALIAS did before; various changes to the horrible wiki system, including the deletion of some obsolete files
+
 2013-12-23 by alderaan
 Clear "user_info_$UserID" for each user that gets disabled for having never logged in
 

@@ -9,9 +9,13 @@ if ($CanEdit && isset($_POST['perform'])) {
 	if ($_POST['perform'] === 'add' && !empty($_POST['message'])) {
 		$Message = db_string($_POST['message']);
 		$Author = db_string($_POST['author']);
+		$Date = db_string($_POST['date']);
+		if (!is_valid_date($Date)) {
+			$Date = sqltime();
+		}
 		$DB->query("
 			INSERT INTO changelog (Message, Author, Time)
-			VALUES ('$Message', '$Author', NOW())");
+			VALUES ('$Message', '$Author', '$Date')");
 		$ID = $DB->inserted_id();
 	//	SiteHistory::add_event(sqltime(), "Change log $ID", "tools.php?action=change_log", 1, 3, "", $Message, $LoggedUser['ID']);
 
@@ -30,15 +34,15 @@ $DB->query("
 		ID,
 		Message,
 		Author,
-		Date(Time) as Time
+		Date(Time) as Time2
 	FROM changelog
-	ORDER BY ID DESC
+	ORDER BY Time DESC
 	LIMIT $Limit");
 $ChangeLog = $DB->to_array();
 $DB->query('SELECT FOUND_ROWS()');
 list($NumResults) = $DB->next_record();
 
-View::show_header('Gazelle Change Log');
+View::show_header('Gazelle Change Log', 'datetime_picker', 'datetime_picker');
 ?>
 <div class="thin">
 	<h2>Gazelle Change Log</h2>
@@ -62,6 +66,11 @@ View::show_header('Gazelle Change Log');
 					<br />
 					<textarea name="message" rows="2"></textarea>
 				</div>
+				<div class="field_div" id="cl_date">
+					<span class="label">Date:</span>
+					<br />
+					<input type="text" class="date_picker" name="date" />
+				</div>
 				<div class="field_div" id="cl_author">
 					<span class="label">Author:</span>
 					<br />
@@ -80,7 +89,7 @@ View::show_header('Gazelle Change Log');
 ?>
 	<div class="box box2 change_log_entry">
 		<div class="head">
-			<span><?=$Change['Time']?> by <?=$Change['Author']?></span>
+			<span><?=$Change['Time2']?> by <?=$Change['Author']?></span>
 <?		if ($CanEdit) { ?>
 			<span style="float: right;">
 				<form id="delete_<?=$Change['ID']?>" method="post" action="">

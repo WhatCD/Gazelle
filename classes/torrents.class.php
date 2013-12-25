@@ -3,7 +3,7 @@ class Torrents {
 	const FILELIST_DELIM = 0xF7; // Hex for &divide; Must be the same as phrase_boundary in sphinx.conf!
 	const SNATCHED_UPDATE_INTERVAL = 3600; // How often we want to update users' snatch lists
 
-	/*
+	/**
 	 * Function to get data and torrents for an array of GroupIDs. Order of keys doesn't matter
 	 *
 	 * @param array $GroupIDs
@@ -882,6 +882,68 @@ class Torrents {
 		return isset($CurSnatchedTorrents[$TorrentID]);
 	}
 
+	// Some constants for self::display_string's $Mode parameter
+	const DISPLAYSTRING_HTML = 1; // Whether or not to use HTML for the output (e.g. VH tooltip)
+	const DISPLAYSTRING_ARTISTS = 2; // Whether or not to display artists
+	const DISPLAYSTRING_YEAR = 4; // Whether or not to display the group's year
+	const DISPLAYSTRING_VH = 8; // Whether or not to display the VH flag
+	const DISPLAYSTRING_RELEASETYPE = 16; // Whether or not to display the release type
+	const DISPLAYSTRING_LINKED = 33; // Whether or not to link artists and the group
+	// The constant for linking is 32, but because linking only works with HTML, this constant is defined as 32|1 = 33, i.e. LINKED also includes HTML
+	// Keep this in mind when defining presets below!
+
+	// Presets to facilitate the use of $Mode
+	const DISPLAYSTRING_DEFAULT = 63; // HTML|ARTISTS|YEAR|VH|RELEASETYPE|LINKED = 63
+	const DISPLAYSTRING_SHORT = 6; // Very simple format, only artists and year, no linking (e.g. for forum thread titles)
+
+	/**
+	 * Return the display string for a given torrent group $GroupID.
+	 * @param int $GroupID
+	 * @return string
+	 */
+	public static function display_string($GroupID, $Mode = self::DISPLAYSTRING_DEFAULT) {
+		global $ReleaseTypes; // I hate this
+
+		$GroupInfo = self::get_groups(array($GroupID), true, true, false)[$GroupID];
+		$ExtendedArtists = $GroupInfo['ExtendedArtists'];
+
+		if ($Mode & self::DISPLAYSTRING_ARTISTS) {
+			if (!empty($ExtendedArtists[1])
+				|| !empty($ExtendedArtists[4])
+				|| !empty($ExtendedArtists[5])
+				|| !empty($ExtendedArtists[6])
+			) {
+				unset($ExtendedArtists[2], $ExtendedArtists[3]);
+				$DisplayName = Artists::display_artists($ExtendedArtists, ($Mode & self::DISPLAYSTRING_LINKED));
+			} else {
+				$DisplayName = '';
+			}
+		}
+
+		if ($Mode & self::DISPLAYSTRING_LINKED) {
+			$DisplayName .= "<a href=\"torrents.php?id=$GroupID\" class=\"tooltip\" title=\"View torrent group\" dir=\"ltr\">$GroupInfo[Name]</a>";
+		} else {
+			$DisplayName .= $GroupInfo['Name'];
+		}
+
+		if (($Mode & self::DISPLAYSTRING_YEAR) && $GroupInfo['Year'] > 0) {
+			$DisplayName .= " [$GroupInfo[Year]]";
+		}
+
+		if (($Mode & self::DISPLAYSTRING_VH) && $GroupInfo['VanityHouse']) {
+			if ($Mode & self::DISPLAYSTRING_HTML) {
+				$DisplayName .= ' [<abbr class="tooltip" title="This is a Vanity House release">VH</abbr>]';
+			} else {
+				$DisplayName .= ' [VH]';
+			}
+		}
+
+		if (($Mode & self::DISPLAYSTRING_RELEASETYPE) && $GroupInfo['ReleaseType'] > 0) {
+			$DisplayName .= ' ['.$ReleaseTypes[$GroupInfo['ReleaseType']].']';
+		}
+
+		return $DisplayName;
+	}
 
 	public static function edition_string(array $Torrent, array $Group) {
 		if ($Torrent['Remastered'] && $Torrent['RemasterYear'] != 0) {

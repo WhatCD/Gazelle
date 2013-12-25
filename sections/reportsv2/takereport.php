@@ -99,12 +99,13 @@ if (!empty($_POST['extra'])) {
 }
 
 $DB->query("
-	SELECT ID
+	SELECT GroupID
 	FROM torrents
 	WHERE ID = $TorrentID");
 if (!$DB->has_results()) {
 	$Err = "A torrent with that ID doesn't exist!";
 }
+list($GroupID) = $DB->next_record();
 
 if (!empty($Err)) {
 	error($Err);

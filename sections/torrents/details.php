@@ -601,7 +601,7 @@ foreach ($TorrentList as $Torrent) {
 				<div class="filelist_title" style="float: left;">File Names' . $RegenLink . '</div>
 				<div class="filelist_path" style="float: right;">' . ($FilePath ? "/$FilePath/" : '') . '</div>
 			</td>
-			<td>
+			<td class="nobr">
 				<strong>Size</strong>
 			</td>
 		</tr>';
@@ -614,13 +614,13 @@ foreach ($TorrentList as $Torrent) {
 				$Name = str_replace(' ', '&nbsp;', substr($Name, 0, $Spaces)) . substr($Name, $Spaces);
 			}
 			$FileSize = substr($File, $NameEnd + 3, -3);
-			$FileTable .= sprintf("\n<tr><td>%s</td><td class=\"number_column\">%s</td></tr>", $Name, Format::get_size($FileSize));
+			$FileTable .= sprintf("\n<tr><td>%s</td><td class=\"number_column nobr\">%s</td></tr>", $Name, Format::get_size($FileSize));
 		}
 	} else {
 		$FileListSplit = explode("\n", $FileList);
 		foreach ($FileListSplit as $File) {
 			$FileInfo = Torrents::filelist_get_file($File);
-			$FileTable .= sprintf("\n<tr><td>%s</td><td class=\"number_column\">%s</td></tr>", $FileInfo['name'], Format::get_size($FileInfo['size']));
+			$FileTable .= sprintf("\n<tr><td>%s</td><td class=\"number_column nobr\">%s</td></tr>", $FileInfo['name'], Format::get_size($FileInfo['size']));
 		}
 	}
 	$FileTable .= '
