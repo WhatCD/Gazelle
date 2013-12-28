@@ -1,5 +1,14 @@
 CHANGE LOG
 
+2013-12-28 by alderaan
+Require the Text class in sections/feeds/index.php to fix broken RSS feeds.
+
+2013-12-28 by alderaan
+Append "(this session)" to the "Up" column on torrent group peer lists
+
+2013-12-28 by alderaan
+Fix display of bidirectional text (mixed LTR/RTL) for torrent group/artist names in the heading on torrent group pages.
+
 2013-12-25 by Ajax
 Custom date input for manual additions to the changelog
 

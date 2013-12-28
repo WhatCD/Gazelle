@@ -10,9 +10,9 @@ if (
 	|| empty($_GET['passkey'])
 	|| empty($_GET['user'])
 	|| !is_number($_GET['user'])
-	|| strlen($_GET['authkey']) != 32
-	|| strlen($_GET['passkey']) != 32
-	|| strlen($_GET['auth']) != 32
+	|| strlen($_GET['authkey']) !== 32
+	|| strlen($_GET['passkey']) !== 32
+	|| strlen($_GET['auth']) !== 32
 ) {
 	$Feed->open_feed();
 	$Feed->channel('Blocked', 'RSS feed.');
@@ -22,9 +22,9 @@ if (
 
 $User = (int)$_GET['user'];
 
-if (!$Enabled = $Cache->get_value('enabled_'.$User)) {
+if (!$Enabled = $Cache->get_value("enabled_$User")) {
 	require(SERVER_ROOT.'/classes/mysql.class.php');
-	$DB=NEW DB_MYSQL; //Load the database wrapper
+	$DB = NEW DB_MYSQL; //Load the database wrapper
 	$DB->query("
 		SELECT Enabled
 		FROM users_main
@@ -33,22 +33,21 @@ if (!$Enabled = $Cache->get_value('enabled_'.$User)) {
 	$Cache->cache_value("enabled_$User", $Enabled, 0);
 }
 
-if (md5($User.RSS_HASH.$_GET['passkey']) != $_GET['auth'] || $Enabled != 1) {
+if (md5($User.RSS_HASH.$_GET['passkey']) !== $_GET['auth'] || $Enabled != 1) {
 	$Feed->open_feed();
 	$Feed->channel('Blocked', 'RSS feed.');
-
-
 	$Feed->close_feed();
 	die();
 }
 
+require(SERVER_ROOT.'/classes/text.class.php');
 $Feed->open_feed();
 switch ($_GET['feed']) {
 	case 'feed_news':
 		$Feed->channel('News', 'RSS feed for site news.');
 		if (!$News = $Cache->get_value('news')) {
 			require(SERVER_ROOT.'/classes/mysql.class.php'); //Require the database wrapper
-			$DB=NEW DB_MYSQL; //Load the database wrapper
+			$DB = NEW DB_MYSQL; //Load the database wrapper
 			$DB->query("
 				SELECT
 					ID,
@@ -63,7 +62,7 @@ switch ($_GET['feed']) {
 		}
 		$Count = 0;
 		foreach ($News as $NewsItem) {
-			list($NewsID,$Title,$Body,$NewsTime) = $NewsItem;
+			list($NewsID, $Title, $Body, $NewsTime) = $NewsItem;
 			if (strtotime($NewsTime) >= time()) {
 				continue;
 			}
@@ -96,7 +95,7 @@ switch ($_GET['feed']) {
 		foreach ($Blog as $BlogItem) {
 			list($BlogID, $Author, $Title, $Body, $BlogTime, $ThreadID) = $BlogItem;
 			if ($ThreadID) {
-				echo $Feed->item($Title, Text::strip_bbcode($Body), 'forums.php?action=viewthread&amp;threadid='.$ThreadID, SITE_NAME.' Staff', '', '', $BlogTime);
+				echo $Feed->item($Title, Text::strip_bbcode($Body), "forums.php?action=viewthread&amp;threadid=$ThreadID", SITE_NAME.' Staff', '', '', $BlogTime);
 			} else {
 				echo $Feed->item($Title, Text::strip_bbcode($Body), "blog.php#blog$BlogID", SITE_NAME.' Staff', '', '', $BlogTime);
 			}

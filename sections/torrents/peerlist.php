@@ -44,7 +44,7 @@ $DB->set_query_id($Result);
 		<td>User</td>
 		<td>Active</td>
 		<td>Connectable</td>
-		<td class="number_column">Up</td>
+		<td class="number_column">Up (this session)</td>
 		<td class="number_column">%</td>
 		<td>Client</td>
 	</tr>

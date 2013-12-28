@@ -25,7 +25,7 @@ list($WikiBody, $WikiImage, $GroupID, $GroupName, $GroupYear,
 	$GroupTime, $GroupVanityHouse, $TorrentTags, $TorrentTagIDs, $TorrentTagUserIDs,
 	$TagPositiveVotes, $TagNegativeVotes, $GroupFlags) = array_values($TorrentDetails);
 
-$DisplayName = $GroupName;
+$DisplayName = "<span dir=\"ltr\">$GroupName</span>";
 $AltName = $GroupName; // Goes in the alt text of the image
 $Title = $GroupName; // goes in <title>
 $WikiBody = Text::full_format($WikiBody);
@@ -33,7 +33,7 @@ $WikiBody = Text::full_format($WikiBody);
 $Artists = Artists::get_artist($GroupID);
 
 if ($Artists) {
-	$DisplayName = '<span dir="ltr">'.Artists::display_artists($Artists, true) . "$DisplayName</span>";
+	$DisplayName = Artists::display_artists($Artists, true) . "$DisplayName";
 	$AltName = display_str(Artists::display_artists($Artists, false)) . $AltName;
 	$Title = $AltName;
 }
