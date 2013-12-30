@@ -99,7 +99,7 @@ function unlink_user($UserID) {
 			JOIN users_dupes AS d2 ON d2.GroupID = d1.GroupID
 		SET i.AdminComment = CONCAT('".db_string($AdminComment)."\n\n', i.AdminComment)
 		WHERE d2.UserID = $UserID");
-	$DB->query("DELETE FROM users_dupes WHERE UserID='$UserID'");
+	$DB->query("DELETE FROM users_dupes WHERE UserID = '$UserID'");
 	$DB->query("
 		DELETE g.*
 		FROM dupe_groups AS g
@@ -197,10 +197,10 @@ function user_dupes_table($UserID) {
 			<input type="hidden" id="form_comment_hash" name="form_comment_hash" value="<?=$CommentHash?>" />
 			<div class="box box2" id="l_a_box">
 				<div class="head">
-					<a href="#l_a_box" class="brackets anchor">#</a> Linked Account<?=(($DupeCount == 2) ? '' : 's')?> (<?=max($DupeCount - 1, 0)?>) <a href="#" onclick="$('.linkedaccounts').gtoggle(); return false;" class="brackets">View</a>
+					<a href="#l_a_box" class="brackets anchor">#</a> Linked Accounts (<?=max($DupeCount - 1, 0)?>) <a href="#" onclick="$('.linkedaccounts').gtoggle(); return false;" class="brackets">View</a>
 				</div>
 				<table width="100%" class="layout hidden linkedaccounts">
-					<?=($DupeCount ? '<tr>' : '')?>
+					<?=($DupeCount ? "<tr>\n" : '')?>
 <?
 	$i = 0;
 	foreach ($Dupes as $Dupe) {
@@ -208,18 +208,20 @@ function user_dupes_table($UserID) {
 		list($DupeID) = $Dupe;
 		$DupeInfo = Users::user_info($DupeID);
 ?>
-					<td align="left"><?=Users::format_username($DupeID, true, true, true, true)?>
-						<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');" class="brackets tooltip" title="Remove linked account">X</a>
-					</td>
+						<td align="left"><?=Users::format_username($DupeID, true, true, true, true)?>
+							<a href="user.php?action=dupes&amp;dupeaction=remove&amp;auth=<?=$LoggedUser['AuthKey']?>&amp;userid=<?=$UserID?>&amp;removeid=<?=$DupeID?>" onclick="return confirm('Are you sure you wish to remove <?=$DupeInfo['Username']?> from this group?');" class="brackets tooltip" title="Remove linked account">X</a>
+						</td>
 <?
-		if ($i == 5) {
+		if ($i == 4) {
 			$i = 0;
-			echo "\t\t\t\t\t</tr>\n\t\t\t\t\t<tr>";
+			echo "\t\t\t\t\t</tr>\n\t\t\t\t\t<tr>\n";
 		}
 	}
 	if ($DupeCount) {
-		for ($j = $i; $j < 5; $j++) {
-			echo "\t\t\t\t\t\t<td>&nbsp;</td>";
+		if ($i !== 0) {
+			for ($j = $i; $j < 4; $j++) {
+				echo "\t\t\t\t\t\t<td>&nbsp;</td>\n";
+			}
 		}
 ?>
 					</tr>
