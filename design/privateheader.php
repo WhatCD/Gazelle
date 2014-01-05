@@ -1,4 +1,5 @@
 <?
+
 define('FOOTER_FILE', SERVER_ROOT.'/design/privatefooter.php');
 $HTTPS = ($_SERVER['SERVER_PORT'] == 443) ? 'ssl_' : '';
 $UseTooltipster = !isset(G::$LoggedUser['Tooltipster']) || G::$LoggedUser['Tooltipster'];
@@ -147,6 +148,7 @@ if ($Mobile) { ?>
 <?
 }
 
+global $ClassLevels;
 // Get notifications early to change menu items if needed
 global $NotificationSpans;
 $NotificationsManager = new NotificationsManager(G::$LoggedUser['ID']);
@@ -181,6 +183,9 @@ if ($NotificationsManager->is_skipped(NotificationsManager::SUBSCRIPTIONS)) {
 				<ul id="userinfo_username">
 					<li id="nav_userinfo" <?=Format::add_class($PageID, array('user', false, false), 'active', true, 'id')?>>
 						<a href="user.php?id=<?=G::$LoggedUser['ID']?>" class="username"><?=G::$LoggedUser['Username']?></a>
+					</li>
+					<li id="nav_userclass">
+						<span class="hidden userclass"><?=$ClassLevels[G::$LoggedUser['Class']]['Name']?></span>
 					</li>
 					<li id="nav_useredit" class="brackets<?=Format::add_class($PageID, array('user','edit'), 'active', false)?>">
 						<a href="user.php?action=edit&amp;userid=<?=G::$LoggedUser['ID']?>">Edit</a>

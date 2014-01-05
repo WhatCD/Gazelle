@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2014-01-05 by Ajax
+Wildcard searches in IP history
+
+2014-01-04 by Ajax
+Added hidden user class span in privateheader for css devs, .userclass and #nav_userclass
+
 2013-12-28 by alderaan
 Require the Text class in sections/feeds/index.php to fix broken RSS feeds.
 

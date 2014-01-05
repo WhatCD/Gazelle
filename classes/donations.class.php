@@ -747,14 +747,14 @@ class Donations {
 	}
 
 	private static function get_pm_body($Source, $Currency, $DonationAmount, $ReceivedRank, $CurrentRank) {
+		$DonationAmount = number_format($DonationAmount, 2);
 		if ($Source == 'Store Parser') {
-			$String = "[*][b]You Purchased:[/b] $DonationAmount $Currency";
+			$String = "[*][b]You Contributed:[/b] $DonationAmount $Currency";
 		} else {
-			$String = "[*][b]You Donated:[/b] $DonationAmount $Currency";
+			$String = "[*][b]You Contributed:[/b] $DonationAmount $Currency";
 		}
 
 		return 'Thank you for your generosity and support. It\'s users like you who make all of this possible. What follows is a brief description of your transaction:
-
 ' . $String . '
 [*][b]You Received:[/b] ' . $ReceivedRank . ' Donor Point' . ($ReceivedRank == 1 ? '' : 's') . '
 [*][b]Your Donor Rank:[/b] Donor Rank # ' . $CurrentRank . '
@@ -768,67 +768,142 @@ Sincerely,
 	}
 
 	private static function get_special_rank_one_pm() {
-		return 'Congratulations on reaching [url=https://'.SSL_SITE_URL.'/staffpm.php]Special Rank #1[/url]! You\'ve been awarded [b]one user pick[/b]! This user pick will be featured on the '.SITE_NAME.' front page during an upcoming event. After you submit your pick, there is no guarantee as to how long it will take before your pick is featured. Picks will be featured on a first-submitted, first-served basis. Please abide by the following guidelines when making your selection:
+		return 'Congratulations on reaching [url=https://'.SSL_SITE_URL.'/forums.php?action=viewthread&threadid=178640&postid=4839790#post4839790]Special Rank #1[/url]! You\'ve been awarded [b]one user pick[/b]! This user pick will be featured on the '.SITE_NAME.' front page during an upcoming event. After you submit your pick, there is no guarantee as to how long it will take before your pick is featured. Picks will be featured on a first-submitted, first-served basis. Please abide by the following guidelines when making your selection:
 
 [*]Pick something that hasn\'t been chosen. You can tell if a pick has been used previously by looking at the collages it\'s in.
 [*]Complete the enclosed form carefully and completely.
-[*]Send a [url=https://'.SSL_SITE_URL.'/forums.php?action=viewthread&threadid=178640&postid=4839790#post4839790]Staff PM[/url] with the completed form. Title this PM "Special Rank User Pick".
-[important][align=center]**The following form must be used. Do not edit the BBCode. Send a Staff PM with the completed form.**[/align][/important]
-[quote][plain]FRONT PAGE:------------------------------------------------------------------------------------------------------------------------------------------
+[*]Reply to this PM with the completed form.
+[important][align=center]**The following form must be used. Do not edit the BBCode. Reply to this message with the completed form.**[/align][/important]
+
+[quote][align=center][size=10]SUBMISSION FORM[/size]
+[size=4]COPY & PASTE THE BBCODE INTO YOUR REPLY. FILL FORM WITH YOUR INFO. SUBMIT.[/size][/align]
+
+
+[code][align=center][size=10][u]FRONT PAGE[/u][/size][/align]
 
 
 [b][size=5][user]<NAME>[/user]\'s Special Donor Pick[/size][/b]
 
 [b]Artist Name - Album Title[/b]
 
-[b]Genre:[/b] Alternative, Rock, Grunge
+[b]Genre:[/b] Alternative, Rock, Grunge, ...
 
-[b]Torrents:[/b] Link Goes Here
+[b]Torrents:[/b] Torrent Group Link Here
 
-[b]Review:[/b] [quote]Review Here (Limit: 1 Paragraph)[/quote]
+[b]Review:[/b] [quote]Put your front page review here. The review should be a maximum of two small(ish) paragraphs or one medium-sized paragraph. Do not include a huge review for the front page portion of your post, as it will be truncated per the wishes of the Staff Team.[/quote]
 
 
-FORUM POST:------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+[align=center][size=10][u]FORUM POST[/u][/size][/align]
 
 
 [b][size=5][user]<NAME>[/user]\'s Special Donor Pick[/size][/b]
 
-[img=Album Cover]
+[img=Album Cover URL]
 
 [b]Artist Name - Album Title[/b]
 
-[b]Genre:[/b] Alternative, Rock, Grunge
+[b]Genre:[/b] Alternative, Rock, Grunge, ...
 
-[b]Torrents:[/b] Link Goes Here
+[b]Torrents:[/b] Torrent Group Link Here
 
-[b]Release Info[/b]
+[b]Release Info:[/b]
+[*][u]Release Date[/u]: Release Date Here
+[*][u]Tracks[/u]: Track Count Here
+[*][u]Length[/u]: Release Length Here
+[*][u]Label[/u]: Release Label Here
 
-[u]Release Date:[/u] Date
-[u]Tracks:[/u] Tracks
-[u]Length:[/u] Length
-[u]Label:[/u] Label
-
-[u]Band Member — Instruments[/u]
-Member 1 — Guitar
-Member 2 — Drums
+[b]Credits:[/b]
+[*][b]Member Name 1:[/b] Role / Instruments Played
+[*][b]Member Name 2:[/b] Role / Instruments Played
+[*][b]Member Name 3:[/b] Role / Instruments Played
 
 [b]Track Listing:[/b]
+[#]Remove or add to this list...
+[#]...as is necessary.
+[#]Track 03
+[#]Track 04
+[#]Track 05
+[#]Track 06
+[#]Track 07
+[#]Track 08
+[#]Track 09
+[#]Track 10
 
-01. Remove
-02. These
-03. As Is
-04. Necessary
-05. Track 05
-06. Track 06
-07. Track 07
-08. Track 08
-09. Track 09
-10. Track 10
+[b]Website:[/b] Artist Website / Info Page / Fan Site Link Here
 
-[b]Web site:[/b] Link
+[b]Review:[/b] [quote]Put your forum post review here. This review can be any length. You can write it yourself or source it from the net. Please try to include a source if you don\'t write your own review. If your review is too long, it will be included, but put into hide tags by the Staff Team formatting the thread.[/quote][/code][/quote]
+[hide=Completed Submission Form (Example)][align=center][size=10][u]FRONT PAGE[/u][/size][/align]
 
-[b]Review:[/b] [quote]Review Here (No Length Limit)[/quote]
-[/plain][/quote]Alternately, you may use this [url=http://pick.thehash.es/]pick generator tool[/url] to assist you in properly formatting your pick.
+
+[b][size=5][user]DixieFlatline[/user]\'s Special Donor Pick[/size][/b]
+
+[b]The Door and The Window - Detailed Twang[/b]
+
+[b]Genre:[/b] Post-Punk, Rock, Experimental
+
+[b]Torrents:[/b] http://what.cd/torrents.php?id=649629
+
+[b]Review:[/b] [quote=Mutant Sounds]Stumblebum idiot savant songform fragmentation that vacillates between moments of delirious jerry-rigged inspiration and passages that border on the insufferably sophomoric, brought to you by this batch of DIY rabble rousers whose stance and attitude (complete with DIY manifestos on the back cover) aligned them strongly at the time with the likes of The Desperate Bicycles. Loosely yoked to a whole network of willfully rinky dink art damage, Nag and Bendle (2/3 of The Door And The Window) also participated in The 49 Americans, a group with a similar propensity for inspired faux naif art brut whimsy and Mark Perry (the other 1/3) was of course the leader of Alternative TV, whose NWW list included group The Good Missionaries also traffic in much the same sort of abstruse fuckery.[/quote][/code][/quote]
+
+
+
+
+
+[align=center][size=10][u]FORUM POST[/u][/size][/align]
+
+
+[b][size=5][user]DixieFlatline[/user]\'s Special Donor Pick[/size][/b]
+
+[img=http://i.imgur.com/wXdQd.jpg]
+
+[b]The Door and The Window - Detailed Twang[/b]
+
+[b]Genre:[/b] Post-Punk, Rock, Experimental
+
+[b]Torrents:[/b] http://what.cd/torrents.php?id=649629
+
+[b]Release Info[/b]
+[*][u]Release Date[/u]: 1980 (Reissue: 2003)
+[*][u]Tracks[/u]: 12 (Reissue: 23)
+[*][u]Length[/u]: 1:09:11
+[*][u]Label[/u]: Overground Records
+
+[b]Credits:[/b]
+[*][b]Bendle:[/b] Guitar, Percussion, Vocals
+[*][b]Nag:[/b] Percussion, Synthesizer, Vocals
+[*][b]Mark Perry:[/b] Drums, Saxophone, Vocals (tracks: 1 to 12, 22, 23)
+
+[b]Track Listing:[/b]
+[#]Dads (4:41)
+[#]Habits (2:14)
+[#]We Do Scare Each Other (2:23)
+[#]Order And Obey (3:20)
+[#]He Feels Like A Doris (4:47)
+[#]Part-Time Punks (3:50)
+[#]In The Car (0:43)
+[#]Subculture Fashion Slaves (3:51)
+[#]Sticks And Stones (3:56)
+[#]Positive (4:24)
+[#]Why Must You Build Walls Around Us? (2:17)
+[#]Detailed Twang (1:50)
+[#]Subculture Fashion Slaves (Early Version) (3:26)
+[#]Nostradomus (1:38)
+[#]Don\'t Kill Colin (3:33)
+[#]Wurst Band (1:38)
+[#]Dig (2:10)
+[#]Production Line (4:05)
+[#]He Feels Like A Doris (Early Version) (3:25)
+[#]I Like Sound (1:25)
+[#]Innocent (1:38)
+[#]The Number One Entertainer (3:38)
+[#]C.C.H. (4:19)
+
+[b]Website:[/b] http://www.wikipedia.org
+
+[b]Review:[/b] [quote=Mutant Sounds]Stumblebum idiot savant songform fragmentation that vacillates between moments of delirious jerry-rigged inspiration and passages that border on the insufferably sophomoric, brought to you by this batch of DIY rabble rousers whose stance and attitude (complete with DIY manifestos on the back cover) aligned them strongly at the time with the likes of The Desperate Bicycles. Loosely yoked to a whole network of willfully rinky dink art damage, Nag and Bendle (2/3 of The Door And The Window) also participated in The 49 Americans, a group with a similar propensity for inspired faux naif art brut whimsy and Mark Perry (the other 1/3) was of course the leader of Alternative TV, whose NWW list included group The Good Missionaries also traffic in much the same sort of abstruse fuckery.[/quote][/hide]
 
 At this time, we\'d like to thank you for your continued support of the site. The fact that you\'ve reached this milestone is testament to your belief in '.SITE_NAME.' as a project. It\'s dedicated users like you that keep us alive. We look forward to featuring your pick in an upcoming announcement.
 

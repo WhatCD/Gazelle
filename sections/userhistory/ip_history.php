@@ -33,8 +33,8 @@ if (!check_perms('users_view_ips', $Class)) {
 $UsersOnly = $_GET['usersonly'];
 
 if (isset($_POST['ip'])) {
-	$SearchIP = db_string($_POST['ip']);
-	$SearchIPQuery = " AND h1.IP = '$SearchIP' ";
+	$SearchIP = db_string(str_replace("*", "%", trim($_POST['ip'])));
+	$SearchIPQuery = " AND h1.IP LIKE '$SearchIP' ";
 }
 
 View::show_header("IP address history for $Username");
@@ -141,7 +141,7 @@ $Pages = Format::get_pages($Page, $NumResults, IPS_PER_PAGE, 9);
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>IP address history for <a href="/user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
+		<h2>IP address history for <a href="user.php?id=<?=$UserID?>"><?=$Username?></a></h2>
 		<div class="linkbox">
 <?	if ($UsersOnly) { ?>
 			<a href="userhistory.php?action=ips&amp;userid=<?=$UserID?>" class="brackets">View all IP addresses</a>
@@ -162,6 +162,7 @@ $Pages = Format::get_pages($Page, $NumResults, IPS_PER_PAGE, 9);
 			<form class="search_form" name="ip_log" method="post" action="">
 				<input type="text" name="ip" />
 				<input type="submit" value="Search" />
+				Wildcard (*) search examples: 127.0.* or 1*2.0.*.1 or *.*.*.*
 			</form>
 		</td></tr>
 	</table>
