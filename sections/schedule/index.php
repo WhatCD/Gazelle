@@ -641,7 +641,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	$OnRatioWatch = array();
 
 	// Take users off ratio watch and enable leeching
-	$UserQuery = $DB->query("
+	/*$UserQuery = $DB->query("
 			SELECT
 				m.ID,
 				torrent_pass
@@ -736,7 +736,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 		$Cache->commit_transaction(0);
 		Misc::send_pm($UserID, 0, 'You have been put on Ratio Watch', "This happens when your ratio falls below the requirements we have outlined in the rules located [url=https://".SSL_SITE_URL."/rules.php?p=ratio]here[/url].\n For information about ratio watch, click the link above.");
 		echo "Ratio watch on: $UserID\n";
-	}
+	}*/
 
 	sleep(5);
 
@@ -993,6 +993,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	$InactivityExceptionsMade = array(//UserID => expiry time of exception
 
 	);
+	/*
 	foreach ($Torrents as $Torrent) {
 		list($ID, $GroupID, $Name, $Format, $Encoding, $UserID, $Media, $InfoHash) = $Torrent;
 		if (array_key_exists($UserID, $InactivityExceptionsMade) && (time() < $InactivityExceptionsMade[$UserID])) {
@@ -1035,7 +1036,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			INSERT INTO log (Message, Time)
 			VALUES $Values");
 		echo "\nDeleted $i torrents for inactivity\n";
-	}
+	}*/
 
 	$DB->query("
 		SELECT SimilarID
