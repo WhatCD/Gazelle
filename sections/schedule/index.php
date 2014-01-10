@@ -641,7 +641,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	$OnRatioWatch = array();
 
 	// Take users off ratio watch and enable leeching
-	/*$UserQuery = $DB->query("
+	$UserQuery = $DB->query("
 			SELECT
 				m.ID,
 				torrent_pass
@@ -710,7 +710,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 
 	// Put user on ratio watch if he doesn't meet the standards
 	sleep(10);
-	$DB->query("
+	/*$DB->query("
 		SELECT m.ID, m.Downloaded
 		FROM users_info AS i
 			JOIN users_main AS m ON m.ID = i.UserID
@@ -968,7 +968,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	sleep(10);
 
 	$i = 0;
-	$DB->query("
+	/*$DB->query("
 		SELECT
 			t.ID,
 			t.GroupID,
@@ -993,7 +993,6 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	$InactivityExceptionsMade = array(//UserID => expiry time of exception
 
 	);
-	/*
 	foreach ($Torrents as $Torrent) {
 		list($ID, $GroupID, $Name, $Format, $Encoding, $UserID, $Media, $InfoHash) = $Torrent;
 		if (array_key_exists($UserID, $InactivityExceptionsMade) && (time() < $InactivityExceptionsMade[$UserID])) {
