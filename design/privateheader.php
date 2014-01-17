@@ -98,8 +98,19 @@ if ($Mobile) { ?>
 ?>
 	<link rel="stylesheet" type="text/css" title="<?=G::$LoggedUser['StyleName']?>" media="screen"
 			href="<?=STATIC_SERVER?>styles/<?=G::$LoggedUser['StyleName']?>/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/'.G::$LoggedUser['StyleName'].'/style.css')?>" />
-<?	} else { ?>
-	<link rel="stylesheet" type="text/css" media="screen" href="<?=G::$LoggedUser['StyleURL']?>" title="External CSS"  />
+<?
+	} else {
+		$StyleURLInfo = parse_url(G::$LoggedUser['StyleURL']);
+		if (substr(G::$LoggedUser['StyleURL'], -4) == '.css'
+				&& $StyleURLInfo['query'].$StyleURLInfo['fragment'] == ''
+				&& in_array($StyleURLInfo['host'], array(NONSSL_SITE_URL, SSL_SITE_URL))
+				&& file_exists(SERVER_ROOT.$StyleURLInfo['path'])) {
+			$StyleURL = G::$LoggedUser['StyleURL'].'?v='.filemtime(SERVER_ROOT.$StyleURLInfo['path']);
+		} else {
+			$StyleURL = G::$LoggedUser['StyleURL'];
+		}
+?>
+	<link rel="stylesheet" type="text/css" media="screen" href="<?=$StyleURL?>" title="External CSS" />
 <?
 	}
 	if (!empty(G::$LoggedUser['UseOpenDyslexic'])) {
