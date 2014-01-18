@@ -6,9 +6,9 @@
 function toggleChecks(formElem, masterElem, elemSelector) {
 	elemSelector = elemSelector || 'input:checkbox';
 	if (masterElem) {
-		$('#'+formElem+' '+elemSelector).prop('checked', masterElem.checked);
+		$('#' + formElem + ' ' + elemSelector).prop('checked', masterElem.checked);
 	} else {
-		$('#'+formElem+' '+elemSelector).each(function() {
+		$('#' + formElem + ' ' + elemSelector).each(function() {
 			this.checked = !this.checked;
 		})
 	}
@@ -17,16 +17,16 @@ function toggleChecks(formElem, masterElem, elemSelector) {
 //Lightbox stuff
 
 /*
- *  If loading from a thumbnail, the lightbox is shown first with a "loading" screen
- *  while the full size image loads, then the HTML of the lightbox is replaced with the image.
+ * If loading from a thumbnail, the lightbox is shown first with a "loading" screen
+ * while the full size image loads, then the HTML of the lightbox is replaced with the image.
  */
 
 var lightbox = {
 	init: function (image, size) {
 		if (typeof(image) == 'string') {
-			$('#lightbox').gshow().listen('click',lightbox.unbox).raw().innerHTML =
+			$('#lightbox').gshow().listen('click', lightbox.unbox).raw().innerHTML =
 				'<p size="7" style="color: gray; font-size: 50px;">Loading...<p>';
-			$('#curtain').gshow().listen('click',lightbox.unbox);
+			$('#curtain').gshow().listen('click', lightbox.unbox);
 			var src = image;
 			image = new Image();
 			image.onload = function() {
@@ -51,8 +51,8 @@ var lightbox = {
 			hasA = true;
 		}
 		if (!hasA) {
-			$('#lightbox').gshow().listen('click',lightbox.unbox).raw().innerHTML = '<img src="' + image.src + '" alt="" />';
-			$('#curtain').gshow().listen('click',lightbox.unbox);
+			$('#lightbox').gshow().listen('click', lightbox.unbox).raw().innerHTML = '<img src="' + image.src + '" alt="" />';
+			$('#curtain').gshow().listen('click', lightbox.unbox);
 		}
 	},
 	box_async: function (image) {
@@ -81,7 +81,7 @@ function caps_check(e) {
 	if (e.which > 47 && e.which < 58) {
 		return;
 	}
-	if ((e.which > 64 && e.which <  91 && !e.shiftKey) || (e.which > 96 && e.which < 123 && e.shiftKey)) {
+	if ((e.which > 64 && e.which < 91 && !e.shiftKey) || (e.which > 96 && e.which < 123 && e.shiftKey)) {
 		$('#capslock').gshow();
 	}
 }
@@ -112,9 +112,9 @@ function add_selection() {
 	if (selected.disabled === false) {
 		var listitem = document.createElement("li");
 		listitem.id = 'list' + selected.value;
-		listitem.innerHTML = '						<input type="hidden" name="list[]" value="'+selected.value+'" /> ' +
-'						<span style="float: left;">'+selected.innerHTML+'</span>' +
-'						<a href="#" onclick="remove_selection(\''+selected.value+'\');return false;" style="float: right;" class="brackets">X</a>' +
+		listitem.innerHTML = '						<input type="hidden" name="list[]" value="' + selected.value + '" /> ' +
+'						<span style="float: left;">' + selected.innerHTML + '</span>' +
+'						<a href="#" onclick="remove_selection(\'' + selected.value + '\'); return false;" style="float: right;" class="brackets">X</a>' +
 '						<br style="clear: all;" />';
 		$('#list').raw().appendChild(listitem);
 		$('#opt' + selected.value).raw().disabled = true;
@@ -123,20 +123,20 @@ function add_selection() {
 
 function remove_selection(index) {
 	$('#list' + index).remove();
-	$('#opt' + index).raw().disabled='';
+	$('#opt' + index).raw().disabled = '';
 }
 
 // Thank you http://stackoverflow.com/questions/4578398/selecting-all-text-within-a-div-on-a-single-left-click-with-javascript
 function select_all(el) {
-    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
-        var range = document.createRange();
-        range.selectNodeContents(el);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-    } else if (typeof document.selection != "undefined" && typeof document.body.createTextRange != "undefined") {
-        var textRange = document.body.createTextRange();
-        textRange.moveToElementText(el);
-        textRange.select();
-    }
+	if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+		var range = document.createRange();
+		range.selectNodeContents(el);
+		var sel = window.getSelection();
+		sel.removeAllRanges();
+		sel.addRange(range);
+	} else if (typeof document.selection != "undefined" && typeof document.body.createTextRange != "undefined") {
+		var textRange = document.body.createTextRange();
+		textRange.moveToElementText(el);
+		textRange.select();
+	}
 }

@@ -1,5 +1,14 @@
 CHANGE LOG
 
+2014-01-18 by alderaan
+Fix grammar in pop-up notifications about new Staff PMs.
+
+2014-01-18 by flaming
+Rename "Unrelated Ebooks" torrent report type to "Ebook Collection".
+
+2014-01-18 by alderaan
+Rename the "Dismiss" button to "Hide" for pop-up notifications.
+
 2014-01-05 by Ajax
 Wildcard searches in IP history
 

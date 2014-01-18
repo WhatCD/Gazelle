@@ -41,7 +41,7 @@
 		});
 		$("#recommendation_note").keypress(function(e) {
 			state = $("#send_recommendation").attr("disabled");
-			if (typeof state  === 'undefined' && e.keyCode == 13) {
+			if (typeof state === 'undefined' && e.keyCode == 13) {
 				e.preventDefault();
 				send_recommendation();
 			}

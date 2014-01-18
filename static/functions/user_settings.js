@@ -1,12 +1,12 @@
 $(document).ready(function() {
 	var top = $('#settings_sections').offset().top - parseFloat($('#settings_sections').css('marginTop').replace(/auto/, 0));
 	$(window).scroll(function (event) {
-	  var y = $(this).scrollTop();
-	  if (y >= top) {
-	    $('#settings_sections').addClass('fixed');
-	  } else {
-	    $('#settings_sections').removeClass('fixed');
-	  }
+		var y = $(this).scrollTop();
+		if (y >= top) {
+			$('#settings_sections').addClass('fixed');
+		} else {
+			$('#settings_sections').removeClass('fixed');
+		}
 	});
 
 	$("#settings_sections li").each(function(index) {

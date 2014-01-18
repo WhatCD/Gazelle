@@ -145,7 +145,7 @@ function Unbookmark(type, id, newName) {
 			$('.groupid_' + id).remove();
 			$('.bookmark_' + id).remove();
 		});
-	} else if (window.location.pathname.indexOf('top10.php') != -1  || window.location.search.indexOf('?action=notify') != -1) {
+	} else if (window.location.pathname.indexOf('top10.php') != -1 || window.location.search.indexOf('?action=notify') != -1) {
 		var oldName = $('#bookmarklink_' + type + '_' + id).raw().innerHTML;
 		ajax.get("bookmarks.php?action=remove&type=" + type + "&auth=" + authkey + "&id=" + id, function() {
 			var bookmarklinks = $('#bookmarklink_' + type + '_' + id);

@@ -333,7 +333,7 @@ class NotificationsManager {
 		}
 
 		if ($NewStaffPMs > 0) {
-			$Title = 'You have new ' . ($NewStaffPMs == 1 ? 'a' : $NewStaffPMs) . ' Staff PM' . ($NewStaffPMs > 1 ? 's' : '');
+			$Title = 'You have ' . ($NewStaffPMs == 1 ? 'a' : $NewStaffPMs) . ' new Staff PM' . ($NewStaffPMs > 1 ? 's' : '');
 			$this->create_notification(self::STAFFPM, 0, $Title, 'staffpm.php', self::INFO);
 		}
 	}

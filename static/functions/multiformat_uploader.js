@@ -90,7 +90,7 @@ function addReleaseDescription(row) {
 		name:"extra_release_desc[]",
 		cols:60,
 		rows:4,
-		style:'display:none;  margin-left: 5px; margin-top: 10px; margin-bottom: 10px;'
+		style:'display:none; margin-left: 5px; margin-top: 10px; margin-bottom: 10px;'
 	}).appendTo(desc_row);
 }
 

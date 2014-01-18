@@ -818,7 +818,7 @@ Your torrent was reported because it contained a program that did not work or no
 			'unrelated' => array(
 				'priority' => '270',
 				'reason' => '-1',
-				'title' => 'Unrelated Ebooks',
+				'title' => 'Ebook Collection',
 				'report_messages' => array(
 					'Please include as much information as possible to verify the report.'
 				),

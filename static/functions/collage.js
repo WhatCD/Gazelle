@@ -93,7 +93,7 @@ var collageShow = {
 		if (this.max - this.pg < 2) {
 			first = Math.max(this.max - 4, 0);
 		}
-		last  = Math.min(first + 4, this.max);
+		last = Math.min(first + 4, this.max);
 		for (i = 0; i < first; i++) {
 			$('#pagelink' + i).ghide();
 		}
@@ -134,7 +134,7 @@ var collageShow = {
 		}
 	},
 	nextPage:function() {
-		this.pg =  this.pg < this.max ? this.pg + 1 : this.pg;
+		this.pg = this.pg < this.max ? this.pg + 1 : this.pg;
 		this.pager();
 	},
 	prevPage:function() {

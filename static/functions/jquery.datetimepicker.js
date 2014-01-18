@@ -98,11 +98,11 @@
 						event.preventDefault();
 					};
 				});
-				timeboxparent.on('touchend touchcancel',function( event ){
+				timeboxparent.on('touchend touchcancel', function(event){
 					start = false;
 				});
 			}
-			timeboxparent.trigger('resize_scroll.xdsoft_scroller',[_percent]);
+			timeboxparent.trigger('resize_scroll.xdsoft_scroller', [_percent]);
 		});
 	};
 	$.fn.datetimepicker = function( opt ){
@@ -127,7 +127,7 @@
 			ZKEY = 90,
 			YKEY = 89,
 			ctrlDown	=	false,
-			default_options  = {
+			default_options = {
 				i18n:{
 					ru:{
 						months:[
@@ -543,13 +543,13 @@
 								stop = false;
 
 							(function(v){
-								var month =  _xdsoft_datetime.currentTime.getMonth();
+								var month = _xdsoft_datetime.currentTime.getMonth();
 								if( $this.hasClass( options.next ) ){
 									_xdsoft_datetime.nextMonth();
 								}else if( $this.hasClass( options.prev ) ){
 									_xdsoft_datetime.prevMonth();
 								}
-								!stop&&(timer = setTimeout(arguments.callee,v?v:100));
+								!stop && (timer = setTimeout(arguments.callee, v ? v : 100));
 							})(500);
 
 							$([document.body,window]).on('mouseup.xdsoft',function(){
@@ -572,7 +572,7 @@
 									top = Math.abs(parseInt(timebox.css('marginTop')));
 								if( $this.hasClass(options.next) && (height-pheight)- options.timeHeightInTimePicker>=top ){
 									timebox.css('marginTop','-'+(top+options.timeHeightInTimePicker)+'px')
-								}else if( $this.hasClass(options.prev) && top-options.timeHeightInTimePicker>=0  ){
+								}else if( $this.hasClass(options.prev) && top-options.timeHeightInTimePicker>=0 ){
 									timebox.css('marginTop','-'+(top-options.timeHeightInTimePicker)+'px')
 								}
 								timeboxparent.trigger('scroll_element.xdsoft_scroller',[Math.abs(parseInt(timebox.css('marginTop'))/(height-pheight))]);

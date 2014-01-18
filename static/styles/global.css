@@ -543,8 +543,8 @@ tr.torrent .bookmark>a:after {
 	overflow: auto;
 }
 
-.setting_description>* {
-    margin: 1em 0 0 0;
+.setting_description > * {
+	margin: 1em 0 0 0;
 }
 
 .settings_sidebar {

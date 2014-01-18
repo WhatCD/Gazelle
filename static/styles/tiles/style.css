@@ -1,62 +1,61 @@
-
 .tiles_container {
-  position: relative;
+	position: relative;
 }
 
 /**
  * Grid container
  */
- .tiles {
-  list-style-type: none;
-  position: relative; /** Needed to ensure items are laid out relative to this container **/
-  margin: 0;
-  padding: 0;
+.tiles {
+	list-style-type: none;
+	position: relative; /** Needed to ensure items are laid out relative to this container **/
+	margin: 0;
+	padding: 0;
 }
 
 /**
  * Grid items
  */
- .tiles li {
-  background-color: #ffffff;
-  border: 1px solid #dedede;
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  display: none; /** Hide items initially to avoid a flicker effect **/
-  cursor: pointer;
-  padding: 4px;
+.tiles li {
+	background-color: #ffffff;
+	border: 1px solid #dedede;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	display: none; /** Hide items initially to avoid a flicker effect **/
+	cursor: pointer;
+	padding: 4px;
 }
 
 .tiles li.inactive {
-  visibility: hidden;
-  opacity: 0;
+	visibility: hidden;
+	opacity: 0;
 }
 
 .tiles li img {
-  display: block;
+	display: block;
 }
 
 .large_tile {
-  max-width: 252px;
+	max-width: 252px;
 }
 
 /**
  * Grid item text
  */
- .tiles li p {
-  color: #666;
-  font-size: 12px;
-  margin: 7px 0 0 7px;
+.tiles li p {
+	color: #666;
+	font-size: 12px;
+	margin: 7px 0 0 7px;
 }
 
 /**
  * Placerholder css
  */
- .wookmark-placeholder {
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  background-color: #eee;
-  border: 1px solid #dedede;
-  z-index: -1;
+.wookmark-placeholder {
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	background-color: #eee;
+	border: 1px solid #dedede;
+	z-index: -1;
 }

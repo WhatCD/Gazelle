@@ -83,7 +83,7 @@ function createNoty(type, id, message, url, importance) {
 			}
 		},
 		{
-			addClass: 'brackets noty_button_close ', text: 'Dismiss', onClick: function($noty) {
+			addClass: 'brackets noty_button_close ', text: 'Hide', onClick: function($noty) {
 				$noty.close();
 			}
 		},
