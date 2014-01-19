@@ -494,7 +494,7 @@ if ($Hour != $NextHour || $_GET['runhour'] || isset($argv[2])) {
 
 	if (count($Users) > 0) {
 		$Subject = 'Leeching Disabled';
-		$Message = 'You have downloaded more then 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://' . SSL_SITE_URL . '/wiki.php?action=article&amp;id=110';
+		$Message = 'You have downloaded more than 10 GiB while on Ratio Watch. Your leeching privileges have been disabled. Please reread the rules and refer to this guide on how to improve your ratio https://' . SSL_SITE_URL . '/wiki.php?action=article&amp;id=110';
 		foreach ($Users as $TorrentPass => $UserID) {
 			Misc::send_pm($UserID, 0, $Subject, $Message);
 			Tracker::update_tracker('update_user', array('passkey' => $TorrentPass, 'can_leech' => '0'));
@@ -769,7 +769,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 
 	//------------- Disable downloading ability of users on ratio watch
 
-
+/*
 	$UserQuery = $DB->query("
 			SELECT ID, torrent_pass
 			FROM users_info AS i
@@ -787,6 +787,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			SET	m.can_leech = '0',
 				i.AdminComment = CONCAT('$sqltime - Leeching ability disabled by ratio watch system - required ratio: ', m.RequiredRatio, '\n\n', i.AdminComment)
 			WHERE m.ID IN(".implode(',', $UserIDs).')');
+
 
 
 		$DB->query("
@@ -807,6 +808,8 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	foreach ($Passkeys as $Passkey) {
 		Tracker::update_tracker('update_user', array('passkey' => $Passkey, 'can_leech' => '0'));
 	}
+
+	*/
 
 	//------------- Disable inactive user accounts --------------------------//
 	sleep(5);
