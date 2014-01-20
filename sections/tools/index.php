@@ -171,6 +171,8 @@ switch ($_REQUEST['action']) {
 
 
 
+		NotificationsManager::send_push(NotificationsManager::get_push_enabled_users(), $_POST['title'], $_POST['body'], site_url() . 'index.php', NotificationsManager::NEWS);
+
 		$Cache->delete_value('news_latest_id');
 		$Cache->delete_value('news_latest_title');
 		$Cache->delete_value('news');

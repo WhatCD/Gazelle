@@ -5,6 +5,9 @@ class NotificationsManager {
 	const OPT_DISABLED = 0;
 	const OPT_POPUP = 1;
 	const OPT_TRADITIONAL = 2;
+	const OPT_PUSH = 3;
+	const OPT_POPUP_PUSH = 4;
+	const OPT_TRADITIONAL_PUSH = 5;
 
 	// Importances
 	const IMPORTANT = 'information';
@@ -225,7 +228,7 @@ class NotificationsManager {
 		if ($GlobalNotification) {
 			// This is some trickery
 			// since we can't know which users have the read cache key set
-			// wet set the expiration time of their cache key to that of the length of the notification
+			// we set the expiration time of their cache key to that of the length of the notification
 			// this gaurantees that their cache key will expire after the notification expires
 			G::$Cache->cache_value('user_read_global_' . G::$LoggedUser['ID'], true, $GlobalNotification['Expiration']);
 		}
@@ -624,9 +627,11 @@ class NotificationsManager {
 			$QueryID = G::$DB->get_query_id();
 			G::$DB->query("
 				SELECT *
-				FROM users_notifications_settings
-				WHERE UserID = '$UserID'");
-			$Results = G::$DB->next_record(MYSQLI_ASSOC);
+				FROM users_notifications_settings AS n
+				LEFT JOIN users_push_notifications AS p
+				ON p.UserID = n.UserID
+				WHERE n.UserID = '$UserID'");
+			$Results = G::$DB->next_record(MYSQLI_ASSOC, false);
 			G::$DB->set_query_id($QueryID);
 			G::$Cache->cache_value("users_notifications_settings_$UserID", $Results, 0);
 		}
@@ -642,11 +647,22 @@ class NotificationsManager {
 		foreach (self::$Types as $Type) {
 			$Popup = array_key_exists("notifications_$Type" . '_popup', $Settings);
 			$Traditional = array_key_exists("notifications_$Type" . '_traditional', $Settings);
+			$Push = array_key_exists("notifications_$Type" . '_push', $Settings);
 			$Result = self::OPT_DISABLED;
 			if ($Popup) {
 				$Result = self::OPT_POPUP;
-			} elseif ($Traditional) {
+			}
+			if ($Traditional) {
 				$Result = self::OPT_TRADITIONAL;
+			}
+			if ($Push) {
+				$Result = self::OPT_POPUP;
+			}
+			if ($Popup && $Push) {
+				$Result = self::OPT_POPUP_PUSH;
+			}
+			if ($Traditional && $Push) {
+				$Result = self::OPT_TRADITIONAL_PUSH;
 			}
 			$Update[] = "$Type = $Result";
 		}
@@ -657,6 +673,23 @@ class NotificationsManager {
 			UPDATE users_notifications_settings
 			SET $Update
 			WHERE UserID = '$UserID'");
+
+		$PushService = (int) $_POST['pushservice'];
+		$PushOptions = db_string(serialize(array("PushKey" => $_POST['pushkey'])));
+
+		if ($PushService != 0) {
+			G::$DB->query("
+					INSERT INTO users_push_notifications
+						(UserID, PushService, PushOptions)
+					VALUES
+						('$UserID', '$PushService', '$PushOptions')
+					ON DUPLICATE KEY UPDATE
+						PushService = '$PushService',
+						PushOptions = '$PushOptions'");
+		} else {
+			G::$DB->query("UPDATE users_push_notifications SET PushService = 0 WHERE UserID = '$UserID'");
+		}
+
 		G::$DB->set_query_id($QueryID);
 		G::$Cache->delete_value("users_notifications_settings_$UserID");
 	}
@@ -671,5 +704,91 @@ class NotificationsManager {
 
 	public function use_noty() {
 		return in_array(self::OPT_POPUP, $this->Settings);
+	}
+
+	/**
+	 * Send a push notification to a user
+	 *
+	 * @param array $UserIDs integer or array of integers of UserIDs to push
+	 * @param string $Title the title to be displayed in the push
+	 * @param string $Body the body of the push
+	 * @param string $URL url for the push notification to contain
+	 * @param string $Type what sort of push is it? PM, Rippy, News, etc
+	 */
+	public static function send_push($UserIDs, $Title, $Body, $URL = '', $Type = 'Global') {
+		if (!is_array($UserIDs)) {
+			$UserIDs = array($UserIDs);
+		}
+		foreach($UserIDs as $UserID) {
+			$UserID = (int) $UserID;
+			$QueryID = G::$DB->get_query_id();
+			$SQL = "
+				SELECT
+					p.PushService, p.PushOptions
+				FROM users_notifications_settings AS n
+				JOIN users_push_notifications AS p
+				ON n.UserID = p.UserID
+				WHERE n.UserID = '$UserID'
+				AND p.PushService != 0";
+			if ($Type != self::GLOBALNOTICE) {
+				$SQL .= " AND n.$Type IN (" . self::OPT_PUSH . "," . self::OPT_POPUP_PUSH . "," . self::OPT_TRADITIONAL_PUSH . ")";
+			}
+			G::$DB->query($SQL);
+
+			if (G::$DB->has_results()) {
+				list($PushService, $PushOptions) = G::$DB->next_record(MYSQLI_NUM, false);
+				$PushOptions = unserialize($PushOptions);
+				switch ($PushService) {
+					case '1':
+						$Service = "NMA";
+						break;
+					case '2':
+						$Service = "Prowl";
+						break;
+					// Case 3 is missing because notifo is dead.
+					case '4':
+						$Service = "Toasty";
+						break;
+					case '5':
+						$Service = "Pushover";
+						break;
+					default:
+						break;
+					}
+					if (!empty($Service) && !empty($PushOptions['PushKey'])) {
+						$JSON = json_encode(array("service" => strtolower($Service),
+										"user" => array("key" => $PushOptions['PushKey']),
+										"message" => array("title" => $Title, "body" => $Body, "url" => $URL)));
+						G::$DB->query("
+							INSERT INTO push_notifications_usage
+								(PushService, TimesUsed)
+							VALUES
+								('$Service', 1)
+							ON DUPLICATE KEY UPDATE
+								TimesUsed = TimesUsed + 1");
+						
+						$PushServerSocket = fsockopen("127.0.0.1", 6789);
+						fwrite($PushServerSocket, $JSON);
+						fclose($PushServerSocket);
+					}
+			}
+			G::$DB->set_query_id($QueryID);
+		}
+	}
+
+	/**
+	 * Gets users who have push notifications enabled
+	 *
+	 */
+	public static function get_push_enabled_users() {
+		$QueryID = G::$DB->get_query_id();
+		G::$DB->query("
+			SELECT UserID
+			FROM users_push_notifications
+			WHERE PushService != 0
+				AND UserID != '$LoggedUser[ID]'");
+		$PushUsers = G::$DB->collect("UserID");
+		G::$DB->set_query_id($QueryID);
+		return $PushUsers;
 	}
 }

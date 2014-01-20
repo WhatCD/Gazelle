@@ -22,11 +22,11 @@ switch ($Category) {
 		break;
 }
 
-View::show_header("Last.fm", "jquery.imagesloaded,jquery.wookmark,top10", "tiles");
+View::show_header("Last.FM", "jquery.imagesloaded,jquery.wookmark,top10", "tiles");
 ?>
 <div class="thin">
 	<div class="header">
-		<h2>Last.fm</h2>
+		<h2>Last.FM</h2>
 <?		Top10View::render_linkbox("lastfm"); ?>
 	</div>
 <?	Top10View::render_artist_links($Category, $View); ?>

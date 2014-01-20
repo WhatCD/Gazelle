@@ -17,8 +17,37 @@ class NotificationsManagerView {
 		}
 	}
 
+	private static function render_push_settings() {
+		$PushService = self::$Settings['PushService'];
+		$PushOptions = unserialize(self::$Settings['PushOptions']);
+		?>
+		<tr>
+			<td class="label"><strong>Push notifications</strong></td>
+			<td>
+				<select name="pushservice" id="pushservice">
+					<option value="0"<? if (empty($PushService)) { ?> selected="selected"<? } ?>>Disable push notifications</option>
+					<option value="1"<? if ($PushService == 1) { ?> selected="selected"<? } ?>>Notify My Android</option>
+					<option value="2"<? if ($PushService == 2) { ?> selected="selected"<? } ?>>Prowl</option>
+<!--						No option 3, notifo died. -->
+					<option value="4"<? if ($PushService == 4) { ?> selected="selected"<? } ?>>Super Toasty</option>
+					<option value="5"<? if ($PushService == 5) { ?> selected="selected"<? } ?>>Pushover</option>
+				</select>
+				<div id="pushsettings" style="display: none;">
+					<label id="pushservice_title" for="pushkey">API key</label>
+					<input type="text" size="50" name="pushkey" id="pushkey" value="<?=display_str($PushOptions['PushKey'])?>" />
+					<br />
+					<a href="user.php?action=take_push&amp;push=1&amp;userid=<?=G::$LoggedUser['ID']?>&amp;auth=<?=G::$LoggedUser['AuthKey']?>" class="brackets">Test push</a>
+					<a href="wiki.php?action=article&amp;id=1017" class="brackets">View wiki guide</a>
+				</div>
+			</td>
+		</tr>
+<?	}
+
 	public static function render_settings($Settings) {
 		self::$Settings = $Settings;
+		if (check_perms("users_mod") || G::$LoggedUser['ExtraClasses'][DELTA_TEAM]) {
+			self::render_push_settings();
+		}
 ?>
 		<tr>
 			<td class="label">
@@ -49,7 +78,7 @@ class NotificationsManagerView {
 				<strong>Staff messages</strong>
 			</td>
 			<td>
-<?				self::render_checkbox(NotificationsManager::STAFFPM); ?>
+<?				self::render_checkbox(NotificationsManager::STAFFPM, false, false); ?>
 			</td>
 		</tr>
 		<tr>
@@ -57,7 +86,7 @@ class NotificationsManagerView {
 				<strong>Thread subscriptions</strong>
 			</td>
 			<td>
-<?				self::render_checkbox(NotificationsManager::SUBSCRIPTIONS); ?>
+<?				self::render_checkbox(NotificationsManager::SUBSCRIPTIONS, false, false); ?>
 			</td>
 		</tr>
 		<tr>
@@ -74,83 +103,48 @@ class NotificationsManagerView {
 					<strong>Torrent notifications</strong>
 				</td>
 				<td>
-<?					self::render_checkbox(NotificationsManager::TORRENTS, true); ?>
+<?					self::render_checkbox(NotificationsManager::TORRENTS, true, false); ?>
 				</td>
 			</tr>
 <?		} ?>
+
 		<tr>
 			<td class="label tooltip" title="Enabling this will give you a notification when a torrent is added to a collage you are subscribed to.">
 				<strong>Collage subscriptions</strong>
 			</td>
 			<td>
-<?				self::render_checkbox(NotificationsManager::COLLAGES); ?>
+<?				self::render_checkbox(NotificationsManager::COLLAGES. false, false); ?>
 			</td>
 		</tr>
-<? /**
-		<tr>
-			<td class="label tooltip" title="">
-				<strong>Site alerts</strong>
-			</td>
-			<td>
-<?				self::render_checkbox(NotificationsManager::SITEALERTS); ?>
-			</td>
-		</tr>
-		<tr>
-			<td class="label tooltip" title="">
-				<strong>Forum alerts</strong>
-			</td>
-			<td>
-<?				self::render_checkbox(NotificationsManager::FORUMALERTS); ?>
-			</td>
-		</tr>
-		<tr>
-			<td class="label tooltip" title="">
-				<strong>Request alerts</strong>
-			</td>
-			<td>
-<?				self::render_checkbox(NotificationsManager::REQUESTALERTS); ?>
-			</td>
-		</tr>
-		<tr>
-			<td class="label tooltip" title="">
-				<strong>Collage alerts</strong>
-			</td>
-			<td>
-<?				self::render_checkbox(NotificationsManager::COLLAGEALERTS); ?>
-			</td>
-		</tr>
-		<tr>
-			<td class="label tooltip" title="">
-				<strong>Torrent alerts</strong>
-			</td>
-			<td>
-<?				self::render_checkbox(NotificationsManager::TORRENTALERTS); ?>
-			</td>
-		</tr>
-<? **/
-	}
+<?	}
 
-	private static function render_checkbox($Name, $Both = false) {
+	private static function render_checkbox($Name, $Traditional = false, $Push = true) {
 		$Checked = self::$Settings[$Name];
-		if ($Both) {
-			$IsChecked = $Checked == NotificationsManager::OPT_TRADITIONAL ? ' checked="checked"' : '';
+		$PopupChecked = $Checked == NotificationsManager::OPT_POPUP || $Checked == NotificationsManager::OPT_POPUP_PUSH || !isset($Checked) ? ' checked="checked"' : '';
+		$TraditionalChecked = $Checked == NotificationsManager::OPT_TRADITIONAL || $Checked == NotificationsManager::OPT_TRADITIONAL_PUSH ? ' checked="checked"' : '';
+		$PushChecked = $Checked == NotificationsManager::OPT_TRADITIONAL_PUSH || $Checked == NotificationsManager::OPT_POPUP_PUSH || $Checked == NotificationsManager::OPT_PUSH ? ' checked="checked"' : '';
+
 ?>
-			<label>
-				<input type="checkbox" value="1" name="notifications_<?=$Name?>_traditional" id="notifications_<?=$Name?>_traditional"<?=$IsChecked?> />
-				Traditional
-			</label>
-<?
-		}
-		$IsChecked = $Checked == NotificationsManager::OPT_POPUP || !isset($Checked) ? ' checked="checked"' : '';
-?>
-			<label>
-				<input type="checkbox" name="notifications_<?=$Name?>_popup" id="notifications_<?=$Name?>_popup"<?=$IsChecked?> />
-				Pop-up
-			</label>
-<?
+		<label>
+			<input type="checkbox" name="notifications_<?=$Name?>_popup" id="notifications_<?=$Name?>_popup"<?=$PopupChecked?> />
+			Pop-up
+		</label>
+<?		if ($Traditional) { ?>
+		<label>
+			<input type="checkbox" name="notifications_<?=$Name?>_traditional" id="notifications_<?=$Name?>_traditional"<?=$TraditionalChecked?> />
+			Traditional
+		</label>
+<?		}
+		if ($Push && (check_perms("users_mod") || G::$LoggedUser['ExtraClasses'][DELTA_TEAM])) { ?>
+		<label>
+			<input type="checkbox" name="notifications_<?=$Name?>_push" id="notifications_<?=$Name?>_push"<?=$PushChecked?> />
+			Push
+		</label>
+<?		}
 	}
 
 	public static function format_traditional($Contents) {
 		return "<a href=\"$Contents[url]\">$Contents[message]</a>";
 	}
+
 }

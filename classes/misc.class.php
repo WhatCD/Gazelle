@@ -44,6 +44,8 @@ class Misc {
 	 */
 	public static function send_pm($ToID, $FromID, $Subject, $Body, $ConvID = '') {
 		global $Time;
+		$UnescapedSubject = $Subject;
+		$UnescapedBody = $Body;
 		$Subject = db_string($Subject);
 		$Body = db_string($Body);
 		if ($ToID == 0 || $ToID == $FromID) {
@@ -126,13 +128,13 @@ class Misc {
 			list($UnRead) = G::$DB->next_record();
 			G::$Cache->cache_value('inbox_new_'.$ID, $UnRead);
 
+			NotificationsManager::send_push($ID, "Message from $SenderName, Subject: $UnescapedSubject", $UnescapedBody, site_url() . 'inbox.php', NotificationsManager::INBOX);
 		}
 
 		G::$DB->set_query_id($QueryID);
 
 		return $ConvID;
 	}
-
 
 	/**
 	 * Create thread function, things should already be escaped when sent here.

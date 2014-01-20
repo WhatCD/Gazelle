@@ -37,7 +37,6 @@ class Subscriptions {
 		// remove any dupes in the array (the fast way)
 		$Usernames = array_flip(array_flip($Usernames));
 
-
 		G::$DB->query("
 			SELECT m.ID
 			FROM users_main AS m
@@ -45,7 +44,6 @@ class Subscriptions {
 			WHERE m.Username IN ('" . implode("', '", $Usernames) . "')
 				AND i.NotifyOnQuote = '1'
 				AND i.UserID != " . G::$LoggedUser['ID']);
-
 
 		$Results = G::$DB->to_array();
 		foreach ($Results as $Result) {
@@ -61,7 +59,13 @@ class Subscriptions {
 				VALUES
 					('$UserID', '$QuoterID', '$Page', '$PageID', '$PostID', '" . sqltime() . "')");
 			G::$Cache->delete_value("notify_quoted_$UserID");
-
+			$URL = 'https://'.SSL_SITE_URL.'/';
+			if ($Page == 'forums') {
+				$URL .= "forums.php?action=viewthread&postid=$PostID";
+			} else {
+				$URL .= "comments.php?action=jump&postid=$PostID";
+			}
+			NotificationsManager::send_push($UserID, 'New Quote!', 'Quoted by ' . G::$LoggedUser['Username'] . " $URL", $URL, NotificationsManager::QUOTES);
 		}
 		G::$DB->set_query_id($QueryID);
 	}

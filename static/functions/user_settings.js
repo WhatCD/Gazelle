@@ -1,3 +1,6 @@
+var PUSHOVER = 5;
+var TOASTY = 4;
+
 $(document).ready(function() {
 	var top = $('#settings_sections').offset().top - parseFloat($('#settings_sections').css('marginTop').replace(/auto/, 0));
 	$(window).scroll(function (event) {
@@ -53,6 +56,25 @@ $(document).ready(function() {
 	});
 	$("#notifications_Torrents_popup").click(function() {
 		$("#notifications_Torrents_traditional").prop('checked', false);
+	});
+
+	if ($("#pushservice").val() > 0) {
+		$('#pushsettings').show();
+	}
+	$("#pushservice").change(function() {
+		if ($(this).val() > 0) {
+			$('#pushsettings').show(500);
+
+			if ($(this).val() == TOASTY) {
+				$('#pushservice_title').text("Device ID");
+			} else if ($(this).val() == PUSHOVER) {
+				$('#pushservice_title').text("User Key");
+			} else {
+				$('#pushservice_title').text("API Key");
+			}
+		} else {
+			$('#pushsettings').hide(500);
+		}
 	});
 });
 

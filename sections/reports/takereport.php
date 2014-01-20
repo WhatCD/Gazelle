@@ -77,8 +77,8 @@ if ($Short === 'request_update') {
 }
 if (in_array($Short, array('comment', 'post', 'thread'))) {
 	$Channels[] = '#forumreports';
-
 }
+
 
 foreach ($Channels as $Channel) {
 	send_irc("PRIVMSG $Channel :$ReportID - ".$LoggedUser['Username']." just reported a $Short: ".site_url()."$Link : ".strtr($Reason, "\n", ' '));

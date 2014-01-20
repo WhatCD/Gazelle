@@ -261,7 +261,6 @@ $DownloadAlt = isset($_POST['downloadalt']) ? 1 : 0;
 $UnseededAlerts = isset($_POST['unseededalerts']) ? 1 : 0;
 
 
-
 $LastFMUsername = db_string($_POST['lastfm_username']);
 $OldLastFMUsername = '';
 $DB->query("
