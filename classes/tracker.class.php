@@ -21,6 +21,7 @@ class Tracker {
 			send_irc('PRIVMSG #tracker :'.$Get);
 		}
 		$Path = TRACKER_SECRET.$Get;
+		$Header = "GET /$Path HTTP/1.0\r\n\r\n";
 
 		$Return = '';
 		$Attempts = 0;
@@ -29,7 +30,6 @@ class Tracker {
 			// Send update
 			$File = fsockopen(TRACKER_HOST, TRACKER_PORT, $ErrorNum, $ErrorString);
 			if ($File) {
-				$Header = 'GET /'.$Path.' HTTP/1.1\r\n';
 				if (fwrite($File, $Header) === false) {
 					$Attempts++;
 					$Err = "Failed to fwrite()";
