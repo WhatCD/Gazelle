@@ -138,9 +138,10 @@ if (!$Sneaky
 	&& ($UserCount <= USER_LIMIT || USER_LIMIT == 0 || check_perms('site_can_invite_always'))
 	) { ?>
 	<div class="box pad">
-		<p>Please note that the selling, trading or public giving away of our invitations, or responding to public requests, is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
+		<p>Please note that the selling, trading, or publicly giving away our invitations&#8202;&mdash;&#8202;or responding to public invite requests&#8202;&mdash;&#8202;is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
 		<p>Remember that you are responsible for ALL invitees, and your account and/or privileges may be disabled due to your invitees' actions. You should know the person you're inviting. If you aren't familiar enough with the user to trust them, we suggest not inviting them.</p>
-		<p><em>Do not send an invite if you haven't read or don't understand the information above.</em></p>
+		<p><em>Do not send an invite if you have not read or do not understand the information above.</em></p>
+
 	</div>
 	<div class="box pad">
 		<form class="send_form" name="invite" action="user.php" method="post">
@@ -149,18 +150,16 @@ if (!$Sneaky
 			<input type="hidden" name="auth" value="<?=$LoggedUser['AuthKey']?>" />
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
-					<td class="label">Email:</td>
+					<td class="label">Email address:</td>
 					<td>
 						<input type="text" name="email" size="60" />
 						<input type="submit" value="Invite" />
 					</td>
 				</tr>
-		</form>
 
 			</table>
+		</form>
 	</div>
-
-
 
 <?
 } elseif (!empty($LoggedUser['DisableInvites'])) { ?>
