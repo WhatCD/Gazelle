@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2014-01-23 by Ajax
+Introduced classes to test models. Classes with a @TestClass comment which include public static functions with a @Test comment will be made available to test via testing.php
+
 2014-01-18 by alderaan
 Fix grammar in pop-up notifications about new Staff PMs.
 

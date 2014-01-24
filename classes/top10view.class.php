@@ -6,7 +6,7 @@ class Top10View {
 ?>
 		<div class="linkbox">
 			<a href="top10.php?type=torrents" class="brackets"><?=self::get_selected_link("Torrents", $Selected == "torrents")?></a>
-			<a href="top10.php?type=lastfm" class="brackets"><?=self::get_selected_link("Last.FM", $Selected == "lastfm")?></a>
+			<a href="top10.php?type=lastfm" class="brackets"><?=self::get_selected_link("Last.fm", $Selected == "lastfm")?></a>
 			<a href="top10.php?type=users" class="brackets"><?=self::get_selected_link("Users", $Selected == "users")?></a>
 			<a href="top10.php?type=tags" class="brackets"><?=self::get_selected_link("Tags", $Selected == "tags")?></a>
 			<a href="top10.php?type=votes" class="brackets"><?=self::get_selected_link("Favorites", $Selected == "votes")?></a>
@@ -18,8 +18,8 @@ class Top10View {
 	public static function render_artist_links($Selected, $View) {
 ?>
 		<div class="center">
-			<a href="top10.php?type=lastfm&amp;category=weekly&amp;view=<?=$View?>" class="brackets tooltip" title="These are the artists with the most Last.FM listeners this week"><?=self::get_selected_link("Weekly Artists", $Selected == "weekly")?></a>
-			<a href="top10.php?type=lastfm&amp;category=hyped&amp;view=<?=$View?>" class="brackets tooltip" title="These are the the fastest rising artists on Last.FM this week"><?=self::get_selected_link("Hyped Artists", $Selected == "hyped")?></a>
+			<a href="top10.php?type=lastfm&amp;category=weekly&amp;view=<?=$View?>" class="brackets tooltip" title="These are the artists with the most Last.fm listeners this week"><?=self::get_selected_link("Weekly Artists", $Selected == "weekly")?></a>
+			<a href="top10.php?type=lastfm&amp;category=hyped&amp;view=<?=$View?>" class="brackets tooltip" title="These are the the fastest rising artists on Last.fm this week"><?=self::get_selected_link("Hyped Artists", $Selected == "hyped")?></a>
 
 		</div>
 <?

@@ -159,6 +159,7 @@ View::show_header('Staff Tools');
 	create_row("BBCode sandbox", "tools.php?action=bbcode_sandbox", check_perms("users_mod"));
 	create_row("Public sandbox", "tools.php?action=public_sandbox", check_perms("users_mod"), "Do not click this!");
 	create_row("Mod-level sandbox", "tools.php?action=mod_sandbox", check_perms("users_mod"), "Do not click this!");
+	create_row("Testing", "testing.php", check_perms("users_mod"));
 
 	if ($ToolsHTML) {
 ?>
