@@ -608,11 +608,11 @@ class Donations {
 	public static function get_rank_expiration($UserID) {
 		$DonorInfo = self::get_donor_info($UserID);
 		if ($DonorInfo['SRank'] == MAX_SPECIAL_RANK || $DonorInfo['Rank'] == 1) {
-			$Return = 'never';
+			$Return = 'Never';
 		} elseif ($DonorInfo['Time']) {
 			$ExpireTime = strtotime($DonorInfo['Time']) + 2764800;
 			if ($ExpireTime - time() < 60) {
-				$Return = 'soon';
+				$Return = 'Soon';
 			} else {
 				$Expiration = time_diff($ExpireTime); // 32 days
 				$Return = "in $Expiration";
