@@ -43,7 +43,7 @@ class Permissions {
 	 * @param $UserID
 	 * @param array|false $CustomPermissions
 	 *	Pass in the user's custom permissions if you already have them.
-	 *	Leave false if you don't have their permissions, the function will fetch them.
+	 *	Leave false if you don't have their permissions. The function will fetch them.
 	 * @return array Mapping of PermissionName=>bool/int
 	 */
 	public static function get_permissions_for_user($UserID, $CustomPermissions = false) {
