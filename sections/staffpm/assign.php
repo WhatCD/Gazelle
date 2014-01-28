@@ -63,6 +63,7 @@ if ($ConvID = (int)$_GET['convid']) {
 					Level = $NewLevel,
 					AssignedToUser = NULL
 				WHERE ID = $ConvID");
+			$Cache->delete_value("num_staff_pms_$LoggedUser[ID]");
 		} else {
 			$UserInfo = Users::user_info($NewLevel);
 			$Level = $Classes[$UserInfo['PermissionID']]['Level'];
@@ -77,7 +78,7 @@ if ($ConvID = (int)$_GET['convid']) {
 					AssignedToUser = $NewLevel,
 					Level = $Level
 				WHERE ID = $ConvID");
-
+			$Cache->delete_value("num_staff_pms_$LoggedUser[ID]");
 		}
 		echo '1';
 

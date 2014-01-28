@@ -1,5 +1,14 @@
 CHANGE LOG
 
+2014-01-28 by alderaan
+Adv. User Search: Replace date format tooltips with "placeholder" HTML attributes
+
+2014-01-28 by alderaan
+Clear cache key "num_staff_pms_$LoggedUser[ID]" when reassigning Staff PMs
+
+2014-01-27 by alderaan
+UI improvements to the Client Whitelist Manager
+
 2014-01-27 by alderaan
 .gitattributes: set diff=html and diff=php, and clean up the file a bit
 

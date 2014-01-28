@@ -460,7 +460,7 @@ View::show_header('User search');
 				<td width="24%">
 					<input type="text" name="username" size="20" value="<?=display_str($_GET['username'])?>" />
 				</td>
-				<td class="label tooltip nobr" title="Date format is YYYY-MM-DD">Joined:</td>
+				<td class="label nobr">Joined:</td>
 				<td width="24%">
 					<select name="joined">
 						<option value="on"<?      if ($_GET['joined'] === 'on')      { echo ' selected="selected"'; } ?>>On</option>
@@ -468,8 +468,8 @@ View::show_header('User search');
 						<option value="after"<?   if ($_GET['joined'] === 'after')   { echo ' selected="selected"'; } ?>>After</option>
 						<option value="between"<? if ($_GET['joined'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
 					</select>
-					<input type="text" name="join1" size="6" value="<?=display_str($_GET['join1'])?>" />
-					<input type="text" name="join2" size="6" value="<?=display_str($_GET['join2'])?>" />
+					<input type="text" name="join1" size="10" value="<?=display_str($_GET['join1'])?>" placeholder="YYYY-MM-DD" />
+					<input type="text" name="join2" size="10" value="<?=display_str($_GET['join2'])?>" placeholder="YYYY-MM-DD" />
 				</td>
 				<td class="label nobr">Enabled:</td>
 				<td>
@@ -486,7 +486,7 @@ View::show_header('User search');
 				<td>
 					<input type="text" name="email" size="20" value="<?=display_str($_GET['email'])?>" />
 				</td>
-				<td class="label tooltip nobr" title="Date format is YYYY-MM-DD">Last active:</td>
+				<td class="label nobr">Last active:</td>
 				<td width="30%">
 					<select name="lastactive">
 						<option value="on"<?      if ($_GET['lastactive'] === 'on')      { echo ' selected="selected"'; } ?>>On</option>
@@ -494,8 +494,8 @@ View::show_header('User search');
 						<option value="after"<?   if ($_GET['lastactive'] === 'after')   { echo ' selected="selected"'; } ?>>After</option>
 						<option value="between"<? if ($_GET['lastactive'] === 'between') { echo ' selected="selected"'; } ?>>Between</option>
 					</select>
-					<input type="text" name="lastactive1" size="6" value="<?=display_str($_GET['lastactive1'])?>" />
-					<input type="text" name="lastactive2" size="6" value="<?=display_str($_GET['lastactive2'])?>" />
+					<input type="text" name="lastactive1" size="10" value="<?=display_str($_GET['lastactive1'])?>" placeholder="YYYY-MM-DD" />
+					<input type="text" name="lastactive2" size="10" value="<?=display_str($_GET['lastactive2'])?>" placeholder="YYYY-MM-DD" />
 				</td>
 				<td class="label nobr">Primary class:</td>
 				<td>
