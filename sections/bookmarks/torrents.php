@@ -26,7 +26,7 @@ if (!empty($_GET['userid'])) {
 }
 
 $Sneaky = $UserID !== $LoggedUser['ID'];
-$Title = $Sneaky ? "$Username's bookmarked torrents" : 'Your bookmarked torrents';
+$Title = $Sneaky ? "$Username's bookmarked torrent groups" : 'Your bookmarked torrent groups';
 
 // Loop through the result set, building up $Collage and $TorrentTable
 // Then we print them.
@@ -280,7 +280,7 @@ View::show_header($Title, 'browse,collage');
 		<div class="box box_info box_statistics_bookmarked_torrents">
 			<div class="head"><strong>Stats</strong></div>
 			<ul class="stats nobullet">
-				<li>Torrents: <?=$NumGroups?></li>
+				<li>Torrent groups: <?=$NumGroups?></li>
 				<li>Artists: <?=count($ArtistCount)?></li>
 			</ul>
 		</div>

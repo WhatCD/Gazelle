@@ -22,6 +22,7 @@ if (isset($_GET['c'])) {
 }
 if (!isset($Data) || !$Data) {
 	$Cached = false;
+	
 	$Data = @file_get_contents($URL, 0, stream_context_create(array('http' => array('timeout' => 15))));
 	if (!$Data || empty($Data)) {
 		img_error('timeout');
