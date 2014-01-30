@@ -22,7 +22,7 @@ if (isset($_GET['c'])) {
 }
 if (!isset($Data) || !$Data) {
 	$Cached = false;
-	
+
 	$Data = @file_get_contents($URL, 0, stream_context_create(array('http' => array('timeout' => 15))));
 	if (!$Data || empty($Data)) {
 		img_error('timeout');
@@ -47,17 +47,17 @@ function reset_image($UserID, $Type, $AdminComment, $PrivMessage) {
 	if ($Type === 'avatar') {
 		$CacheKey = "user_info_$UserID";
 		$DBTable = 'users_info';
-		$DBColumn = "Avatar";
+		$DBColumn = 'Avatar';
 		$PMSubject = 'Your avatar has been automatically reset';
 	} elseif ($Type === 'avatar2') {
 		$CacheKey = "donor_info_$UserID";
 		$DBTable = 'donor_rewards';
-		$DBColumn = "SecondAvatar";
+		$DBColumn = 'SecondAvatar';
 		$PMSubject = 'Your second avatar has been automatically reset';
 	} elseif ($Type === 'donoricon') {
 		$CacheKey = "donor_info_$UserID";
 		$DBTable = 'donor_rewards';
-		$DBColumn = "CustomIcon";
+		$DBColumn = 'CustomIcon';
 		$PMSubject = 'Your donor icon has been automatically reset';
 	}
 
