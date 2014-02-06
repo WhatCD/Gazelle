@@ -1,8 +1,5 @@
 CHANGE LOG
 
-2014-02-05 by lenrek
-Fix file modes for numerous files (755 to 644)
-
 2014-01-28 by alderaan
 Adv. User Search: Replace date format tooltips with "placeholder" HTML attributes
 
