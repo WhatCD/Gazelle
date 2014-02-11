@@ -971,7 +971,8 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 	sleep(10);
 
 	$i = 0;
-	/*$DB->query("
+
+	$DB->query("
 		SELECT
 			t.ID,
 			t.GroupID,
@@ -1038,7 +1039,7 @@ if (!$NoDaily && $Day != $NextDay || $_GET['runday']) {
 			INSERT INTO log (Message, Time)
 			VALUES $Values");
 		echo "\nDeleted $i torrents for inactivity\n";
-	}*/
+	}
 
 	$DB->query("
 		SELECT SimilarID

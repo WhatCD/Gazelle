@@ -114,13 +114,13 @@ if ($Mobile) { ?>
 	<link rel="stylesheet" type="text/css" media="screen" href="<?=$StyleURL?>" title="External CSS" />
 <?
 	}
-	if (!empty(G::$LoggedUser['UseOpenDyslexic'])) {
+}
+if (!empty(G::$LoggedUser['UseOpenDyslexic'])) {
 		// load the OpenDyslexic font
 ?>
 	<link rel="stylesheet" type="text/css" charset="utf-8"
 			href="<?=STATIC_SERVER?>styles/opendyslexic/style.css?v=<?=filemtime(SERVER_ROOT.'/static/styles/opendyslexic/style.css')?>" />
 <?
-	}
 }
 $ExtraCSS = explode(',', $CSSIncludes);
 foreach ($ExtraCSS as $CSS) {

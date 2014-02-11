@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2014-02-11 by alderaan
+Re-enable torrent inactivity deletion for public Gazelle. This was accidentally put in a public release.
+
+2014-02-11 by alderaan
+Enable usage of the OpenDyslexic fonts on the mobile version of the site
+
 2014-01-28 by alderaan
 Adv. User Search: Replace date format tooltips with "placeholder" HTML attributes
 
