@@ -141,6 +141,7 @@ if (!$Sneaky
 		<p>Please note that the selling, trading, or publicly giving away our invitations&#8202;&mdash;&#8202;or responding to public invite requests&#8202;&mdash;&#8202;is strictly forbidden, and may result in you and your entire invite tree being banned. This includes offering to give away our invitations on any forum which is not a class-restricted forum on another private tracker.</p>
 		<p>Remember that you are responsible for ALL invitees, and your account and/or privileges may be disabled due to your invitees' actions. You should know the person you're inviting. If you aren't familiar enough with the user to trust them, we suggest not inviting them.</p>
 		<p><em>Do not send an invite if you have not read or do not understand the information above.</em></p>
+
 	</div>
 	<div class="box pad">
 		<form class="send_form" name="invite" action="user.php" method="post">
