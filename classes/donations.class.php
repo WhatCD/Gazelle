@@ -1,6 +1,6 @@
 <?
 
-define('BTC_API_URL', 'https://blockchain.info/ticker');
+define('BTC_API_URL', 'http://api.bitcoincharts.com/v1/weighted_prices.json');
 define('USD_API_URL', 'http://www.google.com/ig/calculator?hl=en&q=1USD=?EUR');
 
 class Donations {
@@ -717,9 +717,10 @@ class Donations {
 	private static function get_new_conversion_rates() {
 		if ($BTC = file_get_contents(BTC_API_URL)) {
 			$BTC = json_decode($BTC, true);
-			if (isset($BTC['EUR'])) {
-				$Rate = round($BTC['EUR']['24h'], 4); // We don't need good precision
-				self::set_stored_conversion_rate('BTC', $Rate);
+			if (isset($BTC['EUR']) && isset($BTC['EUR']['24h'])) {
+				if ($Rate = round($BTC['EUR']['24h'], 4)) { // We don't need good precision
+					self::set_stored_conversion_rate('BTC', $Rate);
+				}
 			}
 		}
 		if ($USD = file_get_contents(USD_API_URL)) {
@@ -736,8 +737,9 @@ class Donations {
 			if (isset($USD['rhs'])) {
 				// The response is in format "# Euroes", extracts the numbers.
 				$Rate = preg_split("/[\s,]+/", $USD['rhs']);
-				$Rate = round($Rate[0], 4); // We don't need good precision
-				self::set_stored_conversion_rate('USD', $Rate);
+				if ($Rate = round($Rate[0], 4)) { // We don't need good precision
+					self::set_stored_conversion_rate('USD', $Rate);
+				}
 			}
 		}
 	}
