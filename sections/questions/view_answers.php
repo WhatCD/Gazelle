@@ -7,11 +7,6 @@ if (!is_number($UserID)) {
 	error("No UserID");
 }
 
-$Permissions = Permissions::get_permissions_for_user($UserID);
-if (!isset($Permissions['users_mod']) || !$Permissions['users_mod']) {
-	error(404);
-}
-
 $UserInfo = Users::user_info($UserID);
 
 G::$DB->query("
