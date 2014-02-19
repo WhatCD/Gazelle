@@ -5,7 +5,7 @@ if (!(check_perms('users_mod') || check_perms('site_tag_aliases_read'))) {
 
 View::show_header('Tag Aliases');
 
-$orderby = (($_GET['order'] == 'badtags') ? 'BadTag' : 'AliasTag');
+$orderby = ($_GET['order'] === 'badtags' ? 'BadTag' : 'AliasTag');
 
 if (check_perms('users_mod')) {
 	if (isset($_POST['newalias'])) {
@@ -43,7 +43,7 @@ if (check_perms('users_mod')) {
 			<a href="tools.php?action=tag_aliases&amp;order=badtags" class="brackets">Sort by bad tags</a>
 	</div>
 </div>
-<table width="100%">
+<table class="thin">
 	<tr class="colhead">
 		<td>Proper tag</td>
 		<td>Renamed from</td>
@@ -69,10 +69,10 @@ if (check_perms('users_mod')) {
 		</form>
 	</tr>
 <?
-$DB->query('
+$DB->query("
 	SELECT ID, BadTag, AliasTag
 	FROM tag_aliases
-	ORDER BY ' . $orderby);
+	ORDER BY $orderby");
 while (list($ID, $BadTag, $AliasTag) = $DB -> next_record()) {
 	?>
 	<tr>

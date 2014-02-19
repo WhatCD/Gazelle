@@ -165,13 +165,13 @@ class Tools {
 		}
 		G::$DB->query("
 			UPDATE users_info AS i
-				JOIN users_main AS m ON m.ID=i.UserID
-			SET m.Enabled='2',
-				m.can_leech='0',
+				JOIN users_main AS m ON m.ID = i.UserID
+			SET m.Enabled = '2',
+				m.can_leech = '0',
 				i.AdminComment = CONCAT('".sqltime()." - ".($AdminComment ? $AdminComment : 'Disabled by system')."\n\n', i.AdminComment),
-				i.BanDate='".sqltime()."',
-				i.BanReason='$BanReason',
-				i.RatioWatchDownload=".($BanReason == 2 ? 'm.Downloaded' : "'0'")."
+				i.BanDate = '".sqltime()."',
+				i.BanReason = '$BanReason',
+				i.RatioWatchDownload = ".($BanReason == 2 ? 'm.Downloaded' : "'0'")."
 			WHERE m.ID IN(".implode(',', $UserIDs).') ');
 		G::$Cache->decrement('stats_user_count', G::$DB->affected_rows());
 		foreach ($UserIDs as $UserID) {
@@ -264,7 +264,7 @@ class Tools {
 				SET
 					Warned = \''.db_string($WarnTime).'\',
 					WarnedTimes = WarnedTimes + 1,
-					AdminComment = CONCAT(\''.db_string($AdminComment).'\',AdminComment)
+					AdminComment = CONCAT(\''.db_string($AdminComment).'\', AdminComment)
 				WHERE UserID = \''.db_string($UserID).'\'');
 		}
 		G::$DB->set_query_id($QueryID);
@@ -279,7 +279,7 @@ class Tools {
 		$QueryID = G::$DB->get_query_id();
 		G::$DB->query('
 			UPDATE users_info
-			SET AdminComment = CONCAT(\''.db_string($AdminComment).'\',AdminComment)
+			SET AdminComment = CONCAT(\''.db_string($AdminComment).'\', AdminComment)
 			WHERE UserID = \''.db_string($UserID).'\'');
 		G::$DB->set_query_id($QueryID);
 	}

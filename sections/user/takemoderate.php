@@ -401,7 +401,7 @@ if (count($AddedClasses) > 0) {
 	foreach ($AddedClasses as $PermID) {
 		$ClassChanges[] = $Classes[$PermID]['Name'];
 	}
-	$EditSummary[] = "Secondary classes added: ".implode(', ',$ClassChanges);
+	$EditSummary[] = "Secondary classes added: ".implode(', ', $ClassChanges);
 	$Values = array();
 	foreach ($AddedClasses as $PermID) {
 		$Values[] = "($UserID, $PermID)";
@@ -785,7 +785,6 @@ if ($EditSummary) {
 	$Summary = sqltime() . ' - Comment added by ' . $LoggedUser['Username'] . ': ' . "$Reason\n\n";
 
 }
-
 
 if (!empty($Summary)) {
 	$UpdateSet[] = "AdminComment = '$Summary'";

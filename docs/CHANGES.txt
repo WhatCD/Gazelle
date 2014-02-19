@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2014-02-19 by alderaan
+Reduce width of the main table in the Tag Aliases manager
+
 2014-02-11 by alderaan
 Re-enable torrent inactivity deletion for public Gazelle. This was accidentally put in a public release.
 

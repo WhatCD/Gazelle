@@ -2,7 +2,7 @@
 class IRC_DB extends DB_MYSQL {
 	function halt($Msg) {
 		global $Bot;
-		$Bot->send_to($Bot->get_channel(),'The database is currently unavailable; try again later.');
+		$Bot->send_to($Bot->get_channel(), 'The database is currently unavailable; try again later.');
 	}
 }
 
@@ -20,12 +20,12 @@ abstract class IRC_BOT {
 	protected $Channels = array();
 	protected $Messages = array();
 	protected $LastChan = false;
-	protected $ListenSocket =false;
+	protected $ListenSocket = false;
 	protected $Listened = false;
 	protected $Connecting = false;
-	protected $Bound = false; //Did we successfully bind to the socket?
-	protected $State = 1; //Drones live
-	public $Restart = 0; //Die by default
+	protected $Bound = false; // Did we successfully bind to the socket?
+	protected $State = 1; // Drone is live
+	public $Restart = 0; // Die by default
 
 	public function __construct() {
 		if (isset($_SERVER['HOME']) && is_dir($_SERVER['HOME']) && getcwd() != $_SERVER['HOME']) {

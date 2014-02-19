@@ -55,6 +55,12 @@ $DB->query("
 	WHERE RequestID = '$RequestID'");
 $Cache->delete_value("request_artists_$RequestID");
 
+G::$DB->query("
+	REPLACE INTO sphinx_requests_delta
+		(ID)
+	VALUES
+		($RequestID)");
+
 if ($UserID != $LoggedUser['ID']) {
 	Misc::send_pm($UserID, 0, 'A request you created has been deleted', "The request \"$FullName\" was deleted by [url=https://".SSL_SITE_URL.'/user.php?id='.$LoggedUser['ID'].']'.$LoggedUser['Username'].'[/url] for the reason: '.$_POST['reason']);
 }
@@ -66,7 +72,6 @@ $Cache->delete_value("request_votes_$RequestID");
 if ($GroupID) {
 	$Cache->delete_value("requests_group_$GroupID");
 }
-Requests::update_sphinx_requests($RequestID);
 
 header('Location: requests.php');
 ?>

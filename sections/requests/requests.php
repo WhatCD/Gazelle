@@ -569,8 +569,8 @@ View::show_header($Title, 'requests');
 
 	$TimeCompare = 1267643718; // Requests v2 was implemented 2010-03-03 20:15:18
 	$Requests = Requests::get_requests(array_keys($SphRequests));
-	foreach ($SphRequests as $RequestID => $SphRequest) {
-		$Request = $Requests[$RequestID];
+	foreach ($Requests as $RequestID => $Request) {
+		$SphRequest = $SphRequests[$RequestID];
 		$Bounty = $SphRequest['bounty'] * 1024; // Sphinx stores bounty in kB
 		$VoteCount = $SphRequest['votes'];
 
