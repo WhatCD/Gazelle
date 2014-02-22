@@ -223,6 +223,7 @@ View::show_header('Staff Tools');
 	create_row("Rerender stylesheet gallery images", "tools.php?action=rerender_gallery", check_perms("site_debug") || check_perms("users_mod"));
 	create_row("Schedule", "schedule.php?auth=$LoggedUser[AuthKey]", check_perms("site_debug"));
 	create_row("Service stats", "tools.php?action=service_stats", check_perms("site_debug"));
+	create_row("Tracker info", "tools.php?action=ocelot_info", check_perms("users_mod"));
 	create_row("Update GeoIP", "tools.php?action=update_geoip", check_perms("admin_update_geoip"));
 
 	if ($ToolsHTML) {

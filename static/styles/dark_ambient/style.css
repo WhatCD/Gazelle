@@ -2056,6 +2056,7 @@ TODO: Make these rules apply globally and add exceptions where needed
 	margin: 0 0 20px 0;
 }
 
+.two_columns.pad,
 #reportsv2 .pad,
 #reports .pad {
 	padding: 10px !important;

@@ -186,6 +186,9 @@ switch ($_REQUEST['action']) {
 	case 'ocelot':
 		include(SERVER_ROOT.'/sections/tools/managers/ocelot.php');
 		break;
+	case 'ocelot_info':
+		include(SERVER_ROOT.'/sections/tools/data/ocelot_info.php');
+		break;
 	case 'official_tags':
 		include(SERVER_ROOT.'/sections/tools/managers/official_tags.php');
 		break;

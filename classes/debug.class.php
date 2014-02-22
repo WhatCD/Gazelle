@@ -93,7 +93,8 @@ class DEBUG {
 				'includes' => $this->get_includes(),
 				'cache' => $this->get_cache_keys(),
 				'vars' => $this->get_logged_vars(),
-				'perf' => $this->get_perf()
+				'perf' => $this->get_perf(),
+				'ocelot' => $this->get_ocelot_requests()
 			),
 			$Time
 		);
@@ -304,6 +305,12 @@ class DEBUG {
 		return $this->LoggedVars;
 	}
 
+	public function get_ocelot_requests() {
+		if (class_exists('Tracker')) {
+			return Tracker::$Requests;
+		}
+	}
+
 	/* Output Formatting */
 
 	public function perf_table($Perf = false) {
@@ -456,6 +463,38 @@ class DEBUG {
 				</pre>
 			</td>
 		</tr>
+	</table>
+<?
+	}
+
+	public function ocelot_table($OcelotRequests = false) {
+		if (!is_array($OcelotRequests)) {
+			$OcelotRequests = $this->get_ocelot_requests();
+		}
+		if (empty($OcelotRequests)) {
+			return;
+		}
+?>
+	<table class="layout" width="100%">
+		<tr>
+			<td align="left"><strong><a href="#" onclick="$('#debug_ocelot').gtoggle(); return false;" class="brackets">View</a> <?=number_format(count($OcelotRequests))?> Ocelot requests:</strong></td>
+		</tr>
+	</table>
+	<table id="debug_ocelot" class="debug_table hidden" width="100%">
+<?		foreach ($OcelotRequests as $i => $Request) { ?>
+		<tr>
+			<td align="left" class="debug_data debug_ocelot_data">
+				<a href="#" onclick="$('#debug_ocelot_<?=$i?>').gtoggle(); return false"><?=display_str($Request['path'])?></a>
+				<pre id="debug_ocelot_<?=$i?>" class="hidden"><?=display_str($Request['response'])?></pre>
+			</td>
+			<td align="left" class="debug_info" style="width: 100px;">
+				<?=display_str($Request['status'])?>
+			</td>
+			<td align="left" class="debug_info debug_timing" style="width: 100px;">
+				<?=number_format($Request['time'], 5)?> ms
+			</td>
+		</tr>
+<?		} ?>
 	</table>
 <?
 	}

@@ -1436,5 +1436,5 @@ table[width="100%"].user_options {
 Consistent .box and .pad
 TODO: Make these rules apply globally and add exceptions where needed
 */
-#reportsv2 .pad, #reports .pad { padding: 10px !important; }
+#reportsv2 .pad, #reports .pad, .two_columns.pad { padding: 10px !important; }
 #reportsv2 .box, #reports .box { margin-bottom: 10px; background-color: rgb(255,255,255); border: 1px solid #aaa; color: #777; }

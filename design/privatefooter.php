@@ -46,6 +46,7 @@ $Debug->sphinx_table();
 $Debug->query_table();
 $Debug->cache_table();
 $Debug->vars_table();
+$Debug->ocelot_table();
 ?>
 	</div>
 	<!-- End Debugging -->

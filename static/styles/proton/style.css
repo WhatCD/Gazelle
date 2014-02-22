@@ -2078,6 +2078,7 @@ TODO: Make these rules apply globally and add exceptions where needed
 	border-radius: 4px;
 }
 
+.two_columns.pad,
 #reportsv2 .pad,
 #reports .pad {
 	padding: 10px !important;
