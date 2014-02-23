@@ -11,6 +11,7 @@ Things to expect in $_GET:
 
 //---------- Things to sort out before it can start printing/generating content
 
+
 // Enable TOC
 Text::$TOC = true;
 
@@ -36,6 +37,8 @@ if (!isset($_GET['threadid']) || !is_number($_GET['threadid'])) {
 } else {
 	$ThreadID = $_GET['threadid'];
 }
+
+
 
 if (isset($LoggedUser['PostsPerPage'])) {
 	$PerPage = $LoggedUser['PostsPerPage'];

@@ -1,6 +1,6 @@
 <?
 
-define('BTC_API_URL', 'http://api.bitcoincharts.com/v1/weighted_prices.json');
+define('BTC_API_URL', 'https://api.bitcoinaverage.com/ticker/global/EUR/');
 define('USD_API_URL', 'http://www.google.com/ig/calculator?hl=en&q=1USD=?EUR');
 
 class Donations {
@@ -717,8 +717,8 @@ class Donations {
 	private static function get_new_conversion_rates() {
 		if ($BTC = file_get_contents(BTC_API_URL)) {
 			$BTC = json_decode($BTC, true);
-			if (isset($BTC['EUR']) && isset($BTC['EUR']['24h'])) {
-				if ($Rate = round($BTC['EUR']['24h'], 4)) { // We don't need good precision
+			if (isset($BTC['24h_avg'])) {
+				if ($Rate = round($BTC['24h_avg'], 4)) { // We don't need good precision
 					self::set_stored_conversion_rate('BTC', $Rate);
 				}
 			}
