@@ -801,16 +801,16 @@ list($ArtistsAdded) = $DB->next_record();
 					</div>
 					<div class="field_div">
 						<label>New password:<br />
-						<input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" maxlength="40" /> <strong id="pass_strength"></strong></label>
+						<input type="password" size="40" name="new_pass_1" id="new_pass_1" value="" /> <strong id="pass_strength"></strong></label>
 					</div>
 					<div class="field_div">
 						<label>Confirm new password:<br />
-						<input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" maxlength="40" /> <strong id="pass_match"></strong></label>
+						<input type="password" size="40" name="new_pass_2" id="new_pass_2" value="" /> <strong id="pass_match"></strong></label>
 					</div>
 					<div class="setting_description">
 						A strong password:
 						<ul>
-							<li>is between 8 and 40 characters long</li>
+							<li>is 8 characters or longer</li>
 							<li>contains at least 1 lowercase and uppercase letter</li>
 							<li>contains at least a number or symbol</li>
 						</ul>
