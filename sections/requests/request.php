@@ -417,7 +417,7 @@ $google_url = 'https://www.google.com/search?tbm=shop&amp;q=' . "$encoded_artist
 							<input type="hidden" name="requestid" value="<?=$RequestID?>" />
 							<input type="text" size="50" name="link"<?=(!empty($Link) ? " value=\"$Link\"" : '')?> />
 							<br />
-							<strong>Should be the permalink (PL) to the torrent (e.g. https://<?=SSL_SITE_URL?>/torrents.php?torrentid=xxxx).</strong>
+							<strong>Should be the permalink (PL) to the torrent (e.g. <?=site_url()?>torrents.php?torrentid=xxxx).</strong>
 						</div>
 <?		if (check_perms('site_moderate_requests')) { ?>
 						<div class="field_div">

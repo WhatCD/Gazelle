@@ -28,7 +28,7 @@ $DB->query("
 			<table cellpadding="6" cellspacing="1" border="0" class="layout border" width="100%">
 				<tr>
 					<td rowspan="2" class="label"><strong>Add Recommendation:</strong></td>
-					<td>Link to a torrent group on site. For example, <strong>https://<?=SSL_SITE_URL?>/torrents.php?id=12345</strong></td>
+					<td>Link to a torrent group on site. For example, <strong><?=site_url()?>torrents.php?id=12345</strong></td>
 				</tr>
 				<tr>
 					<td>

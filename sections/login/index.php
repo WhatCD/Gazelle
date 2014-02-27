@@ -154,8 +154,6 @@ if (isset($_REQUEST['act']) && $_REQUEST['act'] == 'recover') {
 						SET Active = 0
 						WHERE UserID = '$UserID'
 							AND Active = 1");
-
-
 				} else {
 					$Err = 'There is no user with that email address.';
 				}

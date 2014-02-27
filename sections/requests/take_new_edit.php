@@ -574,9 +574,9 @@ if ($NewRequest) {
 
 
 	if ($CategoryName === 'Music') {
-		$Announce = "\"$Title\" - ".Artists::display_artists($ArtistForm, false, false).' https://'.SSL_SITE_URL."/requests.php?action=view&id=$RequestID - ".implode(' ', $Tags);
+		$Announce = "\"$Title\" - ".Artists::display_artists($ArtistForm, false, false).' '.site_url()."requests.php?action=view&id=$RequestID - ".implode(' ', $Tags);
 	} else {
-		$Announce = "\"$Title\" - https://".SSL_SITE_URL."/requests.php?action=view&id=$RequestID - ".implode(' ', $Tags);
+		$Announce = "\"$Title\" - ".site_url()."requests.php?action=view&id=$RequestID - ".implode(' ', $Tags);
 	}
 	send_irc('PRIVMSG #'.SSL_SITE_URL."-requests :$Announce");
 

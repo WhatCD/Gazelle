@@ -132,7 +132,7 @@ foreach ($History as $Key => $Values) {
 		<td><?=time_diff($Time)?></td>
 		<td><?=display_str($IP)?></td>
 <?
-			$UserURL = 'https://'.SSL_SITE_URL."/user.php?id=$UserID2";
+			$UserURL = site_url()."user.php?id=$UserID2";
 			$DB->query("
 				SELECT Enabled
 				FROM users_main

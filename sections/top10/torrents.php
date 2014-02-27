@@ -417,9 +417,9 @@ function generate_torrent_table($Caption, $Tag, $Details, $Limit) {
 		<td>Name</td>
 		<td style="text-align: right;">Size</td>
 		<td style="text-align: right;">Data</td>
-		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" class="tooltip" /></td>
-		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" class="tooltip" /></td>
-		<td style="text-align: right;"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" class="tooltip" /></td>
+		<td style="text-align: right;" class="sign snatches"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/snatched.png" alt="Snatches" title="Snatches" class="tooltip" /></td>
+		<td style="text-align: right;" class="sign seeders"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/seeders.png" alt="Seeders" title="Seeders" class="tooltip" /></td>
+		<td style="text-align: right;" class="sign leechers"><img src="static/styles/<?=$LoggedUser['StyleName']?>/images/leechers.png" alt="Leechers" title="Leechers" class="tooltip" /></td>
 		<td style="text-align: right;">Peers</td>
 	</tr>
 <?

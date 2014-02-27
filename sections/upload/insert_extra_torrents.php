@@ -53,8 +53,8 @@ foreach ($ExtraTorrentsInsert as $ExtraTorrent) {
 		$Announce .= ' / Freeleech!';
 	}
 
-	$AnnounceSSL = $Announce . ' - https://' . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
-	$Announce .= ' - https://' . SSL_SITE_URL . "/torrents.php?id=$GroupID / https://" . SSL_SITE_URL . "/torrents.php?action=download&id=$ExtraTorrentID";
+	$AnnounceSSL = $Announce . ' - ' . site_url() . "torrents.php?id=$GroupID / " . site_url() . "torrents.php?action=download&id=$ExtraTorrentID";
+	$Announce .= ' - ' . site_url() . "torrents.php?id=$GroupID / " . site_url() . "torrents.php?action=download&id=$ExtraTorrentID";
 
 	$AnnounceSSL .= ' - ' . trim($Properties['TagList']);
 	$Announce .= ' - ' . trim($Properties['TagList']);

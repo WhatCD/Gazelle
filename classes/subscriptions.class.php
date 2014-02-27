@@ -59,11 +59,10 @@ class Subscriptions {
 				VALUES
 					('$UserID', '$QuoterID', '$Page', '$PageID', '$PostID', '" . sqltime() . "')");
 			G::$Cache->delete_value("notify_quoted_$UserID");
-			$URL = 'https://'.SSL_SITE_URL.'/';
 			if ($Page == 'forums') {
-				$URL .= "forums.php?action=viewthread&postid=$PostID";
+				$URL = site_url() . "forums.php?action=viewthread&postid=$PostID";
 			} else {
-				$URL .= "comments.php?action=jump&postid=$PostID";
+				$URL = site_url() . "comments.php?action=jump&postid=$PostID";
 			}
 			NotificationsManager::send_push($UserID, 'New Quote!', 'Quoted by ' . G::$LoggedUser['Username'] . " $URL", $URL, NotificationsManager::QUOTES);
 		}

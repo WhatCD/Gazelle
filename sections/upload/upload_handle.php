@@ -810,8 +810,8 @@ if ($Type == 'Music') {
 }
 $Title = $Announce;
 
-$AnnounceSSL = "$Announce - https://".SSL_SITE_URL."/torrents.php?id=$GroupID / https://".SSL_SITE_URL."/torrents.php?action=download&id=$TorrentID";
-$Announce .= " - https://".SSL_SITE_URL."/torrents.php?id=$GroupID / https://".SSL_SITE_URL."/torrents.php?action=download&id=$TorrentID";
+$AnnounceSSL = "$Announce - ".site_url()."torrents.php?id=$GroupID / ".site_url()."torrents.php?action=download&id=$TorrentID";
+$Announce .= " - ".site_url()."torrents.php?id=$GroupID / ".site_url()."torrents.php?action=download&id=$TorrentID";
 
 $AnnounceSSL .= ' - '.trim($Properties['TagList']);
 $Announce .= ' - '.trim($Properties['TagList']);

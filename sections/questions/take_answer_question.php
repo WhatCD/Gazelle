@@ -32,7 +32,7 @@ if (!$DB->has_results()) {
 		FROM user_questions
 		WHERE ID = '$ID'");
 	list($ToID) = $DB->next_record();
-	Misc::send_pm($ToID, 0, "Your question has been answered", "One of your questions has been answered! View the response [url=https://". SSL_SITE_URL . "/questions.php?action=view_answers&userid=$UserID#question$ID]here[/url].");
+	Misc::send_pm($ToID, 0, "Your question has been answered", "One of your questions has been answered! View the response [url=". site_url() . "questions.php?action=view_answers&userid=$UserID#question$ID]here[/url].");
 } else {
 	error("You have already answered this question");
 }

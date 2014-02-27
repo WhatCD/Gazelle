@@ -11,12 +11,12 @@ class Misc {
 	 */
 	public static function send_email($To, $Subject, $Body, $From = 'noreply', $ContentType = 'text/plain') {
 		$Headers = 'MIME-Version: 1.0'."\r\n";
-		$Headers.= 'Content-type: '.$ContentType.'; charset=iso-8859-1'."\r\n";
-		$Headers.= 'From: '.SITE_NAME.' <'.$From.'@'.NONSSL_SITE_URL.'>'."\r\n";
-		$Headers.= 'Reply-To: '.$From.'@'.NONSSL_SITE_URL."\r\n";
-		$Headers.= 'X-Mailer: Project Gazelle'."\r\n";
-		$Headers.= 'Message-Id: <'.Users::make_secret().'@'.NONSSL_SITE_URL.">\r\n";
-		$Headers.= 'X-Priority: 3'."\r\n";
+		$Headers .= 'Content-type: '.$ContentType.'; charset=iso-8859-1'."\r\n";
+		$Headers .= 'From: '.SITE_NAME.' <'.$From.'@'.NONSSL_SITE_URL.'>'."\r\n";
+		$Headers .= 'Reply-To: '.$From.'@'.NONSSL_SITE_URL."\r\n";
+		$Headers .= 'X-Mailer: Project Gazelle'."\r\n";
+		$Headers .= 'Message-Id: <'.Users::make_secret().'@'.NONSSL_SITE_URL.">\r\n";
+		$Headers .= 'X-Priority: 3'."\r\n";
 		mail($To, $Subject, $Body, $Headers, "-f $From@".NONSSL_SITE_URL);
 	}
 
@@ -28,7 +28,7 @@ class Misc {
 	 * @return the string with all banned characters removed.
 	 */
 	public static function file_string($EscapeStr) {
-		return str_replace(array('"','*','/',':','<','>','?','\\','|'), '', $EscapeStr);
+		return str_replace(array('"', '*', '/', ':', '<', '>', '?', '\\', '|'), '', $EscapeStr);
 	}
 
 
@@ -79,19 +79,19 @@ class Misc {
 			G::$DB->query("
 				UPDATE pm_conversations_users
 				SET
-					InInbox='1',
-					UnRead='1',
-					ReceivedDate='".sqltime()."'
+					InInbox = '1',
+					UnRead = '1',
+					ReceivedDate = '".sqltime()."'
 				WHERE UserID IN (".implode(',', $ToID).")
-					AND ConvID='$ConvID'");
+					AND ConvID = '$ConvID'");
 
 			G::$DB->query("
 				UPDATE pm_conversations_users
 				SET
-					InSentbox='1',
-					SentDate='".sqltime()."'
-				WHERE UserID='$FromID'
-					AND ConvID='$ConvID'");
+					InSentbox = '1',
+					SentDate = '".sqltime()."'
+				WHERE UserID = '$FromID'
+					AND ConvID = '$ConvID'");
 		}
 
 		// Now that we have a $ConvID for sure, send the message.
@@ -107,10 +107,10 @@ class Misc {
 				SELECT COUNT(ConvID)
 				FROM pm_conversations_users
 				WHERE UnRead = '1'
-					AND UserID='$ID'
+					AND UserID = '$ID'
 					AND InInbox = '1'");
 			list($UnRead) = G::$DB->next_record();
-			G::$Cache->cache_value('inbox_new_'.$ID, $UnRead);
+			G::$Cache->cache_value("inbox_new_$ID", $UnRead);
 		}
 
 		G::$DB->query("
@@ -123,10 +123,10 @@ class Misc {
 				SELECT COUNT(ConvID)
 				FROM pm_conversations_users
 				WHERE UnRead = '1'
-					AND UserID='$ID'
+					AND UserID = '$ID'
 					AND InInbox = '1'");
 			list($UnRead) = G::$DB->next_record();
-			G::$Cache->cache_value('inbox_new_'.$ID, $UnRead);
+			G::$Cache->cache_value("inbox_new_$ID", $UnRead);
 
 			NotificationsManager::send_push($ID, "Message from $SenderName, Subject: $UnescapedSubject", $UnescapedBody, site_url() . 'inbox.php', NotificationsManager::INBOX);
 		}
@@ -235,8 +235,12 @@ class Misc {
 				$Part1 = array();
 				$Part3 = $Forum;
 			}
-			if (is_null($Part1)) { $Part1 = array(); }
-			if (is_null($Part3)) { $Part3 = array(); }
+			if (is_null($Part1)) {
+				$Part1 = array();
+			}
+			if (is_null($Part3)) {
+				$Part3 = array();
+			}
 			$Forum = $Part1 + $Part2 + $Part3;
 			G::$Cache->cache_value("forums_$ForumID", array($Forum, '', 0, $Stickies), 0);
 		}
@@ -244,15 +248,15 @@ class Misc {
 		//Update the forum root
 		G::$Cache->begin_transaction('forums_list');
 		$UpdateArray = array(
-			'NumPosts'=>'+1',
-			'NumTopics'=>'+1',
-			'LastPostID'=>$PostID,
-			'LastPostAuthorID'=>$AuthorID,
-			'LastPostTopicID'=>$TopicID,
-			'LastPostTime'=>sqltime(),
-			'Title'=>$Title,
-			'IsLocked'=>$ThreadInfo['IsLocked'],
-			'IsSticky'=>$ThreadInfo['IsSticky']
+			'NumPosts' => '+1',
+			'NumTopics' => '+1',
+			'LastPostID' => $PostID,
+			'LastPostAuthorID' => $AuthorID,
+			'LastPostTopicID' => $TopicID,
+			'LastPostTime' => sqltime(),
+			'Title' => $Title,
+			'IsLocked' => $ThreadInfo['IsLocked'],
+			'IsSticky' => $ThreadInfo['IsSticky']
 			);
 
 		$UpdateArray['NumTopics'] = '+1';
@@ -263,19 +267,19 @@ class Misc {
 		$CatalogueID = floor((POSTS_PER_PAGE * ceil($Posts / POSTS_PER_PAGE) - POSTS_PER_PAGE) / THREAD_CATALOGUE);
 		G::$Cache->begin_transaction('thread_'.$TopicID.'_catalogue_'.$CatalogueID);
 		$Post = array(
-			'ID'=>$PostID,
-			'AuthorID'=>G::$LoggedUser['ID'],
-			'AddedTime'=>sqltime(),
-			'Body'=>$PostBody,
-			'EditedUserID'=>0,
-			'EditedTime'=>'0000-00-00 00:00:00',
-			'Username'=>''
+			'ID' => $PostID,
+			'AuthorID' => G::$LoggedUser['ID'],
+			'AddedTime' => sqltime(),
+			'Body' => $PostBody,
+			'EditedUserID' => 0,
+			'EditedTime' => '0000-00-00 00:00:00',
+			'Username' => ''
 			);
 		G::$Cache->insert('', $Post);
 		G::$Cache->commit_transaction(0);
 
 		G::$Cache->begin_transaction('thread_'.$TopicID.'_info');
-		G::$Cache->update_row(false, array('Posts'=>'+1', 'LastPostAuthorID'=>$AuthorID));
+		G::$Cache->update_row(false, array('Posts' => '+1', 'LastPostAuthorID' => $AuthorID));
 		G::$Cache->commit_transaction(0);
 
 		G::$DB->set_query_id($QueryID);
@@ -296,11 +300,11 @@ class Misc {
 
 
 	/**
-	 * If the preix of $Haystack is $Needle
+	 * If the prefix of $Haystack is $Needle
 	 *
 	 * @param string $Haystack String to search in
 	 * @param string $Needle String to search for
-	 * @return boolean True if $Needle is a preix of $Haystack
+	 * @return boolean True if $Needle is a prefix of $Haystack
 	 */
 	public static function starts_with($Haystack, $Needle) {
 		return strpos($Haystack, $Needle) === 0;
@@ -394,7 +398,7 @@ class Misc {
 
 
 	/**
-	 * Gets the alias of the tag, if there is no alias silently returns the original tag.
+	 * Gets the alias of the tag; if there is no alias, silently returns the original tag.
 	 *
 	 * @param string $BadTag the tag we want to alias
 	 * @return string The aliased tag.
@@ -497,7 +501,7 @@ class Misc {
 	}
 
 	/**
-	 * Check for a : in the beginning of a torrent meta data string
+	 * Check for a ":" in the beginning of a torrent meta data string
 	 * to see if it's stored in the old base64-encoded format
 	 *
 	 * @param string $Torrent the torrent data

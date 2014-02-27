@@ -14,7 +14,7 @@ if (isset($_GET['username'])) {
 
 	$_GET['username'] = trim($_GET['username']);
 	// form submitted
-	$Val->SetFields('username','1','username','Please enter a username.');
+	$Val->SetFields('username', '1', 'username', 'Please enter a username.');
 	$Err = $Val->ValidateForm($_GET);
 
 	if (!$Err) {
@@ -34,7 +34,7 @@ if (isset($_GET['username'])) {
 				Donor,
 				Warned
 			FROM users_main AS um
-				JOIN users_info AS ui ON ui.UserID=um.ID
+				JOIN users_info AS ui ON ui.UserID = um.ID
 			WHERE Username LIKE '%".db_string($_GET['username'], true)."%'
 			ORDER BY Username
 			LIMIT $Limit");
@@ -45,7 +45,6 @@ if (isset($_GET['username'])) {
 			$NumResults = 300;
 		}
 	}
-
 }
 
 View::show_header('User search');
@@ -93,5 +92,4 @@ View::show_header('User search');
 	<?=$Pages?>
 	</div>
 </div>
-
 <? View::show_footer(); ?>

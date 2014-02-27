@@ -1,5 +1,11 @@
 CHANGE LOG
 
+2014-02-27 by alderaan
+Increase the size of the Reports v2 "report comment" text box from 45 to 70
+
+2014-02-27 by alderaan
+Replace nearly every instance of {,NON}SSL_SITE_URL with the site_url() function
+
 2014-02-19 by alderaan
 Reduce width of the main table in the Tag Aliases manager
 

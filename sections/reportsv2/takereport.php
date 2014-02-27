@@ -54,7 +54,7 @@ if (!empty($_POST['sitelink'])) {
 			$Err = "The extra permalinks you gave included the link to the torrent you're reporting!";
 		}
 	} else {
-		$Err = 'The permalink was incorrect. It should look like https://'.SSL_SITE_URL.'/torrents.php?torrentid=12345';
+		$Err = 'The permalink was incorrect. It should look like '.site_url().'torrents.php?torrentid=12345';
 	}
 } else {
 	$ExtraIDs = '';

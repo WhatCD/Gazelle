@@ -517,7 +517,7 @@ if (count($Reports) === 0) {
 				<tr>
 					<td class="label">Report comment:</td>
 					<td colspan="3">
-						<input type="text" name="comment" id="comment<?=$ReportID?>" size="45" value="<?=$ModComment?>" />
+						<input type="text" name="comment" id="comment<?=$ReportID?>" size="70" value="<?=$ModComment?>" />
 						<input type="button" value="Update now" onclick="UpdateComment(<?=$ReportID?>);" />
 					</td>
 				</tr>
@@ -586,7 +586,7 @@ if (count($Reports) === 0) {
 						$Extras = explode(' ', $ExtraIDs);
 						$Value = '';
 						foreach ($Extras as $ExtraID) {
-							$Value .= 'https://'.SSL_SITE_URL."/torrents.php?torrentid=$ExtraID ";
+							$Value .= site_url()."torrents.php?torrentid=$ExtraID ";
 						}
 						echo 'value="'.trim($Value).'"';
 					} ?>

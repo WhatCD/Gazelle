@@ -761,7 +761,7 @@ list($ArtistsAdded) = $DB->next_record();
 				</td>
 			</tr>
 			<tr id="acc_resetpk_tr">
-				<td class="label tooltip_interactive" title="For information about the function of your passkey, please &lt;a href=&quot;https://<?=SSL_SITE_URL?>/wiki.php?action=article&amp;amp;name=Passkey&quot;&gt;read this wiki article&lt;/a&gt;." data-title-plain="For information about the function of your passkey, please read the &quot;Passkey&quot; wiki article."><strong>Reset passkey</strong></td>
+				<td class="label tooltip_interactive" title="For information about the function of your passkey, please &lt;a href=&quot;<?=site_url()?>wiki.php?action=article&amp;amp;name=Passkey&quot;&gt;read this wiki article&lt;/a&gt;." data-title-plain="For information about the function of your passkey, please read the &quot;Passkey&quot; wiki article."><strong>Reset passkey</strong></td>
 				<td>
 					<div class="field_div">
 						<label><input type="checkbox" name="resetpasskey" id="resetpasskey" />

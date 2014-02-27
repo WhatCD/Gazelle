@@ -58,9 +58,9 @@ View::show_header('Donate');
 			<input type="hidden" name="rm" value="2" />
 			<input type="hidden" name="cmd" value="_donations" />
 			<input type="hidden" name="business" value="<?=PAYPAL_ADDRESS?>" />
-			<input type="hidden" name="return" value="https://<?=SSL_SITE_URL?>/donate.php?action=complete" />
-			<input type="hidden" name="cancel_return" value="https://<?=SSL_SITE_URL?>/donate.php?action=cancel" />
-			<input type="hidden" name="notify_url" value="https://<?=SSL_SITE_URL?>/donate.php?action=ipn" />
+			<input type="hidden" name="return" value="<?=site_url()?>donate.php?action=complete" />
+			<input type="hidden" name="cancel_return" value="<?=site_url()?>donate.php?action=cancel" />
+			<input type="hidden" name="notify_url" value="<?=site_url()?>donate.php?action=ipn" />
 			<input type="hidden" name="item_name" value="Donation" />
 			<input type="hidden" name="amount" value="" />
 			<input type="hidden" name="custom" value="<?=$LoggedUser['ID']?>" />

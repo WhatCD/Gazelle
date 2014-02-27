@@ -351,7 +351,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 				<tr>
 					<td class="label">Torrent group</td>
 					<td>
-						https://<?=SSL_SITE_URL?>/torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15" /><br />
+						<?=site_url()?>torrents.php?id=<input type="text" name="groupid" value="<?=$GroupID?>" size="15" /><br />
 						If this request matches a torrent group <span style="font-weight: bold;">already existing</span> on the site, please indicate that here.
 					</td>
 				</tr>
@@ -359,7 +359,7 @@ View::show_header(($NewRequest ? 'Create a request' : 'Edit a request'), 'reques
 				<tr>
 					<td class="label">Torrent group</td>
 					<td>
-						<a href="torrents.php?id=<?=$GroupID?>">https://<?=SSL_SITE_URL?>/torrents.php?id=<?=$GroupID?></a><br />
+						<a href="torrents.php?id=<?=$GroupID?>"><?=site_url()?>torrents.php?id=<?=$GroupID?></a><br />
 						This request <?=($NewRequest ? 'will be' : 'is')?> associated with the above torrent group.
 <?		if (!$NewRequest) {	?>
 						If this is incorrect, please <a href="reports.php?action=report&amp;type=request&amp;id=<?=$RequestID?>">report this request</a> so that staff can fix it.

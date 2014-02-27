@@ -55,7 +55,7 @@ switch ($Type) {
 }
 list($Name) = $DB->next_record();
 $Subject = $LoggedUser['Username'] . " recommended you $Article $Type!";
-$Body = $LoggedUser['Username'] . " recommended you the $Type [url=https://".SSL_SITE_URL."/$Link]$Name".'[/url].';
+$Body = $LoggedUser['Username'] . " recommended you the $Type [url=".site_url()."$Link]$Name".'[/url].';
 if (!empty($Note)) {
 	$Body = "$Body\n\n$Note";
 }
