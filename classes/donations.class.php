@@ -749,7 +749,9 @@ class Donations {
 	}
 
 	private static function get_pm_body($Source, $Currency, $DonationAmount, $ReceivedRank, $CurrentRank) {
-		$DonationAmount = number_format($DonationAmount, 2);
+		if ($Currency != 'BTC') {
+			$DonationAmount = number_format($DonationAmount, 2);
+		}
 		if ($Source == 'Store Parser') {
 			$String = "[*][b]You Contributed:[/b] $DonationAmount $Currency";
 		} else {
