@@ -99,6 +99,15 @@ function display_array($Array, $Escape = array()) {
 	return $Array;
 }
 
+/**
+ * Print the site's URL including the appropriate URI scheme, including the trailing slash
+ *
+ * @param bool $SSL - whether the URL should be crafted for HTTPS or regular HTTP
+ */
+function site_url($SSL = true) {
+	return $SSL ? 'https://' . SSL_SITE_URL . '/' : 'http://' . NONSSL_SITE_URL . '/';
+}
+
 header('Cache-Control: no-cache, must-revalidate, post-check=0, pre-check=0');
 header('Pragma:');
 header('Expires: '.date('D, d M Y H:i:s', time() + (2 * 60 * 60)).' GMT');
