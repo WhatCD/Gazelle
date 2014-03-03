@@ -118,7 +118,7 @@ while (list($ID, $Message, $LogTime) = $DB->next_record()) {
 						$DB->query("
 							SELECT ID
 							FROM users_main
-							WHERE Username = _utf8 '$User'
+							WHERE Username = _utf8 '" . db_string($User) . "'
 							COLLATE utf8_bin");
 						list($UserID) = $DB->next_record();
 						$Usernames[$User] = $UserID ? $UserID : '';
@@ -161,7 +161,7 @@ while (list($ID, $Message, $LogTime) = $DB->next_record()) {
 						$DB->query("
 							SELECT ID
 							FROM users_main
-							WHERE Username = _utf8 '$User'
+							WHERE Username = _utf8 '" . db_string($User) . "'
 							COLLATE utf8_bin");
 						list($UserID) = $DB->next_record();
 						$Usernames[$User] = $UserID ? $UserID : '';
