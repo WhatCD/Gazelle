@@ -121,7 +121,7 @@ class Tracker {
 	 * @return tracker response message or false if the request failed
 	 */
 	private static function send_request($Get, $MaxAttempts = 1, &$Err = false) {
-		$Header = "GET /$Get HTTP/1.1\r\n\r\n";
+		$Header = "GET /$Get HTTP/1.1\r\nConnection: Close\r\n\r\n";
 		$Attempts = 0;
 		$Sleep = 0;
 		$Success = false;
