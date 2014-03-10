@@ -352,7 +352,7 @@ if ($ThreadInfo['NoPoll'] == 0) {
 			if ($ForumID == STAFF_FORUM) {
 ?>
 			<br />
-			<strong>Votes:</strong> <?=number_format($TotalVotes)?> / <?="$StaffCount\n"?>
+			<strong>Votes:</strong> <?=number_format($StaffCount - count($StaffNames))?> / <?=$StaffCount?> current staff, <?=number_format($TotalVotes)?> total
 			<br />
 			<strong>Missing votes:</strong> <?=implode(", ", $StaffNames); echo "\n";?>
 			<br /><br />
