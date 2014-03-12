@@ -529,7 +529,7 @@ class Users {
 						$IconImage = STATIC_SERVER . "common/symbols/donor_{$DonorHeart}.png";
 					}
 				}
-				$Str .= "<a href=\"$IconLink\"><img class=\"donor_icon tooltip\" src=\"$IconImage\" alt=\"$IconText\" title=\"$IconText\" /></a>";
+				$Str .= "<a target=\"_blank\" href=\"$IconLink\"><img class=\"donor_icon tooltip\" src=\"$IconImage\" alt=\"$IconText\" title=\"$IconText\" /></a>";
 			}
 		}
 

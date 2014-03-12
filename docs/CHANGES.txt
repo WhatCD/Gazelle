@@ -1,5 +1,8 @@
 CHANGE LOG
 
+2014-03-12 by Ajax
+Open donor icon links in a new tab
+
 2014-02-27 by alderaan
 Increase the size of the Reports v2 "report comment" text box from 45 to 70
 
